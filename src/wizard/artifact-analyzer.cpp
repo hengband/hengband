@@ -35,9 +35,11 @@
  */
 static concptr *spoiler_flag_aux(const TrFlags &art_flags, const flag_desc *flag_ptr, concptr *desc_ptr, const int n_elmnts)
 {
-    for (int i = 0; i < n_elmnts; ++i)
-        if (art_flags.has(flag_ptr[i].flag))
+    for (int i = 0; i < n_elmnts; ++i) {
+        if (art_flags.has(flag_ptr[i].flag)) {
             *desc_ptr++ = flag_ptr[i].desc;
+        }
+    }
 
     return desc_ptr;
 }
@@ -179,56 +181,71 @@ static void analyze_misc_magic(ObjectType *o_ptr, concptr *misc_list)
     misc_list = spoiler_flag_aux(flgs, misc_flags2_desc, misc_list, N_ELEMENTS(misc_flags2_desc));
     misc_list = spoiler_flag_aux(flgs, misc_flags3_desc, misc_list, N_ELEMENTS(misc_flags3_desc));
     POSITION rad = 0;
-    if (flgs.has(TR_LITE_1))
+    if (flgs.has(TR_LITE_1)) {
         rad += 1;
-
-    if (flgs.has(TR_LITE_2))
-        rad += 2;
-
-    if (flgs.has(TR_LITE_3))
-        rad += 3;
-
-    if (flgs.has(TR_LITE_M1))
-        rad -= 1;
-
-    if (flgs.has(TR_LITE_M2))
-        rad -= 2;
-
-    if (flgs.has(TR_LITE_M3))
-        rad -= 3;
-
-    if (o_ptr->ego_idx == EgoType::LITE_SHINE)
-        rad++;
-
-    if (flgs.has(TR_LITE_FUEL)) {
-        if (rad > 0)
-            sprintf(desc, _("それは燃料補給によって明かり(半径 %d)を授ける。", "It provides light (radius %d) when fueled."), (int)rad);
-    } else {
-        if (rad > 0)
-            sprintf(desc, _("永久光源(半径 %d)", "Permanent Light(radius %d)"), (int)rad);
-
-        if (rad < 0)
-            sprintf(desc, _("永久光源(半径-%d)。", "Permanent Light(radius -%d)"), (int)-rad);
     }
 
-    if (rad != 0)
+    if (flgs.has(TR_LITE_2)) {
+        rad += 2;
+    }
+
+    if (flgs.has(TR_LITE_3)) {
+        rad += 3;
+    }
+
+    if (flgs.has(TR_LITE_M1)) {
+        rad -= 1;
+    }
+
+    if (flgs.has(TR_LITE_M2)) {
+        rad -= 2;
+    }
+
+    if (flgs.has(TR_LITE_M3)) {
+        rad -= 3;
+    }
+
+    if (o_ptr->ego_idx == EgoType::LITE_SHINE) {
+        rad++;
+    }
+
+    if (flgs.has(TR_LITE_FUEL)) {
+        if (rad > 0) {
+            sprintf(desc, _("それは燃料補給によって明かり(半径 %d)を授ける。", "It provides light (radius %d) when fueled."), (int)rad);
+        }
+    } else {
+        if (rad > 0) {
+            sprintf(desc, _("永久光源(半径 %d)", "Permanent Light(radius %d)"), (int)rad);
+        }
+
+        if (rad < 0) {
+            sprintf(desc, _("永久光源(半径-%d)。", "Permanent Light(radius -%d)"), (int)-rad);
+        }
+    }
+
+    if (rad != 0) {
         *misc_list++ = quark_str(quark_add(desc));
+    }
 
-    if (flgs.has(TR_TY_CURSE))
+    if (flgs.has(TR_TY_CURSE)) {
         *misc_list++ = _("太古の怨念", "Ancient Curse");
+    }
 
-    if (o_ptr->curse_flags.has(CurseTraitType::PERMA_CURSE))
+    if (o_ptr->curse_flags.has(CurseTraitType::PERMA_CURSE)) {
         *misc_list++ = _("永遠の呪い", "Permanently Cursed");
-    else if (o_ptr->curse_flags.has(CurseTraitType::HEAVY_CURSE))
+    } else if (o_ptr->curse_flags.has(CurseTraitType::HEAVY_CURSE)) {
         *misc_list++ = _("強力な呪い", "Heavily Cursed");
-    else if (o_ptr->curse_flags.has(CurseTraitType::CURSED))
+    } else if (o_ptr->curse_flags.has(CurseTraitType::CURSED)) {
         *misc_list++ = _("呪い", "Cursed");
+    }
 
-    if (flgs.has(TR_ADD_L_CURSE))
+    if (flgs.has(TR_ADD_L_CURSE)) {
         *misc_list++ = _("呪いを増やす", "Cursing");
+    }
 
-    if (flgs.has(TR_ADD_H_CURSE))
+    if (flgs.has(TR_ADD_H_CURSE)) {
         *misc_list++ = _("強力な呪いを増やす", "Heavily Cursing");
+    }
 
     *misc_list = nullptr;
 }
@@ -248,18 +265,22 @@ static void analyze_addition(ObjectType *o_ptr, char *addition)
         strcat(addition, _("能力and耐性", "Ability and Resistance"));
     } else if (a_ptr->gen_flags.has(ItemGenerationTraitType::XTRA_POWER)) {
         strcat(addition, _("能力", "Ability"));
-        if (a_ptr->gen_flags.has(ItemGenerationTraitType::XTRA_RES_OR_POWER))
+        if (a_ptr->gen_flags.has(ItemGenerationTraitType::XTRA_RES_OR_POWER)) {
             strcat(addition, _("(1/2でand耐性)", "(plus Resistance about 1/2)"));
+        }
     } else if (a_ptr->gen_flags.has(ItemGenerationTraitType::XTRA_H_RES)) {
         strcat(addition, _("耐性", "Resistance"));
-        if (a_ptr->gen_flags.has(ItemGenerationTraitType::XTRA_RES_OR_POWER))
+        if (a_ptr->gen_flags.has(ItemGenerationTraitType::XTRA_RES_OR_POWER)) {
             strcat(addition, _("(1/2でand能力)", "(plus Ability about 1/2)"));
-    } else if (a_ptr->gen_flags.has(ItemGenerationTraitType::XTRA_RES_OR_POWER))
+        }
+    } else if (a_ptr->gen_flags.has(ItemGenerationTraitType::XTRA_RES_OR_POWER)) {
         strcat(addition, _("能力or耐性", "Ability or Resistance"));
+    }
 
     if (a_ptr->gen_flags.has(ItemGenerationTraitType::XTRA_DICE)) {
-        if (strlen(addition) > 0)
+        if (strlen(addition) > 0) {
             strcat(addition, _("、", ", "));
+        }
         strcat(addition, _("ダイス数", "Dice number"));
     }
 }

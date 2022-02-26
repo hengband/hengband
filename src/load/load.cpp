@@ -288,7 +288,7 @@ static errr rd_savefile(PlayerType *player_ptr)
 
         angband_fclose(loading_savefile);
         return err;
-    } catch (SaveDataNotSupportedException const& e) {
+    } catch (SaveDataNotSupportedException const &e) {
         msg_print(e.what());
         angband_fclose(loading_savefile);
         return 1;
@@ -462,8 +462,9 @@ bool load_savedata(PlayerType *player_ptr, bool *new_game)
 
     w_ptr->character_loaded = true;
     auto tmp = counts_read(player_ptr, 2);
-    if (tmp > player_ptr->count)
+    if (tmp > player_ptr->count) {
         player_ptr->count = tmp;
+    }
 
     if (counts_read(player_ptr, 0) > w_ptr->play_time || counts_read(player_ptr, 1) == w_ptr->play_time) {
         counts_write(player_ptr, 2, ++player_ptr->count);

@@ -29,14 +29,16 @@ int get_keymap_dir(char ch)
         concptr act = keymap_act[mode][(byte)(ch)];
         if (act) {
             for (concptr s = act; *s; ++s) {
-                if (isdigit(*s))
+                if (isdigit(*s)) {
                     d = D2I(*s);
+                }
             }
         }
     }
 
-    if (d == 5)
+    if (d == 5) {
         d = 0;
+    }
 
     return d;
 }

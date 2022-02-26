@@ -316,8 +316,9 @@ void MindPowerGetter::calculate_ki_chance(bool *has_weapon)
         return;
     }
 
-    if (heavy_armor(this->player_ptr))
+    if (heavy_armor(this->player_ptr)) {
         this->chance += 20;
+    }
 
     if (this->player_ptr->is_icky_wield[0]) {
         this->chance += 20;

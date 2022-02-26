@@ -4,13 +4,13 @@
  * @author deskull
  */
 #include "object/object-broken.h"
+#include "effect/attribute-types.h"
 #include "effect/effect-characteristics.h"
 #include "effect/effect-processor.h"
 #include "mind/snipe-types.h"
 #include "object-enchant/tr-types.h"
 #include "object/object-flags.h"
 #include "object/object-kind.h"
-#include "effect/attribute-types.h"
 #include "sv-definition/sv-potion-types.h"
 #include "system/object-type-definition.h"
 #include "system/player-type-definition.h"
@@ -211,11 +211,13 @@ bool BreakerCold::hates(ObjectType *o_ptr) const
  */
 bool ObjectBreaker::can_destroy(ObjectType *o_ptr) const
 {
-    if (!this->hates(o_ptr))
+    if (!this->hates(o_ptr)) {
         return false;
+    }
     auto flgs = object_flags(o_ptr);
-    if (flgs.has(this->ignore_flg))
+    if (flgs.has(this->ignore_flg)) {
         return false;
+    }
     return true;
 }
 
@@ -397,20 +399,27 @@ PERCENTAGE breakage_chance(PlayerType *player_ptr, ObjectType *o_ptr, bool has_a
 {
     /* Examine the snipe type */
     if (snipe_type) {
-        if (snipe_type == SP_KILL_WALL)
+        if (snipe_type == SP_KILL_WALL) {
             return 100;
-        if (snipe_type == SP_EXPLODE)
+        }
+        if (snipe_type == SP_EXPLODE) {
             return 100;
-        if (snipe_type == SP_PIERCE)
+        }
+        if (snipe_type == SP_PIERCE) {
             return 100;
-        if (snipe_type == SP_FINAL)
+        }
+        if (snipe_type == SP_FINAL) {
             return 100;
-        if (snipe_type == SP_NEEDLE)
+        }
+        if (snipe_type == SP_NEEDLE) {
             return 100;
-        if (snipe_type == SP_EVILNESS)
+        }
+        if (snipe_type == SP_EVILNESS) {
             return 40;
-        if (snipe_type == SP_HOLYNESS)
+        }
+        if (snipe_type == SP_HOLYNESS) {
             return 40;
+        }
     }
 
     /* Examine the item type */

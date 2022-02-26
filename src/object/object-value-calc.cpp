@@ -41,32 +41,45 @@ PRICE flag_cost(const ObjectType *o_ptr, int plusses)
     /*
      * Calucurate values of remaining flags
      */
-    if (flgs.has(TR_STR))
+    if (flgs.has(TR_STR)) {
         total += (1500 * plusses);
-    if (flgs.has(TR_INT))
+    }
+    if (flgs.has(TR_INT)) {
         total += (1500 * plusses);
-    if (flgs.has(TR_WIS))
+    }
+    if (flgs.has(TR_WIS)) {
         total += (1500 * plusses);
-    if (flgs.has(TR_DEX))
+    }
+    if (flgs.has(TR_DEX)) {
         total += (1500 * plusses);
-    if (flgs.has(TR_CON))
+    }
+    if (flgs.has(TR_CON)) {
         total += (1500 * plusses);
-    if (flgs.has(TR_CHR))
+    }
+    if (flgs.has(TR_CHR)) {
         total += (750 * plusses);
-    if (flgs.has(TR_MAGIC_MASTERY))
+    }
+    if (flgs.has(TR_MAGIC_MASTERY)) {
         total += (600 * plusses);
-    if (flgs.has(TR_STEALTH))
+    }
+    if (flgs.has(TR_STEALTH)) {
         total += (250 * plusses);
-    if (flgs.has(TR_SEARCH))
+    }
+    if (flgs.has(TR_SEARCH)) {
         total += (100 * plusses);
-    if (flgs.has(TR_INFRA))
+    }
+    if (flgs.has(TR_INFRA)) {
         total += (150 * plusses);
-    if (flgs.has(TR_TUNNEL))
+    }
+    if (flgs.has(TR_TUNNEL)) {
         total += (175 * plusses);
-    if ((flgs.has(TR_SPEED)) && (plusses > 0))
+    }
+    if ((flgs.has(TR_SPEED)) && (plusses > 0)) {
         total += (10000 + (2500 * plusses));
-    if ((flgs.has(TR_BLOWS)) && (plusses > 0))
+    }
+    if ((flgs.has(TR_BLOWS)) && (plusses > 0)) {
         total += (10000 + (2500 * plusses));
+    }
 
     PRICE tmp_cost = 0;
     int count = 0;
@@ -191,28 +204,39 @@ PRICE flag_cost(const ObjectType *o_ptr, int plusses)
     }
     total += (tmp_cost * count);
 
-    if (flgs.has(TR_SUST_STR))
+    if (flgs.has(TR_SUST_STR)) {
         total += 850;
-    if (flgs.has(TR_SUST_INT))
+    }
+    if (flgs.has(TR_SUST_INT)) {
         total += 850;
-    if (flgs.has(TR_SUST_WIS))
+    }
+    if (flgs.has(TR_SUST_WIS)) {
         total += 850;
-    if (flgs.has(TR_SUST_DEX))
+    }
+    if (flgs.has(TR_SUST_DEX)) {
         total += 850;
-    if (flgs.has(TR_SUST_CON))
+    }
+    if (flgs.has(TR_SUST_CON)) {
         total += 850;
-    if (flgs.has(TR_SUST_CHR))
+    }
+    if (flgs.has(TR_SUST_CHR)) {
         total += 250;
-    if (flgs.has(TR_RIDING))
+    }
+    if (flgs.has(TR_RIDING)) {
         total += 0;
-    if (flgs.has(TR_EASY_SPELL))
+    }
+    if (flgs.has(TR_EASY_SPELL)) {
         total += 1500;
-    if (flgs.has(TR_THROW))
+    }
+    if (flgs.has(TR_THROW)) {
         total += 5000;
-    if (flgs.has(TR_FREE_ACT))
+    }
+    if (flgs.has(TR_FREE_ACT)) {
         total += 4500;
-    if (flgs.has(TR_HOLD_EXP))
+    }
+    if (flgs.has(TR_HOLD_EXP)) {
         total += 8500;
+    }
 
     tmp_cost = 0;
     count = 0;
@@ -310,139 +334,203 @@ PRICE flag_cost(const ObjectType *o_ptr, int plusses)
     }
     total += (tmp_cost * count);
 
-    if (flgs.has(TR_RES_CURSE))
+    if (flgs.has(TR_RES_CURSE)) {
         total += 7500;
-    if (flgs.has(TR_SH_FIRE))
-        total += 5000;
-    if (flgs.has(TR_SH_ELEC))
-        total += 5000;
-    if (flgs.has(TR_SH_COLD))
-        total += 5000;
-    if (flgs.has(TR_NO_TELE))
-        total -= 10000;
-    if (flgs.has(TR_NO_MAGIC))
-        total += 2500;
-    if (flgs.has(TR_TY_CURSE))
-        total -= 15000;
-    if (flgs.has(TR_HIDE_TYPE))
-        total += 0;
-    if (flgs.has(TR_SHOW_MODS))
-        total += 0;
-    if (flgs.has(TR_LEVITATION))
-        total += 1250;
-    if (flgs.has(TR_LITE_1))
-        total += 1500;
-    if (flgs.has(TR_LITE_2))
-        total += 2500;
-    if (flgs.has(TR_LITE_3))
-        total += 4000;
-    if (flgs.has(TR_LITE_M1))
-        total -= 1500;
-    if (flgs.has(TR_LITE_M2))
-        total -= 2500;
-    if (flgs.has(TR_LITE_M3))
-        total -= 4000;
-    if (flgs.has(TR_SEE_INVIS))
-        total += 2000;
-    if (flgs.has(TR_TELEPATHY))
-        total += 20000;
-    if (flgs.has(TR_ESP_ANIMAL))
-        total += 1000;
-    if (flgs.has(TR_ESP_UNDEAD))
-        total += 1000;
-    if (flgs.has(TR_ESP_DEMON))
-        total += 1000;
-    if (flgs.has(TR_ESP_ORC))
-        total += 1000;
-    if (flgs.has(TR_ESP_TROLL))
-        total += 1000;
-    if (flgs.has(TR_ESP_GIANT))
-        total += 1000;
-    if (flgs.has(TR_ESP_DRAGON))
-        total += 1000;
-    if (flgs.has(TR_ESP_HUMAN))
-        total += 1000;
-    if (flgs.has(TR_ESP_EVIL))
-        total += 15000;
-    if (flgs.has(TR_ESP_GOOD))
-        total += 2000;
-    if (flgs.has(TR_ESP_NONLIVING))
-        total += 2000;
-    if (flgs.has(TR_ESP_UNIQUE))
-        total += 10000;
-    if (flgs.has(TR_SLOW_DIGEST))
-        total += 750;
-    if (flgs.has(TR_REGEN))
-        total += 2500;
-    if (flgs.has(TR_WARNING))
-        total += 2000;
-    if (flgs.has(TR_DEC_MANA))
-        total += 10000;
-    if (flgs.has(TR_XTRA_MIGHT))
-        total += 2250;
-    if (flgs.has(TR_XTRA_SHOTS))
-        total += 10000;
-    if (flgs.has(TR_IGNORE_ACID))
-        total += 100;
-    if (flgs.has(TR_IGNORE_ELEC))
-        total += 100;
-    if (flgs.has(TR_IGNORE_FIRE))
-        total += 100;
-    if (flgs.has(TR_IGNORE_COLD))
-        total += 100;
-    if (flgs.has(TR_ACTIVATE))
-        total += 100;
-    if (flgs.has(TR_DRAIN_EXP))
-        total -= 12500;
-    if (flgs.has(TR_DRAIN_HP))
-        total -= 12500;
-    if (flgs.has(TR_DRAIN_MANA))
-        total -= 12500;
-    if (flgs.has(TR_CALL_ANIMAL))
-        total -= 12500;
-    if (flgs.has(TR_CALL_DEMON))
-        total -= 10000;
-    if (flgs.has(TR_CALL_DRAGON))
-        total -= 10000;
-    if (flgs.has(TR_CALL_UNDEAD))
-        total -= 10000;
-    if (flgs.has(TR_COWARDICE))
-        total -= 5000;
-    if (flgs.has(TR_LOW_MELEE))
-        total -= 5000;
-    if (flgs.has(TR_LOW_AC))
-        total -= 5000;
-    if (flgs.has(TR_HARD_SPELL))
-        total -= 15000;
-    if (flgs.has(TR_FAST_DIGEST))
-        total -= 10000;
-    if (flgs.has(TR_SLOW_REGEN))
-        total -= 10000;
-    if (flgs.has(TR_TELEPORT)) {
-        if (o_ptr->is_cursed())
-            total -= 7500;
-        else
-            total += 250;
     }
-    if (flgs.has(TR_VUL_CURSE))
-        total -= 7500;
-
-    if (flgs.has(TR_AGGRAVATE))
+    if (flgs.has(TR_SH_FIRE)) {
+        total += 5000;
+    }
+    if (flgs.has(TR_SH_ELEC)) {
+        total += 5000;
+    }
+    if (flgs.has(TR_SH_COLD)) {
+        total += 5000;
+    }
+    if (flgs.has(TR_NO_TELE)) {
         total -= 10000;
-    if (flgs.has(TR_BLESSED))
-        total += 750;
-    if (o_ptr->curse_flags.has(CurseTraitType::ADD_L_CURSE))
-        total -= 5000;
-    if (o_ptr->curse_flags.has(CurseTraitType::ADD_H_CURSE))
-        total -= 12500;
-    if (o_ptr->curse_flags.has(CurseTraitType::CURSED))
-        total -= 5000;
-    if (o_ptr->curse_flags.has(CurseTraitType::HEAVY_CURSE))
-        total -= 12500;
-    if (o_ptr->curse_flags.has(CurseTraitType::PERSISTENT_CURSE))
-        total -= 12500;
-    if (o_ptr->curse_flags.has(CurseTraitType::PERMA_CURSE))
+    }
+    if (flgs.has(TR_NO_MAGIC)) {
+        total += 2500;
+    }
+    if (flgs.has(TR_TY_CURSE)) {
         total -= 15000;
+    }
+    if (flgs.has(TR_HIDE_TYPE)) {
+        total += 0;
+    }
+    if (flgs.has(TR_SHOW_MODS)) {
+        total += 0;
+    }
+    if (flgs.has(TR_LEVITATION)) {
+        total += 1250;
+    }
+    if (flgs.has(TR_LITE_1)) {
+        total += 1500;
+    }
+    if (flgs.has(TR_LITE_2)) {
+        total += 2500;
+    }
+    if (flgs.has(TR_LITE_3)) {
+        total += 4000;
+    }
+    if (flgs.has(TR_LITE_M1)) {
+        total -= 1500;
+    }
+    if (flgs.has(TR_LITE_M2)) {
+        total -= 2500;
+    }
+    if (flgs.has(TR_LITE_M3)) {
+        total -= 4000;
+    }
+    if (flgs.has(TR_SEE_INVIS)) {
+        total += 2000;
+    }
+    if (flgs.has(TR_TELEPATHY)) {
+        total += 20000;
+    }
+    if (flgs.has(TR_ESP_ANIMAL)) {
+        total += 1000;
+    }
+    if (flgs.has(TR_ESP_UNDEAD)) {
+        total += 1000;
+    }
+    if (flgs.has(TR_ESP_DEMON)) {
+        total += 1000;
+    }
+    if (flgs.has(TR_ESP_ORC)) {
+        total += 1000;
+    }
+    if (flgs.has(TR_ESP_TROLL)) {
+        total += 1000;
+    }
+    if (flgs.has(TR_ESP_GIANT)) {
+        total += 1000;
+    }
+    if (flgs.has(TR_ESP_DRAGON)) {
+        total += 1000;
+    }
+    if (flgs.has(TR_ESP_HUMAN)) {
+        total += 1000;
+    }
+    if (flgs.has(TR_ESP_EVIL)) {
+        total += 15000;
+    }
+    if (flgs.has(TR_ESP_GOOD)) {
+        total += 2000;
+    }
+    if (flgs.has(TR_ESP_NONLIVING)) {
+        total += 2000;
+    }
+    if (flgs.has(TR_ESP_UNIQUE)) {
+        total += 10000;
+    }
+    if (flgs.has(TR_SLOW_DIGEST)) {
+        total += 750;
+    }
+    if (flgs.has(TR_REGEN)) {
+        total += 2500;
+    }
+    if (flgs.has(TR_WARNING)) {
+        total += 2000;
+    }
+    if (flgs.has(TR_DEC_MANA)) {
+        total += 10000;
+    }
+    if (flgs.has(TR_XTRA_MIGHT)) {
+        total += 2250;
+    }
+    if (flgs.has(TR_XTRA_SHOTS)) {
+        total += 10000;
+    }
+    if (flgs.has(TR_IGNORE_ACID)) {
+        total += 100;
+    }
+    if (flgs.has(TR_IGNORE_ELEC)) {
+        total += 100;
+    }
+    if (flgs.has(TR_IGNORE_FIRE)) {
+        total += 100;
+    }
+    if (flgs.has(TR_IGNORE_COLD)) {
+        total += 100;
+    }
+    if (flgs.has(TR_ACTIVATE)) {
+        total += 100;
+    }
+    if (flgs.has(TR_DRAIN_EXP)) {
+        total -= 12500;
+    }
+    if (flgs.has(TR_DRAIN_HP)) {
+        total -= 12500;
+    }
+    if (flgs.has(TR_DRAIN_MANA)) {
+        total -= 12500;
+    }
+    if (flgs.has(TR_CALL_ANIMAL)) {
+        total -= 12500;
+    }
+    if (flgs.has(TR_CALL_DEMON)) {
+        total -= 10000;
+    }
+    if (flgs.has(TR_CALL_DRAGON)) {
+        total -= 10000;
+    }
+    if (flgs.has(TR_CALL_UNDEAD)) {
+        total -= 10000;
+    }
+    if (flgs.has(TR_COWARDICE)) {
+        total -= 5000;
+    }
+    if (flgs.has(TR_LOW_MELEE)) {
+        total -= 5000;
+    }
+    if (flgs.has(TR_LOW_AC)) {
+        total -= 5000;
+    }
+    if (flgs.has(TR_HARD_SPELL)) {
+        total -= 15000;
+    }
+    if (flgs.has(TR_FAST_DIGEST)) {
+        total -= 10000;
+    }
+    if (flgs.has(TR_SLOW_REGEN)) {
+        total -= 10000;
+    }
+    if (flgs.has(TR_TELEPORT)) {
+        if (o_ptr->is_cursed()) {
+            total -= 7500;
+        } else {
+            total += 250;
+        }
+    }
+    if (flgs.has(TR_VUL_CURSE)) {
+        total -= 7500;
+    }
+
+    if (flgs.has(TR_AGGRAVATE)) {
+        total -= 10000;
+    }
+    if (flgs.has(TR_BLESSED)) {
+        total += 750;
+    }
+    if (o_ptr->curse_flags.has(CurseTraitType::ADD_L_CURSE)) {
+        total -= 5000;
+    }
+    if (o_ptr->curse_flags.has(CurseTraitType::ADD_H_CURSE)) {
+        total -= 12500;
+    }
+    if (o_ptr->curse_flags.has(CurseTraitType::CURSED)) {
+        total -= 5000;
+    }
+    if (o_ptr->curse_flags.has(CurseTraitType::HEAVY_CURSE)) {
+        total -= 12500;
+    }
+    if (o_ptr->curse_flags.has(CurseTraitType::PERSISTENT_CURSE)) {
+        total -= 12500;
+    }
+    if (o_ptr->curse_flags.has(CurseTraitType::PERMA_CURSE)) {
+        total -= 15000;
+    }
 
     /* Also, give some extra for activatable powers... */
     if (o_ptr->art_name && (o_ptr->art_flags.has(TR_ACTIVATE))) {

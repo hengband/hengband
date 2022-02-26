@@ -28,6 +28,7 @@
  * the (compiled out) small random energy boost code.  It may
  * also tend to cause more "clumping" at high speeds.
  */
+// clang-format off
 static const std::vector<byte> extract_energy = {
 	/* Slow */     1,  1,  1,  1,  1,  1,  1,  1,  1,  1,
 	/* Slow */     1,  1,  1,  1,  1,  1,  1,  1,  1,  1,
@@ -50,6 +51,7 @@ static const std::vector<byte> extract_energy = {
 	/* F+70 */    49, 49, 49, 49, 49, 49, 49, 49, 49, 49,
 	/* Fast */    49, 49, 49, 49, 49, 49, 49, 49, 49, 49,
 };
+// clang-format on
 
 /*! @brief 加速値に応じた基本行動エネルギー消費量を返す / Extract energy from speed (Assumes that SPEED is unsigned) */
 byte speed_to_energy(byte speed)

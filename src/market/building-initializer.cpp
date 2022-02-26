@@ -1,7 +1,7 @@
 ﻿#include "market/building-initializer.h"
 #include "floor/floor-town.h"
-#include "object/object-kind.h"
 #include "object/object-kind-hook.h"
+#include "object/object-kind.h"
 #include "player-info/class-types.h"
 #include "store/articles-on-sale.h"
 #include "store/store-owners.h"

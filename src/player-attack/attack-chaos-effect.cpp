@@ -58,8 +58,9 @@ static void attack_confuse(PlayerType *player_ptr, player_attack_type *pa_ptr, b
 
     auto *r_ptr = pa_ptr->r_ptr;
     if (r_ptr->flags3 & RF3_NO_CONF) {
-        if (is_original_ap_and_seen(player_ptr, pa_ptr->m_ptr))
+        if (is_original_ap_and_seen(player_ptr, pa_ptr->m_ptr)) {
             r_ptr->r_flags3 |= RF3_NO_CONF;
+        }
         msg_format(_("%^sには効果がなかった。", "%^s is unaffected."), pa_ptr->m_name);
 
     } else if (can_resist && randint0(100) < r_ptr->level) {
@@ -82,8 +83,9 @@ static void attack_stun(PlayerType *player_ptr, player_attack_type *pa_ptr, bool
 {
     auto *r_ptr = pa_ptr->r_ptr;
     if (any_bits(r_ptr->flags3, RF3_NO_STUN)) {
-        if (is_original_ap_and_seen(player_ptr, pa_ptr->m_ptr))
+        if (is_original_ap_and_seen(player_ptr, pa_ptr->m_ptr)) {
             set_bits(r_ptr->flags3, RF3_NO_STUN);
+        }
         msg_format(_("%^sには効果がなかった。", "%^s is unaffected."), pa_ptr->m_name);
     } else if (can_resist && randint0(100) < r_ptr->level) {
         msg_format(_("%^sには効果がなかった。", "%^s is unaffected."), pa_ptr->m_name);
@@ -105,8 +107,9 @@ static void attack_scare(PlayerType *player_ptr, player_attack_type *pa_ptr, boo
 {
     auto *r_ptr = pa_ptr->r_ptr;
     if (any_bits(r_ptr->flags3, RF3_NO_FEAR)) {
-        if (is_original_ap_and_seen(player_ptr, pa_ptr->m_ptr))
+        if (is_original_ap_and_seen(player_ptr, pa_ptr->m_ptr)) {
             set_bits(r_ptr->flags3, RF3_NO_FEAR);
+        }
         msg_format(_("%^sには効果がなかった。", "%^s is unaffected."), pa_ptr->m_name);
     } else if (can_resist && randint0(100) < r_ptr->level) {
         msg_format(_("%^sには効果がなかった。", "%^s is unaffected."), pa_ptr->m_name);
@@ -125,16 +128,20 @@ static void attack_scare(PlayerType *player_ptr, player_attack_type *pa_ptr, boo
  */
 static void attack_dispel(PlayerType *player_ptr, player_attack_type *pa_ptr)
 {
-    if (pa_ptr->r_ptr->ability_flags.has_none_of(RF_ABILITY_ATTACK_MASK) && pa_ptr->r_ptr->ability_flags.has_none_of(RF_ABILITY_INDIRECT_MASK))
+    if (pa_ptr->r_ptr->ability_flags.has_none_of(RF_ABILITY_ATTACK_MASK) && pa_ptr->r_ptr->ability_flags.has_none_of(RF_ABILITY_INDIRECT_MASK)) {
         return;
+    }
 
     auto dd = 2;
-    if (pa_ptr->m_ptr->mtimed[MTIMED_SLOW])
+    if (pa_ptr->m_ptr->mtimed[MTIMED_SLOW]) {
         dd += 1;
-    if (pa_ptr->m_ptr->mtimed[MTIMED_FAST])
+    }
+    if (pa_ptr->m_ptr->mtimed[MTIMED_FAST]) {
         dd += 2;
-    if (pa_ptr->m_ptr->mtimed[MTIMED_INVULNER])
+    }
+    if (pa_ptr->m_ptr->mtimed[MTIMED_INVULNER]) {
         dd += 3;
+    }
 
     msg_print(_("武器が敵の魔力を吸い取った！", "The weapon drains mana from your enemy!"));
     dispel_monster_status(player_ptr, pa_ptr->m_idx);
@@ -171,20 +178,23 @@ static void attack_probe(PlayerType *player_ptr, player_attack_type *pa_ptr)
 static bool judge_tereprt_resistance(PlayerType *player_ptr, player_attack_type *pa_ptr)
 {
     auto *r_ptr = pa_ptr->r_ptr;
-    if (r_ptr->resistance_flags.has_not(MonsterResistanceType::RESIST_TELEPORT))
+    if (r_ptr->resistance_flags.has_not(MonsterResistanceType::RESIST_TELEPORT)) {
         return false;
+    }
 
     if (r_ptr->kind_flags.has(MonsterKindType::UNIQUE)) {
-        if (is_original_ap_and_seen(player_ptr, pa_ptr->m_ptr))
+        if (is_original_ap_and_seen(player_ptr, pa_ptr->m_ptr)) {
             r_ptr->r_resistance_flags.set(MonsterResistanceType::RESIST_TELEPORT);
+        }
 
         msg_format(_("%^sには効果がなかった。", "%^s is unaffected!"), pa_ptr->m_name);
         return true;
     }
 
     if (r_ptr->level > randint1(100)) {
-        if (is_original_ap_and_seen(player_ptr, pa_ptr->m_ptr))
+        if (is_original_ap_and_seen(player_ptr, pa_ptr->m_ptr)) {
             r_ptr->r_resistance_flags.set(MonsterResistanceType::RESIST_TELEPORT);
+        }
 
         msg_format(_("%^sは抵抗力を持っている！", "%^s resists!"), pa_ptr->m_name);
         return true;
@@ -201,8 +211,9 @@ static bool judge_tereprt_resistance(PlayerType *player_ptr, player_attack_type 
  */
 static void attack_teleport_away(PlayerType *player_ptr, player_attack_type *pa_ptr, int *num)
 {
-    if (judge_tereprt_resistance(player_ptr, pa_ptr))
+    if (judge_tereprt_resistance(player_ptr, pa_ptr)) {
         return;
+    }
 
     msg_format(_("%^sは消えた！", "%^s disappears!"), pa_ptr->m_name);
     teleport_away(player_ptr, pa_ptr->m_idx, 50, TELEPORT_PASSIVE);
@@ -220,15 +231,17 @@ static void attack_teleport_away(PlayerType *player_ptr, player_attack_type *pa_
 static void attack_polymorph(PlayerType *player_ptr, player_attack_type *pa_ptr, POSITION y, POSITION x)
 {
     auto *r_ptr = pa_ptr->r_ptr;
-    if (r_ptr->kind_flags.has(MonsterKindType::UNIQUE) || any_bits(r_ptr->flags1, RF1_QUESTOR) || r_ptr->resistance_flags.has_any_of(RFR_EFF_RESIST_CHAOS_MASK))
+    if (r_ptr->kind_flags.has(MonsterKindType::UNIQUE) || any_bits(r_ptr->flags1, RF1_QUESTOR) || r_ptr->resistance_flags.has_any_of(RFR_EFF_RESIST_CHAOS_MASK)) {
         return;
+    }
 
     if (polymorph_monster(player_ptr, y, x)) {
         msg_format(_("%^sは変化した！", "%^s changes!"), pa_ptr->m_name);
         *(pa_ptr->fear) = false;
         pa_ptr->weak = false;
-    } else
+    } else {
         msg_format(_("%^sには効果がなかった。", "%^s is unaffected."), pa_ptr->m_name);
+    }
 
     pa_ptr->m_ptr = &player_ptr->current_floor_ptr->m_list[pa_ptr->m_idx];
     monster_desc(player_ptr, pa_ptr->m_name, pa_ptr->m_ptr, 0);
@@ -243,8 +256,9 @@ static void attack_golden_hammer(PlayerType *player_ptr, player_attack_type *pa_
 {
     auto *floor_ptr = player_ptr->current_floor_ptr;
     auto *m_ptr = &floor_ptr->m_list[pa_ptr->m_idx];
-    if (m_ptr->hold_o_idx_list.empty())
+    if (m_ptr->hold_o_idx_list.empty()) {
         return;
+    }
 
     auto *q_ptr = &floor_ptr->o_list[m_ptr->hold_o_idx_list.front()];
     GAME_TEXT o_name[MAX_NLEN];
@@ -269,27 +283,35 @@ void change_monster_stat(PlayerType *player_ptr, player_attack_type *pa_ptr, con
     auto *r_ptr = &r_info[pa_ptr->m_ptr->r_idx];
     auto *o_ptr = &player_ptr->inventory_list[INVEN_MAIN_HAND + pa_ptr->hand];
 
-    if (any_bits(player_ptr->special_attack, ATTACK_CONFUSE) || pa_ptr->chaos_effect == CE_CONFUSION || pa_ptr->mode == HISSATSU_CONF || SpellHex(player_ptr).is_spelling_specific(HEX_CONFUSION))
+    if (any_bits(player_ptr->special_attack, ATTACK_CONFUSE) || pa_ptr->chaos_effect == CE_CONFUSION || pa_ptr->mode == HISSATSU_CONF || SpellHex(player_ptr).is_spelling_specific(HEX_CONFUSION)) {
         attack_confuse(player_ptr, pa_ptr);
+    }
 
-    if (pa_ptr->magical_effect == MagicalBrandEffectType::STUN)
+    if (pa_ptr->magical_effect == MagicalBrandEffectType::STUN) {
         attack_stun(player_ptr, pa_ptr, false);
+    }
 
-    if (pa_ptr->magical_effect == MagicalBrandEffectType::SCARE)
+    if (pa_ptr->magical_effect == MagicalBrandEffectType::SCARE) {
         attack_scare(player_ptr, pa_ptr, false);
+    }
 
-    if (pa_ptr->magical_effect == MagicalBrandEffectType::DISPELL)
+    if (pa_ptr->magical_effect == MagicalBrandEffectType::DISPELL) {
         attack_dispel(player_ptr, pa_ptr);
+    }
 
-    if (pa_ptr->magical_effect == MagicalBrandEffectType::PROBE)
+    if (pa_ptr->magical_effect == MagicalBrandEffectType::PROBE) {
         attack_probe(player_ptr, pa_ptr);
+    }
 
-    if (pa_ptr->chaos_effect == CE_TELE_AWAY)
+    if (pa_ptr->chaos_effect == CE_TELE_AWAY) {
         attack_teleport_away(player_ptr, pa_ptr, num);
+    }
 
-    if (pa_ptr->chaos_effect == CE_POLYMORPH && randint1(90) > r_ptr->level)
+    if (pa_ptr->chaos_effect == CE_POLYMORPH && randint1(90) > r_ptr->level) {
         attack_polymorph(player_ptr, pa_ptr, y, x);
+    }
 
-    if (o_ptr->fixed_artifact_idx == ART_G_HAMMER)
+    if (o_ptr->fixed_artifact_idx == ART_G_HAMMER) {
         attack_golden_hammer(player_ptr, pa_ptr);
+    }
 }

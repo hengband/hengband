@@ -68,10 +68,11 @@ void spell_badstatus_message_to_player(PlayerType *player_ptr, MONSTER_IDX m_idx
     monster_name(player_ptr, m_idx, m_name);
 
     disturb(player_ptr, true, true);
-    if (player_ptr->blind)
+    if (player_ptr->blind) {
         msg_format(msgs.blind, m_name);
-    else
+    } else {
         msg_format(msgs.not_blind, m_name);
+    }
 
     if (resist) {
         msg_print(msgs.resist);
@@ -111,14 +112,17 @@ void spell_badstatus_message_to_mons(PlayerType *player_ptr, MONSTER_IDX m_idx, 
     }
 
     if (resist) {
-        if (see_t)
+        if (see_t) {
             msg_format(msgs.resist, t_name);
+        }
     } else if (saved_throw) {
-        if (see_t)
+        if (see_t) {
             msg_format(msgs.saved_throw, t_name);
+        }
     } else {
-        if (see_t)
+        if (see_t) {
             msg_format(msgs.success, t_name);
+        }
     }
 
     set_monster_csleep(player_ptr, t_idx, 0);
@@ -150,8 +154,9 @@ MonsterSpellResult spell_RF5_DRAIN_MANA(PlayerType *player_ptr, POSITION y, POSI
 
     const auto dam = monspell_damage(player_ptr, MonsterAbilityType::DRAIN_MANA, m_idx, DAM_ROLL);
     const auto proj_res = pointed(player_ptr, y, x, m_idx, AttributeType::DRAIN_MANA, dam, target_type);
-    if (target_type == MONSTER_TO_PLAYER)
+    if (target_type == MONSTER_TO_PLAYER) {
         update_smart_learn(player_ptr, m_idx, DRS_MANA);
+    }
 
     auto res = MonsterSpellResult::make_valid();
     res.learnable = proj_res.affected_player;
@@ -180,10 +185,11 @@ MonsterSpellResult spell_RF5_MIND_BLAST(PlayerType *player_ptr, POSITION y, POSI
 
     if (target_type == MONSTER_TO_PLAYER) {
         disturb(player_ptr, true, true);
-        if (!seen)
+        if (!seen) {
             msg_print(_("何かがあなたの精神に念を放っているようだ。", "You feel something focusing on your mind."));
-        else
+        } else {
             msg_format(_("%^sがあなたの瞳をじっとにらんでいる。", "%^s gazes deep into your eyes."), m_name);
+        }
     } else if (target_type == MONSTER_TO_MONSTER && see_monster(player_ptr, m_idx)) {
         msg_format(_("%^sは%sをじっと睨んだ。", "%^s gazes intently at %s."), m_name, t_name);
     }
@@ -218,10 +224,11 @@ MonsterSpellResult spell_RF5_BRAIN_SMASH(PlayerType *player_ptr, POSITION y, POS
 
     if (target_type == MONSTER_TO_PLAYER) {
         disturb(player_ptr, true, true);
-        if (!seen)
+        if (!seen) {
             msg_print(_("何かがあなたの精神に念を放っているようだ。", "You feel something focusing on your mind."));
-        else
+        } else {
             msg_format(_("%^sがあなたの瞳をじっとにらんでいる。", "%^s gazes deep into your eyes."), m_name);
+        }
     } else if (target_type == MONSTER_TO_MONSTER && see_monster(player_ptr, m_idx)) {
         msg_format(_("%^sは%sをじっと睨んだ。", "%^s gazes intently at %s."), m_name, t_name);
     }
@@ -272,8 +279,9 @@ MonsterSpellResult spell_RF5_SCARE(MONSTER_IDX m_idx, PlayerType *player_ptr, MO
         return res;
     }
 
-    if (target_type != MONSTER_TO_MONSTER)
+    if (target_type != MONSTER_TO_MONSTER) {
         return res;
+    }
 
     resist = ((tr_ptr->flags3 & RF3_NO_FEAR) != 0);
     saving_throw = (tr_ptr->level > randint1((rlev - 10) < 1 ? 1 : (rlev - 10)) + 10);
@@ -328,8 +336,9 @@ MonsterSpellResult spell_RF5_BLIND(MONSTER_IDX m_idx, PlayerType *player_ptr, MO
         return res;
     }
 
-    if (target_type != MONSTER_TO_MONSTER)
+    if (target_type != MONSTER_TO_MONSTER) {
         return res;
+    }
 
     concptr msg_default;
     GAME_TEXT t_name[MAX_NLEN];
@@ -394,8 +403,9 @@ MonsterSpellResult spell_RF5_CONF(MONSTER_IDX m_idx, PlayerType *player_ptr, MON
         return res;
     }
 
-    if (target_type != MONSTER_TO_MONSTER)
+    if (target_type != MONSTER_TO_MONSTER) {
         return res;
+    }
 
     resist = ((tr_ptr->flags3 & RF3_NO_CONF) != 0);
     saving_throw = (tr_ptr->level > randint1((rlev - 10) < 1 ? 1 : (rlev - 10)) + 10);
@@ -450,8 +460,9 @@ MonsterSpellResult spell_RF5_HOLD(MONSTER_IDX m_idx, PlayerType *player_ptr, MON
         return res;
     }
 
-    if (target_type != MONSTER_TO_MONSTER)
+    if (target_type != MONSTER_TO_MONSTER) {
         return res;
+    }
 
     resist = (tr_ptr->kind_flags.has(MonsterKindType::UNIQUE) || (tr_ptr->flags3 & RF3_NO_STUN) != 0);
     saving_throw = (tr_ptr->level > randint1((rlev - 10) < 1 ? 1 : (rlev - 10)) + 10);
@@ -494,8 +505,9 @@ MonsterSpellResult spell_RF6_HASTE(PlayerType *player_ptr, MONSTER_IDX m_idx, MO
     monspell_message_base(player_ptr, m_idx, t_idx, msg, player_ptr->blind > 0, target_type);
 
     if (set_monster_fast(player_ptr, m_idx, monster_fast_remaining(m_ptr) + 100)) {
-        if (target_type == MONSTER_TO_PLAYER || (target_type == MONSTER_TO_MONSTER && see_m))
+        if (target_type == MONSTER_TO_PLAYER || (target_type == MONSTER_TO_MONSTER && see_m)) {
             msg_format(_("%^sの動きが速くなった。", "%^s starts moving faster."), m_name);
+        }
     }
 
     return MonsterSpellResult::make_valid();
@@ -538,8 +550,9 @@ MonsterSpellResult spell_RF5_SLOW(MONSTER_IDX m_idx, PlayerType *player_ptr, MON
         return res;
     }
 
-    if (target_type != MONSTER_TO_MONSTER)
+    if (target_type != MONSTER_TO_MONSTER) {
         return res;
+    }
 
     concptr msg_default;
     GAME_TEXT t_name[MAX_NLEN];
@@ -614,18 +627,22 @@ MonsterSpellResult spell_RF6_HEAL(PlayerType *player_ptr, MONSTER_IDX m_idx, MON
 
     monspell_message_base(player_ptr, m_idx, t_idx, msg, !seen, target_type);
 
-    if (player_ptr->health_who == m_idx)
+    if (player_ptr->health_who == m_idx) {
         player_ptr->redraw |= (PR_HEALTH);
-    if (player_ptr->riding == m_idx)
+    }
+    if (player_ptr->riding == m_idx) {
         player_ptr->redraw |= (PR_UHEALTH);
+    }
 
-    if (!monster_fear_remaining(m_ptr))
+    if (!monster_fear_remaining(m_ptr)) {
         return res;
+    }
 
     (void)set_monster_monfear(player_ptr, m_idx, 0);
 
-    if (see_monster(player_ptr, m_idx))
+    if (see_monster(player_ptr, m_idx)) {
         msg_format(_("%^sは勇気を取り戻した。", format("%%^s recovers %s courage.", m_poss)), m_name);
+    }
 
     return res;
 }
@@ -667,8 +684,9 @@ MonsterSpellResult spell_RF6_INVULNER(PlayerType *player_ptr, MONSTER_IDX m_idx,
         }
     }
 
-    if (!monster_invulner_remaining(m_ptr))
+    if (!monster_invulner_remaining(m_ptr)) {
         (void)set_monster_invulner(player_ptr, m_idx, randint1(4) + 4, false);
+    }
 
     return MonsterSpellResult::make_valid();
 }

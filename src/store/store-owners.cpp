@@ -83,10 +83,9 @@ const std::unordered_map<StoreSaleType, std::vector<owner_type>> owners = {
             { "Soalin the Wretched", 30000, 107, PlayerRaceType::ZOMBIE, STORE_OBJ_STD_LEVEL },
             { "Merulla the Humble", 30000, 107, PlayerRaceType::ELF, STORE_OBJ_STD_LEVEL },
 #endif
-        }
-    },
+        } },
     /* Armoury - 28 unique names */
-    { 
+    {
         StoreSaleType::ARMOURY,
         {
 #ifdef JP
@@ -148,11 +147,10 @@ const std::unordered_map<StoreSaleType, std::vector<owner_type>> owners = {
             { "Elvererith the Cheat", 30000, 112, PlayerRaceType::DARK_ELF, STORE_OBJ_STD_LEVEL },
             { "Zzathath the Imp", 30000, 112, PlayerRaceType::IMP, STORE_OBJ_STD_LEVEL },
 #endif
-        }
-    },
+        } },
     /* Weapon Smith - 28 unique names */
-    { 
-        StoreSaleType::WEAPON, 
+    {
+        StoreSaleType::WEAPON,
         {
 #ifdef JP
             { "残忍なるアーノルド", 30000, 115, PlayerRaceType::HALF_TROLL, STORE_OBJ_STD_LEVEL },
@@ -213,10 +211,9 @@ const std::unordered_map<StoreSaleType, std::vector<owner_type>> owners = {
             { "Hooshnak the Vicious", 30000, 115, PlayerRaceType::BEASTMAN, STORE_OBJ_STD_LEVEL },
             { "Balenn War-Dancer", 30000, 112, PlayerRaceType::BARBARIAN, STORE_OBJ_STD_LEVEL },
 #endif
-        }
-    },
+        } },
     /* Temple - 22 unique names */
-    { 
+    {
         StoreSaleType::TEMPLE,
         {
 #ifdef JP
@@ -266,10 +263,9 @@ const std::unordered_map<StoreSaleType, std::vector<owner_type>> owners = {
             { "Muirt the Virtuous", 30000, 107, PlayerRaceType::KOBOLD, STORE_OBJ_STD_LEVEL },
             { "Dardobard the Weak", 30000, 109, PlayerRaceType::SPECTRE, STORE_OBJ_STD_LEVEL },
 #endif
-        }
-    },
+        } },
     /* Alchemist - 26 unique names */
-    { 
+    {
         StoreSaleType::ALCHEMIST,
         {
 #ifdef JP
@@ -327,8 +323,7 @@ const std::unordered_map<StoreSaleType, std::vector<owner_type>> owners = {
             { "Tilba", 30000, 116, PlayerRaceType::HOBBIT, STORE_OBJ_STD_LEVEL },
             { "Myrildric the Wealthy", 30000, 111, PlayerRaceType::HUMAN, STORE_OBJ_STD_LEVEL },
 #endif
-        }
-    },
+        } },
     /* Magic Shop - 23 unique names */
     {
         StoreSaleType::MAGIC,
@@ -382,10 +377,8 @@ const std::unordered_map<StoreSaleType, std::vector<owner_type>> owners = {
             { "Ibeli the Illusionist", 30000, 110, PlayerRaceType::SKELETON, STORE_OBJ_STD_LEVEL },
             { "Heto the Necromancer", 30000, 110, PlayerRaceType::YEEK, STORE_OBJ_STD_LEVEL },
 #endif
-        }
-    },
-    {
-        StoreSaleType::BLACK,
+        } },
+    { StoreSaleType::BLACK,
         {
 /* Black Market - 32 unique names */
 #ifdef JP
@@ -455,15 +448,13 @@ const std::unordered_map<StoreSaleType, std::vector<owner_type>> owners = {
             { "Theradfrid the Loser", 60000, 150, PlayerRaceType::HUMAN, STORE_OBJ_STD_LEVEL },
             { "One-Legged Eroolo", 60000, 150, PlayerRaceType::HALF_OGRE, STORE_OBJ_STD_LEVEL },
 #endif
-        }
-    },
+        } },
     /* Home */
     {
         StoreSaleType::HOME,
         {
             { _("我が家", "Your home"), 0, 100, PlayerRaceType::HUMAN, STORE_OBJ_STD_LEVEL },
-        } 
-    },
+        } },
     /* Bookstore - 21 unique names */
     {
         StoreSaleType::BOOK,
@@ -513,13 +504,11 @@ const std::unordered_map<StoreSaleType, std::vector<owner_type>> owners = {
             { "Rilin the Quiet", 30000, 110, PlayerRaceType::DWARF, STORE_OBJ_STD_LEVEL },
             { "Isung the Lord", 30000, 105, PlayerRaceType::HIGH_ELF, STORE_OBJ_STD_LEVEL },
 #endif
-        }
-    },
+        } },
     /* Museum */
     {
         StoreSaleType::MUSEUM,
         {
             { _("博物館", "Museum"), 0, 100, PlayerRaceType::HUMAN, STORE_OBJ_STD_LEVEL },
-        }
-    }
+        } }
 };

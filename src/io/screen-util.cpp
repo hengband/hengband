@@ -45,8 +45,9 @@
  */
 void resize_map()
 {
-    if (!w_ptr->character_dungeon)
+    if (!w_ptr->character_dungeon) {
         return;
+    }
 
     panel_row_max = 0;
     panel_col_max = 0;
@@ -63,8 +64,9 @@ void resize_map()
     handle_stuff(p_ptr);
     term_redraw();
 
-    if (can_save)
+    if (can_save) {
         move_cursor_relative(p_ptr->y, p_ptr->x);
+    }
 
     term_fresh();
 }
@@ -80,8 +82,9 @@ void get_screen_size(TERM_LEN *wid_p, TERM_LEN *hgt_p)
     term_get_size(wid_p, hgt_p);
     *hgt_p -= ROW_MAP + 2;
     *wid_p -= COL_MAP + 2;
-    if (use_bigtile)
+    if (use_bigtile) {
         *wid_p /= 2;
+    }
 }
 
 /*

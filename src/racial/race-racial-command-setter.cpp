@@ -181,10 +181,11 @@ void set_race_racial_command(PlayerType *player_ptr, rc_type *rc_ptr)
     case PlayerRaceType::KLACKON:
         rpi = rpi_type(_("酸の唾", "Spit Acid"));
         rpi.info = format("%s%d", KWD_DAM, rc_ptr->lvl);
-        if (rc_ptr->lvl >= 25)
+        if (rc_ptr->lvl >= 25) {
             rpi.text = _("酸のボールを放つ", "Fires a boll of acid.");
-        else
+        } else {
             rpi.text = _("酸の矢を放つ", "Fires a bolt of acid.");
+        }
         rpi.min_level = 9;
         rpi.cost = 9;
         rpi.stat = A_DEX;

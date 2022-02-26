@@ -26,16 +26,19 @@ int lore_do_probe(PlayerType *player_ptr, MONRACE_IDX r_idx)
 {
     int n = 0;
     auto *r_ptr = &r_info[r_idx];
-    if (r_ptr->r_wake != MAX_UCHAR)
+    if (r_ptr->r_wake != MAX_UCHAR) {
         n++;
-    if (r_ptr->r_ignore != MAX_UCHAR)
+    }
+    if (r_ptr->r_ignore != MAX_UCHAR) {
         n++;
+    }
     r_ptr->r_wake = r_ptr->r_ignore = MAX_UCHAR;
 
     for (int i = 0; i < 4; i++) {
         if (r_ptr->blow[i].effect != RaceBlowEffectType::NONE || r_ptr->blow[i].method != RaceBlowMethodType::NONE) {
-            if (r_ptr->r_blows[i] != MAX_UCHAR)
+            if (r_ptr->r_blows[i] != MAX_UCHAR) {
                 n++;
+            }
             r_ptr->r_blows[i] = MAX_UCHAR;
         }
     }
@@ -43,27 +46,33 @@ int lore_do_probe(PlayerType *player_ptr, MONRACE_IDX r_idx)
     byte tmp_byte = (((r_ptr->flags1 & RF1_DROP_4D2) ? 8 : 0) + ((r_ptr->flags1 & RF1_DROP_3D2) ? 6 : 0) + ((r_ptr->flags1 & RF1_DROP_2D2) ? 4 : 0) + ((r_ptr->flags1 & RF1_DROP_1D2) ? 2 : 0) + ((r_ptr->flags1 & RF1_DROP_90) ? 1 : 0) + ((r_ptr->flags1 & RF1_DROP_60) ? 1 : 0));
 
     if (!(r_ptr->flags1 & RF1_ONLY_GOLD)) {
-        if (r_ptr->r_drop_item != tmp_byte)
+        if (r_ptr->r_drop_item != tmp_byte) {
             n++;
+        }
         r_ptr->r_drop_item = tmp_byte;
     }
     if (!(r_ptr->flags1 & RF1_ONLY_ITEM)) {
-        if (r_ptr->r_drop_gold != tmp_byte)
+        if (r_ptr->r_drop_gold != tmp_byte) {
             n++;
+        }
         r_ptr->r_drop_gold = tmp_byte;
     }
 
-    if (r_ptr->r_cast_spell != MAX_UCHAR)
+    if (r_ptr->r_cast_spell != MAX_UCHAR) {
         n++;
+    }
     r_ptr->r_cast_spell = MAX_UCHAR;
 
     for (int i = 0; i < 32; i++) {
-        if (!(r_ptr->r_flags1 & (1UL << i)) && (r_ptr->flags1 & (1UL << i)))
+        if (!(r_ptr->r_flags1 & (1UL << i)) && (r_ptr->flags1 & (1UL << i))) {
             n++;
-        if (!(r_ptr->r_flags2 & (1UL << i)) && (r_ptr->flags2 & (1UL << i)))
+        }
+        if (!(r_ptr->r_flags2 & (1UL << i)) && (r_ptr->flags2 & (1UL << i))) {
             n++;
-        if (!(r_ptr->r_flags3 & (1UL << i)) && (r_ptr->flags3 & (1UL << i)))
+        }
+        if (!(r_ptr->r_flags3 & (1UL << i)) && (r_ptr->flags3 & (1UL << i))) {
             n++;
+        }
     }
 
     auto resistance_flags = r_ptr->resistance_flags;
@@ -82,8 +91,9 @@ int lore_do_probe(PlayerType *player_ptr, MONRACE_IDX r_idx)
     r_ptr->r_ability_flags = r_ptr->ability_flags;
     r_ptr->r_behavior_flags = r_ptr->behavior_flags;
 
-    if (!r_ptr->r_can_evolve)
+    if (!r_ptr->r_can_evolve) {
         n++;
+    }
     r_ptr->r_can_evolve = true;
 
     if (player_ptr->monster_race_idx == r_idx) {
@@ -105,18 +115,24 @@ void lore_treasure(PlayerType *player_ptr, MONSTER_IDX m_idx, ITEM_NUMBER num_it
     auto *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
     auto *r_ptr = &r_info[m_ptr->r_idx];
 
-    if (!is_original_ap(m_ptr))
+    if (!is_original_ap(m_ptr)) {
         return;
+    }
 
-    if (num_item > r_ptr->r_drop_item)
+    if (num_item > r_ptr->r_drop_item) {
         r_ptr->r_drop_item = num_item;
-    if (num_gold > r_ptr->r_drop_gold)
+    }
+    if (num_gold > r_ptr->r_drop_gold) {
         r_ptr->r_drop_gold = num_gold;
+    }
 
-    if (r_ptr->flags1 & (RF1_DROP_GOOD))
+    if (r_ptr->flags1 & (RF1_DROP_GOOD)) {
         r_ptr->r_flags1 |= (RF1_DROP_GOOD);
-    if (r_ptr->flags1 & (RF1_DROP_GREAT))
+    }
+    if (r_ptr->flags1 & (RF1_DROP_GREAT)) {
         r_ptr->r_flags1 |= (RF1_DROP_GREAT);
-    if (player_ptr->monster_race_idx == m_ptr->r_idx)
+    }
+    if (player_ptr->monster_race_idx == m_ptr->r_idx) {
         player_ptr->window_flags |= (PW_MONSTER);
+    }
 }

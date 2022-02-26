@@ -1,10 +1,10 @@
 ﻿#include "object-use/item-use-checker.h"
 #include "system/player-type-definition.h"
-#include "timed-effect/timed-effects.h"
 #include "timed-effect/player-stun.h"
+#include "timed-effect/timed-effects.h"
 #include "view/display-messages.h"
 
-ItemUseChecker::ItemUseChecker(PlayerType* player_ptr)
+ItemUseChecker::ItemUseChecker(PlayerType *player_ptr)
     : player_ptr(player_ptr)
 {
 }

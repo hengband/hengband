@@ -19,8 +19,8 @@
 #include "main/sound-of-music.h"
 #include "mutation/mutation-flag-types.h"
 #include "player-base/player-class.h"
-#include "player-info/samurai-data-type.h"
 #include "player-info/race-info.h"
+#include "player-info/samurai-data-type.h"
 #include "player-status/player-energy.h"
 #include "player/attack-defense-types.h"
 #include "player/player-damage.h"
@@ -72,17 +72,19 @@ static void racial_power_display_list(PlayerType *player_ptr, rc_type *rc_ptr)
     auto y = 0;
     for (; y < RC_PAGE_SIZE; y++) {
         auto ctr = RC_PAGE_SIZE * rc_ptr->page + y;
-        if (ctr >= rc_ptr->power_count())
+        if (ctr >= rc_ptr->power_count()) {
             break;
+        }
 
-        if (use_menu)
+        if (use_menu) {
             strcpy(dummy, "    ");
-        else {
+        } else {
             char letter;
-            if (ctr < 26)
+            if (ctr < 26) {
                 letter = I2A(ctr);
-            else
+            } else {
                 letter = '0' + ctr - 26;
+            }
 
             sprintf(dummy, " %c) ", letter);
         }
@@ -97,8 +99,9 @@ static void racial_power_display_list(PlayerType *player_ptr, rc_type *rc_ptr)
 
     prt("", 2 + y, x);
 
-    if (use_menu)
+    if (use_menu) {
         racial_power_display_cursor(rc_ptr);
+    }
 }
 
 /*!
@@ -109,11 +112,12 @@ static void racial_power_make_prompt(rc_type *rc_ptr)
 {
     concptr fmt;
 
-    if (rc_ptr->browse_mode)
+    if (rc_ptr->browse_mode) {
         fmt = _(
             "(特殊能力 %c-%c, '*':一覧, '/'で使用, ESCで中断) どの能力について知りますか？", "(Powers %c-%c, *=List. /=Use, ESC=exit) Browse which power? ");
-    else
+    } else {
         fmt = _("(特殊能力 %c-%c, '*'で一覧, '/'で閲覧, ESCで中断) どの能力を使いますか？", "(Powers %c-%c, *=List, /=Browse, ESC=exit) Use which power? ");
+    }
 
     (void)strnfmt(rc_ptr->out_val, 78, fmt, I2A(0), (rc_ptr->power_count() <= 26) ? I2A(rc_ptr->power_count() - 1) : '0' + rc_ptr->power_count() - 27);
 }
@@ -128,13 +132,16 @@ static void racial_power_add_index(PlayerType *player_ptr, rc_type *rc_ptr, int 
 {
     auto n = rc_ptr->menu_line + i;
     if (i < -1 || i > 1) {
-        if (n < 0 || n >= rc_ptr->power_count())
+        if (n < 0 || n >= rc_ptr->power_count()) {
             return;
+        }
     }
-    if (n < 0)
+    if (n < 0) {
         n = rc_ptr->power_count() - 1;
-    if (n >= rc_ptr->power_count())
+    }
+    if (n >= rc_ptr->power_count()) {
         n = 0;
+    }
 
     auto p = n / RC_PAGE_SIZE;
     racial_power_erase_cursor(rc_ptr);
@@ -144,8 +151,9 @@ static void racial_power_add_index(PlayerType *player_ptr, rc_type *rc_ptr, int 
         screen_load();
         screen_save();
         racial_power_display_list(player_ptr, rc_ptr);
-    } else
+    } else {
         racial_power_display_cursor(rc_ptr);
+    }
 }
 
 /*!
@@ -202,14 +210,17 @@ static bool racial_power_interpret_menu_keys(PlayerType *player_ptr, rc_type *rc
  */
 static bool racial_power_select_by_menu(PlayerType *player_ptr, rc_type *rc_ptr)
 {
-    if (!use_menu || rc_ptr->choice == ' ')
+    if (!use_menu || rc_ptr->choice == ' ') {
         return RC_CONTINUE;
+    }
 
-    if (racial_power_interpret_menu_keys(player_ptr, rc_ptr))
+    if (racial_power_interpret_menu_keys(player_ptr, rc_ptr)) {
         return RC_CANCEL;
+    }
 
-    if (rc_ptr->menu_line > rc_ptr->power_count())
+    if (rc_ptr->menu_line > rc_ptr->power_count()) {
         rc_ptr->menu_line -= rc_ptr->power_count();
+    }
 
     return RC_CONTINUE;
 }
@@ -222,13 +233,15 @@ static bool racial_power_select_by_menu(PlayerType *player_ptr, rc_type *rc_ptr)
  */
 static bool racial_power_interpret_choise(PlayerType *player_ptr, rc_type *rc_ptr)
 {
-    if (use_menu)
+    if (use_menu) {
         return false;
+    }
 
     if (rc_ptr->choice == ' ' || rc_ptr->choice == '*') {
         rc_ptr->page++;
-        if (rc_ptr->page > rc_ptr->max_page)
+        if (rc_ptr->page > rc_ptr->max_page) {
             rc_ptr->page = 0;
+        }
         screen_load();
         screen_save();
         racial_power_display_list(player_ptr, rc_ptr);
@@ -241,19 +254,22 @@ static bool racial_power_interpret_choise(PlayerType *player_ptr, rc_type *rc_pt
         return false;
     }
 
-    if (rc_ptr->choice == '?')
+    if (rc_ptr->choice == '?') {
         return true;
+    }
 
     return true;
 }
 
 static void decide_racial_command(rc_type *rc_ptr)
 {
-    if (use_menu)
+    if (use_menu) {
         return;
+    }
 
-    if (rc_ptr->choice == '\r' && rc_ptr->power_count() == 1)
+    if (rc_ptr->choice == '\r' && rc_ptr->power_count() == 1) {
         rc_ptr->choice = 'a';
+    }
 
     if (!isalpha(rc_ptr->choice)) {
         rc_ptr->ask = false;
@@ -262,8 +278,9 @@ static void decide_racial_command(rc_type *rc_ptr)
     }
 
     rc_ptr->ask = (isupper(rc_ptr->choice));
-    if (rc_ptr->ask)
+    if (rc_ptr->ask) {
         rc_ptr->choice = (char)tolower(rc_ptr->choice);
+    }
 
     rc_ptr->command_code = (islower(rc_ptr->choice) ? A2I(rc_ptr->choice) : -1);
 }
@@ -275,8 +292,9 @@ static bool ask_invoke_racial_power(rc_type *rc_ptr)
         return false;
     }
 
-    if (!rc_ptr->ask)
+    if (!rc_ptr->ask) {
         return true;
+    }
 
     char tmp_val[160];
     (void)strnfmt(tmp_val, 78, _("%sを使いますか？ ", "Use %s? "), rc_ptr->power_desc[rc_ptr->command_code].racial_name.c_str());
@@ -320,25 +338,29 @@ static bool racial_power_process_input(PlayerType *player_ptr, rc_type *rc_ptr)
     rc_ptr->choice = (always_show_list || use_menu) ? ESCAPE : 1;
 
     while (true) {
-        if (rc_ptr->choice == ESCAPE)
+        if (rc_ptr->choice == ESCAPE) {
             rc_ptr->choice = ' ';
-        else if (!get_com(rc_ptr->out_val, &rc_ptr->choice, false))
+        } else if (!get_com(rc_ptr->out_val, &rc_ptr->choice, false)) {
             return RC_CANCEL;
+        }
 
-        if (racial_power_select_by_menu(player_ptr, rc_ptr) == RC_CANCEL)
+        if (racial_power_select_by_menu(player_ptr, rc_ptr) == RC_CANCEL) {
             return RC_CANCEL;
+        }
 
         if (!rc_ptr->is_chosen && racial_power_interpret_choise(player_ptr, rc_ptr)) {
             decide_racial_command(rc_ptr);
-            if (ask_invoke_racial_power(rc_ptr))
+            if (ask_invoke_racial_power(rc_ptr)) {
                 rc_ptr->is_chosen = true;
+            }
         }
 
         if (rc_ptr->is_chosen) {
-            if (rc_ptr->browse_mode)
+            if (rc_ptr->browse_mode) {
                 racial_power_display_explanation(player_ptr, rc_ptr);
-            else
+            } else {
                 break;
+            }
         }
     }
 
@@ -353,20 +375,23 @@ static bool racial_power_process_input(PlayerType *player_ptr, rc_type *rc_ptr)
  */
 static bool racial_power_select_power(PlayerType *player_ptr, rc_type *rc_ptr)
 {
-    if (repeat_pull(&rc_ptr->command_code) && rc_ptr->command_code >= 0 && rc_ptr->command_code < rc_ptr->power_count())
+    if (repeat_pull(&rc_ptr->command_code) && rc_ptr->command_code >= 0 && rc_ptr->command_code < rc_ptr->power_count()) {
         return RC_CONTINUE;
+    }
 
     screen_save();
 
-    if (use_menu)
+    if (use_menu) {
         racial_power_display_list(player_ptr, rc_ptr);
+    }
 
     auto canceled = racial_power_process_input(player_ptr, rc_ptr) == RC_CANCEL;
 
     screen_load();
 
-    if (canceled)
+    if (canceled) {
         return RC_CANCEL;
+    }
 
     repeat_push(rc_ptr->command_code);
     return RC_CONTINUE;
@@ -385,10 +410,11 @@ static void racial_power_cast_power(PlayerType *player_ptr, rc_type *rc_ptr)
 
     switch (check_racial_level(player_ptr, rpi_ptr)) {
     case RACIAL_SUCCESS:
-        if (rpi_ptr->number < 0)
+        if (rpi_ptr->number < 0) {
             rc_ptr->cast = exe_racial_power(player_ptr, rpi_ptr->number);
-        else
+        } else {
             rc_ptr->cast = exe_mutation_power(player_ptr, i2enum<PlayerMutationType>(rpi_ptr->number));
+        }
         break;
     case RACIAL_FAILURE:
         rc_ptr->cast = true;
@@ -411,14 +437,15 @@ static void racial_power_cast_power(PlayerType *player_ptr, rc_type *rc_ptr)
 static bool racial_power_reduce_mana(PlayerType *player_ptr, rc_type *rc_ptr)
 {
     int racial_cost = rc_ptr->power_desc[rc_ptr->command_code].racial_cost;
-    if (racial_cost == 0)
+    if (racial_cost == 0) {
         return false;
+    }
 
     int actual_racial_cost = racial_cost / 2 + randint1(racial_cost / 2);
 
-    if (player_ptr->csp >= actual_racial_cost)
+    if (player_ptr->csp >= actual_racial_cost) {
         player_ptr->csp -= actual_racial_cost;
-    else {
+    } else {
         actual_racial_cost -= player_ptr->csp;
         player_ptr->csp = 0;
         take_hit(player_ptr, DAMAGE_USELIFE, actual_racial_cost, _("過度の集中", "concentrating too hard"));
@@ -433,27 +460,28 @@ static bool racial_power_reduce_mana(PlayerType *player_ptr, rc_type *rc_ptr)
  */
 void do_cmd_racial_power(PlayerType *player_ptr)
 {
-    if (player_ptr->wild_mode)
+    if (player_ptr->wild_mode) {
         return;
+    }
 
     PlayerEnergy energy(player_ptr);
-    if (cmd_limit_confused(player_ptr))
-    {
+    if (cmd_limit_confused(player_ptr)) {
         energy.reset_player_turn();
         return;
     }
 
-   PlayerClass(player_ptr).break_samurai_stance({ SamuraiStanceType::MUSOU, SamuraiStanceType::KOUKIJIN });
+    PlayerClass(player_ptr).break_samurai_stance({ SamuraiStanceType::MUSOU, SamuraiStanceType::KOUKIJIN });
 
     auto tmp_r = rc_type(player_ptr);
     auto *rc_ptr = &tmp_r;
 
     switch_class_racial(player_ptr, rc_ptr);
 
-    if (player_ptr->mimic_form != MimicKindType::NONE)
+    if (player_ptr->mimic_form != MimicKindType::NONE) {
         set_mimic_racial_command(player_ptr, rc_ptr);
-    else
+    } else {
         set_race_racial_command(player_ptr, rc_ptr);
+    }
 
     select_mutation_racial(player_ptr, rc_ptr);
 
@@ -466,16 +494,18 @@ void do_cmd_racial_power(PlayerType *player_ptr)
     rc_ptr->page = use_menu ? 0 : -1;
     racial_power_make_prompt(rc_ptr);
 
-    if (racial_power_select_power(player_ptr, rc_ptr) == RC_CONTINUE)
+    if (racial_power_select_power(player_ptr, rc_ptr) == RC_CONTINUE) {
         racial_power_cast_power(player_ptr, rc_ptr);
+    }
 
     if (!rc_ptr->cast) {
         energy.reset_player_turn();
         return;
     }
 
-    if (!racial_power_reduce_mana(player_ptr, rc_ptr))
+    if (!racial_power_reduce_mana(player_ptr, rc_ptr)) {
         return;
+    }
 
     set_bits(player_ptr->redraw, PR_HP | PR_MANA);
     set_bits(player_ptr->window_flags, PW_PLAYER | PW_SPELL);

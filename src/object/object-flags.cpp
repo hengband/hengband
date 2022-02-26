@@ -86,14 +86,16 @@ TrFlags object_flags_known(const ObjectType *o_ptr)
     auto *k_ptr = &k_info[o_ptr->k_idx];
     TrFlags flgs{};
 
-    if (!o_ptr->is_aware())
+    if (!o_ptr->is_aware()) {
         return flgs;
+    }
 
     /* Base object */
     flgs = k_ptr->flags;
 
-    if (!o_ptr->is_known())
+    if (!o_ptr->is_known()) {
         return flgs;
+    }
 
     object_flags_lite(o_ptr, flgs);
     if (spoil || o_ptr->is_fully_known()) {

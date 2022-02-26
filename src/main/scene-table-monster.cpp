@@ -92,20 +92,24 @@ static bool is_high_rate(PlayerType *player_ptr, MONSTER_IDX m_idx1, MONSTER_IDX
     auto ap_r_ptr2 = &r_info[m_ptr2->ap_r_idx];
 
     /* Unique monsters first */
-    if (ap_r_ptr1->kind_flags.has(MonsterKindType::UNIQUE) != ap_r_ptr2->kind_flags.has(MonsterKindType::UNIQUE))
+    if (ap_r_ptr1->kind_flags.has(MonsterKindType::UNIQUE) != ap_r_ptr2->kind_flags.has(MonsterKindType::UNIQUE)) {
         return ap_r_ptr1->kind_flags.has(MonsterKindType::UNIQUE);
+    }
 
     /* Shadowers first (あやしい影) */
-    if (m_ptr1->mflag2.has(MonsterConstantFlagType::KAGE) != m_ptr2->mflag2.has(MonsterConstantFlagType::KAGE))
+    if (m_ptr1->mflag2.has(MonsterConstantFlagType::KAGE) != m_ptr2->mflag2.has(MonsterConstantFlagType::KAGE)) {
         return m_ptr1->mflag2.has(MonsterConstantFlagType::KAGE);
+    }
 
     /* Unknown monsters first */
-    if ((ap_r_ptr1->r_tkills == 0) != (ap_r_ptr2->r_tkills == 0))
+    if ((ap_r_ptr1->r_tkills == 0) != (ap_r_ptr2->r_tkills == 0)) {
         return ap_r_ptr1->r_tkills == 0;
+    }
 
     /* Higher level monsters first (if known) */
-    if (ap_r_ptr1->r_tkills && ap_r_ptr2->r_tkills && ap_r_ptr1->level != ap_r_ptr2->level)
+    if (ap_r_ptr1->r_tkills && ap_r_ptr2->r_tkills && ap_r_ptr1->level != ap_r_ptr2->level) {
         return ap_r_ptr1->level > ap_r_ptr2->level;
+    }
 
     /* Sort by index if all conditions are same */
     return m_ptr1->ap_r_idx > m_ptr2->ap_r_idx;

@@ -21,23 +21,30 @@ bool object_is_bounty(PlayerType *player_ptr, ObjectType *o_ptr)
 {
     int i;
 
-    if (o_ptr->tval != ItemKindType::CORPSE)
+    if (o_ptr->tval != ItemKindType::CORPSE) {
         return false;
+    }
 
-    if (vanilla_town)
+    if (vanilla_town) {
         return false;
+    }
 
-    if (player_ptr->today_mon > 0 && (streq(r_info[o_ptr->pval].name.c_str(), r_info[w_ptr->today_mon].name.c_str())))
+    if (player_ptr->today_mon > 0 && (streq(r_info[o_ptr->pval].name.c_str(), r_info[w_ptr->today_mon].name.c_str()))) {
         return true;
+    }
 
-    if (o_ptr->pval == MON_TSUCHINOKO)
+    if (o_ptr->pval == MON_TSUCHINOKO) {
         return true;
+    }
 
-    for (i = 0; i < MAX_BOUNTY; i++)
-        if (o_ptr->pval == w_ptr->bounty_r_idx[i])
+    for (i = 0; i < MAX_BOUNTY; i++) {
+        if (o_ptr->pval == w_ptr->bounty_r_idx[i]) {
             break;
-    if (i < MAX_BOUNTY)
+        }
+    }
+    if (i < MAX_BOUNTY) {
         return true;
+    }
 
     return false;
 }
@@ -49,16 +56,19 @@ bool object_is_bounty(PlayerType *player_ptr, ObjectType *o_ptr)
  */
 bool object_is_quest_target(QuestId quest_idx, ObjectType *o_ptr)
 {
-    if (!inside_quest(quest_idx))
+    if (!inside_quest(quest_idx)) {
         return false;
+    }
 
     ARTIFACT_IDX a_idx = quest[enum2i(quest_idx)].k_idx;
-    if (a_idx == 0)
+    if (a_idx == 0) {
         return false;
+    }
 
     auto *a_ptr = &a_info[a_idx];
-    if (a_ptr->gen_flags.has(ItemGenerationTraitType::INSTA_ART))
+    if (a_ptr->gen_flags.has(ItemGenerationTraitType::INSTA_ART)) {
         return false;
+    }
 
     return (o_ptr->tval == a_ptr->tval) && (o_ptr->sval == a_ptr->sval);
 }

@@ -220,8 +220,9 @@ static int get_mane_power(PlayerType *player_ptr, int *sn, bool baigaesi)
                     minfail = adj_mag_fail[player_ptr->stat_index[spell.use_stat]];
 
                     /* Minimum failure rate */
-                    if (chance < minfail)
+                    if (chance < minfail) {
                         chance = minfail;
+                    }
 
                     auto player_stun = player_ptr->effects()->stun();
                     chance += player_stun->get_magic_chance_penalty();

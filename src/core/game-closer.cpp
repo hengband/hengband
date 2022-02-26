@@ -43,17 +43,20 @@ static void clear_floor(PlayerType *player_ptr)
 
 static void send_world_score_on_closing(PlayerType *player_ptr, bool do_send)
 {
-    if (send_world_score(player_ptr, do_send))
+    if (send_world_score(player_ptr, do_send)) {
         return;
+    }
 
     if (!get_check_strict(
-            player_ptr, _("後でスコアを登録するために待機しますか？", "Stand by for later score registration? "), (CHECK_NO_ESCAPE | CHECK_NO_HISTORY)))
+            player_ptr, _("後でスコアを登録するために待機しますか？", "Stand by for later score registration? "), (CHECK_NO_ESCAPE | CHECK_NO_HISTORY))) {
         return;
+    }
 
     player_ptr->wait_report_score = true;
     player_ptr->is_dead = false;
-    if (!save_player(player_ptr, SAVE_TYPE_CLOSE_GAME))
+    if (!save_player(player_ptr, SAVE_TYPE_CLOSE_GAME)) {
         msg_print(_("セーブ失敗！", "death save failed!"));
+    }
 }
 
 /*!
@@ -63,14 +66,16 @@ static void send_world_score_on_closing(PlayerType *player_ptr, bool do_send)
  */
 static bool check_death(PlayerType *player_ptr)
 {
-    if (player_ptr->is_dead)
+    if (player_ptr->is_dead) {
         return true;
+    }
 
     do_cmd_save_game(player_ptr, false);
     prt(_("リターンキーか ESC キーを押して下さい。", "Press Return (or Escape)."), 0, 40);
     play_music(TERM_XTRA_MUSIC_BASIC, MUSIC_BASIC_EXIT);
-    if (inkey() != ESCAPE)
+    if (inkey() != ESCAPE) {
         predict_score(player_ptr);
+    }
 
     clear_floor(player_ptr);
     return false;
@@ -155,20 +160,24 @@ void close_game(PlayerType *player_ptr)
     highscore_fd = fd_open(buf, O_RDWR);
     safe_setuid_drop();
 
-    if (!check_death(player_ptr))
+    if (!check_death(player_ptr)) {
         return;
+    }
 
-    if (w_ptr->total_winner)
+    if (w_ptr->total_winner) {
         kingly(player_ptr);
+    }
 
     if (!cheat_save || get_check(_("死んだデータをセーブしますか？ ", "Save death? "))) {
         update_playtime();
         w_ptr->sf_play_time += w_ptr->play_time;
 
-        if (!save_player(player_ptr, SAVE_TYPE_CLOSE_GAME))
+        if (!save_player(player_ptr, SAVE_TYPE_CLOSE_GAME)) {
             msg_print(_("セーブ失敗！", "death save failed!"));
-    } else
+        }
+    } else {
         do_send = false;
+    }
 
     print_tomb(player_ptr);
     flush();
@@ -176,8 +185,9 @@ void close_game(PlayerType *player_ptr)
     term_clear();
     if (check_score(player_ptr)) {
         send_world_score_on_closing(player_ptr, do_send);
-        if (!player_ptr->wait_report_score)
+        if (!player_ptr->wait_report_score) {
             (void)top_twenty(player_ptr);
+        }
     } else if (highscore_fd >= 0) {
         display_scores(0, 10, -1, nullptr);
     }

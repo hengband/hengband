@@ -101,8 +101,9 @@ static void do_cmd_options_autosave(PlayerType *player_ptr, concptr info)
         prt(buf, 0, 0);
         for (i = 0; i < n; i++) {
             byte a = TERM_WHITE;
-            if (i == k)
+            if (i == k) {
                 a = TERM_L_BLUE;
+            }
 
             sprintf(
                 buf, "%-48s: %s (%s)", autosave_info[i].o_desc, (*autosave_info[i].o_var ? _("はい  ", "yes") : _("いいえ", "no ")), autosave_info[i].o_text);
@@ -191,8 +192,9 @@ static bool has_window_flag(int x, int y)
 static void set_window_flag(int x, int y)
 {
     auto flag = i2enum<window_redraw_type>(1UL << y);
-    if (any_bits(PW_ALL, flag))
+    if (any_bits(PW_ALL, flag)) {
         set_bits(window_flag[x], flag);
+    }
 }
 
 /*!
@@ -232,8 +234,9 @@ static void do_cmd_options_win(PlayerType *player_ptr)
         for (j = 0; j < 8; j++) {
             byte a = TERM_WHITE;
             concptr s = angband_term_name[j];
-            if (j == x)
+            if (j == x) {
                 a = TERM_L_BLUE;
+            }
 
             term_putstr(35 + j * 5 - strlen(s) / 2, 2 + j % 2, -1, a, s);
         }
@@ -241,21 +244,25 @@ static void do_cmd_options_win(PlayerType *player_ptr)
         for (i = 0; i < 16; i++) {
             byte a = TERM_WHITE;
             concptr str = window_flag_desc[i];
-            if (i == y)
+            if (i == y) {
                 a = TERM_L_BLUE;
+            }
 
-            if (!str)
+            if (!str) {
                 str = _("(未使用)", "(Unused option)");
+            }
 
             term_putstr(0, i + 5, -1, a, str);
             for (j = 0; j < 8; j++) {
                 char c = '.';
                 a = TERM_WHITE;
-                if ((i == y) && (j == x))
+                if ((i == y) && (j == x)) {
                     a = TERM_L_BLUE;
+                }
 
-                if (window_flag[j] & (1UL << i))
+                if (window_flag[j] & (1UL << i)) {
                     c = 'X';
+                }
 
                 term_putch(35 + j * 5, i + 5, a, c);
             }
@@ -273,13 +280,15 @@ static void do_cmd_options_win(PlayerType *player_ptr)
         case 'T':
             has_flag = has_window_flag(x, y);
             window_flag[x] = 0;
-            if (x > 0 && !has_flag)
+            if (x > 0 && !has_flag) {
                 set_window_flag(x, y);
+            }
             break;
         case 's':
         case 'S':
-            if (x == 0)
+            if (x == 0) {
                 break;
+            }
             window_flag[x] = 0;
             clear_window_flag(x, y);
             set_window_flag(x, y);
@@ -292,19 +301,22 @@ static void do_cmd_options_win(PlayerType *player_ptr)
             d = get_keymap_dir(ch);
             x = (x + ddx[d] + 8) % 8;
             y = (y + ddy[d] + 16) % 16;
-            if (!d)
+            if (!d) {
                 bell();
+            }
             break;
         }
     }
 
     for (j = 0; j < 8; j++) {
         term_type *old = game_term;
-        if (!angband_term[j])
+        if (!angband_term[j]) {
             continue;
+        }
 
-        if (window_flag[j] == old_flag[j])
+        if (window_flag[j] == old_flag[j]) {
             continue;
+        }
 
         term_activate(angband_term[j]);
         term_clear();
@@ -430,28 +442,32 @@ void do_cmd_options(PlayerType *player_ptr)
     screen_save();
     while (true) {
         int n = OPT_NUM;
-        if (!w_ptr->noscore && !allow_debug_opts)
+        if (!w_ptr->noscore && !allow_debug_opts) {
             n--;
+        }
 
         term_clear();
         prt(_("[ オプションの設定 ]", "Game options"), 1, 0);
         while (true) {
             for (i = 0; i < n; i++) {
                 byte a = TERM_WHITE;
-                if (i == y)
+                if (i == y) {
                     a = TERM_L_BLUE;
+                }
                 term_putstr(5, option_fields[i].row, -1, a, format("(%c) %s", toupper(option_fields[i].key), option_fields[i].name));
             }
 
             prt(_("<方向>で移動, Enterで決定, ESCでキャンセル, ?でヘルプ: ", "Move to <dir>, Select to Enter, Cancel to ESC, ? to help: "), 21, 0);
             skey = inkey_special(true);
-            if (!(skey & SKEY_MASK))
+            if (!(skey & SKEY_MASK)) {
                 k = (char)skey;
-            else
+            } else {
                 k = 0;
+            }
 
-            if (k == ESCAPE)
+            if (k == ESCAPE) {
                 break;
+            }
 
             if (angband_strchr("\n\r ", k)) {
                 k = option_fields[y].key;
@@ -459,28 +475,35 @@ void do_cmd_options(PlayerType *player_ptr)
             }
 
             for (i = 0; i < n; i++) {
-                if (tolower(k) == option_fields[i].key)
+                if (tolower(k) == option_fields[i].key) {
                     break;
+                }
             }
 
-            if (i < n)
+            if (i < n) {
                 break;
+            }
 
-            if (k == '?')
+            if (k == '?') {
                 break;
+            }
 
             d = 0;
-            if (skey == SKEY_UP)
+            if (skey == SKEY_UP) {
                 d = 8;
-            if (skey == SKEY_DOWN)
+            }
+            if (skey == SKEY_DOWN) {
                 d = 2;
+            }
             y = (y + ddy[d] + n) % n;
-            if (!d)
+            if (!d) {
                 bell();
+            }
         }
 
-        if (k == ESCAPE)
+        if (k == ESCAPE) {
             break;
+        }
 
         switch (k) {
         case '1': {
@@ -516,7 +539,7 @@ void do_cmd_options(PlayerType *player_ptr)
         case 'b': {
             do_cmd_options_aux(player_ptr, OPT_PAGE_BIRTH,
                 (!w_ptr->wizard || !allow_debug_opts) ? _("初期オプション(参照のみ)", "Birth Options(browse only)")
-                                                                  : _("初期オプション((*)はスコアに影響)", "Birth Options ((*)) affect score"));
+                                                      : _("初期オプション((*)はスコアに影響)", "Birth Options ((*)) affect score"));
             break;
         }
         case 'C':
@@ -561,15 +584,16 @@ void do_cmd_options(PlayerType *player_ptr)
                 prt(format(_("現在の低ヒットポイント警告: %d0%%", "Current hitpoint warning: %d0%%"), hitpoint_warn), 22, 0);
                 prt(_("低ヒットポイント警告 (0-9) ESCで決定: ", "Hitpoint Warning (0-9 or ESC to accept): "), 20, 0);
                 k = inkey();
-                if (k == ESCAPE)
+                if (k == ESCAPE) {
                     break;
-                else if (k == '?') {
+                } else if (k == '?') {
                     (void)show_file(player_ptr, true, _("joption.txt#Hitpoint", "option.txt#Hitpoint"), nullptr, 0, 0);
                     term_clear();
-                } else if (isdigit(k))
+                } else if (isdigit(k)) {
                     hitpoint_warn = D2I(k);
-                else
+                } else {
                     bell();
+                }
             }
 
             break;
@@ -582,15 +606,16 @@ void do_cmd_options(PlayerType *player_ptr)
                 prt(format(_("現在の低魔力色閾値: %d0%%", "Current mana color threshold: %d0%%"), mana_warn), 22, 0);
                 prt(_("低魔力閾値 (0-9) ESCで決定: ", "Mana color Threshold (0-9 or ESC to accept): "), 20, 0);
                 k = inkey();
-                if (k == ESCAPE)
+                if (k == ESCAPE) {
                     break;
-                else if (k == '?') {
+                } else if (k == '?') {
                     (void)show_file(player_ptr, true, _("joption.txt#Manapoint", "option.txt#Manapoint"), nullptr, 0, 0);
                     term_clear();
-                } else if (isdigit(k))
+                } else if (isdigit(k)) {
                     mana_warn = D2I(k);
-                else
+                } else {
                     bell();
+                }
             }
 
             break;
@@ -626,12 +651,14 @@ void do_cmd_options_aux(PlayerType *player_ptr, game_option_types page, concptr 
     char buf[80];
     bool browse_only = (page == OPT_PAGE_BIRTH) && w_ptr->character_generated && (!w_ptr->wizard || !allow_debug_opts);
 
-    for (i = 0; i < 24; i++)
+    for (i = 0; i < 24; i++) {
         opt[i] = 0;
+    }
 
     for (i = 0; option_info[i].o_desc; i++) {
-        if (option_info[i].o_page == page)
+        if (option_info[i].o_page == page) {
             opt[n++] = i;
+        }
     }
 
     term_clear();
@@ -640,33 +667,38 @@ void do_cmd_options_aux(PlayerType *player_ptr, game_option_types page, concptr 
         sprintf(buf, _("%s (リターン:次, %sESC:終了, ?:ヘルプ) ", "%s (RET:next, %s, ?:help) "), info,
             browse_only ? _("", "ESC:exit") : _("y/n:変更, ", "y/n:change, ESC:accept"));
         prt(buf, 0, 0);
-        if (page == OPT_PAGE_AUTODESTROY)
+        if (page == OPT_PAGE_AUTODESTROY) {
             c_prt(TERM_YELLOW, _("以下のオプションは、簡易自動破壊を使用するときのみ有効", "Following options will protect items from easy auto-destroyer."), 6,
                 _(6, 3));
+        }
 
         for (i = 0; i < n; i++) {
             byte a = TERM_WHITE;
-            if (i == k)
+            if (i == k) {
                 a = TERM_L_BLUE;
+            }
 
             sprintf(buf, "%-48s: %s (%.19s)", option_info[opt[i]].o_desc, (*option_info[opt[i]].o_var ? _("はい  ", "yes") : _("いいえ", "no ")),
                 option_info[opt[i]].o_text);
-            if ((page == OPT_PAGE_AUTODESTROY) && i > 2)
+            if ((page == OPT_PAGE_AUTODESTROY) && i > 2) {
                 c_prt(a, buf, i + 5, 0);
-            else
+            } else {
                 c_prt(a, buf, i + 2, 0);
+            }
         }
 
-        if ((page == OPT_PAGE_AUTODESTROY) && (k > 2))
+        if ((page == OPT_PAGE_AUTODESTROY) && (k > 2)) {
             l = 3;
-        else
+        } else {
             l = 0;
+        }
 
         move_cursor(k + 2 + l, 50);
         ch = inkey();
         dir = get_keymap_dir(ch);
-        if ((dir == 2) || (dir == 4) || (dir == 6) || (dir == 8))
+        if ((dir == 2) || (dir == 4) || (dir == 6) || (dir == 8)) {
             ch = I2D(dir);
+        }
 
         switch (ch) {
         case ESCAPE: {
@@ -687,8 +719,9 @@ void do_cmd_options_aux(PlayerType *player_ptr, game_option_types page, concptr 
         case 'y':
         case 'Y':
         case '6': {
-            if (browse_only)
+            if (browse_only) {
                 break;
+            }
             (*option_info[opt[k]].o_var) = true;
             k = (k + 1) % n;
             break;
@@ -696,16 +729,18 @@ void do_cmd_options_aux(PlayerType *player_ptr, game_option_types page, concptr 
         case 'n':
         case 'N':
         case '4': {
-            if (browse_only)
+            if (browse_only) {
                 break;
+            }
             (*option_info[opt[k]].o_var) = false;
             k = (k + 1) % n;
             break;
         }
         case 't':
         case 'T': {
-            if (!browse_only)
+            if (!browse_only) {
                 (*option_info[opt[k]].o_var) = !(*option_info[opt[k]].o_var);
+            }
             break;
         }
         case '?': {

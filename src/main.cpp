@@ -58,8 +58,9 @@ static void quit_hook(concptr s)
     /* Scan windows */
     for (j = 8 - 1; j >= 0; j--) {
         /* Unused */
-        if (!angband_term[j])
+        if (!angband_term[j]) {
             continue;
+        }
 
         /* Nuke it */
         term_nuke(angband_term[j]);
@@ -135,10 +136,12 @@ static void init_stuff(void)
     varpath[511] = '\0';
 
     /* Hack -- Add a path separator (only if needed) */
-    if (!suffix(libpath, PATH_SEP))
+    if (!suffix(libpath, PATH_SEP)) {
         strcat(libpath, PATH_SEP);
-    if (!suffix(varpath, PATH_SEP))
+    }
+    if (!suffix(varpath, PATH_SEP)) {
         strcat(varpath, PATH_SEP);
+    }
 
     /* Initialize */
     init_file_paths(libpath, varpath);
@@ -161,8 +164,9 @@ static void change_path(concptr info)
     s = angband_strchr(info, '=');
 
     /* Verify equal sign */
-    if (!s)
+    if (!s) {
         quit_fmt("Try '-d<what>=<path>' not '-d%s'", info);
+    }
 
     /* Analyze */
     switch (tolower(info[0])) {
@@ -434,8 +438,9 @@ int main(int argc, char *argv[])
         case 'S':
         case 's': {
             show_score = atoi(&argv[i][2]);
-            if (show_score <= 0)
+            if (show_score <= 0) {
                 show_score = 10;
+            }
             break;
         }
         case 'u':
@@ -493,8 +498,9 @@ int main(int argc, char *argv[])
         }
         }
 
-        if (!is_usage_needed)
+        if (!is_usage_needed) {
             continue;
+        }
 
         display_usage(argv[0]);
     }
@@ -545,12 +551,14 @@ int main(int argc, char *argv[])
 #endif
 
     /* Make sure we have a display! */
-    if (!done)
+    if (!done) {
         quit("Unable to prepare any 'display module'!");
+    }
 
     /* Hack -- If requested, display scores and quit */
-    if (show_score > 0)
+    if (show_score > 0) {
         display_scores(0, show_score);
+    }
 
     /* Catch nasty signals */
     signals_init();

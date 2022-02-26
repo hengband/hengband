@@ -1,6 +1,7 @@
 ﻿#include "spell-kind/spells-neighbor.h"
 #include "core/player-redraw-types.h"
 #include "core/player-update-types.h"
+#include "effect/attribute-types.h"
 #include "effect/effect-characteristics.h"
 #include "effect/effect-processor.h"
 #include "floor/cave.h"
@@ -8,7 +9,6 @@
 #include "grid/feature-flag-types.h"
 #include "grid/grid.h"
 #include "spell-kind/earthquake.h"
-#include "effect/attribute-types.h"
 #include "system/player-type-definition.h"
 #include "util/bit-flags-calculator.h"
 
@@ -131,11 +131,13 @@ void wall_breaker(PlayerType *player_ptr)
         while (attempts--) {
             scatter(player_ptr, &y, &x, player_ptr->y, player_ptr->x, 4, PROJECT_NONE);
 
-            if (!cave_has_flag_bold(player_ptr->current_floor_ptr, y, x, FloorFeatureType::PROJECT))
+            if (!cave_has_flag_bold(player_ptr->current_floor_ptr, y, x, FloorFeatureType::PROJECT)) {
                 continue;
+            }
 
-            if (!player_bold(player_ptr, y, x))
+            if (!player_bold(player_ptr, y, x)) {
                 break;
+            }
         }
 
         project(player_ptr, 0, 0, y, x, 20 + randint1(30), AttributeType::KILL_WALL, (PROJECT_BEAM | PROJECT_THRU | PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL));
@@ -152,8 +154,9 @@ void wall_breaker(PlayerType *player_ptr)
         while (true) {
             scatter(player_ptr, &y, &x, player_ptr->y, player_ptr->x, 10, PROJECT_NONE);
 
-            if (!player_bold(player_ptr, y, x))
+            if (!player_bold(player_ptr, y, x)) {
                 break;
+            }
         }
 
         project(player_ptr, 0, 0, y, x, 20 + randint1(30), AttributeType::KILL_WALL, (PROJECT_BEAM | PROJECT_THRU | PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL));

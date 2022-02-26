@@ -22,11 +22,13 @@ void edit_history(PlayerType *player_ptr)
     for (int i = 0; i < 4; i++) {
         /* loop */
         int j;
-        for (j = 0; player_ptr->history[i][j]; j++)
+        for (j = 0; player_ptr->history[i][j]; j++) {
             ;
+        }
 
-        for (; j < 59; j++)
+        for (; j < 59; j++) {
             player_ptr->history[i][j] = ' ';
+        }
         player_ptr->history[i][59] = '\0';
     }
 
@@ -51,37 +53,44 @@ void edit_history(PlayerType *player_ptr)
 
         term_gotoxy(x + 10, y + 12);
         int skey = inkey_special(true);
-        if (!(skey & SKEY_MASK))
+        if (!(skey & SKEY_MASK)) {
             c = (char)skey;
-        else
+        } else {
             c = 0;
+        }
 
         if (skey == SKEY_UP || c == KTRL('p')) {
             y--;
-            if (y < 0)
+            if (y < 0) {
                 y = 3;
+            }
 #ifdef JP
-            if ((x > 0) && (iskanji2(player_ptr->history[y], x - 1)))
+            if ((x > 0) && (iskanji2(player_ptr->history[y], x - 1))) {
                 x--;
+            }
 #endif
         } else if (skey == SKEY_DOWN || c == KTRL('n')) {
             y++;
-            if (y > 3)
+            if (y > 3) {
                 y = 0;
+            }
 #ifdef JP
-            if ((x > 0) && (iskanji2(player_ptr->history[y], x - 1)))
+            if ((x > 0) && (iskanji2(player_ptr->history[y], x - 1))) {
                 x--;
+            }
 #endif
         } else if (skey == SKEY_RIGHT || c == KTRL('f')) {
 #ifdef JP
-            if (iskanji2(player_ptr->history[y], x))
+            if (iskanji2(player_ptr->history[y], x)) {
                 x++;
+            }
 #endif
             x++;
             if (x > 58) {
                 x = 0;
-                if (y < 3)
+                if (y < 3) {
                     y++;
+                }
             }
         } else if (skey == SKEY_LEFT || c == KTRL('b')) {
             x--;
@@ -89,13 +98,15 @@ void edit_history(PlayerType *player_ptr)
                 if (y) {
                     y--;
                     x = 58;
-                } else
+                } else {
                     x = 0;
+                }
             }
 
 #ifdef JP
-            if ((x > 0) && (iskanji2(player_ptr->history[y], x - 1)))
+            if ((x > 0) && (iskanji2(player_ptr->history[y], x - 1))) {
                 x--;
+            }
 #endif
         } else if (c == '\r' || c == '\n') {
             term_erase(0, 11, 255);
@@ -114,8 +125,9 @@ void edit_history(PlayerType *player_ptr)
         } else if (c == KTRL('A')) {
             if (read_histpref(player_ptr)) {
 #ifdef JP
-                if ((x > 0) && (iskanji2(player_ptr->history[y], x - 1)))
+                if ((x > 0) && (iskanji2(player_ptr->history[y], x - 1))) {
                     x--;
+                }
 #endif
             }
         } else if (c == '\010') {
@@ -124,8 +136,9 @@ void edit_history(PlayerType *player_ptr)
                 if (y) {
                     y--;
                     x = 58;
-                } else
+                } else {
                     x = 0;
+                }
             }
 
             player_ptr->history[y][x] = ' ';
@@ -151,8 +164,9 @@ void edit_history(PlayerType *player_ptr)
                 if (x > 57) {
                     x = 0;
                     y++;
-                    if (y > 3)
+                    if (y > 3) {
                         y = 0;
+                    }
                 }
 
                 if (iskanji2(player_ptr->history[y], x + 1)) {
@@ -168,8 +182,9 @@ void edit_history(PlayerType *player_ptr)
             if (x > 58) {
                 x = 0;
                 y++;
-                if (y > 3)
+                if (y > 3) {
                     y = 0;
+                }
             }
         }
     }

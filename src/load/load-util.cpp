@@ -27,8 +27,9 @@ void load_note(concptr msg)
 {
     static TERM_LEN y = 2;
     prt(msg, y, 0);
-    if (++y >= 24)
+    if (++y >= 24) {
         y = 2;
+    }
 
     term_fresh();
 }
@@ -108,11 +109,13 @@ void rd_string(char *str, int max)
 {
     for (int i = 0; true; i++) {
         auto tmp8u = rd_byte();
-        if (i < max)
+        if (i < max) {
             str[i] = tmp8u;
+        }
 
-        if (!tmp8u)
+        if (!tmp8u) {
             break;
+        }
     }
 
     str[max - 1] = '\0';
@@ -134,8 +137,9 @@ void rd_string(char *str, int max)
         byte code = codeconv(str);
 
         /* 漢字コードが判明したら、それを記録 */
-        if (code)
+        if (code) {
             kanji_code = code;
+        }
 
         break;
     }

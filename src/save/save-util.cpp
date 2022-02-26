@@ -24,7 +24,10 @@ static void sf_put(byte v)
  * @brief 1バイトをファイルに書き込む(sf_put()の糖衣)
  * @param v 書き込むバイト
  */
-void wr_byte(byte v) { sf_put(v); }
+void wr_byte(byte v)
+{
+    sf_put(v);
+}
 
 /*!
  * @brief 符号なし16ビットをファイルに書き込む
@@ -40,7 +43,10 @@ void wr_u16b(uint16_t v)
  * @brief 符号あり16ビットをファイルに書き込む
  * @param v 書き込む符号あり16bit値
  */
-void wr_s16b(int16_t v) { wr_u16b((uint16_t)v); }
+void wr_s16b(int16_t v)
+{
+    wr_u16b((uint16_t)v);
+}
 
 /*!
  * @brief 符号なし32ビットをファイルに書き込む
@@ -58,7 +64,10 @@ void wr_u32b(uint32_t v)
  * @brief 符号あり32ビットをファイルに書き込む
  * @param v 書き込む符号あり32bit値
  */
-void wr_s32b(int32_t v) { wr_u32b((uint32_t)v); }
+void wr_s32b(int32_t v)
+{
+    wr_u32b((uint32_t)v);
+}
 
 /*!
  * @brief 文字列をファイルに書き込む

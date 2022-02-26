@@ -1,6 +1,6 @@
 ﻿#include "spell-kind/spells-beam.h"
-#include "effect/effect-characteristics.h"
 #include "effect/attribute-types.h"
+#include "effect/effect-characteristics.h"
 #include "spell-kind/spells-launcher.h"
 #include "system/player-type-definition.h"
 

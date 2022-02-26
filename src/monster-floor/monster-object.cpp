@@ -36,56 +36,81 @@
  */
 static void update_object_flags(const TrFlags &flgs, EnumClassFlagGroup<MonsterKindType> &flg_monster_kind, EnumClassFlagGroup<MonsterResistanceType> &flgr)
 {
-    if (flgs.has(TR_SLAY_DRAGON))
+    if (flgs.has(TR_SLAY_DRAGON)) {
         flg_monster_kind.set(MonsterKindType::DRAGON);
-    if (flgs.has(TR_KILL_DRAGON))
+    }
+    if (flgs.has(TR_KILL_DRAGON)) {
         flg_monster_kind.set(MonsterKindType::DRAGON);
-    if (flgs.has(TR_SLAY_TROLL))
+    }
+    if (flgs.has(TR_SLAY_TROLL)) {
         flg_monster_kind.set(MonsterKindType::TROLL);
-    if (flgs.has(TR_KILL_TROLL))
+    }
+    if (flgs.has(TR_KILL_TROLL)) {
         flg_monster_kind.set(MonsterKindType::TROLL);
-    if (flgs.has(TR_SLAY_GIANT))
+    }
+    if (flgs.has(TR_SLAY_GIANT)) {
         flg_monster_kind.set(MonsterKindType::GIANT);
-    if (flgs.has(TR_KILL_GIANT))
+    }
+    if (flgs.has(TR_KILL_GIANT)) {
         flg_monster_kind.set(MonsterKindType::GIANT);
-    if (flgs.has(TR_SLAY_ORC))
+    }
+    if (flgs.has(TR_SLAY_ORC)) {
         flg_monster_kind.set(MonsterKindType::ORC);
-    if (flgs.has(TR_KILL_ORC))
+    }
+    if (flgs.has(TR_KILL_ORC)) {
         flg_monster_kind.set(MonsterKindType::ORC);
-    if (flgs.has(TR_SLAY_DEMON))
+    }
+    if (flgs.has(TR_SLAY_DEMON)) {
         flg_monster_kind.set(MonsterKindType::DEMON);
-    if (flgs.has(TR_KILL_DEMON))
+    }
+    if (flgs.has(TR_KILL_DEMON)) {
         flg_monster_kind.set(MonsterKindType::DEMON);
-    if (flgs.has(TR_SLAY_UNDEAD))
+    }
+    if (flgs.has(TR_SLAY_UNDEAD)) {
         flg_monster_kind.set(MonsterKindType::UNDEAD);
-    if (flgs.has(TR_KILL_UNDEAD))
+    }
+    if (flgs.has(TR_KILL_UNDEAD)) {
         flg_monster_kind.set(MonsterKindType::UNDEAD);
-    if (flgs.has(TR_SLAY_ANIMAL))
+    }
+    if (flgs.has(TR_SLAY_ANIMAL)) {
         flg_monster_kind.set(MonsterKindType::ANIMAL);
-    if (flgs.has(TR_KILL_ANIMAL))
+    }
+    if (flgs.has(TR_KILL_ANIMAL)) {
         flg_monster_kind.set(MonsterKindType::ANIMAL);
-    if (flgs.has(TR_SLAY_EVIL))
+    }
+    if (flgs.has(TR_SLAY_EVIL)) {
         flg_monster_kind.set(MonsterKindType::EVIL);
-    if (flgs.has(TR_KILL_EVIL))
+    }
+    if (flgs.has(TR_KILL_EVIL)) {
         flg_monster_kind.set(MonsterKindType::EVIL);
-    if (flgs.has(TR_SLAY_GOOD))
+    }
+    if (flgs.has(TR_SLAY_GOOD)) {
         flg_monster_kind.set(MonsterKindType::GOOD);
-    if (flgs.has(TR_KILL_GOOD))
+    }
+    if (flgs.has(TR_KILL_GOOD)) {
         flg_monster_kind.set(MonsterKindType::GOOD);
-    if (flgs.has(TR_SLAY_HUMAN))
+    }
+    if (flgs.has(TR_SLAY_HUMAN)) {
         flg_monster_kind.set(MonsterKindType::HUMAN);
-    if (flgs.has(TR_KILL_HUMAN))
+    }
+    if (flgs.has(TR_KILL_HUMAN)) {
         flg_monster_kind.set(MonsterKindType::HUMAN);
-    if (flgs.has(TR_BRAND_ACID))
+    }
+    if (flgs.has(TR_BRAND_ACID)) {
         flgr.set(MonsterResistanceType::IMMUNE_ACID);
-    if (flgs.has(TR_BRAND_ELEC))
+    }
+    if (flgs.has(TR_BRAND_ELEC)) {
         flgr.set(MonsterResistanceType::IMMUNE_ELEC);
-    if (flgs.has(TR_BRAND_FIRE))
+    }
+    if (flgs.has(TR_BRAND_FIRE)) {
         flgr.set(MonsterResistanceType::IMMUNE_FIRE);
-    if (flgs.has(TR_BRAND_COLD))
+    }
+    if (flgs.has(TR_BRAND_COLD)) {
         flgr.set(MonsterResistanceType::IMMUNE_COLD);
-    if (flgs.has(TR_BRAND_POIS))
+    }
+    if (flgs.has(TR_BRAND_POIS)) {
         flgr.set(MonsterResistanceType::IMMUNE_POISON);
+    }
 }
 
 /*!
@@ -131,8 +156,9 @@ static void monster_pickup_object(PlayerType *player_ptr, turn_flags *turn_flags
         return;
     }
 
-    if (is_pet(m_ptr))
+    if (is_pet(m_ptr)) {
         return;
+    }
 
     turn_flags_ptr->did_kill_item = true;
     if (player_has_los_bold(player_ptr, ny, nx)) {
@@ -167,8 +193,9 @@ void update_object_by_monster_movement(PlayerType *player_ptr, turn_flags *turn_
 
         if (turn_flags_ptr->do_take) {
             /* Skip gold, corpse and statue */
-            if (o_ptr->tval == ItemKindType::GOLD || (o_ptr->tval == ItemKindType::CORPSE) || (o_ptr->tval == ItemKindType::STATUE))
+            if (o_ptr->tval == ItemKindType::GOLD || (o_ptr->tval == ItemKindType::CORPSE) || (o_ptr->tval == ItemKindType::STATUE)) {
                 continue;
+            }
         }
 
         auto flgs = object_flags(o_ptr);

@@ -40,8 +40,9 @@ void print_path(PlayerType *player_ptr, POSITION y, POSITION x)
     uint16_t path_g[512];
     byte default_color = TERM_SLATE;
 
-    if (!display_path || (project_length == -1))
+    if (!display_path || (project_length == -1)) {
         return;
+    }
 
     auto *floor_ptr = player_ptr->current_floor_ptr;
     int path_n = projection_path(
@@ -62,32 +63,36 @@ void print_path(PlayerType *player_ptr, POSITION y, POSITION x)
             if (g_ptr->m_idx && floor_ptr->m_list[g_ptr->m_idx].ml) {
                 map_info(player_ptr, ny, nx, &a, &c, &ta, &tc);
 
-                if (!is_ascii_graphics(a))
+                if (!is_ascii_graphics(a)) {
                     a = default_color;
-                else if (c == '.' && (a == TERM_WHITE || a == TERM_L_WHITE))
+                } else if (c == '.' && (a == TERM_WHITE || a == TERM_L_WHITE)) {
                     a = default_color;
-                else if (a == default_color)
+                } else if (a == default_color) {
                     a = TERM_WHITE;
+                }
             }
 
             if (!use_graphics) {
-                if (w_ptr->timewalk_m_idx)
+                if (w_ptr->timewalk_m_idx) {
                     a = TERM_DARK;
-                else if (is_invuln(player_ptr) || player_ptr->timewalk)
+                } else if (is_invuln(player_ptr) || player_ptr->timewalk) {
                     a = TERM_WHITE;
-                else if (player_ptr->wraith_form)
+                } else if (player_ptr->wraith_form) {
                     a = TERM_L_DARK;
+                }
             }
 
             c = '*';
             term_queue_bigchar(panel_col_of(nx), ny - panel_row_prt, a, c, ta, tc);
         }
 
-        if (g_ptr->is_mark() && !g_ptr->cave_has_flag(FloorFeatureType::PROJECT))
+        if (g_ptr->is_mark() && !g_ptr->cave_has_flag(FloorFeatureType::PROJECT)) {
             break;
+        }
 
-        if (nx == x && ny == y)
+        if (nx == x && ny == y) {
             default_color = TERM_L_DARK;
+        }
     }
 }
 
@@ -110,18 +115,23 @@ bool change_panel(PlayerType *player_ptr, POSITION dy, POSITION dx)
     POSITION x = panel_col_min + dx * wid / 2;
 
     auto *floor_ptr = player_ptr->current_floor_ptr;
-    if (y > floor_ptr->height - hgt)
+    if (y > floor_ptr->height - hgt) {
         y = floor_ptr->height - hgt;
-    if (y < 0)
+    }
+    if (y < 0) {
         y = 0;
+    }
 
-    if (x > floor_ptr->width - wid)
+    if (x > floor_ptr->width - wid) {
         x = floor_ptr->width - wid;
-    if (x < 0)
+    }
+    if (x < 0) {
         x = 0;
+    }
 
-    if ((y == panel_row_min) && (x == panel_col_min))
+    if ((y == panel_row_min) && (x == panel_col_min)) {
         return false;
+    }
 
     panel_row_min = y;
     panel_col_min = x;

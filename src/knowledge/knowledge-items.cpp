@@ -34,7 +34,7 @@
 
 #include <numeric>
 
-/*! 
+/*!
  * @brief Check the status of "artifacts"
  * @param player_ptr プレイヤーへの参照ポインタ
  * @todo okay = 既知のアーティファクト？ と思われるが確証がない分かりやすい変数名へ変更求む＆万が一未知である旨の配列なら負論理なのでゴソッと差し替えるべき
@@ -43,18 +43,21 @@ void do_cmd_knowledge_artifacts(PlayerType *player_ptr)
 {
     FILE *fff = nullptr;
     GAME_TEXT file_name[FILE_NAME_SIZE];
-    if (!open_temporary_file(&fff, file_name))
+    if (!open_temporary_file(&fff, file_name)) {
         return;
+    }
 
     //! @note 一般的に std::vector<bool> は使用を避けるべきとされているが、ここの用途では問題ない
     std::vector<bool> okay(a_info.size());
 
     for (const auto &a_ref : a_info) {
         okay[a_ref.idx] = false;
-        if (a_ref.name.empty())
+        if (a_ref.name.empty()) {
             continue;
-        if (!a_ref.cur_num)
+        }
+        if (!a_ref.cur_num) {
             continue;
+        }
 
         okay[a_ref.idx] = true;
     }
@@ -65,10 +68,12 @@ void do_cmd_knowledge_artifacts(PlayerType *player_ptr)
             for (const auto this_o_idx : g_ptr->o_idx_list) {
                 ObjectType *o_ptr;
                 o_ptr = &player_ptr->current_floor_ptr->o_list[this_o_idx];
-                if (!o_ptr->is_fixed_artifact())
+                if (!o_ptr->is_fixed_artifact()) {
                     continue;
-                if (o_ptr->is_known())
+                }
+                if (o_ptr->is_known()) {
                     continue;
+                }
 
                 okay[o_ptr->fixed_artifact_idx] = false;
             }
@@ -77,20 +82,24 @@ void do_cmd_knowledge_artifacts(PlayerType *player_ptr)
 
     for (ARTIFACT_IDX i = 0; i < INVEN_TOTAL; i++) {
         auto *o_ptr = &player_ptr->inventory_list[i];
-        if (!o_ptr->k_idx)
+        if (!o_ptr->k_idx) {
             continue;
-        if (!o_ptr->is_fixed_artifact())
+        }
+        if (!o_ptr->is_fixed_artifact()) {
             continue;
-        if (o_ptr->is_known())
+        }
+        if (o_ptr->is_known()) {
             continue;
+        }
 
         okay[o_ptr->fixed_artifact_idx] = false;
     }
 
     std::vector<ARTIFACT_IDX> whats;
     for (const auto &a_ref : a_info) {
-        if (okay[a_ref.idx])
+        if (okay[a_ref.idx]) {
             whats.push_back(a_ref.idx);
+        }
     }
 
     uint16_t why = 3;
@@ -130,34 +139,41 @@ static KIND_OBJECT_IDX collect_objects(int grp_cur, KIND_OBJECT_IDX object_idx[]
     KIND_OBJECT_IDX object_cnt = 0;
     auto group_tval = object_group_tval[grp_cur];
     for (const auto &k_ref : k_info) {
-        if (k_ref.name.empty())
+        if (k_ref.name.empty()) {
             continue;
+        }
 
         if (!(mode & 0x02)) {
             if (!w_ptr->wizard) {
-                if (!k_ref.flavor)
+                if (!k_ref.flavor) {
                     continue;
-                if (!k_ref.aware)
+                }
+                if (!k_ref.aware) {
                     continue;
+                }
             }
 
             auto k = std::reduce(std::begin(k_ref.chance), std::end(k_ref.chance), 0);
-            if (!k)
+            if (!k) {
                 continue;
+            }
         }
 
         if (group_tval == ItemKindType::LIFE_BOOK) {
             if (ItemKindType::LIFE_BOOK <= k_ref.tval && k_ref.tval <= ItemKindType::HEX_BOOK) {
                 object_idx[object_cnt++] = k_ref.idx;
-            } else
+            } else {
                 continue;
+            }
         } else if (k_ref.tval == group_tval) {
             object_idx[object_cnt++] = k_ref.idx;
-        } else
+        } else {
             continue;
+        }
 
-        if (mode & 0x01)
+        if (mode & 0x01) {
             break;
+        }
     }
 
     object_idx[object_cnt] = -1;
@@ -225,8 +241,9 @@ static void desc_obj_fake(PlayerType *player_ptr, KIND_OBJECT_IDX k_idx)
     o_ptr->ident |= IDENT_KNOWN;
     handle_stuff(player_ptr);
 
-    if (screen_object(player_ptr, o_ptr, SCROBJ_FAKE_OBJECT | SCROBJ_FORCE_DETAIL))
+    if (screen_object(player_ptr, o_ptr, SCROBJ_FAKE_OBJECT | SCROBJ_FORCE_DETAIL)) {
         return;
+    }
 
     msg_print(_("特に変わったところはないようだ。", "You see nothing special."));
     msg_print(nullptr);
@@ -259,8 +276,9 @@ void do_cmd_knowledge_objects(PlayerType *player_ptr, bool *need_redraw, bool vi
         mode = visual_only ? 0x03 : 0x01;
         for (IDX i = 0; object_group_text[i] != nullptr; i++) {
             len = strlen(object_group_text[i]);
-            if (len > max)
+            if (len > max) {
                 max = len;
+            }
 
             if (collect_objects(i, object_idx.data(), mode)) {
                 grp_idx[grp_cnt++] = i;
@@ -304,19 +322,23 @@ void do_cmd_knowledge_objects(PlayerType *player_ptr, bool *need_redraw, bool vi
 
 #ifdef JP
             prt(format("%s - アイテム", !visual_only ? "知識" : "表示"), 2, 0);
-            if (direct_k_idx < 0)
+            if (direct_k_idx < 0) {
                 prt("グループ", 4, 0);
+            }
             prt("名前", 4, max + 3);
-            if (w_ptr->wizard || visual_only)
+            if (w_ptr->wizard || visual_only) {
                 prt("Idx", 4, 70);
+            }
             prt("文字", 4, 74);
 #else
             prt(format("%s - objects", !visual_only ? "Knowledge" : "Visuals"), 2, 0);
-            if (direct_k_idx < 0)
+            if (direct_k_idx < 0) {
                 prt("Group", 4, 0);
+            }
             prt("Name", 4, max + 3);
-            if (w_ptr->wizard || visual_only)
+            if (w_ptr->wizard || visual_only) {
                 prt("Idx", 4, 70);
+            }
             prt("Sym", 4, 75);
 #endif
 
@@ -334,10 +356,12 @@ void do_cmd_knowledge_objects(PlayerType *player_ptr, bool *need_redraw, bool vi
         }
 
         if (direct_k_idx < 0) {
-            if (grp_cur < grp_top)
+            if (grp_cur < grp_top) {
                 grp_top = grp_cur;
-            if (grp_cur >= grp_top + browser_rows)
+            }
+            if (grp_cur >= grp_top + browser_rows) {
                 grp_top = grp_cur - browser_rows + 1;
+            }
 
             std::vector<concptr> tmp_texts;
             for (auto &text : object_group_text) {
@@ -350,11 +374,13 @@ void do_cmd_knowledge_objects(PlayerType *player_ptr, bool *need_redraw, bool vi
                 object_cnt = collect_objects(grp_idx[grp_cur], object_idx.data(), mode);
             }
 
-            while (object_cur < object_top)
+            while (object_cur < object_top) {
                 object_top = std::max<short>(0, object_top - browser_rows / 2);
+            }
 
-            while (object_cur >= object_top + browser_rows)
+            while (object_cur >= object_top + browser_rows) {
                 object_top = std::min<short>(object_cnt - browser_rows, object_top + browser_rows / 2);
+            }
         }
 
         if (!visual_list) {
@@ -384,8 +410,9 @@ void do_cmd_knowledge_objects(PlayerType *player_ptr, bool *need_redraw, bool vi
 #endif
 
         if (!visual_only) {
-            if (object_cnt)
+            if (object_cnt) {
                 object_kind_track(player_ptr, object_idx[object_cur]);
+            }
 
             if (object_old != object_idx[object_cur]) {
                 handle_stuff(player_ptr);

@@ -48,9 +48,9 @@ bool double_buffering::render(const RECT &rect)
 void double_buffering::dispose_offscreen()
 {
     ::DeleteDC(this->offscreen);
-     this->offscreen = NULL;
+    this->offscreen = NULL;
     ::DeleteObject(this->bitmap);
-     this->bitmap = NULL;
+    this->bitmap = NULL;
     ::DeleteDC(this->display);
-     this->display = NULL;
+    this->display = NULL;
 }

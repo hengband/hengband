@@ -34,8 +34,9 @@
  */
 void redraw_window(void)
 {
-    if (!w_ptr->character_dungeon)
+    if (!w_ptr->character_dungeon) {
         return;
+    }
 
     p_ptr->window_flags = PW_ALL;
 
@@ -52,8 +53,9 @@ static void print_dungeon(PlayerType *player_ptr)
     c_put_str(TERM_WHITE, "             ", ROW_DUNGEON, COL_DUNGEON);
     concptr dungeon_name = map_name(player_ptr);
     TERM_LEN col = COL_DUNGEON + 6 - strlen(dungeon_name) / 2;
-    if (col < 0)
+    if (col < 0) {
         col = 0;
+    }
 
     c_put_str(TERM_L_UMBER, format("%s", dungeon_name), ROW_DUNGEON, col);
 }
@@ -64,14 +66,17 @@ static void print_dungeon(PlayerType *player_ptr)
  */
 void redraw_stuff(PlayerType *player_ptr)
 {
-    if (!player_ptr->redraw)
+    if (!player_ptr->redraw) {
         return;
+    }
 
-    if (!w_ptr->character_generated)
+    if (!w_ptr->character_generated) {
         return;
+    }
 
-    if (w_ptr->character_icky_depth > 0)
+    if (w_ptr->character_icky_depth > 0) {
         return;
+    }
 
     if (player_ptr->redraw & (PR_WIPE)) {
         player_ptr->redraw &= ~(PR_WIPE);
@@ -225,13 +230,15 @@ void redraw_stuff(PlayerType *player_ptr)
  */
 void window_stuff(PlayerType *player_ptr)
 {
-    if (!player_ptr->window_flags)
+    if (!player_ptr->window_flags) {
         return;
+    }
 
     BIT_FLAGS mask = 0L;
     for (int j = 0; j < 8; j++) {
-        if (angband_term[j] && !angband_term[j]->never_fresh)
+        if (angband_term[j] && !angband_term[j]->never_fresh) {
             mask |= window_flag[j];
+        }
     }
     BIT_FLAGS window_flags = player_ptr->window_flags & mask;
 

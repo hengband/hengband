@@ -22,7 +22,7 @@
  * @param to_ac ＡＣをアップさせる量
  * @return 実際に行ったらTRUE
  */
-bool enchant_item(PlayerType *player_ptr, PRICE cost, HIT_PROB to_hit, int to_dam, ARMOUR_CLASS to_ac, const ItemTester& item_tester)
+bool enchant_item(PlayerType *player_ptr, PRICE cost, HIT_PROB to_hit, int to_dam, ARMOUR_CLASS to_ac, const ItemTester &item_tester)
 {
     clear_bldg(4, 18);
     int maxenchant = (player_ptr->lev / 5);
@@ -35,8 +35,9 @@ bool enchant_item(PlayerType *player_ptr, PRICE cost, HIT_PROB to_hit, int to_da
     OBJECT_IDX item;
     ObjectType *o_ptr;
     o_ptr = choose_object(player_ptr, &item, q, s, (USE_INVEN | USE_EQUIP | IGNORE_BOTHHAND_SLOT), item_tester);
-    if (!o_ptr)
+    if (!o_ptr) {
         return false;
+    }
 
     char tmp_str[MAX_NLEN];
     const PRICE total_cost = cost * o_ptr->number;
@@ -69,8 +70,9 @@ bool enchant_item(PlayerType *player_ptr, PRICE cost, HIT_PROB to_hit, int to_da
     }
 
     if (!okay) {
-        if (flush_failure)
+        if (flush_failure) {
             flush();
+        }
         msg_print(_("改良に失敗した。", "The improvement failed."));
         return false;
     }
@@ -83,7 +85,8 @@ bool enchant_item(PlayerType *player_ptr, PRICE cost, HIT_PROB to_hit, int to_da
 #endif
 
     player_ptr->au -= total_cost;
-    if (item >= INVEN_MAIN_HAND)
+    if (item >= INVEN_MAIN_HAND) {
         calc_android_exp(player_ptr);
+    }
     return true;
 }

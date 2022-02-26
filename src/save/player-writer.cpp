@@ -23,10 +23,11 @@
  */
 static void wr_relams(PlayerType *player_ptr)
 {
-    if (PlayerClass(player_ptr).equals(PlayerClassType::ELEMENTALIST))
+    if (PlayerClass(player_ptr).equals(PlayerClassType::ELEMENTALIST)) {
         wr_byte((byte)player_ptr->element);
-    else
+    } else {
         wr_byte((byte)player_ptr->realm1);
+    }
     wr_byte((byte)player_ptr->realm2);
 }
 
@@ -41,8 +42,9 @@ void wr_player(PlayerType *player_ptr)
     wr_string(player_ptr->last_message ? player_ptr->last_message : "");
 
     save_quick_start();
-    for (int i = 0; i < 4; i++)
+    for (int i = 0; i < 4; i++) {
         wr_string(player_ptr->history[i]);
+    }
 
     wr_byte((byte)player_ptr->prace);
     wr_byte((byte)player_ptr->pclass);
@@ -58,17 +60,21 @@ void wr_player(PlayerType *player_ptr)
     wr_s16b(player_ptr->ht);
     wr_s16b(player_ptr->wt);
 
-    for (int i = 0; i < A_MAX; ++i)
+    for (int i = 0; i < A_MAX; ++i) {
         wr_s16b(player_ptr->stat_max[i]);
+    }
 
-    for (int i = 0; i < A_MAX; ++i)
+    for (int i = 0; i < A_MAX; ++i) {
         wr_s16b(player_ptr->stat_max_max[i]);
+    }
 
-    for (int i = 0; i < A_MAX; ++i)
+    for (int i = 0; i < A_MAX; ++i) {
         wr_s16b(player_ptr->stat_cur[i]);
+    }
 
-    for (int i = 0; i < 12; ++i)
+    for (int i = 0; i < 12; ++i) {
         wr_s16b(0);
+    }
 
     wr_u32b(player_ptr->au);
     wr_u32b(player_ptr->max_exp);
@@ -77,12 +83,15 @@ void wr_player(PlayerType *player_ptr)
     wr_u32b(player_ptr->exp_frac);
     wr_s16b(player_ptr->lev);
 
-    for (int i = 0; i < 64; i++)
+    for (int i = 0; i < 64; i++) {
         wr_s16b(player_ptr->spell_exp[i]);
+    }
 
-    for (auto tval : TV_WEAPON_RANGE)
-        for (int j = 0; j < 64; j++)
+    for (auto tval : TV_WEAPON_RANGE) {
+        for (int j = 0; j < 64; j++) {
             wr_s16b(player_ptr->weapon_exp[tval][j]);
+        }
+    }
 
     for (auto i : PLAYER_SKILL_KIND_TYPE_RANGE) {
         wr_s16b(player_ptr->skill_exp[i]);
@@ -99,8 +108,9 @@ void wr_player(PlayerType *player_ptr)
     wr_s32b(player_ptr->old_race2);
     wr_s16b(player_ptr->old_realm);
 
-    for (int i = 0; i < MAX_BOUNTY; i++)
+    for (int i = 0; i < MAX_BOUNTY; i++) {
         wr_s16b(w_ptr->bounty_r_idx[i]);
+    }
 
     for (int i = 0; i < 4; i++) {
         wr_s16b(battle_mon[i]);
@@ -130,8 +140,9 @@ void wr_player(PlayerType *player_ptr)
 
     byte tmp8u = (byte)d_info.size();
     wr_byte(tmp8u);
-    for (int i = 0; i < tmp8u; i++)
+    for (int i = 0; i < tmp8u; i++) {
         wr_s16b((int16_t)max_dlv[i]);
+    }
 
     wr_s16b(0);
     wr_s16b(0);
@@ -201,11 +212,13 @@ void wr_player(PlayerType *player_ptr)
     wr_s16b(player_ptr->chaos_patron);
     wr_FlagGroup(player_ptr->muta, wr_byte);
 
-    for (int i = 0; i < 8; i++)
+    for (int i = 0; i < 8; i++) {
         wr_s16b(player_ptr->virtues[i]);
+    }
 
-    for (int i = 0; i < 8; i++)
+    for (int i = 0; i < 8; i++) {
         wr_s16b(player_ptr->vir_types[i]);
+    }
 
     wr_s16b(player_ptr->ele_attack);
     wr_u32b(player_ptr->special_attack);
@@ -219,8 +232,9 @@ void wr_player(PlayerType *player_ptr)
     wr_byte(preserve_mode);
     wr_byte(player_ptr->wait_report_score);
 
-    for (int i = 0; i < 12; i++)
+    for (int i = 0; i < 12; i++) {
         wr_u32b(0L);
+    }
 
     /* Ignore some flags */
     wr_u32b(0L);

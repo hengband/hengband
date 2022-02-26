@@ -39,8 +39,9 @@ MonsterSpellResult spell_RF4_ROCKET(PlayerType *player_ptr, POSITION y, POSITION
 
     const auto dam = monspell_damage(player_ptr, MonsterAbilityType::ROCKET, m_idx, DAM_ROLL);
     const auto proj_res = rocket(player_ptr, y, x, m_idx, AttributeType::ROCKET, dam, 2, target_type);
-    if (target_type == MONSTER_TO_PLAYER)
+    if (target_type == MONSTER_TO_PLAYER) {
         update_smart_learn(player_ptr, m_idx, DRS_SHARD);
+    }
 
     auto res = MonsterSpellResult::make_valid(dam);
     res.learnable = proj_res.affected_player;

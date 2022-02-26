@@ -50,8 +50,9 @@ bool affect_item(PlayerType *player_ptr, MONSTER_IDX who, POSITION r, POSITION y
     for (auto it = g_ptr->o_idx_list.begin(); it != g_ptr->o_idx_list.end();) {
         const OBJECT_IDX this_o_idx = *it++;
 
-        if (auto pit = processed_list.find(this_o_idx); pit != processed_list.end())
+        if (auto pit = processed_list.find(this_o_idx); pit != processed_list.end()) {
             continue;
+        }
 
         processed_list.insert(this_o_idx);
 
@@ -71,8 +72,9 @@ bool affect_item(PlayerType *player_ptr, MONSTER_IDX who, POSITION r, POSITION y
             if (BreakerAcid().hates(o_ptr)) {
                 do_kill = true;
                 note_kill = _("融けてしまった！", (plural ? " melt!" : " melts!"));
-                if (flags.has(TR_IGNORE_ACID))
+                if (flags.has(TR_IGNORE_ACID)) {
                     ignore = true;
+                }
             }
 
             break;
@@ -81,8 +83,9 @@ bool affect_item(PlayerType *player_ptr, MONSTER_IDX who, POSITION r, POSITION y
             if (BreakerElec().hates(o_ptr)) {
                 do_kill = true;
                 note_kill = _("壊れてしまった！", (plural ? " are destroyed!" : " is destroyed!"));
-                if (flags.has(TR_IGNORE_ELEC))
+                if (flags.has(TR_IGNORE_ELEC)) {
                     ignore = true;
+                }
             }
 
             break;
@@ -91,8 +94,9 @@ bool affect_item(PlayerType *player_ptr, MONSTER_IDX who, POSITION r, POSITION y
             if (BreakerFire().hates(o_ptr)) {
                 do_kill = true;
                 note_kill = _("燃えてしまった！", (plural ? " burn up!" : " burns up!"));
-                if (flags.has(TR_IGNORE_FIRE))
+                if (flags.has(TR_IGNORE_FIRE)) {
                     ignore = true;
+                }
             }
 
             break;
@@ -101,8 +105,9 @@ bool affect_item(PlayerType *player_ptr, MONSTER_IDX who, POSITION r, POSITION y
             if (BreakerCold().hates(o_ptr)) {
                 note_kill = _("砕け散ってしまった！", (plural ? " shatter!" : " shatters!"));
                 do_kill = true;
-                if (flags.has(TR_IGNORE_COLD))
+                if (flags.has(TR_IGNORE_COLD)) {
                     ignore = true;
+                }
             }
 
             break;
@@ -111,16 +116,18 @@ bool affect_item(PlayerType *player_ptr, MONSTER_IDX who, POSITION r, POSITION y
             if (BreakerFire().hates(o_ptr)) {
                 do_kill = true;
                 note_kill = _("燃えてしまった！", (plural ? " burn up!" : " burns up!"));
-                if (flags.has(TR_IGNORE_FIRE))
+                if (flags.has(TR_IGNORE_FIRE)) {
                     ignore = true;
+                }
             }
 
             if (BreakerElec().hates(o_ptr)) {
                 ignore = false;
                 do_kill = true;
                 note_kill = _("壊れてしまった！", (plural ? " are destroyed!" : " is destroyed!"));
-                if (flags.has(TR_IGNORE_ELEC))
+                if (flags.has(TR_IGNORE_ELEC)) {
                     ignore = true;
+                }
             }
 
             break;
@@ -129,16 +136,18 @@ bool affect_item(PlayerType *player_ptr, MONSTER_IDX who, POSITION r, POSITION y
             if (BreakerFire().hates(o_ptr)) {
                 do_kill = true;
                 note_kill = _("燃えてしまった！", (plural ? " burn up!" : " burns up!"));
-                if (flags.has(TR_IGNORE_FIRE))
+                if (flags.has(TR_IGNORE_FIRE)) {
                     ignore = true;
+                }
             }
 
             if (BreakerCold().hates(o_ptr)) {
                 ignore = false;
                 do_kill = true;
                 note_kill = _("砕け散ってしまった！", (plural ? " shatter!" : " shatters!"));
-                if (flags.has(TR_IGNORE_COLD))
+                if (flags.has(TR_IGNORE_COLD)) {
                     ignore = true;
+                }
             }
 
             break;
@@ -169,10 +178,11 @@ bool affect_item(PlayerType *player_ptr, MONSTER_IDX who, POSITION r, POSITION y
         case AttributeType::CHAOS: {
             do_kill = true;
             note_kill = _("壊れてしまった！", (plural ? " are destroyed!" : " is destroyed!"));
-            if (flags.has(TR_RES_CHAOS))
+            if (flags.has(TR_RES_CHAOS)) {
                 ignore = true;
-            else if ((o_ptr->tval == ItemKindType::SCROLL) && (o_ptr->sval == SV_SCROLL_CHAOS))
+            } else if ((o_ptr->tval == ItemKindType::SCROLL) && (o_ptr->sval == SV_SCROLL_CHAOS)) {
                 ignore = true;
+            }
             break;
         }
         case AttributeType::HOLY_FIRE:
@@ -196,10 +206,12 @@ bool affect_item(PlayerType *player_ptr, MONSTER_IDX who, POSITION r, POSITION y
         }
         case AttributeType::KILL_TRAP:
         case AttributeType::KILL_DOOR: {
-            if (o_ptr->tval != ItemKindType::CHEST)
+            if (o_ptr->tval != ItemKindType::CHEST) {
                 break;
-            if (o_ptr->pval <= 0)
+            }
+            if (o_ptr->pval <= 0) {
                 break;
+            }
 
             o_ptr->pval = (0 - o_ptr->pval);
             object_known(o_ptr);
@@ -211,12 +223,14 @@ bool affect_item(PlayerType *player_ptr, MONSTER_IDX who, POSITION r, POSITION y
             break;
         }
         case AttributeType::ANIM_DEAD: {
-            if (o_ptr->tval != ItemKindType::CORPSE)
+            if (o_ptr->tval != ItemKindType::CORPSE) {
                 break;
+            }
 
             BIT_FLAGS mode = 0L;
-            if (!who || is_pet(&player_ptr->current_floor_ptr->m_list[who]))
+            if (!who || is_pet(&player_ptr->current_floor_ptr->m_list[who])) {
                 mode |= PM_FORCE_PET;
+            }
 
             for (int i = 0; i < o_ptr->number; i++) {
                 if (((o_ptr->sval == SV_CORPSE) && (randint1(100) > 80)) || ((o_ptr->sval == SV_SKELETON) && (randint1(100) > 60))) {
@@ -240,8 +254,9 @@ bool affect_item(PlayerType *player_ptr, MONSTER_IDX who, POSITION r, POSITION y
             break;
         }
 
-        if (!do_kill)
+        if (!do_kill) {
             continue;
+        }
 
         GAME_TEXT o_name[MAX_NLEN];
         if (known && (o_ptr->marked & OM_FOUND)) {
@@ -250,14 +265,16 @@ bool affect_item(PlayerType *player_ptr, MONSTER_IDX who, POSITION r, POSITION y
         }
 
         if ((is_artifact || ignore)) {
-            if (known && (o_ptr->marked & OM_FOUND))
+            if (known && (o_ptr->marked & OM_FOUND)) {
                 msg_format(_("%sは影響を受けない！", (plural ? "The %s are unaffected!" : "The %s is unaffected!")), o_name);
+            }
 
             continue;
         }
 
-        if (known && (o_ptr->marked & OM_FOUND) && note_kill)
+        if (known && (o_ptr->marked & OM_FOUND) && note_kill) {
             msg_format(_("%sは%s", "The %s%s"), o_name, note_kill);
+        }
 
         KIND_OBJECT_IDX k_idx = o_ptr->k_idx;
         bool is_potion = o_ptr->is_potion();

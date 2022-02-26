@@ -62,17 +62,21 @@ static void all_term_fresh(int x, int y)
  */
 static void forget_macro_action(void)
 {
-    if (!parse_macro)
+    if (!parse_macro) {
         return;
+    }
 
     while (true) {
         char ch;
-        if (term_inkey(&ch, false, true))
+        if (term_inkey(&ch, false, true)) {
             break;
-        if (ch == 0)
+        }
+        if (ch == 0) {
             break;
-        if (ch == 30)
+        }
+        if (ch == 30) {
             break;
+        }
     }
 
     parse_macro = false;
@@ -111,27 +115,33 @@ static char inkey_aux(void)
         (void)(term_inkey(&ch, true, true));
     }
 
-    if (ch == 30)
+    if (ch == 30) {
         parse_macro = false;
+    }
 
-    if (ch == 30)
+    if (ch == 30) {
         return ch;
-    if (parse_macro)
+    }
+    if (parse_macro) {
         return ch;
-    if (parse_under)
+    }
+    if (parse_under) {
         return ch;
+    }
 
     buf[p++] = ch;
     buf[p] = '\0';
     k = macro_find_check(buf);
-    if (k < 0)
+    if (k < 0) {
         return ch;
+    }
 
     while (true) {
         k = macro_find_maybe(buf);
 
-        if (k < 0)
+        if (k < 0) {
             break;
+        }
 
         if (0 == term_inkey(&ch, false, true)) {
             buf[p++] = ch;
@@ -139,8 +149,9 @@ static char inkey_aux(void)
             w = 0;
         } else {
             w += 1;
-            if (w >= 10)
+            if (w >= 10) {
                 break;
+            }
 
             term_xtra(TERM_XTRA_DELAY, w);
         }
@@ -149,8 +160,9 @@ static char inkey_aux(void)
     k = macro_find_ready(buf);
     if (k < 0) {
         while (p > 0) {
-            if (term_key_push(buf[--p]))
+            if (term_key_push(buf[--p])) {
                 return 0;
+            }
         }
 
         (void)term_inkey(&ch, true, true);
@@ -160,20 +172,23 @@ static char inkey_aux(void)
     concptr pat = macro__pat[k].c_str();
     n = strlen(pat);
     while (p > n) {
-        if (term_key_push(buf[--p]))
+        if (term_key_push(buf[--p])) {
             return 0;
+        }
     }
 
     parse_macro = true;
-    if (term_key_push(30))
+    if (term_key_push(30)) {
         return 0;
+    }
 
     concptr act = macro__act[k].c_str();
 
     n = strlen(act);
     while (n > 0) {
-        if (term_key_push(act[--n]))
+        if (term_key_push(act[--n])) {
             return 0;
+        }
     }
 
     return 0;
@@ -222,10 +237,11 @@ char inkey(bool do_all_term_refresh)
 
         if (!done && (0 != term_inkey(&kk, false, false))) {
             start_term_fresh();
-            if (do_all_term_refresh)
+            if (do_all_term_refresh) {
                 all_term_fresh(x, y);
-            else
+            } else {
                 term_fresh();
+            }
             w_ptr->character_saved = false;
 
             signal_count = 0;
@@ -247,8 +263,9 @@ char inkey(bool do_all_term_refresh)
                     break;
                 } else {
                     w += 10;
-                    if (w >= 100)
+                    if (w >= 100) {
                         break;
+                    }
 
                     term_xtra(TERM_XTRA_DELAY, w);
                 }
@@ -365,8 +382,9 @@ int inkey_special(bool numpad_cursor)
 
     key = inkey();
     trig_len = strlen(inkey_macro_trigger_string);
-    if (!trig_len)
+    if (!trig_len) {
         return (int)((unsigned char)key);
+    }
     if (trig_len == 1 && parse_macro) {
         char c = inkey_macro_trigger_string[0];
         forget_macro_action();
@@ -384,12 +402,14 @@ int inkey_special(bool numpad_cursor)
                 }
             }
 
-            if (!modifier_key_list[i].keyname)
+            if (!modifier_key_list[i].keyname) {
                 break;
+            }
         }
 
-        if (!numpad_as_cursorkey)
+        if (!numpad_as_cursorkey) {
             numpad_cursor = false;
+        }
 
         for (i = 0; special_key_list[i].keyname; i++) {
             if ((!special_key_list[i].numpad || numpad_cursor) && streq(str, special_key_list[i].keyname)) {
@@ -424,8 +444,9 @@ int inkey_special(bool numpad_cursor)
 void stop_term_fresh(void)
 {
     for (int j = 0; j < 8; j++) {
-        if (angband_term[j])
+        if (angband_term[j]) {
             angband_term[j]->never_fresh = true;
+        }
     }
 }
 
@@ -435,8 +456,9 @@ void stop_term_fresh(void)
 void start_term_fresh(void)
 {
     for (int j = 0; j < 8; j++) {
-        if (angband_term[j])
+        if (angband_term[j]) {
             angband_term[j]->never_fresh = false;
+        }
     }
 }
 
@@ -451,12 +473,14 @@ bool macro_running(void)
         int diff = angband_term[0]->key_head - angband_term[0]->key_tail;
 
         /* 最終入力を展開した直後はdiff==1となる */
-        if (diff != 1)
+        if (diff != 1) {
             return true;
+        }
 
         /* 最終入力の処理中はまだtrueを返す */
-        if (inkey_next && *inkey_next && !inkey_xtra)
+        if (inkey_next && *inkey_next && !inkey_xtra) {
             return true;
+        }
 
         return false;
     }

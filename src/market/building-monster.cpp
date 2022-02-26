@@ -48,8 +48,9 @@ bool research_mon(PlayerType *player_ptr)
 
     IDX ident_i;
     for (ident_i = 0; ident_info[ident_i]; ++ident_i) {
-        if (sym == ident_info[ident_i][0])
+        if (sym == ident_info[ident_i][0]) {
             break;
+        }
     }
 
     /* XTRA HACK WHATSEARCH */
@@ -87,17 +88,20 @@ bool research_mon(PlayerType *player_ptr)
     /* Collect matching monsters */
     for (const auto &r_ref : r_info) {
         /* Empty monster */
-        if (r_ref.idx == 0 || r_ref.name.empty())
+        if (r_ref.idx == 0 || r_ref.name.empty()) {
             continue;
+        }
 
         /* XTRA HACK WHATSEARCH */
         /* Require non-unique monsters if needed */
-        if (norm && r_ref.kind_flags.has(MonsterKindType::UNIQUE))
+        if (norm && r_ref.kind_flags.has(MonsterKindType::UNIQUE)) {
             continue;
+        }
 
         /* Require unique monsters if needed */
-        if (uniq && r_ref.kind_flags.has_not(MonsterKindType::UNIQUE))
+        if (uniq && r_ref.kind_flags.has_not(MonsterKindType::UNIQUE)) {
             continue;
+        }
 
         /* 名前検索 */
         if (temp[0]) {
@@ -108,8 +112,9 @@ bool research_mon(PlayerType *player_ptr)
                     continue;
                 }
 #endif
-                if (isupper(temp[xx]))
+                if (isupper(temp[xx])) {
                     temp[xx] = (char)tolower(temp[xx]);
+                }
             }
 
             char temp2[MAX_MONSTER_NAME];
@@ -119,8 +124,9 @@ bool research_mon(PlayerType *player_ptr)
             strcpy(temp2, r_ref.name.c_str());
 #endif
             for (int xx = 0; temp2[xx] && xx < 80; xx++) {
-                if (isupper(temp2[xx]))
+                if (isupper(temp2[xx])) {
                     temp2[xx] = (char)tolower(temp2[xx]);
+                }
             }
 
 #ifdef JP
@@ -150,10 +156,11 @@ bool research_mon(PlayerType *player_ptr)
     uint i;
     static int old_sym = '\0';
     static uint old_i = 0;
-    if (old_sym == sym && old_i < who.size())
+    if (old_sym == sym && old_i < who.size()) {
         i = old_i;
-    else
+    } else {
         i = who.size() - 1;
+    }
 
     notpicked = true;
     while (notpicked) {
@@ -172,20 +179,23 @@ bool research_mon(PlayerType *player_ptr)
             }
 
             query = inkey();
-            if (query != 'r')
+            if (query != 'r') {
                 break;
+            }
 
             recall = !recall;
         }
 
-        if (query == ESCAPE)
+        if (query == ESCAPE) {
             break;
+        }
 
         if (query == '-') {
             if (++i == who.size()) {
                 i = 0;
-                if (!expand_list)
+                if (!expand_list) {
                     break;
+                }
             }
 
             continue;
@@ -193,8 +203,9 @@ bool research_mon(PlayerType *player_ptr)
 
         if (i-- == 0) {
             i = who.size() - 1;
-            if (!expand_list)
+            if (!expand_list) {
                 break;
+            }
         }
     }
 

@@ -20,35 +20,44 @@
  */
 int16_t tokenize(char *buf, int16_t num, char **tokens, BIT_FLAGS mode)
 {
-	int16_t i = 0;
-	char *s = buf;
-	while (i < num - 1)
-	{
-		char *t;
-		for (t = s; *t; t++)
-		{
-			if ((*t == ':') || (*t == '/')) break;
+    int16_t i = 0;
+    char *s = buf;
+    while (i < num - 1) {
+        char *t;
+        for (t = s; *t; t++) {
+            if ((*t == ':') || (*t == '/')) {
+                break;
+            }
 
-			if ((mode & TOKENIZE_CHECKQUOTE) && (*t == '\''))
-			{
-				t++;
-				if (*t == '\\') t++;
-				if (!*t) break;
+            if ((mode & TOKENIZE_CHECKQUOTE) && (*t == '\'')) {
+                t++;
+                if (*t == '\\') {
+                    t++;
+                }
+                if (!*t) {
+                    break;
+                }
 
-				t++;
-				if (*t != '\'') *t = '\'';
-			}
+                t++;
+                if (*t != '\'') {
+                    *t = '\'';
+                }
+            }
 
-			if (*t == '\\') t++;
-		}
+            if (*t == '\\') {
+                t++;
+            }
+        }
 
-		if (!*t) break;
+        if (!*t) {
+            break;
+        }
 
-		*t++ = '\0';
-		tokens[i++] = s;
-		s = t;
-	}
+        *t++ = '\0';
+        tokens[i++] = s;
+        s = t;
+    }
 
-	tokens[i++] = s;
-	return i;
+    tokens[i++] = s;
+    return i;
 }

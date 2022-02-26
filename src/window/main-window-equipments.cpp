@@ -42,8 +42,9 @@ COMMAND_CODE show_equipment(PlayerType *player_ptr, int target_item, BIT_FLAGS m
     int len = wid - col - 1;
     for (k = 0, i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
         o_ptr = &player_ptr->inventory_list[i];
-        if (!(player_ptr->select_ring_slot ? is_ring_slot(i) : item_tester.okay(o_ptr) || (mode & USE_FULL)) && (!((((i == INVEN_MAIN_HAND) && can_attack_with_sub_hand(player_ptr)) || ((i == INVEN_SUB_HAND) && can_attack_with_main_hand(player_ptr))) && has_two_handed_weapons(player_ptr)) || (mode & IGNORE_BOTHHAND_SLOT)))
+        if (!(player_ptr->select_ring_slot ? is_ring_slot(i) : item_tester.okay(o_ptr) || (mode & USE_FULL)) && (!((((i == INVEN_MAIN_HAND) && can_attack_with_sub_hand(player_ptr)) || ((i == INVEN_SUB_HAND) && can_attack_with_main_hand(player_ptr))) && has_two_handed_weapons(player_ptr)) || (mode & IGNORE_BOTHHAND_SLOT))) {
             continue;
+        }
 
         describe_flavor(player_ptr, o_name, o_ptr, 0);
         if ((((i == INVEN_MAIN_HAND) && can_attack_with_sub_hand(player_ptr)) || ((i == INVEN_SUB_HAND) && can_attack_with_main_hand(player_ptr))) && has_two_handed_weapons(player_ptr)) {
@@ -55,21 +56,26 @@ COMMAND_CODE show_equipment(PlayerType *player_ptr, int target_item, BIT_FLAGS m
         }
 
         out_index[k] = i;
-        if (o_ptr->timeout)
+        if (o_ptr->timeout) {
             out_color[k] = TERM_L_DARK;
+        }
         l = strlen(out_desc[k]) + (2 + _(1, 3));
 
-        if (show_labels)
+        if (show_labels) {
             l += (_(7, 14) + 2);
+        }
 
-        if (show_weights)
+        if (show_weights) {
             l += 9;
+        }
 
-        if (show_item_graph)
+        if (show_item_graph) {
             l += 2;
+        }
 
-        if (l > len)
+        if (l > len) {
             len = l;
+        }
 
         k++;
     }
@@ -84,12 +90,14 @@ COMMAND_CODE show_equipment(PlayerType *player_ptr, int target_item, BIT_FLAGS m
             if (j == (target_item - 1)) {
                 strcpy(tmp_val, _("》", "> "));
                 target_item_label = i;
-            } else
+            } else {
                 strcpy(tmp_val, "  ");
-        } else if (i >= INVEN_MAIN_HAND)
+            }
+        } else if (i >= INVEN_MAIN_HAND) {
             sprintf(tmp_val, "%c)", equip_label[i - INVEN_MAIN_HAND]);
-        else
+        } else {
             sprintf(tmp_val, "%c)", index_to_label(i));
+        }
 
         put_str(tmp_val, j + 1, col);
         int cur_col = col + 3;
@@ -97,8 +105,9 @@ COMMAND_CODE show_equipment(PlayerType *player_ptr, int target_item, BIT_FLAGS m
             TERM_COLOR a = object_attr(o_ptr);
             auto c = object_char(o_ptr);
             term_queue_bigchar(cur_col, j + 1, a, c, 0, 0);
-            if (use_bigtile)
+            if (use_bigtile) {
                 cur_col++;
+            }
 
             cur_col += 2;
         }
@@ -107,19 +116,22 @@ COMMAND_CODE show_equipment(PlayerType *player_ptr, int target_item, BIT_FLAGS m
             (void)sprintf(tmp_val, _("%-7s: ", "%-14s: "), mention_use(player_ptr, i));
             put_str(tmp_val, j + 1, cur_col);
             c_put_str(out_color[j], out_desc[j], j + 1, _(cur_col + 9, cur_col + 16));
-        } else
+        } else {
             c_put_str(out_color[j], out_desc[j], j + 1, cur_col);
+        }
 
-        if (!show_weights)
+        if (!show_weights) {
             continue;
+        }
 
         int wgt = o_ptr->weight * o_ptr->number;
         (void)sprintf(tmp_val, _("%3d.%1d kg", "%3d.%d lb"), _(lb_to_kg_integer(wgt), wgt / 10), _(lb_to_kg_fraction(wgt), wgt % 10));
         prt(tmp_val, j + 1, wid - 9);
     }
 
-    if (j && (j < 23))
+    if (j && (j < 23)) {
         prt("", j + 1, col ? col - 2 : col);
+    }
 
     command_gap = col;
     return target_item_label;

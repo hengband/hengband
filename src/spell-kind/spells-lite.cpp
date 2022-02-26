@@ -65,10 +65,12 @@ static void cave_temp_room_lite(PlayerType *player_ptr, const std::vector<Pos2D>
             auto *m_ptr = &player_ptr->current_floor_ptr->m_list[g_ptr->m_idx];
             auto *r_ptr = &r_info[m_ptr->r_idx];
             update_monster(player_ptr, g_ptr->m_idx, false);
-            if (r_ptr->behavior_flags.has(MonsterBehaviorType::STUPID))
+            if (r_ptr->behavior_flags.has(MonsterBehaviorType::STUPID)) {
                 chance = 10;
-            if (r_ptr->behavior_flags.has(MonsterBehaviorType::SMART))
+            }
+            if (r_ptr->behavior_flags.has(MonsterBehaviorType::SMART)) {
                 chance = 100;
+            }
 
             if (monster_csleep_remaining(m_ptr) && (randint0(100) < chance)) {
                 (void)set_monster_csleep(player_ptr, g_ptr->m_idx, 0);
@@ -109,8 +111,9 @@ static void cave_temp_room_unlite(PlayerType *player_ptr, const std::vector<Pos2
         auto *g_ptr = &player_ptr->current_floor_ptr->grid_array[y][x];
         bool do_dark = !g_ptr->is_mirror();
         g_ptr->info &= ~(CAVE_TEMP);
-        if (!do_dark)
+        if (!do_dark) {
             continue;
+        }
 
         if (player_ptr->current_floor_ptr->dun_level || !is_daytime()) {
             for (int j = 0; j < 9; j++) {
@@ -127,14 +130,16 @@ static void cave_temp_room_unlite(PlayerType *player_ptr, const std::vector<Pos2
                 }
             }
 
-            if (!do_dark)
+            if (!do_dark) {
                 continue;
+            }
         }
 
         g_ptr->info &= ~(CAVE_GLOW);
         if (f_info[g_ptr->get_feat_mimic()].flags.has_not(FloorFeatureType::REMEMBER)) {
-            if (!view_torch_grids)
+            if (!view_torch_grids) {
                 g_ptr->info &= ~(CAVE_MARK);
+            }
             note_spot(player_ptr, y, x);
         }
 
@@ -192,8 +197,9 @@ static int next_to_walls_adj(floor_type *floor_ptr, const POSITION cy, const POS
         y = cy + ddy_ddd[i];
         x = cx + ddx_ddd[i];
 
-        if (!pass_bold(floor_ptr, y, x))
+        if (!pass_bold(floor_ptr, y, x)) {
             c++;
+        }
     }
 
     return c;
@@ -215,16 +221,20 @@ static void cave_temp_room_aux(
     auto *g_ptr = &floor_ptr->grid_array[y][x];
 
     // 既に points に追加済みなら何もしない。
-    if (g_ptr->info & (CAVE_TEMP))
+    if (g_ptr->info & (CAVE_TEMP)) {
         return;
+    }
 
     if (!(g_ptr->info & (CAVE_ROOM))) {
-        if (only_room)
+        if (only_room) {
             return;
-        if (!in_bounds2(floor_ptr, y, x))
+        }
+        if (!in_bounds2(floor_ptr, y, x)) {
             return;
-        if (distance(player_ptr->y, player_ptr->x, y, x) > get_max_range(player_ptr))
+        }
+        if (distance(player_ptr->y, player_ptr->x, y, x) > get_max_range(player_ptr)) {
             return;
+        }
 
         /* Verify this grid */
         /*
@@ -235,8 +245,9 @@ static void cave_temp_room_aux(
          * properly.
          * This leaves only a check for 6 bounding walls!
          */
-        if (in_bounds(floor_ptr, y, x) && pass_bold(floor_ptr, y, x) && (next_to_walls_adj(floor_ptr, y, x, pass_bold) == 6) && (next_to_open(floor_ptr, y, x, pass_bold) <= 1))
+        if (in_bounds(floor_ptr, y, x) && pass_bold(floor_ptr, y, x) && (next_to_walls_adj(floor_ptr, y, x, pass_bold) == 6) && (next_to_open(floor_ptr, y, x, pass_bold) <= 1)) {
             return;
+        }
     }
 
     // (y,x) を points に追加し、追加済みフラグを立てる。
@@ -302,8 +313,9 @@ void lite_room(PlayerType *player_ptr, const POSITION y1, const POSITION x1)
         const POSITION y = point.y;
         const POSITION x = point.x;
 
-        if (!cave_los_bold(floor_ptr, y, x))
+        if (!cave_los_bold(floor_ptr, y, x)) {
             continue;
+        }
 
         cave_temp_lite_room_aux(player_ptr, points, y + 1, x);
         cave_temp_lite_room_aux(player_ptr, points, y - 1, x);
@@ -346,8 +358,9 @@ void unlite_room(PlayerType *player_ptr, const POSITION y1, const POSITION x1)
         const POSITION y = point.y;
         const POSITION x = point.x;
 
-        if (!cave_pass_dark_bold(floor_ptr, y, x))
+        if (!cave_pass_dark_bold(floor_ptr, y, x)) {
             continue;
+        }
 
         cave_temp_unlite_room_aux(player_ptr, points, y + 1, x);
         cave_temp_unlite_room_aux(player_ptr, points, y - 1, x);
@@ -384,10 +397,12 @@ bool starlight(PlayerType *player_ptr, bool magic)
 
         while (attempts--) {
             scatter(player_ptr, &y, &x, player_ptr->y, player_ptr->x, 4, PROJECT_LOS);
-            if (!cave_has_flag_bold(player_ptr->current_floor_ptr, y, x, FloorFeatureType::PROJECT))
+            if (!cave_has_flag_bold(player_ptr->current_floor_ptr, y, x, FloorFeatureType::PROJECT)) {
                 continue;
-            if (!player_bold(player_ptr, y, x))
+            }
+            if (!player_bold(player_ptr, y, x)) {
                 break;
+            }
         }
 
         project(player_ptr, 0, 0, y, x, damroll(6 + player_ptr->lev / 8, 10), AttributeType::LITE_WEAK,

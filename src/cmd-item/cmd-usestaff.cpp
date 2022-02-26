@@ -72,14 +72,16 @@ int staff_effect(PlayerType *player_ptr, OBJECT_SUBTYPE_VALUE sval, bool *use_ch
 
         break;
     case SV_STAFF_SLOWNESS: {
-        if (bss.mod_slowness(randint1(30) + 15, false))
+        if (bss.mod_slowness(randint1(30) + 15, false)) {
             ident = true;
+        }
         break;
     }
 
     case SV_STAFF_HASTE_MONSTERS: {
-        if (speed_monsters(player_ptr))
+        if (speed_monsters(player_ptr)) {
             ident = true;
+        }
         break;
     }
 
@@ -102,11 +104,13 @@ int staff_effect(PlayerType *player_ptr, OBJECT_SUBTYPE_VALUE sval, bool *use_ch
 
     case SV_STAFF_IDENTIFY: {
         if (powerful) {
-            if (!identify_fully(player_ptr, false))
+            if (!identify_fully(player_ptr, false)) {
                 *use_charge = false;
+            }
         } else {
-            if (!ident_spell(player_ptr, false))
+            if (!ident_spell(player_ptr, false)) {
                 *use_charge = false;
+            }
         }
         ident = true;
         break;
@@ -125,8 +129,9 @@ int staff_effect(PlayerType *player_ptr, OBJECT_SUBTYPE_VALUE sval, bool *use_ch
         break;
 
     case SV_STAFF_LITE: {
-        if (lite_area(player_ptr, damroll(2, 8), (powerful ? 4 : 2)))
+        if (lite_area(player_ptr, damroll(2, 8), (powerful ? 4 : 2))) {
             ident = true;
+        }
         break;
     }
 
@@ -137,42 +142,50 @@ int staff_effect(PlayerType *player_ptr, OBJECT_SUBTYPE_VALUE sval, bool *use_ch
     }
 
     case SV_STAFF_DETECT_GOLD: {
-        if (detect_treasure(player_ptr, detect_rad))
+        if (detect_treasure(player_ptr, detect_rad)) {
             ident = true;
-        if (detect_objects_gold(player_ptr, detect_rad))
+        }
+        if (detect_objects_gold(player_ptr, detect_rad)) {
             ident = true;
+        }
         break;
     }
 
     case SV_STAFF_DETECT_ITEM: {
-        if (detect_objects_normal(player_ptr, detect_rad))
+        if (detect_objects_normal(player_ptr, detect_rad)) {
             ident = true;
+        }
         break;
     }
 
     case SV_STAFF_DETECT_TRAP: {
-        if (detect_traps(player_ptr, detect_rad, known))
+        if (detect_traps(player_ptr, detect_rad, known)) {
             ident = true;
+        }
         break;
     }
 
     case SV_STAFF_DETECT_DOOR: {
-        if (detect_doors(player_ptr, detect_rad))
+        if (detect_doors(player_ptr, detect_rad)) {
             ident = true;
-        if (detect_stairs(player_ptr, detect_rad))
+        }
+        if (detect_stairs(player_ptr, detect_rad)) {
             ident = true;
+        }
         break;
     }
 
     case SV_STAFF_DETECT_INVIS: {
-        if (set_tim_invis(player_ptr, player_ptr->tim_invis + 12 + randint1(12), false))
+        if (set_tim_invis(player_ptr, player_ptr->tim_invis + 12 + randint1(12), false)) {
             ident = true;
+        }
         break;
     }
 
     case SV_STAFF_DETECT_EVIL: {
-        if (detect_monsters_evil(player_ptr, detect_rad))
+        if (detect_monsters_evil(player_ptr, detect_rad)) {
             ident = true;
+        }
         break;
     }
 
@@ -183,41 +196,48 @@ int staff_effect(PlayerType *player_ptr, OBJECT_SUBTYPE_VALUE sval, bool *use_ch
 
     case SV_STAFF_CURING: {
         ident = true_healing(player_ptr, 0);
-        if (set_shero(player_ptr, 0, true))
+        if (set_shero(player_ptr, 0, true)) {
             ident = true;
+        }
         break;
     }
 
     case SV_STAFF_HEALING: {
-        if (cure_critical_wounds(player_ptr, powerful ? 500 : 300))
+        if (cure_critical_wounds(player_ptr, powerful ? 500 : 300)) {
             ident = true;
+        }
         break;
     }
 
     case SV_STAFF_THE_MAGI: {
-        if (do_res_stat(player_ptr, A_INT))
+        if (do_res_stat(player_ptr, A_INT)) {
             ident = true;
+        }
         ident |= restore_mana(player_ptr, false);
-        if (set_shero(player_ptr, 0, true))
+        if (set_shero(player_ptr, 0, true)) {
             ident = true;
+        }
         break;
     }
 
     case SV_STAFF_SLEEP_MONSTERS: {
-        if (sleep_monsters(player_ptr, lev))
+        if (sleep_monsters(player_ptr, lev)) {
             ident = true;
+        }
         break;
     }
 
     case SV_STAFF_SLOW_MONSTERS: {
-        if (slow_monsters(player_ptr, lev))
+        if (slow_monsters(player_ptr, lev)) {
             ident = true;
+        }
         break;
     }
 
     case SV_STAFF_SPEED: {
-        if (set_fast(player_ptr, randint1(30) + (powerful ? 30 : 15), false))
+        if (set_fast(player_ptr, randint1(30) + (powerful ? 30 : 15), false)) {
             ident = true;
+        }
         break;
     }
 
@@ -247,10 +267,11 @@ int staff_effect(PlayerType *player_ptr, OBJECT_SUBTYPE_VALUE sval, bool *use_ch
     }
 
     case SV_STAFF_EARTHQUAKES: {
-        if (earthquake(player_ptr, player_ptr->y, player_ptr->x, (powerful ? 15 : 10), 0))
+        if (earthquake(player_ptr, player_ptr->y, player_ptr->x, (powerful ? 15 : 10), 0)) {
             ident = true;
-        else
+        } else {
             msg_print(_("ダンジョンが揺れた。", "The dungeon trembles."));
+        }
 
         break;
     }
@@ -272,8 +293,9 @@ int staff_effect(PlayerType *player_ptr, OBJECT_SUBTYPE_VALUE sval, bool *use_ch
 
     case SV_STAFF_NOTHING: {
         msg_print(_("何も起らなかった。", "Nothing happens."));
-        if (PlayerRace(player_ptr).food() == PlayerRaceFoodType::MANA)
+        if (PlayerRace(player_ptr).food() == PlayerRaceFoodType::MANA) {
             msg_print(_("もったいない事をしたような気がする。食べ物は大切にしなくては。", "What a waste.  It's your food!"));
+        }
         break;
     }
     }
@@ -292,15 +314,17 @@ void do_cmd_use_staff(PlayerType *player_ptr)
         return;
     }
 
-    if (cmd_limit_arena(player_ptr))
+    if (cmd_limit_arena(player_ptr)) {
         return;
+    }
 
     PlayerClass(player_ptr).break_samurai_stance({ SamuraiStanceType::MUSOU, SamuraiStanceType::KOUKIJIN });
 
     q = _("どの杖を使いますか? ", "Use which staff? ");
     s = _("使える杖がない。", "You have no staff to use.");
-    if (!choose_object(player_ptr, &item, q, s, (USE_INVEN | USE_FLOOR), TvalItemTester(ItemKindType::STAFF)))
+    if (!choose_object(player_ptr, &item, q, s, (USE_INVEN | USE_FLOOR), TvalItemTester(ItemKindType::STAFF))) {
         return;
+    }
 
     ObjectUseEntity(player_ptr, item).execute();
 }

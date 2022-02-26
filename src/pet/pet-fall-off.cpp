@@ -36,13 +36,15 @@
  */
 void check_fall_off_horse(PlayerType *player_ptr, MonsterAttackPlayer *monap_ptr)
 {
-    if ((player_ptr->riding == 0) || (monap_ptr->damage == 0))
+    if ((player_ptr->riding == 0) || (monap_ptr->damage == 0)) {
         return;
+    }
 
     char m_steed_name[MAX_NLEN];
     monster_desc(player_ptr, m_steed_name, &player_ptr->current_floor_ptr->m_list[player_ptr->riding], 0);
-    if (process_fall_off_horse(player_ptr, (monap_ptr->damage > 200) ? 200 : monap_ptr->damage, false))
+    if (process_fall_off_horse(player_ptr, (monap_ptr->damage > 200) ? 200 : monap_ptr->damage, false)) {
         msg_format(_("%^sから落ちてしまった！", "You have fallen from %s."), m_steed_name);
+    }
 }
 
 /*!
@@ -56,22 +58,24 @@ void check_fall_off_horse(PlayerType *player_ptr, MonsterAttackPlayer *monap_ptr
  */
 static bool calc_fall_off_possibility(PlayerType *player_ptr, const int dam, const bool force, monster_race *r_ptr)
 {
-    if (force)
+    if (force) {
         return true;
+    }
 
     auto cur = player_ptr->skill_exp[PlayerSkillKindType::RIDING];
 
     int fall_off_level = r_ptr->level;
-    if (player_ptr->riding_ryoute)
+    if (player_ptr->riding_ryoute) {
         fall_off_level += 20;
+    }
 
     PlayerSkill(player_ptr).gain_riding_skill_exp_on_fall_off_check(dam);
 
-    if (randint0(dam / 2 + fall_off_level * 2) >= cur / 30 + 10)
+    if (randint0(dam / 2 + fall_off_level * 2) >= cur / 30 + 10) {
         return true;
+    }
 
-    if ((PlayerClass(player_ptr).is_tamer() && !player_ptr->riding_ryoute)
-        || !one_in_(player_ptr->lev * (player_ptr->riding_ryoute ? 2 : 3) + 30)) {
+    if ((PlayerClass(player_ptr).is_tamer() && !player_ptr->riding_ryoute) || !one_in_(player_ptr->lev * (player_ptr->riding_ryoute ? 2 : 3) + 30)) {
         return false;
     }
 
@@ -93,12 +97,14 @@ bool process_fall_off_horse(PlayerType *player_ptr, int dam, bool force)
     auto *m_ptr = &player_ptr->current_floor_ptr->m_list[player_ptr->riding];
     auto *r_ptr = &r_info[m_ptr->r_idx];
 
-    if (!player_ptr->riding || player_ptr->wild_mode)
+    if (!player_ptr->riding || player_ptr->wild_mode) {
         return false;
+    }
 
     if (dam >= 0 || force) {
-        if (!calc_fall_off_possibility(player_ptr, dam, force, r_ptr))
+        if (!calc_fall_off_possibility(player_ptr, dam, force, r_ptr)) {
             return false;
+        }
 
         /* Check around the player */
         for (DIRECTION i = 0; i < 8; i++) {
@@ -108,24 +114,28 @@ bool process_fall_off_horse(PlayerType *player_ptr, int dam, bool force)
             grid_type *g_ptr;
             g_ptr = &player_ptr->current_floor_ptr->grid_array[y][x];
 
-            if (g_ptr->m_idx)
+            if (g_ptr->m_idx) {
                 continue;
+            }
 
             /* Skip non-empty grids */
             if (!g_ptr->cave_has_flag(FloorFeatureType::MOVE) && !g_ptr->cave_has_flag(FloorFeatureType::CAN_FLY)) {
-                if (!can_player_ride_pet(player_ptr, g_ptr, false))
+                if (!can_player_ride_pet(player_ptr, g_ptr, false)) {
                     continue;
+                }
             }
 
-            if (g_ptr->cave_has_flag(FloorFeatureType::PATTERN))
+            if (g_ptr->cave_has_flag(FloorFeatureType::PATTERN)) {
                 continue;
+            }
 
             /* Count "safe" grids */
             sn++;
 
             /* Randomize choice */
-            if (randint0(sn) > 0)
+            if (randint0(sn) > 0) {
                 continue;
+            }
 
             /* Save the safe location */
             sy = y;
@@ -170,8 +180,9 @@ bool process_fall_off_horse(PlayerType *player_ptr, int dam, bool force)
         fall_dam = true;
     }
 
-    if (sy && !player_ptr->is_dead)
+    if (sy && !player_ptr->is_dead) {
         (void)move_player_effect(player_ptr, player_ptr->y, player_ptr->x, MPE_DONT_PICKUP | MPE_DONT_SWAP_MON);
+    }
 
     return fall_dam;
 }

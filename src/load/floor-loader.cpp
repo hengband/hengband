@@ -54,27 +54,34 @@ errr rd_saved_floor(PlayerType *player_ptr, saved_floor_type *sf_ptr)
         floor_ptr->dun_level = rd_s16b();
         floor_ptr->base_level = floor_ptr->dun_level;
     } else {
-        if (rd_s16b() != sf_ptr->floor_id)
+        if (rd_s16b() != sf_ptr->floor_id) {
             return 171;
+        }
 
-        if (rd_byte() != sf_ptr->savefile_id)
+        if (rd_byte() != sf_ptr->savefile_id) {
             return 171;
+        }
 
-        if (rd_s16b() != sf_ptr->dun_level)
+        if (rd_s16b() != sf_ptr->dun_level) {
             return 171;
+        }
         floor_ptr->dun_level = sf_ptr->dun_level;
 
-        if (rd_s32b() != sf_ptr->last_visit)
+        if (rd_s32b() != sf_ptr->last_visit) {
             return 171;
+        }
 
-        if (rd_u32b() != sf_ptr->visit_mark)
+        if (rd_u32b() != sf_ptr->visit_mark) {
             return 171;
+        }
 
-        if (rd_s16b() != sf_ptr->upper_floor_id)
+        if (rd_s16b() != sf_ptr->upper_floor_id) {
             return 171;
+        }
 
-        if (rd_s16b() != sf_ptr->lower_floor_id)
+        if (rd_s16b() != sf_ptr->lower_floor_id) {
             return 171;
+        }
     }
 
     floor_ptr->base_level = rd_s16b();
@@ -126,8 +133,9 @@ errr rd_saved_floor(PlayerType *player_ptr, saved_floor_type *sf_ptr)
 
             if (++x >= xmax) {
                 x = 0;
-                if (++y >= ymax)
+                if (++y >= ymax) {
                     break;
+                }
             }
         }
     }
@@ -154,8 +162,9 @@ errr rd_saved_floor(PlayerType *player_ptr, saved_floor_type *sf_ptr)
     }
 
     limit = rd_u16b();
-    if (limit > w_ptr->max_o_idx)
+    if (limit > w_ptr->max_o_idx) {
         return 151;
+    }
 
     auto item_loader = ItemLoaderFactory::create_loader();
     for (int i = 1; i < limit; i++) {
@@ -171,8 +180,9 @@ errr rd_saved_floor(PlayerType *player_ptr, saved_floor_type *sf_ptr)
     }
 
     limit = rd_u16b();
-    if (limit > w_ptr->max_m_idx)
+    if (limit > w_ptr->max_m_idx) {
         return 161;
+    }
 
     auto monster_loader = MonsterLoaderFactory::create_loader(player_ptr);
     for (auto i = 1; i < limit; i++) {
@@ -211,19 +221,23 @@ static bool load_floor_aux(PlayerType *player_ptr, saved_floor_type *sf_ptr)
     w_ptr->h_ver_major = H_VER_MAJOR;
     loading_savefile_version = SAVEFILE_VERSION;
 
-    if (saved_floor_file_sign != rd_u32b())
+    if (saved_floor_file_sign != rd_u32b()) {
         return false;
+    }
 
-    if (rd_saved_floor(player_ptr, sf_ptr))
+    if (rd_saved_floor(player_ptr, sf_ptr)) {
         return false;
+    }
 
     auto n_v_check = v_check;
-    if (rd_u32b() != n_v_check)
+    if (rd_u32b() != n_v_check) {
         return false;
+    }
 
     auto n_x_check = x_check;
-    if (rd_u32b() != n_x_check)
+    if (rd_u32b() != n_x_check) {
         return false;
+    }
     return true;
 }
 
@@ -280,18 +294,21 @@ bool load_floor(PlayerType *player_ptr, saved_floor_type *sf_ptr, BIT_FLAGS mode
     safe_setuid_drop();
 
     bool is_save_successful = true;
-    if (!loading_savefile)
+    if (!loading_savefile) {
         is_save_successful = false;
+    }
 
     if (is_save_successful) {
         is_save_successful = load_floor_aux(player_ptr, sf_ptr);
-        if (ferror(loading_savefile))
+        if (ferror(loading_savefile)) {
             is_save_successful = false;
+        }
 
         angband_fclose(loading_savefile);
         safe_setuid_grab(player_ptr);
-        if (!(mode & SLF_NO_KILL))
+        if (!(mode & SLF_NO_KILL)) {
             (void)fd_kill(floor_savefile);
+        }
 
         safe_setuid_drop();
     }

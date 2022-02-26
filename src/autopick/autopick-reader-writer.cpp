@@ -66,18 +66,21 @@ static std::vector<concptr> read_text_lines(concptr filename)
 
     path_build(buf, sizeof(buf), ANGBAND_DIR_USER, filename);
     fff = angband_fopen(buf, "r");
-    if (!fff)
+    if (!fff) {
         return {};
+    }
 
     std::vector<concptr> lines_list(MAX_LINES);
     while (angband_fgets(fff, buf, sizeof(buf)) == 0) {
         lines_list[lines++] = string_make(buf);
-        if (is_greater_autopick_max_line(lines))
+        if (is_greater_autopick_max_line(lines)) {
             break;
+        }
     }
 
-    if (lines == 0)
+    if (lines == 0) {
         lines_list[0] = string_make("");
+    }
 
     angband_fclose(fff);
     return lines_list;
@@ -102,8 +105,9 @@ static void prepare_default_pickpref(PlayerType *player_ptr)
     path_build(buf, sizeof(buf), ANGBAND_DIR_USER, filename);
     FILE *user_fp;
     user_fp = angband_fopen(buf, "w");
-    if (!user_fp)
+    if (!user_fp) {
         return;
+    }
 
     fprintf(user_fp, "#***\n");
     for (int i = 0; messages[i]; i++) {
@@ -168,8 +172,9 @@ bool write_text_lines(concptr filename, concptr *lines_list)
     path_build(buf, sizeof(buf), ANGBAND_DIR_USER, filename);
     FILE *fff;
     fff = angband_fopen(buf, "w");
-    if (!fff)
+    if (!fff) {
         return false;
+    }
 
     for (int lines = 0; lines_list[lines]; lines++) {
         angband_fputs(fff, lines_list[lines], 1024);

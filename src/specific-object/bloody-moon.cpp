@@ -23,26 +23,29 @@ void get_bloody_moon_flags(ObjectType *o_ptr)
     int dummy = randint1(2) + randint1(2);
     for (int i = 0; i < dummy; i++) {
         int flag = randint0(26);
-        if (flag >= 20)
+        if (flag >= 20) {
             o_ptr->art_flags.set(TR_KILL_UNDEAD + flag - 20);
-        else if (flag == 19)
+        } else if (flag == 19) {
             o_ptr->art_flags.set(TR_KILL_ANIMAL);
-        else if (flag == 18)
+        } else if (flag == 18) {
             o_ptr->art_flags.set(TR_SLAY_HUMAN);
-        else
+        } else {
             o_ptr->art_flags.set(TR_CHAOTIC + flag);
+        }
     }
 
     dummy = randint1(2);
-    for (int i = 0; i < dummy; i++)
+    for (int i = 0; i < dummy; i++) {
         one_resistance(o_ptr);
+    }
 
     for (int i = 0; i < 2; i++) {
         int tmp = randint0(11);
-        if (tmp < A_MAX)
+        if (tmp < A_MAX) {
             o_ptr->art_flags.set(TR_STR + tmp);
-        else
+        } else {
             o_ptr->art_flags.set(TR_STEALTH + tmp - 6);
+        }
     }
 }
 
@@ -54,13 +57,15 @@ void get_bloody_moon_flags(ObjectType *o_ptr)
  */
 bool activate_bloody_moon(PlayerType *player_ptr, ObjectType *o_ptr)
 {
-    if (o_ptr->fixed_artifact_idx != ART_BLOOD)
+    if (o_ptr->fixed_artifact_idx != ART_BLOOD) {
         return false;
+    }
 
     msg_print(_("鎌が明るく輝いた...", "Your scythe glows brightly!"));
     get_bloody_moon_flags(o_ptr);
-    if (PlayerRace(player_ptr).equals(PlayerRaceType::ANDROID))
+    if (PlayerRace(player_ptr).equals(PlayerRaceType::ANDROID)) {
         calc_android_exp(player_ptr);
+    }
 
     player_ptr->update |= PU_BONUS | PU_HP;
     return true;

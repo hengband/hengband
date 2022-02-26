@@ -87,8 +87,9 @@ static void build_bubble_vault(PlayerType *player_ptr, POSITION x0, POSITION y0,
 
             for (j = 0; j < i; j++) {
                 /* rough test to see if there is an overlap */
-                if ((x == center[j].x) && (y == center[j].y))
+                if ((x == center[j].x) && (y == center[j].y)) {
                     done = false;
+                }
             }
         }
 
@@ -341,8 +342,9 @@ static void build_vault(
             }
 
             /* Hack -- skip "non-grids" */
-            if (*t == ' ')
+            if (*t == ' ') {
                 continue;
+            }
             g_ptr = &floor_ptr->grid_array[y][x];
 
             /* Lay down a floor */
@@ -410,8 +412,9 @@ static void build_vault(
                 /* Secret glass doors */
             case '-':
                 place_secret_door(player_ptr, y, x, DOOR_GLASS_DOOR);
-                if (is_closed_door(player_ptr, g_ptr->feat))
+                if (is_closed_door(player_ptr, g_ptr->feat)) {
                     g_ptr->mimic = feat_glass_wall;
+                }
                 break;
 
                 /* Curtains */
@@ -538,8 +541,9 @@ static void build_vault(
             }
 
             /* Hack -- skip "non-grids" */
-            if (*t == ' ')
+            if (*t == ' ') {
                 continue;
+            }
 
             /* Analyze the symbol */
             switch (*t) {
@@ -807,8 +811,9 @@ static void build_mini_c_vault(PlayerType *player_ptr, POSITION x0, POSITION y0,
     /* generate the room */
     auto *floor_ptr = player_ptr->current_floor_ptr;
     for (x = x1 - 2; x <= x2 + 2; x++) {
-        if (!in_bounds(floor_ptr, y1 - 2, x))
+        if (!in_bounds(floor_ptr, y1 - 2, x)) {
             break;
+        }
 
         floor_ptr->grid_array[y1 - 2][x].info |= (CAVE_ROOM | CAVE_ICKY);
 
@@ -816,8 +821,9 @@ static void build_mini_c_vault(PlayerType *player_ptr, POSITION x0, POSITION y0,
     }
 
     for (x = x1 - 2; x <= x2 + 2; x++) {
-        if (!in_bounds(floor_ptr, y2 + 2, x))
+        if (!in_bounds(floor_ptr, y2 + 2, x)) {
             break;
+        }
 
         floor_ptr->grid_array[y2 + 2][x].info |= (CAVE_ROOM | CAVE_ICKY);
 
@@ -825,8 +831,9 @@ static void build_mini_c_vault(PlayerType *player_ptr, POSITION x0, POSITION y0,
     }
 
     for (y = y1 - 2; y <= y2 + 2; y++) {
-        if (!in_bounds(floor_ptr, y, x1 - 2))
+        if (!in_bounds(floor_ptr, y, x1 - 2)) {
             break;
+        }
 
         floor_ptr->grid_array[y][x1 - 2].info |= (CAVE_ROOM | CAVE_ICKY);
 
@@ -834,8 +841,9 @@ static void build_mini_c_vault(PlayerType *player_ptr, POSITION x0, POSITION y0,
     }
 
     for (y = y1 - 2; y <= y2 + 2; y++) {
-        if (!in_bounds(floor_ptr, y, x2 + 2))
+        if (!in_bounds(floor_ptr, y, x2 + 2)) {
             break;
+        }
 
         floor_ptr->grid_array[y][x2 + 2].info |= (CAVE_ROOM | CAVE_ICKY);
 
@@ -946,8 +954,9 @@ bool build_type10(PlayerType *player_ptr, dun_data_type *dd_ptr)
 
     /* Find and reserve some space in the dungeon.  Get center of room. */
     auto *floor_ptr = player_ptr->current_floor_ptr;
-    if (!find_space(player_ptr, dd_ptr, &y0, &x0, ysize + 1, xsize + 1))
+    if (!find_space(player_ptr, dd_ptr, &y0, &x0, ysize + 1, xsize + 1)) {
         return false;
+    }
 
     /* Select type of vault */
     do {
@@ -1056,8 +1065,9 @@ bool build_fixed_room(PlayerType *player_ptr, dun_data_type *dd_ptr, int typ, bo
     int xsize = more_space ? abs(x) + 2 : abs(x);
     int ysize = more_space ? abs(y) + 2 : abs(y);
     /* Find and reserve some space in the dungeon.  Get center of room. */
-    if (!find_space(player_ptr, dd_ptr, &yval, &xval, ysize, xsize))
+    if (!find_space(player_ptr, dd_ptr, &yval, &xval, ysize, xsize)) {
         return false;
+    }
 
     msg_format_wizard(player_ptr, CHEAT_DUNGEON, _("固定部屋(%s)を生成しました。", "Fixed room (%s)."), v_ptr->name.c_str());
 

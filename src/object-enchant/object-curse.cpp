@@ -16,8 +16,8 @@
 #include "view/display-messages.h"
 
 namespace {
-const EnumClassFlagGroup<CurseTraitType> TRC_SPECIAL_MASK({CurseTraitType::TY_CURSE, CurseTraitType::AGGRAVATE});
-const EnumClassFlagGroup<CurseTraitType> TRC_HEAVY_MASK({CurseTraitType::TY_CURSE, CurseTraitType::AGGRAVATE, CurseTraitType::DRAIN_EXP, CurseTraitType::ADD_H_CURSE, CurseTraitType::CALL_DEMON, CurseTraitType::CALL_DRAGON, CurseTraitType::CALL_UNDEAD, CurseTraitType::TELEPORT});
+const EnumClassFlagGroup<CurseTraitType> TRC_SPECIAL_MASK({ CurseTraitType::TY_CURSE, CurseTraitType::AGGRAVATE });
+const EnumClassFlagGroup<CurseTraitType> TRC_HEAVY_MASK({ CurseTraitType::TY_CURSE, CurseTraitType::AGGRAVATE, CurseTraitType::DRAIN_EXP, CurseTraitType::ADD_H_CURSE, CurseTraitType::CALL_DEMON, CurseTraitType::CALL_DRAGON, CurseTraitType::CALL_UNDEAD, CurseTraitType::TELEPORT });
 }
 
 /*!
@@ -33,20 +33,25 @@ CurseTraitType get_curse(int power, ObjectType *o_ptr)
     while (true) {
         new_curse = i2enum<CurseTraitType>(rand_range(enum2i(CurseTraitType::TY_CURSE), enum2i(CurseTraitType::MAX) - 1));
         if (power == 2) {
-            if (TRC_HEAVY_MASK.has_not(new_curse))
+            if (TRC_HEAVY_MASK.has_not(new_curse)) {
                 continue;
+            }
         } else if (power == 1) {
-            if (TRC_SPECIAL_MASK.has(new_curse))
+            if (TRC_SPECIAL_MASK.has(new_curse)) {
                 continue;
+            }
         } else if (power == 0) {
-            if (TRC_HEAVY_MASK.has(new_curse))
+            if (TRC_HEAVY_MASK.has(new_curse)) {
                 continue;
+            }
         }
 
-        if (new_curse == CurseTraitType::LOW_MELEE && !o_ptr->is_weapon())
+        if (new_curse == CurseTraitType::LOW_MELEE && !o_ptr->is_weapon()) {
             continue;
-        if (new_curse == CurseTraitType::LOW_AC && !o_ptr->is_armour())
+        }
+        if (new_curse == CurseTraitType::LOW_AC && !o_ptr->is_armour()) {
             continue;
+        }
         break;
     }
 
@@ -61,12 +66,14 @@ CurseTraitType get_curse(int power, ObjectType *o_ptr)
  */
 void curse_equipment(PlayerType *player_ptr, PERCENTAGE chance, PERCENTAGE heavy_chance)
 {
-    if (randint1(100) > chance)
+    if (randint1(100) > chance) {
         return;
+    }
 
     auto *o_ptr = &player_ptr->inventory_list[INVEN_MAIN_HAND + randint0(12)];
-    if (!o_ptr->k_idx)
+    if (!o_ptr->k_idx) {
         return;
+    }
     auto oflgs = object_flags(o_ptr);
     GAME_TEXT o_name[MAX_NLEN];
     describe_flavor(player_ptr, o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
@@ -85,19 +92,22 @@ void curse_equipment(PlayerType *player_ptr, PERCENTAGE chance, PERCENTAGE heavy
     bool changed = false;
     int curse_power = 0;
     if ((randint1(100) <= heavy_chance) && (o_ptr->is_artifact() || o_ptr->is_ego())) {
-        if (o_ptr->curse_flags.has_not(CurseTraitType::HEAVY_CURSE))
+        if (o_ptr->curse_flags.has_not(CurseTraitType::HEAVY_CURSE)) {
             changed = true;
+        }
         o_ptr->curse_flags.set(CurseTraitType::HEAVY_CURSE);
         o_ptr->curse_flags.set(CurseTraitType::CURSED);
         curse_power++;
     } else {
-        if (!o_ptr->is_cursed())
+        if (!o_ptr->is_cursed()) {
             changed = true;
+        }
         o_ptr->curse_flags.set(CurseTraitType::CURSED);
     }
 
-    if (heavy_chance >= 50)
+    if (heavy_chance >= 50) {
         curse_power++;
+    }
 
     auto new_curse = get_curse(curse_power, o_ptr);
     if (o_ptr->curse_flags.has_not(new_curse)) {

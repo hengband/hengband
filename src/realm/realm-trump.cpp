@@ -1,6 +1,7 @@
 ﻿#include "realm/realm-trump.h"
 #include "cmd-action/cmd-spell.h"
 #include "core/asking-player.h"
+#include "effect/attribute-types.h"
 #include "effect/spells-effect-util.h"
 #include "game-option/input-options.h"
 #include "monster-floor/place-monster-types.h"
@@ -16,7 +17,6 @@
 #include "spell-kind/spells-world.h"
 #include "spell-realm/spells-chaos.h"
 #include "spell-realm/spells-trump.h"
-#include "effect/attribute-types.h"
 #include "spell/spells-object.h"
 #include "spell/spells-status.h"
 #include "spell/spells-summon.h"
@@ -49,16 +49,19 @@ concptr do_trump_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessType
 
     switch (spell) {
     case 0:
-        if (name)
+        if (name) {
             return _("ショート・テレポート", "Phase Door");
-        if (desc)
+        }
+        if (desc) {
             return _("近距離のテレポートをする。", "Teleports you a short distance.");
+        }
 
         {
             POSITION range = 10;
 
-            if (info)
+            if (info) {
                 return info_range(range);
+            }
 
             if (cast) {
                 teleport_player(player_ptr, range, TELEPORT_SPONTANEOUS);
@@ -67,10 +70,12 @@ concptr do_trump_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessType
         break;
 
     case 1:
-        if (name)
+        if (name) {
             return _("蜘蛛のカード", "Trump Spiders");
-        if (desc)
+        }
+        if (desc) {
             return _("蜘蛛を召喚する。", "Summons spiders.");
+        }
 
         {
             if (cast || fail) {
@@ -85,14 +90,17 @@ concptr do_trump_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessType
         break;
 
     case 2:
-        if (name)
+        if (name) {
             return _("シャッフル", "Shuffle");
-        if (desc)
+        }
+        if (desc) {
             return _("カードの占いをする。", "Causes random effects.");
+        }
 
         {
-            if (info)
+            if (info) {
                 return KWD_RANDOM;
+            }
 
             if (cast) {
                 cast_shuffle(player_ptr);
@@ -101,30 +109,36 @@ concptr do_trump_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessType
         break;
 
     case 3:
-        if (name)
+        if (name) {
             return _("フロア・リセット", "Reset Recall");
-        if (desc)
+        }
+        if (desc) {
             return _("最深階を変更する。", "Resets the 'deepest' level for recall spell.");
+        }
 
         {
             if (cast) {
-                if (!reset_recall(player_ptr))
+                if (!reset_recall(player_ptr)) {
                     return nullptr;
+                }
             }
         }
         break;
 
     case 4:
-        if (name)
+        if (name) {
             return _("テレポート", "Teleport");
-        if (desc)
+        }
+        if (desc) {
             return _("遠距離のテレポートをする。", "Teleports you a long distance.");
+        }
 
         {
             POSITION range = plev * 4;
 
-            if (info)
+            if (info) {
                 return info_range(range);
+            }
 
             if (cast) {
                 teleport_player(player_ptr, range, TELEPORT_SPONTANEOUS);
@@ -133,17 +147,20 @@ concptr do_trump_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessType
         break;
 
     case 5:
-        if (name)
+        if (name) {
             return _("感知のカード", "Trump Spying");
-        if (desc)
+        }
+        if (desc) {
             return _("一定時間、テレパシー能力を得る。", "Gives telepathy for a while.");
+        }
 
         {
             int base = 25;
             DICE_SID sides = 30;
 
-            if (info)
+            if (info) {
                 return info_duration(base, sides);
+            }
 
             if (cast) {
                 set_tim_esp(player_ptr, randint1(sides) + base, false);
@@ -152,20 +169,24 @@ concptr do_trump_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessType
         break;
 
     case 6:
-        if (name)
+        if (name) {
             return _("テレポート・モンスター", "Teleport Away");
-        if (desc)
+        }
+        if (desc) {
             return _("モンスターをテレポートさせるビームを放つ。抵抗されると無効。", "Teleports all monsters on the line away unless resisted.");
+        }
 
         {
             int power = plev;
 
-            if (info)
+            if (info) {
                 return info_power(power);
+            }
 
             if (cast) {
-                if (!get_aim_dir(player_ptr, &dir))
+                if (!get_aim_dir(player_ptr, &dir)) {
                     return nullptr;
+                }
 
                 fire_beam(player_ptr, AttributeType::AWAY_ALL, dir, power);
             }
@@ -173,10 +194,12 @@ concptr do_trump_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessType
         break;
 
     case 7:
-        if (name)
+        if (name) {
             return _("動物のカード", "Trump Animals");
-        if (desc)
+        }
+        if (desc) {
             return _("1体の動物を召喚する。", "Summons an animal.");
+        }
 
         {
             if (cast || fail) {
@@ -192,20 +215,24 @@ concptr do_trump_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessType
         break;
 
     case 8:
-        if (name)
+        if (name) {
             return _("移動のカード", "Trump Reach");
-        if (desc)
+        }
+        if (desc) {
             return _("アイテムを自分の足元へ移動させる。", "Pulls a distant item close to you.");
+        }
 
         {
             WEIGHT weight = plev * 15;
 
-            if (info)
+            if (info) {
                 return info_weight(weight);
+            }
 
             if (cast) {
-                if (!get_aim_dir(player_ptr, &dir))
+                if (!get_aim_dir(player_ptr, &dir)) {
                     return nullptr;
+                }
 
                 fetch_item(player_ptr, dir, weight, false);
             }
@@ -213,10 +240,12 @@ concptr do_trump_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessType
         break;
 
     case 9:
-        if (name)
+        if (name) {
             return _("カミカゼのカード", "Trump Kamikaze");
-        if (desc)
+        }
+        if (desc) {
             return _("複数の爆発するモンスターを召喚する。", "Summons multiple exploding monsters.");
+        }
 
         {
             if (cast || fail) {
@@ -224,8 +253,9 @@ concptr do_trump_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessType
                 summon_type type;
 
                 if (cast) {
-                    if (!target_set(player_ptr, TARGET_KILL))
+                    if (!target_set(player_ptr, TARGET_KILL)) {
                         return nullptr;
+                    }
                     x = target_col;
                     y = target_row;
                 } else {
@@ -234,10 +264,11 @@ concptr do_trump_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessType
                     y = player_ptr->y;
                 }
 
-                if (PlayerClass(player_ptr).equals(PlayerClassType::BEASTMASTER))
+                if (PlayerClass(player_ptr).equals(PlayerClassType::BEASTMASTER)) {
                     type = SUMMON_KAMIKAZE_LIVING;
-                else
+                } else {
                     type = SUMMON_KAMIKAZE;
+                }
 
                 msg_print(_("あなたはカミカゼのカードに集中する...", "You concentrate on several trumps at once..."));
                 if (trump_summoning(player_ptr, 2 + randint0(plev / 7), !fail, y, x, 0, type, 0L)) {
@@ -250,10 +281,12 @@ concptr do_trump_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessType
         break;
 
     case 10:
-        if (name)
+        if (name) {
             return _("幻霊召喚", "Phantasmal Servant");
-        if (desc)
+        }
+        if (desc) {
             return _("1体の幽霊を召喚する。", "Summons a ghost.");
+        }
 
         {
             /* Phantasmal Servant is not summoned as enemy when failed */
@@ -268,10 +301,12 @@ concptr do_trump_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessType
         break;
 
     case 11:
-        if (name)
+        if (name) {
             return _("スピード・モンスター", "Haste Monster");
-        if (desc)
+        }
+        if (desc) {
             return _("モンスター1体を加速させる。", "Hastes a monster.");
+        }
 
         {
             if (cast) {
@@ -286,8 +321,9 @@ concptr do_trump_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessType
                 /* Restore target_pet option */
                 target_pet = old_target_pet;
 
-                if (!result)
+                if (!result) {
                     return nullptr;
+                }
 
                 speed_monster(player_ptr, dir, plev);
             }
@@ -295,72 +331,86 @@ concptr do_trump_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessType
         break;
 
     case 12:
-        if (name)
+        if (name) {
             return _("テレポート・レベル", "Teleport Level");
-        if (desc)
+        }
+        if (desc) {
             return _("瞬時に上か下の階にテレポートする。", "Instantly teleports you up or down a level.");
+        }
 
         {
             if (cast) {
-                if (!get_check(_("本当に他の階にテレポートしますか？", "Are you sure? (Teleport Level)")))
+                if (!get_check(_("本当に他の階にテレポートしますか？", "Are you sure? (Teleport Level)"))) {
                     return nullptr;
+                }
                 teleport_level(player_ptr, 0);
             }
         }
         break;
 
     case 13:
-        if (name)
+        if (name) {
             return _("次元の扉", "Dimension Door");
-        if (desc)
+        }
+        if (desc) {
             return _("短距離内の指定した場所にテレポートする。", "Teleports you to a given location.");
+        }
 
         {
             POSITION range = plev / 2 + 10;
 
-            if (info)
+            if (info) {
                 return info_range(range);
+            }
 
             if (cast) {
                 msg_print(_("次元の扉が開いた。目的地を選んで下さい。", "You open a dimensional gate. Choose a destination."));
-                if (!dimension_door(player_ptr))
+                if (!dimension_door(player_ptr)) {
                     return nullptr;
+                }
             }
         }
         break;
 
     case 14:
-        if (name)
+        if (name) {
             return _("帰還の呪文", "Word of Recall");
-        if (desc)
+        }
+        if (desc) {
             return _("地上にいるときはダンジョンの最深階へ、ダンジョンにいるときは地上へと移動する。",
                 "Recalls player from dungeon to town or from town to the deepest level of dungeon.");
+        }
 
         {
             int base = 15;
             DICE_SID sides = 20;
 
-            if (info)
+            if (info) {
                 return info_delay(base, sides);
+            }
 
             if (cast) {
-                if (!recall_player(player_ptr, randint0(21) + 15))
+                if (!recall_player(player_ptr, randint0(21) + 15)) {
                     return nullptr;
+                }
             }
         }
         break;
 
     case 15:
-        if (name)
+        if (name) {
             return _("怪物追放", "Banish");
-        if (desc)
+        }
+        if (desc) {
             return _("視界内の全てのモンスターをテレポートさせる。抵抗されると無効。", "Teleports all monsters in sight away unless resisted.");
+        }
 
         {
             int power = plev * 4;
 
-            if (info)
+            if (info) {
                 return info_power(power);
+            }
 
             if (cast) {
                 banish_monsters(player_ptr, power);
@@ -369,10 +419,12 @@ concptr do_trump_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessType
         break;
 
     case 16:
-        if (name)
+        if (name) {
             return _("位置交換のカード", "Swap Position");
-        if (desc)
+        }
+        if (desc) {
             return _("1体のモンスターと位置を交換する。", "Swap positions of you and a monster.");
+        }
 
         {
             if (cast) {
@@ -386,8 +438,9 @@ concptr do_trump_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessType
                 /* Restore range to default */
                 project_length = 0;
 
-                if (!result)
+                if (!result) {
                     return nullptr;
+                }
 
                 teleport_swap(player_ptr, dir);
             }
@@ -395,10 +448,12 @@ concptr do_trump_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessType
         break;
 
     case 17:
-        if (name)
+        if (name) {
             return _("アンデッドのカード", "Trump Undead");
-        if (desc)
+        }
+        if (desc) {
             return _("1体のアンデッドを召喚する。", "Summons an undead monster.");
+        }
 
         {
             if (cast || fail) {
@@ -413,10 +468,12 @@ concptr do_trump_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessType
         break;
 
     case 18:
-        if (name)
+        if (name) {
             return _("爬虫類のカード", "Trump Reptile");
-        if (desc)
+        }
+        if (desc) {
             return _("1体のヒドラを召喚する。", "Summons a hydra.");
+        }
 
         {
             if (cast || fail) {
@@ -431,19 +488,22 @@ concptr do_trump_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessType
         break;
 
     case 19:
-        if (name)
+        if (name) {
             return _("モンスターのカード", "Trump Monsters");
-        if (desc)
+        }
+        if (desc) {
             return _("複数のモンスターを召喚する。", "Summons some monsters.");
+        }
 
         {
             if (cast || fail) {
                 summon_type type;
                 msg_print(_("あなたはモンスターのカードに集中する...", "You concentrate on several trumps at once..."));
-                if (PlayerClass(player_ptr).equals(PlayerClassType::BEASTMASTER))
+                if (PlayerClass(player_ptr).equals(PlayerClassType::BEASTMASTER)) {
                     type = SUMMON_LIVING;
-                else
+                } else {
                     type = SUMMON_NONE;
+                }
 
                 if (trump_summoning(player_ptr, (1 + (plev - 15) / 10), !fail, player_ptr->y, player_ptr->x, 0, type, 0L)) {
                     if (fail) {
@@ -455,10 +515,12 @@ concptr do_trump_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessType
         break;
 
     case 20:
-        if (name)
+        if (name) {
             return _("ハウンドのカード", "Trump Hounds");
-        if (desc)
+        }
+        if (desc) {
             return _("1グループのハウンドを召喚する。", "Summons a group of hounds.");
+        }
 
         {
             if (cast || fail) {
@@ -473,10 +535,12 @@ concptr do_trump_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessType
         break;
 
     case 21:
-        if (name)
+        if (name) {
             return _("トランプの刃", "Trump Branding");
-        if (desc)
+        }
+        if (desc) {
             return _("武器にトランプの属性をつける。", "Makes current weapon a Trump weapon.");
+        }
 
         {
             if (cast) {
@@ -486,20 +550,25 @@ concptr do_trump_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessType
         break;
 
     case 22:
-        if (name)
+        if (name) {
             return _("人間トランプ", "Living Trump");
-        if (desc)
+        }
+        if (desc) {
             return _("ランダムにテレポートする突然変異か、自分の意思でテレポートする突然変異が身につく。",
                 "Gives mutation which makes you teleport randomly or makes you able to teleport at will.");
-        if (cast)
+        }
+        if (cast) {
             become_living_trump(player_ptr);
+        }
         break;
 
     case 23:
-        if (name)
+        if (name) {
             return _("サイバーデーモンのカード", "Trump Cyberdemon");
-        if (desc)
+        }
+        if (desc) {
             return _("1体のサイバーデーモンを召喚する。", "Summons a cyber demon.");
+        }
 
         {
             if (cast || fail) {
@@ -514,17 +583,20 @@ concptr do_trump_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessType
         break;
 
     case 24:
-        if (name)
+        if (name) {
             return _("予見のカード", "Trump Divination");
-        if (desc)
+        }
+        if (desc) {
             return _("近くの全てのモンスター、罠、扉、階段、財宝、そしてアイテムを感知する。",
                 "Detects all monsters, traps, doors, stairs, treasures and items in your vicinity.");
+        }
 
         {
             POSITION rad = DETECT_RAD_DEFAULT;
 
-            if (info)
+            if (info) {
                 return info_radius(rad);
+            }
 
             if (cast) {
                 detect_all(player_ptr, rad);
@@ -533,30 +605,36 @@ concptr do_trump_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessType
         break;
 
     case 25:
-        if (name)
+        if (name) {
             return _("知識のカード", "Trump Lore");
-        if (desc)
+        }
+        if (desc) {
             return _("アイテムの持つ能力を完全に知る。", "*Identifies* an item.");
+        }
 
         {
             if (cast) {
-                if (!identify_fully(player_ptr, false))
+                if (!identify_fully(player_ptr, false)) {
                     return nullptr;
+                }
             }
         }
         break;
 
     case 26:
-        if (name)
+        if (name) {
             return _("回復モンスター", "Heal Monster");
-        if (desc)
+        }
+        if (desc) {
             return _("モンスター1体の体力を回復させる。", "Heals a monster.");
+        }
 
         {
             int heal = plev * 10 + 200;
 
-            if (info)
+            if (info) {
                 return info_heal(0, 0, heal);
+            }
 
             if (cast) {
                 bool result;
@@ -570,8 +648,9 @@ concptr do_trump_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessType
                 /* Restore target_pet option */
                 target_pet = old_target_pet;
 
-                if (!result)
+                if (!result) {
                     return nullptr;
+                }
 
                 heal_monster(player_ptr, dir, heal);
             }
@@ -579,10 +658,12 @@ concptr do_trump_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessType
         break;
 
     case 27:
-        if (name)
+        if (name) {
             return _("ドラゴンのカード", "Trump Dragon");
-        if (desc)
+        }
+        if (desc) {
             return _("1体のドラゴンを召喚する。", "Summons a dragon.");
+        }
 
         {
             if (cast || fail) {
@@ -597,17 +678,20 @@ concptr do_trump_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessType
         break;
 
     case 28:
-        if (name)
+        if (name) {
             return _("隕石のカード", "Trump Meteor");
-        if (desc)
+        }
+        if (desc) {
             return _("自分の周辺に隕石を落とす。", "Causes meteorites to fall down on nearby random locations.");
+        }
 
         {
             int dam = plev * 2;
             POSITION rad = 2;
 
-            if (info)
+            if (info) {
                 return info_multi_damage(dam);
+            }
 
             if (cast) {
                 cast_meteor(player_ptr, dam, rad);
@@ -616,10 +700,12 @@ concptr do_trump_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessType
         break;
 
     case 29:
-        if (name)
+        if (name) {
             return _("デーモンのカード", "Trump Demon");
-        if (desc)
+        }
+        if (desc) {
             return _("1体の悪魔を召喚する。", "Summons a demon.");
+        }
 
         {
             if (cast || fail) {
@@ -634,10 +720,12 @@ concptr do_trump_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessType
         break;
 
     case 30:
-        if (name)
+        if (name) {
             return _("地獄のカード", "Trump Greater Undead");
-        if (desc)
+        }
+        if (desc) {
             return _("1体の上級アンデッドを召喚する。", "Summons a greater undead.");
+        }
 
         {
             if (cast || fail) {
@@ -653,19 +741,22 @@ concptr do_trump_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessType
         break;
 
     case 31:
-        if (name)
+        if (name) {
             return _("古代ドラゴンのカード", "Trump Ancient Dragon");
-        if (desc)
+        }
+        if (desc) {
             return _("1体の古代ドラゴンを召喚する。", "Summons an ancient dragon.");
+        }
 
         {
             if (cast) {
                 summon_type type;
 
-                if (PlayerClass(player_ptr).equals(PlayerClassType::BEASTMASTER))
+                if (PlayerClass(player_ptr).equals(PlayerClassType::BEASTMASTER)) {
                     type = SUMMON_HI_DRAGON_LIVING;
-                else
+                } else {
                     type = SUMMON_HI_DRAGON;
+                }
 
                 msg_print(_("あなたは古代ドラゴンのカードに集中する...", "You concentrate on the trump of an ancient dragon..."));
                 /* May allow unique depend on level and dice roll */

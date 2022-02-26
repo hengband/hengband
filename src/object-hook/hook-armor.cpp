@@ -13,13 +13,16 @@
  */
 bool item_tester_hook_wear(PlayerType *player_ptr, const ObjectType *o_ptr)
 {
-    if ((o_ptr->tval == ItemKindType::SOFT_ARMOR) && (o_ptr->sval == SV_ABUNAI_MIZUGI))
-        if (player_ptr->psex == SEX_MALE)
+    if ((o_ptr->tval == ItemKindType::SOFT_ARMOR) && (o_ptr->sval == SV_ABUNAI_MIZUGI)) {
+        if (player_ptr->psex == SEX_MALE) {
             return false;
+        }
+    }
 
     /* Check for a usable slot */
-    if (wield_slot(player_ptr, o_ptr) >= INVEN_MAIN_HAND)
+    if (wield_slot(player_ptr, o_ptr) >= INVEN_MAIN_HAND) {
         return true;
+    }
 
     return false;
 }

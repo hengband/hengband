@@ -49,13 +49,15 @@ bool project_all_los(PlayerType *player_ptr, AttributeType typ, int dam)
 {
     for (MONSTER_IDX i = 1; i < player_ptr->current_floor_ptr->m_max; i++) {
         auto *m_ptr = &player_ptr->current_floor_ptr->m_list[i];
-        if (!monster_is_valid(m_ptr))
+        if (!monster_is_valid(m_ptr)) {
             continue;
+        }
 
         POSITION y = m_ptr->fy;
         POSITION x = m_ptr->fx;
-        if (!player_has_los_bold(player_ptr, y, x) || !projectable(player_ptr, player_ptr->y, player_ptr->x, y, x))
+        if (!player_has_los_bold(player_ptr, y, x) || !projectable(player_ptr, player_ptr->y, player_ptr->x, y, x)) {
             continue;
+        }
 
         m_ptr->mflag.set(MonsterTemporaryFlagType::LOS);
     }
@@ -64,15 +66,17 @@ bool project_all_los(PlayerType *player_ptr, AttributeType typ, int dam)
     bool obvious = false;
     for (MONSTER_IDX i = 1; i < player_ptr->current_floor_ptr->m_max; i++) {
         auto *m_ptr = &player_ptr->current_floor_ptr->m_list[i];
-        if (m_ptr->mflag.has_not(MonsterTemporaryFlagType::LOS))
+        if (m_ptr->mflag.has_not(MonsterTemporaryFlagType::LOS)) {
             continue;
+        }
 
         m_ptr->mflag.reset(MonsterTemporaryFlagType::LOS);
         POSITION y = m_ptr->fy;
         POSITION x = m_ptr->fx;
 
-        if (project(player_ptr, 0, 0, y, x, dam, typ, flg).notice)
+        if (project(player_ptr, 0, 0, y, x, dam, typ, flg).notice) {
             obvious = true;
+        }
     }
 
     return obvious;
@@ -125,8 +129,9 @@ bool banish_evil(PlayerType *player_ptr, int dist)
 bool turn_undead(PlayerType *player_ptr)
 {
     bool tester = (project_all_los(player_ptr, AttributeType::TURN_UNDEAD, player_ptr->lev));
-    if (tester)
+    if (tester) {
         chg_virtue(player_ptr, V_UNLIFE, -1);
+    }
     return tester;
 }
 
@@ -138,8 +143,9 @@ bool turn_undead(PlayerType *player_ptr)
 bool dispel_undead(PlayerType *player_ptr, int dam)
 {
     bool tester = (project_all_los(player_ptr, AttributeType::DISP_UNDEAD, dam));
-    if (tester)
+    if (tester) {
         chg_virtue(player_ptr, V_UNLIFE, -2);
+    }
     return tester;
 }
 
@@ -214,10 +220,12 @@ void aggravate_monsters(PlayerType *player_ptr, MONSTER_IDX who)
     bool speed = false;
     for (MONSTER_IDX i = 1; i < player_ptr->current_floor_ptr->m_max; i++) {
         auto *m_ptr = &player_ptr->current_floor_ptr->m_list[i];
-        if (!monster_is_valid(m_ptr))
+        if (!monster_is_valid(m_ptr)) {
             continue;
-        if (i == who)
+        }
+        if (i == who) {
             continue;
+        }
 
         if (m_ptr->cdis < MAX_SIGHT * 2) {
             if (monster_csleep_remaining(m_ptr)) {
@@ -225,8 +233,9 @@ void aggravate_monsters(PlayerType *player_ptr, MONSTER_IDX who)
                 sleep = true;
             }
 
-            if (!is_pet(m_ptr))
+            if (!is_pet(m_ptr)) {
                 m_ptr->mflag2.set(MonsterConstantFlagType::NOPET);
+            }
         }
 
         if (player_has_los_bold(player_ptr, m_ptr->fy, m_ptr->fx)) {
@@ -237,12 +246,14 @@ void aggravate_monsters(PlayerType *player_ptr, MONSTER_IDX who)
         }
     }
 
-    if (speed)
+    if (speed) {
         msg_print(_("付近で何かが突如興奮したような感じを受けた！", "You feel a sudden stirring nearby!"));
-    else if (sleep)
+    } else if (sleep) {
         msg_print(_("何かが突如興奮したような騒々しい音が遠くに聞こえた！", "You hear a sudden stirring in the distance!"));
-    if (player_ptr->riding)
+    }
+    if (player_ptr->riding) {
         player_ptr->update |= PU_BONUS;
+    }
 }
 
 /*!
@@ -363,8 +374,9 @@ bool deathray_monsters(PlayerType *player_ptr)
 void probed_monster_info(char *buf, PlayerType *player_ptr, monster_type *m_ptr, monster_race *r_ptr)
 {
     if (!is_original_ap(m_ptr)) {
-        if (m_ptr->mflag2.has(MonsterConstantFlagType::KAGE))
+        if (m_ptr->mflag2.has(MonsterConstantFlagType::KAGE)) {
             m_ptr->mflag2.reset(MonsterConstantFlagType::KAGE);
+        }
 
         m_ptr->ap_r_idx = m_ptr->r_idx;
         lite_spot(player_ptr, m_ptr->fy, m_ptr->fx);
@@ -374,28 +386,32 @@ void probed_monster_info(char *buf, PlayerType *player_ptr, monster_type *m_ptr,
     monster_desc(player_ptr, m_name, m_ptr, MD_IGNORE_HALLU | MD_INDEF_HIDDEN);
 
     auto speed = m_ptr->mspeed - 110;
-    if (monster_fast_remaining(m_ptr))
+    if (monster_fast_remaining(m_ptr)) {
         speed += 10;
-    if (monster_slow_remaining(m_ptr))
+    }
+    if (monster_slow_remaining(m_ptr)) {
         speed -= 10;
-    if (ironman_nightmare)
+    }
+    if (ironman_nightmare) {
         speed += 5;
+    }
 
     concptr align;
-    if (r_ptr->kind_flags.has_all_of(alignment_mask))
+    if (r_ptr->kind_flags.has_all_of(alignment_mask)) {
         align = _("善悪", "good&evil");
-    else if (r_ptr->kind_flags.has(MonsterKindType::EVIL))
+    } else if (r_ptr->kind_flags.has(MonsterKindType::EVIL)) {
         align = _("邪悪", "evil");
-    else if (r_ptr->kind_flags.has(MonsterKindType::GOOD))
+    } else if (r_ptr->kind_flags.has(MonsterKindType::GOOD)) {
         align = _("善良", "good");
-    else if ((m_ptr->sub_align & (SUB_ALIGN_EVIL | SUB_ALIGN_GOOD)) == (SUB_ALIGN_EVIL | SUB_ALIGN_GOOD))
+    } else if ((m_ptr->sub_align & (SUB_ALIGN_EVIL | SUB_ALIGN_GOOD)) == (SUB_ALIGN_EVIL | SUB_ALIGN_GOOD)) {
         align = _("中立(善悪)", "neutral(good&evil)");
-    else if (m_ptr->sub_align & SUB_ALIGN_EVIL)
+    } else if (m_ptr->sub_align & SUB_ALIGN_EVIL) {
         align = _("中立(邪悪)", "neutral(evil)");
-    else if (m_ptr->sub_align & SUB_ALIGN_GOOD)
+    } else if (m_ptr->sub_align & SUB_ALIGN_GOOD) {
         align = _("中立(善良)", "neutral(good)");
-    else
+    } else {
         align = _("中立", "neutral");
+    }
 
     sprintf(buf, _("%s ... 属性:%s HP:%d/%d AC:%d 速度:%s%d 経験:", "%s ... align:%s HP:%d/%d AC:%d speed:%s%d exp:"), m_name, align, (int)m_ptr->hp,
         (int)m_ptr->maxhp, r_ptr->ac, (speed > 0) ? "+" : "", speed);
@@ -406,16 +422,21 @@ void probed_monster_info(char *buf, PlayerType *player_ptr, monster_type *m_ptr,
         strcat(buf, "xxx ");
     }
 
-    if (monster_csleep_remaining(m_ptr))
+    if (monster_csleep_remaining(m_ptr)) {
         strcat(buf, _("睡眠 ", "sleeping "));
-    if (monster_stunned_remaining(m_ptr))
+    }
+    if (monster_stunned_remaining(m_ptr)) {
         strcat(buf, _("朦朧 ", "stunned "));
-    if (monster_fear_remaining(m_ptr))
+    }
+    if (monster_fear_remaining(m_ptr)) {
         strcat(buf, _("恐怖 ", "scared "));
-    if (monster_confused_remaining(m_ptr))
+    }
+    if (monster_confused_remaining(m_ptr)) {
         strcat(buf, _("混乱 ", "confused "));
-    if (monster_invulner_remaining(m_ptr))
+    }
+    if (monster_invulner_remaining(m_ptr)) {
         strcat(buf, _("無敵 ", "invulnerable "));
+    }
     buf[strlen(buf) - 1] = '\0';
 }
 
@@ -435,15 +456,19 @@ bool probing(PlayerType *player_ptr)
     for (int i = 1; i < player_ptr->current_floor_ptr->m_max; i++) {
         auto *m_ptr = &player_ptr->current_floor_ptr->m_list[i];
         auto *r_ptr = &r_info[m_ptr->r_idx];
-        if (!monster_is_valid(m_ptr))
+        if (!monster_is_valid(m_ptr)) {
             continue;
-        if (!player_has_los_bold(player_ptr, m_ptr->fy, m_ptr->fx))
+        }
+        if (!player_has_los_bold(player_ptr, m_ptr->fy, m_ptr->fx)) {
             continue;
-        if (!m_ptr->ml)
+        }
+        if (!m_ptr->ml) {
             continue;
+        }
 
-        if (!probe)
+        if (!probe) {
             msg_print(_("調査中...", "Probing..."));
+        }
         msg_print(nullptr);
 
         probed_monster_info(buf, player_ptr, m_ptr, r_ptr);

@@ -10,6 +10,7 @@
 #include "core/stuff-handler.h"
 #include "dungeon/dungeon-flag-types.h"
 #include "dungeon/dungeon.h"
+#include "effect/attribute-types.h"
 #include "effect/effect-characteristics.h"
 #include "effect/effect-processor.h"
 #include "effect/spells-effect-util.h"
@@ -39,7 +40,6 @@
 #include "spell-kind/spells-perception.h"
 #include "spell-kind/spells-sight.h"
 #include "spell-kind/spells-teleport.h"
-#include "effect/attribute-types.h"
 #include "spell/technic-info-table.h"
 #include "status/bad-status-setter.h"
 #include "system/floor-type-definition.h"
@@ -76,99 +76,118 @@ concptr do_hissatsu_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessT
 
     switch (spell) {
     case 0:
-        if (name)
+        if (name) {
             return _("飛飯綱", "Tobi-Izuna");
-        if (desc)
+        }
+        if (desc) {
             return _("2マス離れたところにいるモンスターを攻撃する。", "Attacks a monster two squares away.");
+        }
 
         if (cast) {
             project_length = 2;
-            if (!get_aim_dir(player_ptr, &dir))
+            if (!get_aim_dir(player_ptr, &dir)) {
                 return nullptr;
+            }
 
             project_hook(player_ptr, AttributeType::ATTACK, dir, HISSATSU_2, PROJECT_STOP | PROJECT_KILL);
         }
         break;
 
     case 1:
-        if (name)
+        if (name) {
             return _("五月雨斬り", "3-Way Attack");
-        if (desc)
+        }
+        if (desc) {
             return _("3方向に対して攻撃する。", "Attacks in 3 directions at one time.");
+        }
 
         if (cast) {
             DIRECTION cdir;
             POSITION y, x;
 
-            if (!get_direction(player_ptr, &dir, false, false))
+            if (!get_direction(player_ptr, &dir, false, false)) {
                 return nullptr;
-            if (dir == 5)
+            }
+            if (dir == 5) {
                 return nullptr;
-
-            for (cdir = 0; cdir < 8; cdir++) {
-                if (cdd[cdir] == dir)
-                    break;
             }
 
-            if (cdir == 8)
+            for (cdir = 0; cdir < 8; cdir++) {
+                if (cdd[cdir] == dir) {
+                    break;
+                }
+            }
+
+            if (cdir == 8) {
                 return nullptr;
+            }
 
             y = player_ptr->y + ddy_cdd[cdir];
             x = player_ptr->x + ddx_cdd[cdir];
-            if (player_ptr->current_floor_ptr->grid_array[y][x].m_idx)
+            if (player_ptr->current_floor_ptr->grid_array[y][x].m_idx) {
                 do_cmd_attack(player_ptr, y, x, HISSATSU_NONE);
-            else
+            } else {
                 msg_print(_("攻撃は空を切った。", "You attack the empty air."));
+            }
 
             y = player_ptr->y + ddy_cdd[(cdir + 7) % 8];
             x = player_ptr->x + ddx_cdd[(cdir + 7) % 8];
-            if (player_ptr->current_floor_ptr->grid_array[y][x].m_idx)
+            if (player_ptr->current_floor_ptr->grid_array[y][x].m_idx) {
                 do_cmd_attack(player_ptr, y, x, HISSATSU_NONE);
-            else
+            } else {
                 msg_print(_("攻撃は空を切った。", "You attack the empty air."));
+            }
 
             y = player_ptr->y + ddy_cdd[(cdir + 1) % 8];
             x = player_ptr->x + ddx_cdd[(cdir + 1) % 8];
-            if (player_ptr->current_floor_ptr->grid_array[y][x].m_idx)
+            if (player_ptr->current_floor_ptr->grid_array[y][x].m_idx) {
                 do_cmd_attack(player_ptr, y, x, HISSATSU_NONE);
-            else
+            } else {
                 msg_print(_("攻撃は空を切った。", "You attack the empty air."));
+            }
         }
         break;
 
     case 2:
-        if (name)
+        if (name) {
             return _("ブーメラン", "Boomerang");
-        if (desc)
+        }
+        if (desc) {
             return _(
                 "武器を手元に戻ってくるように投げる。戻ってこないこともある。", "Throws current weapon. It'll return to your hand unless the action failed.");
+        }
 
         if (cast) {
-            if (!ThrowCommand(player_ptr).do_cmd_throw(1, true, -1))
+            if (!ThrowCommand(player_ptr).do_cmd_throw(1, true, -1)) {
                 return nullptr;
+            }
         }
         break;
 
     case 3:
-        if (name)
+        if (name) {
             return _("焔霊", "Burning Strike");
-        if (desc)
+        }
+        if (desc) {
             return _("火炎耐性のないモンスターに大ダメージを与える。", "Attacks a monster with more damage unless it has resistance to fire.");
+        }
 
         if (cast) {
             POSITION y, x;
 
-            if (!get_direction(player_ptr, &dir, false, false))
+            if (!get_direction(player_ptr, &dir, false, false)) {
                 return nullptr;
-            if (dir == 5)
+            }
+            if (dir == 5) {
                 return nullptr;
+            }
 
             y = player_ptr->y + ddy[dir];
             x = player_ptr->x + ddx[dir];
 
-            if (player_ptr->current_floor_ptr->grid_array[y][x].m_idx)
+            if (player_ptr->current_floor_ptr->grid_array[y][x].m_idx) {
                 do_cmd_attack(player_ptr, y, x, HISSATSU_FIRE);
-            else {
+            } else {
                 msg_print(_("その方向にはモンスターはいません。", "There is no monster."));
                 return nullptr;
             }
@@ -176,10 +195,12 @@ concptr do_hissatsu_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessT
         break;
 
     case 4:
-        if (name)
+        if (name) {
             return _("殺気感知", "Detect Ferocity");
-        if (desc)
+        }
+        if (desc) {
             return _("近くの思考することができるモンスターを感知する。", "Detects all monsters except the mindless in your vicinity.");
+        }
 
         if (cast) {
             detect_monsters_mind(player_ptr, DETECT_RAD_DEFAULT);
@@ -187,25 +208,29 @@ concptr do_hissatsu_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessT
         break;
 
     case 5:
-        if (name)
+        if (name) {
             return _("みね打ち", "Strike to Stun");
-        if (desc)
+        }
+        if (desc) {
             return _("相手にダメージを与えないが、朦朧とさせる。", "Attempts to stun a monster next to you.");
+        }
 
         if (cast) {
             POSITION y, x;
 
-            if (!get_direction(player_ptr, &dir, false, false))
+            if (!get_direction(player_ptr, &dir, false, false)) {
                 return nullptr;
-            if (dir == 5)
+            }
+            if (dir == 5) {
                 return nullptr;
+            }
 
             y = player_ptr->y + ddy[dir];
             x = player_ptr->x + ddx[dir];
 
-            if (player_ptr->current_floor_ptr->grid_array[y][x].m_idx)
+            if (player_ptr->current_floor_ptr->grid_array[y][x].m_idx) {
                 do_cmd_attack(player_ptr, y, x, HISSATSU_MINEUCHI);
-            else {
+            } else {
                 msg_print(_("その方向にはモンスターはいません。", "There is no monster."));
                 return nullptr;
             }
@@ -213,11 +238,13 @@ concptr do_hissatsu_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessT
         break;
 
     case 6:
-        if (name)
+        if (name) {
             return _("カウンター", "Counter");
-        if (desc)
+        }
+        if (desc) {
             return _("相手に攻撃されたときに反撃する。反撃するたびにMPを消費。",
                 "Prepares to counterattack. When attacked by a monster, strikes back using SP each time.");
+        }
 
         if (cast) {
             if (player_ptr->riding) {
@@ -230,11 +257,13 @@ concptr do_hissatsu_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessT
         break;
 
     case 7:
-        if (name)
+        if (name) {
             return _("払い抜け", "Harainuke");
-        if (desc)
+        }
+        if (desc) {
             return _("攻撃した後、反対側に抜ける。",
                 "In one action, attacks a monster with your weapons normally and then moves to the space beyond the monster if that space is not blocked.");
+        }
 
         if (cast) {
             POSITION y, x;
@@ -244,11 +273,13 @@ concptr do_hissatsu_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessT
                 return nullptr;
             }
 
-            if (!get_direction(player_ptr, &dir, false, false))
+            if (!get_direction(player_ptr, &dir, false, false)) {
                 return nullptr;
+            }
 
-            if (dir == 5)
+            if (dir == 5) {
                 return nullptr;
+            }
             y = player_ptr->y + ddy[dir];
             x = player_ptr->x + ddx[dir];
 
@@ -259,15 +290,14 @@ concptr do_hissatsu_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessT
 
             do_cmd_attack(player_ptr, y, x, HISSATSU_NONE);
 
-            if (!player_can_enter(player_ptr, player_ptr->current_floor_ptr->grid_array[y][x].feat, 0)
-                || is_trap(player_ptr, player_ptr->current_floor_ptr->grid_array[y][x].feat))
+            if (!player_can_enter(player_ptr, player_ptr->current_floor_ptr->grid_array[y][x].feat, 0) || is_trap(player_ptr, player_ptr->current_floor_ptr->grid_array[y][x].feat)) {
                 break;
+            }
 
             y += ddy[dir];
             x += ddx[dir];
 
-            if (player_can_enter(player_ptr, player_ptr->current_floor_ptr->grid_array[y][x].feat, 0)
-                && !is_trap(player_ptr, player_ptr->current_floor_ptr->grid_array[y][x].feat) && !player_ptr->current_floor_ptr->grid_array[y][x].m_idx) {
+            if (player_can_enter(player_ptr, player_ptr->current_floor_ptr->grid_array[y][x].feat, 0) && !is_trap(player_ptr, player_ptr->current_floor_ptr->grid_array[y][x].feat) && !player_ptr->current_floor_ptr->grid_array[y][x].m_idx) {
                 msg_print(nullptr);
                 (void)move_player_effect(player_ptr, y, x, MPE_FORGET_FLOW | MPE_HANDLE_STUFF | MPE_DONT_PICKUP);
             }
@@ -275,25 +305,29 @@ concptr do_hissatsu_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessT
         break;
 
     case 8:
-        if (name)
+        if (name) {
             return _("サーペンツタン", "Serpent's Tongue");
-        if (desc)
+        }
+        if (desc) {
             return _("毒耐性のないモンスターに大ダメージを与える。", "Attacks a monster with more damage unless it has resistance to poison.");
+        }
 
         if (cast) {
             POSITION y, x;
 
-            if (!get_direction(player_ptr, &dir, false, false))
+            if (!get_direction(player_ptr, &dir, false, false)) {
                 return nullptr;
-            if (dir == 5)
+            }
+            if (dir == 5) {
                 return nullptr;
+            }
 
             y = player_ptr->y + ddy[dir];
             x = player_ptr->x + ddx[dir];
 
-            if (player_ptr->current_floor_ptr->grid_array[y][x].m_idx)
+            if (player_ptr->current_floor_ptr->grid_array[y][x].m_idx) {
                 do_cmd_attack(player_ptr, y, x, HISSATSU_POISON);
-            else {
+            } else {
                 msg_print(_("その方向にはモンスターはいません。", "There is no monster."));
                 return nullptr;
             }
@@ -301,26 +335,30 @@ concptr do_hissatsu_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessT
         break;
 
     case 9:
-        if (name)
+        if (name) {
             return _("斬魔剣弐の太刀", "Zammaken");
-        if (desc)
+        }
+        if (desc) {
             return _("生命のない邪悪なモンスターに大ダメージを与えるが、他のモンスターには全く効果がない。",
                 "Attacks an evil unliving monster with great damage. Has no effect on other monsters.");
+        }
 
         if (cast) {
             POSITION y, x;
 
-            if (!get_direction(player_ptr, &dir, false, false))
+            if (!get_direction(player_ptr, &dir, false, false)) {
                 return nullptr;
-            if (dir == 5)
+            }
+            if (dir == 5) {
                 return nullptr;
+            }
 
             y = player_ptr->y + ddy[dir];
             x = player_ptr->x + ddx[dir];
 
-            if (player_ptr->current_floor_ptr->grid_array[y][x].m_idx)
+            if (player_ptr->current_floor_ptr->grid_array[y][x].m_idx) {
                 do_cmd_attack(player_ptr, y, x, HISSATSU_ZANMA);
-            else {
+            } else {
                 msg_print(_("その方向にはモンスターはいません。", "There is no monster."));
                 return nullptr;
             }
@@ -328,25 +366,29 @@ concptr do_hissatsu_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessT
         break;
 
     case 10:
-        if (name)
+        if (name) {
             return _("裂風剣", "Wind Blast");
-        if (desc)
+        }
+        if (desc) {
             return _("攻撃した相手を後方へ吹き飛ばす。", "Attacks an adjacent monster and blows it away.");
+        }
 
         if (cast) {
             POSITION y, x;
 
-            if (!get_direction(player_ptr, &dir, false, false))
+            if (!get_direction(player_ptr, &dir, false, false)) {
                 return nullptr;
-            if (dir == 5)
+            }
+            if (dir == 5) {
                 return nullptr;
+            }
 
             y = player_ptr->y + ddy[dir];
             x = player_ptr->x + ddx[dir];
 
-            if (player_ptr->current_floor_ptr->grid_array[y][x].m_idx)
+            if (player_ptr->current_floor_ptr->grid_array[y][x].m_idx) {
                 do_cmd_attack(player_ptr, y, x, HISSATSU_NONE);
-            else {
+            } else {
                 msg_print(_("その方向にはモンスターはいません。", "There is no monster."));
                 return nullptr;
             }
@@ -369,8 +411,9 @@ concptr do_hissatsu_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessT
                     if (is_cave_empty_bold(player_ptr, y, x)) {
                         ty = y;
                         tx = x;
-                    } else
+                    } else {
                         break;
+                    }
                 }
                 if ((ty != oy) || (tx != ox)) {
                     msg_format(_("%sを吹き飛ばした！", "You blow %s away!"), m_name);
@@ -383,53 +426,64 @@ concptr do_hissatsu_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessT
                     lite_spot(player_ptr, oy, ox);
                     lite_spot(player_ptr, ty, tx);
 
-                    if (r_info[m_ptr->r_idx].flags7 & (RF7_LITE_MASK | RF7_DARK_MASK))
+                    if (r_info[m_ptr->r_idx].flags7 & (RF7_LITE_MASK | RF7_DARK_MASK)) {
                         player_ptr->update |= (PU_MON_LITE);
+                    }
                 }
             }
         }
         break;
 
     case 11:
-        if (name)
+        if (name) {
             return _("刀匠の目利き", "Judge");
-        if (desc)
+        }
+        if (desc) {
             return _("武器・防具を1つ識別する。レベル45以上で武器・防具の能力を完全に知ることができる。",
                 "Identifies a weapon or armor. *Identifies* the item at level 45.");
+        }
 
         if (cast) {
             if (plev > 44) {
-                if (!identify_fully(player_ptr, true))
+                if (!identify_fully(player_ptr, true)) {
                     return nullptr;
+                }
             } else {
-                if (!ident_spell(player_ptr, true))
+                if (!ident_spell(player_ptr, true)) {
                     return nullptr;
+                }
             }
         }
         break;
 
     case 12:
-        if (name)
+        if (name) {
             return _("破岩斬", "Rock Smash");
-        if (desc)
+        }
+        if (desc) {
             return _("岩を壊し、岩石系のモンスターに大ダメージを与える。", "Breaks rock or greatly damages a monster made of rocks.");
+        }
 
         if (cast) {
             POSITION y, x;
 
-            if (!get_direction(player_ptr, &dir, false, false))
+            if (!get_direction(player_ptr, &dir, false, false)) {
                 return nullptr;
-            if (dir == 5)
+            }
+            if (dir == 5) {
                 return nullptr;
+            }
 
             y = player_ptr->y + ddy[dir];
             x = player_ptr->x + ddx[dir];
 
-            if (player_ptr->current_floor_ptr->grid_array[y][x].m_idx)
+            if (player_ptr->current_floor_ptr->grid_array[y][x].m_idx) {
                 do_cmd_attack(player_ptr, y, x, HISSATSU_HAGAN);
+            }
 
-            if (!cave_has_flag_bold(player_ptr->current_floor_ptr, y, x, FloorFeatureType::HURT_ROCK))
+            if (!cave_has_flag_bold(player_ptr->current_floor_ptr, y, x, FloorFeatureType::HURT_ROCK)) {
                 break;
+            }
 
             /* Destroy the feature */
             cave_alter_feat(player_ptr, y, x, FloorFeatureType::HURT_ROCK);
@@ -438,26 +492,30 @@ concptr do_hissatsu_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessT
         break;
 
     case 13:
-        if (name)
+        if (name) {
             return _("乱れ雪月花", "Midare-Setsugekka");
-        if (desc)
+        }
+        if (desc) {
             return _("攻撃回数が増え、冷気耐性のないモンスターに大ダメージを与える。",
                 "Attacks a monster with an increased number of attacks and more damage unless it has resistance to cold.");
+        }
 
         if (cast) {
             POSITION y, x;
 
-            if (!get_direction(player_ptr, &dir, false, false))
+            if (!get_direction(player_ptr, &dir, false, false)) {
                 return nullptr;
-            if (dir == 5)
+            }
+            if (dir == 5) {
                 return nullptr;
+            }
 
             y = player_ptr->y + ddy[dir];
             x = player_ptr->x + ddx[dir];
 
-            if (player_ptr->current_floor_ptr->grid_array[y][x].m_idx)
+            if (player_ptr->current_floor_ptr->grid_array[y][x].m_idx) {
                 do_cmd_attack(player_ptr, y, x, HISSATSU_COLD);
-            else {
+            } else {
                 msg_print(_("その方向にはモンスターはいません。", "There is no monster."));
                 return nullptr;
             }
@@ -465,26 +523,30 @@ concptr do_hissatsu_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessT
         break;
 
     case 14:
-        if (name)
+        if (name) {
             return _("急所突き", "Spot Aiming");
-        if (desc)
+        }
+        if (desc) {
             return _("モンスターを一撃で倒す攻撃を繰り出す。失敗すると1点しかダメージを与えられない。",
                 "Attempts to kill a monster instantly. If that fails, causes only 1HP of damage.");
+        }
 
         if (cast) {
             POSITION y, x;
 
-            if (!get_direction(player_ptr, &dir, false, false))
+            if (!get_direction(player_ptr, &dir, false, false)) {
                 return nullptr;
-            if (dir == 5)
+            }
+            if (dir == 5) {
                 return nullptr;
+            }
 
             y = player_ptr->y + ddy[dir];
             x = player_ptr->x + ddx[dir];
 
-            if (player_ptr->current_floor_ptr->grid_array[y][x].m_idx)
+            if (player_ptr->current_floor_ptr->grid_array[y][x].m_idx) {
                 do_cmd_attack(player_ptr, y, x, HISSATSU_KYUSHO);
-            else {
+            } else {
                 msg_print(_("その方向にはモンスターはいません。", "There is no monster."));
                 return nullptr;
             }
@@ -492,25 +554,29 @@ concptr do_hissatsu_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessT
         break;
 
     case 15:
-        if (name)
+        if (name) {
             return _("魔神斬り", "Majingiri");
-        if (desc)
+        }
+        if (desc) {
             return _("会心の一撃で攻撃する。攻撃がかわされやすい。", "Attempts to attack with a critical hit, but this attack is easy to evade for a monster.");
+        }
 
         if (cast) {
             POSITION y, x;
 
-            if (!get_direction(player_ptr, &dir, false, false))
+            if (!get_direction(player_ptr, &dir, false, false)) {
                 return nullptr;
-            if (dir == 5)
+            }
+            if (dir == 5) {
                 return nullptr;
+            }
 
             y = player_ptr->y + ddy[dir];
             x = player_ptr->x + ddx[dir];
 
-            if (player_ptr->current_floor_ptr->grid_array[y][x].m_idx)
+            if (player_ptr->current_floor_ptr->grid_array[y][x].m_idx) {
                 do_cmd_attack(player_ptr, y, x, HISSATSU_MAJIN);
-            else {
+            } else {
                 msg_print(_("その方向にはモンスターはいません。", "There is no monster."));
                 return nullptr;
             }
@@ -518,26 +584,30 @@ concptr do_hissatsu_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessT
         break;
 
     case 16:
-        if (name)
+        if (name) {
             return _("捨て身", "Desperate Attack");
-        if (desc)
+        }
+        if (desc) {
             return _("強力な攻撃を繰り出す。次のターンまでの間、食らうダメージが増える。",
                 "Attacks with all of your power, but all damage you take will be doubled for one turn.");
+        }
 
         if (cast) {
             POSITION y, x;
 
-            if (!get_direction(player_ptr, &dir, false, false))
+            if (!get_direction(player_ptr, &dir, false, false)) {
                 return nullptr;
-            if (dir == 5)
+            }
+            if (dir == 5) {
                 return nullptr;
+            }
 
             y = player_ptr->y + ddy[dir];
             x = player_ptr->x + ddx[dir];
 
-            if (player_ptr->current_floor_ptr->grid_array[y][x].m_idx)
+            if (player_ptr->current_floor_ptr->grid_array[y][x].m_idx) {
                 do_cmd_attack(player_ptr, y, x, HISSATSU_SUTEMI);
-            else {
+            } else {
                 msg_print(_("その方向にはモンスターはいません。", "There is no monster."));
                 return nullptr;
             }
@@ -546,25 +616,29 @@ concptr do_hissatsu_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessT
         break;
 
     case 17:
-        if (name)
+        if (name) {
             return _("雷撃鷲爪斬", "Lightning Eagle");
-        if (desc)
+        }
+        if (desc) {
             return _("電撃耐性のないモンスターに非常に大きいダメージを与える。", "Attacks a monster with more damage unless it has resistance to electricity.");
+        }
 
         if (cast) {
             POSITION y, x;
 
-            if (!get_direction(player_ptr, &dir, false, false))
+            if (!get_direction(player_ptr, &dir, false, false)) {
                 return nullptr;
-            if (dir == 5)
+            }
+            if (dir == 5) {
                 return nullptr;
+            }
 
             y = player_ptr->y + ddy[dir];
             x = player_ptr->x + ddx[dir];
 
-            if (player_ptr->current_floor_ptr->grid_array[y][x].m_idx)
+            if (player_ptr->current_floor_ptr->grid_array[y][x].m_idx) {
                 do_cmd_attack(player_ptr, y, x, HISSATSU_ELEC);
-            else {
+            } else {
                 msg_print(_("その方向にはモンスターはいません。", "There is no monster."));
                 return nullptr;
             }
@@ -572,14 +646,17 @@ concptr do_hissatsu_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessT
         break;
 
     case 18:
-        if (name)
+        if (name) {
             return _("入身", "Rush Attack");
-        if (desc)
+        }
+        if (desc) {
             return _("素早く相手に近寄り攻撃する。", "Steps close to a monster and attacks at the same time.");
+        }
 
         if (cast) {
-            if (!rush_attack(player_ptr, nullptr))
+            if (!rush_attack(player_ptr, nullptr)) {
                 return nullptr;
+            }
         }
         break;
 
@@ -611,7 +688,7 @@ concptr do_hissatsu_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessT
                     do_cmd_attack(player_ptr, y, x, HISSATSU_SEKIRYUKA);
                     continue;
                 }
-                    
+
                 GAME_TEXT m_name[MAX_NLEN];
                 monster_desc(player_ptr, m_name, m_ptr, 0);
                 msg_format(_("%sには効果がない！", "%s is unharmed!"), m_name);
@@ -620,46 +697,55 @@ concptr do_hissatsu_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessT
 
         break;
     case 20:
-        if (name)
+        if (name) {
             return _("激震撃", "Earthquake Blow");
-        if (desc)
+        }
+        if (desc) {
             return _("地震を起こす。", "Shakes dungeon structure, and results in random swapping of floors and walls.");
+        }
 
         if (cast) {
             POSITION y, x;
 
-            if (!get_direction(player_ptr, &dir, false, false))
+            if (!get_direction(player_ptr, &dir, false, false)) {
                 return nullptr;
-            if (dir == 5)
+            }
+            if (dir == 5) {
                 return nullptr;
+            }
 
             y = player_ptr->y + ddy[dir];
             x = player_ptr->x + ddx[dir];
 
-            if (player_ptr->current_floor_ptr->grid_array[y][x].m_idx)
+            if (player_ptr->current_floor_ptr->grid_array[y][x].m_idx) {
                 do_cmd_attack(player_ptr, y, x, HISSATSU_QUAKE);
-            else
+            } else {
                 earthquake(player_ptr, player_ptr->y, player_ptr->x, 10, 0);
+            }
         }
         break;
 
     case 21:
-        if (name)
+        if (name) {
             return _("地走り", "Crack");
-        if (desc)
+        }
+        if (desc) {
             return _("衝撃波のビームを放つ。", "Fires a shock wave as a beam.");
+        }
 
         if (cast) {
             int total_damage = 0, basedam, i;
             ObjectType *o_ptr;
-            if (!get_aim_dir(player_ptr, &dir))
+            if (!get_aim_dir(player_ptr, &dir)) {
                 return nullptr;
+            }
             msg_print(_("武器を大きく振り下ろした。", "You swing your weapon downward."));
             for (i = 0; i < 2; i++) {
                 int damage;
 
-                if (!has_melee_weapon(player_ptr, INVEN_MAIN_HAND + i))
+                if (!has_melee_weapon(player_ptr, INVEN_MAIN_HAND + i)) {
                     break;
+                }
                 o_ptr = &player_ptr->inventory_list[INVEN_MAIN_HAND + i];
                 basedam = (o_ptr->dd * (o_ptr->ds + 1)) * 50;
                 damage = o_ptr->to_d * 100;
@@ -676,19 +762,22 @@ concptr do_hissatsu_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessT
                 damage += basedam;
                 damage *= player_ptr->num_blow[i];
                 total_damage += damage / 200;
-                if (i)
+                if (i) {
                     total_damage = total_damage * 7 / 10;
+                }
             }
             fire_beam(player_ptr, AttributeType::FORCE, dir, total_damage);
         }
         break;
 
     case 22:
-        if (name)
+        if (name) {
             return _("気迫の雄叫び", "War Cry");
-        if (desc)
+        }
+        if (desc) {
             return _("視界内の全モンスターに対して轟音の攻撃を行う。さらに、近くにいるモンスターを怒らせる。",
                 "Damages all monsters in sight with sound. Aggravates nearby monsters.");
+        }
 
         if (cast) {
             msg_print(_("雄叫びをあげた！", "You roar!"));
@@ -698,18 +787,22 @@ concptr do_hissatsu_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessT
         break;
 
     case 23:
-        if (name)
+        if (name) {
             return _("無双三段", "Musou-Sandan");
-        if (desc)
+        }
+        if (desc) {
             return _("強力な3段攻撃を繰り出す。", "Attacks with three powerful strikes.");
+        }
 
         if (cast) {
             int i;
 
-            if (!get_direction(player_ptr, &dir, false, false))
+            if (!get_direction(player_ptr, &dir, false, false)) {
                 return nullptr;
-            if (dir == 5)
+            }
+            if (dir == 5) {
                 return nullptr;
+            }
 
             for (i = 0; i < 3; i++) {
                 POSITION y, x;
@@ -722,9 +815,9 @@ concptr do_hissatsu_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessT
                 x = player_ptr->x + ddx[dir];
                 g_ptr = &player_ptr->current_floor_ptr->grid_array[y][x];
 
-                if (g_ptr->m_idx)
+                if (g_ptr->m_idx) {
                     do_cmd_attack(player_ptr, y, x, HISSATSU_3DAN);
-                else {
+                } else {
                     msg_print(_("その方向にはモンスターはいません。", "There is no monster."));
                     return nullptr;
                 }
@@ -734,8 +827,9 @@ concptr do_hissatsu_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessT
                 }
 
                 /* Monster is dead? */
-                if (!g_ptr->m_idx)
+                if (!g_ptr->m_idx) {
                     break;
+                }
 
                 ny = y + ddy[dir];
                 nx = x + ddx[dir];
@@ -745,8 +839,9 @@ concptr do_hissatsu_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessT
                 /* Monster cannot move back? */
                 if (!monster_can_enter(player_ptr, ny, nx, &r_info[m_ptr->r_idx], 0)) {
                     /* -more- */
-                    if (i < 2)
+                    if (i < 2) {
                         msg_print(nullptr);
+                    }
                     continue;
                 }
 
@@ -765,40 +860,46 @@ concptr do_hissatsu_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessT
 
                 /* Player can move forward? */
                 if (player_can_enter(player_ptr, g_ptr->feat, 0)) {
-                    if (!move_player_effect(player_ptr, y, x, MPE_FORGET_FLOW | MPE_HANDLE_STUFF | MPE_DONT_PICKUP))
+                    if (!move_player_effect(player_ptr, y, x, MPE_FORGET_FLOW | MPE_HANDLE_STUFF | MPE_DONT_PICKUP)) {
                         break;
+                    }
                 } else {
                     break;
                 }
 
                 /* -more- */
-                if (i < 2)
+                if (i < 2) {
                     msg_print(nullptr);
+                }
             }
         }
         break;
 
     case 24:
-        if (name)
+        if (name) {
             return _("吸血鬼の牙", "Vampire's Fang");
-        if (desc)
+        }
+        if (desc) {
             return _("攻撃した相手の体力を吸いとり、自分の体力を回復させる。生命を持たないモンスターには通じない。",
                 "Attacks with vampiric strikes which absorb HP from a monster and heal you. Has no effect on unliving monsters.");
+        }
 
         if (cast) {
             POSITION y, x;
 
-            if (!get_direction(player_ptr, &dir, false, false))
+            if (!get_direction(player_ptr, &dir, false, false)) {
                 return nullptr;
-            if (dir == 5)
+            }
+            if (dir == 5) {
                 return nullptr;
+            }
 
             y = player_ptr->y + ddy[dir];
             x = player_ptr->x + ddx[dir];
 
-            if (player_ptr->current_floor_ptr->grid_array[y][x].m_idx)
+            if (player_ptr->current_floor_ptr->grid_array[y][x].m_idx) {
                 do_cmd_attack(player_ptr, y, x, HISSATSU_DRAIN);
-            else {
+            } else {
                 msg_print(_("その方向にはモンスターはいません。", "There is no monster."));
                 return nullptr;
             }
@@ -806,10 +907,12 @@ concptr do_hissatsu_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessT
         break;
 
     case 25:
-        if (name)
+        if (name) {
             return _("幻惑", "Moon Dazzling");
-        if (desc)
+        }
+        if (desc) {
             return _("視界内の起きている全モンスターに朦朧、混乱、眠りを与えようとする。", "Attempts to stun, confuse and put to sleep all waking monsters.");
+        }
 
         if (cast) {
             msg_print(_("武器を不規則に揺らした．．．", "You irregularly wave your weapon..."));
@@ -818,11 +921,13 @@ concptr do_hissatsu_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessT
         break;
 
     case 26:
-        if (name)
+        if (name) {
             return _("百人斬り", "Hundred Slaughter");
-        if (desc)
+        }
+        if (desc) {
             return _("連続して入身でモンスターを攻撃する。攻撃するたびにMPを消費。MPがなくなるか、モンスターを倒せなかったら百人斬りは終了する。",
                 "Performs a series of rush attacks. The series continues as long as the attacked monster dies and you have sufficient SP.");
+        }
 
         if (cast) {
             const int mana_cost_per_monster = 8;
@@ -830,25 +935,29 @@ concptr do_hissatsu_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessT
             bool mdeath;
 
             do {
-                if (!rush_attack(player_ptr, &mdeath))
+                if (!rush_attack(player_ptr, &mdeath)) {
                     break;
+                }
                 if (is_new) {
                     /* Reserve needed mana point */
                     player_ptr->csp -= technic_info[REALM_HISSATSU - MIN_TECHNIC][26].smana;
                     is_new = false;
-                } else
+                } else {
                     player_ptr->csp -= mana_cost_per_monster;
+                }
 
-                if (!mdeath)
+                if (!mdeath) {
                     break;
+                }
                 command_dir = 0;
 
                 player_ptr->redraw |= PR_MANA;
                 handle_stuff(player_ptr);
             } while (player_ptr->csp > mana_cost_per_monster);
 
-            if (is_new)
+            if (is_new) {
                 return nullptr;
+            }
 
             /* Restore reserved mana */
             player_ptr->csp += technic_info[REALM_HISSATSU - MIN_TECHNIC][26].smana;
@@ -856,20 +965,22 @@ concptr do_hissatsu_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessT
         break;
 
     case 27:
-        if (name)
+        if (name) {
             return _("天翔龍閃", "Dragonic Flash");
-        if (desc)
+        }
+        if (desc) {
             return _("視界内の場所を指定して、その場所と自分の間にいる全モンスターを攻撃し、その場所に移動する。",
                 "Runs toward given location while attacking all monsters on the path.");
+        }
 
         if (cast) {
             POSITION y, x;
 
-            if (!tgt_pt(player_ptr, &x, &y))
+            if (!tgt_pt(player_ptr, &x, &y)) {
                 return nullptr;
+            }
 
-            if (!cave_player_teleportable_bold(player_ptr, y, x, TELEPORT_SPONTANEOUS) || (distance(y, x, player_ptr->y, player_ptr->x) > MAX_SIGHT / 2)
-                || !projectable(player_ptr, player_ptr->y, player_ptr->x, y, x)) {
+            if (!cave_player_teleportable_bold(player_ptr, y, x, TELEPORT_SPONTANEOUS) || (distance(y, x, player_ptr->y, player_ptr->x) > MAX_SIGHT / 2) || !projectable(player_ptr, player_ptr->y, player_ptr->x, y, x)) {
                 msg_print(_("失敗！", "You cannot move to that place!"));
                 break;
             }
@@ -883,16 +994,19 @@ concptr do_hissatsu_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessT
         break;
 
     case 28:
-        if (name)
+        if (name) {
             return _("二重の剣撃", "Twin Slash");
-        if (desc)
+        }
+        if (desc) {
             return _("1ターンで2度攻撃を行う。", "Attack twice in one turn.");
+        }
 
         if (cast) {
             POSITION x, y;
 
-            if (!get_rep_dir(player_ptr, &dir, false))
+            if (!get_rep_dir(player_ptr, &dir, false)) {
                 return nullptr;
+            }
 
             y = player_ptr->y + ddy[dir];
             x = player_ptr->x + ddx[dir];
@@ -911,20 +1025,24 @@ concptr do_hissatsu_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessT
         break;
 
     case 29:
-        if (name)
+        if (name) {
             return _("虎伏絶刀勢", "Kofuku-Zettousei");
-        if (desc)
+        }
+        if (desc) {
             return _("強力な攻撃を行い、近くの場所にも効果が及ぶ。", "Performs a powerful attack which even affects nearby monsters.");
+        }
 
         if (cast) {
             int total_damage = 0, basedam, i;
             POSITION y, x;
             ObjectType *o_ptr;
 
-            if (!get_direction(player_ptr, &dir, false, false))
+            if (!get_direction(player_ptr, &dir, false, false)) {
                 return nullptr;
-            if (dir == 5)
+            }
+            if (dir == 5) {
                 return nullptr;
+            }
 
             y = player_ptr->y + ddy[dir];
             x = player_ptr->x + ddx[dir];
@@ -936,8 +1054,9 @@ concptr do_hissatsu_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessT
             msg_print(_("武器を大きく振り下ろした。", "You swing your weapon downward."));
             for (i = 0; i < 2; i++) {
                 int damage;
-                if (!has_melee_weapon(player_ptr, INVEN_MAIN_HAND + i))
+                if (!has_melee_weapon(player_ptr, INVEN_MAIN_HAND + i)) {
                     break;
+                }
                 o_ptr = &player_ptr->inventory_list[INVEN_MAIN_HAND + i];
                 basedam = (o_ptr->dd * (o_ptr->ds + 1)) * 50;
                 damage = o_ptr->to_d * 100;
@@ -962,26 +1081,30 @@ concptr do_hissatsu_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessT
         break;
 
     case 30:
-        if (name)
+        if (name) {
             return _("慶雲鬼忍剣", "Keiun-Kininken");
-        if (desc)
+        }
+        if (desc) {
             return _("自分もダメージをくらうが、相手に非常に大きなダメージを与える。アンデッドには特に効果がある。",
                 "Attacks a monster with extremely powerful damage, but you also take some damage. Hurts an undead monster greatly.");
+        }
 
         if (cast) {
             POSITION y, x;
 
-            if (!get_direction(player_ptr, &dir, false, false))
+            if (!get_direction(player_ptr, &dir, false, false)) {
                 return nullptr;
-            if (dir == 5)
+            }
+            if (dir == 5) {
                 return nullptr;
+            }
 
             y = player_ptr->y + ddy[dir];
             x = player_ptr->x + ddx[dir];
 
-            if (player_ptr->current_floor_ptr->grid_array[y][x].m_idx)
+            if (player_ptr->current_floor_ptr->grid_array[y][x].m_idx) {
                 do_cmd_attack(player_ptr, y, x, HISSATSU_UNDEAD);
-            else {
+            } else {
                 msg_print(_("その方向にはモンスターはいません。", "There is no monster."));
                 return nullptr;
             }
@@ -990,23 +1113,27 @@ concptr do_hissatsu_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessT
         break;
 
     case 31:
-        if (name)
+        if (name) {
             return _("切腹", "Harakiri");
-        if (desc)
+        }
+        if (desc) {
             return _("「武士道とは、死ぬことと見つけたり。」", "'Bushido, the way of warriors, is found in death'");
+        }
 
         if (cast) {
             int i;
-            if (!get_check(_("本当に自殺しますか？", "Do you really want to commit suicide? ")))
+            if (!get_check(_("本当に自殺しますか？", "Do you really want to commit suicide? "))) {
                 return nullptr;
+            }
             /* Special Verification for suicide */
             prt(_("確認のため '@' を押して下さい。", "Please verify SUICIDE by typing the '@' sign: "), 0, 0);
 
             flush();
             i = inkey();
             prt("", 0, 0);
-            if (i != '@')
+            if (i != '@') {
                 return nullptr;
+            }
             if (w_ptr->total_winner) {
                 take_hit(player_ptr, DAMAGE_FORCE, 9999, "Seppuku");
                 w_ptr->total_winner = true;

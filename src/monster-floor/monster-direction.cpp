@@ -33,8 +33,9 @@
 static bool decide_pet_approch_direction(PlayerType *player_ptr, monster_type *m_ptr, monster_type *t_ptr)
 {
     auto *r_ptr = &r_info[m_ptr->r_idx];
-    if (!is_pet(m_ptr))
+    if (!is_pet(m_ptr)) {
         return false;
+    }
 
     if (player_ptr->pet_follow_distance < 0) {
         if (t_ptr->cdis <= (0 - player_ptr->pet_follow_distance)) {
@@ -63,27 +64,34 @@ static void decide_enemy_approch_direction(PlayerType *player_ptr, MONSTER_IDX m
     auto *r_ptr = &r_info[m_ptr->r_idx];
     for (int i = start; ((i < start + floor_ptr->m_max) && (i > start - floor_ptr->m_max)); i += plus) {
         MONSTER_IDX dummy = (i % floor_ptr->m_max);
-        if (dummy == 0)
+        if (dummy == 0) {
             continue;
+        }
 
         MONSTER_IDX t_idx = dummy;
         monster_type *t_ptr;
         t_ptr = &floor_ptr->m_list[t_idx];
-        if (t_ptr == m_ptr)
+        if (t_ptr == m_ptr) {
             continue;
-        if (!monster_is_valid(t_ptr))
+        }
+        if (!monster_is_valid(t_ptr)) {
             continue;
-        if (decide_pet_approch_direction(player_ptr, m_ptr, t_ptr))
+        }
+        if (decide_pet_approch_direction(player_ptr, m_ptr, t_ptr)) {
             continue;
-        if (!are_enemies(player_ptr, m_ptr, t_ptr))
+        }
+        if (!are_enemies(player_ptr, m_ptr, t_ptr)) {
             continue;
+        }
 
         if (((r_ptr->flags2 & RF2_PASS_WALL) && ((m_idx != player_ptr->riding) || has_pass_wall(player_ptr))) || ((r_ptr->flags2 & RF2_KILL_WALL) && (m_idx != player_ptr->riding))) {
-            if (!in_disintegration_range(floor_ptr, m_ptr->fy, m_ptr->fx, t_ptr->fy, t_ptr->fx))
+            if (!in_disintegration_range(floor_ptr, m_ptr->fy, m_ptr->fx, t_ptr->fy, t_ptr->fx)) {
                 continue;
+            }
         } else {
-            if (!projectable(player_ptr, m_ptr->fy, m_ptr->fx, t_ptr->fy, t_ptr->fx))
+            if (!projectable(player_ptr, m_ptr->fy, m_ptr->fx, t_ptr->fy, t_ptr->fx)) {
                 continue;
+            }
         }
 
         *y = t_ptr->fy;
@@ -117,16 +125,18 @@ bool get_enemy_dir(PlayerType *player_ptr, MONSTER_IDX m_idx, int *mm)
         int plus = 1;
         if (player_ptr->phase_out) {
             start = randint1(floor_ptr->m_max - 1) + floor_ptr->m_max;
-            if (randint0(2))
+            if (randint0(2)) {
                 plus = -1;
+            }
         } else {
             start = floor_ptr->m_max + 1;
         }
 
         decide_enemy_approch_direction(player_ptr, m_idx, start, plus, &y, &x);
 
-        if ((x == 0) && (y == 0))
+        if ((x == 0) && (y == 0)) {
             return false;
+        }
     }
 
     x -= m_ptr->fx;
@@ -148,24 +158,27 @@ static bool random_walk(PlayerType *player_ptr, DIRECTION *mm, monster_type *m_p
 {
     auto *r_ptr = &r_info[m_ptr->r_idx];
     if (r_ptr->behavior_flags.has_all_of({ MonsterBehaviorType::RAND_MOVE_50, MonsterBehaviorType::RAND_MOVE_25 }) && (randint0(100) < 75)) {
-        if (is_original_ap_and_seen(player_ptr, m_ptr))
+        if (is_original_ap_and_seen(player_ptr, m_ptr)) {
             r_ptr->r_behavior_flags.set({ MonsterBehaviorType::RAND_MOVE_50, MonsterBehaviorType::RAND_MOVE_25 });
+        }
 
         mm[0] = mm[1] = mm[2] = mm[3] = 5;
         return true;
     }
 
     if (r_ptr->behavior_flags.has(MonsterBehaviorType::RAND_MOVE_50) && (randint0(100) < 50)) {
-        if (is_original_ap_and_seen(player_ptr, m_ptr))
+        if (is_original_ap_and_seen(player_ptr, m_ptr)) {
             r_ptr->r_behavior_flags.set(MonsterBehaviorType::RAND_MOVE_50);
+        }
 
         mm[0] = mm[1] = mm[2] = mm[3] = 5;
         return true;
     }
 
     if (r_ptr->behavior_flags.has(MonsterBehaviorType::RAND_MOVE_25) && (randint0(100) < 25)) {
-        if (is_original_ap_and_seen(player_ptr, m_ptr))
+        if (is_original_ap_and_seen(player_ptr, m_ptr)) {
             r_ptr->r_behavior_flags.set(MonsterBehaviorType::RAND_MOVE_25);
+        }
 
         mm[0] = mm[1] = mm[2] = mm[3] = 5;
         return true;

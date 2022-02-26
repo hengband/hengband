@@ -334,8 +334,9 @@ static AttributeType get_element_spells_type(PlayerType *player_ptr, int n)
     auto realm = element_types.at(i2enum<ElementRealmType>(player_ptr->element));
     auto t = realm.type.at(n);
     if (realm.extra.find(t) != realm.extra.end()) {
-        if (randint0(100) < player_ptr->lev * 2)
+        if (randint0(100) < player_ptr->lev * 2) {
             return realm.extra.at(t);
+        }
     }
     return t;
 }
@@ -484,8 +485,9 @@ static bool cast_element_spell(PlayerType *player_ptr, SPELL_IDX spell_idx)
 
     switch (spell) {
     case ElementSpells::BOLT_1ST:
-        if (!get_aim_dir(player_ptr, &dir))
+        if (!get_aim_dir(player_ptr, &dir)) {
             return false;
+        }
         dam = damroll(3 + ((plev - 1) / 5), 4);
         typ = get_element_spells_type(player_ptr, power.elem);
         (void)fire_bolt(player_ptr, typ, dir, dam);
@@ -501,8 +503,9 @@ static bool cast_element_spell(PlayerType *player_ptr, SPELL_IDX spell_idx)
         (void)BadStatusSetter(player_ptr).mod_cut(-10);
         break;
     case ElementSpells::BOLT_2ND:
-        if (!get_aim_dir(player_ptr, &dir))
+        if (!get_aim_dir(player_ptr, &dir)) {
             return false;
+        }
         dam = damroll(8 + ((plev - 5) / 4), 8);
         typ = get_element_spells_type(player_ptr, power.elem);
         if (fire_bolt_or_beam(player_ptr, plev, typ, dir, dam)) {
@@ -516,23 +519,26 @@ static bool cast_element_spell(PlayerType *player_ptr, SPELL_IDX spell_idx)
         break;
     case ElementSpells::BALL_3RD:
         project_length = 4;
-        if (!get_aim_dir(player_ptr, &dir))
+        if (!get_aim_dir(player_ptr, &dir)) {
             return false;
+        }
         typ = get_element_spells_type(player_ptr, power.elem);
         dam = 50 + plev * 2;
         (void)fire_ball(player_ptr, typ, dir, dam, 1);
         project_length = 0;
         break;
     case ElementSpells::BALL_1ST:
-        if (!get_aim_dir(player_ptr, &dir))
+        if (!get_aim_dir(player_ptr, &dir)) {
             return false;
+        }
         dam = 55 + plev;
         typ = get_element_spells_type(player_ptr, power.elem);
         (void)fire_ball(player_ptr, typ, dir, dam, 2);
         break;
     case ElementSpells::BREATH_2ND:
-        if (!get_aim_dir(player_ptr, &dir))
+        if (!get_aim_dir(player_ptr, &dir)) {
             return false;
+        }
         dam = std::min(150, player_ptr->chp / 2);
         typ = get_element_spells_type(player_ptr, power.elem);
         if (fire_breath(player_ptr, typ, dir, dam, 3)) {
@@ -542,13 +548,15 @@ static bool cast_element_spell(PlayerType *player_ptr, SPELL_IDX spell_idx)
         }
         break;
     case ElementSpells::ANNIHILATE:
-        if (!get_aim_dir(player_ptr, &dir))
+        if (!get_aim_dir(player_ptr, &dir)) {
             return false;
+        }
         fire_ball_hide(player_ptr, AttributeType::E_GENOCIDE, dir, plev + 50, 0);
         break;
     case ElementSpells::BOLT_3RD:
-        if (!get_aim_dir(player_ptr, &dir))
+        if (!get_aim_dir(player_ptr, &dir)) {
             return false;
+        }
         dam = damroll(12 + ((plev - 5) / 4), 8);
         typ = get_element_spells_type(player_ptr, power.elem);
         fire_bolt_or_beam(player_ptr, plev, typ, dir, dam);
@@ -559,8 +567,9 @@ static bool cast_element_spell(PlayerType *player_ptr, SPELL_IDX spell_idx)
         project_all_los(player_ptr, typ, dam);
         break;
     case ElementSpells::BALL_2ND:
-        if (!get_aim_dir(player_ptr, &dir))
+        if (!get_aim_dir(player_ptr, &dir)) {
             return false;
+        }
         dam = 75 + plev * 3 / 2;
         typ = get_element_spells_type(player_ptr, power.elem);
         if (fire_ball(player_ptr, typ, dir, dam, 3)) {
@@ -578,17 +587,20 @@ static bool cast_element_spell(PlayerType *player_ptr, SPELL_IDX spell_idx)
             int attempts = 1000;
             while (attempts--) {
                 scatter(player_ptr, &y, &x, player_ptr->y, player_ptr->x, 4, PROJECT_NONE);
-                if (!cave_has_flag_bold(player_ptr->current_floor_ptr, y, x, FloorFeatureType::PROJECT))
+                if (!cave_has_flag_bold(player_ptr->current_floor_ptr, y, x, FloorFeatureType::PROJECT)) {
                     continue;
-                if (!player_bold(player_ptr, y, x))
+                }
+                if (!player_bold(player_ptr, y, x)) {
                     break;
+                }
             }
             project(player_ptr, 0, 0, y, x, damroll(6 + plev / 8, 7), typ, (PROJECT_BEAM | PROJECT_THRU | PROJECT_GRID | PROJECT_KILL));
         }
         break;
     case ElementSpells::STORM_2ND:
-        if (!get_aim_dir(player_ptr, &dir))
+        if (!get_aim_dir(player_ptr, &dir)) {
             return false;
+        }
         dam = 115 + plev * 5 / 2;
         typ = get_element_spells_type(player_ptr, power.elem);
         if (fire_ball(player_ptr, typ, dir, dam, 4)) {
@@ -598,15 +610,17 @@ static bool cast_element_spell(PlayerType *player_ptr, SPELL_IDX spell_idx)
         }
         break;
     case ElementSpells::BREATH_1ST:
-        if (!get_aim_dir(player_ptr, &dir))
+        if (!get_aim_dir(player_ptr, &dir)) {
             return false;
+        }
         dam = player_ptr->chp * 2 / 3;
         typ = get_element_spells_type(player_ptr, power.elem);
         (void)fire_breath(player_ptr, typ, dir, dam, 3);
         break;
     case ElementSpells::STORM_3ND:
-        if (!get_aim_dir(player_ptr, &dir))
+        if (!get_aim_dir(player_ptr, &dir)) {
             return false;
+        }
         dam = 300 + plev * 5;
         typ = get_element_spells_type(player_ptr, power.elem);
         (void)fire_ball(player_ptr, typ, dir, dam, 5);
@@ -633,22 +647,27 @@ static PERCENTAGE decide_element_chance(PlayerType *player_ptr, mind_type spell)
     chance -= 3 * (adj_mag_stat[player_ptr->stat_index[A_WIS]] - 1);
 
     PERCENTAGE minfail = adj_mag_fail[player_ptr->stat_index[A_WIS]];
-    if (chance < minfail)
+    if (chance < minfail) {
         chance = minfail;
+    }
 
     auto player_stun = player_ptr->effects()->stun();
     chance += player_stun->get_magic_chance_penalty();
-    if (heavy_armor(player_ptr))
+    if (heavy_armor(player_ptr)) {
         chance += 5;
+    }
 
-    if (player_ptr->is_icky_wield[0])
+    if (player_ptr->is_icky_wield[0]) {
         chance += 5;
+    }
 
-    if (player_ptr->is_icky_wield[1])
+    if (player_ptr->is_icky_wield[1]) {
         chance += 5;
+    }
 
-    if (chance > 95)
+    if (chance > 95) {
         chance = 95;
+    }
 
     return chance;
 }
@@ -690,8 +709,9 @@ bool get_element_power(PlayerType *player_ptr, SPELL_IDX *sn, bool only_browse)
     *sn = -1;
     if (repeat_pull(&code)) {
         *sn = (SPELL_IDX)code;
-        if (get_elemental_info(player_ptr, *sn).min_lev <= plev)
+        if (get_elemental_info(player_ptr, *sn).min_lev <= plev) {
             return true;
+        }
     }
 
     concptr p = _("元素魔法", "magic");
@@ -699,34 +719,39 @@ bool get_element_power(PlayerType *player_ptr, SPELL_IDX *sn, bool only_browse)
     redraw = false;
 
     for (i = 0; i < static_cast<SPELL_IDX>(ElementSpells::MAX); i++) {
-        if (get_elemental_info(player_ptr, i).min_lev <= plev)
+        if (get_elemental_info(player_ptr, i).min_lev <= plev) {
             num++;
+        }
     }
 
-    if (only_browse)
+    if (only_browse) {
         (void)strnfmt(out_val, 78, _("(%^s %c-%c, '*'で一覧, ESC) どの%sについて知りますか？", "(%^ss %c-%c, *=List, ESC=exit) Use which %s? "), p, I2A(0),
             I2A(num - 1), p);
-    else
+    } else {
         (void)strnfmt(
             out_val, 78, _("(%^s %c-%c, '*'で一覧, ESC) どの%sを使いますか？", "(%^ss %c-%c, *=List, ESC=exit) Use which %s? "), p, I2A(0), I2A(num - 1), p);
+    }
 
-    if (use_menu && !only_browse)
+    if (use_menu && !only_browse) {
         screen_save();
+    }
 
     int elem;
     mind_type spell;
     choice = (always_show_list || use_menu) ? ESCAPE : 1;
     while (!flag) {
-        if (choice == ESCAPE)
+        if (choice == ESCAPE) {
             choice = ' ';
-        else if (!get_com(out_val, &choice, true))
+        } else if (!get_com(out_val, &choice, true)) {
             break;
+        }
 
         if (use_menu && choice != ' ') {
             switch (choice) {
             case '0':
-                if (!only_browse)
+                if (!only_browse) {
                     screen_load();
+                }
                 return false;
             case '8':
             case 'k':
@@ -747,8 +772,9 @@ bool get_element_power(PlayerType *player_ptr, SPELL_IDX *sn, bool only_browse)
                 break;
             }
 
-            if (menu_line > num)
+            if (menu_line > num) {
                 menu_line -= num;
+            }
         }
 
         int spell_max = enum2i(ElementSpells::MAX);
@@ -757,8 +783,9 @@ bool get_element_power(PlayerType *player_ptr, SPELL_IDX *sn, bool only_browse)
                 char desc[80];
                 char name[80];
                 redraw = true;
-                if (!only_browse && !use_menu)
+                if (!only_browse && !use_menu) {
                     screen_save();
+                }
 
                 prt("", y, x);
                 put_str(_("名前", "Name"), y, x + 5);
@@ -767,20 +794,23 @@ bool get_element_power(PlayerType *player_ptr, SPELL_IDX *sn, bool only_browse)
                     elem = get_elemental_elem(player_ptr, i);
                     spell = get_elemental_info(player_ptr, i);
 
-                    if (spell.min_lev > plev)
+                    if (spell.min_lev > plev) {
                         break;
+                    }
 
                     PERCENTAGE chance = decide_element_chance(player_ptr, spell);
                     int mana_cost = decide_element_mana_cost(player_ptr, spell);
                     get_element_effect_info(player_ptr, i, comment);
 
                     if (use_menu) {
-                        if (i == (menu_line - 1))
+                        if (i == (menu_line - 1)) {
                             strcpy(desc, _("  》 ", "  >  "));
-                        else
+                        } else {
                             strcpy(desc, "     ");
-                    } else
+                        }
+                    } else {
                         sprintf(desc, "  %c) ", I2A(i));
+                    }
 
                     concptr s = get_element_name(player_ptr->element, elem);
                     sprintf(name, spell.name, s);
@@ -799,8 +829,9 @@ bool get_element_power(PlayerType *player_ptr, SPELL_IDX *sn, bool only_browse)
 
         if (!use_menu) {
             ask = isupper(choice);
-            if (ask)
+            if (ask) {
                 choice = (char)tolower(choice);
+            }
 
             i = (islower(choice) ? A2I(choice) : -1);
         }
@@ -817,20 +848,23 @@ bool get_element_power(PlayerType *player_ptr, SPELL_IDX *sn, bool only_browse)
             spell = get_elemental_info(player_ptr, i);
             (void)sprintf(name, spell.name, get_element_name(player_ptr->element, elem));
             (void)strnfmt(tmp_val, 78, _("%sを使いますか？", "Use %s? "), name);
-            if (!get_check(tmp_val))
+            if (!get_check(tmp_val)) {
                 continue;
+            }
         }
 
         flag = true;
     }
 
-    if (redraw && !only_browse)
+    if (redraw && !only_browse) {
         screen_load();
+    }
 
     set_bits(player_ptr->window_flags, PW_SPELL);
     handle_stuff(player_ptr);
-    if (!flag)
+    if (!flag) {
         return false;
+    }
 
     *sn = i;
     repeat_push((COMMAND_CODE)i);
@@ -845,12 +879,14 @@ bool get_element_power(PlayerType *player_ptr, SPELL_IDX *sn, bool only_browse)
  */
 static bool check_element_mp_sufficiency(PlayerType *player_ptr, int mana_cost)
 {
-    if (mana_cost <= player_ptr->csp)
+    if (mana_cost <= player_ptr->csp) {
         return true;
+    }
 
     msg_print(_("ＭＰが足りません。", "You do not have enough mana to use this power."));
-    if (!over_exert)
+    if (!over_exert) {
         return false;
+    }
 
     return get_check(_("それでも挑戦しますか? ", "Attempt it anyway? "));
 }
@@ -869,8 +905,9 @@ static bool try_cast_element_spell(PlayerType *player_ptr, SPELL_IDX spell_idx, 
         return cast_element_spell(player_ptr, spell_idx);
     }
 
-    if (flush_failure)
+    if (flush_failure) {
         flush();
+    }
 
     msg_format(_("魔力の集中に失敗した！", "You failed to concentrate hard enough for Mana!"));
     sound(SOUND_FAIL);
@@ -899,18 +936,21 @@ static bool try_cast_element_spell(PlayerType *player_ptr, SPELL_IDX spell_idx, 
 void do_cmd_element(PlayerType *player_ptr)
 {
     SPELL_IDX i;
-    if (cmd_limit_confused(player_ptr) || !get_element_power(player_ptr, &i, false))
+    if (cmd_limit_confused(player_ptr) || !get_element_power(player_ptr, &i, false)) {
         return;
+    }
 
     mind_type spell = get_elemental_info(player_ptr, i);
     PERCENTAGE chance = decide_element_chance(player_ptr, spell);
     int mana_cost = decide_element_mana_cost(player_ptr, spell);
 
-    if (!check_element_mp_sufficiency(player_ptr, mana_cost))
+    if (!check_element_mp_sufficiency(player_ptr, mana_cost)) {
         return;
+    }
 
-    if (!try_cast_element_spell(player_ptr, i, chance))
+    if (!try_cast_element_spell(player_ptr, i, chance)) {
         return;
+    }
 
     if (mana_cost <= player_ptr->csp) {
         player_ptr->csp -= mana_cost;
@@ -976,36 +1016,44 @@ bool is_elemental_genocide_effective(monster_race *r_ptr, AttributeType type)
 {
     switch (type) {
     case AttributeType::FIRE:
-        if (r_ptr->resistance_flags.has(MonsterResistanceType::IMMUNE_FIRE))
+        if (r_ptr->resistance_flags.has(MonsterResistanceType::IMMUNE_FIRE)) {
             return false;
+        }
         break;
     case AttributeType::COLD:
-        if (r_ptr->resistance_flags.has(MonsterResistanceType::IMMUNE_COLD))
+        if (r_ptr->resistance_flags.has(MonsterResistanceType::IMMUNE_COLD)) {
             return false;
+        }
         break;
     case AttributeType::ELEC:
-        if (r_ptr->resistance_flags.has(MonsterResistanceType::IMMUNE_ELEC))
+        if (r_ptr->resistance_flags.has(MonsterResistanceType::IMMUNE_ELEC)) {
             return false;
+        }
         break;
     case AttributeType::ACID:
-        if (r_ptr->resistance_flags.has(MonsterResistanceType::IMMUNE_ACID))
+        if (r_ptr->resistance_flags.has(MonsterResistanceType::IMMUNE_ACID)) {
             return false;
+        }
         break;
     case AttributeType::DARK:
-        if (r_ptr->resistance_flags.has(MonsterResistanceType::RESIST_DARK) || r_ptr->r_resistance_flags.has(MonsterResistanceType::HURT_LITE))
+        if (r_ptr->resistance_flags.has(MonsterResistanceType::RESIST_DARK) || r_ptr->r_resistance_flags.has(MonsterResistanceType::HURT_LITE)) {
             return false;
+        }
         break;
     case AttributeType::CONFUSION:
-        if (any_bits(r_ptr->flags3, RF3_NO_CONF))
+        if (any_bits(r_ptr->flags3, RF3_NO_CONF)) {
             return false;
+        }
         break;
     case AttributeType::SHARDS:
-        if (r_ptr->resistance_flags.has(MonsterResistanceType::RESIST_SHARDS))
+        if (r_ptr->resistance_flags.has(MonsterResistanceType::RESIST_SHARDS)) {
             return false;
+        }
         break;
     case AttributeType::POIS:
-        if (r_ptr->resistance_flags.has(MonsterResistanceType::IMMUNE_POISON))
+        if (r_ptr->resistance_flags.has(MonsterResistanceType::IMMUNE_POISON)) {
             return false;
+        }
         break;
     default:
         return false;
@@ -1026,22 +1074,26 @@ process_result effect_monster_elemental_genocide(PlayerType *player_ptr, effect_
     auto name = get_element_name(player_ptr->element, 0);
     bool b = is_elemental_genocide_effective(em_ptr->r_ptr, type);
 
-    if (em_ptr->seen_msg)
+    if (em_ptr->seen_msg) {
         msg_format(_("%sが%sを包み込んだ。", "The %s surrounds %s."), name, em_ptr->m_name);
+    }
 
-    if (em_ptr->seen)
+    if (em_ptr->seen) {
         em_ptr->obvious = true;
+    }
 
     if (!b) {
-        if (em_ptr->seen_msg)
+        if (em_ptr->seen_msg) {
             msg_format(_("%sには効果がなかった。", "%^s is unaffected."), em_ptr->m_name);
+        }
         em_ptr->dam = 0;
         return PROCESS_TRUE;
     }
 
     if (genocide_aux(player_ptr, em_ptr->g_ptr->m_idx, em_ptr->dam, !em_ptr->who, (em_ptr->r_ptr->level + 1) / 2, _("モンスター消滅", "Genocide One"))) {
-        if (em_ptr->seen_msg)
+        if (em_ptr->seen_msg) {
             msg_format(_("%sは消滅した！", "%^s disappeared!"), em_ptr->m_name);
+        }
         em_ptr->dam = 0;
         chg_virtue(player_ptr, V_VITALITY, -1);
         return PROCESS_TRUE;
@@ -1062,8 +1114,9 @@ process_result effect_monster_elemental_genocide(PlayerType *player_ptr, effect_
  */
 bool has_element_resist(PlayerType *player_ptr, ElementRealmType realm, PLAYER_LEVEL lev)
 {
-    if (!PlayerClass(player_ptr).equals(PlayerClassType::ELEMENTALIST))
+    if (!PlayerClass(player_ptr).equals(PlayerClassType::ELEMENTALIST)) {
         return false;
+    }
 
     auto prealm = i2enum<ElementRealmType>(player_ptr->element);
     return (prealm == realm) && (player_ptr->lev >= lev);
@@ -1101,24 +1154,33 @@ static void display_realm_cursor(int i, int n, term_color_type color)
  */
 static int interpret_realm_select_key(int cs, int n, char c)
 {
-    if (c == 'Q')
+    if (c == 'Q') {
         quit(nullptr);
+    }
 
-    if (c == '8')
-        if (cs >= 5)
+    if (c == '8') {
+        if (cs >= 5) {
             return cs - 5;
+        }
+    }
 
-    if (c == '4')
-        if (cs > 0)
+    if (c == '4') {
+        if (cs > 0) {
             return cs - 1;
+        }
+    }
 
-    if (c == '6')
-        if (cs < n)
+    if (c == '6') {
+        if (cs < n) {
             return cs + 1;
+        }
+    }
 
-    if (c == '2')
-        if (cs + 5 <= n)
+    if (c == '2') {
+        if (cs + 5 <= n) {
             return cs + 5;
+        }
+    }
 
     return cs;
 }
@@ -1147,8 +1209,9 @@ static int get_element_realm(PlayerType *player_ptr, int is, int n)
         char c = inkey();
         cs = interpret_realm_select_key(cs, n, c);
 
-        if (c == 'S')
+        if (c == 'S') {
             return 255;
+        }
 
         if (c == ' ' || c == '\r' || c == '\n') {
             if (cs == n) {
@@ -1182,8 +1245,9 @@ static int get_element_realm(PlayerType *player_ptr, int is, int n)
             screen_save();
             do_cmd_options_aux(player_ptr, OPT_PAGE_BIRTH, _("初期オプション((*)はスコアに影響)", "Birth Options ((*)) affect score"));
             screen_load();
-        } else if (c != '2' && c != '4' && c != '6' && c != '8')
+        } else if (c != '2' && c != '4' && c != '6' && c != '8') {
             bell();
+        }
     }
 
     display_realm_cursor(cs, n, TERM_YELLOW);
@@ -1212,22 +1276,25 @@ byte select_element_realm(PlayerType *player_ptr)
         }
 
         realm_idx = get_element_realm(player_ptr, realm_idx - 1, realm_max - 1);
-        if (realm_idx == 255)
+        if (realm_idx == 255) {
             break;
+        }
 
         auto realm = i2enum<ElementRealmType>(realm_idx);
         char temp[80 * 5];
         shape_buffer(element_texts.at(realm).data(), 74, temp, sizeof(temp));
         concptr t = temp;
         for (int i = 0; i < 5; i++) {
-            if (t[0] == 0)
+            if (t[0] == 0) {
                 break;
+            }
             prt(t, row + i, 3);
             t += strlen(t) + 1;
         }
 
-        if (get_check_strict(player_ptr, _("よろしいですか？", "Are you sure? "), CHECK_DEFAULT_Y))
+        if (get_check_strict(player_ptr, _("よろしいですか？", "Are you sure? "), CHECK_DEFAULT_Y)) {
             break;
+        }
 
         clear_from(row);
     }
@@ -1355,8 +1422,9 @@ bool switch_element_execution(PlayerType *player_ptr)
         (void)recharge(player_ptr, 120);
         break;
     case ElementRealmType::SEA:
-        if (!get_aim_dir(player_ptr, &dir))
+        if (!get_aim_dir(player_ptr, &dir)) {
             return false;
+        }
         (void)wall_to_mud(player_ptr, dir, plev * 3 / 2);
         break;
     case ElementRealmType::DARKNESS:
@@ -1369,8 +1437,9 @@ bool switch_element_execution(PlayerType *player_ptr)
         (void)earthquake(player_ptr, player_ptr->y, player_ptr->x, 10, 0);
         break;
     case ElementRealmType::DEATH:
-        if (player_ptr->current_floor_ptr->num_repro <= MAX_REPRO)
+        if (player_ptr->current_floor_ptr->num_repro <= MAX_REPRO) {
             player_ptr->current_floor_ptr->num_repro += MAX_REPRO;
+        }
         break;
     default:
         return false;
@@ -1388,34 +1457,43 @@ bool switch_element_execution(PlayerType *player_ptr)
  */
 static bool is_target_grid_dark(floor_type *f_ptr, POSITION y, POSITION x)
 {
-    if (any_bits(f_ptr->grid_array[y][x].info, CAVE_MNLT))
+    if (any_bits(f_ptr->grid_array[y][x].info, CAVE_MNLT)) {
         return false;
+    }
 
     bool is_dark = false;
     bool is_lite = any_bits(f_ptr->grid_array[y][x].info, CAVE_GLOW | CAVE_LITE);
 
-    for (int dx = x - 2; dx <= x + 2; dx++)
+    for (int dx = x - 2; dx <= x + 2; dx++) {
         for (int dy = y - 2; dy <= y + 2; dy++) {
-            if (dx == x && dy == y)
+            if (dx == x && dy == y) {
                 continue;
-            if (!in_bounds(f_ptr, dy, dx))
+            }
+            if (!in_bounds(f_ptr, dy, dx)) {
                 continue;
+            }
 
             MONSTER_IDX m_idx = f_ptr->grid_array[dy][dx].m_idx;
-            if (!m_idx)
+            if (!m_idx) {
                 continue;
+            }
 
             POSITION d = distance(dy, dx, y, x);
             auto *r_ptr = &r_info[f_ptr->m_list[m_idx].r_idx];
-            if (d <= 1 && any_bits(r_ptr->flags7, RF7_HAS_LITE_1 | RF7_SELF_LITE_1))
+            if (d <= 1 && any_bits(r_ptr->flags7, RF7_HAS_LITE_1 | RF7_SELF_LITE_1)) {
                 return false;
-            if (d <= 2 && any_bits(r_ptr->flags7, RF7_HAS_LITE_2 | RF7_SELF_LITE_2))
+            }
+            if (d <= 2 && any_bits(r_ptr->flags7, RF7_HAS_LITE_2 | RF7_SELF_LITE_2)) {
                 return false;
-            if (d <= 1 && any_bits(r_ptr->flags7, RF7_HAS_DARK_1 | RF7_SELF_DARK_1))
+            }
+            if (d <= 1 && any_bits(r_ptr->flags7, RF7_HAS_DARK_1 | RF7_SELF_DARK_1)) {
                 is_dark = true;
-            if (d <= 2 && any_bits(r_ptr->flags7, RF7_HAS_DARK_2 | RF7_SELF_DARK_2))
+            }
+            if (d <= 2 && any_bits(r_ptr->flags7, RF7_HAS_DARK_2 | RF7_SELF_DARK_2)) {
                 is_dark = true;
+            }
         }
+    }
 
     return !is_lite || is_dark;
 }
@@ -1431,8 +1509,9 @@ static bool door_to_darkness(PlayerType *player_ptr, POSITION dist)
     floor_type *f_ptr;
 
     for (int i = 0; i < 3; i++) {
-        if (!tgt_pt(player_ptr, &x, &y))
+        if (!tgt_pt(player_ptr, &x, &y)) {
             return false;
+        }
 
         f_ptr = player_ptr->current_floor_ptr;
 

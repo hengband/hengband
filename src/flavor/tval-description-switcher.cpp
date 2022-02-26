@@ -21,8 +21,9 @@
 static void describe_monster_ball(flavor_type *flavor_ptr)
 {
     auto *r_ptr = &r_info[flavor_ptr->o_ptr->pval];
-    if (!flavor_ptr->known)
+    if (!flavor_ptr->known) {
         return;
+    }
 
     if (!flavor_ptr->o_ptr->pval) {
         flavor_ptr->modstr = _(" (空)", " (empty)");
@@ -54,8 +55,9 @@ static void describe_statue(flavor_type *flavor_ptr)
     if (r_ptr->kind_flags.has_not(MonsterKindType::UNIQUE)) {
         sprintf(flavor_ptr->tmp_val2, "%s%s", (is_a_vowel(*flavor_ptr->t) ? "an " : "a "), flavor_ptr->t);
         flavor_ptr->modstr = flavor_ptr->tmp_val2;
-    } else
+    } else {
         flavor_ptr->modstr = flavor_ptr->t;
+    }
 #endif
 }
 
@@ -66,111 +68,124 @@ static void describe_corpse(flavor_type *flavor_ptr)
 #ifdef JP
     flavor_ptr->basenm = "#%";
 #else
-    if (r_ptr->kind_flags.has(MonsterKindType::UNIQUE))
+    if (r_ptr->kind_flags.has(MonsterKindType::UNIQUE)) {
         flavor_ptr->basenm = "& % of #";
-    else
+    } else {
         flavor_ptr->basenm = "& # %";
+    }
 #endif
 }
 
 static void describe_amulet(flavor_type *flavor_ptr)
 {
-    if (flavor_ptr->aware && (flavor_ptr->o_ptr->is_fixed_artifact() || flavor_ptr->k_ptr->gen_flags.has(ItemGenerationTraitType::INSTA_ART)))
+    if (flavor_ptr->aware && (flavor_ptr->o_ptr->is_fixed_artifact() || flavor_ptr->k_ptr->gen_flags.has(ItemGenerationTraitType::INSTA_ART))) {
         return;
+    }
 
     flavor_ptr->modstr = flavor_ptr->flavor_k_ptr->flavor_name.c_str();
-    if (!flavor_ptr->flavor)
+    if (!flavor_ptr->flavor) {
         flavor_ptr->basenm = _("%のアミュレット", "& Amulet~ of %");
-    else if (flavor_ptr->aware)
+    } else if (flavor_ptr->aware) {
         flavor_ptr->basenm = _("%の#アミュレット", "& # Amulet~ of %");
-    else
+    } else {
         flavor_ptr->basenm = _("#アミュレット", "& # Amulet~");
+    }
 }
 
 static void describe_ring(flavor_type *flavor_ptr)
 {
-    if (flavor_ptr->aware && (flavor_ptr->o_ptr->is_fixed_artifact() || flavor_ptr->k_ptr->gen_flags.has(ItemGenerationTraitType::INSTA_ART)))
+    if (flavor_ptr->aware && (flavor_ptr->o_ptr->is_fixed_artifact() || flavor_ptr->k_ptr->gen_flags.has(ItemGenerationTraitType::INSTA_ART))) {
         return;
+    }
 
     flavor_ptr->modstr = flavor_ptr->flavor_k_ptr->flavor_name.c_str();
-    if (!flavor_ptr->flavor)
+    if (!flavor_ptr->flavor) {
         flavor_ptr->basenm = _("%の指輪", "& Ring~ of %");
-    else if (flavor_ptr->aware)
+    } else if (flavor_ptr->aware) {
         flavor_ptr->basenm = _("%の#指輪", "& # Ring~ of %");
-    else
+    } else {
         flavor_ptr->basenm = _("#指輪", "& # Ring~");
+    }
 
-    if (!flavor_ptr->k_ptr->to_h && !flavor_ptr->k_ptr->to_d && (flavor_ptr->o_ptr->to_h || flavor_ptr->o_ptr->to_d))
+    if (!flavor_ptr->k_ptr->to_h && !flavor_ptr->k_ptr->to_d && (flavor_ptr->o_ptr->to_h || flavor_ptr->o_ptr->to_d)) {
         flavor_ptr->show_weapon = true;
+    }
 }
 
 static void describe_staff(flavor_type *flavor_ptr)
 {
     flavor_ptr->modstr = flavor_ptr->flavor_k_ptr->flavor_name.c_str();
-    if (!flavor_ptr->flavor)
+    if (!flavor_ptr->flavor) {
         flavor_ptr->basenm = _("%の杖", "& Staff~ of %");
-    else if (flavor_ptr->aware)
+    } else if (flavor_ptr->aware) {
         flavor_ptr->basenm = _("%の#杖", "& # Staff~ of %");
-    else
+    } else {
         flavor_ptr->basenm = _("#杖", "& # Staff~");
+    }
 }
 
 static void describe_wand(flavor_type *flavor_ptr)
 {
     flavor_ptr->modstr = flavor_ptr->flavor_k_ptr->flavor_name.c_str();
-    if (!flavor_ptr->flavor)
+    if (!flavor_ptr->flavor) {
         flavor_ptr->basenm = _("%の魔法棒", "& Wand~ of %");
-    else if (flavor_ptr->aware)
+    } else if (flavor_ptr->aware) {
         flavor_ptr->basenm = _("%の#魔法棒", "& # Wand~ of %");
-    else
+    } else {
         flavor_ptr->basenm = _("#魔法棒", "& # Wand~");
+    }
 }
 
 static void describe_rod(flavor_type *flavor_ptr)
 {
     flavor_ptr->modstr = flavor_ptr->flavor_k_ptr->flavor_name.c_str();
-    if (!flavor_ptr->flavor)
+    if (!flavor_ptr->flavor) {
         flavor_ptr->basenm = _("%のロッド", "& Rod~ of %");
-    else if (flavor_ptr->aware)
+    } else if (flavor_ptr->aware) {
         flavor_ptr->basenm = _("%の#ロッド", "& # Rod~ of %");
-    else
+    } else {
         flavor_ptr->basenm = _("#ロッド", "& # Rod~");
+    }
 }
 
 static void describe_scroll(flavor_type *flavor_ptr)
 {
     flavor_ptr->modstr = flavor_ptr->flavor_k_ptr->flavor_name.c_str();
-    if (!flavor_ptr->flavor)
+    if (!flavor_ptr->flavor) {
         flavor_ptr->basenm = _("%の巻物", "& Scroll~ of %");
-    else if (flavor_ptr->aware)
+    } else if (flavor_ptr->aware) {
         flavor_ptr->basenm = _("「#」と書かれた%の巻物", "& Scroll~ titled \"#\" of %");
-    else
+    } else {
         flavor_ptr->basenm = _("「#」と書かれた巻物", "& Scroll~ titled \"#\"");
+    }
 }
 
 static void describe_potion(flavor_type *flavor_ptr)
 {
     flavor_ptr->modstr = flavor_ptr->flavor_k_ptr->flavor_name.c_str();
-    if (!flavor_ptr->flavor)
+    if (!flavor_ptr->flavor) {
         flavor_ptr->basenm = _("%の薬", "& Potion~ of %");
-    else if (flavor_ptr->aware)
+    } else if (flavor_ptr->aware) {
         flavor_ptr->basenm = _("%の#薬", "& # Potion~ of %");
-    else
+    } else {
         flavor_ptr->basenm = _("#薬", "& # Potion~");
+    }
 }
 
 static void describe_food(flavor_type *flavor_ptr)
 {
-    if (flavor_ptr->k_ptr->flavor_name.empty())
+    if (flavor_ptr->k_ptr->flavor_name.empty()) {
         return;
+    }
 
     flavor_ptr->modstr = flavor_ptr->flavor_k_ptr->flavor_name.c_str();
-    if (!flavor_ptr->flavor)
+    if (!flavor_ptr->flavor) {
         flavor_ptr->basenm = _("%のキノコ", "& Mushroom~ of %");
-    else if (flavor_ptr->aware)
+    } else if (flavor_ptr->aware) {
         flavor_ptr->basenm = _("%の#キノコ", "& # Mushroom~ of %");
-    else
+    } else {
         flavor_ptr->basenm = _("#キノコ", "& # Mushroom~");
+    }
 }
 
 static void describe_book_life(flavor_type *flavor_ptr)
@@ -178,10 +193,11 @@ static void describe_book_life(flavor_type *flavor_ptr)
 #ifdef JP
     flavor_ptr->basenm = "生命の魔法書%";
 #else
-    if (mp_ptr->spell_book == ItemKindType::LIFE_BOOK)
+    if (mp_ptr->spell_book == ItemKindType::LIFE_BOOK) {
         flavor_ptr->basenm = "& Book~ of Life Magic %";
-    else
+    } else {
         flavor_ptr->basenm = "& Life Spellbook~ %";
+    }
 #endif
 }
 
@@ -190,10 +206,11 @@ static void describe_book_sorcery(flavor_type *flavor_ptr)
 #ifdef JP
     flavor_ptr->basenm = "仙術の魔法書%";
 #else
-    if (mp_ptr->spell_book == ItemKindType::LIFE_BOOK)
+    if (mp_ptr->spell_book == ItemKindType::LIFE_BOOK) {
         flavor_ptr->basenm = "& Book~ of Sorcery %";
-    else
+    } else {
         flavor_ptr->basenm = "& Sorcery Spellbook~ %";
+    }
 #endif
 }
 
@@ -202,10 +219,11 @@ static void describe_book_nature(flavor_type *flavor_ptr)
 #ifdef JP
     flavor_ptr->basenm = "自然の魔法書%";
 #else
-    if (mp_ptr->spell_book == ItemKindType::LIFE_BOOK)
+    if (mp_ptr->spell_book == ItemKindType::LIFE_BOOK) {
         flavor_ptr->basenm = "& Book~ of Nature Magic %";
-    else
+    } else {
         flavor_ptr->basenm = "& Nature Spellbook~ %";
+    }
 #endif
 }
 
@@ -214,10 +232,11 @@ static void describe_book_chaos(flavor_type *flavor_ptr)
 #ifdef JP
     flavor_ptr->basenm = "カオスの魔法書%";
 #else
-    if (mp_ptr->spell_book == ItemKindType::LIFE_BOOK)
+    if (mp_ptr->spell_book == ItemKindType::LIFE_BOOK) {
         flavor_ptr->basenm = "& Book~ of Chaos Magic %";
-    else
+    } else {
         flavor_ptr->basenm = "& Chaos Spellbook~ %";
+    }
 #endif
 }
 
@@ -226,10 +245,11 @@ static void describe_book_death(flavor_type *flavor_ptr)
 #ifdef JP
     flavor_ptr->basenm = "暗黒の魔法書%";
 #else
-    if (mp_ptr->spell_book == ItemKindType::LIFE_BOOK)
+    if (mp_ptr->spell_book == ItemKindType::LIFE_BOOK) {
         flavor_ptr->basenm = "& Book~ of Death Magic %";
-    else
+    } else {
         flavor_ptr->basenm = "& Death Spellbook~ %";
+    }
 #endif
 }
 
@@ -238,10 +258,11 @@ static void describe_book_trump(flavor_type *flavor_ptr)
 #ifdef JP
     flavor_ptr->basenm = "トランプの魔法書%";
 #else
-    if (mp_ptr->spell_book == ItemKindType::LIFE_BOOK)
+    if (mp_ptr->spell_book == ItemKindType::LIFE_BOOK) {
         flavor_ptr->basenm = "& Book~ of Trump Magic %";
-    else
+    } else {
         flavor_ptr->basenm = "& Trump Spellbook~ %";
+    }
 #endif
 }
 
@@ -250,10 +271,11 @@ static void describe_book_arcane(flavor_type *flavor_ptr)
 #ifdef JP
     flavor_ptr->basenm = "秘術の魔法書%";
 #else
-    if (mp_ptr->spell_book == ItemKindType::LIFE_BOOK)
+    if (mp_ptr->spell_book == ItemKindType::LIFE_BOOK) {
         flavor_ptr->basenm = "& Book~ of Arcane Magic %";
-    else
+    } else {
         flavor_ptr->basenm = "& Arcane Spellbook~ %";
+    }
 #endif
 }
 
@@ -262,10 +284,11 @@ static void describe_book_craft(flavor_type *flavor_ptr)
 #ifdef JP
     flavor_ptr->basenm = "匠の魔法書%";
 #else
-    if (mp_ptr->spell_book == ItemKindType::LIFE_BOOK)
+    if (mp_ptr->spell_book == ItemKindType::LIFE_BOOK) {
         flavor_ptr->basenm = "& Book~ of Craft Magic %";
-    else
+    } else {
         flavor_ptr->basenm = "& Craft Spellbook~ %";
+    }
 #endif
 }
 
@@ -274,10 +297,11 @@ static void describe_book_demon(flavor_type *flavor_ptr)
 #ifdef JP
     flavor_ptr->basenm = "悪魔の魔法書%";
 #else
-    if (mp_ptr->spell_book == ItemKindType::LIFE_BOOK)
+    if (mp_ptr->spell_book == ItemKindType::LIFE_BOOK) {
         flavor_ptr->basenm = "& Book~ of Daemon Magic %";
-    else
+    } else {
         flavor_ptr->basenm = "& Daemon Spellbook~ %";
+    }
 #endif
 }
 
@@ -286,10 +310,11 @@ static void describe_book_crusade(flavor_type *flavor_ptr)
 #ifdef JP
     flavor_ptr->basenm = "破邪の魔法書%";
 #else
-    if (mp_ptr->spell_book == ItemKindType::LIFE_BOOK)
+    if (mp_ptr->spell_book == ItemKindType::LIFE_BOOK) {
         flavor_ptr->basenm = "& Book~ of Crusade Magic %";
-    else
+    } else {
         flavor_ptr->basenm = "& Crusade Spellbook~ %";
+    }
 #endif
 }
 
@@ -298,10 +323,11 @@ static void describe_book_hex(flavor_type *flavor_ptr)
 #ifdef JP
     flavor_ptr->basenm = "呪術の魔法書%";
 #else
-    if (mp_ptr->spell_book == ItemKindType::LIFE_BOOK)
+    if (mp_ptr->spell_book == ItemKindType::LIFE_BOOK) {
         flavor_ptr->basenm = "& Book~ of Hex Magic %";
-    else
+    } else {
         flavor_ptr->basenm = "& Hex Spellbook~ %";
+    }
 #endif
 }
 

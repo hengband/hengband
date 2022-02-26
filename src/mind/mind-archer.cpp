@@ -50,12 +50,13 @@ static bool select_ammo_creation_type(ammo_creation_type &type, PLAYER_LEVEL ple
     }
 
     concptr com;
-    if (plev >= 20)
+    if (plev >= 20) {
         com = _("[S]弾, [A]矢, [B]クロスボウの矢 :", "Create [S]hots, Create [A]rrow or Create [B]olt ?");
-    else if (plev >= 10)
+    } else if (plev >= 10) {
         com = _("[S]弾, [A]矢:", "Create [S]hots or Create [A]rrow ?");
-    else
+    } else {
         com = _("[S]弾:", "Create [S]hots ?");
+    }
 
     while (type == AMMO_NONE) {
         char ch;
@@ -91,19 +92,22 @@ static bool select_ammo_creation_type(ammo_creation_type &type, PLAYER_LEVEL ple
  */
 bool create_ammo(PlayerType *player_ptr)
 {
-    if (cmd_limit_confused(player_ptr) || cmd_limit_blind(player_ptr))
+    if (cmd_limit_confused(player_ptr) || cmd_limit_blind(player_ptr)) {
         return false;
+    }
 
     ammo_creation_type ext = AMMO_NONE;
 
-    if (!select_ammo_creation_type(ext, player_ptr->lev))
+    if (!select_ammo_creation_type(ext, player_ptr->lev)) {
         return false;
+    }
 
     switch (ext) {
     case AMMO_SHOT: {
         DIRECTION dir;
-        if (!get_rep_dir(player_ptr, &dir, false))
+        if (!get_rep_dir(player_ptr, &dir, false)) {
             return false;
+        }
 
         POSITION y = player_ptr->y + ddy[dir];
         POSITION x = player_ptr->x + ddx[dir];
@@ -130,8 +134,9 @@ bool create_ammo(PlayerType *player_ptr)
         GAME_TEXT o_name[MAX_NLEN];
         describe_flavor(player_ptr, o_name, q_ptr, 0);
         msg_format(_("%sを作った。", "You make some ammo."), o_name);
-        if (slot >= 0)
+        if (slot >= 0) {
             autopick_alter_item(player_ptr, slot, false);
+        }
 
         cave_alter_feat(player_ptr, y, x, FloorFeatureType::HURT_ROCK);
         player_ptr->update |= PU_FLOW;
@@ -142,8 +147,9 @@ bool create_ammo(PlayerType *player_ptr)
         concptr s = _("材料を持っていない。", "You have no item to convert.");
         OBJECT_IDX item;
         auto *q_ptr = choose_object(player_ptr, &item, q, s, USE_INVEN | USE_FLOOR, FuncItemTester(&ObjectType::is_convertible));
-        if (!q_ptr)
+        if (!q_ptr) {
             return false;
+        }
 
         ObjectType forge;
         q_ptr = &forge;
@@ -158,8 +164,9 @@ bool create_ammo(PlayerType *player_ptr)
         msg_format(_("%sを作った。", "You make some ammo."), o_name);
         vary_item(player_ptr, item, -1);
         int16_t slot = store_item_to_inventory(player_ptr, q_ptr);
-        if (slot >= 0)
+        if (slot >= 0) {
             autopick_alter_item(player_ptr, slot, false);
+        }
 
         return true;
     }
@@ -168,8 +175,9 @@ bool create_ammo(PlayerType *player_ptr)
         concptr s = _("材料を持っていない。", "You have no item to convert.");
         OBJECT_IDX item;
         auto *q_ptr = choose_object(player_ptr, &item, q, s, (USE_INVEN | USE_FLOOR), FuncItemTester(&ObjectType::is_convertible));
-        if (!q_ptr)
+        if (!q_ptr) {
             return false;
+        }
 
         ObjectType forge;
         q_ptr = &forge;
@@ -184,8 +192,9 @@ bool create_ammo(PlayerType *player_ptr)
         msg_format(_("%sを作った。", "You make some ammo."), o_name);
         vary_item(player_ptr, item, -1);
         int16_t slot = store_item_to_inventory(player_ptr, q_ptr);
-        if (slot >= 0)
+        if (slot >= 0) {
             autopick_alter_item(player_ptr, slot, false);
+        }
 
         return true;
     }

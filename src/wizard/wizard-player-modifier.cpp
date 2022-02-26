@@ -39,8 +39,9 @@ constexpr std::array wizard_player_modifier_menu_table = {
  */
 void display_wizard_player_modifier_menu()
 {
-    for (auto y = 1U; y <= wizard_player_modifier_menu_table.size(); y++)
+    for (auto y = 1U; y <= wizard_player_modifier_menu_table.size(); y++) {
         term_erase(14, y, 64);
+    }
 
     int r = 1;
     int c = 15;

@@ -43,29 +43,36 @@ bool summon_unique_okay = false;
 static bool summon_specific_okay(PlayerType *player_ptr, MONRACE_IDX r_idx)
 {
     auto *r_ptr = &r_info[r_idx];
-    if (!mon_hook_dungeon(player_ptr, r_idx))
+    if (!mon_hook_dungeon(player_ptr, r_idx)) {
         return false;
+    }
 
     if (summon_specific_who > 0) {
         auto *m_ptr = &player_ptr->current_floor_ptr->m_list[summon_specific_who];
-        if (monster_has_hostile_align(player_ptr, m_ptr, 0, 0, r_ptr))
+        if (monster_has_hostile_align(player_ptr, m_ptr, 0, 0, r_ptr)) {
             return false;
+        }
     } else if (summon_specific_who < 0) {
-        if (monster_has_hostile_align(player_ptr, nullptr, 10, -10, r_ptr) && !one_in_(std::abs(player_ptr->alignment) / 2 + 1))
+        if (monster_has_hostile_align(player_ptr, nullptr, 10, -10, r_ptr) && !one_in_(std::abs(player_ptr->alignment) / 2 + 1)) {
             return false;
+        }
     }
 
-    if (!summon_unique_okay && (r_ptr->kind_flags.has(MonsterKindType::UNIQUE) || (r_ptr->flags7 & RF7_NAZGUL)))
+    if (!summon_unique_okay && (r_ptr->kind_flags.has(MonsterKindType::UNIQUE) || (r_ptr->flags7 & RF7_NAZGUL))) {
         return false;
+    }
 
-    if (!summon_specific_type)
+    if (!summon_specific_type) {
         return true;
+    }
 
-    if ((summon_specific_who < 0) && (r_ptr->kind_flags.has(MonsterKindType::UNIQUE) || (r_ptr->flags7 & RF7_NAZGUL)) && monster_has_hostile_align(player_ptr, nullptr, 10, -10, r_ptr))
+    if ((summon_specific_who < 0) && (r_ptr->kind_flags.has(MonsterKindType::UNIQUE) || (r_ptr->flags7 & RF7_NAZGUL)) && monster_has_hostile_align(player_ptr, nullptr, 10, -10, r_ptr)) {
         return false;
+    }
 
-    if ((r_ptr->flags7 & RF7_CHAMELEON) && d_info[player_ptr->dungeon_idx].flags.has(DungeonFeatureType::CHAMELEON))
+    if ((r_ptr->flags7 & RF7_CHAMELEON) && d_info[player_ptr->dungeon_idx].flags.has(DungeonFeatureType::CHAMELEON)) {
         return true;
+    }
 
     if (summon_specific_who > 0) {
         auto *m_ptr = &player_ptr->current_floor_ptr->m_list[summon_specific_who];
@@ -99,8 +106,9 @@ static bool is_dead_summoning(summon_type type)
 DEPTH get_dungeon_or_wilderness_level(PlayerType *player_ptr)
 {
     auto *floor_ptr = player_ptr->current_floor_ptr;
-    if (floor_ptr->dun_level > 0)
+    if (floor_ptr->dun_level > 0) {
         return floor_ptr->dun_level;
+    }
 
     return wilderness[player_ptr->wilderness_y][player_ptr->wilderness_x].level;
 }
@@ -119,12 +127,14 @@ DEPTH get_dungeon_or_wilderness_level(PlayerType *player_ptr)
 bool summon_specific(PlayerType *player_ptr, MONSTER_IDX who, POSITION y1, POSITION x1, DEPTH lev, summon_type type, BIT_FLAGS mode)
 {
     auto *floor_ptr = player_ptr->current_floor_ptr;
-    if (floor_ptr->inside_arena)
+    if (floor_ptr->inside_arena) {
         return false;
+    }
 
     POSITION x, y;
-    if (!mon_scatter(player_ptr, 0, &y, &x, y1, x1, 2))
+    if (!mon_scatter(player_ptr, 0, &y, &x, y1, x1, 2)) {
         return false;
+    }
 
     summon_specific_who = who;
     summon_specific_type = type;
@@ -138,8 +148,9 @@ bool summon_specific(PlayerType *player_ptr, MONSTER_IDX who, POSITION y1, POSIT
         return false;
     }
 
-    if (is_dead_summoning(type))
+    if (is_dead_summoning(type)) {
         mode |= PM_NO_KAGE;
+    }
 
     if (!place_monster_aux(player_ptr, who, y, x, r_idx, mode)) {
         summon_specific_type = SUMMON_NONE;

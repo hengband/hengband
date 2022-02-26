@@ -143,16 +143,17 @@ SUB_EXP PlayerSkill::spell_exp_at(PlayerSkillRank rank)
  */
 PlayerSkillRank PlayerSkill::weapon_skill_rank(int weapon_exp)
 {
-    if (weapon_exp < WEAPON_EXP_BEGINNER)
+    if (weapon_exp < WEAPON_EXP_BEGINNER) {
         return PlayerSkillRank::UNSKILLED;
-    else if (weapon_exp < WEAPON_EXP_SKILLED)
+    } else if (weapon_exp < WEAPON_EXP_SKILLED) {
         return PlayerSkillRank::BEGINNER;
-    else if (weapon_exp < WEAPON_EXP_EXPERT)
+    } else if (weapon_exp < WEAPON_EXP_EXPERT) {
         return PlayerSkillRank::SKILLED;
-    else if (weapon_exp < WEAPON_EXP_MASTER)
+    } else if (weapon_exp < WEAPON_EXP_MASTER) {
         return PlayerSkillRank::EXPERT;
-    else
+    } else {
         return PlayerSkillRank::MASTER;
+    }
 }
 
 bool PlayerSkill::valid_weapon_exp(int weapon_exp)
@@ -167,16 +168,17 @@ bool PlayerSkill::valid_weapon_exp(int weapon_exp)
  */
 PlayerSkillRank PlayerSkill::riding_skill_rank(int riding_exp)
 {
-    if (riding_exp < RIDING_EXP_BEGINNER)
+    if (riding_exp < RIDING_EXP_BEGINNER) {
         return PlayerSkillRank::UNSKILLED;
-    else if (riding_exp < RIDING_EXP_SKILLED)
+    } else if (riding_exp < RIDING_EXP_SKILLED) {
         return PlayerSkillRank::BEGINNER;
-    else if (riding_exp < RIDING_EXP_EXPERT)
+    } else if (riding_exp < RIDING_EXP_EXPERT) {
         return PlayerSkillRank::SKILLED;
-    else if (riding_exp < RIDING_EXP_MASTER)
+    } else if (riding_exp < RIDING_EXP_MASTER) {
         return PlayerSkillRank::EXPERT;
-    else
+    } else {
         return PlayerSkillRank::MASTER;
+    }
 }
 
 /*!
@@ -186,16 +188,17 @@ PlayerSkillRank PlayerSkill::riding_skill_rank(int riding_exp)
  */
 PlayerSkillRank PlayerSkill::spell_skill_rank(int spell_exp)
 {
-    if (spell_exp < SPELL_EXP_BEGINNER)
+    if (spell_exp < SPELL_EXP_BEGINNER) {
         return PlayerSkillRank::UNSKILLED;
-    else if (spell_exp < SPELL_EXP_SKILLED)
+    } else if (spell_exp < SPELL_EXP_SKILLED) {
         return PlayerSkillRank::BEGINNER;
-    else if (spell_exp < SPELL_EXP_EXPERT)
+    } else if (spell_exp < SPELL_EXP_EXPERT) {
         return PlayerSkillRank::SKILLED;
-    else if (spell_exp < SPELL_EXP_MASTER)
+    } else if (spell_exp < SPELL_EXP_MASTER) {
         return PlayerSkillRank::EXPERT;
-    else
+    } else {
         return PlayerSkillRank::MASTER;
+    }
 }
 
 concptr PlayerSkill::skill_name(PlayerSkillKindType skill)
@@ -282,20 +285,23 @@ void PlayerSkill::gain_riding_skill_exp_on_melee_attack(const monster_race *r_pt
 {
     auto now_exp = this->player_ptr->skill_exp[PlayerSkillKindType::RIDING];
     auto max_exp = s_info[enum2i(this->player_ptr->pclass)].s_max[PlayerSkillKindType::RIDING];
-    if (now_exp >= max_exp)
+    if (now_exp >= max_exp) {
         return;
+    }
 
     auto riding_level = r_info[this->player_ptr->current_floor_ptr->m_list[this->player_ptr->riding].r_idx].level;
     int inc = 0;
 
-    if ((now_exp / 200 - 5) < r_ptr->level)
+    if ((now_exp / 200 - 5) < r_ptr->level) {
         inc += 1;
+    }
 
     if ((now_exp / 100) < riding_level) {
-        if ((now_exp / 100 + 15) < riding_level)
+        if ((now_exp / 100 + 15) < riding_level) {
             inc += 1 + (riding_level - (now_exp / 100 + 15));
-        else
+        } else {
             inc += 1;
+        }
     }
 
     this->player_ptr->skill_exp[PlayerSkillKindType::RIDING] = std::min<SUB_EXP>(max_exp, now_exp + inc);
@@ -306,8 +312,9 @@ void PlayerSkill::gain_riding_skill_exp_on_range_attack()
 {
     auto now_exp = this->player_ptr->skill_exp[PlayerSkillKindType::RIDING];
     auto max_exp = s_info[enum2i(this->player_ptr->pclass)].s_max[PlayerSkillKindType::RIDING];
-    if (now_exp >= max_exp)
+    if (now_exp >= max_exp) {
         return;
+    }
 
     if (((this->player_ptr->skill_exp[PlayerSkillKindType::RIDING] - (RIDING_EXP_BEGINNER * 2)) / 200 < r_info[this->player_ptr->current_floor_ptr->m_list[this->player_ptr->riding].r_idx].level) && one_in_(2)) {
         this->player_ptr->skill_exp[PlayerSkillKindType::RIDING] += 1;
@@ -319,19 +326,22 @@ void PlayerSkill::gain_riding_skill_exp_on_fall_off_check(int dam)
 {
     auto now_exp = this->player_ptr->skill_exp[PlayerSkillKindType::RIDING];
     auto max_exp = s_info[enum2i(this->player_ptr->pclass)].s_max[PlayerSkillKindType::RIDING];
-    if (now_exp >= max_exp || max_exp <= 1000)
+    if (now_exp >= max_exp || max_exp <= 1000) {
         return;
+    }
 
     auto riding_level = r_info[this->player_ptr->current_floor_ptr->m_list[this->player_ptr->riding].r_idx].level;
 
-    if ((dam / 2 + riding_level) <= (now_exp / 30 + 10))
+    if ((dam / 2 + riding_level) <= (now_exp / 30 + 10)) {
         return;
+    }
 
     int inc = 0;
-    if ((now_exp / 100 + 15) < riding_level)
+    if ((now_exp / 100 + 15) < riding_level) {
         inc += 1 + (riding_level - (now_exp / 100 + 15));
-    else
+    } else {
         inc += 1;
+    }
 
     this->player_ptr->skill_exp[PlayerSkillKindType::RIDING] = std::min<SUB_EXP>(max_exp, now_exp + inc);
     set_bits(this->player_ptr->update, PU_BONUS);
@@ -409,16 +419,17 @@ PlayerSkillRank PlayerSkill::gain_spell_skill_exp_over_learning(int spell_idx)
 EXP PlayerSkill::exp_of_spell(int realm, int spell_idx) const
 {
     PlayerClass pc(this->player_ptr);
-    if (pc.equals(PlayerClassType::SORCERER))
+    if (pc.equals(PlayerClassType::SORCERER)) {
         return SPELL_EXP_MASTER;
-    else if (pc.equals(PlayerClassType::RED_MAGE))
+    } else if (pc.equals(PlayerClassType::RED_MAGE)) {
         return SPELL_EXP_SKILLED;
-    else if (realm == this->player_ptr->realm1)
+    } else if (realm == this->player_ptr->realm1) {
         return this->player_ptr->spell_exp[spell_idx];
-    else if (realm == this->player_ptr->realm2)
+    } else if (realm == this->player_ptr->realm2) {
         return this->player_ptr->spell_exp[spell_idx + 32];
-    else
+    } else {
         return 0;
+    }
 }
 
 /*!

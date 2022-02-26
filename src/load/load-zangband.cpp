@@ -27,71 +27,85 @@
 
 void load_zangband_options(void)
 {
-    if (option_flag[5] & (0x00000001U << 4))
+    if (option_flag[5] & (0x00000001U << 4)) {
         option_flag[5] &= ~(0x00000001U << 4);
-    else
+    } else {
         option_flag[5] |= (0x00000001U << 4);
+    }
 
-    if (option_flag[2] & (0x00000001U << 5))
+    if (option_flag[2] & (0x00000001U << 5)) {
         option_flag[2] &= ~(0x00000001U << 5);
-    else
+    } else {
         option_flag[2] |= (0x00000001U << 5);
+    }
 
-    if (option_flag[4] & (0x00000001U << 5))
+    if (option_flag[4] & (0x00000001U << 5)) {
         option_flag[4] &= ~(0x00000001U << 5);
-    else
+    } else {
         option_flag[4] |= (0x00000001U << 5);
+    }
 
-    if (option_flag[5] & (0x00000001U << 0))
+    if (option_flag[5] & (0x00000001U << 0)) {
         option_flag[5] &= ~(0x00000001U << 0);
-    else
+    } else {
         option_flag[5] |= (0x00000001U << 0);
+    }
 
-    if (option_flag[5] & (0x00000001U << 12))
+    if (option_flag[5] & (0x00000001U << 12)) {
         option_flag[5] &= ~(0x00000001U << 12);
-    else
+    } else {
         option_flag[5] |= (0x00000001U << 12);
+    }
 
-    if (option_flag[1] & (0x00000001U << 0))
+    if (option_flag[1] & (0x00000001U << 0)) {
         option_flag[1] &= ~(0x00000001U << 0);
-    else
+    } else {
         option_flag[1] |= (0x00000001U << 0);
+    }
 
-    if (option_flag[1] & (0x00000001U << 18))
+    if (option_flag[1] & (0x00000001U << 18)) {
         option_flag[1] &= ~(0x00000001U << 18);
-    else
+    } else {
         option_flag[1] |= (0x00000001U << 18);
+    }
 
-    if (option_flag[1] & (0x00000001U << 19))
+    if (option_flag[1] & (0x00000001U << 19)) {
         option_flag[1] &= ~(0x00000001U << 19);
-    else
+    } else {
         option_flag[1] |= (0x00000001U << 19);
+    }
 
-    if (option_flag[5] & (0x00000001U << 3))
+    if (option_flag[5] & (0x00000001U << 3)) {
         option_flag[1] &= ~(0x00000001U << 3);
-    else
+    } else {
         option_flag[5] |= (0x00000001U << 3);
+    }
 }
 
 void set_zangband_realm(PlayerType *player_ptr)
 {
-    if (player_ptr->realm1 == 9)
+    if (player_ptr->realm1 == 9) {
         player_ptr->realm1 = REALM_MUSIC;
+    }
 
-    if (player_ptr->realm2 == 9)
+    if (player_ptr->realm2 == 9) {
         player_ptr->realm2 = REALM_MUSIC;
+    }
 
-    if (player_ptr->realm1 == 10)
+    if (player_ptr->realm1 == 10) {
         player_ptr->realm1 = REALM_HISSATSU;
+    }
 
-    if (player_ptr->realm2 == 10)
+    if (player_ptr->realm2 == 10) {
         player_ptr->realm2 = REALM_HISSATSU;
+    }
 }
 
 void set_zangband_skill(PlayerType *player_ptr)
 {
-    if (!PlayerClass(player_ptr).equals(PlayerClassType::BEASTMASTER))
+    if (!PlayerClass(player_ptr).equals(PlayerClassType::BEASTMASTER)) {
         player_ptr->skill_exp[PlayerSkillKindType::RIDING] /= 2;
+    }
 
     player_ptr->skill_exp[PlayerSkillKindType::RIDING] = std::min(player_ptr->skill_exp[PlayerSkillKindType::RIDING], s_info[enum2i(player_ptr->pclass)].s_max[PlayerSkillKindType::RIDING]);
 }
@@ -109,8 +123,9 @@ void set_zangband_bounty_uniques(PlayerType *player_ptr)
     determine_bounty_uniques(player_ptr);
     for (int i = 0; i < MAX_BOUNTY; i++) {
         /* Is this bounty unique already dead? */
-        if (!r_info[w_ptr->bounty_r_idx[i]].max_num)
+        if (!r_info[w_ptr->bounty_r_idx[i]].max_num) {
             w_ptr->bounty_r_idx[i] += 10000;
+        }
     }
 }
 
@@ -155,8 +170,9 @@ void set_zangband_gambling_monsters(int i)
 
 void set_zangband_special_attack(PlayerType *player_ptr)
 {
-    if (rd_byte() != 0)
+    if (rd_byte() != 0) {
         player_ptr->special_attack = ATTACK_CONFUSE;
+    }
 
     player_ptr->ele_attack = 0;
 }
@@ -169,8 +185,9 @@ void set_zangband_special_defense(PlayerType *player_ptr)
 
 void set_zangband_action(PlayerType *player_ptr)
 {
-    if (rd_byte() != 0)
+    if (rd_byte() != 0) {
         player_ptr->action = ACTION_LEARN;
+    }
 }
 
 void set_zangband_visited_towns(PlayerType *player_ptr)
@@ -219,44 +236,53 @@ void set_zangband_class(PlayerType *player_ptr)
 void set_zangband_learnt_spells(PlayerType *player_ptr)
 {
     player_ptr->learned_spells = 0;
-    for (int i = 0; i < 64; i++)
-        if ((i < 32) ? (player_ptr->spell_learned1 & (1UL << i)) : (player_ptr->spell_learned2 & (1UL << (i - 32))))
+    for (int i = 0; i < 64; i++) {
+        if ((i < 32) ? (player_ptr->spell_learned1 & (1UL << i)) : (player_ptr->spell_learned2 & (1UL << (i - 32)))) {
             player_ptr->learned_spells++;
+        }
+    }
 }
 
 void set_zangband_pet(PlayerType *player_ptr)
 {
     player_ptr->pet_extra_flags = 0;
-    if (rd_byte() != 0)
+    if (rd_byte() != 0) {
         player_ptr->pet_extra_flags |= PF_OPEN_DOORS;
+    }
 
-    if (rd_byte() != 0)
+    if (rd_byte() != 0) {
         player_ptr->pet_extra_flags |= PF_PICKUP_ITEMS;
+    }
 
-    if (h_older_than(0, 0, 4))
+    if (h_older_than(0, 0, 4)) {
         player_ptr->pet_extra_flags |= PF_TELEPORT;
-    else {
-        if (rd_byte() != 0)
+    } else {
+        if (rd_byte() != 0) {
             player_ptr->pet_extra_flags |= PF_TELEPORT;
+        }
     }
 
-    if (h_older_than(0, 0, 7))
+    if (h_older_than(0, 0, 7)) {
         player_ptr->pet_extra_flags |= PF_ATTACK_SPELL;
-    else {
-        if (rd_byte() != 0)
+    } else {
+        if (rd_byte() != 0) {
             player_ptr->pet_extra_flags |= PF_ATTACK_SPELL;
+        }
     }
 
-    if (h_older_than(0, 0, 8))
+    if (h_older_than(0, 0, 8)) {
         player_ptr->pet_extra_flags |= PF_SUMMON_SPELL;
-    else {
-        if (rd_byte() != 0)
+    } else {
+        if (rd_byte() != 0) {
             player_ptr->pet_extra_flags |= PF_SUMMON_SPELL;
+        }
     }
 
-    if (h_older_than(0, 0, 8))
+    if (h_older_than(0, 0, 8)) {
         return;
+    }
 
-    if (rd_byte() != 0)
+    if (rd_byte() != 0) {
         player_ptr->pet_extra_flags |= PF_BALL_SPELL;
+    }
 }

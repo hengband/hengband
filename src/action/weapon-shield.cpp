@@ -26,15 +26,17 @@ void verify_equip_slot(PlayerType *player_ptr, INVENTORY_IDX item)
     GAME_TEXT o_name[MAX_NLEN];
 
     if (item == INVEN_MAIN_HAND) {
-        if (!has_melee_weapon(player_ptr, INVEN_SUB_HAND))
+        if (!has_melee_weapon(player_ptr, INVEN_SUB_HAND)) {
             return;
+        }
 
         o_ptr = &player_ptr->inventory_list[INVEN_SUB_HAND];
         describe_flavor(player_ptr, o_name, o_ptr, 0);
 
         if (o_ptr->is_cursed()) {
-            if (o_ptr->allow_two_hands_wielding() && can_two_hands_wielding(player_ptr))
+            if (o_ptr->allow_two_hands_wielding() && can_two_hands_wielding(player_ptr)) {
                 msg_format(_("%sを両手で構えた。", "You are wielding %s with both hands."), o_name);
+            }
             return;
         }
 
@@ -42,29 +44,34 @@ void verify_equip_slot(PlayerType *player_ptr, INVENTORY_IDX item)
         new_o_ptr->copy_from(o_ptr);
         inven_item_increase(player_ptr, INVEN_SUB_HAND, -((int)o_ptr->number));
         inven_item_optimize(player_ptr, INVEN_SUB_HAND);
-        if (o_ptr->allow_two_hands_wielding() && can_two_hands_wielding(player_ptr))
+        if (o_ptr->allow_two_hands_wielding() && can_two_hands_wielding(player_ptr)) {
             msg_format(_("%sを両手で構えた。", "You are wielding %s with both hands."), o_name);
-        else
+        } else {
             msg_format(_("%sを%sで構えた。", "You are wielding %s in your %s hand."), o_name, (left_hander ? _("左手", "left") : _("右手", "right")));
+        }
         return;
     }
 
-    if (item != INVEN_SUB_HAND)
+    if (item != INVEN_SUB_HAND) {
         return;
+    }
 
     o_ptr = &player_ptr->inventory_list[INVEN_MAIN_HAND];
-    if (o_ptr->k_idx)
+    if (o_ptr->k_idx) {
         describe_flavor(player_ptr, o_name, o_ptr, 0);
+    }
 
     if (has_melee_weapon(player_ptr, INVEN_MAIN_HAND)) {
-        if (o_ptr->allow_two_hands_wielding() && can_two_hands_wielding(player_ptr))
+        if (o_ptr->allow_two_hands_wielding() && can_two_hands_wielding(player_ptr)) {
             msg_format(_("%sを両手で構えた。", "You are wielding %s with both hands."), o_name);
+        }
 
         return;
     }
 
-    if ((empty_hands(player_ptr, false) & EMPTY_HAND_MAIN) || o_ptr->is_cursed())
+    if ((empty_hands(player_ptr, false) & EMPTY_HAND_MAIN) || o_ptr->is_cursed()) {
         return;
+    }
 
     new_o_ptr = &player_ptr->inventory_list[INVEN_SUB_HAND];
     new_o_ptr->copy_from(o_ptr);

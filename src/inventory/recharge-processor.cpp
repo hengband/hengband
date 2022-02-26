@@ -21,8 +21,9 @@
  */
 static void recharged_notice(PlayerType *player_ptr, ObjectType *o_ptr)
 {
-    if (!o_ptr->inscription)
+    if (!o_ptr->inscription) {
         return;
+    }
 
     concptr s = angband_strchr(quark_str(o_ptr->inscription), '!');
     while (s) {
@@ -32,10 +33,11 @@ static void recharged_notice(PlayerType *player_ptr, ObjectType *o_ptr)
 #ifdef JP
             msg_format("%sは再充填された。", o_name);
 #else
-            if (o_ptr->number > 1)
+            if (o_ptr->number > 1) {
                 msg_format("Your %s are recharged.", o_name);
-            else
+            } else {
                 msg_format("Your %s is recharged.", o_name);
+            }
 #endif
             disturb(player_ptr, false, false);
             return;
@@ -56,8 +58,9 @@ void recharge_magic_items(PlayerType *player_ptr)
 
     for (changed = false, i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
         auto *o_ptr = &player_ptr->inventory_list[i];
-        if (!o_ptr->k_idx)
+        if (!o_ptr->k_idx) {
             continue;
+        }
 
         if (o_ptr->timeout > 0) {
             o_ptr->timeout--;
@@ -81,17 +84,20 @@ void recharge_magic_items(PlayerType *player_ptr)
     for (changed = false, i = 0; i < INVEN_PACK; i++) {
         auto *o_ptr = &player_ptr->inventory_list[i];
         auto *k_ptr = &k_info[o_ptr->k_idx];
-        if (!o_ptr->k_idx)
+        if (!o_ptr->k_idx) {
             continue;
+        }
 
         if ((o_ptr->tval == ItemKindType::ROD) && (o_ptr->timeout)) {
             TIME_EFFECT temp = (o_ptr->timeout + (k_ptr->pval - 1)) / k_ptr->pval;
-            if (temp > o_ptr->number)
+            if (temp > o_ptr->number) {
                 temp = (TIME_EFFECT)o_ptr->number;
+            }
 
             o_ptr->timeout -= temp;
-            if (o_ptr->timeout < 0)
+            if (o_ptr->timeout < 0) {
                 o_ptr->timeout = 0;
+            }
 
             if (!(o_ptr->timeout)) {
                 recharged_notice(player_ptr, o_ptr);
@@ -109,13 +115,15 @@ void recharge_magic_items(PlayerType *player_ptr)
 
     for (i = 1; i < player_ptr->current_floor_ptr->o_max; i++) {
         auto *o_ptr = &player_ptr->current_floor_ptr->o_list[i];
-        if (!o_ptr->is_valid())
+        if (!o_ptr->is_valid()) {
             continue;
+        }
 
         if ((o_ptr->tval == ItemKindType::ROD) && (o_ptr->timeout)) {
             o_ptr->timeout -= (TIME_EFFECT)o_ptr->number;
-            if (o_ptr->timeout < 0)
+            if (o_ptr->timeout < 0) {
                 o_ptr->timeout = 0;
+            }
         }
     }
 }

@@ -104,8 +104,9 @@ SpoilerOutputResultType spoil_mon_desc(concptr fname, std::function<bool(const m
 
     std::vector<MONRACE_IDX> who;
     for (const auto &r_ref : r_info) {
-        if (r_ref.idx > 0 && !r_ref.name.empty())
+        if (r_ref.idx > 0 && !r_ref.name.empty()) {
             who.push_back(r_ref.idx);
+        }
     }
 
     ang_sort(&dummy, who.data(), &why, who.size(), ang_sort_comp_hook, ang_sort_swap_hook);
@@ -198,8 +199,9 @@ SpoilerOutputResultType spoil_mon_info(concptr fname)
 
     std::vector<MONRACE_IDX> who;
     for (const auto &r_ref : r_info) {
-        if (r_ref.idx > 0 && !r_ref.name.empty())
+        if (r_ref.idx > 0 && !r_ref.name.empty()) {
             who.push_back(r_ref.idx);
+        }
     }
 
     uint16_t why = 2;

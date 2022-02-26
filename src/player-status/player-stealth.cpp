@@ -18,7 +18,7 @@
 #include "util/bit-flags-calculator.h"
 #include "util/enum-converter.h"
 
-PlayerStealth::PlayerStealth(PlayerType* player_ptr)
+PlayerStealth::PlayerStealth(PlayerType *player_ptr)
     : PlayerStatusBase(player_ptr)
 {
 }
@@ -72,8 +72,7 @@ int16_t PlayerStealth::class_value()
     if (PlayerClass(player_ptr).equals(PlayerClassType::NINJA)) {
         if (heavy_armor(this->player_ptr)) {
             result -= (this->player_ptr->lev) / 10;
-        } else if ((!this->player_ptr->inventory_list[INVEN_MAIN_HAND].k_idx || can_attack_with_main_hand(this->player_ptr))
-            && (!this->player_ptr->inventory_list[INVEN_SUB_HAND].k_idx || can_attack_with_sub_hand(this->player_ptr))) {
+        } else if ((!this->player_ptr->inventory_list[INVEN_MAIN_HAND].k_idx || can_attack_with_main_hand(this->player_ptr)) && (!this->player_ptr->inventory_list[INVEN_SUB_HAND].k_idx || can_attack_with_sub_hand(this->player_ptr))) {
             result += (this->player_ptr->lev) / 10;
         }
     }
@@ -159,8 +158,9 @@ BIT_FLAGS PlayerStealth::get_bad_flags()
 {
     BIT_FLAGS result = PlayerStatusBase::get_bad_flags();
 
-    if (this->is_aggravated_s_fairy())
+    if (this->is_aggravated_s_fairy()) {
         set_bits(result, FLAG_CAUSE_RACE);
+    }
 
     return result;
 }

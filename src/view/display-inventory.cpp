@@ -43,8 +43,9 @@ COMMAND_CODE show_inventory(PlayerType *player_ptr, int target_item, BIT_FLAGS m
     int len = wid - col - 1;
     for (i = 0; i < INVEN_PACK; i++) {
         o_ptr = &player_ptr->inventory_list[i];
-        if (!o_ptr->k_idx)
+        if (!o_ptr->k_idx) {
             continue;
+        }
 
         z = i + 1;
     }
@@ -52,28 +53,33 @@ COMMAND_CODE show_inventory(PlayerType *player_ptr, int target_item, BIT_FLAGS m
     prepare_label_string(player_ptr, inven_label, USE_INVEN, item_tester);
     for (k = 0, i = 0; i < z; i++) {
         o_ptr = &player_ptr->inventory_list[i];
-        if (!item_tester.okay(o_ptr) && !(mode & USE_FULL))
+        if (!item_tester.okay(o_ptr) && !(mode & USE_FULL)) {
             continue;
+        }
 
         describe_flavor(player_ptr, o_name, o_ptr, 0);
         out_index[k] = i;
         out_color[k] = tval_to_attr[enum2i(o_ptr->tval) % 128];
-        if (o_ptr->timeout)
+        if (o_ptr->timeout) {
             out_color[k] = TERM_L_DARK;
+        }
 
         (void)strcpy(out_desc[k], o_name);
         l = strlen(out_desc[k]) + 5;
-        if (show_weights)
+        if (show_weights) {
             l += 9;
+        }
 
         if (show_item_graph) {
             l += 2;
-            if (use_bigtile)
+            if (use_bigtile) {
                 l++;
+            }
         }
 
-        if (l > len)
+        if (l > len) {
             len = l;
+        }
 
         k++;
     }
@@ -89,12 +95,14 @@ COMMAND_CODE show_inventory(PlayerType *player_ptr, int target_item, BIT_FLAGS m
             if (j == (target_item - 1)) {
                 strcpy(tmp_val, _("》", "> "));
                 target_item_label = i;
-            } else
+            } else {
                 strcpy(tmp_val, "  ");
-        } else if (i <= INVEN_PACK)
+            }
+        } else if (i <= INVEN_PACK) {
             sprintf(tmp_val, "%c)", inven_label[i]);
-        else
+        } else {
             sprintf(tmp_val, "%c)", index_to_label(i));
+        }
 
         put_str(tmp_val, j + 1, col);
         cur_col = col + 3;
@@ -102,8 +110,9 @@ COMMAND_CODE show_inventory(PlayerType *player_ptr, int target_item, BIT_FLAGS m
             TERM_COLOR a = object_attr(o_ptr);
             auto c = object_char(o_ptr);
             term_queue_bigchar(cur_col, j + 1, a, c, 0, 0);
-            if (use_bigtile)
+            if (use_bigtile) {
                 cur_col++;
+            }
 
             cur_col += 2;
         }
@@ -116,8 +125,9 @@ COMMAND_CODE show_inventory(PlayerType *player_ptr, int target_item, BIT_FLAGS m
         }
     }
 
-    if (j && (j < 23))
+    if (j && (j < 23)) {
         prt("", j + 1, col ? col - 2 : col);
+    }
 
     command_gap = col;
     return target_item_label;
@@ -135,21 +145,24 @@ void display_inventory(PlayerType *player_ptr, const ItemTester &item_tester)
     GAME_TEXT o_name[MAX_NLEN];
     TERM_LEN wid, hgt;
 
-    if (!player_ptr || !player_ptr->inventory_list)
+    if (!player_ptr || !player_ptr->inventory_list) {
         return;
+    }
 
     term_get_size(&wid, &hgt);
 
     for (i = 0; i < INVEN_PACK; i++) {
         auto o_ptr = &player_ptr->inventory_list[i];
-        if (!o_ptr->k_idx)
+        if (!o_ptr->k_idx) {
             continue;
+        }
         z = i + 1;
     }
 
     for (i = 0; i < z; i++) {
-        if (i >= hgt)
+        if (i >= hgt) {
             break;
+        }
 
         auto o_ptr = &player_ptr->inventory_list[i];
         auto do_disp = item_tester.okay(o_ptr);
@@ -173,8 +186,9 @@ void display_inventory(PlayerType *player_ptr, const ItemTester &item_tester)
             TERM_COLOR a = object_attr(o_ptr);
             auto c = object_char(o_ptr);
             term_queue_bigchar(cur_col, i, a, c, 0, 0);
-            if (use_bigtile)
+            if (use_bigtile) {
                 cur_col++;
+            }
 
             cur_col += 2;
         }
@@ -188,6 +202,7 @@ void display_inventory(PlayerType *player_ptr, const ItemTester &item_tester)
         }
     }
 
-    for (i = z; i < hgt; i++)
+    for (i = z; i < hgt; i++) {
         term_erase(0, i, 255);
+    }
 }

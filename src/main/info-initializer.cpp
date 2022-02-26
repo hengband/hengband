@@ -107,8 +107,9 @@ static errr init_info(concptr filename, angband_header &head, InfoType &info, st
 
     FILE *fp = angband_fopen(buf, "r");
 
-    if (!fp)
+    if (!fp) {
         quit(format(_("'%s.txt'ファイルをオープンできません。", "Cannot open '%s.txt' file."), filename));
+    }
 
     constexpr auto info_is_vector = is_vector_v<InfoType>;
     if constexpr (info_is_vector) {
@@ -136,8 +137,9 @@ static errr init_info(concptr filename, angband_header &head, InfoType &info, st
     }
     head.info_num = static_cast<uint16_t>(info.size());
 
-    if (retouch)
+    if (retouch) {
         (*retouch)(&head);
+    }
 
     return 0;
 }

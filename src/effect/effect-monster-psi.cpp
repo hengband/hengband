@@ -31,13 +31,15 @@
  */
 static bool resisted_psi_because_empty_mind(PlayerType *player_ptr, effect_monster_type *em_ptr)
 {
-    if (none_bits(em_ptr->r_ptr->flags2, RF2_EMPTY_MIND))
+    if (none_bits(em_ptr->r_ptr->flags2, RF2_EMPTY_MIND)) {
         return false;
+    }
 
     em_ptr->dam = 0;
     em_ptr->note = _("には完全な耐性がある！", " is immune.");
-    if (is_original_ap_and_seen(player_ptr, em_ptr->m_ptr))
+    if (is_original_ap_and_seen(player_ptr, em_ptr->m_ptr)) {
         set_bits(em_ptr->r_ptr->r_flags2, RF2_EMPTY_MIND);
+    }
 
     return true;
 }
@@ -58,8 +60,9 @@ static bool resisted_psi_because_weird_mind_or_powerful(effect_monster_type *em_
     has_resistance |= any_bits(em_ptr->r_ptr->flags2, RF2_WEIRD_MIND);
     has_resistance |= em_ptr->r_ptr->kind_flags.has(MonsterKindType::ANIMAL);
     has_resistance |= (em_ptr->r_ptr->level > randint1(3 * em_ptr->dam));
-    if (!has_resistance)
+    if (!has_resistance) {
         return false;
+    }
 
     em_ptr->note = _("には耐性がある！", " resists!");
     em_ptr->dam /= 3;
@@ -81,8 +84,9 @@ static bool reflects_psi_with_currupted_mind(PlayerType *player_ptr, effect_mons
     bool is_corrupted = em_ptr->r_ptr->kind_flags.has_any_of(has_corrupted_mind);
     is_corrupted &= (em_ptr->r_ptr->level > player_ptr->lev / 2);
     is_corrupted &= one_in_(2);
-    if (!is_corrupted)
+    if (!is_corrupted) {
         return false;
+    }
 
     em_ptr->note = nullptr;
     msg_format(_("%^sの堕落した精神は攻撃を跳ね返した！",
@@ -139,12 +143,15 @@ static void effect_monster_psi_reflect_extra_effect(PlayerType *player_ptr, effe
  */
 static void effect_monster_psi_resist(PlayerType *player_ptr, effect_monster_type *em_ptr)
 {
-    if (resisted_psi_because_empty_mind(player_ptr, em_ptr))
+    if (resisted_psi_because_empty_mind(player_ptr, em_ptr)) {
         return;
-    if (!resisted_psi_because_weird_mind_or_powerful(em_ptr))
+    }
+    if (!resisted_psi_because_weird_mind_or_powerful(em_ptr)) {
         return;
-    if (!reflects_psi_with_currupted_mind(player_ptr, em_ptr))
+    }
+    if (!reflects_psi_with_currupted_mind(player_ptr, em_ptr)) {
         return;
+    }
 
     /* プレイヤーの反射判定 */
     if ((randint0(100 + em_ptr->r_ptr->level / 2) < player_ptr->skill_sav) && !check_multishadow(player_ptr)) {
@@ -170,8 +177,9 @@ static void effect_monster_psi_resist(PlayerType *player_ptr, effect_monster_typ
  */
 static void effect_monster_psi_extra_effect(effect_monster_type *em_ptr)
 {
-    if ((em_ptr->dam <= 0) || !one_in_(4))
+    if ((em_ptr->dam <= 0) || !one_in_(4)) {
         return;
+    }
 
     switch (randint1(4)) {
     case 1:
@@ -201,11 +209,13 @@ static void effect_monster_psi_extra_effect(effect_monster_type *em_ptr)
  */
 process_result effect_monster_psi(PlayerType *player_ptr, effect_monster_type *em_ptr)
 {
-    if (em_ptr->seen)
+    if (em_ptr->seen) {
         em_ptr->obvious = true;
+    }
     if (!(los(player_ptr, em_ptr->m_ptr->fy, em_ptr->m_ptr->fx, player_ptr->y, player_ptr->x))) {
-        if (em_ptr->seen_msg)
+        if (em_ptr->seen_msg) {
             msg_format(_("%sはあなたが見えないので影響されない！", "%^s can't see you, and isn't affected!"), em_ptr->m_name);
+        }
 
         em_ptr->skipped = true;
         return PROCESS_CONTINUE;
@@ -226,12 +236,15 @@ process_result effect_monster_psi(PlayerType *player_ptr, effect_monster_type *e
  */
 static void effect_monster_psi_drain_resist(PlayerType *player_ptr, effect_monster_type *em_ptr)
 {
-    if (resisted_psi_because_empty_mind(player_ptr, em_ptr))
+    if (resisted_psi_because_empty_mind(player_ptr, em_ptr)) {
         return;
-    if (!resisted_psi_because_weird_mind_or_powerful(em_ptr))
+    }
+    if (!resisted_psi_because_weird_mind_or_powerful(em_ptr)) {
         return;
-    if (!reflects_psi_with_currupted_mind(player_ptr, em_ptr))
+    }
+    if (!reflects_psi_with_currupted_mind(player_ptr, em_ptr)) {
         return;
+    }
 
     /* プレイヤーの反射判定 */
     if ((randint0(100 + em_ptr->r_ptr->level / 2) < player_ptr->skill_sav) && !check_multishadow(player_ptr)) {
@@ -249,8 +262,9 @@ static void effect_monster_psi_drain_resist(PlayerType *player_ptr, effect_monst
 
     msg_print(_("超能力パワーを吸いとられた！", "Your psychic energy is drained!"));
     player_ptr->csp -= damroll(5, em_ptr->dam) / 2;
-    if (player_ptr->csp < 0)
+    if (player_ptr->csp < 0) {
         player_ptr->csp = 0;
+    }
 
     set_bits(player_ptr->redraw, PR_MANA);
     set_bits(player_ptr->window_flags, PW_SPELL);
@@ -286,12 +300,14 @@ static void effect_monster_psi_drain_change_power(PlayerType *player_ptr, effect
  */
 process_result effect_monster_psi_drain(PlayerType *player_ptr, effect_monster_type *em_ptr)
 {
-    if (em_ptr->seen)
+    if (em_ptr->seen) {
         em_ptr->obvious = true;
+    }
 
     effect_monster_psi_drain_resist(player_ptr, em_ptr);
-    if (em_ptr->dam > 0)
+    if (em_ptr->dam > 0) {
         effect_monster_psi_drain_change_power(player_ptr, em_ptr);
+    }
 
     em_ptr->note_dies = _("の精神は崩壊し、肉体は抜け殻となった。", " collapses, a mindless husk.");
     return PROCESS_CONTINUE;
@@ -307,13 +323,15 @@ process_result effect_monster_psi_drain(PlayerType *player_ptr, effect_monster_t
  */
 process_result effect_monster_telekinesis(PlayerType *player_ptr, effect_monster_type *em_ptr)
 {
-    if (em_ptr->seen)
+    if (em_ptr->seen) {
         em_ptr->obvious = true;
+    }
     if (one_in_(4)) {
-        if (player_ptr->riding && (em_ptr->g_ptr->m_idx == player_ptr->riding))
+        if (player_ptr->riding && (em_ptr->g_ptr->m_idx == player_ptr->riding)) {
             em_ptr->do_dist = 0;
-        else
+        } else {
             em_ptr->do_dist = 7;
+        }
     }
 
     em_ptr->do_stun = damroll((em_ptr->caster_lev / 20) + 3, em_ptr->dam) + 1;

@@ -36,18 +36,22 @@ TrFlags PlayerRace::tr_flags() const
     TrFlags flags;
 
     auto race_ptr = this->get_info();
-    if (race_ptr->infra > 0)
+    if (race_ptr->infra > 0) {
         flags.set(TR_INFRA);
+    }
 
     for (auto &cond : race_ptr->extra_flags) {
-        if (this->player_ptr->lev < cond.level)
+        if (this->player_ptr->lev < cond.level) {
             continue;
+        }
         if (cond.pclass.has_value()) {
             auto is_class_equal = PlayerClass(this->player_ptr).equals(cond.pclass.value());
-            if (cond.not_class && is_class_equal)
+            if (cond.not_class && is_class_equal) {
                 continue;
-            if (!cond.not_class && !is_class_equal)
+            }
+            if (!cond.not_class && !is_class_equal) {
                 continue;
+            }
         }
 
         flags.set(cond.type);
@@ -139,8 +143,9 @@ int16_t PlayerRace::speed() const
 {
     int16_t result = 0;
 
-    if (this->equals(PlayerRaceType::KLACKON) || this->equals(PlayerRaceType::SPRITE))
+    if (this->equals(PlayerRaceType::KLACKON) || this->equals(PlayerRaceType::SPRITE)) {
         result += (this->player_ptr->lev) / 10;
+    }
 
     if (this->equals(PlayerRaceType::MERFOLK)) {
         auto *floor_ptr = this->player_ptr->current_floor_ptr;
@@ -178,12 +183,15 @@ int16_t PlayerRace::additional_strength() const
     int16_t result = 0;
 
     if (this->equals(PlayerRaceType::ENT)) {
-        if (this->player_ptr->lev > 25)
+        if (this->player_ptr->lev > 25) {
             result++;
-        if (this->player_ptr->lev > 40)
+        }
+        if (this->player_ptr->lev > 40) {
             result++;
-        if (this->player_ptr->lev > 45)
+        }
+        if (this->player_ptr->lev > 45) {
             result++;
+        }
     }
 
     return result;
@@ -201,12 +209,15 @@ int16_t PlayerRace::additional_dexterity() const
     int16_t result = 0;
 
     if (this->equals(PlayerRaceType::ENT)) {
-        if (this->player_ptr->lev > 25)
+        if (this->player_ptr->lev > 25) {
             result--;
-        if (this->player_ptr->lev > 40)
+        }
+        if (this->player_ptr->lev > 40) {
             result--;
-        if (this->player_ptr->lev > 45)
+        }
+        if (this->player_ptr->lev > 45) {
             result--;
+        }
     }
 
     return result;
@@ -224,12 +235,15 @@ int16_t PlayerRace::additional_constitution() const
     int16_t result = 0;
 
     if (PlayerRace(this->player_ptr).equals(PlayerRaceType::ENT)) {
-        if (this->player_ptr->lev > 25)
+        if (this->player_ptr->lev > 25) {
             result++;
-        if (this->player_ptr->lev > 40)
+        }
+        if (this->player_ptr->lev > 40) {
             result++;
-        if (this->player_ptr->lev > 45)
+        }
+        if (this->player_ptr->lev > 45) {
             result++;
+        }
     }
 
     return result;

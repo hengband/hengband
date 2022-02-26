@@ -18,7 +18,7 @@ void birth_quit(void)
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param helpfile ファイル名
  */
-void show_help(PlayerType* player_ptr, concptr helpfile)
+void show_help(PlayerType *player_ptr, concptr helpfile)
 {
     screen_save();
     (void)show_file(player_ptr, true, helpfile, nullptr, 0, 0);
@@ -55,6 +55,7 @@ void birth_help_option(PlayerType *player_ptr, char c, birth_kind bk)
         screen_save();
         do_cmd_options_aux(player_ptr, OPT_PAGE_BIRTH, _("初期オプション((*)はスコアに影響)", "Birth Options ((*)) affect score"));
         screen_load();
-    } else if (c != '2' && c != '4' && c != '6' && c != '8')
+    } else if (c != '2' && c != '4' && c != '6' && c != '8') {
         bell();
+    }
 }

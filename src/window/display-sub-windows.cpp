@@ -70,11 +70,13 @@ void fix_inventory(PlayerType *player_ptr)
 {
     for (int j = 0; j < 8; j++) {
         term_type *old = game_term;
-        if (!angband_term[j])
+        if (!angband_term[j]) {
             continue;
+        }
 
-        if (!(window_flag[j] & (PW_INVEN)))
+        if (!(window_flag[j] & (PW_INVEN))) {
             continue;
+        }
 
         term_activate(angband_term[j]);
         display_inventory(player_ptr, *fix_item_tester);
@@ -106,8 +108,9 @@ static void print_monster_line(TERM_LEN x, TERM_LEN y, monster_type *m_ptr, int 
 
     term_erase(0, y, 255);
     term_gotoxy(x, y);
-    if (!r_ptr)
+    if (!r_ptr) {
         return;
+    }
     if (r_ptr->kind_flags.has(MonsterKindType::UNIQUE)) {
         bool is_bounty = false;
         for (int i = 0; i < MAX_BOUNTY; i++) {
@@ -152,13 +155,15 @@ void print_monster_list(floor_type *floor_ptr, const std::vector<MONSTER_IDX> &m
     size_t i;
     for (i = 0; i < monster_list.size(); i++) {
         auto m_ptr = &floor_ptr->m_list[monster_list[i]];
-        if (is_pet(m_ptr))
-            continue; // pet
-        if (!m_ptr->r_idx)
-            continue; // dead?
+        if (is_pet(m_ptr)) {
+            continue;
+        } // pet
+        if (!m_ptr->r_idx) {
+            continue;
+        } // dead?
 
-        //ソート済みなので同じモンスターは連続する．これを利用して同じモンスターをカウント，まとめて表示する．
-        //先頭モンスター
+        // ソート済みなので同じモンスターは連続する．これを利用して同じモンスターをカウント，まとめて表示する．
+        // 先頭モンスター
         if (!last_mons) {
             last_mons = m_ptr;
             n_same = 1;
@@ -168,7 +173,7 @@ void print_monster_list(floor_type *floor_ptr, const std::vector<MONSTER_IDX> &m
         // same race?
         if (last_mons->ap_r_idx == m_ptr->ap_r_idx) {
             n_same++;
-            continue; //表示処理を次に回す
+            continue; // 表示処理を次に回す
         }
 
         // last_mons と m_ptr が(見た目が)異なるなら、last_mons とその数を出力。
@@ -178,8 +183,9 @@ void print_monster_list(floor_type *floor_ptr, const std::vector<MONSTER_IDX> &m
         last_mons = m_ptr;
 
         // 行数が足りなくなったら中断。
-        if (line - y == max_lines)
+        if (line - y == max_lines) {
             break;
+        }
     }
 
     if (i != monster_list.size()) {
@@ -187,10 +193,12 @@ void print_monster_list(floor_type *floor_ptr, const std::vector<MONSTER_IDX> &m
         term_addstr(-1, TERM_WHITE, "-- and more --");
     } else {
         // 行数が足りていれば last_mons とその数を出力し、残りの行をクリア。
-        if (last_mons)
+        if (last_mons) {
             print_monster_line(x, line++, last_mons, n_same);
-        for (; line < max_lines; line++)
+        }
+        for (; line < max_lines; line++) {
             term_erase(0, line, 255);
+        }
     }
 }
 
@@ -205,12 +213,15 @@ void fix_monster_list(PlayerType *player_ptr)
 
     for (int j = 0; j < 8; j++) {
         term_type *old = game_term;
-        if (!angband_term[j])
+        if (!angband_term[j]) {
             continue;
-        if (!(window_flag[j] & PW_MONSTER_LIST))
+        }
+        if (!(window_flag[j] & PW_MONSTER_LIST)) {
             continue;
-        if (angband_term[j]->never_fresh)
+        }
+        if (angband_term[j]->never_fresh) {
             continue;
+        }
 
         term_activate(angband_term[j]);
         int w, h;
@@ -233,8 +244,9 @@ void fix_monster_list(PlayerType *player_ptr)
  */
 static void display_equipment(PlayerType *player_ptr, const ItemTester &item_tester)
 {
-    if (!player_ptr || !player_ptr->inventory_list)
+    if (!player_ptr || !player_ptr->inventory_list) {
         return;
+    }
 
     TERM_LEN wid, hgt;
     term_get_size(&wid, &hgt);
@@ -244,8 +256,9 @@ static void display_equipment(PlayerType *player_ptr, const ItemTester &item_tes
     GAME_TEXT o_name[MAX_NLEN];
     for (int i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
         int cur_row = i - INVEN_MAIN_HAND;
-        if (cur_row >= hgt)
+        if (cur_row >= hgt) {
             break;
+        }
 
         auto o_ptr = &player_ptr->inventory_list[i];
         auto do_disp = player_ptr->select_ring_slot ? is_ring_slot(i) : item_tester.okay(o_ptr);
@@ -269,15 +282,17 @@ static void display_equipment(PlayerType *player_ptr, const ItemTester &item_tes
         }
 
         int n = strlen(o_name);
-        if (o_ptr->timeout)
+        if (o_ptr->timeout) {
             attr = TERM_L_DARK;
+        }
 
         if (show_item_graph) {
             TERM_COLOR a = object_attr(o_ptr);
             auto c = object_char(o_ptr);
             term_queue_bigchar(cur_col, cur_row, a, c, 0, 0);
-            if (use_bigtile)
+            if (use_bigtile) {
                 cur_col++;
+            }
 
             cur_col += 2;
         }
@@ -295,8 +310,9 @@ static void display_equipment(PlayerType *player_ptr, const ItemTester &item_tes
         }
     }
 
-    for (int i = INVEN_TOTAL - INVEN_MAIN_HAND; i < hgt; i++)
+    for (int i = INVEN_TOTAL - INVEN_MAIN_HAND; i < hgt; i++) {
         term_erase(0, i, 255);
+    }
 }
 
 /*!
@@ -308,10 +324,12 @@ void fix_equip(PlayerType *player_ptr)
 {
     for (int j = 0; j < 8; j++) {
         term_type *old = game_term;
-        if (!angband_term[j])
+        if (!angband_term[j]) {
             continue;
-        if (!(window_flag[j] & (PW_EQUIP)))
+        }
+        if (!(window_flag[j] & (PW_EQUIP))) {
             continue;
+        }
 
         term_activate(angband_term[j]);
         display_equipment(player_ptr, *fix_item_tester);
@@ -329,11 +347,13 @@ void fix_player(PlayerType *player_ptr)
 {
     for (int j = 0; j < 8; j++) {
         term_type *old = game_term;
-        if (!angband_term[j])
+        if (!angband_term[j]) {
             continue;
+        }
 
-        if (!(window_flag[j] & (PW_PLAYER)))
+        if (!(window_flag[j] & (PW_PLAYER))) {
             continue;
+        }
 
         term_activate(angband_term[j]);
         update_playtime();
@@ -352,11 +372,13 @@ void fix_message(void)
 {
     for (int j = 0; j < 8; j++) {
         term_type *old = game_term;
-        if (!angband_term[j])
+        if (!angband_term[j]) {
             continue;
+        }
 
-        if (!(window_flag[j] & (PW_MESSAGE)))
+        if (!(window_flag[j] & (PW_MESSAGE))) {
             continue;
+        }
 
         term_activate(angband_term[j]);
         TERM_LEN w, h;
@@ -386,11 +408,13 @@ void fix_overhead(PlayerType *player_ptr)
     for (int j = 0; j < 8; j++) {
         term_type *old = game_term;
         TERM_LEN wid, hgt;
-        if (!angband_term[j])
+        if (!angband_term[j]) {
             continue;
+        }
 
-        if (!(window_flag[j] & (PW_OVERHEAD)))
+        if (!(window_flag[j] & (PW_OVERHEAD))) {
             continue;
+        }
 
         term_activate(angband_term[j]);
         term_get_size(&wid, &hgt);
@@ -428,12 +452,13 @@ static void display_dungeon(PlayerType *player_ptr)
             map_info(player_ptr, y, x, &a, &c, &ta, &tc);
 
             if (!use_graphics) {
-                if (w_ptr->timewalk_m_idx)
+                if (w_ptr->timewalk_m_idx) {
                     a = TERM_DARK;
-                else if (is_invuln(player_ptr) || player_ptr->timewalk)
+                } else if (is_invuln(player_ptr) || player_ptr->timewalk) {
                     a = TERM_WHITE;
-                else if (player_ptr->wraith_form)
+                } else if (player_ptr->wraith_form) {
                     a = TERM_L_DARK;
+                }
             }
 
             term_queue_char(x - player_ptr->x + game_term->wid / 2 - 1, y - player_ptr->y + game_term->hgt / 2 - 1, a, c, ta, tc);
@@ -449,11 +474,13 @@ void fix_dungeon(PlayerType *player_ptr)
 {
     for (int j = 0; j < 8; j++) {
         term_type *old = game_term;
-        if (!angband_term[j])
+        if (!angband_term[j]) {
             continue;
+        }
 
-        if (!(window_flag[j] & (PW_DUNGEON)))
+        if (!(window_flag[j] & (PW_DUNGEON))) {
             continue;
+        }
 
         term_activate(angband_term[j]);
         display_dungeon(player_ptr);
@@ -471,15 +498,18 @@ void fix_monster(PlayerType *player_ptr)
 {
     for (int j = 0; j < 8; j++) {
         term_type *old = game_term;
-        if (!angband_term[j])
+        if (!angband_term[j]) {
             continue;
+        }
 
-        if (!(window_flag[j] & (PW_MONSTER)))
+        if (!(window_flag[j] & (PW_MONSTER))) {
             continue;
+        }
 
         term_activate(angband_term[j]);
-        if (player_ptr->monster_race_idx)
+        if (player_ptr->monster_race_idx) {
             display_roff(player_ptr);
+        }
 
         term_fresh();
         term_activate(old);
@@ -495,15 +525,18 @@ void fix_object(PlayerType *player_ptr)
 {
     for (int j = 0; j < 8; j++) {
         term_type *old = game_term;
-        if (!angband_term[j])
+        if (!angband_term[j]) {
             continue;
+        }
 
-        if (!(window_flag[j] & (PW_OBJECT)))
+        if (!(window_flag[j] & (PW_OBJECT))) {
             continue;
+        }
 
         term_activate(angband_term[j]);
-        if (player_ptr->object_kind_idx)
+        if (player_ptr->object_kind_idx) {
             display_koff(player_ptr, player_ptr->object_kind_idx);
+        }
 
         term_fresh();
         term_activate(old);
@@ -520,12 +553,14 @@ void fix_object(PlayerType *player_ptr)
  */
 static const monster_type *monster_on_floor_items(floor_type *floor_ptr, const grid_type *g_ptr)
 {
-    if (g_ptr->m_idx == 0)
+    if (g_ptr->m_idx == 0) {
         return nullptr;
+    }
 
     auto m_ptr = &floor_ptr->m_list[g_ptr->m_idx];
-    if (!monster_is_valid(m_ptr) || !m_ptr->ml)
+    if (!monster_is_valid(m_ptr) || !m_ptr->ml) {
         return nullptr;
+    }
 
     return m_ptr;
 }
@@ -544,8 +579,9 @@ static void display_floor_item_list(PlayerType *player_ptr, const int y, const i
         TERM_LEN term_w;
         term_get_size(&term_w, &term_h);
     }
-    if (term_h <= 0)
+    if (term_h <= 0) {
         return;
+    }
 
     term_clear();
     term_gotoxy(0, 0);
@@ -555,9 +591,9 @@ static void display_floor_item_list(PlayerType *player_ptr, const int y, const i
     char line[1024];
 
     // 先頭行を書く。
-    if (player_bold(player_ptr, y, x))
+    if (player_bold(player_ptr, y, x)) {
         sprintf(line, _("(X:%03d Y:%03d) あなたの足元のアイテム一覧", "Items at (%03d,%03d) under you"), x, y);
-    else if (const auto *m_ptr = monster_on_floor_items(floor_ptr, g_ptr); m_ptr != nullptr) {
+    } else if (const auto *m_ptr = monster_on_floor_items(floor_ptr, g_ptr); m_ptr != nullptr) {
         if (player_ptr->hallucinated) {
             sprintf(line, _("(X:%03d Y:%03d) 何か奇妙な物の足元の発見済みアイテム一覧", "Found items at (%03d,%03d) under something strange"), x, y);
         } else {
@@ -569,12 +605,13 @@ static void display_floor_item_list(PlayerType *player_ptr, const int y, const i
         concptr fn = f_ptr->name.c_str();
         char buf[512];
 
-        if (f_ptr->flags.has(FloorFeatureType::STORE) || (f_ptr->flags.has(FloorFeatureType::BLDG) && !floor_ptr->inside_arena))
+        if (f_ptr->flags.has(FloorFeatureType::STORE) || (f_ptr->flags.has(FloorFeatureType::BLDG) && !floor_ptr->inside_arena)) {
             sprintf(buf, _("%sの入口", "on the entrance of %s"), fn);
-        else if (f_ptr->flags.has(FloorFeatureType::WALL))
+        } else if (f_ptr->flags.has(FloorFeatureType::WALL)) {
             sprintf(buf, _("%sの中", "in %s"), fn);
-        else
+        } else {
             sprintf(buf, _("%s", "on %s"), fn);
+        }
         sprintf(line, _("(X:%03d Y:%03d) %sの上の発見済みアイテム一覧", "Found items at (X:%03d Y:%03d) %s"), x, y, buf);
     }
     term_addstr(-1, TERM_WHITE, line);
@@ -615,12 +652,15 @@ static void display_floor_item_list(PlayerType *player_ptr, const int y, const i
 void fix_floor_item_list(PlayerType *player_ptr, const int y, const int x)
 {
     for (int j = 0; j < 8; j++) {
-        if (!angband_term[j])
+        if (!angband_term[j]) {
             continue;
-        if (angband_term[j]->never_fresh)
+        }
+        if (angband_term[j]->never_fresh) {
             continue;
-        if (!(window_flag[j] & PW_FLOOR_ITEM_LIST))
+        }
+        if (!(window_flag[j] & PW_FLOOR_ITEM_LIST)) {
             continue;
+        }
 
         term_type *old = game_term;
         term_activate(angband_term[j]);
@@ -639,8 +679,9 @@ void fix_floor_item_list(PlayerType *player_ptr, const int y, const int x)
 void toggle_inventory_equipment(PlayerType *player_ptr)
 {
     for (int j = 0; j < 8; j++) {
-        if (!angband_term[j])
+        if (!angband_term[j]) {
             continue;
+        }
 
         if (window_flag[j] & (PW_INVEN)) {
             window_flag[j] &= ~(PW_INVEN);

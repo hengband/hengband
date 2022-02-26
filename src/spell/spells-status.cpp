@@ -12,6 +12,7 @@
 #include "core/player-update-types.h"
 #include "core/stuff-handler.h"
 #include "core/window-redrawer.h"
+#include "effect/attribute-types.h"
 #include "effect/effect-characteristics.h"
 #include "flavor/flavor-describer.h"
 #include "flavor/object-flavor-types.h"
@@ -36,7 +37,6 @@
 #include "spell-kind/spells-launcher.h"
 #include "spell-kind/spells-teleport.h"
 #include "spell-kind/spells-world.h"
-#include "effect/attribute-types.h"
 #include "status/action-setter.h"
 #include "status/bad-status-setter.h"
 #include "status/base-status.h"
@@ -169,8 +169,9 @@ bool poly_monster(PlayerType *player_ptr, DIRECTION dir, int power)
 {
     BIT_FLAGS flg = PROJECT_STOP | PROJECT_KILL | PROJECT_REFLECTABLE;
     bool tester = (project_hook(player_ptr, AttributeType::OLD_POLY, dir, power, flg));
-    if (tester)
+    if (tester) {
         chg_virtue(player_ptr, V_CHANCE, 1);
+    }
     return tester;
 }
 
@@ -244,25 +245,27 @@ void roll_hitdice(PlayerType *player_ptr, spell_operation options)
         }
 
         /* Require "valid" hitpoints at highest level */
-        if ((player_ptr->player_hp[PY_MAX_LEVEL - 1] >= min_value) && (player_ptr->player_hp[PY_MAX_LEVEL - 1] <= max_value))
+        if ((player_ptr->player_hp[PY_MAX_LEVEL - 1] >= min_value) && (player_ptr->player_hp[PY_MAX_LEVEL - 1] <= max_value)) {
             break;
+        }
     }
 
     player_ptr->knowledge &= ~(KNOW_HPRATE);
 
-    PERCENTAGE percent
-        = (int)(((long)player_ptr->player_hp[PY_MAX_LEVEL - 1] * 200L) / (2 * player_ptr->hitdie + ((PY_MAX_LEVEL - 1 + 3) * (player_ptr->hitdie + 1))));
+    PERCENTAGE percent = (int)(((long)player_ptr->player_hp[PY_MAX_LEVEL - 1] * 200L) / (2 * player_ptr->hitdie + ((PY_MAX_LEVEL - 1 + 3) * (player_ptr->hitdie + 1))));
 
     /* Update and redraw hitpoints */
     player_ptr->update |= (PU_HP);
     player_ptr->redraw |= (PR_HP);
     player_ptr->window_flags |= (PW_PLAYER);
 
-    if (!(options & SPOP_NO_UPDATE))
+    if (!(options & SPOP_NO_UPDATE)) {
         handle_stuff(player_ptr);
+    }
 
-    if (!(options & SPOP_DISPLAY_MES))
+    if (!(options & SPOP_DISPLAY_MES)) {
         return;
+    }
 
     if (options & SPOP_DEBUG) {
         msg_format(_("現在の体力ランクは %d/100 です。", "Your life rate is %d/100 now."), percent);
@@ -484,8 +487,9 @@ bool restore_mana(PlayerType *player_ptr, bool magic_eater)
         return true;
     }
 
-    if (player_ptr->csp >= player_ptr->msp)
+    if (player_ptr->csp >= player_ptr->msp) {
         return false;
+    }
 
     player_ptr->csp = player_ptr->msp;
     player_ptr->csp_frac = 0;
@@ -499,26 +503,33 @@ bool restore_mana(PlayerType *player_ptr, bool magic_eater)
 bool restore_all_status(PlayerType *player_ptr)
 {
     bool ident = false;
-    if (do_res_stat(player_ptr, A_STR))
+    if (do_res_stat(player_ptr, A_STR)) {
         ident = true;
-    if (do_res_stat(player_ptr, A_INT))
+    }
+    if (do_res_stat(player_ptr, A_INT)) {
         ident = true;
-    if (do_res_stat(player_ptr, A_WIS))
+    }
+    if (do_res_stat(player_ptr, A_WIS)) {
         ident = true;
-    if (do_res_stat(player_ptr, A_DEX))
+    }
+    if (do_res_stat(player_ptr, A_DEX)) {
         ident = true;
-    if (do_res_stat(player_ptr, A_CON))
+    }
+    if (do_res_stat(player_ptr, A_CON)) {
         ident = true;
-    if (do_res_stat(player_ptr, A_CHR))
+    }
+    if (do_res_stat(player_ptr, A_CHR)) {
         ident = true;
+    }
     return ident;
 }
 
 bool fishing(PlayerType *player_ptr)
 {
     DIRECTION dir;
-    if (!get_direction(player_ptr, &dir, false, false))
+    if (!get_direction(player_ptr, &dir, false, false)) {
         return false;
+    }
     POSITION y = player_ptr->y + ddy[dir];
     POSITION x = player_ptr->x + ddx[dir];
     player_ptr->fishing_dir = dir;
@@ -555,12 +566,14 @@ bool cosmic_cast_off(PlayerType *player_ptr, ObjectType **o_ptr_ptr)
     /* Cast off activated item */
     INVENTORY_IDX slot;
     for (slot = INVEN_MAIN_HAND; slot <= INVEN_FEET; slot++) {
-        if (o_ptr == &player_ptr->inventory_list[slot])
+        if (o_ptr == &player_ptr->inventory_list[slot]) {
             break;
+        }
     }
 
-    if (slot > INVEN_FEET)
+    if (slot > INVEN_FEET) {
         return false;
+    }
 
     ObjectType forge;
     (&forge)->copy_from(o_ptr);
@@ -649,8 +662,9 @@ void status_shuffle(PlayerType *player_ptr)
     int j;
 
     //!< @todo ここのループは一体何をしている？
-    for (j = i; j == i; j = randint0(A_MAX)) /* loop */
+    for (j = i; j == i; j = randint0(A_MAX)) { /* loop */
         ;
+    }
 
     BASE_STATUS max1 = player_ptr->stat_max[i];
     BASE_STATUS cur1 = player_ptr->stat_cur[i];
@@ -663,10 +677,12 @@ void status_shuffle(PlayerType *player_ptr)
     player_ptr->stat_cur[j] = cur1;
 
     for (int k = 0; k < A_MAX; k++) {
-        if (player_ptr->stat_max[k] > player_ptr->stat_max_max[k])
+        if (player_ptr->stat_max[k] > player_ptr->stat_max_max[k]) {
             player_ptr->stat_max[k] = player_ptr->stat_max_max[k];
-        if (player_ptr->stat_cur[k] > player_ptr->stat_max_max[k])
+        }
+        if (player_ptr->stat_cur[k] > player_ptr->stat_max_max[k]) {
             player_ptr->stat_cur[k] = player_ptr->stat_max_max[k];
+        }
     }
 
     player_ptr->update |= PU_BONUS;

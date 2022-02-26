@@ -25,20 +25,23 @@
 
 static void inscribe_nickname(ae_type *ae_ptr, CapturedMonsterType *cap_mon_ptr)
 {
-    if (cap_mon_ptr->nickname == 0)
+    if (cap_mon_ptr->nickname == 0) {
         return;
+    }
 
     concptr t;
     char *s;
     char buf[80] = "";
-    if (ae_ptr->o_ptr->inscription)
+    if (ae_ptr->o_ptr->inscription) {
         strcpy(buf, quark_str(ae_ptr->o_ptr->inscription));
+    }
 
     s = buf;
     for (s = buf; *s && (*s != '#'); s++) {
 #ifdef JP
-        if (iskanji(*s))
+        if (iskanji(*s)) {
             s++;
+        }
 #endif
     }
 
@@ -73,8 +76,9 @@ static bool set_activation_target(PlayerType *player_ptr, ae_type *ae_ptr)
 
     target_pet = old_target_pet;
     CapturedMonsterType cap_mon_ptr;
-    if (!fire_ball(player_ptr, AttributeType::CAPTURE, ae_ptr->dir, 0, 0, &cap_mon_ptr))
+    if (!fire_ball(player_ptr, AttributeType::CAPTURE, ae_ptr->dir, 0, 0, &cap_mon_ptr)) {
         return true;
+    }
 
     ae_ptr->o_ptr->pval = cap_mon_ptr.r_idx;
     ae_ptr->o_ptr->captured_monster_speed = cap_mon_ptr.speed;
@@ -86,8 +90,9 @@ static bool set_activation_target(PlayerType *player_ptr, ae_type *ae_ptr)
 
 static void add_quark_to_inscription(PlayerType *player_ptr, ae_type *ae_ptr, concptr t, char *buf)
 {
-    if (!*t)
+    if (!*t) {
         return;
+    }
 
     char *s = buf;
     t++;
@@ -108,8 +113,9 @@ static void add_quark_to_inscription(PlayerType *player_ptr, ae_type *ae_ptr, co
 
 #ifdef JP
 #else
-    if (quote && *(s - 1) == '\'')
+    if (quote && *(s - 1) == '\'') {
         s--;
+    }
 #endif
 
     *s = '\0';
@@ -128,15 +134,17 @@ static void add_quark_to_inscription(PlayerType *player_ptr, ae_type *ae_ptr, co
 
 static void check_inscription_value(PlayerType *player_ptr, ae_type *ae_ptr)
 {
-    if (ae_ptr->o_ptr->inscription == 0)
+    if (ae_ptr->o_ptr->inscription == 0) {
         return;
+    }
 
     char buf[80];
     concptr t = quark_str(ae_ptr->o_ptr->inscription);
     for (t = quark_str(ae_ptr->o_ptr->inscription); *t && (*t != '#'); t++) {
 #ifdef JP
-        if (iskanji(*t))
+        if (iskanji(*t)) {
             t++;
+        }
 #endif
     }
 
@@ -145,21 +153,26 @@ static void check_inscription_value(PlayerType *player_ptr, ae_type *ae_ptr)
 
 static void check_monster_ball_use(PlayerType *player_ptr, ae_type *ae_ptr)
 {
-    if (!monster_can_enter(player_ptr, player_ptr->y + ddy[ae_ptr->dir], player_ptr->x + ddx[ae_ptr->dir], &r_info[ae_ptr->o_ptr->pval], 0))
+    if (!monster_can_enter(player_ptr, player_ptr->y + ddy[ae_ptr->dir], player_ptr->x + ddx[ae_ptr->dir], &r_info[ae_ptr->o_ptr->pval], 0)) {
         return;
+    }
 
-    if (!place_monster_aux(player_ptr, 0, player_ptr->y + ddy[ae_ptr->dir], player_ptr->x + ddx[ae_ptr->dir], ae_ptr->o_ptr->pval, PM_FORCE_PET | PM_NO_KAGE))
+    if (!place_monster_aux(player_ptr, 0, player_ptr->y + ddy[ae_ptr->dir], player_ptr->x + ddx[ae_ptr->dir], ae_ptr->o_ptr->pval, PM_FORCE_PET | PM_NO_KAGE)) {
         return;
+    }
 
     auto *floor_ptr = player_ptr->current_floor_ptr;
-    if (ae_ptr->o_ptr->captured_monster_speed > 0)
+    if (ae_ptr->o_ptr->captured_monster_speed > 0) {
         floor_ptr->m_list[hack_m_idx_ii].mspeed = ae_ptr->o_ptr->captured_monster_speed;
+    }
 
-    if (ae_ptr->o_ptr->captured_monster_max_hp)
+    if (ae_ptr->o_ptr->captured_monster_max_hp) {
         floor_ptr->m_list[hack_m_idx_ii].max_maxhp = ae_ptr->o_ptr->captured_monster_max_hp;
+    }
 
-    if (ae_ptr->o_ptr->captured_monster_current_hp > 0)
+    if (ae_ptr->o_ptr->captured_monster_current_hp > 0) {
         floor_ptr->m_list[hack_m_idx_ii].hp = ae_ptr->o_ptr->captured_monster_current_hp;
+    }
 
     floor_ptr->m_list[hack_m_idx_ii].maxhp = floor_ptr->m_list[hack_m_idx_ii].max_maxhp;
     check_inscription_value(player_ptr, ae_ptr);
@@ -172,24 +185,28 @@ static void check_monster_ball_use(PlayerType *player_ptr, ae_type *ae_ptr)
 
 bool exe_monster_capture(PlayerType *player_ptr, ae_type *ae_ptr)
 {
-    if (ae_ptr->o_ptr->tval != ItemKindType::CAPTURE)
+    if (ae_ptr->o_ptr->tval != ItemKindType::CAPTURE) {
         return false;
+    }
 
     if (ae_ptr->o_ptr->pval == 0) {
-        if (!set_activation_target(player_ptr, ae_ptr))
+        if (!set_activation_target(player_ptr, ae_ptr)) {
             return true;
+        }
 
         calc_android_exp(player_ptr);
         return true;
     }
 
     ae_ptr->success = false;
-    if (!get_direction(player_ptr, &ae_ptr->dir, false, false))
+    if (!get_direction(player_ptr, &ae_ptr->dir, false, false)) {
         return true;
+    }
 
     check_monster_ball_use(player_ptr, ae_ptr);
-    if (!ae_ptr->success)
+    if (!ae_ptr->success) {
         msg_print(_("おっと、解放に失敗した。", "Oops.  You failed to release your pet."));
+    }
 
     calculate_upkeep(player_ptr);
     calc_android_exp(player_ptr);

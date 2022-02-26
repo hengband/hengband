@@ -25,8 +25,9 @@
  */
 static void redraw_edit_command_menu(bool *redraw, int level, int start, char *linestr, byte *menu_key, int max_len)
 {
-    if (!*redraw)
+    if (!*redraw) {
         return;
+    }
 
     int col0 = 5 + level * 7;
     int row0 = 1 + level * 3;
@@ -37,8 +38,9 @@ static void redraw_edit_command_menu(bool *redraw, int level, int start, char *l
     for (int i = start; menu_data[i].level >= level; i++) {
         char com_key_str[3];
         concptr str;
-        if (menu_data[i].level > level)
+        if (menu_data[i].level > level) {
             continue;
+        }
 
         if (menu_data[i].com_id == -1) {
             strcpy(com_key_str, _("▼", ">"));
@@ -71,12 +73,14 @@ int do_command_menu(int level, int start)
     byte menu_key = 0;
     for (int i = start; menu_data[i].level >= level; i++) {
         /* Ignore lower level sub menus */
-        if (menu_data[i].level > level)
+        if (menu_data[i].level > level) {
             continue;
+        }
 
         int len = strlen(menu_data[i].name);
-        if (len > max_len)
+        if (len > max_len) {
             max_len = len;
+        }
 
         menu_id_list[menu_key] = i;
         menu_key++;
@@ -102,8 +106,9 @@ int do_command_menu(int level, int start)
         redraw_edit_command_menu(&redraw, level, start, linestr, &menu_key, max_len);
         prt(format(_("(a-%c) コマンド:", "(a-%c) Command:"), menu_key + 'a' - 1), 0, 0);
         char key = inkey();
-        if (key == ESCAPE)
+        if (key == ESCAPE) {
             return 0;
+        }
 
         int com_id;
         bool is_alphabet = key >= 'a' && key <= 'z';
@@ -117,16 +122,18 @@ int do_command_menu(int level, int start)
         }
 
         int menu_id = menu_id_list[key - 'a'];
-        if (menu_id < 0)
+        if (menu_id < 0) {
             continue;
+        }
 
         com_id = menu_data[menu_id].com_id;
         if (com_id == -1) {
             com_id = do_command_menu(level + 1, menu_id + 1);
-            if (com_id)
+            if (com_id) {
                 return com_id;
-            else
+            } else {
                 redraw = true;
+            }
         } else if (com_id) {
             return com_id;
         }

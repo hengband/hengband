@@ -25,87 +25,110 @@
 bool object_sort_comp(PlayerType *player_ptr, ObjectType *o_ptr, int32_t o_value, ObjectType *j_ptr)
 {
     int o_type, j_type;
-    if (!j_ptr->k_idx)
+    if (!j_ptr->k_idx) {
         return true;
+    }
 
-    if ((o_ptr->tval == get_realm1_book(player_ptr)) && (j_ptr->tval != get_realm1_book(player_ptr)))
+    if ((o_ptr->tval == get_realm1_book(player_ptr)) && (j_ptr->tval != get_realm1_book(player_ptr))) {
         return true;
-    if ((j_ptr->tval == get_realm1_book(player_ptr)) && (o_ptr->tval != get_realm1_book(player_ptr)))
+    }
+    if ((j_ptr->tval == get_realm1_book(player_ptr)) && (o_ptr->tval != get_realm1_book(player_ptr))) {
         return false;
+    }
 
-    if ((o_ptr->tval == get_realm2_book(player_ptr)) && (j_ptr->tval != get_realm2_book(player_ptr)))
+    if ((o_ptr->tval == get_realm2_book(player_ptr)) && (j_ptr->tval != get_realm2_book(player_ptr))) {
         return true;
-    if ((j_ptr->tval == get_realm2_book(player_ptr)) && (o_ptr->tval != get_realm2_book(player_ptr)))
+    }
+    if ((j_ptr->tval == get_realm2_book(player_ptr)) && (o_ptr->tval != get_realm2_book(player_ptr))) {
         return false;
+    }
 
-    if (o_ptr->tval > j_ptr->tval)
+    if (o_ptr->tval > j_ptr->tval) {
         return true;
-    if (o_ptr->tval < j_ptr->tval)
+    }
+    if (o_ptr->tval < j_ptr->tval) {
         return false;
+    }
 
-    if (!o_ptr->is_aware())
+    if (!o_ptr->is_aware()) {
         return false;
-    if (!j_ptr->is_aware())
+    }
+    if (!j_ptr->is_aware()) {
         return true;
+    }
 
-    if (o_ptr->sval < j_ptr->sval)
+    if (o_ptr->sval < j_ptr->sval) {
         return true;
-    if (o_ptr->sval > j_ptr->sval)
+    }
+    if (o_ptr->sval > j_ptr->sval) {
         return false;
+    }
 
-    if (!o_ptr->is_known())
+    if (!o_ptr->is_known()) {
         return false;
-    if (!j_ptr->is_known())
+    }
+    if (!j_ptr->is_known()) {
         return true;
+    }
 
-    if (o_ptr->is_fixed_artifact())
+    if (o_ptr->is_fixed_artifact()) {
         o_type = 3;
-    else if (o_ptr->art_name)
+    } else if (o_ptr->art_name) {
         o_type = 2;
-    else if (o_ptr->is_ego())
+    } else if (o_ptr->is_ego()) {
         o_type = 1;
-    else
+    } else {
         o_type = 0;
+    }
 
-    if (j_ptr->is_fixed_artifact())
+    if (j_ptr->is_fixed_artifact()) {
         j_type = 3;
-    else if (j_ptr->art_name)
+    } else if (j_ptr->art_name) {
         j_type = 2;
-    else if (j_ptr->is_ego())
+    } else if (j_ptr->is_ego()) {
         j_type = 1;
-    else
+    } else {
         j_type = 0;
+    }
 
-    if (o_type < j_type)
+    if (o_type < j_type) {
         return true;
-    if (o_type > j_type)
+    }
+    if (o_type > j_type) {
         return false;
+    }
 
     switch (o_ptr->tval) {
     case ItemKindType::FIGURINE:
     case ItemKindType::STATUE:
     case ItemKindType::CORPSE:
     case ItemKindType::CAPTURE:
-        if (r_info[o_ptr->pval].level < r_info[j_ptr->pval].level)
+        if (r_info[o_ptr->pval].level < r_info[j_ptr->pval].level) {
             return true;
-        if ((r_info[o_ptr->pval].level == r_info[j_ptr->pval].level) && (o_ptr->pval < j_ptr->pval))
+        }
+        if ((r_info[o_ptr->pval].level == r_info[j_ptr->pval].level) && (o_ptr->pval < j_ptr->pval)) {
             return true;
+        }
         return false;
 
     case ItemKindType::SHOT:
     case ItemKindType::ARROW:
     case ItemKindType::BOLT:
-        if (o_ptr->to_h + o_ptr->to_d < j_ptr->to_h + j_ptr->to_d)
+        if (o_ptr->to_h + o_ptr->to_d < j_ptr->to_h + j_ptr->to_d) {
             return true;
-        if (o_ptr->to_h + o_ptr->to_d > j_ptr->to_h + j_ptr->to_d)
+        }
+        if (o_ptr->to_h + o_ptr->to_d > j_ptr->to_h + j_ptr->to_d) {
             return false;
+        }
         break;
 
     case ItemKindType::ROD:
-        if (o_ptr->pval < j_ptr->pval)
+        if (o_ptr->pval < j_ptr->pval) {
             return true;
-        if (o_ptr->pval > j_ptr->pval)
+        }
+        if (o_ptr->pval > j_ptr->pval) {
             return false;
+        }
         break;
 
     default:

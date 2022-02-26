@@ -103,21 +103,25 @@ static void restore_windows(PlayerType *player_ptr)
     w_ptr->character_icky_depth = 1;
     term_activate(angband_term[0]);
     angband_term[0]->resize_hook = resize_map;
-    for (MONSTER_IDX i = 1; i < 8; i++)
-        if (angband_term[i])
+    for (MONSTER_IDX i = 1; i < 8; i++) {
+        if (angband_term[i]) {
             angband_term[i]->resize_hook = redraw_window;
+        }
+    }
 
     (void)term_set_cursor(0);
 }
 
 static void send_waiting_record(PlayerType *player_ptr)
 {
-    if (!player_ptr->wait_report_score)
+    if (!player_ptr->wait_report_score) {
         return;
+    }
 
     char buf[1024];
-    if (!get_check_strict(player_ptr, _("待機していたスコア登録を今行ないますか？", "Do you register score now? "), CHECK_NO_HISTORY))
+    if (!get_check_strict(player_ptr, _("待機していたスコア登録を今行ないますか？", "Do you register score now? "), CHECK_NO_HISTORY)) {
         quit(0);
+    }
 
     player_ptr->update |= (PU_BONUS | PU_HP | PU_MANA | PU_SPELLS);
     update_creature(player_ptr);
@@ -137,8 +141,9 @@ static void send_waiting_record(PlayerType *player_ptr)
     } else {
         player_ptr->wait_report_score = false;
         top_twenty(player_ptr);
-        if (!save_player(player_ptr, SAVE_TYPE_CLOSE_GAME))
+        if (!save_player(player_ptr, SAVE_TYPE_CLOSE_GAME)) {
             msg_print(_("セーブ失敗！", "death save failed!"));
+        }
     }
 
     (void)fd_close(highscore_fd);
@@ -155,14 +160,17 @@ static void init_random_seed(PlayerType *player_ptr, bool new_game)
         w_ptr->character_dungeon = false;
         init_random_seed = true;
         init_saved_floors(player_ptr, false);
-    } else if (new_game)
+    } else if (new_game) {
         init_saved_floors(player_ptr, true);
+    }
 
-    if (!new_game)
+    if (!new_game) {
         process_player_name(player_ptr);
+    }
 
-    if (init_random_seed)
+    if (init_random_seed) {
         Rand_state_init();
+    }
 }
 
 static void init_world_floor_info(PlayerType *player_ptr)
@@ -223,8 +231,9 @@ static void reset_world_info(PlayerType *player_ptr)
 static void generate_wilderness(PlayerType *player_ptr)
 {
     auto *floor_ptr = player_ptr->current_floor_ptr;
-    if ((floor_ptr->dun_level == 0) && inside_quest(floor_ptr->quest_number))
+    if ((floor_ptr->dun_level == 0) && inside_quest(floor_ptr->quest_number)) {
         return;
+    }
 
     parse_fixed_map(player_ptr, "w_info.txt", 0, 0, w_ptr->max_wild_y, w_ptr->max_wild_x);
     init_flags = INIT_ONLY_BUILDINGS;
@@ -239,16 +248,18 @@ static void change_floor_if_error(PlayerType *player_ptr)
         return;
     }
 
-    if (player_ptr->panic_save == 0)
+    if (player_ptr->panic_save == 0) {
         return;
+    }
 
     if (!player_ptr->y || !player_ptr->x) {
         msg_print(_("プレイヤーの位置がおかしい。フロアを再生成します。", "What a strange player location, regenerate the dungeon floor."));
         change_floor(player_ptr);
     }
 
-    if (!player_ptr->y || !player_ptr->x)
+    if (!player_ptr->y || !player_ptr->x) {
         player_ptr->y = player_ptr->x = 10;
+    }
 
     player_ptr->panic_save = 0;
 }
@@ -268,8 +279,9 @@ static void generate_world(PlayerType *player_ptr, bool new_game)
     change_floor_if_error(player_ptr);
     w_ptr->character_generated = true;
     w_ptr->character_icky_depth = 0;
-    if (!new_game)
+    if (!new_game) {
         return;
+    }
 
     char buf[80];
     sprintf(buf, _("%sに降り立った。", "arrived in %s."), map_name(player_ptr));
@@ -281,18 +293,21 @@ static void init_io(PlayerType *player_ptr)
     term_xtra(TERM_XTRA_REACT, 0);
     player_ptr->window_flags = PW_ALL;
     handle_stuff(player_ptr);
-    if (arg_force_original)
+    if (arg_force_original) {
         rogue_like_commands = false;
+    }
 
-    if (arg_force_roguelike)
+    if (arg_force_roguelike) {
         rogue_like_commands = true;
+    }
 }
 
 static void init_riding_pet(PlayerType *player_ptr, bool new_game)
 {
     PlayerClass pc(player_ptr);
-    if (!new_game || !pc.is_tamer())
+    if (!new_game || !pc.is_tamer()) {
         return;
+    }
 
     MONRACE_IDX pet_r_idx = pc.equals(PlayerClassType::CAVALRY) ? MON_HORSE : MON_YASE_HORSE;
     auto *r_ptr = &r_info[pet_r_idx];
@@ -308,22 +323,25 @@ static void init_riding_pet(PlayerType *player_ptr, bool new_game)
 
 static void decide_arena_death(PlayerType *player_ptr)
 {
-    if (!player_ptr->playing || !player_ptr->is_dead)
+    if (!player_ptr->playing || !player_ptr->is_dead) {
         return;
+    }
 
     auto *floor_ptr = player_ptr->current_floor_ptr;
     if (!floor_ptr->inside_arena) {
-        if ((w_ptr->wizard || cheat_live) && !get_check(_("死にますか? ", "Die? ")))
+        if ((w_ptr->wizard || cheat_live) && !get_check(_("死にますか? ", "Die? "))) {
             cheat_death(player_ptr);
+        }
 
         return;
     }
 
     floor_ptr->inside_arena = false;
-    if (player_ptr->arena_number > MAX_ARENA_MONS)
+    if (player_ptr->arena_number > MAX_ARENA_MONS) {
         player_ptr->arena_number++;
-    else
+    } else {
         player_ptr->arena_number = -1 - player_ptr->arena_number;
+    }
 
     player_ptr->is_dead = false;
     player_ptr->chp = 0;
@@ -348,18 +366,21 @@ static void process_game_turn(PlayerType *player_ptr)
         forget_lite(floor_ptr);
         forget_view(floor_ptr);
         clear_mon_lite(floor_ptr);
-        if (!player_ptr->playing && !player_ptr->is_dead)
+        if (!player_ptr->playing && !player_ptr->is_dead) {
             break;
+        }
 
         wipe_o_list(floor_ptr);
-        if (!player_ptr->is_dead)
+        if (!player_ptr->is_dead) {
             wipe_monsters_list(player_ptr);
+        }
 
         msg_print(nullptr);
         load_game = false;
         decide_arena_death(player_ptr);
-        if (player_ptr->is_dead)
+        if (player_ptr->is_dead) {
             break;
+        }
 
         change_floor(player_ptr);
     }
@@ -384,31 +405,36 @@ void play_game(PlayerType *player_ptr, bool new_game, bool browsing_movie)
     }
 
     restore_windows(player_ptr);
-    if (!load_savedata(player_ptr, &new_game))
+    if (!load_savedata(player_ptr, &new_game)) {
         quit(_("セーブファイルが壊れています", "broken savefile"));
+    }
 
     extract_option_vars();
     send_waiting_record(player_ptr);
     w_ptr->creating_savefile = new_game;
     init_random_seed(player_ptr, new_game);
-    if (new_game)
+    if (new_game) {
         init_world_floor_info(player_ptr);
-    else
+    } else {
         restore_world_floor_info(player_ptr);
+    }
 
     generate_world(player_ptr, new_game);
     player_ptr->playing = true;
     reset_visuals(player_ptr);
     load_all_pref_files(player_ptr);
-    if (new_game)
+    if (new_game) {
         player_outfit(player_ptr);
+    }
 
     init_io(player_ptr);
-    if (player_ptr->chp < 0 && !cheat_immortal)
+    if (player_ptr->chp < 0 && !cheat_immortal) {
         player_ptr->is_dead = true;
+    }
 
-    if (PlayerRace(player_ptr).equals(PlayerRaceType::ANDROID))
+    if (PlayerRace(player_ptr).equals(PlayerRaceType::ANDROID)) {
         calc_android_exp(player_ptr);
+    }
 
     init_riding_pet(player_ptr, new_game);
     (void)combine_and_reorder_home(player_ptr, StoreSaleType::HOME);

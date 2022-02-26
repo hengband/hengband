@@ -19,15 +19,18 @@
 bool set_tim_esp(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
 {
     bool notice = false;
-    v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;
+    v = (v > 10000) ? 10000 : (v < 0) ? 0
+                                      : v;
 
-    if (player_ptr->is_dead)
+    if (player_ptr->is_dead) {
         return false;
+    }
 
     if (v) {
         if (player_ptr->tim_esp && !do_dec) {
-            if (player_ptr->tim_esp > v)
+            if (player_ptr->tim_esp > v) {
                 return false;
+            }
         } else if (!is_time_limit_esp(player_ptr)) {
             msg_print(_("意識が広がった気がする！", "You feel your consciousness expand!"));
             notice = true;
@@ -42,11 +45,13 @@ bool set_tim_esp(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
     player_ptr->tim_esp = v;
     player_ptr->redraw |= (PR_STATUS);
 
-    if (!notice)
+    if (!notice) {
         return false;
+    }
 
-    if (disturb_state)
+    if (disturb_state) {
         disturb(player_ptr, false, false);
+    }
     player_ptr->update |= (PU_BONUS);
     player_ptr->update |= (PU_MONSTERS);
     handle_stuff(player_ptr);
@@ -62,15 +67,18 @@ bool set_tim_esp(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
 bool set_tim_invis(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
 {
     bool notice = false;
-    v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;
+    v = (v > 10000) ? 10000 : (v < 0) ? 0
+                                      : v;
 
-    if (player_ptr->is_dead)
+    if (player_ptr->is_dead) {
         return false;
+    }
 
     if (v) {
         if (player_ptr->tim_invis && !do_dec) {
-            if (player_ptr->tim_invis > v)
+            if (player_ptr->tim_invis > v) {
                 return false;
+            }
         } else if (!player_ptr->tim_invis) {
             msg_print(_("目が非常に敏感になった気がする！", "Your eyes feel very sensitive!"));
             notice = true;
@@ -85,11 +93,13 @@ bool set_tim_invis(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
     player_ptr->tim_invis = v;
     player_ptr->redraw |= (PR_STATUS);
 
-    if (!notice)
+    if (!notice) {
         return false;
+    }
 
-    if (disturb_state)
+    if (disturb_state) {
         disturb(player_ptr, false, false);
+    }
     player_ptr->update |= (PU_BONUS);
     player_ptr->update |= (PU_MONSTERS);
     handle_stuff(player_ptr);
@@ -105,15 +115,18 @@ bool set_tim_invis(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
 bool set_tim_infra(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
 {
     bool notice = false;
-    v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;
+    v = (v > 10000) ? 10000 : (v < 0) ? 0
+                                      : v;
 
-    if (player_ptr->is_dead)
+    if (player_ptr->is_dead) {
         return false;
+    }
 
     if (v) {
         if (player_ptr->tim_infra && !do_dec) {
-            if (player_ptr->tim_infra > v)
+            if (player_ptr->tim_infra > v) {
                 return false;
+            }
         } else if (!player_ptr->tim_infra) {
             msg_print(_("目がランランと輝き始めた！", "Your eyes begin to tingle!"));
             notice = true;
@@ -128,11 +141,13 @@ bool set_tim_infra(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
     player_ptr->tim_infra = v;
     player_ptr->redraw |= (PR_STATUS);
 
-    if (!notice)
+    if (!notice) {
         return false;
+    }
 
-    if (disturb_state)
+    if (disturb_state) {
         disturb(player_ptr, false, false);
+    }
     player_ptr->update |= (PU_BONUS);
     player_ptr->update |= (PU_MONSTERS);
     handle_stuff(player_ptr);

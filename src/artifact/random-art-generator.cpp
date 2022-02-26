@@ -123,26 +123,30 @@ static void set_artifact_bias(PlayerType *player_ptr, ObjectType *o_ptr, int *wa
         break;
     case PlayerClassType::MINDCRAFTER:
     case PlayerClassType::BARD:
-        if (randint1(5) > 2)
+        if (randint1(5) > 2) {
             o_ptr->artifact_bias = BIAS_PRIESTLY;
+        }
         break;
     case PlayerClassType::TOURIST:
-        if (randint1(5) > 2)
+        if (randint1(5) > 2) {
             o_ptr->artifact_bias = BIAS_WARRIOR;
+        }
         break;
     case PlayerClassType::IMITATOR:
-        if (randint1(2) > 1)
+        if (randint1(2) > 1) {
             o_ptr->artifact_bias = BIAS_RANGER;
+        }
         break;
     case PlayerClassType::BEASTMASTER:
         o_ptr->artifact_bias = BIAS_CHR;
         *warrior_artifact_bias = 50;
         break;
     case PlayerClassType::MIRROR_MASTER:
-        if (randint1(4) > 1)
+        if (randint1(4) > 1) {
             o_ptr->artifact_bias = BIAS_MAGE;
-        else
+        } else {
             o_ptr->artifact_bias = BIAS_ROGUE;
+        }
         break;
     case PlayerClassType::ELEMENTALIST:
         o_ptr->artifact_bias = one_in_(2) ? BIAS_MAGE : BIAS_INT;
@@ -156,20 +160,24 @@ static void set_artifact_bias(PlayerType *player_ptr, ObjectType *o_ptr, int *wa
 static void decide_warrior_bias(PlayerType *player_ptr, ObjectType *o_ptr, const bool a_scroll)
 {
     int warrior_artifact_bias = 0;
-    if (a_scroll && one_in_(4))
+    if (a_scroll && one_in_(4)) {
         set_artifact_bias(player_ptr, o_ptr, &warrior_artifact_bias);
+    }
 
-    if (a_scroll && (randint1(100) <= warrior_artifact_bias))
+    if (a_scroll && (randint1(100) <= warrior_artifact_bias)) {
         o_ptr->artifact_bias = BIAS_WARRIOR;
+    }
 }
 
 static bool decide_random_art_cursed(const bool a_scroll, ObjectType *o_ptr)
 {
-    if (!a_scroll && one_in_(A_CURSED))
+    if (!a_scroll && one_in_(A_CURSED)) {
         return true;
+    }
 
-    if (((o_ptr->tval == ItemKindType::AMULET) || (o_ptr->tval == ItemKindType::RING)) && o_ptr->is_cursed())
+    if (((o_ptr->tval == ItemKindType::AMULET) || (o_ptr->tval == ItemKindType::RING)) && o_ptr->is_cursed()) {
         return true;
+    }
 
     return false;
 }
@@ -177,14 +185,17 @@ static bool decide_random_art_cursed(const bool a_scroll, ObjectType *o_ptr)
 static int decide_random_art_power(const bool a_cursed)
 {
     int powers = randint1(5) + 1;
-    while (one_in_(powers) || one_in_(7) || one_in_(10))
+    while (one_in_(powers) || one_in_(7) || one_in_(10)) {
         powers++;
+    }
 
-    if (!a_cursed && one_in_(WEIRD_LUCK))
+    if (!a_cursed && one_in_(WEIRD_LUCK)) {
         powers *= 2;
+    }
 
-    if (a_cursed)
+    if (a_cursed) {
         powers /= 2;
+    }
 
     return powers;
 }
@@ -202,17 +213,21 @@ static void invest_powers(PlayerType *player_ptr, ObjectType *o_ptr, int *powers
         case 3:
         case 4:
             if (one_in_(2) && o_ptr->is_weapon_ammo() && (o_ptr->tval != ItemKindType::BOW)) {
-                if (a_cursed && !one_in_(13))
+                if (a_cursed && !one_in_(13)) {
                     break;
-                if (one_in_(13)) {
-                    if (one_in_(o_ptr->ds + 4))
-                        o_ptr->ds++;
-                } else {
-                    if (one_in_(o_ptr->dd + 1))
-                        o_ptr->dd++;
                 }
-            } else
+                if (one_in_(13)) {
+                    if (one_in_(o_ptr->ds + 4)) {
+                        o_ptr->ds++;
+                    }
+                } else {
+                    if (one_in_(o_ptr->dd + 1)) {
+                        o_ptr->dd++;
+                    }
+                }
+            } else {
                 random_resistance(o_ptr);
+            }
 
             break;
         case 5:
@@ -223,8 +238,9 @@ static void invest_powers(PlayerType *player_ptr, ObjectType *o_ptr, int *powers
             random_slay(o_ptr);
             break;
         default:
-            if (w_ptr->wizard)
+            if (w_ptr->wizard) {
                 msg_print("Switch error in become_random_artifact!");
+            }
 
             (*powers)++;
         }
@@ -235,16 +251,18 @@ static void strengthen_pval(ObjectType *o_ptr)
 {
     if (o_ptr->art_flags.has(TR_BLOWS)) {
         o_ptr->pval = randint1(2);
-        if ((o_ptr->tval == ItemKindType::SWORD) && (o_ptr->sval == SV_HAYABUSA))
+        if ((o_ptr->tval == ItemKindType::SWORD) && (o_ptr->sval == SV_HAYABUSA)) {
             o_ptr->pval++;
+        }
     } else {
         do {
             o_ptr->pval++;
         } while (o_ptr->pval < randint1(5) || one_in_(o_ptr->pval));
     }
 
-    if ((o_ptr->pval > 4) && !one_in_(WEIRD_LUCK))
+    if ((o_ptr->pval > 4) && !one_in_(WEIRD_LUCK)) {
         o_ptr->pval = 4;
+    }
 }
 
 /*!
@@ -259,13 +277,15 @@ static void invest_positive_modified_value(ObjectType *o_ptr)
         return;
     }
 
-    if (!o_ptr->is_weapon_ammo())
+    if (!o_ptr->is_weapon_ammo()) {
         return;
+    }
 
     o_ptr->to_h += randint1(o_ptr->to_h > 19 ? 1 : 20 - o_ptr->to_h);
     o_ptr->to_d += randint1(o_ptr->to_d > 19 ? 1 : 20 - o_ptr->to_d);
-    if ((o_ptr->art_flags.has(TR_WIS)) && (o_ptr->pval > 0))
+    if ((o_ptr->art_flags.has(TR_WIS)) && (o_ptr->pval > 0)) {
         o_ptr->art_flags.set(TR_BLESSED);
+    }
 }
 
 /*!
@@ -275,20 +295,23 @@ static void invest_positive_modified_value(ObjectType *o_ptr)
  */
 static void invest_negative_modified_value(ObjectType *o_ptr)
 {
-    if (!o_ptr->is_armour())
+    if (!o_ptr->is_armour()) {
         return;
+    }
 
     while ((o_ptr->to_d + o_ptr->to_h) > 20) {
-        if (one_in_(o_ptr->to_d) && one_in_(o_ptr->to_h))
+        if (one_in_(o_ptr->to_d) && one_in_(o_ptr->to_h)) {
             break;
+        }
 
         o_ptr->to_d -= (int)randint0(3);
         o_ptr->to_h -= (HIT_PROB)randint0(3);
     }
 
     while ((o_ptr->to_d + o_ptr->to_h) > 10) {
-        if (one_in_(o_ptr->to_d) || one_in_(o_ptr->to_h))
+        if (one_in_(o_ptr->to_d) || one_in_(o_ptr->to_h)) {
             break;
+        }
 
         o_ptr->to_d -= (int)randint0(3);
         o_ptr->to_h -= (HIT_PROB)randint0(3);
@@ -297,8 +320,9 @@ static void invest_negative_modified_value(ObjectType *o_ptr)
 
 static void reset_flags_poison_needle(ObjectType *o_ptr)
 {
-    if ((o_ptr->tval != ItemKindType::SWORD) || (o_ptr->sval != SV_POISON_NEEDLE))
+    if ((o_ptr->tval != ItemKindType::SWORD) || (o_ptr->sval != SV_POISON_NEEDLE)) {
         return;
+    }
 
     o_ptr->to_h = 0;
     o_ptr->to_d = 0;
@@ -325,26 +349,32 @@ static void reset_flags_poison_needle(ObjectType *o_ptr)
 static int decide_random_art_power_level(ObjectType *o_ptr, const bool a_cursed, const int total_flags)
 {
     if (o_ptr->is_weapon_ammo()) {
-        if (a_cursed)
+        if (a_cursed) {
             return 0;
+        }
 
-        if (total_flags < 20000)
+        if (total_flags < 20000) {
             return 1;
+        }
 
-        if (total_flags < 45000)
+        if (total_flags < 45000) {
             return 2;
+        }
 
         return 3;
     }
 
-    if (a_cursed)
+    if (a_cursed) {
         return 0;
+    }
 
-    if (total_flags < 15000)
+    if (total_flags < 15000) {
         return 1;
+    }
 
-    if (total_flags < 35000)
+    if (total_flags < 35000) {
         return 2;
+    }
 
     return 3;
 }
@@ -411,8 +441,9 @@ bool become_random_artifact(PlayerType *player_ptr, ObjectType *o_ptr, bool a_sc
     int powers = decide_random_art_power(a_cursed);
     int max_powers = powers;
     invest_powers(player_ptr, o_ptr, &powers, &has_pval, a_cursed);
-    if (has_pval)
+    if (has_pval) {
         strengthen_pval(o_ptr);
+    }
 
     invest_positive_modified_value(o_ptr);
     o_ptr->art_flags.set(TR_IGNORE_ACID);
@@ -421,8 +452,9 @@ bool become_random_artifact(PlayerType *player_ptr, ObjectType *o_ptr, bool a_sc
     o_ptr->art_flags.set(TR_IGNORE_COLD);
 
     int32_t total_flags = flag_cost(o_ptr, o_ptr->pval);
-    if (a_cursed)
+    if (a_cursed) {
         curse_artifact(player_ptr, o_ptr);
+    }
 
     if (!a_cursed && one_in_(o_ptr->is_armour() ? ACTIVATION_CHANCE * 2 : ACTIVATION_CHANCE)) {
         o_ptr->activation_id = RandomArtActType::NONE;
@@ -430,13 +462,15 @@ bool become_random_artifact(PlayerType *player_ptr, ObjectType *o_ptr, bool a_sc
     }
 
     invest_negative_modified_value(o_ptr);
-    if (((o_ptr->artifact_bias == BIAS_MAGE) || (o_ptr->artifact_bias == BIAS_INT)) && (o_ptr->tval == ItemKindType::GLOVES))
+    if (((o_ptr->artifact_bias == BIAS_MAGE) || (o_ptr->artifact_bias == BIAS_INT)) && (o_ptr->tval == ItemKindType::GLOVES)) {
         o_ptr->art_flags.set(TR_FREE_ACT);
+    }
 
     reset_flags_poison_needle(o_ptr);
     int power_level = decide_random_art_power_level(o_ptr, a_cursed, total_flags);
-    while (has_extreme_damage_rate(player_ptr, o_ptr) && !one_in_(SWORDFISH_LUCK))
+    while (has_extreme_damage_rate(player_ptr, o_ptr) && !one_in_(SWORDFISH_LUCK)) {
         weakening_artifact(o_ptr);
+    }
 
     generate_unnatural_random_artifact(player_ptr, o_ptr, a_scroll, power_level, max_powers, total_flags);
     return true;

@@ -32,7 +32,7 @@ CfgData *sound_cfg_data;
  * 効果音データ
  */
 struct sound_res {
-    sound_res(BYTE* _buf)
+    sound_res(BYTE *_buf)
     {
         buf.reset(_buf);
     }
@@ -79,7 +79,7 @@ std::queue<sound_res *> sound_queue;
 
 /*!
  * 効果音の再生と管理キューへの追加.
- * 
+ *
  * @param wf WAVEFORMATEXへのポインタ
  * @param buf PCMデータバッファ。使用後にdelete[]すること。
  * @param bufsize バッファサイズ
@@ -135,7 +135,7 @@ static bool add_sound_queue(const WAVEFORMATEX *wf, BYTE *buf, DWORD bufsize)
 
 /*!
  * 指定ファイルを再生する
- * 
+ *
  * @param buf ファイル名
  * @retval true 正常に処理された
  * @retval false 処理エラー
@@ -143,13 +143,15 @@ static bool add_sound_queue(const WAVEFORMATEX *wf, BYTE *buf, DWORD bufsize)
 static bool play_sound_impl(char *filename)
 {
     wav_reader reader;
-    if (!reader.open(filename))
+    if (!reader.open(filename)) {
         return false;
+    }
     auto wf = reader.get_waveformat();
 
     auto data_buffer = reader.read_data();
-    if (data_buffer == NULL)
+    if (data_buffer == NULL) {
         return false;
+    }
 
     return add_sound_queue(wf, data_buffer, reader.get_data_chunk()->cksize);
 }
@@ -164,8 +166,9 @@ static concptr sound_key_at(int index, char *buf)
 {
     (void)buf;
 
-    if (index >= SOUND_MAX)
+    if (index >= SOUND_MAX) {
         return nullptr;
+    }
 
     return angband_sound_name[index];
 }

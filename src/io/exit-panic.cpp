@@ -8,13 +8,13 @@
 
 #include "io/exit-panic.h"
 #include "core/disturbance.h"
-#include "world/world.h"
-#include "player/player-move.h"
 #include "io/signal-handlers.h"
+#include "player/player-move.h"
 #include "save/save.h"
 #include "system/player-type-definition.h"
 #include "term/screen-processor.h"
 #include "view/display-messages.h"
+#include "world/world.h"
 
 /*!
  * @brief Handle abrupt death of the visual system
@@ -26,17 +26,22 @@
  */
 void exit_game_panic(PlayerType *player_ptr)
 {
-	if (!w_ptr->character_generated || w_ptr->character_saved)
-		quit(_("緊急事態", "panic"));
-	msg_flag = false;
+    if (!w_ptr->character_generated || w_ptr->character_saved) {
+        quit(_("緊急事態", "panic"));
+    }
+    msg_flag = false;
 
-	prt("", 0, 0);
-	disturb(player_ptr, true, true);
-	if (player_ptr->chp < 0) player_ptr->is_dead = false;
+    prt("", 0, 0);
+    disturb(player_ptr, true, true);
+    if (player_ptr->chp < 0) {
+        player_ptr->is_dead = false;
+    }
 
-	player_ptr->panic_save = 1;
-	signals_ignore_tstp();
-	(void)strcpy(player_ptr->died_from, _("(緊急セーブ)", "(panic save)"));
-	if (!save_player(player_ptr, SAVE_TYPE_CLOSE_GAME)) quit(_("緊急セーブ失敗！", "panic save failed!"));
-	quit(_("緊急セーブ成功！", "panic save succeeded!"));
+    player_ptr->panic_save = 1;
+    signals_ignore_tstp();
+    (void)strcpy(player_ptr->died_from, _("(緊急セーブ)", "(panic save)"));
+    if (!save_player(player_ptr, SAVE_TYPE_CLOSE_GAME)) {
+        quit(_("緊急セーブ失敗！", "panic save failed!"));
+    }
+    quit(_("緊急セーブ成功！", "panic save succeeded!"));
 }

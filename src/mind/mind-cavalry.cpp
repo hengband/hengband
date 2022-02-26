@@ -38,23 +38,27 @@ bool rodeo(PlayerType *player_ptr)
         return false;
     }
 
-    if (!do_cmd_riding(player_ptr, true))
+    if (!do_cmd_riding(player_ptr, true)) {
         return true;
+    }
 
     m_ptr = &player_ptr->current_floor_ptr->m_list[player_ptr->riding];
     r_ptr = &r_info[m_ptr->r_idx];
     monster_desc(player_ptr, m_name, m_ptr, 0);
     msg_format(_("%sに乗った。", "You ride on %s."), m_name);
 
-    if (is_pet(m_ptr))
+    if (is_pet(m_ptr)) {
         return true;
+    }
 
     rlev = r_ptr->level;
 
-    if (r_ptr->kind_flags.has(MonsterKindType::UNIQUE))
+    if (r_ptr->kind_flags.has(MonsterKindType::UNIQUE)) {
         rlev = rlev * 3 / 2;
-    if (rlev > 60)
+    }
+    if (rlev > 60) {
         rlev = 60 + (rlev - 60) / 2;
+    }
     if ((randint1(player_ptr->skill_exp[PlayerSkillKindType::RIDING] / 120 + player_ptr->lev * 2 / 3) > rlev) && one_in_(2) &&
         !player_ptr->current_floor_ptr->inside_arena && !player_ptr->phase_out && !(r_ptr->flags7 & (RF7_GUARDIAN)) && !(r_ptr->flags1 & (RF1_QUESTOR)) &&
         (rlev < player_ptr->lev * 3 / 2 + randint0(player_ptr->lev / 5))) {

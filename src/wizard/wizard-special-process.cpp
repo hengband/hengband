@@ -230,13 +230,15 @@ void wiz_create_item(PlayerType *player_ptr)
     screen_save();
     OBJECT_IDX k_idx = wiz_create_itemtype();
     screen_load();
-    if (!k_idx)
+    if (!k_idx) {
         return;
+    }
 
     if (k_info[k_idx].gen_flags.has(ItemGenerationTraitType::INSTA_ART)) {
         for (const auto &a_ref : a_info) {
-            if ((a_ref.idx == 0) || (a_ref.tval != k_info[k_idx].tval) || (a_ref.sval != k_info[k_idx].sval))
+            if ((a_ref.idx == 0) || (a_ref.tval != k_info[k_idx].tval) || (a_ref.sval != k_info[k_idx].sval)) {
                 continue;
+            }
 
             (void)create_named_art(player_ptr, a_ref.idx, player_ptr->y, player_ptr->x);
             msg_print("Allocated(INSTA_ART).");
@@ -399,21 +401,24 @@ void wiz_change_status(PlayerType *player_ptr)
     for (int i = 0; i < A_MAX; i++) {
         sprintf(ppp, "%s (3-%d): ", stat_names[i], player_ptr->stat_max_max[i]);
         sprintf(tmp_val, "%d", player_ptr->stat_max[i]);
-        if (!get_string(ppp, tmp_val, 3))
+        if (!get_string(ppp, tmp_val, 3)) {
             return;
+        }
 
         tmp_int = atoi(tmp_val);
-        if (tmp_int > player_ptr->stat_max_max[i])
+        if (tmp_int > player_ptr->stat_max_max[i]) {
             tmp_int = player_ptr->stat_max_max[i];
-        else if (tmp_int < 3)
+        } else if (tmp_int < 3) {
             tmp_int = 3;
+        }
 
         player_ptr->stat_cur[i] = player_ptr->stat_max[i] = (BASE_STATUS)tmp_int;
     }
 
     sprintf(tmp_val, "%d", PlayerSkill::weapon_exp_at(PlayerSkillRank::MASTER));
-    if (!get_string(_("熟練度: ", "Proficiency: "), tmp_val, 4))
+    if (!get_string(_("熟練度: ", "Proficiency: "), tmp_val, 4)) {
         return;
+    }
 
     auto tmp_s16b = std::clamp(static_cast<SUB_EXP>(atoi(tmp_val)),
         PlayerSkill::weapon_exp_at(PlayerSkillRank::UNSKILLED),
@@ -429,36 +434,44 @@ void wiz_change_status(PlayerType *player_ptr)
     for (auto j : PLAYER_SKILL_KIND_TYPE_RANGE) {
         player_ptr->skill_exp[j] = tmp_s16b;
         auto short_pclass = enum2i(player_ptr->pclass);
-        if (player_ptr->skill_exp[j] > s_info[short_pclass].s_max[j])
+        if (player_ptr->skill_exp[j] > s_info[short_pclass].s_max[j]) {
             player_ptr->skill_exp[j] = s_info[short_pclass].s_max[j];
+        }
     }
 
     int k;
-    for (k = 0; k < 32; k++)
+    for (k = 0; k < 32; k++) {
         player_ptr->spell_exp[k] = std::min(PlayerSkill::spell_exp_at(PlayerSkillRank::MASTER), tmp_s16b);
+    }
 
-    for (; k < 64; k++)
+    for (; k < 64; k++) {
         player_ptr->spell_exp[k] = std::min(PlayerSkill::spell_exp_at(PlayerSkillRank::EXPERT), tmp_s16b);
+    }
 
     sprintf(tmp_val, "%ld", (long)(player_ptr->au));
-    if (!get_string("Gold: ", tmp_val, 9))
+    if (!get_string("Gold: ", tmp_val, 9)) {
         return;
+    }
 
     long tmp_long = atol(tmp_val);
-    if (tmp_long < 0)
+    if (tmp_long < 0) {
         tmp_long = 0L;
+    }
 
     player_ptr->au = tmp_long;
     sprintf(tmp_val, "%ld", (long)(player_ptr->max_exp));
-    if (!get_string("Experience: ", tmp_val, 9))
+    if (!get_string("Experience: ", tmp_val, 9)) {
         return;
+    }
 
     tmp_long = atol(tmp_val);
-    if (tmp_long < 0)
+    if (tmp_long < 0) {
         tmp_long = 0L;
+    }
 
-    if (PlayerRace(player_ptr).equals(PlayerRaceType::ANDROID))
+    if (PlayerRace(player_ptr).equals(PlayerRaceType::ANDROID)) {
         return;
+    }
 
     player_ptr->max_exp = tmp_long;
     player_ptr->exp = tmp_long;
@@ -475,8 +488,9 @@ void wiz_create_feature(PlayerType *player_ptr)
 {
     int f_val1, f_val2;
     POSITION y, x;
-    if (!tgt_pt(player_ptr, &x, &y))
+    if (!tgt_pt(player_ptr, &x, &y)) {
         return;
+    }
 
     grid_type *g_ptr;
     g_ptr = &player_ptr->current_floor_ptr->grid_array[y][x];
@@ -496,10 +510,11 @@ void wiz_create_feature(PlayerType *player_ptr)
     feature_type *f_ptr;
     f_ptr = &f_info[g_ptr->get_feat_mimic()];
 
-    if (f_ptr->flags.has(FloorFeatureType::RUNE_PROTECTION) || f_ptr->flags.has(FloorFeatureType::RUNE_EXPLOSION))
+    if (f_ptr->flags.has(FloorFeatureType::RUNE_PROTECTION) || f_ptr->flags.has(FloorFeatureType::RUNE_EXPLOSION)) {
         g_ptr->info |= CAVE_OBJECT;
-    else if (f_ptr->flags.has(FloorFeatureType::MIRROR))
+    } else if (f_ptr->flags.has(FloorFeatureType::MIRROR)) {
         g_ptr->info |= CAVE_GLOW | CAVE_OBJECT;
+    }
 
     note_spot(player_ptr, y, x);
     lite_spot(player_ptr, y, x);
@@ -597,15 +612,18 @@ void wiz_jump_to_dungeon(PlayerType *player_ptr)
         return;
     }
 
-    if (command_arg < d_info[dungeon_type].mindepth)
+    if (command_arg < d_info[dungeon_type].mindepth) {
         command_arg = 0;
+    }
 
-    if (command_arg > d_info[dungeon_type].maxdepth)
+    if (command_arg > d_info[dungeon_type].maxdepth) {
         command_arg = (COMMAND_ARG)d_info[dungeon_type].maxdepth;
+    }
 
     msg_format("You jump to dungeon level %d.", command_arg);
-    if (autosave_l)
+    if (autosave_l) {
         do_cmd_save_game(player_ptr, true);
+    }
 
     jump_floor(player_ptr, dungeon_type, command_arg);
 }
@@ -713,8 +731,9 @@ void wiz_dump_options(void)
 
     for (int i = 0; option_info[i].o_desc; i++) {
         const option_type *ot_ptr = &option_info[i];
-        if (ot_ptr->o_var)
+        if (ot_ptr->o_var) {
             exist[ot_ptr->o_set][ot_ptr->o_bit] = i + 1;
+        }
     }
 
     char title[200];
@@ -749,14 +768,16 @@ void set_gametime(void)
     char ppp[80], tmp_val[40];
     sprintf(ppp, "Dungeon Turn (0-%ld): ", (long)w_ptr->dungeon_turn_limit);
     sprintf(tmp_val, "%ld", (long)w_ptr->dungeon_turn);
-    if (!get_string(ppp, tmp_val, 10))
+    if (!get_string(ppp, tmp_val, 10)) {
         return;
+    }
 
     tmp_int = atoi(tmp_val);
-    if (tmp_int >= w_ptr->dungeon_turn_limit)
+    if (tmp_int >= w_ptr->dungeon_turn_limit) {
         tmp_int = w_ptr->dungeon_turn_limit - 1;
-    else if (tmp_int < 0)
+    } else if (tmp_int < 0) {
         tmp_int = 0;
+    }
 
     w_ptr->dungeon_turn = w_ptr->game_turn = tmp_int;
 }
@@ -768,8 +789,9 @@ void wiz_zap_surrounding_monsters(PlayerType *player_ptr)
 {
     for (MONSTER_IDX i = 1; i < player_ptr->current_floor_ptr->m_max; i++) {
         auto *m_ptr = &player_ptr->current_floor_ptr->m_list[i];
-        if (!monster_is_valid(m_ptr) || (i == player_ptr->riding) || (m_ptr->cdis > MAX_SIGHT))
+        if (!monster_is_valid(m_ptr) || (i == player_ptr->riding) || (m_ptr->cdis > MAX_SIGHT)) {
             continue;
+        }
 
         if (record_named_pet && is_pet(m_ptr) && m_ptr->nickname) {
             GAME_TEXT m_name[MAX_NLEN];
@@ -790,8 +812,9 @@ void wiz_zap_floor_monsters(PlayerType *player_ptr)
 {
     for (MONSTER_IDX i = 1; i < player_ptr->current_floor_ptr->m_max; i++) {
         auto *m_ptr = &player_ptr->current_floor_ptr->m_list[i];
-        if (!monster_is_valid(m_ptr) || (i == player_ptr->riding))
+        if (!monster_is_valid(m_ptr) || (i == player_ptr->riding)) {
             continue;
+        }
 
         if (record_named_pet && is_pet(m_ptr) && m_ptr->nickname) {
             GAME_TEXT m_name[MAX_NLEN];
@@ -805,8 +828,9 @@ void wiz_zap_floor_monsters(PlayerType *player_ptr)
 
 void cheat_death(PlayerType *player_ptr)
 {
-    if (player_ptr->sc)
+    if (player_ptr->sc) {
         player_ptr->sc = player_ptr->age = 0;
+    }
     player_ptr->age++;
 
     w_ptr->noscore |= 0x0001;
@@ -828,8 +852,9 @@ void cheat_death(PlayerType *player_ptr)
     player_ptr->phase_out = false;
     leaving_quest = QuestId::NONE;
     floor_ptr->quest_number = QuestId::NONE;
-    if (player_ptr->dungeon_idx)
+    if (player_ptr->dungeon_idx) {
         player_ptr->recall_dungeon = player_ptr->dungeon_idx;
+    }
     player_ptr->dungeon_idx = 0;
     if (lite_town || vanilla_town) {
         player_ptr->wilderness_y = 1;

@@ -22,8 +22,9 @@
 
 IDX rumor_num(char *zz, IDX max_idx)
 {
-    if (strcmp(zz, "*") == 0)
+    if (strcmp(zz, "*") == 0) {
         return randint1(max_idx - 1);
+    }
     return (IDX)atoi(zz);
 }
 
@@ -46,8 +47,9 @@ void display_rumor(PlayerType *player_ptr, bool ex)
     char rumor[1024];
     int section = (ex && (randint0(3) == 0)) ? 1 : 0;
     errr err = _(get_rnd_line_jonly("rumors_j.txt", section, rumor, 10), get_rnd_line("rumors.txt", section, rumor));
-    if (err)
+    if (err) {
         strcpy(rumor, _("嘘の噂もある。", "Some rumors are wrong."));
+    }
 
     if (strncmp(rumor, "R:", 2) != 0) {
         msg_format("%s", rumor);
@@ -69,8 +71,9 @@ void display_rumor(PlayerType *player_ptr, bool ex)
             a_idx = rumor_num(zz[1], static_cast<IDX>(a_info.size()));
 
             a_ptr = &a_info[a_idx];
-            if (!a_ptr->name.empty())
+            if (!a_ptr->name.empty()) {
                 break;
+            }
         }
 
         KIND_OBJECT_IDX k_idx = lookup_kind(a_ptr->tval, a_ptr->sval);
@@ -85,8 +88,9 @@ void display_rumor(PlayerType *player_ptr, bool ex)
         while (true) {
             MONRACE_IDX r_idx = rumor_num(zz[1], static_cast<IDX>(r_info.size()));
             r_ptr = &r_info[r_idx];
-            if (!r_ptr->name.empty())
+            if (!r_ptr->name.empty()) {
                 break;
+            }
         }
 
         strcpy(fullname, r_ptr->name.c_str());
@@ -100,8 +104,9 @@ void display_rumor(PlayerType *player_ptr, bool ex)
         while (true) {
             d_idx = rumor_num(zz[1], static_cast<IDX>(d_info.size()));
             d_ptr = &d_info[d_idx];
-            if (!d_ptr->name.empty())
+            if (!d_ptr->name.empty()) {
                 break;
+            }
         }
 
         strcpy(fullname, d_ptr->name.c_str());
@@ -114,8 +119,9 @@ void display_rumor(PlayerType *player_ptr, bool ex)
         IDX t_idx;
         while (true) {
             t_idx = rumor_num(zz[1], NO_TOWN);
-            if (town_info[t_idx].name[0] != '\0')
+            if (town_info[t_idx].name[0] != '\0') {
                 break;
+            }
         }
 
         strcpy(fullname, town_info[t_idx].name);

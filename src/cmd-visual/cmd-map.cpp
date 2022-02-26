@@ -41,22 +41,24 @@ void do_cmd_view_map(PlayerType *player_ptr)
         move_cursor(cy, cx);
         int i = inkey(true);
         byte flag;
-        if ('M' == i)
+        if ('M' == i) {
             flag = (DO_AUTOPICK | DO_QUERY_AUTOPICK);
-        else if ('N' == i)
+        } else if ('N' == i) {
             flag = DONT_AUTOPICK;
-        else if ('K' == i)
+        } else if ('K' == i) {
             flag = DO_AUTODESTROY;
-        else if ('D' == i)
+        } else if ('D' == i) {
             flag = (DO_AUTOPICK | DO_QUERY_AUTOPICK | DONT_AUTOPICK);
-        else
+        } else {
             break;
+        }
 
         term_fresh();
-        if (~display_autopick & flag)
+        if (~display_autopick & flag) {
             display_autopick |= flag;
-        else
+        } else {
             display_autopick &= ~flag;
+        }
 
         display_map(player_ptr, &cy, &cx);
     }

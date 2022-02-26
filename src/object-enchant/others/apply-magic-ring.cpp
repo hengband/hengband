@@ -504,21 +504,24 @@ void RingEnchanter::give_cursed()
         auto *k_ptr = &k_info[this->o_ptr->k_idx];
         switch (randint1(5)) {
         case 1:
-            if (k_ptr->flags.has(TR_DRAIN_EXP))
+            if (k_ptr->flags.has(TR_DRAIN_EXP)) {
                 break;
+            }
             this->o_ptr->ego_idx = EgoType::RING_DRAIN_EXP;
             break;
         case 2:
             this->o_ptr->ego_idx = EgoType::RING_NO_MELEE;
             break;
         case 3:
-            if (k_ptr->flags.has(TR_AGGRAVATE))
+            if (k_ptr->flags.has(TR_AGGRAVATE)) {
                 break;
+            }
             this->o_ptr->ego_idx = EgoType::RING_AGGRAVATE;
             break;
         case 4:
-            if (k_ptr->flags.has(TR_TY_CURSE))
+            if (k_ptr->flags.has(TR_TY_CURSE)) {
                 break;
+            }
             this->o_ptr->ego_idx = EgoType::RING_TY_CURSE;
             break;
         case 5:

@@ -7,8 +7,8 @@
 #include "load/old/item-loader-savefile50.h"
 #include "object/object-stack.h"
 #include "object/object-value.h"
-#include "store/store.h"
 #include "store/store-owners.h"
+#include "store/store.h"
 #include "system/object-type-definition.h"
 #include "system/player-type-definition.h"
 #include "util/object-sort.h"
@@ -46,8 +46,9 @@ static void home_carry_load(PlayerType *player_ptr, store_type *store_ptr, Objec
     auto value = object_value(o_ptr);
     int slot;
     for (slot = 0; slot < store_ptr->stock_num; slot++) {
-        if (object_sort_comp(player_ptr, o_ptr, value, &store_ptr->stock[slot]))
+        if (object_sort_comp(player_ptr, o_ptr, value, &store_ptr->stock[slot])) {
             break;
+        }
     }
 
     for (auto i = store_ptr->stock_num; i > slot; i--) {

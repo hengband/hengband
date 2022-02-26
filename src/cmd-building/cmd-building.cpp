@@ -99,10 +99,11 @@ static void bldg_process_command(PlayerType *player_ptr, building_type *bldg, in
     msg_erase();
 
     PRICE bcost;
-    if (is_owner(player_ptr, bldg))
+    if (is_owner(player_ptr, bldg)) {
         bcost = bldg->member_costs[i];
-    else
+    } else {
         bcost = bldg->other_costs[i];
+    }
 
     /* action restrictions */
     if (((bldg->action_restr[i] == 1) && !is_member(player_ptr, bldg)) || ((bldg->action_restr[i] == 2) && !is_owner(player_ptr, bldg))) {
@@ -111,9 +112,7 @@ static void bldg_process_command(PlayerType *player_ptr, building_type *bldg, in
     }
 
     auto bact = bldg->actions[i];
-    if ((bact != BACT_RECHARGE)
-        && (((bldg->member_costs[i] > player_ptr->au) && is_owner(player_ptr, bldg))
-            || ((bldg->other_costs[i] > player_ptr->au) && !is_owner(player_ptr, bldg)))) {
+    if ((bact != BACT_RECHARGE) && (((bldg->member_costs[i] > player_ptr->au) && is_owner(player_ptr, bldg)) || ((bldg->other_costs[i] > player_ptr->au) && !is_owner(player_ptr, bldg)))) {
         msg_print(_("お金が足りません！", "You do not have the gold!"));
         return;
     }
@@ -178,8 +177,9 @@ static void bldg_process_command(PlayerType *player_ptr, building_type *bldg, in
         building_recharge_all(player_ptr);
         break;
     case BACT_IDENTS:
-        if (!get_check(_("持ち物を全て鑑定してよろしいですか？", "Do you pay to identify all your possession? ")))
+        if (!get_check(_("持ち物を全て鑑定してよろしいですか？", "Do you pay to identify all your possession? "))) {
             break;
+        }
         identify_pack(player_ptr);
         msg_print(_(" 持ち物全てが鑑定されました。", "Your possessions have been identified."));
         paid = true;
@@ -204,8 +204,9 @@ static void bldg_process_command(PlayerType *player_ptr, building_type *bldg, in
         break;
 
     case BACT_RECALL:
-        if (recall_player(player_ptr, 1))
+        if (recall_player(player_ptr, 1)) {
             paid = true;
+        }
         break;
 
     case BACT_TELEPORT_LEVEL:
@@ -220,8 +221,9 @@ static void bldg_process_command(PlayerType *player_ptr, building_type *bldg, in
             muta.reset(PlayerMutationType::GOOD_LUCK);
         }
         if (muta.any()) {
-            while (!lose_mutation(player_ptr, 0))
+            while (!lose_mutation(player_ptr, 0)) {
                 ;
+            }
             paid = true;
             break;
         }
@@ -289,8 +291,9 @@ static void bldg_process_command(PlayerType *player_ptr, building_type *bldg, in
         break;
     }
 
-    if (paid)
+    if (paid) {
         player_ptr->au -= bcost;
+    }
 }
 
 /*!
@@ -299,8 +302,9 @@ static void bldg_process_command(PlayerType *player_ptr, building_type *bldg, in
  */
 void do_cmd_building(PlayerType *player_ptr)
 {
-    if (player_ptr->wild_mode)
+    if (player_ptr->wild_mode) {
         return;
+    }
 
     PlayerEnergy energy(player_ptr);
     energy.set_player_turn_energy(100);
@@ -380,8 +384,9 @@ void do_cmd_building(PlayerType *player_ptr)
             }
         }
 
-        if (validcmd)
+        if (validcmd) {
             bldg_process_command(player_ptr, bldg, i);
+        }
 
         handle_stuff(player_ptr);
     }
@@ -391,8 +396,9 @@ void do_cmd_building(PlayerType *player_ptr)
     msg_flag = false;
     msg_erase();
 
-    if (reinit_wilderness)
+    if (reinit_wilderness) {
         player_ptr->leaving = true;
+    }
 
     w_ptr->character_icky_depth--;
     term_clear();

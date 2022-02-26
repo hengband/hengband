@@ -6,8 +6,8 @@
 #include "floor/floor-object.h"
 #include "object-enchant/item-feeling.h"
 #include "object-enchant/special-object-flags.h"
-#include "object-enchant/trc-types.h"
 #include "object-enchant/tr-types.h"
+#include "object-enchant/trc-types.h"
 #include "object-hook/hook-weapon.h"
 #include "object/item-tester-hooker.h"
 #include "object/item-use-flags.h"
@@ -30,16 +30,16 @@ bool bless_weapon(PlayerType *player_ptr)
 
     OBJECT_IDX item;
     auto *o_ptr = choose_object(player_ptr, &item, q, s, USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT, FuncItemTester(&ObjectType::is_weapon));
-    if (!o_ptr)
+    if (!o_ptr) {
         return false;
+    }
 
     GAME_TEXT o_name[MAX_NLEN];
     describe_flavor(player_ptr, o_name, o_ptr, OD_OMIT_PREFIX | OD_NAME_ONLY);
     auto flgs = object_flags(o_ptr);
 
     if (o_ptr->is_cursed()) {
-        if ((o_ptr->curse_flags.has(CurseTraitType::HEAVY_CURSE) && (randint1(100) < 33)) || flgs.has(TR_ADD_L_CURSE) || flgs.has(TR_ADD_H_CURSE) 
-            || o_ptr->curse_flags.has(CurseTraitType::PERSISTENT_CURSE) || o_ptr->curse_flags.has(CurseTraitType::PERMA_CURSE)) {
+        if ((o_ptr->curse_flags.has(CurseTraitType::HEAVY_CURSE) && (randint1(100) < 33)) || flgs.has(TR_ADD_L_CURSE) || flgs.has(TR_ADD_H_CURSE) || o_ptr->curse_flags.has(CurseTraitType::PERSISTENT_CURSE) || o_ptr->curse_flags.has(CurseTraitType::PERMA_CURSE)) {
 #ifdef JP
             msg_format("%sを覆う黒いオーラは祝福を跳ね返した！", o_name);
 #else
@@ -96,8 +96,9 @@ bool bless_weapon(PlayerType *player_ptr)
             dis_happened = true;
         }
 
-        if ((o_ptr->to_h > 5) && (randint0(100) < 33))
+        if ((o_ptr->to_h > 5) && (randint0(100) < 33)) {
             o_ptr->to_h--;
+        }
 
         /* Disenchant todam */
         if (o_ptr->to_d > 0) {
@@ -105,8 +106,9 @@ bool bless_weapon(PlayerType *player_ptr)
             dis_happened = true;
         }
 
-        if ((o_ptr->to_d > 5) && (randint0(100) < 33))
+        if ((o_ptr->to_d > 5) && (randint0(100) < 33)) {
             o_ptr->to_d--;
+        }
 
         /* Disenchant toac */
         if (o_ptr->to_a > 0) {
@@ -114,8 +116,9 @@ bool bless_weapon(PlayerType *player_ptr)
             dis_happened = true;
         }
 
-        if ((o_ptr->to_a > 5) && (randint0(100) < 33))
+        if ((o_ptr->to_a > 5) && (randint0(100) < 33)) {
             o_ptr->to_a--;
+        }
 
         if (dis_happened) {
             msg_print(_("周囲が凡庸な雰囲気で満ちた...", "There is a static feeling in the air..."));

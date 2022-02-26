@@ -38,8 +38,9 @@ static errr rd_inventory(PlayerType *player_ptr)
 
         ObjectType item;
         item_loader->rd_item(&item);
-        if (!item.k_idx)
+        if (!item.k_idx) {
             return 53;
+        }
 
         if (n >= INVEN_MAIN_HAND) {
             item.marked |= OM_TOUCHED;
@@ -68,8 +69,9 @@ errr load_inventory(PlayerType *player_ptr)
         player_ptr->spell_order[i] = rd_byte();
     }
 
-    if (!rd_inventory(player_ptr))
+    if (!rd_inventory(player_ptr)) {
         return 0;
+    }
 
     load_note(_("持ち物情報を読み込むことができません", "Unable to read inventory"));
     return 21;

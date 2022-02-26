@@ -52,11 +52,13 @@ bool apply_disenchant(PlayerType *player_ptr, BIT_FLAGS mode)
 
     ObjectType *o_ptr;
     o_ptr = &player_ptr->inventory_list[t];
-    if (!o_ptr->k_idx)
+    if (!o_ptr->k_idx) {
         return false;
+    }
 
-    if (!o_ptr->is_weapon_armour_ammo())
+    if (!o_ptr->is_weapon_armour_ammo()) {
         return false;
+    }
 
     if ((o_ptr->to_h <= 0) && (o_ptr->to_d <= 0) && (o_ptr->to_a <= 0) && (o_ptr->pval <= 1)) {
         return false;
@@ -78,30 +80,38 @@ bool apply_disenchant(PlayerType *player_ptr, BIT_FLAGS mode)
     int to_a = o_ptr->to_a;
     int pval = o_ptr->pval;
 
-    if (o_ptr->to_h > 0)
+    if (o_ptr->to_h > 0) {
         o_ptr->to_h--;
-    if ((o_ptr->to_h > 5) && (randint0(100) < 20))
+    }
+    if ((o_ptr->to_h > 5) && (randint0(100) < 20)) {
         o_ptr->to_h--;
+    }
 
-    if (o_ptr->to_d > 0)
+    if (o_ptr->to_d > 0) {
         o_ptr->to_d--;
-    if ((o_ptr->to_d > 5) && (randint0(100) < 20))
+    }
+    if ((o_ptr->to_d > 5) && (randint0(100) < 20)) {
         o_ptr->to_d--;
+    }
 
-    if (o_ptr->to_a > 0)
+    if (o_ptr->to_a > 0) {
         o_ptr->to_a--;
-    if ((o_ptr->to_a > 5) && (randint0(100) < 20))
+    }
+    if ((o_ptr->to_a > 5) && (randint0(100) < 20)) {
         o_ptr->to_a--;
+    }
 
-    if ((o_ptr->pval > 1) && one_in_(13) && !(mode & 0x01))
+    if ((o_ptr->pval > 1) && one_in_(13) && !(mode & 0x01)) {
         o_ptr->pval--;
+    }
 
     bool is_actually_disenchanted = to_h != o_ptr->to_h;
     is_actually_disenchanted |= to_d != o_ptr->to_d;
     is_actually_disenchanted |= to_a != o_ptr->to_a;
     is_actually_disenchanted |= pval != o_ptr->pval;
-    if (!is_actually_disenchanted)
+    if (!is_actually_disenchanted) {
         return true;
+    }
 
 #ifdef JP
     msg_format("%s(%c)は劣化してしまった！", o_name, index_to_label(t));

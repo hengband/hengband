@@ -94,23 +94,26 @@ constexpr std::array debug_menu_table = {
  */
 void display_debug_menu(int page, int max_page, int page_size, int max_line)
 {
-    for (int y = 1; y < page_size + 3; y++)
+    for (int y = 1; y < page_size + 3; y++) {
         term_erase(14, y, 64);
+    }
 
     int r = 1;
     int c = 15;
     for (int i = 0; i < page_size; i++) {
         int pos = page * page_size + i;
-        if (pos >= max_line)
+        if (pos >= max_line) {
             break;
+        }
 
         std::stringstream ss;
         const auto &[symbol, desc] = debug_menu_table[pos];
         ss << symbol << ") " << desc;
         put_str(ss.str().c_str(), r++, c);
     }
-    if (max_page > 1)
+    if (max_page > 1) {
         put_str("-- more --", r++, c);
+    }
 }
 
 /*!
@@ -213,8 +216,9 @@ bool exe_cmd_debug(PlayerType *player_ptr, char cmd)
         wizard_player_modifier(player_ptr);
         break;
     case 's':
-        if (command_arg <= 0)
+        if (command_arg <= 0) {
             command_arg = 1;
+        }
 
         wiz_summon_random_enemy(player_ptr, command_arg);
         break;
@@ -222,9 +226,11 @@ bool exe_cmd_debug(PlayerType *player_ptr, char cmd)
         teleport_player(player_ptr, 100, TELEPORT_SPONTANEOUS);
         break;
     case 'u':
-        for (int y = 0; y < player_ptr->current_floor_ptr->height; y++)
-            for (int x = 0; x < player_ptr->current_floor_ptr->width; x++)
+        for (int y = 0; y < player_ptr->current_floor_ptr->height; y++) {
+            for (int x = 0; x < player_ptr->current_floor_ptr->width; x++) {
                 player_ptr->current_floor_ptr->grid_array[y][x].info |= CAVE_GLOW | CAVE_MARK;
+            }
+        }
 
         wiz_lite(player_ptr, false);
         break;
@@ -235,9 +241,11 @@ bool exe_cmd_debug(PlayerType *player_ptr, char cmd)
         gain_exp(player_ptr, command_arg ? command_arg : (player_ptr->exp + 1));
         break;
     case 'X':
-        for (INVENTORY_IDX i = INVEN_TOTAL - 1; i >= 0; i--)
-            if (player_ptr->inventory_list[i].k_idx)
+        for (INVENTORY_IDX i = INVEN_TOTAL - 1; i >= 0; i--) {
+            if (player_ptr->inventory_list[i].k_idx) {
                 drop_from_inventory(player_ptr, i, 999);
+            }
+        }
 
         player_outfit(player_ptr);
         break;
@@ -298,8 +306,9 @@ void do_cmd_debug(PlayerType *player_ptr)
         get_com("Debug Command: ", &cmd, false);
         screen_load();
 
-        if (exe_cmd_debug(player_ptr, cmd))
+        if (exe_cmd_debug(player_ptr, cmd)) {
             break;
+        }
 
         page = (page + 1) % max_page;
     }

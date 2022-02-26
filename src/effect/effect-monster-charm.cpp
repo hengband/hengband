@@ -37,19 +37,22 @@ static void effect_monster_charm_resist(PlayerType *player_ptr, effect_monster_t
         em_ptr->note = _("には効果がなかった。", " is unaffected.");
         em_ptr->obvious = false;
 
-        if (one_in_(4))
+        if (one_in_(4)) {
             em_ptr->m_ptr->mflag2.set(MonsterConstantFlagType::NOPET);
+        }
     } else if (has_aggravate(player_ptr)) {
         em_ptr->note = _("はあなたに敵意を抱いている！", " hates you too much!");
-        if (one_in_(4))
+        if (one_in_(4)) {
             em_ptr->m_ptr->mflag2.set(MonsterConstantFlagType::NOPET);
+        }
     } else {
         em_ptr->note = _("は突然友好的になったようだ！", " suddenly seems friendly!");
         set_pet(player_ptr, em_ptr->m_ptr);
 
         chg_virtue(player_ptr, V_INDIVIDUALISM, -1);
-        if (em_ptr->r_ptr->kind_flags.has(MonsterKindType::ANIMAL))
+        if (em_ptr->r_ptr->kind_flags.has(MonsterKindType::ANIMAL)) {
             chg_virtue(player_ptr, V_NATURE, 1);
+        }
     }
 }
 
@@ -65,8 +68,9 @@ process_result effect_monster_charm(PlayerType *player_ptr, effect_monster_type 
         em_ptr->dam -= player_ptr->virtues[vir - 1] / 20;
     }
 
-    if (em_ptr->seen)
+    if (em_ptr->seen) {
         em_ptr->obvious = true;
+    }
 
     effect_monster_charm_resist(player_ptr, em_ptr);
     em_ptr->dam = 0;
@@ -75,8 +79,9 @@ process_result effect_monster_charm(PlayerType *player_ptr, effect_monster_type 
 
 process_result effect_monster_control_undead(PlayerType *player_ptr, effect_monster_type *em_ptr)
 {
-    if (em_ptr->seen)
+    if (em_ptr->seen) {
         em_ptr->obvious = true;
+    }
 
     int vir = virtue_number(player_ptr, V_UNLIFE);
     if (vir) {
@@ -91,12 +96,14 @@ process_result effect_monster_control_undead(PlayerType *player_ptr, effect_mons
     if (common_saving_throw_control(player_ptr, em_ptr->dam, em_ptr->m_ptr) || em_ptr->r_ptr->kind_flags.has_not(MonsterKindType::UNDEAD)) {
         em_ptr->note = _("には効果がなかった。", " is unaffected.");
         em_ptr->obvious = false;
-        if (one_in_(4))
+        if (one_in_(4)) {
             em_ptr->m_ptr->mflag2.set(MonsterConstantFlagType::NOPET);
+        }
     } else if (has_aggravate(player_ptr)) {
         em_ptr->note = _("はあなたに敵意を抱いている！", " hates you too much!");
-        if (one_in_(4))
+        if (one_in_(4)) {
             em_ptr->m_ptr->mflag2.set(MonsterConstantFlagType::NOPET);
+        }
     } else {
         em_ptr->note = _("は既にあなたの奴隷だ！", " is in your thrall!");
         set_pet(player_ptr, em_ptr->m_ptr);
@@ -108,8 +115,9 @@ process_result effect_monster_control_undead(PlayerType *player_ptr, effect_mons
 
 process_result effect_monster_control_demon(PlayerType *player_ptr, effect_monster_type *em_ptr)
 {
-    if (em_ptr->seen)
+    if (em_ptr->seen) {
         em_ptr->obvious = true;
+    }
 
     int vir = virtue_number(player_ptr, V_UNLIFE);
     if (vir) {
@@ -124,12 +132,14 @@ process_result effect_monster_control_demon(PlayerType *player_ptr, effect_monst
     if (common_saving_throw_control(player_ptr, em_ptr->dam, em_ptr->m_ptr) || em_ptr->r_ptr->kind_flags.has_not(MonsterKindType::DEMON)) {
         em_ptr->note = _("には効果がなかった。", " is unaffected.");
         em_ptr->obvious = false;
-        if (one_in_(4))
+        if (one_in_(4)) {
             em_ptr->m_ptr->mflag2.set(MonsterConstantFlagType::NOPET);
+        }
     } else if (has_aggravate(player_ptr)) {
         em_ptr->note = _("はあなたに敵意を抱いている！", " hates you too much!");
-        if (one_in_(4))
+        if (one_in_(4)) {
             em_ptr->m_ptr->mflag2.set(MonsterConstantFlagType::NOPET);
+        }
     } else {
         em_ptr->note = _("は既にあなたの奴隷だ！", " is in your thrall!");
         set_pet(player_ptr, em_ptr->m_ptr);
@@ -141,8 +151,9 @@ process_result effect_monster_control_demon(PlayerType *player_ptr, effect_monst
 
 process_result effect_monster_control_animal(PlayerType *player_ptr, effect_monster_type *em_ptr)
 {
-    if (em_ptr->seen)
+    if (em_ptr->seen) {
         em_ptr->obvious = true;
+    }
 
     int vir = virtue_number(player_ptr, V_NATURE);
     if (vir) {
@@ -157,17 +168,20 @@ process_result effect_monster_control_animal(PlayerType *player_ptr, effect_mons
     if (common_saving_throw_control(player_ptr, em_ptr->dam, em_ptr->m_ptr) || em_ptr->r_ptr->kind_flags.has_not(MonsterKindType::ANIMAL)) {
         em_ptr->note = _("には効果がなかった。", " is unaffected.");
         em_ptr->obvious = false;
-        if (one_in_(4))
+        if (one_in_(4)) {
             em_ptr->m_ptr->mflag2.set(MonsterConstantFlagType::NOPET);
+        }
     } else if (has_aggravate(player_ptr)) {
         em_ptr->note = _("はあなたに敵意を抱いている！", " hates you too much!");
-        if (one_in_(4))
+        if (one_in_(4)) {
             em_ptr->m_ptr->mflag2.set(MonsterConstantFlagType::NOPET);
+        }
     } else {
         em_ptr->note = _("はなついた。", " is tamed!");
         set_pet(player_ptr, em_ptr->m_ptr);
-        if (em_ptr->r_ptr->kind_flags.has(MonsterKindType::ANIMAL))
+        if (em_ptr->r_ptr->kind_flags.has(MonsterKindType::ANIMAL)) {
             chg_virtue(player_ptr, V_NATURE, 1);
+        }
     }
 
     em_ptr->dam = 0;
@@ -177,8 +191,9 @@ process_result effect_monster_control_animal(PlayerType *player_ptr, effect_mons
 process_result effect_monster_charm_living(PlayerType *player_ptr, effect_monster_type *em_ptr)
 {
     int vir = virtue_number(player_ptr, V_UNLIFE);
-    if (em_ptr->seen)
+    if (em_ptr->seen) {
         em_ptr->obvious = true;
+    }
 
     vir = virtue_number(player_ptr, V_UNLIFE);
     if (vir) {
@@ -195,17 +210,20 @@ process_result effect_monster_charm_living(PlayerType *player_ptr, effect_monste
     if (common_saving_throw_charm(player_ptr, em_ptr->dam, em_ptr->m_ptr) || !monster_living(em_ptr->m_ptr->r_idx)) {
         em_ptr->note = _("には効果がなかった。", " is unaffected.");
         em_ptr->obvious = false;
-        if (one_in_(4))
+        if (one_in_(4)) {
             em_ptr->m_ptr->mflag2.set(MonsterConstantFlagType::NOPET);
+        }
     } else if (has_aggravate(player_ptr)) {
         em_ptr->note = _("はあなたに敵意を抱いている！", " hates you too much!");
-        if (one_in_(4))
+        if (one_in_(4)) {
             em_ptr->m_ptr->mflag2.set(MonsterConstantFlagType::NOPET);
+        }
     } else {
         em_ptr->note = _("を支配した。", " is tamed!");
         set_pet(player_ptr, em_ptr->m_ptr);
-        if (em_ptr->r_ptr->kind_flags.has(MonsterKindType::ANIMAL))
+        if (em_ptr->r_ptr->kind_flags.has(MonsterKindType::ANIMAL)) {
             chg_virtue(player_ptr, V_NATURE, 1);
+        }
     }
 
     em_ptr->dam = 0;
@@ -271,15 +289,18 @@ static void effect_monster_domination_addition(effect_monster_type *em_ptr)
 
 process_result effect_monster_domination(PlayerType *player_ptr, effect_monster_type *em_ptr)
 {
-    if (!is_hostile(em_ptr->m_ptr))
+    if (!is_hostile(em_ptr->m_ptr)) {
         return PROCESS_CONTINUE;
+    }
 
-    if (em_ptr->seen)
+    if (em_ptr->seen) {
         em_ptr->obvious = true;
+    }
 
     if (em_ptr->r_ptr->kind_flags.has(MonsterKindType::UNIQUE) || any_bits(em_ptr->r_ptr->flags1, RF1_QUESTOR) || (em_ptr->r_ptr->flags3 & RF3_NO_CONF) || (em_ptr->r_ptr->level > randint1((em_ptr->dam - 10) < 1 ? 1 : (em_ptr->dam - 10)) + 10)) {
-        if (((em_ptr->r_ptr->flags3 & RF3_NO_CONF) != 0) && is_original_ap_and_seen(player_ptr, em_ptr->m_ptr))
+        if (((em_ptr->r_ptr->flags3 & RF3_NO_CONF) != 0) && is_original_ap_and_seen(player_ptr, em_ptr->m_ptr)) {
             em_ptr->r_ptr->r_flags3 |= (RF3_NO_CONF);
+        }
 
         em_ptr->do_conf = 0;
         effect_monster_domination_corrupted(player_ptr, em_ptr);
@@ -301,13 +322,16 @@ process_result effect_monster_domination(PlayerType *player_ptr, effect_monster_
 
 static bool effect_monster_crusade_domination(PlayerType *player_ptr, effect_monster_type *em_ptr)
 {
-    if ((em_ptr->r_ptr->kind_flags.has_not(MonsterKindType::GOOD)) || player_ptr->current_floor_ptr->inside_arena)
+    if ((em_ptr->r_ptr->kind_flags.has_not(MonsterKindType::GOOD)) || player_ptr->current_floor_ptr->inside_arena) {
         return false;
+    }
 
-    if (em_ptr->r_ptr->flags3 & RF3_NO_CONF)
+    if (em_ptr->r_ptr->flags3 & RF3_NO_CONF) {
         em_ptr->dam -= 50;
-    if (em_ptr->dam < 1)
+    }
+    if (em_ptr->dam < 1) {
         em_ptr->dam = 1;
+    }
 
     if (is_pet(em_ptr->m_ptr)) {
         em_ptr->note = _("の動きが速くなった。", " starts moving faster.");
@@ -322,8 +346,9 @@ static bool effect_monster_crusade_domination(PlayerType *player_ptr, effect_mon
     failed |= (em_ptr->r_ptr->level + 10) > randint1(em_ptr->dam);
 
     if (failed) {
-        if (one_in_(4))
+        if (one_in_(4)) {
             em_ptr->m_ptr->mflag2.set(MonsterConstantFlagType::NOPET);
+        }
 
         return false;
     }
@@ -331,26 +356,29 @@ static bool effect_monster_crusade_domination(PlayerType *player_ptr, effect_mon
     em_ptr->note = _("を支配した。", " is tamed!");
     set_pet(player_ptr, em_ptr->m_ptr);
     (void)set_monster_fast(player_ptr, em_ptr->g_ptr->m_idx, monster_fast_remaining(em_ptr->m_ptr) + 100);
-    if (is_original_ap_and_seen(player_ptr, em_ptr->m_ptr))
+    if (is_original_ap_and_seen(player_ptr, em_ptr->m_ptr)) {
         em_ptr->r_ptr->r_kind_flags.set(MonsterKindType::GOOD);
+    }
 
     return true;
 }
 
 process_result effect_monster_crusade(PlayerType *player_ptr, effect_monster_type *em_ptr)
 {
-    if (em_ptr->seen)
+    if (em_ptr->seen) {
         em_ptr->obvious = true;
+    }
     bool success = effect_monster_crusade_domination(player_ptr, em_ptr);
     if (success) {
         em_ptr->dam = 0;
         return PROCESS_CONTINUE;
     }
 
-    if ((em_ptr->r_ptr->flags3 & RF3_NO_FEAR) == 0)
+    if ((em_ptr->r_ptr->flags3 & RF3_NO_FEAR) == 0) {
         em_ptr->do_fear = randint1(90) + 10;
-    else if (is_original_ap_and_seen(player_ptr, em_ptr->m_ptr))
+    } else if (is_original_ap_and_seen(player_ptr, em_ptr->m_ptr)) {
         em_ptr->r_ptr->r_flags3 |= RF3_NO_FEAR;
+    }
 
     em_ptr->dam = 0;
     return PROCESS_CONTINUE;
@@ -365,11 +393,13 @@ process_result effect_monster_crusade(PlayerType *player_ptr, effect_monster_typ
  */
 static int calcutate_capturable_hp(PlayerType *player_ptr, monster_type *m_ptr, int hp)
 {
-    if (is_pet(m_ptr))
+    if (is_pet(m_ptr)) {
         return hp * 4L;
+    }
 
-    if (PlayerClass(player_ptr).equals(PlayerClassType::BEASTMASTER) && monster_living(m_ptr->r_idx))
+    if (PlayerClass(player_ptr).equals(PlayerClassType::BEASTMASTER) && monster_living(m_ptr->r_idx)) {
         return hp * 3 / 10;
+    }
 
     return hp * 3 / 20;
 }
@@ -381,8 +411,9 @@ static int calcutate_capturable_hp(PlayerType *player_ptr, monster_type *m_ptr, 
  */
 static void effect_monster_captured(PlayerType *player_ptr, effect_monster_type *em_ptr, std::optional<CapturedMonsterType *> tmp_cap_mon_ptr)
 {
-    if (em_ptr->m_ptr->mflag2.has(MonsterConstantFlagType::CHAMELEON))
+    if (em_ptr->m_ptr->mflag2.has(MonsterConstantFlagType::CHAMELEON)) {
         choose_new_monster(player_ptr, em_ptr->g_ptr->m_idx, false, MON_CHAMELEON);
+    }
 
     msg_format(_("%sを捕えた！", "You capture %^s!"), em_ptr->m_name);
     auto cap_mon_ptr = tmp_cap_mon_ptr.value();
@@ -391,8 +422,9 @@ static void effect_monster_captured(PlayerType *player_ptr, effect_monster_type 
     cap_mon_ptr->current_hp = static_cast<short>(em_ptr->m_ptr->hp);
     cap_mon_ptr->max_hp = static_cast<short>(em_ptr->m_ptr->max_maxhp);
     cap_mon_ptr->nickname = em_ptr->m_ptr->nickname;
-    if ((em_ptr->g_ptr->m_idx == player_ptr->riding) && process_fall_off_horse(player_ptr, -1, false))
+    if ((em_ptr->g_ptr->m_idx == player_ptr->riding) && process_fall_off_horse(player_ptr, -1, false)) {
         msg_format(_("地面に落とされた。", "You have fallen from %s."), em_ptr->m_name);
+    }
 
     delete_monster_idx(player_ptr, em_ptr->g_ptr->m_idx);
     calculate_upkeep(player_ptr);

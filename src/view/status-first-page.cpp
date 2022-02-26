@@ -41,27 +41,33 @@ static TERM_COLOR likert_color = TERM_WHITE;
  */
 static void calc_shot_params(PlayerType *player_ptr, ObjectType *o_ptr, int *shots, int *shot_frac)
 {
-    if (o_ptr->k_idx == 0)
+    if (o_ptr->k_idx == 0) {
         return;
+    }
 
     ENERGY energy_fire = bow_energy(o_ptr->sval);
     *shots = player_ptr->num_fire * 100;
     *shot_frac = ((*shots) * 100 / energy_fire) % 100;
     *shots = (*shots) / energy_fire;
-    if (o_ptr->fixed_artifact_idx != ART_CRIMSON)
+    if (o_ptr->fixed_artifact_idx != ART_CRIMSON) {
         return;
+    }
 
     *shots = 1;
     *shot_frac = 0;
-    if (!PlayerClass(player_ptr).equals(PlayerClassType::ARCHER))
+    if (!PlayerClass(player_ptr).equals(PlayerClassType::ARCHER)) {
         return;
+    }
 
-    if (player_ptr->lev >= 10)
+    if (player_ptr->lev >= 10) {
         (*shots)++;
-    if (player_ptr->lev >= 30)
+    }
+    if (player_ptr->lev >= 30) {
         (*shots)++;
-    if (player_ptr->lev >= 45)
+    }
+    if (player_ptr->lev >= 45) {
         (*shots)++;
+    }
 }
 
 /*!
@@ -82,21 +88,25 @@ static bool calc_weapon_damage_limit(PlayerType *player_ptr, int hand, int *dama
     }
 
     PlayerClass pc(player_ptr);
-    if (pc.equals(PlayerClassType::FORCETRAINER))
+    if (pc.equals(PlayerClassType::FORCETRAINER)) {
         level = std::max<short>(1, level - 3);
+    }
 
-    if (pc.monk_stance_is(MonkStanceType::BYAKKO))
+    if (pc.monk_stance_is(MonkStanceType::BYAKKO)) {
         *basedam = monk_ave_damage[level][1];
-    else if (pc.monk_stance_is(MonkStanceType::GENBU) || pc.monk_stance_is(MonkStanceType::SUZAKU))
+    } else if (pc.monk_stance_is(MonkStanceType::GENBU) || pc.monk_stance_is(MonkStanceType::SUZAKU)) {
         *basedam = monk_ave_damage[level][2];
-    else
+    } else {
         *basedam = monk_ave_damage[level][0];
+    }
 
     damage[hand] += *basedam;
-    if ((o_ptr->tval == ItemKindType::SWORD) && (o_ptr->sval == SV_POISON_NEEDLE))
+    if ((o_ptr->tval == ItemKindType::SWORD) && (o_ptr->sval == SV_POISON_NEEDLE)) {
         damage[hand] = 1;
-    if (damage[hand] < 0)
+    }
+    if (damage[hand] < 0) {
         damage[hand] = 0;
+    }
 
     return true;
 }
@@ -111,16 +121,19 @@ static bool calc_weapon_damage_limit(PlayerType *player_ptr, int hand, int *dama
  */
 static bool calc_weapon_one_hand(ObjectType *o_ptr, int hand, int *damage, int *basedam)
 {
-    if (o_ptr->k_idx == 0)
+    if (o_ptr->k_idx == 0) {
         return false;
+    }
 
     *basedam = 0;
     damage[hand] += *basedam;
-    if ((o_ptr->tval == ItemKindType::SWORD) && (o_ptr->sval == SV_POISON_NEEDLE))
+    if ((o_ptr->tval == ItemKindType::SWORD) && (o_ptr->sval == SV_POISON_NEEDLE)) {
         damage[hand] = 1;
+    }
 
-    if (damage[hand] < 0)
+    if (damage[hand] < 0) {
         damage[hand] = 0;
+    }
 
     return true;
 }
@@ -149,8 +162,9 @@ static int strengthen_basedam(PlayerType *player_ptr, ObjectType *o_ptr, int bas
     bool is_force = !PlayerClass(player_ptr).equals(PlayerClassType::SAMURAI);
     is_force &= flgs.has(TR_FORCE_WEAPON);
     is_force &= player_ptr->csp > (o_ptr->dd * o_ptr->ds / 5);
-    if (is_force)
+    if (is_force) {
         basedam = basedam * 7 / 2;
+    }
 
     return basedam;
 }
@@ -166,11 +180,13 @@ static concptr likert(int x, int y)
     static char dummy[20] = "", dummy2[20] = "";
     memset(dummy, 0, strlen(dummy));
     memset(dummy2, 0, strlen(dummy2));
-    if (y <= 0)
+    if (y <= 0) {
         y = 1;
+    }
 
-    if (show_actual_value)
+    if (show_actual_value) {
         sprintf(dummy, "%3d-", x);
+    }
 
     if (x < 0) {
         likert_color = TERM_L_DARK;
@@ -256,20 +272,23 @@ static void calc_two_hands(PlayerType *player_ptr, int *damage, int *to_h)
         damage[i] = player_ptr->dis_to_d[i] * 100;
         PlayerClass pc(player_ptr);
         if (pc.is_martial_arts_pro() && (empty_hands(player_ptr, true) & EMPTY_HAND_MAIN)) {
-            if (!calc_weapon_damage_limit(player_ptr, i, damage, &basedam, o_ptr))
+            if (!calc_weapon_damage_limit(player_ptr, i, damage, &basedam, o_ptr)) {
                 break;
+            }
 
             continue;
         }
 
         o_ptr = &player_ptr->inventory_list[INVEN_MAIN_HAND + i];
-        if (!calc_weapon_one_hand(o_ptr, i, damage, &basedam))
+        if (!calc_weapon_one_hand(o_ptr, i, damage, &basedam)) {
             continue;
+        }
 
         to_h[i] = 0;
         bool poison_needle = false;
-        if ((o_ptr->tval == ItemKindType::SWORD) && (o_ptr->sval == SV_POISON_NEEDLE))
+        if ((o_ptr->tval == ItemKindType::SWORD) && (o_ptr->sval == SV_POISON_NEEDLE)) {
             poison_needle = true;
+        }
         if (o_ptr->is_known()) {
             damage[i] += o_ptr->to_d * 100;
             to_h[i] += o_ptr->to_h;
@@ -282,10 +301,12 @@ static void calc_two_hands(PlayerType *player_ptr, int *damage, int *to_h)
         basedam = calc_expect_crit(player_ptr, o_ptr->weight, to_h[i], basedam, player_ptr->dis_to_h[i], poison_needle, impact);
         basedam = strengthen_basedam(player_ptr, o_ptr, basedam, flgs);
         damage[i] += basedam;
-        if ((o_ptr->tval == ItemKindType::SWORD) && (o_ptr->sval == SV_POISON_NEEDLE))
+        if ((o_ptr->tval == ItemKindType::SWORD) && (o_ptr->sval == SV_POISON_NEEDLE)) {
             damage[i] = 1;
-        if (damage[i] < 0)
+        }
+        if (damage[i] < 0) {
             damage[i] = 0;
+        }
     }
 }
 
@@ -303,16 +324,21 @@ static void display_first_page(PlayerType *player_ptr, int xthb, int *damage, in
     int xthn = player_ptr->skill_thn + (player_ptr->to_h_m * BTH_PLUS_ADJ);
 
     int muta_att = 0;
-    if (player_ptr->muta.has(PlayerMutationType::HORNS))
+    if (player_ptr->muta.has(PlayerMutationType::HORNS)) {
         muta_att++;
-    if (player_ptr->muta.has(PlayerMutationType::SCOR_TAIL))
+    }
+    if (player_ptr->muta.has(PlayerMutationType::SCOR_TAIL)) {
         muta_att++;
-    if (player_ptr->muta.has(PlayerMutationType::BEAK))
+    }
+    if (player_ptr->muta.has(PlayerMutationType::BEAK)) {
         muta_att++;
-    if (player_ptr->muta.has(PlayerMutationType::TRUNK))
+    }
+    if (player_ptr->muta.has(PlayerMutationType::TRUNK)) {
         muta_att++;
-    if (player_ptr->muta.has(PlayerMutationType::TENTACLES))
+    }
+    if (player_ptr->muta.has(PlayerMutationType::TENTACLES)) {
         muta_att++;
+    }
 
     int blows1 = can_attack_with_main_hand(player_ptr) ? player_ptr->num_blow[0] : 0;
     int blows2 = can_attack_with_sub_hand(player_ptr) ? player_ptr->num_blow[1] : 0;
@@ -354,17 +380,19 @@ static void display_first_page(PlayerType *player_ptr, int xthb, int *damage, in
     desc = likert(xdig, 4);
     display_player_one_line(ENTRY_SKILL_DIG, desc, likert_color);
 
-    if (!muta_att)
+    if (!muta_att) {
         display_player_one_line(ENTRY_BLOWS, format("%d+%d", blows1, blows2), TERM_L_BLUE);
-    else
+    } else {
         display_player_one_line(ENTRY_BLOWS, format("%d+%d+%d", blows1, blows2, muta_att), TERM_L_BLUE);
+    }
 
     display_player_one_line(ENTRY_SHOTS, format("%d.%02d", shots, shot_frac), TERM_L_BLUE);
 
-    if ((damage[0] + damage[1]) == 0)
+    if ((damage[0] + damage[1]) == 0) {
         desc = "nil!";
-    else
+    } else {
         desc = format("%d+%d", blows1 * damage[0] / 100, blows2 * damage[1] / 100);
+    }
 
     display_player_one_line(ENTRY_AVG_DMG, desc, TERM_L_BLUE);
     display_player_one_line(ENTRY_INFRA, format("%d feet", player_ptr->see_infra * 10), TERM_WHITE);

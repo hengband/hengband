@@ -52,17 +52,19 @@ void call_chaos(PlayerType *player_ptr)
 
     AttributeType chaos_type = hurt_types[randint0(32)];
     bool line_chaos = false;
-    if (one_in_(4))
+    if (one_in_(4)) {
         line_chaos = true;
+    }
 
     int dir;
     if (one_in_(6)) {
         for (int dummy = 1; dummy < 10; dummy++) {
             if (dummy - 5) {
-                if (line_chaos)
+                if (line_chaos) {
                     fire_beam(player_ptr, chaos_type, dummy, 150);
-                else
+                } else {
                     fire_ball(player_ptr, chaos_type, dummy, 150, 2);
+                }
             }
         }
 
@@ -74,12 +76,14 @@ void call_chaos(PlayerType *player_ptr)
         return;
     }
 
-    if (!get_aim_dir(player_ptr, &dir))
+    if (!get_aim_dir(player_ptr, &dir)) {
         return;
-    if (line_chaos)
+    }
+    if (line_chaos) {
         fire_beam(player_ptr, chaos_type, dir, 250);
-    else
+    } else {
         fire_ball(player_ptr, chaos_type, dir, 250, 3 + (player_ptr->lev / 35));
+    }
 }
 
 /*!
@@ -107,8 +111,9 @@ bool activate_ty_curse(PlayerType *player_ptr, bool stop_ty, int *count)
             if (!(*count)) {
                 msg_print(_("地面が揺れた...", "The ground trembles..."));
                 earthquake(player_ptr, player_ptr->y, player_ptr->x, 5 + randint0(10), 0);
-                if (!one_in_(6))
+                if (!one_in_(6)) {
                     break;
+                }
             }
             /* Fall through */
         case 30:
@@ -118,8 +123,9 @@ bool activate_ty_curse(PlayerType *player_ptr, bool stop_ty, int *count)
                 msg_print(_("純粋な魔力の次元への扉が開いた！", "A portal opens to a plane of raw mana!"));
                 project(player_ptr, 0, 8, player_ptr->y, player_ptr->x, dam, AttributeType::MANA, flg);
                 take_hit(player_ptr, DAMAGE_NOESCAPE, dam, _("純粋な魔力の解放", "released pure mana"));
-                if (!one_in_(6))
+                if (!one_in_(6)) {
                     break;
+                }
             }
             /* Fall through */
         case 32:
@@ -127,10 +133,12 @@ bool activate_ty_curse(PlayerType *player_ptr, bool stop_ty, int *count)
             if (!(*count)) {
                 msg_print(_("周囲の空間が歪んだ！", "Space warps about you!"));
                 teleport_player(player_ptr, damroll(10, 10), TELEPORT_PASSIVE);
-                if (randint0(13))
+                if (randint0(13)) {
                     (*count) += activate_hi_summon(player_ptr, player_ptr->y, player_ptr->x, false);
-                if (!one_in_(6))
+                }
+                if (!one_in_(6)) {
                     break;
+                }
             }
             /* Fall through */
         case 34:
@@ -141,8 +149,9 @@ bool activate_ty_curse(PlayerType *player_ptr, bool stop_ty, int *count)
                 take_hit(player_ptr, DAMAGE_NOESCAPE, 50, _("エネルギーのうねり", "surge of energy"));
             }
 
-            if (!one_in_(6))
+            if (!one_in_(6)) {
                 break;
+            }
             /* Fall through */
         case 1:
         case 2:
@@ -150,15 +159,17 @@ bool activate_ty_curse(PlayerType *player_ptr, bool stop_ty, int *count)
         case 16:
         case 17:
             aggravate_monsters(player_ptr, 0);
-            if (!one_in_(6))
+            if (!one_in_(6)) {
                 break;
+            }
             /* Fall through */
         case 4:
         case 5:
         case 6:
             (*count) += activate_hi_summon(player_ptr, player_ptr->y, player_ptr->x, false);
-            if (!one_in_(6))
+            if (!one_in_(6)) {
                 break;
+            }
             /* Fall through */
         case 7:
         case 8:
@@ -166,16 +177,18 @@ bool activate_ty_curse(PlayerType *player_ptr, bool stop_ty, int *count)
         case 18:
             (*count) += summon_specific(
                 player_ptr, 0, player_ptr->y, player_ptr->x, floor_ptr->dun_level, SUMMON_NONE, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE | PM_NO_PET));
-            if (!one_in_(6))
+            if (!one_in_(6)) {
                 break;
+            }
             /* Fall through */
         case 10:
         case 11:
         case 12:
             msg_print(_("経験値が体から吸い取られた気がする！", "You feel your experience draining away..."));
             lose_exp(player_ptr, player_ptr->exp / 16);
-            if (!one_in_(6))
+            if (!one_in_(6)) {
                 break;
+            }
             /* Fall through */
         case 13:
         case 14:
@@ -201,14 +214,16 @@ bool activate_ty_curse(PlayerType *player_ptr, bool stop_ty, int *count)
         case 22:
         case 23:
             (void)do_dec_stat(player_ptr, randint0(6));
-            if (!one_in_(6))
+            if (!one_in_(6)) {
                 break;
+            }
             /* Fall through */
         case 24:
             msg_print(_("ほえ？私は誰？ここで何してる？", "Huh? Who am I? What am I doing here?"));
             lose_all_info(player_ptr);
-            if (!one_in_(6))
+            if (!one_in_(6)) {
                 break;
+            }
             /* Fall through */
         case 25:
             if ((floor_ptr->dun_level > 65) && !stop_ty) {
@@ -217,8 +232,9 @@ bool activate_ty_curse(PlayerType *player_ptr, bool stop_ty, int *count)
                 break;
             }
 
-            if (!one_in_(6))
+            if (!one_in_(6)) {
                 break;
+            }
             /* Fall through */
         default:
             for (int i = 0; i < A_MAX; i++) {
@@ -240,10 +256,11 @@ bool activate_ty_curse(PlayerType *player_ptr, bool stop_ty, int *count)
 void wild_magic(PlayerType *player_ptr, int spell)
 {
     int type = SUMMON_MOLD + randint0(6);
-    if (type < SUMMON_MOLD)
+    if (type < SUMMON_MOLD) {
         type = SUMMON_MOLD;
-    else if (type > SUMMON_MIMIC)
+    } else if (type > SUMMON_MIMIC) {
         type = SUMMON_MIMIC;
+    }
 
     auto *floor_ptr = player_ptr->current_floor_ptr;
     switch (randint1(spell) + randint1(8) + 1) {
@@ -355,11 +372,13 @@ void cast_wonder(PlayerType *player_ptr, DIRECTION dir)
     int vir = virtue_number(player_ptr, V_CHANCE);
     if (vir) {
         if (player_ptr->virtues[vir - 1] > 0) {
-            while (randint1(400) < player_ptr->virtues[vir - 1])
+            while (randint1(400) < player_ptr->virtues[vir - 1]) {
                 die++;
+            }
         } else {
-            while (randint1(400) < (0 - player_ptr->virtues[vir - 1]))
+            while (randint1(400) < (0 - player_ptr->virtues[vir - 1])) {
                 die--;
+            }
         }
     }
 

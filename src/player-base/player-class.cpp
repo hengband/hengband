@@ -50,39 +50,47 @@ TrFlags PlayerClass::tr_flags() const
 
     switch (this->player_ptr->pclass) {
     case PlayerClassType::WARRIOR: {
-        if (plev > 29)
+        if (plev > 29) {
             flags.set(TR_RES_FEAR);
-        if (plev > 44)
+        }
+        if (plev > 44) {
             flags.set(TR_REGEN);
+        }
 
         break;
     }
     case PlayerClassType::SAMURAI: {
-        if (plev > 29)
+        if (plev > 29) {
             flags.set(TR_RES_FEAR);
+        }
 
         break;
     }
     case PlayerClassType::PALADIN: {
-        if (plev > 39)
+        if (plev > 39) {
             flags.set(TR_RES_FEAR);
+        }
 
         break;
     }
     case PlayerClassType::CHAOS_WARRIOR: {
-        if (plev > 29)
+        if (plev > 29) {
             flags.set(TR_RES_CHAOS);
-        if (plev > 39)
+        }
+        if (plev > 39) {
             flags.set(TR_RES_FEAR);
+        }
 
         break;
     }
     case PlayerClassType::MONK:
     case PlayerClassType::FORCETRAINER: {
-        if ((plev > 9) && !heavy_armor(this->player_ptr))
+        if ((plev > 9) && !heavy_armor(this->player_ptr)) {
             flags.set(TR_SPEED);
-        if ((plev > 24) && !heavy_armor(this->player_ptr))
+        }
+        if ((plev > 24) && !heavy_armor(this->player_ptr)) {
             flags.set(TR_FREE_ACT);
+        }
 
         break;
     }
@@ -90,32 +98,41 @@ TrFlags PlayerClass::tr_flags() const
         if (heavy_armor(this->player_ptr)) {
             flags.set(TR_SPEED);
         } else {
-            if ((!this->player_ptr->inventory_list[INVEN_MAIN_HAND].k_idx || can_attack_with_main_hand(this->player_ptr)) && (!this->player_ptr->inventory_list[INVEN_SUB_HAND].k_idx || can_attack_with_sub_hand(this->player_ptr)))
+            if ((!this->player_ptr->inventory_list[INVEN_MAIN_HAND].k_idx || can_attack_with_main_hand(this->player_ptr)) && (!this->player_ptr->inventory_list[INVEN_SUB_HAND].k_idx || can_attack_with_sub_hand(this->player_ptr))) {
                 flags.set(TR_SPEED);
-            if (plev > 24 && !this->player_ptr->is_icky_wield[0] && !this->player_ptr->is_icky_wield[1])
+            }
+            if (plev > 24 && !this->player_ptr->is_icky_wield[0] && !this->player_ptr->is_icky_wield[1]) {
                 flags.set(TR_FREE_ACT);
+            }
         }
 
         flags.set(TR_SLOW_DIGEST);
         flags.set(TR_RES_FEAR);
-        if (plev > 19)
+        if (plev > 19) {
             flags.set(TR_RES_POIS);
-        if (plev > 24)
+        }
+        if (plev > 24) {
             flags.set(TR_SUST_DEX);
-        if (plev > 29)
+        }
+        if (plev > 29) {
             flags.set(TR_SEE_INVIS);
+        }
 
         break;
     }
     case PlayerClassType::MINDCRAFTER: {
-        if (plev > 9)
+        if (plev > 9) {
             flags.set(TR_RES_FEAR);
-        if (plev > 19)
+        }
+        if (plev > 19) {
             flags.set(TR_SUST_WIS);
-        if (plev > 29)
+        }
+        if (plev > 29) {
             flags.set(TR_RES_CONF);
-        if (plev > 39)
+        }
+        if (plev > 39) {
             flags.set(TR_TELEPATHY);
+        }
 
         break;
     }
@@ -130,50 +147,68 @@ TrFlags PlayerClass::tr_flags() const
         flags.set(TR_REGEN);
         flags.set(TR_FREE_ACT);
         flags.set(TR_SPEED);
-        if (plev > 39)
+        if (plev > 39) {
             flags.set(TR_REFLECT);
+        }
 
         break;
     }
     case PlayerClassType::MIRROR_MASTER: {
-        if (plev > 39)
+        if (plev > 39) {
             flags.set(TR_REFLECT);
+        }
 
         break;
     }
     case PlayerClassType::ELEMENTALIST:
-        if (has_element_resist(this->player_ptr, ElementRealmType::FIRE, 1))
+        if (has_element_resist(this->player_ptr, ElementRealmType::FIRE, 1)) {
             flags.set(TR_RES_FIRE);
-        if (has_element_resist(this->player_ptr, ElementRealmType::FIRE, 30))
+        }
+        if (has_element_resist(this->player_ptr, ElementRealmType::FIRE, 30)) {
             flags.set(TR_IM_FIRE);
-        if (has_element_resist(this->player_ptr, ElementRealmType::ICE, 1))
+        }
+        if (has_element_resist(this->player_ptr, ElementRealmType::ICE, 1)) {
             flags.set(TR_RES_COLD);
-        if (has_element_resist(this->player_ptr, ElementRealmType::ICE, 30))
+        }
+        if (has_element_resist(this->player_ptr, ElementRealmType::ICE, 30)) {
             flags.set(TR_IM_COLD);
-        if (has_element_resist(this->player_ptr, ElementRealmType::SKY, 1))
+        }
+        if (has_element_resist(this->player_ptr, ElementRealmType::SKY, 1)) {
             flags.set(TR_RES_ELEC);
-        if (has_element_resist(this->player_ptr, ElementRealmType::SKY, 30))
+        }
+        if (has_element_resist(this->player_ptr, ElementRealmType::SKY, 30)) {
             flags.set(TR_IM_ELEC);
-        if (has_element_resist(this->player_ptr, ElementRealmType::SEA, 1))
+        }
+        if (has_element_resist(this->player_ptr, ElementRealmType::SEA, 1)) {
             flags.set(TR_RES_ACID);
-        if (has_element_resist(this->player_ptr, ElementRealmType::SEA, 30))
+        }
+        if (has_element_resist(this->player_ptr, ElementRealmType::SEA, 30)) {
             flags.set(TR_IM_ACID);
-        if (has_element_resist(this->player_ptr, ElementRealmType::DARKNESS, 1))
+        }
+        if (has_element_resist(this->player_ptr, ElementRealmType::DARKNESS, 1)) {
             flags.set(TR_RES_DARK);
-        if (has_element_resist(this->player_ptr, ElementRealmType::DARKNESS, 30))
+        }
+        if (has_element_resist(this->player_ptr, ElementRealmType::DARKNESS, 30)) {
             flags.set(TR_RES_NETHER);
-        if (has_element_resist(this->player_ptr, ElementRealmType::CHAOS, 1))
+        }
+        if (has_element_resist(this->player_ptr, ElementRealmType::CHAOS, 1)) {
             flags.set(TR_RES_CONF);
-        if (has_element_resist(this->player_ptr, ElementRealmType::CHAOS, 30))
+        }
+        if (has_element_resist(this->player_ptr, ElementRealmType::CHAOS, 30)) {
             flags.set(TR_RES_CHAOS);
-        if (has_element_resist(this->player_ptr, ElementRealmType::EARTH, 1))
+        }
+        if (has_element_resist(this->player_ptr, ElementRealmType::EARTH, 1)) {
             flags.set(TR_RES_SHARDS);
-        if (has_element_resist(this->player_ptr, ElementRealmType::EARTH, 30))
+        }
+        if (has_element_resist(this->player_ptr, ElementRealmType::EARTH, 30)) {
             flags.set(TR_REFLECT);
-        if (has_element_resist(this->player_ptr, ElementRealmType::DEATH, 1))
+        }
+        if (has_element_resist(this->player_ptr, ElementRealmType::DEATH, 1)) {
             flags.set(TR_RES_POIS);
-        if (has_element_resist(this->player_ptr, ElementRealmType::DEATH, 30))
+        }
+        if (has_element_resist(this->player_ptr, ElementRealmType::DEATH, 30)) {
             flags.set(TR_RES_DISEN);
+        }
         break;
     default:
         break;
@@ -240,7 +275,7 @@ bool PlayerClass::has_poison_resistance() const
 /*!
  * @brief 加速ボーナスのある種族かを返す
  * @return 加速ボーナスのある種族か否か
- * @details 
+ * @details
  * 種族と職業の両方で特性による加速が得られる場合、重複して加速することはない.
  * 代りに経験値補正が軽くなる.
  */

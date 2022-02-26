@@ -36,7 +36,8 @@ static void resize_scene_list()
  * @param type action-type
  * @param val action-val
  */
-void interrupt_scene(int type, int val) {
+void interrupt_scene(int type, int val)
+{
     interrupt_scene_type = type;
     interrupt_scene_val = val;
 

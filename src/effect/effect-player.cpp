@@ -6,6 +6,7 @@
 
 #include "effect/effect-player.h"
 #include "core/disturbance.h"
+#include "effect/attribute-types.h"
 #include "effect/effect-characteristics.h"
 #include "effect/effect-player-switcher.h"
 #include "effect/effect-player.h"
@@ -25,7 +26,6 @@
 #include "realm/realm-hex-numbers.h"
 #include "spell-realm/spells-crusade.h"
 #include "spell-realm/spells-hex.h"
-#include "effect/attribute-types.h"
 #include "spell/spells-util.h"
 #include "system/floor-type-definition.h"
 #include "system/monster-race-definition.h"
@@ -47,7 +47,15 @@
  * @return 初期化後の構造体ポインタ
  */
 EffectPlayerType::EffectPlayerType(MONSTER_IDX who, int dam, AttributeType attribute, BIT_FLAGS flag)
-    : rlev(0), m_ptr(nullptr), killer(""), m_name(""), get_damage(0), who(who), dam(dam), attribute(attribute), flag(flag)
+    : rlev(0)
+    , m_ptr(nullptr)
+    , killer("")
+    , m_name("")
+    , get_damage(0)
+    , who(who)
+    , dam(dam)
+    , attribute(attribute)
+    , flag(flag)
 {
 }
 

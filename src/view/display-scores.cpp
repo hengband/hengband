@@ -98,20 +98,24 @@ void display_scores(int from, int to, int note, high_score *score)
             auto mdun = atoi(the_score.max_dun);
 
             concptr user;
-            for (user = the_score.uid; iswspace(*user); user++) /* loop */
+            for (user = the_score.uid; iswspace(*user); user++) { /* loop */
                 ;
+            }
 
             concptr when;
-            for (when = the_score.day; iswspace(*when); when++) /* loop */
+            for (when = the_score.day; iswspace(*when); when++) { /* loop */
                 ;
+            }
 
             concptr gold;
-            for (gold = the_score.gold; iswspace(*gold); gold++) /* loop */
+            for (gold = the_score.gold; iswspace(*gold); gold++) { /* loop */
                 ;
+            }
 
             concptr aged;
-            for (aged = the_score.turns; iswspace(*aged); aged++) /* loop */
+            for (aged = the_score.turns; iswspace(*aged); aged++) { /* loop */
                 ;
+            }
 
             if ((*when == '@') && strlen(when) == 9) {
                 sprintf(tmp_val, "%.4s-%.2s-%.2s", when + 1, when + 5, when + 7);

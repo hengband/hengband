@@ -38,8 +38,9 @@ void r_visit(PlayerType *player_ptr, POSITION y1, POSITION x1, POSITION y2, POSI
     place_bold(player_ptr, y, x, GB_FLOOR);
 
     if (one_in_(3)) {
-        for (int i = 0; i < 4; i++)
+        for (int i = 0; i < 4; i++) {
             adj[i] = i;
+        }
 
         for (int i = 0; i < 4; i++) {
             int j = randint0(4);
@@ -51,8 +52,9 @@ void r_visit(PlayerType *player_ptr, POSITION y1, POSITION x1, POSITION y2, POSI
         dir = adj[0];
     } else {
         adj[0] = dir;
-        for (int i = 1; i < 4; i++)
+        for (int i = 1; i < 4; i++) {
             adj[i] = i;
+        }
 
         for (int i = 1; i < 4; i++) {
             int j = 1 + randint0(3);
@@ -111,8 +113,9 @@ void build_maze_vault(PlayerType *player_ptr, POSITION x0, POSITION y0, POSITION
             grid_type *g_ptr;
             g_ptr = &floor_ptr->grid_array[y][x];
             g_ptr->info |= CAVE_ROOM;
-            if (is_vault)
+            if (is_vault) {
                 g_ptr->info |= CAVE_ICKY;
+            }
             if ((x == x1 - 1) || (x == x2 + 1) || (y == y1 - 1) || (y == y2 + 1)) {
                 place_grid(player_ptr, g_ptr, GB_OUTER);
             } else if (!is_vault) {
@@ -121,8 +124,9 @@ void build_maze_vault(PlayerType *player_ptr, POSITION x0, POSITION y0, POSITION
                 place_grid(player_ptr, g_ptr, GB_INNER);
             }
 
-            if (light)
+            if (light) {
                 g_ptr->info |= (CAVE_GLOW);
+            }
         }
     }
 
@@ -132,6 +136,7 @@ void build_maze_vault(PlayerType *player_ptr, POSITION x0, POSITION y0, POSITION
 
     std::vector<int> visited(num_vertices);
     r_visit(player_ptr, y1, x1, y2, x2, randint0(num_vertices), 0, visited.data());
-    if (is_vault)
+    if (is_vault) {
         fill_treasure(player_ptr, x1, x2, y1, y2, randint1(5));
+    }
 }

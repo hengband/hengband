@@ -98,12 +98,13 @@ void print_map(PlayerType *player_ptr)
             char tc;
             map_info(player_ptr, y, x, &a, &c, &ta, &tc);
             if (!use_graphics) {
-                if (w_ptr->timewalk_m_idx)
+                if (w_ptr->timewalk_m_idx) {
                     a = TERM_DARK;
-                else if (is_invuln(player_ptr) || player_ptr->timewalk)
+                } else if (is_invuln(player_ptr) || player_ptr->timewalk) {
                     a = TERM_WHITE;
-                else if (player_ptr->wraith_form)
+                } else if (player_ptr->wraith_form) {
                     a = TERM_L_DARK;
+                }
             }
 
             term_queue_bigchar(panel_col_of(x), y - panel_row_prt, a, c, ta, tc);
@@ -131,22 +132,26 @@ static void display_shortened_item_name(PlayerType *player_ptr, ObjectType *o_pt
             concptr org_w = simplify_list[i][0];
 
             if (*org_w == '^') {
-                if (c == buf)
+                if (c == buf) {
                     org_w++;
-                else
+                } else {
                     continue;
+                }
             }
 
-            if (strncmp(c, org_w, strlen(org_w)))
+            if (strncmp(c, org_w, strlen(org_w))) {
                 continue;
+            }
 
             char *s = c;
             concptr tmp = simplify_list[i][1];
-            while (*tmp)
+            while (*tmp) {
                 *s++ = *tmp++;
+            }
             tmp = c + strlen(org_w);
-            while (*tmp)
+            while (*tmp) {
                 *s++ = *tmp++;
+            }
             *s = '\0';
         }
     }
@@ -157,15 +162,17 @@ static void display_shortened_item_name(PlayerType *player_ptr, ObjectType *o_pt
     while (*c) {
 #ifdef JP
         if (iskanji(*c)) {
-            if (len + 2 > 12)
+            if (len + 2 > 12) {
                 break;
+            }
             c += 2;
             len += 2;
         } else
 #endif
         {
-            if (len + 1 > 12)
+            if (len + 1 > 12) {
                 break;
+            }
             c++;
             len++;
         }
@@ -201,8 +208,9 @@ void display_map(PlayerType *player_ptr, int *cy, int *cx)
     term_get_size(&wid, &hgt);
     hgt -= 2;
     wid -= 12 + border_width * 2; //!< @note 描画桁数(枠線抜)
-    if (use_bigtile)
+    if (use_bigtile) {
         wid = wid / 2 - 1;
+    }
 
     auto *floor_ptr = player_ptr->current_floor_ptr;
     yrat = (floor_ptr->height + hgt - 1) / hgt;
@@ -256,11 +264,13 @@ void display_map(PlayerType *player_ptr, int *cy, int *cx)
                 int cnt = 0;
 
                 for (t = 0; t < 8; t++) {
-                    if (tc == bigmc[j + 1 + ddy_cdd[t]][i + 1 + ddx_cdd[t]] && ta == bigma[j + 1 + ddy_cdd[t]][i + 1 + ddx_cdd[t]])
+                    if (tc == bigmc[j + 1 + ddy_cdd[t]][i + 1 + ddx_cdd[t]] && ta == bigma[j + 1 + ddy_cdd[t]][i + 1 + ddx_cdd[t]]) {
                         cnt++;
+                    }
                 }
-                if (cnt <= 4)
+                if (cnt <= 4) {
                     tp++;
+                }
             }
 
             if (mp[y][x] < tp) {
@@ -275,11 +285,13 @@ void display_map(PlayerType *player_ptr, int *cy, int *cx)
     y = hgt + 1;
 
     mc[0][0] = mc[0][x] = mc[y][0] = mc[y][x] = '+';
-    for (x = 1; x <= wid; x++)
+    for (x = 1; x <= wid; x++) {
         mc[0][x] = mc[y][x] = '-';
+    }
 
-    for (y = 1; y <= hgt; y++)
+    for (y = 1; y <= hgt; y++) {
         mc[y][0] = mc[y][x] = '|';
+    }
 
     for (y = 0; y < hgt + 2; ++y) {
         term_gotoxy(COL_MAP, y);
@@ -287,12 +299,13 @@ void display_map(PlayerType *player_ptr, int *cy, int *cx)
             ta = ma[y][x];
             tc = mc[y][x];
             if (!use_graphics) {
-                if (w_ptr->timewalk_m_idx)
+                if (w_ptr->timewalk_m_idx) {
                     ta = TERM_DARK;
-                else if (is_invuln(player_ptr) || player_ptr->timewalk)
+                } else if (is_invuln(player_ptr) || player_ptr->timewalk) {
                     ta = TERM_WHITE;
-                else if (player_ptr->wraith_form)
+                } else if (player_ptr->wraith_form) {
                     ta = TERM_L_DARK;
+                }
             }
 
             term_add_bigch(ta, tc);
@@ -309,15 +322,17 @@ void display_map(PlayerType *player_ptr, int *cy, int *cx)
         }
 
         term_putstr(0, y, 12, 0, "            ");
-        if (match_autopick != -1)
+        if (match_autopick != -1) {
             display_shortened_item_name(player_ptr, autopick_obj, y);
+        }
     }
 
     (*cy) = player_ptr->y / yrat + 1 + ROW_MAP;
-    if (!use_bigtile)
+    if (!use_bigtile) {
         (*cx) = player_ptr->x / xrat + 1 + COL_MAP;
-    else
+    } else {
         (*cx) = (player_ptr->x / xrat + 1) * 2 + COL_MAP;
+    }
 
     view_special_lite = old_view_special_lite;
     view_granite_lite = old_view_granite_lite;
@@ -325,8 +340,9 @@ void display_map(PlayerType *player_ptr, int *cy, int *cx)
 
 void set_term_color(PlayerType *player_ptr, POSITION y, POSITION x, TERM_COLOR *ap, char *cp)
 {
-    if (!player_bold(player_ptr, y, x))
+    if (!player_bold(player_ptr, y, x)) {
         return;
+    }
 
     auto *r_ptr = &r_info[0];
     *ap = r_ptr->x_attr;
@@ -340,7 +356,8 @@ void set_term_color(PlayerType *player_ptr, POSITION y, POSITION x, TERM_COLOR *
 int panel_col_of(int col)
 {
     col -= panel_col_min;
-    if (use_bigtile)
+    if (use_bigtile) {
         col *= 2;
+    }
     return col + 13;
 }

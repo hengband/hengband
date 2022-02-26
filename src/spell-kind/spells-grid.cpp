@@ -64,13 +64,15 @@ bool create_rune_explosion(PlayerType *player_ptr, POSITION y, POSITION x)
 void stair_creation(PlayerType *player_ptr)
 {
     bool up = true;
-    if (ironman_downward)
+    if (ironman_downward) {
         up = false;
+    }
 
     bool down = true;
     auto *floor_ptr = player_ptr->current_floor_ptr;
-    if (inside_quest(quest_number(player_ptr, floor_ptr->dun_level)) || (floor_ptr->dun_level >= d_info[player_ptr->dungeon_idx].maxdepth))
+    if (inside_quest(quest_number(player_ptr, floor_ptr->dun_level)) || (floor_ptr->dun_level >= d_info[player_ptr->dungeon_idx].maxdepth)) {
         down = false;
+    }
 
     if (!floor_ptr->dun_level || (!up && !down) || (inside_quest(floor_ptr->quest_number) && quest_type::is_fixed(floor_ptr->quest_number)) || floor_ptr->inside_arena || player_ptr->phase_out) {
         msg_print(_("効果がありません！", "There is no effect!"));
@@ -91,31 +93,37 @@ void stair_creation(PlayerType *player_ptr)
     }
 
     if (up && down) {
-        if (randint0(100) < 50)
+        if (randint0(100) < 50) {
             up = false;
-        else
+        } else {
             down = false;
+        }
     }
 
     FLOOR_IDX dest_floor_id = 0;
     if (up) {
-        if (sf_ptr->upper_floor_id)
+        if (sf_ptr->upper_floor_id) {
             dest_floor_id = sf_ptr->upper_floor_id;
+        }
     } else {
-        if (sf_ptr->lower_floor_id)
+        if (sf_ptr->lower_floor_id) {
             dest_floor_id = sf_ptr->lower_floor_id;
+        }
     }
 
     if (dest_floor_id) {
         for (POSITION y = 0; y < floor_ptr->height; y++) {
             for (POSITION x = 0; x < floor_ptr->width; x++) {
                 auto *g_ptr = &floor_ptr->grid_array[y][x];
-                if (!g_ptr->special)
+                if (!g_ptr->special) {
                     continue;
-                if (feat_uses_special(g_ptr->feat))
+                }
+                if (feat_uses_special(g_ptr->feat)) {
                     continue;
-                if (g_ptr->special != dest_floor_id)
+                }
+                if (g_ptr->special != dest_floor_id) {
                     continue;
+                }
 
                 /* Remove old stairs */
                 g_ptr->special = 0;
@@ -124,10 +132,11 @@ void stair_creation(PlayerType *player_ptr)
         }
     } else {
         dest_floor_id = get_new_floor_id(player_ptr);
-        if (up)
+        if (up) {
             sf_ptr->upper_floor_id = dest_floor_id;
-        else
+        } else {
             sf_ptr->lower_floor_id = dest_floor_id;
+        }
     }
 
     saved_floor_type *dest_sf_ptr;

@@ -3,6 +3,7 @@
 #include "core/player-redraw-types.h"
 #include "core/player-update-types.h"
 #include "core/stuff-handler.h"
+#include "effect/attribute-types.h"
 #include "effect/effect-characteristics.h"
 #include "effect/effect-feature.h"
 #include "effect/effect-item.h"
@@ -28,7 +29,6 @@
 #include "spell-kind/spells-sight.h"
 #include "spell-kind/spells-teleport.h"
 #include "spell-kind/spells-world.h"
-#include "effect/attribute-types.h"
 #include "status/body-improvement.h"
 #include "status/buff-setter.h"
 #include "status/sight-setter.h"
@@ -46,7 +46,10 @@
 /*
  * @brief Multishadow effects is determined by turn
  */
-bool check_multishadow(PlayerType *player_ptr) { return (player_ptr->multishadow != 0) && ((w_ptr->game_turn & 1) != 0); }
+bool check_multishadow(PlayerType *player_ptr)
+{
+    return (player_ptr->multishadow != 0) && ((w_ptr->game_turn & 1) != 0);
+}
 
 /*!
  * 静水
@@ -86,12 +89,14 @@ void remove_all_mirrors(PlayerType *player_ptr, bool explode)
 {
     for (POSITION x = 0; x < player_ptr->current_floor_ptr->width; x++) {
         for (POSITION y = 0; y < player_ptr->current_floor_ptr->height; y++) {
-            if (!player_ptr->current_floor_ptr->grid_array[y][x].is_mirror())
+            if (!player_ptr->current_floor_ptr->grid_array[y][x].is_mirror()) {
                 continue;
+            }
 
             remove_mirror(player_ptr, y, x);
-            if (!explode)
+            if (!explode) {
                 continue;
+            }
 
             project(player_ptr, 0, 2, y, x, player_ptr->lev / 2 + 5, AttributeType::SHARDS,
                 (PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL | PROJECT_JUMP | PROJECT_NO_HANGEKI));
@@ -119,9 +124,7 @@ bool binding_field(PlayerType *player_ptr, int dam)
 
     for (POSITION x = 0; x < player_ptr->current_floor_ptr->width; x++) {
         for (POSITION y = 0; y < player_ptr->current_floor_ptr->height; y++) {
-            if (player_ptr->current_floor_ptr->grid_array[y][x].is_mirror() && distance(player_ptr->y, player_ptr->x, y, x) <= get_max_range(player_ptr)
-                && distance(player_ptr->y, player_ptr->x, y, x) != 0 && player_has_los_bold(player_ptr, y, x)
-                && projectable(player_ptr, player_ptr->y, player_ptr->x, y, x)) {
+            if (player_ptr->current_floor_ptr->grid_array[y][x].is_mirror() && distance(player_ptr->y, player_ptr->x, y, x) <= get_max_range(player_ptr) && distance(player_ptr->y, player_ptr->x, y, x) != 0 && player_has_los_bold(player_ptr, y, x) && projectable(player_ptr, player_ptr->y, player_ptr->x, y, x)) {
                 mirror_y[mirror_num] = y;
                 mirror_x[mirror_num] = x;
                 mirror_num++;
@@ -129,8 +132,9 @@ bool binding_field(PlayerType *player_ptr, int dam)
         }
     }
 
-    if (mirror_num < 2)
+    if (mirror_num < 2) {
         return false;
+    }
 
     point_x[0] = randint0(mirror_num);
     do {
@@ -148,8 +152,9 @@ bool binding_field(PlayerType *player_ptr, int dam)
     POSITION y = point_y[0] + point_y[1] + point_y[2];
 
     POSITION centersign = (point_x[0] * 3 - x) * (point_y[1] * 3 - y) - (point_y[0] * 3 - y) * (point_x[1] * 3 - x);
-    if (centersign == 0)
+    if (centersign == 0) {
         return false;
+    }
 
     POSITION x1 = point_x[0] < point_x[1] ? point_x[0] : point_x[1];
     x1 = x1 < point_x[2] ? x1 : point_x[2];
@@ -163,9 +168,7 @@ bool binding_field(PlayerType *player_ptr, int dam)
 
     for (y = y1; y <= y2; y++) {
         for (x = x1; x <= x2; x++) {
-            if (centersign * ((point_x[0] - x) * (point_y[1] - y) - (point_y[0] - y) * (point_x[1] - x)) >= 0
-                && centersign * ((point_x[1] - x) * (point_y[2] - y) - (point_y[1] - y) * (point_x[2] - x)) >= 0
-                && centersign * ((point_x[2] - x) * (point_y[0] - y) - (point_y[2] - y) * (point_x[0] - x)) >= 0) {
+            if (centersign * ((point_x[0] - x) * (point_y[1] - y) - (point_y[0] - y) * (point_x[1] - x)) >= 0 && centersign * ((point_x[1] - x) * (point_y[2] - y) - (point_y[1] - y) * (point_x[2] - x)) >= 0 && centersign * ((point_x[2] - x) * (point_y[0] - y) - (point_y[2] - y) * (point_x[0] - x)) >= 0) {
                 if (player_has_los_bold(player_ptr, y, x) && projectable(player_ptr, player_ptr->y, player_ptr->x, y, x)) {
                     if (!(player_ptr->blind) && panel_contains(y, x)) {
                         uint16_t p = bolt_pict(y, x, y, x, AttributeType::MANA);
@@ -181,9 +184,7 @@ bool binding_field(PlayerType *player_ptr, int dam)
 
     for (y = y1; y <= y2; y++) {
         for (x = x1; x <= x2; x++) {
-            if (centersign * ((point_x[0] - x) * (point_y[1] - y) - (point_y[0] - y) * (point_x[1] - x)) >= 0
-                && centersign * ((point_x[1] - x) * (point_y[2] - y) - (point_y[1] - y) * (point_x[2] - x)) >= 0
-                && centersign * ((point_x[2] - x) * (point_y[0] - y) - (point_y[2] - y) * (point_x[0] - x)) >= 0) {
+            if (centersign * ((point_x[0] - x) * (point_y[1] - y) - (point_y[0] - y) * (point_x[1] - x)) >= 0 && centersign * ((point_x[1] - x) * (point_y[2] - y) - (point_y[1] - y) * (point_x[2] - x)) >= 0 && centersign * ((point_x[2] - x) * (point_y[0] - y) - (point_y[2] - y) * (point_x[0] - x)) >= 0) {
                 if (player_has_los_bold(player_ptr, y, x) && projectable(player_ptr, player_ptr->y, player_ptr->x, y, x)) {
                     (void)affect_feature(player_ptr, 0, 0, y, x, dam, AttributeType::MANA);
                 }
@@ -193,9 +194,7 @@ bool binding_field(PlayerType *player_ptr, int dam)
 
     for (y = y1; y <= y2; y++) {
         for (x = x1; x <= x2; x++) {
-            if (centersign * ((point_x[0] - x) * (point_y[1] - y) - (point_y[0] - y) * (point_x[1] - x)) >= 0
-                && centersign * ((point_x[1] - x) * (point_y[2] - y) - (point_y[1] - y) * (point_x[2] - x)) >= 0
-                && centersign * ((point_x[2] - x) * (point_y[0] - y) - (point_y[2] - y) * (point_x[0] - x)) >= 0) {
+            if (centersign * ((point_x[0] - x) * (point_y[1] - y) - (point_y[0] - y) * (point_x[1] - x)) >= 0 && centersign * ((point_x[1] - x) * (point_y[2] - y) - (point_y[1] - y) * (point_x[2] - x)) >= 0 && centersign * ((point_x[2] - x) * (point_y[0] - y) - (point_y[2] - y) * (point_x[0] - x)) >= 0) {
                 if (player_has_los_bold(player_ptr, y, x) && projectable(player_ptr, player_ptr->y, player_ptr->x, y, x)) {
                     (void)affect_item(player_ptr, 0, 0, y, x, dam, AttributeType::MANA);
                 }
@@ -205,9 +204,7 @@ bool binding_field(PlayerType *player_ptr, int dam)
 
     for (y = y1; y <= y2; y++) {
         for (x = x1; x <= x2; x++) {
-            if (centersign * ((point_x[0] - x) * (point_y[1] - y) - (point_y[0] - y) * (point_x[1] - x)) >= 0
-                && centersign * ((point_x[1] - x) * (point_y[2] - y) - (point_y[1] - y) * (point_x[2] - x)) >= 0
-                && centersign * ((point_x[2] - x) * (point_y[0] - y) - (point_y[2] - y) * (point_x[0] - x)) >= 0) {
+            if (centersign * ((point_x[0] - x) * (point_y[1] - y) - (point_y[0] - y) * (point_x[1] - x)) >= 0 && centersign * ((point_x[1] - x) * (point_y[2] - y) - (point_y[1] - y) * (point_x[2] - x)) >= 0 && centersign * ((point_x[2] - x) * (point_y[0] - y) - (point_y[2] - y) * (point_x[0] - x)) >= 0) {
                 if (player_has_los_bold(player_ptr, y, x) && projectable(player_ptr, player_ptr->y, player_ptr->x, y, x)) {
                     (void)affect_monster(player_ptr, 0, 0, y, x, dam, AttributeType::MANA, (PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL | PROJECT_JUMP), true);
                 }
@@ -232,11 +229,13 @@ void seal_of_mirror(PlayerType *player_ptr, int dam)
 {
     for (POSITION x = 0; x < player_ptr->current_floor_ptr->width; x++) {
         for (POSITION y = 0; y < player_ptr->current_floor_ptr->height; y++) {
-            if (!player_ptr->current_floor_ptr->grid_array[y][x].is_mirror())
+            if (!player_ptr->current_floor_ptr->grid_array[y][x].is_mirror()) {
                 continue;
+            }
 
-            if (!affect_monster(player_ptr, 0, 0, y, x, dam, AttributeType::GENOCIDE, (PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL | PROJECT_JUMP), true))
+            if (!affect_monster(player_ptr, 0, 0, y, x, dam, AttributeType::GENOCIDE, (PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL | PROJECT_JUMP), true)) {
                 continue;
+            }
 
             if (!player_ptr->current_floor_ptr->grid_array[y][x].m_idx) {
                 remove_mirror(player_ptr, y, x);
@@ -295,10 +294,12 @@ bool place_mirror(PlayerType *player_ptr)
 bool mirror_tunnel(PlayerType *player_ptr)
 {
     POSITION x = 0, y = 0;
-    if (!tgt_pt(player_ptr, &x, &y))
+    if (!tgt_pt(player_ptr, &x, &y)) {
         return false;
-    if (exe_dimension_door(player_ptr, x, y))
+    }
+    if (exe_dimension_door(player_ptr, x, y)) {
         return true;
+    }
 
     msg_print(_("鏡の世界をうまく通れなかった！", "You could not enter the mirror!"));
     return true;
@@ -310,15 +311,18 @@ bool mirror_tunnel(PlayerType *player_ptr)
 bool set_multishadow(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
 {
     bool notice = false;
-    v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;
+    v = (v > 10000) ? 10000 : (v < 0) ? 0
+                                      : v;
 
-    if (player_ptr->is_dead)
+    if (player_ptr->is_dead) {
         return false;
+    }
 
     if (v) {
         if (player_ptr->multishadow && !do_dec) {
-            if (player_ptr->multishadow > v)
+            if (player_ptr->multishadow > v) {
                 return false;
+            }
         } else if (!player_ptr->multishadow) {
             msg_print(_("あなたの周りに幻影が生まれた。", "Your Shadow enveloped you."));
             notice = true;
@@ -333,11 +337,13 @@ bool set_multishadow(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
     player_ptr->multishadow = v;
     player_ptr->redraw |= (PR_STATUS);
 
-    if (!notice)
+    if (!notice) {
         return false;
+    }
 
-    if (disturb_state)
+    if (disturb_state) {
         disturb(player_ptr, false, false);
+    }
     player_ptr->update |= (PU_BONUS);
     handle_stuff(player_ptr);
     return true;
@@ -352,15 +358,18 @@ bool set_multishadow(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
 bool set_dustrobe(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
 {
     bool notice = false;
-    v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;
+    v = (v > 10000) ? 10000 : (v < 0) ? 0
+                                      : v;
 
-    if (player_ptr->is_dead)
+    if (player_ptr->is_dead) {
         return false;
+    }
 
     if (v) {
         if (player_ptr->dustrobe && !do_dec) {
-            if (player_ptr->dustrobe > v)
+            if (player_ptr->dustrobe > v) {
                 return false;
+            }
         } else if (!player_ptr->dustrobe) {
             msg_print(_("体が鏡のオーラで覆われた。", "You are enveloped by mirror shards."));
             notice = true;
@@ -375,11 +384,13 @@ bool set_dustrobe(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
     player_ptr->dustrobe = v;
     player_ptr->redraw |= (PR_STATUS);
 
-    if (!notice)
+    if (!notice) {
         return false;
+    }
 
-    if (disturb_state)
+    if (disturb_state) {
         disturb(player_ptr, false, false);
+    }
     player_ptr->update |= (PU_BONUS);
     handle_stuff(player_ptr);
     return true;
@@ -394,8 +405,9 @@ static int number_of_mirrors(floor_type *floor_ptr)
     int val = 0;
     for (POSITION x = 0; x < floor_ptr->width; x++) {
         for (POSITION y = 0; y < floor_ptr->height; y++) {
-            if (floor_ptr->grid_array[y][x].is_mirror())
+            if (floor_ptr->grid_array[y][x].is_mirror()) {
                 val++;
+            }
         }
     }
 
@@ -419,33 +431,40 @@ bool cast_mirror_spell(PlayerType *player_ptr, mind_mirror_master_type spell)
     switch (spell) {
     case MIRROR_SEEING:
         tmp = g_ptr->is_mirror() ? 4 : 0;
-        if (plev + tmp > 4)
+        if (plev + tmp > 4) {
             detect_monsters_normal(player_ptr, DETECT_RAD_DEFAULT);
-        if (plev + tmp > 18)
+        }
+        if (plev + tmp > 18) {
             detect_monsters_invis(player_ptr, DETECT_RAD_DEFAULT);
-        if (plev + tmp > 28)
+        }
+        if (plev + tmp > 28) {
             set_tim_esp(player_ptr, (TIME_EFFECT)plev, false);
-        if (plev + tmp > 38)
+        }
+        if (plev + tmp > 38) {
             map_area(player_ptr, DETECT_RAD_MAP);
+        }
         if (tmp == 0 && plev < 5) {
             msg_print(_("鏡がなくて集中できなかった！", "You need a mirror to concentrate!"));
         }
         break;
     case MAKE_MIRROR:
-        if (number_of_mirrors(player_ptr->current_floor_ptr) < 4 + plev / 10)
+        if (number_of_mirrors(player_ptr->current_floor_ptr) < 4 + plev / 10) {
             place_mirror(player_ptr);
-        else
+        } else {
             msg_format(_("これ以上鏡は制御できない！", "There are too many mirrors to control!"));
+        }
 
         break;
     case DRIP_LIGHT:
-        if (!get_aim_dir(player_ptr, &dir))
+        if (!get_aim_dir(player_ptr, &dir)) {
             return false;
+        }
 
-        if (plev > 9 && g_ptr->is_mirror())
+        if (plev > 9 && g_ptr->is_mirror()) {
             fire_beam(player_ptr, AttributeType::LITE, dir, damroll(3 + ((plev - 1) / 5), 4));
-        else
+        } else {
             fire_bolt(player_ptr, AttributeType::LITE, dir, damroll(3 + ((plev - 1) / 5), 4));
+        }
 
         break;
     case WRAPPED_MIRROR:
@@ -461,28 +480,34 @@ bool cast_mirror_spell(PlayerType *player_ptr, mind_mirror_master_type spell)
         set_dustrobe(player_ptr, 20 + randint1(20), false);
         break;
     case BANISHING_MIRROR:
-        if (!get_aim_dir(player_ptr, &dir))
+        if (!get_aim_dir(player_ptr, &dir)) {
             return false;
+        }
 
         (void)fire_beam(player_ptr, AttributeType::AWAY_ALL, dir, plev);
         break;
     case MIRROR_CRASHING:
-        if (!get_aim_dir(player_ptr, &dir))
+        if (!get_aim_dir(player_ptr, &dir)) {
             return false;
+        }
 
         fire_ball(player_ptr, AttributeType::SHARDS, dir, damroll(8 + ((plev - 5) / 4), 8), (plev > 20 ? (plev - 20) / 8 + 1 : 0));
         break;
     case SLEEPING_MIRROR:
-        for (x = 0; x < player_ptr->current_floor_ptr->width; x++)
-            for (y = 0; y < player_ptr->current_floor_ptr->height; y++)
-                if (player_ptr->current_floor_ptr->grid_array[y][x].is_mirror())
+        for (x = 0; x < player_ptr->current_floor_ptr->width; x++) {
+            for (y = 0; y < player_ptr->current_floor_ptr->height; y++) {
+                if (player_ptr->current_floor_ptr->grid_array[y][x].is_mirror()) {
                     project(player_ptr, 0, 2, y, x, (int)plev, AttributeType::OLD_SLEEP,
                         (PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL | PROJECT_JUMP | PROJECT_NO_HANGEKI));
+                }
+            }
+        }
 
         break;
     case SEEKER_RAY:
-        if (!get_aim_dir(player_ptr, &dir))
+        if (!get_aim_dir(player_ptr, &dir)) {
             return false;
+        }
 
         fire_beam(player_ptr, AttributeType::SEEKER, dir, damroll(11 + (plev - 5) / 4, 8));
         break;
@@ -492,16 +517,19 @@ bool cast_mirror_spell(PlayerType *player_ptr, mind_mirror_master_type spell)
     case WATER_SHIELD:
         t = 20 + randint1(20);
         set_shield(player_ptr, t, false);
-        if (plev > 31)
+        if (plev > 31) {
             set_tim_reflect(player_ptr, t, false);
+        }
 
-        if (plev > 39)
+        if (plev > 39) {
             set_resist_magic(player_ptr, t, false);
+        }
 
         break;
     case SUPER_RAY:
-        if (!get_aim_dir(player_ptr, &dir))
+        if (!get_aim_dir(player_ptr, &dir)) {
             return false;
+        }
 
         fire_beam(player_ptr, AttributeType::SUPER_RAY, dir, 150 + randint1(2 * plev));
         break;
@@ -530,8 +558,9 @@ bool cast_mirror_spell(PlayerType *player_ptr, mind_mirror_master_type spell)
         set_multishadow(player_ptr, 6 + randint1(6), false);
         break;
     case BINDING_FIELD:
-        if (!binding_field(player_ptr, plev * 11 + 5))
+        if (!binding_field(player_ptr, plev * 11 + 5)) {
             msg_print(_("適当な鏡を選べなかった！", "You were not able to choose suitable mirrors!"));
+        }
 
         break;
     case RUFFNOR_MIRROR:

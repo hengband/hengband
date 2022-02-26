@@ -28,8 +28,9 @@ concptr process_pref_file_expr(PlayerType *player_ptr, char **sp, char *fp)
 {
     char *s;
     s = (*sp);
-    while (iswspace(*s))
+    while (iswspace(*s)) {
         s++;
+    }
 
     char *b;
     b = s;
@@ -55,22 +56,25 @@ concptr process_pref_file_expr(PlayerType *player_ptr, char **sp, char *fp)
             v = "0";
             while (*s && (f != b2)) {
                 t = process_pref_file_expr(player_ptr, &s, &f);
-                if (*t && !streq(t, "0"))
+                if (*t && !streq(t, "0")) {
                     v = "1";
+                }
             }
         } else if (streq(t, "AND")) {
             v = "1";
             while (*s && (f != b2)) {
                 t = process_pref_file_expr(player_ptr, &s, &f);
-                if (*t && streq(t, "0"))
+                if (*t && streq(t, "0")) {
                     v = "0";
+                }
             }
         } else if (streq(t, "NOT")) {
             v = "1";
             while (*s && (f != b2)) {
                 t = process_pref_file_expr(player_ptr, &s, &f);
-                if (*t && streq(t, "1"))
+                if (*t && streq(t, "1")) {
                     v = "0";
+                }
             }
         } else if (streq(t, "EQU")) {
             v = "0";
@@ -79,8 +83,9 @@ concptr process_pref_file_expr(PlayerType *player_ptr, char **sp, char *fp)
             }
             while (*s && (f != b2)) {
                 p = process_pref_file_expr(player_ptr, &s, &f);
-                if (streq(t, p))
+                if (streq(t, p)) {
                     v = "1";
+                }
             }
         } else if (streq(t, "LEQ")) {
             v = "1";
@@ -90,8 +95,9 @@ concptr process_pref_file_expr(PlayerType *player_ptr, char **sp, char *fp)
             while (*s && (f != b2)) {
                 p = t;
                 t = process_pref_file_expr(player_ptr, &s, &f);
-                if (*t && atoi(p) > atoi(t))
+                if (*t && atoi(p) > atoi(t)) {
                     v = "0";
+                }
             }
         } else if (streq(t, "GEQ")) {
             v = "1";
@@ -101,8 +107,9 @@ concptr process_pref_file_expr(PlayerType *player_ptr, char **sp, char *fp)
             while (*s && (f != b2)) {
                 p = t;
                 t = process_pref_file_expr(player_ptr, &s, &f);
-                if (*t && atoi(p) < atoi(t))
+                if (*t && atoi(p) < atoi(t)) {
                     v = "0";
+                }
             }
         } else {
             while (*s && (f != b2)) {
@@ -110,11 +117,13 @@ concptr process_pref_file_expr(PlayerType *player_ptr, char **sp, char *fp)
             }
         }
 
-        if (f != b2)
+        if (f != b2) {
             v = "?x?x?";
+        }
 
-        if ((f = *s) != '\0')
+        if ((f = *s) != '\0') {
             *s++ = '\0';
+        }
 
         *fp = f;
         *sp = s;
@@ -124,17 +133,20 @@ concptr process_pref_file_expr(PlayerType *player_ptr, char **sp, char *fp)
     /* Accept all printables except spaces and brackets */
 #ifdef JP
     while (iskanji(*s) || (isprint(*s) && !angband_strchr(" []", *s))) {
-        if (iskanji(*s))
+        if (iskanji(*s)) {
             s++;
+        }
         s++;
     }
 #else
-    while (isprint(*s) && !angband_strchr(" []", *s))
+    while (isprint(*s) && !angband_strchr(" []", *s)) {
         ++s;
+    }
 #endif
 
-    if ((f = *s) != '\0')
+    if ((f = *s) != '\0') {
         *s++ = '\0';
+    }
 
     if (*b != '$') {
         v = b;
@@ -150,10 +162,11 @@ concptr process_pref_file_expr(PlayerType *player_ptr, char **sp, char *fp)
     } else if (streq(b + 1, "GRAF")) {
         v = ANGBAND_GRAF;
     } else if (streq(b + 1, "MONOCHROME")) {
-        if (arg_monochrome)
+        if (arg_monochrome) {
             v = "ON";
-        else
+        } else {
             v = "OFF";
+        }
     } else if (streq(b + 1, "RACE")) {
 #ifdef JP
         v = rp_ptr->E_title;
@@ -198,10 +211,11 @@ concptr process_pref_file_expr(PlayerType *player_ptr, char **sp, char *fp)
         sprintf(tmp, "%02d", player_ptr->lev);
         v = tmp;
     } else if (streq(b + 1, "AUTOREGISTER")) {
-        if (player_ptr->autopick_autoregister)
+        if (player_ptr->autopick_autoregister) {
             v = "1";
-        else
+        } else {
             v = "0";
+        }
     } else if (streq(b + 1, "MONEY")) {
         sprintf(tmp, "%09ld", (long int)player_ptr->au);
         v = tmp;

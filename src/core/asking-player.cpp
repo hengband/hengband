@@ -14,12 +14,12 @@
 #include "util/string-processor.h"
 #include "view/display-messages.h"
 
-#include <climits>
 #include <algorithm>
-#include <iostream>
-#include <string>
-#include <sstream>
 #include <charconv>
+#include <climits>
+#include <iostream>
+#include <sstream>
+#include <string>
 
 /*
  * Get some string input at the cursor location.
@@ -49,12 +49,15 @@ bool askfor_aux(char *buf, int len, bool numpad_cursor)
 
     int y, x;
     term_locate(&x, &y);
-    if (len < 1)
+    if (len < 1) {
         len = 1;
-    if ((x < 0) || (x >= 80))
+    }
+    if ((x < 0) || (x >= 80)) {
         x = 0;
-    if (x + len > 80)
+    }
+    if (x + len > 80) {
         len = 80 - x;
+    }
 
     buf[len] = '\0';
 
@@ -72,16 +75,19 @@ bool askfor_aux(char *buf, int len, bool numpad_cursor)
             int i = 0;
             color = TERM_WHITE;
 
-            if (0 == pos)
+            if (0 == pos) {
                 break;
+            }
             while (true) {
                 int next_pos = i + 1;
 #ifdef JP
-                if (iskanji(buf[i]))
+                if (iskanji(buf[i])) {
                     next_pos++;
+                }
 #endif
-                if (next_pos >= pos)
+                if (next_pos >= pos) {
                     break;
+                }
 
                 i = next_pos;
             }
@@ -93,14 +99,16 @@ bool askfor_aux(char *buf, int len, bool numpad_cursor)
         case SKEY_RIGHT:
         case KTRL('f'):
             color = TERM_WHITE;
-            if ('\0' == buf[pos])
+            if ('\0' == buf[pos]) {
                 break;
+            }
 
 #ifdef JP
-            if (iskanji(buf[pos]))
+            if (iskanji(buf[pos])) {
                 pos += 2;
-            else
+            } else {
                 pos++;
+            }
 #else
             pos++;
 #endif
@@ -117,16 +125,19 @@ bool askfor_aux(char *buf, int len, bool numpad_cursor)
         case '\010': {
             int i = 0;
             color = TERM_WHITE;
-            if (0 == pos)
+            if (0 == pos) {
                 break;
+            }
             while (true) {
                 int next_pos = i + 1;
 #ifdef JP
-                if (iskanji(buf[i]))
+                if (iskanji(buf[i])) {
                     next_pos++;
+                }
 #endif
-                if (next_pos >= pos)
+                if (next_pos >= pos) {
                     break;
+                }
 
                 i = next_pos;
             }
@@ -138,24 +149,28 @@ bool askfor_aux(char *buf, int len, bool numpad_cursor)
         case 0x7F:
         case KTRL('d'): {
             color = TERM_WHITE;
-            if ('\0' == buf[pos])
+            if ('\0' == buf[pos]) {
                 break;
+            }
             int src = pos + 1;
 #ifdef JP
-            if (iskanji(buf[pos]))
+            if (iskanji(buf[pos])) {
                 src++;
+            }
 #endif
 
             int dst = pos;
-            while ('\0' != (buf[dst++] = buf[src++]))
+            while ('\0' != (buf[dst++] = buf[src++])) {
                 ;
+            }
             break;
         }
 
         default: {
             char tmp[100];
-            if (skey & SKEY_MASK)
+            if (skey & SKEY_MASK) {
                 break;
+            }
             char c = (char)skey;
 
             if (color == TERM_YELLOW) {
@@ -203,7 +218,10 @@ bool askfor_aux(char *buf, int len, bool numpad_cursor)
  *
  * Allow to use numpad keys as cursor keys.
  */
-bool askfor(char *buf, int len) { return askfor_aux(buf, len, true); }
+bool askfor(char *buf, int len)
+{
+    return askfor_aux(buf, len, true);
+}
 
 /*
  * Get a string from the user
@@ -232,7 +250,10 @@ bool get_string(concptr prompt, char *buf, int len)
  *
  * Note that "[y/n]" is appended to the prompt.
  */
-bool get_check(concptr prompt) { return get_check_strict(p_ptr, prompt, 0); }
+bool get_check(concptr prompt)
+{
+    return get_check_strict(p_ptr, prompt, 0);
+}
 
 /*
  * Verify something with the user strictly
@@ -245,8 +266,9 @@ bool get_check(concptr prompt) { return get_check_strict(p_ptr, prompt, 0); }
 bool get_check_strict(PlayerType *player_ptr, concptr prompt, BIT_FLAGS mode)
 {
     char buf[80];
-    if (!rogue_like_commands)
+    if (!rogue_like_commands) {
         mode &= ~CHECK_OKAY_CANCEL;
+    }
 
     if (mode & CHECK_OKAY_CANCEL) {
         angband_strcpy(buf, prompt, sizeof(buf) - 15);
@@ -326,16 +348,19 @@ bool get_com(concptr prompt, char *command, bool z_escape)
 {
     msg_print(nullptr);
     prt(prompt, 0, 0);
-    if (get_com_no_macros)
+    if (get_com_no_macros) {
         *command = (char)inkey_special(false);
-    else
+    } else {
         *command = inkey();
+    }
 
     prt("", 0, 0);
-    if (*command == ESCAPE)
+    if (*command == ESCAPE) {
         return false;
-    if (z_escape && ((*command == 'z') || (*command == 'Z')))
+    }
+    if (z_escape && ((*command == 'z') || (*command == 'Z'))) {
         return false;
+    }
 
     return true;
 }
@@ -358,8 +383,9 @@ QUANTITY get_quantity(concptr prompt, QUANTITY max)
     if (command_arg) {
         amt = command_arg;
         command_arg = 0;
-        if (amt > max)
+        if (amt > max) {
             amt = max;
+        }
 
         return amt;
     }
@@ -368,10 +394,12 @@ QUANTITY get_quantity(concptr prompt, QUANTITY max)
     bool result = repeat_pull(&code);
     amt = (QUANTITY)code;
     if ((max != 1) && result) {
-        if (amt > max)
+        if (amt > max) {
             amt = max;
-        if (amt < 0)
+        }
+        if (amt < 0) {
             amt = 0;
+        }
 
         return amt;
     }
@@ -393,16 +421,19 @@ QUANTITY get_quantity(concptr prompt, QUANTITY max)
     res = askfor_aux(buf, 6, false);
 
     prt("", 0, 0);
-    if (!res)
+    if (!res) {
         return 0;
+    }
 
-   if (isalpha(buf[0]))
+    if (isalpha(buf[0])) {
         amt = max;
-    else
+    } else {
         amt = std::clamp<int>(atoi(buf), 0, max);
+    }
 
-   if (amt)
+    if (amt) {
         repeat_push((COMMAND_CODE)amt);
+    }
 
     return amt;
 }
@@ -428,8 +459,9 @@ bool get_value(const char *text, int min, int max, int *value)
     st << text << "(" << min << "-" << max << "): ";
     int digit = std::max(std::to_string(min).length(), std::to_string(max).length());
     while (true) {
-        if (!get_string(st.str().c_str(), tmp_val, digit))
+        if (!get_string(st.str().c_str(), tmp_val, digit)) {
             return false;
+        }
 
         val = atoi(tmp_val);
 

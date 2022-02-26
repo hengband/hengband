@@ -34,8 +34,9 @@ static void get_questinfo(PlayerType *player_ptr, QuestId questnum, bool do_init
     floor_ptr->quest_number = questnum;
 
     init_flags = INIT_SHOW_TEXT;
-    if (do_init)
+    if (do_init) {
         init_flags = i2enum<init_flags_type>(init_flags | INIT_ASSIGN);
+    }
 
     parse_fixed_map(player_ptr, "q_info.txt", 0, 0, 0, 0);
     floor_ptr->quest_number = old_quest;
@@ -98,8 +99,9 @@ void castle_quest(PlayerType *player_ptr)
 
         put_str(_("このクエストは放棄することができます。", "You can give up this quest."), 12, 0);
 
-        if (!get_check(_("二度と受けられなくなりますが放棄しますか？", "Are you sure to give up this quest? ")))
+        if (!get_check(_("二度と受けられなくなりますが放棄しますか？", "Are you sure to give up this quest? "))) {
             return;
+        }
 
         clear_bldg(4, 18);
         msg_print(_("放棄しました。", "You gave up."));
@@ -114,8 +116,9 @@ void castle_quest(PlayerType *player_ptr)
         return;
     }
 
-    if (q_ptr->status != QuestStatusType::UNTAKEN)
+    if (q_ptr->status != QuestStatusType::UNTAKEN) {
         return;
+    }
 
     q_ptr->status = QuestStatusType::TAKEN;
     reinit_wilderness = true;
@@ -136,10 +139,11 @@ void castle_quest(PlayerType *player_ptr)
     }
 
     if (q_ptr->max_num == 0) {
-        if (randint1(10) > 7)
+        if (randint1(10) > 7) {
             q_ptr->max_num = 1;
-        else
+        } else {
             q_ptr->max_num = randint1(3) + 1;
+        }
     }
 
     q_ptr->cur_num = 0;

@@ -30,23 +30,28 @@
  */
 void distribute_charges(ObjectType *o_ptr, ObjectType *q_ptr, int amt)
 {
-    if ((o_ptr->tval != ItemKindType::WAND) && (o_ptr->tval != ItemKindType::ROD))
+    if ((o_ptr->tval != ItemKindType::WAND) && (o_ptr->tval != ItemKindType::ROD)) {
         return;
+    }
 
     q_ptr->pval = o_ptr->pval * amt / o_ptr->number;
-    if (amt < o_ptr->number)
+    if (amt < o_ptr->number) {
         o_ptr->pval -= q_ptr->pval;
+    }
 
-    if ((o_ptr->tval != ItemKindType::ROD) || !o_ptr->timeout)
+    if ((o_ptr->tval != ItemKindType::ROD) || !o_ptr->timeout) {
         return;
+    }
 
-    if (q_ptr->pval > o_ptr->timeout)
+    if (q_ptr->pval > o_ptr->timeout) {
         q_ptr->timeout = o_ptr->timeout;
-    else
+    } else {
         q_ptr->timeout = q_ptr->pval;
+    }
 
-    if (amt < o_ptr->number)
+    if (amt < o_ptr->number) {
         o_ptr->timeout -= q_ptr->timeout;
+    }
 }
 
 /*!
@@ -76,8 +81,9 @@ int object_similar_part(const ObjectType *o_ptr, const ObjectType *j_ptr)
 {
     const int max_stack_size = 99;
     int max_num = max_stack_size;
-    if (o_ptr->k_idx != j_ptr->k_idx)
+    if (o_ptr->k_idx != j_ptr->k_idx) {
         return 0;
+    }
 
     switch (o_ptr->tval) {
     case ItemKindType::CHEST:
@@ -86,16 +92,19 @@ int object_similar_part(const ObjectType *o_ptr, const ObjectType *j_ptr)
         return 0;
     }
     case ItemKindType::STATUE: {
-        if ((o_ptr->sval != SV_PHOTO) || (j_ptr->sval != SV_PHOTO))
+        if ((o_ptr->sval != SV_PHOTO) || (j_ptr->sval != SV_PHOTO)) {
             return 0;
-        if (o_ptr->pval != j_ptr->pval)
+        }
+        if (o_ptr->pval != j_ptr->pval) {
             return 0;
+        }
         break;
     }
     case ItemKindType::FIGURINE:
     case ItemKindType::CORPSE: {
-        if (o_ptr->pval != j_ptr->pval)
+        if (o_ptr->pval != j_ptr->pval) {
             return 0;
+        }
 
         break;
     }
@@ -105,17 +114,20 @@ int object_similar_part(const ObjectType *o_ptr, const ObjectType *j_ptr)
         break;
     }
     case ItemKindType::STAFF: {
-        if ((!(o_ptr->ident & (IDENT_EMPTY)) && !o_ptr->is_known()) || (!(j_ptr->ident & (IDENT_EMPTY)) && !j_ptr->is_known()))
+        if ((!(o_ptr->ident & (IDENT_EMPTY)) && !o_ptr->is_known()) || (!(j_ptr->ident & (IDENT_EMPTY)) && !j_ptr->is_known())) {
             return 0;
+        }
 
-        if (o_ptr->pval != j_ptr->pval)
+        if (o_ptr->pval != j_ptr->pval) {
             return 0;
+        }
 
         break;
     }
     case ItemKindType::WAND: {
-        if ((!(o_ptr->ident & (IDENT_EMPTY)) && !o_ptr->is_known()) || (!(j_ptr->ident & (IDENT_EMPTY)) && !j_ptr->is_known()))
+        if ((!(o_ptr->ident & (IDENT_EMPTY)) && !o_ptr->is_known()) || (!(j_ptr->ident & (IDENT_EMPTY)) && !j_ptr->is_known())) {
             return 0;
+        }
 
         break;
     }
@@ -177,28 +189,35 @@ int object_similar_part(const ObjectType *o_ptr, const ObjectType *j_ptr)
 
         break;
     default: {
-        if (!o_ptr->is_known() || !j_ptr->is_known())
+        if (!o_ptr->is_known() || !j_ptr->is_known()) {
             return 0;
+        }
 
         break;
     }
     }
 
-    if (o_ptr->art_flags != j_ptr->art_flags)
+    if (o_ptr->art_flags != j_ptr->art_flags) {
         return 0;
+    }
 
-    if (o_ptr->curse_flags != j_ptr->curse_flags)
+    if (o_ptr->curse_flags != j_ptr->curse_flags) {
         return 0;
-    if ((o_ptr->ident & (IDENT_BROKEN)) != (j_ptr->ident & (IDENT_BROKEN)))
+    }
+    if ((o_ptr->ident & (IDENT_BROKEN)) != (j_ptr->ident & (IDENT_BROKEN))) {
         return 0;
+    }
 
-    if (o_ptr->inscription && j_ptr->inscription && (o_ptr->inscription != j_ptr->inscription))
+    if (o_ptr->inscription && j_ptr->inscription && (o_ptr->inscription != j_ptr->inscription)) {
         return 0;
+    }
 
-    if (!stack_force_notes && (o_ptr->inscription != j_ptr->inscription))
+    if (!stack_force_notes && (o_ptr->inscription != j_ptr->inscription)) {
         return 0;
-    if (!stack_force_costs && (o_ptr->discount != j_ptr->discount))
+    }
+    if (!stack_force_costs && (o_ptr->discount != j_ptr->discount)) {
         return 0;
+    }
 
     return max_num;
 }
@@ -214,10 +233,12 @@ bool object_similar(const ObjectType *o_ptr, const ObjectType *j_ptr)
 {
     int total = o_ptr->number + j_ptr->number;
     int max_num = object_similar_part(o_ptr, j_ptr);
-    if (!max_num)
+    if (!max_num) {
         return false;
-    if (total > max_num)
+    }
+    if (total > max_num) {
         return 0;
+    }
 
     return true;
 }
@@ -235,24 +256,31 @@ void object_absorb(ObjectType *o_ptr, ObjectType *j_ptr)
     int diff = (total > max_num) ? total - max_num : 0;
 
     o_ptr->number = (total > max_num) ? max_num : total;
-    if (j_ptr->is_known())
+    if (j_ptr->is_known()) {
         object_known(o_ptr);
-
-    if (((o_ptr->ident & IDENT_STORE) || (j_ptr->ident & IDENT_STORE)) && (!((o_ptr->ident & IDENT_STORE) && (j_ptr->ident & IDENT_STORE)))) {
-        if (j_ptr->ident & IDENT_STORE)
-            j_ptr->ident &= 0xEF;
-        if (o_ptr->ident & IDENT_STORE)
-            o_ptr->ident &= 0xEF;
     }
 
-    if (j_ptr->is_fully_known())
+    if (((o_ptr->ident & IDENT_STORE) || (j_ptr->ident & IDENT_STORE)) && (!((o_ptr->ident & IDENT_STORE) && (j_ptr->ident & IDENT_STORE)))) {
+        if (j_ptr->ident & IDENT_STORE) {
+            j_ptr->ident &= 0xEF;
+        }
+        if (o_ptr->ident & IDENT_STORE) {
+            o_ptr->ident &= 0xEF;
+        }
+    }
+
+    if (j_ptr->is_fully_known()) {
         o_ptr->ident |= (IDENT_FULL_KNOWN);
-    if (j_ptr->inscription)
+    }
+    if (j_ptr->inscription) {
         o_ptr->inscription = j_ptr->inscription;
-    if (j_ptr->feeling)
+    }
+    if (j_ptr->feeling) {
         o_ptr->feeling = j_ptr->feeling;
-    if (o_ptr->discount < j_ptr->discount)
+    }
+    if (o_ptr->discount < j_ptr->discount) {
         o_ptr->discount = j_ptr->discount;
+    }
     if (o_ptr->tval == ItemKindType::ROD) {
         o_ptr->pval += j_ptr->pval * (j_ptr->number - diff) / j_ptr->number;
         o_ptr->timeout += j_ptr->timeout * (j_ptr->number - diff) / j_ptr->number;

@@ -58,8 +58,9 @@ static errr process_pref_file_aux(PlayerType *player_ptr, concptr name, int pref
 {
     FILE *fp;
     fp = angband_fopen(name, "r");
-    if (!fp)
+    if (!fp) {
         return -1;
+    }
 
     int line = -1;
     errr err = 0;
@@ -68,17 +69,20 @@ static errr process_pref_file_aux(PlayerType *player_ptr, concptr name, int pref
     std::string error_line;
     while (angband_fgets(fp, file_read__buf.data(), file_read__buf.size()) == 0) {
         line++;
-        if (!file_read__buf[0])
+        if (!file_read__buf[0]) {
             continue;
+        }
 
 #ifdef JP
         if (!iskanji(file_read__buf[0]))
 #endif
-            if (iswspace(file_read__buf[0]))
+            if (iswspace(file_read__buf[0])) {
                 continue;
+            }
 
-        if (file_read__buf[0] == '#')
+        if (file_read__buf[0] == '#') {
             continue;
+        }
         error_line = file_read__buf.data();
 
         /* Process "?:<expr>" */
@@ -91,14 +95,16 @@ static errr process_pref_file_aux(PlayerType *player_ptr, concptr name, int pref
             continue;
         }
 
-        if (bypass)
+        if (bypass) {
             continue;
+        }
 
         /* Process "%:<file>" */
         if (file_read__buf[0] == '%') {
             static int depth_count = 0;
-            if (depth_count > 20)
+            if (depth_count > 20) {
                 continue;
+            }
 
             depth_count++;
             switch (preftype) {
@@ -119,8 +125,9 @@ static errr process_pref_file_aux(PlayerType *player_ptr, concptr name, int pref
 
         err = interpret_pref_file(player_ptr, file_read__buf.data());
         if (err != 0) {
-            if (preftype != PREF_TYPE_AUTOPICK)
+            if (preftype != PREF_TYPE_AUTOPICK) {
                 break;
+            }
 
             process_autopick_file_command(file_read__buf.data());
             err = 0;
@@ -161,14 +168,16 @@ errr process_pref_file(PlayerType *player_ptr, concptr name, bool only_user_dir)
         path_build(buf, sizeof(buf), ANGBAND_DIR_PREF, name);
 
         err1 = process_pref_file_aux(player_ptr, buf, PREF_TYPE_NORMAL);
-        if (err1 > 0)
+        if (err1 > 0) {
             return err1;
+        }
     }
 
     path_build(buf, sizeof(buf), ANGBAND_DIR_USER, name);
     errr err2 = process_pref_file_aux(player_ptr, buf, PREF_TYPE_NORMAL);
-    if (err2 < 0 && !err1)
+    if (err2 < 0 && !err1) {
         return -2;
+    }
 
     return err2;
 }
@@ -221,8 +230,9 @@ void auto_dump_printf(FILE *auto_dump_stream, concptr fmt, ...)
     (void)vstrnfmt(buf, sizeof(buf), fmt, vp);
     va_end(vp);
     for (concptr p = buf; *p; p++) {
-        if (*p == '\n')
+        if (*p == '\n') {
             auto_dump_line_num++;
+        }
     }
 
     fprintf(auto_dump_stream, "%s", buf);
@@ -316,8 +326,9 @@ bool read_histpref(PlayerType *player_ptr)
     char temp[64 * 4];
     char histbuf[HISTPREF_LIMIT];
 
-    if (!get_check(_("生い立ち設定ファイルをロードしますか? ", "Load background history preference file? ")))
+    if (!get_check(_("生い立ち設定ファイルをロードしますか? ", "Load background history preference file? "))) {
         return false;
+    }
 
     histbuf[0] = '\0';
     histpref_buf = histbuf;
@@ -342,23 +353,26 @@ bool read_histpref(PlayerType *player_ptr)
         return false;
     }
 
-    for (i = 0; i < 4; i++)
+    for (i = 0; i < 4; i++) {
         player_ptr->history[i][0] = '\0';
+    }
 
     /* loop */
-    for (s = histpref_buf; *s == ' '; s++)
+    for (s = histpref_buf; *s == ' '; s++) {
         ;
+    }
 
     n = strlen(s);
-    while ((n > 0) && (s[n - 1] == ' '))
+    while ((n > 0) && (s[n - 1] == ' ')) {
         s[--n] = '\0';
+    }
 
     shape_buffer(s, 60, temp, sizeof(temp));
     t = temp;
     for (i = 0; i < 4; i++) {
-        if (t[0] == 0)
+        if (t[0] == 0) {
             break;
-        else {
+        } else {
             strcpy(player_ptr->history[i], t);
             t += strlen(t) + 1;
         }
@@ -366,11 +380,13 @@ bool read_histpref(PlayerType *player_ptr)
 
     for (i = 0; i < 4; i++) {
         /* loop */
-        for (j = 0; player_ptr->history[i][j]; j++)
+        for (j = 0; player_ptr->history[i][j]; j++) {
             ;
+        }
 
-        for (; j < 59; j++)
+        for (; j < 59; j++) {
             player_ptr->history[i][j] = ' ';
+        }
         player_ptr->history[i][59] = '\0';
     }
 

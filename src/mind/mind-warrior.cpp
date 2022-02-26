@@ -16,16 +16,18 @@
 bool hit_and_away(PlayerType *player_ptr)
 {
     DIRECTION dir;
-    if (!get_direction(player_ptr, &dir, false, false))
+    if (!get_direction(player_ptr, &dir, false, false)) {
         return false;
+    }
     POSITION y = player_ptr->y + ddy[dir];
     POSITION x = player_ptr->x + ddx[dir];
     if (player_ptr->current_floor_ptr->grid_array[y][x].m_idx) {
         do_cmd_attack(player_ptr, y, x, HISSATSU_NONE);
-        if (randint0(player_ptr->skill_dis) < 7)
+        if (randint0(player_ptr->skill_dis) < 7) {
             msg_print(_("うまく逃げられなかった。", "You failed to run away."));
-        else
+        } else {
             teleport_player(player_ptr, 30, TELEPORT_SPONTANEOUS);
+        }
         return true;
     }
 
@@ -51,9 +53,9 @@ bool sword_dancing(PlayerType *player_ptr)
         g_ptr = &player_ptr->current_floor_ptr->grid_array[y][x];
 
         /* Hack -- attack monsters */
-        if (g_ptr->m_idx)
+        if (g_ptr->m_idx) {
             do_cmd_attack(player_ptr, y, x, HISSATSU_NONE);
-        else {
+        } else {
             msg_print(_("攻撃が空をきった。", "You attack the empty air."));
         }
     }

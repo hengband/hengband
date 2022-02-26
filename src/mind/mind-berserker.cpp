@@ -9,10 +9,10 @@
 #include "player-attack/player-attack.h"
 #include "player/player-move.h"
 #include "spell-kind/earthquake.h"
+#include "spell-kind/spells-detection.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
 #include "system/player-type-definition.h"
-#include "spell-kind/spells-detection.h"
 #include "target/target-getter.h"
 #include "view/display-messages.h"
 
@@ -36,8 +36,9 @@ bool cast_berserk_spell(PlayerType *player_ptr, mind_berserker_type spell)
             return false;
         }
 
-        if (!get_direction(player_ptr, &dir, false, false) || (dir == 5))
+        if (!get_direction(player_ptr, &dir, false, false) || (dir == 5)) {
             return false;
+        }
 
         y = player_ptr->y + ddy[dir];
         x = player_ptr->x + ddx[dir];
@@ -47,14 +48,13 @@ bool cast_berserk_spell(PlayerType *player_ptr, mind_berserker_type spell)
         }
 
         do_cmd_attack(player_ptr, y, x, HISSATSU_NONE);
-        if (!player_can_enter(player_ptr, player_ptr->current_floor_ptr->grid_array[y][x].feat, 0)
-            || is_trap(player_ptr, player_ptr->current_floor_ptr->grid_array[y][x].feat))
+        if (!player_can_enter(player_ptr, player_ptr->current_floor_ptr->grid_array[y][x].feat, 0) || is_trap(player_ptr, player_ptr->current_floor_ptr->grid_array[y][x].feat)) {
             break;
+        }
 
         y += ddy[dir];
         x += ddx[dir];
-        if (player_can_enter(player_ptr, player_ptr->current_floor_ptr->grid_array[y][x].feat, 0)
-            && !is_trap(player_ptr, player_ptr->current_floor_ptr->grid_array[y][x].feat) && !player_ptr->current_floor_ptr->grid_array[y][x].m_idx) {
+        if (player_can_enter(player_ptr, player_ptr->current_floor_ptr->grid_array[y][x].feat, 0) && !is_trap(player_ptr, player_ptr->current_floor_ptr->grid_array[y][x].feat) && !player_ptr->current_floor_ptr->grid_array[y][x].m_idx) {
             msg_print(nullptr);
             (void)move_player_effect(player_ptr, y, x, MPE_FORGET_FLOW | MPE_HANDLE_STUFF | MPE_DONT_PICKUP);
         }
@@ -62,8 +62,9 @@ bool cast_berserk_spell(PlayerType *player_ptr, mind_berserker_type spell)
         break;
     }
     case SMASH_TRAP: {
-        if (!get_direction(player_ptr, &dir, false, false))
+        if (!get_direction(player_ptr, &dir, false, false)) {
             return false;
+        }
 
         y = player_ptr->y + ddy[dir];
         x = player_ptr->x + ddx[dir];

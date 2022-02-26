@@ -16,25 +16,28 @@ static void rd_hengband_dungeons(void)
     auto max = rd_byte();
     for (auto i = 0U; i < max; i++) {
         auto tmp16s = rd_s16b();
-        if (i >= d_info.size()){
+        if (i >= d_info.size()) {
             continue;
         }
 
         max_dlv[i] = tmp16s;
-        if (max_dlv[i] > d_info[i].maxdepth)
+        if (max_dlv[i] > d_info[i].maxdepth) {
             max_dlv[i] = d_info[i].maxdepth;
+        }
     }
 }
 
 void rd_dungeons(PlayerType *player_ptr)
 {
-    if (h_older_than(0, 3, 8))
+    if (h_older_than(0, 3, 8)) {
         rd_zangband_dungeon();
-    else
+    } else {
         rd_hengband_dungeons();
+    }
 
-    if (player_ptr->max_plv < player_ptr->lev)
+    if (player_ptr->max_plv < player_ptr->lev) {
         player_ptr->max_plv = player_ptr->lev;
+    }
 }
 
 /*!
@@ -43,16 +46,17 @@ void rd_dungeons(PlayerType *player_ptr)
  */
 void rd_alter_reality(PlayerType *player_ptr)
 {
-    if (h_older_than(0, 3, 8))
+    if (h_older_than(0, 3, 8)) {
         player_ptr->recall_dungeon = DUNGEON_ANGBAND;
-    else {
+    } else {
         player_ptr->recall_dungeon = rd_s16b();
     }
 
-    if (h_older_than(1, 5, 0, 0))
+    if (h_older_than(1, 5, 0, 0)) {
         player_ptr->alter_reality = 0;
-    else
+    } else {
         player_ptr->alter_reality = rd_s16b();
+    }
 }
 
 void set_gambling_monsters(void)
@@ -60,10 +64,11 @@ void set_gambling_monsters(void)
     const int max_gambling_monsters = 4;
     for (int i = 0; i < max_gambling_monsters; i++) {
         battle_mon[i] = rd_s16b();
-        if (h_older_than(0, 3, 4))
+        if (h_older_than(0, 3, 4)) {
             set_zangband_gambling_monsters(i);
-        else
+        } else {
             mon_odds[i] = rd_u32b();
+        }
     }
 }
 
@@ -95,28 +100,32 @@ static void rd_world_info(PlayerType *player_ptr)
     set_undead_turn_limit(player_ptr);
     w_ptr->dungeon_turn_limit = TURNS_PER_TICK * TOWN_DAWN * (MAX_DAYS - 1) + TURNS_PER_TICK * TOWN_DAWN * 3 / 4;
     player_ptr->current_floor_ptr->generated_turn = rd_s32b();
-    if (h_older_than(1, 7, 0, 4))
+    if (h_older_than(1, 7, 0, 4)) {
         player_ptr->feeling_turn = player_ptr->current_floor_ptr->generated_turn;
-    else
+    } else {
         player_ptr->feeling_turn = rd_s32b();
+    }
 
     w_ptr->game_turn = rd_s32b();
-    if (h_older_than(0, 3, 12))
+    if (h_older_than(0, 3, 12)) {
         w_ptr->dungeon_turn = w_ptr->game_turn;
-    else
+    } else {
         w_ptr->dungeon_turn = rd_s32b();
+    }
 
-    if (h_older_than(1, 0, 13))
+    if (h_older_than(1, 0, 13)) {
         set_zangband_game_turns(player_ptr);
+    }
 
-    if (h_older_than(0, 3, 13))
+    if (h_older_than(0, 3, 13)) {
         w_ptr->arena_start_turn = w_ptr->game_turn;
-    else
+    } else {
         w_ptr->arena_start_turn = rd_s32b();
+    }
 
-    if (h_older_than(0, 0, 3))
+    if (h_older_than(0, 0, 3)) {
         determine_daily_bounty(player_ptr, true);
-    else {
+    } else {
         w_ptr->today_mon = rd_s16b();
         player_ptr->today_mon = rd_s16b();
     }
@@ -161,15 +170,17 @@ void load_wilderness_info(PlayerType *player_ptr)
         player_ptr->wilderness_y = 48;
     }
 
-    if (h_older_than(0, 3, 7))
+    if (h_older_than(0, 3, 7)) {
         player_ptr->wild_mode = false;
-    else
+    } else {
         player_ptr->wild_mode = rd_byte() != 0;
+    }
 
-    if (h_older_than(0, 3, 7))
+    if (h_older_than(0, 3, 7)) {
         player_ptr->ambush_flag = false;
-    else
+    } else {
         player_ptr->ambush_flag = rd_byte() != 0;
+    }
 }
 
 errr analyze_wilderness(void)
@@ -182,9 +193,11 @@ errr analyze_wilderness(void)
         return 23;
     }
 
-    for (int i = 0; i < wild_x_size; i++)
-        for (int j = 0; j < wild_y_size; j++)
+    for (int i = 0; i < wild_x_size; i++) {
+        for (int j = 0; j < wild_y_size; j++) {
             wilderness[j][i].seed = rd_u32b();
+        }
+    }
 
     return 0;
 }

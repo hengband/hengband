@@ -54,13 +54,15 @@ void do_cmd_redraw(PlayerType *player_ptr)
 
     update_playtime();
     handle_stuff(player_ptr);
-    if (PlayerRace(player_ptr).equals(PlayerRaceType::ANDROID))
+    if (PlayerRace(player_ptr).equals(PlayerRaceType::ANDROID)) {
         calc_android_exp(player_ptr);
+    }
 
     term_type *old = game_term;
     for (int j = 0; j < 8; j++) {
-        if (!angband_term[j])
+        if (!angband_term[j]) {
             continue;
+        }
 
         term_activate(angband_term[j]);
         term_redraw();
@@ -89,8 +91,9 @@ void do_cmd_player_status(PlayerType *player_ptr)
         term_putstr(2, 23, -1, TERM_WHITE,
             _("['c'で名前変更, 'f'でファイルへ書出, 'h'でモード変更, ESCで終了]", "['c' to change name, 'f' to file, 'h' to change mode, or ESC]"));
         char c = inkey();
-        if (c == ESCAPE)
+        if (c == ESCAPE) {
             break;
+        }
 
         if (c == 'c') {
             get_name(player_ptr);
@@ -167,8 +170,9 @@ void do_cmd_messages(int num_now)
         for (j = 0; (j < num_lines) && (i + j < n); j++) {
             concptr msg = message_str(i + j);
             c_prt((i + j < num_now ? TERM_WHITE : TERM_SLATE), msg, num_lines + 1 - j, 0);
-            if (!shower || !shower[0])
+            if (!shower || !shower[0]) {
                 continue;
+            }
 
             concptr str = msg;
             while ((str = angband_strstr(str, shower)) != nullptr) {
@@ -178,24 +182,27 @@ void do_cmd_messages(int num_now)
             }
         }
 
-        for (; j < num_lines; j++)
+        for (; j < num_lines; j++) {
             term_erase(0, num_lines + 1 - j, 255);
+        }
 
         prt(format(_("以前のメッセージ %d-%d 全部で(%d)", "Message Recall (%d-%d of %d)"), i, i + j - 1, n), 0, 0);
         prt(_("[ 'p' で更に古いもの, 'n' で更に新しいもの, '/' で検索, ESC で中断 ]", "[Press 'p' for older, 'n' for newer, ..., or ESCAPE]"), hgt - 1, 0);
         skey = inkey_special(true);
-        if (skey == ESCAPE)
+        if (skey == ESCAPE) {
             break;
+        }
 
         j = i;
         switch (skey) {
         case '=':
             prt(_("強調: ", "Show: "), hgt - 1, 0);
             strcpy(back_str, shower_str);
-            if (askfor(shower_str, 80))
+            if (askfor(shower_str, 80)) {
                 shower = shower_str[0] ? shower_str : nullptr;
-            else
+            } else {
                 strcpy(shower_str, back_str);
+            }
 
             continue;
         case '/':
@@ -257,8 +264,9 @@ void do_cmd_messages(int num_now)
             break;
         }
 
-        if (i == j)
+        if (i == j) {
             bell();
+        }
     }
 
     screen_load();

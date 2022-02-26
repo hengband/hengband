@@ -20,13 +20,15 @@
 
 process_result effect_monster_drain_mana(PlayerType *player_ptr, effect_monster_type *em_ptr)
 {
-    if (em_ptr->seen)
+    if (em_ptr->seen) {
         em_ptr->obvious = true;
+    }
     auto ability_flags = em_ptr->r_ptr->ability_flags;
     bool has_mana = ability_flags.reset(RF_ABILITY_NOMAGIC_MASK).any();
     if (!has_mana) {
-        if (em_ptr->see_s_msg)
+        if (em_ptr->see_s_msg) {
             msg_format(_("%sには効果がなかった。", "%s is unaffected."), em_ptr->m_name);
+        }
 
         em_ptr->dam = 0;
         return PROCESS_CONTINUE;
@@ -45,14 +47,17 @@ process_result effect_monster_drain_mana(PlayerType *player_ptr, effect_monster_
     }
 
     em_ptr->m_caster_ptr->hp += em_ptr->dam;
-    if (em_ptr->m_caster_ptr->hp > em_ptr->m_caster_ptr->maxhp)
+    if (em_ptr->m_caster_ptr->hp > em_ptr->m_caster_ptr->maxhp) {
         em_ptr->m_caster_ptr->hp = em_ptr->m_caster_ptr->maxhp;
+    }
 
-    if (player_ptr->health_who == em_ptr->who)
+    if (player_ptr->health_who == em_ptr->who) {
         player_ptr->redraw |= (PR_HEALTH);
+    }
 
-    if (player_ptr->riding == em_ptr->who)
+    if (player_ptr->riding == em_ptr->who) {
         player_ptr->redraw |= (PR_UHEALTH);
+    }
 
     if (em_ptr->see_s_msg) {
         monster_desc(player_ptr, em_ptr->killer, em_ptr->m_caster_ptr, 0);
@@ -65,10 +70,12 @@ process_result effect_monster_drain_mana(PlayerType *player_ptr, effect_monster_
 
 process_result effect_monster_mind_blast(PlayerType *player_ptr, effect_monster_type *em_ptr)
 {
-    if (em_ptr->seen)
+    if (em_ptr->seen) {
         em_ptr->obvious = true;
-    if (!em_ptr->who)
+    }
+    if (!em_ptr->who) {
         msg_format(_("%sをじっと睨んだ。", "You gaze intently at %s."), em_ptr->m_name);
+    }
 
     bool has_immute = em_ptr->r_ptr->kind_flags.has(MonsterKindType::UNIQUE);
     has_immute |= any_bits(em_ptr->r_ptr->flags3, RF3_NO_CONF);
@@ -76,30 +83,34 @@ process_result effect_monster_mind_blast(PlayerType *player_ptr, effect_monster_
 
     if (has_immute) {
         if (em_ptr->r_ptr->flags3 & (RF3_NO_CONF)) {
-            if (is_original_ap_and_seen(player_ptr, em_ptr->m_ptr))
+            if (is_original_ap_and_seen(player_ptr, em_ptr->m_ptr)) {
                 em_ptr->r_ptr->r_flags3 |= (RF3_NO_CONF);
+            }
         }
 
         em_ptr->note = _("には効果がなかった。", " is unaffected.");
         em_ptr->dam = 0;
     } else if (em_ptr->r_ptr->flags2 & RF2_EMPTY_MIND) {
-        if (is_original_ap_and_seen(player_ptr, em_ptr->m_ptr))
+        if (is_original_ap_and_seen(player_ptr, em_ptr->m_ptr)) {
             em_ptr->r_ptr->r_flags2 |= (RF2_EMPTY_MIND);
+        }
         em_ptr->note = _("には完全な耐性がある！", " is immune.");
         em_ptr->dam = 0;
     } else if (em_ptr->r_ptr->flags2 & RF2_WEIRD_MIND) {
-        if (is_original_ap_and_seen(player_ptr, em_ptr->m_ptr))
+        if (is_original_ap_and_seen(player_ptr, em_ptr->m_ptr)) {
             em_ptr->r_ptr->r_flags2 |= (RF2_WEIRD_MIND);
+        }
         em_ptr->note = _("には耐性がある。", " resists.");
         em_ptr->dam /= 3;
     } else {
         em_ptr->note = _("は精神攻撃を食らった。", " is blasted by psionic energy.");
         em_ptr->note_dies = _("の精神は崩壊し、肉体は抜け殻となった。", " collapses, a mindless husk.");
 
-        if (em_ptr->who > 0)
+        if (em_ptr->who > 0) {
             em_ptr->do_conf = randint0(4) + 4;
-        else
+        } else {
             em_ptr->do_conf = randint0(8) + 8;
+        }
     }
 
     return PROCESS_CONTINUE;
@@ -107,10 +118,12 @@ process_result effect_monster_mind_blast(PlayerType *player_ptr, effect_monster_
 
 process_result effect_monster_brain_smash(PlayerType *player_ptr, effect_monster_type *em_ptr)
 {
-    if (em_ptr->seen)
+    if (em_ptr->seen) {
         em_ptr->obvious = true;
-    if (!em_ptr->who)
+    }
+    if (!em_ptr->who) {
         msg_format(_("%sをじっと睨んだ。", "You gaze intently at %s."), em_ptr->m_name);
+    }
 
     bool has_immute = em_ptr->r_ptr->kind_flags.has(MonsterKindType::UNIQUE);
     has_immute |= any_bits(em_ptr->r_ptr->flags3, RF3_NO_CONF);
@@ -118,21 +131,24 @@ process_result effect_monster_brain_smash(PlayerType *player_ptr, effect_monster
 
     if (has_immute) {
         if (em_ptr->r_ptr->flags3 & (RF3_NO_CONF)) {
-            if (is_original_ap_and_seen(player_ptr, em_ptr->m_ptr))
+            if (is_original_ap_and_seen(player_ptr, em_ptr->m_ptr)) {
                 em_ptr->r_ptr->r_flags3 |= (RF3_NO_CONF);
+            }
         }
 
         em_ptr->note = _("には効果がなかった。", " is unaffected.");
         em_ptr->dam = 0;
     } else if (em_ptr->r_ptr->flags2 & RF2_EMPTY_MIND) {
-        if (is_original_ap_and_seen(player_ptr, em_ptr->m_ptr))
+        if (is_original_ap_and_seen(player_ptr, em_ptr->m_ptr)) {
             em_ptr->r_ptr->r_flags2 |= (RF2_EMPTY_MIND);
+        }
 
         em_ptr->note = _("には完全な耐性がある！", " is immune.");
         em_ptr->dam = 0;
     } else if (em_ptr->r_ptr->flags2 & RF2_WEIRD_MIND) {
-        if (is_original_ap_and_seen(player_ptr, em_ptr->m_ptr))
+        if (is_original_ap_and_seen(player_ptr, em_ptr->m_ptr)) {
             em_ptr->r_ptr->r_flags2 |= (RF2_WEIRD_MIND);
+        }
 
         em_ptr->note = _("には耐性がある！", " resists!");
         em_ptr->dam /= 3;

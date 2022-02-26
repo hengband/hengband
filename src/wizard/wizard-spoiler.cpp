@@ -312,28 +312,34 @@ void exe_output_spoilers(void)
 SpoilerOutputResultType output_all_spoilers(void)
 {
     auto status = spoil_obj_desc("obj-desc.txt");
-    if (status != SpoilerOutputResultType::SPOILER_OUTPUT_SUCCESS)
+    if (status != SpoilerOutputResultType::SPOILER_OUTPUT_SUCCESS) {
         return status;
+    }
 
     status = spoil_fixed_artifact("artifact.txt");
-    if (status != SpoilerOutputResultType::SPOILER_OUTPUT_SUCCESS)
+    if (status != SpoilerOutputResultType::SPOILER_OUTPUT_SUCCESS) {
         return status;
+    }
 
     status = spoil_mon_desc("mon-desc.txt");
-    if (status != SpoilerOutputResultType::SPOILER_OUTPUT_SUCCESS)
+    if (status != SpoilerOutputResultType::SPOILER_OUTPUT_SUCCESS) {
         return status;
+    }
 
     status = spoil_categorized_mon_desc();
-    if (status != SpoilerOutputResultType::SPOILER_OUTPUT_SUCCESS)
+    if (status != SpoilerOutputResultType::SPOILER_OUTPUT_SUCCESS) {
         return status;
+    }
 
     status = spoil_mon_info("mon-info.txt");
-    if (status != SpoilerOutputResultType::SPOILER_OUTPUT_SUCCESS)
+    if (status != SpoilerOutputResultType::SPOILER_OUTPUT_SUCCESS) {
         return status;
+    }
 
     status = spoil_mon_evol("mon-evol.txt");
-    if (status != SpoilerOutputResultType::SPOILER_OUTPUT_SUCCESS)
+    if (status != SpoilerOutputResultType::SPOILER_OUTPUT_SUCCESS) {
         return status;
+    }
 
     return SpoilerOutputResultType::SPOILER_OUTPUT_SUCCESS;
 }

@@ -1,7 +1,7 @@
 ﻿#include "info-reader/vault-reader.h"
-#include "main/angband-headers.h"
 #include "info-reader/info-reader-util.h"
 #include "info-reader/parse-error-types.h"
+#include "main/angband-headers.h"
 #include "room/rooms-vault.h"
 #include "util/string-processor.h"
 
@@ -19,14 +19,17 @@ errr parse_v_info(std::string_view buf, angband_header *)
 
     if (tokens[0] == "N") {
         // N:index:name
-        if (tokens.size() < 3)
+        if (tokens.size() < 3) {
             return PARSE_ERROR_TOO_FEW_ARGUMENTS;
-        if (tokens[1].size() == 0 || tokens[2].size() == 0)
+        }
+        if (tokens[1].size() == 0 || tokens[2].size() == 0) {
             return PARSE_ERROR_GENERIC;
+        }
 
         auto i = std::stoi(tokens[1]);
-        if (i < error_idx)
+        if (i < error_idx) {
             return PARSE_ERROR_NON_SEQUENTIAL_RECORDS;
+        }
         if (i >= static_cast<int>(v_info.size())) {
             v_info.resize(i + 1);
         }
@@ -35,25 +38,28 @@ errr parse_v_info(std::string_view buf, angband_header *)
         v_ptr = &v_info[i];
         v_ptr->idx = static_cast<int16_t>(i);
         v_ptr->name = std::string(tokens[2]);
-    } else if (!v_ptr)
+    } else if (!v_ptr) {
         return PARSE_ERROR_MISSING_RECORD_HEADER;
-    else if (tokens[0] == "D") {
+    } else if (tokens[0] == "D") {
         // D:MapText
-        if (tokens.size() < 2 || tokens[1].size() == 0)
+        if (tokens.size() < 2 || tokens[1].size() == 0) {
             return PARSE_ERROR_TOO_FEW_ARGUMENTS;
+        }
 
         v_ptr->text.append(buf.substr(2));
     } else if (tokens[0] == "X") {
         // X:type:rate:height:width
-        if (tokens.size() < 5)
+        if (tokens.size() < 5) {
             return PARSE_ERROR_TOO_FEW_ARGUMENTS;
+        }
 
         info_set_value(v_ptr->typ, tokens[1]);
         info_set_value(v_ptr->rat, tokens[2]);
         info_set_value(v_ptr->hgt, tokens[3]);
         info_set_value(v_ptr->wid, tokens[4]);
-    } else
+    } else {
         return PARSE_ERROR_UNDEFINED_DIRECTIVE;
+    }
 
     return PARSE_ERROR_NONE;
 }

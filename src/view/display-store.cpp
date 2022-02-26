@@ -57,8 +57,9 @@ void display_entry(PlayerType *player_ptr, int pos)
         auto c = object_char(o_ptr);
 
         term_queue_bigchar(cur_col, i + 6, a, c, 0, 0);
-        if (use_bigtile)
+        if (use_bigtile) {
             cur_col++;
+        }
 
         cur_col += 2;
     }
@@ -67,8 +68,9 @@ void display_entry(PlayerType *player_ptr, int pos)
     int maxwid = 75;
     if ((cur_store_num == StoreSaleType::HOME) || (cur_store_num == StoreSaleType::MUSEUM)) {
         maxwid = 75;
-        if (show_weights)
+        if (show_weights) {
             maxwid -= 10;
+        }
 
         GAME_TEXT o_name[MAX_NLEN];
         describe_flavor(player_ptr, o_name, o_ptr, 0);
@@ -84,8 +86,9 @@ void display_entry(PlayerType *player_ptr, int pos)
     }
 
     maxwid = 65;
-    if (show_weights)
+    if (show_weights) {
         maxwid -= 7;
+    }
 
     GAME_TEXT o_name[MAX_NLEN];
     describe_flavor(player_ptr, o_name, o_ptr, 0);
@@ -115,14 +118,16 @@ void display_store_inventory(PlayerType *player_ptr)
 {
     int k;
     for (k = 0; k < store_bottom; k++) {
-        if (store_top + k >= st_ptr->stock_num)
+        if (store_top + k >= st_ptr->stock_num) {
             break;
+        }
 
         display_entry(player_ptr, store_top + k);
     }
 
-    for (int i = k; i < store_bottom + 1; i++)
+    for (int i = k; i < store_bottom + 1; i++) {
         prt("", i + 6, 0);
+    }
 
     put_str(_("          ", "        "), 5, _(20, 22));
     if (st_ptr->stock_num > store_bottom) {
@@ -132,8 +137,9 @@ void display_store_inventory(PlayerType *player_ptr)
 
     if (cur_store_num == StoreSaleType::HOME || cur_store_num == StoreSaleType::MUSEUM) {
         k = st_ptr->stock_size;
-        if (cur_store_num == StoreSaleType::HOME && !powerup_home)
+        if (cur_store_num == StoreSaleType::HOME && !powerup_home) {
             k /= 10;
+        }
 
         put_str(format(_("アイテム数:  %4d/%4d", "Objects:  %4d/%4d"), st_ptr->stock_num, k), 19 + xtra_stock, _(27, 30));
     }
@@ -183,8 +189,9 @@ void display_store(PlayerType *player_ptr)
     prt(buf, 3, 50);
 
     put_str(_("商品の一覧", "Item Description"), 5, 5);
-    if (show_weights)
+    if (show_weights) {
         put_str(_("  重さ", "Weight"), 5, 60);
+    }
 
     put_str(_(" 価格", "Price"), 5, 72);
     store_prt_gold(player_ptr);

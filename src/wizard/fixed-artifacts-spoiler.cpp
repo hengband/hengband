@@ -20,8 +20,9 @@
 void spoiler_outlist(concptr header, concptr *list, char separator)
 {
     char line[MAX_LINE_LEN + 20], buf[80];
-    if (*list == nullptr)
+    if (*list == nullptr) {
         return;
+    }
 
     strcpy(line, spoiler_indent);
     if (header && (header[0])) {
@@ -56,8 +57,9 @@ void spoiler_outlist(concptr header, concptr *list, char separator)
             line_len = strlen(line);
         }
 
-        if (!*++list)
+        if (!*++list) {
             break;
+        }
     }
 
     fprintf(spoiler_file, "%s\n", line);
@@ -85,12 +87,14 @@ static void print_header(void)
 static bool make_fake_artifact(ObjectType *o_ptr, ARTIFACT_IDX fixed_artifact_idx)
 {
     auto *a_ptr = &a_info[fixed_artifact_idx];
-    if (a_ptr->name.empty())
+    if (a_ptr->name.empty()) {
         return false;
+    }
 
     OBJECT_IDX i = lookup_kind(a_ptr->tval, a_ptr->sval);
-    if (!i)
+    if (!i) {
         return false;
+    }
 
     o_ptr->prep(i);
     o_ptr->fixed_artifact_idx = fixed_artifact_idx;
@@ -128,11 +132,13 @@ static void spoiler_print_art(obj_desc_list *art_ptr)
     spoiler_outlist(_("維持:", "Sustain"), art_ptr->sustains, item_separator);
     spoiler_outlist("", art_ptr->misc_magic, list_separator);
 
-    if (art_ptr->addition[0])
+    if (art_ptr->addition[0]) {
         fprintf(spoiler_file, _("%s追加: %s\n", "%sAdditional %s\n"), spoiler_indent, art_ptr->addition);
+    }
 
-    if (art_ptr->activation)
+    if (art_ptr->activation) {
         fprintf(spoiler_file, _("%s発動: %s\n", "%sActivates for %s\n"), spoiler_indent, art_ptr->activation);
+    }
 
     fprintf(spoiler_file, "%s%s\n\n", spoiler_indent, art_ptr->misc_desc);
 }
@@ -159,13 +165,15 @@ SpoilerOutputResultType spoil_fixed_artifact(concptr fname)
 
         for (auto tval : tval_list) {
             for (const auto &a_ref : a_info) {
-                if (a_ref.tval != tval)
+                if (a_ref.tval != tval) {
                     continue;
+                }
 
                 ObjectType obj;
                 obj.wipe();
-                if (!make_fake_artifact(&obj, a_ref.idx))
+                if (!make_fake_artifact(&obj, a_ref.idx)) {
                     continue;
+                }
 
                 PlayerType dummy;
                 obj_desc_list artifact;

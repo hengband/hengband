@@ -40,10 +40,11 @@ static MonsterSpellResult spell_RF5_CAUSE(PlayerType *player_ptr, AttributeType 
 
     if (target_type == MONSTER_TO_PLAYER) {
         disturb(player_ptr, true, true);
-        if (player_ptr->blind)
+        if (player_ptr->blind) {
             msg_format(msg1, m_name);
-        else
+        } else {
             msg_format(msg2, m_name);
+        }
         pointed(player_ptr, y, x, m_idx, GF_TYPE, dam, target_type);
         return res;
     }

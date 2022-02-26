@@ -58,8 +58,9 @@ static BIT_FLAGS monster_u_mode(floor_type *floor_ptr, MONSTER_IDX m_idx)
     BIT_FLAGS u_mode = 0L;
     auto *m_ptr = &floor_ptr->m_list[m_idx];
     bool pet = is_pet(m_ptr);
-    if (!pet)
+    if (!pet) {
         u_mode |= PM_ALLOW_UNIQUE;
+    }
     return u_mode;
 }
 
@@ -103,8 +104,9 @@ static void decide_summon_kin_caster(
     summon_disturb(player_ptr, target_type, known, see_either);
 
     if (player_ptr->blind) {
-        if (mon_to_player)
+        if (mon_to_player) {
             msg_format(_("%^sが何かをつぶやいた。", "%^s mumbles."), m_name);
+        }
     } else if (mon_to_player || (mon_to_mon && known && see_either)) {
         auto *r_ptr = &r_info[m_ptr->r_idx];
 #ifdef JP
@@ -114,8 +116,9 @@ static void decide_summon_kin_caster(
             msg_format("%^s magically summons %s %s.", m_name, m_poss, (r_ptr->kind_flags.has(MonsterKindType::UNIQUE) ? "minions" : "kin")));
     }
 
-    if (mon_to_mon && known && !see_either)
+    if (mon_to_mon && known && !see_either) {
         floor_ptr->monster_noise = true;
+    }
 }
 
 /*!
@@ -206,11 +209,13 @@ MonsterSpellResult spell_RF6_S_KIN(PlayerType *player_ptr, POSITION y, POSITION 
         break;
     }
 
-    if (player_ptr->blind && count && (target_type == MONSTER_TO_PLAYER))
+    if (player_ptr->blind && count && (target_type == MONSTER_TO_PLAYER)) {
         msg_print(_("多くのものが間近に現れた音がする。", "You hear many things appear nearby."));
+    }
 
-    if (known && !see_monster(player_ptr, t_idx) && count && (target_type == MONSTER_TO_MONSTER))
+    if (known && !see_monster(player_ptr, t_idx) && count && (target_type == MONSTER_TO_MONSTER)) {
         floor_ptr->monster_noise = true;
+    }
 
     auto res = MonsterSpellResult::make_valid();
     res.learnable = target_type == MONSTER_TO_PLAYER;
@@ -252,11 +257,13 @@ MonsterSpellResult spell_RF6_S_CYBER(PlayerType *player_ptr, POSITION y, POSITIO
         count += summon_cyber(player_ptr, m_idx, y, x);
     }
 
-    if (player_ptr->blind && count && mon_to_player)
+    if (player_ptr->blind && count && mon_to_player) {
         msg_print(_("重厚な足音が近くで聞こえる。", "You hear heavy steps nearby."));
+    }
 
-    if (monster_near_player(floor_ptr, m_idx, t_idx) && !see_monster(player_ptr, t_idx) && count && mon_to_mon)
+    if (monster_near_player(floor_ptr, m_idx, t_idx) && !see_monster(player_ptr, t_idx) && count && mon_to_mon) {
         floor_ptr->monster_noise = true;
+    }
 
     auto res = MonsterSpellResult::make_valid();
     res.learnable = target_type == MONSTER_TO_PLAYER;
@@ -292,18 +299,22 @@ MonsterSpellResult spell_RF6_S_MONSTER(PlayerType *player_ptr, POSITION y, POSIT
 
     int count = 0;
     for (int k = 0; k < 1; k++) {
-        if (mon_to_player)
+        if (mon_to_player) {
             count += summon_specific(player_ptr, m_idx, y, x, rlev, SUMMON_NONE, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE));
+        }
 
-        if (mon_to_mon)
+        if (mon_to_mon) {
             count += summon_specific(player_ptr, m_idx, y, x, rlev, SUMMON_NONE, (monster_u_mode(floor_ptr, m_idx)));
+        }
     }
 
-    if (player_ptr->blind && count && mon_to_player)
+    if (player_ptr->blind && count && mon_to_player) {
         msg_print(_("何かが間近に現れた音がする。", "You hear something appear nearby."));
+    }
 
-    if (monster_near_player(floor_ptr, m_idx, t_idx) && !see_monster(player_ptr, t_idx) && count && mon_to_mon)
+    if (monster_near_player(floor_ptr, m_idx, t_idx) && !see_monster(player_ptr, t_idx) && count && mon_to_mon) {
         floor_ptr->monster_noise = true;
+    }
 
     auto res = MonsterSpellResult::make_valid();
     res.learnable = target_type == MONSTER_TO_PLAYER;
@@ -339,18 +350,22 @@ MonsterSpellResult spell_RF6_S_MONSTERS(PlayerType *player_ptr, POSITION y, POSI
 
     int count = 0;
     for (auto k = 0; k < S_NUM_6; k++) {
-        if (mon_to_player)
+        if (mon_to_player) {
             count += summon_specific(player_ptr, m_idx, y, x, rlev, SUMMON_NONE, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE));
+        }
 
-        if (mon_to_mon)
+        if (mon_to_mon) {
             count += summon_specific(player_ptr, m_idx, y, x, rlev, SUMMON_NONE, (PM_ALLOW_GROUP | monster_u_mode(floor_ptr, m_idx)));
+        }
     }
 
-    if (player_ptr->blind && count && mon_to_player)
+    if (player_ptr->blind && count && mon_to_player) {
         msg_print(_("多くのものが間近に現れた音がする。", "You hear many things appear nearby."));
+    }
 
-    if (monster_near_player(floor_ptr, m_idx, t_idx) && !see_monster(player_ptr, t_idx) && count && mon_to_mon)
+    if (monster_near_player(floor_ptr, m_idx, t_idx) && !see_monster(player_ptr, t_idx) && count && mon_to_mon) {
         floor_ptr->monster_noise = true;
+    }
 
     auto res = MonsterSpellResult::make_valid();
     res.learnable = target_type == MONSTER_TO_PLAYER;
@@ -389,11 +404,13 @@ MonsterSpellResult spell_RF6_S_ANT(PlayerType *player_ptr, POSITION y, POSITION 
         count += summon_specific(player_ptr, m_idx, y, x, rlev, SUMMON_ANT, PM_ALLOW_GROUP);
     }
 
-    if (player_ptr->blind && count && mon_to_player)
+    if (player_ptr->blind && count && mon_to_player) {
         msg_print(_("多くのものが間近に現れた音がする。", "You hear many things appear nearby."));
+    }
 
-    if (monster_near_player(floor_ptr, m_idx, t_idx) && !see_monster(player_ptr, t_idx) && count && mon_to_mon)
+    if (monster_near_player(floor_ptr, m_idx, t_idx) && !see_monster(player_ptr, t_idx) && count && mon_to_mon) {
         floor_ptr->monster_noise = true;
+    }
 
     auto res = MonsterSpellResult::make_valid();
     res.learnable = target_type == MONSTER_TO_PLAYER;
@@ -432,11 +449,13 @@ MonsterSpellResult spell_RF6_S_SPIDER(PlayerType *player_ptr, POSITION y, POSITI
         count += summon_specific(player_ptr, m_idx, y, x, rlev, SUMMON_SPIDER, PM_ALLOW_GROUP);
     }
 
-    if (player_ptr->blind && count && mon_to_player)
+    if (player_ptr->blind && count && mon_to_player) {
         msg_print(_("多くのものが間近に現れた音がする。", "You hear many things appear nearby."));
+    }
 
-    if (monster_near_player(floor_ptr, m_idx, t_idx) && !see_monster(player_ptr, t_idx) && count && mon_to_mon)
+    if (monster_near_player(floor_ptr, m_idx, t_idx) && !see_monster(player_ptr, t_idx) && count && mon_to_mon) {
         floor_ptr->monster_noise = true;
+    }
 
     auto res = MonsterSpellResult::make_valid();
     res.learnable = target_type == MONSTER_TO_PLAYER;
@@ -475,11 +494,13 @@ MonsterSpellResult spell_RF6_S_HOUND(PlayerType *player_ptr, POSITION y, POSITIO
         count += summon_specific(player_ptr, m_idx, y, x, rlev, SUMMON_HOUND, PM_ALLOW_GROUP);
     }
 
-    if (player_ptr->blind && count && mon_to_player)
+    if (player_ptr->blind && count && mon_to_player) {
         msg_print(_("多くのものが間近に現れた音がする。", "You hear many things appear nearby."));
+    }
 
-    if (monster_near_player(floor_ptr, m_idx, t_idx) && !see_monster(player_ptr, t_idx) && count && mon_to_mon)
+    if (monster_near_player(floor_ptr, m_idx, t_idx) && !see_monster(player_ptr, t_idx) && count && mon_to_mon) {
         floor_ptr->monster_noise = true;
+    }
 
     auto res = MonsterSpellResult::make_valid();
     res.learnable = target_type == MONSTER_TO_PLAYER;
@@ -518,11 +539,13 @@ MonsterSpellResult spell_RF6_S_HYDRA(PlayerType *player_ptr, POSITION y, POSITIO
         count += summon_specific(player_ptr, m_idx, y, x, rlev, SUMMON_HYDRA, PM_ALLOW_GROUP);
     }
 
-    if (player_ptr->blind && count && mon_to_player)
+    if (player_ptr->blind && count && mon_to_player) {
         msg_print(_("多くのものが間近に現れた音がする。", "You hear many things appear nearby."));
+    }
 
-    if (monster_near_player(floor_ptr, m_idx, t_idx) && !see_monster(player_ptr, t_idx) && count && mon_to_mon)
+    if (monster_near_player(floor_ptr, m_idx, t_idx) && !see_monster(player_ptr, t_idx) && count && mon_to_mon) {
         floor_ptr->monster_noise = true;
+    }
 
     auto res = MonsterSpellResult::make_valid();
     res.learnable = target_type == MONSTER_TO_PLAYER;
@@ -568,15 +591,18 @@ MonsterSpellResult spell_RF6_S_ANGEL(PlayerType *player_ptr, POSITION y, POSITIO
     }
 
     if (count < 2) {
-        if (player_ptr->blind && count)
+        if (player_ptr->blind && count) {
             msg_print(_("何かが間近に現れた音がする。", "You hear something appear nearby."));
+        }
     } else {
-        if (player_ptr->blind)
+        if (player_ptr->blind) {
             msg_print(_("多くのものが間近に現れた音がする。", "You hear many things appear nearby."));
+        }
     }
 
-    if (monster_near_player(floor_ptr, m_idx, t_idx) && !see_monster(player_ptr, t_idx) && count && mon_to_mon)
+    if (monster_near_player(floor_ptr, m_idx, t_idx) && !see_monster(player_ptr, t_idx) && count && mon_to_mon) {
         floor_ptr->monster_noise = true;
+    }
 
     auto res = MonsterSpellResult::make_valid();
     res.learnable = target_type == MONSTER_TO_PLAYER;
@@ -615,11 +641,13 @@ MonsterSpellResult spell_RF6_S_DEMON(PlayerType *player_ptr, POSITION y, POSITIO
         count += summon_specific(player_ptr, m_idx, y, x, rlev, SUMMON_DEMON, PM_ALLOW_GROUP);
     }
 
-    if (player_ptr->blind && count)
+    if (player_ptr->blind && count) {
         msg_print(_("何かが間近に現れた音がする。", "You hear something appear nearby."));
+    }
 
-    if (monster_near_player(floor_ptr, m_idx, t_idx) && !see_monster(player_ptr, t_idx) && count && mon_to_mon)
+    if (monster_near_player(floor_ptr, m_idx, t_idx) && !see_monster(player_ptr, t_idx) && count && mon_to_mon) {
         floor_ptr->monster_noise = true;
+    }
 
     auto res = MonsterSpellResult::make_valid();
     res.learnable = target_type == MONSTER_TO_PLAYER;
@@ -658,11 +686,13 @@ MonsterSpellResult spell_RF6_S_UNDEAD(PlayerType *player_ptr, POSITION y, POSITI
         count += summon_specific(player_ptr, m_idx, y, x, rlev, SUMMON_UNDEAD, PM_ALLOW_GROUP);
     }
 
-    if (player_ptr->blind && count)
+    if (player_ptr->blind && count) {
         msg_print(_("何かが間近に現れた音がする。", "You hear something appear nearby."));
+    }
 
-    if (monster_near_player(floor_ptr, m_idx, t_idx) && !see_monster(player_ptr, t_idx) && count && mon_to_mon)
+    if (monster_near_player(floor_ptr, m_idx, t_idx) && !see_monster(player_ptr, t_idx) && count && mon_to_mon) {
         floor_ptr->monster_noise = true;
+    }
 
     auto res = MonsterSpellResult::make_valid();
     res.learnable = target_type == MONSTER_TO_PLAYER;
@@ -697,17 +727,21 @@ MonsterSpellResult spell_RF6_S_DRAGON(PlayerType *player_ptr, POSITION y, POSITI
     summon_disturb(player_ptr, target_type, known, see_either);
 
     int count = 0;
-    if (mon_to_player)
+    if (mon_to_player) {
         count += summon_specific(player_ptr, m_idx, y, x, rlev, SUMMON_DRAGON, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE));
+    }
 
-    if (mon_to_mon)
+    if (mon_to_mon) {
         count += summon_specific(player_ptr, m_idx, y, x, rlev, SUMMON_DRAGON, (PM_ALLOW_GROUP | monster_u_mode(floor_ptr, m_idx)));
+    }
 
-    if (player_ptr->blind && count)
+    if (player_ptr->blind && count) {
         msg_print(_("何かが間近に現れた音がする。", "You hear something appear nearby."));
+    }
 
-    if (monster_near_player(floor_ptr, m_idx, t_idx) && !see_monster(player_ptr, t_idx) && count && mon_to_mon)
+    if (monster_near_player(floor_ptr, m_idx, t_idx) && !see_monster(player_ptr, t_idx) && count && mon_to_mon) {
         floor_ptr->monster_noise = true;
+    }
 
     auto res = MonsterSpellResult::make_valid();
     res.learnable = target_type == MONSTER_TO_PLAYER;
@@ -751,11 +785,13 @@ MonsterSpellResult spell_RF6_S_HI_UNDEAD(PlayerType *player_ptr, POSITION y, POS
         monspell_message(player_ptr, m_idx, t_idx, msg, target_type);
 
         for (auto k = 0; k < S_NUM_6; k++) {
-            if (mon_to_player)
+            if (mon_to_player) {
                 count += summon_specific(player_ptr, m_idx, y, x, rlev, SUMMON_HI_UNDEAD, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE));
+            }
 
-            if (mon_to_mon)
+            if (mon_to_mon) {
                 count += summon_specific(player_ptr, m_idx, y, x, rlev, SUMMON_HI_UNDEAD, (PM_ALLOW_GROUP | monster_u_mode(floor_ptr, m_idx)));
+            }
         }
     }
 
@@ -763,8 +799,9 @@ MonsterSpellResult spell_RF6_S_HI_UNDEAD(PlayerType *player_ptr, POSITION y, POS
         msg_print(_("間近で何か多くのものが這い回る音が聞こえる。", "You hear many creepy things appear nearby."));
     }
 
-    if (monster_near_player(floor_ptr, m_idx, t_idx) && !see_monster(player_ptr, t_idx) && count && mon_to_mon)
+    if (monster_near_player(floor_ptr, m_idx, t_idx) && !see_monster(player_ptr, t_idx) && count && mon_to_mon) {
         floor_ptr->monster_noise = true;
+    }
 
     auto res = MonsterSpellResult::make_valid();
     res.learnable = target_type == MONSTER_TO_PLAYER;
@@ -801,19 +838,22 @@ MonsterSpellResult spell_RF6_S_HI_DRAGON(PlayerType *player_ptr, POSITION y, POS
 
     int count = 0;
     for (auto k = 0; k < S_NUM_4; k++) {
-        if (mon_to_player)
+        if (mon_to_player) {
             count += summon_specific(player_ptr, m_idx, y, x, rlev, SUMMON_HI_DRAGON, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE));
+        }
 
-        if (mon_to_mon)
+        if (mon_to_mon) {
             count += summon_specific(player_ptr, m_idx, y, x, rlev, SUMMON_HI_DRAGON, (PM_ALLOW_GROUP | monster_u_mode(floor_ptr, m_idx)));
+        }
     }
 
     if (player_ptr->blind && count && mon_to_player) {
         msg_print(_("多くの力強いものが間近に現れた音が聞こえる。", "You hear many powerful things appear nearby."));
     }
 
-    if (monster_near_player(floor_ptr, m_idx, t_idx) && !see_monster(player_ptr, t_idx) && count && mon_to_mon)
+    if (monster_near_player(floor_ptr, m_idx, t_idx) && !see_monster(player_ptr, t_idx) && count && mon_to_mon) {
         floor_ptr->monster_noise = true;
+    }
 
     auto res = MonsterSpellResult::make_valid();
     res.learnable = target_type == MONSTER_TO_PLAYER;
@@ -857,8 +897,9 @@ MonsterSpellResult spell_RF6_S_AMBERITES(PlayerType *player_ptr, POSITION y, POS
         msg_print(_("何者かが次元を超えて現れた気配がした。", "You feel shadow shifting by immortal beings."));
     }
 
-    if (monster_near_player(floor_ptr, m_idx, t_idx) && !see_monster(player_ptr, t_idx) && count && mon_to_mon)
+    if (monster_near_player(floor_ptr, m_idx, t_idx) && !see_monster(player_ptr, t_idx) && count && mon_to_mon) {
         floor_ptr->monster_noise = true;
+    }
 
     auto res = MonsterSpellResult::make_valid();
     res.learnable = target_type == MONSTER_TO_PLAYER;
@@ -900,14 +941,16 @@ MonsterSpellResult spell_RF6_S_UNIQUE(PlayerType *player_ptr, POSITION y, POSITI
         count += summon_specific(player_ptr, m_idx, y, x, rlev, SUMMON_UNIQUE, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE));
     }
 
-    if (count)
+    if (count) {
         uniques_are_summoned = true;
+    }
 
     summon_type non_unique_type = SUMMON_HI_UNDEAD;
-    if ((m_ptr->sub_align & (SUB_ALIGN_GOOD | SUB_ALIGN_EVIL)) == (SUB_ALIGN_GOOD | SUB_ALIGN_EVIL))
+    if ((m_ptr->sub_align & (SUB_ALIGN_GOOD | SUB_ALIGN_EVIL)) == (SUB_ALIGN_GOOD | SUB_ALIGN_EVIL)) {
         non_unique_type = SUMMON_NONE;
-    else if (m_ptr->sub_align & SUB_ALIGN_GOOD)
+    } else if (m_ptr->sub_align & SUB_ALIGN_GOOD) {
         non_unique_type = SUMMON_ANGEL;
+    }
 
     for (auto k = count; k < S_NUM_4; k++) {
         count += summon_specific(player_ptr, m_idx, y, x, rlev, non_unique_type, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE));
@@ -918,8 +961,9 @@ MonsterSpellResult spell_RF6_S_UNIQUE(PlayerType *player_ptr, POSITION y, POSITI
             uniques_are_summoned ? _("力強いもの", "powerful things") : _("もの", "things"));
     }
 
-    if (monster_near_player(floor_ptr, m_idx, t_idx) && !see_monster(player_ptr, t_idx) && count && mon_to_mon)
+    if (monster_near_player(floor_ptr, m_idx, t_idx) && !see_monster(player_ptr, t_idx) && count && mon_to_mon) {
         floor_ptr->monster_noise = true;
+    }
 
     auto res = MonsterSpellResult::make_valid();
     res.learnable = target_type == MONSTER_TO_PLAYER;

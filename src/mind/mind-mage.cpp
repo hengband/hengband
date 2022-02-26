@@ -37,8 +37,9 @@ bool eat_magic(PlayerType *player_ptr, int power)
     ObjectType *o_ptr;
     OBJECT_IDX item;
     o_ptr = choose_object(player_ptr, &item, q, s, (USE_INVEN | USE_FLOOR), FuncItemTester(&ObjectType::is_rechargeable));
-    if (!o_ptr)
+    if (!o_ptr) {
         return false;
+    }
 
     object_kind *k_ptr;
     k_ptr = &k_info[o_ptr->k_idx];
@@ -60,8 +61,9 @@ bool eat_magic(PlayerType *player_ptr, int power)
         }
     } else {
         recharge_strength = (100 + power - lev) / 15;
-        if (recharge_strength < 0)
+        if (recharge_strength < 0) {
             recharge_strength = 0;
+        }
 
         if (one_in_(recharge_strength)) {
             is_eating_successful = false;
@@ -87,8 +89,9 @@ bool eat_magic(PlayerType *player_ptr, int power)
                 msg_print(_("吸収できる魔力がありません！", "There's no energy there to absorb!"));
             }
 
-            if (!o_ptr->pval)
+            if (!o_ptr->pval) {
                 o_ptr->ident |= IDENT_EMPTY;
+            }
         }
     }
 
@@ -99,10 +102,11 @@ bool eat_magic(PlayerType *player_ptr, int power)
     if (o_ptr->is_fixed_artifact()) {
         describe_flavor(player_ptr, o_name, o_ptr, OD_NAME_ONLY);
         msg_format(_("魔力が逆流した！%sは完全に魔力を失った。", "The recharging backfires - %s is completely drained!"), o_name);
-        if (o_ptr->tval == ItemKindType::ROD)
+        if (o_ptr->tval == ItemKindType::ROD) {
             o_ptr->timeout = k_ptr->pval * o_ptr->number;
-        else if ((o_ptr->tval == ItemKindType::WAND) || (o_ptr->tval == ItemKindType::STAFF))
+        } else if ((o_ptr->tval == ItemKindType::WAND) || (o_ptr->tval == ItemKindType::STAFF)) {
             o_ptr->pval = 0;
+        }
 
         return redraw_player(player_ptr);
     }
@@ -113,24 +117,27 @@ bool eat_magic(PlayerType *player_ptr, int power)
     if (PlayerClass(player_ptr).is_wizard()) {
         /* 10% chance to blow up one rod, otherwise draining. */
         if (o_ptr->tval == ItemKindType::ROD) {
-            if (one_in_(10))
+            if (one_in_(10)) {
                 fail_type = 2;
-            else
+            } else {
                 fail_type = 1;
+            }
         }
         /* 75% chance to blow up one wand, otherwise draining. */
         else if (o_ptr->tval == ItemKindType::WAND) {
-            if (!one_in_(3))
+            if (!one_in_(3)) {
                 fail_type = 2;
-            else
+            } else {
                 fail_type = 1;
+            }
         }
         /* 50% chance to blow up one staff, otherwise no effect. */
         else if (o_ptr->tval == ItemKindType::STAFF) {
-            if (one_in_(2))
+            if (one_in_(2)) {
                 fail_type = 2;
-            else
+            } else {
                 fail_type = 0;
+            }
         }
     }
 
@@ -138,17 +145,19 @@ bool eat_magic(PlayerType *player_ptr, int power)
     else {
         /* 33% chance to blow up one rod, otherwise draining. */
         if (o_ptr->tval == ItemKindType::ROD) {
-            if (one_in_(3))
+            if (one_in_(3)) {
                 fail_type = 2;
-            else
+            } else {
                 fail_type = 1;
+            }
         }
         /* 20% chance of the entire stack, else destroy one wand. */
         else if (o_ptr->tval == ItemKindType::WAND) {
-            if (one_in_(5))
+            if (one_in_(5)) {
                 fail_type = 3;
-            else
+            } else {
                 fail_type = 2;
+            }
         }
         /* Blow up one staff. */
         else if (o_ptr->tval == ItemKindType::STAFF) {
@@ -170,10 +179,11 @@ bool eat_magic(PlayerType *player_ptr, int power)
         if (o_ptr->number > 1) {
             msg_format(_("乱暴な魔法のために%sが一本壊れた！", "Wild magic consumes one of your %s!"), o_name);
             /* Reduce rod stack maximum timeout, drain wands. */
-            if (o_ptr->tval == ItemKindType::ROD)
+            if (o_ptr->tval == ItemKindType::ROD) {
                 o_ptr->timeout = std::min<short>(o_ptr->timeout, k_ptr->pval * (o_ptr->number - 1));
-            else if (o_ptr->tval == ItemKindType::WAND)
+            } else if (o_ptr->tval == ItemKindType::WAND) {
                 o_ptr->pval = o_ptr->pval * (o_ptr->number - 1) / o_ptr->number;
+            }
         } else {
             msg_format(_("乱暴な魔法のために%sが何本か壊れた！", "Wild magic consumes your %s!"), o_name);
         }
@@ -182,10 +192,11 @@ bool eat_magic(PlayerType *player_ptr, int power)
     }
 
     if (fail_type == 3) {
-        if (o_ptr->number > 1)
+        if (o_ptr->number > 1) {
             msg_format(_("乱暴な魔法のために%sが全て壊れた！", "Wild magic consumes all your %s!"), o_name);
-        else
+        } else {
             msg_format(_("乱暴な魔法のために%sが壊れた！", "Wild magic consumes your %s!"), o_name);
+        }
 
         vary_item(player_ptr, item, -999);
     }

@@ -45,10 +45,11 @@ void WeaponEnchanter::apply_magic()
     switch (this->o_ptr->tval) {
     case ItemKindType::DIGGING: {
         if (this->power > 1) {
-            if ((this->power > 2) || one_in_(30))
+            if ((this->power > 2) || one_in_(30)) {
                 become_random_artifact(this->player_ptr, this->o_ptr, false);
-            else
+            } else {
                 this->o_ptr->ego_idx = EgoType::DIGGING;
+            }
         } else if (this->power < -1) {
             this->o_ptr->pval = 0 - (5 + randint1(5));
         } else if (this->power < 0) {

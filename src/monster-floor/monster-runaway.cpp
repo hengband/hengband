@@ -73,15 +73,17 @@ bool runaway_monster(PlayerType *player_ptr, turn_flags *turn_flags_ptr, MONSTER
     bool can_runaway = is_pet(m_ptr) || is_friendly(m_ptr);
     can_runaway &= (r_ptr->kind_flags.has(MonsterKindType::UNIQUE)) || ((r_ptr->flags7 & RF7_NAZGUL) != 0);
     can_runaway &= !player_ptr->phase_out;
-    if (!can_runaway)
+    if (!can_runaway) {
         return false;
+    }
 
     static int riding_pinch = 0;
 
     if (m_ptr->hp >= m_ptr->maxhp / 3) {
         /* Reset the counter */
-        if (turn_flags_ptr->is_riding_mon)
+        if (turn_flags_ptr->is_riding_mon) {
             riding_pinch = 0;
+        }
 
         return false;
     }

@@ -51,8 +51,9 @@ bool trump_summoning(PlayerType *player_ptr, int num, bool pet, POSITION y, POSI
 {
     /* Default level */
     PLAYER_LEVEL plev = player_ptr->lev;
-    if (!lev)
+    if (!lev) {
         lev = plev * 2 / 3 + randint1(plev / 2);
+    }
 
     MONSTER_IDX who;
     if (pet) {
@@ -62,8 +63,9 @@ bool trump_summoning(PlayerType *player_ptr, int num, bool pet, POSITION y, POSI
         /* Only sometimes allow unique monster */
         if (mode & PM_ALLOW_UNIQUE) {
             /* Forbid often */
-            if (randint1(50 + plev) >= plev / 10)
+            if (randint1(50 + plev) >= plev / 10) {
                 mode &= ~PM_ALLOW_UNIQUE;
+            }
         }
 
         /* Player is who summons */
@@ -78,8 +80,9 @@ bool trump_summoning(PlayerType *player_ptr, int num, bool pet, POSITION y, POSI
 
     bool success = false;
     for (int i = 0; i < num; i++) {
-        if (summon_specific(player_ptr, who, y, x, lev, type, mode))
+        if (summon_specific(player_ptr, who, y, x, lev, type, mode)) {
             success = true;
+        }
     }
 
     if (!success) {
@@ -93,15 +96,18 @@ bool cast_summon_demon(PlayerType *player_ptr, int power)
 {
     uint32_t flg = 0L;
     bool pet = !one_in_(3);
-    if (pet)
+    if (pet) {
         flg |= PM_FORCE_PET;
-    else
+    } else {
         flg |= PM_NO_PET;
-    if (!(pet && (player_ptr->lev < 50)))
+    }
+    if (!(pet && (player_ptr->lev < 50))) {
         flg |= PM_ALLOW_GROUP;
+    }
 
-    if (!summon_specific(player_ptr, (pet ? -1 : 0), player_ptr->y, player_ptr->x, power, SUMMON_DEMON, flg))
+    if (!summon_specific(player_ptr, (pet ? -1 : 0), player_ptr->y, player_ptr->x, power, SUMMON_DEMON, flg)) {
         return true;
+    }
 
     msg_print(_("硫黄の悪臭が充満した。", "The area fills with a stench of sulphur and brimstone."));
     if (pet) {
@@ -119,20 +125,23 @@ bool cast_summon_undead(PlayerType *player_ptr, int power)
     summon_type type = (player_ptr->lev > 47 ? SUMMON_HI_UNDEAD : SUMMON_UNDEAD);
 
     BIT_FLAGS mode = 0L;
-    if (!pet || ((player_ptr->lev > 24) && one_in_(3)))
+    if (!pet || ((player_ptr->lev > 24) && one_in_(3))) {
         mode |= PM_ALLOW_GROUP;
-    if (pet)
+    }
+    if (pet) {
         mode |= PM_FORCE_PET;
-    else
+    } else {
         mode |= (PM_ALLOW_UNIQUE | PM_NO_PET);
+    }
 
     if (summon_specific(player_ptr, (pet ? -1 : 0), player_ptr->y, player_ptr->x, power, type, mode)) {
         msg_print(_("冷たい風があなたの周りに吹き始めた。それは腐敗臭を運んでいる...",
             "Cold winds begin to blow around you, carrying with them the stench of decay..."));
-        if (pet)
+        if (pet) {
             msg_print(_("古えの死せる者共があなたに仕えるため土から甦った！", "Ancient, long-dead forms arise from the ground to serve you!"));
-        else
+        } else {
             msg_print(_("死者が甦った。眠りを妨げるあなたを罰するために！", "'The dead arise... to punish you for disturbing them!'"));
+        }
     }
     return true;
 }
@@ -141,16 +150,18 @@ bool cast_summon_hound(PlayerType *player_ptr, int power)
 {
     BIT_FLAGS mode = PM_ALLOW_GROUP;
     bool pet = !one_in_(5);
-    if (pet)
+    if (pet) {
         mode |= PM_FORCE_PET;
-    else
+    } else {
         mode |= PM_NO_PET;
+    }
 
     if (summon_specific(player_ptr, (pet ? -1 : 0), player_ptr->y, player_ptr->x, power, SUMMON_HOUND, mode)) {
-        if (pet)
+        if (pet) {
             msg_print(_("ハウンドがあなたの下僕として出現した。", "A group of hounds appear as your servants."));
-        else
+        } else {
             msg_print(_("ハウンドはあなたに牙を向けている！", "A group of hounds appear as your enemies!"));
+        }
     }
 
     return true;
@@ -160,19 +171,22 @@ bool cast_summon_elemental(PlayerType *player_ptr, int power)
 {
     bool pet = one_in_(3);
     BIT_FLAGS mode = 0L;
-    if (!(pet && (player_ptr->lev < 50)))
+    if (!(pet && (player_ptr->lev < 50))) {
         mode |= PM_ALLOW_GROUP;
-    if (pet)
+    }
+    if (pet) {
         mode |= PM_FORCE_PET;
-    else
+    } else {
         mode |= PM_NO_PET;
+    }
 
     if (summon_specific(player_ptr, (pet ? -1 : 0), player_ptr->y, player_ptr->x, power, SUMMON_ELEMENTAL, mode)) {
         msg_print(_("エレメンタルが現れた...", "An elemental materializes..."));
-        if (pet)
+        if (pet) {
             msg_print(_("あなたに服従しているようだ。", "It seems obedient to you."));
-        else
+        } else {
             msg_print(_("それをコントロールできなかった！", "You fail to control it!"));
+        }
     }
 
     return true;
@@ -182,13 +196,15 @@ bool cast_summon_octopus(PlayerType *player_ptr)
 {
     BIT_FLAGS mode = PM_ALLOW_GROUP;
     bool pet = !one_in_(5);
-    if (pet)
+    if (pet) {
         mode |= PM_FORCE_PET;
+    }
     if (summon_named_creature(player_ptr, 0, player_ptr->y, player_ptr->x, MON_JIZOTAKO, mode)) {
-        if (pet)
+        if (pet) {
             msg_print(_("蛸があなたの下僕として出現した。", "A group of octopuses appear as your servants."));
-        else
+        } else {
             msg_print(_("蛸はあなたを睨んでいる！", "A group of octopuses appear as your enemies!"));
+        }
     }
 
     return true;
@@ -205,8 +221,9 @@ bool cast_summon_greater_demon(PlayerType *player_ptr)
     OBJECT_IDX item;
     ObjectType *o_ptr;
     o_ptr = choose_object(player_ptr, &item, q, s, (USE_INVEN | USE_FLOOR), FuncItemTester(&ObjectType::is_offerable));
-    if (!o_ptr)
+    if (!o_ptr) {
         return false;
+    }
 
     PLAYER_LEVEL plev = player_ptr->lev;
     int summon_lev = plev * 2 / 3 + r_info[o_ptr->pval].level;
@@ -234,8 +251,9 @@ bool cast_summon_greater_demon(PlayerType *player_ptr)
 bool summon_kin_player(PlayerType *player_ptr, DEPTH level, POSITION y, POSITION x, BIT_FLAGS mode)
 {
     bool pet = (bool)(mode & PM_FORCE_PET);
-    if (!pet)
+    if (!pet) {
         mode |= PM_NO_PET;
+    }
     return summon_specific(player_ptr, (pet ? -1 : 0), y, x, level, SUMMON_KIN, mode);
 }
 
@@ -254,13 +272,15 @@ int summon_cyber(PlayerType *player_ptr, MONSTER_IDX who, POSITION y, POSITION x
     auto *floor_ptr = player_ptr->current_floor_ptr;
     if (who > 0) {
         auto *m_ptr = &floor_ptr->m_list[who];
-        if (is_pet(m_ptr))
+        if (is_pet(m_ptr)) {
             mode |= PM_FORCE_PET;
+        }
     }
 
     int max_cyber = (floor_ptr->dun_level / 50) + randint1(2);
-    if (max_cyber > 4)
+    if (max_cyber > 4) {
         max_cyber = 4;
+    }
 
     int count = 0;
     for (int i = 0; i < max_cyber; i++) {
@@ -290,14 +310,18 @@ void mitokohmon(PlayerType *player_ptr)
         for (int i = player_ptr->current_floor_ptr->m_max - 1; i > 0; i--) {
             monster_type *m_ptr;
             m_ptr = &player_ptr->current_floor_ptr->m_list[i];
-            if (!monster_is_valid(m_ptr))
+            if (!monster_is_valid(m_ptr)) {
                 continue;
-            if (!((m_ptr->r_idx == MON_SUKE) || (m_ptr->r_idx == MON_KAKU)))
+            }
+            if (!((m_ptr->r_idx == MON_SUKE) || (m_ptr->r_idx == MON_KAKU))) {
                 continue;
-            if (!los(player_ptr, m_ptr->fy, m_ptr->fx, player_ptr->y, player_ptr->x))
+            }
+            if (!los(player_ptr, m_ptr->fy, m_ptr->fx, player_ptr->y, player_ptr->x)) {
                 continue;
-            if (!projectable(player_ptr, m_ptr->fy, m_ptr->fx, player_ptr->y, player_ptr->x))
+            }
+            if (!projectable(player_ptr, m_ptr->fy, m_ptr->fx, player_ptr->y, player_ptr->x)) {
                 continue;
+            }
             count++;
             break;
         }
@@ -341,8 +365,9 @@ int activate_hi_summon(PlayerType *player_ptr, POSITION y, POSITION x, bool can_
         }
     }
 
-    if (!pet)
+    if (!pet) {
         mode |= PM_NO_PET;
+    }
 
     DEPTH dungeon_level = player_ptr->current_floor_ptr->dun_level;
     DEPTH summon_lev = (pet ? player_ptr->lev * 2 / 3 + randint1(player_ptr->lev / 2) : dungeon_level);
@@ -382,34 +407,39 @@ int activate_hi_summon(PlayerType *player_ptr, POSITION y, POSITION x, bool can_
             count += summon_specific(player_ptr, (pet ? -1 : 0), y, x, summon_lev, SUMMON_DEMON, mode);
             break;
         case 17:
-            if (can_pet)
+            if (can_pet) {
                 break;
+            }
             count += summon_specific(player_ptr, (pet ? -1 : 0), y, x, summon_lev, SUMMON_AMBERITES, (mode | PM_ALLOW_UNIQUE));
             break;
         case 18:
         case 19:
-            if (can_pet)
+            if (can_pet) {
                 break;
+            }
             count += summon_specific(player_ptr, (pet ? -1 : 0), y, x, summon_lev, SUMMON_UNIQUE, (mode | PM_ALLOW_UNIQUE));
             break;
         case 20:
         case 21:
-            if (!can_pet)
+            if (!can_pet) {
                 mode |= PM_ALLOW_UNIQUE;
+            }
             count += summon_specific(player_ptr, (pet ? -1 : 0), y, x, summon_lev, SUMMON_HI_UNDEAD, mode);
             break;
         case 22:
         case 23:
-            if (!can_pet)
+            if (!can_pet) {
                 mode |= PM_ALLOW_UNIQUE;
+            }
             count += summon_specific(player_ptr, (pet ? -1 : 0), y, x, summon_lev, SUMMON_HI_DRAGON, mode);
             break;
         case 24:
             count += summon_specific(player_ptr, (pet ? -1 : 0), y, x, 100, SUMMON_CYBER, mode);
             break;
         default:
-            if (!can_pet)
+            if (!can_pet) {
                 mode |= PM_ALLOW_UNIQUE;
+            }
             count += summon_specific(player_ptr, (pet ? -1 : 0), y, x, pet ? summon_lev : (((summon_lev * 3) / 2) + 5), SUMMON_NONE, mode);
         }
     }
@@ -430,17 +460,20 @@ void cast_invoke_spirits(PlayerType *player_ptr, DIRECTION dir)
 
     if (vir != 0) {
         if (player_ptr->virtues[vir - 1] > 0) {
-            while (randint1(400) < player_ptr->virtues[vir - 1])
+            while (randint1(400) < player_ptr->virtues[vir - 1]) {
                 die++;
+            }
         } else {
-            while (randint1(400) < (0 - player_ptr->virtues[vir - 1]))
+            while (randint1(400) < (0 - player_ptr->virtues[vir - 1])) {
                 die--;
+            }
         }
     }
 
     msg_print(_("あなたは死者たちの力を招集した...", "You call on the power of the dead..."));
-    if (die < 26)
+    if (die < 26) {
         chg_virtue(player_ptr, V_CHANCE, 1);
+    }
 
     if (die > 100) {
         msg_print(_("あなたはおどろおどろしい力のうねりを感じた！", "You feel a surge of eldritch force!"));

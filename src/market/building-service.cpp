@@ -61,12 +61,14 @@ bool is_member(PlayerType *player_ptr, building_type *bldg)
         return true;
     }
 
-    if (!PlayerClass(player_ptr).equals(PlayerClassType::SORCERER))
+    if (!PlayerClass(player_ptr).equals(PlayerClassType::SORCERER)) {
         return false;
+    }
 
     for (int i = 0; i < MAX_MAGIC; i++) {
-        if (bldg->member_realm[i + 1])
+        if (bldg->member_realm[i + 1]) {
             return true;
+        }
     }
 
     return false;
@@ -88,8 +90,9 @@ void display_buikding_service(PlayerType *player_ptr, building_type *bldg)
     prt(tmp_str, 2, 1);
 
     for (int i = 0; i < 8; i++) {
-        if (!bldg->letters[i])
+        if (!bldg->letters[i]) {
             continue;
+        }
 
         if (bldg->action_restr[i] == 0) {
             if ((is_owner(player_ptr, bldg) && (bldg->member_costs[i] == 0)) || (!is_owner(player_ptr, bldg) && (bldg->other_costs[i] == 0))) {

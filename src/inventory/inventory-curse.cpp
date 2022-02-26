@@ -68,8 +68,9 @@ static bool is_specific_curse(CurseTraitType flag)
 
 static void choise_cursed_item(CurseTraitType flag, ObjectType *o_ptr, int *choices, int *number, int item_num)
 {
-    if (!is_specific_curse(flag))
+    if (!is_specific_curse(flag)) {
         return;
+    }
 
     tr_type cf = TR_STR;
     auto flgs = object_flags(o_ptr);
@@ -129,8 +130,9 @@ static void choise_cursed_item(CurseTraitType flag, ObjectType *o_ptr, int *choi
         break;
     }
 
-    if (flgs.has_not(cf))
+    if (flgs.has_not(cf)) {
         return;
+    }
 
     choices[*number] = item_num;
     (*number)++;
@@ -146,8 +148,9 @@ ObjectType *choose_cursed_obj_name(PlayerType *player_ptr, CurseTraitType flag)
 {
     int choices[INVEN_TOTAL - INVEN_MAIN_HAND];
     int number = 0;
-    if (player_ptr->cursed.has_not(flag))
+    if (player_ptr->cursed.has_not(flag)) {
         return nullptr;
+    }
 
     for (int i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
         auto *o_ptr = &player_ptr->inventory_list[i];
@@ -169,28 +172,33 @@ ObjectType *choose_cursed_obj_name(PlayerType *player_ptr, CurseTraitType flag)
  */
 static void curse_teleport(PlayerType *player_ptr)
 {
-    if ((player_ptr->cursed_special.has_not(CurseSpecialTraitType::TELEPORT_SELF)) || !one_in_(200))
+    if ((player_ptr->cursed_special.has_not(CurseSpecialTraitType::TELEPORT_SELF)) || !one_in_(200)) {
         return;
+    }
 
     GAME_TEXT o_name[MAX_NLEN];
     ObjectType *o_ptr;
     int i_keep = 0, count = 0;
     for (int i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
         o_ptr = &player_ptr->inventory_list[i];
-        if (!o_ptr->k_idx)
+        if (!o_ptr->k_idx) {
             continue;
+        }
 
         auto flgs = object_flags(o_ptr);
 
-        if (flgs.has_not(TR_TELEPORT))
+        if (flgs.has_not(TR_TELEPORT)) {
             continue;
+        }
 
-        if (o_ptr->inscription && angband_strchr(quark_str(o_ptr->inscription), '.'))
+        if (o_ptr->inscription && angband_strchr(quark_str(o_ptr->inscription), '.')) {
             continue;
+        }
 
         count++;
-        if (one_in_(count))
+        if (one_in_(count)) {
             i_keep = i;
+        }
     }
 
     o_ptr = &player_ptr->inventory_list[i_keep];
@@ -210,41 +218,48 @@ static void curse_teleport(PlayerType *player_ptr)
  */
 static void occur_chainsword_effect(PlayerType *player_ptr)
 {
-    if ((player_ptr->cursed_special.has_not(CurseSpecialTraitType::CHAINSWORD)) || !one_in_(CHAINSWORD_NOISE))
+    if ((player_ptr->cursed_special.has_not(CurseSpecialTraitType::CHAINSWORD)) || !one_in_(CHAINSWORD_NOISE)) {
         return;
+    }
 
     char noise[1024];
-    if (!get_rnd_line(_("chainswd_j.txt", "chainswd.txt"), 0, noise))
+    if (!get_rnd_line(_("chainswd_j.txt", "chainswd.txt"), 0, noise)) {
         msg_print(noise);
+    }
     disturb(player_ptr, false, false);
 }
 
 static void curse_drain_exp(PlayerType *player_ptr)
 {
-    if (PlayerRace(player_ptr).equals(PlayerRaceType::ANDROID) || (player_ptr->cursed.has_not(CurseTraitType::DRAIN_EXP)) || !one_in_(4))
+    if (PlayerRace(player_ptr).equals(PlayerRaceType::ANDROID) || (player_ptr->cursed.has_not(CurseTraitType::DRAIN_EXP)) || !one_in_(4)) {
         return;
+    }
 
     player_ptr->exp -= (player_ptr->lev + 1) / 2;
-    if (player_ptr->exp < 0)
+    if (player_ptr->exp < 0) {
         player_ptr->exp = 0;
+    }
 
     player_ptr->max_exp -= (player_ptr->lev + 1) / 2;
-    if (player_ptr->max_exp < 0)
+    if (player_ptr->max_exp < 0) {
         player_ptr->max_exp = 0;
+    }
 
     check_experience(player_ptr);
 }
 
 static void multiply_low_curse(PlayerType *player_ptr)
 {
-    if ((player_ptr->cursed.has_not(CurseTraitType::ADD_L_CURSE)) || !one_in_(2000))
+    if ((player_ptr->cursed.has_not(CurseTraitType::ADD_L_CURSE)) || !one_in_(2000)) {
         return;
+    }
 
     ObjectType *o_ptr;
     o_ptr = choose_cursed_obj_name(player_ptr, CurseTraitType::ADD_L_CURSE);
     auto new_curse = get_curse(0, o_ptr);
-    if (o_ptr->curse_flags.has(new_curse))
+    if (o_ptr->curse_flags.has(new_curse)) {
         return;
+    }
 
     GAME_TEXT o_name[MAX_NLEN];
     describe_flavor(player_ptr, o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
@@ -256,14 +271,16 @@ static void multiply_low_curse(PlayerType *player_ptr)
 
 static void multiply_high_curse(PlayerType *player_ptr)
 {
-    if ((player_ptr->cursed.has_not(CurseTraitType::ADD_H_CURSE)) || !one_in_(2000))
+    if ((player_ptr->cursed.has_not(CurseTraitType::ADD_H_CURSE)) || !one_in_(2000)) {
         return;
+    }
 
     ObjectType *o_ptr;
     o_ptr = choose_cursed_obj_name(player_ptr, CurseTraitType::ADD_H_CURSE);
     auto new_curse = get_curse(1, o_ptr);
-    if (o_ptr->curse_flags.has(new_curse))
+    if (o_ptr->curse_flags.has(new_curse)) {
         return;
+    }
 
     GAME_TEXT o_name[MAX_NLEN];
     describe_flavor(player_ptr, o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
@@ -275,13 +292,15 @@ static void multiply_high_curse(PlayerType *player_ptr)
 
 static void persist_curse(PlayerType *player_ptr)
 {
-    if ((player_ptr->cursed.has_not(CurseTraitType::PERSISTENT_CURSE)) || !one_in_(500))
+    if ((player_ptr->cursed.has_not(CurseTraitType::PERSISTENT_CURSE)) || !one_in_(500)) {
         return;
+    }
 
     ObjectType *o_ptr;
     o_ptr = choose_cursed_obj_name(player_ptr, CurseTraitType::PERSISTENT_CURSE);
-    if (o_ptr->curse_flags.has(CurseTraitType::HEAVY_CURSE))
+    if (o_ptr->curse_flags.has(CurseTraitType::HEAVY_CURSE)) {
         return;
+    }
 
     GAME_TEXT o_name[MAX_NLEN];
     describe_flavor(player_ptr, o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
@@ -346,7 +365,7 @@ static void curse_cowardice(PlayerType *player_ptr)
         chance = 150;
         duration *= 2;
     }
-    
+
     if (!one_in_(chance) || (has_resist_fear(player_ptr) != 0)) {
         return;
     }
@@ -374,7 +393,7 @@ static void curse_berserk_rage(PlayerType *player_ptr)
         chance = 150;
         duration *= 2;
     }
-    
+
     if (!one_in_(chance)) {
         return;
     }
@@ -388,8 +407,9 @@ static void curse_berserk_rage(PlayerType *player_ptr)
 
 static void curse_drain_hp(PlayerType *player_ptr)
 {
-    if ((player_ptr->cursed.has_not(CurseTraitType::DRAIN_HP)) || !one_in_(666))
+    if ((player_ptr->cursed.has_not(CurseTraitType::DRAIN_HP)) || !one_in_(666)) {
         return;
+    }
 
     GAME_TEXT o_name[MAX_NLEN];
     describe_flavor(player_ptr, o_name, choose_cursed_obj_name(player_ptr, CurseTraitType::DRAIN_HP), (OD_OMIT_PREFIX | OD_NAME_ONLY));
@@ -399,8 +419,9 @@ static void curse_drain_hp(PlayerType *player_ptr)
 
 static void curse_drain_mp(PlayerType *player_ptr)
 {
-    if ((player_ptr->cursed.has_not(CurseTraitType::DRAIN_MANA)) || (player_ptr->csp == 0) || !one_in_(666))
+    if ((player_ptr->cursed.has_not(CurseTraitType::DRAIN_MANA)) || (player_ptr->csp == 0) || !one_in_(666)) {
         return;
+    }
 
     GAME_TEXT o_name[MAX_NLEN];
     describe_flavor(player_ptr, o_name, choose_cursed_obj_name(player_ptr, CurseTraitType::DRAIN_MANA), (OD_OMIT_PREFIX | OD_NAME_ONLY));
@@ -416,9 +437,9 @@ static void curse_drain_mp(PlayerType *player_ptr)
 
 static void occur_curse_effects(PlayerType *player_ptr)
 {
-    if ((player_ptr->cursed.has_none_of(TRC_P_FLAG_MASK) && player_ptr->cursed_special.has_none_of(TRCS_P_FLAG_MASK)) || player_ptr->phase_out
-        || player_ptr->wild_mode)
+    if ((player_ptr->cursed.has_none_of(TRC_P_FLAG_MASK) && player_ptr->cursed_special.has_none_of(TRCS_P_FLAG_MASK)) || player_ptr->phase_out || player_ptr->wild_mode) {
         return;
+    }
 
     curse_teleport(player_ptr);
     occur_chainsword_effect(player_ptr);
@@ -451,17 +472,20 @@ static void occur_curse_effects(PlayerType *player_ptr)
 void execute_cursed_items_effect(PlayerType *player_ptr)
 {
     occur_curse_effects(player_ptr);
-    if (!one_in_(999) || player_ptr->anti_magic || (one_in_(2) && has_resist_curse(player_ptr)))
+    if (!one_in_(999) || player_ptr->anti_magic || (one_in_(2) && has_resist_curse(player_ptr))) {
         return;
+    }
 
     auto *o_ptr = &player_ptr->inventory_list[INVEN_LITE];
-    if (o_ptr->fixed_artifact_idx != ART_JUDGE)
+    if (o_ptr->fixed_artifact_idx != ART_JUDGE) {
         return;
+    }
 
-    if (o_ptr->is_known())
+    if (o_ptr->is_known()) {
         msg_print(_("『審判の宝石』はあなたの体力を吸収した！", "The Jewel of Judgement drains life from you!"));
-    else
+    } else {
         msg_print(_("なにかがあなたの体力を吸収した！", "Something drains life from you!"));
+    }
 
     take_hit(player_ptr, DAMAGE_LOSELIFE, std::min<short>(player_ptr->lev, 50), _("審判の宝石", "the Jewel of Judgement"));
 }

@@ -19,17 +19,21 @@
 void reduce_lite_life(PlayerType *player_ptr)
 {
     auto *o_ptr = &player_ptr->inventory_list[INVEN_LITE];
-    if (o_ptr->tval != ItemKindType::LITE)
+    if (o_ptr->tval != ItemKindType::LITE) {
         return;
+    }
 
-    if (o_ptr->is_fixed_artifact() || (o_ptr->sval == SV_LITE_FEANOR) || (o_ptr->fuel <= 0))
+    if (o_ptr->is_fixed_artifact() || (o_ptr->sval == SV_LITE_FEANOR) || (o_ptr->fuel <= 0)) {
         return;
+    }
 
     if (o_ptr->ego_idx == EgoType::LITE_LONG) {
-        if (w_ptr->game_turn % (TURNS_PER_TICK * 2))
+        if (w_ptr->game_turn % (TURNS_PER_TICK * 2)) {
             o_ptr->fuel--;
-    } else
+        }
+    } else {
         o_ptr->fuel--;
+    }
 
     notice_lite_change(player_ptr, o_ptr);
 }
@@ -46,8 +50,9 @@ void notice_lite_change(PlayerType *player_ptr, ObjectType *o_ptr)
     }
 
     if (player_ptr->blind) {
-        if (o_ptr->fuel == 0)
+        if (o_ptr->fuel == 0) {
             o_ptr->fuel++;
+        }
     } else if (o_ptr->fuel == 0) {
         disturb(player_ptr, false, true);
         msg_print(_("明かりが消えてしまった！", "Your light has gone out!"));
@@ -55,13 +60,15 @@ void notice_lite_change(PlayerType *player_ptr, ObjectType *o_ptr)
         player_ptr->update |= (PU_BONUS);
     } else if (o_ptr->ego_idx == EgoType::LITE_LONG) {
         if ((o_ptr->fuel < 50) && (!(o_ptr->fuel % 5)) && (w_ptr->game_turn % (TURNS_PER_TICK * 2))) {
-            if (disturb_minor)
+            if (disturb_minor) {
                 disturb(player_ptr, false, true);
+            }
             msg_print(_("明かりが微かになってきている。", "Your light is growing faint."));
         }
     } else if ((o_ptr->fuel < 100) && (!(o_ptr->fuel % 10))) {
-        if (disturb_minor)
+        if (disturb_minor) {
             disturb(player_ptr, false, true);
+        }
         msg_print(_("明かりが微かになってきている。", "Your light is growing faint."));
     }
 }

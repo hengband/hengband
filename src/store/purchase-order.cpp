@@ -115,17 +115,19 @@ static void take_item_from_home(PlayerType *player_ptr, ObjectType *o_ptr, Objec
     auto combined_or_reordered = combine_and_reorder_home(player_ptr, StoreSaleType::HOME);
 
     if (i == st_ptr->stock_num) {
-        if (combined_or_reordered)
+        if (combined_or_reordered) {
             display_store_inventory(player_ptr);
-        else
+        } else {
             display_entry(player_ptr, item);
+        }
         return;
     }
 
-    if (st_ptr->stock_num == 0)
+    if (st_ptr->stock_num == 0) {
         store_top = 0;
-    else if (store_top >= st_ptr->stock_num)
+    } else if (store_top >= st_ptr->stock_num) {
         store_top -= store_bottom;
+    }
 
     display_store_inventory(player_ptr);
     chg_virtue(player_ptr, V_SACRIFICE, 1);
@@ -160,8 +162,9 @@ static void switch_store_stock(PlayerType *player_ptr, const int i, const COMMAN
     }
 
     if (st_ptr->stock_num != i) {
-        if (store_top >= st_ptr->stock_num)
+        if (store_top >= st_ptr->stock_num) {
             store_top -= store_bottom;
+        }
 
         display_store_inventory(player_ptr);
         return;
@@ -183,20 +186,23 @@ void store_purchase(PlayerType *player_ptr)
     }
 
     if (st_ptr->stock_num <= 0) {
-        if (cur_store_num == StoreSaleType::HOME)
+        if (cur_store_num == StoreSaleType::HOME) {
             msg_print(_("我が家には何も置いてありません。", "Your home is empty."));
-        else
+        } else {
             msg_print(_("現在商品の在庫を切らしています。", "I am currently out of stock."));
+        }
         return;
     }
 
     int i = (st_ptr->stock_num - store_top);
-    if (i > store_bottom)
+    if (i > store_bottom) {
         i = store_bottom;
+    }
 
     COMMAND_CODE item;
-    if (!show_store_select_item(&item, i))
+    if (!show_store_select_item(&item, i)) {
         return;
+    }
 
     item = item + store_top;
     ObjectType *o_ptr;
@@ -225,8 +231,9 @@ void store_purchase(PlayerType *player_ptr)
         }
 
         amt = get_quantity(nullptr, o_ptr->number);
-        if (amt <= 0)
+        if (amt <= 0) {
             return;
+        }
     }
 
     j_ptr = &forge;
@@ -256,10 +263,12 @@ void store_purchase(PlayerType *player_ptr)
     msg_print(nullptr);
 
     auto res = prompt_to_buy(player_ptr, j_ptr);
-    if (st_ptr->store_open >= w_ptr->game_turn)
+    if (st_ptr->store_open >= w_ptr->game_turn) {
         return;
-    if (!res)
+    }
+    if (!res) {
         return;
+    }
 
     price = res.value();
 
@@ -269,10 +278,12 @@ void store_purchase(PlayerType *player_ptr)
     }
 
     store_owner_says_comment(player_ptr);
-    if (cur_store_num == StoreSaleType::BLACK)
+    if (cur_store_num == StoreSaleType::BLACK) {
         chg_virtue(player_ptr, V_JUSTICE, -1);
-    if ((o_ptr->tval == ItemKindType::BOTTLE) && (cur_store_num != StoreSaleType::HOME))
+    }
+    if ((o_ptr->tval == ItemKindType::BOTTLE) && (cur_store_num != StoreSaleType::HOME)) {
         chg_virtue(player_ptr, V_NATURE, -1);
+    }
 
     sound(SOUND_BUY);
     player_ptr->au -= price;
@@ -285,12 +296,14 @@ void store_purchase(PlayerType *player_ptr)
     strcpy(record_o_name, o_name);
     record_turn = w_ptr->game_turn;
 
-    if (record_buy)
+    if (record_buy) {
         exe_write_diary(player_ptr, DIARY_BUY, 0, o_name);
+    }
 
     describe_flavor(player_ptr, o_name, o_ptr, OD_NAME_ONLY);
-    if (record_rand_art && o_ptr->art_name)
+    if (record_rand_art && o_ptr->art_name) {
         exe_write_diary(player_ptr, DIARY_ART, 0, o_name);
+    }
 
     j_ptr->inscription = 0;
     j_ptr->feeling = FEEL_NONE;
@@ -305,8 +318,9 @@ void store_purchase(PlayerType *player_ptr)
     describe_flavor(player_ptr, o_name, &player_ptr->inventory_list[item_new], 0);
     msg_format(_("%s(%c)を手に入れた。", "You have %s (%c)."), o_name, index_to_label(item_new));
 
-    if ((o_ptr->tval == ItemKindType::ROD) || (o_ptr->tval == ItemKindType::WAND))
+    if ((o_ptr->tval == ItemKindType::ROD) || (o_ptr->tval == ItemKindType::WAND)) {
         o_ptr->pval -= j_ptr->pval;
+    }
 
     i = st_ptr->stock_num;
     store_item_increase(item, -amt);

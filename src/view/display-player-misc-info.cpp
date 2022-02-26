@@ -23,8 +23,9 @@ void display_player_misc_info(PlayerType *player_ptr)
     char tmp[80];
     strcpy(tmp, ap_ptr->title);
 #ifdef JP
-    if (ap_ptr->no == 1)
+    if (ap_ptr->no == 1) {
         strcat(tmp, "の");
+    }
 #else
     strcat(tmp, " ");
 #endif

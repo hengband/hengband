@@ -82,8 +82,9 @@ void get_stats(PlayerType *player_ptr)
             }
         }
 
-        if ((sum > 42 + 5 * 6) && (sum < 57 + 5 * 6))
+        if ((sum > 42 + 5 * 6) && (sum < 57 + 5 * 6)) {
             break;
+        }
     }
 }
 
@@ -95,13 +96,15 @@ uint16_t get_expfact(PlayerType *player_ptr)
     uint16_t expfact = rp_ptr->r_exp;
 
     PlayerRace pr(player_ptr);
-    if (!pr.equals(PlayerRaceType::ANDROID))
+    if (!pr.equals(PlayerRaceType::ANDROID)) {
         expfact += cp_ptr->c_exp;
+    }
 
     auto is_race_gaining_additional_speed = pr.equals(PlayerRaceType::KLACKON) || pr.equals(PlayerRaceType::SPRITE);
     auto is_class_gaining_additional_speed = PlayerClass(player_ptr).has_additional_speed();
-    if (is_race_gaining_additional_speed && is_class_gaining_additional_speed)
+    if (is_race_gaining_additional_speed && is_class_gaining_additional_speed) {
         expfact -= 15;
+    }
 
     return expfact;
 }
@@ -121,14 +124,14 @@ void get_extra(PlayerType *player_ptr, bool roll_hitdie)
 
     PlayerClass pc(player_ptr);
     auto is_sorcerer = pc.equals(PlayerClassType::SORCERER);
-    for (int i = 0; i < 64; i++)
-    {
-        if (is_sorcerer)
+    for (int i = 0; i < 64; i++) {
+        if (is_sorcerer) {
             player_ptr->spell_exp[i] = PlayerSkill::spell_exp_at(PlayerSkillRank::MASTER);
-        else if (pc.equals(PlayerClassType::RED_MAGE))
+        } else if (pc.equals(PlayerClassType::RED_MAGE)) {
             player_ptr->spell_exp[i] = PlayerSkill::spell_exp_at(PlayerSkillRank::SKILLED);
-        else
+        } else {
             player_ptr->spell_exp[i] = PlayerSkill::spell_exp_at(PlayerSkillRank::UNSKILLED);
+        }
     }
 
     auto pclass = enum2i(player_ptr->pclass);
@@ -140,13 +143,15 @@ void get_extra(PlayerType *player_ptr, bool roll_hitdie)
         whip_exp = std::max(whip_exp, PlayerSkill::weapon_exp_at(PlayerSkillRank::BEGINNER));
     }
 
-    for (auto i : PLAYER_SKILL_KIND_TYPE_RANGE)
+    for (auto i : PLAYER_SKILL_KIND_TYPE_RANGE) {
         player_ptr->skill_exp[i] = s_info[pclass].s_start[i];
+    }
 
     player_ptr->hitdie = cp_ptr->c_mhp + ap_ptr->a_mhp;
     player_ptr->hitdie += is_sorcerer ? rp_ptr->r_mhp / 2 : rp_ptr->r_mhp;
-    if (roll_hitdie)
+    if (roll_hitdie) {
         roll_hitdice(player_ptr, SPOP_NO_UPDATE);
+    }
 
     player_ptr->mhp = player_ptr->player_hp[0];
 }
@@ -166,17 +171,20 @@ void get_max_stats(PlayerType *player_ptr)
             j += dice[i];
         }
 
-        if (j == 24)
+        if (j == 24) {
             break;
+        }
     }
 
     for (int i = 0; i < A_MAX; i++) {
         BASE_STATUS max_max = 18 + 60 + dice[i] * 10;
         player_ptr->stat_max_max[i] = max_max;
-        if (player_ptr->stat_max[i] > max_max)
+        if (player_ptr->stat_max[i] > max_max) {
             player_ptr->stat_max[i] = max_max;
-        if (player_ptr->stat_cur[i] > max_max)
+        }
+        if (player_ptr->stat_cur[i] > max_max) {
             player_ptr->stat_cur[i] = max_max;
+        }
     }
 
     player_ptr->knowledge &= ~(KNOW_STAT);

@@ -29,8 +29,9 @@
 bool eat_rock(PlayerType *player_ptr)
 {
     DIRECTION dir;
-    if (!get_direction(player_ptr, &dir, false, false))
+    if (!get_direction(player_ptr, &dir, false, false)) {
         return false;
+    }
 
     POSITION y = player_ptr->y + ddy[dir];
     POSITION x = player_ptr->x + ddx[dir];
@@ -49,8 +50,9 @@ bool eat_rock(PlayerType *player_ptr)
         auto *m_ptr = &player_ptr->current_floor_ptr->m_list[g_ptr->m_idx];
         msg_print(_("何かが邪魔しています！", "There's something in the way!"));
 
-        if (!m_ptr->ml || !is_pet(m_ptr))
+        if (!m_ptr->ml || !is_pet(m_ptr)) {
             do_cmd_attack(player_ptr, y, x, HISSATSU_NONE);
+        }
     } else if (f_ptr->flags.has(FloorFeatureType::TREE)) {
         msg_print(_("木の味は好きじゃない！", "You don't like the woody taste!"));
     } else if (f_ptr->flags.has(FloorFeatureType::GLASS)) {

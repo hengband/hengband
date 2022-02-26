@@ -47,8 +47,9 @@ static int monspell_damage_roll(int dam, int dice_num, int dice_side, int mult, 
         return dam;
     }
 
-    if (dam < 1)
+    if (dam < 1) {
         dam = 1;
+    }
     return dam;
 }
 
@@ -446,8 +447,9 @@ void monspell_shoot_dice(monster_race *r_ptr, int *dd, int *ds)
     int n = 0; /* Number of blows */
     const int max_blows = 4;
     for (int m = 0; m < max_blows; m++) {
-        if (r_ptr->blow[m].method != RaceBlowMethodType::NONE)
-            n++; /* Count blows */
+        if (r_ptr->blow[m].method != RaceBlowMethodType::NONE) {
+            n++;
+        } /* Count blows */
 
         if (r_ptr->blow[m].method == RaceBlowMethodType::SHOOT) {
             p = m; /* Remember position */
@@ -456,8 +458,9 @@ void monspell_shoot_dice(monster_race *r_ptr, int *dd, int *ds)
     }
 
     /* When full blows, use a first damage */
-    if (n == max_blows)
+    if (n == max_blows) {
         p = 0;
+    }
 
     if (p < 0) {
         (*dd) = 0;
@@ -523,10 +526,11 @@ int monspell_bluemage_damage(PlayerType *player_ptr, MonsterAbilityType ms_type,
     int shoot_dd = 1, shoot_ds = 1, shoot_base = 0;
     ObjectType *o_ptr = nullptr;
 
-    if (has_melee_weapon(player_ptr, INVEN_MAIN_HAND))
+    if (has_melee_weapon(player_ptr, INVEN_MAIN_HAND)) {
         o_ptr = &player_ptr->inventory_list[INVEN_MAIN_HAND];
-    else if (has_melee_weapon(player_ptr, INVEN_SUB_HAND))
+    } else if (has_melee_weapon(player_ptr, INVEN_SUB_HAND)) {
         o_ptr = &player_ptr->inventory_list[INVEN_SUB_HAND];
+    }
 
     if (o_ptr) {
         shoot_dd = o_ptr->dd;

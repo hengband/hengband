@@ -58,187 +58,238 @@ static bool restrict_monster_to_dungeon(PlayerType *player_ptr, MONRACE_IDX r_id
     auto *r_ptr = &r_info[r_idx];
 
     if (d_ptr->flags.has(DungeonFeatureType::CHAMELEON)) {
-        if (chameleon_change_m_idx)
+        if (chameleon_change_m_idx) {
             return true;
+        }
     }
 
     if (d_ptr->flags.has(DungeonFeatureType::NO_MAGIC)) {
-        if (r_idx != MON_CHAMELEON && r_ptr->freq_spell && r_ptr->ability_flags.has_none_of(RF_ABILITY_NOMAGIC_MASK))
+        if (r_idx != MON_CHAMELEON && r_ptr->freq_spell && r_ptr->ability_flags.has_none_of(RF_ABILITY_NOMAGIC_MASK)) {
             return false;
+        }
     }
 
     if (d_ptr->flags.has(DungeonFeatureType::NO_MELEE)) {
-        if (r_idx == MON_CHAMELEON)
+        if (r_idx == MON_CHAMELEON) {
             return true;
+        }
         if (r_ptr->ability_flags.has_none_of(RF_ABILITY_BOLT_MASK | RF_ABILITY_BEAM_MASK | RF_ABILITY_BALL_MASK) && r_ptr->ability_flags.has_none_of(
-                                                                                                                        { MonsterAbilityType::CAUSE_1, MonsterAbilityType::CAUSE_2, MonsterAbilityType::CAUSE_3, MonsterAbilityType::CAUSE_4, MonsterAbilityType::MIND_BLAST, MonsterAbilityType::BRAIN_SMASH }))
+                                                                                                                        { MonsterAbilityType::CAUSE_1, MonsterAbilityType::CAUSE_2, MonsterAbilityType::CAUSE_3, MonsterAbilityType::CAUSE_4, MonsterAbilityType::MIND_BLAST, MonsterAbilityType::BRAIN_SMASH })) {
             return false;
+        }
     }
 
     auto *floor_ptr = player_ptr->current_floor_ptr;
     if (d_ptr->flags.has(DungeonFeatureType::BEGINNER)) {
-        if (r_ptr->level > floor_ptr->dun_level)
+        if (r_ptr->level > floor_ptr->dun_level) {
             return false;
+        }
     }
 
-    if (d_ptr->special_div >= 64)
+    if (d_ptr->special_div >= 64) {
         return true;
-    if (summon_specific_type && d_ptr->flags.has_not(DungeonFeatureType::CHAMELEON))
+    }
+    if (summon_specific_type && d_ptr->flags.has_not(DungeonFeatureType::CHAMELEON)) {
         return true;
+    }
 
     byte a;
     switch (d_ptr->mode) {
     case DUNGEON_MODE_AND: {
         if (d_ptr->mflags1) {
-            if ((d_ptr->mflags1 & r_ptr->flags1) != d_ptr->mflags1)
+            if ((d_ptr->mflags1 & r_ptr->flags1) != d_ptr->mflags1) {
                 return false;
+            }
         }
 
         if (d_ptr->mflags2) {
-            if ((d_ptr->mflags2 & r_ptr->flags2) != d_ptr->mflags2)
+            if ((d_ptr->mflags2 & r_ptr->flags2) != d_ptr->mflags2) {
                 return false;
+            }
         }
 
         if (d_ptr->mflags3) {
-            if ((d_ptr->mflags3 & r_ptr->flags3) != d_ptr->mflags3)
+            if ((d_ptr->mflags3 & r_ptr->flags3) != d_ptr->mflags3) {
                 return false;
+            }
         }
 
         if (d_ptr->mon_ability_flags.any()) {
-            if (!r_ptr->ability_flags.has_all_of(d_ptr->mon_ability_flags))
+            if (!r_ptr->ability_flags.has_all_of(d_ptr->mon_ability_flags)) {
                 return false;
+            }
         }
 
         if (d_ptr->mon_behavior_flags.any()) {
-            if (!r_ptr->behavior_flags.has_all_of(d_ptr->mon_behavior_flags))
+            if (!r_ptr->behavior_flags.has_all_of(d_ptr->mon_behavior_flags)) {
                 return false;
+            }
         }
 
         if (d_ptr->mflags7) {
-            if ((d_ptr->mflags7 & r_ptr->flags7) != d_ptr->mflags7)
+            if ((d_ptr->mflags7 & r_ptr->flags7) != d_ptr->mflags7) {
                 return false;
+            }
         }
 
         if (d_ptr->mflags8) {
-            if ((d_ptr->mflags8 & r_ptr->flags8) != d_ptr->mflags8)
+            if ((d_ptr->mflags8 & r_ptr->flags8) != d_ptr->mflags8) {
                 return false;
+            }
         }
 
         if (d_ptr->mflags9) {
-            if ((d_ptr->mflags9 & r_ptr->flags9) != d_ptr->mflags9)
+            if ((d_ptr->mflags9 & r_ptr->flags9) != d_ptr->mflags9) {
                 return false;
+            }
         }
 
         if (d_ptr->mon_resistance_flags.any()) {
-            if (!d_ptr->mon_resistance_flags.has_all_of(r_ptr->resistance_flags))
+            if (!d_ptr->mon_resistance_flags.has_all_of(r_ptr->resistance_flags)) {
                 return false;
+            }
         }
 
-        for (a = 0; a < 5; a++)
-            if (d_ptr->r_char[a] && (d_ptr->r_char[a] != r_ptr->d_char))
+        for (a = 0; a < 5; a++) {
+            if (d_ptr->r_char[a] && (d_ptr->r_char[a] != r_ptr->d_char)) {
                 return false;
+            }
+        }
 
         return true;
     }
     case DUNGEON_MODE_NAND: {
         if (d_ptr->mflags1) {
-            if ((d_ptr->mflags1 & r_ptr->flags1) != d_ptr->mflags1)
+            if ((d_ptr->mflags1 & r_ptr->flags1) != d_ptr->mflags1) {
                 return true;
+            }
         }
 
         if (d_ptr->mflags2) {
-            if ((d_ptr->mflags2 & r_ptr->flags2) != d_ptr->mflags2)
+            if ((d_ptr->mflags2 & r_ptr->flags2) != d_ptr->mflags2) {
                 return true;
+            }
         }
 
         if (d_ptr->mflags3) {
-            if ((d_ptr->mflags3 & r_ptr->flags3) != d_ptr->mflags3)
+            if ((d_ptr->mflags3 & r_ptr->flags3) != d_ptr->mflags3) {
                 return true;
+            }
         }
 
         if (d_ptr->mon_ability_flags.any()) {
-            if (!r_ptr->ability_flags.has_all_of(d_ptr->mon_ability_flags))
+            if (!r_ptr->ability_flags.has_all_of(d_ptr->mon_ability_flags)) {
                 return true;
+            }
         }
 
         if (d_ptr->mon_behavior_flags.any()) {
-            if (!r_ptr->behavior_flags.has_all_of(d_ptr->mon_behavior_flags))
+            if (!r_ptr->behavior_flags.has_all_of(d_ptr->mon_behavior_flags)) {
                 return true;
+            }
         }
 
         if (d_ptr->mflags7) {
-            if ((d_ptr->mflags7 & r_ptr->flags7) != d_ptr->mflags7)
+            if ((d_ptr->mflags7 & r_ptr->flags7) != d_ptr->mflags7) {
                 return true;
+            }
         }
 
         if (d_ptr->mflags8) {
-            if ((d_ptr->mflags8 & r_ptr->flags8) != d_ptr->mflags8)
+            if ((d_ptr->mflags8 & r_ptr->flags8) != d_ptr->mflags8) {
                 return true;
+            }
         }
 
         if (d_ptr->mflags9) {
-            if ((d_ptr->mflags9 & r_ptr->flags9) != d_ptr->mflags9)
+            if ((d_ptr->mflags9 & r_ptr->flags9) != d_ptr->mflags9) {
                 return true;
+            }
         }
 
         if (d_ptr->mon_resistance_flags.any()) {
-            if (!d_ptr->mon_resistance_flags.has_all_of(r_ptr->resistance_flags))
+            if (!d_ptr->mon_resistance_flags.has_all_of(r_ptr->resistance_flags)) {
                 return true;
+            }
         }
 
-        for (a = 0; a < 5; a++)
-            if (d_ptr->r_char[a] && (d_ptr->r_char[a] != r_ptr->d_char))
+        for (a = 0; a < 5; a++) {
+            if (d_ptr->r_char[a] && (d_ptr->r_char[a] != r_ptr->d_char)) {
                 return true;
+            }
+        }
 
         return false;
     }
     case DUNGEON_MODE_OR: {
-        if (r_ptr->flags1 & d_ptr->mflags1)
+        if (r_ptr->flags1 & d_ptr->mflags1) {
             return true;
-        if (r_ptr->flags2 & d_ptr->mflags2)
+        }
+        if (r_ptr->flags2 & d_ptr->mflags2) {
             return true;
-        if (r_ptr->flags3 & d_ptr->mflags3)
+        }
+        if (r_ptr->flags3 & d_ptr->mflags3) {
             return true;
-        if (r_ptr->ability_flags.has_any_of(d_ptr->mon_ability_flags))
+        }
+        if (r_ptr->ability_flags.has_any_of(d_ptr->mon_ability_flags)) {
             return true;
-        if (r_ptr->behavior_flags.has_any_of(d_ptr->mon_behavior_flags))
+        }
+        if (r_ptr->behavior_flags.has_any_of(d_ptr->mon_behavior_flags)) {
             return true;
-        if (r_ptr->flags7 & d_ptr->mflags7)
+        }
+        if (r_ptr->flags7 & d_ptr->mflags7) {
             return true;
-        if (r_ptr->flags8 & d_ptr->mflags8)
+        }
+        if (r_ptr->flags8 & d_ptr->mflags8) {
             return true;
-        if (r_ptr->flags9 & d_ptr->mflags9)
+        }
+        if (r_ptr->flags9 & d_ptr->mflags9) {
             return true;
-        if (r_ptr->resistance_flags.has_any_of(d_ptr->mon_resistance_flags))
+        }
+        if (r_ptr->resistance_flags.has_any_of(d_ptr->mon_resistance_flags)) {
             return true;
-        for (a = 0; a < 5; a++)
-            if (d_ptr->r_char[a] == r_ptr->d_char)
+        }
+        for (a = 0; a < 5; a++) {
+            if (d_ptr->r_char[a] == r_ptr->d_char) {
                 return true;
+            }
+        }
 
         return false;
     }
     case DUNGEON_MODE_NOR: {
-        if (r_ptr->flags1 & d_ptr->mflags1)
+        if (r_ptr->flags1 & d_ptr->mflags1) {
             return false;
-        if (r_ptr->flags2 & d_ptr->mflags2)
+        }
+        if (r_ptr->flags2 & d_ptr->mflags2) {
             return false;
-        if (r_ptr->flags3 & d_ptr->mflags3)
+        }
+        if (r_ptr->flags3 & d_ptr->mflags3) {
             return false;
-        if (r_ptr->ability_flags.has_any_of(d_ptr->mon_ability_flags))
+        }
+        if (r_ptr->ability_flags.has_any_of(d_ptr->mon_ability_flags)) {
             return false;
-        if (r_ptr->behavior_flags.has_any_of(d_ptr->mon_behavior_flags))
+        }
+        if (r_ptr->behavior_flags.has_any_of(d_ptr->mon_behavior_flags)) {
             return false;
-        if (r_ptr->flags7 & d_ptr->mflags7)
+        }
+        if (r_ptr->flags7 & d_ptr->mflags7) {
             return false;
-        if (r_ptr->flags8 & d_ptr->mflags8)
+        }
+        if (r_ptr->flags8 & d_ptr->mflags8) {
             return false;
-        if (r_ptr->flags9 & d_ptr->mflags9)
+        }
+        if (r_ptr->flags9 & d_ptr->mflags9) {
             return false;
-        if (r_ptr->resistance_flags.has_any_of(d_ptr->mon_resistance_flags))
+        }
+        if (r_ptr->resistance_flags.has_any_of(d_ptr->mon_resistance_flags)) {
             return false;
-        for (a = 0; a < 5; a++)
-            if (d_ptr->r_char[a] == r_ptr->d_char)
+        }
+        for (a = 0; a < 5; a++) {
+            if (d_ptr->r_char[a] == r_ptr->d_char) {
                 return false;
+            }
+        }
 
         return true;
     }
@@ -254,8 +305,9 @@ static bool restrict_monster_to_dungeon(PlayerType *player_ptr, MONRACE_IDX r_id
  */
 monsterrace_hook_type get_monster_hook(PlayerType *player_ptr)
 {
-    if ((player_ptr->current_floor_ptr->dun_level > 0) || (inside_quest(player_ptr->current_floor_ptr->quest_number)))
+    if ((player_ptr->current_floor_ptr->dun_level > 0) || (inside_quest(player_ptr->current_floor_ptr->quest_number))) {
         return (monsterrace_hook_type)mon_hook_dungeon;
+    }
 
     switch (wilderness[player_ptr->wilderness_y][player_ptr->wilderness_x].terrain) {
     case TERRAIN_TOWN:
@@ -289,11 +341,13 @@ monsterrace_hook_type get_monster_hook(PlayerType *player_ptr)
 monsterrace_hook_type get_monster_hook2(PlayerType *player_ptr, POSITION y, POSITION x)
 {
     auto *f_ptr = &f_info[player_ptr->current_floor_ptr->grid_array[y][x].feat];
-    if (f_ptr->flags.has(FloorFeatureType::WATER))
+    if (f_ptr->flags.has(FloorFeatureType::WATER)) {
         return f_ptr->flags.has(FloorFeatureType::DEEP) ? (monsterrace_hook_type)mon_hook_deep_water : (monsterrace_hook_type)mon_hook_shallow_water;
+    }
 
-    if (f_ptr->flags.has(FloorFeatureType::LAVA))
+    if (f_ptr->flags.has(FloorFeatureType::LAVA)) {
         return (monsterrace_hook_type)mon_hook_lava;
+    }
 
     return (monsterrace_hook_type)mon_hook_floor;
 }
@@ -329,30 +383,36 @@ static errr do_get_mon_num_prep(PlayerType *player_ptr, const monsterrace_hook_t
 
         // 基本重みが 0 以下なら生成禁止。
         // テーブル内の無効エントリもこれに該当する(alloc_race_table は生成時にゼロクリアされるため)。
-        if (entry->prob1 <= 0)
+        if (entry->prob1 <= 0) {
             continue;
+        }
 
         // いずれかの生成制約関数が偽を返したら生成禁止。
-        if ((hook1 && !hook1(player_ptr, entry->index)) || (hook2 && !hook2(player_ptr, entry->index)))
+        if ((hook1 && !hook1(player_ptr, entry->index)) || (hook2 && !hook2(player_ptr, entry->index))) {
             continue;
+        }
 
         // 原則生成禁止するものたち(フェイズアウト状態 / カメレオンの変身先 / ダンジョンの主召喚 は例外)。
         if (!player_ptr->phase_out && !chameleon_change_m_idx && summon_specific_type != SUMMON_GUARDIANS) {
             // クエストモンスターは生成禁止。
-            if (r_ptr->flags1 & RF1_QUESTOR)
+            if (r_ptr->flags1 & RF1_QUESTOR) {
                 continue;
+            }
 
             // ダンジョンの主は生成禁止。
-            if (r_ptr->flags7 & RF7_GUARDIAN)
+            if (r_ptr->flags7 & RF7_GUARDIAN) {
                 continue;
+            }
 
             // RF1_FORCE_DEPTH フラグ持ちは指定階未満では生成禁止。
-            if ((r_ptr->flags1 & RF1_FORCE_DEPTH) && (r_ptr->level > floor_ptr->dun_level))
+            if ((r_ptr->flags1 & RF1_FORCE_DEPTH) && (r_ptr->level > floor_ptr->dun_level)) {
                 continue;
+            }
 
             // クエスト内でRES_ALLの生成を禁止する (殲滅系クエストの詰み防止)
-            if (inside_quest(player_ptr->current_floor_ptr->quest_number) && r_ptr->resistance_flags.has(MonsterResistanceType::RESIST_ALL))
+            if (inside_quest(player_ptr->current_floor_ptr->quest_number) && r_ptr->resistance_flags.has(MonsterResistanceType::RESIST_ALL)) {
                 continue;
+            }
         }
 
         // 生成を許可するものは基本重みをそのまま引き継ぐ。
@@ -381,17 +441,20 @@ static errr do_get_mon_num_prep(PlayerType *player_ptr, const monsterrace_hook_t
         // 統計情報更新。
         if (entry->prob2 > 0) {
             mon_num++;
-            if (lev_min > entry->level)
+            if (lev_min > entry->level) {
                 lev_min = entry->level;
-            if (lev_max < entry->level)
+            }
+            if (lev_max < entry->level) {
                 lev_max = entry->level;
+            }
             prob2_total += entry->prob2;
         }
     }
 
     // チートオプションが有効なら統計情報を出力。
-    if (cheat_hear)
+    if (cheat_hear) {
         msg_format(_("モンスター第2次候補数:%d(%d-%dF)%d ", "monster second selection:%d(%d-%dF)%d "), mon_num, lev_min, lev_max, prob2_total);
+    }
 
     return 0;
 }

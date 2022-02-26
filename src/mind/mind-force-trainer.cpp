@@ -4,6 +4,7 @@
 #include "core/player-redraw-types.h"
 #include "core/player-update-types.h"
 #include "core/stuff-handler.h"
+#include "effect/attribute-types.h"
 #include "effect/spells-effect-util.h"
 #include "floor/cave.h"
 #include "floor/geometry.h"
@@ -25,7 +26,6 @@
 #include "player/player-damage.h"
 #include "spell-kind/spells-launcher.h"
 #include "spell-kind/spells-lite.h"
-#include "effect/attribute-types.h"
 #include "spell/summon-types.h"
 #include "status/temporary-resistance.h"
 #include "system/floor-type-definition.h"
@@ -100,18 +100,22 @@ bool clear_mind(PlayerType *player_ptr)
 void set_lightspeed(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
 {
     bool notice = false;
-    v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;
+    v = (v > 10000) ? 10000 : (v < 0) ? 0
+                                      : v;
 
-    if (player_ptr->is_dead)
+    if (player_ptr->is_dead) {
         return;
+    }
 
-    if (player_ptr->wild_mode)
+    if (player_ptr->wild_mode) {
         v = 0;
+    }
 
     if (v) {
         if (player_ptr->lightspeed && !do_dec) {
-            if (player_ptr->lightspeed > v)
+            if (player_ptr->lightspeed > v) {
                 return;
+            }
         } else if (!player_ptr->lightspeed) {
             msg_print(_("非常に素早く動けるようになった！", "You feel yourself moving extremely fast!"));
             notice = true;
@@ -127,11 +131,13 @@ void set_lightspeed(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
 
     player_ptr->lightspeed = v;
 
-    if (!notice)
+    if (!notice) {
         return;
+    }
 
-    if (disturb_state)
+    if (disturb_state) {
         disturb(player_ptr, false, false);
+    }
     player_ptr->update |= (PU_BONUS);
     handle_stuff(player_ptr);
 }
@@ -145,15 +151,18 @@ void set_lightspeed(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
 bool set_tim_sh_force(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
 {
     bool notice = false;
-    v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;
+    v = (v > 10000) ? 10000 : (v < 0) ? 0
+                                      : v;
 
-    if (player_ptr->is_dead)
+    if (player_ptr->is_dead) {
         return false;
+    }
 
     if (v) {
         if (player_ptr->tim_sh_touki && !do_dec) {
-            if (player_ptr->tim_sh_touki > v)
+            if (player_ptr->tim_sh_touki > v) {
                 return false;
+            }
         } else if (!player_ptr->tim_sh_touki) {
             msg_print(_("体が闘気のオーラで覆われた。", "You are enveloped by an aura of the Force!"));
             notice = true;
@@ -168,11 +177,13 @@ bool set_tim_sh_force(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
     player_ptr->tim_sh_touki = v;
     player_ptr->redraw |= (PR_STATUS);
 
-    if (!notice)
+    if (!notice) {
         return false;
+    }
 
-    if (disturb_state)
+    if (disturb_state) {
         disturb(player_ptr, false, false);
+    }
     handle_stuff(player_ptr);
     return true;
 }
@@ -185,21 +196,24 @@ bool set_tim_sh_force(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
 bool shock_power(PlayerType *player_ptr)
 {
     int boost = get_current_ki(player_ptr);
-    if (heavy_armor(player_ptr))
+    if (heavy_armor(player_ptr)) {
         boost /= 2;
+    }
 
     project_length = 1;
     DIRECTION dir;
-    if (!get_aim_dir(player_ptr, &dir))
+    if (!get_aim_dir(player_ptr, &dir)) {
         return false;
+    }
 
     POSITION y = player_ptr->y + ddy[dir];
     POSITION x = player_ptr->x + ddx[dir];
     PLAYER_LEVEL plev = player_ptr->lev;
     int dam = damroll(8 + ((plev - 5) / 4) + boost / 12, 8);
     fire_beam(player_ptr, AttributeType::MISSILE, dir, dam);
-    if (!player_ptr->current_floor_ptr->grid_array[y][x].m_idx)
+    if (!player_ptr->current_floor_ptr->grid_array[y][x].m_idx) {
         return true;
+    }
 
     POSITION ty = y, tx = x;
     POSITION oy = y, ox = x;
@@ -227,8 +241,9 @@ bool shock_power(PlayerType *player_ptr)
 
     bool is_shock_successful = ty != oy;
     is_shock_successful |= tx != ox;
-    if (is_shock_successful)
+    if (is_shock_successful) {
         return true;
+    }
 
     msg_format(_("%sを吹き飛ばした！", "You blow %s away!"), m_name);
     player_ptr->current_floor_ptr->grid_array[oy][ox].m_idx = 0;
@@ -240,8 +255,9 @@ bool shock_power(PlayerType *player_ptr)
     lite_spot(player_ptr, oy, ox);
     lite_spot(player_ptr, ty, tx);
 
-    if (r_ptr->flags7 & (RF7_LITE_MASK | RF7_DARK_MASK))
+    if (r_ptr->flags7 & (RF7_LITE_MASK | RF7_DARK_MASK)) {
         player_ptr->update |= (PU_MON_LITE);
+    }
 
     return true;
 }
@@ -257,13 +273,15 @@ bool cast_force_spell(PlayerType *player_ptr, mind_force_trainer_type spell)
     DIRECTION dir;
     PLAYER_LEVEL plev = player_ptr->lev;
     int boost = get_current_ki(player_ptr);
-    if (heavy_armor(player_ptr))
+    if (heavy_armor(player_ptr)) {
         boost /= 2;
+    }
 
     switch (spell) {
     case SMALL_FORCE_BALL:
-        if (!get_aim_dir(player_ptr, &dir))
+        if (!get_aim_dir(player_ptr, &dir)) {
             return false;
+        }
 
         fire_ball(player_ptr, AttributeType::MISSILE, dir, damroll(3 + ((plev - 1) / 5) + boost / 12, 4), 0);
         break;
@@ -275,8 +293,9 @@ bool cast_force_spell(PlayerType *player_ptr, mind_force_trainer_type spell)
         break;
     case KAMEHAMEHA:
         project_length = plev / 8 + 3;
-        if (!get_aim_dir(player_ptr, &dir))
+        if (!get_aim_dir(player_ptr, &dir)) {
             return false;
+        }
 
         fire_beam(player_ptr, AttributeType::MISSILE, dir, damroll(5 + ((plev - 1) / 5) + boost / 10, 5));
         break;
@@ -292,8 +311,9 @@ bool cast_force_spell(PlayerType *player_ptr, mind_force_trainer_type spell)
             fire_ball(player_ptr, AttributeType::MANA, 0, get_current_ki(player_ptr) / 2, 10);
             auto data = PlayerClass(player_ptr).get_specific_data<force_trainer_data_type>();
             take_hit(player_ptr, DAMAGE_LOSELIFE, data->ki / 2, _("気の暴走", "Explosion of the Force"));
-        } else
+        } else {
             return true;
+        }
 
         break;
     case AURA_OF_FORCE:
@@ -303,33 +323,38 @@ bool cast_force_spell(PlayerType *player_ptr, mind_force_trainer_type spell)
         return shock_power(player_ptr);
         break;
     case LARGE_FORCE_BALL:
-        if (!get_aim_dir(player_ptr, &dir))
+        if (!get_aim_dir(player_ptr, &dir)) {
             return false;
+        }
 
         fire_ball(player_ptr, AttributeType::MISSILE, dir, damroll(10, 6) + plev * 3 / 2 + boost * 3 / 5, (plev < 30) ? 2 : 3);
         break;
     case DISPEL_MAGIC: {
-        if (!target_set(player_ptr, TARGET_KILL))
+        if (!target_set(player_ptr, TARGET_KILL)) {
             return false;
+        }
 
         MONSTER_IDX m_idx = player_ptr->current_floor_ptr->grid_array[target_row][target_col].m_idx;
-        if ((m_idx == 0) || !player_has_los_bold(player_ptr, target_row, target_col)
-            || !projectable(player_ptr, player_ptr->y, player_ptr->x, target_row, target_col))
+        if ((m_idx == 0) || !player_has_los_bold(player_ptr, target_row, target_col) || !projectable(player_ptr, player_ptr->y, player_ptr->x, target_row, target_col)) {
             break;
+        }
 
         dispel_monster_status(player_ptr, m_idx);
         break;
     }
     case SUMMON_GHOST: {
         bool success = false;
-        for (int i = 0; i < 1 + boost / 100; i++)
-            if (summon_specific(player_ptr, -1, player_ptr->y, player_ptr->x, plev, SUMMON_PHANTOM, PM_FORCE_PET))
+        for (int i = 0; i < 1 + boost / 100; i++) {
+            if (summon_specific(player_ptr, -1, player_ptr->y, player_ptr->x, plev, SUMMON_PHANTOM, PM_FORCE_PET)) {
                 success = true;
+            }
+        }
 
-        if (success)
+        if (success) {
             msg_print(_("御用でございますが、御主人様？", "'Your wish, master?'"));
-        else
+        } else {
             msg_print(_("何も現れなかった。", "Nothing happens."));
+        }
 
         break;
     }
@@ -337,8 +362,9 @@ bool cast_force_spell(PlayerType *player_ptr, mind_force_trainer_type spell)
         fire_ball(player_ptr, AttributeType::FIRE, 0, 200 + (2 * plev) + boost * 2, 10);
         break;
     case SUPER_KAMEHAMEHA:
-        if (!get_aim_dir(player_ptr, &dir))
+        if (!get_aim_dir(player_ptr, &dir)) {
             return false;
+        }
 
         fire_beam(player_ptr, AttributeType::MANA, dir, damroll(10 + (plev / 2) + boost * 3 / 10, 15));
         break;

@@ -73,10 +73,11 @@ static void monster_attack_show(MonsterAttackPlayer *monap_ptr)
     if (monap_ptr->m_ptr->r_idx == MON_JAIAN) {
         show_jaian_song(monap_ptr);
     } else {
-        if (one_in_(3))
+        if (one_in_(3)) {
             monap_ptr->act = _("は♪僕らは楽しい家族♪と歌っている。", "sings 'We are a happy family.'");
-        else
+        } else {
             monap_ptr->act = _("は♪アイ ラブ ユー、ユー ラブ ミー♪と歌っている。", "sings 'I love you, you love me.'");
+        }
     }
 
     sound(SOUND_SHOW);

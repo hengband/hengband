@@ -3,8 +3,8 @@
 #include "load/angband-version-comparer.h"
 #include "load/load-util.h"
 #include "load/option-loader.h"
-#include "system/angband.h"
 #include "system/angband-version.h"
+#include "system/angband.h"
 #include "view/display-messages.h"
 #include "world/world.h"
 

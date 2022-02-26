@@ -101,16 +101,18 @@ static void display_player_basic_info(PlayerType *player_ptr)
  */
 static void display_magic_realms(PlayerType *player_ptr)
 {
-    if (player_ptr->realm1 == REALM_NONE && player_ptr->element == REALM_NONE)
+    if (player_ptr->realm1 == REALM_NONE && player_ptr->element == REALM_NONE) {
         return;
+    }
 
     char tmp[64];
-    if (PlayerClass(player_ptr).equals(PlayerClassType::ELEMENTALIST))
+    if (PlayerClass(player_ptr).equals(PlayerClassType::ELEMENTALIST)) {
         sprintf(tmp, "%s", get_element_title(player_ptr->element));
-    else if (player_ptr->realm2)
+    } else if (player_ptr->realm2) {
         sprintf(tmp, "%s, %s", realm_names[player_ptr->realm1], realm_names[player_ptr->realm2]);
-    else
+    } else {
         strcpy(tmp, realm_names[player_ptr->realm1]);
+    }
 
     display_player_one_line(ENTRY_REALM, tmp, TERM_L_BLUE);
 }
@@ -160,8 +162,9 @@ static void display_player_stats(PlayerType *player_ptr)
             c_put_str(TERM_L_GREEN, buf, 3 + i, 60);
         }
 
-        if (player_ptr->stat_max[i] == player_ptr->stat_max_max[i])
+        if (player_ptr->stat_max[i] == player_ptr->stat_max_max[i]) {
             c_put_str(TERM_WHITE, "!", 3 + i, _(58, 58 - 2));
+        }
     }
 }
 
@@ -219,11 +222,13 @@ static std::optional<std::string> search_death_cause(PlayerType *player_ptr)
 static std::optional<std::string> decide_death_in_quest(PlayerType *player_ptr)
 {
     auto *floor_ptr = player_ptr->current_floor_ptr;
-    if (!inside_quest(floor_ptr->quest_number) || !quest_type::is_fixed(floor_ptr->quest_number))
+    if (!inside_quest(floor_ptr->quest_number) || !quest_type::is_fixed(floor_ptr->quest_number)) {
         return std::nullopt;
+    }
 
-    for (int i = 0; i < 10; i++)
+    for (int i = 0; i < 10; i++) {
         quest_text[i][0] = '\0';
+    }
 
     quest_text_line = 0;
     init_flags = INIT_NAME_ONLY;

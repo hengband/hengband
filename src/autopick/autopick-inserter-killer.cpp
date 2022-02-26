@@ -44,8 +44,9 @@ bool insert_return_code(text_body_type *tb)
     int i, j, num_lines;
 
     num_lines = count_line(tb);
-    if (is_greater_autopick_max_line(num_lines))
+    if (is_greater_autopick_max_line(num_lines)) {
         return false;
+    }
 
     num_lines--;
 
@@ -56,8 +57,9 @@ bool insert_return_code(text_body_type *tb)
 
     for (i = j = 0; tb->lines_list[tb->cy][i] && i < tb->cx; i++) {
 #ifdef JP
-        if (iskanji(tb->lines_list[tb->cy][i]))
+        if (iskanji(tb->lines_list[tb->cy][i])) {
             buf[j++] = tb->lines_list[tb->cy][i++];
+        }
 #endif
         buf[j++] = tb->lines_list[tb->cy][i];
     }
@@ -76,8 +78,9 @@ bool insert_return_code(text_body_type *tb)
  */
 bool insert_macro_line(text_body_type *tb)
 {
-    if (!can_insert_line(tb, 2))
+    if (!can_insert_line(tb, 2)) {
         return false;
+    }
     int i, n = 0;
     flush();
     inkey_base = true;
@@ -95,8 +98,9 @@ bool insert_macro_line(text_body_type *tb)
 
     char tmp[1024];
     ascii_to_text(tmp, buf);
-    if (!tmp[0])
+    if (!tmp[0]) {
         return false;
+    }
 
     tb->cx = 0;
     insert_return_code(tb);
@@ -122,8 +126,9 @@ bool insert_macro_line(text_body_type *tb)
  */
 bool insert_keymap_line(text_body_type *tb)
 {
-    if (!can_insert_line(tb, 2))
+    if (!can_insert_line(tb, 2)) {
         return false;
+    }
     BIT_FLAGS mode;
     if (rogue_like_commands) {
         mode = KEYMAP_MODE_ROGUE;
@@ -139,8 +144,9 @@ bool insert_keymap_line(text_body_type *tb)
     flush();
     char tmp[1024];
     ascii_to_text(tmp, buf);
-    if (!tmp[0])
+    if (!tmp[0]) {
         return false;
+    }
 
     tb->cx = 0;
     insert_return_code(tb);
@@ -181,25 +187,29 @@ void insert_single_letter(text_body_type *tb, int key)
             buf[j++] = (char)key;
             buf[j++] = (char)next;
             tb->cx += 2;
-        } else
+        } else {
             bell();
+        }
     } else
 #endif
     {
-        if (j + 1 < MAX_LINELEN)
+        if (j + 1 < MAX_LINELEN) {
             buf[j++] = (char)key;
+        }
         tb->cx++;
     }
 
-    for (; tb->lines_list[tb->cy][i] && j + 1 < MAX_LINELEN; i++)
+    for (; tb->lines_list[tb->cy][i] && j + 1 < MAX_LINELEN; i++) {
         buf[j++] = tb->lines_list[tb->cy][i];
+    }
     buf[j] = '\0';
 
     string_free(tb->lines_list[tb->cy]);
     tb->lines_list[tb->cy] = string_make(buf);
     len = strlen(tb->lines_list[tb->cy]);
-    if (len < tb->cx)
+    if (len < tb->cx) {
         tb->cx = len;
+    }
 
     tb->dirty_line = tb->cy;
     check_expression_line(tb, tb->cy);
@@ -216,8 +226,9 @@ void kill_line_segment(text_body_type *tb, int y, int x0, int x1, bool whole)
         string_free(tb->lines_list[y]);
 
         int i;
-        for (i = y; tb->lines_list[i + 1]; i++)
+        for (i = y; tb->lines_list[i + 1]; i++) {
             tb->lines_list[i] = tb->lines_list[i + 1];
+        }
         tb->lines_list[i] = nullptr;
 
         tb->dirty_flags |= DIRTY_EXPRESSION;
@@ -225,16 +236,19 @@ void kill_line_segment(text_body_type *tb, int y, int x0, int x1, bool whole)
         return;
     }
 
-    if (x0 == x1)
+    if (x0 == x1) {
         return;
+    }
 
     char buf[MAX_LINELEN];
     char *d = buf;
-    for (int x = 0; x < x0; x++)
+    for (int x = 0; x < x0; x++) {
         *(d++) = s[x];
+    }
 
-    for (int x = x1; s[x]; x++)
+    for (int x = x1; s[x]; x++) {
         *(d++) = s[x];
+    }
 
     *d = '\0';
     string_free(tb->lines_list[y]);

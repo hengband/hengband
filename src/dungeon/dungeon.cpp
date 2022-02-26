@@ -35,9 +35,9 @@ DUNGEON_IDX choose_dungeon(concptr note, POSITION y, POSITION x)
 
     /* Hack -- No need to choose dungeon in some case */
     if (lite_town || vanilla_town || ironman_downward) {
-        if (max_dlv[DUNGEON_ANGBAND])
+        if (max_dlv[DUNGEON_ANGBAND]) {
             return DUNGEON_ANGBAND;
-        else {
+        } else {
             msg_format(_("まだ%sに入ったことはない。", "You haven't entered %s yet."), d_info[DUNGEON_ANGBAND].name.c_str());
             msg_print(nullptr);
             return 0;
@@ -51,15 +51,19 @@ DUNGEON_IDX choose_dungeon(concptr note, POSITION y, POSITION x)
         char buf[80];
         bool seiha = false;
 
-        if (d_ref.idx == 0 || !d_ref.maxdepth)
+        if (d_ref.idx == 0 || !d_ref.maxdepth) {
             continue;
-        if (!max_dlv[d_ref.idx])
+        }
+        if (!max_dlv[d_ref.idx]) {
             continue;
+        }
         if (d_ref.final_guardian) {
-            if (!r_info[d_ref.final_guardian].max_num)
+            if (!r_info[d_ref.final_guardian].max_num) {
                 seiha = true;
-        } else if (max_dlv[d_ref.idx] == d_ref.maxdepth)
+            }
+        } else if (max_dlv[d_ref.idx] == d_ref.maxdepth) {
             seiha = true;
+        }
 
         sprintf(buf, _("      %c) %c%-12s : 最大 %d 階", "      %c) %c%-16s : Max level %d"),
             static_cast<char>('a' + dun.size()), seiha ? '!' : ' ', d_ref.name.c_str(), (int)max_dlv[d_ref.idx]);
@@ -81,8 +85,9 @@ DUNGEON_IDX choose_dungeon(concptr note, POSITION y, POSITION x)
         if (i >= 'a' && i < static_cast<char>('a' + dun.size())) {
             select_dungeon = dun[i - 'a'];
             break;
-        } else
+        } else {
             bell();
+        }
     }
     screen_load();
 

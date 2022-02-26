@@ -45,8 +45,9 @@ void do_cmd_tunnel(PlayerType *player_ptr)
 
     DIRECTION dir;
     if (!get_rep_dir(player_ptr, &dir, false)) {
-        if (!more)
+        if (!more) {
             disturb(player_ptr, false, false);
+        }
 
         return;
     }
@@ -56,17 +57,19 @@ void do_cmd_tunnel(PlayerType *player_ptr)
     grid_type *g_ptr;
     g_ptr = &player_ptr->current_floor_ptr->grid_array[y][x];
     FEAT_IDX feat = g_ptr->get_feat_mimic();
-    if (f_info[feat].flags.has(FloorFeatureType::DOOR))
+    if (f_info[feat].flags.has(FloorFeatureType::DOOR)) {
         msg_print(_("ドアは掘れない。", "You cannot tunnel through doors."));
-    else if (f_info[feat].flags.has_not(FloorFeatureType::TUNNEL))
+    } else if (f_info[feat].flags.has_not(FloorFeatureType::TUNNEL)) {
         msg_print(_("そこは掘れない。", "You can't tunnel through that."));
-    else if (g_ptr->m_idx) {
+    } else if (g_ptr->m_idx) {
         PlayerEnergy(player_ptr).set_player_turn_energy(100);
         msg_print(_("モンスターが立ちふさがっている！", "There is a monster in the way!"));
         do_cmd_attack(player_ptr, y, x, HISSATSU_NONE);
-    } else
+    } else {
         more = exe_tunnel(player_ptr, y, x);
+    }
 
-    if (!more)
+    if (!more) {
         disturb(player_ptr, false, false);
+    }
 }

@@ -18,14 +18,16 @@ int usleep(ulong usecs)
     int nfds = 0;
 
     fd_set *no_fds = nullptr;
-    if (usecs > 4000000L)
+    if (usecs > 4000000L) {
         core(_("不当な usleep() 呼び出し", "Illegal usleep() call"));
+    }
 
     timer.tv_sec = (usecs / 1000000L);
     timer.tv_usec = (usecs % 1000000L);
     if (select(nfds, no_fds, no_fds, no_fds, &timer) < 0) {
-        if (errno != EINTR)
+        if (errno != EINTR) {
             return -1;
+        }
     }
 
     return 0;
@@ -53,8 +55,9 @@ void user_name(char *buf, int id)
 #ifdef JP
         if (!iskanji(buf[0]))
 #endif
-            if (islower(buf[0]))
+            if (islower(buf[0])) {
                 buf[0] = toupper(buf[0]);
+            }
 
         return;
     }
@@ -75,8 +78,9 @@ void user_name(char *buf, int id)
 errr path_parse(char *buf, int max, concptr file)
 {
     buf[0] = '\0';
-    if (!file)
+    if (!file) {
         return -1;
+    }
 
     if (file[0] != '~') {
         (void)strnfmt(buf, max, "%s", file);
@@ -86,33 +90,39 @@ errr path_parse(char *buf, int max, concptr file)
     concptr u = file + 1;
     concptr s = angband_strstr(u, PATH_SEP);
     char user[128];
-    if (s && (s >= u + sizeof(user)))
+    if (s && (s >= u + sizeof(user))) {
         return 1;
+    }
 
     if (s) {
         int i;
-        for (i = 0; u < s; ++i)
+        for (i = 0; u < s; ++i) {
             user[i] = *u++;
+        }
         user[i] = '\0';
         u = user;
     }
 
-    if (u[0] == '\0')
+    if (u[0] == '\0') {
         u = getlogin();
+    }
 
     struct passwd *pw;
-    if (u)
+    if (u) {
         pw = getpwnam(u);
-    else
+    } else {
         pw = getpwuid(getuid());
+    }
 
-    if (!pw)
+    if (!pw) {
         return 1;
+    }
 
-    if (s)
+    if (s) {
         strnfmt(buf, max, "%s%s", pw->pw_dir, s);
-    else
+    } else {
         strnfmt(buf, max, "%s", pw->pw_dir);
+    }
 
     return 0;
 }
@@ -140,8 +150,9 @@ errr path_parse(char *buf, int max, concptr file)
 static errr path_temp(char *buf, int max)
 {
     concptr s = tmpnam(nullptr);
-    if (!s)
+    if (!s) {
         return -1;
+    }
 
 #if !defined(WIN32) || (defined(_MSC_VER) && (_MSC_VER >= 1900))
     (void)strnfmt(buf, max, "%s", s);
@@ -192,8 +203,9 @@ errr path_build(char *buf, int max, concptr path, concptr file)
 FILE *angband_fopen(concptr file, concptr mode)
 {
     char buf[1024];
-    if (path_parse(buf, 1024, file))
+    if (path_parse(buf, 1024, file)) {
         return nullptr;
+    }
 
     return fopen(buf, mode);
 }
@@ -203,10 +215,12 @@ FILE *angband_fopen(concptr file, concptr mode)
  */
 errr angband_fclose(FILE *fff)
 {
-    if (!fff)
+    if (!fff) {
         return -1;
-    if (fclose(fff) == EOF)
+    }
+    if (fclose(fff) == EOF) {
         return 1;
+    }
     return 0;
 }
 
@@ -215,16 +229,18 @@ FILE *angband_fopen_temp(char *buf, int max)
 {
     strncpy(buf, "/tmp/anXXXXXX", max);
     int fd = mkstemp(buf);
-    if (fd < 0)
+    if (fd < 0) {
         return nullptr;
+    }
 
     return fdopen(fd, "w");
 }
 #else /* HAVE_MKSTEMP */
 FILE *angband_fopen_temp(char *buf, int max)
 {
-    if (path_temp(buf, max))
+    if (path_temp(buf, max)) {
         return nullptr;
+    }
     return angband_fopen(buf, "w");
 }
 #endif /* HAVE_MKSTEMP */
@@ -241,8 +257,9 @@ errr angband_fgets(FILE *fff, char *buf, ulong n)
     ulong i = 0;
     char *s;
 
-    if (n <= 1)
+    if (n <= 1) {
         return 1;
+    }
     // Reserve for null termination
     --n;
 
@@ -256,36 +273,43 @@ errr angband_fgets(FILE *fff, char *buf, ulong n)
                 buf[i] = '\0';
                 return 0;
             } else if (*s == '\t') {
-                if (i + 8 >= n)
+                if (i + 8 >= n) {
                     break;
+                }
 
                 buf[i++] = ' ';
-                while (0 != (i % 8))
+                while (0 != (i % 8)) {
                     buf[i++] = ' ';
+                }
             }
 #ifdef JP
             else if (iskanji(*s)) {
-                if (i + 1 >= n)
+                if (i + 1 >= n) {
                     break;
-                if (!s[1])
+                }
+                if (!s[1]) {
                     break;
+                }
                 buf[i++] = *s++;
                 buf[i++] = *s;
             } else if (iskana(*s)) {
                 /* 半角かなに対応 */
                 buf[i++] = *s;
-                if (i >= n)
+                if (i >= n) {
                     break;
+                }
             }
 #endif
             else if (isprint((unsigned char)*s)) {
                 buf[i++] = *s;
-                if (i >= n)
+                if (i >= n) {
                     break;
+                }
             } else {
                 buf[i++] = '?';
-                if (i >= n)
+                if (i >= n) {
                     break;
+                }
             }
         }
 
@@ -322,8 +346,9 @@ errr angband_fputs(FILE *fff, concptr buf, ulong n)
 errr fd_kill(concptr file)
 {
     char buf[1024];
-    if (path_parse(buf, 1024, file))
+    if (path_parse(buf, 1024, file)) {
         return -1;
+    }
 
     (void)remove(buf);
     return 0;
@@ -336,10 +361,12 @@ errr fd_move(concptr file, concptr what)
 {
     char buf[1024];
     char aux[1024];
-    if (path_parse(buf, 1024, file))
+    if (path_parse(buf, 1024, file)) {
         return -1;
-    if (path_parse(aux, 1024, what))
+    }
+    if (path_parse(aux, 1024, what)) {
         return -1;
+    }
 
     (void)rename(buf, aux);
     return 0;
@@ -355,18 +382,22 @@ errr fd_copy(concptr file, concptr what)
     int read_num;
     int src_fd, dst_fd;
 
-    if (path_parse(buf, 1024, file))
+    if (path_parse(buf, 1024, file)) {
         return -1;
-    if (path_parse(aux, 1024, what))
+    }
+    if (path_parse(aux, 1024, what)) {
         return -1;
+    }
 
     src_fd = fd_open(buf, O_RDONLY);
-    if (src_fd < 0)
+    if (src_fd < 0) {
         return -1;
+    }
 
     dst_fd = fd_open(aux, O_WRONLY | O_TRUNC | O_CREAT);
-    if (dst_fd < 0)
+    if (dst_fd < 0) {
         return -1;
+    }
 
     while ((read_num = read(src_fd, buf, 1024)) > 0) {
         int write_num = 0;
@@ -396,8 +427,9 @@ errr fd_copy(concptr file, concptr what)
 int fd_make(concptr file, BIT_FLAGS mode)
 {
     char buf[1024];
-    if (path_parse(buf, 1024, file))
+    if (path_parse(buf, 1024, file)) {
         return -1;
+    }
 
     return open(buf, O_CREAT | O_EXCL | O_WRONLY | O_BINARY, mode);
 }
@@ -410,8 +442,9 @@ int fd_make(concptr file, BIT_FLAGS mode)
 int fd_open(concptr file, int flags)
 {
     char buf[1024];
-    if (path_parse(buf, 1024, file))
+    if (path_parse(buf, 1024, file)) {
         return -1;
+    }
 
     return open(buf, flags | O_BINARY, 0);
 }
@@ -424,15 +457,17 @@ int fd_open(concptr file, int flags)
 errr fd_lock(int fd, int what)
 {
     what = what ? what : 0;
-    if (fd < 0)
+    if (fd < 0) {
         return -1;
+    }
 
 #if defined(SET_UID) && defined(LOCK_UN) && defined(LOCK_EX)
     if (what == F_UNLCK) {
         (void)flock(fd, LOCK_UN);
     } else {
-        if (flock(fd, LOCK_EX) != 0)
+        if (flock(fd, LOCK_EX) != 0) {
             return 1;
+        }
     }
 #endif
 
@@ -444,12 +479,14 @@ errr fd_lock(int fd, int what)
  */
 errr fd_seek(int fd, ulong n)
 {
-    if (fd < 0)
+    if (fd < 0) {
         return -1;
+    }
 
     ulong p = lseek(fd, n, SEEK_SET);
-    if (p != n)
+    if (p != n) {
         return 1;
+    }
 
     return 0;
 }
@@ -468,20 +505,23 @@ errr fd_chop(int fd, ulong n)
  */
 errr fd_read(int fd, char *buf, ulong n)
 {
-    if (fd < 0)
+    if (fd < 0) {
         return -1;
+    }
 #ifndef SET_UID
     while (n >= 16384) {
-        if (read(fd, buf, 16384) != 16384)
+        if (read(fd, buf, 16384) != 16384) {
             return 1;
+        }
 
         buf += 16384;
         n -= 16384;
     }
 #endif
 
-    if (read(fd, buf, n) != (int)n)
+    if (read(fd, buf, n) != (int)n) {
         return 1;
+    }
 
     return 0;
 }
@@ -491,21 +531,24 @@ errr fd_read(int fd, char *buf, ulong n)
  */
 errr fd_write(int fd, concptr buf, ulong n)
 {
-    if (fd < 0)
+    if (fd < 0) {
         return -1;
+    }
 
 #ifndef SET_UID
     while (n >= 16384) {
-        if (write(fd, buf, 16384) != 16384)
+        if (write(fd, buf, 16384) != 16384) {
             return 1;
+        }
 
         buf += 16384;
         n -= 16384;
     }
 #endif
 
-    if (write(fd, buf, n) != (int)n)
+    if (write(fd, buf, n) != (int)n) {
         return 1;
+    }
 
     return 0;
 }
@@ -515,8 +558,9 @@ errr fd_write(int fd, concptr buf, ulong n)
  */
 errr fd_close(int fd)
 {
-    if (fd < 0)
+    if (fd < 0) {
         return -1;
+    }
 
     (void)close(fd);
     return 0;

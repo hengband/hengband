@@ -80,8 +80,9 @@ static errr init_buffer(void)
     ring.wptr = ring.rptr = ring.inlen = 0;
     fresh_queue.time[0] = 0;
     ring.buf = static_cast<char *>(malloc(RINGBUF_SIZE));
-    if (ring.buf == nullptr)
+    if (ring.buf == nullptr) {
         return -1;
+    }
 
     return 0;
 }
@@ -111,8 +112,9 @@ static errr insert_ringbuf(char *buf)
     }
 
     /* バッファをオーバー */
-    if (ring.inlen + len >= RINGBUF_SIZE)
+    if (ring.inlen + len >= RINGBUF_SIZE) {
         return -1;
+    }
 
     /* バッファの終端までに収まる */
     if (ring.wptr + len < RINGBUF_SIZE) {
@@ -141,20 +143,24 @@ static bool string_is_repeat(char *str, int len)
     char c = str[0];
     int i;
 
-    if (len < 2)
+    if (len < 2) {
         return false;
+    }
 #ifdef JP
-    if (iskanji(c))
+    if (iskanji(c)) {
         return false;
+    }
 #endif
 
     for (i = 1; i < len; i++) {
 #ifdef JP
-        if (c != str[i] || iskanji(str[i]))
+        if (c != str[i] || iskanji(str[i])) {
             return false;
+        }
 #else
-        if (c != str[i])
+        if (c != str[i]) {
             return false;
+        }
 #endif
     }
 
@@ -215,8 +221,9 @@ static errr send_xtra_to_chuukei_server(int n, int v)
     }
 
     /* Verify the hook */
-    if (!old_xtra_hook)
+    if (!old_xtra_hook) {
         return -1;
+    }
 
     return (*old_xtra_hook)(n, v);
 }
@@ -296,8 +303,9 @@ void prepare_movie_hooks(PlayerType *player_ptr)
                 (void)sprintf(out_val, _("現存するファイルに上書きしますか? (%s)", "Replace existing file %s? "), buf);
 
                 /* Ask */
-                if (!get_check(out_val))
+                if (!get_check(out_val)) {
                     return;
+                }
 
                 movie_fd = fd_open(buf, O_WRONLY | O_TRUNC);
             } else {
@@ -350,8 +358,9 @@ static int read_movie_file(void)
 
     recv_bytes = read(movie_fd, recv_buf + remain_bytes, RECVBUF_SIZE - remain_bytes);
 
-    if (recv_bytes <= 0)
+    if (recv_bytes <= 0) {
         return -1;
+    }
 
     /* 前回残ったデータ量に今回読んだデータ量を追加 */
     remain_bytes += recv_bytes;
@@ -361,12 +370,14 @@ static int read_movie_file(void)
         if (recv_buf[i] == '\0') {
             /* 'd'で始まるデータ(タイムスタンプ)の場合は
                描画キューに保存する処理を呼ぶ */
-            if ((recv_buf[0] == 'd') && (handle_movie_timestamp_data(atoi(recv_buf + 1)) < 0))
+            if ((recv_buf[0] == 'd') && (handle_movie_timestamp_data(atoi(recv_buf + 1)) < 0)) {
                 return -1;
+            }
 
             /* 受信データを保存 */
-            if (insert_ringbuf(recv_buf) < 0)
+            if (insert_ringbuf(recv_buf) < 0) {
                 return -1;
+            }
 
             /* 次のデータ移行をrecv_bufの先頭に移動 */
             memmove(recv_buf, recv_buf + i + 1, remain_bytes - i - 1);
@@ -384,10 +395,11 @@ static int read_movie_file(void)
 static void win2unix(int col, char *buf)
 {
     char wall;
-    if (col == 9)
+    if (col == 9) {
         wall = '%';
-    else
+    } else {
         wall = '#';
+    }
 
     while (*buf) {
 #ifdef JP
@@ -396,10 +408,11 @@ static void win2unix(int col, char *buf)
             continue;
         }
 #endif
-        if (*buf == 127)
+        if (*buf == 127) {
             *buf = wall;
-        else if (*buf == 31)
+        } else if (*buf == 31) {
             *buf = '.';
+        }
         buf++;
     }
 }
@@ -412,14 +425,17 @@ static bool get_nextbuf(char *buf)
     while (true) {
         *ptr = ring.buf[ring.rptr++];
         ring.inlen--;
-        if (ring.rptr == RINGBUF_SIZE)
+        if (ring.rptr == RINGBUF_SIZE) {
             ring.rptr = 0;
-        if (*ptr++ == '\0')
+        }
+        if (*ptr++ == '\0') {
             break;
+        }
     }
 
-    if (buf[0] == 'd')
+    if (buf[0] == 'd') {
         return false;
+    }
 
     return true;
 }
@@ -434,14 +450,17 @@ static void update_term_size(int x, int y, int len)
     ny = oy;
 
     /* 横方向のチェック */
-    if (x + len > ox)
+    if (x + len > ox) {
         nx = x + len;
+    }
     /* 縦方向のチェック */
-    if (y + 1 > oy)
+    if (y + 1 > oy) {
         ny = y + 1;
+    }
 
-    if (nx != ox || ny != oy)
+    if (nx != ox || ny != oy) {
         term_resize(nx, ny);
+    }
 }
 
 static bool flush_ringbuf_client(void)
@@ -449,12 +468,14 @@ static bool flush_ringbuf_client(void)
     char buf[1024];
 
     /* 書くデータなし */
-    if (fresh_queue.next == fresh_queue.tail)
+    if (fresh_queue.next == fresh_queue.tail) {
         return false;
+    }
 
     /* まだ書くべき時でない */
-    if (fresh_queue.time[fresh_queue.next] > get_current_time() - epoch_time)
+    if (fresh_queue.time[fresh_queue.next] > get_current_time() - epoch_time) {
         return false;
+    }
 
     /* 時間情報(区切り)が得られるまで書く */
     while (get_nextbuf(buf)) {
@@ -473,8 +494,9 @@ static bool flush_ringbuf_client(void)
         if (id == 's') {
             col = tmp3;
             mesg = &buf[4];
-        } else
+        } else {
             mesg = &buf[5];
+        }
 #ifndef WINDOWS
         win2unix(col, mesg);
 #endif
@@ -518,8 +540,9 @@ static bool flush_ringbuf_client(void)
             break;
 
         case 'x':
-            if (x == TERM_XTRA_CLEAR)
+            if (x == TERM_XTRA_CLEAR) {
                 term_clear();
+            }
             (void)((*angband_term[0]->xtra_hook)(x, 0));
             break;
 
@@ -535,8 +558,9 @@ static bool flush_ringbuf_client(void)
     }
 
     fresh_queue.next++;
-    if (fresh_queue.next == FRESH_QUEUE_SIZE)
+    if (fresh_queue.next == FRESH_QUEUE_SIZE) {
         fresh_queue.next = 0;
+    }
     return true;
 }
 

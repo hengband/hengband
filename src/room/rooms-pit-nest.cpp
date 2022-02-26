@@ -43,11 +43,13 @@ static int pick_vault_type(floor_type *floor_ptr, std::vector<nest_pit_type> &l_
     for (size_t i = 0; i < l_ptr.size(); i++) {
         nest_pit_type *n_ptr = &l_ptr.at(i);
 
-        if (n_ptr->level > floor_ptr->dun_level)
+        if (n_ptr->level > floor_ptr->dun_level) {
             continue;
+        }
 
-        if (!(allow_flag_mask & (1UL << i)))
+        if (!(allow_flag_mask & (1UL << i))) {
             continue;
+        }
 
         table.entry_item(i, n_ptr->chance * MAX_DEPTH / (std::min(floor_ptr->dun_level, MAX_DEPTH - 1) - n_ptr->level + 5));
     }
@@ -133,20 +135,26 @@ static bool ang_sort_comp_nest_mon_info(PlayerType *player_ptr, vptr u, vptr v, 
     int z1 = nest_mon_info[a].used;
     int z2 = nest_mon_info[b].used;
 
-    if (z1 < z2)
+    if (z1 < z2) {
         return false;
-    if (z1 > z2)
+    }
+    if (z1 > z2) {
         return true;
+    }
 
-    if (r1_ptr->level < r2_ptr->level)
+    if (r1_ptr->level < r2_ptr->level) {
         return true;
-    if (r1_ptr->level > r2_ptr->level)
+    }
+    if (r1_ptr->level > r2_ptr->level) {
         return false;
+    }
 
-    if (r1_ptr->mexp < r2_ptr->mexp)
+    if (r1_ptr->mexp < r2_ptr->mexp) {
         return true;
-    if (r1_ptr->mexp > r2_ptr->mexp)
+    }
+    if (r1_ptr->mexp > r2_ptr->mexp) {
         return false;
+    }
 
     return w1 <= w2;
 }
@@ -231,14 +239,16 @@ bool build_type5(PlayerType *player_ptr, dun_data_type *dd_ptr)
     nest_pit_type *n_ptr;
 
     /* No type available */
-    if (cur_nest_type < 0)
+    if (cur_nest_type < 0) {
         return false;
+    }
 
     n_ptr = &nest_types[cur_nest_type];
 
     /* Process a preparation function if necessary */
-    if (n_ptr->prep_func)
+    if (n_ptr->prep_func) {
         (*(n_ptr->prep_func))(player_ptr);
+    }
     get_mon_num_prep(player_ptr, n_ptr->hook_func, nullptr);
 
     align.sub_align = SUB_ALIGN_NEUTRAL;
@@ -255,30 +265,35 @@ bool build_type5(PlayerType *player_ptr, dun_data_type *dd_ptr)
             r_ptr = &r_info[r_idx];
 
             /* Decline incorrect alignment */
-            if (monster_has_hostile_align(player_ptr, &align, 0, 0, r_ptr))
+            if (monster_has_hostile_align(player_ptr, &align, 0, 0, r_ptr)) {
                 continue;
+            }
 
             /* Accept this monster */
             break;
         }
 
         /* Notice failure */
-        if (!r_idx || !attempts)
+        if (!r_idx || !attempts) {
             return false;
+        }
 
         /* Note the alignment */
-        if (r_ptr->kind_flags.has(MonsterKindType::EVIL))
+        if (r_ptr->kind_flags.has(MonsterKindType::EVIL)) {
             align.sub_align |= SUB_ALIGN_EVIL;
-        if (r_ptr->kind_flags.has(MonsterKindType::GOOD))
+        }
+        if (r_ptr->kind_flags.has(MonsterKindType::GOOD)) {
             align.sub_align |= SUB_ALIGN_GOOD;
+        }
 
         nest_mon_info[i].r_idx = (int16_t)r_idx;
         nest_mon_info[i].used = false;
     }
 
     /* Find and reserve some space in the dungeon.  Get center of room. */
-    if (!find_space(player_ptr, dd_ptr, &yval, &xval, 11, 25))
+    if (!find_space(player_ptr, dd_ptr, &yval, &xval, 11, 25)) {
         return false;
+    }
 
     /* Large room */
     y1 = yval - 4;
@@ -374,13 +389,16 @@ bool build_type5(PlayerType *player_ptr, dun_data_type *dd_ptr)
 
         /* Dump the entries (prevent multi-printing) */
         for (i = 0; i < NUM_NEST_MON_TYPE; i++) {
-            if (!nest_mon_info[i].used)
+            if (!nest_mon_info[i].used) {
                 break;
+            }
             for (; i < NUM_NEST_MON_TYPE - 1; i++) {
-                if (nest_mon_info[i].r_idx != nest_mon_info[i + 1].r_idx)
+                if (nest_mon_info[i].r_idx != nest_mon_info[i + 1].r_idx) {
                     break;
-                if (!nest_mon_info[i + 1].used)
+                }
+                if (!nest_mon_info[i + 1].used) {
                     break;
+                }
             }
 
             msg_format_wizard(player_ptr, CHEAT_DUNGEON, "Nest構成モンスターNo.%d:%s", i, r_info[nest_mon_info[i].r_idx].name.c_str());
@@ -458,14 +476,16 @@ bool build_type6(PlayerType *player_ptr, dun_data_type *dd_ptr)
     nest_pit_type *n_ptr;
 
     /* No type available */
-    if (cur_pit_type < 0)
+    if (cur_pit_type < 0) {
         return false;
+    }
 
     n_ptr = &pit_types[cur_pit_type];
 
     /* Process a preparation function if necessary */
-    if (n_ptr->prep_func)
+    if (n_ptr->prep_func) {
         (*(n_ptr->prep_func))(player_ptr);
+    }
     get_mon_num_prep(player_ptr, n_ptr->hook_func, nullptr);
 
     align.sub_align = SUB_ALIGN_NEUTRAL;
@@ -482,29 +502,34 @@ bool build_type6(PlayerType *player_ptr, dun_data_type *dd_ptr)
             r_ptr = &r_info[r_idx];
 
             /* Decline incorrect alignment */
-            if (monster_has_hostile_align(player_ptr, &align, 0, 0, r_ptr))
+            if (monster_has_hostile_align(player_ptr, &align, 0, 0, r_ptr)) {
                 continue;
+            }
 
             /* Accept this monster */
             break;
         }
 
         /* Notice failure */
-        if (!r_idx || !attempts)
+        if (!r_idx || !attempts) {
             return false;
+        }
 
         /* Note the alignment */
-        if (r_ptr->kind_flags.has(MonsterKindType::EVIL))
+        if (r_ptr->kind_flags.has(MonsterKindType::EVIL)) {
             align.sub_align |= SUB_ALIGN_EVIL;
-        if (r_ptr->kind_flags.has(MonsterKindType::GOOD))
+        }
+        if (r_ptr->kind_flags.has(MonsterKindType::GOOD)) {
             align.sub_align |= SUB_ALIGN_GOOD;
+        }
 
         what[i] = r_idx;
     }
 
     /* Find and reserve some space in the dungeon.  Get center of room. */
-    if (!find_space(player_ptr, dd_ptr, &yval, &xval, 11, 25))
+    if (!find_space(player_ptr, dd_ptr, &yval, &xval, 11, 25)) {
         return false;
+    }
 
     /* Large room */
     y1 = yval - 4;
@@ -689,12 +714,14 @@ static bool vault_aux_trapped_pit(PlayerType *player_ptr, MONRACE_IDX r_idx)
 
     auto *r_ptr = &r_info[r_idx];
 
-    if (!vault_monster_okay(player_ptr, r_idx))
+    if (!vault_monster_okay(player_ptr, r_idx)) {
         return false;
+    }
 
     /* No wall passing monster */
-    if (r_ptr->flags2 & (RF2_PASS_WALL | RF2_KILL_WALL))
+    if (r_ptr->flags2 & (RF2_PASS_WALL | RF2_KILL_WALL)) {
         return false;
+    }
 
     return true;
 }
@@ -759,18 +786,21 @@ bool build_type13(PlayerType *player_ptr, dun_data_type *dd_ptr)
     nest_pit_type *n_ptr;
 
     /* Only in Angband */
-    if (floor_ptr->dungeon_idx != DUNGEON_ANGBAND)
+    if (floor_ptr->dungeon_idx != DUNGEON_ANGBAND) {
         return false;
+    }
 
     /* No type available */
-    if (cur_pit_type < 0)
+    if (cur_pit_type < 0) {
         return false;
+    }
 
     n_ptr = &pit_types[cur_pit_type];
 
     /* Process a preparation function if necessary */
-    if (n_ptr->prep_func)
+    if (n_ptr->prep_func) {
         (*(n_ptr->prep_func))(player_ptr);
+    }
     get_mon_num_prep(player_ptr, n_ptr->hook_func, vault_aux_trapped_pit);
 
     align.sub_align = SUB_ALIGN_NEUTRAL;
@@ -787,29 +817,34 @@ bool build_type13(PlayerType *player_ptr, dun_data_type *dd_ptr)
             r_ptr = &r_info[r_idx];
 
             /* Decline incorrect alignment */
-            if (monster_has_hostile_align(player_ptr, &align, 0, 0, r_ptr))
+            if (monster_has_hostile_align(player_ptr, &align, 0, 0, r_ptr)) {
                 continue;
+            }
 
             /* Accept this monster */
             break;
         }
 
         /* Notice failure */
-        if (!r_idx || !attempts)
+        if (!r_idx || !attempts) {
             return false;
+        }
 
         /* Note the alignment */
-        if (r_ptr->kind_flags.has(MonsterKindType::EVIL))
+        if (r_ptr->kind_flags.has(MonsterKindType::EVIL)) {
             align.sub_align |= SUB_ALIGN_EVIL;
-        if (r_ptr->kind_flags.has(MonsterKindType::GOOD))
+        }
+        if (r_ptr->kind_flags.has(MonsterKindType::GOOD)) {
             align.sub_align |= SUB_ALIGN_GOOD;
+        }
 
         what[i] = r_idx;
     }
 
     /* Find and reserve some space in the dungeon.  Get center of room. */
-    if (!find_space(player_ptr, dd_ptr, &yval, &xval, 13, 25))
+    if (!find_space(player_ptr, dd_ptr, &yval, &xval, 13, 25)) {
         return false;
+    }
 
     /* Large room */
     y1 = yval - 5;

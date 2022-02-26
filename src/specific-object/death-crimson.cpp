@@ -22,8 +22,9 @@
 static bool fire_crimson(PlayerType *player_ptr)
 {
     DIRECTION dir;
-    if (!get_aim_dir(player_ptr, &dir))
+    if (!get_aim_dir(player_ptr, &dir)) {
         return false;
+    }
 
     POSITION tx = player_ptr->x + 99 * ddx[dir];
     POSITION ty = player_ptr->y + 99 * ddy[dir];
@@ -34,27 +35,32 @@ static bool fire_crimson(PlayerType *player_ptr)
 
     int num = 1;
     if (PlayerClass(player_ptr).equals(PlayerClassType::ARCHER)) {
-        if (player_ptr->lev >= 10)
+        if (player_ptr->lev >= 10) {
             num++;
+        }
 
-        if (player_ptr->lev >= 30)
+        if (player_ptr->lev >= 30) {
             num++;
+        }
 
-        if (player_ptr->lev >= 45)
+        if (player_ptr->lev >= 45) {
             num++;
+        }
     }
 
     BIT_FLAGS flg = PROJECT_STOP | PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL;
-    for (int i = 0; i < num; i++)
+    for (int i = 0; i < num; i++) {
         (void)project(player_ptr, 0, player_ptr->lev / 20 + 1, ty, tx, player_ptr->lev * player_ptr->lev * 6 / 50, AttributeType::ROCKET, flg);
+    }
 
     return true;
 }
 
 bool activate_crimson(PlayerType *player_ptr, ObjectType *o_ptr)
 {
-    if (o_ptr->fixed_artifact_idx != ART_CRIMSON)
+    if (o_ptr->fixed_artifact_idx != ART_CRIMSON) {
         return false;
+    }
 
     msg_print(_("せっかくだから『クリムゾン』をぶっぱなすぜ！", "I'll fire CRIMSON! SEKKAKUDAKARA!"));
     return fire_crimson(player_ptr);

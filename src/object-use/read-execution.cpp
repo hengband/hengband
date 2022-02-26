@@ -104,11 +104,13 @@ void ObjectReadEntity::execute(bool known)
     if (o_ptr->tval == ItemKindType::SCROLL) {
         switch (o_ptr->sval) {
         case SV_SCROLL_DARKNESS: {
-            if (!has_resist_blind(this->player_ptr) && !has_resist_dark(this->player_ptr))
+            if (!has_resist_blind(this->player_ptr) && !has_resist_dark(this->player_ptr)) {
                 (void)BadStatusSetter(this->player_ptr).mod_blindness(3 + randint1(5));
+            }
 
-            if (unlite_area(this->player_ptr, 10, 3))
+            if (unlite_area(this->player_ptr, 10, 3)) {
                 ident = true;
+            }
 
             break;
         }
@@ -119,8 +121,9 @@ void ObjectReadEntity::execute(bool known)
             break;
         }
         case SV_SCROLL_CURSE_ARMOR: {
-            if (curse_armor(this->player_ptr))
+            if (curse_armor(this->player_ptr)) {
                 ident = true;
+            }
 
             break;
         }
@@ -128,13 +131,16 @@ void ObjectReadEntity::execute(bool known)
             auto k = 0;
             if (has_melee_weapon(this->player_ptr, INVEN_MAIN_HAND)) {
                 k = INVEN_MAIN_HAND;
-                if (has_melee_weapon(this->player_ptr, INVEN_SUB_HAND) && one_in_(2))
+                if (has_melee_weapon(this->player_ptr, INVEN_SUB_HAND) && one_in_(2)) {
                     k = INVEN_SUB_HAND;
-            } else if (has_melee_weapon(this->player_ptr, INVEN_SUB_HAND))
+                }
+            } else if (has_melee_weapon(this->player_ptr, INVEN_SUB_HAND)) {
                 k = INVEN_SUB_HAND;
+            }
 
-            if (k && curse_weapon_object(this->player_ptr, false, &this->player_ptr->inventory_list[k]))
+            if (k && curse_weapon_object(this->player_ptr, false, &this->player_ptr->inventory_list[k])) {
                 ident = true;
+            }
 
             break;
         }
@@ -160,20 +166,23 @@ void ObjectReadEntity::execute(bool known)
         }
         case SV_SCROLL_SUMMON_PET: {
             if (summon_specific(
-                    this->player_ptr, -1, this->player_ptr->y, this->player_ptr->x, this->player_ptr->current_floor_ptr->dun_level, SUMMON_NONE, PM_ALLOW_GROUP | PM_FORCE_PET))
+                    this->player_ptr, -1, this->player_ptr->y, this->player_ptr->x, this->player_ptr->current_floor_ptr->dun_level, SUMMON_NONE, PM_ALLOW_GROUP | PM_FORCE_PET)) {
                 ident = true;
+            }
 
             break;
         }
         case SV_SCROLL_SUMMON_KIN: {
-            if (summon_kin_player(this->player_ptr, this->player_ptr->lev, this->player_ptr->y, this->player_ptr->x, PM_FORCE_PET | PM_ALLOW_GROUP))
+            if (summon_kin_player(this->player_ptr, this->player_ptr->lev, this->player_ptr->y, this->player_ptr->x, PM_FORCE_PET | PM_ALLOW_GROUP)) {
                 ident = true;
+            }
 
             break;
         }
         case SV_SCROLL_TRAP_CREATION: {
-            if (trap_creation(this->player_ptr, this->player_ptr->y, this->player_ptr->x))
+            if (trap_creation(this->player_ptr, this->player_ptr->y, this->player_ptr->x)) {
                 ident = true;
+            }
 
             break;
         }
@@ -193,90 +202,103 @@ void ObjectReadEntity::execute(bool known)
             break;
         }
         case SV_SCROLL_WORD_OF_RECALL: {
-            if (!recall_player(this->player_ptr, randint0(21) + 15))
+            if (!recall_player(this->player_ptr, randint0(21) + 15)) {
                 used_up = false;
+            }
 
             ident = true;
             break;
         }
         case SV_SCROLL_IDENTIFY: {
-            if (!ident_spell(this->player_ptr, false))
+            if (!ident_spell(this->player_ptr, false)) {
                 used_up = false;
+            }
 
             ident = true;
             break;
         }
         case SV_SCROLL_STAR_IDENTIFY: {
-            if (!identify_fully(this->player_ptr, false))
+            if (!identify_fully(this->player_ptr, false)) {
                 used_up = false;
+            }
 
             ident = true;
             break;
         }
         case SV_SCROLL_REMOVE_CURSE: {
-            if (remove_curse(this->player_ptr))
+            if (remove_curse(this->player_ptr)) {
                 ident = true;
+            }
 
             break;
         }
         case SV_SCROLL_STAR_REMOVE_CURSE: {
-            if (remove_all_curse(this->player_ptr))
+            if (remove_all_curse(this->player_ptr)) {
                 ident = true;
+            }
 
             break;
         }
         case SV_SCROLL_ENCHANT_ARMOR: {
             ident = true;
-            if (!enchant_spell(this->player_ptr, 0, 0, 1))
+            if (!enchant_spell(this->player_ptr, 0, 0, 1)) {
                 used_up = false;
+            }
 
             break;
         }
         case SV_SCROLL_ENCHANT_WEAPON_TO_HIT: {
-            if (!enchant_spell(this->player_ptr, 1, 0, 0))
+            if (!enchant_spell(this->player_ptr, 1, 0, 0)) {
                 used_up = false;
+            }
 
             ident = true;
             break;
         }
         case SV_SCROLL_ENCHANT_WEAPON_TO_DAM: {
-            if (!enchant_spell(this->player_ptr, 0, 1, 0))
+            if (!enchant_spell(this->player_ptr, 0, 1, 0)) {
                 used_up = false;
+            }
 
             ident = true;
             break;
         }
         case SV_SCROLL_STAR_ENCHANT_ARMOR: {
-            if (!enchant_spell(this->player_ptr, 0, 0, randint1(3) + 2))
+            if (!enchant_spell(this->player_ptr, 0, 0, randint1(3) + 2)) {
                 used_up = false;
+            }
 
             ident = true;
             break;
         }
         case SV_SCROLL_STAR_ENCHANT_WEAPON: {
-            if (!enchant_spell(this->player_ptr, randint1(3), randint1(3), 0))
+            if (!enchant_spell(this->player_ptr, randint1(3), randint1(3), 0)) {
                 used_up = false;
+            }
 
             ident = true;
             break;
         }
         case SV_SCROLL_RECHARGING: {
-            if (!recharge(this->player_ptr, 130))
+            if (!recharge(this->player_ptr, 130)) {
                 used_up = false;
+            }
 
             ident = true;
             break;
         }
         case SV_SCROLL_MUNDANITY: {
             ident = true;
-            if (!mundane_spell(this->player_ptr, false))
+            if (!mundane_spell(this->player_ptr, false)) {
                 used_up = false;
+            }
 
             break;
         }
         case SV_SCROLL_LIGHT: {
-            if (lite_area(this->player_ptr, damroll(2, 8), 2))
+            if (lite_area(this->player_ptr, damroll(2, 8), 2)) {
                 ident = true;
+            }
             break;
         }
 
@@ -286,56 +308,65 @@ void ObjectReadEntity::execute(bool known)
             break;
         }
         case SV_SCROLL_DETECT_GOLD: {
-            if (detect_treasure(this->player_ptr, DETECT_RAD_DEFAULT) || detect_objects_gold(this->player_ptr, DETECT_RAD_DEFAULT))
+            if (detect_treasure(this->player_ptr, DETECT_RAD_DEFAULT) || detect_objects_gold(this->player_ptr, DETECT_RAD_DEFAULT)) {
                 ident = true;
+            }
 
             break;
         }
         case SV_SCROLL_DETECT_ITEM: {
-            if (detect_objects_normal(this->player_ptr, DETECT_RAD_DEFAULT))
+            if (detect_objects_normal(this->player_ptr, DETECT_RAD_DEFAULT)) {
                 ident = true;
+            }
 
             break;
         }
         case SV_SCROLL_DETECT_TRAP: {
-            if (detect_traps(this->player_ptr, DETECT_RAD_DEFAULT, known))
+            if (detect_traps(this->player_ptr, DETECT_RAD_DEFAULT, known)) {
                 ident = true;
+            }
 
             break;
         }
         case SV_SCROLL_DETECT_DOOR: {
-            if (detect_doors(this->player_ptr, DETECT_RAD_DEFAULT) || detect_stairs(this->player_ptr, DETECT_RAD_DEFAULT))
+            if (detect_doors(this->player_ptr, DETECT_RAD_DEFAULT) || detect_stairs(this->player_ptr, DETECT_RAD_DEFAULT)) {
                 ident = true;
+            }
 
             break;
         }
         case SV_SCROLL_DETECT_INVIS: {
-            if (detect_monsters_invis(this->player_ptr, DETECT_RAD_DEFAULT))
+            if (detect_monsters_invis(this->player_ptr, DETECT_RAD_DEFAULT)) {
                 ident = true;
+            }
 
             break;
         }
         case SV_SCROLL_SATISFY_HUNGER: {
-            if (set_food(this->player_ptr, PY_FOOD_MAX - 1))
+            if (set_food(this->player_ptr, PY_FOOD_MAX - 1)) {
                 ident = true;
+            }
 
             break;
         }
         case SV_SCROLL_BLESSING: {
-            if (set_blessed(this->player_ptr, this->player_ptr->blessed + randint1(12) + 6, false))
+            if (set_blessed(this->player_ptr, this->player_ptr->blessed + randint1(12) + 6, false)) {
                 ident = true;
+            }
 
             break;
         }
         case SV_SCROLL_HOLY_CHANT: {
-            if (set_blessed(this->player_ptr, this->player_ptr->blessed + randint1(24) + 12, false))
+            if (set_blessed(this->player_ptr, this->player_ptr->blessed + randint1(24) + 12, false)) {
                 ident = true;
+            }
             break;
         }
 
         case SV_SCROLL_HOLY_PRAYER: {
-            if (set_blessed(this->player_ptr, this->player_ptr->blessed + randint1(48) + 24, false))
+            if (set_blessed(this->player_ptr, this->player_ptr->blessed + randint1(48) + 24, false)) {
                 ident = true;
+            }
 
             break;
         }
@@ -351,8 +382,9 @@ void ObjectReadEntity::execute(bool known)
         }
         case SV_SCROLL_PROTECTION_FROM_EVIL: {
             auto k = 3 * this->player_ptr->lev;
-            if (set_protevil(this->player_ptr, this->player_ptr->protevil + randint1(25) + k, false))
+            if (set_protevil(this->player_ptr, this->player_ptr->protevil + randint1(25) + k, false)) {
                 ident = true;
+            }
 
             break;
         }
@@ -362,22 +394,25 @@ void ObjectReadEntity::execute(bool known)
             break;
         }
         case SV_SCROLL_TRAP_DOOR_DESTRUCTION: {
-            if (destroy_doors_touch(this->player_ptr))
+            if (destroy_doors_touch(this->player_ptr)) {
                 ident = true;
+            }
 
             break;
         }
         case SV_SCROLL_STAR_DESTRUCTION: {
-            if (destroy_area(this->player_ptr, this->player_ptr->y, this->player_ptr->x, 13 + randint0(5), false))
+            if (destroy_area(this->player_ptr, this->player_ptr->y, this->player_ptr->x, 13 + randint0(5), false)) {
                 ident = true;
-            else
+            } else {
                 msg_print(_("ダンジョンが揺れた...", "The dungeon trembles..."));
+            }
 
             break;
         }
         case SV_SCROLL_DISPEL_UNDEAD: {
-            if (dispel_undead(this->player_ptr, 80))
+            if (dispel_undead(this->player_ptr, 80)) {
                 ident = true;
+            }
 
             break;
         }
@@ -413,24 +448,27 @@ void ObjectReadEntity::execute(bool known)
         }
         case SV_SCROLL_FIRE: {
             fire_ball(this->player_ptr, AttributeType::FIRE, 0, 666, 4);
-            if (!(is_oppose_fire(this->player_ptr) || has_resist_fire(this->player_ptr) || has_immune_fire(this->player_ptr)))
+            if (!(is_oppose_fire(this->player_ptr) || has_resist_fire(this->player_ptr) || has_immune_fire(this->player_ptr))) {
                 take_hit(this->player_ptr, DAMAGE_NOESCAPE, 50 + randint1(50), _("炎の巻物", "a Scroll of Fire"));
+            }
 
             ident = true;
             break;
         }
         case SV_SCROLL_ICE: {
             fire_ball(this->player_ptr, AttributeType::ICE, 0, 777, 4);
-            if (!(is_oppose_cold(this->player_ptr) || has_resist_cold(this->player_ptr) || has_immune_cold(this->player_ptr)))
+            if (!(is_oppose_cold(this->player_ptr) || has_resist_cold(this->player_ptr) || has_immune_cold(this->player_ptr))) {
                 take_hit(this->player_ptr, DAMAGE_NOESCAPE, 100 + randint1(100), _("氷の巻物", "a Scroll of Ice"));
+            }
 
             ident = true;
             break;
         }
         case SV_SCROLL_CHAOS: {
             fire_ball(this->player_ptr, AttributeType::CHAOS, 0, 1000, 4);
-            if (!has_resist_chaos(this->player_ptr))
+            if (!has_resist_chaos(this->player_ptr)) {
                 take_hit(this->player_ptr, DAMAGE_NOESCAPE, 111 + randint1(111), _("ログルスの巻物", "a Scroll of Logrus"));
+            }
 
             ident = true;
             break;
@@ -446,15 +484,17 @@ void ObjectReadEntity::execute(bool known)
         }
         case SV_SCROLL_ARTIFACT: {
             ident = true;
-            if (!artifact_scroll(this->player_ptr))
+            if (!artifact_scroll(this->player_ptr)) {
                 used_up = false;
+            }
 
             break;
         }
         case SV_SCROLL_RESET_RECALL: {
             ident = true;
-            if (!reset_recall(this->player_ptr))
+            if (!reset_recall(this->player_ptr)) {
                 used_up = false;
+            }
 
             break;
         }
@@ -511,8 +551,9 @@ void ObjectReadEntity::execute(bool known)
 
     this->player_ptr->window_flags |= PW_INVEN | PW_EQUIP | PW_PLAYER;
     this->player_ptr->update |= inventory_flags;
-    if (!used_up)
+    if (!used_up) {
         return;
+    }
 
     sound(SOUND_SCROLL);
     vary_item(this->player_ptr, this->item, -1);

@@ -129,14 +129,16 @@ static void natural_attack(PlayerType *player_ptr, MONSTER_IDX m_idx, PlayerMuta
     int k = damroll(dice_num, dice_side);
     k = critical_norm(player_ptr, n_weight, bonus, k, (int16_t)bonus, HISSATSU_NONE);
     k += player_ptr->to_d_m;
-    if (k < 0)
+    if (k < 0) {
         k = 0;
+    }
 
     k = mon_damage_mod(player_ptr, m_ptr, k, false);
     msg_format_wizard(player_ptr, CHEAT_MONSTER, _("%dのダメージを与えた。(残りHP %d/%d(%d))", "You do %d damage. (left HP %d/%d(%d))"), k, m_ptr->hp - k,
         m_ptr->maxhp, m_ptr->max_maxhp);
-    if (k > 0)
+    if (k > 0) {
         anger_monster(player_ptr, m_ptr);
+    }
 
     switch (attack) {
     case PlayerMutationType::SCOR_TAIL:
@@ -187,8 +189,9 @@ bool do_cmd_attack(PlayerType *player_ptr, POSITION y, POSITION x, combat_option
     monster_desc(player_ptr, m_name, m_ptr, 0);
 
     if (m_ptr->ml) {
-        if (!player_ptr->hallucinated)
+        if (!player_ptr->hallucinated) {
             monster_race_track(player_ptr, m_ptr->ap_r_idx);
+        }
 
         health_track(player_ptr, g_ptr->m_idx);
     }
@@ -209,10 +212,12 @@ bool do_cmd_attack(PlayerType *player_ptr, POSITION y, POSITION x, combat_option
 
     bool stormbringer = false;
     if (!is_hostile(m_ptr) && !(is_stunned || player_ptr->confused || player_ptr->hallucinated || is_shero(player_ptr) || !m_ptr->ml)) {
-        if (player_ptr->inventory_list[INVEN_MAIN_HAND].fixed_artifact_idx == ART_STORMBRINGER)
+        if (player_ptr->inventory_list[INVEN_MAIN_HAND].fixed_artifact_idx == ART_STORMBRINGER) {
             stormbringer = true;
-        if (player_ptr->inventory_list[INVEN_SUB_HAND].fixed_artifact_idx == ART_STORMBRINGER)
+        }
+        if (player_ptr->inventory_list[INVEN_SUB_HAND].fixed_artifact_idx == ART_STORMBRINGER) {
             stormbringer = true;
+        }
         if (stormbringer) {
             msg_format(_("黒い刃は強欲に%sを攻撃した！", "Your black blade greedily attacks %s!"), m_name);
             chg_virtue(player_ptr, V_INDIVIDUALISM, 1);
@@ -233,20 +238,23 @@ bool do_cmd_attack(PlayerType *player_ptr, POSITION y, POSITION x, combat_option
     }
 
     if (player_ptr->afraid) {
-        if (m_ptr->ml)
+        if (m_ptr->ml) {
             msg_format(_("恐くて%sを攻撃できない！", "You are too afraid to attack %s!"), m_name);
-        else
+        } else {
             msg_format(_("そっちには何か恐いものがいる！", "There is something scary in your way!"));
+        }
 
         (void)set_monster_csleep(player_ptr, g_ptr->m_idx, 0);
         return false;
     }
 
     if (monster_csleep_remaining(m_ptr)) {
-        if (r_ptr->kind_flags.has_not(MonsterKindType::EVIL) || one_in_(5))
+        if (r_ptr->kind_flags.has_not(MonsterKindType::EVIL) || one_in_(5)) {
             chg_virtue(player_ptr, V_COMPASSION, -1);
-        if (r_ptr->kind_flags.has_not(MonsterKindType::EVIL) || one_in_(5))
+        }
+        if (r_ptr->kind_flags.has_not(MonsterKindType::EVIL) || one_in_(5)) {
             chg_virtue(player_ptr, V_HONOUR, -1);
+        }
     }
 
     if (can_attack_with_main_hand(player_ptr) && can_attack_with_sub_hand(player_ptr)) {
@@ -262,10 +270,12 @@ bool do_cmd_attack(PlayerType *player_ptr, POSITION y, POSITION x, combat_option
     player_ptr->riding_t_m_idx = g_ptr->m_idx;
     bool fear = false;
     bool mdeath = false;
-    if (can_attack_with_main_hand(player_ptr))
+    if (can_attack_with_main_hand(player_ptr)) {
         exe_player_attack_to_monster(player_ptr, y, x, &fear, &mdeath, 0, mode);
-    if (can_attack_with_sub_hand(player_ptr) && !mdeath)
+    }
+    if (can_attack_with_sub_hand(player_ptr) && !mdeath) {
         exe_player_attack_to_monster(player_ptr, y, x, &fear, &mdeath, 1, mode);
+    }
 
     if (!mdeath) {
         for (auto m : mutation_attack_methods) {

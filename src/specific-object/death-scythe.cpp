@@ -87,23 +87,29 @@ static int calc_death_scythe_reflection_magnification(PlayerType *player_ptr)
  */
 static void compensate_death_scythe_reflection_magnification(PlayerType *player_ptr, int *magnification, const TrFlags &death_scythe_flags)
 {
-    if ((player_ptr->alignment < 0) && (*magnification < 20))
+    if ((player_ptr->alignment < 0) && (*magnification < 20)) {
         *magnification = 20;
+    }
 
-    if (!(has_resist_acid(player_ptr) || is_oppose_acid(player_ptr) || has_immune_acid(player_ptr)) && (*magnification < 25))
+    if (!(has_resist_acid(player_ptr) || is_oppose_acid(player_ptr) || has_immune_acid(player_ptr)) && (*magnification < 25)) {
         *magnification = 25;
+    }
 
-    if (!(has_resist_elec(player_ptr) || is_oppose_elec(player_ptr) || has_immune_elec(player_ptr)) && (*magnification < 25))
+    if (!(has_resist_elec(player_ptr) || is_oppose_elec(player_ptr) || has_immune_elec(player_ptr)) && (*magnification < 25)) {
         *magnification = 25;
+    }
 
-    if (!(has_resist_fire(player_ptr) || is_oppose_fire(player_ptr) || has_immune_fire(player_ptr)) && (*magnification < 25))
+    if (!(has_resist_fire(player_ptr) || is_oppose_fire(player_ptr) || has_immune_fire(player_ptr)) && (*magnification < 25)) {
         *magnification = 25;
+    }
 
-    if (!(has_resist_cold(player_ptr) || is_oppose_cold(player_ptr) || has_immune_cold(player_ptr)) && (*magnification < 25))
+    if (!(has_resist_cold(player_ptr) || is_oppose_cold(player_ptr) || has_immune_cold(player_ptr)) && (*magnification < 25)) {
         *magnification = 25;
+    }
 
-    if (!(has_resist_pois(player_ptr) || is_oppose_pois(player_ptr)) && (*magnification < 25))
+    if (!(has_resist_pois(player_ptr) || is_oppose_pois(player_ptr)) && (*magnification < 25)) {
         *magnification = 25;
+    }
 
     if (!PlayerClass(player_ptr).equals(PlayerClassType::SAMURAI) && (death_scythe_flags.has(TR_FORCE_WEAPON)) && (player_ptr->csp > (player_ptr->msp / 30))) {
         player_ptr->csp -= (1 + (player_ptr->msp / 30));
@@ -118,13 +124,15 @@ static void compensate_death_scythe_reflection_magnification(PlayerType *player_
  */
 static void death_scythe_reflection_critial_hit(player_attack_type *pa_ptr)
 {
-    if (!one_in_(6))
+    if (!one_in_(6)) {
         return;
+    }
 
     int more_magnification = 2;
     msg_format(_("グッサリ切り裂かれた！", "Your weapon cuts deep into yourself!"));
-    while (one_in_(4))
+    while (one_in_(4)) {
         more_magnification++;
+    }
 
     pa_ptr->attack_damage *= (int)more_magnification;
 }
@@ -150,8 +158,9 @@ void process_death_scythe_reflection(PlayerType *player_ptr, player_attack_type 
     pa_ptr->attack_damage = critical_norm(player_ptr, o_ptr->weight, o_ptr->to_h, pa_ptr->attack_damage, player_ptr->to_h[pa_ptr->hand], pa_ptr->mode);
     death_scythe_reflection_critial_hit(pa_ptr);
     pa_ptr->attack_damage += (player_ptr->to_d[pa_ptr->hand] + o_ptr->to_d);
-    if (pa_ptr->attack_damage < 0)
+    if (pa_ptr->attack_damage < 0) {
         pa_ptr->attack_damage = 0;
+    }
 
     take_hit(player_ptr, DAMAGE_FORCE, pa_ptr->attack_damage, _("死の大鎌", "Death scythe"));
     handle_stuff(player_ptr);

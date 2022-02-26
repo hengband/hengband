@@ -74,12 +74,15 @@ void rd_item_old(ObjectType *o_ptr)
     o_ptr->sval = rd_byte();
 
     if (h_older_than(0, 4, 4)) {
-        if (o_ptr->tval == i2enum<ItemKindType>(100))
+        if (o_ptr->tval == i2enum<ItemKindType>(100)) {
             o_ptr->tval = ItemKindType::GOLD;
-        if (o_ptr->tval == i2enum<ItemKindType>(98))
+        }
+        if (o_ptr->tval == i2enum<ItemKindType>(98)) {
             o_ptr->tval = ItemKindType::MUSIC_BOOK;
-        if (o_ptr->tval == i2enum<ItemKindType>(110))
+        }
+        if (o_ptr->tval == i2enum<ItemKindType>(110)) {
             o_ptr->tval = ItemKindType::HISSATSU_BOOK;
+        }
     }
 
     o_ptr->pval = rd_s16b();
@@ -111,8 +114,9 @@ void rd_item_old(ObjectType *o_ptr)
     }
 
     if (h_older_than(1, 3, 0, 0)) {
-        if (o_ptr->ego_idx == EgoType::TELEPATHY)
+        if (o_ptr->ego_idx == EgoType::TELEPATHY) {
             o_ptr->art_flags.set(TR_TELEPATHY);
+        }
     }
 
     if (h_older_than(1, 0, 11)) {
@@ -120,22 +124,28 @@ void rd_item_old(ObjectType *o_ptr)
         o_ptr->curse_flags.clear();
         if (o_ptr->ident & 0x40) {
             o_ptr->curse_flags.set(CurseTraitType::CURSED);
-            if (o_ptr->art_flags.has(i2enum<tr_type>(94)))
+            if (o_ptr->art_flags.has(i2enum<tr_type>(94))) {
                 o_ptr->curse_flags.set(CurseTraitType::HEAVY_CURSE);
-            if (o_ptr->art_flags.has(i2enum<tr_type>(95)))
+            }
+            if (o_ptr->art_flags.has(i2enum<tr_type>(95))) {
                 o_ptr->curse_flags.set(CurseTraitType::PERMA_CURSE);
+            }
             if (o_ptr->is_fixed_artifact()) {
                 auto *a_ptr = &a_info[o_ptr->fixed_artifact_idx];
-                if (a_ptr->gen_flags.has(ItemGenerationTraitType::HEAVY_CURSE))
+                if (a_ptr->gen_flags.has(ItemGenerationTraitType::HEAVY_CURSE)) {
                     o_ptr->curse_flags.set(CurseTraitType::HEAVY_CURSE);
-                if (a_ptr->gen_flags.has(ItemGenerationTraitType::PERMA_CURSE))
+                }
+                if (a_ptr->gen_flags.has(ItemGenerationTraitType::PERMA_CURSE)) {
                     o_ptr->curse_flags.set(CurseTraitType::PERMA_CURSE);
+                }
             } else if (o_ptr->is_ego()) {
                 auto *e_ptr = &e_info[o_ptr->ego_idx];
-                if (e_ptr->gen_flags.has(ItemGenerationTraitType::HEAVY_CURSE))
+                if (e_ptr->gen_flags.has(ItemGenerationTraitType::HEAVY_CURSE)) {
                     o_ptr->curse_flags.set(CurseTraitType::HEAVY_CURSE);
-                if (e_ptr->gen_flags.has(ItemGenerationTraitType::PERMA_CURSE))
+                }
+                if (e_ptr->gen_flags.has(ItemGenerationTraitType::PERMA_CURSE)) {
                     o_ptr->curse_flags.set(CurseTraitType::PERMA_CURSE);
+                }
             }
         }
         o_ptr->art_flags.reset({ i2enum<tr_type>(93), i2enum<tr_type>(94), i2enum<tr_type>(95) });
@@ -254,10 +264,11 @@ void rd_item_old(ObjectType *o_ptr)
         }
 
         if (o_ptr->tval == ItemKindType::CAPTURE) {
-            if (r_info[o_ptr->pval].flags1 & RF1_FORCE_MAXHP)
+            if (r_info[o_ptr->pval].flags1 & RF1_FORCE_MAXHP) {
                 o_ptr->captured_monster_max_hp = maxroll(r_info[o_ptr->pval].hdice, r_info[o_ptr->pval].hside);
-            else
+            } else {
                 o_ptr->captured_monster_max_hp = damroll(r_info[o_ptr->pval].hdice, r_info[o_ptr->pval].hside);
+            }
             if (ironman_nightmare) {
                 o_ptr->captured_monster_max_hp = std::min<short>(MONSTER_MAXHP, o_ptr->captured_monster_max_hp * 2L);
             }
@@ -295,24 +306,28 @@ void rd_item_old(ObjectType *o_ptr)
 
     char buf[128];
     rd_string(buf, sizeof(buf));
-    if (buf[0])
+    if (buf[0]) {
         o_ptr->inscription = quark_add(buf);
+    }
 
     rd_string(buf, sizeof(buf));
 
     /*!< @todo 元々このif文には末尾に";"が付いていた、バグかもしれない */
-    if (buf[0])
+    if (buf[0]) {
         o_ptr->art_name = quark_add(buf);
+    }
     {
         auto tmp32s = rd_s32b();
         strip_bytes(tmp32s);
     }
 
-    if ((o_ptr->k_idx >= 445) && (o_ptr->k_idx <= 479))
+    if ((o_ptr->k_idx >= 445) && (o_ptr->k_idx <= 479)) {
         return;
+    }
 
-    if (h_older_than(0, 4, 10) && (o_ptr->ego_idx == EgoType::TWILIGHT))
+    if (h_older_than(0, 4, 10) && (o_ptr->ego_idx == EgoType::TWILIGHT)) {
         o_ptr->k_idx = lookup_kind(ItemKindType::SOFT_ARMOR, SV_TWILIGHT_ROBE);
+    }
 
     if (h_older_than(0, 4, 9)) {
         if (o_ptr->art_flags.has(TR_MAGIC_MASTERY)) {
@@ -324,14 +339,16 @@ void rd_item_old(ObjectType *o_ptr)
     if (o_ptr->is_fixed_artifact()) {
         artifact_type *a_ptr;
         a_ptr = &a_info[o_ptr->fixed_artifact_idx];
-        if (a_ptr->name.empty())
+        if (a_ptr->name.empty()) {
             o_ptr->fixed_artifact_idx = 0;
+        }
     }
 
     if (o_ptr->is_ego()) {
         auto *e_ptr = &e_info[o_ptr->ego_idx];
-        if (e_ptr->name.empty())
+        if (e_ptr->name.empty()) {
             o_ptr->ego_idx = EgoType::NONE;
+        }
     }
 }
 
@@ -344,21 +361,25 @@ void rd_monster_old(PlayerType *player_ptr, monster_type *m_ptr)
 {
     m_ptr->r_idx = rd_s16b();
 
-    if (h_older_than(1, 0, 12))
+    if (h_older_than(1, 0, 12)) {
         m_ptr->ap_r_idx = m_ptr->r_idx;
-    else
+    } else {
         m_ptr->ap_r_idx = rd_s16b();
+    }
 
     if (h_older_than(1, 0, 14)) {
         auto *r_ptr = &r_info[m_ptr->r_idx];
 
         m_ptr->sub_align = SUB_ALIGN_NEUTRAL;
-        if (r_ptr->kind_flags.has(MonsterKindType::EVIL))
+        if (r_ptr->kind_flags.has(MonsterKindType::EVIL)) {
             m_ptr->sub_align |= SUB_ALIGN_EVIL;
-        if (r_ptr->kind_flags.has(MonsterKindType::GOOD))
+        }
+        if (r_ptr->kind_flags.has(MonsterKindType::GOOD)) {
             m_ptr->sub_align |= SUB_ALIGN_GOOD;
-    } else
+        }
+    } else {
         m_ptr->sub_align = rd_byte();
+    }
 
     m_ptr->fy = rd_byte();
     m_ptr->fx = rd_byte();
@@ -383,11 +404,13 @@ void rd_monster_old(PlayerType *player_ptr, monster_type *m_ptr)
 
     if (h_older_than(0, 4, 2)) {
         m_ptr->energy_need = rd_byte();
-    } else
+    } else {
         m_ptr->energy_need = rd_s16b();
+    }
 
-    if (h_older_than(1, 0, 13))
+    if (h_older_than(1, 0, 13)) {
         m_ptr->energy_need = 100 - m_ptr->energy_need;
+    }
 
     if (h_older_than(0, 0, 7)) {
         m_ptr->mtimed[MTIMED_FAST] = 0;
@@ -442,8 +465,9 @@ void rd_monster_old(PlayerType *player_ptr, monster_type *m_ptr)
     }
 
     if (h_older_than(1, 0, 12)) {
-        if (m_ptr->mflag2.has(MonsterConstantFlagType::KAGE))
+        if (m_ptr->mflag2.has(MonsterConstantFlagType::KAGE)) {
             m_ptr->ap_r_idx = MON_KAGE;
+        }
     }
 
     if (h_older_than(0, 1, 3)) {
@@ -451,8 +475,9 @@ void rd_monster_old(PlayerType *player_ptr, monster_type *m_ptr)
     } else {
         char buf[128];
         rd_string(buf, sizeof(buf));
-        if (buf[0])
+        if (buf[0]) {
             m_ptr->nickname = quark_add(buf);
+        }
     }
 
     strip_bytes(1);
@@ -468,8 +493,9 @@ static void move_RF3_to_RFR(monster_race *r_ptr, const BIT_FLAGS rf3, const Mons
 
 static void move_RF4_BR_to_RFR(monster_race *r_ptr, BIT_FLAGS f4, const BIT_FLAGS rf4_br, const MonsterResistanceType rfr)
 {
-    if (f4 & rf4_br)
+    if (f4 & rf4_br) {
         r_ptr->resistance_flags.set(rfr);
+    }
 }
 
 /*!
@@ -504,14 +530,17 @@ void set_old_lore(monster_race *r_ptr, BIT_FLAGS f4, const MONRACE_IDX r_idx)
     move_RF4_BR_to_RFR(r_ptr, f4, RF4_BR_SHAR, MonsterResistanceType::RESIST_SHARDS);
     move_RF4_BR_to_RFR(r_ptr, f4, RF4_BR_WALL, MonsterResistanceType::RESIST_FORCE);
 
-    if (f4 & RF4_BR_CONF)
+    if (f4 & RF4_BR_CONF) {
         r_ptr->r_flags3 |= RF3_NO_CONF;
+    }
 
-    if (r_idx == MON_STORMBRINGER)
+    if (r_idx == MON_STORMBRINGER) {
         r_ptr->r_resistance_flags.set(MonsterResistanceType::RESIST_CHAOS);
+    }
 
-    if (r_ptr->r_kind_flags.has(MonsterKindType::ORC))
+    if (r_ptr->r_kind_flags.has(MonsterKindType::ORC)) {
         r_ptr->r_resistance_flags.set(MonsterResistanceType::RESIST_DARK);
+    }
 }
 
 /*!
@@ -525,9 +554,9 @@ errr rd_dungeon_old(PlayerType *player_ptr)
 {
     auto *floor_ptr = player_ptr->current_floor_ptr;
     floor_ptr->dun_level = rd_s16b();
-    if (h_older_than(0, 3, 8))
+    if (h_older_than(0, 3, 8)) {
         player_ptr->dungeon_idx = DUNGEON_ANGBAND;
-    else {
+    } else {
         player_ptr->dungeon_idx = rd_byte();
     }
 
@@ -565,8 +594,9 @@ errr rd_dungeon_old(PlayerType *player_ptr)
             g_ptr->info = info;
             if (++x >= xmax) {
                 x = 0;
-                if (++y >= ymax)
+                if (++y >= ymax) {
                     break;
+                }
             }
         }
     }
@@ -580,8 +610,9 @@ errr rd_dungeon_old(PlayerType *player_ptr)
             g_ptr->feat = (int16_t)tmp8u;
             if (++x >= xmax) {
                 x = 0;
-                if (++y >= ymax)
+                if (++y >= ymax) {
                     break;
+                }
             }
         }
     }
@@ -595,8 +626,9 @@ errr rd_dungeon_old(PlayerType *player_ptr)
             g_ptr->mimic = (int16_t)tmp8u;
             if (++x >= xmax) {
                 x = 0;
-                if (++y >= ymax)
+                if (++y >= ymax) {
                     break;
+                }
             }
         }
     }
@@ -610,8 +642,9 @@ errr rd_dungeon_old(PlayerType *player_ptr)
             g_ptr->special = tmp16s;
             if (++x >= xmax) {
                 x = 0;
-                if (++y >= ymax)
+                if (++y >= ymax) {
                     break;
+                }
             }
         }
     }
@@ -734,10 +767,11 @@ errr rd_dungeon_old(PlayerType *player_ptr)
         real_r_ptr(m_ptr)->cur_num++;
     }
 
-    if (h_older_than(0, 3, 13) && !floor_ptr->dun_level && !floor_ptr->inside_arena)
+    if (h_older_than(0, 3, 13) && !floor_ptr->dun_level && !floor_ptr->inside_arena) {
         w_ptr->character_dungeon = false;
-    else
+    } else {
         w_ptr->character_dungeon = true;
+    }
 
     return 0;
 }
