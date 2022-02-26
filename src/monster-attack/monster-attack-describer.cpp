@@ -9,7 +9,7 @@
 #include "main/sound-of-music.h"
 #include "monster-attack/insults-moans.h"
 #include "monster-attack/monster-attack-player.h"
-#include "monster-attack/monster-attack-types.h"
+#include "monster-attack/monster-attack-table.h"
 #include "monster-race/race-indice-types.h"
 #include "system/angband.h"
 #include "system/monster-type-definition.h"

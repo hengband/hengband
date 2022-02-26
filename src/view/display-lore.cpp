@@ -12,7 +12,7 @@
 #include "lore/lore-calculator.h"
 #include "lore/lore-util.h"
 #include "lore/monster-lore.h"
-#include "monster-attack/monster-attack-types.h"
+#include "monster-attack/monster-attack-table.h"
 #include "monster-race/monster-race.h"
 #include "monster-race/race-ability-flags.h"
 #include "monster-race/race-flags1.h"

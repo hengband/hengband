@@ -18,7 +18,7 @@
 #include "game-option/birth-options.h"
 #include "game-option/cheat-types.h"
 #include "grid/grid.h"
-#include "monster-attack/monster-attack-types.h"
+#include "monster-attack/monster-attack-table.h"
 #include "monster-floor/monster-move.h"
 #include "monster-floor/monster-summon.h"
 #include "monster-floor/place-monster-types.h"
