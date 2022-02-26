@@ -109,39 +109,46 @@ static void recursive_river(floor_type *floor_ptr, POSITION x1, POSITION y1, POS
             while (!done) {
                 for (ty = y - width - 1; ty <= y + width + 1; ty++) {
                     for (tx = x - width - 1; tx <= x + width + 1; tx++) {
-                        if (!in_bounds2(floor_ptr, ty, tx))
+                        if (!in_bounds2(floor_ptr, ty, tx)) {
                             continue;
+                        }
 
                         g_ptr = &floor_ptr->grid_array[ty][tx];
 
-                        if (g_ptr->feat == feat1)
+                        if (g_ptr->feat == feat1) {
                             continue;
-                        if (g_ptr->feat == feat2)
+                        }
+                        if (g_ptr->feat == feat2) {
                             continue;
+                        }
 
-                        if (distance(ty, tx, y, x) > rand_spread(width, 1))
+                        if (distance(ty, tx, y, x) > rand_spread(width, 1)) {
                             continue;
+                        }
 
                         /* Do not convert permanent features */
-                        if (g_ptr->cave_has_flag(FloorFeatureType::PERMANENT))
+                        if (g_ptr->cave_has_flag(FloorFeatureType::PERMANENT)) {
                             continue;
+                        }
 
                         /*
                          * Clear previous contents, add feature
                          * The border mainly gets feat2, while the center gets feat1
                          */
-                        if (distance(ty, tx, y, x) > width)
+                        if (distance(ty, tx, y, x) > width) {
                             g_ptr->feat = feat2;
-                        else
+                        } else {
                             g_ptr->feat = feat1;
+                        }
 
                         /* Clear garbage of hidden trap or door */
                         g_ptr->mimic = 0;
 
                         /* Lava terrain glows */
                         if (f_info[feat1].flags.has(FloorFeatureType::LAVA)) {
-                            if (d_info[floor_ptr->dungeon_idx].flags.has_not(DungeonFeatureType::DARKNESS))
+                            if (d_info[floor_ptr->dungeon_idx].flags.has_not(DungeonFeatureType::DARKNESS)) {
                                 g_ptr->info |= CAVE_GLOW;
+                            }
                         }
 
                         /* Hack -- don't teleport here */
@@ -210,8 +217,7 @@ void add_river(floor_type *floor_ptr, dun_data_type *dd_ptr)
         auto *f_ptr = &f_info[feat1];
 
         /* Only add river if matches lake type or if have no lake at all */
-        if (!(((dd_ptr->laketype == LAKE_T_LAVA) && f_ptr->flags.has(FloorFeatureType::LAVA)) || ((dd_ptr->laketype == LAKE_T_WATER) && f_ptr->flags.has(FloorFeatureType::WATER))
-                || !dd_ptr->laketype)) {
+        if (!(((dd_ptr->laketype == LAKE_T_LAVA) && f_ptr->flags.has(FloorFeatureType::LAVA)) || ((dd_ptr->laketype == LAKE_T_WATER) && f_ptr->flags.has(FloorFeatureType::WATER)) || !dd_ptr->laketype)) {
             return;
         }
     }
@@ -307,31 +313,34 @@ void build_streamer(PlayerType *player_ptr, FEAT_IDX feat, int chance)
             while (true) {
                 ty = rand_spread(y, d);
                 tx = rand_spread(x, d);
-                if (!in_bounds2(floor_ptr, ty, tx))
+                if (!in_bounds2(floor_ptr, ty, tx)) {
                     continue;
+                }
                 break;
             }
             g_ptr = &floor_ptr->grid_array[ty][tx];
             f_ptr = &f_info[g_ptr->feat];
 
-            if (f_ptr->flags.has(FloorFeatureType::MOVE) && f_ptr->flags.has_any_of({FloorFeatureType::WATER, FloorFeatureType::LAVA}))
+            if (f_ptr->flags.has(FloorFeatureType::MOVE) && f_ptr->flags.has_any_of({ FloorFeatureType::WATER, FloorFeatureType::LAVA })) {
                 continue;
+            }
 
             /* Do not convert permanent features */
-            if (f_ptr->flags.has(FloorFeatureType::PERMANENT))
+            if (f_ptr->flags.has(FloorFeatureType::PERMANENT)) {
                 continue;
+            }
 
             /* Only convert "granite" walls */
             if (streamer_is_wall) {
-                if (!g_ptr->is_extra() && !g_ptr->is_inner() && !g_ptr->is_outer() && !g_ptr->is_solid())
+                if (!g_ptr->is_extra() && !g_ptr->is_inner() && !g_ptr->is_outer() && !g_ptr->is_solid()) {
                     continue;
-                if (is_closed_door(player_ptr, g_ptr->feat))
+                }
+                if (is_closed_door(player_ptr, g_ptr->feat)) {
                     continue;
+                }
             }
 
-            if (g_ptr->m_idx
-                && !(streamer_ptr->flags.has(FloorFeatureType::PLACE)
-                    && monster_can_cross_terrain(player_ptr, feat, &r_info[floor_ptr->m_list[g_ptr->m_idx].r_idx], 0))) {
+            if (g_ptr->m_idx && !(streamer_ptr->flags.has(FloorFeatureType::PLACE) && monster_can_cross_terrain(player_ptr, feat, &r_info[floor_ptr->m_list[g_ptr->m_idx].r_idx], 0))) {
                 /* Delete the monster (if any) */
                 delete_monster(player_ptr, ty, tx);
             }
@@ -390,15 +399,17 @@ void build_streamer(PlayerType *player_ptr, FEAT_IDX feat, int chance)
         x += ddx[cdd[dir]];
 
         if (one_in_(10)) {
-            if (one_in_(2))
+            if (one_in_(2)) {
                 dir = (dir + 1) % 8;
-            else
+            } else {
                 dir = (dir > 0) ? dir - 1 : 7;
+            }
         }
 
         /* Quit before leaving the dungeon */
-        if (!in_bounds(floor_ptr, y, x))
+        if (!in_bounds(floor_ptr, y, x)) {
             break;
+        }
     }
 }
 
@@ -422,14 +433,17 @@ void place_trees(PlayerType *player_ptr, POSITION x, POSITION y)
     auto *floor_ptr = player_ptr->current_floor_ptr;
     for (i = x - 3; i < x + 4; i++) {
         for (j = y - 3; j < y + 4; j++) {
-            if (!in_bounds(floor_ptr, j, i))
+            if (!in_bounds(floor_ptr, j, i)) {
                 continue;
+            }
             g_ptr = &floor_ptr->grid_array[j][i];
 
-            if (g_ptr->info & CAVE_ICKY)
+            if (g_ptr->info & CAVE_ICKY) {
                 continue;
-            if (!g_ptr->o_idx_list.empty())
+            }
+            if (!g_ptr->o_idx_list.empty()) {
                 continue;
+            }
 
             /* Want square to be in the circle and accessable. */
             if ((distance(j, i, y, x) < 4) && !g_ptr->cave_has_flag(FloorFeatureType::PERMANENT)) {
@@ -438,8 +452,9 @@ void place_trees(PlayerType *player_ptr, POSITION x, POSITION y)
                  * The border mainly gets trees, while the center gets rubble
                  */
                 if ((distance(j, i, y, x) > 1) || (randint1(100) < 25)) {
-                    if (randint1(100) < 75)
+                    if (randint1(100) < 75) {
                         floor_ptr->grid_array[j][i].feat = feat_tree;
+                    }
                 } else {
                     floor_ptr->grid_array[j][i].feat = feat_rubble;
                 }
@@ -448,8 +463,9 @@ void place_trees(PlayerType *player_ptr, POSITION x, POSITION y)
                 g_ptr->mimic = 0;
 
                 /* Light area since is open above */
-                if (d_info[player_ptr->dungeon_idx].flags.has_not(DungeonFeatureType::DARKNESS))
+                if (d_info[player_ptr->dungeon_idx].flags.has_not(DungeonFeatureType::DARKNESS)) {
                     floor_ptr->grid_array[j][i].info |= (CAVE_GLOW | CAVE_ROOM);
+                }
             }
         }
     }

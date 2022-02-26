@@ -26,8 +26,9 @@
  */
 static void compact_monsters_aux(PlayerType *player_ptr, MONSTER_IDX i1, MONSTER_IDX i2)
 {
-    if (i1 == i2)
+    if (i1 == i2) {
         return;
+    }
 
     auto *floor_ptr = player_ptr->current_floor_ptr;
     monster_type *m_ptr;
@@ -45,26 +46,32 @@ static void compact_monsters_aux(PlayerType *player_ptr, MONSTER_IDX i1, MONSTER
         o_ptr->held_m_idx = i2;
     }
 
-    if (target_who == i1)
+    if (target_who == i1) {
         target_who = i2;
+    }
 
-    if (player_ptr->pet_t_m_idx == i1)
+    if (player_ptr->pet_t_m_idx == i1) {
         player_ptr->pet_t_m_idx = i2;
-    if (player_ptr->riding_t_m_idx == i1)
+    }
+    if (player_ptr->riding_t_m_idx == i1) {
         player_ptr->riding_t_m_idx = i2;
+    }
 
-    if (player_ptr->riding == i1)
+    if (player_ptr->riding == i1) {
         player_ptr->riding = i2;
+    }
 
-    if (player_ptr->health_who == i1)
+    if (player_ptr->health_who == i1) {
         health_track(player_ptr, i2);
+    }
 
     if (is_pet(m_ptr)) {
         for (int i = 1; i < floor_ptr->m_max; i++) {
             monster_type *m2_ptr = &floor_ptr->m_list[i];
 
-            if (m2_ptr->parent_m_idx == i1)
+            if (m2_ptr->parent_m_idx == i1) {
                 m2_ptr->parent_m_idx = i2;
+            }
         }
     }
 
@@ -73,8 +80,9 @@ static void compact_monsters_aux(PlayerType *player_ptr, MONSTER_IDX i1, MONSTER
 
     for (int i = 0; i < MAX_MTIMED; i++) {
         int mproc_idx = get_mproc_idx(floor_ptr, i1, i);
-        if (mproc_idx >= 0)
+        if (mproc_idx >= 0) {
             floor_ptr->mproc_list[i][mproc_idx] = i2;
+        }
     }
 }
 
@@ -94,8 +102,9 @@ static void compact_monsters_aux(PlayerType *player_ptr, MONSTER_IDX i1, MONSTER
  */
 void compact_monsters(PlayerType *player_ptr, int size)
 {
-    if (size)
+    if (size) {
         msg_print(_("モンスター情報を圧縮しています...", "Compacting monsters..."));
+    }
 
     /* Compact at least 'size' objects */
     auto *floor_ptr = player_ptr->current_floor_ptr;
@@ -105,24 +114,31 @@ void compact_monsters(PlayerType *player_ptr, int size)
         for (MONSTER_IDX i = 1; i < floor_ptr->m_max; i++) {
             auto *m_ptr = &floor_ptr->m_list[i];
             auto *r_ptr = &r_info[m_ptr->r_idx];
-            if (!monster_is_valid(m_ptr))
+            if (!monster_is_valid(m_ptr)) {
                 continue;
-            if (r_ptr->level > cur_lev)
+            }
+            if (r_ptr->level > cur_lev) {
                 continue;
-            if (i == player_ptr->riding)
+            }
+            if (i == player_ptr->riding) {
                 continue;
-            if ((cur_dis > 0) && (m_ptr->cdis < cur_dis))
+            }
+            if ((cur_dis > 0) && (m_ptr->cdis < cur_dis)) {
                 continue;
+            }
 
             int chance = 90;
-            if ((r_ptr->flags1 & (RF1_QUESTOR)) && (cnt < 1000))
+            if ((r_ptr->flags1 & (RF1_QUESTOR)) && (cnt < 1000)) {
                 chance = 100;
+            }
 
-            if (r_ptr->kind_flags.has(MonsterKindType::UNIQUE))
+            if (r_ptr->kind_flags.has(MonsterKindType::UNIQUE)) {
                 chance = 100;
+            }
 
-            if (randint0(100) < chance)
+            if (randint0(100) < chance) {
                 continue;
+            }
 
             if (record_named_pet && is_pet(m_ptr) && m_ptr->nickname) {
                 GAME_TEXT m_name[MAX_NLEN];
@@ -138,8 +154,9 @@ void compact_monsters(PlayerType *player_ptr, int size)
     /* Excise dead monsters (backwards!) */
     for (MONSTER_IDX i = floor_ptr->m_max - 1; i >= 1; i--) {
         auto *m_ptr = &floor_ptr->m_list[i];
-        if (m_ptr->r_idx)
+        if (m_ptr->r_idx) {
             continue;
+        }
         compact_monsters_aux(player_ptr, floor_ptr->m_max - 1, i);
         floor_ptr->m_max--;
     }

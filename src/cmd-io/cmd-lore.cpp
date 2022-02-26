@@ -51,13 +51,15 @@ void do_cmd_query_symbol(PlayerType *player_ptr)
 
     if (!get_com(_("知りたい文字を入力して下さい(記号 or ^A全,^Uユ,^N非ユ,^R乗馬,^M名前): ",
                      "Enter character to be identified(^A:All,^U:Uniqs,^N:Non uniqs,^M:Name): "),
-            &sym, false))
+            &sym, false)) {
         return;
+    }
 
     int ident_i;
     for (ident_i = 0; ident_info[ident_i]; ++ident_i) {
-        if (sym == ident_info[ident_i][0])
+        if (sym == ident_info[ident_i][0]) {
             break;
+        }
     }
 
     if (sym == KTRL('A')) {
@@ -88,17 +90,21 @@ void do_cmd_query_symbol(PlayerType *player_ptr)
     prt(buf, 0, 0);
     std::vector<MONRACE_IDX> who;
     for (const auto &r_ref : r_info) {
-        if (!cheat_know && !r_ref.r_sights)
+        if (!cheat_know && !r_ref.r_sights) {
             continue;
+        }
 
-        if (norm && r_ref.kind_flags.has(MonsterKindType::UNIQUE))
+        if (norm && r_ref.kind_flags.has(MonsterKindType::UNIQUE)) {
             continue;
+        }
 
-        if (uniq && r_ref.kind_flags.has_not(MonsterKindType::UNIQUE))
+        if (uniq && r_ref.kind_flags.has_not(MonsterKindType::UNIQUE)) {
             continue;
+        }
 
-        if (ride && !(r_ref.flags7 & (RF7_RIDING)))
+        if (ride && !(r_ref.flags7 & (RF7_RIDING))) {
             continue;
+        }
 
         if (temp[0]) {
             TERM_LEN xx;
@@ -111,8 +117,9 @@ void do_cmd_query_symbol(PlayerType *player_ptr)
                     continue;
                 }
 #endif
-                if (isupper(temp[xx]))
+                if (isupper(temp[xx])) {
                     temp[xx] = (char)tolower(temp[xx]);
+                }
             }
 
 #ifdef JP
@@ -120,9 +127,11 @@ void do_cmd_query_symbol(PlayerType *player_ptr)
 #else
             strcpy(temp2, r_ref.name.c_str());
 #endif
-            for (xx = 0; temp2[xx] && xx < MAX_MONSTER_NAME; xx++)
-                if (isupper(temp2[xx]))
+            for (xx = 0; temp2[xx] && xx < MAX_MONSTER_NAME; xx++) {
+                if (isupper(temp2[xx])) {
                     temp2[xx] = (char)tolower(temp2[xx]);
+                }
+            }
 
 #ifdef JP
             if (angband_strstr(temp2, temp) || angband_strstr(r_ref.name.c_str(), temp))
@@ -132,8 +141,9 @@ void do_cmd_query_symbol(PlayerType *player_ptr)
                 who.push_back(r_ref.idx);
         }
 
-        else if (all || (r_ref.d_char == sym))
+        else if (all || (r_ref.d_char == sym)) {
             who.push_back(r_ref.idx);
+        }
     }
 
     if (who.empty()) {
@@ -176,25 +186,29 @@ void do_cmd_query_symbol(PlayerType *player_ptr)
                 screen_load();
             }
 
-            if (query != 'r')
+            if (query != 'r') {
                 break;
+            }
             recall = !recall;
         }
 
-        if (query == ESCAPE)
+        if (query == ESCAPE) {
             break;
+        }
 
         if (query == '-') {
             if (++i == who.size()) {
                 i = 0;
-                if (!expand_list)
+                if (!expand_list) {
                     break;
+                }
             }
         } else {
             if (i-- == 0) {
                 i = who.size() - 1;
-                if (!expand_list)
+                if (!expand_list) {
                     break;
+                }
             }
         }
     }

@@ -34,17 +34,21 @@
 static int calc_basic_stat(PlayerType *player_ptr, int stat_num)
 {
     int e_adj = 0;
-    if ((player_ptr->stat_max[stat_num] > 18) && (player_ptr->stat_top[stat_num] > 18))
+    if ((player_ptr->stat_max[stat_num] > 18) && (player_ptr->stat_top[stat_num] > 18)) {
         e_adj = (player_ptr->stat_top[stat_num] - player_ptr->stat_max[stat_num]) / 10;
+    }
 
-    if ((player_ptr->stat_max[stat_num] <= 18) && (player_ptr->stat_top[stat_num] <= 18))
+    if ((player_ptr->stat_max[stat_num] <= 18) && (player_ptr->stat_top[stat_num] <= 18)) {
         e_adj = player_ptr->stat_top[stat_num] - player_ptr->stat_max[stat_num];
+    }
 
-    if ((player_ptr->stat_max[stat_num] <= 18) && (player_ptr->stat_top[stat_num] > 18))
+    if ((player_ptr->stat_max[stat_num] <= 18) && (player_ptr->stat_top[stat_num] > 18)) {
         e_adj = (player_ptr->stat_top[stat_num] - 18) / 10 - player_ptr->stat_max[stat_num] + 18;
+    }
 
-    if ((player_ptr->stat_max[stat_num] > 18) && (player_ptr->stat_top[stat_num] <= 18))
+    if ((player_ptr->stat_max[stat_num] > 18) && (player_ptr->stat_top[stat_num] <= 18)) {
         e_adj = player_ptr->stat_top[stat_num] - (player_ptr->stat_max[stat_num] - 19) / 10 - 19;
+    }
 
     return e_adj;
 }
@@ -57,27 +61,34 @@ static int calc_basic_stat(PlayerType *player_ptr, int stat_num)
  */
 static int compensate_special_race(PlayerType *player_ptr, int stat_num)
 {
-    if (!PlayerRace(player_ptr).equals(PlayerRaceType::ENT))
+    if (!PlayerRace(player_ptr).equals(PlayerRaceType::ENT)) {
         return 0;
+    }
 
     int r_adj = 0;
     switch (stat_num) {
     case A_STR:
     case A_CON:
-        if (player_ptr->lev > 25)
+        if (player_ptr->lev > 25) {
             r_adj++;
-        if (player_ptr->lev > 40)
+        }
+        if (player_ptr->lev > 40) {
             r_adj++;
-        if (player_ptr->lev > 45)
+        }
+        if (player_ptr->lev > 45) {
             r_adj++;
+        }
         break;
     case A_DEX:
-        if (player_ptr->lev > 25)
+        if (player_ptr->lev > 25) {
             r_adj--;
-        if (player_ptr->lev > 40)
+        }
+        if (player_ptr->lev > 40) {
             r_adj--;
-        if (player_ptr->lev > 45)
+        }
+        if (player_ptr->lev > 45) {
             r_adj--;
+        }
         break;
     }
 
@@ -93,10 +104,11 @@ static int compensate_special_race(PlayerType *player_ptr, int stat_num)
  */
 static void display_basic_stat_name(PlayerType *player_ptr, int stat_num, int row, int stat_col)
 {
-    if (player_ptr->stat_cur[stat_num] < player_ptr->stat_max[stat_num])
+    if (player_ptr->stat_cur[stat_num] < player_ptr->stat_max[stat_num]) {
         c_put_str(TERM_WHITE, stat_names_reduced[stat_num], row + stat_num + 1, stat_col + 1);
-    else
+    } else {
         c_put_str(TERM_WHITE, stat_names[stat_num], row + stat_num + 1, stat_col + 1);
+    }
 }
 
 /*!
@@ -151,8 +163,9 @@ static void process_stats(PlayerType *player_ptr, int row, int stat_col)
 
         display_basic_stat_name(player_ptr, i, row, stat_col);
         cnv_stat(player_ptr->stat_max[i], buf);
-        if (player_ptr->stat_max[i] == player_ptr->stat_max_max[i])
+        if (player_ptr->stat_max[i] == player_ptr->stat_max_max[i]) {
             c_put_str(TERM_WHITE, "!", row + i + 1, _(stat_col + 6, stat_col + 4));
+        }
 
         c_put_str(TERM_BLUE, buf, row + i + 1, stat_col + 13 - strlen(buf));
 
@@ -174,8 +187,9 @@ static void compensate_stat_by_weapon(char *c, TERM_COLOR *a, ObjectType *o_ptr,
 
     if (o_ptr->pval > 0) {
         *a = TERM_L_GREEN;
-        if (o_ptr->pval < 10)
+        if (o_ptr->pval < 10) {
             *c = '0' + o_ptr->pval;
+        }
     }
 
     if (flags.has(tr_flag)) {
@@ -184,8 +198,9 @@ static void compensate_stat_by_weapon(char *c, TERM_COLOR *a, ObjectType *o_ptr,
 
     if (o_ptr->pval < 0) {
         *a = TERM_RED;
-        if (o_ptr->pval > -10)
+        if (o_ptr->pval > -10) {
             *c = '0' - o_ptr->pval;
+        }
     }
 }
 
@@ -228,60 +243,79 @@ static int compensation_stat_by_mutation(PlayerType *player_ptr, int stat)
 {
     int compensation = 0;
     if (stat == A_STR) {
-        if (player_ptr->muta.has(PlayerMutationType::HYPER_STR))
+        if (player_ptr->muta.has(PlayerMutationType::HYPER_STR)) {
             compensation += 4;
-        if (player_ptr->muta.has(PlayerMutationType::PUNY))
+        }
+        if (player_ptr->muta.has(PlayerMutationType::PUNY)) {
             compensation -= 4;
-        if (player_ptr->tsuyoshi)
+        }
+        if (player_ptr->tsuyoshi) {
             compensation += 4;
+        }
         return compensation;
     }
 
     if (stat == A_WIS || stat == A_INT) {
-        if (player_ptr->muta.has(PlayerMutationType::HYPER_INT))
+        if (player_ptr->muta.has(PlayerMutationType::HYPER_INT)) {
             compensation += 4;
-        if (player_ptr->muta.has(PlayerMutationType::MORONIC))
+        }
+        if (player_ptr->muta.has(PlayerMutationType::MORONIC)) {
             compensation -= 4;
+        }
         return compensation;
     }
 
     if (stat == A_DEX) {
-        if (player_ptr->muta.has(PlayerMutationType::IRON_SKIN))
+        if (player_ptr->muta.has(PlayerMutationType::IRON_SKIN)) {
             compensation -= 1;
-        if (player_ptr->muta.has(PlayerMutationType::LIMBER))
+        }
+        if (player_ptr->muta.has(PlayerMutationType::LIMBER)) {
             compensation += 3;
-        if (player_ptr->muta.has(PlayerMutationType::ARTHRITIS))
+        }
+        if (player_ptr->muta.has(PlayerMutationType::ARTHRITIS)) {
             compensation -= 3;
+        }
         return compensation;
     }
 
     if (stat == A_CON) {
-        if (player_ptr->muta.has(PlayerMutationType::RESILIENT))
+        if (player_ptr->muta.has(PlayerMutationType::RESILIENT)) {
             compensation += 4;
-        if (player_ptr->muta.has(PlayerMutationType::XTRA_FAT))
+        }
+        if (player_ptr->muta.has(PlayerMutationType::XTRA_FAT)) {
             compensation += 2;
-        if (player_ptr->muta.has(PlayerMutationType::ALBINO))
+        }
+        if (player_ptr->muta.has(PlayerMutationType::ALBINO)) {
             compensation -= 4;
-        if (player_ptr->muta.has(PlayerMutationType::FLESH_ROT))
+        }
+        if (player_ptr->muta.has(PlayerMutationType::FLESH_ROT)) {
             compensation -= 2;
-        if (player_ptr->tsuyoshi)
+        }
+        if (player_ptr->tsuyoshi) {
             compensation += 4;
+        }
         return compensation;
     }
 
     if (stat == A_CHR) {
-        if (player_ptr->muta.has(PlayerMutationType::SILLY_VOI))
+        if (player_ptr->muta.has(PlayerMutationType::SILLY_VOI)) {
             compensation -= 4;
-        if (player_ptr->muta.has(PlayerMutationType::BLANK_FAC))
+        }
+        if (player_ptr->muta.has(PlayerMutationType::BLANK_FAC)) {
             compensation -= 1;
-        if (player_ptr->muta.has(PlayerMutationType::FLESH_ROT))
+        }
+        if (player_ptr->muta.has(PlayerMutationType::FLESH_ROT)) {
             compensation -= 1;
-        if (player_ptr->muta.has(PlayerMutationType::SCALES))
+        }
+        if (player_ptr->muta.has(PlayerMutationType::SCALES)) {
             compensation -= 1;
-        if (player_ptr->muta.has(PlayerMutationType::WART_SKIN))
+        }
+        if (player_ptr->muta.has(PlayerMutationType::WART_SKIN)) {
             compensation -= 2;
-        if (player_ptr->muta.has(PlayerMutationType::ILL_NORM))
+        }
+        if (player_ptr->muta.has(PlayerMutationType::ILL_NORM)) {
             compensation = 0;
+        }
         return compensation;
     }
 
@@ -298,20 +332,23 @@ static int compensation_stat_by_mutation(PlayerType *player_ptr, int stat)
 static void change_display_by_mutation(PlayerType *player_ptr, int stat, char *c, TERM_COLOR *a)
 {
     int compensation = compensation_stat_by_mutation(player_ptr, stat);
-    if (compensation == 0)
+    if (compensation == 0) {
         return;
+    }
 
     *c = '*';
     if (compensation > 0) {
         *a = TERM_L_GREEN;
-        if (compensation < 10)
+        if (compensation < 10) {
             *c = '0' + compensation;
+        }
     }
 
     if (compensation < 0) {
         *a = TERM_RED;
-        if (compensation > -10)
+        if (compensation > -10) {
             *c = '0' - compensation;
+        }
     }
 }
 

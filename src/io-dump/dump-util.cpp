@@ -37,8 +37,9 @@ bool visual_mode_command(char ch, bool *visual_list_ptr,
 
     switch (ch) {
     case ESCAPE: {
-        if (!*visual_list_ptr)
+        if (!*visual_list_ptr) {
             return false;
+        }
 
         *cur_attr_ptr = attr_old;
         *cur_char_ptr = char_old;
@@ -47,8 +48,9 @@ bool visual_mode_command(char ch, bool *visual_list_ptr,
     }
     case '\n':
     case '\r': {
-        if (!*visual_list_ptr)
+        if (!*visual_list_ptr) {
             return false;
+        }
 
         *visual_list_ptr = false;
         *need_redraw = true;
@@ -56,8 +58,9 @@ bool visual_mode_command(char ch, bool *visual_list_ptr,
     }
     case 'V':
     case 'v': {
-        if (*visual_list_ptr)
+        if (*visual_list_ptr) {
             return false;
+        }
 
         *visual_list_ptr = true;
         *attr_top_ptr = std::max<byte>(0, (*cur_attr_ptr & 0x7f) - 5);
@@ -82,58 +85,71 @@ bool visual_mode_command(char ch, bool *visual_list_ptr,
         if (attr_idx || (!(char_idx & 0x80) && char_idx)) {
             *cur_attr_ptr = attr_idx;
             *attr_top_ptr = std::max<byte>(0, (*cur_attr_ptr & 0x7f) - 5);
-            if (!*visual_list_ptr)
+            if (!*visual_list_ptr) {
                 *need_redraw = true;
+            }
         }
 
         if (char_idx) {
             /* Set the char */
             *cur_char_ptr = char_idx;
             *char_left_ptr = std::max<byte>(0, *cur_char_ptr - 10);
-            if (!*visual_list_ptr)
+            if (!*visual_list_ptr) {
                 *need_redraw = true;
+            }
         }
 
         return true;
     }
     default: {
-        if (!*visual_list_ptr)
+        if (!*visual_list_ptr) {
             return false;
+        }
 
         int eff_width;
         int d = get_keymap_dir(ch);
         TERM_COLOR a = (*cur_attr_ptr & 0x7f);
         auto c = *cur_char_ptr;
 
-        if (use_bigtile)
+        if (use_bigtile) {
             eff_width = width / 2;
-        else
+        } else {
             eff_width = width;
+        }
 
-        if ((a == 0) && (ddy[d] < 0))
+        if ((a == 0) && (ddy[d] < 0)) {
             d = 0;
-        if ((c == 0) && (ddx[d] < 0))
+        }
+        if ((c == 0) && (ddx[d] < 0)) {
             d = 0;
-        if ((a == 0x7f) && (ddy[d] > 0))
+        }
+        if ((a == 0x7f) && (ddy[d] > 0)) {
             d = 0;
-        if (((byte)c == 0xff) && (ddx[d] > 0))
+        }
+        if (((byte)c == 0xff) && (ddx[d] > 0)) {
             d = 0;
+        }
 
         a += (TERM_COLOR)ddy[d];
         c += static_cast<char>(ddx[d]);
-        if (c & 0x80)
+        if (c & 0x80) {
             a |= 0x80;
+        }
 
         *cur_attr_ptr = a;
         *cur_char_ptr = c;
-        if ((ddx[d] < 0) && *char_left_ptr > std::max(0, (unsigned char)c - 10))
+        if ((ddx[d] < 0) && *char_left_ptr > std::max(0, (unsigned char)c - 10)) {
             (*char_left_ptr)--;
-        if ((ddx[d] > 0) && *char_left_ptr + eff_width < std::min(0xff, (unsigned char)c + 10))
+        }
+        if ((ddx[d] > 0) && *char_left_ptr + eff_width < std::min(0xff, (unsigned char)c + 10)) {
             (*char_left_ptr)++;
-        if ((ddy[d] < 0) && *attr_top_ptr > std::max(0, (int)(a & 0x7f) - 4))
+        }
+        if ((ddy[d] < 0) && *attr_top_ptr > std::max(0, (int)(a & 0x7f) - 4)) {
             (*attr_top_ptr)--;
-        if ((ddy[d] > 0) && *attr_top_ptr + height < std::min(0x7f, (a & 0x7f) + 4))
+        }
+        if ((ddy[d] > 0) && *attr_top_ptr + height < std::min(0x7f, (a & 0x7f) + 4)) {
             (*attr_top_ptr)++;
+        }
 
         return true;
     }
@@ -145,13 +161,14 @@ bool visual_mode_command(char ch, bool *visual_list_ptr,
  * @param fff 一時ファイルへの参照ポインタ
  * @param file_name ファイル名
  * @return ファイルを開けたらTRUE、開けなかったらFALSE
- * @details 
+ * @details
  */
 bool open_temporary_file(FILE **fff, char *file_name)
 {
     *fff = angband_fopen_temp(file_name, FILE_NAME_SIZE);
-    if (*fff != nullptr)
+    if (*fff != nullptr) {
         return true;
+    }
 
     msg_format(_("一時ファイル %s を作成できませんでした。", "Failed to create temporary file %s."), file_name);
     msg_print(nullptr);
@@ -189,26 +206,30 @@ void display_visual_list(int col, int row, int height, int width, TERM_COLOR att
         term_erase(col, row + i, width);
     }
 
-    if (use_bigtile)
+    if (use_bigtile) {
         width /= 2;
+    }
 
     for (int i = 0; i < height; i++) {
         for (int j = 0; j < width; j++) {
             TERM_LEN x = col + j;
             TERM_LEN y = row + i;
-            if (use_bigtile)
+            if (use_bigtile) {
                 x += j;
+            }
 
             int ia = attr_top + i;
             int ic = char_left + j;
             if (ia > 0x7f || ic > 0xff || ic < ' ' ||
-                (!use_graphics && ic > 0x7f))
+                (!use_graphics && ic > 0x7f)) {
                 continue;
+            }
 
             TERM_COLOR a = (TERM_COLOR)ia;
             auto c = static_cast<char>(ic);
-            if (c & 0x80)
+            if (c & 0x80) {
                 a |= 0x80;
+            }
 
             term_queue_bigchar(x, y, a, c, 0, 0);
         }
@@ -225,8 +246,9 @@ void place_visual_list_cursor(TERM_LEN col, TERM_LEN row, TERM_COLOR a, byte c, 
 
     TERM_LEN x = col + j;
     TERM_LEN y = row + i;
-    if (use_bigtile)
+    if (use_bigtile) {
         x += j;
+    }
 
     term_gotoxy(x, y);
 }
@@ -240,15 +262,17 @@ void browser_cursor(char ch, int *column, IDX *grp_cur, int grp_cnt, IDX *list_c
     int col = *column;
     IDX grp = *grp_cur;
     IDX list = *list_cur;
-    if (ch == ' ')
+    if (ch == ' ') {
         d = 3;
-    else if (ch == '-')
+    } else if (ch == '-') {
         d = 9;
-    else
+    } else {
         d = get_keymap_dir(ch);
+    }
 
-    if (!d)
+    if (!d) {
         return;
+    }
 
     if ((ddx[d] > 0) && ddy[d]) {
         int browser_rows;
@@ -258,18 +282,23 @@ void browser_cursor(char ch, int *column, IDX *grp_cur, int grp_cnt, IDX *list_c
         if (!col) {
             int old_grp = grp;
             grp += ddy[d] * (browser_rows - 1);
-            if (grp >= grp_cnt)
+            if (grp >= grp_cnt) {
                 grp = grp_cnt - 1;
-            if (grp < 0)
+            }
+            if (grp < 0) {
                 grp = 0;
-            if (grp != old_grp)
+            }
+            if (grp != old_grp) {
                 list = 0;
+            }
         } else {
             list += ddy[d] * browser_rows;
-            if (list >= list_cnt)
+            if (list >= list_cnt) {
                 list = list_cnt - 1;
-            if (list < 0)
+            }
+            if (list < 0) {
                 list = 0;
+            }
         }
 
         (*grp_cur) = grp;
@@ -279,10 +308,12 @@ void browser_cursor(char ch, int *column, IDX *grp_cur, int grp_cnt, IDX *list_c
 
     if (ddx[d]) {
         col += ddx[d];
-        if (col < 0)
+        if (col < 0) {
             col = 0;
-        if (col > 1)
+        }
+        if (col > 1) {
             col = 1;
+        }
 
         (*column) = col;
         return;
@@ -291,18 +322,23 @@ void browser_cursor(char ch, int *column, IDX *grp_cur, int grp_cnt, IDX *list_c
     if (!col) {
         int old_grp = grp;
         grp += (IDX)ddy[d];
-        if (grp >= grp_cnt)
+        if (grp >= grp_cnt) {
             grp = grp_cnt - 1;
-        if (grp < 0)
+        }
+        if (grp < 0) {
             grp = 0;
-        if (grp != old_grp)
+        }
+        if (grp != old_grp) {
             list = 0;
+        }
     } else {
         list += (IDX)ddy[d];
-        if (list >= list_cnt)
+        if (list >= list_cnt) {
             list = list_cnt - 1;
-        if (list < 0)
+        }
+        if (list < 0) {
             list = 0;
+        }
     }
 
     (*grp_cur) = grp;

@@ -65,8 +65,9 @@ MULTIPLY mult_slaying(PlayerType *player_ptr, MULTIPLY mult, const TrFlags &flgs
     for (size_t i = 0; i < sizeof(slay_table) / sizeof(slay_table[0]); ++i) {
         const struct slay_table_t *p = &slay_table[i];
 
-        if (flgs.has_not(p->slay_flag) || r_ptr->kind_flags.has(p->affect_race_flag))
+        if (flgs.has_not(p->slay_flag) || r_ptr->kind_flags.has(p->affect_race_flag)) {
             continue;
+        }
 
         if (is_original_ap_and_seen(player_ptr, m_ptr)) {
             r_ptr->r_kind_flags.set(p->affect_race_flag);
@@ -104,8 +105,9 @@ MULTIPLY mult_brand(PlayerType *player_ptr, MULTIPLY mult, const TrFlags &flgs, 
     for (size_t i = 0; i < sizeof(brand_table) / sizeof(brand_table[0]); ++i) {
         const struct brand_table_t *p = &brand_table[i];
 
-        if (flgs.has_not(p->brand_flag))
+        if (flgs.has_not(p->brand_flag)) {
             continue;
+        }
 
         /* Notice immunity */
         if (r_ptr->resistance_flags.has_any_of(p->resist_mask)) {
@@ -154,20 +156,26 @@ int calc_attack_damage_with_slay(PlayerType *player_ptr, ObjectType *o_ptr, int 
     torch_flags(o_ptr, flgs); /* torches has secret flags */
 
     if (!thrown) {
-        if (player_ptr->special_attack & (ATTACK_ACID))
+        if (player_ptr->special_attack & (ATTACK_ACID)) {
             flgs.set(TR_BRAND_ACID);
-        if (player_ptr->special_attack & (ATTACK_COLD))
+        }
+        if (player_ptr->special_attack & (ATTACK_COLD)) {
             flgs.set(TR_BRAND_COLD);
-        if (player_ptr->special_attack & (ATTACK_ELEC))
+        }
+        if (player_ptr->special_attack & (ATTACK_ELEC)) {
             flgs.set(TR_BRAND_ELEC);
-        if (player_ptr->special_attack & (ATTACK_FIRE))
+        }
+        if (player_ptr->special_attack & (ATTACK_FIRE)) {
             flgs.set(TR_BRAND_FIRE);
-        if (player_ptr->special_attack & (ATTACK_POIS))
+        }
+        if (player_ptr->special_attack & (ATTACK_POIS)) {
             flgs.set(TR_BRAND_POIS);
+        }
     }
 
-    if (SpellHex(player_ptr).is_spelling_specific(HEX_RUNESWORD))
+    if (SpellHex(player_ptr).is_spelling_specific(HEX_RUNESWORD)) {
         flgs.set(TR_SLAY_GOOD);
+    }
 
     MULTIPLY mult = 10;
     switch (o_ptr->tval) {
@@ -194,8 +202,9 @@ int calc_attack_damage_with_slay(PlayerType *player_ptr, ObjectType *o_ptr, int 
             mult = mult * 3 / 2 + 20;
         }
 
-        if ((o_ptr->fixed_artifact_idx == ART_NOTHUNG) && (m_ptr->r_idx == MON_FAFNER))
+        if ((o_ptr->fixed_artifact_idx == ART_NOTHUNG) && (m_ptr->r_idx == MON_FAFNER)) {
             mult = 150;
+        }
         break;
     }
 
@@ -203,8 +212,9 @@ int calc_attack_damage_with_slay(PlayerType *player_ptr, ObjectType *o_ptr, int 
         break;
     }
 
-    if (mult > 150)
+    if (mult > 150) {
         mult = 150;
+    }
     return tdam * mult / 10;
 }
 
@@ -228,26 +238,33 @@ AttributeFlags melee_attribute(PlayerType *player_ptr, ObjectType *o_ptr, combat
         for (size_t i = 0; i < sizeof(samurai_convert_table) / sizeof(samurai_convert_table[0]); ++i) {
             const struct samurai_convert_table_t *p = &samurai_convert_table[i];
 
-            if (mode == p->hissatsu_type)
+            if (mode == p->hissatsu_type) {
                 attribute_flags.set(p->attribute);
+            }
         }
     }
 
     auto flgs = object_flags(o_ptr);
 
-    if (player_ptr->special_attack & (ATTACK_ACID))
+    if (player_ptr->special_attack & (ATTACK_ACID)) {
         flgs.set(TR_BRAND_ACID);
-    if (player_ptr->special_attack & (ATTACK_COLD))
+    }
+    if (player_ptr->special_attack & (ATTACK_COLD)) {
         flgs.set(TR_BRAND_COLD);
-    if (player_ptr->special_attack & (ATTACK_ELEC))
+    }
+    if (player_ptr->special_attack & (ATTACK_ELEC)) {
         flgs.set(TR_BRAND_ELEC);
-    if (player_ptr->special_attack & (ATTACK_FIRE))
+    }
+    if (player_ptr->special_attack & (ATTACK_FIRE)) {
         flgs.set(TR_BRAND_FIRE);
-    if (player_ptr->special_attack & (ATTACK_POIS))
+    }
+    if (player_ptr->special_attack & (ATTACK_POIS)) {
         flgs.set(TR_BRAND_POIS);
+    }
 
-    if (SpellHex(player_ptr).is_spelling_specific(HEX_RUNESWORD))
+    if (SpellHex(player_ptr).is_spelling_specific(HEX_RUNESWORD)) {
         flgs.set(TR_SLAY_GOOD);
+    }
 
     static const struct brand_convert_table_t {
         tr_type brand_type;
@@ -267,8 +284,9 @@ AttributeFlags melee_attribute(PlayerType *player_ptr, ObjectType *o_ptr, combat
     for (size_t i = 0; i < sizeof(brand_convert_table) / sizeof(brand_convert_table[0]); ++i) {
         const struct brand_convert_table_t *p = &brand_convert_table[i];
 
-        if (flgs.has(p->brand_type))
+        if (flgs.has(p->brand_type)) {
             attribute_flags.set(p->attribute);
+        }
     }
 
     if ((flgs.has(TR_FORCE_WEAPON)) && (player_ptr->csp > (o_ptr->dd * o_ptr->ds / 5))) {

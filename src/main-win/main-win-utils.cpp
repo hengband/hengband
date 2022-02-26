@@ -95,6 +95,6 @@ bool get_open_filename(OPENFILENAMEW *ofn, concptr dirname, char *filename, DWOR
         strncpy_s(filename, max_name_size, to_multibyte(&buf[0]).c_str(), _TRUNCATE);
         return true;
     }
-    
+
     return false;
 }

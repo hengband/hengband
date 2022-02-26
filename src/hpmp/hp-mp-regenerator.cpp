@@ -28,10 +28,12 @@ int wild_regen = 20;
  */
 void regenhp(PlayerType *player_ptr, int percent)
 {
-    if (PlayerClass(player_ptr).samurai_stance_is(SamuraiStanceType::KOUKIJIN))
+    if (PlayerClass(player_ptr).samurai_stance_is(SamuraiStanceType::KOUKIJIN)) {
         return;
-    if (player_ptr->action == ACTION_HAYAGAKE)
+    }
+    if (player_ptr->action == ACTION_HAYAGAKE) {
         return;
+    }
 
     int old_chp = player_ptr->chp;
 
@@ -170,26 +172,33 @@ void regenerate_monsters(PlayerType *player_ptr)
         auto *m_ptr = &player_ptr->current_floor_ptr->m_list[i];
         auto *r_ptr = &r_info[m_ptr->r_idx];
 
-        if (!monster_is_valid(m_ptr))
+        if (!monster_is_valid(m_ptr)) {
             continue;
+        }
 
         if (m_ptr->hp < m_ptr->maxhp) {
             int frac = m_ptr->maxhp / 100;
-            if (!frac)
-                if (one_in_(2))
+            if (!frac) {
+                if (one_in_(2)) {
                     frac = 1;
+                }
+            }
 
-            if (r_ptr->flags2 & RF2_REGENERATE)
+            if (r_ptr->flags2 & RF2_REGENERATE) {
                 frac *= 2;
+            }
 
             m_ptr->hp += frac;
-            if (m_ptr->hp > m_ptr->maxhp)
+            if (m_ptr->hp > m_ptr->maxhp) {
                 m_ptr->hp = m_ptr->maxhp;
+            }
 
-            if (player_ptr->health_who == i)
+            if (player_ptr->health_who == i) {
                 player_ptr->redraw |= (PR_HEALTH);
-            if (player_ptr->riding == i)
+            }
+            if (player_ptr->riding == i) {
                 player_ptr->redraw |= (PR_UHEALTH);
+            }
         }
     }
 }
@@ -205,35 +214,42 @@ void regenerate_captured_monsters(PlayerType *player_ptr)
     for (int i = 0; i < INVEN_TOTAL; i++) {
         monster_race *r_ptr;
         auto *o_ptr = &player_ptr->inventory_list[i];
-        if (!o_ptr->k_idx)
+        if (!o_ptr->k_idx) {
             continue;
-        if (o_ptr->tval != ItemKindType::CAPTURE)
+        }
+        if (o_ptr->tval != ItemKindType::CAPTURE) {
             continue;
-        if (!o_ptr->pval)
+        }
+        if (!o_ptr->pval) {
             continue;
+        }
 
         heal = true;
         r_ptr = &r_info[o_ptr->pval];
         if (o_ptr->captured_monster_current_hp < o_ptr->captured_monster_max_hp) {
             short frac = o_ptr->captured_monster_max_hp / 100;
-            if (!frac)
-                if (one_in_(2))
+            if (!frac) {
+                if (one_in_(2)) {
                     frac = 1;
+                }
+            }
 
-            if (r_ptr->flags2 & RF2_REGENERATE)
+            if (r_ptr->flags2 & RF2_REGENERATE) {
                 frac *= 2;
+            }
 
             o_ptr->captured_monster_current_hp += frac;
-            if (o_ptr->captured_monster_current_hp > o_ptr->captured_monster_max_hp)
+            if (o_ptr->captured_monster_current_hp > o_ptr->captured_monster_max_hp) {
                 o_ptr->captured_monster_current_hp = o_ptr->captured_monster_max_hp;
+            }
         }
     }
 
     if (heal) {
         player_ptr->update |= (PU_COMBINE);
         // FIXME 広域マップ移動で1歩毎に何度も再描画されて重くなる。現在はボール中モンスターのHP回復でボールの表示は変わらないためコメントアウトする。
-        //player_ptr->window_flags |= (PW_INVEN);
-        //player_ptr->window_flags |= (PW_EQUIP);
+        // player_ptr->window_flags |= (PW_INVEN);
+        // player_ptr->window_flags |= (PW_EQUIP);
         wild_regen = 20;
     }
 }

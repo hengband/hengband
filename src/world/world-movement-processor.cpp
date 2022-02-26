@@ -50,25 +50,30 @@ void check_random_quest_auto_failure(PlayerType *player_ptr)
  */
 void execute_recall(PlayerType *player_ptr)
 {
-    if (player_ptr->word_recall == 0)
+    if (player_ptr->word_recall == 0) {
         return;
+    }
 
-    if (autosave_l && (player_ptr->word_recall == 1) && !player_ptr->phase_out)
+    if (autosave_l && (player_ptr->word_recall == 1) && !player_ptr->phase_out) {
         do_cmd_save_game(player_ptr, true);
+    }
 
     player_ptr->word_recall--;
     player_ptr->redraw |= (PR_STATUS);
-    if (player_ptr->word_recall != 0)
+    if (player_ptr->word_recall != 0) {
         return;
+    }
 
     disturb(player_ptr, false, true);
     auto *floor_ptr = player_ptr->current_floor_ptr;
     if (floor_ptr->dun_level || inside_quest(player_ptr->current_floor_ptr->quest_number) || player_ptr->enter_dungeon) {
         msg_print(_("上に引っ張りあげられる感じがする！", "You feel yourself yanked upwards!"));
-        if (player_ptr->dungeon_idx)
+        if (player_ptr->dungeon_idx) {
             player_ptr->recall_dungeon = player_ptr->dungeon_idx;
-        if (record_stair)
+        }
+        if (record_stair) {
             exe_write_diary(player_ptr, DIARY_RECALL, floor_ptr->dun_level, nullptr);
+        }
 
         floor_ptr->dun_level = 0;
         player_ptr->dungeon_idx = 0;
@@ -82,12 +87,14 @@ void execute_recall(PlayerType *player_ptr)
 
     msg_print(_("下に引きずり降ろされる感じがする！", "You feel yourself yanked downwards!"));
     player_ptr->dungeon_idx = player_ptr->recall_dungeon;
-    if (record_stair)
+    if (record_stair) {
         exe_write_diary(player_ptr, DIARY_RECALL, floor_ptr->dun_level, nullptr);
+    }
 
     floor_ptr->dun_level = max_dlv[player_ptr->dungeon_idx];
-    if (floor_ptr->dun_level < 1)
+    if (floor_ptr->dun_level < 1) {
         floor_ptr->dun_level = 1;
+    }
     if (ironman_nightmare && !randint0(666) && (player_ptr->dungeon_idx == DUNGEON_ANGBAND)) {
         if (floor_ptr->dun_level < 50) {
             floor_ptr->dun_level *= 2;
@@ -127,16 +134,19 @@ void execute_recall(PlayerType *player_ptr)
 void execute_floor_reset(PlayerType *player_ptr)
 {
     auto *floor_ptr = player_ptr->current_floor_ptr;
-    if (player_ptr->alter_reality == 0)
+    if (player_ptr->alter_reality == 0) {
         return;
+    }
 
-    if (autosave_l && (player_ptr->alter_reality == 1) && !player_ptr->phase_out)
+    if (autosave_l && (player_ptr->alter_reality == 1) && !player_ptr->phase_out) {
         do_cmd_save_game(player_ptr, true);
+    }
 
     player_ptr->alter_reality--;
     player_ptr->redraw |= (PR_STATUS);
-    if (player_ptr->alter_reality != 0)
+    if (player_ptr->alter_reality != 0) {
         return;
+    }
 
     disturb(player_ptr, false, true);
     if (!inside_quest(quest_number(player_ptr, floor_ptr->dun_level)) && floor_ptr->dun_level) {

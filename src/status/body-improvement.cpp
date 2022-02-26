@@ -22,15 +22,18 @@
 bool set_protevil(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
 {
     bool notice = false;
-    v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;
+    v = (v > 10000) ? 10000 : (v < 0) ? 0
+                                      : v;
 
-    if (player_ptr->is_dead)
+    if (player_ptr->is_dead) {
         return false;
+    }
 
     if (v) {
         if (player_ptr->protevil && !do_dec) {
-            if (player_ptr->protevil > v)
+            if (player_ptr->protevil > v) {
                 return false;
+            }
         } else if (!player_ptr->protevil) {
             msg_print(_("邪悪なる存在から守られているような感じがする！", "You feel safe from evil!"));
             notice = true;
@@ -45,11 +48,13 @@ bool set_protevil(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
     player_ptr->protevil = v;
     player_ptr->redraw |= (PR_STATUS);
 
-    if (!notice)
+    if (!notice) {
         return false;
+    }
 
-    if (disturb_state)
+    if (disturb_state) {
         disturb(player_ptr, false, false);
+    }
 
     handle_stuff(player_ptr);
     return true;
@@ -64,15 +69,18 @@ bool set_protevil(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
 bool set_invuln(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
 {
     bool notice = false;
-    v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;
+    v = (v > 10000) ? 10000 : (v < 0) ? 0
+                                      : v;
 
-    if (player_ptr->is_dead)
+    if (player_ptr->is_dead) {
         return false;
+    }
 
     if (v) {
         if (player_ptr->invuln && !do_dec) {
-            if (player_ptr->invuln > v)
+            if (player_ptr->invuln > v) {
                 return false;
+            }
         } else if (!is_invuln(player_ptr)) {
             msg_print(_("無敵だ！", "Invulnerability!"));
             notice = true;
@@ -104,11 +112,13 @@ bool set_invuln(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
     player_ptr->invuln = v;
     player_ptr->redraw |= (PR_STATUS);
 
-    if (!notice)
+    if (!notice) {
         return false;
+    }
 
-    if (disturb_state)
+    if (disturb_state) {
         disturb(player_ptr, false, false);
+    }
 
     player_ptr->update |= (PU_BONUS);
     handle_stuff(player_ptr);
@@ -124,15 +134,18 @@ bool set_invuln(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
 bool set_tim_regen(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
 {
     bool notice = false;
-    v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;
+    v = (v > 10000) ? 10000 : (v < 0) ? 0
+                                      : v;
 
-    if (player_ptr->is_dead)
+    if (player_ptr->is_dead) {
         return false;
+    }
 
     if (v) {
         if (player_ptr->tim_regen && !do_dec) {
-            if (player_ptr->tim_regen > v)
+            if (player_ptr->tim_regen > v) {
                 return false;
+            }
         } else if (!player_ptr->tim_regen) {
             msg_print(_("回復力が上がった！", "You feel yourself regenerating quickly!"));
             notice = true;
@@ -147,11 +160,13 @@ bool set_tim_regen(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
     player_ptr->tim_regen = v;
     player_ptr->redraw |= (PR_STATUS);
 
-    if (!notice)
+    if (!notice) {
         return false;
+    }
 
-    if (disturb_state)
+    if (disturb_state) {
         disturb(player_ptr, false, false);
+    }
 
     player_ptr->update |= (PU_BONUS);
     handle_stuff(player_ptr);
@@ -167,15 +182,18 @@ bool set_tim_regen(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
 bool set_tim_reflect(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
 {
     bool notice = false;
-    v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;
+    v = (v > 10000) ? 10000 : (v < 0) ? 0
+                                      : v;
 
-    if (player_ptr->is_dead)
+    if (player_ptr->is_dead) {
         return false;
+    }
 
     if (v) {
         if (player_ptr->tim_reflect && !do_dec) {
-            if (player_ptr->tim_reflect > v)
+            if (player_ptr->tim_reflect > v) {
                 return false;
+            }
         } else if (!player_ptr->tim_reflect) {
             msg_print(_("体の表面が滑かになった気がする。", "Your body becames smooth."));
             notice = true;
@@ -190,11 +208,13 @@ bool set_tim_reflect(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
     player_ptr->tim_reflect = v;
     player_ptr->redraw |= (PR_STATUS);
 
-    if (!notice)
+    if (!notice) {
         return false;
+    }
 
-    if (disturb_state)
+    if (disturb_state) {
         disturb(player_ptr, false, false);
+    }
 
     player_ptr->update |= (PU_BONUS);
     handle_stuff(player_ptr);
@@ -210,15 +230,18 @@ bool set_tim_reflect(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
 bool set_pass_wall(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
 {
     bool notice = false;
-    v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;
+    v = (v > 10000) ? 10000 : (v < 0) ? 0
+                                      : v;
 
-    if (player_ptr->is_dead)
+    if (player_ptr->is_dead) {
         return false;
+    }
 
     if (v) {
         if (player_ptr->tim_pass_wall && !do_dec) {
-            if (player_ptr->tim_pass_wall > v)
+            if (player_ptr->tim_pass_wall > v) {
                 return false;
+            }
         } else if (!player_ptr->tim_pass_wall) {
             msg_print(_("体が半物質の状態になった。", "You became ethereal."));
             notice = true;
@@ -233,11 +256,13 @@ bool set_pass_wall(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
     player_ptr->tim_pass_wall = v;
     player_ptr->redraw |= (PR_STATUS);
 
-    if (!notice)
+    if (!notice) {
         return false;
+    }
 
-    if (disturb_state)
+    if (disturb_state) {
         disturb(player_ptr, false, false);
+    }
 
     player_ptr->update |= (PU_BONUS);
     handle_stuff(player_ptr);

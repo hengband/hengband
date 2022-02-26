@@ -1,8 +1,8 @@
 ﻿#include "combat/hallucination-attacks-table.h"
 
 /*!
-  * @brief 幻覚時の打撃記述テーブル / Weird melee attack types when hallucinating
-  */
+ * @brief 幻覚時の打撃記述テーブル / Weird melee attack types when hallucinating
+ */
 #ifdef JP
 const concptr silly_attacks[MAX_SILLY_ATTACK] = {
     "に小便をかけられた。",

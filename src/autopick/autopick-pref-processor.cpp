@@ -17,17 +17,18 @@ void process_autopick_file_command(char *buf)
             continue;
         }
 #endif
-        if (iswspace(buf[i]) && buf[i] != ' ')
+        if (iswspace(buf[i]) && buf[i] != ' ') {
             break;
+        }
     }
 
     buf[i] = 0;
-    if (!autopick_new_entry(&entry, buf, false))
+    if (!autopick_new_entry(&entry, buf, false)) {
         return;
+    }
 
     for (const auto &item : autopick_list) {
-        if ((entry.name == item.name) && entry.flag[0] == item.flag[0] && entry.flag[1] == item.flag[1]
-            && entry.dice == item.dice && entry.bonus == item.bonus) {
+        if ((entry.name == item.name) && entry.flag[0] == item.flag[0] && entry.flag[1] == item.flag[1] && entry.dice == item.dice && entry.bonus == item.bonus) {
             return;
         }
     }

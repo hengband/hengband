@@ -24,8 +24,9 @@ void ObjectIndexList::remove(OBJECT_IDX o_idx)
 
 void ObjectIndexList::rotate(floor_type *floor_ptr)
 {
-    if (o_idx_list_.size() < 2)
+    if (o_idx_list_.size() < 2) {
         return;
+    }
 
     o_idx_list_.push_back(o_idx_list_.front());
     o_idx_list_.pop_front();

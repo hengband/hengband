@@ -29,8 +29,9 @@ PlayerAlignment::PlayerAlignment(PlayerType *player_ptr)
 concptr PlayerAlignment::get_alignment_description(bool with_value)
 {
     auto s = alignment_label();
-    if (with_value || show_actual_value)
+    if (with_value || show_actual_value) {
         return format(_("%s(%ld)", "%s (%ld)"), s, static_cast<long>(this->player_ptr->alignment));
+    }
 
     return s;
 }
@@ -45,12 +46,14 @@ void PlayerAlignment::update_alignment()
     auto *floor_ptr = this->player_ptr->current_floor_ptr;
     for (MONSTER_IDX m_idx = floor_ptr->m_max - 1; m_idx >= 1; m_idx--) {
         auto *m_ptr = &floor_ptr->m_list[m_idx];
-        if (!monster_is_valid(m_ptr))
+        if (!monster_is_valid(m_ptr)) {
             continue;
+        }
         auto *r_ptr = &r_info[m_ptr->r_idx];
 
-        if (!is_pet(m_ptr))
+        if (!is_pet(m_ptr)) {
             continue;
+        }
 
         if (r_ptr->kind_flags.has(MonsterKindType::GOOD)) {
             this->bias_good_alignment(r_ptr->level);
@@ -88,8 +91,9 @@ void PlayerAlignment::update_alignment()
     }
 
     for (int i = 0; i < 2; i++) {
-        if (!has_melee_weapon(this->player_ptr, INVEN_MAIN_HAND + i) || (this->player_ptr->inventory_list[INVEN_MAIN_HAND + i].fixed_artifact_idx != ART_IRON_BALL))
+        if (!has_melee_weapon(this->player_ptr, INVEN_MAIN_HAND + i) || (this->player_ptr->inventory_list[INVEN_MAIN_HAND + i].fixed_artifact_idx != ART_IRON_BALL)) {
             continue;
+        }
 
         this->bias_evil_alignment(1000);
     }
@@ -119,12 +123,14 @@ void PlayerAlignment::update_alignment()
     for (int i = 0; i < j; i++) {
         if (this->player_ptr->alignment > 0) {
             this->bias_evil_alignment(this->player_ptr->virtues[neutral[i]] / 2);
-            if (this->player_ptr->alignment < 0)
+            if (this->player_ptr->alignment < 0) {
                 this->reset_alignment();
+            }
         } else if (this->player_ptr->alignment < 0) {
             this->bias_good_alignment(this->player_ptr->virtues[neutral[i]] / 2);
-            if (this->player_ptr->alignment > 0)
+            if (this->player_ptr->alignment > 0) {
                 this->reset_alignment();
+            }
         }
     }
 }
@@ -151,18 +157,19 @@ void PlayerAlignment::reset_alignment()
  */
 concptr PlayerAlignment::alignment_label()
 {
-    if (this->player_ptr->alignment > 150)
+    if (this->player_ptr->alignment > 150) {
         return _("大善", "Lawful");
-    else if (this->player_ptr->alignment > 50)
+    } else if (this->player_ptr->alignment > 50) {
         return _("中善", "Good");
-    else if (this->player_ptr->alignment > 10)
+    } else if (this->player_ptr->alignment > 10) {
         return _("小善", "Neutral Good");
-    else if (this->player_ptr->alignment > -11)
+    } else if (this->player_ptr->alignment > -11) {
         return _("中立", "Neutral");
-    else if (this->player_ptr->alignment > -51)
+    } else if (this->player_ptr->alignment > -51) {
         return _("小悪", "Neutral Evil");
-    else if (this->player_ptr->alignment > -151)
+    } else if (this->player_ptr->alignment > -151) {
         return _("中悪", "Evil");
-    else
+    } else {
         return _("大悪", "Chaotic");
+    }
 }

@@ -49,8 +49,9 @@ void set_proxy(char *default_url, int default_port)
     }
 
     while (angband_fgets(fp, buf, sizeof(buf)) == 0) {
-        if (buf[0] != '#' && buf[0] != '\0')
+        if (buf[0] != '#' && buf[0] != '\0') {
             break;
+        }
     }
 
     angband_fclose(fp);
@@ -71,12 +72,13 @@ void set_proxy(char *default_url, int default_port)
 
     /* 文字列の長さを調べ、必要なメモリを確保 */
     len = strlen(s);
-    proxy = static_cast<char*>(malloc(len + 1));
+    proxy = static_cast<char *>(malloc(len + 1));
 
     /* ポート番号があるかどうかを調べ、あればproxy_portに設定。 */
     --len;
-    while (len > 0 && isdigit((unsigned char)s[len]))
+    while (len > 0 && isdigit((unsigned char)s[len])) {
         --len;
+    }
     if (len > 0 && s[len] == ':' && s[len + 1] != '\0') {
         s[len] = '\0';
         strcpy(proxy, s);
@@ -89,8 +91,9 @@ void set_proxy(char *default_url, int default_port)
     /* プロキシのアドレスをproxyにコピー */
     strcpy(proxy, s);
 
-    if (proxy_port == 0)
+    if (proxy_port == 0) {
         proxy_port = 80;
+    }
 }
 
 /* ソケットにバッファの内容を書き込む */
@@ -102,8 +105,9 @@ int soc_write(int sd, char *buf, size_t sz)
 
     while (nleft > 0) {
         nwritten = send(sd, buf, nleft, 0);
-        if (nwritten <= 0)
+        if (nwritten <= 0) {
             return nwritten;
+        }
         nleft -= nwritten;
         buf += nwritten;
     }
@@ -120,8 +124,9 @@ int soc_read(int sd, char *buf, size_t sz)
     while (nleft > 0) {
         int n;
         n = recv(sd, buf + nread, nleft, 0);
-        if (n <= 0)
+        if (n <= 0) {
             return nread;
+        }
         nleft -= n;
         nread += n;
     }
@@ -181,15 +186,17 @@ int connect_server(int timeout, concptr host, int port)
     /* タイムアウト、もしくは中断した時の処理。 */
     if ((ret = sigsetjmp(env, 1)) != 0) {
 #ifdef JP
-        if (ret == SIGALRM)
+        if (ret == SIGALRM) {
             errstr = "エラー: タイムアウト";
-        else
+        } else {
             errstr = "エラー: インタラプト";
+        }
 #else
-        if (ret == SIGALRM)
+        if (ret == SIGALRM) {
             errstr = "Error : time out";
-        else
+        } else {
             errstr = "Error : interupted";
+        }
 #endif
         return -1;
     }
@@ -233,10 +240,11 @@ int connect_server(int timeout, concptr host, int port)
 
     to.sin_family = AF_INET;
 
-    if (proxy && proxy[0] && proxy_port)
+    if (proxy && proxy[0] && proxy_port) {
         to.sin_port = htons(static_cast<ushort>(proxy_port));
-    else
+    } else {
         to.sin_port = htons(static_cast<ushort>(port));
+    }
 
 #ifndef WINDOWS
     if ((sd = socket(PF_INET, SOCK_STREAM, 0)) < 0)
@@ -282,6 +290,9 @@ int disconnect_server(int sd)
 #endif
 }
 
-concptr soc_err() { return errstr; }
+concptr soc_err()
+{
+    return errstr;
+}
 
 #endif /* WORLD_SCORE */

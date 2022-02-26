@@ -47,8 +47,8 @@ bool BadStatusSetter::blindness(const TIME_EFFECT tmp_v)
     if (this->player_ptr->is_dead) {
         return false;
     }
-    
-    PlayerRace pr(player_ptr);    
+
+    PlayerRace pr(player_ptr);
     if (v > 0) {
         if (!this->player_ptr->blind) {
             if (pr.equals(PlayerRaceType::ANDROID)) {
@@ -507,7 +507,7 @@ bool BadStatusSetter::process_stun_effect(const short v)
         this->process_stun_status(new_rank, v);
         return true;
     }
-    
+
     if (new_rank < old_rank) {
         this->clear_head();
         return true;
@@ -572,7 +572,7 @@ void BadStatusSetter::decrease_int_wis(const short v)
         if (has_sustain_int(this->player_ptr) == 0) {
             (void)do_dec_stat(this->player_ptr, A_INT);
         }
-        
+
         return;
     case 3:
     case 4:
@@ -628,8 +628,8 @@ void BadStatusSetter::stop_blooding(const PlayerCutRank new_rank)
     }
 
     auto blood_stop_mes = PlayerRace(this->player_ptr).equals(PlayerRaceType::ANDROID)
-        ? _("怪我が直った", "leaking fluid")
-        : _("出血が止まった", "bleeding");
+                              ? _("怪我が直った", "leaking fluid")
+                              : _("出血が止まった", "bleeding");
     msg_format(_("やっと%s。", "You are no longer %s."), blood_stop_mes);
     if (disturb_state) {
         disturb(this->player_ptr, false, false);

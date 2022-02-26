@@ -1,4 +1,5 @@
 ﻿#include "mspell/mspell-bolt.h"
+#include "effect/attribute-types.h"
 #include "effect/effect-processor.h"
 #include "main/sound-definitions-table.h"
 #include "main/sound-of-music.h"
@@ -10,8 +11,6 @@
 #include "mspell/mspell-damage-calculator.h"
 #include "mspell/mspell-result.h"
 #include "mspell/mspell-util.h"
-#include "mspell/mspell-result.h"
-#include "effect/attribute-types.h"
 #include "system/floor-type-definition.h"
 #include "system/player-type-definition.h"
 

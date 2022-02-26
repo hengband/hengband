@@ -79,10 +79,12 @@ PERCENTAGE calc_acid_damage_rate(PlayerType *player_ptr)
         }
     }
 
-    if (has_resist_acid(player_ptr))
+    if (has_resist_acid(player_ptr)) {
         per = (per + 2) / 3;
-    if (is_oppose_acid(player_ptr))
+    }
+    if (is_oppose_acid(player_ptr)) {
         per = (per + 2) / 3;
+    }
 
     return per;
 }
@@ -109,10 +111,12 @@ PERCENTAGE calc_elec_damage_rate(PlayerType *player_ptr)
         }
     }
 
-    if (has_resist_elec(player_ptr))
+    if (has_resist_elec(player_ptr)) {
         per = (per + 2) / 3;
-    if (is_oppose_elec(player_ptr))
+    }
+    if (is_oppose_elec(player_ptr)) {
         per = (per + 2) / 3;
+    }
 
     return per;
 }
@@ -135,10 +139,12 @@ PERCENTAGE calc_fire_damage_rate(PlayerType *player_ptr)
     }
 
     /* Resist the damage */
-    if (has_resist_fire(player_ptr))
+    if (has_resist_fire(player_ptr)) {
         per = (per + 2) / 3;
-    if (is_oppose_fire(player_ptr))
+    }
+    if (is_oppose_fire(player_ptr)) {
         per = (per + 2) / 3;
+    }
 
     return per;
 }
@@ -160,10 +166,12 @@ PERCENTAGE calc_cold_damage_rate(PlayerType *player_ptr)
         }
     }
 
-    if (has_resist_cold(player_ptr))
+    if (has_resist_cold(player_ptr)) {
         per = (per + 2) / 3;
-    if (is_oppose_cold(player_ptr))
+    }
+    if (is_oppose_cold(player_ptr)) {
         per = (per + 2) / 3;
+    }
 
     return per;
 }
@@ -174,10 +182,12 @@ PERCENTAGE calc_cold_damage_rate(PlayerType *player_ptr)
 PERCENTAGE calc_pois_damage_rate(PlayerType *player_ptr)
 {
     PERCENTAGE per = 100;
-    if (has_resist_pois(player_ptr))
+    if (has_resist_pois(player_ptr)) {
         per = (per + 2) / 3;
-    if (is_oppose_pois(player_ptr))
+    }
+    if (is_oppose_pois(player_ptr)) {
         per = (per + 2) / 3;
+    }
 
     return per;
 }
@@ -189,10 +199,12 @@ PERCENTAGE calc_nuke_damage_rate(PlayerType *player_ptr)
 {
 
     PERCENTAGE per = 100;
-    if (has_resist_pois(player_ptr))
+    if (has_resist_pois(player_ptr)) {
         per = (2 * per + 2) / 5;
-    if (is_oppose_pois(player_ptr))
+    }
+    if (is_oppose_pois(player_ptr)) {
         per = (2 * per + 2) / 5;
+    }
 
     return per;
 }
@@ -251,8 +263,9 @@ PERCENTAGE calc_lite_damage_rate(PlayerType *player_ptr, rate_calc_type_mode mod
         per /= randrate(4, 7, mode);
     }
 
-    if (player_ptr->wraith_form)
+    if (player_ptr->wraith_form) {
         per *= 2;
+    }
 
     return per;
 }
@@ -264,8 +277,9 @@ PERCENTAGE calc_dark_damage_rate(PlayerType *player_ptr, rate_calc_type_mode mod
 {
     PERCENTAGE per = 100;
 
-    if (has_immune_dark(player_ptr))
+    if (has_immune_dark(player_ptr)) {
         return 0;
+    }
 
     if (has_resist_dark(player_ptr)) {
         per *= 400;
@@ -388,8 +402,9 @@ PERCENTAGE calc_nether_damage_rate(PlayerType *player_ptr, rate_calc_type_mode m
     PERCENTAGE per = 100;
 
     if (has_resist_neth(player_ptr)) {
-        if (!PlayerRace(player_ptr).equals(PlayerRaceType::SPECTRE))
+        if (!PlayerRace(player_ptr).equals(PlayerRaceType::SPECTRE)) {
             per *= 6;
+        }
         per *= 100;
         per /= randrate(4, 7, mode);
     }
@@ -436,10 +451,11 @@ PERCENTAGE calc_holy_fire_damage_rate(PlayerType *player_ptr, rate_calc_type_mod
 {
     (void)mode; // unused
     PERCENTAGE per = 100;
-    if (player_ptr->alignment > 10)
+    if (player_ptr->alignment > 10) {
         per /= 2;
-    else if (player_ptr->alignment < -10)
+    } else if (player_ptr->alignment < -10) {
         per *= 2;
+    }
     return per;
 }
 
@@ -450,8 +466,9 @@ PERCENTAGE calc_hell_fire_damage_rate(PlayerType *player_ptr, rate_calc_type_mod
 {
     (void)mode; // unused
     PERCENTAGE per = 100;
-    if (player_ptr->alignment > 10)
+    if (player_ptr->alignment > 10) {
         per *= 2;
+    }
     return per;
 }
 

@@ -15,11 +15,11 @@ void phlogiston(PlayerType *player_ptr)
 {
     short max_flog = 0;
     auto *o_ptr = &player_ptr->inventory_list[INVEN_LITE];
-    if ((o_ptr->tval == ItemKindType::LITE) && (o_ptr->sval == SV_LITE_LANTERN))
+    if ((o_ptr->tval == ItemKindType::LITE) && (o_ptr->sval == SV_LITE_LANTERN)) {
         max_flog = FUEL_LAMP;
-    else if ((o_ptr->tval == ItemKindType::LITE) && (o_ptr->sval == SV_LITE_TORCH))
+    } else if ((o_ptr->tval == ItemKindType::LITE) && (o_ptr->sval == SV_LITE_TORCH)) {
         max_flog = FUEL_TORCH;
-    else {
+    } else {
         msg_print(_("燃素を消費するアイテムを装備していません。", "You are not wielding anything which uses phlogiston."));
         return;
     }

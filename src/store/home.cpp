@@ -69,12 +69,15 @@ int home_carry(PlayerType *player_ptr, ObjectType *o_ptr)
 
     PRICE value = object_value(o_ptr);
     int slot;
-    for (slot = 0; slot < st_ptr->stock_num; slot++)
-        if (object_sort_comp(player_ptr, o_ptr, value, &st_ptr->stock[slot]))
+    for (slot = 0; slot < st_ptr->stock_num; slot++) {
+        if (object_sort_comp(player_ptr, o_ptr, value, &st_ptr->stock[slot])) {
             break;
+        }
+    }
 
-    for (int i = st_ptr->stock_num; i > slot; i--)
+    for (int i = st_ptr->stock_num; i > slot; i--) {
         st_ptr->stock[i] = st_ptr->stock[i - 1];
+    }
 
     st_ptr->stock_num++;
     st_ptr->stock[slot] = *o_ptr;
@@ -85,14 +88,16 @@ int home_carry(PlayerType *player_ptr, ObjectType *o_ptr)
 
 static bool exe_combine_store_items(ObjectType *o_ptr, ObjectType *j_ptr, const int max_num, const int i, bool *combined)
 {
-    if (o_ptr->number + j_ptr->number > max_num)
+    if (o_ptr->number + j_ptr->number > max_num) {
         return false;
+    }
 
     object_absorb(j_ptr, o_ptr);
     st_ptr->stock_num--;
     int k;
-    for (k = i; k < st_ptr->stock_num; k++)
+    for (k = i; k < st_ptr->stock_num; k++) {
         st_ptr->stock[k] = st_ptr->stock[k + 1];
+    }
 
     (&st_ptr->stock[k])->wipe();
     *combined = true;
@@ -104,15 +109,18 @@ static void sweep_reorder_store_item(ObjectType *o_ptr, const int i, bool *combi
     for (int j = 0; j < i; j++) {
         ObjectType *j_ptr;
         j_ptr = &st_ptr->stock[j];
-        if (!j_ptr->k_idx)
+        if (!j_ptr->k_idx) {
             continue;
+        }
 
         int max_num = object_similar_part(j_ptr, o_ptr);
-        if (max_num == 0 || j_ptr->number >= max_num)
+        if (max_num == 0 || j_ptr->number >= max_num) {
             continue;
+        }
 
-        if (exe_combine_store_items(o_ptr, j_ptr, max_num, i, combined))
+        if (exe_combine_store_items(o_ptr, j_ptr, max_num, i, combined)) {
             break;
+        }
 
         ITEM_NUMBER old_num = o_ptr->number;
         ITEM_NUMBER remain = j_ptr->number + o_ptr->number - max_num;
@@ -135,25 +143,30 @@ static void exe_reorder_store_item(PlayerType *player_ptr, bool *flag)
     for (int i = 0; i < st_ptr->stock_num; i++) {
         ObjectType *o_ptr;
         o_ptr = &st_ptr->stock[i];
-        if (!o_ptr->k_idx)
+        if (!o_ptr->k_idx) {
             continue;
+        }
 
         int32_t o_value = object_value(o_ptr);
         int j;
-        for (j = 0; j < st_ptr->stock_num; j++)
-            if (object_sort_comp(player_ptr, o_ptr, o_value, &st_ptr->stock[j]))
+        for (j = 0; j < st_ptr->stock_num; j++) {
+            if (object_sort_comp(player_ptr, o_ptr, o_value, &st_ptr->stock[j])) {
                 break;
+            }
+        }
 
-        if (j >= i)
+        if (j >= i) {
             continue;
+        }
 
         *flag = true;
         ObjectType *j_ptr;
         ObjectType forge;
         j_ptr = &forge;
         j_ptr->copy_from(&st_ptr->stock[i]);
-        for (int k = i; k > j; k--)
+        for (int k = i; k > j; k--) {
             (&st_ptr->stock[k])->copy_from(&st_ptr->stock[k - 1]);
+        }
 
         (&st_ptr->stock[j])->copy_from(j_ptr);
     }
@@ -183,8 +196,9 @@ bool combine_and_reorder_home(PlayerType *player_ptr, const StoreSaleType store_
         for (int i = st_ptr->stock_num - 1; i > 0; i--) {
             ObjectType *o_ptr;
             o_ptr = &st_ptr->stock[i];
-            if (!o_ptr->k_idx)
+            if (!o_ptr->k_idx) {
                 continue;
+            }
 
             sweep_reorder_store_item(o_ptr, i, &combined);
         }

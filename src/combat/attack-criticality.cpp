@@ -57,18 +57,21 @@ int critical_norm(PlayerType *player_ptr, WEIGHT weight, int plus, int dam, int1
 
     /* Chance */
     auto pow = PlayerClass(player_ptr).equals(PlayerClassType::NINJA) ? 4444 : 5000;
-    if (impact)
+    if (impact) {
         pow /= 2;
+    }
 
     bool is_special_option = randint1(pow) <= i;
     is_special_option |= mode == HISSATSU_MAJIN;
     is_special_option |= mode == HISSATSU_3DAN;
-    if (!is_special_option)
+    if (!is_special_option) {
         return dam;
+    }
 
     int k = weight + randint1(650);
-    if (impact || (mode == HISSATSU_MAJIN) || (mode == HISSATSU_3DAN))
+    if (impact || (mode == HISSATSU_MAJIN) || (mode == HISSATSU_3DAN)) {
         k += randint1(650);
+    }
 
     auto [critical_dam, msg, battle_sound] = apply_critical_norm_damage(k, dam);
     sound(battle_sound);
@@ -99,8 +102,9 @@ static void ninja_critical(PlayerType *player_ptr, player_attack_type *pa_ptr)
     bool is_weaken = pa_ptr->m_ptr->hp < maxhp / 2;
     bool is_unique = (r_ptr->kind_flags.has(MonsterKindType::UNIQUE)) || ((r_ptr->flags7 & RF7_UNIQUE2) != 0);
     bool is_critical = (is_weaken && one_in_((player_ptr->num_blow[0] + player_ptr->num_blow[1] + 1) * 10)) || ((one_in_(666) || ((pa_ptr->backstab || pa_ptr->surprise_attack) && one_in_(11))) && !is_unique);
-    if (!is_critical)
+    if (!is_critical) {
         return;
+    }
 
     if (is_unique || !is_weaken) {
         pa_ptr->attack_damage = std::max(pa_ptr->attack_damage * 5, pa_ptr->m_ptr->hp / 2);
@@ -125,13 +129,15 @@ void critical_attack(PlayerType *player_ptr, player_attack_type *pa_ptr)
         if ((randint1(randint1(r_ptr->level / 7) + 5) == 1) && r_ptr->kind_flags.has_not(MonsterKindType::UNIQUE) && !(r_ptr->flags7 & RF7_UNIQUE2)) {
             pa_ptr->attack_damage = pa_ptr->m_ptr->hp + 1;
             msg_format(_("%sの急所を突き刺した！", "You hit %s on a fatal spot!"), pa_ptr->m_name);
-        } else
+        } else {
             pa_ptr->attack_damage = 1;
+        }
 
         return;
     }
 
     bool is_ninja_hit = PlayerClass(player_ptr).equals(PlayerClassType::NINJA) && has_melee_weapon(player_ptr, INVEN_MAIN_HAND + pa_ptr->hand) && !player_ptr->is_icky_wield[pa_ptr->hand] && ((player_ptr->cur_lite <= 0) || one_in_(7));
-    if (is_ninja_hit)
+    if (is_ninja_hit) {
         ninja_critical(player_ptr, pa_ptr);
+    }
 }

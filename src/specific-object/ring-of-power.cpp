@@ -1,10 +1,10 @@
 ﻿#include "specific-object/ring-of-power.h"
+#include "effect/attribute-types.h"
 #include "main/sound-definitions-table.h"
 #include "main/sound-of-music.h"
 #include "player/player-status.h"
 #include "spell-kind/spells-launcher.h"
 #include "spell-kind/spells-sight.h"
-#include "effect/attribute-types.h"
 #include "status/base-status.h"
 #include "system/player-type-definition.h"
 #include "target/target-getter.h"
@@ -57,8 +57,9 @@ bool activate_ring_of_power(PlayerType *player_ptr, concptr name)
 {
     DIRECTION dir;
     msg_format(_("%sは漆黒に輝いた...", "The %s glows intensely black..."), name);
-    if (!get_aim_dir(player_ptr, &dir))
+    if (!get_aim_dir(player_ptr, &dir)) {
         return false;
+    }
 
     exe_ring_of_power(player_ptr, dir);
     return true;

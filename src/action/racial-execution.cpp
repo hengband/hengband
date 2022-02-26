@@ -29,11 +29,13 @@
  */
 bool exe_racial_power(PlayerType *player_ptr, const int32_t command)
 {
-    if (command <= -3)
+    if (command <= -3) {
         return switch_class_racial_execution(player_ptr, command);
+    }
 
-    if (player_ptr->mimic_form != MimicKindType::NONE)
+    if (player_ptr->mimic_form != MimicKindType::NONE) {
         return switch_mimic_racial_execution(player_ptr);
+    }
 
     return switch_race_racial_execution(player_ptr, command);
 }
@@ -45,20 +47,23 @@ bool exe_racial_power(PlayerType *player_ptr, const int32_t command)
  */
 PERCENTAGE racial_chance(PlayerType *player_ptr, rpi_type *rpi_ptr)
 {
-    if ((player_ptr->lev < rpi_ptr->min_level) || player_ptr->confused)
+    if ((player_ptr->lev < rpi_ptr->min_level) || player_ptr->confused) {
         return 0;
+    }
 
     PERCENTAGE difficulty = rpi_ptr->fail;
-    if (difficulty == 0)
+    if (difficulty == 0) {
         return 100;
+    }
 
     auto player_stun = player_ptr->effects()->stun();
     if (player_stun->is_stunned()) {
         difficulty += player_stun->current();
     } else if (player_ptr->lev > rpi_ptr->min_level) {
         PERCENTAGE lev_adj = (PERCENTAGE)((player_ptr->lev - rpi_ptr->min_level) / 3);
-        if (lev_adj > 10)
+        if (lev_adj > 10) {
             lev_adj = 10;
+        }
 
         difficulty -= lev_adj;
     }
@@ -70,41 +75,47 @@ PERCENTAGE racial_chance(PlayerType *player_ptr, rpi_type *rpi_ptr)
         difficulty -= 12;
     }
 
-    if (difficulty < 5)
+    if (difficulty < 5) {
         difficulty = 5;
+    }
 
     difficulty = difficulty / 2;
     const BASE_STATUS stat = player_ptr->stat_cur[rpi_ptr->stat];
     int sum = 0;
     for (int i = 1; i <= stat; i++) {
         int val = i - difficulty;
-        if (val > 0)
+        if (val > 0) {
             sum += (val <= difficulty) ? val : difficulty;
+        }
     }
 
-    if (difficulty == 0)
+    if (difficulty == 0) {
         return 100;
-    else
+    } else {
         return ((sum * 100) / difficulty) / stat;
+    }
 }
 
 static void adjust_racial_power_difficulty(PlayerType *player_ptr, rpi_type *rpi_ptr, int *difficulty)
 {
-    if (*difficulty == 0)
+    if (*difficulty == 0) {
         return;
+    }
 
     auto player_stun = player_ptr->effects()->stun();
     if (player_stun->is_stunned()) {
         *difficulty += player_stun->current();
     } else if (player_ptr->lev > rpi_ptr->min_level) {
         int lev_adj = ((player_ptr->lev - rpi_ptr->min_level) / 3);
-        if (lev_adj > 10)
+        if (lev_adj > 10) {
             lev_adj = 10;
+        }
         *difficulty -= lev_adj;
     }
 
-    if (*difficulty < 5)
+    if (*difficulty < 5) {
         *difficulty = 5;
+    }
 }
 
 /*!
@@ -142,11 +153,13 @@ racial_level_check_result check_racial_level(PlayerType *player_ptr, rpi_type *r
 
     adjust_racial_power_difficulty(player_ptr, rpi_ptr, &difficulty);
     energy.set_player_turn_energy(100);
-    if (randint1(player_ptr->stat_cur[use_stat]) >= ((difficulty / 2) + randint1(difficulty / 2)))
+    if (randint1(player_ptr->stat_cur[use_stat]) >= ((difficulty / 2) + randint1(difficulty / 2))) {
         return RACIAL_SUCCESS;
+    }
 
-    if (flush_failure)
+    if (flush_failure) {
         flush();
+    }
 
     msg_print(_("充分に集中できなかった。", "You've failed to concentrate hard enough."));
     return RACIAL_FAILURE;

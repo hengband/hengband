@@ -52,18 +52,22 @@
  */
 void apply_magic_to_object(PlayerType *player_ptr, ObjectType *o_ptr, DEPTH lev, BIT_FLAGS mode)
 {
-    if (player_ptr->ppersonality == PERSONALITY_MUNCHKIN)
+    if (player_ptr->ppersonality == PERSONALITY_MUNCHKIN) {
         lev += randint0(player_ptr->lev / 2 + 10);
-    if (lev > MAX_DEPTH - 1)
+    }
+    if (lev > MAX_DEPTH - 1) {
         lev = MAX_DEPTH - 1;
+    }
 
     int f1 = lev + 10;
-    if (f1 > d_info[player_ptr->dungeon_idx].obj_good)
+    if (f1 > d_info[player_ptr->dungeon_idx].obj_good) {
         f1 = d_info[player_ptr->dungeon_idx].obj_good;
+    }
 
     int f2 = f1 * 2 / 3;
-    if ((player_ptr->ppersonality != PERSONALITY_MUNCHKIN) && (f2 > d_info[player_ptr->dungeon_idx].obj_great))
+    if ((player_ptr->ppersonality != PERSONALITY_MUNCHKIN) && (f2 > d_info[player_ptr->dungeon_idx].obj_great)) {
         f2 = d_info[player_ptr->dungeon_idx].obj_great;
+    }
 
     if (has_good_luck(player_ptr)) {
         f1 += 5;
@@ -78,13 +82,15 @@ void apply_magic_to_object(PlayerType *player_ptr, ObjectType *o_ptr, DEPTH lev,
         power = 1;
         if ((mode & AM_GREAT) || magik(f2)) {
             power = 2;
-            if (mode & AM_SPECIAL)
+            if (mode & AM_SPECIAL) {
                 power = 3;
+            }
         }
     } else if (magik(f1)) {
         power = -1;
-        if (magik(f2))
+        if (magik(f2)) {
             power = -2;
+        }
     }
     if (mode & AM_CURSED) {
         if (power > 0) {
@@ -95,28 +101,34 @@ void apply_magic_to_object(PlayerType *player_ptr, ObjectType *o_ptr, DEPTH lev,
     }
 
     int rolls = 0;
-    if (power >= 2)
+    if (power >= 2) {
         rolls = 1;
+    }
 
-    if (mode & (AM_GREAT | AM_SPECIAL))
+    if (mode & (AM_GREAT | AM_SPECIAL)) {
         rolls = 4;
-    if ((mode & AM_NO_FIXED_ART) || o_ptr->fixed_artifact_idx)
+    }
+    if ((mode & AM_NO_FIXED_ART) || o_ptr->fixed_artifact_idx) {
         rolls = 0;
+    }
 
     for (int i = 0; i < rolls; i++) {
-        if (make_artifact(player_ptr, o_ptr))
+        if (make_artifact(player_ptr, o_ptr)) {
             break;
+        }
         if (has_good_luck(player_ptr) && one_in_(77)) {
-            if (make_artifact(player_ptr, o_ptr))
+            if (make_artifact(player_ptr, o_ptr)) {
                 break;
+            }
         }
     }
 
     if (o_ptr->is_fixed_artifact()) {
         auto *a_ptr = apply_artifact(player_ptr, o_ptr);
         a_ptr->cur_num = 1;
-        if (w_ptr->character_dungeon)
+        if (w_ptr->character_dungeon) {
             a_ptr->floor_id = player_ptr->floor_id;
+        }
         return;
     }
 
@@ -182,20 +194,27 @@ void apply_magic_to_object(PlayerType *player_ptr, ObjectType *o_ptr, DEPTH lev,
 
     if (o_ptr->k_idx) {
         auto *k_ptr = &k_info[o_ptr->k_idx];
-        if (!k_info[o_ptr->k_idx].cost)
+        if (!k_info[o_ptr->k_idx].cost) {
             o_ptr->ident |= (IDENT_BROKEN);
+        }
 
-        if (k_ptr->gen_flags.has(ItemGenerationTraitType::CURSED))
+        if (k_ptr->gen_flags.has(ItemGenerationTraitType::CURSED)) {
             o_ptr->curse_flags.set(CurseTraitType::CURSED);
-        if (k_ptr->gen_flags.has(ItemGenerationTraitType::HEAVY_CURSE))
+        }
+        if (k_ptr->gen_flags.has(ItemGenerationTraitType::HEAVY_CURSE)) {
             o_ptr->curse_flags.set(CurseTraitType::HEAVY_CURSE);
-        if (k_ptr->gen_flags.has(ItemGenerationTraitType::PERMA_CURSE))
+        }
+        if (k_ptr->gen_flags.has(ItemGenerationTraitType::PERMA_CURSE)) {
             o_ptr->curse_flags.set(CurseTraitType::PERMA_CURSE);
-        if (k_ptr->gen_flags.has(ItemGenerationTraitType::RANDOM_CURSE0))
+        }
+        if (k_ptr->gen_flags.has(ItemGenerationTraitType::RANDOM_CURSE0)) {
             o_ptr->curse_flags.set(get_curse(0, o_ptr));
-        if (k_ptr->gen_flags.has(ItemGenerationTraitType::RANDOM_CURSE1))
+        }
+        if (k_ptr->gen_flags.has(ItemGenerationTraitType::RANDOM_CURSE1)) {
             o_ptr->curse_flags.set(get_curse(1, o_ptr));
-        if (k_ptr->gen_flags.has(ItemGenerationTraitType::RANDOM_CURSE2))
+        }
+        if (k_ptr->gen_flags.has(ItemGenerationTraitType::RANDOM_CURSE2)) {
             o_ptr->curse_flags.set(get_curse(2, o_ptr));
+        }
     }
 }

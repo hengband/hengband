@@ -18,8 +18,9 @@ bmc_type *initialize_blue_magic_type(
     bmc_ptr->p_mode = bmc_ptr->pet ? PM_FORCE_PET : PM_NO_PET;
     bmc_ptr->u_mode = 0L;
     bmc_ptr->g_mode = bmc_ptr->pet ? 0 : PM_ALLOW_GROUP;
-    if (!success || (randint1(50 + bmc_ptr->plev) < bmc_ptr->plev / 10))
+    if (!success || (randint1(50 + bmc_ptr->plev) < bmc_ptr->plev / 10)) {
         bmc_ptr->u_mode = PM_ALLOW_UNIQUE;
+    }
 
     return bmc_ptr;
 }

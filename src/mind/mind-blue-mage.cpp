@@ -31,8 +31,9 @@
  */
 bool do_cmd_cast_learned(PlayerType *player_ptr)
 {
-    if (cmd_limit_confused(player_ptr))
+    if (cmd_limit_confused(player_ptr)) {
         return false;
+    }
 
     auto selected_spell = get_learned_power(player_ptr);
     if (!selected_spell.has_value()) {
@@ -43,18 +44,21 @@ bool do_cmd_cast_learned(PlayerType *player_ptr)
     const auto need_mana = mod_need_mana(player_ptr, spell.smana, 0, REALM_NONE);
     if (need_mana > player_ptr->csp) {
         msg_print(_("ＭＰが足りません。", "You do not have enough mana to use this power."));
-        if (!over_exert)
+        if (!over_exert) {
             return false;
+        }
 
-        if (!get_check(_("それでも挑戦しますか? ", "Attempt it anyway? ")))
+        if (!get_check(_("それでも挑戦しますか? ", "Attempt it anyway? "))) {
             return false;
+        }
     }
 
     const auto chance = calculate_blue_magic_failure_probability(player_ptr, spell, need_mana);
 
     if (randint0(100) < chance) {
-        if (flush_failure)
+        if (flush_failure) {
             flush();
+        }
 
         msg_print(_("魔法をうまく唱えられなかった。", "You failed to concentrate hard enough!"));
         sound(SOUND_FAIL);

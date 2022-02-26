@@ -15,9 +15,9 @@
 #include "monster/monster-update.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
-#include "system/object-type-definition.h"
 #include "system/monster-race-definition.h"
 #include "system/monster-type-definition.h"
+#include "system/object-type-definition.h"
 #include "system/player-type-definition.h"
 #include "target/projection-path-calculator.h"
 #include "target/target-checker.h"
@@ -86,9 +86,9 @@ void fetch_item(PlayerType *player_ptr, DIRECTION dir, WEIGHT wgt, bool require_
             tx += ddx[dir];
             g_ptr = &player_ptr->current_floor_ptr->grid_array[ty][tx];
 
-            if ((distance(player_ptr->y, player_ptr->x, ty, tx) > get_max_range(player_ptr))
-                || !cave_has_flag_bold(player_ptr->current_floor_ptr, ty, tx, FloorFeatureType::PROJECT))
+            if ((distance(player_ptr->y, player_ptr->x, ty, tx) > get_max_range(player_ptr)) || !cave_has_flag_bold(player_ptr->current_floor_ptr, ty, tx, FloorFeatureType::PROJECT)) {
                 return;
+            }
         }
     }
 
@@ -122,18 +122,23 @@ bool fetch_monster(PlayerType *player_ptr)
     uint16_t path_g[512];
     POSITION ty, tx;
 
-    if (!target_set(player_ptr, TARGET_KILL))
+    if (!target_set(player_ptr, TARGET_KILL)) {
         return false;
+    }
 
     m_idx = player_ptr->current_floor_ptr->grid_array[target_row][target_col].m_idx;
-    if (!m_idx)
+    if (!m_idx) {
         return false;
-    if (m_idx == player_ptr->riding)
+    }
+    if (m_idx == player_ptr->riding) {
         return false;
-    if (!player_has_los_bold(player_ptr, target_row, target_col))
+    }
+    if (!player_has_los_bold(player_ptr, target_row, target_col)) {
         return false;
-    if (!projectable(player_ptr, player_ptr->y, player_ptr->x, target_row, target_col))
+    }
+    if (!projectable(player_ptr, player_ptr->y, player_ptr->x, target_row, target_col)) {
         return false;
+    }
 
     m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
     monster_desc(player_ptr, m_name, m_ptr, 0);
@@ -145,8 +150,7 @@ bool fetch_monster(PlayerType *player_ptr)
         POSITION nx = get_grid_x(path_g[i]);
         auto *g_ptr = &player_ptr->current_floor_ptr->grid_array[ny][nx];
 
-        if (in_bounds(player_ptr->current_floor_ptr, ny, nx) && is_cave_empty_bold(player_ptr, ny, nx) && !g_ptr->is_object()
-            && !pattern_tile(player_ptr->current_floor_ptr, ny, nx)) {
+        if (in_bounds(player_ptr->current_floor_ptr, ny, nx) && is_cave_empty_bold(player_ptr, ny, nx) && !g_ptr->is_object() && !pattern_tile(player_ptr->current_floor_ptr, ny, nx)) {
             ty = ny;
             tx = nx;
         }
@@ -160,12 +164,14 @@ bool fetch_monster(PlayerType *player_ptr)
     update_monster(player_ptr, m_idx, true);
     lite_spot(player_ptr, target_row, target_col);
     lite_spot(player_ptr, ty, tx);
-    if (r_info[m_ptr->r_idx].flags7 & (RF7_LITE_MASK | RF7_DARK_MASK))
+    if (r_info[m_ptr->r_idx].flags7 & (RF7_LITE_MASK | RF7_DARK_MASK)) {
         player_ptr->update |= (PU_MON_LITE);
+    }
 
     if (m_ptr->ml) {
-        if (!player_ptr->hallucinated)
+        if (!player_ptr->hallucinated) {
             monster_race_track(player_ptr, m_ptr->ap_r_idx);
+        }
 
         health_track(player_ptr, m_idx);
     }

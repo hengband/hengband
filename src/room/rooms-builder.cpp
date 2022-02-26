@@ -101,8 +101,9 @@ void build_cavern(PlayerType *player_ptr)
     bool light = false;
     bool done = false;
     auto *floor_ptr = player_ptr->current_floor_ptr;
-    if ((floor_ptr->dun_level <= randint1(50)) && d_info[floor_ptr->dungeon_idx].flags.has_not(DungeonFeatureType::DARKNESS))
+    if ((floor_ptr->dun_level <= randint1(50)) && d_info[floor_ptr->dungeon_idx].flags.has_not(DungeonFeatureType::DARKNESS)) {
         light = true;
+    }
 
     POSITION xsize = floor_ptr->width - 1;
     POSITION ysize = floor_ptr->height - 1;
@@ -158,8 +159,9 @@ void build_lake(PlayerType *player_ptr, int type)
 void build_room(PlayerType *player_ptr, POSITION x1, POSITION x2, POSITION y1, POSITION y2)
 {
     int temp;
-    if ((x1 == x2) || (y1 == y2))
+    if ((x1 == x2) || (y1 == y2)) {
         return;
+    }
 
     if (x1 > x2) {
         temp = x1;
@@ -329,9 +331,11 @@ void build_recursive_room(PlayerType *player_ptr, POSITION x1, POSITION y1, POSI
     case 3: {
         /* Try and divide horizontally */
         if (ysize < 3) {
-            for (int y = y1; y < y2; y++)
-                for (int x = x1; x < x2; x++)
+            for (int y = y1; y < y2; y++) {
+                for (int x = x1; x < x2; x++) {
                     place_bold(player_ptr, y, x, GB_INNER);
+                }
+            }
 
             return;
         }
@@ -352,13 +356,15 @@ void build_recursive_room(PlayerType *player_ptr, POSITION x1, POSITION y1, POSI
 void add_outer_wall(PlayerType *player_ptr, POSITION x, POSITION y, int light, POSITION x1, POSITION y1, POSITION x2, POSITION y2)
 {
     auto *floor_ptr = player_ptr->current_floor_ptr;
-    if (!in_bounds(floor_ptr, y, x))
+    if (!in_bounds(floor_ptr, y, x)) {
         return;
+    }
 
     grid_type *g_ptr;
     g_ptr = &floor_ptr->grid_array[y][x];
-    if (g_ptr->is_room())
+    if (g_ptr->is_room()) {
         return;
+    }
 
     g_ptr->info |= CAVE_ROOM;
     feature_type *f_ptr;
@@ -368,8 +374,9 @@ void add_outer_wall(PlayerType *player_ptr, POSITION x, POSITION y, int light, P
             for (int j = -1; j <= 1; j++) {
                 if ((x + i >= x1) && (x + i <= x2) && (y + j >= y1) && (y + j <= y2)) {
                     add_outer_wall(player_ptr, x + i, y + j, light, x1, y1, x2, y2);
-                    if (light)
+                    if (light) {
                         g_ptr->info |= CAVE_GLOW;
+                    }
                 }
             }
         }
@@ -379,15 +386,17 @@ void add_outer_wall(PlayerType *player_ptr, POSITION x, POSITION y, int light, P
 
     if (g_ptr->is_extra()) {
         place_bold(player_ptr, y, x, GB_OUTER);
-        if (light)
+        if (light) {
             g_ptr->info |= CAVE_GLOW;
+        }
 
         return;
     }
 
     if (permanent_wall(f_ptr)) {
-        if (light)
+        if (light) {
             g_ptr->info |= CAVE_GLOW;
+        }
     }
 }
 
@@ -399,11 +408,13 @@ POSITION dist2(POSITION x1, POSITION y1, POSITION x2, POSITION y2, POSITION h1, 
 {
     POSITION dx = abs(x2 - x1);
     POSITION dy = abs(y2 - y1);
-    if (dx >= 2 * dy)
+    if (dx >= 2 * dy) {
         return dx + (dy * h1) / h2;
+    }
 
-    if (dy >= 2 * dx)
+    if (dy >= 2 * dx) {
         return dy + (dx * h1) / h2;
+    }
 
     return ((dx + dy) * 128) / 181 + (dx * dx / (dy * h3) + dy * dy / (dx * h3)) * h4;
 }

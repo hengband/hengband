@@ -184,8 +184,9 @@ bool MonsterAttackPlayer::process_monster_blows()
             this->increase_blow_type_seen(ap_cnt);
 
             // 撃退成功時はそのまま次の打撃へ移行。
-            if (protect)
+            if (protect) {
                 continue;
+            }
 
             // 撃退失敗時は落馬処理、変わり身のテレポート処理を行う。
             check_fall_off_horse(this->player_ptr, this);

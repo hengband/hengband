@@ -18,12 +18,14 @@ void display_short_flavors(flavor_type *flavor_ptr)
         }
     }
 
-    if (flavor_ptr->o_ptr->inscription == 0)
+    if (flavor_ptr->o_ptr->inscription == 0) {
         return;
+    }
 
     char buff[1024] = "";
-    if (flavor_ptr->tmp_val2[0])
+    if (flavor_ptr->tmp_val2[0]) {
         strcat(flavor_ptr->tmp_val2, ", ");
+    }
 
     get_inscription(buff, flavor_ptr->o_ptr);
     angband_strcat(flavor_ptr->tmp_val2, buff, sizeof(flavor_ptr->tmp_val2));
@@ -31,12 +33,14 @@ void display_short_flavors(flavor_type *flavor_ptr)
 
 void display_item_discount(flavor_type *flavor_ptr)
 {
-    if ((flavor_ptr->o_ptr->discount == 0) || (flavor_ptr->tmp_val2[0] && ((flavor_ptr->o_ptr->ident & IDENT_STORE) == 0)))
+    if ((flavor_ptr->o_ptr->discount == 0) || (flavor_ptr->tmp_val2[0] && ((flavor_ptr->o_ptr->ident & IDENT_STORE) == 0))) {
         return;
+    }
 
     char discount_num_buf[4];
-    if (flavor_ptr->fake_insc_buf[0])
+    if (flavor_ptr->fake_insc_buf[0]) {
         strcat(flavor_ptr->fake_insc_buf, ", ");
+    }
 
     (void)object_desc_num(discount_num_buf, flavor_ptr->o_ptr->discount);
     strcat(flavor_ptr->fake_insc_buf, discount_num_buf);
@@ -49,21 +53,24 @@ void display_item_discount(flavor_type *flavor_ptr)
  */
 void display_item_fake_inscription(flavor_type *flavor_ptr)
 {
-    if ((flavor_ptr->fake_insc_buf[0] == '\0') && (flavor_ptr->tmp_val2[0] == '\0'))
+    if ((flavor_ptr->fake_insc_buf[0] == '\0') && (flavor_ptr->tmp_val2[0] == '\0')) {
         return;
+    }
 
     flavor_ptr->t = object_desc_chr(flavor_ptr->t, ' ');
     flavor_ptr->t = object_desc_chr(flavor_ptr->t, flavor_ptr->c1);
-    if (flavor_ptr->fake_insc_buf[0])
+    if (flavor_ptr->fake_insc_buf[0]) {
         flavor_ptr->t = object_desc_str(flavor_ptr->t, flavor_ptr->fake_insc_buf);
+    }
 
     if ((flavor_ptr->fake_insc_buf[0] != '\0') && (flavor_ptr->tmp_val2[0] != '\0')) {
         flavor_ptr->t = object_desc_chr(flavor_ptr->t, ',');
         flavor_ptr->t = object_desc_chr(flavor_ptr->t, ' ');
     }
 
-    if (flavor_ptr->tmp_val2[0])
+    if (flavor_ptr->tmp_val2[0]) {
         flavor_ptr->t = object_desc_str(flavor_ptr->t, flavor_ptr->tmp_val2);
+    }
 
     flavor_ptr->t = object_desc_chr(flavor_ptr->t, flavor_ptr->c2);
 }

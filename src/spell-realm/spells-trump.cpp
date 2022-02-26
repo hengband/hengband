@@ -39,18 +39,21 @@ void cast_shuffle(PlayerType *player_ptr)
     auto is_good_shuffle = PlayerClass(player_ptr).equals(PlayerClassType::ROGUE);
     is_good_shuffle |= PlayerClass(player_ptr).equals(PlayerClassType::HIGH_MAGE);
     is_good_shuffle |= PlayerClass(player_ptr).equals(PlayerClassType::SORCERER);
-    if (is_good_shuffle)
+    if (is_good_shuffle) {
         die = (randint1(110)) + plev / 5;
-    else
+    } else {
         die = randint1(120);
+    }
 
     if (vir) {
         if (player_ptr->virtues[vir - 1] > 0) {
-            while (randint1(400) < player_ptr->virtues[vir - 1])
+            while (randint1(400) < player_ptr->virtues[vir - 1]) {
                 die++;
+            }
         } else {
-            while (randint1(400) < (0 - player_ptr->virtues[vir - 1]))
+            while (randint1(400) < (0 - player_ptr->virtues[vir - 1])) {
                 die--;
+            }
         }
     }
 
@@ -219,8 +222,9 @@ void cast_shuffle(PlayerType *player_ptr)
     }
 
     int32_t ee = (player_ptr->exp / 25) + 1;
-    if (ee > 5000)
+    if (ee > 5000) {
         ee = 5000;
+    }
     msg_print(_("更に経験を積んだような気がする。", "You feel more experienced."));
     gain_exp(player_ptr, ee);
 }
@@ -229,6 +233,7 @@ void become_living_trump(PlayerType *player_ptr)
 {
     /* 1/7 Teleport control and 6/7 Random teleportation (uncontrolled) */
     MUTATION_IDX mutation = one_in_(7) ? 12 : 77;
-    if (gain_mutation(player_ptr, mutation))
+    if (gain_mutation(player_ptr, mutation)) {
         msg_print(_("あなたは生きているカードに変わった。", "You have turned into a Living Trump."));
+    }
 }

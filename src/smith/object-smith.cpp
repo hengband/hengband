@@ -305,31 +305,42 @@ Smith::DrainEssenceResult Smith::drain_essence(ObjectType *o_ptr)
 {
     // 抽出量を揃えるためKILLフラグのみ付いている場合はSLAYフラグも付ける
     auto old_flgs = object_flags(o_ptr);
-    if (old_flgs.has(TR_KILL_DRAGON))
+    if (old_flgs.has(TR_KILL_DRAGON)) {
         old_flgs.set(TR_SLAY_DRAGON);
-    if (old_flgs.has(TR_KILL_ANIMAL))
+    }
+    if (old_flgs.has(TR_KILL_ANIMAL)) {
         old_flgs.set(TR_SLAY_ANIMAL);
-    if (old_flgs.has(TR_KILL_EVIL))
+    }
+    if (old_flgs.has(TR_KILL_EVIL)) {
         old_flgs.set(TR_SLAY_EVIL);
-    if (old_flgs.has(TR_KILL_UNDEAD))
+    }
+    if (old_flgs.has(TR_KILL_UNDEAD)) {
         old_flgs.set(TR_SLAY_UNDEAD);
-    if (old_flgs.has(TR_KILL_DEMON))
+    }
+    if (old_flgs.has(TR_KILL_DEMON)) {
         old_flgs.set(TR_SLAY_DEMON);
-    if (old_flgs.has(TR_KILL_ORC))
+    }
+    if (old_flgs.has(TR_KILL_ORC)) {
         old_flgs.set(TR_SLAY_ORC);
-    if (old_flgs.has(TR_KILL_TROLL))
+    }
+    if (old_flgs.has(TR_KILL_TROLL)) {
         old_flgs.set(TR_SLAY_TROLL);
-    if (old_flgs.has(TR_KILL_GIANT))
+    }
+    if (old_flgs.has(TR_KILL_GIANT)) {
         old_flgs.set(TR_SLAY_GIANT);
-    if (old_flgs.has(TR_KILL_HUMAN))
+    }
+    if (old_flgs.has(TR_KILL_HUMAN)) {
         old_flgs.set(TR_SLAY_HUMAN);
-    if (old_flgs.has(TR_KILL_GOOD))
+    }
+    if (old_flgs.has(TR_KILL_GOOD)) {
         old_flgs.set(TR_SLAY_GOOD);
+    }
 
     // マイナス効果のあるアイテムから抽出する時のペナルティを計算
     int dec = 4;
-    if (o_ptr->curse_flags.has_any_of({ CurseTraitType::CURSED, CurseTraitType::HEAVY_CURSE, CurseTraitType::PERMA_CURSE }))
+    if (o_ptr->curse_flags.has_any_of({ CurseTraitType::CURSED, CurseTraitType::HEAVY_CURSE, CurseTraitType::PERMA_CURSE })) {
         dec--;
+    }
 
     for (auto &&info : essence_drain_info_table) {
         if (info.amount < 0 && old_flgs.has(info.tr_flag)) {
@@ -349,8 +360,9 @@ Smith::DrainEssenceResult Smith::drain_essence(ObjectType *o_ptr)
     o_ptr->number = old_o.number;
     o_ptr->discount = old_o.discount;
 
-    if (o_ptr->tval == ItemKindType::DRAG_ARMOR)
+    if (o_ptr->tval == ItemKindType::DRAG_ARMOR) {
         o_ptr->timeout = old_o.timeout;
+    }
     o_ptr->ident |= (IDENT_FULL_KNOWN);
     object_aware(player_ptr, o_ptr);
     object_known(o_ptr);

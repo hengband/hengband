@@ -43,8 +43,9 @@ void building_recharge(PlayerType *player_ptr)
     OBJECT_IDX item;
     ObjectType *o_ptr;
     o_ptr = choose_object(player_ptr, &item, q, s, (USE_INVEN | USE_FLOOR), FuncItemTester(&ObjectType::is_rechargeable));
-    if (!o_ptr)
+    if (!o_ptr) {
         return;
+    }
 
     object_kind *k_ptr;
     k_ptr = &k_info[o_ptr->k_idx];
@@ -135,16 +136,18 @@ void building_recharge(PlayerType *player_ptr)
         }
     } else {
         int max_charges;
-        if (o_ptr->tval == ItemKindType::STAFF)
+        if (o_ptr->tval == ItemKindType::STAFF) {
             max_charges = k_ptr->pval - o_ptr->pval;
-        else
+        } else {
             max_charges = o_ptr->number * k_ptr->pval - o_ptr->pval;
+        }
 
         charges = (PARAMETER_VALUE)get_quantity(
             format(_("一回分＄%d で何回分充填しますか？", "Add how many charges for %d gold apiece? "), price), std::min(player_ptr->au / price, max_charges));
 
-        if (charges < 1)
+        if (charges < 1) {
             return;
+        }
 
         price *= charges;
         o_ptr->pval += charges;
@@ -185,10 +188,12 @@ void building_recharge_all(PlayerType *player_ptr)
         ObjectType *o_ptr;
         o_ptr = &player_ptr->inventory_list[i];
 
-        if ((o_ptr->tval < ItemKindType::STAFF) || (o_ptr->tval > ItemKindType::ROD))
+        if ((o_ptr->tval < ItemKindType::STAFF) || (o_ptr->tval > ItemKindType::ROD)) {
             continue;
-        if (!o_ptr->is_known())
+        }
+        if (!o_ptr->is_known()) {
             total_cost += 50;
+        }
 
         DEPTH lev = k_info[o_ptr->k_idx].level;
         object_kind *k_ptr;
@@ -215,8 +220,9 @@ void building_recharge_all(PlayerType *player_ptr)
             break;
         }
 
-        if (price > 0)
+        if (price > 0) {
             total_cost += price;
+        }
     }
 
     if (!total_cost) {
@@ -231,8 +237,9 @@ void building_recharge_all(PlayerType *player_ptr)
         return;
     }
 
-    if (!get_check(format(_("すべてのアイテムを ＄%d で再充填しますか？", "Recharge all items for %d gold? "), total_cost)))
+    if (!get_check(format(_("すべてのアイテムを ＄%d で再充填しますか？", "Recharge all items for %d gold? "), total_cost))) {
         return;
+    }
 
     for (INVENTORY_IDX i = 0; i < INVEN_PACK; i++) {
         ObjectType *o_ptr;
@@ -240,8 +247,9 @@ void building_recharge_all(PlayerType *player_ptr)
         object_kind *k_ptr;
         k_ptr = &k_info[o_ptr->k_idx];
 
-        if ((o_ptr->tval < ItemKindType::STAFF) || (o_ptr->tval > ItemKindType::ROD))
+        if ((o_ptr->tval < ItemKindType::STAFF) || (o_ptr->tval > ItemKindType::ROD)) {
             continue;
+        }
 
         if (!o_ptr->is_known()) {
             identify_item(player_ptr, o_ptr);
@@ -253,14 +261,16 @@ void building_recharge_all(PlayerType *player_ptr)
             o_ptr->timeout = 0;
             break;
         case ItemKindType::STAFF:
-            if (o_ptr->pval < k_ptr->pval)
+            if (o_ptr->pval < k_ptr->pval) {
                 o_ptr->pval = k_ptr->pval;
+            }
 
             o_ptr->ident &= ~(IDENT_EMPTY);
             break;
         case ItemKindType::WAND:
-            if (o_ptr->pval < o_ptr->number * k_ptr->pval)
+            if (o_ptr->pval < o_ptr->number * k_ptr->pval) {
                 o_ptr->pval = o_ptr->number * k_ptr->pval;
+            }
 
             o_ptr->ident &= ~(IDENT_EMPTY);
             break;

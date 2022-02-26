@@ -38,8 +38,9 @@ void BasicSmithInfo::erase_essence(ObjectType *o_ptr) const
 {
     o_ptr->smith_effect = std::nullopt;
     auto flgs = object_flags(o_ptr);
-    if (flgs.has_none_of(TR_PVAL_FLAG_MASK))
+    if (flgs.has_none_of(TR_PVAL_FLAG_MASK)) {
         o_ptr->pval = 0;
+    }
 }
 
 TrFlags BasicSmithInfo::tr_flags() const
@@ -205,10 +206,12 @@ void SlayingGlovesSmithInfo::erase_essence(ObjectType *o_ptr) const
     o_ptr->to_d -= o_ptr->smith_damage;
     o_ptr->smith_hit = 0;
     o_ptr->smith_damage = 0;
-    if (o_ptr->to_h < 0)
+    if (o_ptr->to_h < 0) {
         o_ptr->to_h = 0;
-    if (o_ptr->to_d < 0)
+    }
+    if (o_ptr->to_d < 0) {
         o_ptr->to_d = 0;
+    }
 }
 
 bool SlayingGlovesSmithInfo::can_give_smith_effect_impl(const ObjectType *o_ptr) const

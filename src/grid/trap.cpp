@@ -171,16 +171,19 @@ FEAT_IDX choose_random_trap(PlayerType *player_ptr)
         feat = normal_traps[randint0(normal_traps.size())];
 
         /* Accept non-trapdoors */
-        if (f_info[feat].flags.has_not(FloorFeatureType::MORE))
+        if (f_info[feat].flags.has_not(FloorFeatureType::MORE)) {
             break;
+        }
 
         /* Hack -- no trap doors on special levels */
-        if (floor_ptr->inside_arena || inside_quest(quest_number(player_ptr, floor_ptr->dun_level)))
+        if (floor_ptr->inside_arena || inside_quest(quest_number(player_ptr, floor_ptr->dun_level))) {
             continue;
+        }
 
         /* Hack -- no trap doors on the deepest level */
-        if (floor_ptr->dun_level >= d_info[floor_ptr->dungeon_idx].maxdepth)
+        if (floor_ptr->dun_level >= d_info[floor_ptr->dungeon_idx].maxdepth) {
             continue;
+        }
 
         break;
     }
@@ -227,12 +230,14 @@ void place_trap(PlayerType *player_ptr, POSITION y, POSITION x)
     auto *g_ptr = &floor_ptr->grid_array[y][x];
 
     /* Paranoia -- verify location */
-    if (!in_bounds(floor_ptr, y, x))
+    if (!in_bounds(floor_ptr, y, x)) {
         return;
+    }
 
     /* Require empty, clean, floor grid */
-    if (!cave_clean_bold(floor_ptr, y, x))
+    if (!cave_clean_bold(floor_ptr, y, x)) {
         return;
+    }
 
     /* Place an invisible trap */
     g_ptr->mimic = g_ptr->feat;
@@ -257,23 +262,28 @@ static int check_hit_from_monster_to_player(PlayerType *player_ptr, int power)
     k = randint0(100);
 
     /* Hack -- 5% hit, 5% miss */
-    if (k < 10)
+    if (k < 10) {
         return k < 5;
+    }
 
-    if (player_ptr->ppersonality == PERSONALITY_LAZY)
-        if (one_in_(20))
+    if (player_ptr->ppersonality == PERSONALITY_LAZY) {
+        if (one_in_(20)) {
             return true;
+        }
+    }
 
     /* Paranoia -- No power */
-    if (power <= 0)
+    if (power <= 0) {
         return false;
+    }
 
     /* Total armor */
     ac = player_ptr->ac + player_ptr->to_a;
 
     /* Power competes against Armor */
-    if (randint1(power) > ((ac * 3) / 4))
+    if (randint1(power) > ((ac * 3) / 4)) {
         return true;
+    }
 
     /* Assume miss */
     return false;
@@ -348,8 +358,9 @@ static bool hit_trap_dart(PlayerType *player_ptr)
     if (check_hit_from_monster_to_player(player_ptr, 125)) {
         msg_print(_("小さなダーツが飛んできて刺さった！", "A small dart hits you!"));
         take_hit(player_ptr, DAMAGE_ATTACK, damroll(1, 4), _("ダーツの罠", "a dart trap"));
-        if (!check_multishadow(player_ptr))
+        if (!check_multishadow(player_ptr)) {
             hit = true;
+        }
     } else {
         msg_print(_("小さなダーツが飛んできた！が、運良く当たらなかった。", "A small dart barely misses you."));
     }
@@ -404,10 +415,11 @@ void hit_trap(PlayerType *player_ptr, bool break_trap)
             msg_print(_("落とし戸を飛び越えた。", "You fly over a trap door."));
         } else {
             msg_print(_("落とし戸に落ちた！", "You have fallen through a trap door!"));
-            if (is_echizen(player_ptr))
+            if (is_echizen(player_ptr)) {
                 msg_print(_("くっそ～！", ""));
-            else if (is_chargeman(player_ptr))
+            } else if (is_chargeman(player_ptr)) {
                 msg_print(_("ジュラル星人の仕業に違いない！", ""));
+            }
 
             sound(SOUND_FALL);
             dam = damroll(2, 8);
@@ -416,8 +428,9 @@ void hit_trap(PlayerType *player_ptr, bool break_trap)
             take_hit(player_ptr, DAMAGE_NOESCAPE, dam, name);
 
             /* Still alive and autosave enabled */
-            if (autosave_l && (player_ptr->chp >= 0))
+            if (autosave_l && (player_ptr->chp >= 0)) {
                 do_cmd_save_game(player_ptr, true);
+            }
 
             exe_write_diary(player_ptr, DIARY_DESCRIPTION, 0, _("落とし戸に落ちた", "fell through a trap door!"));
             prepare_change_floor_mode(player_ptr, CFM_SAVE_FLOORS | CFM_DOWN | CFM_RAND_PLACE | CFM_RAND_CONNECT);
@@ -573,15 +586,18 @@ void hit_trap(PlayerType *player_ptr, bool break_trap)
                 POSITION x1 = rand_spread(x, 7);
                 POSITION y1 = rand_spread(y, 5);
 
-                if (!in_bounds(player_ptr->current_floor_ptr, y1, x1))
+                if (!in_bounds(player_ptr->current_floor_ptr, y1, x1)) {
                     continue;
+                }
 
                 /* Require line of projection */
-                if (!projectable(player_ptr, player_ptr->y, player_ptr->x, y1, x1))
+                if (!projectable(player_ptr, player_ptr->y, player_ptr->x, y1, x1)) {
                     continue;
+                }
 
-                if (summon_specific(player_ptr, 0, y1, x1, lev, SUMMON_ARMAGE_EVIL, (PM_NO_PET)))
+                if (summon_specific(player_ptr, 0, y1, x1, lev, SUMMON_ARMAGE_EVIL, (PM_NO_PET))) {
                     evil_idx = hack_m_idx_ii;
+                }
 
                 if (summon_specific(player_ptr, 0, y1, x1, lev, SUMMON_ARMAGE_GOOD, (PM_NO_PET))) {
                     good_idx = hack_m_idx_ii;

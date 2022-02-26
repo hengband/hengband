@@ -12,7 +12,10 @@ static int screen_depth = 0;
 /*
  * Move the cursor
  */
-void move_cursor(int row, int col) { term_gotoxy(col, row); }
+void move_cursor(int row, int col)
+{
+    term_gotoxy(col, row);
+}
 
 /*
  * Flush all input chars.  Actually, remember the flush,
@@ -21,7 +24,10 @@ void move_cursor(int row, int col) { term_gotoxy(col, row); }
  * This is not only more efficient, but also necessary to make sure
  * that various "inkey()" codes are not "lost" along the way.
  */
-void flush(void) { inkey_xtra = true; }
+void flush(void)
+{
+    inkey_xtra = true;
+}
 
 /*
  * Save the screen, and increase the "icky" depth.
@@ -71,12 +77,18 @@ void screen_load(ScreenLoadOptType opt)
  * At the given location, using the given attribute, if allowed,
  * add the given string.  Do not clear the line.
  */
-void c_put_str(TERM_COLOR attr, concptr str, TERM_LEN row, TERM_LEN col) { term_putstr(col, row, -1, attr, str); }
+void c_put_str(TERM_COLOR attr, concptr str, TERM_LEN row, TERM_LEN col)
+{
+    term_putstr(col, row, -1, attr, str);
+}
 
 /*
  * As above, but in "white"
  */
-void put_str(concptr str, TERM_LEN row, TERM_LEN col) { term_putstr(col, row, -1, TERM_WHITE, str); }
+void put_str(concptr str, TERM_LEN row, TERM_LEN col)
+{
+    term_putstr(col, row, -1, TERM_WHITE, str);
+}
 
 /*
  * Display a string on the screen using an attribute, and clear
@@ -119,8 +131,9 @@ void c_roff(TERM_COLOR a, concptr str)
     int x, y;
     (void)term_locate(&x, &y);
 
-    if (y == h - 1 && x > w - 3)
+    if (y == h - 1 && x > w - 3) {
         return;
+    }
 
     for (concptr s = str; *s; s++) {
         char ch;
@@ -130,8 +143,9 @@ void c_roff(TERM_COLOR a, concptr str)
         if (*s == '\n') {
             x = 0;
             y++;
-            if (y == h)
+            if (y == h) {
                 break;
+            }
 
             term_erase(x, y, 255);
             break;
@@ -187,24 +201,28 @@ void c_roff(TERM_COLOR a, concptr str)
                 }
 #endif
             }
-            if (n == 0)
+            if (n == 0) {
                 n = w;
+            }
 
             term_erase(n, y, 255);
             x = 0;
             y++;
-            if (y == h)
+            if (y == h) {
                 break;
+            }
 
             term_erase(x, y, 255);
             for (i = n; i <= end_col; i++) {
 #ifdef JP
-                if (cv[i] == '\0')
+                if (cv[i] == '\0') {
                     break;
+                }
 #endif
                 term_addch(av[i], cv[i]);
-                if (++x > w)
+                if (++x > w) {
                     x = w;
+                }
             }
         }
 
@@ -223,8 +241,9 @@ void c_roff(TERM_COLOR a, concptr str)
         }
 #endif
 
-        if (++x > w)
+        if (++x > w) {
             x = w;
+        }
     }
 }
 

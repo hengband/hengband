@@ -38,8 +38,9 @@ bool build_type14(PlayerType *player_ptr, dun_data_type *dd_ptr)
     ysize = y1 + y2 + 1;
 
     /* Find and reserve some space in the dungeon.  Get center of room. */
-    if (!find_space(player_ptr, dd_ptr, &yval, &xval, ysize + 2, xsize + 2))
+    if (!find_space(player_ptr, dd_ptr, &yval, &xval, ysize + 2, xsize + 2)) {
         return false;
+    }
 
     /* Choose lite or dark */
     auto *floor_ptr = player_ptr->current_floor_ptr;
@@ -57,8 +58,9 @@ bool build_type14(PlayerType *player_ptr, dun_data_type *dd_ptr)
             g_ptr = &floor_ptr->grid_array[y][x];
             place_grid(player_ptr, g_ptr, GB_FLOOR);
             g_ptr->info |= (CAVE_ROOM);
-            if (light)
+            if (light) {
                 g_ptr->info |= (CAVE_GLOW);
+            }
         }
     }
 
@@ -76,10 +78,11 @@ bool build_type14(PlayerType *player_ptr, dun_data_type *dd_ptr)
         place_grid(player_ptr, g_ptr, GB_OUTER);
     }
 
-    if (floor_ptr->dun_level < 30 + randint1(30))
+    if (floor_ptr->dun_level < 30 + randint1(30)) {
         trap = feat_trap_piranha;
-    else
+    } else {
         trap = feat_trap_armageddon;
+    }
 
     /* Place a special trap */
     g_ptr = &floor_ptr->grid_array[rand_spread(yval, ysize / 4)][rand_spread(xval, xsize / 4)];

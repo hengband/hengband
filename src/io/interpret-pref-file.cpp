@@ -36,21 +36,25 @@ char *histpref_buf = nullptr;
 static errr interpret_r_token(char *buf)
 {
     char *zz[16];
-    if (tokenize(buf + 2, 3, zz, TOKENIZE_CHECKQUOTE) != 3)
+    if (tokenize(buf + 2, 3, zz, TOKENIZE_CHECKQUOTE) != 3) {
         return 1;
+    }
 
     monster_race *r_ptr;
     int i = (int)strtol(zz[0], nullptr, 0);
     TERM_COLOR n1 = (TERM_COLOR)strtol(zz[1], nullptr, 0);
     auto n2 = static_cast<char>(strtol(zz[2], nullptr, 0));
-    if (i >= static_cast<int>(r_info.size()))
+    if (i >= static_cast<int>(r_info.size())) {
         return 1;
+    }
 
     r_ptr = &r_info[i];
-    if (n1 || (!(n2 & 0x80) && n2))
-        r_ptr->x_attr = n1; /* Allow TERM_DARK text */
-    if (n2)
+    if (n1 || (!(n2 & 0x80) && n2)) {
+        r_ptr->x_attr = n1;
+    } /* Allow TERM_DARK text */
+    if (n2) {
         r_ptr->x_char = n2;
+    }
 
     return 0;
 }
@@ -63,21 +67,25 @@ static errr interpret_r_token(char *buf)
 static errr interpret_k_token(char *buf)
 {
     char *zz[16];
-    if (tokenize(buf + 2, 3, zz, TOKENIZE_CHECKQUOTE) != 3)
+    if (tokenize(buf + 2, 3, zz, TOKENIZE_CHECKQUOTE) != 3) {
         return 1;
+    }
 
     object_kind *k_ptr;
     int i = (int)strtol(zz[0], nullptr, 0);
     TERM_COLOR n1 = (TERM_COLOR)strtol(zz[1], nullptr, 0);
     auto n2 = static_cast<char>(strtol(zz[2], nullptr, 0));
-    if (i >= static_cast<int>(k_info.size()))
+    if (i >= static_cast<int>(k_info.size())) {
         return 1;
+    }
 
     k_ptr = &k_info[i];
-    if (n1 || (!(n2 & 0x80) && n2))
-        k_ptr->x_attr = n1; /* Allow TERM_DARK text */
-    if (n2)
+    if (n1 || (!(n2 & 0x80) && n2)) {
+        k_ptr->x_attr = n1;
+    } /* Allow TERM_DARK text */
+    if (n2) {
         k_ptr->x_char = n2;
+    }
 
     return 0;
 }
@@ -95,10 +103,12 @@ static errr decide_feature_type(int i, int num, char **zz)
 
     TERM_COLOR n1 = (TERM_COLOR)strtol(zz[1], nullptr, 0);
     auto n2 = static_cast<char>(strtol(zz[2], nullptr, 0));
-    if (n1 || (!(n2 & 0x80) && n2))
-        f_ptr->x_attr[F_LIT_STANDARD] = n1; /* Allow TERM_DARK text */
-    if (n2)
+    if (n1 || (!(n2 & 0x80) && n2)) {
+        f_ptr->x_attr[F_LIT_STANDARD] = n1;
+    } /* Allow TERM_DARK text */
+    if (n2) {
         f_ptr->x_char[F_LIT_STANDARD] = n2;
+    }
 
     switch (num) {
     case 3: {
@@ -122,10 +132,12 @@ static errr decide_feature_type(int i, int num, char **zz)
         for (int j = F_LIT_NS_BEGIN; j < F_LIT_MAX; j++) {
             n1 = (TERM_COLOR)strtol(zz[j * 2 + 1], nullptr, 0);
             n2 = static_cast<char>(strtol(zz[j * 2 + 2], nullptr, 0));
-            if (n1 || (!(n2 & 0x80) && n2))
-                f_ptr->x_attr[j] = n1; /* Allow TERM_DARK text */
-            if (n2)
+            if (n1 || (!(n2 & 0x80) && n2)) {
+                f_ptr->x_attr[j] = n1;
+            } /* Allow TERM_DARK text */
+            if (n2) {
                 f_ptr->x_char[j] = n2;
+            }
         }
 
         return 0;
@@ -149,14 +161,16 @@ static errr interpret_f_token(char *buf)
     char *zz[16];
     int num = tokenize(buf + 2, F_LIT_MAX * 2 + 1, zz, TOKENIZE_CHECKQUOTE);
 
-    if ((num != 3) && (num != 4) && (num != F_LIT_MAX * 2 + 1))
+    if ((num != 3) && (num != 4) && (num != F_LIT_MAX * 2 + 1)) {
         return 1;
-    else if ((num == 4) && !streq(zz[3], "LIT"))
+    } else if ((num == 4) && !streq(zz[3], "LIT")) {
         return 1;
+    }
 
     int i = (int)strtol(zz[0], nullptr, 0);
-    if (i >= static_cast<int>(f_info.size()))
+    if (i >= static_cast<int>(f_info.size())) {
         return 1;
+    }
 
     return decide_feature_type(i, num, zz);
 }
@@ -169,8 +183,9 @@ static errr interpret_f_token(char *buf)
 static errr interpret_s_token(char *buf)
 {
     char *zz[16];
-    if (tokenize(buf + 2, 3, zz, TOKENIZE_CHECKQUOTE) != 3)
+    if (tokenize(buf + 2, 3, zz, TOKENIZE_CHECKQUOTE) != 3) {
         return 1;
+    }
 
     int j = (byte)strtol(zz[0], nullptr, 0);
     TERM_COLOR n1 = (TERM_COLOR)strtol(zz[1], nullptr, 0);
@@ -188,18 +203,21 @@ static errr interpret_s_token(char *buf)
 static errr interpret_u_token(char *buf)
 {
     char *zz[16];
-    if (tokenize(buf + 2, 3, zz, TOKENIZE_CHECKQUOTE) != 3)
+    if (tokenize(buf + 2, 3, zz, TOKENIZE_CHECKQUOTE) != 3) {
         return 1;
+    }
 
     int j = (int)strtol(zz[0], nullptr, 0);
     TERM_COLOR n1 = (TERM_COLOR)strtol(zz[1], nullptr, 0);
     auto n2 = static_cast<char>(strtol(zz[2], nullptr, 0));
     for (auto &k_ref : k_info) {
         if ((k_ref.idx > 0) && (enum2i(k_ref.tval) == j)) {
-            if (n1)
+            if (n1) {
                 k_ref.d_attr = n1;
-            if (n2)
+            }
+            if (n2) {
                 k_ref.d_char = n2;
+            }
         }
     }
 
@@ -214,13 +232,15 @@ static errr interpret_u_token(char *buf)
 static errr interpret_e_token(char *buf)
 {
     char *zz[16];
-    if (tokenize(buf + 2, 2, zz, TOKENIZE_CHECKQUOTE) != 2)
+    if (tokenize(buf + 2, 2, zz, TOKENIZE_CHECKQUOTE) != 2) {
         return 1;
+    }
 
     int j = (byte)strtol(zz[0], nullptr, 0) % 128;
     TERM_COLOR n1 = (TERM_COLOR)strtol(zz[1], nullptr, 0);
-    if (n1)
+    if (n1) {
         tval_to_attr[j] = n1;
+    }
     return 0;
 }
 
@@ -244,17 +264,20 @@ static errr interpret_p_token(char *buf)
 static errr interpret_c_token(char *buf)
 {
     char *zz[16];
-    if (tokenize(buf + 2, 2, zz, TOKENIZE_CHECKQUOTE) != 2)
+    if (tokenize(buf + 2, 2, zz, TOKENIZE_CHECKQUOTE) != 2) {
         return 1;
+    }
 
     int mode = strtol(zz[0], nullptr, 0);
-    if ((mode < 0) || (mode >= KEYMAP_MODES))
+    if ((mode < 0) || (mode >= KEYMAP_MODES)) {
         return 1;
+    }
 
     char tmp[1024];
     text_to_ascii(tmp, zz[1]);
-    if (!tmp[0] || tmp[1])
+    if (!tmp[0] || tmp[1]) {
         return 1;
+    }
 
     int i = (byte)(tmp[0]);
     string_free(keymap_act[mode][i]);
@@ -270,8 +293,9 @@ static errr interpret_c_token(char *buf)
 static errr interpret_v_token(char *buf)
 {
     char *zz[16];
-    if (tokenize(buf + 2, 5, zz, TOKENIZE_CHECKQUOTE) != 5)
+    if (tokenize(buf + 2, 5, zz, TOKENIZE_CHECKQUOTE) != 5) {
         return 1;
+    }
 
     int i = (byte)strtol(zz[0], nullptr, 0);
     angband_color_table[i][0] = (byte)strtol(zz[1], nullptr, 0);
@@ -296,8 +320,9 @@ static errr interpret_xy_token(PlayerType *player_ptr, char *buf)
         bool is_option = option_info[i].o_var != nullptr;
         is_option &= option_info[i].o_text != nullptr;
         is_option &= streq(option_info[i].o_text, buf + 2);
-        if (!is_option)
+        if (!is_option) {
             continue;
+        }
 
         int os = option_info[i].o_set;
         int ob = option_info[i].o_bit;
@@ -376,13 +401,15 @@ static errr decide_template_modifier(int tok, char **zz)
         max_macrotrigger = 0;
     }
 
-    if (*zz[0] == '\0')
+    if (*zz[0] == '\0') {
         return 0;
+    }
 
     int zz_length = strlen(zz[1]);
     zz_length = std::min(MAX_MACRO_MOD, zz_length);
-    if (2 + zz_length != tok)
+    if (2 + zz_length != tok) {
         return 1;
+    }
 
     macro_template = string_make(zz[0]);
     macro_modifier_chr = string_make(zz[1]);
@@ -413,8 +440,9 @@ static errr interpret_macro_keycodes(int tok, char **zz)
     t = buf_aux;
     s = zz[0];
     while (*s) {
-        if ('\\' == *s)
+        if ('\\' == *s) {
             s++;
+        }
         *t++ = *s++;
     }
 
@@ -440,10 +468,12 @@ static errr interpret_t_token(char *buf)
 {
     char *zz[16];
     int tok = tokenize(buf + 2, 2 + MAX_MACRO_MOD, zz, 0);
-    if (tok >= 4)
+    if (tok >= 4) {
         return decide_template_modifier(tok, zz);
-    if (tok < 2)
+    }
+    if (tok < 2) {
         return 0;
+    }
 
     return interpret_macro_keycodes(tok, zz);
 }
@@ -473,8 +503,9 @@ static errr interpret_t_token(char *buf)
  */
 errr interpret_pref_file(PlayerType *player_ptr, char *buf)
 {
-    if (buf[1] != ':')
+    if (buf[1] != ':') {
         return 1;
+    }
 
     switch (buf[0]) {
     case 'H': {
@@ -522,8 +553,9 @@ errr interpret_pref_file(PlayerType *player_ptr, char *buf)
  */
 void add_history_from_pref_line(concptr t)
 {
-    if (!histpref_buf)
+    if (!histpref_buf) {
         return;
+    }
 
     angband_strcat(histpref_buf, t, HISTPREF_LIMIT);
 }

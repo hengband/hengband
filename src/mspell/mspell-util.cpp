@@ -13,28 +13,31 @@ mspell_cast_msg::mspell_cast_msg(concptr to_player_true, concptr to_mons_true, c
     , to_mons_true(to_mons_true)
     , to_player_false(to_player_false)
     , to_mons_false(to_mons_false)
- {}
+{
+}
 
 mspell_cast_msg_blind::mspell_cast_msg_blind(concptr blind, concptr to_player, concptr to_mons)
     : blind(blind)
     , to_player(to_player)
     , to_mons(to_mons)
- {}
+{
+}
 
 mspell_cast_msg_simple::mspell_cast_msg_simple(concptr to_player, concptr to_mons)
-     : to_player(to_player)
-     , to_mons(to_mons)
- {}
+    : to_player(to_player)
+    , to_mons(to_mons)
+{
+}
 
 /*!
-* @brief プレイヤーがモンスターを見ることができるかの判定 /
-* @param floor_ptr 現在フロアへの参照ポインタ
-* @param m_idx モンスターID
-* @return プレイヤーがモンスターを見ることができるならTRUE、そうでなければFALSEを返す。
-*/
-bool see_monster(PlayerType* player_ptr, MONSTER_IDX m_idx)
+ * @brief プレイヤーがモンスターを見ることができるかの判定 /
+ * @param floor_ptr 現在フロアへの参照ポインタ
+ * @param m_idx モンスターID
+ * @return プレイヤーがモンスターを見ることができるならTRUE、そうでなければFALSEを返す。
+ */
+bool see_monster(PlayerType *player_ptr, MONSTER_IDX m_idx)
 {
-    monster_type* m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
+    monster_type *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
     return is_seen(player_ptr, m_ptr);
 }
 
@@ -45,16 +48,16 @@ bool see_monster(PlayerType* player_ptr, MONSTER_IDX m_idx)
  * @param t_idx モンスターID二体目
  * @return モンスター2体のどちらかがプレイヤーの近くに居ればTRUE、どちらも遠ければFALSEを返す。
  */
-bool monster_near_player(floor_type* floor_ptr, MONSTER_IDX m_idx, MONSTER_IDX t_idx)
+bool monster_near_player(floor_type *floor_ptr, MONSTER_IDX m_idx, MONSTER_IDX t_idx)
 {
-    monster_type* m_ptr = &floor_ptr->m_list[m_idx];
-    monster_type* t_ptr = &floor_ptr->m_list[t_idx];
+    monster_type *m_ptr = &floor_ptr->m_list[m_idx];
+    monster_type *t_ptr = &floor_ptr->m_list[t_idx];
     return (m_ptr->cdis <= MAX_SIGHT) || (t_ptr->cdis <= MAX_SIGHT);
 }
 
 /*!
  * @brief モンスターが呪文行使する際のメッセージを処理する汎用関数 /
-* @param player_ptr プレイヤーへの参照ポインタ
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param m_idx 呪文を唱えるモンスターID
  * @param t_idx 呪文を受けるモンスターID。プレイヤーの場合はdummyで0とする。
  * @param msgs メッセージの構造体
@@ -62,10 +65,10 @@ bool monster_near_player(floor_type* floor_ptr, MONSTER_IDX m_idx, MONSTER_IDX t
  * @param target_type プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
  * @return メッセージを表示した場合trueを返す。
  */
-bool monspell_message_base(PlayerType* player_ptr, MONSTER_IDX m_idx, MONSTER_IDX t_idx, const mspell_cast_msg &msgs, bool msg_flag_aux, int target_type)
+bool monspell_message_base(PlayerType *player_ptr, MONSTER_IDX m_idx, MONSTER_IDX t_idx, const mspell_cast_msg &msgs, bool msg_flag_aux, int target_type)
 {
     bool notice = false;
-    floor_type* floor_ptr = player_ptr->current_floor_ptr;
+    floor_type *floor_ptr = player_ptr->current_floor_ptr;
     bool known = monster_near_player(floor_ptr, m_idx, t_idx);
     bool see_either = see_monster(player_ptr, m_idx) || see_monster(player_ptr, t_idx);
     bool mon_to_mon = (target_type == MONSTER_TO_MONSTER);
@@ -74,8 +77,9 @@ bool monspell_message_base(PlayerType* player_ptr, MONSTER_IDX m_idx, MONSTER_ID
     monster_name(player_ptr, m_idx, m_name);
     monster_name(player_ptr, t_idx, t_name);
 
-    if (mon_to_player || (mon_to_mon && known && see_either))
+    if (mon_to_player || (mon_to_mon && known && see_either)) {
         disturb(player_ptr, true, true);
+    }
 
     if (msg_flag_aux) {
         if (mon_to_player) {
@@ -95,36 +99,36 @@ bool monspell_message_base(PlayerType* player_ptr, MONSTER_IDX m_idx, MONSTER_ID
         }
     }
 
-    if (mon_to_mon && known && !see_either)
+    if (mon_to_mon && known && !see_either) {
         floor_ptr->monster_noise = true;
+    }
 
     return notice;
 }
 
 /*!
-* @brief モンスターが呪文行使する際のメッセージを処理する汎用関数。盲目時と通常時のメッセージを切り替える。 /
-* @param player_ptr プレイヤーへの参照ポインタ
-* @param m_idx 呪文を唱えるモンスターID
-* @param t_idx 呪文を受けるモンスターID。プレイヤーの場合はdummyで0とする。
-* @param msgs メッセージの構造体
-* @param target_type プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
+ * @brief モンスターが呪文行使する際のメッセージを処理する汎用関数。盲目時と通常時のメッセージを切り替える。 /
+ * @param player_ptr プレイヤーへの参照ポインタ
+ * @param m_idx 呪文を唱えるモンスターID
+ * @param t_idx 呪文を受けるモンスターID。プレイヤーの場合はdummyで0とする。
+ * @param msgs メッセージの構造体
+ * @param target_type プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
  * @return メッセージを表示した場合trueを返す。
  */
-bool monspell_message(PlayerType* player_ptr, MONSTER_IDX m_idx, MONSTER_IDX t_idx, const mspell_cast_msg_blind &msgs, int target_type)
+bool monspell_message(PlayerType *player_ptr, MONSTER_IDX m_idx, MONSTER_IDX t_idx, const mspell_cast_msg_blind &msgs, int target_type)
 {
     return monspell_message_base(player_ptr, m_idx, t_idx, mspell_cast_msg(msgs.blind, msgs.blind, msgs.to_player, msgs.to_mons), player_ptr->blind > 0, target_type);
 }
 
 /*!
-* @brief モンスターが呪文行使する際のメッセージを処理する汎用関数。対モンスターと対プレイヤーのメッセージを切り替える。 /
-* @param player_ptr プレイヤーへの参照ポインタ
-* @param m_idx 呪文を唱えるモンスターID
-* @param t_idx 呪文を受けるモンスターID。プレイヤーの場合はdummyで0とする。
-* @param msgs メッセージの構造体
-* @param target_type プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
-*/
-void simple_monspell_message(PlayerType* player_ptr, MONSTER_IDX m_idx, MONSTER_IDX t_idx, const mspell_cast_msg_simple &msgs, int target_type)
+ * @brief モンスターが呪文行使する際のメッセージを処理する汎用関数。対モンスターと対プレイヤーのメッセージを切り替える。 /
+ * @param player_ptr プレイヤーへの参照ポインタ
+ * @param m_idx 呪文を唱えるモンスターID
+ * @param t_idx 呪文を受けるモンスターID。プレイヤーの場合はdummyで0とする。
+ * @param msgs メッセージの構造体
+ * @param target_type プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
+ */
+void simple_monspell_message(PlayerType *player_ptr, MONSTER_IDX m_idx, MONSTER_IDX t_idx, const mspell_cast_msg_simple &msgs, int target_type)
 {
-    monspell_message_base(player_ptr, m_idx, t_idx, mspell_cast_msg(msgs.to_player, msgs.to_mons,
-        msgs.to_player, msgs.to_mons), player_ptr->blind > 0, target_type);
+    monspell_message_base(player_ptr, m_idx, t_idx, mspell_cast_msg(msgs.to_player, msgs.to_mons, msgs.to_player, msgs.to_mons), player_ptr->blind > 0, target_type);
 }

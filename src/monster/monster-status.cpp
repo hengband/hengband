@@ -211,8 +211,9 @@ static void process_monsters_mtimed_aux(PlayerType *player_ptr, MONSTER_IDX m_id
             /* Notice the "not waking up" */
             if (is_original_ap_and_seen(player_ptr, m_ptr)) {
                 /* Hack -- Count the ignores */
-                if (r_ptr->r_ignore < MAX_UCHAR)
+                if (r_ptr->r_ignore < MAX_UCHAR) {
                     r_ptr->r_ignore++;
+                }
             }
 
             break;
@@ -227,8 +228,9 @@ static void process_monsters_mtimed_aux(PlayerType *player_ptr, MONSTER_IDX m_id
 
         if (is_original_ap_and_seen(player_ptr, m_ptr)) {
             /* Hack -- Count the wakings */
-            if (r_ptr->r_wake < MAX_UCHAR)
+            if (r_ptr->r_wake < MAX_UCHAR) {
                 r_ptr->r_wake++;
+            }
         }
 
         break;
@@ -403,8 +405,9 @@ void monster_gain_exp(PlayerType *player_ptr, MONSTER_IDX m_idx, MONRACE_IDX s_i
     auto *floor_ptr = player_ptr->current_floor_ptr;
     auto *m_ptr = &floor_ptr->m_list[m_idx];
 
-    if (!monster_is_valid(m_ptr))
+    if (!monster_is_valid(m_ptr)) {
         return;
+    }
 
     auto *r_ptr = &r_info[m_ptr->r_idx];
     auto *s_ptr = &r_info[s_idx];

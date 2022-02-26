@@ -49,8 +49,9 @@ MONSTER_NUMBER summon_EDGE(PlayerType *player_ptr, POSITION y, POSITION x, int r
 {
     int count = 0;
     int num = 2 + randint1(1 + rlev / 20);
-    for (int k = 0; k < num; k++)
+    for (int k = 0; k < num; k++) {
         count += summon_named_creature(player_ptr, m_idx, y, x, MON_EDGE, PM_NONE);
+    }
 
     return count;
 }
@@ -78,10 +79,11 @@ MONSTER_NUMBER summon_guardian(PlayerType *player_ptr, POSITION y, POSITION x, i
 
         simple_monspell_message(player_ptr, m_idx, t_idx, msg, target_type);
 
-        if (mon_to_player)
+        if (mon_to_player) {
             fire_ball_hide(player_ptr, AttributeType::WATER_FLOW, 0, 3, 8);
-        else if (mon_to_mon)
+        } else if (mon_to_mon) {
             project(player_ptr, t_idx, 8, y, x, 3, AttributeType::WATER_FLOW, PROJECT_GRID | PROJECT_HIDE);
+        }
     }
 
     int count = 0;
@@ -124,8 +126,9 @@ MONSTER_NUMBER summon_LOUSE(PlayerType *player_ptr, POSITION y, POSITION x, int 
 {
     int count = 0;
     int num = 2 + randint1(3);
-    for (int k = 0; k < num; k++)
+    for (int k = 0; k < num; k++) {
         count += summon_specific(player_ptr, m_idx, y, x, rlev, SUMMON_LOUSE, PM_ALLOW_GROUP);
+    }
 
     return count;
 }
@@ -134,8 +137,9 @@ MONSTER_NUMBER summon_MOAI(PlayerType *player_ptr, POSITION y, POSITION x, int r
 {
     int count = 0;
     int num = 3 + randint1(3);
-    for (int k = 0; k < num; k++)
+    for (int k = 0; k < num; k++) {
         count += summon_specific(player_ptr, m_idx, y, x, rlev, SUMMON_SMALL_MOAI, PM_NONE);
+    }
 
     return count;
 }
@@ -149,11 +153,13 @@ MONSTER_NUMBER summon_DEMON_SLAYER(PlayerType *player_ptr, POSITION y, POSITION 
     }
 
     auto count = 0;
-    for (auto k = 0; k < MAX_NAZGUL_NUM; k++)
+    for (auto k = 0; k < MAX_NAZGUL_NUM; k++) {
         count += summon_named_creature(player_ptr, m_idx, y, x, MON_DEMON_SLAYER_MEMBER, PM_NONE);
+    }
 
-    if (count == 0)
+    if (count == 0) {
         msg_print(_("しかし、隊士は誰も来てくれなかった。", "However, no demon slayer member answered the call..."));
+    }
 
     return count;
 }
@@ -174,10 +180,11 @@ MONSTER_NUMBER summon_NAZGUL(PlayerType *player_ptr, POSITION y, POSITION x, MON
     GAME_TEXT m_name[MAX_NLEN];
     monster_name(player_ptr, m_idx, m_name);
 
-    if (player_ptr->blind)
+    if (player_ptr->blind) {
         msg_format(_("%^sが何かをつぶやいた。", "%^s mumbles."), m_name);
-    else
+    } else {
         msg_format(_("%^sが魔法で幽鬼戦隊を召喚した！", "%^s magically summons rangers of Nazgul!"), m_name);
+    }
 
     msg_print(nullptr);
 
@@ -187,27 +194,32 @@ MONSTER_NUMBER summon_NAZGUL(PlayerType *player_ptr, POSITION y, POSITION x, MON
             int j;
             for (j = 100; j > 0; j--) {
                 scatter(player_ptr, &cy, &cx, y, x, 2, PROJECT_NONE);
-                if (is_cave_empty_bold(player_ptr, cy, cx))
+                if (is_cave_empty_bold(player_ptr, cy, cx)) {
                     break;
+                }
             }
 
-            if (!j)
+            if (!j) {
                 break;
+            }
         }
 
-        if (!is_cave_empty_bold(player_ptr, cy, cx))
+        if (!is_cave_empty_bold(player_ptr, cy, cx)) {
             continue;
+        }
 
-        if (!summon_named_creature(player_ptr, m_idx, cy, cx, MON_NAZGUL, mode))
+        if (!summon_named_creature(player_ptr, m_idx, cy, cx, MON_NAZGUL, mode)) {
             continue;
+        }
 
         y = cy;
         x = cx;
         count++;
-        if (count == 1)
+        if (count == 1) {
             msg_format(_("「幽鬼戦隊%d号、ナズグル・ブラック！」", "A Nazgul says 'Nazgul-Rangers Number %d, Nazgul-Black!'"), count);
-        else
+        } else {
             msg_format(_("「同じく%d号、ナズグル・ブラック！」", "Another one says 'Number %d, Nazgul-Black!'"), count);
+        }
 
         msg_print(nullptr);
     }
@@ -222,8 +234,9 @@ MONSTER_NUMBER summon_APOCRYPHA(PlayerType *player_ptr, POSITION y, POSITION x, 
     int count = 0;
     int num = 4 + randint1(4);
     summon_type followers = one_in_(2) ? SUMMON_APOCRYPHA_FOLLOWERS : SUMMON_APOCRYPHA_DRAGONS;
-    for (int k = 0; k < num; k++)
+    for (int k = 0; k < num; k++) {
         count += summon_specific(player_ptr, m_idx, y, x, 200, followers, PM_ALLOW_UNIQUE);
+    }
 
     return count;
 }
@@ -232,8 +245,9 @@ MONSTER_NUMBER summon_HIGHEST_DRAGON(PlayerType *player_ptr, POSITION y, POSITIO
 {
     int count = 0;
     int num = 4 + randint1(4);
-    for (int k = 0; k < num; k++)
+    for (int k = 0; k < num; k++) {
         count += summon_specific(player_ptr, m_idx, y, x, 100, SUMMON_APOCRYPHA_DRAGONS, PM_ALLOW_UNIQUE);
+    }
 
     return count;
 }
@@ -242,8 +256,9 @@ MONSTER_NUMBER summon_PYRAMID(PlayerType *player_ptr, POSITION y, POSITION x, in
 {
     int count = 0;
     int num = 2 + randint1(3);
-    for (int k = 0; k < num; k++)
+    for (int k = 0; k < num; k++) {
         count += summon_specific(player_ptr, m_idx, y, x, rlev, SUMMON_PYRAMID, PM_NONE);
+    }
 
     return count;
 }
@@ -252,8 +267,9 @@ MONSTER_NUMBER summon_EYE_PHORN(PlayerType *player_ptr, POSITION y, POSITION x, 
 {
     int count = 0;
     int num = 2 + randint1(1 + rlev / 20);
-    for (int k = 0; k < num; k++)
+    for (int k = 0; k < num; k++) {
         count += summon_named_creature(player_ptr, m_idx, y, x, MON_EYE_PHORN, PM_NONE);
+    }
 
     return count;
 }
@@ -262,8 +278,9 @@ MONSTER_NUMBER summon_VESPOID(PlayerType *player_ptr, POSITION y, POSITION x, in
 {
     int count = 0;
     int num = 2 + randint1(3);
-    for (int k = 0; k < num; k++)
+    for (int k = 0; k < num; k++) {
         count += summon_specific(player_ptr, m_idx, y, x, rlev, SUMMON_VESPOID, PM_NONE);
+    }
 
     return count;
 }

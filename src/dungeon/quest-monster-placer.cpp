@@ -30,12 +30,14 @@ bool place_quest_monsters(PlayerType *player_ptr)
         }
 
         r_ptr = &r_info[quest[i].r_idx];
-        if (r_ptr->kind_flags.has(MonsterKindType::UNIQUE) && (r_ptr->cur_num >= r_ptr->max_num))
+        if (r_ptr->kind_flags.has(MonsterKindType::UNIQUE) && (r_ptr->cur_num >= r_ptr->max_num)) {
             continue;
+        }
 
         mode = PM_NO_KAGE | PM_NO_PET;
-        if (!(r_ptr->flags1 & RF1_FRIENDS))
+        if (!(r_ptr->flags1 & RF1_FRIENDS)) {
             mode |= PM_ALLOW_GROUP;
+        }
 
         for (int j = 0; j < (quest[i].max_num - quest[i].cur_num); j++) {
             int k;
@@ -50,32 +52,39 @@ bool place_quest_monsters(PlayerType *player_ptr)
                     x = randint0(floor_ptr->width);
                     g_ptr = &floor_ptr->grid_array[y][x];
                     f_ptr = &f_info[g_ptr->feat];
-                    if (f_ptr->flags.has_none_of({ FloorFeatureType::MOVE, FloorFeatureType::CAN_FLY }))
+                    if (f_ptr->flags.has_none_of({ FloorFeatureType::MOVE, FloorFeatureType::CAN_FLY })) {
                         continue;
+                    }
 
-                    if (!monster_can_enter(player_ptr, y, x, r_ptr, 0))
+                    if (!monster_can_enter(player_ptr, y, x, r_ptr, 0)) {
                         continue;
+                    }
 
-                    if (distance(y, x, player_ptr->y, player_ptr->x) < 10)
+                    if (distance(y, x, player_ptr->y, player_ptr->x) < 10) {
                         continue;
+                    }
 
-                    if (g_ptr->is_icky())
+                    if (g_ptr->is_icky()) {
                         continue;
-                    else
+                    } else {
                         break;
+                    }
                 }
 
-                if (l == 0)
+                if (l == 0) {
                     return false;
+                }
 
-                if (place_monster_aux(player_ptr, 0, y, x, quest[i].r_idx, mode))
+                if (place_monster_aux(player_ptr, 0, y, x, quest[i].r_idx, mode)) {
                     break;
-                else
+                } else {
                     continue;
+                }
             }
 
-            if (k == SAFE_MAX_ATTEMPTS)
+            if (k == SAFE_MAX_ATTEMPTS) {
                 return false;
+            }
         }
     }
 

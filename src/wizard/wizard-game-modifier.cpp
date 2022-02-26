@@ -48,8 +48,9 @@ constexpr std::array wizard_game_modifier_menu_table = {
  */
 void display_wizard_game_modifier_menu()
 {
-    for (auto y = 1U; y <= wizard_game_modifier_menu_table.size(); y++)
+    for (auto y = 1U; y <= wizard_game_modifier_menu_table.size(); y++) {
         term_erase(14, y, 64);
+    }
 
     int r = 1;
     int c = 15;
@@ -109,19 +110,22 @@ void wiz_enter_quest(PlayerType *player_ptr)
     sprintf(ppp, "QuestID (0-%d):", max_q_idx - 1);
     sprintf(tmp_val, "%d", 0);
 
-    if (!get_string(ppp, tmp_val, 3))
+    if (!get_string(ppp, tmp_val, 3)) {
         return;
+    }
 
     tmp_int = atoi(tmp_val);
-    if ((tmp_int < 0) || (tmp_int >= max_q_idx))
+    if ((tmp_int < 0) || (tmp_int >= max_q_idx)) {
         return;
+    }
 
     init_flags = i2enum<init_flags_type>(INIT_SHOW_TEXT | INIT_ASSIGN);
     player_ptr->current_floor_ptr->quest_number = i2enum<QuestId>(tmp_int);
     parse_fixed_map(player_ptr, "q_info.txt", 0, 0, 0, 0);
     quest[tmp_int].status = QuestStatusType::TAKEN;
-    if (quest[tmp_int].dungeon == 0)
+    if (quest[tmp_int].dungeon == 0) {
         exe_enter_quest(player_ptr, i2enum<QuestId>(tmp_int));
+    }
 }
 
 /*!
@@ -136,8 +140,9 @@ void wiz_complete_quest(PlayerType *player_ptr)
         return;
     }
 
-    if (quest[enum2i(player_ptr->current_floor_ptr->quest_number)].status == QuestStatusType::TAKEN)
+    if (quest[enum2i(player_ptr->current_floor_ptr->quest_number)].status == QuestStatusType::TAKEN) {
         complete_quest(player_ptr, player_ptr->current_floor_ptr->quest_number);
+    }
 }
 
 void wiz_restore_monster_max_num(MONRACE_IDX r_idx)

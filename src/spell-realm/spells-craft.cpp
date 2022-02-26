@@ -33,7 +33,8 @@
  */
 bool set_ele_attack(PlayerType *player_ptr, uint32_t attack_type, TIME_EFFECT v)
 {
-    v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;
+    v = (v > 10000) ? 10000 : (v < 0) ? 0
+                                      : v;
 
     if ((player_ptr->special_attack & (ATTACK_ACID)) && (attack_type != ATTACK_ACID)) {
         player_ptr->special_attack &= ~(ATTACK_ACID);
@@ -68,24 +69,25 @@ bool set_ele_attack(PlayerType *player_ptr, uint32_t attack_type, TIME_EFFECT v)
             ((attack_type == ATTACK_ACID)
                     ? "酸"
                     : ((attack_type == ATTACK_ELEC)
-                            ? "電撃"
-                            : ((attack_type == ATTACK_FIRE) ? "火炎"
-                                                            : ((attack_type == ATTACK_COLD) ? "冷気" : ((attack_type == ATTACK_POIS) ? "毒" : "(なし)"))))));
+                              ? "電撃"
+                              : ((attack_type == ATTACK_FIRE) ? "火炎"
+                                                              : ((attack_type == ATTACK_COLD) ? "冷気" : ((attack_type == ATTACK_POIS) ? "毒" : "(なし)"))))));
 #else
         msg_format("For a while, the blows you deal will %s",
             ((attack_type == ATTACK_ACID)
                     ? "melt with acid!"
                     : ((attack_type == ATTACK_ELEC)
-                            ? "shock your foes!"
-                            : ((attack_type == ATTACK_FIRE)
-                                    ? "burn with fire!"
-                                    : ((attack_type == ATTACK_COLD) ? "chill to the bone!"
-                                                                    : ((attack_type == ATTACK_POIS) ? "poison your enemies!" : "do nothing special."))))));
+                              ? "shock your foes!"
+                              : ((attack_type == ATTACK_FIRE)
+                                        ? "burn with fire!"
+                                        : ((attack_type == ATTACK_COLD) ? "chill to the bone!"
+                                                                        : ((attack_type == ATTACK_POIS) ? "poison your enemies!" : "do nothing special."))))));
 #endif
     }
 
-    if (disturb_state)
+    if (disturb_state) {
         disturb(player_ptr, false, false);
+    }
     player_ptr->redraw |= (PR_STATUS);
     player_ptr->update |= (PU_BONUS);
     handle_stuff(player_ptr);
@@ -101,7 +103,8 @@ bool set_ele_attack(PlayerType *player_ptr, uint32_t attack_type, TIME_EFFECT v)
  */
 bool set_ele_immune(PlayerType *player_ptr, uint32_t immune_type, TIME_EFFECT v)
 {
-    v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;
+    v = (v > 10000) ? 10000 : (v < 0) ? 0
+                                      : v;
 
     if ((player_ptr->special_defense & (DEFENSE_ACID)) && (immune_type != DEFENSE_ACID)) {
         player_ptr->special_defense &= ~(DEFENSE_ACID);
@@ -135,16 +138,17 @@ bool set_ele_immune(PlayerType *player_ptr, uint32_t immune_type, TIME_EFFECT v)
             ((immune_type == DEFENSE_ACID)
                     ? _("酸", "acid!")
                     : ((immune_type == DEFENSE_ELEC)
-                            ? _("電撃", "electricity!")
-                            : ((immune_type == DEFENSE_FIRE)
-                                    ? _("火炎", "fire!")
-                                    : ((immune_type == DEFENSE_COLD)
-                                            ? _("冷気", "cold!")
-                                            : ((immune_type == DEFENSE_POIS) ? _("毒", "poison!") : _("(なし)", "nothing special.")))))));
+                              ? _("電撃", "electricity!")
+                              : ((immune_type == DEFENSE_FIRE)
+                                        ? _("火炎", "fire!")
+                                        : ((immune_type == DEFENSE_COLD)
+                                                  ? _("冷気", "cold!")
+                                                  : ((immune_type == DEFENSE_POIS) ? _("毒", "poison!") : _("(なし)", "nothing special.")))))));
     }
 
-    if (disturb_state)
+    if (disturb_state) {
         disturb(player_ptr, false, false);
+    }
     player_ptr->redraw |= (PR_STATUS);
     player_ptr->update |= (PU_BONUS);
     handle_stuff(player_ptr);
@@ -166,25 +170,29 @@ bool choose_ele_attack(PlayerType *player_ptr)
     int num = (player_ptr->lev - 20) / 5;
     c_prt(TERM_RED, _("        a) 焼棄", "        a) Fire Brand"), 2, 14);
 
-    if (num >= 2)
+    if (num >= 2) {
         c_prt(TERM_L_WHITE, _("        b) 凍結", "        b) Cold Brand"), 3, 14);
-    else
+    } else {
         prt("", 3, 14);
+    }
 
-    if (num >= 3)
+    if (num >= 3) {
         c_prt(TERM_GREEN, _("        c) 毒殺", "        c) Poison Brand"), 4, 14);
-    else
+    } else {
         prt("", 4, 14);
+    }
 
-    if (num >= 4)
+    if (num >= 4) {
         c_prt(TERM_L_DARK, _("        d) 溶解", "        d) Acid Brand"), 5, 14);
-    else
+    } else {
         prt("", 5, 14);
+    }
 
-    if (num >= 5)
+    if (num >= 5) {
         c_prt(TERM_BLUE, _("        e) 電撃", "        e) Elec Brand"), 6, 14);
-    else
+    } else {
         prt("", 6, 14);
+    }
 
     prt("", 7, 14);
     prt("", 8, 14);
@@ -195,17 +203,17 @@ bool choose_ele_attack(PlayerType *player_ptr)
 
     char choice = inkey();
 
-    if ((choice == 'a') || (choice == 'A'))
+    if ((choice == 'a') || (choice == 'A')) {
         set_ele_attack(player_ptr, ATTACK_FIRE, player_ptr->lev / 2 + randint1(player_ptr->lev / 2));
-    else if (((choice == 'b') || (choice == 'B')) && (num >= 2))
+    } else if (((choice == 'b') || (choice == 'B')) && (num >= 2)) {
         set_ele_attack(player_ptr, ATTACK_COLD, player_ptr->lev / 2 + randint1(player_ptr->lev / 2));
-    else if (((choice == 'c') || (choice == 'C')) && (num >= 3))
+    } else if (((choice == 'c') || (choice == 'C')) && (num >= 3)) {
         set_ele_attack(player_ptr, ATTACK_POIS, player_ptr->lev / 2 + randint1(player_ptr->lev / 2));
-    else if (((choice == 'd') || (choice == 'D')) && (num >= 4))
+    } else if (((choice == 'd') || (choice == 'D')) && (num >= 4)) {
         set_ele_attack(player_ptr, ATTACK_ACID, player_ptr->lev / 2 + randint1(player_ptr->lev / 2));
-    else if (((choice == 'e') || (choice == 'E')) && (num >= 5))
+    } else if (((choice == 'e') || (choice == 'E')) && (num >= 5)) {
         set_ele_attack(player_ptr, ATTACK_ELEC, player_ptr->lev / 2 + randint1(player_ptr->lev / 2));
-    else {
+    } else {
         msg_print(_("魔法剣を使うのをやめた。", "You cancel the temporary branding."));
         screen_load();
         return false;
@@ -236,15 +244,15 @@ bool choose_ele_immune(PlayerType *player_ptr, TIME_EFFECT immune_turn)
 
     char choice = inkey();
 
-    if ((choice == 'a') || (choice == 'A'))
+    if ((choice == 'a') || (choice == 'A')) {
         set_ele_immune(player_ptr, DEFENSE_FIRE, immune_turn);
-    else if ((choice == 'b') || (choice == 'B'))
+    } else if ((choice == 'b') || (choice == 'B')) {
         set_ele_immune(player_ptr, DEFENSE_COLD, immune_turn);
-    else if ((choice == 'c') || (choice == 'C'))
+    } else if ((choice == 'c') || (choice == 'C')) {
         set_ele_immune(player_ptr, DEFENSE_ACID, immune_turn);
-    else if ((choice == 'd') || (choice == 'D'))
+    } else if ((choice == 'd') || (choice == 'D')) {
         set_ele_immune(player_ptr, DEFENSE_ELEC, immune_turn);
-    else {
+    } else {
         msg_print(_("免疫を付けるのをやめた。", "You cancel the temporary immunity."));
         screen_load();
         return false;
@@ -266,8 +274,9 @@ bool pulish_shield(PlayerType *player_ptr)
 
     OBJECT_IDX item;
     auto *o_ptr = choose_object(player_ptr, &item, q, s, USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT, TvalItemTester(ItemKindType::SHIELD));
-    if (o_ptr == nullptr)
+    if (o_ptr == nullptr) {
         return false;
+    }
 
     GAME_TEXT o_name[MAX_NLEN];
     describe_flavor(player_ptr, o_name, o_ptr, OD_OMIT_PREFIX | OD_NAME_ONLY);
@@ -288,8 +297,9 @@ bool pulish_shield(PlayerType *player_ptr)
         return true;
     }
 
-    if (flush_failure)
+    if (flush_failure) {
         flush();
+    }
 
     msg_print(_("失敗した。", "Failed."));
     chg_virtue(player_ptr, V_ENCHANT, -2);

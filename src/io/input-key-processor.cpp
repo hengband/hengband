@@ -199,20 +199,23 @@ void process_command(PlayerType *player_ptr)
         break;
     }
     case 'w': {
-        if (!player_ptr->wild_mode)
+        if (!player_ptr->wild_mode) {
             do_cmd_wield(player_ptr);
+        }
 
         break;
     }
     case 't': {
-        if (!player_ptr->wild_mode)
+        if (!player_ptr->wild_mode) {
             do_cmd_takeoff(player_ptr);
+        }
 
         break;
     }
     case 'd': {
-        if (!player_ptr->wild_mode)
+        if (!player_ptr->wild_mode) {
             do_cmd_drop(player_ptr);
+        }
 
         break;
     }
@@ -238,14 +241,16 @@ void process_command(PlayerType *player_ptr)
         break;
     }
     case '+': {
-        if (!player_ptr->wild_mode)
+        if (!player_ptr->wild_mode) {
             do_cmd_alter(player_ptr);
+        }
 
         break;
     }
     case 'T': {
-        if (!player_ptr->wild_mode)
+        if (!player_ptr->wild_mode) {
             do_cmd_tunnel(player_ptr);
+        }
 
         break;
     }
@@ -258,8 +263,9 @@ void process_command(PlayerType *player_ptr)
         break;
     }
     case '.': {
-        if (!player_ptr->wild_mode)
+        if (!player_ptr->wild_mode) {
             do_cmd_run(player_ptr);
+        }
 
         break;
     }
@@ -280,10 +286,11 @@ void process_command(PlayerType *player_ptr)
         break;
     }
     case 'S': {
-        if (player_ptr->action == ACTION_SEARCH)
+        if (player_ptr->action == ACTION_SEARCH) {
             set_action(player_ptr, ACTION_NONE);
-        else
+        } else {
             set_action(player_ptr, ACTION_SEARCH);
+        }
 
         break;
     }
@@ -301,8 +308,9 @@ void process_command(PlayerType *player_ptr)
     }
     case '<': {
         if (!player_ptr->wild_mode && !floor_ptr->dun_level && !floor_ptr->inside_arena && !inside_quest(floor_ptr->quest_number)) {
-            if (vanilla_town)
+            if (vanilla_town) {
                 break;
+            }
 
             if (player_ptr->ambush_flag) {
                 msg_print(_("襲撃から逃げるにはマップの端まで移動しなければならない。", "To flee the ambush you have to reach the edge of the map."));
@@ -315,16 +323,18 @@ void process_command(PlayerType *player_ptr)
             }
 
             change_wild_mode(player_ptr, false);
-        } else
+        } else {
             do_cmd_go_up(player_ptr);
+        }
 
         break;
     }
     case '>': {
-        if (player_ptr->wild_mode)
+        if (player_ptr->wild_mode) {
             change_wild_mode(player_ptr, false);
-        else
+        } else {
             do_cmd_go_down(player_ptr);
+        }
 
         break;
     }
@@ -350,31 +360,33 @@ void process_command(PlayerType *player_ptr)
     }
     case 'G': {
         PlayerClass pc(player_ptr);
-        if (pc.is_every_magic() || pc.equals(PlayerClassType::ELEMENTALIST))
+        if (pc.is_every_magic() || pc.equals(PlayerClassType::ELEMENTALIST)) {
             msg_print(_("呪文を学習する必要はない！", "You don't have to learn spells!"));
-        else if (pc.equals(PlayerClassType::SAMURAI))
+        } else if (pc.equals(PlayerClassType::SAMURAI)) {
             do_cmd_gain_hissatsu(player_ptr);
-        else if (pc.equals(PlayerClassType::MAGIC_EATER))
+        } else if (pc.equals(PlayerClassType::MAGIC_EATER)) {
             import_magic_device(player_ptr);
-        else
+        } else {
             do_cmd_study(player_ptr);
+        }
 
         break;
     }
     case 'b': {
         PlayerClass pc(player_ptr);
-        if (pc.can_browse())
+        if (pc.can_browse()) {
             do_cmd_mind_browse(player_ptr);
-        else if (pc.equals(PlayerClassType::ELEMENTALIST))
+        } else if (pc.equals(PlayerClassType::ELEMENTALIST)) {
             do_cmd_element_browse(player_ptr);
-        else if (pc.equals(PlayerClassType::SMITH))
+        } else if (pc.equals(PlayerClassType::SMITH)) {
             do_cmd_kaji(player_ptr, true);
-        else if (pc.equals(PlayerClassType::MAGIC_EATER))
+        } else if (pc.equals(PlayerClassType::MAGIC_EATER)) {
             do_cmd_magic_eater(player_ptr, true, false);
-        else if (pc.equals(PlayerClassType::SNIPER))
+        } else if (pc.equals(PlayerClassType::SNIPER)) {
             do_cmd_snipe_browse(player_ptr);
-        else
+        } else {
             do_cmd_browse(player_ptr);
+        }
 
         break;
     }
@@ -417,8 +429,9 @@ void process_command(PlayerType *player_ptr)
                 which_power = _("元素魔法", "magic");
                 break;
             default:
-                if (mp_ptr->spell_book == ItemKindType::LIFE_BOOK)
+                if (mp_ptr->spell_book == ItemKindType::LIFE_BOOK) {
                     which_power = _("祈り", "prayer");
+                }
                 break;
             }
 
@@ -433,24 +446,25 @@ void process_command(PlayerType *player_ptr)
             break;
         }
 
-        if (pc.can_browse())
+        if (pc.can_browse()) {
             do_cmd_mind(player_ptr);
-        else if (pc.equals(PlayerClassType::ELEMENTALIST))
+        } else if (pc.equals(PlayerClassType::ELEMENTALIST)) {
             do_cmd_element(player_ptr);
-        else if (pc.equals(PlayerClassType::IMITATOR))
+        } else if (pc.equals(PlayerClassType::IMITATOR)) {
             do_cmd_mane(player_ptr, false);
-        else if (pc.equals(PlayerClassType::MAGIC_EATER))
+        } else if (pc.equals(PlayerClassType::MAGIC_EATER)) {
             do_cmd_magic_eater(player_ptr, false, false);
-        else if (pc.equals(PlayerClassType::SAMURAI))
+        } else if (pc.equals(PlayerClassType::SAMURAI)) {
             do_cmd_hissatsu(player_ptr);
-        else if (pc.equals(PlayerClassType::BLUE_MAGE))
+        } else if (pc.equals(PlayerClassType::BLUE_MAGE)) {
             do_cmd_cast_learned(player_ptr);
-        else if (pc.equals(PlayerClassType::SMITH))
+        } else if (pc.equals(PlayerClassType::SMITH)) {
             do_cmd_kaji(player_ptr, false);
-        else if (pc.equals(PlayerClassType::SNIPER))
+        } else if (pc.equals(PlayerClassType::SNIPER)) {
             do_cmd_snipe(player_ptr);
-        else
+        } else {
             (void)do_cmd_cast(player_ptr);
+        }
 
         break;
     }
@@ -508,10 +522,11 @@ void process_command(PlayerType *player_ptr)
         break;
     }
     case 'u': {
-        if (use_command && !rogue_like_commands)
+        if (use_command && !rogue_like_commands) {
             do_cmd_use(player_ptr);
-        else
+        } else {
             do_cmd_use_staff(player_ptr);
+        }
 
         break;
     }
@@ -654,20 +669,23 @@ void process_command(PlayerType *player_ptr)
         break;
     }
     case '`': {
-        if (!player_ptr->wild_mode)
+        if (!player_ptr->wild_mode) {
             do_cmd_travel(player_ptr);
+        }
         PlayerClass(player_ptr).break_samurai_stance({ SamuraiStanceType::MUSOU });
 
         break;
     }
     default: {
-        if (flush_failure)
+        if (flush_failure) {
             flush();
+        }
         if (one_in_(2)) {
             char error_m[1024];
             sound(SOUND_ILLEGAL);
-            if (!get_rnd_line(_("error_j.txt", "error.txt"), 0, error_m))
+            if (!get_rnd_line(_("error_j.txt", "error.txt"), 0, error_m)) {
                 msg_print(error_m);
+            }
         } else {
             prt(_(" '?' でヘルプが表示されます。", "Type '?' for help."), 0, 0);
         }
@@ -676,6 +694,7 @@ void process_command(PlayerType *player_ptr)
     }
     }
 
-    if (!player_ptr->energy_use && !now_message)
+    if (!player_ptr->energy_use && !now_message) {
         now_message = old_now_message;
+    }
 }

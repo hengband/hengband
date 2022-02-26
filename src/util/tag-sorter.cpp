@@ -24,8 +24,9 @@ static void insertion_sort(tag_type elements[], int number)
     for (int i = 1; i < number; i++) {
         tmp = elements[i];
         int j;
-        for (j = i; (j > 0) && (elements[j - 1].tag > tmp.tag); j--)
+        for (j = i; (j > 0) && (elements[j - 1].tag > tmp.tag); j--) {
             elements[j] = elements[j - 1];
+        }
         elements[j] = tmp;
     }
 }
@@ -37,12 +38,15 @@ static tag_type median3(tag_type elements[], int left, int right)
 {
     int center = (left + right) / 2;
 
-    if (elements[left].tag > elements[center].tag)
+    if (elements[left].tag > elements[center].tag) {
         swap(&elements[left], &elements[center]);
-    if (elements[left].tag > elements[right].tag)
+    }
+    if (elements[left].tag > elements[right].tag) {
         swap(&elements[left], &elements[right]);
-    if (elements[center].tag > elements[right].tag)
+    }
+    if (elements[center].tag > elements[right].tag) {
         swap(&elements[center], &elements[right]);
+    }
 
     swap(&elements[center], &elements[right - 1]);
     return elements[right - 1];
@@ -71,15 +75,18 @@ static void quicksort(tag_type elements[], int left, int right)
         int j = right - 1;
 
         while (true) {
-            while (elements[++i].tag < pivot.tag)
+            while (elements[++i].tag < pivot.tag) {
                 ;
-            while (elements[--j].tag > pivot.tag)
+            }
+            while (elements[--j].tag > pivot.tag) {
                 ;
+            }
 
-            if (i < j)
+            if (i < j) {
                 swap(&elements[i], &elements[j]);
-            else
+            } else {
                 break;
+            }
         }
 
         swap(&elements[i], &elements[right - 1]);
@@ -97,4 +104,7 @@ static void quicksort(tag_type elements[], int left, int right)
  * Sorts an array of tagged pointers
  * with <number> elements.
  */
-void tag_sort(tag_type elements[], int number) { quicksort(elements, 0, number - 1); }
+void tag_sort(tag_type elements[], int number)
+{
+    quicksort(elements, 0, number - 1);
+}

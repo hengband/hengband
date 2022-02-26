@@ -28,8 +28,8 @@
 #include "system/monster-race-definition.h"
 #include "system/monster-type-definition.h"
 #include "system/player-type-definition.h"
-#include "view/display-messages.h"
 #include "util/bit-flags-calculator.h"
+#include "view/display-messages.h"
 
 /*!
  * @brief モンスターへの単体抹殺処理サブルーチン / Delete a non-unique/non-quest monster
@@ -44,23 +44,24 @@ bool genocide_aux(PlayerType *player_ptr, MONSTER_IDX m_idx, int power, bool pla
 {
     auto *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
     auto *r_ptr = &r_info[m_ptr->r_idx];
-    if (is_pet(m_ptr) && !player_cast)
+    if (is_pet(m_ptr) && !player_cast) {
         return false;
+    }
 
     bool resist = false;
-    if (r_ptr->kind_flags.has(MonsterKindType::UNIQUE) || any_bits(r_ptr->flags1, RF1_QUESTOR))
+    if (r_ptr->kind_flags.has(MonsterKindType::UNIQUE) || any_bits(r_ptr->flags1, RF1_QUESTOR)) {
         resist = true;
-    else if (r_ptr->flags7 & RF7_UNIQUE2)
+    } else if (r_ptr->flags7 & RF7_UNIQUE2) {
         resist = true;
-    else if (m_idx == player_ptr->riding)
+    } else if (m_idx == player_ptr->riding) {
         resist = true;
-    else if ((inside_quest(player_ptr->current_floor_ptr->quest_number) && !inside_quest(random_quest_number(player_ptr, player_ptr->current_floor_ptr->dun_level))) || player_ptr->current_floor_ptr->inside_arena || player_ptr->phase_out)
+    } else if ((inside_quest(player_ptr->current_floor_ptr->quest_number) && !inside_quest(random_quest_number(player_ptr, player_ptr->current_floor_ptr->dun_level))) || player_ptr->current_floor_ptr->inside_arena || player_ptr->phase_out) {
         resist = true;
-    else if (player_cast && (r_ptr->level > randint0(power)))
+    } else if (player_cast && (r_ptr->level > randint0(power))) {
         resist = true;
-    else if (player_cast && m_ptr->mflag2.has(MonsterConstantFlagType::NOGENO))
+    } else if (player_cast && m_ptr->mflag2.has(MonsterConstantFlagType::NOGENO)) {
         resist = true;
-    else {
+    } else {
         if (record_named_pet && is_pet(m_ptr) && m_ptr->nickname) {
             GAME_TEXT m_name[MAX_NLEN];
             monster_desc(player_ptr, m_name, m_ptr, MD_INDEF_VISIBLE);
@@ -93,8 +94,9 @@ bool genocide_aux(PlayerType *player_ptr, MONSTER_IDX m_idx, int power, bool pla
             set_hostile(player_ptr, m_ptr);
         }
 
-        if (one_in_(13))
+        if (one_in_(13)) {
             m_ptr->mflag2.set(MonsterConstantFlagType::NOGENO);
+        }
     }
 
     if (player_cast) {
@@ -130,16 +132,19 @@ bool symbol_genocide(PlayerType *player_ptr, int power, bool player_cast)
     }
 
     char typ;
-    while (!get_com(_("どの種類(文字)のモンスターを抹殺しますか: ", "Choose a monster race (by symbol) to genocide: "), &typ, false))
+    while (!get_com(_("どの種類(文字)のモンスターを抹殺しますか: ", "Choose a monster race (by symbol) to genocide: "), &typ, false)) {
         ;
+    }
     bool result = false;
     for (MONSTER_IDX i = 1; i < player_ptr->current_floor_ptr->m_max; i++) {
         auto *m_ptr = &player_ptr->current_floor_ptr->m_list[i];
         auto *r_ptr = &r_info[m_ptr->r_idx];
-        if (!monster_is_valid(m_ptr))
+        if (!monster_is_valid(m_ptr)) {
             continue;
-        if (r_ptr->d_char != typ)
+        }
+        if (r_ptr->d_char != typ) {
             continue;
+        }
 
         result |= genocide_aux(player_ptr, i, power, player_cast, 4, _("抹殺", "Genocide"));
     }
@@ -171,10 +176,12 @@ bool mass_genocide(PlayerType *player_ptr, int power, bool player_cast)
     bool result = false;
     for (MONSTER_IDX i = 1; i < player_ptr->current_floor_ptr->m_max; i++) {
         auto *m_ptr = &player_ptr->current_floor_ptr->m_list[i];
-        if (!monster_is_valid(m_ptr))
+        if (!monster_is_valid(m_ptr)) {
             continue;
-        if (m_ptr->cdis > MAX_SIGHT)
+        }
+        if (m_ptr->cdis > MAX_SIGHT) {
             continue;
+        }
 
         result |= genocide_aux(player_ptr, i, power, player_cast, 3, _("周辺抹殺", "Mass Genocide"));
     }
@@ -207,12 +214,15 @@ bool mass_genocide_undead(PlayerType *player_ptr, int power, bool player_cast)
     for (MONSTER_IDX i = 1; i < player_ptr->current_floor_ptr->m_max; i++) {
         auto *m_ptr = &player_ptr->current_floor_ptr->m_list[i];
         auto *r_ptr = &r_info[m_ptr->r_idx];
-        if (!monster_is_valid(m_ptr))
+        if (!monster_is_valid(m_ptr)) {
             continue;
-        if (r_ptr->kind_flags.has_not(MonsterKindType::UNDEAD))
+        }
+        if (r_ptr->kind_flags.has_not(MonsterKindType::UNDEAD)) {
             continue;
-        if (m_ptr->cdis > MAX_SIGHT)
+        }
+        if (m_ptr->cdis > MAX_SIGHT) {
             continue;
+        }
 
         result |= genocide_aux(player_ptr, i, power, player_cast, 3, _("アンデッド消滅", "Annihilate Undead"));
     }

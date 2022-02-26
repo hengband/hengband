@@ -29,10 +29,12 @@ void load_quick_start(void)
     previous_char.sc = rd_s16b();
     previous_char.au = rd_s32b();
 
-    for (int i = 0; i < A_MAX; i++)
+    for (int i = 0; i < A_MAX; i++) {
         previous_char.stat_max[i] = rd_s16b();
-    for (int i = 0; i < A_MAX; i++)
+    }
+    for (int i = 0; i < A_MAX; i++) {
         previous_char.stat_max_max[i] = rd_s16b();
+    }
 
     for (int i = 0; i < PY_MAX_LEVEL; i++) {
         previous_char.player_hp[i] = rd_s16b();
@@ -40,11 +42,13 @@ void load_quick_start(void)
 
     previous_char.chaos_patron = rd_s16b();
 
-    for (int i = 0; i < 8; i++)
+    for (int i = 0; i < 8; i++) {
         previous_char.vir_types[i] = rd_s16b();
+    }
 
-    for (int i = 0; i < 4; i++)
+    for (int i = 0; i < 4; i++) {
         rd_string(previous_char.history[i], sizeof(previous_char.history[i]));
+    }
 
     strip_bytes(1);
     previous_char.quick_ok = rd_byte() != 0;

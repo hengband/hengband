@@ -134,15 +134,19 @@ bool check_summon_specific(PlayerType *player_ptr, MONRACE_IDX summoner_idx, MON
         is_match = r_ptr->d_char == 'B';
         break;
     case SUMMON_KAMIKAZE:
-        for (int i = 0; i < 4; i++)
-            if (r_ptr->blow[i].method == RaceBlowMethodType::EXPLODE)
+        for (int i = 0; i < 4; i++) {
+            if (r_ptr->blow[i].method == RaceBlowMethodType::EXPLODE) {
                 is_match = true;
+            }
+        }
 
         break;
     case SUMMON_KAMIKAZE_LIVING:
-        for (int i = 0; i < 4; i++)
-            if (r_ptr->blow[i].method == RaceBlowMethodType::EXPLODE)
+        for (int i = 0; i < 4; i++) {
+            if (r_ptr->blow[i].method == RaceBlowMethodType::EXPLODE) {
                 is_match = true;
+            }
+        }
 
         is_match &= monster_living(r_idx);
         break;

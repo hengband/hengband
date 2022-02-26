@@ -48,18 +48,21 @@ void call_the_void(PlayerType *player_ptr)
 
     if (do_call) {
         for (int i = 1; i < 10; i++) {
-            if (i - 5)
+            if (i - 5) {
                 fire_ball(player_ptr, AttributeType::ROCKET, i, 175, 2);
+            }
         }
 
         for (int i = 1; i < 10; i++) {
-            if (i - 5)
+            if (i - 5) {
                 fire_ball(player_ptr, AttributeType::MANA, i, 175, 3);
+            }
         }
 
         for (int i = 1; i < 10; i++) {
-            if (i - 5)
+            if (i - 5) {
                 fire_ball(player_ptr, AttributeType::NUKE, i, 175, 4);
+            }
         }
 
         return;
@@ -81,16 +84,18 @@ void call_the_void(PlayerType *player_ptr)
     msg_print(_("大きな爆発音があった！", "There is a loud explosion!"));
 
     if (one_in_(666)) {
-        if (!vanish_dungeon(player_ptr))
+        if (!vanish_dungeon(player_ptr)) {
             msg_print(_("ダンジョンは一瞬静まり返った。", "The dungeon becomes quiet for a moment."));
+        }
         take_hit(player_ptr, DAMAGE_NOESCAPE, 100 + randint1(150), _("自殺的な虚無招来", "a suicidal Call the Void"));
         return;
     }
 
-    if (destroy_area(player_ptr, player_ptr->y, player_ptr->x, 15 + player_ptr->lev + randint0(11), false))
+    if (destroy_area(player_ptr, player_ptr->y, player_ptr->x, 15 + player_ptr->lev + randint0(11), false)) {
         msg_print(_("ダンジョンが崩壊した...", "The dungeon collapses..."));
-    else
+    } else {
         msg_print(_("ダンジョンは大きく揺れた。", "The dungeon trembles."));
+    }
     take_hit(player_ptr, DAMAGE_NOESCAPE, 100 + randint1(150), _("自殺的な虚無招来", "a suicidal Call the Void"));
 }
 
@@ -106,8 +111,9 @@ bool vanish_dungeon(PlayerType *player_ptr)
     auto *floor_ptr = player_ptr->current_floor_ptr;
     bool is_special_floor = inside_quest(floor_ptr->quest_number) && quest_type::is_fixed(floor_ptr->quest_number);
     is_special_floor |= (floor_ptr->dun_level == 0);
-    if (is_special_floor)
+    if (is_special_floor) {
         return false;
+    }
 
     GAME_TEXT m_name[MAX_NLEN];
     for (POSITION y = 1; y < floor_ptr->height - 1; y++) {
@@ -125,8 +131,9 @@ bool vanish_dungeon(PlayerType *player_ptr)
                 }
             }
 
-            if (f_ptr->flags.has(FloorFeatureType::HURT_DISI))
+            if (f_ptr->flags.has(FloorFeatureType::HURT_DISI)) {
                 cave_alter_feat(player_ptr, y, x, FloorFeatureType::HURT_DISI);
+            }
         }
     }
 
@@ -137,8 +144,9 @@ bool vanish_dungeon(PlayerType *player_ptr)
 
         if (g_ptr->mimic && f_ptr->flags.has(FloorFeatureType::HURT_DISI)) {
             g_ptr->mimic = feat_state(floor_ptr, g_ptr->mimic, FloorFeatureType::HURT_DISI);
-            if (f_info[g_ptr->mimic].flags.has_not(FloorFeatureType::REMEMBER))
+            if (f_info[g_ptr->mimic].flags.has_not(FloorFeatureType::REMEMBER)) {
                 g_ptr->info &= ~(CAVE_MARK);
+            }
         }
 
         g_ptr = &floor_ptr->grid_array[floor_ptr->height - 1][x];
@@ -147,8 +155,9 @@ bool vanish_dungeon(PlayerType *player_ptr)
 
         if (g_ptr->mimic && f_ptr->flags.has(FloorFeatureType::HURT_DISI)) {
             g_ptr->mimic = feat_state(floor_ptr, g_ptr->mimic, FloorFeatureType::HURT_DISI);
-            if (f_info[g_ptr->mimic].flags.has_not(FloorFeatureType::REMEMBER))
+            if (f_info[g_ptr->mimic].flags.has_not(FloorFeatureType::REMEMBER)) {
                 g_ptr->info &= ~(CAVE_MARK);
+            }
         }
     }
 
@@ -160,8 +169,9 @@ bool vanish_dungeon(PlayerType *player_ptr)
 
         if (g_ptr->mimic && f_ptr->flags.has(FloorFeatureType::HURT_DISI)) {
             g_ptr->mimic = feat_state(floor_ptr, g_ptr->mimic, FloorFeatureType::HURT_DISI);
-            if (f_info[g_ptr->mimic].flags.has_not(FloorFeatureType::REMEMBER))
+            if (f_info[g_ptr->mimic].flags.has_not(FloorFeatureType::REMEMBER)) {
                 g_ptr->info &= ~(CAVE_MARK);
+            }
         }
 
         g_ptr = &floor_ptr->grid_array[y][floor_ptr->width - 1];
@@ -170,8 +180,9 @@ bool vanish_dungeon(PlayerType *player_ptr)
 
         if (g_ptr->mimic && f_ptr->flags.has(FloorFeatureType::HURT_DISI)) {
             g_ptr->mimic = feat_state(floor_ptr, g_ptr->mimic, FloorFeatureType::HURT_DISI);
-            if (f_info[g_ptr->mimic].flags.has_not(FloorFeatureType::REMEMBER))
+            if (f_info[g_ptr->mimic].flags.has_not(FloorFeatureType::REMEMBER)) {
                 g_ptr->info &= ~(CAVE_MARK);
+            }
         }
     }
 
@@ -205,18 +216,21 @@ void cast_meteor(PlayerType *player_ptr, int dam, POSITION rad)
             dy = (player_ptr->y > y) ? (player_ptr->y - y) : (y - player_ptr->y);
             d = (dy > dx) ? (dy + (dx >> 1)) : (dx + (dy >> 1));
 
-            if (d >= 9)
+            if (d >= 9) {
                 continue;
+            }
 
             auto *floor_ptr = player_ptr->current_floor_ptr;
-            if (!in_bounds(floor_ptr, y, x) || !projectable(player_ptr, player_ptr->y, player_ptr->x, y, x) || !cave_has_flag_bold(floor_ptr, y, x, FloorFeatureType::PROJECT))
+            if (!in_bounds(floor_ptr, y, x) || !projectable(player_ptr, player_ptr->y, player_ptr->x, y, x) || !cave_has_flag_bold(floor_ptr, y, x, FloorFeatureType::PROJECT)) {
                 continue;
+            }
 
             break;
         }
 
-        if (count > 20)
+        if (count > 20) {
             continue;
+        }
 
         project(player_ptr, 0, rad, y, x, dam, AttributeType::METEOR, PROJECT_KILL | PROJECT_JUMP | PROJECT_ITEM);
     }

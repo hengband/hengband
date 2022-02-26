@@ -1,5 +1,6 @@
 ﻿#include "realm/realm-crusade.h"
 #include "cmd-action/cmd-spell.h"
+#include "effect/attribute-types.h"
 #include "effect/effect-characteristics.h"
 #include "effect/effect-processor.h"
 #include "floor/cave.h"
@@ -18,7 +19,6 @@
 #include "spell-kind/spells-sight.h"
 #include "spell-kind/spells-teleport.h"
 #include "spell-realm/spells-crusade.h"
-#include "effect/attribute-types.h"
 #include "spell/spells-diceroll.h"
 #include "spell/spells-object.h"
 #include "spell/spells-status.h"
@@ -51,32 +51,39 @@ concptr do_crusade_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessTy
 
     switch (spell) {
     case 0:
-        if (name)
+        if (name) {
             return _("懲罰", "Punishment");
-        if (desc)
+        }
+        if (desc) {
             return _("電撃のボルトもしくはビームを放つ。", "Fires a bolt or beam of lightning.");
+        }
         {
             DICE_NUMBER dice = 3 + (plev - 1) / 5;
             DICE_SID sides = 4;
-            if (info)
+            if (info) {
                 return info_damage(dice, sides, 0);
+            }
             if (cast) {
-                if (!get_aim_dir(player_ptr, &dir))
+                if (!get_aim_dir(player_ptr, &dir)) {
                     return nullptr;
+                }
                 fire_bolt_or_beam(player_ptr, beam_chance(player_ptr) - 10, AttributeType::ELEC, dir, damroll(dice, sides));
             }
         }
         break;
 
     case 1:
-        if (name)
+        if (name) {
             return _("邪悪存在感知", "Detect Evil");
-        if (desc)
+        }
+        if (desc) {
             return _("近くの邪悪なモンスターを感知する。", "Detects all evil monsters in your vicinity.");
+        }
         {
             POSITION rad = DETECT_RAD_DEFAULT;
-            if (info)
+            if (info) {
                 return info_radius(rad);
+            }
             if (cast) {
                 detect_monsters_evil(player_ptr, rad);
             }
@@ -98,66 +105,82 @@ concptr do_crusade_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessTy
 
         break;
     case 3:
-        if (name)
+        if (name) {
             return _("威圧", "Scare Monster");
-        if (desc)
+        }
+        if (desc) {
             return _("モンスター1体を恐怖させる。抵抗されると無効。", "Attempts to scare a monster.");
+        }
 
         {
             PLAYER_LEVEL power = plev;
-            if (info)
+            if (info) {
                 return info_power(power);
+            }
             if (cast) {
-                if (!get_aim_dir(player_ptr, &dir))
+                if (!get_aim_dir(player_ptr, &dir)) {
                     return nullptr;
+                }
                 fear_monster(player_ptr, dir, power);
             }
         }
         break;
 
     case 4:
-        if (name)
+        if (name) {
             return _("聖域", "Sanctuary");
-        if (desc)
+        }
+        if (desc) {
             return _("隣接した全てのモンスターを眠らせる。抵抗されると無効。", "Attempts to put to sleep monsters in the adjacent squares.");
+        }
         {
             PLAYER_LEVEL power = plev;
-            if (info)
+            if (info) {
                 return info_power(power);
-            if (cast)
+            }
+            if (cast) {
                 sleep_monsters_touch(player_ptr);
+            }
         }
         break;
 
     case 5:
-        if (name)
+        if (name) {
             return _("入口", "Portal");
-        if (desc)
+        }
+        if (desc) {
             return _("中距離のテレポートをする。", "Teleports you a medium distance.");
+        }
 
         {
             POSITION range = 25 + plev / 2;
-            if (info)
+            if (info) {
                 return info_range(range);
-            if (cast)
+            }
+            if (cast) {
                 teleport_player(player_ptr, range, TELEPORT_SPONTANEOUS);
+            }
         }
         break;
 
     case 6:
-        if (name)
+        if (name) {
             return _("スターダスト", "Star Dust");
-        if (desc)
+        }
+        if (desc) {
             return _("ターゲット付近に閃光のボルトを連射する。", "Fires many bolts of light near the target.");
+        }
 
         {
             DICE_NUMBER dice = 3 + (plev - 1) / 9;
             DICE_SID sides = 2;
-            if (info)
+            if (info) {
                 return info_multi_damage_dice(dice, sides);
+            }
             if (cast) {
-                if (!get_aim_dir(player_ptr, &dir))
+                if (!get_aim_dir(player_ptr, &dir)) {
                     return nullptr;
+                }
                 fire_blast(player_ptr, AttributeType::LITE, dir, dice, sides, 10, 3);
             }
         }
@@ -182,29 +205,35 @@ concptr do_crusade_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessTy
         break;
 
     case 8:
-        if (name)
+        if (name) {
             return _("邪悪飛ばし", "Scatter Evil");
-        if (desc)
+        }
+        if (desc) {
             return _("邪悪なモンスター1体をテレポートさせる。抵抗されると無効。", "Attempts to teleport an evil monster away.");
+        }
 
         {
             int power = MAX_SIGHT * 5;
-            if (info)
+            if (info) {
                 return info_power(power);
+            }
             if (cast) {
-                if (!get_aim_dir(player_ptr, &dir))
+                if (!get_aim_dir(player_ptr, &dir)) {
                     return nullptr;
+                }
                 fire_ball(player_ptr, AttributeType::AWAY_EVIL, dir, power, 0);
             }
         }
         break;
 
     case 9:
-        if (name)
+        if (name) {
             return _("聖なる光球", "Holy Orb");
-        if (desc)
+        }
+        if (desc) {
             return _("聖なる力をもつ宝珠を放つ。邪悪なモンスターに対して大きなダメージを与えるが、善良なモンスターには効果がない。",
                 "Fires a ball with holy power. Hurts evil monsters greatly but doesn't affect good monsters.");
+        }
 
         {
             DICE_NUMBER dice = 3;
@@ -212,17 +241,20 @@ concptr do_crusade_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessTy
             POSITION rad = (plev < 30) ? 2 : 3;
             int base;
             PlayerClass pc(player_ptr);
-            if (pc.equals(PlayerClassType::PRIEST) || pc.equals(PlayerClassType::HIGH_MAGE) || pc.equals(PlayerClassType::SORCERER))
+            if (pc.equals(PlayerClassType::PRIEST) || pc.equals(PlayerClassType::HIGH_MAGE) || pc.equals(PlayerClassType::SORCERER)) {
                 base = plev + plev / 2;
-            else
+            } else {
                 base = plev + plev / 4;
+            }
 
-            if (info)
+            if (info) {
                 return info_damage(dice, sides, base);
+            }
 
             if (cast) {
-                if (!get_aim_dir(player_ptr, &dir))
+                if (!get_aim_dir(player_ptr, &dir)) {
                     return nullptr;
+                }
 
                 fire_ball(player_ptr, AttributeType::HOLY_FIRE, dir, damroll(dice, sides) + base, rad);
             }
@@ -230,16 +262,19 @@ concptr do_crusade_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessTy
         break;
 
     case 10:
-        if (name)
+        if (name) {
             return _("悪魔払い", "Exorcism");
-        if (desc)
+        }
+        if (desc) {
             return _("視界内の全てのアンデッド及び悪魔にダメージを与え、邪悪なモンスターを恐怖させる。",
                 "Damages all undead and demons in sight, and scares all evil monsters in sight.");
+        }
         {
             DICE_SID sides = plev;
             int power = plev;
-            if (info)
+            if (info) {
                 return info_damage(1, sides, 0);
+            }
             if (cast) {
                 dispel_undead(player_ptr, randint1(sides));
                 dispel_demons(player_ptr, randint1(sides));
@@ -249,27 +284,33 @@ concptr do_crusade_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessTy
         break;
 
     case 11:
-        if (name)
+        if (name) {
             return _("解呪", "Remove Curse");
-        if (desc)
+        }
+        if (desc) {
             return _("アイテムにかかった弱い呪いを解除する。", "Removes normal curses from equipped items.");
+        }
         {
-            if (cast)
+            if (cast) {
                 (void)remove_curse(player_ptr);
+            }
         }
         break;
 
     case 12:
-        if (name)
+        if (name) {
             return _("透明視認", "Sense Unseen");
-        if (desc)
+        }
+        if (desc) {
             return _("一定時間、透明なものが見えるようになる。", "Gives see invisible for a while.");
+        }
 
         {
             int base = 24;
 
-            if (info)
+            if (info) {
                 return info_duration(base, base);
+            }
 
             if (cast) {
                 set_tim_invis(player_ptr, randint1(base) + base, false);
@@ -278,17 +319,20 @@ concptr do_crusade_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessTy
         break;
 
     case 13:
-        if (name)
+        if (name) {
             return _("対邪悪結界", "Protection from Evil");
-        if (desc)
+        }
+        if (desc) {
             return _("邪悪なモンスターの攻撃を防ぐバリアを張る。", "Gives aura which protects you from evil monster's physical attack.");
+        }
 
         {
             int base = 25;
             DICE_SID sides = 3 * plev;
 
-            if (info)
+            if (info) {
                 return info_duration(base, sides);
+            }
 
             if (cast) {
                 set_protevil(player_ptr, randint1(sides) + base, false);
@@ -297,20 +341,24 @@ concptr do_crusade_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessTy
         break;
 
     case 14:
-        if (name)
+        if (name) {
             return _("裁きの雷", "Judgment Thunder");
-        if (desc)
+        }
+        if (desc) {
             return _("強力な電撃のボルトを放つ。", "Fires a powerful bolt of lightning.");
+        }
 
         {
             int dam = plev * 5;
 
-            if (info)
+            if (info) {
                 return info_damage(0, 0, dam);
+            }
 
             if (cast) {
-                if (!get_aim_dir(player_ptr, &dir))
+                if (!get_aim_dir(player_ptr, &dir)) {
                     return nullptr;
+                }
                 fire_bolt(player_ptr, AttributeType::ELEC, dir, dam);
             }
         }
@@ -343,17 +391,20 @@ concptr do_crusade_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessTy
         }
 
         break;
-    }    
+    }
     case 16:
-        if (name)
+        if (name) {
             return _("開かれた道", "Unbarring Ways");
-        if (desc)
+        }
+        if (desc) {
             return _("一直線上の全ての罠と扉を破壊する。", "Fires a beam which destroy traps and doors.");
+        }
 
         {
             if (cast) {
-                if (!get_aim_dir(player_ptr, &dir))
+                if (!get_aim_dir(player_ptr, &dir)) {
                     return nullptr;
+                }
 
                 destroy_door(player_ptr, dir);
             }
@@ -361,37 +412,44 @@ concptr do_crusade_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessTy
         break;
 
     case 17:
-        if (name)
+        if (name) {
             return _("封魔", "Arrest");
-        if (desc)
+        }
+        if (desc) {
             return _("邪悪なモンスターの動きを止める。", "Attempts to paralyze an evil monster.");
+        }
 
         {
             int power = plev * 2;
 
-            if (info)
+            if (info) {
                 return info_power(power);
+            }
 
             if (cast) {
-                if (!get_aim_dir(player_ptr, &dir))
+                if (!get_aim_dir(player_ptr, &dir)) {
                     return nullptr;
+                }
                 stasis_evil(player_ptr, dir);
             }
         }
         break;
 
     case 18:
-        if (name)
+        if (name) {
             return _("聖なるオーラ", "Holy Aura");
-        if (desc)
+        }
+        if (desc) {
             return _("一定時間、邪悪なモンスターを傷つける聖なるオーラを得る。",
                 "Gives a temporary aura of holy power that injures evil monsters which attack you.");
+        }
 
         {
             int base = 20;
 
-            if (info)
+            if (info) {
                 return info_duration(base, base);
+            }
 
             if (cast) {
                 set_tim_sh_holy(player_ptr, randint1(base) + base, false);
@@ -400,16 +458,19 @@ concptr do_crusade_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessTy
         break;
 
     case 19:
-        if (name)
+        if (name) {
             return _("アンデッド&悪魔退散", "Dispel Undead & Demons");
-        if (desc)
+        }
+        if (desc) {
             return _("視界内の全てのアンデッド及び悪魔にダメージを与える。", "Damages all undead and demons in sight.");
+        }
 
         {
             DICE_SID sides = plev * 4;
 
-            if (info)
+            if (info) {
                 return info_damage(1, sides, 0);
+            }
 
             if (cast) {
                 dispel_undead(player_ptr, randint1(sides));
@@ -419,16 +480,19 @@ concptr do_crusade_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessTy
         break;
 
     case 20:
-        if (name)
+        if (name) {
             return _("邪悪退散", "Dispel Evil");
-        if (desc)
+        }
+        if (desc) {
             return _("視界内の全ての邪悪なモンスターにダメージを与える。", "Damages all evil monsters in sight.");
+        }
 
         {
             DICE_SID sides = plev * 4;
 
-            if (info)
+            if (info) {
                 return info_damage(1, sides, 0);
+            }
 
             if (cast) {
                 dispel_evil(player_ptr, randint1(sides));
@@ -437,10 +501,12 @@ concptr do_crusade_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessTy
         break;
 
     case 21:
-        if (name)
+        if (name) {
             return _("聖なる刃", "Holy Blade");
-        if (desc)
+        }
+        if (desc) {
             return _("通常の武器に滅邪の属性をつける。", "Makes current weapon especially deadly against evil monsters.");
+        }
 
         {
             if (cast) {
@@ -450,21 +516,25 @@ concptr do_crusade_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessTy
         break;
 
     case 22:
-        if (name)
+        if (name) {
             return _("スターバースト", "Star Burst");
-        if (desc)
+        }
+        if (desc) {
             return _("巨大な閃光の球を放つ。", "Fires a huge ball of powerful light.");
+        }
 
         {
             int dam = 100 + plev * 2;
             POSITION rad = 4;
 
-            if (info)
+            if (info) {
                 return info_damage(0, 0, dam);
+            }
 
             if (cast) {
-                if (!get_aim_dir(player_ptr, &dir))
+                if (!get_aim_dir(player_ptr, &dir)) {
                     return nullptr;
+                }
 
                 fire_ball(player_ptr, AttributeType::LITE, dir, dam, rad);
             }
@@ -472,22 +542,26 @@ concptr do_crusade_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessTy
         break;
 
     case 23:
-        if (name)
+        if (name) {
             return _("天使召喚", "Summon Angel");
-        if (desc)
+        }
+        if (desc) {
             return _("天使を1体召喚する。", "Summons an angel.");
+        }
 
         {
             if (cast) {
                 bool pet = !one_in_(3);
                 uint32_t flg = 0L;
 
-                if (pet)
+                if (pet) {
                     flg |= PM_FORCE_PET;
-                else
+                } else {
                     flg |= PM_NO_PET;
-                if (!(pet && (plev < 50)))
+                }
+                if (!(pet && (plev < 50))) {
                     flg |= PM_ALLOW_GROUP;
+                }
 
                 if (summon_specific(player_ptr, (pet ? -1 : 0), player_ptr->y, player_ptr->x, (plev * 3) / 2, SUMMON_ANGEL, flg)) {
                     if (pet) {
@@ -501,16 +575,19 @@ concptr do_crusade_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessTy
         break;
 
     case 24:
-        if (name)
+        if (name) {
             return _("士気高揚", "Heroism");
-        if (desc)
+        }
+        if (desc) {
             return _("一定時間、ヒーロー気分になる。", "Removes fear. Gives a bonus to hit for a while. Heals you for 10 HP.");
+        }
 
         {
             int base = 25;
 
-            if (info)
+            if (info) {
                 return info_duration(base, base);
+            }
 
             if (cast) {
                 (void)heroism(player_ptr, base);
@@ -519,28 +596,34 @@ concptr do_crusade_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessTy
         break;
 
     case 25:
-        if (name)
+        if (name) {
             return _("呪い退散", "Dispel Curse");
-        if (desc)
+        }
+        if (desc) {
             return _("アイテムにかかった強力な呪いを解除する。", "Removes normal and heavy curses from equipped items.");
+        }
 
         {
-            if (cast)
+            if (cast) {
                 (void)remove_all_curse(player_ptr);
+            }
         }
         break;
 
     case 26:
-        if (name)
+        if (name) {
             return _("邪悪追放", "Banish Evil");
-        if (desc)
+        }
+        if (desc) {
             return _("視界内の全ての邪悪なモンスターをテレポートさせる。抵抗されると無効。", "Teleports all evil monsters in sight away unless resisted.");
+        }
 
         {
             int power = 100;
 
-            if (info)
+            if (info) {
                 return info_power(power);
+            }
 
             if (cast) {
                 if (banish_evil(player_ptr, power)) {
@@ -551,10 +634,12 @@ concptr do_crusade_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessTy
         break;
 
     case 27:
-        if (name)
+        if (name) {
             return _("ハルマゲドン", "Armageddon");
-        if (desc)
+        }
+        if (desc) {
             return _("周辺のアイテム、モンスター、地形を破壊する。", "Destroys everything in nearby area.");
+        }
 
         {
             int base = 12;
@@ -567,17 +652,20 @@ concptr do_crusade_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessTy
         break;
 
     case 28:
-        if (name)
+        if (name) {
             return _("目には目を", "An Eye for an Eye");
-        if (desc)
+        }
+        if (desc) {
             return _("一定時間、自分がダメージを受けたときに攻撃を行ったモンスターに対して同等のダメージを与える。",
                 "Gives special aura for a while. When you are attacked by a monster, the monster is injured with same amount of damage as you took.");
+        }
 
         {
             int base = 10;
 
-            if (info)
+            if (info) {
                 return info_duration(base, base);
+            }
 
             if (cast) {
                 set_tim_eyeeye(player_ptr, randint1(base) + base, false);
@@ -586,32 +674,38 @@ concptr do_crusade_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessTy
         break;
 
     case 29:
-        if (name)
+        if (name) {
             return _("神の怒り", "Wrath of the God");
-        if (desc)
+        }
+        if (desc) {
             return _("ターゲットの周囲に分解の球を多数落とす。", "Drops many balls of disintegration near the target.");
+        }
 
         {
             int dam = plev * 3 + 25;
             POSITION rad = 2;
 
-            if (info)
+            if (info) {
                 return info_multi_damage(dam);
+            }
 
             if (cast) {
-                if (!cast_wrath_of_the_god(player_ptr, dam, rad))
+                if (!cast_wrath_of_the_god(player_ptr, dam, rad)) {
                     return nullptr;
+                }
             }
         }
         break;
 
     case 30:
-        if (name)
+        if (name) {
             return _("神威", "Divine Intervention");
-        if (desc)
+        }
+        if (desc) {
             return _("隣接するモンスターに聖なるダメージを与え、視界内のモンスターにダメージ、減速、朦朧、混乱、恐怖、眠りを与える。さらに体力を回復する。",
                 "Damages all adjacent monsters with holy power. Damages and attempt to slow, stun, confuse, scare and freeze all monsters in sight. And heals "
                 "HP.");
+        }
 
         {
             int b_dam = plev * 11;
@@ -619,8 +713,9 @@ concptr do_crusade_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessTy
             int heal = 100;
             int power = plev * 4;
 
-            if (info)
+            if (info) {
                 return format(_("回%d/損%d+%d", "h%d/dm%d+%d"), heal, d_dam, b_dam / 2);
+            }
             if (cast) {
                 project(player_ptr, 0, 1, player_ptr->y, player_ptr->x, b_dam, AttributeType::HOLY_FIRE, PROJECT_KILL);
                 dispel_monsters(player_ptr, d_dam);
@@ -645,7 +740,7 @@ concptr do_crusade_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessTy
                 "Attempts to charm all good monsters in sight and scares all non-charmed monsters. Summons a great number of knights. Gives heroism, bless, "
                 "speed and protection from evil to the caster.");
         }
-        
+
         if (cast) {
             auto base = 25;
             auto sp_sides = 20 + plev;

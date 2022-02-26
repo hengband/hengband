@@ -27,34 +27,42 @@
  */
 void starve_player(PlayerType *player_ptr)
 {
-    if (player_ptr->phase_out)
+    if (player_ptr->phase_out) {
         return;
+    }
 
     if (player_ptr->food >= PY_FOOD_MAX) {
         (void)set_food(player_ptr, player_ptr->food - 100);
     } else if (!(w_ptr->game_turn % (TURNS_PER_TICK * 5))) {
         int digestion = speed_to_energy(player_ptr->pspeed);
-        if (player_ptr->regenerate)
+        if (player_ptr->regenerate) {
             digestion += 20;
+        }
         PlayerClass pc(player_ptr);
-        if (!pc.monk_stance_is(MonkStanceType::NONE) || !pc.samurai_stance_is(SamuraiStanceType::NONE))
+        if (!pc.monk_stance_is(MonkStanceType::NONE) || !pc.samurai_stance_is(SamuraiStanceType::NONE)) {
             digestion += 20;
-        if (player_ptr->cursed.has(CurseTraitType::FAST_DIGEST))
+        }
+        if (player_ptr->cursed.has(CurseTraitType::FAST_DIGEST)) {
             digestion += 30;
+        }
 
-        if (player_ptr->slow_digest)
+        if (player_ptr->slow_digest) {
             digestion -= 5;
+        }
 
-        if (digestion < 1)
+        if (digestion < 1) {
             digestion = 1;
-        if (digestion > 100)
+        }
+        if (digestion > 100) {
             digestion = 100;
+        }
 
         (void)set_food(player_ptr, player_ptr->food - digestion);
     }
 
-    if ((player_ptr->food >= PY_FOOD_FAINT))
+    if ((player_ptr->food >= PY_FOOD_FAINT)) {
         return;
+    }
 
     if (!player_ptr->paralyzed && (randint0(100) < 10)) {
         msg_print(_("あまりにも空腹で気絶してしまった。", "You faint from the lack of food."));
@@ -64,8 +72,9 @@ void starve_player(PlayerType *player_ptr)
 
     if (player_ptr->food < PY_FOOD_STARVE) {
         int dam = (PY_FOOD_STARVE - player_ptr->food) / 10;
-        if (!is_invuln(player_ptr))
+        if (!is_invuln(player_ptr)) {
             take_hit(player_ptr, DAMAGE_LOSELIFE, dam, _("空腹", "starvation"));
+        }
     }
 }
 
@@ -100,7 +109,8 @@ bool set_food(PlayerType *player_ptr, TIME_EFFECT v)
     int old_aux, new_aux;
 
     bool notice = false;
-    v = (v > 20000) ? 20000 : (v < 0) ? 0 : v;
+    v = (v > 20000) ? 20000 : (v < 0) ? 0
+                                      : v;
     if (player_ptr->food < PY_FOOD_FAINT) {
         old_aux = 0;
     } else if (player_ptr->food < PY_FOOD_WEAK) {
@@ -129,14 +139,17 @@ bool set_food(PlayerType *player_ptr, TIME_EFFECT v)
         new_aux = 5;
     }
 
-    if (old_aux < 1 && new_aux > 0)
+    if (old_aux < 1 && new_aux > 0) {
         chg_virtue(player_ptr, V_PATIENCE, 2);
-    else if (old_aux < 3 && (old_aux != new_aux))
+    } else if (old_aux < 3 && (old_aux != new_aux)) {
         chg_virtue(player_ptr, V_PATIENCE, 1);
-    if (old_aux == 2)
+    }
+    if (old_aux == 2) {
         chg_virtue(player_ptr, V_TEMPERANCE, 1);
-    if (old_aux == 0)
+    }
+    if (old_aux == 0) {
         chg_virtue(player_ptr, V_TEMPERANCE, -1);
+    }
 
     if (new_aux > old_aux) {
         switch (new_aux) {
@@ -192,11 +205,13 @@ bool set_food(PlayerType *player_ptr, TIME_EFFECT v)
     }
 
     player_ptr->food = v;
-    if (!notice)
+    if (!notice) {
         return false;
+    }
 
-    if (disturb_state)
+    if (disturb_state) {
         disturb(player_ptr, false, false);
+    }
     player_ptr->update |= (PU_BONUS);
     player_ptr->redraw |= (PR_HUNGER);
     handle_stuff(player_ptr);

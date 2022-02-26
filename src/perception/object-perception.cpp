@@ -49,19 +49,23 @@ void object_aware(PlayerType *player_ptr, ObjectType *o_ptr)
     k_info[o_ptr->k_idx].aware = true;
 
     // 以下、playrecordに記録しない場合はreturnする
-    if (!record_ident)
+    if (!record_ident) {
         return;
+    }
 
-    if (is_already_awared || player_ptr->is_dead)
+    if (is_already_awared || player_ptr->is_dead) {
         return;
+    }
 
     // アーティファクト専用ベースアイテムは記録しない
-    if (k_info[o_ptr->k_idx].gen_flags.has(ItemGenerationTraitType::INSTA_ART))
+    if (k_info[o_ptr->k_idx].gen_flags.has(ItemGenerationTraitType::INSTA_ART)) {
         return;
+    }
 
     // 未鑑定名の無いアイテムは記録しない
-    if (!((o_ptr->tval >= ItemKindType::AMULET && o_ptr->tval <= ItemKindType::POTION) || o_ptr->tval == ItemKindType::FOOD))
+    if (!((o_ptr->tval >= ItemKindType::AMULET && o_ptr->tval <= ItemKindType::POTION) || o_ptr->tval == ItemKindType::FOOD)) {
         return;
+    }
 
     // playrecordに識別したアイテムを記録
     ObjectType forge;
@@ -82,4 +86,7 @@ void object_aware(PlayerType *player_ptr, ObjectType *o_ptr)
  * Something has been "sampled"
  * @param o_ptr 試行済にするオブジェクトの構造体参照ポインタ
  */
-void object_tried(ObjectType *o_ptr) { k_info[o_ptr->k_idx].tried = true; }
+void object_tried(ObjectType *o_ptr)
+{
+    k_info[o_ptr->k_idx].tried = true;
+}

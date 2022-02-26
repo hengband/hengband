@@ -6,18 +6,18 @@
 
 #include "system/system-variables.h"
 
- /*!
-  * @todo どこからも呼ばれていない。main関数辺りに移設するか、そもそもコメントでいいと思われる
-  * コピーライト情報 / Link a copyright message into the executable
-  */
+/*!
+ * @todo どこからも呼ばれていない。main関数辺りに移設するか、そもそもコメントでいいと思われる
+ * コピーライト情報 / Link a copyright message into the executable
+ */
 /*
 const concptr copyright[5] =
 {
-	"Copyright (c) 1989 James E. Wilson, Robert A. Keoneke",
-	"",
-	"This software may be copied and distributed for educational, research,",
-	"and not for profit purposes provided that this copyright and statement",
-	"are included in all such copies."
+        "Copyright (c) 1989 James E. Wilson, Robert A. Keoneke",
+        "",
+        "This software may be copied and distributed for educational, research,",
+        "and not for profit purposes provided that this copyright and statement",
+        "are included in all such copies."
 };
 */
 

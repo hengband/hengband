@@ -169,8 +169,9 @@ static uint vstrnfmt_aux_dflt(char *buf, uint max, concptr fmt, vptr arg)
     /* Pointer display */
     sprintf(tmp, "<<%p>>", arg);
     len = strlen(tmp);
-    if (len >= max)
+    if (len >= max) {
         len = max - 1;
+    }
     tmp[len] = '\0';
     strcpy(buf, tmp);
     return len;
@@ -258,12 +259,14 @@ uint vstrnfmt(char *buf, uint max, concptr fmt, va_list vp)
     char tmp[1024];
 
     /* Mega-Hack -- treat "illegal" length as "infinite" */
-    if (!max)
+    if (!max) {
         max = 32767;
+    }
 
     /* Mega-Hack -- treat "no format" as "empty string" */
-    if (!fmt)
+    if (!fmt) {
         fmt = "";
+    }
 
     /* Begin the buffer */
     n = 0;
@@ -274,14 +277,16 @@ uint vstrnfmt(char *buf, uint max, concptr fmt, va_list vp)
     /* Scan the format string */
     while (true) {
         /* All done */
-        if (!*s)
+        if (!*s) {
             break;
+        }
 
         /* Normal character */
         if (*s != '%') {
             /* Check total length */
-            if (n == max - 1)
+            if (n == max - 1) {
                 break;
+            }
 
             /* Save the character */
             buf[n++] = *s++;
@@ -294,8 +299,9 @@ uint vstrnfmt(char *buf, uint max, concptr fmt, va_list vp)
         /* Pre-process "%%" */
         if (*s == '%') {
             /* Check total length */
-            if (n == max - 1)
+            if (n == max - 1) {
                 break;
+            }
 
             /* Save the percent */
             buf[n++] = '%';
@@ -410,8 +416,9 @@ uint vstrnfmt(char *buf, uint max, concptr fmt, va_list vp)
                     sprintf(aux + q, "%d", arg);
 
                     /* Hack -- accept the "length" */
-                    while (aux[q])
+                    while (aux[q]) {
                         q++;
+                    }
 
                     /* Skip the "*" */
                     s++;
@@ -556,8 +563,9 @@ uint vstrnfmt(char *buf, uint max, concptr fmt, va_list vp)
             arg = va_arg(vp, concptr);
 
             /* Hack -- convert nullptr to EMPTY */
-            if (!arg)
+            if (!arg) {
                 arg = "";
+            }
 
             /* Prevent buffer overflows */
             strncpy(arg2, arg, 1024);
@@ -593,11 +601,12 @@ uint vstrnfmt(char *buf, uint max, concptr fmt, va_list vp)
         }
 
 #ifdef JP
-        for (q = 0; tmp[q]; q++)
+        for (q = 0; tmp[q]; q++) {
             if (iskanji(tmp[q])) {
                 do_xtra = false;
                 break;
             }
+        }
 #endif
         /* Mega-Hack -- handle "capitilization" */
         if (do_xtra) {
@@ -606,8 +615,9 @@ uint vstrnfmt(char *buf, uint max, concptr fmt, va_list vp)
                 /* Notice first non-space */
                 if (!iswspace(tmp[q])) {
                     /* Capitalize if possible */
-                    if (islower(tmp[q]))
+                    if (islower(tmp[q])) {
                         tmp[q] = (char)toupper(tmp[q]);
+                    }
 
                     break;
                 }
@@ -617,8 +627,9 @@ uint vstrnfmt(char *buf, uint max, concptr fmt, va_list vp)
         /* Now append "tmp" to "buf" */
         for (q = 0; tmp[q]; q++) {
             /* Check total length */
-            if (n == max - 1)
+            if (n == max - 1) {
                 break;
+            }
 
             /* Save the character */
 #ifdef JP
@@ -653,8 +664,9 @@ char *vformat(concptr fmt, va_list vp)
     static std::vector<char> format_buf(1024);
 
     /* Null format yields last result */
-    if (!fmt)
+    if (!fmt) {
         return format_buf.data();
+    }
 
     /* Keep going until successful */
     while (true) {
@@ -664,8 +676,9 @@ char *vformat(concptr fmt, va_list vp)
         len = vstrnfmt(format_buf.data(), format_buf.size(), fmt, vp);
 
         /* Success */
-        if (len < format_buf.size() - 1)
+        if (len < format_buf.size() - 1) {
             break;
+        }
 
         /* Grow the buffer */
         format_buf.resize(format_buf.size() * 2);

@@ -24,8 +24,8 @@
 #include "io/signal-handlers.h"
 #include "io/uid-checker.h"
 #include "locale/japanese.h"
-#include "player-info/class-info.h"
 #include "player-base/player-race.h"
+#include "player-info/class-info.h"
 #include "player/player-personality.h"
 #include "player/player-status.h"
 #include "player/race-info-table.h"
@@ -61,23 +61,27 @@ static int highscore_write(high_score *score)
 static int highscore_where(high_score *score)
 {
     /* Paranoia -- it may not have opened */
-    if (highscore_fd < 0)
+    if (highscore_fd < 0) {
         return -1;
+    }
 
     /* Go to the start of the highscore file */
-    if (highscore_seek(0))
+    if (highscore_seek(0)) {
         return -1;
+    }
 
     /* Read until we get to a higher score */
     high_score the_score;
     int my_score = atoi(score->pts);
     for (int i = 0; i < MAX_HISCORES; i++) {
         int old_score;
-        if (highscore_read(&the_score))
+        if (highscore_read(&the_score)) {
             return i;
+        }
         old_score = atoi(the_score.pts);
-        if (my_score > old_score)
+        if (my_score > old_score) {
             return i;
+        }
     }
 
     /* The "last" entry is always usable */
@@ -92,15 +96,17 @@ static int highscore_where(high_score *score)
 static int highscore_add(high_score *score)
 {
     /* Paranoia -- it may not have opened */
-    if (highscore_fd < 0)
+    if (highscore_fd < 0) {
         return -1;
+    }
 
     /* Determine where the score should go */
     int slot = highscore_where(score);
 
     /* Hack -- Not on the list */
-    if (slot < 0)
+    if (slot < 0) {
         return -1;
+    }
 
     /* Hack -- prepare to dump the new score */
     high_score the_score = (*score);
@@ -110,16 +116,20 @@ static int highscore_add(high_score *score)
     high_score tmpscore;
     for (int i = slot; !done && (i < MAX_HISCORES); i++) {
         /* Read the old guy, note errors */
-        if (highscore_seek(i))
+        if (highscore_seek(i)) {
             return -1;
-        if (highscore_read(&tmpscore))
+        }
+        if (highscore_read(&tmpscore)) {
             done = true;
+        }
 
         /* Back up and dump the score we were holding */
-        if (highscore_seek(i))
+        if (highscore_seek(i)) {
             return -1;
-        if (highscore_write(&the_score))
+        }
+        if (highscore_write(&the_score)) {
             return -1;
+        }
 
         /* Hack -- Save the old score, for the next pass */
         the_score = tmpscore;
@@ -242,8 +252,9 @@ errr top_twenty(PlayerType *player_ptr)
     /* Drop permissions */
     safe_setuid_drop();
 
-    if (err)
+    if (err) {
         return 1;
+    }
 
     /* Add a new entry to the score list, see where it went */
     int j = highscore_add(&the_score);
@@ -257,8 +268,9 @@ errr top_twenty(PlayerType *player_ptr)
     /* Drop permissions */
     safe_setuid_drop();
 
-    if (err)
+    if (err) {
         return 1;
+    }
 
     /* Hack -- Display the top fifteen scores */
     if (j < 10) {
@@ -358,23 +370,28 @@ void show_highclass(PlayerType *player_ptr)
         return;
     }
 
-    if (highscore_seek(0))
+    if (highscore_seek(0)) {
         return;
+    }
 
     high_score the_score;
-    for (int i = 0; i < MAX_HISCORES; i++)
-        if (highscore_read(&the_score))
+    for (int i = 0; i < MAX_HISCORES; i++) {
+        if (highscore_read(&the_score)) {
             break;
+        }
+    }
 
     int m = 0;
     int j = 0;
     PLAYER_LEVEL clev = 0;
     int pr;
     while ((m < 9) && (j < MAX_HISCORES)) {
-        if (highscore_seek(j))
+        if (highscore_seek(j)) {
             break;
-        if (highscore_read(&the_score))
+        }
+        if (highscore_read(&the_score)) {
             break;
+        }
         pr = atoi(the_score.p_r);
         clev = (PLAYER_LEVEL)atoi(the_score.cur_lev);
 
@@ -403,8 +420,9 @@ void show_highclass(PlayerType *player_ptr)
 
     (void)inkey();
 
-    for (j = 5; j < 18; j++)
+    for (j = 5; j < 18; j++) {
         prt("", j, 0);
+    }
     screen_load();
 }
 
@@ -436,22 +454,26 @@ void race_score(PlayerType *player_ptr, int race_num)
         return;
     }
 
-    if (highscore_seek(0))
+    if (highscore_seek(0)) {
         return;
+    }
 
     for (i = 0; i < MAX_HISCORES; i++) {
-        if (highscore_read(&the_score))
+        if (highscore_read(&the_score)) {
             break;
+        }
     }
 
     m = 0;
     j = 0;
 
     while ((m < 10) || (j < MAX_HISCORES)) {
-        if (highscore_seek(j))
+        if (highscore_seek(j)) {
             break;
-        if (highscore_read(&the_score))
+        }
+        if (highscore_read(&the_score)) {
             break;
+        }
         pr = atoi(the_score.p_r);
         clev = atoi(the_score.cur_lev);
 
@@ -494,8 +516,9 @@ void race_legends(PlayerType *player_ptr)
         race_score(player_ptr, i);
         msg_print(_("何かキーを押すとゲームに戻ります", "Hit any key to continue"));
         msg_print(nullptr);
-        for (int j = 5; j < 19; j++)
+        for (int j = 5; j < 19; j++) {
             prt("", j, 0);
+        }
     }
 }
 

@@ -39,8 +39,9 @@ ape_quittance do_editor_command(PlayerType *player_ptr, text_body_type *tb, int 
     switch (com_id) {
     case EC_QUIT: {
         if (tb->changed) {
-            if (!get_check(_("全ての変更を破棄してから終了します。よろしいですか？ ", "Discard all changes and quit. Are you sure? ")))
+            if (!get_check(_("全ての変更を破棄してから終了します。よろしいですか？ ", "Discard all changes and quit. Are you sure? "))) {
                 break;
+            }
         }
 
         return APE_QUIT_WITHOUT_SAVE;
@@ -48,8 +49,9 @@ ape_quittance do_editor_command(PlayerType *player_ptr, text_body_type *tb, int 
     case EC_SAVEQUIT:
         return APE_QUIT_AND_SAVE;
     case EC_REVERT: {
-        if (!get_check(_("全ての変更を破棄して元の状態に戻します。よろしいですか？ ", "Discard all changes and revert to original file. Are you sure? ")))
+        if (!get_check(_("全ての変更を破棄して元の状態に戻します。よろしいですか？ ", "Discard all changes and revert to original file. Are you sure? "))) {
             break;
+        }
 
         free_text_lines(tb->lines_list);
         tb->lines_list = read_pickpref_text_lines(player_ptr, &tb->filename_mode);
@@ -70,8 +72,9 @@ ape_quittance do_editor_command(PlayerType *player_ptr, text_body_type *tb, int 
             tb->dirty_flags |= DIRTY_ALL;
         }
 
-        if (!insert_return_code(tb))
+        if (!insert_return_code(tb)) {
             break;
+        }
         tb->cy++;
         tb->cx = 0;
         tb->dirty_flags |= DIRTY_ALL;
@@ -85,8 +88,9 @@ ape_quittance do_editor_command(PlayerType *player_ptr, text_body_type *tb, int 
 #endif
             tb->cx--;
             len = strlen(tb->lines_list[tb->cy]);
-            if (len < tb->cx)
+            if (len < tb->cx) {
                 tb->cx = len;
+            }
 #ifdef JP
             for (i = 0; tb->lines_list[tb->cy][i]; i++) {
                 if (iskanji(tb->lines_list[tb->cy][i])) {
@@ -107,29 +111,33 @@ ape_quittance do_editor_command(PlayerType *player_ptr, text_body_type *tb, int 
     }
     case EC_DOWN: {
         if (!tb->lines_list[tb->cy + 1]) {
-            if (!add_empty_line(tb))
+            if (!add_empty_line(tb)) {
                 break;
+            }
         }
 
         tb->cy++;
         break;
     }
     case EC_UP:
-        if (tb->cy > 0)
+        if (tb->cy > 0) {
             tb->cy--;
+        }
         break;
     case EC_RIGHT: {
 #ifdef JP
-        if (iskanji(tb->lines_list[tb->cy][tb->cx]))
+        if (iskanji(tb->lines_list[tb->cy][tb->cx])) {
             tb->cx++;
+        }
 #endif
         tb->cx++;
         int len = strlen(tb->lines_list[tb->cy]);
         if (len < tb->cx) {
             tb->cx = len;
             if (!tb->lines_list[tb->cy + 1]) {
-                if (!add_empty_line(tb))
+                if (!add_empty_line(tb)) {
                     break;
+                }
             }
 
             tb->cy++;
@@ -145,18 +153,21 @@ ape_quittance do_editor_command(PlayerType *player_ptr, text_body_type *tb, int 
         tb->cx = strlen(tb->lines_list[tb->cy]);
         break;
     case EC_PGUP:
-        while (0 < tb->cy && tb->upper <= tb->cy)
+        while (0 < tb->cy && tb->upper <= tb->cy) {
             tb->cy--;
+        }
 
-        while (0 < tb->upper && tb->cy + 1 < tb->upper + tb->hgt)
+        while (0 < tb->upper && tb->cy + 1 < tb->upper + tb->hgt) {
             tb->upper--;
+        }
 
         break;
     case EC_PGDOWN:
         while (tb->cy < tb->upper + tb->hgt) {
             if (!tb->lines_list[tb->cy + 1]) {
-                if (!add_empty_line(tb))
+                if (!add_empty_line(tb)) {
                     break;
+                }
             }
 
             tb->cy++;
@@ -170,8 +181,9 @@ ape_quittance do_editor_command(PlayerType *player_ptr, text_body_type *tb, int 
     case EC_BOTTOM:
         while (true) {
             if (!tb->lines_list[tb->cy + 1]) {
-                if (!add_empty_line(tb))
+                if (!add_empty_line(tb)) {
                     break;
+                }
             }
 
             tb->cy++;
@@ -185,8 +197,9 @@ ape_quittance do_editor_command(PlayerType *player_ptr, text_body_type *tb, int 
             int bx1 = std::min(tb->mx, tb->cx);
             int bx2 = std::max(tb->mx, tb->cx);
             int len = strlen(tb->lines_list[tb->cy]);
-            if (bx2 > len)
+            if (bx2 > len) {
                 bx2 = len;
+            }
 
             kill_line_segment(tb, tb->cy, bx1, bx2, true);
             tb->cx = bx1;
@@ -220,8 +233,9 @@ ape_quittance do_editor_command(PlayerType *player_ptr, text_body_type *tb, int 
         if (tb->my != tb->cy) {
             tb->cy = std::max(tb->cy, tb->my);
             if (!tb->lines_list[tb->cy + 1]) {
-                if (!add_empty_line(tb))
+                if (!add_empty_line(tb)) {
                     break;
+                }
             }
 
             tb->cy++;
@@ -231,8 +245,9 @@ ape_quittance do_editor_command(PlayerType *player_ptr, text_body_type *tb, int 
         tb->cx = std::max(tb->cx, tb->mx);
         if (!tb->lines_list[tb->cy][tb->cx]) {
             if (!tb->lines_list[tb->cy + 1]) {
-                if (!add_empty_line(tb))
+                if (!add_empty_line(tb)) {
                     break;
+                }
             }
 
             tb->cy++;
@@ -244,10 +259,12 @@ ape_quittance do_editor_command(PlayerType *player_ptr, text_body_type *tb, int 
     case EC_PASTE: {
         chain_str_type *chain = tb->yank;
         int len = strlen(tb->lines_list[tb->cy]);
-        if (!chain)
+        if (!chain) {
             break;
-        if (tb->cx > len)
+        }
+        if (tb->cx > len) {
             tb->cx = len;
+        }
 
         if (tb->mark) {
             tb->mark = 0;
@@ -259,8 +276,9 @@ ape_quittance do_editor_command(PlayerType *player_ptr, text_body_type *tb, int 
             char buf[MAX_LINELEN];
             int i;
             char rest[MAX_LINELEN], *rest_ptr = rest;
-            for (i = 0; i < tb->cx; i++)
+            for (i = 0; i < tb->cx; i++) {
                 buf[i] = tb->lines_list[tb->cy][i];
+            }
 
             strcpy(rest, &(tb->lines_list[tb->cy][i]));
             while (*yank_str && i < MAX_LINELEN - 1) {
@@ -270,8 +288,9 @@ ape_quittance do_editor_command(PlayerType *player_ptr, text_body_type *tb, int 
             buf[i] = '\0';
             chain = chain->next;
             if (chain || tb->yank_eol) {
-                if (!insert_return_code(tb))
+                if (!insert_return_code(tb)) {
                     break;
+                }
                 string_free(tb->lines_list[tb->cy]);
                 tb->lines_list[tb->cy] = string_make(buf);
                 tb->cx = 0;
@@ -319,14 +338,16 @@ ape_quittance do_editor_command(PlayerType *player_ptr, text_body_type *tb, int 
 
         tb->my = tb->cy;
         tb->mx = tb->cx;
-        if (tb->cx > len)
+        if (tb->cx > len) {
             tb->mx = len;
+        }
         break;
     }
     case EC_KILL_LINE: {
         int len = strlen(tb->lines_list[tb->cy]);
-        if (tb->cx > len)
+        if (tb->cx > len) {
             tb->cx = len;
+        }
 
         if (tb->mark) {
             tb->mark = 0;
@@ -345,8 +366,9 @@ ape_quittance do_editor_command(PlayerType *player_ptr, text_body_type *tb, int 
             break;
         }
 
-        if (tb->yank_eol)
+        if (tb->yank_eol) {
             add_str_to_yank(tb, "");
+        }
 
         tb->yank_eol = true;
         do_editor_command(player_ptr, tb, EC_DELETE_CHAR);
@@ -359,8 +381,9 @@ ape_quittance do_editor_command(PlayerType *player_ptr, text_body_type *tb, int 
         }
 
 #ifdef JP
-        if (iskanji(tb->lines_list[tb->cy][tb->cx]))
+        if (iskanji(tb->lines_list[tb->cy][tb->cx])) {
             tb->cx++;
+        }
 #endif
         tb->cx++;
         int len = strlen(tb->lines_list[tb->cy]);
@@ -389,12 +412,14 @@ ape_quittance do_editor_command(PlayerType *player_ptr, text_body_type *tb, int 
         }
 
         len = strlen(tb->lines_list[tb->cy]);
-        if (len < tb->cx)
+        if (len < tb->cx) {
             tb->cx = len;
+        }
 
         if (tb->cx == 0) {
-            if (tb->cy == 0)
+            if (tb->cy == 0) {
                 break;
+            }
             tb->cx = strlen(tb->lines_list[tb->cy - 1]);
             strcpy(buf, tb->lines_list[tb->cy - 1]);
             strcat(buf, tb->lines_list[tb->cy]);
@@ -402,8 +427,9 @@ ape_quittance do_editor_command(PlayerType *player_ptr, text_body_type *tb, int 
             string_free(tb->lines_list[tb->cy]);
             tb->lines_list[tb->cy - 1] = string_make(buf);
 
-            for (i = tb->cy; tb->lines_list[i + 1]; i++)
+            for (i = tb->cy; tb->lines_list[i + 1]; i++) {
                 tb->lines_list[i] = tb->lines_list[i + 1];
+            }
 
             tb->lines_list[i] = nullptr;
             tb->cy--;
@@ -416,8 +442,9 @@ ape_quittance do_editor_command(PlayerType *player_ptr, text_body_type *tb, int 
         for (i = j = k = 0; tb->lines_list[tb->cy][i] && i < tb->cx; i++) {
             k = j;
 #ifdef JP
-            if (iskanji(tb->lines_list[tb->cy][i]))
+            if (iskanji(tb->lines_list[tb->cy][i])) {
                 buf[j++] = tb->lines_list[tb->cy][i++];
+            }
 #endif
             buf[j++] = tb->lines_list[tb->cy][i];
         }
@@ -444,13 +471,15 @@ ape_quittance do_editor_command(PlayerType *player_ptr, text_body_type *tb, int 
         tb->dirty_flags |= DIRTY_SCREEN;
         search_dir = get_string_for_search(player_ptr, &tb->search_o_ptr, &tb->search_str);
 
-        if (!search_dir)
+        if (!search_dir) {
             break;
+        }
 
-        if (search_dir == 1)
+        if (search_dir == 1) {
             do_editor_command(player_ptr, tb, EC_SEARCH_FORW);
-        else
+        } else {
             do_editor_command(player_ptr, tb, EC_SEARCH_BACK);
+        }
 
         break;
     }
@@ -485,8 +514,9 @@ ape_quittance do_editor_command(PlayerType *player_ptr, text_body_type *tb, int 
     case EC_SEARCH_OBJ: {
         tb->dirty_flags |= DIRTY_SCREEN;
 
-        if (!get_object_for_search(player_ptr, &tb->search_o_ptr, &tb->search_str))
+        if (!get_object_for_search(player_ptr, &tb->search_o_ptr, &tb->search_str)) {
             break;
+        }
 
         do_editor_command(player_ptr, tb, EC_SEARCH_FORW);
         break;
@@ -508,20 +538,23 @@ ape_quittance do_editor_command(PlayerType *player_ptr, text_body_type *tb, int 
         }
 
         tb->cx = 0;
-        if (!insert_return_code(tb))
+        if (!insert_return_code(tb)) {
             break;
+        }
         string_free(tb->lines_list[tb->cy]);
         tb->lines_list[tb->cy] = autopick_line_from_entry_kill(entry);
         tb->dirty_flags |= DIRTY_SCREEN;
         break;
     }
     case EC_INSERT_DESTROYED: {
-        if (!tb->last_destroyed)
+        if (!tb->last_destroyed) {
             break;
+        }
 
         tb->cx = 0;
-        if (!insert_return_code(tb))
+        if (!insert_return_code(tb)) {
             break;
+        }
         string_free(tb->lines_list[tb->cy]);
         tb->lines_list[tb->cy] = string_make(tb->last_destroyed);
         tb->dirty_flags |= DIRTY_ALL;
@@ -529,8 +562,9 @@ ape_quittance do_editor_command(PlayerType *player_ptr, text_body_type *tb, int 
         break;
     }
     case EC_INSERT_BLOCK: {
-        if (!can_insert_line(tb, 2))
+        if (!can_insert_line(tb, 2)) {
             break;
+        }
         char expression[80];
         sprintf(expression, "?:[AND [EQU $RACE %s] [EQU $CLASS %s] [GEQ $LEVEL %02d]]",
 #ifdef JP
@@ -555,8 +589,9 @@ ape_quittance do_editor_command(PlayerType *player_ptr, text_body_type *tb, int 
         draw_text_editor(player_ptr, tb);
         term_erase(0, tb->cy - tb->upper + 1, tb->wid);
         term_putstr(0, tb->cy - tb->upper + 1, tb->wid - 1, TERM_YELLOW, _("P:<トリガーキー>: ", "P:<Trigger key>: "));
-        if (!insert_macro_line(tb))
+        if (!insert_macro_line(tb)) {
             break;
+        }
 
         tb->cx = 2;
         tb->dirty_flags |= DIRTY_ALL;
@@ -569,8 +604,9 @@ ape_quittance do_editor_command(PlayerType *player_ptr, text_body_type *tb, int 
         term_putstr(0, tb->cy - tb->upper + 1, tb->wid - 1, TERM_YELLOW,
             format(_("C:%d:<コマンドキー>: ", "C:%d:<Keypress>: "), (rogue_like_commands ? KEYMAP_MODE_ROGUE : KEYMAP_MODE_ORIG)));
 
-        if (!insert_keymap_line(tb))
+        if (!insert_keymap_line(tb)) {
             break;
+        }
 
         tb->cx = 2;
         tb->dirty_flags |= DIRTY_ALL;

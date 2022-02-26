@@ -34,15 +34,17 @@ OBJECT_IDX o_pop(floor_type *floor_ptr)
     for (OBJECT_IDX i = 1; i < floor_ptr->o_max; i++) {
         ObjectType *o_ptr;
         o_ptr = &floor_ptr->o_list[i];
-        if (o_ptr->k_idx)
+        if (o_ptr->k_idx) {
             continue;
+        }
         floor_ptr->o_cnt++;
 
         return i;
     }
 
-    if (w_ptr->character_dungeon)
+    if (w_ptr->character_dungeon) {
         msg_print(_("アイテムが多すぎる！", "Too many objects!"));
+    }
 
     return 0;
 }
@@ -68,8 +70,9 @@ OBJECT_IDX o_pop(floor_type *floor_ptr)
  */
 OBJECT_IDX get_obj_num(PlayerType *player_ptr, DEPTH level, BIT_FLAGS mode)
 {
-    if (level > MAX_DEPTH - 1)
+    if (level > MAX_DEPTH - 1) {
         level = MAX_DEPTH - 1;
+    }
 
     if ((level > 0) && d_info[player_ptr->dungeon_idx].flags.has_not(DungeonFeatureType::BEGINNER)) {
         if (one_in_(GREAT_OBJ)) {
@@ -81,30 +84,35 @@ OBJECT_IDX get_obj_num(PlayerType *player_ptr, DEPTH level, BIT_FLAGS mode)
     ProbabilityTable<int> prob_table;
     for (auto i = 0U; i < alloc_kind_table.size(); i++) {
         const auto &entry = alloc_kind_table[i];
-        if (entry.level > level)
+        if (entry.level > level) {
             break;
+        }
 
         KIND_OBJECT_IDX k_idx = entry.index;
         auto *k_ptr = &k_info[k_idx];
 
-        if ((mode & AM_FORBID_CHEST) && (k_ptr->tval == ItemKindType::CHEST))
+        if ((mode & AM_FORBID_CHEST) && (k_ptr->tval == ItemKindType::CHEST)) {
             continue;
+        }
 
         prob_table.entry_item(i, entry.prob2);
     }
 
     // 候補なし
-    if (prob_table.empty())
+    if (prob_table.empty()) {
         return 0;
+    }
 
     // 40%で1回、50%で2回、10%で3回抽選し、その中で一番レベルが高いアイテムを選択する
     int n = 1;
 
     const int p = randint0(100);
-    if (p < 60)
+    if (p < 60) {
         n++;
-    if (p < 10)
+    }
+    if (p < 10) {
         n++;
+    }
 
     std::vector<int> result;
     ProbabilityTable<int>::lottery(std::back_inserter(result), prob_table, n);

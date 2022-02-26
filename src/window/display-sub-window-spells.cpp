@@ -93,8 +93,9 @@ static void display_spell_list(PlayerType *player_ptr)
         for (int i = 0; i < MAX_MIND_POWERS; i++) {
             byte a = TERM_WHITE;
             spell = mind_powers[static_cast<int>(use_mind)].info[i];
-            if (spell.min_lev > plev)
+            if (spell.min_lev > plev) {
                 break;
+            }
 
             chance = spell.fail;
             chance -= 3 * (player_ptr->lev - spell.min_lev);
@@ -112,8 +113,9 @@ static void display_spell_list(PlayerType *player_ptr)
             }
 
             minfail = adj_mag_fail[player_ptr->stat_index[mp_ptr->spell_stat]];
-            if (chance < minfail)
+            if (chance < minfail) {
                 chance = minfail;
+            }
 
             auto player_stun = player_ptr->effects()->stun();
             chance += player_stun->get_magic_chance_penalty();
@@ -130,8 +132,9 @@ static void display_spell_list(PlayerType *player_ptr)
         return;
     }
 
-    if (REALM_NONE == player_ptr->realm1)
+    if (REALM_NONE == player_ptr->realm1) {
         return;
+    }
 
     for (int j = 0; j < ((player_ptr->realm2 > REALM_NONE) ? 2 : 1); j++) {
         m[j] = 0;
@@ -178,11 +181,13 @@ void fix_spell(PlayerType *player_ptr)
 {
     for (int j = 0; j < 8; j++) {
         term_type *old = game_term;
-        if (!angband_term[j])
+        if (!angband_term[j]) {
             continue;
+        }
 
-        if (!(window_flag[j] & (PW_SPELL)))
+        if (!(window_flag[j] & (PW_SPELL))) {
             continue;
+        }
 
         term_activate(angband_term[j]);
         display_spell_list(player_ptr);

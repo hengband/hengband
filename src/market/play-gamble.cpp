@@ -61,8 +61,9 @@ bool gamble_comm(PlayerType *player_ptr, int cmd)
         return true;
     }
 
-    for (p = out_val; *p == ' '; p++)
+    for (p = out_val; *p == ' '; p++) {
         ;
+    }
 
     wager = atol(p);
     if (wager > player_ptr->au) {
@@ -104,8 +105,9 @@ bool gamble_comm(PlayerType *player_ptr, int cmd)
             sprintf(tmp_str, _("赤ダイス: %d", "Red die: %d"), choice);
 
             prt(tmp_str, 11, 14);
-            if (((choice > roll1) && (choice < roll2)) || ((choice < roll1) && (choice > roll2)))
+            if (((choice > roll1) && (choice < roll2)) || ((choice < roll1) && (choice > roll2))) {
                 win = 1;
+            }
             break;
         case BACT_CRAPS: /* Game of Craps */
             c_put_str(TERM_GREEN, _("クラップス", "Craps"), 5, 2);
@@ -118,11 +120,11 @@ bool gamble_comm(PlayerType *player_ptr, int cmd)
             choice = roll3;
             sprintf(tmp_str, _("１振りめ: %d %d      Total: %d", "First roll: %d %d    Total: %d"), roll1, roll2, roll3);
             prt(tmp_str, 7, 5);
-            if ((roll3 == 7) || (roll3 == 11))
+            if ((roll3 == 7) || (roll3 == 11)) {
                 win = 1;
-            else if ((roll3 == 2) || (roll3 == 3) || (roll3 == 12))
+            } else if ((roll3 == 2) || (roll3 == 3) || (roll3 == 12)) {
                 win = 0;
-            else {
+            } else {
                 do {
                     msg_print(_("なにかキーを押すともう一回振ります。", "Hit any key to roll again"));
 
@@ -132,10 +134,11 @@ bool gamble_comm(PlayerType *player_ptr, int cmd)
                     roll3 = roll1 + roll2;
                     sprintf(tmp_str, _("出目: %d %d          合計:      %d", "Roll result: %d %d   Total:     %d"), roll1, roll2, roll3);
                     prt(tmp_str, 8, 5);
-                    if (roll3 == choice)
+                    if (roll3 == choice) {
                         win = 1;
-                    else if (roll3 == 7)
+                    } else if (roll3 == 7) {
                         win = 0;
+                    }
                 } while ((win != 1) && (win != 0));
             }
 
@@ -151,8 +154,9 @@ bool gamble_comm(PlayerType *player_ptr, int cmd)
             strcpy(out_val, "");
             get_string(_("何番？ (0-9): ", "Pick a number (0-9): "), out_val, 32);
 
-            for (p = out_val; iswspace(*p); p++)
+            for (p = out_val; iswspace(*p); p++) {
                 ;
+            }
             choice = atol(p);
             if (choice < 0) {
                 msg_print(_("0番にしとくぜ。", "I'll put you down for 0."));
@@ -167,8 +171,9 @@ bool gamble_comm(PlayerType *player_ptr, int cmd)
             prt(tmp_str, 13, 3);
             prt("", 9, 0);
             prt("*", 9, (3 * roll1 + 5));
-            if (roll1 == choice)
+            if (roll1 == choice) {
                 win = 1;
+            }
             break;
 
         case BACT_DICE_SLOTS: /* The Dice Slots */
@@ -241,8 +246,9 @@ bool gamble_comm(PlayerType *player_ptr, int cmd)
         case BACT_POKER:
             win = 0;
             odds = do_poker();
-            if (odds)
+            if (odds) {
                 win = 1;
+            }
             break;
         }
 

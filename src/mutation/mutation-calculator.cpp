@@ -16,7 +16,7 @@
 #include "player-base/player-race.h"
 #include "system/player-type-definition.h"
 
- /*!
+/*!
  * @brief 現在プレイヤー得ている突然変異の数を返す。
  * @return 現在得ている突然変異の数
  */
@@ -38,20 +38,23 @@ int calc_mutant_regenerate_mod(PlayerType *player_ptr)
     int regen;
     int mod = 10;
     int count = count_mutations(player_ptr);
-    if (player_ptr->ppersonality == PERSONALITY_LUCKY)
+    if (player_ptr->ppersonality == PERSONALITY_LUCKY) {
         count--;
+    }
 
     if (PlayerRace(player_ptr).equals(PlayerRaceType::BEASTMAN)) {
         count -= 10;
         mod = 5;
     }
 
-    if (count <= 0)
+    if (count <= 0) {
         return 100;
+    }
 
     regen = 100 - count * mod;
-    if (regen < 10)
+    if (regen < 10) {
         regen = 10;
+    }
 
     return regen;
 }

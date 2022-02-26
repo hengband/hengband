@@ -24,28 +24,32 @@ void shape_buffer(concptr str, int maxlen, char *tbuf, size_t bufsize)
             ch[1] = str[read_pt + 1];
             ch_len = 2;
 
-            if (strcmp(ch, "。") == 0 || strcmp(ch, "、") == 0 || strcmp(ch, "ィ") == 0 || strcmp(ch, "ー") == 0)
+            if (strcmp(ch, "。") == 0 || strcmp(ch, "、") == 0 || strcmp(ch, "ィ") == 0 || strcmp(ch, "ー") == 0) {
                 kinsoku = true;
-        } else if (!isprint(ch[0]))
+            }
+        } else if (!isprint(ch[0])) {
             ch[0] = ' ';
+        }
 #else
-        if (!isprint(ch[0]))
+        if (!isprint(ch[0])) {
             ch[0] = ' ';
+        }
 #endif
 
         if (line_len + ch_len > maxlen - 1 || str[read_pt] == '\n') {
             int word_len = read_pt - word_punct;
 #ifdef JP
-            if (kanji && !kinsoku)
+            if (kanji && !kinsoku) {
                 /* nothing */;
-            else
+            } else
 #endif
-                if (ch[0] == ' ' || word_len >= line_len / 2)
+                if (ch[0] == ' ' || word_len >= line_len / 2) {
                 read_pt++;
-            else {
+            } else {
                 read_pt = word_punct;
-                if (str[word_punct] == ' ')
+                if (str[word_punct] == ' ') {
                     read_pt++;
+                }
                 write_pt -= word_len;
             }
 
@@ -55,16 +59,19 @@ void shape_buffer(concptr str, int maxlen, char *tbuf, size_t bufsize)
             continue;
         }
 
-        if (ch[0] == ' ')
+        if (ch[0] == ' ') {
             word_punct = read_pt;
+        }
 
 #ifdef JP
-        if (!kinsoku)
+        if (!kinsoku) {
             word_punct = read_pt;
+        }
 #endif
 
-        if ((size_t)(write_pt + 3) >= bufsize)
+        if ((size_t)(write_pt + 3) >= bufsize) {
             break;
+        }
 
         tbuf[write_pt++] = ch[0];
         line_len++;

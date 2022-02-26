@@ -105,8 +105,7 @@ void OtherItemsEnchanter::generate_figurine()
 {
     auto *floor_ptr = this->player_ptr->current_floor_ptr;
     short r_idx;
-    while (true)
-    {
+    while (true) {
         r_idx = randint1(r_info.size() - 1);
         if (!item_monster_okay(this->player_ptr, r_idx) || (r_idx == MON_TSUCHINOKO)) {
             continue;

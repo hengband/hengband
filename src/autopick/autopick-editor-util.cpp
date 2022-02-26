@@ -26,41 +26,48 @@ void toggle_keyword(text_body_type *tb, BIT_FLAGS flg)
 
     for (int y = by1; y <= by2; y++) {
         autopick_type an_entry, *entry = &an_entry;
-        if (!autopick_new_entry(entry, tb->lines_list[y], !fixed))
+        if (!autopick_new_entry(entry, tb->lines_list[y], !fixed)) {
             continue;
+        }
 
         string_free(tb->lines_list[y]);
         if (!fixed) {
-            if (!IS_FLG(flg))
+            if (!IS_FLG(flg)) {
                 add = true;
-            else
+            } else {
                 add = false;
+            }
 
             fixed = true;
         }
 
         if (FLG_NOUN_BEGIN <= flg && flg <= FLG_NOUN_END) {
             int i;
-            for (i = FLG_NOUN_BEGIN; i <= FLG_NOUN_END; i++)
+            for (i = FLG_NOUN_BEGIN; i <= FLG_NOUN_END; i++) {
                 REM_FLG(i);
+            }
         } else if (FLG_UNAWARE <= flg && flg <= FLG_STAR_IDENTIFIED) {
             int i;
-            for (i = FLG_UNAWARE; i <= FLG_STAR_IDENTIFIED; i++)
+            for (i = FLG_UNAWARE; i <= FLG_STAR_IDENTIFIED; i++) {
                 REM_FLG(i);
+            }
         } else if (FLG_ARTIFACT <= flg && flg <= FLG_AVERAGE) {
             int i;
-            for (i = FLG_ARTIFACT; i <= FLG_AVERAGE; i++)
+            for (i = FLG_ARTIFACT; i <= FLG_AVERAGE; i++) {
                 REM_FLG(i);
+            }
         } else if (FLG_RARE <= flg && flg <= FLG_COMMON) {
             int i;
-            for (i = FLG_RARE; i <= FLG_COMMON; i++)
+            for (i = FLG_RARE; i <= FLG_COMMON; i++) {
                 REM_FLG(i);
+            }
         }
 
-        if (add)
+        if (add) {
             ADD_FLG(flg);
-        else
+        } else {
             REM_FLG(flg);
+        }
 
         tb->lines_list[y] = autopick_line_from_entry_kill(entry);
         tb->dirty_flags |= DIRTY_ALL;
@@ -89,55 +96,65 @@ void toggle_command_letter(text_body_type *tb, byte flg)
     for (int y = by1; y <= by2; y++) {
         int wid = 0;
 
-        if (!autopick_new_entry(entry, tb->lines_list[y], false))
+        if (!autopick_new_entry(entry, tb->lines_list[y], false)) {
             continue;
+        }
 
         string_free(tb->lines_list[y]);
 
         if (!fixed) {
-            if (!(entry->action & flg))
+            if (!(entry->action & flg)) {
                 add = true;
-            else
+            } else {
                 add = false;
+            }
 
             fixed = true;
         }
 
-        if (entry->action & DONT_AUTOPICK)
+        if (entry->action & DONT_AUTOPICK) {
             wid--;
-        else if (entry->action & DO_AUTODESTROY)
+        } else if (entry->action & DO_AUTODESTROY) {
             wid--;
-        else if (entry->action & DO_QUERY_AUTOPICK)
+        } else if (entry->action & DO_QUERY_AUTOPICK) {
             wid--;
-        if (!(entry->action & DO_DISPLAY))
+        }
+        if (!(entry->action & DO_DISPLAY)) {
             wid--;
+        }
 
         if (flg != DO_DISPLAY) {
             entry->action &= ~(DO_AUTOPICK | DONT_AUTOPICK | DO_AUTODESTROY | DO_QUERY_AUTOPICK);
-            if (add)
+            if (add) {
                 entry->action |= flg;
-            else
+            } else {
                 entry->action |= DO_AUTOPICK;
+            }
         } else {
             entry->action &= ~(DO_DISPLAY);
-            if (add)
+            if (add) {
                 entry->action |= flg;
+            }
         }
 
         if (tb->cy == y) {
-            if (entry->action & DONT_AUTOPICK)
+            if (entry->action & DONT_AUTOPICK) {
                 wid++;
-            else if (entry->action & DO_AUTODESTROY)
+            } else if (entry->action & DO_AUTODESTROY) {
                 wid++;
-            else if (entry->action & DO_QUERY_AUTOPICK)
+            } else if (entry->action & DO_QUERY_AUTOPICK) {
                 wid++;
-            if (!(entry->action & DO_DISPLAY))
+            }
+            if (!(entry->action & DO_DISPLAY)) {
                 wid++;
+            }
 
-            if (wid > 0)
+            if (wid > 0) {
                 tb->cx++;
-            if (wid < 0 && tb->cx > 0)
+            }
+            if (wid < 0 && tb->cx > 0) {
                 tb->cx--;
+            }
         }
 
         tb->lines_list[y] = autopick_line_from_entry_kill(entry);
@@ -161,8 +178,9 @@ void add_keyword(text_body_type *tb, BIT_FLAGS flg)
 
     for (int y = by1; y <= by2; y++) {
         autopick_type an_entry, *entry = &an_entry;
-        if (!autopick_new_entry(entry, tb->lines_list[y], false))
+        if (!autopick_new_entry(entry, tb->lines_list[y], false)) {
             continue;
+        }
 
         if (IS_FLG(flg)) {
             continue;
@@ -171,8 +189,9 @@ void add_keyword(text_body_type *tb, BIT_FLAGS flg)
         string_free(tb->lines_list[y]);
         if (FLG_NOUN_BEGIN <= flg && flg <= FLG_NOUN_END) {
             int i;
-            for (i = FLG_NOUN_BEGIN; i <= FLG_NOUN_END; i++)
+            for (i = FLG_NOUN_BEGIN; i <= FLG_NOUN_END; i++) {
                 REM_FLG(i);
+            }
         }
 
         ADD_FLG(flg);
@@ -189,8 +208,9 @@ bool add_empty_line(text_body_type *tb)
 {
     int num_lines = count_line(tb);
 
-    if (!tb->lines_list[num_lines - 1][0])
+    if (!tb->lines_list[num_lines - 1][0]) {
         return false;
+    }
 
     tb->lines_list[num_lines] = string_make("");
     tb->dirty_flags |= DIRTY_EXPRESSION;
@@ -250,8 +270,9 @@ void add_str_to_yank(text_body_type *tb, concptr str)
 void copy_text_to_yank(text_body_type *tb)
 {
     int len = strlen(tb->lines_list[tb->cy]);
-    if (tb->cx > len)
+    if (tb->cx > len) {
         tb->cx = len;
+    }
 
     if (!tb->mark) {
         tb->cx = 0;
@@ -277,8 +298,9 @@ void copy_text_to_yank(text_body_type *tb)
     char buf[MAX_LINELEN];
     int bx1 = std::min(tb->mx, tb->cx);
     int bx2 = std::max(tb->mx, tb->cx);
-    if (bx2 > len)
+    if (bx2 > len) {
         bx2 = len;
+    }
 
     if (bx1 == 0 && bx2 == len) {
         add_str_to_yank(tb, tb->lines_list[tb->cy]);

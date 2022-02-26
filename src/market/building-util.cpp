@@ -10,10 +10,9 @@
  */
 void clear_bldg(int min_row, int max_row)
 {
-	for (int i = min_row; i <= max_row; i++)
-	{
-		prt("", i, 0);
-	}
+    for (int i = min_row; i <= max_row; i++) {
+        prt("", i, 0);
+    }
 }
 
 /*!

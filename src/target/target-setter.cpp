@@ -79,20 +79,25 @@ static bool change_panel_xy(PlayerType *player_ptr, POSITION y, POSITION x)
     POSITION dy = 0, dx = 0;
     TERM_LEN wid, hgt;
     get_screen_size(&wid, &hgt);
-    if (y < panel_row_min)
+    if (y < panel_row_min) {
         dy = -1;
+    }
 
-    if (y > panel_row_max)
+    if (y > panel_row_max) {
         dy = 1;
+    }
 
-    if (x < panel_col_min)
+    if (x < panel_col_min) {
         dx = -1;
+    }
 
-    if (x > panel_col_max)
+    if (x > panel_col_max) {
         dx = 1;
+    }
 
-    if (!dy && !dx)
+    if (!dy && !dx) {
         return false;
+    }
 
     return change_panel(player_ptr, dy, dx);
 }
@@ -122,30 +127,35 @@ static POSITION_IDX target_pick(const POSITION y1, const POSITION x1, const POSI
 
         // dx > 0 のとき、x3 <= 0 なるものは除外。
         // dx < 0 のとき、x3 >= 0 なるものは除外。
-        if (dx && (x3 * dx <= 0))
+        if (dx && (x3 * dx <= 0)) {
             continue;
+        }
 
         // dy > 0 のとき、y3 <= 0 なるものは除外。
         // dy < 0 のとき、y3 >= 0 なるものは除外。
-        if (dy && (y3 * dy <= 0))
+        if (dy && (y3 * dy <= 0)) {
             continue;
+        }
 
         const POSITION x4 = std::abs(x3);
         const POSITION y4 = std::abs(y3);
 
         // (dy,dx) が (-1,0) or (1,0) のとき、|x3| > |y3| なるものは除外。
-        if (dy && !dx && (x4 > y4))
+        if (dy && !dx && (x4 > y4)) {
             continue;
+        }
 
         // (dy,dx) が (0,-1) or (0,1) のとき、|y3| > |x3| なるものは除外。
-        if (dx && !dy && (y4 > x4))
+        if (dx && !dy && (y4 > x4)) {
             continue;
+        }
 
         // (y1,x1), (y2,x2) 間の距離を求め、最も近いものを更新する。
         // 距離の定義は v の式を参照。
         const POSITION_IDX v = ((x4 > y4) ? (x4 + x4 + y4) : (y4 + y4 + x4));
-        if ((b_i >= 0) && (v >= b_v))
+        if ((b_i >= 0) && (v >= b_v)) {
             continue;
+        }
 
         b_i = i;
         b_v = v;
@@ -159,17 +169,20 @@ static void describe_projectablity(PlayerType *player_ptr, ts_type *ts_ptr)
     ts_ptr->y = ys_interest[ts_ptr->m];
     ts_ptr->x = xs_interest[ts_ptr->m];
     change_panel_xy(player_ptr, ts_ptr->y, ts_ptr->x);
-    if ((ts_ptr->mode & TARGET_LOOK) == 0)
+    if ((ts_ptr->mode & TARGET_LOOK) == 0) {
         print_path(player_ptr, ts_ptr->y, ts_ptr->x);
+    }
 
     ts_ptr->g_ptr = &player_ptr->current_floor_ptr->grid_array[ts_ptr->y][ts_ptr->x];
-    if (target_able(player_ptr, ts_ptr->g_ptr->m_idx))
+    if (target_able(player_ptr, ts_ptr->g_ptr->m_idx)) {
         strcpy(ts_ptr->info, _("q止 t決 p自 o現 +次 -前", "q,t,p,o,+,-,<dir>"));
-    else
+    } else {
         strcpy(ts_ptr->info, _("q止 p自 o現 +次 -前", "q,p,o,+,-,<dir>"));
+    }
 
-    if (!cheat_sight)
+    if (!cheat_sight) {
         return;
+    }
 
     char cheatinfo[30];
     sprintf(cheatinfo, " X:%d Y:%d LOS:%d LOP:%d", ts_ptr->x, ts_ptr->y, los(player_ptr, player_ptr->y, player_ptr->x, ts_ptr->y, ts_ptr->x),
@@ -179,11 +192,13 @@ static void describe_projectablity(PlayerType *player_ptr, ts_type *ts_ptr)
 
 static void menu_target(ts_type *ts_ptr)
 {
-    if (!use_menu)
+    if (!use_menu) {
         return;
+    }
 
-    if (ts_ptr->query == '\r')
+    if (ts_ptr->query == '\r') {
         ts_ptr->query = 't';
+    }
 }
 
 static void switch_target_input(PlayerType *player_ptr, ts_type *ts_ptr)
@@ -212,21 +227,25 @@ static void switch_target_input(PlayerType *player_ptr, ts_type *ts_ptr)
     case ' ':
     case '*':
     case '+':
-        if (++ts_ptr->m != (int)size(ys_interest))
+        if (++ts_ptr->m != (int)size(ys_interest)) {
             return;
+        }
 
         ts_ptr->m = 0;
-        if (!expand_list)
+        if (!expand_list) {
             ts_ptr->done = true;
+        }
 
         return;
     case '-':
-        if (ts_ptr->m-- != 0)
+        if (ts_ptr->m-- != 0) {
             return;
+        }
 
         ts_ptr->m = (int)size(ys_interest) - 1;
-        if (!expand_list)
+        if (!expand_list) {
             ts_ptr->done = true;
+        }
 
         return;
     case 'p': {
@@ -249,18 +268,21 @@ static void switch_target_input(PlayerType *player_ptr, ts_type *ts_ptr)
         const char queried_command = rogue_like_commands ? 'x' : 'l';
         if (ts_ptr->query != queried_command) {
             ts_ptr->distance = get_keymap_dir(ts_ptr->query);
-            if (ts_ptr->distance == 0)
+            if (ts_ptr->distance == 0) {
                 bell();
+            }
 
             return;
         }
 
-        if (++ts_ptr->m != (int)size(ys_interest))
+        if (++ts_ptr->m != (int)size(ys_interest)) {
             return;
+        }
 
         ts_ptr->m = 0;
-        if (!expand_list)
+        if (!expand_list) {
             ts_ptr->done = true;
+        }
 
         return;
     }
@@ -274,8 +296,9 @@ static void switch_target_input(PlayerType *player_ptr, ts_type *ts_ptr)
 static bool check_panel_changed(PlayerType *player_ptr, ts_type *ts_ptr)
 {
     // カーソル移動によって描画範囲が変化しないなら何もせずその旨を返す。
-    if (!change_panel(player_ptr, ddy[ts_ptr->distance], ddx[ts_ptr->distance]))
+    if (!change_panel(player_ptr, ddy[ts_ptr->distance], ddx[ts_ptr->distance])) {
         return false;
+    }
 
     // 描画範囲が変化した場合、"interesting" 座標リストおよび現在のターゲットを更新する必要がある。
 
@@ -297,8 +320,9 @@ static bool check_panel_changed(PlayerType *player_ptr, ts_type *ts_ptr)
     // 新たな "interesting" 座標リストからターゲットを探す。
     ts_ptr->flag = true;
     ts_ptr->target_num = target_pick(v, u, ddy[ts_ptr->distance], ddx[ts_ptr->distance]);
-    if (ts_ptr->target_num >= 0)
+    if (ts_ptr->target_num >= 0) {
         ts_ptr->m = ts_ptr->target_num;
+    }
 
     return true;
 }
@@ -314,8 +338,9 @@ static void sweep_targets(PlayerType *player_ptr, ts_type *ts_ptr)
     while (ts_ptr->flag && (ts_ptr->target_num < 0)) {
         // カーソル移動に伴い、必要なだけ描画範囲を更新。
         // "interesting" 座標リストおよび現在のターゲットも更新。
-        if (check_panel_changed(player_ptr, ts_ptr))
+        if (check_panel_changed(player_ptr, ts_ptr)) {
             continue;
+        }
 
         POSITION dx = ddx[ts_ptr->distance];
         POSITION dy = ddy[ts_ptr->distance];
@@ -330,48 +355,55 @@ static void sweep_targets(PlayerType *player_ptr, ts_type *ts_ptr)
         ts_ptr->flag = false;
         ts_ptr->x += dx;
         ts_ptr->y += dy;
-        if (((ts_ptr->x < panel_col_min + ts_ptr->wid / 2) && (dx > 0)) || ((ts_ptr->x > panel_col_min + ts_ptr->wid / 2) && (dx < 0)))
+        if (((ts_ptr->x < panel_col_min + ts_ptr->wid / 2) && (dx > 0)) || ((ts_ptr->x > panel_col_min + ts_ptr->wid / 2) && (dx < 0))) {
             dx = 0;
-
-        if (((ts_ptr->y < panel_row_min + ts_ptr->hgt / 2) && (dy > 0)) || ((ts_ptr->y > panel_row_min + ts_ptr->hgt / 2) && (dy < 0)))
-            dy = 0;
-
-        if ((ts_ptr->y >= panel_row_min + ts_ptr->hgt) || (ts_ptr->y < panel_row_min) || (ts_ptr->x >= panel_col_min + ts_ptr->wid)
-            || (ts_ptr->x < panel_col_min)) {
-            if (change_panel(player_ptr, dy, dx))
-                target_set_prepare(player_ptr, ys_interest, xs_interest, ts_ptr->mode);
         }
 
-        if (ts_ptr->x >= floor_ptr->width - 1)
-            ts_ptr->x = floor_ptr->width - 2;
-        else if (ts_ptr->x <= 0)
-            ts_ptr->x = 1;
+        if (((ts_ptr->y < panel_row_min + ts_ptr->hgt / 2) && (dy > 0)) || ((ts_ptr->y > panel_row_min + ts_ptr->hgt / 2) && (dy < 0))) {
+            dy = 0;
+        }
 
-        if (ts_ptr->y >= floor_ptr->height - 1)
+        if ((ts_ptr->y >= panel_row_min + ts_ptr->hgt) || (ts_ptr->y < panel_row_min) || (ts_ptr->x >= panel_col_min + ts_ptr->wid) || (ts_ptr->x < panel_col_min)) {
+            if (change_panel(player_ptr, dy, dx)) {
+                target_set_prepare(player_ptr, ys_interest, xs_interest, ts_ptr->mode);
+            }
+        }
+
+        if (ts_ptr->x >= floor_ptr->width - 1) {
+            ts_ptr->x = floor_ptr->width - 2;
+        } else if (ts_ptr->x <= 0) {
+            ts_ptr->x = 1;
+        }
+
+        if (ts_ptr->y >= floor_ptr->height - 1) {
             ts_ptr->y = floor_ptr->height - 2;
-        else if (ts_ptr->y <= 0)
+        } else if (ts_ptr->y <= 0) {
             ts_ptr->y = 1;
+        }
     }
 }
 
 static bool set_target_grid(PlayerType *player_ptr, ts_type *ts_ptr)
 {
-    if (!ts_ptr->flag || ys_interest.empty())
+    if (!ts_ptr->flag || ys_interest.empty()) {
         return false;
+    }
 
     describe_projectablity(player_ptr, ts_ptr);
     fix_floor_item_list(player_ptr, ts_ptr->y, ts_ptr->x);
 
     while (true) {
         ts_ptr->query = examine_grid(player_ptr, ts_ptr->y, ts_ptr->x, ts_ptr->mode, ts_ptr->info);
-        if (ts_ptr->query)
+        if (ts_ptr->query) {
             break;
+        }
     }
 
     menu_target(ts_ptr);
     switch_target_input(player_ptr, ts_ptr);
-    if (ts_ptr->distance == 0)
+    if (ts_ptr->distance == 0) {
         return true;
+    }
 
     ts_ptr->y2 = panel_row_min;
     ts_ptr->x2 = panel_col_min;
@@ -387,8 +419,9 @@ static bool set_target_grid(PlayerType *player_ptr, ts_type *ts_ptr)
 
 static void describe_grid_wizard(PlayerType *player_ptr, ts_type *ts_ptr)
 {
-    if (!cheat_sight)
+    if (!cheat_sight) {
         return;
+    }
 
     char cheatinfo[100];
     sprintf(cheatinfo, " X:%d Y:%d LOS:%d LOP:%d SPECIAL:%d", ts_ptr->x, ts_ptr->y, los(player_ptr, player_ptr->y, player_ptr->x, ts_ptr->y, ts_ptr->x),
@@ -442,18 +475,21 @@ static void switch_next_grid_command(PlayerType *player_ptr, ts_type *ts_ptr)
             }
         }
 
-        if (bd == 999)
+        if (bd == 999) {
             ts_ptr->flag = false;
+        }
 
         break;
     }
     default:
         ts_ptr->distance = get_keymap_dir(ts_ptr->query);
-        if (isupper(ts_ptr->query))
+        if (isupper(ts_ptr->query)) {
             ts_ptr->move_fast = true;
+        }
 
-        if (!ts_ptr->distance)
+        if (!ts_ptr->distance) {
             bell();
+        }
 
         break;
     }
@@ -461,8 +497,9 @@ static void switch_next_grid_command(PlayerType *player_ptr, ts_type *ts_ptr)
 
 static void decide_change_panel(PlayerType *player_ptr, ts_type *ts_ptr)
 {
-    if (ts_ptr->distance == 0)
+    if (ts_ptr->distance == 0) {
         return;
+    }
 
     POSITION dx = ddx[ts_ptr->distance];
     POSITION dy = ddy[ts_ptr->distance];
@@ -475,39 +512,45 @@ static void decide_change_panel(PlayerType *player_ptr, ts_type *ts_ptr)
         ts_ptr->y += dy;
     }
 
-    if (((ts_ptr->x < panel_col_min + ts_ptr->wid / 2) && (dx > 0)) || ((ts_ptr->x > panel_col_min + ts_ptr->wid / 2) && (dx < 0)))
+    if (((ts_ptr->x < panel_col_min + ts_ptr->wid / 2) && (dx > 0)) || ((ts_ptr->x > panel_col_min + ts_ptr->wid / 2) && (dx < 0))) {
         dx = 0;
+    }
 
-    if (((ts_ptr->y < panel_row_min + ts_ptr->hgt / 2) && (dy > 0)) || ((ts_ptr->y > panel_row_min + ts_ptr->hgt / 2) && (dy < 0)))
+    if (((ts_ptr->y < panel_row_min + ts_ptr->hgt / 2) && (dy > 0)) || ((ts_ptr->y > panel_row_min + ts_ptr->hgt / 2) && (dy < 0))) {
         dy = 0;
+    }
 
-    if ((ts_ptr->y >= panel_row_min + ts_ptr->hgt) || (ts_ptr->y < panel_row_min) || (ts_ptr->x >= panel_col_min + ts_ptr->wid)
-        || (ts_ptr->x < panel_col_min)) {
-        if (change_panel(player_ptr, dy, dx))
+    if ((ts_ptr->y >= panel_row_min + ts_ptr->hgt) || (ts_ptr->y < panel_row_min) || (ts_ptr->x >= panel_col_min + ts_ptr->wid) || (ts_ptr->x < panel_col_min)) {
+        if (change_panel(player_ptr, dy, dx)) {
             target_set_prepare(player_ptr, ys_interest, xs_interest, ts_ptr->mode);
+        }
     }
 
     auto *floor_ptr = player_ptr->current_floor_ptr;
-    if (ts_ptr->x >= floor_ptr->width - 1)
+    if (ts_ptr->x >= floor_ptr->width - 1) {
         ts_ptr->x = floor_ptr->width - 2;
-    else if (ts_ptr->x <= 0)
+    } else if (ts_ptr->x <= 0) {
         ts_ptr->x = 1;
+    }
 
-    if (ts_ptr->y >= floor_ptr->height - 1)
+    if (ts_ptr->y >= floor_ptr->height - 1) {
         ts_ptr->y = floor_ptr->height - 2;
-    else if (ts_ptr->y <= 0)
+    } else if (ts_ptr->y <= 0) {
         ts_ptr->y = 1;
+    }
 }
 
 static void sweep_target_grids(PlayerType *player_ptr, ts_type *ts_ptr)
 {
     while (!ts_ptr->done) {
-        if (set_target_grid(player_ptr, ts_ptr))
+        if (set_target_grid(player_ptr, ts_ptr)) {
             continue;
+        }
 
         ts_ptr->move_fast = false;
-        if ((ts_ptr->mode & TARGET_LOOK) == 0)
+        if ((ts_ptr->mode & TARGET_LOOK) == 0) {
             print_path(player_ptr, ts_ptr->y, ts_ptr->x);
+        }
 
         ts_ptr->g_ptr = &player_ptr->current_floor_ptr->grid_array[ts_ptr->y][ts_ptr->x];
         strcpy(ts_ptr->info, _("q止 t決 p自 m近 +次 -前", "q,t,p,m,+,-,<dir>"));
@@ -515,12 +558,14 @@ static void sweep_target_grids(PlayerType *player_ptr, ts_type *ts_ptr)
         fix_floor_item_list(player_ptr, ts_ptr->y, ts_ptr->x);
 
         /* Describe and Prompt (enable "TARGET_LOOK") */
-        while ((ts_ptr->query = examine_grid(player_ptr, ts_ptr->y, ts_ptr->x, i2enum<target_type>(ts_ptr->mode | TARGET_LOOK), ts_ptr->info)) == 0)
+        while ((ts_ptr->query = examine_grid(player_ptr, ts_ptr->y, ts_ptr->x, i2enum<target_type>(ts_ptr->mode | TARGET_LOOK), ts_ptr->info)) == 0) {
             ;
+        }
 
         ts_ptr->distance = 0;
-        if (use_menu && (ts_ptr->query == '\r'))
+        if (use_menu && (ts_ptr->query == '\r')) {
             ts_ptr->query = 't';
+        }
 
         switch_next_grid_command(player_ptr, ts_ptr);
         decide_change_panel(player_ptr, ts_ptr);

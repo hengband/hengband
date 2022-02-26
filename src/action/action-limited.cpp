@@ -103,8 +103,9 @@ bool cmd_limit_blind(PlayerType *player_ptr)
 bool cmd_limit_time_walk(PlayerType *player_ptr)
 {
     if (player_ptr->timewalk) {
-        if (flush_failure)
+        if (flush_failure) {
             flush();
+        }
 
         msg_print(_("止まった時の中ではうまく働かないようだ。", "It shows no reaction."));
         sound(SOUND_FAIL);

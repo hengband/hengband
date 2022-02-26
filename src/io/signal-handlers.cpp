@@ -9,12 +9,12 @@
 #include "cmd-io/cmd-dump.h"
 #include "core/game-closer.h"
 #include "floor/floor-events.h"
+#include "game-option/cheat-options.h"
 #include "io/write-diary.h"
 #include "monster-floor/monster-lite.h"
-#include "game-option/cheat-options.h"
 #include "save/save.h"
-#include "system/system-variables.h"
 #include "system/player-type-definition.h"
+#include "system/system-variables.h"
 #include "term/term-color-types.h"
 #include "world/world.h"
 
@@ -63,8 +63,9 @@ static void handle_signal_suspend(int sig)
 static void handle_signal_simple(int sig)
 {
     (void)signal(sig, SIG_IGN);
-    if (!w_ptr->character_generated || w_ptr->character_saved)
+    if (!w_ptr->character_generated || w_ptr->character_saved) {
         quit(nullptr);
+    }
 
     signal_count++;
     if (p_ptr->is_dead) {
@@ -80,8 +81,9 @@ static void handle_signal_simple(int sig)
         forget_view(p_ptr->current_floor_ptr);
         clear_mon_lite(p_ptr->current_floor_ptr);
         p_ptr->playing = false;
-        if (!cheat_immortal)
+        if (!cheat_immortal) {
             p_ptr->is_dead = true;
+        }
         p_ptr->leaving = true;
         close_game(p_ptr);
         quit(_("強制終了", "interrupt"));
@@ -120,8 +122,9 @@ static void handle_signal_abort(int sig)
     term_get_size(&wid, &hgt);
 
     (void)signal(sig, SIG_IGN);
-    if (!w_ptr->character_generated || w_ptr->character_saved)
+    if (!w_ptr->character_generated || w_ptr->character_saved) {
         quit(nullptr);
+    }
 
     forget_lite(p_ptr->current_floor_ptr);
     forget_view(p_ptr->current_floor_ptr);

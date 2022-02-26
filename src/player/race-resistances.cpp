@@ -24,19 +24,25 @@ void player_immunity(PlayerType *player_ptr, TrFlags &flags)
 
     const auto p_flags = (PlayerRace(player_ptr).tr_flags() | PlayerClass(player_ptr).tr_flags());
 
-    if (p_flags.has(TR_IM_ACID))
+    if (p_flags.has(TR_IM_ACID)) {
         flags.set(TR_RES_ACID);
-    if (p_flags.has(TR_IM_COLD))
+    }
+    if (p_flags.has(TR_IM_COLD)) {
         flags.set(TR_RES_COLD);
-    if (p_flags.has(TR_IM_ELEC))
+    }
+    if (p_flags.has(TR_IM_ELEC)) {
         flags.set(TR_RES_ELEC);
-    if (p_flags.has(TR_IM_FIRE))
+    }
+    if (p_flags.has(TR_IM_FIRE)) {
         flags.set(TR_RES_FIRE);
-    if (p_flags.has(TR_IM_DARK))
+    }
+    if (p_flags.has(TR_IM_DARK)) {
         flags.set(TR_RES_DARK);
+    }
 
-    if (PlayerRace(player_ptr).equals(PlayerRaceType::SPECTRE))
+    if (PlayerRace(player_ptr).equals(PlayerRaceType::SPECTRE)) {
         flags.set(TR_RES_NETHER);
+    }
 }
 
 /*!
@@ -48,16 +54,21 @@ void tim_player_immunity(PlayerType *player_ptr, TrFlags &flags)
 {
     flags.clear();
 
-    if (player_ptr->special_defense & DEFENSE_ACID)
+    if (player_ptr->special_defense & DEFENSE_ACID) {
         flags.set(TR_RES_ACID);
-    if (player_ptr->special_defense & DEFENSE_ELEC)
+    }
+    if (player_ptr->special_defense & DEFENSE_ELEC) {
         flags.set(TR_RES_ELEC);
-    if (player_ptr->special_defense & DEFENSE_FIRE)
+    }
+    if (player_ptr->special_defense & DEFENSE_FIRE) {
         flags.set(TR_RES_FIRE);
-    if (player_ptr->special_defense & DEFENSE_COLD)
+    }
+    if (player_ptr->special_defense & DEFENSE_COLD) {
         flags.set(TR_RES_COLD);
-    if (player_ptr->wraith_form)
+    }
+    if (player_ptr->wraith_form) {
         flags.set(TR_RES_DARK);
+    }
 }
 
 /*!
@@ -72,18 +83,23 @@ void known_obj_immunity(PlayerType *player_ptr, TrFlags &flags)
     for (int i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
         ObjectType *o_ptr;
         o_ptr = &player_ptr->inventory_list[i];
-        if (!o_ptr->k_idx)
+        if (!o_ptr->k_idx) {
             continue;
+        }
 
         auto o_flags = object_flags_known(o_ptr);
-        if (o_flags.has(TR_IM_ACID))
+        if (o_flags.has(TR_IM_ACID)) {
             flags.set(TR_RES_ACID);
-        if (o_flags.has(TR_IM_ELEC))
+        }
+        if (o_flags.has(TR_IM_ELEC)) {
             flags.set(TR_RES_ELEC);
-        if (o_flags.has(TR_IM_FIRE))
+        }
+        if (o_flags.has(TR_IM_FIRE)) {
             flags.set(TR_RES_FIRE);
-        if (o_flags.has(TR_IM_COLD))
+        }
+        if (o_flags.has(TR_IM_COLD)) {
             flags.set(TR_RES_COLD);
+        }
     }
 }
 
@@ -105,14 +121,19 @@ void player_vulnerability_flags(PlayerType *player_ptr, TrFlags &flags)
 
     const auto p_flags = PlayerRace(player_ptr).tr_flags();
 
-    if (p_flags.has(TR_VUL_ACID))
+    if (p_flags.has(TR_VUL_ACID)) {
         flags.set(TR_RES_ACID);
-    if (p_flags.has(TR_VUL_COLD))
+    }
+    if (p_flags.has(TR_VUL_COLD)) {
         flags.set(TR_RES_COLD);
-    if (p_flags.has(TR_VUL_ELEC))
+    }
+    if (p_flags.has(TR_VUL_ELEC)) {
         flags.set(TR_RES_ELEC);
-    if (p_flags.has(TR_VUL_FIRE))
+    }
+    if (p_flags.has(TR_VUL_FIRE)) {
         flags.set(TR_RES_FIRE);
-    if (p_flags.has(TR_VUL_LITE))
+    }
+    if (p_flags.has(TR_VUL_LITE)) {
         flags.set(TR_RES_LITE);
+    }
 }

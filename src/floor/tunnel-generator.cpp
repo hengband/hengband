@@ -31,13 +31,16 @@ static void rand_dir(POSITION *rdir, POSITION *cdir)
  */
 static void correct_dir(POSITION *rdir, POSITION *cdir, POSITION y1, POSITION x1, POSITION y2, POSITION x2)
 {
-    *rdir = (y1 == y2) ? 0 : (y1 < y2) ? 1 : -1;
-    *cdir = (x1 == x2) ? 0 : (x1 < x2) ? 1 : -1;
+    *rdir = (y1 == y2) ? 0 : (y1 < y2) ? 1
+                                       : -1;
+    *cdir = (x1 == x2) ? 0 : (x1 < x2) ? 1
+                                       : -1;
     if (*rdir && *cdir) {
-        if (randint0(100) < 50)
+        if (randint0(100) < 50) {
             *rdir = 0;
-        else
+        } else {
             *cdir = 0;
+        }
     }
 }
 
@@ -62,49 +65,58 @@ bool build_tunnel(PlayerType *player_ptr, dun_data_type *dd_ptr, dt_type *dt_ptr
     correct_dir(&row_dir, &col_dir, row1, col1, row2, col2);
     auto *floor_ptr = player_ptr->current_floor_ptr;
     while ((row1 != row2) || (col1 != col2)) {
-        if (main_loop_count++ > 2000)
+        if (main_loop_count++ > 2000) {
             return false;
+        }
 
         if (randint0(100) < dt_ptr->dun_tun_chg) {
             correct_dir(&row_dir, &col_dir, row1, col1, row2, col2);
-            if (randint0(100) < dt_ptr->dun_tun_rnd)
+            if (randint0(100) < dt_ptr->dun_tun_rnd) {
                 rand_dir(&row_dir, &col_dir);
+            }
         }
 
         tmp_row = row1 + row_dir;
         tmp_col = col1 + col_dir;
         while (!in_bounds(floor_ptr, tmp_row, tmp_col)) {
             correct_dir(&row_dir, &col_dir, row1, col1, row2, col2);
-            if (randint0(100) < dt_ptr->dun_tun_rnd)
+            if (randint0(100) < dt_ptr->dun_tun_rnd) {
                 rand_dir(&row_dir, &col_dir);
+            }
 
             tmp_row = row1 + row_dir;
             tmp_col = col1 + col_dir;
         }
 
         auto *tmp_g_ptr = &floor_ptr->grid_array[tmp_row][tmp_col];
-        if (tmp_g_ptr->is_solid())
+        if (tmp_g_ptr->is_solid()) {
             continue;
+        }
 
         if (tmp_g_ptr->is_outer()) {
             POSITION y = tmp_row + row_dir;
             POSITION x = tmp_col + col_dir;
             auto *g_ptr = &floor_ptr->grid_array[y][x];
-            if (g_ptr->is_outer() || g_ptr->is_solid())
+            if (g_ptr->is_outer() || g_ptr->is_solid()) {
                 continue;
+            }
 
             row1 = tmp_row;
             col1 = tmp_col;
-            if (dd_ptr->wall_n >= WALL_MAX)
+            if (dd_ptr->wall_n >= WALL_MAX) {
                 return false;
+            }
 
             dd_ptr->wall[dd_ptr->wall_n].y = row1;
             dd_ptr->wall[dd_ptr->wall_n].x = col1;
             dd_ptr->wall_n++;
-            for (y = row1 - 1; y <= row1 + 1; y++)
-                for (x = col1 - 1; x <= col1 + 1; x++)
-                    if (floor_ptr->grid_array[y][x].is_outer())
+            for (y = row1 - 1; y <= row1 + 1; y++) {
+                for (x = col1 - 1; x <= col1 + 1; x++) {
+                    if (floor_ptr->grid_array[y][x].is_outer()) {
                         place_bold(player_ptr, y, x, GB_SOLID_NOPERM);
+                    }
+                }
+            }
 
         } else if (tmp_g_ptr->info & (CAVE_ROOM)) {
             row1 = tmp_row;
@@ -112,8 +124,9 @@ bool build_tunnel(PlayerType *player_ptr, dun_data_type *dd_ptr, dt_type *dt_ptr
         } else if (tmp_g_ptr->is_extra() || tmp_g_ptr->is_inner() || tmp_g_ptr->is_solid()) {
             row1 = tmp_row;
             col1 = tmp_col;
-            if (dd_ptr->tunn_n >= TUNN_MAX)
+            if (dd_ptr->tunn_n >= TUNN_MAX) {
                 return false;
+            }
 
             dd_ptr->tunn[dd_ptr->tunn_n].y = row1;
             dd_ptr->tunn[dd_ptr->tunn_n].x = col1;
@@ -123,8 +136,9 @@ bool build_tunnel(PlayerType *player_ptr, dun_data_type *dd_ptr, dt_type *dt_ptr
             row1 = tmp_row;
             col1 = tmp_col;
             if (!door_flag) {
-                if (dd_ptr->door_n >= DOOR_MAX)
+                if (dd_ptr->door_n >= DOOR_MAX) {
                     return false;
+                }
 
                 dd_ptr->door[dd_ptr->door_n].y = row1;
                 dd_ptr->door[dd_ptr->door_n].x = col1;
@@ -134,15 +148,18 @@ bool build_tunnel(PlayerType *player_ptr, dun_data_type *dd_ptr, dt_type *dt_ptr
 
             if (randint0(100) >= dt_ptr->dun_tun_con) {
                 tmp_row = row1 - start_row;
-                if (tmp_row < 0)
+                if (tmp_row < 0) {
                     tmp_row = (-tmp_row);
+                }
 
                 tmp_col = col1 - start_col;
-                if (tmp_col < 0)
+                if (tmp_col < 0) {
                     tmp_col = (-tmp_col);
+                }
 
-                if ((tmp_row > 10) || (tmp_col > 10))
+                if ((tmp_row > 10) || (tmp_col > 10)) {
                     break;
+                }
             }
         }
     }
@@ -162,12 +179,14 @@ static bool set_tunnel(PlayerType *player_ptr, dun_data_type *dd_ptr, POSITION *
 {
     auto *floor_ptr = player_ptr->current_floor_ptr;
     auto *g_ptr = &floor_ptr->grid_array[*y][*x];
-    if (!in_bounds(floor_ptr, *y, *x) || g_ptr->is_inner())
+    if (!in_bounds(floor_ptr, *y, *x) || g_ptr->is_inner()) {
         return true;
+    }
 
     if (g_ptr->is_extra()) {
-        if (dd_ptr->tunn_n >= TUNN_MAX)
+        if (dd_ptr->tunn_n >= TUNN_MAX) {
             return false;
+        }
 
         dd_ptr->tunn[dd_ptr->tunn_n].y = *y;
         dd_ptr->tunn[dd_ptr->tunn_n].x = *x;
@@ -175,20 +194,25 @@ static bool set_tunnel(PlayerType *player_ptr, dun_data_type *dd_ptr, POSITION *
         return true;
     }
 
-    if (g_ptr->is_floor())
+    if (g_ptr->is_floor()) {
         return true;
+    }
 
     if (g_ptr->is_outer() && affectwall) {
-        if (dd_ptr->wall_n >= WALL_MAX)
+        if (dd_ptr->wall_n >= WALL_MAX) {
             return false;
+        }
 
         dd_ptr->wall[dd_ptr->wall_n].y = *y;
         dd_ptr->wall[dd_ptr->wall_n].x = *x;
         dd_ptr->wall_n++;
-        for (int j = *y - 1; j <= *y + 1; j++)
-            for (int i = *x - 1; i <= *x + 1; i++)
-                if (floor_ptr->grid_array[j][i].is_outer())
+        for (int j = *y - 1; j <= *y + 1; j++) {
+            for (int i = *x - 1; i <= *x + 1; i++) {
+                if (floor_ptr->grid_array[j][i].is_outer()) {
                     place_bold(player_ptr, j, i, GB_SOLID_NOPERM);
+                }
+            }
+        }
 
         floor_ptr->grid_array[*y][*x].mimic = 0;
         place_bold(player_ptr, *y, *x, GB_FLOOR);
@@ -257,8 +281,9 @@ static void create_cata_tunnel(PlayerType *player_ptr, dun_data_type *dd_ptr, PO
 static void short_seg_hack(
     PlayerType *player_ptr, dun_data_type *dd_ptr, const POSITION x1, const POSITION y1, const POSITION x2, const POSITION y2, int type, int count, bool *fail)
 {
-    if (!(*fail))
+    if (!(*fail)) {
         return;
+    }
 
     int length = distance(x1, y1, x2, y2);
     count++;
@@ -281,8 +306,9 @@ static void short_seg_hack(
         return;
     }
 
-    if ((type != 2) && (type != 3))
+    if ((type != 2) && (type != 3)) {
         return;
+    }
 
     if (x1 < x2) {
         for (int i = x1; i <= x2; i++) {
@@ -293,8 +319,9 @@ static void short_seg_hack(
                 short_seg_hack(player_ptr, dd_ptr, x, y, i + 1, y1, 1, count, fail);
             }
 
-            if ((type == 3) && ((x + y) % 2))
+            if ((type == 3) && ((x + y) % 2)) {
                 create_cata_tunnel(player_ptr, dd_ptr, i, y1);
+            }
         }
     } else {
         for (int i = x2; i <= x1; i++) {
@@ -305,8 +332,9 @@ static void short_seg_hack(
                 short_seg_hack(player_ptr, dd_ptr, x, y, i + 1, y1, 1, count, fail);
             }
 
-            if ((type == 3) && ((x + y) % 2))
+            if ((type == 3) && ((x + y) % 2)) {
                 create_cata_tunnel(player_ptr, dd_ptr, i, y1);
+            }
         }
     }
 
@@ -319,8 +347,9 @@ static void short_seg_hack(
                 short_seg_hack(player_ptr, dd_ptr, x, y, x2, i + 1, 1, count, fail);
             }
 
-            if ((type == 3) && ((x + y) % 2))
+            if ((type == 3) && ((x + y) % 2)) {
                 create_cata_tunnel(player_ptr, dd_ptr, x2, i);
+            }
         }
     } else {
         for (int i = y2; i <= y1; i++) {
@@ -331,8 +360,9 @@ static void short_seg_hack(
                 short_seg_hack(player_ptr, dd_ptr, x, y, x2, i + 1, 1, count, fail);
             }
 
-            if ((type == 3) && ((x + y) % 2))
+            if ((type == 3) && ((x + y) % 2)) {
                 create_cata_tunnel(player_ptr, dd_ptr, x2, i);
+            }
         }
     }
 }
@@ -399,8 +429,9 @@ bool build_tunnel2(PlayerType *player_ptr, dun_data_type *dd_ptr, POSITION x1, P
                 retval = build_tunnel2(player_ptr, dd_ptr, x3, y3, x2, y2, type, cutoff);
             } else {
                 retval = false;
-                if (dd_ptr->door_n >= DOOR_MAX)
+                if (dd_ptr->door_n >= DOOR_MAX) {
                     return false;
+                }
 
                 dd_ptr->door[dd_ptr->door_n].y = y3;
                 dd_ptr->door[dd_ptr->door_n].x = x3;
@@ -422,8 +453,9 @@ bool build_tunnel2(PlayerType *player_ptr, dun_data_type *dd_ptr, POSITION x1, P
         }
     }
 
-    if (firstsuccede)
+    if (firstsuccede) {
         set_tunnel(player_ptr, dd_ptr, &x3, &y3, true);
+    }
 
     return retval;
 }

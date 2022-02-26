@@ -9,6 +9,7 @@
 #include "core/player-redraw-types.h"
 #include "core/player-update-types.h"
 #include "core/stuff-handler.h"
+#include "effect/attribute-types.h"
 #include "effect/effect-characteristics.h"
 #include "effect/effect-processor.h"
 #include "floor/cave.h"
@@ -17,7 +18,6 @@
 #include "grid/feature-flag-types.h"
 #include "spell-realm/spells-crusade.h"
 #include "spell/range-calc.h"
-#include "effect/attribute-types.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
 #include "system/player-type-definition.h"
@@ -37,8 +37,9 @@
 bool cast_wrath_of_the_god(PlayerType *player_ptr, int dam, POSITION rad)
 {
     DIRECTION dir;
-    if (!get_aim_dir(player_ptr, &dir))
+    if (!get_aim_dir(player_ptr, &dir)) {
         return false;
+    }
 
     POSITION tx = player_ptr->x + 99 * ddx[dir];
     POSITION ty = player_ptr->y + 99 * ddy[dir];
@@ -51,18 +52,22 @@ bool cast_wrath_of_the_god(PlayerType *player_ptr, int dam, POSITION rad)
     POSITION y = player_ptr->y;
     POSITION nx, ny;
     while (true) {
-        if ((y == ty) && (x == tx))
+        if ((y == ty) && (x == tx)) {
             break;
+        }
 
         ny = y;
         nx = x;
         mmove2(&ny, &nx, player_ptr->y, player_ptr->x, ty, tx);
-        if (get_max_range(player_ptr) <= distance(player_ptr->y, player_ptr->x, ny, nx))
+        if (get_max_range(player_ptr) <= distance(player_ptr->y, player_ptr->x, ny, nx)) {
             break;
-        if (!cave_has_flag_bold(player_ptr->current_floor_ptr, ny, nx, FloorFeatureType::PROJECT))
+        }
+        if (!cave_has_flag_bold(player_ptr->current_floor_ptr, ny, nx, FloorFeatureType::PROJECT)) {
             break;
-        if ((dir != 5) && player_ptr->current_floor_ptr->grid_array[ny][nx].m_idx != 0)
+        }
+        if ((dir != 5) && player_ptr->current_floor_ptr->grid_array[ny][nx].m_idx != 0) {
             break;
+        }
 
         x = nx;
         y = ny;
@@ -85,16 +90,18 @@ bool cast_wrath_of_the_god(PlayerType *player_ptr, int dam, POSITION rad)
             dy = (ty > y) ? (ty - y) : (y - ty);
 
             d = (dy > dx) ? (dy + (dx >> 1)) : (dx + (dy >> 1));
-            if (d < 5)
+            if (d < 5) {
                 break;
+            }
         }
 
-        if (count < 0)
+        if (count < 0) {
             continue;
+        }
 
-        if (!in_bounds(player_ptr->current_floor_ptr, y, x) || cave_stop_disintegration(player_ptr->current_floor_ptr, y, x)
-            || !in_disintegration_range(player_ptr->current_floor_ptr, ty, tx, y, x))
+        if (!in_bounds(player_ptr->current_floor_ptr, y, x) || cave_stop_disintegration(player_ptr->current_floor_ptr, y, x) || !in_disintegration_range(player_ptr->current_floor_ptr, ty, tx, y, x)) {
             continue;
+        }
 
         project(player_ptr, 0, rad, y, x, dam, AttributeType::DISINTEGRATE, PROJECT_JUMP | PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL);
     }
@@ -111,15 +118,18 @@ bool cast_wrath_of_the_god(PlayerType *player_ptr, int dam, POSITION rad)
 bool set_tim_sh_holy(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
 {
     bool notice = false;
-    v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;
+    v = (v > 10000) ? 10000 : (v < 0) ? 0
+                                      : v;
 
-    if (player_ptr->is_dead)
+    if (player_ptr->is_dead) {
         return false;
+    }
 
     if (v) {
         if (player_ptr->tim_sh_holy && !do_dec) {
-            if (player_ptr->tim_sh_holy > v)
+            if (player_ptr->tim_sh_holy > v) {
                 return false;
+            }
         } else if (!player_ptr->tim_sh_holy) {
             msg_print(_("体が聖なるオーラで覆われた。", "You are enveloped by a holy aura!"));
             notice = true;
@@ -134,11 +144,13 @@ bool set_tim_sh_holy(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
     player_ptr->tim_sh_holy = v;
     player_ptr->redraw |= (PR_STATUS);
 
-    if (!notice)
+    if (!notice) {
         return false;
+    }
 
-    if (disturb_state)
+    if (disturb_state) {
         disturb(player_ptr, false, false);
+    }
     player_ptr->update |= (PU_BONUS);
     handle_stuff(player_ptr);
     return true;
@@ -154,15 +166,18 @@ bool set_tim_sh_holy(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
 bool set_tim_eyeeye(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
 {
     bool notice = false;
-    v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;
+    v = (v > 10000) ? 10000 : (v < 0) ? 0
+                                      : v;
 
-    if (player_ptr->is_dead)
+    if (player_ptr->is_dead) {
         return false;
+    }
 
     if (v) {
         if (player_ptr->tim_eyeeye && !do_dec) {
-            if (player_ptr->tim_eyeeye > v)
+            if (player_ptr->tim_eyeeye > v) {
                 return false;
+            }
         } else if (!player_ptr->tim_eyeeye) {
             msg_print(_("法の守り手になった気がした！", "You feel like a keeper of commandments!"));
             notice = true;
@@ -177,11 +192,13 @@ bool set_tim_eyeeye(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
     player_ptr->tim_eyeeye = v;
     player_ptr->redraw |= (PR_STATUS);
 
-    if (!notice)
+    if (!notice) {
         return false;
+    }
 
-    if (disturb_state)
+    if (disturb_state) {
         disturb(player_ptr, false, false);
+    }
     player_ptr->update |= (PU_BONUS);
     handle_stuff(player_ptr);
     return true;

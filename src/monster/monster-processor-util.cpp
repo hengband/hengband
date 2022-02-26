@@ -129,15 +129,18 @@ void store_moves_val(int *mm, int y, int x)
     POSITION ay = std::abs(y);
 
     int move_val = 0;
-    if (y < 0)
+    if (y < 0) {
         move_val += 8;
-    if (x > 0)
+    }
+    if (x > 0) {
         move_val += 4;
+    }
 
-    if (ay > (ax << 1))
+    if (ay > (ax << 1)) {
         move_val += 2;
-    else if (ax > (ay << 1))
+    } else if (ax > (ay << 1)) {
         move_val++;
+    }
 
     switch (move_val) {
     case 0: {
@@ -282,8 +285,9 @@ void store_moves_val(int *mm, int y, int x)
  */
 void save_old_race_flags(MONRACE_IDX monster_race_idx, old_race_flags *old_race_flags_ptr)
 {
-    if (monster_race_idx == 0)
+    if (monster_race_idx == 0) {
         return;
+    }
 
     monster_race *r_ptr;
     r_ptr = &r_info[monster_race_idx];
@@ -311,13 +315,16 @@ void save_old_race_flags(MONRACE_IDX monster_race_idx, old_race_flags *old_race_
 byte decide_monster_speed(monster_type *m_ptr)
 {
     auto speed = m_ptr->mspeed;
-    if (ironman_nightmare)
+    if (ironman_nightmare) {
         speed += 5;
+    }
 
-    if (monster_fast_remaining(m_ptr))
+    if (monster_fast_remaining(m_ptr)) {
         speed += 10;
-    if (monster_slow_remaining(m_ptr))
+    }
+    if (monster_slow_remaining(m_ptr)) {
         speed -= 10;
+    }
 
     return speed;
 }

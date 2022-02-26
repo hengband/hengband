@@ -55,8 +55,9 @@ concptr quark_str(ushort i)
     concptr q;
 
     /* Return nullptr for an invalid index */
-    if ((i < 1) || (i >= quark__str.size()))
+    if ((i < 1) || (i >= quark__str.size())) {
         return nullptr;
+    }
 
     /* Access the quark */
     q = quark__str[i].data();

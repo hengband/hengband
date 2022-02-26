@@ -1,7 +1,7 @@
 ﻿#include "system/player-type-definition.h"
+#include "market/arena-info-table.h"
 #include "timed-effect/player-stun.h"
 #include "timed-effect/timed-effects.h"
-#include "market/arena-info-table.h"
 #include "world/world.h"
 
 /*!

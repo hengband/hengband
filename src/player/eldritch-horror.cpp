@@ -84,8 +84,9 @@ static void feel_eldritch_horror(concptr desc, monster_race *r_ptr)
  */
 void sanity_blast(PlayerType *player_ptr, monster_type *m_ptr, bool necro)
 {
-    if (player_ptr->phase_out || !w_ptr->character_dungeon)
+    if (player_ptr->phase_out || !w_ptr->character_dungeon) {
         return;
+    }
 
     int power = 100;
     if (!necro && m_ptr) {
@@ -94,28 +95,36 @@ void sanity_blast(PlayerType *player_ptr, monster_type *m_ptr, bool necro)
         power = r_ptr->level / 2;
         monster_desc(player_ptr, m_name, m_ptr, 0);
         if (r_ptr->kind_flags.has_not(MonsterKindType::UNIQUE)) {
-            if (r_ptr->flags1 & RF1_FRIENDS)
+            if (r_ptr->flags1 & RF1_FRIENDS) {
                 power /= 2;
-        } else
+            }
+        } else {
             power *= 2;
+        }
 
-        if (!w_ptr->is_loading_now)
+        if (!w_ptr->is_loading_now) {
             return;
+        }
 
-        if (!m_ptr->ml)
+        if (!m_ptr->ml) {
             return;
+        }
 
-        if (!(r_ptr->flags2 & RF2_ELDRITCH_HORROR))
+        if (!(r_ptr->flags2 & RF2_ELDRITCH_HORROR)) {
             return;
+        }
 
-        if (is_pet(m_ptr))
+        if (is_pet(m_ptr)) {
             return;
+        }
 
-        if (randint1(100) > power)
+        if (randint1(100) > power) {
             return;
+        }
 
-        if (saving_throw(player_ptr->skill_sav - power))
+        if (saving_throw(player_ptr->skill_sav - power)) {
             return;
+        }
 
         if (player_ptr->hallucinated) {
             msg_format(_("%s%sの顔を見てしまった！", "You behold the %s visage of %s!"), funny_desc[randint0(MAX_SAN_FUNNY)], m_name);
@@ -132,8 +141,9 @@ void sanity_blast(PlayerType *player_ptr, monster_type *m_ptr, bool necro)
         case PlayerRaceLifeType::DEMON:
             return;
         case PlayerRaceLifeType::UNDEAD:
-            if (saving_throw(25 + player_ptr->lev))
+            if (saving_throw(25 + player_ptr->lev)) {
                 return;
+            }
             break;
         default:
             break;
@@ -150,17 +160,19 @@ void sanity_blast(PlayerType *player_ptr, monster_type *m_ptr, bool necro)
 #ifdef JP
 #else
 
-        if (r_ptr->kind_flags.has_not(MonsterKindType::UNIQUE))
+        if (r_ptr->kind_flags.has_not(MonsterKindType::UNIQUE)) {
             sprintf(m_name, "%s %s", (is_a_vowel(desc[0]) ? "an" : "a"), desc);
-        else
+        } else
 #endif
         sprintf(m_name, "%s", desc);
 
         if (r_ptr->kind_flags.has_not(MonsterKindType::UNIQUE)) {
-            if (r_ptr->flags1 & RF1_FRIENDS)
+            if (r_ptr->flags1 & RF1_FRIENDS) {
                 power /= 2;
-        } else
+            }
+        } else {
             power *= 2;
+        }
 
         if (saving_throw(player_ptr->skill_sav * 100 / power)) {
             msg_format(_("夢の中で%sに追いかけられた。", "%^s chases you through your dreams."), m_name);
@@ -180,12 +192,14 @@ void sanity_blast(PlayerType *player_ptr, monster_type *m_ptr, bool necro)
         feel_eldritch_horror(desc, r_ptr);
         switch (PlayerRace(player_ptr).life()) {
         case PlayerRaceLifeType::DEMON:
-            if (saving_throw(20 + player_ptr->lev))
+            if (saving_throw(20 + player_ptr->lev)) {
                 return;
+            }
             break;
         case PlayerRaceLifeType::UNDEAD:
-            if (saving_throw(10 + player_ptr->lev))
+            if (saving_throw(10 + player_ptr->lev)) {
                 return;
+            }
             break;
         default:
             break;
@@ -294,8 +308,9 @@ void sanity_blast(PlayerType *player_ptr, monster_type *m_ptr, bool necro)
     }
     case 16:
     case 17: {
-        if (lose_all_info(player_ptr))
+        if (lose_all_info(player_ptr)) {
             msg_print(_("あまりの恐怖に全てのことを忘れてしまった！", "You forget everything in your utmost terror!"));
+        }
         break;
     }
     case 18:

@@ -7,6 +7,7 @@
 #include "mspell/mspell-special.h"
 #include "core/disturbance.h"
 #include "core/player-update-types.h"
+#include "effect/attribute-types.h"
 #include "effect/effect-characteristics.h"
 #include "effect/effect-processor.h"
 #include "floor/cave.h"
@@ -29,7 +30,6 @@
 #include "player/player-damage.h"
 #include "spell-kind/spells-teleport.h"
 #include "spell-realm/spells-crusade.h"
-#include "effect/attribute-types.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
 #include "system/monster-race-definition.h"
@@ -51,16 +51,18 @@ static MonsterSpellResult spell_RF6_SPECIAL_BANORLUPART(PlayerType *player_ptr, 
     POSITION dummy_x = m_ptr->fx;
     BIT_FLAGS mode = 0L;
 
-    if (see_monster(player_ptr, m_idx) && monster_near_player(floor_ptr, m_idx, 0))
+    if (see_monster(player_ptr, m_idx) && monster_near_player(floor_ptr, m_idx, 0)) {
         disturb(player_ptr, true, true);
+    }
 
     switch (m_ptr->r_idx) {
     case MON_BANORLUPART:
         dummy_hp = (m_ptr->hp + 1) / 2;
         dummy_maxhp = m_ptr->maxhp / 2;
 
-        if (floor_ptr->inside_arena || player_ptr->phase_out || !summon_possible(player_ptr, m_ptr->fy, m_ptr->fx))
+        if (floor_ptr->inside_arena || player_ptr->phase_out || !summon_possible(player_ptr, m_ptr->fy, m_ptr->fx)) {
             return MonsterSpellResult::make_invalid();
+        }
 
         delete_monster_idx(player_ptr, floor_ptr->grid_array[m_ptr->fy][m_ptr->fx].m_idx);
         summon_named_creature(player_ptr, 0, dummy_y, dummy_x, MON_BANOR, mode);
@@ -78,8 +80,9 @@ static MonsterSpellResult spell_RF6_SPECIAL_BANORLUPART(PlayerType *player_ptr, 
         dummy_hp = 0;
         dummy_maxhp = 0;
 
-        if (!r_info[MON_BANOR].cur_num || !r_info[MON_LUPART].cur_num)
+        if (!r_info[MON_BANOR].cur_num || !r_info[MON_LUPART].cur_num) {
             return MonsterSpellResult::make_invalid();
+        }
 
         for (MONSTER_IDX k = 1; k < floor_ptr->m_max; k++) {
             if (floor_ptr->m_list[k].r_idx == MON_BANOR || floor_ptr->m_list[k].r_idx == MON_LUPART) {
@@ -127,8 +130,9 @@ static MonsterSpellResult spell_RF6_SPECIAL_ROLENTO(PlayerType *player_ptr, POSI
         _("%^sは手榴弾をばらまいた。", "%^s throws some hand grenades."), _("%^sは手榴弾をばらまいた。", "%^s throws some hand grenades."));
 
     monspell_message(player_ptr, m_idx, t_idx, msg, target_type);
-    if (mon_to_player || (mon_to_mon && known && see_either))
+    if (mon_to_player || (mon_to_mon && known && see_either)) {
         disturb(player_ptr, true, true);
+    }
 
     for (k = 0; k < num; k++) {
         count += summon_named_creature(player_ptr, m_idx, y, x, MON_GRENADE, mode);
@@ -186,10 +190,11 @@ static MonsterSpellResult spell_RF6_SPECIAL_B(PlayerType *player_ptr, POSITION y
     bool fear, dead; /* dummy */
     int dam = damroll(4, 8);
 
-    if (monster_to_player || t_idx == player_ptr->riding)
+    if (monster_to_player || t_idx == player_ptr->riding) {
         teleport_player_to(player_ptr, m_ptr->fy, m_ptr->fx, i2enum<teleport_flags>(TELEPORT_NONMAGICAL | TELEPORT_PASSIVE));
-    else
+    } else {
         teleport_monster_to(player_ptr, t_idx, m_ptr->fy, m_ptr->fx, 100, i2enum<teleport_flags>(TELEPORT_NONMAGICAL | TELEPORT_PASSIVE));
+    }
 
     if ((monster_to_player && player_ptr->levitation) || (monster_to_monster && (tr_ptr->flags7 & RF7_CAN_FLY))) {
         msg.to_player = _("あなたは静かに着地した。", "You float gently down to the ground.");
@@ -213,11 +218,13 @@ static MonsterSpellResult spell_RF6_SPECIAL_B(PlayerType *player_ptr, POSITION y
         }
     }
 
-    if (monster_to_player && player_ptr->riding)
+    if (monster_to_player && player_ptr->riding) {
         mon_take_hit_mon(player_ptr, player_ptr->riding, dam, &dead, &fear, extract_note_dies(real_r_idx(&floor_ptr->m_list[player_ptr->riding])), m_idx);
+    }
 
-    if (monster_to_monster)
+    if (monster_to_monster) {
         mon_take_hit_mon(player_ptr, t_idx, dam, &dead, &fear, extract_note_dies(real_r_idx(t_ptr)), m_idx);
+    }
 
     return MonsterSpellResult::make_valid();
 }

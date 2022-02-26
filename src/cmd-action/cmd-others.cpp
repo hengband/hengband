@@ -55,15 +55,17 @@ void do_cmd_search(PlayerType *player_ptr)
     PlayerEnergy(player_ptr).set_player_turn_energy(100);
     search(player_ptr);
 
-    if (player_ptr->action == ACTION_SEARCH)
+    if (player_ptr->action == ACTION_SEARCH) {
         search(player_ptr);
+    }
 }
 
 static bool exe_alter(PlayerType *player_ptr)
 {
     DIRECTION dir;
-    if (!get_rep_dir(player_ptr, &dir, true))
+    if (!get_rep_dir(player_ptr, &dir, true)) {
         return false;
+    }
 
     POSITION y = player_ptr->y + ddy[dir];
     POSITION x = player_ptr->x + ddx[dir];
@@ -77,21 +79,26 @@ static bool exe_alter(PlayerType *player_ptr)
         do_cmd_attack(player_ptr, y, x, HISSATSU_NONE);
         return false;
     }
-    
-    if (f_ptr->flags.has(FloorFeatureType::OPEN))
+
+    if (f_ptr->flags.has(FloorFeatureType::OPEN)) {
         return exe_open(player_ptr, y, x);
-    
-    if (f_ptr->flags.has(FloorFeatureType::BASH))
+    }
+
+    if (f_ptr->flags.has(FloorFeatureType::BASH)) {
         return exe_bash(player_ptr, y, x, dir);
-    
-    if (f_ptr->flags.has(FloorFeatureType::TUNNEL))
+    }
+
+    if (f_ptr->flags.has(FloorFeatureType::TUNNEL)) {
         return exe_tunnel(player_ptr, y, x);
-    
-    if (f_ptr->flags.has(FloorFeatureType::CLOSE))
+    }
+
+    if (f_ptr->flags.has(FloorFeatureType::CLOSE)) {
         return exe_close(player_ptr, y, x);
-    
-    if (f_ptr->flags.has(FloorFeatureType::DISARM))
+    }
+
+    if (f_ptr->flags.has(FloorFeatureType::DISARM)) {
         return exe_disarm(player_ptr, y, x, dir);
+    }
 
     msg_print(_("何もない空中を攻撃した。", "You attack the empty air."));
     return false;
@@ -111,8 +118,9 @@ void do_cmd_alter(PlayerType *player_ptr)
         command_arg = 0;
     }
 
-    if (!exe_alter(player_ptr))
+    if (!exe_alter(player_ptr)) {
         disturb(player_ptr, false, false);
+    }
 }
 
 /*!
@@ -122,8 +130,9 @@ void do_cmd_alter(PlayerType *player_ptr)
  */
 static bool decide_suicide(void)
 {
-    if (w_ptr->noscore)
+    if (w_ptr->noscore) {
         return true;
+    }
 
     prt(_("確認のため '@' を押して下さい。", "Please verify SUICIDE by typing the '@' sign: "), 0, 0);
     flush();
@@ -134,14 +143,16 @@ static bool decide_suicide(void)
 
 static void accept_winner_message(PlayerType *player_ptr)
 {
-    if (!w_ptr->total_winner || !last_words)
+    if (!w_ptr->total_winner || !last_words) {
         return;
+    }
 
     char buf[1024] = "";
     play_music(TERM_XTRA_MUSIC_BASIC, MUSIC_BASIC_WINNER);
     do {
-        while (!get_string(_("*勝利*メッセージ: ", "*Winning* message: "), buf, sizeof(buf)))
+        while (!get_string(_("*勝利*メッセージ: ", "*Winning* message: "), buf, sizeof(buf))) {
             ;
+        }
     } while (!get_check_strict(player_ptr, _("よろしいですか？", "Are you sure? "), CHECK_NO_HISTORY));
 
     if (buf[0]) {
@@ -159,18 +170,22 @@ void do_cmd_suicide(PlayerType *player_ptr)
 {
     flush();
     if (w_ptr->total_winner) {
-        if (!get_check_strict(player_ptr, _("引退しますか? ", "Do you want to retire? "), CHECK_NO_HISTORY))
+        if (!get_check_strict(player_ptr, _("引退しますか? ", "Do you want to retire? "), CHECK_NO_HISTORY)) {
             return;
+        }
     } else {
-        if (!get_check(_("本当に自殺しますか？", "Do you really want to commit suicide? ")))
+        if (!get_check(_("本当に自殺しますか？", "Do you really want to commit suicide? "))) {
             return;
+        }
     }
 
-    if (!decide_suicide())
+    if (!decide_suicide()) {
         return;
+    }
 
-    if (player_ptr->last_message)
+    if (player_ptr->last_message) {
         string_free(player_ptr->last_message);
+    }
 
     player_ptr->last_message = nullptr;
     player_ptr->playing = false;

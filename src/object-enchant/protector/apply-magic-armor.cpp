@@ -87,7 +87,7 @@ void ArmorEnchanter::apply_magic()
             this->give_ego_index();
             return;
         }
-        
+
         if (this->power < -1) {
             this->give_cursed();
         }

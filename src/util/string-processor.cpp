@@ -36,8 +36,9 @@ static char hexify(uint i)
  */
 static int deoct(char c)
 {
-    if (isdigit(c))
+    if (isdigit(c)) {
         return D2I(c);
+    }
     return 0;
 }
 
@@ -46,12 +47,15 @@ static int deoct(char c)
  */
 static int dehex(char c)
 {
-    if (isdigit(c))
+    if (isdigit(c)) {
         return D2I(c);
-    if (islower(c))
+    }
+    if (islower(c)) {
         return A2I(c) + 10;
-    if (isupper(c))
+    }
+    if (isupper(c)) {
         return A2I(tolower(c)) + 10;
+    }
     return 0;
 }
 
@@ -65,12 +69,15 @@ static int angband_stricmp(concptr a, concptr b)
     for (concptr s1 = a, s2 = b; true; s1++, s2++) {
         char z1 = force_upper(*s1);
         char z2 = force_upper(*s2);
-        if (z1 < z2)
+        if (z1 < z2) {
             return -1;
-        if (z1 > z2)
+        }
+        if (z1 > z2) {
             return 1;
-        if (!z1)
+        }
+        if (!z1) {
             return 0;
+        }
     }
 }
 
@@ -79,12 +86,15 @@ static int angband_strnicmp(concptr a, concptr b, int n)
     for (concptr s1 = a, s2 = b; n > 0; s1++, s2++, n--) {
         char z1 = force_upper(*s1);
         char z2 = force_upper(*s2);
-        if (z1 < z2)
+        if (z1 < z2) {
             return -1;
-        if (z1 > z2)
+        }
+        if (z1 > z2) {
             return 1;
-        if (!z1)
+        }
+        if (!z1) {
             return 0;
+        }
     }
 
     return 0;
@@ -100,11 +110,13 @@ static void trigger_text_to_ascii(char **bufptr, concptr *strptr)
     int shiftstatus = 0;
     concptr key_code;
 
-    if (macro_template == nullptr)
+    if (macro_template == nullptr) {
         return;
+    }
 
-    for (i = 0; macro_modifier_chr[i]; i++)
+    for (i = 0; macro_modifier_chr[i]; i++) {
         mod_status[i] = false;
+    }
     str++;
 
     /* Examine modifier keys */
@@ -112,16 +124,19 @@ static void trigger_text_to_ascii(char **bufptr, concptr *strptr)
         for (i = 0; macro_modifier_chr[i]; i++) {
             len = strlen(macro_modifier_name[i]);
 
-            if (!angband_strnicmp(str, macro_modifier_name[i], len))
+            if (!angband_strnicmp(str, macro_modifier_name[i], len)) {
                 break;
+            }
         }
 
-        if (!macro_modifier_chr[i])
+        if (!macro_modifier_chr[i]) {
             break;
+        }
         str += len;
         mod_status[i] = true;
-        if ('S' == macro_modifier_chr[i])
+        if ('S' == macro_modifier_chr[i]) {
             shiftstatus = 1;
+        }
     }
 
     for (i = 0; i < max_macrotrigger; i++) {
@@ -152,8 +167,9 @@ static void trigger_text_to_ascii(char **bufptr, concptr *strptr)
         switch (ch) {
         case '&':
             for (int j = 0; macro_modifier_chr[j]; j++) {
-                if (mod_status[j])
+                if (mod_status[j]) {
                     *s++ = macro_modifier_chr[j];
+                }
             }
 
             break;
@@ -188,8 +204,9 @@ void text_to_ascii(char *buf, std::string_view sv)
     while (*str) {
         if (*str == '\\') {
             str++;
-            if (!(*str))
+            if (!(*str)) {
                 break;
+            }
 
             if (*str == '[') {
                 trigger_text_to_ascii(&s, &str);
@@ -246,8 +263,9 @@ static bool trigger_ascii_to_text(char **bufptr, concptr *strptr)
     concptr str = *strptr;
     char key_code[100];
     int i;
-    if (macro_template == nullptr)
+    if (macro_template == nullptr) {
         return false;
+    }
 
     *s++ = '\\';
     *s++ = '[';
@@ -261,40 +279,47 @@ static bool trigger_ascii_to_text(char **bufptr, concptr *strptr)
             while ((tmp = angband_strchr(macro_modifier_chr, *str)) != 0) {
                 int j = (int)(tmp - macro_modifier_chr);
                 tmp = macro_modifier_name[j];
-                while (*tmp)
+                while (*tmp) {
                     *s++ = *tmp++;
+                }
                 str++;
             }
 
             break;
         case '#': {
             int j;
-            for (j = 0; *str && *str != '\r'; j++)
+            for (j = 0; *str && *str != '\r'; j++) {
                 key_code[j] = *str++;
+            }
             key_code[j] = '\0';
             break;
         }
         default:
-            if (ch != *str)
+            if (ch != *str) {
                 return false;
+            }
             str++;
         }
     }
 
-    if (*str++ != '\r')
+    if (*str++ != '\r') {
         return false;
-
-    for (i = 0; i < max_macrotrigger; i++) {
-        if (!angband_stricmp(key_code, macro_trigger_keycode[0][i]) || !angband_stricmp(key_code, macro_trigger_keycode[1][i]))
-            break;
     }
 
-    if (i == max_macrotrigger)
+    for (i = 0; i < max_macrotrigger; i++) {
+        if (!angband_stricmp(key_code, macro_trigger_keycode[0][i]) || !angband_stricmp(key_code, macro_trigger_keycode[1][i])) {
+            break;
+        }
+    }
+
+    if (i == max_macrotrigger) {
         return false;
+    }
 
     tmp = macro_trigger_name[i];
-    while (*tmp)
+    while (*tmp) {
         *s++ = *tmp++;
+    }
 
     *s++ = ']';
 
@@ -388,8 +413,9 @@ size_t angband_strcpy(char *buf, concptr src, size_t bufsize)
         /* Copy as many bytes as will fit */
         while (*s && (len < bufsize)) {
             if (iskanji(*s)) {
-                if (len + 1 >= bufsize || !*(s + 1))
+                if (len + 1 >= bufsize || !*(s + 1)) {
                     break;
+                }
                 *d++ = *s++;
                 *d++ = *s++;
                 len += 2;
@@ -401,18 +427,21 @@ size_t angband_strcpy(char *buf, concptr src, size_t bufsize)
         *d = '\0';
     }
 
-    while (*s++)
+    while (*s++) {
         len++;
+    }
     return len;
 
 #else
     size_t len = strlen(src);
     size_t ret = len;
-    if (bufsize == 0)
+    if (bufsize == 0) {
         return ret;
+    }
 
-    if (len >= bufsize)
+    if (len >= bufsize) {
         len = bufsize - 1;
+    }
 
     (void)memcpy(buf, src, len);
     buf[len] = '\0';
@@ -453,12 +482,14 @@ char *angband_strstr(concptr haystack, concptr needle)
 
     if (l1 >= l2) {
         for (int i = 0; i <= l1 - l2; i++) {
-            if (!strncmp(haystack + i, needle, l2))
+            if (!strncmp(haystack + i, needle, l2)) {
                 return (char *)haystack + i;
+            }
 
 #ifdef JP
-            if (iskanji(*(haystack + i)))
+            if (iskanji(*(haystack + i))) {
                 i++;
+            }
 #endif
         }
     }
@@ -474,12 +505,14 @@ char *angband_strstr(concptr haystack, concptr needle)
 char *angband_strchr(concptr ptr, char ch)
 {
     for (; *ptr != '\0'; ptr++) {
-        if (*ptr == ch)
+        if (*ptr == ch) {
             return (char *)ptr;
+        }
 
 #ifdef JP
-        if (iskanji(*ptr))
+        if (iskanji(*ptr)) {
             ptr++;
+        }
 #endif
     }
 
@@ -493,8 +526,9 @@ char *angband_strchr(concptr ptr, char ch)
  */
 char *ltrim(char *p)
 {
-    while (p[0] == ' ')
+    while (p[0] == ' ') {
         p++;
+    }
     return p;
 }
 
@@ -506,8 +540,9 @@ char *ltrim(char *p)
 char *rtrim(char *p)
 {
     int i = strlen(p) - 1;
-    while (p[i] == ' ')
+    while (p[i] == ' ') {
         p[i--] = '\0';
+    }
     return p;
 }
 
@@ -531,19 +566,24 @@ int strrncmp(const char *s1, const char *s2, int len)
         int p2 = l2 - i;
 
         if (l1 != l2) {
-            if (p1 < 0)
+            if (p1 < 0) {
                 return -1;
-            if (p2 < 0)
+            }
+            if (p2 < 0) {
                 return 1;
+            }
         } else {
-            if (p1 < 0)
+            if (p1 < 0) {
                 return 0;
+            }
         }
 
-        if (s1[p1] < s2[p2])
+        if (s1[p1] < s2[p2]) {
             return -1;
-        if (s1[p1] > s2[p2])
+        }
+        if (s1[p1] > s2[p2]) {
             return -1;
+        }
     }
 
     return 0;
@@ -628,8 +668,9 @@ std::string str_ltrim(std::string_view str)
 std::vector<std::string> str_split(std::string_view str, char delim, bool trim, int num)
 {
     std::vector<std::string> result;
-    if (num > 0)
+    if (num > 0) {
         result.reserve(num);
+    }
 
     auto make_str = [trim](std::string_view sv) { return trim ? str_trim(sv) : std::string(sv); };
 
@@ -643,8 +684,9 @@ std::vector<std::string> str_split(std::string_view str, char delim, bool trim, 
                 break;
             }
 #ifdef JP
-            if (iskanji(str[i]))
+            if (iskanji(str[i])) {
                 ++i;
+            }
 #endif
         }
         if (!found) {
@@ -672,8 +714,9 @@ std::string str_erase(std::string str, std::string_view erase_chars)
             continue;
         }
 #ifdef JP
-        if (iskanji(*it))
+        if (iskanji(*it)) {
             ++it;
+        }
 #endif
         ++it;
     }

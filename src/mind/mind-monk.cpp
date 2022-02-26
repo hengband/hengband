@@ -35,8 +35,9 @@ static void set_stance(PlayerType *player_ptr, const MonkStanceType new_stance)
  */
 bool choose_monk_stance(PlayerType *player_ptr)
 {
-    if (cmd_limit_confused(player_ptr))
+    if (cmd_limit_confused(player_ptr)) {
         return false;
+    }
 
     screen_save();
     prt(_(" a) 構えをとく", " a) No form"), 2, 20);
@@ -58,16 +59,17 @@ bool choose_monk_stance(PlayerType *player_ptr)
             screen_load();
             return false;
         }
-        
+
         if ((choice == 'a') || (choice == 'A')) {
             if (player_ptr->action == ACTION_MONK_STANCE) {
                 set_action(player_ptr, ACTION_NONE);
-            } else
+            } else {
                 msg_print(_("もともと構えていない。", "You are not in a special stance."));
+            }
             screen_load();
             return true;
         }
-        
+
         if ((choice == 'b') || (choice == 'B')) {
             new_stance = MonkStanceType::GENBU;
             break;

@@ -45,12 +45,14 @@
 
 static bool cast_blue_dispel(PlayerType *player_ptr)
 {
-    if (!target_set(player_ptr, TARGET_KILL))
+    if (!target_set(player_ptr, TARGET_KILL)) {
         return false;
+    }
 
     MONSTER_IDX m_idx = player_ptr->current_floor_ptr->grid_array[target_row][target_col].m_idx;
-    if ((m_idx == 0) || !player_has_los_bold(player_ptr, target_row, target_col) || !projectable(player_ptr, player_ptr->y, player_ptr->x, target_row, target_col))
+    if ((m_idx == 0) || !player_has_los_bold(player_ptr, target_row, target_col) || !projectable(player_ptr, player_ptr->y, player_ptr->x, target_row, target_col)) {
         return true;
+    }
 
     dispel_monster_status(player_ptr, m_idx);
     return true;
@@ -58,8 +60,9 @@ static bool cast_blue_dispel(PlayerType *player_ptr)
 
 static bool cast_blue_rocket(PlayerType *player_ptr, bmc_type *bmc_ptr)
 {
-    if (!get_aim_dir(player_ptr, &bmc_ptr->dir))
+    if (!get_aim_dir(player_ptr, &bmc_ptr->dir)) {
         return false;
+    }
 
     msg_print(_("ロケットを発射した。", "You fire a rocket."));
     bmc_ptr->damage = monspell_bluemage_damage(player_ptr, MonsterAbilityType::ROCKET, bmc_ptr->plev, DAM_ROLL);
@@ -69,8 +72,9 @@ static bool cast_blue_rocket(PlayerType *player_ptr, bmc_type *bmc_ptr)
 
 static bool cast_blue_shoot(PlayerType *player_ptr, bmc_type *bmc_ptr)
 {
-    if (!get_aim_dir(player_ptr, &bmc_ptr->dir))
+    if (!get_aim_dir(player_ptr, &bmc_ptr->dir)) {
         return false;
+    }
 
     msg_print(_("矢を放った。", "You fire an arrow."));
     bmc_ptr->damage = monspell_bluemage_damage(player_ptr, MonsterAbilityType::SHOOT, bmc_ptr->plev, DAM_ROLL);
@@ -80,8 +84,9 @@ static bool cast_blue_shoot(PlayerType *player_ptr, bmc_type *bmc_ptr)
 
 static bool cast_blue_hand_doom(PlayerType *player_ptr, bmc_type *bmc_ptr)
 {
-    if (!get_aim_dir(player_ptr, &bmc_ptr->dir))
+    if (!get_aim_dir(player_ptr, &bmc_ptr->dir)) {
         return false;
+    }
 
     msg_print(_("<破滅の手>を放った！", "You invoke the Hand of Doom!"));
     fire_ball_hide(player_ptr, AttributeType::HAND_DOOM, bmc_ptr->dir, bmc_ptr->plev * 3, 0);
@@ -93,28 +98,33 @@ static bool exe_blue_teleport_back(PlayerType *player_ptr, GAME_TEXT *m_name)
     monster_type *m_ptr;
     monster_race *r_ptr;
     auto *floor_ptr = player_ptr->current_floor_ptr;
-    if ((floor_ptr->grid_array[target_row][target_col].m_idx == 0) || !player_has_los_bold(player_ptr, target_row, target_col) || !projectable(player_ptr, player_ptr->y, player_ptr->x, target_row, target_col))
+    if ((floor_ptr->grid_array[target_row][target_col].m_idx == 0) || !player_has_los_bold(player_ptr, target_row, target_col) || !projectable(player_ptr, player_ptr->y, player_ptr->x, target_row, target_col)) {
         return true;
+    }
 
     m_ptr = &floor_ptr->m_list[floor_ptr->grid_array[target_row][target_col].m_idx];
     r_ptr = &r_info[m_ptr->r_idx];
     monster_desc(player_ptr, m_name, m_ptr, 0);
-    if (r_ptr->resistance_flags.has_not(MonsterResistanceType::RESIST_TELEPORT))
+    if (r_ptr->resistance_flags.has_not(MonsterResistanceType::RESIST_TELEPORT)) {
         return false;
+    }
 
     if (r_ptr->kind_flags.has(MonsterKindType::UNIQUE) || r_ptr->resistance_flags.has(MonsterResistanceType::RESIST_ALL)) {
-        if (is_original_ap_and_seen(player_ptr, m_ptr))
+        if (is_original_ap_and_seen(player_ptr, m_ptr)) {
             r_ptr->r_resistance_flags.set(MonsterResistanceType::RESIST_TELEPORT);
+        }
 
         msg_format(_("%sには効果がなかった！", "%s is unaffected!"), m_name);
         return true;
     }
 
-    if (r_ptr->level <= randint1(100))
+    if (r_ptr->level <= randint1(100)) {
         return false;
+    }
 
-    if (is_original_ap_and_seen(player_ptr, m_ptr))
+    if (is_original_ap_and_seen(player_ptr, m_ptr)) {
         r_ptr->r_resistance_flags.set(MonsterResistanceType::RESIST_TELEPORT);
+    }
 
     msg_format(_("%sには耐性がある！", "%s resists!"), m_name);
     return true;
@@ -122,12 +132,14 @@ static bool exe_blue_teleport_back(PlayerType *player_ptr, GAME_TEXT *m_name)
 
 static bool cast_blue_teleport_back(PlayerType *player_ptr)
 {
-    if (!target_set(player_ptr, TARGET_KILL))
+    if (!target_set(player_ptr, TARGET_KILL)) {
         return false;
+    }
 
     GAME_TEXT m_name[MAX_NLEN];
-    if (exe_blue_teleport_back(player_ptr, m_name))
+    if (exe_blue_teleport_back(player_ptr, m_name)) {
         return true;
+    }
 
     msg_format(_("%sを引き戻した。", "You command %s to return."), m_name);
     teleport_monster_to(
@@ -137,8 +149,9 @@ static bool cast_blue_teleport_back(PlayerType *player_ptr)
 
 static bool cast_blue_teleport_away(PlayerType *player_ptr, bmc_type *bmc_ptr)
 {
-    if (!get_aim_dir(player_ptr, &bmc_ptr->dir))
+    if (!get_aim_dir(player_ptr, &bmc_ptr->dir)) {
         return false;
+    }
 
     (void)fire_beam(player_ptr, AttributeType::AWAY_ALL, bmc_ptr->dir, 100);
     return true;
@@ -146,8 +159,9 @@ static bool cast_blue_teleport_away(PlayerType *player_ptr, bmc_type *bmc_ptr)
 
 static bool cast_blue_psy_spear(PlayerType *player_ptr, bmc_type *bmc_ptr)
 {
-    if (!get_aim_dir(player_ptr, &bmc_ptr->dir))
+    if (!get_aim_dir(player_ptr, &bmc_ptr->dir)) {
         return false;
+    }
 
     msg_print(_("光の剣を放った。", "You throw a psycho-spear."));
     bmc_ptr->damage = monspell_bluemage_damage(player_ptr, MonsterAbilityType::PSY_SPEAR, bmc_ptr->plev, DAM_ROLL);
@@ -157,8 +171,9 @@ static bool cast_blue_psy_spear(PlayerType *player_ptr, bmc_type *bmc_ptr)
 
 static bool cast_blue_make_trap(PlayerType *player_ptr)
 {
-    if (!target_set(player_ptr, TARGET_KILL))
+    if (!target_set(player_ptr, TARGET_KILL)) {
         return false;
+    }
 
     msg_print(_("呪文を唱えて邪悪に微笑んだ。", "You cast a spell and cackle evilly."));
     trap_creation(player_ptr, target_row, target_col);
@@ -405,11 +420,13 @@ bool cast_learned_spell(PlayerType *player_ptr, MonsterAbilityType spell, const 
 {
     bmc_type tmp_bm;
     bmc_type *bmc_ptr = initialize_blue_magic_type(player_ptr, &tmp_bm, success, get_pseudo_monstetr_level);
-    if (!switch_cast_blue_magic(player_ptr, bmc_ptr, spell))
+    if (!switch_cast_blue_magic(player_ptr, bmc_ptr, spell)) {
         return false;
+    }
 
-    if (bmc_ptr->no_trump)
+    if (bmc_ptr->no_trump) {
         msg_print(_("何も現れなかった。", "No one appeared."));
+    }
 
     return true;
 }

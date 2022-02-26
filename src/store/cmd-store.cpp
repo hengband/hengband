@@ -1,4 +1,5 @@
-﻿#include "cmd-io/macro-util.h"
+﻿#include "store/cmd-store.h"
+#include "cmd-io/macro-util.h"
 #include "core/player-redraw-types.h"
 #include "core/player-update-types.h"
 #include "core/stuff-handler.h"
@@ -19,7 +20,6 @@
 #include "main/sound-of-music.h"
 #include "object/object-info.h"
 #include "player-status/player-energy.h"
-#include "store/cmd-store.h"
 #include "store/home.h"
 #include "store/store-key-processor.h"
 #include "store/store-owners.h"
@@ -53,8 +53,9 @@
  */
 void do_cmd_store(PlayerType *player_ptr)
 {
-    if (player_ptr->wild_mode)
+    if (player_ptr->wild_mode) {
         return;
+    }
     TERM_LEN w, h;
     term_get_size(&w, &h);
 
@@ -78,10 +79,12 @@ void do_cmd_store(PlayerType *player_ptr)
     //   この辺はリファクタしたい。
     StoreSaleType which = i2enum<StoreSaleType>(f_info[g_ptr->feat].subtype);
     old_town_num = player_ptr->town_num;
-    if ((which == StoreSaleType::HOME) || (which == StoreSaleType::MUSEUM))
+    if ((which == StoreSaleType::HOME) || (which == StoreSaleType::MUSEUM)) {
         player_ptr->town_num = 1;
-    if (is_in_dungeon(player_ptr))
+    }
+    if (is_in_dungeon(player_ptr)) {
         player_ptr->town_num = NO_TOWN;
+    }
     inner_town_num = player_ptr->town_num;
 
     if ((town_info[player_ptr->town_num].store[enum2i(which)].store_open >= w_ptr->game_turn) || ironman_shops) {
@@ -91,8 +94,9 @@ void do_cmd_store(PlayerType *player_ptr)
     }
 
     int maintain_num = (w_ptr->game_turn - town_info[player_ptr->town_num].store[enum2i(which)].last_visit) / (TURNS_PER_TICK * STORE_TICKS);
-    if (maintain_num > 10)
+    if (maintain_num > 10) {
         maintain_num = 10;
+    }
     if (maintain_num) {
         store_maintenance(player_ptr, player_ptr->town_num, which, maintain_num);
 
@@ -139,10 +143,11 @@ void do_cmd_store(PlayerType *player_ptr)
         }
 
         prt(_("i/e) 持ち物/装備の一覧", "i/e) Inventry/Equipment list"), 21 + xtra_stock, 56);
-        if (rogue_like_commands)
+        if (rogue_like_commands) {
             prt(_("w/T) 装備する/はずす", "w/T) Wear/Take off equipment"), 22 + xtra_stock, 56);
-        else
+        } else {
             prt(_("w/t) 装備する/はずす", "w/t) Wear/Take off equipment"), 22 + xtra_stock, 56);
+        }
 
         prt(_("コマンド:", "You may: "), 20 + xtra_stock, 0);
         InputKeyRequestor(player_ptr, true).request_command();
@@ -155,10 +160,11 @@ void do_cmd_store(PlayerType *player_ptr)
             INVENTORY_IDX item = INVEN_PACK;
             auto *o_ptr = &player_ptr->inventory_list[item];
             if (cur_store_num != StoreSaleType::HOME) {
-                if (cur_store_num == StoreSaleType::MUSEUM)
+                if (cur_store_num == StoreSaleType::MUSEUM) {
                     msg_print(_("ザックからアイテムがあふれそうなので、あわてて博物館から出た...", "Your pack is so full that you flee the Museum..."));
-                else
+                } else {
                     msg_print(_("ザックからアイテムがあふれそうなので、あわてて店から出た...", "Your pack is so full that you flee the store..."));
+                }
 
                 leave_store = true;
             } else if (!store_check_num(o_ptr)) {
@@ -185,11 +191,13 @@ void do_cmd_store(PlayerType *player_ptr)
             }
         }
 
-        if (need_redraw_store_inv)
+        if (need_redraw_store_inv) {
             display_store_inventory(player_ptr);
+        }
 
-        if (st_ptr->store_open >= w_ptr->game_turn)
+        if (st_ptr->store_open >= w_ptr->game_turn) {
             leave_store = true;
+        }
     }
 
     // 現在地の偽装を解除。

@@ -19,21 +19,25 @@
 
 static void process_dirty_expression(PlayerType *player_ptr, text_body_type *tb)
 {
-    if ((tb->dirty_flags & DIRTY_EXPRESSION) == 0)
+    if ((tb->dirty_flags & DIRTY_EXPRESSION) == 0) {
         return;
+    }
 
     byte state = 0;
     for (int y = 0; tb->lines_list[y]; y++) {
         concptr s = tb->lines_list[y];
         tb->states[y] = state;
 
-        if (*s++ != '?')
+        if (*s++ != '?') {
             continue;
-        if (*s++ != ':')
+        }
+        if (*s++ != ':') {
             continue;
+        }
 
-        if (streq(s, "$AUTOREGISTER"))
+        if (streq(s, "$AUTOREGISTER")) {
             state |= LSTAT_AUTOREGISTER;
+        }
 
         auto s_keep = string_make(s);
         //! @note string_make の戻り値は const char* だが process_pref_file_expr で書き換える
@@ -42,10 +46,11 @@ static void process_dirty_expression(PlayerType *player_ptr, text_body_type *tb)
 
         char f;
         concptr v = process_pref_file_expr(player_ptr, &ss, &f);
-        if (streq(v, "0"))
+        if (streq(v, "0")) {
             state |= LSTAT_BYPASS;
-        else
+        } else {
             state &= ~LSTAT_BYPASS;
+        }
 
         string_free(s_keep);
         tb->states[y] = state | LSTAT_EXPRESSION;
@@ -71,7 +76,7 @@ void draw_text_editor(PlayerType *player_ptr, text_body_type *tb)
 
 #ifdef JP
     /* Don't let cursor at second byte of kanji */
-    for (int i = 0; tb->lines_list[tb->cy][i]; i++)
+    for (int i = 0; tb->lines_list[tb->cy][i]; i++) {
         if (iskanji(tb->lines_list[tb->cy][i])) {
             i++;
             if (i == tb->cx) {
@@ -79,27 +84,34 @@ void draw_text_editor(PlayerType *player_ptr, text_body_type *tb)
                  * Move to a correct position in the
                  * left or right
                  */
-                if (i & 1)
+                if (i & 1) {
                     tb->cx--;
-                else
+                } else {
                     tb->cx++;
+                }
                 break;
             }
         }
+    }
 #endif
-    if (tb->cy < tb->upper || tb->upper + tb->hgt <= tb->cy)
+    if (tb->cy < tb->upper || tb->upper + tb->hgt <= tb->cy) {
         tb->upper = tb->cy - (tb->hgt) / 2;
-    if (tb->upper < 0)
+    }
+    if (tb->upper < 0) {
         tb->upper = 0;
-    if ((tb->cx < tb->left + 10 && tb->left > 0) || tb->left + tb->wid - 5 <= tb->cx)
+    }
+    if ((tb->cx < tb->left + 10 && tb->left > 0) || tb->left + tb->wid - 5 <= tb->cx) {
         tb->left = tb->cx - (tb->wid) * 2 / 3;
-    if (tb->left < 0)
+    }
+    if (tb->left < 0) {
         tb->left = 0;
+    }
 
-    if (tb->old_wid != tb->wid || tb->old_hgt != tb->hgt)
+    if (tb->old_wid != tb->wid || tb->old_hgt != tb->hgt) {
         tb->dirty_flags |= DIRTY_SCREEN;
-    else if (tb->old_upper != tb->upper || tb->old_left != tb->left)
+    } else if (tb->old_upper != tb->upper || tb->old_left != tb->left) {
         tb->dirty_flags |= DIRTY_ALL;
+    }
 
     if (tb->dirty_flags & DIRTY_SCREEN) {
         tb->dirty_flags |= (DIRTY_ALL | DIRTY_MODE);
@@ -110,8 +122,9 @@ void draw_text_editor(PlayerType *player_ptr, text_body_type *tb)
         char buf[MAX_LINELEN];
         int sepa_length = tb->wid;
         int j = 0;
-        for (; j < sepa_length; j++)
+        for (; j < sepa_length; j++) {
             buf[j] = '-';
+        }
         buf[j] = '\0';
         term_putstr(0, tb->hgt + 1, sepa_length, TERM_WHITE, buf);
     }
@@ -131,16 +144,19 @@ void draw_text_editor(PlayerType *player_ptr, text_body_type *tb)
         byte color;
         int y = tb->upper + i;
 
-        if (!(tb->dirty_flags & DIRTY_ALL) && (tb->dirty_line != y))
+        if (!(tb->dirty_flags & DIRTY_ALL) && (tb->dirty_line != y)) {
             continue;
+        }
 
         msg = tb->lines_list[y];
-        if (!msg)
+        if (!msg) {
             break;
+        }
 
         for (int j = 0; *msg; msg++, j++) {
-            if (j == tb->left)
+            if (j == tb->left) {
                 break;
+            }
 #ifdef JP
             if (j > tb->left) {
                 leftcol = 1;
@@ -157,10 +173,11 @@ void draw_text_editor(PlayerType *player_ptr, text_body_type *tb)
         if (tb->states[y] & LSTAT_AUTOREGISTER) {
             color = TERM_L_RED;
         } else {
-            if (tb->states[y] & LSTAT_BYPASS)
+            if (tb->states[y] & LSTAT_BYPASS) {
                 color = TERM_SLATE;
-            else
+            } else {
                 color = TERM_WHITE;
+            }
         }
 
         if (!tb->mark || (y < by1 || by2 < y)) {
@@ -173,14 +190,17 @@ void draw_text_editor(PlayerType *player_ptr, text_body_type *tb)
             int bx1 = std::min(tb->mx, tb->cx);
             int bx2 = std::max(tb->mx, tb->cx);
 
-            if (bx2 > len)
+            if (bx2 > len) {
                 bx2 = len;
+            }
 
             term_gotoxy(leftcol, i + 1);
-            if (x0 < bx1)
+            if (x0 < bx1) {
                 term_addstr(bx1 - x0, color, msg);
-            if (x0 < bx2)
+            }
+            if (x0 < bx2) {
                 term_addstr(bx2 - bx1, TERM_YELLOW, msg + (bx1 - x0));
+            }
             term_addstr(-1, color, msg + (bx2 - x0));
         }
     }
@@ -191,8 +211,9 @@ void draw_text_editor(PlayerType *player_ptr, text_body_type *tb)
 
     bool is_dirty_diary = (tb->dirty_flags & (DIRTY_ALL | DIRTY_NOT_FOUND | DIRTY_NO_SEARCH)) != 0;
     bool is_updated = tb->old_cy != tb->cy || is_dirty_diary || tb->dirty_line == tb->cy;
-    if (!is_updated)
+    if (!is_updated) {
         return;
+    }
 
     autopick_type an_entry, *entry = &an_entry;
     concptr str1 = nullptr, str2 = nullptr;
@@ -263,17 +284,19 @@ void draw_text_editor(PlayerType *player_ptr, text_body_type *tb)
         shape_buffer(buf, 81, temp, sizeof(temp));
         t = temp;
         for (int j = 0; j < 3; j++) {
-            if (t[0] == 0)
+            if (t[0] == 0) {
                 break;
-            else {
+            } else {
                 prt(t, tb->hgt + 1 + 1 + j, 0);
                 t += strlen(t) + 1;
             }
         }
     }
 
-    if (str1)
+    if (str1) {
         prt(str1, tb->hgt + 1 + 1, 0);
-    if (str2)
+    }
+    if (str2) {
         prt(str2, tb->hgt + 1 + 2, 0);
+    }
 }

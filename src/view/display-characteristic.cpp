@@ -248,8 +248,9 @@ static void process_inventory_characteristic(PlayerType *player_ptr, tr_type fla
             char_stat.has_res = true;
         } else {
             char_stat.syms.emplace_back(".");
-            if (b_vul)
+            if (b_vul) {
                 char_stat.has_vul = true;
+            }
         }
     }
 }
@@ -268,33 +269,37 @@ static void process_one_characteristic(PlayerType *player_ptr, TERM_LEN row, TER
 {
     char_stat char_stat;
 
-    if (f->riding_flags.has(flag))
+    if (f->riding_flags.has(flag)) {
         char_stat.has_rid = true;
+    }
     if (f->riding_negative_flags.has(flag)) {
         char_stat.has_rid = true;
         char_stat.has_vul = true;
     }
 
-    if (mode & DP_LITE)
+    if (mode & DP_LITE) {
         process_light_equipment_characteristics(player_ptr, f, mode, char_stat);
-    else if (mode & DP_CURSE)
+    } else if (mode & DP_CURSE) {
         process_cursed_equipment_characteristics(player_ptr, mode, char_stat);
-    else
+    } else {
         process_inventory_characteristic(player_ptr, flag, f, mode, char_stat);
+    }
 
-    if (char_stat.has_vul && !char_stat.has_imm && !char_stat.has_res && !char_stat.has_tim)
+    if (char_stat.has_vul && !char_stat.has_imm && !char_stat.has_res && !char_stat.has_tim) {
         char_stat.syms.emplace_back("v");
+    }
 
     auto row_clr = char_stat.has_rid ? TERM_L_GREEN : TERM_WHITE;
     if (!char_stat.has_imm) {
-        if (char_stat.has_res && char_stat.has_tim)
+        if (char_stat.has_res && char_stat.has_tim) {
             row_clr = char_stat.has_vul ? TERM_YELLOW : row_clr;
-        else if (char_stat.has_res || char_stat.has_tim)
+        } else if (char_stat.has_res || char_stat.has_tim) {
             row_clr = char_stat.has_vul ? TERM_ORANGE : row_clr;
-        else if (char_stat.has_vul)
+        } else if (char_stat.has_vul) {
             row_clr = TERM_RED;
-        else
+        } else {
             row_clr = TERM_L_DARK;
+        }
     }
 
     c_put_str(row_clr, header.data(), row, col);
@@ -302,12 +307,15 @@ static void process_one_characteristic(PlayerType *player_ptr, TERM_LEN row, TER
 
     for (auto s : char_stat.syms) {
         auto clr = row_clr;
-        if (s == "#")
+        if (s == "#") {
             clr = char_stat.has_vul && !char_stat.has_imm ? TERM_ORANGE : TERM_YELLOW;
-        if (s == "-" && !char_stat.has_imm)
+        }
+        if (s == "-" && !char_stat.has_imm) {
             clr = TERM_ORANGE;
-        if (s == "." && (!char_stat.has_imm && !char_stat.has_vul))
+        }
+        if (s == "." && (!char_stat.has_imm && !char_stat.has_vul)) {
             clr = TERM_L_DARK;
+        }
         c_put_str(clr, s.c_str(), row, col++);
     }
 }
@@ -394,7 +402,7 @@ static void display_other_resistance_info(
  * @param player_ptr プレイヤーへの参照ポインタ
  * @todo 将来的には装備系とまとめたいが、乗馬による特性変化や一時能力変化等の扱いがあるので据え置き。
  */
- all_player_flags get_player_state_flags(PlayerType *player_ptr)
+all_player_flags get_player_state_flags(PlayerType *player_ptr)
 {
     all_player_flags f;
     player_flags(player_ptr, f.player_flags);
@@ -532,7 +540,6 @@ static void display_esc_info(PlayerType *player_ptr, void (*display_player_equip
     process_one_characteristic(player_ptr, row++, col, _("巨人    ESP:", "ESP Giant  :"), TR_ESP_GIANT, f, 0);
     process_one_characteristic(player_ptr, row++, col, _("ユニークESP:", "ESP Unique :"), TR_ESP_UNIQUE, f, 0);
 }
-
 
 /*!
  * @brief ESP/能力維持の特性フラグを表示する

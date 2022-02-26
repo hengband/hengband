@@ -88,8 +88,9 @@ bool teleport_swap(PlayerType *player_ptr, DIRECTION dir)
 
     if (r_ptr->resistance_flags.has(MonsterResistanceType::RESIST_TELEPORT)) {
         msg_print(_("テレポートを邪魔された！", "Your teleportation is blocked!"));
-        if (is_original_ap_and_seen(player_ptr, m_ptr))
+        if (is_original_ap_and_seen(player_ptr, m_ptr)) {
             r_ptr->r_resistance_flags.set(MonsterResistanceType::RESIST_TELEPORT);
+        }
         return false;
     }
 
@@ -126,8 +127,9 @@ bool teleport_monster(PlayerType *player_ptr, DIRECTION dir, int distance)
 bool teleport_away(PlayerType *player_ptr, MONSTER_IDX m_idx, POSITION dis, teleport_flags mode)
 {
     auto *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
-    if (!monster_is_valid(m_ptr))
+    if (!monster_is_valid(m_ptr)) {
         return false;
+    }
 
     if ((mode & TELEPORT_DEC_VALOUR) && (((player_ptr->chp * 10) / player_ptr->mhp) > 5) && (4 + randint1(5) < ((player_ptr->chp * 10) / player_ptr->mhp))) {
         chg_virtue(player_ptr, V_VALOUR, -1);
@@ -141,25 +143,31 @@ bool teleport_away(PlayerType *player_ptr, MONSTER_IDX m_idx, POSITION dis, tele
     bool look = true;
     while (look) {
         tries++;
-        if (dis > 200)
+        if (dis > 200) {
             dis = 200;
+        }
 
         for (int i = 0; i < 500; i++) {
             while (true) {
                 ny = rand_spread(oy, dis);
                 nx = rand_spread(ox, dis);
                 POSITION d = distance(oy, ox, ny, nx);
-                if ((d >= min) && (d <= dis))
+                if ((d >= min) && (d <= dis)) {
                     break;
+                }
             }
 
-            if (!in_bounds(player_ptr->current_floor_ptr, ny, nx))
+            if (!in_bounds(player_ptr->current_floor_ptr, ny, nx)) {
                 continue;
-            if (!cave_monster_teleportable_bold(player_ptr, m_idx, ny, nx, mode))
+            }
+            if (!cave_monster_teleportable_bold(player_ptr, m_idx, ny, nx, mode)) {
                 continue;
-            if (!(inside_quest(player_ptr->current_floor_ptr->quest_number) || player_ptr->current_floor_ptr->inside_arena))
-                if (player_ptr->current_floor_ptr->grid_array[ny][nx].is_icky())
+            }
+            if (!(inside_quest(player_ptr->current_floor_ptr->quest_number) || player_ptr->current_floor_ptr->inside_arena)) {
+                if (player_ptr->current_floor_ptr->grid_array[ny][nx].is_icky()) {
                     continue;
+                }
+            }
 
             look = false;
             break;
@@ -168,8 +176,9 @@ bool teleport_away(PlayerType *player_ptr, MONSTER_IDX m_idx, POSITION dis, tele
         dis = dis * 2;
         min = min / 2;
         const int MAX_TELEPORT_TRIES = 100;
-        if (tries > MAX_TELEPORT_TRIES)
+        if (tries > MAX_TELEPORT_TRIES) {
             return false;
+        }
     }
 
     sound(SOUND_TPOTHER);
@@ -184,8 +193,9 @@ bool teleport_away(PlayerType *player_ptr, MONSTER_IDX m_idx, POSITION dis, tele
     lite_spot(player_ptr, oy, ox);
     lite_spot(player_ptr, ny, nx);
 
-    if (r_info[m_ptr->r_idx].flags7 & (RF7_LITE_MASK | RF7_DARK_MASK))
+    if (r_info[m_ptr->r_idx].flags7 & (RF7_LITE_MASK | RF7_DARK_MASK)) {
         player_ptr->update |= (PU_MON_LITE);
+    }
 
     return true;
 }
@@ -203,10 +213,12 @@ bool teleport_away(PlayerType *player_ptr, MONSTER_IDX m_idx, POSITION dis, tele
 void teleport_monster_to(PlayerType *player_ptr, MONSTER_IDX m_idx, POSITION ty, POSITION tx, int power, teleport_flags mode)
 {
     auto *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
-    if (!m_ptr->r_idx)
+    if (!m_ptr->r_idx) {
         return;
-    if (randint1(100) > power)
+    }
+    if (randint1(100) > power) {
         return;
+    }
 
     POSITION ny = m_ptr->fy;
     POSITION nx = m_ptr->fx;
@@ -218,22 +230,26 @@ void teleport_monster_to(PlayerType *player_ptr, MONSTER_IDX m_idx, POSITION ty,
     int attempts = 500;
     bool look = true;
     while (look && --attempts) {
-        if (dis > 200)
+        if (dis > 200) {
             dis = 200;
+        }
 
         for (int i = 0; i < 500; i++) {
             while (true) {
                 ny = rand_spread(ty, dis);
                 nx = rand_spread(tx, dis);
                 int d = distance(ty, tx, ny, nx);
-                if ((d >= min) && (d <= dis))
+                if ((d >= min) && (d <= dis)) {
                     break;
+                }
             }
 
-            if (!in_bounds(player_ptr->current_floor_ptr, ny, nx))
+            if (!in_bounds(player_ptr->current_floor_ptr, ny, nx)) {
                 continue;
-            if (!cave_monster_teleportable_bold(player_ptr, m_idx, ny, nx, mode))
+            }
+            if (!cave_monster_teleportable_bold(player_ptr, m_idx, ny, nx, mode)) {
                 continue;
+            }
 
             look = false;
             break;
@@ -243,8 +259,9 @@ void teleport_monster_to(PlayerType *player_ptr, MONSTER_IDX m_idx, POSITION ty,
         min = min / 2;
     }
 
-    if (attempts < 1)
+    if (attempts < 1) {
         return;
+    }
 
     sound(SOUND_TPOTHER);
     player_ptr->current_floor_ptr->grid_array[oy][ox].m_idx = 0;
@@ -257,8 +274,9 @@ void teleport_monster_to(PlayerType *player_ptr, MONSTER_IDX m_idx, POSITION ty,
     lite_spot(player_ptr, oy, ox);
     lite_spot(player_ptr, ny, nx);
 
-    if (r_info[m_ptr->r_idx].flags7 & (RF7_LITE_MASK | RF7_DARK_MASK))
+    if (r_info[m_ptr->r_idx].flags7 & (RF7_LITE_MASK | RF7_DARK_MASK)) {
         player_ptr->update |= (PU_MON_LITE);
+    }
 }
 
 /*!
@@ -287,19 +305,22 @@ void teleport_monster_to(PlayerType *player_ptr, MONSTER_IDX m_idx, POSITION ty,
  */
 bool teleport_player_aux(PlayerType *player_ptr, POSITION dis, bool is_quantum_effect, teleport_flags mode)
 {
-    if (player_ptr->wild_mode)
+    if (player_ptr->wild_mode) {
         return false;
+    }
     if (!is_quantum_effect && player_ptr->anti_tele && !(mode & TELEPORT_NONMAGICAL)) {
         msg_print(_("不思議な力がテレポートを防いだ！", "A mysterious force prevents you from teleporting!"));
         return false;
     }
 
     int candidates_at[MAX_TELEPORT_DISTANCE + 1];
-    for (int i = 0; i <= MAX_TELEPORT_DISTANCE; i++)
+    for (int i = 0; i <= MAX_TELEPORT_DISTANCE; i++) {
         candidates_at[i] = 0;
+    }
 
-    if (dis > MAX_TELEPORT_DISTANCE)
+    if (dis > MAX_TELEPORT_DISTANCE) {
         dis = MAX_TELEPORT_DISTANCE;
+    }
 
     int left = std::max(1, player_ptr->x - dis);
     int right = std::min(player_ptr->current_floor_ptr->width - 2, player_ptr->x + dis);
@@ -308,27 +329,31 @@ bool teleport_player_aux(PlayerType *player_ptr, POSITION dis, bool is_quantum_e
     int total_candidates = 0;
     for (POSITION y = top; y <= bottom; y++) {
         for (POSITION x = left; x <= right; x++) {
-            if (!cave_player_teleportable_bold(player_ptr, y, x, mode))
+            if (!cave_player_teleportable_bold(player_ptr, y, x, mode)) {
                 continue;
+            }
 
             int d = distance(player_ptr->y, player_ptr->x, y, x);
-            if (d > dis)
+            if (d > dis) {
                 continue;
+            }
 
             total_candidates++;
             candidates_at[d]++;
         }
     }
 
-    if (0 == total_candidates)
+    if (0 == total_candidates) {
         return false;
+    }
 
     int cur_candidates;
     int min = dis;
     for (cur_candidates = 0; min >= 0; min--) {
         cur_candidates += candidates_at[min];
-        if (cur_candidates && (cur_candidates >= total_candidates / 2))
+        if (cur_candidates && (cur_candidates >= total_candidates / 2)) {
             break;
+        }
     }
 
     int pick = randint1(cur_candidates);
@@ -337,31 +362,38 @@ bool teleport_player_aux(PlayerType *player_ptr, POSITION dis, bool is_quantum_e
     POSITION yy, xx = 0;
     for (yy = top; yy <= bottom; yy++) {
         for (xx = left; xx <= right; xx++) {
-            if (!cave_player_teleportable_bold(player_ptr, yy, xx, mode))
+            if (!cave_player_teleportable_bold(player_ptr, yy, xx, mode)) {
                 continue;
+            }
 
             int d = distance(player_ptr->y, player_ptr->x, yy, xx);
-            if (d > dis)
+            if (d > dis) {
                 continue;
-            if (d < min)
+            }
+            if (d < min) {
                 continue;
+            }
 
             pick--;
-            if (!pick)
+            if (!pick) {
                 break;
+            }
         }
 
-        if (!pick)
+        if (!pick) {
             break;
+        }
     }
 
-    if (player_bold(player_ptr, yy, xx))
+    if (player_bold(player_ptr, yy, xx)) {
         return false;
+    }
 
     sound(SOUND_TELEPORT);
 #ifdef JP
-    if (is_echizen(player_ptr))
+    if (is_echizen(player_ptr)) {
         msg_format("『こっちだぁ、%s』", player_ptr->name);
+    }
 #endif
     (void)move_player_effect(player_ptr, yy, xx, MPE_FORGET_FLOW | MPE_HANDLE_STUFF | MPE_DONT_PICKUP);
     return true;
@@ -378,8 +410,9 @@ void teleport_player(PlayerType *player_ptr, POSITION dis, BIT_FLAGS mode)
     const POSITION oy = player_ptr->y;
     const POSITION ox = player_ptr->x;
 
-    if (!teleport_player_aux(player_ptr, dis, false, i2enum<teleport_flags>(mode)))
+    if (!teleport_player_aux(player_ptr, dis, false, i2enum<teleport_flags>(mode))) {
         return;
+    }
 
     /* Monsters with teleport ability may follow the player */
     for (POSITION xx = -1; xx < 2; xx++) {
@@ -409,14 +442,16 @@ void teleport_player(PlayerType *player_ptr, POSITION dis, BIT_FLAGS mode)
  */
 void teleport_player_away(MONSTER_IDX m_idx, PlayerType *player_ptr, POSITION dis, bool is_quantum_effect)
 {
-    if (player_ptr->phase_out)
+    if (player_ptr->phase_out) {
         return;
+    }
 
     const POSITION oy = player_ptr->y;
     const POSITION ox = player_ptr->x;
 
-    if (!teleport_player_aux(player_ptr, dis, is_quantum_effect, TELEPORT_PASSIVE))
+    if (!teleport_player_aux(player_ptr, dis, is_quantum_effect, TELEPORT_PASSIVE)) {
         return;
+    }
 
     /* Monsters with teleport ability may follow the player */
     for (POSITION xx = -1; xx < 2; xx++) {
@@ -469,18 +504,21 @@ void teleport_player_to(PlayerType *player_ptr, POSITION ny, POSITION nx, telepo
         while (true) {
             y = (POSITION)rand_spread(ny, dis);
             x = (POSITION)rand_spread(nx, dis);
-            if (in_bounds(player_ptr->current_floor_ptr, y, x))
+            if (in_bounds(player_ptr->current_floor_ptr, y, x)) {
                 break;
+            }
         }
 
         bool is_anywhere = w_ptr->wizard;
         is_anywhere &= (mode & TELEPORT_PASSIVE) == 0;
         is_anywhere &= (player_ptr->current_floor_ptr->grid_array[y][x].m_idx > 0) || player_ptr->current_floor_ptr->grid_array[y][x].m_idx == player_ptr->riding;
-        if (is_anywhere)
+        if (is_anywhere) {
             break;
+        }
 
-        if (cave_player_teleportable_bold(player_ptr, y, x, mode))
+        if (cave_player_teleportable_bold(player_ptr, y, x, mode)) {
             break;
+        }
 
         if (++ctr > (4 * dis * dis + 4 * dis + 1)) {
             ctr = 0;
@@ -507,13 +545,14 @@ void teleport_away_followable(PlayerType *player_ptr, MONSTER_IDX m_idx)
     is_followable &= w_ptr->timewalk_m_idx == 0;
     is_followable &= !player_ptr->phase_out;
     is_followable &= los(player_ptr, player_ptr->y, player_ptr->x, oldfy, oldfx);
-    if (!is_followable)
+    if (!is_followable) {
         return;
+    }
 
     bool follow = false;
-    if (player_ptr->muta.has(PlayerMutationType::VTELEPORT) || PlayerClass(player_ptr).equals(PlayerClassType::IMITATOR))
+    if (player_ptr->muta.has(PlayerMutationType::VTELEPORT) || PlayerClass(player_ptr).equals(PlayerClassType::IMITATOR)) {
         follow = true;
-    else {
+    } else {
         ObjectType *o_ptr;
         INVENTORY_IDX i;
 
@@ -529,10 +568,12 @@ void teleport_away_followable(PlayerType *player_ptr, MONSTER_IDX m_idx)
         }
     }
 
-    if (!follow)
+    if (!follow) {
         return;
-    if (!get_check_strict(player_ptr, _("ついていきますか？", "Do you follow it? "), CHECK_OKAY_CANCEL))
+    }
+    if (!get_check_strict(player_ptr, _("ついていきますか？", "Do you follow it? "), CHECK_OKAY_CANCEL)) {
         return;
+    }
 
     if (one_in_(3)) {
         teleport_player(player_ptr, 200, TELEPORT_PASSIVE);
@@ -577,11 +618,13 @@ bool exe_dimension_door(PlayerType *player_ptr, POSITION x, POSITION y)
 bool dimension_door(PlayerType *player_ptr)
 {
     DEPTH x = 0, y = 0;
-    if (!tgt_pt(player_ptr, &x, &y))
+    if (!tgt_pt(player_ptr, &x, &y)) {
         return false;
+    }
 
-    if (exe_dimension_door(player_ptr, x, y))
+    if (exe_dimension_door(player_ptr, x, y)) {
         return true;
+    }
 
     msg_print(_("精霊界から物質界に戻る時うまくいかなかった！", "You fail to exit the astral plane correctly!"));
     return true;

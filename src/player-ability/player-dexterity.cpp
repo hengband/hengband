@@ -14,7 +14,7 @@
 #include "system/player-type-definition.h"
 #include "util/bit-flags-calculator.h"
 
-PlayerDexterity::PlayerDexterity(PlayerType* player_ptr)
+PlayerDexterity::PlayerDexterity(PlayerType *player_ptr)
     : PlayerBasicStatistics(player_ptr)
 {
 }

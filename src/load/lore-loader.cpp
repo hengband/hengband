@@ -60,12 +60,15 @@ static void migrate_old_resistance_flags(monster_race *r_ptr, BIT_FLAGS old_flag
         { SavedataLoreOlderThan14FlagType::RFR_RES_TELE, MonsterResistanceType::RESIST_TELEPORT }
     };
 
-    if (old_flags == 0)
+    if (old_flags == 0) {
         return;
+    }
 
-    for (const auto &f : flag_list)
-        if (any_bits(old_flags, f.old_flag))
+    for (const auto &f : flag_list) {
+        if (any_bits(old_flags, f.old_flag)) {
             r_ptr->r_resistance_flags.set(f.flag);
+        }
+    }
 }
 
 static void rd_r_ability_flags(monster_race *r_ptr, const MONRACE_IDX r_idx)
@@ -75,10 +78,11 @@ static void rd_r_ability_flags(monster_race *r_ptr, const MONRACE_IDX r_idx)
         uint32_t f4 = rd_u32b();
         uint32_t f5 = rd_u32b();
         uint32_t f6 = rd_u32b();
-        if (h_older_than(1, 5, 0, 3))
+        if (h_older_than(1, 5, 0, 3)) {
             set_old_lore(r_ptr, f4, r_idx);
-        else
+        } else {
             r_flagsr = rd_u32b();
+        }
 
         migrate_bitflag_to_flaggroup(r_ptr->r_ability_flags, f4, sizeof(uint32_t) * 8 * 0);
         migrate_bitflag_to_flaggroup(r_ptr->r_ability_flags, f5, sizeof(uint32_t) * 8 * 1);
@@ -138,17 +142,23 @@ static void rd_r_kind_flags(monster_race *r_ptr)
 
         };
 
-        for (const auto &f : flag1)
-            if (any_bits(r_ptr->r_flags1, f.check_flag))
+        for (const auto &f : flag1) {
+            if (any_bits(r_ptr->r_flags1, f.check_flag)) {
                 r_ptr->r_kind_flags.set(f.flag);
+            }
+        }
 
-        for (const auto &f : flag2)
-            if (any_bits(r_ptr->r_flags2, f.check_flag))
+        for (const auto &f : flag2) {
+            if (any_bits(r_ptr->r_flags2, f.check_flag)) {
                 r_ptr->r_kind_flags.set(f.flag);
+            }
+        }
 
-        for (const auto &f : flag3)
-            if (any_bits(r_ptr->r_flags3, f.check_flag))
+        for (const auto &f : flag3) {
+            if (any_bits(r_ptr->r_flags3, f.check_flag)) {
                 r_ptr->r_kind_flags.set(f.flag);
+            }
+        }
 
         return;
     }
@@ -182,13 +192,17 @@ static void rd_r_behavior_flags(monster_race *r_ptr)
             { RF2_SMART, MonsterBehaviorType::SMART },
         };
 
-        for (const auto &f : flag1)
-            if (any_bits(r_ptr->r_flags1, f.check_flag))
+        for (const auto &f : flag1) {
+            if (any_bits(r_ptr->r_flags1, f.check_flag)) {
                 r_ptr->r_behavior_flags.set(f.flag);
+            }
+        }
 
-        for (const auto &f : flag2)
-            if (any_bits(r_ptr->r_flags2, f.check_flag))
+        for (const auto &f : flag2) {
+            if (any_bits(r_ptr->r_flags2, f.check_flag)) {
                 r_ptr->r_behavior_flags.set(f.flag);
+            }
+        }
 
         return;
     }

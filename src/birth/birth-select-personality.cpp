@@ -13,15 +13,17 @@ static void enumerate_personality_list(PlayerType *player_ptr, concptr *str, cha
 {
     char buf[80];
     for (int n = 0; n < MAX_PERSONALITIES; n++) {
-        if (personality_info[n].sex && (personality_info[n].sex != (player_ptr->psex + 1)))
+        if (personality_info[n].sex && (personality_info[n].sex != (player_ptr->psex + 1))) {
             continue;
+        }
 
         ap_ptr = &personality_info[n];
         *str = ap_ptr->title;
-        if (n < 26)
+        if (n < 26) {
             sym[n] = I2A(n);
-        else
+        } else {
             sym[n] = ('A' + n - 26);
+        }
 
         sprintf(buf, "%c%c%s", I2A(n), p2, *str);
         put_str(buf, 12 + (n / 4), 2 + 18 * (n % 4));
@@ -31,8 +33,9 @@ static void enumerate_personality_list(PlayerType *player_ptr, concptr *str, cha
 static void display_personality_stat(int cs, int *os, concptr *str, char *cur, char *sym)
 {
     char buf[80];
-    if (cs == *os)
+    if (cs == *os) {
         return;
+    }
 
     c_put_str(TERM_WHITE, cur, 12 + (*os / 4), 2 + 18 * (*os % 4));
     put_str("                                   ", 3, 40);
@@ -68,46 +71,54 @@ static void display_personality_stat(int cs, int *os, concptr *str, char *cur, c
 static void interpret_personality_select_key_move(PlayerType *player_ptr, char c, int *cs)
 {
     if (c == '8') {
-        if (*cs >= 4)
+        if (*cs >= 4) {
             *cs -= 4;
+        }
         if ((*cs != MAX_PERSONALITIES) && personality_info[*cs].sex && (personality_info[*cs].sex != (player_ptr->psex + 1))) {
-            if ((*cs - 4) > 0)
+            if ((*cs - 4) > 0) {
                 *cs -= 4;
-            else
+            } else {
                 *cs += 4;
+            }
         }
     }
 
     if (c == '4') {
-        if (*cs > 0)
+        if (*cs > 0) {
             (*cs)--;
+        }
         if ((*cs != MAX_PERSONALITIES) && personality_info[*cs].sex && (personality_info[*cs].sex != (player_ptr->psex + 1))) {
-            if ((*cs - 1) > 0)
+            if ((*cs - 1) > 0) {
                 (*cs)--;
-            else
+            } else {
                 (*cs)++;
+            }
         }
     }
 
     if (c == '6') {
-        if (*cs < MAX_PERSONALITIES)
+        if (*cs < MAX_PERSONALITIES) {
             (*cs)++;
+        }
         if ((*cs != MAX_PERSONALITIES) && personality_info[*cs].sex && (personality_info[*cs].sex != (player_ptr->psex + 1))) {
-            if ((*cs + 1) <= MAX_PERSONALITIES)
+            if ((*cs + 1) <= MAX_PERSONALITIES) {
                 (*cs)++;
-            else
+            } else {
                 (*cs)--;
+            }
         }
     }
 
     if (c == '2') {
-        if ((*cs + 4) <= MAX_PERSONALITIES)
+        if ((*cs + 4) <= MAX_PERSONALITIES) {
             *cs += 4;
+        }
         if ((*cs != MAX_PERSONALITIES) && personality_info[*cs].sex && (personality_info[*cs].sex != (player_ptr->psex + 1))) {
-            if ((*cs + 4) <= MAX_PERSONALITIES)
+            if ((*cs + 4) <= MAX_PERSONALITIES) {
                 *cs += 4;
-            else
+            } else {
                 *cs -= 4;
+            }
         }
     }
 }
@@ -120,19 +131,22 @@ static bool select_personality(PlayerType *player_ptr, int *k, concptr *str, cha
     int os = MAX_PERSONALITIES;
     while (true) {
         display_personality_stat(cs, &os, str, cur, sym);
-        if (*k >= 0)
+        if (*k >= 0) {
             break;
+        }
 
         char buf[80];
         sprintf(
             buf, _("性格を選んで下さい (%c-%c) ('='初期オプション設定): ", "Choose a personality (%c-%c) ('=' for options): "), sym[0], sym[MAX_PERSONALITIES - 1]);
         put_str(buf, 10, 10);
         char c = inkey();
-        if (c == 'Q')
+        if (c == 'Q') {
             birth_quit();
+        }
 
-        if (c == 'S')
+        if (c == 'S') {
             return false;
+        }
 
         if (c == ' ' || c == '\r' || c == '\n') {
             if (cs == MAX_PERSONALITIES) {
@@ -172,8 +186,9 @@ static bool select_personality(PlayerType *player_ptr, int *k, concptr *str, cha
                 cs = *k;
                 continue;
             }
-        } else
+        } else {
             *k = -1;
+        }
 
         birth_help_option(player_ptr, c, BK_PERSONALITY);
     }
@@ -195,16 +210,18 @@ bool get_player_personality(PlayerType *player_ptr)
     char sym[MAX_PERSONALITIES];
     enumerate_personality_list(player_ptr, &str, sym);
     int k = -1;
-    if (!select_personality(player_ptr, &k, &str, sym))
+    if (!select_personality(player_ptr, &k, &str, sym)) {
         return false;
+    }
 
     player_ptr->ppersonality = (player_personality_type)k;
     ap_ptr = &personality_info[player_ptr->ppersonality];
     char tmp[64];
 #ifdef JP
     strcpy(tmp, ap_ptr->title);
-    if (ap_ptr->no == 1)
+    if (ap_ptr->no == 1) {
         strcat(tmp, "の");
+    }
 #else
     strcpy(tmp, ap_ptr->title);
     strcat(tmp, " ");

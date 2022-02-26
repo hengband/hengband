@@ -21,14 +21,17 @@ static int exe_curse_removal(PlayerType *player_ptr, int all)
     int cnt = 0;
     for (int i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
         auto *o_ptr = &player_ptr->inventory_list[i];
-        if (!o_ptr->k_idx)
+        if (!o_ptr->k_idx) {
             continue;
-        if (!o_ptr->is_cursed())
+        }
+        if (!o_ptr->is_cursed()) {
             continue;
-        if (!all && o_ptr->curse_flags.has(CurseTraitType::HEAVY_CURSE))
+        }
+        if (!all && o_ptr->curse_flags.has(CurseTraitType::HEAVY_CURSE)) {
             continue;
+        }
         if (o_ptr->curse_flags.has(CurseTraitType::PERMA_CURSE)) {
-            o_ptr->curse_flags &= {CurseTraitType::CURSED, CurseTraitType::HEAVY_CURSE, CurseTraitType::PERMA_CURSE};
+            o_ptr->curse_flags &= { CurseTraitType::CURSED, CurseTraitType::HEAVY_CURSE, CurseTraitType::PERMA_CURSE };
             continue;
         }
 
@@ -41,8 +44,9 @@ static int exe_curse_removal(PlayerType *player_ptr, int all)
         cnt++;
     }
 
-    if (cnt)
+    if (cnt) {
         msg_print(_("誰かに見守られているような気がする。", "You feel as if someone is watching over you."));
+    }
 
     return cnt;
 }
@@ -53,11 +57,17 @@ static int exe_curse_removal(PlayerType *player_ptr, int all)
  * @param player_ptr プレイヤーへの参照ポインタ
  * @return 解呪に成功した装備数
  */
-int remove_curse(PlayerType *player_ptr) { return exe_curse_removal(player_ptr, false); }
+int remove_curse(PlayerType *player_ptr)
+{
+    return exe_curse_removal(player_ptr, false);
+}
 
 /*!
  * @brief 装備の重い呪い解呪処理 /
  * Remove all curses
  * @return 解呪に成功した装備数
  */
-int remove_all_curse(PlayerType *player_ptr) { return exe_curse_removal(player_ptr, true); }
+int remove_all_curse(PlayerType *player_ptr)
+{
+    return exe_curse_removal(player_ptr, true);
+}

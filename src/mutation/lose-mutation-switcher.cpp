@@ -484,8 +484,9 @@ void switch_lose_mutation(PlayerType *player_ptr, glm_type *glm_ptr)
         glm_ptr->muta_desc = _("動作の正確さがなくなった。", "You move with less assurance.");
         break;
     case 193:
-        if (player_ptr->ppersonality == PERSONALITY_LUCKY)
+        if (player_ptr->ppersonality == PERSONALITY_LUCKY) {
             break;
+        }
 
         glm_ptr->muta_which = PlayerMutationType::GOOD_LUCK;
         glm_ptr->muta_desc = _("白いオーラは輝いて消えた。", "Your white aura shimmers and fades.");

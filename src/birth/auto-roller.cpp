@@ -54,8 +54,9 @@ static int32_t get_autoroller_prob(int *minval)
     }
 
     /* No Chance */
-    if (tot > 86)
+    if (tot > 86) {
         return -999;
+    }
 
     /* bubble sort for speed-up */
     for (i = 0; i < 5; i++) {
@@ -79,16 +80,19 @@ static int32_t get_autoroller_prob(int *minval)
                         for (ii[5] = tval[5]; ii[5] < 18; ii[5]++) {
                             tot = ii[0] + ii[1] + ii[2] + ii[3] + ii[4] + ii[5];
 
-                            if (tot > 86)
+                            if (tot > 86) {
                                 break;
-                            if (tot <= 72)
+                            }
+                            if (tot <= 72) {
                                 continue;
+                            }
 
                             succ += (pp[ii[0]] * pp[ii[1]] * pp[ii[2]] * pp[ii[3]] * pp[ii[4]] * pp[ii[5]]);
 
                             /* If given condition is easy enough, quit calc. to save CPU. */
-                            if (succ > 320670)
+                            if (succ > 320670) {
                                 return -1;
+                            }
                         }
                     }
                 }
@@ -121,9 +125,9 @@ static void decide_initial_stat(PlayerType *player_ptr, int *cval)
     if (is_magic_user) {
         auto st = magic_ptr.spell_stat;
         if (st >= 0 && st < A_MAX) {
-            if (is_attacker)
+            if (is_attacker) {
                 cval[st] = 16;
-            else {
+            } else {
                 cval[st] = 17;
                 num_17++;
             }
@@ -132,22 +136,27 @@ static void decide_initial_stat(PlayerType *player_ptr, int *cval)
 
     if (cval[A_CON] == 0) {
         cval[A_CON] = 17;
-        if (is_magic_user)
+        if (is_magic_user) {
             num_17++;
+        }
     }
 
     if (cval[A_STR] == 0) {
         cval[A_STR] = num_17 == 2 ? 16 : 17;
-        if (is_magic_user && num_17 < 2)
+        if (is_magic_user && num_17 < 2) {
             num_17++;
+        }
     }
 
-    if (cval[A_DEX] == 0)
+    if (cval[A_DEX] == 0) {
         cval[A_DEX] = 17 - std::max(0, num_17 - 1);
+    }
 
-    for (int i = 0; i < A_MAX; i++)
-        if (cval[i] == 0)
+    for (int i = 0; i < A_MAX; i++) {
+        if (cval[i] == 0) {
             cval[i] = 8;
+        }
+    }
 }
 
 /*!
@@ -161,16 +170,18 @@ static void cursor_of_adjusted_stat(char *cur, int *cval, int cs)
     char inp[80], maxv[80];
     auto j = rp_ptr->r_adj[cs] + cp_ptr->c_adj[cs] + ap_ptr->a_adj[cs];
     auto m = adjust_stat(17, j);
-    if (m > 18)
+    if (m > 18) {
         sprintf(maxv, "18/%02d", (m - 18));
-    else
+    } else {
         sprintf(maxv, "%2d", m);
+    }
 
     m = adjust_stat(cval[cs], j);
-    if (m > 18)
+    if (m > 18) {
         sprintf(inp, "18/%02d", (m - 18));
-    else
+    } else {
         sprintf(inp, "%2d", m);
+    }
 
     sprintf(cur, "%6s       %2d   %+3d  %+3d  %+3d  =  %6s  %6s", stat_names[cs], cval[cs], rp_ptr->r_adj[cs], cp_ptr->c_adj[cs], ap_ptr->a_adj[cs], inp, maxv);
 }
@@ -183,12 +194,13 @@ static void display_autoroller_chance(int *cval)
 {
     char buf[320];
     autoroll_chance = get_autoroller_prob(cval);
-    if (autoroll_chance == -999)
+    if (autoroll_chance == -999) {
         sprintf(buf, _("確率: 不可能(合計86超)       ", "Prob: Impossible(>86 tot stats)"));
-    else if (autoroll_chance < 1)
+    } else if (autoroll_chance < 1) {
         sprintf(buf, _("確率: 非常に容易(1/10000以上)", "Prob: Quite Easy(>1/10000)     "));
-    else
+    } else {
         sprintf(buf, _("確率: 約 1/%8d00             ", "Prob: ~ 1/%8d00                "), autoroll_chance);
+    }
     put_str(buf, 23, 25);
 }
 
@@ -219,16 +231,17 @@ bool get_stat_limits(PlayerType *player_ptr)
     int os = A_MAX;
     while (true) {
         if (cs != os) {
-            if (os == 7)
+            if (os == 7) {
                 display_autoroller_chance(cval);
-            else if (os == A_MAX)
+            } else if (os == A_MAX) {
                 c_put_str(TERM_WHITE, _("決定する", "Accept"), 21, 35);
-            else if (os < A_MAX)
+            } else if (os < A_MAX) {
                 c_put_str(TERM_WHITE, cur, 14 + os, 10);
+            }
 
-            if (cs == A_MAX)
+            if (cs == A_MAX) {
                 c_put_str(TERM_YELLOW, _("決定する", "Accept"), 21, 35);
-            else {
+            } else {
                 cursor_of_adjusted_stat(cur, cval, cs);
                 c_put_str(TERM_YELLOW, cur, 14 + cs, 10);
             }
@@ -248,20 +261,23 @@ bool get_stat_limits(PlayerType *player_ptr)
         case ' ':
         case '\r':
         case '\n':
-            if (cs == A_MAX)
+            if (cs == A_MAX) {
                 break;
+            }
             cs++;
             c = '2';
             break;
         case '8':
         case 'k':
-            if (cs > 0)
+            if (cs > 0) {
                 cs--;
+            }
             break;
         case '2':
         case 'j':
-            if (cs < A_MAX)
+            if (cs < A_MAX) {
                 cs++;
+            }
             break;
         case '4':
         case 'h':
@@ -272,8 +288,9 @@ bool get_stat_limits(PlayerType *player_ptr)
                 } else if (cval[cs] > 3) {
                     cval[cs]--;
                     os = 7;
-                } else
+                } else {
                     return false;
+                }
             }
 
             break;
@@ -286,8 +303,9 @@ bool get_stat_limits(PlayerType *player_ptr)
                 } else if (cval[cs] < 17) {
                     cval[cs]++;
                     os = 7;
-                } else
+                } else {
                     return false;
+                }
             }
 
             break;
@@ -318,12 +336,14 @@ bool get_stat_limits(PlayerType *player_ptr)
             break;
         }
 
-        if (c == ESCAPE || ((c == ' ' || c == '\r' || c == '\n') && cs == 6 && autoroll_chance != -999))
+        if (c == ESCAPE || ((c == ' ' || c == '\r' || c == '\n') && cs == 6 && autoroll_chance != -999)) {
             break;
+        }
     }
 
-    for (int i = 0; i < A_MAX; i++)
+    for (int i = 0; i < A_MAX; i++) {
         stat_limit[i] = (int16_t)cval[i];
+    }
 
     return true;
 }
@@ -379,28 +399,32 @@ bool get_chara_limits(PlayerType *player_ptr, chara_limit_type *chara_limit_ptr)
             break;
 
         case 2: /* Minimum height */
-            if (player_ptr->psex == SEX_MALE)
+            if (player_ptr->psex == SEX_MALE) {
                 m = rp_ptr->m_b_ht - rp_ptr->m_m_ht * 4 + 1;
-            else
+            } else {
                 m = rp_ptr->f_b_ht - rp_ptr->f_m_ht * 4 + 1;
+            }
             break;
         case 3: /* Maximum height */
-            if (player_ptr->psex == SEX_MALE)
+            if (player_ptr->psex == SEX_MALE) {
                 m = rp_ptr->m_b_ht + rp_ptr->m_m_ht * 4 - 1;
-            else
+            } else {
                 m = rp_ptr->f_b_ht + rp_ptr->f_m_ht * 4 - 1;
+            }
             break;
         case 4: /* Minimum weight */
-            if (player_ptr->psex == SEX_MALE)
+            if (player_ptr->psex == SEX_MALE) {
                 m = (rp_ptr->m_b_wt * min_percent / 100) - (rp_ptr->m_m_wt * min_percent / 75) + 1;
-            else
+            } else {
                 m = (rp_ptr->f_b_wt * min_percent / 100) - (rp_ptr->f_m_wt * min_percent / 75) + 1;
+            }
             break;
         case 5: /* Maximum weight */
-            if (player_ptr->psex == SEX_MALE)
+            if (player_ptr->psex == SEX_MALE) {
                 m = (rp_ptr->m_b_wt * max_percent / 100) + (rp_ptr->m_m_wt * max_percent / 75) - 1;
-            else
+            } else {
                 m = (rp_ptr->f_b_wt * max_percent / 100) + (rp_ptr->f_m_wt * max_percent / 75) - 1;
+            }
             break;
         case 6: /* Minimum social class */
             m = 1;
@@ -431,10 +455,11 @@ bool get_chara_limits(PlayerType *player_ptr, chara_limit_type *chara_limit_ptr)
     while (true) {
         if (cs != os) {
             const char accept[] = _("決定する", "Accept");
-            if (os == MAXITEMS)
+            if (os == MAXITEMS) {
                 c_put_str(TERM_WHITE, accept, 19, 35);
-            else
+            } else {
                 c_put_str(TERM_WHITE, cur, 14 + os / 2, 45 + 8 * (os % 2));
+            }
 
             if (cs == MAXITEMS) {
                 c_put_str(TERM_YELLOW, accept, 19, 35);
@@ -458,32 +483,38 @@ bool get_chara_limits(PlayerType *player_ptr, chara_limit_type *chara_limit_ptr)
         case ' ':
         case '\r':
         case '\n':
-            if (cs == MAXITEMS)
+            if (cs == MAXITEMS) {
                 break;
+            }
             cs++;
             c = '6';
             break;
         case '8':
         case 'k':
-            if (cs - 2 >= 0)
+            if (cs - 2 >= 0) {
                 cs -= 2;
+            }
             break;
         case '2':
         case 'j':
-            if (cs < MAXITEMS)
+            if (cs < MAXITEMS) {
                 cs += 2;
-            if (cs > MAXITEMS)
+            }
+            if (cs > MAXITEMS) {
                 cs = MAXITEMS;
+            }
             break;
         case '4':
         case 'h':
-            if (cs > 0)
+            if (cs > 0) {
                 cs--;
+            }
             break;
         case '6':
         case 'l':
-            if (cs < MAXITEMS)
+            if (cs < MAXITEMS) {
                 cs++;
+            }
             break;
         case '-':
         case '<':
@@ -568,8 +599,9 @@ bool get_chara_limits(PlayerType *player_ptr, chara_limit_type *chara_limit_ptr)
             break;
         }
 
-        if (c == ESCAPE || ((c == ' ' || c == '\r' || c == '\n') && cs == MAXITEMS))
+        if (c == ESCAPE || ((c == ' ' || c == '\r' || c == '\n') && cs == MAXITEMS)) {
             break;
+        }
     }
 
     chara_limit_ptr->agemin = (int16_t)cval[0];

@@ -23,23 +23,28 @@ void place_gold(PlayerType *player_ptr, POSITION y, POSITION x)
 {
     auto *floor_ptr = player_ptr->current_floor_ptr;
     auto *g_ptr = &floor_ptr->grid_array[y][x];
-    if (!in_bounds(floor_ptr, y, x))
+    if (!in_bounds(floor_ptr, y, x)) {
         return;
-    if (!cave_drop_bold(floor_ptr, y, x))
+    }
+    if (!cave_drop_bold(floor_ptr, y, x)) {
         return;
-    if (!g_ptr->o_idx_list.empty())
+    }
+    if (!g_ptr->o_idx_list.empty()) {
         return;
+    }
 
     ObjectType forge;
     ObjectType *q_ptr;
     q_ptr = &forge;
     q_ptr->wipe();
-    if (!make_gold(player_ptr, q_ptr))
+    if (!make_gold(player_ptr, q_ptr)) {
         return;
+    }
 
     OBJECT_IDX o_idx = o_pop(floor_ptr);
-    if (o_idx == 0)
+    if (o_idx == 0) {
         return;
+    }
 
     ObjectType *o_ptr;
     o_ptr = &floor_ptr->o_list[o_idx];
@@ -72,13 +77,15 @@ void place_object(PlayerType *player_ptr, POSITION y, POSITION x, BIT_FLAGS mode
     auto *g_ptr = &floor_ptr->grid_array[y][x];
     ObjectType forge;
     ObjectType *q_ptr;
-    if (!in_bounds(floor_ptr, y, x) || !cave_drop_bold(floor_ptr, y, x) || !g_ptr->o_idx_list.empty())
+    if (!in_bounds(floor_ptr, y, x) || !cave_drop_bold(floor_ptr, y, x) || !g_ptr->o_idx_list.empty()) {
         return;
+    }
 
     q_ptr = &forge;
     q_ptr->wipe();
-    if (!make_object(player_ptr, q_ptr, mode))
+    if (!make_object(player_ptr, q_ptr, mode)) {
         return;
+    }
 
     OBJECT_IDX o_idx = o_pop(floor_ptr);
     if (o_idx == 0) {

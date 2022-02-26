@@ -26,10 +26,11 @@ void effect_player_drain_mana(PlayerType *player_ptr, EffectPlayerType *ep_ptr)
         return;
     }
 
-    if (ep_ptr->who > 0)
+    if (ep_ptr->who > 0) {
         msg_format(_("%^sに精神エネルギーを吸い取られてしまった！", "%^s draws psychic energy from you!"), ep_ptr->m_name);
-    else
+    } else {
         msg_print(_("精神エネルギーを吸い取られてしまった！", "Your psychic energy is drained!"));
+    }
 
     if (ep_ptr->dam >= player_ptr->csp) {
         ep_ptr->dam = player_ptr->csp;
@@ -48,13 +49,16 @@ void effect_player_drain_mana(PlayerType *player_ptr, EffectPlayerType *ep_ptr)
     }
 
     ep_ptr->m_ptr->hp += ep_ptr->dam;
-    if (ep_ptr->m_ptr->hp > ep_ptr->m_ptr->maxhp)
+    if (ep_ptr->m_ptr->hp > ep_ptr->m_ptr->maxhp) {
         ep_ptr->m_ptr->hp = ep_ptr->m_ptr->maxhp;
+    }
 
-    if (player_ptr->health_who == ep_ptr->who)
+    if (player_ptr->health_who == ep_ptr->who) {
         player_ptr->redraw |= (PR_HEALTH);
-    if (player_ptr->riding == ep_ptr->who)
+    }
+    if (player_ptr->riding == ep_ptr->who) {
         player_ptr->redraw |= (PR_UHEALTH);
+    }
 
     if (ep_ptr->m_ptr->ml) {
         msg_format(_("%^sは気分が良さそうだ。", "%^s appears healthier."), ep_ptr->m_name);
@@ -114,8 +118,9 @@ void effect_player_brain_smash(PlayerType *player_ptr, EffectPlayerType *ep_ptr)
     }
 
     ep_ptr->get_damage = take_hit(player_ptr, DAMAGE_ATTACK, ep_ptr->dam, ep_ptr->killer);
-    if (check_multishadow(player_ptr))
+    if (check_multishadow(player_ptr)) {
         return;
+    }
 
     BadStatusSetter bss(player_ptr);
     if (!has_resist_blind(player_ptr)) {
@@ -132,10 +137,12 @@ void effect_player_brain_smash(PlayerType *player_ptr, EffectPlayerType *ep_ptr)
 
     (void)bss.mod_slowness(randint0(4) + 4, false);
 
-    while (randint0(100 + ep_ptr->rlev / 2) > (std::max<short>(5, player_ptr->skill_sav)))
+    while (randint0(100 + ep_ptr->rlev / 2) > (std::max<short>(5, player_ptr->skill_sav))) {
         (void)do_dec_stat(player_ptr, A_INT);
-    while (randint0(100 + ep_ptr->rlev / 2) > (std::max<short>(5, player_ptr->skill_sav)))
+    }
+    while (randint0(100 + ep_ptr->rlev / 2) > (std::max<short>(5, player_ptr->skill_sav))) {
         (void)do_dec_stat(player_ptr, A_WIS);
+    }
 
     if (!has_resist_chaos(player_ptr)) {
         (void)bss.mod_hallucination(randint0(250) + 150);

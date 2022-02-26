@@ -128,24 +128,27 @@ MonsterSpellResult spell_RF4_DISPEL(MONSTER_IDX m_idx, PlayerType *player_ptr, M
 
     if (target_type == MONSTER_TO_PLAYER) {
         dispel_player(player_ptr);
-        if (player_ptr->riding)
+        if (player_ptr->riding) {
             dispel_monster_status(player_ptr, player_ptr->riding);
+        }
 
-        if (is_echizen(player_ptr))
+        if (is_echizen(player_ptr)) {
             msg_print(_("やりやがったな！", ""));
-        else if (is_chargeman(player_ptr)) {
-            if (randint0(2) == 0)
+        } else if (is_chargeman(player_ptr)) {
+            if (randint0(2) == 0) {
                 msg_print(_("ジュラル星人め！", ""));
-            else
+            } else {
                 msg_print(_("弱い者いじめは止めるんだ！", ""));
+            }
         }
 
         return res;
     }
 
     if (target_type == MONSTER_TO_MONSTER) {
-        if (t_idx == player_ptr->riding)
+        if (t_idx == player_ptr->riding) {
             dispel_player(player_ptr);
+        }
 
         dispel_monster_status(player_ptr, t_idx);
     }

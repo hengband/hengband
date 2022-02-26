@@ -28,32 +28,39 @@ static int travel_flow_cost(PlayerType *player_ptr, POSITION y, POSITION x)
     int cost = 1;
     auto *g_ptr = &player_ptr->current_floor_ptr->grid_array[y][x];
     auto *f_ptr = &f_info[g_ptr->feat];
-    if (f_ptr->flags.has(FloorFeatureType::AVOID_RUN))
+    if (f_ptr->flags.has(FloorFeatureType::AVOID_RUN)) {
         cost += 1;
+    }
 
-    if (f_ptr->flags.has_all_of({FloorFeatureType::WATER, FloorFeatureType::DEEP}) && !player_ptr->levitation)
+    if (f_ptr->flags.has_all_of({ FloorFeatureType::WATER, FloorFeatureType::DEEP }) && !player_ptr->levitation) {
         cost += 5;
+    }
 
     if (f_ptr->flags.has(FloorFeatureType::LAVA)) {
         int lava = 2;
-        if (!has_resist_fire(player_ptr))
+        if (!has_resist_fire(player_ptr)) {
             lava *= 2;
+        }
 
-        if (!player_ptr->levitation)
+        if (!player_ptr->levitation) {
             lava *= 2;
+        }
 
-        if (f_ptr->flags.has(FloorFeatureType::DEEP))
+        if (f_ptr->flags.has(FloorFeatureType::DEEP)) {
             lava *= 2;
+        }
 
         cost += lava;
     }
 
     if (g_ptr->is_mark()) {
-        if (f_ptr->flags.has(FloorFeatureType::DOOR))
+        if (f_ptr->flags.has(FloorFeatureType::DOOR)) {
             cost += 1;
+        }
 
-        if (f_ptr->flags.has(FloorFeatureType::TRAP))
+        if (f_ptr->flags.has(FloorFeatureType::TRAP)) {
             cost += 10;
+        }
     }
 
     return cost;
@@ -72,37 +79,43 @@ static void travel_flow_aux(PlayerType *player_ptr, POSITION y, POSITION x, int 
     auto *floor_ptr = player_ptr->current_floor_ptr;
     auto *g_ptr = &floor_ptr->grid_array[y][x];
     auto *f_ptr = &f_info[g_ptr->feat];
-    if (!in_bounds(floor_ptr, y, x))
+    if (!in_bounds(floor_ptr, y, x)) {
         return;
+    }
 
-    if (floor_ptr->dun_level > 0 && !(g_ptr->info & CAVE_KNOWN))
+    if (floor_ptr->dun_level > 0 && !(g_ptr->info & CAVE_KNOWN)) {
         return;
+    }
 
     int add_cost = 1;
     int from_wall = (n / TRAVEL_UNABLE);
-    if (f_ptr->flags.has(FloorFeatureType::WALL) || f_ptr->flags.has(FloorFeatureType::CAN_DIG) || (f_ptr->flags.has(FloorFeatureType::DOOR) && floor_ptr->grid_array[y][x].mimic)
-        || (f_ptr->flags.has_not(FloorFeatureType::MOVE) && f_ptr->flags.has(FloorFeatureType::CAN_FLY) && !player_ptr->levitation)) {
-        if (!wall || !from_wall)
+    if (f_ptr->flags.has(FloorFeatureType::WALL) || f_ptr->flags.has(FloorFeatureType::CAN_DIG) || (f_ptr->flags.has(FloorFeatureType::DOOR) && floor_ptr->grid_array[y][x].mimic) || (f_ptr->flags.has_not(FloorFeatureType::MOVE) && f_ptr->flags.has(FloorFeatureType::CAN_FLY) && !player_ptr->levitation)) {
+        if (!wall || !from_wall) {
             return;
+        }
 
         add_cost += TRAVEL_UNABLE;
-    } else
+    } else {
         add_cost = travel_flow_cost(player_ptr, y, x);
+    }
 
     int base_cost = (n % TRAVEL_UNABLE);
     int cost = base_cost + add_cost;
-    if (travel.cost[y][x] <= cost)
+    if (travel.cost[y][x] <= cost) {
         return;
+    }
 
     travel.cost[y][x] = cost;
     int old_head = flow_head;
     temp2_y[flow_head] = y;
     temp2_x[flow_head] = x;
-    if (++flow_head == MAX_SHORT)
+    if (++flow_head == MAX_SHORT) {
         flow_head = 0;
+    }
 
-    if (flow_head == flow_tail)
+    if (flow_head == flow_tail) {
         flow_head = old_head;
+    }
 }
 
 /*!
@@ -116,19 +129,22 @@ static void travel_flow(PlayerType *player_ptr, POSITION ty, POSITION tx)
     flow_head = flow_tail = 0;
     bool wall = false;
     auto *f_ptr = &f_info[player_ptr->current_floor_ptr->grid_array[player_ptr->y][player_ptr->x].feat];
-    if (f_ptr->flags.has_not(FloorFeatureType::MOVE))
+    if (f_ptr->flags.has_not(FloorFeatureType::MOVE)) {
         wall = true;
+    }
 
     travel_flow_aux(player_ptr, ty, tx, 0, wall);
     POSITION x, y;
     while (flow_head != flow_tail) {
         y = temp2_y[flow_tail];
         x = temp2_x[flow_tail];
-        if (++flow_tail == MAX_SHORT)
+        if (++flow_tail == MAX_SHORT) {
             flow_tail = 0;
+        }
 
-        for (DIRECTION d = 0; d < 8; d++)
+        for (DIRECTION d = 0; d < 8; d++) {
             travel_flow_aux(player_ptr, y + ddy_ddd[d], x + ddx_ddd[d], travel.cost[y][x], wall);
+        }
     }
 
     flow_head = flow_tail = 0;
@@ -140,12 +156,12 @@ static void travel_flow(PlayerType *player_ptr, POSITION ty, POSITION tx)
 void do_cmd_travel(PlayerType *player_ptr)
 {
     POSITION x, y;
-    if ((travel.x != 0) && (travel.y != 0) && (travel.x != player_ptr->x) && (travel.y != player_ptr->y)
-        && get_check(_("トラベルを継続しますか？", "Do you continue to travel? "))) {
+    if ((travel.x != 0) && (travel.y != 0) && (travel.x != player_ptr->x) && (travel.y != player_ptr->y) && get_check(_("トラベルを継続しますか？", "Do you continue to travel? "))) {
         y = travel.y;
         x = travel.x;
-    } else if (!tgt_pt(player_ptr, &x, &y))
+    } else if (!tgt_pt(player_ptr, &x, &y)) {
         return;
+    }
 
     if ((x == player_ptr->x) && (y == player_ptr->y)) {
         msg_print(_("すでにそこにいます！", "You are already there!!"));
@@ -155,8 +171,7 @@ void do_cmd_travel(PlayerType *player_ptr)
     auto *floor_ptr = player_ptr->current_floor_ptr;
     feature_type *f_ptr;
     f_ptr = &f_info[floor_ptr->grid_array[y][x].feat];
-    if ((floor_ptr->grid_array[y][x].info & CAVE_MARK)
-        && (f_ptr->flags.has(FloorFeatureType::WALL) || f_ptr->flags.has(FloorFeatureType::CAN_DIG) || (f_ptr->flags.has(FloorFeatureType::DOOR) && floor_ptr->grid_array[y][x].mimic))) {
+    if ((floor_ptr->grid_array[y][x].info & CAVE_MARK) && (f_ptr->flags.has(FloorFeatureType::WALL) || f_ptr->flags.has(FloorFeatureType::CAN_DIG) || (f_ptr->flags.has(FloorFeatureType::DOOR) && floor_ptr->grid_array[y][x].mimic))) {
         msg_print(_("そこには行くことができません！", "You cannot travel there!"));
         return;
     }
@@ -171,7 +186,9 @@ void do_cmd_travel(PlayerType *player_ptr)
     POSITION dy = abs(player_ptr->y - y);
     POSITION sx = ((x == player_ptr->x) || (dx < dy)) ? 0 : ((x > player_ptr->x) ? 1 : -1);
     POSITION sy = ((y == player_ptr->y) || (dy < dx)) ? 0 : ((y > player_ptr->y) ? 1 : -1);
-    for (int i = 1; i <= 9; i++)
-        if ((sx == ddx[i]) && (sy == ddy[i]))
+    for (int i = 1; i <= 9; i++) {
+        if ((sx == ddx[i]) && (sy == ddy[i])) {
             travel.dir = i;
+        }
+    }
 }

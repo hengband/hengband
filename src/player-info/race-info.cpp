@@ -25,8 +25,9 @@ char get_summon_symbol_from_player(PlayerType *player_ptr)
     auto l = strlen(mmc_ptr->symbol);
     auto mul = 1;
     for (size_t i = 0; i < l; i++) {
-        if (one_in_(mul))
+        if (one_in_(mul)) {
             symbol = mmc_ptr->symbol[i];
+        }
         mul *= 13;
     }
     return symbol;

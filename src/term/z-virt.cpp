@@ -21,8 +21,9 @@
  */
 concptr string_make(const concptr str)
 {
-    if (!str)
+    if (!str) {
         return nullptr;
+    }
 
     const auto bufsize = std::strlen(str) + 1;
     auto *const buf = new char[bufsize];
@@ -39,8 +40,9 @@ concptr string_make(const concptr str)
  */
 errr string_free(const concptr str)
 {
-    if (!str)
+    if (!str) {
         return 0;
+    }
 
     delete[] str;
 

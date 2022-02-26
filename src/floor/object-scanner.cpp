@@ -32,25 +32,30 @@
 ITEM_NUMBER scan_floor_items(PlayerType *player_ptr, OBJECT_IDX *items, POSITION y, POSITION x, BIT_FLAGS mode, const ItemTester &item_tester)
 {
     auto *floor_ptr = player_ptr->current_floor_ptr;
-    if (!in_bounds(floor_ptr, y, x))
+    if (!in_bounds(floor_ptr, y, x)) {
         return 0;
+    }
 
     ITEM_NUMBER num = 0;
     for (const auto this_o_idx : floor_ptr->grid_array[y][x].o_idx_list) {
         ObjectType *o_ptr;
         o_ptr = &floor_ptr->o_list[this_o_idx];
-        if ((mode & SCAN_FLOOR_ITEM_TESTER) && !item_tester.okay(o_ptr))
+        if ((mode & SCAN_FLOOR_ITEM_TESTER) && !item_tester.okay(o_ptr)) {
             continue;
+        }
 
-        if ((mode & SCAN_FLOOR_ONLY_MARKED) && !(o_ptr->marked & OM_FOUND))
+        if ((mode & SCAN_FLOOR_ONLY_MARKED) && !(o_ptr->marked & OM_FOUND)) {
             continue;
+        }
 
-        if (num < 23)
+        if (num < 23) {
             items[num] = this_o_idx;
+        }
 
         num++;
-        if (mode & SCAN_FLOOR_AT_MOST_ONE)
+        if (mode & SCAN_FLOOR_AT_MOST_ONE) {
             break;
+        }
     }
 
     return num;
@@ -72,11 +77,13 @@ static void prepare_label_string_floor(floor_type *floor_ptr, char *label, FLOOR
     for (int i = 0; i < 52; i++) {
         COMMAND_CODE index;
         auto c = alphabet_chars[i];
-        if (!get_tag_floor(floor_ptr, &index, c, floor_list, floor_num))
+        if (!get_tag_floor(floor_ptr, &index, c, floor_list, floor_num)) {
             continue;
+        }
 
-        if (label[i] == c)
+        if (label[i] == c) {
             label[i] = ' ';
+        }
 
         label[index] = c;
     }
@@ -118,20 +125,24 @@ COMMAND_CODE show_floor_items(PlayerType *player_ptr, int target_item, POSITION 
         out_color[k] = tval_to_attr[enum2i(o_ptr->tval) & 0x7F];
         strcpy(out_desc[k], o_name);
         l = strlen(out_desc[k]) + 5;
-        if (show_weights)
+        if (show_weights) {
             l += 9;
+        }
 
-        if (o_ptr->tval != ItemKindType::GOLD)
+        if (o_ptr->tval != ItemKindType::GOLD) {
             dont_need_to_show_weights = false;
+        }
 
-        if (l > len)
+        if (l > len) {
             len = l;
+        }
 
         k++;
     }
 
-    if (show_weights && dont_need_to_show_weights)
+    if (show_weights && dont_need_to_show_weights) {
         len -= 9;
+    }
 
     *min_width = len;
     int col = (len > wid - 4) ? 0 : (wid - len - 1);
@@ -144,8 +155,9 @@ COMMAND_CODE show_floor_items(PlayerType *player_ptr, int target_item, POSITION 
             if (j == (target_item - 1)) {
                 strcpy(tmp_val, _("》", "> "));
                 target_item_label = m;
-            } else
+            } else {
                 strcpy(tmp_val, "   ");
+            }
         } else {
             sprintf(tmp_val, "%c)", floor_label[j]);
         }
@@ -159,8 +171,9 @@ COMMAND_CODE show_floor_items(PlayerType *player_ptr, int target_item, POSITION 
         }
     }
 
-    if (j && (j < 23))
+    if (j && (j < 23)) {
         prt("", j + 1, col ? col - 2 : col);
+    }
 
     return target_item_label;
 }

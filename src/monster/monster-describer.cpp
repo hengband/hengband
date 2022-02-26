@@ -29,8 +29,9 @@ void monster_desc(PlayerType *player_ptr, char *desc, monster_type *m_ptr, BIT_F
     bool named = false;
     if (player_ptr->hallucinated && !(mode & MD_IGNORE_HALLU)) {
         if (one_in_(2)) {
-            if (!get_rnd_line(_("silly_j.txt", "silly.txt"), m_ptr->r_idx, silly_name))
+            if (!get_rnd_line(_("silly_j.txt", "silly.txt"), m_ptr->r_idx, silly_name)) {
                 named = true;
+            }
         }
 
         if (!named) {
@@ -53,13 +54,15 @@ void monster_desc(PlayerType *player_ptr, char *desc, monster_type *m_ptr, BIT_F
     auto *floor_ptr = player_ptr->current_floor_ptr;
     if (!seen || pron) {
         int kind = 0x00;
-        if (r_ptr->flags1 & (RF1_FEMALE))
+        if (r_ptr->flags1 & (RF1_FEMALE)) {
             kind = 0x20;
-        else if (r_ptr->flags1 & (RF1_MALE))
+        } else if (r_ptr->flags1 & (RF1_MALE)) {
             kind = 0x10;
+        }
 
-        if (!m_ptr || !pron)
+        if (!m_ptr || !pron) {
             kind = 0x00;
+        }
 
         concptr res = _("何か", "it");
         switch (kind + (mode & (MD_INDEF_HIDDEN | MD_POSSESSIVE | MD_OBJECTIVE))) {
@@ -144,12 +147,13 @@ void monster_desc(PlayerType *player_ptr, char *desc, monster_type *m_ptr, BIT_F
     /* Handle visible monsters, "reflexive" request */
     if ((mode & (MD_POSSESSIVE | MD_OBJECTIVE)) == (MD_POSSESSIVE | MD_OBJECTIVE)) {
         /* The monster is visible, so use its gender */
-        if (r_ptr->flags1 & (RF1_FEMALE))
+        if (r_ptr->flags1 & (RF1_FEMALE)) {
             strcpy(desc, _("彼女自身", "herself"));
-        else if (r_ptr->flags1 & (RF1_MALE))
+        } else if (r_ptr->flags1 & (RF1_MALE)) {
             strcpy(desc, _("彼自身", "himself"));
-        else
+        } else {
             strcpy(desc, _("それ自身", "itself"));
+        }
         return;
     }
 
@@ -161,13 +165,15 @@ void monster_desc(PlayerType *player_ptr, char *desc, monster_type *m_ptr, BIT_F
         char buf[128];
         strcpy(buf, name);
         t = buf;
-        while (strncmp(t, "』", 2) && *t)
+        while (strncmp(t, "』", 2) && *t) {
             t++;
+        }
         if (*t) {
             *t = '\0';
             (void)sprintf(desc, "%s？』", buf);
-        } else
+        } else {
             (void)sprintf(desc, "%s？", name);
+        }
 #else
         (void)sprintf(desc, "%s?", name);
 #endif
@@ -179,13 +185,15 @@ void monster_desc(PlayerType *player_ptr, char *desc, monster_type *m_ptr, BIT_F
                 char buf[128];
                 strcpy(buf, name);
                 t = buf;
-                while (strncmp(t, "』", 2) && *t)
+                while (strncmp(t, "』", 2) && *t) {
                     t++;
+                }
                 if (*t) {
                     *t = '\0';
                     (void)sprintf(desc, "%s？』", buf);
-                } else
+                } else {
                     (void)sprintf(desc, "%s？", name);
+                }
 #else
                 (void)sprintf(desc, "%s?", name);
 #endif
@@ -202,10 +210,11 @@ void monster_desc(PlayerType *player_ptr, char *desc, monster_type *m_ptr, BIT_F
 #endif
             (void)strcat(desc, name);
         } else {
-            if (is_pet(m_ptr))
+            if (is_pet(m_ptr)) {
                 (void)strcpy(desc, _("あなたの", "your "));
-            else
+            } else {
                 (void)strcpy(desc, _("", "the "));
+            }
 
             (void)strcat(desc, name);
         }
@@ -269,251 +278,265 @@ void message_pain(PlayerType *player_ptr, MONSTER_IDX m_idx, int dam)
     PERCENTAGE percentage = tmp;
 
     if (angband_strchr(",ejmvwQ", r_ptr->d_char)) {
-        if (percentage > 95)
+        if (percentage > 95) {
             msg_format(_("%^sはほとんど気にとめていない。", "%^s barely notices."), m_name);
-        else if (percentage > 75)
+        } else if (percentage > 75) {
             msg_format(_("%^sはしり込みした。", "%^s flinches."), m_name);
-        else if (percentage > 50)
+        } else if (percentage > 50) {
             msg_format(_("%^sは縮こまった。", "%^s squelches."), m_name);
-        else if (percentage > 35)
+        } else if (percentage > 35) {
             msg_format(_("%^sは痛みに震えた。", "%^s quivers in pain."), m_name);
-        else if (percentage > 20)
+        } else if (percentage > 20) {
             msg_format(_("%^sは身もだえした。", "%^s writhes about."), m_name);
-        else if (percentage > 10)
+        } else if (percentage > 10) {
             msg_format(_("%^sは苦痛で身もだえした。", "%^s writhes in agony."), m_name);
-        else
+        } else {
             msg_format(_("%^sはぐにゃぐにゃと痙攣した。", "%^s jerks limply."), m_name);
+        }
         return;
     }
 
     if (angband_strchr("l", r_ptr->d_char)) {
-        if (percentage > 95)
+        if (percentage > 95) {
             msg_format(_("%^sはほとんど気にとめていない。", "%^s barely notices."), m_name);
-        else if (percentage > 75)
+        } else if (percentage > 75) {
             msg_format(_("%^sはしり込みした。", "%^s flinches."), m_name);
-        else if (percentage > 50)
+        } else if (percentage > 50) {
             msg_format(_("%^sは躊躇した。", "%^s hesitates."), m_name);
-        else if (percentage > 35)
+        } else if (percentage > 35) {
             msg_format(_("%^sは痛みに震えた。", "%^s quivers in pain."), m_name);
-        else if (percentage > 20)
+        } else if (percentage > 20) {
             msg_format(_("%^sは身もだえした。", "%^s writhes about."), m_name);
-        else if (percentage > 10)
+        } else if (percentage > 10) {
             msg_format(_("%^sは苦痛で身もだえした。", "%^s writhes in agony."), m_name);
-        else
+        } else {
             msg_format(_("%^sはぐにゃぐにゃと痙攣した。", "%^s jerks limply."), m_name);
+        }
         return;
     }
 
     if (angband_strchr("g#+<>", r_ptr->d_char)) {
-        if (percentage > 95)
+        if (percentage > 95) {
             msg_format(_("%sは攻撃を気にとめていない。", "%^s ignores the attack."), m_name);
-        else if (percentage > 75)
+        } else if (percentage > 75) {
             msg_format(_("%sは攻撃に肩をすくめた。", "%^s shrugs off the attack."), m_name);
-        else if (percentage > 50)
+        } else if (percentage > 50) {
             msg_format(_("%^sは雷鳴のように吠えた。", "%^s roars thunderously."), m_name);
-        else if (percentage > 35)
+        } else if (percentage > 35) {
             msg_format(_("%^sは苦しげに吠えた。", "%^s rumbles."), m_name);
-        else if (percentage > 20)
+        } else if (percentage > 20) {
             msg_format(_("%^sはうめいた。", "%^s grunts."), m_name);
-        else if (percentage > 10)
+        } else if (percentage > 10) {
             msg_format(_("%^sは躊躇した。", "%^s hesitates."), m_name);
-        else
+        } else {
             msg_format(_("%^sはくしゃくしゃになった。", "%^s crumples."), m_name);
+        }
         return;
     }
 
     if (angband_strchr("JMR", r_ptr->d_char) || !isalpha(r_ptr->d_char)) {
-        if (percentage > 95)
+        if (percentage > 95) {
             msg_format(_("%^sはほとんど気にとめていない。", "%^s barely notices."), m_name);
-        else if (percentage > 75)
+        } else if (percentage > 75) {
             msg_format(_("%^sはシーッと鳴いた。", "%^s hisses."), m_name);
-        else if (percentage > 50)
+        } else if (percentage > 50) {
             msg_format(_("%^sは怒って頭を上げた。", "%^s rears up in anger."), m_name);
-        else if (percentage > 35)
+        } else if (percentage > 35) {
             msg_format(_("%^sは猛然と威嚇した。", "%^s hisses furiously."), m_name);
-        else if (percentage > 20)
+        } else if (percentage > 20) {
             msg_format(_("%^sは身もだえした。", "%^s writhes about."), m_name);
-        else if (percentage > 10)
+        } else if (percentage > 10) {
             msg_format(_("%^sは苦痛で身もだえした。", "%^s writhes in agony."), m_name);
-        else
+        } else {
             msg_format(_("%^sはぐにゃぐにゃと痙攣した。", "%^s jerks limply."), m_name);
+        }
         return;
     }
 
     if (angband_strchr("f", r_ptr->d_char)) {
-        if (percentage > 95)
+        if (percentage > 95) {
             msg_format(_("%sは攻撃に肩をすくめた。", "%^s shrugs off the attack."), m_name);
-        else if (percentage > 75)
+        } else if (percentage > 75) {
             msg_format(_("%^sは吠えた。", "%^s roars."), m_name);
-        else if (percentage > 50)
+        } else if (percentage > 50) {
             msg_format(_("%^sは怒って吠えた。", "%^s growls angrily."), m_name);
-        else if (percentage > 35)
+        } else if (percentage > 35) {
             msg_format(_("%^sは痛みでシーッと鳴いた。", "%^s hisses with pain."), m_name);
-        else if (percentage > 20)
+        } else if (percentage > 20) {
             msg_format(_("%^sは痛みで弱々しく鳴いた。", "%^s mewls in pain."), m_name);
-        else if (percentage > 10)
+        } else if (percentage > 10) {
             msg_format(_("%^sは苦痛にうめいた。", "%^s hisses in agony."), m_name);
-        else
+        } else {
             msg_format(_("%sは哀れな鳴き声を出した。", "%^s mewls pitifully."), m_name);
+        }
         return;
     }
 
     if (angband_strchr("acFIKS", r_ptr->d_char)) {
-        if (percentage > 95)
+        if (percentage > 95) {
             msg_format(_("%sは攻撃を気にとめていない。", "%^s ignores the attack."), m_name);
-        else if (percentage > 75)
+        } else if (percentage > 75) {
             msg_format(_("%^sはキーキー鳴いた。", "%^s chitters."), m_name);
-        else if (percentage > 50)
+        } else if (percentage > 50) {
             msg_format(_("%^sはヨロヨロ逃げ回った。", "%^s scuttles about."), m_name);
-        else if (percentage > 35)
+        } else if (percentage > 35) {
             msg_format(_("%^sはうるさく鳴いた。", "%^s twitters."), m_name);
-        else if (percentage > 20)
+        } else if (percentage > 20) {
             msg_format(_("%^sは痛みに痙攣した。", "%^s jerks in pain."), m_name);
-        else if (percentage > 10)
+        } else if (percentage > 10) {
             msg_format(_("%^sは苦痛で痙攣した。", "%^s jerks in agony."), m_name);
-        else
+        } else {
             msg_format(_("%^sはピクピクひきつった。", "%^s twitches."), m_name);
+        }
         return;
     }
 
     if (angband_strchr("B", r_ptr->d_char)) {
-        if (percentage > 95)
+        if (percentage > 95) {
             msg_format(_("%^sはさえずった。", "%^s chirps."), m_name);
-        else if (percentage > 75)
+        } else if (percentage > 75) {
             msg_format(_("%^sはピーピー鳴いた。", "%^s twitters."), m_name);
-        else if (percentage > 50)
+        } else if (percentage > 50) {
             msg_format(_("%^sはギャーギャー鳴いた。", "%^s squawks."), m_name);
-        else if (percentage > 35)
+        } else if (percentage > 35) {
             msg_format(_("%^sはギャーギャー鳴きわめいた。", "%^s chatters."), m_name);
-        else if (percentage > 20)
+        } else if (percentage > 20) {
             msg_format(_("%^sは苦しんだ。", "%^s jeers."), m_name);
-        else if (percentage > 10)
+        } else if (percentage > 10) {
             msg_format(_("%^sはのたうち回った。", "%^s flutters about."), m_name);
-        else
+        } else {
             msg_format(_("%^sはキーキーと鳴き叫んだ。", "%^s squeaks."), m_name);
+        }
         return;
     }
 
     if (angband_strchr("duDLUW", r_ptr->d_char)) {
-        if (percentage > 95)
+        if (percentage > 95) {
             msg_format(_("%sは攻撃を気にとめていない。", "%^s ignores the attack."), m_name);
-        else if (percentage > 75)
+        } else if (percentage > 75) {
             msg_format(_("%^sはしり込みした。", "%^s flinches."), m_name);
-        else if (percentage > 50)
+        } else if (percentage > 50) {
             msg_format(_("%^sは痛みでシーッと鳴いた。", "%^s hisses in pain."), m_name);
-        else if (percentage > 35)
+        } else if (percentage > 35) {
             msg_format(_("%^sは痛みでうなった。", "%^s snarls with pain."), m_name);
-        else if (percentage > 20)
+        } else if (percentage > 20) {
             msg_format(_("%^sは痛みに吠えた。", "%^s roars with pain."), m_name);
-        else if (percentage > 10)
+        } else if (percentage > 10) {
             msg_format(_("%^sは苦しげに叫んだ。", "%^s gasps."), m_name);
-        else
+        } else {
             msg_format(_("%^sは弱々しくうなった。", "%^s snarls feebly."), m_name);
+        }
         return;
     }
 
     if (angband_strchr("s", r_ptr->d_char)) {
-        if (percentage > 95)
+        if (percentage > 95) {
             msg_format(_("%sは攻撃を気にとめていない。", "%^s ignores the attack."), m_name);
-        else if (percentage > 75)
+        } else if (percentage > 75) {
             msg_format(_("%sは攻撃に肩をすくめた。", "%^s shrugs off the attack."), m_name);
-        else if (percentage > 50)
+        } else if (percentage > 50) {
             msg_format(_("%^sはカタカタと笑った。", "%^s rattles."), m_name);
-        else if (percentage > 35)
+        } else if (percentage > 35) {
             msg_format(_("%^sはよろめいた。", "%^s stumbles."), m_name);
-        else if (percentage > 20)
+        } else if (percentage > 20) {
             msg_format(_("%^sはカタカタ言った。", "%^s rattles."), m_name);
-        else if (percentage > 10)
+        } else if (percentage > 10) {
             msg_format(_("%^sはよろめいた。", "%^s staggers."), m_name);
-        else
+        } else {
             msg_format(_("%^sはガタガタ言った。", "%^s clatters."), m_name);
+        }
         return;
     }
 
     if (angband_strchr("z", r_ptr->d_char)) {
-        if (percentage > 95)
+        if (percentage > 95) {
             msg_format(_("%sは攻撃を気にとめていない。", "%^s ignores the attack."), m_name);
-        else if (percentage > 75)
+        } else if (percentage > 75) {
             msg_format(_("%sは攻撃に肩をすくめた。", "%^s shrugs off the attack."), m_name);
-        else if (percentage > 50)
+        } else if (percentage > 50) {
             msg_format(_("%^sはうめいた。", "%^s groans."), m_name);
-        else if (percentage > 35)
+        } else if (percentage > 35) {
             msg_format(_("%sは苦しげにうめいた。", "%^s moans."), m_name);
-        else if (percentage > 20)
+        } else if (percentage > 20) {
             msg_format(_("%^sは躊躇した。", "%^s hesitates."), m_name);
-        else if (percentage > 10)
+        } else if (percentage > 10) {
             msg_format(_("%^sはうなった。", "%^s grunts."), m_name);
-        else
+        } else {
             msg_format(_("%^sはよろめいた。", "%^s staggers."), m_name);
+        }
         return;
     }
 
     if (angband_strchr("G", r_ptr->d_char)) {
-        if (percentage > 95)
+        if (percentage > 95) {
             msg_format(_("%sは攻撃を気にとめていない。", "%^s ignores the attack."), m_name);
-        else if (percentage > 75)
+        } else if (percentage > 75) {
             msg_format(_("%sは攻撃に肩をすくめた。", "%^s shrugs off the attack."), m_name);
-        else if (percentage > 50)
+        } else if (percentage > 50) {
             msg_format(_("%sはうめいた。", "%^s moans."), m_name);
-        else if (percentage > 35)
+        } else if (percentage > 35) {
             msg_format(_("%^sは泣きわめいた。", "%^s wails."), m_name);
-        else if (percentage > 20)
+        } else if (percentage > 20) {
             msg_format(_("%^sは吠えた。", "%^s howls."), m_name);
-        else if (percentage > 10)
+        } else if (percentage > 10) {
             msg_format(_("%sは弱々しくうめいた。", "%^s moans softly."), m_name);
-        else
+        } else {
             msg_format(_("%^sはかすかにうめいた。", "%^s sighs."), m_name);
+        }
         return;
     }
 
     if (angband_strchr("CZ", r_ptr->d_char)) {
-        if (percentage > 95)
+        if (percentage > 95) {
             msg_format(_("%^sは攻撃に肩をすくめた。", "%^s shrugs off the attack."), m_name);
-        else if (percentage > 75)
+        } else if (percentage > 75) {
             msg_format(_("%^sは痛みでうなった。", "%^s snarls with pain."), m_name);
-        else if (percentage > 50)
+        } else if (percentage > 50) {
             msg_format(_("%^sは痛みでキャンキャン吠えた。", "%^s yelps in pain."), m_name);
-        else if (percentage > 35)
+        } else if (percentage > 35) {
             msg_format(_("%^sは痛みで鳴きわめいた。", "%^s howls in pain."), m_name);
-        else if (percentage > 20)
+        } else if (percentage > 20) {
             msg_format(_("%^sは苦痛のあまり鳴きわめいた。", "%^s howls in agony."), m_name);
-        else if (percentage > 10)
+        } else if (percentage > 10) {
             msg_format(_("%^sは苦痛でもだえ苦しんだ。", "%^s writhes in agony."), m_name);
-        else
+        } else {
             msg_format(_("%^sは弱々しく吠えた。", "%^s yelps feebly."), m_name);
+        }
         return;
     }
 
     if (angband_strchr("Xbilqrt", r_ptr->d_char)) {
-        if (percentage > 95)
+        if (percentage > 95) {
             msg_format(_("%^sは攻撃を気にとめていない。", "%^s ignores the attack."), m_name);
-        else if (percentage > 75)
+        } else if (percentage > 75) {
             msg_format(_("%^sは痛みでうなった。", "%^s grunts with pain."), m_name);
-        else if (percentage > 50)
+        } else if (percentage > 50) {
             msg_format(_("%^sは痛みで叫んだ。", "%^s squeals in pain."), m_name);
-        else if (percentage > 35)
+        } else if (percentage > 35) {
             msg_format(_("%^sは痛みで絶叫した。", "%^s shrieks in pain."), m_name);
-        else if (percentage > 20)
+        } else if (percentage > 20) {
             msg_format(_("%^sは苦痛のあまり絶叫した。", "%^s shrieks in agony."), m_name);
-        else if (percentage > 10)
+        } else if (percentage > 10) {
             msg_format(_("%^sは苦痛でもだえ苦しんだ。", "%^s writhes in agony."), m_name);
-        else
+        } else {
             msg_format(_("%^sは弱々しく叫んだ。", "%^s cries out feebly."), m_name);
+        }
         return;
     }
 
-    if (percentage > 95)
+    if (percentage > 95) {
         msg_format(_("%^sは攻撃に肩をすくめた。", "%^s shrugs off the attack."), m_name);
-    else if (percentage > 75)
+    } else if (percentage > 75) {
         msg_format(_("%^sは痛みでうなった。", "%^s grunts with pain."), m_name);
-    else if (percentage > 50)
+    } else if (percentage > 50) {
         msg_format(_("%^sは痛みで叫んだ。", "%^s cries out in pain."), m_name);
-    else if (percentage > 35)
+    } else if (percentage > 35) {
         msg_format(_("%^sは痛みで絶叫した。", "%^s screams in pain."), m_name);
-    else if (percentage > 20)
+    } else if (percentage > 20) {
         msg_format(_("%^sは苦痛のあまり絶叫した。", "%^s screams in agony."), m_name);
-    else if (percentage > 10)
+    } else if (percentage > 10) {
         msg_format(_("%^sは苦痛でもだえ苦しんだ。", "%^s writhes in agony."), m_name);
-    else
+    } else {
         msg_format(_("%^sは弱々しく叫んだ。", "%^s cries out feebly."), m_name);
+    }
 }

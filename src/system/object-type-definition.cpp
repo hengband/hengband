@@ -74,23 +74,31 @@ void ObjectType::prep(KIND_OBJECT_IDX ko_idx)
     this->dd = k_ptr->dd;
     this->ds = k_ptr->ds;
 
-    if (k_ptr->act_idx > RandomArtActType::NONE)
+    if (k_ptr->act_idx > RandomArtActType::NONE) {
         this->activation_id = k_ptr->act_idx;
-    if (k_info[this->k_idx].cost <= 0)
+    }
+    if (k_info[this->k_idx].cost <= 0) {
         this->ident |= (IDENT_BROKEN);
+    }
 
-    if (k_ptr->gen_flags.has(ItemGenerationTraitType::CURSED))
+    if (k_ptr->gen_flags.has(ItemGenerationTraitType::CURSED)) {
         this->curse_flags.set(CurseTraitType::CURSED);
-    if (k_ptr->gen_flags.has(ItemGenerationTraitType::HEAVY_CURSE))
+    }
+    if (k_ptr->gen_flags.has(ItemGenerationTraitType::HEAVY_CURSE)) {
         this->curse_flags.set(CurseTraitType::HEAVY_CURSE);
-    if (k_ptr->gen_flags.has(ItemGenerationTraitType::PERMA_CURSE))
+    }
+    if (k_ptr->gen_flags.has(ItemGenerationTraitType::PERMA_CURSE)) {
         this->curse_flags.set(CurseTraitType::PERMA_CURSE);
-    if (k_ptr->gen_flags.has(ItemGenerationTraitType::RANDOM_CURSE0))
+    }
+    if (k_ptr->gen_flags.has(ItemGenerationTraitType::RANDOM_CURSE0)) {
         this->curse_flags.set(get_curse(0, this));
-    if (k_ptr->gen_flags.has(ItemGenerationTraitType::RANDOM_CURSE1))
+    }
+    if (k_ptr->gen_flags.has(ItemGenerationTraitType::RANDOM_CURSE1)) {
         this->curse_flags.set(get_curse(1, this));
-    if (k_ptr->gen_flags.has(ItemGenerationTraitType::RANDOM_CURSE2))
+    }
+    if (k_ptr->gen_flags.has(ItemGenerationTraitType::RANDOM_CURSE2)) {
         this->curse_flags.set(get_curse(2, this));
+    }
 }
 
 /*!
@@ -146,8 +154,9 @@ bool ObjectType::is_melee_ammo() const
         return true;
     }
     case ItemKindType::SWORD: {
-        if (this->sval != SV_POISON_NEEDLE)
+        if (this->sval != SV_POISON_NEEDLE) {
             return true;
+        }
     }
 
     default:
@@ -188,8 +197,9 @@ bool ObjectType::is_orthodox_melee_weapons() const
         return true;
     }
     case ItemKindType::SWORD: {
-        if (this->sval != SV_POISON_NEEDLE)
+        if (this->sval != SV_POISON_NEEDLE) {
             return true;
+        }
     }
 
     default:
@@ -205,8 +215,9 @@ bool ObjectType::is_orthodox_melee_weapons() const
  */
 bool ObjectType::is_broken_weapon() const
 {
-    if (this->tval != ItemKindType::SWORD)
+    if (this->tval != ItemKindType::SWORD) {
         return false;
+    }
 
     switch (this->sval) {
     case SV_BROKEN_DAGGER:
@@ -520,8 +531,9 @@ bool ObjectType::is_offerable() const
  */
 bool ObjectType::is_activatable() const
 {
-    if (!this->is_known())
+    if (!this->is_known()) {
         return false;
+    }
 
     auto flags = object_flags(this);
     return flags.has(TR_ACTIVATE);

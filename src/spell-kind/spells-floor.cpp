@@ -64,10 +64,12 @@ void wiz_lite(PlayerType *player_ptr, bool ninja)
     /* Memorize objects */
     for (OBJECT_IDX i = 1; i < player_ptr->current_floor_ptr->o_max; i++) {
         auto *o_ptr = &player_ptr->current_floor_ptr->o_list[i];
-        if (!o_ptr->is_valid())
+        if (!o_ptr->is_valid()) {
             continue;
-        if (o_ptr->is_held_by_monster())
+        }
+        if (o_ptr->is_held_by_monster()) {
             continue;
+        }
         o_ptr->marked |= OM_FOUND;
     }
 
@@ -158,10 +160,12 @@ void wiz_dark(PlayerType *player_ptr)
     for (OBJECT_IDX i = 1; i < player_ptr->current_floor_ptr->o_max; i++) {
         auto *o_ptr = &player_ptr->current_floor_ptr->o_list[i];
 
-        if (!o_ptr->is_valid())
+        if (!o_ptr->is_valid()) {
             continue;
-        if (o_ptr->is_held_by_monster())
+        }
+        if (o_ptr->is_held_by_monster()) {
             continue;
+        }
 
         /* Forget the object */
         o_ptr->marked &= OM_TOUCHED;
@@ -182,14 +186,16 @@ void wiz_dark(PlayerType *player_ptr)
  */
 void map_area(PlayerType *player_ptr, POSITION range)
 {
-    if (d_info[player_ptr->dungeon_idx].flags.has(DungeonFeatureType::DARKNESS))
+    if (d_info[player_ptr->dungeon_idx].flags.has(DungeonFeatureType::DARKNESS)) {
         range /= 3;
+    }
 
     /* Scan that area */
     for (POSITION y = 1; y < player_ptr->current_floor_ptr->height - 1; y++) {
         for (POSITION x = 1; x < player_ptr->current_floor_ptr->width - 1; x++) {
-            if (distance(player_ptr->y, player_ptr->x, y, x) > range)
+            if (distance(player_ptr->y, player_ptr->x, y, x) > range) {
                 continue;
+            }
 
             grid_type *g_ptr;
             g_ptr = &player_ptr->current_floor_ptr->grid_array[y][x];
@@ -253,22 +259,25 @@ bool destroy_area(PlayerType *player_ptr, POSITION y1, POSITION x1, POSITION r, 
     }
 
     /* Lose monster light */
-    if (!in_generate)
+    if (!in_generate) {
         clear_mon_lite(floor_ptr);
+    }
 
     /* Big area of affect */
     bool flag = false;
     for (POSITION y = (y1 - r); y <= (y1 + r); y++) {
         for (POSITION x = (x1 - r); x <= (x1 + r); x++) {
-            if (!in_bounds(floor_ptr, y, x))
+            if (!in_bounds(floor_ptr, y, x)) {
                 continue;
+            }
 
             /* Extract the distance */
             int k = distance(y1, x1, y, x);
 
             /* Stay in the circle of death */
-            if (k > r)
+            if (k > r) {
                 continue;
+            }
             grid_type *g_ptr;
             g_ptr = &floor_ptr->grid_array[y][x];
 
@@ -294,8 +303,9 @@ bool destroy_area(PlayerType *player_ptr, POSITION y1, POSITION x1, POSITION r, 
             }
 
             /* Hack -- Skip the epicenter */
-            if ((y == y1) && (x == x1))
+            if ((y == y1) && (x == x1)) {
                 continue;
+            }
 
             if (g_ptr->m_idx) {
                 auto *m_ptr = &floor_ptr->m_list[g_ptr->m_idx];
@@ -310,8 +320,9 @@ bool destroy_area(PlayerType *player_ptr, POSITION y1, POSITION x1, POSITION r, 
                     m_ptr->hp = m_ptr->maxhp;
 
                     /* Try to teleport away quest monsters */
-                    if (!teleport_away(player_ptr, g_ptr->m_idx, (r * 2) + 1, TELEPORT_DEC_VALOUR))
+                    if (!teleport_away(player_ptr, g_ptr->m_idx, (r * 2) + 1, TELEPORT_DEC_VALOUR)) {
                         continue;
+                    }
                 } else {
                     if (record_named_pet && is_pet(m_ptr) && m_ptr->nickname) {
                         GAME_TEXT m_name[MAX_NLEN];
@@ -352,8 +363,9 @@ bool destroy_area(PlayerType *player_ptr, POSITION y1, POSITION x1, POSITION r, 
             delete_all_items_from_floor(player_ptr, y, x);
 
             /* Destroy "non-permanent" grids */
-            if (g_ptr->cave_has_flag(FloorFeatureType::PERMANENT))
+            if (g_ptr->cave_has_flag(FloorFeatureType::PERMANENT)) {
                 continue;
+            }
 
             /* Wall (or floor) type */
             int t = randint0(200);
@@ -396,21 +408,24 @@ bool destroy_area(PlayerType *player_ptr, POSITION y1, POSITION x1, POSITION r, 
         }
     }
 
-    if (in_generate)
+    if (in_generate) {
         return true;
+    }
 
     /* Process "re-glowing" */
     for (POSITION y = (y1 - r); y <= (y1 + r); y++) {
         for (POSITION x = (x1 - r); x <= (x1 + r); x++) {
-            if (!in_bounds(floor_ptr, y, x))
+            if (!in_bounds(floor_ptr, y, x)) {
                 continue;
+            }
 
             /* Extract the distance */
             int k = distance(y1, x1, y, x);
 
             /* Stay in the circle of death */
-            if (k > r)
+            if (k > r) {
                 continue;
+            }
             grid_type *g_ptr;
             g_ptr = &floor_ptr->grid_array[y][x];
 
@@ -419,8 +434,9 @@ bool destroy_area(PlayerType *player_ptr, POSITION y1, POSITION x1, POSITION r, 
                 continue;
             }
 
-            if (d_info[floor_ptr->dungeon_idx].flags.has(DungeonFeatureType::DARKNESS))
+            if (d_info[floor_ptr->dungeon_idx].flags.has(DungeonFeatureType::DARKNESS)) {
                 continue;
+            }
 
             DIRECTION i;
             POSITION yy, xx;
@@ -429,8 +445,9 @@ bool destroy_area(PlayerType *player_ptr, POSITION y1, POSITION x1, POSITION r, 
             for (i = 0; i < 9; i++) {
                 yy = y + ddy_ddd[i];
                 xx = x + ddx_ddd[i];
-                if (!in_bounds2(floor_ptr, yy, xx))
+                if (!in_bounds2(floor_ptr, yy, xx)) {
                     continue;
+                }
                 cc_ptr = &floor_ptr->grid_array[yy][xx];
                 if (f_info[cc_ptr->get_feat_mimic()].flags.has(FloorFeatureType::GLOW)) {
                     g_ptr->info |= CAVE_GLOW;

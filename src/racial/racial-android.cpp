@@ -1,4 +1,5 @@
 ﻿#include "racial/racial-android.h"
+#include "effect/attribute-types.h"
 #include "inventory/inventory-slot-types.h"
 #include "object-enchant/object-ego.h"
 #include "object-enchant/trg-types.h"
@@ -10,7 +11,6 @@
 #include "player-info/equipment-info.h"
 #include "player/player-status.h"
 #include "spell-kind/spells-launcher.h"
-#include "effect/attribute-types.h"
 #include "sv-definition/sv-armor-types.h"
 #include "sv-definition/sv-protector-types.h"
 #include "sv-definition/sv-weapon-types.h"
@@ -23,8 +23,9 @@
 bool android_inside_weapon(PlayerType *player_ptr)
 {
     DIRECTION dir;
-    if (!get_aim_dir(player_ptr, &dir))
+    if (!get_aim_dir(player_ptr, &dir)) {
         return false;
+    }
 
     if (player_ptr->lev < 10) {
         msg_print(_("レイガンを発射した。", "You fire your ray gun."));
@@ -58,8 +59,9 @@ bool android_inside_weapon(PlayerType *player_ptr)
 void calc_android_exp(PlayerType *player_ptr)
 {
     uint32_t total_exp = 0;
-    if (player_ptr->is_dead || !PlayerRace(player_ptr).equals(PlayerRaceType::ANDROID))
+    if (player_ptr->is_dead || !PlayerRace(player_ptr).equals(PlayerRaceType::ANDROID)) {
         return;
+    }
 
     for (int i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
         auto *o_ptr = &player_ptr->inventory_list[i];
@@ -68,10 +70,12 @@ void calc_android_exp(PlayerType *player_ptr)
         uint32_t value, exp;
         DEPTH level = std::max(k_info[o_ptr->k_idx].level - 8, 1);
 
-        if ((i == INVEN_MAIN_RING) || (i == INVEN_SUB_RING) || (i == INVEN_NECK) || (i == INVEN_LITE))
+        if ((i == INVEN_MAIN_RING) || (i == INVEN_SUB_RING) || (i == INVEN_NECK) || (i == INVEN_LITE)) {
             continue;
-        if (!o_ptr->k_idx)
+        }
+        if (!o_ptr->k_idx) {
             continue;
+        }
 
         q_ptr->wipe();
         q_ptr->copy_from(o_ptr);
@@ -88,57 +92,66 @@ void calc_android_exp(PlayerType *player_ptr)
             int fake_level;
 
             if (!o_ptr->is_weapon_ammo()) {
-                if (total_flags < 15000)
+                if (total_flags < 15000) {
                     fake_level = 10;
-                else if (total_flags < 35000)
+                } else if (total_flags < 35000) {
                     fake_level = 25;
-                else
+                } else {
                     fake_level = 40;
+                }
             } else {
-                if (total_flags < 20000)
+                if (total_flags < 20000) {
                     fake_level = 10;
-                else if (total_flags < 45000)
+                } else if (total_flags < 45000) {
                     fake_level = 25;
-                else
+                } else {
                     fake_level = 40;
+                }
             }
 
             level = std::max(level, (level + std::max(fake_level - 8, 5)) / 2 + 3);
         }
 
         value = object_value_real(q_ptr);
-        if (value <= 0)
+        if (value <= 0) {
             continue;
-        if ((o_ptr->tval == ItemKindType::SOFT_ARMOR) && (o_ptr->sval == SV_ABUNAI_MIZUGI) && (player_ptr->ppersonality != PERSONALITY_SEXY))
+        }
+        if ((o_ptr->tval == ItemKindType::SOFT_ARMOR) && (o_ptr->sval == SV_ABUNAI_MIZUGI) && (player_ptr->ppersonality != PERSONALITY_SEXY)) {
             value /= 32;
-        if (value > 5000000L)
+        }
+        if (value > 5000000L) {
             value = 5000000L;
-        if ((o_ptr->tval == ItemKindType::DRAG_ARMOR) || (o_ptr->tval == ItemKindType::CARD))
+        }
+        if ((o_ptr->tval == ItemKindType::DRAG_ARMOR) || (o_ptr->tval == ItemKindType::CARD)) {
             level /= 2;
+        }
 
-        if (o_ptr->is_artifact() || o_ptr->is_ego() || (o_ptr->tval == ItemKindType::DRAG_ARMOR) || ((o_ptr->tval == ItemKindType::HELM) && (o_ptr->sval == SV_DRAGON_HELM))
-            || ((o_ptr->tval == ItemKindType::SHIELD) && (o_ptr->sval == SV_DRAGON_SHIELD)) || ((o_ptr->tval == ItemKindType::GLOVES) && (o_ptr->sval == SV_SET_OF_DRAGON_GLOVES))
-            || ((o_ptr->tval == ItemKindType::BOOTS) && (o_ptr->sval == SV_PAIR_OF_DRAGON_GREAVE)) || ((o_ptr->tval == ItemKindType::SWORD) && (o_ptr->sval == SV_DIAMOND_EDGE))) {
-            if (level > 65)
+        if (o_ptr->is_artifact() || o_ptr->is_ego() || (o_ptr->tval == ItemKindType::DRAG_ARMOR) || ((o_ptr->tval == ItemKindType::HELM) && (o_ptr->sval == SV_DRAGON_HELM)) || ((o_ptr->tval == ItemKindType::SHIELD) && (o_ptr->sval == SV_DRAGON_SHIELD)) || ((o_ptr->tval == ItemKindType::GLOVES) && (o_ptr->sval == SV_SET_OF_DRAGON_GLOVES)) || ((o_ptr->tval == ItemKindType::BOOTS) && (o_ptr->sval == SV_PAIR_OF_DRAGON_GREAVE)) || ((o_ptr->tval == ItemKindType::SWORD) && (o_ptr->sval == SV_DIAMOND_EDGE))) {
+            if (level > 65) {
                 level = 35 + (level - 65) / 5;
-            else if (level > 35)
+            } else if (level > 35) {
                 level = 25 + (level - 35) / 3;
-            else if (level > 15)
+            } else if (level > 15) {
                 level = 15 + (level - 15) / 2;
+            }
             exp = std::min<uint>(100000, value) / 2 * level * level;
-            if (value > 100000L)
+            if (value > 100000L) {
                 exp += (value - 100000L) / 8 * level * level;
+            }
         } else {
             exp = std::min<uint>(100000, value) * level;
-            if (value > 100000L)
+            if (value > 100000L) {
                 exp += (value - 100000L) / 4 * level;
+            }
         }
-        if ((((i == INVEN_MAIN_HAND) || (i == INVEN_SUB_HAND)) && (has_melee_weapon(player_ptr, i))) || (i == INVEN_BOW))
+        if ((((i == INVEN_MAIN_HAND) || (i == INVEN_SUB_HAND)) && (has_melee_weapon(player_ptr, i))) || (i == INVEN_BOW)) {
             total_exp += exp / 48;
-        else
+        } else {
             total_exp += exp / 16;
-        if (i == INVEN_BODY)
+        }
+        if (i == INVEN_BODY) {
             total_exp += exp / 32;
+        }
     }
 
     player_ptr->exp = player_ptr->max_exp = total_exp;

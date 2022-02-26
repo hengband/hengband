@@ -39,8 +39,9 @@
 
 process_result effect_monster_hypodynamia(PlayerType *player_ptr, effect_monster_type *em_ptr)
 {
-    if (em_ptr->seen)
+    if (em_ptr->seen) {
         em_ptr->obvious = true;
+    }
 
     if (monster_living(em_ptr->m_ptr->r_idx)) {
         em_ptr->do_time = (em_ptr->dam + 7) / 8;
@@ -48,12 +49,15 @@ process_result effect_monster_hypodynamia(PlayerType *player_ptr, effect_monster
     }
 
     if (is_original_ap_and_seen(player_ptr, em_ptr->m_ptr)) {
-        if (em_ptr->r_ptr->kind_flags.has(MonsterKindType::DEMON))
+        if (em_ptr->r_ptr->kind_flags.has(MonsterKindType::DEMON)) {
             em_ptr->r_ptr->r_kind_flags.set(MonsterKindType::DEMON);
-        if (em_ptr->r_ptr->kind_flags.has(MonsterKindType::UNDEAD))
+        }
+        if (em_ptr->r_ptr->kind_flags.has(MonsterKindType::UNDEAD)) {
             em_ptr->r_ptr->r_kind_flags.set(MonsterKindType::UNDEAD);
-        if (em_ptr->r_ptr->kind_flags.has(MonsterKindType::NONLIVING))
+        }
+        if (em_ptr->r_ptr->kind_flags.has(MonsterKindType::NONLIVING)) {
             em_ptr->r_ptr->r_kind_flags.set(MonsterKindType::NONLIVING);
+        }
     }
 
     em_ptr->note = _("には効果がなかった。", " is unaffected.");
@@ -67,17 +71,21 @@ process_result effect_monster_hypodynamia(PlayerType *player_ptr, effect_monster
  */
 process_result effect_monster_death_ray(PlayerType *player_ptr, effect_monster_type *em_ptr)
 {
-    if (em_ptr->seen)
+    if (em_ptr->seen) {
         em_ptr->obvious = true;
+    }
 
     if (!monster_living(em_ptr->m_ptr->r_idx)) {
         if (is_original_ap_and_seen(player_ptr, em_ptr->m_ptr)) {
-            if (em_ptr->r_ptr->kind_flags.has(MonsterKindType::DEMON))
+            if (em_ptr->r_ptr->kind_flags.has(MonsterKindType::DEMON)) {
                 em_ptr->r_ptr->r_kind_flags.set(MonsterKindType::DEMON);
-            if (em_ptr->r_ptr->kind_flags.has(MonsterKindType::UNDEAD))
+            }
+            if (em_ptr->r_ptr->kind_flags.has(MonsterKindType::UNDEAD)) {
                 em_ptr->r_ptr->r_kind_flags.set(MonsterKindType::UNDEAD);
-            if (em_ptr->r_ptr->kind_flags.has(MonsterKindType::NONLIVING))
+            }
+            if (em_ptr->r_ptr->kind_flags.has(MonsterKindType::NONLIVING)) {
                 em_ptr->r_ptr->r_kind_flags.set(MonsterKindType::NONLIVING);
+            }
         }
 
         em_ptr->note = _("には完全な耐性がある！", " is immune.");
@@ -105,11 +113,13 @@ process_result effect_monster_kill_wall(PlayerType *player_ptr, effect_monster_t
         return PROCESS_CONTINUE;
     }
 
-    if (em_ptr->seen)
+    if (em_ptr->seen) {
         em_ptr->obvious = true;
+    }
 
-    if (is_original_ap_and_seen(player_ptr, em_ptr->m_ptr))
+    if (is_original_ap_and_seen(player_ptr, em_ptr->m_ptr)) {
         em_ptr->r_ptr->r_resistance_flags.set(MonsterResistanceType::HURT_ROCK);
+    }
 
     em_ptr->note = _("の皮膚がただれた！", " loses some skin!");
     em_ptr->note_dies = _("はドロドロに溶けた！", " dissolves!");
@@ -118,8 +128,9 @@ process_result effect_monster_kill_wall(PlayerType *player_ptr, effect_monster_t
 
 process_result effect_monster_hand_doom(effect_monster_type *em_ptr)
 {
-    if (em_ptr->seen)
+    if (em_ptr->seen) {
         em_ptr->obvious = true;
+    }
 
     if (em_ptr->r_ptr->kind_flags.has(MonsterKindType::UNIQUE)) {
         em_ptr->note = _("には効果がなかった。", " is unaffected.");
@@ -130,8 +141,9 @@ process_result effect_monster_hand_doom(effect_monster_type *em_ptr)
     if ((em_ptr->who > 0) ? ((em_ptr->caster_lev + randint1(em_ptr->dam)) > (em_ptr->r_ptr->level + 10 + randint1(20)))
                           : (((em_ptr->caster_lev / 2) + randint1(em_ptr->dam)) > (em_ptr->r_ptr->level + randint1(200)))) {
         em_ptr->dam = ((40 + randint1(20)) * em_ptr->m_ptr->hp) / 100;
-        if (em_ptr->m_ptr->hp < em_ptr->dam)
+        if (em_ptr->m_ptr->hp < em_ptr->dam) {
             em_ptr->dam = em_ptr->m_ptr->hp - 1;
+        }
     } else {
         em_ptr->note = _("は破滅の手に耐え切った！", "resists!");
         em_ptr->dam = 0;
@@ -152,15 +164,17 @@ process_result effect_monster_hand_doom(effect_monster_type *em_ptr)
  */
 process_result effect_monster_engetsu(PlayerType *player_ptr, effect_monster_type *em_ptr)
 {
-    if (em_ptr->seen)
+    if (em_ptr->seen) {
         em_ptr->obvious = true;
+    }
 
     if (any_bits(em_ptr->r_ptr->flags2, RF2_EMPTY_MIND)) {
         em_ptr->note = _("には効果がなかった。", " is unaffected.");
         em_ptr->dam = 0;
         em_ptr->skipped = true;
-        if (is_original_ap_and_seen(player_ptr, em_ptr->m_ptr))
+        if (is_original_ap_and_seen(player_ptr, em_ptr->m_ptr)) {
             set_bits(em_ptr->r_ptr->r_flags2, RF2_EMPTY_MIND);
+        }
         return PROCESS_CONTINUE;
     }
 
@@ -173,12 +187,14 @@ process_result effect_monster_engetsu(PlayerType *player_ptr, effect_monster_typ
 
     bool done = false;
     for (int i = 0; i < 3; i++) {
-        if (randint0(5) < 2)
+        if (randint0(5) < 2) {
             continue;
+        }
 
         int power = 10 + randint1((em_ptr->dam - 10) < 1 ? 1 : (em_ptr->dam - 10));
-        if (em_ptr->r_ptr->level > power)
+        if (em_ptr->r_ptr->level > power) {
             continue;
+        }
 
         switch (randint0(4)) {
         case 0:
@@ -200,8 +216,9 @@ process_result effect_monster_engetsu(PlayerType *player_ptr, effect_monster_typ
         case 2:
             if (em_ptr->r_ptr->kind_flags.has(MonsterKindType::UNIQUE) || any_bits(em_ptr->r_ptr->flags3, RF3_NO_CONF)) {
                 if (any_bits(em_ptr->r_ptr->flags3, RF3_NO_CONF)) {
-                    if (is_original_ap_and_seen(player_ptr, em_ptr->m_ptr))
+                    if (is_original_ap_and_seen(player_ptr, em_ptr->m_ptr)) {
                         set_bits(em_ptr->r_ptr->r_flags3, RF3_NO_CONF);
+                    }
                 }
                 em_ptr->do_conf = 0;
             } else {
@@ -214,8 +231,9 @@ process_result effect_monster_engetsu(PlayerType *player_ptr, effect_monster_typ
         default:
             if (em_ptr->r_ptr->kind_flags.has(MonsterKindType::UNIQUE) || any_bits(em_ptr->r_ptr->flags3, RF3_NO_SLEEP)) {
                 if (any_bits(em_ptr->r_ptr->flags3, RF3_NO_SLEEP)) {
-                    if (is_original_ap_and_seen(player_ptr, em_ptr->m_ptr))
+                    if (is_original_ap_and_seen(player_ptr, em_ptr->m_ptr)) {
                         set_bits(em_ptr->r_ptr->r_flags3, RF3_NO_SLEEP);
+                    }
                 }
                 em_ptr->do_sleep = 0;
             } else {
@@ -227,8 +245,9 @@ process_result effect_monster_engetsu(PlayerType *player_ptr, effect_monster_typ
             break;
         }
 
-        if (em_ptr->do_sleep > 0)
+        if (em_ptr->do_sleep > 0) {
             break;
+        }
     }
 
     if (!done) {
@@ -242,13 +261,15 @@ process_result effect_monster_engetsu(PlayerType *player_ptr, effect_monster_typ
 
 process_result effect_monster_genocide(PlayerType *player_ptr, effect_monster_type *em_ptr)
 {
-    if (em_ptr->seen)
+    if (em_ptr->seen) {
         em_ptr->obvious = true;
+    }
 
     std::string_view spell_name(_("モンスター消滅", "Genocide One"));
     if (genocide_aux(player_ptr, em_ptr->g_ptr->m_idx, em_ptr->dam, !em_ptr->who, (em_ptr->r_ptr->level + 1) / 2, spell_name.data())) {
-        if (em_ptr->seen_msg)
+        if (em_ptr->seen_msg) {
             msg_format(_("%sは消滅した！", "%^s disappeared!"), em_ptr->m_name);
+        }
         chg_virtue(player_ptr, V_VITALITY, -1);
         return PROCESS_TRUE;
     }
@@ -259,15 +280,18 @@ process_result effect_monster_genocide(PlayerType *player_ptr, effect_monster_ty
 
 process_result effect_monster_photo(PlayerType *player_ptr, effect_monster_type *em_ptr)
 {
-    if (!em_ptr->who)
+    if (!em_ptr->who) {
         msg_format(_("%sを写真に撮った。", "You take a photograph of %s."), em_ptr->m_name);
+    }
 
     if (em_ptr->r_ptr->resistance_flags.has(MonsterResistanceType::HURT_LITE)) {
-        if (em_ptr->seen)
+        if (em_ptr->seen) {
             em_ptr->obvious = true;
+        }
 
-        if (is_original_ap_and_seen(player_ptr, em_ptr->m_ptr))
+        if (is_original_ap_and_seen(player_ptr, em_ptr->m_ptr)) {
             em_ptr->r_ptr->r_resistance_flags.set(MonsterResistanceType::HURT_LITE);
+        }
 
         em_ptr->note = _("は光に身をすくめた！", " cringes from the light!");
         em_ptr->note_dies = _("は光を受けてしぼんでしまった！", " shrivels away in the light!");
@@ -281,8 +305,9 @@ process_result effect_monster_photo(PlayerType *player_ptr, effect_monster_type 
 
 process_result effect_monster_wounds(effect_monster_type *em_ptr)
 {
-    if (em_ptr->seen)
+    if (em_ptr->seen) {
         em_ptr->obvious = true;
+    }
 
     if (randint0(100 + em_ptr->dam) < (em_ptr->r_ptr->level + 50)) {
         em_ptr->note = _("には効果がなかった。", " is unaffected.");

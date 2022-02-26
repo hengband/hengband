@@ -56,8 +56,9 @@ int m_bonus(int max, DEPTH level)
     int bonus, stand, extra, value;
 
     /* Paranoia -- enforce maximal "level" */
-    if (level > MAX_DEPTH - 1)
+    if (level > MAX_DEPTH - 1) {
         level = MAX_DEPTH - 1;
+    }
 
     /* The "bonus" moves towards the max */
     bonus = ((max * level) / MAX_DEPTH);
@@ -66,8 +67,9 @@ int m_bonus(int max, DEPTH level)
     extra = ((max * level) % MAX_DEPTH);
 
     /* Hack -- simulate floating point computations */
-    if (randint0(MAX_DEPTH) < extra)
+    if (randint0(MAX_DEPTH) < extra) {
         bonus++;
+    }
 
     /* The "stand" is equal to one quarter of the max */
     stand = (max / 4);
@@ -76,19 +78,22 @@ int m_bonus(int max, DEPTH level)
     extra = (max % 4);
 
     /* Hack -- simulate floating point computations */
-    if (randint0(4) < extra)
+    if (randint0(4) < extra) {
         stand++;
+    }
 
     /* Choose an "interesting" value */
     value = randnor(bonus, stand);
 
     /* Enforce the minimum value */
-    if (value < 0)
+    if (value < 0) {
         return 0;
+    }
 
     /* Enforce the maximum value */
-    if (value > max)
+    if (value > max) {
         return max;
+    }
     return value;
 }
 
@@ -186,12 +191,13 @@ void add_esp_weak(ObjectType *o_ptr, bool extra)
  * ESPまたは邪ESPは1d3の種族ESPを得る。
  * 無ESPは3+1d6の種族ESPを得る。
  */
-void add_high_telepathy(ObjectType* o_ptr)
+void add_high_telepathy(ObjectType *o_ptr)
 {
-    if (add_esp_strong(o_ptr))
+    if (add_esp_strong(o_ptr)) {
         add_esp_weak(o_ptr, true);
-    else
+    } else {
         add_esp_weak(o_ptr, false);
+    }
 }
 
 /*!
@@ -203,10 +209,11 @@ void add_high_telepathy(ObjectType* o_ptr)
  */
 void add_low_telepathy(ObjectType *o_ptr)
 {
-    if (one_in_(2))
+    if (one_in_(2)) {
         add_esp_strong(o_ptr);
-    else
+    } else {
         add_esp_weak(o_ptr, false);
+    }
 }
 
 /*!
@@ -309,10 +316,11 @@ void one_high_resistance(ObjectType *o_ptr)
 void dragon_resist(ObjectType *o_ptr)
 {
     do {
-        if (one_in_(4))
+        if (one_in_(4)) {
             one_dragon_ele_resistance(o_ptr);
-        else
+        } else {
             one_high_resistance(o_ptr);
+        }
     } while (one_in_(2));
 }
 
@@ -421,7 +429,7 @@ void one_low_esp(ObjectType *o_ptr)
  */
 void one_activation(ObjectType *o_ptr)
 {
-    RandomArtActType type =RandomArtActType::NONE;
+    RandomArtActType type = RandomArtActType::NONE;
     PERCENTAGE chance = 0;
     while (randint1(100) >= chance) {
         type = i2enum<RandomArtActType>(randint1(enum2i(RandomArtActType::MAX) - 1));
@@ -588,7 +596,7 @@ void one_lordly_high_resistance(ObjectType *o_ptr)
  * @brief オブジェクトの重量を軽くする
  * @param o_ptr オブジェクト情報への参照ポインタ
  */
-void make_weight_ligten(ObjectType* o_ptr)
+void make_weight_ligten(ObjectType *o_ptr)
 {
     o_ptr->weight = (2 * k_info[o_ptr->k_idx].weight / 3);
 }

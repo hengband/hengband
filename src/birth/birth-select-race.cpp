@@ -17,10 +17,11 @@ static void enumerate_race_list(char *sym)
     for (int n = 0; n < MAX_RACES; n++) {
         rp_ptr = &race_info[n];
         concptr str = rp_ptr->title;
-        if (n < 26)
+        if (n < 26) {
             sym[n] = I2A(n);
-        else
+        } else {
             sym[n] = ('A' + n - 26);
+        }
 
         sprintf(buf, "%c%c%s", sym[n], p2, str);
         put_str(buf, 12 + (n / 5), 1 + 16 * (n % 5));
@@ -30,8 +31,9 @@ static void enumerate_race_list(char *sym)
 static void display_race_stat(int cs, int *os, char *cur, char *sym)
 {
     char buf[80];
-    if (cs == *os)
+    if (cs == *os) {
         return;
+    }
 
     c_put_str(TERM_WHITE, cur, 12 + (*os / 5), 1 + 16 * (*os % 5));
     put_str("                                   ", 3, 40);
@@ -72,23 +74,27 @@ static void display_race_stat(int cs, int *os, char *cur, char *sym)
 static void interpret_race_select_key_move(char c, int *cs)
 {
     if (c == '8') {
-        if (*cs >= 5)
+        if (*cs >= 5) {
             *cs -= 5;
+        }
     }
 
     if (c == '4') {
-        if (*cs > 0)
+        if (*cs > 0) {
             (*cs)--;
+        }
     }
 
     if (c == '6') {
-        if (*cs < MAX_RACES)
+        if (*cs < MAX_RACES) {
             (*cs)++;
+        }
     }
 
     if (c == '2') {
-        if ((*cs + 5) <= MAX_RACES)
+        if ((*cs + 5) <= MAX_RACES) {
             *cs += 5;
+        }
     }
 }
 
@@ -100,18 +106,21 @@ static bool select_race(PlayerType *player_ptr, char *sym, int *k)
     int os = MAX_RACES;
     while (true) {
         display_race_stat(cs, &os, cur, sym);
-        if (*k >= 0)
+        if (*k >= 0) {
             break;
+        }
 
         char buf[80];
         sprintf(buf, _("種族を選んで下さい (%c-%c) ('='初期オプション設定): ", "Choose a race (%c-%c) ('=' for options): "), sym[0], sym[MAX_RACES - 1]);
         put_str(buf, 10, 10);
         char c = inkey();
-        if (c == 'Q')
+        if (c == 'Q') {
             birth_quit();
+        }
 
-        if (c == 'S')
+        if (c == 'S') {
             return false;
+        }
 
         if (c == ' ' || c == '\r' || c == '\n') {
             if (cs == MAX_RACES) {
@@ -141,8 +150,9 @@ static bool select_race(PlayerType *player_ptr, char *sym, int *k)
         if ((*k >= 26) && (*k < MAX_RACES)) {
             cs = *k;
             continue;
-        } else
+        } else {
             *k = -1;
+        }
 
         birth_help_option(player_ptr, c, BK_RACE);
     }
@@ -163,8 +173,9 @@ bool get_player_race(PlayerType *player_ptr)
     char sym[MAX_RACES];
     enumerate_race_list(sym);
     int k = -1;
-    if (!select_race(player_ptr, sym, &k))
+    if (!select_race(player_ptr, sym, &k)) {
         return false;
+    }
 
     player_ptr->prace = i2enum<PlayerRaceType>(k);
     rp_ptr = &race_info[k];

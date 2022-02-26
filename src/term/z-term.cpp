@@ -66,8 +66,9 @@ std::unique_ptr<term_win> term_win::clone() const
 void term_win::resize(TERM_LEN w, TERM_LEN h)
 {
     /* Ignore non-changes */
-    if (this->a.size() == static_cast<size_t>(h) && this->a[0].size() == static_cast<size_t>(w))
+    if (this->a.size() == static_cast<size_t>(h) && this->a[0].size() == static_cast<size_t>(w)) {
         return;
+    }
 
     this->a.resize(h, std::vector<TERM_COLOR>(w));
     this->c.resize(h, std::vector<char>(w));
@@ -82,10 +83,12 @@ void term_win::resize(TERM_LEN w, TERM_LEN h)
     }
 
     /* Illegal cursor */
-    if (this->cx >= w)
+    if (this->cx >= w) {
         this->cu = 1;
-    if (this->cy >= h)
+    }
+    if (this->cy >= h) {
         this->cu = 1;
+    }
 }
 
 /*** External hooks ***/
@@ -96,8 +99,9 @@ void term_win::resize(TERM_LEN w, TERM_LEN h)
 errr term_user(int n)
 {
     /* Verify the hook */
-    if (!game_term->user_hook)
+    if (!game_term->user_hook) {
         return -1;
+    }
 
     /* Call the hook */
     return (*game_term->user_hook)(n);
@@ -109,8 +113,9 @@ errr term_user(int n)
 errr term_xtra(int n, int v)
 {
     /* Verify the hook */
-    if (!game_term->xtra_hook)
+    if (!game_term->xtra_hook) {
         return -1;
+    }
 
     /* Call the hook */
     return (*game_term->xtra_hook)(n, v);
@@ -200,8 +205,9 @@ void term_queue_char(TERM_LEN x, TERM_LEN y, TERM_COLOR a, char c, TERM_COLOR ta
     char *scr_tcc = &scrn->tc[y][x];
 
     /* Ignore non-changes */
-    if ((*scr_aa == a) && (*scr_cc == c) && (*scr_taa == ta) && (*scr_tcc == tc))
+    if ((*scr_aa == a) && (*scr_cc == c) && (*scr_taa == ta) && (*scr_tcc == tc)) {
         return;
+    }
 
     /* Save the "literal" information */
     *scr_aa = a;
@@ -211,24 +217,29 @@ void term_queue_char(TERM_LEN x, TERM_LEN y, TERM_COLOR a, char c, TERM_COLOR ta
     *scr_tcc = tc;
 
     /* Check for new min/max row info */
-    if (y < game_term->y1)
+    if (y < game_term->y1) {
         game_term->y1 = y;
-    if (y > game_term->y2)
+    }
+    if (y > game_term->y2) {
         game_term->y2 = y;
+    }
 
     /* Check for new min/max col info for this row */
-    if (x < game_term->x1[y])
+    if (x < game_term->x1[y]) {
         game_term->x1[y] = x;
-    if (x > game_term->x2[y])
+    }
+    if (x > game_term->x2[y]) {
         game_term->x2[y] = x;
+    }
 
 #ifdef JP
     if (((scrn->a[y][x] & AF_BIGTILE2) == AF_BIGTILE2) || (scrn->a[y][x] & AF_KANJI2))
 #else
     if ((scrn->a[y][x] & AF_BIGTILE2) == AF_BIGTILE2)
 #endif
-        if ((x - 1) < game_term->x1[y])
+        if ((x - 1) < game_term->x1[y]) {
             game_term->x1[y]--;
+        }
 }
 
 /*
@@ -347,8 +358,9 @@ void term_queue_line(TERM_LEN x, TERM_LEN y, int n, TERM_COLOR *a, char *c, TERM
         *scr_cc++ = *c++;
 
         /* Track minimum changed column */
-        if (x1 < 0)
+        if (x1 < 0) {
             x1 = x;
+        }
 
         /* Track maximum changed column */
         x2 = x;
@@ -359,16 +371,20 @@ void term_queue_line(TERM_LEN x, TERM_LEN y, int n, TERM_COLOR *a, char *c, TERM
     /* Expand the "change area" as needed */
     if (x1 >= 0) {
         /* Check for new min/max row info */
-        if (y < game_term->y1)
+        if (y < game_term->y1) {
             game_term->y1 = y;
-        if (y > game_term->y2)
+        }
+        if (y > game_term->y2) {
             game_term->y2 = y;
+        }
 
         /* Check for new min/max col info in this row */
-        if (x1 < game_term->x1[y])
+        if (x1 < game_term->x1[y]) {
             game_term->x1[y] = x1;
-        if (x2 > game_term->x2[y])
+        }
+        if (x2 > game_term->x2[y]) {
             game_term->x2[y] = x2;
+        }
     }
 }
 
@@ -399,8 +415,9 @@ static void term_queue_chars(TERM_LEN x, TERM_LEN y, int n, TERM_COLOR a, concpt
 
 #ifdef JP
     /* 表示文字なし */
-    if (n == 0 || *s == 0)
+    if (n == 0 || *s == 0) {
         return;
+    }
     /*
      * 全角文字の右半分から文字を表示する場合、
      * 重なった文字の左部分を消去。
@@ -425,20 +442,22 @@ static void term_queue_chars(TERM_LEN x, TERM_LEN y, int n, TERM_COLOR a, concpt
             byte na1 = (a | AF_KANJI1);
             byte na2 = (a | AF_KANJI2);
 
-            if ((--n == 0) || !nc2)
+            if ((--n == 0) || !nc2) {
                 break;
+            }
 
-            if (scr_aa[x++] == na1 && scr_aa[x] == na2 && scr_cc[x - 1] == nc1 && scr_cc[x] == nc2 && (scr_taa[x - 1] == 0) && (scr_taa[x] == 0)
-                && (scr_tcc[x - 1] == 0) && (scr_tcc[x] == 0))
+            if (scr_aa[x++] == na1 && scr_aa[x] == na2 && scr_cc[x - 1] == nc1 && scr_cc[x] == nc2 && (scr_taa[x - 1] == 0) && (scr_taa[x] == 0) && (scr_tcc[x - 1] == 0) && (scr_tcc[x] == 0)) {
                 continue;
+            }
 
             scr_aa[x - 1] = na1;
             scr_aa[x] = na2;
             scr_cc[x - 1] = nc1;
             scr_cc[x] = nc2;
 
-            if (x1 < 0)
+            if (x1 < 0) {
                 x1 = x - 1;
+            }
             x2 = x;
         } else {
 #endif
@@ -449,8 +468,9 @@ static void term_queue_chars(TERM_LEN x, TERM_LEN y, int n, TERM_COLOR a, concpt
             char otc = scr_tcc[x];
 
             /* Ignore non-changes */
-            if ((oa == a) && (oc == *s) && (ota == 0) && (otc == 0))
+            if ((oa == a) && (oc == *s) && (ota == 0) && (otc == 0)) {
                 continue;
+            }
 
             /* Save the "literal" information */
             scr_aa[x] = a;
@@ -460,8 +480,9 @@ static void term_queue_chars(TERM_LEN x, TERM_LEN y, int n, TERM_COLOR a, concpt
             scr_tcc[x] = 0;
 
             /* Note the "range" of window updates */
-            if (x1 < 0)
+            if (x1 < 0) {
                 x1 = x;
+            }
             x2 = x;
 #ifdef JP
         }
@@ -480,8 +501,9 @@ static void term_queue_chars(TERM_LEN x, TERM_LEN y, int n, TERM_COLOR a, concpt
         if (x != w && !(scr_aa[x] & AF_TILE1) && (scr_aa[x] & AF_KANJI2)) {
             scr_cc[x] = ' ';
             scr_aa[x] &= AF_KANJIC;
-            if (x1 < 0)
+            if (x1 < 0) {
                 x1 = x;
+            }
             x2 = x;
         }
     }
@@ -489,16 +511,20 @@ static void term_queue_chars(TERM_LEN x, TERM_LEN y, int n, TERM_COLOR a, concpt
     /* Expand the "change area" as needed */
     if (x1 >= 0) {
         /* Check for new min/max row info */
-        if (y < game_term->y1)
+        if (y < game_term->y1) {
             game_term->y1 = y;
-        if (y > game_term->y2)
+        }
+        if (y > game_term->y2) {
             game_term->y2 = y;
+        }
 
         /* Check for new min/max col info in this row */
-        if (x1 < game_term->x1[y])
+        if (x1 < game_term->x1[y]) {
             game_term->x1[y] = x1;
-        if (x2 > game_term->x2[y])
+        }
+        if (x2 > game_term->x2[y]) {
             game_term->x2[y] = x2;
+        }
     }
 }
 
@@ -577,9 +603,7 @@ static void term_fresh_row_pict(TERM_LEN y, TERM_LEN x1, TERM_LEN x2)
 
         /* Handle unchanged grids */
 #ifdef JP
-        if ((na == oa) && (nc == oc) && (nta == ota) && (ntc == otc)
-            && (!kanji
-                || (scr_aa[x + 1] == old_aa[x + 1] && scr_cc[x + 1] == old_cc[x + 1] && scr_taa[x + 1] == old_taa[x + 1] && scr_tcc[x + 1] == old_tcc[x + 1])))
+        if ((na == oa) && (nc == oc) && (nta == ota) && (ntc == otc) && (!kanji || (scr_aa[x + 1] == old_aa[x + 1] && scr_cc[x + 1] == old_cc[x + 1] && scr_taa[x + 1] == old_taa[x + 1] && scr_tcc[x + 1] == old_tcc[x + 1])))
 #else
         if ((na == oa) && (nc == oc) && (nta == ota) && (ntc == otc))
 #endif
@@ -612,8 +636,9 @@ static void term_fresh_row_pict(TERM_LEN y, TERM_LEN x1, TERM_LEN x2)
         old_tcc[x] = ntc;
 
         /* Restart and Advance */
-        if (fn++ == 0)
+        if (fn++ == 0) {
             fx = x;
+        }
     }
 
     /* Flush */
@@ -703,9 +728,7 @@ static void term_fresh_row_both(TERM_LEN y, int x1, int x2)
 
         /* Handle unchanged grids */
 #ifdef JP
-        if ((na == oa) && (nc == oc) && (nta == ota) && (ntc == otc)
-            && (!kanji
-                || (scr_aa[x + 1] == old_aa[x + 1] && scr_cc[x + 1] == old_cc[x + 1] && scr_taa[x + 1] == old_taa[x + 1] && scr_tcc[x + 1] == old_tcc[x + 1])))
+        if ((na == oa) && (nc == oc) && (nta == ota) && (ntc == otc) && (!kanji || (scr_aa[x + 1] == old_aa[x + 1] && scr_cc[x + 1] == old_cc[x + 1] && scr_taa[x + 1] == old_taa[x + 1] && scr_tcc[x + 1] == old_tcc[x + 1])))
 #else
         if ((na == oa) && (nc == oc) && (nta == ota) && (ntc == otc))
 #endif
@@ -746,8 +769,9 @@ static void term_fresh_row_both(TERM_LEN y, int x1, int x2)
         old_tcc[x] = ntc;
 
         /* 2nd byte of bigtile */
-        if ((na & AF_BIGTILE2) == AF_BIGTILE2)
+        if ((na & AF_BIGTILE2) == AF_BIGTILE2) {
             continue;
+        }
 
         /* Handle high-bit attr/chars */
         if ((na & AF_TILE1) && (nc & 0x80)) {
@@ -807,8 +831,9 @@ static void term_fresh_row_both(TERM_LEN y, int x1, int x2)
         }
 
         /* Restart and Advance */
-        if (fn++ == 0)
+        if (fn++ == 0) {
             fx = x;
+        }
     }
 
     /* Flush */
@@ -860,14 +885,16 @@ static void term_fresh_row_text(TERM_LEN y, TERM_LEN x1, TERM_LEN x2)
     /* 全角文字の２バイト目かどうか */
     int kanji = 0;
 
-    for (TERM_LEN x = 0; x < x1; x++)
+    for (TERM_LEN x = 0; x < x1; x++) {
         if (!(old_aa[x] & AF_TILE1) && iskanji(old_cc[x])) {
             if (x == x1 - 1) {
                 x1--;
                 break;
-            } else
+            } else {
                 x++;
+            }
         }
+    }
 #endif
     /* Scan "modified" columns */
     for (TERM_LEN x = x1; x <= x2; x++) {
@@ -966,8 +993,9 @@ static void term_fresh_row_text(TERM_LEN y, TERM_LEN x1, TERM_LEN x2)
         }
 
         /* Restart and Advance */
-        if (fn++ == 0)
+        if (fn++ == 0) {
             fx = x;
+        }
     }
 
     /* Flush */
@@ -999,15 +1027,18 @@ errr term_fresh(void)
     const auto &scr = game_term->scr;
 
     /* Before initialize (Advice from Mr.shimitei)*/
-    if (!old || !scr)
+    if (!old || !scr) {
         return 1;
+    }
 
-    if (game_term->never_fresh)
+    if (game_term->never_fresh) {
         return 1;
+    }
 
     /* Do nothing unless "mapped" */
-    if (!game_term->mapped_flag)
+    if (!game_term->mapped_flag) {
         return 1;
+    }
 
     /* Trivial Refresh */
     if ((y1 > y2) && (scr->cu == old->cu) && (scr->cv == old->cv) && (scr->cx == old->cx) && (scr->cy == old->cy) && !(game_term->total_erase)) {
@@ -1078,16 +1109,19 @@ errr term_fresh(void)
             char otc = old_tcc[tx];
 
 #ifdef JP
-            if (tx + 1 < game_term->wid && !(old_aa[tx] & AF_TILE1) && iskanji(old_cc[tx]))
+            if (tx + 1 < game_term->wid && !(old_aa[tx] & AF_TILE1) && iskanji(old_cc[tx])) {
                 csize = 2;
+            }
 #endif
             /* Use "term_pict()" always */
-            if (game_term->always_pict)
+            if (game_term->always_pict) {
                 (void)((*game_term->pict_hook)(tx, ty, csize, &old_aa[tx], &old_cc[tx], &ota, &otc));
+            }
 
             /* Use "term_pict()" sometimes */
-            else if (game_term->higher_pict && (old_aa[tx] & AF_TILE1) && (old_cc[tx] & 0x80))
+            else if (game_term->higher_pict && (old_aa[tx] & AF_TILE1) && (old_cc[tx] & 0x80)) {
                 (void)((*game_term->pict_hook)(tx, ty, 1, &old_aa[tx], &old_cc[tx], &ota, &otc));
+            }
 
             /*
              * Restore the actual character
@@ -1101,8 +1135,9 @@ errr term_fresh(void)
             }
 
             /* Erase the grid */
-            else
+            else {
                 (void)((*game_term->wipe_hook)(tx, ty, 1));
+            }
         }
     }
 
@@ -1156,8 +1191,9 @@ errr term_fresh(void)
                 game_term->x2[y] = 0;
 
                 /* Flush that row (if allowed) */
-                if (!game_term->never_frosh)
+                if (!game_term->never_frosh) {
                     term_xtra(TERM_XTRA_FROSH, y);
+                }
             }
         }
 
@@ -1171,9 +1207,7 @@ errr term_fresh(void)
         /* Draw the cursor */
         if (!scr->cu && scr->cv) {
 #ifdef JP
-            if ((scr->cx + 1 < w)
-                && ((old->a[scr->cy][scr->cx + 1] & AF_BIGTILE2) == AF_BIGTILE2
-                    || (!(old->a[scr->cy][scr->cx] & AF_TILE1) && iskanji(old->c[scr->cy][scr->cx]))))
+            if ((scr->cx + 1 < w) && ((old->a[scr->cy][scr->cx + 1] & AF_BIGTILE2) == AF_BIGTILE2 || (!(old->a[scr->cy][scr->cx] & AF_TILE1) && iskanji(old->c[scr->cy][scr->cx]))))
 #else
             if ((scr->cx + 1 < w) && (old->a[scr->cy][scr->cx + 1] & AF_BIGTILE2) == AF_BIGTILE2)
 #endif
@@ -1235,8 +1269,9 @@ errr term_fresh_force(void)
 errr term_set_cursor(int v)
 {
     /* Already done */
-    if (game_term->scr->cv == (bool)v)
+    if (game_term->scr->cv == (bool)v) {
         return 1;
+    }
 
     /* Change */
     game_term->scr->cv = (bool)v;
@@ -1254,10 +1289,12 @@ errr term_gotoxy(TERM_LEN x, TERM_LEN y)
     int h = game_term->hgt;
 
     /* Verify */
-    if ((x < 0) || (x >= w))
+    if ((x < 0) || (x >= w)) {
         return -1;
-    if ((y < 0) || (y >= h))
+    }
+    if ((y < 0) || (y >= h)) {
         return -1;
+    }
 
     /* Remember the cursor */
     game_term->scr->cx = x;
@@ -1278,14 +1315,17 @@ errr term_draw(TERM_LEN x, TERM_LEN y, TERM_COLOR a, char c)
     int w = game_term->wid;
     int h = game_term->hgt;
 
-    if ((x < 0) || (x >= w))
+    if ((x < 0) || (x >= w)) {
         return -1;
-    if ((y < 0) || (y >= h))
+    }
+    if ((y < 0) || (y >= h)) {
         return -1;
+    }
 
     /* Paranoia -- illegal char */
-    if (!c)
+    if (!c) {
         return -2;
+    }
 
     /* Queue it for later */
     term_queue_char(x, y, a, c, 0, 0);
@@ -1313,12 +1353,14 @@ errr term_addch(TERM_COLOR a, char c)
     TERM_LEN w = game_term->wid;
 
     /* Handle "unusable" cursor */
-    if (game_term->scr->cu)
+    if (game_term->scr->cu) {
         return -1;
+    }
 
     /* Paranoia -- no illegal chars */
-    if (!c)
+    if (!c) {
         return -2;
+    }
 
     /* Queue the given character for display */
     term_queue_char(game_term->scr->cx, game_term->scr->cy, a, c, 0, 0);
@@ -1327,8 +1369,9 @@ errr term_addch(TERM_COLOR a, char c)
     game_term->scr->cx++;
 
     /* Success */
-    if (game_term->scr->cx < w)
+    if (game_term->scr->cx < w) {
         return 0;
+    }
 
     /* Note "Useless" cursor */
     game_term->scr->cu = 1;
@@ -1347,16 +1390,19 @@ errr term_addch(TERM_COLOR a, char c)
  */
 errr term_add_bigch(TERM_COLOR a, char c)
 {
-    if (!use_bigtile)
+    if (!use_bigtile) {
         return term_addch(a, c);
+    }
 
     /* Handle "unusable" cursor */
-    if (game_term->scr->cu)
+    if (game_term->scr->cu) {
         return -1;
+    }
 
     /* Paranoia -- no illegal chars */
-    if (!c)
+    if (!c) {
         return -2;
+    }
 
     /* Queue the given character for display */
     term_queue_bigchar(game_term->scr->cx, game_term->scr->cy, a, c, 0, 0);
@@ -1365,8 +1411,9 @@ errr term_add_bigch(TERM_COLOR a, char c)
     game_term->scr->cx += 2;
 
     /* Success */
-    if (game_term->scr->cx < game_term->wid)
+    if (game_term->scr->cx < game_term->wid) {
         return 0;
+    }
 
     /* Note "Useless" cursor */
     game_term->scr->cu = 1;
@@ -1401,19 +1448,22 @@ errr term_addstr(int n, TERM_COLOR a, concptr s)
     errr res = 0;
 
     /* Handle "unusable" cursor */
-    if (game_term->scr->cu)
+    if (game_term->scr->cu) {
         return -1;
+    }
 
     /* Obtain maximal length */
     k = (n < 0) ? (w + 1) : n;
 
     /* Obtain the usable string length */
-    for (n = 0; (n < k) && s[n]; n++) /* loop */
+    for (n = 0; (n < k) && s[n]; n++) { /* loop */
         ;
+    }
 
     /* React to reaching the edge of the screen */
-    if (game_term->scr->cx + n >= w)
+    if (game_term->scr->cx + n >= w) {
         res = n = w - game_term->scr->cx;
+    }
 
     /* Queue the first "n" characters for display */
     term_queue_chars(game_term->scr->cx, game_term->scr->cy, n, a, s);
@@ -1422,8 +1472,9 @@ errr term_addstr(int n, TERM_COLOR a, concptr s)
     game_term->scr->cx += n;
 
     /* Notice "Useless" cursor */
-    if (res)
+    if (res) {
         game_term->scr->cu = 1;
+    }
 
     return res;
 }
@@ -1436,12 +1487,14 @@ errr term_putch(TERM_LEN x, TERM_LEN y, TERM_COLOR a, char c)
     errr res;
 
     /* Move first */
-    if ((res = term_gotoxy(x, y)) != 0)
+    if ((res = term_gotoxy(x, y)) != 0) {
         return res;
+    }
 
     /* Then add the char */
-    if ((res = term_addch(a, c)) != 0)
+    if ((res = term_addch(a, c)) != 0) {
         return res;
+    }
 
     return 0;
 }
@@ -1454,12 +1507,14 @@ errr term_putstr(TERM_LEN x, TERM_LEN y, int n, TERM_COLOR a, concptr s)
     errr res;
 
     /* Move first */
-    if ((res = term_gotoxy(x, y)) != 0)
+    if ((res = term_gotoxy(x, y)) != 0) {
         return res;
+    }
 
     /* Then add the string */
-    if ((res = term_addstr(n, a, s)) != 0)
+    if ((res = term_addstr(n, a, s)) != 0) {
         return res;
+    }
 
     return 0;
 }
@@ -1479,12 +1534,14 @@ errr term_erase(TERM_LEN x, TERM_LEN y, int n)
     int nc = game_term->char_blank;
 
     /* Place cursor */
-    if (term_gotoxy(x, y))
+    if (term_gotoxy(x, y)) {
         return -1;
+    }
 
     /* Force legal size */
-    if (x + n > w)
+    if (x + n > w) {
         n = w - x;
+    }
 
     /* Fast access */
     auto &scr_aa = game_term->scr->a[y];
@@ -1513,8 +1570,9 @@ errr term_erase(TERM_LEN x, TERM_LEN y, int n)
         int oc = scr_cc[x];
 
         /* Ignore "non-changes" */
-        if ((oa == na) && (oc == nc))
+        if ((oa == na) && (oc == nc)) {
             continue;
+        }
 
 #ifdef JP
         /*
@@ -1524,8 +1582,9 @@ errr term_erase(TERM_LEN x, TERM_LEN y, int n)
          * 2001/04/29 -- Habu
          * 行の右端の場合はこの処理をしないように修正。
          */
-        if ((oa & AF_KANJI1) && (i + 1) == n && x != w - 1)
+        if ((oa & AF_KANJI1) && (i + 1) == n && x != w - 1) {
             n++;
+        }
 #endif
         /* Save the "literal" information */
         scr_aa[x] = (byte)na;
@@ -1535,8 +1594,9 @@ errr term_erase(TERM_LEN x, TERM_LEN y, int n)
         scr_tcc[x] = 0;
 
         /* Track minimum changed column */
-        if (x1 < 0)
+        if (x1 < 0) {
             x1 = x;
+        }
 
         /* Track maximum changed column */
         x2 = x;
@@ -1545,16 +1605,20 @@ errr term_erase(TERM_LEN x, TERM_LEN y, int n)
     /* Expand the "change area" as needed */
     if (x1 >= 0) {
         /* Check for new min/max row info */
-        if (y < game_term->y1)
+        if (y < game_term->y1) {
             game_term->y1 = y;
-        if (y > game_term->y2)
+        }
+        if (y > game_term->y2) {
             game_term->y2 = y;
+        }
 
         /* Check for new min/max col info in this row */
-        if (x1 < game_term->x1[y])
+        if (x1 < game_term->x1[y]) {
             game_term->x1[y] = x1;
-        if (x2 > game_term->x2[y])
+        }
+        if (x2 > game_term->x2[y]) {
             game_term->x2[y] = x2;
+        }
     }
 
     return 0;
@@ -1627,14 +1691,18 @@ errr term_redraw(void)
 errr term_redraw_section(TERM_LEN x1, TERM_LEN y1, TERM_LEN x2, TERM_LEN y2)
 {
     /* Bounds checking */
-    if (y2 >= game_term->hgt)
+    if (y2 >= game_term->hgt) {
         y2 = game_term->hgt - 1;
-    if (x2 >= game_term->wid)
+    }
+    if (x2 >= game_term->wid) {
         x2 = game_term->wid - 1;
-    if (y1 < 0)
+    }
+    if (y1 < 0) {
         y1 = 0;
-    if (x1 < 0)
+    }
+    if (x1 < 0) {
         x1 = 0;
+    }
 
     /* Set y limits */
     game_term->y1 = y1;
@@ -1647,13 +1715,15 @@ errr term_redraw_section(TERM_LEN x1, TERM_LEN y1, TERM_LEN x2, TERM_LEN y2)
         TERM_LEN x2j = x2;
 
         if (x1j > 0) {
-            if (game_term->scr->a[i][x1j] & AF_KANJI2)
+            if (game_term->scr->a[i][x1j] & AF_KANJI2) {
                 x1j--;
+            }
         }
 
         if (x2j < game_term->wid - 1) {
-            if (game_term->scr->a[i][x2j] & AF_KANJI1)
+            if (game_term->scr->a[i][x2j] & AF_KANJI1) {
                 x2j++;
+            }
         }
 
         game_term->x1[i] = x1j;
@@ -1717,8 +1787,9 @@ errr term_locate(TERM_LEN *x, TERM_LEN *y)
     (*y) = game_term->scr->cy;
 
     /* Warn about "useless" cursor */
-    if (game_term->scr->cu)
+    if (game_term->scr->cu) {
         return 1;
+    }
 
     return 0;
 }
@@ -1733,10 +1804,12 @@ errr term_what(TERM_LEN x, TERM_LEN y, TERM_COLOR *a, char *c)
     TERM_LEN w = game_term->wid;
     TERM_LEN h = game_term->hgt;
 
-    if ((x < 0) || (x >= w))
+    if ((x < 0) || (x >= w)) {
         return -1;
-    if ((y < 0) || (y >= h))
+    }
+    if ((y < 0) || (y >= h)) {
         return -1;
+    }
 
     /* Direct access */
     (*a) = game_term->scr->a[y][x];
@@ -1765,18 +1838,21 @@ errr term_flush(void)
 errr term_key_push(int k)
 {
     /* Refuse to enqueue non-keys */
-    if (!k)
+    if (!k) {
         return -1;
+    }
 
     /* Overflow may induce circular queue */
-    if (game_term->key_tail == 0)
+    if (game_term->key_tail == 0) {
         game_term->key_tail = game_term->key_size;
+    }
 
     /* Back up, Store the char */
     game_term->key_queue[--game_term->key_tail] = (char)k;
 
-    if (game_term->key_head != game_term->key_tail)
+    if (game_term->key_head != game_term->key_tail) {
         return 0;
+    }
 
     return 1;
 }
@@ -1821,15 +1897,17 @@ errr term_inkey(char *ch, bool wait, bool take)
     }
 
     /* No keys are ready */
-    if (game_term->key_head == game_term->key_tail)
+    if (game_term->key_head == game_term->key_tail) {
         return 1;
+    }
 
     /* Extract the next keypress */
     (*ch) = game_term->key_queue[game_term->key_tail];
 
     /* If requested, advance the queue, wrap around if necessary */
-    if (take && (++game_term->key_tail == game_term->key_size))
+    if (take && (++game_term->key_tail == game_term->key_size)) {
         game_term->key_tail = 0;
+    }
 
     return 0;
 }
@@ -1859,13 +1937,15 @@ errr term_load(bool load_all)
     TERM_LEN w = game_term->wid;
     TERM_LEN h = game_term->hgt;
 
-    if (game_term->mem_stack.empty())
+    if (game_term->mem_stack.empty()) {
         return 0;
+    }
 
     if (load_all) {
         // 残り1つを残して読み捨てる
-        while (game_term->mem_stack.size() > 1)
+        while (game_term->mem_stack.size() > 1) {
             game_term->mem_stack.pop();
+        }
     }
 
     /* Load */
@@ -1924,24 +2004,28 @@ errr term_exchange(void)
 errr term_resize(TERM_LEN w, TERM_LEN h)
 {
     /* Resizing is forbidden */
-    if (game_term->fixed_shape)
+    if (game_term->fixed_shape) {
         return -1;
+    }
 
     /* Ignore illegal changes */
-    if ((w < 1) || (h < 1))
+    if ((w < 1) || (h < 1)) {
         return -1;
+    }
 
     /* Ignore non-changes */
-    if ((game_term->wid == w) && (game_term->hgt == h) && (arg_bigtile == use_bigtile))
+    if ((game_term->wid == w) && (game_term->hgt == h) && (arg_bigtile == use_bigtile)) {
         return 1;
+    }
 
     use_bigtile = arg_bigtile;
 
     /* Resize windows */
     game_term->old->resize(w, h);
     game_term->scr->resize(w, h);
-    if (game_term->tmp)
+    if (game_term->tmp) {
         game_term->tmp->resize(w, h);
+    }
 
     /* Resize scanners */
     game_term->x1.resize(h);
@@ -1966,8 +2050,9 @@ errr term_resize(TERM_LEN w, TERM_LEN h)
     game_term->y2 = h - 1;
 
     /* Execute the "resize_hook" hook, if available */
-    if (game_term->resize_hook)
+    if (game_term->resize_hook) {
         game_term->resize_hook();
+    }
 
     return 0;
 }
@@ -1984,18 +2069,21 @@ errr term_resize(TERM_LEN w, TERM_LEN h)
 errr term_activate(term_type *t)
 {
     /* already done */
-    if (game_term == t)
+    if (game_term == t) {
         return 1;
+    }
 
     /* Deactivate the old Term */
-    if (game_term)
+    if (game_term) {
         term_xtra(TERM_XTRA_LEVEL, 0);
+    }
 
     /* Call the special "init" hook */
     if (t && !t->active_flag) {
         /* Call the "init" hook */
-        if (t->init_hook)
+        if (t->init_hook) {
             (*t->init_hook)(t);
+        }
 
         /* Remember */
         t->active_flag = true;
@@ -2008,8 +2096,9 @@ errr term_activate(term_type *t)
     game_term = t;
 
     /* Activate the new Term */
-    if (game_term)
+    if (game_term) {
         term_xtra(TERM_XTRA_LEVEL, 1);
+    }
 
     return 0;
 }
@@ -2086,19 +2175,23 @@ errr term_putstr_v(TERM_LEN x, TERM_LEN y, int n, byte a, concptr s)
 
     for (int i = 0; i < n && s[i] != 0; i++) {
         /* Move first */
-        if ((res = term_gotoxy(x, y0)) != 0)
+        if ((res = term_gotoxy(x, y0)) != 0) {
             return res;
+        }
 
         if (iskanji(s[i])) {
-            if ((res = term_addstr(2, a, &s[i])) != 0)
+            if ((res = term_addstr(2, a, &s[i])) != 0) {
                 return res;
+            }
             i++;
             y0++;
-            if (s[i] == 0)
+            if (s[i] == 0) {
                 break;
+            }
         } else {
-            if ((res = term_addstr(1, a, &s[i])) != 0)
+            if ((res = term_addstr(1, a, &s[i])) != 0) {
                 return res;
+            }
             y0++;
         }
     }
@@ -2111,8 +2204,9 @@ errr term_putstr_v(TERM_LEN x, TERM_LEN y, int n, byte a, concptr s)
 errr term_nuke(term_type *t)
 {
     if (t->active_flag) {
-        if (t->nuke_hook)
+        if (t->nuke_hook) {
             (*t->nuke_hook)(t);
+        }
 
         t->active_flag = false;
         t->mapped_flag = false;
@@ -2121,8 +2215,9 @@ errr term_nuke(term_type *t)
     t->old.reset();
     t->scr.reset();
     t->tmp.reset();
-    while (!t->mem_stack.empty())
+    while (!t->mem_stack.empty()) {
         t->mem_stack.pop();
+    }
 
     t->x1.clear();
     t->x2.clear();

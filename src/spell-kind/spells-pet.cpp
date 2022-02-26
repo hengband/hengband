@@ -26,21 +26,25 @@ void discharge_minion(PlayerType *player_ptr)
     bool okay = true;
     for (MONSTER_IDX i = 1; i < player_ptr->current_floor_ptr->m_max; i++) {
         auto *m_ptr = &player_ptr->current_floor_ptr->m_list[i];
-        if (!m_ptr->r_idx || !is_pet(m_ptr))
+        if (!m_ptr->r_idx || !is_pet(m_ptr)) {
             continue;
-        if (m_ptr->nickname)
+        }
+        if (m_ptr->nickname) {
             okay = false;
+        }
     }
 
     if (!okay || player_ptr->riding) {
-        if (!get_check(_("本当に全ペットを爆破しますか？", "You will blast all pets. Are you sure? ")))
+        if (!get_check(_("本当に全ペットを爆破しますか？", "You will blast all pets. Are you sure? "))) {
             return;
+        }
     }
 
     for (MONSTER_IDX i = 1; i < player_ptr->current_floor_ptr->m_max; i++) {
         auto *m_ptr = &player_ptr->current_floor_ptr->m_list[i];
-        if (!m_ptr->r_idx || !is_pet(m_ptr))
+        if (!m_ptr->r_idx || !is_pet(m_ptr)) {
             continue;
+        }
 
         monster_race *r_ptr;
         r_ptr = &r_info[m_ptr->r_idx];
@@ -53,12 +57,15 @@ void discharge_minion(PlayerType *player_ptr)
         }
 
         int dam = m_ptr->maxhp / 2;
-        if (dam > 100)
+        if (dam > 100) {
             dam = (dam - 100) / 2 + 100;
-        if (dam > 400)
+        }
+        if (dam > 400) {
             dam = (dam - 400) / 2 + 400;
-        if (dam > 800)
+        }
+        if (dam > 800) {
             dam = 800;
+        }
         project(player_ptr, i, 2 + (r_ptr->level / 20), m_ptr->fy, m_ptr->fx, dam, AttributeType::PLASMA, PROJECT_STOP | PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL);
 
         if (record_named_pet && m_ptr->nickname) {

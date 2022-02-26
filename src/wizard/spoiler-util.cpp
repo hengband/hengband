@@ -16,8 +16,9 @@ FILE *spoiler_file = nullptr;
  */
 static void spoiler_out_n_chars(int n, char c)
 {
-    while (--n >= 0)
+    while (--n >= 0) {
         fputc(c, spoiler_file);
+    }
 }
 
 /*!
@@ -25,7 +26,10 @@ static void spoiler_out_n_chars(int n, char c)
  * Write out `n' blank lines to the spoiler file
  * @param n 改行を出力する数
  */
-void spoiler_blanklines(int n) { spoiler_out_n_chars(n, '\n'); }
+void spoiler_blanklines(int n)
+{
+    spoiler_out_n_chars(n, '\n');
+}
 
 /*!
  * @brief ファイルポインタ先に複数のハイフンで装飾した文字列を出力する /
@@ -64,14 +68,16 @@ void spoil_out(concptr str)
             waiting_output = false;
         }
 
-        if (roff_p != roff_buf)
+        if (roff_p != roff_buf) {
             roff_p--;
-        while (*roff_p == ' ' && roff_p != roff_buf)
+        }
+        while (*roff_p == ' ' && roff_p != roff_buf) {
             roff_p--;
+        }
 
-        if (roff_p == roff_buf)
+        if (roff_p == roff_buf) {
             fprintf(spoiler_file, "\n");
-        else {
+        } else {
             *(roff_p + 1) = '\0';
             fprintf(spoiler_file, "%s\n\n", roff_buf);
         }
@@ -91,34 +97,39 @@ void spoil_out(concptr str)
         bool wrap = (ch == '\n');
 
 #ifdef JP
-        if (!isprint((unsigned char)ch) && !k_flag && !iskanji_flag)
+        if (!isprint((unsigned char)ch) && !k_flag && !iskanji_flag) {
             ch = ' ';
+        }
 
         iskanji_flag = k_flag && !iskanji_flag;
 #else
-        if (!isprint(ch))
+        if (!isprint(ch)) {
             ch = ' ';
+        }
 #endif
 
         if (waiting_output) {
             fputs(roff_waiting_buf, spoiler_file);
-            if (!wrap)
+            if (!wrap) {
                 fputc('\n', spoiler_file);
+            }
 
             waiting_output = false;
         }
 
         if (!wrap) {
 #ifdef JP
-            if (roff_p >= roff_buf + (iskanji_flag ? 74 : 75))
+            if (roff_p >= roff_buf + (iskanji_flag ? 74 : 75)) {
                 wrap = true;
-            else if ((ch == ' ') && (roff_p >= roff_buf + (iskanji_flag ? 72 : 73)))
+            } else if ((ch == ' ') && (roff_p >= roff_buf + (iskanji_flag ? 72 : 73))) {
                 wrap = true;
+            }
 #else
-            if (roff_p >= roff_buf + 75)
+            if (roff_p >= roff_buf + 75) {
                 wrap = true;
-            else if ((ch == ' ') && (roff_p >= roff_buf + 73))
+            } else if ((ch == ' ') && (roff_p >= roff_buf + 73)) {
                 wrap = true;
+            }
 #endif
 
             if (wrap) {
@@ -131,23 +142,27 @@ void spoil_out(concptr str)
 #endif
 
                 for (; *tail; tail++) {
-                    if (*tail == ' ')
+                    if (*tail == ' ') {
                         continue;
+                    }
 
 #ifdef JP
                     k_flag_local = iskanji((unsigned char)(*tail));
-                    if (isprint((unsigned char)*tail) || k_flag_local || iskanji_flag_local)
+                    if (isprint((unsigned char)*tail) || k_flag_local || iskanji_flag_local) {
                         break;
+                    }
 
                     iskanji_flag_local = k_flag_local && !iskanji_flag_local;
 #else
-                    if (isprint(*tail))
+                    if (isprint(*tail)) {
                         break;
+                    }
 #endif
                 }
 
-                if (!*tail)
+                if (!*tail) {
                     waiting_output = true;
+                }
             }
         }
 
@@ -165,35 +180,42 @@ void spoil_out(concptr str)
                 r = roff_s + 1;
             }
 
-            if (!waiting_output)
+            if (!waiting_output) {
                 fprintf(spoiler_file, "%s\n", roff_buf);
-            else
+            } else {
                 strcpy(roff_waiting_buf, roff_buf);
+            }
 
             roff_s = nullptr;
             roff_p = roff_buf;
 #ifdef JP
-            if (cbak != ' ')
+            if (cbak != ' ') {
                 *roff_p++ = cbak;
+            }
 #endif
-            while (*r)
+            while (*r) {
                 *roff_p++ = *r++;
+            }
         }
 
-        if ((roff_p <= roff_buf) && (ch == ' '))
+        if ((roff_p <= roff_buf) && (ch == ' ')) {
             continue;
+        }
 
 #ifdef JP
         if (!k_flag) {
-            if ((ch == ' ') || (ch == '('))
+            if ((ch == ' ') || (ch == '(')) {
                 roff_s = roff_p;
+            }
         } else {
-            if (iskanji_flag && strncmp(str, "。", 2) != 0 && strncmp(str, "、", 2) != 0 && strncmp(str, "ィ", 2) != 0 && strncmp(str, "ー", 2) != 0)
+            if (iskanji_flag && strncmp(str, "。", 2) != 0 && strncmp(str, "、", 2) != 0 && strncmp(str, "ィ", 2) != 0 && strncmp(str, "ー", 2) != 0) {
                 roff_s = roff_p;
+            }
         }
 #else
-        if (ch == ' ')
+        if (ch == ' ') {
             roff_s = roff_p;
+        }
 #endif
 
         *roff_p++ = ch;

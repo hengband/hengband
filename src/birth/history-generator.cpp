@@ -107,10 +107,11 @@ static void decide_social_class(PlayerType *player_ptr, char *buf)
         chart = bg[i].next;
     }
 
-    if (social_class > 100)
+    if (social_class > 100) {
         social_class = 100;
-    else if (social_class < 1)
+    } else if (social_class < 1) {
         social_class = 1;
+    }
 
     player_ptr->sc = (int16_t)social_class;
 }
@@ -120,8 +121,9 @@ static void decide_social_class(PlayerType *player_ptr, char *buf)
  */
 void get_history(PlayerType *player_ptr)
 {
-    for (int i = 0; i < 4; i++)
+    for (int i = 0; i < 4; i++) {
         player_ptr->history[i][0] = '\0';
+    }
 
     char buf[240];
     buf[0] = '\0';
@@ -129,12 +131,14 @@ void get_history(PlayerType *player_ptr)
 
     /* loop */
     char *s;
-    for (s = buf; *s == ' '; s++)
+    for (s = buf; *s == ' '; s++) {
         ;
+    }
 
     int n = strlen(s);
-    while ((n > 0) && (s[n - 1] == ' '))
+    while ((n > 0) && (s[n - 1] == ' ')) {
         s[--n] = '\0';
+    }
 
     {
         char temp[64 * 4];
@@ -142,9 +146,9 @@ void get_history(PlayerType *player_ptr)
         char *t;
         t = temp;
         for (int i = 0; i < 4; i++) {
-            if (t[0] == 0)
+            if (t[0] == 0) {
                 break;
-            else {
+            } else {
                 strcpy(player_ptr->history[i], t);
                 t += strlen(t) + 1;
             }

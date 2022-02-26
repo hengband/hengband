@@ -103,46 +103,59 @@ bool screen_object(PlayerType *player_ptr, ObjectType *o_ptr, BIT_FLAGS mode)
 
     if (o_ptr->tval == ItemKindType::STATUE) {
         auto *r_ptr = &r_info[o_ptr->pval];
-        if (o_ptr->pval == MON_BULLGATES)
+        if (o_ptr->pval == MON_BULLGATES) {
             info[i++] = _("それは部屋に飾ると恥ずかしい。", "It is shameful.");
-        else if (r_ptr->flags2 & (RF2_ELDRITCH_HORROR))
+        } else if (r_ptr->flags2 & (RF2_ELDRITCH_HORROR)) {
             info[i++] = _("それは部屋に飾ると恐い。", "It is fearful.");
-        else
+        } else {
             info[i++] = _("それは部屋に飾ると楽しい。", "It is cheerful.");
+        }
     }
 
-    if (flgs.has(TR_DARK_SOURCE))
+    if (flgs.has(TR_DARK_SOURCE)) {
         info[i++] = _("それは全く光らない。", "It provides no light.");
+    }
 
     POSITION rad = 0;
-    if (flgs.has(TR_LITE_1) && flgs.has_not(TR_DARK_SOURCE))
+    if (flgs.has(TR_LITE_1) && flgs.has_not(TR_DARK_SOURCE)) {
         rad += 1;
-    if (flgs.has(TR_LITE_2) && flgs.has_not(TR_DARK_SOURCE))
+    }
+    if (flgs.has(TR_LITE_2) && flgs.has_not(TR_DARK_SOURCE)) {
         rad += 2;
-    if (flgs.has(TR_LITE_3) && flgs.has_not(TR_DARK_SOURCE))
+    }
+    if (flgs.has(TR_LITE_3) && flgs.has_not(TR_DARK_SOURCE)) {
         rad += 3;
-    if (flgs.has(TR_LITE_M1))
+    }
+    if (flgs.has(TR_LITE_M1)) {
         rad -= 1;
-    if (flgs.has(TR_LITE_M2))
+    }
+    if (flgs.has(TR_LITE_M2)) {
         rad -= 2;
-    if (flgs.has(TR_LITE_M3))
+    }
+    if (flgs.has(TR_LITE_M3)) {
         rad -= 3;
-
-    if (o_ptr->ego_idx == EgoType::LITE_SHINE)
-        rad++;
-
-    if (flgs.has(TR_LITE_FUEL) && flgs.has_not(TR_DARK_SOURCE)) {
-        if (rad > 0)
-            sprintf(desc, _("それは燃料補給によって明かり(半径 %d)を授ける。", "It provides light (radius %d) when fueled."), (int)rad);
-    } else {
-        if (rad > 0)
-            sprintf(desc, _("それは永遠なる明かり(半径 %d)を授ける。", "It provides light (radius %d) forever."), (int)rad);
-        if (rad < 0)
-            sprintf(desc, _("それは明かりの半径を狭める(半径に-%d)。", "It decreases the radius of your light by %d."), (int)-rad);
     }
 
-    if (rad != 0)
+    if (o_ptr->ego_idx == EgoType::LITE_SHINE) {
+        rad++;
+    }
+
+    if (flgs.has(TR_LITE_FUEL) && flgs.has_not(TR_DARK_SOURCE)) {
+        if (rad > 0) {
+            sprintf(desc, _("それは燃料補給によって明かり(半径 %d)を授ける。", "It provides light (radius %d) when fueled."), (int)rad);
+        }
+    } else {
+        if (rad > 0) {
+            sprintf(desc, _("それは永遠なる明かり(半径 %d)を授ける。", "It provides light (radius %d) forever."), (int)rad);
+        }
+        if (rad < 0) {
+            sprintf(desc, _("それは明かりの半径を狭める(半径に-%d)。", "It decreases the radius of your light by %d."), (int)-rad);
+        }
+    }
+
+    if (rad != 0) {
         info[i++] = desc;
+    }
 
     if (o_ptr->ego_idx == EgoType::LITE_LONG) {
         info[i++] = _("それは長いターン明かりを授ける。", "It provides light for much longer time.");
@@ -365,31 +378,37 @@ bool screen_object(PlayerType *player_ptr, ObjectType *o_ptr, BIT_FLAGS mode)
         info[i++] = _("それはあなたの魅力を維持する。", "It sustains your charisma.");
     }
 
-    if (flgs.has(TR_IM_ACID))
+    if (flgs.has(TR_IM_ACID)) {
         info[i++] = _("それは酸に対する完全な免疫を授ける。", "It provides immunity to acid.");
-    else if (flgs.has(TR_VUL_ACID))
+    } else if (flgs.has(TR_VUL_ACID)) {
         info[i++] = _("それは酸に対する弱点を授ける。", "It provides vulnerability to acid.");
+    }
 
-    if (flgs.has(TR_IM_ELEC))
+    if (flgs.has(TR_IM_ELEC)) {
         info[i++] = _("それは電撃に対する完全な免疫を授ける。", "It provides immunity to electricity.");
-    else if (flgs.has(TR_VUL_ELEC))
+    } else if (flgs.has(TR_VUL_ELEC)) {
         info[i++] = _("それは電撃に対する弱点を授ける。", "It provides vulnerability to electricity.");
+    }
 
-    if (flgs.has(TR_IM_FIRE))
+    if (flgs.has(TR_IM_FIRE)) {
         info[i++] = _("それは火に対する完全な免疫を授ける。", "It provides immunity to fire.");
-    else if (flgs.has(TR_VUL_FIRE))
+    } else if (flgs.has(TR_VUL_FIRE)) {
         info[i++] = _("それは火に対する弱点を授ける。", "It provides vulnerability to fire.");
+    }
 
-    if (flgs.has(TR_IM_COLD))
+    if (flgs.has(TR_IM_COLD)) {
         info[i++] = _("それは寒さに対する完全な免疫を授ける。", "It provides immunity to cold.");
-    else if (flgs.has(TR_VUL_COLD))
+    } else if (flgs.has(TR_VUL_COLD)) {
         info[i++] = _("それは寒さに対する弱点を授ける。", "It provides vulnerability to cold.");
+    }
 
-    if (flgs.has(TR_IM_DARK))
+    if (flgs.has(TR_IM_DARK)) {
         info[i++] = _("それは暗黒に対する完全な免疫を授ける。", "It provides immunity to dark.");
+    }
 
-    if (flgs.has(TR_VUL_LITE))
+    if (flgs.has(TR_VUL_LITE)) {
         info[i++] = _("それは閃光に対する弱点を授ける。", "It provides vulnerability to cold.");
+    }
 
     if (flgs.has(TR_THROW)) {
         info[i++] = _("それは敵に投げて大きなダメージを与えることができる。", "It is perfectly balanced for throwing.");
@@ -555,8 +574,7 @@ bool screen_object(PlayerType *player_ptr, ObjectType *o_ptr, BIT_FLAGS mode)
         info[i++] = _("それは呪いへの抵抗力を高める。", "It increases your resistance to curses.");
     }
 
-    if (flgs.has(TR_SH_FIRE))
-    {
+    if (flgs.has(TR_SH_FIRE)) {
         info[i++] = _("それは炎のバリアを張る。", "It produces a fiery sheath.");
     }
 
@@ -664,8 +682,9 @@ bool screen_object(PlayerType *player_ptr, ObjectType *o_ptr, BIT_FLAGS mode)
         info[i++] = _("それは恐怖感を引き起こす。", "It makes you subject to cowardice.");
     }
 
-    if (flgs.has(TR_BERS_RAGE) || o_ptr->curse_flags.has(CurseTraitType::BERS_RAGE))
+    if (flgs.has(TR_BERS_RAGE) || o_ptr->curse_flags.has(CurseTraitType::BERS_RAGE)) {
         info[i++] = _("それは狂戦士化の発作を引き起こす。", "It makes you subject to berserker fits.");
+    }
 
     if ((flgs.has(TR_TELEPORT)) || o_ptr->curse_flags.has(CurseTraitType::TELEPORT)) {
         info[i++] = _("それはランダムなテレポートを引き起こす。", "It induces random teleportation.");
@@ -755,20 +774,23 @@ bool screen_object(PlayerType *player_ptr, ObjectType *o_ptr, BIT_FLAGS mode)
         }
     }
 
-    if (mode & SCROBJ_FORCE_DETAIL)
+    if (mode & SCROBJ_FORCE_DETAIL) {
         trivial_info = 0;
+    }
 
-    if (i <= trivial_info)
+    if (i <= trivial_info) {
         return false;
+    }
 
     screen_save();
     int wid, hgt;
     term_get_size(&wid, &hgt);
 
-    if (!(mode & SCROBJ_FAKE_OBJECT))
+    if (!(mode & SCROBJ_FAKE_OBJECT)) {
         describe_flavor(player_ptr, o_name, o_ptr, 0);
-    else
+    } else {
         describe_flavor(player_ptr, o_name, o_ptr, (OD_NAME_ONLY | OD_STORE));
+    }
 
     prt(o_name, 0, 0);
     for (int k = 1; k < hgt; k++) {
@@ -791,8 +813,9 @@ bool screen_object(PlayerType *player_ptr, ObjectType *o_ptr, BIT_FLAGS mode)
         if ((k == hgt - 2) && (j + 1 < i)) {
             prt(_("-- 続く --", "-- more --"), k, 15);
             inkey();
-            for (; k > 2; k--)
+            for (; k > 2; k--) {
                 prt("", k, 15);
+            }
         }
     }
 

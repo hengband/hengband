@@ -23,32 +23,39 @@ void place_random_stairs(PlayerType *player_ptr, POSITION y, POSITION x)
     grid_type *g_ptr;
     auto *floor_ptr = player_ptr->current_floor_ptr;
     g_ptr = &floor_ptr->grid_array[y][x];
-    if (!g_ptr->is_floor() || !g_ptr->o_idx_list.empty())
+    if (!g_ptr->is_floor() || !g_ptr->o_idx_list.empty()) {
         return;
-
-    if (!floor_ptr->dun_level)
-        up_stairs = false;
-
-    if (ironman_downward)
-        up_stairs = false;
-
-    if (floor_ptr->dun_level >= d_info[player_ptr->dungeon_idx].maxdepth)
-        down_stairs = false;
-
-    if (inside_quest(quest_number(player_ptr, floor_ptr->dun_level)) && (floor_ptr->dun_level > 1))
-        down_stairs = false;
-
-    if (down_stairs && up_stairs) {
-        if (randint0(100) < 50)
-            up_stairs = false;
-        else
-            down_stairs = false;
     }
 
-    if (up_stairs)
+    if (!floor_ptr->dun_level) {
+        up_stairs = false;
+    }
+
+    if (ironman_downward) {
+        up_stairs = false;
+    }
+
+    if (floor_ptr->dun_level >= d_info[player_ptr->dungeon_idx].maxdepth) {
+        down_stairs = false;
+    }
+
+    if (inside_quest(quest_number(player_ptr, floor_ptr->dun_level)) && (floor_ptr->dun_level > 1)) {
+        down_stairs = false;
+    }
+
+    if (down_stairs && up_stairs) {
+        if (randint0(100) < 50) {
+            up_stairs = false;
+        } else {
+            down_stairs = false;
+        }
+    }
+
+    if (up_stairs) {
         set_cave_feat(floor_ptr, y, x, feat_up_stair);
-    else if (down_stairs)
+    } else if (down_stairs) {
         set_cave_feat(floor_ptr, y, x, feat_down_stair);
+    }
 }
 
 /*!
@@ -63,14 +70,16 @@ void place_random_stairs(PlayerType *player_ptr, POSITION y, POSITION x)
 bool cave_valid_bold(floor_type *floor_ptr, POSITION y, POSITION x)
 {
     auto *g_ptr = &floor_ptr->grid_array[y][x];
-    if (g_ptr->cave_has_flag(FloorFeatureType::PERMANENT))
+    if (g_ptr->cave_has_flag(FloorFeatureType::PERMANENT)) {
         return false;
+    }
 
     for (const auto this_o_idx : g_ptr->o_idx_list) {
         ObjectType *o_ptr;
         o_ptr = &floor_ptr->o_list[this_o_idx];
-        if (o_ptr->is_artifact())
+        if (o_ptr->is_artifact()) {
             return false;
+        }
     }
 
     return true;

@@ -15,8 +15,9 @@ static COMMAND_CODE repeat__key[REPEAT_MAX];
 
 void repeat_push(COMMAND_CODE what)
 {
-    if (repeat__cnt == REPEAT_MAX)
+    if (repeat__cnt == REPEAT_MAX) {
         return;
+    }
 
     repeat__key[repeat__cnt++] = what;
     ++repeat__idx;
@@ -24,8 +25,9 @@ void repeat_push(COMMAND_CODE what)
 
 bool repeat_pull(COMMAND_CODE *what)
 {
-    if (repeat__idx == repeat__cnt)
+    if (repeat__idx == repeat__cnt) {
         return false;
+    }
 
     *what = repeat__key[repeat__idx++];
     return true;
@@ -33,14 +35,18 @@ bool repeat_pull(COMMAND_CODE *what)
 
 void repeat_check(void)
 {
-    if (command_cmd == ESCAPE)
+    if (command_cmd == ESCAPE) {
         return;
-    if (command_cmd == ' ')
+    }
+    if (command_cmd == ' ') {
         return;
-    if (command_cmd == '\r')
+    }
+    if (command_cmd == '\r') {
         return;
-    if (command_cmd == '\n')
+    }
+    if (command_cmd == '\n') {
         return;
+    }
 
     COMMAND_CODE what;
     if (command_cmd == 'n') {

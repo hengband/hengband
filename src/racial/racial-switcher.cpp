@@ -120,16 +120,18 @@ bool switch_class_racial_execution(PlayerType *player_ptr, const int32_t command
         probing(player_ptr);
         return true;
     case PlayerClassType::PALADIN:
-        if (!get_aim_dir(player_ptr, &dir))
+        if (!get_aim_dir(player_ptr, &dir)) {
             return false;
+        }
 
         fire_beam(player_ptr, is_good_realm(player_ptr->realm1) ? AttributeType::HOLY_FIRE : AttributeType::HELL_FIRE, dir, player_ptr->lev * 3);
         return true;
     case PlayerClassType::WARRIOR_MAGE:
-        if (command == -3)
+        if (command == -3) {
             return comvert_hp_to_mp(player_ptr);
-        else if (command == -4)
+        } else if (command == -4) {
             return comvert_mp_to_hp(player_ptr);
+        }
 
         return true;
     case PlayerClassType::CHAOS_WARRIOR:
@@ -146,15 +148,17 @@ bool switch_class_racial_execution(PlayerType *player_ptr, const int32_t command
         }
 
         if (command == -3) {
-            if (!choose_monk_stance(player_ptr))
+            if (!choose_monk_stance(player_ptr)) {
                 return false;
+            }
 
             set_bits(player_ptr->update, PU_BONUS);
             return true;
         }
 
-        if (command == -4)
+        if (command == -4) {
             return double_attack(player_ptr);
+        }
 
         return true;
     case PlayerClassType::MINDCRAFTER:
@@ -162,8 +166,9 @@ bool switch_class_racial_execution(PlayerType *player_ptr, const int32_t command
         return clear_mind(player_ptr);
     case PlayerClassType::TOURIST:
         if (command == -3) {
-            if (!get_aim_dir(player_ptr, &dir))
+            if (!get_aim_dir(player_ptr, &dir)) {
                 return false;
+            }
 
             project_length = 1;
             fire_beam(player_ptr, AttributeType::PHOTO, dir, 1);
@@ -176,38 +181,44 @@ bool switch_class_racial_execution(PlayerType *player_ptr, const int32_t command
         return do_cmd_mane(player_ptr, true);
     case PlayerClassType::BEASTMASTER:
         if (command == -3) {
-            if (!get_aim_dir(player_ptr, &dir))
+            if (!get_aim_dir(player_ptr, &dir)) {
                 return false;
+            }
 
             (void)fire_ball_hide(player_ptr, AttributeType::CHARM_LIVING, dir, player_ptr->lev, 0);
             return true;
         }
 
-        if (command == -4)
+        if (command == -4) {
             project_all_los(player_ptr, AttributeType::CHARM_LIVING, player_ptr->lev);
+        }
 
         return true;
     case PlayerClassType::ARCHER:
         return create_ammo(player_ptr);
     case PlayerClassType::MAGIC_EATER:
-        if (command == -3)
+        if (command == -3) {
             return import_magic_device(player_ptr);
+        }
 
         return (command != -4) || (!cmd_limit_cast(player_ptr) && do_cmd_magic_eater(player_ptr, false, true));
     case PlayerClassType::BARD:
-        if ((get_singing_song_effect(player_ptr) == 0) && (get_interrupting_song_effect(player_ptr) == 0))
+        if ((get_singing_song_effect(player_ptr) == 0) && (get_interrupting_song_effect(player_ptr) == 0)) {
             return false;
+        }
 
         stop_singing(player_ptr);
         PlayerEnergy(player_ptr).set_player_turn_energy(10);
         return true;
     case PlayerClassType::RED_MAGE:
-        if (cmd_limit_cast(player_ptr))
+        if (cmd_limit_cast(player_ptr)) {
             return false;
+        }
 
         handle_stuff(player_ptr);
-        if (!do_cmd_cast(player_ptr))
+        if (!do_cmd_cast(player_ptr)) {
             return false;
+        }
 
         if (!player_ptr->paralyzed && !cmd_limit_cast(player_ptr)) {
             handle_stuff(player_ptr);
@@ -221,16 +232,18 @@ bool switch_class_racial_execution(PlayerType *player_ptr, const int32_t command
             return true;
         }
 
-        if (command != -4)
+        if (command != -4) {
             return true;
+        }
 
         if (!has_melee_weapon(player_ptr, INVEN_MAIN_HAND) && !has_melee_weapon(player_ptr, INVEN_SUB_HAND)) {
             msg_print(_("武器を持たないといけません。", "You need to wield a weapon."));
             return false;
         }
 
-        if (!choose_samurai_stance(player_ptr))
+        if (!choose_samurai_stance(player_ptr)) {
             return false;
+        }
 
         set_bits(player_ptr->update, PU_BONUS);
         return true;
@@ -243,8 +256,9 @@ bool switch_class_racial_execution(PlayerType *player_ptr, const int32_t command
     case PlayerClassType::BERSERKER:
         return recall_player(player_ptr, randint0(21) + 15);
     case PlayerClassType::SMITH:
-        if (player_ptr->lev <= 29)
+        if (player_ptr->lev <= 29) {
             return ident_spell(player_ptr, true);
+        }
 
         return identify_fully(player_ptr, true);
     case PlayerClassType::MIRROR_MASTER:
@@ -253,17 +267,20 @@ bool switch_class_racial_execution(PlayerType *player_ptr, const int32_t command
             return true;
         }
 
-        if (command == -4)
+        if (command == -4) {
             return mirror_concentration(player_ptr);
+        }
 
         return true;
     case PlayerClassType::NINJA:
         return hayagake(player_ptr);
     case PlayerClassType::ELEMENTALIST:
-        if (command == -3)
+        if (command == -3) {
             return clear_mind(player_ptr);
-        if (command == -4)
+        }
+        if (command == -4) {
             return switch_element_execution(player_ptr);
+        }
         return true;
     default:
         return true;
@@ -316,8 +333,9 @@ bool switch_race_racial_execution(PlayerType *player_ptr, const int32_t command)
             return true;
         }
 
-        if (command != -2)
+        if (command != -2) {
             return true;
+        }
 
         msg_print(_("あなたは「パターン」を心に描いてその上を歩いた...", "You picture the Pattern in your mind and walk it..."));
         (void)true_healing(player_ptr, 0);
@@ -333,8 +351,9 @@ bool switch_race_racial_execution(PlayerType *player_ptr, const int32_t command)
         (void)create_rune_explosion(player_ptr, player_ptr->y, player_ptr->x);
         return true;
     case PlayerRaceType::HALF_GIANT:
-        if (!get_aim_dir(player_ptr, &dir))
+        if (!get_aim_dir(player_ptr, &dir)) {
             return false;
+        }
 
         (void)wall_to_mud(player_ptr, dir, 20 + randint1(30));
         return true;
@@ -343,35 +362,40 @@ bool switch_race_racial_execution(PlayerType *player_ptr, const int32_t command)
         (void)probing(player_ptr);
         return true;
     case PlayerRaceType::CYCLOPS:
-        if (!get_aim_dir(player_ptr, &dir))
+        if (!get_aim_dir(player_ptr, &dir)) {
             return false;
+        }
 
         msg_print(_("巨大な岩を投げた。", "You throw a huge boulder."));
         (void)fire_bolt(player_ptr, AttributeType::MISSILE, dir, (3 * player_ptr->lev) / 2);
         return true;
     case PlayerRaceType::YEEK:
-        if (!get_aim_dir(player_ptr, &dir))
+        if (!get_aim_dir(player_ptr, &dir)) {
             return false;
+        }
 
         stop_mouth(player_ptr);
         msg_print(_("身の毛もよだつ叫び声を上げた！", "You make a horrible scream!"));
         (void)fear_monster(player_ptr, dir, player_ptr->lev);
         return true;
     case PlayerRaceType::KLACKON:
-        if (!get_aim_dir(player_ptr, &dir))
+        if (!get_aim_dir(player_ptr, &dir)) {
             return false;
+        }
 
         stop_mouth(player_ptr);
         msg_print(_("酸を吐いた。", "You spit acid."));
-        if (player_ptr->lev < 25)
+        if (player_ptr->lev < 25) {
             (void)fire_bolt(player_ptr, AttributeType::ACID, dir, player_ptr->lev);
-        else
+        } else {
             (void)fire_ball(player_ptr, AttributeType::ACID, dir, player_ptr->lev, 2);
+        }
 
         return true;
     case PlayerRaceType::KOBOLD:
-        if (!get_aim_dir(player_ptr, &dir))
+        if (!get_aim_dir(player_ptr, &dir)) {
             return false;
+        }
 
         msg_print(_("毒のダーツを投げた。", "You throw a poisoned dart."));
         (void)fire_bolt(player_ptr, AttributeType::POIS, dir, player_ptr->lev);
@@ -383,8 +407,9 @@ bool switch_race_racial_execution(PlayerType *player_ptr, const int32_t command)
         (void)detect_stairs(player_ptr, DETECT_RAD_DEFAULT);
         return true;
     case PlayerRaceType::DARK_ELF:
-        if (!get_aim_dir(player_ptr, &dir))
+        if (!get_aim_dir(player_ptr, &dir)) {
             return false;
+        }
 
         msg_print(_("マジック・ミサイルを放った。", "You cast a magic missile."));
         (void)fire_bolt_or_beam(player_ptr, 10, AttributeType::MISSILE, dir, damroll(3 + ((player_ptr->lev - 1) / 5), 4));
@@ -392,15 +417,17 @@ bool switch_race_racial_execution(PlayerType *player_ptr, const int32_t command)
     case PlayerRaceType::DRACONIAN:
         return draconian_breath(player_ptr);
     case PlayerRaceType::MIND_FLAYER:
-        if (!get_aim_dir(player_ptr, &dir))
+        if (!get_aim_dir(player_ptr, &dir)) {
             return false;
+        }
 
         msg_print(_("あなたは集中し、目が赤く輝いた...", "You concentrate and your eyes glow red..."));
         (void)fire_bolt(player_ptr, AttributeType::PSI, dir, player_ptr->lev);
         return true;
     case PlayerRaceType::IMP:
-        if (!get_aim_dir(player_ptr, &dir))
+        if (!get_aim_dir(player_ptr, &dir)) {
             return false;
+        }
 
         if (player_ptr->lev >= 30) {
             msg_print(_("ファイア・ボールを放った。", "You cast a ball of fire."));
@@ -423,8 +450,9 @@ bool switch_race_racial_execution(PlayerType *player_ptr, const int32_t command)
         (void)vampirism(player_ptr);
         return true;
     case PlayerRaceType::SPECTRE:
-        if (!get_aim_dir(player_ptr, &dir))
+        if (!get_aim_dir(player_ptr, &dir)) {
             return false;
+        }
 
         stop_mouth(player_ptr);
         msg_print(_("あなたはおどろおどろしい叫び声をあげた！", "You emit an eldritch howl!"));
@@ -432,10 +460,11 @@ bool switch_race_racial_execution(PlayerType *player_ptr, const int32_t command)
         return true;
     case PlayerRaceType::SPRITE:
         msg_print(_("あなたは魔法の粉を投げつけた...", "You throw some magic dust..."));
-        if (player_ptr->lev < 25)
+        if (player_ptr->lev < 25) {
             (void)sleep_monsters_touch(player_ptr);
-        else
+        } else {
             (void)sleep_monsters(player_ptr, player_ptr->lev);
+        }
 
         return true;
     case PlayerRaceType::BALROG:

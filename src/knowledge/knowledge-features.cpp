@@ -30,14 +30,17 @@ static FEAT_IDX collect_features(FEAT_IDX *feat_idx, BIT_FLAGS8 mode)
 {
     FEAT_IDX feat_cnt = 0;
     for (const auto &f_ref : f_info) {
-        if (f_ref.name.empty())
+        if (f_ref.name.empty()) {
             continue;
-        if (f_ref.mimic != f_ref.idx)
+        }
+        if (f_ref.mimic != f_ref.idx) {
             continue;
+        }
 
         feat_idx[feat_cnt++] = f_ref.idx;
-        if (mode & 0x01)
+        if (mode & 0x01) {
             break;
+        }
     }
 
     feat_idx[feat_cnt] = -1;
@@ -53,8 +56,9 @@ static void display_feature_list(int col, int row, int per_page, FEAT_IDX *feat_
     int f_idx_col = use_bigtile ? 62 : 64;
 
     lit_col[F_LIT_STANDARD] = use_bigtile ? (71 - F_LIT_MAX) : 71;
-    for (i = F_LIT_NS_BEGIN; i < F_LIT_MAX; i++)
+    for (i = F_LIT_NS_BEGIN; i < F_LIT_MAX; i++) {
         lit_col[i] = lit_col[F_LIT_STANDARD] + 2 + (i - F_LIT_NS_BEGIN) * 2 + (use_bigtile ? i : 0);
+    }
 
     for (i = 0; i < per_page && (feat_idx[feat_top + i] >= 0); i++) {
         TERM_COLOR attr;
@@ -115,8 +119,9 @@ void do_cmd_knowledge_features(bool *need_redraw, bool visual_only, IDX direct_f
     if (direct_f_idx < 0) {
         for (FEAT_IDX i = 0; feature_group_text[i] != nullptr; i++) {
             len = strlen(feature_group_text[i]);
-            if (len > max)
+            if (len > max) {
                 max = len;
+            }
 
             if (collect_features(feat_idx.data(), 0x01)) {
                 grp_idx[grp_cnt++] = i;
@@ -160,16 +165,19 @@ void do_cmd_knowledge_features(bool *need_redraw, bool visual_only, IDX direct_f
             clear_from(0);
 
             prt(_("表示 - 地形", "Visuals - features"), 2, 0);
-            if (direct_f_idx < 0)
+            if (direct_f_idx < 0) {
                 prt(_("グループ", "Group"), 4, 0);
+            }
             prt(_("名前", "Name"), 4, max + 3);
             if (use_bigtile) {
-                if (w_ptr->wizard || visual_only)
+                if (w_ptr->wizard || visual_only) {
                     prt("Idx", 4, 62);
+                }
                 prt(_("文字 ( l/ d)", "Sym ( l/ d)"), 4, 66);
             } else {
-                if (w_ptr->wizard || visual_only)
+                if (w_ptr->wizard || visual_only) {
                     prt("Idx", 4, 64);
+                }
                 prt(_("文字 (l/d)", "Sym (l/d)"), 4, 68);
             }
 
@@ -187,10 +195,12 @@ void do_cmd_knowledge_features(bool *need_redraw, bool visual_only, IDX direct_f
         }
 
         if (direct_f_idx < 0) {
-            if (grp_cur < grp_top)
+            if (grp_cur < grp_top) {
                 grp_top = grp_cur;
-            if (grp_cur >= grp_top + browser_rows)
+            }
+            if (grp_cur >= grp_top + browser_rows) {
                 grp_top = grp_cur - browser_rows + 1;
+            }
 
             display_group_list(0, 6, max, browser_rows, grp_idx, feature_group_text, grp_cur, grp_top);
             if (old_grp_cur != grp_cur) {
@@ -198,10 +208,12 @@ void do_cmd_knowledge_features(bool *need_redraw, bool visual_only, IDX direct_f
                 feat_cnt = collect_features(feat_idx.data(), 0x00);
             }
 
-            while (feat_cur < feat_top)
+            while (feat_cur < feat_top) {
                 feat_top = std::max<short>(0, feat_top - browser_rows / 2);
-            while (feat_cur >= feat_top + browser_rows)
+            }
+            while (feat_cur >= feat_top + browser_rows) {
                 feat_top = std::min<short>(feat_cnt - browser_rows, feat_top + browser_rows / 2);
+            }
         }
 
         if (!visual_list) {
@@ -235,22 +247,26 @@ void do_cmd_knowledge_features(bool *need_redraw, bool visual_only, IDX direct_f
             int prev_lighting_level = *lighting_level;
 
             if (ch == 'A') {
-                if (*lighting_level <= 0)
+                if (*lighting_level <= 0) {
                     *lighting_level = F_LIT_MAX - 1;
-                else
+                } else {
                     (*lighting_level)--;
+                }
             } else {
-                if (*lighting_level >= F_LIT_MAX - 1)
+                if (*lighting_level >= F_LIT_MAX - 1) {
                     *lighting_level = 0;
-                else
+                } else {
                     (*lighting_level)++;
+                }
             }
 
-            if (f_ptr->x_attr[prev_lighting_level] != f_ptr->x_attr[*lighting_level])
+            if (f_ptr->x_attr[prev_lighting_level] != f_ptr->x_attr[*lighting_level]) {
                 attr_top = std::max<byte>(0, (f_ptr->x_attr[*lighting_level] & 0x7f) - 5);
+            }
 
-            if (f_ptr->x_char[prev_lighting_level] != f_ptr->x_char[*lighting_level])
+            if (f_ptr->x_char[prev_lighting_level] != f_ptr->x_char[*lighting_level]) {
                 char_left = std::max<byte>(0, f_ptr->x_char[*lighting_level] - 10);
+            }
 
             continue;
         } else if ((ch == 'D') || (ch == 'd')) {
@@ -260,13 +276,16 @@ void do_cmd_knowledge_features(bool *need_redraw, bool visual_only, IDX direct_f
             apply_default_feat_lighting(f_ptr->x_attr, f_ptr->x_char);
 
             if (visual_list) {
-                if (prev_x_attr != f_ptr->x_attr[*lighting_level])
+                if (prev_x_attr != f_ptr->x_attr[*lighting_level]) {
                     attr_top = std::max<byte>(0, (f_ptr->x_attr[*lighting_level] & 0x7f) - 5);
+                }
 
-                if (prev_x_char != f_ptr->x_char[*lighting_level])
+                if (prev_x_char != f_ptr->x_char[*lighting_level]) {
                     char_left = std::max<byte>(0, f_ptr->x_char[*lighting_level] - 10);
-            } else
+                }
+            } else {
                 *need_redraw = true;
+            }
 
             continue;
         } else if (visual_mode_command(ch, &visual_list, browser_rows - 1, wid - (max + 3), &attr_top, &char_left, cur_attr_ptr, cur_char_ptr, need_redraw)) {
@@ -280,10 +299,11 @@ void do_cmd_knowledge_features(bool *need_redraw, bool visual_only, IDX direct_f
                 /* Fall through */
             case '\n':
             case '\r':
-                if (direct_f_idx >= 0)
+                if (direct_f_idx >= 0) {
                     flag = true;
-                else
+                } else {
                     *lighting_level = F_LIT_STANDARD;
+                }
                 break;
             case 'V':
             case 'v':
@@ -308,10 +328,12 @@ void do_cmd_knowledge_features(bool *need_redraw, bool visual_only, IDX direct_f
             case 'p':
                 if (!visual_list) {
                     for (FEAT_IDX i = F_LIT_NS_BEGIN; i < F_LIT_MAX; i++) {
-                        if (attr_idx_feat[i] || (!(char_idx_feat[i] & 0x80) && char_idx_feat[i]))
+                        if (attr_idx_feat[i] || (!(char_idx_feat[i] & 0x80) && char_idx_feat[i])) {
                             f_ptr->x_attr[i] = attr_idx_feat[i];
-                        if (char_idx_feat[i])
+                        }
+                        if (char_idx_feat[i]) {
                             f_ptr->x_char[i] = char_idx_feat[i];
+                        }
                     }
                 }
                 break;
@@ -340,21 +362,26 @@ void do_cmd_knowledge_dungeon(PlayerType *player_ptr)
 {
     FILE *fff = nullptr;
     GAME_TEXT file_name[FILE_NAME_SIZE];
-    if (!open_temporary_file(&fff, file_name))
+    if (!open_temporary_file(&fff, file_name)) {
         return;
+    }
 
     for (const auto &d_ref : d_info) {
         bool seiha = false;
 
-        if (d_ref.idx == 0 || !d_ref.maxdepth)
+        if (d_ref.idx == 0 || !d_ref.maxdepth) {
             continue;
-        if (!max_dlv[d_ref.idx])
+        }
+        if (!max_dlv[d_ref.idx]) {
             continue;
+        }
         if (d_ref.final_guardian) {
-            if (!r_info[d_ref.final_guardian].max_num)
+            if (!r_info[d_ref.final_guardian].max_num) {
                 seiha = true;
-        } else if (max_dlv[d_ref.idx] == d_ref.maxdepth)
+            }
+        } else if (max_dlv[d_ref.idx] == d_ref.maxdepth) {
             seiha = true;
+        }
 
         fprintf(fff, _("%c%-12s :  %3d 階\n", "%c%-16s :  level %3d\n"), seiha ? '!' : ' ', d_ref.name.c_str(), (int)max_dlv[d_ref.idx]);
     }

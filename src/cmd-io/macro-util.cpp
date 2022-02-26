@@ -26,8 +26,9 @@ int macro_find_exact(concptr pat)
     }
 
     for (int i = 0; i < macro__num; ++i) {
-        if (!streq(macro__pat[i], pat))
+        if (!streq(macro__pat[i], pat)) {
             continue;
+        }
 
         return i;
     }
@@ -45,8 +46,9 @@ int macro_find_check(concptr pat)
     }
 
     for (int i = 0; i < macro__num; ++i) {
-        if (!prefix(macro__pat[i], pat))
+        if (!prefix(macro__pat[i], pat)) {
             continue;
+        }
 
         return i;
     }
@@ -64,10 +66,12 @@ int macro_find_maybe(concptr pat)
     }
 
     for (int i = 0; i < macro__num; ++i) {
-        if (!prefix(macro__pat[i], pat))
+        if (!prefix(macro__pat[i], pat)) {
             continue;
-        if (streq(macro__pat[i], pat))
+        }
+        if (streq(macro__pat[i], pat)) {
             continue;
+        }
 
         return i;
     }
@@ -87,12 +91,14 @@ int macro_find_ready(concptr pat)
     }
 
     for (int i = 0; i < macro__num; ++i) {
-        if (!prefix(pat, macro__pat[i]))
+        if (!prefix(pat, macro__pat[i])) {
             continue;
+        }
 
         t = macro__pat[i].size();
-        if ((n >= 0) && (s > t))
+        if ((n >= 0) && (s > t)) {
             continue;
+        }
 
         n = i;
         s = t;
@@ -117,10 +123,12 @@ int macro_find_ready(concptr pat)
  */
 errr macro_add(concptr pat, concptr act)
 {
-    if (!pat || !act)
+    if (!pat || !act) {
         return -1;
-    if (strlen(pat) == 0 || strlen(act) == 0)
+    }
+    if (strlen(pat) == 0 || strlen(act) == 0) {
         return -1;
+    }
 
     int n = macro_find_exact(pat);
     if (n < 0) {

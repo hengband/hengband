@@ -1,7 +1,7 @@
 ﻿#include "market/building-craft-fix.h"
-#include "artifact/random-art-effects.h"
-#include "artifact/fixed-art-types.h"
 #include "artifact/artifact-info.h"
+#include "artifact/fixed-art-types.h"
+#include "artifact/random-art-effects.h"
 #include "core/asking-player.h"
 #include "core/player-update-types.h"
 #include "core/stuff-handler.h"
@@ -62,24 +62,29 @@ static void give_one_ability_of_object(ObjectType *to_ptr, ObjectType *from_ptr)
         default:
             auto tr_flag = i2enum<tr_type>(i);
             if (from_flgs.has(tr_flag) && to_flgs.has_not(tr_flag)) {
-                if (!(TR_PVAL_FLAG_MASK.has(tr_flag) && (from_ptr->pval < 1)))
+                if (!(TR_PVAL_FLAG_MASK.has(tr_flag) && (from_ptr->pval < 1))) {
                     cand[n++] = tr_flag;
+                }
             }
         }
     }
 
-    if (n <= 0)
+    if (n <= 0) {
         return;
+    }
 
     auto tr_idx = cand[randint0(n)];
     to_ptr->art_flags.set(tr_idx);
-    if (TR_PVAL_FLAG_MASK.has(tr_idx))
+    if (TR_PVAL_FLAG_MASK.has(tr_idx)) {
         to_ptr->pval = std::max<short>(to_ptr->pval, 1);
+    }
     auto bmax = std::min<short>(3, std::max<short>(1, 40 / (to_ptr->dd * to_ptr->ds)));
-    if (tr_idx == TR_BLOWS)
+    if (tr_idx == TR_BLOWS) {
         to_ptr->pval = std::min<short>(to_ptr->pval, bmax);
-    if (tr_idx == TR_SPEED)
+    }
+    if (tr_idx == TR_SPEED) {
         to_ptr->pval = std::min<short>(to_ptr->pval, 4);
+    }
 }
 
 /*!
@@ -101,8 +106,9 @@ static PRICE repair_broken_weapon_aux(PlayerType *player_ptr, PRICE bcost)
     OBJECT_IDX item;
     ObjectType *o_ptr;
     o_ptr = choose_object(player_ptr, &item, q, s, (USE_INVEN | USE_EQUIP), FuncItemTester(&ObjectType::is_broken_weapon));
-    if (!o_ptr)
+    if (!o_ptr) {
         return 0;
+    }
 
     if (!o_ptr->is_ego() && !o_ptr->is_artifact()) {
         msg_format(_("それは直してもしょうがないぜ。", "It is worthless to repair."));
@@ -124,8 +130,9 @@ static PRICE repair_broken_weapon_aux(PlayerType *player_ptr, PRICE bcost)
     OBJECT_IDX mater;
     ObjectType *mo_ptr;
     mo_ptr = choose_object(player_ptr, &mater, q, s, (USE_INVEN | USE_EQUIP), FuncItemTester(&ObjectType::is_orthodox_melee_weapons));
-    if (!mo_ptr)
+    if (!mo_ptr) {
         return 0;
+    }
     if (mater == item) {
         msg_print(_("クラインの壷じゃない！", "This is not a Klein bottle!"));
         return 0;
@@ -134,8 +141,9 @@ static PRICE repair_broken_weapon_aux(PlayerType *player_ptr, PRICE bcost)
     describe_flavor(player_ptr, basenm, mo_ptr, OD_NAME_ONLY);
     prt(format(_("材料とする武器： %s", "Material : %s"), basenm), row + 4, 2);
     PRICE cost = bcost + object_value_real(o_ptr) * 2;
-    if (!get_check(format(_("＄%dかかりますがよろしいですか？ ", "Costs %d gold, okay? "), cost)))
+    if (!get_check(format(_("＄%dかかりますがよろしいですか？ ", "Costs %d gold, okay? "), cost))) {
         return 0;
+    }
 
     if (player_ptr->au < cost) {
         describe_flavor(player_ptr, basenm, o_ptr, OD_NAME_ONLY);
@@ -149,12 +157,15 @@ static PRICE repair_broken_weapon_aux(PlayerType *player_ptr, PRICE bcost)
         int n = 1;
         k_idx = 0;
         for (const auto &k_ref : k_info) {
-            if (k_ref.tval != ItemKindType::SWORD)
+            if (k_ref.tval != ItemKindType::SWORD) {
                 continue;
-            if ((k_ref.sval == SV_BROKEN_DAGGER) || (k_ref.sval == SV_BROKEN_SWORD) || (k_ref.sval == SV_POISON_NEEDLE))
+            }
+            if ((k_ref.sval == SV_BROKEN_DAGGER) || (k_ref.sval == SV_BROKEN_SWORD) || (k_ref.sval == SV_POISON_NEEDLE)) {
                 continue;
-            if (k_ref.weight > 99)
+            }
+            if (k_ref.weight > 99) {
                 continue;
+            }
 
             if (one_in_(n)) {
                 k_idx = k_ref.idx;
@@ -169,17 +180,19 @@ static PRICE repair_broken_weapon_aux(PlayerType *player_ptr, PRICE bcost)
             ck_ptr = &k_info[k_idx];
 
             if (tval == ItemKindType::SWORD) {
-                if ((ck_ptr->sval == SV_BROKEN_DAGGER) || (ck_ptr->sval == SV_BROKEN_SWORD) || (ck_ptr->sval == SV_DIAMOND_EDGE)
-                    || (ck_ptr->sval == SV_POISON_NEEDLE))
+                if ((ck_ptr->sval == SV_BROKEN_DAGGER) || (ck_ptr->sval == SV_BROKEN_SWORD) || (ck_ptr->sval == SV_DIAMOND_EDGE) || (ck_ptr->sval == SV_POISON_NEEDLE)) {
                     continue;
+                }
             }
             if (tval == ItemKindType::POLEARM) {
-                if ((ck_ptr->sval == SV_DEATH_SCYTHE) || (ck_ptr->sval == SV_TSURIZAO))
+                if ((ck_ptr->sval == SV_DEATH_SCYTHE) || (ck_ptr->sval == SV_TSURIZAO)) {
                     continue;
+                }
             }
             if (tval == ItemKindType::HAFTED) {
-                if ((ck_ptr->sval == SV_GROND) || (ck_ptr->sval == SV_WIZSTAFF) || (ck_ptr->sval == SV_NAMAKE_HAMMER))
+                if ((ck_ptr->sval == SV_GROND) || (ck_ptr->sval == SV_WIZSTAFF) || (ck_ptr->sval == SV_NAMAKE_HAMMER)) {
                     continue;
+                }
             }
 
             break;
@@ -202,24 +215,28 @@ static PRICE repair_broken_weapon_aux(PlayerType *player_ptr, PRICE bcost)
 
     o_ptr->art_flags.set(k_ptr->flags);
 
-    if (k_ptr->pval)
+    if (k_ptr->pval) {
         o_ptr->pval = std::max<short>(o_ptr->pval, randint1(k_ptr->pval));
-    if (k_ptr->flags.has(TR_ACTIVATE))
+    }
+    if (k_ptr->flags.has(TR_ACTIVATE)) {
         o_ptr->activation_id = k_ptr->act_idx;
+    }
 
     if (dd_bonus > 0) {
         o_ptr->dd++;
         for (int i = 1; i < dd_bonus; i++) {
-            if (one_in_(o_ptr->dd + i))
+            if (one_in_(o_ptr->dd + i)) {
                 o_ptr->dd++;
+            }
         }
     }
 
     if (ds_bonus > 0) {
         o_ptr->ds++;
         for (int i = 1; i < ds_bonus; i++) {
-            if (one_in_(o_ptr->ds + i))
+            if (one_in_(o_ptr->ds + i)) {
                 o_ptr->ds++;
+            }
         }
     }
 
@@ -240,8 +257,9 @@ static PRICE repair_broken_weapon_aux(PlayerType *player_ptr, PRICE bcost)
         }
 
         give_one_ability_of_object(o_ptr, mo_ptr);
-        if (activation_index(o_ptr) == RandomArtActType::NONE)
+        if (activation_index(o_ptr) == RandomArtActType::NONE) {
             one_activation(o_ptr);
+        }
 
         if (o_ptr->fixed_artifact_idx == ART_NARSIL) {
             one_high_resistance(o_ptr);

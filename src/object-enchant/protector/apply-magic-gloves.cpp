@@ -47,7 +47,7 @@ void GlovesEnchanter::apply_magic()
         this->o_ptr->ego_idx = get_random_ego(INVEN_ARMS, true);
         return;
     }
-    
+
     if (this->power < -1) {
         this->o_ptr->ego_idx = get_random_ego(INVEN_ARMS, false);
     }

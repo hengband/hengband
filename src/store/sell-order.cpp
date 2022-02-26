@@ -93,8 +93,9 @@ void store_sell(PlayerType *player_ptr)
     OBJECT_IDX item;
     ObjectType *o_ptr;
     o_ptr = choose_object(player_ptr, &item, q, s_none, USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT, FuncItemTester(store_will_buy, player_ptr));
-    if (!o_ptr)
+    if (!o_ptr) {
         return;
+    }
 
     if ((item >= INVEN_MAIN_HAND) && o_ptr->is_cursed()) {
         msg_print(_("ふーむ、どうやらそれは呪われているようだね。", "Hmmm, it seems to be cursed."));
@@ -104,8 +105,9 @@ void store_sell(PlayerType *player_ptr)
     int amt = 1;
     if (o_ptr->number > 1) {
         amt = get_quantity(nullptr, o_ptr->number);
-        if (amt <= 0)
+        if (amt <= 0) {
             return;
+        }
     }
 
     ObjectType forge;
@@ -113,8 +115,9 @@ void store_sell(PlayerType *player_ptr)
     q_ptr->copy_from(o_ptr);
     q_ptr->number = amt;
 
-    if ((o_ptr->tval == ItemKindType::ROD) || (o_ptr->tval == ItemKindType::WAND))
+    if ((o_ptr->tval == ItemKindType::ROD) || (o_ptr->tval == ItemKindType::WAND)) {
         q_ptr->pval = o_ptr->pval * amt / o_ptr->number;
+    }
 
     GAME_TEXT o_name[MAX_NLEN];
     describe_flavor(player_ptr, o_name, q_ptr, 0);
@@ -140,11 +143,13 @@ void store_sell(PlayerType *player_ptr)
             store_owner_says_comment(player_ptr);
 
             sound(SOUND_SELL);
-            if (cur_store_num == StoreSaleType::BLACK)
+            if (cur_store_num == StoreSaleType::BLACK) {
                 chg_virtue(player_ptr, V_JUSTICE, -1);
+            }
 
-            if ((o_ptr->tval == ItemKindType::BOTTLE) && (cur_store_num != StoreSaleType::HOME))
+            if ((o_ptr->tval == ItemKindType::BOTTLE) && (cur_store_num != StoreSaleType::HOME)) {
                 chg_virtue(player_ptr, V_NATURE, 1);
+            }
 
             player_ptr->au += price;
             store_prt_gold(player_ptr);
@@ -156,25 +161,29 @@ void store_sell(PlayerType *player_ptr)
             q_ptr->number = amt;
             q_ptr->ident |= IDENT_STORE;
 
-            if ((o_ptr->tval == ItemKindType::ROD) || (o_ptr->tval == ItemKindType::WAND))
+            if ((o_ptr->tval == ItemKindType::ROD) || (o_ptr->tval == ItemKindType::WAND)) {
                 q_ptr->pval = o_ptr->pval * amt / o_ptr->number;
+            }
 
             PRICE value = object_value(q_ptr) * q_ptr->number;
             describe_flavor(player_ptr, o_name, q_ptr, 0);
             msg_format(_("%sを $%ldで売却しました。", "You sold %s for %ld gold."), o_name, static_cast<long>(price));
 
-            if (record_sell)
+            if (record_sell) {
                 exe_write_diary(player_ptr, DIARY_SELL, 0, o_name);
+            }
 
-            if (!((o_ptr->tval == ItemKindType::FIGURINE) && (value > 0)))
+            if (!((o_ptr->tval == ItemKindType::FIGURINE) && (value > 0))) {
                 purchase_analyze(player_ptr, price, value, dummy);
+            }
 
             distribute_charges(o_ptr, q_ptr, amt);
             q_ptr->timeout = 0;
             inven_item_increase(player_ptr, item, -amt);
             inven_item_describe(player_ptr, item);
-            if (o_ptr->number > 0)
+            if (o_ptr->number > 0) {
                 autopick_alter_item(player_ptr, item, false);
+            }
 
             inven_item_optimize(player_ptr, item);
             int item_pos = store_carry(q_ptr);
@@ -187,13 +196,15 @@ void store_sell(PlayerType *player_ptr)
         char o2_name[MAX_NLEN];
         describe_flavor(player_ptr, o2_name, q_ptr, OD_NAME_ONLY);
 
-        if (-1 == store_check_num(q_ptr))
+        if (-1 == store_check_num(q_ptr)) {
             msg_print(_("それと同じ品物は既に博物館にあるようです。", "The Museum already has one of those items."));
-        else
+        } else {
             msg_print(_("博物館に寄贈したものは取り出すことができません！！", "You cannot take back items which have been donated to the Museum!!"));
+        }
 
-        if (!get_check(format(_("本当に%sを寄贈しますか？", "Really give %s to the Museum? "), o2_name)))
+        if (!get_check(format(_("本当に%sを寄贈しますか？", "Really give %s to the Museum? "), o2_name))) {
             return;
+        }
 
         identify_item(player_ptr, q_ptr);
         q_ptr->ident |= IDENT_FULL_KNOWN;

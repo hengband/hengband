@@ -58,20 +58,23 @@ static void do_cmd_knowledge_quests_current(PlayerType *player_ptr, FILE *fff)
         bool is_print = quest[i].status == QuestStatusType::TAKEN;
         is_print |= (quest[i].status == QuestStatusType::STAGE_COMPLETED) && (quest[i].type == QuestKindType::TOWER);
         is_print |= quest[i].status == QuestStatusType::COMPLETED;
-        if (!is_print)
+        if (!is_print) {
             continue;
+        }
 
         QuestId old_quest = player_ptr->current_floor_ptr->quest_number;
-        for (int j = 0; j < 10; j++)
+        for (int j = 0; j < 10; j++) {
             quest_text[j][0] = '\0';
+        }
 
         quest_text_line = 0;
         player_ptr->current_floor_ptr->quest_number = i2enum<QuestId>(i);
         init_flags = INIT_SHOW_TEXT;
         parse_fixed_map(player_ptr, "q_info.txt", 0, 0, 0, 0);
         player_ptr->current_floor_ptr->quest_number = old_quest;
-        if (quest[i].flags & QUEST_FLAG_SILENT)
+        if (quest[i].flags & QUEST_FLAG_SILENT) {
             continue;
+        }
 
         total++;
         if (quest[i].type != QuestKindType::RANDOM) {
@@ -90,8 +93,9 @@ static void do_cmd_knowledge_quests_current(PlayerType *player_ptr, FILE *fff)
                         plural_aux(name);
                         sprintf(note, " - kill %d %s, have killed %d.", (int)quest[i].max_num, name, (int)quest[i].cur_num);
 #endif
-                    } else
+                    } else {
                         sprintf(note, _(" - %sを倒す。", " - kill %s."), name);
+                    }
                     break;
 
                 case QuestKindType::FIND_ARTIFACT:
@@ -145,12 +149,14 @@ static void do_cmd_knowledge_quests_current(PlayerType *player_ptr, FILE *fff)
             continue;
         }
 
-        if (quest[i].level >= rand_level)
+        if (quest[i].level >= rand_level) {
             continue;
+        }
 
         rand_level = quest[i].level;
-        if (max_dlv[DUNGEON_ANGBAND] < rand_level)
+        if (max_dlv[DUNGEON_ANGBAND] < rand_level) {
             continue;
+        }
 
         r_ptr = &r_info[quest[i].r_idx];
         strcpy(name, r_ptr->name.c_str());
@@ -170,11 +176,13 @@ static void do_cmd_knowledge_quests_current(PlayerType *player_ptr, FILE *fff)
 #endif
     }
 
-    if (rand_tmp_str[0])
+    if (rand_tmp_str[0]) {
         fputs(rand_tmp_str, fff);
+    }
 
-    if (!total)
+    if (!total) {
         fprintf(fff, _("  なし\n", "  Nothing.\n"));
+    }
 }
 
 static bool do_cmd_knowledge_quests_aux(PlayerType *player_ptr, FILE *fff, QuestId q_idx)
@@ -191,8 +199,9 @@ static bool do_cmd_knowledge_quests_aux(PlayerType *player_ptr, FILE *fff, Quest
         init_flags = INIT_NAME_ONLY;
         parse_fixed_map(player_ptr, "q_info.txt", 0, 0, 0, 0);
         floor_ptr->quest_number = old_quest;
-        if (q_ptr->flags & QUEST_FLAG_SILENT)
+        if (q_ptr->flags & QUEST_FLAG_SILENT) {
             return false;
+        }
     }
 
     strnfmt(playtime_str, sizeof(playtime_str), "%02d:%02d:%02d", q_ptr->comptime / (60 * 60), (q_ptr->comptime / 60) % 60, q_ptr->comptime % 60);
@@ -236,8 +245,9 @@ void do_cmd_knowledge_quests_completed(PlayerType *player_ptr, FILE *fff, int16_
         }
     }
 
-    if (total == 0)
+    if (total == 0) {
         fprintf(fff, _("  なし\n", "  Nothing.\n"));
+    }
 }
 
 /*
@@ -259,8 +269,9 @@ void do_cmd_knowledge_quests_failed(PlayerType *player_ptr, FILE *fff, int16_t q
         }
     }
 
-    if (total == 0)
+    if (total == 0) {
         fprintf(fff, _("  なし\n", "  Nothing.\n"));
+    }
 }
 
 /*
@@ -272,8 +283,9 @@ static void do_cmd_knowledge_quests_wiz_random(FILE *fff)
     GAME_TEXT tmp_str[120];
     int16_t total = 0;
     for (int16_t i = 1; i < max_q_idx; i++) {
-        if (quest[i].flags & QUEST_FLAG_SILENT)
+        if (quest[i].flags & QUEST_FLAG_SILENT) {
             continue;
+        }
 
         if ((quest[i].type == QuestKindType::RANDOM) && (quest[i].status == QuestStatusType::TAKEN)) {
             total++;
@@ -282,8 +294,9 @@ static void do_cmd_knowledge_quests_wiz_random(FILE *fff)
         }
     }
 
-    if (total == 0)
+    if (total == 0) {
         fprintf(fff, _("  なし\n", "  Nothing.\n"));
+    }
 }
 
 /*
@@ -294,8 +307,9 @@ void do_cmd_knowledge_quests(PlayerType *player_ptr)
 {
     FILE *fff = nullptr;
     GAME_TEXT file_name[FILE_NAME_SIZE];
-    if (!open_temporary_file(&fff, file_name))
+    if (!open_temporary_file(&fff, file_name)) {
         return;
+    }
 
     std::vector<int16_t> quest_num(max_q_idx);
     std::iota(quest_num.begin(), quest_num.end(), enum2i(QuestId::NONE));

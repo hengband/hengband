@@ -43,16 +43,20 @@ void wield_all(PlayerType *player_ptr)
     for (INVENTORY_IDX item = INVEN_PACK - 1; item >= 0; item--) {
         ObjectType *o_ptr;
         o_ptr = &player_ptr->inventory_list[item];
-        if (!o_ptr->k_idx)
+        if (!o_ptr->k_idx) {
             continue;
+        }
 
         int slot = wield_slot(player_ptr, o_ptr);
-        if (slot < INVEN_MAIN_HAND)
+        if (slot < INVEN_MAIN_HAND) {
             continue;
-        if (slot == INVEN_LITE)
+        }
+        if (slot == INVEN_LITE) {
             continue;
-        if (player_ptr->inventory_list[slot].k_idx)
+        }
+        if (player_ptr->inventory_list[slot].k_idx) {
             continue;
+        }
 
         ObjectType *i_ptr;
         i_ptr = &ObjectType_body;
@@ -241,7 +245,7 @@ void player_outfit(PlayerType *player_ptr)
     if (!pc.equals(PlayerClassType::SORCERER)) {
         auto short_pclass = enum2i(player_ptr->pclass);
         if (player_ptr->ppersonality == PERSONALITY_SEXY) {
-            player_init[short_pclass][2] = std::make_tuple(ItemKindType::HAFTED, SV_WHIP);            
+            player_init[short_pclass][2] = std::make_tuple(ItemKindType::HAFTED, SV_WHIP);
         } else if (pr.equals(PlayerRaceType::MERFOLK)) {
             player_init[short_pclass][2] = std::make_tuple(ItemKindType::POLEARM, SV_TRIDENT);
         }
@@ -249,16 +253,17 @@ void player_outfit(PlayerType *player_ptr)
 
     for (auto i = 0; i < 3; i++) {
         auto &[tv, sv] = player_init[enum2i(player_ptr->pclass)][i];
-        if (pr.equals(PlayerRaceType::ANDROID) && ((tv == ItemKindType::SOFT_ARMOR) || (tv == ItemKindType::HARD_ARMOR)))
+        if (pr.equals(PlayerRaceType::ANDROID) && ((tv == ItemKindType::SOFT_ARMOR) || (tv == ItemKindType::HARD_ARMOR))) {
             continue;
+        }
 
-        if (tv == ItemKindType::SORCERY_BOOK)
+        if (tv == ItemKindType::SORCERY_BOOK) {
             tv = i2enum<ItemKindType>(enum2i(ItemKindType::LIFE_BOOK) + player_ptr->realm1 - 1);
-        else if (tv == ItemKindType::DEATH_BOOK)
+        } else if (tv == ItemKindType::DEATH_BOOK) {
             tv = i2enum<ItemKindType>(enum2i(ItemKindType::LIFE_BOOK) + player_ptr->realm2 - 1);
-        else if (tv == ItemKindType::RING && sv == SV_RING_RES_FEAR && pr.equals(PlayerRaceType::BARBARIAN))
+        } else if (tv == ItemKindType::RING && sv == SV_RING_RES_FEAR && pr.equals(PlayerRaceType::BARBARIAN)) {
             sv = SV_RING_SUSTAIN_STR;
-        else if (tv == ItemKindType::RING && sv == SV_RING_SUSTAIN_INT && pr.equals(PlayerRaceType::MIND_FLAYER)) {
+        } else if (tv == ItemKindType::RING && sv == SV_RING_SUSTAIN_INT && pr.equals(PlayerRaceType::MIND_FLAYER)) {
             tv = ItemKindType::POTION;
             sv = SV_POTION_RESTORE_MANA;
         }
@@ -270,7 +275,7 @@ void player_outfit(PlayerType *player_ptr)
         if (((tv == ItemKindType::SWORD) || (tv == ItemKindType::HAFTED)) && (pc.equals(PlayerClassType::ROGUE) && (player_ptr->realm1 == REALM_DEATH))) {
             q_ptr->ego_idx = EgoType::BRAND_POIS;
         }
-        
+
         add_outfit(player_ptr, q_ptr);
     }
 

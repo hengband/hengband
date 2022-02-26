@@ -135,8 +135,9 @@ static void compare_weapon_aux(PlayerType *player_ptr, ObjectType *o_ptr, int co
     int dmg_bonus = o_ptr->to_d + player_ptr->to_d[0];
 
     auto flgs = object_flags(o_ptr);
-    if ((o_ptr->tval == ItemKindType::SWORD) && (o_ptr->sval == SV_POISON_NEEDLE))
+    if ((o_ptr->tval == ItemKindType::SWORD) && (o_ptr->sval == SV_POISON_NEEDLE)) {
         dokubari = true;
+    }
 
     bool impact = flgs.has(TR_IMPACT) || (player_ptr->impact != 0);
     mindam = calc_expect_crit(player_ptr, o_ptr->weight, o_ptr->to_h, mindice, player_ptr->to_h[0], dokubari, impact);
@@ -381,8 +382,9 @@ PRICE compare_weapons(PlayerType *player_ptr, PRICE bcost)
         w_ptr->character_xtra = true;
         for (int i = 0; i < n; i++) {
             int col = (wid * i + mgn);
-            if (o_ptr[i] != i_ptr)
+            if (o_ptr[i] != i_ptr) {
                 i_ptr->copy_from(o_ptr[i]);
+            }
 
             player_ptr->update |= PU_BONUS;
             handle_stuff(player_ptr);
@@ -408,8 +410,9 @@ PRICE compare_weapons(PlayerType *player_ptr, PRICE bcost)
 
         flush();
         ch = inkey();
-        if (ch != 's')
+        if (ch != 's') {
             break;
+        }
 
         if (total + cost > player_ptr->au) {
             msg_print(_("お金が足りません！", "You don't have enough money!"));
@@ -421,8 +424,9 @@ PRICE compare_weapons(PlayerType *player_ptr, PRICE bcost)
         s = _("比べるものがありません。", "You have nothing to compare.");
         OBJECT_IDX item2;
         ObjectType *i2_ptr = choose_object(player_ptr, &item2, q, s, (USE_EQUIP | USE_INVEN | IGNORE_BOTHHAND_SLOT), FuncItemTester(&ObjectType::is_orthodox_melee_weapons));
-        if (!i2_ptr)
+        if (!i2_ptr) {
             continue;
+        }
 
         if (i2_ptr == o_ptr[0] || (n == 2 && i2_ptr == o_ptr[1])) {
             msg_print(_("表示中の武器は選べません！", "Select a different weapon than those displayed."));

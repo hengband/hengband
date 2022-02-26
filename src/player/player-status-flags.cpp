@@ -117,13 +117,15 @@ BIT_FLAGS check_equipment_flags(PlayerType *player_ptr, tr_type tr_flag)
     BIT_FLAGS result = 0L;
     for (int i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
         o_ptr = &player_ptr->inventory_list[i];
-        if (!o_ptr->k_idx)
+        if (!o_ptr->k_idx) {
             continue;
+        }
 
         auto flgs = object_flags(o_ptr);
 
-        if (flgs.has(tr_flag))
+        if (flgs.has(tr_flag)) {
             set_bits(result, convert_inventory_slot_type_to_flag_cause(i2enum<inventory_slot_type>(i)));
+        }
     }
     return result;
 }
@@ -132,8 +134,9 @@ BIT_FLAGS player_flags_brand_pois(PlayerType *player_ptr)
 {
     BIT_FLAGS result = common_cause_flags(player_ptr, TR_BRAND_POIS);
 
-    if (player_ptr->special_attack & ATTACK_POIS)
+    if (player_ptr->special_attack & ATTACK_POIS) {
         set_bits(result, FLAG_CAUSE_MAGIC_TIME_EFFECT);
+    }
 
     return result;
 }
@@ -142,8 +145,9 @@ BIT_FLAGS player_flags_brand_acid(PlayerType *player_ptr)
 {
     BIT_FLAGS result = common_cause_flags(player_ptr, TR_BRAND_ACID);
 
-    if (player_ptr->special_attack & ATTACK_ACID)
+    if (player_ptr->special_attack & ATTACK_ACID) {
         set_bits(result, FLAG_CAUSE_MAGIC_TIME_EFFECT);
+    }
 
     return result;
 }
@@ -152,8 +156,9 @@ BIT_FLAGS player_flags_brand_elec(PlayerType *player_ptr)
 {
     BIT_FLAGS result = common_cause_flags(player_ptr, TR_BRAND_ELEC);
 
-    if (player_ptr->special_attack & ATTACK_ELEC)
+    if (player_ptr->special_attack & ATTACK_ELEC) {
         set_bits(result, FLAG_CAUSE_MAGIC_TIME_EFFECT);
+    }
 
     return result;
 }
@@ -162,8 +167,9 @@ BIT_FLAGS player_flags_brand_fire(PlayerType *player_ptr)
 {
     BIT_FLAGS result = common_cause_flags(player_ptr, TR_BRAND_FIRE);
 
-    if (player_ptr->special_attack & ATTACK_FIRE)
+    if (player_ptr->special_attack & ATTACK_FIRE) {
         set_bits(result, FLAG_CAUSE_MAGIC_TIME_EFFECT);
+    }
 
     return result;
 }
@@ -172,8 +178,9 @@ BIT_FLAGS player_flags_brand_cold(PlayerType *player_ptr)
 {
     BIT_FLAGS result = common_cause_flags(player_ptr, TR_BRAND_COLD);
 
-    if (player_ptr->special_attack & ATTACK_COLD)
+    if (player_ptr->special_attack & ATTACK_COLD) {
         set_bits(result, FLAG_CAUSE_MAGIC_TIME_EFFECT);
+    }
 
     return result;
 }
@@ -476,8 +483,9 @@ bool has_kill_wall(PlayerType *player_ptr)
     if (player_ptr->riding) {
         monster_type *riding_m_ptr = &player_ptr->current_floor_ptr->m_list[player_ptr->riding];
         monster_race *riding_r_ptr = &r_info[riding_m_ptr->r_idx];
-        if (riding_r_ptr->flags2 & RF2_KILL_WALL)
+        if (riding_r_ptr->flags2 & RF2_KILL_WALL) {
             return true;
+        }
     }
 
     return false;
@@ -502,8 +510,9 @@ bool has_pass_wall(PlayerType *player_ptr)
     if (player_ptr->riding) {
         monster_type *riding_m_ptr = &player_ptr->current_floor_ptr->m_list[player_ptr->riding];
         monster_race *riding_r_ptr = &r_info[riding_m_ptr->r_idx];
-        if (!(riding_r_ptr->flags2 & RF2_PASS_WALL))
+        if (!(riding_r_ptr->flags2 & RF2_PASS_WALL)) {
             pow = false;
+        }
     }
 
     return pow;
@@ -528,8 +537,9 @@ BIT_FLAGS has_esp_evil(PlayerType *player_ptr)
 {
     BIT_FLAGS result = common_cause_flags(player_ptr, TR_ESP_EVIL);
     if (player_ptr->realm1 == REALM_HEX) {
-        if (SpellHex(player_ptr).is_spelling_specific(HEX_DETECT_EVIL))
+        if (SpellHex(player_ptr).is_spelling_specific(HEX_DETECT_EVIL)) {
             result |= FLAG_CAUSE_MAGIC_TIME_EFFECT;
+        }
     }
     return result;
 }
@@ -686,8 +696,9 @@ BIT_FLAGS has_no_ac(PlayerType *player_ptr)
 
 BIT_FLAGS has_invuln_arrow(PlayerType *player_ptr)
 {
-    if (player_ptr->blind)
+    if (player_ptr->blind) {
         return 0;
+    }
 
     return common_cause_flags(player_ptr, TR_INVULN_ARROW);
 }
@@ -710,32 +721,38 @@ void check_no_flowed(PlayerType *player_ptr)
     }
 
     for (int i = 0; i < INVEN_PACK; i++) {
-        if ((player_ptr->inventory_list[i].tval == ItemKindType::NATURE_BOOK) && (player_ptr->inventory_list[i].sval == 2))
+        if ((player_ptr->inventory_list[i].tval == ItemKindType::NATURE_BOOK) && (player_ptr->inventory_list[i].sval == 2)) {
             has_sw = true;
-        if ((player_ptr->inventory_list[i].tval == ItemKindType::CRAFT_BOOK) && (player_ptr->inventory_list[i].sval == 2))
+        }
+        if ((player_ptr->inventory_list[i].tval == ItemKindType::CRAFT_BOOK) && (player_ptr->inventory_list[i].sval == 2)) {
             has_kabe = true;
+        }
     }
 
     for (const auto this_o_idx : player_ptr->current_floor_ptr->grid_array[player_ptr->y][player_ptr->x].o_idx_list) {
         o_ptr = &player_ptr->current_floor_ptr->o_list[this_o_idx];
 
-        if ((o_ptr->tval == ItemKindType::NATURE_BOOK) && (o_ptr->sval == 2))
+        if ((o_ptr->tval == ItemKindType::NATURE_BOOK) && (o_ptr->sval == 2)) {
             has_sw = true;
-        if ((o_ptr->tval == ItemKindType::CRAFT_BOOK) && (o_ptr->sval == 2))
+        }
+        if ((o_ptr->tval == ItemKindType::CRAFT_BOOK) && (o_ptr->sval == 2)) {
             has_kabe = true;
+        }
     }
 
     PlayerClass pc(player_ptr);
     if (has_sw && ((player_ptr->realm1 == REALM_NATURE) || (player_ptr->realm2 == REALM_NATURE) || pc.equals(PlayerClassType::SORCERER))) {
         const magic_type *s_ptr = &mp_ptr->info[REALM_NATURE - 1][SPELL_SW];
-        if (player_ptr->lev >= s_ptr->slevel)
+        if (player_ptr->lev >= s_ptr->slevel) {
             player_ptr->no_flowed = true;
+        }
     }
 
     if (has_kabe && ((player_ptr->realm1 == REALM_CRAFT) || (player_ptr->realm2 == REALM_CRAFT) || pc.equals(PlayerClassType::SORCERER))) {
         const magic_type *s_ptr = &mp_ptr->info[REALM_CRAFT - 1][SPELL_WALL];
-        if (player_ptr->lev >= s_ptr->slevel)
+        if (player_ptr->lev >= s_ptr->slevel) {
             player_ptr->no_flowed = true;
+        }
     }
 }
 
@@ -772,14 +789,16 @@ BIT_FLAGS has_warning(PlayerType *player_ptr)
 
     for (int i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
         o_ptr = &player_ptr->inventory_list[i];
-        if (!o_ptr->k_idx)
+        if (!o_ptr->k_idx) {
             continue;
+        }
 
         auto flgs = object_flags(o_ptr);
 
         if (flgs.has(TR_WARNING)) {
-            if (!o_ptr->inscription || !(angband_strchr(quark_str(o_ptr->inscription), '$')))
+            if (!o_ptr->inscription || !(angband_strchr(quark_str(o_ptr->inscription), '$'))) {
                 set_bits(result, convert_inventory_slot_type_to_flag_cause(i2enum<inventory_slot_type>(i)));
+            }
         }
     }
     return result;
@@ -814,8 +833,9 @@ BIT_FLAGS has_sh_elec(PlayerType *player_ptr)
 {
     BIT_FLAGS result = common_cause_flags(player_ptr, TR_SH_ELEC);
 
-    if (player_ptr->muta.has(PlayerMutationType::ELEC_TOUC))
+    if (player_ptr->muta.has(PlayerMutationType::ELEC_TOUC)) {
         result |= FLAG_CAUSE_MUTATION;
+    }
 
     if (SpellHex(player_ptr).is_spelling_specific(HEX_SHOCK_CLOAK) || player_ptr->ult_res) {
         result |= FLAG_CAUSE_MAGIC_TIME_EFFECT;
@@ -880,8 +900,9 @@ BIT_FLAGS has_free_act(PlayerType *player_ptr)
 {
     BIT_FLAGS result = common_cause_flags(player_ptr, TR_FREE_ACT);
 
-    if (player_ptr->muta.has(PlayerMutationType::MOTION))
+    if (player_ptr->muta.has(PlayerMutationType::MOTION)) {
         result |= FLAG_CAUSE_MUTATION;
+    }
 
     if (player_ptr->ult_res || player_ptr->magicdef) {
         result |= FLAG_CAUSE_MAGIC_TIME_EFFECT;
@@ -988,8 +1009,9 @@ bool has_can_swim(PlayerType *player_ptr)
     if (player_ptr->riding) {
         monster_type *riding_m_ptr = &player_ptr->current_floor_ptr->m_list[player_ptr->riding];
         monster_race *riding_r_ptr = &r_info[riding_m_ptr->r_idx];
-        if (riding_r_ptr->flags7 & (RF7_CAN_SWIM | RF7_AQUATIC))
+        if (riding_r_ptr->flags7 & (RF7_CAN_SWIM | RF7_AQUATIC)) {
             can_swim = true;
+        }
     }
 
     return can_swim;
@@ -1010,15 +1032,17 @@ BIT_FLAGS has_regenerate(PlayerType *player_ptr)
 {
     BIT_FLAGS result = common_cause_flags(player_ptr, TR_REGEN);
 
-    if (player_ptr->muta.has(PlayerMutationType::REGEN))
+    if (player_ptr->muta.has(PlayerMutationType::REGEN)) {
         result |= FLAG_CAUSE_MUTATION;
+    }
 
     if (SpellHex(player_ptr).is_spelling_specific(HEX_DEMON_AURA) || player_ptr->ult_res || player_ptr->tim_regen) {
         result |= FLAG_CAUSE_MAGIC_TIME_EFFECT;
     }
 
-    if (player_ptr->muta.has(PlayerMutationType::FLESH_ROT))
+    if (player_ptr->muta.has(PlayerMutationType::FLESH_ROT)) {
         result = 0L;
+    }
 
     return result;
 }
@@ -1029,65 +1053,88 @@ void update_curses(PlayerType *player_ptr)
     player_ptr->cursed.clear();
     player_ptr->cursed_special.clear();
 
-    if (player_ptr->ppersonality == PERSONALITY_SEXY)
+    if (player_ptr->ppersonality == PERSONALITY_SEXY) {
         player_ptr->cursed.set(CurseTraitType::AGGRAVATE);
+    }
 
     for (int i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
         o_ptr = &player_ptr->inventory_list[i];
-        if (!o_ptr->k_idx)
+        if (!o_ptr->k_idx) {
             continue;
+        }
         auto flgs = object_flags(o_ptr);
-        if (flgs.has(TR_AGGRAVATE))
+        if (flgs.has(TR_AGGRAVATE)) {
             player_ptr->cursed.set(CurseTraitType::AGGRAVATE);
-        if (flgs.has(TR_DRAIN_EXP))
+        }
+        if (flgs.has(TR_DRAIN_EXP)) {
             player_ptr->cursed.set(CurseTraitType::DRAIN_EXP);
-        if (flgs.has(TR_TY_CURSE))
+        }
+        if (flgs.has(TR_TY_CURSE)) {
             player_ptr->cursed.set(CurseTraitType::TY_CURSE);
-        if (flgs.has(TR_ADD_L_CURSE))
+        }
+        if (flgs.has(TR_ADD_L_CURSE)) {
             player_ptr->cursed.set(CurseTraitType::ADD_L_CURSE);
-        if (flgs.has(TR_ADD_H_CURSE))
+        }
+        if (flgs.has(TR_ADD_H_CURSE)) {
             player_ptr->cursed.set(CurseTraitType::ADD_H_CURSE);
-        if (flgs.has(TR_DRAIN_HP))
+        }
+        if (flgs.has(TR_DRAIN_HP)) {
             player_ptr->cursed.set(CurseTraitType::DRAIN_HP);
-        if (flgs.has(TR_DRAIN_MANA))
+        }
+        if (flgs.has(TR_DRAIN_MANA)) {
             player_ptr->cursed.set(CurseTraitType::DRAIN_MANA);
-        if (flgs.has(TR_CALL_ANIMAL))
+        }
+        if (flgs.has(TR_CALL_ANIMAL)) {
             player_ptr->cursed.set(CurseTraitType::CALL_ANIMAL);
-        if (flgs.has(TR_CALL_DEMON))
+        }
+        if (flgs.has(TR_CALL_DEMON)) {
             player_ptr->cursed.set(CurseTraitType::CALL_DEMON);
-        if (flgs.has(TR_CALL_DRAGON))
+        }
+        if (flgs.has(TR_CALL_DRAGON)) {
             player_ptr->cursed.set(CurseTraitType::CALL_DRAGON);
-        if (flgs.has(TR_CALL_UNDEAD))
+        }
+        if (flgs.has(TR_CALL_UNDEAD)) {
             player_ptr->cursed.set(CurseTraitType::CALL_UNDEAD);
-        if (flgs.has(TR_COWARDICE))
+        }
+        if (flgs.has(TR_COWARDICE)) {
             player_ptr->cursed.set(CurseTraitType::COWARDICE);
-        if (flgs.has(TR_LOW_MELEE))
+        }
+        if (flgs.has(TR_LOW_MELEE)) {
             player_ptr->cursed.set(CurseTraitType::LOW_MELEE);
-        if (flgs.has(TR_LOW_AC))
+        }
+        if (flgs.has(TR_LOW_AC)) {
             player_ptr->cursed.set(CurseTraitType::LOW_AC);
-        if (flgs.has(TR_HARD_SPELL))
+        }
+        if (flgs.has(TR_HARD_SPELL)) {
             player_ptr->cursed.set(CurseTraitType::HARD_SPELL);
-        if (flgs.has(TR_FAST_DIGEST))
+        }
+        if (flgs.has(TR_FAST_DIGEST)) {
             player_ptr->cursed.set(CurseTraitType::FAST_DIGEST);
-        if (flgs.has(TR_SLOW_REGEN))
+        }
+        if (flgs.has(TR_SLOW_REGEN)) {
             player_ptr->cursed.set(CurseTraitType::SLOW_REGEN);
-        if (flgs.has(TR_BERS_RAGE))
+        }
+        if (flgs.has(TR_BERS_RAGE)) {
             player_ptr->cursed.set(CurseTraitType::BERS_RAGE);
-        if (flgs.has(TR_PERSISTENT_CURSE))
+        }
+        if (flgs.has(TR_PERSISTENT_CURSE)) {
             player_ptr->cursed.set(CurseTraitType::PERSISTENT_CURSE);
-        if (flgs.has(TR_VUL_CURSE))
+        }
+        if (flgs.has(TR_VUL_CURSE)) {
             player_ptr->cursed.set(CurseTraitType::VUL_CURSE);
+        }
 
         auto obj_curse_flags = o_ptr->curse_flags;
         obj_curse_flags.reset({ CurseTraitType::CURSED, CurseTraitType::HEAVY_CURSE, CurseTraitType::PERMA_CURSE });
         player_ptr->cursed.set(obj_curse_flags);
-        if (o_ptr->fixed_artifact_idx == ART_CHAINSWORD)
+        if (o_ptr->fixed_artifact_idx == ART_CHAINSWORD) {
             player_ptr->cursed_special.set(CurseSpecialTraitType::CHAINSWORD);
+        }
 
         if (flgs.has(TR_TELEPORT)) {
-            if (o_ptr->is_cursed())
+            if (o_ptr->is_cursed()) {
                 player_ptr->cursed.set(CurseTraitType::TELEPORT);
-            else {
+            } else {
                 concptr insc = quark_str(o_ptr->inscription);
 
                 /* {.} will stop random teleportation. */
@@ -1099,8 +1146,9 @@ void update_curses(PlayerType *player_ptr)
         }
     }
 
-    if (player_ptr->cursed.has(CurseTraitType::TELEPORT))
+    if (player_ptr->cursed.has(CurseTraitType::TELEPORT)) {
         player_ptr->cursed_special.reset(CurseSpecialTraitType::TELEPORT_SELF);
+    }
 }
 
 BIT_FLAGS has_impact(PlayerType *player_ptr)
@@ -1123,16 +1171,17 @@ void update_extra_blows(PlayerType *player_ptr)
 
     for (int i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
         o_ptr = &player_ptr->inventory_list[i];
-        if (!o_ptr->k_idx)
+        if (!o_ptr->k_idx) {
             continue;
+        }
 
         auto flgs = object_flags(o_ptr);
         if (flgs.has(TR_BLOWS)) {
-            if ((i == INVEN_MAIN_HAND || i == INVEN_MAIN_RING) && !two_handed)
+            if ((i == INVEN_MAIN_HAND || i == INVEN_MAIN_RING) && !two_handed) {
                 player_ptr->extra_blows[0] += o_ptr->pval;
-            else if ((i == INVEN_SUB_HAND || i == INVEN_SUB_RING) && !two_handed)
+            } else if ((i == INVEN_SUB_HAND || i == INVEN_SUB_RING) && !two_handed) {
                 player_ptr->extra_blows[1] += o_ptr->pval;
-            else {
+            } else {
                 player_ptr->extra_blows[0] += o_ptr->pval;
                 player_ptr->extra_blows[1] += o_ptr->pval;
             }
@@ -1425,13 +1474,15 @@ BIT_FLAGS has_vuln_curse(PlayerType *player_ptr)
     BIT_FLAGS result = 0L;
     for (int i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
         o_ptr = &player_ptr->inventory_list[i];
-        if (!o_ptr->k_idx)
+        if (!o_ptr->k_idx) {
             continue;
+        }
 
         auto flgs = object_flags(o_ptr);
 
-        if (flgs.has(TR_VUL_CURSE) || o_ptr->curse_flags.has(CurseTraitType::VUL_CURSE))
+        if (flgs.has(TR_VUL_CURSE) || o_ptr->curse_flags.has(CurseTraitType::VUL_CURSE)) {
             set_bits(result, convert_inventory_slot_type_to_flag_cause(i2enum<inventory_slot_type>(i)));
+        }
     }
 
     return result;
@@ -1448,13 +1499,15 @@ BIT_FLAGS has_heavy_vuln_curse(PlayerType *player_ptr)
     BIT_FLAGS result = 0L;
     for (int i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
         o_ptr = &player_ptr->inventory_list[i];
-        if (!o_ptr->k_idx)
+        if (!o_ptr->k_idx) {
             continue;
+        }
 
         auto flgs = object_flags(o_ptr);
 
-        if ((flgs.has(TR_VUL_CURSE) || o_ptr->curse_flags.has(CurseTraitType::VUL_CURSE)) && o_ptr->curse_flags.has(CurseTraitType::HEAVY_CURSE))
+        if ((flgs.has(TR_VUL_CURSE) || o_ptr->curse_flags.has(CurseTraitType::VUL_CURSE)) && o_ptr->curse_flags.has(CurseTraitType::HEAVY_CURSE)) {
             set_bits(result, convert_inventory_slot_type_to_flag_cause(i2enum<inventory_slot_type>(i)));
+        }
     }
 
     return result;
@@ -1464,8 +1517,9 @@ BIT_FLAGS has_resist_fear(PlayerType *player_ptr)
 {
     BIT_FLAGS result = common_cause_flags(player_ptr, TR_RES_FEAR);
 
-    if (player_ptr->muta.has(PlayerMutationType::FEARLESS))
+    if (player_ptr->muta.has(PlayerMutationType::FEARLESS)) {
         result |= FLAG_CAUSE_MUTATION;
+    }
 
     if (is_hero(player_ptr) || is_shero(player_ptr) || player_ptr->ult_res) {
         result |= FLAG_CAUSE_MAGIC_TIME_EFFECT;
@@ -1479,8 +1533,9 @@ BIT_FLAGS has_immune_acid(PlayerType *player_ptr)
     BIT_FLAGS result = common_cause_flags(player_ptr, TR_IM_ACID);
 
     if (player_ptr->ele_immune) {
-        if (player_ptr->special_defense & DEFENSE_ACID)
+        if (player_ptr->special_defense & DEFENSE_ACID) {
             result |= FLAG_CAUSE_MAGIC_TIME_EFFECT;
+        }
     }
 
     return result;
@@ -1491,8 +1546,9 @@ BIT_FLAGS has_immune_elec(PlayerType *player_ptr)
     BIT_FLAGS result = common_cause_flags(player_ptr, TR_IM_ELEC);
 
     if (player_ptr->ele_immune) {
-        if (player_ptr->special_defense & DEFENSE_ELEC)
+        if (player_ptr->special_defense & DEFENSE_ELEC) {
             result |= FLAG_CAUSE_MAGIC_TIME_EFFECT;
+        }
     }
 
     return result;
@@ -1503,8 +1559,9 @@ BIT_FLAGS has_immune_fire(PlayerType *player_ptr)
     BIT_FLAGS result = common_cause_flags(player_ptr, TR_IM_FIRE);
 
     if (player_ptr->ele_immune) {
-        if (player_ptr->special_defense & DEFENSE_FIRE)
+        if (player_ptr->special_defense & DEFENSE_FIRE) {
             result |= FLAG_CAUSE_MAGIC_TIME_EFFECT;
+        }
     }
 
     return result;
@@ -1515,8 +1572,9 @@ BIT_FLAGS has_immune_cold(PlayerType *player_ptr)
     BIT_FLAGS result = common_cause_flags(player_ptr, TR_IM_COLD);
 
     if (player_ptr->ele_immune) {
-        if (player_ptr->special_defense & DEFENSE_COLD)
+        if (player_ptr->special_defense & DEFENSE_COLD) {
             result |= FLAG_CAUSE_MAGIC_TIME_EFFECT;
+        }
     }
 
     return result;
@@ -1535,8 +1593,9 @@ BIT_FLAGS has_immune_dark(PlayerType *player_ptr)
 
 melee_type player_melee_type(PlayerType *player_ptr)
 {
-    if (has_two_handed_weapons(player_ptr))
+    if (has_two_handed_weapons(player_ptr)) {
         return MELEE_TYPE_WEAPON_TWOHAND;
+    }
 
     if (has_melee_weapon(player_ptr, INVEN_MAIN_HAND)) {
         if (has_melee_weapon(player_ptr, INVEN_SUB_HAND)) {
@@ -1545,17 +1604,21 @@ melee_type player_melee_type(PlayerType *player_ptr)
         return MELEE_TYPE_WEAPON_MAIN;
     }
 
-    if (has_melee_weapon(player_ptr, INVEN_SUB_HAND))
+    if (has_melee_weapon(player_ptr, INVEN_SUB_HAND)) {
         return MELEE_TYPE_WEAPON_SUB;
+    }
 
-    if (empty_hands(player_ptr, false) == (EMPTY_HAND_MAIN | EMPTY_HAND_SUB))
+    if (empty_hands(player_ptr, false) == (EMPTY_HAND_MAIN | EMPTY_HAND_SUB)) {
         return MELEE_TYPE_BAREHAND_TWO;
+    }
 
-    if (empty_hands(player_ptr, false) == EMPTY_HAND_MAIN)
+    if (empty_hands(player_ptr, false) == EMPTY_HAND_MAIN) {
         return MELEE_TYPE_BAREHAND_MAIN;
+    }
 
-    if (empty_hands(player_ptr, false) == EMPTY_HAND_SUB)
+    if (empty_hands(player_ptr, false) == EMPTY_HAND_SUB) {
         return MELEE_TYPE_BAREHAND_SUB;
+    }
 
     return MELEE_TYPE_SHIELD_DOUBLE;
 }
@@ -1568,11 +1631,13 @@ melee_type player_melee_type(PlayerType *player_ptr)
  */
 bool can_attack_with_main_hand(PlayerType *player_ptr)
 {
-    if (has_melee_weapon(player_ptr, INVEN_MAIN_HAND))
+    if (has_melee_weapon(player_ptr, INVEN_MAIN_HAND)) {
         return true;
+    }
 
-    if ((empty_hands(player_ptr, true) & EMPTY_HAND_MAIN) && !can_attack_with_sub_hand(player_ptr))
+    if ((empty_hands(player_ptr, true) & EMPTY_HAND_MAIN) && !can_attack_with_sub_hand(player_ptr)) {
         return true;
+    }
 
     return false;
 }
@@ -1605,15 +1670,17 @@ bool has_two_handed_weapons(PlayerType *player_ptr)
 BIT_FLAGS has_lite(PlayerType *player_ptr)
 {
     BIT_FLAGS result = 0L;
-    if (PlayerClass(player_ptr).equals(PlayerClassType::NINJA))
+    if (PlayerClass(player_ptr).equals(PlayerClassType::NINJA)) {
         return 0L;
+    }
 
     if (player_ptr->ppersonality == PERSONALITY_MUNCHKIN) {
         result |= FLAG_CAUSE_PERSONALITY;
     }
 
-    if (PlayerRace(player_ptr).tr_flags().has(TR_LITE_1))
+    if (PlayerRace(player_ptr).tr_flags().has(TR_LITE_1)) {
         result |= FLAG_CAUSE_RACE;
+    }
 
     if (player_ptr->ult_res) {
         result |= FLAG_CAUSE_MAGIC_TIME_EFFECT;
@@ -1637,8 +1704,9 @@ bool has_disable_two_handed_bonus(PlayerType *player_ptr, int i)
         int limit = calc_weapon_weight_limit(player_ptr);
 
         /* Enable when two hand wields an enough light weapon */
-        if (limit >= o_ptr->weight / 5)
+        if (limit >= o_ptr->weight / 5) {
             return false;
+        }
     }
 
     /* Disable when empty hands, one hand wieldings and heavy weapons */

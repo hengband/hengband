@@ -501,12 +501,12 @@ static TERM_COLOR spell_color(AttributeType type)
             return mh_attr(2);
         case AttributeType::DISINTEGRATE:
             return 0x05;
-        case AttributeType::PSI:            /* fall through */
-        case AttributeType::PSI_DRAIN:      /* fall through */
-        case AttributeType::TELEKINESIS:    /* fall through */
-        case AttributeType::DOMINATION:     /* fall through */
-        case AttributeType::DRAIN_MANA:     /* fall through */
-        case AttributeType::MIND_BLAST:     /* fall through */
+        case AttributeType::PSI: /* fall through */
+        case AttributeType::PSI_DRAIN: /* fall through */
+        case AttributeType::TELEKINESIS: /* fall through */
+        case AttributeType::DOMINATION: /* fall through */
+        case AttributeType::DRAIN_MANA: /* fall through */
+        case AttributeType::MIND_BLAST: /* fall through */
         case AttributeType::BRAIN_SMASH:
             return 0x09;
         case AttributeType::CAUSE_1: /* fall through */
@@ -531,12 +531,13 @@ static TERM_COLOR spell_color(AttributeType type)
     /* Normal tiles or ASCII */
     else {
         TERM_COLOR a;
-        
+
         /* Lookup the default colors for this type */
         concptr s = quark_str(gf_colors[type]);
 
-        if (!s)
+        if (!s) {
             return TERM_WHITE;
+        }
 
         /* Pick a random color */
         auto c = s[randint0(strlen(s))];
@@ -545,9 +546,10 @@ static TERM_COLOR spell_color(AttributeType type)
         a = angband_strchr(color_char, c) - color_char;
 
         /* Invalid color (note check for < 0 removed, gave a silly
-		 * warning because bytes are always >= 0 -- RG) */
-        if (a > 15)
+         * warning because bytes are always >= 0 -- RG) */
+        if (a > 15) {
             return TERM_WHITE;
+        }
 
         /* Use this color */
         return a;
@@ -579,30 +581,36 @@ uint16_t bolt_pict(POSITION y, POSITION x, POSITION ny, POSITION nx, AttributeTy
     byte k;
 
     TERM_COLOR a;
-    
+
     /* No motion (*) */
-    if ((ny == y) && (nx == x))
+    if ((ny == y) && (nx == x)) {
         base = 0x30;
+    }
 
     /* Vertical (|) */
-    else if (nx == x)
+    else if (nx == x) {
         base = 0x40;
+    }
 
     /* Horizontal (-) */
-    else if (ny == y)
+    else if (ny == y) {
         base = 0x50;
+    }
 
     /* Diagonal (/) */
-    else if ((ny - y) == (x - nx))
+    else if ((ny - y) == (x - nx)) {
         base = 0x60;
+    }
 
     /* Diagonal (\) */
-    else if ((ny - y) == (nx - x))
+    else if ((ny - y) == (nx - x)) {
         base = 0x70;
+    }
 
     /* Weird (*) */
-    else
+    else {
         base = 0x30;
+    }
 
     /* Basic spell color */
     k = spell_color(typ);

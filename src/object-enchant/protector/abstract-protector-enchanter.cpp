@@ -32,7 +32,7 @@ AbstractProtectorEnchanter::AbstractProtectorEnchanter(ObjectType *o_ptr, DEPTH 
 
         return;
     }
-    
+
     if (this->power < 0) {
         this->o_ptr->to_a -= toac1;
         if (this->power < -1) {

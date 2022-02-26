@@ -257,8 +257,9 @@ static byte ignore_key_list[] = {
  */
 static void validate_file(concptr s)
 {
-    if (check_file(s))
+    if (check_file(s)) {
         return;
+    }
 
     quit_fmt(_("必要なファイル[%s]が見あたりません。", "Cannot find required file:\n%s"), s);
 }
@@ -268,8 +269,9 @@ static void validate_file(concptr s)
  */
 static void validate_dir(concptr s, bool vital)
 {
-    if (check_dir(s))
+    if (check_dir(s)) {
         return;
+    }
 
     if (vital) {
         quit_fmt(_("必要なディレクトリ[%s]が見あたりません。", "Cannot find required directory:\n%s"), s);
@@ -283,10 +285,12 @@ static void validate_dir(concptr s, bool vital)
  */
 static void term_getsize(term_data *td)
 {
-    if (td->cols < 1)
+    if (td->cols < 1) {
         td->cols = 1;
-    if (td->rows < 1)
+    }
+    if (td->rows < 1) {
         td->rows = 1;
+    }
 
     TERM_LEN wid = td->cols * td->tile_wid + td->size_ow1 + td->size_ow2;
     TERM_LEN hgt = td->rows * td->tile_hgt + td->size_oh1 + td->size_oh2;
@@ -322,8 +326,9 @@ static void save_prefs_aux(int i)
     GAME_TEXT sec_name[128];
     char buf[1024];
 
-    if (!td->w)
+    if (!td->w) {
         return;
+    }
 
     wsprintfA(sec_name, "Term-%d", i);
 
@@ -353,17 +358,19 @@ static void save_prefs_aux(int i)
     GetWindowPlacement(td->w, &lpwndpl);
 
     RECT rc = lpwndpl.rcNormalPosition;
-    if (i == 0)
+    if (i == 0) {
         wsprintfA(buf, "%d", normsize.x);
-    else
+    } else {
         wsprintfA(buf, "%d", td->cols);
+    }
 
     WritePrivateProfileStringA(sec_name, "NumCols", buf, ini_file);
 
-    if (i == 0)
+    if (i == 0) {
         wsprintfA(buf, "%d", normsize.y);
-    else
+    } else {
         wsprintfA(buf, "%d", td->rows);
+    }
 
     WritePrivateProfileStringA(sec_name, "NumRows", buf, ini_file);
     if (i == 0) {
@@ -591,8 +598,9 @@ static bool change_bg_mode(bg_mode new_mode, bool show_error = false, bool force
         init_background();
         if (!load_bg(wallpaper_file)) {
             current_bg_mode = bg_mode::BG_NONE;
-            if (show_error)
+            if (show_error) {
                 plog_fmt(_("壁紙用ファイル '%s' を読み込めません。", "Can't load the image file '%s'."), wallpaper_file);
+            }
         }
     } else {
         delete_bg();
@@ -620,8 +628,9 @@ static bool change_bg_mode(bg_mode new_mode, bool show_error = false, bool force
  */
 static void term_window_resize(term_data *td)
 {
-    if (!td->w)
+    if (!td->w) {
         return;
+    }
 
     SetWindowPos(td->w, 0, 0, 0, td->size_wid, td->size_hgt, SWP_NOMOVE | SWP_NOZORDER);
     if (!td->size_hack) {
@@ -639,14 +648,16 @@ static void term_window_resize(term_data *td)
  */
 static errr term_force_font(term_data *td)
 {
-    if (td->font_id)
+    if (td->font_id) {
         DeleteObject(td->font_id);
+    }
 
     td->font_id = CreateFontIndirectW(&(td->lf));
     int wid = td->lf.lfWidth;
     int hgt = td->lf.lfHeight;
-    if (!td->font_id)
+    if (!td->font_id) {
         return 1;
+    }
 
     if (!wid || !hgt) {
         HDC hdcDesktop;
@@ -680,8 +691,9 @@ static void term_change_font(term_data *td)
     cf.Flags = CF_SCREENFONTS | CF_FIXEDPITCHONLY | CF_NOVERTFONTS | CF_INITTOLOGFONTSTRUCT;
     cf.lpLogFont = &(td->lf);
 
-    if (!ChooseFontW(&cf))
+    if (!ChooseFontW(&cf)) {
         return;
+    }
 
     term_force_font(td);
     td->tile_wid = td->font_wid;
@@ -888,8 +900,9 @@ static errr term_xtra_win_noise(void)
  */
 static errr term_xtra_win_sound(int v)
 {
-    if (!use_sound)
+    if (!use_sound) {
         return 1;
+    }
     return play_sound(v);
 }
 
@@ -939,8 +952,9 @@ static errr term_xtra_win(int n, int v)
     }
     case TERM_XTRA_FRESH: {
         term_data *td = (term_data *)(game_term->data);
-        if (td->w)
+        if (td->w) {
             UpdateWindow(td->w);
+        }
         return 0;
     }
     case TERM_XTRA_MUSIC_BASIC:
@@ -1047,10 +1061,11 @@ static errr term_wipe_win(int x, int y, int n)
     HDC hdc = td->get_hdc();
     SetBkColor(hdc, RGB(0, 0, 0));
     SelectObject(hdc, td->font_id);
-    if (current_bg_mode != bg_mode::BG_NONE)
+    if (current_bg_mode != bg_mode::BG_NONE) {
         draw_bg(hdc, &rc);
-    else
+    } else {
         ExtTextOut(hdc, 0, 0, ETO_OPAQUE, &rc, NULL, 0, NULL);
+    }
 
     td->refresh(&rc);
     return 0;
@@ -1090,12 +1105,14 @@ static errr term_text_win(int x, int y, int n, TERM_COLOR a, concptr s)
     SetTextColor(hdc, win_clr[a]);
 
     SelectObject(hdc, td->font_id);
-    if (current_bg_mode != bg_mode::BG_NONE)
+    if (current_bg_mode != bg_mode::BG_NONE) {
         SetBkMode(hdc, TRANSPARENT);
+    }
 
     ExtTextOut(hdc, 0, 0, ETO_OPAQUE, &rc, NULL, 0, NULL);
-    if (current_bg_mode != bg_mode::BG_NONE)
+    if (current_bg_mode != bg_mode::BG_NONE) {
         draw_bg(hdc, &rc);
+    }
 
     rc.left += ((td->tile_wid - td->font_wid) / 2);
     rc.right = rc.left + td->font_wid;
@@ -1121,10 +1138,11 @@ static errr term_text_win(int x, int y, int n, TERM_COLOR a, concptr s)
             to_wchar wc(tmp);
             const auto *buf = wc.wc_str();
             rc.right += td->font_wid;
-            if (buf == NULL)
+            if (buf == NULL) {
                 ExtTextOutA(hdc, rc.left, rc.top, ETO_CLIPPED, &rc, s + i, 2, NULL);
-            else
+            } else {
                 ExtTextOutW(hdc, rc.left, rc.top, ETO_CLIPPED, &rc, buf, wcslen(buf), NULL);
+            }
             rc.right -= td->font_wid;
             i++;
             rc.left += 2 * td->tile_wid;
@@ -1197,8 +1215,9 @@ static errr term_pict_win(TERM_LEN x, TERM_LEN y, int n, const TERM_COLOR *ap, c
     w2 = td->tile_wid;
     h2 = td->tile_hgt;
     tw2 = w2;
-    if (use_bigtile)
+    if (use_bigtile) {
         tw2 *= 2;
+    }
 
     TERM_LEN x2 = x * w2 + td->size_ow1 + infGraph.OffsetX;
     TERM_LEN y2 = y * h2 + td->size_oh1 + infGraph.OffsetY;
@@ -1348,10 +1367,12 @@ static void init_windows(void)
         td->lf.lfCharSet = _(SHIFTJIS_CHARSET, DEFAULT_CHARSET);
         td->lf.lfPitchAndFamily = FIXED_PITCH | FF_DONTCARE;
         term_force_font(td);
-        if (!td->tile_wid)
+        if (!td->tile_wid) {
             td->tile_wid = td->font_wid;
-        if (!td->tile_hgt)
+        }
+        if (!td->tile_hgt) {
             td->tile_hgt = td->font_hgt;
+        }
         term_getsize(td);
         term_window_resize(td);
     }
@@ -1365,8 +1386,9 @@ static void init_windows(void)
             td->dwExStyle, AngList, td->name, td->dwStyle, td->pos_x, td->pos_y, td->size_wid, td->size_hgt, HWND_DESKTOP, NULL, hInstance, NULL);
         my_td = NULL;
 
-        if (!td->w)
+        if (!td->w) {
             quit(_("サブウィンドウに作成に失敗しました", "Failed to create sub-window"));
+        }
 
         td->size_hack = true;
         term_getsize(td);
@@ -1399,8 +1421,9 @@ static void init_windows(void)
         td->dwExStyle, AppName, _(L"変愚蛮怒", td->name), td->dwStyle, td->pos_x, td->pos_y, td->size_wid, td->size_hgt, HWND_DESKTOP, NULL, hInstance, NULL);
     my_td = NULL;
 
-    if (!td->w)
+    if (!td->w) {
         quit(_("メインウィンドウの作成に失敗しました", "Failed to create main window"));
+    }
 
     /* Resize */
     td->size_hack = true;
@@ -1413,10 +1436,11 @@ static void init_windows(void)
     normsize.x = td->cols;
     normsize.y = td->rows;
 
-    if (win_maximized)
+    if (win_maximized) {
         ShowWindow(td->w, SW_SHOWMAXIMIZED);
-    else
+    } else {
         ShowWindow(td->w, SW_SHOW);
+    }
 
     SetWindowPos(td->w, HWND_TOP, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE);
     hbrYellow = CreateSolidBrush(win_clr[TERM_YELLOW]);
@@ -1517,8 +1541,9 @@ static void setup_menus(void)
  */
 static void check_for_save_file(const std::string &savefile_option)
 {
-    if (savefile_option.empty())
+    if (savefile_option.empty()) {
         return;
+    }
 
     strcpy(savefile, savefile_option.c_str());
     validate_file(savefile);
@@ -1650,8 +1675,9 @@ static void process_menus(PlayerType *player_ptr, WORD wCmd)
     case IDM_WINDOW_VIS_6:
     case IDM_WINDOW_VIS_7: {
         int i = wCmd - IDM_WINDOW_VIS_0;
-        if ((i < 0) || (i >= MAX_TERM_DATA))
+        if ((i < 0) || (i >= MAX_TERM_DATA)) {
             break;
+        }
 
         td = &data[i];
         if (!td->visible) {
@@ -1675,8 +1701,9 @@ static void process_menus(PlayerType *player_ptr, WORD wCmd)
     case IDM_WINDOW_FONT_6:
     case IDM_WINDOW_FONT_7: {
         int i = wCmd - IDM_WINDOW_FONT_0;
-        if ((i < 0) || (i >= MAX_TERM_DATA))
+        if ((i < 0) || (i >= MAX_TERM_DATA)) {
             break;
+        }
 
         td = &data[i];
         term_change_font(td);
@@ -1690,8 +1717,9 @@ static void process_menus(PlayerType *player_ptr, WORD wCmd)
     case IDM_WINDOW_POS_6:
     case IDM_WINDOW_POS_7: {
         int i = wCmd - IDM_WINDOW_POS_0;
-        if ((i < 0) || (i >= MAX_TERM_DATA))
+        if ((i < 0) || (i >= MAX_TERM_DATA)) {
             break;
+        }
 
         td = &data[i];
         if (!td->posfix && td->visible) {
@@ -1713,8 +1741,9 @@ static void process_menus(PlayerType *player_ptr, WORD wCmd)
     case IDM_WINDOW_I_WID_6:
     case IDM_WINDOW_I_WID_7: {
         int i = wCmd - IDM_WINDOW_I_WID_0;
-        if ((i < 0) || (i >= MAX_TERM_DATA))
+        if ((i < 0) || (i >= MAX_TERM_DATA)) {
             break;
+        }
 
         td = &data[i];
         td->tile_wid += 1;
@@ -1731,8 +1760,9 @@ static void process_menus(PlayerType *player_ptr, WORD wCmd)
     case IDM_WINDOW_D_WID_6:
     case IDM_WINDOW_D_WID_7: {
         int i = wCmd - IDM_WINDOW_D_WID_0;
-        if ((i < 0) || (i >= MAX_TERM_DATA))
+        if ((i < 0) || (i >= MAX_TERM_DATA)) {
             break;
+        }
 
         td = &data[i];
         td->tile_wid -= 1;
@@ -1749,8 +1779,9 @@ static void process_menus(PlayerType *player_ptr, WORD wCmd)
     case IDM_WINDOW_I_HGT_6:
     case IDM_WINDOW_I_HGT_7: {
         int i = wCmd - IDM_WINDOW_I_HGT_0;
-        if ((i < 0) || (i >= MAX_TERM_DATA))
+        if ((i < 0) || (i >= MAX_TERM_DATA)) {
             break;
+        }
 
         td = &data[i];
         td->tile_hgt += 1;
@@ -1767,8 +1798,9 @@ static void process_menus(PlayerType *player_ptr, WORD wCmd)
     case IDM_WINDOW_D_HGT_6:
     case IDM_WINDOW_D_HGT_7: {
         int i = wCmd - IDM_WINDOW_D_HGT_0;
-        if ((i < 0) || (i >= MAX_TERM_DATA))
+        if ((i < 0) || (i >= MAX_TERM_DATA)) {
             break;
+        }
 
         td = &data[i];
         td->tile_hgt -= 1;
@@ -1783,16 +1815,18 @@ static void process_menus(PlayerType *player_ptr, WORD wCmd)
     case IDM_OPTIONS_NO_GRAPHICS: {
         if (arg_graphics != enum2i(graphics_mode::GRAPHICS_NONE)) {
             arg_graphics = enum2i(graphics_mode::GRAPHICS_NONE);
-            if (game_in_progress)
+            if (game_in_progress) {
                 do_cmd_redraw(player_ptr);
+            }
         }
         break;
     }
     case IDM_OPTIONS_OLD_GRAPHICS: {
         if (arg_graphics != enum2i(graphics_mode::GRAPHICS_ORIGINAL)) {
             arg_graphics = enum2i(graphics_mode::GRAPHICS_ORIGINAL);
-            if (game_in_progress)
+            if (game_in_progress) {
                 do_cmd_redraw(player_ptr);
+            }
         }
 
         break;
@@ -1800,8 +1834,9 @@ static void process_menus(PlayerType *player_ptr, WORD wCmd)
     case IDM_OPTIONS_NEW_GRAPHICS: {
         if (arg_graphics != enum2i(graphics_mode::GRAPHICS_ADAM_BOLT)) {
             arg_graphics = enum2i(graphics_mode::GRAPHICS_ADAM_BOLT);
-            if (game_in_progress)
+            if (game_in_progress) {
                 do_cmd_redraw(player_ptr);
+            }
         }
 
         break;
@@ -1809,8 +1844,9 @@ static void process_menus(PlayerType *player_ptr, WORD wCmd)
     case IDM_OPTIONS_NEW2_GRAPHICS: {
         if (arg_graphics != enum2i(graphics_mode::GRAPHICS_HENGBAND)) {
             arg_graphics = enum2i(graphics_mode::GRAPHICS_HENGBAND);
-            if (game_in_progress)
+            if (game_in_progress) {
                 do_cmd_redraw(player_ptr);
+            }
         }
 
         break;
@@ -1826,8 +1862,9 @@ static void process_menus(PlayerType *player_ptr, WORD wCmd)
         use_music = arg_music;
         if (use_music) {
             init_music();
-            if (game_in_progress)
+            if (game_in_progress) {
                 select_floor_music(player_ptr);
+            }
         } else {
             main_win_music::stop_music();
         }
@@ -1863,8 +1900,9 @@ static void process_menus(PlayerType *player_ptr, WORD wCmd)
         break;
     }
     case IDM_OPTIONS_BG: {
-        if (change_bg_mode(bg_mode::BG_ONE))
+        if (change_bg_mode(bg_mode::BG_ONE)) {
             break;
+        }
         // 壁紙の設定に失敗した（ファイルが存在しない等）場合、壁紙に使うファイルを選択させる
     }
         [[fallthrough]]; /* Fall through */
@@ -1895,18 +1933,21 @@ static void process_menus(PlayerType *player_ptr, WORD wCmd)
 static errr term_keypress(int k)
 {
     /* Refuse to enqueue non-keys */
-    if (!k)
+    if (!k) {
         return -1;
+    }
 
     /* Store the char, advance the queue */
     game_term->key_queue[game_term->key_head++] = (char)k;
 
     /* Circular queue, handle wrap */
-    if (game_term->key_head == game_term->key_size)
+    if (game_term->key_head == game_term->key_size) {
         game_term->key_head = 0;
+    }
 
-    if (game_term->key_head != game_term->key_tail)
+    if (game_term->key_head != game_term->key_tail) {
         return 0;
+    }
 
     return 1;
 }
@@ -1941,12 +1982,15 @@ static bool process_keydown(WPARAM wParam, LPARAM lParam)
         bool numpad = false;
 
         term_keypress(31);
-        if (mc)
+        if (mc) {
             term_keypress('C');
-        if (ms)
+        }
+        if (ms) {
             term_keypress('S');
-        if (ma)
+        }
+        if (ma) {
             term_keypress('A');
+        }
 
         int i = LOBYTE(HIWORD(lParam));
         term_keypress('x');
@@ -1988,8 +2032,9 @@ static bool process_keydown(WPARAM wParam, LPARAM lParam)
             numpad = !ext_key;
         }
 
-        if (numpad)
+        if (numpad) {
             term_keypress('K');
+        }
 
         term_keypress(hexsym[i / 16]);
         term_keypress(hexsym[i % 16]);
@@ -2009,18 +2054,22 @@ static void handle_app_active(HWND hWnd, UINT uMsg, WPARAM wParam, [[maybe_unuse
     switch (uMsg) {
     case WM_ACTIVATEAPP: {
         if (wParam) {
-            if (use_pause_music_inactive)
+            if (use_pause_music_inactive) {
                 main_win_music::resume_music();
+            }
         } else {
-            if (use_pause_music_inactive)
+            if (use_pause_music_inactive) {
                 main_win_music::pause_music();
+            }
         }
         break;
     }
     case WM_WINDOWPOSCHANGING: {
-        if (!IsIconic(hWnd))
-            if (use_pause_music_inactive)
+        if (!IsIconic(hWnd)) {
+            if (use_pause_music_inactive) {
                 main_win_music::resume_music();
+            }
+        }
         break;
     }
     }
@@ -2064,10 +2113,12 @@ static void fit_term_size_to_window(term_data *td, bool recalc_window_size = fal
  */
 static bool handle_window_resize(term_data *td, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
-    if (!td)
+    if (!td) {
         return false;
-    if (!td->w)
+    }
+    if (!td->w) {
         return false;
+    }
 
     switch (uMsg) {
     case WM_GETMINMAXINFO: {
@@ -2100,15 +2151,17 @@ static bool handle_window_resize(term_data *td, UINT uMsg, WPARAM wParam, LPARAM
         break;
     }
     case WM_SIZE: {
-        if (td->size_hack)
+        if (td->size_hack) {
             break;
+        }
 
         //!< @todo 二重のswitch文。後で分割する.
         switch (wParam) {
         case SIZE_MINIMIZED: {
             for (int i = 1; i < MAX_TERM_DATA; i++) {
-                if (data[i].visible)
+                if (data[i].visible) {
                     ShowWindow(data[i].w, SW_HIDE);
+                }
             }
 
             return true;
@@ -2119,8 +2172,9 @@ static bool handle_window_resize(term_data *td, UINT uMsg, WPARAM wParam, LPARAM
 
             td->size_hack = true;
             for (int i = 1; i < MAX_TERM_DATA; i++) {
-                if (data[i].visible)
+                if (data[i].visible) {
                     ShowWindow(data[i].w, SW_SHOWNA);
+                }
             }
 
             td->size_hack = false;
@@ -2144,8 +2198,9 @@ LRESULT PASCAL angband_window_procedure(HWND hWnd, UINT uMsg, WPARAM wParam, LPA
     term_data *td = (term_data *)GetWindowLong(hWnd, 0);
 
     handle_app_active(hWnd, uMsg, wParam, lParam);
-    if (handle_window_resize(td, uMsg, wParam, lParam))
+    if (handle_window_resize(td, uMsg, wParam, lParam)) {
         return 0;
+    }
 
     switch (uMsg) {
     case WM_NCCREATE: {
@@ -2162,11 +2217,12 @@ LRESULT PASCAL angband_window_procedure(HWND hWnd, UINT uMsg, WPARAM wParam, LPA
     case WM_PAINT: {
         PAINTSTRUCT ps;
         HDC hdc = BeginPaint(hWnd, &ps);
-        if (td)
+        if (td) {
             if (!td->render(ps.rcPaint)) {
                 SetBkColor(hdc, RGB(0, 0, 0));
                 ExtTextOut(hdc, 0, 0, ETO_OPAQUE, &ps.rcPaint, NULL, 0, NULL);
             }
+        }
         EndPaint(hWnd, &ps);
         ValidateRect(hWnd, NULL);
         return 0;
@@ -2178,23 +2234,25 @@ LRESULT PASCAL angband_window_procedure(HWND hWnd, UINT uMsg, WPARAM wParam, LPA
     }
     case WM_SYSKEYDOWN:
     case WM_KEYDOWN: {
-        if (process_keydown(wParam, lParam))
+        if (process_keydown(wParam, lParam)) {
             return 0;
+        }
         break;
     }
     case WM_CHAR: {
         // wParam is WCHAR because using RegisterClassW
-        if (term_no_press)
+        if (term_no_press) {
             term_no_press = false;
-        else {
+        } else {
             WCHAR wc[2] = { (WCHAR)wParam, '\0' };
             term_keypress(to_multibyte(wc).c_str());
         }
         return 0;
     }
     case WM_LBUTTONDOWN: {
-        if (macro_running())
+        if (macro_running()) {
             return 0;
+        }
         mousex = std::min(LOWORD(lParam) / td->tile_wid, td->cols - 1);
         mousey = std::min(HIWORD(lParam) / td->tile_hgt, td->rows - 1);
         mouse_down = true;
@@ -2203,8 +2261,9 @@ LRESULT PASCAL angband_window_procedure(HWND hWnd, UINT uMsg, WPARAM wParam, LPA
         return 0;
     }
     case WM_LBUTTONUP: {
-        if (!mouse_down)
+        if (!mouse_down) {
             return 0;
+        }
         HGLOBAL hGlobal;
         LPSTR lpStr;
         TERM_LEN dx = abs(oldx - mousex) + 1;
@@ -2221,8 +2280,9 @@ LRESULT PASCAL angband_window_procedure(HWND hWnd, UINT uMsg, WPARAM wParam, LPA
         int sz = (dx + 2) * dy;
 #endif
         hGlobal = GlobalAlloc(GHND, sz + 1);
-        if (hGlobal == NULL)
+        if (hGlobal == NULL) {
             return 0;
+        }
         lpStr = (LPSTR)GlobalLock(hGlobal);
 
         for (int i = 0; i < dy; i++) {
@@ -2233,18 +2293,21 @@ LRESULT PASCAL angband_window_procedure(HWND hWnd, UINT uMsg, WPARAM wParam, LPA
             strncpy(s.data(), &scr[oy + i][ox], dx);
 
             if (ox > 0) {
-                if (iskanji(scr[oy + i][ox - 1]))
+                if (iskanji(scr[oy + i][ox - 1])) {
                     s[0] = ' ';
+                }
             }
 
             if (ox + dx < data[0].cols) {
-                if (iskanji(scr[oy + i][ox + dx - 1]))
+                if (iskanji(scr[oy + i][ox + dx - 1])) {
                     s[dx - 1] = ' ';
+                }
             }
 
             for (int j = 0; j < dx; j++) {
-                if (s[j] == 127)
+                if (s[j] == 127) {
                     s[j] = '#';
+                }
                 *lpStr++ = s[j];
             }
 #else
@@ -2271,8 +2334,9 @@ LRESULT PASCAL angband_window_procedure(HWND hWnd, UINT uMsg, WPARAM wParam, LPA
         return 0;
     }
     case WM_MOUSEMOVE: {
-        if (!mouse_down)
+        if (!mouse_down) {
             return 0;
+        }
 
         int dx, dy;
         int cx = std::min(LOWORD(lParam) / td->tile_wid, td->cols - 1);
@@ -2328,8 +2392,9 @@ LRESULT PASCAL angband_window_procedure(HWND hWnd, UINT uMsg, WPARAM wParam, LPA
         }
 
         msg_flag = false;
-        if (p_ptr->chp < 0)
+        if (p_ptr->chp < 0) {
             p_ptr->is_dead = false;
+        }
         exe_write_diary(p_ptr, DIARY_GAMESTART, 0, _("----ゲーム中断----", "---- Save and Exit Game ----"));
 
         p_ptr->panic_save = 1;
@@ -2348,20 +2413,23 @@ LRESULT PASCAL angband_window_procedure(HWND hWnd, UINT uMsg, WPARAM wParam, LPA
         return 0;
     }
     case WM_ACTIVATE: {
-        if (!wParam || HIWORD(lParam))
+        if (!wParam || HIWORD(lParam)) {
             break;
+        }
 
         for (int i = 1; i < MAX_TERM_DATA; i++) {
-            if (!data[i].posfix)
+            if (!data[i].posfix) {
                 term_window_pos(&data[i], hWnd);
+            }
         }
 
         SetFocus(hWnd);
         return 0;
     }
     case WM_ACTIVATEAPP: {
-        if (IsIconic(td->w))
+        if (IsIconic(td->w)) {
             break;
+        }
 
         for (int i = 1; i < MAX_TERM_DATA; i++) {
             if (data[i].visible) {
@@ -2394,8 +2462,9 @@ LRESULT PASCAL angband_window_procedure(HWND hWnd, UINT uMsg, WPARAM wParam, LPA
 LRESULT PASCAL AngbandListProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
     term_data *td = (term_data *)GetWindowLong(hWnd, 0);
-    if (handle_window_resize(td, uMsg, wParam, lParam))
+    if (handle_window_resize(td, uMsg, wParam, lParam)) {
         return 0;
+    }
 
     switch (uMsg) {
     case WM_NCCREATE: {
@@ -2411,34 +2480,37 @@ LRESULT PASCAL AngbandListProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPara
     case WM_PAINT: {
         PAINTSTRUCT ps;
         HDC hdc = BeginPaint(hWnd, &ps);
-        if (td)
+        if (td) {
             if (!td->render(ps.rcPaint)) {
                 SetBkColor(hdc, RGB(0, 0, 0));
                 ExtTextOut(hdc, 0, 0, ETO_OPAQUE, &ps.rcPaint, NULL, 0, NULL);
             }
+        }
         EndPaint(hWnd, &ps);
         return 0;
     }
     case WM_SYSKEYDOWN:
     case WM_KEYDOWN: {
-        if (process_keydown(wParam, lParam))
+        if (process_keydown(wParam, lParam)) {
             return 0;
+        }
 
         break;
     }
     case WM_CHAR: {
         // wParam is WCHAR because using RegisterClassW
-        if (term_no_press)
+        if (term_no_press) {
             term_no_press = false;
-        else {
+        } else {
             WCHAR wc[2] = { (WCHAR)wParam, '\0' };
             term_keypress(to_multibyte(wc).c_str());
         }
         return 0;
     }
     case WM_NCLBUTTONDOWN: {
-        if (wParam == HTCLOSE)
+        if (wParam == HTCLOSE) {
             wParam = HTSYSMENU;
+        }
 
         if (wParam == HTSYSMENU) {
             if (td->visible) {
@@ -2478,10 +2550,12 @@ static void hook_quit(concptr str)
     save_prefs();
     for (int i = MAX_TERM_DATA - 1; i >= 0; --i) {
         term_force_font(&data[i]);
-        if (data[i].font_want)
+        if (data[i].font_want) {
             string_free(data[i].font_want);
-        if (data[i].w)
+        }
+        if (data[i].w) {
             DestroyWindow(data[i].w);
+        }
         data[i].w = 0;
     }
 
@@ -2491,8 +2565,9 @@ static void hook_quit(concptr str)
     finalize_sound();
 
     UnregisterClassW(AppName, hInstance);
-    if (hIcon)
+    if (hIcon) {
         DestroyIcon(hIcon);
+    }
 
     exit(0);
 }
@@ -2557,9 +2632,9 @@ static void init_stuff(void)
     }
 
     ANGBAND_SYS = "win";
-    if (7 != GetKeyboardType(0))
+    if (7 != GetKeyboardType(0)) {
         ANGBAND_KEYBOARD = "0";
-    else {
+    } else {
         switch (GetKeyboardType(1)) {
         case 0x0D01:
         case 0x0D02:
@@ -2618,15 +2693,17 @@ static void register_wndclass(void)
     wc.lpszMenuName = AppName;
     wc.lpszClassName = AppName;
 
-    if (!RegisterClassW(&wc))
+    if (!RegisterClassW(&wc)) {
         exit(1);
+    }
 
     wc.lpfnWndProc = AngbandListProc;
     wc.lpszMenuName = NULL;
     wc.lpszClassName = AngList;
 
-    if (!RegisterClassW(&wc))
+    if (!RegisterClassW(&wc)) {
         exit(2);
+    }
 }
 
 /*!
@@ -2648,8 +2725,9 @@ int WINAPI WinMain(
 
     // before term_data initialize
     plog_aux = [](concptr str) {
-        if (str)
+        if (str) {
             MessageBoxW(NULL, to_wchar(str).wc_str(), _(L"警告！", L"Warning"), MB_ICONEXCLAMATION | MB_OK);
+        }
     };
     quit_aux = [](concptr str) {
         if (str) {
@@ -2657,8 +2735,9 @@ int WINAPI WinMain(
         }
 
         UnregisterClassW(AppName, hInstance);
-        if (hIcon)
+        if (hIcon) {
             DestroyIcon(hIcon);
+        }
 
         exit(0);
     };
@@ -2702,8 +2781,9 @@ int WINAPI WinMain(
     while (GetMessage(&msg, NULL, 0, 0)) {
         TranslateMessage(&msg);
         DispatchMessage(&msg);
-        if (game_in_progress || movie_in_progress)
+        if (game_in_progress || movie_in_progress) {
             break;
+        }
     }
 
     term_flush();
