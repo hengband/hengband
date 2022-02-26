@@ -23,6 +23,7 @@
 #include "monster-floor/monster-summon.h"
 #include "monster-floor/place-monster-types.h"
 #include "object-use/item-use-checker.h"
+#include "object-use/read/read-executor-factory.h"
 #include "object/object-info.h"
 #include "object/object-kind.h"
 #include "perception/object-perception.h"
@@ -66,7 +67,6 @@
 #include "util/angband-files.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
-#include "object-use/read/read-executor-factory.h"
 
 /*!
  * @brief コンストラクタ
@@ -347,7 +347,7 @@ void ObjectReadEntity::execute(bool known)
             msg_print(_("手が輝き始めた。", "Your hands begin to glow."));
             this->player_ptr->special_attack |= ATTACK_CONFUSE;
             this->player_ptr->redraw |= PR_STATUS;
-            ident = true;            
+            ident = true;
             break;
         case SV_SCROLL_PROTECTION_FROM_EVIL: {
             auto k = 3 * this->player_ptr->lev;

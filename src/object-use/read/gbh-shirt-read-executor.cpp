@@ -3,3 +3,15 @@
  * @date 2022/02/26
  * @author Hourier
  */
+
+#include "object-use/read/gbh-shirt-read-executor.h"
+
+bool GbhShirtReadExecutor::is_identified()
+{
+    return false;
+}
+
+bool GbhShirtReadExecutor::read()
+{
+    return false;
+}

@@ -3,3 +3,15 @@
  * @date 2022/02/26
  * @author Hourier
  */
+
+#include "object-use/read/ring-power-read-executor.h"
+
+bool RingOfPowerReadExecutor::is_identified()
+{
+    return false;
+}
+
+bool RingOfPowerReadExecutor::read()
+{
+    return false;
+}
