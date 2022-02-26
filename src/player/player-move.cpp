@@ -248,10 +248,9 @@ bool move_player_effect(PlayerType *player_ptr, POSITION ny, POSITION nx, BIT_FL
         energy.reset_player_turn();
         command_new = SPECIAL_KEY_QUEST;
     } else if (f_ptr->flags.has(FloorFeatureType::QUEST_EXIT)) {
-        if (quest[enum2i(floor_ptr->quest_number)].type == QuestKindType::FIND_EXIT) {
+        if (quest[floor_ptr->quest_number].type == QuestKindType::FIND_EXIT) {
             complete_quest(player_ptr, floor_ptr->quest_number);
         }
-
         leave_quest_check(player_ptr);
         floor_ptr->quest_number = i2enum<QuestId>(g_ptr->special);
         floor_ptr->dun_level = 0;

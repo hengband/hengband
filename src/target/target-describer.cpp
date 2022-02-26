@@ -462,17 +462,18 @@ static concptr decide_target_floor(PlayerType *player_ptr, eg_type *eg_ptr)
 {
     if (eg_ptr->f_ptr->flags.has(FloorFeatureType::QUEST_ENTER)) {
         QuestId old_quest = player_ptr->current_floor_ptr->quest_number;
+        const QuestId number = i2enum<QuestId>(eg_ptr->g_ptr->special);
+        std::string_view msg(_("クエスト「%s」(%d階相当)", "the entrance to the quest '%s'(level %d)"));
         for (int j = 0; j < 10; j++) {
             quest_text[j][0] = '\0';
         }
 
         quest_text_line = 0;
-        player_ptr->current_floor_ptr->quest_number = i2enum<QuestId>(eg_ptr->g_ptr->special);
+        player_ptr->current_floor_ptr->quest_number = number;
         init_flags = INIT_NAME_ONLY;
         parse_fixed_map(player_ptr, "q_info.txt", 0, 0, 0, 0);
         player_ptr->current_floor_ptr->quest_number = old_quest;
-        return format(
-            _("クエスト「%s」(%d階相当)", "the entrance to the quest '%s'(level %d)"), quest[eg_ptr->g_ptr->special].name, quest[eg_ptr->g_ptr->special].level);
+        return format(msg.data(), quest[number].name, quest[number].level);
     }
 
     if (eg_ptr->f_ptr->flags.has(FloorFeatureType::BLDG) && !player_ptr->current_floor_ptr->inside_arena) {

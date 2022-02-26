@@ -58,16 +58,15 @@ void player_wipe_without_name(PlayerType *player_ptr)
         strcpy(player_ptr->history[i], "");
     }
 
-    for (int i = 0; i < max_q_idx; i++) {
-        quest_type *const q_ptr = &quest[i];
-        q_ptr->status = QuestStatusType::UNTAKEN;
-        q_ptr->cur_num = 0;
-        q_ptr->max_num = 0;
-        q_ptr->type = QuestKindType::NONE;
-        q_ptr->level = 0;
-        q_ptr->r_idx = 0;
-        q_ptr->complev = 0;
-        q_ptr->comptime = 0;
+    for (auto &[q_idx, q_ref] : quest) {
+        q_ref.status = QuestStatusType::UNTAKEN;
+        q_ref.cur_num = 0;
+        q_ref.max_num = 0;
+        q_ref.type = QuestKindType::NONE;
+        q_ref.level = 0;
+        q_ref.r_idx = 0;
+        q_ref.complev = 0;
+        q_ref.comptime = 0;
     }
 
     player_ptr->inven_cnt = 0;
@@ -184,14 +183,13 @@ void player_wipe_without_name(PlayerType *player_ptr)
  */
 void init_dungeon_quests(PlayerType *player_ptr)
 {
-    int number_of_quests = MAX_RANDOM_QUEST - MIN_RANDOM_QUEST + 1;
     init_flags = INIT_ASSIGN;
     auto *floor_ptr = player_ptr->current_floor_ptr;
-    floor_ptr->quest_number = i2enum<QuestId>(MIN_RANDOM_QUEST);
+    floor_ptr->quest_number = QuestId::RANDOM_QUEST1;
     parse_fixed_map(player_ptr, "q_info.txt", 0, 0, 0, 0);
     floor_ptr->quest_number = QuestId::NONE;
-    for (int i = MIN_RANDOM_QUEST + number_of_quests - 1; i >= MIN_RANDOM_QUEST; i--) {
-        auto *q_ptr = &quest[i];
+    for (auto q = quest.find(QuestId::RANDOM_QUEST10); q != quest.lower_bound(QuestId::RANDOM_QUEST1) && q != quest.end(); q--) {
+        auto *q_ptr = &q->second;
         monster_race *quest_r_ptr;
         q_ptr->status = QuestStatusType::TAKEN;
         determine_random_questor(player_ptr, q_ptr);
@@ -203,11 +201,11 @@ void init_dungeon_quests(PlayerType *player_ptr)
     init_flags = INIT_ASSIGN;
     floor_ptr->quest_number = QuestId::OBERON;
     parse_fixed_map(player_ptr, "q_info.txt", 0, 0, 0, 0);
-    quest[enum2i(QuestId::OBERON)].status = QuestStatusType::TAKEN;
+    quest[QuestId::OBERON].status = QuestStatusType::TAKEN;
 
     floor_ptr->quest_number = QuestId::SERPENT;
     parse_fixed_map(player_ptr, "q_info.txt", 0, 0, 0, 0);
-    quest[enum2i(QuestId::SERPENT)].status = QuestStatusType::TAKEN;
+    quest[QuestId::SERPENT].status = QuestStatusType::TAKEN;
     floor_ptr->quest_number = QuestId::NONE;
 }
 

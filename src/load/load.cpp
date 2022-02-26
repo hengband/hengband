@@ -79,8 +79,8 @@ static errr load_town_quest(PlayerType *player_ptr)
 
     /* Quest 18 was removed */
     if (h_older_than(1, 7, 0, 6)) {
-        quest[OLD_QUEST_WATER_CAVE] = {};
-        quest[OLD_QUEST_WATER_CAVE].status = QuestStatusType::UNTAKEN;
+        quest[i2enum<QuestId>(OLD_QUEST_WATER_CAVE)] = {};
+        quest[i2enum<QuestId>(OLD_QUEST_WATER_CAVE)].status = QuestStatusType::UNTAKEN;
     }
 
     load_wilderness_info(player_ptr);

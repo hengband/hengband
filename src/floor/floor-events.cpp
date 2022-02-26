@@ -280,10 +280,17 @@ void update_dungeon_feeling(PlayerType *player_ptr)
     }
 
     auto quest_num = quest_number(player_ptr, floor_ptr->dun_level);
-    if (inside_quest(quest_num) && (quest_type::is_fixed(quest_num) && !((quest_num == QuestId::OBERON) || (quest_num == QuestId::SERPENT) || !(quest[enum2i(quest_num)].flags & QUEST_FLAG_PRESET)))) {
+
+    auto dungeon_quest = (quest_num == QuestId::OBERON);
+    dungeon_quest |= (quest_num == QuestId::SERPENT);
+    dungeon_quest |= !(quest[quest_num].flags & QUEST_FLAG_PRESET);
+
+    auto feeling_quest = inside_quest(quest_num);
+    feeling_quest &= quest_type::is_fixed(quest_num);
+    feeling_quest &= !dungeon_quest;
+    if (feeling_quest) {
         return;
     }
-
     byte new_feeling = get_dungeon_feeling(player_ptr);
     player_ptr->feeling_turn = w_ptr->game_turn;
     if (player_ptr->feeling == new_feeling) {

@@ -119,12 +119,14 @@ void wiz_enter_quest(PlayerType *player_ptr)
         return;
     }
 
+    auto q_idx = i2enum<QuestId>(tmp_int);
+
     init_flags = i2enum<init_flags_type>(INIT_SHOW_TEXT | INIT_ASSIGN);
-    player_ptr->current_floor_ptr->quest_number = i2enum<QuestId>(tmp_int);
+    player_ptr->current_floor_ptr->quest_number = q_idx;
     parse_fixed_map(player_ptr, "q_info.txt", 0, 0, 0, 0);
-    quest[tmp_int].status = QuestStatusType::TAKEN;
-    if (quest[tmp_int].dungeon == 0) {
-        exe_enter_quest(player_ptr, i2enum<QuestId>(tmp_int));
+    quest[q_idx].status = QuestStatusType::TAKEN;
+    if (quest[q_idx].dungeon == 0) {
+        exe_enter_quest(player_ptr, q_idx);
     }
 }
 
@@ -140,7 +142,7 @@ void wiz_complete_quest(PlayerType *player_ptr)
         return;
     }
 
-    if (quest[enum2i(player_ptr->current_floor_ptr->quest_number)].status == QuestStatusType::TAKEN) {
+    if (quest[player_ptr->current_floor_ptr->quest_number].status == QuestStatusType::TAKEN) {
         complete_quest(player_ptr, player_ptr->current_floor_ptr->quest_number);
     }
 }
