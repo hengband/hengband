@@ -342,8 +342,8 @@ bool ang_sort_comp_quest_num(PlayerType *player_ptr, vptr u, vptr v, int a, int 
     (void)v;
 
     QuestId *q_num = (QuestId *)u;
-    auto *qa = &quest[q_num[a]];
-    auto *qb = &quest[q_num[b]];
+    auto *qa = &quest_map[q_num[a]];
+    auto *qb = &quest_map[q_num[b]];
     return (qa->comptime != qb->comptime) ? (qa->comptime < qb->comptime) : (qa->level <= qb->level);
 }
 

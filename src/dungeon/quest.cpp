@@ -36,7 +36,7 @@
 #include "view/display-messages.h"
 #include "world/world.h"
 
-std::map<QuestId, quest_type> quest; /*!< Quest info */
+std::map<QuestId, quest_type> quest_map; /*!< Quest info */
 int16_t max_q_idx; /*!< Maximum number of quests */
 char quest_text[10][80]; /*!< Quest text */
 int quest_text_line; /*!< Current line of the quest text */
@@ -45,7 +45,7 @@ QuestId leaving_quest = QuestId::NONE;
 /*!
  * @brief クエスト突入時のメッセージテーブル / Array of places to find an inscription
  */
-static concptr find_quest[] = {
+static concptr find_quest_map[] = {
     _("床にメッセージが刻まれている:", "You find the following inscription in the floor"),
     _("壁にメッセージが刻まれている:", "You see a message inscribed in the wall"),
     _("メッセージを見つけた:", "There is a sign saying"),
@@ -138,7 +138,7 @@ void record_quest_final_status(quest_type *q_ptr, PLAYER_LEVEL lev, QuestStatusT
  */
 void complete_quest(PlayerType *player_ptr, QuestId quest_num)
 {
-    auto *const q_ptr = &quest[quest_num];
+    auto *const q_ptr = &quest_map[quest_num];
 
     switch (q_ptr->type) {
     case QuestKindType::RANDOM:
@@ -173,7 +173,7 @@ void complete_quest(PlayerType *player_ptr, QuestId quest_num)
 void check_find_art_quest_completion(PlayerType *player_ptr, ObjectType *o_ptr)
 {
     /* Check if completed a quest */
-    for (auto &[q_idx, q_ref] : quest) {
+    for (auto &[q_idx, q_ref] : quest_map) {
         auto found_artifact = (q_ref.type == QuestKindType::FIND_ARTIFACT);
         found_artifact &= (q_ref.status == QuestStatusType::TAKEN);
         found_artifact &= (q_ref.k_idx == o_ptr->fixed_artifact_idx);
@@ -189,7 +189,7 @@ void check_find_art_quest_completion(PlayerType *player_ptr, ObjectType *o_ptr)
  */
 void quest_discovery(QuestId q_idx)
 {
-    auto *q_ptr = &quest[q_idx];
+    auto *q_ptr = &quest_map[q_idx];
     auto *r_ptr = &r_info[q_ptr->r_idx];
     MONSTER_NUMBER q_num = q_ptr->max_num;
 
@@ -200,7 +200,7 @@ void quest_discovery(QuestId q_idx)
     GAME_TEXT name[MAX_NLEN];
     strcpy(name, (r_ptr->name.c_str()));
 
-    msg_print(find_quest[rand_range(0, 4)]);
+    msg_print(find_quest_map[rand_range(0, 4)]);
     msg_print(nullptr);
 
     if (q_num != 1) {
@@ -237,7 +237,7 @@ QuestId quest_number(PlayerType *player_ptr, DEPTH level)
         return floor_ptr->quest_number;
     }
 
-    for (auto &[q_idx, q_ref] : quest) {
+    for (auto &[q_idx, q_ref] : quest_map) {
         if (q_ref.status != QuestStatusType::TAKEN) {
             continue;
         }
@@ -266,7 +266,7 @@ QuestId random_quest_number(PlayerType *player_ptr, DEPTH level)
     }
 
     for (auto q_idx : EnumRange(QuestId::RANDOM_QUEST1, QuestId::RANDOM_QUEST10)) {
-        auto &q_ref = quest[q_idx];
+        auto &q_ref = quest_map[q_idx];
         auto is_random_quest = (q_ref.type == QuestKindType::RANDOM);
         is_random_quest &= (q_ref.status == QuestStatusType::TAKEN);
         is_random_quest &= (q_ref.level == level);
@@ -290,7 +290,7 @@ void leave_quest_check(PlayerType *player_ptr)
         return;
     }
 
-    auto *const q_ptr = &quest[leaving_quest];
+    auto *const q_ptr = &quest_map[leaving_quest];
     bool is_one_time_quest = ((q_ptr->flags & QUEST_FLAG_ONCE) || (q_ptr->type == QuestKindType::RANDOM)) && (q_ptr->status == QuestStatusType::TAKEN);
     if (!is_one_time_quest) {
         return;
@@ -301,8 +301,8 @@ void leave_quest_check(PlayerType *player_ptr)
     /* Additional settings */
     switch (q_ptr->type) {
     case QuestKindType::TOWER:
-        quest[QuestId::TOWER1].status = QuestStatusType::FAILED;
-        quest[QuestId::TOWER1].complev = player_ptr->lev;
+        quest_map[QuestId::TOWER1].status = QuestStatusType::FAILED;
+        quest_map[QuestId::TOWER1].complev = player_ptr->lev;
         break;
     case QuestKindType::FIND_ARTIFACT:
         a_info[q_ptr->k_idx].gen_flags.reset(ItemGenerationTraitType::QUESTITEM);
@@ -335,19 +335,19 @@ void leave_tower_check(PlayerType *player_ptr)
 {
     leaving_quest = player_ptr->current_floor_ptr->quest_number;
     bool is_leaving_from_tower = inside_quest(leaving_quest);
-    is_leaving_from_tower &= quest[leaving_quest].type == QuestKindType::TOWER;
-    is_leaving_from_tower &= quest[QuestId::TOWER1].status != QuestStatusType::COMPLETED;
+    is_leaving_from_tower &= quest_map[leaving_quest].type == QuestKindType::TOWER;
+    is_leaving_from_tower &= quest_map[QuestId::TOWER1].status != QuestStatusType::COMPLETED;
     if (!is_leaving_from_tower) {
         return;
     }
-    if (quest[leaving_quest].type != QuestKindType::TOWER) {
+    if (quest_map[leaving_quest].type != QuestKindType::TOWER) {
         return;
     }
 
-    quest[QuestId::TOWER1].status = QuestStatusType::FAILED;
-    quest[QuestId::TOWER1].complev = player_ptr->lev;
+    quest_map[QuestId::TOWER1].status = QuestStatusType::FAILED;
+    quest_map[QuestId::TOWER1].complev = player_ptr->lev;
     update_playtime();
-    quest[QuestId::TOWER1].comptime = w_ptr->play_time;
+    quest_map[QuestId::TOWER1].comptime = w_ptr->play_time;
 }
 
 /*!
@@ -355,7 +355,7 @@ void leave_tower_check(PlayerType *player_ptr)
  */
 void exe_enter_quest(PlayerType *player_ptr, QuestId quest_idx)
 {
-    if (quest[quest_idx].type != QuestKindType::RANDOM) {
+    if (quest_map[quest_idx].type != QuestKindType::RANDOM) {
         player_ptr->current_floor_ptr->dun_level = 1;
     }
     player_ptr->current_floor_ptr->quest_number = quest_idx;

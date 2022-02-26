@@ -118,7 +118,7 @@ static void dump_aux_quest(PlayerType *player_ptr, FILE *fff)
     fprintf(fff, _("\n\n  [クエスト情報]\n", "\n\n  [Quest Information]\n"));
 
     std::vector<QuestId> quest_numbers;
-    for (auto &[q_idx, q_ref] : quest) {
+    for (auto &[q_idx, q_ref] : quest_map) {
         quest_numbers.push_back(q_idx);
     }
     int dummy;

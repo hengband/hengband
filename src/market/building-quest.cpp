@@ -53,9 +53,9 @@ void print_questinfo(PlayerType *player_ptr, QuestId questnum, bool do_init)
     get_questinfo(player_ptr, questnum, do_init);
 
     GAME_TEXT tmp_str[80];
-    sprintf(tmp_str, _("クエスト情報 (危険度: %d 階相当)", "Quest Information (Danger level: %d)"), (int)quest[questnum].level);
+    sprintf(tmp_str, _("クエスト情報 (危険度: %d 階相当)", "Quest Information (Danger level: %d)"), (int)quest_map[questnum].level);
     prt(tmp_str, 5, 0);
-    prt(quest[questnum].name, 7, 0);
+    prt(quest_map[questnum].name, 7, 0);
 
     for (int i = 0; i < 10; i++) {
         c_put_str(TERM_YELLOW, quest_text[i], i + 8, 0);
@@ -77,7 +77,7 @@ void castle_quest(PlayerType *player_ptr)
     }
 
     quest_type *q_ptr;
-    q_ptr = &quest[q_index];
+    q_ptr = &quest_map[q_index];
     if (q_ptr->status == QuestStatusType::COMPLETED) {
         q_ptr->status = QuestStatusType::REWARDED;
         print_questinfo(player_ptr, q_index, false);

@@ -93,7 +93,7 @@ bool alloc_stairs(PlayerType *player_ptr, FEAT_IDX feat, int num, int walls)
     } else if (f_ptr->flags.has(FloorFeatureType::MORE)) {
         auto q_idx = quest_number(player_ptr, floor_ptr->dun_level);
         if (floor_ptr->dun_level > 1 && inside_quest(q_idx)) {
-            auto *r_ptr = &r_info[quest[q_idx].r_idx];
+            auto *r_ptr = &r_info[quest_map[q_idx].r_idx];
             if (r_ptr->kind_flags.has_not(MonsterKindType::UNIQUE) || 0 < r_ptr->max_num) {
                 return true;
             }

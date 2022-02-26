@@ -79,7 +79,7 @@ static void load_quest_details(PlayerType *player_ptr, quest_type *q_ptr, int lo
 
     q_ptr->r_idx = rd_s16b();
     if ((q_ptr->type == QuestKindType::RANDOM) && (!q_ptr->r_idx)) {
-        determine_random_questor(player_ptr, &quest[i2enum<QuestId>(loading_quest_index)]);
+        determine_random_questor(player_ptr, &quest_map[i2enum<QuestId>(loading_quest_index)]);
     }
     q_ptr->k_idx = rd_s16b();
     if (q_ptr->k_idx) {
@@ -97,7 +97,7 @@ void analyze_quests(PlayerType *player_ptr, const uint16_t max_quests_load, cons
             continue;
         }
 
-        auto *const q_ptr = &quest[i2enum<QuestId>(i)];
+        auto *const q_ptr = &quest_map[i2enum<QuestId>(i)];
         load_quest_completion(q_ptr);
         bool is_quest_running = (q_ptr->status == QuestStatusType::TAKEN);
         is_quest_running |= (!h_older_than(0, 3, 14) && (q_ptr->status == QuestStatusType::COMPLETED));
