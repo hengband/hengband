@@ -465,10 +465,7 @@ void do_cmd_rest(PlayerType *player_ptr)
         chg_virtue(player_ptr, V_DILIGENCE, -1);
     }
 
-    auto effects = player_ptr->effects();
-    auto is_stunned = effects->stun()->is_stunned();
-    auto is_cut = effects->cut()->is_cut();
-    if ((player_ptr->chp == player_ptr->mhp) && (player_ptr->csp == player_ptr->msp) && !player_ptr->blind && !player_ptr->confused && !player_ptr->poisoned && !player_ptr->afraid && !is_stunned && !is_cut && !player_ptr->slow && !player_ptr->paralyzed && !player_ptr->hallucinated && !player_ptr->word_recall && !player_ptr->alter_reality) {
+    if (player_ptr->is_fully_healthy()) {
         chg_virtue(player_ptr, V_DILIGENCE, -1);
     }
 

@@ -56,6 +56,7 @@
 #include "system/monster-race-definition.h"
 #include "system/player-type-definition.h"
 #include "term/screen-processor.h"
+#include "timed-effect/player-confusion.h"
 #include "timed-effect/player-cut.h"
 #include "timed-effect/player-stun.h"
 #include "timed-effect/timed-effects.h"
@@ -158,10 +159,7 @@ void process_player(PlayerType *player_ptr)
                 set_action(player_ptr, ACTION_NONE);
             }
         } else if (player_ptr->resting == COMMAND_ARG_REST_UNTIL_DONE) {
-            auto effects = player_ptr->effects();
-            auto is_stunned = effects->stun()->is_stunned();
-            auto is_cut = effects->cut()->is_cut();
-            if ((player_ptr->chp == player_ptr->mhp) && (player_ptr->csp >= player_ptr->msp) && !player_ptr->blind && !player_ptr->confused && !player_ptr->poisoned && !player_ptr->afraid && !is_stunned && !is_cut && !player_ptr->slow && !player_ptr->paralyzed && !player_ptr->hallucinated && !player_ptr->word_recall && !player_ptr->alter_reality) {
+            if (player_ptr->is_fully_healthy()) {
                 set_action(player_ptr, ACTION_NONE);
             }
         }
@@ -182,7 +180,7 @@ void process_player(PlayerType *player_ptr)
         }
     }
 
-    if (player_ptr->riding && !player_ptr->confused && !player_ptr->blind) {
+    if (player_ptr->riding && !player_ptr->effects()->confusion()->is_confused() && !player_ptr->blind) {
         auto *m_ptr = &player_ptr->current_floor_ptr->m_list[player_ptr->riding];
         auto *r_ptr = &r_info[m_ptr->r_idx];
         if (monster_csleep_remaining(m_ptr)) {

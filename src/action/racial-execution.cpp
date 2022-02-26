@@ -17,6 +17,7 @@
 #include "system/object-type-definition.h"
 #include "system/player-type-definition.h"
 #include "term/screen-processor.h"
+#include "timed-effect/player-confusion.h"
 #include "timed-effect/player-stun.h"
 #include "timed-effect/timed-effects.h"
 #include "view/display-messages.h"
@@ -47,7 +48,7 @@ bool exe_racial_power(PlayerType *player_ptr, const int32_t command)
  */
 PERCENTAGE racial_chance(PlayerType *player_ptr, rpi_type *rpi_ptr)
 {
-    if ((player_ptr->lev < rpi_ptr->min_level) || player_ptr->confused) {
+    if ((player_ptr->lev < rpi_ptr->min_level) || player_ptr->effects()->confusion()->is_confused()) {
         return 0;
     }
 

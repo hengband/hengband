@@ -96,7 +96,6 @@ public:
     TIME_EFFECT slow{}; /* Timed -- Slow */
     TIME_EFFECT blind{}; /* Timed -- Blindness */
     TIME_EFFECT paralyzed{}; /* Timed -- Paralysis */
-    TIME_EFFECT confused{}; /* Timed -- Confusion */
     TIME_EFFECT afraid{}; /* Timed -- Fear */
     TIME_EFFECT hallucinated{}; /* Timed -- Hallucination */
     TIME_EFFECT poisoned{}; /* Timed -- Poisoned */
@@ -134,7 +133,7 @@ public:
     TIME_EFFECT magicdef{};
     TIME_EFFECT tim_res_nether{}; /* Timed -- Nether resistance */
     TIME_EFFECT tim_res_time{}; /* Timed -- Time resistance */
-    MimicKindType mimic_form{}; // @todo 後でPlayerRaceTypeに差し替える.
+    MimicKindType mimic_form{};
     TIME_EFFECT tim_mimic{};
     TIME_EFFECT tim_sh_fire{};
     TIME_EFFECT tim_sh_holy{};
@@ -416,6 +415,7 @@ public:
     char base_name[32]{}; /*!< Stripped version of "player_name" */
 
     std::shared_ptr<TimedEffects> effects() const;
+    bool is_fully_healthy() const;
 
 private:
     std::shared_ptr<TimedEffects> timed_effects;

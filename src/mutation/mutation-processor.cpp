@@ -51,6 +51,8 @@
 #include "target/target-setter.h"
 #include "target/target-types.h"
 #include "term/screen-processor.h"
+#include "timed-effect/player-confusion.h"
+#include "timed-effect/timed-effects.h"
 #include "view/display-messages.h"
 
 static bool get_hack_dir(PlayerType *player_ptr, DIRECTION *dp)
@@ -105,7 +107,7 @@ static bool get_hack_dir(PlayerType *player_ptr, DIRECTION *dp)
     }
 
     command_dir = dir;
-    if (player_ptr->confused) {
+    if (player_ptr->effects()->confusion()->is_confused()) {
         dir = ddd[randint0(8)];
     }
 

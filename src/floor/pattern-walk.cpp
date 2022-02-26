@@ -23,6 +23,7 @@
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
 #include "system/player-type-definition.h"
+#include "timed-effect/player-confusion.h"
 #include "timed-effect/player-cut.h"
 #include "timed-effect/player-stun.h"
 #include "timed-effect/timed-effects.h"
@@ -190,7 +191,8 @@ bool pattern_seq(PlayerType *player_ptr, POSITION c_y, POSITION c_x, POSITION n_
     if (pattern_type_new == PATTERN_TILE_START) {
         auto effects = player_ptr->effects();
         auto is_stunned = effects->stun()->is_stunned();
-        if (!is_pattern_tile_cur && !player_ptr->confused && !is_stunned && !player_ptr->hallucinated) {
+        auto is_confused = effects->confusion()->is_confused();
+        if (!is_pattern_tile_cur && !is_confused && !is_stunned && !player_ptr->hallucinated) {
             if (get_check(_("パターンの上を歩き始めると、全てを歩かなければなりません。いいですか？",
                     "If you start walking the Pattern, you must walk the whole way. Ok? "))) {
                 return true;
