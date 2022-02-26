@@ -4,10 +4,10 @@
  * @brief Windows版固有実装(WAVファイル読込)ヘッダ
  */
 
-#include <memory>
-
-#include <mmsystem.h>
 #include <windows.h>
+
+#include <memory>
+#include <mmsystem.h>
 
 /*!
  * WAVファイルの読み込み
