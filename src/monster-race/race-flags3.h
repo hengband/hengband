@@ -1,7 +1,7 @@
 ﻿#pragma once
 
 enum race_flags3 {
-	RF3_ORC = 0x00000001, /*!< モンスター特性: オーク / Orc */
+    RF3_ORC = 0x00000001, /*!< モンスター特性: オーク / Orc */
     RF3_TROLL = 0x00000002, /*!< モンスター特性: トロル / Troll */
     RF3_GIANT = 0x00000004, /*!< モンスター特性: 巨人 / Giant */
     RF3_DRAGON = 0x00000008, /*!< モンスター特性: ドラゴン / Dragon */

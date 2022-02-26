@@ -21,4 +21,4 @@ ObjectIndexList &get_o_idx_list_contains(floor_type *floor_ptr, OBJECT_IDX o_idx
 OBJECT_IDX drop_near(PlayerType *player_ptr, ObjectType *o_ptr, PERCENTAGE chance, POSITION y, POSITION x);
 void floor_item_charges(floor_type *player_ptr, INVENTORY_IDX item);
 void floor_item_describe(PlayerType *player_ptr, INVENTORY_IDX item);
-ObjectType *choose_object(PlayerType *player_ptr, OBJECT_IDX *idx, concptr q, concptr s, BIT_FLAGS option, const ItemTester& item_tester = AllMatchItemTester());
+ObjectType *choose_object(PlayerType *player_ptr, OBJECT_IDX *idx, concptr q, concptr s, BIT_FLAGS option, const ItemTester &item_tester = AllMatchItemTester());

@@ -1,6 +1,6 @@
 ﻿#pragma once
-#include "system/angband.h"
 #include "player/player-status-flags.h"
+#include "system/angband.h"
 
 class PlayerType;
 class PlayerStatusBase {

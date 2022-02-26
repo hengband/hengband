@@ -12,10 +12,10 @@
  * Available graphic modes
  */
 enum class graphics_mode : byte {
-    GRAPHICS_NONE = 0,      //!< None
-    GRAPHICS_ORIGINAL = 1,  //!< Old tiles
+    GRAPHICS_NONE = 0, //!< None
+    GRAPHICS_ORIGINAL = 1, //!< Old tiles
     GRAPHICS_ADAM_BOLT = 2, //!< Adam Bolt's tiles
-    GRAPHICS_HENGBAND = 3,  //!< 新タイル
+    GRAPHICS_HENGBAND = 3, //!< 新タイル
 };
 
 /*!

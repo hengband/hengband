@@ -2,7 +2,7 @@
 
 /* The "sval" codes for TV_STAFF */
 enum sv_staff_type {
-	SV_STAFF_DARKNESS = 0,
+    SV_STAFF_DARKNESS = 0,
     SV_STAFF_SLOWNESS = 1,
     SV_STAFF_HASTE_MONSTERS = 2,
     SV_STAFF_SUMMONING = 3,

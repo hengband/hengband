@@ -4,7 +4,6 @@
 #include "monster-attack/monster-attack-types.h"
 #include "monster-race/monster-aura-types.h"
 #include "monster-race/race-ability-flags.h"
-#include "monster-race/race-kind-flags.h"
 #include "monster-race/race-behavior-flags.h"
 #include "monster-race/race-flags-resistance.h"
 #include "monster-race/race-flags1.h"
@@ -13,6 +12,7 @@
 #include "monster-race/race-flags7.h"
 #include "monster-race/race-flags8.h"
 #include "monster-race/race-flags9.h"
+#include "monster-race/race-kind-flags.h"
 #include "monster-race/race-visual-flags.h"
 #include "system/angband.h"
 

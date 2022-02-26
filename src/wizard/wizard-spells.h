@@ -1,7 +1,7 @@
 ﻿#pragma once
 
-#include "system/angband.h"
 #include "effect/attribute-types.h"
+#include "system/angband.h"
 
 struct floor_type;
 class PlayerType;
@@ -19,7 +19,7 @@ typedef union spell_functions {
     } spell3;
 
     struct debug_spell_type4 { // 実質 ty curse
-        bool (*spell_function)(PlayerType *, bool, int*);
+        bool (*spell_function)(PlayerType *, bool, int *);
     } spell4;
 
     struct debug_spell_type5 {

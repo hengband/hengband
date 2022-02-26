@@ -1,7 +1,7 @@
 ﻿#pragma once
 
 enum race_flags9 {
-	RF9_DROP_CORPSE = 0x00000001,
+    RF9_DROP_CORPSE = 0x00000001,
     RF9_DROP_SKELETON = 0x00000002,
     RF9_EAT_BLIND = 0x00000004,
     RF9_EAT_CONF = 0x00000008,

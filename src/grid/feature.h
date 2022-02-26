@@ -9,15 +9,15 @@
 #include <vector>
 
 /* Number of feats we change to (Excluding default). Used in f_info.txt. */
-#define MAX_FEAT_STATES	 8
+#define MAX_FEAT_STATES 8
 
 /* Lighting levels of features' attr and char */
 #define F_LIT_STANDARD 0 /* Standard */
-#define F_LIT_LITE     1 /* Brightly lit */
-#define F_LIT_DARK     2 /* Darkened */
+#define F_LIT_LITE 1 /* Brightly lit */
+#define F_LIT_DARK 2 /* Darkened */
 
 #define F_LIT_NS_BEGIN 1 /* Nonstandard */
-#define F_LIT_MAX      3
+#define F_LIT_MAX 3
 
 /*!
  * @struct feature_state

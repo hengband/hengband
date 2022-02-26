@@ -1,7 +1,7 @@
 ﻿#pragma once
 
 enum race_flags2 {
-	RF2_STUPID = 0x00000001, /*!< モンスター特性: 愚かな行動を取る / Monster is stupid */
+    RF2_STUPID = 0x00000001, /*!< モンスター特性: 愚かな行動を取る / Monster is stupid */
     RF2_SMART = 0x00000002, /*!< モンスター特性: 賢い行動を取る / Monster is smart */
     RF2_CAN_SPEAK = 0x00000004, /*!< モンスター特性: 台詞をしゃべる / TY: can speak */
     RF2_REFLECTING = 0x00000008, /*!< モンスター特性: 矢やボルト魔法を反射する / Reflects bolts */

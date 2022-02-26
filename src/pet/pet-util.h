@@ -3,7 +3,7 @@
 #include "system/angband.h"
 
 enum pet_command {
-	PET_DISMISS = 1, /*!< ペットに関するコマンド: ペットを離す */
+    PET_DISMISS = 1, /*!< ペットに関するコマンド: ペットを離す */
     PET_TARGET = 2, /*!< ペットに関するコマンド: ペットのターゲットを指定 */
     PET_STAY_CLOSE = 3, /*!< ペットに関するコマンド: 近くにいろ */
     PET_FOLLOW_ME = 4, /*!< ペットに関するコマンド: ついて来い */
@@ -42,7 +42,8 @@ enum pet_permission {
 
 extern int total_friends;
 
-struct grid_type;;
+struct grid_type;
+;
 class PlayerType;
 bool can_player_ride_pet(PlayerType *player_ptr, grid_type *g_ptr, bool now_riding);
 PERCENTAGE calculate_upkeep(PlayerType *player_ptr);

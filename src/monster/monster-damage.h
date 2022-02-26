@@ -1,8 +1,8 @@
 ﻿#pragma once
 
+#include "effect/attribute-types.h"
 #include "monster-race/race-indice-types.h"
 #include "system/angband.h"
-#include "effect/attribute-types.h"
 #include "util/flag-group.h"
 #include <tuple>
 #include <vector>

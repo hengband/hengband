@@ -14,9 +14,9 @@
  * included in all such copies.
  */
 
-#include "system/angband.h"
 #include "object/object-index-list.h"
 #include "spell/spells-util.h"
+#include "system/angband.h"
 
 /*  A structure type for terrain template of saving dungeon floor */
 struct grid_template_type {

@@ -1,7 +1,7 @@
 ﻿#pragma once
 
 enum be_type {
-	BLOW_EFFECT_TYPE_NONE = 0,
+    BLOW_EFFECT_TYPE_NONE = 0,
     BLOW_EFFECT_TYPE_FEAR = 1,
     BLOW_EFFECT_TYPE_SLEEP = 2,
     BLOW_EFFECT_TYPE_HEAL = 3,

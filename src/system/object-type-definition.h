@@ -7,12 +7,12 @@
  * @date 2021/05/02
  */
 
+#include "object-enchant/object-ego.h"
 #include "object-enchant/tr-flags.h"
 #include "object-enchant/trc-types.h"
-#include "object-enchant/object-ego.h"
 #include "system/angband.h"
-#include "system/system-variables.h"
 #include "system/object-type-definition.h"
+#include "system/system-variables.h"
 #include "util/flag-group.h"
 #include <optional>
 

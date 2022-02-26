@@ -2,7 +2,7 @@
 
 /* The "sval" codes for TV_SHIELD */
 enum sv_shield_type {
-	SV_SMALL_LEATHER_SHIELD = 2,
+    SV_SMALL_LEATHER_SHIELD = 2,
     SV_SMALL_METAL_SHIELD = 3,
     SV_LARGE_LEATHER_SHIELD = 4,
     SV_LARGE_METAL_SHIELD = 5,

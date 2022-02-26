@@ -2,7 +2,7 @@
 
 /* The "sval" values for TV_HAFTED */
 enum sv_hafted_type {
-	SV_CLUB = 1, /* 1d4  */
+    SV_CLUB = 1, /* 1d4  */
     SV_WHIP = 2, /* 1d6  */
     SV_QUARTERSTAFF = 3, /* 1d9  */
     SV_NUNCHAKU = 4, /* 2d3  */

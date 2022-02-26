@@ -8,7 +8,7 @@ public:
     ThrowCommand(PlayerType *player_ptr);
     virtual ~ThrowCommand() = default;
     bool do_cmd_throw(int mult, bool boomerang, OBJECT_IDX shuriken);
-    
+
 private:
     PlayerType *player_ptr;
 };

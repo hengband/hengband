@@ -10,8 +10,8 @@
 
 /* Struct for build underground buildings */
 struct ugbldg_type {
-	POSITION y0, x0; /* North-west corner (relative) */
-	POSITION y1, x1; /* South-east corner (relative) */
+    POSITION y0, x0; /* North-west corner (relative) */
+    POSITION y1, x1; /* South-east corner (relative) */
 };
 
 struct dun_data_type;

@@ -3,7 +3,7 @@
 #include "system/angband.h"
 
 enum rate_calc_type_mode {
-	CALC_RAND = 0,
+    CALC_RAND = 0,
     CALC_AVERAGE = 1,
     CALC_MIN = 2,
     CALC_MAX = 3,

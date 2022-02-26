@@ -1,12 +1,11 @@
 ﻿#pragma once
 
-#include "system/angband.h"
 #include "effect/attribute-types.h"
+#include "system/angband.h"
 #include <vector>
 
-struct named_num
-{
-	concptr name;		/* The name of this thing */
+struct named_num {
+    concptr name; /* The name of this thing */
     AttributeType num; /* A number associated with it */
 };
 

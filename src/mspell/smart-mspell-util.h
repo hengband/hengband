@@ -1,8 +1,8 @@
 ﻿#pragma once
 
-#include "system/angband.h"
 #include "monster-race/race-ability-flags.h"
 #include "monster/smart-learn-types.h"
+#include "system/angband.h"
 #include "util/flag-group.h"
 
 // Monster Spell Remover.

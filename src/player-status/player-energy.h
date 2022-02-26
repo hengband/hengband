@@ -13,6 +13,7 @@ public:
     void mul_player_turn_energy(ENERGY need_cost); // 乗算.
     void div_player_turn_energy(ENERGY need_cost); // 除算.
     void reset_player_turn();
+
 private:
     PlayerType *player_ptr;
 };

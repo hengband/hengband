@@ -63,8 +63,9 @@ public:
      */
     int total_prob() const
     {
-        if (item_list_.empty())
+        if (item_list_.empty()) {
             return 0;
+        }
 
         return std::get<1>(item_list_.back());
     }

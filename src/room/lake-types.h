@@ -2,7 +2,7 @@
 
 /* 池型地形の生成ID / Room types for generate_lake() */
 enum lake_type {
-	LAKE_T_LAVA = 1, /*!< 池型地形ID: 溶岩 */
+    LAKE_T_LAVA = 1, /*!< 池型地形ID: 溶岩 */
     LAKE_T_WATER = 2, /*!< 池型地形ID: 池 */
     LAKE_T_CAVE = 3, /*!< 池型地形ID: 空洞 */
     LAKE_T_EARTH_VAULT = 4, /*!< 池型地形ID: 地属性VAULT */

@@ -2,7 +2,7 @@
 
 /* The "sval" codes for TV_AMULET */
 enum sv_amulet_type {
-	SV_AMULET_DOOM = 0,
+    SV_AMULET_DOOM = 0,
     SV_AMULET_TELEPORT = 1,
     SV_AMULET_ADORNMENT = 2,
     SV_AMULET_SLOW_DIGEST = 3,

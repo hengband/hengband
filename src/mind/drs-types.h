@@ -4,7 +4,7 @@
  * Some things which induce learning
  */
 enum drs_type {
-	DRS_ACID = 1,
+    DRS_ACID = 1,
     DRS_ELEC = 2,
     DRS_FIRE = 3,
     DRS_COLD = 4,
