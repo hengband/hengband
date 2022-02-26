@@ -102,18 +102,11 @@ void ObjectReadEntity::execute(bool known)
 
     auto executor = ReadExecutorFactory::create(player_ptr, o_ptr, known);
     auto used_up = executor->read();
-    auto ident = executor->is_identified();
     BIT_FLAGS inventory_flags = PU_COMBINE | PU_REORDER | (this->player_ptr->update & PU_AUTODESTROY);
     reset_bits(this->player_ptr->update, PU_COMBINE | PU_REORDER | PU_AUTODESTROY);
-
-    if (!(o_ptr->is_aware())) {
-        chg_virtue(this->player_ptr, V_PATIENCE, -1);
-        chg_virtue(this->player_ptr, V_CHANCE, 1);
-        chg_virtue(this->player_ptr, V_KNOWLEDGE, -1);
-    }
-
+    this->change_virtue_as_read(*o_ptr);
     object_tried(o_ptr);
-    if (ident && !o_ptr->is_aware()) {
+    if (executor->is_identified() && !o_ptr->is_aware()) {
         object_aware(this->player_ptr, o_ptr);
         auto lev = k_info[o_ptr->k_idx].level;
         gain_exp(this->player_ptr, (lev + (this->player_ptr->lev >> 1)) / this->player_ptr->lev);
@@ -141,4 +134,15 @@ bool ObjectReadEntity::check_can_read()
     }
 
     return ItemUseChecker(this->player_ptr).check_stun(_("朦朧としていて読めなかった！", "You too stunned to read it!"));
+}
+
+void ObjectReadEntity::change_virtue_as_read(ObjectType &o_ref)
+{
+    if (o_ref.is_aware()) {
+        return;
+    }
+
+    chg_virtue(this->player_ptr, V_PATIENCE, -1);
+    chg_virtue(this->player_ptr, V_CHANCE, 1);
+    chg_virtue(this->player_ptr, V_KNOWLEDGE, -1);
 }
