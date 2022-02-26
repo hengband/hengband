@@ -492,11 +492,14 @@ void monster_gain_exp(PlayerType *player_ptr, MONSTER_IDX m_idx, MONRACE_IDX s_i
         auto is_hallucinated = player_ptr->effects()->hallucination()->is_hallucinated();
         if (!ignore_unview || player_can_see_bold(player_ptr, m_ptr->fy, m_ptr->fx)) {
             if (is_hallucinated) {
-                monster_race *hallu_race;
+                monster_race *hallucinated_race = nullptr;
                 do {
-                    hallu_race = &r_info[randint1(r_info.size() - 1)];
-                } while (hallu_race->name.empty() || hallu_race->kind_flags.has(MonsterKindType::UNIQUE));
-                msg_format(_("%sは%sに進化した。", "%^s evolved into %s."), m_name, hallu_race->name.c_str());
+                    hallucinated_race = &r_info[randint1(r_info.size() - 1)];
+                } while (hallucinated_race->name.empty() || hallucinated_race->kind_flags.has(MonsterKindType::UNIQUE));
+                auto mes_evolution = _("%sは%sに進化した。", "%^s evolved into %s.");
+                auto mes_degeneration = _("%sは%sに退化した。", "%^s degenerated into %s.");
+                auto mes = randint0(2) == 0 ? mes_evolution : mes_degeneration;
+                msg_format(mes, m_name, hallucinated_race->name.c_str());
             } else {
                 msg_format(_("%sは%sに進化した。", "%^s evolved into %s."), m_name, r_ptr->name.c_str());
             }
