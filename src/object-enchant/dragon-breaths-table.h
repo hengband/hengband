@@ -1,8 +1,8 @@
 ﻿#pragma once
 
-#include "system/angband.h"
-#include "object-enchant/tr-types.h"
 #include "effect/attribute-types.h"
+#include "object-enchant/tr-types.h"
+#include "system/angband.h"
 
 struct dragonbreath_type {
     tr_type flag;

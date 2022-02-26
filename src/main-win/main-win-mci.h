@@ -1,7 +1,7 @@
 ﻿#pragma once
 
-#include <windows.h>
 #include <mciapi.h>
+#include <windows.h>
 
 #include <string>
 

@@ -2,7 +2,8 @@
 
 #include "system/angband.h"
 
-struct grid_type;;
+struct grid_type;
+;
 class PlayerType;
 void autopick_alter_item(PlayerType *player_ptr, INVENTORY_IDX item, bool destroy);
 void autopick_delayed_alter(PlayerType *player_ptr);

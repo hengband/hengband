@@ -2,7 +2,7 @@
 
 /* The sval codes for TV_LITE */
 enum sv_lite_type {
-	SV_LITE_TORCH = 0,
+    SV_LITE_TORCH = 0,
     SV_LITE_LANTERN = 1,
     SV_LITE_FEANOR = 2,
     SV_LITE_EDISON = 3,

@@ -32,7 +32,7 @@ int rand_range(int a, int b);
  * The integer X falls along a uniform distribution.
  * For example, if M is 100, you get "percentile dice"
  */
-#define randint0(M) (rand_range(0, (M) - 1))
+#define randint0(M) (rand_range(0, (M)-1))
 
 /*
  * Generate a random long integer X where A-D<=X<=A+D

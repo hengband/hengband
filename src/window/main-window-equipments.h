@@ -4,4 +4,4 @@
 
 class PlayerType;
 class ItemTester;
-void display_inventory(PlayerType *player_ptr, const ItemTester& item_tester);
+void display_inventory(PlayerType *player_ptr, const ItemTester &item_tester);

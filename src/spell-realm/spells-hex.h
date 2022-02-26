@@ -1,7 +1,7 @@
 ﻿#pragma once
 
-#include "system/angband.h"
 #include "realm/realm-hex-numbers.h"
+#include "system/angband.h"
 #include <tuple>
 
 enum class SpellHexRevengeType : byte {

@@ -13,7 +13,6 @@
  * This file has been modified for use with "Angband 2.8.2"
  */
 
-
 #ifndef INCLUDED_ANGBAND_H
 #define INCLUDED_ANGBAND_H
 
@@ -22,15 +21,15 @@
  * to reflect any hardware, operating system, or compiler nuances.
  */
 
-
 /*
  * Then, include the header files for the low-level code
  */
-#include "term/z-util.h"
-#include "term/z-virt.h"
 #include "term/z-form.h"
 #include "term/z-rand.h"
 #include "term/z-term.h"
+#include "term/z-util.h"
+#include "term/z-virt.h"
+
 #include "locale/language-switcher.h"
 
 /*
@@ -39,7 +38,6 @@
 #include "system/gamevalue.h"
 
 /***** Some copyright messages follow below *****/
-
 
 /*!
  *
@@ -59,7 +57,7 @@
 
 /*!
  * @page page_basic リファクタリング基本方針
- * 
+ *
  * 現在まとめ中。
  *
  * @ref index "メインページへ"
@@ -73,7 +71,7 @@
  * Note that these copyright messages apply to an ancient version
  * of Angband, as in, from pre-2.4.frog-knows days, and thus the
  * reference to "5.0" is rather misleading...
- * 
+ *
  * UNIX ANGBAND Version 5.0
  *
  * Original copyright message follows.
@@ -100,13 +98,13 @@
  *		UC Berkeley
  *		wilson@ernie.Berkeley.EDU
  *		ucbvax!ucbernie!wilson
- * 
+ *
  *	 ANGBAND may be copied and modified freely as long as the above
  *	 credits are retained.	No one who-so-ever may sell or market
  *	 this software in any form without the expressed written consent
  *	 of the author Robert Alan Koeneke.
  * </pre>
- * 
+ *
  * @ref index "メインページへ"
  */
 

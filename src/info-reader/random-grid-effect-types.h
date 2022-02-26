@@ -2,7 +2,7 @@
 
 /* Random dungeon grid effects */
 enum rdge_type {
-	RANDOM_NONE = 0x00000000,
+    RANDOM_NONE = 0x00000000,
     RANDOM_FEATURE = 0x00000001,
     RANDOM_MONSTER = 0x00000002,
     RANDOM_OBJECT = 0x00000004,

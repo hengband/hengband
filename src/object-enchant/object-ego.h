@@ -4,10 +4,10 @@
 #include <string>
 #include <vector>
 
+#include "object-enchant/object-ego.h"
 #include "object-enchant/tr-flags.h"
 #include "object-enchant/tr-types.h"
 #include "object-enchant/trg-types.h"
-#include "object-enchant/object-ego.h"
 #include "system/angband.h"
 #include "util/flag-group.h"
 
@@ -227,7 +227,6 @@ enum class EgoType {
     // MAX 240,
 
 };
-
 
 struct ego_generate_type {
     int mul{}; //<! 確率分子

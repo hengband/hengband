@@ -8,4 +8,4 @@
 class ObjectType;
 class PlayerType;
 
-void inventory_damage(PlayerType *player_ptr, const ObjectBreaker& breaker, int perc);
+void inventory_damage(PlayerType *player_ptr, const ObjectBreaker &breaker, int perc);

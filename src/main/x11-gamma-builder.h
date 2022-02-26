@@ -1,5 +1,5 @@
 ﻿#pragma once
-/*! 
+/*!
  * @file x11-gamma-builder.h
  * @brief X11環境ガンマ値の調整処理ヘッダ
  */

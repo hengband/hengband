@@ -1,7 +1,7 @@
 ﻿#pragma once
 
-#include "system/angband.h"
 #include "spell/spells-util.h"
+#include "system/angband.h"
 
 class PlayerType;
 bool teleport_monster(PlayerType *player_ptr, DIRECTION dir, int distance);

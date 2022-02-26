@@ -1,7 +1,7 @@
 ﻿#pragma once
 
 enum combat_options {
-	HISSATSU_NONE = 0,
+    HISSATSU_NONE = 0,
     HISSATSU_2 = 1,
     HISSATSU_3WAY = 2,
     HISSATSU_SUTEMI = 3,

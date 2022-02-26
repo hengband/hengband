@@ -1,7 +1,7 @@
 ﻿#pragma once
 
 enum monster_timed_effect_type {
-	MTIMED_CSLEEP = 0, /* Monster is sleeping */
+    MTIMED_CSLEEP = 0, /* Monster is sleeping */
     MTIMED_FAST = 1, /* Monster is temporarily fast */
     MTIMED_SLOW = 2, /* Monster is temporarily slow */
     MTIMED_STUNNED = 3, /* Monster is stunned */

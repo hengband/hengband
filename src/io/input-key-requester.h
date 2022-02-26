@@ -1,7 +1,7 @@
 ﻿#pragma once
 
-#include "system/angband.h"
 #include "game-option/keymap-directory-getter.h"
+#include "system/angband.h"
 #include <string>
 
 extern concptr keymap_act[KEYMAP_MODES][256];
@@ -37,7 +37,7 @@ private:
     int max_num = 0;
     bool is_max_num_odd = false;
     char sub_cmd = 0;
-    
+
     void input_command();
     short get_command();
     char inkey_from_menu();

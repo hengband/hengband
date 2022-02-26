@@ -20,7 +20,6 @@
 #include "status/buff-setter.h"
 #include "system/player-type-definition.h"
 #include "timed-effect/player-confusion.h"
-#include "timed-effect/timed-effects.h"
 #include "timed-effect/player-cut.h"
 #include "timed-effect/player-stun.h"
 #include "timed-effect/timed-effects.h"

@@ -11,9 +11,9 @@ enum parse_error_type : int;
 
 /* Wilderness Terrains */
 enum wt_type {
-	TERRAIN_EDGE = 0, /* Edge of the World */
+    TERRAIN_EDGE = 0, /* Edge of the World */
     TERRAIN_TOWN = 1, /* Town */
-	TERRAIN_DEEP_WATER = 2, /* Deep water */
+    TERRAIN_DEEP_WATER = 2, /* Deep water */
     TERRAIN_SHALLOW_WATER = 3, /* Shallow water */
     TERRAIN_SWAMP = 4, /* Swamp */
     TERRAIN_DIRT = 5, /* Dirt */
@@ -22,20 +22,20 @@ enum wt_type {
     TERRAIN_DESERT = 8, /* Desert */
     TERRAIN_SHALLOW_LAVA = 9, /* Shallow lava */
     TERRAIN_DEEP_LAVA = 10, /* Deep lava */
-    TERRAIN_MOUNTAIN = 11, /* Mountain */	
-	MAX_WILDERNESS = 12, /* Maximum wilderness index */
+    TERRAIN_MOUNTAIN = 11, /* Mountain */
+    MAX_WILDERNESS = 12, /* Maximum wilderness index */
 };
 
 /*
  * A structure describing a wilderness area with a terrain or a town
  */
 struct wilderness_type {
-	wt_type terrain;
-	int16_t town;
-	int road;
-	uint32_t seed;
-	DEPTH level;
-	byte entrance;
+    wt_type terrain;
+    int16_t town;
+    int road;
+    uint32_t seed;
+    DEPTH level;
+    byte entrance;
 };
 
 extern std::vector<std::vector<wilderness_type>> wilderness;

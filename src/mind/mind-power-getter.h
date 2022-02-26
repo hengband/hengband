@@ -1,7 +1,7 @@
 ﻿#pragma once
 
-#include "system/angband.h"
 #include "mind/mind-types.h"
+#include "system/angband.h"
 
 struct mind_power;
 struct mind_type;

@@ -1,7 +1,7 @@
 ﻿#pragma once
 
-#include "system/angband.h"
 #include "info-reader/parse-error-types.h"
+#include "system/angband.h"
 
 // Quest/Town/World Generator
 struct qtwg_type {

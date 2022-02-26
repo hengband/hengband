@@ -22,7 +22,7 @@ enum sv_food_type {
     SV_FOOD_RESTORE_STR = 17,
     SV_FOOD_RESTORE_CON = 18,
     SV_FOOD_RESTORING = 19,
-	/* many missing mushrooms */
+    /* many missing mushrooms */
     SV_FOOD_BISCUIT = 32,
     SV_FOOD_JERKY = 33,
     SV_FOOD_RATION = 35,

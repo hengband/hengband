@@ -2,7 +2,7 @@
 
 /* 旧TRC. 実態に即した名称に変更 */
 enum class CurseTraitType {
-	CURSED = 0,
+    CURSED = 0,
     HEAVY_CURSE = 1,
     PERMA_CURSE = 2,
     XXX1 = 3,

@@ -1,7 +1,7 @@
 ﻿#pragma once
 
-#include "system/angband.h"
 #include "floor/floor-allocation-types.h"
+#include "system/angband.h"
 
 enum dap_type : int;
 class PlayerType;

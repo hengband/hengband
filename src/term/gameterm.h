@@ -7,13 +7,13 @@
  * Convert a "pict" (P) into an "attr" (A)
  */
 #define PICT_A(P) \
-	((byte)((P) >> 8))
+    ((byte)((P) >> 8))
 
 /*
  * Convert a "pict" (P) into an "char" (C)
  */
 #define PICT_C(P) \
-	((char)((byte)(P)))
+    ((char)((byte)(P)))
 
 extern const concptr color_names[16];
 extern const concptr window_flag_desc[32];

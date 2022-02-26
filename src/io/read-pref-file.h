@@ -15,4 +15,4 @@ void auto_dump_printf(FILE *auto_dump_stream, concptr fmt, ...);
 bool open_auto_dump(FILE **fpp, concptr buf, concptr mark);
 void close_auto_dump(FILE **fpp, concptr auto_dump_mark);
 
-void load_all_pref_files(PlayerType* player_ptr);
+void load_all_pref_files(PlayerType *player_ptr);

@@ -1,7 +1,7 @@
 ﻿#pragma once
 
 enum realm_song_type : int {
-	MUSIC_NONE = 0,
+    MUSIC_NONE = 0,
     MUSIC_SLOW = 1,
     MUSIC_BLESS = 2,
     MUSIC_STUN = 3,

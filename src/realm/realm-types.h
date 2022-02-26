@@ -1,7 +1,7 @@
 ﻿#pragma once
 
 enum magic_realm_type {
-	REALM_NONE = 0,
+    REALM_NONE = 0,
     REALM_LIFE = 1,
     REALM_SORCERY = 2,
     REALM_NATURE = 3,

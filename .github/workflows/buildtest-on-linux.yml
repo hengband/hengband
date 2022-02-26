@@ -20,6 +20,9 @@ jobs:
       - name: Check the BOM of the source files
         run: sh .github/scripts/check-bom.sh
 
+      - name: Check the format of the source files
+        run: sh .github/scripts/check-format.sh
+
       - uses: hendrikmuhs/ccache-action@v1
         with:
           max-size: 8.0G

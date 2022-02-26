@@ -1,7 +1,7 @@
 ﻿#pragma once
 
 enum race_flags7 {
-	RF7_AQUATIC = 0x00000001, /* Aquatic monster */
+    RF7_AQUATIC = 0x00000001, /* Aquatic monster */
     RF7_CAN_SWIM = 0x00000002, /* Monster can swim */
     RF7_CAN_FLY = 0x00000004, /* Monster can fly */
     RF7_FRIENDLY = 0x00000008, /* Monster is friendly */

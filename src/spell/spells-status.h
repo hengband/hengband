@@ -1,7 +1,7 @@
 ﻿#pragma once
 
-#include "system/angband.h"
 #include "spell/spells-util.h"
+#include "system/angband.h"
 
 class ObjectType;
 class PlayerType;
@@ -10,8 +10,8 @@ bool heal_monster(PlayerType *player_ptr, DIRECTION dir, int dam);
 bool speed_monster(PlayerType *player_ptr, DIRECTION dir, int power);
 bool slow_monster(PlayerType *player_ptr, DIRECTION dir, int power);
 bool sleep_monster(PlayerType *player_ptr, DIRECTION dir, int power);
-bool stasis_monster(PlayerType *player_ptr, DIRECTION dir);    /* Like sleep, affects undead as well */
-bool stasis_evil(PlayerType *player_ptr, DIRECTION dir);    /* Like sleep, affects undead as well */
+bool stasis_monster(PlayerType *player_ptr, DIRECTION dir); /* Like sleep, affects undead as well */
+bool stasis_evil(PlayerType *player_ptr, DIRECTION dir); /* Like sleep, affects undead as well */
 bool confuse_monster(PlayerType *player_ptr, DIRECTION dir, PLAYER_LEVEL plev);
 bool stun_monster(PlayerType *player_ptr, DIRECTION dir, PLAYER_LEVEL plev);
 bool fear_monster(PlayerType *player_ptr, DIRECTION dir, PLAYER_LEVEL plev);

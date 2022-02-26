@@ -1,6 +1,6 @@
 ﻿#pragma once
 
-#include<stdint.h>
+#include <stdint.h>
 
 enum target_type : uint32_t;
 class PlayerType;

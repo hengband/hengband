@@ -7,7 +7,7 @@
 #define MAX_SAN_HORROR_COMMON 5 /*!< 恐ろしい対象の形容数(正常時、邪悪・中立共通) */
 #define MAX_SAN_HORROR_EVIL 15 /*!< 恐ろしい対象の形容数(正常時、邪悪) */
 #define MAX_SAN_HORROR_NEUTRAL 15 /*!< 恐ろしい対象の形容数(正常時、中立) */
-#define MAX_SAN_FUNNY 22  /*!< 恐ろしい対象の形容数(幻覚時) */
+#define MAX_SAN_FUNNY 22 /*!< 恐ろしい対象の形容数(幻覚時) */
 #define MAX_SAN_COMMENT 5 /*!< 恐ろしい対象を見たときの絶叫メッセージ数(幻覚時) */
 
 extern concptr horror_desc_common[MAX_SAN_HORROR_COMMON];

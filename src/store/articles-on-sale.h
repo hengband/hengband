@@ -1,11 +1,11 @@
 ﻿#pragma once
 
-#include "store/store.h"
-#include "store/store-owners.h"
 #include "object/tval-types.h"
+#include "store/store-owners.h"
+#include "store/store.h"
 #include "system/angband.h"
 
-#define STORE_CHOICES   48 /* Number of items to choose stock from */
+#define STORE_CHOICES 48 /* Number of items to choose stock from */
 
 struct store_stock_item_type {
     ItemKindType tval;
