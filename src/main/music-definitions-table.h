@@ -4,6 +4,8 @@
  * @brief 設定ファイル用のBGM名定義ヘッダ
  */
 
+#include "system/angband.h"
+
 enum music_type {
 	MUSIC_BASIC_NEW_GAME = 0,
     MUSIC_BASIC_GAMEOVER = 1,
