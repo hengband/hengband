@@ -411,17 +411,11 @@ void do_cmd_pet(PlayerType *player_ptr)
     powers[num++] = PET_DISMISS;
 
     auto is_hallucinated = player_ptr->effects()->hallucination()->is_hallucinated();
-#ifdef JP
-    sprintf(target_buf, "ペットのターゲットを指定 (現在：%s)",
-        (player_ptr->pet_t_m_idx
-                ? (is_hallucinated ? "何か奇妙な物" : r_info[player_ptr->current_floor_ptr->m_list[player_ptr->pet_t_m_idx].ap_r_idx].name.c_str())
-                : "指定なし"));
-#else
-    sprintf(target_buf, "specify a target of pet (now:%s)",
-        (player_ptr->pet_t_m_idx
-                ? (is_hallucinated ? "something strange" : r_info[player_ptr->current_floor_ptr->m_list[player_ptr->pet_t_m_idx].ap_r_idx].name.c_str())
-                : "nothing"));
-#endif
+    auto taget_of_pet = r_info[player_ptr->current_floor_ptr->m_list[player_ptr->pet_t_m_idx].ap_r_idx].name.c_str();
+    auto target_of_pet_appearance = is_hallucinated ? _("何か奇妙な物", "something strange") : taget_of_pet;
+    auto mes = _("ペットのターゲットを指定 (現在：%s)", "specify a target of pet (now:%s)");
+    auto target_name = player_ptr->pet_t_m_idx > 0 ? target_of_pet_appearance : _("指定なし", "nothing");
+    sprintf(target_buf, mes, target_name);
     power_desc[num] = target_buf;
     powers[num++] = PET_TARGET;
     power_desc[num] = _("近くにいろ", "stay close");
