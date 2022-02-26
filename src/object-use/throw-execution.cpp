@@ -62,6 +62,8 @@
 #include "target/target-checker.h"
 #include "target/target-getter.h"
 #include "term/screen-processor.h"
+#include "timed-effect/player-hallucination.h"
+#include "timed-effect/timed-effects.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 #include "view/object-describer.h"
@@ -467,7 +469,7 @@ void ObjectThrowEntity::display_attack_racial_power()
         return;
     }
 
-    if (!this->player_ptr->hallucinated) {
+    if (!this->player_ptr->effects()->hallucination()->is_hallucinated()) {
         monster_race_track(this->player_ptr, this->m_ptr->ap_r_idx);
     }
 

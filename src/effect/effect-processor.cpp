@@ -34,6 +34,8 @@
 #include "system/player-type-definition.h"
 #include "target/projection-path-calculator.h"
 #include "term/gameterm.h"
+#include "timed-effect/player-hallucination.h"
+#include "timed-effect/timed-effects.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 
@@ -236,6 +238,7 @@ ProjectResult project(PlayerType *player_ptr, const MONSTER_IDX who, POSITION ra
             if (affect_item(player_ptr, 0, 0, temp_y, temp_x, dam, AttributeType::SEEKER)) {
                 res.notice = true;
             }
+
             if (!player_ptr->current_floor_ptr->grid_array[temp_y][temp_x].is_mirror()) {
                 continue;
             }
@@ -251,12 +254,14 @@ ProjectResult project(PlayerType *player_ptr, const MONSTER_IDX who, POSITION ra
                 if (affect_monster(player_ptr, 0, 0, temp_y, temp_x, dam, AttributeType::SEEKER, flag, true, cap_mon_ptr)) {
                     res.notice = true;
                 }
+
                 if (!who && (project_m_n == 1) && !jump && (player_ptr->current_floor_ptr->grid_array[project_m_y][project_m_x].m_idx > 0)) {
                     auto *m_ptr = &player_ptr->current_floor_ptr->m_list[player_ptr->current_floor_ptr->grid_array[project_m_y][project_m_x].m_idx];
                     if (m_ptr->ml) {
-                        if (!player_ptr->hallucinated) {
+                        if (!player_ptr->effects()->hallucination()->is_hallucinated()) {
                             monster_race_track(player_ptr, m_ptr->ap_r_idx);
                         }
+
                         health_track(player_ptr, player_ptr->current_floor_ptr->grid_array[project_m_y][project_m_x].m_idx);
                     }
                 }
@@ -277,9 +282,8 @@ ProjectResult project(PlayerType *player_ptr, const MONSTER_IDX who, POSITION ra
             if (!who && (project_m_n == 1) && !jump) {
                 if (player_ptr->current_floor_ptr->grid_array[project_m_y][project_m_x].m_idx > 0) {
                     auto *m_ptr = &player_ptr->current_floor_ptr->m_list[player_ptr->current_floor_ptr->grid_array[project_m_y][project_m_x].m_idx];
-
                     if (m_ptr->ml) {
-                        if (!player_ptr->hallucinated) {
+                        if (!player_ptr->effects()->hallucination()->is_hallucinated()) {
                             monster_race_track(player_ptr, m_ptr->ap_r_idx);
                         }
                         health_track(player_ptr, player_ptr->current_floor_ptr->grid_array[project_m_y][project_m_x].m_idx);
@@ -379,9 +383,8 @@ ProjectResult project(PlayerType *player_ptr, const MONSTER_IDX who, POSITION ra
             if (!who && (project_m_n == 1) && !jump) {
                 if (player_ptr->current_floor_ptr->grid_array[project_m_y][project_m_x].m_idx > 0) {
                     auto *m_ptr = &player_ptr->current_floor_ptr->m_list[player_ptr->current_floor_ptr->grid_array[project_m_y][project_m_x].m_idx];
-
                     if (m_ptr->ml) {
-                        if (!player_ptr->hallucinated) {
+                        if (!player_ptr->effects()->hallucination()->is_hallucinated()) {
                             monster_race_track(player_ptr, m_ptr->ap_r_idx);
                         }
                         health_track(player_ptr, player_ptr->current_floor_ptr->grid_array[project_m_y][project_m_x].m_idx);
@@ -751,11 +754,11 @@ ProjectResult project(PlayerType *player_ptr, const MONSTER_IDX who, POSITION ra
             auto y = project_m_y;
             if (player_ptr->current_floor_ptr->grid_array[y][x].m_idx > 0) {
                 auto *m_ptr = &player_ptr->current_floor_ptr->m_list[player_ptr->current_floor_ptr->grid_array[y][x].m_idx];
-
                 if (m_ptr->ml) {
-                    if (!player_ptr->hallucinated) {
+                    if (!player_ptr->effects()->hallucination()->is_hallucinated()) {
                         monster_race_track(player_ptr, m_ptr->ap_r_idx);
                     }
+
                     health_track(player_ptr, player_ptr->current_floor_ptr->grid_array[y][x].m_idx);
                 }
             }

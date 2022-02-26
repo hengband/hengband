@@ -15,6 +15,8 @@
 #include "term/gameterm.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
+#include "timed-effect/player-hallucination.h"
+#include "timed-effect/timed-effects.h"
 #include "view/display-map.h"
 #include "world/world.h"
 #include <vector>
@@ -121,7 +123,7 @@ static void display_shortened_item_name(PlayerType *player_ptr, ObjectType *o_pt
     describe_flavor(player_ptr, buf, o_ptr, (OD_NO_FLAVOR | OD_OMIT_PREFIX | OD_NAME_ONLY));
     TERM_COLOR attr = tval_to_attr[enum2i(o_ptr->tval) % 128];
 
-    if (player_ptr->hallucinated) {
+    if (player_ptr->effects()->hallucination()->is_hallucinated()) {
         attr = TERM_WHITE;
         strcpy(buf, _("何か奇妙な物", "something strange"));
     }

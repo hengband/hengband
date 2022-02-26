@@ -41,6 +41,8 @@
 #include "system/monster-type-definition.h"
 #include "system/player-type-definition.h"
 #include "target/projection-path-calculator.h"
+#include "timed-effect/player-hallucination.h"
+#include "timed-effect/timed-effects.h"
 #include "util/bit-flags-calculator.h"
 #include "world/world.h"
 
@@ -237,7 +239,7 @@ static bool update_weird_telepathy(PlayerType *player_ptr, um_type *um_ptr, MONS
 
     um_ptr->flag = true;
     um_ptr->m_ptr->mflag.set(MonsterTemporaryFlagType::ESP);
-    if (is_original_ap(um_ptr->m_ptr) && !player_ptr->hallucinated) {
+    if (is_original_ap(um_ptr->m_ptr) && !player_ptr->effects()->hallucination()->is_hallucinated()) {
         r_ptr->r_flags2 |= RF2_WEIRD_MIND;
         update_smart_stupid_flags(r_ptr);
     }
@@ -251,7 +253,7 @@ static void update_telepathy_sight(PlayerType *player_ptr, um_type *um_ptr, MONS
     if (PlayerClass(player_ptr).samurai_stance_is(SamuraiStanceType::MUSOU)) {
         um_ptr->flag = true;
         um_ptr->m_ptr->mflag.set(MonsterTemporaryFlagType::ESP);
-        if (is_original_ap(um_ptr->m_ptr) && !player_ptr->hallucinated) {
+        if (is_original_ap(um_ptr->m_ptr) && !player_ptr->effects()->hallucination()->is_hallucinated()) {
             update_smart_stupid_flags(r_ptr);
         }
 
@@ -262,8 +264,9 @@ static void update_telepathy_sight(PlayerType *player_ptr, um_type *um_ptr, MONS
         return;
     }
 
+    auto is_hallucinated = player_ptr->effects()->hallucination()->is_hallucinated();
     if (r_ptr->flags2 & RF2_EMPTY_MIND) {
-        if (is_original_ap(um_ptr->m_ptr) && !player_ptr->hallucinated) {
+        if (is_original_ap(um_ptr->m_ptr) && !is_hallucinated) {
             r_ptr->r_flags2 |= RF2_EMPTY_MIND;
         }
 
@@ -276,7 +279,7 @@ static void update_telepathy_sight(PlayerType *player_ptr, um_type *um_ptr, MONS
 
     um_ptr->flag = true;
     um_ptr->m_ptr->mflag.set(MonsterTemporaryFlagType::ESP);
-    if (is_original_ap(um_ptr->m_ptr) && !player_ptr->hallucinated) {
+    if (is_original_ap(um_ptr->m_ptr) && !is_hallucinated) {
         update_smart_stupid_flags(r_ptr);
     }
 }
@@ -284,10 +287,11 @@ static void update_telepathy_sight(PlayerType *player_ptr, um_type *um_ptr, MONS
 static void update_specific_race_telepathy(PlayerType *player_ptr, um_type *um_ptr)
 {
     auto *r_ptr = &r_info[um_ptr->m_ptr->r_idx];
+    auto is_hallucinated = player_ptr->effects()->hallucination()->is_hallucinated();
     if ((player_ptr->esp_animal) && r_ptr->kind_flags.has(MonsterKindType::ANIMAL)) {
         um_ptr->flag = true;
         um_ptr->m_ptr->mflag.set(MonsterTemporaryFlagType::ESP);
-        if (is_original_ap(um_ptr->m_ptr) && !player_ptr->hallucinated) {
+        if (is_original_ap(um_ptr->m_ptr) && !is_hallucinated) {
             r_ptr->r_kind_flags.set(MonsterKindType::ANIMAL);
         }
     }
@@ -295,7 +299,7 @@ static void update_specific_race_telepathy(PlayerType *player_ptr, um_type *um_p
     if ((player_ptr->esp_undead) && r_ptr->kind_flags.has(MonsterKindType::UNDEAD)) {
         um_ptr->flag = true;
         um_ptr->m_ptr->mflag.set(MonsterTemporaryFlagType::ESP);
-        if (is_original_ap(um_ptr->m_ptr) && !player_ptr->hallucinated) {
+        if (is_original_ap(um_ptr->m_ptr) && !is_hallucinated) {
             r_ptr->r_kind_flags.set(MonsterKindType::UNDEAD);
         }
     }
@@ -303,7 +307,7 @@ static void update_specific_race_telepathy(PlayerType *player_ptr, um_type *um_p
     if ((player_ptr->esp_demon) && r_ptr->kind_flags.has(MonsterKindType::DEMON)) {
         um_ptr->flag = true;
         um_ptr->m_ptr->mflag.set(MonsterTemporaryFlagType::ESP);
-        if (is_original_ap(um_ptr->m_ptr) && !player_ptr->hallucinated) {
+        if (is_original_ap(um_ptr->m_ptr) && !is_hallucinated) {
             r_ptr->r_kind_flags.set(MonsterKindType::DEMON);
         }
     }
@@ -311,7 +315,7 @@ static void update_specific_race_telepathy(PlayerType *player_ptr, um_type *um_p
     if ((player_ptr->esp_orc) && r_ptr->kind_flags.has(MonsterKindType::ORC)) {
         um_ptr->flag = true;
         um_ptr->m_ptr->mflag.set(MonsterTemporaryFlagType::ESP);
-        if (is_original_ap(um_ptr->m_ptr) && !player_ptr->hallucinated) {
+        if (is_original_ap(um_ptr->m_ptr) && !is_hallucinated) {
             r_ptr->r_kind_flags.set(MonsterKindType::ORC);
         }
     }
@@ -319,7 +323,7 @@ static void update_specific_race_telepathy(PlayerType *player_ptr, um_type *um_p
     if ((player_ptr->esp_troll) && r_ptr->kind_flags.has(MonsterKindType::TROLL)) {
         um_ptr->flag = true;
         um_ptr->m_ptr->mflag.set(MonsterTemporaryFlagType::ESP);
-        if (is_original_ap(um_ptr->m_ptr) && !player_ptr->hallucinated) {
+        if (is_original_ap(um_ptr->m_ptr) && !is_hallucinated) {
             r_ptr->r_kind_flags.set(MonsterKindType::TROLL);
         }
     }
@@ -327,7 +331,7 @@ static void update_specific_race_telepathy(PlayerType *player_ptr, um_type *um_p
     if ((player_ptr->esp_giant) && r_ptr->kind_flags.has(MonsterKindType::GIANT)) {
         um_ptr->flag = true;
         um_ptr->m_ptr->mflag.set(MonsterTemporaryFlagType::ESP);
-        if (is_original_ap(um_ptr->m_ptr) && !player_ptr->hallucinated) {
+        if (is_original_ap(um_ptr->m_ptr) && !is_hallucinated) {
             r_ptr->r_kind_flags.set(MonsterKindType::GIANT);
         }
     }
@@ -335,7 +339,7 @@ static void update_specific_race_telepathy(PlayerType *player_ptr, um_type *um_p
     if ((player_ptr->esp_dragon) && r_ptr->kind_flags.has(MonsterKindType::DRAGON)) {
         um_ptr->flag = true;
         um_ptr->m_ptr->mflag.set(MonsterTemporaryFlagType::ESP);
-        if (is_original_ap(um_ptr->m_ptr) && !player_ptr->hallucinated) {
+        if (is_original_ap(um_ptr->m_ptr) && !is_hallucinated) {
             r_ptr->r_kind_flags.set(MonsterKindType::DRAGON);
         }
     }
@@ -343,7 +347,7 @@ static void update_specific_race_telepathy(PlayerType *player_ptr, um_type *um_p
     if ((player_ptr->esp_human) && r_ptr->kind_flags.has(MonsterKindType::HUMAN)) {
         um_ptr->flag = true;
         um_ptr->m_ptr->mflag.set(MonsterTemporaryFlagType::ESP);
-        if (is_original_ap(um_ptr->m_ptr) && !player_ptr->hallucinated) {
+        if (is_original_ap(um_ptr->m_ptr) && !is_hallucinated) {
             r_ptr->r_kind_flags.set(MonsterKindType::HUMAN);
         }
     }
@@ -351,7 +355,7 @@ static void update_specific_race_telepathy(PlayerType *player_ptr, um_type *um_p
     if ((player_ptr->esp_evil) && r_ptr->kind_flags.has(MonsterKindType::EVIL)) {
         um_ptr->flag = true;
         um_ptr->m_ptr->mflag.set(MonsterTemporaryFlagType::ESP);
-        if (is_original_ap(um_ptr->m_ptr) && !player_ptr->hallucinated) {
+        if (is_original_ap(um_ptr->m_ptr) && !is_hallucinated) {
             r_ptr->r_kind_flags.set(MonsterKindType::EVIL);
         }
     }
@@ -359,7 +363,7 @@ static void update_specific_race_telepathy(PlayerType *player_ptr, um_type *um_p
     if ((player_ptr->esp_good) && r_ptr->kind_flags.has(MonsterKindType::GOOD)) {
         um_ptr->flag = true;
         um_ptr->m_ptr->mflag.set(MonsterTemporaryFlagType::ESP);
-        if (is_original_ap(um_ptr->m_ptr) && !player_ptr->hallucinated) {
+        if (is_original_ap(um_ptr->m_ptr) && !is_hallucinated) {
             r_ptr->r_kind_flags.set(MonsterKindType::GOOD);
         }
     }
@@ -367,7 +371,7 @@ static void update_specific_race_telepathy(PlayerType *player_ptr, um_type *um_p
     if ((player_ptr->esp_nonliving) && (r_ptr->kind_flags.has(MonsterKindType::NONLIVING) && r_ptr->kind_flags.has_none_of({ MonsterKindType::DEMON, MonsterKindType::UNDEAD }))) {
         um_ptr->flag = true;
         um_ptr->m_ptr->mflag.set(MonsterTemporaryFlagType::ESP);
-        if (is_original_ap(um_ptr->m_ptr) && !player_ptr->hallucinated) {
+        if (is_original_ap(um_ptr->m_ptr) && !is_hallucinated) {
             r_ptr->r_kind_flags.set(MonsterKindType::NONLIVING);
         }
     }
@@ -375,7 +379,7 @@ static void update_specific_race_telepathy(PlayerType *player_ptr, um_type *um_p
     if ((player_ptr->esp_unique) && r_ptr->kind_flags.has(MonsterKindType::UNIQUE)) {
         um_ptr->flag = true;
         um_ptr->m_ptr->mflag.set(MonsterTemporaryFlagType::ESP);
-        if (is_original_ap(um_ptr->m_ptr) && !player_ptr->hallucinated) {
+        if (is_original_ap(um_ptr->m_ptr) && !is_hallucinated) {
             r_ptr->r_kind_flags.set(MonsterKindType::UNIQUE);
         }
     }
@@ -450,7 +454,7 @@ static void decide_sight_invisible_monster(PlayerType *player_ptr, um_type *um_p
 
     bool do_cold_blood = check_cold_blood(player_ptr, um_ptr, distance);
     bool do_invisible = check_invisible(player_ptr, um_ptr);
-    if (!um_ptr->flag || !is_original_ap(um_ptr->m_ptr) || player_ptr->hallucinated) {
+    if (!um_ptr->flag || !is_original_ap(um_ptr->m_ptr) || player_ptr->effects()->hallucination()->is_hallucinated()) {
         return;
     }
 
@@ -488,7 +492,7 @@ static void update_invisible_monster(PlayerType *player_ptr, um_type *um_ptr, MO
         player_ptr->redraw |= PR_UHEALTH;
     }
 
-    if (!player_ptr->hallucinated) {
+    if (!player_ptr->effects()->hallucination()->is_hallucinated()) {
         auto *r_ptr = &r_info[um_ptr->m_ptr->r_idx];
         if ((um_ptr->m_ptr->ap_r_idx == MON_KAGE) && (r_info[MON_KAGE].r_sights < MAX_SHORT)) {
             r_info[MON_KAGE].r_sights++;

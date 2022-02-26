@@ -22,6 +22,8 @@
 #include "system/monster-race-definition.h"
 #include "system/monster-type-definition.h"
 #include "system/player-type-definition.h"
+#include "timed-effect/player-hallucination.h"
+#include "timed-effect/timed-effects.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 #include "world/world.h"
@@ -487,8 +489,9 @@ void monster_gain_exp(PlayerType *player_ptr, MONSTER_IDX m_idx, MONRACE_IDX s_i
 
     m_ptr->exp = 0;
     if (is_pet(m_ptr) || m_ptr->ml) {
+        auto is_hallucinated = player_ptr->effects()->hallucination()->is_hallucinated();
         if (!ignore_unview || player_can_see_bold(player_ptr, m_ptr->fy, m_ptr->fx)) {
-            if (player_ptr->hallucinated) {
+            if (is_hallucinated) {
                 monster_race *hallu_race;
                 do {
                     hallu_race = &r_info[randint1(r_info.size() - 1)];
@@ -499,7 +502,7 @@ void monster_gain_exp(PlayerType *player_ptr, MONSTER_IDX m_idx, MONRACE_IDX s_i
             }
         }
 
-        if (!player_ptr->hallucinated) {
+        if (!is_hallucinated) {
             r_info[old_r_idx].r_can_evolve = true;
         }
 

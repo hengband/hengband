@@ -37,6 +37,8 @@
 #include "target/target-types.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
+#include "timed-effect/player-hallucination.h"
+#include "timed-effect/timed-effects.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-lore.h"
 #include "view/display-messages.h"
@@ -160,7 +162,7 @@ static void describe_target(PlayerType *player_ptr, eg_type *eg_ptr)
 
 static process_result describe_hallucinated_target(PlayerType *player_ptr, eg_type *eg_ptr)
 {
-    if (!player_ptr->hallucinated) {
+    if (!player_ptr->effects()->hallucination()->is_hallucinated()) {
         return PROCESS_CONTINUE;
     }
 

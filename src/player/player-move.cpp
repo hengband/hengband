@@ -47,6 +47,7 @@
 #include "system/player-type-definition.h"
 #include "target/target-checker.h"
 #include "timed-effect/player-confusion.h"
+#include "timed-effect/player-hallucination.h"
 #include "timed-effect/timed-effects.h"
 #include "util/bit-flags-calculator.h"
 #include "util/enum-converter.h"
@@ -111,7 +112,8 @@ void search(PlayerType *player_ptr)
         chance = chance / 10;
     }
 
-    if (player_ptr->effects()->confusion()->is_confused() || player_ptr->hallucinated) {
+    auto effects = player_ptr->effects();
+    if (effects->confusion()->is_confused() || effects->hallucination()->is_hallucinated()) {
         chance = chance / 10;
     }
 

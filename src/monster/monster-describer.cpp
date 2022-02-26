@@ -10,6 +10,8 @@
 #include "system/monster-race-definition.h"
 #include "system/monster-type-definition.h"
 #include "system/player-type-definition.h"
+#include "timed-effect/player-hallucination.h"
+#include "timed-effect/timed-effects.h"
 #include "util/quarks.h"
 #include "util/string-processor.h"
 #include "view/display-messages.h"
@@ -27,7 +29,8 @@ void monster_desc(PlayerType *player_ptr, char *desc, monster_type *m_ptr, BIT_F
     concptr name = (mode & MD_TRUE_NAME) ? real_r_ptr(m_ptr)->name.c_str() : r_ptr->name.c_str();
     GAME_TEXT silly_name[1024];
     bool named = false;
-    if (player_ptr->hallucinated && !(mode & MD_IGNORE_HALLU)) {
+    auto is_hallucinated = player_ptr->effects()->hallucination()->is_hallucinated();
+    if (is_hallucinated && !(mode & MD_IGNORE_HALLU)) {
         if (one_in_(2)) {
             if (!get_rnd_line(_("silly_j.txt", "silly.txt"), m_ptr->r_idx, silly_name)) {
                 named = true;
@@ -178,7 +181,7 @@ void monster_desc(PlayerType *player_ptr, char *desc, monster_type *m_ptr, BIT_F
         (void)sprintf(desc, "%s?", name);
 #endif
     } else {
-        if (r_ptr->kind_flags.has(MonsterKindType::UNIQUE) && !(player_ptr->hallucinated && !(mode & MD_IGNORE_HALLU))) {
+        if (r_ptr->kind_flags.has(MonsterKindType::UNIQUE) && !(is_hallucinated && !(mode & MD_IGNORE_HALLU))) {
             if (m_ptr->mflag2.has(MonsterConstantFlagType::CHAMELEON) && !(mode & MD_TRUE_NAME)) {
 #ifdef JP
                 char *t;

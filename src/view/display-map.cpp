@@ -21,6 +21,8 @@
 #include "system/object-type-definition.h"
 #include "system/player-type-definition.h"
 #include "term/term-color-types.h"
+#include "timed-effect/player-hallucination.h"
+#include "timed-effect/timed-effects.h"
 #include "util/bit-flags-calculator.h"
 #include "window/main-window-util.h"
 #include "world/world.h"
@@ -248,7 +250,8 @@ void map_info(PlayerType *player_ptr, POSITION y, POSITION x, TERM_COLOR *ap, ch
     (*ap) = a;
     (*cp) = c;
 
-    if (player_ptr->hallucinated && one_in_(256)) {
+    auto is_hallucinated = player_ptr->effects()->hallucination()->is_hallucinated();
+    if (is_hallucinated && one_in_(256)) {
         image_random(ap, cp);
     }
 
@@ -280,7 +283,7 @@ void map_info(PlayerType *player_ptr, POSITION y, POSITION x, TERM_COLOR *ap, ch
         (*cp) = object_char(o_ptr);
         (*ap) = object_attr(o_ptr);
         feat_priority = 20;
-        if (player_ptr->hallucinated) {
+        if (is_hallucinated) {
             image_object(ap, cp);
         }
 
@@ -300,7 +303,7 @@ void map_info(PlayerType *player_ptr, POSITION y, POSITION x, TERM_COLOR *ap, ch
 
     auto *r_ptr = &r_info[m_ptr->ap_r_idx];
     feat_priority = 30;
-    if (player_ptr->hallucinated) {
+    if (is_hallucinated) {
         if (r_ptr->visual_flags.has_all_of({ MonsterVisualType::CLEAR, MonsterVisualType::CLEAR_COLOR })) {
             /* Do nothing */
         } else {

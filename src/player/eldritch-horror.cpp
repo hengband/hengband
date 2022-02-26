@@ -30,6 +30,8 @@
 #include "system/monster-race-definition.h"
 #include "system/monster-type-definition.h"
 #include "system/player-type-definition.h"
+#include "timed-effect/player-hallucination.h"
+#include "timed-effect/timed-effects.h"
 #include "view/display-messages.h"
 #include "world/world.h"
 
@@ -126,7 +128,7 @@ void sanity_blast(PlayerType *player_ptr, monster_type *m_ptr, bool necro)
             return;
         }
 
-        if (player_ptr->hallucinated) {
+        if (player_ptr->effects()->hallucination()->is_hallucinated()) {
             msg_format(_("%s%sの顔を見てしまった！", "You behold the %s visage of %s!"), funny_desc[randint0(MAX_SAN_FUNNY)], m_name);
             if (one_in_(3)) {
                 msg_print(funny_comments[randint0(MAX_SAN_COMMENT)]);
@@ -179,7 +181,7 @@ void sanity_blast(PlayerType *player_ptr, monster_type *m_ptr, bool necro)
             return;
         }
 
-        if (player_ptr->hallucinated) {
+        if (player_ptr->effects()->hallucination()->is_hallucinated()) {
             msg_format(_("%s%sの顔を見てしまった！", "You behold the %s visage of %s!"), funny_desc[randint0(MAX_SAN_FUNNY)], m_name);
             if (one_in_(3)) {
                 msg_print(funny_comments[randint0(MAX_SAN_COMMENT)]);

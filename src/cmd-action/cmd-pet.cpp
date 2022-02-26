@@ -60,6 +60,8 @@
 #include "target/target-setter.h"
 #include "target/target-types.h"
 #include "term/screen-processor.h"
+#include "timed-effect/player-hallucination.h"
+#include "timed-effect/timed-effects.h"
 #include "util/bit-flags-calculator.h"
 #include "util/int-char-converter.h"
 #include "util/quarks.h"
@@ -408,15 +410,16 @@ void do_cmd_pet(PlayerType *player_ptr)
     power_desc[num] = _("ペットを放す", "dismiss pets");
     powers[num++] = PET_DISMISS;
 
+    auto is_hallucinated = player_ptr->effects()->hallucination()->is_hallucinated();
 #ifdef JP
     sprintf(target_buf, "ペットのターゲットを指定 (現在：%s)",
         (player_ptr->pet_t_m_idx
-                ? (player_ptr->hallucinated ? "何か奇妙な物" : r_info[player_ptr->current_floor_ptr->m_list[player_ptr->pet_t_m_idx].ap_r_idx].name.c_str())
+                ? (is_hallucinated ? "何か奇妙な物" : r_info[player_ptr->current_floor_ptr->m_list[player_ptr->pet_t_m_idx].ap_r_idx].name.c_str())
                 : "指定なし"));
 #else
     sprintf(target_buf, "specify a target of pet (now:%s)",
         (player_ptr->pet_t_m_idx
-                ? (player_ptr->hallucinated ? "something strange" : r_info[player_ptr->current_floor_ptr->m_list[player_ptr->pet_t_m_idx].ap_r_idx].name.c_str())
+                ? (is_hallucinated ? "something strange" : r_info[player_ptr->current_floor_ptr->m_list[player_ptr->pet_t_m_idx].ap_r_idx].name.c_str())
                 : "nothing"));
 #endif
     power_desc[num] = target_buf;

@@ -36,6 +36,8 @@
 #include "term/gameterm.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
+#include "timed-effect/player-hallucination.h"
+#include "timed-effect/timed-effects.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-lore.h"
 #include "view/display-map.h"
@@ -591,10 +593,11 @@ static void display_floor_item_list(PlayerType *player_ptr, const int y, const i
     char line[1024];
 
     // 先頭行を書く。
+    auto is_hallucinated = player_ptr->effects()->hallucination()->is_hallucinated();
     if (player_bold(player_ptr, y, x)) {
         sprintf(line, _("(X:%03d Y:%03d) あなたの足元のアイテム一覧", "Items at (%03d,%03d) under you"), x, y);
     } else if (const auto *m_ptr = monster_on_floor_items(floor_ptr, g_ptr); m_ptr != nullptr) {
-        if (player_ptr->hallucinated) {
+        if (is_hallucinated) {
             sprintf(line, _("(X:%03d Y:%03d) 何か奇妙な物の足元の発見済みアイテム一覧", "Found items at (%03d,%03d) under something strange"), x, y);
         } else {
             const monster_race *const r_ptr = &r_info[m_ptr->ap_r_idx];
@@ -634,7 +637,7 @@ static void display_floor_item_list(PlayerType *player_ptr, const int y, const i
 
         term_gotoxy(0, term_y);
 
-        if (player_ptr->hallucinated) {
+        if (is_hallucinated) {
             term_addstr(-1, TERM_WHITE, _("何か奇妙な物", "something strange"));
         } else {
             describe_flavor(player_ptr, line, o_ptr, 0);

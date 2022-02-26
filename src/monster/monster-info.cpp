@@ -32,6 +32,8 @@
 #include "system/monster-race-definition.h"
 #include "system/monster-type-definition.h"
 #include "system/player-type-definition.h"
+#include "timed-effect/player-hallucination.h"
+#include "timed-effect/timed-effects.h"
 #include "util/bit-flags-calculator.h"
 #include "util/string-processor.h"
 
@@ -260,7 +262,7 @@ bool monster_has_hostile_align(PlayerType *player_ptr, monster_type *m_ptr, int 
 
 bool is_original_ap_and_seen(PlayerType *player_ptr, monster_type *m_ptr)
 {
-    return m_ptr->ml && !player_ptr->hallucinated && (m_ptr->ap_r_idx == m_ptr->r_idx);
+    return m_ptr->ml && !player_ptr->effects()->hallucination()->is_hallucinated() && (m_ptr->ap_r_idx == m_ptr->r_idx);
 }
 
 /*  Determine monster race appearance index is same as race index */
