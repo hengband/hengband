@@ -205,9 +205,9 @@ static void shuffle_flavors(ItemKindType tval)
         k_idx_list.push_back(k_ref.idx);
     }
 
-    for (auto k_idx : k_idx_list) {
-        object_kind *k1_ptr = &k_info[k_idx];
-        object_kind *k2_ptr = &k_info[k_idx_list[randint0(k_idx_list.size())]];
+    for (auto i = k_idx_list.size() - 1; i > 0; --i) {
+        object_kind *k1_ptr = &k_info[k_idx_list[i]];
+        object_kind *k2_ptr = &k_info[k_idx_list[randint0(i + 1)]];
         std::swap(k1_ptr->flavor, k2_ptr->flavor);
     }
 }
