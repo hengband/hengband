@@ -9,6 +9,7 @@
 #include "load/old/load-v1-7-0.h"
 #include "load/player-attack-loader.h"
 #include "load/player-class-specific-data-loader.h"
+#include "load/savedata-old-flag-types.h"
 #include "load/world-loader.h"
 #include "market/arena.h"
 #include "monster-race/race-ability-flags.h"
@@ -19,6 +20,7 @@
 #include "player/attack-defense-types.h"
 #include "player/player-skill.h"
 #include "spell-realm/spells-song.h"
+#include "system/angband-exceptions.h"
 #include "system/floor-type-definition.h"
 #include "system/player-type-definition.h"
 #include "timed-effect/player-confusion.h"
@@ -230,7 +232,15 @@ static void set_imitation(PlayerType *player_ptr)
 static void rd_phase_out(PlayerType *player_ptr)
 {
     player_ptr->current_floor_ptr->inside_arena = rd_s16b() != 0;
-    player_ptr->current_floor_ptr->quest_number = i2enum<QuestId>(rd_s16b());
+    const auto quest_number = rd_s16b();
+    if (loading_savefile_version_is_older_than(15)) {
+        if (quest_number == enum2i(OldQuestId15::CITY_SEA)) {
+            const std::string msg(_("海底都市クエストにいるデータはサポート外です。",
+                "The save data in the quest of The City beneath the Sea is unsupported."));
+            throw(SaveDataNotSupportedException(msg));
+        }
+    }
+    player_ptr->current_floor_ptr->quest_number = i2enum<QuestId>(quest_number);
     if (h_older_than(0, 3, 5)) {
         player_ptr->phase_out = false;
     } else {
