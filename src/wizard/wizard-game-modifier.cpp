@@ -124,8 +124,8 @@ void wiz_enter_quest(PlayerType *player_ptr)
     init_flags = i2enum<init_flags_type>(INIT_SHOW_TEXT | INIT_ASSIGN);
     player_ptr->current_floor_ptr->quest_number = q_idx;
     parse_fixed_map(player_ptr, "q_info.txt", 0, 0, 0, 0);
-    quest[q_idx].status = QuestStatusType::TAKEN;
-    if (quest[q_idx].dungeon == 0) {
+    quest_map[q_idx].status = QuestStatusType::TAKEN;
+    if (quest_map[q_idx].dungeon == 0) {
         exe_enter_quest(player_ptr, q_idx);
     }
 }
@@ -142,7 +142,7 @@ void wiz_complete_quest(PlayerType *player_ptr)
         return;
     }
 
-    if (quest[player_ptr->current_floor_ptr->quest_number].status == QuestStatusType::TAKEN) {
+    if (quest_map[player_ptr->current_floor_ptr->quest_number].status == QuestStatusType::TAKEN) {
         complete_quest(player_ptr, player_ptr->current_floor_ptr->quest_number);
     }
 }

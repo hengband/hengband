@@ -30,7 +30,7 @@ void check_random_quest_auto_failure(PlayerType *player_ptr)
         return;
     }
     for (auto q_idx : EnumRange(QuestId::RANDOM_QUEST1, QuestId::RANDOM_QUEST10)) {
-        auto &q_ref = quest[q_idx];
+        auto &q_ref = quest_map[q_idx];
         auto is_taken_quest = (q_ref.type == QuestKindType::RANDOM);
         is_taken_quest &= (q_ref.status == QuestStatusType::TAKEN);
         is_taken_quest &= (q_ref.level < player_ptr->current_floor_ptr->dun_level);

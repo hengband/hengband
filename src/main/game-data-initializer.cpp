@@ -41,7 +41,7 @@ constexpr int MACRO_MAX = 256;
 void init_quests(void)
 {
     for (auto i = 0; i < max_q_idx; i++) {
-        quest[i2enum<QuestId>(i)].status = QuestStatusType::UNTAKEN;
+        quest_map[i2enum<QuestId>(i)].status = QuestStatusType::UNTAKEN;
     }
 }
 

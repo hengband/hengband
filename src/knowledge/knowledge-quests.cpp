@@ -54,7 +54,7 @@ static void do_cmd_knowledge_quests_current(PlayerType *player_ptr, FILE *fff)
 
     fprintf(fff, _("《遂行中のクエスト》\n", "< Current Quest >\n"));
 
-    for (auto &[q_idx, q_ref] : quest) {
+    for (auto &[q_idx, q_ref] : quest_map) {
         bool is_print = q_ref.status == QuestStatusType::TAKEN;
         is_print |= (q_ref.status == QuestStatusType::STAGE_COMPLETED) && (q_ref.type == QuestKindType::TOWER);
         is_print |= q_ref.status == QuestStatusType::COMPLETED;
@@ -187,7 +187,7 @@ static bool do_cmd_knowledge_quests_aux(PlayerType *player_ptr, FILE *fff, Quest
 {
     char tmp_str[120];
     char playtime_str[16];
-    auto *const q_ptr = &quest[q_idx];
+    auto *const q_ptr = &quest_map[q_idx];
 
     auto *floor_ptr = player_ptr->current_floor_ptr;
     auto is_fixed_quest = quest_type::is_fixed(q_idx);
@@ -235,7 +235,7 @@ void do_cmd_knowledge_quests_completed(PlayerType *player_ptr, FILE *fff, const 
     fprintf(fff, _("《達成したクエスト》\n", "< Completed Quest >\n"));
     int16_t total = 0;
     for (auto &q_idx : quest_numbers) {
-        auto &q_ref = quest[q_idx];
+        auto &q_ref = quest_map[q_idx];
 
         if (q_ref.status == QuestStatusType::FINISHED && do_cmd_knowledge_quests_aux(player_ptr, fff, q_idx)) {
             ++total;
@@ -258,7 +258,7 @@ void do_cmd_knowledge_quests_failed(PlayerType *player_ptr, FILE *fff, const std
     fprintf(fff, _("《失敗したクエスト》\n", "< Failed Quest >\n"));
     int16_t total = 0;
     for (auto &q_idx : quest_numbers) {
-        auto &q_ref = quest[q_idx];
+        auto &q_ref = quest_map[q_idx];
 
         if (((q_ref.status == QuestStatusType::FAILED_DONE) || (q_ref.status == QuestStatusType::FAILED)) && do_cmd_knowledge_quests_aux(player_ptr, fff, q_idx)) {
             ++total;
@@ -278,7 +278,7 @@ static void do_cmd_knowledge_quests_wiz_random(FILE *fff)
     fprintf(fff, _("《残りのランダムクエスト》\n", "< Remaining Random Quest >\n"));
     GAME_TEXT tmp_str[120];
     int16_t total = 0;
-    for (auto &[q_idx, q_ref] : quest) {
+    for (auto &[q_idx, q_ref] : quest_map) {
         if (q_ref.flags & QUEST_FLAG_SILENT) {
             continue;
         }
@@ -308,7 +308,7 @@ void do_cmd_knowledge_quests(PlayerType *player_ptr)
     }
 
     std::vector<QuestId> quest_numbers;
-    for (auto &q : quest) {
+    for (auto &q : quest_map) {
         quest_numbers.push_back(q.first);
     }
     int dummy;

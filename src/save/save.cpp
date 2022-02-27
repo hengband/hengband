@@ -131,7 +131,7 @@ static bool wr_savefile_new(PlayerType *player_ptr, save_type type)
     wr_byte(tmp8u);
 
     for (short i = 0; i < max_q_idx; i++) {
-        auto *const q_ptr = &quest[i2enum<QuestId>(i)];
+        auto *const q_ptr = &quest_map[i2enum<QuestId>(i)];
         wr_s16b(enum2i(q_ptr->status));
         wr_s16b((int16_t)q_ptr->level);
         wr_byte((byte)q_ptr->complev);

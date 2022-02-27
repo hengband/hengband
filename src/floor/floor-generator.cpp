@@ -265,7 +265,7 @@ static void generate_fixed_floor(PlayerType *player_ptr)
         }
     }
 
-    floor_ptr->base_level = quest[floor_ptr->quest_number].level;
+    floor_ptr->base_level = quest_map[floor_ptr->quest_number].level;
     floor_ptr->dun_level = floor_ptr->base_level;
     floor_ptr->object_level = floor_ptr->base_level;
     floor_ptr->monster_level = floor_ptr->base_level;

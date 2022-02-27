@@ -135,7 +135,7 @@ errr restore_dungeon(PlayerType *player_ptr)
 {
     if (player_ptr->is_dead) {
         for (auto q_idx : EnumRange(QuestId::RANDOM_QUEST1, QuestId::RANDOM_QUEST10)) {
-            r_info[quest[q_idx].r_idx].flags1 &= ~RF1_QUESTOR;
+            r_info[quest_map[q_idx].r_idx].flags1 &= ~RF1_QUESTOR;
         }
 
         return 0;
