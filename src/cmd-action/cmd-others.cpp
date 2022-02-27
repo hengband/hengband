@@ -201,5 +201,5 @@ void do_cmd_suicide(PlayerType *player_ptr)
         exe_write_diary(player_ptr, DIARY_DESCRIPTION, 1, "\n\n\n\n");
     }
 
-    (void)strcpy(player_ptr->died_from, _("途中終了", "Quitting"));
+    player_ptr->died_from = _("途中終了", "Quitting");
 }

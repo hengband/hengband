@@ -39,7 +39,7 @@ void exit_game_panic(PlayerType *player_ptr)
 
     player_ptr->panic_save = 1;
     signals_ignore_tstp();
-    (void)strcpy(player_ptr->died_from, _("(緊急セーブ)", "(panic save)"));
+    player_ptr->died_from = _("(緊急セーブ)", "(panic save)");
     if (!save_player(player_ptr, SAVE_TYPE_CLOSE_GAME)) {
         quit(_("緊急セーブ失敗！", "panic save failed!"));
     }

@@ -69,14 +69,14 @@ static void handle_signal_simple(int sig)
 
     signal_count++;
     if (p_ptr->is_dead) {
-        (void)strcpy(p_ptr->died_from, _("強制終了", "Abortion"));
+        p_ptr->died_from = _("強制終了", "Abortion");
         forget_lite(p_ptr->current_floor_ptr);
         forget_view(p_ptr->current_floor_ptr);
         clear_mon_lite(p_ptr->current_floor_ptr);
         close_game(p_ptr);
         quit(_("強制終了", "interrupt"));
     } else if (signal_count >= 5) {
-        (void)strcpy(p_ptr->died_from, _("強制終了中", "Interrupting"));
+        p_ptr->died_from = _("強制終了中", "Interrupting");
         forget_lite(p_ptr->current_floor_ptr);
         forget_view(p_ptr->current_floor_ptr);
         clear_mon_lite(p_ptr->current_floor_ptr);
@@ -139,7 +139,7 @@ static void handle_signal_abort(int sig)
     term_fresh();
 
     p_ptr->panic_save = 1;
-    (void)strcpy(p_ptr->died_from, _("(緊急セーブ)", "(panic save)"));
+    p_ptr->died_from = _("(緊急セーブ)", "(panic save)");
 
     signals_ignore_tstp();
 
