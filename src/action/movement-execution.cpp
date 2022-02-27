@@ -170,7 +170,7 @@ void exe_movement(PlayerType *player_ptr, DIRECTION dir, bool do_pickup, bool br
         can_cast &= m_ptr->ml;
         can_cast &= !is_stunned;
         can_cast &= player_ptr->muta.has_not(PlayerMutationType::BERS_RAGE) || !is_shero(player_ptr);
-        if (!is_hostile(m_ptr) && !can_cast && pattern_seq(player_ptr, player_ptr->y, player_ptr->x, y, x) && (p_can_enter || p_can_kill_walls)) {
+        if (!is_hostile(m_ptr) && can_cast && pattern_seq(player_ptr, player_ptr->y, player_ptr->x, y, x) && (p_can_enter || p_can_kill_walls)) {
             (void)set_monster_csleep(player_ptr, g_ptr->m_idx, 0);
             monster_desc(player_ptr, m_name, m_ptr, 0);
             if (m_ptr->ml) {
