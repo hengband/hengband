@@ -1,0 +1,52 @@
+name: Pull Request Status Check
+
+on:
+  # プルリクエストがopen、synchronize、reopenされた時にトリガーする
+  pull_request:
+
+  # 手動トリガーを許可
+  workflow_dispatch:
+
+jobs:
+  check_bom:
+    name: Check the BOM of the source files
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - run: sh ./.github/scripts/check-bom.sh
+
+  check_format:
+    name: Check the format of the source files
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - run: sh ./.github/scripts/check-format.sh
+
+  build_test_clang_without_pch:
+    name: Build Japanese version with clang (without using pre-compiled headers)
+    needs: [check_bom, check_format]
+    uses: ./.github/workflows/build-with-autotools.yml
+    with:
+      cxx: clang++-11
+      cxx-flags: "-pipe -O3 -Werror -Wall -Wextra -Wno-unused-const-variable -Wno-invalid-source-encoding"
+      configure-opts: "--disable-pch"
+      use-ccache: true
+
+  build_test_japanese:
+    name: Build Japanese version with gcc
+    needs: build_test_clang_without_pch
+    uses: ./.github/workflows/build-with-autotools.yml
+    with:
+      cxx: g++
+      cxx-flags: "-pipe -O3 -Werror -Wall -Wextra"
+      use-ccache: true
+
+  build_test_english:
+    name: Build English version with gcc
+    needs: build_test_japanese
+    uses: ./.github/workflows/build-with-autotools.yml
+    with:
+      cxx: g++
+      cxx-flags: "-pipe -O3 -Werror -Wall -Wextra"
+      configure-opts: "--disable-japanese"
+      use-ccache: true
