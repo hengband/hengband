@@ -44,6 +44,8 @@
 #include "system/monster-type-definition.h"
 #include "system/player-type-definition.h"
 #include "system/system-variables.h"
+#include "timed-effect/player-hallucination.h"
+#include "timed-effect/timed-effects.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 #include "world/world.h"
@@ -339,7 +341,7 @@ static void drop_items_golds(PlayerType *player_ptr, monster_death_type *md_ptr,
     auto *floor_ptr = player_ptr->current_floor_ptr;
     floor_ptr->object_level = floor_ptr->base_level;
     coin_type = 0;
-    bool visible = (md_ptr->m_ptr->ml && !player_ptr->hallucinated) || (md_ptr->r_ptr->kind_flags.has(MonsterKindType::UNIQUE));
+    bool visible = (md_ptr->m_ptr->ml && !player_ptr->effects()->hallucination()->is_hallucinated()) || (md_ptr->r_ptr->kind_flags.has(MonsterKindType::UNIQUE));
     if (visible && (dump_item || dump_gold)) {
         lore_treasure(player_ptr, md_ptr->m_idx, dump_item, dump_gold);
     }

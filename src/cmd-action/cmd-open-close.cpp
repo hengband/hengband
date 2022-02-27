@@ -28,6 +28,7 @@
 #include "target/target-getter.h"
 #include "term/screen-processor.h"
 #include "timed-effect/player-confusion.h"
+#include "timed-effect/player-hallucination.h"
 #include "timed-effect/timed-effects.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
@@ -55,7 +56,8 @@ static bool exe_open_chest(PlayerType *player_ptr, POSITION y, POSITION x, OBJEC
             i = i / 10;
         }
 
-        if (player_ptr->effects()->confusion()->is_confused() || player_ptr->hallucinated) {
+        auto effects = player_ptr->effects();
+        if (effects->confusion()->is_confused() || effects->hallucination()->is_hallucinated()) {
             i = i / 10;
         }
 

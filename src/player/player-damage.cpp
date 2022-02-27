@@ -66,6 +66,8 @@
 #include "system/player-type-definition.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
+#include "timed-effect/player-hallucination.h"
+#include "timed-effect/timed-effects.h"
 #include "util/bit-flags-calculator.h"
 #include "util/string-processor.h"
 #include "view/display-messages.h"
@@ -413,11 +415,13 @@ int take_hit(PlayerType *player_ptr, int damage_type, int damage, concptr hit_fr
             } else {
                 char dummy[1024];
 #ifdef JP
+                auto effects = player_ptr->effects();
+                auto is_hallucinated = effects->hallucination()->is_hallucinated();
                 sprintf(dummy, "%s%s%s",
                     !player_ptr->paralyzed ? ""
                     : player_ptr->free_act ? "彫像状態で"
                                            : "麻痺状態で",
-                    player_ptr->hallucinated ? "幻覚に歪んだ" : "", hit_from);
+                    is_hallucinated ? "幻覚に歪んだ" : "", hit_from);
 #else
                 sprintf(dummy, "%s%s", hit_from, !player_ptr->paralyzed ? "" : " while helpless");
 #endif
@@ -567,7 +571,7 @@ int take_hit(PlayerType *player_ptr, int damage_type, int damage, concptr hit_fr
 
         sound(SOUND_WARN);
         if (record_danger && (old_chp > warning)) {
-            if (player_ptr->hallucinated && damage_type == DAMAGE_ATTACK) {
+            if (player_ptr->effects()->hallucination()->is_hallucinated() && damage_type == DAMAGE_ATTACK) {
                 hit_from = _("何か", "something");
             }
 

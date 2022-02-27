@@ -33,6 +33,8 @@
 #include "term/gameterm.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
+#include "timed-effect/player-hallucination.h"
+#include "timed-effect/timed-effects.h"
 #include "util/angband-files.h"
 #include "util/int-char-converter.h"
 #include "view/display-messages.h"
@@ -281,7 +283,7 @@ void do_cmd_time(PlayerType *player_ptr)
         (hour < 12) ? "AM" : "PM");
 
     char buf[1024];
-    if (!randint0(10) || player_ptr->hallucinated) {
+    if (!randint0(10) || player_ptr->effects()->hallucination()->is_hallucinated()) {
         path_build(buf, sizeof(buf), ANGBAND_DIR_FILE, _("timefun_j.txt", "timefun.txt"));
     } else {
         path_build(buf, sizeof(buf), ANGBAND_DIR_FILE, _("timenorm_j.txt", "timenorm.txt"));

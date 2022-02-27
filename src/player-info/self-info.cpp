@@ -30,6 +30,7 @@
 #include "term/screen-processor.h"
 #include "timed-effect/player-confusion.h"
 #include "timed-effect/player-cut.h"
+#include "timed-effect/player-hallucination.h"
 #include "timed-effect/player-stun.h"
 #include "timed-effect/timed-effects.h"
 #include "view/display-self-info.h"
@@ -61,7 +62,7 @@ static void set_bad_status_info(PlayerType *player_ptr, self_info_type *self_ptr
         self_ptr->info[self_ptr->line++] = _("あなたは毒に侵されている。", "You are poisoned.");
     }
 
-    if (player_ptr->hallucinated) {
+    if (effects->hallucination()->is_hallucinated()) {
         self_ptr->info[self_ptr->line++] = _("あなたは幻覚を見ている。", "You are hallucinating.");
     }
 }
@@ -338,8 +339,9 @@ void report_magics(PlayerType *player_ptr)
         info[i++] = _("あなたは毒に侵されている", "You are poisoned");
     }
 
-    if (player_ptr->hallucinated) {
-        info2[i] = report_magics_aux(player_ptr->hallucinated);
+    auto hallucination = effects->hallucination();
+    if (hallucination->is_hallucinated()) {
+        info2[i] = report_magics_aux(hallucination->current());
         info[i++] = _("あなたは幻覚を見ている", "You are hallucinating");
     }
 

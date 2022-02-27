@@ -44,6 +44,8 @@
 #include "system/monster-race-definition.h"
 #include "system/monster-type-definition.h"
 #include "system/player-type-definition.h"
+#include "timed-effect/player-hallucination.h"
+#include "timed-effect/timed-effects.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 #include "world/world.h"
@@ -300,7 +302,8 @@ void MonsterDamageProcessor::increase_kill_numbers()
 {
     auto *m_ptr = &this->player_ptr->current_floor_ptr->m_list[this->m_idx];
     auto *r_ptr = real_r_ptr(m_ptr);
-    if (((m_ptr->ml == 0) || this->player_ptr->hallucinated) && r_ptr->kind_flags.has_not(MonsterKindType::UNIQUE)) {
+    auto is_hallucinated = this->player_ptr->effects()->hallucination()->is_hallucinated();
+    if (((m_ptr->ml == 0) || is_hallucinated) && r_ptr->kind_flags.has_not(MonsterKindType::UNIQUE)) {
         return;
     }
 

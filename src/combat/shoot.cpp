@@ -65,6 +65,8 @@
 #include "target/projection-path-calculator.h"
 #include "target/target-checker.h"
 #include "target/target-getter.h"
+#include "timed-effect/player-hallucination.h"
+#include "timed-effect/timed-effects.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 #include "wizard/wizard-messages.h"
@@ -781,9 +783,10 @@ void exe_fire(PlayerType *player_ptr, INVENTORY_IDX item, ObjectType *j_ptr, SPE
                         msg_format(_("%sが%sに命中した。", "The %s hits %s."), o_name, m_name);
 
                         if (m_ptr->ml) {
-                            if (!player_ptr->hallucinated) {
+                            if (!player_ptr->effects()->hallucination()->is_hallucinated()) {
                                 monster_race_track(player_ptr, m_ptr->ap_r_idx);
                             }
+
                             health_track(player_ptr, c_mon_ptr->m_idx);
                         }
                     }

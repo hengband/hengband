@@ -97,7 +97,6 @@ public:
     TIME_EFFECT blind{}; /* Timed -- Blindness */
     TIME_EFFECT paralyzed{}; /* Timed -- Paralysis */
     TIME_EFFECT afraid{}; /* Timed -- Fear */
-    TIME_EFFECT hallucinated{}; /* Timed -- Hallucination */
     TIME_EFFECT poisoned{}; /* Timed -- Poisoned */
 
     TIME_EFFECT protevil{}; /* Timed -- Protection */

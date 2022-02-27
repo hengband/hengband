@@ -14,6 +14,8 @@
 #include "system/player-type-definition.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
+#include "timed-effect/player-hallucination.h"
+#include "timed-effect/timed-effects.h"
 #include "util/string-processor.h"
 #include "window/main-window-row-column.h"
 #include "window/main-window-stat-poster.h"
@@ -362,7 +364,7 @@ void health_redraw(PlayerType *player_ptr, bool riding)
         return;
     }
 
-    if (player_ptr->hallucinated) {
+    if (player_ptr->effects()->hallucination()->is_hallucinated()) {
         term_putstr(col, row, 12, TERM_WHITE, "[----------]");
         return;
     }
