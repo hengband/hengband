@@ -59,6 +59,7 @@
 #include "target/target-getter.h"
 #include "timed-effect/player-confusion.h"
 #include "timed-effect/player-hallucination.h"
+#include "timed-effect/player-paralysis.h"
 #include "timed-effect/player-stun.h"
 #include "timed-effect/timed-effects.h"
 #include "util/bit-flags-calculator.h"
@@ -86,7 +87,8 @@ bool kawarimi(PlayerType *player_ptr, bool success)
     auto effects = player_ptr->effects();
     auto is_confused = effects->confusion()->is_confused();
     auto is_hallucinated = effects->hallucination()->is_hallucinated();
-    if (is_confused || player_ptr->blind || player_ptr->paralyzed || is_hallucinated) {
+    auto is_paralyzed = effects->paralysis()->is_paralyzed();
+    if (is_confused || player_ptr->blind || is_paralyzed || is_hallucinated) {
         return false;
     }
 

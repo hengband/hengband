@@ -25,6 +25,7 @@
 #include "timed-effect/player-confusion.h"
 #include "timed-effect/player-cut.h"
 #include "timed-effect/player-hallucination.h"
+#include "timed-effect/player-paralysis.h"
 #include "timed-effect/player-stun.h"
 #include "timed-effect/timed-effects.h"
 #include "view/status-bars-table.h"
@@ -468,7 +469,7 @@ void print_status(PlayerType *player_ptr)
         ADD_BAR_FLAG(BAR_BLINDNESS);
     }
 
-    if (player_ptr->paralyzed) {
+    if (effects->paralysis()->is_paralyzed()) {
         ADD_BAR_FLAG(BAR_PARALYZE);
     }
 

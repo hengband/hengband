@@ -18,6 +18,8 @@
 #include "player/special-defense-types.h"
 #include "status/bad-status-setter.h"
 #include "system/player-type-definition.h"
+#include "timed-effect/player-paralysis.h"
+#include "timed-effect/timed-effects.h"
 #include "view/display-messages.h"
 #include "world/world.h"
 
@@ -64,7 +66,7 @@ void starve_player(PlayerType *player_ptr)
         return;
     }
 
-    if (!player_ptr->paralyzed && (randint0(100) < 10)) {
+    if (!player_ptr->effects()->paralysis()->is_paralyzed() && (randint0(100) < 10)) {
         msg_print(_("あまりにも空腹で気絶してしまった。", "You faint from the lack of food."));
         disturb(player_ptr, true, true);
         (void)BadStatusSetter(player_ptr).mod_paralysis(1 + randint0(5));

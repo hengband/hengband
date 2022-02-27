@@ -67,6 +67,7 @@
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
 #include "timed-effect/player-hallucination.h"
+#include "timed-effect/player-paralysis.h"
 #include "timed-effect/timed-effects.h"
 #include "util/bit-flags-calculator.h"
 #include "util/string-processor.h"
@@ -417,13 +418,14 @@ int take_hit(PlayerType *player_ptr, int damage_type, int damage, concptr hit_fr
 #ifdef JP
                 auto effects = player_ptr->effects();
                 auto is_hallucinated = effects->hallucination()->is_hallucinated();
+                auto is_paralyzed = effects->paralysis()->is_paralyzed();
                 sprintf(dummy, "%s%s%s",
-                    !player_ptr->paralyzed ? ""
+                    !is_paralyzed          ? ""
                     : player_ptr->free_act ? "彫像状態で"
                                            : "麻痺状態で",
                     is_hallucinated ? "幻覚に歪んだ" : "", hit_from);
 #else
-                sprintf(dummy, "%s%s", hit_from, !player_ptr->paralyzed ? "" : " while helpless");
+                sprintf(dummy, "%s%s", hit_from, !is_paralyzed ? "" : " while helpless");
 #endif
                 angband_strcpy(player_ptr->died_from, dummy, sizeof player_ptr->died_from);
             }

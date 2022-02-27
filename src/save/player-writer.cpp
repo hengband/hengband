@@ -13,6 +13,7 @@
 #include "timed-effect/player-confusion.h"
 #include "timed-effect/player-cut.h"
 #include "timed-effect/player-hallucination.h"
+#include "timed-effect/player-paralysis.h"
 #include "timed-effect/player-stun.h"
 #include "timed-effect/timed-effects.h"
 #include "world/world.h"
@@ -154,7 +155,7 @@ void wr_player(PlayerType *player_ptr)
     auto effects = player_ptr->effects();
     wr_s16b(0); /* old "rest" */
     wr_s16b(player_ptr->blind);
-    wr_s16b(player_ptr->paralyzed);
+    wr_s16b(effects->paralysis()->current());
     wr_s16b(effects->confusion()->current());
     wr_s16b(player_ptr->food);
     wr_s16b(0); /* old "food_digested" */
