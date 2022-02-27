@@ -408,26 +408,24 @@ int take_hit(PlayerType *player_ptr, int damage_type, int damage, concptr hit_fr
 #endif
             if (seppuku) {
                 strcpy(player_ptr->died_from, hit_from);
-#ifdef JP
                 if (!winning_seppuku) {
-                    strcpy(player_ptr->died_from, "切腹");
+                    strcpy(player_ptr->died_from, _("切腹", "Seppuku"));
                 }
-#endif
             } else {
-                char dummy[1024];
-#ifdef JP
                 auto effects = player_ptr->effects();
                 auto is_hallucinated = effects->hallucination()->is_hallucinated();
-                auto is_paralyzed = effects->paralysis()->is_paralyzed();
-                sprintf(dummy, "%s%s%s",
-                    !is_paralyzed          ? ""
-                    : player_ptr->free_act ? "彫像状態で"
-                                           : "麻痺状態で",
-                    is_hallucinated ? "幻覚に歪んだ" : "", hit_from);
+                auto paralysis_state = "";
+                if (effects->paralysis()->is_paralyzed()) {
+                    paralysis_state = player_ptr->free_act ? _("彫像状態で", " while being the statue") : _("麻痺状態で", " while paralyzing");
+                }
+
+                auto hallucintion_state = is_hallucinated ? _("幻覚に歪んだ", "hallucinatingly distorted ") : "";
+#ifdef JP
+                auto killing_expression = format("%s%s%s", paralysis_state, hallucintion_state, hit_from);
 #else
-                sprintf(dummy, "%s%s", hit_from, !is_paralyzed ? "" : " while helpless");
+                auto killing_expression = format("%s%s%s", hallucintion_state, hit_from, paralysis_state);
 #endif
-                angband_strcpy(player_ptr->died_from, dummy, sizeof player_ptr->died_from);
+                angband_strcpy(player_ptr->died_from, killing_expression, sizeof(player_ptr->died_from));
             }
 
             w_ptr->total_winner = false;
