@@ -164,7 +164,7 @@ void wr_player(PlayerType *player_ptr)
     wr_s16b(player_ptr->enchant_energy_need);
     wr_s16b(player_ptr->fast);
     wr_s16b(player_ptr->slow);
-    wr_s16b(player_ptr->afraid);
+    wr_s16b(player_ptr->fearful);
     wr_s16b(effects->cut()->current());
     wr_s16b(effects->stun()->current());
     wr_s16b(player_ptr->poisoned);

@@ -243,9 +243,9 @@ bool do_cmd_attack(PlayerType *player_ptr, POSITION y, POSITION x, combat_option
         }
     }
 
-    if (player_ptr->afraid) {
+    if (player_ptr->fearful) {
         if (m_ptr->ml) {
-            msg_format(_("恐くて%sを攻撃できない！", "You are too afraid to attack %s!"), m_name);
+            msg_format(_("恐くて%sを攻撃できない！", "You are too fearful to attack %s!"), m_name);
         } else {
             msg_format(_("そっちには何か恐いものがいる！", "There is something scary in your way!"));
         }

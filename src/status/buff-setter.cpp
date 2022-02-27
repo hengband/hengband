@@ -39,7 +39,7 @@ void reset_tim_flags(PlayerType *player_ptr)
     player_ptr->blind = 0; /* Timed -- Blindness */
     effects->paralysis()->reset();
     effects->confusion()->reset();
-    player_ptr->afraid = 0; /* Timed -- Fear */
+    player_ptr->fearful = 0; /* Timed -- Fear */
     effects->hallucination()->reset();
     player_ptr->poisoned = 0; /* Timed -- Poisoned */
     effects->cut()->reset();

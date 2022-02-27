@@ -596,7 +596,7 @@ void print_status(PlayerType *player_ptr)
         ADD_BAR_FLAG(BAR_ALTER);
     }
 
-    if (player_ptr->afraid) {
+    if (player_ptr->fearful) {
         ADD_BAR_FLAG(BAR_AFRAID);
     }
 

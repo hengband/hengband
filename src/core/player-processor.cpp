@@ -215,7 +215,7 @@ void process_player(PlayerType *player_ptr)
                     (randint0(r_ptr->level) < player_ptr->skill_exp[PlayerSkillKindType::RIDING]) ? 0 : (monster_fear_remaining(m_ptr) - 1))) {
                 GAME_TEXT m_name[MAX_NLEN];
                 monster_desc(player_ptr, m_name, m_ptr, 0);
-                msg_format(_("%^sを恐怖から立ち直らせた。", "%^s is no longer afraid."), m_name);
+                msg_format(_("%^sを恐怖から立ち直らせた。", "%^s is no longer fearful."), m_name);
             }
         }
 

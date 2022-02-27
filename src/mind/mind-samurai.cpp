@@ -386,7 +386,7 @@ bool choose_samurai_stance(PlayerType *player_ptr)
         return false;
     }
 
-    if (player_ptr->afraid) {
+    if (player_ptr->fearful) {
         msg_print(_("体が震えて構えられない！", "You are trembling with fear!"));
         return false;
     }

@@ -46,7 +46,7 @@ static void set_bad_status_info(PlayerType *player_ptr, self_info_type *self_ptr
         self_ptr->info[self_ptr->line++] = _("あなたは混乱している。", "You are confused.");
     }
 
-    if (player_ptr->afraid) {
+    if (player_ptr->fearful) {
         self_ptr->info[self_ptr->line++] = _("あなたは恐怖に侵されている。", "You are terrified.");
     }
 
@@ -329,8 +329,8 @@ void report_magics(PlayerType *player_ptr)
         info[i++] = _("あなたは混乱している", "You are confused");
     }
 
-    if (player_ptr->afraid) {
-        info2[i] = report_magics_aux(player_ptr->afraid);
+    if (player_ptr->fearful) {
+        info2[i] = report_magics_aux(player_ptr->fearful);
         info[i++] = _("あなたは恐怖に侵されている", "You are terrified");
     }
 

@@ -46,7 +46,7 @@ bool PlayerType::is_fully_healthy() const
     is_fully_healthy &= !this->blind;
     is_fully_healthy &= !effects->confusion()->is_confused();
     is_fully_healthy &= !this->poisoned;
-    is_fully_healthy &= !this->afraid;
+    is_fully_healthy &= !this->fearful;
     is_fully_healthy &= !effects->stun()->is_stunned();
     is_fully_healthy &= !effects->cut()->is_cut();
     is_fully_healthy &= !this->slow;
