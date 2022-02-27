@@ -950,7 +950,7 @@
     <ClCompile Include="..\..\src\monster-attack\monster-attack-switcher.cpp">
       <Filter>monster-attack</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\monster-attack\monster-attack-types.cpp">
+    <ClCompile Include="..\..\src\monster-attack\monster-attack-table.cpp">
       <Filter>monster-attack</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\monster-attack\monster-eating.cpp">
@@ -3467,7 +3467,7 @@
     <ClInclude Include="..\..\src\monster-attack\monster-attack-switcher.h">
       <Filter>monster-attack</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\monster-attack\monster-attack-types.h">
+    <ClInclude Include="..\..\src\monster-attack\monster-attack-table.h">
       <Filter>monster-attack</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\monster-attack\monster-eating.h">

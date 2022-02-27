@@ -1,6 +1,6 @@
 ﻿#include "info-reader/race-info-tokens-table.h"
 #include "monster-attack/monster-attack-effect.h"
-#include "monster-attack/monster-attack-types.h"
+#include "monster-attack/monster-attack-table.h"
 #include "monster-race/race-ability-flags.h"
 #include "monster-race/race-kind-flags.h"
 #include "monster-race/race-visual-flags.h"

@@ -12,7 +12,7 @@
 #include "monster-attack/monster-attack-lose.h"
 #include "monster-attack/monster-attack-player.h"
 #include "monster-attack/monster-attack-status.h"
-#include "monster-attack/monster-attack-types.h"
+#include "monster-attack/monster-attack-table.h"
 #include "monster-attack/monster-eating.h"
 #include "monster/monster-status.h"
 #include "monster/monster-update.h"

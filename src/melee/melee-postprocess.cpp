@@ -19,7 +19,7 @@
 #include "grid/grid.h"
 #include "main/sound-definitions-table.h"
 #include "main/sound-of-music.h"
-#include "monster-attack/monster-attack-types.h"
+#include "monster-attack/monster-attack-table.h"
 #include "monster-floor/monster-death.h"
 #include "monster-floor/monster-move.h"
 #include "monster-floor/monster-remover.h"
