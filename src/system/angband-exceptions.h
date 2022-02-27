@@ -4,8 +4,5 @@
 
 class SaveDataNotSupportedException : public std::runtime_error {
 public:
-    SaveDataNotSupportedException(const char *message)
-        : std::runtime_error(message)
-    {
-    }
+    using std::runtime_error::runtime_error;
 };
