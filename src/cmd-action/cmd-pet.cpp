@@ -68,6 +68,7 @@
 #include "util/sort.h"
 #include "view/display-messages.h"
 #include "world/world.h"
+#include <sstream>
 
 /*!
  * @brief ペットを開放するコマンドのメインルーチン
@@ -385,24 +386,15 @@ static void do_name_pet(PlayerType *player_ptr)
 void do_cmd_pet(PlayerType *player_ptr)
 {
     COMMAND_CODE i = 0;
-    int num;
-    int powers[36];
-    concptr power_desc[36];
+    int powers[36]{};
+    std::string power_desc[36];
     bool flag, redraw;
     char choice;
-    char out_val[160];
     int pet_ctr;
     monster_type *m_ptr;
-
     auto command_idx = 0;
-
-    char buf[160];
-    char target_buf[160];
-
     int menu_line = use_menu ? 1 : 0;
-
-    num = 0;
-
+    auto num = 0;
     if (player_ptr->wild_mode) {
         return;
     }
@@ -415,8 +407,8 @@ void do_cmd_pet(PlayerType *player_ptr)
     auto target_of_pet_appearance = is_hallucinated ? _("何か奇妙な物", "something strange") : taget_of_pet;
     auto mes = _("ペットのターゲットを指定 (現在：%s)", "specify a target of pet (now:%s)");
     auto target_name = player_ptr->pet_t_m_idx > 0 ? target_of_pet_appearance : _("指定なし", "nothing");
-    sprintf(target_buf, mes, target_name);
-    power_desc[num] = target_buf;
+    auto target_ask = format(mes, target_name);
+    power_desc[num] = target_ask;
     powers[num++] = PET_TARGET;
     power_desc[num] = _("近くにいろ", "stay close");
 
@@ -551,11 +543,12 @@ void do_cmd_pet(PlayerType *player_ptr)
         flag = false;
         redraw = false;
 
+        std::string prompt;
         if (use_menu) {
             screen_save();
-            strnfmt(out_val, 78, _("(コマンド、ESC=終了) コマンドを選んでください:", "(Command, ESC=exit) Choose command from menu."));
+            prompt = _("(コマンド、ESC=終了) コマンドを選んでください:", "(Command, ESC=exit) Choose command from menu.");
         } else {
-            strnfmt(out_val, 78, _("(コマンド %c-%c、'*'=一覧、ESC=終了) コマンドを選んでください:", "(Command %c-%c, *=List, ESC=exit) Select a command: "),
+            prompt = format(_("(コマンド %c-%c、'*'=一覧、ESC=終了) コマンドを選んでください:", "(Command %c-%c, *=List, ESC=exit) Select a command: "),
                 I2A(0), I2A(num - 1));
         }
 
@@ -567,7 +560,7 @@ void do_cmd_pet(PlayerType *player_ptr)
 
             if (choice == ESCAPE) {
                 choice = ' ';
-            } else if (!get_com(out_val, &choice, true)) {
+            } else if (!get_com(prompt.c_str(), &choice, true)) {
                 break;
             }
 
@@ -630,15 +623,15 @@ void do_cmd_pet(PlayerType *player_ptr)
                     int control;
                     for (control = 0; control < num; control++) {
                         /* Letter/number for power selection */
+                        std::stringstream ss;
                         if (use_menu) {
-                            sprintf(buf, "%c%s ", (control == command_idx) ? '*' : ' ', (control == (menu_line - 1)) ? _("》", "> ") : "  ");
+                            ss << format("%c%s ", (control == command_idx) ? '*' : ' ', (control == (menu_line - 1)) ? _("》", "> ") : "  ");
                         } else {
-                            sprintf(buf, "%c%c) ", (control == command_idx) ? '*' : ' ', I2A(control));
+                            ss << format("%c%c) ", (control == command_idx) ? '*' : ' ', I2A(control));
                         }
 
-                        strcat(buf, power_desc[control]);
-
-                        prt(buf, y + control, x);
+                        ss << power_desc[control];
+                        prt(ss.str().c_str(), y + control, x);
                     }
 
                     prt("", y + std::min(control, 17), x);
@@ -676,11 +669,7 @@ void do_cmd_pet(PlayerType *player_ptr)
 
             /* Verify it */
             if (ask) {
-                /* Prompt */
-                strnfmt(buf, 78, _("%sを使いますか？ ", "Use %s? "), power_desc[i]);
-
-                /* Belay that order */
-                if (!get_check(buf)) {
+                if (!get_check(format(_("%sを使いますか？ ", "Use %s? "), power_desc[i].c_str()))) {
                     continue;
                 }
             }
