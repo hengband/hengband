@@ -95,7 +95,6 @@ public:
     TIME_EFFECT fast{}; /* Timed -- Fast */
     TIME_EFFECT slow{}; /* Timed -- Slow */
     TIME_EFFECT blind{}; /* Timed -- Blindness */
-    TIME_EFFECT paralyzed{}; /* Timed -- Paralysis */
     TIME_EFFECT afraid{}; /* Timed -- Fear */
     TIME_EFFECT poisoned{}; /* Timed -- Poisoned */
 

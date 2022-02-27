@@ -29,13 +29,16 @@
 #include "system/monster-type-definition.h"
 #include "system/object-type-definition.h"
 #include "system/player-type-definition.h"
+#include "timed-effect/player-paralysis.h"
+#include "timed-effect/timed-effects.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 #include "world/world-object.h"
 
 void process_eat_gold(PlayerType *player_ptr, MonsterAttackPlayer *monap_ptr)
 {
-    if (!player_ptr->paralyzed && (randint0(100) < (adj_dex_safe[player_ptr->stat_index[A_DEX]] + player_ptr->lev))) {
+    auto is_paralyzed = player_ptr->effects()->paralysis()->is_paralyzed();
+    if (!is_paralyzed && (randint0(100) < (adj_dex_safe[player_ptr->stat_index[A_DEX]] + player_ptr->lev))) {
         msg_print(_("しかし素早く財布を守った！", "You quickly protect your money pouch!"));
         if (randint0(3)) {
             monap_ptr->blinked = true;
@@ -91,7 +94,8 @@ bool check_eat_item(PlayerType *player_ptr, MonsterAttackPlayer *monap_ptr)
         return false;
     }
 
-    if (!player_ptr->paralyzed && (randint0(100) < (adj_dex_safe[player_ptr->stat_index[A_DEX]] + player_ptr->lev))) {
+    auto is_paralyzed = player_ptr->effects()->paralysis()->is_paralyzed();
+    if (!is_paralyzed && (randint0(100) < (adj_dex_safe[player_ptr->stat_index[A_DEX]] + player_ptr->lev))) {
         msg_print(_("しかしあわててザックを取り返した！", "You grab hold of your backpack!"));
         monap_ptr->blinked = true;
         monap_ptr->obvious = true;

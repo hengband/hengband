@@ -24,6 +24,7 @@
 #include "system/player-type-definition.h"
 #include "timed-effect/player-confusion.h"
 #include "timed-effect/player-hallucination.h"
+#include "timed-effect/player-paralysis.h"
 #include "timed-effect/player-stun.h"
 #include "timed-effect/timed-effects.h"
 #include "view/display-messages.h"
@@ -47,7 +48,8 @@ void learn_spell(PlayerType *player_ptr, MonsterAbilityType monspell)
     auto is_confused = effects->confusion()->is_confused();
     auto is_stunned = effects->stun()->is_stunned();
     auto is_hallucinated = effects->hallucination()->is_hallucinated();
-    if (is_confused || player_ptr->blind || is_hallucinated || is_stunned || player_ptr->paralyzed) {
+    auto is_paralyzed = effects->paralysis()->is_paralyzed();
+    if (is_confused || player_ptr->blind || is_hallucinated || is_stunned || is_paralyzed) {
         return;
     }
 
