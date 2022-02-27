@@ -73,11 +73,10 @@ void wr_s32b(int32_t v)
  * @brief 文字列をファイルに書き込む
  * @param str 書き込む文字列
  */
-void wr_string(concptr str)
+void wr_string(std::string_view sv)
 {
-    while (*str) {
-        wr_byte(*str);
-        str++;
+    for (auto c : sv) {
+        wr_byte(c);
     }
-    wr_byte(*str);
+    wr_byte('\0');
 }
