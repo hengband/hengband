@@ -17,6 +17,7 @@
 #include "io/write-diary.h"
 #include "main/sound-definitions-table.h"
 #include "main/sound-of-music.h"
+#include "market/bounty.h"
 #include "mind/mind-ninja.h"
 #include "monster-floor/monster-death.h"
 #include "monster-floor/monster-remover.h"
@@ -414,11 +415,8 @@ void MonsterDamageProcessor::show_bounty_message(GAME_TEXT *m_name)
         return;
     }
 
-    for (auto i = 0; i < MAX_BOUNTY; i++) {
-        if (!w_ptr->bounties[i].is_achieved && (w_ptr->bounties[i].r_idx == m_ptr->r_idx)) {
-            msg_format(_("%sの首には賞金がかかっている。", "There is a price on %s's head."), m_name);
-            break;
-        }
+    if (is_bounty(m_ptr->r_idx, true)) {
+        msg_format(_("%sの首には賞金がかかっている。", "There is a price on %s's head."), m_name);
     }
 }
 

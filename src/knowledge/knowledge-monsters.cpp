@@ -16,6 +16,7 @@
 #include "knowledge/monster-group-table.h"
 #include "locale/english.h"
 #include "lore/lore-util.h"
+#include "market/bounty.h"
 #include "monster-race/monster-race.h"
 #include "monster-race/race-flags1.h"
 #include "monster-race/race-flags3.h"
@@ -75,13 +76,8 @@ static IDX collect_monsters(PlayerType *player_ptr, IDX grp_cur, IDX mon_idx[], 
                 continue;
             }
         } else if (grp_wanted) {
-            bool wanted = false;
-            for (int j = 0; j < MAX_BOUNTY; j++) {
-                if ((w_ptr->bounties[j].r_idx == r_ref.idx) || (player_ptr->today_mon && player_ptr->today_mon == r_ref.idx)) {
-                    wanted = true;
-                    break;
-                }
-            }
+            auto wanted = (player_ptr->today_mon > 0) && (player_ptr->today_mon == r_ref.idx);
+            wanted |= is_bounty(r_ref.idx, false);
 
             if (!wanted) {
                 continue;
