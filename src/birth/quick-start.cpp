@@ -27,8 +27,9 @@ birther previous_char;
  */
 bool ask_quick_start(PlayerType *player_ptr)
 {
-    if (!previous_char.quick_ok)
+    if (!previous_char.quick_ok) {
         return false;
+    }
 
     term_clear();
     put_str(_("クイック・スタートを使うと以前と全く同じキャラクターで始められます。",
@@ -38,16 +39,17 @@ bool ask_quick_start(PlayerType *player_ptr)
         char c;
         put_str(_("クイック・スタートを使いますか？[y/N]", "Use quick start? [y/N]"), 14, 10);
         c = inkey();
-        if (c == 'Q')
+        if (c == 'Q') {
             quit(nullptr);
-        else if (c == 'S')
+        } else if (c == 'S') {
             return false;
-        else if (c == '?')
+        } else if (c == '?') {
             show_help(player_ptr, _("jbirth.txt#QuickStart", "birth.txt#QuickStart"));
-        else if ((c == 'y') || (c == 'Y'))
+        } else if ((c == 'y') || (c == 'Y')) {
             break;
-        else
+        } else {
             return false;
+        }
     }
 
     load_prev_data(player_ptr, false);
@@ -81,10 +83,11 @@ void save_prev_data(PlayerType *player_ptr, birther *birther_ptr)
     birther_ptr->pclass = player_ptr->pclass;
     birther_ptr->ppersonality = player_ptr->ppersonality;
 
-    if (PlayerClass(player_ptr).equals(PlayerClassType::ELEMENTALIST))
+    if (PlayerClass(player_ptr).equals(PlayerClassType::ELEMENTALIST)) {
         birther_ptr->realm1 = player_ptr->element;
-    else
+    } else {
         birther_ptr->realm1 = player_ptr->realm1;
+    }
 
     birther_ptr->realm2 = player_ptr->realm2;
     birther_ptr->age = player_ptr->age;
@@ -120,18 +123,20 @@ void save_prev_data(PlayerType *player_ptr, birther *birther_ptr)
 void load_prev_data(PlayerType *player_ptr, bool swap)
 {
     birther temp;
-    if (swap)
+    if (swap) {
         save_prev_data(player_ptr, &temp);
+    }
 
     player_ptr->psex = previous_char.psex;
     player_ptr->prace = previous_char.prace;
     player_ptr->pclass = previous_char.pclass;
     player_ptr->ppersonality = previous_char.ppersonality;
 
-    if (PlayerClass(player_ptr).equals(PlayerClassType::ELEMENTALIST))
+    if (PlayerClass(player_ptr).equals(PlayerClassType::ELEMENTALIST)) {
         player_ptr->element = previous_char.realm1;
-    else
+    } else {
         player_ptr->realm1 = previous_char.realm1;
+    }
 
     player_ptr->realm2 = previous_char.realm2;
     player_ptr->age = previous_char.age;

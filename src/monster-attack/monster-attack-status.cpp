@@ -18,6 +18,7 @@
 #include "system/monster-race-definition.h"
 #include "system/monster-type-definition.h"
 #include "system/player-type-definition.h"
+#include "timed-effect/player-paralysis.h"
 #include "timed-effect/timed-effects.h"
 #include "view/display-messages.h"
 
@@ -89,7 +90,8 @@ void process_paralyze_attack(PlayerType *player_ptr, MonsterAttackPlayer *monap_
         return;
     }
 
-    if (!player_ptr->paralyzed && BadStatusSetter(player_ptr).paralysis(3 + randint1(monap_ptr->rlev))) {
+    auto is_paralyzed = player_ptr->effects()->paralysis()->is_paralyzed();
+    if (!is_paralyzed && BadStatusSetter(player_ptr).paralysis(3 + randint1(monap_ptr->rlev))) {
         monap_ptr->obvious = true;
     }
 }

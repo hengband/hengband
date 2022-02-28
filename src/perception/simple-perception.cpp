@@ -24,6 +24,8 @@
 #include "player/player-status-flags.h"
 #include "system/object-type-definition.h"
 #include "system/player-type-definition.h"
+#include "timed-effect/player-confusion.h"
+#include "timed-effect/timed-effects.h"
 #include "view/display-messages.h"
 
 /*!
@@ -36,14 +38,17 @@ static void sense_inventory_aux(PlayerType *player_ptr, INVENTORY_IDX slot, bool
 {
     auto *o_ptr = &player_ptr->inventory_list[slot];
     GAME_TEXT o_name[MAX_NLEN];
-    if (o_ptr->ident & (IDENT_SENSE))
+    if (o_ptr->ident & (IDENT_SENSE)) {
         return;
-    if (o_ptr->is_known())
+    }
+    if (o_ptr->is_known()) {
         return;
+    }
 
     item_feel_type feel = (heavy ? pseudo_value_check_heavy(o_ptr) : pseudo_value_check_light(o_ptr));
-    if (!feel)
+    if (!feel) {
         return;
+    }
 
     if ((player_ptr->muta.has(PlayerMutationType::BAD_LUCK)) && !randint0(13)) {
         switch (feel) {
@@ -56,10 +61,11 @@ static void sense_inventory_aux(PlayerType *player_ptr, INVENTORY_IDX slot, bool
             break;
         }
         case FEEL_CURSED: {
-            if (heavy)
+            if (heavy) {
                 feel = randint0(3) ? FEEL_GOOD : FEEL_AVERAGE;
-            else
+            } else {
                 feel = FEEL_UNCURSED;
+            }
             break;
         }
         case FEEL_AVERAGE: {
@@ -67,10 +73,11 @@ static void sense_inventory_aux(PlayerType *player_ptr, INVENTORY_IDX slot, bool
             break;
         }
         case FEEL_GOOD: {
-            if (heavy)
+            if (heavy) {
                 feel = randint0(3) ? FEEL_CURSED : FEEL_AVERAGE;
-            else
+            } else {
                 feel = FEEL_CURSED;
+            }
             break;
         }
         case FEEL_EXCELLENT: {
@@ -87,8 +94,9 @@ static void sense_inventory_aux(PlayerType *player_ptr, INVENTORY_IDX slot, bool
         }
     }
 
-    if (disturb_minor)
+    if (disturb_minor) {
         disturb(player_ptr, false, false);
+    }
 
     describe_flavor(player_ptr, o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
     if (slot >= INVEN_MAIN_HAND) {
@@ -132,23 +140,26 @@ void sense_inventory1(PlayerType *player_ptr)
     PLAYER_LEVEL plev = player_ptr->lev;
     bool heavy = false;
     ObjectType *o_ptr;
-    if (player_ptr->confused)
+    if (player_ptr->effects()->confusion()->is_confused()) {
         return;
+    }
 
     switch (player_ptr->pclass) {
     case PlayerClassType::WARRIOR:
     case PlayerClassType::ARCHER:
     case PlayerClassType::SAMURAI:
     case PlayerClassType::CAVALRY: {
-        if (0 != randint0(9000L / (plev * plev + 40)))
+        if (0 != randint0(9000L / (plev * plev + 40))) {
             return;
+        }
 
         heavy = true;
         break;
     }
     case PlayerClassType::SMITH: {
-        if (0 != randint0(6000L / (plev * plev + 50)))
+        if (0 != randint0(6000L / (plev * plev + 50))) {
             return;
+        }
 
         heavy = true;
         break;
@@ -158,45 +169,51 @@ void sense_inventory1(PlayerType *player_ptr)
     case PlayerClassType::SORCERER:
     case PlayerClassType::MAGIC_EATER:
     case PlayerClassType::ELEMENTALIST: {
-        if (0 != randint0(240000L / (plev + 5)))
+        if (0 != randint0(240000L / (plev + 5))) {
             return;
+        }
 
         break;
     }
     case PlayerClassType::PRIEST:
     case PlayerClassType::BARD: {
-        if (0 != randint0(10000L / (plev * plev + 40)))
+        if (0 != randint0(10000L / (plev * plev + 40))) {
             return;
+        }
 
         break;
     }
     case PlayerClassType::ROGUE:
     case PlayerClassType::NINJA: {
-        if (0 != randint0(20000L / (plev * plev + 40)))
+        if (0 != randint0(20000L / (plev * plev + 40))) {
             return;
+        }
 
         heavy = true;
         break;
     }
     case PlayerClassType::RANGER: {
-        if (0 != randint0(95000L / (plev * plev + 40)))
+        if (0 != randint0(95000L / (plev * plev + 40))) {
             return;
+        }
 
         heavy = true;
         break;
     }
     case PlayerClassType::PALADIN:
     case PlayerClassType::SNIPER: {
-        if (0 != randint0(77777L / (plev * plev + 40)))
+        if (0 != randint0(77777L / (plev * plev + 40))) {
             return;
+        }
 
         heavy = true;
         break;
     }
     case PlayerClassType::WARRIOR_MAGE:
     case PlayerClassType::RED_MAGE: {
-        if (0 != randint0(75000L / (plev * plev + 40)))
+        if (0 != randint0(75000L / (plev * plev + 40))) {
             return;
+        }
 
         break;
     }
@@ -204,35 +221,40 @@ void sense_inventory1(PlayerType *player_ptr)
     case PlayerClassType::IMITATOR:
     case PlayerClassType::BLUE_MAGE:
     case PlayerClassType::MIRROR_MASTER: {
-        if (0 != randint0(55000L / (plev * plev + 40)))
+        if (0 != randint0(55000L / (plev * plev + 40))) {
             return;
+        }
 
         break;
     }
     case PlayerClassType::CHAOS_WARRIOR: {
-        if (0 != randint0(80000L / (plev * plev + 40)))
+        if (0 != randint0(80000L / (plev * plev + 40))) {
             return;
+        }
 
         heavy = true;
         break;
     }
     case PlayerClassType::MONK:
     case PlayerClassType::FORCETRAINER: {
-        if (0 != randint0(20000L / (plev * plev + 40)))
+        if (0 != randint0(20000L / (plev * plev + 40))) {
             return;
+        }
 
         break;
     }
     case PlayerClassType::TOURIST: {
-        if (0 != randint0(20000L / ((plev + 50) * (plev + 50))))
+        if (0 != randint0(20000L / ((plev + 50) * (plev + 50)))) {
             return;
+        }
 
         heavy = true;
         break;
     }
     case PlayerClassType::BEASTMASTER: {
-        if (0 != randint0(65000L / (plev * plev + 40)))
+        if (0 != randint0(65000L / (plev * plev + 40))) {
             return;
+        }
 
         break;
     }
@@ -245,16 +267,18 @@ void sense_inventory1(PlayerType *player_ptr)
         break;
     }
 
-    if (compare_virtue(player_ptr, V_KNOWLEDGE, 100, VIRTUE_LARGE))
+    if (compare_virtue(player_ptr, V_KNOWLEDGE, 100, VIRTUE_LARGE)) {
         heavy = true;
+    }
 
     for (INVENTORY_IDX i = 0; i < INVEN_TOTAL; i++) {
         bool okay = false;
 
         o_ptr = &player_ptr->inventory_list[i];
 
-        if (!o_ptr->k_idx)
+        if (!o_ptr->k_idx) {
             continue;
+        }
 
         switch (o_ptr->tval) {
         case ItemKindType::SHOT:
@@ -283,10 +307,13 @@ void sense_inventory1(PlayerType *player_ptr)
             break;
         }
 
-        if (!okay)
+        if (!okay) {
             continue;
-        if ((i < INVEN_MAIN_HAND) && (0 != randint0(5)))
+        }
+
+        if ((i < INVEN_MAIN_HAND) && (0 != randint0(5))) {
             continue;
+        }
 
         if (has_good_luck(player_ptr) && !randint0(13)) {
             heavy = true;
@@ -304,8 +331,9 @@ void sense_inventory2(PlayerType *player_ptr)
     PLAYER_LEVEL plev = player_ptr->lev;
     ObjectType *o_ptr;
 
-    if (player_ptr->confused)
+    if (player_ptr->effects()->confusion()->is_confused()) {
         return;
+    }
 
     switch (player_ptr->pclass) {
     case PlayerClassType::WARRIOR:
@@ -322,8 +350,9 @@ void sense_inventory2(PlayerType *player_ptr)
     case PlayerClassType::IMITATOR:
     case PlayerClassType::BEASTMASTER:
     case PlayerClassType::NINJA: {
-        if (0 != randint0(240000L / (plev + 5)))
+        if (0 != randint0(240000L / (plev + 5))) {
             return;
+        }
 
         break;
     }
@@ -331,8 +360,9 @@ void sense_inventory2(PlayerType *player_ptr)
     case PlayerClassType::WARRIOR_MAGE:
     case PlayerClassType::RED_MAGE:
     case PlayerClassType::MONK: {
-        if (0 != randint0(95000L / (plev * plev + 40)))
+        if (0 != randint0(95000L / (plev * plev + 40))) {
             return;
+        }
 
         break;
     }
@@ -341,8 +371,9 @@ void sense_inventory2(PlayerType *player_ptr)
     case PlayerClassType::ROGUE:
     case PlayerClassType::FORCETRAINER:
     case PlayerClassType::MINDCRAFTER: {
-        if (0 != randint0(20000L / (plev * plev + 40)))
+        if (0 != randint0(20000L / (plev * plev + 40))) {
             return;
+        }
 
         break;
     }
@@ -353,14 +384,16 @@ void sense_inventory2(PlayerType *player_ptr)
     case PlayerClassType::MIRROR_MASTER:
     case PlayerClassType::BLUE_MAGE:
     case PlayerClassType::ELEMENTALIST: {
-        if (0 != randint0(9000L / (plev * plev + 40)))
+        if (0 != randint0(9000L / (plev * plev + 40))) {
             return;
+        }
 
         break;
     }
     case PlayerClassType::TOURIST: {
-        if (0 != randint0(20000L / ((plev + 50) * (plev + 50))))
+        if (0 != randint0(20000L / ((plev + 50) * (plev + 50)))) {
             return;
+        }
 
         break;
     }
@@ -372,8 +405,9 @@ void sense_inventory2(PlayerType *player_ptr)
     for (INVENTORY_IDX i = 0; i < INVEN_TOTAL; i++) {
         bool okay = false;
         o_ptr = &player_ptr->inventory_list[i];
-        if (!o_ptr->k_idx)
+        if (!o_ptr->k_idx) {
             continue;
+        }
 
         switch (o_ptr->tval) {
         case ItemKindType::RING:
@@ -388,10 +422,13 @@ void sense_inventory2(PlayerType *player_ptr)
             break;
         }
 
-        if (!okay)
+        if (!okay) {
             continue;
-        if ((i < INVEN_MAIN_HAND) && (0 != randint0(5)))
+        }
+
+        if ((i < INVEN_MAIN_HAND) && (0 != randint0(5))) {
             continue;
+        }
 
         sense_inventory_aux(player_ptr, i, true);
     }
@@ -405,29 +442,40 @@ void sense_inventory2(PlayerType *player_ptr)
 item_feel_type pseudo_value_check_heavy(ObjectType *o_ptr)
 {
     if (o_ptr->is_artifact()) {
-        if (o_ptr->is_cursed() || o_ptr->is_broken())
+        if (o_ptr->is_cursed() || o_ptr->is_broken()) {
             return FEEL_TERRIBLE;
+        }
 
         return FEEL_SPECIAL;
     }
 
     if (o_ptr->is_ego()) {
-        if (o_ptr->is_cursed() || o_ptr->is_broken())
+        if (o_ptr->is_cursed() || o_ptr->is_broken()) {
             return FEEL_WORTHLESS;
+        }
 
         return FEEL_EXCELLENT;
     }
 
-    if (o_ptr->is_cursed())
+    if (o_ptr->is_cursed()) {
         return FEEL_CURSED;
-    if (o_ptr->is_broken())
+    }
+
+    if (o_ptr->is_broken()) {
         return FEEL_BROKEN;
-    if ((o_ptr->tval == ItemKindType::RING) || (o_ptr->tval == ItemKindType::AMULET))
+    }
+
+    if ((o_ptr->tval == ItemKindType::RING) || (o_ptr->tval == ItemKindType::AMULET)) {
         return FEEL_AVERAGE;
-    if (o_ptr->to_a > 0)
+    }
+
+    if (o_ptr->to_a > 0) {
         return FEEL_GOOD;
-    if (o_ptr->to_h + o_ptr->to_d > 0)
+    }
+
+    if (o_ptr->to_h + o_ptr->to_d > 0) {
         return FEEL_GOOD;
+    }
 
     return FEEL_AVERAGE;
 }
@@ -439,18 +487,29 @@ item_feel_type pseudo_value_check_heavy(ObjectType *o_ptr)
  */
 item_feel_type pseudo_value_check_light(ObjectType *o_ptr)
 {
-    if (o_ptr->is_cursed())
+    if (o_ptr->is_cursed()) {
         return FEEL_CURSED;
-    if (o_ptr->is_broken())
+    }
+
+    if (o_ptr->is_broken()) {
         return FEEL_BROKEN;
-    if (o_ptr->is_artifact())
+    }
+
+    if (o_ptr->is_artifact()) {
         return FEEL_UNCURSED;
-    if (o_ptr->is_ego())
+    }
+
+    if (o_ptr->is_ego()) {
         return FEEL_UNCURSED;
-    if (o_ptr->to_a > 0)
+    }
+
+    if (o_ptr->to_a > 0) {
         return FEEL_UNCURSED;
-    if (o_ptr->to_h + o_ptr->to_d > 0)
+    }
+
+    if (o_ptr->to_h + o_ptr->to_d > 0) {
         return FEEL_UNCURSED;
+    }
 
     return FEEL_NONE;
 }

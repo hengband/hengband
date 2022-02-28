@@ -22,11 +22,11 @@ extern concptr ANGBAND_DIR_USER;
 extern concptr ANGBAND_DIR_XTRA;
 
 class PlayerType;
-typedef void(*update_playtime_pf)(void);
+typedef void (*update_playtime_pf)(void);
 
 extern errr file_character(PlayerType *player_ptr, concptr name);
 extern errr get_rnd_line(concptr file_name, int entry, char *output);
-void read_dead_file(char* buf, size_t buf_size);
+void read_dead_file(char *buf, size_t buf_size);
 
 #ifdef JP
 extern errr get_rnd_line_jonly(concptr file_name, int entry, char *output, int count);

@@ -63,12 +63,14 @@ bool wiz_debug_spell(PlayerType *player_ptr)
     char tmp_val[50] = "\0";
     int tmp_int;
 
-    if (!get_string("SPELL: ", tmp_val, 32))
+    if (!get_string("SPELL: ", tmp_val, 32)) {
         return false;
+    }
 
-    for (const auto& d : debug_spell_commands_list) {
-        if (strcmp(tmp_val, d.command_name) != 0)
+    for (const auto &d : debug_spell_commands_list) {
+        if (strcmp(tmp_val, d.command_name) != 0) {
             continue;
+        }
 
         switch (d.type) {
         case 2:
@@ -77,8 +79,9 @@ bool wiz_debug_spell(PlayerType *player_ptr)
             break;
         case 3:
             tmp_val[0] = '\0';
-            if (!get_string("POWER:", tmp_val, 32))
+            if (!get_string("POWER:", tmp_val, 32)) {
                 return false;
+            }
             tmp_int = atoi(tmp_val);
             (d.command_function.spell3.spell_function)(player_ptr, tmp_int);
             return true;
@@ -107,8 +110,9 @@ bool wiz_debug_spell(PlayerType *player_ptr)
 void wiz_dimension_door(PlayerType *player_ptr)
 {
     POSITION x = 0, y = 0;
-    if (!tgt_pt(player_ptr, &x, &y))
+    if (!tgt_pt(player_ptr, &x, &y)) {
         return;
+    }
 
     teleport_player_to(player_ptr, y, x, TELEPORT_NONMAGICAL);
 }
@@ -124,8 +128,9 @@ void wiz_summon_horde(PlayerType *player_ptr)
 
     while (--attempts) {
         scatter(player_ptr, &wy, &wx, player_ptr->y, player_ptr->x, 3, PROJECT_NONE);
-        if (is_cave_empty_bold(player_ptr, wy, wx))
+        if (is_cave_empty_bold(player_ptr, wy, wx)) {
             break;
+        }
     }
 
     (void)alloc_horde(player_ptr, wy, wx, summon_specific);
@@ -136,8 +141,9 @@ void wiz_summon_horde(PlayerType *player_ptr)
  */
 void wiz_teleport_back(PlayerType *player_ptr)
 {
-    if (!target_who)
+    if (!target_who) {
         return;
+    }
 
     teleport_player_to(player_ptr, target_row, target_col, TELEPORT_NONMAGICAL);
 }
@@ -183,8 +189,9 @@ void wiz_fillup_all_smith_essences(PlayerType *player_ptr)
  */
 void wiz_summon_random_enemy(PlayerType *player_ptr, int num)
 {
-    for (int i = 0; i < num; i++)
+    for (int i = 0; i < num; i++) {
         (void)summon_specific(player_ptr, 0, player_ptr->y, player_ptr->x, player_ptr->current_floor_ptr->dun_level, SUMMON_NONE, PM_ALLOW_GROUP | PM_ALLOW_UNIQUE);
+    }
 }
 
 /*!

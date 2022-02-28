@@ -27,6 +27,9 @@
 #include "system/player-type-definition.h"
 #include "target/target-getter.h"
 #include "term/screen-processor.h"
+#include "timed-effect/player-confusion.h"
+#include "timed-effect/player-hallucination.h"
+#include "timed-effect/timed-effects.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 
@@ -49,15 +52,19 @@ static bool exe_open_chest(PlayerType *player_ptr, POSITION y, POSITION x, OBJEC
     if (o_ptr->pval > 0) {
         flag = false;
         int i = player_ptr->skill_dis;
-        if (player_ptr->blind || no_lite(player_ptr))
+        if (player_ptr->blind || no_lite(player_ptr)) {
             i = i / 10;
+        }
 
-        if (player_ptr->confused || player_ptr->hallucinated)
+        auto effects = player_ptr->effects();
+        if (effects->confusion()->is_confused() || effects->hallucination()->is_hallucinated()) {
             i = i / 10;
+        }
 
         int j = i - o_ptr->pval;
-        if (j < 2)
+        if (j < 2) {
             j = 2;
+        }
 
         if (randint0(100) < j) {
             msg_print(_("鍵をはずした。", "You have picked the lock."));
@@ -65,8 +72,9 @@ static bool exe_open_chest(PlayerType *player_ptr, POSITION y, POSITION x, OBJEC
             flag = true;
         } else {
             more = true;
-            if (flush_failure)
+            if (flush_failure) {
                 flush();
+            }
 
             msg_print(_("鍵をはずせなかった。", "You failed to pick the lock."));
         }
@@ -93,8 +101,9 @@ void do_cmd_open(PlayerType *player_ptr)
     DIRECTION dir;
     OBJECT_IDX o_idx;
     bool more = false;
-    if (player_ptr->wild_mode)
+    if (player_ptr->wild_mode) {
         return;
+    }
 
     PlayerClass(player_ptr).break_samurai_stance({ SamuraiStanceType::MUSOU });
 
@@ -103,8 +112,9 @@ void do_cmd_open(PlayerType *player_ptr)
         int num_chests = count_chests(player_ptr, &y, &x, false);
         if (num_doors || num_chests) {
             bool too_many = (num_doors && num_chests) || (num_doors > 1) || (num_chests > 1);
-            if (!too_many)
+            if (!too_many) {
                 command_dir = coords_to_dir(player_ptr, y, x);
+            }
         }
     }
 
@@ -135,8 +145,9 @@ void do_cmd_open(PlayerType *player_ptr)
         }
     }
 
-    if (!more)
+    if (!more) {
         disturb(player_ptr, false, false);
+    }
 }
 
 /*!
@@ -150,13 +161,15 @@ void do_cmd_close(PlayerType *player_ptr)
     POSITION y, x;
     DIRECTION dir;
     bool more = false;
-    if (player_ptr->wild_mode)
+    if (player_ptr->wild_mode) {
         return;
+    }
 
     PlayerClass(player_ptr).break_samurai_stance({ SamuraiStanceType::MUSOU });
 
-    if (easy_open && (count_dt(player_ptr, &y, &x, is_open, false) == 1))
+    if (easy_open && (count_dt(player_ptr, &y, &x, is_open, false) == 1)) {
         command_dir = coords_to_dir(player_ptr, y, x);
+    }
 
     if (command_arg) {
         command_rep = command_arg - 1;
@@ -182,8 +195,9 @@ void do_cmd_close(PlayerType *player_ptr)
         }
     }
 
-    if (!more)
+    if (!more) {
         disturb(player_ptr, false, false);
+    }
 }
 
 /*!
@@ -196,8 +210,9 @@ void do_cmd_disarm(PlayerType *player_ptr)
     DIRECTION dir;
     OBJECT_IDX o_idx;
     bool more = false;
-    if (player_ptr->wild_mode)
+    if (player_ptr->wild_mode) {
         return;
+    }
 
     PlayerClass(player_ptr).break_samurai_stance({ SamuraiStanceType::MUSOU });
 
@@ -206,8 +221,9 @@ void do_cmd_disarm(PlayerType *player_ptr)
         int num_chests = count_chests(player_ptr, &y, &x, true);
         if (num_traps || num_chests) {
             bool too_many = (num_traps && num_chests) || (num_traps > 1) || (num_chests > 1);
-            if (!too_many)
+            if (!too_many) {
                 command_dir = coords_to_dir(player_ptr, y, x);
+            }
         }
     }
 
@@ -237,8 +253,9 @@ void do_cmd_disarm(PlayerType *player_ptr)
         }
     }
 
-    if (!more)
+    if (!more) {
         disturb(player_ptr, false, false);
+    }
 }
 
 /*!
@@ -264,8 +281,9 @@ void do_cmd_bash(PlayerType *player_ptr)
     DIRECTION dir;
     grid_type *g_ptr;
     bool more = false;
-    if (player_ptr->wild_mode)
+    if (player_ptr->wild_mode) {
         return;
+    }
 
     PlayerClass(player_ptr).break_samurai_stance({ SamuraiStanceType::MUSOU });
 
@@ -292,8 +310,9 @@ void do_cmd_bash(PlayerType *player_ptr)
         }
     }
 
-    if (!more)
+    if (!more) {
         disturb(player_ptr, false, false);
+    }
 }
 
 /*!
@@ -310,8 +329,9 @@ static bool get_spike(PlayerType *player_ptr, INVENTORY_IDX *ip)
 {
     for (INVENTORY_IDX i = 0; i < INVEN_PACK; i++) {
         auto *o_ptr = &player_ptr->inventory_list[i];
-        if (!o_ptr->k_idx)
+        if (!o_ptr->k_idx) {
             continue;
+        }
 
         if (o_ptr->tval == ItemKindType::SPIKE) {
             *ip = i;
@@ -334,13 +354,15 @@ static bool get_spike(PlayerType *player_ptr, INVENTORY_IDX *ip)
 void do_cmd_spike(PlayerType *player_ptr)
 {
     DIRECTION dir;
-    if (player_ptr->wild_mode)
+    if (player_ptr->wild_mode) {
         return;
+    }
 
     PlayerClass(player_ptr).break_samurai_stance({ SamuraiStanceType::MUSOU });
 
-    if (!get_rep_dir(player_ptr, &dir, false))
+    if (!get_rep_dir(player_ptr, &dir, false)) {
         return;
+    }
 
     POSITION y = player_ptr->y + ddy[dir];
     POSITION x = player_ptr->x + ddx[dir];

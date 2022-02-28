@@ -17,6 +17,8 @@
 #include "target/target-checker.h"
 #include "target/target-setter.h"
 #include "target/target-types.h"
+#include "timed-effect/player-confusion.h"
+#include "timed-effect/timed-effects.h"
 #include "view/display-messages.h"
 
 /*
@@ -33,28 +35,34 @@
 bool get_aim_dir(PlayerType *player_ptr, DIRECTION *dp)
 {
     DIRECTION dir = command_dir;
-    if (use_old_target && target_okay(player_ptr))
+    if (use_old_target && target_okay(player_ptr)) {
         dir = 5;
+    }
 
     COMMAND_CODE code;
-    if (repeat_pull(&code))
-        if (!(code == 5 && !target_okay(player_ptr)))
+    if (repeat_pull(&code)) {
+        if (!(code == 5 && !target_okay(player_ptr))) {
             dir = (DIRECTION)code;
+        }
+    }
 
     *dp = (DIRECTION)code;
     char command;
     while (!dir) {
         concptr p;
-        if (!target_okay(player_ptr))
+        if (!target_okay(player_ptr)) {
             p = _("方向 ('*'でターゲット選択, ESCで中断)? ", "Direction ('*' to choose a target, Escape to cancel)? ");
-        else
+        } else {
             p = _("方向 ('5'でターゲットへ, '*'でターゲット再選択, ESCで中断)? ", "Direction ('5' for target, '*' to re-target, Escape to cancel)? ");
+        }
 
-        if (!get_com(p, &command, true))
+        if (!get_com(p, &command, true)) {
             break;
+        }
 
-        if (use_menu && (command == '\r'))
+        if (use_menu && (command == '\r')) {
             command = 't';
+        }
 
         switch (command) {
         case 'T':
@@ -67,8 +75,9 @@ bool get_aim_dir(PlayerType *player_ptr, DIRECTION *dp)
         case '*':
         case ' ':
         case '\r':
-            if (target_set(player_ptr, TARGET_KILL))
+            if (target_set(player_ptr, TARGET_KILL)) {
                 dir = 5;
+            }
 
             break;
         default:
@@ -76,11 +85,13 @@ bool get_aim_dir(PlayerType *player_ptr, DIRECTION *dp)
             break;
         }
 
-        if ((dir == 5) && !target_okay(player_ptr))
+        if ((dir == 5) && !target_okay(player_ptr)) {
             dir = 0;
+        }
 
-        if (!dir)
+        if (!dir) {
             bell();
+        }
     }
 
     if (!dir) {
@@ -89,11 +100,13 @@ bool get_aim_dir(PlayerType *player_ptr, DIRECTION *dp)
     }
 
     command_dir = dir;
-    if (player_ptr->confused)
+    if (player_ptr->effects()->confusion()->is_confused()) {
         dir = ddd[randint0(8)];
+    }
 
-    if (command_dir != dir)
+    if (command_dir != dir) {
         msg_print(_("あなたは混乱している。", "You are confused."));
+    }
 
     *dp = dir;
     repeat_push((COMMAND_CODE)command_dir);
@@ -104,8 +117,9 @@ bool get_direction(PlayerType *player_ptr, DIRECTION *dp, bool allow_under, bool
 {
     DIRECTION dir = command_dir;
     COMMAND_CODE code;
-    if (repeat_pull(&code))
+    if (repeat_pull(&code)) {
         dir = (DIRECTION)code;
+    }
 
     *dp = (DIRECTION)code;
     concptr prompt = allow_under ? _("方向 ('.'足元, ESCで中断)? ", "Direction ('.' at feet, Escape to cancel)? ")
@@ -113,8 +127,9 @@ bool get_direction(PlayerType *player_ptr, DIRECTION *dp, bool allow_under, bool
 
     while (!dir) {
         char ch;
-        if (!get_com(prompt, &ch, true))
+        if (!get_com(prompt, &ch, true)) {
             break;
+        }
 
         if ((allow_under) && ((ch == '5') || (ch == '-') || (ch == '.'))) {
             dir = 5;
@@ -122,18 +137,22 @@ bool get_direction(PlayerType *player_ptr, DIRECTION *dp, bool allow_under, bool
         }
 
         dir = get_keymap_dir(ch);
-        if (!dir)
+        if (!dir) {
             bell();
+        }
     }
 
-    if ((dir == 5) && (!allow_under))
+    if ((dir == 5) && (!allow_under)) {
         dir = 0;
+    }
 
-    if (!dir)
+    if (!dir) {
         return false;
+    }
 
     command_dir = dir;
-    if (player_ptr->confused) {
+    auto is_confused = player_ptr->effects()->confusion()->is_confused();
+    if (is_confused) {
         if (randint0(100) < 75) {
             dir = ddd[randint0(8)];
         }
@@ -141,16 +160,18 @@ bool get_direction(PlayerType *player_ptr, DIRECTION *dp, bool allow_under, bool
         auto *m_ptr = &player_ptr->current_floor_ptr->m_list[player_ptr->riding];
         auto *r_ptr = &r_info[m_ptr->r_idx];
         if (monster_confused_remaining(m_ptr)) {
-            if (randint0(100) < 75)
+            if (randint0(100) < 75) {
                 dir = ddd[randint0(8)];
-        } else if (r_ptr->behavior_flags.has(MonsterBehaviorType::RAND_MOVE_50) && r_ptr->behavior_flags.has(MonsterBehaviorType::RAND_MOVE_25) && (randint0(100) < 50))
+            }
+        } else if (r_ptr->behavior_flags.has(MonsterBehaviorType::RAND_MOVE_50) && r_ptr->behavior_flags.has(MonsterBehaviorType::RAND_MOVE_25) && (randint0(100) < 50)) {
             dir = ddd[randint0(8)];
-        else if (r_ptr->behavior_flags.has(MonsterBehaviorType::RAND_MOVE_50) && (randint0(100) < 25))
+        } else if (r_ptr->behavior_flags.has(MonsterBehaviorType::RAND_MOVE_50) && (randint0(100) < 25)) {
             dir = ddd[randint0(8)];
+        }
     }
 
     if (command_dir != dir) {
-        if (player_ptr->confused) {
+        if (is_confused) {
             msg_print(_("あなたは混乱している。", "You are confused."));
         } else {
             GAME_TEXT m_name[MAX_NLEN];
@@ -190,15 +211,17 @@ bool get_rep_dir(PlayerType *player_ptr, DIRECTION *dp, bool under)
 {
     DIRECTION dir = command_dir;
     COMMAND_CODE code;
-    if (repeat_pull(&code))
+    if (repeat_pull(&code)) {
         dir = (DIRECTION)code;
+    }
 
     *dp = (DIRECTION)code;
     concptr prompt = under ? _("方向 ('.'足元, ESCで中断)? ", "Direction ('.' at feet, Escape to cancel)? ") : _("方向 (ESCで中断)? ", "Direction (Escape to cancel)? ");
     while (!dir) {
         char ch;
-        if (!get_com(prompt, &ch, true))
+        if (!get_com(prompt, &ch, true)) {
             break;
+        }
 
         if ((under) && ((ch == '5') || (ch == '-') || (ch == '.'))) {
             dir = 5;
@@ -206,43 +229,51 @@ bool get_rep_dir(PlayerType *player_ptr, DIRECTION *dp, bool under)
         }
 
         dir = get_keymap_dir(ch);
-        if (!dir)
+        if (!dir) {
             bell();
+        }
     }
 
-    if ((dir == 5) && (!under))
+    if ((dir == 5) && (!under)) {
         dir = 0;
+    }
 
-    if (!dir)
+    if (!dir) {
         return false;
+    }
 
     command_dir = dir;
-    if (player_ptr->confused) {
-        if (randint0(100) < 75)
+    auto is_confused = player_ptr->effects()->confusion()->is_confused();
+    if (is_confused) {
+        if (randint0(100) < 75) {
             dir = ddd[randint0(8)];
+        }
     } else if (player_ptr->riding) {
         auto *m_ptr = &player_ptr->current_floor_ptr->m_list[player_ptr->riding];
         auto *r_ptr = &r_info[m_ptr->r_idx];
         if (monster_confused_remaining(m_ptr)) {
-            if (randint0(100) < 75)
+            if (randint0(100) < 75) {
                 dir = ddd[randint0(8)];
-        } else if (r_ptr->behavior_flags.has_all_of({ MonsterBehaviorType::RAND_MOVE_50, MonsterBehaviorType::RAND_MOVE_25 }) && (randint0(100) < 50))
+            }
+        } else if (r_ptr->behavior_flags.has_all_of({ MonsterBehaviorType::RAND_MOVE_50, MonsterBehaviorType::RAND_MOVE_25 }) && (randint0(100) < 50)) {
             dir = ddd[randint0(8)];
-        else if (r_ptr->behavior_flags.has(MonsterBehaviorType::RAND_MOVE_50) && (randint0(100) < 25))
+        } else if (r_ptr->behavior_flags.has(MonsterBehaviorType::RAND_MOVE_50) && (randint0(100) < 25)) {
             dir = ddd[randint0(8)];
+        }
     }
 
     if (command_dir != dir) {
-        if (player_ptr->confused) {
+        if (is_confused) {
             msg_print(_("あなたは混乱している。", "You are confused."));
         } else {
             GAME_TEXT m_name[MAX_NLEN];
             auto *m_ptr = &player_ptr->current_floor_ptr->m_list[player_ptr->riding];
             monster_desc(player_ptr, m_name, m_ptr, 0);
-            if (monster_confused_remaining(m_ptr))
+            if (monster_confused_remaining(m_ptr)) {
                 msg_format(_("%sは混乱している。", "%^s is confused."), m_name);
-            else
+            } else {
                 msg_format(_("%sは思い通りに動いてくれない。", "You cannot control %s."), m_name);
+            }
         }
     }
 

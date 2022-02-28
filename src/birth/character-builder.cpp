@@ -95,8 +95,9 @@ void player_birth(PlayerType *player_ptr)
     if (!ask_quick_start(player_ptr)) {
         play_music(TERM_XTRA_MUSIC_BASIC, MUSIC_BASIC_NEW_GAME);
         while (true) {
-            if (player_birth_wizard(player_ptr))
+            if (player_birth_wizard(player_ptr)) {
                 break;
+            }
 
             player_wipe_without_name(player_ptr);
         }
@@ -110,14 +111,17 @@ void player_birth(PlayerType *player_ptr)
     }
 
     seed_wilderness();
-    if (PlayerRace(player_ptr).equals(PlayerRaceType::BEASTMAN))
+    if (PlayerRace(player_ptr).equals(PlayerRaceType::BEASTMAN)) {
         player_ptr->hack_mutation = true;
-    else
+    } else {
         player_ptr->hack_mutation = false;
+    }
 
-    if (!window_flag[1])
+    if (!window_flag[1]) {
         window_flag[1] |= PW_MESSAGE;
+    }
 
-    if (!window_flag[2])
+    if (!window_flag[2]) {
         window_flag[2] |= PW_INVEN;
+    }
 }

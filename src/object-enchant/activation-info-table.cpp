@@ -72,7 +72,7 @@ const std::vector<activation_type> activation_info = {
     { "SUMMON_UNDEAD", RandomArtActType::SUMMON_UNDEAD, 50, 20000, { 666, 0 }, _("アンデッド召喚", "summon undead") },
     { "SUMMON_HOUND", RandomArtActType::SUMMON_HOUND, 50, 15000, { 300, 0 }, _("ハウンド召喚", "summon hound") },
     { "SUMMON_DAWN", RandomArtActType::SUMMON_DAWN, 50, 15000, { 500, 0 }, _("暁の師団召喚", "summon the Legion of the Dawn") },
-    
+
     { "SUMMON_OCTOPUS", RandomArtActType::SUMMON_OCTOPUS, 50, 15000, { 300, 0 }, _("蛸の大群召喚", "summon octopus") },
     { "CHOIR_SINGS", RandomArtActType::CHOIR_SINGS, 60, 20000, { 300, 0 }, _("回復(777)、癒し、士気高揚", "heal 777 hit points, curing and HEROism") },
     { "CURE_LW", RandomArtActType::CURE_LW, 10, 500, { 10, 0 }, _("恐怖除去/体力回復(30)", "remove fear and heal 30 hp") },
@@ -106,7 +106,7 @@ const std::vector<activation_type> activation_info = {
     { "RESIST_ELEC", RandomArtActType::RESIST_ELEC, 20, 2000, { 40, 40 }, _("電撃への耐性(期間 20+d20)", "resist elec (dur 20+d20)") },
     { "RESIST_POIS", RandomArtActType::RESIST_POIS, 20, 2000, { 40, 40 }, _("毒への耐性(期間 20+d20)", "resist poison (dur 20+d20)") },
     { "LIGHT", RandomArtActType::LIGHT, 10, 150, { 10, 10 }, _("イルミネーション", "light area (dam 2d15)") },
-    
+
     { "MAP_LIGHT", RandomArtActType::MAP_LIGHT, 30, 500, { 50, 50 }, _("魔法の地図と光", "light (dam 2d15) & map area") },
     { "DETECT_ALL", RandomArtActType::DETECT_ALL, 30, 1000, { 55, 55 }, _("全感知", "detection") },
     { "DETECT_XTRA", RandomArtActType::DETECT_XTRA, 50, 12500, { 100, 0 }, _("全感知、探索、*鑑定*", "detection, probing and identify true") },
@@ -139,7 +139,7 @@ const std::vector<activation_type> activation_info = {
     { "INROU", RandomArtActType::INROU, 40, 15000, { 150, 150 }, _("例のアレ", "reveal your identity") },
     { "MURAMASA", RandomArtActType::MURAMASA, 0, 0, { -1, 0 }, _("腕力の上昇", "increase STR") },
     { "BLOODY_MOON", RandomArtActType::BLOODY_MOON, 0, 0, { 3333, 0 }, _("属性変更", "change zokusei") },
-    
+
     { "CRIMSON", RandomArtActType::CRIMSON, 0, 50000, { 15, 0 }, _("ファイア！", "fire!") },
     { "STRAIN_HASTE", RandomArtActType::STRAIN_HASTE, 10, 1000, { 120, 100 }, _("体力と引き換えに加速", "haste with strain") },
     { "GRAND_CROSS", RandomArtActType::GRAND_CROSS, 30, 15000, { 250, 200 }, _("グランド・クロス", "grand cross") },
@@ -148,7 +148,7 @@ const std::vector<activation_type> activation_info = {
     { "ANIM_DEAD", RandomArtActType::ANIM_DEAD, 30, 2000, { 10, 10 }, _("死者復活", "animate dead") },
     { "TREE_CREATION", RandomArtActType::TREE_CREATION, 50, 25000, { 1000, 0 }, _("森林生成", "tree creation") },
     { "ELBERETH", RandomArtActType::ELBERETH, 10, 30000, { 75, 0 }, _("エルベレスの結界", "Rune of Elbereth") },
-    { "DETECT_TREASURE", RandomArtActType::DETECT_TREASURE, 10, 3000, {35, 0}, _("財宝感知", "detect treasure") },
+    { "DETECT_TREASURE", RandomArtActType::DETECT_TREASURE, 10, 3000, { 35, 0 }, _("財宝感知", "detect treasure") },
     { "HERO_BLESS", RandomArtActType::HERO_BLESS, 10, 500, { 30, 30 }, _("士気高揚、祝福", "hero, bless") },
     { "CREATE_AMMO", RandomArtActType::CREATE_AMMO, 10, 30000, { 200, 0 }, _("弾/矢の製造", "Create Ammo") },
     { "DISPEL_MAGIC", RandomArtActType::DISPEL_MAGIC, 10, 10000, { 50, 50 }, _("魔力消去", "Dispel Magic") },

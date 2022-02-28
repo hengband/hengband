@@ -92,8 +92,9 @@ void describe_melee_method(PlayerType *player_ptr, mam_type *mam_ptr)
         break;
     }
     case RaceBlowMethodType::EXPLODE: {
-        if (mam_ptr->see_either)
+        if (mam_ptr->see_either) {
             disturb(player_ptr, true, true);
+        }
 
         mam_ptr->act = _("爆発した。", "explodes.");
         mam_ptr->explode = true;
@@ -177,8 +178,9 @@ void decide_monster_attack_effect(PlayerType *player_ptr, mam_type *mam_ptr)
         break;
     case RaceBlowEffectType::EAT_ITEM:
     case RaceBlowEffectType::EAT_GOLD:
-        if ((player_ptr->riding != mam_ptr->m_idx) && one_in_(2))
+        if ((player_ptr->riding != mam_ptr->m_idx) && one_in_(2)) {
             mam_ptr->blinked = true;
+        }
 
         break;
     case RaceBlowEffectType::EAT_FOOD:
@@ -215,8 +217,9 @@ void decide_monster_attack_effect(PlayerType *player_ptr, mam_type *mam_ptr)
         break;
     case RaceBlowEffectType::SHATTER:
         mam_ptr->damage -= (mam_ptr->damage * ((mam_ptr->ac < 150) ? mam_ptr->ac : 150) / 250);
-        if (mam_ptr->damage > 23)
+        if (mam_ptr->damage > 23) {
             earthquake(player_ptr, mam_ptr->m_ptr->fy, mam_ptr->m_ptr->fx, 8, mam_ptr->m_idx);
+        }
 
         break;
     case RaceBlowEffectType::EXP_10:

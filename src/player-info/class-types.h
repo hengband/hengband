@@ -1,7 +1,7 @@
 ﻿#pragma once
 
 enum class PlayerClassType : short {
-	WARRIOR = 0,
+    WARRIOR = 0,
     MAGE = 1,
     PRIEST = 2,
     ROGUE = 3,

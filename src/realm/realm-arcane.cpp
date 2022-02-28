@@ -2,6 +2,7 @@
 #include "avatar/avatar.h"
 #include "cmd-action/cmd-spell.h"
 #include "core/asking-player.h"
+#include "effect/attribute-types.h"
 #include "monster-floor/monster-summon.h"
 #include "monster-floor/place-monster-types.h"
 #include "player/digestion-processor.h"
@@ -14,7 +15,6 @@
 #include "spell-kind/spells-teleport.h"
 #include "spell-kind/spells-world.h"
 #include "spell-realm/spells-arcane.h"
-#include "effect/attribute-types.h"
 #include "spell/spells-diceroll.h"
 #include "spell/spells-status.h"
 #include "spell/summon-types.h"
@@ -44,21 +44,25 @@ concptr do_arcane_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessTyp
 
     switch (spell) {
     case 0:
-        if (name)
+        if (name) {
             return _("電撃", "Zap");
-        if (desc)
+        }
+        if (desc) {
             return _("電撃のボルトもしくはビームを放つ。", "Fires a bolt or beam of lightning.");
+        }
 
         {
             DICE_NUMBER dice = 3 + (plev - 1) / 5;
             DICE_SID sides = 3;
 
-            if (info)
+            if (info) {
                 return info_damage(dice, sides, 0);
+            }
 
             if (cast) {
-                if (!get_aim_dir(player_ptr, &dir))
+                if (!get_aim_dir(player_ptr, &dir)) {
                     return nullptr;
+                }
 
                 fire_bolt_or_beam(player_ptr, beam_chance(player_ptr) - 10, AttributeType::ELEC, dir, damroll(dice, sides));
             }
@@ -66,15 +70,18 @@ concptr do_arcane_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessTyp
         break;
 
     case 1:
-        if (name)
+        if (name) {
             return _("魔法の施錠", "Wizard Lock");
-        if (desc)
+        }
+        if (desc) {
             return _("扉に鍵をかける。", "Locks a door.");
+        }
 
         {
             if (cast) {
-                if (!get_aim_dir(player_ptr, &dir))
+                if (!get_aim_dir(player_ptr, &dir)) {
                     return nullptr;
+                }
 
                 wizard_lock(player_ptr, dir);
             }
@@ -82,16 +89,19 @@ concptr do_arcane_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessTyp
         break;
 
     case 2:
-        if (name)
+        if (name) {
             return _("透明体感知", "Detect Invisibility");
-        if (desc)
+        }
+        if (desc) {
             return _("近くの透明なモンスターを感知する。", "Detects all invisible monsters in your vicinity.");
+        }
 
         {
             POSITION rad = DETECT_RAD_DEFAULT;
 
-            if (info)
+            if (info) {
                 return info_radius(rad);
+            }
 
             if (cast) {
                 detect_monsters_invis(player_ptr, rad);
@@ -100,16 +110,19 @@ concptr do_arcane_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessTyp
         break;
 
     case 3:
-        if (name)
+        if (name) {
             return _("モンスター感知", "Detect Monsters");
-        if (desc)
+        }
+        if (desc) {
             return _("近くの全ての見えるモンスターを感知する。", "Detects all monsters in your vicinity unless invisible.");
+        }
 
         {
             POSITION rad = DETECT_RAD_DEFAULT;
 
-            if (info)
+            if (info) {
                 return info_radius(rad);
+            }
 
             if (cast) {
                 detect_monsters_normal(player_ptr, rad);
@@ -118,16 +131,19 @@ concptr do_arcane_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessTyp
         break;
 
     case 4:
-        if (name)
+        if (name) {
             return _("ショート・テレポート", "Blink");
-        if (desc)
+        }
+        if (desc) {
             return _("近距離のテレポートをする。", "Teleports you a short distance.");
+        }
 
         {
             POSITION range = 10;
 
-            if (info)
+            if (info) {
                 return info_range(range);
+            }
 
             if (cast) {
                 teleport_player(player_ptr, range, TELEPORT_SPONTANEOUS);
@@ -136,18 +152,21 @@ concptr do_arcane_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessTyp
         break;
 
     case 5:
-        if (name)
+        if (name) {
             return _("ライト・エリア", "Light Area");
-        if (desc)
+        }
+        if (desc) {
             return _("光源が照らしている範囲か部屋全体を永久に明るくする。", "Lights up nearby area and the inside of a room permanently.");
+        }
 
         {
             DICE_NUMBER dice = 2;
             DICE_SID sides = plev / 2;
             POSITION rad = plev / 10 + 1;
 
-            if (info)
+            if (info) {
                 return info_damage(dice, sides, 0);
+            }
 
             if (cast) {
                 lite_area(player_ptr, damroll(dice, sides), rad);
@@ -156,15 +175,18 @@ concptr do_arcane_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessTyp
         break;
 
     case 6:
-        if (name)
+        if (name) {
             return _("罠と扉 破壊", "Trap & Door Destruction");
-        if (desc)
+        }
+        if (desc) {
             return _("一直線上の全ての罠と扉を破壊する。", "Fires a beam which destroy traps and doors.");
+        }
 
         {
             if (cast) {
-                if (!get_aim_dir(player_ptr, &dir))
+                if (!get_aim_dir(player_ptr, &dir)) {
                     return nullptr;
+                }
 
                 destroy_door(player_ptr, dir);
             }
@@ -172,33 +194,40 @@ concptr do_arcane_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessTyp
         break;
 
     case 7:
-        if (name)
+        if (name) {
             return _("軽傷の治癒", "Cure Light Wounds");
-        if (desc)
+        }
+        if (desc) {
             return _("怪我と体力を少し回復させる。", "Heals cuts and HP a little.");
+        }
 
         {
             DICE_NUMBER dice = 2;
             DICE_SID sides = 8;
 
-            if (info)
+            if (info) {
                 return info_heal(dice, sides, 0);
-            if (cast)
+            }
+            if (cast) {
                 (void)cure_light_wounds(player_ptr, dice, sides);
+            }
         }
         break;
 
     case 8:
-        if (name)
+        if (name) {
             return _("罠と扉 感知", "Detect Doors & Traps");
-        if (desc)
+        }
+        if (desc) {
             return _("近くの全ての罠と扉と階段を感知する。", "Detects traps, doors, and stairs in your vicinity.");
+        }
 
         {
             POSITION rad = DETECT_RAD_DEFAULT;
 
-            if (info)
+            if (info) {
                 return info_radius(rad);
+            }
 
             if (cast) {
                 detect_traps(player_ptr, rad, true);
@@ -209,10 +238,12 @@ concptr do_arcane_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessTyp
         break;
 
     case 9:
-        if (name)
+        if (name) {
             return _("燃素", "Phlogiston");
-        if (desc)
+        }
+        if (desc) {
             return _("光源に燃料を補給する。", "Adds more turns of light to a lantern or torch.");
+        }
 
         {
             if (cast) {
@@ -222,16 +253,19 @@ concptr do_arcane_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessTyp
         break;
 
     case 10:
-        if (name)
+        if (name) {
             return _("財宝感知", "Detect Treasure");
-        if (desc)
+        }
+        if (desc) {
             return _("近くの財宝を感知する。", "Detects all treasures in your vicinity.");
+        }
 
         {
             POSITION rad = DETECT_RAD_DEFAULT;
 
-            if (info)
+            if (info) {
                 return info_radius(rad);
+            }
 
             if (cast) {
                 detect_treasure(player_ptr, rad);
@@ -241,16 +275,19 @@ concptr do_arcane_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessTyp
         break;
 
     case 11:
-        if (name)
+        if (name) {
             return _("魔法 感知", "Detect Enchantment");
-        if (desc)
+        }
+        if (desc) {
             return _("近くの魔法がかかったアイテムを感知する。", "Detects all magical items in your vicinity.");
+        }
 
         {
             POSITION rad = DETECT_RAD_DEFAULT;
 
-            if (info)
+            if (info) {
                 return info_radius(rad);
+            }
 
             if (cast) {
                 detect_objects_magic(player_ptr, rad);
@@ -259,16 +296,19 @@ concptr do_arcane_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessTyp
         break;
 
     case 12:
-        if (name)
+        if (name) {
             return _("アイテム感知", "Detect Objects");
-        if (desc)
+        }
+        if (desc) {
             return _("近くの全てのアイテムを感知する。", "Detects all items in your vicinity.");
+        }
 
         {
             POSITION rad = DETECT_RAD_DEFAULT;
 
-            if (info)
+            if (info) {
                 return info_radius(rad);
+            }
 
             if (cast) {
                 detect_objects_normal(player_ptr, rad);
@@ -292,17 +332,20 @@ concptr do_arcane_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessTyp
         break;
 
     case 14:
-        if (name)
+        if (name) {
             return _("耐冷", "Resist Cold");
-        if (desc)
+        }
+        if (desc) {
             return _("一定時間、冷気への耐性を得る。装備による耐性に累積する。",
                 "Gives resistance to cold. This resistance can be added to that from equipment for more powerful resistance.");
+        }
 
         {
             int base = 20;
 
-            if (info)
+            if (info) {
                 return info_duration(base, base);
+            }
 
             if (cast) {
                 set_oppose_cold(player_ptr, randint1(base) + base, false);
@@ -311,17 +354,20 @@ concptr do_arcane_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessTyp
         break;
 
     case 15:
-        if (name)
+        if (name) {
             return _("耐火", "Resist Fire");
-        if (desc)
+        }
+        if (desc) {
             return _("一定時間、炎への耐性を得る。装備による耐性に累積する。",
                 "Gives resistance to fire. This resistance can be added to that from equipment for more powerful resistance.");
+        }
 
         {
             int base = 20;
 
-            if (info)
+            if (info) {
                 return info_duration(base, base);
+            }
 
             if (cast) {
                 set_oppose_fire(player_ptr, randint1(base) + base, false);
@@ -330,17 +376,20 @@ concptr do_arcane_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessTyp
         break;
 
     case 16:
-        if (name)
+        if (name) {
             return _("耐電", "Resist Lightning");
-        if (desc)
+        }
+        if (desc) {
             return _("一定時間、電撃への耐性を得る。装備による耐性に累積する。",
                 "Gives resistance to electricity. This resistance can be added to that from equipment for more powerful resistance.");
+        }
 
         {
             int base = 20;
 
-            if (info)
+            if (info) {
                 return info_duration(base, base);
+            }
 
             if (cast) {
                 set_oppose_elec(player_ptr, randint1(base) + base, false);
@@ -349,17 +398,20 @@ concptr do_arcane_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessTyp
         break;
 
     case 17:
-        if (name)
+        if (name) {
             return _("耐酸", "Resist Acid");
-        if (desc)
+        }
+        if (desc) {
             return _("一定時間、酸への耐性を得る。装備による耐性に累積する。",
                 "Gives resistance to acid. This resistance can be added to that from equipment for more powerful resistance.");
+        }
 
         {
             int base = 20;
 
-            if (info)
+            if (info) {
                 return info_duration(base, base);
+            }
 
             if (cast) {
                 set_oppose_acid(player_ptr, randint1(base) + base, false);
@@ -368,33 +420,40 @@ concptr do_arcane_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessTyp
         break;
 
     case 18:
-        if (name)
+        if (name) {
             return _("重傷の治癒", "Cure Medium Wounds");
-        if (desc)
+        }
+        if (desc) {
             return _("怪我と体力を中程度回復させる。", "Heals cuts and HP.");
+        }
 
         {
             DICE_NUMBER dice = 4;
             DICE_SID sides = 8;
 
-            if (info)
+            if (info) {
                 return info_heal(dice, sides, 0);
-            if (cast)
+            }
+            if (cast) {
                 (void)cure_serious_wounds(player_ptr, 4, 8);
+            }
         }
         break;
 
     case 19:
-        if (name)
+        if (name) {
             return _("テレポート", "Teleport");
-        if (desc)
+        }
+        if (desc) {
             return _("遠距離のテレポートをする。", "Teleports you a long distance.");
+        }
 
         {
             POSITION range = plev * 5;
 
-            if (info)
+            if (info) {
                 return info_range(range);
+            }
 
             if (cast) {
                 teleport_player(player_ptr, range, TELEPORT_SPONTANEOUS);
@@ -403,36 +462,43 @@ concptr do_arcane_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessTyp
         break;
 
     case 20:
-        if (name)
+        if (name) {
             return _("鑑定", "Identify");
-        if (desc)
+        }
+        if (desc) {
             return _("アイテムを識別する。", "Identifies an item.");
+        }
 
         {
             if (cast) {
-                if (!ident_spell(player_ptr, false))
+                if (!ident_spell(player_ptr, false)) {
                     return nullptr;
+                }
             }
         }
         break;
 
     case 21:
-        if (name)
+        if (name) {
             return _("岩石溶解", "Stone to Mud");
-        if (desc)
+        }
+        if (desc) {
             return _("壁を溶かして床にする。", "Turns one rock square to mud.");
+        }
 
         {
             DICE_NUMBER dice = 1;
             DICE_SID sides = 30;
             int base = 20;
 
-            if (info)
+            if (info) {
                 return info_damage(dice, sides, base);
+            }
 
             if (cast) {
-                if (!get_aim_dir(player_ptr, &dir))
+                if (!get_aim_dir(player_ptr, &dir)) {
                     return nullptr;
+                }
 
                 wall_to_mud(player_ptr, dir, 20 + randint1(30));
             }
@@ -440,21 +506,25 @@ concptr do_arcane_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessTyp
         break;
 
     case 22:
-        if (name)
+        if (name) {
             return _("閃光", "Ray of Light");
-        if (desc)
+        }
+        if (desc) {
             return _("光線を放つ。光りを嫌うモンスターに効果がある。", "Fires a beam of light which damages to light-sensitive monsters.");
+        }
 
         {
             DICE_NUMBER dice = 6;
             DICE_SID sides = 8;
 
-            if (info)
+            if (info) {
                 return info_damage(dice, sides, 0);
+            }
 
             if (cast) {
-                if (!get_aim_dir(player_ptr, &dir))
+                if (!get_aim_dir(player_ptr, &dir)) {
                     return nullptr;
+                }
 
                 msg_print(_("光線が放たれた。", "A line of light appears."));
                 lite_line(player_ptr, dir, damroll(6, 8));
@@ -463,10 +533,12 @@ concptr do_arcane_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessTyp
         break;
 
     case 23:
-        if (name)
+        if (name) {
             return _("空腹充足", "Satisfy Hunger");
-        if (desc)
+        }
+        if (desc) {
             return _("満腹にする。", "Satisfies hunger.");
+        }
 
         {
             if (cast) {
@@ -476,16 +548,19 @@ concptr do_arcane_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessTyp
         break;
 
     case 24:
-        if (name)
+        if (name) {
             return _("透明視認", "See Invisible");
-        if (desc)
+        }
+        if (desc) {
             return _("一定時間、透明なものが見えるようになる。", "Gives see invisible for a while.");
+        }
 
         {
             int base = 24;
 
-            if (info)
+            if (info) {
                 return info_duration(base, base);
+            }
 
             if (cast) {
                 set_tim_invis(player_ptr, randint1(base) + base, false);
@@ -494,10 +569,12 @@ concptr do_arcane_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessTyp
         break;
 
     case 25:
-        if (name)
+        if (name) {
             return _("エレメンタル召喚", "Conjure Elemental");
-        if (desc)
+        }
+        if (desc) {
             return _("1体のエレメンタルを召喚する。", "Summons an elemental.");
+        }
         {
             if (cast) {
                 if (!summon_specific(player_ptr, -1, player_ptr->y, player_ptr->x, plev, SUMMON_ELEMENTAL, (PM_ALLOW_GROUP | PM_FORCE_PET))) {
@@ -508,35 +585,42 @@ concptr do_arcane_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessTyp
         break;
 
     case 26:
-        if (name)
+        if (name) {
             return _("テレポート・レベル", "Teleport Level");
-        if (desc)
+        }
+        if (desc) {
             return _("瞬時に上か下の階にテレポートする。", "Instantly teleports you up or down a level.");
+        }
 
         {
             if (cast) {
-                if (!get_check(_("本当に他の階にテレポートしますか？", "Are you sure? (Teleport Level)")))
+                if (!get_check(_("本当に他の階にテレポートしますか？", "Are you sure? (Teleport Level)"))) {
                     return nullptr;
+                }
                 teleport_level(player_ptr, 0);
             }
         }
         break;
 
     case 27:
-        if (name)
+        if (name) {
             return _("テレポート・モンスター", "Teleport Away");
-        if (desc)
+        }
+        if (desc) {
             return _("モンスターをテレポートさせるビームを放つ。抵抗されると無効。", "Teleports all monsters on the line away unless resisted.");
+        }
 
         {
             int power = plev;
 
-            if (info)
+            if (info) {
                 return info_power(power);
+            }
 
             if (cast) {
-                if (!get_aim_dir(player_ptr, &dir))
+                if (!get_aim_dir(player_ptr, &dir)) {
                     return nullptr;
+                }
 
                 fire_beam(player_ptr, AttributeType::AWAY_ALL, dir, power);
             }
@@ -544,23 +628,27 @@ concptr do_arcane_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessTyp
         break;
 
     case 28:
-        if (name)
+        if (name) {
             return _("元素の球", "Elemental Ball");
-        if (desc)
+        }
+        if (desc) {
             return _("炎、電撃、冷気、酸のどれかの球を放つ。", "Fires a ball of some elements.");
+        }
 
         {
             int dam = 75 + plev;
             POSITION rad = 2;
 
-            if (info)
+            if (info) {
                 return info_damage(0, 0, dam);
+            }
 
             if (cast) {
                 AttributeType type;
 
-                if (!get_aim_dir(player_ptr, &dir))
+                if (!get_aim_dir(player_ptr, &dir)) {
                     return nullptr;
+                }
 
                 switch (randint1(4)) {
                 case 1:
@@ -583,17 +671,20 @@ concptr do_arcane_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessTyp
         break;
 
     case 29:
-        if (name)
+        if (name) {
             return _("全感知", "Detection");
-        if (desc)
+        }
+        if (desc) {
             return _("近くの全てのモンスター、罠、扉、階段、財宝、そしてアイテムを感知する。",
                 "Detects all monsters, traps, doors, stairs, treasures and items in your vicinity.");
+        }
 
         {
             POSITION rad = DETECT_RAD_DEFAULT;
 
-            if (info)
+            if (info) {
                 return info_radius(rad);
+            }
 
             if (cast) {
                 detect_all(player_ptr, rad);
@@ -602,39 +693,46 @@ concptr do_arcane_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessTyp
         break;
 
     case 30:
-        if (name)
+        if (name) {
             return _("帰還の呪文", "Word of Recall");
-        if (desc)
+        }
+        if (desc) {
             return _("地上にいるときはダンジョンの最深階へ、ダンジョンにいるときは地上へと移動する。",
                 "Recalls player from dungeon to town or from town to the deepest level of dungeon.");
+        }
 
         {
             int base = 15;
             DICE_SID sides = 20;
 
-            if (info)
+            if (info) {
                 return info_delay(base, sides);
+            }
 
             if (cast) {
-                if (!recall_player(player_ptr, randint0(21) + 15))
+                if (!recall_player(player_ptr, randint0(21) + 15)) {
                     return nullptr;
+                }
             }
         }
         break;
 
     case 31:
-        if (name)
+        if (name) {
             return _("千里眼", "Clairvoyance");
-        if (desc)
+        }
+        if (desc) {
             return _("その階全体を永久に照らし、ダンジョン内すべてのアイテムを感知する。さらに、一定時間テレパシー能力を得る。",
                 "Maps and lights whole dungeon level. Reveals locations of all objects. Gives telepathy for a while.");
+        }
 
         {
             int base = 25;
             DICE_SID sides = 30;
 
-            if (info)
+            if (info) {
                 return info_duration(base, sides);
+            }
 
             if (cast) {
                 chg_virtue(player_ptr, V_KNOWLEDGE, 1);

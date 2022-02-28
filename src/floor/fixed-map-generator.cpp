@@ -76,8 +76,9 @@ static void drop_here(floor_type *floor_ptr, ObjectType *j_ptr, POSITION y, POSI
 
 static void generate_artifact(PlayerType *player_ptr, qtwg_type *qtwg_ptr, const ARTIFACT_IDX artifact_index)
 {
-    if (artifact_index == 0)
+    if (artifact_index == 0) {
         return;
+    }
 
     if ((a_info[artifact_index].cur_num == 0) && create_named_art(player_ptr, artifact_index, *qtwg_ptr->y, *qtwg_ptr->x)) {
         a_info[artifact_index].cur_num = 1;
@@ -104,8 +105,9 @@ static void parse_qtw_D(PlayerType *player_ptr, qtwg_type *qtwg_ptr, char *s)
         int random = letter[idx].random;
         ARTIFACT_IDX artifact_index = letter[idx].artifact;
         g_ptr->feat = conv_dungeon_feat(floor_ptr, letter[idx].feature);
-        if (init_flags & INIT_ONLY_FEATURES)
+        if (init_flags & INIT_ONLY_FEATURES) {
             continue;
+        }
 
         g_ptr->info = letter[idx].cave_info;
         if (random & RANDOM_MONSTER) {
@@ -159,12 +161,13 @@ static void parse_qtw_D(PlayerType *player_ptr, qtwg_type *qtwg_ptr, char *s)
             floor_ptr->object_level = floor_ptr->base_level;
         } else if (random & RANDOM_OBJECT) {
             floor_ptr->object_level = floor_ptr->base_level + object_index;
-            if (randint0(100) < 75)
+            if (randint0(100) < 75) {
                 place_object(player_ptr, *qtwg_ptr->y, *qtwg_ptr->x, 0L);
-            else if (randint0(100) < 80)
+            } else if (randint0(100) < 80) {
                 place_object(player_ptr, *qtwg_ptr->y, *qtwg_ptr->x, AM_GOOD);
-            else
+            } else {
                 place_object(player_ptr, *qtwg_ptr->y, *qtwg_ptr->x, AM_GOOD | AM_GREAT);
+            }
 
             floor_ptr->object_level = floor_ptr->base_level;
         } else if (random & RANDOM_TRAP) {
@@ -193,17 +196,20 @@ static void parse_qtw_D(PlayerType *player_ptr, qtwg_type *qtwg_ptr, char *s)
 
 static bool parse_qtw_QQ(quest_type *q_ptr, char **zz, int num)
 {
-    if (zz[1][0] != 'Q')
+    if (zz[1][0] != 'Q') {
         return false;
+    }
 
-    if ((init_flags & INIT_ASSIGN) == 0)
+    if ((init_flags & INIT_ASSIGN) == 0) {
         return true;
+    }
 
     monster_race *r_ptr;
     artifact_type *a_ptr;
 
-    if (num < 9)
+    if (num < 9) {
         return true;
+    }
 
     q_ptr->type = i2enum<QuestKindType>(atoi(zz[2]));
     q_ptr->num_mon = (MONSTER_NUMBER)atoi(zz[3]);
@@ -214,12 +220,14 @@ static bool parse_qtw_QQ(quest_type *q_ptr, char **zz, int num)
     q_ptr->k_idx = (KIND_OBJECT_IDX)atoi(zz[8]);
     q_ptr->dungeon = (DUNGEON_IDX)atoi(zz[9]);
 
-    if (num > 10)
+    if (num > 10) {
         q_ptr->flags = atoi(zz[10]);
+    }
 
     r_ptr = &r_info[q_ptr->r_idx];
-    if (r_ptr->kind_flags.has(MonsterKindType::UNIQUE))
+    if (r_ptr->kind_flags.has(MonsterKindType::UNIQUE)) {
         r_ptr->flags1 |= RF1_QUESTOR;
+    }
 
     a_ptr = &a_info[q_ptr->k_idx];
     a_ptr->gen_flags.set(ItemGenerationTraitType::QUESTITEM);
@@ -231,23 +239,28 @@ static bool parse_qtw_QQ(quest_type *q_ptr, char **zz, int num)
  */
 static bool parse_qtw_QR(quest_type *q_ptr, char **zz, int num)
 {
-    if (zz[1][0] != 'R')
+    if (zz[1][0] != 'R') {
         return false;
+    }
 
-    if ((init_flags & INIT_ASSIGN) == 0)
+    if ((init_flags & INIT_ASSIGN) == 0) {
         return true;
+    }
 
     int count = 0;
     ARTIFACT_IDX idx, reward_idx = 0;
     for (idx = 2; idx < num; idx++) {
         ARTIFACT_IDX a_idx = (ARTIFACT_IDX)atoi(zz[idx]);
-        if (a_idx < 1)
+        if (a_idx < 1) {
             continue;
-        if (a_info[a_idx].cur_num > 0)
+        }
+        if (a_info[a_idx].cur_num > 0) {
             continue;
+        }
         count++;
-        if (one_in_(count))
+        if (one_in_(count)) {
             reward_idx = a_idx;
+        }
     }
 
     if (reward_idx) {
@@ -268,28 +281,34 @@ static bool parse_qtw_QR(quest_type *q_ptr, char **zz, int num)
  */
 static int parse_qtw_Q(qtwg_type *qtwg_ptr, char **zz)
 {
-    if (qtwg_ptr->buf[0] != 'Q')
+    if (qtwg_ptr->buf[0] != 'Q') {
         return PARSE_CONTINUE;
+    }
 
 #ifdef JP
-    if (qtwg_ptr->buf[2] == '$')
+    if (qtwg_ptr->buf[2] == '$') {
         return PARSE_ERROR_NONE;
+    }
 #else
-    if (qtwg_ptr->buf[2] != '$')
+    if (qtwg_ptr->buf[2] != '$') {
         return PARSE_ERROR_NONE;
+    }
 #endif
 
     int num = tokenize(qtwg_ptr->buf + _(2, 3), 33, zz, 0);
-    if (num < 3)
+    if (num < 3) {
         return PARSE_ERROR_TOO_FEW_ARGUMENTS;
+    }
 
     quest_type *q_ptr;
-    q_ptr = &(quest[atoi(zz[0])]);
-    if (parse_qtw_QQ(q_ptr, zz, num))
+    q_ptr = &(quest_map[i2enum<QuestId>(atoi(zz[0]))]);
+    if (parse_qtw_QQ(q_ptr, zz, num)) {
         return PARSE_ERROR_NONE;
+    }
 
-    if (parse_qtw_QR(q_ptr, zz, num))
+    if (parse_qtw_QR(q_ptr, zz, num)) {
         return PARSE_ERROR_NONE;
+    }
 
     if (zz[1][0] == 'N') {
         if (init_flags & (INIT_ASSIGN | INIT_SHOW_TEXT | INIT_NAME_ONLY)) {
@@ -313,24 +332,29 @@ static int parse_qtw_Q(qtwg_type *qtwg_ptr, char **zz)
 
 static bool parse_qtw_P(PlayerType *player_ptr, qtwg_type *qtwg_ptr, char **zz)
 {
-    if (qtwg_ptr->buf[0] != 'P')
+    if (qtwg_ptr->buf[0] != 'P') {
         return false;
+    }
 
-    if ((init_flags & INIT_CREATE_DUNGEON) == 0)
+    if ((init_flags & INIT_CREATE_DUNGEON) == 0) {
         return true;
+    }
 
-    if (tokenize(qtwg_ptr->buf + 2, 2, zz, 0) != 2)
+    if (tokenize(qtwg_ptr->buf + 2, 2, zz, 0) != 2) {
         return true;
+    }
 
     int panels_y = (*qtwg_ptr->y / SCREEN_HGT);
-    if (*qtwg_ptr->y % SCREEN_HGT)
+    if (*qtwg_ptr->y % SCREEN_HGT) {
         panels_y++;
+    }
 
     auto *floor_ptr = player_ptr->current_floor_ptr;
     floor_ptr->height = panels_y * SCREEN_HGT;
     int panels_x = (*qtwg_ptr->x / SCREEN_WID);
-    if (*qtwg_ptr->x % SCREEN_WID)
+    if (*qtwg_ptr->x % SCREEN_WID) {
         panels_x++;
+    }
 
     floor_ptr->width = panels_x * SCREEN_WID;
     panel_row_min = floor_ptr->height;
@@ -354,11 +378,13 @@ static bool parse_qtw_P(PlayerType *player_ptr, qtwg_type *qtwg_ptr, char **zz)
 
 static bool parse_qtw_M(qtwg_type *qtwg_ptr, char **zz)
 {
-    if (qtwg_ptr->buf[0] != 'M')
+    if (qtwg_ptr->buf[0] != 'M') {
         return false;
+    }
 
-    if ((tokenize(qtwg_ptr->buf + 2, 2, zz, 0) == 2) == 0)
+    if ((tokenize(qtwg_ptr->buf + 2, 2, zz, 0) == 2) == 0) {
         return true;
+    }
 
     if (zz[0][0] == 'T') {
         max_towns = static_cast<int16_t>(atoi(zz[1]));
@@ -369,11 +395,13 @@ static bool parse_qtw_M(qtwg_type *qtwg_ptr, char **zz)
     } else if (zz[0][0] == 'M') {
         w_ptr->max_m_idx = (MONSTER_IDX)atoi(zz[1]);
     } else if (zz[0][0] == 'W') {
-        if (zz[0][1] == 'X')
+        if (zz[0][1] == 'X') {
             w_ptr->max_wild_x = (POSITION)atoi(zz[1]);
+        }
 
-        if (zz[0][1] == 'Y')
+        if (zz[0][1] == 'Y') {
             w_ptr->max_wild_y = (POSITION)atoi(zz[1]);
+        }
     }
 
     return true;
@@ -396,29 +424,36 @@ static bool parse_qtw_M(qtwg_type *qtwg_ptr, char **zz)
 parse_error_type generate_fixed_map_floor(PlayerType *player_ptr, qtwg_type *qtwg_ptr, process_dungeon_file_pf parse_fixed_map)
 {
     char *zz[33];
-    if (!qtwg_ptr->buf[0])
+    if (!qtwg_ptr->buf[0]) {
         return PARSE_ERROR_NONE;
+    }
 
-    if (iswspace(qtwg_ptr->buf[0]))
+    if (iswspace(qtwg_ptr->buf[0])) {
         return PARSE_ERROR_NONE;
+    }
 
-    if (qtwg_ptr->buf[0] == '#')
+    if (qtwg_ptr->buf[0] == '#') {
         return PARSE_ERROR_NONE;
+    }
 
-    if (qtwg_ptr->buf[1] != ':')
+    if (qtwg_ptr->buf[1] != ':') {
         return PARSE_ERROR_GENERIC;
+    }
 
-    if (qtwg_ptr->buf[0] == '%')
+    if (qtwg_ptr->buf[0] == '%') {
         return (*parse_fixed_map)(player_ptr, qtwg_ptr->buf + 2, qtwg_ptr->ymin, qtwg_ptr->xmin, qtwg_ptr->ymax, qtwg_ptr->xmax);
+    }
 
     /* Process "F:<letter>:<terrain>:<cave_info>:<monster>:<object>:<ego>:<artifact>:<trap>:<special>" -- info for dungeon grid */
-    if (qtwg_ptr->buf[0] == 'F')
+    if (qtwg_ptr->buf[0] == 'F') {
         return parse_line_feature(player_ptr->current_floor_ptr, qtwg_ptr->buf);
+    }
 
     if (qtwg_ptr->buf[0] == 'D') {
         char *s = qtwg_ptr->buf + 2;
-        if (init_flags & INIT_ONLY_BUILDINGS)
+        if (init_flags & INIT_ONLY_BUILDINGS) {
             return PARSE_ERROR_NONE;
+        }
 
         parse_qtw_D(player_ptr, qtwg_ptr, s);
         (*qtwg_ptr->y)++;
@@ -426,20 +461,25 @@ parse_error_type generate_fixed_map_floor(PlayerType *player_ptr, qtwg_type *qtw
     }
 
     parse_error_type parse_result_Q = i2enum<parse_error_type>(parse_qtw_Q(qtwg_ptr, zz));
-    if (parse_result_Q != PARSE_CONTINUE)
+    if (parse_result_Q != PARSE_CONTINUE) {
         return parse_result_Q;
+    }
 
-    if (qtwg_ptr->buf[0] == 'W')
+    if (qtwg_ptr->buf[0] == 'W') {
         return parse_line_wilderness(player_ptr, qtwg_ptr->buf, qtwg_ptr->xmin, qtwg_ptr->xmax, qtwg_ptr->y, qtwg_ptr->x);
+    }
 
-    if (parse_qtw_P(player_ptr, qtwg_ptr, zz))
+    if (parse_qtw_P(player_ptr, qtwg_ptr, zz)) {
         return PARSE_ERROR_NONE;
+    }
 
-    if (qtwg_ptr->buf[0] == 'B')
+    if (qtwg_ptr->buf[0] == 'B') {
         return parse_line_building(qtwg_ptr->buf);
+    }
 
-    if (parse_qtw_M(qtwg_ptr, zz))
+    if (parse_qtw_M(qtwg_ptr, zz)) {
         return PARSE_ERROR_NONE;
+    }
 
     return PARSE_ERROR_GENERIC;
 }

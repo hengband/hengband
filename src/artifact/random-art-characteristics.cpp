@@ -20,49 +20,62 @@
 
 static void pval_subtraction(ObjectType *o_ptr)
 {
-    if (o_ptr->pval > 0)
+    if (o_ptr->pval > 0) {
         o_ptr->pval = 0 - (o_ptr->pval + randint1(4));
+    }
 
-    if (o_ptr->to_a > 0)
+    if (o_ptr->to_a > 0) {
         o_ptr->to_a = 0 - (o_ptr->to_a + randint1(4));
+    }
 
-    if (o_ptr->to_h > 0)
+    if (o_ptr->to_h > 0) {
         o_ptr->to_h = 0 - (o_ptr->to_h + randint1(4));
+    }
 
-    if (o_ptr->to_d > 0)
+    if (o_ptr->to_d > 0) {
         o_ptr->to_d = 0 - (o_ptr->to_d + randint1(4));
+    }
 }
 
 static void add_negative_flags(ObjectType *o_ptr)
 {
-    if (one_in_(4))
+    if (one_in_(4)) {
         o_ptr->curse_flags.set(CurseTraitType::PERMA_CURSE);
+    }
 
-    if (one_in_(3))
+    if (one_in_(3)) {
         o_ptr->art_flags.set(TR_TY_CURSE);
+    }
 
-    if (one_in_(2))
+    if (one_in_(2)) {
         o_ptr->art_flags.set(TR_AGGRAVATE);
+    }
 
-    if (one_in_(3))
+    if (one_in_(3)) {
         o_ptr->art_flags.set(TR_DRAIN_EXP);
+    }
 
-    if (one_in_(6))
+    if (one_in_(6)) {
         o_ptr->art_flags.set(TR_ADD_L_CURSE);
+    }
 
-    if (one_in_(9))
+    if (one_in_(9)) {
         o_ptr->art_flags.set(TR_ADD_H_CURSE);
+    }
 
-    if (one_in_(9))
+    if (one_in_(9)) {
         o_ptr->art_flags.set(TR_DRAIN_HP);
+    }
 
-    if (one_in_(9))
+    if (one_in_(9)) {
         o_ptr->art_flags.set(TR_DRAIN_MANA);
+    }
 
-    if (one_in_(2))
+    if (one_in_(2)) {
         o_ptr->art_flags.set(TR_TELEPORT);
-    else if (one_in_(3))
+    } else if (one_in_(3)) {
         o_ptr->art_flags.set(TR_NO_TELE);
+    }
 }
 
 /*!
@@ -80,8 +93,9 @@ void curse_artifact(PlayerType *player_ptr, ObjectType *o_ptr)
     o_ptr->curse_flags.set({ CurseTraitType::HEAVY_CURSE, CurseTraitType::CURSED });
     o_ptr->art_flags.reset(TR_BLESSED);
     add_negative_flags(o_ptr);
-    if (!PlayerClass(player_ptr).is_soldier() && one_in_(3))
+    if (!PlayerClass(player_ptr).is_soldier() && one_in_(3)) {
         o_ptr->art_flags.set(TR_NO_MAGIC);
+    }
 }
 
 /*!
@@ -140,8 +154,9 @@ void get_random_name(ObjectType *o_ptr, char *return_name, bool armour, int powe
     auto filename = get_random_art_filename(armour, power);
     (void)get_rnd_line(filename.c_str(), o_ptr->artifact_bias, return_name);
 #ifdef JP
-    if (return_name[0] == 0)
+    if (return_name[0] == 0) {
         get_table_name(return_name);
+    }
 #endif
 }
 
@@ -156,18 +171,21 @@ static int calc_arm_avgdamage(PlayerType *player_ptr, ObjectType *o_ptr)
         dam = s_evil = dam * 7 / 2;
     } else if (flgs.has_not(TR_KILL_EVIL) && flgs.has(TR_SLAY_EVIL)) {
         dam = s_evil = dam * 2;
-    } else
+    } else {
         s_evil = dam;
+    }
 
     if (flgs.has(TR_FORCE_WEAPON)) {
         dam = forced = dam * 3 / 2 + (o_ptr->dd * o_ptr->ds + o_ptr->dd);
-    } else
+    } else {
         forced = dam;
+    }
 
     if (flgs.has(TR_VORPAL)) {
         dam = vorpal = dam * 11 / 9;
-    } else
+    } else {
         vorpal = dam;
+    }
 
     dam = dam + o_ptr->to_d;
     msg_format_wizard(player_ptr, CHEAT_OBJECT, "素:%d> 対邪:%d> 理力:%d> 切:%d> 最終:%d", base, s_evil, forced, vorpal, dam);

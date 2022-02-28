@@ -29,11 +29,13 @@ void fill_treasure(PlayerType *player_ptr, POSITION x1, POSITION x2, POSITION y1
     for (POSITION x = x1; x <= x2; x++) {
         for (POSITION y = y1; y <= y2; y++) {
             int32_t value = ((((int32_t)(distance(cx, cy, x, y))) * 100) / size) + randint1(10) - difficulty;
-            if ((randint1(100) - difficulty * 3) > 50)
+            if ((randint1(100) - difficulty * 3) > 50) {
                 value = 20;
+            }
 
-            if (!floor_ptr->grid_array[y][x].is_floor() && (!cave_has_flag_bold(floor_ptr, y, x, FloorFeatureType::PLACE) || !cave_has_flag_bold(floor_ptr, y, x, FloorFeatureType::DROP)))
+            if (!floor_ptr->grid_array[y][x].is_floor() && (!cave_has_flag_bold(floor_ptr, y, x, FloorFeatureType::PLACE) || !cave_has_flag_bold(floor_ptr, y, x, FloorFeatureType::DROP))) {
                 continue;
+            }
 
             if (value < 0) {
                 floor_ptr->monster_level = floor_ptr->base_level + 40;

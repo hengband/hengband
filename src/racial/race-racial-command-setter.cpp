@@ -8,8 +8,10 @@ void set_mimic_racial_command(PlayerType *player_ptr, rc_type *rc_ptr)
 {
     rpi_type rpi;
     switch (player_ptr->mimic_form) {
-    case MIMIC_DEMON:
-    case MIMIC_DEMON_LORD:
+    case MimicKindType::NONE:
+        return;
+    case MimicKindType::DEMON:
+    case MimicKindType::DEMON_LORD:
         rpi = rpi_type(_("地獄/火炎のブレス", "Nether or Fire Breath"));
         rpi.info = format("%s%d", KWD_DAM, rc_ptr->lvl * 3);
         rpi.text = _("火炎または地獄のブレスを放つ。", "Fires a breath of fire or nether.");
@@ -18,8 +20,8 @@ void set_mimic_racial_command(PlayerType *player_ptr, rc_type *rc_ptr)
         rpi.stat = A_CON;
         rpi.fail = 20;
         rc_ptr->add_power(rpi, RC_IDX_RACE_0);
-        break;
-    case MIMIC_VAMPIRE:
+        return;
+    case MimicKindType::VAMPIRE:
         rpi = rpi_type(_("吸血", "Vampiric Drain"));
         rpi.info = format("%s%d", KWD_DAM, rc_ptr->lvl * 2);
         rpi.text = _("隣接したモンスター1体から生命力を吸い取る。吸い取った生命力によって満腹度があがる。",
@@ -29,7 +31,7 @@ void set_mimic_racial_command(PlayerType *player_ptr, rc_type *rc_ptr)
         rpi.stat = A_CON;
         rpi.fail = 9;
         rc_ptr->add_power(rpi, RC_IDX_RACE_0);
-        break;
+        return;
     }
 }
 
@@ -179,10 +181,11 @@ void set_race_racial_command(PlayerType *player_ptr, rc_type *rc_ptr)
     case PlayerRaceType::KLACKON:
         rpi = rpi_type(_("酸の唾", "Spit Acid"));
         rpi.info = format("%s%d", KWD_DAM, rc_ptr->lvl);
-        if (rc_ptr->lvl >= 25)
+        if (rc_ptr->lvl >= 25) {
             rpi.text = _("酸のボールを放つ", "Fires a boll of acid.");
-        else
+        } else {
             rpi.text = _("酸の矢を放つ", "Fires a bolt of acid.");
+        }
         rpi.min_level = 9;
         rpi.cost = 9;
         rpi.stat = A_DEX;

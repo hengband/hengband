@@ -21,8 +21,9 @@
  */
 static void compact_objects_aux(floor_type *floor_ptr, OBJECT_IDX i1, OBJECT_IDX i2)
 {
-    if (i1 == i2)
+    if (i1 == i2) {
         return;
+    }
 
     auto *o_ptr = &floor_ptr->o_list[i1];
 
@@ -67,8 +68,9 @@ void compact_objects(PlayerType *player_ptr, int size)
         for (OBJECT_IDX i = 1; i < floor_ptr->o_max; i++) {
             o_ptr = &floor_ptr->o_list[i];
 
-            if (!o_ptr->is_valid() || (k_info[o_ptr->k_idx].level > cur_lev))
+            if (!o_ptr->is_valid() || (k_info[o_ptr->k_idx].level > cur_lev)) {
                 continue;
+            }
 
             POSITION y, x;
             if (o_ptr->is_held_by_monster()) {
@@ -77,22 +79,26 @@ void compact_objects(PlayerType *player_ptr, int size)
                 y = m_ptr->fy;
                 x = m_ptr->fx;
 
-                if (randint0(100) < 90)
+                if (randint0(100) < 90) {
                     continue;
+                }
             } else {
                 y = o_ptr->iy;
                 x = o_ptr->ix;
             }
 
-            if ((cur_dis > 0) && (distance(player_ptr->y, player_ptr->x, y, x) < cur_dis))
+            if ((cur_dis > 0) && (distance(player_ptr->y, player_ptr->x, y, x) < cur_dis)) {
                 continue;
+            }
 
             int chance = 90;
-            if ((o_ptr->is_fixed_artifact() || o_ptr->art_name) && (cnt < 1000))
+            if ((o_ptr->is_fixed_artifact() || o_ptr->art_name) && (cnt < 1000)) {
                 chance = 100;
+            }
 
-            if (randint0(100) < chance)
+            if (randint0(100) < chance) {
                 continue;
+            }
 
             delete_object_idx(player_ptr, i);
             num++;
@@ -101,8 +107,9 @@ void compact_objects(PlayerType *player_ptr, int size)
 
     for (OBJECT_IDX i = floor_ptr->o_max - 1; i >= 1; i--) {
         o_ptr = &floor_ptr->o_list[i];
-        if (o_ptr->k_idx)
+        if (o_ptr->k_idx) {
             continue;
+        }
 
         compact_objects_aux(floor_ptr, floor_ptr->o_max - 1, i);
         floor_ptr->o_max--;

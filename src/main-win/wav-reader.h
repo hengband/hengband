@@ -4,9 +4,9 @@
  * @brief Windows版固有実装(WAVファイル読込)ヘッダ
  */
 
-#include <memory>
-
 #include <windows.h>
+
+#include <memory>
 #include <mmsystem.h>
 
 /*!
@@ -19,7 +19,7 @@ public:
     {
     }
     wav_reader(const wav_reader &) = delete;
-    wav_reader& operator=(const wav_reader &) = delete;
+    wav_reader &operator=(const wav_reader &) = delete;
 
     ~wav_reader()
     {
@@ -28,7 +28,7 @@ public:
 
     /*!
      * WAVファイルを開く
-     * 
+     *
      * @param filename
      * @retval true 正常に処理された
      * @retval false 処理エラー
@@ -39,7 +39,7 @@ public:
      * @details 呼び出し元でdelete[]すること
      * @return PCMデータ
      */
-    BYTE* read_data();
+    BYTE *read_data();
     const WAVEFORMATEX *get_waveformat()
     {
         return &waveformatex;

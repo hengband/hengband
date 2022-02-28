@@ -1,5 +1,5 @@
 ﻿#include "mspell/summon-checker.h"
-#include "monster-attack/monster-attack-types.h"
+#include "monster-attack/monster-attack-table.h"
 #include "monster-race/monster-race-hook.h"
 #include "monster-race/monster-race.h"
 #include "monster-race/race-flags1.h"
@@ -87,7 +87,7 @@ bool check_summon_specific(PlayerType *player_ptr, MONRACE_IDX summoner_idx, MON
         is_match = (r_ptr->d_char == 'U') && r_ptr->ability_flags.has(MonsterAbilityType::ROCKET);
         break;
     case SUMMON_KIN: {
-        SYMBOL_CODE summon_kin_type = summoner_idx > 0 ? r_info[summoner_idx].d_char : get_summon_symbol_from_player(player_ptr);
+        auto summon_kin_type = summoner_idx > 0 ? r_info[summoner_idx].d_char : get_summon_symbol_from_player(player_ptr);
         is_match = (r_ptr->d_char == summon_kin_type) && (r_idx != MON_HAGURE);
         break;
     }
@@ -134,15 +134,19 @@ bool check_summon_specific(PlayerType *player_ptr, MONRACE_IDX summoner_idx, MON
         is_match = r_ptr->d_char == 'B';
         break;
     case SUMMON_KAMIKAZE:
-        for (int i = 0; i < 4; i++)
-            if (r_ptr->blow[i].method == RaceBlowMethodType::EXPLODE)
+        for (int i = 0; i < 4; i++) {
+            if (r_ptr->blow[i].method == RaceBlowMethodType::EXPLODE) {
                 is_match = true;
+            }
+        }
 
         break;
     case SUMMON_KAMIKAZE_LIVING:
-        for (int i = 0; i < 4; i++)
-            if (r_ptr->blow[i].method == RaceBlowMethodType::EXPLODE)
+        for (int i = 0; i < 4; i++) {
+            if (r_ptr->blow[i].method == RaceBlowMethodType::EXPLODE) {
                 is_match = true;
+            }
+        }
 
         is_match &= monster_living(r_idx);
         break;

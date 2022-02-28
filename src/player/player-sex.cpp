@@ -15,23 +15,19 @@ const player_sex_type *sp_ptr;
  *      Winner
  * </pre>
  */
-const player_sex_type sex_info[MAX_SEXES] =
-{
-	{
+const player_sex_type sex_info[MAX_SEXES] = {
+    {
 #ifdef JP
-		"女性",
-		"クイーン",
+        "女性",
+        "クイーン",
 #endif
-		"Female",
-		"Queen"
-	},
-	{
+        "Female",
+        "Queen" },
+    {
 #ifdef JP
-		"男性",
-		"キング",
+        "男性",
+        "キング",
 #endif
-		"Male",
-		"King"
-	}
+        "Male",
+        "King" }
 };
-

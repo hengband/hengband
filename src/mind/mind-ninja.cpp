@@ -57,6 +57,9 @@
 #include "target/projection-path-calculator.h"
 #include "target/target-checker.h"
 #include "target/target-getter.h"
+#include "timed-effect/player-confusion.h"
+#include "timed-effect/player-hallucination.h"
+#include "timed-effect/player-paralysis.h"
 #include "timed-effect/player-stun.h"
 #include "timed-effect/timed-effects.h"
 #include "util/bit-flags-calculator.h"
@@ -82,7 +85,10 @@ bool kawarimi(PlayerType *player_ptr, bool success)
     }
 
     auto effects = player_ptr->effects();
-    if (player_ptr->confused || player_ptr->blind || player_ptr->paralyzed || player_ptr->hallucinated) {
+    auto is_confused = effects->confusion()->is_confused();
+    auto is_hallucinated = effects->hallucination()->is_hallucinated();
+    auto is_paralyzed = effects->paralysis()->is_paralyzed();
+    if (is_confused || player_ptr->blind || is_paralyzed || is_hallucinated) {
         return false;
     }
 
@@ -108,10 +114,11 @@ bool kawarimi(PlayerType *player_ptr, bool success)
     q_ptr->pval = MON_NINJA;
     (void)drop_near(player_ptr, q_ptr, -1, y, x);
 
-    if (success)
+    if (success) {
         msg_print(_("攻撃を受ける前に素早く身をひるがえした。", "You have turned around just before the attack hit you."));
-    else
+    } else {
         msg_print(_("変わり身失敗！攻撃を受けてしまった。", "Kawarimi failed! You are hit by the attack."));
+    }
 
     ninja_data->kawarimi = false;
     player_ptr->redraw |= (PR_STATUS);
@@ -126,13 +133,15 @@ bool kawarimi(PlayerType *player_ptr, bool success)
  */
 bool rush_attack(PlayerType *player_ptr, bool *mdeath)
 {
-    if (mdeath)
+    if (mdeath) {
         *mdeath = false;
+    }
 
     project_length = 5;
     DIRECTION dir;
-    if (!get_aim_dir(player_ptr, &dir))
+    if (!get_aim_dir(player_ptr, &dir)) {
         return false;
+    }
 
     int tx = player_ptr->x + project_length * ddx[dir];
     int ty = player_ptr->y + project_length * ddy[dir];
@@ -144,14 +153,16 @@ bool rush_attack(PlayerType *player_ptr, bool *mdeath)
 
     int tm_idx = 0;
     auto *floor_ptr = player_ptr->current_floor_ptr;
-    if (in_bounds(floor_ptr, ty, tx))
+    if (in_bounds(floor_ptr, ty, tx)) {
         tm_idx = floor_ptr->grid_array[ty][tx].m_idx;
+    }
 
     uint16_t path_g[32];
     int path_n = projection_path(player_ptr, path_g, project_length, player_ptr->y, player_ptr->x, ty, tx, PROJECT_STOP | PROJECT_KILL);
     project_length = 0;
-    if (!path_n)
+    if (!path_n) {
         return true;
+    }
 
     ty = player_ptr->y;
     tx = player_ptr->x;
@@ -179,8 +190,9 @@ bool rush_attack(PlayerType *player_ptr, bool *mdeath)
             break;
         }
 
-        if (!player_bold(player_ptr, ty, tx))
+        if (!player_bold(player_ptr, ty, tx)) {
             teleport_player_to(player_ptr, ty, tx, TELEPORT_NONMAGICAL);
+        }
         update_monster(player_ptr, floor_ptr->grid_array[ny][nx].m_idx, true);
 
         m_ptr = &floor_ptr->m_list[floor_ptr->grid_array[ny][nx].m_idx];
@@ -196,19 +208,22 @@ bool rush_attack(PlayerType *player_ptr, bool *mdeath)
             msg_format(_("素早く%sの懐に入り込んだ！", "You quickly jump in and attack %s!"), m_name);
         }
 
-        if (!player_bold(player_ptr, ty, tx))
+        if (!player_bold(player_ptr, ty, tx)) {
             teleport_player_to(player_ptr, ty, tx, TELEPORT_NONMAGICAL);
+        }
         moved = true;
         tmp_mdeath = do_cmd_attack(player_ptr, ny, nx, HISSATSU_NYUSIN);
 
         break;
     }
 
-    if (!moved && !player_bold(player_ptr, ty, tx))
+    if (!moved && !player_bold(player_ptr, ty, tx)) {
         teleport_player_to(player_ptr, ty, tx, TELEPORT_NONMAGICAL);
+    }
 
-    if (mdeath)
+    if (mdeath) {
         *mdeath = tmp_mdeath;
+    }
     return true;
 }
 
@@ -220,16 +235,20 @@ bool rush_attack(PlayerType *player_ptr, bool *mdeath)
 void process_surprise_attack(PlayerType *player_ptr, player_attack_type *pa_ptr)
 {
     auto *r_ptr = &r_info[pa_ptr->m_ptr->r_idx];
-    if (!has_melee_weapon(player_ptr, INVEN_MAIN_HAND + pa_ptr->hand) || player_ptr->is_icky_wield[pa_ptr->hand])
+    if (!has_melee_weapon(player_ptr, INVEN_MAIN_HAND + pa_ptr->hand) || player_ptr->is_icky_wield[pa_ptr->hand]) {
         return;
+    }
 
     int tmp = player_ptr->lev * 6 + (player_ptr->skill_stl + 10) * 4;
-    if (player_ptr->monlite && (pa_ptr->mode != HISSATSU_NYUSIN))
+    if (player_ptr->monlite && (pa_ptr->mode != HISSATSU_NYUSIN)) {
         tmp /= 3;
-    if (has_aggravate(player_ptr))
+    }
+    if (has_aggravate(player_ptr)) {
         tmp /= 2;
-    if (r_ptr->level > (player_ptr->lev * player_ptr->lev / 20 + 10))
+    }
+    if (r_ptr->level > (player_ptr->lev * player_ptr->lev / 20 + 10)) {
         tmp /= 3;
+    }
 
     auto ninja_data = PlayerClass(player_ptr).get_specific_data<ninja_data_type>();
     if (monster_csleep_remaining(pa_ptr->m_ptr) && pa_ptr->m_ptr->ml) {
@@ -245,14 +264,15 @@ void process_surprise_attack(PlayerType *player_ptr, player_attack_type *pa_ptr)
 
 void print_surprise_attack(player_attack_type *pa_ptr)
 {
-    if (pa_ptr->backstab)
+    if (pa_ptr->backstab) {
         msg_format(_("あなたは冷酷にも眠っている無力な%sを突き刺した！", "You cruelly stab the helpless, sleeping %s!"), pa_ptr->m_name);
-    else if (pa_ptr->surprise_attack)
+    } else if (pa_ptr->surprise_attack) {
         msg_format(_("不意を突いて%sに強烈な一撃を喰らわせた！", "You make surprise attack, and hit %s with a powerful blow!"), pa_ptr->m_name);
-    else if (pa_ptr->stab_fleeing)
+    } else if (pa_ptr->stab_fleeing) {
         msg_format(_("逃げる%sを背中から突き刺した！", "You backstab the fleeing %s!"), pa_ptr->m_name);
-    else if (!pa_ptr->monk_attack)
+    } else if (!pa_ptr->monk_attack) {
         msg_format(_("%sを攻撃した。", "You hit %s."), pa_ptr->m_name);
+    }
 }
 
 /*!
@@ -272,8 +292,9 @@ void calc_surprise_attack_damage(PlayerType *player_ptr, player_attack_type *pa_
         return;
     }
 
-    if (pa_ptr->stab_fleeing)
+    if (pa_ptr->stab_fleeing) {
         pa_ptr->attack_damage = (3 * pa_ptr->attack_damage) / 2;
+    }
 }
 
 /*!
@@ -313,8 +334,9 @@ bool set_superstealth(PlayerType *player_ptr, bool set)
     bool notice = false;
 
     auto ninja_data = PlayerClass(player_ptr).get_specific_data<ninja_data_type>();
-    if (!ninja_data || player_ptr->is_dead)
+    if (!ninja_data || player_ptr->is_dead) {
         return false;
+    }
 
     if (set) {
         if (!ninja_data->s_stealth) {
@@ -337,12 +359,14 @@ bool set_superstealth(PlayerType *player_ptr, bool set)
         }
     }
 
-    if (!notice)
+    if (!notice) {
         return false;
+    }
     player_ptr->redraw |= (PR_STATUS);
 
-    if (disturb_state)
+    if (disturb_state) {
         disturb(player_ptr, false, false);
+    }
     return true;
 }
 
@@ -364,8 +388,9 @@ bool cast_ninja_spell(PlayerType *player_ptr, mind_ninja_type spell)
         (void)unlite_area(player_ptr, 0, 3);
         break;
     case DETECT_NEAR:
-        if (plev > 44)
+        if (plev > 44) {
             wiz_lite(player_ptr, true);
+        }
 
         detect_monsters_normal(player_ptr, DETECT_RAD_DEFAULT);
         if (plev > 4) {
@@ -374,8 +399,9 @@ bool cast_ninja_spell(PlayerType *player_ptr, mind_ninja_type spell)
             detect_stairs(player_ptr, DETECT_RAD_DEFAULT);
         }
 
-        if (plev > 14)
+        if (plev > 14) {
             detect_objects_normal(player_ptr, DETECT_RAD_DEFAULT);
+        }
 
         break;
     case HIDE_LEAVES:
@@ -393,13 +419,15 @@ bool cast_ninja_spell(PlayerType *player_ptr, mind_ninja_type spell)
         teleport_player(player_ptr, player_ptr->lev * 5, TELEPORT_SPONTANEOUS);
         break;
     case HIT_AND_AWAY:
-        if (!hit_and_away(player_ptr))
+        if (!hit_and_away(player_ptr)) {
             return false;
+        }
 
         break;
     case BIND_MONSTER:
-        if (!get_aim_dir(player_ptr, &dir))
+        if (!get_aim_dir(player_ptr, &dir)) {
             return false;
+        }
 
         (void)stasis_monster(player_ptr, dir);
         break;
@@ -420,15 +448,17 @@ bool cast_ninja_spell(PlayerType *player_ptr, mind_ninja_type spell)
             OBJECT_IDX slot;
 
             for (slot = 0; slot < INVEN_PACK; slot++) {
-                if (player_ptr->inventory_list[slot].tval == ItemKindType::SPIKE)
+                if (player_ptr->inventory_list[slot].tval == ItemKindType::SPIKE) {
                     break;
+                }
             }
 
             if (slot == INVEN_PACK) {
-                if (!i)
+                if (!i) {
                     msg_print(_("くさびを持っていない。", "You have no Iron Spikes."));
-                else
+                } else {
                     msg_print(_("くさびがなくなった。", "You have no more Iron Spikes."));
+                }
 
                 return false;
             }
@@ -443,8 +473,9 @@ bool cast_ninja_spell(PlayerType *player_ptr, mind_ninja_type spell)
         (void)fetch_monster(player_ptr);
         break;
     case SMOKE_BALL:
-        if (!get_aim_dir(player_ptr, &dir))
+        if (!get_aim_dir(player_ptr, &dir)) {
             return false;
+        }
 
         fire_ball(player_ptr, AttributeType::OLD_CONF, dir, plev * 3, 3);
         break;
@@ -479,8 +510,9 @@ bool cast_ninja_spell(PlayerType *player_ptr, mind_ninja_type spell)
             int attempts = 1000;
             while (attempts--) {
                 scatter(player_ptr, &y, &x, player_ptr->y, player_ptr->x, 4, PROJECT_NONE);
-                if (!player_bold(player_ptr, y, x))
+                if (!player_bold(player_ptr, y, x)) {
                     break;
+                }
             }
 
             project(player_ptr, 0, 0, y, x, damroll(6 + plev / 8, 10), typ, (PROJECT_BEAM | PROJECT_THRU | PROJECT_GRID | PROJECT_KILL));

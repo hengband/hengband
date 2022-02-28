@@ -20,8 +20,9 @@ static bool get_is_floor(floor_type *floor_ptr, POSITION x, POSITION y)
         return false;
     }
 
-    if (floor_ptr->grid_array[y][x].is_floor())
+    if (floor_ptr->grid_array[y][x].is_floor()) {
         return true;
+    }
 
     return false;
 }
@@ -35,15 +36,18 @@ static bool get_is_floor(floor_type *floor_ptr, POSITION x, POSITION y)
 static void set_floor(PlayerType *player_ptr, POSITION x, POSITION y)
 {
     auto *floor_ptr = player_ptr->current_floor_ptr;
-    if (!in_bounds(floor_ptr, y, x))
+    if (!in_bounds(floor_ptr, y, x)) {
         return;
+    }
 
     auto *g_ptr = &floor_ptr->grid_array[y][x];
-    if (g_ptr->is_room())
+    if (g_ptr->is_room()) {
         return;
+    }
 
-    if (g_ptr->is_extra())
+    if (g_ptr->is_extra()) {
         place_bold(player_ptr, y, x, GB_FLOOR);
+    }
 }
 
 /*!
@@ -67,42 +71,49 @@ static void check_room_boundary(PlayerType *player_ptr, POSITION x1, POSITION y1
 
     for (POSITION x = x1; x <= x2; x++) {
         new_is_floor = get_is_floor(floor_ptr, x, y1 - 1);
-        if (new_is_floor != old_is_floor)
+        if (new_is_floor != old_is_floor) {
             count++;
+        }
 
         old_is_floor = new_is_floor;
     }
 
     for (POSITION y = y1; y <= y2; y++) {
         new_is_floor = get_is_floor(floor_ptr, x2 + 1, y);
-        if (new_is_floor != old_is_floor)
+        if (new_is_floor != old_is_floor) {
             count++;
+        }
 
         old_is_floor = new_is_floor;
     }
 
     for (POSITION x = x2; x >= x1; x--) {
         new_is_floor = get_is_floor(floor_ptr, x, y2 + 1);
-        if (new_is_floor != old_is_floor)
+        if (new_is_floor != old_is_floor) {
             count++;
+        }
 
         old_is_floor = new_is_floor;
     }
 
     for (POSITION y = y2; y >= y1; y--) {
         new_is_floor = get_is_floor(floor_ptr, x1 - 1, y);
-        if (new_is_floor != old_is_floor)
+        if (new_is_floor != old_is_floor) {
             count++;
+        }
 
         old_is_floor = new_is_floor;
     }
 
-    if (count <= 2)
+    if (count <= 2) {
         return;
+    }
 
-    for (POSITION y = y1; y <= y2; y++)
-        for (POSITION x = x1; x <= x2; x++)
+    for (POSITION y = y1; y <= y2; y++) {
+        for (POSITION x = x1; x <= x2; x++) {
             set_floor(player_ptr, x, y);
+        }
+    }
 }
 
 /*!
@@ -117,22 +128,28 @@ static void check_room_boundary(PlayerType *player_ptr, POSITION x1, POSITION y1
 static bool find_space_aux(dun_data_type *dd_ptr, POSITION blocks_high, POSITION blocks_wide, POSITION block_y, POSITION block_x)
 {
     if (blocks_wide < 3) {
-        if ((blocks_wide == 2) && (block_x % 3) == 2)
+        if ((blocks_wide == 2) && (block_x % 3) == 2) {
             return false;
+        }
     } else if ((blocks_wide % 3) == 0) {
-        if ((block_x % 3) != 0)
+        if ((block_x % 3) != 0) {
             return false;
+        }
     } else {
         if (block_x + (blocks_wide / 2) <= dd_ptr->col_rooms / 2) {
-            if (((block_x % 3) == 2) && ((blocks_wide % 3) == 2))
+            if (((block_x % 3) == 2) && ((blocks_wide % 3) == 2)) {
                 return false;
-            if ((block_x % 3) == 1)
+            }
+            if ((block_x % 3) == 1) {
                 return false;
+            }
         } else {
-            if (((block_x % 3) == 2) && ((blocks_wide % 3) == 2))
+            if (((block_x % 3) == 2) && ((blocks_wide % 3) == 2)) {
                 return false;
-            if ((block_x % 3) == 1)
+            }
+            if ((block_x % 3) == 1) {
                 return false;
+            }
         }
     }
 
@@ -141,13 +158,17 @@ static bool find_space_aux(dun_data_type *dd_ptr, POSITION blocks_high, POSITION
     POSITION by2 = block_y + blocks_high;
     POSITION bx2 = block_x + blocks_wide;
 
-    if ((by1 < 0) || (by2 > dd_ptr->row_rooms) || (bx1 < 0) || (bx2 > dd_ptr->col_rooms))
+    if ((by1 < 0) || (by2 > dd_ptr->row_rooms) || (bx1 < 0) || (bx2 > dd_ptr->col_rooms)) {
         return false;
+    }
 
-    for (POSITION by = by1; by < by2; by++)
-        for (POSITION bx = bx1; bx < bx2; bx++)
-            if (dd_ptr->room_map[by][bx])
+    for (POSITION by = by1; by < by2; by++) {
+        for (POSITION bx = bx1; bx < bx2; bx++) {
+            if (dd_ptr->room_map[by][bx]) {
                 return false;
+            }
+        }
+    }
 
     return true;
 }
@@ -180,8 +201,9 @@ bool find_space(PlayerType *player_ptr, dun_data_type *dd_ptr, POSITION *y, POSI
     POSITION block_x = 0;
     POSITION blocks_high = 1 + ((height - 1) / BLOCK_HGT);
     POSITION blocks_wide = 1 + ((width - 1) / BLOCK_WID);
-    if ((dd_ptr->row_rooms < blocks_high) || (dd_ptr->col_rooms < blocks_wide))
+    if ((dd_ptr->row_rooms < blocks_high) || (dd_ptr->col_rooms < blocks_wide)) {
         return false;
+    }
 
     int candidates = 0;
     for (block_y = dd_ptr->row_rooms - blocks_high; block_y >= 0; block_y--) {
@@ -193,25 +215,29 @@ bool find_space(PlayerType *player_ptr, dun_data_type *dd_ptr, POSITION *y, POSI
         }
     }
 
-    if (!candidates)
+    if (!candidates) {
         return false;
+    }
 
-    if (d_info[player_ptr->current_floor_ptr->dungeon_idx].flags.has_not(DungeonFeatureType::NO_CAVE))
+    if (d_info[player_ptr->current_floor_ptr->dungeon_idx].flags.has_not(DungeonFeatureType::NO_CAVE)) {
         pick = randint1(candidates);
-    else
+    } else {
         pick = candidates / 2 + 1;
+    }
 
     for (block_y = dd_ptr->row_rooms - blocks_high; block_y >= 0; block_y--) {
         for (block_x = dd_ptr->col_rooms - blocks_wide; block_x >= 0; block_x--) {
             if (find_space_aux(dd_ptr, blocks_high, blocks_wide, block_y, block_x)) {
                 pick--;
-                if (!pick)
+                if (!pick) {
                     break;
+                }
             }
         }
 
-        if (!pick)
+        if (!pick) {
             break;
+        }
     }
 
     POSITION by1 = block_y;
@@ -226,9 +252,11 @@ bool find_space(PlayerType *player_ptr, dun_data_type *dd_ptr, POSITION *y, POSI
         dd_ptr->cent_n++;
     }
 
-    for (POSITION by = by1; by < by2; by++)
-        for (POSITION bx = bx1; bx < bx2; bx++)
+    for (POSITION by = by1; by < by2; by++) {
+        for (POSITION bx = bx1; bx < bx2; bx++) {
             dd_ptr->room_map[by][bx] = true;
+        }
+    }
 
     check_room_boundary(player_ptr, *x - width / 2 - 1, *y - height / 2 - 1, *x + (width - 1) / 2 + 1, *y + (height - 1) / 2 + 1);
     return true;

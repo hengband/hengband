@@ -3,8 +3,8 @@
 #include "mind/mind-force-trainer.h"
 #include "mind/mind-magic-resistance.h"
 #include "mind/mind-mirror-master.h"
-#include "racial/racial-kutar.h"
 #include "player/player-status-table.h"
+#include "racial/racial-kutar.h"
 #include "spell-realm/spells-craft.h"
 #include "spell-realm/spells-crusade.h"
 #include "spell-realm/spells-demon.h"
@@ -17,7 +17,10 @@
 #include "status/sight-setter.h"
 #include "status/temporary-resistance.h"
 #include "system/player-type-definition.h"
+#include "timed-effect/player-confusion.h"
 #include "timed-effect/player-cut.h"
+#include "timed-effect/player-hallucination.h"
+#include "timed-effect/player-paralysis.h"
 #include "timed-effect/player-stun.h"
 #include "timed-effect/timed-effects.h"
 
@@ -33,7 +36,7 @@ void reduce_magic_effects_timeout(PlayerType *player_ptr)
 
     BadStatusSetter bss(player_ptr);
     auto effects = player_ptr->effects();
-    if (player_ptr->hallucinated) {
+    if (effects->hallucination()->is_hallucinated()) {
         (void)bss.mod_hallucination(-1);
     }
 
@@ -55,14 +58,16 @@ void reduce_magic_effects_timeout(PlayerType *player_ptr)
 
     if (player_ptr->ele_attack) {
         player_ptr->ele_attack--;
-        if (!player_ptr->ele_attack)
+        if (!player_ptr->ele_attack) {
             set_ele_attack(player_ptr, 0, 0);
+        }
     }
 
     if (player_ptr->ele_immune) {
         player_ptr->ele_immune--;
-        if (!player_ptr->ele_immune)
+        if (!player_ptr->ele_immune) {
             set_ele_immune(player_ptr, 0, 0);
+        }
     }
 
     if (player_ptr->tim_infra) {
@@ -125,11 +130,11 @@ void reduce_magic_effects_timeout(PlayerType *player_ptr)
         (void)set_pass_wall(player_ptr, player_ptr->tim_pass_wall - 1, true);
     }
 
-    if (player_ptr->paralyzed) {
+    if (effects->paralysis()->is_paralyzed()) {
         (void)bss.mod_paralysis(-1);
     }
 
-    if (player_ptr->confused) {
+    if (player_ptr->effects()->confusion()->is_confused()) {
         (void)bss.mod_confusion(-1);
     }
 

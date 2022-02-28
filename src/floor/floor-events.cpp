@@ -52,8 +52,9 @@ void day_break(PlayerType *player_ptr)
             for (POSITION x = 0; x < floor_ptr->width; x++) {
                 auto *g_ptr = &floor_ptr->grid_array[y][x];
                 g_ptr->info |= CAVE_GLOW;
-                if (view_perma_grids)
+                if (view_perma_grids) {
                     g_ptr->info |= CAVE_MARK;
+                }
 
                 note_spot(player_ptr, y, x);
             }
@@ -63,8 +64,9 @@ void day_break(PlayerType *player_ptr)
     player_ptr->update |= PU_MONSTERS | PU_MON_LITE;
     player_ptr->redraw |= PR_MAP;
     player_ptr->window_flags |= PW_OVERHEAD | PW_DUNGEON;
-    if ((floor_ptr->grid_array[player_ptr->y][player_ptr->x].info & CAVE_GLOW) != 0)
+    if ((floor_ptr->grid_array[player_ptr->y][player_ptr->x].info & CAVE_GLOW) != 0) {
         set_superstealth(player_ptr, false);
+    }
 }
 
 void night_falls(PlayerType *player_ptr)
@@ -76,8 +78,9 @@ void night_falls(PlayerType *player_ptr)
             for (POSITION x = 0; x < floor_ptr->width; x++) {
                 auto *g_ptr = &floor_ptr->grid_array[y][x];
                 auto *f_ptr = &f_info[g_ptr->get_feat_mimic()];
-                if (g_ptr->is_mirror() || f_ptr->flags.has(FloorFeatureType::QUEST_ENTER) || f_ptr->flags.has(FloorFeatureType::ENTRANCE))
+                if (g_ptr->is_mirror() || f_ptr->flags.has(FloorFeatureType::QUEST_ENTER) || f_ptr->flags.has(FloorFeatureType::ENTRANCE)) {
                     continue;
+                }
 
                 g_ptr->info &= ~(CAVE_GLOW);
                 if (f_ptr->flags.has_not(FloorFeatureType::REMEMBER)) {
@@ -94,8 +97,9 @@ void night_falls(PlayerType *player_ptr)
     player_ptr->redraw |= PR_MAP;
     player_ptr->window_flags |= PW_OVERHEAD | PW_DUNGEON;
 
-    if ((floor_ptr->grid_array[player_ptr->y][player_ptr->x].info & CAVE_GLOW) != 0)
+    if ((floor_ptr->grid_array[player_ptr->y][player_ptr->x].info & CAVE_GLOW) != 0) {
         set_superstealth(player_ptr, false);
+    }
 }
 
 /*!
@@ -114,8 +118,9 @@ static int rating_boost(int delta)
 static byte get_dungeon_feeling(PlayerType *player_ptr)
 {
     auto *floor_ptr = player_ptr->current_floor_ptr;
-    if (!floor_ptr->dun_level)
+    if (!floor_ptr->dun_level) {
         return 0;
+    }
 
     const int base = 10;
     int rating = 0;
@@ -123,21 +128,26 @@ static byte get_dungeon_feeling(PlayerType *player_ptr)
         auto *m_ptr = &floor_ptr->m_list[i];
         monster_race *r_ptr;
         int delta = 0;
-        if (!monster_is_valid(m_ptr) || is_pet(m_ptr))
+        if (!monster_is_valid(m_ptr) || is_pet(m_ptr)) {
             continue;
+        }
 
         r_ptr = &r_info[m_ptr->r_idx];
         if (r_ptr->kind_flags.has(MonsterKindType::UNIQUE)) {
-            if (r_ptr->level + 10 > floor_ptr->dun_level)
+            if (r_ptr->level + 10 > floor_ptr->dun_level) {
                 delta += (r_ptr->level + 10 - floor_ptr->dun_level) * 2 * base;
-        } else if (r_ptr->level > floor_ptr->dun_level)
+            }
+        } else if (r_ptr->level > floor_ptr->dun_level) {
             delta += (r_ptr->level - floor_ptr->dun_level) * base;
+        }
 
         if (r_ptr->flags1 & RF1_FRIENDS) {
-            if (5 <= get_monster_crowd_number(floor_ptr, i))
+            if (5 <= get_monster_crowd_number(floor_ptr, i)) {
                 delta += 1;
-        } else if (2 <= get_monster_crowd_number(floor_ptr, i))
+            }
+        } else if (2 <= get_monster_crowd_number(floor_ptr, i)) {
             delta += 1;
+        }
 
         rating += rating_boost(delta);
     }
@@ -146,83 +156,105 @@ static byte get_dungeon_feeling(PlayerType *player_ptr)
         auto *o_ptr = &floor_ptr->o_list[i];
         auto *k_ptr = &k_info[o_ptr->k_idx];
         int delta = 0;
-        if (!o_ptr->is_valid() || (o_ptr->is_known() && ((o_ptr->marked & OM_TOUCHED) != 0)) || ((o_ptr->ident & IDENT_SENSE) != 0))
+        if (!o_ptr->is_valid() || (o_ptr->is_known() && ((o_ptr->marked & OM_TOUCHED) != 0)) || ((o_ptr->ident & IDENT_SENSE) != 0)) {
             continue;
+        }
 
         if (o_ptr->is_ego()) {
-            ego_item_type *e_ptr = &e_info[o_ptr->name2];
+            auto *e_ptr = &e_info[o_ptr->ego_idx];
             delta += e_ptr->rating * base;
         }
 
         if (o_ptr->is_artifact()) {
             PRICE cost = object_value_real(o_ptr);
             delta += 10 * base;
-            if (cost > 10000L)
+            if (cost > 10000L) {
                 delta += 10 * base;
+            }
 
-            if (cost > 50000L)
+            if (cost > 50000L) {
                 delta += 10 * base;
+            }
 
-            if (cost > 100000L)
+            if (cost > 100000L) {
                 delta += 10 * base;
+            }
 
-            if (!preserve_mode)
+            if (!preserve_mode) {
                 return 1;
+            }
         }
 
-        if (o_ptr->tval == ItemKindType::DRAG_ARMOR)
+        if (o_ptr->tval == ItemKindType::DRAG_ARMOR) {
             delta += 30 * base;
+        }
 
-        if (o_ptr->tval == ItemKindType::SHIELD && o_ptr->sval == SV_DRAGON_SHIELD)
+        if (o_ptr->tval == ItemKindType::SHIELD && o_ptr->sval == SV_DRAGON_SHIELD) {
             delta += 5 * base;
+        }
 
-        if (o_ptr->tval == ItemKindType::GLOVES && o_ptr->sval == SV_SET_OF_DRAGON_GLOVES)
+        if (o_ptr->tval == ItemKindType::GLOVES && o_ptr->sval == SV_SET_OF_DRAGON_GLOVES) {
             delta += 5 * base;
+        }
 
-        if (o_ptr->tval == ItemKindType::BOOTS && o_ptr->sval == SV_PAIR_OF_DRAGON_GREAVE)
+        if (o_ptr->tval == ItemKindType::BOOTS && o_ptr->sval == SV_PAIR_OF_DRAGON_GREAVE) {
             delta += 5 * base;
+        }
 
-        if (o_ptr->tval == ItemKindType::HELM && o_ptr->sval == SV_DRAGON_HELM)
+        if (o_ptr->tval == ItemKindType::HELM && o_ptr->sval == SV_DRAGON_HELM) {
             delta += 5 * base;
+        }
 
-        if (o_ptr->tval == ItemKindType::RING && o_ptr->sval == SV_RING_SPEED && !o_ptr->is_cursed())
+        if (o_ptr->tval == ItemKindType::RING && o_ptr->sval == SV_RING_SPEED && !o_ptr->is_cursed()) {
             delta += 25 * base;
+        }
 
-        if (o_ptr->tval == ItemKindType::RING && o_ptr->sval == SV_RING_LORDLY && !o_ptr->is_cursed())
+        if (o_ptr->tval == ItemKindType::RING && o_ptr->sval == SV_RING_LORDLY && !o_ptr->is_cursed()) {
             delta += 15 * base;
+        }
 
-        if (o_ptr->tval == ItemKindType::AMULET && o_ptr->sval == SV_AMULET_THE_MAGI && !o_ptr->is_cursed())
+        if (o_ptr->tval == ItemKindType::AMULET && o_ptr->sval == SV_AMULET_THE_MAGI && !o_ptr->is_cursed()) {
             delta += 15 * base;
+        }
 
-        if (!o_ptr->is_cursed() && !o_ptr->is_broken() && k_ptr->level > floor_ptr->dun_level)
+        if (!o_ptr->is_cursed() && !o_ptr->is_broken() && k_ptr->level > floor_ptr->dun_level) {
             delta += (k_ptr->level - floor_ptr->dun_level) * base;
+        }
 
         rating += rating_boost(delta);
     }
 
-    if (rating > rating_boost(1000))
+    if (rating > rating_boost(1000)) {
         return 2;
+    }
 
-    if (rating > rating_boost(800))
+    if (rating > rating_boost(800)) {
         return 3;
+    }
 
-    if (rating > rating_boost(600))
+    if (rating > rating_boost(600)) {
         return 4;
+    }
 
-    if (rating > rating_boost(400))
+    if (rating > rating_boost(400)) {
         return 5;
+    }
 
-    if (rating > rating_boost(300))
+    if (rating > rating_boost(300)) {
         return 6;
+    }
 
-    if (rating > rating_boost(200))
+    if (rating > rating_boost(200)) {
         return 7;
+    }
 
-    if (rating > rating_boost(100))
+    if (rating > rating_boost(100)) {
         return 8;
+    }
 
-    if (rating > rating_boost(0))
+    if (rating > rating_boost(0)) {
         return 9;
+    }
 
     return 10;
 }
@@ -234,31 +266,44 @@ static byte get_dungeon_feeling(PlayerType *player_ptr)
 void update_dungeon_feeling(PlayerType *player_ptr)
 {
     auto *floor_ptr = player_ptr->current_floor_ptr;
-    if (!floor_ptr->dun_level)
+    if (!floor_ptr->dun_level) {
         return;
+    }
 
-    if (player_ptr->phase_out)
+    if (player_ptr->phase_out) {
         return;
+    }
 
     int delay = std::max(10, 150 - player_ptr->skill_fos) * (150 - floor_ptr->dun_level) * TURNS_PER_TICK / 100;
-    if (w_ptr->game_turn < player_ptr->feeling_turn + delay && !cheat_xtra)
+    if (w_ptr->game_turn < player_ptr->feeling_turn + delay && !cheat_xtra) {
         return;
+    }
 
     auto quest_num = quest_number(player_ptr, floor_ptr->dun_level);
-    if (inside_quest(quest_num) && (quest_type::is_fixed(quest_num) && !((quest_num == QuestId::OBERON) || (quest_num == QuestId::SERPENT) || !(quest[enum2i(quest_num)].flags & QUEST_FLAG_PRESET))))
-        return;
 
+    auto dungeon_quest = (quest_num == QuestId::OBERON);
+    dungeon_quest |= (quest_num == QuestId::SERPENT);
+    dungeon_quest |= !(quest_map[quest_num].flags & QUEST_FLAG_PRESET);
+
+    auto feeling_quest = inside_quest(quest_num);
+    feeling_quest &= quest_type::is_fixed(quest_num);
+    feeling_quest &= !dungeon_quest;
+    if (feeling_quest) {
+        return;
+    }
     byte new_feeling = get_dungeon_feeling(player_ptr);
     player_ptr->feeling_turn = w_ptr->game_turn;
-    if (player_ptr->feeling == new_feeling)
+    if (player_ptr->feeling == new_feeling) {
         return;
+    }
 
     player_ptr->feeling = new_feeling;
     do_cmd_feeling(player_ptr);
     select_floor_music(player_ptr);
     player_ptr->redraw |= PR_DEPTH;
-    if (disturb_minor)
+    if (disturb_minor) {
         disturb(player_ptr, false, false);
+    }
 }
 
 /*
@@ -266,22 +311,25 @@ void update_dungeon_feeling(PlayerType *player_ptr)
  */
 void glow_deep_lava_and_bldg(PlayerType *player_ptr)
 {
-    if (d_info[player_ptr->dungeon_idx].flags.has(DungeonFeatureType::DARKNESS))
+    if (d_info[player_ptr->dungeon_idx].flags.has(DungeonFeatureType::DARKNESS)) {
         return;
+    }
 
     auto *floor_ptr = player_ptr->current_floor_ptr;
     for (POSITION y = 0; y < floor_ptr->height; y++) {
         for (POSITION x = 0; x < floor_ptr->width; x++) {
             grid_type *g_ptr;
             g_ptr = &floor_ptr->grid_array[y][x];
-            if (f_info[g_ptr->get_feat_mimic()].flags.has_not(FloorFeatureType::GLOW))
+            if (f_info[g_ptr->get_feat_mimic()].flags.has_not(FloorFeatureType::GLOW)) {
                 continue;
+            }
 
             for (DIRECTION i = 0; i < 9; i++) {
                 POSITION yy = y + ddy_ddd[i];
                 POSITION xx = x + ddx_ddd[i];
-                if (!in_bounds2(floor_ptr, yy, xx))
+                if (!in_bounds2(floor_ptr, yy, xx)) {
                     continue;
+                }
 
                 floor_ptr->grid_array[yy][xx].info |= CAVE_GLOW;
             }
@@ -297,8 +345,9 @@ void glow_deep_lava_and_bldg(PlayerType *player_ptr)
  */
 void forget_lite(floor_type *floor_ptr)
 {
-    if (!floor_ptr->lite_n)
+    if (!floor_ptr->lite_n) {
         return;
+    }
 
     for (int i = 0; i < floor_ptr->lite_n; i++) {
         POSITION y = floor_ptr->lite_y[i];
@@ -314,8 +363,9 @@ void forget_lite(floor_type *floor_ptr)
  */
 void forget_view(floor_type *floor_ptr)
 {
-    if (!floor_ptr->view_n)
+    if (!floor_ptr->view_n) {
         return;
+    }
 
     for (int i = 0; i < floor_ptr->view_n; i++) {
         POSITION y = floor_ptr->view_y[i];

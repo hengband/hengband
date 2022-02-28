@@ -106,10 +106,11 @@ void WorldTurnProcessor::print_time()
     int day;
     c_put_str(TERM_WHITE, "             ", ROW_DAY, COL_DAY);
     extract_day_hour_min(this->player_ptr, &day, &this->hour, &this->min);
-    if (day < 1000)
+    if (day < 1000) {
         c_put_str(TERM_WHITE, format(_("%2d日目", "Day%3d"), day), ROW_DAY, COL_DAY);
-    else
+    } else {
         c_put_str(TERM_WHITE, _("***日目", "Day***"), ROW_DAY, COL_DAY);
+    }
 
     c_put_str(TERM_WHITE, format("%2d:%02d", this->hour, this->min), ROW_DAY, COL_DAY + 7);
 }
@@ -281,8 +282,9 @@ void WorldTurnProcessor::shuffle_shopkeeper()
     } while (true);
 
     for (const auto &f_ref : f_info) {
-        if (f_ref.name.empty() || f_ref.flags.has_not(FloorFeatureType::STORE))
+        if (f_ref.name.empty() || f_ref.flags.has_not(FloorFeatureType::STORE)) {
             continue;
+        }
 
         if (f_ref.subtype != n) {
             continue;

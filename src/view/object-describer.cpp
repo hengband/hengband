@@ -22,10 +22,12 @@
 void inven_item_charges(PlayerType *player_ptr, INVENTORY_IDX item)
 {
     auto *o_ptr = &player_ptr->inventory_list[item];
-    if ((o_ptr->tval != ItemKindType::STAFF) && (o_ptr->tval != ItemKindType::WAND))
+    if ((o_ptr->tval != ItemKindType::STAFF) && (o_ptr->tval != ItemKindType::WAND)) {
         return;
-    if (!o_ptr->is_known())
+    }
+    if (!o_ptr->is_known()) {
         return;
+    }
 
 #ifdef JP
     if (o_ptr->pval <= 0) {
@@ -85,8 +87,9 @@ void display_koff(PlayerType *player_ptr, KIND_OBJECT_IDX k_idx)
         term_erase(0, y, 255);
     }
 
-    if (!k_idx)
+    if (!k_idx) {
         return;
+    }
     q_ptr = &forge;
 
     q_ptr->prep(k_idx);
@@ -97,16 +100,20 @@ void display_koff(PlayerType *player_ptr, KIND_OBJECT_IDX k_idx)
     use_realm = tval2realm(q_ptr->tval);
 
     if (player_ptr->realm1 || player_ptr->realm2) {
-        if ((use_realm != player_ptr->realm1) && (use_realm != player_ptr->realm2))
+        if ((use_realm != player_ptr->realm1) && (use_realm != player_ptr->realm2)) {
             return;
+        }
     } else {
         PlayerClass pc(player_ptr);
-        if (!pc.is_every_magic())
+        if (!pc.is_every_magic()) {
             return;
-        if (!is_magic(use_realm))
+        }
+        if (!is_magic(use_realm)) {
             return;
-        if (pc.equals(PlayerClassType::RED_MAGE) && (use_realm != REALM_ARCANE) && (sval > 1))
+        }
+        if (pc.equals(PlayerClassType::RED_MAGE) && (use_realm != REALM_ARCANE) && (sval > 1)) {
             return;
+        }
     }
 
     int num = 0;

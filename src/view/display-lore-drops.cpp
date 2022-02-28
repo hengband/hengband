@@ -19,7 +19,7 @@ void display_monster_drop_quantity(lore_type *lore_ptr)
     }
 }
 
-void display_monster_drop_quality(lore_type* lore_ptr)
+void display_monster_drop_quality(lore_type *lore_ptr)
 {
     if (lore_ptr->flags1 & RF1_DROP_GREAT) {
         lore_ptr->drop_quality = _("特別な", " exceptional");
@@ -36,25 +36,29 @@ void display_monster_drop_quality(lore_type* lore_ptr)
 
 void display_monster_drop_items(lore_type *lore_ptr)
 {
-    if (lore_ptr->drop_item == 0)
+    if (lore_ptr->drop_item == 0) {
         return;
+    }
 
 #ifdef JP
 #else
-    if (lore_ptr->sin)
+    if (lore_ptr->sin) {
         hooked_roff("n");
+    }
 
     lore_ptr->sin = false;
 #endif
 
-    if (lore_ptr->drop_quality != nullptr)
+    if (lore_ptr->drop_quality != nullptr) {
         hooked_roff(lore_ptr->drop_quality);
+    }
 
     hooked_roff(_("アイテム", " object"));
 #ifdef JP
 #else
-    if (lore_ptr->drop_quantity != 1)
+    if (lore_ptr->drop_quantity != 1) {
         hooked_roff("s");
+    }
 #endif
     lore_ptr->drop_quality = _("や", " or");
 }
@@ -64,35 +68,41 @@ void display_monster_drop_golds(lore_type *lore_ptr)
     auto is_item_only = lore_ptr->drop_gold == 0;
     is_item_only |= any_bits(lore_ptr->flags1, RF1_DROP_GOOD);
     is_item_only |= any_bits(lore_ptr->flags1, RF1_DROP_GREAT);
-    if (is_item_only)
+    if (is_item_only) {
         return;
+    }
 
 #ifdef JP
 #else
-    if (lore_ptr->drop_quality == nullptr)
+    if (lore_ptr->drop_quality == nullptr) {
         lore_ptr->sin = false;
+    }
 
-    if (lore_ptr->sin)
+    if (lore_ptr->sin) {
         hooked_roff("n");
+    }
 
     lore_ptr->sin = false;
 #endif
 
-    if (lore_ptr->drop_quality != nullptr)
+    if (lore_ptr->drop_quality != nullptr) {
         hooked_roff(lore_ptr->drop_quality);
+    }
 
     hooked_roff(_("財宝", " treasure"));
 #ifdef JP
 #else
-    if (lore_ptr->drop_quantity != 1)
+    if (lore_ptr->drop_quantity != 1) {
         hooked_roff("s");
+    }
 #endif
 }
 
 void display_monster_drops(lore_type *lore_ptr)
 {
-    if ((lore_ptr->drop_gold == 0) && (lore_ptr->drop_item == 0))
+    if ((lore_ptr->drop_gold == 0) && (lore_ptr->drop_item == 0)) {
         return;
+    }
 
     hooked_roff(format(_("%^sは", "%^s may carry"), Who::who(lore_ptr->msex)));
 #ifdef JP

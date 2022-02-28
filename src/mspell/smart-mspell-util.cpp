@@ -26,8 +26,9 @@ msr_type *initialize_msr_type(PlayerType *player_ptr, msr_type *msr_ptr, MONSTER
  */
 bool int_outof(monster_race *r_ptr, PERCENTAGE prob)
 {
-    if (r_ptr->behavior_flags.has_not(MonsterBehaviorType::SMART))
+    if (r_ptr->behavior_flags.has_not(MonsterBehaviorType::SMART)) {
         prob = prob / 2;
+    }
 
     return randint0(100) < prob;
 }

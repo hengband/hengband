@@ -1,5 +1,5 @@
-﻿#include "io/input-key-acceptor.h"
-#include "market/building-craft-armor.h"
+﻿#include "market/building-craft-armor.h"
+#include "io/input-key-acceptor.h"
 #include "market/building-util.h"
 #include "term/screen-processor.h"
 #include "util/buffer-shaper.h"
@@ -15,14 +15,14 @@
 bool eval_ac(ARMOUR_CLASS iAC)
 {
     const GAME_TEXT memo[] = _("ダメージ軽減率とは、敵の攻撃が当たった時そのダメージを\n"
-                          "何パーセント軽減するかを示します。\n"
-                          "ダメージ軽減は通常の直接攻撃(種類が「攻撃する」と「粉砕する」の物)\n"
-                          "に対してのみ効果があります。\n \n"
-                          "敵のレベルとは、その敵が通常何階に現れるかを示します。\n \n"
-                          "回避率は敵の直接攻撃を何パーセントの確率で避けるかを示し、\n"
-                          "敵のレベルとあなたのACによって決定されます。\n \n"
-                          "ダメージ期待値とは、敵の１００ポイントの通常攻撃に対し、\n"
-                          "回避率とダメージ軽減率を考慮したダメージの期待値を示します。\n",
+                               "何パーセント軽減するかを示します。\n"
+                               "ダメージ軽減は通常の直接攻撃(種類が「攻撃する」と「粉砕する」の物)\n"
+                               "に対してのみ効果があります。\n \n"
+                               "敵のレベルとは、その敵が通常何階に現れるかを示します。\n \n"
+                               "回避率は敵の直接攻撃を何パーセントの確率で避けるかを示し、\n"
+                               "敵のレベルとあなたのACによって決定されます。\n \n"
+                               "ダメージ期待値とは、敵の１００ポイントの通常攻撃に対し、\n"
+                               "回避率とダメージ軽減率を考慮したダメージの期待値を示します。\n",
         "'Protection Rate' means how much damage is reduced by your armor.\n"
         "Note that the Protection rate is effective only against normal "
         "'attack' and 'shatter' type melee attacks, "
@@ -38,8 +38,9 @@ bool eval_ac(ARMOUR_CLASS iAC)
     DEPTH lvl;
     char buf[80 * 20], *t;
 
-    if (iAC < 0)
+    if (iAC < 0) {
         iAC = 0;
+    }
 
     protection = 100 * std::min<short>(iAC, 150) / 250;
     screen_save();
@@ -70,8 +71,9 @@ bool eval_ac(ARMOUR_CLASS iAC)
     }
 
     shape_buffer(memo, 70, buf, sizeof(buf));
-    for (t = buf; t[0]; t += strlen(t) + 1)
+    for (t = buf; t[0]; t += strlen(t) + 1) {
         put_str(t, (row++) + 4, 4);
+    }
 
     prt(_("現在のあなたの装備からすると、あなたの防御力はこれくらいです:", "Defense abilities from your current Armor Class are evaluated below."), 0, 0);
 

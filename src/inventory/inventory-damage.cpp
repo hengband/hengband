@@ -25,39 +25,45 @@
  * Destruction taken from "melee.c" code for "stealing".
  * New-style wands and rods handled correctly. -LM-
  */
-void inventory_damage(PlayerType *player_ptr, const ObjectBreaker& breaker, int perc)
+void inventory_damage(PlayerType *player_ptr, const ObjectBreaker &breaker, int perc)
 {
     INVENTORY_IDX i;
     int j, amt;
     ObjectType *o_ptr;
     GAME_TEXT o_name[MAX_NLEN];
 
-    if (check_multishadow(player_ptr) || player_ptr->current_floor_ptr->inside_arena)
+    if (check_multishadow(player_ptr) || player_ptr->current_floor_ptr->inside_arena) {
         return;
+    }
 
     /* Scan through the slots backwards */
     for (i = 0; i < INVEN_PACK; i++) {
         o_ptr = &player_ptr->inventory_list[i];
-        if (!o_ptr->k_idx)
+        if (!o_ptr->k_idx) {
             continue;
+        }
 
         /* Hack -- for now, skip artifacts */
-        if (o_ptr->is_artifact())
+        if (o_ptr->is_artifact()) {
             continue;
+        }
 
         /* Give this item slot a shot at death */
-        if (!breaker.can_destroy(o_ptr))
+        if (!breaker.can_destroy(o_ptr)) {
             continue;
+        }
 
         /* Count the casualties */
         for (amt = j = 0; j < o_ptr->number; ++j) {
-            if (randint0(100) < perc)
+            if (randint0(100) < perc) {
                 amt++;
+            }
         }
 
         /* Some casualities */
-        if (!amt)
+        if (!amt) {
             continue;
+        }
 
         describe_flavor(player_ptr, o_name, o_ptr, OD_OMIT_PREFIX);
 
@@ -70,13 +76,14 @@ void inventory_damage(PlayerType *player_ptr, const ObjectBreaker& breaker, int 
 #endif
 
 #ifdef JP
-        if (is_echizen(player_ptr))
+        if (is_echizen(player_ptr)) {
             msg_print("やりやがったな！");
-        else if (is_chargeman(player_ptr)) {
-            if (randint0(2) == 0)
+        } else if (is_chargeman(player_ptr)) {
+            if (randint0(2) == 0) {
                 msg_print(_("ジュラル星人め！", ""));
-            else
+            } else {
                 msg_print(_("弱い者いじめは止めるんだ！", ""));
+            }
         }
 #endif
 

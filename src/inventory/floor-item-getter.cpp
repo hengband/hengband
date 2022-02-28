@@ -42,14 +42,14 @@
  * @return プレイヤーによりアイテムが選択されたならTRUEを返す
  * @todo 適切な関数名をどうしても付けられなかったので暫定でauxとした
  */
-static bool check_floor_item_tag_aux(PlayerType *player_ptr, fis_type *fis_ptr, char *prev_tag, const ItemTester& item_tester)
+static bool check_floor_item_tag_aux(PlayerType *player_ptr, fis_type *fis_ptr, char *prev_tag, const ItemTester &item_tester)
 {
-    if (!fis_ptr->floor || (*fis_ptr->cp >= 0))
+    if (!fis_ptr->floor || (*fis_ptr->cp >= 0)) {
         return false;
+    }
 
     if (*prev_tag && command_cmd) {
-        fis_ptr->floor_num
-            = scan_floor_items(player_ptr, fis_ptr->floor_list, player_ptr->y, player_ptr->x, SCAN_FLOOR_ITEM_TESTER | SCAN_FLOOR_ONLY_MARKED, item_tester);
+        fis_ptr->floor_num = scan_floor_items(player_ptr, fis_ptr->floor_list, player_ptr->y, player_ptr->x, SCAN_FLOOR_ITEM_TESTER | SCAN_FLOOR_ONLY_MARKED, item_tester);
         if (get_tag_floor(player_ptr->current_floor_ptr, &fis_ptr->k, *prev_tag, fis_ptr->floor_list, fis_ptr->floor_num)) {
             *fis_ptr->cp = 0 - fis_ptr->floor_list[fis_ptr->k];
             command_cmd = 0;
@@ -60,8 +60,9 @@ static bool check_floor_item_tag_aux(PlayerType *player_ptr, fis_type *fis_ptr, 
         return false;
     }
 
-    if (!item_tester.okay(&player_ptr->current_floor_ptr->o_list[0 - (*fis_ptr->cp)]) && ((fis_ptr->mode & USE_FULL) == 0))
+    if (!item_tester.okay(&player_ptr->current_floor_ptr->o_list[0 - (*fis_ptr->cp)]) && ((fis_ptr->mode & USE_FULL) == 0)) {
         return false;
+    }
 
     command_cmd = 0;
     return true;
@@ -74,7 +75,7 @@ static bool check_floor_item_tag_aux(PlayerType *player_ptr, fis_type *fis_ptr, 
  * @param prev_tag 前回選択したアイテムのタグ (のはず)
  * @return プレイヤーによりアイテムが選択されたならTRUEを返す
  */
-static bool get_floor_item_tag_inventory(PlayerType *player_ptr, fis_type *fis_ptr, char *prev_tag, const ItemTester& item_tester)
+static bool get_floor_item_tag_inventory(PlayerType *player_ptr, fis_type *fis_ptr, char *prev_tag, const ItemTester &item_tester)
 {
     bool flag = false;
     item_use_flag use_flag = (*fis_ptr->cp >= INVEN_MAIN_HAND) ? USE_EQUIP : USE_INVEN;
@@ -82,10 +83,11 @@ static bool get_floor_item_tag_inventory(PlayerType *player_ptr, fis_type *fis_p
     flag |= !get_tag(player_ptr, &fis_ptr->k, *prev_tag, use_flag, item_tester);
     flag |= !get_item_okay(player_ptr, fis_ptr->k, item_tester);
 
-    if (fis_ptr->k < INVEN_MAIN_HAND)
+    if (fis_ptr->k < INVEN_MAIN_HAND) {
         flag |= !fis_ptr->inven;
-    else
+    } else {
         flag |= !fis_ptr->equip;
+    }
 
     if (flag) {
         *prev_tag = '\0';
@@ -104,14 +106,15 @@ static bool get_floor_item_tag_inventory(PlayerType *player_ptr, fis_type *fis_p
  * @param prev_tag 前回選択したアイテムのタグ (のはず)
  * @return プレイヤーによりアイテムが選択されたならTRUEを返す
  */
-static bool check_floor_item_tag_inventory(PlayerType *player_ptr, fis_type *fis_ptr, char *prev_tag, const ItemTester& item_tester)
+static bool check_floor_item_tag_inventory(PlayerType *player_ptr, fis_type *fis_ptr, char *prev_tag, const ItemTester &item_tester)
 {
-    if ((!fis_ptr->inven || (*fis_ptr->cp < 0) || (*fis_ptr->cp >= INVEN_PACK))
-        && (!fis_ptr->equip || (*fis_ptr->cp < INVEN_MAIN_HAND) || (*fis_ptr->cp >= INVEN_TOTAL)))
+    if ((!fis_ptr->inven || (*fis_ptr->cp < 0) || (*fis_ptr->cp >= INVEN_PACK)) && (!fis_ptr->equip || (*fis_ptr->cp < INVEN_MAIN_HAND) || (*fis_ptr->cp >= INVEN_TOTAL))) {
         return false;
+    }
 
-    if ((*prev_tag != '\0') && command_cmd)
+    if ((*prev_tag != '\0') && command_cmd) {
         return get_floor_item_tag_inventory(player_ptr, fis_ptr, prev_tag, item_tester);
+    }
 
     if (get_item_okay(player_ptr, *fis_ptr->cp, item_tester)) {
         command_cmd = 0;
@@ -128,18 +131,20 @@ static bool check_floor_item_tag_inventory(PlayerType *player_ptr, fis_type *fis
  * @param prev_tag 前回選択したアイテムのタグ (のはず)
  * @return プレイヤーによりアイテムが選択されたならTRUEを返す
  */
-static bool check_floor_item_tag(PlayerType *player_ptr, fis_type *fis_ptr, char *prev_tag, const ItemTester& item_tester)
+static bool check_floor_item_tag(PlayerType *player_ptr, fis_type *fis_ptr, char *prev_tag, const ItemTester &item_tester)
 {
-    if (!repeat_pull(fis_ptr->cp))
+    if (!repeat_pull(fis_ptr->cp)) {
         return false;
+    }
 
     if (fis_ptr->force && (*fis_ptr->cp == INVEN_FORCE)) {
         command_cmd = 0;
         return true;
     }
 
-    if (check_floor_item_tag_aux(player_ptr, fis_ptr, prev_tag, item_tester))
+    if (check_floor_item_tag_aux(player_ptr, fis_ptr, prev_tag, item_tester)) {
         return true;
+    }
 
     return check_floor_item_tag_inventory(player_ptr, fis_ptr, prev_tag, item_tester);
 }
@@ -149,19 +154,22 @@ static bool check_floor_item_tag(PlayerType *player_ptr, fis_type *fis_ptr, char
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param fis_ptr 床上アイテムへの参照ポインタ
  */
-static void test_inventory_floor(PlayerType *player_ptr, fis_type *fis_ptr, const ItemTester& item_tester)
+static void test_inventory_floor(PlayerType *player_ptr, fis_type *fis_ptr, const ItemTester &item_tester)
 {
     if (!fis_ptr->inven) {
         fis_ptr->i2 = -1;
         return;
     }
 
-    if (!use_menu)
+    if (!use_menu) {
         return;
+    }
 
-    for (int i = 0; i < INVEN_PACK; i++)
-        if (item_tester.okay(&player_ptr->inventory_list[i]) || (fis_ptr->mode & USE_FULL))
+    for (int i = 0; i < INVEN_PACK; i++) {
+        if (item_tester.okay(&player_ptr->inventory_list[i]) || (fis_ptr->mode & USE_FULL)) {
             fis_ptr->max_inven++;
+        }
+    }
 }
 
 /*!
@@ -169,20 +177,23 @@ static void test_inventory_floor(PlayerType *player_ptr, fis_type *fis_ptr, cons
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param fis_ptr 床上アイテムへの参照ポインタ
  */
-static void test_equipment_floor(PlayerType *player_ptr, fis_type *fis_ptr, const ItemTester& item_tester)
+static void test_equipment_floor(PlayerType *player_ptr, fis_type *fis_ptr, const ItemTester &item_tester)
 {
     if (!fis_ptr->equip) {
         fis_ptr->e2 = -1;
         return;
     }
 
-    if (!use_menu)
+    if (!use_menu) {
         return;
+    }
 
-    for (int i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++)
+    for (int i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
         if (player_ptr->select_ring_slot ? is_ring_slot(i)
-                                        : item_tester.okay(&player_ptr->inventory_list[i]) || (fis_ptr->mode & USE_FULL))
+                                         : item_tester.okay(&player_ptr->inventory_list[i]) || (fis_ptr->mode & USE_FULL)) {
             fis_ptr->max_equip++;
+        }
+    }
 }
 
 /*!
@@ -194,13 +205,14 @@ static void test_equipment_floor(PlayerType *player_ptr, fis_type *fis_ptr, cons
  * @param mode オプションフラグ
  * @return プレイヤーによりアイテムが選択されたならTRUEを返す。/
  */
-bool get_item_floor(PlayerType *player_ptr, COMMAND_CODE *cp, concptr pmt, concptr str, BIT_FLAGS mode, const ItemTester& item_tester)
+bool get_item_floor(PlayerType *player_ptr, COMMAND_CODE *cp, concptr pmt, concptr str, BIT_FLAGS mode, const ItemTester &item_tester)
 {
     fis_type tmp_fis;
     fis_type *fis_ptr = initialize_fis_type(&tmp_fis, cp, mode);
     static char prev_tag = '\0';
-    if (check_floor_item_tag(player_ptr, fis_ptr, &prev_tag, item_tester))
+    if (check_floor_item_tag(player_ptr, fis_ptr, &prev_tag, item_tester)) {
         return true;
+    }
 
     msg_print(nullptr);
     handle_stuff(player_ptr);
@@ -209,45 +221,55 @@ bool get_item_floor(PlayerType *player_ptr, COMMAND_CODE *cp, concptr pmt, concp
     fis_ptr->item = false;
     fis_ptr->i1 = 0;
     fis_ptr->i2 = INVEN_PACK - 1;
-    while ((fis_ptr->i1 <= fis_ptr->i2) && (!get_item_okay(player_ptr, fis_ptr->i1, item_tester)))
+    while ((fis_ptr->i1 <= fis_ptr->i2) && (!get_item_okay(player_ptr, fis_ptr->i1, item_tester))) {
         fis_ptr->i1++;
+    }
 
-    while ((fis_ptr->i1 <= fis_ptr->i2) && (!get_item_okay(player_ptr, fis_ptr->i2, item_tester)))
+    while ((fis_ptr->i1 <= fis_ptr->i2) && (!get_item_okay(player_ptr, fis_ptr->i2, item_tester))) {
         fis_ptr->i2--;
+    }
 
     fis_ptr->e1 = INVEN_MAIN_HAND;
     fis_ptr->e2 = INVEN_TOTAL - 1;
     test_equipment_floor(player_ptr, fis_ptr, item_tester);
-    if (has_two_handed_weapons(player_ptr) && !(fis_ptr->mode & IGNORE_BOTHHAND_SLOT))
+    if (has_two_handed_weapons(player_ptr) && !(fis_ptr->mode & IGNORE_BOTHHAND_SLOT)) {
         fis_ptr->max_equip++;
+    }
 
-    while ((fis_ptr->e1 <= fis_ptr->e2) && (!get_item_okay(player_ptr, fis_ptr->e1, item_tester)))
+    while ((fis_ptr->e1 <= fis_ptr->e2) && (!get_item_okay(player_ptr, fis_ptr->e1, item_tester))) {
         fis_ptr->e1++;
+    }
 
-    while ((fis_ptr->e1 <= fis_ptr->e2) && (!get_item_okay(player_ptr, fis_ptr->e2, item_tester)))
+    while ((fis_ptr->e1 <= fis_ptr->e2) && (!get_item_okay(player_ptr, fis_ptr->e2, item_tester))) {
         fis_ptr->e2--;
+    }
 
     if (fis_ptr->equip && has_two_handed_weapons(player_ptr) && !(fis_ptr->mode & IGNORE_BOTHHAND_SLOT)) {
         if (can_attack_with_main_hand(player_ptr)) {
-            if (fis_ptr->e2 < INVEN_SUB_HAND)
+            if (fis_ptr->e2 < INVEN_SUB_HAND) {
                 fis_ptr->e2 = INVEN_SUB_HAND;
-        } else if (can_attack_with_sub_hand(player_ptr))
+            }
+        } else if (can_attack_with_sub_hand(player_ptr)) {
             fis_ptr->e1 = INVEN_MAIN_HAND;
+        }
     }
 
     fis_ptr->floor_num = 0;
-    if (fis_ptr->floor)
-        fis_ptr->floor_num
-            = scan_floor_items(player_ptr, fis_ptr->floor_list, player_ptr->y, player_ptr->x, SCAN_FLOOR_ITEM_TESTER | SCAN_FLOOR_ONLY_MARKED, item_tester);
+    if (fis_ptr->floor) {
+        fis_ptr->floor_num = scan_floor_items(player_ptr, fis_ptr->floor_list, player_ptr->y, player_ptr->x, SCAN_FLOOR_ITEM_TESTER | SCAN_FLOOR_ONLY_MARKED, item_tester);
+    }
 
-    if ((mode & USE_INVEN) && (fis_ptr->i1 <= fis_ptr->i2))
+    if ((mode & USE_INVEN) && (fis_ptr->i1 <= fis_ptr->i2)) {
         fis_ptr->allow_inven = true;
+    }
 
-    if ((mode & USE_EQUIP) && (fis_ptr->e1 <= fis_ptr->e2))
+    if ((mode & USE_EQUIP) && (fis_ptr->e1 <= fis_ptr->e2)) {
         fis_ptr->allow_equip = true;
+    }
 
-    if ((mode & USE_FLOOR) && (fis_ptr->floor_num))
+    if ((mode & USE_FLOOR) && (fis_ptr->floor_num)) {
         fis_ptr->allow_floor = true;
+    }
 
     if (!fis_ptr->allow_inven && !fis_ptr->allow_equip && !fis_ptr->allow_floor) {
         command_see = false;
@@ -259,35 +281,41 @@ bool get_item_floor(PlayerType *player_ptr, COMMAND_CODE *cp, concptr pmt, concp
             fis_ptr->item = true;
         }
     } else {
-        if (command_see && (command_wrk == USE_EQUIP) && fis_ptr->allow_equip)
+        if (command_see && (command_wrk == USE_EQUIP) && fis_ptr->allow_equip) {
             command_wrk = USE_EQUIP;
-        else if (fis_ptr->allow_inven)
+        } else if (fis_ptr->allow_inven) {
             command_wrk = USE_INVEN;
-        else if (fis_ptr->allow_equip)
+        } else if (fis_ptr->allow_equip) {
             command_wrk = USE_EQUIP;
-        else if (fis_ptr->allow_floor)
+        } else if (fis_ptr->allow_floor) {
             command_wrk = USE_FLOOR;
+        }
     }
 
     /* 追加オプション(always_show_list)が設定されている場合は常に一覧を表示する */
-    if (always_show_list || use_menu)
+    if (always_show_list || use_menu) {
         command_see = true;
+    }
 
-    if (command_see)
+    if (command_see) {
         screen_save();
+    }
 
     while (!fis_ptr->done) {
         int ni = 0;
         int ne = 0;
         for (int i = 0; i < 8; i++) {
-            if (!angband_term[i])
+            if (!angband_term[i]) {
                 continue;
+            }
 
-            if (window_flag[i] & PW_INVEN)
+            if (window_flag[i] & PW_INVEN) {
                 ni++;
+            }
 
-            if (window_flag[i] & PW_EQUIP)
+            if (window_flag[i] & PW_EQUIP) {
                 ne++;
+            }
         }
 
         if ((command_wrk == (USE_EQUIP) && ni && !ne) || (command_wrk == (USE_INVEN) && !ni && ne)) {
@@ -301,20 +329,23 @@ bool get_item_floor(PlayerType *player_ptr, COMMAND_CODE *cp, concptr pmt, concp
         if (command_wrk == USE_INVEN) {
             fis_ptr->n1 = I2A(fis_ptr->i1);
             fis_ptr->n2 = I2A(fis_ptr->i2);
-            if (command_see)
+            if (command_see) {
                 get_item_label = show_inventory(player_ptr, fis_ptr->menu_line, fis_ptr->mode, item_tester);
+            }
         } else if (command_wrk == USE_EQUIP) {
             fis_ptr->n1 = I2A(fis_ptr->e1 - INVEN_MAIN_HAND);
             fis_ptr->n2 = I2A(fis_ptr->e2 - INVEN_MAIN_HAND);
-            if (command_see)
+            if (command_see) {
                 get_item_label = show_equipment(player_ptr, fis_ptr->menu_line, mode, item_tester);
+            }
         } else if (command_wrk == USE_FLOOR) {
             int j = fis_ptr->floor_top;
             fis_ptr->k = std::min(fis_ptr->floor_top + 23, fis_ptr->floor_num) - 1;
             fis_ptr->n1 = I2A(j - fis_ptr->floor_top); // TODO: 常に'0'になる。どんな意図でこのようなコードになっているのか不明.
             fis_ptr->n2 = I2A(fis_ptr->k - fis_ptr->floor_top);
-            if (command_see)
+            if (command_see) {
                 get_item_label = show_floor_items(player_ptr, fis_ptr->menu_line, player_ptr->y, player_ptr->x, &fis_ptr->min_width, item_tester);
+            }
         }
 
         if (command_wrk == USE_INVEN) {
@@ -325,25 +356,28 @@ bool get_item_floor(PlayerType *player_ptr, COMMAND_CODE *cp, concptr pmt, concp
                 strcat(fis_ptr->out_val, tmp_val);
             }
 
-            if (!command_see && !use_menu)
+            if (!command_see && !use_menu) {
                 strcat(fis_ptr->out_val, _(" '*'一覧,", " * to see,"));
+            }
 
             if (fis_ptr->allow_equip) {
-                if (!use_menu)
+                if (!use_menu) {
                     strcat(fis_ptr->out_val, _(" '/' 装備品,", " / for Equip,"));
-                else if (fis_ptr->allow_floor)
+                } else if (fis_ptr->allow_floor) {
                     strcat(fis_ptr->out_val, _(" '6' 装備品,", " 6 for Equip,"));
-                else
+                } else {
                     strcat(fis_ptr->out_val, _(" '4'or'6' 装備品,", " 4 or 6 for Equip,"));
+                }
             }
 
             if (fis_ptr->allow_floor) {
-                if (!use_menu)
+                if (!use_menu) {
                     strcat(fis_ptr->out_val, _(" '-'床上,", " - for floor,"));
-                else if (fis_ptr->allow_equip)
+                } else if (fis_ptr->allow_equip) {
                     strcat(fis_ptr->out_val, _(" '4' 床上,", " 4 for floor,"));
-                else
+                } else {
                     strcat(fis_ptr->out_val, _(" '4'or'6' 床上,", " 4 or 6 for floor,"));
+                }
             }
         } else if (command_wrk == (USE_EQUIP)) {
             sprintf(fis_ptr->out_val, _("装備品:", "Equip:"));
@@ -353,25 +387,28 @@ bool get_item_floor(PlayerType *player_ptr, COMMAND_CODE *cp, concptr pmt, concp
                 strcat(fis_ptr->out_val, tmp_val);
             }
 
-            if (!command_see && !use_menu)
+            if (!command_see && !use_menu) {
                 strcat(fis_ptr->out_val, _(" '*'一覧,", " * to see,"));
+            }
 
             if (fis_ptr->allow_inven) {
-                if (!use_menu)
+                if (!use_menu) {
                     strcat(fis_ptr->out_val, _(" '/' 持ち物,", " / for Inven,"));
-                else if (fis_ptr->allow_floor)
+                } else if (fis_ptr->allow_floor) {
                     strcat(fis_ptr->out_val, _(" '4' 持ち物,", " 4 for Inven,"));
-                else
+                } else {
                     strcat(fis_ptr->out_val, _(" '4'or'6' 持ち物,", " 4 or 6 for Inven,"));
+                }
             }
 
             if (fis_ptr->allow_floor) {
-                if (!use_menu)
+                if (!use_menu) {
                     strcat(fis_ptr->out_val, _(" '-'床上,", " - for floor,"));
-                else if (fis_ptr->allow_inven)
+                } else if (fis_ptr->allow_inven) {
                     strcat(fis_ptr->out_val, _(" '6' 床上,", " 6 for floor,"));
-                else
+                } else {
                     strcat(fis_ptr->out_val, _(" '4'or'6' 床上,", " 4 or 6 for floor,"));
+                }
             }
         } else if (command_wrk == USE_FLOOR) {
             sprintf(fis_ptr->out_val, _("床上:", "Floor:"));
@@ -381,8 +418,9 @@ bool get_item_floor(PlayerType *player_ptr, COMMAND_CODE *cp, concptr pmt, concp
                 strcat(fis_ptr->out_val, tmp_val);
             }
 
-            if (!command_see && !use_menu)
+            if (!command_see && !use_menu) {
                 strcat(fis_ptr->out_val, _(" '*'一覧,", " * to see,"));
+            }
 
             if (use_menu) {
                 if (fis_ptr->allow_inven && fis_ptr->allow_equip) {
@@ -403,8 +441,9 @@ bool get_item_floor(PlayerType *player_ptr, COMMAND_CODE *cp, concptr pmt, concp
             }
         }
 
-        if (fis_ptr->force)
+        if (fis_ptr->force) {
             strcat(fis_ptr->out_val, _(" 'w'練気術,", " w for the Force,"));
+        }
 
         strcat(fis_ptr->out_val, " ESC");
         sprintf(fis_ptr->tmp_val, "(%s) %s", fis_ptr->out_val, pmt);
@@ -412,12 +451,13 @@ bool get_item_floor(PlayerType *player_ptr, COMMAND_CODE *cp, concptr pmt, concp
         fis_ptr->which = inkey();
         if (use_menu) {
             int max_line = 1;
-            if (command_wrk == USE_INVEN)
+            if (command_wrk == USE_INVEN) {
                 max_line = fis_ptr->max_inven;
-            else if (command_wrk == USE_EQUIP)
+            } else if (command_wrk == USE_EQUIP) {
                 max_line = fis_ptr->max_equip;
-            else if (command_wrk == USE_FLOOR)
+            } else if (command_wrk == USE_FLOOR) {
                 max_line = std::min(23, fis_ptr->floor_num);
+            }
             switch (fis_ptr->which) {
             case ESCAPE:
             case 'z':
@@ -442,29 +482,29 @@ bool get_item_floor(PlayerType *player_ptr, COMMAND_CODE *cp, concptr pmt, concp
             case 'h':
             case 'H': {
                 if (command_wrk == (USE_INVEN)) {
-                    if (fis_ptr->allow_floor)
+                    if (fis_ptr->allow_floor) {
                         command_wrk = USE_FLOOR;
-                    else if (fis_ptr->allow_equip)
+                    } else if (fis_ptr->allow_equip) {
                         command_wrk = USE_EQUIP;
-                    else {
+                    } else {
                         bell();
                         break;
                     }
                 } else if (command_wrk == (USE_EQUIP)) {
-                    if (fis_ptr->allow_inven)
+                    if (fis_ptr->allow_inven) {
                         command_wrk = USE_INVEN;
-                    else if (fis_ptr->allow_floor)
+                    } else if (fis_ptr->allow_floor) {
                         command_wrk = USE_FLOOR;
-                    else {
+                    } else {
                         bell();
                         break;
                     }
                 } else if (command_wrk == (USE_FLOOR)) {
-                    if (fis_ptr->allow_equip)
+                    if (fis_ptr->allow_equip) {
                         command_wrk = USE_EQUIP;
-                    else if (fis_ptr->allow_inven)
+                    } else if (fis_ptr->allow_inven) {
                         command_wrk = USE_INVEN;
-                    else {
+                    } else {
                         bell();
                         break;
                     }
@@ -478,15 +518,17 @@ bool get_item_floor(PlayerType *player_ptr, COMMAND_CODE *cp, concptr pmt, concp
                     screen_save();
                 }
 
-                if (command_wrk == USE_INVEN)
+                if (command_wrk == USE_INVEN) {
                     max_line = fis_ptr->max_inven;
-                else if (command_wrk == USE_EQUIP)
+                } else if (command_wrk == USE_EQUIP) {
                     max_line = fis_ptr->max_equip;
-                else if (command_wrk == USE_FLOOR)
+                } else if (command_wrk == USE_FLOOR) {
                     max_line = std::min(23, fis_ptr->floor_num);
+                }
 
-                if (fis_ptr->menu_line > max_line)
+                if (fis_ptr->menu_line > max_line) {
                     fis_ptr->menu_line = max_line;
+                }
 
                 break;
             }
@@ -494,29 +536,29 @@ bool get_item_floor(PlayerType *player_ptr, COMMAND_CODE *cp, concptr pmt, concp
             case 'l':
             case 'L': {
                 if (command_wrk == (USE_INVEN)) {
-                    if (fis_ptr->allow_equip)
+                    if (fis_ptr->allow_equip) {
                         command_wrk = USE_EQUIP;
-                    else if (fis_ptr->allow_floor)
+                    } else if (fis_ptr->allow_floor) {
                         command_wrk = USE_FLOOR;
-                    else {
+                    } else {
                         bell();
                         break;
                     }
                 } else if (command_wrk == (USE_EQUIP)) {
-                    if (fis_ptr->allow_floor)
+                    if (fis_ptr->allow_floor) {
                         command_wrk = USE_FLOOR;
-                    else if (fis_ptr->allow_inven)
+                    } else if (fis_ptr->allow_inven) {
                         command_wrk = USE_INVEN;
-                    else {
+                    } else {
                         bell();
                         break;
                     }
                 } else if (command_wrk == (USE_FLOOR)) {
-                    if (fis_ptr->allow_inven)
+                    if (fis_ptr->allow_inven) {
                         command_wrk = USE_INVEN;
-                    else if (fis_ptr->allow_equip)
+                    } else if (fis_ptr->allow_equip) {
                         command_wrk = USE_EQUIP;
-                    else {
+                    } else {
                         bell();
                         break;
                     }
@@ -530,15 +572,17 @@ bool get_item_floor(PlayerType *player_ptr, COMMAND_CODE *cp, concptr pmt, concp
                     screen_save();
                 }
 
-                if (command_wrk == USE_INVEN)
+                if (command_wrk == USE_INVEN) {
                     max_line = fis_ptr->max_inven;
-                else if (command_wrk == USE_EQUIP)
+                } else if (command_wrk == USE_EQUIP) {
                     max_line = fis_ptr->max_equip;
-                else if (command_wrk == USE_FLOOR)
+                } else if (command_wrk == USE_FLOOR) {
                     max_line = std::min(23, fis_ptr->floor_num);
+                }
 
-                if (fis_ptr->menu_line > max_line)
+                if (fis_ptr->menu_line > max_line) {
                     fis_ptr->menu_line = max_line;
+                }
 
                 break;
             }
@@ -546,9 +590,9 @@ bool get_item_floor(PlayerType *player_ptr, COMMAND_CODE *cp, concptr pmt, concp
             case 'X':
             case '\r':
             case '\n': {
-                if (command_wrk == USE_FLOOR)
+                if (command_wrk == USE_FLOOR) {
                     *cp = -get_item_label;
-                else {
+                } else {
                     if (!get_item_okay(player_ptr, get_item_label, item_tester)) {
                         bell();
                         break;
@@ -576,8 +620,9 @@ bool get_item_floor(PlayerType *player_ptr, COMMAND_CODE *cp, concptr pmt, concp
             }
             }
 
-            if (fis_ptr->menu_line > max_line)
+            if (fis_ptr->menu_line > max_line) {
                 fis_ptr->menu_line -= max_line;
+            }
 
             continue;
         }
@@ -604,21 +649,23 @@ bool get_item_floor(PlayerType *player_ptr, COMMAND_CODE *cp, concptr pmt, concp
         case '\r':
         case '+': {
             auto *g_ptr = &player_ptr->current_floor_ptr->grid_array[player_ptr->y][player_ptr->x];
-            if (command_wrk != (USE_FLOOR))
+            if (command_wrk != (USE_FLOOR)) {
                 break;
+            }
 
-            if (g_ptr->o_idx_list.size() < 2)
+            if (g_ptr->o_idx_list.size() < 2) {
                 break;
+            }
 
             const auto next_o_idx = fis_ptr->floor_list[1];
-            while (g_ptr->o_idx_list.front() != next_o_idx)
+            while (g_ptr->o_idx_list.front() != next_o_idx) {
                 g_ptr->o_idx_list.rotate(player_ptr->current_floor_ptr);
+            }
 
             player_ptr->window_flags |= PW_FLOOR_ITEM_LIST;
             window_stuff(player_ptr);
 
-            fis_ptr->floor_num
-                = scan_floor_items(player_ptr, fis_ptr->floor_list, player_ptr->y, player_ptr->x, SCAN_FLOOR_ITEM_TESTER | SCAN_FLOOR_ONLY_MARKED, item_tester);
+            fis_ptr->floor_num = scan_floor_items(player_ptr, fis_ptr->floor_list, player_ptr->y, player_ptr->x, SCAN_FLOOR_ITEM_TESTER | SCAN_FLOOR_ONLY_MARKED, item_tester);
             if (command_see) {
                 screen_load();
                 screen_save();
@@ -744,45 +791,51 @@ bool get_item_floor(PlayerType *player_ptr, COMMAND_CODE *cp, concptr pmt, concp
             bool tag_not_found = false;
 
             if (command_wrk != USE_FLOOR) {
-                if (!get_tag(player_ptr, &fis_ptr->k, fis_ptr->which, command_wrk, item_tester))
+                if (!get_tag(player_ptr, &fis_ptr->k, fis_ptr->which, command_wrk, item_tester)) {
                     tag_not_found = true;
-                else if ((fis_ptr->k < INVEN_MAIN_HAND) ? !fis_ptr->inven : !fis_ptr->equip)
+                } else if ((fis_ptr->k < INVEN_MAIN_HAND) ? !fis_ptr->inven : !fis_ptr->equip) {
                     tag_not_found = true;
+                }
 
-                if (!tag_not_found)
+                if (!tag_not_found) {
                     fis_ptr->cur_tag = fis_ptr->which;
+                }
             } else {
                 if (get_tag_floor(player_ptr->current_floor_ptr, &fis_ptr->k, fis_ptr->which, fis_ptr->floor_list, fis_ptr->floor_num)) {
                     fis_ptr->k = 0 - fis_ptr->floor_list[fis_ptr->k];
                     fis_ptr->cur_tag = fis_ptr->which;
-                } else
+                } else {
                     tag_not_found = true;
+                }
             }
 
             if (tag_not_found) {
                 auto which = (char)tolower(fis_ptr->which);
 
                 if (command_wrk == (USE_INVEN)) {
-                    if (which == '(')
+                    if (which == '(') {
                         fis_ptr->k = fis_ptr->i1;
-                    else if (which == ')')
+                    } else if (which == ')') {
                         fis_ptr->k = fis_ptr->i2;
-                    else
+                    } else {
                         fis_ptr->k = label_to_inventory(player_ptr, which);
+                    }
                 } else if (command_wrk == (USE_EQUIP)) {
-                    if (which == '(')
+                    if (which == '(') {
                         fis_ptr->k = fis_ptr->e1;
-                    else if (which == ')')
+                    } else if (which == ')') {
                         fis_ptr->k = fis_ptr->e2;
-                    else
+                    } else {
                         fis_ptr->k = label_to_equipment(player_ptr, which);
+                    }
                 } else if (command_wrk == USE_FLOOR) {
-                    if (which == '(')
+                    if (which == '(') {
                         fis_ptr->k = 0;
-                    else if (which == ')')
+                    } else if (which == ')') {
                         fis_ptr->k = fis_ptr->floor_num - 1;
-                    else
+                    } else {
                         fis_ptr->k = islower(which) ? A2I(which) : -1;
+                    }
                     if (fis_ptr->k < 0 || fis_ptr->k >= fis_ptr->floor_num || fis_ptr->k >= 23) {
                         bell();
                         break;
@@ -821,19 +874,22 @@ bool get_item_floor(PlayerType *player_ptr, COMMAND_CODE *cp, concptr pmt, concp
         command_see = false;
     }
 
-    if (fis_ptr->toggle)
+    if (fis_ptr->toggle) {
         toggle_inventory_equipment(player_ptr);
+    }
 
     player_ptr->window_flags |= (PW_INVEN | PW_EQUIP);
     handle_stuff(player_ptr);
     prt("", 0, 0);
-    if (fis_ptr->oops && str)
+    if (fis_ptr->oops && str) {
         msg_print(str);
+    }
 
     if (fis_ptr->item) {
         repeat_push(*cp);
-        if (command_cmd)
+        if (command_cmd) {
             prev_tag = fis_ptr->cur_tag;
+        }
         command_cmd = 0;
     }
 

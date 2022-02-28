@@ -2,7 +2,7 @@
 
 /* The "sval" codes for TV_SCROLL */
 enum sv_scroll_type {
-	SV_SCROLL_DARKNESS = 0,
+    SV_SCROLL_DARKNESS = 0,
     SV_SCROLL_AGGRAVATE_MONSTER = 1,
     SV_SCROLL_CURSE_ARMOR = 2,
     SV_SCROLL_CURSE_WEAPON = 3,
@@ -21,7 +21,7 @@ enum sv_scroll_type {
     SV_SCROLL_ENCHANT_ARMOR = 16,
     SV_SCROLL_ENCHANT_WEAPON_TO_HIT = 17,
     SV_SCROLL_ENCHANT_WEAPON_TO_DAM = 18,
-	/* xxx enchant missile? */
+    /* xxx enchant missile? */
     SV_SCROLL_STAR_ENCHANT_ARMOR = 20,
     SV_SCROLL_STAR_ENCHANT_WEAPON = 21,
     SV_SCROLL_RECHARGING = 22,
@@ -33,7 +33,7 @@ enum sv_scroll_type {
     SV_SCROLL_DETECT_TRAP = 28,
     SV_SCROLL_DETECT_DOOR = 29,
     SV_SCROLL_DETECT_INVIS = 30,
-	/* xxx (detect evil?) */
+    /* xxx (detect evil?) */
     SV_SCROLL_SATISFY_HUNGER = 32,
     SV_SCROLL_BLESSING = 33,
     SV_SCROLL_HOLY_CHANT = 34,
@@ -42,7 +42,7 @@ enum sv_scroll_type {
     SV_SCROLL_PROTECTION_FROM_EVIL = 37,
     SV_SCROLL_RUNE_OF_PROTECTION = 38,
     SV_SCROLL_TRAP_DOOR_DESTRUCTION = 39,
-	/* xxx */
+    /* xxx */
     SV_SCROLL_STAR_DESTRUCTION = 41,
     SV_SCROLL_DISPEL_UNDEAD = 42,
     SV_SCROLL_SPELL = 43,

@@ -310,8 +310,9 @@ bool cast_blue_bolt_missile(PlayerType *player_ptr, bmc_type *bmc_ptr)
 
 bool cast_blue_bolt_abyss(PlayerType *player_ptr, bmc_type *bmc_ptr)
 {
-    if (!get_aim_dir(player_ptr, &bmc_ptr->dir))
+    if (!get_aim_dir(player_ptr, &bmc_ptr->dir)) {
         return false;
+    }
 
     msg_print(_("アビス・ボルトの呪文を唱えた。", "You cast a abyss bolt."));
     bmc_ptr->damage = monspell_bluemage_damage(player_ptr, MonsterAbilityType::BO_ABYSS, bmc_ptr->plev, DAM_ROLL);
@@ -321,8 +322,9 @@ bool cast_blue_bolt_abyss(PlayerType *player_ptr, bmc_type *bmc_ptr)
 
 bool cast_blue_bolt_void(PlayerType *player_ptr, bmc_type *bmc_ptr)
 {
-    if (!get_aim_dir(player_ptr, &bmc_ptr->dir))
+    if (!get_aim_dir(player_ptr, &bmc_ptr->dir)) {
         return false;
+    }
 
     msg_print(_("ヴォイド・ボルトの呪文を唱えた。", "You cast a void bolt."));
     bmc_ptr->damage = monspell_bluemage_damage(player_ptr, MonsterAbilityType::BO_VOID, bmc_ptr->plev, DAM_ROLL);

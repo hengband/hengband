@@ -73,8 +73,9 @@ HBITMAP read_graphic(char *filename)
 namespace Impl {
 graphics_mode change_graphics(graphics_mode arg)
 {
-    if (current_graphics_mode == arg)
+    if (current_graphics_mode == arg) {
         return current_graphics_mode;
+    }
 
     char buf[MAIN_WIN_MAX_PATH];
     BYTE wid, hgt, twid, thgt, ox, oy;

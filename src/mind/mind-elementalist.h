@@ -1,18 +1,18 @@
 ﻿#pragma once
 
-#include "system/angband.h"
 #include "effect/attribute-types.h"
+#include "system/angband.h"
 
 enum class ElementRealmType {
-	FIRE = 1,
-	ICE = 2,
-	SKY = 3,
-	SEA = 4,
-	DARKNESS = 5,
-	CHAOS = 6,
-	EARTH = 7,
-	DEATH = 8,
-	MAX
+    FIRE = 1,
+    ICE = 2,
+    SKY = 3,
+    SEA = 4,
+    DARKNESS = 5,
+    CHAOS = 6,
+    EARTH = 7,
+    DEATH = 8,
+    MAX
 };
 
 class PlayerType;

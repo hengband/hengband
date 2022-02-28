@@ -20,5 +20,5 @@ class PlayerType;
 void print_field(concptr info, TERM_LEN row, TERM_LEN col);
 void print_map(PlayerType *player_ptr);
 void display_map(PlayerType *player_ptr, int *cy, int *cx);
-void set_term_color(PlayerType *player_ptr, POSITION y, POSITION x, TERM_COLOR *ap, SYMBOL_CODE *cp);
+void set_term_color(PlayerType *player_ptr, POSITION y, POSITION x, TERM_COLOR *ap, char *cp);
 int panel_col_of(int col);

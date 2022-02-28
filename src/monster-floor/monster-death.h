@@ -1,8 +1,8 @@
 ﻿#pragma once
 
-#include "system/angband.h"
-#include "monster-floor/monster-death-util.h"
 #include "effect/attribute-types.h"
+#include "monster-floor/monster-death-util.h"
+#include "system/angband.h"
 
 class PlayerType;
 void monster_death(PlayerType *player_ptr, MONSTER_IDX m_idx, bool drop_item, AttributeFlags attribute_flags);

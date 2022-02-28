@@ -36,8 +36,9 @@ void rd_dummy2(void)
  */
 void rd_dummy_monsters(PlayerType *player_ptr)
 {
-    if (h_older_than(1, 5, 0, 2))
+    if (h_older_than(1, 5, 0, 2)) {
         return;
+    }
 
     auto tmp16s = rd_s16b();
     monster_type dummy_mon;

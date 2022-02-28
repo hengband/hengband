@@ -50,9 +50,11 @@ void sindarin_to_kana(char *kana, concptr sindarin)
     int idx;
 
     sprintf(kana, "%s$", sindarin);
-    for (idx = 0; kana[idx]; idx++)
-        if (isupper(kana[idx]))
+    for (idx = 0; kana[idx]; idx++) {
+        if (isupper(kana[idx])) {
             kana[idx] = (char)tolower(kana[idx]);
+        }
+    }
 
     for (idx = 0; s2j_table[idx].key1 != nullptr; idx++) {
         concptr pat1 = s2j_table[idx].key1;
@@ -84,8 +86,9 @@ void sindarin_to_kana(char *kana, concptr sindarin)
 
     idx = 0;
 
-    while (kana[idx] != '$')
+    while (kana[idx] != '$') {
         idx++;
+    }
 
     kana[idx] = '\0';
 }
@@ -151,8 +154,9 @@ void jverb(concptr in, char *out, int flag)
         }
     }
 
-    if (p->from == nullptr)
+    if (p->from == nullptr) {
         strcpy(&out[in_len], p->to[flag - 1]);
+    }
 }
 
 /*!
@@ -183,8 +187,9 @@ void sjis2euc(char *str)
             }
             tmp[i - 1] = c1;
             tmp[i] = c2;
-        } else
+        } else {
             tmp[i] = c1;
+        }
     }
     tmp[len] = 0;
     strcpy(str, tmp.data());
@@ -219,8 +224,9 @@ void euc2sjis(char *str)
 
             tmp[i - 1] = c1;
             tmp[i] = c2;
-        } else
+        } else {
             tmp[i] = c1;
+        }
     }
     tmp[len] = 0;
     strcpy(str, tmp.data());
@@ -248,8 +254,9 @@ byte codeconv(char *str)
         c1 = str[i];
 
         /* ASCII? */
-        if (!(c1 & 0x80))
+        if (!(c1 & 0x80)) {
             continue;
+        }
 
         /* Second byte */
         i++;
@@ -269,8 +276,7 @@ byte codeconv(char *str)
             }
         }
 
-        else if (((0x81 <= c1 && c1 <= 0x9f) && ((0x40 <= c2 && c2 <= 0x7e) || (0x80 <= c2 && c2 <= 0xfc)))
-            || ((0xe0 <= c1 && c1 <= 0xfc) && (0x40 <= c2 && c2 <= 0x7e))) {
+        else if (((0x81 <= c1 && c1 <= 0x9f) && ((0x40 <= c2 && c2 <= 0x7e) || (0x80 <= c2 && c2 <= 0xfc))) || ((0xe0 <= c1 && c1 <= 0xfc) && (0x40 <= c2 && c2 <= 0x7e))) {
             /* Only SJIS is allowed */
             if (!code) {
                 /* SJIS */
@@ -317,11 +323,13 @@ bool iskanji2(concptr s, int x)
     int i;
 
     for (i = 0; i < x; i++) {
-        if (iskanji(s[i]))
+        if (iskanji(s[i])) {
             i++;
+        }
     }
-    if ((x == i) && iskanji(s[x]))
+    if ((x == i) && iskanji(s[x])) {
         return true;
+    }
 
     return false;
 }
@@ -335,8 +343,9 @@ static bool is_ascii_str(concptr str)
 {
     for (; *str; str++) {
         int ch = *str;
-        if (!(0x00 < ch && ch <= 0x7f))
+        if (!(0x00 < ch && ch <= 0x7f)) {
             return false;
+        }
     }
     return true;
 }
@@ -374,11 +383,13 @@ static void ms_to_jis_unicode(char *str)
     unsigned char *p;
     for (p = (unsigned char *)str; *p; p++) {
         int subseq_num = 0;
-        if (0x00 < *p && *p <= 0x7f)
+        if (0x00 < *p && *p <= 0x7f) {
             continue;
+        }
 
-        if ((*p & 0xe0) == 0xc0)
+        if ((*p & 0xe0) == 0xc0) {
             subseq_num = 1;
+        }
         if ((*p & 0xf0) == 0xe0) {
             size_t i;
             for (i = 0; i < sizeof(ms_to_jis_unicode_conv) / sizeof(ms_to_jis_unicode_conv[0]); ++i) {
@@ -389,8 +400,9 @@ static void ms_to_jis_unicode(char *str)
             }
             subseq_num = 2;
         }
-        if ((*p & 0xf8) == 0xf0)
+        if ((*p & 0xf8) == 0xf0) {
             subseq_num = 3;
+        }
 
         p += subseq_num;
     }
@@ -413,8 +425,9 @@ static void ms_to_jis_unicode(char *str)
 int utf8_to_euc(char *utf8_str, size_t utf8_str_len, char *euc_buf, size_t euc_buf_len)
 {
     static iconv_t cd = nullptr;
-    if (!cd)
+    if (!cd) {
         cd = iconv_open("EUC-JP", "UTF-8");
+    }
 
     ms_to_jis_unicode(utf8_str);
 
@@ -442,8 +455,9 @@ int utf8_to_euc(char *utf8_str, size_t utf8_str_len, char *euc_buf, size_t euc_b
 int euc_to_utf8(const char *euc_str, size_t euc_str_len, char *utf8_buf, size_t utf8_buf_len)
 {
     static iconv_t cd = nullptr;
-    if (!cd)
+    if (!cd) {
         cd = iconv_open("UTF-8", "EUC-JP");
+    }
 
     size_t inlen_left = euc_str_len;
     size_t outlen_left = utf8_buf_len;
@@ -503,8 +517,9 @@ static bool utf8_to_sys(char *utf8_str, char *sys_str_buffer, size_t sys_str_buf
  */
 void guess_convert_to_system_encoding(char *strbuf, int buflen)
 {
-    if (is_ascii_str(strbuf))
+    if (is_ascii_str(strbuf)) {
         return;
+    }
 
     if (is_utf8_str(strbuf)) {
         std::vector<char> work(buflen);

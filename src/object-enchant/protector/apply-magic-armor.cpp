@@ -9,8 +9,10 @@
 #include "inventory/inventory-slot-types.h"
 #include "object-enchant/object-ego.h"
 #include "object/object-kind-hook.h"
+#include "player/player-personality-types.h"
 #include "sv-definition/sv-armor-types.h"
 #include "system/object-type-definition.h"
+#include "system/player-type-definition.h"
 #include "view/display-messages.h"
 
 /*
@@ -53,9 +55,27 @@ void ArmorEnchanter::apply_magic()
         }
 
         return;
-    case ItemKindType::SOFT_ARMOR: {
-        if (this->o_ptr->sval == SV_KUROSHOUZOKU) {
+    case ItemKindType::SOFT_ARMOR:
+        // @todo 後ほどSoftArmorEnchanterへ分離した時、このswitch文はsval_enchant() へ移動させる.
+        switch (this->o_ptr->sval) {
+        case SV_KUROSHOUZOKU:
             this->o_ptr->pval = randint1(4);
+            break;
+        case SV_ABUNAI_MIZUGI:
+            if (this->player_ptr->ppersonality != PERSONALITY_SEXY) {
+                break;
+            }
+
+            this->o_ptr->pval = 3;
+            this->o_ptr->art_flags.set(TR_STR);
+            this->o_ptr->art_flags.set(TR_INT);
+            this->o_ptr->art_flags.set(TR_WIS);
+            this->o_ptr->art_flags.set(TR_DEX);
+            this->o_ptr->art_flags.set(TR_CON);
+            this->o_ptr->art_flags.set(TR_CHR);
+            break;
+        default:
+            break;
         }
 
         if (this->power > 1) {
@@ -67,13 +87,12 @@ void ArmorEnchanter::apply_magic()
             this->give_ego_index();
             return;
         }
-        
+
         if (this->power < -1) {
             this->give_cursed();
         }
 
         return;
-    }
     default:
         return;
     }
@@ -91,15 +110,15 @@ void ArmorEnchanter::give_ego_index()
 
     while (true) {
         auto valid = true;
-        this->o_ptr->name2 = get_random_ego(INVEN_BODY, true);
-        switch (this->o_ptr->name2) {
-        case EGO_DWARVEN:
+        this->o_ptr->ego_idx = get_random_ego(INVEN_BODY, true);
+        switch (this->o_ptr->ego_idx) {
+        case EgoType::DWARVEN:
             if (this->o_ptr->tval != ItemKindType::HARD_ARMOR) {
                 valid = false;
             }
 
             break;
-        case EGO_DRUID:
+        case EgoType::DRUID:
             if (this->o_ptr->tval != ItemKindType::SOFT_ARMOR) {
                 valid = false;
             }
@@ -128,7 +147,7 @@ void ArmorEnchanter::give_high_ego_index()
 
     this->is_high_ego_generated = true;
     auto ego_robe = one_in_(5);
-    this->o_ptr->name2 = ego_robe ? EGO_TWILIGHT : EGO_PERMANENCE;
+    this->o_ptr->ego_idx = ego_robe ? EgoType::TWILIGHT : EgoType::PERMANENCE;
     if (!ego_robe) {
         return;
     }
@@ -142,10 +161,10 @@ void ArmorEnchanter::give_high_ego_index()
 
 void ArmorEnchanter::give_cursed()
 {
-    this->o_ptr->name2 = get_random_ego(INVEN_BODY, false);
-    switch (this->o_ptr->name2) {
-    case EGO_A_DEMON:
-    case EGO_A_MORGUL:
+    this->o_ptr->ego_idx = get_random_ego(INVEN_BODY, false);
+    switch (this->o_ptr->ego_idx) {
+    case EgoType::A_DEMON:
+    case EgoType::A_MORGUL:
         return;
     default:
         msg_print(_("エラー：適した呪い鎧エゴがみつかりませんでした.", "Error:  suitable cursed armor ego not found."));

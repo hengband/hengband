@@ -27,21 +27,24 @@
  */
 void do_cmd_read_scroll(PlayerType *player_ptr)
 {
-    if (player_ptr->wild_mode || cmd_limit_arena(player_ptr))
+    if (player_ptr->wild_mode || cmd_limit_arena(player_ptr)) {
         return;
+    }
 
     PlayerClass(player_ptr).break_samurai_stance({ SamuraiStanceType::MUSOU, SamuraiStanceType::KOUKIJIN });
 
-    if (cmd_limit_blind(player_ptr) || cmd_limit_confused(player_ptr))
+    if (cmd_limit_blind(player_ptr) || cmd_limit_confused(player_ptr)) {
         return;
+    }
 
     concptr q = _("どの巻物を読みますか? ", "Read which scroll? ");
     concptr s = _("読める巻物がない。", "You have no scrolls to read.");
     ObjectType *o_ptr;
     OBJECT_IDX item;
     o_ptr = choose_object(player_ptr, &item, q, s, USE_INVEN | USE_FLOOR, FuncItemTester(&ObjectType::is_readable));
-    if (!o_ptr)
+    if (!o_ptr) {
         return;
+    }
 
     ObjectReadEntity(player_ptr, item).execute(o_ptr->is_aware());
 }

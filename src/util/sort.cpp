@@ -24,23 +24,27 @@
 static void exe_ang_sort(PlayerType *player_ptr, vptr u, vptr v, int p, int q, bool (*ang_sort_comp)(PlayerType *, vptr, vptr, int, int),
     void (*ang_sort_swap)(PlayerType *, vptr, vptr, int, int))
 {
-    if (p >= q)
+    if (p >= q) {
         return;
+    }
 
     int z = p;
     int a = p;
     int b = q;
     while (true) {
         /* Slide i2 */
-        while (!(*ang_sort_comp)(player_ptr, u, v, b, z))
+        while (!(*ang_sort_comp)(player_ptr, u, v, b, z)) {
             b--;
+        }
 
         /* Slide i1 */
-        while (!(*ang_sort_comp)(player_ptr, u, v, z, a))
+        while (!(*ang_sort_comp)(player_ptr, u, v, z, a)) {
             a++;
+        }
 
-        if (a >= b)
+        if (a >= b) {
             break;
+        }
 
         (*ang_sort_swap)(player_ptr, u, v, a, b);
 
@@ -123,77 +127,97 @@ bool ang_sort_comp_importance(PlayerType *player_ptr, vptr u, vptr v, int a, int
     monster_race *ap_ra_ptr, *ap_rb_ptr;
 
     /* The player grid */
-    if (y[a] == player_ptr->y && x[a] == player_ptr->x)
+    if (y[a] == player_ptr->y && x[a] == player_ptr->x) {
         return true;
+    }
 
-    if (y[b] == player_ptr->y && x[b] == player_ptr->x)
+    if (y[b] == player_ptr->y && x[b] == player_ptr->x) {
         return false;
+    }
 
     /* Extract monster race */
-    if (ca_ptr->m_idx && ma_ptr->ml)
+    if (ca_ptr->m_idx && ma_ptr->ml) {
         ap_ra_ptr = &r_info[ma_ptr->ap_r_idx];
-    else
+    } else {
         ap_ra_ptr = nullptr;
+    }
 
-    if (cb_ptr->m_idx && mb_ptr->ml)
+    if (cb_ptr->m_idx && mb_ptr->ml) {
         ap_rb_ptr = &r_info[mb_ptr->ap_r_idx];
-    else
+    } else {
         ap_rb_ptr = nullptr;
+    }
 
-    if (ap_ra_ptr && !ap_rb_ptr)
+    if (ap_ra_ptr && !ap_rb_ptr) {
         return true;
+    }
 
-    if (!ap_ra_ptr && ap_rb_ptr)
+    if (!ap_ra_ptr && ap_rb_ptr) {
         return false;
+    }
 
     /* Compare two monsters */
     if (ap_ra_ptr && ap_rb_ptr) {
         /* Unique monsters first */
-        if (ap_ra_ptr->kind_flags.has(MonsterKindType::UNIQUE) && ap_rb_ptr->kind_flags.has_not(MonsterKindType::UNIQUE))
+        if (ap_ra_ptr->kind_flags.has(MonsterKindType::UNIQUE) && ap_rb_ptr->kind_flags.has_not(MonsterKindType::UNIQUE)) {
             return true;
-        if (ap_ra_ptr->kind_flags.has_not(MonsterKindType::UNIQUE) && ap_rb_ptr->kind_flags.has(MonsterKindType::UNIQUE))
+        }
+        if (ap_ra_ptr->kind_flags.has_not(MonsterKindType::UNIQUE) && ap_rb_ptr->kind_flags.has(MonsterKindType::UNIQUE)) {
             return false;
+        }
 
         /* Shadowers first (あやしい影) */
-        if (ma_ptr->mflag2.has(MonsterConstantFlagType::KAGE) && mb_ptr->mflag2.has_not(MonsterConstantFlagType::KAGE))
+        if (ma_ptr->mflag2.has(MonsterConstantFlagType::KAGE) && mb_ptr->mflag2.has_not(MonsterConstantFlagType::KAGE)) {
             return true;
-        if (ma_ptr->mflag2.has_not(MonsterConstantFlagType::KAGE) && mb_ptr->mflag2.has(MonsterConstantFlagType::KAGE))
+        }
+        if (ma_ptr->mflag2.has_not(MonsterConstantFlagType::KAGE) && mb_ptr->mflag2.has(MonsterConstantFlagType::KAGE)) {
             return false;
+        }
 
         /* Unknown monsters first */
-        if (!ap_ra_ptr->r_tkills && ap_rb_ptr->r_tkills)
+        if (!ap_ra_ptr->r_tkills && ap_rb_ptr->r_tkills) {
             return true;
-        if (ap_ra_ptr->r_tkills && !ap_rb_ptr->r_tkills)
+        }
+        if (ap_ra_ptr->r_tkills && !ap_rb_ptr->r_tkills) {
             return false;
+        }
 
         /* Higher level monsters first (if known) */
         if (ap_ra_ptr->r_tkills && ap_rb_ptr->r_tkills) {
-            if (ap_ra_ptr->level > ap_rb_ptr->level)
+            if (ap_ra_ptr->level > ap_rb_ptr->level) {
                 return true;
-            if (ap_ra_ptr->level < ap_rb_ptr->level)
+            }
+            if (ap_ra_ptr->level < ap_rb_ptr->level) {
                 return false;
+            }
         }
 
         /* Sort by index if all conditions are same */
-        if (ma_ptr->ap_r_idx > mb_ptr->ap_r_idx)
+        if (ma_ptr->ap_r_idx > mb_ptr->ap_r_idx) {
             return true;
-        if (ma_ptr->ap_r_idx < mb_ptr->ap_r_idx)
+        }
+        if (ma_ptr->ap_r_idx < mb_ptr->ap_r_idx) {
             return false;
+        }
     }
 
     /* An object get higher priority */
-    if (!player_ptr->current_floor_ptr->grid_array[y[a]][x[a]].o_idx_list.empty() && player_ptr->current_floor_ptr->grid_array[y[b]][x[b]].o_idx_list.empty())
+    if (!player_ptr->current_floor_ptr->grid_array[y[a]][x[a]].o_idx_list.empty() && player_ptr->current_floor_ptr->grid_array[y[b]][x[b]].o_idx_list.empty()) {
         return true;
+    }
 
-    if (player_ptr->current_floor_ptr->grid_array[y[a]][x[a]].o_idx_list.empty() && !player_ptr->current_floor_ptr->grid_array[y[b]][x[b]].o_idx_list.empty())
+    if (player_ptr->current_floor_ptr->grid_array[y[a]][x[a]].o_idx_list.empty() && !player_ptr->current_floor_ptr->grid_array[y[b]][x[b]].o_idx_list.empty()) {
         return false;
+    }
 
     /* Priority from the terrain */
-    if (f_info[ca_ptr->feat].priority > f_info[cb_ptr->feat].priority)
+    if (f_info[ca_ptr->feat].priority > f_info[cb_ptr->feat].priority) {
         return true;
+    }
 
-    if (f_info[ca_ptr->feat].priority < f_info[cb_ptr->feat].priority)
+    if (f_info[ca_ptr->feat].priority < f_info[cb_ptr->feat].priority) {
         return false;
+    }
 
     /* If all conditions are same, compare distance */
     return ang_sort_comp_distance(player_ptr, u, v, a, b);
@@ -248,11 +272,13 @@ bool ang_sort_art_comp(PlayerType *player_ptr, vptr u, vptr v, int a, int b)
         z2 = enum2i(a_info[w2].tval);
 
         /* Compare total kills */
-        if (z1 < z2)
+        if (z1 < z2) {
             return true;
+        }
 
-        if (z1 > z2)
+        if (z1 > z2) {
             return false;
+        }
     }
 
     /* Sort by monster level */
@@ -262,11 +288,13 @@ bool ang_sort_art_comp(PlayerType *player_ptr, vptr u, vptr v, int a, int b)
         z2 = a_info[w2].sval;
 
         /* Compare levels */
-        if (z1 < z2)
+        if (z1 < z2) {
             return true;
+        }
 
-        if (z1 > z2)
+        if (z1 > z2) {
             return false;
+        }
     }
 
     /* Sort by monster experience */
@@ -276,11 +304,13 @@ bool ang_sort_art_comp(PlayerType *player_ptr, vptr u, vptr v, int a, int b)
         z2 = a_info[w2].level;
 
         /* Compare experience */
-        if (z1 < z2)
+        if (z1 < z2) {
             return true;
+        }
 
-        if (z1 > z2)
+        if (z1 > z2) {
             return false;
+        }
     }
 
     /* Compare indexes */
@@ -312,8 +342,8 @@ bool ang_sort_comp_quest_num(PlayerType *player_ptr, vptr u, vptr v, int a, int 
     (void)v;
 
     QuestId *q_num = (QuestId *)u;
-    quest_type *qa = &quest[enum2i(q_num[a])];
-    quest_type *qb = &quest[enum2i(q_num[b])];
+    auto *qa = &quest_map[q_num[a]];
+    auto *qb = &quest_map[q_num[b]];
     return (qa->comptime != qb->comptime) ? (qa->comptime < qb->comptime) : (qa->level <= qb->level);
 }
 
@@ -352,29 +382,37 @@ bool ang_sort_comp_pet(PlayerType *player_ptr, vptr u, vptr v, int a, int b)
     monster_race *r_ptr1 = &r_info[m_ptr1->r_idx];
     monster_race *r_ptr2 = &r_info[m_ptr2->r_idx];
 
-    if (m_ptr1->nickname && !m_ptr2->nickname)
+    if (m_ptr1->nickname && !m_ptr2->nickname) {
         return true;
+    }
 
-    if (m_ptr2->nickname && !m_ptr1->nickname)
+    if (m_ptr2->nickname && !m_ptr1->nickname) {
         return false;
+    }
 
-    if (r_ptr1->kind_flags.has(MonsterKindType::UNIQUE) && r_ptr2->kind_flags.has_not(MonsterKindType::UNIQUE))
+    if (r_ptr1->kind_flags.has(MonsterKindType::UNIQUE) && r_ptr2->kind_flags.has_not(MonsterKindType::UNIQUE)) {
         return true;
+    }
 
-    if (r_ptr2->kind_flags.has(MonsterKindType::UNIQUE) && r_ptr1->kind_flags.has_not(MonsterKindType::UNIQUE))
+    if (r_ptr2->kind_flags.has(MonsterKindType::UNIQUE) && r_ptr1->kind_flags.has_not(MonsterKindType::UNIQUE)) {
         return false;
+    }
 
-    if (r_ptr1->level > r_ptr2->level)
+    if (r_ptr1->level > r_ptr2->level) {
         return true;
+    }
 
-    if (r_ptr2->level > r_ptr1->level)
+    if (r_ptr2->level > r_ptr1->level) {
         return false;
+    }
 
-    if (m_ptr1->hp > m_ptr2->hp)
+    if (m_ptr1->hp > m_ptr2->hp) {
         return true;
+    }
 
-    if (m_ptr2->hp > m_ptr1->hp)
+    if (m_ptr2->hp > m_ptr1->hp) {
         return false;
+    }
 
     return w1 <= w2;
 }
@@ -410,10 +448,12 @@ bool ang_sort_comp_hook(PlayerType *player_ptr, vptr u, vptr v, int a, int b)
         z2 = r_info[w2].r_pkills;
 
         /* Compare player kills */
-        if (z1 < z2)
+        if (z1 < z2) {
             return true;
-        if (z1 > z2)
+        }
+        if (z1 > z2) {
             return false;
+        }
     }
 
     /* Sort by total kills */
@@ -423,10 +463,12 @@ bool ang_sort_comp_hook(PlayerType *player_ptr, vptr u, vptr v, int a, int b)
         z2 = r_info[w2].r_tkills;
 
         /* Compare total kills */
-        if (z1 < z2)
+        if (z1 < z2) {
             return true;
-        if (z1 > z2)
+        }
+        if (z1 > z2) {
             return false;
+        }
     }
 
     /* Sort by monster level */
@@ -436,10 +478,12 @@ bool ang_sort_comp_hook(PlayerType *player_ptr, vptr u, vptr v, int a, int b)
         z2 = r_info[w2].level;
 
         /* Compare levels */
-        if (z1 < z2)
+        if (z1 < z2) {
             return true;
-        if (z1 > z2)
+        }
+        if (z1 > z2) {
             return false;
+        }
     }
 
     /* Sort by monster experience */
@@ -449,10 +493,12 @@ bool ang_sort_comp_hook(PlayerType *player_ptr, vptr u, vptr v, int a, int b)
         z2 = r_info[w2].mexp;
 
         /* Compare experience */
-        if (z1 < z2)
+        if (z1 < z2) {
             return true;
-        if (z1 > z2)
+        }
+        if (z1 > z2) {
             return false;
+        }
     }
 
     /* Compare indexes */
@@ -501,17 +547,21 @@ bool ang_sort_comp_monster_level(PlayerType *player_ptr, vptr u, vptr v, int a, 
     monster_race *r_ptr1 = &r_info[w1];
     monster_race *r_ptr2 = &r_info[w2];
 
-    if (r_ptr2->level > r_ptr1->level)
+    if (r_ptr2->level > r_ptr1->level) {
         return true;
+    }
 
-    if (r_ptr1->level > r_ptr2->level)
+    if (r_ptr1->level > r_ptr2->level) {
         return false;
+    }
 
-    if (r_ptr2->kind_flags.has(MonsterKindType::UNIQUE) && r_ptr1->kind_flags.has_not(MonsterKindType::UNIQUE))
+    if (r_ptr2->kind_flags.has(MonsterKindType::UNIQUE) && r_ptr1->kind_flags.has_not(MonsterKindType::UNIQUE)) {
         return true;
+    }
 
-    if (r_ptr1->kind_flags.has(MonsterKindType::UNIQUE) && r_ptr2->kind_flags.has_not(MonsterKindType::UNIQUE))
+    if (r_ptr1->kind_flags.has(MonsterKindType::UNIQUE) && r_ptr2->kind_flags.has_not(MonsterKindType::UNIQUE)) {
         return false;
+    }
 
     return w1 <= w2;
 }
@@ -539,41 +589,53 @@ bool ang_sort_comp_pet_dismiss(PlayerType *player_ptr, vptr u, vptr v, int a, in
     monster_race *r_ptr1 = &r_info[m_ptr1->r_idx];
     monster_race *r_ptr2 = &r_info[m_ptr2->r_idx];
 
-    if (w1 == player_ptr->riding)
+    if (w1 == player_ptr->riding) {
         return true;
+    }
 
-    if (w2 == player_ptr->riding)
+    if (w2 == player_ptr->riding) {
         return false;
+    }
 
-    if (m_ptr1->nickname && !m_ptr2->nickname)
+    if (m_ptr1->nickname && !m_ptr2->nickname) {
         return true;
+    }
 
-    if (m_ptr2->nickname && !m_ptr1->nickname)
+    if (m_ptr2->nickname && !m_ptr1->nickname) {
         return false;
+    }
 
-    if (!m_ptr1->parent_m_idx && m_ptr2->parent_m_idx)
+    if (!m_ptr1->parent_m_idx && m_ptr2->parent_m_idx) {
         return true;
+    }
 
-    if (!m_ptr2->parent_m_idx && m_ptr1->parent_m_idx)
+    if (!m_ptr2->parent_m_idx && m_ptr1->parent_m_idx) {
         return false;
+    }
 
-    if (r_ptr1->kind_flags.has(MonsterKindType::UNIQUE) && r_ptr2->kind_flags.has_not(MonsterKindType::UNIQUE))
+    if (r_ptr1->kind_flags.has(MonsterKindType::UNIQUE) && r_ptr2->kind_flags.has_not(MonsterKindType::UNIQUE)) {
         return true;
+    }
 
-    if (r_ptr2->kind_flags.has(MonsterKindType::UNIQUE) && r_ptr1->kind_flags.has_not(MonsterKindType::UNIQUE))
+    if (r_ptr2->kind_flags.has(MonsterKindType::UNIQUE) && r_ptr1->kind_flags.has_not(MonsterKindType::UNIQUE)) {
         return false;
+    }
 
-    if (r_ptr1->level > r_ptr2->level)
+    if (r_ptr1->level > r_ptr2->level) {
         return true;
+    }
 
-    if (r_ptr2->level > r_ptr1->level)
+    if (r_ptr2->level > r_ptr1->level) {
         return false;
+    }
 
-    if (m_ptr1->hp > m_ptr2->hp)
+    if (m_ptr1->hp > m_ptr2->hp) {
         return true;
+    }
 
-    if (m_ptr2->hp > m_ptr1->hp)
+    if (m_ptr2->hp > m_ptr1->hp) {
         return false;
+    }
 
     return w1 <= w2;
 }

@@ -22,6 +22,8 @@
 #include "system/monster-race-definition.h"
 #include "system/monster-type-definition.h"
 #include "system/player-type-definition.h"
+#include "timed-effect/player-hallucination.h"
+#include "timed-effect/timed-effects.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 #include "world/world.h"
@@ -211,8 +213,9 @@ static void process_monsters_mtimed_aux(PlayerType *player_ptr, MONSTER_IDX m_id
             /* Notice the "not waking up" */
             if (is_original_ap_and_seen(player_ptr, m_ptr)) {
                 /* Hack -- Count the ignores */
-                if (r_ptr->r_ignore < MAX_UCHAR)
+                if (r_ptr->r_ignore < MAX_UCHAR) {
                     r_ptr->r_ignore++;
+                }
             }
 
             break;
@@ -227,8 +230,9 @@ static void process_monsters_mtimed_aux(PlayerType *player_ptr, MONSTER_IDX m_id
 
         if (is_original_ap_and_seen(player_ptr, m_ptr)) {
             /* Hack -- Count the wakings */
-            if (r_ptr->r_wake < MAX_UCHAR)
+            if (r_ptr->r_wake < MAX_UCHAR) {
                 r_ptr->r_wake++;
+            }
         }
 
         break;
@@ -403,8 +407,9 @@ void monster_gain_exp(PlayerType *player_ptr, MONSTER_IDX m_idx, MONRACE_IDX s_i
     auto *floor_ptr = player_ptr->current_floor_ptr;
     auto *m_ptr = &floor_ptr->m_list[m_idx];
 
-    if (!monster_is_valid(m_ptr))
+    if (!monster_is_valid(m_ptr)) {
         return;
+    }
 
     auto *r_ptr = &r_info[m_ptr->r_idx];
     auto *s_ptr = &r_info[s_idx];
@@ -484,19 +489,23 @@ void monster_gain_exp(PlayerType *player_ptr, MONSTER_IDX m_idx, MONRACE_IDX s_i
 
     m_ptr->exp = 0;
     if (is_pet(m_ptr) || m_ptr->ml) {
+        auto is_hallucinated = player_ptr->effects()->hallucination()->is_hallucinated();
         if (!ignore_unview || player_can_see_bold(player_ptr, m_ptr->fy, m_ptr->fx)) {
-            if (player_ptr->hallucinated) {
-                monster_race *hallu_race;
+            if (is_hallucinated) {
+                monster_race *hallucinated_race = nullptr;
                 do {
-                    hallu_race = &r_info[randint1(r_info.size() - 1)];
-                } while (hallu_race->name.empty() || hallu_race->kind_flags.has(MonsterKindType::UNIQUE));
-                msg_format(_("%sは%sに進化した。", "%^s evolved into %s."), m_name, hallu_race->name.c_str());
+                    hallucinated_race = &r_info[randint1(r_info.size() - 1)];
+                } while (hallucinated_race->name.empty() || hallucinated_race->kind_flags.has(MonsterKindType::UNIQUE));
+                auto mes_evolution = _("%sは%sに進化した。", "%^s evolved into %s.");
+                auto mes_degeneration = _("%sは%sに退化した。", "%^s degenerated into %s.");
+                auto mes = randint0(2) == 0 ? mes_evolution : mes_degeneration;
+                msg_format(mes, m_name, hallucinated_race->name.c_str());
             } else {
                 msg_format(_("%sは%sに進化した。", "%^s evolved into %s."), m_name, r_ptr->name.c_str());
             }
         }
 
-        if (!player_ptr->hallucinated) {
+        if (!is_hallucinated) {
             r_info[old_r_idx].r_can_evolve = true;
         }
 

@@ -20,6 +20,7 @@
 #include "system/player-type-definition.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
+#include <algorithm>
 
 QuestCompletionChecker::QuestCompletionChecker(PlayerType *player_ptr, monster_type *m_ptr)
     : player_ptr(player_ptr)
@@ -38,8 +39,8 @@ void QuestCompletionChecker::complete()
     this->set_quest_idx();
     auto create_stairs = false;
     auto reward = false;
-    if (inside_quest(this->quest_idx) && (quest[enum2i(this->quest_idx)].status == QuestStatusType::TAKEN)) {
-        this->q_ptr = &quest[enum2i(this->quest_idx)];
+    if (inside_quest(this->quest_idx) && (quest_map[this->quest_idx].status == QuestStatusType::TAKEN)) {
+        this->q_ptr = &quest_map[this->quest_idx];
         auto [tmp_create_stairs, tmp_reward] = this->switch_completion();
         create_stairs = tmp_create_stairs;
         reward = tmp_reward;
@@ -53,6 +54,40 @@ void QuestCompletionChecker::complete()
     this->make_reward(pos);
 }
 
+static bool check_quest_completion(PlayerType *player_ptr, const quest_type &q_ref, monster_type *m_ptr)
+{
+    auto *floor_ptr = player_ptr->current_floor_ptr;
+    if (q_ref.status != QuestStatusType::TAKEN) {
+        return false;
+    }
+
+    if (any_bits(q_ref.flags, QUEST_FLAG_PRESET)) {
+        return false;
+    }
+
+    if ((q_ref.level != floor_ptr->dun_level)) {
+        return false;
+    }
+
+    if ((q_ref.type == QuestKindType::FIND_ARTIFACT) || (q_ref.type == QuestKindType::FIND_EXIT)) {
+        return false;
+    }
+
+    auto kill_them_all = q_ref.type == QuestKindType::KILL_NUMBER;
+    kill_them_all |= q_ref.type == QuestKindType::TOWER;
+    kill_them_all |= q_ref.type == QuestKindType::KILL_ALL;
+    if (kill_them_all) {
+        return true;
+    }
+
+    auto is_target = (q_ref.type == QuestKindType::RANDOM) && (q_ref.r_idx == m_ptr->r_idx);
+    if ((q_ref.type == QuestKindType::KILL_LEVEL) || is_target) {
+        return true;
+    }
+
+    return false;
+}
+
 void QuestCompletionChecker::set_quest_idx()
 {
     auto *floor_ptr = this->player_ptr->current_floor_ptr;
@@ -60,40 +95,13 @@ void QuestCompletionChecker::set_quest_idx()
     if (inside_quest(this->quest_idx)) {
         return;
     }
+    auto q = std::find_if(quest_map.rbegin(), quest_map.rend(), [this](auto q) { return check_quest_completion(this->player_ptr, q.second, this->m_ptr); });
 
-    short i;
-    for (i = max_q_idx - 1; i > 0; i--) {
-        auto *const quest_ptr = &quest[i];
-        if (quest_ptr->status != QuestStatusType::TAKEN) {
-            continue;
-        }
-
-        if (any_bits(quest_ptr->flags, QUEST_FLAG_PRESET)) {
-            continue;
-        }
-
-        if ((quest_ptr->level != floor_ptr->dun_level) && (quest_ptr->type != QuestKindType::KILL_ANY_LEVEL)) {
-            continue;
-        }
-
-        if ((quest_ptr->type == QuestKindType::FIND_ARTIFACT) || (quest_ptr->type == QuestKindType::FIND_EXIT)) {
-            continue;
-        }
-
-        auto kill_them_all = quest_ptr->type == QuestKindType::KILL_NUMBER;
-        kill_them_all |= quest_ptr->type == QuestKindType::TOWER;
-        kill_them_all |= quest_ptr->type == QuestKindType::KILL_ALL;
-        if (kill_them_all) {
-            break;
-        }
-
-        auto is_target = (quest_ptr->type == QuestKindType::RANDOM) && (quest_ptr->r_idx == this->m_ptr->r_idx);
-        if ((quest_ptr->type == QuestKindType::KILL_LEVEL) || (quest_ptr->type == QuestKindType::KILL_ANY_LEVEL) || is_target) {
-            break;
-        }
+    if (q != quest_map.rend()) {
+        this->quest_idx = q->first;
+    } else {
+        this->quest_idx = QuestId::NONE;
     }
-
-    this->quest_idx = i2enum<QuestId>(i);
 }
 
 std::tuple<bool, bool> QuestCompletionChecker::switch_completion()
@@ -108,9 +116,6 @@ std::tuple<bool, bool> QuestCompletionChecker::switch_completion()
     case QuestKindType::KILL_LEVEL:
     case QuestKindType::RANDOM:
         return this->complete_random();
-    case QuestKindType::KILL_ANY_LEVEL:
-        this->complete_kill_any_level();
-        return std::make_tuple(false, false);
     case QuestKindType::TOWER:
         this->complete_tower();
         return std::make_tuple(false, false);
@@ -172,15 +177,6 @@ std::tuple<bool, bool> QuestCompletionChecker::complete_random()
     return std::make_tuple(create_stairs, reward);
 }
 
-void QuestCompletionChecker::complete_kill_any_level()
-{
-    this->q_ptr->cur_num++;
-    if (this->q_ptr->cur_num >= this->q_ptr->max_num) {
-        complete_quest(this->player_ptr, this->quest_idx);
-        this->q_ptr->cur_num = 0;
-    }
-}
-
 void QuestCompletionChecker::complete_tower()
 {
     if (!is_hostile(this->m_ptr)) {
@@ -192,9 +188,9 @@ void QuestCompletionChecker::complete_tower()
     }
 
     this->q_ptr->status = QuestStatusType::STAGE_COMPLETED;
-    auto is_tower_completed = quest[enum2i(QuestId::TOWER1)].status == QuestStatusType::STAGE_COMPLETED;
-    is_tower_completed &= quest[enum2i(QuestId::TOWER2)].status == QuestStatusType::STAGE_COMPLETED;
-    is_tower_completed &= quest[enum2i(QuestId::TOWER3)].status == QuestStatusType::STAGE_COMPLETED;
+    auto is_tower_completed = quest_map[QuestId::TOWER1].status == QuestStatusType::STAGE_COMPLETED;
+    is_tower_completed &= quest_map[QuestId::TOWER2].status == QuestStatusType::STAGE_COMPLETED;
+    is_tower_completed &= quest_map[QuestId::TOWER3].status == QuestStatusType::STAGE_COMPLETED;
     if (is_tower_completed) {
         complete_quest(this->player_ptr, QuestId::TOWER1);
     }
@@ -277,6 +273,6 @@ bool QuestCompletionChecker::check_quality(ObjectType &item)
 {
     auto is_good_reward = !item.is_cursed();
     is_good_reward &= !item.is_ammo() || (item.is_ammo() && item.is_fixed_artifact());
-    is_good_reward &= item.name2 != EGO_DIGGING;
+    is_good_reward &= item.ego_idx != EgoType::DIGGING;
     return is_good_reward;
 }

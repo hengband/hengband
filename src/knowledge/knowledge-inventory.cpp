@@ -65,10 +65,7 @@ static void print_flag(tr_type tr, const TrFlags &flags, FILE *fff)
  */
 static bool determine_spcial_item_type(ObjectType *o_ptr, ItemKindType tval)
 {
-    bool is_special_item_type = (o_ptr->is_wearable() && o_ptr->is_ego()) || ((tval == ItemKindType::AMULET) && (o_ptr->sval == SV_AMULET_RESISTANCE))
-        || ((tval == ItemKindType::RING) && (o_ptr->sval == SV_RING_LORDLY)) || ((tval == ItemKindType::SHIELD) && (o_ptr->sval == SV_DRAGON_SHIELD))
-        || ((tval == ItemKindType::HELM) && (o_ptr->sval == SV_DRAGON_HELM)) || ((tval == ItemKindType::GLOVES) && (o_ptr->sval == SV_SET_OF_DRAGON_GLOVES))
-        || ((tval == ItemKindType::BOOTS) && (o_ptr->sval == SV_PAIR_OF_DRAGON_GREAVE)) || o_ptr->is_artifact();
+    bool is_special_item_type = (o_ptr->is_wearable() && o_ptr->is_ego()) || ((tval == ItemKindType::AMULET) && (o_ptr->sval == SV_AMULET_RESISTANCE)) || ((tval == ItemKindType::RING) && (o_ptr->sval == SV_RING_LORDLY)) || ((tval == ItemKindType::SHIELD) && (o_ptr->sval == SV_DRAGON_SHIELD)) || ((tval == ItemKindType::HELM) && (o_ptr->sval == SV_DRAGON_HELM)) || ((tval == ItemKindType::GLOVES) && (o_ptr->sval == SV_SET_OF_DRAGON_GLOVES)) || ((tval == ItemKindType::BOOTS) && (o_ptr->sval == SV_PAIR_OF_DRAGON_GREAVE)) || o_ptr->is_artifact();
 
     return is_special_item_type;
 }
@@ -81,14 +78,18 @@ static bool determine_spcial_item_type(ObjectType *o_ptr, ItemKindType tval)
  */
 static bool check_item_knowledge(ObjectType *o_ptr, ItemKindType tval)
 {
-    if (o_ptr->k_idx == 0)
+    if (o_ptr->k_idx == 0) {
         return false;
-    if (o_ptr->tval != tval)
+    }
+    if (o_ptr->tval != tval) {
         return false;
-    if (!o_ptr->is_known())
+    }
+    if (!o_ptr->is_known()) {
         return false;
-    if (!determine_spcial_item_type(o_ptr, tval))
+    }
+    if (!determine_spcial_item_type(o_ptr, tval)) {
         return false;
+    }
 
     return true;
 }
@@ -147,8 +148,9 @@ static void do_cmd_knowledge_inventory_aux(PlayerType *player_ptr, FILE *fff, Ob
     describe_flavor(player_ptr, o_name, o_ptr, OD_NAME_ONLY);
     while (o_name[i] && (i < 26)) {
 #ifdef JP
-        if (iskanji(o_name[i]))
+        if (iskanji(o_name[i])) {
             i++;
+        }
 #endif
         i++;
     }
@@ -193,8 +195,9 @@ static void add_res_label(int *label_number, FILE *fff)
  */
 static void reset_label_number(int *label_number, FILE *fff)
 {
-    if (*label_number == 0)
+    if (*label_number == 0) {
         return;
+    }
 
     for (; *label_number < 9; (*label_number)++) {
         fputc('\n', fff);
@@ -217,8 +220,9 @@ static void show_wearing_equipment_resistances(PlayerType *player_ptr, ItemKindT
     strcpy(where, _("装", "E "));
     for (int i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
         auto *o_ptr = &player_ptr->inventory_list[i];
-        if (!check_item_knowledge(o_ptr, tval))
+        if (!check_item_knowledge(o_ptr, tval)) {
             continue;
+        }
 
         do_cmd_knowledge_inventory_aux(player_ptr, fff, o_ptr, where);
         add_res_label(label_number, fff);
@@ -238,8 +242,9 @@ static void show_holding_equipment_resistances(PlayerType *player_ptr, ItemKindT
     strcpy(where, _("持", "I "));
     for (int i = 0; i < INVEN_PACK; i++) {
         auto *o_ptr = &player_ptr->inventory_list[i];
-        if (!check_item_knowledge(o_ptr, tval))
+        if (!check_item_knowledge(o_ptr, tval)) {
             continue;
+        }
 
         do_cmd_knowledge_inventory_aux(player_ptr, fff, o_ptr, where);
         add_res_label(label_number, fff);
@@ -261,8 +266,9 @@ static void show_home_equipment_resistances(PlayerType *player_ptr, ItemKindType
     strcpy(where, _("家", "H "));
     for (int i = 0; i < store_ptr->stock_num; i++) {
         auto *o_ptr = &store_ptr->stock[i];
-        if (!check_item_knowledge(o_ptr, tval))
+        if (!check_item_knowledge(o_ptr, tval)) {
             continue;
+        }
 
         do_cmd_knowledge_inventory_aux(player_ptr, fff, o_ptr, where);
         add_res_label(label_number, fff);
@@ -277,8 +283,9 @@ void do_cmd_knowledge_inventory(PlayerType *player_ptr)
 {
     FILE *fff = nullptr;
     GAME_TEXT file_name[FILE_NAME_SIZE];
-    if (!open_temporary_file(&fff, file_name))
+    if (!open_temporary_file(&fff, file_name)) {
         return;
+    }
 
     fprintf(fff, "%s\n", inven_res_label);
     int label_number = 0;

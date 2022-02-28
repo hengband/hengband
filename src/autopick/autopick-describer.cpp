@@ -26,20 +26,25 @@ struct autopick_describer {
 static void describe_autpick_jp(char *buff, autopick_type *entry, autopick_describer *describer)
 {
     concptr before_str[100];
-    if (IS_FLG(FLG_COLLECTING))
+    if (IS_FLG(FLG_COLLECTING)) {
         before_str[describer->before_n++] = "収集中で既に持っているスロットにまとめられる";
+    }
 
-    if (IS_FLG(FLG_UNAWARE))
+    if (IS_FLG(FLG_UNAWARE)) {
         before_str[describer->before_n++] = "未鑑定でその効果も判明していない";
+    }
 
-    if (IS_FLG(FLG_UNIDENTIFIED))
+    if (IS_FLG(FLG_UNIDENTIFIED)) {
         before_str[describer->before_n++] = "未鑑定の";
+    }
 
-    if (IS_FLG(FLG_IDENTIFIED))
+    if (IS_FLG(FLG_IDENTIFIED)) {
         before_str[describer->before_n++] = "鑑定済みの";
+    }
 
-    if (IS_FLG(FLG_STAR_IDENTIFIED))
+    if (IS_FLG(FLG_STAR_IDENTIFIED)) {
         before_str[describer->before_n++] = "完全に鑑定済みの";
+    }
 
     if (IS_FLG(FLG_BOOSTED)) {
         before_str[describer->before_n++] = "ダメージダイスが通常より大きい";
@@ -65,8 +70,9 @@ static void describe_autpick_jp(char *buff, autopick_type *entry, autopick_descr
         before_str[describer->before_n++] = ")以上の";
     }
 
-    if (IS_FLG(FLG_WORTHLESS))
+    if (IS_FLG(FLG_WORTHLESS)) {
         before_str[describer->before_n++] = "店で無価値と判定される";
+    }
 
     if (IS_FLG(FLG_ARTIFACT)) {
         before_str[describer->before_n++] = "アーティファクトの";
@@ -153,53 +159,57 @@ static void describe_autpick_jp(char *buff, autopick_type *entry, autopick_descr
         describer->body_str = "魔法書";
     }
 
-    if (IS_FLG(FLG_ITEMS))
-        ; /* Nothing to do */
-    else if (IS_FLG(FLG_WEAPONS))
+    if (IS_FLG(FLG_ITEMS)) {
+        ;
+    } /* Nothing to do */
+    else if (IS_FLG(FLG_WEAPONS)) {
         describer->body_str = "武器";
-    else if (IS_FLG(FLG_FAVORITE_WEAPONS))
+    } else if (IS_FLG(FLG_FAVORITE_WEAPONS)) {
         describer->body_str = "得意武器";
-    else if (IS_FLG(FLG_ARMORS))
+    } else if (IS_FLG(FLG_ARMORS)) {
         describer->body_str = "防具";
-    else if (IS_FLG(FLG_MISSILES))
+    } else if (IS_FLG(FLG_MISSILES)) {
         describer->body_str = "弾や矢やクロスボウの矢";
-    else if (IS_FLG(FLG_DEVICES))
+    } else if (IS_FLG(FLG_DEVICES)) {
         describer->body_str = "巻物や魔法棒や杖やロッド";
-    else if (IS_FLG(FLG_LIGHTS))
+    } else if (IS_FLG(FLG_LIGHTS)) {
         describer->body_str = "光源用のアイテム";
-    else if (IS_FLG(FLG_JUNKS))
+    } else if (IS_FLG(FLG_JUNKS)) {
         describer->body_str = "折れた棒等のガラクタ";
-    else if (IS_FLG(FLG_CORPSES))
+    } else if (IS_FLG(FLG_CORPSES)) {
         describer->body_str = "死体や骨";
-    else if (IS_FLG(FLG_SPELLBOOKS))
+    } else if (IS_FLG(FLG_SPELLBOOKS)) {
         describer->body_str = "魔法書";
-    else if (IS_FLG(FLG_HAFTED))
+    } else if (IS_FLG(FLG_HAFTED)) {
         describer->body_str = "鈍器";
-    else if (IS_FLG(FLG_SHIELDS))
+    } else if (IS_FLG(FLG_SHIELDS)) {
         describer->body_str = "盾";
-    else if (IS_FLG(FLG_BOWS))
+    } else if (IS_FLG(FLG_BOWS)) {
         describer->body_str = "スリングや弓やクロスボウ";
-    else if (IS_FLG(FLG_RINGS))
+    } else if (IS_FLG(FLG_RINGS)) {
         describer->body_str = "指輪";
-    else if (IS_FLG(FLG_AMULETS))
+    } else if (IS_FLG(FLG_AMULETS)) {
         describer->body_str = "アミュレット";
-    else if (IS_FLG(FLG_SUITS))
+    } else if (IS_FLG(FLG_SUITS)) {
         describer->body_str = "鎧";
-    else if (IS_FLG(FLG_CLOAKS))
+    } else if (IS_FLG(FLG_CLOAKS)) {
         describer->body_str = "クローク";
-    else if (IS_FLG(FLG_HELMS))
+    } else if (IS_FLG(FLG_HELMS)) {
         describer->body_str = "ヘルメットや冠";
-    else if (IS_FLG(FLG_GLOVES))
+    } else if (IS_FLG(FLG_GLOVES)) {
         describer->body_str = "籠手";
-    else if (IS_FLG(FLG_BOOTS))
+    } else if (IS_FLG(FLG_BOOTS)) {
         describer->body_str = "ブーツ";
+    }
 
     *buff = '\0';
-    if (!describer->before_n)
+    if (!describer->before_n) {
         strcat(buff, "全ての");
-    else
-        for (int i = 0; i < describer->before_n && before_str[i]; i++)
+    } else {
+        for (int i = 0; i < describer->before_n && before_str[i]; i++) {
             strcat(buff, before_str[i]);
+        }
+    }
 
     strcat(buff, describer->body_str);
 
@@ -211,10 +221,11 @@ static void describe_autpick_jp(char *buff, autopick_type *entry, autopick_descr
 
         strcat(buff, "で、名前が「");
         angband_strcat(buff, describer->str, (MAX_NLEN - MAX_INSCRIPTION));
-        if (describer->top)
+        if (describer->top) {
             strcat(buff, "」で始まるもの");
-        else
+        } else {
             strcat(buff, "」を含むもの");
+        }
     }
 
     if (describer->insc) {
@@ -222,37 +233,42 @@ static void describe_autpick_jp(char *buff, autopick_type *entry, autopick_descr
         angband_strcat(tmp, describer->insc, MAX_INSCRIPTION);
         angband_strcat(buff, format("に「%s」", tmp), MAX_INSCRIPTION + 6);
 
-        if (angband_strstr(describer->insc, "%%all"))
+        if (angband_strstr(describer->insc, "%%all")) {
             strcat(buff, "(%%allは全能力を表す英字の記号で置換)");
-        else if (angband_strstr(describer->insc, "%all"))
+        } else if (angband_strstr(describer->insc, "%all")) {
             strcat(buff, "(%allは全能力を表す記号で置換)");
-        else if (angband_strstr(describer->insc, "%%"))
+        } else if (angband_strstr(describer->insc, "%%")) {
             strcat(buff, "(%%は追加能力を表す英字の記号で置換)");
-        else if (angband_strstr(describer->insc, "%"))
+        } else if (angband_strstr(describer->insc, "%")) {
             strcat(buff, "(%は追加能力を表す記号で置換)");
+        }
 
         strcat(buff, "と刻んで");
-    } else
+    } else {
         strcat(buff, "を");
+    }
 
-    if (describer->act & DONT_AUTOPICK)
+    if (describer->act & DONT_AUTOPICK) {
         strcat(buff, "放置する。");
-    else if (describer->act & DO_AUTODESTROY)
+    } else if (describer->act & DO_AUTODESTROY) {
         strcat(buff, "破壊する。");
-    else if (describer->act & DO_QUERY_AUTOPICK)
+    } else if (describer->act & DO_QUERY_AUTOPICK) {
         strcat(buff, "確認の後に拾う。");
-    else
+    } else {
         strcat(buff, "拾う。");
+    }
 
     if (describer->act & DO_DISPLAY) {
-        if (describer->act & DONT_AUTOPICK)
+        if (describer->act & DONT_AUTOPICK) {
             strcat(buff, "全体マップ('M')で'N'を押したときに表示する。");
-        else if (describer->act & DO_AUTODESTROY)
+        } else if (describer->act & DO_AUTODESTROY) {
             strcat(buff, "全体マップ('M')で'K'を押したときに表示する。");
-        else
+        } else {
             strcat(buff, "全体マップ('M')で'M'を押したときに表示する。");
-    } else
+        }
+    } else {
         strcat(buff, "全体マップには表示しない。");
+    }
 }
 #else
 
@@ -262,8 +278,9 @@ void describe_autopick_en(char *buff, autopick_type *entry, autopick_describer *
     concptr whose_arg_str[20];
     char arg_str[2][24];
     int after_n = 0, which_n = 0, whose_n = 0, arg_n = 0;
-    if (IS_FLG(FLG_COLLECTING))
+    if (IS_FLG(FLG_COLLECTING)) {
         which_str[which_n++] = "can be absorbed into an existing inventory list slot";
+    }
 
     if (IS_FLG(FLG_UNAWARE)) {
         before_str[describer->before_n++] = "unidentified";
@@ -272,14 +289,17 @@ void describe_autopick_en(char *buff, autopick_type *entry, autopick_describer *
         ++whose_n;
     }
 
-    if (IS_FLG(FLG_UNIDENTIFIED))
+    if (IS_FLG(FLG_UNIDENTIFIED)) {
         before_str[describer->before_n++] = "unidentified";
+    }
 
-    if (IS_FLG(FLG_IDENTIFIED))
+    if (IS_FLG(FLG_IDENTIFIED)) {
         before_str[describer->before_n++] = "identified";
+    }
 
-    if (IS_FLG(FLG_STAR_IDENTIFIED))
+    if (IS_FLG(FLG_STAR_IDENTIFIED)) {
         before_str[describer->before_n++] = "fully identified";
+    }
 
     if (IS_FLG(FLG_RARE)) {
         before_str[describer->before_n++] = "very rare";
@@ -296,11 +316,13 @@ void describe_autopick_en(char *buff, autopick_type *entry, autopick_describer *
         which_str[which_n++] = "can not be sold at stores";
     }
 
-    if (IS_FLG(FLG_ARTIFACT))
+    if (IS_FLG(FLG_ARTIFACT)) {
         before_str[describer->before_n++] = "artifact";
+    }
 
-    if (IS_FLG(FLG_EGO))
+    if (IS_FLG(FLG_EGO)) {
         before_str[describer->before_n++] = "ego";
+    }
 
     if (IS_FLG(FLG_GOOD)) {
         which_str[which_n++] = "are of good quality";
@@ -397,46 +419,48 @@ void describe_autopick_en(char *buff, autopick_type *entry, autopick_describer *
         describer->body_str = "spellbooks";
     }
 
-    if (IS_FLG(FLG_ITEMS))
-        ; /* Nothing to do */
-    else if (IS_FLG(FLG_WEAPONS))
+    if (IS_FLG(FLG_ITEMS)) {
+        ;
+    } /* Nothing to do */
+    else if (IS_FLG(FLG_WEAPONS)) {
         describer->body_str = "weapons";
-    else if (IS_FLG(FLG_FAVORITE_WEAPONS))
+    } else if (IS_FLG(FLG_FAVORITE_WEAPONS)) {
         describer->body_str = "favorite weapons";
-    else if (IS_FLG(FLG_ARMORS))
+    } else if (IS_FLG(FLG_ARMORS)) {
         describer->body_str = "pieces of armor";
-    else if (IS_FLG(FLG_MISSILES))
+    } else if (IS_FLG(FLG_MISSILES)) {
         describer->body_str = "shots, arrows or crossbow bolts";
-    else if (IS_FLG(FLG_DEVICES))
+    } else if (IS_FLG(FLG_DEVICES)) {
         describer->body_str = "scrolls, wands, staffs or rods";
-    else if (IS_FLG(FLG_LIGHTS))
+    } else if (IS_FLG(FLG_LIGHTS)) {
         describer->body_str = "light sources";
-    else if (IS_FLG(FLG_JUNKS))
+    } else if (IS_FLG(FLG_JUNKS)) {
         describer->body_str = "pieces of junk such as broken sticks";
-    else if (IS_FLG(FLG_CORPSES))
+    } else if (IS_FLG(FLG_CORPSES)) {
         describer->body_str = "corpses or skeletons";
-    else if (IS_FLG(FLG_SPELLBOOKS))
+    } else if (IS_FLG(FLG_SPELLBOOKS)) {
         describer->body_str = "spellbooks";
-    else if (IS_FLG(FLG_HAFTED))
+    } else if (IS_FLG(FLG_HAFTED)) {
         describer->body_str = "hafted weapons";
-    else if (IS_FLG(FLG_SHIELDS))
+    } else if (IS_FLG(FLG_SHIELDS)) {
         describer->body_str = "shields";
-    else if (IS_FLG(FLG_BOWS))
+    } else if (IS_FLG(FLG_BOWS)) {
         describer->body_str = "slings, bows or crossbows";
-    else if (IS_FLG(FLG_RINGS))
+    } else if (IS_FLG(FLG_RINGS)) {
         describer->body_str = "rings";
-    else if (IS_FLG(FLG_AMULETS))
+    } else if (IS_FLG(FLG_AMULETS)) {
         describer->body_str = "amulets";
-    else if (IS_FLG(FLG_SUITS))
+    } else if (IS_FLG(FLG_SUITS)) {
         describer->body_str = "pieces of body armor";
-    else if (IS_FLG(FLG_CLOAKS))
+    } else if (IS_FLG(FLG_CLOAKS)) {
         describer->body_str = "cloaks";
-    else if (IS_FLG(FLG_HELMS))
+    } else if (IS_FLG(FLG_HELMS)) {
         describer->body_str = "helms or crowns";
-    else if (IS_FLG(FLG_GLOVES))
+    } else if (IS_FLG(FLG_GLOVES)) {
         describer->body_str = "gloves";
-    else if (IS_FLG(FLG_BOOTS))
+    } else if (IS_FLG(FLG_BOOTS)) {
         describer->body_str = "boots";
+    }
 
     if (*describer->str) {
         if (*describer->str == '^') {
@@ -445,37 +469,41 @@ void describe_autopick_en(char *buff, autopick_type *entry, autopick_describer *
             whose_str[whose_n] = "names begin with \"";
             whose_arg_str[whose_n] = "";
             ++whose_n;
-        } else
+        } else {
             which_str[which_n++] = "have \"";
+        }
     }
 
-    if (describer->act & DONT_AUTOPICK)
+    if (describer->act & DONT_AUTOPICK) {
         strcpy(buff, "Leave on floor ");
-    else if (describer->act & DO_AUTODESTROY)
+    } else if (describer->act & DO_AUTODESTROY) {
         strcpy(buff, "Destroy ");
-    else if (describer->act & DO_QUERY_AUTOPICK)
+    } else if (describer->act & DO_QUERY_AUTOPICK) {
         strcpy(buff, "Ask to pick up ");
-    else
+    } else {
         strcpy(buff, "Pickup ");
+    }
 
     if (describer->insc) {
         strncat(buff, format("and inscribe \"%s\"", describer->insc), 80);
 
-        if (angband_strstr(describer->insc, "%all"))
+        if (angband_strstr(describer->insc, "%all")) {
             strcat(buff, ", replacing %all with code string representing all abilities,");
-        else if (angband_strstr(describer->insc, "%"))
+        } else if (angband_strstr(describer->insc, "%")) {
             strcat(buff, ", replacing % with code string representing extra random abilities,");
+        }
 
         strcat(buff, " on ");
     }
 
-    if (!describer->before_n)
+    if (!describer->before_n) {
         strcat(buff, "all ");
-    else
+    } else {
         for (int i = 0; i < describer->before_n && before_str[i]; i++) {
             strcat(buff, before_str[i]);
             strcat(buff, " ");
         }
+    }
 
     strcat(buff, describer->body_str);
     for (int i = 0; i < after_n && after_str[i]; i++) {
@@ -484,10 +512,11 @@ void describe_autopick_en(char *buff, autopick_type *entry, autopick_describer *
     }
 
     for (int i = 0; i < whose_n && whose_str[i]; i++) {
-        if (i == 0)
+        if (i == 0) {
             strcat(buff, " whose ");
-        else
+        } else {
             strcat(buff, ", and ");
+        }
 
         strcat(buff, whose_str[i]);
         strcat(buff, whose_arg_str[i]);
@@ -498,14 +527,16 @@ void describe_autopick_en(char *buff, autopick_type *entry, autopick_describer *
         strcat(buff, "\"");
     }
 
-    if (whose_n && which_n)
+    if (whose_n && which_n) {
         strcat(buff, ", and ");
+    }
 
     for (int i = 0; i < which_n && which_str[i]; i++) {
-        if (i == 0)
+        if (i == 0) {
             strcat(buff, " which ");
-        else
+        } else {
             strcat(buff, ", and ");
+        }
 
         strcat(buff, which_str[i]);
     }
@@ -518,14 +549,16 @@ void describe_autopick_en(char *buff, autopick_type *entry, autopick_describer *
     strcat(buff, ".");
 
     if (describer->act & DO_DISPLAY) {
-        if (describer->act & DONT_AUTOPICK)
+        if (describer->act & DONT_AUTOPICK) {
             strcat(buff, "  Display these items when you press the N key in the full 'M'ap.");
-        else if (describer->act & DO_AUTODESTROY)
+        } else if (describer->act & DO_AUTODESTROY) {
             strcat(buff, "  Display these items when you press the K key in the full 'M'ap.");
-        else
+        } else {
             strcat(buff, "  Display these items when you press the M key in the full 'M'ap.");
-    } else
+        }
+    } else {
         strcat(buff, " Not displayed in the full map.");
+    }
 }
 #endif
 

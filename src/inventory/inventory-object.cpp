@@ -42,14 +42,16 @@ void inven_item_increase(PlayerType *player_ptr, INVENTORY_IDX item, ITEM_NUMBER
 {
     auto *o_ptr = &player_ptr->inventory_list[item];
     num += o_ptr->number;
-    if (num > 255)
+    if (num > 255) {
         num = 255;
-    else if (num < 0)
+    } else if (num < 0) {
         num = 0;
+    }
 
     num -= o_ptr->number;
-    if (num == 0)
+    if (num == 0) {
         return;
+    }
 
     o_ptr->number += num;
     player_ptr->update |= (PU_BONUS);
@@ -57,12 +59,15 @@ void inven_item_increase(PlayerType *player_ptr, INVENTORY_IDX item, ITEM_NUMBER
     player_ptr->update |= (PU_COMBINE);
     player_ptr->window_flags |= (PW_INVEN | PW_EQUIP);
 
-    if (o_ptr->number || !player_ptr->ele_attack)
+    if (o_ptr->number || !player_ptr->ele_attack) {
         return;
-    if (!(item == INVEN_MAIN_HAND) && !(item == INVEN_SUB_HAND))
+    }
+    if (!(item == INVEN_MAIN_HAND) && !(item == INVEN_SUB_HAND)) {
         return;
-    if (has_melee_weapon(player_ptr, INVEN_MAIN_HAND + INVEN_SUB_HAND - item))
+    }
+    if (has_melee_weapon(player_ptr, INVEN_MAIN_HAND + INVEN_SUB_HAND - item)) {
         return;
+    }
 
     set_ele_attack(player_ptr, 0, 0);
 }
@@ -76,10 +81,12 @@ void inven_item_increase(PlayerType *player_ptr, INVENTORY_IDX item, ITEM_NUMBER
 void inven_item_optimize(PlayerType *player_ptr, INVENTORY_IDX item)
 {
     auto *o_ptr = &player_ptr->inventory_list[item];
-    if (!o_ptr->k_idx)
+    if (!o_ptr->k_idx) {
         return;
-    if (o_ptr->number)
+    }
+    if (o_ptr->number) {
         return;
+    }
 
     if (item >= INVEN_MAIN_HAND) {
         player_ptr->equip_cnt--;
@@ -120,11 +127,13 @@ void drop_from_inventory(PlayerType *player_ptr, INVENTORY_IDX item, ITEM_NUMBER
     ObjectType *o_ptr;
     GAME_TEXT o_name[MAX_NLEN];
     o_ptr = &player_ptr->inventory_list[item];
-    if (amt <= 0)
+    if (amt <= 0) {
         return;
+    }
 
-    if (amt > o_ptr->number)
+    if (amt > o_ptr->number) {
         amt = o_ptr->number;
+    }
 
     if (item >= INVEN_MAIN_HAND) {
         item = inven_takeoff(player_ptr, item, amt);
@@ -160,13 +169,15 @@ void combine_pack(PlayerType *player_ptr)
         for (int i = INVEN_PACK; i > 0; i--) {
             ObjectType *o_ptr;
             o_ptr = &player_ptr->inventory_list[i];
-            if (!o_ptr->k_idx)
+            if (!o_ptr->k_idx) {
                 continue;
+            }
             for (int j = 0; j < i; j++) {
                 ObjectType *j_ptr;
                 j_ptr = &player_ptr->inventory_list[j];
-                if (!j_ptr->k_idx)
+                if (!j_ptr->k_idx) {
                     continue;
+                }
 
                 /*
                  * Get maximum number of the stack if these
@@ -175,8 +186,9 @@ void combine_pack(PlayerType *player_ptr)
                 int max_num = object_similar_part(j_ptr, o_ptr);
 
                 bool is_max = (max_num != 0) && (j_ptr->number < max_num);
-                if (!is_max)
+                if (!is_max) {
                     continue;
+                }
 
                 if (o_ptr->number + j_ptr->number <= max_num) {
                     flag = true;
@@ -210,8 +222,9 @@ void combine_pack(PlayerType *player_ptr)
         }
     }
 
-    if (flag)
+    if (flag) {
         msg_print(_("ザックの中のアイテムをまとめ直した。", "You combine some items in your pack."));
+    }
 }
 
 /*!
@@ -231,21 +244,25 @@ void reorder_pack(PlayerType *player_ptr)
     bool flag = false;
 
     for (i = 0; i < INVEN_PACK; i++) {
-        if ((i == INVEN_PACK) && (player_ptr->inven_cnt == INVEN_PACK))
+        if ((i == INVEN_PACK) && (player_ptr->inven_cnt == INVEN_PACK)) {
             break;
+        }
 
         o_ptr = &player_ptr->inventory_list[i];
-        if (!o_ptr->k_idx)
+        if (!o_ptr->k_idx) {
             continue;
+        }
 
         o_value = object_value(o_ptr);
         for (j = 0; j < INVEN_PACK; j++) {
-            if (object_sort_comp(player_ptr, o_ptr, o_value, &player_ptr->inventory_list[j]))
+            if (object_sort_comp(player_ptr, o_ptr, o_value, &player_ptr->inventory_list[j])) {
                 break;
+            }
         }
 
-        if (j >= i)
+        if (j >= i) {
             continue;
+        }
 
         flag = true;
         q_ptr = &forge;
@@ -258,8 +275,9 @@ void reorder_pack(PlayerType *player_ptr)
         player_ptr->window_flags |= (PW_INVEN);
     }
 
-    if (flag)
+    if (flag) {
         msg_print(_("ザックの中のアイテムを並べ直した。", "You reorder some items in your pack."));
+    }
 }
 
 /*!
@@ -290,8 +308,9 @@ int16_t store_item_to_inventory(PlayerType *player_ptr, ObjectType *o_ptr)
     ObjectType *j_ptr;
     for (j = 0; j < INVEN_PACK; j++) {
         j_ptr = &player_ptr->inventory_list[j];
-        if (!j_ptr->k_idx)
+        if (!j_ptr->k_idx) {
             continue;
+        }
 
         n = j;
         if (object_similar(j_ptr, o_ptr)) {
@@ -303,21 +322,24 @@ int16_t store_item_to_inventory(PlayerType *player_ptr, ObjectType *o_ptr)
         }
     }
 
-    if (player_ptr->inven_cnt > INVEN_PACK)
+    if (player_ptr->inven_cnt > INVEN_PACK) {
         return -1;
+    }
 
     for (j = 0; j <= INVEN_PACK; j++) {
         j_ptr = &player_ptr->inventory_list[j];
-        if (!j_ptr->k_idx)
+        if (!j_ptr->k_idx) {
             break;
+        }
     }
 
     i = j;
     if (i < INVEN_PACK) {
         int32_t o_value = object_value(o_ptr);
         for (j = 0; j < INVEN_PACK; j++) {
-            if (object_sort_comp(player_ptr, o_ptr, o_value, &player_ptr->inventory_list[j]))
+            if (object_sort_comp(player_ptr, o_ptr, o_value, &player_ptr->inventory_list[j])) {
                 break;
+            }
         }
 
         i = j;
@@ -350,16 +372,19 @@ int16_t store_item_to_inventory(PlayerType *player_ptr, ObjectType *o_ptr)
  */
 bool check_store_item_to_inventory(PlayerType *player_ptr, const ObjectType *o_ptr)
 {
-    if (player_ptr->inven_cnt < INVEN_PACK)
+    if (player_ptr->inven_cnt < INVEN_PACK) {
         return true;
+    }
 
     for (int j = 0; j < INVEN_PACK; j++) {
         auto *j_ptr = &player_ptr->inventory_list[j];
-        if (!j_ptr->k_idx)
+        if (!j_ptr->k_idx) {
             continue;
+        }
 
-        if (object_similar(j_ptr, o_ptr))
+        if (object_similar(j_ptr, o_ptr)) {
             return true;
+        }
     }
 
     return false;
@@ -387,11 +412,13 @@ INVENTORY_IDX inven_takeoff(PlayerType *player_ptr, INVENTORY_IDX item, ITEM_NUM
     concptr act;
     GAME_TEXT o_name[MAX_NLEN];
     o_ptr = &player_ptr->inventory_list[item];
-    if (amt <= 0)
+    if (amt <= 0) {
         return -1;
+    }
 
-    if (amt > o_ptr->number)
+    if (amt > o_ptr->number) {
         amt = o_ptr->number;
+    }
     q_ptr = &forge;
     q_ptr->copy_from(o_ptr);
     q_ptr->number = amt;

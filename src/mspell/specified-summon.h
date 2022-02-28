@@ -5,7 +5,7 @@
 class PlayerType;
 MONSTER_NUMBER summon_EAGLE(PlayerType *player_ptr, POSITION y, POSITION x, int rlev, MONSTER_IDX m_idx);
 MONSTER_NUMBER summon_EDGE(PlayerType *player_ptr, POSITION y, POSITION x, int rlev, MONSTER_IDX m_idx);
-MONSTER_NUMBER summon_guardian(PlayerType *player_ptr, POSITION y, POSITION x, int rlev, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE);
+MONSTER_NUMBER summon_guardian(PlayerType *player_ptr, POSITION y, POSITION x, int rlev, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int target_type);
 MONSTER_NUMBER summon_LOCKE_CLONE(PlayerType *player_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx);
 MONSTER_NUMBER summon_LOUSE(PlayerType *player_ptr, POSITION y, POSITION x, int rlev, MONSTER_IDX m_idx);
 MONSTER_NUMBER summon_MOAI(PlayerType *player_ptr, POSITION y, POSITION x, int rlev, MONSTER_IDX m_idx);

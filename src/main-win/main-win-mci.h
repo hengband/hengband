@@ -1,8 +1,8 @@
 ﻿#pragma once
 
 #include <windows.h>
-#include <mciapi.h>
 
+#include <mciapi.h>
 #include <string>
 
 extern MCI_OPEN_PARMSW mci_open_parms;

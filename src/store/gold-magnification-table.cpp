@@ -4,6 +4,7 @@
  * Buying and selling adjustments for race combinations.
  * Entry[owner][player] gives the basic "cost inflation".
  */
+// clang-format off
 byte rgold_adj[MAX_RACES][MAX_RACES] =
 {
 	/* Human */
@@ -234,3 +235,4 @@ byte rgold_adj[MAX_RACES][MAX_RACES] =
 	  120, 110, 110, 110, 120, 110, 110, 125, 110,  95, 140,
 	  110, 115, 110, 110, 100 },
 };
+// clang-format on

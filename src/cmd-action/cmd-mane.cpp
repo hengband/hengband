@@ -212,7 +212,7 @@ static int get_mane_power(PlayerType *player_ptr, int *sn, bool baigaesi)
 
                     chance += player_ptr->to_m_chance;
 
-                    if (player_ptr->inventory_list[INVEN_NECK].name1 == ART_GOGO_PENDANT) {
+                    if (player_ptr->inventory_list[INVEN_NECK].fixed_artifact_idx == ART_GOGO_PENDANT) {
                         chance -= 10;
                     }
 
@@ -220,8 +220,9 @@ static int get_mane_power(PlayerType *player_ptr, int *sn, bool baigaesi)
                     minfail = adj_mag_fail[player_ptr->stat_index[spell.use_stat]];
 
                     /* Minimum failure rate */
-                    if (chance < minfail)
+                    if (chance < minfail) {
                         chance = minfail;
+                    }
 
                     auto player_stun = player_ptr->effects()->stun();
                     chance += player_stun->get_magic_chance_penalty();

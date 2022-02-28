@@ -56,12 +56,14 @@ static bool clear_auto_register(PlayerType *player_ptr)
     int num = 0;
     char buf[1024];
     while (true) {
-        if (angband_fgets(pref_fff, buf, sizeof(buf)))
+        if (angband_fgets(pref_fff, buf, sizeof(buf))) {
             break;
+        }
 
         if (autoregister) {
-            if (buf[0] != '#' && buf[0] != '?')
+            if (buf[0] != '#' && buf[0] != '?') {
                 num++;
+            }
             continue;
         }
 
@@ -92,8 +94,9 @@ static bool clear_auto_register(PlayerType *player_ptr)
         tmp_fff = angband_fopen(tmp_file, "r");
         pref_fff = angband_fopen(pref_file, "w");
 
-        while (!angband_fgets(tmp_fff, buf, sizeof(buf)))
+        while (!angband_fgets(tmp_fff, buf, sizeof(buf))) {
             fprintf(pref_fff, "%s\n", buf);
+        }
 
         angband_fclose(pref_fff);
         angband_fclose(tmp_fff);
@@ -113,14 +116,15 @@ bool autopick_autoregister(PlayerType *player_ptr, ObjectType *o_ptr)
     if (autopick_registered != -1) {
         concptr what;
         byte act = autopick_list[autopick_registered].action;
-        if (act & DO_AUTOPICK)
+        if (act & DO_AUTOPICK) {
             what = _("自動で拾う", "auto-pickup");
-        else if (act & DO_AUTODESTROY)
+        } else if (act & DO_AUTODESTROY) {
             what = _("自動破壊する", "auto-destroy");
-        else if (act & DONT_AUTOPICK)
+        } else if (act & DONT_AUTOPICK) {
             what = _("放置する", "leave on floor");
-        else
+        } else {
             what = _("確認して拾う", "query auto-pickup");
+        }
 
         msg_format(_("そのアイテムは既に%sように設定されています。", "The object is already registered to %s."), what);
         return false;
@@ -134,8 +138,9 @@ bool autopick_autoregister(PlayerType *player_ptr, ObjectType *o_ptr)
     }
 
     if (!player_ptr->autopick_autoregister) {
-        if (!clear_auto_register(player_ptr))
+        if (!clear_auto_register(player_ptr)) {
             return false;
+        }
     }
 
     char buf[1024];

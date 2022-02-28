@@ -9,15 +9,15 @@
 #include <vector>
 
 /* Number of feats we change to (Excluding default). Used in f_info.txt. */
-#define MAX_FEAT_STATES	 8
+#define MAX_FEAT_STATES 8
 
 /* Lighting levels of features' attr and char */
 #define F_LIT_STANDARD 0 /* Standard */
-#define F_LIT_LITE     1 /* Brightly lit */
-#define F_LIT_DARK     2 /* Darkened */
+#define F_LIT_LITE 1 /* Brightly lit */
+#define F_LIT_DARK 2 /* Darkened */
 
 #define F_LIT_NS_BEGIN 1 /* Nonstandard */
-#define F_LIT_MAX      3
+#define F_LIT_MAX 3
 
 /*!
  * @struct feature_state
@@ -48,9 +48,9 @@ struct feature_type {
     FEAT_SUBTYPE subtype{}; /*!< 副特性値 */
     FEAT_POWER power{}; /*!< 地形強度 */
     TERM_COLOR d_attr[F_LIT_MAX]{}; /*!< デフォルトの地形シンボルカラー / Default feature attribute */
-    SYMBOL_CODE d_char[F_LIT_MAX]{}; /*!< デフォルトの地形シンボルアルファベット / Default feature character */
+    char d_char[F_LIT_MAX]{}; /*!< デフォルトの地形シンボルアルファベット / Default feature character */
     TERM_COLOR x_attr[F_LIT_MAX]{}; /*!< 設定変更後の地形シンボルカラー / Desired feature attribute */
-    SYMBOL_CODE x_char[F_LIT_MAX]{}; /*!< 設定変更後の地形シンボルアルファベット / Desired feature character */
+    char x_char[F_LIT_MAX]{}; /*!< 設定変更後の地形シンボルアルファベット / Desired feature character */
 };
 
 extern std::vector<feature_type> f_info;
@@ -117,7 +117,7 @@ struct floor_type;
 class PlayerType;
 bool is_closed_door(PlayerType *player_ptr, FEAT_IDX feat);
 bool is_trap(PlayerType *player_ptr, FEAT_IDX feat);
-void apply_default_feat_lighting(TERM_COLOR *f_attr, SYMBOL_CODE *f_char);
+void apply_default_feat_lighting(TERM_COLOR *f_attr, char *f_char);
 bool is_ascii_graphics(char x);
 bool permanent_wall(feature_type *f_ptr);
 FEAT_IDX feat_locked_door_random(int door_type);

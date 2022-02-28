@@ -19,10 +19,12 @@
 bool check_file(concptr s)
 {
     DWORD attrib = GetFileAttributesW(to_wchar(s).wc_str());
-    if (attrib == INVALID_FILE_NAME)
+    if (attrib == INVALID_FILE_NAME) {
         return false;
-    if (attrib & FILE_ATTRIBUTE_DIRECTORY)
+    }
+    if (attrib & FILE_ATTRIBUTE_DIRECTORY) {
         return false;
+    }
 
     return true;
 }
@@ -38,14 +40,17 @@ bool check_dir(concptr s)
     char path[MAIN_WIN_MAX_PATH];
     strcpy(path, s);
     int i = strlen(path);
-    if (i && (path[i - 1] == '\\'))
+    if (i && (path[i - 1] == '\\')) {
         path[--i] = '\0';
+    }
 
     DWORD attrib = GetFileAttributesW(to_wchar(path).wc_str());
-    if (attrib == INVALID_FILE_NAME)
+    if (attrib == INVALID_FILE_NAME) {
         return false;
-    if (!(attrib & FILE_ATTRIBUTE_DIRECTORY))
+    }
+    if (!(attrib & FILE_ATTRIBUTE_DIRECTORY)) {
         return false;
+    }
 
     return true;
 }

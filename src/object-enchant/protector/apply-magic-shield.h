@@ -1,7 +1,7 @@
 ﻿#pragma once
 
-#include "object-enchant/protector/abstract-protector-enchanter.h"
 #include "object-enchant/enchanter-base.h"
+#include "object-enchant/protector/abstract-protector-enchanter.h"
 #include "system/angband.h"
 
 class ObjectType;

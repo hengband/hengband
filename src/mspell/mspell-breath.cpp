@@ -1,5 +1,6 @@
 ﻿#include "mspell/mspell-breath.h"
 #include "core/disturbance.h"
+#include "effect/attribute-types.h"
 #include "effect/effect-processor.h"
 #include "main/sound-definitions-table.h"
 #include "main/sound-of-music.h"
@@ -12,8 +13,6 @@
 #include "mspell/mspell-damage-calculator.h"
 #include "mspell/mspell-result.h"
 #include "mspell/mspell-util.h"
-#include "mspell/mspell-result.h"
-#include "effect/attribute-types.h"
 #include "system/floor-type-definition.h"
 #include "system/monster-type-definition.h"
 #include "system/player-type-definition.h"
@@ -36,10 +35,11 @@ static bool spell_RF4_BREATH_special_message(MONSTER_IDX r_idx, AttributeType GF
         return true;
     }
     if (r_idx == MON_RAOU && (GF_TYPE == AttributeType::FORCE)) {
-        if (one_in_(2))
+        if (one_in_(2)) {
             msg_format(_("%^s「北斗剛掌波！！」", "%^s says, 'Hokuto Goh-Sho-Ha!!'"), m_name);
-        else
+        } else {
             msg_format(_("%^s「受けてみい！！天将奔烈！！！」", "%^s says, 'Tensho-Honretsu!!'"), m_name);
+        }
         return true;
     }
     return false;
@@ -53,11 +53,11 @@ static bool spell_RF4_BREATH_special_message(MONSTER_IDX r_idx, AttributeType GF
  * @param x 対象の地点のx座標
  * @param m_idx 呪文を唱えるモンスターID
  * @param t_idx 呪文を受けるモンスターID。プレイヤーの場合はdummyで0とする。
- * @param TARGET_TYPE プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
+ * @param target_type プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
  *
  * プレイヤーに当たったらラーニング可。
  */
-MonsterSpellResult spell_RF4_BREATH(PlayerType *player_ptr, AttributeType GF_TYPE, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
+MonsterSpellResult spell_RF4_BREATH(PlayerType *player_ptr, AttributeType GF_TYPE, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int target_type)
 {
     int dam, drs_type = 0;
     concptr type_s;
@@ -66,8 +66,8 @@ MonsterSpellResult spell_RF4_BREATH(PlayerType *player_ptr, AttributeType GF_TYP
     auto *m_ptr = &floor_ptr->m_list[m_idx];
     bool known = monster_near_player(floor_ptr, m_idx, t_idx);
     bool see_either = see_monster(player_ptr, m_idx) || see_monster(player_ptr, t_idx);
-    bool mon_to_mon = (TARGET_TYPE == MONSTER_TO_MONSTER);
-    bool mon_to_player = (TARGET_TYPE == MONSTER_TO_PLAYER);
+    bool mon_to_mon = (target_type == MONSTER_TO_MONSTER);
+    bool mon_to_player = (target_type == MONSTER_TO_PLAYER);
     GAME_TEXT m_name[MAX_NLEN], t_name[MAX_NLEN];
     monster_name(player_ptr, m_idx, m_name);
     monster_name(player_ptr, t_idx, t_name);
@@ -201,13 +201,15 @@ MonsterSpellResult spell_RF4_BREATH(PlayerType *player_ptr, AttributeType GF_TYP
         break;
     }
 
-    if (mon_to_player || (mon_to_mon && known && see_either))
+    if (mon_to_player || (mon_to_mon && known && see_either)) {
         disturb(player_ptr, true, true);
+    }
 
     if (!spell_RF4_BREATH_special_message(m_ptr->r_idx, GF_TYPE, m_name)) {
         if (player_ptr->blind) {
-            if (mon_to_player || (mon_to_mon && known && see_either))
+            if (mon_to_player || (mon_to_mon && known && see_either)) {
                 msg_format(_("%^sが何かのブレスを吐いた。", "%^s breathes."), m_name);
+            }
         } else {
             if (mon_to_player) {
                 msg_format(_("%^sが%^sのブレスを吐いた。", "%^s breathes %^s."), m_name, type_s);
@@ -217,15 +219,18 @@ MonsterSpellResult spell_RF4_BREATH(PlayerType *player_ptr, AttributeType GF_TYP
         }
     }
 
-    if (mon_to_mon && known && !see_either)
+    if (mon_to_mon && known && !see_either) {
         floor_ptr->monster_noise = true;
+    }
 
-    if (known || see_either)
+    if (known || see_either) {
         sound(SOUND_BREATH);
+    }
 
-    const auto proj_res = breath(player_ptr, y, x, m_idx, GF_TYPE, dam, 0, true, TARGET_TYPE);
-    if (smart_learn_aux && mon_to_player)
+    const auto proj_res = breath(player_ptr, y, x, m_idx, GF_TYPE, dam, 0, target_type);
+    if (smart_learn_aux && mon_to_player) {
         update_smart_learn(player_ptr, m_idx, drs_type);
+    }
 
     auto res = MonsterSpellResult::make_valid(dam);
     res.learnable = proj_res.affected_player;

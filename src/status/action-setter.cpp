@@ -85,8 +85,9 @@ void set_action(PlayerType *player_ptr, uint8_t typ)
     player_ptr->action = typ;
 
     /* If we are requested other action, stop singing */
-    if (prev_typ == ACTION_SING)
+    if (prev_typ == ACTION_SING) {
         stop_singing(player_ptr);
+    }
 
     if (prev_typ == ACTION_SPELL) {
         SpellHex spell_hex(player_ptr);

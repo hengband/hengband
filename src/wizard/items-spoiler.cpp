@@ -39,8 +39,9 @@ static void kind_info(PlayerType *player_ptr, char *buf, char *dam, char *wgt, c
     q_ptr->to_d = 0;
     *lev = k_info[q_ptr->k_idx].level;
     *val = object_value(q_ptr);
-    if (!buf || !dam || !chance || !wgt)
+    if (!buf || !dam || !chance || !wgt) {
         return;
+    }
 
     describe_flavor(player_ptr, buf, q_ptr, OD_NAME_ONLY | OD_STORE);
     strcpy(dam, "");

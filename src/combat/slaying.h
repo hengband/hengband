@@ -3,8 +3,8 @@
 #include "system/angband.h"
 
 #include "combat/combat-options-type.h"
-#include "object-enchant/tr-flags.h"
 #include "effect/attribute-types.h"
+#include "object-enchant/tr-flags.h"
 
 struct monster_type;
 class ObjectType;

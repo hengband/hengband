@@ -7,6 +7,7 @@
 #include "load/old/item-loader-savefile50.h"
 #include "object/object-stack.h"
 #include "object/object-value.h"
+#include "store/store-owners.h"
 #include "store/store.h"
 #include "system/object-type-definition.h"
 #include "system/player-type-definition.h"
@@ -45,8 +46,9 @@ static void home_carry_load(PlayerType *player_ptr, store_type *store_ptr, Objec
     auto value = object_value(o_ptr);
     int slot;
     for (slot = 0; slot < store_ptr->stock_num; slot++) {
-        if (object_sort_comp(player_ptr, o_ptr, value, &store_ptr->stock[slot]))
+        if (object_sort_comp(player_ptr, o_ptr, value, &store_ptr->stock[slot])) {
             break;
+        }
     }
 
     for (auto i = store_ptr->stock_num; i > slot; i--) {
@@ -81,6 +83,11 @@ static void rd_store(PlayerType *player_ptr, int town_number, int store_number)
     store_ptr->store_open = rd_s32b();
     store_ptr->insult_cur = rd_s16b();
     store_ptr->owner = rd_byte();
+
+    if (auto num = owners.at(i2enum<StoreSaleType>(store_number)).size();
+        num <= store_ptr->owner) {
+        store_ptr->owner %= num;
+    }
 
     int16_t inven_num;
     if (h_older_than(1, 0, 4)) {

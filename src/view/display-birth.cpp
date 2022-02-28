@@ -16,8 +16,9 @@
  */
 void birth_put_stats(PlayerType *player_ptr)
 {
-    if (!autoroller)
+    if (!autoroller) {
         return;
+    }
 
     const int col = 22;
     for (int i = 0; i < A_MAX; i++) {

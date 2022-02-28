@@ -4,10 +4,10 @@
  * @brief トラベル移動処理ヘッダ
  */
 
-#include "system/angband.h"
 #include "floor/floor-base-definitions.h"
+#include "system/angband.h"
 
- /*  A structure type for travel command  */
+/*  A structure type for travel command  */
 struct travel_type {
     int run; /* Remaining grid number */
     int cost[MAX_HGT][MAX_WID];

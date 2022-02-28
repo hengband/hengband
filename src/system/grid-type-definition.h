@@ -1,7 +1,7 @@
 ﻿#pragma once
 
-#include "system/angband.h"
 #include "object/object-index-list.h"
+#include "system/angband.h"
 
 /*
  * 特殊なマス状態フラグ / Special grid flags

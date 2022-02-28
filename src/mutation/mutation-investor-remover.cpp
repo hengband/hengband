@@ -15,23 +15,27 @@
 static void sweep_gain_mutation(PlayerType *player_ptr, glm_type *gm_ptr)
 {
     int attempts_left = 20;
-    if (gm_ptr->choose_mut)
+    if (gm_ptr->choose_mut) {
         attempts_left = 1;
+    }
 
     while (attempts_left--) {
         switch_gain_mutation(player_ptr, gm_ptr);
-        if (gm_ptr->muta_which != PlayerMutationType::MAX && player_ptr->muta.has_not(gm_ptr->muta_which))
+        if (gm_ptr->muta_which != PlayerMutationType::MAX && player_ptr->muta.has_not(gm_ptr->muta_which)) {
             gm_ptr->muta_chosen = true;
+        }
 
-        if (gm_ptr->muta_chosen)
+        if (gm_ptr->muta_chosen) {
             break;
+        }
     }
 }
 
 static void race_dependent_mutation(PlayerType *player_ptr, glm_type *gm_ptr)
 {
-    if (gm_ptr->choose_mut != 0)
+    if (gm_ptr->choose_mut != 0) {
         return;
+    }
 
     PlayerRace pr(player_ptr);
     if (pr.equals(PlayerRaceType::VAMPIRE) && player_ptr->muta.has_not(PlayerMutationType::HYPN_GAZE) && (randint1(10) < 7)) {
@@ -218,8 +222,9 @@ bool gain_mutation(PlayerType *player_ptr, MUTATION_IDX choose_mut)
     race_dependent_mutation(player_ptr, gm_ptr);
     msg_print(_("突然変異した！", "You mutate!"));
     msg_print(gm_ptr->muta_desc);
-    if (gm_ptr->muta_which != PlayerMutationType::MAX)
+    if (gm_ptr->muta_which != PlayerMutationType::MAX) {
         player_ptr->muta.set(gm_ptr->muta_which);
+    }
 
     neutralize_base_status(player_ptr, gm_ptr);
     neutralize_other_status(player_ptr, gm_ptr);
@@ -233,8 +238,9 @@ bool gain_mutation(PlayerType *player_ptr, MUTATION_IDX choose_mut)
 static void sweep_lose_mutation(PlayerType *player_ptr, glm_type *glm_ptr)
 {
     int attempts_left = 20;
-    if (glm_ptr->choose_mut)
+    if (glm_ptr->choose_mut) {
         attempts_left = 1;
+    }
 
     while (attempts_left--) {
         switch_lose_mutation(player_ptr, glm_ptr);
@@ -244,8 +250,9 @@ static void sweep_lose_mutation(PlayerType *player_ptr, glm_type *glm_ptr)
             }
         }
 
-        if (glm_ptr->muta_chosen)
+        if (glm_ptr->muta_chosen) {
             break;
+        }
     }
 }
 
@@ -258,12 +265,14 @@ bool lose_mutation(PlayerType *player_ptr, MUTATION_IDX choose_mut)
     glm_type tmp_glm;
     glm_type *glm_ptr = initialize_glm_type(&tmp_glm, choose_mut);
     sweep_lose_mutation(player_ptr, glm_ptr);
-    if (!glm_ptr->muta_chosen)
+    if (!glm_ptr->muta_chosen) {
         return false;
+    }
 
     msg_print(glm_ptr->muta_desc);
-    if (glm_ptr->muta_which != PlayerMutationType::MAX)
+    if (glm_ptr->muta_which != PlayerMutationType::MAX) {
         player_ptr->muta.reset(glm_ptr->muta_which);
+    }
 
     set_bits(player_ptr->update, PU_BONUS);
     handle_stuff(player_ptr);

@@ -87,12 +87,14 @@ static void pass_game_turn_by_stay(void)
 {
     int32_t oldturn = w_ptr->game_turn;
     w_ptr->game_turn = (w_ptr->game_turn / (TURNS_PER_TICK * TOWN_DAWN / 2) + 1) * (TURNS_PER_TICK * TOWN_DAWN / 2);
-    if (w_ptr->dungeon_turn >= w_ptr->dungeon_turn_limit)
+    if (w_ptr->dungeon_turn >= w_ptr->dungeon_turn_limit) {
         return;
+    }
 
     w_ptr->dungeon_turn += std::min<int>((w_ptr->game_turn - oldturn), TURNS_PER_TICK * 250) * INN_DUNGEON_TURN_ADJ;
-    if (w_ptr->dungeon_turn > w_ptr->dungeon_turn_limit)
+    if (w_ptr->dungeon_turn > w_ptr->dungeon_turn_limit) {
         w_ptr->dungeon_turn = w_ptr->dungeon_turn_limit;
+    }
 }
 
 /*!
@@ -102,15 +104,17 @@ static void pass_game_turn_by_stay(void)
  */
 static bool has_a_nightmare(PlayerType *player_ptr)
 {
-    if (!ironman_nightmare)
+    if (!ironman_nightmare) {
         return false;
+    }
 
     msg_print(_("眠りに就くと恐ろしい光景が心をよぎった。", "Horrible visions flit through your mind as you sleep."));
 
     while (true) {
         sanity_blast(player_ptr, nullptr, false);
-        if (!one_in_(3))
+        if (!one_in_(3)) {
             break;
+        }
     }
 
     msg_print(_("あなたは絶叫して目を覚ました。", "You awake screaming."));
@@ -185,8 +189,9 @@ static void display_stay_result(PlayerType *player_ptr, int prev_hour)
  */
 static bool stay_inn(PlayerType *player_ptr)
 {
-    if (!is_healthy_stay(player_ptr))
+    if (!is_healthy_stay(player_ptr)) {
         return false;
+    }
 
     int prev_day, prev_hour, prev_min;
     extract_day_hour_min(player_ptr, &prev_day, &prev_hour, &prev_min);
@@ -201,8 +206,9 @@ static bool stay_inn(PlayerType *player_ptr)
     }
 
     player_ptr->chp = player_ptr->mhp;
-    if (has_a_nightmare(player_ptr))
+    if (has_a_nightmare(player_ptr)) {
         return true;
+    }
 
     back_to_health(player_ptr);
     charge_magic_eating_energy(player_ptr);

@@ -13,6 +13,7 @@
 #include "system/floor-type-definition.h"
 #include "system/monster-race-definition.h"
 #include "system/player-type-definition.h"
+#include "util/enum-range.h"
 #include "world/world.h"
 
 /*!
@@ -59,33 +60,40 @@ static errr rd_dungeon(PlayerType *player_ptr)
 
         for (int i = 0; i < num; i++) {
             saved_floor_type *sf_ptr = &saved_floors[i];
-            if (!sf_ptr->floor_id)
+            if (!sf_ptr->floor_id) {
                 continue;
-            if (rd_byte() != 0)
+            }
+            if (rd_byte() != 0) {
                 continue;
+            }
 
             err = rd_saved_floor(player_ptr, sf_ptr);
-            if (err)
+            if (err) {
                 break;
+            }
 
-            if (!save_floor(player_ptr, sf_ptr, SLF_SECOND))
+            if (!save_floor(player_ptr, sf_ptr, SLF_SECOND)) {
                 err = 182;
+            }
 
-            if (err)
+            if (err) {
                 break;
+            }
         }
 
         if (err == 0) {
-            if (!load_floor(player_ptr, get_sf_ptr(player_ptr->floor_id), SLF_SECOND))
+            if (!load_floor(player_ptr, get_sf_ptr(player_ptr->floor_id), SLF_SECOND)) {
                 err = 183;
+            }
         }
 
         // latest_visit_mark の復元。
         // 全ての保存フロアについての visit_mark の最大値 + 1 とする。
         for (int i = 0; i < num; ++i) {
             const uint32_t next_visit_mark = saved_floors[i].visit_mark + 1;
-            if (next_visit_mark > latest_visit_mark)
+            if (next_visit_mark > latest_visit_mark) {
                 latest_visit_mark = next_visit_mark;
+            }
         }
     }
 
@@ -126,8 +134,9 @@ static errr rd_dungeon(PlayerType *player_ptr)
 errr restore_dungeon(PlayerType *player_ptr)
 {
     if (player_ptr->is_dead) {
-        for (int i = MIN_RANDOM_QUEST; i < MAX_RANDOM_QUEST + 1; i++)
-            r_info[quest[i].r_idx].flags1 &= ~RF1_QUESTOR;
+        for (auto q_idx : EnumRange(QuestId::RANDOM_QUEST1, QuestId::RANDOM_QUEST10)) {
+            r_info[quest_map[q_idx].r_idx].flags1 &= ~RF1_QUESTOR;
+        }
 
         return 0;
     }

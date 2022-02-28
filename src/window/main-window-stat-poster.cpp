@@ -22,7 +22,10 @@
 #include "system/player-type-definition.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
+#include "timed-effect/player-confusion.h"
 #include "timed-effect/player-cut.h"
+#include "timed-effect/player-hallucination.h"
+#include "timed-effect/player-paralysis.h"
 #include "timed-effect/player-stun.h"
 #include "timed-effect/timed-effects.h"
 #include "view/status-bars-table.h"
@@ -59,8 +62,9 @@ void print_stat(PlayerType *player_ptr, int stat)
         c_put_str(TERM_L_GREEN, tmp, ROW_STAT + stat, COL_STAT + 6);
     }
 
-    if (player_ptr->stat_max[stat] != player_ptr->stat_max_max[stat])
+    if (player_ptr->stat_max[stat] != player_ptr->stat_max_max[stat]) {
         return;
+    }
 
 #ifdef JP
     /* 日本語にかぶらないように表示位置を変更 */
@@ -107,8 +111,9 @@ void print_stun(PlayerType *player_ptr)
  */
 void print_hunger(PlayerType *player_ptr)
 {
-    if (w_ptr->wizard && player_ptr->current_floor_ptr->inside_arena)
+    if (w_ptr->wizard && player_ptr->current_floor_ptr->inside_arena) {
         return;
+    }
 
     if (player_ptr->food < PY_FOOD_FAINT) {
         c_put_str(TERM_RED, _("衰弱  ", "Weak  "), ROW_HUNGRY, COL_HUNGRY);
@@ -181,8 +186,9 @@ void print_state(PlayerType *player_ptr)
     case ACTION_LEARN: {
         strcpy(text, _("学習", "lear"));
         auto bluemage_data = PlayerClass(player_ptr).get_specific_data<bluemage_data_type>();
-        if (bluemage_data->new_magic_learned)
+        if (bluemage_data->new_magic_learned) {
             attr = TERM_L_RED;
+        }
         break;
     }
     case ACTION_FISH: {
@@ -260,34 +266,38 @@ void print_speed(PlayerType *player_ptr)
     if (speed_value > 0) {
         if (player_ptr->riding) {
             auto *m_ptr = &floor_ptr->m_list[player_ptr->riding];
-            if (monster_fast_remaining(m_ptr) && !monster_slow_remaining(m_ptr))
+            if (monster_fast_remaining(m_ptr) && !monster_slow_remaining(m_ptr)) {
                 attr = TERM_L_BLUE;
-            else if (monster_slow_remaining(m_ptr) && !monster_fast_remaining(m_ptr))
+            } else if (monster_slow_remaining(m_ptr) && !monster_fast_remaining(m_ptr)) {
                 attr = TERM_VIOLET;
-            else
+            } else {
                 attr = TERM_GREEN;
-        } else if ((is_player_fast && !player_ptr->slow) || player_ptr->lightspeed)
+            }
+        } else if ((is_player_fast && !player_ptr->slow) || player_ptr->lightspeed) {
             attr = TERM_YELLOW;
-        else if (player_ptr->slow && !is_player_fast)
+        } else if (player_ptr->slow && !is_player_fast) {
             attr = TERM_VIOLET;
-        else
+        } else {
             attr = TERM_L_GREEN;
+        }
         sprintf(buf, "%s(+%d)", (player_ptr->riding ? _("乗馬", "Ride") : _("加速", "Fast")), speed_value);
     } else if (speed_value < 0) {
         if (player_ptr->riding) {
             auto *m_ptr = &floor_ptr->m_list[player_ptr->riding];
-            if (monster_fast_remaining(m_ptr) && !monster_slow_remaining(m_ptr))
+            if (monster_fast_remaining(m_ptr) && !monster_slow_remaining(m_ptr)) {
                 attr = TERM_L_BLUE;
-            else if (monster_slow_remaining(m_ptr) && !monster_fast_remaining(m_ptr))
+            } else if (monster_slow_remaining(m_ptr) && !monster_fast_remaining(m_ptr)) {
                 attr = TERM_VIOLET;
-            else
+            } else {
                 attr = TERM_RED;
-        } else if (is_player_fast && !player_ptr->slow)
+            }
+        } else if (is_player_fast && !player_ptr->slow) {
             attr = TERM_YELLOW;
-        else if (player_ptr->slow && !is_player_fast)
+        } else if (player_ptr->slow && !is_player_fast) {
             attr = TERM_VIOLET;
-        else
+        } else {
             attr = TERM_L_UMBER;
+        }
         sprintf(buf, "%s(%d)", (player_ptr->riding ? _("乗馬", "Ride") : _("減速", "Slow")), speed_value);
     } else if (player_ptr->riding) {
         attr = TERM_GREEN;
@@ -327,8 +337,9 @@ void print_imitation(PlayerType *player_ptr)
     TERM_LEN row_study = hgt + ROW_STUDY;
 
     PlayerClass pc(player_ptr);
-    if (!pc.equals(PlayerClassType::IMITATOR))
+    if (!pc.equals(PlayerClassType::IMITATOR)) {
         return;
+    }
 
     auto mane_data = pc.get_specific_data<mane_data_type>();
 
@@ -414,8 +425,7 @@ static void add_hex_status_flags(PlayerType *player_ptr, BIT_FLAGS *bar_flags)
         ADD_BAR_FLAG(BAR_ANTIMAGIC);
     }
 
-    if (spell_hex.is_spelling_specific(HEX_CURE_LIGHT) || spell_hex.is_spelling_specific(HEX_CURE_SERIOUS)
-        || spell_hex.is_spelling_specific(HEX_CURE_CRITICAL)) {
+    if (spell_hex.is_spelling_specific(HEX_CURE_LIGHT) || spell_hex.is_spelling_specific(HEX_CURE_SERIOUS) || spell_hex.is_spelling_specific(HEX_CURE_CRITICAL)) {
         ADD_BAR_FLAG(BAR_CURE);
     }
 
@@ -446,26 +456,34 @@ void print_status(PlayerType *player_ptr)
     BIT_FLAGS bar_flags[3];
     bar_flags[0] = bar_flags[1] = bar_flags[2] = 0L;
 
-    if (player_ptr->tsuyoshi)
+    auto effects = player_ptr->effects();
+    if (player_ptr->tsuyoshi) {
         ADD_BAR_FLAG(BAR_TSUYOSHI);
+    }
 
-    if (player_ptr->hallucinated)
+    if (effects->hallucination()->is_hallucinated()) {
         ADD_BAR_FLAG(BAR_HALLUCINATION);
+    }
 
-    if (player_ptr->blind)
+    if (player_ptr->blind) {
         ADD_BAR_FLAG(BAR_BLINDNESS);
+    }
 
-    if (player_ptr->paralyzed)
+    if (effects->paralysis()->is_paralyzed()) {
         ADD_BAR_FLAG(BAR_PARALYZE);
+    }
 
-    if (player_ptr->confused)
+    if (effects->confusion()->is_confused()) {
         ADD_BAR_FLAG(BAR_CONFUSE);
+    }
 
-    if (player_ptr->poisoned)
+    if (player_ptr->poisoned) {
         ADD_BAR_FLAG(BAR_POISONED);
+    }
 
-    if (player_ptr->tim_invis)
+    if (player_ptr->tim_invis) {
         ADD_BAR_FLAG(BAR_SENSEUNSEEN);
+    }
 
     auto sniper_data = PlayerClass(player_ptr).get_specific_data<sniper_data_type>();
     if (sniper_data && (sniper_data->concent >= CONCENT_RADAR_THRESHOLD)) {
@@ -473,135 +491,190 @@ void print_status(PlayerType *player_ptr)
         ADD_BAR_FLAG(BAR_NIGHTSIGHT);
     }
 
-    if (is_time_limit_esp(player_ptr))
+    if (is_time_limit_esp(player_ptr)) {
         ADD_BAR_FLAG(BAR_TELEPATHY);
+    }
 
-    if (player_ptr->tim_regen)
+    if (player_ptr->tim_regen) {
         ADD_BAR_FLAG(BAR_REGENERATION);
+    }
 
-    if (player_ptr->tim_infra)
+    if (player_ptr->tim_infra) {
         ADD_BAR_FLAG(BAR_INFRAVISION);
+    }
 
-    if (player_ptr->protevil)
+    if (player_ptr->protevil) {
         ADD_BAR_FLAG(BAR_PROTEVIL);
+    }
 
-    if (is_invuln(player_ptr))
+    if (is_invuln(player_ptr)) {
         ADD_BAR_FLAG(BAR_INVULN);
+    }
 
-    if (player_ptr->wraith_form)
+    if (player_ptr->wraith_form) {
         ADD_BAR_FLAG(BAR_WRAITH);
+    }
 
-    if (player_ptr->tim_pass_wall)
+    if (player_ptr->tim_pass_wall) {
         ADD_BAR_FLAG(BAR_PASSWALL);
+    }
 
-    if (player_ptr->tim_reflect)
+    if (player_ptr->tim_reflect) {
         ADD_BAR_FLAG(BAR_REFLECTION);
+    }
 
-    if (is_hero(player_ptr))
+    if (is_hero(player_ptr)) {
         ADD_BAR_FLAG(BAR_HEROISM);
+    }
 
-    if (is_shero(player_ptr))
+    if (is_shero(player_ptr)) {
         ADD_BAR_FLAG(BAR_BERSERK);
+    }
 
-    if (is_blessed(player_ptr))
+    if (is_blessed(player_ptr)) {
         ADD_BAR_FLAG(BAR_BLESSED);
+    }
 
-    if (player_ptr->magicdef)
+    if (player_ptr->magicdef) {
         ADD_BAR_FLAG(BAR_MAGICDEFENSE);
+    }
 
-    if (player_ptr->tsubureru)
+    if (player_ptr->tsubureru) {
         ADD_BAR_FLAG(BAR_EXPAND);
+    }
 
-    if (player_ptr->shield)
+    if (player_ptr->shield) {
         ADD_BAR_FLAG(BAR_STONESKIN);
+    }
 
     auto ninja_data = PlayerClass(player_ptr).get_specific_data<ninja_data_type>();
-    if (ninja_data && ninja_data->kawarimi)
+    if (ninja_data && ninja_data->kawarimi) {
         ADD_BAR_FLAG(BAR_KAWARIMI);
+    }
 
-    if (player_ptr->special_defense & DEFENSE_ACID)
+    if (player_ptr->special_defense & DEFENSE_ACID) {
         ADD_BAR_FLAG(BAR_IMMACID);
-    if (is_oppose_acid(player_ptr))
+    }
+
+    if (is_oppose_acid(player_ptr)) {
         ADD_BAR_FLAG(BAR_RESACID);
+    }
 
-    if (player_ptr->special_defense & DEFENSE_ELEC)
+    if (player_ptr->special_defense & DEFENSE_ELEC) {
         ADD_BAR_FLAG(BAR_IMMELEC);
-    if (is_oppose_elec(player_ptr))
+    }
+
+    if (is_oppose_elec(player_ptr)) {
         ADD_BAR_FLAG(BAR_RESELEC);
+    }
 
-    if (player_ptr->special_defense & DEFENSE_FIRE)
+    if (player_ptr->special_defense & DEFENSE_FIRE) {
         ADD_BAR_FLAG(BAR_IMMFIRE);
-    if (is_oppose_fire(player_ptr))
+    }
+
+    if (is_oppose_fire(player_ptr)) {
         ADD_BAR_FLAG(BAR_RESFIRE);
+    }
 
-    if (player_ptr->special_defense & DEFENSE_COLD)
+    if (player_ptr->special_defense & DEFENSE_COLD) {
         ADD_BAR_FLAG(BAR_IMMCOLD);
-    if (is_oppose_cold(player_ptr))
+    }
+
+    if (is_oppose_cold(player_ptr)) {
         ADD_BAR_FLAG(BAR_RESCOLD);
+    }
 
-    if (is_oppose_pois(player_ptr))
+    if (is_oppose_pois(player_ptr)) {
         ADD_BAR_FLAG(BAR_RESPOIS);
+    }
 
-    if (player_ptr->word_recall)
+    if (player_ptr->word_recall) {
         ADD_BAR_FLAG(BAR_RECALL);
+    }
 
-    if (player_ptr->alter_reality)
+    if (player_ptr->alter_reality) {
         ADD_BAR_FLAG(BAR_ALTER);
+    }
 
-    if (player_ptr->afraid)
+    if (player_ptr->afraid) {
         ADD_BAR_FLAG(BAR_AFRAID);
+    }
 
-    if (player_ptr->tim_res_time)
+    if (player_ptr->tim_res_time) {
         ADD_BAR_FLAG(BAR_RESTIME);
+    }
 
-    if (player_ptr->multishadow)
+    if (player_ptr->multishadow) {
         ADD_BAR_FLAG(BAR_MULTISHADOW);
+    }
 
-    if (player_ptr->special_attack & ATTACK_CONFUSE)
+    if (player_ptr->special_attack & ATTACK_CONFUSE) {
         ADD_BAR_FLAG(BAR_ATTKCONF);
+    }
 
-    if (player_ptr->resist_magic)
+    if (player_ptr->resist_magic) {
         ADD_BAR_FLAG(BAR_REGMAGIC);
+    }
 
-    if (player_ptr->ult_res)
+    if (player_ptr->ult_res) {
         ADD_BAR_FLAG(BAR_ULTIMATE);
+    }
 
-    if (player_ptr->tim_levitation)
+    if (player_ptr->tim_levitation) {
         ADD_BAR_FLAG(BAR_LEVITATE);
+    }
 
-    if (player_ptr->tim_res_nether)
+    if (player_ptr->tim_res_nether) {
         ADD_BAR_FLAG(BAR_RESNETH);
+    }
 
-    if (player_ptr->dustrobe)
+    if (player_ptr->dustrobe) {
         ADD_BAR_FLAG(BAR_DUSTROBE);
+    }
 
-    if (player_ptr->special_attack & ATTACK_FIRE)
+    if (player_ptr->special_attack & ATTACK_FIRE) {
         ADD_BAR_FLAG(BAR_ATTKFIRE);
-    if (player_ptr->special_attack & ATTACK_COLD)
+    }
+
+    if (player_ptr->special_attack & ATTACK_COLD) {
         ADD_BAR_FLAG(BAR_ATTKCOLD);
-    if (player_ptr->special_attack & ATTACK_ELEC)
+    }
+
+    if (player_ptr->special_attack & ATTACK_ELEC) {
         ADD_BAR_FLAG(BAR_ATTKELEC);
-    if (player_ptr->special_attack & ATTACK_ACID)
+    }
+
+    if (player_ptr->special_attack & ATTACK_ACID) {
         ADD_BAR_FLAG(BAR_ATTKACID);
-    if (player_ptr->special_attack & ATTACK_POIS)
+    }
+
+    if (player_ptr->special_attack & ATTACK_POIS) {
         ADD_BAR_FLAG(BAR_ATTKPOIS);
-    if (ninja_data && ninja_data->s_stealth)
+    }
+
+    if (ninja_data && ninja_data->s_stealth) {
         ADD_BAR_FLAG(BAR_SUPERSTEALTH);
+    }
 
-    if (player_ptr->tim_sh_fire)
+    if (player_ptr->tim_sh_fire) {
         ADD_BAR_FLAG(BAR_SHFIRE);
+    }
 
-    if (is_time_limit_stealth(player_ptr))
+    if (is_time_limit_stealth(player_ptr)) {
         ADD_BAR_FLAG(BAR_STEALTH);
+    }
 
-    if (player_ptr->tim_sh_touki)
+    if (player_ptr->tim_sh_touki) {
         ADD_BAR_FLAG(BAR_TOUKI);
+    }
 
-    if (player_ptr->tim_sh_holy)
+    if (player_ptr->tim_sh_holy) {
         ADD_BAR_FLAG(BAR_SHHOLY);
+    }
 
-    if (player_ptr->tim_eyeeye)
+    if (player_ptr->tim_eyeeye) {
         ADD_BAR_FLAG(BAR_EYEEYE);
+    }
 
     add_hex_status_flags(player_ptr, bar_flags);
     TERM_LEN col = 0, num = 0;
@@ -631,21 +704,26 @@ void print_status(PlayerType *player_ptr)
 
     col = (max_col_statbar - col) / 2;
     for (int i = 0; stat_bars[i].sstr; i++) {
-        if (!IS_BAR_FLAG(i))
+        if (!IS_BAR_FLAG(i)) {
             continue;
+        }
 
         concptr str;
-        if (space == 2)
+        if (space == 2) {
             str = stat_bars[i].lstr;
-        else
+        } else {
             str = stat_bars[i].sstr;
+        }
 
         c_put_str(stat_bars[i].attr, str, row_statbar, col);
         col += strlen(str);
-        if (space > 0)
+        if (space > 0) {
             col++;
-        if (col > max_col_statbar)
+        }
+
+        if (col > max_col_statbar) {
             break;
+        }
     }
 }
 

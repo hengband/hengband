@@ -3,6 +3,7 @@
 #include "avatar/avatar.h"
 #include "core/player-update-types.h"
 #include "core/window-redrawer.h"
+#include "effect/attribute-types.h"
 #include "floor/floor-object.h"
 #include "game-option/disturbance-options.h"
 #include "game-option/input-options.h"
@@ -29,7 +30,6 @@
 #include "spell-kind/spells-neighbor.h"
 #include "spell-kind/spells-specific-bolt.h"
 #include "spell-kind/spells-teleport.h"
-#include "effect/attribute-types.h"
 #include "spell/spells-status.h"
 #include "status/action-setter.h"
 #include "status/experience.h"
@@ -64,69 +64,83 @@ bool wand_effect(PlayerType *player_ptr, OBJECT_SUBTYPE_VALUE sval, DIRECTION di
 
         if (vir) {
             if (player_ptr->virtues[vir - 1] > 0) {
-                while (randint1(300) < player_ptr->virtues[vir - 1])
+                while (randint1(300) < player_ptr->virtues[vir - 1]) {
                     sval++;
-                if (sval > SV_WAND_COLD_BALL)
+                }
+                if (sval > SV_WAND_COLD_BALL) {
                     sval = randint0(4) + SV_WAND_ACID_BALL;
+                }
             } else {
-                while (randint1(300) < (0 - player_ptr->virtues[vir - 1]))
+                while (randint1(300) < (0 - player_ptr->virtues[vir - 1])) {
                     sval--;
-                if (sval < SV_WAND_HEAL_MONSTER)
+                }
+                if (sval < SV_WAND_HEAL_MONSTER) {
                     sval = randint0(3) + SV_WAND_HEAL_MONSTER;
+                }
             }
         }
-        if (sval < SV_WAND_TELEPORT_AWAY)
+        if (sval < SV_WAND_TELEPORT_AWAY) {
             chg_virtue(player_ptr, V_CHANCE, 1);
+        }
     }
 
     /* Analyze the wand */
     switch (sval) {
     case SV_WAND_HEAL_MONSTER: {
         int dam = damroll((powerful ? 20 : 10), 10);
-        if (heal_monster(player_ptr, dir, dam))
+        if (heal_monster(player_ptr, dir, dam)) {
             ident = true;
+        }
         break;
     }
 
     case SV_WAND_HASTE_MONSTER: {
-        if (speed_monster(player_ptr, dir, lev))
+        if (speed_monster(player_ptr, dir, lev)) {
             ident = true;
+        }
         break;
     }
 
     case SV_WAND_CLONE_MONSTER: {
-        if (clone_monster(player_ptr, dir))
+        if (clone_monster(player_ptr, dir)) {
             ident = true;
+        }
         break;
     }
 
     case SV_WAND_TELEPORT_AWAY: {
         int distance = MAX_SIGHT * (powerful ? 8 : 5);
-        if (teleport_monster(player_ptr, dir, distance))
+        if (teleport_monster(player_ptr, dir, distance)) {
             ident = true;
+        }
         break;
     }
 
     case SV_WAND_DISARMING: {
-        if (disarm_trap(player_ptr, dir))
+        if (disarm_trap(player_ptr, dir)) {
             ident = true;
-        if (powerful && disarm_traps_touch(player_ptr))
+        }
+        if (powerful && disarm_traps_touch(player_ptr)) {
             ident = true;
+        }
         break;
     }
 
     case SV_WAND_TRAP_DOOR_DEST: {
-        if (destroy_door(player_ptr, dir))
+        if (destroy_door(player_ptr, dir)) {
             ident = true;
-        if (powerful && destroy_doors_touch(player_ptr))
+        }
+        if (powerful && destroy_doors_touch(player_ptr)) {
             ident = true;
+        }
         break;
     }
 
     case SV_WAND_STONE_TO_MUD: {
         int dam = powerful ? 40 + randint1(60) : 20 + randint1(30);
-        if (wall_to_mud(player_ptr, dir, dam))
+        if (wall_to_mud(player_ptr, dir, dam)) {
             ident = true;
+        }
         break;
     }
 
@@ -139,38 +153,44 @@ bool wand_effect(PlayerType *player_ptr, OBJECT_SUBTYPE_VALUE sval, DIRECTION di
     }
 
     case SV_WAND_SLEEP_MONSTER: {
-        if (sleep_monster(player_ptr, dir, lev))
+        if (sleep_monster(player_ptr, dir, lev)) {
             ident = true;
+        }
         break;
     }
 
     case SV_WAND_SLOW_MONSTER: {
-        if (slow_monster(player_ptr, dir, lev))
+        if (slow_monster(player_ptr, dir, lev)) {
             ident = true;
+        }
         break;
     }
 
     case SV_WAND_CONFUSE_MONSTER: {
-        if (confuse_monster(player_ptr, dir, lev))
+        if (confuse_monster(player_ptr, dir, lev)) {
             ident = true;
+        }
         break;
     }
 
     case SV_WAND_FEAR_MONSTER: {
-        if (fear_monster(player_ptr, dir, lev))
+        if (fear_monster(player_ptr, dir, lev)) {
             ident = true;
+        }
         break;
     }
 
     case SV_WAND_HYPODYNAMIA: {
-        if (hypodynamic_bolt(player_ptr, dir, 80 + lev))
+        if (hypodynamic_bolt(player_ptr, dir, 80 + lev)) {
             ident = true;
+        }
         break;
     }
 
     case SV_WAND_POLYMORPH: {
-        if (poly_monster(player_ptr, dir, lev))
+        if (poly_monster(player_ptr, dir, lev)) {
             ident = true;
+        }
         break;
     }
 
@@ -193,8 +213,9 @@ bool wand_effect(PlayerType *player_ptr, OBJECT_SUBTYPE_VALUE sval, DIRECTION di
     }
 
     case SV_WAND_CHARM_MONSTER: {
-        if (charm_monster(player_ptr, dir, std::max<short>(20, lev)))
+        if (charm_monster(player_ptr, dir, std::max<short>(20, lev))) {
             ident = true;
+        }
         break;
     }
 
@@ -278,8 +299,9 @@ bool wand_effect(PlayerType *player_ptr, OBJECT_SUBTYPE_VALUE sval, DIRECTION di
             break;
         }
 
-        if (powerful)
+        if (powerful) {
             dam = (dam * 3) / 2;
+        }
 
         fire_breath(player_ptr, typ, dir, dam, 3);
 
@@ -323,16 +345,19 @@ void do_cmd_aim_wand(PlayerType *player_ptr)
     OBJECT_IDX item;
     concptr q, s;
 
-    if (player_ptr->wild_mode)
+    if (player_ptr->wild_mode) {
         return;
-    if (cmd_limit_arena(player_ptr))
+    }
+    if (cmd_limit_arena(player_ptr)) {
         return;
+    }
     PlayerClass(player_ptr).break_samurai_stance({ SamuraiStanceType::MUSOU, SamuraiStanceType::KOUKIJIN });
 
     q = _("どの魔法棒で狙いますか? ", "Aim which wand? ");
     s = _("使える魔法棒がない。", "You have no wand to aim.");
-    if (!choose_object(player_ptr, &item, q, s, (USE_INVEN | USE_FLOOR), TvalItemTester(ItemKindType::WAND)))
+    if (!choose_object(player_ptr, &item, q, s, (USE_INVEN | USE_FLOOR), TvalItemTester(ItemKindType::WAND))) {
         return;
+    }
 
     ObjectZapWandEntity(player_ptr).execute(item);
 }

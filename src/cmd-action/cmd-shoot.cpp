@@ -28,8 +28,9 @@ void do_cmd_fire(PlayerType *player_ptr, SPELL_IDX snipe_type)
 {
     OBJECT_IDX item;
     ObjectType *j_ptr, *ammo_ptr;
-    if (player_ptr->wild_mode)
+    if (player_ptr->wild_mode) {
         return;
+    }
 
     player_ptr->is_fired = false;
     j_ptr = &player_ptr->inventory_list[INVEN_BOW];
@@ -62,8 +63,9 @@ void do_cmd_fire(PlayerType *player_ptr, SPELL_IDX snipe_type)
     }
 
     exe_fire(player_ptr, item, j_ptr, snipe_type);
-    if (!player_ptr->is_fired || !PlayerClass(player_ptr).equals(PlayerClassType::SNIPER))
+    if (!player_ptr->is_fired || !PlayerClass(player_ptr).equals(PlayerClassType::SNIPER)) {
         return;
+    }
 
     if (snipe_type == SP_AWAY) {
         auto sniper_data = PlayerClass(player_ptr).get_specific_data<sniper_data_type>();

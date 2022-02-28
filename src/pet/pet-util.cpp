@@ -33,9 +33,9 @@ bool can_player_ride_pet(PlayerType *player_ptr, grid_type *g_ptr, bool now_ridi
     bool old_pf_two_hands = any_bits(player_ptr->pet_extra_flags, PF_TWO_HANDS);
     w_ptr->character_xtra = true;
 
-    if (now_riding)
+    if (now_riding) {
         player_ptr->riding = g_ptr->m_idx;
-    else {
+    } else {
         player_ptr->riding = 0;
         player_ptr->pet_extra_flags &= ~(PF_TWO_HANDS);
         player_ptr->riding_ryoute = player_ptr->old_riding_ryoute = false;
@@ -46,10 +46,11 @@ bool can_player_ride_pet(PlayerType *player_ptr, grid_type *g_ptr, bool now_ridi
 
     bool p_can_enter = player_can_enter(player_ptr, g_ptr->feat, CEM_P_CAN_ENTER_PATTERN);
     player_ptr->riding = old_riding;
-    if (old_pf_two_hands)
+    if (old_pf_two_hands) {
         player_ptr->pet_extra_flags |= (PF_TWO_HANDS);
-    else
+    } else {
         player_ptr->pet_extra_flags &= ~(PF_TWO_HANDS);
+    }
 
     player_ptr->riding_ryoute = old_riding_two_hands;
     player_ptr->old_riding_ryoute = old_old_riding_two_hands;
@@ -71,8 +72,9 @@ PERCENTAGE calculate_upkeep(PlayerType *player_ptr)
     total_friends = 0;
     for (auto m_idx = player_ptr->current_floor_ptr->m_max - 1; m_idx >= 1; m_idx--) {
         auto *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
-        if (!monster_is_valid(m_ptr))
+        if (!monster_is_valid(m_ptr)) {
             continue;
+        }
         auto *r_ptr = &r_info[m_ptr->r_idx];
 
         if (!is_pet(m_ptr)) {
@@ -90,12 +92,13 @@ PERCENTAGE calculate_upkeep(PlayerType *player_ptr)
             continue;
         }
 
-        if (player_ptr->riding == m_idx)
+        if (player_ptr->riding == m_idx) {
             total_friend_levels += (r_ptr->level + 5) * 2;
-        else if (!has_a_unique && any_bits(r_info[m_ptr->r_idx].flags7, RF7_RIDING))
+        } else if (!has_a_unique && any_bits(r_info[m_ptr->r_idx].flags7, RF7_RIDING)) {
             total_friend_levels += (r_ptr->level + 5) * 7 / 2;
-        else
+        } else {
             total_friend_levels += (r_ptr->level + 5) * 10;
+        }
 
         has_a_unique = true;
     }

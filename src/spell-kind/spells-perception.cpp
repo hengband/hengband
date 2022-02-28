@@ -40,8 +40,9 @@ void identify_pack(PlayerType *player_ptr)
 {
     for (INVENTORY_IDX i = 0; i < INVEN_TOTAL; i++) {
         auto *o_ptr = &player_ptr->inventory_list[i];
-        if (!o_ptr->k_idx)
+        if (!o_ptr->k_idx) {
             continue;
+        }
 
         identify_item(player_ptr, o_ptr);
         autopick_alter_item(player_ptr, i, false);
@@ -61,12 +62,14 @@ bool identify_item(PlayerType *player_ptr, ObjectType *o_ptr)
     describe_flavor(player_ptr, o_name, o_ptr, 0);
 
     bool old_known = false;
-    if (any_bits(o_ptr->ident, IDENT_KNOWN))
+    if (any_bits(o_ptr->ident, IDENT_KNOWN)) {
         old_known = true;
+    }
 
     if (!o_ptr->is_fully_known()) {
-        if (o_ptr->is_artifact() || one_in_(5))
+        if (o_ptr->is_artifact() || one_in_(5)) {
             chg_virtue(player_ptr, V_KNOWLEDGE, 1);
+        }
     }
 
     object_aware(player_ptr, o_ptr);
@@ -81,10 +84,12 @@ bool identify_item(PlayerType *player_ptr, ObjectType *o_ptr)
 
     describe_flavor(player_ptr, o_name, o_ptr, OD_NAME_ONLY);
 
-    if (record_fix_art && !old_known && o_ptr->is_fixed_artifact())
+    if (record_fix_art && !old_known && o_ptr->is_fixed_artifact()) {
         exe_write_diary(player_ptr, DIARY_ART, 0, o_name);
-    if (record_rand_art && !old_known && o_ptr->art_name)
+    }
+    if (record_rand_art && !old_known && o_ptr->art_name) {
         exe_write_diary(player_ptr, DIARY_ART, 0, o_name);
+    }
 
     return old_known;
 }
@@ -119,8 +124,9 @@ bool ident_spell(PlayerType *player_ptr, bool only_equip)
     OBJECT_IDX item;
     ObjectType *o_ptr;
     o_ptr = choose_object(player_ptr, &item, q, s, (USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT), *item_tester);
-    if (!o_ptr)
+    if (!o_ptr) {
         return false;
+    }
 
     bool old_known = identify_item(player_ptr, o_ptr);
 
@@ -150,8 +156,7 @@ bool ident_spell(PlayerType *player_ptr, bool only_equip)
  */
 bool identify_fully(PlayerType *player_ptr, bool only_equip)
 {
-    std::unique_ptr<ItemTester> item_tester
-        = std::make_unique<FuncItemTester>(only_equip ? object_is_not_fully_identified_weapon_armour : object_is_not_fully_identified);
+    std::unique_ptr<ItemTester> item_tester = std::make_unique<FuncItemTester>(only_equip ? object_is_not_fully_identified_weapon_armour : object_is_not_fully_identified);
 
     concptr q;
     if (can_get_item(player_ptr, *item_tester)) {
@@ -170,8 +175,9 @@ bool identify_fully(PlayerType *player_ptr, bool only_equip)
     OBJECT_IDX item;
     ObjectType *o_ptr;
     o_ptr = choose_object(player_ptr, &item, q, s, (USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT), *item_tester);
-    if (!o_ptr)
+    if (!o_ptr) {
         return false;
+    }
 
     bool old_known = identify_item(player_ptr, o_ptr);
 

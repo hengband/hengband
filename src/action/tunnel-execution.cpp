@@ -60,8 +60,9 @@ bool exe_tunnel(PlayerType *player_ptr, POSITION y, POSITION x)
     int power;
     concptr name;
     bool more = false;
-    if (!do_cmd_tunnel_test(player_ptr->current_floor_ptr, y, x))
+    if (!do_cmd_tunnel_test(player_ptr->current_floor_ptr, y, x)) {
         return false;
+    }
 
     PlayerEnergy(player_ptr).set_player_turn_energy(100);
     g_ptr = &player_ptr->current_floor_ptr->grid_array[y][x];
@@ -71,10 +72,11 @@ bool exe_tunnel(PlayerType *player_ptr, POSITION y, POSITION x)
     name = mimic_f_ptr->name.c_str();
     sound(SOUND_DIG);
     if (f_ptr->flags.has(FloorFeatureType::PERMANENT)) {
-        if (mimic_f_ptr->flags.has(FloorFeatureType::PERMANENT))
+        if (mimic_f_ptr->flags.has(FloorFeatureType::PERMANENT)) {
             msg_print(_("この岩は硬すぎて掘れないようだ。", "This seems to be permanent rock."));
-        else
+        } else {
             msg_print(_("そこは掘れない!", "You can't tunnel through that!"));
+        }
     } else if (f_ptr->flags.has(FloorFeatureType::CAN_DIG)) {
         if (player_ptr->skill_dig > randint0(20 * power)) {
             msg_format(_("%sをくずした。", "You have removed the %s."), name);
@@ -87,15 +89,16 @@ bool exe_tunnel(PlayerType *player_ptr, POSITION y, POSITION x)
     } else {
         bool tree = mimic_f_ptr->flags.has(FloorFeatureType::TREE);
         if (player_ptr->skill_dig > power + randint0(40 * power)) {
-            if (tree)
+            if (tree) {
                 msg_format(_("%sを切り払った。", "You have cleared away the %s."), name);
-            else {
+            } else {
                 msg_print(_("穴を掘り終えた。", "You have finished the tunnel."));
                 player_ptr->update |= (PU_FLOW);
             }
 
-            if (f_ptr->flags.has(FloorFeatureType::GLASS))
+            if (f_ptr->flags.has(FloorFeatureType::GLASS)) {
                 sound(SOUND_GLASS);
+            }
 
             cave_alter_feat(player_ptr, y, x, FloorFeatureType::TUNNEL);
             chg_virtue(player_ptr, V_DILIGENCE, 1);
@@ -103,8 +106,9 @@ bool exe_tunnel(PlayerType *player_ptr, POSITION y, POSITION x)
         } else {
             if (tree) {
                 msg_format(_("%sを切っている。", "You chop away at the %s."), name);
-                if (randint0(100) < 25)
+                if (randint0(100) < 25) {
                     search(player_ptr);
+                }
             } else {
                 msg_format(_("%sに穴を掘っている。", "You tunnel into the %s."), name);
             }
@@ -113,8 +117,9 @@ bool exe_tunnel(PlayerType *player_ptr, POSITION y, POSITION x)
         }
     }
 
-    if (is_hidden_door(player_ptr, g_ptr) && (randint0(100) < 25))
+    if (is_hidden_door(player_ptr, g_ptr) && (randint0(100) < 25)) {
         search(player_ptr);
+    }
 
     return more;
 }

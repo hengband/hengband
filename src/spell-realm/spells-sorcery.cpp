@@ -23,22 +23,25 @@
 bool alchemy(PlayerType *player_ptr)
 {
     bool force = false;
-    if (command_arg > 0)
+    if (command_arg > 0) {
         force = true;
+    }
 
     concptr q = _("どのアイテムを金に変えますか？", "Turn which item to gold? ");
     concptr s = _("金に変えられる物がありません。", "You have nothing to turn to gold.");
     OBJECT_IDX item;
     ObjectType *o_ptr;
     o_ptr = choose_object(player_ptr, &item, q, s, (USE_INVEN | USE_FLOOR));
-    if (!o_ptr)
+    if (!o_ptr) {
         return false;
+    }
 
     int amt = 1;
     if (o_ptr->number > 1) {
         amt = get_quantity(nullptr, o_ptr->number);
-        if (amt <= 0)
+        if (amt <= 0) {
             return false;
+        }
     }
 
     ITEM_NUMBER old_number = o_ptr->number;
@@ -51,8 +54,9 @@ bool alchemy(PlayerType *player_ptr)
         if (confirm_destroy || (object_value(o_ptr) > 0)) {
             char out_val[MAX_NLEN + 40];
             sprintf(out_val, _("本当に%sを金に変えますか？", "Really turn %s to gold? "), o_name);
-            if (!get_check(out_val))
+            if (!get_check(out_val)) {
                 return false;
+            }
         }
     }
 
@@ -70,11 +74,13 @@ bool alchemy(PlayerType *player_ptr)
 
     price /= 3;
 
-    if (amt > 1)
+    if (amt > 1) {
         price *= amt;
+    }
 
-    if (price > 30000)
+    if (price > 30000) {
         price = 30000;
+    }
     msg_format(_("%sを＄%d の金に変えた。", "You turn %s to %ld coins worth of gold."), o_name, price);
 
     player_ptr->au += price;

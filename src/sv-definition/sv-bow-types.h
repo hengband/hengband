@@ -2,7 +2,7 @@
 
 /* The "sval" codes for TV_BOW (note information in "sval") */
 enum sv_bow_type {
-	SV_SLING = 2, /* (x2) */
+    SV_SLING = 2, /* (x2) */
     SV_SHORT_BOW = 12, /* (x2) */
     SV_LONG_BOW = 13, /* (x3) */
     SV_LIGHT_XBOW = 23, /* (x3) */

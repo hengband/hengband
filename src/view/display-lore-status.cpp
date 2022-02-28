@@ -14,8 +14,9 @@
 
 void display_monster_hp_ac(lore_type *lore_ptr)
 {
-    if (!know_armour(lore_ptr->r_idx, lore_ptr->know_everything))
+    if (!know_armour(lore_ptr->r_idx, lore_ptr->know_everything)) {
         return;
+    }
 
     hooked_roff(format(_("%^sは AC%d の防御力と", "%^s has an armor rating of %d"), Who::who(lore_ptr->msex), lore_ptr->r_ptr->ac));
     if ((lore_ptr->flags1 & RF1_FORCE_MAXHP) || (lore_ptr->r_ptr->hside == 1)) {
@@ -92,8 +93,9 @@ void display_monster_concrete_abilities(lore_type *lore_ptr)
 
 void display_monster_abilities(lore_type *lore_ptr)
 {
-    if (lore_ptr->vn <= 0)
+    if (lore_ptr->vn <= 0) {
         return;
+    }
 
     hooked_roff(format(_("%^sは", "%^s"), Who::who(lore_ptr->msex)));
     for (int n = 0; n < lore_ptr->vn; n++) {
@@ -106,12 +108,13 @@ void display_monster_abilities(lore_type *lore_ptr)
             hook_c_roff(lore_ptr->color[n], lore_ptr->vp[n]);
         }
 #else
-        if (n == 0)
+        if (n == 0) {
             hooked_roff(" can ");
-        else if (n < lore_ptr->vn - 1)
+        } else if (n < lore_ptr->vn - 1) {
             hooked_roff(", ");
-        else
+        } else {
             hooked_roff(" and ");
+        }
 
         hook_c_roff(lore_ptr->color[n], lore_ptr->vp[n]);
 #endif
@@ -122,34 +125,43 @@ void display_monster_abilities(lore_type *lore_ptr)
 
 void display_monster_constitutions(lore_type *lore_ptr)
 {
-    if (lore_ptr->flags7 & RF7_AQUATIC)
+    if (lore_ptr->flags7 & RF7_AQUATIC) {
         hooked_roff(format(_("%^sは水中に棲んでいる。", "%^s lives in water.  "), Who::who(lore_ptr->msex)));
+    }
 
-    if (lore_ptr->flags7 & (RF7_SELF_LITE_1 | RF7_SELF_LITE_2))
+    if (lore_ptr->flags7 & (RF7_SELF_LITE_1 | RF7_SELF_LITE_2)) {
         hooked_roff(format(_("%^sは光っている。", "%^s is shining.  "), Who::who(lore_ptr->msex)));
+    }
 
-    if (lore_ptr->flags7 & (RF7_SELF_DARK_1 | RF7_SELF_DARK_2))
+    if (lore_ptr->flags7 & (RF7_SELF_DARK_1 | RF7_SELF_DARK_2)) {
         hook_c_roff(TERM_L_DARK, format(_("%^sは暗黒に包まれている。", "%^s is surrounded by darkness.  "), Who::who(lore_ptr->msex)));
+    }
 
-    if (lore_ptr->flags2 & RF2_INVISIBLE)
+    if (lore_ptr->flags2 & RF2_INVISIBLE) {
         hooked_roff(format(_("%^sは透明で目に見えない。", "%^s is invisible.  "), Who::who(lore_ptr->msex)));
+    }
 
-    if (lore_ptr->flags2 & RF2_COLD_BLOOD)
+    if (lore_ptr->flags2 & RF2_COLD_BLOOD) {
         hooked_roff(format(_("%^sは冷血動物である。", "%^s is cold blooded.  "), Who::who(lore_ptr->msex)));
+    }
 
-    if (lore_ptr->flags2 & RF2_EMPTY_MIND)
+    if (lore_ptr->flags2 & RF2_EMPTY_MIND) {
         hooked_roff(format(_("%^sはテレパシーでは感知できない。", "%^s is not detected by telepathy.  "), Who::who(lore_ptr->msex)));
-    else if (lore_ptr->flags2 & RF2_WEIRD_MIND)
+    } else if (lore_ptr->flags2 & RF2_WEIRD_MIND) {
         hooked_roff(format(_("%^sはまれにテレパシーで感知できる。", "%^s is rarely detected by telepathy.  "), Who::who(lore_ptr->msex)));
+    }
 
-    if (lore_ptr->flags2 & RF2_MULTIPLY)
+    if (lore_ptr->flags2 & RF2_MULTIPLY) {
         hook_c_roff(TERM_L_UMBER, format(_("%^sは爆発的に増殖する。", "%^s breeds explosively.  "), Who::who(lore_ptr->msex)));
+    }
 
-    if (lore_ptr->flags2 & RF2_REGENERATE)
+    if (lore_ptr->flags2 & RF2_REGENERATE) {
         hook_c_roff(TERM_L_WHITE, format(_("%^sは素早く体力を回復する。", "%^s regenerates quickly.  "), Who::who(lore_ptr->msex)));
+    }
 
-    if (lore_ptr->flags7 & RF7_RIDING)
+    if (lore_ptr->flags7 & RF7_RIDING) {
         hook_c_roff(TERM_SLATE, format(_("%^sに乗ることができる。", "%^s is suitable for riding.  "), Who::who(lore_ptr->msex)));
+    }
 }
 
 void display_monster_concrete_weakness(lore_type *lore_ptr)
@@ -177,21 +189,24 @@ void display_monster_concrete_weakness(lore_type *lore_ptr)
 
 void display_monster_weakness(lore_type *lore_ptr)
 {
-    if (lore_ptr->vn <= 0)
+    if (lore_ptr->vn <= 0) {
         return;
+    }
 
     hooked_roff(format(_("%^sには", "%^s"), Who::who(lore_ptr->msex)));
     for (int n = 0; n < lore_ptr->vn; n++) {
 #ifdef JP
-        if (n != 0)
+        if (n != 0) {
             hooked_roff("や");
+        }
 #else
-        if (n == 0)
+        if (n == 0) {
             hooked_roff(" is hurt by ");
-        else if (n < lore_ptr->vn - 1)
+        } else if (n < lore_ptr->vn - 1) {
             hooked_roff(", ");
-        else
+        } else {
             hooked_roff(" and ");
+        }
 #endif
         hook_c_roff(lore_ptr->color[n], lore_ptr->vp[n]);
     }
@@ -309,21 +324,24 @@ void display_monster_concrete_resistances(lore_type *lore_ptr)
 
 void display_monster_resistances(lore_type *lore_ptr)
 {
-    if (lore_ptr->vn <= 0)
+    if (lore_ptr->vn <= 0) {
         return;
+    }
 
     hooked_roff(format(_("%^sは", "%^s"), Who::who(lore_ptr->msex)));
     for (int n = 0; n < lore_ptr->vn; n++) {
 #ifdef JP
-        if (n != 0)
+        if (n != 0) {
             hooked_roff("と");
+        }
 #else
-        if (n == 0)
+        if (n == 0) {
             hooked_roff(" resists ");
-        else if (n < lore_ptr->vn - 1)
+        } else if (n < lore_ptr->vn - 1) {
             hooked_roff(", ");
-        else
+        } else {
             hooked_roff(" and ");
+        }
 #endif
         hook_c_roff(lore_ptr->color[n], lore_ptr->vp[n]);
     }
@@ -333,8 +351,9 @@ void display_monster_resistances(lore_type *lore_ptr)
 
 void display_monster_evolution(lore_type *lore_ptr)
 {
-    if (!lore_ptr->r_ptr->r_can_evolve && !lore_ptr->know_everything)
+    if (!lore_ptr->r_ptr->r_can_evolve && !lore_ptr->know_everything) {
         return;
+    }
 
     if (lore_ptr->r_ptr->next_r_idx) {
         hooked_roff(format(_("%^sは経験を積むと、", "%^s will evolve into "), Who::who(lore_ptr->msex)));
@@ -376,21 +395,24 @@ void display_monster_concrete_immunities(lore_type *lore_ptr)
 
 void display_monster_immunities(lore_type *lore_ptr)
 {
-    if (lore_ptr->vn <= 0)
+    if (lore_ptr->vn <= 0) {
         return;
+    }
 
     hooked_roff(format(_("%^sは", "%^s"), Who::who(lore_ptr->msex)));
     for (int n = 0; n < lore_ptr->vn; n++) {
 #ifdef JP
-        if (n != 0)
+        if (n != 0) {
             hooked_roff("し、");
+        }
 #else
-        if (n == 0)
+        if (n == 0) {
             hooked_roff(" cannot be ");
-        else if (n < lore_ptr->vn - 1)
+        } else if (n < lore_ptr->vn - 1) {
             hooked_roff(", ");
-        else
+        } else {
             hooked_roff(" or ");
+        }
 #endif
         hook_c_roff(lore_ptr->color[n], lore_ptr->vp[n]);
     }
@@ -404,8 +426,9 @@ void display_monster_alert(lore_type *lore_ptr)
     alert |= lore_ptr->r_ptr->r_ignore == MAX_UCHAR;
     alert |= (lore_ptr->r_ptr->sleep == 0) && (lore_ptr->r_ptr->r_tkills >= 10);
     alert |= lore_ptr->know_everything;
-    if (!alert)
+    if (!alert) {
         return;
+    }
 
     concptr act;
     if (lore_ptr->r_ptr->sleep > 200) {

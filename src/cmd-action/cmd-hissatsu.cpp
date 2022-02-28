@@ -106,15 +106,17 @@ static int get_hissatsu_power(PlayerType *player_ptr, SPELL_IDX *sn)
     (void)strnfmt(out_val, 78, _("(%^s %c-%c, '*'で一覧, ESC) どの%sを使いますか？", "(%^ss %c-%c, *=List, ESC=exit) Use which %s? "), p, I2A(0),
         "abcdefghijklmnopqrstuvwxyz012345"[num - 1], p);
 
-    if (use_menu)
+    if (use_menu) {
         screen_save();
+    }
     choice = always_show_list ? ESCAPE : 1;
 
     while (!flag) {
-        if (choice == ESCAPE)
+        if (choice == ESCAPE) {
             choice = ' ';
-        else if (!get_com(out_val, &choice, false))
+        } else if (!get_com(out_val, &choice, false)) {
             break;
+        }
 
         if (use_menu && choice != ' ') {
             switch (choice) {
@@ -128,8 +130,9 @@ static int get_hissatsu_power(PlayerType *player_ptr, SPELL_IDX *sn)
             case 'K': {
                 do {
                     menu_line += 31;
-                    if (menu_line > 32)
+                    if (menu_line > 32) {
                         menu_line -= 32;
+                    }
                 } while (!(player_ptr->spell_learned1 & (1UL << (menu_line - 1))));
                 break;
             }
@@ -139,8 +142,9 @@ static int get_hissatsu_power(PlayerType *player_ptr, SPELL_IDX *sn)
             case 'J': {
                 do {
                     menu_line++;
-                    if (menu_line > 32)
+                    if (menu_line > 32) {
                         menu_line -= 32;
+                    }
                 } while (!(player_ptr->spell_learned1 & (1UL << (menu_line - 1))));
                 break;
             }
@@ -152,22 +156,26 @@ static int get_hissatsu_power(PlayerType *player_ptr, SPELL_IDX *sn)
             case 'l':
             case 'L': {
                 bool reverse = false;
-                if ((choice == '4') || (choice == 'h') || (choice == 'H'))
+                if ((choice == '4') || (choice == 'h') || (choice == 'H')) {
                     reverse = true;
+                }
                 if (menu_line > 16) {
                     menu_line -= 16;
                     reverse = true;
-                } else
+                } else {
                     menu_line += 16;
+                }
                 while (!(player_ptr->spell_learned1 & (1UL << (menu_line - 1)))) {
                     if (reverse) {
                         menu_line--;
-                        if (menu_line < 2)
+                        if (menu_line < 2) {
                             reverse = false;
+                        }
                     } else {
                         menu_line++;
-                        if (menu_line > 31)
+                        if (menu_line > 31) {
                             reverse = true;
+                        }
                     }
                 }
                 break;
@@ -190,8 +198,9 @@ static int get_hissatsu_power(PlayerType *player_ptr, SPELL_IDX *sn)
                 char psi_desc[80];
                 int line;
                 redraw = true;
-                if (!use_menu)
+                if (!use_menu) {
                     screen_save();
+                }
 
                 /* Display a list of spells */
                 prt("", y, x);
@@ -201,29 +210,35 @@ static int get_hissatsu_power(PlayerType *player_ptr, SPELL_IDX *sn)
                 for (i = 0, line = 0; i < 32; i++) {
                     spell = technic_info[TECHNIC_HISSATSU][i];
 
-                    if (spell.slevel > PY_MAX_LEVEL)
+                    if (spell.slevel > PY_MAX_LEVEL) {
                         continue;
+                    }
                     line++;
-                    if (!(player_ptr->spell_learned1 >> i))
+                    if (!(player_ptr->spell_learned1 >> i)) {
                         break;
+                    }
 
                     /* Access the spell */
-                    if (spell.slevel > plev)
+                    if (spell.slevel > plev) {
                         continue;
-                    if (!(player_ptr->spell_learned1 & (1UL << i)))
+                    }
+                    if (!(player_ptr->spell_learned1 & (1UL << i))) {
                         continue;
+                    }
                     if (use_menu) {
-                        if (i == (menu_line - 1))
+                        if (i == (menu_line - 1)) {
                             strcpy(psi_desc, _("  》", "  > "));
-                        else
+                        } else {
                             strcpy(psi_desc, "    ");
+                        }
 
                     } else {
                         char letter;
-                        if (line <= 26)
+                        if (line <= 26) {
                             letter = I2A(line - 1);
-                        else
+                        } else {
                             letter = '0' + line - 27;
+                        }
                         sprintf(psi_desc, "  %c)", letter);
                     }
 
@@ -251,8 +266,9 @@ static int get_hissatsu_power(PlayerType *player_ptr, SPELL_IDX *sn)
                 ask = (isupper(choice));
 
                 /* Lowercase */
-                if (ask)
+                if (ask) {
                     choice = (char)tolower(choice);
+                }
 
                 /* Extract request */
                 i = (islower(choice) ? A2I(choice) : -1);
@@ -279,22 +295,25 @@ static int get_hissatsu_power(PlayerType *player_ptr, SPELL_IDX *sn)
             (void)strnfmt(tmp_val, 78, _("%sを使いますか？", "Use %s? "), exe_spell(player_ptr, REALM_HISSATSU, j, SpellProcessType::NAME));
 
             /* Belay that order */
-            if (!get_check(tmp_val))
+            if (!get_check(tmp_val)) {
                 continue;
+            }
         }
 
         /* Stop the loop */
         flag = true;
     }
-    if (redraw)
+    if (redraw) {
         screen_load();
+    }
 
     player_ptr->window_flags |= (PW_SPELL);
     handle_stuff(player_ptr);
 
     /* Abort if needed */
-    if (!flag)
+    if (!flag) {
         return false;
+    }
 
     /* Save the choice */
     (*sn) = j;
@@ -313,11 +332,13 @@ void do_cmd_hissatsu(PlayerType *player_ptr)
     SPELL_IDX n = 0;
     magic_type spell;
 
-    if (cmd_limit_confused(player_ptr))
+    if (cmd_limit_confused(player_ptr)) {
         return;
+    }
     if (!has_melee_weapon(player_ptr, INVEN_MAIN_HAND) && !has_melee_weapon(player_ptr, INVEN_SUB_HAND)) {
-        if (flush_failure)
+        if (flush_failure) {
             flush();
+        }
         msg_print(_("武器を持たないと必殺技は使えない！", "You need to wield a weapon!"));
         return;
     }
@@ -328,15 +349,17 @@ void do_cmd_hissatsu(PlayerType *player_ptr)
 
     PlayerClass(player_ptr).break_samurai_stance({ SamuraiStanceType::MUSOU, SamuraiStanceType::IAI, SamuraiStanceType::FUUJIN, SamuraiStanceType::KOUKIJIN });
 
-    if (!get_hissatsu_power(player_ptr, &n))
+    if (!get_hissatsu_power(player_ptr, &n)) {
         return;
+    }
 
     spell = technic_info[TECHNIC_HISSATSU][n];
 
     /* Verify "dangerous" spells */
     if (spell.smana > player_ptr->csp) {
-        if (flush_failure)
+        if (flush_failure) {
             flush();
+        }
         /* Warning */
         msg_print(_("ＭＰが足りません。", "You do not have enough mana to use this power."));
         msg_print(nullptr);
@@ -345,8 +368,9 @@ void do_cmd_hissatsu(PlayerType *player_ptr)
 
     sound(SOUND_ZAP);
 
-    if (!exe_spell(player_ptr, REALM_HISSATSU, n, SpellProcessType::CAST))
+    if (!exe_spell(player_ptr, REALM_HISSATSU, n, SpellProcessType::CAST)) {
         return;
+    }
 
     PlayerEnergy(player_ptr).set_player_turn_energy(100);
 
@@ -354,8 +378,9 @@ void do_cmd_hissatsu(PlayerType *player_ptr)
     player_ptr->csp -= spell.smana;
 
     /* Limit */
-    if (player_ptr->csp < 0)
+    if (player_ptr->csp < 0) {
         player_ptr->csp = 0;
+    }
     player_ptr->redraw |= (PR_MANA);
     player_ptr->window_flags |= (PW_PLAYER | PW_SPELL);
 }
@@ -375,10 +400,12 @@ void do_cmd_gain_hissatsu(PlayerType *player_ptr)
 
     PlayerClass(player_ptr).break_samurai_stance({ SamuraiStanceType::MUSOU, SamuraiStanceType::KOUKIJIN });
 
-    if (cmd_limit_blind(player_ptr))
+    if (cmd_limit_blind(player_ptr)) {
         return;
-    if (cmd_limit_confused(player_ptr))
+    }
+    if (cmd_limit_confused(player_ptr)) {
         return;
+    }
 
     if (!(player_ptr->new_spells)) {
         msg_print(_("新しい必殺技を覚えることはできない！", "You cannot learn any new special attacks!"));
@@ -395,22 +422,26 @@ void do_cmd_gain_hissatsu(PlayerType *player_ptr)
     s = _("読める書がない。", "You have no books that you can read.");
 
     o_ptr = choose_object(player_ptr, &item, q, s, (USE_INVEN | USE_FLOOR), TvalItemTester(ItemKindType::HISSATSU_BOOK));
-    if (!o_ptr)
+    if (!o_ptr) {
         return;
+    }
 
     for (i = o_ptr->sval * 8; i < o_ptr->sval * 8 + 8; i++) {
-        if (player_ptr->spell_learned1 & (1UL << i))
+        if (player_ptr->spell_learned1 & (1UL << i)) {
             continue;
-        if (technic_info[TECHNIC_HISSATSU][i].slevel > player_ptr->lev)
+        }
+        if (technic_info[TECHNIC_HISSATSU][i].slevel > player_ptr->lev) {
             continue;
+        }
 
         player_ptr->spell_learned1 |= (1UL << i);
         player_ptr->spell_worked1 |= (1UL << i);
         msg_format(_("%sの技を覚えた。", "You have learned the special attack of %s."), exe_spell(player_ptr, REALM_HISSATSU, i, SpellProcessType::NAME));
         for (j = 0; j < 64; j++) {
             /* Stop at the first empty space */
-            if (player_ptr->spell_order[j] == 99)
+            if (player_ptr->spell_order[j] == 99) {
                 break;
+            }
         }
         player_ptr->spell_order[j] = i;
         gain = true;

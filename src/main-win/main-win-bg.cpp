@@ -37,8 +37,9 @@ bool load_bg(char *filename)
 
 void draw_bg(HDC hdc, RECT *r)
 {
-    if (!hBG)
+    if (!hBG) {
         return;
+    }
 
     int x = r->left, y = r->top;
     int nx = x;

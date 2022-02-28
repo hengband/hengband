@@ -2,9 +2,9 @@
 
 #include "system/angband.h"
 #include <cstddef>
-#include <vector>
-#include <unordered_map>
 #include <initializer_list>
+#include <unordered_map>
+#include <vector>
 
 typedef uint cfg_key;
 using cfg_values = std::vector<concptr>;

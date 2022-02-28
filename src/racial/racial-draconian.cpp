@@ -1,16 +1,17 @@
 ﻿#include "racial/racial-draconian.h"
+#include "effect/attribute-types.h"
 #include "mind/mind-elementalist.h"
 #include "player/player-status.h"
 #include "spell-kind/spells-launcher.h"
-#include "effect/attribute-types.h"
 #include "system/player-type-definition.h"
 #include "target/target-getter.h"
 #include "view/display-messages.h"
 
 static void decide_breath_kind(PlayerType *player_ptr, AttributeType *breath_type, concptr *breath_type_description)
 {
-    if (randint1(100) >= player_ptr->lev)
+    if (randint1(100) >= player_ptr->lev) {
         return;
+    }
 
     switch (player_ptr->pclass) {
     case PlayerClassType::WARRIOR:
@@ -124,8 +125,9 @@ bool draconian_breath(PlayerType *player_ptr)
     AttributeType breath_type = (one_in_(3) ? AttributeType::COLD : AttributeType::FIRE);
     concptr breath_type_description = ((breath_type == AttributeType::COLD) ? _("冷気", "cold") : _("炎", "fire"));
     DIRECTION dir;
-    if (!get_aim_dir(player_ptr, &dir))
+    if (!get_aim_dir(player_ptr, &dir)) {
         return false;
+    }
 
     decide_breath_kind(player_ptr, &breath_type, &breath_type_description);
     stop_mouth(player_ptr);

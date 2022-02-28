@@ -12,14 +12,13 @@
 #include "system/angband.h"
 
 /*
- * @brief Constant for kinds of mimic
- * @todo 後ほど時間がある時にenum classへ変換する.
+ * @brief プレイヤーの変身形態
  */
-enum mimic_kind_type {
-    MIMIC_NONE = 0,
-    MIMIC_DEMON = 1,
-    MIMIC_DEMON_LORD = 2,
-    MIMIC_VAMPIRE = 3,
+enum class MimicKindType {
+    NONE = 0,
+    DEMON = 1,
+    DEMON_LORD = 2,
+    VAMPIRE = 3,
 };
 
 /*!
@@ -112,4 +111,4 @@ struct player_race_info {
 extern const player_race_info *rp_ptr;
 
 class PlayerType;
-SYMBOL_CODE get_summon_symbol_from_player(PlayerType *player_ptr);
+char get_summon_symbol_from_player(PlayerType *player_ptr);

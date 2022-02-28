@@ -10,10 +10,10 @@
  */
 
 #include "target/target-checker.h"
+#include "core/disturbance.h"
 #include "core/player-redraw-types.h"
 #include "core/player-update-types.h"
 #include "core/window-redrawer.h"
-#include "core/disturbance.h"
 #include "game-option/disturbance-options.h"
 #include "game-option/map-screen-options.h"
 #include "io/cursor.h"
@@ -48,64 +48,82 @@ void verify_panel(PlayerType *player_ptr)
     get_screen_size(&wid, &hgt);
     int max_prow_min = player_ptr->current_floor_ptr->height - hgt;
     int max_pcol_min = player_ptr->current_floor_ptr->width - wid;
-    if (max_prow_min < 0)
+    if (max_prow_min < 0) {
         max_prow_min = 0;
-    if (max_pcol_min < 0)
+    }
+    if (max_pcol_min < 0) {
         max_pcol_min = 0;
+    }
 
     int prow_min;
     int pcol_min;
     if (center_player && (center_running || !player_ptr->running)) {
         prow_min = y - hgt / 2;
-        if (prow_min < 0)
+        if (prow_min < 0) {
             prow_min = 0;
-        else if (prow_min > max_prow_min)
+        } else if (prow_min > max_prow_min) {
             prow_min = max_prow_min;
+        }
 
         pcol_min = x - wid / 2;
-        if (pcol_min < 0)
+        if (pcol_min < 0) {
             pcol_min = 0;
-        else if (pcol_min > max_pcol_min)
+        } else if (pcol_min > max_pcol_min) {
             pcol_min = max_pcol_min;
+        }
     } else {
         prow_min = panel_row_min;
         pcol_min = panel_col_min;
-        if (y > panel_row_max - 2)
-            while (y > prow_min + hgt - 1 - 2)
+        if (y > panel_row_max - 2) {
+            while (y > prow_min + hgt - 1 - 2) {
                 prow_min += (hgt / 2);
+            }
+        }
 
-        if (y < panel_row_min + 2)
-            while (y < prow_min + 2)
+        if (y < panel_row_min + 2) {
+            while (y < prow_min + 2) {
                 prow_min -= (hgt / 2);
+            }
+        }
 
-        if (prow_min > max_prow_min)
+        if (prow_min > max_prow_min) {
             prow_min = max_prow_min;
+        }
 
-        if (prow_min < 0)
+        if (prow_min < 0) {
             prow_min = 0;
+        }
 
-        if (x > panel_col_max - 4)
-            while (x > pcol_min + wid - 1 - 4)
+        if (x > panel_col_max - 4) {
+            while (x > pcol_min + wid - 1 - 4) {
                 pcol_min += (wid / 2);
+            }
+        }
 
-        if (x < panel_col_min + 4)
-            while (x < pcol_min + 4)
+        if (x < panel_col_min + 4) {
+            while (x < pcol_min + 4) {
                 pcol_min -= (wid / 2);
+            }
+        }
 
-        if (pcol_min > max_pcol_min)
+        if (pcol_min > max_pcol_min) {
             pcol_min = max_pcol_min;
+        }
 
-        if (pcol_min < 0)
+        if (pcol_min < 0) {
             pcol_min = 0;
+        }
     }
 
-    if ((prow_min == panel_row_min) && (pcol_min == panel_col_min))
+    if ((prow_min == panel_row_min) && (pcol_min == panel_col_min)) {
         return;
+    }
 
     panel_row_min = prow_min;
     panel_col_min = pcol_min;
-    if (disturb_panel && !center_player)
+    if (disturb_panel && !center_player) {
         disturb(player_ptr, false, false);
+    }
 
     panel_bounds_center();
     player_ptr->update |= PU_MONSTERS;
@@ -119,14 +137,17 @@ void verify_panel(PlayerType *player_ptr)
  */
 bool target_okay(PlayerType *player_ptr)
 {
-    if (target_who < 0)
+    if (target_who < 0) {
         return true;
+    }
 
-    if (target_who <= 0)
+    if (target_who <= 0) {
         return false;
+    }
 
-    if (!target_able(player_ptr, target_who))
+    if (!target_able(player_ptr, target_who)) {
         return false;
+    }
 
     auto *m_ptr = &player_ptr->current_floor_ptr->m_list[target_who];
     target_row = m_ptr->fy;

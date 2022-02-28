@@ -2,7 +2,12 @@
 
 #include "system/angband.h"
 
-enum class WishResultType { FAIL = -1, NOTHING = 0, NORMAL = 1, EGO = 2, ARTIFACT = 3, MAX };
+enum class WishResultType { FAIL = -1,
+    NOTHING = 0,
+    NORMAL = 1,
+    EGO = 2,
+    ARTIFACT = 3,
+    MAX };
 
 class PlayerType;
 void wizard_item_modifier(PlayerType *player_ptr);

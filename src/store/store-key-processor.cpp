@@ -7,13 +7,13 @@
 #include "cmd-io/cmd-gameoption.h"
 #include "cmd-io/cmd-help.h"
 #include "cmd-io/cmd-knowledge.h"
-#include "cmd-io/cmd-process-screen.h"
-#include "cmd-item/cmd-destroy.h"
-#include "cmd-item/cmd-item.h"
-#include "cmd-item/cmd-magiceat.h"
 #include "cmd-io/cmd-lore.h"
 #include "cmd-io/cmd-macro.h"
+#include "cmd-io/cmd-process-screen.h"
+#include "cmd-item/cmd-destroy.h"
 #include "cmd-item/cmd-equipment.h"
+#include "cmd-item/cmd-item.h"
+#include "cmd-item/cmd-magiceat.h"
 #include "cmd-visual/cmd-draw.h"
 #include "cmd-visual/cmd-visuals.h"
 #include "game-option/birth-options.h"
@@ -54,8 +54,9 @@ bool leave_store = false;
 void store_process_command(PlayerType *player_ptr)
 {
     repeat_check();
-    if (rogue_like_commands && (command_cmd == 'l'))
+    if (rogue_like_commands && (command_cmd == 'l')) {
         command_cmd = 'x';
+    }
 
     switch (command_cmd) {
     case ESCAPE: {
@@ -69,12 +70,15 @@ void store_process_command(PlayerType *player_ptr)
             msg_print(_("これで全部です。", "Entire inventory is shown."));
         } else {
             store_top -= store_bottom;
-            if (store_top < 0)
+            if (store_top < 0) {
                 store_top = ((st_ptr->stock_num - 1) / store_bottom) * store_bottom;
+            }
 
-            if ((cur_store_num == StoreSaleType::HOME) && !powerup_home)
-                if (store_top >= store_bottom)
+            if ((cur_store_num == StoreSaleType::HOME) && !powerup_home) {
+                if (store_top >= store_bottom) {
                     store_top = store_bottom;
+                }
+            }
 
             display_store_inventory(player_ptr);
         }
@@ -92,8 +96,9 @@ void store_process_command(PlayerType *player_ptr)
              * 我が家では 2 ページまでしか表示しない
              */
             auto inven_max = store_get_stock_max(StoreSaleType::HOME, powerup_home);
-            if (store_top >= st_ptr->stock_num || store_top >= inven_max)
+            if (store_top >= st_ptr->stock_num || store_top >= inven_max) {
                 store_top = 0;
+            }
 
             display_store_inventory(player_ptr);
         }
@@ -150,18 +155,19 @@ void store_process_command(PlayerType *player_ptr)
     }
     case 'b': {
         PlayerClass pc(player_ptr);
-        if (pc.can_browse())
+        if (pc.can_browse()) {
             do_cmd_mind_browse(player_ptr);
-        else if (pc.equals(PlayerClassType::ELEMENTALIST))
+        } else if (pc.equals(PlayerClassType::ELEMENTALIST)) {
             do_cmd_element_browse(player_ptr);
-        else if (pc.equals(PlayerClassType::SMITH))
+        } else if (pc.equals(PlayerClassType::SMITH)) {
             do_cmd_kaji(player_ptr, true);
-        else if (pc.equals(PlayerClassType::MAGIC_EATER))
+        } else if (pc.equals(PlayerClassType::MAGIC_EATER)) {
             do_cmd_magic_eater(player_ptr, true, false);
-        else if (pc.equals(PlayerClassType::SNIPER))
+        } else if (pc.equals(PlayerClassType::SNIPER)) {
             do_cmd_snipe_browse(player_ptr);
-        else
+        } else {
             do_cmd_browse(player_ptr);
+        }
 
         break;
     }

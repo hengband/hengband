@@ -25,7 +25,7 @@
 #include "monster-attack/monster-attack-describer.h"
 #include "monster-attack/monster-attack-effect.h"
 #include "monster-attack/monster-attack-switcher.h"
-#include "monster-attack/monster-attack-types.h"
+#include "monster-attack/monster-attack-table.h"
 #include "monster-race/monster-race.h"
 #include "monster-race/race-flags1.h"
 #include "monster-race/race-flags3.h"
@@ -54,7 +54,9 @@
 #include "system/object-type-definition.h"
 #include "system/player-type-definition.h"
 #include "timed-effect/player-cut.h"
+#include "timed-effect/player-hallucination.h"
 #include "timed-effect/player-stun.h"
+#include "timed-effect/timed-effects.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 
@@ -68,7 +70,7 @@ MonsterAttackPlayer::MonsterAttackPlayer(PlayerType *player_ptr, short m_idx)
     , m_ptr(&player_ptr->current_floor_ptr->m_list[m_idx])
     , method(RaceBlowMethodType::NONE)
     , effect(RaceBlowEffectType::NONE)
-    , do_silly_attack(one_in_(2) && player_ptr->hallucinated)
+    , do_silly_attack(one_in_(2) && player_ptr->effects()->hallucination()->is_hallucinated())
     , player_ptr(player_ptr)
 {
 }
@@ -184,8 +186,9 @@ bool MonsterAttackPlayer::process_monster_blows()
             this->increase_blow_type_seen(ap_cnt);
 
             // 撃退成功時はそのまま次の打撃へ移行。
-            if (protect)
+            if (protect) {
                 continue;
+            }
 
             // 撃退失敗時は落馬処理、変わり身のテレポート処理を行う。
             check_fall_off_horse(this->player_ptr, this);

@@ -1,7 +1,7 @@
 ﻿#include "object-activation/activation-resistance.h"
+#include "effect/attribute-types.h"
 #include "hpmp/hp-mp-processor.h"
 #include "spell-kind/spells-launcher.h"
-#include "effect/attribute-types.h"
 #include "status/bad-status-setter.h"
 #include "status/buff-setter.h"
 #include "status/element-resistance.h"
@@ -34,8 +34,9 @@ bool activate_acid_ball_and_resistance(PlayerType *player_ptr, concptr name)
     msg_format(_("%sが黒く輝いた...", "The %s grows black."), name);
 
     DIRECTION dir;
-    if (!get_aim_dir(player_ptr, &dir))
+    if (!get_aim_dir(player_ptr, &dir)) {
         return false;
+    }
 
     (void)fire_ball(player_ptr, AttributeType::ACID, dir, 100, 2);
     (void)set_oppose_acid(player_ptr, randint1(20) + 20, false);
@@ -54,8 +55,9 @@ bool activate_elec_ball_and_resistance(PlayerType *player_ptr, concptr name)
     msg_format(_("%sが青く輝いた...", "The %s grows blue."), name);
 
     DIRECTION dir;
-    if (!get_aim_dir(player_ptr, &dir))
+    if (!get_aim_dir(player_ptr, &dir)) {
         return false;
+    }
 
     (void)fire_ball(player_ptr, AttributeType::ELEC, dir, 100, 2);
     (void)set_oppose_elec(player_ptr, randint1(20) + 20, false);
@@ -74,8 +76,9 @@ bool activate_fire_ball_and_resistance(PlayerType *player_ptr, concptr name)
     msg_format(_("%sが赤く輝いた...", "The %s grows red."), name);
 
     DIRECTION dir;
-    if (!get_aim_dir(player_ptr, &dir))
+    if (!get_aim_dir(player_ptr, &dir)) {
         return false;
+    }
 
     (void)fire_ball(player_ptr, AttributeType::FIRE, dir, 100, 2);
     (void)set_oppose_fire(player_ptr, randint1(20) + 20, false);
@@ -94,8 +97,9 @@ bool activate_cold_ball_and_resistance(PlayerType *player_ptr, concptr name)
     msg_format(_("%sが白く輝いた...", "The %s grows white."), name);
 
     DIRECTION dir;
-    if (!get_aim_dir(player_ptr, &dir))
+    if (!get_aim_dir(player_ptr, &dir)) {
         return false;
+    }
 
     (void)fire_ball(player_ptr, AttributeType::COLD, dir, 100, 2);
     (void)set_oppose_cold(player_ptr, randint1(20) + 20, false);
@@ -114,8 +118,9 @@ bool activate_pois_ball_and_resistance(PlayerType *player_ptr, concptr name)
     msg_format(_("%sが緑に輝いた...", "The %s grows green."), name);
 
     DIRECTION dir;
-    if (!get_aim_dir(player_ptr, &dir))
+    if (!get_aim_dir(player_ptr, &dir)) {
         return false;
+    }
 
     (void)fire_ball(player_ptr, AttributeType::POIS, dir, 100, 2);
     (void)set_oppose_pois(player_ptr, randint1(20) + 20, false);

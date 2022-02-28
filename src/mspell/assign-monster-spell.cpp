@@ -20,7 +20,6 @@
 #include "mspell/mspell-status.h"
 #include "mspell/mspell-summon.h"
 #include "mspell/mspell-util.h"
-#include "mspell/mspell-result.h"
 #include "system/player-type-definition.h"
 #include "util/enum-converter.h"
 
@@ -264,8 +263,9 @@ MonsterSpellResult monspell_to_player(PlayerType *player_ptr, MonsterAbilityType
     const bool player_could_see_monster = spell_learnable(player_ptr, m_idx);
 
     auto res = monspell_to_player_impl(player_ptr, ms_type, y, x, m_idx);
-    if (!player_could_see_monster)
+    if (!player_could_see_monster) {
         res.learnable = false;
+    }
 
     // 条件を満たしていればラーニングを試みる。
     if (res.valid && res.learnable) {
@@ -293,8 +293,9 @@ MonsterSpellResult monspell_to_monster(
     const bool player_could_see_monster = spell_learnable(player_ptr, m_idx);
 
     auto res = monspell_to_monster_impl(player_ptr, ms_type, y, x, m_idx, t_idx, is_special_spell);
-    if (!player_could_see_monster)
+    if (!player_could_see_monster) {
         res.learnable = false;
+    }
 
     // 条件を満たしていればラーニングを試みる。
     if (res.valid && res.learnable) {

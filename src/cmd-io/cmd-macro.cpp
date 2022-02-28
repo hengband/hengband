@@ -25,8 +25,9 @@ static void macro_dump(FILE **fpp, concptr fname)
     static concptr mark = "Macro Dump";
     char buf[1024];
     path_build(buf, sizeof(buf), ANGBAND_DIR_USER, fname);
-    if (!open_auto_dump(fpp, buf, mark))
+    if (!open_auto_dump(fpp, buf, mark)) {
         return;
+    }
 
     auto_dump_printf(*fpp, _("\n# 自動マクロセーブ\n\n", "\n# Automatic macro dump\n\n"));
 
@@ -114,15 +115,17 @@ static errr keymap_dump(concptr fname)
     }
 
     path_build(buf, sizeof(buf), ANGBAND_DIR_USER, fname);
-    if (!open_auto_dump(&auto_dump_stream, buf, mark))
+    if (!open_auto_dump(&auto_dump_stream, buf, mark)) {
         return -1;
+    }
 
     auto_dump_printf(auto_dump_stream, _("\n# 自動キー配置セーブ\n\n", "\n# Automatic keymap dump\n\n"));
     for (int i = 0; i < 256; i++) {
         concptr act;
         act = keymap_act[mode][i];
-        if (!act)
+        if (!act) {
             continue;
+        }
 
         buf[0] = (char)i;
         buf[1] = '\0';
@@ -174,8 +177,9 @@ void do_cmd_macros(PlayerType *player_ptr)
     while (true) {
         msg_print(_("コマンド: ", "Command: "));
         const int key = inkey();
-        if (key == ESCAPE)
+        if (key == ESCAPE) {
             break;
+        }
         clear_from(1);
         print_macro_menu();
 
@@ -183,22 +187,25 @@ void do_cmd_macros(PlayerType *player_ptr)
             prt(_("コマンド: ユーザー設定ファイルのロード", "Command: Load a user pref file"), 16, 0);
             prt(_("ファイル: ", "File: "), 18, 0);
             sprintf(tmp, "%s.prf", player_ptr->base_name);
-            if (!askfor(tmp, 80))
+            if (!askfor(tmp, 80)) {
                 continue;
+            }
 
             errr err = process_pref_file(player_ptr, tmp, true);
-            if (-2 == err)
+            if (-2 == err) {
                 msg_format(_("標準の設定ファイル'%s'を読み込みました。", "Loaded default '%s'."), tmp);
-            else if (err)
+            } else if (err) {
                 msg_format(_("'%s'の読み込みに失敗しました！", "Failed to load '%s'!"), tmp);
-            else
+            } else {
                 msg_format(_("'%s'を読み込みました。", "Loaded '%s'."), tmp);
+            }
         } else if (key == '2') {
             prt(_("コマンド: マクロをファイルに追加する", "Command: Append macros to a file"), 16, 0);
             prt(_("ファイル: ", "File: "), 18, 0);
             sprintf(tmp, "%s.prf", player_ptr->base_name);
-            if (!askfor(tmp, 80))
+            if (!askfor(tmp, 80)) {
                 continue;
+            }
 
             macro_dump(&auto_dump_stream, tmp);
             msg_print(_("マクロを追加しました。", "Appended macros."));
@@ -212,7 +219,7 @@ void do_cmd_macros(PlayerType *player_ptr)
                 msg_print(_("そのキーにはマクロは定義されていません。", "Found no macro."));
             } else {
                 // マクロの作成時に参照するためmacro_bufにコピーする
-                strncpy(macro_buf, macro__act[k].c_str(), sizeof(macro_buf) -1);
+                strncpy(macro_buf, macro__act[k].c_str(), sizeof(macro_buf) - 1);
                 // too long macro must die
                 strncpy(tmp, macro_buf, 80);
                 tmp[80] = '\0';
@@ -247,8 +254,9 @@ void do_cmd_macros(PlayerType *player_ptr)
             prt(_("コマンド: キー配置をファイルに追加する", "Command: Append keymaps to a file"), 16, 0);
             prt(_("ファイル: ", "File: "), 18, 0);
             sprintf(tmp, "%s.prf", player_ptr->base_name);
-            if (!askfor(tmp, 80))
+            if (!askfor(tmp, 80)) {
                 continue;
+            }
 
             (void)keymap_dump(tmp);
             msg_print(_("キー配置を追加しました。", "Appended keymaps."));
@@ -303,8 +311,9 @@ void do_cmd_macros(PlayerType *player_ptr)
                 22, 0);
             prt(_("マクロ行動: ", "Action: "), 20, 0);
             buf[0] = '\0';
-            if (!askfor(buf, 80))
+            if (!askfor(buf, 80)) {
                 continue;
+            }
 
             text_to_ascii(macro_buf, buf);
         } else {

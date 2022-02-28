@@ -72,7 +72,7 @@ static void dispel_player(PlayerType *player_ptr)
     (void)set_oppose_cold(player_ptr, 0, true);
     (void)set_oppose_pois(player_ptr, 0, true);
     (void)set_ultimate_res(player_ptr, 0, true);
-    (void)set_mimic(player_ptr, 0, 0, true);
+    (void)set_mimic(player_ptr, 0, MimicKindType::NONE, true);
     (void)set_ele_attack(player_ptr, 0, 0);
     (void)set_ele_immune(player_ptr, 0, 0);
 
@@ -108,14 +108,14 @@ static void dispel_player(PlayerType *player_ptr)
  * @param m_idx 呪文を唱えるモンスターID
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param t_idx 呪文を受けるモンスターID。プレイヤーの場合はdummyで0とする。
- * @param TARGET_TYPE プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
+ * @param target_type プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
  *
  * プレイヤーが対象ならラーニング可。
  */
-MonsterSpellResult spell_RF4_DISPEL(MONSTER_IDX m_idx, PlayerType *player_ptr, MONSTER_IDX t_idx, int TARGET_TYPE)
+MonsterSpellResult spell_RF4_DISPEL(MONSTER_IDX m_idx, PlayerType *player_ptr, MONSTER_IDX t_idx, int target_type)
 {
     auto res = MonsterSpellResult::make_valid();
-    res.learnable = TARGET_TYPE == MONSTER_TO_PLAYER;
+    res.learnable = target_type == MONSTER_TO_PLAYER;
 
     GAME_TEXT m_name[MAX_NLEN], t_name[MAX_NLEN];
     monster_name(player_ptr, m_idx, m_name);
@@ -124,28 +124,31 @@ MonsterSpellResult spell_RF4_DISPEL(MONSTER_IDX m_idx, PlayerType *player_ptr, M
     mspell_cast_msg_blind msg(_("%^sが何かを力強くつぶやいた。", "%^s mumbles powerfully."),
         _("%^sが魔力消去の呪文を念じた。", "%^s invokes a dispel magic."), _("%^sが%sに対して魔力消去の呪文を念じた。", "%^s invokes a dispel magic at %s."));
 
-    monspell_message(player_ptr, m_idx, t_idx, msg, TARGET_TYPE);
+    monspell_message(player_ptr, m_idx, t_idx, msg, target_type);
 
-    if (TARGET_TYPE == MONSTER_TO_PLAYER) {
+    if (target_type == MONSTER_TO_PLAYER) {
         dispel_player(player_ptr);
-        if (player_ptr->riding)
+        if (player_ptr->riding) {
             dispel_monster_status(player_ptr, player_ptr->riding);
+        }
 
-        if (is_echizen(player_ptr))
+        if (is_echizen(player_ptr)) {
             msg_print(_("やりやがったな！", ""));
-        else if (is_chargeman(player_ptr)) {
-            if (randint0(2) == 0)
+        } else if (is_chargeman(player_ptr)) {
+            if (randint0(2) == 0) {
                 msg_print(_("ジュラル星人め！", ""));
-            else
+            } else {
                 msg_print(_("弱い者いじめは止めるんだ！", ""));
+            }
         }
 
         return res;
     }
 
-    if (TARGET_TYPE == MONSTER_TO_MONSTER) {
-        if (t_idx == player_ptr->riding)
+    if (target_type == MONSTER_TO_MONSTER) {
+        if (t_idx == player_ptr->riding) {
             dispel_player(player_ptr);
+        }
 
         dispel_monster_status(player_ptr, t_idx);
     }

@@ -1,0 +1,55 @@
+name: Build with Autotools
+
+on:
+  workflow_call:
+    inputs:
+      cxx:
+        type: string
+        required: true
+      cxx-flags:
+        type: string
+        required: true
+      configure-opts:
+        type: string
+        required: false
+      use-ccache:
+        type: boolean
+        required: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - if: ${{ inputs.use-ccache }}
+        uses: hendrikmuhs/ccache-action@v1
+
+      - name: Configuring ccache to use precompiled headers
+        if: ${{ inputs.use-ccache }}
+        run: |
+          ln -s /usr/bin/ccache /usr/local/bin/${{ inputs.cxx }}
+          /usr/bin/ccache --set-config=sloppiness=pch_defines,time_macros,include_file_mtime,include_file_ctime
+          /usr/bin/ccache --set-config=pch_external_checksum=true
+          /usr/bin/ccache -p
+
+      - name: Install required packages
+        run: |
+          sudo apt-get install \
+            autoconf-archive \
+            libncursesw5-dev \
+            libcurl4-openssl-dev \
+            nkf \
+            clang-11 \
+
+      - name: Generate configure
+        run: ./bootstrap
+
+      - name: Configure
+        run: ./configure ${{ inputs.configure-opts }}
+        env:
+          CXX: ${{ inputs.cxx }}
+          CXXFLAGS: ${{ inputs.cxx-flags }}
+
+      - name: Build
+        run: make -j$(nproc) >/dev/null

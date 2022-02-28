@@ -14,10 +14,12 @@ static const char p2 = ')';
 static TERM_COLOR birth_class_color(PlayerClassType cs)
 {
     if (cs < PlayerClassType::MAX) {
-        if (is_retired_class(cs))
+        if (is_retired_class(cs)) {
             return TERM_L_DARK;
-        if (is_winner_class(cs))
+        }
+        if (is_winner_class(cs)) {
             return TERM_SLATE;
+        }
     }
     return TERM_WHITE;
 }
@@ -28,16 +30,18 @@ static void enumerate_class_list(char *sym)
         cp_ptr = &class_info[n];
         mp_ptr = &m_info[n];
         concptr str = cp_ptr->title;
-        if (n < 26)
+        if (n < 26) {
             sym[n] = I2A(n);
-        else
+        } else {
             sym[n] = ('A' + n - 26);
+        }
 
         char buf[80];
-        if (!(rp_ptr->choice & (1UL << n)))
+        if (!(rp_ptr->choice & (1UL << n))) {
             sprintf(buf, "%c%c(%s)", sym[n], p2, str);
-        else
+        } else {
             sprintf(buf, "%c%c%s", sym[n], p2, str);
+        }
 
         auto cs = i2enum<PlayerClassType>(n);
         c_put_str(birth_class_color(cs), buf, 13 + (n / 4), 2 + 19 * (n % 4));
@@ -46,8 +50,9 @@ static void enumerate_class_list(char *sym)
 
 static void display_class_stat(int cs, int *os, char *cur, char *sym)
 {
-    if (cs == *os)
+    if (cs == *os) {
         return;
+    }
 
     auto pclass = i2enum<PlayerClassType>(*os);
     c_put_str(birth_class_color(pclass), cur, 13 + (*os / 4), 2 + 19 * (*os % 4));
@@ -61,10 +66,11 @@ static void display_class_stat(int cs, int *os, char *cur, char *sym)
         cp_ptr = &class_info[cs];
         mp_ptr = &m_info[cs];
         concptr str = cp_ptr->title;
-        if (!(rp_ptr->choice & (1UL << cs)))
+        if (!(rp_ptr->choice & (1UL << cs))) {
             sprintf(cur, "%c%c(%s)", sym[cs], p2, str);
-        else
+        } else {
             sprintf(cur, "%c%c%s", sym[cs], p2, str);
+        }
 
         c_put_str(TERM_L_BLUE, cp_ptr->title, 3, 40);
         put_str(_("の職業修正", ": Class modification"), 3, 40 + strlen(cp_ptr->title));
@@ -79,10 +85,11 @@ static void display_class_stat(int cs, int *os, char *cur, char *sym)
         c_put_str(TERM_L_BLUE, buf, 6, 42);
 
         put_str(_("隠密", "Stealth"), 6, 47);
-        if (i2enum<PlayerClassType>(cs) == PlayerClassType::BERSERKER)
+        if (i2enum<PlayerClassType>(cs) == PlayerClassType::BERSERKER) {
             strcpy(buf, " xx");
-        else
+        } else {
             sprintf(buf, " %+2d", cp_ptr->c_stl);
+        }
         c_put_str(TERM_L_BLUE, buf, 6, _(51, 54));
     }
 
@@ -93,23 +100,27 @@ static void display_class_stat(int cs, int *os, char *cur, char *sym)
 static void interpret_class_select_key_move(char c, int *cs)
 {
     if (c == '8') {
-        if (*cs >= 4)
+        if (*cs >= 4) {
             *cs -= 4;
+        }
     }
 
     if (c == '4') {
-        if (*cs > 0)
+        if (*cs > 0) {
             (*cs)--;
+        }
     }
 
     if (c == '6') {
-        if (*cs < PLAYER_CLASS_TYPE_MAX)
+        if (*cs < PLAYER_CLASS_TYPE_MAX) {
             (*cs)++;
+        }
     }
 
     if (c == '2') {
-        if (*cs + 4 <= PLAYER_CLASS_TYPE_MAX)
+        if (*cs + 4 <= PLAYER_CLASS_TYPE_MAX) {
             *cs += 4;
+        }
     }
 }
 
@@ -121,8 +132,9 @@ static bool select_class(PlayerType *player_ptr, char *cur, char *sym, int *k)
     int int_cs = enum2i(cs);
     while (true) {
         display_class_stat(int_cs, &int_os, cur, sym);
-        if (*k >= 0)
+        if (*k >= 0) {
             break;
+        }
 
         char buf[80];
         sprintf(buf, _("職業を選んで下さい (%c-%c) ('='初期オプション設定, 灰色:勝利済): ", "Choose a class (%c-%c) ('=' for options, Gray is winner): "),
@@ -130,11 +142,13 @@ static bool select_class(PlayerType *player_ptr, char *cur, char *sym, int *k)
 
         put_str(buf, 10, 6);
         char c = inkey();
-        if (c == 'Q')
+        if (c == 'Q') {
             birth_quit();
+        }
 
-        if (c == 'S')
+        if (c == 'S') {
             return false;
+        }
 
         if (c == ' ' || c == '\r' || c == '\n') {
             if (int_cs == enum2i(PlayerClassType::MAX)) {
@@ -164,8 +178,9 @@ static bool select_class(PlayerType *player_ptr, char *cur, char *sym, int *k)
         if ((*k >= 26) && (*k < PLAYER_CLASS_TYPE_MAX)) {
             cs = i2enum<PlayerClassType>(*k);
             continue;
-        } else
+        } else {
             *k = -1;
+        }
 
         birth_help_option(player_ptr, c, BK_CLASS);
     }
@@ -191,8 +206,9 @@ bool get_player_class(PlayerType *player_ptr)
     char cur[80];
     sprintf(cur, "%c%c%s", '*', p2, _("ランダム", "Random"));
     int k = -1;
-    if (!select_class(player_ptr, cur, sym, &k))
+    if (!select_class(player_ptr, cur, sym, &k)) {
         return false;
+    }
 
     player_ptr->pclass = i2enum<PlayerClassType>(k);
     cp_ptr = &class_info[enum2i(player_ptr->pclass)];

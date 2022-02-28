@@ -1,8 +1,8 @@
 ﻿#pragma once
 
+#include "effect/attribute-types.h"
 #include "monster-attack/monster-attack-effect.h"
 #include "system/angband.h"
-#include "effect/attribute-types.h"
 
 /*!
  * @note モンスターの打撃方法 / New monster blow methods

@@ -56,8 +56,9 @@ bool earthquake(PlayerType *player_ptr, POSITION cy, POSITION cx, POSITION r, MO
         return false;
     }
 
-    if (r > 12)
+    if (r > 12) {
         r = 12;
+    }
 
     bool map[32][32];
     for (POSITION y = 0; y < 32; y++) {
@@ -73,25 +74,30 @@ bool earthquake(PlayerType *player_ptr, POSITION cy, POSITION cx, POSITION r, MO
             POSITION yy = cy + dy;
             POSITION xx = cx + dx;
 
-            if (!in_bounds(floor_ptr, yy, xx))
+            if (!in_bounds(floor_ptr, yy, xx)) {
                 continue;
+            }
 
-            if (distance(cy, cx, yy, xx) > r)
+            if (distance(cy, cx, yy, xx) > r) {
                 continue;
+            }
 
             grid_type *g_ptr;
             g_ptr = &floor_ptr->grid_array[yy][xx];
             g_ptr->info &= ~(CAVE_ROOM | CAVE_ICKY | CAVE_UNSAFE);
             g_ptr->info &= ~(CAVE_GLOW | CAVE_MARK | CAVE_KNOWN);
-            if (!dx && !dy)
+            if (!dx && !dy) {
                 continue;
+            }
 
-            if (randint0(100) < 85)
+            if (randint0(100) < 85) {
                 continue;
+            }
 
             map[16 + yy - cy][16 + xx - cx] = true;
-            if (player_bold(player_ptr, yy, xx))
+            if (player_bold(player_ptr, yy, xx)) {
                 hurt = true;
+            }
         }
     }
 
@@ -101,18 +107,22 @@ bool earthquake(PlayerType *player_ptr, POSITION cy, POSITION cx, POSITION r, MO
         for (DIRECTION i = 0; i < 8; i++) {
             POSITION y = player_ptr->y + ddy_ddd[i];
             POSITION x = player_ptr->x + ddx_ddd[i];
-            if (!is_cave_empty_bold(player_ptr, y, x))
+            if (!is_cave_empty_bold(player_ptr, y, x)) {
                 continue;
+            }
 
-            if (map[16 + y - cy][16 + x - cx])
+            if (map[16 + y - cy][16 + x - cx]) {
                 continue;
+            }
 
-            if (floor_ptr->grid_array[y][x].m_idx)
+            if (floor_ptr->grid_array[y][x].m_idx) {
                 continue;
+            }
 
             sn++;
-            if (randint0(sn) > 0)
+            if (randint0(sn) > 0) {
                 continue;
+            }
 
             sy = y;
             sx = x;
@@ -182,16 +192,19 @@ bool earthquake(PlayerType *player_ptr, POSITION cy, POSITION cx, POSITION r, MO
         for (POSITION dx = -r; dx <= r; dx++) {
             POSITION yy = cy + dy;
             POSITION xx = cx + dx;
-            if (!map[16 + yy - cy][16 + xx - cx])
+            if (!map[16 + yy - cy][16 + xx - cx]) {
                 continue;
+            }
 
             grid_type *gg_ptr;
             gg_ptr = &floor_ptr->grid_array[yy][xx];
-            if (gg_ptr->m_idx == player_ptr->riding)
+            if (gg_ptr->m_idx == player_ptr->riding) {
                 continue;
+            }
 
-            if (!gg_ptr->m_idx)
+            if (!gg_ptr->m_idx) {
                 continue;
+            }
 
             auto *m_ptr = &floor_ptr->m_list[gg_ptr->m_idx];
             auto *r_ptr = &r_info[m_ptr->r_idx];
@@ -200,8 +213,9 @@ bool earthquake(PlayerType *player_ptr, POSITION cy, POSITION cx, POSITION r, MO
                 continue;
             }
 
-            if ((r_ptr->flags2 & RF2_KILL_WALL) || (r_ptr->flags2 & RF2_PASS_WALL))
+            if ((r_ptr->flags2 & RF2_KILL_WALL) || (r_ptr->flags2 & RF2_PASS_WALL)) {
                 continue;
+            }
 
             GAME_TEXT m_name[MAX_NLEN];
             sn = 0;
@@ -209,32 +223,40 @@ bool earthquake(PlayerType *player_ptr, POSITION cy, POSITION cx, POSITION r, MO
                 for (DIRECTION i = 0; i < 8; i++) {
                     POSITION y = yy + ddy_ddd[i];
                     POSITION x = xx + ddx_ddd[i];
-                    if (!is_cave_empty_bold(player_ptr, y, x))
+                    if (!is_cave_empty_bold(player_ptr, y, x)) {
                         continue;
+                    }
 
                     auto *g_ptr = &floor_ptr->grid_array[y][x];
-                    if (g_ptr->is_rune_protection())
+                    if (g_ptr->is_rune_protection()) {
                         continue;
+                    }
 
-                    if (g_ptr->is_rune_explosion())
+                    if (g_ptr->is_rune_explosion()) {
                         continue;
+                    }
 
-                    if (pattern_tile(floor_ptr, y, x))
+                    if (pattern_tile(floor_ptr, y, x)) {
                         continue;
+                    }
 
-                    if (map[16 + y - cy][16 + x - cx])
+                    if (map[16 + y - cy][16 + x - cx]) {
                         continue;
+                    }
 
-                    if (floor_ptr->grid_array[y][x].m_idx)
+                    if (floor_ptr->grid_array[y][x].m_idx) {
                         continue;
+                    }
 
-                    if (player_bold(player_ptr, y, x))
+                    if (player_bold(player_ptr, y, x)) {
                         continue;
+                    }
 
                     sn++;
 
-                    if (randint0(sn) > 0)
+                    if (randint0(sn) > 0) {
                         continue;
+                    }
 
                     sy = y;
                     sx = x;
@@ -242,15 +264,17 @@ bool earthquake(PlayerType *player_ptr, POSITION cy, POSITION cx, POSITION r, MO
             }
 
             monster_desc(player_ptr, m_name, m_ptr, 0);
-            if (!ignore_unview || is_seen(player_ptr, m_ptr))
+            if (!ignore_unview || is_seen(player_ptr, m_ptr)) {
                 msg_format(_("%^sは苦痛で泣きわめいた！", "%^s wails out in pain!"), m_name);
+            }
 
             damage = (sn ? damroll(4, 8) : (m_ptr->hp + 1));
             (void)set_monster_csleep(player_ptr, gg_ptr->m_idx, 0);
             m_ptr->hp -= damage;
             if (m_ptr->hp < 0) {
-                if (!ignore_unview || is_seen(player_ptr, m_ptr))
+                if (!ignore_unview || is_seen(player_ptr, m_ptr)) {
                     msg_format(_("%^sは岩石に埋もれてしまった！", "%^s is embedded in the rock!"), m_name);
+                }
 
                 if (gg_ptr->m_idx) {
                     if (record_named_pet && is_pet(&floor_ptr->m_list[gg_ptr->m_idx]) && floor_ptr->m_list[gg_ptr->m_idx].nickname) {
@@ -265,8 +289,9 @@ bool earthquake(PlayerType *player_ptr, POSITION cy, POSITION cx, POSITION r, MO
                 sn = 0;
             }
 
-            if (sn == 0)
+            if (sn == 0) {
                 continue;
+            }
 
             IDX m_idx_aux = floor_ptr->grid_array[yy][xx].m_idx;
             floor_ptr->grid_array[yy][xx].m_idx = 0;
@@ -284,11 +309,13 @@ bool earthquake(PlayerType *player_ptr, POSITION cy, POSITION cx, POSITION r, MO
         for (POSITION dx = -r; dx <= r; dx++) {
             POSITION yy = cy + dy;
             POSITION xx = cx + dx;
-            if (!map[16 + yy - cy][16 + xx - cx])
+            if (!map[16 + yy - cy][16 + xx - cx]) {
                 continue;
+            }
 
-            if (!cave_valid_bold(floor_ptr, yy, xx))
+            if (!cave_valid_bold(floor_ptr, yy, xx)) {
                 continue;
+            }
 
             delete_all_items_from_floor(player_ptr, yy, xx);
             int t = cave_has_flag_bold(floor_ptr, yy, xx, FloorFeatureType::PROJECT) ? randint0(100) : 200;
@@ -315,11 +342,13 @@ bool earthquake(PlayerType *player_ptr, POSITION cy, POSITION cx, POSITION r, MO
         for (POSITION dx = -r; dx <= r; dx++) {
             POSITION yy = cy + dy;
             POSITION xx = cx + dx;
-            if (!in_bounds(floor_ptr, yy, xx))
+            if (!in_bounds(floor_ptr, yy, xx)) {
                 continue;
+            }
 
-            if (distance(cy, cx, yy, xx) > r)
+            if (distance(cy, cx, yy, xx) > r) {
                 continue;
+            }
 
             auto *g_ptr = &floor_ptr->grid_array[yy][xx];
             if (g_ptr->is_mirror()) {
@@ -327,15 +356,17 @@ bool earthquake(PlayerType *player_ptr, POSITION cy, POSITION cx, POSITION r, MO
                 continue;
             }
 
-            if (d_info[player_ptr->dungeon_idx].flags.has(DungeonFeatureType::DARKNESS))
+            if (d_info[player_ptr->dungeon_idx].flags.has(DungeonFeatureType::DARKNESS)) {
                 continue;
+            }
 
             grid_type *cc_ptr;
             for (DIRECTION ii = 0; ii < 9; ii++) {
                 POSITION yyy = yy + ddy_ddd[ii];
                 POSITION xxx = xx + ddx_ddd[ii];
-                if (!in_bounds2(floor_ptr, yyy, xxx))
+                if (!in_bounds2(floor_ptr, yyy, xxx)) {
                     continue;
+                }
                 cc_ptr = &floor_ptr->grid_array[yyy][xxx];
                 if (f_info[cc_ptr->get_feat_mimic()].flags.has(FloorFeatureType::GLOW)) {
                     g_ptr->info |= CAVE_GLOW;

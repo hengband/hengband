@@ -35,29 +35,34 @@ int32_t turn_real(PlayerType *player_ptr, int32_t hoge)
  */
 void prevent_turn_overflow(PlayerType *player_ptr)
 {
-    if (w_ptr->game_turn < w_ptr->game_turn_limit)
+    if (w_ptr->game_turn < w_ptr->game_turn_limit) {
         return;
+    }
 
     int rollback_days = 1 + (w_ptr->game_turn - w_ptr->game_turn_limit) / (TURNS_PER_TICK * TOWN_DAWN);
     int32_t rollback_turns = TURNS_PER_TICK * TOWN_DAWN * rollback_days;
 
-    if (w_ptr->game_turn > rollback_turns)
+    if (w_ptr->game_turn > rollback_turns) {
         w_ptr->game_turn -= rollback_turns;
-    else
+    } else {
         w_ptr->game_turn = 1;
+    }
     auto *floor_ptr = player_ptr->current_floor_ptr;
-    if (floor_ptr->generated_turn > rollback_turns)
+    if (floor_ptr->generated_turn > rollback_turns) {
         floor_ptr->generated_turn -= rollback_turns;
-    else
+    } else {
         floor_ptr->generated_turn = 1;
-    if (w_ptr->arena_start_turn > rollback_turns)
+    }
+    if (w_ptr->arena_start_turn > rollback_turns) {
         w_ptr->arena_start_turn -= rollback_turns;
-    else
+    } else {
         w_ptr->arena_start_turn = 1;
-    if (player_ptr->feeling_turn > rollback_turns)
+    }
+    if (player_ptr->feeling_turn > rollback_turns) {
         player_ptr->feeling_turn -= rollback_turns;
-    else
+    } else {
         player_ptr->feeling_turn = 1;
+    }
 
     for (int i = 1; i < max_towns; i++) {
         for (int j = 0; j < MAX_STORES; j++) {
@@ -65,14 +70,16 @@ void prevent_turn_overflow(PlayerType *player_ptr)
 
             if (store_ptr->last_visit > -10L * TURNS_PER_TICK * STORE_TICKS) {
                 store_ptr->last_visit -= rollback_turns;
-                if (store_ptr->last_visit < -10L * TURNS_PER_TICK * STORE_TICKS)
+                if (store_ptr->last_visit < -10L * TURNS_PER_TICK * STORE_TICKS) {
                     store_ptr->last_visit = -10L * TURNS_PER_TICK * STORE_TICKS;
+                }
             }
 
             if (store_ptr->store_open) {
                 store_ptr->store_open -= rollback_turns;
-                if (store_ptr->store_open < 1)
+                if (store_ptr->store_open < 1) {
                     store_ptr->store_open = 1;
+                }
             }
         }
     }

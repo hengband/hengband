@@ -60,8 +60,9 @@ static void switch_mind_mindcrafter(PlayerType *player_ptr, const PLAYER_LEVEL p
 static void switch_mind_ki(PlayerType *player_ptr, const PLAYER_LEVEL plev, const int power, char *p)
 {
     int boost = get_current_ki(player_ptr);
-    if (heavy_armor(player_ptr))
+    if (heavy_armor(player_ptr)) {
         boost /= 2;
+    }
 
     switch (power) {
     case 0:

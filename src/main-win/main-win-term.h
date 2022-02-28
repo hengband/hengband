@@ -4,8 +4,8 @@
  * @brief Windows版固有実装(ターミナル)ヘッダ
  */
 
-#include "term/z-term.h"
 #include "system/h-type.h"
+#include "term/z-term.h"
 
 #include <windows.h>
 
@@ -123,4 +123,3 @@ struct term_data {
         graphics.dispose_offscreen();
     };
 };
-

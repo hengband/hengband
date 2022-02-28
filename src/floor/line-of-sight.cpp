@@ -52,8 +52,9 @@ bool los(PlayerType *player_ptr, POSITION y1, POSITION x1, POSITION y2, POSITION
     POSITION dx = x2 - x1;
     POSITION ay = std::abs(dy);
     POSITION ax = std::abs(dx);
-    if ((ax < 2) && (ay < 2))
+    if ((ax < 2) && (ay < 2)) {
         return true;
+    }
 
     /* Directly South/North */
     auto *floor_ptr = player_ptr->current_floor_ptr;
@@ -62,16 +63,18 @@ bool los(PlayerType *player_ptr, POSITION y1, POSITION x1, POSITION y2, POSITION
         /* South -- check for walls */
         if (dy > 0) {
             for (ty = y1 + 1; ty < y2; ty++) {
-                if (!cave_los_bold(floor_ptr, ty, x1))
+                if (!cave_los_bold(floor_ptr, ty, x1)) {
                     return false;
+                }
             }
         }
 
         /* North -- check for walls */
         else {
             for (ty = y1 - 1; ty > y2; ty--) {
-                if (!cave_los_bold(floor_ptr, ty, x1))
+                if (!cave_los_bold(floor_ptr, ty, x1)) {
                     return false;
+                }
             }
         }
 
@@ -84,16 +87,18 @@ bool los(PlayerType *player_ptr, POSITION y1, POSITION x1, POSITION y2, POSITION
         /* East -- check for walls */
         if (dx > 0) {
             for (tx = x1 + 1; tx < x2; tx++) {
-                if (!cave_los_bold(floor_ptr, y1, tx))
+                if (!cave_los_bold(floor_ptr, y1, tx)) {
                     return false;
+                }
             }
         }
 
         /* West -- check for walls */
         else {
             for (tx = x1 - 1; tx > x2; tx--) {
-                if (!cave_los_bold(floor_ptr, y1, tx))
+                if (!cave_los_bold(floor_ptr, y1, tx)) {
                     return false;
+                }
             }
         }
 
@@ -105,13 +110,15 @@ bool los(PlayerType *player_ptr, POSITION y1, POSITION x1, POSITION y2, POSITION
 
     if (ax == 1) {
         if (ay == 2) {
-            if (cave_los_bold(floor_ptr, y1 + sy, x1))
+            if (cave_los_bold(floor_ptr, y1 + sy, x1)) {
                 return true;
+            }
         }
     } else if (ay == 1) {
         if (ax == 2) {
-            if (cave_los_bold(floor_ptr, y1, x1 + sx))
+            if (cave_los_bold(floor_ptr, y1, x1 + sx)) {
                 return true;
+            }
         }
     }
 
@@ -133,8 +140,9 @@ bool los(PlayerType *player_ptr, POSITION y1, POSITION x1, POSITION y2, POSITION
         /* Note (below) the case (qy == f2), where */
         /* the LOS exactly meets the corner of a tile. */
         while (x2 - tx) {
-            if (!cave_los_bold(floor_ptr, ty, tx))
+            if (!cave_los_bold(floor_ptr, ty, tx)) {
                 return false;
+            }
 
             qy += m;
 
@@ -145,8 +153,9 @@ bool los(PlayerType *player_ptr, POSITION y1, POSITION x1, POSITION y2, POSITION
 
             if (qy > f2) {
                 ty += sy;
-                if (!cave_los_bold(floor_ptr, ty, tx))
+                if (!cave_los_bold(floor_ptr, ty, tx)) {
                     return false;
+                }
                 qy -= f1;
                 tx += sx;
                 continue;
@@ -174,8 +183,9 @@ bool los(PlayerType *player_ptr, POSITION y1, POSITION x1, POSITION y2, POSITION
     /* Note (below) the case (qx == f2), where */
     /* the LOS exactly meets the corner of a tile. */
     while (y2 - ty) {
-        if (!cave_los_bold(floor_ptr, ty, tx))
+        if (!cave_los_bold(floor_ptr, ty, tx)) {
             return false;
+        }
 
         qx += m;
 
@@ -186,8 +196,9 @@ bool los(PlayerType *player_ptr, POSITION y1, POSITION x1, POSITION y2, POSITION
 
         if (qx > f2) {
             tx += sx;
-            if (!cave_los_bold(floor_ptr, ty, tx))
+            if (!cave_los_bold(floor_ptr, ty, tx)) {
                 return false;
+            }
             qx -= f1;
             ty += sy;
             continue;

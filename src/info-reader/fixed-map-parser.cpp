@@ -44,8 +44,9 @@ static concptr parse_fixed_map_expression(PlayerType *player_ptr, char **sp, cha
     char *s;
     s = (*sp);
 
-    while (iswspace(*s))
+    while (iswspace(*s)) {
         s++;
+    }
 
     char *b;
     b = s;
@@ -61,22 +62,25 @@ static concptr parse_fixed_map_expression(PlayerType *player_ptr, char **sp, cha
             v = "0";
             while (*s && (f != b2)) {
                 t = parse_fixed_map_expression(player_ptr, &s, &f);
-                if (*t && !streq(t, "0"))
+                if (*t && !streq(t, "0")) {
                     v = "1";
+                }
             }
         } else if (streq(t, "AND")) {
             v = "1";
             while (*s && (f != b2)) {
                 t = parse_fixed_map_expression(player_ptr, &s, &f);
-                if (*t && streq(t, "0"))
+                if (*t && streq(t, "0")) {
                     v = "0";
+                }
             }
         } else if (streq(t, "NOT")) {
             v = "1";
             while (*s && (f != b2)) {
                 t = parse_fixed_map_expression(player_ptr, &s, &f);
-                if (*t && streq(t, "1"))
+                if (*t && streq(t, "1")) {
                     v = "0";
+                }
             }
         } else if (streq(t, "EQU")) {
             v = "0";
@@ -86,8 +90,9 @@ static concptr parse_fixed_map_expression(PlayerType *player_ptr, char **sp, cha
 
             while (*s && (f != b2)) {
                 p = parse_fixed_map_expression(player_ptr, &s, &f);
-                if (streq(t, p))
+                if (streq(t, p)) {
                     v = "1";
+                }
             }
         } else if (streq(t, "LEQ")) {
             v = "1";
@@ -98,8 +103,9 @@ static concptr parse_fixed_map_expression(PlayerType *player_ptr, char **sp, cha
             while (*s && (f != b2)) {
                 p = t;
                 t = parse_fixed_map_expression(player_ptr, &s, &f);
-                if (*t && atoi(p) > atoi(t))
+                if (*t && atoi(p) > atoi(t)) {
                     v = "0";
+                }
             }
         } else if (streq(t, "GEQ")) {
             v = "1";
@@ -110,8 +116,9 @@ static concptr parse_fixed_map_expression(PlayerType *player_ptr, char **sp, cha
             while (*s && (f != b2)) {
                 p = t;
                 t = parse_fixed_map_expression(player_ptr, &s, &f);
-                if (*t && atoi(p) < atoi(t))
+                if (*t && atoi(p) < atoi(t)) {
                     v = "0";
+                }
             }
         } else {
             while (*s && (f != b2)) {
@@ -119,10 +126,12 @@ static concptr parse_fixed_map_expression(PlayerType *player_ptr, char **sp, cha
             }
         }
 
-        if (f != b2)
+        if (f != b2) {
             v = "?x?x?";
-        if ((f = *s) != '\0')
+        }
+        if ((f = *s) != '\0') {
             *s++ = '\0';
+        }
 
         (*fp) = f;
         (*sp) = s;
@@ -131,16 +140,19 @@ static concptr parse_fixed_map_expression(PlayerType *player_ptr, char **sp, cha
 
 #ifdef JP
     while (iskanji(*s) || (isprint(*s) && !angband_strchr(" []", *s))) {
-        if (iskanji(*s))
+        if (iskanji(*s)) {
             s++;
+        }
         s++;
     }
 #else
-    while (isprint(*s) && !angband_strchr(" []", *s))
+    while (isprint(*s) && !angband_strchr(" []", *s)) {
         ++s;
+    }
 #endif
-    if ((f = *s) != '\0')
+    if ((f = *s) != '\0') {
         *s++ = '\0';
+    }
 
     if (*b != '$') {
         v = b;
@@ -154,10 +166,11 @@ static concptr parse_fixed_map_expression(PlayerType *player_ptr, char **sp, cha
     } else if (streq(b + 1, "GRAF")) {
         v = ANGBAND_GRAF;
     } else if (streq(b + 1, "MONOCHROME")) {
-        if (arg_monochrome)
+        if (arg_monochrome) {
             v = "ON";
-        else
+        } else {
             v = "OFF";
+        }
     } else if (streq(b + 1, "RACE")) {
         v = _(rp_ptr->E_title, rp_ptr->title);
     } else if (streq(b + 1, "CLASS")) {
@@ -195,10 +208,10 @@ static concptr parse_fixed_map_expression(PlayerType *player_ptr, char **sp, cha
         sprintf(tmp, "%d", enum2i(leaving_quest));
         v = tmp;
     } else if (prefix(b + 1, "QUEST_TYPE")) {
-        sprintf(tmp, "%d", enum2i(quest[atoi(b + 11)].type));
+        sprintf(tmp, "%d", enum2i(quest_map[i2enum<QuestId>(atoi(b + 11))].type));
         v = tmp;
     } else if (prefix(b + 1, "QUEST")) {
-        sprintf(tmp, "%d", enum2i(quest[atoi(b + 6)].status));
+        sprintf(tmp, "%d", enum2i(quest_map[i2enum<QuestId>(atoi(b + 6))].status));
         v = tmp;
     } else if (prefix(b + 1, "RANDOM")) {
         sprintf(tmp, "%d", (int)(w_ptr->seed_town % atoi(b + 7)));
@@ -206,12 +219,13 @@ static concptr parse_fixed_map_expression(PlayerType *player_ptr, char **sp, cha
     } else if (streq(b + 1, "VARIANT")) {
         v = variant;
     } else if (streq(b + 1, "WILDERNESS")) {
-        if (vanilla_town)
+        if (vanilla_town) {
             sprintf(tmp, "NONE");
-        else if (lite_town)
+        } else if (lite_town) {
             sprintf(tmp, "LITE");
-        else
+        } else {
             sprintf(tmp, "NORMAL");
+        }
         v = tmp;
     } else if (streq(b + 1, "IRONMAN_DOWNWARD")) {
         v = (ironman_downward ? "1" : "0");
@@ -237,8 +251,9 @@ parse_error_type parse_fixed_map(PlayerType *player_ptr, concptr name, int ymin,
     char buf[1024];
     path_build(buf, sizeof(buf), ANGBAND_DIR_EDIT, name);
     FILE *fp = angband_fopen(buf, "r");
-    if (fp == nullptr)
+    if (fp == nullptr) {
         return PARSE_ERROR_GENERIC;
+    }
 
     int num = -1;
     parse_error_type err = PARSE_ERROR_NONE;
@@ -249,8 +264,9 @@ parse_error_type parse_fixed_map(PlayerType *player_ptr, concptr name, int ymin,
     qtwg_type *qg_ptr = initialize_quest_generator_type(&tmp_qg, buf, ymin, xmin, ymax, xmax, &y, &x);
     while (angband_fgets(fp, buf, sizeof(buf)) == 0) {
         num++;
-        if (!buf[0] || iswspace(buf[0]) || buf[0] == '#')
+        if (!buf[0] || iswspace(buf[0]) || buf[0] == '#') {
             continue;
+        }
 
         if ((buf[0] == '?') && (buf[1] == ':')) {
             char f;
@@ -261,12 +277,14 @@ parse_error_type parse_fixed_map(PlayerType *player_ptr, concptr name, int ymin,
             continue;
         }
 
-        if (bypass)
+        if (bypass) {
             continue;
+        }
 
         err = generate_fixed_map_floor(player_ptr, qg_ptr, parse_fixed_map);
-        if (err != PARSE_ERROR_NONE)
+        if (err != PARSE_ERROR_NONE) {
             break;
+        }
     }
 
     if (err != 0) {

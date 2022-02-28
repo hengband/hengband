@@ -138,8 +138,9 @@ static bool snipe_concentrate(PlayerType *player_ptr)
         return false;
     }
 
-    if (sniper_data->concent < (2 + (player_ptr->lev + 5) / 10))
+    if (sniper_data->concent < (2 + (player_ptr->lev + 5) / 10)) {
         sniper_data->concent++;
+    }
 
     msg_format(_("集中した。(集中度 %d)", "You concentrate deeply. (lvl %d)"), sniper_data->concent);
     sniper_data->reset_concent = false;
@@ -209,15 +210,17 @@ void display_snipe_list(PlayerType *player_ptr)
     for (i = 0; i < MAX_SNIPE_POWERS; i++) {
         /* Access the available spell */
         spell = snipe_powers[i];
-        if (spell.min_lev > plev)
+        if (spell.min_lev > plev) {
             continue;
+        }
 
         sprintf(psi_desc, "  %c) %-30s%2d %4d", I2A(i), spell.name, spell.min_lev, spell.mana_cost);
 
-        if (spell.mana_cost > sniper_data->concent)
+        if (spell.mana_cost > sniper_data->concent) {
             term_putstr(x, y + i + 1, -1, TERM_SLATE, psi_desc);
-        else
+        } else {
             term_putstr(x, y + i + 1, -1, TERM_WHITE, psi_desc);
+        }
     }
 }
 
@@ -290,10 +293,11 @@ static int get_snipe_power(PlayerType *player_ptr, COMMAND_CODE *sn, bool only_b
 
     choice = always_show_list ? ESCAPE : 1;
     while (!flag) {
-        if (choice == ESCAPE)
+        if (choice == ESCAPE) {
             choice = ' ';
-        else if (!get_com(out_val, &choice, false))
+        } else if (!get_com(out_val, &choice, false)) {
             break;
+        }
 
         /* Request redraw */
         if ((choice == ' ') || (choice == '*') || (choice == '?')) {
@@ -302,8 +306,9 @@ static int get_snipe_power(PlayerType *player_ptr, COMMAND_CODE *sn, bool only_b
                 char psi_index[6];
                 char psi_desc[75];
                 redraw = true;
-                if (!only_browse)
+                if (!only_browse) {
                     screen_save();
+                }
 
                 /* Display a list of spells */
                 prt("", y, x);
@@ -319,17 +324,19 @@ static int get_snipe_power(PlayerType *player_ptr, COMMAND_CODE *sn, bool only_b
                     spell = snipe_powers[i];
 
                     /* Dump the spell --(-- */
-                    if (spell.min_lev > plev)
+                    if (spell.min_lev > plev) {
                         sprintf(psi_index, "   ) ");
-                    else
+                    } else {
                         sprintf(psi_index, "  %c) ", I2A(i));
+                    }
 
                     sprintf(psi_desc, "%-30s%2d %4d", spell.name, spell.min_lev, spell.mana_cost);
 
-                    if (spell.min_lev > plev)
+                    if (spell.min_lev > plev) {
                         tcol = TERM_SLATE;
-                    else if (spell.mana_cost > sniper_data->concent)
+                    } else if (spell.mana_cost > sniper_data->concent) {
                         tcol = TERM_L_BLUE;
+                    }
 
                     term_putstr(x, y + i + 1, -1, tcol, psi_index);
                     term_putstr(x + 5, y + i + 1, -1, tcol, psi_desc);
@@ -343,8 +350,9 @@ static int get_snipe_power(PlayerType *player_ptr, COMMAND_CODE *sn, bool only_b
             else {
                 /* Hide list */
                 redraw = false;
-                if (!only_browse)
+                if (!only_browse) {
                     screen_load();
+                }
             }
 
             /* Redo asking */
@@ -355,8 +363,9 @@ static int get_snipe_power(PlayerType *player_ptr, COMMAND_CODE *sn, bool only_b
         ask = isupper(choice);
 
         /* Lowercase */
-        if (ask)
+        if (ask) {
             choice = (char)tolower(choice);
+        }
 
         /* Extract request */
         i = (islower(choice) ? A2I(choice) : -1);
@@ -378,22 +387,25 @@ static int get_snipe_power(PlayerType *player_ptr, COMMAND_CODE *sn, bool only_b
             (void)strnfmt(tmp_val, 78, _("%sを使いますか？", "Use %s? "), snipe_powers[i].name);
 
             /* Belay that order */
-            if (!get_check(tmp_val))
+            if (!get_check(tmp_val)) {
                 continue;
+            }
         }
 
         /* Stop the loop */
         flag = true;
     }
-    if (redraw && !only_browse)
+    if (redraw && !only_browse) {
         screen_load();
+    }
 
     player_ptr->window_flags |= (PW_SPELL);
     handle_stuff(player_ptr);
 
     /* Abort if needed */
-    if (!flag)
+    if (!flag) {
         return false;
+    }
 
     /* Save the choice */
     (*sn) = i;
@@ -423,95 +435,115 @@ MULTIPLY calc_snipe_damage_with_slay(PlayerType *player_ptr, MULTIPLY mult, mons
     case SP_LITE:
         if (r_ptr->resistance_flags.has(MonsterResistanceType::HURT_LITE)) {
             MULTIPLY n = 20 + sniper_concent;
-            if (seen)
+            if (seen) {
                 r_ptr->r_resistance_flags.set(MonsterResistanceType::HURT_LITE);
-            if (mult < n)
+            }
+            if (mult < n) {
                 mult = n;
+            }
         }
         break;
     case SP_FIRE:
         if (r_ptr->resistance_flags.has(MonsterResistanceType::IMMUNE_FIRE)) {
-            if (seen)
+            if (seen) {
                 r_ptr->r_resistance_flags.set(MonsterResistanceType::IMMUNE_FIRE);
+            }
         } else {
             MULTIPLY n;
             if (r_ptr->resistance_flags.has(MonsterResistanceType::HURT_FIRE)) {
                 n = 22 + (sniper_concent * 4);
                 r_ptr->r_resistance_flags.set(MonsterResistanceType::HURT_FIRE);
-            } else
+            } else {
                 n = 15 + (sniper_concent * 3);
+            }
 
-            if (mult < n)
+            if (mult < n) {
                 mult = n;
+            }
         }
         break;
     case SP_COLD:
         if (r_ptr->resistance_flags.has(MonsterResistanceType::IMMUNE_COLD)) {
-            if (seen)
+            if (seen) {
                 r_ptr->r_resistance_flags.set(MonsterResistanceType::IMMUNE_COLD);
+            }
         } else {
             MULTIPLY n;
             if (r_ptr->resistance_flags.has(MonsterResistanceType::HURT_COLD)) {
                 n = 22 + (sniper_concent * 4);
                 r_ptr->r_resistance_flags.set(MonsterResistanceType::HURT_COLD);
-            } else
+            } else {
                 n = 15 + (sniper_concent * 3);
+            }
 
-            if (mult < n)
+            if (mult < n) {
                 mult = n;
+            }
         }
         break;
     case SP_ELEC:
         if (r_ptr->resistance_flags.has(MonsterResistanceType::IMMUNE_ELEC)) {
-            if (seen)
+            if (seen) {
                 r_ptr->r_resistance_flags.set(MonsterResistanceType::IMMUNE_ELEC);
+            }
         } else {
             MULTIPLY n = 18 + (sniper_concent * 4);
-            if (mult < n)
+            if (mult < n) {
                 mult = n;
+            }
         }
         break;
     case SP_KILL_WALL:
         if (r_ptr->resistance_flags.has(MonsterResistanceType::HURT_ROCK)) {
             MULTIPLY n = 15 + (sniper_concent * 2);
-            if (seen)
+            if (seen) {
                 r_ptr->r_resistance_flags.set(MonsterResistanceType::HURT_ROCK);
-            if (mult < n)
+            }
+            if (mult < n) {
                 mult = n;
+            }
         } else if (r_ptr->kind_flags.has(MonsterKindType::NONLIVING)) {
             MULTIPLY n = 15 + (sniper_concent * 2);
-            if (seen)
+            if (seen) {
                 r_ptr->r_kind_flags.set(MonsterKindType::NONLIVING);
-            if (mult < n)
+            }
+            if (mult < n) {
                 mult = n;
+            }
         }
         break;
     case SP_EVILNESS:
         if (r_ptr->kind_flags.has(MonsterKindType::GOOD)) {
             MULTIPLY n = 15 + (sniper_concent * 4);
-            if (seen)
+            if (seen) {
                 r_ptr->r_kind_flags.set(MonsterKindType::GOOD);
-            if (mult < n)
+            }
+            if (mult < n) {
                 mult = n;
+            }
         }
         break;
     case SP_HOLYNESS:
         if (r_ptr->kind_flags.has(MonsterKindType::EVIL)) {
             MULTIPLY n = 12 + (sniper_concent * 3);
-            if (seen)
+            if (seen) {
                 r_ptr->r_kind_flags.set(MonsterKindType::EVIL);
+            }
             if (r_ptr->resistance_flags.has(MonsterResistanceType::HURT_LITE)) {
                 n += (sniper_concent * 3);
-                if (seen)
+                if (seen) {
                     r_ptr->r_resistance_flags.set(MonsterResistanceType::HURT_LITE);
+                }
             }
-            if (mult < n)
+            if (mult < n) {
                 mult = n;
+            }
         }
         break;
     case SP_FINAL:
-        if (mult < 50)
+        if (mult < 50) {
             mult = 50;
+        }
         break;
     }
 
@@ -538,8 +570,9 @@ static bool cast_sniper_spell(PlayerType *player_ptr, int spell)
     switch (spell) {
     case 0: /* Concentration */
         sound(SOUND_ZAP);
-        if (!snipe_concentrate(player_ptr))
+        if (!snipe_concentrate(player_ptr)) {
             return false;
+        }
         PlayerEnergy(player_ptr).set_player_turn_energy(100);
         return true;
     case 1:
@@ -605,20 +638,25 @@ void do_cmd_snipe(PlayerType *player_ptr)
     COMMAND_CODE n = 0;
     bool cast;
 
-    if (cmd_limit_confused(player_ptr))
+    if (cmd_limit_confused(player_ptr)) {
         return;
-    if (cmd_limit_image(player_ptr))
+    }
+    if (cmd_limit_image(player_ptr)) {
         return;
-    if (cmd_limit_stun(player_ptr))
+    }
+    if (cmd_limit_stun(player_ptr)) {
         return;
+    }
 
-    if (!get_snipe_power(player_ptr, &n, false))
+    if (!get_snipe_power(player_ptr, &n, false)) {
         return;
+    }
 
     cast = cast_sniper_spell(player_ptr, n);
 
-    if (!cast)
+    if (!cast) {
         return;
+    }
     player_ptr->redraw |= (PR_HP | PR_MANA);
     player_ptr->window_flags |= (PW_PLAYER);
     player_ptr->window_flags |= (PW_SPELL);

@@ -33,8 +33,8 @@
 #include "util/angband-files.h"
 #include "world/world.h"
 #ifndef WINDOWS
-#include <dirent.h>
 #include "util/string-processor.h"
+#include <dirent.h>
 #endif
 #ifdef PRIVATE_USER_PATH
 #include <string>
@@ -139,7 +139,7 @@ void init_file_paths(char *libpath, char *varpath)
                      * 7*24*60*60 seconds.
                      */
                     if (stat(path, &next_stat) == 0 &&
-                            difftime(now, next_stat.st_mtime) > 604800) {
+                        difftime(now, next_stat.st_mtime) > 604800) {
                         remove(path);
                     }
                 }
@@ -232,8 +232,9 @@ void init_angband(PlayerType *player_ptr, bool no_term)
         fp = angband_fopen(buf, "r");
         if (fp) {
             int i = 0;
-            while (0 == angband_fgets(fp, buf, sizeof(buf)))
+            while (0 == angband_fgets(fp, buf, sizeof(buf))) {
                 term_putstr(0, i++, -1, TERM_WHITE, buf);
+            }
 
             angband_fclose(fp);
         }
@@ -263,51 +264,64 @@ void init_angband(PlayerType *player_ptr, bool no_term)
     void (*init_note)(concptr) = (no_term ? init_note_no_term : init_note_term);
 
     init_note(_("[変数を初期化しています...(その他)", "[Initializing values... (misc)]"));
-    if (init_misc(player_ptr))
+    if (init_misc(player_ptr)) {
         quit(_("その他の変数を初期化できません", "Cannot initialize misc. values"));
+    }
 
     init_note(_("[データの初期化中... (地形)]", "[Initializing arrays... (features)]"));
-    if (init_f_info())
+    if (init_f_info()) {
         quit(_("地形初期化不能", "Cannot initialize features"));
+    }
 
-    if (init_feat_variables())
+    if (init_feat_variables()) {
         quit(_("地形初期化不能", "Cannot initialize features"));
+    }
 
     init_note(_("[データの初期化中... (アイテム)]", "[Initializing arrays... (objects)]"));
-    if (init_k_info())
+    if (init_k_info()) {
         quit(_("アイテム初期化不能", "Cannot initialize objects"));
+    }
 
     init_note(_("[データの初期化中... (伝説のアイテム)]", "[Initializing arrays... (artifacts)]"));
-    if (init_a_info())
+    if (init_a_info()) {
         quit(_("伝説のアイテム初期化不能", "Cannot initialize artifacts"));
+    }
 
     init_note(_("[データの初期化中... (名のあるアイテム)]", "[Initializing arrays... (ego-items)]"));
-    if (init_e_info())
+    if (init_e_info()) {
         quit(_("名のあるアイテム初期化不能", "Cannot initialize ego-items"));
+    }
 
     init_note(_("[データの初期化中... (モンスター)]", "[Initializing arrays... (monsters)]"));
-    if (init_r_info())
+    if (init_r_info()) {
         quit(_("モンスター初期化不能", "Cannot initialize monsters"));
+    }
 
     init_note(_("[データの初期化中... (ダンジョン)]", "[Initializing arrays... (dungeon)]"));
-    if (init_d_info())
+    if (init_d_info()) {
         quit(_("ダンジョン初期化不能", "Cannot initialize dungeon"));
+    }
 
-    for (const auto &d_ref : d_info)
-        if (d_ref.idx > 0 && d_ref.final_guardian)
+    for (const auto &d_ref : d_info) {
+        if (d_ref.idx > 0 && d_ref.final_guardian) {
             r_info[d_ref.final_guardian].flags7 |= RF7_GUARDIAN;
+        }
+    }
 
     init_note(_("[データの初期化中... (魔法)]", "[Initializing arrays... (magic)]"));
-    if (init_m_info())
+    if (init_m_info()) {
         quit(_("魔法初期化不能", "Cannot initialize magic"));
+    }
 
     init_note(_("[データの初期化中... (熟練度)]", "[Initializing arrays... (skill)]"));
-    if (init_s_info())
+    if (init_s_info()) {
         quit(_("熟練度初期化不能", "Cannot initialize skill"));
+    }
 
     init_note(_("[配列を初期化しています... (荒野)]", "[Initializing arrays... (wilderness)]"));
-    if (init_wilderness())
+    if (init_wilderness()) {
         quit(_("荒野を初期化できません", "Cannot initialize wilderness"));
+    }
 
     init_note(_("[配列を初期化しています... (街)]", "[Initializing arrays... (towns)]"));
     init_towns();
@@ -317,8 +331,9 @@ void init_angband(PlayerType *player_ptr, bool no_term)
 
     init_note(_("[配列を初期化しています... (クエスト)]", "[Initializing arrays... (quests)]"));
     init_quests();
-    if (init_v_info())
+    if (init_v_info()) {
         quit(_("vault 初期化不能", "Cannot initialize vaults"));
+    }
 
     init_note(_("[データの初期化中... (その他)]", "[Initializing arrays... (other)]"));
     init_other(player_ptr);

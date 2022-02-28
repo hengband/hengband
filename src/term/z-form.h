@@ -24,7 +24,6 @@
  * This file makes use of both "z-util.c" and "z-virt.c"
  */
 
-
 /**** Available Functions ****/
 
 /* Format arguments into given bounded-length buffer */
@@ -50,6 +49,5 @@ extern void quit_fmt(concptr fmt, ...);
 
 /* Vararg interface to "core()", using "format()" */
 extern void core_fmt(concptr fmt, ...);
-
 
 #endif

@@ -16,7 +16,10 @@
 /*
  * Grid based version of "creature_bold()"
  */
-static bool player_grid(PlayerType *player_ptr, grid_type *g_ptr) { return g_ptr == &player_ptr->current_floor_ptr->grid_array[player_ptr->y][player_ptr->x]; }
+static bool player_grid(PlayerType *player_ptr, grid_type *g_ptr)
+{
+    return g_ptr == &player_ptr->current_floor_ptr->grid_array[player_ptr->y][player_ptr->x];
+}
 
 /*
  * Grid based version of "cave_empty_bold()"
@@ -48,8 +51,9 @@ void vault_monsters(PlayerType *player_ptr, POSITION y1, POSITION x1, int num)
             scatter(player_ptr, &y, &x, y1, x1, d, 0);
             grid_type *g_ptr;
             g_ptr = &player_ptr->current_floor_ptr->grid_array[y][x];
-            if (!is_cave_empty_grid(player_ptr, g_ptr))
+            if (!is_cave_empty_grid(player_ptr, g_ptr)) {
                 continue;
+            }
 
             floor_ptr->monster_level = floor_ptr->base_level + 2;
             (void)place_monster(player_ptr, y, x, PM_ALLOW_SLEEP | PM_ALLOW_GROUP);
@@ -78,8 +82,9 @@ void vault_objects(PlayerType *player_ptr, POSITION y, POSITION x, int num)
                 j = rand_spread(y, 2);
                 k = rand_spread(x, 3);
                 dummy++;
-                if (!in_bounds(floor_ptr, j, k))
+                if (!in_bounds(floor_ptr, j, k)) {
                     continue;
+                }
                 break;
             }
 
@@ -89,8 +94,9 @@ void vault_objects(PlayerType *player_ptr, POSITION y, POSITION x, int num)
 
             grid_type *g_ptr;
             g_ptr = &floor_ptr->grid_array[j][k];
-            if (!g_ptr->is_floor() || !g_ptr->o_idx_list.empty())
+            if (!g_ptr->is_floor() || !g_ptr->o_idx_list.empty()) {
                 continue;
+            }
 
             if (randint0(100) < 75) {
                 place_object(player_ptr, j, k, 0L);
@@ -123,8 +129,9 @@ static void vault_trap_aux(PlayerType *player_ptr, POSITION y, POSITION x, POSIT
             y1 = rand_spread(y, yd);
             x1 = rand_spread(x, xd);
             dummy++;
-            if (!in_bounds(floor_ptr, y1, x1))
+            if (!in_bounds(floor_ptr, y1, x1)) {
                 continue;
+            }
             break;
         }
 
@@ -133,8 +140,9 @@ static void vault_trap_aux(PlayerType *player_ptr, POSITION y, POSITION x, POSIT
         }
 
         g_ptr = &floor_ptr->grid_array[y1][x1];
-        if (!g_ptr->is_floor() || !g_ptr->o_idx_list.empty() || g_ptr->m_idx)
+        if (!g_ptr->is_floor() || !g_ptr->o_idx_list.empty() || g_ptr->m_idx) {
             continue;
+        }
 
         place_trap(player_ptr, y1, x1);
         break;
@@ -155,6 +163,7 @@ static void vault_trap_aux(PlayerType *player_ptr, POSITION y, POSITION x, POSIT
  */
 void vault_traps(PlayerType *player_ptr, POSITION y, POSITION x, POSITION yd, POSITION xd, int num)
 {
-    for (int i = 0; i < num; i++)
+    for (int i = 0; i < num; i++) {
         vault_trap_aux(player_ptr, y, x, yd, xd);
+    }
 }

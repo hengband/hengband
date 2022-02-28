@@ -38,8 +38,9 @@ void do_cmd_knowledge(PlayerType *player_ptr)
             prt(_("(4) 既知の撃破したユニーク・モンスター   の一覧", "(4) Display defeated uniques"), 9, 5);
             prt(_("(5) 既知のモンスター                     の一覧", "(5) Display known monster"), 10, 5);
             prt(_("(6) 倒した敵の数                         の一覧", "(6) Display kill count"), 11, 5);
-            if (!vanilla_town)
+            if (!vanilla_town) {
                 prt(_("(7) 賞金首                               の一覧", "(7) Display wanted monsters"), 12, 5);
+            }
             prt(_("(8) 現在のペット                         の一覧", "(8) Display current pets"), 13, 5);
             prt(_("(9) 我が家のアイテム                     の一覧", "(9) Display home inventory"), 14, 5);
             prt(_("(0) *鑑定*済み装備の耐性                 の一覧", "(0) Display *identified* equip."), 15, 5);
@@ -62,8 +63,9 @@ void do_cmd_knowledge(PlayerType *player_ptr)
         prt(_("コマンド:", "Command: "), 20, 0);
         i = inkey();
 
-        if (i == ESCAPE)
+        if (i == ESCAPE) {
             break;
+        }
         switch (i) {
         case ' ': /* Page change */
         case '-':
@@ -88,8 +90,9 @@ void do_cmd_knowledge(PlayerType *player_ptr)
             do_cmd_knowledge_kill_count(player_ptr);
             break;
         case '7': /* wanted */
-            if (!vanilla_town)
+            if (!vanilla_town) {
                 do_cmd_knowledge_bounty(player_ptr);
+            }
             break;
         case '8': /* Pets */
             do_cmd_knowledge_pets(player_ptr);
@@ -142,6 +145,7 @@ void do_cmd_knowledge(PlayerType *player_ptr)
     }
 
     screen_load();
-    if (need_redraw)
+    if (need_redraw) {
         do_cmd_redraw(player_ptr);
+    }
 }

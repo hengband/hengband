@@ -16,15 +16,18 @@
 bool set_tim_sh_fire(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
 {
     bool notice = false;
-    v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;
+    v = (v > 10000) ? 10000 : (v < 0) ? 0
+                                      : v;
 
-    if (player_ptr->is_dead)
+    if (player_ptr->is_dead) {
         return false;
+    }
 
     if (v) {
         if (player_ptr->tim_sh_fire && !do_dec) {
-            if (player_ptr->tim_sh_fire > v)
+            if (player_ptr->tim_sh_fire > v) {
                 return false;
+            }
         } else if (!player_ptr->tim_sh_fire) {
             msg_print(_("体が炎のオーラで覆われた。", "You are enveloped by a fiery aura!"));
             notice = true;
@@ -39,11 +42,13 @@ bool set_tim_sh_fire(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
     player_ptr->tim_sh_fire = v;
     player_ptr->redraw |= (PR_STATUS);
 
-    if (!notice)
+    if (!notice) {
         return false;
+    }
 
-    if (disturb_state)
+    if (disturb_state) {
         disturb(player_ptr, false, false);
+    }
     player_ptr->update |= (PU_BONUS);
     handle_stuff(player_ptr);
     return true;

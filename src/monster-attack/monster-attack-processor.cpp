@@ -38,25 +38,29 @@ void exe_monster_attack_to_player(PlayerType *player_ptr, turn_flags *turn_flags
 {
     auto *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
     auto *r_ptr = &r_info[m_ptr->r_idx];
-    if (!turn_flags_ptr->do_move || !player_bold(player_ptr, ny, nx))
+    if (!turn_flags_ptr->do_move || !player_bold(player_ptr, ny, nx)) {
         return;
+    }
 
     if (r_ptr->behavior_flags.has(MonsterBehaviorType::NEVER_BLOW)) {
-        if (is_original_ap_and_seen(player_ptr, m_ptr))
+        if (is_original_ap_and_seen(player_ptr, m_ptr)) {
             r_ptr->r_behavior_flags.set(MonsterBehaviorType::NEVER_BLOW);
+        }
 
         turn_flags_ptr->do_move = false;
     }
 
     if (turn_flags_ptr->do_move && d_info[player_ptr->dungeon_idx].flags.has(DungeonFeatureType::NO_MELEE) && !monster_confused_remaining(m_ptr)) {
-        if (r_ptr->behavior_flags.has_not(MonsterBehaviorType::STUPID))
+        if (r_ptr->behavior_flags.has_not(MonsterBehaviorType::STUPID)) {
             turn_flags_ptr->do_move = false;
-        else if (is_original_ap_and_seen(player_ptr, m_ptr))
+        } else if (is_original_ap_and_seen(player_ptr, m_ptr)) {
             r_ptr->r_behavior_flags.set(MonsterBehaviorType::STUPID);
+        }
     }
 
-    if (!turn_flags_ptr->do_move)
+    if (!turn_flags_ptr->do_move) {
         return;
+    }
 
     if (!player_ptr->riding || one_in_(2)) {
         MonsterAttackPlayer(player_ptr, m_idx).make_attack_normal();
@@ -77,25 +81,33 @@ static bool exe_monster_attack_to_monster(PlayerType *player_ptr, MONSTER_IDX m_
     auto *r_ptr = &r_info[m_ptr->r_idx];
     monster_type *y_ptr;
     y_ptr = &player_ptr->current_floor_ptr->m_list[g_ptr->m_idx];
-    if (r_ptr->behavior_flags.has(MonsterBehaviorType::NEVER_BLOW))
+    if (r_ptr->behavior_flags.has(MonsterBehaviorType::NEVER_BLOW)) {
         return false;
+    }
 
-    if ((r_ptr->behavior_flags.has_not(MonsterBehaviorType::KILL_BODY)) && is_original_ap_and_seen(player_ptr, m_ptr))
+    if ((r_ptr->behavior_flags.has_not(MonsterBehaviorType::KILL_BODY)) && is_original_ap_and_seen(player_ptr, m_ptr)) {
         r_ptr->r_behavior_flags.set(MonsterBehaviorType::KILL_BODY);
+    }
 
-    if ((y_ptr->r_idx == 0) || (y_ptr->hp < 0))
+    if ((y_ptr->r_idx == 0) || (y_ptr->hp < 0)) {
         return false;
-    if (monst_attack_monst(player_ptr, m_idx, g_ptr->m_idx))
+    }
+    if (monst_attack_monst(player_ptr, m_idx, g_ptr->m_idx)) {
         return true;
-    if (d_info[player_ptr->dungeon_idx].flags.has_not(DungeonFeatureType::NO_MELEE))
+    }
+    if (d_info[player_ptr->dungeon_idx].flags.has_not(DungeonFeatureType::NO_MELEE)) {
         return false;
-    if (monster_confused_remaining(m_ptr))
+    }
+    if (monster_confused_remaining(m_ptr)) {
         return true;
-    if (r_ptr->behavior_flags.has_not(MonsterBehaviorType::STUPID))
+    }
+    if (r_ptr->behavior_flags.has_not(MonsterBehaviorType::STUPID)) {
         return false;
+    }
 
-    if (is_original_ap_and_seen(player_ptr, m_ptr))
+    if (is_original_ap_and_seen(player_ptr, m_ptr)) {
         r_ptr->r_behavior_flags.set(MonsterBehaviorType::STUPID);
+    }
 
     return true;
 }
@@ -115,8 +127,9 @@ bool process_monster_attack_to_monster(PlayerType *player_ptr, turn_flags *turn_
     auto *r_ptr = &r_info[m_ptr->r_idx];
     monster_type *y_ptr;
     y_ptr = &player_ptr->current_floor_ptr->m_list[g_ptr->m_idx];
-    if (!turn_flags_ptr->do_move || (g_ptr->m_idx == 0))
+    if (!turn_flags_ptr->do_move || (g_ptr->m_idx == 0)) {
         return false;
+    }
 
     monster_race *z_ptr = &r_info[y_ptr->r_idx];
     turn_flags_ptr->do_move = false;

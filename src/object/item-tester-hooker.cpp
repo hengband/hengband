@@ -60,12 +60,14 @@ FuncItemTester::FuncItemTester(std::function<bool(PlayerType *, const ObjectType
  */
 bool ItemTester::okay(const ObjectType *o_ptr) const
 {
-    if (o_ptr->k_idx == 0)
+    if (o_ptr->k_idx == 0) {
         return false;
+    }
 
     if (o_ptr->tval == ItemKindType::GOLD) {
-        if (!show_gold_on_floor)
+        if (!show_gold_on_floor) {
             return false;
+        }
     }
 
     return this->okay_impl(o_ptr);

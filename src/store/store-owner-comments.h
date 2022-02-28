@@ -2,11 +2,11 @@
 
 #include "system/angband.h"
 
-#define MAX_COMMENT_1	6
-#define MAX_COMMENT_7A	8
-#define MAX_COMMENT_7B	8
-#define MAX_COMMENT_7C	4
-#define MAX_COMMENT_7D	4
+#define MAX_COMMENT_1 6
+#define MAX_COMMENT_7A 8
+#define MAX_COMMENT_7B 8
+#define MAX_COMMENT_7C 4
+#define MAX_COMMENT_7D 4
 
 extern concptr comment_1[MAX_COMMENT_1];
 extern concptr comment_1_B[MAX_COMMENT_1];

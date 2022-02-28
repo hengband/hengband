@@ -25,8 +25,9 @@ bool import_magic_device(PlayerType *player_ptr)
     concptr s = _("魔力を取り込めるアイテムがない。", "There's nothing with power to absorb.");
     OBJECT_IDX item;
     auto *o_ptr = choose_object(player_ptr, &item, q, s, USE_INVEN | USE_FLOOR, FuncItemTester(&ObjectType::is_rechargeable));
-    if (!o_ptr)
+    if (!o_ptr) {
         return false;
+    }
 
     if (o_ptr->tval == ItemKindType::STAFF && o_ptr->sval == SV_STAFF_NOTHING) {
         msg_print(_("この杖には発動の為の能力は何も備わっていないようだ。", "This staff doesn't have any magical ability."));
@@ -53,19 +54,22 @@ bool import_magic_device(PlayerType *player_ptr)
     } else {
         for (auto num = o_ptr->number; num > 0; num--) {
             int gain_num = pval;
-            if (o_ptr->tval == ItemKindType::WAND)
+            if (o_ptr->tval == ItemKindType::WAND) {
                 gain_num = (pval + num - 1) / num;
+            }
             if (target_item.count > 0) {
                 gain_num *= 256;
                 gain_num = (gain_num / 3 + randint0(gain_num / 3)) / 256;
-                if (gain_num < 1)
+                if (gain_num < 1) {
                     gain_num = 1;
+                }
             }
             target_item.count = std::min<byte>(target_item.count + gain_num, 99);
             target_item.charge += pval * EATER_CHARGE;
             target_item.charge = std::min(target_item.charge, target_item.count * EATER_CHARGE);
-            if (o_ptr->tval == ItemKindType::WAND)
+            if (o_ptr->tval == ItemKindType::WAND) {
                 pval -= (pval + num - 1) / num;
+            }
         }
     }
 

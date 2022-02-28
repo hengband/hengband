@@ -27,6 +27,9 @@
 #include "system/object-type-definition.h"
 #include "system/player-type-definition.h"
 #include "term/screen-processor.h"
+#include "timed-effect/player-confusion.h"
+#include "timed-effect/player-hallucination.h"
+#include "timed-effect/timed-effects.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 
@@ -54,20 +57,25 @@ bool exe_open(PlayerType *player_ptr, POSITION y, POSITION x)
     }
 
     int i = player_ptr->skill_dis;
-    if (player_ptr->blind || no_lite(player_ptr))
+    if (player_ptr->blind || no_lite(player_ptr)) {
         i = i / 10;
+    }
 
-    if (player_ptr->confused || player_ptr->hallucinated)
+    auto effects = player_ptr->effects();
+    if (effects->confusion()->is_confused() || effects->hallucination()->is_hallucinated()) {
         i = i / 10;
+    }
 
     int j = f_ptr->power;
     j = i - (j * 4);
-    if (j < 2)
+    if (j < 2) {
         j = 2;
+    }
 
     if (randint0(100) >= j) {
-        if (flush_failure)
+        if (flush_failure) {
             flush();
+        }
 
         msg_print(_("鍵をはずせなかった。", "You failed to pick the lock."));
         return true;
@@ -98,8 +106,9 @@ bool exe_close(PlayerType *player_ptr, POSITION y, POSITION x)
     FEAT_IDX old_feat = g_ptr->feat;
     bool more = false;
     PlayerEnergy(player_ptr).set_player_turn_energy(100);
-    if (f_info[old_feat].flags.has_not(FloorFeatureType::CLOSE))
+    if (f_info[old_feat].flags.has_not(FloorFeatureType::CLOSE)) {
         return more;
+    }
 
     int16_t closed_feat = feat_state(player_ptr->current_floor_ptr, old_feat, FloorFeatureType::CLOSE);
     if ((!g_ptr->o_idx_list.empty() || g_ptr->is_object()) && (closed_feat != old_feat) && f_info[closed_feat].flags.has_not(FloorFeatureType::DROP)) {
@@ -136,23 +145,28 @@ bool easy_open_door(PlayerType *player_ptr, POSITION y, POSITION x)
     int i, j;
     auto *g_ptr = &player_ptr->current_floor_ptr->grid_array[y][x];
     auto *f_ptr = &f_info[g_ptr->feat];
-    if (!is_closed_door(player_ptr, g_ptr->feat))
+    if (!is_closed_door(player_ptr, g_ptr->feat)) {
         return false;
+    }
 
     if (f_ptr->flags.has_not(FloorFeatureType::OPEN)) {
         msg_format(_("%sはがっちりと閉じられているようだ。", "The %s appears to be stuck."), f_info[g_ptr->get_feat_mimic()].name.c_str());
     } else if (f_ptr->power) {
         i = player_ptr->skill_dis;
-        if (player_ptr->blind || no_lite(player_ptr))
+        if (player_ptr->blind || no_lite(player_ptr)) {
             i = i / 10;
+        }
 
-        if (player_ptr->confused || player_ptr->hallucinated)
+        auto effects = player_ptr->effects();
+        if (effects->confusion()->is_confused() || effects->hallucination()->is_hallucinated()) {
             i = i / 10;
+        }
 
         j = f_ptr->power;
         j = i - (j * 4);
-        if (j < 2)
+        if (j < 2) {
             j = 2;
+        }
 
         if (randint0(100) < j) {
             msg_print(_("鍵をはずした。", "You have picked the lock."));
@@ -160,8 +174,9 @@ bool easy_open_door(PlayerType *player_ptr, POSITION y, POSITION x)
             sound(SOUND_OPENDOOR);
             gain_exp(player_ptr, 1);
         } else {
-            if (flush_failure)
+            if (flush_failure) {
                 flush();
+            }
 
             msg_print(_("鍵をはずせなかった。", "You failed to pick the lock."));
         }
@@ -193,15 +208,19 @@ bool exe_disarm_chest(PlayerType *player_ptr, POSITION y, POSITION x, OBJECT_IDX
     auto *o_ptr = &player_ptr->current_floor_ptr->o_list[o_idx];
     PlayerEnergy(player_ptr).set_player_turn_energy(100);
     int i = player_ptr->skill_dis;
-    if (player_ptr->blind || no_lite(player_ptr))
+    if (player_ptr->blind || no_lite(player_ptr)) {
         i = i / 10;
+    }
 
-    if (player_ptr->confused || player_ptr->hallucinated)
+    auto effects = player_ptr->effects();
+    if (effects->confusion()->is_confused() || effects->hallucination()->is_hallucinated()) {
         i = i / 10;
+    }
 
     int j = i - o_ptr->pval;
-    if (j < 2)
+    if (j < 2) {
         j = 2;
+    }
 
     if (!o_ptr->is_known()) {
         msg_print(_("トラップが見あたらない。", "I don't see any traps."));
@@ -215,8 +234,9 @@ bool exe_disarm_chest(PlayerType *player_ptr, POSITION y, POSITION x, OBJECT_IDX
         o_ptr->pval = (0 - o_ptr->pval);
     } else if ((i > 5) && (randint1(i) > 5)) {
         more = true;
-        if (flush_failure)
+        if (flush_failure) {
             flush();
+        }
 
         msg_print(_("箱のトラップ解除に失敗した。", "You failed to disarm the chest."));
     } else {
@@ -252,15 +272,19 @@ bool exe_disarm(PlayerType *player_ptr, POSITION y, POSITION x, DIRECTION dir)
     bool more = false;
     int i = player_ptr->skill_dis;
     PlayerEnergy(player_ptr).set_player_turn_energy(100);
-    if (player_ptr->blind || no_lite(player_ptr))
+    if (player_ptr->blind || no_lite(player_ptr)) {
         i = i / 10;
+    }
 
-    if (player_ptr->confused || player_ptr->hallucinated)
+    auto effects = player_ptr->effects();
+    if (effects->confusion()->is_confused() || effects->hallucination()->is_hallucinated()) {
         i = i / 10;
+    }
 
     int j = i - power;
-    if (j < 2)
+    if (j < 2) {
         j = 2;
+    }
 
     if (randint0(100) < j) {
         msg_format(_("%sを解除した。", "You have disarmed the %s."), name);
@@ -268,8 +292,9 @@ bool exe_disarm(PlayerType *player_ptr, POSITION y, POSITION x, DIRECTION dir)
         cave_alter_feat(player_ptr, y, x, FloorFeatureType::DISARM);
         exe_movement(player_ptr, dir, easy_disarm, false);
     } else if ((i > 5) && (randint1(i) > 5)) {
-        if (flush_failure)
+        if (flush_failure) {
             flush();
+        }
 
         msg_format(_("%sの解除に失敗した。", "You failed to disarm the %s."), name);
         more = true;
@@ -306,11 +331,13 @@ bool exe_bash(PlayerType *player_ptr, POSITION y, POSITION x, DIRECTION dir)
     PlayerEnergy(player_ptr).set_player_turn_energy(100);
     msg_format(_("%sに体当たりをした！", "You smash into the %s!"), name);
     temp = (bash - (temp * 10));
-    if (PlayerClass(player_ptr).equals(PlayerClassType::BERSERKER))
+    if (PlayerClass(player_ptr).equals(PlayerClassType::BERSERKER)) {
         temp *= 2;
+    }
 
-    if (temp < 1)
+    if (temp < 1) {
         temp = 1;
+    }
 
     if (randint0(100) < temp) {
         msg_format(_("%sを壊した！", "The %s crashes open!"), name);

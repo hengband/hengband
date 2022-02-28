@@ -1,6 +1,6 @@
 ﻿#pragma once
-#include "system/angband.h"
 #include "effect/attribute-types.h"
+#include "system/angband.h"
 
 struct monster_death_type;
 class PlayerType;

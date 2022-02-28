@@ -425,8 +425,9 @@ static errr Metadpy_init_2(Display *dpy, concptr name)
     metadpy *m = Metadpy;
     if (!dpy) {
         dpy = XOpenDisplay(name);
-        if (!dpy)
+        if (!dpy) {
             return -1;
+        }
 
         m->nuke = 1;
     } else {
@@ -469,10 +470,12 @@ static errr Metadpy_init_2(Display *dpy, concptr name)
  */
 static errr Metadpy_update(int flush, int sync, int discard)
 {
-    if (flush)
+    if (flush) {
         XFlush(Metadpy->dpy);
-    if (sync)
+    }
+    if (sync) {
         XSync(Metadpy->dpy, discard);
+    }
 
     return 0;
 }
@@ -554,8 +557,9 @@ static errr Infowin_init_data(Window dad, int x, int y, int w, int h, int b, Pix
 {
     Window xid;
     *Infowin = {};
-    if (dad == None)
+    if (dad == None) {
         dad = Metadpy->root;
+    }
 
 #ifdef USE_XFT
     xid = XCreateSimpleWindow(Metadpy->dpy, dad, x, y, w, h, b, fg.pixel, bg.pixel);
@@ -698,20 +702,25 @@ static errr Infoclr_init_data(Pixell fg, Pixell bg, int op, int stip)
 #endif
 
 #ifndef USE_XFT
-    if (bg > Metadpy->zg)
+    if (bg > Metadpy->zg) {
         return -1;
-    if (fg > Metadpy->zg)
+    }
+    if (fg > Metadpy->zg) {
         return -1;
-    if ((op < 0) || (op > 15))
+    }
+    if ((op < 0) || (op > 15)) {
         return -1;
+    }
 
     gcv.function = op;
     gcv.background = bg;
     gcv.foreground = fg;
-    if (op == 6)
+    if (op == 6) {
         gcv.background = 0;
-    if (op == 6)
+    }
+    if (op == 6) {
         gcv.foreground = (bg ^ fg);
+    }
 
     gcv.fill_style = (stip ? FillStippled : FillSolid);
     gcv.graphics_exposures = False;
@@ -746,8 +755,9 @@ static errr Infoclr_change_fg(Pixell fg)
 #ifdef USE_XFT
     iclr->fg = fg;
 #else
-    if (fg > Metadpy->zg)
+    if (fg > Metadpy->zg) {
         return -1;
+    }
 
     XSetForeground(Metadpy->dpy, iclr->gc, fg);
 #endif
@@ -789,17 +799,21 @@ static errr Infofnt_prepare(XFontSet info)
     ascent = descent = width = 0;
     while (n_fonts-- > 0) {
         cs = &((*fontinfo)->max_bounds);
-        if (ascent < (*fontinfo)->ascent)
+        if (ascent < (*fontinfo)->ascent) {
             ascent = (*fontinfo)->ascent;
-        if (descent < (*fontinfo)->descent)
+        }
+        if (descent < (*fontinfo)->descent) {
             descent = (*fontinfo)->descent;
+        }
         if (((*fontinfo)->max_byte1) > 0) {
             /* 多バイト文字の場合は幅半分(端数切り上げ)で評価する */
-            if (width < (cs->width + 1) / 2)
+            if (width < (cs->width + 1) / 2) {
                 width = (cs->width + 1) / 2;
+            }
         } else {
-            if (width < cs->width)
+            if (width < cs->width) {
                 width = cs->width;
+            }
         }
         fontinfo++;
         fontname++;
@@ -809,10 +823,11 @@ static errr Infofnt_prepare(XFontSet info)
     ifnt->wid = width;
 #endif
 
-    if (use_bigtile)
+    if (use_bigtile) {
         ifnt->twid = 2 * ifnt->wid;
-    else
+    } else {
         ifnt->twid = ifnt->wid;
+    }
 
     return 0;
 }
@@ -835,8 +850,9 @@ static void Infofnt_init_data(concptr name)
     char *default_font;
 #endif
 
-    if (!name || !*name)
+    if (!name || !*name) {
         quit("Missing font!");
+    }
 
 #ifdef USE_XFT
     info = XftFontOpenName(Metadpy->dpy, 0, name);
@@ -852,8 +868,9 @@ static void Infofnt_init_data(concptr name)
     }
 #endif
 
-    if (!info)
+    if (!info) {
         quit_fmt("Failed to find font:\"%s\"", name);
+    }
 
     *Infofnt = {};
     if (Infofnt_prepare(info)) {
@@ -892,11 +909,13 @@ static void Infofnt_text_std_xft_draw_str(int x, int y, concptr str, concptr str
  */
 static errr Infofnt_text_std(int x, int y, concptr str, int len)
 {
-    if (!str || !*str)
+    if (!str || !*str) {
         return -1;
+    }
 
-    if (len < 0)
+    if (len < 0) {
         len = strlen(str);
+    }
 
     y = (y * Infofnt->hgt) + Infofnt->asc + Infowin->oy;
     x = (x * Infofnt->wid) + Infowin->ox;
@@ -942,8 +961,9 @@ static errr Infofnt_text_std(int x, int y, concptr str, int len)
 static errr Infofnt_text_non(int x, int y, concptr str, int len)
 {
     int w, h;
-    if (len < 0)
+    if (len < 0) {
         len = strlen(str);
+    }
 
     w = len * Infofnt->wid;
     x = x * Infofnt->wid + Infowin->ox;
@@ -1050,8 +1070,9 @@ static void send_key(const char key)
 // ゲーム側へキー列を送る
 static void send_keys(const char *const keys)
 {
-    for (const char *p = keys; *p != '\0'; ++p)
+    for (const char *p = keys; *p != '\0'; ++p) {
         send_key(*p);
+    }
 }
 
 /*
@@ -1104,8 +1125,9 @@ static void react_keypress(XKeyEvent *xev)
     }
 #endif
 
-    if (IsModifierKey(ks))
+    if (IsModifierKey(ks)) {
         return;
+    }
 
     ks1 = (uint)(ks);
     mc = any_bits(ev->state, ControlMask);
@@ -1218,8 +1240,9 @@ static void mark_selection(void)
     term_type *old = game_term;
     bool draw = s_ptr->select;
     bool clear = s_ptr->drawn;
-    if (s_ptr->t != old)
+    if (s_ptr->t != old) {
         term_activate(s_ptr->t);
+    }
 
     if (clear) {
         sort_co_ord(&min, &max, &s_ptr->init, &s_ptr->old);
@@ -1230,8 +1253,9 @@ static void mark_selection(void)
         mark_selection_mark(min.x, min.y, max.x, max.y);
     }
 
-    if (s_ptr->t != old)
+    if (s_ptr->t != old) {
         term_activate(old);
+    }
 
     s_ptr->old.x = s_ptr->cur.x;
     s_ptr->old.y = s_ptr->cur.y;
@@ -1252,8 +1276,9 @@ static void copy_x11_release(void)
  */
 static void copy_x11_start(int x, int y)
 {
-    if (s_ptr->select)
+    if (s_ptr->select) {
         copy_x11_release();
+    }
 
     s_ptr->t = game_term;
     s_ptr->init.x = s_ptr->cur.x = s_ptr->old.x = x;
@@ -1267,12 +1292,15 @@ static void copy_x11_cont(int x, int y, unsigned int buttons)
 {
     x = MIN(MAX(x, 0), game_term->wid - 1);
     y = MIN(MAX(y, 0), game_term->hgt - 1);
-    if (~buttons & Button1Mask)
+    if (~buttons & Button1Mask) {
         return;
-    if (s_ptr->t != game_term)
+    }
+    if (s_ptr->t != game_term) {
         return;
-    if (x == s_ptr->old.x && y == s_ptr->old.y && s_ptr->select)
+    }
+    if (x == s_ptr->old.x && y == s_ptr->old.y && s_ptr->select) {
         return;
+    }
 
     s_ptr->select = true;
     s_ptr->cur.x = x;
@@ -1286,10 +1314,12 @@ static void copy_x11_cont(int x, int y, unsigned int buttons)
  */
 static void copy_x11_end(const Time time)
 {
-    if (!s_ptr->select)
+    if (!s_ptr->select) {
         return;
-    if (s_ptr->t != game_term)
+    }
+    if (s_ptr->t != game_term) {
         return;
+    }
 
     s_ptr->time = time;
     XSetSelectionOwner(Metadpy->dpy, XA_PRIMARY, Infowin->win, time);
@@ -1367,8 +1397,7 @@ static void paste_x11_accept(const XSelectionEvent *ptr)
     }
 
     if (XGetWindowProperty(Metadpy->dpy, Infowin->win, property, offset, length, true, request_target, &xtextproperty.encoding, &xtextproperty.format,
-            &xtextproperty.nitems, &left, &xtextproperty.value)
-        != Success) {
+            &xtextproperty.nitems, &left, &xtextproperty.value) != Success) {
         return;
     }
 
@@ -1383,8 +1412,9 @@ static void paste_x11_accept(const XSelectionEvent *ptr)
 
             for (i = 0; i < count; i++) {
                 err = type_string(list[i], 0);
-                if (err)
+                if (err) {
                     break;
+                }
             }
 
             XFreeStringList(list);
@@ -1424,38 +1454,46 @@ static bool paste_x11_send_text(XSelectionRequestEvent *rq)
 #ifdef JP
         int kanji = 0;
 #endif
-        if (y < min.y)
+        if (y < min.y) {
             continue;
-        if (y > max.y)
+        }
+        if (y > max.y) {
             break;
+        }
 
         for (l = 0, x = 0; x < game_term->wid; x++) {
 #ifdef JP
-            if (x > max.x)
+            if (x > max.x) {
                 break;
+            }
 
             term_what(x, y, &a, &c);
-            if (1 == kanji)
+            if (1 == kanji) {
                 kanji = 2;
-            else if (iskanji(c))
+            } else if (iskanji(c)) {
                 kanji = 1;
-            else
+            } else {
                 kanji = 0;
+            }
 
-            if (x < min.x)
+            if (x < min.x) {
                 continue;
+            }
 
             /*
              * A single kanji character was divided in two...
              * Delete the garbage.
              */
-            if ((2 == kanji && x == min.x) || (1 == kanji && x == max.x))
+            if ((2 == kanji && x == min.x) || (1 == kanji && x == max.x)) {
                 c = ' ';
+            }
 #else
-            if (x > max.x)
+            if (x > max.x) {
                 break;
-            if (x < min.x)
+            }
+            if (x < min.x) {
                 continue;
+            }
 
             term_what(x, y, &a, &c);
 #endif
@@ -1465,8 +1503,9 @@ static bool paste_x11_send_text(XSelectionRequestEvent *rq)
         }
 
         // 末尾の空白を削る。
-        while (l >= 1 && buf[l - 1] == ' ')
+        while (l >= 1 && buf[l - 1] == ' ') {
             l--;
+        }
 
         // 複数行の場合、各行末に改行を付加。
         if (min.y != max.y) {
@@ -1510,8 +1549,9 @@ static void paste_x11_send(XSelectionRequestEvent *rq)
      */
 
     if (rq->target == xa_utf8) {
-        if (!paste_x11_send_text(rq))
+        if (!paste_x11_send_text(rq)) {
             ptr->property = None;
+        }
     } else if (rq->target == xa_targets) {
         Atom target_list[] = { xa_targets, xa_utf8 };
         XChangeProperty(
@@ -1530,12 +1570,15 @@ static void handle_button(Time time, int x, int y, int button, bool press)
 {
     pixel_to_square(&x, &y, x, y);
 
-    if (press && button == 1)
+    if (press && button == 1) {
         copy_x11_start(x, y);
-    if (!press && button == 1)
+    }
+    if (!press && button == 1) {
         copy_x11_end(time);
-    if (!press && button == 2)
+    }
+    if (!press && button == 2) {
         paste_x11_request(xa_compound_text, time);
+    }
 }
 
 /*
@@ -1556,11 +1599,13 @@ static errr CheckEvent(bool wait)
     do {
 #endif
 
-        if (!wait && !XPending(Metadpy->dpy))
+        if (!wait && !XPending(Metadpy->dpy)) {
             return 1;
+        }
 
-        if (s_ptr->select && !s_ptr->drawn)
+        if (s_ptr->select && !s_ptr->drawn) {
             mark_selection();
+        }
 
         XNextEvent(Metadpy->dpy, xev);
 
@@ -1574,8 +1619,9 @@ static errr CheckEvent(bool wait)
     }
 
     for (i = 0; i < MAX_TERM_DATA; i++) {
-        if (!data[i].win)
+        if (!data[i].win) {
             continue;
+        }
         if (xev->xany.window == data[i].win->win) {
             td = &data[i];
             iwin = td->win.get();
@@ -1583,8 +1629,9 @@ static errr CheckEvent(bool wait)
         }
     }
 
-    if (!td || !iwin)
+    if (!td || !iwin) {
         return 0;
+    }
 
     term_activate(&td->t);
     Infowin_set(iwin);
@@ -1595,18 +1642,19 @@ static errr CheckEvent(bool wait)
         int x = xev->xbutton.x;
         int y = xev->xbutton.y;
         int z;
-        if (xev->xbutton.button == Button1)
+        if (xev->xbutton.button == Button1) {
             z = 1;
-        else if (xev->xbutton.button == Button2)
+        } else if (xev->xbutton.button == Button2) {
             z = 2;
-        else if (xev->xbutton.button == Button3)
+        } else if (xev->xbutton.button == Button3) {
             z = 3;
-        else if (xev->xbutton.button == Button4)
+        } else if (xev->xbutton.button == Button4) {
             z = 4;
-        else if (xev->xbutton.button == Button5)
+        } else if (xev->xbutton.button == Button5) {
             z = 5;
-        else
+        } else {
             z = 0;
+        }
 
         handle_button(xev->xbutton.time, x, y, z, press);
         break;
@@ -1675,16 +1723,20 @@ static errr CheckEvent(bool wait)
         Infowin->h = xev->xconfigure.height;
         cols = ((Infowin->w - (ox + ox)) / td->fnt->wid);
         rows = ((Infowin->h - (oy + oy)) / td->fnt->hgt);
-        if (cols < 1)
+        if (cols < 1) {
             cols = 1;
-        if (rows < 1)
+        }
+        if (rows < 1) {
             rows = 1;
+        }
 
         if (td == &data[0]) {
-            if (cols < 80)
+            if (cols < 80) {
                 cols = 80;
-            if (rows < 24)
+            }
+            if (rows < 24) {
                 rows = 24;
+            }
         }
 
         wid = cols * td->fnt->wid + (ox + ox);
@@ -1733,8 +1785,9 @@ static bool check_file(concptr s)
     FILE *fff;
 
     fff = fopen(s, "r");
-    if (!fff)
+    if (!fff) {
         return false;
+    }
 
     fclose(fff);
     return true;
@@ -1753,8 +1806,9 @@ static void init_sound(void)
     for (i = 1; i < SOUND_MAX; i++) {
         sprintf(wav, "%s.wav", angband_sound_name[i]);
         path_build(buf, sizeof(buf), dir_xtra_sound, wav);
-        if (check_file(buf))
+        if (check_file(buf)) {
             sound_file[i] = string_make(buf);
+        }
     }
 
     use_sound = true;
@@ -1767,12 +1821,15 @@ static void init_sound(void)
 static errr game_term_xtra_x11_sound(int v)
 {
     char buf[1024];
-    if (!use_sound)
+    if (!use_sound) {
         return 1;
-    if ((v < 0) || (v >= SOUND_MAX))
+    }
+    if ((v < 0) || (v >= SOUND_MAX)) {
         return 1;
-    if (!sound_file[v])
+    }
+    if (!sound_file[v]) {
         return 1;
+    }
 
     sprintf(buf, "./playwave.sh %s\n", sound_file[v]);
     return system(buf) < 0;
@@ -1801,8 +1858,7 @@ static errr game_term_xtra_x11_react(void)
 
     if (Metadpy->color) {
         for (i = 0; i < 256; i++) {
-            if ((color_table[i][0] != angband_color_table[i][0]) || (color_table[i][1] != angband_color_table[i][1])
-                || (color_table[i][2] != angband_color_table[i][2]) || (color_table[i][3] != angband_color_table[i][3])) {
+            if ((color_table[i][0] != angband_color_table[i][0]) || (color_table[i][1] != angband_color_table[i][1]) || (color_table[i][2] != angband_color_table[i][2]) || (color_table[i][3] != angband_color_table[i][3])) {
                 Pixell pixel;
                 color_table[i][0] = angband_color_table[i][0];
                 color_table[i][1] = angband_color_table[i][1];
@@ -1843,8 +1899,9 @@ static errr game_term_xtra_x11(int n, int v)
     case TERM_XTRA_EVENT:
         return CheckEvent(v);
     case TERM_XTRA_FLUSH:
-        while (!CheckEvent(false))
+        while (!CheckEvent(false)) {
             ;
+        }
         return 0;
     case TERM_XTRA_LEVEL:
         return game_term_xtra_x11_level(v);
@@ -1974,8 +2031,7 @@ static errr game_term_pict_x11(TERM_LEN x, TERM_LEN y, int n, const TERM_COLOR *
         x2 = (tc & 0x7F) * td->fnt->twid;
         y2 = (ta & 0x7F) * td->fnt->hgt;
 
-        if (((x1 == x2) && (y1 == y2)) || !(((byte)ta & 0x80) && ((byte)tc & 0x80)) || td->tiles->width < x2 + td->fnt->wid
-            || td->tiles->height < y2 + td->fnt->hgt) {
+        if (((x1 == x2) && (y1 == y2)) || !(((byte)ta & 0x80) && ((byte)tc & 0x80)) || td->tiles->width < x2 + td->fnt->wid || td->tiles->height < y2 + td->fnt->hgt) {
             XPutImage(Metadpy->dpy, td->win->win, clr[0]->gc, td->tiles, x1, y1, x, y, td->fnt->twid, td->fnt->hgt);
         } else {
             blank = XGetPixel(td->tiles, 0, td->fnt->hgt * 6);
@@ -2022,8 +2078,9 @@ static void IMInstantiateCallback(Display *display, XPointer unused1, XPointer u
     XSetIMValues(xim, XNDestroyCallback, &ximcallback, nullptr);
     XGetIMValues(xim, XNQueryInputStyle, &xim_styles, nullptr);
     for (i = 0; i < xim_styles->count_styles; i++) {
-        if (xim_styles->supported_styles[i] == (XIMPreeditNothing | XIMStatusNothing))
+        if (xim_styles->supported_styles[i] == (XIMPreeditNothing | XIMStatusNothing)) {
             break;
+        }
     }
     if (i >= xim_styles->count_styles) {
         printf("Sorry, your IM does not support 'Root' preedit style...\n");
@@ -2036,8 +2093,9 @@ static void IMInstantiateCallback(Display *display, XPointer unused1, XPointer u
 
     for (i = 0; i < MAX_TERM_DATA; i++) {
         infowin *iwin = data[i].win.get();
-        if (!iwin)
+        if (!iwin) {
             continue;
+        }
         iwin->xic = XCreateIC(xim, XNInputStyle, (XIMPreeditNothing | XIMStatusNothing), XNClientWindow, iwin->win, XNFocusWindow, iwin->win, nullptr);
         if (!iwin->xic) {
             printf("Can't create input context for Term%d\n", i);
@@ -2066,8 +2124,9 @@ static void IMDestroyCallback(XIM xim, XPointer client_data, XPointer call_data)
 
     for (i = 0; i < MAX_TERM_DATA; i++) {
         infowin *iwin = data[i].win.get();
-        if (!iwin)
+        if (!iwin) {
             continue;
+        }
         if (iwin->xic_mask) {
             XSelectInput(Metadpy->dpy, iwin->win, iwin->mask);
             iwin->xic_mask = 0L;
@@ -2095,17 +2154,20 @@ static void game_term_nuke_x11(term_type *)
 #else
             XFreeFontSet(Metadpy->dpy, ifnt->info);
 #endif
-        if (iwin && iwin->xic)
+        if (iwin && iwin->xic) {
             XDestroyIC(iwin->xic);
+        }
 #ifdef USE_XFT
-        if (iwin && iwin->draw)
+        if (iwin && iwin->draw) {
             XftDrawDestroy(iwin->draw);
+        }
 #endif
         angband_term[i] = nullptr;
     }
 
-    if (Metadpy->xim)
+    if (Metadpy->xim) {
         XCloseIM(Metadpy->xim);
+    }
     XUnregisterIMInstantiateCallback(Metadpy->dpy, NULL, NULL, NULL, IMInstantiateCallback, NULL);
     XCloseDisplay(Metadpy->dpy);
 }
@@ -2149,8 +2211,9 @@ static errr term_data_init(term_data *td, int i)
 
     sprintf(buf, "ANGBAND_X11_FONT_%d", i);
     font = getenv(buf);
-    if (!font)
+    if (!font) {
         font = getenv("ANGBAND_X11_FONT");
+    }
 
     if (!font) {
         switch (i) {
@@ -2195,33 +2258,39 @@ static errr term_data_init(term_data *td, int i)
     sprintf(buf, "ANGBAND_X11_COLS_%d", i);
     str = getenv(buf);
     val = (str != nullptr) ? atoi(str) : -1;
-    if (val > 0)
+    if (val > 0) {
         cols = val;
+    }
 
     sprintf(buf, "ANGBAND_X11_ROWS_%d", i);
     str = getenv(buf);
     val = (str != nullptr) ? atoi(str) : -1;
-    if (val > 0)
+    if (val > 0) {
         rows = val;
+    }
 
     if (!i) {
-        if (cols < 80)
+        if (cols < 80) {
             cols = 80;
-        if (rows < 24)
+        }
+        if (rows < 24) {
             rows = 24;
+        }
     }
 
     sprintf(buf, "ANGBAND_X11_IBOX_%d", i);
     str = getenv(buf);
     val = (str != nullptr) ? atoi(str) : -1;
-    if (val > 0)
+    if (val > 0) {
         ox = val;
+    }
 
     sprintf(buf, "ANGBAND_X11_IBOY_%d", i);
     str = getenv(buf);
     val = (str != nullptr) ? atoi(str) : -1;
-    if (val > 0)
+    if (val > 0) {
         oy = val;
+    }
 
     td->fnt = std::make_unique<infofnt>();
     Infofnt_set(td->fnt.get());
@@ -2245,8 +2314,9 @@ static errr term_data_init(term_data *td, int i)
     Infowin->oy = oy;
     ch = XAllocClassHint();
 
-    if (ch == nullptr)
+    if (ch == nullptr) {
         quit("XAllocClassHint failed");
+    }
 
     strcpy(res_name, name);
     res_name[0] = force_lower(res_name[0]);
@@ -2258,8 +2328,9 @@ static errr term_data_init(term_data *td, int i)
     XSetClassHint(Metadpy->dpy, Infowin->win, ch);
     XFree(ch);
     sh = XAllocSizeHints();
-    if (sh == nullptr)
+    if (sh == nullptr) {
         quit("XAllocSizeHints failed");
+    }
 
     if (i == 0) {
         sh->flags = PMinSize | PMaxSize;
@@ -2287,16 +2358,18 @@ static errr term_data_init(term_data *td, int i)
 
 #ifdef USE_XIM
     wh = XAllocWMHints();
-    if (wh == nullptr)
+    if (wh == nullptr) {
         quit("XAllocWMHints failed");
+    }
     wh->flags = InputHint;
     wh->input = True;
     XSetWMHints(Metadpy->dpy, Infowin->win, wh);
     XFree(wh);
 #endif
 
-    if ((x >= 0) && (y >= 0))
+    if ((x >= 0) && (y >= 0)) {
         Infowin_impell(x, y);
+    }
 
     term_init(t, cols, rows, num);
     t->soft_cursor = true;
@@ -2361,10 +2434,11 @@ errr init_x11(int argc, char *argv[])
 
         if (prefix(argv[i], "-n")) {
             num_term = atoi(&argv[i][2]);
-            if (num_term > MAX_TERM_DATA)
+            if (num_term > MAX_TERM_DATA) {
                 num_term = MAX_TERM_DATA;
-            else if (num_term < 1)
+            } else if (num_term < 1) {
                 num_term = 1;
+            }
             continue;
         }
 
@@ -2401,8 +2475,9 @@ errr init_x11(int argc, char *argv[])
 
 #endif /* USE_LOCALE */
 
-    if (Metadpy_init_name(dpy_name))
+    if (Metadpy_init_name(dpy_name)) {
         return -1;
+    }
 
     xor_ = std::make_unique<infoclr>();
     Infoclr_set(xor_.get());
@@ -2445,8 +2520,9 @@ errr init_x11(int argc, char *argv[])
     XRegisterIMInstantiateCallback(Metadpy->dpy, nullptr, nullptr, nullptr, IMInstantiateCallback, nullptr);
 #endif
 
-    if (arg_sound)
+    if (arg_sound) {
         init_sound();
+    }
 
 #ifndef USE_XFT
     switch (arg_graphics) {
@@ -2488,8 +2564,9 @@ errr init_x11(int argc, char *argv[])
             int total;
             ii = 1;
             jj = (depth - 1) >> 2;
-            while (jj >>= 1)
+            while (jj >>= 1) {
                 ii <<= 1;
+            }
             total = td->fnt->twid * td->fnt->hgt * ii;
             TmpData = (char *)malloc(total);
             td->TmpImage = XCreateImage(dpy, visual, depth, ZPixmap, 0, TmpData, td->fnt->twid, td->fnt->hgt, 8, 0);

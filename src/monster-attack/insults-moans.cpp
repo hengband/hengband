@@ -17,7 +17,7 @@ concptr desc_insult[MAX_INSULTS] = {
 /*! マゴットのぼやきメッセージテーブル / Hack -- possible "insult" messages */
 concptr desc_moan[MAX_MOANS] = {
     _("は何かを悲しんでいるようだ。", "seems sad about something."),
-	_("が彼の飼い犬を見なかったかと尋ねている。", "asks if you have seen his dogs."),
-	_("が縄張りから出て行けと言っている。", "tells you to get off his land."),
-	_("はキノコがどうとか呟いている。", "mumbles something about mushrooms."),
+    _("が彼の飼い犬を見なかったかと尋ねている。", "asks if you have seen his dogs."),
+    _("が縄張りから出て行けと言っている。", "tells you to get off his land."),
+    _("はキノコがどうとか呟いている。", "mumbles something about mushrooms."),
 };

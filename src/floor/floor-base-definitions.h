@@ -45,4 +45,3 @@ constexpr int MAX_HGT = 66;
  * Maximum dungeon width in grids, must be a multiple of SCREEN_WID, probably hard-coded to SCREEN_WID * 3.
  */
 constexpr int MAX_WID = 198;
-

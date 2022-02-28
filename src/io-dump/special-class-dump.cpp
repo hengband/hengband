@@ -62,12 +62,14 @@ static void dump_magic_eater(PlayerType *player_ptr, FILE *fff)
         std::vector<std::string> desc_list;
         for (auto i = 0U; i < item_group.size(); ++i) {
             auto &item = item_group[i];
-            if (item.count == 0)
+            if (item.count == 0) {
                 continue;
+            }
 
             KIND_OBJECT_IDX k_idx = lookup_kind(tval, i);
-            if (!k_idx)
+            if (!k_idx) {
                 continue;
+            }
 
             char buf[128];
             snprintf(buf, sizeof(buf), "%23s (%2d)", k_info[k_idx].name.c_str(), item.count);
@@ -82,14 +84,16 @@ static void dump_magic_eater(PlayerType *player_ptr, FILE *fff)
         uint i;
         for (i = 0; i < desc_list.size(); i++) {
             fputs(desc_list[i].c_str(), fff);
-            if (i % 3 < 2)
+            if (i % 3 < 2) {
                 fputs("    ", fff);
-            else
+            } else {
                 fputs("\n", fff);
+            }
         }
 
-        if (i % 3 > 0)
+        if (i % 3 > 0) {
             fputs("\n", fff);
+        }
     }
 }
 
@@ -113,10 +117,12 @@ static void dump_smith(PlayerType *player_ptr, FILE *fff)
     for (auto i = 0U; i < row; i++) {
         fprintf(fff, "\n");
         fprintf(fff, "%-11s %5d     ", Smith::get_essence_name(essences[i]), amounts[i]);
-        if (i + row < n)
+        if (i + row < n) {
             fprintf(fff, "%-11s %5d     ", Smith::get_essence_name(essences[i + row]), amounts[i + row]);
-        if (i + row * 2 < n)
+        }
+        if (i + row * 2 < n) {
             fprintf(fff, "%-11s %5d", Smith::get_essence_name(essences[i + row * 2]), amounts[i + row * 2]);
+        }
     }
 
     fputs("\n", fff);

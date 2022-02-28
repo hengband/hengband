@@ -14,6 +14,8 @@
 #include "system/player-type-definition.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
+#include "timed-effect/player-hallucination.h"
+#include "timed-effect/timed-effects.h"
 #include "util/string-processor.h"
 #include "window/main-window-row-column.h"
 #include "window/main-window-stat-poster.h"
@@ -78,10 +80,11 @@ void print_exp(PlayerType *player_ptr)
     }
 
     if (player_ptr->exp >= player_ptr->max_exp) {
-        if (pr.equals(PlayerRaceType::ANDROID))
+        if (pr.equals(PlayerRaceType::ANDROID)) {
             put_str(_("強化 ", "Cst "), ROW_EXP, 0);
-        else
+        } else {
             put_str(_("経験 ", "EXP "), ROW_EXP, 0);
+        }
         c_put_str(TERM_L_GREEN, out_val, ROW_EXP, COL_EXP + 4);
     } else {
         put_str(_("x経験", "Exp "), ROW_EXP, 0);
@@ -139,8 +142,9 @@ void print_sp(PlayerType *player_ptr)
 {
     char tmp[32];
     byte color;
-    if ((mp_ptr->spell_book == ItemKindType::NONE) && mp_ptr->spell_first == SPELL_FIRST_NO_SPELL)
+    if ((mp_ptr->spell_book == ItemKindType::NONE) && mp_ptr->spell_first == SPELL_FIRST_NO_SPELL) {
         return;
+    }
 
     put_str(_("MP", "SP"), ROW_CURSP, COL_CURSP);
     sprintf(tmp, "%4ld", (long int)player_ptr->csp);
@@ -198,10 +202,11 @@ void print_depth(PlayerType *player_ptr)
         return;
     }
 
-    if (depth_in_feet)
+    if (depth_in_feet) {
         (void)sprintf(depths, _("%d ft", "%d ft"), (int)floor_ptr->dun_level * 50);
-    else
+    } else {
         (void)sprintf(depths, _("%d 階", "Lev %d"), (int)floor_ptr->dun_level);
+    }
 
     switch (player_ptr->feeling) {
     case 0:
@@ -248,8 +253,8 @@ void print_depth(PlayerType *player_ptr)
  */
 void print_frame_basic(PlayerType *player_ptr)
 {
-    if (player_ptr->mimic_form) {
-        print_field(mimic_info[player_ptr->mimic_form].title, ROW_RACE, COL_RACE);
+    if (player_ptr->mimic_form != MimicKindType::NONE) {
+        print_field(mimic_info.at(player_ptr->mimic_form).title, ROW_RACE, COL_RACE);
     } else {
         char str[14];
         angband_strcpy(str, rp_ptr->title, sizeof(str));
@@ -259,8 +264,9 @@ void print_frame_basic(PlayerType *player_ptr)
     print_title(player_ptr);
     print_level(player_ptr);
     print_exp(player_ptr);
-    for (int i = 0; i < A_MAX; i++)
+    for (int i = 0; i < A_MAX; i++) {
         print_stat(player_ptr, i);
+    }
 
     print_ac(player_ptr);
     print_hp(player_ptr);
@@ -358,7 +364,7 @@ void health_redraw(PlayerType *player_ptr, bool riding)
         return;
     }
 
-    if (player_ptr->hallucinated) {
+    if (player_ptr->effects()->hallucination()->is_hallucinated()) {
         term_putstr(col, row, 12, TERM_WHITE, "[----------]");
         return;
     }
@@ -373,20 +379,21 @@ void health_redraw(PlayerType *player_ptr, bool riding)
     int len = (pct2 < 10) ? 1 : (pct2 < 90) ? (pct2 / 10 + 1)
                                             : 10;
     TERM_COLOR attr = TERM_RED;
-    if (monster_invulner_remaining(m_ptr))
+    if (monster_invulner_remaining(m_ptr)) {
         attr = TERM_WHITE;
-    else if (monster_csleep_remaining(m_ptr))
+    } else if (monster_csleep_remaining(m_ptr)) {
         attr = TERM_BLUE;
-    else if (monster_fear_remaining(m_ptr))
+    } else if (monster_fear_remaining(m_ptr)) {
         attr = TERM_VIOLET;
-    else if (pct >= 100)
+    } else if (pct >= 100) {
         attr = TERM_L_GREEN;
-    else if (pct >= 60)
+    } else if (pct >= 60) {
         attr = TERM_YELLOW;
-    else if (pct >= 25)
+    } else if (pct >= 25) {
         attr = TERM_ORANGE;
-    else if (pct >= 10)
+    } else if (pct >= 10) {
         attr = TERM_L_RED;
+    }
 
     term_putstr(col, row, 12, TERM_WHITE, "[----------]");
     term_putstr(col + 1, row, len, attr, "**********");

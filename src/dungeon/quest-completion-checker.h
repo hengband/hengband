@@ -27,7 +27,6 @@ private:
     void complete_kill_number();
     void complete_kill_all();
     std::tuple<bool, bool> complete_random();
-    void complete_kill_any_level();
     void complete_tower();
     int count_all_hostile_monsters();
     Pos2D make_stairs(const bool create_stairs);

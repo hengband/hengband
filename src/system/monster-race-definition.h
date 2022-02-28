@@ -1,7 +1,7 @@
 ﻿#pragma once
 
 #include "monster-attack/monster-attack-effect.h"
-#include "monster-attack/monster-attack-types.h"
+#include "monster-attack/monster-attack-table.h"
 #include "monster-race/monster-aura-types.h"
 #include "monster-race/race-ability-flags.h"
 #include "monster-race/race-behavior-flags.h"
@@ -15,7 +15,8 @@
 /*! モンスターが1ターンに攻撃する最大回数 (射撃を含む) / The maximum number of times a monster can attack in a turn (including SHOOT) */
 constexpr int MAX_NUM_BLOWS = 4;
 
-struct monster_blow {
+class MonsterBlow {
+public:
     RaceBlowMethodType method{};
     RaceBlowEffectType effect{};
     DICE_NUMBER d_dice{};
@@ -71,7 +72,7 @@ struct monster_race {
     EnumClassFlagGroup<MonsterVisualType> visual_flags; //!< 能力フラグ（シンボル） / Symbol Flags
     EnumClassFlagGroup<MonsterKindType> kind_flags; //!< 能力フラグ（種族・徳） / Attr Flags
     EnumClassFlagGroup<MonsterResistanceType> resistance_flags; //!< 耐性フラグ / Flags R (resistances info)
-    monster_blow blow[MAX_NUM_BLOWS]{}; //!< 打撃能力定義 / Up to four blows per round
+    MonsterBlow blow[MAX_NUM_BLOWS]{}; //!< 打撃能力定義 / Up to four blows per round
     MONRACE_IDX reinforce_id[6]{}; //!< 指定護衛モンスター種族ID(6種まで)
     DICE_NUMBER reinforce_dd[6]{}; //!< 指定護衛数ダイス数
     DICE_SID reinforce_ds[6]{}; //!< 指定護衛数ダイス面
@@ -84,9 +85,9 @@ struct monster_race {
     DEPTH level{}; //!< レベル / Level of creature
     RARITY rarity{}; //!< レアリティ / Rarity of creature
     TERM_COLOR d_attr{}; //!< デフォルトの表示色 / Default monster attribute
-    SYMBOL_CODE d_char{}; //!< デフォルトの表示文字 / Default monster character
+    char d_char{}; //!< デフォルトの表示文字 / Default monster character
     TERM_COLOR x_attr{}; //!< 設定した表示色(またはタイル位置Y) / Desired monster attribute
-    SYMBOL_CODE x_char{}; //!< 設定した表示文字(またはタイル位置X) / Desired monster character
+    char x_char{}; //!< 設定した表示文字(またはタイル位置X) / Desired monster character
     MONSTER_NUMBER max_num{}; //!< 階に最大存在できる数 / Maximum population allowed per level
     MONSTER_NUMBER cur_num{}; //!< 階に現在いる数 / Monster population on current level
     FLOOR_IDX floor_id{}; //!< 存在している保存階ID /  Location of unique monster

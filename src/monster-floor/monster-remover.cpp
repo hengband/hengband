@@ -36,36 +36,49 @@ void delete_monster_idx(PlayerType *player_ptr, MONSTER_IDX i)
     POSITION x = m_ptr->fx;
 
     real_r_ptr(m_ptr)->cur_num--;
-    if (r_ptr->flags2 & (RF2_MULTIPLY))
+    if (r_ptr->flags2 & (RF2_MULTIPLY)) {
         floor_ptr->num_repro--;
+    }
 
-    if (monster_csleep_remaining(m_ptr))
+    if (monster_csleep_remaining(m_ptr)) {
         (void)set_monster_csleep(player_ptr, i, 0);
-    if (monster_fast_remaining(m_ptr))
+    }
+    if (monster_fast_remaining(m_ptr)) {
         (void)set_monster_fast(player_ptr, i, 0);
-    if (monster_slow_remaining(m_ptr))
+    }
+    if (monster_slow_remaining(m_ptr)) {
         (void)set_monster_slow(player_ptr, i, 0);
-    if (monster_stunned_remaining(m_ptr))
+    }
+    if (monster_stunned_remaining(m_ptr)) {
         (void)set_monster_stunned(player_ptr, i, 0);
-    if (monster_confused_remaining(m_ptr))
+    }
+    if (monster_confused_remaining(m_ptr)) {
         (void)set_monster_confused(player_ptr, i, 0);
-    if (monster_fear_remaining(m_ptr))
+    }
+    if (monster_fear_remaining(m_ptr)) {
         (void)set_monster_monfear(player_ptr, i, 0);
-    if (monster_invulner_remaining(m_ptr))
+    }
+    if (monster_invulner_remaining(m_ptr)) {
         (void)set_monster_invulner(player_ptr, i, 0, false);
+    }
 
-    if (i == target_who)
+    if (i == target_who) {
         target_who = 0;
+    }
 
-    if (i == player_ptr->health_who)
+    if (i == player_ptr->health_who) {
         health_track(player_ptr, 0);
+    }
 
-    if (player_ptr->pet_t_m_idx == i)
+    if (player_ptr->pet_t_m_idx == i) {
         player_ptr->pet_t_m_idx = 0;
-    if (player_ptr->riding_t_m_idx == i)
+    }
+    if (player_ptr->riding_t_m_idx == i) {
         player_ptr->riding_t_m_idx = 0;
-    if (player_ptr->riding == i)
+    }
+    if (player_ptr->riding == i) {
         player_ptr->riding = 0;
+    }
 
     floor_ptr->grid_array[y][x].m_idx = 0;
     for (auto it = m_ptr->hold_o_idx_list.begin(); it != m_ptr->hold_o_idx_list.end();) {
@@ -104,24 +117,27 @@ void wipe_monsters_list(PlayerType *player_ptr)
             r_info[MON_BANOR].max_num = 0;
             r_info[MON_BANOR].r_pkills++;
             r_info[MON_BANOR].r_akills++;
-            if (r_info[MON_BANOR].r_tkills < MAX_SHORT)
+            if (r_info[MON_BANOR].r_tkills < MAX_SHORT) {
                 r_info[MON_BANOR].r_tkills++;
+            }
         }
 
         if (r_info[MON_LUPART].max_num) {
             r_info[MON_LUPART].max_num = 0;
             r_info[MON_LUPART].r_pkills++;
             r_info[MON_LUPART].r_akills++;
-            if (r_info[MON_LUPART].r_tkills < MAX_SHORT)
+            if (r_info[MON_LUPART].r_tkills < MAX_SHORT) {
                 r_info[MON_LUPART].r_tkills++;
+            }
         }
     }
 
     auto *floor_ptr = player_ptr->current_floor_ptr;
     for (int i = floor_ptr->m_max - 1; i >= 1; i--) {
         auto *m_ptr = &floor_ptr->m_list[i];
-        if (!monster_is_valid(m_ptr))
+        if (!monster_is_valid(m_ptr)) {
             continue;
+        }
 
         floor_ptr->grid_array[m_ptr->fy][m_ptr->fx].m_idx = 0;
         *m_ptr = {};
@@ -132,13 +148,15 @@ void wipe_monsters_list(PlayerType *player_ptr)
      * counters of monsters in party_mon[] are required to prevent multiple
      * generation of unique monster who is the minion of player.
      */
-    for (auto &r_ref : r_info)
+    for (auto &r_ref : r_info) {
         r_ref.cur_num = 0;
+    }
 
     floor_ptr->m_max = 1;
     floor_ptr->m_cnt = 0;
-    for (int i = 0; i < MAX_MTIMED; i++)
+    for (int i = 0; i < MAX_MTIMED; i++) {
         floor_ptr->mproc_max[i] = 0;
+    }
 
     floor_ptr->num_repro = 0;
     target_who = 0;
@@ -157,10 +175,12 @@ void delete_monster(PlayerType *player_ptr, POSITION y, POSITION x)
 {
     grid_type *g_ptr;
     auto *floor_ptr = player_ptr->current_floor_ptr;
-    if (!in_bounds(floor_ptr, y, x))
+    if (!in_bounds(floor_ptr, y, x)) {
         return;
+    }
 
     g_ptr = &floor_ptr->grid_array[y][x];
-    if (g_ptr->m_idx)
+    if (g_ptr->m_idx) {
         delete_monster_idx(player_ptr, g_ptr->m_idx);
+    }
 }

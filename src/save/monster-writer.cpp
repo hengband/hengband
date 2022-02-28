@@ -11,53 +11,69 @@
 
 static void write_monster_flags(monster_type *m_ptr, BIT_FLAGS *flags)
 {
-    if (!is_original_ap(m_ptr))
+    if (!is_original_ap(m_ptr)) {
         set_bits(*flags, SaveDataMonsterFlagType::AP_R_IDX);
+    }
 
-    if (m_ptr->sub_align)
+    if (m_ptr->sub_align) {
         set_bits(*flags, SaveDataMonsterFlagType::SUB_ALIGN);
+    }
 
-    if (monster_csleep_remaining(m_ptr))
+    if (monster_csleep_remaining(m_ptr)) {
         set_bits(*flags, SaveDataMonsterFlagType::CSLEEP);
+    }
 
-    if (monster_fast_remaining(m_ptr))
+    if (monster_fast_remaining(m_ptr)) {
         set_bits(*flags, SaveDataMonsterFlagType::FAST);
+    }
 
-    if (monster_slow_remaining(m_ptr))
+    if (monster_slow_remaining(m_ptr)) {
         set_bits(*flags, SaveDataMonsterFlagType::SLOW);
+    }
 
-    if (monster_stunned_remaining(m_ptr))
+    if (monster_stunned_remaining(m_ptr)) {
         set_bits(*flags, SaveDataMonsterFlagType::STUNNED);
+    }
 
-    if (monster_confused_remaining(m_ptr))
+    if (monster_confused_remaining(m_ptr)) {
         set_bits(*flags, SaveDataMonsterFlagType::CONFUSED);
+    }
 
-    if (monster_fear_remaining(m_ptr))
+    if (monster_fear_remaining(m_ptr)) {
         set_bits(*flags, SaveDataMonsterFlagType::MONFEAR);
+    }
 
-    if (m_ptr->target_y)
+    if (m_ptr->target_y) {
         set_bits(*flags, SaveDataMonsterFlagType::TARGET_Y);
+    }
 
-    if (m_ptr->target_x)
+    if (m_ptr->target_x) {
         set_bits(*flags, SaveDataMonsterFlagType::TARGET_X);
+    }
 
-    if (monster_invulner_remaining(m_ptr))
+    if (monster_invulner_remaining(m_ptr)) {
         set_bits(*flags, SaveDataMonsterFlagType::INVULNER);
+    }
 
-    if (m_ptr->smart.any())
+    if (m_ptr->smart.any()) {
         set_bits(*flags, SaveDataMonsterFlagType::SMART);
+    }
 
-    if (m_ptr->exp)
+    if (m_ptr->exp) {
         set_bits(*flags, SaveDataMonsterFlagType::EXP);
+    }
 
-    if (m_ptr->mflag2.any())
+    if (m_ptr->mflag2.any()) {
         set_bits(*flags, SaveDataMonsterFlagType::MFLAG2);
+    }
 
-    if (m_ptr->nickname)
+    if (m_ptr->nickname) {
         set_bits(*flags, SaveDataMonsterFlagType::NICKNAME);
+    }
 
-    if (m_ptr->parent_m_idx)
+    if (m_ptr->parent_m_idx) {
         set_bits(*flags, SaveDataMonsterFlagType::PARENT);
+    }
 
     wr_u32b(*flags);
 }
@@ -90,31 +106,38 @@ static void write_monster_info(monster_type *m_ptr, const BIT_FLAGS flags)
         wr_byte(tmp8u);
     }
 
-    if (any_bits(flags, SaveDataMonsterFlagType::TARGET_Y))
+    if (any_bits(flags, SaveDataMonsterFlagType::TARGET_Y)) {
         wr_s16b((int16_t)m_ptr->target_y);
+    }
 
-    if (any_bits(flags, SaveDataMonsterFlagType::TARGET_X))
+    if (any_bits(flags, SaveDataMonsterFlagType::TARGET_X)) {
         wr_s16b((int16_t)m_ptr->target_x);
+    }
 
     if (any_bits(flags, SaveDataMonsterFlagType::INVULNER)) {
         tmp8u = (byte)m_ptr->mtimed[MTIMED_INVULNER];
         wr_byte(tmp8u);
     }
 
-    if (any_bits(flags, SaveDataMonsterFlagType::SMART))
+    if (any_bits(flags, SaveDataMonsterFlagType::SMART)) {
         wr_FlagGroup(m_ptr->smart, wr_byte);
+    }
 
-    if (any_bits(flags, SaveDataMonsterFlagType::EXP))
+    if (any_bits(flags, SaveDataMonsterFlagType::EXP)) {
         wr_u32b(m_ptr->exp);
+    }
 
-    if (any_bits(flags, SaveDataMonsterFlagType::MFLAG2))
+    if (any_bits(flags, SaveDataMonsterFlagType::MFLAG2)) {
         wr_FlagGroup(m_ptr->mflag2, wr_byte);
+    }
 
-    if (any_bits(flags, SaveDataMonsterFlagType::NICKNAME))
+    if (any_bits(flags, SaveDataMonsterFlagType::NICKNAME)) {
         wr_string(quark_str(m_ptr->nickname));
+    }
 
-    if (any_bits(flags, SaveDataMonsterFlagType::PARENT))
+    if (any_bits(flags, SaveDataMonsterFlagType::PARENT)) {
         wr_s16b(m_ptr->parent_m_idx);
+    }
 }
 
 /*!
@@ -134,14 +157,17 @@ void wr_monster(monster_type *m_ptr)
     wr_s16b((int16_t)m_ptr->max_maxhp);
     wr_u32b(m_ptr->dealt_damage);
 
-    if (any_bits(flags, SaveDataMonsterFlagType::AP_R_IDX))
+    if (any_bits(flags, SaveDataMonsterFlagType::AP_R_IDX)) {
         wr_s16b(m_ptr->ap_r_idx);
+    }
 
-    if (any_bits(flags, SaveDataMonsterFlagType::SUB_ALIGN))
+    if (any_bits(flags, SaveDataMonsterFlagType::SUB_ALIGN)) {
         wr_byte(m_ptr->sub_align);
+    }
 
-    if (any_bits(flags, SaveDataMonsterFlagType::CSLEEP))
+    if (any_bits(flags, SaveDataMonsterFlagType::CSLEEP)) {
         wr_s16b(m_ptr->mtimed[MTIMED_CSLEEP]);
+    }
 
     wr_byte((byte)m_ptr->mspeed);
     wr_s16b(m_ptr->energy_need);

@@ -21,6 +21,8 @@
 #include "system/object-type-definition.h"
 #include "system/player-type-definition.h"
 #include "term/term-color-types.h"
+#include "timed-effect/player-hallucination.h"
+#include "timed-effect/timed-effects.h"
 #include "util/bit-flags-calculator.h"
 #include "window/main-window-util.h"
 #include "world/world.h"
@@ -38,7 +40,7 @@ char image_monster_hack[MAX_IMAGE_MONSTER_HACK] = "abcdefghijklmnopqrstuvwxyzABC
  * @param ap 本来の色
  * @param cp 本来のシンボル
  */
-static void image_object(TERM_COLOR *ap, SYMBOL_CODE *cp)
+static void image_object(TERM_COLOR *ap, char *cp)
 {
     if (use_graphics) {
         auto *k_ptr = &k_info[randint1(k_info.size() - 1)];
@@ -57,7 +59,7 @@ static void image_object(TERM_COLOR *ap, SYMBOL_CODE *cp)
  * @param ap 本来の色
  * @param cp 本来のシンボル
  */
-static void image_monster(TERM_COLOR *ap, SYMBOL_CODE *cp)
+static void image_monster(TERM_COLOR *ap, char *cp)
 {
     if (use_graphics) {
         auto *r_ptr = &r_info[randint1(r_info.size() - 1)];
@@ -75,7 +77,7 @@ static void image_monster(TERM_COLOR *ap, SYMBOL_CODE *cp)
  * @param ap 本来の色
  * @param cp 本来のシンボル
  */
-static void image_random(TERM_COLOR *ap, SYMBOL_CODE *cp)
+static void image_random(TERM_COLOR *ap, char *cp)
 {
     if (randint0(100) < 75) {
         image_monster(ap, cp);
@@ -98,17 +100,21 @@ static void image_random(TERM_COLOR *ap, SYMBOL_CODE *cp)
 static bool is_revealed_wall(floor_type *floor_ptr, feature_type *f_ptr, POSITION y, POSITION x)
 {
     if (view_hidden_walls) {
-        if (view_unsafe_walls)
+        if (view_unsafe_walls) {
             return true;
-        if (none_bits(floor_ptr->grid_array[y][x].info, CAVE_UNSAFE))
+        }
+        if (none_bits(floor_ptr->grid_array[y][x].info, CAVE_UNSAFE)) {
             return true;
+        }
     }
 
-    if (f_ptr->flags.has_not(FloorFeatureType::WALL) || f_ptr->flags.has(FloorFeatureType::HAS_GOLD))
+    if (f_ptr->flags.has_not(FloorFeatureType::WALL) || f_ptr->flags.has(FloorFeatureType::HAS_GOLD)) {
         return true;
+    }
 
-    if (in_bounds(floor_ptr, y, x) && f_ptr->flags.has(FloorFeatureType::PERMANENT))
+    if (in_bounds(floor_ptr, y, x) && f_ptr->flags.has(FloorFeatureType::PERMANENT)) {
         return true;
+    }
 
     int n = 0;
     for (int i = 0; i < 8; i++) {
@@ -121,8 +127,9 @@ static bool is_revealed_wall(floor_type *floor_ptr, feature_type *f_ptr, POSITIO
 
         FEAT_IDX f_idx = floor_ptr->grid_array[dy][dx].feat;
         feature_type *n_ptr = &f_info[f_idx];
-        if (n_ptr->flags.has(FloorFeatureType::WALL))
+        if (n_ptr->flags.has(FloorFeatureType::WALL)) {
             n++;
+        }
     }
 
     return n != 8;
@@ -138,14 +145,14 @@ static bool is_revealed_wall(floor_type *floor_ptr, feature_type *f_ptr, POSITIO
  * @param tap 文字色属性(タイル)
  * @param tcp 文字種属性(タイル)
  */
-void map_info(PlayerType *player_ptr, POSITION y, POSITION x, TERM_COLOR *ap, SYMBOL_CODE *cp, TERM_COLOR *tap, SYMBOL_CODE *tcp)
+void map_info(PlayerType *player_ptr, POSITION y, POSITION x, TERM_COLOR *ap, char *cp, TERM_COLOR *tap, char *tcp)
 {
     auto *floor_ptr = player_ptr->current_floor_ptr;
     auto *g_ptr = &floor_ptr->grid_array[y][x];
     FEAT_IDX feat = g_ptr->get_feat_mimic();
     auto *f_ptr = &f_info[feat];
     TERM_COLOR a;
-    SYMBOL_CODE c;
+    char c;
     if (f_ptr->flags.has_not(FloorFeatureType::REMEMBER)) {
         auto is_visible = any_bits(g_ptr->info, (CAVE_MARK | CAVE_LITE | CAVE_MNLT));
         auto is_glowing = match_bits(g_ptr->info, CAVE_GLOW | CAVE_MNDK, CAVE_GLOW);
@@ -234,29 +241,34 @@ void map_info(PlayerType *player_ptr, POSITION y, POSITION x, TERM_COLOR *ap, SY
         }
     }
 
-    if (feat_priority == -1)
+    if (feat_priority == -1) {
         feat_priority = f_ptr->priority;
+    }
 
     (*tap) = a;
     (*tcp) = c;
     (*ap) = a;
     (*cp) = c;
 
-    if (player_ptr->hallucinated && one_in_(256))
+    auto is_hallucinated = player_ptr->effects()->hallucination()->is_hallucinated();
+    if (is_hallucinated && one_in_(256)) {
         image_random(ap, cp);
+    }
 
     for (const auto this_o_idx : g_ptr->o_idx_list) {
         ObjectType *o_ptr;
         o_ptr = &floor_ptr->o_list[this_o_idx];
-        if (!(o_ptr->marked & OM_FOUND))
+        if (!(o_ptr->marked & OM_FOUND)) {
             continue;
+        }
 
         if (display_autopick) {
             byte act;
 
             match_autopick = find_autopick_list(player_ptr, o_ptr);
-            if (match_autopick == -1)
+            if (match_autopick == -1) {
                 continue;
+            }
 
             act = autopick_list[match_autopick].action;
 
@@ -271,8 +283,9 @@ void map_info(PlayerType *player_ptr, POSITION y, POSITION x, TERM_COLOR *ap, SY
         (*cp) = object_char(o_ptr);
         (*ap) = object_attr(o_ptr);
         feat_priority = 20;
-        if (player_ptr->hallucinated)
+        if (is_hallucinated) {
             image_object(ap, cp);
+        }
 
         break;
     }
@@ -290,7 +303,7 @@ void map_info(PlayerType *player_ptr, POSITION y, POSITION x, TERM_COLOR *ap, SY
 
     auto *r_ptr = &r_info[m_ptr->ap_r_idx];
     feat_priority = 30;
-    if (player_ptr->hallucinated) {
+    if (is_hallucinated) {
         if (r_ptr->visual_flags.has_all_of({ MonsterVisualType::CLEAR, MonsterVisualType::CLEAR_COLOR })) {
             /* Do nothing */
         } else {
@@ -318,9 +331,9 @@ void map_info(PlayerType *player_ptr, POSITION y, POSITION x, TERM_COLOR *ap, SY
     if (r_ptr->visual_flags.has(MonsterVisualType::CLEAR_COLOR) && (*ap != TERM_DARK) && !use_graphics) {
         /* Do nothing */
     } else if (r_ptr->visual_flags.has(MonsterVisualType::MULTI_COLOR) && !use_graphics) {
-        if (r_ptr->visual_flags.has(MonsterVisualType::ANY_COLOR))
+        if (r_ptr->visual_flags.has(MonsterVisualType::ANY_COLOR)) {
             *ap = randint1(15);
-        else
+        } else {
             switch (randint1(7)) {
             case 1:
                 *ap = TERM_RED;
@@ -344,6 +357,7 @@ void map_info(PlayerType *player_ptr, POSITION y, POSITION x, TERM_COLOR *ap, SY
                 *ap = TERM_GREEN;
                 break;
             }
+        }
     } else if (r_ptr->visual_flags.has(MonsterVisualType::RANDOM_COLOR) && !use_graphics) {
         *ap = g_ptr->m_idx % 15 + 1;
     } else {

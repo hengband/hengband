@@ -47,16 +47,16 @@ void CrownEnchanter::give_ego_index()
     }
 
     while (true) {
-        this->o_ptr->name2 = get_random_ego(INVEN_HEAD, true);
-        switch (this->o_ptr->name2) {
-        case EGO_TELEPATHY:
-        case EGO_MAGI:
-        case EGO_MIGHT:
-        case EGO_REGENERATION:
-        case EGO_LORDLINESS:
-        case EGO_BASILISK:
+        this->o_ptr->ego_idx = get_random_ego(INVEN_HEAD, true);
+        switch (this->o_ptr->ego_idx) {
+        case EgoType::TELEPATHY:
+        case EgoType::MAGI:
+        case EgoType::MIGHT:
+        case EgoType::REGENERATION:
+        case EgoType::LORDLINESS:
+        case EgoType::BASILISK:
             return;
-        case EGO_SEEING:
+        case EgoType::SEEING:
             if (one_in_(3)) {
                 add_low_telepathy(this->o_ptr);
             }
@@ -71,9 +71,9 @@ void CrownEnchanter::give_ego_index()
 void CrownEnchanter::give_cursed()
 {
     while (true) {
-        this->o_ptr->name2 = get_random_ego(INVEN_HEAD, false);
-        switch (this->o_ptr->name2) {
-        case EGO_H_DEMON:
+        this->o_ptr->ego_idx = get_random_ego(INVEN_HEAD, false);
+        switch (this->o_ptr->ego_idx) {
+        case EgoType::H_DEMON:
             return;
         default:
             continue;

@@ -1,6 +1,7 @@
 ﻿#pragma once
 
 #include "system/angband.h"
+#include <memory>
 
 /*!
  * @details 仮引数がtmpなのは、全て範囲外の値を範囲内に収める処理が含まれるため
@@ -8,12 +9,13 @@
  */
 enum class PlayerCutRank;
 enum class PlayerStunRank;
+class PlayerConfusion;
 class PlayerType;
 class BadStatusSetter {
 public:
     BadStatusSetter(PlayerType *player_ptr);
     virtual ~BadStatusSetter() = default;
-    
+
     bool blindness(const TIME_EFFECT tmp_v);
     bool mod_blindness(const TIME_EFFECT tmp_v);
     bool confusion(const TIME_EFFECT tmp_v);
@@ -35,6 +37,7 @@ public:
 
 private:
     PlayerType *player_ptr;
+    std::shared_ptr<PlayerConfusion> player_confusion;
 
     bool process_stun_effect(const short v);
     void process_stun_status(const PlayerStunRank new_rank, const short v);

@@ -91,12 +91,13 @@ static bool scene_field(PlayerType *player_ptr, scene_type *value)
     if (enable) {
         value->type = TERM_XTRA_MUSIC_BASIC;
 
-        if (player_ptr->lev >= 45)
+        if (player_ptr->lev >= 45) {
             value->val = MUSIC_BASIC_FIELD3;
-        else if (player_ptr->lev >= 25)
+        } else if (player_ptr->lev >= 25) {
             value->val = MUSIC_BASIC_FIELD2;
-        else
+        } else {
             value->val = MUSIC_BASIC_FIELD1;
+        }
     }
     return enable;
 }
@@ -107,10 +108,11 @@ static bool scene_dungeon_feeling(PlayerType *player_ptr, scene_type *value)
     if (enable) {
         value->type = TERM_XTRA_MUSIC_BASIC;
 
-        if (player_ptr->feeling == 2)
+        if (player_ptr->feeling == 2) {
             value->val = MUSIC_BASIC_DUN_FEEL2;
-        else
+        } else {
             value->val = MUSIC_BASIC_DUN_FEEL1;
+        }
     }
     return enable;
 }
@@ -132,12 +134,13 @@ static bool scene_dungeon_basic(PlayerType *player_ptr, scene_type *value)
         value->type = TERM_XTRA_MUSIC_BASIC;
 
         const auto dun_level = player_ptr->current_floor_ptr->dun_level;
-        if (dun_level >= 80)
+        if (dun_level >= 80) {
             value->val = MUSIC_BASIC_DUN_HIGH;
-        else if (dun_level >= 40)
+        } else if (dun_level >= 40) {
             value->val = MUSIC_BASIC_DUN_MED;
-        else
+        } else {
             value->val = MUSIC_BASIC_DUN_LOW;
+        }
     }
     return enable;
 }

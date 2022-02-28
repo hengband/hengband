@@ -14,9 +14,9 @@
 
 //!< 対象グリッドの一覧をまとめる構造体
 struct pos_list {
-	POSITION_IDX n; //!< Array of grids for use by various functions (see grid.c")
-	POSITION y[TEMP_MAX];
-	POSITION x[TEMP_MAX];
+    POSITION_IDX n; //!< Array of grids for use by various functions (see grid.c")
+    POSITION y[TEMP_MAX];
+    POSITION x[TEMP_MAX];
 };
 
 extern const POSITION ddd[9];

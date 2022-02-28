@@ -7,9 +7,9 @@
 #include "system/angband.h"
 
 enum racial_level_check_result {
-	RACIAL_SUCCESS = 1,
-	RACIAL_FAILURE = -1,
-	RACIAL_CANCEL = 0,
+    RACIAL_SUCCESS = 1,
+    RACIAL_FAILURE = -1,
+    RACIAL_CANCEL = 0,
 };
 
 struct rpi_type;

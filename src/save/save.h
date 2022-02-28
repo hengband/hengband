@@ -1,9 +1,9 @@
 ﻿#pragma once
 
 enum save_type {
-	SAVE_TYPE_CLOSE_GAME = 0,
-	SAVE_TYPE_CONTINUE_GAME = 1,
-	SAVE_TYPE_DEBUG = 2
+    SAVE_TYPE_CLOSE_GAME = 0,
+    SAVE_TYPE_CONTINUE_GAME = 1,
+    SAVE_TYPE_DEBUG = 2
 };
 
 class PlayerType;

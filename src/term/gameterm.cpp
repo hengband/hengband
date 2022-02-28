@@ -358,7 +358,7 @@ static const concptr color_char = "dwsorgbuDWvyRGBU";
  * Be sure to use "index & 0x7F" to avoid illegal access
  */
 TERM_COLOR misc_to_attr[256];
-SYMBOL_CODE misc_to_char[256];
+char misc_to_char[256];
 
 /*
  * Specify attr/char pairs for inventory items (by tval)
@@ -501,12 +501,12 @@ static TERM_COLOR spell_color(AttributeType type)
             return mh_attr(2);
         case AttributeType::DISINTEGRATE:
             return 0x05;
-        case AttributeType::PSI:            /* fall through */
-        case AttributeType::PSI_DRAIN:      /* fall through */
-        case AttributeType::TELEKINESIS:    /* fall through */
-        case AttributeType::DOMINATION:     /* fall through */
-        case AttributeType::DRAIN_MANA:     /* fall through */
-        case AttributeType::MIND_BLAST:     /* fall through */
+        case AttributeType::PSI: /* fall through */
+        case AttributeType::PSI_DRAIN: /* fall through */
+        case AttributeType::TELEKINESIS: /* fall through */
+        case AttributeType::DOMINATION: /* fall through */
+        case AttributeType::DRAIN_MANA: /* fall through */
+        case AttributeType::MIND_BLAST: /* fall through */
         case AttributeType::BRAIN_SMASH:
             return 0x09;
         case AttributeType::CAUSE_1: /* fall through */
@@ -531,24 +531,25 @@ static TERM_COLOR spell_color(AttributeType type)
     /* Normal tiles or ASCII */
     else {
         TERM_COLOR a;
-        SYMBOL_CODE c;
 
         /* Lookup the default colors for this type */
         concptr s = quark_str(gf_colors[type]);
 
-        if (!s)
+        if (!s) {
             return TERM_WHITE;
+        }
 
         /* Pick a random color */
-        c = s[randint0(strlen(s))];
+        auto c = s[randint0(strlen(s))];
 
         /* Lookup this color */
         a = angband_strchr(color_char, c) - color_char;
 
         /* Invalid color (note check for < 0 removed, gave a silly
-		 * warning because bytes are always >= 0 -- RG) */
-        if (a > 15)
+         * warning because bytes are always >= 0 -- RG) */
+        if (a > 15) {
             return TERM_WHITE;
+        }
 
         /* Use this color */
         return a;
@@ -580,38 +581,43 @@ uint16_t bolt_pict(POSITION y, POSITION x, POSITION ny, POSITION nx, AttributeTy
     byte k;
 
     TERM_COLOR a;
-    SYMBOL_CODE c;
 
     /* No motion (*) */
-    if ((ny == y) && (nx == x))
+    if ((ny == y) && (nx == x)) {
         base = 0x30;
+    }
 
     /* Vertical (|) */
-    else if (nx == x)
+    else if (nx == x) {
         base = 0x40;
+    }
 
     /* Horizontal (-) */
-    else if (ny == y)
+    else if (ny == y) {
         base = 0x50;
+    }
 
     /* Diagonal (/) */
-    else if ((ny - y) == (x - nx))
+    else if ((ny - y) == (x - nx)) {
         base = 0x60;
+    }
 
     /* Diagonal (\) */
-    else if ((ny - y) == (nx - x))
+    else if ((ny - y) == (nx - x)) {
         base = 0x70;
+    }
 
     /* Weird (*) */
-    else
+    else {
         base = 0x30;
+    }
 
     /* Basic spell color */
     k = spell_color(typ);
 
     /* Obtain attr/char */
     a = misc_to_attr[base + k];
-    c = misc_to_char[base + k];
+    auto c = misc_to_char[base + k];
 
     /* Create pict */
     return PICT(a, c);
@@ -624,7 +630,7 @@ uint16_t bolt_pict(POSITION y, POSITION x, POSITION ny, POSITION nx, AttributeTy
  * @param c シンボル文字
  * @return カラーID
  */
-TERM_COLOR color_char_to_attr(SYMBOL_CODE c)
+TERM_COLOR color_char_to_attr(char c)
 {
     switch (c) {
     case 'd':

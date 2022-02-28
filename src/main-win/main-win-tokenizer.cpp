@@ -29,17 +29,21 @@ int16_t tokenize_whitespace(char *buf, int16_t num, char **tokens)
 
     while (k < num) {
         char *t;
-        for (; *s && iswspace(*s); ++s) /* loop */
+        for (; *s && iswspace(*s); ++s) { /* loop */
             ;
+        }
 
-        if (!*s)
+        if (!*s) {
             break;
+        }
 
-        for (t = s; *t && !iswspace(*t); ++t) /* loop */
+        for (t = s; *t && !iswspace(*t); ++t) { /* loop */
             ;
+        }
 
-        if (*t)
+        if (*t) {
             *t++ = '\0';
+        }
 
         tokens[k++] = s;
         s = t;

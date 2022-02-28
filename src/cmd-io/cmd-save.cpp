@@ -20,25 +20,27 @@
  */
 void do_cmd_save_game(PlayerType *player_ptr, int is_autosave)
 {
-    if (is_autosave)
+    if (is_autosave) {
         msg_print(_("自動セーブ中", "Autosaving the game..."));
-    else
+    } else {
         disturb(player_ptr, true, true);
+    }
 
     msg_print(nullptr);
     handle_stuff(player_ptr);
     prt(_("ゲームをセーブしています...", "Saving game..."), 0, 0);
     term_fresh();
-    (void)strcpy(player_ptr->died_from, _("(セーブ)", "(saved)"));
+    player_ptr->died_from = _("(セーブ)", "(saved)");
     signals_ignore_tstp();
-    if (save_player(player_ptr, SAVE_TYPE_CONTINUE_GAME))
+    if (save_player(player_ptr, SAVE_TYPE_CONTINUE_GAME)) {
         prt(_("ゲームをセーブしています... 終了", "Saving game... done."), 0, 0);
-    else
+    } else {
         prt(_("ゲームをセーブしています... 失敗！", "Saving game... failed!"), 0, 0);
+    }
 
     signals_handle_tstp();
     term_fresh();
-    (void)strcpy(player_ptr->died_from, _("(元気に生きている)", "(alive and well)"));
+    player_ptr->died_from = _("(元気に生きている)", "(alive and well)");
 }
 
 /*!

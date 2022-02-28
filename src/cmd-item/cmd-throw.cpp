@@ -4,10 +4,10 @@
  * @author Hourier
  */
 #include "cmd-item/cmd-throw.h"
-#include "object-use/throw-execution.h"
 #include "core/player-redraw-types.h"
 #include "game-option/special-options.h"
 #include "inventory/inventory-slot-types.h"
+#include "object-use/throw-execution.h"
 #include "object/object-broken.h"
 #include "player-base/player-class.h"
 #include "player-info/samurai-data-type.h"

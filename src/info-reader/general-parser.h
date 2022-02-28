@@ -1,5 +1,6 @@
 ﻿#pragma once
 
+#include "object-enchant/object-ego.h"
 #include "system/angband.h"
 #include <functional>
 #include <string_view>
@@ -10,7 +11,7 @@ struct dungeon_grid {
     FEAT_IDX feature; /* Terrain feature */
     MONSTER_IDX monster; /* Monster */
     OBJECT_IDX object; /* Object */
-    EGO_IDX ego; /* Ego-Item */
+    EgoType ego; /* Ego-Item */
     ARTIFACT_IDX artifact; /* Artifact */
     IDX trap; /* Trap */
     BIT_FLAGS cave_info; /* Flags for CAVE_MARK, CAVE_GLOW, CAVE_ICKY, CAVE_ROOM */

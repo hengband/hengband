@@ -56,15 +56,15 @@ void HelmEnchanter::give_ego_index()
     }
 
     while (true) {
-        this->o_ptr->name2 = get_random_ego(INVEN_HEAD, true);
-        switch (this->o_ptr->name2) {
-        case EGO_BRILLIANCE:
-        case EGO_DARK:
-        case EGO_INFRAVISION:
-        case EGO_H_PROTECTION:
-        case EGO_LITE:
+        this->o_ptr->ego_idx = get_random_ego(INVEN_HEAD, true);
+        switch (this->o_ptr->ego_idx) {
+        case EgoType::BRILLIANCE:
+        case EgoType::DARK:
+        case EgoType::INFRAVISION:
+        case EgoType::H_PROTECTION:
+        case EgoType::LITE:
             return;
-        case EGO_SEEING:
+        case EgoType::SEEING:
             if (one_in_(7)) {
                 add_low_telepathy(this->o_ptr);
             }
@@ -79,9 +79,9 @@ void HelmEnchanter::give_ego_index()
 void HelmEnchanter::give_cursed()
 {
     while (true) {
-        this->o_ptr->name2 = get_random_ego(INVEN_HEAD, false);
-        switch (this->o_ptr->name2) {
-        case EGO_ANCIENT_CURSE:
+        this->o_ptr->ego_idx = get_random_ego(INVEN_HEAD, false);
+        switch (this->o_ptr->ego_idx) {
+        case EgoType::ANCIENT_CURSE:
             return;
         default:
             continue;

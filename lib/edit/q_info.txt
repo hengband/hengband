@@ -67,10 +67,6 @@
 ?:[EQU $QUEST_NUMBER 16]
 %:q000dekn.txt
 
-# The City beneath the Sea
-#?:[EQU $QUEST_NUMBER 17]
-#%:q000lyeh.txt
-
 # Quest #18 was returned!
 # Water Cave
 ?:[EQU $QUEST_NUMBER 18]

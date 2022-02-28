@@ -12,7 +12,7 @@
 #include "grid/feature.h"
 #include "inventory/inventory-slot-types.h"
 #include "monster-attack/monster-attack-effect.h"
-#include "monster-attack/monster-attack-types.h"
+#include "monster-attack/monster-attack-table.h"
 #include "monster-race/monster-race.h"
 #include "monster-race/race-ability-flags.h"
 #include "monster-race/race-flags1.h"
@@ -276,7 +276,7 @@ static void spell_damcalc_by_spellnum(PlayerType *player_ptr, MonsterAbilityType
  * @param blow_ptr モンスターの打撃能力の構造体参照ポインタ
  * @return 算出された最大ダメージを返す。
  */
-static int blow_damcalc(monster_type *m_ptr, PlayerType *player_ptr, monster_blow *blow_ptr)
+static int blow_damcalc(monster_type *m_ptr, PlayerType *player_ptr, MonsterBlow *blow_ptr)
 {
     int dam = blow_ptr->d_dice * blow_ptr->d_side;
     int dummy_max = 0;

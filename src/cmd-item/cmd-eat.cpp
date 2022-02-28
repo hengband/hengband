@@ -60,8 +60,9 @@
  */
 bool exe_eat_food_type_object(PlayerType *player_ptr, ObjectType *o_ptr)
 {
-    if (o_ptr->tval != ItemKindType::FOOD)
+    if (o_ptr->tval != ItemKindType::FOOD) {
         return false;
+    }
 
     BadStatusSetter bss(player_ptr);
     switch (o_ptr->sval) {
@@ -152,8 +153,9 @@ bool exe_eat_food_type_object(PlayerType *player_ptr, ObjectType *o_ptr)
  */
 bool exe_eat_charge_of_magic_device(PlayerType *player_ptr, ObjectType *o_ptr, INVENTORY_IDX item)
 {
-    if (o_ptr->tval != ItemKindType::STAFF && o_ptr->tval != ItemKindType::WAND)
+    if (o_ptr->tval != ItemKindType::STAFF && o_ptr->tval != ItemKindType::WAND) {
         return false;
+    }
 
     if (PlayerRace(player_ptr).food() == PlayerRaceFoodType::MANA) {
         concptr staff;
@@ -220,8 +222,9 @@ bool exe_eat_charge_of_magic_device(PlayerType *player_ptr, ObjectType *o_ptr, I
  */
 void exe_eat_food(PlayerType *player_ptr, INVENTORY_IDX item)
 {
-    if (music_singing_any(player_ptr))
+    if (music_singing_any(player_ptr)) {
         stop_singing(player_ptr);
+    }
 
     SpellHex spell_hex(player_ptr);
     if (spell_hex.is_spelling_any()) {
@@ -257,8 +260,9 @@ void exe_eat_food(PlayerType *player_ptr, INVENTORY_IDX item)
     }
 
     /* We have tried it */
-    if (o_ptr->tval == ItemKindType::FOOD)
+    if (o_ptr->tval == ItemKindType::FOOD) {
         object_tried(o_ptr);
+    }
 
     /* The player is now aware of the object */
     if (ident && !o_ptr->is_aware()) {
@@ -306,8 +310,9 @@ void exe_eat_food(PlayerType *player_ptr, INVENTORY_IDX item)
         (void)set_food(player_ptr, player_ptr->food + (o_ptr->pval / 10));
         msg_print(_("あなたのような者にとって食糧など僅かな栄養にしかならない。", "Mere victuals hold scant sustenance for a being such as yourself."));
 
-        if (player_ptr->food < PY_FOOD_ALERT) /* Hungry */
+        if (player_ptr->food < PY_FOOD_ALERT) { /* Hungry */
             msg_print(_("あなたの飢えは新鮮な血によってのみ満たされる！", "Your hunger can only be satisfied with fresh blood!"));
+        }
     } else if (food_type == PlayerRaceFoodType::WATER) {
         msg_print(_("動物の食物はあなたにとってほとんど栄養にならない。", "The food of animals is poor sustenance for you."));
         set_food(player_ptr, player_ptr->food + ((o_ptr->pval) / 20));
@@ -342,8 +347,9 @@ void do_cmd_eat_food(PlayerType *player_ptr)
     q = _("どれを食べますか? ", "Eat which item? ");
     s = _("食べ物がない。", "You have nothing to eat.");
 
-    if (!choose_object(player_ptr, &item, q, s, (USE_INVEN | USE_FLOOR), FuncItemTester(item_tester_hook_eatable, player_ptr)))
+    if (!choose_object(player_ptr, &item, q, s, (USE_INVEN | USE_FLOOR), FuncItemTester(item_tester_hook_eatable, player_ptr))) {
         return;
+    }
 
     exe_eat_food(player_ptr, item);
 }

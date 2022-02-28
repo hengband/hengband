@@ -13,7 +13,8 @@ std::wstring mci_device_type;
  * @brief MCI用設定の初期化
  * @param hWnd MCIコマンドのコールバックウインドウ
  */
-void setup_mci(HWND hWnd) {
+void setup_mci(HWND hWnd)
+{
     mci_open_parms.dwCallback = (DWORD)hWnd;
     mci_play_parms.dwCallback = (DWORD)hWnd;
 }

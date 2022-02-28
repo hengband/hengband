@@ -52,3 +52,7 @@ enum class SavedataLoreOlderThan14FlagType {
     RFR_RES_ALL = 0x00080000, /* Resist all */
     RFR_RES_TELE = 0x00100000, /* Resist teleportation */
 };
+
+enum class OldQuestId15 {
+    CITY_SEA = 17,
+};

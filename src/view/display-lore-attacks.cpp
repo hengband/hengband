@@ -3,7 +3,7 @@
 #include "lore/combat-types-setter.h"
 #include "lore/lore-calculator.h"
 #include "lore/lore-util.h"
-#include "monster-attack/monster-attack-types.h"
+#include "monster-attack/monster-attack-table.h"
 #include "monster-race/race-flags1.h"
 #include "system/monster-race-definition.h"
 #include "term/term-color-types.h"
@@ -34,26 +34,29 @@ static void display_monster_blow_jp(lore_type *lore_ptr, int attack_numbers, int
     }
 
     /* XXしてYYし/XXしてYYする/XXし/XXする */
-    if (lore_ptr->q != nullptr)
+    if (lore_ptr->q != nullptr) {
         jverb(lore_ptr->p, lore_ptr->jverb_buf, JVERB_TO);
-    else if (attack_numbers != lore_ptr->count - 1)
+    } else if (attack_numbers != lore_ptr->count - 1) {
         jverb(lore_ptr->p, lore_ptr->jverb_buf, JVERB_AND);
-    else
+    } else {
         strcpy(lore_ptr->jverb_buf, lore_ptr->p);
+    }
 
     hook_c_roff(lore_ptr->pc, lore_ptr->jverb_buf);
 
     if (lore_ptr->q) {
-        if (attack_numbers != lore_ptr->count - 1)
+        if (attack_numbers != lore_ptr->count - 1) {
             jverb(lore_ptr->q, lore_ptr->jverb_buf, JVERB_AND);
-        else
+        } else {
             strcpy(lore_ptr->jverb_buf, lore_ptr->q);
+        }
 
         hook_c_roff(lore_ptr->qc, lore_ptr->jverb_buf);
     }
 
-    if (attack_numbers != lore_ptr->count - 1)
+    if (attack_numbers != lore_ptr->count - 1) {
         hooked_roff("、");
+    }
 }
 #else
 /*!
@@ -113,17 +116,20 @@ void display_monster_blows(lore_type *lore_ptr)
 {
     const int max_attack_numbers = 4;
     for (int m = 0; m < max_attack_numbers; m++) {
-        if (lore_ptr->r_ptr->blow[m].method == RaceBlowMethodType::NONE || (lore_ptr->r_ptr->blow[m].method == RaceBlowMethodType::SHOOT))
+        if (lore_ptr->r_ptr->blow[m].method == RaceBlowMethodType::NONE || (lore_ptr->r_ptr->blow[m].method == RaceBlowMethodType::SHOOT)) {
             continue;
+        }
 
-        if (lore_ptr->r_ptr->r_blows[m] || lore_ptr->know_everything)
+        if (lore_ptr->r_ptr->r_blows[m] || lore_ptr->know_everything) {
             lore_ptr->count++;
+        }
     }
 
     int attack_numbers = 0;
     for (int m = 0; m < max_attack_numbers; m++) {
-        if (lore_ptr->r_ptr->blow[m].method == RaceBlowMethodType::NONE || (lore_ptr->r_ptr->blow[m].method == RaceBlowMethodType::SHOOT) || (((lore_ptr->r_ptr->r_blows[m] == 0) && !lore_ptr->know_everything)))
+        if (lore_ptr->r_ptr->blow[m].method == RaceBlowMethodType::NONE || (lore_ptr->r_ptr->blow[m].method == RaceBlowMethodType::SHOOT) || (((lore_ptr->r_ptr->r_blows[m] == 0) && !lore_ptr->know_everything))) {
             continue;
+        }
 
         set_monster_blow_method(lore_ptr, m);
         set_monster_blow_effect(lore_ptr, m);

@@ -1,6 +1,6 @@
-﻿#include "monster-attack/monster-attack-types.h"
-#include "monster-attack/monster-attack-effect.h"
+﻿#include "monster-attack/monster-attack-table.h"
 #include "effect/attribute-types.h"
+#include "monster-attack/monster-attack-effect.h"
 
 /*!
  * @brief モンスターの打撃効力テーブル /

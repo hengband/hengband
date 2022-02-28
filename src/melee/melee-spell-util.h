@@ -2,8 +2,8 @@
 
 #include <vector>
 
-#include "system/angband.h"
 #include "monster-race/race-ability-flags.h"
+#include "system/angband.h"
 #include "util/flag-group.h"
 
 struct monster_race;

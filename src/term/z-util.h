@@ -21,18 +21,15 @@
  * All variables and functions in this file are "addressable".
  */
 
-
 /**** Available variables ****/
 
 /* A concptr to the name of the program */
 extern concptr argv0;
 
-
 /* Aux functions */
 extern void (*plog_aux)(concptr);
 extern void (*quit_aux)(concptr);
 extern void (*core_aux)(concptr);
-
 
 /**** Available Functions ****/
 
@@ -50,7 +47,6 @@ extern void quit(concptr str);
 /* Dump core, with optional message */
 extern void core(concptr str);
 
-
 /* 64-bit integer operations */
 
 /*!
@@ -61,7 +57,7 @@ extern void core(concptr str);
  *
  * hi や n に範囲外の値を渡したり、オーバーフローした場合の動作は未定義。
  */
-void s64b_lshift(int32_t* hi, uint32_t* lo, int n);
+void s64b_lshift(int32_t *hi, uint32_t *lo, int n);
 
 /*!
  * @brief 64bit非負整数を n 回右シフトする。
@@ -71,7 +67,7 @@ void s64b_lshift(int32_t* hi, uint32_t* lo, int n);
  *
  * hi や n に範囲外の値を渡した場合の動作は未定義。
  */
-void s64b_rshift(int32_t* hi, uint32_t* lo, int n);
+void s64b_rshift(int32_t *hi, uint32_t *lo, int n);
 
 extern void s64b_add(int32_t *A1, uint32_t *A2, int32_t B1, uint32_t B2);
 extern void s64b_sub(int32_t *A1, uint32_t *A2, int32_t B1, uint32_t B2);
@@ -79,7 +75,6 @@ extern int s64b_cmp(int32_t A1, uint32_t A2, int32_t B1, uint32_t B2);
 extern void s64b_mul(int32_t *A1, uint32_t *A2, int32_t B1, uint32_t B2);
 extern void s64b_div(int32_t *A1, uint32_t *A2, int32_t B1, uint32_t B2);
 extern void s64b_mod(int32_t *A1, uint32_t *A2, int32_t B1, uint32_t B2);
-
 
 #endif
 

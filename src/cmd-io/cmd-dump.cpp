@@ -33,6 +33,8 @@
 #include "term/gameterm.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
+#include "timed-effect/player-hallucination.h"
+#include "timed-effect/timed-effects.h"
 #include "util/angband-files.h"
 #include "util/int-char-converter.h"
 #include "view/display-messages.h"
@@ -50,8 +52,9 @@ void do_cmd_pref(PlayerType *player_ptr)
 {
     char buf[80];
     strcpy(buf, "");
-    if (!get_string(_("設定変更コマンド: ", "Pref: "), buf, 80))
+    if (!get_string(_("設定変更コマンド: ", "Pref: "), buf, 80)) {
         return;
+    }
 
     (void)interpret_pref_file(player_ptr, buf);
 }
@@ -74,15 +77,17 @@ void do_cmd_colors(PlayerType *player_ptr)
         prt(_("(3) カラーの設定を変更する", "(3) Modify colors"), 6, 5);
         prt(_("コマンド: ", "Command: "), 8, 0);
         i = inkey();
-        if (i == ESCAPE)
+        if (i == ESCAPE) {
             break;
+        }
 
         if (i == '1') {
             prt(_("コマンド: ユーザー設定ファイルをロードします", "Command: Load a user pref file"), 8, 0);
             prt(_("ファイル: ", "File: "), 10, 0);
             sprintf(tmp, "%s.prf", player_ptr->base_name);
-            if (!askfor(tmp, 70))
+            if (!askfor(tmp, 70)) {
                 continue;
+            }
 
             (void)process_pref_file(player_ptr, tmp, true);
             term_xtra(TERM_XTRA_REACT, 0);
@@ -92,12 +97,14 @@ void do_cmd_colors(PlayerType *player_ptr)
             prt(_("コマンド: カラーの設定をファイルに書き出します", "Command: Dump colors"), 8, 0);
             prt(_("ファイル: ", "File: "), 10, 0);
             sprintf(tmp, "%s.prf", player_ptr->base_name);
-            if (!askfor(tmp, 70))
+            if (!askfor(tmp, 70)) {
                 continue;
+            }
 
             path_build(buf, sizeof(buf), ANGBAND_DIR_USER, tmp);
-            if (!open_auto_dump(&auto_dump_stream, buf, mark))
+            if (!open_auto_dump(&auto_dump_stream, buf, mark)) {
                 continue;
+            }
 
             auto_dump_printf(auto_dump_stream, _("\n# カラーの設定\n\n", "\n# Color redefinitions\n\n"));
             for (i = 0; i < 256; i++) {
@@ -107,11 +114,13 @@ void do_cmd_colors(PlayerType *player_ptr)
                 int bv = angband_color_table[i][3];
 
                 concptr name = _("未知", "unknown");
-                if (!kv && !rv && !gv && !bv)
+                if (!kv && !rv && !gv && !bv) {
                     continue;
+                }
 
-                if (i < 16)
+                if (i < 16) {
                     name = color_names[i];
+                }
 
                 auto_dump_printf(auto_dump_stream, _("# カラー '%s'\n", "# Color '%s'\n"), name);
                 auto_dump_printf(auto_dump_stream, "V:%d:0x%02X:0x%02X:0x%02X:0x%02X\n\n", i, kv, rv, gv, bv);
@@ -137,29 +146,40 @@ void do_cmd_colors(PlayerType *player_ptr)
                         angband_color_table[a][3]));
                 term_putstr(0, 14, -1, TERM_WHITE, _("コマンド (n/N/k/K/r/R/g/G/b/B): ", "Command (n/N/k/K/r/R/g/G/b/B): "));
                 i = inkey();
-                if (i == ESCAPE)
+                if (i == ESCAPE) {
                     break;
+                }
 
-                if (i == 'n')
+                if (i == 'n') {
                     a = (byte)(a + 1);
-                if (i == 'N')
+                }
+                if (i == 'N') {
                     a = (byte)(a - 1);
-                if (i == 'k')
+                }
+                if (i == 'k') {
                     angband_color_table[a][0] = (byte)(angband_color_table[a][0] + 1);
-                if (i == 'K')
+                }
+                if (i == 'K') {
                     angband_color_table[a][0] = (byte)(angband_color_table[a][0] - 1);
-                if (i == 'r')
+                }
+                if (i == 'r') {
                     angband_color_table[a][1] = (byte)(angband_color_table[a][1] + 1);
-                if (i == 'R')
+                }
+                if (i == 'R') {
                     angband_color_table[a][1] = (byte)(angband_color_table[a][1] - 1);
-                if (i == 'g')
+                }
+                if (i == 'g') {
                     angband_color_table[a][2] = (byte)(angband_color_table[a][2] + 1);
-                if (i == 'G')
+                }
+                if (i == 'G') {
                     angband_color_table[a][2] = (byte)(angband_color_table[a][2] - 1);
-                if (i == 'b')
+                }
+                if (i == 'b') {
                     angband_color_table[a][3] = (byte)(angband_color_table[a][3] + 1);
-                if (i == 'B')
+                }
+                if (i == 'B') {
                     angband_color_table[a][3] = (byte)(angband_color_table[a][3] - 1);
+                }
 
                 term_xtra(TERM_XTRA_REACT, 0);
                 term_redraw();
@@ -181,10 +201,12 @@ void do_cmd_note(void)
 {
     char buf[80];
     strcpy(buf, "");
-    if (!get_string(_("メモ: ", "Note: "), buf, 60))
+    if (!get_string(_("メモ: ", "Note: "), buf, 60)) {
         return;
-    if (!buf[0] || (buf[0] == ' '))
+    }
+    if (!buf[0] || (buf[0] == ' ')) {
         return;
+    }
 
     msg_format(_("メモ: %s", "Note: %s"), buf);
 }
@@ -205,8 +227,9 @@ void do_cmd_version(void)
  */
 void do_cmd_feeling(PlayerType *player_ptr)
 {
-    if (player_ptr->wild_mode)
+    if (player_ptr->wild_mode) {
         return;
+    }
 
     if (inside_quest(player_ptr->current_floor_ptr->quest_number) && !inside_quest(random_quest_number(player_ptr, player_ptr->current_floor_ptr->dun_level))) {
         msg_print(_("典型的なクエストのダンジョンのようだ。", "Looks like a typical quest level."));
@@ -228,12 +251,13 @@ void do_cmd_feeling(PlayerType *player_ptr)
         return;
     }
 
-    if (has_good_luck(player_ptr))
+    if (has_good_luck(player_ptr)) {
         msg_print(do_cmd_feeling_text_lucky[player_ptr->feeling]);
-    else if (is_echizen(player_ptr))
+    } else if (is_echizen(player_ptr)) {
         msg_print(do_cmd_feeling_text_combat[player_ptr->feeling]);
-    else
+    } else {
         msg_print(do_cmd_feeling_text[player_ptr->feeling]);
+    }
 }
 
 /*
@@ -249,16 +273,17 @@ void do_cmd_time(PlayerType *player_ptr)
     strcpy(desc, _("変な時刻だ。", "It is a strange time."));
 
     char day_buf[20];
-    if (day < MAX_DAYS)
+    if (day < MAX_DAYS) {
         sprintf(day_buf, "%d", day);
-    else
+    } else {
         strcpy(day_buf, "*****");
+    }
 
     msg_format(_("%s日目, 時刻は%d:%02d %sです。", "This is day %s. The time is %d:%02d %s."), day_buf, (hour % 12 == 0) ? 12 : (hour % 12), min,
         (hour < 12) ? "AM" : "PM");
 
     char buf[1024];
-    if (!randint0(10) || player_ptr->hallucinated) {
+    if (!randint0(10) || player_ptr->effects()->hallucination()->is_hallucinated()) {
         path_build(buf, sizeof(buf), ANGBAND_DIR_FILE, _("timefun_j.txt", "timefun.txt"));
     } else {
         path_build(buf, sizeof(buf), ANGBAND_DIR_FILE, _("timenorm_j.txt", "timenorm.txt"));
@@ -267,18 +292,21 @@ void do_cmd_time(PlayerType *player_ptr)
     FILE *fff;
     fff = angband_fopen(buf, "rt");
 
-    if (!fff)
+    if (!fff) {
         return;
+    }
 
     int full = hour * 100 + min;
     int start = 9999;
     int end = -9999;
     int num = 0;
     while (!angband_fgets(fff, buf, sizeof(buf))) {
-        if (!buf[0] || (buf[0] == '#'))
+        if (!buf[0] || (buf[0] == '#')) {
             continue;
-        if (buf[1] != ':')
+        }
+        if (buf[1] != ':') {
             continue;
+        }
 
         if (buf[0] == 'S') {
             start = atoi(buf + 2);
@@ -291,13 +319,15 @@ void do_cmd_time(PlayerType *player_ptr)
             continue;
         }
 
-        if ((start > full) || (full > end))
+        if ((start > full) || (full > end)) {
             continue;
+        }
 
         if (buf[0] == 'D') {
             num++;
-            if (!randint0(num))
+            if (!randint0(num)) {
                 strcpy(desc, buf + 2);
+            }
 
             continue;
         }

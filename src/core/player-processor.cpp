@@ -56,7 +56,10 @@
 #include "system/monster-race-definition.h"
 #include "system/player-type-definition.h"
 #include "term/screen-processor.h"
+#include "timed-effect/player-confusion.h"
 #include "timed-effect/player-cut.h"
+#include "timed-effect/player-hallucination.h"
+#include "timed-effect/player-paralysis.h"
 #include "timed-effect/player-stun.h"
 #include "timed-effect/timed-effects.h"
 #include "util/bit-flags-calculator.h"
@@ -128,8 +131,9 @@ void process_player(PlayerType *player_ptr)
     if (player_ptr->phase_out) {
         for (MONSTER_IDX m_idx = 1; m_idx < player_ptr->current_floor_ptr->m_max; m_idx++) {
             auto *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
-            if (!monster_is_valid(m_ptr))
+            if (!monster_is_valid(m_ptr)) {
                 continue;
+            }
 
             m_ptr->mflag2.set({ MonsterConstantFlagType::MARK, MonsterConstantFlagType::SHOW });
             update_monster(player_ptr, m_idx, false);
@@ -140,8 +144,9 @@ void process_player(PlayerType *player_ptr)
         player_ptr->energy_need -= speed_to_energy(player_ptr->pspeed);
     }
 
-    if (player_ptr->energy_need > 0)
+    if (player_ptr->energy_need > 0) {
         return;
+    }
     if (!command_rep) {
         WorldTurnProcessor(player_ptr).print_time();
     }
@@ -156,17 +161,15 @@ void process_player(PlayerType *player_ptr)
                 set_action(player_ptr, ACTION_NONE);
             }
         } else if (player_ptr->resting == COMMAND_ARG_REST_UNTIL_DONE) {
-            auto effects = player_ptr->effects();
-            auto is_stunned = effects->stun()->is_stunned();
-            auto is_cut = effects->cut()->is_cut();
-            if ((player_ptr->chp == player_ptr->mhp) && (player_ptr->csp >= player_ptr->msp) && !player_ptr->blind && !player_ptr->confused && !player_ptr->poisoned && !player_ptr->afraid && !is_stunned && !is_cut && !player_ptr->slow && !player_ptr->paralyzed && !player_ptr->hallucinated && !player_ptr->word_recall && !player_ptr->alter_reality) {
+            if (player_ptr->is_fully_healthy()) {
                 set_action(player_ptr, ACTION_NONE);
             }
         }
     }
 
-    if (player_ptr->action == ACTION_FISH)
+    if (player_ptr->action == ACTION_FISH) {
         process_fishing(player_ptr);
+    }
 
     if (check_abort) {
         if (continuous_action_running(player_ptr)) {
@@ -179,7 +182,7 @@ void process_player(PlayerType *player_ptr)
         }
     }
 
-    if (player_ptr->riding && !player_ptr->confused && !player_ptr->blind) {
+    if (player_ptr->riding && !player_ptr->effects()->confusion()->is_confused() && !player_ptr->blind) {
         auto *m_ptr = &player_ptr->current_floor_ptr->m_list[player_ptr->riding];
         auto *r_ptr = &r_info[m_ptr->r_idx];
         if (monster_csleep_remaining(m_ptr)) {
@@ -220,14 +223,16 @@ void process_player(PlayerType *player_ptr)
     }
 
     load = false;
-    if (player_ptr->lightspeed)
+    if (player_ptr->lightspeed) {
         set_lightspeed(player_ptr, player_ptr->lightspeed - 1, true);
+    }
 
     if (PlayerClass(player_ptr).equals(PlayerClassType::FORCETRAINER) && get_current_ki(player_ptr)) {
-        if (get_current_ki(player_ptr) < 40)
+        if (get_current_ki(player_ptr) < 40) {
             set_current_ki(player_ptr, true, 0);
-        else
+        } else {
             set_current_ki(player_ptr, false, -40);
+        }
         player_ptr->update |= (PU_BONUS);
     }
 
@@ -265,28 +270,32 @@ void process_player(PlayerType *player_ptr)
         update_monsters(player_ptr, false);
         handle_stuff(player_ptr);
         move_cursor_relative(player_ptr->y, player_ptr->x);
-        if (fresh_before)
+        if (fresh_before) {
             term_fresh_force();
+        }
 
         pack_overflow(player_ptr);
-        if (!command_new)
+        if (!command_new) {
             command_see = false;
+        }
 
         PlayerEnergy energy(player_ptr);
         energy.reset_player_turn();
         auto effects = player_ptr->effects();
         auto is_knocked_out = effects->stun()->is_knocked_out();
+        auto is_paralyzed = effects->paralysis()->is_paralyzed();
         if (player_ptr->phase_out) {
             move_cursor_relative(player_ptr->y, player_ptr->x);
             command_cmd = SPECIAL_KEY_BUILDING;
             process_command(player_ptr);
-        } else if ((player_ptr->paralyzed || is_knocked_out) && !cheat_immortal) {
+        } else if ((is_paralyzed || is_knocked_out) && !cheat_immortal) {
             energy.set_player_turn_energy(100);
         } else if (player_ptr->action == ACTION_REST) {
             if (player_ptr->resting > 0) {
                 player_ptr->resting--;
-                if (!player_ptr->resting)
+                if (!player_ptr->resting) {
                     set_action(player_ptr, ACTION_NONE);
+                }
                 player_ptr->redraw |= (PR_STATE);
             }
 
@@ -311,7 +320,7 @@ void process_player(PlayerType *player_ptr)
             window_stuff(player_ptr);
 
             can_save = true;
-            request_command(player_ptr, false);
+            InputKeyRequestor(player_ptr, false).request_command();
             can_save = false;
             process_command(player_ptr);
         }
@@ -324,15 +333,17 @@ void process_player(PlayerType *player_ptr)
                 player_ptr->energy_need += (int16_t)((int32_t)player_ptr->energy_use * ENERGY_NEED() / 100L);
             }
 
-            if (player_ptr->hallucinated)
+            if (effects->hallucination()->is_hallucinated()) {
                 player_ptr->redraw |= (PR_MAP);
+            }
 
             for (MONSTER_IDX m_idx = 1; m_idx < player_ptr->current_floor_ptr->m_max; m_idx++) {
                 monster_type *m_ptr;
                 monster_race *r_ptr;
                 m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
-                if (!monster_is_valid(m_ptr))
+                if (!monster_is_valid(m_ptr)) {
                     continue;
+                }
 
                 r_ptr = &r_info[m_ptr->ap_r_idx];
 
@@ -360,10 +371,12 @@ void process_player(PlayerType *player_ptr)
                         m_ptr->mflag2.reset(MonsterConstantFlagType::MARK);
                         m_ptr->ml = false;
                         update_monster(player_ptr, m_idx, false);
-                        if (player_ptr->health_who == m_idx)
+                        if (player_ptr->health_who == m_idx) {
                             player_ptr->redraw |= (PR_HEALTH);
-                        if (player_ptr->riding == m_idx)
+                        }
+                        if (player_ptr->riding == m_idx) {
                             player_ptr->redraw |= (PR_UHEALTH);
+                        }
 
                         lite_spot(player_ptr, m_ptr->fy, m_ptr->fx);
                     }
@@ -407,11 +420,13 @@ void process_player(PlayerType *player_ptr)
         }
 
         auto sniper_data = PlayerClass(player_ptr).get_specific_data<sniper_data_type>();
-        if (player_ptr->energy_use && sniper_data && sniper_data->reset_concent)
+        if (player_ptr->energy_use && sniper_data && sniper_data->reset_concent) {
             reset_concentration(player_ptr, true);
+        }
 
-        if (player_ptr->leaving)
+        if (player_ptr->leaving) {
             break;
+        }
     }
 
     update_smell(player_ptr->current_floor_ptr, player_ptr);
@@ -426,8 +441,9 @@ void process_upkeep_with_speed(PlayerType *player_ptr)
         player_ptr->enchant_energy_need -= speed_to_energy(player_ptr->pspeed);
     }
 
-    if (player_ptr->enchant_energy_need > 0)
+    if (player_ptr->enchant_energy_need > 0) {
         return;
+    }
 
     while (player_ptr->enchant_energy_need <= 0) {
         if (!load) {

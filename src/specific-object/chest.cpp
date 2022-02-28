@@ -1,4 +1,5 @@
 ﻿#include "specific-object/chest.h"
+#include "effect/attribute-types.h"
 #include "floor/cave.h"
 #include "floor/floor-object.h"
 #include "grid/grid.h"
@@ -15,7 +16,6 @@
 #include "spell-kind/spells-equipment.h"
 #include "spell-kind/spells-launcher.h"
 #include "spell-kind/spells-sight.h"
-#include "effect/attribute-types.h"
 #include "spell/spells-summon.h"
 #include "spell/summon-types.h"
 #include "status/bad-status-setter.h"
@@ -84,8 +84,9 @@ void Chest::chest_death(bool scatter, POSITION y, POSITION x, OBJECT_IDX o_idx)
     }
 
     /* Zero pval means empty chest */
-    if (!o_ptr->pval)
+    if (!o_ptr->pval) {
         number = 0;
+    }
 
     /* Drop some objects (non-chests) */
     for (; number > 0; --number) {
@@ -95,15 +96,17 @@ void Chest::chest_death(bool scatter, POSITION y, POSITION x, OBJECT_IDX o_idx)
         /* Small chests often drop gold */
         if (small && (randint0(100) < 25)) {
             /* Make some gold */
-            if (!make_gold(this->player_ptr, q_ptr))
+            if (!make_gold(this->player_ptr, q_ptr)) {
                 continue;
+            }
         }
 
         /* Otherwise drop an item */
         else {
             /* Make a good object */
-            if (!make_object(this->player_ptr, q_ptr, mode))
+            if (!make_object(this->player_ptr, q_ptr, mode)) {
                 continue;
+            }
         }
 
         /* If chest scatters its contents, pick any floor square. */
@@ -115,8 +118,9 @@ void Chest::chest_death(bool scatter, POSITION y, POSITION x, OBJECT_IDX o_idx)
                 x = randint0(MAX_WID);
 
                 /* Must be an empty floor. */
-                if (!is_cave_empty_bold(this->player_ptr, y, x))
+                if (!is_cave_empty_bold(this->player_ptr, y, x)) {
                     continue;
+                }
 
                 /* Place the object there. */
                 (void)drop_near(this->player_ptr, q_ptr, -1, y, x);
@@ -126,8 +130,9 @@ void Chest::chest_death(bool scatter, POSITION y, POSITION x, OBJECT_IDX o_idx)
             }
         }
         /* Normally, drop object near the chest. */
-        else
+        else {
             (void)drop_near(this->player_ptr, q_ptr, -1, y, x);
+        }
     }
 
     /* Reset the object level */
@@ -162,8 +167,9 @@ void Chest::chest_trap(POSITION y, POSITION x, OBJECT_IDX o_idx)
     int mon_level = o_ptr->chest_level;
 
     /* Ignore disarmed chests */
-    if (o_ptr->pval <= 0)
+    if (o_ptr->pval <= 0) {
         return;
+    }
 
     /* Obtain the traps */
     auto trap = chest_traps[o_ptr->pval];
@@ -203,10 +209,11 @@ void Chest::chest_trap(POSITION y, POSITION x, OBJECT_IDX o_idx)
         int num = 2 + randint1(3);
         msg_print(_("突如吹き出した煙に包み込まれた！", "You are enveloped in a cloud of smoke!"));
         for (i = 0; i < num; i++) {
-            if (randint1(100) < this->player_ptr->current_floor_ptr->dun_level)
+            if (randint1(100) < this->player_ptr->current_floor_ptr->dun_level) {
                 activate_hi_summon(this->player_ptr, this->player_ptr->y, this->player_ptr->x, false);
-            else
+            } else {
                 (void)summon_specific(this->player_ptr, 0, y, x, mon_level, SUMMON_NONE, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE | PM_NO_PET));
+            }
         }
     }
 
@@ -222,8 +229,9 @@ void Chest::chest_trap(POSITION y, POSITION x, OBJECT_IDX o_idx)
     if (trap.has(ChestTrapType::BIRD_STORM)) {
         msg_print(_("鳥の群れがあなたを取り巻いた！", "A storm of birds swirls around you!"));
 
-        for (i = 0; i < randint1(3) + 3; i++)
+        for (i = 0; i < randint1(3) + 3; i++) {
             (void)fire_meteor(this->player_ptr, -1, AttributeType::FORCE, y, x, o_ptr->pval / 5, 7);
+        }
 
         for (i = 0; i < randint1(5) + o_ptr->pval / 5; i++) {
             (void)summon_specific(this->player_ptr, 0, y, x, mon_level, SUMMON_BIRD, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE | PM_NO_PET));
@@ -278,13 +286,13 @@ void Chest::chest_trap(POSITION y, POSITION x, OBJECT_IDX o_idx)
                 take_hit(this->player_ptr, DAMAGE_NOESCAPE, damroll(5, 20), _("破滅のトラップの宝箱", "a chest dispel-player trap"));
                 continue;
             }
-            
+
             BadStatusSetter bss(this->player_ptr);
             if (one_in_(5)) {
                 (void)bss.mod_cut(200);
                 continue;
             }
-            
+
             if (one_in_(4)) {
                 if (!this->player_ptr->free_act) {
                     (void)bss.mod_paralysis(2 + randint0(6));
@@ -294,12 +302,12 @@ void Chest::chest_trap(POSITION y, POSITION x, OBJECT_IDX o_idx)
 
                 continue;
             }
-            
+
             if (one_in_(3)) {
                 apply_disenchant(this->player_ptr, 0);
                 continue;
             }
-            
+
             if (one_in_(2)) {
                 (void)do_dec_stat(this->player_ptr, A_STR);
                 (void)do_dec_stat(this->player_ptr, A_DEX);

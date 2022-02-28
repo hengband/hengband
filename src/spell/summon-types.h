@@ -3,7 +3,7 @@
 /* summon_specificで取り扱われる、召喚の種別定義 / Legal restrictions for "summon_specific()" */
 enum summon_type : int {
     SUMMON_NONE = 0,
-	SUMMON_ANT = 11,  /*!< 召喚タイプ: アリ */
+    SUMMON_ANT = 11, /*!< 召喚タイプ: アリ */
     SUMMON_SPIDER = 12, /*!< 召喚タイプ: 蜘蛛 */
     SUMMON_HOUND = 13, /*!< 召喚タイプ: ハウンド */
     SUMMON_HYDRA = 14, /*!< 召喚タイプ: ヒドラ */

@@ -9,6 +9,7 @@
 #include "load/old/load-v1-7-0.h"
 #include "load/player-attack-loader.h"
 #include "load/player-class-specific-data-loader.h"
+#include "load/savedata-old-flag-types.h"
 #include "load/world-loader.h"
 #include "market/arena.h"
 #include "monster-race/race-ability-flags.h"
@@ -19,9 +20,13 @@
 #include "player/attack-defense-types.h"
 #include "player/player-skill.h"
 #include "spell-realm/spells-song.h"
+#include "system/angband-exceptions.h"
 #include "system/floor-type-definition.h"
 #include "system/player-type-definition.h"
+#include "timed-effect/player-confusion.h"
 #include "timed-effect/player-cut.h"
+#include "timed-effect/player-hallucination.h"
+#include "timed-effect/player-paralysis.h"
 #include "timed-effect/player-stun.h"
 #include "timed-effect/timed-effects.h"
 #include "world/world.h"
@@ -32,14 +37,16 @@
  */
 static void rd_realms(PlayerType *player_ptr)
 {
-    if (PlayerClass(player_ptr).equals(PlayerClassType::ELEMENTALIST))
+    if (PlayerClass(player_ptr).equals(PlayerClassType::ELEMENTALIST)) {
         player_ptr->element = rd_byte();
-    else
+    } else {
         player_ptr->realm1 = rd_byte();
+    }
 
     player_ptr->realm2 = rd_byte();
-    if (player_ptr->realm2 == 255)
+    if (player_ptr->realm2 == 255) {
         player_ptr->realm2 = 0;
+    }
 }
 
 /*!
@@ -49,18 +56,20 @@ static void rd_realms(PlayerType *player_ptr)
 void rd_base_info(PlayerType *player_ptr)
 {
     rd_string(player_ptr->name, sizeof(player_ptr->name));
-    rd_string(player_ptr->died_from, sizeof(player_ptr->died_from));
+    rd_string(player_ptr->died_from, 1024);
     if (!h_older_than(1, 7, 0, 1)) {
         char buf[1024];
         rd_string(buf, sizeof buf);
-        if (buf[0])
+        if (buf[0]) {
             player_ptr->last_message = string_make(buf);
+        }
     }
 
     load_quick_start();
     const int max_history_lines = 4;
-    for (int i = 0; i < max_history_lines; i++)
+    for (int i = 0; i < max_history_lines; i++) {
         rd_string(player_ptr->history[i], sizeof(player_ptr->history[i]));
+    }
 
     player_ptr->prace = i2enum<PlayerRaceType>(rd_byte());
     player_ptr->pclass = i2enum<PlayerClassType>(rd_byte());
@@ -70,8 +79,9 @@ void rd_base_info(PlayerType *player_ptr)
     rd_realms(player_ptr);
 
     strip_bytes(1);
-    if (h_older_than(0, 4, 4))
+    if (h_older_than(0, 4, 4)) {
         set_zangband_realm(player_ptr);
+    }
 
     player_ptr->hitdie = rd_byte();
     player_ptr->expfact = rd_u16b();
@@ -84,32 +94,40 @@ void rd_base_info(PlayerType *player_ptr)
 void rd_experience(PlayerType *player_ptr)
 {
     player_ptr->max_exp = rd_s32b();
-    if (h_older_than(1, 5, 4, 1))
+    if (h_older_than(1, 5, 4, 1)) {
         player_ptr->max_max_exp = player_ptr->max_exp;
-    else
+    } else {
         player_ptr->max_max_exp = rd_s32b();
+    }
 
     player_ptr->exp = rd_s32b();
-    if (h_older_than(1, 7, 0, 3))
+    if (h_older_than(1, 7, 0, 3)) {
         set_exp_frac_old(player_ptr);
-    else
+    } else {
         player_ptr->exp_frac = rd_u32b();
+    }
 
     player_ptr->lev = rd_s16b();
-    for (int i = 0; i < 64; i++)
+    for (int i = 0; i < 64; i++) {
         player_ptr->spell_exp[i] = rd_s16b();
+    }
 
-    if (PlayerClass(player_ptr).equals(PlayerClassType::SORCERER) && h_older_than(0, 4, 2))
-        for (int i = 0; i < 64; i++)
+    if (PlayerClass(player_ptr).equals(PlayerClassType::SORCERER) && h_older_than(0, 4, 2)) {
+        for (int i = 0; i < 64; i++) {
             player_ptr->spell_exp[i] = PlayerSkill::spell_exp_at(PlayerSkillRank::MASTER);
+        }
+    }
 
     const int max_weapon_exp_size = h_older_than(0, 3, 6) ? 60 : 64;
-    for (auto tval : TV_WEAPON_RANGE)
-        for (int j = 0; j < max_weapon_exp_size; j++)
+    for (auto tval : TV_WEAPON_RANGE) {
+        for (int j = 0; j < max_weapon_exp_size; j++) {
             player_ptr->weapon_exp[tval][j] = rd_s16b();
+        }
+    }
 
-    for (auto i : PLAYER_SKILL_KIND_TYPE_RANGE)
+    for (auto i : PLAYER_SKILL_KIND_TYPE_RANGE) {
         player_ptr->skill_exp[i] = rd_s16b();
+    }
 
     // resreved skills
     strip_bytes(sizeof(int16_t) * (MAX_SKILLS - PLAYER_SKILL_KIND_TYPE_RANGE.size()));
@@ -117,14 +135,16 @@ void rd_experience(PlayerType *player_ptr)
 
 void rd_skills(PlayerType *player_ptr)
 {
-    if (h_older_than(0, 4, 1))
+    if (h_older_than(0, 4, 1)) {
         set_zangband_skill(player_ptr);
+    }
 
     PlayerClass(player_ptr).init_specific_data();
     std::visit(PlayerClassSpecificDataLoader(), player_ptr->class_specific_data);
 
-    if (music_singing_any(player_ptr))
+    if (music_singing_any(player_ptr)) {
         player_ptr->action = ACTION_SING;
+    }
 }
 
 static void set_race(PlayerType *player_ptr)
@@ -152,8 +172,9 @@ void rd_bounty_uniques(PlayerType *player_ptr)
         return;
     }
 
-    for (int i = 0; i < MAX_BOUNTY; i++)
+    for (int i = 0; i < MAX_BOUNTY; i++) {
         w_ptr->bounty_r_idx[i] = rd_s16b();
+    }
 }
 
 /*!
@@ -162,14 +183,17 @@ void rd_bounty_uniques(PlayerType *player_ptr)
  */
 static void rd_base_status(PlayerType *player_ptr)
 {
-    for (int i = 0; i < A_MAX; i++)
+    for (int i = 0; i < A_MAX; i++) {
         player_ptr->stat_max[i] = rd_s16b();
+    }
 
-    for (int i = 0; i < A_MAX; i++)
+    for (int i = 0; i < A_MAX; i++) {
         player_ptr->stat_max_max[i] = rd_s16b();
+    }
 
-    for (int i = 0; i < A_MAX; i++)
+    for (int i = 0; i < A_MAX; i++) {
         player_ptr->stat_cur[i] = rd_s16b();
+    }
 }
 
 static void set_imitation(PlayerType *player_ptr)
@@ -209,26 +233,37 @@ static void set_imitation(PlayerType *player_ptr)
 static void rd_phase_out(PlayerType *player_ptr)
 {
     player_ptr->current_floor_ptr->inside_arena = rd_s16b() != 0;
-    player_ptr->current_floor_ptr->quest_number = i2enum<QuestId>(rd_s16b());
-    if (h_older_than(0, 3, 5))
+    const auto quest_number = rd_s16b();
+    if (loading_savefile_version_is_older_than(15)) {
+        if (quest_number == enum2i(OldQuestId15::CITY_SEA)) {
+            const std::string msg(_("海底都市クエストにいるデータはサポート外です。",
+                "The save data in the quest of The City beneath the Sea is unsupported."));
+            throw(SaveDataNotSupportedException(msg));
+        }
+    }
+    player_ptr->current_floor_ptr->quest_number = i2enum<QuestId>(quest_number);
+    if (h_older_than(0, 3, 5)) {
         player_ptr->phase_out = false;
-    else {
+    } else {
         player_ptr->phase_out = rd_s16b() != 0;
     }
 }
 
 static void rd_arena(PlayerType *player_ptr)
 {
-    if (h_older_than(0, 0, 3))
+    if (h_older_than(0, 0, 3)) {
         update_gambling_monsters(player_ptr);
-    else
+    } else {
         set_gambling_monsters();
+    }
 
     player_ptr->town_num = rd_s16b();
     player_ptr->arena_number = rd_s16b();
-    if (h_older_than(1, 5, 0, 1))
-        if (player_ptr->arena_number >= 99)
+    if (h_older_than(1, 5, 0, 1)) {
+        if (player_ptr->arena_number >= 99) {
             player_ptr->arena_number = ARENA_DEFEATED_OLD_VER;
+        }
+    }
 
     rd_phase_out(player_ptr);
     player_ptr->exit_bldg = rd_byte();
@@ -280,10 +315,11 @@ static void rd_mana(PlayerType *player_ptr)
  */
 static void rd_bad_status(PlayerType *player_ptr)
 {
+    auto effects = player_ptr->effects();
     strip_bytes(2); /* Old "rest" */
     player_ptr->blind = rd_s16b();
-    player_ptr->paralyzed = rd_s16b();
-    player_ptr->confused = rd_s16b();
+    effects->paralysis()->set(rd_s16b());
+    effects->confusion()->set(rd_s16b());
     player_ptr->food = rd_s16b();
     strip_bytes(4); /* Old "food_digested" / "protection" */
 }
@@ -291,13 +327,15 @@ static void rd_bad_status(PlayerType *player_ptr)
 static void rd_energy(PlayerType *player_ptr)
 {
     player_ptr->energy_need = rd_s16b();
-    if (h_older_than(1, 0, 13))
+    if (h_older_than(1, 0, 13)) {
         player_ptr->energy_need = 100 - player_ptr->energy_need;
+    }
 
-    if (h_older_than(2, 1, 2, 0))
+    if (h_older_than(2, 1, 2, 0)) {
         player_ptr->enchant_energy_need = 0;
-    else
+    } else {
         player_ptr->enchant_energy_need = rd_s16b();
+    }
 }
 
 /*!
@@ -307,27 +345,30 @@ static void rd_energy(PlayerType *player_ptr)
  */
 static void rd_status(PlayerType *player_ptr)
 {
+    auto effects = player_ptr->effects();
     player_ptr->fast = rd_s16b();
     player_ptr->slow = rd_s16b();
     player_ptr->afraid = rd_s16b();
-    player_ptr->effects()->cut()->set(rd_s16b());
-    player_ptr->effects()->stun()->set(rd_s16b());
+    effects->cut()->set(rd_s16b());
+    effects->stun()->set(rd_s16b());
     player_ptr->poisoned = rd_s16b();
-    player_ptr->hallucinated = rd_s16b();
+    effects->hallucination()->set(rd_s16b());
     player_ptr->protevil = rd_s16b();
     player_ptr->invuln = rd_s16b();
-    if (h_older_than(0, 0, 0))
+    if (h_older_than(0, 0, 0)) {
         player_ptr->ult_res = 0;
-    else
+    } else {
         player_ptr->ult_res = rd_s16b();
+    }
 }
 
 static void rd_tsuyoshi(PlayerType *player_ptr)
 {
-    if (h_older_than(0, 0, 2))
+    if (h_older_than(0, 0, 2)) {
         player_ptr->tsuyoshi = 0;
-    else
+    } else {
         player_ptr->tsuyoshi = rd_s16b();
+    }
 }
 
 static void set_timed_effects(PlayerType *player_ptr)
@@ -342,32 +383,33 @@ static void set_timed_effects(PlayerType *player_ptr)
     player_ptr->tim_sh_touki = rd_s16b();
     player_ptr->lightspeed = rd_s16b();
     player_ptr->tsubureru = rd_s16b();
-    if (h_older_than(0, 4, 7))
+    if (h_older_than(0, 4, 7)) {
         player_ptr->magicdef = 0;
-    else
+    } else {
         player_ptr->magicdef = rd_s16b();
+    }
 
     player_ptr->tim_res_nether = rd_s16b();
-    if (h_older_than(0, 4, 11))
+    if (h_older_than(0, 4, 11)) {
         set_zangband_mimic(player_ptr);
-    else {
+    } else {
         player_ptr->tim_res_time = rd_s16b();
 
-        player_ptr->mimic_form = rd_byte();
+        player_ptr->mimic_form = i2enum<MimicKindType>(rd_byte());
         player_ptr->tim_mimic = rd_s16b();
         player_ptr->tim_sh_fire = rd_s16b();
     }
 
-    if (h_older_than(1, 0, 99))
+    if (h_older_than(1, 0, 99)) {
         set_zangband_holy_aura(player_ptr);
-    else {
+    } else {
         player_ptr->tim_sh_holy = rd_s16b();
         player_ptr->tim_eyeeye = rd_s16b();
     }
 
-    if (h_older_than(1, 0, 3))
+    if (h_older_than(1, 0, 3)) {
         set_zangband_reflection(player_ptr);
-    else {
+    } else {
         player_ptr->tim_reflect = rd_s16b();
         player_ptr->multishadow = rd_s16b();
         player_ptr->dustrobe = rd_s16b();
@@ -388,11 +430,13 @@ static void set_mutations(PlayerType *player_ptr)
 
 static void set_virtues(PlayerType *player_ptr)
 {
-    for (int i = 0; i < 8; i++)
+    for (int i = 0; i < 8; i++) {
         player_ptr->virtues[i] = rd_s16b();
+    }
 
-    for (int i = 0; i < 8; i++)
+    for (int i = 0; i < 8; i++) {
         player_ptr->vir_types[i] = rd_s16b();
+    }
 }
 
 /*!

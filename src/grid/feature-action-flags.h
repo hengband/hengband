@@ -1,6 +1,6 @@
 ﻿#pragma once
-#include "system/angband.h"
 #include "grid/feature-flag-types.h"
+#include "system/angband.h"
 
 /*
  * Feature action flags

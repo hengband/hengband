@@ -14,8 +14,9 @@
 
 static bool invest_misc_ranger(ObjectType *o_ptr)
 {
-    if (o_ptr->art_flags.has(TR_SUST_CON))
+    if (o_ptr->art_flags.has(TR_SUST_CON)) {
         return false;
+    }
 
     o_ptr->art_flags.set(TR_SUST_CON);
     return one_in_(2);
@@ -23,8 +24,9 @@ static bool invest_misc_ranger(ObjectType *o_ptr)
 
 static bool invest_misc_strength(ObjectType *o_ptr)
 {
-    if (o_ptr->art_flags.has(TR_SUST_STR))
+    if (o_ptr->art_flags.has(TR_SUST_STR)) {
         return false;
+    }
 
     o_ptr->art_flags.set(TR_SUST_STR);
     return one_in_(2);
@@ -32,8 +34,9 @@ static bool invest_misc_strength(ObjectType *o_ptr)
 
 static bool invest_misc_wisdom(ObjectType *o_ptr)
 {
-    if (o_ptr->art_flags.has(TR_SUST_WIS))
+    if (o_ptr->art_flags.has(TR_SUST_WIS)) {
         return false;
+    }
 
     o_ptr->art_flags.set(TR_SUST_WIS);
     return one_in_(2);
@@ -41,8 +44,9 @@ static bool invest_misc_wisdom(ObjectType *o_ptr)
 
 static bool invest_misc_intelligence(ObjectType *o_ptr)
 {
-    if (o_ptr->art_flags.has(TR_SUST_INT))
+    if (o_ptr->art_flags.has(TR_SUST_INT)) {
         return false;
+    }
 
     o_ptr->art_flags.set(TR_SUST_INT);
     return one_in_(2);
@@ -50,8 +54,9 @@ static bool invest_misc_intelligence(ObjectType *o_ptr)
 
 static bool invest_misc_dexterity(ObjectType *o_ptr)
 {
-    if (o_ptr->art_flags.has(TR_SUST_DEX))
+    if (o_ptr->art_flags.has(TR_SUST_DEX)) {
         return false;
+    }
 
     o_ptr->art_flags.set(TR_SUST_DEX);
     return one_in_(2);
@@ -59,8 +64,9 @@ static bool invest_misc_dexterity(ObjectType *o_ptr)
 
 static bool invest_misc_constitution(ObjectType *o_ptr)
 {
-    if (o_ptr->art_flags.has(TR_SUST_CON))
+    if (o_ptr->art_flags.has(TR_SUST_CON)) {
         return false;
+    }
 
     o_ptr->art_flags.set(TR_SUST_CON);
     return one_in_(2);
@@ -68,8 +74,9 @@ static bool invest_misc_constitution(ObjectType *o_ptr)
 
 static bool invest_misc_charisma(ObjectType *o_ptr)
 {
-    if (o_ptr->art_flags.has(TR_SUST_CHR))
+    if (o_ptr->art_flags.has(TR_SUST_CHR)) {
         return false;
+    }
 
     o_ptr->art_flags.set(TR_SUST_CHR);
     return one_in_(2);
@@ -77,8 +84,9 @@ static bool invest_misc_charisma(ObjectType *o_ptr)
 
 static bool invest_misc_chaos(ObjectType *o_ptr)
 {
-    if (o_ptr->art_flags.has(TR_TELEPORT))
+    if (o_ptr->art_flags.has(TR_TELEPORT)) {
         return false;
+    }
 
     o_ptr->art_flags.set(TR_TELEPORT);
     return one_in_(2);
@@ -86,8 +94,9 @@ static bool invest_misc_chaos(ObjectType *o_ptr)
 
 static bool invest_misc_res_curse(ObjectType *o_ptr)
 {
-    if (o_ptr->art_flags.has(TR_RES_CURSE))
+    if (o_ptr->art_flags.has(TR_RES_CURSE)) {
         return false;
+    }
 
     o_ptr->art_flags.set(TR_RES_CURSE);
     return one_in_(2);
@@ -118,8 +127,9 @@ static bool switch_misc_bias(ObjectType *o_ptr)
     case BIAS_CHAOS:
         return invest_misc_chaos(o_ptr);
     case BIAS_FIRE:
-        if (o_ptr->art_flags.has_not(TR_LITE_1))
+        if (o_ptr->art_flags.has_not(TR_LITE_1)) {
             o_ptr->art_flags.set(TR_LITE_1);
+        }
 
         return false;
     default:
@@ -146,20 +156,23 @@ static void invest_misc_string_esp(ObjectType *o_ptr)
     switch (randint1(3)) {
     case 1:
         o_ptr->art_flags.set(TR_ESP_EVIL);
-        if (!o_ptr->artifact_bias && one_in_(3))
+        if (!o_ptr->artifact_bias && one_in_(3)) {
             o_ptr->artifact_bias = BIAS_LAW;
+        }
 
         return;
     case 2:
         o_ptr->art_flags.set(TR_ESP_NONLIVING);
-        if (!o_ptr->artifact_bias && one_in_(3))
+        if (!o_ptr->artifact_bias && one_in_(3)) {
             o_ptr->artifact_bias = BIAS_MAGE;
+        }
 
         return;
     case 3:
         o_ptr->art_flags.set(TR_TELEPATHY);
-        if (!o_ptr->artifact_bias && one_in_(9))
+        if (!o_ptr->artifact_bias && one_in_(9)) {
             o_ptr->artifact_bias = BIAS_MAGE;
+        }
 
         return;
     }
@@ -170,16 +183,18 @@ static void switch_investment_weak_esps(ObjectType *o_ptr, const int *idx, const
     switch (idx[n]) {
     case 1:
         o_ptr->art_flags.set(TR_ESP_ANIMAL);
-        if (!o_ptr->artifact_bias && one_in_(4))
+        if (!o_ptr->artifact_bias && one_in_(4)) {
             o_ptr->artifact_bias = BIAS_RANGER;
+        }
 
         break;
     case 2:
         o_ptr->art_flags.set(TR_ESP_UNDEAD);
-        if (!o_ptr->artifact_bias && one_in_(3))
+        if (!o_ptr->artifact_bias && one_in_(3)) {
             o_ptr->artifact_bias = BIAS_PRIESTLY;
-        else if (!o_ptr->artifact_bias && one_in_(6))
+        } else if (!o_ptr->artifact_bias && one_in_(6)) {
             o_ptr->artifact_bias = BIAS_NECROMANTIC;
+        }
 
         break;
     case 3:
@@ -199,20 +214,23 @@ static void switch_investment_weak_esps(ObjectType *o_ptr, const int *idx, const
         break;
     case 8:
         o_ptr->art_flags.set(TR_ESP_HUMAN);
-        if (!o_ptr->artifact_bias && one_in_(6))
+        if (!o_ptr->artifact_bias && one_in_(6)) {
             o_ptr->artifact_bias = BIAS_ROGUE;
+        }
 
         break;
     case 9:
         o_ptr->art_flags.set(TR_ESP_GOOD);
-        if (!o_ptr->artifact_bias && one_in_(3))
+        if (!o_ptr->artifact_bias && one_in_(3)) {
             o_ptr->artifact_bias = BIAS_LAW;
+        }
 
         break;
     case 10:
         o_ptr->art_flags.set(TR_ESP_UNIQUE);
-        if (!o_ptr->artifact_bias && one_in_(3))
+        if (!o_ptr->artifact_bias && one_in_(3)) {
             o_ptr->artifact_bias = BIAS_LAW;
+        }
 
         break;
     }
@@ -223,19 +241,23 @@ static void invest_misc_weak_esps(ObjectType *o_ptr)
     int idx[3];
     idx[0] = randint1(10);
     idx[1] = randint1(9);
-    if (idx[1] >= idx[0])
+    if (idx[1] >= idx[0]) {
         idx[1]++;
+    }
 
     idx[2] = randint1(8);
-    if (idx[2] >= idx[0])
+    if (idx[2] >= idx[0]) {
         idx[2]++;
+    }
 
-    if (idx[2] >= idx[1])
+    if (idx[2] >= idx[1]) {
         idx[2]++;
+    }
 
     int n = randint1(3);
-    while (n--)
+    while (n--) {
         switch_investment_weak_esps(o_ptr, idx, n);
+    }
 }
 
 /*!
@@ -248,44 +270,51 @@ static void invest_misc_weak_esps(ObjectType *o_ptr)
  */
 void random_misc(PlayerType *player_ptr, ObjectType *o_ptr)
 {
-    if (switch_misc_bias(o_ptr))
+    if (switch_misc_bias(o_ptr)) {
         return;
+    }
 
     switch (randint1(34)) {
     case 1:
         o_ptr->art_flags.set(TR_SUST_STR);
-        if (!o_ptr->artifact_bias)
+        if (!o_ptr->artifact_bias) {
             o_ptr->artifact_bias = BIAS_STR;
+        }
 
         break;
     case 2:
         o_ptr->art_flags.set(TR_SUST_INT);
-        if (!o_ptr->artifact_bias)
+        if (!o_ptr->artifact_bias) {
             o_ptr->artifact_bias = BIAS_INT;
+        }
 
         break;
     case 3:
         o_ptr->art_flags.set(TR_SUST_WIS);
-        if (!o_ptr->artifact_bias)
+        if (!o_ptr->artifact_bias) {
             o_ptr->artifact_bias = BIAS_WIS;
+        }
 
         break;
     case 4:
         o_ptr->art_flags.set(TR_SUST_DEX);
-        if (!o_ptr->artifact_bias)
+        if (!o_ptr->artifact_bias) {
             o_ptr->artifact_bias = BIAS_DEX;
+        }
 
         break;
     case 5:
         o_ptr->art_flags.set(TR_SUST_CON);
-        if (!o_ptr->artifact_bias)
+        if (!o_ptr->artifact_bias) {
             o_ptr->artifact_bias = BIAS_CON;
+        }
 
         break;
     case 6:
         o_ptr->art_flags.set(TR_SUST_CHR);
-        if (!o_ptr->artifact_bias)
+        if (!o_ptr->artifact_bias) {
             o_ptr->artifact_bias = BIAS_CHR;
+        }
 
         break;
     case 7:
@@ -295,10 +324,11 @@ void random_misc(PlayerType *player_ptr, ObjectType *o_ptr)
         break;
     case 9:
         o_ptr->art_flags.set(TR_HOLD_EXP);
-        if (!o_ptr->artifact_bias && one_in_(5))
+        if (!o_ptr->artifact_bias && one_in_(5)) {
             o_ptr->artifact_bias = BIAS_PRIESTLY;
-        else if (!o_ptr->artifact_bias && one_in_(6))
+        } else if (!o_ptr->artifact_bias && one_in_(6)) {
             o_ptr->artifact_bias = BIAS_NECROMANTIC;
+        }
 
         break;
     case 10:
@@ -328,10 +358,11 @@ void random_misc(PlayerType *player_ptr, ObjectType *o_ptr)
     case 24:
     case 25:
     case 26:
-        if (o_ptr->is_armour())
+        if (o_ptr->is_armour()) {
             random_misc(player_ptr, o_ptr);
-        else
+        } else {
             o_ptr->to_a = 4 + randint1(11);
+        }
 
         break;
     case 27:

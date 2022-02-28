@@ -46,32 +46,38 @@ errr parse_m_info(std::string_view buf, angband_header *head)
 
     if (tokens[0] == "N") {
         // N:class-index
-        if (tokens.size() < 2 && tokens[1].size() == 0)
+        if (tokens.size() < 2 && tokens[1].size() == 0) {
             return PARSE_ERROR_GENERIC;
+        }
 
         auto i = std::stoi(tokens[1]);
-        if (i < error_idx)
+        if (i < error_idx) {
             return PARSE_ERROR_NON_SEQUENTIAL_RECORDS;
-        if (i >= head->info_num)
+        }
+        if (i >= head->info_num) {
             return PARSE_ERROR_OUT_OF_BOUNDS;
+        }
 
         error_idx = i;
         m_ptr = &m_info[i];
-    } else if (!m_ptr)
+    } else if (!m_ptr) {
         return PARSE_ERROR_MISSING_RECORD_HEADER;
-    else if (tokens[0] == "I") {
-        if (tokens.size() < 7 || tokens[1].size() == 0)
+    } else if (tokens[0] == "I") {
+        if (tokens.size() < 7 || tokens[1].size() == 0) {
             return PARSE_ERROR_TOO_FEW_ARGUMENTS;
+        }
 
         const auto tval = name_to_tval.find(tokens[1]);
-        if (tval == name_to_tval.end())
+        if (tval == name_to_tval.end()) {
             return PARSE_ERROR_INVALID_FLAG;
+        }
 
         m_ptr->spell_book = tval->second;
 
         const auto stat = name_to_stat.find(tokens[2]);
-        if (stat == name_to_stat.end())
+        if (stat == name_to_stat.end()) {
             return PARSE_ERROR_INVALID_FLAG;
+        }
 
         m_ptr->spell_stat = stat->second;
 
@@ -80,18 +86,21 @@ errr parse_m_info(std::string_view buf, angband_header *head)
         info_set_value(m_ptr->spell_first, tokens[5]);
         info_set_value(m_ptr->spell_weight, tokens[6]);
     } else if (tokens[0] == "R") {
-        if (tokens.size() < 3)
+        if (tokens.size() < 3) {
             return PARSE_ERROR_TOO_FEW_ARGUMENTS;
+        }
 
         info_set_value(realm, tokens[1]);
         info_set_value(readable, tokens[2]);
         magic_idx = 0;
     } else if (tokens[0] == "T") {
-        if (!readable)
+        if (!readable) {
             return PARSE_ERROR_GENERIC;
+        }
 
-        if (tokens.size() < 5)
+        if (tokens.size() < 5) {
             return PARSE_ERROR_TOO_FEW_ARGUMENTS;
+        }
 
         auto &magic = m_ptr->info[realm][magic_idx];
         info_set_value(magic.slevel, tokens[1]);
@@ -99,8 +108,9 @@ errr parse_m_info(std::string_view buf, angband_header *head)
         info_set_value(magic.sfail, tokens[3]);
         info_set_value(magic.sexp, tokens[4]);
         magic_idx++;
-    } else
+    } else {
         return PARSE_ERROR_UNDEFINED_DIRECTIVE;
+    }
 
     return PARSE_ERROR_NONE;
 }

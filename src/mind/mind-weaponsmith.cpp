@@ -114,14 +114,16 @@ static void drain_essence(PlayerType *player_ptr)
 
     OBJECT_IDX item;
     auto o_ptr = choose_object(player_ptr, &item, q, s, (USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT), FuncItemTester(&ObjectType::is_weapon_armour_ammo));
-    if (!o_ptr)
+    if (!o_ptr) {
         return;
+    }
 
     if (o_ptr->is_known() && !o_ptr->is_nameless()) {
         GAME_TEXT o_name[MAX_NLEN];
         describe_flavor(player_ptr, o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
-        if (!get_check(format(_("本当に%sから抽出してよろしいですか？", "Really extract from %s? "), o_name)))
+        if (!get_check(format(_("本当に%sから抽出してよろしいですか？", "Really extract from %s? "), o_name))) {
             return;
+        }
     }
 
     PlayerEnergy(player_ptr).set_player_turn_energy(100);
@@ -163,8 +165,9 @@ static COMMAND_CODE choose_essence(void)
 #endif
     const COMMAND_CODE mode_max = 8;
 
-    if (repeat_pull(&mode) && 1 <= mode && mode <= mode_max)
+    if (repeat_pull(&mode) && 1 <= mode && mode <= mode_max) {
         return mode;
+    }
     mode = 0;
     if (use_menu) {
         screen_save();
@@ -204,8 +207,9 @@ static COMMAND_CODE choose_essence(void)
                 mode = menu_line;
                 break;
             }
-            if (menu_line > mode_max)
+            if (menu_line > mode_max) {
                 menu_line -= mode_max;
+            }
         }
         screen_load();
     } else {
@@ -213,19 +217,22 @@ static COMMAND_CODE choose_essence(void)
         while (!mode) {
             int i;
 
-            for (i = 0; i < mode_max; i++)
+            for (i = 0; i < mode_max; i++) {
                 prt(format("  %c) %s", 'a' + i, menu_name[i]), 2 + i, 14);
+            }
 
             if (!get_com(_("何を付加しますか:", "Command :"), &choice, true)) {
                 screen_load();
                 return 0;
             }
 
-            if (isupper(choice))
+            if (isupper(choice)) {
                 choice = (char)tolower(choice);
+            }
 
-            if ('a' <= choice && choice <= 'a' + (char)mode_max - 1)
+            if ('a' <= choice && choice <= 'a' + (char)mode_max - 1) {
                 mode = (int)choice - 'a' + 1;
+            }
         }
         screen_load();
     }
@@ -247,8 +254,9 @@ static void display_smith_effect_list(const Smith &smith, const std::vector<Smit
 {
     auto x = 10;
 
-    for (auto y = 1; y < line_max + 2; y++)
+    for (auto y = 1; y < line_max + 2; y++) {
         prt("", y, x);
+    }
 
 #ifdef JP
     prt(format("   %-45s %6s/%s", "能力(必要エッセンス)", "所持数", "必要数"), 1, x);
@@ -261,10 +269,11 @@ static void display_smith_effect_list(const Smith &smith, const std::vector<Smit
         std::stringstream title;
 
         if (use_menu) {
-            if (ctr == (menu_line - 1))
+            if (ctr == (menu_line - 1)) {
                 title << _("》 ", ">  ");
-            else
+            } else {
                 title << "   ";
+            }
 
         } else {
             title << static_cast<char>(I2A(ctr)) << ") ";
@@ -333,8 +342,9 @@ static void add_essence(PlayerType *player_ptr, SmithCategoryType mode)
 
             const auto page_effect_num = std::min<int>(effect_num_per_page, smith_effect_list.size() - (page * effect_num_per_page));
 
-            if (!get_com(out_val, &choice, false))
+            if (!get_com(out_val, &choice, false)) {
                 break;
+            }
 
             if (use_menu) {
                 switch (choice) {
@@ -383,8 +393,9 @@ static void add_essence(PlayerType *player_ptr, SmithCategoryType mode)
                 }
                 }
 
-                if (menu_line > page_effect_num)
+                if (menu_line > page_effect_num) {
                     menu_line -= page_effect_num;
+                }
             }
 
             /* Request redraw */
@@ -405,8 +416,9 @@ static void add_essence(PlayerType *player_ptr, SmithCategoryType mode)
                 ask = (isupper(choice));
 
                 /* Lowercase */
-                if (ask)
+                if (ask) {
                     choice = (char)tolower(choice);
+                }
 
                 /* Extract request */
                 i = (islower(choice) ? A2I(choice) : -1);
@@ -427,8 +439,9 @@ static void add_essence(PlayerType *player_ptr, SmithCategoryType mode)
                 (void)strnfmt(tmp_val, 78, _("%sを付加しますか？ ", "Add the ability of %s? "), Smith::get_effect_name(smith_effect_list[i]));
 
                 /* Belay that order */
-                if (!get_check(tmp_val))
+                if (!get_check(tmp_val)) {
                     continue;
+                }
             }
 
             /* Stop the loop */
@@ -437,8 +450,9 @@ static void add_essence(PlayerType *player_ptr, SmithCategoryType mode)
 
         screen_load();
 
-        if (!flag)
+        if (!flag) {
             return;
+        }
 
         repeat_push(effect_idx);
     }
@@ -451,8 +465,9 @@ static void add_essence(PlayerType *player_ptr, SmithCategoryType mode)
     s = _("改良できるアイテムがありません。", "You have nothing to improve.");
 
     o_ptr = choose_object(player_ptr, &item, q, s, (USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT), *item_tester);
-    if (!o_ptr)
+    if (!o_ptr) {
         return;
+    }
 
     describe_flavor(player_ptr, o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
 
@@ -485,8 +500,9 @@ static void add_essence(PlayerType *player_ptr, SmithCategoryType mode)
             sprintf(tmp, _("いくつ付加しますか？ (1-%d): ", "Enchant how many? (1-%d): "), limit);
             strcpy(tmp_val, "1");
 
-            if (!get_string(tmp, tmp_val, 1))
+            if (!get_string(tmp, tmp_val, 1)) {
                 return;
+            }
             o_ptr->pval = static_cast<PARAMETER_VALUE>(std::clamp(atoi(tmp_val), 1, limit));
         }
 
@@ -535,12 +551,14 @@ static void erase_essence(PlayerType *player_ptr)
     s = _("エッセンスを付加したアイテムがありません。", "You have nothing with added essence to remove.");
 
     o_ptr = choose_object(player_ptr, &item, q, s, (USE_INVEN | USE_FLOOR), FuncItemTester(&ObjectType::is_smith));
-    if (!o_ptr)
+    if (!o_ptr) {
         return;
+    }
 
     describe_flavor(player_ptr, o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
-    if (!get_check(format(_("よろしいですか？ [%s]", "Are you sure? [%s]"), o_name)))
+    if (!get_check(format(_("よろしいですか？ [%s]", "Are you sure? [%s]"), o_name))) {
         return;
+    }
 
     PlayerEnergy(player_ptr).set_player_turn_energy(100);
 
@@ -563,20 +581,25 @@ void do_cmd_kaji(PlayerType *player_ptr, bool only_browse)
     COMMAND_CODE menu_line = (use_menu ? 1 : 0);
 
     if (!only_browse) {
-        if (cmd_limit_confused(player_ptr))
+        if (cmd_limit_confused(player_ptr)) {
             return;
-        if (cmd_limit_blind(player_ptr))
+        }
+        if (cmd_limit_blind(player_ptr)) {
             return;
-        if (cmd_limit_image(player_ptr))
+        }
+        if (cmd_limit_image(player_ptr)) {
             return;
+        }
     }
 
     if (!(repeat_pull(&mode) && 1 <= mode && mode <= 5)) {
-        if (only_browse)
+        if (only_browse) {
             screen_save();
+        }
         do {
-            if (!only_browse)
+            if (!only_browse) {
                 screen_save();
+            }
             if (use_menu) {
                 while (!mode) {
 #ifdef JP
@@ -618,8 +641,9 @@ void do_cmd_kaji(PlayerType *player_ptr, bool only_browse)
                         mode = menu_line;
                         break;
                     }
-                    if (menu_line > 5)
+                    if (menu_line > 5) {
                         menu_line -= 5;
+                    }
                 }
             }
 
@@ -683,8 +707,9 @@ void do_cmd_kaji(PlayerType *player_ptr, bool only_browse)
                 }
                 mode = 0;
             }
-            if (!only_browse)
+            if (!only_browse) {
                 screen_load();
+            }
         } while (only_browse);
         repeat_push(mode);
     }
@@ -700,8 +725,9 @@ void do_cmd_kaji(PlayerType *player_ptr, bool only_browse)
         break;
     case 4:
         mode = choose_essence();
-        if (mode == 0)
+        if (mode == 0) {
             break;
+        }
         add_essence(player_ptr, i2enum<SmithCategoryType>(mode));
         break;
     case 5:

@@ -7,22 +7,25 @@
 void display_monster_breath(lore_type *lore_ptr)
 {
     lore_ptr->breath = false;
-    if (lore_ptr->vn <= 0)
+    if (lore_ptr->vn <= 0) {
         return;
+    }
 
     lore_ptr->breath = true;
     hooked_roff(format(_("%^sは", "%^s"), Who::who(lore_ptr->msex)));
     for (int n = 0; n < lore_ptr->vn; n++) {
 #ifdef JP
-        if (n != 0)
+        if (n != 0) {
             hooked_roff("や");
+        }
 #else
-        if (n == 0)
+        if (n == 0) {
             hooked_roff(" may breathe ");
-        else if (n < lore_ptr->vn - 1)
+        } else if (n < lore_ptr->vn - 1) {
             hooked_roff(", ");
-        else
+        } else {
             hooked_roff(" or ");
+        }
 #endif
         hook_c_roff(lore_ptr->color[n], lore_ptr->vp[n]);
     }
@@ -35,8 +38,9 @@ void display_monster_breath(lore_type *lore_ptr)
 void display_monster_magic_types(lore_type *lore_ptr)
 {
     lore_ptr->magic = false;
-    if (lore_ptr->vn == 0)
+    if (lore_ptr->vn == 0) {
         return;
+    }
 
     lore_ptr->magic = true;
     if (lore_ptr->breath) {
@@ -46,27 +50,31 @@ void display_monster_magic_types(lore_type *lore_ptr)
     }
 
 #ifdef JP
-    if (lore_ptr->behavior_flags.has(MonsterBehaviorType::SMART))
+    if (lore_ptr->behavior_flags.has(MonsterBehaviorType::SMART)) {
         hook_c_roff(TERM_YELLOW, "的確に");
+    }
 
     hooked_roff("魔法を使うことができ、");
 #else
     hooked_roff(" magical, casting spells");
-    if (lore_ptr->behavior_flags.has(MonsterBehaviorType::SMART))
+    if (lore_ptr->behavior_flags.has(MonsterBehaviorType::SMART)) {
         hook_c_roff(TERM_YELLOW, " intelligently");
+    }
 #endif
 
     for (int n = 0; n < lore_ptr->vn; n++) {
 #ifdef JP
-        if (n != 0)
+        if (n != 0) {
             hooked_roff("、");
+        }
 #else
-        if (n == 0)
+        if (n == 0) {
             hooked_roff(" which ");
-        else if (n < lore_ptr->vn - 1)
+        } else if (n < lore_ptr->vn - 1) {
             hooked_roff(", ");
-        else
+        } else {
             hooked_roff(" or ");
+        }
 #endif
         hook_c_roff(lore_ptr->color[n], lore_ptr->vp[n]);
     }
@@ -78,8 +86,9 @@ void display_monster_magic_types(lore_type *lore_ptr)
 
 void display_mosnter_magic_possibility(lore_type *lore_ptr)
 {
-    if (!lore_ptr->breath && !lore_ptr->magic && !lore_ptr->shoot && !lore_ptr->rocket)
+    if (!lore_ptr->breath && !lore_ptr->magic && !lore_ptr->shoot && !lore_ptr->rocket) {
         return;
+    }
 
     int m = lore_ptr->r_ptr->r_cast_spell;
     int n = lore_ptr->r_ptr->freq_spell;

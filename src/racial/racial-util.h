@@ -22,7 +22,7 @@ enum rc_index : int {
 struct rpi_type {
     std::string racial_name{}; //!< パワー名
     std::string info{}; //!< パワー情報
-    std::string text{}; //パワー説明文
+    std::string text{}; // パワー説明文
     PLAYER_LEVEL min_level{}; //!< 使用可能最小レベル
     int cost{}; //!< コスト
     int stat{}; //!< 使用に必要な能力値
@@ -35,7 +35,9 @@ struct rpi_type {
      * @param name パワー名
      */
     rpi_type(std::string name = {})
-        : racial_name(name) {}
+        : racial_name(name)
+    {
+    }
 };
 
 /*!

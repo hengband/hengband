@@ -1,7 +1,7 @@
 ﻿#pragma once
 
 enum snipe_type {
-	SP_NONE = 0,
+    SP_NONE = 0,
     SP_LITE = 1,
     SP_AWAY = 2,
     SP_FIRE = 3,

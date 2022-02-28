@@ -78,8 +78,9 @@ int32_t message_num(void)
  */
 concptr message_str(int age)
 {
-    if ((age < 0) || (age >= message_num()))
+    if ((age < 0) || (age >= message_num())) {
         return "";
+    }
 
     return message_history[age]->c_str();
 }
@@ -88,8 +89,9 @@ static void message_add_aux(std::string str)
 {
     std::string splitted;
 
-    if (str.empty())
+    if (str.empty()) {
         return;
+    }
 
     // 80桁を超えるメッセージは80桁ずつ分割する
     if (str.length() > 80) {
@@ -102,14 +104,18 @@ static void message_add_aux(std::string str)
         }
 
         /* 最後の文字が漢字半分 */
-        if (n == 81)
+        if (n == 81) {
             n = 79;
+        }
 #else
-        for (n = 80; n > 60; n--)
-            if (str[n] == ' ')
+        for (n = 80; n > 60; n--) {
+            if (str[n] == ' ') {
                 break;
-        if (n == 60)
+            }
+        }
+        if (n == 60) {
             n = 80;
+        }
 #endif
         splitted = str.substr(n);
         str = str.substr(0, n);
@@ -120,12 +126,15 @@ static void message_add_aux(std::string str)
         const char *t;
         std::string_view last_message = *message_history.front();
 #ifdef JP
-        for (t = last_message.data(); *t && (*t != '<' || (*(t + 1) != 'x')); t++)
-            if (iskanji(*t))
+        for (t = last_message.data(); *t && (*t != '<' || (*(t + 1) != 'x')); t++) {
+            if (iskanji(*t)) {
                 t++;
+            }
+        }
 #else
-        for (t = last_message.data(); *t && (*t != '<'); t++)
+        for (t = last_message.data(); *t && (*t != '<'); t++) {
             ;
+        }
 #endif
         int j = 1;
         if (*t && t != last_message.data()) {
@@ -138,8 +147,9 @@ static void message_add_aux(std::string str)
         if (str == last_message && (j < 1000)) {
             str = format("%s <x%d>", str.c_str(), j + 1);
             message_history.pop_front();
-            if (!now_message)
+            if (!now_message) {
                 now_message++;
+            }
         } else {
             /*流れた行の数を数えておく */
             num_more++;
@@ -161,8 +171,9 @@ static void message_add_aux(std::string str)
     // メッセージ履歴に追加
     message_history.push_front(std::move(add_msg));
 
-    if (message_history.size() == MESSAGE_MAX)
+    if (message_history.size() == MESSAGE_MAX) {
         message_history.pop_back();
+    }
 
     if (!splitted.empty()) {
         message_add_aux(std::move(splitted));
@@ -182,12 +193,14 @@ bool is_msg_window_flowed(void)
 {
     int i;
     for (i = 0; i < 8; i++) {
-        if (angband_term[i] && (window_flag[i] & PW_MESSAGE))
+        if (angband_term[i] && (window_flag[i] & PW_MESSAGE)) {
             break;
+        }
     }
     if (i < 8) {
-        if (num_more < angband_term[i]->hgt)
+        if (num_more < angband_term[i]->hgt) {
             return false;
+        }
 
         return num_more >= 0;
     }
@@ -202,11 +215,13 @@ static void msg_flush(PlayerType *player_ptr, int x)
     byte a = TERM_L_BLUE;
     bool show_more = (num_more >= 0);
 
-    if (auto_more && !player_ptr->now_damaged)
+    if (auto_more && !player_ptr->now_damaged) {
         show_more = is_msg_window_flowed();
+    }
 
-    if (skip_more)
+    if (skip_more) {
         show_more = false;
+    }
 
     player_ptr->now_damaged = false;
     if (!player_ptr->playing || show_more) {
@@ -227,8 +242,9 @@ static void msg_flush(PlayerType *player_ptr, int x)
                 break;
             }
 
-            if (quick_messages)
+            if (quick_messages) {
                 break;
+            }
             bell();
         }
     }
@@ -273,8 +289,9 @@ void msg_print(concptr msg)
     char *t;
     char buf[1024];
 
-    if (w_ptr->timewalk_m_idx)
+    if (w_ptr->timewalk_m_idx) {
         return;
+    }
 
     if (!msg_flag) {
         term_erase(0, 0, 255);
@@ -288,10 +305,12 @@ void msg_print(concptr msg)
         p = 0;
     }
 
-    if (!msg)
+    if (!msg) {
         return;
-    if (n > 1000)
+    }
+    if (n > 1000) {
         return;
+    }
 
     if (!cheat_turn) {
         strcpy(buf, msg);
@@ -300,8 +319,9 @@ void msg_print(concptr msg)
     }
 
     n = strlen(buf);
-    if (w_ptr->character_generated)
+    if (w_ptr->character_generated) {
         message_add(buf);
+    }
 
     t = buf;
     while (n > 72) {
@@ -323,15 +343,17 @@ void msg_print(concptr msg)
                 wordlen = 0;
             } else {
                 wordlen++;
-                if (wordlen > 20)
+                if (wordlen > 20) {
                     split = check;
+                }
             }
         }
 
 #else
         for (check = 40; check < 72; check++) {
-            if (t[check] == ' ')
+            if (t[check] == ' ') {
                 split = check;
+            }
         }
 #endif
 
@@ -356,8 +378,9 @@ void msg_print(concptr msg)
     p += n + 1;
 #endif
 
-    if (fresh_message)
+    if (fresh_message) {
         term_fresh_force();
+    }
 }
 
 /*

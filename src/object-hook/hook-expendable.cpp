@@ -24,16 +24,19 @@
  */
 bool item_tester_hook_eatable(PlayerType *player_ptr, const ObjectType *o_ptr)
 {
-    if (o_ptr->tval == ItemKindType::FOOD)
+    if (o_ptr->tval == ItemKindType::FOOD) {
         return true;
+    }
 
     auto food_type = PlayerRace(player_ptr).food();
     if (food_type == PlayerRaceFoodType::MANA) {
-        if (o_ptr->tval == ItemKindType::STAFF || o_ptr->tval == ItemKindType::WAND)
+        if (o_ptr->tval == ItemKindType::STAFF || o_ptr->tval == ItemKindType::WAND) {
             return true;
+        }
     } else if (food_type == PlayerRaceFoodType::CORPSE) {
-        if (o_ptr->tval == ItemKindType::CORPSE && o_ptr->sval == SV_CORPSE && angband_strchr("pht", r_info[o_ptr->pval].d_char))
+        if (o_ptr->tval == ItemKindType::CORPSE && o_ptr->sval == SV_CORPSE && angband_strchr("pht", r_info[o_ptr->pval].d_char)) {
             return true;
+        }
     }
 
     return false;
@@ -47,11 +50,13 @@ bool item_tester_hook_eatable(PlayerType *player_ptr, const ObjectType *o_ptr)
  */
 bool item_tester_hook_quaff(PlayerType *player_ptr, const ObjectType *o_ptr)
 {
-    if (o_ptr->tval == ItemKindType::POTION)
+    if (o_ptr->tval == ItemKindType::POTION) {
         return true;
+    }
 
-    if (PlayerRace(player_ptr).food() == PlayerRaceFoodType::OIL && o_ptr->tval == ItemKindType::FLASK && o_ptr->sval == SV_FLASK_OIL)
+    if (PlayerRace(player_ptr).food() == PlayerRaceFoodType::OIL && o_ptr->tval == ItemKindType::FLASK && o_ptr->sval == SV_FLASK_OIL) {
         return true;
+    }
 
     return false;
 }
@@ -65,13 +70,15 @@ bool item_tester_hook_quaff(PlayerType *player_ptr, const ObjectType *o_ptr)
 bool can_player_destroy_object(PlayerType *player_ptr, ObjectType *o_ptr)
 {
     /* Artifacts cannot be destroyed */
-    if (!o_ptr->is_artifact())
+    if (!o_ptr->is_artifact()) {
         return true;
+    }
 
     if (!o_ptr->is_known()) {
         byte feel = FEEL_SPECIAL;
-        if (o_ptr->is_cursed() || o_ptr->is_broken())
+        if (o_ptr->is_cursed() || o_ptr->is_broken()) {
             feel = FEEL_TERRIBLE;
+        }
 
         o_ptr->feeling = feel;
         o_ptr->ident |= IDENT_SENSE;

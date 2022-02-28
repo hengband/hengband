@@ -580,7 +580,10 @@
     <ClCompile Include="..\..\src\target\target-getter.cpp" />
     <ClCompile Include="..\..\src\target\target-preparation.cpp" />
     <ClCompile Include="..\..\src\target\target-setter.cpp" />
+    <ClCompile Include="..\..\src\timed-effect\player-confusion.cpp" />
     <ClCompile Include="..\..\src\timed-effect\player-cut.cpp" />
+    <ClCompile Include="..\..\src\timed-effect\player-hallucination.cpp" />
+    <ClCompile Include="..\..\src\timed-effect\player-paralysis.cpp" />
     <ClCompile Include="..\..\src\timed-effect\player-stun.cpp" />
     <ClCompile Include="..\..\src\timed-effect\timed-effects.cpp" />
     <ClCompile Include="..\..\src\util\rng-xoshiro.cpp" />
@@ -632,7 +635,7 @@
     <ClCompile Include="..\..\src\monster-attack\monster-attack-player.cpp" />
     <ClCompile Include="..\..\src\monster-attack\monster-attack-status.cpp" />
     <ClCompile Include="..\..\src\monster-attack\monster-attack-switcher.cpp" />
-    <ClCompile Include="..\..\src\monster-attack\monster-attack-types.cpp" />
+    <ClCompile Include="..\..\src\monster-attack\monster-attack-table.cpp" />
     <ClCompile Include="..\..\src\combat\attack-accuracy.cpp" />
     <ClCompile Include="..\..\src\monster-attack\monster-eating.cpp" />
     <ClCompile Include="..\..\src\player-attack\player-attack.cpp" />
@@ -1343,7 +1346,10 @@
     <ClInclude Include="..\..\src\target\target-setter.h" />
     <ClInclude Include="..\..\src\target\target-types.h" />
     <ClInclude Include="..\..\src\term\screen-processor.h" />
+    <ClInclude Include="..\..\src\timed-effect\player-confusion.h" />
     <ClInclude Include="..\..\src\timed-effect\player-cut.h" />
+    <ClInclude Include="..\..\src\timed-effect\player-hallucination.h" />
+    <ClInclude Include="..\..\src\timed-effect\player-paralysis.h" />
     <ClInclude Include="..\..\src\timed-effect\player-stun.h" />
     <ClInclude Include="..\..\src\timed-effect\timed-effects.h" />
     <ClInclude Include="..\..\src\util\bit-flags-calculator.h" />
@@ -1409,7 +1415,7 @@
     <ClInclude Include="..\..\src\monster-attack\monster-attack-player.h" />
     <ClInclude Include="..\..\src\monster-attack\monster-attack-status.h" />
     <ClInclude Include="..\..\src\monster-attack\monster-attack-switcher.h" />
-    <ClInclude Include="..\..\src\monster-attack\monster-attack-types.h" />
+    <ClInclude Include="..\..\src\monster-attack\monster-attack-table.h" />
     <ClInclude Include="..\..\src\combat\attack-accuracy.h" />
     <ClInclude Include="..\..\src\monster-attack\monster-eating.h" />
     <ClInclude Include="..\..\src\player-attack\player-attack-util.h" />

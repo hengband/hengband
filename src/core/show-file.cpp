@@ -57,17 +57,21 @@ static void show_file_aux_line(concptr str, int cy, concptr shower)
         int endcol = len;
         if (shower) {
             ptr = angband_strstr(&lcstr[i], shower);
-            if (ptr)
+            if (ptr) {
                 showercol = ptr - &lcstr[i];
+            }
         }
 
         ptr = in_tag ? angband_strchr(&str[i], in_tag) : angband_strstr(&str[i], tag_str);
-        if (ptr)
+        if (ptr) {
             bracketcol = ptr - &str[i];
-        if (bracketcol < endcol)
+        }
+        if (bracketcol < endcol) {
             endcol = bracketcol;
-        if (showercol < endcol)
+        }
+        if (showercol < endcol) {
             endcol = showercol;
+        }
 
         term_addstr(endcol, color, &str[i]);
         cx += endcol;
@@ -81,8 +85,9 @@ static void show_file_aux_line(concptr str, int cy, concptr shower)
             continue;
         }
 
-        if (endcol != bracketcol)
+        if (endcol != bracketcol) {
             continue;
+        }
 
         if (in_tag) {
             i++;
@@ -181,9 +186,11 @@ bool show_file(PlayerType *player_ptr, bool show_version, concptr name, concptr 
     if (!fff) {
         path_build(path, sizeof(path), ANGBAND_DIR, name);
 
-        for (int i = 0; path[i]; i++)
-            if ('\\' == path[i])
+        for (int i = 0; path[i]; i++) {
+            if ('\\' == path[i]) {
                 path[i] = PATH_SEP[0];
+            }
+        }
 
         sprintf(caption, _("スポイラー・ファイル'%s'", "Info file '%s'"), name);
         fff = angband_fopen(path, "r");
@@ -205,8 +212,9 @@ bool show_file(PlayerType *player_ptr, bool show_version, concptr name, concptr 
     bool reverse = (line < 0);
     while (true) {
         char *str = buf;
-        if (angband_fgets(fff, buf, sizeof(buf)))
+        if (angband_fgets(fff, buf, sizeof(buf))) {
             break;
+        }
         if (!prefix(str, "***** ")) {
             next++;
             continue;
@@ -223,65 +231,77 @@ bool show_file(PlayerType *player_ptr, bool show_version, concptr name, concptr 
             continue;
         }
 
-        if (str[6] != '<')
+        if (str[6] != '<') {
             continue;
+        }
 
         size_t len = strlen(str);
         if (str[len - 1] == '>') {
             str[len - 1] = '\0';
-            if (tag && streq(str + 7, tag))
+            if (tag && streq(str + 7, tag)) {
                 line = next;
+            }
         }
     }
 
     size = next;
     int rows = hgt - 4;
-    if (line == -1)
+    if (line == -1) {
         line = ((size - 1) / rows) * rows;
+    }
 
     term_clear();
 
     concptr find = nullptr;
     concptr shower = nullptr;
     while (true) {
-        if (line >= size - rows)
-              line = size - rows;
-        if (line < 0)
+        if (line >= size - rows) {
+            line = size - rows;
+        }
+        if (line < 0) {
             line = 0;
+        }
 
         if (next > line) {
             angband_fclose(fff);
             fff = angband_fopen(path, "r");
-            if (!fff)
+            if (!fff) {
                 return false;
+            }
 
             next = 0;
         }
 
         while (next < line) {
-            if (angband_fgets(fff, buf, sizeof(buf)))
+            if (angband_fgets(fff, buf, sizeof(buf))) {
                 break;
-            if (prefix(buf, "***** "))
+            }
+            if (prefix(buf, "***** ")) {
                 continue;
+            }
             next++;
         }
 
         int row_count;
         for (row_count = 0; row_count < rows;) {
             concptr str = buf;
-            if (!row_count)
+            if (!row_count) {
                 line = next;
-            if (angband_fgets(fff, buf, sizeof(buf)))
+            }
+            if (angband_fgets(fff, buf, sizeof(buf))) {
                 break;
-            if (prefix(buf, "***** "))
+            }
+            if (prefix(buf, "***** ")) {
                 continue;
+            }
             next++;
             if (find && !row_count) {
                 char lc_buf[1024];
                 strcpy(lc_buf, str);
                 str_tolower(lc_buf);
-                if (!angband_strstr(lc_buf, find))
+                if (!angband_strstr(lc_buf, find)) {
                     continue;
+                }
             }
 
             find = nullptr;
@@ -317,10 +337,11 @@ bool show_file(PlayerType *player_ptr, bool show_version, concptr name, concptr 
             prt(_("[キー:(?)ヘルプ (ESC)終了]", "[Press ESC to exit.]"), hgt - 1, 0);
         } else {
 #ifdef JP
-            if (reverse)
+            if (reverse) {
                 prt("[キー:(RET/スペース)↑ (-)↓ (?)ヘルプ (ESC)終了]", hgt - 1, 0);
-            else
+            } else {
                 prt("[キー:(RET/スペース)↓ (-)↑ (?)ヘルプ (ESC)終了]", hgt - 1, 0);
+            }
 #else
             prt("[Press Return, Space, -, =, /, |, or ESC to exit.]", hgt - 1, 0);
 #endif
@@ -329,8 +350,9 @@ bool show_file(PlayerType *player_ptr, bool show_version, concptr name, concptr 
         skey = inkey_special(true);
         switch (skey) {
         case '?':
-            if (strcmp(name, _("jhelpinfo.txt", "helpinfo.txt")) != 0)
+            if (strcmp(name, _("jhelpinfo.txt", "helpinfo.txt")) != 0) {
                 show_file(player_ptr, true, _("jhelpinfo.txt", "helpinfo.txt"), nullptr, 0, mode);
+            }
             break;
         case '=':
             prt(_("強調: ", "Show: "), hgt - 1, 0);
@@ -341,10 +363,12 @@ bool show_file(PlayerType *player_ptr, bool show_version, concptr name, concptr 
                 if (shower_str[0]) {
                     str_tolower(shower_str);
                     shower = shower_str;
-                } else
+                } else {
                     shower = nullptr;
-            } else
+                }
+            } else {
                 strcpy(shower_str, back_str);
+            }
             break;
 
         case '/':
@@ -358,10 +382,12 @@ bool show_file(PlayerType *player_ptr, bool show_version, concptr name, concptr 
                     line = line + 1;
                     str_tolower(finder_str);
                     shower = finder_str;
-                } else
+                } else {
                     shower = nullptr;
-            } else
+                }
+            } else {
                 strcpy(finder_str, back_str);
+            }
             break;
 
         case '#': {
@@ -369,8 +395,9 @@ bool show_file(PlayerType *player_ptr, bool show_version, concptr name, concptr 
             prt(_("行: ", "Goto Line: "), hgt - 1, 0);
             strcpy(tmp, "0");
 
-            if (askfor(tmp, 80))
+            if (askfor(tmp, 80)) {
                 line = atoi(tmp);
+            }
             break;
         }
 
@@ -388,8 +415,9 @@ bool show_file(PlayerType *player_ptr, bool show_version, concptr name, concptr 
             strcpy(tmp, _("jhelp.hlp", "help.hlp"));
 
             if (askfor(tmp, 80)) {
-                if (!show_file(player_ptr, true, tmp, nullptr, 0, mode))
+                if (!show_file(player_ptr, true, tmp, nullptr, 0, mode)) {
                     skey = 'q';
+                }
             }
 
             break;
@@ -397,28 +425,32 @@ bool show_file(PlayerType *player_ptr, bool show_version, concptr name, concptr 
 
         case '-':
             line = line + (reverse ? rows : -rows);
-            if (line < 0)
+            if (line < 0) {
                 line = 0;
+            }
             break;
 
         case SKEY_PGUP:
             line = line - rows;
-            if (line < 0)
+            if (line < 0) {
                 line = 0;
+            }
             break;
 
         case '\n':
         case '\r':
             line = line + (reverse ? -1 : 1);
-            if (line < 0)
+            if (line < 0) {
                 line = 0;
+            }
             break;
 
         case '8':
         case SKEY_UP:
             line--;
-            if (line < 0)
+            if (line < 0) {
                 line = 0;
+            }
             break;
 
         case '2':
@@ -428,8 +460,9 @@ bool show_file(PlayerType *player_ptr, bool show_version, concptr name, concptr 
 
         case ' ':
             line = line + (reverse ? -rows : rows);
-            if (line < 0)
+            if (line < 0) {
                 line = 0;
+            }
             break;
 
         case SKEY_PGDOWN:
@@ -439,13 +472,15 @@ bool show_file(PlayerType *player_ptr, bool show_version, concptr name, concptr 
 
         if (menu) {
             int key = -1;
-            if (!(skey & SKEY_MASK) && isalpha(skey))
+            if (!(skey & SKEY_MASK) && isalpha(skey)) {
                 key = skey - 'A';
+            }
 
             if ((key > -1) && hook[key][0]) {
                 /* Recurse on that file */
-                if (!show_file(player_ptr, true, hook[key], nullptr, 0, mode))
+                if (!show_file(player_ptr, true, hook[key], nullptr, 0, mode)) {
                     skey = 'q';
+                }
             }
         }
 
@@ -456,8 +491,9 @@ bool show_file(PlayerType *player_ptr, bool show_version, concptr name, concptr 
 
             strcpy(xtmp, "");
 
-            if (!get_string(_("ファイル名: ", "File name: "), xtmp, 80))
+            if (!get_string(_("ファイル名: ", "File name: "), xtmp, 80)) {
                 continue;
+            }
             angband_fclose(fff);
             path_build(buff, sizeof(buff), ANGBAND_DIR_USER, xtmp);
 
@@ -476,21 +512,25 @@ bool show_file(PlayerType *player_ptr, bool show_version, concptr name, concptr 
             angband_fputs(ffp, xtmp, 80);
             angband_fputs(ffp, "\n", 80);
 
-            while (!angband_fgets(fff, buff, sizeof(buff)))
+            while (!angband_fgets(fff, buff, sizeof(buff))) {
                 angband_fputs(ffp, buff, 80);
+            }
             angband_fclose(fff);
             angband_fclose(ffp);
             fff = angband_fopen(path, "r");
         }
 
-        if ((skey == ESCAPE) || (skey == '<'))
+        if ((skey == ESCAPE) || (skey == '<')) {
             break;
+        }
 
-        if (skey == KTRL('q'))
+        if (skey == KTRL('q')) {
             skey = 'q';
+        }
 
-        if (skey == 'q')
+        if (skey == 'q') {
             break;
+        }
     }
 
     angband_fclose(fff);

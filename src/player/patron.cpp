@@ -153,28 +153,34 @@ void Patron::gain_level_reward(PlayerType *player_ptr_, int chosen_reward)
     int count = 0;
 
     if (!chosen_reward) {
-        if (this->player_ptr->suppress_multi_reward)
+        if (this->player_ptr->suppress_multi_reward) {
             return;
-        else
+        } else {
             this->player_ptr->suppress_multi_reward = true;
+        }
     }
 
-    if (this->player_ptr->lev == 13)
+    if (this->player_ptr->lev == 13) {
         nasty_chance = 2;
-    else if (!(this->player_ptr->lev % 13))
+    } else if (!(this->player_ptr->lev % 13)) {
         nasty_chance = 3;
-    else if (!(this->player_ptr->lev % 14))
+    } else if (!(this->player_ptr->lev % 14)) {
         nasty_chance = 12;
+    }
 
-    if (one_in_(nasty_chance))
-        type = randint1(20); /* Allow the 'nasty' effects */
-    else
-        type = randint1(15) + 5; /* Or disallow them */
+    if (one_in_(nasty_chance)) {
+        type = randint1(20);
+    } /* Allow the 'nasty' effects */
+    else {
+        type = randint1(15) + 5;
+    } /* Or disallow them */
 
-    if (type < 1)
+    if (type < 1) {
         type = 1;
-    if (type > 20)
+    }
+    if (type > 20) {
         type = 20;
+    }
     type--;
 
     sprintf(wrath_reason, _("%sの怒り", "the Wrath of %s"), this->name.c_str());
@@ -206,8 +212,9 @@ void Patron::gain_level_reward(PlayerType *player_ptr_, int chosen_reward)
                 msg_print(_("しかし何も起こらなかった。", "But, nothing happens."));
             } else if (this->player_ptr->exp < PY_MAX_EXP) {
                 int32_t ee = (this->player_ptr->exp / 2) + 10;
-                if (ee > 100000L)
+                if (ee > 100000L) {
                     ee = 100000L;
+                }
                 msg_print(_("更に経験を積んだような気がする。", "You feel more experienced."));
 
                 gain_exp(player_ptr, ee);
@@ -311,10 +318,11 @@ void Patron::gain_level_reward(PlayerType *player_ptr_, int chosen_reward)
             msg_format(_("%sの声が鳴り響いた:", "The voice of %s rings out:"), this->name.c_str());
             msg_print(_("「留まるのだ、下僕よ。余が汝の肉体を鍛えん。」", "'Stay, mortal, and let me mold thee.'"));
 
-            if (one_in_(3) && !(this->boost_stat != A_RANDOM))
+            if (one_in_(3) && !(this->boost_stat != A_RANDOM)) {
                 do_inc_stat(player_ptr, this->boost_stat);
-            else
+            } else {
                 do_inc_stat(player_ptr, randint0(6));
+            }
             reward = _("能力値が上がった。", "increasing a stat");
             break;
 
@@ -322,10 +330,11 @@ void Patron::gain_level_reward(PlayerType *player_ptr_, int chosen_reward)
             msg_format(_("%sの声が響き渡った:", "The voice of %s booms out:"), this->name.c_str());
             msg_print(_("「下僕よ、余は汝に飽みたり。」", "'I grow tired of thee, mortal.'"));
 
-            if (one_in_(3) && !(this->boost_stat != A_RANDOM))
+            if (one_in_(3) && !(this->boost_stat != A_RANDOM)) {
                 do_dec_stat(player_ptr, this->boost_stat);
-            else
+            } else {
                 (void)do_dec_stat(player_ptr, randint0(6));
+            }
             reward = _("能力値が下がった。", "decreasing a stat");
             break;
 
@@ -382,16 +391,18 @@ void Patron::gain_level_reward(PlayerType *player_ptr_, int chosen_reward)
         case REW_CURSE_WP: {
             inventory_slot_type slot;
 
-            if (!has_melee_weapon(player_ptr, INVEN_MAIN_HAND) && !has_melee_weapon(player_ptr, INVEN_SUB_HAND))
+            if (!has_melee_weapon(player_ptr, INVEN_MAIN_HAND) && !has_melee_weapon(player_ptr, INVEN_SUB_HAND)) {
                 break;
+            }
             msg_format(_("%sの声が響き渡った:", "The voice of %s booms out:"), this->name.c_str());
             msg_print(_("「汝、武器に頼ることなかれ。」", "'Thou reliest too much on thy weapon.'"));
 
             slot = INVEN_MAIN_HAND;
             if (has_melee_weapon(player_ptr, INVEN_SUB_HAND)) {
                 slot = INVEN_SUB_HAND;
-                if (has_melee_weapon(player_ptr, INVEN_MAIN_HAND) && one_in_(2))
+                if (has_melee_weapon(player_ptr, INVEN_MAIN_HAND) && one_in_(2)) {
                     slot = INVEN_MAIN_HAND;
+                }
             }
             describe_flavor(player_ptr, o_name, &this->player_ptr->inventory_list[slot], OD_NAME_ONLY);
             (void)curse_weapon_object(player_ptr, false, &this->player_ptr->inventory_list[slot]);
@@ -401,8 +412,9 @@ void Patron::gain_level_reward(PlayerType *player_ptr_, int chosen_reward)
 
         case REW_CURSE_AR:
 
-            if (!this->player_ptr->inventory_list[INVEN_BODY].k_idx)
+            if (!this->player_ptr->inventory_list[INVEN_BODY].k_idx) {
                 break;
+            }
             msg_format(_("%sの声が響き渡った:", "The voice of %s booms out:"), this->name.c_str());
             msg_print(_("「汝、防具に頼ることなかれ。」", "'Thou reliest too much on thine equipment.'"));
 
@@ -428,20 +440,23 @@ void Patron::gain_level_reward(PlayerType *player_ptr_, int chosen_reward)
             case 3:
                 if (one_in_(2)) {
                     inventory_slot_type slot;
-                    if (!has_melee_weapon(player_ptr, INVEN_MAIN_HAND) && !has_melee_weapon(player_ptr, INVEN_SUB_HAND))
+                    if (!has_melee_weapon(player_ptr, INVEN_MAIN_HAND) && !has_melee_weapon(player_ptr, INVEN_SUB_HAND)) {
                         break;
+                    }
                     slot = INVEN_MAIN_HAND;
                     if (has_melee_weapon(player_ptr, INVEN_SUB_HAND)) {
                         slot = INVEN_SUB_HAND;
-                        if (has_melee_weapon(player_ptr, INVEN_MAIN_HAND) && one_in_(2))
+                        if (has_melee_weapon(player_ptr, INVEN_MAIN_HAND) && one_in_(2)) {
                             slot = INVEN_MAIN_HAND;
+                        }
                     }
                     describe_flavor(player_ptr, o_name, &this->player_ptr->inventory_list[slot], OD_NAME_ONLY);
                     (void)curse_weapon_object(player_ptr, false, &this->player_ptr->inventory_list[slot]);
                     reward = format(_("%sが破壊された。", "destroying %s"), o_name);
                 } else {
-                    if (!this->player_ptr->inventory_list[INVEN_BODY].k_idx)
+                    if (!this->player_ptr->inventory_list[INVEN_BODY].k_idx) {
                         break;
+                    }
                     describe_flavor(player_ptr, o_name, &this->player_ptr->inventory_list[INVEN_BODY], OD_NAME_ONLY);
                     (void)curse_armor(player_ptr);
                     reward = format(_("%sが破壊された。", "destroying %s"), o_name);
@@ -472,16 +487,20 @@ void Patron::gain_level_reward(PlayerType *player_ptr_, int chosen_reward)
 
                 if (has_melee_weapon(player_ptr, INVEN_MAIN_HAND)) {
                     slot = INVEN_MAIN_HAND;
-                    if (has_melee_weapon(player_ptr, INVEN_SUB_HAND) && one_in_(2))
+                    if (has_melee_weapon(player_ptr, INVEN_SUB_HAND) && one_in_(2)) {
                         slot = INVEN_SUB_HAND;
-                } else if (has_melee_weapon(player_ptr, INVEN_SUB_HAND))
+                    }
+                } else if (has_melee_weapon(player_ptr, INVEN_SUB_HAND)) {
                     slot = INVEN_SUB_HAND;
+                }
 
-                if (slot)
+                if (slot) {
                     (void)curse_weapon_object(player_ptr, false, &this->player_ptr->inventory_list[slot]);
+                }
             }
-            if (one_in_(2))
+            if (one_in_(2)) {
                 (void)curse_armor(player_ptr);
+            }
             break;
 
         case REW_DESTRUCT:
@@ -525,30 +544,33 @@ void Patron::gain_level_reward(PlayerType *player_ptr_, int chosen_reward)
 
             msg_format(_("%sは褒美として悪魔の使いをよこした！", "%s rewards you with a demonic servant!"), this->name.c_str());
 
-            if (!summon_specific(player_ptr, -1, this->player_ptr->y, this->player_ptr->x, this->player_ptr->current_floor_ptr->dun_level, SUMMON_DEMON, PM_FORCE_PET))
+            if (!summon_specific(player_ptr, -1, this->player_ptr->y, this->player_ptr->x, this->player_ptr->current_floor_ptr->dun_level, SUMMON_DEMON, PM_FORCE_PET)) {
                 msg_print(_("何も現れなかった...", "Nobody ever turns up..."));
-            else
+            } else {
                 reward = _("悪魔がペットになった。", "a demonic servant");
+            }
 
             break;
 
         case REW_SER_MONS:
             msg_format(_("%sは褒美として使いをよこした！", "%s rewards you with a servant!"), this->name.c_str());
 
-            if (!summon_specific(player_ptr, -1, this->player_ptr->y, this->player_ptr->x, this->player_ptr->current_floor_ptr->dun_level, SUMMON_NONE, PM_FORCE_PET))
+            if (!summon_specific(player_ptr, -1, this->player_ptr->y, this->player_ptr->x, this->player_ptr->current_floor_ptr->dun_level, SUMMON_NONE, PM_FORCE_PET)) {
                 msg_print(_("何も現れなかった...", "Nobody ever turns up..."));
-            else
+            } else {
                 reward = _("モンスターがペットになった。", "a servant");
+            }
 
             break;
 
         case REW_SER_UNDE:
             msg_format(_("%sは褒美としてアンデッドの使いをよこした。", "%s rewards you with an undead servant!"), this->name.c_str());
 
-            if (!summon_specific(player_ptr, -1, this->player_ptr->y, this->player_ptr->x, this->player_ptr->current_floor_ptr->dun_level, SUMMON_UNDEAD, PM_FORCE_PET))
+            if (!summon_specific(player_ptr, -1, this->player_ptr->y, this->player_ptr->x, this->player_ptr->current_floor_ptr->dun_level, SUMMON_UNDEAD, PM_FORCE_PET)) {
                 msg_print(_("何も現れなかった...", "Nobody ever turns up..."));
-            else
+            } else {
                 reward = _("アンデッドがペットになった。", "an undead servant");
+            }
 
             break;
 

@@ -156,15 +156,17 @@ void PlayerBasicStatistics::update_index_status()
 {
     int status = (int)this->ability_type;
     int index;
-    if (this->player_ptr->stat_use[status] <= 18)
+    if (this->player_ptr->stat_use[status] <= 18) {
         index = (this->player_ptr->stat_use[status] - 3);
-    else if (this->player_ptr->stat_use[status] <= 18 + 219)
+    } else if (this->player_ptr->stat_use[status] <= 18 + 219) {
         index = (15 + (this->player_ptr->stat_use[status] - 18) / 10);
-    else
+    } else {
         index = (37);
+    }
 
-    if (this->player_ptr->stat_index[status] == index)
+    if (this->player_ptr->stat_index[status] == index) {
         return;
+    }
 
     this->player_ptr->stat_index[status] = (int16_t)index;
     if (status == A_CON) {
