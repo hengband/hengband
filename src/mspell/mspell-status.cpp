@@ -272,7 +272,7 @@ MonsterSpellResult spell_RF5_SCARE(MONSTER_IDX m_idx, PlayerType *player_ptr, MO
         spell_badstatus_message_to_player(player_ptr, m_idx, msg, resist, saving_throw);
 
         if (!resist && !saving_throw) {
-            (void)BadStatusSetter(player_ptr).mod_afraidness(randint0(4) + 4);
+            (void)BadStatusSetter(player_ptr).mod_fear(randint0(4) + 4);
         }
 
         update_smart_learn(player_ptr, m_idx, DRS_FEAR);

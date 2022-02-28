@@ -204,7 +204,7 @@ bool activate_dispel_curse(PlayerType *player_ptr, concptr name)
 
 bool activate_cure_lw(PlayerType *player_ptr)
 {
-    (void)BadStatusSetter(player_ptr).afraidness(0);
+    (void)BadStatusSetter(player_ptr).fear(0);
     (void)hp_player(player_ptr, 30);
     return true;
 }
@@ -339,7 +339,7 @@ bool activate_recharge_extra(PlayerType *player_ptr, concptr name)
 bool activate_shikofumi(PlayerType *player_ptr)
 {
     msg_print(_("力強く四股を踏んだ。", "You stamp. (as if you are in a ring.)"));
-    (void)BadStatusSetter(player_ptr).afraidness(0);
+    (void)BadStatusSetter(player_ptr).fear(0);
     (void)set_hero(player_ptr, randint1(20) + 20, false);
     (void)dispel_evil(player_ptr, player_ptr->lev * 3);
     return true;
@@ -378,7 +378,7 @@ bool activate_protection_elbereth(PlayerType *player_ptr)
     BadStatusSetter bss(player_ptr);
     msg_print(_("エルベレスよ、我を護り給え！", "A Elbereth gilthoniel!"));
     create_rune_protection_one(player_ptr);
-    (void)bss.afraidness(0);
+    (void)bss.fear(0);
     (void)bss.blindness(0);
     (void)bss.hallucination(0);
     set_blessed(player_ptr, randint0(25) + 25, true);

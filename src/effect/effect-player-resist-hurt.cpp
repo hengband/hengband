@@ -727,7 +727,7 @@ void effect_player_abyss(PlayerType *player_ptr, EffectPlayerType *ep_ptr)
     }
 
     if (!has_resist_fear(player_ptr)) {
-        (void)bss.mod_afraidness(randint1(10));
+        (void)bss.mod_fear(randint1(10));
     }
     ep_ptr->get_damage = take_hit(player_ptr, DAMAGE_ATTACK, ep_ptr->dam, ep_ptr->killer);
 }

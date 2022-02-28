@@ -244,7 +244,7 @@ static void effect_monster_domination_corrupted_addition(PlayerType *player_ptr,
         if (any_bits(em_ptr->r_ptr->flags3, RF3_NO_FEAR)) {
             em_ptr->note = _("には効果がなかった。", " is unaffected.");
         } else {
-            (void)bss.mod_afraidness(static_cast<TIME_EFFECT>(em_ptr->dam));
+            (void)bss.mod_fear(static_cast<TIME_EFFECT>(em_ptr->dam));
         }
 
         return;

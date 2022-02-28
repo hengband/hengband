@@ -140,7 +140,7 @@ void reduce_magic_effects_timeout(PlayerType *player_ptr)
     }
 
     if (effects->fear()->is_fearful()) {
-        (void)bss.mod_afraidness(-1);
+        (void)bss.mod_fear(-1);
     }
 
     if (player_ptr->fast) {
