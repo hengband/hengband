@@ -2,6 +2,7 @@
 #include "market/arena-info-table.h"
 #include "timed-effect/player-confusion.h"
 #include "timed-effect/player-cut.h"
+#include "timed-effect/player-fear.h"
 #include "timed-effect/player-hallucination.h"
 #include "timed-effect/player-paralysis.h"
 #include "timed-effect/player-stun.h"
@@ -46,7 +47,7 @@ bool PlayerType::is_fully_healthy() const
     is_fully_healthy &= !this->blind;
     is_fully_healthy &= !effects->confusion()->is_confused();
     is_fully_healthy &= !this->poisoned;
-    is_fully_healthy &= !this->fearful;
+    is_fully_healthy &= !effects->fear()->is_fearful();
     is_fully_healthy &= !effects->stun()->is_stunned();
     is_fully_healthy &= !effects->cut()->is_cut();
     is_fully_healthy &= !this->slow;

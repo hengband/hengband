@@ -52,6 +52,7 @@
 #include "system/object-type-definition.h"
 #include "system/player-type-definition.h"
 #include "timed-effect/player-confusion.h"
+#include "timed-effect/player-fear.h"
 #include "timed-effect/player-hallucination.h"
 #include "timed-effect/player-stun.h"
 #include "timed-effect/timed-effects.h"
@@ -243,7 +244,7 @@ bool do_cmd_attack(PlayerType *player_ptr, POSITION y, POSITION x, combat_option
         }
     }
 
-    if (player_ptr->fearful) {
+    if (effects->fear()->is_fearful()) {
         if (m_ptr->ml) {
             msg_format(_("恐くて%sを攻撃できない！", "You are too fearful to attack %s!"), m_name);
         } else {
