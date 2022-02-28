@@ -169,11 +169,11 @@ void OtherItemsEnchanter::generate_corpse()
 void OtherItemsEnchanter::generate_statue()
 {
     short r_idx;
-    auto &r_ref = r_info[0];
+    const auto *r_ptr = &r_info[1];
     while (true) {
         r_idx = randint1(r_info.size() - 1);
-        r_ref = r_info[r_idx];
-        if (r_ref.rarity == 0) {
+        r_ptr = &r_info[r_idx];
+        if (r_ptr->rarity == 0) {
             continue;
         }
 
@@ -182,7 +182,7 @@ void OtherItemsEnchanter::generate_statue()
 
     this->o_ptr->pval = r_idx;
     if (cheat_peek) {
-        msg_format(_("%sの像", "Statue of %s"), r_ref.name.c_str());
+        msg_format(_("%sの像", "Statue of %s"), r_ptr->name.c_str());
     }
 
     object_aware(this->player_ptr, this->o_ptr);
