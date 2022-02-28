@@ -65,7 +65,7 @@ MULTIPLY mult_slaying(PlayerType *player_ptr, MULTIPLY mult, const TrFlags &flgs
     for (size_t i = 0; i < sizeof(slay_table) / sizeof(slay_table[0]); ++i) {
         const struct slay_table_t *p = &slay_table[i];
 
-        if (flgs.has_not(p->slay_flag) || r_ptr->kind_flags.has(p->affect_race_flag)) {
+        if (flgs.has_not(p->slay_flag) || r_ptr->kind_flags.has_not(p->affect_race_flag)) {
             continue;
         }
 
