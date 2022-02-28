@@ -29,7 +29,7 @@ PlayerStealth::PlayerStealth(PlayerType *player_ptr)
  * @details
  * * 種族による加算
  */
-int16_t PlayerStealth::race_value()
+int16_t PlayerStealth::race_bonus()
 {
     return PlayerRace(this->player_ptr).get_info()->r_stl;
 }
@@ -40,7 +40,7 @@ int16_t PlayerStealth::race_value()
  * @details
  * * 性格による加算
  */
-int16_t PlayerStealth::personality_value()
+int16_t PlayerStealth::personality_bonus()
 {
     const player_personality *a_ptr = &personality_info[this->player_ptr->ppersonality];
     return a_ptr->a_stl;
@@ -65,7 +65,7 @@ int16_t PlayerStealth::class_base_value()
  * * 忍者がheavy_armorならば減算(-レベル/10)
  * * 忍者がheavy_armorでなく適正な武器を持っていれば加算(+レベル/10)
  */
-int16_t PlayerStealth::class_value()
+int16_t PlayerStealth::class_bonus()
 {
     if (!PlayerClass(this->player_ptr).equals(PlayerClassType::NINJA)) {
         return 0;

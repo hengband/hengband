@@ -32,12 +32,12 @@ int16_t PlayerStatusBase::get_value()
     pow += this->action_value();
     pow += this->stance_value();
     pow += this->class_base_value();
-    pow += this->class_value();
+    pow += this->class_bonus();
     pow += this->equipments_value();
     pow += this->inventory_weight_value();
     pow += this->mutation_value();
-    pow += this->personality_value();
-    pow += this->race_value();
+    pow += this->personality_bonus();
+    pow += this->race_bonus();
     pow += this->riding_value();
     pow += this->time_effect_value();
     pow = this->set_exception_value(pow);
@@ -61,11 +61,11 @@ BIT_FLAGS PlayerStatusBase::get_all_flags()
 {
     this->set_locals(); /* 計算前に値のセット。派生クラスの値がセットされる。*/
     auto flags = equipments_flags(this->tr_flag);
-    if (this->class_value() != 0) {
+    if (this->class_bonus() != 0) {
         set_bits(flags, FLAG_CAUSE_CLASS);
     }
 
-    if (this->race_value() != 0) {
+    if (this->race_bonus() != 0) {
         set_bits(flags, FLAG_CAUSE_RACE);
     }
 
@@ -81,7 +81,7 @@ BIT_FLAGS PlayerStatusBase::get_all_flags()
         set_bits(flags, FLAG_CAUSE_MAGIC_TIME_EFFECT);
     }
 
-    if (this->personality_value() != 0) {
+    if (this->personality_bonus() != 0) {
         set_bits(flags, FLAG_CAUSE_PERSONALITY);
     }
 
@@ -108,11 +108,11 @@ BIT_FLAGS PlayerStatusBase::get_good_flags()
 {
     this->set_locals(); /* 計算前に値のセット。派生クラスの値がセットされる。*/
     auto flags = equipments_flags(this->tr_flag);
-    if (this->class_value() > 0) {
+    if (this->class_bonus() > 0) {
         set_bits(flags, FLAG_CAUSE_CLASS);
     }
 
-    if (this->race_value() > 0) {
+    if (this->race_bonus() > 0) {
         set_bits(flags, FLAG_CAUSE_RACE);
     }
 
@@ -128,7 +128,7 @@ BIT_FLAGS PlayerStatusBase::get_good_flags()
         set_bits(flags, FLAG_CAUSE_MAGIC_TIME_EFFECT);
     }
 
-    if (this->personality_value() > 0) {
+    if (this->personality_bonus() > 0) {
         set_bits(flags, FLAG_CAUSE_PERSONALITY);
     }
 
@@ -155,11 +155,11 @@ BIT_FLAGS PlayerStatusBase::get_bad_flags()
 {
     this->set_locals(); /* 計算前に値のセット。派生クラスの値がセットされる。*/
     auto flags = equipments_bad_flags(this->tr_bad_flag);
-    if (this->class_value() < 0) {
+    if (this->class_bonus() < 0) {
         set_bits(flags, FLAG_CAUSE_CLASS);
     }
 
-    if (this->race_value() < 0) {
+    if (this->race_bonus() < 0) {
         set_bits(flags, FLAG_CAUSE_RACE);
     }
 
@@ -175,7 +175,7 @@ BIT_FLAGS PlayerStatusBase::get_bad_flags()
         set_bits(flags, FLAG_CAUSE_MAGIC_TIME_EFFECT);
     }
 
-    if (this->personality_value() < 0) {
+    if (this->personality_bonus() < 0) {
         set_bits(flags, FLAG_CAUSE_PERSONALITY);
     }
 
@@ -274,12 +274,12 @@ int16_t PlayerStatusBase::equipments_value()
     return bonus;
 }
 
-int16_t PlayerStatusBase::race_value()
+int16_t PlayerStatusBase::race_bonus()
 {
     return 0;
 }
 
-int16_t PlayerStatusBase::class_value()
+int16_t PlayerStatusBase::class_bonus()
 {
     return 0;
 }
@@ -289,7 +289,7 @@ int16_t PlayerStatusBase::class_base_value()
     return 0;
 }
 
-int16_t PlayerStatusBase::personality_value()
+int16_t PlayerStatusBase::personality_bonus()
 {
     return 0;
 }

@@ -32,9 +32,9 @@ void PlayerStrength::set_locals()
  * @brief 腕力補正計算 - 種族
  * @return 腕力補正値
  */
-int16_t PlayerStrength::race_value()
+int16_t PlayerStrength::race_bonus()
 {
-    int16_t result = PlayerBasicStatistics::race_value();
+    int16_t result = PlayerBasicStatistics::race_bonus();
 
     result += PlayerRace(this->player_ptr).additional_strength();
 

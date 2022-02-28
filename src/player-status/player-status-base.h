@@ -21,10 +21,10 @@ protected:
     tr_type tr_flag;
     tr_type tr_bad_flag;
     virtual void set_locals();
-    virtual int16_t race_value();
-    virtual int16_t class_value();
+    virtual int16_t race_bonus();
+    virtual int16_t class_bonus();
     virtual int16_t class_base_value();
-    virtual int16_t personality_value();
+    virtual int16_t personality_bonus();
     virtual int16_t equipments_value();
     virtual int16_t time_effect_value();
     virtual int16_t stance_value();

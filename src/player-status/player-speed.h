@@ -7,9 +7,9 @@ public:
 
 protected:
     void set_locals() override;
-    int16_t race_value() override;
-    int16_t class_value() override;
-    int16_t personality_value() override;
+    int16_t race_bonus() override;
+    int16_t class_bonus() override;
+    int16_t personality_bonus() override;
     int16_t equipments_value() override;
     int16_t time_effect_value() override;
     int16_t stance_value() override;

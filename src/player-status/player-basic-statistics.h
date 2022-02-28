@@ -14,9 +14,9 @@ protected:
     PlayerBasicStatistics(PlayerType *player_ptr);
 
     player_ability_type ability_type{};
-    int16_t race_value() override;
-    int16_t class_value() override;
-    int16_t personality_value() override;
+    int16_t race_bonus() override;
+    int16_t class_bonus() override;
+    int16_t personality_bonus() override;
     void update_top_status();
     void update_use_status();
     void update_index_status();

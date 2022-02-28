@@ -55,7 +55,7 @@ void PlayerSpeed::set_locals()
  * @brief 速度計算 - 種族
  * @return 速度値の増減分
  */
-int16_t PlayerSpeed::race_value()
+int16_t PlayerSpeed::race_bonus()
 {
     return PlayerRace(this->player_ptr).speed();
 }
@@ -69,7 +69,7 @@ int16_t PlayerSpeed::race_value()
  * ** 錬気術師で装備が重くなくクラッコン、妖精、いかさま以外なら加算(+レベル/10)
  * ** 狂戦士なら加算(+3),レベル20/30/40/50ごとに+1
  */
-int16_t PlayerSpeed::class_value()
+int16_t PlayerSpeed::class_bonus()
 {
     int16_t bonus = 0;
     PlayerClass pc(this->player_ptr);
@@ -117,7 +117,7 @@ int16_t PlayerSpeed::class_value()
  * @details
  * ** いかさまでクラッコン/妖精以外なら加算(+5+レベル/10)
  */
-int16_t PlayerSpeed::personality_value()
+int16_t PlayerSpeed::personality_bonus()
 {
     int16_t bonus = 0;
     PlayerRace pr(this->player_ptr);

@@ -32,9 +32,9 @@ void PlayerDexterity::set_locals()
  * @brief 器用さ補正計算 - 種族
  * @return 器用さ補正値
  */
-int16_t PlayerDexterity::race_value()
+int16_t PlayerDexterity::race_bonus()
 {
-    int16_t result = PlayerBasicStatistics::race_value();
+    int16_t result = PlayerBasicStatistics::race_bonus();
 
     result += PlayerRace(this->player_ptr).additional_dexterity();
 

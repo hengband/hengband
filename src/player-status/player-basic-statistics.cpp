@@ -50,7 +50,7 @@ int16_t PlayerBasicStatistics::get_value()
  * @details
  * * 種族によるステータス修正値。
  */
-int16_t PlayerBasicStatistics::race_value()
+int16_t PlayerBasicStatistics::race_bonus()
 {
     return PlayerRace(this->player_ptr).get_info()->r_adj[this->ability_type];
 }
@@ -62,7 +62,7 @@ int16_t PlayerBasicStatistics::race_value()
  * @details
  * * 職業によるステータス修正値
  */
-int16_t PlayerBasicStatistics::class_value()
+int16_t PlayerBasicStatistics::class_bonus()
 {
     const player_class_info *c_ptr = &class_info[enum2i(this->player_ptr->pclass)];
     return c_ptr->c_adj[this->ability_type];
@@ -75,7 +75,7 @@ int16_t PlayerBasicStatistics::class_value()
  * @details
  * * 性格によるステータス修正値
  */
-int16_t PlayerBasicStatistics::personality_value()
+int16_t PlayerBasicStatistics::personality_bonus()
 {
     const player_personality *a_ptr = &personality_info[this->player_ptr->ppersonality];
     return a_ptr->a_adj[this->ability_type];

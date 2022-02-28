@@ -30,7 +30,7 @@ void PlayerInfravision::set_locals()
  * @details
  * * 種族による加算
  */
-int16_t PlayerInfravision::race_value()
+int16_t PlayerInfravision::race_bonus()
 {
     return PlayerRace(this->player_ptr).get_info()->infra;
 }
