@@ -60,45 +60,44 @@ int16_t PlayerStatusBase::get_value()
 BIT_FLAGS PlayerStatusBase::get_all_flags()
 {
     this->set_locals(); /* 計算前に値のセット。派生クラスの値がセットされる。*/
-    BIT_FLAGS result = equipments_flags(this->tr_flag);
-
+    auto flags = equipments_flags(this->tr_flag);
     if (this->class_value() != 0) {
-        set_bits(result, FLAG_CAUSE_CLASS);
+        set_bits(flags, FLAG_CAUSE_CLASS);
     }
 
     if (this->race_value() != 0) {
-        set_bits(result, FLAG_CAUSE_RACE);
+        set_bits(flags, FLAG_CAUSE_RACE);
     }
 
     if (this->stance_value() != 0) {
-        set_bits(result, FLAG_CAUSE_STANCE);
+        set_bits(flags, FLAG_CAUSE_STANCE);
     }
 
     if (this->mutation_value() != 0) {
-        set_bits(result, FLAG_CAUSE_MUTATION);
+        set_bits(flags, FLAG_CAUSE_MUTATION);
     }
 
     if (this->time_effect_value() != 0) {
-        set_bits(result, FLAG_CAUSE_MAGIC_TIME_EFFECT);
+        set_bits(flags, FLAG_CAUSE_MAGIC_TIME_EFFECT);
     }
 
     if (this->personality_value() != 0) {
-        set_bits(result, FLAG_CAUSE_PERSONALITY);
+        set_bits(flags, FLAG_CAUSE_PERSONALITY);
     }
 
     if (this->riding_value() != 0) {
-        set_bits(result, FLAG_CAUSE_RIDING);
+        set_bits(flags, FLAG_CAUSE_RIDING);
     }
 
     if (this->inventory_weight_value() != 0) {
-        set_bits(result, FLAG_CAUSE_INVEN_PACK);
+        set_bits(flags, FLAG_CAUSE_INVEN_PACK);
     }
 
     if (this->action_value() != 0) {
-        set_bits(result, FLAG_CAUSE_ACTION);
+        set_bits(flags, FLAG_CAUSE_ACTION);
     }
 
-    return result;
+    return flags;
 }
 
 /*!
@@ -108,45 +107,44 @@ BIT_FLAGS PlayerStatusBase::get_all_flags()
 BIT_FLAGS PlayerStatusBase::get_good_flags()
 {
     this->set_locals(); /* 計算前に値のセット。派生クラスの値がセットされる。*/
-    BIT_FLAGS result = equipments_flags(this->tr_flag);
-
+    auto flags = equipments_flags(this->tr_flag);
     if (this->class_value() > 0) {
-        set_bits(result, FLAG_CAUSE_CLASS);
+        set_bits(flags, FLAG_CAUSE_CLASS);
     }
 
     if (this->race_value() > 0) {
-        set_bits(result, FLAG_CAUSE_RACE);
+        set_bits(flags, FLAG_CAUSE_RACE);
     }
 
     if (this->stance_value() > 0) {
-        set_bits(result, FLAG_CAUSE_STANCE);
+        set_bits(flags, FLAG_CAUSE_STANCE);
     }
 
     if (this->mutation_value() > 0) {
-        set_bits(result, FLAG_CAUSE_MUTATION);
+        set_bits(flags, FLAG_CAUSE_MUTATION);
     }
 
     if (this->time_effect_value() > 0) {
-        set_bits(result, FLAG_CAUSE_MAGIC_TIME_EFFECT);
+        set_bits(flags, FLAG_CAUSE_MAGIC_TIME_EFFECT);
     }
 
     if (this->personality_value() > 0) {
-        set_bits(result, FLAG_CAUSE_PERSONALITY);
+        set_bits(flags, FLAG_CAUSE_PERSONALITY);
     }
 
     if (this->riding_value() > 0) {
-        set_bits(result, FLAG_CAUSE_RIDING);
+        set_bits(flags, FLAG_CAUSE_RIDING);
     }
 
     if (this->inventory_weight_value() > 0) {
-        set_bits(result, FLAG_CAUSE_INVEN_PACK);
+        set_bits(flags, FLAG_CAUSE_INVEN_PACK);
     }
 
     if (this->action_value() > 0) {
-        set_bits(result, FLAG_CAUSE_ACTION);
+        set_bits(flags, FLAG_CAUSE_ACTION);
     }
 
-    return result;
+    return flags;
 }
 
 /*!
@@ -156,45 +154,44 @@ BIT_FLAGS PlayerStatusBase::get_good_flags()
 BIT_FLAGS PlayerStatusBase::get_bad_flags()
 {
     this->set_locals(); /* 計算前に値のセット。派生クラスの値がセットされる。*/
-    BIT_FLAGS result = equipments_bad_flags(this->tr_bad_flag);
-
+    auto flags = equipments_bad_flags(this->tr_bad_flag);
     if (this->class_value() < 0) {
-        set_bits(result, FLAG_CAUSE_CLASS);
+        set_bits(flags, FLAG_CAUSE_CLASS);
     }
 
     if (this->race_value() < 0) {
-        set_bits(result, FLAG_CAUSE_RACE);
+        set_bits(flags, FLAG_CAUSE_RACE);
     }
 
     if (this->stance_value() < 0) {
-        set_bits(result, FLAG_CAUSE_STANCE);
+        set_bits(flags, FLAG_CAUSE_STANCE);
     }
 
     if (this->mutation_value() < 0) {
-        set_bits(result, FLAG_CAUSE_MUTATION);
+        set_bits(flags, FLAG_CAUSE_MUTATION);
     }
 
     if (this->time_effect_value() < 0) {
-        set_bits(result, FLAG_CAUSE_MAGIC_TIME_EFFECT);
+        set_bits(flags, FLAG_CAUSE_MAGIC_TIME_EFFECT);
     }
 
     if (this->personality_value() < 0) {
-        set_bits(result, FLAG_CAUSE_PERSONALITY);
+        set_bits(flags, FLAG_CAUSE_PERSONALITY);
     }
 
     if (this->riding_value() < 0) {
-        set_bits(result, FLAG_CAUSE_RIDING);
+        set_bits(flags, FLAG_CAUSE_RIDING);
     }
 
     if (this->inventory_weight_value() < 0) {
-        set_bits(result, FLAG_CAUSE_INVEN_PACK);
+        set_bits(flags, FLAG_CAUSE_INVEN_PACK);
     }
 
     if (this->action_value() < 0) {
-        set_bits(result, FLAG_CAUSE_ACTION);
+        set_bits(flags, FLAG_CAUSE_ACTION);
     }
 
-    return result;
+    return flags;
 }
 
 void PlayerStatusBase::set_locals()
@@ -213,21 +210,20 @@ void PlayerStatusBase::set_locals()
  */
 BIT_FLAGS PlayerStatusBase::equipments_flags(tr_type check_flag)
 {
-    ObjectType *o_ptr;
-    BIT_FLAGS result = 0L;
+    BIT_FLAGS flags = 0;
     for (int i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
-        o_ptr = &player_ptr->inventory_list[i];
+        auto *o_ptr = &player_ptr->inventory_list[i];
         if (!o_ptr->k_idx) {
             continue;
         }
 
-        auto flgs = object_flags(o_ptr);
-
-        if (flgs.has(check_flag)) {
-            set_bits(result, convert_inventory_slot_type_to_flag_cause(i2enum<inventory_slot_type>(i)));
+        auto o_flags = object_flags(o_ptr);
+        if (o_flags.has(check_flag)) {
+            set_bits(flags, convert_inventory_slot_type_to_flag_cause(i2enum<inventory_slot_type>(i)));
         }
     }
-    return result;
+
+    return flags;
 }
 
 /*!
@@ -237,23 +233,22 @@ BIT_FLAGS PlayerStatusBase::equipments_flags(tr_type check_flag)
  */
 BIT_FLAGS PlayerStatusBase::equipments_bad_flags(tr_type check_flag)
 {
-    ObjectType *o_ptr;
-    BIT_FLAGS result = 0L;
+    BIT_FLAGS flags = 0;
     for (int i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
-        o_ptr = &player_ptr->inventory_list[i];
+        auto *o_ptr = &player_ptr->inventory_list[i];
         if (!o_ptr->k_idx) {
             continue;
         }
 
-        auto flgs = object_flags(o_ptr);
-
-        if (flgs.has(check_flag)) {
+        auto o_flags = object_flags(o_ptr);
+        if (o_flags.has(check_flag)) {
             if (o_ptr->pval < 0) {
-                set_bits(result, convert_inventory_slot_type_to_flag_cause(i2enum<inventory_slot_type>(i)));
+                set_bits(flags, convert_inventory_slot_type_to_flag_cause(i2enum<inventory_slot_type>(i)));
             }
         }
     }
-    return result;
+
+    return flags;
 }
 
 /*!
@@ -263,19 +258,20 @@ BIT_FLAGS PlayerStatusBase::equipments_bad_flags(tr_type check_flag)
 int16_t PlayerStatusBase::equipments_value()
 {
     this->set_locals(); /* 計算前に値のセット。派生クラスの値がセットされる。*/
-    int16_t result = 0;
+    int16_t bonus = 0;
     for (int i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
         auto *o_ptr = &player_ptr->inventory_list[i];
-        auto flgs = object_flags(o_ptr);
-
+        auto o_flags = object_flags(o_ptr);
         if (!o_ptr->k_idx) {
             continue;
         }
-        if (flgs.has(this->tr_flag)) {
-            result += o_ptr->pval;
+
+        if (o_flags.has(this->tr_flag)) {
+            bonus += o_ptr->pval;
         }
     }
-    return result;
+
+    return bonus;
 }
 
 int16_t PlayerStatusBase::race_value()

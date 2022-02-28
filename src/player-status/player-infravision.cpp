@@ -43,12 +43,12 @@ int16_t PlayerInfravision::race_value()
  */
 int16_t PlayerInfravision::mutation_value()
 {
-    int16_t result = 0;
+    int16_t bonus = 0;
     if (this->player_ptr->muta.has(PlayerMutationType::INFRAVIS)) {
-        result += 3;
+        bonus += 3;
     }
 
-    return result;
+    return bonus;
 }
 
 /*!
@@ -59,10 +59,10 @@ int16_t PlayerInfravision::mutation_value()
  */
 int16_t PlayerInfravision::time_effect_value()
 {
-    int16_t result = 0;
+    int16_t bonus = 0;
     if (this->player_ptr->tim_infra) {
-        result += 3;
+        bonus += 3;
     }
 
-    return result;
+    return bonus;
 }

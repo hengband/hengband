@@ -67,17 +67,18 @@ int16_t PlayerStealth::class_base_value()
  */
 int16_t PlayerStealth::class_value()
 {
-    ACTION_SKILL_POWER result = 0;
-
-    if (PlayerClass(player_ptr).equals(PlayerClassType::NINJA)) {
-        if (heavy_armor(this->player_ptr)) {
-            result -= (this->player_ptr->lev) / 10;
-        } else if ((!this->player_ptr->inventory_list[INVEN_MAIN_HAND].k_idx || can_attack_with_main_hand(this->player_ptr)) && (!this->player_ptr->inventory_list[INVEN_SUB_HAND].k_idx || can_attack_with_sub_hand(this->player_ptr))) {
-            result += (this->player_ptr->lev) / 10;
-        }
+    if (!PlayerClass(this->player_ptr).equals(PlayerClassType::NINJA)) {
+        return 0;
     }
 
-    return result;
+    int16_t bonus = 0;
+    if (heavy_armor(this->player_ptr)) {
+        bonus -= (this->player_ptr->lev) / 10;
+    } else if ((!this->player_ptr->inventory_list[INVEN_MAIN_HAND].k_idx || can_attack_with_main_hand(this->player_ptr)) && (!this->player_ptr->inventory_list[INVEN_SUB_HAND].k_idx || can_attack_with_sub_hand(this->player_ptr))) {
+        bonus += (this->player_ptr->lev) / 10;
+    }
+
+    return bonus;
 }
 
 /*!
@@ -89,15 +90,17 @@ int16_t PlayerStealth::class_value()
  */
 int16_t PlayerStealth::mutation_value()
 {
-    int16_t result = 0;
+    int16_t bonus = 0;
     const auto &muta = this->player_ptr->muta;
     if (muta.has(PlayerMutationType::XTRA_NOIS)) {
-        result -= 3;
+        bonus -= 3;
     }
+
     if (muta.has(PlayerMutationType::MOTION)) {
-        result += 1;
+        bonus += 1;
     }
-    return result;
+
+    return bonus;
 }
 
 /*!
@@ -110,23 +113,23 @@ int16_t PlayerStealth::mutation_value()
  */
 int16_t PlayerStealth::time_effect_value()
 {
-    int16_t result = 0;
+    int16_t bonus = 0;
     if (this->player_ptr->realm1 == REALM_HEX) {
         SpellHex spell_hex(this->player_ptr);
         if (spell_hex.is_spelling_any()) {
-            result -= spell_hex.get_casting_num() + 1;
+            bonus -= spell_hex.get_casting_num() + 1;
         }
     }
 
     if (is_shero(this->player_ptr)) {
-        result -= 7;
+        bonus -= 7;
     }
 
     if (is_time_limit_stealth(this->player_ptr)) {
-        result += 999;
+        bonus += 999;
     }
 
-    return result;
+    return bonus;
 }
 
 bool PlayerStealth::is_aggravated_s_fairy()
@@ -145,6 +148,7 @@ int16_t PlayerStealth::set_exception_value(int16_t value)
     if (this->is_aggravated_s_fairy()) {
         value = std::min<int16_t>(value - 3, (value + 2) / 2);
     }
+
     return value;
 }
 
@@ -156,13 +160,12 @@ int16_t PlayerStealth::set_exception_value(int16_t value)
  */
 BIT_FLAGS PlayerStealth::get_bad_flags()
 {
-    BIT_FLAGS result = PlayerStatusBase::get_bad_flags();
-
+    auto flags = PlayerStatusBase::get_bad_flags();
     if (this->is_aggravated_s_fairy()) {
-        set_bits(result, FLAG_CAUSE_RACE);
+        set_bits(flags, FLAG_CAUSE_RACE);
     }
 
-    return result;
+    return flags;
 }
 
 /*!
