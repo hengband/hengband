@@ -71,7 +71,7 @@ int16_t PlayerSpeed::race_value()
  */
 int16_t PlayerSpeed::class_value()
 {
-    byte result = 0;
+    int16_t result = 0;
     PlayerClass pc(this->player_ptr);
     if (pc.equals(PlayerClassType::NINJA)) {
         if (heavy_armor(this->player_ptr)) {
