@@ -71,44 +71,44 @@ int16_t PlayerSpeed::race_value()
  */
 int16_t PlayerSpeed::class_value()
 {
-    int16_t result = 0;
+    int16_t compensation = 0;
     PlayerClass pc(this->player_ptr);
     if (pc.equals(PlayerClassType::NINJA)) {
         if (heavy_armor(this->player_ptr)) {
-            result -= (this->player_ptr->lev) / 10;
+            compensation -= (this->player_ptr->lev) / 10;
         } else if ((!this->player_ptr->inventory_list[INVEN_MAIN_HAND].k_idx || can_attack_with_main_hand(this->player_ptr)) && (!this->player_ptr->inventory_list[INVEN_SUB_HAND].k_idx || can_attack_with_sub_hand(this->player_ptr))) {
-            result += 3;
+            compensation += 3;
             if (!(PlayerRace(this->player_ptr).equals(PlayerRaceType::KLACKON) || PlayerRace(this->player_ptr).equals(PlayerRaceType::SPRITE) || (this->player_ptr->ppersonality == PERSONALITY_MUNCHKIN))) {
-                result += (this->player_ptr->lev) / 10;
+                compensation += (this->player_ptr->lev) / 10;
             }
         }
     }
 
     if ((pc.equals(PlayerClassType::MONK) || pc.equals(PlayerClassType::FORCETRAINER)) && !heavy_armor(this->player_ptr)) {
         if (!(PlayerRace(this->player_ptr).equals(PlayerRaceType::KLACKON) || PlayerRace(this->player_ptr).equals(PlayerRaceType::SPRITE) || (this->player_ptr->ppersonality == PERSONALITY_MUNCHKIN))) {
-            result += (this->player_ptr->lev) / 10;
+            compensation += (this->player_ptr->lev) / 10;
         }
     }
 
     if (pc.equals(PlayerClassType::BERSERKER)) {
-        result += 2;
+        compensation += 2;
         if (this->player_ptr->lev > 29) {
-            result++;
+            compensation++;
         }
 
         if (this->player_ptr->lev > 39) {
-            result++;
+            compensation++;
         }
         if (this->player_ptr->lev > 44) {
-            result++;
+            compensation++;
         }
 
         if (this->player_ptr->lev > 49) {
-            result++;
+            compensation++;
         }
     }
 
-    return result;
+    return compensation;
 }
 
 /*!
@@ -119,13 +119,13 @@ int16_t PlayerSpeed::class_value()
  */
 int16_t PlayerSpeed::personality_value()
 {
-    int16_t result = 0;
+    int16_t compensation = 0;
     PlayerRace pr(this->player_ptr);
     if (this->player_ptr->ppersonality == PERSONALITY_MUNCHKIN && !pr.equals(PlayerRaceType::KLACKON) && !pr.equals(PlayerRaceType::SPRITE)) {
-        result += (this->player_ptr->lev) / 10 + 5;
+        compensation += (this->player_ptr->lev) / 10 + 5;
     }
 
-    return result;
+    return compensation;
 }
 
 /*!
@@ -138,24 +138,24 @@ int16_t PlayerSpeed::personality_value()
  */
 int16_t PlayerSpeed::special_weapon_set_value()
 {
-    int16_t result = 0;
+    int16_t compensation = 0;
     if (!has_melee_weapon(this->player_ptr, INVEN_MAIN_HAND) || !has_melee_weapon(this->player_ptr, INVEN_SUB_HAND)) {
-        return result;
+        return compensation;
     }
 
     if (set_quick_and_tiny(this->player_ptr)) {
-        result += 7;
+        compensation += 7;
     }
 
     if (set_icing_and_twinkle(this->player_ptr)) {
-        result += 5;
+        compensation += 5;
     }
 
     if (set_anubis_and_chariot(this->player_ptr)) {
-        result += 5;
+        compensation += 5;
     }
 
-    return result;
+    return compensation;
 }
 
 /*!
@@ -167,9 +167,9 @@ int16_t PlayerSpeed::special_weapon_set_value()
  */
 int16_t PlayerSpeed::equipments_value()
 {
-    int16_t result = PlayerStatusBase::equipments_value();
-    result += this->special_weapon_set_value();
-    return result;
+    int16_t compensation = PlayerStatusBase::equipments_value();
+    compensation += this->special_weapon_set_value();
+    return compensation;
 }
 
 /*!
@@ -184,30 +184,30 @@ int16_t PlayerSpeed::equipments_value()
  */
 int16_t PlayerSpeed::time_effect_value()
 {
-    int16_t result = 0;
+    int16_t compensation = 0;
     if (is_fast(this->player_ptr)) {
-        result += 10;
+        compensation += 10;
     }
 
     if (this->player_ptr->slow) {
-        result -= 10;
+        compensation -= 10;
     }
 
     if (this->player_ptr->realm1 == REALM_HEX) {
         if (SpellHex(this->player_ptr).is_spelling_specific(HEX_SHOCK_CLOAK)) {
-            result += 3;
+            compensation += 3;
         }
     }
 
     if (this->player_ptr->food >= PY_FOOD_MAX) {
-        result -= 10;
+        compensation -= 10;
     }
 
     if (this->player_ptr->lightspeed) {
-        result += 999;
+        compensation += 999;
     }
 
-    return result;
+    return compensation;
 }
 
 /*!
@@ -218,12 +218,12 @@ int16_t PlayerSpeed::time_effect_value()
  */
 int16_t PlayerSpeed::stance_value()
 {
-    int16_t result = 0;
+    int16_t compensation = 0;
     if (PlayerClass(player_ptr).monk_stance_is(MonkStanceType::SUZAKU)) {
-        result += 10;
+        compensation += 10;
     }
 
-    return result;
+    return compensation;
 }
 
 /*!
@@ -236,21 +236,21 @@ int16_t PlayerSpeed::stance_value()
  */
 int16_t PlayerSpeed::mutation_value()
 {
-    int16_t result = 0;
+    int16_t compensation = 0;
     const auto &muta = this->player_ptr->muta;
     if (muta.has(PlayerMutationType::XTRA_FAT)) {
-        result -= 2;
+        compensation -= 2;
     }
 
     if (muta.has(PlayerMutationType::XTRA_LEGS)) {
-        result += 3;
+        compensation += 3;
     }
 
     if (muta.has(PlayerMutationType::SHORT_LEG)) {
-        result -= 3;
+        compensation -= 3;
     }
 
-    return result;
+    return compensation;
 }
 
 /*!
@@ -263,30 +263,30 @@ int16_t PlayerSpeed::riding_value()
 {
     auto *riding_m_ptr = &(this->player_ptr)->current_floor_ptr->m_list[this->player_ptr->riding];
     int16_t speed = riding_m_ptr->mspeed;
-    int16_t result = 0;
+    int16_t compensation = 0;
     if (!this->player_ptr->riding) {
         return 0;
     }
 
     if (riding_m_ptr->mspeed > 110) {
-        result = (int16_t)((speed - 110) * (this->player_ptr->skill_exp[PlayerSkillKindType::RIDING] * 3 + this->player_ptr->lev * 160L - 10000L) / (22000L));
-        if (result < 0) {
-            result = 0;
+        compensation = (int16_t)((speed - 110) * (this->player_ptr->skill_exp[PlayerSkillKindType::RIDING] * 3 + this->player_ptr->lev * 160L - 10000L) / (22000L));
+        if (compensation < 0) {
+            compensation = 0;
         }
     } else {
-        result = speed - 110;
+        compensation = speed - 110;
     }
 
-    result += (this->player_ptr->skill_exp[PlayerSkillKindType::RIDING] + this->player_ptr->lev * 160L) / 3200;
+    compensation += (this->player_ptr->skill_exp[PlayerSkillKindType::RIDING] + this->player_ptr->lev * 160L) / 3200;
     if (monster_fast_remaining(riding_m_ptr)) {
-        result += 10;
+        compensation += 10;
     }
 
     if (monster_slow_remaining(riding_m_ptr)) {
-        result -= 10;
+        compensation -= 10;
     }
 
-    return result;
+    return compensation;
 }
 
 /*!
@@ -297,23 +297,23 @@ int16_t PlayerSpeed::riding_value()
  */
 int16_t PlayerSpeed::inventory_weight_value()
 {
-    int16_t result = 0;
+    int16_t compensation = 0;
     auto weight = calc_inventory_weight(this->player_ptr);
     if (this->player_ptr->riding) {
         auto *riding_m_ptr = &(this->player_ptr)->current_floor_ptr->m_list[this->player_ptr->riding];
         auto *riding_r_ptr = &r_info[riding_m_ptr->r_idx];
         auto count = 1500 + riding_r_ptr->level * 25;
         if (weight > count) {
-            result -= ((weight - count) / (count / 5));
+            compensation -= ((weight - count) / (count / 5));
         }
     } else {
         auto count = calc_weight_limit(this->player_ptr);
         if (weight > count) {
-            result -= ((weight - count) / (count / 5));
+            compensation -= ((weight - count) / (count / 5));
         }
     }
 
-    return result;
+    return compensation;
 }
 
 /*!
@@ -324,12 +324,12 @@ int16_t PlayerSpeed::inventory_weight_value()
  */
 int16_t PlayerSpeed::action_value()
 {
-    int16_t result = 0;
+    int16_t compensation = 0;
     if (this->player_ptr->action == ACTION_SEARCH) {
-        result -= 10;
+        compensation -= 10;
     }
 
-    return result;
+    return compensation;
 }
 
 /*!
@@ -340,12 +340,12 @@ int16_t PlayerSpeed::action_value()
  */
 BIT_FLAGS PlayerSpeed::equipments_flags(tr_type check_flag)
 {
-    BIT_FLAGS result = PlayerStatusBase::equipments_flags(check_flag);
+    auto compensation = PlayerStatusBase::equipments_flags(check_flag);
     if (this->special_weapon_set_value() != 0) {
-        set_bits(result, FLAG_CAUSE_INVEN_MAIN_HAND | FLAG_CAUSE_INVEN_SUB_HAND);
+        set_bits(compensation, FLAG_CAUSE_INVEN_MAIN_HAND | FLAG_CAUSE_INVEN_SUB_HAND);
     }
 
-    return result;
+    return compensation;
 }
 
 /*!
