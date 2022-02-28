@@ -112,7 +112,8 @@ void wr_player(PlayerType *player_ptr)
     wr_s16b(player_ptr->old_realm);
 
     for (int i = 0; i < MAX_BOUNTY; i++) {
-        wr_s16b(w_ptr->bounty_r_idx[i]);
+        wr_s16b(w_ptr->bounties[i].r_idx);
+        wr_byte(w_ptr->bounties[i].is_achieved);
     }
 
     for (int i = 0; i < 4; i++) {

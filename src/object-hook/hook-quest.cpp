@@ -38,7 +38,7 @@ bool object_is_bounty(PlayerType *player_ptr, ObjectType *o_ptr)
     }
 
     for (i = 0; i < MAX_BOUNTY; i++) {
-        if (o_ptr->pval == w_ptr->bounty_r_idx[i]) {
+        if (!w_ptr->bounties[i].is_achieved && (o_ptr->pval == w_ptr->bounties[i].r_idx)) {
             break;
         }
     }

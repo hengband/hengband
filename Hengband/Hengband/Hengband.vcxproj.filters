@@ -5199,6 +5199,9 @@
     <ClInclude Include="..\..\src\timed-effect\player-fear.h">
       <Filter>timed-effect</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\market\bounty-type-definition.h">
+      <Filter>market</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\src\wall.bmp" />

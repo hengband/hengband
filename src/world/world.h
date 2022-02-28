@@ -1,11 +1,12 @@
 ﻿#pragma once
 
+#include "market/bounty-type-definition.h"
 #include "player-info/class-types.h"
 #include "system/angband.h"
 #include "util/flag-group.h"
 #include "util/rng-xoshiro.h"
 
-#define MAX_BOUNTY 20
+constexpr auto MAX_BOUNTY = 20;
 
 /*!
  * @brief 世界情報構造体
@@ -25,7 +26,7 @@ struct world_type {
 
     MONSTER_IDX timewalk_m_idx{}; /*!< 現在時間停止を行っているモンスターのID */
 
-    MONRACE_IDX bounty_r_idx[MAX_BOUNTY]{};
+    bounty_type bounties[MAX_BOUNTY]{};
     MONSTER_IDX today_mon{}; //!< 実際の日替わり賞金首
 
     uint32_t play_time{}; /*!< 実プレイ時間 */

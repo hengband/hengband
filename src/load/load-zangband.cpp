@@ -123,8 +123,8 @@ void set_zangband_bounty_uniques(PlayerType *player_ptr)
     determine_bounty_uniques(player_ptr);
     for (int i = 0; i < MAX_BOUNTY; i++) {
         /* Is this bounty unique already dead? */
-        if (!r_info[w_ptr->bounty_r_idx[i]].max_num) {
-            w_ptr->bounty_r_idx[i] += 10000;
+        if (r_info[w_ptr->bounties[i].r_idx].max_num == 0) {
+            w_ptr->bounties[i].is_achieved = true;
         }
     }
 }

@@ -407,6 +407,7 @@ hengband_SOURCES = \
 	market/poker.cpp market/poker.h \
 	market/arena.cpp market/arena.h \
 	market/bounty-prize-table.cpp market/bounty-prize-table.h \
+	market/bounty-type-definition.h \
 	market/bounty.cpp market/bounty.h \
 	market/building-recharger.cpp market/building-recharger.h \
 	market/building-quest.cpp market/building-quest.h \

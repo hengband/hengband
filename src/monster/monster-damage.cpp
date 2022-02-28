@@ -410,8 +410,12 @@ void MonsterDamageProcessor::show_bounty_message(GAME_TEXT *m_name)
         return;
     }
 
+    if (m_ptr->mflag2.has(MonsterConstantFlagType::CHAMELEON)) {
+        return;
+    }
+
     for (auto i = 0; i < MAX_BOUNTY; i++) {
-        if ((w_ptr->bounty_r_idx[i] == m_ptr->r_idx) && m_ptr->mflag2.has_not(MonsterConstantFlagType::CHAMELEON)) {
+        if (!w_ptr->bounties[i].is_achieved && (w_ptr->bounties[i].r_idx == m_ptr->r_idx)) {
             msg_format(_("%sの首には賞金がかかっている。", "There is a price on %s's head."), m_name);
             break;
         }

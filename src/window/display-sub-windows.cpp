@@ -116,7 +116,7 @@ static void print_monster_line(TERM_LEN x, TERM_LEN y, monster_type *m_ptr, int 
     if (r_ptr->kind_flags.has(MonsterKindType::UNIQUE)) {
         bool is_bounty = false;
         for (int i = 0; i < MAX_BOUNTY; i++) {
-            if (w_ptr->bounty_r_idx[i] == r_idx) {
+            if (!w_ptr->bounties[i].is_achieved && (w_ptr->bounties[i].r_idx == r_idx)) {
                 is_bounty = true;
                 break;
             }

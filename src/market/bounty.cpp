@@ -136,9 +136,13 @@ bool exchange_cash(PlayerType *player_ptr)
     }
 
     for (int j = 0; j < MAX_BOUNTY; j++) {
+        if (w_ptr->bounties[j].is_achieved) {
+            continue;
+        }
+
         for (INVENTORY_IDX i = INVEN_PACK - 1; i >= 0; i--) {
             o_ptr = &player_ptr->inventory_list[i];
-            if ((o_ptr->tval != ItemKindType::CORPSE) || (o_ptr->pval != w_ptr->bounty_r_idx[j])) {
+            if ((o_ptr->tval != ItemKindType::CORPSE) || (o_ptr->pval != w_ptr->bounties[j].r_idx)) {
                 continue;
             }
 
@@ -155,10 +159,10 @@ bool exchange_cash(PlayerType *player_ptr)
 
             vary_item(player_ptr, i, -o_ptr->number);
             chg_virtue(player_ptr, V_JUSTICE, 5);
-            w_ptr->bounty_r_idx[j] += 10000;
+            w_ptr->bounties[j].is_achieved = true;
 
             for (num = 0, k = 0; k < MAX_BOUNTY; k++) {
-                if (w_ptr->bounty_r_idx[k] >= 10000) {
+                if (w_ptr->bounties[k].is_achieved) {
                     num++;
                 }
             }
@@ -242,9 +246,9 @@ void show_bounty(void)
     for (int i = 0; i < MAX_BOUNTY; i++) {
         byte color;
         concptr done_mark;
-        monster_race *r_ptr = &r_info[(w_ptr->bounty_r_idx[i] > 10000 ? w_ptr->bounty_r_idx[i] - 10000 : w_ptr->bounty_r_idx[i])];
+        monster_race *r_ptr = &r_info[w_ptr->bounties[i].r_idx];
 
-        if (w_ptr->bounty_r_idx[i] > 10000) {
+        if (w_ptr->bounties[i].is_achieved) {
             color = TERM_RED;
             done_mark = _("(済)", "(done)");
         } else {
@@ -327,10 +331,12 @@ void determine_bounty_uniques(PlayerType *player_ptr)
     get_mon_num_prep_bounty(player_ptr);
 
     for (int i = 0; i < MAX_BOUNTY; i++) {
+        w_ptr->bounties[i].is_achieved = false;
+
         while (true) {
-            w_ptr->bounty_r_idx[i] = get_mon_num(player_ptr, 0, MAX_DEPTH - 1, GMN_ARENA);
+            auto r_idx = get_mon_num(player_ptr, 0, MAX_DEPTH - 1, GMN_ARENA);
             monster_race *r_ptr;
-            r_ptr = &r_info[w_ptr->bounty_r_idx[i]];
+            r_ptr = &r_info[r_idx];
 
             if (r_ptr->kind_flags.has_not(MonsterKindType::UNIQUE)) {
                 continue;
@@ -344,30 +350,32 @@ void determine_bounty_uniques(PlayerType *player_ptr)
                 continue;
             }
 
-            if (no_questor_or_bounty_uniques(w_ptr->bounty_r_idx[i])) {
+            if (no_questor_or_bounty_uniques(r_idx)) {
                 continue;
             }
 
             int j;
             for (j = 0; j < i; j++) {
-                if (w_ptr->bounty_r_idx[i] == w_ptr->bounty_r_idx[j]) {
+                if (r_idx == w_ptr->bounties[j].r_idx) {
                     break;
                 }
             }
 
             if (j == i) {
+                w_ptr->bounties[i].r_idx = r_idx;
                 break;
             }
         }
     }
 
+    // @todo std::sort() で書き直す
     for (int i = 0; i < MAX_BOUNTY - 1; i++) {
         for (int j = i; j < MAX_BOUNTY; j++) {
             MONRACE_IDX tmp;
-            if (r_info[w_ptr->bounty_r_idx[i]].level > r_info[w_ptr->bounty_r_idx[j]].level) {
-                tmp = w_ptr->bounty_r_idx[i];
-                w_ptr->bounty_r_idx[i] = w_ptr->bounty_r_idx[j];
-                w_ptr->bounty_r_idx[j] = tmp;
+            if (r_info[w_ptr->bounties[i].r_idx].level > r_info[w_ptr->bounties[j].r_idx].level) {
+                tmp = w_ptr->bounties[i].r_idx;
+                w_ptr->bounties[i].r_idx = w_ptr->bounties[j].r_idx;
+                w_ptr->bounties[j].r_idx = tmp;
             }
         }
     }
