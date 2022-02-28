@@ -56,7 +56,7 @@ static void rd_realms(PlayerType *player_ptr)
 void rd_base_info(PlayerType *player_ptr)
 {
     rd_string(player_ptr->name, sizeof(player_ptr->name));
-    rd_string(player_ptr->died_from, sizeof(player_ptr->died_from));
+    rd_string(player_ptr->died_from, 1024);
     if (!h_older_than(1, 7, 0, 1)) {
         char buf[1024];
         rd_string(buf, sizeof buf);

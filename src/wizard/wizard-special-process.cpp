@@ -843,7 +843,7 @@ void cheat_death(PlayerType *player_ptr)
     (void)recall_player(player_ptr, 0);
     reserve_alter_reality(player_ptr, 0);
 
-    (void)strcpy(player_ptr->died_from, _("死の欺き", "Cheating death"));
+    player_ptr->died_from = _("死の欺き", "Cheating death");
     (void)set_food(player_ptr, PY_FOOD_MAX - 1);
 
     auto *floor_ptr = player_ptr->current_floor_ptr;

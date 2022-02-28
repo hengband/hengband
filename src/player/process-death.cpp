@@ -80,7 +80,7 @@ static void show_basic_params(PlayerType *player_ptr, char *buf)
  */
 static int show_killing_monster(PlayerType *player_ptr, char *buf, char *tomb_message, size_t tomb_message_size)
 {
-    shape_buffer(player_ptr->died_from, GRAVE_LINE_WIDTH + 1, tomb_message, tomb_message_size);
+    shape_buffer(player_ptr->died_from.c_str(), GRAVE_LINE_WIDTH + 1, tomb_message, tomb_message_size);
     char *t;
     t = tomb_message + strlen(tomb_message) + 1;
     if (!*t) {

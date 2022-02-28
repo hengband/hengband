@@ -91,7 +91,7 @@ static void kingly(PlayerType *player_ptr)
     player_ptr->current_floor_ptr->dun_level = 0;
     if (!seppuku) {
         /* 引退したときの識別文字 */
-        (void)strcpy(player_ptr->died_from, _("ripe", "Ripe Old Age"));
+        player_ptr->died_from = _("ripe", "Ripe Old Age");
     }
 
     player_ptr->exp = player_ptr->max_exp;

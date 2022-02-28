@@ -150,6 +150,18 @@ void rd_string(char *str, int max)
 }
 
 /*!
+ * @brief ロードファイルポインタから文字列を読み込んで std::string オブジェクトに格納する
+ * @param str std::string オブジェクトへの参照
+ * @param max 最大読み取りバイト数
+ */
+void rd_string(std::string &str, int max)
+{
+    std::vector<char> buf(max);
+    rd_string(buf.data(), max);
+    str = buf.data();
+}
+
+/*!
  * @brief ロードファイルポインタを指定バイト分飛ばして進める / Hack -- strip some bytes
  * @param n スキップバイト数
  */
