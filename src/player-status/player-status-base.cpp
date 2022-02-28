@@ -282,38 +282,47 @@ int16_t PlayerStatusBase::race_value()
 {
     return 0;
 }
+
 int16_t PlayerStatusBase::class_value()
 {
     return 0;
 }
+
 int16_t PlayerStatusBase::class_base_value()
 {
     return 0;
 }
+
 int16_t PlayerStatusBase::personality_value()
 {
     return 0;
 }
+
 int16_t PlayerStatusBase::time_effect_value()
 {
     return 0;
 }
+
 int16_t PlayerStatusBase::stance_value()
 {
     return 0;
 }
+
 int16_t PlayerStatusBase::mutation_value()
 {
     return 0;
 }
+
 int16_t PlayerStatusBase::riding_value()
 {
     return 0;
 }
+
 int16_t PlayerStatusBase::inventory_weight_value()
 {
     return 0;
 }
+
 int16_t PlayerStatusBase::action_value()
 {
     return 0;
