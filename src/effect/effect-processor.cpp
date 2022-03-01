@@ -492,36 +492,36 @@ ProjectResult project(PlayerType *player_ptr, const MONSTER_IDX who, POSITION ra
             breath_shape(player_ptr, path_g, dist, &grids, gx, gy, gm, &gm_rad, rad, y1, x1, by, bx, typ);
         } else {
             for (dist = 0; dist <= rad; dist++) {
-                for (temp_y = by - dist; temp_y <= by + dist; temp_y++) {
-                    for (temp_x = bx - dist; temp_x <= bx + dist; temp_x++) {
-                        if (!in_bounds2(player_ptr->current_floor_ptr, temp_y, temp_x)) {
+                for (auto y = by - dist; y <= by + dist; y++) {
+                    for (auto x = bx - dist; x <= bx + dist; x++) {
+                        if (!in_bounds2(player_ptr->current_floor_ptr, y, x)) {
                             continue;
                         }
-                        if (distance(by, bx, temp_y, temp_x) != dist) {
+                        if (distance(by, bx, y, x) != dist) {
                             continue;
                         }
 
                         switch (typ) {
                         case AttributeType::LITE:
                         case AttributeType::LITE_WEAK:
-                            if (!los(player_ptr, by, bx, temp_y, temp_x)) {
+                            if (!los(player_ptr, by, bx, y, x)) {
                                 continue;
                             }
                             break;
                         case AttributeType::DISINTEGRATE:
-                            if (!in_disintegration_range(player_ptr->current_floor_ptr, by, bx, temp_y, temp_x)) {
+                            if (!in_disintegration_range(player_ptr->current_floor_ptr, by, bx, y, x)) {
                                 continue;
                             }
                             break;
                         default:
-                            if (!projectable(player_ptr, by, bx, temp_y, temp_x)) {
+                            if (!projectable(player_ptr, by, bx, y, x)) {
                                 continue;
                             }
                             break;
                         }
 
-                        gy[grids] = temp_y;
-                        gx[grids] = temp_x;
+                        gy[grids] = y;
+                        gx[grids] = x;
                         grids++;
                     }
                 }
