@@ -189,7 +189,7 @@ static void show_tomb_detail(PlayerType *player_ptr, char *buf)
     center_string(buf, tomb_message);
     put_str(buf, 14, 11);
 
-    shape_buffer(format("by %s.", player_ptr->died_from), GRAVE_LINE_WIDTH + 1, tomb_message, sizeof(tomb_message));
+    shape_buffer(format("by %s.", player_ptr->died_from.c_str()), GRAVE_LINE_WIDTH + 1, tomb_message, sizeof(tomb_message));
     center_string(buf, tomb_message);
     char *t;
     put_str(buf, 15, 11);
