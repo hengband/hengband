@@ -198,34 +198,32 @@ ProjectResult project(PlayerType *player_ptr, const MONSTER_IDX who, POSITION ra
         project_m_n = 0;
         project_m_x = 0;
         project_m_y = 0;
+        auto oy = temp_y;
+        auto ox = temp_x;
         for (int i = 0; i < path_n; ++i) {
-            POSITION oy = temp_y;
-            POSITION ox = temp_x;
             POSITION ny = get_grid_y(path_g[i]);
             POSITION nx = get_grid_x(path_g[i]);
-            temp_y = ny;
-            temp_x = nx;
-            gy[grids] = temp_y;
-            gx[grids] = temp_x;
+            gy[grids] = ny;
+            gx[grids] = nx;
             grids++;
 
             if (delay_factor > 0) {
                 if (!blind && !(flag & (PROJECT_HIDE))) {
-                    if (panel_contains(temp_y, temp_x) && player_has_los_bold(player_ptr, temp_y, temp_x)) {
-                        uint16_t p = bolt_pict(oy, ox, temp_y, temp_x, typ);
+                    if (panel_contains(ny, nx) && player_has_los_bold(player_ptr, ny, nx)) {
+                        uint16_t p = bolt_pict(oy, ox, ny, nx, typ);
                         TERM_COLOR a = PICT_A(p);
                         auto c = PICT_C(p);
-                        print_rel(player_ptr, c, a, temp_y, temp_x);
-                        move_cursor_relative(temp_y, temp_x);
+                        print_rel(player_ptr, c, a, ny, nx);
+                        move_cursor_relative(ny, nx);
                         term_fresh();
                         term_xtra(TERM_XTRA_DELAY, delay_factor);
-                        lite_spot(player_ptr, temp_y, temp_x);
+                        lite_spot(player_ptr, ny, nx);
                         term_fresh();
                         if (flag & (PROJECT_BEAM)) {
-                            p = bolt_pict(temp_y, temp_x, temp_y, temp_x, typ);
+                            p = bolt_pict(ny, nx, ny, nx, typ);
                             a = PICT_A(p);
                             c = PICT_C(p);
-                            print_rel(player_ptr, c, a, temp_y, temp_x);
+                            print_rel(player_ptr, c, a, ny, nx);
                         }
 
                         visual = true;
@@ -235,23 +233,27 @@ ProjectResult project(PlayerType *player_ptr, const MONSTER_IDX who, POSITION ra
                 }
             }
 
-            if (affect_item(player_ptr, 0, 0, temp_y, temp_x, dam, AttributeType::SEEKER)) {
+            if (affect_item(player_ptr, 0, 0, ny, nx, dam, AttributeType::SEEKER)) {
                 res.notice = true;
             }
 
-            if (!player_ptr->current_floor_ptr->grid_array[temp_y][temp_x].is_mirror()) {
+            if (!player_ptr->current_floor_ptr->grid_array[ny][nx].is_mirror()) {
+                oy = ny;
+                ox = nx;
                 continue;
             }
 
-            monster_target_y = temp_y;
-            monster_target_x = temp_x;
-            remove_mirror(player_ptr, temp_y, temp_x);
-            next_mirror(player_ptr, &oy, &ox, temp_y, temp_x);
-            path_n = i + projection_path(player_ptr, &(path_g[i + 1]), (project_length ? project_length : get_max_range(player_ptr)), temp_y, temp_x, oy, ox, flag);
+            monster_target_y = ny;
+            monster_target_x = nx;
+            remove_mirror(player_ptr, ny, nx);
+            next_mirror(player_ptr, &oy, &ox, ny, nx);
+            path_n = i + projection_path(player_ptr, &(path_g[i + 1]), (project_length ? project_length : get_max_range(player_ptr)), ny, nx, oy, ox, flag);
+            auto y = ny;
+            auto x = nx;
             for (j = last_i; j <= i; j++) {
-                temp_y = get_grid_y(path_g[j]);
-                temp_x = get_grid_x(path_g[j]);
-                if (affect_monster(player_ptr, 0, 0, temp_y, temp_x, dam, AttributeType::SEEKER, flag, true, cap_mon_ptr)) {
+                y = get_grid_y(path_g[j]);
+                x = get_grid_x(path_g[j]);
+                if (affect_monster(player_ptr, 0, 0, y, x, dam, AttributeType::SEEKER, flag, true, cap_mon_ptr)) {
                     res.notice = true;
                 }
 
@@ -266,10 +268,12 @@ ProjectResult project(PlayerType *player_ptr, const MONSTER_IDX who, POSITION ra
                     }
                 }
 
-                (void)affect_feature(player_ptr, 0, 0, temp_y, temp_x, dam, AttributeType::SEEKER);
+                (void)affect_feature(player_ptr, 0, 0, y, x, dam, AttributeType::SEEKER);
             }
 
             last_i = i;
+            oy = y;
+            ox = x;
         }
 
         for (int i = last_i; i < path_n; i++) {
@@ -301,35 +305,33 @@ ProjectResult project(PlayerType *player_ptr, const MONSTER_IDX who, POSITION ra
         project_m_n = 0;
         project_m_x = 0;
         project_m_y = 0;
+        auto oy = temp_y;
+        auto ox = temp_x;
         for (int i = 0; i < path_n; ++i) {
-            POSITION oy = temp_y;
-            POSITION ox = temp_x;
             POSITION ny = get_grid_y(path_g[i]);
             POSITION nx = get_grid_x(path_g[i]);
-            temp_y = ny;
-            temp_x = nx;
-            gy[grids] = temp_y;
-            gx[grids] = temp_x;
+            gy[grids] = ny;
+            gx[grids] = nx;
             grids++;
             {
                 if (delay_factor > 0) {
-                    if (panel_contains(temp_y, temp_x) && player_has_los_bold(player_ptr, temp_y, temp_x)) {
+                    if (panel_contains(ny, nx) && player_has_los_bold(player_ptr, ny, nx)) {
                         uint16_t p;
                         TERM_COLOR a;
-                        p = bolt_pict(oy, ox, temp_y, temp_x, typ);
+                        p = bolt_pict(oy, ox, ny, nx, typ);
                         a = PICT_A(p);
                         auto c = PICT_C(p);
-                        print_rel(player_ptr, c, a, temp_y, temp_x);
-                        move_cursor_relative(temp_y, temp_x);
+                        print_rel(player_ptr, c, a, ny, nx);
+                        move_cursor_relative(ny, nx);
                         term_fresh();
                         term_xtra(TERM_XTRA_DELAY, delay_factor);
-                        lite_spot(player_ptr, temp_y, temp_x);
+                        lite_spot(player_ptr, ny, nx);
                         term_fresh();
                         if (flag & (PROJECT_BEAM)) {
-                            p = bolt_pict(temp_y, temp_x, temp_y, temp_x, typ);
+                            p = bolt_pict(ny, nx, ny, nx, typ);
                             a = PICT_A(p);
                             c = PICT_C(p);
-                            print_rel(player_ptr, c, a, temp_y, temp_x);
+                            print_rel(player_ptr, c, a, ny, nx);
                         }
 
                         visual = true;
@@ -339,41 +341,49 @@ ProjectResult project(PlayerType *player_ptr, const MONSTER_IDX who, POSITION ra
                 }
             }
 
-            if (affect_item(player_ptr, 0, 0, temp_y, temp_x, dam, AttributeType::SUPER_RAY)) {
+            if (affect_item(player_ptr, 0, 0, ny, nx, dam, AttributeType::SUPER_RAY)) {
                 res.notice = true;
             }
-            if (!cave_has_flag_bold(player_ptr->current_floor_ptr, temp_y, temp_x, FloorFeatureType::PROJECT)) {
+            if (!cave_has_flag_bold(player_ptr->current_floor_ptr, ny, nx, FloorFeatureType::PROJECT)) {
                 if (second_step) {
                     continue;
                 }
                 break;
             }
 
-            if (player_ptr->current_floor_ptr->grid_array[temp_y][temp_x].is_mirror() && !second_step) {
-                monster_target_y = temp_y;
-                monster_target_x = temp_x;
-                remove_mirror(player_ptr, temp_y, temp_x);
+            if (player_ptr->current_floor_ptr->grid_array[ny][nx].is_mirror() && !second_step) {
+                monster_target_y = ny;
+                monster_target_x = nx;
+                remove_mirror(player_ptr, ny, nx);
+                auto y = ny;
+                auto x = nx;
                 for (j = 0; j <= i; j++) {
-                    temp_y = get_grid_y(path_g[j]);
-                    temp_x = get_grid_x(path_g[j]);
-                    (void)affect_feature(player_ptr, 0, 0, temp_y, temp_x, dam, AttributeType::SUPER_RAY);
+                    y = get_grid_y(path_g[j]);
+                    x = get_grid_x(path_g[j]);
+                    (void)affect_feature(player_ptr, 0, 0, y, x, dam, AttributeType::SUPER_RAY);
                 }
 
                 path_n = i;
                 second_step = i + 1;
                 path_n += projection_path(
-                    player_ptr, &(path_g[path_n + 1]), (project_length ? project_length : get_max_range(player_ptr)), temp_y, temp_x, temp_y - 1, temp_x - 1, flag);
-                path_n += projection_path(player_ptr, &(path_g[path_n + 1]), (project_length ? project_length : get_max_range(player_ptr)), temp_y, temp_x, temp_y - 1, temp_x, flag);
+                    player_ptr, &(path_g[path_n + 1]), (project_length ? project_length : get_max_range(player_ptr)), y, x, y - 1, x - 1, flag);
+                path_n += projection_path(player_ptr, &(path_g[path_n + 1]), (project_length ? project_length : get_max_range(player_ptr)), y, x, y - 1, x, flag);
                 path_n += projection_path(
-                    player_ptr, &(path_g[path_n + 1]), (project_length ? project_length : get_max_range(player_ptr)), temp_y, temp_x, temp_y - 1, temp_x + 1, flag);
-                path_n += projection_path(player_ptr, &(path_g[path_n + 1]), (project_length ? project_length : get_max_range(player_ptr)), temp_y, temp_x, temp_y, temp_x - 1, flag);
-                path_n += projection_path(player_ptr, &(path_g[path_n + 1]), (project_length ? project_length : get_max_range(player_ptr)), temp_y, temp_x, temp_y, temp_x + 1, flag);
+                    player_ptr, &(path_g[path_n + 1]), (project_length ? project_length : get_max_range(player_ptr)), y, x, y - 1, x + 1, flag);
+                path_n += projection_path(player_ptr, &(path_g[path_n + 1]), (project_length ? project_length : get_max_range(player_ptr)), y, x, y, x - 1, flag);
+                path_n += projection_path(player_ptr, &(path_g[path_n + 1]), (project_length ? project_length : get_max_range(player_ptr)), y, x, y, x + 1, flag);
                 path_n += projection_path(
-                    player_ptr, &(path_g[path_n + 1]), (project_length ? project_length : get_max_range(player_ptr)), temp_y, temp_x, temp_y + 1, temp_x - 1, flag);
-                path_n += projection_path(player_ptr, &(path_g[path_n + 1]), (project_length ? project_length : get_max_range(player_ptr)), temp_y, temp_x, temp_y + 1, temp_x, flag);
+                    player_ptr, &(path_g[path_n + 1]), (project_length ? project_length : get_max_range(player_ptr)), y, x, y + 1, x - 1, flag);
+                path_n += projection_path(player_ptr, &(path_g[path_n + 1]), (project_length ? project_length : get_max_range(player_ptr)), y, x, y + 1, x, flag);
                 path_n += projection_path(
-                    player_ptr, &(path_g[path_n + 1]), (project_length ? project_length : get_max_range(player_ptr)), temp_y, temp_x, temp_y + 1, temp_x + 1, flag);
+                    player_ptr, &(path_g[path_n + 1]), (project_length ? project_length : get_max_range(player_ptr)), y, x, y + 1, x + 1, flag);
+
+                oy = y;
+                ox = x;
+                continue;
             }
+            oy = ny;
+            ox = nx;
         }
 
         for (int i = 0; i < path_n; i++) {
@@ -399,9 +409,9 @@ ProjectResult project(PlayerType *player_ptr, const MONSTER_IDX who, POSITION ra
     }
 
     int k;
+    auto oy = temp_y;
+    auto ox = temp_x;
     for (k = 0; k < path_n; ++k) {
-        POSITION oy = temp_y;
-        POSITION ox = temp_x;
         POSITION ny = get_grid_y(path_g[k]);
         POSITION nx = get_grid_x(path_g[k]);
         if (flag & PROJECT_DISI) {
@@ -417,34 +427,31 @@ ProjectResult project(PlayerType *player_ptr, const MONSTER_IDX who, POSITION ra
                 break;
             }
         }
-
-        temp_y = ny;
-        temp_x = nx;
         if (flag & (PROJECT_BEAM)) {
-            gy[grids] = temp_y;
-            gx[grids] = temp_x;
+            gy[grids] = ny;
+            gx[grids] = nx;
             grids++;
         }
 
         if (delay_factor > 0) {
             if (!blind && !(flag & (PROJECT_HIDE | PROJECT_FAST))) {
-                if (panel_contains(temp_y, temp_x) && player_has_los_bold(player_ptr, temp_y, temp_x)) {
+                if (panel_contains(ny, nx) && player_has_los_bold(player_ptr, ny, nx)) {
                     uint16_t p;
                     TERM_COLOR a;
-                    p = bolt_pict(oy, ox, temp_y, temp_x, typ);
+                    p = bolt_pict(oy, ox, ny, nx, typ);
                     a = PICT_A(p);
                     auto c = PICT_C(p);
-                    print_rel(player_ptr, c, a, temp_y, temp_x);
-                    move_cursor_relative(temp_y, temp_x);
+                    print_rel(player_ptr, c, a, ny, nx);
+                    move_cursor_relative(ny, nx);
                     term_fresh();
                     term_xtra(TERM_XTRA_DELAY, delay_factor);
-                    lite_spot(player_ptr, temp_y, temp_x);
+                    lite_spot(player_ptr, ny, nx);
                     term_fresh();
                     if (flag & (PROJECT_BEAM)) {
-                        p = bolt_pict(temp_y, temp_x, temp_y, temp_x, typ);
+                        p = bolt_pict(ny, nx, ny, nx, typ);
                         a = PICT_A(p);
                         c = PICT_C(p);
-                        print_rel(player_ptr, c, a, temp_y, temp_x);
+                        print_rel(player_ptr, c, a, ny, nx);
                     }
 
                     visual = true;
@@ -453,11 +460,14 @@ ProjectResult project(PlayerType *player_ptr, const MONSTER_IDX who, POSITION ra
                 }
             }
         }
+
+        oy = ny;
+        ox = nx;
     }
 
     path_n = k;
-    POSITION by = temp_y;
-    POSITION bx = temp_x;
+    POSITION by = oy;
+    POSITION bx = ox;
     if (breath && !path_n) {
         breath = false;
         gm_rad = rad;
