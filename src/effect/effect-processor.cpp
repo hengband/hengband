@@ -106,9 +106,7 @@ ProjectResult project(PlayerType *player_ptr, const MONSTER_IDX who, POSITION ra
     POSITION gy[1024];
     POSITION gm[32];
     POSITION gm_rad = rad;
-    GAME_TEXT who_name[MAX_NLEN];
     bool see_s_msg = true;
-    who_name[0] = '\0';
     rakubadam_p = 0;
     rakubadam_m = 0;
     monster_target_y = player_ptr->y;
@@ -125,7 +123,6 @@ ProjectResult project(PlayerType *player_ptr, const MONSTER_IDX who, POSITION ra
     } else if (who > 0) {
         x1 = player_ptr->current_floor_ptr->m_list[who].fx;
         y1 = player_ptr->current_floor_ptr->m_list[who].fy;
-        monster_desc(player_ptr, who_name, &player_ptr->current_floor_ptr->m_list[who], MD_WRONGDOER_NAME);
     } else {
         x1 = target_x;
         y1 = target_y;
@@ -814,6 +811,12 @@ ProjectResult project(PlayerType *player_ptr, const MONSTER_IDX who, POSITION ra
                      */
                     effective_dist++;
                 }
+            }
+
+            GAME_TEXT who_name[MAX_NLEN];
+            who_name[0] = '\0';
+            if (who > 0) {
+                monster_desc(player_ptr, who_name, &player_ptr->current_floor_ptr->m_list[who], MD_WRONGDOER_NAME);
             }
 
             if (affect_player(who, player_ptr, who_name, effective_dist, y, x, dam, typ, flag, project)) {
