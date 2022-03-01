@@ -289,38 +289,27 @@ static bool spell_okay(PlayerType *player_ptr, int spell, bool learned, bool stu
  */
 static int get_spell(PlayerType *player_ptr, SPELL_IDX *sn, concptr prompt, OBJECT_SUBTYPE_VALUE sval, bool learned, int16_t use_realm)
 {
-    int i;
-    SPELL_IDX spell = -1;
-    int num = 0;
-    int ask = true;
-    MANA_POINT need_mana;
-    SPELL_IDX spells[64];
-    bool flag, redraw, okay;
-    char choice;
-    const magic_type *s_ptr;
-    char out_val[160];
-    concptr p;
-    COMMAND_CODE code;
-#ifdef JP
-    char jverb_buf[128];
-#endif
-    int menu_line = (use_menu ? 1 : 0);
+    short code;
     if (repeat_pull(&code)) {
-        *sn = (SPELL_IDX)code;
+        *sn = code;
         if (spell_okay(player_ptr, *sn, learned, false, use_realm)) {
             return true;
         }
     }
 
-    p = spell_category_name(mp_ptr->spell_book);
+    auto p = spell_category_name(mp_ptr->spell_book);
+    auto num = 0;
+    int spells[64]{};
+    int spell = -1; // @todo よくあるバッドプラクティス.
     for (spell = 0; spell < 32; spell++) {
         if ((fake_spell_flags[sval] & (1UL << spell))) {
             spells[num++] = spell;
         }
     }
 
-    okay = false;
+    auto okay = false;
     (*sn) = -2;
+    int i;
     for (i = 0; i < num; i++) {
         if (spell_okay(player_ptr, spells[i], learned, false, use_realm)) {
             okay = true;
@@ -344,18 +333,20 @@ static int get_spell(PlayerType *player_ptr, SPELL_IDX *sn, concptr prompt, OBJE
     }
 
     *sn = (-1);
-    flag = false;
-    redraw = false;
+    auto flag = false;
+    auto redraw = false;
     player_ptr->window_flags |= (PW_SPELL);
     handle_stuff(player_ptr);
+    char out_val[160];
 #ifdef JP
+    char jverb_buf[128];
     jverb(prompt, jverb_buf, JVERB_AND);
     (void)strnfmt(out_val, 78, "(%^s:%c-%c, '*'で一覧, ESCで中断) どの%sを%^sますか? ", p, I2A(0), I2A(num - 1), p, jverb_buf);
 #else
     (void)strnfmt(out_val, 78, "(%^ss %c-%c, *=List, ESC=exit) %^s which %s? ", p, I2A(0), I2A(num - 1), prompt, p);
 #endif
 
-    choice = (always_show_list || use_menu) ? ESCAPE : 1;
+    auto choice = (always_show_list || use_menu) ? ESCAPE : '\1';
     while (!flag) {
         if (choice == ESCAPE) {
             choice = ' ';
@@ -363,7 +354,9 @@ static int get_spell(PlayerType *player_ptr, SPELL_IDX *sn, concptr prompt, OBJE
             break;
         }
 
+        auto ask = true;
         if (use_menu && choice != ' ') {
+            auto menu_line = use_menu ? 1 : 0;
             switch (choice) {
             case '0': {
                 screen_load();
@@ -407,6 +400,7 @@ static int get_spell(PlayerType *player_ptr, SPELL_IDX *sn, concptr prompt, OBJE
                 if (!redraw) {
                     redraw = true;
                     screen_save();
+                    auto menu_line = use_menu ? 1 : 0;
                     print_spells(player_ptr, menu_line, spells, num, 1, 15, use_realm);
                 } else {
                     if (use_menu) {
@@ -420,7 +414,7 @@ static int get_spell(PlayerType *player_ptr, SPELL_IDX *sn, concptr prompt, OBJE
                 continue;
             }
 
-            ask = (isupper(choice));
+            ask = isupper(choice) != 0;
             if (ask) {
                 choice = (char)tolower(choice);
             }
@@ -447,12 +441,14 @@ static int get_spell(PlayerType *player_ptr, SPELL_IDX *sn, concptr prompt, OBJE
 
         if (ask) {
             char tmp_val[160];
+            const magic_type *s_ptr;
             if (!is_magic(use_realm)) {
                 s_ptr = &technic_info[use_realm - MIN_TECHNIC][spell];
             } else {
                 s_ptr = &mp_ptr->info[use_realm - 1][spell];
             }
 
+            int need_mana;
             if (use_realm == REALM_HISSATSU) {
                 need_mana = s_ptr->smana;
             } else {
