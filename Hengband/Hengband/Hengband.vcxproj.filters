@@ -2409,6 +2409,9 @@
     <ClCompile Include="..\..\src\object-use\read\parchment-read-executor.cpp">
       <Filter>object-use\read</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\io\spell-selector.cpp">
+      <Filter>io</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\combat\shoot.h">
@@ -5234,6 +5237,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\object-use\read\read-executor-base.h">
       <Filter>object-use\read</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\io\spell-selector.h">
+      <Filter>io</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

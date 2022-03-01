@@ -11,8 +11,6 @@ extern concptr KWD_MANA; //!< 効果文字列: MP回復 / heal SP
 extern concptr KWD_POWER; //!< 効果文字列: 効力 / power
 extern concptr KWD_RANDOM; //!< 効果文字列: ランダム / random
 
-extern const uint32_t fake_spell_flags[4];
-
 concptr info_string_dice(concptr str, DICE_NUMBER dice, DICE_SID sides, int base);
 concptr info_damage(DICE_NUMBER dice, DICE_SID sides, int base);
 concptr info_duration(int base, DICE_SID sides);
