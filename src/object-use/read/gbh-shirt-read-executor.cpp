@@ -7,7 +7,7 @@
 #include "object-use/read/gbh-shirt-read-executor.h"
 #include "view/display-messages.h"
 
-bool GbhShirtReadExecutor::is_identified()
+bool GbhShirtReadExecutor::is_identified() const
 {
     return false;
 }

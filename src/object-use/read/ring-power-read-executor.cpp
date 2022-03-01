@@ -8,7 +8,7 @@
 #include "locale/language-switcher.h"
 #include "view/display-messages.h"
 
-bool RingOfPowerReadExecutor::is_identified()
+bool RingOfPowerReadExecutor::is_identified() const
 {
     return false;
 }

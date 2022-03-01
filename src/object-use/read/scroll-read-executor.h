@@ -7,7 +7,7 @@ class ObjectType;
 class ScrollReadExecutor : public ReadExecutorBase {
 public:
     ScrollReadExecutor(PlayerType *player_ptr, ObjectType *o_ptr, bool known);
-    bool is_identified() override;
+    bool is_identified() const override;
     bool read() override;
 
 private:

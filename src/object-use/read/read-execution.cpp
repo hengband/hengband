@@ -46,7 +46,7 @@ void ObjectReadEntity::execute(bool known)
 {
     auto *o_ptr = ref_item(this->player_ptr, this->item);
     PlayerEnergy(this->player_ptr).set_player_turn_energy(100);
-    if (!this->check_can_read()) {
+    if (!this->can_read()) {
         return;
     }
 
@@ -76,7 +76,7 @@ void ObjectReadEntity::execute(bool known)
     vary_item(this->player_ptr, this->item, -1);
 }
 
-bool ObjectReadEntity::check_can_read()
+bool ObjectReadEntity::can_read() const
 {
     if (cmd_limit_time_walk(this->player_ptr)) {
         return false;

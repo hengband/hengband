@@ -21,7 +21,7 @@ ParchmentReadExecutor::ParchmentReadExecutor(PlayerType *player_ptr, ObjectType 
 {
 }
 
-bool ParchmentReadExecutor::is_identified()
+bool ParchmentReadExecutor::is_identified() const
 {
     return false;
 }

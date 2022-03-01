@@ -51,7 +51,7 @@ ScrollReadExecutor::ScrollReadExecutor(PlayerType *player_ptr, ObjectType *o_ptr
 {
 }
 
-bool ScrollReadExecutor::is_identified()
+bool ScrollReadExecutor::is_identified() const
 {
     return this->ident;
 }
