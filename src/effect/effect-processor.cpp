@@ -474,7 +474,6 @@ ProjectResult project(PlayerType *player_ptr, const MONSTER_IDX who, POSITION ra
 
     gm[0] = 0;
     gm[1] = grids;
-    int dist_hack = path_n;
     project_length = 0;
 
     /* If we found a "target", explode there */
@@ -644,7 +643,7 @@ ProjectResult project(PlayerType *player_ptr, const MONSTER_IDX who, POSITION ra
             if (grids <= 1) {
                 auto *m_ptr = &player_ptr->current_floor_ptr->m_list[player_ptr->current_floor_ptr->grid_array[y][x].m_idx];
                 monster_race *ref_ptr = &r_info[m_ptr->r_idx];
-                if ((flag & PROJECT_REFLECTABLE) && player_ptr->current_floor_ptr->grid_array[y][x].m_idx && (ref_ptr->flags2 & RF2_REFLECTING) && ((player_ptr->current_floor_ptr->grid_array[y][x].m_idx != player_ptr->riding) || !(flag & PROJECT_PLAYER)) && (!who || dist_hack > 1) && !one_in_(10)) {
+                if ((flag & PROJECT_REFLECTABLE) && player_ptr->current_floor_ptr->grid_array[y][x].m_idx && (ref_ptr->flags2 & RF2_REFLECTING) && ((player_ptr->current_floor_ptr->grid_array[y][x].m_idx != player_ptr->riding) || !(flag & PROJECT_PLAYER)) && (!who || path_n > 1) && !one_in_(10)) {
                     POSITION t_y, t_x;
                     int max_attempts = 10;
                     do {
