@@ -17,6 +17,7 @@
 #include "io/write-diary.h"
 #include "main/sound-definitions-table.h"
 #include "main/sound-of-music.h"
+#include "market/bounty.h"
 #include "mind/mind-ninja.h"
 #include "monster-floor/monster-death.h"
 #include "monster-floor/monster-remover.h"
@@ -410,11 +411,12 @@ void MonsterDamageProcessor::show_bounty_message(GAME_TEXT *m_name)
         return;
     }
 
-    for (auto i = 0; i < MAX_BOUNTY; i++) {
-        if ((w_ptr->bounty_r_idx[i] == m_ptr->r_idx) && m_ptr->mflag2.has_not(MonsterConstantFlagType::CHAMELEON)) {
-            msg_format(_("%sの首には賞金がかかっている。", "There is a price on %s's head."), m_name);
-            break;
-        }
+    if (m_ptr->mflag2.has(MonsterConstantFlagType::CHAMELEON)) {
+        return;
+    }
+
+    if (is_bounty(m_ptr->r_idx, true)) {
+        msg_format(_("%sの首には賞金がかかっている。", "There is a price on %s's head."), m_name);
     }
 }
 

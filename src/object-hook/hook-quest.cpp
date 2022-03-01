@@ -2,6 +2,7 @@
 #include "cmd-building/cmd-building.h"
 #include "dungeon/quest.h"
 #include "game-option/birth-options.h"
+#include "market/bounty.h"
 #include "monster-race/monster-race.h"
 #include "monster-race/race-indice-types.h"
 #include "object-enchant/trg-types.h"
@@ -19,8 +20,6 @@
  */
 bool object_is_bounty(PlayerType *player_ptr, ObjectType *o_ptr)
 {
-    int i;
-
     if (o_ptr->tval != ItemKindType::CORPSE) {
         return false;
     }
@@ -37,16 +36,8 @@ bool object_is_bounty(PlayerType *player_ptr, ObjectType *o_ptr)
         return true;
     }
 
-    for (i = 0; i < MAX_BOUNTY; i++) {
-        if (o_ptr->pval == w_ptr->bounty_r_idx[i]) {
-            break;
-        }
-    }
-    if (i < MAX_BOUNTY) {
-        return true;
-    }
-
-    return false;
+    auto corpse_r_idx = o_ptr->pval;
+    return is_bounty(corpse_r_idx, true);
 }
 
 /*!

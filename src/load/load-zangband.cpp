@@ -121,10 +121,10 @@ void set_zangband_race(PlayerType *player_ptr)
 void set_zangband_bounty_uniques(PlayerType *player_ptr)
 {
     determine_bounty_uniques(player_ptr);
-    for (int i = 0; i < MAX_BOUNTY; i++) {
+    for (auto &[r_idx, is_achieved] : w_ptr->bounties) {
         /* Is this bounty unique already dead? */
-        if (!r_info[w_ptr->bounty_r_idx[i]].max_num) {
-            w_ptr->bounty_r_idx[i] += 10000;
+        if (r_info[r_idx].max_num == 0) {
+            is_achieved = true;
         }
     }
 }

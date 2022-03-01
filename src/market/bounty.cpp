@@ -34,8 +34,10 @@
 #include "system/player-type-definition.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
+#include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 #include "world/world.h"
+#include <algorithm>
 
 /*!
  * @brief 賞金首の引き換え処理 / Get prize
@@ -135,15 +137,18 @@ bool exchange_cash(PlayerType *player_ptr)
         }
     }
 
-    for (int j = 0; j < MAX_BOUNTY; j++) {
+    for (auto &[r_idx, is_achieved] : w_ptr->bounties) {
+        if (is_achieved) {
+            continue;
+        }
+
         for (INVENTORY_IDX i = INVEN_PACK - 1; i >= 0; i--) {
             o_ptr = &player_ptr->inventory_list[i];
-            if ((o_ptr->tval != ItemKindType::CORPSE) || (o_ptr->pval != w_ptr->bounty_r_idx[j])) {
+            if ((o_ptr->tval != ItemKindType::CORPSE) || (o_ptr->pval != r_idx)) {
                 continue;
             }
 
             char buf[MAX_NLEN + 20];
-            int num, k;
             INVENTORY_IDX item_new;
             ObjectType forge;
 
@@ -155,13 +160,10 @@ bool exchange_cash(PlayerType *player_ptr)
 
             vary_item(player_ptr, i, -o_ptr->number);
             chg_virtue(player_ptr, V_JUSTICE, 5);
-            w_ptr->bounty_r_idx[j] += 10000;
+            is_achieved = true;
 
-            for (num = 0, k = 0; k < MAX_BOUNTY; k++) {
-                if (w_ptr->bounty_r_idx[k] >= 10000) {
-                    num++;
-                }
-            }
+            auto num = std::count_if(std::begin(w_ptr->bounties), std::end(w_ptr->bounties),
+                [](const auto &b_ref) { return b_ref.is_achieved; });
 
             msg_format(_("これで合計 %d ポイント獲得しました。", "You earned %d point%s total."), num, (num > 1 ? "s" : ""));
 
@@ -239,29 +241,48 @@ void show_bounty(void)
     prt(_("死体を持ち帰れば報酬を差し上げます。", "Offer a prize when you bring a wanted monster's corpse"), 4, 10);
     c_put_str(TERM_YELLOW, _("現在の賞金首", "Wanted monsters"), 6, 10);
 
-    for (int i = 0; i < MAX_BOUNTY; i++) {
-        byte color;
-        concptr done_mark;
-        monster_race *r_ptr = &r_info[(w_ptr->bounty_r_idx[i] > 10000 ? w_ptr->bounty_r_idx[i] - 10000 : w_ptr->bounty_r_idx[i])];
+    for (auto i = 0U; i < std::size(w_ptr->bounties); i++) {
+        const auto &[r_idx, is_achieved] = w_ptr->bounties[i];
+        monster_race *r_ptr = &r_info[r_idx];
 
-        if (w_ptr->bounty_r_idx[i] > 10000) {
-            color = TERM_RED;
-            done_mark = _("(済)", "(done)");
-        } else {
-            color = TERM_WHITE;
-            done_mark = "";
-        }
+        auto color = is_achieved ? TERM_RED : TERM_WHITE;
+        auto done_mark = is_achieved ? _("(済)", "(done)") : "";
 
         c_prt(color, format("%s %s", r_ptr->name.c_str(), done_mark), y + 7, 10);
 
         y = (y + 1) % 10;
-        if (!y && (i < MAX_BOUNTY - 1)) {
+        if (!y && (i < std::size(w_ptr->bounties) - 1)) {
             prt(_("何かキーを押してください", "Hit any key."), 0, 0);
             (void)inkey();
             prt("", 0, 0);
             clear_bldg(7, 18);
         }
     }
+}
+
+/*!
+ * @brief モンスターが賞金首の対象かどうかを調べる。達成済みの賞金首と日替わり賞金首は対象外。
+ *
+ * @param r_idx 対象のモンスター種族ID
+ * @param unachieved_only true の場合未達成の賞金首のみを対象とする。false の場合達成未達成に関わらずすべての賞金首を対象とする。
+ * @return 引数で指定したモンスター種族IDが賞金首の対象ならば true、そうでなければ false
+ */
+bool is_bounty(MONRACE_IDX r_idx, bool unachieved_only)
+{
+    auto it = std::find_if(std::begin(w_ptr->bounties), std::end(w_ptr->bounties),
+        [r_idx](const auto &b_ref) {
+            return b_ref.r_idx == r_idx;
+        });
+
+    if (it == std::end(w_ptr->bounties)) {
+        return false;
+    }
+
+    if (unachieved_only && (*it).is_achieved) {
+        return false;
+    }
+
+    return true;
 }
 
 /*!
@@ -326,49 +347,39 @@ void determine_bounty_uniques(PlayerType *player_ptr)
 {
     get_mon_num_prep_bounty(player_ptr);
 
-    for (int i = 0; i < MAX_BOUNTY; i++) {
-        while (true) {
-            w_ptr->bounty_r_idx[i] = get_mon_num(player_ptr, 0, MAX_DEPTH - 1, GMN_ARENA);
-            monster_race *r_ptr;
-            r_ptr = &r_info[w_ptr->bounty_r_idx[i]];
+    auto is_suitable_for_bounty = [](MONRACE_IDX r_idx) {
+        const auto &r_ref = r_info[r_idx];
+        bool is_suitable = r_ref.kind_flags.has(MonsterKindType::UNIQUE);
+        is_suitable &= any_bits(r_ref.flags9, RF9_DROP_CORPSE | RF9_DROP_SKELETON);
+        is_suitable &= r_ref.rarity <= 100;
+        is_suitable &= !no_questor_or_bounty_uniques(r_idx);
+        return is_suitable;
+    };
 
-            if (r_ptr->kind_flags.has_not(MonsterKindType::UNIQUE)) {
-                continue;
-            }
+    // 賞金首とするモンスターの種族IDのリストを生成
+    std::vector<MONRACE_IDX> bounty_r_idx_list;
+    while (bounty_r_idx_list.size() < std::size(w_ptr->bounties)) {
+        auto r_idx = get_mon_num(player_ptr, 0, MAX_DEPTH - 1, GMN_ARENA);
+        if (!is_suitable_for_bounty(r_idx)) {
+            continue;
+        }
 
-            if (!(r_ptr->flags9 & (RF9_DROP_CORPSE | RF9_DROP_SKELETON))) {
-                continue;
-            }
-
-            if (r_ptr->rarity > 100) {
-                continue;
-            }
-
-            if (no_questor_or_bounty_uniques(w_ptr->bounty_r_idx[i])) {
-                continue;
-            }
-
-            int j;
-            for (j = 0; j < i; j++) {
-                if (w_ptr->bounty_r_idx[i] == w_ptr->bounty_r_idx[j]) {
-                    break;
-                }
-            }
-
-            if (j == i) {
-                break;
-            }
+        auto is_already_selected = std::any_of(bounty_r_idx_list.begin(), bounty_r_idx_list.end(),
+            [r_idx](MONRACE_IDX bounty_r_idx) { return r_idx == bounty_r_idx; });
+        if (!is_already_selected) {
+            bounty_r_idx_list.push_back(r_idx);
         }
     }
 
-    for (int i = 0; i < MAX_BOUNTY - 1; i++) {
-        for (int j = i; j < MAX_BOUNTY; j++) {
-            MONRACE_IDX tmp;
-            if (r_info[w_ptr->bounty_r_idx[i]].level > r_info[w_ptr->bounty_r_idx[j]].level) {
-                tmp = w_ptr->bounty_r_idx[i];
-                w_ptr->bounty_r_idx[i] = w_ptr->bounty_r_idx[j];
-                w_ptr->bounty_r_idx[j] = tmp;
-            }
-        }
-    }
+    // モンスターのLVで昇順に並び替える
+    std::sort(bounty_r_idx_list.begin(), bounty_r_idx_list.end(),
+        [](MONRACE_IDX r_idx1, MONRACE_IDX r_idx2) {
+            return r_info[r_idx1].level < r_info[r_idx2].level;
+        });
+
+    // 賞金首情報を設定
+    std::transform(bounty_r_idx_list.begin(), bounty_r_idx_list.end(), std::begin(w_ptr->bounties),
+        [](MONSTER_IDX r_idx) -> bounty_type {
+            return { r_idx, false };
+        });
 }
