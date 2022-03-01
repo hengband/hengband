@@ -105,8 +105,6 @@ ProjectResult project(PlayerType *player_ptr, const MONSTER_IDX who, POSITION ra
     POSITION gx[1024];
     POSITION gy[1024];
     POSITION gm[32];
-    POSITION gm_rad = rad;
-    bool see_s_msg = true;
     rakubadam_p = 0;
     rakubadam_m = 0;
     monster_target_y = player_ptr->y;
@@ -398,6 +396,8 @@ ProjectResult project(PlayerType *player_ptr, const MONSTER_IDX who, POSITION ra
     auto oy = y1;
     auto ox = x1;
     auto visual = false;
+    POSITION gm_rad = rad;
+    bool see_s_msg = true;
     for (k = 0; k < path_n; ++k) {
         POSITION ny = get_grid_y(path_g[k]);
         POSITION nx = get_grid_x(path_g[k]);
