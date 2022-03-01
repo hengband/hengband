@@ -109,7 +109,6 @@ ProjectResult project(PlayerType *player_ptr, const MONSTER_IDX who, POSITION ra
     POSITION gy[1024];
     POSITION gm[32];
     POSITION gm_rad = rad;
-    bool jump = false;
     GAME_TEXT who_name[MAX_NLEN];
     bool see_s_msg = true;
     who_name[0] = '\0';
@@ -120,11 +119,9 @@ ProjectResult project(PlayerType *player_ptr, const MONSTER_IDX who, POSITION ra
 
     ProjectResult res;
 
-    if (flag & (PROJECT_JUMP)) {
+    if (any_bits(flag, PROJECT_JUMP)) {
         x1 = target_x;
         y1 = target_y;
-        flag &= ~(PROJECT_JUMP);
-        jump = true;
     } else if (who <= 0) {
         x1 = player_ptr->x;
         y1 = player_ptr->y;
@@ -195,6 +192,7 @@ ProjectResult project(PlayerType *player_ptr, const MONSTER_IDX who, POSITION ra
         project_m_y = 0;
         auto oy = y1;
         auto ox = x1;
+        auto jump = any_bits(flag, PROJECT_JUMP);
         for (int i = 0; i < path_n; ++i) {
             POSITION ny = get_grid_y(path_g[i]);
             POSITION nx = get_grid_x(path_g[i]);
@@ -385,7 +383,7 @@ ProjectResult project(PlayerType *player_ptr, const MONSTER_IDX who, POSITION ra
             POSITION py = get_grid_y(path_g[i]);
             POSITION px = get_grid_x(path_g[i]);
             (void)affect_monster(player_ptr, 0, 0, py, px, dam, AttributeType::SUPER_RAY, flag, true, cap_mon_ptr);
-            if (!who && (project_m_n == 1) && !jump) {
+            if (!who && (project_m_n == 1) && none_bits(flag, PROJECT_JUMP)) {
                 if (player_ptr->current_floor_ptr->grid_array[project_m_y][project_m_x].m_idx > 0) {
                     auto *m_ptr = &player_ptr->current_floor_ptr->m_list[player_ptr->current_floor_ptr->grid_array[project_m_y][project_m_x].m_idx];
                     if (m_ptr->ml) {
@@ -751,9 +749,8 @@ ProjectResult project(PlayerType *player_ptr, const MONSTER_IDX who, POSITION ra
                 res.notice = true;
             }
         }
-
         /* Player affected one monster (without "jumping") */
-        if (!who && (project_m_n == 1) && !jump) {
+        if (!who && (project_m_n == 1) && none_bits(flag, PROJECT_JUMP)) {
             auto x = project_m_x;
             auto y = project_m_y;
             if (player_ptr->current_floor_ptr->grid_array[y][x].m_idx > 0) {
