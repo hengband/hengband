@@ -2,6 +2,7 @@
 
 #include "system/angband.h"
 
+class ObjectType;
 class PlayerType;
 class ObjectReadEntity {
 public:
@@ -14,5 +15,7 @@ private:
     PlayerType *player_ptr;
     INVENTORY_IDX item;
 
-    bool check_can_read();
+    bool can_read() const;
+    void change_virtue_as_read(ObjectType &o_ref);
+    void gain_exp_from_item_use(ObjectType *o_ptr, bool is_identified);
 };

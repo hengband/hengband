@@ -9,7 +9,7 @@
 #include "action/action-limited.h"
 #include "floor/floor-object.h"
 #include "object-hook/hook-expendable.h"
-#include "object-use/read-execution.h"
+#include "object-use/read/read-execution.h"
 #include "object/item-tester-hooker.h"
 #include "object/item-use-flags.h"
 #include "perception/object-perception.h"

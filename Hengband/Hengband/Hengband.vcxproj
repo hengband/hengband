@@ -277,6 +277,11 @@
     <ClCompile Include="..\..\src\monster-race\monster-kind-mask.cpp" />
     <ClCompile Include="..\..\src\monster-race\race-resistance-mask.cpp" />
     <ClCompile Include="..\..\src\object-enchant\weapon\abstract-weapon-enchanter.cpp" />
+    <ClCompile Include="..\..\src\object-use\read\gbh-shirt-read-executor.cpp" />
+    <ClCompile Include="..\..\src\object-use\read\parchment-read-executor.cpp" />
+    <ClCompile Include="..\..\src\object-use\read\read-executor-factory.cpp" />
+    <ClCompile Include="..\..\src\object-use\read\ring-power-read-executor.cpp" />
+    <ClCompile Include="..\..\src\object-use\read\scroll-read-executor.cpp" />
     <ClCompile Include="..\..\src\smith\object-smith.cpp" />
     <ClCompile Include="..\..\src\smith\smith-info.cpp" />
     <ClCompile Include="..\..\src\smith\smith-tables.cpp" />
@@ -475,7 +480,7 @@
     <ClCompile Include="..\..\src\room\vault-builder.cpp" />
     <ClCompile Include="..\..\src\specific-object\blade-turner.cpp" />
     <ClCompile Include="..\..\src\specific-object\monster-ball.cpp" />
-    <ClCompile Include="..\..\src\object-use\read-execution.cpp" />
+    <ClCompile Include="..\..\src\object-use\read\read-execution.cpp" />
     <ClCompile Include="..\..\src\player\player-status-flags.cpp" />
     <ClCompile Include="..\..\src\player\player-status-table.cpp" />
     <ClCompile Include="..\..\src\player\player-view.cpp" />
@@ -951,6 +956,12 @@
     <ClInclude Include="..\..\src\mspell\mspell-result.h" />
     <ClInclude Include="..\..\src\object-enchant\others\apply-magic-lite.h" />
     <ClInclude Include="..\..\src\object-enchant\weapon\abstract-weapon-enchanter.h" />
+    <ClInclude Include="..\..\src\object-use\read\gbh-shirt-read-executor.h" />
+    <ClInclude Include="..\..\src\object-use\read\parchment-read-executor.h" />
+    <ClInclude Include="..\..\src\object-use\read\read-executor-base.h" />
+    <ClInclude Include="..\..\src\object-use\read\read-executor-factory.h" />
+    <ClInclude Include="..\..\src\object-use\read\ring-power-read-executor.h" />
+    <ClInclude Include="..\..\src\object-use\read\scroll-read-executor.h" />
     <ClInclude Include="..\..\src\smith\object-smith.h" />
     <ClInclude Include="..\..\src\smith\smith-info.h" />
     <ClInclude Include="..\..\src\smith\smith-tables.h" />
@@ -1230,7 +1241,7 @@
     <ClInclude Include="..\..\src\room\vault-builder.h" />
     <ClInclude Include="..\..\src\specific-object\blade-turner.h" />
     <ClInclude Include="..\..\src\specific-object\monster-ball.h" />
-    <ClInclude Include="..\..\src\object-use\read-execution.h" />
+    <ClInclude Include="..\..\src\object-use\read\read-execution.h" />
     <ClInclude Include="..\..\src\player\player-status-flags.h" />
     <ClInclude Include="..\..\src\player\player-status-table.h" />
     <ClInclude Include="..\..\src\player\player-view.h" />
