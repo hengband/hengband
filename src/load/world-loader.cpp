@@ -77,7 +77,7 @@ void set_gambling_monsters(void)
  */
 void rd_autopick(PlayerType *player_ptr)
 {
-    player_ptr->autopick_autoregister = rd_byte() != 0;
+    player_ptr->autopick_autoregister = rd_bool();
 }
 
 static void set_undead_turn_limit(PlayerType *player_ptr)
@@ -155,7 +155,7 @@ void rd_global_configurations(PlayerType *player_ptr)
     w_ptr->total_winner = rd_u16b();
     w_ptr->noscore = rd_u16b();
 
-    player_ptr->is_dead = rd_byte() != 0;
+    player_ptr->is_dead = rd_bool();
 
     player_ptr->feeling = rd_byte();
     rd_world_info(player_ptr);
@@ -173,13 +173,13 @@ void load_wilderness_info(PlayerType *player_ptr)
     if (h_older_than(0, 3, 7)) {
         player_ptr->wild_mode = false;
     } else {
-        player_ptr->wild_mode = rd_byte() != 0;
+        player_ptr->wild_mode = rd_bool();
     }
 
     if (h_older_than(0, 3, 7)) {
         player_ptr->ambush_flag = false;
     } else {
-        player_ptr->ambush_flag = rd_byte() != 0;
+        player_ptr->ambush_flag = rd_bool();
     }
 }
 

@@ -113,7 +113,7 @@ void wr_player(PlayerType *player_ptr)
 
     for (const auto &[r_idx, is_achieved] : w_ptr->bounties) {
         wr_s16b(r_idx);
-        wr_byte(is_achieved);
+        wr_bool(is_achieved);
     }
 
     for (int i = 0; i < 4; i++) {
@@ -229,12 +229,12 @@ void wr_player(PlayerType *player_ptr)
     wr_s16b(player_ptr->ele_immune);
     wr_u32b(player_ptr->special_defense);
     wr_byte(player_ptr->knowledge);
-    wr_byte(player_ptr->autopick_autoregister);
+    wr_bool(player_ptr->autopick_autoregister);
     wr_byte(0);
     wr_byte((byte)player_ptr->action);
     wr_byte(0);
-    wr_byte(preserve_mode);
-    wr_byte(player_ptr->wait_report_score);
+    wr_bool(preserve_mode);
+    wr_bool(player_ptr->wait_report_score);
 
     for (int i = 0; i < 12; i++) {
         wr_u32b(0L);
@@ -250,7 +250,7 @@ void wr_player(PlayerType *player_ptr)
     wr_u16b(player_ptr->panic_save);
     wr_u16b(w_ptr->total_winner);
     wr_u16b(w_ptr->noscore);
-    wr_byte(player_ptr->is_dead);
+    wr_bool(player_ptr->is_dead);
     wr_byte(player_ptr->feeling);
     wr_s32b(player_ptr->current_floor_ptr->generated_turn);
     wr_s32b(player_ptr->feeling_turn);
