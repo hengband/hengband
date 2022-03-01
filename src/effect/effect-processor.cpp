@@ -99,7 +99,6 @@ ProjectResult project(PlayerType *player_ptr, const MONSTER_IDX who, POSITION ra
     POSITION y_saver;
     POSITION x_saver;
     bool visual = false;
-    bool drawn = false;
     bool breath = false;
     bool blind = player_ptr->blind != 0;
     bool old_hide = false;
@@ -540,6 +539,7 @@ ProjectResult project(PlayerType *player_ptr, const MONSTER_IDX who, POSITION ra
     }
 
     if (!blind && !(flag & (PROJECT_HIDE)) && (delay_factor > 0)) {
+        auto drawn = false;
         for (int t = 0; t <= gm_rad; t++) {
             for (int i = gm[t]; i < gm[t + 1]; i++) {
                 auto y = gy[i];
