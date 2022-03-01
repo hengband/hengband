@@ -37,6 +37,7 @@
 #include "system/player-type-definition.h"
 #include "term/screen-processor.h"
 #include "timed-effect/player-cut.h"
+#include "timed-effect/player-fear.h"
 #include "timed-effect/player-stun.h"
 #include "timed-effect/timed-effects.h"
 #include "util/bit-flags-calculator.h"
@@ -386,7 +387,7 @@ bool choose_samurai_stance(PlayerType *player_ptr)
         return false;
     }
 
-    if (player_ptr->afraid) {
+    if (effects->fear()->is_fearful()) {
         msg_print(_("体が震えて構えられない！", "You are trembling with fear!"));
         return false;
     }

@@ -66,7 +66,7 @@ void process_terrify_attack(PlayerType *player_ptr, MonsterAttackPlayer *monap_p
         return;
     }
 
-    if (BadStatusSetter(player_ptr).mod_afraidness(3 + randint1(monap_ptr->rlev))) {
+    if (BadStatusSetter(player_ptr).mod_fear(3 + randint1(monap_ptr->rlev))) {
         monap_ptr->obvious = true;
     }
 }

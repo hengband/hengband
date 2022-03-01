@@ -197,7 +197,7 @@ bool switch_activation(PlayerType *player_ptr, ObjectType **o_ptr_ptr, const act
     case RandomArtActType::CURE_POISON: {
         msg_print(_("深青色に輝いている...", "It glows deep blue..."));
         BadStatusSetter bss(player_ptr);
-        (void)bss.afraidness(0);
+        (void)bss.fear(0);
         (void)bss.poison(0);
         return true;
     }

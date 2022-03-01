@@ -30,6 +30,7 @@
 #include "term/screen-processor.h"
 #include "timed-effect/player-confusion.h"
 #include "timed-effect/player-cut.h"
+#include "timed-effect/player-fear.h"
 #include "timed-effect/player-hallucination.h"
 #include "timed-effect/player-stun.h"
 #include "timed-effect/timed-effects.h"
@@ -46,7 +47,7 @@ static void set_bad_status_info(PlayerType *player_ptr, self_info_type *self_ptr
         self_ptr->info[self_ptr->line++] = _("あなたは混乱している。", "You are confused.");
     }
 
-    if (player_ptr->afraid) {
+    if (effects->fear()->is_fearful()) {
         self_ptr->info[self_ptr->line++] = _("あなたは恐怖に侵されている。", "You are terrified.");
     }
 
@@ -329,8 +330,8 @@ void report_magics(PlayerType *player_ptr)
         info[i++] = _("あなたは混乱している", "You are confused");
     }
 
-    if (player_ptr->afraid) {
-        info2[i] = report_magics_aux(player_ptr->afraid);
+    if (effects->fear()->is_fearful()) {
+        info2[i] = report_magics_aux(effects->fear()->current());
         info[i++] = _("あなたは恐怖に侵されている", "You are terrified");
     }
 

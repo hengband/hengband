@@ -268,7 +268,7 @@ void ObjectQuaffEntity::execute(INVENTORY_IDX item)
             break;
 
         case SV_POTION_BOLDNESS:
-            if (BadStatusSetter(this->player_ptr).afraidness(0)) {
+            if (BadStatusSetter(this->player_ptr).fear(0)) {
                 ident = true;
             }
             break;

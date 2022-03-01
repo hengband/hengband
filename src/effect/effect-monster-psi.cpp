@@ -121,7 +121,7 @@ static void effect_monster_psi_reflect_extra_effect(PlayerType *player_ptr, effe
         if (any_bits(em_ptr->r_ptr->flags3, RF3_NO_FEAR)) {
             em_ptr->note = _("には効果がなかった。", " is unaffected.");
         } else {
-            (void)bss.mod_afraidness(3 + randint1(em_ptr->dam));
+            (void)bss.mod_fear(3 + randint1(em_ptr->dam));
         }
 
         return;

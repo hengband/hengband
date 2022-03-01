@@ -372,7 +372,7 @@ static void curse_cowardice(PlayerType *player_ptr)
 
     disturb(player_ptr, false, true);
     msg_print(_("とても暗い... とても恐い！", "It's so dark... so scary!"));
-    (void)BadStatusSetter(player_ptr).mod_afraidness(duration);
+    (void)BadStatusSetter(player_ptr).mod_fear(duration);
 }
 
 /*!
@@ -402,7 +402,7 @@ static void curse_berserk_rage(PlayerType *player_ptr)
     msg_print(_("ウガァァア！", "RAAAAGHH!"));
     msg_print(_("激怒の発作に襲われた！", "You feel a fit of rage coming over you!"));
     (void)set_shero(player_ptr, duration, false);
-    (void)BadStatusSetter(player_ptr).afraidness(0);
+    (void)BadStatusSetter(player_ptr).fear(0);
 }
 
 static void curse_drain_hp(PlayerType *player_ptr)
