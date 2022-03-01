@@ -44,7 +44,7 @@ const uint32_t fake_spell_flags[4] = { 0x000000ff, 0x0000ff00, 0x00ff0000, 0xff0
  * @param learned 使用可能な判定ならばTRUE、学習可能かどうかの判定ならばFALSE
  * @param study_pray 祈りの学習判定目的ならばTRUE
  * @param use_realm 魔法領域ID
- * @return 失敗率(%)
+ * @return 選択した魔法が利用可能か否か
  */
 bool spell_okay(PlayerType *player_ptr, int spell, bool learned, bool study_pray, int use_realm)
 {
@@ -91,7 +91,7 @@ bool spell_okay(PlayerType *player_ptr, int spell, bool learned, bool study_pray
  * The "known" should be TRUE for cast/pray, FALSE for study
  * </pre>
  */
-int get_spell(PlayerType *player_ptr, SPELL_IDX *sn, concptr prompt, OBJECT_SUBTYPE_VALUE sval, bool learned, int16_t use_realm)
+bool get_spell(PlayerType *player_ptr, SPELL_IDX *sn, concptr prompt, OBJECT_SUBTYPE_VALUE sval, bool learned, int16_t use_realm)
 {
     short code;
     if (repeat_pull(&code)) {
@@ -129,9 +129,11 @@ int get_spell(PlayerType *player_ptr, SPELL_IDX *sn, concptr prompt, OBJECT_SUBT
     if (((use_realm) != player_ptr->realm1) && ((use_realm) != player_ptr->realm2) && !is_every_magic) {
         return false;
     }
+
     if (is_every_magic && !is_magic(use_realm)) {
         return false;
     }
+
     if (pc.equals(PlayerClassType::RED_MAGE) && ((use_realm) != REALM_ARCANE) && (sval > 1)) {
         return false;
     }
@@ -162,33 +164,26 @@ int get_spell(PlayerType *player_ptr, SPELL_IDX *sn, concptr prompt, OBJECT_SUBT
         if (use_menu && choice != ' ') {
             auto menu_line = use_menu ? 1 : 0;
             switch (choice) {
-            case '0': {
+            case '0':
                 screen_load();
                 return false;
-            }
-
             case '8':
             case 'k':
-            case 'K': {
+            case 'K':
                 menu_line += (num - 1);
                 break;
-            }
-
             case '2':
             case 'j':
-            case 'J': {
+            case 'J':
                 menu_line++;
                 break;
-            }
-
             case 'x':
             case 'X':
             case '\r':
-            case '\n': {
+            case '\n':
                 i = menu_line - 1;
                 ask = false;
                 break;
-            }
             }
 
             if (menu_line > num) {
