@@ -92,7 +92,6 @@ static void next_mirror(PlayerType *player_ptr, POSITION *next_y, POSITION *next
 ProjectResult project(PlayerType *player_ptr, const MONSTER_IDX who, POSITION rad, const POSITION target_y, const POSITION target_x, const int dam,
     const AttributeType typ, BIT_FLAGS flag, std::optional<CapturedMonsterType *> cap_mon_ptr)
 {
-    int dist;
     POSITION y1;
     POSITION x1;
     POSITION y2;
@@ -158,11 +157,10 @@ ProjectResult project(PlayerType *player_ptr, const MONSTER_IDX who, POSITION ra
         flag |= PROJECT_HIDE;
     }
 
-    for (dist = 0; dist < 32; dist++) {
+    for (auto dist = 0; dist < 32; dist++) {
         gm[dist] = 0;
     }
 
-    dist = 0;
     if (flag & (PROJECT_BEAM)) {
         gy[grids] = y1;
         gx[grids] = x1;
@@ -476,12 +474,11 @@ ProjectResult project(PlayerType *player_ptr, const MONSTER_IDX who, POSITION ra
 
     gm[0] = 0;
     gm[1] = grids;
-    dist = path_n;
-    int dist_hack = dist;
+    int dist_hack = path_n;
     project_length = 0;
 
     /* If we found a "target", explode there */
-    if (dist <= get_max_range(player_ptr)) {
+    if (path_n <= get_max_range(player_ptr)) {
         if ((flag & (PROJECT_BEAM)) && (grids > 0)) {
             grids--;
         }
@@ -497,9 +494,9 @@ ProjectResult project(PlayerType *player_ptr, const MONSTER_IDX who, POSITION ra
          */
         if (breath) {
             flag &= ~(PROJECT_HIDE);
-            breath_shape(player_ptr, path_g, dist, &grids, gx, gy, gm, &gm_rad, rad, y1, x1, by, bx, typ);
+            breath_shape(player_ptr, path_g, path_n, &grids, gx, gy, gm, &gm_rad, rad, y1, x1, by, bx, typ);
         } else {
-            for (dist = 0; dist <= rad; dist++) {
+            for (auto dist = 0; dist <= rad; dist++) {
                 for (auto y = by - dist; y <= by + dist; y++) {
                     for (auto x = bx - dist; x <= bx + dist; x++) {
                         if (!in_bounds2(player_ptr->current_floor_ptr, y, x)) {
@@ -588,7 +585,7 @@ ProjectResult project(PlayerType *player_ptr, const MONSTER_IDX who, POSITION ra
     }
 
     if (flag & (PROJECT_GRID)) {
-        dist = 0;
+        auto dist = 0;
         for (int i = 0; i < grids; i++) {
             if (gm[dist + 1] == i) {
                 dist++;
@@ -610,7 +607,7 @@ ProjectResult project(PlayerType *player_ptr, const MONSTER_IDX who, POSITION ra
 
     update_creature(player_ptr);
     if (flag & (PROJECT_ITEM)) {
-        dist = 0;
+        auto dist = 0;
         for (int i = 0; i < grids; i++) {
             if (gm[dist + 1] == i) {
                 dist++;
@@ -635,7 +632,7 @@ ProjectResult project(PlayerType *player_ptr, const MONSTER_IDX who, POSITION ra
         project_m_n = 0;
         project_m_x = 0;
         project_m_y = 0;
-        dist = 0;
+        auto dist = 0;
         for (int i = 0; i < grids; i++) {
             int effective_dist;
             if (gm[dist + 1] == i) {
@@ -774,7 +771,7 @@ ProjectResult project(PlayerType *player_ptr, const MONSTER_IDX who, POSITION ra
     }
 
     if (flag & (PROJECT_KILL)) {
-        dist = 0;
+        auto dist = 0;
         for (int i = 0; i < grids; i++) {
             int effective_dist;
             if (gm[dist + 1] == i) {
