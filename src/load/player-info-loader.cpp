@@ -184,7 +184,7 @@ void rd_bounty_uniques(PlayerType *player_ptr)
                 is_achieved = true;
             }
         } else {
-            is_achieved = rd_byte() != 0;
+            is_achieved = rd_bool();
         }
     }
 }

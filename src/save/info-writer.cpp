@@ -117,8 +117,8 @@ void wr_options(save_type type)
 
     wr_u16b(c);
 
-    wr_byte(autosave_l);
-    wr_byte(autosave_t);
+    wr_bool(autosave_l);
+    wr_bool(autosave_t);
     wr_s16b(autosave_freq);
 
     for (int i = 0; option_info[i].o_desc; i++) {

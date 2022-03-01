@@ -53,6 +53,14 @@ byte sf_get(void)
 }
 
 /*!
+ * @brief ロードファイルポインタからbool値を読み込む
+ */
+bool rd_bool()
+{
+    return rd_byte() != 0;
+}
+
+/*!
  * @brief ロードファイルポインタから1バイトを読み込む
  */
 byte rd_byte()
