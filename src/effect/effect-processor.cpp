@@ -96,7 +96,6 @@ ProjectResult project(PlayerType *player_ptr, const MONSTER_IDX who, POSITION ra
     POSITION x1;
     POSITION y2;
     POSITION x2;
-    bool visual = false;
     bool breath = false;
     bool blind = player_ptr->blind != 0;
     bool old_hide = false;
@@ -188,6 +187,7 @@ ProjectResult project(PlayerType *player_ptr, const MONSTER_IDX who, POSITION ra
         auto oy = y1;
         auto ox = x1;
         auto jump = any_bits(flag, PROJECT_JUMP);
+        auto visual = false;
         for (int i = 0; i < path_n; ++i) {
             POSITION ny = get_grid_y(path_g[i]);
             POSITION nx = get_grid_x(path_g[i]);
@@ -295,6 +295,7 @@ ProjectResult project(PlayerType *player_ptr, const MONSTER_IDX who, POSITION ra
         project_m_y = 0;
         auto oy = y1;
         auto ox = x1;
+        auto visual = false;
         for (int i = 0; i < path_n; ++i) {
             POSITION ny = get_grid_y(path_g[i]);
             POSITION nx = get_grid_x(path_g[i]);
@@ -399,6 +400,7 @@ ProjectResult project(PlayerType *player_ptr, const MONSTER_IDX who, POSITION ra
     int k;
     auto oy = y1;
     auto ox = x1;
+    auto visual = false;
     for (k = 0; k < path_n; ++k) {
         POSITION ny = get_grid_y(path_g[k]);
         POSITION nx = get_grid_x(path_g[k]);
