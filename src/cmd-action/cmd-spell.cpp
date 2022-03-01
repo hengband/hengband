@@ -329,8 +329,11 @@ void do_cmd_browse(PlayerType *player_ptr)
 
     screen_save();
     prt("", 0, 0);
+    SpellSelector spell_selector(player_ptr);
     while (true) {
-        if (!get_spell(player_ptr, &spell, _("読む", "browse"), o_ptr->sval, true, use_realm)) {
+        auto select_result = spell_selector.get_spell(_("読む", "browse"), o_ptr->sval, true, use_realm, spell);
+        spell = spell_selector.get_selected_spell();
+        if (!select_result) {
             if (spell == -1) {
                 break;
             }
@@ -409,7 +412,6 @@ void do_cmd_study(PlayerType *player_ptr)
     OBJECT_SUBTYPE_VALUE sval;
     int increment = 0;
     bool learned = false;
-    SPELL_IDX spell = -1;
     concptr p = spell_category_name(mp_ptr->spell_book);
     ObjectType *o_ptr;
     concptr q, s;
@@ -465,8 +467,12 @@ void do_cmd_study(PlayerType *player_ptr)
 
     object_kind_track(player_ptr, o_ptr->k_idx);
     handle_stuff(player_ptr);
+    SpellSelector spell_selector(player_ptr);
+    auto spell = -1;
     if (mp_ptr->spell_book != ItemKindType::LIFE_BOOK) {
-        if (!get_spell(player_ptr, &spell, _("学ぶ", "study"), sval, false, tval2realm(o_ptr->tval)) && (spell == -1)) {
+        auto select_result = spell_selector.get_spell(_("学ぶ", "study"), sval, false, tval2realm(o_ptr->tval), spell);
+        spell = spell_selector.get_selected_spell();
+        if (!select_result) {
             return;
         }
     } else {
@@ -474,7 +480,7 @@ void do_cmd_study(PlayerType *player_ptr)
         int gift = -1;
         for (spell = 0; spell < 32; spell++) {
             if ((fake_spell_flags[sval] & (1UL << spell))) {
-                if (!spell_okay(player_ptr, spell, false, true, (increment ? player_ptr->realm2 : player_ptr->realm1))) {
+                if (!spell_selector.spell_okay(spell, false, true, (increment ? player_ptr->realm2 : player_ptr->realm1))) {
                     continue;
                 }
 
@@ -669,27 +675,29 @@ bool do_cmd_cast(PlayerType *player_ptr)
         realm = player_ptr->realm1;
     }
 
-#ifdef JP
-    if (!get_spell(player_ptr, &spell,
-            ((mp_ptr->spell_book == ItemKindType::LIFE_BOOK)       ? "詠唱する"
-                : (mp_ptr->spell_book == ItemKindType::MUSIC_BOOK) ? "歌う"
-                                                                   : "唱える"),
-            sval, true, realm)) {
+    SpellSelector spell_selector(player_ptr);
+    std::string cast_word;
+    switch (mp_ptr->spell_book) {
+    case ItemKindType::LIFE_BOOK:
+        cast_word = _("詠唱する", "recite");
+        break;
+    case ItemKindType::MUSIC_BOOK:
+        cast_word = _("歌う", "sing");
+        break;
+    default:
+        cast_word = _("唱える", "cast");
+        break;
+    }
+
+    auto select_result = spell_selector.get_spell(cast_word.c_str(), sval, true, realm);
+    spell = spell_selector.get_selected_spell();
+    if (!select_result) {
         if (spell == -2) {
-            msg_format("その本には知っている%sがない。", prayer);
+            msg_format(_("その本には知っている%sがない。", "You don't know any %ss in that book."), prayer);
         }
 
         return false;
     }
-#else
-    if (!get_spell(player_ptr, &spell, ((mp_ptr->spell_book == ItemKindType::LIFE_BOOK) ? "recite" : "cast"), sval, true, realm)) {
-        if (spell == -2) {
-            msg_format("You don't know any %ss in that book.", prayer);
-        }
-
-        return false;
-    }
-#endif
 
     use_realm = tval2realm(o_ptr->tval);
     if (use_realm == REALM_HEX) {

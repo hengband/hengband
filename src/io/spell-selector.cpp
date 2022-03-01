@@ -35,6 +35,11 @@
  */
 const uint32_t fake_spell_flags[4] = { 0x000000ff, 0x0000ff00, 0x00ff0000, 0xff000000 };
 
+SpellSelector::SpellSelector(PlayerType *player_ptr)
+    : player_ptr(player_ptr)
+{
+}
+
 /*!
  * @brief 魔法が利用可能かどうかを返す /
  * Determine if a spell is "okay" for the player to cast or study
@@ -46,7 +51,7 @@ const uint32_t fake_spell_flags[4] = { 0x000000ff, 0x0000ff00, 0x00ff0000, 0xff0
  * @param use_realm 魔法領域ID
  * @return 選択した魔法が利用可能か否か
  */
-bool spell_okay(PlayerType *player_ptr, int spell, bool learned, bool study_pray, int use_realm)
+bool SpellSelector::spell_okay(int spell, bool learned, bool study_pray, int use_realm)
 {
     const magic_type *s_ptr;
     if (!is_magic(use_realm)) {
@@ -91,12 +96,13 @@ bool spell_okay(PlayerType *player_ptr, int spell, bool learned, bool study_pray
  * The "known" should be TRUE for cast/pray, FALSE for study
  * </pre>
  */
-bool get_spell(PlayerType *player_ptr, SPELL_IDX *sn, concptr prompt, OBJECT_SUBTYPE_VALUE sval, bool learned, int16_t use_realm)
+bool SpellSelector::get_spell(concptr prompt, OBJECT_SUBTYPE_VALUE sval, bool learned, int16_t use_realm, int tmp_sn)
 {
+    this->sn = tmp_sn;
     short code;
     if (repeat_pull(&code)) {
-        *sn = code;
-        if (spell_okay(player_ptr, *sn, learned, false, use_realm)) {
+        this->sn = code;
+        if (spell_okay(this->sn, learned, false, use_realm)) {
             return true;
         }
     }
@@ -112,10 +118,10 @@ bool get_spell(PlayerType *player_ptr, SPELL_IDX *sn, concptr prompt, OBJECT_SUB
     }
 
     auto okay = false;
-    (*sn) = -2;
+    this->sn = -2;
     int i;
     for (i = 0; i < num; i++) {
-        if (spell_okay(player_ptr, spells[i], learned, false, use_realm)) {
+        if (spell_okay(spells[i], learned, false, use_realm)) {
             okay = true;
         }
     }
@@ -138,7 +144,7 @@ bool get_spell(PlayerType *player_ptr, SPELL_IDX *sn, concptr prompt, OBJECT_SUB
         return false;
     }
 
-    *sn = (-1);
+    this->sn = -1;
     auto flag = false;
     auto redraw = false;
     player_ptr->window_flags |= (PW_SPELL);
@@ -227,7 +233,7 @@ bool get_spell(PlayerType *player_ptr, SPELL_IDX *sn, concptr prompt, OBJECT_SUB
         }
 
         spell = spells[i];
-        if (!spell_okay(player_ptr, spell, learned, false, use_realm)) {
+        if (!spell_okay(spell, learned, false, use_realm)) {
             bell();
 #ifdef JP
             msg_format("その%sを%sことはできません。", p, prompt);
@@ -280,7 +286,12 @@ bool get_spell(PlayerType *player_ptr, SPELL_IDX *sn, concptr prompt, OBJECT_SUB
         return false;
     }
 
-    (*sn) = spell;
+    this->sn = spell;
     repeat_push((COMMAND_CODE)spell);
     return true;
+}
+
+int SpellSelector::get_selected_spell()
+{
+    return this->sn;
 }
