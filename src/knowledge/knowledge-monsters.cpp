@@ -499,9 +499,9 @@ void do_cmd_knowledge_bounty(PlayerType *player_ptr)
     fprintf(fff, "----------------------------------------------\n");
 
     bool listed = false;
-    for (int i = 0; i < MAX_BOUNTY; i++) {
-        if (!w_ptr->bounties[i].is_achieved) {
-            fprintf(fff, "%s\n", r_info[w_ptr->bounties[i].r_idx].name.c_str());
+    for (const auto &[r_idx, is_achieved] : w_ptr->bounties) {
+        if (!is_achieved) {
+            fprintf(fff, "%s\n", r_info[r_idx].name.c_str());
             listed = true;
         }
     }

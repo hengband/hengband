@@ -111,9 +111,9 @@ void wr_player(PlayerType *player_ptr)
     wr_s32b(player_ptr->old_race2);
     wr_s16b(player_ptr->old_realm);
 
-    for (int i = 0; i < MAX_BOUNTY; i++) {
-        wr_s16b(w_ptr->bounties[i].r_idx);
-        wr_byte(w_ptr->bounties[i].is_achieved);
+    for (const auto &[r_idx, is_achieved] : w_ptr->bounties) {
+        wr_s16b(r_idx);
+        wr_byte(is_achieved);
     }
 
     for (int i = 0; i < 4; i++) {

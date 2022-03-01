@@ -173,19 +173,18 @@ void rd_bounty_uniques(PlayerType *player_ptr)
         return;
     }
 
-    for (int i = 0; i < MAX_BOUNTY; i++) {
-        auto &b_ref = w_ptr->bounties[i];
-        b_ref.r_idx = rd_s16b();
+    for (auto &[r_idx, is_achieved] : w_ptr->bounties) {
+        r_idx = rd_s16b();
 
         if (loading_savefile_version_is_older_than(16)) {
             constexpr auto old_achieved_flag = 10000; // かつて賞金首達成フラグとしてモンスター種族番号を10000増やしていた
-            b_ref.is_achieved = false;
-            if (b_ref.r_idx >= old_achieved_flag) {
-                b_ref.r_idx -= old_achieved_flag;
-                b_ref.is_achieved = true;
+            is_achieved = false;
+            if (r_idx >= old_achieved_flag) {
+                r_idx -= old_achieved_flag;
+                is_achieved = true;
             }
         } else {
-            b_ref.is_achieved = rd_byte() != 0;
+            is_achieved = rd_byte() != 0;
         }
     }
 }
