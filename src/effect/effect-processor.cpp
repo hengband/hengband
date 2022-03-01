@@ -96,8 +96,6 @@ ProjectResult project(PlayerType *player_ptr, const MONSTER_IDX who, POSITION ra
     POSITION x1;
     POSITION y2;
     POSITION x2;
-    POSITION y_saver;
-    POSITION x_saver;
     bool visual = false;
     bool breath = false;
     bool blind = player_ptr->blind != 0;
@@ -133,9 +131,6 @@ ProjectResult project(PlayerType *player_ptr, const MONSTER_IDX who, POSITION ra
         x1 = target_x;
         y1 = target_y;
     }
-
-    y_saver = y1;
-    x_saver = x1;
     y2 = target_y;
     x2 = target_x;
 
@@ -645,14 +640,14 @@ ProjectResult project(PlayerType *player_ptr, const MONSTER_IDX who, POSITION ra
                     POSITION t_y, t_x;
                     int max_attempts = 10;
                     do {
-                        t_y = y_saver - 1 + randint1(3);
-                        t_x = x_saver - 1 + randint1(3);
+                        t_y = y1 - 1 + randint1(3);
+                        t_x = x1 - 1 + randint1(3);
                         max_attempts--;
                     } while (max_attempts && in_bounds2u(player_ptr->current_floor_ptr, t_y, t_x) && !projectable(player_ptr, y, x, t_y, t_x));
 
                     if (max_attempts < 1) {
-                        t_y = y_saver;
-                        t_x = x_saver;
+                        t_y = y1;
+                        t_x = x1;
                     }
 
                     if (is_seen(player_ptr, m_ptr)) {
