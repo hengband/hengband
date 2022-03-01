@@ -162,12 +162,10 @@ ProjectResult project(PlayerType *player_ptr, const MONSTER_IDX who, POSITION ra
         gm[dist] = 0;
     }
 
-    temp_y = y1;
-    temp_x = x1;
     dist = 0;
     if (flag & (PROJECT_BEAM)) {
-        gy[grids] = temp_y;
-        gx[grids] = temp_x;
+        gy[grids] = y1;
+        gx[grids] = x1;
         grids++;
     }
 
@@ -198,8 +196,8 @@ ProjectResult project(PlayerType *player_ptr, const MONSTER_IDX who, POSITION ra
         project_m_n = 0;
         project_m_x = 0;
         project_m_y = 0;
-        auto oy = temp_y;
-        auto ox = temp_x;
+        auto oy = y1;
+        auto ox = x1;
         for (int i = 0; i < path_n; ++i) {
             POSITION ny = get_grid_y(path_g[i]);
             POSITION nx = get_grid_x(path_g[i]);
@@ -305,8 +303,8 @@ ProjectResult project(PlayerType *player_ptr, const MONSTER_IDX who, POSITION ra
         project_m_n = 0;
         project_m_x = 0;
         project_m_y = 0;
-        auto oy = temp_y;
-        auto ox = temp_x;
+        auto oy = y1;
+        auto ox = x1;
         for (int i = 0; i < path_n; ++i) {
             POSITION ny = get_grid_y(path_g[i]);
             POSITION nx = get_grid_x(path_g[i]);
@@ -409,8 +407,8 @@ ProjectResult project(PlayerType *player_ptr, const MONSTER_IDX who, POSITION ra
     }
 
     int k;
-    auto oy = temp_y;
-    auto ox = temp_x;
+    auto oy = y1;
+    auto ox = x1;
     for (k = 0; k < path_n; ++k) {
         POSITION ny = get_grid_y(path_g[k]);
         POSITION nx = get_grid_x(path_g[k]);
