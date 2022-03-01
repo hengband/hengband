@@ -79,8 +79,8 @@ static void next_mirror(PlayerType *player_ptr, POSITION *next_y, POSITION *next
  * monster (zero for "player")
  * @param rad 効果半径(ビーム/ボルト = 0 / ボール = 1以上) / Radius of explosion
  * (0 = beam/bolt, 1 to 9 = ball)
- * @param temp_y 目標Y座標 / Target temp_y location (or location to travel "towards")
- * @param temp_x 目標X座標 / Target temp_x location (or location to travel "towards")
+ * @param target_y 目標Y座標 / Target y location (or location to travel "towards")
+ * @param target_x 目標X座標 / Target x location (or location to travel "towards")
  * @param dam 基本威力 / Base damage roll to apply to affected monsters (or
  * player)
  * @param typ 効果属性 / Type of damage to apply to monsters (and objects)
@@ -89,7 +89,7 @@ static void next_mirror(PlayerType *player_ptr, POSITION *next_y, POSITION *next
  * @todo 似たような処理が山ほど並んでいる、何とかならないものか
  * @todo 引数にそのまま再代入していてカオスすぎる。直すのは簡単ではない
  */
-ProjectResult project(PlayerType *player_ptr, const MONSTER_IDX who, POSITION rad, POSITION temp_y, POSITION temp_x, const int dam,
+ProjectResult project(PlayerType *player_ptr, const MONSTER_IDX who, POSITION rad, const POSITION target_y, const POSITION target_x, const int dam,
     const AttributeType typ, BIT_FLAGS flag, std::optional<CapturedMonsterType *> cap_mon_ptr)
 {
     int dist;
@@ -123,8 +123,8 @@ ProjectResult project(PlayerType *player_ptr, const MONSTER_IDX who, POSITION ra
     ProjectResult res;
 
     if (flag & (PROJECT_JUMP)) {
-        x1 = temp_x;
-        y1 = temp_y;
+        x1 = target_x;
+        y1 = target_y;
         flag &= ~(PROJECT_JUMP);
         jump = true;
     } else if (who <= 0) {
@@ -135,14 +135,14 @@ ProjectResult project(PlayerType *player_ptr, const MONSTER_IDX who, POSITION ra
         y1 = player_ptr->current_floor_ptr->m_list[who].fy;
         monster_desc(player_ptr, who_name, &player_ptr->current_floor_ptr->m_list[who], MD_WRONGDOER_NAME);
     } else {
-        x1 = temp_x;
-        y1 = temp_y;
+        x1 = target_x;
+        y1 = target_y;
     }
 
     y_saver = y1;
     x_saver = x1;
-    y2 = temp_y;
-    x2 = temp_x;
+    y2 = target_y;
+    x2 = target_x;
 
     if (flag & (PROJECT_THRU)) {
         if ((x1 == x2) && (y1 == y2)) {
