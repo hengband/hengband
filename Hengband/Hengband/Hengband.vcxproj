@@ -294,6 +294,7 @@
     <ClCompile Include="..\..\src\player-info\magic-eater-data-type.cpp" />
     <ClCompile Include="..\..\src\save\player-class-specific-data-writer.cpp" />
     <ClCompile Include="..\..\src\specific-object\stone-of-lore.cpp" />
+    <ClCompile Include="..\..\src\spell-class\spells-mirror-master.cpp" />
     <ClCompile Include="..\..\src\system\grid-type-definition.cpp" />
     <ClCompile Include="..\..\src\grid\feature-action-flags.cpp" />
     <ClCompile Include="..\..\src\main-win\commandline-win.cpp" />
@@ -1057,6 +1058,7 @@
     <ClInclude Include="..\..\src\main-win\main-win-utils.h" />
     <ClInclude Include="..\..\src\save\player-class-specific-data-writer.h" />
     <ClInclude Include="..\..\src\specific-object\stone-of-lore.h" />
+    <ClInclude Include="..\..\src\spell-class\spells-mirror-master.h" />
     <ClInclude Include="..\..\src\store\cmd-store.h" />
     <ClInclude Include="..\..\src\cmd-io\cmd-floor.h" />
     <ClInclude Include="..\..\src\cmd-io\cmd-lore.h" />
