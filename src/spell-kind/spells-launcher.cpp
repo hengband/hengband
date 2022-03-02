@@ -4,6 +4,7 @@
 #include "floor/geometry.h"
 #include "system/player-type-definition.h"
 #include "target/target-checker.h"
+#include "util/bit-flags-calculator.h"
 
 /*!
  * @brief ボール系スペルの発動 / Cast a ball spell
@@ -56,7 +57,18 @@ bool fire_ball(PlayerType *player_ptr, AttributeType typ, DIRECTION dir, int dam
  */
 bool fire_breath(PlayerType *player_ptr, AttributeType typ, DIRECTION dir, int dam, POSITION rad)
 {
-    return fire_ball(player_ptr, typ, dir, dam, -rad);
+    BIT_FLAGS flg = PROJECT_STOP | PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL | PROJECT_BREATH;
+
+    auto tx = player_ptr->x + 99 * ddx[dir];
+    auto ty = player_ptr->y + 99 * ddy[dir];
+
+    if ((dir == 5) && target_okay(player_ptr)) {
+        reset_bits(flg, PROJECT_STOP);
+        tx = target_col;
+        ty = target_row;
+    }
+
+    return project(player_ptr, 0, rad, ty, tx, dam, typ, flg).notice;
 }
 
 /*!
