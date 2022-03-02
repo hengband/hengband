@@ -35,12 +35,12 @@ static bool effect_monster_away_resist(PlayerType *player_ptr, effect_monster_ty
     return false;
 }
 
-process_result effect_monster_away_undead(PlayerType *player_ptr, effect_monster_type *em_ptr)
+ProcessResult effect_monster_away_undead(PlayerType *player_ptr, effect_monster_type *em_ptr)
 {
     if (em_ptr->r_ptr->kind_flags.has_not(MonsterKindType::UNDEAD)) {
         em_ptr->skipped = true;
         em_ptr->dam = 0;
-        return PROCESS_CONTINUE;
+        return ProcessResult::PROCESS_CONTINUE;
     }
 
     bool resists_tele = effect_monster_away_resist(player_ptr, em_ptr);
@@ -56,15 +56,15 @@ process_result effect_monster_away_undead(PlayerType *player_ptr, effect_monster
     }
 
     em_ptr->dam = 0;
-    return PROCESS_CONTINUE;
+    return ProcessResult::PROCESS_CONTINUE;
 }
 
-process_result effect_monster_away_evil(PlayerType *player_ptr, effect_monster_type *em_ptr)
+ProcessResult effect_monster_away_evil(PlayerType *player_ptr, effect_monster_type *em_ptr)
 {
     if (em_ptr->r_ptr->kind_flags.has_not(MonsterKindType::EVIL)) {
         em_ptr->skipped = true;
         em_ptr->dam = 0;
-        return PROCESS_CONTINUE;
+        return ProcessResult::PROCESS_CONTINUE;
     }
 
     bool resists_tele = effect_monster_away_resist(player_ptr, em_ptr);
@@ -80,10 +80,10 @@ process_result effect_monster_away_evil(PlayerType *player_ptr, effect_monster_t
     }
 
     em_ptr->dam = 0;
-    return PROCESS_CONTINUE;
+    return ProcessResult::PROCESS_CONTINUE;
 }
 
-process_result effect_monster_away_all(PlayerType *player_ptr, effect_monster_type *em_ptr)
+ProcessResult effect_monster_away_all(PlayerType *player_ptr, effect_monster_type *em_ptr)
 {
     bool resists_tele = effect_monster_away_resist(player_ptr, em_ptr);
     if (!resists_tele) {
@@ -95,15 +95,15 @@ process_result effect_monster_away_all(PlayerType *player_ptr, effect_monster_ty
     }
 
     em_ptr->dam = 0;
-    return PROCESS_CONTINUE;
+    return ProcessResult::PROCESS_CONTINUE;
 }
 
-process_result effect_monster_turn_undead(PlayerType *player_ptr, effect_monster_type *em_ptr)
+ProcessResult effect_monster_turn_undead(PlayerType *player_ptr, effect_monster_type *em_ptr)
 {
     if (em_ptr->r_ptr->kind_flags.has_not(MonsterKindType::UNDEAD)) {
         em_ptr->skipped = true;
         em_ptr->dam = 0;
-        return PROCESS_CONTINUE;
+        return ProcessResult::PROCESS_CONTINUE;
     }
 
     if (em_ptr->seen) {
@@ -122,15 +122,15 @@ process_result effect_monster_turn_undead(PlayerType *player_ptr, effect_monster
     }
 
     em_ptr->dam = 0;
-    return PROCESS_CONTINUE;
+    return ProcessResult::PROCESS_CONTINUE;
 }
 
-process_result effect_monster_turn_evil(PlayerType *player_ptr, effect_monster_type *em_ptr)
+ProcessResult effect_monster_turn_evil(PlayerType *player_ptr, effect_monster_type *em_ptr)
 {
     if (em_ptr->r_ptr->kind_flags.has_not(MonsterKindType::EVIL)) {
         em_ptr->skipped = true;
         em_ptr->dam = 0;
-        return PROCESS_CONTINUE;
+        return ProcessResult::PROCESS_CONTINUE;
     }
 
     if (em_ptr->seen) {
@@ -149,10 +149,10 @@ process_result effect_monster_turn_evil(PlayerType *player_ptr, effect_monster_t
     }
 
     em_ptr->dam = 0;
-    return PROCESS_CONTINUE;
+    return ProcessResult::PROCESS_CONTINUE;
 }
 
-process_result effect_monster_turn_all(effect_monster_type *em_ptr)
+ProcessResult effect_monster_turn_all(effect_monster_type *em_ptr)
 {
     if (em_ptr->seen) {
         em_ptr->obvious = true;
@@ -168,15 +168,15 @@ process_result effect_monster_turn_all(effect_monster_type *em_ptr)
     }
 
     em_ptr->dam = 0;
-    return PROCESS_CONTINUE;
+    return ProcessResult::PROCESS_CONTINUE;
 }
 
-process_result effect_monster_disp_undead(PlayerType *player_ptr, effect_monster_type *em_ptr)
+ProcessResult effect_monster_disp_undead(PlayerType *player_ptr, effect_monster_type *em_ptr)
 {
     if (em_ptr->r_ptr->kind_flags.has_not(MonsterKindType::UNDEAD)) {
         em_ptr->skipped = true;
         em_ptr->dam = 0;
-        return PROCESS_CONTINUE;
+        return ProcessResult::PROCESS_CONTINUE;
     }
 
     if (em_ptr->seen) {
@@ -189,15 +189,15 @@ process_result effect_monster_disp_undead(PlayerType *player_ptr, effect_monster
 
     em_ptr->note = _("は身震いした。", " shudders.");
     em_ptr->note_dies = _("はドロドロに溶けた！", " dissolves!");
-    return PROCESS_CONTINUE;
+    return ProcessResult::PROCESS_CONTINUE;
 }
 
-process_result effect_monster_disp_evil(PlayerType *player_ptr, effect_monster_type *em_ptr)
+ProcessResult effect_monster_disp_evil(PlayerType *player_ptr, effect_monster_type *em_ptr)
 {
     if (em_ptr->r_ptr->kind_flags.has_not(MonsterKindType::EVIL)) {
         em_ptr->skipped = true;
         em_ptr->dam = 0;
-        return PROCESS_CONTINUE;
+        return ProcessResult::PROCESS_CONTINUE;
     }
 
     if (em_ptr->seen) {
@@ -210,15 +210,15 @@ process_result effect_monster_disp_evil(PlayerType *player_ptr, effect_monster_t
 
     em_ptr->note = _("は身震いした。", " shudders.");
     em_ptr->note_dies = _("はドロドロに溶けた！", " dissolves!");
-    return PROCESS_CONTINUE;
+    return ProcessResult::PROCESS_CONTINUE;
 }
 
-process_result effect_monster_disp_good(PlayerType *player_ptr, effect_monster_type *em_ptr)
+ProcessResult effect_monster_disp_good(PlayerType *player_ptr, effect_monster_type *em_ptr)
 {
     if (em_ptr->r_ptr->kind_flags.has_not(MonsterKindType::GOOD)) {
         em_ptr->skipped = true;
         em_ptr->dam = 0;
-        return PROCESS_CONTINUE;
+        return ProcessResult::PROCESS_CONTINUE;
     }
 
     if (em_ptr->seen) {
@@ -231,15 +231,15 @@ process_result effect_monster_disp_good(PlayerType *player_ptr, effect_monster_t
 
     em_ptr->note = _("は身震いした。", " shudders.");
     em_ptr->note_dies = _("はドロドロに溶けた！", " dissolves!");
-    return PROCESS_CONTINUE;
+    return ProcessResult::PROCESS_CONTINUE;
 }
 
-process_result effect_monster_disp_living(effect_monster_type *em_ptr)
+ProcessResult effect_monster_disp_living(effect_monster_type *em_ptr)
 {
     if (!monster_living(em_ptr->m_ptr->r_idx)) {
         em_ptr->skipped = true;
         em_ptr->dam = 0;
-        return PROCESS_CONTINUE;
+        return ProcessResult::PROCESS_CONTINUE;
     }
 
     if (em_ptr->seen) {
@@ -248,15 +248,15 @@ process_result effect_monster_disp_living(effect_monster_type *em_ptr)
 
     em_ptr->note = _("は身震いした。", " shudders.");
     em_ptr->note_dies = _("はドロドロに溶けた！", " dissolves!");
-    return PROCESS_CONTINUE;
+    return ProcessResult::PROCESS_CONTINUE;
 }
 
-process_result effect_monster_disp_demon(PlayerType *player_ptr, effect_monster_type *em_ptr)
+ProcessResult effect_monster_disp_demon(PlayerType *player_ptr, effect_monster_type *em_ptr)
 {
     if (em_ptr->r_ptr->kind_flags.has_not(MonsterKindType::DEMON)) {
         em_ptr->skipped = true;
         em_ptr->dam = 0;
-        return PROCESS_CONTINUE;
+        return ProcessResult::PROCESS_CONTINUE;
     }
 
     if (em_ptr->seen) {
@@ -269,10 +269,10 @@ process_result effect_monster_disp_demon(PlayerType *player_ptr, effect_monster_
 
     em_ptr->note = _("は身震いした。", " shudders.");
     em_ptr->note_dies = _("はドロドロに溶けた！", " dissolves!");
-    return PROCESS_CONTINUE;
+    return ProcessResult::PROCESS_CONTINUE;
 }
 
-process_result effect_monster_disp_all(effect_monster_type *em_ptr)
+ProcessResult effect_monster_disp_all(effect_monster_type *em_ptr)
 {
     if (em_ptr->seen) {
         em_ptr->obvious = true;
@@ -280,5 +280,5 @@ process_result effect_monster_disp_all(effect_monster_type *em_ptr)
 
     em_ptr->note = _("は身震いした。", " shudders.");
     em_ptr->note_dies = _("はドロドロに溶けた！", " dissolves!");
-    return PROCESS_CONTINUE;
+    return ProcessResult::PROCESS_CONTINUE;
 }

@@ -7,16 +7,16 @@
 #include "system/monster-race-definition.h"
 #include "system/player-type-definition.h"
 
-process_result effect_monster_lite_weak(PlayerType *player_ptr, effect_monster_type *em_ptr)
+ProcessResult effect_monster_lite_weak(PlayerType *player_ptr, effect_monster_type *em_ptr)
 {
     if (!em_ptr->dam) {
         em_ptr->skipped = true;
-        return PROCESS_CONTINUE;
+        return ProcessResult::PROCESS_CONTINUE;
     }
 
     if (em_ptr->r_ptr->resistance_flags.has_not(MonsterResistanceType::HURT_LITE)) {
         em_ptr->dam = 0;
-        return PROCESS_CONTINUE;
+        return ProcessResult::PROCESS_CONTINUE;
     }
 
     if (em_ptr->seen) {
@@ -29,10 +29,10 @@ process_result effect_monster_lite_weak(PlayerType *player_ptr, effect_monster_t
 
     em_ptr->note = _("は光に身をすくめた！", " cringes from the light!");
     em_ptr->note_dies = _("は光を受けてしぼんでしまった！", " shrivels away in the light!");
-    return PROCESS_CONTINUE;
+    return ProcessResult::PROCESS_CONTINUE;
 }
 
-process_result effect_monster_lite(PlayerType *player_ptr, effect_monster_type *em_ptr)
+ProcessResult effect_monster_lite(PlayerType *player_ptr, effect_monster_type *em_ptr)
 {
     if (em_ptr->seen) {
         em_ptr->obvious = true;
@@ -55,17 +55,17 @@ process_result effect_monster_lite(PlayerType *player_ptr, effect_monster_type *
         em_ptr->dam *= 2;
     }
 
-    return PROCESS_CONTINUE;
+    return ProcessResult::PROCESS_CONTINUE;
 }
 
-process_result effect_monster_dark(PlayerType *player_ptr, effect_monster_type *em_ptr)
+ProcessResult effect_monster_dark(PlayerType *player_ptr, effect_monster_type *em_ptr)
 {
     if (em_ptr->seen) {
         em_ptr->obvious = true;
     }
 
     if (em_ptr->r_ptr->resistance_flags.has_not(MonsterResistanceType::RESIST_DARK)) {
-        return PROCESS_CONTINUE;
+        return ProcessResult::PROCESS_CONTINUE;
     }
 
     em_ptr->note = _("には耐性がある！", " resists!");
@@ -75,5 +75,5 @@ process_result effect_monster_dark(PlayerType *player_ptr, effect_monster_type *
         em_ptr->r_ptr->r_resistance_flags.set(MonsterResistanceType::RESIST_DARK);
     }
 
-    return PROCESS_CONTINUE;
+    return ProcessResult::PROCESS_CONTINUE;
 }

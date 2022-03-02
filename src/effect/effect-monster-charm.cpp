@@ -56,7 +56,7 @@ static void effect_monster_charm_resist(PlayerType *player_ptr, effect_monster_t
     }
 }
 
-process_result effect_monster_charm(PlayerType *player_ptr, effect_monster_type *em_ptr)
+ProcessResult effect_monster_charm(PlayerType *player_ptr, effect_monster_type *em_ptr)
 {
     int vir = virtue_number(player_ptr, V_HARMONY);
     if (vir) {
@@ -74,10 +74,10 @@ process_result effect_monster_charm(PlayerType *player_ptr, effect_monster_type 
 
     effect_monster_charm_resist(player_ptr, em_ptr);
     em_ptr->dam = 0;
-    return PROCESS_CONTINUE;
+    return ProcessResult::PROCESS_CONTINUE;
 }
 
-process_result effect_monster_control_undead(PlayerType *player_ptr, effect_monster_type *em_ptr)
+ProcessResult effect_monster_control_undead(PlayerType *player_ptr, effect_monster_type *em_ptr)
 {
     if (em_ptr->seen) {
         em_ptr->obvious = true;
@@ -110,10 +110,10 @@ process_result effect_monster_control_undead(PlayerType *player_ptr, effect_mons
     }
 
     em_ptr->dam = 0;
-    return PROCESS_CONTINUE;
+    return ProcessResult::PROCESS_CONTINUE;
 }
 
-process_result effect_monster_control_demon(PlayerType *player_ptr, effect_monster_type *em_ptr)
+ProcessResult effect_monster_control_demon(PlayerType *player_ptr, effect_monster_type *em_ptr)
 {
     if (em_ptr->seen) {
         em_ptr->obvious = true;
@@ -146,10 +146,10 @@ process_result effect_monster_control_demon(PlayerType *player_ptr, effect_monst
     }
 
     em_ptr->dam = 0;
-    return PROCESS_CONTINUE;
+    return ProcessResult::PROCESS_CONTINUE;
 }
 
-process_result effect_monster_control_animal(PlayerType *player_ptr, effect_monster_type *em_ptr)
+ProcessResult effect_monster_control_animal(PlayerType *player_ptr, effect_monster_type *em_ptr)
 {
     if (em_ptr->seen) {
         em_ptr->obvious = true;
@@ -185,10 +185,10 @@ process_result effect_monster_control_animal(PlayerType *player_ptr, effect_mons
     }
 
     em_ptr->dam = 0;
-    return PROCESS_CONTINUE;
+    return ProcessResult::PROCESS_CONTINUE;
 }
 
-process_result effect_monster_charm_living(PlayerType *player_ptr, effect_monster_type *em_ptr)
+ProcessResult effect_monster_charm_living(PlayerType *player_ptr, effect_monster_type *em_ptr)
 {
     int vir = virtue_number(player_ptr, V_UNLIFE);
     if (em_ptr->seen) {
@@ -227,7 +227,7 @@ process_result effect_monster_charm_living(PlayerType *player_ptr, effect_monste
     }
 
     em_ptr->dam = 0;
-    return PROCESS_CONTINUE;
+    return ProcessResult::PROCESS_CONTINUE;
 }
 
 static void effect_monster_domination_corrupted_addition(PlayerType *player_ptr, effect_monster_type *em_ptr)
@@ -287,10 +287,10 @@ static void effect_monster_domination_addition(effect_monster_type *em_ptr)
     }
 }
 
-process_result effect_monster_domination(PlayerType *player_ptr, effect_monster_type *em_ptr)
+ProcessResult effect_monster_domination(PlayerType *player_ptr, effect_monster_type *em_ptr)
 {
     if (!is_hostile(em_ptr->m_ptr)) {
-        return PROCESS_CONTINUE;
+        return ProcessResult::PROCESS_CONTINUE;
     }
 
     if (em_ptr->seen) {
@@ -305,19 +305,19 @@ process_result effect_monster_domination(PlayerType *player_ptr, effect_monster_
         em_ptr->do_conf = 0;
         effect_monster_domination_corrupted(player_ptr, em_ptr);
         em_ptr->dam = 0;
-        return PROCESS_CONTINUE;
+        return ProcessResult::PROCESS_CONTINUE;
     }
 
     if (!common_saving_throw_charm(player_ptr, em_ptr->dam, em_ptr->m_ptr)) {
         em_ptr->note = _("があなたに隷属した。", " is in your thrall!");
         set_pet(player_ptr, em_ptr->m_ptr);
         em_ptr->dam = 0;
-        return PROCESS_CONTINUE;
+        return ProcessResult::PROCESS_CONTINUE;
     }
 
     effect_monster_domination_addition(em_ptr);
     em_ptr->dam = 0;
-    return PROCESS_CONTINUE;
+    return ProcessResult::PROCESS_CONTINUE;
 }
 
 static bool effect_monster_crusade_domination(PlayerType *player_ptr, effect_monster_type *em_ptr)
@@ -363,7 +363,7 @@ static bool effect_monster_crusade_domination(PlayerType *player_ptr, effect_mon
     return true;
 }
 
-process_result effect_monster_crusade(PlayerType *player_ptr, effect_monster_type *em_ptr)
+ProcessResult effect_monster_crusade(PlayerType *player_ptr, effect_monster_type *em_ptr)
 {
     if (em_ptr->seen) {
         em_ptr->obvious = true;
@@ -371,7 +371,7 @@ process_result effect_monster_crusade(PlayerType *player_ptr, effect_monster_typ
     bool success = effect_monster_crusade_domination(player_ptr, em_ptr);
     if (success) {
         em_ptr->dam = 0;
-        return PROCESS_CONTINUE;
+        return ProcessResult::PROCESS_CONTINUE;
     }
 
     if ((em_ptr->r_ptr->flags3 & RF3_NO_FEAR) == 0) {
@@ -381,7 +381,7 @@ process_result effect_monster_crusade(PlayerType *player_ptr, effect_monster_typ
     }
 
     em_ptr->dam = 0;
-    return PROCESS_CONTINUE;
+    return ProcessResult::PROCESS_CONTINUE;
 }
 
 /*!
@@ -436,7 +436,7 @@ static void effect_monster_captured(PlayerType *player_ptr, effect_monster_type 
  * @param em_ptr 効果情報への参照ポインタ
  * @return 効果発動結果
  */
-process_result effect_monster_capture(PlayerType *player_ptr, effect_monster_type *em_ptr, std::optional<CapturedMonsterType *> cap_mon_ptr)
+ProcessResult effect_monster_capture(PlayerType *player_ptr, effect_monster_type *em_ptr, std::optional<CapturedMonsterType *> cap_mon_ptr)
 {
     auto *floor_ptr = player_ptr->current_floor_ptr;
 
@@ -452,7 +452,7 @@ process_result effect_monster_capture(PlayerType *player_ptr, effect_monster_typ
     if (cannot_capture) {
         msg_format(_("%sには効果がなかった。", "%s is unaffected."), em_ptr->m_name);
         em_ptr->skipped = true;
-        return PROCESS_CONTINUE;
+        return ProcessResult::PROCESS_CONTINUE;
     }
 
     auto r_max_hp = em_ptr->r_ptr->hdice * em_ptr->r_ptr->hside;
@@ -462,15 +462,15 @@ process_result effect_monster_capture(PlayerType *player_ptr, effect_monster_typ
     if (threshold_hp < 2 || em_ptr->m_ptr->hp >= capturable_hp) {
         msg_format(_("もっと弱らせないと。", "You need to weaken %s more."), em_ptr->m_name);
         em_ptr->skipped = true;
-        return PROCESS_CONTINUE;
+        return ProcessResult::PROCESS_CONTINUE;
     }
 
     if (em_ptr->m_ptr->hp <= randint1(capturable_hp)) {
         effect_monster_captured(player_ptr, em_ptr, cap_mon_ptr);
-        return PROCESS_TRUE;
+        return ProcessResult::PROCESS_TRUE;
     }
 
     msg_format(_("うまく捕まえられなかった。", "You failed to capture %s."), em_ptr->m_name);
     em_ptr->skipped = true;
-    return PROCESS_CONTINUE;
+    return ProcessResult::PROCESS_CONTINUE;
 }

@@ -160,10 +160,10 @@ static void describe_target(PlayerType *player_ptr, eg_type *eg_ptr)
 #endif
 }
 
-static process_result describe_hallucinated_target(PlayerType *player_ptr, eg_type *eg_ptr)
+static ProcessResult describe_hallucinated_target(PlayerType *player_ptr, eg_type *eg_ptr)
 {
     if (!player_ptr->effects()->hallucination()->is_hallucinated()) {
-        return PROCESS_CONTINUE;
+        return ProcessResult::PROCESS_CONTINUE;
     }
 
     concptr name = _("何か奇妙な物", "something strange");
@@ -176,10 +176,10 @@ static process_result describe_hallucinated_target(PlayerType *player_ptr, eg_ty
     move_cursor_relative(eg_ptr->y, eg_ptr->x);
     eg_ptr->query = inkey();
     if ((eg_ptr->query != '\r') && (eg_ptr->query != '\n')) {
-        return PROCESS_TRUE;
+        return ProcessResult::PROCESS_TRUE;
     }
 
-    return PROCESS_FALSE;
+    return ProcessResult::PROCESS_FALSE;
 }
 
 static bool describe_grid_lore(PlayerType *player_ptr, eg_type *eg_ptr)
@@ -541,13 +541,13 @@ char examine_grid(PlayerType *player_ptr, const POSITION y, const POSITION x, ta
     eg_type *eg_ptr = initialize_eg_type(player_ptr, &tmp_eg, y, x, mode, info);
     describe_scan_result(player_ptr, eg_ptr);
     describe_target(player_ptr, eg_ptr);
-    process_result next_target = describe_hallucinated_target(player_ptr, eg_ptr);
+    ProcessResult next_target = describe_hallucinated_target(player_ptr, eg_ptr);
     switch (next_target) {
-    case PROCESS_FALSE:
+    case ProcessResult::PROCESS_FALSE:
         return 0;
-    case PROCESS_TRUE:
+    case ProcessResult::PROCESS_TRUE:
         return eg_ptr->query;
-    case PROCESS_CONTINUE:
+    default:
         break;
     }
 

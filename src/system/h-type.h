@@ -167,8 +167,10 @@ typedef int QUANTITY; /*!< インターフェース上の指定個数 */
 
 typedef int16_t ACTION_SKILL_POWER; /*!< 行動技能値 */
 
-enum process_result {
+enum class ProcessResult {
     PROCESS_FALSE = 0,
     PROCESS_TRUE = 1,
     PROCESS_CONTINUE = 2,
+    PROCESS_LOOP_CONTINUE = 3,
+    PROCESS_LOOP_BREAK = 4,
 };

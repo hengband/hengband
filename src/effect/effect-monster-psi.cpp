@@ -207,7 +207,7 @@ static void effect_monster_psi_extra_effect(effect_monster_type *em_ptr)
  * 視界による影響を発動する。
  * モンスターの耐性とそれに不随した効果を発動する。
  */
-process_result effect_monster_psi(PlayerType *player_ptr, effect_monster_type *em_ptr)
+ProcessResult effect_monster_psi(PlayerType *player_ptr, effect_monster_type *em_ptr)
 {
     if (em_ptr->seen) {
         em_ptr->obvious = true;
@@ -218,13 +218,13 @@ process_result effect_monster_psi(PlayerType *player_ptr, effect_monster_type *e
         }
 
         em_ptr->skipped = true;
-        return PROCESS_CONTINUE;
+        return ProcessResult::PROCESS_CONTINUE;
     }
 
     effect_monster_psi_resist(player_ptr, em_ptr);
     effect_monster_psi_extra_effect(em_ptr);
     em_ptr->note_dies = _("の精神は崩壊し、肉体は抜け殻となった。", " collapses, a mindless husk.");
-    return PROCESS_CONTINUE;
+    return ProcessResult::PROCESS_CONTINUE;
 }
 
 /*!
@@ -298,7 +298,7 @@ static void effect_monster_psi_drain_change_power(PlayerType *player_ptr, effect
  * @details
  * ダメージがないか3/4の確率で追加効果なし
  */
-process_result effect_monster_psi_drain(PlayerType *player_ptr, effect_monster_type *em_ptr)
+ProcessResult effect_monster_psi_drain(PlayerType *player_ptr, effect_monster_type *em_ptr)
 {
     if (em_ptr->seen) {
         em_ptr->obvious = true;
@@ -310,7 +310,7 @@ process_result effect_monster_psi_drain(PlayerType *player_ptr, effect_monster_t
     }
 
     em_ptr->note_dies = _("の精神は崩壊し、肉体は抜け殻となった。", " collapses, a mindless husk.");
-    return PROCESS_CONTINUE;
+    return ProcessResult::PROCESS_CONTINUE;
 }
 
 /*!
@@ -321,7 +321,7 @@ process_result effect_monster_psi_drain(PlayerType *player_ptr, effect_monster_t
  * @details
  * 朦朧＋ショートテレポートアウェイ
  */
-process_result effect_monster_telekinesis(PlayerType *player_ptr, effect_monster_type *em_ptr)
+ProcessResult effect_monster_telekinesis(PlayerType *player_ptr, effect_monster_type *em_ptr)
 {
     if (em_ptr->seen) {
         em_ptr->obvious = true;
@@ -340,5 +340,5 @@ process_result effect_monster_telekinesis(PlayerType *player_ptr, effect_monster
         em_ptr->obvious = false;
     }
 
-    return PROCESS_CONTINUE;
+    return ProcessResult::PROCESS_CONTINUE;
 }
