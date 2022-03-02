@@ -53,35 +53,6 @@ bool check_multishadow(PlayerType *player_ptr)
 }
 
 /*!
- * 静水
- * @param player_ptr プレイヤーへの参照ポインタ
- * @return ペットを操っている場合を除きTRUE
- */
-bool mirror_concentration(PlayerType *player_ptr)
-{
-    if (total_friends) {
-        msg_print(_("今はペットを操ることに集中していないと。", "Your pets demand all of your attention."));
-        return false;
-    }
-
-    if (!player_ptr->current_floor_ptr->grid_array[player_ptr->y][player_ptr->x].is_mirror()) {
-        msg_print(_("鏡の上でないと集中できない！", "There's no mirror here!"));
-        return true;
-    }
-
-    msg_print(_("少し頭がハッキリした。", "You feel your head clear a little."));
-
-    player_ptr->csp += (5 + player_ptr->lev * player_ptr->lev / 100);
-    if (player_ptr->csp >= player_ptr->msp) {
-        player_ptr->csp = player_ptr->msp;
-        player_ptr->csp_frac = 0;
-    }
-
-    player_ptr->redraw |= PR_MANA;
-    return true;
-}
-
-/*!
  * @brief 鏡魔法「封魔結界」の効果処理
  * @param dam ダメージ量
  * @return 効果があったらTRUEを返す

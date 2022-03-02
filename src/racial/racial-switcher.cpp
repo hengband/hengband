@@ -264,17 +264,19 @@ bool switch_class_racial_execution(PlayerType *player_ptr, const int32_t command
         }
 
         return identify_fully(player_ptr, true);
-    case PlayerClassType::MIRROR_MASTER:
+    case PlayerClassType::MIRROR_MASTER: {
+        SpellsMirrorMaster smm(player_ptr);
         if (command == -3) {
-            SpellsMirrorMaster(player_ptr).remove_all_mirrors(true);
+            smm.remove_all_mirrors(true);
             return true;
         }
 
         if (command == -4) {
-            return mirror_concentration(player_ptr);
+            return smm.mirror_concentration();
         }
 
         return true;
+    }
     case PlayerClassType::NINJA:
         return hayagake(player_ptr);
     case PlayerClassType::ELEMENTALIST:

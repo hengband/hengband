@@ -8,6 +8,7 @@ public:
     void remove_mirror(int y, int x);
     bool mirror_tunnel();
     bool place_mirror();
+    bool mirror_concentration();
 
 private:
     PlayerType *player_ptr;

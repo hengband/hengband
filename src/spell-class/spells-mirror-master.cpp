@@ -1,4 +1,5 @@
 ﻿#include "spell-class/spells-mirror-master.h"
+#include "core/player-redraw-types.h"
 #include "dungeon/dungeon-flag-types.h"
 #include "dungeon/dungeon.h"
 #include "effect/attribute-types.h"
@@ -9,6 +10,7 @@
 #include "grid/feature.h"
 #include "grid/grid.h"
 #include "monster/monster-update.h"
+#include "pet/pet-util.h"
 #include "spell-kind/spells-teleport.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
@@ -113,5 +115,33 @@ bool SpellsMirrorMaster::place_mirror()
     note_spot(this->player_ptr, y, x);
     lite_spot(this->player_ptr, y, x);
     update_local_illumination(this->player_ptr, y, x);
+    return true;
+}
+
+/*!
+ * @brief 静水
+ * @param player_ptr プレイヤーへの参照ポインタ
+ * @return ペットを操っている場合を除きTRUE
+ */
+bool SpellsMirrorMaster::mirror_concentration()
+{
+    if (total_friends) {
+        msg_print(_("今はペットを操ることに集中していないと。", "Your pets demand all of your attention."));
+        return false;
+    }
+
+    if (!this->player_ptr->current_floor_ptr->grid_array[this->player_ptr->y][this->player_ptr->x].is_mirror()) {
+        msg_print(_("鏡の上でないと集中できない！", "There's no mirror here!"));
+        return true;
+    }
+
+    msg_print(_("少し頭がハッキリした。", "You feel your head clear a little."));
+    this->player_ptr->csp += (5 + this->player_ptr->lev * this->player_ptr->lev / 100);
+    if (this->player_ptr->csp >= this->player_ptr->msp) {
+        this->player_ptr->csp = this->player_ptr->msp;
+        this->player_ptr->csp_frac = 0;
+    }
+
+    this->player_ptr->redraw |= PR_MANA;
     return true;
 }
