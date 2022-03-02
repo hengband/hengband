@@ -119,9 +119,9 @@ bool SpellSelector::get_spell(concptr prompt, OBJECT_SUBTYPE_VALUE sval, bool le
 
     auto okay = false;
     this->sn = -2;
-    int i;
-    for (i = 0; i < num; i++) {
-        if (spell_okay(spells[i], learned, false, use_realm)) {
+    int spell_num;
+    for (spell_num = 0; spell_num < num; spell_num++) {
+        if (spell_okay(spells[spell_num], learned, false, use_realm)) {
             okay = true;
         }
     }
@@ -187,7 +187,7 @@ bool SpellSelector::get_spell(concptr prompt, OBJECT_SUBTYPE_VALUE sval, bool le
             case 'X':
             case '\r':
             case '\n':
-                i = menu_line - 1;
+                spell_num = menu_line - 1;
                 ask = false;
                 break;
             }
@@ -224,15 +224,15 @@ bool SpellSelector::get_spell(concptr prompt, OBJECT_SUBTYPE_VALUE sval, bool le
                 choice = (char)tolower(choice);
             }
 
-            i = (islower(choice) ? A2I(choice) : -1);
+            spell_num = (islower(choice) ? A2I(choice) : -1);
         }
 
-        if ((i < 0) || (i >= num)) {
+        if ((spell_num < 0) || (spell_num >= num)) {
             bell();
             continue;
         }
 
-        spell = spells[i];
+        spell = spells[spell_num];
         if (!spell_okay(spell, learned, false, use_realm)) {
             bell();
 #ifdef JP
