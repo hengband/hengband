@@ -237,31 +237,6 @@ bool confusing_light(PlayerType *player_ptr)
     return true;
 }
 
-/*!
- * @brief 鏡設置処理
- * @return 実際に設置が行われた場合TRUEを返す
- */
-bool place_mirror(PlayerType *player_ptr)
-{
-    if (!cave_clean_bold(player_ptr->current_floor_ptr, player_ptr->y, player_ptr->x)) {
-        msg_print(_("床上のアイテムが呪文を跳ね返した。", "The object resists the spell."));
-        return false;
-    }
-
-    /* Create a mirror */
-    player_ptr->current_floor_ptr->grid_array[player_ptr->y][player_ptr->x].info |= CAVE_OBJECT;
-    player_ptr->current_floor_ptr->grid_array[player_ptr->y][player_ptr->x].mimic = feat_mirror;
-
-    /* Turn on the light */
-    player_ptr->current_floor_ptr->grid_array[player_ptr->y][player_ptr->x].info |= CAVE_GLOW;
-
-    note_spot(player_ptr, player_ptr->y, player_ptr->x);
-    lite_spot(player_ptr, player_ptr->y, player_ptr->x);
-    update_local_illumination(player_ptr, player_ptr->y, player_ptr->x);
-
-    return true;
-}
-
 /*
  * Set "multishadow", notice observable changes
  */
@@ -406,7 +381,7 @@ bool cast_mirror_spell(PlayerType *player_ptr, mind_mirror_master_type spell)
         break;
     case MAKE_MIRROR:
         if (number_of_mirrors(player_ptr->current_floor_ptr) < 4 + plev / 10) {
-            place_mirror(player_ptr);
+            SpellsMirrorMaster(player_ptr).place_mirror();
         } else {
             msg_format(_("これ以上鏡は制御できない！", "There are too many mirrors to control!"));
         }

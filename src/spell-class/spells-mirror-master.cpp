@@ -4,7 +4,9 @@
 #include "effect/attribute-types.h"
 #include "effect/effect-characteristics.h"
 #include "effect/effect-processor.h"
+#include "floor/cave.h"
 #include "game-option/map-screen-options.h"
+#include "grid/feature.h"
 #include "grid/grid.h"
 #include "monster/monster-update.h"
 #include "spell-kind/spells-teleport.h"
@@ -85,5 +87,31 @@ bool SpellsMirrorMaster::mirror_tunnel()
     }
 
     msg_print(_("鏡の世界をうまく通れなかった！", "You could not enter the mirror!"));
+    return true;
+}
+
+/*!
+ * @brief 鏡設置処理
+ * @return 実際に設置が行われた場合TRUEを返す
+ */
+bool SpellsMirrorMaster::place_mirror()
+{
+    auto y = this->player_ptr->y;
+    auto x = this->player_ptr->x;
+    if (!cave_clean_bold(this->player_ptr->current_floor_ptr, y, x)) {
+        msg_print(_("床上のアイテムが呪文を跳ね返した。", "The object resists the spell."));
+        return false;
+    }
+
+    /* Create a mirror */
+    this->player_ptr->current_floor_ptr->grid_array[y][x].info |= CAVE_OBJECT;
+    this->player_ptr->current_floor_ptr->grid_array[y][x].mimic = feat_mirror;
+
+    /* Turn on the light */
+    this->player_ptr->current_floor_ptr->grid_array[y][x].info |= CAVE_GLOW;
+
+    note_spot(this->player_ptr, y, x);
+    lite_spot(this->player_ptr, y, x);
+    update_local_illumination(this->player_ptr, y, x);
     return true;
 }
