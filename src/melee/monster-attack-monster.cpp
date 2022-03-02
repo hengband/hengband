@@ -40,7 +40,7 @@
 
 static void heal_monster_by_melee(PlayerType *player_ptr, mam_type *mam_ptr)
 {
-    if (!monster_living(mam_ptr->m_idx) || (mam_ptr->damage <= 2)) {
+    if (!monster_living(mam_ptr->t_ptr->r_idx) || (mam_ptr->damage <= 2)) {
         return;
     }
 
