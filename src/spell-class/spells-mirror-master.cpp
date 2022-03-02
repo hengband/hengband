@@ -7,10 +7,13 @@
 #include "game-option/map-screen-options.h"
 #include "grid/grid.h"
 #include "monster/monster-update.h"
+#include "spell-kind/spells-teleport.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
 #include "system/player-type-definition.h"
+#include "target/grid-selector.h"
 #include "util/bit-flags-calculator.h"
+#include "view/display-messages.h"
 
 SpellsMirrorMaster::SpellsMirrorMaster(PlayerType *player_ptr)
     : player_ptr(player_ptr)
@@ -61,4 +64,26 @@ void SpellsMirrorMaster::remove_all_mirrors(bool explode)
             project(this->player_ptr, 0, 2, y, x, this->player_ptr->lev / 2 + 5, AttributeType::SHARDS, projection);
         }
     }
+}
+
+/*!
+ * @brief 鏡抜け処理のメインルーチン /
+ * Mirror Master's Dimension Door
+ * @param player_ptr プレイヤーへの参照ポインタ
+ * @return ターンを消費した場合TRUEを返す
+ */
+bool SpellsMirrorMaster::mirror_tunnel()
+{
+    int x;
+    int y;
+    if (!tgt_pt(this->player_ptr, &x, &y)) {
+        return false;
+    }
+
+    if (exe_dimension_door(this->player_ptr, x, y)) {
+        return true;
+    }
+
+    msg_print(_("鏡の世界をうまく通れなかった！", "You could not enter the mirror!"));
+    return true;
 }

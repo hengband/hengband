@@ -262,26 +262,6 @@ bool place_mirror(PlayerType *player_ptr)
     return true;
 }
 
-/*!
- * @brief 鏡抜け処理のメインルーチン /
- * Mirror Master's Dimension Door
- * @param player_ptr プレイヤーへの参照ポインタ
- * @return ターンを消費した場合TRUEを返す
- */
-bool mirror_tunnel(PlayerType *player_ptr)
-{
-    POSITION x = 0, y = 0;
-    if (!tgt_pt(player_ptr, &x, &y)) {
-        return false;
-    }
-    if (exe_dimension_door(player_ptr, x, y)) {
-        return true;
-    }
-
-    msg_print(_("鏡の世界をうまく通れなかった！", "You could not enter the mirror!"));
-    return true;
-}
-
 /*
  * Set "multishadow", notice observable changes
  */
@@ -528,7 +508,7 @@ bool cast_mirror_spell(PlayerType *player_ptr, mind_mirror_master_type spell)
         break;
     case MIRROR_TUNNEL:
         msg_print(_("鏡の世界を通り抜け…  ", "You try to enter the mirror..."));
-        return mirror_tunnel(player_ptr);
+        return SpellsMirrorMaster(player_ptr).mirror_tunnel();
     case RECALL_MIRROR:
         return recall_player(player_ptr, randint0(21) + 15);
     case MULTI_SHADOW:

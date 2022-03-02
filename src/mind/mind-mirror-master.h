@@ -9,7 +9,6 @@ bool binding_field(PlayerType *player_ptr, int dam);
 void seal_of_mirror(PlayerType *player_ptr, int dam);
 bool confusing_light(PlayerType *player_ptr);
 bool place_mirror(PlayerType *player_ptr);
-bool mirror_tunnel(PlayerType *player_ptr);
 bool set_multishadow(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec);
 bool set_dustrobe(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec);
 
