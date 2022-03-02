@@ -22,6 +22,7 @@
 #include "mind/mind-magic-resistance.h"
 #include "mind/mind-numbers.h"
 #include "pet/pet-util.h"
+#include "spell-class/spells-mirror-master.h"
 #include "spell-kind/spells-detection.h"
 #include "spell-kind/spells-floor.h"
 #include "spell-kind/spells-launcher.h"
@@ -78,30 +79,6 @@ bool mirror_concentration(PlayerType *player_ptr)
 
     player_ptr->redraw |= PR_MANA;
     return true;
-}
-
-/*!
- * @brief 全鏡の消去 / Remove all mirrors in this floor
- * @param player_ptr プレイヤーへの参照ポインタ
- * @param explode 爆発処理を伴うならばTRUE
- */
-void remove_all_mirrors(PlayerType *player_ptr, bool explode)
-{
-    for (POSITION x = 0; x < player_ptr->current_floor_ptr->width; x++) {
-        for (POSITION y = 0; y < player_ptr->current_floor_ptr->height; y++) {
-            if (!player_ptr->current_floor_ptr->grid_array[y][x].is_mirror()) {
-                continue;
-            }
-
-            remove_mirror(player_ptr, y, x);
-            if (!explode) {
-                continue;
-            }
-
-            project(player_ptr, 0, 2, y, x, player_ptr->lev / 2 + 5, AttributeType::SHARDS,
-                (PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL | PROJECT_JUMP | PROJECT_NO_HANGEKI));
-        }
-    }
 }
 
 /*!
@@ -214,7 +191,7 @@ bool binding_field(PlayerType *player_ptr, int dam)
 
     if (one_in_(7)) {
         msg_print(_("鏡が結界に耐えきれず、壊れてしまった。", "The field broke a mirror"));
-        remove_mirror(player_ptr, point_y[0], point_x[0]);
+        SpellsMirrorMaster(player_ptr).remove_mirror(point_y[0], point_x[0]);
     }
 
     return true;
@@ -238,7 +215,7 @@ void seal_of_mirror(PlayerType *player_ptr, int dam)
             }
 
             if (!player_ptr->current_floor_ptr->grid_array[y][x].m_idx) {
-                remove_mirror(player_ptr, y, x);
+                SpellsMirrorMaster(player_ptr).remove_mirror(y, x);
             }
         }
     }
