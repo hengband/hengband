@@ -119,9 +119,8 @@ bool SpellSelector::get_spell(concptr prompt, OBJECT_SUBTYPE_VALUE sval, bool le
 
     auto okay = false;
     this->sn = -2;
-    int spell_num;
-    for (spell_num = 0; spell_num < this->num; spell_num++) {
-        if (spell_okay(this->spells[spell_num], learned, false, this->use_realm)) {
+    for (this->spell_num = 0; this->spell_num < this->num; this->spell_num++) {
+        if (spell_okay(this->spells[this->spell_num], learned, false, this->use_realm)) {
             okay = true;
         }
     }
@@ -166,38 +165,23 @@ bool SpellSelector::get_spell(concptr prompt, OBJECT_SUBTYPE_VALUE sval, bool le
         }
 
         this->ask = true;
-        if (use_menu && this->choice != ' ') {
-            if (!this->on_key_down(&spell_num)) {
-                return false;
-            }
-
-            if (this->menu_line > this->num) {
-                this->menu_line -= this->num;
-            }
-
-            print_spells(this->player_ptr, this->menu_line, spells, this->num, 1, 15, this->use_realm);
-            if (this->ask) {
-                continue;
-            }
-        } else {
-            if (this->decide_redraw()) {
-                continue;
-            }
-
-            this->ask = isupper(this->choice) != 0;
-            if (this->ask) {
-                this->choice = (char)tolower(this->choice);
-            }
-
-            spell_num = (islower(this->choice) ? A2I(this->choice) : -1);
+        switch (this->select_spell_number()) {
+        case PROCESS_FALSE:
+            return false;
+        case PROCESS_CONTINUE:
+            break;
+        case PROCESS_LOOP_CONTINUE:
+            continue;
+        default:
+            throw("Invalid process result returns!");
         }
 
-        if ((spell_num < 0) || (spell_num >= this->num)) {
+        if ((this->spell_num < 0) || (this->spell_num >= this->num)) {
             bell();
             continue;
         }
 
-        spell = this->spells[spell_num];
+        spell = this->spells[this->spell_num];
         if (!spell_okay(spell, learned, false, this->use_realm)) {
             bell();
 #ifdef JP
@@ -261,7 +245,7 @@ int SpellSelector::get_selected_spell()
     return this->sn;
 }
 
-bool SpellSelector::on_key_down(int *spell_num)
+bool SpellSelector::on_key_down()
 {
     this->menu_line = use_menu ? 1 : 0;
     switch (this->choice) {
@@ -282,7 +266,7 @@ bool SpellSelector::on_key_down(int *spell_num)
     case 'X':
     case '\r':
     case '\n':
-        *spell_num = this->menu_line - 1;
+        this->spell_num = this->menu_line - 1;
         this->ask = false;
         return true;
     default:
@@ -311,4 +295,34 @@ bool SpellSelector::decide_redraw()
     this->redraw = false;
     screen_load();
     return true;
+}
+
+process_result SpellSelector::select_spell_number()
+{
+    if (use_menu && this->choice != ' ') {
+        if (!this->on_key_down()) {
+            return PROCESS_FALSE;
+        }
+
+        if (this->menu_line > this->num) {
+            this->menu_line -= this->num;
+        }
+
+        print_spells(this->player_ptr, this->menu_line, this->spells, this->num, 1, 15, this->use_realm);
+        if (this->ask) {
+            return PROCESS_LOOP_CONTINUE;
+        }
+    }
+
+    if (this->decide_redraw()) {
+        return PROCESS_LOOP_CONTINUE;
+    }
+
+    this->ask = isupper(this->choice) != 0;
+    if (this->ask) {
+        this->choice = static_cast<char>(tolower(this->choice));
+    }
+
+    this->spell_num = islower(this->choice) ? A2I(this->choice) : -1;
+    return PROCESS_CONTINUE;
 }

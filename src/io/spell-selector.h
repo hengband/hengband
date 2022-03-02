@@ -23,7 +23,9 @@ private:
     bool redraw = false;
     int spells[64]{};
     short use_realm = 0;
+    int spell_num = 0;
     
-    bool on_key_down(int *spell_num);
+    bool on_key_down();
     bool decide_redraw();
+    process_result select_spell_number();
 };

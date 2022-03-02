@@ -171,4 +171,6 @@ enum process_result {
     PROCESS_FALSE = 0,
     PROCESS_TRUE = 1,
     PROCESS_CONTINUE = 2,
+    PROCESS_LOOP_CONTINUE = 3,
+    PROCESS_LOOP_BREAK = 4,
 };

@@ -549,6 +549,8 @@ char examine_grid(PlayerType *player_ptr, const POSITION y, const POSITION x, ta
         return eg_ptr->query;
     case PROCESS_CONTINUE:
         break;
+    default:
+        break;
     }
 
     int16_t description_grid = describe_grid(player_ptr, eg_ptr);
