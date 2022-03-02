@@ -16,4 +16,10 @@ public:
 private:
     PlayerType *player_ptr;
     int sn = 0;
+    char choice = '\0';
+    int menu_line = 0;
+    bool ask = true;
+    int num = 0;
+
+    bool on_key_down(int *spell_num);
 };

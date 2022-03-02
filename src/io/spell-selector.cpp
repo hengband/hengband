@@ -60,19 +60,19 @@ bool SpellSelector::spell_okay(int spell, bool learned, bool study_pray, int use
         s_ptr = &mp_ptr->info[use_realm - 1][spell];
     }
 
-    if (s_ptr->slevel > player_ptr->lev) {
+    if (s_ptr->slevel > this->player_ptr->lev) {
         return false;
     }
 
-    if ((use_realm == player_ptr->realm2) ? (player_ptr->spell_forgotten2 & (1UL << spell)) : (player_ptr->spell_forgotten1 & (1UL << spell))) {
+    if ((use_realm == this->player_ptr->realm2) ? (this->player_ptr->spell_forgotten2 & (1UL << spell)) : (this->player_ptr->spell_forgotten1 & (1UL << spell))) {
         return false;
     }
 
-    if (PlayerClass(player_ptr).is_every_magic()) {
+    if (PlayerClass(this->player_ptr).is_every_magic()) {
         return true;
     }
 
-    if ((use_realm == player_ptr->realm2) ? (player_ptr->spell_learned2 & (1UL << spell)) : (player_ptr->spell_learned1 & (1UL << spell))) {
+    if ((use_realm == this->player_ptr->realm2) ? (this->player_ptr->spell_learned2 & (1UL << spell)) : (this->player_ptr->spell_learned1 & (1UL << spell))) {
         return !study_pray;
     }
 
@@ -108,19 +108,18 @@ bool SpellSelector::get_spell(concptr prompt, OBJECT_SUBTYPE_VALUE sval, bool le
     }
 
     auto p = spell_category_name(mp_ptr->spell_book);
-    auto num = 0;
     int spells[64]{};
     int spell = -1; // @todo よくあるバッドプラクティス.
     for (spell = 0; spell < 32; spell++) {
         if ((fake_spell_flags[sval] & (1UL << spell))) {
-            spells[num++] = spell;
+            spells[this->num++] = spell;
         }
     }
 
     auto okay = false;
     this->sn = -2;
     int spell_num;
-    for (spell_num = 0; spell_num < num; spell_num++) {
+    for (spell_num = 0; spell_num < this->num; spell_num++) {
         if (spell_okay(spells[spell_num], learned, false, use_realm)) {
             okay = true;
         }
@@ -130,9 +129,9 @@ bool SpellSelector::get_spell(concptr prompt, OBJECT_SUBTYPE_VALUE sval, bool le
         return false;
     }
 
-    PlayerClass pc(player_ptr);
+    PlayerClass pc(this->player_ptr);
     auto is_every_magic = pc.is_every_magic();
-    if (((use_realm) != player_ptr->realm1) && ((use_realm) != player_ptr->realm2) && !is_every_magic) {
+    if (((use_realm) != this->player_ptr->realm1) && ((use_realm) != this->player_ptr->realm2) && !is_every_magic) {
         return false;
     }
 
@@ -147,66 +146,46 @@ bool SpellSelector::get_spell(concptr prompt, OBJECT_SUBTYPE_VALUE sval, bool le
     this->sn = -1;
     auto flag = false;
     auto redraw = false;
-    player_ptr->window_flags |= (PW_SPELL);
-    handle_stuff(player_ptr);
+    this->player_ptr->window_flags |= (PW_SPELL);
+    handle_stuff(this->player_ptr);
     char out_val[160];
 #ifdef JP
     char jverb_buf[128];
     jverb(prompt, jverb_buf, JVERB_AND);
-    (void)strnfmt(out_val, 78, "(%^s:%c-%c, '*'で一覧, ESCで中断) どの%sを%^sますか? ", p, I2A(0), I2A(num - 1), p, jverb_buf);
+    (void)strnfmt(out_val, 78, "(%^s:%c-%c, '*'で一覧, ESCで中断) どの%sを%^sますか? ", p, I2A(0), I2A(this->num - 1), p, jverb_buf);
 #else
-    (void)strnfmt(out_val, 78, "(%^ss %c-%c, *=List, ESC=exit) %^s which %s? ", p, I2A(0), I2A(num - 1), prompt, p);
+    (void)strnfmt(out_val, 78, "(%^ss %c-%c, *=List, ESC=exit) %^s which %s? ", p, I2A(0), I2A(this->num - 1), prompt, p);
 #endif
 
-    auto choice = (always_show_list || use_menu) ? ESCAPE : '\1';
+    this->choice = (always_show_list || use_menu) ? ESCAPE : '\1';
     while (!flag) {
-        if (choice == ESCAPE) {
-            choice = ' ';
-        } else if (!get_com(out_val, &choice, true)) {
+        if (this->choice == ESCAPE) {
+            this->choice = ' ';
+        } else if (!get_com(out_val, &this->choice, true)) {
             break;
         }
 
-        auto ask = true;
-        if (use_menu && choice != ' ') {
-            auto menu_line = use_menu ? 1 : 0;
-            switch (choice) {
-            case '0':
-                screen_load();
+        this->ask = true;
+        if (use_menu && this->choice != ' ') {
+            if (!this->on_key_down(&spell_num)) {
                 return false;
-            case '8':
-            case 'k':
-            case 'K':
-                menu_line += (num - 1);
-                break;
-            case '2':
-            case 'j':
-            case 'J':
-                menu_line++;
-                break;
-            case 'x':
-            case 'X':
-            case '\r':
-            case '\n':
-                spell_num = menu_line - 1;
-                ask = false;
-                break;
             }
 
-            if (menu_line > num) {
-                menu_line -= num;
+            if (this->menu_line > this->num) {
+                this->menu_line -= this->num;
             }
 
-            print_spells(player_ptr, menu_line, spells, num, 1, 15, use_realm);
-            if (ask) {
+            print_spells(this->player_ptr, this->menu_line, spells, this->num, 1, 15, use_realm);
+            if (this->ask) {
                 continue;
             }
         } else {
-            if ((choice == ' ') || (choice == '*') || (choice == '?')) {
+            if ((this->choice == ' ') || (this->choice == '*') || (this->choice == '?')) {
                 if (!redraw) {
                     redraw = true;
                     screen_save();
-                    auto menu_line = use_menu ? 1 : 0;
-                    print_spells(player_ptr, menu_line, spells, num, 1, 15, use_realm);
+                    this->menu_line = use_menu ? 1 : 0;
+                    print_spells(this->player_ptr, menu_line, spells, this->num, 1, 15, use_realm);
                 } else {
                     if (use_menu) {
                         continue;
@@ -219,15 +198,15 @@ bool SpellSelector::get_spell(concptr prompt, OBJECT_SUBTYPE_VALUE sval, bool le
                 continue;
             }
 
-            ask = isupper(choice) != 0;
-            if (ask) {
-                choice = (char)tolower(choice);
+            this->ask = isupper(this->choice) != 0;
+            if (this->ask) {
+                this->choice = (char)tolower(this->choice);
             }
 
-            spell_num = (islower(choice) ? A2I(choice) : -1);
+            spell_num = (islower(this->choice) ? A2I(this->choice) : -1);
         }
 
-        if ((spell_num < 0) || (spell_num >= num)) {
+        if ((spell_num < 0) || (spell_num >= this->num)) {
             bell();
             continue;
         }
@@ -244,7 +223,7 @@ bool SpellSelector::get_spell(concptr prompt, OBJECT_SUBTYPE_VALUE sval, bool le
             continue;
         }
 
-        if (ask) {
+        if (this->ask) {
             char tmp_val[160];
             const magic_type *s_ptr;
             if (!is_magic(use_realm)) {
@@ -257,16 +236,16 @@ bool SpellSelector::get_spell(concptr prompt, OBJECT_SUBTYPE_VALUE sval, bool le
             if (use_realm == REALM_HISSATSU) {
                 need_mana = s_ptr->smana;
             } else {
-                need_mana = mod_need_mana(player_ptr, s_ptr->smana, spell, use_realm);
+                need_mana = mod_need_mana(this->player_ptr, s_ptr->smana, spell, use_realm);
             }
 
 #ifdef JP
             jverb(prompt, jverb_buf, JVERB_AND);
-            (void)strnfmt(tmp_val, 78, "%s(MP%d, 失敗率%d%%)を%sますか? ", exe_spell(player_ptr, use_realm, spell, SpellProcessType::NAME), need_mana,
-                spell_chance(player_ptr, spell, use_realm), jverb_buf);
+            (void)strnfmt(tmp_val, 78, "%s(MP%d, 失敗率%d%%)を%sますか? ", exe_spell(this->player_ptr, use_realm, spell, SpellProcessType::NAME), need_mana,
+                spell_chance(this->player_ptr, spell, use_realm), jverb_buf);
 #else
-            (void)strnfmt(tmp_val, 78, "%^s %s (%d mana, %d%% fail)? ", prompt, exe_spell(player_ptr, use_realm, spell, SpellProcessType::NAME), need_mana,
-                spell_chance(player_ptr, spell, use_realm));
+            (void)strnfmt(tmp_val, 78, "%^s %s (%d mana, %d%% fail)? ", prompt, exe_spell(this->player_ptr, use_realm, spell, SpellProcessType::NAME), need_mana,
+                spell_chance(this->player_ptr, spell, use_realm));
 #endif
             if (!get_check(tmp_val)) {
                 continue;
@@ -280,8 +259,8 @@ bool SpellSelector::get_spell(concptr prompt, OBJECT_SUBTYPE_VALUE sval, bool le
         screen_load();
     }
 
-    player_ptr->window_flags |= (PW_SPELL);
-    handle_stuff(player_ptr);
+    this->player_ptr->window_flags |= (PW_SPELL);
+    handle_stuff(this->player_ptr);
     if (!flag) {
         return false;
     }
@@ -294,4 +273,33 @@ bool SpellSelector::get_spell(concptr prompt, OBJECT_SUBTYPE_VALUE sval, bool le
 int SpellSelector::get_selected_spell()
 {
     return this->sn;
+}
+
+bool SpellSelector::on_key_down(int *spell_num)
+{
+    this->menu_line = use_menu ? 1 : 0;
+    switch (this->choice) {
+    case '0':
+        screen_load();
+        return false;
+    case '8':
+    case 'k':
+    case 'K':
+        this->menu_line += (this->num - 1);
+        return true;
+    case '2':
+    case 'j':
+    case 'J':
+        this->menu_line++;
+        return true;
+    case 'x':
+    case 'X':
+    case '\r':
+    case '\n':
+        *spell_num = this->menu_line - 1;
+        this->ask = false;
+        return true;
+    default:
+        return true;
+    }
 }
