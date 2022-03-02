@@ -722,7 +722,7 @@ bool affect_monster(
 
     ProcessResult result = exe_affect_monster_by_effect(player_ptr, em_ptr, cap_mon_ptr);
     if (result != ProcessResult::PROCESS_CONTINUE) {
-        return (bool)result;
+        return result == ProcessResult::PROCESS_TRUE;
     }
 
     if (em_ptr->skipped) {
