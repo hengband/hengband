@@ -282,7 +282,7 @@ void do_cmd_browse(PlayerType *player_ptr)
 {
     OBJECT_IDX item;
     OBJECT_SUBTYPE_VALUE sval;
-    int16_t use_realm = 0;
+    short use_realm = 0;
     int j, line;
     SPELL_IDX spell = -1;
     int num = 0;

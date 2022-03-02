@@ -51,20 +51,21 @@ SpellSelector::SpellSelector(PlayerType *player_ptr)
  * @param use_realm 魔法領域ID
  * @return 選択した魔法が利用可能か否か
  */
-bool SpellSelector::spell_okay(int spell, bool learned, bool study_pray, int use_realm)
+bool SpellSelector::spell_okay(int spell, bool learned, bool study_pray, const short tmp_use_realm)
 {
+    this->use_realm = tmp_use_realm;
     const magic_type *s_ptr;
-    if (!is_magic(use_realm)) {
-        s_ptr = &technic_info[use_realm - MIN_TECHNIC][spell];
+    if (!is_magic(this->use_realm)) {
+        s_ptr = &technic_info[this->use_realm - MIN_TECHNIC][spell];
     } else {
-        s_ptr = &mp_ptr->info[use_realm - 1][spell];
+        s_ptr = &mp_ptr->info[this->use_realm - 1][spell];
     }
 
     if (s_ptr->slevel > this->player_ptr->lev) {
         return false;
     }
 
-    if ((use_realm == this->player_ptr->realm2) ? (this->player_ptr->spell_forgotten2 & (1UL << spell)) : (this->player_ptr->spell_forgotten1 & (1UL << spell))) {
+    if ((this->use_realm == this->player_ptr->realm2) ? (this->player_ptr->spell_forgotten2 & (1UL << spell)) : (this->player_ptr->spell_forgotten1 & (1UL << spell))) {
         return false;
     }
 
@@ -72,7 +73,7 @@ bool SpellSelector::spell_okay(int spell, bool learned, bool study_pray, int use
         return true;
     }
 
-    if ((use_realm == this->player_ptr->realm2) ? (this->player_ptr->spell_learned2 & (1UL << spell)) : (this->player_ptr->spell_learned1 & (1UL << spell))) {
+    if ((this->use_realm == this->player_ptr->realm2) ? (this->player_ptr->spell_learned2 & (1UL << spell)) : (this->player_ptr->spell_learned1 & (1UL << spell))) {
         return !study_pray;
     }
 
@@ -96,23 +97,23 @@ bool SpellSelector::spell_okay(int spell, bool learned, bool study_pray, int use
  * The "known" should be TRUE for cast/pray, FALSE for study
  * </pre>
  */
-bool SpellSelector::get_spell(concptr prompt, OBJECT_SUBTYPE_VALUE sval, bool learned, int16_t use_realm, int tmp_sn)
+bool SpellSelector::get_spell(concptr prompt, OBJECT_SUBTYPE_VALUE sval, bool learned, const short tmp_use_realm, int tmp_sn)
 {
+    this->use_realm = tmp_use_realm;
     this->sn = tmp_sn;
     short code;
     if (repeat_pull(&code)) {
         this->sn = code;
-        if (spell_okay(this->sn, learned, false, use_realm)) {
+        if (spell_okay(this->sn, learned, false, this->use_realm)) {
             return true;
         }
     }
 
     auto p = spell_category_name(mp_ptr->spell_book);
-    int spells[64]{};
     int spell = -1; // @todo よくあるバッドプラクティス.
     for (spell = 0; spell < 32; spell++) {
         if ((fake_spell_flags[sval] & (1UL << spell))) {
-            spells[this->num++] = spell;
+            this->spells[this->num++] = spell;
         }
     }
 
@@ -120,7 +121,7 @@ bool SpellSelector::get_spell(concptr prompt, OBJECT_SUBTYPE_VALUE sval, bool le
     this->sn = -2;
     int spell_num;
     for (spell_num = 0; spell_num < this->num; spell_num++) {
-        if (spell_okay(spells[spell_num], learned, false, use_realm)) {
+        if (spell_okay(this->spells[spell_num], learned, false, this->use_realm)) {
             okay = true;
         }
     }
@@ -131,21 +132,20 @@ bool SpellSelector::get_spell(concptr prompt, OBJECT_SUBTYPE_VALUE sval, bool le
 
     PlayerClass pc(this->player_ptr);
     auto is_every_magic = pc.is_every_magic();
-    if (((use_realm) != this->player_ptr->realm1) && ((use_realm) != this->player_ptr->realm2) && !is_every_magic) {
+    if (((this->use_realm) != this->player_ptr->realm1) && ((this->use_realm) != this->player_ptr->realm2) && !is_every_magic) {
         return false;
     }
 
-    if (is_every_magic && !is_magic(use_realm)) {
+    if (is_every_magic && !is_magic(this->use_realm)) {
         return false;
     }
 
-    if (pc.equals(PlayerClassType::RED_MAGE) && ((use_realm) != REALM_ARCANE) && (sval > 1)) {
+    if (pc.equals(PlayerClassType::RED_MAGE) && ((this->use_realm) != REALM_ARCANE) && (sval > 1)) {
         return false;
     }
 
     this->sn = -1;
     auto flag = false;
-    auto redraw = false;
     this->player_ptr->window_flags |= (PW_SPELL);
     handle_stuff(this->player_ptr);
     char out_val[160];
@@ -175,26 +175,12 @@ bool SpellSelector::get_spell(concptr prompt, OBJECT_SUBTYPE_VALUE sval, bool le
                 this->menu_line -= this->num;
             }
 
-            print_spells(this->player_ptr, this->menu_line, spells, this->num, 1, 15, use_realm);
+            print_spells(this->player_ptr, this->menu_line, spells, this->num, 1, 15, this->use_realm);
             if (this->ask) {
                 continue;
             }
         } else {
-            if ((this->choice == ' ') || (this->choice == '*') || (this->choice == '?')) {
-                if (!redraw) {
-                    redraw = true;
-                    screen_save();
-                    this->menu_line = use_menu ? 1 : 0;
-                    print_spells(this->player_ptr, menu_line, spells, this->num, 1, 15, use_realm);
-                } else {
-                    if (use_menu) {
-                        continue;
-                    }
-
-                    redraw = false;
-                    screen_load();
-                }
-
+            if (this->decide_redraw()) {
                 continue;
             }
 
@@ -211,8 +197,8 @@ bool SpellSelector::get_spell(concptr prompt, OBJECT_SUBTYPE_VALUE sval, bool le
             continue;
         }
 
-        spell = spells[spell_num];
-        if (!spell_okay(spell, learned, false, use_realm)) {
+        spell = this->spells[spell_num];
+        if (!spell_okay(spell, learned, false, this->use_realm)) {
             bell();
 #ifdef JP
             msg_format("その%sを%sことはできません。", p, prompt);
@@ -226,26 +212,26 @@ bool SpellSelector::get_spell(concptr prompt, OBJECT_SUBTYPE_VALUE sval, bool le
         if (this->ask) {
             char tmp_val[160];
             const magic_type *s_ptr;
-            if (!is_magic(use_realm)) {
-                s_ptr = &technic_info[use_realm - MIN_TECHNIC][spell];
+            if (!is_magic(this->use_realm)) {
+                s_ptr = &technic_info[this->use_realm - MIN_TECHNIC][spell];
             } else {
-                s_ptr = &mp_ptr->info[use_realm - 1][spell];
+                s_ptr = &mp_ptr->info[this->use_realm - 1][spell];
             }
 
             int need_mana;
-            if (use_realm == REALM_HISSATSU) {
+            if (this->use_realm == REALM_HISSATSU) {
                 need_mana = s_ptr->smana;
             } else {
-                need_mana = mod_need_mana(this->player_ptr, s_ptr->smana, spell, use_realm);
+                need_mana = mod_need_mana(this->player_ptr, s_ptr->smana, spell, this->use_realm);
             }
 
 #ifdef JP
             jverb(prompt, jverb_buf, JVERB_AND);
-            (void)strnfmt(tmp_val, 78, "%s(MP%d, 失敗率%d%%)を%sますか? ", exe_spell(this->player_ptr, use_realm, spell, SpellProcessType::NAME), need_mana,
-                spell_chance(this->player_ptr, spell, use_realm), jverb_buf);
+            (void)strnfmt(tmp_val, 78, "%s(MP%d, 失敗率%d%%)を%sますか? ", exe_spell(this->player_ptr, this->use_realm, spell, SpellProcessType::NAME), need_mana,
+                spell_chance(this->player_ptr, spell, this->use_realm), jverb_buf);
 #else
-            (void)strnfmt(tmp_val, 78, "%^s %s (%d mana, %d%% fail)? ", prompt, exe_spell(this->player_ptr, use_realm, spell, SpellProcessType::NAME), need_mana,
-                spell_chance(this->player_ptr, spell, use_realm));
+            (void)strnfmt(tmp_val, 78, "%^s %s (%d mana, %d%% fail)? ", prompt, exe_spell(this->player_ptr, this->use_realm, spell, SpellProcessType::NAME), need_mana,
+                spell_chance(this->player_ptr, spell, this->use_realm));
 #endif
             if (!get_check(tmp_val)) {
                 continue;
@@ -255,7 +241,7 @@ bool SpellSelector::get_spell(concptr prompt, OBJECT_SUBTYPE_VALUE sval, bool le
         flag = true;
     }
 
-    if (redraw) {
+    if (this->redraw) {
         screen_load();
     }
 
@@ -302,4 +288,27 @@ bool SpellSelector::on_key_down(int *spell_num)
     default:
         return true;
     }
+}
+
+bool SpellSelector::decide_redraw()
+{
+    if ((this->choice != ' ') && (this->choice != '*') && (this->choice != '?')) {
+        return false;
+    }
+
+    if (!this->redraw) {
+        this->redraw = true;
+        screen_save();
+        this->menu_line = use_menu ? 1 : 0;
+        print_spells(this->player_ptr, this->menu_line, this->spells, this->num, 1, 15, this->use_realm);
+        return true;
+    }
+
+    if (use_menu) {
+        return true;
+    }
+
+    this->redraw = false;
+    screen_load();
+    return true;
 }
