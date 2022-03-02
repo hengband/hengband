@@ -110,10 +110,9 @@ bool SpellSelector::get_spell(concptr prompt, OBJECT_SUBTYPE_VALUE sval, bool le
     }
 
     auto p = spell_category_name(mp_ptr->spell_book);
-    int spell = -1; // @todo よくあるバッドプラクティス.
-    for (spell = 0; spell < 32; spell++) {
-        if ((fake_spell_flags[sval] & (1UL << spell))) {
-            this->spells[this->num++] = spell;
+    for (auto i = 0; i < MAX_SPELLS_PER_REALM; i++) {
+        if (fake_spell_flags[sval] & (1U << i)) {
+            this->spells[this->num++] = i;
         }
     }
 
@@ -157,6 +156,7 @@ bool SpellSelector::get_spell(concptr prompt, OBJECT_SUBTYPE_VALUE sval, bool le
 #endif
 
     this->choice = (always_show_list || use_menu) ? ESCAPE : '\1';
+    auto selected_spell = MAX_SPELLS_PER_REALM;
     while (!flag) {
         if (this->choice == ESCAPE) {
             this->choice = ' ';
@@ -181,8 +181,8 @@ bool SpellSelector::get_spell(concptr prompt, OBJECT_SUBTYPE_VALUE sval, bool le
             continue;
         }
 
-        spell = this->spells[this->spell_num];
-        if (!spell_okay(spell, learned, false, this->use_realm)) {
+        selected_spell = this->spells[this->spell_num];
+        if (!spell_okay(selected_spell, learned, false, this->use_realm)) {
             bell();
 #ifdef JP
             msg_format("その%sを%sことはできません。", p, prompt);
@@ -197,25 +197,25 @@ bool SpellSelector::get_spell(concptr prompt, OBJECT_SUBTYPE_VALUE sval, bool le
             char tmp_val[160];
             const magic_type *s_ptr;
             if (!is_magic(this->use_realm)) {
-                s_ptr = &technic_info[this->use_realm - MIN_TECHNIC][spell];
+                s_ptr = &technic_info[this->use_realm - MIN_TECHNIC][selected_spell];
             } else {
-                s_ptr = &mp_ptr->info[this->use_realm - 1][spell];
+                s_ptr = &mp_ptr->info[this->use_realm - 1][selected_spell];
             }
 
             int need_mana;
             if (this->use_realm == REALM_HISSATSU) {
                 need_mana = s_ptr->smana;
             } else {
-                need_mana = mod_need_mana(this->player_ptr, s_ptr->smana, spell, this->use_realm);
+                need_mana = mod_need_mana(this->player_ptr, s_ptr->smana, selected_spell, this->use_realm);
             }
 
 #ifdef JP
             jverb(prompt, jverb_buf, JVERB_AND);
-            (void)strnfmt(tmp_val, 78, "%s(MP%d, 失敗率%d%%)を%sますか? ", exe_spell(this->player_ptr, this->use_realm, spell, SpellProcessType::NAME), need_mana,
-                spell_chance(this->player_ptr, spell, this->use_realm), jverb_buf);
+            (void)strnfmt(tmp_val, 78, "%s(MP%d, 失敗率%d%%)を%sますか? ", exe_spell(this->player_ptr, this->use_realm, selected_spell, SpellProcessType::NAME), need_mana,
+                spell_chance(this->player_ptr, selected_spell, this->use_realm), jverb_buf);
 #else
-            (void)strnfmt(tmp_val, 78, "%^s %s (%d mana, %d%% fail)? ", prompt, exe_spell(this->player_ptr, this->use_realm, spell, SpellProcessType::NAME), need_mana,
-                spell_chance(this->player_ptr, spell, this->use_realm));
+            (void)strnfmt(tmp_val, 78, "%^s %s (%d mana, %d%% fail)? ", prompt, exe_spell(this->player_ptr, this->use_realm, selected_spell, SpellProcessType::NAME), need_mana,
+                spell_chance(this->player_ptr, selected_spell, this->use_realm));
 #endif
             if (!get_check(tmp_val)) {
                 continue;
@@ -235,8 +235,8 @@ bool SpellSelector::get_spell(concptr prompt, OBJECT_SUBTYPE_VALUE sval, bool le
         return false;
     }
 
-    this->sn = spell;
-    repeat_push((COMMAND_CODE)spell);
+    this->sn = selected_spell;
+    repeat_push(static_cast<short>(selected_spell));
     return true;
 }
 
