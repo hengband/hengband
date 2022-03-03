@@ -400,7 +400,7 @@ void dispel_monster_status(PlayerType *player_ptr, MONSTER_IDX m_idx)
  */
 void monster_gain_exp(PlayerType *player_ptr, MONSTER_IDX m_idx, MonsterRaceId s_idx)
 {
-    if (m_idx <= 0 || !is_valid_monster_race(s_idx)) {
+    if (m_idx <= 0 || !MonsterRace(s_idx).is_valid()) {
         return;
     }
 
@@ -524,7 +524,7 @@ void monster_gain_exp(PlayerType *player_ptr, MONSTER_IDX m_idx, MonsterRaceId s
 
 bool monster_is_valid(monster_type *m_ptr)
 {
-    return is_valid_monster_race(m_ptr->r_idx);
+    return MonsterRace(m_ptr->r_idx).is_valid();
 }
 
 TIME_EFFECT monster_csleep_remaining(monster_type *m_ptr)

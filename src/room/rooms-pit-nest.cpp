@@ -274,7 +274,7 @@ bool build_type5(PlayerType *player_ptr, dun_data_type *dd_ptr)
         }
 
         /* Notice failure */
-        if (!is_valid_monster_race(r_idx) || !attempts) {
+        if (!MonsterRace(r_idx).is_valid() || !attempts) {
             return false;
         }
 
@@ -511,7 +511,7 @@ bool build_type6(PlayerType *player_ptr, dun_data_type *dd_ptr)
         }
 
         /* Notice failure */
-        if (!is_valid_monster_race(r_idx) || !attempts) {
+        if (!MonsterRace(r_idx).is_valid() || !attempts) {
             return false;
         }
 
@@ -826,7 +826,7 @@ bool build_type13(PlayerType *player_ptr, dun_data_type *dd_ptr)
         }
 
         /* Notice failure */
-        if (!is_valid_monster_race(r_idx) || !attempts) {
+        if (!MonsterRace(r_idx).is_valid() || !attempts) {
             return false;
         }
 

@@ -285,7 +285,7 @@ void store_moves_val(int *mm, int y, int x)
  */
 void save_old_race_flags(MonsterRaceId monster_race_idx, old_race_flags *old_race_flags_ptr)
 {
-    if (!is_valid_monster_race(monster_race_idx)) {
+    if (!MonsterRace(monster_race_idx).is_valid()) {
         return;
     }
 

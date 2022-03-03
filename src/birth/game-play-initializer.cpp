@@ -82,7 +82,7 @@ void player_wipe_without_name(PlayerType *player_ptr)
 
     k_info_reset();
     for (auto &[r_idx, r_ref] : r_info) {
-        if (r_ref.idx == MonsterRaceId::PLAYER) {
+        if (!MonsterRace(r_ref.idx).is_valid()) {
             continue;
         }
         r_ref.cur_num = 0;

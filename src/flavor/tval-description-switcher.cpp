@@ -27,7 +27,7 @@ static void describe_monster_ball(flavor_type *flavor_ptr)
         return;
     }
 
-    if (!is_valid_monster_race(r_idx)) {
+    if (!MonsterRace(r_idx).is_valid()) {
         flavor_ptr->modstr = _(" (空)", " (empty)");
         return;
     }

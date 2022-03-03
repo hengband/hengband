@@ -175,7 +175,7 @@ static void dump_aux_recall(FILE *fff)
         if (!max_dlv[d_ref.idx]) {
             continue;
         }
-        if (is_valid_monster_race(d_ref.final_guardian)) {
+        if (MonsterRace(d_ref.final_guardian).is_valid()) {
             if (!r_info[d_ref.final_guardian].max_num) {
                 seiha = true;
             }
@@ -314,7 +314,7 @@ static void dump_aux_monsters(PlayerType *player_ptr, FILE *fff)
     auto norm_total = 0;
     for (const auto &[r_idx, r_ref] : r_info) {
         /* Ignore unused index */
-        if (!is_valid_monster_race(r_ref.idx) || r_ref.name.empty()) {
+        if (!MonsterRace(r_ref.idx).is_valid() || r_ref.name.empty()) {
             continue;
         }
 

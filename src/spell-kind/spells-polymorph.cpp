@@ -41,7 +41,7 @@ static MonsterRaceId poly_r_idx(PlayerType *player_ptr, MonsterRaceId r_idx)
     MonsterRaceId r;
     for (int i = 0; i < 1000; i++) {
         r = get_mon_num(player_ptr, 0, (player_ptr->current_floor_ptr->dun_level + r_ptr->level) / 2 + 5, 0);
-        if (!is_valid_monster_race(r)) {
+        if (!MonsterRace(r).is_valid()) {
             break;
         }
 

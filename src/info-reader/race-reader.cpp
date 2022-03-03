@@ -194,7 +194,7 @@ errr parse_r_info(std::string_view buf, angband_header *)
         // R:reinforcer_idx:number_dice
         size_t i = 0;
         for (; i < A_MAX; i++) {
-            if (!is_valid_monster_race(r_ptr->reinforce_id[i])) {
+            if (!MonsterRace(r_ptr->reinforce_id[i]).is_valid()) {
                 break;
             }
         }

@@ -87,7 +87,7 @@ bool check_summon_specific(PlayerType *player_ptr, MonsterRaceId summoner_idx, M
         is_match = (r_ptr->d_char == 'U') && r_ptr->ability_flags.has(MonsterAbilityType::ROCKET);
         break;
     case SUMMON_KIN: {
-        auto summon_kin_type = is_valid_monster_race(summoner_idx) ? r_info[summoner_idx].d_char : get_summon_symbol_from_player(player_ptr);
+        auto summon_kin_type = MonsterRace(summoner_idx).is_valid() ? r_info[summoner_idx].d_char : get_summon_symbol_from_player(player_ptr);
         is_match = (r_ptr->d_char == summon_kin_type) && (r_idx != MonsterRaceId::HAGURE);
         break;
     }

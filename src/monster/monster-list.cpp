@@ -69,7 +69,7 @@ MONSTER_IDX m_pop(floor_type *floor_ptr)
     for (MONSTER_IDX i = 1; i < floor_ptr->m_max; i++) {
         monster_type *m_ptr;
         m_ptr = &floor_ptr->m_list[i];
-        if (is_valid_monster_race(m_ptr->r_idx)) {
+        if (MonsterRace(m_ptr->r_idx).is_valid()) {
             continue;
         }
         floor_ptr->m_cnt++;
@@ -320,7 +320,7 @@ void choose_new_monster(PlayerType *player_ptr, MONSTER_IDX m_idx, bool born, Mo
     char old_m_name[MAX_NLEN];
     monster_desc(player_ptr, old_m_name, m_ptr, 0);
 
-    if (!is_valid_monster_race(r_idx)) {
+    if (!MonsterRace(r_idx).is_valid()) {
         DEPTH level;
 
         chameleon_change_m_idx = m_idx;
@@ -346,7 +346,7 @@ void choose_new_monster(PlayerType *player_ptr, MONSTER_IDX m_idx, bool born, Mo
         r_ptr = &r_info[r_idx];
 
         chameleon_change_m_idx = 0;
-        if (!is_valid_monster_race(r_idx)) {
+        if (!MonsterRace(r_idx).is_valid()) {
             return;
         }
     }

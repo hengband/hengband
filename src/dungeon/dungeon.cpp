@@ -4,7 +4,6 @@
 #include "io/input-key-acceptor.h"
 #include "main/sound-of-music.h"
 #include "monster-race/monster-race.h"
-#include "monster-race/race-indice-types.h"
 #include "system/floor-type-definition.h"
 #include "system/monster-race-definition.h"
 #include "system/player-type-definition.h"
@@ -58,7 +57,7 @@ DUNGEON_IDX choose_dungeon(concptr note, POSITION y, POSITION x)
         if (!max_dlv[d_ref.idx]) {
             continue;
         }
-        if (d_ref.final_guardian != MonsterRaceId::PLAYER) {
+        if (MonsterRace(d_ref.final_guardian).is_valid()) {
             if (!r_info[d_ref.final_guardian].max_num) {
                 seiha = true;
             }

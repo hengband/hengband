@@ -90,7 +90,7 @@ void delete_monster_idx(PlayerType *player_ptr, MONSTER_IDX i)
     // 召喚されたモンスター自身のm_idxを指すようにする
     for (MONSTER_IDX child_m_idx = 1; child_m_idx < floor_ptr->m_max; child_m_idx++) {
         monster_type *child_m_ptr = &floor_ptr->m_list[child_m_idx];
-        if (is_valid_monster_race(child_m_ptr->r_idx) && child_m_ptr->parent_m_idx == i) {
+        if (MonsterRace(child_m_ptr->r_idx).is_valid() && child_m_ptr->parent_m_idx == i) {
             child_m_ptr->parent_m_idx = child_m_idx;
         }
     }

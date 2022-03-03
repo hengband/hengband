@@ -144,7 +144,7 @@ bool summon_specific(PlayerType *player_ptr, MONSTER_IDX who, POSITION y1, POSIT
 
     DEPTH dlev = get_dungeon_or_wilderness_level(player_ptr);
     MonsterRaceId r_idx = get_mon_num(player_ptr, 0, (dlev + lev) / 2 + 5, 0);
-    if (!is_valid_monster_race(r_idx)) {
+    if (!MonsterRace(r_idx).is_valid()) {
         summon_specific_type = SUMMON_NONE;
         return false;
     }
@@ -193,7 +193,7 @@ bool summon_specific(PlayerType *player_ptr, MONSTER_IDX who, POSITION y1, POSIT
  */
 bool summon_named_creature(PlayerType *player_ptr, MONSTER_IDX who, POSITION oy, POSITION ox, MonsterRaceId r_idx, BIT_FLAGS mode)
 {
-    if (!is_valid_monster_race(r_idx) || (r_idx >= static_cast<MonsterRaceId>(r_info.size()))) {
+    if (!MonsterRace(r_idx).is_valid() || (r_idx >= static_cast<MonsterRaceId>(r_info.size()))) {
         return false;
     }
 

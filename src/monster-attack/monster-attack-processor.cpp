@@ -89,7 +89,7 @@ static bool exe_monster_attack_to_monster(PlayerType *player_ptr, MONSTER_IDX m_
         r_ptr->r_behavior_flags.set(MonsterBehaviorType::KILL_BODY);
     }
 
-    if (!is_valid_monster_race(y_ptr->r_idx) || (y_ptr->hp < 0)) {
+    if (!MonsterRace(y_ptr->r_idx).is_valid() || (y_ptr->hp < 0)) {
         return false;
     }
     if (monst_attack_monst(player_ptr, m_idx, g_ptr->m_idx)) {

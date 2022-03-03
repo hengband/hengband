@@ -29,7 +29,7 @@ bool object_is_bounty(PlayerType *player_ptr, ObjectType *o_ptr)
     }
 
     auto corpse_r_idx = i2enum<MonsterRaceId>(o_ptr->pval);
-    if (is_valid_monster_race(player_ptr->today_mon) && (streq(r_info[corpse_r_idx].name.c_str(), r_info[w_ptr->today_mon].name.c_str()))) {
+    if (MonsterRace(player_ptr->today_mon).is_valid() && (streq(r_info[corpse_r_idx].name.c_str(), r_info[w_ptr->today_mon].name.c_str()))) {
         return true;
     }
 

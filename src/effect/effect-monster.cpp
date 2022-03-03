@@ -732,12 +732,13 @@ bool affect_monster(
     exe_affect_monster_by_damage(player_ptr, em_ptr);
 
     update_phase_out_stat(player_ptr, em_ptr);
-    if (is_valid_monster_race(em_ptr->m_ptr->r_idx)) {
+    const auto monster_is_valid = MonsterRace(em_ptr->m_ptr->r_idx).is_valid();
+    if (monster_is_valid) {
         update_monster(player_ptr, em_ptr->g_ptr->m_idx, false);
     }
 
     lite_spot(player_ptr, em_ptr->y, em_ptr->x);
-    if ((player_ptr->monster_race_idx == em_ptr->m_ptr->r_idx) && (em_ptr->seen || !is_valid_monster_race(em_ptr->m_ptr->r_idx))) {
+    if ((player_ptr->monster_race_idx == em_ptr->m_ptr->r_idx) && (em_ptr->seen || !monster_is_valid)) {
         player_ptr->window_flags |= (PW_MONSTER);
     }
 

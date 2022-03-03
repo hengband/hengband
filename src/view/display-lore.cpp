@@ -536,7 +536,7 @@ static void display_monster_escort_contents(lore_type *lore_ptr)
 #endif
 
     for (int n = 0; n < A_MAX; n++) {
-        bool is_reinforced = is_valid_monster_race(lore_ptr->r_ptr->reinforce_id[n]);
+        bool is_reinforced = MonsterRace(lore_ptr->r_ptr->reinforce_id[n]).is_valid();
         is_reinforced &= lore_ptr->r_ptr->reinforce_dd[n] > 0;
         is_reinforced &= lore_ptr->r_ptr->reinforce_ds[n] > 0;
         if (!is_reinforced) {

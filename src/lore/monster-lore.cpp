@@ -146,7 +146,7 @@ void process_monster_lore(PlayerType *player_ptr, MonsterRaceId r_idx, monster_l
     lore_type tmp_lore;
     lore_type *lore_ptr = initialize_lore_type(&tmp_lore, r_idx, mode);
     for (int n = 0; n < A_MAX; n++) {
-        if (is_valid_monster_race(lore_ptr->r_ptr->reinforce_id[n])) {
+        if (MonsterRace(lore_ptr->r_ptr->reinforce_id[n]).is_valid()) {
             lore_ptr->reinforce = true;
         }
     }

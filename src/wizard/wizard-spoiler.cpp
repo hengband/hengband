@@ -56,7 +56,7 @@ static auto get_mon_evol_roots(void)
     std::set<MonsterRaceId> evol_parents;
     std::set<MonsterRaceId> evol_children;
     for (const auto &[r_idx, r_ref] : r_info) {
-        if (is_valid_monster_race(r_ref.next_r_idx)) {
+        if (MonsterRace(r_ref.next_r_idx).is_valid()) {
             evol_parents.emplace(r_ref.idx);
             evol_children.emplace(r_ref.next_r_idx);
         }
@@ -106,7 +106,7 @@ static SpoilerOutputResultType spoil_mon_evol(concptr fname)
         auto r_ptr = &r_info[r_idx];
         fprintf(spoiler_file, _("[%d]: %s (レベル%d, '%c')\n", "[%d]: %s (Level %d, '%c')\n"), enum2i(r_idx), r_ptr->name.c_str(), (int)r_ptr->level, r_ptr->d_char);
 
-        for (auto n = 1; is_valid_monster_race(r_ptr->next_r_idx); n++) {
+        for (auto n = 1; MonsterRace(r_ptr->next_r_idx).is_valid(); n++) {
             fprintf(spoiler_file, "%*s-(%d)-> ", n * 2, "", r_ptr->next_exp);
             fprintf(spoiler_file, "[%d]: ", enum2i(r_ptr->next_r_idx));
             r_ptr = &r_info[r_ptr->next_r_idx];

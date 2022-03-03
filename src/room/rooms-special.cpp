@@ -99,7 +99,7 @@ bool build_type15(PlayerType *player_ptr, dun_data_type *dd_ptr)
 
             y = yval + 2 * ddy_ddd[dir1];
             x = xval + 2 * ddx_ddd[dir1];
-            if (is_valid_monster_race(r_idx)) {
+            if (MonsterRace(r_idx).is_valid()) {
                 place_monster_aux(player_ptr, 0, y, x, r_idx, PM_ALLOW_SLEEP);
             }
 
@@ -161,7 +161,7 @@ bool build_type15(PlayerType *player_ptr, dun_data_type *dd_ptr)
         get_mon_num_prep(player_ptr, vault_aux_lite, nullptr);
 
         r_idx = get_mon_num(player_ptr, 0, floor_ptr->dun_level, 0);
-        if (is_valid_monster_race(r_idx)) {
+        if (MonsterRace(r_idx).is_valid()) {
             place_monster_aux(player_ptr, 0, yval, xval, r_idx, 0L);
         }
 
@@ -225,7 +225,7 @@ bool build_type15(PlayerType *player_ptr, dun_data_type *dd_ptr)
 
             y = yval + ddy_ddd[dir1];
             x = xval + ddx_ddd[dir1];
-            if (is_valid_monster_race(r_idx)) {
+            if (MonsterRace(r_idx).is_valid()) {
                 place_monster_aux(player_ptr, 0, y, x, r_idx, 0L);
             }
         }

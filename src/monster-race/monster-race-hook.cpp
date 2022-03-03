@@ -474,7 +474,7 @@ bool vault_aux_chapel_g(PlayerType *player_ptr, MonsterRaceId r_idx)
         return true;
     }
 
-    for (int i = 0; is_valid_monster_race(chapel_list[i]); i++) {
+    for (int i = 0; MonsterRace(chapel_list[i]).is_valid(); i++) {
         if (r_idx == chapel_list[i]) {
             return true;
         }
@@ -775,7 +775,7 @@ bool vault_aux_dark_elf(PlayerType *player_ptr, MonsterRaceId r_idx)
         return false;
     }
 
-    for (int i = 0; is_valid_monster_race(dark_elf_list[i]); i++) {
+    for (int i = 0; MonsterRace(dark_elf_list[i]).is_valid(); i++) {
         if (r_idx == dark_elf_list[i]) {
             return true;
         }

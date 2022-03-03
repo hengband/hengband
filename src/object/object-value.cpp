@@ -61,7 +61,7 @@ static PRICE object_value_base(const ObjectType *o_ptr)
     }
     case ItemKindType::CAPTURE: {
         auto capture_r_idx = i2enum<MonsterRaceId>(o_ptr->pval);
-        if (!is_valid_monster_race(capture_r_idx)) {
+        if (!MonsterRace(capture_r_idx).is_valid()) {
             return 1000;
         } else {
             return (r_info[capture_r_idx].level) * 50 + 1000;
@@ -337,7 +337,7 @@ PRICE object_value_real(const ObjectType *o_ptr)
     }
     case ItemKindType::CAPTURE: {
         auto capture_r_idx = i2enum<MonsterRaceId>(o_ptr->pval);
-        if (!is_valid_monster_race(capture_r_idx)) {
+        if (!MonsterRace(capture_r_idx).is_valid()) {
             value = 1000L;
         } else {
             value = ((r_info[capture_r_idx].level) * 50L + 1000);

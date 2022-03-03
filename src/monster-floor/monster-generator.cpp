@@ -90,7 +90,7 @@ bool mon_scatter(PlayerType *player_ptr, MonsterRaceId r_idx, POSITION *yp, POSI
             if (!projectable(player_ptr, y, x, ny, nx)) {
                 continue;
             }
-            if (r_idx != MonsterRaceId::PLAYER) {
+            if (MonsterRace(r_idx).is_valid()) {
                 auto *r_ptr = &r_info[r_idx];
                 if (!monster_can_enter(player_ptr, ny, nx, r_ptr, 0)) {
                     continue;
@@ -306,7 +306,7 @@ bool place_monster_aux(PlayerType *player_ptr, MONSTER_IDX who, POSITION y, POSI
 
     /* Reinforcement */
     for (int i = 0; i < 6; i++) {
-        if (r_ptr->reinforce_id[i] == MonsterRaceId::PLAYER) {
+        if (!MonsterRace(r_ptr->reinforce_id[i]).is_valid()) {
             break;
         }
         int n = damroll(r_ptr->reinforce_dd[i], r_ptr->reinforce_ds[i]);
@@ -345,7 +345,7 @@ bool place_monster_aux(PlayerType *player_ptr, MONSTER_IDX who, POSITION y, POSI
 
         get_mon_num_prep(player_ptr, place_monster_can_escort, get_monster_hook2(player_ptr, ny, nx));
         z = get_mon_num(player_ptr, 0, r_ptr->level, 0);
-        if (z == MonsterRaceId::PLAYER) {
+        if (!MonsterRace(z).is_valid()) {
             break;
         }
 
@@ -374,7 +374,7 @@ bool place_monster(PlayerType *player_ptr, POSITION y, POSITION x, BIT_FLAGS mod
         r_idx = get_mon_num(player_ptr, 0, player_ptr->current_floor_ptr->monster_level, 0);
     } while ((mode & PM_NO_QUEST) && (r_info[r_idx].flags8 & RF8_NO_QUEST));
 
-    if (r_idx == MonsterRaceId::PLAYER) {
+    if (!MonsterRace(r_idx).is_valid()) {
         return false;
     }
 
@@ -402,7 +402,7 @@ bool alloc_horde(PlayerType *player_ptr, POSITION y, POSITION x, summon_specific
     monster_race *r_ptr = nullptr;
     while (--attempts) {
         r_idx = get_mon_num(player_ptr, 0, floor_ptr->monster_level, 0);
-        if (r_idx == MonsterRaceId::PLAYER) {
+        if (!MonsterRace(r_idx).is_valid()) {
             return false;
         }
 
@@ -463,7 +463,7 @@ bool alloc_guardian(PlayerType *player_ptr, bool def_val)
 {
     MonsterRaceId guardian = d_info[player_ptr->dungeon_idx].final_guardian;
     auto *floor_ptr = player_ptr->current_floor_ptr;
-    bool is_guardian_applicable = guardian != MonsterRaceId::PLAYER;
+    bool is_guardian_applicable = MonsterRace(guardian).is_valid();
     is_guardian_applicable &= d_info[player_ptr->dungeon_idx].maxdepth == floor_ptr->dun_level;
     is_guardian_applicable &= r_info[guardian].cur_num < r_info[guardian].max_num;
     if (!is_guardian_applicable) {

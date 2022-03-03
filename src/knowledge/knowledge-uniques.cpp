@@ -146,7 +146,7 @@ void do_cmd_knowledge_uniques(PlayerType *player_ptr, bool is_alive)
     }
 
     for (auto &[r_idx, r_ref] : r_info) {
-        if (!is_valid_monster_race(r_ref.idx)) {
+        if (!MonsterRace(r_ref.idx).is_valid()) {
             continue;
         }
         if (!sweep_uniques(&r_ref, unique_list_ptr->is_alive)) {

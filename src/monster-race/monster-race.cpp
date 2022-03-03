@@ -4,6 +4,8 @@
 #include "monster-race/race-indice-types.h"
 #include "monster-race/race-resistance-mask.h"
 #include "system/monster-race-definition.h"
+#include <algorithm>
+#include <vector>
 
 /* The monster race arrays */
 std::map<MonsterRaceId, monster_race> r_info;
@@ -49,7 +51,18 @@ int calc_monrace_power(monster_race *r_ptr)
     return ret;
 }
 
-bool is_valid_monster_race(MonsterRaceId r_idx)
+MonsterRace::MonsterRace(MonsterRaceId r_idx)
+    : r_idx(r_idx)
 {
-    return r_idx != MonsterRaceId::PLAYER;
+}
+
+/*!
+ * @brief コンストラクタに渡された MonsterRaceId が正当なもの（実際に存在するモンスター種族IDである）かどうかを調べる
+ * @details モンスター種族IDが r_info に実在するもの(MonsterRaceId::PLAYERは除く)であるかどうかの用途の他、
+ * m_list 上の要素などの r_idx にMonsterRaceId::PLAYER を入れることで死亡扱いとして使われるのでその判定に使用する事もある
+ * @return 正当なものであれば true、そうでなければ false
+ */
+bool MonsterRace::is_valid() const
+{
+    return this->r_idx != MonsterRaceId::PLAYER;
 }

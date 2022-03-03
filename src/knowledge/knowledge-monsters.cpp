@@ -77,7 +77,7 @@ static IDX collect_monsters(PlayerType *player_ptr, IDX grp_cur, MonsterRaceId m
                 continue;
             }
         } else if (grp_wanted) {
-            auto wanted = (player_ptr->today_mon != MonsterRaceId::PLAYER) && (player_ptr->today_mon == r_ref.idx);
+            auto wanted = MonsterRace(player_ptr->today_mon).is_valid() && (player_ptr->today_mon == r_ref.idx);
             wanted |= is_bounty(r_ref.idx, false);
 
             if (!wanted) {
@@ -191,7 +191,7 @@ void do_cmd_knowledge_kill_count(PlayerType *player_ptr)
     std::vector<MonsterRaceId> who;
     total = 0;
     for (const auto &[r_idx, r_ref] : r_info) {
-        if (r_ref.idx != MonsterRaceId::PLAYER && !r_ref.name.empty()) {
+        if (MonsterRace(r_ref.idx).is_valid() && !r_ref.name.empty()) {
             who.push_back(r_ref.idx);
         }
     }
@@ -461,7 +461,7 @@ void do_cmd_knowledge_monsters(PlayerType *player_ptr, bool *need_redraw, bool v
 
         case 'R':
         case 'r': {
-            if (!visual_list && !visual_only && (mon_idx[mon_cur] != MonsterRaceId::PLAYER)) {
+            if (!visual_list && !visual_only && MonsterRace(mon_idx[mon_cur]).is_valid()) {
                 screen_roff(player_ptr, mon_idx[mon_cur], MONSTER_LORE_NORMAL);
 
                 (void)inkey();
@@ -494,7 +494,7 @@ void do_cmd_knowledge_bounty(PlayerType *player_ptr)
     }
 
     fprintf(fff, _("今日のターゲット : %s\n", "Today's target : %s\n"),
-        (player_ptr->today_mon != MonsterRaceId::PLAYER ? r_info[player_ptr->today_mon].name.c_str() : _("不明", "unknown")));
+        MonsterRace(player_ptr->today_mon).is_valid() ? r_info[player_ptr->today_mon].name.c_str() : _("不明", "unknown"));
     fprintf(fff, "\n");
     fprintf(fff, _("賞金首リスト\n", "List of wanted monsters\n"));
     fprintf(fff, "----------------------------------------------\n");

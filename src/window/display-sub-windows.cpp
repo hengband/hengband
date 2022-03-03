@@ -153,7 +153,7 @@ void print_monster_list(floor_type *floor_ptr, const std::vector<MONSTER_IDX> &m
         if (is_pet(m_ptr)) {
             continue;
         } // pet
-        if (!is_valid_monster_race(m_ptr->r_idx)) {
+        if (!MonsterRace(m_ptr->r_idx).is_valid()) {
             continue;
         } // dead?
 
@@ -502,7 +502,7 @@ void fix_monster(PlayerType *player_ptr)
         }
 
         term_activate(angband_term[j]);
-        if (is_valid_monster_race(player_ptr->monster_race_idx)) {
+        if (MonsterRace(player_ptr->monster_race_idx).is_valid()) {
             display_roff(player_ptr);
         }
 

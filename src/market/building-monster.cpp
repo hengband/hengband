@@ -88,7 +88,7 @@ bool research_mon(PlayerType *player_ptr)
     /* Collect matching monsters */
     for (const auto &[r_idx, r_ref] : r_info) {
         /* Empty monster */
-        if (!is_valid_monster_race(r_ref.idx) || r_ref.name.empty()) {
+        if (!MonsterRace(r_ref.idx).is_valid() || r_ref.name.empty()) {
             continue;
         }
 
