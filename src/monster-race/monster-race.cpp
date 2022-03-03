@@ -4,6 +4,7 @@
 #include "monster-race/race-indice-types.h"
 #include "monster-race/race-resistance-mask.h"
 #include "system/monster-race-definition.h"
+#include "util/probability-table.h"
 #include <algorithm>
 #include <vector>
 
@@ -54,6 +55,26 @@ int calc_monrace_power(monster_race *r_ptr)
 MonsterRace::MonsterRace(MonsterRaceId r_idx)
     : r_idx(r_idx)
 {
+}
+
+/*!
+ * @brief (MonsterRaceId::PLAYERを除く)実在するすべてのモンスター種族IDから等確率で1つ選択する
+ *
+ * @return 選択したモンスター種族ID
+ */
+MonsterRaceId MonsterRace::pick_one_at_random()
+{
+    static ProbabilityTable<MonsterRaceId> table;
+
+    if (table.empty()) {
+        for (const auto &[r_idx, r_ref] : r_info) {
+            if (MonsterRace(r_idx).is_valid()) {
+                table.entry_item(r_idx, 1);
+            }
+        }
+    }
+
+    return table.pick_one_at_random();
 }
 
 /*!

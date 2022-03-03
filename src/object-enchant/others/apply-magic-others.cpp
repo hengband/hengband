@@ -106,7 +106,7 @@ void OtherItemsEnchanter::generate_figurine()
     auto *floor_ptr = this->player_ptr->current_floor_ptr;
     MonsterRaceId r_idx;
     while (true) {
-        r_idx = i2enum<MonsterRaceId>(randint1(r_info.size() - 1));
+        r_idx = MonsterRace::pick_one_at_random();
         if (!item_monster_okay(this->player_ptr, r_idx) || (r_idx == MonsterRaceId::TSUCHINOKO)) {
             continue;
         }
@@ -171,7 +171,7 @@ void OtherItemsEnchanter::generate_statue()
     MonsterRaceId r_idx;
     const auto *r_ptr = &r_info[MonsterRaceId::PLAYER];
     while (true) {
-        r_idx = i2enum<MonsterRaceId>(randint1(r_info.size() - 1));
+        r_idx = MonsterRace::pick_one_at_random();
         r_ptr = &r_info[r_idx];
         if (r_ptr->rarity == 0) {
             continue;

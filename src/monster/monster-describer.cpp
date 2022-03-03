@@ -41,7 +41,7 @@ void monster_desc(PlayerType *player_ptr, char *desc, monster_type *m_ptr, BIT_F
             monster_race *hallu_race;
 
             do {
-                auto r_idx = i2enum<MonsterRaceId>(randint1(r_info.size() - 1));
+                auto r_idx = MonsterRace::pick_one_at_random();
                 hallu_race = &r_info[r_idx];
             } while (hallu_race->name.empty() || hallu_race->kind_flags.has(MonsterKindType::UNIQUE));
 

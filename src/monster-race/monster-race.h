@@ -12,6 +12,9 @@ int calc_monrace_power(monster_race *r_ptr);
 class MonsterRace {
 public:
     MonsterRace(MonsterRaceId r_idx);
+
+    static MonsterRaceId pick_one_at_random();
+
     bool is_valid() const;
 
 private:
