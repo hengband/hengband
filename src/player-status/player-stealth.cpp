@@ -29,7 +29,7 @@ PlayerStealth::PlayerStealth(PlayerType *player_ptr)
  * @details
  * * 種族による加算
  */
-int16_t PlayerStealth::race_value()
+int16_t PlayerStealth::race_bonus()
 {
     return PlayerRace(this->player_ptr).get_info()->r_stl;
 }
@@ -40,7 +40,7 @@ int16_t PlayerStealth::race_value()
  * @details
  * * 性格による加算
  */
-int16_t PlayerStealth::personality_value()
+int16_t PlayerStealth::personality_bonus()
 {
     const player_personality *a_ptr = &personality_info[this->player_ptr->ppersonality];
     return a_ptr->a_stl;
@@ -52,7 +52,7 @@ int16_t PlayerStealth::personality_value()
  * @details
  * * 職業による加算
  */
-int16_t PlayerStealth::class_base_value()
+int16_t PlayerStealth::class_base_bonus()
 {
     const player_class_info *c_ptr = &class_info[enum2i(this->player_ptr->pclass)];
     return c_ptr->c_stl + (c_ptr->x_stl * this->player_ptr->lev / 10);
@@ -65,19 +65,20 @@ int16_t PlayerStealth::class_base_value()
  * * 忍者がheavy_armorならば減算(-レベル/10)
  * * 忍者がheavy_armorでなく適正な武器を持っていれば加算(+レベル/10)
  */
-int16_t PlayerStealth::class_value()
+int16_t PlayerStealth::class_bonus()
 {
-    ACTION_SKILL_POWER result = 0;
-
-    if (PlayerClass(player_ptr).equals(PlayerClassType::NINJA)) {
-        if (heavy_armor(this->player_ptr)) {
-            result -= (this->player_ptr->lev) / 10;
-        } else if ((!this->player_ptr->inventory_list[INVEN_MAIN_HAND].k_idx || can_attack_with_main_hand(this->player_ptr)) && (!this->player_ptr->inventory_list[INVEN_SUB_HAND].k_idx || can_attack_with_sub_hand(this->player_ptr))) {
-            result += (this->player_ptr->lev) / 10;
-        }
+    if (!PlayerClass(this->player_ptr).equals(PlayerClassType::NINJA)) {
+        return 0;
     }
 
-    return result;
+    int16_t bonus = 0;
+    if (heavy_armor(this->player_ptr)) {
+        bonus -= (this->player_ptr->lev) / 10;
+    } else if ((!this->player_ptr->inventory_list[INVEN_MAIN_HAND].k_idx || can_attack_with_main_hand(this->player_ptr)) && (!this->player_ptr->inventory_list[INVEN_SUB_HAND].k_idx || can_attack_with_sub_hand(this->player_ptr))) {
+        bonus += (this->player_ptr->lev) / 10;
+    }
+
+    return bonus;
 }
 
 /*!
@@ -87,17 +88,19 @@ int16_t PlayerStealth::class_value()
  * * 変異MUT3_XTRA_NOISで減算(-3)
  * * 変異MUT3_MOTIONで加算(+1)
  */
-int16_t PlayerStealth::mutation_value()
+int16_t PlayerStealth::mutation_bonus()
 {
-    int16_t result = 0;
+    int16_t bonus = 0;
     const auto &muta = this->player_ptr->muta;
     if (muta.has(PlayerMutationType::XTRA_NOIS)) {
-        result -= 3;
+        bonus -= 3;
     }
+
     if (muta.has(PlayerMutationType::MOTION)) {
-        result += 1;
+        bonus += 1;
     }
-    return result;
+
+    return bonus;
 }
 
 /*!
@@ -108,25 +111,25 @@ int16_t PlayerStealth::mutation_value()
  * * 狂戦士化で減算(-7)
  * * 隠密の歌で加算(+999)
  */
-int16_t PlayerStealth::time_effect_value()
+int16_t PlayerStealth::time_effect_bonus()
 {
-    int16_t result = 0;
+    int16_t bonus = 0;
     if (this->player_ptr->realm1 == REALM_HEX) {
         SpellHex spell_hex(this->player_ptr);
         if (spell_hex.is_spelling_any()) {
-            result -= spell_hex.get_casting_num() + 1;
+            bonus -= spell_hex.get_casting_num() + 1;
         }
     }
 
     if (is_shero(this->player_ptr)) {
-        result -= 7;
+        bonus -= 7;
     }
 
     if (is_time_limit_stealth(this->player_ptr)) {
-        result += 999;
+        bonus += 999;
     }
 
-    return result;
+    return bonus;
 }
 
 bool PlayerStealth::is_aggravated_s_fairy()
@@ -140,11 +143,12 @@ bool PlayerStealth::is_aggravated_s_fairy()
  * @details
  * * セクシーギャルでない影フェアリーがTRC_AGGRAVATE持ちの時、別処理でTRC_AGGRAVATEを無効にする代わりに減算(-3か3未満なら(現在値+2)/2)
  */
-int16_t PlayerStealth::set_exception_value(int16_t value)
+int16_t PlayerStealth::set_exception_bonus(int16_t value)
 {
     if (this->is_aggravated_s_fairy()) {
         value = std::min<int16_t>(value - 3, (value + 2) / 2);
     }
+
     return value;
 }
 
@@ -156,13 +160,12 @@ int16_t PlayerStealth::set_exception_value(int16_t value)
  */
 BIT_FLAGS PlayerStealth::get_bad_flags()
 {
-    BIT_FLAGS result = PlayerStatusBase::get_bad_flags();
-
+    auto flags = PlayerStatusBase::get_bad_flags();
     if (this->is_aggravated_s_fairy()) {
-        set_bits(result, FLAG_CAUSE_RACE);
+        set_bits(flags, FLAG_CAUSE_RACE);
     }
 
-    return result;
+    return flags;
 }
 
 /*!

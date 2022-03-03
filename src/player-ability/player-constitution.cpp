@@ -32,9 +32,9 @@ void PlayerConstitution::set_locals()
  * @brief 耐久力補正計算 - 種族
  * @return 耐久力補正値
  */
-int16_t PlayerConstitution::race_value()
+int16_t PlayerConstitution::race_bonus()
 {
-    int16_t result = PlayerBasicStatistics::race_value();
+    int16_t result = PlayerBasicStatistics::race_bonus();
 
     result += PlayerRace(this->player_ptr).additional_constitution();
 
@@ -48,7 +48,7 @@ int16_t PlayerConstitution::race_value()
  * * 一時効果による耐久力修正値
  * * 呪術の肉体強化で加算(+4)
  */
-int16_t PlayerConstitution::time_effect_value()
+int16_t PlayerConstitution::time_effect_bonus()
 {
     int16_t result = 0;
 
@@ -72,7 +72,7 @@ int16_t PlayerConstitution::time_effect_value()
  * * 朱雀の構えで減算(-2)
  * * ネオ・つよしスペシャル中で加算(+4)
  */
-int16_t PlayerConstitution::stance_value()
+int16_t PlayerConstitution::stance_bonus()
 {
     int16_t result = 0;
 
@@ -105,7 +105,7 @@ int16_t PlayerConstitution::stance_value()
  * * 変異MUT3_XTRA_FATで加算(+2)
  * * 変異MUT3_FLESH_ROTで減算(-2)
  */
-int16_t PlayerConstitution::mutation_value()
+int16_t PlayerConstitution::mutation_bonus()
 {
     int16_t result = 0;
 

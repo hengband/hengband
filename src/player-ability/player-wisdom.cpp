@@ -35,7 +35,7 @@ void PlayerWisdom::set_locals()
  * * 玄武の構えで減算(-1)
  * * 朱雀の構えで加算(+1)
  */
-int16_t PlayerWisdom::stance_value()
+int16_t PlayerWisdom::stance_bonus()
 {
     int16_t result = 0;
 
@@ -61,7 +61,7 @@ int16_t PlayerWisdom::stance_value()
  * * 変異MUT3_HYPER_INTで加算(+4)
  * * 変異MUT3_MORONICで減算(-4)
  */
-int16_t PlayerWisdom::mutation_value()
+int16_t PlayerWisdom::mutation_bonus()
 {
     int16_t result = 0;
 
