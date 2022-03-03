@@ -22,10 +22,3 @@ protected:
     void update_index_status();
     virtual int16_t set_exception_use_status(int16_t value);
 };
-
-#include "player-ability/player-charisma.h"
-#include "player-ability/player-constitution.h"
-#include "player-ability/player-dexterity.h"
-#include "player-ability/player-intelligence.h"
-#include "player-ability/player-strength.h"
-#include "player-ability/player-wisdom.h"
