@@ -69,7 +69,7 @@ static process_result is_affective(PlayerType *player_ptr, effect_monster_type *
     if (em_ptr->who && (em_ptr->g_ptr->m_idx == em_ptr->who)) {
         return PROCESS_FALSE;
     }
-    if (sukekaku && ((em_ptr->m_ptr->r_idx == MON_SUKE) || (em_ptr->m_ptr->r_idx == MON_KAKU))) {
+    if (sukekaku && ((em_ptr->m_ptr->r_idx == MonsterRaceId::SUKE) || (em_ptr->m_ptr->r_idx == MonsterRaceId::KAKU))) {
         return PROCESS_FALSE;
     }
     if (em_ptr->m_ptr->hp < 0) {
@@ -732,12 +732,12 @@ bool affect_monster(
     exe_affect_monster_by_damage(player_ptr, em_ptr);
 
     update_phase_out_stat(player_ptr, em_ptr);
-    if (em_ptr->m_ptr->r_idx) {
+    if (is_valid_monster_race(em_ptr->m_ptr->r_idx)) {
         update_monster(player_ptr, em_ptr->g_ptr->m_idx, false);
     }
 
     lite_spot(player_ptr, em_ptr->y, em_ptr->x);
-    if ((player_ptr->monster_race_idx == em_ptr->m_ptr->r_idx) && (em_ptr->seen || !em_ptr->m_ptr->r_idx)) {
+    if ((player_ptr->monster_race_idx == em_ptr->m_ptr->r_idx) && (em_ptr->seen || !is_valid_monster_race(em_ptr->m_ptr->r_idx))) {
         player_ptr->window_flags |= (PW_MONSTER);
     }
 

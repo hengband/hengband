@@ -70,7 +70,7 @@ bool quest_type::is_fixed(QuestId quest_idx)
 void determine_random_questor(PlayerType *player_ptr, quest_type *q_ptr)
 {
     get_mon_num_prep(player_ptr, mon_hook_quest, nullptr);
-    MONRACE_IDX r_idx;
+    MonsterRaceId r_idx;
     while (true) {
         /*
          * Random monster 5 - 10 levels out of depth

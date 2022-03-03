@@ -67,7 +67,7 @@ process_result effect_monster_curse_4(effect_monster_type *em_ptr)
             em_ptr->m_name);
     }
 
-    if ((randint0(100 + (em_ptr->caster_lev / 2)) < (em_ptr->r_ptr->level + 35)) && ((em_ptr->who <= 0) || (em_ptr->m_caster_ptr->r_idx != MON_KENSHIROU))) {
+    if ((randint0(100 + (em_ptr->caster_lev / 2)) < (em_ptr->r_ptr->level + 35)) && ((em_ptr->who <= 0) || (em_ptr->m_caster_ptr->r_idx != MonsterRaceId::KENSHIROU))) {
         em_ptr->note = _("には効果がなかった。", " is unaffected.");
         em_ptr->dam = 0;
     }

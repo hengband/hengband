@@ -199,7 +199,7 @@ bool cast_summon_octopus(PlayerType *player_ptr)
     if (pet) {
         mode |= PM_FORCE_PET;
     }
-    if (summon_named_creature(player_ptr, 0, player_ptr->y, player_ptr->x, MON_JIZOTAKO, mode)) {
+    if (summon_named_creature(player_ptr, 0, player_ptr->y, player_ptr->x, MonsterRaceId::JIZOTAKO, mode)) {
         if (pet) {
             msg_print(_("蛸があなたの下僕として出現した。", "A group of octopuses appear as your servants."));
         } else {
@@ -226,7 +226,8 @@ bool cast_summon_greater_demon(PlayerType *player_ptr)
     }
 
     PLAYER_LEVEL plev = player_ptr->lev;
-    int summon_lev = plev * 2 / 3 + r_info[o_ptr->pval].level;
+    auto corpse_r_idx = i2enum<MonsterRaceId>(o_ptr->pval);
+    int summon_lev = plev * 2 / 3 + r_info[corpse_r_idx].level;
 
     if (summon_specific(player_ptr, -1, player_ptr->y, player_ptr->x, summon_lev, SUMMON_HI_DEMON, (PM_ALLOW_GROUP | PM_FORCE_PET))) {
         msg_print(_("硫黄の悪臭が充満した。", "The area fills with a stench of sulphur and brimstone."));
@@ -294,13 +295,13 @@ void mitokohmon(PlayerType *player_ptr)
 {
     int count = 0;
     concptr sukekakusan = "";
-    if (summon_named_creature(player_ptr, 0, player_ptr->y, player_ptr->x, MON_SUKE, PM_FORCE_PET)) {
+    if (summon_named_creature(player_ptr, 0, player_ptr->y, player_ptr->x, MonsterRaceId::SUKE, PM_FORCE_PET)) {
         msg_print(_("『助さん』が現れた。", "Suke-san apperars."));
         sukekakusan = "Suke-san";
         count++;
     }
 
-    if (summon_named_creature(player_ptr, 0, player_ptr->y, player_ptr->x, MON_KAKU, PM_FORCE_PET)) {
+    if (summon_named_creature(player_ptr, 0, player_ptr->y, player_ptr->x, MonsterRaceId::KAKU, PM_FORCE_PET)) {
         msg_print(_("『格さん』が現れた。", "Kaku-san appears."));
         sukekakusan = "Kaku-san";
         count++;
@@ -313,7 +314,7 @@ void mitokohmon(PlayerType *player_ptr)
             if (!monster_is_valid(m_ptr)) {
                 continue;
             }
-            if (!((m_ptr->r_idx == MON_SUKE) || (m_ptr->r_idx == MON_KAKU))) {
+            if (!((m_ptr->r_idx == MonsterRaceId::SUKE) || (m_ptr->r_idx == MonsterRaceId::KAKU))) {
                 continue;
             }
             if (!los(player_ptr, m_ptr->fy, m_ptr->fx, player_ptr->y, player_ptr->x)) {

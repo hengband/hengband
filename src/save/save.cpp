@@ -111,8 +111,8 @@ static bool wr_savefile_new(PlayerType *player_ptr, save_type type)
 
     uint16_t tmp16u = static_cast<uint16_t>(r_info.size());
     wr_u16b(tmp16u);
-    for (MONRACE_IDX r_idx = 0; r_idx < tmp16u; r_idx++) {
-        wr_lore(r_idx);
+    for (auto r_idx = 0; r_idx < tmp16u; r_idx++) {
+        wr_lore(i2enum<MonsterRaceId>(r_idx));
     }
 
     tmp16u = static_cast<uint16_t>(k_info.size());
@@ -147,7 +147,7 @@ static bool wr_savefile_new(PlayerType *player_ptr, save_type type)
         wr_s16b((int16_t)q_ptr->cur_num);
         wr_s16b((int16_t)q_ptr->max_num);
         wr_s16b(enum2i(q_ptr->type));
-        wr_s16b(q_ptr->r_idx);
+        wr_s16b(enum2i(q_ptr->r_idx));
         wr_s16b(q_ptr->k_idx);
         wr_byte((byte)q_ptr->flags);
         wr_byte((byte)q_ptr->dungeon);

@@ -327,5 +327,5 @@ TERM_COLOR object_attr(ObjectType *o_ptr)
                 ? (k_info[k_info[o_ptr->k_idx].flavor].x_attr)
                 : ((!o_ptr->k_idx || (o_ptr->tval != ItemKindType::CORPSE) || (o_ptr->sval != SV_CORPSE) || (k_info[o_ptr->k_idx].x_attr != TERM_DARK))
                           ? (k_info[o_ptr->k_idx].x_attr)
-                          : (r_info[o_ptr->pval].x_attr)));
+                          : (r_info[i2enum<MonsterRaceId>(o_ptr->pval)].x_attr)));
 }

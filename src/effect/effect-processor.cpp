@@ -651,9 +651,9 @@ ProjectResult project(PlayerType *player_ptr, const MONSTER_IDX who, POSITION ra
 
                     if (is_seen(player_ptr, m_ptr)) {
                         sound(SOUND_REFLECT);
-                        if ((m_ptr->r_idx == MON_KENSHIROU) || (m_ptr->r_idx == MON_RAOU)) {
+                        if ((m_ptr->r_idx == MonsterRaceId::KENSHIROU) || (m_ptr->r_idx == MonsterRaceId::RAOU)) {
                             msg_print(_("「北斗神拳奥義・二指真空把！」", "The attack bounces!"));
-                        } else if (m_ptr->r_idx == MON_DIO) {
+                        } else if (m_ptr->r_idx == MonsterRaceId::DIO) {
                             msg_print(_("ディオ・ブランドーは指一本で攻撃を弾き返した！", "The attack bounces!"));
                         } else {
                             msg_print(_("攻撃は跳ね返った！", "The attack bounces!"));

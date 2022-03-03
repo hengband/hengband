@@ -25,6 +25,7 @@
 #include "mind/mind-ninja.h"
 #include "monster-race/monster-race.h"
 #include "monster-race/race-flags1.h"
+#include "monster-race/race-indice-types.h"
 #include "monster/monster-compaction.h"
 #include "monster/monster-processor.h"
 #include "monster/monster-status.h"
@@ -139,7 +140,7 @@ void process_dungeon(PlayerType *player_ptr, bool load_game)
         quest_discovery(random_quest_number(player_ptr, floor_ptr->dun_level));
         floor_ptr->quest_number = random_quest_number(player_ptr, floor_ptr->dun_level);
     }
-    if ((floor_ptr->dun_level == d_info[player_ptr->dungeon_idx].maxdepth) && d_info[player_ptr->dungeon_idx].final_guardian) {
+    if ((floor_ptr->dun_level == d_info[player_ptr->dungeon_idx].maxdepth) && (d_info[player_ptr->dungeon_idx].final_guardian != MonsterRaceId::PLAYER)) {
         if (r_info[d_info[player_ptr->dungeon_idx].final_guardian].max_num)
 #ifdef JP
             msg_format("この階には%sの主である%sが棲んでいる。", d_info[player_ptr->dungeon_idx].name.c_str(),

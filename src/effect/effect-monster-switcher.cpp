@@ -299,7 +299,7 @@ process_result effect_monster_photo(PlayerType *player_ptr, effect_monster_type 
         em_ptr->dam = 0;
     }
 
-    em_ptr->photo = em_ptr->m_ptr->r_idx;
+    em_ptr->photo = enum2i(em_ptr->m_ptr->r_idx);
     return PROCESS_CONTINUE;
 }
 

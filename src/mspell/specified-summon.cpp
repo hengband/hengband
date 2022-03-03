@@ -50,7 +50,7 @@ MONSTER_NUMBER summon_EDGE(PlayerType *player_ptr, POSITION y, POSITION x, int r
     int count = 0;
     int num = 2 + randint1(1 + rlev / 20);
     for (int k = 0; k < num; k++) {
-        count += summon_named_creature(player_ptr, m_idx, y, x, MON_EDGE, PM_NONE);
+        count += summon_named_creature(player_ptr, m_idx, y, x, MonsterRaceId::EDGE, PM_NONE);
     }
 
     return count;
@@ -73,7 +73,7 @@ MONSTER_NUMBER summon_guardian(PlayerType *player_ptr, POSITION y, POSITION x, i
     bool mon_to_mon = (target_type == MONSTER_TO_MONSTER);
     bool mon_to_player = (target_type == MONSTER_TO_PLAYER);
 
-    if (r_info[MON_JORMUNGAND].cur_num < r_info[MON_JORMUNGAND].max_num && one_in_(6)) {
+    if (r_info[MonsterRaceId::JORMUNGAND].cur_num < r_info[MonsterRaceId::JORMUNGAND].max_num && one_in_(6)) {
         mspell_cast_msg_simple msg(_("地面から水が吹き出した！", "Water blew off from the ground!"),
             _("地面から水が吹き出した！", "Water blew off from the ground!"));
 
@@ -107,7 +107,7 @@ MONSTER_NUMBER summon_LOCKE_CLONE(PlayerType *player_ptr, POSITION y, POSITION x
     int count = 0;
     int num = randint1(3);
     for (int k = 0; k < num; k++) {
-        count += summon_named_creature(player_ptr, m_idx, y, x, MON_LOCKE_CLONE, PM_NONE);
+        count += summon_named_creature(player_ptr, m_idx, y, x, MonsterRaceId::LOCKE_CLONE, PM_NONE);
     }
 
     return count;
@@ -146,7 +146,7 @@ MONSTER_NUMBER summon_MOAI(PlayerType *player_ptr, POSITION y, POSITION x, int r
 
 MONSTER_NUMBER summon_DEMON_SLAYER(PlayerType *player_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx)
 {
-    auto *r_ptr = &r_info[MON_DEMON_SLAYER_MEMBER];
+    auto *r_ptr = &r_info[MonsterRaceId::DEMON_SLAYER_MEMBER];
     if (r_ptr->max_num == 0) {
         msg_print(_("しかし、隊士は全滅していた…。", "However, all demon slayer members were murdered..."));
         return 0;
@@ -154,7 +154,7 @@ MONSTER_NUMBER summon_DEMON_SLAYER(PlayerType *player_ptr, POSITION y, POSITION 
 
     auto count = 0;
     for (auto k = 0; k < MAX_NAZGUL_NUM; k++) {
-        count += summon_named_creature(player_ptr, m_idx, y, x, MON_DEMON_SLAYER_MEMBER, PM_NONE);
+        count += summon_named_creature(player_ptr, m_idx, y, x, MonsterRaceId::DEMON_SLAYER_MEMBER, PM_NONE);
     }
 
     if (count == 0) {
@@ -208,7 +208,7 @@ MONSTER_NUMBER summon_NAZGUL(PlayerType *player_ptr, POSITION y, POSITION x, MON
             continue;
         }
 
-        if (!summon_named_creature(player_ptr, m_idx, cy, cx, MON_NAZGUL, mode)) {
+        if (!summon_named_creature(player_ptr, m_idx, cy, cx, MonsterRaceId::NAZGUL, mode)) {
             continue;
         }
 
@@ -268,7 +268,7 @@ MONSTER_NUMBER summon_EYE_PHORN(PlayerType *player_ptr, POSITION y, POSITION x, 
     int count = 0;
     int num = 2 + randint1(1 + rlev / 20);
     for (int k = 0; k < num; k++) {
-        count += summon_named_creature(player_ptr, m_idx, y, x, MON_EYE_PHORN, PM_NONE);
+        count += summon_named_creature(player_ptr, m_idx, y, x, MonsterRaceId::EYE_PHORN, PM_NONE);
     }
 
     return count;
@@ -306,13 +306,13 @@ MONSTER_NUMBER summon_THUNDERS(PlayerType *player_ptr, POSITION y, POSITION x, i
  */
 MONSTER_NUMBER summon_YENDER_WIZARD(PlayerType *player_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx)
 {
-    auto *r_ptr = &r_info[MON_YENDOR_WIZARD_2];
+    auto *r_ptr = &r_info[MonsterRaceId::YENDOR_WIZARD_2];
     if (r_ptr->max_num == 0) {
         msg_print(_("しかし、誰も来なかった…。", "However, no kin was appeared..."));
         return 0;
     }
 
-    auto count = (MONSTER_NUMBER)summon_named_creature(player_ptr, m_idx, y, x, MON_YENDOR_WIZARD_2, PM_NONE);
+    auto count = (MONSTER_NUMBER)summon_named_creature(player_ptr, m_idx, y, x, MonsterRaceId::YENDOR_WIZARD_2, PM_NONE);
     if (count == 0) {
         msg_print(_("どこからか声が聞こえる…「三重苦は負わぬ。。。」", "Heard a voice from somewhere... 'I will deny the triple suffering...'"));
         return 0;
@@ -327,7 +327,7 @@ MONSTER_NUMBER summon_PLASMA(PlayerType *player_ptr, POSITION y, POSITION x, int
     auto count = 0;
     auto num = 2 + randint1(1 + rlev / 20);
     for (auto k = 0; k < num; k++) {
-        count += summon_named_creature(player_ptr, m_idx, y, x, MON_PLASMA_VORTEX, PM_NONE);
+        count += summon_named_creature(player_ptr, m_idx, y, x, MonsterRaceId::PLASMA_VORTEX, PM_NONE);
     }
 
     msg_print(_("プーラーズーマーッ！！", "P--la--s--ma--!!"));

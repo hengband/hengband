@@ -121,7 +121,8 @@ bool raise_possible(PlayerType *player_ptr, monster_type *m_ptr)
             for (const auto this_o_idx : g_ptr->o_idx_list) {
                 auto *o_ptr = &floor_ptr->o_list[this_o_idx];
                 if (o_ptr->tval == ItemKindType::CORPSE) {
-                    if (!monster_has_hostile_align(player_ptr, m_ptr, 0, 0, &r_info[o_ptr->pval])) {
+                    auto corpse_r_idx = i2enum<MonsterRaceId>(o_ptr->pval);
+                    if (!monster_has_hostile_align(player_ptr, m_ptr, 0, 0, &r_info[corpse_r_idx])) {
                         return true;
                     }
                 }

@@ -366,9 +366,9 @@ MonsterAbilityType choose_attack_spell(PlayerType *player_ptr, msa_type *msa_ptr
     if (!special.empty()) {
         bool success = false;
         switch (m_ptr->r_idx) {
-        case MON_BANOR:
-        case MON_LUPART:
-            if ((m_ptr->hp < m_ptr->maxhp / 2) && r_info[MON_BANOR].max_num && r_info[MON_LUPART].max_num) {
+        case MonsterRaceId::BANOR:
+        case MonsterRaceId::LUPART:
+            if ((m_ptr->hp < m_ptr->maxhp / 2) && r_info[MonsterRaceId::BANOR].max_num && r_info[MonsterRaceId::LUPART].max_num) {
                 success = true;
             }
             break;
@@ -396,16 +396,16 @@ MonsterAbilityType choose_attack_spell(PlayerType *player_ptr, msa_type *msa_ptr
     if (!special.empty()) {
         bool success = false;
         switch (m_ptr->r_idx) {
-        case MON_OHMU:
-        case MON_BANOR:
-        case MON_LUPART:
+        case MonsterRaceId::OHMU:
+        case MonsterRaceId::BANOR:
+        case MonsterRaceId::LUPART:
             break;
-        case MON_BANORLUPART:
+        case MonsterRaceId::BANORLUPART:
             if (randint0(100) < 70) {
                 success = true;
             }
             break;
-        case MON_ROLENTO:
+        case MonsterRaceId::ROLENTO:
             if (randint0(100) < 40) {
                 success = true;
             }

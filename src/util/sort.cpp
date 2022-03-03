@@ -433,11 +433,11 @@ bool ang_sort_comp_hook(PlayerType *player_ptr, vptr u, vptr v, int a, int b)
     /* Unused */
     (void)player_ptr;
 
-    uint16_t *who = (uint16_t *)(u);
+    MonsterRaceId *who = (MonsterRaceId *)(u);
     uint16_t *why = (uint16_t *)(v);
 
-    int w1 = who[a];
-    int w2 = who[b];
+    auto w1 = who[a];
+    auto w2 = who[b];
 
     int z1, z2;
 
@@ -539,10 +539,10 @@ bool ang_sort_comp_monster_level(PlayerType *player_ptr, vptr u, vptr v, int a, 
     (void)player_ptr;
     (void)v;
 
-    uint16_t *who = (uint16_t *)(u);
+    MonsterRaceId *who = (MonsterRaceId *)(u);
 
-    int w1 = who[a];
-    int w2 = who[b];
+    auto w1 = who[a];
+    auto w2 = who[b];
 
     monster_race *r_ptr1 = &r_info[w1];
     monster_race *r_ptr2 = &r_info[w2];

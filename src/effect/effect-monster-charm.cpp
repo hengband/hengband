@@ -412,7 +412,7 @@ static int calcutate_capturable_hp(PlayerType *player_ptr, monster_type *m_ptr, 
 static void effect_monster_captured(PlayerType *player_ptr, effect_monster_type *em_ptr, std::optional<CapturedMonsterType *> tmp_cap_mon_ptr)
 {
     if (em_ptr->m_ptr->mflag2.has(MonsterConstantFlagType::CHAMELEON)) {
-        choose_new_monster(player_ptr, em_ptr->g_ptr->m_idx, false, MON_CHAMELEON);
+        choose_new_monster(player_ptr, em_ptr->g_ptr->m_idx, false, MonsterRaceId::CHAMELEON);
     }
 
     msg_format(_("%sを捕えた！", "You capture %^s!"), em_ptr->m_name);

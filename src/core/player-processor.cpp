@@ -29,6 +29,7 @@
 #include "monster-race/monster-race-hook.h"
 #include "monster-race/monster-race.h"
 #include "monster-race/race-flags1.h"
+#include "monster-race/race-indice-types.h"
 #include "monster/monster-describer.h"
 #include "monster/monster-flag-types.h"
 #include "monster/monster-list.h"
@@ -74,7 +75,7 @@ static void process_fishing(PlayerType *player_ptr)
 {
     term_xtra(TERM_XTRA_DELAY, 10);
     if (one_in_(1000)) {
-        MONRACE_IDX r_idx;
+        MonsterRaceId r_idx;
         bool success = false;
         get_mon_num_prep(player_ptr, monster_is_fishing_target, nullptr);
         r_idx = get_mon_num(player_ptr, 0,
@@ -82,7 +83,7 @@ static void process_fishing(PlayerType *player_ptr)
                                       : wilderness[player_ptr->wilderness_y][player_ptr->wilderness_x].level,
             0);
         msg_print(nullptr);
-        if (r_idx && one_in_(2)) {
+        if ((r_idx != MonsterRaceId::PLAYER) && one_in_(2)) {
             POSITION y, x;
             y = player_ptr->y + ddy[player_ptr->fishing_dir];
             x = player_ptr->x + ddx[player_ptr->fishing_dir];

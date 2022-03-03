@@ -56,7 +56,7 @@ static MonsterSpellResult spell_RF6_SPECIAL_BANORLUPART(PlayerType *player_ptr, 
     }
 
     switch (m_ptr->r_idx) {
-    case MON_BANORLUPART:
+    case MonsterRaceId::BANORLUPART:
         dummy_hp = (m_ptr->hp + 1) / 2;
         dummy_maxhp = m_ptr->maxhp / 2;
 
@@ -65,27 +65,27 @@ static MonsterSpellResult spell_RF6_SPECIAL_BANORLUPART(PlayerType *player_ptr, 
         }
 
         delete_monster_idx(player_ptr, floor_ptr->grid_array[m_ptr->fy][m_ptr->fx].m_idx);
-        summon_named_creature(player_ptr, 0, dummy_y, dummy_x, MON_BANOR, mode);
+        summon_named_creature(player_ptr, 0, dummy_y, dummy_x, MonsterRaceId::BANOR, mode);
         floor_ptr->m_list[hack_m_idx_ii].hp = dummy_hp;
         floor_ptr->m_list[hack_m_idx_ii].maxhp = dummy_maxhp;
-        summon_named_creature(player_ptr, 0, dummy_y, dummy_x, MON_LUPART, mode);
+        summon_named_creature(player_ptr, 0, dummy_y, dummy_x, MonsterRaceId::LUPART, mode);
         floor_ptr->m_list[hack_m_idx_ii].hp = dummy_hp;
         floor_ptr->m_list[hack_m_idx_ii].maxhp = dummy_maxhp;
 
         msg_print(_("『バーノール・ルパート』が分裂した！", "Banor=Rupart splits into two persons!"));
         break;
 
-    case MON_BANOR:
-    case MON_LUPART:
+    case MonsterRaceId::BANOR:
+    case MonsterRaceId::LUPART:
         dummy_hp = 0;
         dummy_maxhp = 0;
 
-        if (!r_info[MON_BANOR].cur_num || !r_info[MON_LUPART].cur_num) {
+        if (!r_info[MonsterRaceId::BANOR].cur_num || !r_info[MonsterRaceId::LUPART].cur_num) {
             return MonsterSpellResult::make_invalid();
         }
 
         for (MONSTER_IDX k = 1; k < floor_ptr->m_max; k++) {
-            if (floor_ptr->m_list[k].r_idx == MON_BANOR || floor_ptr->m_list[k].r_idx == MON_LUPART) {
+            if (floor_ptr->m_list[k].r_idx == MonsterRaceId::BANOR || floor_ptr->m_list[k].r_idx == MonsterRaceId::LUPART) {
                 dummy_hp += floor_ptr->m_list[k].hp;
                 dummy_maxhp += floor_ptr->m_list[k].maxhp;
                 if (floor_ptr->m_list[k].r_idx != m_ptr->r_idx) {
@@ -95,11 +95,14 @@ static MonsterSpellResult spell_RF6_SPECIAL_BANORLUPART(PlayerType *player_ptr, 
                 delete_monster_idx(player_ptr, k);
             }
         }
-        summon_named_creature(player_ptr, 0, dummy_y, dummy_x, MON_BANORLUPART, mode);
+        summon_named_creature(player_ptr, 0, dummy_y, dummy_x, MonsterRaceId::BANORLUPART, mode);
         floor_ptr->m_list[hack_m_idx_ii].hp = dummy_hp;
         floor_ptr->m_list[hack_m_idx_ii].maxhp = dummy_maxhp;
 
         msg_print(_("『バーノール』と『ルパート』が合体した！", "Banor and Rupart combine into one!"));
+        break;
+
+    default:
         break;
     }
 
@@ -135,7 +138,7 @@ static MonsterSpellResult spell_RF6_SPECIAL_ROLENTO(PlayerType *player_ptr, POSI
     }
 
     for (k = 0; k < num; k++) {
-        count += summon_named_creature(player_ptr, m_idx, y, x, MON_GRENADE, mode);
+        count += summon_named_creature(player_ptr, m_idx, y, x, MonsterRaceId::GRENADE, mode);
     }
     if (player_ptr->blind && count) {
         msg_print(_("多くのものが間近にばらまかれる音がする。", "You hear many things scattered nearby."));
@@ -247,15 +250,15 @@ MonsterSpellResult spell_RF6_SPECIAL(PlayerType *player_ptr, POSITION y, POSITIO
     auto *r_ptr = &r_info[m_ptr->r_idx];
 
     switch (m_ptr->r_idx) {
-    case MON_OHMU:
+    case MonsterRaceId::OHMU:
         return MonsterSpellResult::make_invalid();
 
-    case MON_BANORLUPART:
-    case MON_BANOR:
-    case MON_LUPART:
+    case MonsterRaceId::BANORLUPART:
+    case MonsterRaceId::BANOR:
+    case MonsterRaceId::LUPART:
         return spell_RF6_SPECIAL_BANORLUPART(player_ptr, m_idx);
 
-    case MON_ROLENTO:
+    case MonsterRaceId::ROLENTO:
         return spell_RF6_SPECIAL_ROLENTO(player_ptr, y, x, m_idx, t_idx, target_type);
         break;
 

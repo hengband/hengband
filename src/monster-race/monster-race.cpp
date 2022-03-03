@@ -1,11 +1,12 @@
 ﻿#include "monster-race/monster-race.h"
 #include "monster-race/race-flags-resistance.h"
 #include "monster-race/race-flags1.h"
+#include "monster-race/race-indice-types.h"
 #include "monster-race/race-resistance-mask.h"
 #include "system/monster-race-definition.h"
 
 /* The monster race arrays */
-std::vector<monster_race> r_info;
+std::map<MonsterRaceId, monster_race> r_info;
 
 int calc_monrace_power(monster_race *r_ptr)
 {
@@ -46,4 +47,9 @@ int calc_monrace_power(monster_race *r_ptr)
         ret = ret * r_ptr->arena_ratio / 100;
     }
     return ret;
+}
+
+bool is_valid_monster_race(MonsterRaceId r_idx)
+{
+    return r_idx != MonsterRaceId::PLAYER;
 }

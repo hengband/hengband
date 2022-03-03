@@ -19,23 +19,23 @@
  * Used to allocate proper treasure when "Creeping coins" die
  * Note the use of actual "monster names"
  */
-static OBJECT_SUBTYPE_VALUE get_coin_type(MONRACE_IDX r_idx)
+static OBJECT_SUBTYPE_VALUE get_coin_type(MonsterRaceId r_idx)
 {
     switch (r_idx) {
-    case MON_COPPER_COINS:
+    case MonsterRaceId::COPPER_COINS:
         return 2;
-    case MON_SILVER_COINS:
+    case MonsterRaceId::SILVER_COINS:
         return 5;
-    case MON_GOLD_COINS:
+    case MonsterRaceId::GOLD_COINS:
         return 10;
-    case MON_MITHRIL_COINS:
-    case MON_MITHRIL_GOLEM:
+    case MonsterRaceId::MITHRIL_COINS:
+    case MonsterRaceId::MITHRIL_GOLEM:
         return 16;
-    case MON_ADAMANT_COINS:
+    case MonsterRaceId::ADAMANT_COINS:
         return 17;
+    default:
+        return 0;
     }
-
-    return MON_PLAYER;
 }
 
 monster_death_type *initialize_monster_death_type(PlayerType *player_ptr, monster_death_type *md_ptr, MONSTER_IDX m_idx, bool drop_item)

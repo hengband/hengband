@@ -210,17 +210,17 @@ void MonsterDamageProcessor::death_special_flag_monster()
         return;
     }
 
-    this->death_unique_monster((monster_race_type)r_idx);
+    this->death_unique_monster((MonsterRaceId)r_idx);
 }
 
 /*
  * @brief ユニークの死亡処理
  * @param r_idx 死亡したユニークの種族番号
  */
-void MonsterDamageProcessor::death_unique_monster(monster_race_type r_idx)
+void MonsterDamageProcessor::death_unique_monster(MonsterRaceId r_idx)
 {
     r_info[r_idx].max_num = 0;
-    std::vector<monster_race_type> combined_unique_vec;
+    std::vector<MonsterRaceId> combined_unique_vec;
     if (!check_combined_unique(r_idx, &combined_unique_vec)) {
         return;
     }
@@ -241,11 +241,11 @@ void MonsterDamageProcessor::death_unique_monster(monster_race_type r_idx)
  * @param united_uniques 分裂/合体を行う特殊ユニーク
  * @details 合体後、合体前1、合体前2 の順にpush_backすること
  */
-bool MonsterDamageProcessor::check_combined_unique(const monster_race_type r_idx, std::vector<monster_race_type> *combined_unique_vec)
+bool MonsterDamageProcessor::check_combined_unique(const MonsterRaceId r_idx, std::vector<MonsterRaceId> *combined_unique_vec)
 {
-    combined_unique_vec->push_back(MON_BANORLUPART);
-    combined_unique_vec->push_back(MON_BANOR);
-    combined_unique_vec->push_back(MON_LUPART);
+    combined_unique_vec->push_back(MonsterRaceId::BANORLUPART);
+    combined_unique_vec->push_back(MonsterRaceId::BANOR);
+    combined_unique_vec->push_back(MonsterRaceId::LUPART);
 
     for (const auto &unique : *combined_unique_vec) {
         if (r_idx == unique) {
@@ -261,12 +261,12 @@ bool MonsterDamageProcessor::check_combined_unique(const monster_race_type r_idx
  * @param m_ptr ダメージを与えたモンスターの構造体参照ポインタ
  * @uniques 分裂/合体を行う特殊ユニークのリスト
  */
-void MonsterDamageProcessor::death_combined_uniques(const monster_race_type r_idx, combined_uniques *combined_uniques)
+void MonsterDamageProcessor::death_combined_uniques(const MonsterRaceId r_idx, combined_uniques *combined_uniques)
 {
     for (const auto &unique : *combined_uniques) {
-        auto united = (monster_race_type)0;
-        auto split1 = (monster_race_type)0;
-        auto split2 = (monster_race_type)0;
+        auto united = (MonsterRaceId)0;
+        auto split1 = (MonsterRaceId)0;
+        auto split2 = (MonsterRaceId)0;
         std::tie(united, split1, split2) = unique;
         if ((r_idx == split1) || (r_idx == split2)) {
             r_info[united].max_num = 0;
@@ -308,14 +308,14 @@ void MonsterDamageProcessor::increase_kill_numbers()
         return;
     }
 
-    if (m_ptr->mflag2.has(MonsterConstantFlagType::KAGE) && (r_info[MON_KAGE].r_pkills < MAX_SHORT)) {
-        r_info[MON_KAGE].r_pkills++;
+    if (m_ptr->mflag2.has(MonsterConstantFlagType::KAGE) && (r_info[MonsterRaceId::KAGE].r_pkills < MAX_SHORT)) {
+        r_info[MonsterRaceId::KAGE].r_pkills++;
     } else if (r_ptr->r_pkills < MAX_SHORT) {
         r_ptr->r_pkills++;
     }
 
-    if (m_ptr->mflag2.has(MonsterConstantFlagType::KAGE) && (r_info[MON_KAGE].r_tkills < MAX_SHORT)) {
-        r_info[MON_KAGE].r_tkills++;
+    if (m_ptr->mflag2.has(MonsterConstantFlagType::KAGE) && (r_info[MonsterRaceId::KAGE].r_tkills < MAX_SHORT)) {
+        r_info[MonsterRaceId::KAGE].r_tkills++;
     } else if (r_ptr->r_tkills < MAX_SHORT) {
         r_ptr->r_tkills++;
     }
@@ -350,12 +350,12 @@ void MonsterDamageProcessor::dying_scream(GAME_TEXT *m_name)
     }
 
     char line_got[1024];
-    if (!get_rnd_line(_("mondeath_j.txt", "mondeath.txt"), m_ptr->r_idx, line_got)) {
+    if (!get_rnd_line(_("mondeath_j.txt", "mondeath.txt"), enum2i(m_ptr->r_idx), line_got)) {
         msg_format("%^s %s", m_name, line_got);
     }
 
 #ifdef WORLD_SCORE
-    if (m_ptr->r_idx == MON_SERPENT) {
+    if (m_ptr->r_idx == MonsterRaceId::SERPENT) {
         screen_dump = make_screen_dump(this->player_ptr);
     }
 #endif
@@ -462,7 +462,7 @@ void MonsterDamageProcessor::get_exp_from_mon(monster_type *m_ptr, int exp_dam)
     s64b_div(&new_exp, &new_exp_frac, div_h, div_l);
 
     /* Special penalty for mutiply-monster */
-    if (any_bits(r_ptr->flags2, RF2_MULTIPLY) || (m_ptr->r_idx == MON_DAWN)) {
+    if (any_bits(r_ptr->flags2, RF2_MULTIPLY) || (m_ptr->r_idx == MonsterRaceId::DAWN)) {
         int monnum_penarty = r_ptr->r_akills / 400;
         if (monnum_penarty > 8) {
             monnum_penarty = 8;
@@ -510,8 +510,8 @@ void MonsterDamageProcessor::set_redraw()
 void MonsterDamageProcessor::summon_special_unique()
 {
     auto *m_ptr = &this->player_ptr->current_floor_ptr->m_list[this->m_idx];
-    bool is_special_summon = m_ptr->r_idx == MON_IKETA;
-    is_special_summon |= m_ptr->r_idx == MON_DOPPIO;
+    bool is_special_summon = m_ptr->r_idx == MonsterRaceId::IKETA;
+    is_special_summon |= m_ptr->r_idx == MonsterRaceId::DOPPIO;
     if (!is_special_summon || this->player_ptr->current_floor_ptr->inside_arena || this->player_ptr->phase_out) {
         delete_monster_idx(this->player_ptr, this->m_idx);
         return;
@@ -524,19 +524,19 @@ void MonsterDamageProcessor::summon_special_unique()
         mode |= PM_FORCE_PET;
     }
 
-    MONRACE_IDX new_unique_idx;
+    MonsterRaceId new_unique_idx;
     concptr mes;
     switch (m_ptr->r_idx) {
-    case MON_IKETA:
-        new_unique_idx = MON_BIKETAL;
+    case MonsterRaceId::IKETA:
+        new_unique_idx = MonsterRaceId::BIKETAL;
         mes = _("「ハァッハッハッハ！！私がバイケタルだ！！」", "Uwa-hahaha!  *I* am Biketal!");
         break;
-    case MON_DOPPIO:
-        new_unique_idx = MON_DIAVOLO;
+    case MonsterRaceId::DOPPIO:
+        new_unique_idx = MonsterRaceId::DIAVOLO;
         mes = _("「これは『試練』だ　過去に打ち勝てという『試練』とオレは受けとった」", "This is a 'trial'. I took it as a 'trial' to overcome in the past.");
         break;
     default: // バグでなければ入らない.
-        new_unique_idx = 0;
+        new_unique_idx = MonsterRaceId::PLAYER;
         mes = "";
         break;
     }

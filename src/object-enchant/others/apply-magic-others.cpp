@@ -104,10 +104,10 @@ void OtherItemsEnchanter::enchant_wand_staff()
 void OtherItemsEnchanter::generate_figurine()
 {
     auto *floor_ptr = this->player_ptr->current_floor_ptr;
-    short r_idx;
+    MonsterRaceId r_idx;
     while (true) {
-        r_idx = randint1(r_info.size() - 1);
-        if (!item_monster_okay(this->player_ptr, r_idx) || (r_idx == MON_TSUCHINOKO)) {
+        r_idx = i2enum<MonsterRaceId>(randint1(r_info.size() - 1));
+        if (!item_monster_okay(this->player_ptr, r_idx) || (r_idx == MonsterRaceId::TSUCHINOKO)) {
             continue;
         }
 
@@ -120,7 +120,7 @@ void OtherItemsEnchanter::generate_figurine()
         break;
     }
 
-    this->o_ptr->pval = r_idx;
+    this->o_ptr->pval = enum2i(r_idx);
     if (one_in_(6)) {
         this->o_ptr->curse_flags.set(CurseTraitType::CURSED);
     }
@@ -145,7 +145,7 @@ void OtherItemsEnchanter::generate_corpse()
 
     get_mon_num_prep(this->player_ptr, item_monster_okay, nullptr);
     auto *floor_ptr = this->player_ptr->current_floor_ptr;
-    short r_idx;
+    MonsterRaceId r_idx;
     while (true) {
         r_idx = get_mon_num(this->player_ptr, 0, floor_ptr->dun_level, 0);
         auto &r_ref = r_info[r_idx];
@@ -157,7 +157,7 @@ void OtherItemsEnchanter::generate_corpse()
         break;
     }
 
-    this->o_ptr->pval = r_idx;
+    this->o_ptr->pval = enum2i(r_idx);
     object_aware(this->player_ptr, this->o_ptr);
     object_known(this->o_ptr);
 }
@@ -168,10 +168,10 @@ void OtherItemsEnchanter::generate_corpse()
  */
 void OtherItemsEnchanter::generate_statue()
 {
-    short r_idx;
-    const auto *r_ptr = &r_info[1];
+    MonsterRaceId r_idx;
+    const auto *r_ptr = &r_info[MonsterRaceId::PLAYER];
     while (true) {
-        r_idx = randint1(r_info.size() - 1);
+        r_idx = i2enum<MonsterRaceId>(randint1(r_info.size() - 1));
         r_ptr = &r_info[r_idx];
         if (r_ptr->rarity == 0) {
             continue;
@@ -180,7 +180,7 @@ void OtherItemsEnchanter::generate_statue()
         break;
     }
 
-    this->o_ptr->pval = r_idx;
+    this->o_ptr->pval = enum2i(r_idx);
     if (cheat_peek) {
         msg_format(_("%sの像", "Statue of %s"), r_ptr->name.c_str());
     }

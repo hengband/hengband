@@ -27,7 +27,7 @@ struct world_type {
     MONSTER_IDX timewalk_m_idx{}; /*!< 現在時間停止を行っているモンスターのID */
 
     bounty_type bounties[MAX_BOUNTY]{};
-    MONSTER_IDX today_mon{}; //!< 実際の日替わり賞金首
+    MonsterRaceId today_mon{}; //!< 実際の日替わり賞金首
 
     uint32_t play_time{}; /*!< 実プレイ時間 */
 

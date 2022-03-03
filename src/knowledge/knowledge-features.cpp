@@ -375,7 +375,7 @@ void do_cmd_knowledge_dungeon(PlayerType *player_ptr)
         if (!max_dlv[d_ref.idx]) {
             continue;
         }
-        if (d_ref.final_guardian) {
+        if (is_valid_monster_race(d_ref.final_guardian)) {
             if (!r_info[d_ref.final_guardian].max_num) {
                 seiha = true;
             }

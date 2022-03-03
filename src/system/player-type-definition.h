@@ -19,6 +19,7 @@ enum class ItemKindType : short;
 enum class PlayerSkillKindType;
 enum class MimicKindType;
 enum class MonsterAbilityType;
+enum class MonsterRaceId;
 
 struct floor_type;
 class ObjectType;
@@ -219,7 +220,7 @@ public:
     int16_t pet_follow_distance{}; /* Length of the imaginary "leash" for pets */
     BIT_FLAGS16 pet_extra_flags{}; /* Various flags for controling pets */
 
-    MONSTER_IDX today_mon{}; //!< 日替わり賞金首を知っていればそのモンスターID、知らなければ 0
+    MonsterRaceId today_mon{}; //!< 日替わり賞金首を知っていればそのモンスターID、知らなければ MonsterRaceId::PLAYER
 
     bool dtrap{}; /* Whether you are on trap-safe grids */
     FLOOR_IDX floor_id{}; /* Current floor location */
@@ -251,7 +252,7 @@ public:
 
     IDX health_who{}; /* Health bar trackee */
 
-    MONRACE_IDX monster_race_idx{}; /* Monster race trackee */
+    MonsterRaceId monster_race_idx{}; /* Monster race trackee */
 
     KIND_OBJECT_IDX object_kind_idx{}; /* Object kind trackee */
 

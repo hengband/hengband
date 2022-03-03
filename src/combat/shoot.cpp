@@ -347,7 +347,7 @@ static MULTIPLY calc_shot_damage_with_slay(
             if (mult < 30) {
                 mult = 30;
             }
-            if ((arrow_ptr->fixed_artifact_idx == ART_BARD_ARROW) && (monster_ptr->r_idx == MON_SMAUG) && (player_ptr->inventory_list[INVEN_BOW].fixed_artifact_idx == ART_BARD)) {
+            if ((arrow_ptr->fixed_artifact_idx == ART_BARD_ARROW) && (monster_ptr->r_idx == MonsterRaceId::SMAUG) && (player_ptr->inventory_list[INVEN_BOW].fixed_artifact_idx == ART_BARD)) {
                 mult *= 5;
             }
         }
@@ -1033,7 +1033,7 @@ bool test_hit_fire(PlayerType *player_ptr, int chance, monster_type *m_ptr, int 
     ac = r_ptr->ac;
     ac = ac * (8 - sniper_concent) / 8;
 
-    if (m_ptr->r_idx == MON_GOEMON && !monster_csleep_remaining(m_ptr)) {
+    if (m_ptr->r_idx == MonsterRaceId::GOEMON && !monster_csleep_remaining(m_ptr)) {
         ac *= 3;
     }
 
@@ -1044,7 +1044,7 @@ bool test_hit_fire(PlayerType *player_ptr, int chance, monster_type *m_ptr, int 
 
     /* Power competes against armor */
     if (randint0(chance) < (ac * 3 / 4)) {
-        if (m_ptr->r_idx == MON_GOEMON && !monster_csleep_remaining(m_ptr)) {
+        if (m_ptr->r_idx == MonsterRaceId::GOEMON && !monster_csleep_remaining(m_ptr)) {
             GAME_TEXT m_name[MAX_NLEN];
             monster_desc(player_ptr, m_name, m_ptr, 0);
             msg_format(_("%sは%sを斬り捨てた！", "%s cuts down %s!"), m_name, o_name);

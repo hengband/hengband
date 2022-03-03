@@ -112,12 +112,12 @@ void wr_player(PlayerType *player_ptr)
     wr_s16b(player_ptr->old_realm);
 
     for (const auto &[r_idx, is_achieved] : w_ptr->bounties) {
-        wr_s16b(r_idx);
+        wr_s16b(enum2i(r_idx));
         wr_bool(is_achieved);
     }
 
     for (int i = 0; i < 4; i++) {
-        wr_s16b(battle_mon[i]);
+        wr_s16b(enum2i(battle_mon[i]));
         wr_u32b(mon_odds[i]);
     }
 
@@ -257,8 +257,8 @@ void wr_player(PlayerType *player_ptr)
     wr_s32b(w_ptr->game_turn);
     wr_s32b(w_ptr->dungeon_turn);
     wr_s32b(w_ptr->arena_start_turn);
-    wr_s16b(w_ptr->today_mon);
-    wr_s16b(player_ptr->today_mon);
+    wr_s16b(enum2i(w_ptr->today_mon));
+    wr_s16b(enum2i(player_ptr->today_mon));
     wr_s16b(player_ptr->riding);
     wr_s16b(player_ptr->floor_id);
 

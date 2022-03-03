@@ -25,6 +25,7 @@
 #include "monster-race/race-flags2.h"
 #include "monster-race/race-flags7.h"
 #include "monster-race/race-flags8.h"
+#include "monster-race/race-indice-types.h"
 #include "monster-race/race-resistance-mask.h"
 #include "monster/monster-describer.h"
 #include "monster/monster-info.h"
@@ -200,7 +201,7 @@ void exe_movement(PlayerType *player_ptr, DIRECTION dir, bool do_pickup, bool br
     }
 
     monster_type *riding_m_ptr = &floor_ptr->m_list[player_ptr->riding];
-    monster_race *riding_r_ptr = &r_info[player_ptr->riding ? riding_m_ptr->r_idx : 0];
+    monster_race *riding_r_ptr = &r_info[player_ptr->riding ? riding_m_ptr->r_idx : MonsterRaceId::PLAYER];
     PlayerEnergy energy(player_ptr);
     if (can_move && player_ptr->riding) {
         if (riding_r_ptr->behavior_flags.has(MonsterBehaviorType::NEVER_MOVE)) {

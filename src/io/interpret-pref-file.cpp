@@ -48,7 +48,7 @@ static errr interpret_r_token(char *buf)
         return 1;
     }
 
-    r_ptr = &r_info[i];
+    r_ptr = &r_info[i2enum<MonsterRaceId>(i)];
     if (n1 || (!(n2 & 0x80) && n2)) {
         r_ptr->x_attr = n1;
     } /* Allow TERM_DARK text */

@@ -7,6 +7,7 @@
 #include "game-option/special-options.h"
 #include "grid/grid.h"
 #include "monster-race/monster-race.h"
+#include "monster-race/race-indice-types.h"
 #include "player/player-status.h"
 #include "system/floor-type-definition.h"
 #include "system/monster-race-definition.h"
@@ -346,7 +347,7 @@ void set_term_color(PlayerType *player_ptr, POSITION y, POSITION x, TERM_COLOR *
         return;
     }
 
-    auto *r_ptr = &r_info[0];
+    auto *r_ptr = &r_info[MonsterRaceId::PLAYER];
     *ap = r_ptr->x_attr;
     *cp = r_ptr->x_char;
     feat_priority = 31;

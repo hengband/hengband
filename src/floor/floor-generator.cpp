@@ -357,7 +357,7 @@ void clear_cave(PlayerType *player_ptr)
     floor_ptr->o_max = 1;
     floor_ptr->o_cnt = 0;
 
-    for (auto &r_ref : r_info) {
+    for (auto &[r_idx, r_ref] : r_info) {
         r_ref.cur_num = 0;
     }
 

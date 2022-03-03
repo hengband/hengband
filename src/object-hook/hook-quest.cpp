@@ -28,15 +28,15 @@ bool object_is_bounty(PlayerType *player_ptr, ObjectType *o_ptr)
         return false;
     }
 
-    if (player_ptr->today_mon > 0 && (streq(r_info[o_ptr->pval].name.c_str(), r_info[w_ptr->today_mon].name.c_str()))) {
+    auto corpse_r_idx = i2enum<MonsterRaceId>(o_ptr->pval);
+    if (is_valid_monster_race(player_ptr->today_mon) && (streq(r_info[corpse_r_idx].name.c_str(), r_info[w_ptr->today_mon].name.c_str()))) {
         return true;
     }
 
-    if (o_ptr->pval == MON_TSUCHINOKO) {
+    if (corpse_r_idx == MonsterRaceId::TSUCHINOKO) {
         return true;
     }
 
-    auto corpse_r_idx = o_ptr->pval;
     return is_bounty(corpse_r_idx, true);
 }
 
