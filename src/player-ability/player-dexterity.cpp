@@ -48,7 +48,7 @@ int16_t PlayerDexterity::race_bonus()
  * * 一時効果による器用さ修正値
  * * 呪術の肉体強化で加算(+4)
  */
-int16_t PlayerDexterity::time_effect_value()
+int16_t PlayerDexterity::time_effect_bonus()
 {
     int16_t result = 0;
 
@@ -71,7 +71,7 @@ int16_t PlayerDexterity::time_effect_value()
  * * 玄武の構えで減算(-2)
  * * 朱雀の構えで加算(+2)
  */
-int16_t PlayerDexterity::stance_value()
+int16_t PlayerDexterity::stance_bonus()
 {
     int16_t result = 0;
 
@@ -100,7 +100,7 @@ int16_t PlayerDexterity::stance_value()
  * * 変異MUT3_LIMBERで加算(+3)
  * * 変異MUT3_ARTHRITISで減算(-3)
  */
-int16_t PlayerDexterity::mutation_value()
+int16_t PlayerDexterity::mutation_bonus()
 {
     int16_t result = 0;
 

@@ -29,18 +29,18 @@ int16_t PlayerStatusBase::get_value()
     this->set_locals(); /* 計算前に値のセット。派生クラスの値がセットされる。*/
     int16_t pow = this->default_value;
 
-    pow += this->action_value();
-    pow += this->stance_value();
-    pow += this->class_base_value();
+    pow += this->action_bonus();
+    pow += this->stance_bonus();
+    pow += this->class_base_bonus();
     pow += this->class_bonus();
-    pow += this->equipments_value();
-    pow += this->inventory_weight_value();
-    pow += this->mutation_value();
+    pow += this->equipments_bonus();
+    pow += this->inventory_weight_bonus();
+    pow += this->mutation_bonus();
     pow += this->personality_bonus();
     pow += this->race_bonus();
-    pow += this->riding_value();
-    pow += this->time_effect_value();
-    pow = this->set_exception_value(pow);
+    pow += this->riding_bonus();
+    pow += this->time_effect_bonus();
+    pow = this->set_exception_bonus(pow);
 
     if ((pow > this->max_value)) {
         pow = this->max_value;
@@ -69,15 +69,15 @@ BIT_FLAGS PlayerStatusBase::get_all_flags()
         set_bits(flags, FLAG_CAUSE_RACE);
     }
 
-    if (this->stance_value() != 0) {
+    if (this->stance_bonus() != 0) {
         set_bits(flags, FLAG_CAUSE_STANCE);
     }
 
-    if (this->mutation_value() != 0) {
+    if (this->mutation_bonus() != 0) {
         set_bits(flags, FLAG_CAUSE_MUTATION);
     }
 
-    if (this->time_effect_value() != 0) {
+    if (this->time_effect_bonus() != 0) {
         set_bits(flags, FLAG_CAUSE_MAGIC_TIME_EFFECT);
     }
 
@@ -85,15 +85,15 @@ BIT_FLAGS PlayerStatusBase::get_all_flags()
         set_bits(flags, FLAG_CAUSE_PERSONALITY);
     }
 
-    if (this->riding_value() != 0) {
+    if (this->riding_bonus() != 0) {
         set_bits(flags, FLAG_CAUSE_RIDING);
     }
 
-    if (this->inventory_weight_value() != 0) {
+    if (this->inventory_weight_bonus() != 0) {
         set_bits(flags, FLAG_CAUSE_INVEN_PACK);
     }
 
-    if (this->action_value() != 0) {
+    if (this->action_bonus() != 0) {
         set_bits(flags, FLAG_CAUSE_ACTION);
     }
 
@@ -116,15 +116,15 @@ BIT_FLAGS PlayerStatusBase::get_good_flags()
         set_bits(flags, FLAG_CAUSE_RACE);
     }
 
-    if (this->stance_value() > 0) {
+    if (this->stance_bonus() > 0) {
         set_bits(flags, FLAG_CAUSE_STANCE);
     }
 
-    if (this->mutation_value() > 0) {
+    if (this->mutation_bonus() > 0) {
         set_bits(flags, FLAG_CAUSE_MUTATION);
     }
 
-    if (this->time_effect_value() > 0) {
+    if (this->time_effect_bonus() > 0) {
         set_bits(flags, FLAG_CAUSE_MAGIC_TIME_EFFECT);
     }
 
@@ -132,15 +132,15 @@ BIT_FLAGS PlayerStatusBase::get_good_flags()
         set_bits(flags, FLAG_CAUSE_PERSONALITY);
     }
 
-    if (this->riding_value() > 0) {
+    if (this->riding_bonus() > 0) {
         set_bits(flags, FLAG_CAUSE_RIDING);
     }
 
-    if (this->inventory_weight_value() > 0) {
+    if (this->inventory_weight_bonus() > 0) {
         set_bits(flags, FLAG_CAUSE_INVEN_PACK);
     }
 
-    if (this->action_value() > 0) {
+    if (this->action_bonus() > 0) {
         set_bits(flags, FLAG_CAUSE_ACTION);
     }
 
@@ -163,15 +163,15 @@ BIT_FLAGS PlayerStatusBase::get_bad_flags()
         set_bits(flags, FLAG_CAUSE_RACE);
     }
 
-    if (this->stance_value() < 0) {
+    if (this->stance_bonus() < 0) {
         set_bits(flags, FLAG_CAUSE_STANCE);
     }
 
-    if (this->mutation_value() < 0) {
+    if (this->mutation_bonus() < 0) {
         set_bits(flags, FLAG_CAUSE_MUTATION);
     }
 
-    if (this->time_effect_value() < 0) {
+    if (this->time_effect_bonus() < 0) {
         set_bits(flags, FLAG_CAUSE_MAGIC_TIME_EFFECT);
     }
 
@@ -179,15 +179,15 @@ BIT_FLAGS PlayerStatusBase::get_bad_flags()
         set_bits(flags, FLAG_CAUSE_PERSONALITY);
     }
 
-    if (this->riding_value() < 0) {
+    if (this->riding_bonus() < 0) {
         set_bits(flags, FLAG_CAUSE_RIDING);
     }
 
-    if (this->inventory_weight_value() < 0) {
+    if (this->inventory_weight_bonus() < 0) {
         set_bits(flags, FLAG_CAUSE_INVEN_PACK);
     }
 
-    if (this->action_value() < 0) {
+    if (this->action_bonus() < 0) {
         set_bits(flags, FLAG_CAUSE_ACTION);
     }
 
@@ -255,7 +255,7 @@ BIT_FLAGS PlayerStatusBase::equipments_bad_flags(tr_type check_flag)
  * @brief this->tr_flagを持つ装備品のpval合計値を返す
  * @return 該当するfalgを持つ全装備のpvalの合計値
  */
-int16_t PlayerStatusBase::equipments_value()
+int16_t PlayerStatusBase::equipments_bonus()
 {
     this->set_locals(); /* 計算前に値のセット。派生クラスの値がセットされる。*/
     int16_t bonus = 0;
@@ -284,7 +284,7 @@ int16_t PlayerStatusBase::class_bonus()
     return 0;
 }
 
-int16_t PlayerStatusBase::class_base_value()
+int16_t PlayerStatusBase::class_base_bonus()
 {
     return 0;
 }
@@ -294,32 +294,32 @@ int16_t PlayerStatusBase::personality_bonus()
     return 0;
 }
 
-int16_t PlayerStatusBase::time_effect_value()
+int16_t PlayerStatusBase::time_effect_bonus()
 {
     return 0;
 }
 
-int16_t PlayerStatusBase::stance_value()
+int16_t PlayerStatusBase::stance_bonus()
 {
     return 0;
 }
 
-int16_t PlayerStatusBase::mutation_value()
+int16_t PlayerStatusBase::mutation_bonus()
 {
     return 0;
 }
 
-int16_t PlayerStatusBase::riding_value()
+int16_t PlayerStatusBase::riding_bonus()
 {
     return 0;
 }
 
-int16_t PlayerStatusBase::inventory_weight_value()
+int16_t PlayerStatusBase::inventory_weight_bonus()
 {
     return 0;
 }
 
-int16_t PlayerStatusBase::action_value()
+int16_t PlayerStatusBase::action_bonus()
 {
     return 0;
 }
@@ -331,7 +331,7 @@ int16_t PlayerStatusBase::action_value()
  * * 派生クラスで必要とされる例外処理でoverrideされる
  * @return 直接変更された値。このままmin-max処理され最終的なvalueになる。
  */
-int16_t PlayerStatusBase::set_exception_value(int16_t value)
+int16_t PlayerStatusBase::set_exception_bonus(int16_t value)
 {
     return value;
 }

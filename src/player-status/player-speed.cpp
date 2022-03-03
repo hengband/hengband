@@ -165,9 +165,9 @@ int16_t PlayerSpeed::special_weapon_set_value()
  * ** 装備品にTR_SPEEDがあれば加算(+pval+1
  * ** セットで加速増減があるものを計算
  */
-int16_t PlayerSpeed::equipments_value()
+int16_t PlayerSpeed::equipments_bonus()
 {
-    int16_t bonus = PlayerStatusBase::equipments_value();
+    int16_t bonus = PlayerStatusBase::equipments_bonus();
     bonus += this->special_weapon_set_value();
     return bonus;
 }
@@ -182,7 +182,7 @@ int16_t PlayerSpeed::equipments_value()
  * ** 食い過ぎなら減算(-10)
  * ** 光速移動中は+999(最終的に+99になる)
  */
-int16_t PlayerSpeed::time_effect_value()
+int16_t PlayerSpeed::time_effect_bonus()
 {
     int16_t bonus = 0;
     if (is_fast(this->player_ptr)) {
@@ -216,7 +216,7 @@ int16_t PlayerSpeed::time_effect_value()
  * @details
  * ** 朱雀の構えなら加算(+10)
  */
-int16_t PlayerSpeed::stance_value()
+int16_t PlayerSpeed::stance_bonus()
 {
     int16_t bonus = 0;
     if (PlayerClass(player_ptr).monk_stance_is(MonkStanceType::SUZAKU)) {
@@ -234,7 +234,7 @@ int16_t PlayerSpeed::stance_value()
  * ** 変異MUT3_XTRA_LEGなら加算(+3)
  * ** 変異MUT3_SHORT_LEGなら減算(-3)
  */
-int16_t PlayerSpeed::mutation_value()
+int16_t PlayerSpeed::mutation_bonus()
 {
     int16_t bonus = 0;
     const auto &muta = this->player_ptr->muta;
@@ -259,7 +259,7 @@ int16_t PlayerSpeed::mutation_value()
  * @details
  * * 騎乗中ならばモンスターの加速に準拠、ただし騎乗技能値とモンスターレベルによるキャップ処理あり
  */
-int16_t PlayerSpeed::riding_value()
+int16_t PlayerSpeed::riding_bonus()
 {
     auto *riding_m_ptr = &(this->player_ptr)->current_floor_ptr->m_list[this->player_ptr->riding];
     int16_t speed = riding_m_ptr->mspeed;
@@ -295,7 +295,7 @@ int16_t PlayerSpeed::riding_value()
  * @details
  * * 所持品の重量による減速処理。乗馬時は別計算。
  */
-int16_t PlayerSpeed::inventory_weight_value()
+int16_t PlayerSpeed::inventory_weight_bonus()
 {
     int16_t bonus = 0;
     auto weight = calc_inventory_weight(this->player_ptr);
@@ -322,7 +322,7 @@ int16_t PlayerSpeed::inventory_weight_value()
  * @details
  * * 探索中なら減算(-10)
  */
-int16_t PlayerSpeed::action_value()
+int16_t PlayerSpeed::action_bonus()
 {
     int16_t bonus = 0;
     if (this->player_ptr->action == ACTION_SEARCH) {
@@ -355,15 +355,15 @@ BIT_FLAGS PlayerSpeed::equipments_flags(tr_type check_flag)
  * * 非乗馬時 - ここまでの修正値合算をそのまま使用
  * * 乗馬時 - 乗馬の速度と重量減衰のみを計算
  */
-int16_t PlayerSpeed::set_exception_value(int16_t value)
+int16_t PlayerSpeed::set_exception_bonus(int16_t value)
 {
     if (!this->player_ptr->riding) {
         return value;
     }
 
     value = this->default_value;
-    value += this->riding_value();
-    value += this->inventory_weight_value();
-    value += this->action_value();
+    value += this->riding_bonus();
+    value += this->inventory_weight_bonus();
+    value += this->action_bonus();
     return value;
 }

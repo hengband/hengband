@@ -34,7 +34,7 @@ void PlayerCharisma::set_locals()
  * * 型による魅力修正値
  * * 降鬼陣で加算(+5)
  */
-int16_t PlayerCharisma::stance_value()
+int16_t PlayerCharisma::stance_bonus()
 {
     int16_t result = 0;
 
@@ -56,7 +56,7 @@ int16_t PlayerCharisma::stance_value()
  * * 変異MUT3_WART_SKINで減算(-2)
  * * 変異MUT3_SCALESで減算(-1)
  */
-int16_t PlayerCharisma::mutation_value()
+int16_t PlayerCharisma::mutation_bonus()
 {
     int16_t result = 0;
 
@@ -81,7 +81,7 @@ int16_t PlayerCharisma::mutation_value()
     return result;
 }
 
-int16_t PlayerCharisma::set_exception_value(int16_t value)
+int16_t PlayerCharisma::set_exception_bonus(int16_t value)
 {
     int16_t result = value;
 

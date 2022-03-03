@@ -41,7 +41,7 @@ int16_t PlayerInfravision::race_bonus()
  * @details
  * * 変異MUT3_INFRAVISによる加算(+3)
  */
-int16_t PlayerInfravision::mutation_value()
+int16_t PlayerInfravision::mutation_bonus()
 {
     int16_t bonus = 0;
     if (this->player_ptr->muta.has(PlayerMutationType::INFRAVIS)) {
@@ -57,7 +57,7 @@ int16_t PlayerInfravision::mutation_value()
  * @details
  * * 魔法効果tim_infraによる加算(+3)
  */
-int16_t PlayerInfravision::time_effect_value()
+int16_t PlayerInfravision::time_effect_bonus()
 {
     int16_t bonus = 0;
     if (this->player_ptr->tim_infra) {

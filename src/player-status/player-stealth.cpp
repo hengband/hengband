@@ -52,7 +52,7 @@ int16_t PlayerStealth::personality_bonus()
  * @details
  * * 職業による加算
  */
-int16_t PlayerStealth::class_base_value()
+int16_t PlayerStealth::class_base_bonus()
 {
     const player_class_info *c_ptr = &class_info[enum2i(this->player_ptr->pclass)];
     return c_ptr->c_stl + (c_ptr->x_stl * this->player_ptr->lev / 10);
@@ -88,7 +88,7 @@ int16_t PlayerStealth::class_bonus()
  * * 変異MUT3_XTRA_NOISで減算(-3)
  * * 変異MUT3_MOTIONで加算(+1)
  */
-int16_t PlayerStealth::mutation_value()
+int16_t PlayerStealth::mutation_bonus()
 {
     int16_t bonus = 0;
     const auto &muta = this->player_ptr->muta;
@@ -111,7 +111,7 @@ int16_t PlayerStealth::mutation_value()
  * * 狂戦士化で減算(-7)
  * * 隠密の歌で加算(+999)
  */
-int16_t PlayerStealth::time_effect_value()
+int16_t PlayerStealth::time_effect_bonus()
 {
     int16_t bonus = 0;
     if (this->player_ptr->realm1 == REALM_HEX) {
@@ -143,7 +143,7 @@ bool PlayerStealth::is_aggravated_s_fairy()
  * @details
  * * セクシーギャルでない影フェアリーがTRC_AGGRAVATE持ちの時、別処理でTRC_AGGRAVATEを無効にする代わりに減算(-3か3未満なら(現在値+2)/2)
  */
-int16_t PlayerStealth::set_exception_value(int16_t value)
+int16_t PlayerStealth::set_exception_bonus(int16_t value)
 {
     if (this->is_aggravated_s_fairy()) {
         value = std::min<int16_t>(value - 3, (value + 2) / 2);
