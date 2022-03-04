@@ -36,4 +36,5 @@ private:
     bool ask_capital();
     bool can_use(const bool learned);
     bool loop_key_input(char *out_val, const bool learned);
+    bool need_learning(OBJECT_SUBTYPE_VALUE sval);
 };

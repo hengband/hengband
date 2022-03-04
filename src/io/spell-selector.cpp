@@ -129,17 +129,7 @@ bool SpellSelector::get_spell(concptr tmp_prompt, OBJECT_SUBTYPE_VALUE sval, boo
         return false;
     }
 
-    PlayerClass pc(this->player_ptr);
-    auto is_every_magic = pc.is_every_magic();
-    if ((this->use_realm != this->player_ptr->realm1) && (this->use_realm != this->player_ptr->realm2) && !is_every_magic) {
-        return false;
-    }
-
-    if (is_every_magic && !is_magic(this->use_realm)) {
-        return false;
-    }
-
-    if (pc.equals(PlayerClassType::RED_MAGE) && (this->use_realm != REALM_ARCANE) && (sval > 1)) {
+    if (!this->need_learning(sval)) {
         return false;
     }
 
@@ -349,6 +339,25 @@ bool SpellSelector::loop_key_input(char *out_val, const bool learned)
         }
 
         this->flag = true;
+    }
+
+    return true;
+}
+
+bool SpellSelector::need_learning(OBJECT_SUBTYPE_VALUE sval)
+{
+    PlayerClass pc(this->player_ptr);
+    auto is_every_magic = pc.is_every_magic();
+    if ((this->use_realm != this->player_ptr->realm1) && (this->use_realm != this->player_ptr->realm2) && !is_every_magic) {
+        return false;
+    }
+
+    if (is_every_magic && !is_magic(this->use_realm)) {
+        return false;
+    }
+
+    if (pc.equals(PlayerClassType::RED_MAGE) && (this->use_realm != REALM_ARCANE) && (sval > 1)) {
+        return false;
     }
 
     return true;
