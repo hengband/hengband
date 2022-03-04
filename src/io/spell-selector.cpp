@@ -51,7 +51,7 @@ SpellSelector::SpellSelector(PlayerType *player_ptr)
  * @param use_realm 魔法領域ID
  * @return 選択した魔法が利用可能か否か
  */
-bool SpellSelector::spell_okay(int spell, bool learned, bool study_pray, const short tmp_use_realm)
+bool SpellSelector::spell_okay(const int spell, const bool learned, const bool study_pray, const short tmp_use_realm)
 {
     this->use_realm = tmp_use_realm;
     const magic_type *s_ptr;
@@ -117,19 +117,7 @@ bool SpellSelector::get_spell(concptr tmp_prompt, OBJECT_SUBTYPE_VALUE sval, boo
         }
     }
 
-    auto okay = false;
-    this->sn = -2;
-    for (this->spell_num = 0; this->spell_num < this->num; this->spell_num++) {
-        if (this->spell_okay(this->spells[this->spell_num], learned, false, this->use_realm)) {
-            okay = true;
-        }
-    }
-
-    if (!okay) {
-        return false;
-    }
-
-    if (!this->need_learning(sval)) {
+    if (!this->is_learned(learned) || !this->need_learning(sval)) {
         return false;
     }
 
@@ -361,4 +349,16 @@ bool SpellSelector::need_learning(OBJECT_SUBTYPE_VALUE sval)
     }
 
     return true;
+}
+
+bool SpellSelector::is_learned(const bool learned)
+{
+    this->sn = -2;
+    for (this->spell_num = 0; this->spell_num < this->num; this->spell_num++) {
+        if (this->spell_okay(this->spells[this->spell_num], learned, false, this->use_realm)) {
+            return true;
+        }
+    }
+
+    return false;
 }
