@@ -131,7 +131,7 @@ bool SpellSelector::get_spell(concptr tmp_prompt, OBJECT_SUBTYPE_VALUE sval, boo
 
     PlayerClass pc(this->player_ptr);
     auto is_every_magic = pc.is_every_magic();
-    if (((this->use_realm) != this->player_ptr->realm1) && ((this->use_realm) != this->player_ptr->realm2) && !is_every_magic) {
+    if ((this->use_realm != this->player_ptr->realm1) && (this->use_realm != this->player_ptr->realm2) && !is_every_magic) {
         return false;
     }
 
@@ -139,12 +139,11 @@ bool SpellSelector::get_spell(concptr tmp_prompt, OBJECT_SUBTYPE_VALUE sval, boo
         return false;
     }
 
-    if (pc.equals(PlayerClassType::RED_MAGE) && ((this->use_realm) != REALM_ARCANE) && (sval > 1)) {
+    if (pc.equals(PlayerClassType::RED_MAGE) && (this->use_realm != REALM_ARCANE) && (sval > 1)) {
         return false;
     }
 
     this->sn = -1;
-    auto flag = false;
     this->player_ptr->window_flags |= (PW_SPELL);
     handle_stuff(this->player_ptr);
     char out_val[160];
@@ -156,41 +155,9 @@ bool SpellSelector::get_spell(concptr tmp_prompt, OBJECT_SUBTYPE_VALUE sval, boo
 #endif
 
     this->choice = (always_show_list || use_menu) ? ESCAPE : '\1';
-    auto selected_spell = MAX_SPELLS_PER_REALM;
-    while (!flag) {
-        if (this->choice == ESCAPE) {
-            this->choice = ' ';
-        } else if (!get_com(out_val, &this->choice, true)) {
-            break;
-        }
-
-        this->ask = true;
-        switch (this->select_spell_number()) {
-        case PROCESS_FALSE:
-            return false;
-        case PROCESS_CONTINUE:
-            break;
-        case PROCESS_LOOP_CONTINUE:
-            continue;
-        default:
-            throw("Invalid process result returns!");
-        }
-
-        if ((this->spell_num < 0) || (this->spell_num >= this->num)) {
-            bell();
-            continue;
-        }
-
-        selected_spell = this->spells[this->spell_num];
-        if (!this->can_use(selected_spell, learned)) {
-            continue;
-        }
-
-        if (!this->ask_capital(selected_spell)) {
-            continue;
-        }
-
-        flag = true;
+    this->selected_spell = MAX_SPELLS_PER_REALM;
+    if (!this->loop_key_input(out_val, learned)){
+        return false;
     }
 
     if (this->redraw) {
@@ -199,7 +166,7 @@ bool SpellSelector::get_spell(concptr tmp_prompt, OBJECT_SUBTYPE_VALUE sval, boo
 
     this->player_ptr->window_flags |= (PW_SPELL);
     handle_stuff(this->player_ptr);
-    if (!flag) {
+    if (!this->flag) {
         return false;
     }
 
@@ -295,7 +262,7 @@ process_result SpellSelector::select_spell_number()
     return PROCESS_CONTINUE;
 }
 
-bool SpellSelector::can_use(const int selected_spell, const bool learned)
+bool SpellSelector::can_use(const bool learned)
 {
     if (this->spell_okay(selected_spell, learned, false, this->use_realm)) {
         return true;
@@ -310,7 +277,7 @@ bool SpellSelector::can_use(const int selected_spell, const bool learned)
     return false;
 }
 
-bool SpellSelector::ask_capital(const int selected_spell)
+bool SpellSelector::ask_capital()
 {
     if (!this->ask) {
         return true;
@@ -319,28 +286,69 @@ bool SpellSelector::ask_capital(const int selected_spell)
     char tmp_val[160];
     const magic_type *s_ptr;
     if (!is_magic(this->use_realm)) {
-        s_ptr = &technic_info[this->use_realm - MIN_TECHNIC][selected_spell];
+        s_ptr = &technic_info[this->use_realm - MIN_TECHNIC][this->selected_spell];
     } else {
-        s_ptr = &mp_ptr->info[this->use_realm - 1][selected_spell];
+        s_ptr = &mp_ptr->info[this->use_realm - 1][this->selected_spell];
     }
 
     int need_mana;
     if (this->use_realm == REALM_HISSATSU) {
         need_mana = s_ptr->smana;
     } else {
-        need_mana = mod_need_mana(this->player_ptr, s_ptr->smana, selected_spell, this->use_realm);
+        need_mana = mod_need_mana(this->player_ptr, s_ptr->smana, this->selected_spell, this->use_realm);
     }
 
 #ifdef JP
     jverb(this->prompt, this->jverb_buf, JVERB_AND);
-    (void)strnfmt(tmp_val, 78, "%s(MP%d, 失敗率%d%%)を%sますか? ", exe_spell(this->player_ptr, this->use_realm, selected_spell, SpellProcessType::NAME), need_mana,
-        spell_chance(this->player_ptr, selected_spell, this->use_realm), this->jverb_buf);
+    (void)strnfmt(tmp_val, 78, "%s(MP%d, 失敗率%d%%)を%sますか? ", exe_spell(this->player_ptr, this->use_realm, this->selected_spell, SpellProcessType::NAME), need_mana,
+        spell_chance(this->player_ptr, this->selected_spell, this->use_realm), this->jverb_buf);
 #else
-    (void)strnfmt(tmp_val, 78, "%^s %s (%d mana, %d%% fail)? ", this->prompt, exe_spell(this->player_ptr, this->use_realm, selected_spell, SpellProcessType::NAME), need_mana,
-        spell_chance(this->player_ptr, selected_spell, this->use_realm));
+    (void)strnfmt(tmp_val, 78, "%^s %s (%d mana, %d%% fail)? ", this->prompt, exe_spell(this->player_ptr, this->use_realm, this->selected_spell, SpellProcessType::NAME), need_mana,
+        spell_chance(this->player_ptr, this->selected_spell, this->use_realm));
 #endif
     if (!get_check(tmp_val)) {
         return false;
+    }
+
+    return true;
+}
+
+bool SpellSelector::loop_key_input(char *out_val, const bool learned)
+{
+    while (!this->flag) {
+        if (this->choice == ESCAPE) {
+            this->choice = ' ';
+        } else if (!get_com(out_val, &this->choice, true)) {
+            return true;
+        }
+
+        this->ask = true;
+        switch (this->select_spell_number()) {
+        case PROCESS_FALSE:
+            return false;
+        case PROCESS_CONTINUE:
+            break;
+        case PROCESS_LOOP_CONTINUE:
+            continue;
+        default:
+            throw("Invalid process result returns!");
+        }
+
+        if ((this->spell_num < 0) || (this->spell_num >= this->num)) {
+            bell();
+            continue;
+        }
+
+        this->selected_spell = this->spells[this->spell_num];
+        if (!this->can_use(learned)) {
+            continue;
+        }
+
+        if (!this->ask_capital()) {
+            continue;
+        }
+
+        this->flag = true;
     }
 
     return true;

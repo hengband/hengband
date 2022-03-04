@@ -27,10 +27,13 @@ private:
     char jverb_buf[128]{};
     concptr spell_category = nullptr;
     concptr prompt = nullptr;
+    bool flag = false;
+    int selected_spell = 0;
 
     bool on_key_down();
     bool decide_redraw();
     process_result select_spell_number();
-    bool ask_capital(const int selected_spell);
-    bool can_use(const int selected_spell, const bool learned);
+    bool ask_capital();
+    bool can_use(const bool learned);
+    bool loop_key_input(char *out_val, const bool learned);
 };
