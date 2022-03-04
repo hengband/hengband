@@ -97,19 +97,20 @@ bool SpellSelector::spell_okay(int spell, bool learned, bool study_pray, const s
  * The "known" should be TRUE for cast/pray, FALSE for study
  * </pre>
  */
-bool SpellSelector::get_spell(concptr prompt, OBJECT_SUBTYPE_VALUE sval, bool learned, const short tmp_use_realm, int tmp_sn)
+bool SpellSelector::get_spell(concptr tmp_prompt, OBJECT_SUBTYPE_VALUE sval, bool learned, const short tmp_use_realm, int tmp_sn)
 {
+    this->prompt = tmp_prompt;
     this->use_realm = tmp_use_realm;
     this->sn = tmp_sn;
     short code;
     if (repeat_pull(&code)) {
         this->sn = code;
-        if (spell_okay(this->sn, learned, false, this->use_realm)) {
+        if (this->spell_okay(this->sn, learned, false, this->use_realm)) {
             return true;
         }
     }
 
-    auto p = spell_category_name(mp_ptr->spell_book);
+    this->spell_category = spell_category_name(mp_ptr->spell_book);
     for (auto i = 0; i < MAX_SPELLS_PER_REALM; i++) {
         if (fake_spell_flags[sval] & (1U << i)) {
             this->spells[this->num++] = i;
@@ -119,7 +120,7 @@ bool SpellSelector::get_spell(concptr prompt, OBJECT_SUBTYPE_VALUE sval, bool le
     auto okay = false;
     this->sn = -2;
     for (this->spell_num = 0; this->spell_num < this->num; this->spell_num++) {
-        if (spell_okay(this->spells[this->spell_num], learned, false, this->use_realm)) {
+        if (this->spell_okay(this->spells[this->spell_num], learned, false, this->use_realm)) {
             okay = true;
         }
     }
@@ -149,9 +150,9 @@ bool SpellSelector::get_spell(concptr prompt, OBJECT_SUBTYPE_VALUE sval, bool le
     char out_val[160];
 #ifdef JP
     jverb(prompt, this->jverb_buf, JVERB_AND);
-    (void)strnfmt(out_val, 78, "(%^s:%c-%c, '*'で一覧, ESCで中断) どの%sを%^sますか? ", p, I2A(0), I2A(this->num - 1), p, this->jverb_buf);
+    (void)strnfmt(out_val, 78, "(%^s:%c-%c, '*'で一覧, ESCで中断) どの%sを%^sますか? ", this->spell_category, I2A(0), I2A(this->num - 1), this->spell_category, this->jverb_buf);
 #else
-    (void)strnfmt(out_val, 78, "(%^ss %c-%c, *=List, ESC=exit) %^s which %s? ", p, I2A(0), I2A(this->num - 1), prompt, p);
+    (void)strnfmt(out_val, 78, "(%^ss %c-%c, *=List, ESC=exit) %^s which %s? ", this->spell_category, I2A(0), I2A(this->num - 1), prompt, this->spell_category);
 #endif
 
     this->choice = (always_show_list || use_menu) ? ESCAPE : '\1';
@@ -181,18 +182,11 @@ bool SpellSelector::get_spell(concptr prompt, OBJECT_SUBTYPE_VALUE sval, bool le
         }
 
         selected_spell = this->spells[this->spell_num];
-        if (!spell_okay(selected_spell, learned, false, this->use_realm)) {
-            bell();
-#ifdef JP
-            msg_format("その%sを%sことはできません。", p, prompt);
-#else
-            msg_format("You may not %s that %s.", prompt, p);
-#endif
-
+        if (!this->can_use(selected_spell, learned)) {
             continue;
         }
 
-        if (!this->ask_capital(prompt, selected_spell)) {
+        if (!this->ask_capital(selected_spell)) {
             continue;
         }
 
@@ -301,7 +295,22 @@ process_result SpellSelector::select_spell_number()
     return PROCESS_CONTINUE;
 }
 
-bool SpellSelector::ask_capital(concptr prompt, const int selected_spell)
+bool SpellSelector::can_use(const int selected_spell, const bool learned)
+{
+    if (this->spell_okay(selected_spell, learned, false, this->use_realm)) {
+        return true;
+    }
+
+    bell();
+#ifdef JP
+    msg_format("その%sを%sことはできません。", this->spell_category, this->prompt);
+#else
+    msg_format("You may not %s that %s.", this->prompt, this->spell_category);
+#endif
+    return false;
+}
+
+bool SpellSelector::ask_capital(const int selected_spell)
 {
     if (!this->ask) {
         return true;
@@ -323,11 +332,11 @@ bool SpellSelector::ask_capital(concptr prompt, const int selected_spell)
     }
 
 #ifdef JP
-    jverb(prompt, this->jverb_buf, JVERB_AND);
+    jverb(this->prompt, this->jverb_buf, JVERB_AND);
     (void)strnfmt(tmp_val, 78, "%s(MP%d, 失敗率%d%%)を%sますか? ", exe_spell(this->player_ptr, this->use_realm, selected_spell, SpellProcessType::NAME), need_mana,
         spell_chance(this->player_ptr, selected_spell, this->use_realm), this->jverb_buf);
 #else
-    (void)strnfmt(tmp_val, 78, "%^s %s (%d mana, %d%% fail)? ", prompt, exe_spell(this->player_ptr, this->use_realm, selected_spell, SpellProcessType::NAME), need_mana,
+    (void)strnfmt(tmp_val, 78, "%^s %s (%d mana, %d%% fail)? ", this->prompt, exe_spell(this->player_ptr, this->use_realm, selected_spell, SpellProcessType::NAME), need_mana,
         spell_chance(this->player_ptr, selected_spell, this->use_realm));
 #endif
     if (!get_check(tmp_val)) {
