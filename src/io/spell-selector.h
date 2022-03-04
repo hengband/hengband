@@ -40,4 +40,5 @@ private:
     bool need_learning(OBJECT_SUBTYPE_VALUE sval);
     bool is_learned();
     bool display_selection();
+    bool can_repeat();
 };

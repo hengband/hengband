@@ -104,12 +104,8 @@ bool SpellSelector::get_spell(concptr tmp_prompt, OBJECT_SUBTYPE_VALUE sval, con
     this->prompt = tmp_prompt;
     this->use_realm = tmp_use_realm;
     this->sn = tmp_sn;
-    short code;
-    if (repeat_pull(&code)) {
-        this->sn = code;
-        if (this->spell_okay(this->sn, this->learned, false, this->use_realm)) {
-            return true;
-        }
+    if (this->can_repeat()) {
+        return true;
     }
 
     this->spell_category = spell_category_name(mp_ptr->spell_book);
@@ -140,8 +136,8 @@ bool SpellSelector::get_spell(concptr tmp_prompt, OBJECT_SUBTYPE_VALUE sval, con
         return false;
     }
 
-    this->sn = selected_spell;
-    repeat_push(static_cast<short>(selected_spell));
+    this->sn = this->selected_spell;
+    repeat_push(static_cast<short>(this->selected_spell));
     return true;
 }
 
@@ -368,4 +364,15 @@ bool SpellSelector::display_selection()
     this->choice = (always_show_list || use_menu) ? ESCAPE : '\1';
     this->selected_spell = MAX_SPELLS_PER_REALM;
     return this->loop_key_input(out_val);
+}
+
+bool SpellSelector::can_repeat()
+{
+    short code;
+    if (!repeat_pull(&code)) {
+        return false;
+    }
+
+    this->sn = code;
+    return this->spell_okay(this->sn, this->learned, false, this->use_realm);
 }
