@@ -148,9 +148,8 @@ bool SpellSelector::get_spell(concptr prompt, OBJECT_SUBTYPE_VALUE sval, bool le
     handle_stuff(this->player_ptr);
     char out_val[160];
 #ifdef JP
-    char jverb_buf[128];
-    jverb(prompt, jverb_buf, JVERB_AND);
-    (void)strnfmt(out_val, 78, "(%^s:%c-%c, '*'で一覧, ESCで中断) どの%sを%^sますか? ", p, I2A(0), I2A(this->num - 1), p, jverb_buf);
+    jverb(prompt, this->jverb_buf, JVERB_AND);
+    (void)strnfmt(out_val, 78, "(%^s:%c-%c, '*'で一覧, ESCで中断) どの%sを%^sますか? ", p, I2A(0), I2A(this->num - 1), p, this->jverb_buf);
 #else
     (void)strnfmt(out_val, 78, "(%^ss %c-%c, *=List, ESC=exit) %^s which %s? ", p, I2A(0), I2A(this->num - 1), prompt, p);
 #endif
@@ -193,33 +192,8 @@ bool SpellSelector::get_spell(concptr prompt, OBJECT_SUBTYPE_VALUE sval, bool le
             continue;
         }
 
-        if (this->ask) {
-            char tmp_val[160];
-            const magic_type *s_ptr;
-            if (!is_magic(this->use_realm)) {
-                s_ptr = &technic_info[this->use_realm - MIN_TECHNIC][selected_spell];
-            } else {
-                s_ptr = &mp_ptr->info[this->use_realm - 1][selected_spell];
-            }
-
-            int need_mana;
-            if (this->use_realm == REALM_HISSATSU) {
-                need_mana = s_ptr->smana;
-            } else {
-                need_mana = mod_need_mana(this->player_ptr, s_ptr->smana, selected_spell, this->use_realm);
-            }
-
-#ifdef JP
-            jverb(prompt, jverb_buf, JVERB_AND);
-            (void)strnfmt(tmp_val, 78, "%s(MP%d, 失敗率%d%%)を%sますか? ", exe_spell(this->player_ptr, this->use_realm, selected_spell, SpellProcessType::NAME), need_mana,
-                spell_chance(this->player_ptr, selected_spell, this->use_realm), jverb_buf);
-#else
-            (void)strnfmt(tmp_val, 78, "%^s %s (%d mana, %d%% fail)? ", prompt, exe_spell(this->player_ptr, this->use_realm, selected_spell, SpellProcessType::NAME), need_mana,
-                spell_chance(this->player_ptr, selected_spell, this->use_realm));
-#endif
-            if (!get_check(tmp_val)) {
-                continue;
-            }
+        if (!this->ask_capital(prompt, selected_spell)) {
+            continue;
         }
 
         flag = true;
@@ -325,4 +299,40 @@ process_result SpellSelector::select_spell_number()
 
     this->spell_num = islower(this->choice) ? A2I(this->choice) : -1;
     return PROCESS_CONTINUE;
+}
+
+bool SpellSelector::ask_capital(concptr prompt, const int selected_spell)
+{
+    if (!this->ask) {
+        return true;
+    }
+
+    char tmp_val[160];
+    const magic_type *s_ptr;
+    if (!is_magic(this->use_realm)) {
+        s_ptr = &technic_info[this->use_realm - MIN_TECHNIC][selected_spell];
+    } else {
+        s_ptr = &mp_ptr->info[this->use_realm - 1][selected_spell];
+    }
+
+    int need_mana;
+    if (this->use_realm == REALM_HISSATSU) {
+        need_mana = s_ptr->smana;
+    } else {
+        need_mana = mod_need_mana(this->player_ptr, s_ptr->smana, selected_spell, this->use_realm);
+    }
+
+#ifdef JP
+    jverb(prompt, this->jverb_buf, JVERB_AND);
+    (void)strnfmt(tmp_val, 78, "%s(MP%d, 失敗率%d%%)を%sますか? ", exe_spell(this->player_ptr, this->use_realm, selected_spell, SpellProcessType::NAME), need_mana,
+        spell_chance(this->player_ptr, selected_spell, this->use_realm), this->jverb_buf);
+#else
+    (void)strnfmt(tmp_val, 78, "%^s %s (%d mana, %d%% fail)? ", prompt, exe_spell(this->player_ptr, this->use_realm, selected_spell, SpellProcessType::NAME), need_mana,
+        spell_chance(this->player_ptr, selected_spell, this->use_realm));
+#endif
+    if (!get_check(tmp_val)) {
+        return false;
+    }
+
+    return true;
 }

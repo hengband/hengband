@@ -24,8 +24,10 @@ private:
     int spells[64]{};
     short use_realm = 0;
     int spell_num = 0;
-    
+    char jverb_buf[128]{};
+
     bool on_key_down();
     bool decide_redraw();
     process_result select_spell_number();
+    bool ask_capital(concptr prompt, const int selected_spell);
 };
