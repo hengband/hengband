@@ -10,7 +10,7 @@ public:
     SpellSelector(PlayerType *player_ptr);
 
     bool spell_okay(const int spell, const bool learned, const bool study_pray, const short tmp_use_realm);
-    bool get_spell(concptr tmp_prompt, OBJECT_SUBTYPE_VALUE sval, bool learned, const short tmp_use_realm, int tmp_sn = -2);
+    bool get_spell(concptr tmp_prompt, OBJECT_SUBTYPE_VALUE sval, const bool learned, const short tmp_use_realm, int tmp_sn = -2);
     int get_selected_spell();
 
 private:
@@ -29,13 +29,15 @@ private:
     concptr prompt = nullptr;
     bool flag = false;
     int selected_spell = 0;
+    bool learned = false;
 
     bool on_key_down();
     bool decide_redraw();
     process_result select_spell_number();
     bool ask_capital();
-    bool can_use(const bool learned);
-    bool loop_key_input(char *out_val, const bool learned);
+    bool can_use();
+    bool loop_key_input(char *out_val);
     bool need_learning(OBJECT_SUBTYPE_VALUE sval);
-    bool is_learned(const bool learned);
+    bool is_learned();
+    bool display_selection();
 };

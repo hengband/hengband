@@ -51,8 +51,9 @@ SpellSelector::SpellSelector(PlayerType *player_ptr)
  * @param use_realm 魔法領域ID
  * @return 選択した魔法が利用可能か否か
  */
-bool SpellSelector::spell_okay(const int spell, const bool learned, const bool study_pray, const short tmp_use_realm)
+bool SpellSelector::spell_okay(const int spell, const bool tmp_learned, const bool study_pray, const short tmp_use_realm)
 {
+    this->learned = tmp_learned;
     this->use_realm = tmp_use_realm;
     const magic_type *s_ptr;
     if (!is_magic(this->use_realm)) {
@@ -77,7 +78,7 @@ bool SpellSelector::spell_okay(const int spell, const bool learned, const bool s
         return !study_pray;
     }
 
-    return !learned;
+    return !this->learned;
 }
 
 /*!
@@ -97,15 +98,16 @@ bool SpellSelector::spell_okay(const int spell, const bool learned, const bool s
  * The "known" should be TRUE for cast/pray, FALSE for study
  * </pre>
  */
-bool SpellSelector::get_spell(concptr tmp_prompt, OBJECT_SUBTYPE_VALUE sval, bool learned, const short tmp_use_realm, int tmp_sn)
+bool SpellSelector::get_spell(concptr tmp_prompt, OBJECT_SUBTYPE_VALUE sval, const bool tmp_learned, const short tmp_use_realm, int tmp_sn)
 {
+    this->learned = tmp_learned;
     this->prompt = tmp_prompt;
     this->use_realm = tmp_use_realm;
     this->sn = tmp_sn;
     short code;
     if (repeat_pull(&code)) {
         this->sn = code;
-        if (this->spell_okay(this->sn, learned, false, this->use_realm)) {
+        if (this->spell_okay(this->sn, this->learned, false, this->use_realm)) {
             return true;
         }
     }
@@ -117,24 +119,14 @@ bool SpellSelector::get_spell(concptr tmp_prompt, OBJECT_SUBTYPE_VALUE sval, boo
         }
     }
 
-    if (!this->is_learned(learned) || !this->need_learning(sval)) {
+    if (!this->is_learned() || !this->need_learning(sval)) {
         return false;
     }
 
     this->sn = -1;
     this->player_ptr->window_flags |= (PW_SPELL);
     handle_stuff(this->player_ptr);
-    char out_val[160];
-#ifdef JP
-    jverb(prompt, this->jverb_buf, JVERB_AND);
-    (void)strnfmt(out_val, 78, "(%^s:%c-%c, '*'で一覧, ESCで中断) どの%sを%^sますか? ", this->spell_category, I2A(0), I2A(this->num - 1), this->spell_category, this->jverb_buf);
-#else
-    (void)strnfmt(out_val, 78, "(%^ss %c-%c, *=List, ESC=exit) %^s which %s? ", this->spell_category, I2A(0), I2A(this->num - 1), prompt, this->spell_category);
-#endif
-
-    this->choice = (always_show_list || use_menu) ? ESCAPE : '\1';
-    this->selected_spell = MAX_SPELLS_PER_REALM;
-    if (!this->loop_key_input(out_val, learned)){
+    if (!this->display_selection()) {
         return false;
     }
 
@@ -240,9 +232,9 @@ process_result SpellSelector::select_spell_number()
     return PROCESS_CONTINUE;
 }
 
-bool SpellSelector::can_use(const bool learned)
+bool SpellSelector::can_use()
 {
-    if (this->spell_okay(selected_spell, learned, false, this->use_realm)) {
+    if (this->spell_okay(this->selected_spell, this->learned, false, this->use_realm)) {
         return true;
     }
 
@@ -291,7 +283,7 @@ bool SpellSelector::ask_capital()
     return true;
 }
 
-bool SpellSelector::loop_key_input(char *out_val, const bool learned)
+bool SpellSelector::loop_key_input(char *out_val)
 {
     while (!this->flag) {
         if (this->choice == ESCAPE) {
@@ -318,7 +310,7 @@ bool SpellSelector::loop_key_input(char *out_val, const bool learned)
         }
 
         this->selected_spell = this->spells[this->spell_num];
-        if (!this->can_use(learned)) {
+        if (!this->can_use()) {
             continue;
         }
 
@@ -351,14 +343,29 @@ bool SpellSelector::need_learning(OBJECT_SUBTYPE_VALUE sval)
     return true;
 }
 
-bool SpellSelector::is_learned(const bool learned)
+bool SpellSelector::is_learned()
 {
     this->sn = -2;
     for (this->spell_num = 0; this->spell_num < this->num; this->spell_num++) {
-        if (this->spell_okay(this->spells[this->spell_num], learned, false, this->use_realm)) {
+        if (this->spell_okay(this->spells[this->spell_num], this->learned, false, this->use_realm)) {
             return true;
         }
     }
 
     return false;
+}
+
+bool SpellSelector::display_selection()
+{
+    char out_val[160];
+#ifdef JP
+    jverb(this->prompt, this->jverb_buf, JVERB_AND);
+    (void)strnfmt(out_val, 78, "(%^s:%c-%c, '*'で一覧, ESCで中断) どの%sを%^sますか? ", this->spell_category, I2A(0), I2A(this->num - 1), this->spell_category, this->jverb_buf);
+#else
+    (void)strnfmt(out_val, 78, "(%^ss %c-%c, *=List, ESC=exit) %^s which %s? ", this->spell_category, I2A(0), I2A(this->num - 1), this->prompt, this->spell_category);
+#endif
+
+    this->choice = (always_show_list || use_menu) ? ESCAPE : '\1';
+    this->selected_spell = MAX_SPELLS_PER_REALM;
+    return this->loop_key_input(out_val);
 }
