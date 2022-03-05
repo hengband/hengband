@@ -179,7 +179,6 @@ void effect_player_nether(PlayerType *player_ptr, EffectPlayerType *ep_ptr)
 
     if (PlayerRace(player_ptr).equals(PlayerRaceType::SPECTRE)) {
         if (!evaded) {
-            msg_print(_("気分がよくなった。", "You feel invigorated!"));
             hp_player(player_ptr, ep_ptr->dam / 4);
         }
         ep_ptr->get_damage = 0;
