@@ -6,4 +6,4 @@
 struct effect_monster_type;
 class CapturedMonsterType;
 class PlayerType;
-process_result switch_effects_monster(PlayerType *player_ptr, effect_monster_type *em_ptr, std::optional<CapturedMonsterType *> cap_mon_ptr = std::nullopt);
+ProcessResult switch_effects_monster(PlayerType *player_ptr, effect_monster_type *em_ptr, std::optional<CapturedMonsterType *> cap_mon_ptr = std::nullopt);

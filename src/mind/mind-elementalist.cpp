@@ -1068,7 +1068,7 @@ bool is_elemental_genocide_effective(monster_race *r_ptr, AttributeType type)
  * @param em_ptr 魔法効果情報への参照ポインタ
  * @return 効果処理を続けるかどうか
  */
-process_result effect_monster_elemental_genocide(PlayerType *player_ptr, effect_monster_type *em_ptr)
+ProcessResult effect_monster_elemental_genocide(PlayerType *player_ptr, effect_monster_type *em_ptr)
 {
     auto type = get_element_type(player_ptr->element, 0);
     auto name = get_element_name(player_ptr->element, 0);
@@ -1087,7 +1087,7 @@ process_result effect_monster_elemental_genocide(PlayerType *player_ptr, effect_
             msg_format(_("%sには効果がなかった。", "%^s is unaffected."), em_ptr->m_name);
         }
         em_ptr->dam = 0;
-        return PROCESS_TRUE;
+        return ProcessResult::PROCESS_TRUE;
     }
 
     if (genocide_aux(player_ptr, em_ptr->g_ptr->m_idx, em_ptr->dam, !em_ptr->who, (em_ptr->r_ptr->level + 1) / 2, _("モンスター消滅", "Genocide One"))) {
@@ -1096,11 +1096,11 @@ process_result effect_monster_elemental_genocide(PlayerType *player_ptr, effect_
         }
         em_ptr->dam = 0;
         chg_virtue(player_ptr, V_VITALITY, -1);
-        return PROCESS_TRUE;
+        return ProcessResult::PROCESS_TRUE;
     }
 
     em_ptr->skipped = true;
-    return PROCESS_CONTINUE;
+    return ProcessResult::PROCESS_CONTINUE;
 }
 
 /*!

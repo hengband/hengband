@@ -6,7 +6,7 @@
 #include "system/monster-type-definition.h"
 #include "view/display-messages.h"
 
-process_result effect_monster_curse_1(effect_monster_type *em_ptr)
+ProcessResult effect_monster_curse_1(effect_monster_type *em_ptr)
 {
     if (em_ptr->seen) {
         em_ptr->obvious = true;
@@ -19,10 +19,10 @@ process_result effect_monster_curse_1(effect_monster_type *em_ptr)
         em_ptr->dam = 0;
     }
 
-    return PROCESS_CONTINUE;
+    return ProcessResult::PROCESS_CONTINUE;
 }
 
-process_result effect_monster_curse_2(effect_monster_type *em_ptr)
+ProcessResult effect_monster_curse_2(effect_monster_type *em_ptr)
 {
     if (em_ptr->seen) {
         em_ptr->obvious = true;
@@ -36,10 +36,10 @@ process_result effect_monster_curse_2(effect_monster_type *em_ptr)
         em_ptr->dam = 0;
     }
 
-    return PROCESS_CONTINUE;
+    return ProcessResult::PROCESS_CONTINUE;
 }
 
-process_result effect_monster_curse_3(effect_monster_type *em_ptr)
+ProcessResult effect_monster_curse_3(effect_monster_type *em_ptr)
 {
     if (em_ptr->seen) {
         em_ptr->obvious = true;
@@ -53,10 +53,10 @@ process_result effect_monster_curse_3(effect_monster_type *em_ptr)
         em_ptr->dam = 0;
     }
 
-    return PROCESS_CONTINUE;
+    return ProcessResult::PROCESS_CONTINUE;
 }
 
-process_result effect_monster_curse_4(effect_monster_type *em_ptr)
+ProcessResult effect_monster_curse_4(effect_monster_type *em_ptr)
 {
     if (em_ptr->seen) {
         em_ptr->obvious = true;
@@ -72,5 +72,5 @@ process_result effect_monster_curse_4(effect_monster_type *em_ptr)
         em_ptr->dam = 0;
     }
 
-    return PROCESS_CONTINUE;
+    return ProcessResult::PROCESS_CONTINUE;
 }
