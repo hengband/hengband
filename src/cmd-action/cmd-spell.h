@@ -2,6 +2,7 @@
 
 #include "system/angband.h"
 
+// @caution constexprで文字列リテラルを宣言すると文字コードの異なるOS間で文字化けを起こして面倒なので実施しない.
 extern concptr KWD_DAM; //!< 効果文字列: 損傷 / dam
 extern concptr KWD_RANGE; //!< 効果文字列: 射程 / dir
 extern concptr KWD_DURATION; //!< 効果文字列: 期間 / dur
