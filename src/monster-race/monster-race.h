@@ -18,5 +18,5 @@ public:
     bool is_valid() const;
 
 private:
-    const MonsterRaceId r_idx;
+    MonsterRaceId r_idx;
 };

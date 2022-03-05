@@ -56,11 +56,6 @@ static concptr basic_key_at(int index, char *buf)
     return angband_music_basic_name[index];
 }
 
-static inline DUNGEON_IDX get_dungeon_count()
-{
-    return static_cast<DUNGEON_IDX>(d_info.size());
-}
-
 /*!
  * @brief action-valに対応する[Dungeon]セクションのキー名を取得する
  * @param index "term_xtra()"の第2引数action-valに対応する値
@@ -69,17 +64,12 @@ static inline DUNGEON_IDX get_dungeon_count()
  */
 static concptr dungeon_key_at(int index, char *buf)
 {
-    if (index >= get_dungeon_count()) {
+    if (index >= static_cast<int>(d_info.size())) {
         return nullptr;
     }
 
     sprintf(buf, "dungeon%03d", index);
     return buf;
-}
-
-static inline int16_t get_quest_count()
-{
-    return max_q_idx;
 }
 
 /*!
@@ -90,17 +80,12 @@ static inline int16_t get_quest_count()
  */
 static concptr quest_key_at(int index, char *buf)
 {
-    if (index >= get_quest_count()) {
+    if (index >= static_cast<int>(max_q_idx)) {
         return nullptr;
     }
 
     sprintf(buf, "quest%03d", index);
     return buf;
-}
-
-static inline int16_t get_town_count()
-{
-    return max_towns;
 }
 
 /*!
@@ -111,17 +96,12 @@ static inline int16_t get_town_count()
  */
 static concptr town_key_at(int index, char *buf)
 {
-    if (index >= get_town_count()) {
+    if (index >= static_cast<int>(max_towns)) {
         return nullptr;
     }
 
     sprintf(buf, "town%03d", index);
     return buf;
-}
-
-static inline MonsterRaceId get_monster_count()
-{
-    return static_cast<MonsterRaceId>(r_info.size());
 }
 
 /*!
@@ -132,7 +112,7 @@ static inline MonsterRaceId get_monster_count()
  */
 static concptr monster_key_at(int index, char *buf)
 {
-    if (index >= get_monster_count()) {
+    if (index >= static_cast<int>(r_info.size())) {
         return nullptr;
     }
 
