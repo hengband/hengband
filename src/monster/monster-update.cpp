@@ -699,7 +699,7 @@ void update_smart_learn(PlayerType *player_ptr, MONSTER_IDX m_idx, int what)
 
         break;
     case DRS_DARK:
-        if (has_resist_dark(player_ptr)) {
+        if (has_resist_dark(player_ptr) || has_immune_dark(player_ptr)) {
             m_ptr->smart.set(MonsterSmartLearnType::RES_DARK);
         }
 

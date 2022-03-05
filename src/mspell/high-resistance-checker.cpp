@@ -113,7 +113,7 @@ static void check_dark_resistance(PlayerType *player_ptr, msr_type *msr_ptr)
         return;
     }
 
-    if (PlayerRace(player_ptr).tr_flags().has(TR_IM_DARK)) {
+    if (has_immune_dark(player_ptr)) {
         msr_ptr->ability_flags.reset(MonsterAbilityType::BR_DARK);
         msr_ptr->ability_flags.reset(MonsterAbilityType::BA_DARK);
         return;
