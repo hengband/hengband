@@ -80,7 +80,7 @@ static bool set_activation_target(PlayerType *player_ptr, ae_type *ae_ptr)
         return true;
     }
 
-    ae_ptr->o_ptr->pval = cap_mon_ptr.r_idx;
+    ae_ptr->o_ptr->pval = enum2i(cap_mon_ptr.r_idx);
     ae_ptr->o_ptr->captured_monster_speed = cap_mon_ptr.speed;
     ae_ptr->o_ptr->captured_monster_current_hp = cap_mon_ptr.current_hp;
     ae_ptr->o_ptr->captured_monster_max_hp = cap_mon_ptr.max_hp;
@@ -153,11 +153,12 @@ static void check_inscription_value(PlayerType *player_ptr, ae_type *ae_ptr)
 
 static void check_monster_ball_use(PlayerType *player_ptr, ae_type *ae_ptr)
 {
-    if (!monster_can_enter(player_ptr, player_ptr->y + ddy[ae_ptr->dir], player_ptr->x + ddx[ae_ptr->dir], &r_info[ae_ptr->o_ptr->pval], 0)) {
+    auto r_idx = i2enum<MonsterRaceId>(ae_ptr->o_ptr->pval);
+    if (!monster_can_enter(player_ptr, player_ptr->y + ddy[ae_ptr->dir], player_ptr->x + ddx[ae_ptr->dir], &r_info[r_idx], 0)) {
         return;
     }
 
-    if (!place_monster_aux(player_ptr, 0, player_ptr->y + ddy[ae_ptr->dir], player_ptr->x + ddx[ae_ptr->dir], ae_ptr->o_ptr->pval, PM_FORCE_PET | PM_NO_KAGE)) {
+    if (!place_monster_aux(player_ptr, 0, player_ptr->y + ddy[ae_ptr->dir], player_ptr->x + ddx[ae_ptr->dir], r_idx, PM_FORCE_PET | PM_NO_KAGE)) {
         return;
     }
 

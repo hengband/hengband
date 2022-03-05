@@ -145,7 +145,7 @@ static void drop_corpse(PlayerType *player_ptr, monster_death_type *md_ptr)
     auto *q_ptr = &forge;
     q_ptr->prep(lookup_kind(ItemKindType::CORPSE, (corpse ? SV_CORPSE : SV_SKELETON)));
     apply_magic_to_object(player_ptr, q_ptr, floor_ptr->object_level, AM_NO_FIXED_ART);
-    q_ptr->pval = md_ptr->m_ptr->r_idx;
+    q_ptr->pval = enum2i(md_ptr->m_ptr->r_idx);
     (void)drop_near(player_ptr, q_ptr, -1, md_ptr->md_y, md_ptr->md_x);
 }
 
@@ -418,7 +418,7 @@ void monster_death(PlayerType *player_ptr, MONSTER_IDX m_idx, bool drop_item, At
     write_pet_death(player_ptr, md_ptr);
     on_dead_explosion(player_ptr, md_ptr);
     if (md_ptr->m_ptr->mflag2.has(MonsterConstantFlagType::CHAMELEON)) {
-        choose_new_monster(player_ptr, m_idx, true, MON_CHAMELEON);
+        choose_new_monster(player_ptr, m_idx, true, MonsterRaceId::CHAMELEON);
         md_ptr->r_ptr = &r_info[md_ptr->m_ptr->r_idx];
     }
 
@@ -438,7 +438,7 @@ void monster_death(PlayerType *player_ptr, MONSTER_IDX m_idx, bool drop_item, At
     auto *floor_ptr = player_ptr->current_floor_ptr;
     floor_ptr->object_level = (floor_ptr->dun_level + md_ptr->r_ptr->level) / 2;
     drop_items_golds(player_ptr, md_ptr, drop_numbers);
-    if (((md_ptr->r_ptr->flags1 & RF1_QUESTOR) == 0) || player_ptr->phase_out || (md_ptr->m_ptr->r_idx != MON_SERPENT) || md_ptr->cloned) {
+    if (((md_ptr->r_ptr->flags1 & RF1_QUESTOR) == 0) || player_ptr->phase_out || (md_ptr->m_ptr->r_idx != MonsterRaceId::SERPENT) || md_ptr->cloned) {
         return;
     }
 
@@ -451,7 +451,7 @@ void monster_death(PlayerType *player_ptr, MONSTER_IDX m_idx, bool drop_item, At
  * @param r_ptr 撃破されたモンスターの種族情報を持つ構造体の参照ポインタ
  * @return 撃破されたモンスターの述語
  */
-concptr extract_note_dies(MONRACE_IDX r_idx)
+concptr extract_note_dies(MonsterRaceId r_idx)
 {
     auto *r_ptr = &r_info[r_idx];
     if (monster_living(r_idx)) {

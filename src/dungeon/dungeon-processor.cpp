@@ -139,13 +139,14 @@ void process_dungeon(PlayerType *player_ptr, bool load_game)
         quest_discovery(random_quest_number(player_ptr, floor_ptr->dun_level));
         floor_ptr->quest_number = random_quest_number(player_ptr, floor_ptr->dun_level);
     }
-    if ((floor_ptr->dun_level == d_info[player_ptr->dungeon_idx].maxdepth) && d_info[player_ptr->dungeon_idx].final_guardian) {
-        if (r_info[d_info[player_ptr->dungeon_idx].final_guardian].max_num)
+    const auto guardian = d_info[player_ptr->dungeon_idx].final_guardian;
+    if ((floor_ptr->dun_level == d_info[player_ptr->dungeon_idx].maxdepth) && MonsterRace(guardian).is_valid()) {
+        if (r_info[guardian].max_num)
 #ifdef JP
             msg_format("この階には%sの主である%sが棲んでいる。", d_info[player_ptr->dungeon_idx].name.c_str(),
-                r_info[d_info[player_ptr->dungeon_idx].final_guardian].name.c_str());
+                r_info[guardian].name.c_str());
 #else
-            msg_format("%^s lives in this level as the keeper of %s.", r_info[d_info[player_ptr->dungeon_idx].final_guardian].name.c_str(),
+            msg_format("%^s lives in this level as the keeper of %s.", r_info[guardian].name.c_str(),
                 d_info[player_ptr->dungeon_idx].name.c_str());
 #endif
     }

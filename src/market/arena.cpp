@@ -197,12 +197,12 @@ void update_gambling_monsters(PlayerType *player_ptr)
         total = 0;
         tekitou = false;
         for (i = 0; i < 4; i++) {
-            MONRACE_IDX r_idx;
+            MonsterRaceId r_idx;
             int j;
             while (true) {
                 get_mon_num_prep(player_ptr, monster_can_entry_arena, nullptr);
                 r_idx = get_mon_num(player_ptr, 0, mon_level, GMN_ARENA);
-                if (!r_idx) {
+                if (!MonsterRace(r_idx).is_valid()) {
                     continue;
                 }
 

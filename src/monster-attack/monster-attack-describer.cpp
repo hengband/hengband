@@ -70,7 +70,7 @@ static void monster_attack_show(MonsterAttackPlayer *monap_ptr)
 #ifdef JP
     monap_ptr->abbreviate = -1;
 #endif
-    if (monap_ptr->m_ptr->r_idx == MON_JAIAN) {
+    if (monap_ptr->m_ptr->r_idx == MonsterRaceId::JAIAN) {
         show_jaian_song(monap_ptr);
     } else {
         if (one_in_(3)) {
@@ -228,7 +228,7 @@ void describe_monster_attack_method(MonsterAttackPlayer *monap_ptr)
 #ifdef JP
         monap_ptr->abbreviate = -1;
 #endif
-        monap_ptr->act = desc_insult[randint0(monap_ptr->m_ptr->r_idx == MON_DEBBY ? 10 : 8)];
+        monap_ptr->act = desc_insult[randint0(monap_ptr->m_ptr->r_idx == MonsterRaceId::DEBBY ? 10 : 8)];
         sound(SOUND_MOAN);
         break;
     }

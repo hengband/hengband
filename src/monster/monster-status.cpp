@@ -398,9 +398,9 @@ void dispel_monster_status(PlayerType *player_ptr, MONSTER_IDX m_idx)
  * @param m_idx 経験値を得るモンスターの参照ID
  * @param s_idx 撃破されたモンスター種族の参照ID
  */
-void monster_gain_exp(PlayerType *player_ptr, MONSTER_IDX m_idx, MONRACE_IDX s_idx)
+void monster_gain_exp(PlayerType *player_ptr, MONSTER_IDX m_idx, MonsterRaceId s_idx)
 {
-    if (m_idx <= 0 || s_idx <= 0) {
+    if (m_idx <= 0 || !MonsterRace(s_idx).is_valid()) {
         return;
     }
 
@@ -494,7 +494,8 @@ void monster_gain_exp(PlayerType *player_ptr, MONSTER_IDX m_idx, MONRACE_IDX s_i
             if (is_hallucinated) {
                 monster_race *hallucinated_race = nullptr;
                 do {
-                    hallucinated_race = &r_info[randint1(r_info.size() - 1)];
+                    auto r_idx = MonsterRace::pick_one_at_random();
+                    hallucinated_race = &r_info[r_idx];
                 } while (hallucinated_race->name.empty() || hallucinated_race->kind_flags.has(MonsterKindType::UNIQUE));
                 auto mes_evolution = _("%sは%sに進化した。", "%^s evolved into %s.");
                 auto mes_degeneration = _("%sは%sに退化した。", "%^s degenerated into %s.");
@@ -523,7 +524,7 @@ void monster_gain_exp(PlayerType *player_ptr, MONSTER_IDX m_idx, MONRACE_IDX s_i
 
 bool monster_is_valid(monster_type *m_ptr)
 {
-    return (m_ptr->r_idx != 0);
+    return MonsterRace(m_ptr->r_idx).is_valid();
 }
 
 TIME_EFFECT monster_csleep_remaining(monster_type *m_ptr)

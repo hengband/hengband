@@ -7,6 +7,7 @@
 #include "player-ability/player-ability-types.h"
 #include "system/monster-race-definition.h"
 #include "term/gameterm.h"
+#include "util/enum-converter.h"
 #include "util/string-processor.h"
 #include "view/display-messages.h"
 
@@ -106,13 +107,10 @@ errr parse_r_info(std::string_view buf, angband_header *)
         if (i < error_idx) {
             return PARSE_ERROR_NON_SEQUENTIAL_RECORDS;
         }
-        if (i >= static_cast<int>(r_info.size())) {
-            r_info.resize(i + 1);
-        }
 
         error_idx = i;
-        r_ptr = &r_info[i];
-        r_ptr->idx = static_cast<MONRACE_IDX>(i);
+        r_ptr = &(r_info.emplace_hint(r_info.end(), i2enum<MonsterRaceId>(i), monster_race{})->second);
+        r_ptr->idx = i2enum<MonsterRaceId>(i);
 #ifdef JP
         r_ptr->name = tokens[2];
 #endif
@@ -196,7 +194,7 @@ errr parse_r_info(std::string_view buf, angband_header *)
         // R:reinforcer_idx:number_dice
         size_t i = 0;
         for (; i < A_MAX; i++) {
-            if (r_ptr->reinforce_id[i] == 0) {
+            if (!MonsterRace(r_ptr->reinforce_id[i]).is_valid()) {
                 break;
             }
         }

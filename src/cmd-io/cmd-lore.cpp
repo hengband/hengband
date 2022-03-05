@@ -88,8 +88,8 @@ void do_cmd_query_symbol(PlayerType *player_ptr)
     }
 
     prt(buf, 0, 0);
-    std::vector<MONRACE_IDX> who;
-    for (const auto &r_ref : r_info) {
+    std::vector<MonsterRaceId> who;
+    for (const auto &[r_idx, r_ref] : r_info) {
         if (!cheat_know && !r_ref.r_sights) {
             continue;
         }

@@ -14,7 +14,8 @@ enum spell_flag_type {
 };
 
 enum class MonsterAbilityType;
+enum class MonsterRaceId : int16_t;
 class PlayerType;
 int monspell_damage(PlayerType *player_ptr, MonsterAbilityType ms_type, MONSTER_IDX m_idx, int TYPE);
-int monspell_race_damage(PlayerType *player_ptr, MonsterAbilityType ms_type, MONRACE_IDX r_idx, int TYPE);
+int monspell_race_damage(PlayerType *player_ptr, MonsterAbilityType ms_type, MonsterRaceId r_idx, int TYPE);
 int monspell_bluemage_damage(PlayerType *player_ptr, MonsterAbilityType ms_type, PLAYER_LEVEL plev, int TYPE);

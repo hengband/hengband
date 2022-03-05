@@ -5,10 +5,12 @@
 extern int rakubadam_m; /*!< 振り落とされた際のダメージ量 */
 extern int rakubadam_p; /*!< 落馬した際のダメージ量 */
 
+enum class MonsterRaceId : int16_t;
+
 class CapturedMonsterType {
 public:
     CapturedMonsterType() = default;
-    short r_idx;
+    MonsterRaceId r_idx;
     byte speed;
     short current_hp;
     short max_hp;

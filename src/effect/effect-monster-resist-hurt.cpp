@@ -293,7 +293,7 @@ process_result effect_monster_water(PlayerType *player_ptr, effect_monster_type 
         return PROCESS_CONTINUE;
     }
 
-    if ((em_ptr->m_ptr->r_idx == MON_WATER_ELEM) || (em_ptr->m_ptr->r_idx == MON_UNMAKER)) {
+    if ((em_ptr->m_ptr->r_idx == MonsterRaceId::WATER_ELEM) || (em_ptr->m_ptr->r_idx == MonsterRaceId::UNMAKER)) {
         em_ptr->note = _("には完全な耐性がある！", " is immune.");
         em_ptr->dam = 0;
     } else {

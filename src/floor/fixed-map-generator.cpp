@@ -125,23 +125,26 @@ static void parse_qtw_D(PlayerType *player_ptr, qtwg_type *qtwg_ptr, char *s)
                 clone = true;
             }
 
-            old_cur_num = r_info[monster_index].cur_num;
-            old_max_num = r_info[monster_index].max_num;
+            const auto r_idx = i2enum<MonsterRaceId>(monster_index);
+            auto &r_ref = r_info[r_idx];
 
-            if (r_info[monster_index].kind_flags.has(MonsterKindType::UNIQUE)) {
-                r_info[monster_index].cur_num = 0;
-                r_info[monster_index].max_num = 1;
-            } else if (r_info[monster_index].flags7 & RF7_NAZGUL) {
-                if (r_info[monster_index].cur_num == r_info[monster_index].max_num) {
-                    r_info[monster_index].max_num++;
+            old_cur_num = r_ref.cur_num;
+            old_max_num = r_ref.max_num;
+
+            if (r_ref.kind_flags.has(MonsterKindType::UNIQUE)) {
+                r_ref.cur_num = 0;
+                r_ref.max_num = 1;
+            } else if (r_ref.flags7 & RF7_NAZGUL) {
+                if (r_ref.cur_num == r_ref.max_num) {
+                    r_ref.max_num++;
                 }
             }
 
-            place_monster_aux(player_ptr, 0, *qtwg_ptr->y, *qtwg_ptr->x, monster_index, (PM_ALLOW_SLEEP | PM_NO_KAGE));
+            place_monster_aux(player_ptr, 0, *qtwg_ptr->y, *qtwg_ptr->x, r_idx, (PM_ALLOW_SLEEP | PM_NO_KAGE));
             if (clone) {
                 floor_ptr->m_list[hack_m_idx_ii].mflag2.set(MonsterConstantFlagType::CLONED);
-                r_info[monster_index].cur_num = old_cur_num;
-                r_info[monster_index].max_num = old_max_num;
+                r_ref.cur_num = old_cur_num;
+                r_ref.max_num = old_max_num;
             }
         }
 
@@ -216,7 +219,7 @@ static bool parse_qtw_QQ(quest_type *q_ptr, char **zz, int num)
     q_ptr->cur_num = (MONSTER_NUMBER)atoi(zz[4]);
     q_ptr->max_num = (MONSTER_NUMBER)atoi(zz[5]);
     q_ptr->level = (DEPTH)atoi(zz[6]);
-    q_ptr->r_idx = (MONRACE_IDX)atoi(zz[7]);
+    q_ptr->r_idx = i2enum<MonsterRaceId>(atoi(zz[7]));
     q_ptr->k_idx = (KIND_OBJECT_IDX)atoi(zz[8]);
     q_ptr->dungeon = (DUNGEON_IDX)atoi(zz[9]);
 

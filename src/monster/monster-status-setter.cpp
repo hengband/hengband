@@ -378,7 +378,7 @@ bool set_monster_invulner(PlayerType *player_ptr, MONSTER_IDX m_idx, int v, bool
  * @param vs_player TRUEならば時間停止開始処理を行う
  * @return 時間停止が行われている状態ならばTRUEを返す
  */
-bool set_monster_timewalk(PlayerType *player_ptr, int num, MONRACE_IDX who, bool vs_player)
+bool set_monster_timewalk(PlayerType *player_ptr, int num, MonsterRaceId who, bool vs_player)
 {
     auto *m_ptr = &player_ptr->current_floor_ptr->m_list[hack_m_idx];
     if (w_ptr->timewalk_m_idx) {
@@ -391,13 +391,13 @@ bool set_monster_timewalk(PlayerType *player_ptr, int num, MONRACE_IDX who, bool
 
         concptr mes;
         switch (who) {
-        case MON_DIO:
+        case MonsterRaceId::DIO:
             mes = _("「『ザ・ワールド』！　時は止まった！」", "%s yells 'The World! Time has stopped!'");
             break;
-        case MON_WONG:
+        case MonsterRaceId::WONG:
             mes = _("「時よ！」", "%s yells 'Time!'");
             break;
-        case MON_DIAVOLO:
+        case MonsterRaceId::DIAVOLO:
             mes = _("『キング・クリムゾン』！", "%s yells 'King Crison!'");
             break;
         default:
@@ -434,7 +434,7 @@ bool set_monster_timewalk(PlayerType *player_ptr, int num, MONRACE_IDX who, bool
     if (vs_player || (player_has_los_bold(player_ptr, m_ptr->fy, m_ptr->fx) && projectable(player_ptr, player_ptr->y, player_ptr->x, m_ptr->fy, m_ptr->fx))) {
         concptr mes;
         switch (who) {
-        case MON_DIAVOLO:
+        case MonsterRaceId::DIAVOLO:
             mes = _("これが我が『キング・クリムゾン』の能力！　『時間を消し去って』飛び越えさせた…！！",
                 "This is the ability of my 'King Crimson'! 'Erase the time' and let it jump over... !!");
             break;

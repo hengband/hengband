@@ -1,11 +1,15 @@
 ﻿#include "monster-race/monster-race.h"
 #include "monster-race/race-flags-resistance.h"
 #include "monster-race/race-flags1.h"
+#include "monster-race/race-indice-types.h"
 #include "monster-race/race-resistance-mask.h"
 #include "system/monster-race-definition.h"
+#include "util/probability-table.h"
+#include <algorithm>
+#include <vector>
 
 /* The monster race arrays */
-std::vector<monster_race> r_info;
+std::map<MonsterRaceId, monster_race> r_info;
 
 int calc_monrace_power(monster_race *r_ptr)
 {
@@ -46,4 +50,40 @@ int calc_monrace_power(monster_race *r_ptr)
         ret = ret * r_ptr->arena_ratio / 100;
     }
     return ret;
+}
+
+MonsterRace::MonsterRace(MonsterRaceId r_idx)
+    : r_idx(r_idx)
+{
+}
+
+/*!
+ * @brief (MonsterRaceId::PLAYERを除く)実在するすべてのモンスター種族IDから等確率で1つ選択する
+ *
+ * @return 選択したモンスター種族ID
+ */
+MonsterRaceId MonsterRace::pick_one_at_random()
+{
+    static ProbabilityTable<MonsterRaceId> table;
+
+    if (table.empty()) {
+        for (const auto &[r_idx, r_ref] : r_info) {
+            if (MonsterRace(r_idx).is_valid()) {
+                table.entry_item(r_idx, 1);
+            }
+        }
+    }
+
+    return table.pick_one_at_random();
+}
+
+/*!
+ * @brief コンストラクタに渡された MonsterRaceId が正当なもの（実際に存在するモンスター種族IDである）かどうかを調べる
+ * @details モンスター種族IDが r_info に実在するもの(MonsterRaceId::PLAYERは除く)であるかどうかの用途の他、
+ * m_list 上の要素などの r_idx にMonsterRaceId::PLAYER を入れることで死亡扱いとして使われるのでその判定に使用する事もある
+ * @return 正当なものであれば true、そうでなければ false
+ */
+bool MonsterRace::is_valid() const
+{
+    return this->r_idx != MonsterRaceId::PLAYER;
 }

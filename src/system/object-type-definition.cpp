@@ -521,7 +521,7 @@ bool ObjectType::is_offerable() const
         return false;
     }
 
-    return angband_strchr("pht", r_info[this->pval].d_char) != nullptr;
+    return angband_strchr("pht", r_info[i2enum<MonsterRaceId>(this->pval)].d_char) != nullptr;
 }
 
 /*!

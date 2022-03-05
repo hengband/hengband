@@ -86,7 +86,7 @@ static void check_mspell_arena(PlayerType *player_ptr, msa_type *msa_ptr)
 
     msa_ptr->ability_flags.reset(RF_ABILITY_SUMMON_MASK).reset(MonsterAbilityType::TELE_LEVEL);
 
-    if (msa_ptr->m_ptr->r_idx == MON_ROLENTO) {
+    if (msa_ptr->m_ptr->r_idx == MonsterRaceId::ROLENTO) {
         msa_ptr->ability_flags.reset(MonsterAbilityType::SPECIAL);
     }
 }
@@ -113,7 +113,7 @@ static bool check_mspell_non_stupid(PlayerType *player_ptr, msa_type *msa_ptr)
         msa_ptr->ability_flags.reset(MonsterAbilityType::RAISE_DEAD);
     }
 
-    if (msa_ptr->ability_flags.has(MonsterAbilityType::SPECIAL) && (msa_ptr->m_ptr->r_idx == MON_ROLENTO) && !summon_possible(player_ptr, msa_ptr->y, msa_ptr->x)) {
+    if (msa_ptr->ability_flags.has(MonsterAbilityType::SPECIAL) && (msa_ptr->m_ptr->r_idx == MonsterRaceId::ROLENTO) && !summon_possible(player_ptr, msa_ptr->y, msa_ptr->x)) {
         msa_ptr->ability_flags.reset(MonsterAbilityType::SPECIAL);
     }
 

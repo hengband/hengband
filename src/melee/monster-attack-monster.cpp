@@ -85,7 +85,7 @@ static void aura_fire_by_melee(PlayerType *player_ptr, mam_type *mam_ptr)
 {
     auto *r_ptr = &r_info[mam_ptr->m_ptr->r_idx];
     monster_race *tr_ptr = &r_info[mam_ptr->t_ptr->r_idx];
-    if (tr_ptr->aura_flags.has_not(MonsterAuraType::FIRE) || (mam_ptr->m_ptr->r_idx == 0)) {
+    if (tr_ptr->aura_flags.has_not(MonsterAuraType::FIRE) || !MonsterRace(mam_ptr->m_ptr->r_idx).is_valid()) {
         return;
     }
 
@@ -110,7 +110,7 @@ static void aura_cold_by_melee(PlayerType *player_ptr, mam_type *mam_ptr)
 {
     auto *r_ptr = &r_info[mam_ptr->m_ptr->r_idx];
     monster_race *tr_ptr = &r_info[mam_ptr->t_ptr->r_idx];
-    if (tr_ptr->aura_flags.has_not(MonsterAuraType::COLD) || (mam_ptr->m_ptr->r_idx == 0)) {
+    if (tr_ptr->aura_flags.has_not(MonsterAuraType::COLD) || !MonsterRace(mam_ptr->m_ptr->r_idx).is_valid()) {
         return;
     }
 
@@ -135,7 +135,7 @@ static void aura_elec_by_melee(PlayerType *player_ptr, mam_type *mam_ptr)
 {
     auto *r_ptr = &r_info[mam_ptr->m_ptr->r_idx];
     monster_race *tr_ptr = &r_info[mam_ptr->t_ptr->r_idx];
-    if (tr_ptr->aura_flags.has_not(MonsterAuraType::ELEC) || (mam_ptr->m_ptr->r_idx == 0)) {
+    if (tr_ptr->aura_flags.has_not(MonsterAuraType::ELEC) || !MonsterRace(mam_ptr->m_ptr->r_idx).is_valid()) {
         return;
     }
 
@@ -352,7 +352,7 @@ bool monst_attack_monst(PlayerType *player_ptr, MONSTER_IDX m_idx, MONSTER_IDX t
 
     repeat_melee(player_ptr, mam_ptr);
     explode_monster_by_melee(player_ptr, mam_ptr);
-    if (!mam_ptr->blinked || mam_ptr->m_ptr->r_idx == 0) {
+    if (!mam_ptr->blinked || !MonsterRace(mam_ptr->m_ptr->r_idx).is_valid()) {
         return true;
     }
 

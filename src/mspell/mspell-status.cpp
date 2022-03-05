@@ -667,15 +667,15 @@ MonsterSpellResult spell_RF6_INVULNER(PlayerType *player_ptr, MONSTER_IDX m_idx,
     monspell_message_base(player_ptr, m_idx, t_idx, msg, !seen, target_type);
 
     if (m_ptr->ml) {
-        MONRACE_IDX r_idx = m_ptr->r_idx;
+        MonsterRaceId r_idx = m_ptr->r_idx;
         GAME_TEXT m_name[MAX_NLEN];
         monster_desc(player_ptr, m_name, m_ptr, MD_NONE);
         switch (r_idx) {
-        case MON_MARIO:
-        case MON_LUIGI:
+        case MonsterRaceId::MARIO:
+        case MonsterRaceId::LUIGI:
             msg_format(_("%sはスターを取った！", "%^s got a star!"), m_name);
             break;
-        case MON_DIAVOLO:
+        case MonsterRaceId::DIAVOLO:
             msg_print(_("『読める』………動きの『軌跡』が読める……", "'Read'......... I can read the 'trajectory' of movement..."));
             break;
         default:

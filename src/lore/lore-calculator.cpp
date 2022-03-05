@@ -55,7 +55,7 @@ void dice_to_string(int base_damage, int dice_num, int dice_side, int dice_mult,
  * @details
  * The higher the level, the fewer kills needed.
  */
-bool know_armour(MONRACE_IDX r_idx, const bool know_everything)
+bool know_armour(MonsterRaceId r_idx, const bool know_everything)
 {
     auto *r_ptr = &r_info[r_idx];
     DEPTH level = r_ptr->level;
@@ -90,7 +90,7 @@ bool know_armour(MONRACE_IDX r_idx, const bool know_everything)
  * the more damage an attack does, the more attacks you need
  * </pre>
  */
-bool know_damage(MONRACE_IDX r_idx, int i)
+bool know_damage(MonsterRaceId r_idx, int i)
 {
     auto *r_ptr = &r_info[r_idx];
     DEPTH level = r_ptr->level;
@@ -124,7 +124,7 @@ bool know_damage(MONRACE_IDX r_idx, int i)
  */
 void set_damage(PlayerType *player_ptr, lore_type *lore_ptr, MonsterAbilityType ms_type, concptr msg)
 {
-    MONRACE_IDX r_idx = lore_ptr->r_idx;
+    MonsterRaceId r_idx = lore_ptr->r_idx;
     int base_damage = monspell_race_damage(player_ptr, ms_type, r_idx, BASE_DAM);
     int dice_num = monspell_race_damage(player_ptr, ms_type, r_idx, DICE_NUM);
     int dice_side = monspell_race_damage(player_ptr, ms_type, r_idx, DICE_SIDE);

@@ -6,6 +6,8 @@
 #include <map>
 #include <vector>
 
+enum class MonsterRaceId : int16_t;
+
 // clang-format off
 
 /*
@@ -104,7 +106,7 @@ public:
 
     GAME_TEXT name[60]; /*!< クエスト名 / Quest name */
     DEPTH level; /*!< 処理階層 / Dungeon level */
-    MONRACE_IDX r_idx; /*!< クエスト対象のモンスターID / Monster race */
+    MonsterRaceId r_idx; /*!< クエスト対象のモンスターID / Monster race */
 
     MONSTER_NUMBER cur_num; /*!< 撃破したモンスターの数 / Number killed */
     MONSTER_NUMBER max_num; /*!< 求められるモンスターの撃破数 / Number required */

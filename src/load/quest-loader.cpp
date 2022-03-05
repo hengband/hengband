@@ -79,8 +79,8 @@ static void load_quest_details(PlayerType *player_ptr, quest_type *q_ptr, int lo
     q_ptr->max_num = rd_s16b();
     q_ptr->type = i2enum<QuestKindType>(rd_s16b());
 
-    q_ptr->r_idx = rd_s16b();
-    if ((q_ptr->type == QuestKindType::RANDOM) && (!q_ptr->r_idx)) {
+    q_ptr->r_idx = i2enum<MonsterRaceId>(rd_s16b());
+    if ((q_ptr->type == QuestKindType::RANDOM) && !MonsterRace(q_ptr->r_idx).is_valid()) {
         determine_random_questor(player_ptr, &quest_map[i2enum<QuestId>(loading_quest_index)]);
     }
     q_ptr->k_idx = rd_s16b();

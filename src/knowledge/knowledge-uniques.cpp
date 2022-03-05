@@ -18,7 +18,7 @@
 struct unique_list_type {
     bool is_alive;
     uint16_t why;
-    std::vector<MONRACE_IDX> who;
+    std::vector<MonsterRaceId> who;
     int num_uniques[10];
     int num_uniques_surface;
     int num_uniques_over100;
@@ -145,8 +145,8 @@ void do_cmd_knowledge_uniques(PlayerType *player_ptr, bool is_alive)
         return;
     }
 
-    for (auto &r_ref : r_info) {
-        if (r_ref.idx == 0) {
+    for (auto &[r_idx, r_ref] : r_info) {
+        if (!MonsterRace(r_ref.idx).is_valid()) {
             continue;
         }
         if (!sweep_uniques(&r_ref, unique_list_ptr->is_alive)) {

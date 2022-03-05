@@ -25,7 +25,7 @@ void reset_visuals(PlayerType *player_ptr)
         k_ref.x_char = k_ref.d_char;
     }
 
-    for (auto &r_ref : r_info) {
+    for (auto &[r_idx, r_ref] : r_info) {
         r_ref.x_attr = r_ref.d_attr;
         r_ref.x_char = r_ref.d_char;
     }

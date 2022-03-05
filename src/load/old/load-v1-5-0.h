@@ -40,5 +40,5 @@ class ObjectType;
 class PlayerType;
 void rd_item_old(ObjectType *o_ptr);
 void rd_monster_old(PlayerType *player_ptr, monster_type *m_ptr);
-void set_old_lore(monster_race *r_ptr, BIT_FLAGS f4, const MONRACE_IDX r_idx);
+void set_old_lore(monster_race *r_ptr, BIT_FLAGS f4, const MonsterRaceId r_idx);
 errr rd_dungeon_old(PlayerType *player_ptr);

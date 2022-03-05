@@ -111,7 +111,7 @@ bool kawarimi(PlayerType *player_ptr, bool success)
     const int SV_WOODEN_STATUE = 0;
     q_ptr->prep(lookup_kind(ItemKindType::STATUE, SV_WOODEN_STATUE));
 
-    q_ptr->pval = MON_NINJA;
+    q_ptr->pval = enum2i(MonsterRaceId::NINJA);
     (void)drop_near(player_ptr, q_ptr, -1, y, x);
 
     if (success) {

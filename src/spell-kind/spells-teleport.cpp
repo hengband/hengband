@@ -213,7 +213,7 @@ bool teleport_away(PlayerType *player_ptr, MONSTER_IDX m_idx, POSITION dis, tele
 void teleport_monster_to(PlayerType *player_ptr, MONSTER_IDX m_idx, POSITION ty, POSITION tx, int power, teleport_flags mode)
 {
     auto *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
-    if (!m_ptr->r_idx) {
+    if (!MonsterRace(m_ptr->r_idx).is_valid()) {
         return;
     }
     if (randint1(100) > power) {

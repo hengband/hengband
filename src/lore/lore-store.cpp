@@ -22,7 +22,7 @@
  * @details
  * Return the number of new flags learnt.  -Mogami-
  */
-int lore_do_probe(PlayerType *player_ptr, MONRACE_IDX r_idx)
+int lore_do_probe(PlayerType *player_ptr, MonsterRaceId r_idx)
 {
     int n = 0;
     auto *r_ptr = &r_info[r_idx];

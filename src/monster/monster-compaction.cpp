@@ -154,7 +154,7 @@ void compact_monsters(PlayerType *player_ptr, int size)
     /* Excise dead monsters (backwards!) */
     for (MONSTER_IDX i = floor_ptr->m_max - 1; i >= 1; i--) {
         auto *m_ptr = &floor_ptr->m_list[i];
-        if (m_ptr->r_idx) {
+        if (MonsterRace(m_ptr->r_idx).is_valid()) {
             continue;
         }
         compact_monsters_aux(player_ptr, floor_ptr->m_max - 1, i);

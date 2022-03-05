@@ -203,7 +203,7 @@ static bool do_cmd_knowledge_quests_aux(PlayerType *player_ptr, FILE *fff, Quest
 
     strnfmt(playtime_str, sizeof(playtime_str), "%02d:%02d:%02d", q_ptr->comptime / (60 * 60), (q_ptr->comptime / 60) % 60, q_ptr->comptime % 60);
 
-    if (is_fixed_quest || (q_ptr->r_idx == 0)) {
+    if (is_fixed_quest || !MonsterRace(q_ptr->r_idx).is_valid()) {
         sprintf(tmp_str, _("  %-35s (危険度:%3d階相当) - レベル%2d - %s\n", "  %-35s (Danger  level: %3d) - level %2d - %s\n"), q_ptr->name, (int)q_ptr->level,
             q_ptr->complev, playtime_str);
         fputs(tmp_str, fff);

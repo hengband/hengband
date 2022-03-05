@@ -165,17 +165,17 @@ static void init_object_alloc(void)
 void init_alloc(void)
 {
     std::vector<tag_type> elements(r_info.size());
-    for (const auto &r_ref : r_info) {
-        if (r_ref.idx > 0) {
-            elements[r_ref.idx].tag = r_ref.level;
-            elements[r_ref.idx].index = r_ref.idx;
+    for (const auto &[r_idx, r_ref] : r_info) {
+        if (MonsterRace(r_ref.idx).is_valid()) {
+            elements[enum2i(r_ref.idx)].tag = r_ref.level;
+            elements[enum2i(r_ref.idx)].index = enum2i(r_ref.idx);
         }
     }
 
     tag_sort(elements.data(), elements.size());
     alloc_race_table.assign(r_info.size(), {});
     for (auto i = 1U; i < r_info.size(); i++) {
-        auto *r_ptr = &r_info[elements[i].index];
+        auto *r_ptr = &r_info[i2enum<MonsterRaceId>(elements[i].index)];
         if (r_ptr->rarity == 0) {
             continue;
         }

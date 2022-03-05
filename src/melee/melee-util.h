@@ -9,8 +9,8 @@
 struct monster_type;
 struct mam_type {
     int attribute;
-    MONRACE_IDX m_idx;
-    MONRACE_IDX t_idx;
+    MONSTER_IDX m_idx;
+    MONSTER_IDX t_idx;
     monster_type *m_ptr;
     monster_type *t_ptr;
     GAME_TEXT m_name[MAX_NLEN];
@@ -41,4 +41,4 @@ struct mam_type {
 };
 
 class PlayerType;
-mam_type *initialize_mam_type(PlayerType *player_ptr, mam_type *mam_ptr, MONRACE_IDX m_idx, MONRACE_IDX t_idx);
+mam_type *initialize_mam_type(PlayerType *player_ptr, mam_type *mam_ptr, MONSTER_IDX m_idx, MONSTER_IDX t_idx);

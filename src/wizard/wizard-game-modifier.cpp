@@ -30,7 +30,7 @@
 
 void wiz_enter_quest(PlayerType *player_ptr);
 void wiz_complete_quest(PlayerType *player_ptr);
-void wiz_restore_monster_max_num(MONRACE_IDX r_idx);
+void wiz_restore_monster_max_num(MonsterRaceId r_idx);
 
 /*!
  * @brief ゲーム設定コマンド一覧表
@@ -90,7 +90,7 @@ void wizard_game_modifier(PlayerType *player_ptr)
         wiz_enter_quest(player_ptr);
         break;
     case 'u':
-        wiz_restore_monster_max_num(command_arg);
+        wiz_restore_monster_max_num(i2enum<MonsterRaceId>(command_arg));
         break;
     case 't':
         set_gametime();
@@ -147,14 +147,14 @@ void wiz_complete_quest(PlayerType *player_ptr)
     }
 }
 
-void wiz_restore_monster_max_num(MONRACE_IDX r_idx)
+void wiz_restore_monster_max_num(MonsterRaceId r_idx)
 {
-    if (r_idx <= 0) {
+    if (!MonsterRace(r_idx).is_valid()) {
         int val;
         if (!get_value("MonsterID", 1, r_info.size() - 1, &val)) {
             return;
         }
-        r_idx = static_cast<MONRACE_IDX>(val);
+        r_idx = static_cast<MonsterRaceId>(val);
     }
 
     auto *r_ptr = &r_info[r_idx];

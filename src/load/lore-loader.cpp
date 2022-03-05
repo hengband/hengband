@@ -71,7 +71,7 @@ static void migrate_old_resistance_flags(monster_race *r_ptr, BIT_FLAGS old_flag
     }
 }
 
-static void rd_r_ability_flags(monster_race *r_ptr, const MONRACE_IDX r_idx)
+static void rd_r_ability_flags(monster_race *r_ptr, const MonsterRaceId r_idx)
 {
     if (loading_savefile_version_is_older_than(3)) {
         BIT_FLAGS r_flagsr = 0;
@@ -215,7 +215,7 @@ static void rd_r_behavior_flags(monster_race *r_ptr)
  * @param r_ptr 読み込み先モンスター種族情報へのポインタ
  * @param r_idx 読み込み先モンスターID(種族特定用)
  */
-static void rd_lore(monster_race *r_ptr, const MONRACE_IDX r_idx)
+static void rd_lore(monster_race *r_ptr, const MonsterRaceId r_idx)
 {
     r_ptr->r_sights = rd_s16b();
     r_ptr->r_deaths = rd_s16b();
@@ -282,8 +282,9 @@ void load_lore(void)
     auto loading_max_r_idx = rd_u16b();
     monster_race dummy;
     for (auto i = 0U; i < loading_max_r_idx; i++) {
-        auto *r_ptr = i < r_info.size() ? &r_info[i] : &dummy;
-        rd_lore(r_ptr, static_cast<MONRACE_IDX>(i));
+        auto r_idx = static_cast<MonsterRaceId>(i);
+        auto *r_ptr = i < r_info.size() ? &r_info[r_idx] : &dummy;
+        rd_lore(r_ptr, r_idx);
     }
 
     load_note(_("モンスターの思い出をロードしました", "Loaded Monster Memory"));

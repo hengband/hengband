@@ -62,7 +62,7 @@ MonsterSpellResult spell_RF4_SHRIEK(MONSTER_IDX m_idx, PlayerType *player_ptr, M
 
     auto *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
     auto result = MonsterSpellResult::make_valid();
-    if (m_ptr->r_idx == MON_LEE_QIEZI) {
+    if (m_ptr->r_idx == MonsterRaceId::LEE_QIEZI) {
         msg_print(_("しかし、その声は誰の心にも響かなかった…。", "However, that voice didn't touch anyone's heart..."));
         return result;
     }

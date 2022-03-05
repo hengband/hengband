@@ -198,11 +198,12 @@ bool is_autopick_match(PlayerType *player_ptr, ObjectType *o_ptr, autopick_type 
         return false;
     }
 
-    if (IS_FLG(FLG_UNIQUE) && ((o_ptr->tval != ItemKindType::CORPSE && o_ptr->tval != ItemKindType::STATUE) || r_info[o_ptr->pval].kind_flags.has_not(MonsterKindType::UNIQUE))) {
+    const auto r_idx = i2enum<MonsterRaceId>(o_ptr->pval);
+    if (IS_FLG(FLG_UNIQUE) && ((o_ptr->tval != ItemKindType::CORPSE && o_ptr->tval != ItemKindType::STATUE) || r_info[r_idx].kind_flags.has_not(MonsterKindType::UNIQUE))) {
         return false;
     }
 
-    if (IS_FLG(FLG_HUMAN) && (o_ptr->tval != ItemKindType::CORPSE || !angband_strchr("pht", r_info[o_ptr->pval].d_char))) {
+    if (IS_FLG(FLG_HUMAN) && (o_ptr->tval != ItemKindType::CORPSE || !angband_strchr("pht", r_info[r_idx].d_char))) {
         return false;
     }
 

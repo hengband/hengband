@@ -90,7 +90,7 @@ void delete_monster_idx(PlayerType *player_ptr, MONSTER_IDX i)
     // 召喚されたモンスター自身のm_idxを指すようにする
     for (MONSTER_IDX child_m_idx = 1; child_m_idx < floor_ptr->m_max; child_m_idx++) {
         monster_type *child_m_ptr = &floor_ptr->m_list[child_m_idx];
-        if (child_m_ptr->r_idx && child_m_ptr->parent_m_idx == i) {
+        if (MonsterRace(child_m_ptr->r_idx).is_valid() && child_m_ptr->parent_m_idx == i) {
             child_m_ptr->parent_m_idx = child_m_idx;
         }
     }
@@ -112,22 +112,22 @@ void delete_monster_idx(PlayerType *player_ptr, MONSTER_IDX i)
  */
 void wipe_monsters_list(PlayerType *player_ptr)
 {
-    if (!r_info[MON_BANORLUPART].max_num) {
-        if (r_info[MON_BANOR].max_num) {
-            r_info[MON_BANOR].max_num = 0;
-            r_info[MON_BANOR].r_pkills++;
-            r_info[MON_BANOR].r_akills++;
-            if (r_info[MON_BANOR].r_tkills < MAX_SHORT) {
-                r_info[MON_BANOR].r_tkills++;
+    if (!r_info[MonsterRaceId::BANORLUPART].max_num) {
+        if (r_info[MonsterRaceId::BANOR].max_num) {
+            r_info[MonsterRaceId::BANOR].max_num = 0;
+            r_info[MonsterRaceId::BANOR].r_pkills++;
+            r_info[MonsterRaceId::BANOR].r_akills++;
+            if (r_info[MonsterRaceId::BANOR].r_tkills < MAX_SHORT) {
+                r_info[MonsterRaceId::BANOR].r_tkills++;
             }
         }
 
-        if (r_info[MON_LUPART].max_num) {
-            r_info[MON_LUPART].max_num = 0;
-            r_info[MON_LUPART].r_pkills++;
-            r_info[MON_LUPART].r_akills++;
-            if (r_info[MON_LUPART].r_tkills < MAX_SHORT) {
-                r_info[MON_LUPART].r_tkills++;
+        if (r_info[MonsterRaceId::LUPART].max_num) {
+            r_info[MonsterRaceId::LUPART].max_num = 0;
+            r_info[MonsterRaceId::LUPART].r_pkills++;
+            r_info[MonsterRaceId::LUPART].r_akills++;
+            if (r_info[MonsterRaceId::LUPART].r_tkills < MAX_SHORT) {
+                r_info[MonsterRaceId::LUPART].r_tkills++;
             }
         }
     }
@@ -148,7 +148,7 @@ void wipe_monsters_list(PlayerType *player_ptr)
      * counters of monsters in party_mon[] are required to prevent multiple
      * generation of unique monster who is the minion of player.
      */
-    for (auto &r_ref : r_info) {
+    for (auto &[r_idx, r_ref] : r_info) {
         r_ref.cur_num = 0;
     }
 

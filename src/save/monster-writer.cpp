@@ -7,6 +7,7 @@
 #include "system/monster-race-definition.h"
 #include "system/monster-type-definition.h"
 #include "util/bit-flags-calculator.h"
+#include "util/enum-converter.h"
 #include "util/quarks.h"
 
 static void write_monster_flags(monster_type *m_ptr, BIT_FLAGS *flags)
@@ -149,7 +150,7 @@ void wr_monster(monster_type *m_ptr)
     BIT_FLAGS flags = 0x00000000;
     write_monster_flags(m_ptr, &flags);
 
-    wr_s16b(m_ptr->r_idx);
+    wr_s16b(enum2i(m_ptr->r_idx));
     wr_byte((byte)m_ptr->fy);
     wr_byte((byte)m_ptr->fx);
     wr_s16b((int16_t)m_ptr->hp);
@@ -158,7 +159,7 @@ void wr_monster(monster_type *m_ptr)
     wr_u32b(m_ptr->dealt_damage);
 
     if (any_bits(flags, SaveDataMonsterFlagType::AP_R_IDX)) {
-        wr_s16b(m_ptr->ap_r_idx);
+        wr_s16b(enum2i(m_ptr->ap_r_idx));
     }
 
     if (any_bits(flags, SaveDataMonsterFlagType::SUB_ALIGN)) {
@@ -178,7 +179,7 @@ void wr_monster(monster_type *m_ptr)
  * @brief モンスターの思い出を書き込む / Write a "lore" record
  * @param r_idx モンスター種族ID
  */
-void wr_lore(MONRACE_IDX r_idx)
+void wr_lore(MonsterRaceId r_idx)
 {
     auto *r_ptr = &r_info[r_idx];
     wr_s16b((int16_t)r_ptr->r_sights);

@@ -15,6 +15,8 @@
 /*! モンスターが1ターンに攻撃する最大回数 (射撃を含む) / The maximum number of times a monster can attack in a turn (including SHOOT) */
 constexpr int MAX_NUM_BLOWS = 4;
 
+enum class MonsterRaceId : int16_t;
+
 class MonsterBlow {
 public:
     RaceBlowMethodType method{};
@@ -45,7 +47,7 @@ public:
  * fields have a special prefix to aid in searching for them.
  */
 struct monster_race {
-    MONRACE_IDX idx{};
+    MonsterRaceId idx{};
     std::string name; //!< 名前データのオフセット(日本語) /  Name offset(Japanese)
 #ifdef JP
     std::string E_name; //!< 名前データのオフセット(英語) /  Name offset(English)
@@ -73,14 +75,14 @@ struct monster_race {
     EnumClassFlagGroup<MonsterKindType> kind_flags; //!< 能力フラグ（種族・徳） / Attr Flags
     EnumClassFlagGroup<MonsterResistanceType> resistance_flags; //!< 耐性フラグ / Flags R (resistances info)
     MonsterBlow blow[MAX_NUM_BLOWS]{}; //!< 打撃能力定義 / Up to four blows per round
-    MONRACE_IDX reinforce_id[6]{}; //!< 指定護衛モンスター種族ID(6種まで)
+    MonsterRaceId reinforce_id[6]{}; //!< 指定護衛モンスター種族ID(6種まで)
     DICE_NUMBER reinforce_dd[6]{}; //!< 指定護衛数ダイス数
     DICE_SID reinforce_ds[6]{}; //!< 指定護衛数ダイス面
     ARTIFACT_IDX artifact_id[4]{}; //!< 特定アーティファクトドロップID
     RARITY artifact_rarity[4]{}; //!< 特定アーティファクトレア度
     PERCENTAGE artifact_percent[4]{}; //!< 特定アーティファクトドロップ率
     PERCENTAGE arena_ratio{}; //!< モンスター闘技場の掛け金倍率修正値(%基準 / 0=100%) / The adjustment ratio for gambling monster
-    MONRACE_IDX next_r_idx{}; //!< 進化先モンスター種族ID
+    MonsterRaceId next_r_idx{}; //!< 進化先モンスター種族ID
     EXP next_exp{}; //!< 進化に必要な経験値
     DEPTH level{}; //!< レベル / Level of creature
     RARITY rarity{}; //!< レアリティ / Rarity of creature

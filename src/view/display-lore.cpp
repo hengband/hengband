@@ -38,7 +38,7 @@
  * Hack -- Display the "name" and "attr/chars" of a monster race
  * @param r_idx モンスターの種族ID
  */
-void roff_top(MONRACE_IDX r_idx)
+void roff_top(MonsterRaceId r_idx)
 {
     auto *r_ptr = &r_info[r_idx];
     char c1 = r_ptr->d_char;
@@ -80,7 +80,7 @@ void roff_top(MONRACE_IDX r_idx)
  * @param r_idx モンスターの種族ID
  * @param mode 表示オプション
  */
-void screen_roff(PlayerType *player_ptr, MONRACE_IDX r_idx, monster_lore_mode mode)
+void screen_roff(PlayerType *player_ptr, MonsterRaceId r_idx, monster_lore_mode mode)
 {
     msg_erase();
     term_erase(0, 1, 255);
@@ -102,7 +102,7 @@ void display_roff(PlayerType *player_ptr)
 
     term_gotoxy(0, 1);
     hook_c_roff = c_roff;
-    MONRACE_IDX r_idx = player_ptr->monster_race_idx;
+    MonsterRaceId r_idx = player_ptr->monster_race_idx;
     process_monster_lore(player_ptr, r_idx, MONSTER_LORE_NORMAL);
     roff_top(r_idx);
 }
@@ -114,7 +114,7 @@ void display_roff(PlayerType *player_ptr)
  * @param roff_func 出力処理を行う関数ポインタ
  * @todo ここのroff_funcの引数にFILE* を追加しないとspoiler_file をローカル関数化することができないと判明した、保留.
  */
-void output_monster_spoiler(MONRACE_IDX r_idx, void (*roff_func)(TERM_COLOR attr, concptr str))
+void output_monster_spoiler(MonsterRaceId r_idx, void (*roff_func)(TERM_COLOR attr, concptr str))
 {
     hook_c_roff = roff_func;
     PlayerType dummy;
@@ -262,7 +262,7 @@ bool display_where_to_appear(lore_type *lore_ptr)
         lore_ptr->old = true;
     }
 
-    if (lore_ptr->r_idx == MON_CHAMELEON) {
+    if (lore_ptr->r_idx == MonsterRaceId::CHAMELEON) {
         hooked_roff(_("、他のモンスターに化ける。", "and can take the shape of other monster."));
         return false;
     }
@@ -536,7 +536,7 @@ static void display_monster_escort_contents(lore_type *lore_ptr)
 #endif
 
     for (int n = 0; n < A_MAX; n++) {
-        bool is_reinforced = lore_ptr->r_ptr->reinforce_id[n] > 0;
+        bool is_reinforced = MonsterRace(lore_ptr->r_ptr->reinforce_id[n]).is_valid();
         is_reinforced &= lore_ptr->r_ptr->reinforce_dd[n] > 0;
         is_reinforced &= lore_ptr->r_ptr->reinforce_ds[n] > 0;
         if (!is_reinforced) {
@@ -671,7 +671,7 @@ void display_monster_guardian(lore_type *lore_ptr)
     bool is_kingpin = (lore_ptr->flags1 & RF1_QUESTOR) != 0;
     is_kingpin &= lore_ptr->r_ptr->r_sights > 0;
     is_kingpin &= lore_ptr->r_ptr->max_num > 0;
-    is_kingpin &= (lore_ptr->r_idx == MON_OBERON) || (lore_ptr->r_idx == MON_SERPENT);
+    is_kingpin &= (lore_ptr->r_idx == MonsterRaceId::OBERON) || (lore_ptr->r_idx == MonsterRaceId::SERPENT);
     if (is_kingpin) {
         hook_c_roff(TERM_VIOLET, _("あなたはこのモンスターを殺したいという強い欲望を感じている...", "You feel an intense desire to kill this monster...  "));
     } else if (lore_ptr->flags7 & RF7_GUARDIAN) {

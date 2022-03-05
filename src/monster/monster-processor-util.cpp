@@ -283,9 +283,9 @@ void store_moves_val(int *mm, int y, int x)
  * @param monster_race_idx モンスターID
  * @param old_race_flags_ptr モンスターフラグへの参照ポインタ
  */
-void save_old_race_flags(MONRACE_IDX monster_race_idx, old_race_flags *old_race_flags_ptr)
+void save_old_race_flags(MonsterRaceId monster_race_idx, old_race_flags *old_race_flags_ptr)
 {
-    if (monster_race_idx == 0) {
+    if (!MonsterRace(monster_race_idx).is_valid()) {
         return;
     }
 

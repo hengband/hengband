@@ -233,13 +233,14 @@ bool affect_item(PlayerType *player_ptr, MONSTER_IDX who, POSITION r, POSITION y
             }
 
             for (int i = 0; i < o_ptr->number; i++) {
+                auto corpse_r_idx = i2enum<MonsterRaceId>(o_ptr->pval);
                 if (((o_ptr->sval == SV_CORPSE) && (randint1(100) > 80)) || ((o_ptr->sval == SV_SKELETON) && (randint1(100) > 60))) {
                     if (!note_kill) {
                         note_kill = _("灰になった。", (plural ? " become dust." : " becomes dust."));
                     }
 
                     continue;
-                } else if (summon_named_creature(player_ptr, who, y, x, o_ptr->pval, mode)) {
+                } else if (summon_named_creature(player_ptr, who, y, x, corpse_r_idx, mode)) {
                     note_kill = _("生き返った。", " revived.");
                 } else if (!note_kill) {
                     note_kill = _("灰になった。", (plural ? " become dust." : " becomes dust."));

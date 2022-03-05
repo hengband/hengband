@@ -29,7 +29,7 @@ const who_word_definition Who::words = {
  */
 hook_c_roff_pf hook_c_roff = c_roff;
 
-lore_type *initialize_lore_type(lore_type *lore_ptr, MONRACE_IDX r_idx, monster_lore_mode mode)
+lore_type *initialize_lore_type(lore_type *lore_ptr, MonsterRaceId r_idx, monster_lore_mode mode)
 {
 #ifdef JP
 #else

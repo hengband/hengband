@@ -264,10 +264,11 @@ void rd_item_old(ObjectType *o_ptr)
         }
 
         if (o_ptr->tval == ItemKindType::CAPTURE) {
-            if (r_info[o_ptr->pval].flags1 & RF1_FORCE_MAXHP) {
-                o_ptr->captured_monster_max_hp = maxroll(r_info[o_ptr->pval].hdice, r_info[o_ptr->pval].hside);
+            const auto &r_ref = r_info[i2enum<MonsterRaceId>(o_ptr->pval)];
+            if (r_ref.flags1 & RF1_FORCE_MAXHP) {
+                o_ptr->captured_monster_max_hp = maxroll(r_ref.hdice, r_ref.hside);
             } else {
-                o_ptr->captured_monster_max_hp = damroll(r_info[o_ptr->pval].hdice, r_info[o_ptr->pval].hside);
+                o_ptr->captured_monster_max_hp = damroll(r_ref.hdice, r_ref.hside);
             }
             if (ironman_nightmare) {
                 o_ptr->captured_monster_max_hp = std::min<short>(MONSTER_MAXHP, o_ptr->captured_monster_max_hp * 2L);
@@ -359,12 +360,12 @@ void rd_item_old(ObjectType *o_ptr)
  */
 void rd_monster_old(PlayerType *player_ptr, monster_type *m_ptr)
 {
-    m_ptr->r_idx = rd_s16b();
+    m_ptr->r_idx = i2enum<MonsterRaceId>(rd_s16b());
 
     if (h_older_than(1, 0, 12)) {
         m_ptr->ap_r_idx = m_ptr->r_idx;
     } else {
-        m_ptr->ap_r_idx = rd_s16b();
+        m_ptr->ap_r_idx = i2enum<MonsterRaceId>(rd_s16b());
     }
 
     if (h_older_than(1, 0, 14)) {
@@ -454,8 +455,8 @@ void rd_monster_old(PlayerType *player_ptr, monster_type *m_ptr)
     }
 
     if (h_older_than(0, 2, 2)) {
-        if (m_ptr->r_idx < 0) {
-            m_ptr->r_idx = (0 - m_ptr->r_idx);
+        if (enum2i(m_ptr->r_idx) < 0) {
+            m_ptr->r_idx = i2enum<MonsterRaceId>(0 - enum2i(m_ptr->r_idx));
             m_ptr->mflag2.set(MonsterConstantFlagType::KAGE);
         }
     } else {
@@ -466,7 +467,7 @@ void rd_monster_old(PlayerType *player_ptr, monster_type *m_ptr)
 
     if (h_older_than(1, 0, 12)) {
         if (m_ptr->mflag2.has(MonsterConstantFlagType::KAGE)) {
-            m_ptr->ap_r_idx = MON_KAGE;
+            m_ptr->ap_r_idx = MonsterRaceId::KAGE;
         }
     }
 
@@ -504,7 +505,7 @@ static void move_RF4_BR_to_RFR(monster_race *r_ptr, BIT_FLAGS f4, const BIT_FLAG
  * @param r_idx モンスター種族ID
  * @details 本来はr_idxからr_ptrを決定可能だが、互換性を優先するため元コードのままとする
  */
-void set_old_lore(monster_race *r_ptr, BIT_FLAGS f4, const MONRACE_IDX r_idx)
+void set_old_lore(monster_race *r_ptr, BIT_FLAGS f4, const MonsterRaceId r_idx)
 {
     r_ptr->r_resistance_flags.clear();
     move_RF3_to_RFR(r_ptr, RF3_IM_ACID, MonsterResistanceType::IMMUNE_ACID);
@@ -534,7 +535,7 @@ void set_old_lore(monster_race *r_ptr, BIT_FLAGS f4, const MONRACE_IDX r_idx)
         r_ptr->r_flags3 |= RF3_NO_CONF;
     }
 
-    if (r_idx == MON_STORMBRINGER) {
+    if (r_idx == MonsterRaceId::STORMBRINGER) {
         r_ptr->r_resistance_flags.set(MonsterResistanceType::RESIST_CHAOS);
     }
 

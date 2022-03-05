@@ -2,7 +2,9 @@
 
 #include "system/angband.h"
 
+enum class MonsterRaceId : int16_t;
+
 struct bounty_type {
-    MONRACE_IDX r_idx; //!< 賞金首の対象のモンスター種族ID
+    MonsterRaceId r_idx; //!< 賞金首の対象のモンスター種族ID
     bool is_achieved; //!< 死体を渡して報酬を獲得したかどうか
 };

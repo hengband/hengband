@@ -51,7 +51,7 @@ summon_type summon_specific_type = SUMMON_NONE;
  * @param r_idx チェックするモンスター種族ID
  * @return 召喚条件が一致するならtrue / Return TRUE is the monster is OK and FALSE otherwise
  */
-static bool restrict_monster_to_dungeon(PlayerType *player_ptr, MONRACE_IDX r_idx)
+static bool restrict_monster_to_dungeon(PlayerType *player_ptr, MonsterRaceId r_idx)
 {
     DUNGEON_IDX d_idx = player_ptr->dungeon_idx;
     dungeon_type *d_ptr = &d_info[d_idx];
@@ -64,13 +64,13 @@ static bool restrict_monster_to_dungeon(PlayerType *player_ptr, MONRACE_IDX r_id
     }
 
     if (d_ptr->flags.has(DungeonFeatureType::NO_MAGIC)) {
-        if (r_idx != MON_CHAMELEON && r_ptr->freq_spell && r_ptr->ability_flags.has_none_of(RF_ABILITY_NOMAGIC_MASK)) {
+        if (r_idx != MonsterRaceId::CHAMELEON && r_ptr->freq_spell && r_ptr->ability_flags.has_none_of(RF_ABILITY_NOMAGIC_MASK)) {
             return false;
         }
     }
 
     if (d_ptr->flags.has(DungeonFeatureType::NO_MELEE)) {
-        if (r_idx == MON_CHAMELEON) {
+        if (r_idx == MonsterRaceId::CHAMELEON) {
             return true;
         }
         if (r_ptr->ability_flags.has_none_of(RF_ABILITY_BOLT_MASK | RF_ABILITY_BEAM_MASK | RF_ABILITY_BALL_MASK) && r_ptr->ability_flags.has_none_of(
@@ -376,7 +376,8 @@ static errr do_get_mon_num_prep(PlayerType *player_ptr, const monsterrace_hook_t
     // モンスター生成テーブルの各要素について重みを修正する。
     for (auto i = 0U; i < alloc_race_table.size(); i++) {
         alloc_entry *const entry = &alloc_race_table[i];
-        const monster_race *const r_ptr = &r_info[entry->index];
+        const auto entry_r_idx = i2enum<MonsterRaceId>(entry->index);
+        const monster_race *const r_ptr = &r_info[entry_r_idx];
 
         // 生成を禁止する要素は重み 0 とする。
         entry->prob2 = 0;
@@ -388,7 +389,7 @@ static errr do_get_mon_num_prep(PlayerType *player_ptr, const monsterrace_hook_t
         }
 
         // いずれかの生成制約関数が偽を返したら生成禁止。
-        if ((hook1 && !hook1(player_ptr, entry->index)) || (hook2 && !hook2(player_ptr, entry->index))) {
+        if ((hook1 && !hook1(player_ptr, entry_r_idx)) || (hook2 && !hook2(player_ptr, entry_r_idx))) {
             continue;
         }
 
@@ -428,7 +429,7 @@ static errr do_get_mon_num_prep(PlayerType *player_ptr, const monsterrace_hook_t
             const bool in_random_quest = inside_quest(floor_ptr->quest_number) && !quest_type::is_fixed(floor_ptr->quest_number);
             const bool cond = !player_ptr->phase_out && floor_ptr->dun_level > 0 && !in_random_quest;
 
-            if (cond && !restrict_monster_to_dungeon(player_ptr, entry->index)) {
+            if (cond && !restrict_monster_to_dungeon(player_ptr, entry_r_idx)) {
                 // ダンジョンによる制約に掛かった場合、重みを special_div/64 倍する。
                 // 丸めは確率的に行う。
                 const int numer = entry->prob2 * d_info[player_ptr->dungeon_idx].special_div;

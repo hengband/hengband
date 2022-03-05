@@ -175,7 +175,7 @@ static void dump_aux_recall(FILE *fff)
         if (!max_dlv[d_ref.idx]) {
             continue;
         }
-        if (d_ref.final_guardian) {
+        if (MonsterRace(d_ref.final_guardian).is_valid()) {
             if (!r_info[d_ref.final_guardian].max_num) {
                 seiha = true;
             }
@@ -308,13 +308,13 @@ static void dump_aux_monsters(PlayerType *player_ptr, FILE *fff)
 
     /* Allocate the "who" array */
     uint16_t why = 2;
-    std::vector<MONRACE_IDX> who;
+    std::vector<MonsterRaceId> who;
 
     /* Count monster kills */
     auto norm_total = 0;
-    for (const auto &r_ref : r_info) {
+    for (const auto &[r_idx, r_ref] : r_info) {
         /* Ignore unused index */
-        if (r_ref.idx == 0 || r_ref.name.empty()) {
+        if (!MonsterRace(r_ref.idx).is_valid() || r_ref.name.empty()) {
             continue;
         }
 

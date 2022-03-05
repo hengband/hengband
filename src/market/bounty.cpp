@@ -52,7 +52,9 @@ bool exchange_cash(PlayerType *player_ptr)
 
     for (INVENTORY_IDX i = 0; i <= INVEN_SUB_HAND; i++) {
         o_ptr = &player_ptr->inventory_list[i];
-        if ((o_ptr->tval == ItemKindType::CAPTURE) && (o_ptr->pval == MON_TSUCHINOKO)) {
+        const auto r_idx_of_item = static_cast<MonsterRaceId>(o_ptr->pval);
+
+        if ((o_ptr->tval == ItemKindType::CAPTURE) && (r_idx_of_item == MonsterRaceId::TSUCHINOKO)) {
             char buf[MAX_NLEN + 32];
             describe_flavor(player_ptr, o_name, o_ptr, 0);
             sprintf(buf, _("%s を換金しますか？", "Convert %s into money? "), o_name);
@@ -69,7 +71,9 @@ bool exchange_cash(PlayerType *player_ptr)
 
     for (INVENTORY_IDX i = 0; i < INVEN_PACK; i++) {
         o_ptr = &player_ptr->inventory_list[i];
-        if ((o_ptr->tval == ItemKindType::CORPSE) && (o_ptr->sval == SV_CORPSE) && (o_ptr->pval == MON_TSUCHINOKO)) {
+        const auto r_idx_of_item = static_cast<MonsterRaceId>(o_ptr->pval);
+
+        if ((o_ptr->tval == ItemKindType::CORPSE) && (o_ptr->sval == SV_CORPSE) && (r_idx_of_item == MonsterRaceId::TSUCHINOKO)) {
             char buf[MAX_NLEN + 32];
             describe_flavor(player_ptr, o_name, o_ptr, 0);
             sprintf(buf, _("%s を換金しますか？", "Convert %s into money? "), o_name);
@@ -86,7 +90,9 @@ bool exchange_cash(PlayerType *player_ptr)
 
     for (INVENTORY_IDX i = 0; i < INVEN_PACK; i++) {
         o_ptr = &player_ptr->inventory_list[i];
-        if ((o_ptr->tval == ItemKindType::CORPSE) && (o_ptr->sval == SV_SKELETON) && (o_ptr->pval == MON_TSUCHINOKO)) {
+        const auto r_idx_of_item = static_cast<MonsterRaceId>(o_ptr->pval);
+
+        if ((o_ptr->tval == ItemKindType::CORPSE) && (o_ptr->sval == SV_SKELETON) && (r_idx_of_item == MonsterRaceId::TSUCHINOKO)) {
             char buf[MAX_NLEN + 32];
             describe_flavor(player_ptr, o_name, o_ptr, 0);
             sprintf(buf, _("%s を換金しますか？", "Convert %s into money? "), o_name);
@@ -103,7 +109,9 @@ bool exchange_cash(PlayerType *player_ptr)
 
     for (INVENTORY_IDX i = 0; i < INVEN_PACK; i++) {
         o_ptr = &player_ptr->inventory_list[i];
-        if ((o_ptr->tval == ItemKindType::CORPSE) && (o_ptr->sval == SV_CORPSE) && (streq(r_info[o_ptr->pval].name.c_str(), r_info[w_ptr->today_mon].name.c_str()))) {
+        const auto r_idx_of_item = static_cast<MonsterRaceId>(o_ptr->pval);
+
+        if ((o_ptr->tval == ItemKindType::CORPSE) && (o_ptr->sval == SV_CORPSE) && (streq(r_info[r_idx_of_item].name.c_str(), r_info[w_ptr->today_mon].name.c_str()))) {
             char buf[MAX_NLEN + 32];
             describe_flavor(player_ptr, o_name, o_ptr, 0);
             sprintf(buf, _("%s を換金しますか？", "Convert %s into money? "), o_name);
@@ -121,8 +129,9 @@ bool exchange_cash(PlayerType *player_ptr)
 
     for (INVENTORY_IDX i = 0; i < INVEN_PACK; i++) {
         o_ptr = &player_ptr->inventory_list[i];
+        const auto r_idx_of_item = static_cast<MonsterRaceId>(o_ptr->pval);
 
-        if ((o_ptr->tval == ItemKindType::CORPSE) && (o_ptr->sval == SV_SKELETON) && (streq(r_info[o_ptr->pval].name.c_str(), r_info[w_ptr->today_mon].name.c_str()))) {
+        if ((o_ptr->tval == ItemKindType::CORPSE) && (o_ptr->sval == SV_SKELETON) && (streq(r_info[r_idx_of_item].name.c_str(), r_info[w_ptr->today_mon].name.c_str()))) {
             char buf[MAX_NLEN + 32];
             describe_flavor(player_ptr, o_name, o_ptr, 0);
             sprintf(buf, _("%s を換金しますか？", "Convert %s into money? "), o_name);
@@ -144,7 +153,9 @@ bool exchange_cash(PlayerType *player_ptr)
 
         for (INVENTORY_IDX i = INVEN_PACK - 1; i >= 0; i--) {
             o_ptr = &player_ptr->inventory_list[i];
-            if ((o_ptr->tval != ItemKindType::CORPSE) || (o_ptr->pval != r_idx)) {
+            const auto r_idx_of_item = static_cast<MonsterRaceId>(o_ptr->pval);
+
+            if ((o_ptr->tval != ItemKindType::CORPSE) || (r_idx_of_item != r_idx)) {
                 continue;
             }
 
@@ -267,7 +278,7 @@ void show_bounty(void)
  * @param unachieved_only true の場合未達成の賞金首のみを対象とする。false の場合達成未達成に関わらずすべての賞金首を対象とする。
  * @return 引数で指定したモンスター種族IDが賞金首の対象ならば true、そうでなければ false
  */
-bool is_bounty(MONRACE_IDX r_idx, bool unachieved_only)
+bool is_bounty(MonsterRaceId r_idx, bool unachieved_only)
 {
     auto it = std::find_if(std::begin(w_ptr->bounties), std::end(w_ptr->bounties),
         [r_idx](const auto &b_ref) {
@@ -336,7 +347,7 @@ void determine_daily_bounty(PlayerType *player_ptr, bool conv_old)
     }
 
     // プレイヤーは日替わり賞金首に関する知識を失う。
-    player_ptr->today_mon = 0;
+    player_ptr->today_mon = MonsterRaceId::PLAYER;
 }
 
 /*!
@@ -347,7 +358,7 @@ void determine_bounty_uniques(PlayerType *player_ptr)
 {
     get_mon_num_prep_bounty(player_ptr);
 
-    auto is_suitable_for_bounty = [](MONRACE_IDX r_idx) {
+    auto is_suitable_for_bounty = [](MonsterRaceId r_idx) {
         const auto &r_ref = r_info[r_idx];
         bool is_suitable = r_ref.kind_flags.has(MonsterKindType::UNIQUE);
         is_suitable &= any_bits(r_ref.flags9, RF9_DROP_CORPSE | RF9_DROP_SKELETON);
@@ -357,7 +368,7 @@ void determine_bounty_uniques(PlayerType *player_ptr)
     };
 
     // 賞金首とするモンスターの種族IDのリストを生成
-    std::vector<MONRACE_IDX> bounty_r_idx_list;
+    std::vector<MonsterRaceId> bounty_r_idx_list;
     while (bounty_r_idx_list.size() < std::size(w_ptr->bounties)) {
         auto r_idx = get_mon_num(player_ptr, 0, MAX_DEPTH - 1, GMN_ARENA);
         if (!is_suitable_for_bounty(r_idx)) {
@@ -365,7 +376,7 @@ void determine_bounty_uniques(PlayerType *player_ptr)
         }
 
         auto is_already_selected = std::any_of(bounty_r_idx_list.begin(), bounty_r_idx_list.end(),
-            [r_idx](MONRACE_IDX bounty_r_idx) { return r_idx == bounty_r_idx; });
+            [r_idx](MonsterRaceId bounty_r_idx) { return r_idx == bounty_r_idx; });
         if (!is_already_selected) {
             bounty_r_idx_list.push_back(r_idx);
         }
@@ -373,13 +384,13 @@ void determine_bounty_uniques(PlayerType *player_ptr)
 
     // モンスターのLVで昇順に並び替える
     std::sort(bounty_r_idx_list.begin(), bounty_r_idx_list.end(),
-        [](MONRACE_IDX r_idx1, MONRACE_IDX r_idx2) {
+        [](MonsterRaceId r_idx1, MonsterRaceId r_idx2) {
             return r_info[r_idx1].level < r_info[r_idx2].level;
         });
 
     // 賞金首情報を設定
     std::transform(bounty_r_idx_list.begin(), bounty_r_idx_list.end(), std::begin(w_ptr->bounties),
-        [](MONSTER_IDX r_idx) -> bounty_type {
+        [](MonsterRaceId r_idx) -> bounty_type {
             return { r_idx, false };
         });
 }

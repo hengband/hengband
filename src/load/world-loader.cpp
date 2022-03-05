@@ -63,7 +63,7 @@ void set_gambling_monsters(void)
 {
     const int max_gambling_monsters = 4;
     for (int i = 0; i < max_gambling_monsters; i++) {
-        battle_mon[i] = rd_s16b();
+        battle_mon[i] = i2enum<MonsterRaceId>(rd_s16b());
         if (h_older_than(0, 3, 4)) {
             set_zangband_gambling_monsters(i);
         } else {
@@ -126,8 +126,8 @@ static void rd_world_info(PlayerType *player_ptr)
     if (h_older_than(0, 0, 3)) {
         determine_daily_bounty(player_ptr, true);
     } else {
-        w_ptr->today_mon = rd_s16b();
-        player_ptr->today_mon = rd_s16b();
+        w_ptr->today_mon = i2enum<MonsterRaceId>(rd_s16b());
+        player_ptr->today_mon = i2enum<MonsterRaceId>(rd_s16b());
     }
 }
 

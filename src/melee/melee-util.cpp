@@ -9,7 +9,7 @@
 #include "timed-effect/player-hallucination.h"
 #include "timed-effect/timed-effects.h"
 
-mam_type *initialize_mam_type(PlayerType *player_ptr, mam_type *mam_ptr, MONRACE_IDX m_idx, MONRACE_IDX t_idx)
+mam_type *initialize_mam_type(PlayerType *player_ptr, mam_type *mam_ptr, MONSTER_IDX m_idx, MONSTER_IDX t_idx)
 {
     mam_ptr->attribute = 0;
     mam_ptr->m_idx = m_idx;
