@@ -210,7 +210,7 @@ void MonsterDamageProcessor::death_special_flag_monster()
         return;
     }
 
-    this->death_unique_monster((MonsterRaceId)r_idx);
+    this->death_unique_monster(r_idx);
 }
 
 /*
@@ -264,9 +264,9 @@ bool MonsterDamageProcessor::check_combined_unique(const MonsterRaceId r_idx, st
 void MonsterDamageProcessor::death_combined_uniques(const MonsterRaceId r_idx, combined_uniques *combined_uniques)
 {
     for (const auto &unique : *combined_uniques) {
-        auto united = (MonsterRaceId)0;
-        auto split1 = (MonsterRaceId)0;
-        auto split2 = (MonsterRaceId)0;
+        auto united = i2enum<MonsterRaceId>(0);
+        auto split1 = i2enum<MonsterRaceId>(0);
+        auto split2 = i2enum<MonsterRaceId>(0);
         std::tie(united, split1, split2) = unique;
         if ((r_idx == split1) || (r_idx == split2)) {
             r_info[united].max_num = 0;

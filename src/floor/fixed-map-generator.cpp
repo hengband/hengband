@@ -219,7 +219,7 @@ static bool parse_qtw_QQ(quest_type *q_ptr, char **zz, int num)
     q_ptr->cur_num = (MONSTER_NUMBER)atoi(zz[4]);
     q_ptr->max_num = (MONSTER_NUMBER)atoi(zz[5]);
     q_ptr->level = (DEPTH)atoi(zz[6]);
-    q_ptr->r_idx = (MonsterRaceId)atoi(zz[7]);
+    q_ptr->r_idx = i2enum<MonsterRaceId>(atoi(zz[7]));
     q_ptr->k_idx = (KIND_OBJECT_IDX)atoi(zz[8]);
     q_ptr->dungeon = (DUNGEON_IDX)atoi(zz[9]);
 

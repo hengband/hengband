@@ -505,7 +505,7 @@ static void on_dead_chest_mimic(PlayerType *player_ptr, monster_death_type *md_p
         num_summons = one_in_(2) ? 3 : 2;
         break;
     default:
-        mimic_inside = (MonsterRaceId)-1;
+        mimic_inside = i2enum<MonsterRaceId>(-1);
         num_summons = 0;
         return;
     }
