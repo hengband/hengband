@@ -16,7 +16,6 @@
 #include "knowledge/monster-group-table.h"
 #include "locale/english.h"
 #include "lore/lore-util.h"
-#include "market/bounty.h"
 #include "monster-race/monster-race.h"
 #include "monster-race/race-flags1.h"
 #include "monster-race/race-flags3.h"
@@ -77,8 +76,8 @@ static IDX collect_monsters(PlayerType *player_ptr, IDX grp_cur, MonsterRaceId m
                 continue;
             }
         } else if (grp_wanted) {
-            auto wanted = MonsterRace(player_ptr->today_mon).is_valid() && (player_ptr->today_mon == r_ref.idx);
-            wanted |= is_bounty(r_ref.idx, false);
+            auto wanted = player_ptr->knows_daily_bounty && (w_ptr->today_mon == r_ref.idx);
+            wanted |= MonsterRace(r_ref.idx).is_bounty(false);
 
             if (!wanted) {
                 continue;
@@ -494,7 +493,7 @@ void do_cmd_knowledge_bounty(PlayerType *player_ptr)
     }
 
     fprintf(fff, _("今日のターゲット : %s\n", "Today's target : %s\n"),
-        MonsterRace(player_ptr->today_mon).is_valid() ? r_info[player_ptr->today_mon].name.c_str() : _("不明", "unknown"));
+        player_ptr->knows_daily_bounty ? r_info[w_ptr->today_mon].name.c_str() : _("不明", "unknown"));
     fprintf(fff, "\n");
     fprintf(fff, _("賞金首リスト\n", "List of wanted monsters\n"));
     fprintf(fff, "----------------------------------------------\n");

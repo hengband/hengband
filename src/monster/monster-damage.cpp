@@ -17,7 +17,6 @@
 #include "io/write-diary.h"
 #include "main/sound-definitions-table.h"
 #include "main/sound-of-music.h"
-#include "market/bounty.h"
 #include "mind/mind-ninja.h"
 #include "monster-floor/monster-death.h"
 #include "monster-floor/monster-remover.h"
@@ -415,7 +414,7 @@ void MonsterDamageProcessor::show_bounty_message(GAME_TEXT *m_name)
         return;
     }
 
-    if (is_bounty(m_ptr->r_idx, true)) {
+    if (MonsterRace(m_ptr->r_idx).is_bounty(true)) {
         msg_format(_("%sの首には賞金がかかっている。", "There is a price on %s's head."), m_name);
     }
 }

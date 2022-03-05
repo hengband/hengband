@@ -5,6 +5,7 @@
 #include "monster-race/race-resistance-mask.h"
 #include "system/monster-race-definition.h"
 #include "util/probability-table.h"
+#include "world/world.h"
 #include <algorithm>
 #include <vector>
 
@@ -45,6 +46,30 @@ MonsterRaceId MonsterRace::pick_one_at_random()
 bool MonsterRace::is_valid() const
 {
     return this->r_idx != MonsterRaceId::PLAYER;
+}
+
+/*!
+ * @brief モンスター種族が賞金首の対象かどうかを調べる。日替わり賞金首は対象外。
+ *
+ * @param unachieved_only true の場合未達成の賞金首のみを対象とする。false の場合達成未達成に関わらずすべての賞金首を対象とする。
+ * @return モンスター種族が賞金首の対象ならば true、そうでなければ false
+ */
+bool MonsterRace::is_bounty(bool unachieved_only) const
+{
+    auto it = std::find_if(std::begin(w_ptr->bounties), std::end(w_ptr->bounties),
+        [r_idx = this->r_idx](const auto &b_ref) {
+            return b_ref.r_idx == r_idx;
+        });
+
+    if (it == std::end(w_ptr->bounties)) {
+        return false;
+    }
+
+    if (unachieved_only && (*it).is_achieved) {
+        return false;
+    }
+
+    return true;
 }
 
 /*!
