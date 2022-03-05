@@ -28,4 +28,4 @@ struct building_type {
 };
 
 extern building_type building[MAX_BLDG];
-extern MonsterRaceId battle_mon[4];
+extern MonsterRaceId battle_mon_list[4];

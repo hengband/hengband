@@ -63,7 +63,7 @@ void set_gambling_monsters(void)
 {
     const int max_gambling_monsters = 4;
     for (int i = 0; i < max_gambling_monsters; i++) {
-        battle_mon[i] = i2enum<MonsterRaceId>(rd_s16b());
+        battle_mon_list[i] = i2enum<MonsterRaceId>(rd_s16b());
         if (h_older_than(0, 3, 4)) {
             set_zangband_gambling_monsters(i);
         } else {
