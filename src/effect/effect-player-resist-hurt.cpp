@@ -442,7 +442,12 @@ void effect_player_dark(PlayerType *player_ptr, EffectPlayerType *ep_ptr)
 
     ep_ptr->dam = ep_ptr->dam * calc_dark_damage_rate(player_ptr, CALC_RAND) / 100;
 
-    if (!player_ptr->blind && !has_resist_dark(player_ptr) && !has_resist_blind(player_ptr) && !check_multishadow(player_ptr)) {
+    auto go_blind = player_ptr->blind == 0;
+    go_blind &= !has_resist_blind(player_ptr);
+    go_blind &= !(has_resist_dark(player_ptr) || has_immune_dark(player_ptr));
+    go_blind &= !check_multishadow(player_ptr);
+
+    if (go_blind) {
         (void)BadStatusSetter(player_ptr).mod_blindness(randint1(5) + 2);
     }
 
