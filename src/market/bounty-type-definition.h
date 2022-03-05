@@ -1,6 +1,8 @@
 ﻿#pragma once
 
-enum class MonsterRaceId;
+#include "system/angband.h"
+
+enum class MonsterRaceId : int16_t;
 
 struct bounty_type {
     MonsterRaceId r_idx; //!< 賞金首の対象のモンスター種族ID

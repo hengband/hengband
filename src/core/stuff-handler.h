@@ -2,7 +2,7 @@
 
 #include "system/angband.h"
 
-enum class MonsterRaceId;
+enum class MonsterRaceId : int16_t;
 class PlayerType;
 void handle_stuff(PlayerType *player_ptr);
 void monster_race_track(PlayerType *player_ptr, MonsterRaceId r_idx);

@@ -4,7 +4,7 @@
 #include "monster-floor/monster-death-util.h"
 #include "system/angband.h"
 
-enum class MonsterRaceId;
+enum class MonsterRaceId : int16_t;
 class PlayerType;
 void monster_death(PlayerType *player_ptr, MONSTER_IDX m_idx, bool drop_item, AttributeFlags attribute_flags);
 void monster_death(PlayerType *player_ptr, MONSTER_IDX m_idx, bool drop_item, AttributeType type);

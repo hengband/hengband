@@ -2,7 +2,7 @@
 
 #include "system/angband.h"
 
-enum class MonsterRaceId;
+enum class MonsterRaceId : int16_t;
 class PlayerType;
 typedef bool (*monsterrace_hook_type)(PlayerType *, MonsterRaceId);
 

@@ -4,7 +4,7 @@
 
 #define GMN_ARENA 0x00000001 //!< 賭け闘技場向け生成
 
-enum class MonsterRaceId;
+enum class MonsterRaceId : int16_t;
 struct floor_type;
 struct monster_race;
 class PlayerType;

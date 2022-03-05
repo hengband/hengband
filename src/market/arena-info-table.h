@@ -3,7 +3,7 @@
 #include "system/angband.h"
 #include <vector>
 
-enum class MonsterRaceId;
+enum class MonsterRaceId : int16_t;
 enum class ItemKindType : short;
 
 /*!

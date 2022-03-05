@@ -5,7 +5,7 @@
 #define NUM_NEST_MON_TYPE 64 /*!<nestの種別数 */
 #define TRAPPED_PIT_MONSTER_PLACE_MAX 69
 
-enum class MonsterRaceId;
+enum class MonsterRaceId : int16_t;
 
 /*! nestのID定義 /  Nest types code */
 enum nest_type : int {

@@ -13,7 +13,7 @@
 #include "system/angband.h"
 #include "util/flag-group.h"
 
-enum class MonsterRaceId;
+enum class MonsterRaceId : int16_t;
 
 struct turn_flags {
     bool see_m;

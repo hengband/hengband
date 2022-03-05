@@ -3,7 +3,7 @@
 #include "system/angband.h"
 
 enum class MonsterAbilityType;
-enum class MonsterRaceId;
+enum class MonsterRaceId : int16_t;
 
 struct lore_type;
 class PlayerType;

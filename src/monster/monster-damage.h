@@ -7,7 +7,7 @@
 #include <tuple>
 #include <vector>
 
-enum class MonsterRaceId;
+enum class MonsterRaceId : int16_t;
 struct monster_race;
 struct monster_type;
 class PlayerType;

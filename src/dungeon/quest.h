@@ -6,7 +6,7 @@
 #include <map>
 #include <vector>
 
-enum class MonsterRaceId;
+enum class MonsterRaceId : int16_t;
 
 // clang-format off
 

@@ -5,7 +5,7 @@
 #include "monster-race/race-ability-flags.h"
 #include "util/flag-group.h"
 
-enum class MonsterRaceId;
+enum class MonsterRaceId : int16_t;
 
 extern MonsterRaceId vault_aux_race;
 extern char vault_aux_char;

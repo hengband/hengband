@@ -2,7 +2,7 @@
 
 #include "system/angband.h"
 
-enum class MonsterRaceId;
+enum class MonsterRaceId : int16_t;
 struct monster_type;
 class PlayerType;
 void set_friendly(monster_type *m_ptr);

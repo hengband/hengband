@@ -1,6 +1,6 @@
 ﻿#pragma once
 
-enum class MonsterRaceId {
+enum class MonsterRaceId : int16_t {
     PLAYER = 0, // Dummy.
     BEGGAR = 12,
     LEPER = 13,

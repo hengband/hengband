@@ -7,7 +7,7 @@
  */
 #define CEM_RIDING 0x0001
 #define CEM_P_CAN_ENTER_PATTERN 0x0002
-enum class MonsterRaceId;
+enum class MonsterRaceId : int16_t;
 struct monster_race;
 struct monster_type;
 class PlayerType;

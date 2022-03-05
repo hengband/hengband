@@ -3,7 +3,7 @@
 #include "system/angband.h"
 
 enum summon_type : int;
-enum class MonsterRaceId;
+enum class MonsterRaceId : int16_t;
 class PlayerType;
 typedef bool (*summon_specific_pf)(PlayerType *, MONSTER_IDX, POSITION, POSITION, DEPTH, summon_type, BIT_FLAGS);
 

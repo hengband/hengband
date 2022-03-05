@@ -8,7 +8,7 @@
 
 #define MAX_BLDG 32 /*!< 施設の種類最大数 / Number of buildings */
 
-enum class MonsterRaceId;
+enum class MonsterRaceId : int16_t;
 
 struct building_type {
     GAME_TEXT name[20]; /* proprietor name */

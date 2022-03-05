@@ -36,7 +36,7 @@
 #define DUNGEON_DARKNESS 19
 #define DUNGEON_MAX 19
 
-enum class MonsterRaceId;
+enum class MonsterRaceId : int16_t;
 
 struct feat_prob {
     FEAT_IDX feat{}; /* Feature tile */

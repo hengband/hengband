@@ -12,7 +12,7 @@
 #include <string>
 #include <unordered_map>
 
-enum class MonsterRaceId;
+enum class MonsterRaceId : int16_t;
 
 enum monster_sex {
     MSEX_NONE = 0,

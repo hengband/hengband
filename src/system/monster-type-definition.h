@@ -15,7 +15,7 @@
  */
 constexpr int MONSTER_MAXHP = 30000; //!< モンスターの最大HP
 
-enum class MonsterRaceId;
+enum class MonsterRaceId : int16_t;
 struct floor_type;
 struct monster_race;
 struct monster_type {

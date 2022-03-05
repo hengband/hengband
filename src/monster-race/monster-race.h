@@ -4,7 +4,7 @@
 
 #include <map>
 
-enum class MonsterRaceId;
+enum class MonsterRaceId : int16_t;
 struct monster_race;
 extern std::map<MonsterRaceId, monster_race> r_info;
 int calc_monrace_power(monster_race *r_ptr);

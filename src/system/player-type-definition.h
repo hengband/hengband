@@ -19,7 +19,7 @@ enum class ItemKindType : short;
 enum class PlayerSkillKindType;
 enum class MimicKindType;
 enum class MonsterAbilityType;
-enum class MonsterRaceId;
+enum class MonsterRaceId : int16_t;
 
 struct floor_type;
 class ObjectType;

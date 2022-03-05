@@ -3,7 +3,7 @@
 #include "effect/attribute-types.h"
 #include "system/angband.h"
 
-enum class MonsterRaceId;
+enum class MonsterRaceId : int16_t;
 
 struct floor_type;
 class PlayerType;

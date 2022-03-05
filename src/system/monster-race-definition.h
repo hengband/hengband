@@ -15,7 +15,7 @@
 /*! モンスターが1ターンに攻撃する最大回数 (射撃を含む) / The maximum number of times a monster can attack in a turn (including SHOOT) */
 constexpr int MAX_NUM_BLOWS = 4;
 
-enum class MonsterRaceId;
+enum class MonsterRaceId : int16_t;
 
 class MonsterBlow {
 public:
