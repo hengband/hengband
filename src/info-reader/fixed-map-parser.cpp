@@ -22,6 +22,9 @@
 #include "util/string-processor.h"
 #include "view/display-messages.h"
 #include "world/world.h"
+#include <algorithm>
+#include <sstream>
+#include <stdexcept>
 
 static char tmp[8];
 static concptr variant = "ZANGBAND";
@@ -296,4 +299,93 @@ parse_error_type parse_fixed_map(PlayerType *player_ptr, concptr name, int ymin,
 
     angband_fclose(fp);
     return err;
+}
+
+static QuestId parse_quest_number_n(const std::vector<std::string> &token)
+{
+    auto number = i2enum<QuestId>(atoi(token[1].substr(_(0, 1)).c_str()));
+    return number;
+}
+
+static QuestId parse_quest_number(const std::vector<std::string> &token)
+{
+    auto is_quest_none = _(token[1][0] == '$', token[1][0] != '$');
+    if (is_quest_none) {
+        return QuestId::NONE;
+    }
+
+    if (token[2] == "N") {
+        return parse_quest_number_n(token);
+    }
+    return QuestId::NONE;
+}
+
+/*!
+ * @brief クエスト番号をファイルから読み込んでパースする
+ * @param player_ptr プレイヤーへの参照ポインタ
+ * @param file_name ファイル名
+ * @param key_list キーになるQuestIdの配列
+ */
+static void parse_quest_info_aux(const char *file_name, std::set<QuestId> &key_list_ref)
+{
+
+    auto push_set = [&key_list_ref, &file_name](auto q, auto line) {
+        if (q == QuestId::NONE) {
+            return;
+        }
+
+        if (key_list_ref.find(q) != key_list_ref.end()) {
+            std::stringstream ss;
+            ss << _("重複したQuestID ", "Duplicated Quest Id ") << enum2i(q) << '(' << file_name << ", L" << line << ')';
+            throw std::runtime_error(ss.str());
+        }
+
+        key_list_ref.insert(q);
+    };
+
+    char file_buf[1024];
+    path_build(file_buf, sizeof(file_buf), ANGBAND_DIR_EDIT, file_name);
+    auto *fp = angband_fopen(file_buf, "r");
+    if (fp == nullptr) {
+        std::stringstream ss;
+        ss << _("ファイルが見つかりません (", "File is not found (") << file_name << ')';
+        throw std::runtime_error(ss.str());
+    }
+
+    char buf[4096];
+    auto line_num = 0;
+    while (angband_fgets(fp, buf, sizeof(buf)) == 0) {
+        line_num++;
+
+        const auto token = str_split(buf, ':', true);
+
+        switch (token[0][0]) {
+        case 'Q': {
+            auto quest_number = parse_quest_number(token);
+            push_set(quest_number, line_num);
+            break;
+        }
+        case '%': {
+            parse_quest_info_aux(token[1].c_str(), key_list_ref);
+            break;
+        }
+        default:
+            break;
+        }
+    }
+
+    angband_fclose(fp);
+}
+
+/*!
+ * @brief ファイルからパースして作成したクエスト番号配列を返す
+ * @param player_ptr プレイヤーへの参照ポインタ
+ * @param file_name ファイル名
+ * @return クエスト番号の配列
+ */
+std::set<QuestId> parse_quest_info(const char *file_name)
+{
+    std::set<QuestId> key_list;
+    parse_quest_info_aux(file_name, key_list);
+    return key_list;
 }
