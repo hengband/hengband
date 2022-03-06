@@ -27,7 +27,7 @@ errr load_town(void)
     return 23;
 }
 
-errr load_quest_info(uint16_t *max_quests_load, byte *max_rquests_load)
+void load_quest_info(uint16_t *max_quests_load, byte *max_rquests_load)
 {
     *max_quests_load = rd_u16b();
     if (h_older_than(1, 0, 7)) {
@@ -35,24 +35,6 @@ errr load_quest_info(uint16_t *max_quests_load, byte *max_rquests_load)
     } else {
         *max_rquests_load = rd_byte();
     }
-
-    if (*max_quests_load <= max_q_idx) {
-        return 0;
-    }
-
-    load_note(format(_("クエストが多すぎる(%u)！", "Too many (%u) quests!"), *max_quests_load));
-    return 23;
-}
-
-static bool check_quest_index(int loading_quest_index)
-{
-    if (loading_quest_index < max_q_idx) {
-        return false;
-    }
-
-    strip_bytes(2);
-    strip_bytes(2);
-    return true;
 }
 
 static void load_quest_completion(quest_type *q_ptr)
@@ -73,7 +55,7 @@ static void load_quest_completion(quest_type *q_ptr)
     }
 }
 
-static void load_quest_details(PlayerType *player_ptr, quest_type *q_ptr, int loading_quest_index)
+static void load_quest_details(PlayerType *player_ptr, quest_type *q_ptr, const QuestId loading_quest_index)
 {
     q_ptr->cur_num = rd_s16b();
     q_ptr->max_num = rd_s16b();
@@ -81,7 +63,7 @@ static void load_quest_details(PlayerType *player_ptr, quest_type *q_ptr, int lo
 
     q_ptr->r_idx = i2enum<MonsterRaceId>(rd_s16b());
     if ((q_ptr->type == QuestKindType::RANDOM) && !MonsterRace(q_ptr->r_idx).is_valid()) {
-        determine_random_questor(player_ptr, &quest_map[i2enum<QuestId>(loading_quest_index)]);
+        determine_random_questor(player_ptr, &quest_map[loading_quest_index]);
     }
     q_ptr->k_idx = rd_s16b();
     if (q_ptr->k_idx) {
@@ -91,15 +73,80 @@ static void load_quest_details(PlayerType *player_ptr, quest_type *q_ptr, int lo
     q_ptr->flags = rd_byte();
 }
 
+static bool is_missing_id_ver_16(const QuestId q_idx)
+{
+    auto is_missing_id = (enum2i(q_idx) == 0);
+    is_missing_id |= (enum2i(q_idx) == 13);
+    is_missing_id |= (enum2i(q_idx) == 17);
+    is_missing_id |= (enum2i(q_idx) >= 35 && enum2i(q_idx) <= 39);
+    is_missing_id |= (enum2i(q_idx) >= 88 && enum2i(q_idx) <= 100);
+
+    auto is_deleted_random_quest = (enum2i(q_idx) >= 50 || enum2i(q_idx) <= 88);
+
+    return is_missing_id || is_deleted_random_quest;
+}
+
+static bool is_loadable_quest(const QuestId q_idx, const byte max_rquests_load)
+{
+    if (quest_map.find(q_idx) != quest_map.end()) {
+        return true;
+    }
+
+    bool is_missing_id;
+
+    if (loading_savefile_version_is_older_than(17)) {
+        is_missing_id = is_missing_id_ver_16(q_idx);
+    } else {
+        is_missing_id = false;
+    }
+
+    if (!is_missing_id) {
+        const std::string msg(_("削除されたクエストのあるセーブデータはサポート対象外です。",
+            "The save data with deleted quests is unsupported."));
+        throw SaveDataNotSupportedException(msg);
+    }
+
+    auto status = i2enum<QuestStatusType>(rd_s16b());
+
+    strip_bytes(2);
+    if (!h_older_than(1, 0, 6)) {
+        strip_bytes(1);
+    }
+    if (!h_older_than(2, 1, 2, 2)) {
+        strip_bytes(4);
+    }
+
+    auto is_quest_running = (status == QuestStatusType::TAKEN);
+    is_quest_running |= (!h_older_than(0, 3, 14) && (status == QuestStatusType::COMPLETED));
+    is_quest_running |= (!h_older_than(1, 0, 7) && (enum2i(q_idx) >= MIN_RANDOM_QUEST) && (enum2i(q_idx) <= (MIN_RANDOM_QUEST + max_rquests_load)));
+    if (!is_quest_running) {
+        return false;
+    }
+
+    strip_bytes(2);
+    strip_bytes(2);
+    strip_bytes(2);
+    strip_bytes(2);
+    strip_bytes(2);
+    strip_bytes(1);
+    return false;
+}
+
 void analyze_quests(PlayerType *player_ptr, const uint16_t max_quests_load, const byte max_rquests_load)
 {
     QuestId old_inside_quest = player_ptr->current_floor_ptr->quest_number;
-    for (int i = 0; i < max_quests_load; i++) {
-        if (check_quest_index(i)) {
+    for (auto i = 0; i < max_quests_load; i++) {
+        QuestId q_idx;
+        if (loading_savefile_version_is_older_than(17)) {
+            q_idx = i2enum<QuestId>(i);
+        } else {
+            q_idx = i2enum<QuestId>(rd_s16b());
+        }
+        if (!is_loadable_quest(q_idx, max_rquests_load)) {
             continue;
         }
 
-        auto *const q_ptr = &quest_map[i2enum<QuestId>(i)];
+        auto *const q_ptr = &quest_map.at(q_idx);
 
         if (loading_savefile_version_is_older_than(15)) {
             if (i == enum2i(OldQuestId15::CITY_SEA) && q_ptr->status != QuestStatusType::UNTAKEN) {
@@ -110,16 +157,16 @@ void analyze_quests(PlayerType *player_ptr, const uint16_t max_quests_load, cons
         }
 
         load_quest_completion(q_ptr);
-        bool is_quest_running = (q_ptr->status == QuestStatusType::TAKEN);
+        auto is_quest_running = (q_ptr->status == QuestStatusType::TAKEN);
         is_quest_running |= (!h_older_than(0, 3, 14) && (q_ptr->status == QuestStatusType::COMPLETED));
-        is_quest_running |= (!h_older_than(1, 0, 7) && (i >= MIN_RANDOM_QUEST) && (i <= (MIN_RANDOM_QUEST + max_rquests_load)));
+        is_quest_running |= (!h_older_than(1, 0, 7) && (enum2i(q_idx) >= MIN_RANDOM_QUEST) && (enum2i(q_idx) <= (MIN_RANDOM_QUEST + max_rquests_load)));
         if (!is_quest_running) {
             continue;
         }
 
-        load_quest_details(player_ptr, q_ptr, i);
+        load_quest_details(player_ptr, q_ptr, q_idx);
         if (h_older_than(0, 3, 11)) {
-            set_zangband_quest(player_ptr, q_ptr, i, old_inside_quest);
+            set_zangband_quest(player_ptr, q_ptr, q_idx, old_inside_quest);
         } else {
             q_ptr->dungeon = rd_byte();
         }
