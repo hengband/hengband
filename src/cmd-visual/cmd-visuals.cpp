@@ -15,7 +15,6 @@
 #include "knowledge/lighting-level-table.h"
 #include "main/sound-of-music.h"
 #include "monster-race/monster-race.h"
-#include "monster-race/race-indice-types.h"
 #include "object/object-kind.h"
 #include "system/monster-race-definition.h"
 #include "system/object-type-definition.h"
@@ -211,8 +210,9 @@ void do_cmd_visuals(PlayerType *player_ptr)
             break;
         }
         case '4': {
+            IDX num = 0;
             static concptr choice_msg = _("モンスターの[色/文字]を変更します", "Change monster attr/chars");
-            static MonsterRaceId r = MonsterRaceId::PLAYER;
+            static MonsterRaceId r = r_info.begin()->second.idx;
             prt(format(_("コマンド: %s", "Command: %s"), choice_msg), 15, 0);
             while (true) {
                 auto *r_ptr = &r_info[r];
@@ -249,7 +249,6 @@ void do_cmd_visuals(PlayerType *player_ptr)
                 case 'n': {
                     auto prev_r = r;
                     do {
-                        IDX num = 0;
                         if (!cmd_visuals_aux(i, &num, static_cast<IDX>(r_info.size()))) {
                             r = prev_r;
                             break;
