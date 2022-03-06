@@ -249,7 +249,6 @@ static int get_snipe_power(PlayerType *player_ptr, COMMAND_CODE *sn, bool only_b
     TERM_LEN y = 1;
     TERM_LEN x = 20;
     PLAYER_LEVEL plev = player_ptr->lev;
-    int ask;
     char choice;
     char out_val[160];
     concptr p = _("射撃術", "power");
@@ -359,16 +358,7 @@ static int get_snipe_power(PlayerType *player_ptr, COMMAND_CODE *sn, bool only_b
             continue;
         }
 
-        /* Note verify */
-        ask = isupper(choice);
-
-        /* Lowercase */
-        if (ask) {
-            choice = (char)tolower(choice);
-        }
-
-        /* Extract request */
-        i = (islower(choice) ? A2I(choice) : -1);
+        i = A2I(choice);
 
         /* Totally Illegal */
         if ((i < 0) || (i > num) || (!only_browse && (snipe_powers[i].mana_cost > sniper_data->concent))) {
@@ -378,19 +368,6 @@ static int get_snipe_power(PlayerType *player_ptr, COMMAND_CODE *sn, bool only_b
 
         /* Save the spell index */
         spell = snipe_powers[i];
-
-        /* Verify it */
-        if (ask) {
-            char tmp_val[160];
-
-            /* Prompt */
-            (void)strnfmt(tmp_val, 78, _("%sを使いますか？", "Use %s? "), snipe_powers[i].name);
-
-            /* Belay that order */
-            if (!get_check(tmp_val)) {
-                continue;
-            }
-        }
 
         /* Stop the loop */
         flag = true;
