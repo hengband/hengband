@@ -225,7 +225,7 @@ void today_target(PlayerType *player_ptr)
     prt(buf, 8, 10);
     sprintf(buf, _("骨   ---- $%d", "skeleton ---- $%d"), (int)r_ptr->level * 30 + 60);
     prt(buf, 9, 10);
-    player_ptr->today_mon = w_ptr->today_mon;
+    player_ptr->knows_daily_bounty = true;
 }
 
 /*!
@@ -269,31 +269,6 @@ void show_bounty(void)
             clear_bldg(7, 18);
         }
     }
-}
-
-/*!
- * @brief モンスターが賞金首の対象かどうかを調べる。達成済みの賞金首と日替わり賞金首は対象外。
- *
- * @param r_idx 対象のモンスター種族ID
- * @param unachieved_only true の場合未達成の賞金首のみを対象とする。false の場合達成未達成に関わらずすべての賞金首を対象とする。
- * @return 引数で指定したモンスター種族IDが賞金首の対象ならば true、そうでなければ false
- */
-bool is_bounty(MonsterRaceId r_idx, bool unachieved_only)
-{
-    auto it = std::find_if(std::begin(w_ptr->bounties), std::end(w_ptr->bounties),
-        [r_idx](const auto &b_ref) {
-            return b_ref.r_idx == r_idx;
-        });
-
-    if (it == std::end(w_ptr->bounties)) {
-        return false;
-    }
-
-    if (unachieved_only && (*it).is_achieved) {
-        return false;
-    }
-
-    return true;
 }
 
 /*!
@@ -346,8 +321,7 @@ void determine_daily_bounty(PlayerType *player_ptr, bool conv_old)
         break;
     }
 
-    // プレイヤーは日替わり賞金首に関する知識を失う。
-    player_ptr->today_mon = MonsterRaceId::PLAYER;
+    player_ptr->knows_daily_bounty = false;
 }
 
 /*!

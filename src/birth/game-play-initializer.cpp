@@ -150,7 +150,7 @@ void player_wipe_without_name(PlayerType *player_ptr)
     player_ptr->current_floor_ptr->quest_number = QuestId::NONE;
 
     player_ptr->exit_bldg = true;
-    player_ptr->today_mon = MonsterRaceId::PLAYER;
+    player_ptr->knows_daily_bounty = false;
     update_gambling_monsters(player_ptr);
     player_ptr->muta.clear();
 

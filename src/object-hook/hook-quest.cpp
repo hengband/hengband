@@ -2,7 +2,6 @@
 #include "cmd-building/cmd-building.h"
 #include "dungeon/quest.h"
 #include "game-option/birth-options.h"
-#include "market/bounty.h"
 #include "monster-race/monster-race.h"
 #include "monster-race/race-indice-types.h"
 #include "object-enchant/trg-types.h"
@@ -29,7 +28,7 @@ bool object_is_bounty(PlayerType *player_ptr, ObjectType *o_ptr)
     }
 
     auto corpse_r_idx = i2enum<MonsterRaceId>(o_ptr->pval);
-    if (MonsterRace(player_ptr->today_mon).is_valid() && (streq(r_info[corpse_r_idx].name.c_str(), r_info[w_ptr->today_mon].name.c_str()))) {
+    if (player_ptr->knows_daily_bounty && (streq(r_info[corpse_r_idx].name.c_str(), r_info[w_ptr->today_mon].name.c_str()))) {
         return true;
     }
 
@@ -37,7 +36,7 @@ bool object_is_bounty(PlayerType *player_ptr, ObjectType *o_ptr)
         return true;
     }
 
-    return is_bounty(corpse_r_idx, true);
+    return MonsterRace(corpse_r_idx).is_bounty(true);
 }
 
 /*!

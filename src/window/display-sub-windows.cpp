@@ -11,7 +11,6 @@
 #include "inventory/inventory-util.h"
 #include "locale/japanese.h"
 #include "main/sound-of-music.h"
-#include "market/bounty.h"
 #include "monster-race/monster-race.h"
 #include "monster-race/race-flags1.h"
 #include "monster/monster-flag-types.h"
@@ -115,7 +114,7 @@ static void print_monster_line(TERM_LEN x, TERM_LEN y, monster_type *m_ptr, int 
         return;
     }
     if (r_ptr->kind_flags.has(MonsterKindType::UNIQUE)) {
-        term_addstr(-1, TERM_WHITE, is_bounty(r_idx, true) ? "  W" : "  U");
+        term_addstr(-1, TERM_WHITE, MonsterRace(r_idx).is_bounty(true) ? "  W" : "  U");
     } else {
         sprintf(buf, "%3d", n_same);
         term_addstr(-1, TERM_WHITE, buf);
