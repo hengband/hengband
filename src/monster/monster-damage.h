@@ -31,7 +31,7 @@ private:
     void death_special_flag_monster();
     void death_unique_monster(MonsterRaceId r_idx);
     bool check_combined_unique(const MonsterRaceId r_idx, std::vector<MonsterRaceId> *combined_uniques);
-    void death_combined_uniques(const MonsterRaceId r_idx, combined_uniques *combined_uniques);
+    void death_combined_uniques(const MonsterRaceId r_idx, const combined_uniques &combined_uniques);
     void increase_kill_numbers();
     void death_amberites(GAME_TEXT *m_name);
     void dying_scream(GAME_TEXT *m_name);

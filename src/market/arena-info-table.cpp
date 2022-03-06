@@ -1,4 +1,5 @@
 ﻿#include "market/arena-info-table.h"
+#include "monster-race/monster-race.h"
 #include "monster-race/race-indice-types.h"
 #include "object/tval-types.h"
 #include "sv-definition/sv-amulet-types.h"
@@ -56,7 +57,7 @@ const std::vector<arena_type> arena_info = {
     { MonsterRaceId::BLACK_REAVER, ItemKindType::RING, SV_RING_LORDLY },
     { MonsterRaceId::FENGHUANG, ItemKindType::STAFF, SV_STAFF_THE_MAGI },
     { MonsterRaceId::WYRM_POWER, ItemKindType::SCROLL, SV_SCROLL_ARTIFACT },
-    { MonsterRaceId::PLAYER, ItemKindType::NONE, 0 }, /* Victory prizing */
+    { MonsterRace::empty_id(), ItemKindType::NONE, 0 }, /* Victory prizing */
     { MonsterRaceId::HAGURE, ItemKindType::SCROLL, SV_SCROLL_ARTIFACT },
 };
 

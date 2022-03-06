@@ -231,7 +231,7 @@ void MonsterDamageProcessor::death_unique_monster(MonsterRaceId r_idx)
         uniques.push_back(unique);
     }
 
-    this->death_combined_uniques(r_idx, &uniques);
+    this->death_combined_uniques(r_idx, uniques);
 }
 
 /*
@@ -255,26 +255,28 @@ bool MonsterDamageProcessor::check_combined_unique(const MonsterRaceId r_idx, st
     return false;
 }
 
-/*
+/*!
  * @brief 分裂/合体を行う特殊ユニークの死亡処理
- * @param m_ptr ダメージを与えたモンスターの構造体参照ポインタ
- * @uniques 分裂/合体を行う特殊ユニークのリスト
+ * @details 分裂/合体が A = B + C という図式の時、Aが死亡した場合BとCも死亡処理を行う。
+ * BもしくはCが死亡した場合、Aの死亡処理を行う。
+ * @param r_idx 実際に死亡したモンスターの種族ID
+ * @param combined_uniques 分裂/合体を行う特殊ユニークのリスト
  */
-void MonsterDamageProcessor::death_combined_uniques(const MonsterRaceId r_idx, combined_uniques *combined_uniques)
+void MonsterDamageProcessor::death_combined_uniques(const MonsterRaceId r_idx, const combined_uniques &combined_uniques)
 {
-    for (const auto &unique : *combined_uniques) {
-        auto united = i2enum<MonsterRaceId>(0);
-        auto split1 = i2enum<MonsterRaceId>(0);
-        auto split2 = i2enum<MonsterRaceId>(0);
-        std::tie(united, split1, split2) = unique;
-        if ((r_idx == split1) || (r_idx == split2)) {
-            r_info[united].max_num = 0;
-            r_info[united].r_pkills++;
-            r_info[united].r_akills++;
-            if (r_info[united].r_tkills < MAX_SHORT) {
-                r_info[united].r_tkills++;
-            }
+    auto death_r_idx = [](MonsterRaceId r_idx) {
+        auto &r_ref = r_info[r_idx];
+        r_ref.max_num = 0;
+        r_ref.r_pkills++;
+        r_ref.r_akills++;
+        if (r_ref.r_tkills < MAX_SHORT) {
+            r_ref.r_tkills++;
+        }
+    };
 
+    for (auto [united, split1, split2] : combined_uniques) {
+        if ((r_idx == split1) || (r_idx == split2)) {
+            death_r_idx(united);
             continue;
         }
 
@@ -282,19 +284,8 @@ void MonsterDamageProcessor::death_combined_uniques(const MonsterRaceId r_idx, c
             continue;
         }
 
-        r_info[split1].max_num = 0;
-        r_info[split1].r_pkills++;
-        r_info[split1].r_akills++;
-        if (r_info[split1].r_tkills < MAX_SHORT) {
-            r_info[split1].r_tkills++;
-        }
-
-        r_info[split2].max_num = 0;
-        r_info[split2].r_pkills++;
-        r_info[split2].r_akills++;
-        if (r_info[split2].r_tkills < MAX_SHORT) {
-            r_info[split2].r_tkills++;
-        }
+        death_r_idx(split1);
+        death_r_idx(split2);
     }
 }
 
@@ -535,7 +526,7 @@ void MonsterDamageProcessor::summon_special_unique()
         mes = _("「これは『試練』だ　過去に打ち勝てという『試練』とオレは受けとった」", "This is a 'trial'. I took it as a 'trial' to overcome in the past.");
         break;
     default: // バグでなければ入らない.
-        new_unique_idx = MonsterRaceId::PLAYER;
+        new_unique_idx = MonsterRace::empty_id();
         mes = "";
         break;
     }

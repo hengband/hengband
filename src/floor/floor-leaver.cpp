@@ -22,7 +22,6 @@
 #include "monster-race/monster-race.h"
 #include "monster-race/race-flags1.h"
 #include "monster-race/race-flags7.h"
-#include "monster-race/race-indice-types.h"
 #include "monster/monster-describer.h"
 #include "monster/monster-description-types.h"
 #include "monster/monster-info.h"
@@ -124,8 +123,8 @@ static void record_pet_diary(PlayerType *player_ptr)
  */
 static void preserve_pet(PlayerType *player_ptr)
 {
-    for (MONSTER_IDX party_monster_num = 0; party_monster_num < MAX_PARTY_MON; party_monster_num++) {
-        party_mon[party_monster_num].r_idx = MonsterRaceId::PLAYER;
+    for (auto &mon : party_mon) {
+        mon.r_idx = MonsterRace::empty_id();
     }
 
     check_riding_preservation(player_ptr);
@@ -261,7 +260,7 @@ static void get_out_monster(PlayerType *player_ptr)
  */
 static void preserve_info(PlayerType *player_ptr)
 {
-    auto quest_r_idx = MonsterRaceId::PLAYER;
+    auto quest_r_idx = MonsterRace::empty_id();
     for (auto &[q_idx, q_ref] : quest_map) {
         auto quest_relating_monster = (q_ref.status == QuestStatusType::TAKEN);
         quest_relating_monster &= ((q_ref.type == QuestKindType::KILL_LEVEL) || (q_ref.type == QuestKindType::RANDOM));

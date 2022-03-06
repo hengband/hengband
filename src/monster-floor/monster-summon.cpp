@@ -133,7 +133,7 @@ bool summon_specific(PlayerType *player_ptr, MONSTER_IDX who, POSITION y1, POSIT
     }
 
     POSITION x, y;
-    if (!mon_scatter(player_ptr, MonsterRaceId::PLAYER, &y, &x, y1, x1, 2)) {
+    if (!mon_scatter(player_ptr, MonsterRace::empty_id(), &y, &x, y1, x1, 2)) {
         return false;
     }
 

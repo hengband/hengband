@@ -10,7 +10,6 @@
 #include "monster-race/monster-race.h"
 #include "monster-race/race-flags1.h"
 #include "monster-race/race-flags7.h"
-#include "monster-race/race-indice-types.h"
 #include "object/object-kind.h"
 #include "pet/pet-util.h"
 #include "player-base/player-class.h"
@@ -65,7 +64,7 @@ void player_wipe_without_name(PlayerType *player_ptr)
         q_ref.max_num = 0;
         q_ref.type = QuestKindType::NONE;
         q_ref.level = 0;
-        q_ref.r_idx = MonsterRaceId::PLAYER;
+        q_ref.r_idx = MonsterRace::empty_id();
         q_ref.complev = 0;
         q_ref.comptime = 0;
     }

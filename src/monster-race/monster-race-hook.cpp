@@ -19,6 +19,7 @@
 #include "system/player-type-definition.h"
 #include "util/bit-flags-calculator.h"
 #include "util/string-processor.h"
+#include <set>
 
 /*! 通常pit生成時のモンスターの構成条件ID / Race index for "monster pit (clone)" */
 MonsterRaceId vault_aux_race;
@@ -454,8 +455,21 @@ bool vault_aux_undead(PlayerType *player_ptr, MonsterRaceId r_idx)
  */
 bool vault_aux_chapel_g(PlayerType *player_ptr, MonsterRaceId r_idx)
 {
-    static MonsterRaceId chapel_list[] = { MonsterRaceId::NOV_PRIEST, MonsterRaceId::NOV_PALADIN, MonsterRaceId::NOV_PRIEST_G, MonsterRaceId::NOV_PALADIN_G, MonsterRaceId::PRIEST, MonsterRaceId::JADE_MONK, MonsterRaceId::IVORY_MONK,
-        MonsterRaceId::ULTRA_PALADIN, MonsterRaceId::EBONY_MONK, MonsterRaceId::W_KNIGHT, MonsterRaceId::KNI_TEMPLAR, MonsterRaceId::PALADIN, MonsterRaceId::TOPAZ_MONK, MonsterRaceId::PLAYER };
+    static const std::set<MonsterRaceId> chapel_list = {
+        MonsterRaceId::NOV_PRIEST,
+        MonsterRaceId::NOV_PALADIN,
+        MonsterRaceId::NOV_PRIEST_G,
+        MonsterRaceId::NOV_PALADIN_G,
+        MonsterRaceId::PRIEST,
+        MonsterRaceId::JADE_MONK,
+        MonsterRaceId::IVORY_MONK,
+        MonsterRaceId::ULTRA_PALADIN,
+        MonsterRaceId::EBONY_MONK,
+        MonsterRaceId::W_KNIGHT,
+        MonsterRaceId::KNI_TEMPLAR,
+        MonsterRaceId::PALADIN,
+        MonsterRaceId::TOPAZ_MONK,
+    };
 
     auto *r_ptr = &r_info[r_idx];
     if (!vault_monster_okay(player_ptr, r_idx)) {
@@ -474,13 +488,7 @@ bool vault_aux_chapel_g(PlayerType *player_ptr, MonsterRaceId r_idx)
         return true;
     }
 
-    for (int i = 0; MonsterRace(chapel_list[i]).is_valid(); i++) {
-        if (r_idx == chapel_list[i]) {
-            return true;
-        }
-    }
-
-    return false;
+    return chapel_list.find(r_idx) != chapel_list.end();
 }
 
 /*!
@@ -757,7 +765,7 @@ bool vault_aux_cthulhu(PlayerType *player_ptr, MonsterRaceId r_idx)
  */
 bool vault_aux_dark_elf(PlayerType *player_ptr, MonsterRaceId r_idx)
 {
-    static MonsterRaceId dark_elf_list[] = {
+    static const std::set<MonsterRaceId> dark_elf_list = {
         MonsterRaceId::D_ELF,
         MonsterRaceId::D_ELF_MAGE,
         MonsterRaceId::D_ELF_WARRIOR,
@@ -768,20 +776,13 @@ bool vault_aux_dark_elf(PlayerType *player_ptr, MonsterRaceId r_idx)
         MonsterRaceId::NIGHTBLADE,
         MonsterRaceId::D_ELF_SORC,
         MonsterRaceId::D_ELF_SHADE,
-        MonsterRaceId::PLAYER,
     };
 
     if (!vault_monster_okay(player_ptr, r_idx)) {
         return false;
     }
 
-    for (int i = 0; MonsterRace(dark_elf_list[i]).is_valid(); i++) {
-        if (r_idx == dark_elf_list[i]) {
-            return true;
-        }
-    }
-
-    return false;
+    return dark_elf_list.find(r_idx) != dark_elf_list.end();
 }
 
 /*!

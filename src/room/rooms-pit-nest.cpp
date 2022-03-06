@@ -29,6 +29,7 @@
 #include "util/sort.h"
 #include "view/display-messages.h"
 #include "wizard/wizard-messages.h"
+#include <optional>
 #include <vector>
 
 /*!
@@ -255,28 +256,34 @@ bool build_type5(PlayerType *player_ptr, dun_data_type *dd_ptr)
 
     /* Pick some monster types */
     for (i = 0; i < NUM_NEST_MON_TYPE; i++) {
-        MonsterRaceId r_idx;
-        int attempts = 100;
-        monster_race *r_ptr = nullptr;
+        auto select_r_idx = [player_ptr, floor_ptr, &align]() -> std::optional<MonsterRaceId> {
+            for (auto attempts = 100; attempts > 0; attempts--) {
+                /* Get a (hard) monster type */
+                auto r_idx = get_mon_num(player_ptr, 0, floor_ptr->dun_level + 11, 0);
+                auto *r_ptr = &r_info[r_idx];
 
-        while (attempts--) {
-            /* Get a (hard) monster type */
-            r_idx = get_mon_num(player_ptr, 0, floor_ptr->dun_level + 11, 0);
-            r_ptr = &r_info[r_idx];
+                /* Decline incorrect alignment */
+                if (monster_has_hostile_align(player_ptr, &align, 0, 0, r_ptr)) {
+                    continue;
+                }
 
-            /* Decline incorrect alignment */
-            if (monster_has_hostile_align(player_ptr, &align, 0, 0, r_ptr)) {
-                continue;
+                /* Accept this monster */
+                if (MonsterRace(r_idx).is_valid()) {
+                    return r_idx;
+                } else {
+                    return std::nullopt;
+                }
             }
 
-            /* Accept this monster */
-            break;
-        }
+            return std::nullopt;
+        };
 
-        /* Notice failure */
-        if (!MonsterRace(r_idx).is_valid() || !attempts) {
+        const auto r_idx = select_r_idx();
+        if (!r_idx.has_value()) {
             return false;
         }
+
+        const auto *r_ptr = &r_info[r_idx.value()];
 
         /* Note the alignment */
         if (r_ptr->kind_flags.has(MonsterKindType::EVIL)) {
@@ -286,7 +293,7 @@ bool build_type5(PlayerType *player_ptr, dun_data_type *dd_ptr)
             align.sub_align |= SUB_ALIGN_GOOD;
         }
 
-        nest_mon_info[i].r_idx = r_idx;
+        nest_mon_info[i].r_idx = r_idx.value();
         nest_mon_info[i].used = false;
     }
 
@@ -492,7 +499,7 @@ bool build_type6(PlayerType *player_ptr, dun_data_type *dd_ptr)
 
     /* Pick some monster types */
     for (i = 0; i < 16; i++) {
-        MonsterRaceId r_idx;
+        auto r_idx = MonsterRace::empty_id();
         int attempts = 100;
         monster_race *r_ptr = nullptr;
 
@@ -807,7 +814,7 @@ bool build_type13(PlayerType *player_ptr, dun_data_type *dd_ptr)
 
     /* Pick some monster types */
     for (i = 0; i < 16; i++) {
-        MonsterRaceId r_idx;
+        auto r_idx = MonsterRace::empty_id();
         int attempts = 100;
         monster_race *r_ptr = nullptr;
 
