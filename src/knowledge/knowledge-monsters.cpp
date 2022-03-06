@@ -20,7 +20,6 @@
 #include "monster-race/race-flags1.h"
 #include "monster-race/race-flags3.h"
 #include "monster-race/race-flags7.h"
-#include "monster-race/race-indice-types.h"
 #include "monster/monster-describer.h"
 #include "monster/monster-description-types.h"
 #include "monster/monster-info.h"
@@ -46,11 +45,10 @@
  * @brief 特定の与えられた条件に応じてモンスターのIDリストを作成する / Build a list of monster indexes in the given group.
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param grp_cur グループ種別。リスト表記中の左一覧（各シンボル及び/ユニーク(-1)/騎乗可能モンスター(-2)/賞金首(-3)/アンバーの王族(-4)）を参照できる
- * @param mon_idx[] ID一覧を返す配列参照
  * @param mode 思い出の扱いに関するモード
- * @return 得られたモンスターIDの数 / The number of monsters in the group
+ * @return 作成したモンスターのIDリスト
  */
-static IDX collect_monsters(PlayerType *player_ptr, IDX grp_cur, MonsterRaceId mon_idx[], monster_lore_mode mode)
+static std::vector<MonsterRaceId> collect_monsters(PlayerType *player_ptr, IDX grp_cur, monster_lore_mode mode)
 {
     concptr group_char = monster_group_char[grp_cur];
     bool grp_unique = (monster_group_char[grp_cur] == (char *)-1L);
@@ -58,7 +56,7 @@ static IDX collect_monsters(PlayerType *player_ptr, IDX grp_cur, MonsterRaceId m
     bool grp_wanted = (monster_group_char[grp_cur] == (char *)-3L);
     bool grp_amberite = (monster_group_char[grp_cur] == (char *)-4L);
 
-    IDX mon_cnt = 0;
+    std::vector<MonsterRaceId> r_idx_list;
     for (const auto &[r_idx, r_ref] : r_info) {
         if (r_ref.name.empty()) {
             continue;
@@ -92,7 +90,7 @@ static IDX collect_monsters(PlayerType *player_ptr, IDX grp_cur, MonsterRaceId m
             }
         }
 
-        mon_idx[mon_cnt++] = r_ref.idx;
+        r_idx_list.push_back(r_ref.idx);
         if (mode == MONSTER_LORE_NORMAL) {
             break;
         }
@@ -101,10 +99,9 @@ static IDX collect_monsters(PlayerType *player_ptr, IDX grp_cur, MonsterRaceId m
         }
     }
 
-    mon_idx[mon_cnt] = i2enum<MonsterRaceId>(-1);
     int dummy_why;
-    ang_sort(player_ptr, mon_idx, &dummy_why, mon_cnt, ang_sort_comp_monster_level, ang_sort_swap_hook);
-    return mon_cnt;
+    ang_sort(player_ptr, r_idx_list.data(), &dummy_why, r_idx_list.size(), ang_sort_comp_monster_level, ang_sort_swap_hook);
+    return r_idx_list;
 }
 
 /*!
@@ -257,10 +254,10 @@ void do_cmd_knowledge_kill_count(PlayerType *player_ptr)
 /*
  * Display the monsters in a group.
  */
-static void display_monster_list(int col, int row, int per_page, MonsterRaceId mon_idx[], int mon_cur, int mon_top, bool visual_only)
+static void display_monster_list(int col, int row, int per_page, const std::vector<MonsterRaceId> &mon_idx, int mon_cur, int mon_top, bool visual_only)
 {
     int i;
-    for (i = 0; i < per_page && (mon_idx[mon_top + i] >= MonsterRaceId::PLAYER); i++) {
+    for (i = 0; i < per_page && mon_top + i < static_cast<int>(mon_idx.size()); i++) {
         TERM_COLOR attr;
         MonsterRaceId r_idx = mon_idx[mon_top + i];
         auto *r_ptr = &r_info[r_idx];
@@ -302,16 +299,15 @@ void do_cmd_knowledge_monsters(PlayerType *player_ptr, bool *need_redraw, bool v
 {
     TERM_LEN wid, hgt;
     term_get_size(&wid, &hgt);
-    std::vector<MonsterRaceId> mon_idx(r_info.size());
+    std::vector<MonsterRaceId> r_idx_list;
     std::vector<IDX> grp_idx;
 
     int max = 0;
-    IDX mon_cnt;
     bool visual_list = false;
     TERM_COLOR attr_top = 0;
     byte char_left = 0;
     monster_lore_mode mode;
-    int browser_rows = hgt - 8;
+    const int browser_rows = hgt - 8;
     if (!direct_r_idx.has_value()) {
         mode = visual_only ? MONSTER_LORE_DEBUG : MONSTER_LORE_NORMAL;
         int len;
@@ -321,16 +317,12 @@ void do_cmd_knowledge_monsters(PlayerType *player_ptr, bool *need_redraw, bool v
                 max = len;
             }
 
-            if ((monster_group_char[i] == ((char *)-1L)) || collect_monsters(player_ptr, i, mon_idx.data(), mode)) {
+            if ((monster_group_char[i] == ((char *)-1L)) || !collect_monsters(player_ptr, i, mode).empty()) {
                 grp_idx.push_back(i);
             }
         }
-
-        mon_cnt = 0;
     } else {
-        mon_idx[0] = direct_r_idx.value();
-        mon_cnt = 1;
-        mon_idx[1] = i2enum<MonsterRaceId>(-1);
+        r_idx_list.push_back(direct_r_idx.value());
 
         (void)visual_mode_command('v', &visual_list, browser_rows - 1, wid - (max + 3), &attr_top, &char_left, &r_info[direct_r_idx.value()].x_attr,
             &r_info[direct_r_idx.value()].x_char, need_redraw);
@@ -386,7 +378,7 @@ void do_cmd_knowledge_monsters(PlayerType *player_ptr, bool *need_redraw, bool v
             display_group_list(0, 6, max, browser_rows, grp_idx.data(), monster_group_text, grp_cur, grp_top);
             if (old_grp_cur != grp_cur) {
                 old_grp_cur = grp_cur;
-                mon_cnt = collect_monsters(player_ptr, grp_idx[grp_cur], mon_idx.data(), mode);
+                r_idx_list = collect_monsters(player_ptr, grp_idx[grp_cur], mode);
             }
 
             while (mon_cur < mon_top) {
@@ -394,19 +386,20 @@ void do_cmd_knowledge_monsters(PlayerType *player_ptr, bool *need_redraw, bool v
             }
 
             while (mon_cur >= mon_top + browser_rows) {
-                mon_top = std::min<short>(mon_cnt - browser_rows, mon_top + browser_rows / 2);
+                auto remain = static_cast<int>(r_idx_list.size()) - browser_rows;
+                mon_top = static_cast<short>(std::min(remain, mon_top + browser_rows / 2));
             }
         }
 
         if (!visual_list) {
-            display_monster_list(max + 3, 6, browser_rows, mon_idx.data(), mon_cur, mon_top, visual_only);
+            display_monster_list(max + 3, 6, browser_rows, r_idx_list, mon_cur, mon_top, visual_only);
         } else {
             mon_top = mon_cur;
-            display_monster_list(max + 3, 6, 1, mon_idx.data(), mon_cur, mon_top, visual_only);
+            display_monster_list(max + 3, 6, 1, r_idx_list, mon_cur, mon_top, visual_only);
             display_visual_list(max + 3, 7, browser_rows - 1, wid - (max + 3), attr_top, char_left);
         }
 
-        prt(format(_("%d 種", "%d Races"), mon_cnt), 3, 26);
+        prt(format(_("%d 種", "%d Races"), r_idx_list.size()), 3, 26);
         prt(format(_("<方向>%s%s%s, ESC", "<dir>%s%s%s, ESC"), (!visual_list && !visual_only) ? _(", 'r'で思い出を見る", ", 'r' to recall") : "",
                 visual_list ? _(", ENTERで決定", ", ENTER to accept") : _(", 'v'でシンボル変更", ", 'v' for visuals"),
                 (attr_idx || char_idx) ? _(", 'c', 'p'でペースト", ", 'c', 'p' to paste") : _(", 'c'でコピー", ", 'c' to copy")),
@@ -416,15 +409,13 @@ void do_cmd_knowledge_monsters(PlayerType *player_ptr, bool *need_redraw, bool v
         char dummy_c = 0;
         auto *attr_ptr = &dummy_a;
         auto *char_ptr = &dummy_c;
-        if (mon_idx[0] != i2enum<MonsterRaceId>(-1)) {
-            auto *r_ptr = &r_info[mon_idx[mon_cur]];
+        if (!r_idx_list.empty()) {
+            auto *r_ptr = &r_info[r_idx_list[mon_cur]];
             attr_ptr = &r_ptr->x_attr;
             char_ptr = &r_ptr->x_char;
 
             if (!visual_only) {
-                if (mon_cnt) {
-                    monster_race_track(player_ptr, mon_idx[mon_cur]);
-                }
+                monster_race_track(player_ptr, r_idx_list[mon_cur]);
                 handle_stuff(player_ptr);
             }
 
@@ -460,8 +451,8 @@ void do_cmd_knowledge_monsters(PlayerType *player_ptr, bool *need_redraw, bool v
 
         case 'R':
         case 'r': {
-            if (!visual_list && !visual_only && MonsterRace(mon_idx[mon_cur]).is_valid()) {
-                screen_roff(player_ptr, mon_idx[mon_cur], MONSTER_LORE_NORMAL);
+            if (!visual_list && !visual_only && MonsterRace(r_idx_list[mon_cur]).is_valid()) {
+                screen_roff(player_ptr, r_idx_list[mon_cur], MONSTER_LORE_NORMAL);
 
                 (void)inkey();
 
@@ -472,7 +463,7 @@ void do_cmd_knowledge_monsters(PlayerType *player_ptr, bool *need_redraw, bool v
         }
 
         default: {
-            browser_cursor(ch, &column, &grp_cur, grp_idx.size() - 1, &mon_cur, mon_cnt);
+            browser_cursor(ch, &column, &grp_cur, grp_idx.size() - 1, &mon_cur, r_idx_list.size());
 
             break;
         }
