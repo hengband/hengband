@@ -142,7 +142,6 @@ static std::optional<std::tuple<ItemKindType, OBJECT_SUBTYPE_VALUE>> select_magi
     char choice;
     bool flag, request_list;
     auto tval = ItemKindType::NONE;
-    int ask = true;
     OBJECT_SUBTYPE_VALUE i = 0;
     char out_val[160];
 
@@ -361,6 +360,7 @@ static std::optional<std::tuple<ItemKindType, OBJECT_SUBTYPE_VALUE>> select_magi
             break;
         }
 
+        auto should_redraw_cursor = true;
         if (use_menu && choice != ' ') {
             switch (choice) {
             case '0': {
@@ -428,14 +428,14 @@ static std::optional<std::tuple<ItemKindType, OBJECT_SUBTYPE_VALUE>> select_magi
             case 'X':
             case '\r': {
                 i = menu_line - 1;
-                ask = false;
+                should_redraw_cursor = false;
                 break;
             }
             }
         }
 
         /* Request redraw */
-        if (use_menu && ask) {
+        if (use_menu && should_redraw_cursor) {
             continue;
         }
 
@@ -457,19 +457,8 @@ static std::optional<std::tuple<ItemKindType, OBJECT_SUBTYPE_VALUE>> select_magi
 
         if (!use_menu) {
             if (isalpha(choice)) {
-                /* Note verify */
-                ask = (isupper(choice));
-
-                /* Lowercase */
-                if (ask) {
-                    choice = (char)tolower(choice);
-                }
-
-                /* Extract request */
-                i = (islower(choice) ? A2I(choice) : -1);
+                i = A2I(choice);
             } else {
-                ask = false; /* Can't uppercase digits */
-
                 i = choice - '0' + 26;
             }
         }
@@ -481,35 +470,17 @@ static std::optional<std::tuple<ItemKindType, OBJECT_SUBTYPE_VALUE>> select_magi
         }
 
         if (!only_browse) {
-            /* Verify it */
-            if (ask) {
-                char tmp_val[160];
-
-                /* Prompt */
-                (void)strnfmt(tmp_val, 78, _("%sを使いますか？ ", "Use %s? "), k_info[lookup_kind(tval, i)].name.c_str());
-
-                /* Belay that order */
-                if (!get_check(tmp_val)) {
-                    continue;
-                }
-            }
             auto &item = item_group[i];
             if (tval == ItemKindType::ROD) {
                 if (item.charge > k_info[lookup_kind(tval, i)].pval * (item.count - 1) * EATER_ROD_CHARGE) {
                     msg_print(_("その魔法はまだ充填している最中だ。", "The magic is still charging."));
                     msg_print(nullptr);
-                    if (use_menu) {
-                        ask = true;
-                    }
                     continue;
                 }
             } else {
                 if (item.charge < EATER_CHARGE) {
                     msg_print(_("その魔法は使用回数が切れている。", "The magic has no charges left."));
                     msg_print(nullptr);
-                    if (use_menu) {
-                        ask = true;
-                    }
                     continue;
                 }
             }

@@ -556,14 +556,13 @@ void do_cmd_pet(PlayerType *player_ptr)
 
         /* Get a command from the user */
         while (!flag) {
-            int ask = true;
-
             if (choice == ESCAPE) {
                 choice = ' ';
             } else if (!get_com(prompt.c_str(), &choice, true)) {
                 break;
             }
 
+            auto should_redraw_cursor = true;
             if (use_menu && (choice != ' ')) {
                 switch (choice) {
                 case '0':
@@ -599,7 +598,7 @@ void do_cmd_pet(PlayerType *player_ptr)
                 case '\r':
                 case '\n':
                     i = menu_line - 1;
-                    ask = false;
+                    should_redraw_cursor = false;
                     break;
                 }
                 if (menu_line > num) {
@@ -608,7 +607,7 @@ void do_cmd_pet(PlayerType *player_ptr)
             }
 
             /* Request redraw */
-            if ((choice == ' ') || (choice == '*') || (choice == '?') || (use_menu && ask)) {
+            if ((choice == ' ') || (choice == '*') || (choice == '?') || (use_menu && should_redraw_cursor)) {
                 /* Show the list */
                 if (!redraw || use_menu) {
                     byte y = 1, x = 0;
@@ -649,29 +648,13 @@ void do_cmd_pet(PlayerType *player_ptr)
             }
 
             if (!use_menu) {
-                /* Note verify */
-                ask = (isupper(choice));
-
-                /* Lowercase */
-                if (ask) {
-                    choice = (char)tolower(choice);
-                }
-
-                /* Extract request */
-                i = (islower(choice) ? A2I(choice) : -1);
+                i = A2I(choice);
             }
 
             /* Totally Illegal */
             if ((i < 0) || (i >= num)) {
                 bell();
                 continue;
-            }
-
-            /* Verify it */
-            if (ask) {
-                if (!get_check(format(_("%sを使いますか？ ", "Use %s? "), power_desc[i].c_str()))) {
-                    continue;
-                }
             }
 
             /* Stop the loop */

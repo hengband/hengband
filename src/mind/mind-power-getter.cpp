@@ -163,14 +163,6 @@ bool MindPowerGetter::decide_mind_choice(char *out_val, const bool only_browse)
         }
 
         this->spell = &mind_ptr->info[this->index];
-        if (this->ask) {
-            char tmp_val[160];
-            (void)strnfmt(tmp_val, 78, _("%sを使いますか？", "Use %s? "), this->spell->name);
-            if (!get_check(tmp_val)) {
-                continue;
-            }
-        }
-
         this->flag = true;
     }
 
@@ -183,6 +175,7 @@ bool MindPowerGetter::interpret_mind_key_input(const bool only_browse)
         return true;
     }
 
+    this->should_redraw_cursor = true;
     switch (this->choice) {
     case '0':
         if (!only_browse) {
@@ -205,7 +198,7 @@ bool MindPowerGetter::interpret_mind_key_input(const bool only_browse)
     case '\r':
     case '\n':
         this->index = this->menu_line - 1;
-        this->ask = false;
+        this->should_redraw_cursor = false;
         break;
     default:
         break;
@@ -220,7 +213,7 @@ bool MindPowerGetter::interpret_mind_key_input(const bool only_browse)
 
 bool MindPowerGetter::display_minds_chance(const bool only_browse)
 {
-    if ((this->choice != ' ') && (this->choice != '*') && (this->choice != '?') && (!use_menu || !this->ask)) {
+    if ((this->choice != ' ') && (this->choice != '*') && (this->choice != '?') && (!use_menu || !this->should_redraw_cursor)) {
         return false;
     }
 
@@ -364,10 +357,5 @@ void MindPowerGetter::make_choice_lower()
         return;
     }
 
-    this->ask = (bool)isupper(this->choice);
-    if (this->ask) {
-        this->choice = (char)tolower(this->choice);
-    }
-
-    this->index = (islower(this->choice) ? A2I(this->choice) : -1);
+    this->index = A2I(this->choice);
 }

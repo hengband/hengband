@@ -698,7 +698,6 @@ bool get_element_power(PlayerType *player_ptr, SPELL_IDX *sn, bool only_browse)
     TERM_LEN y = 1;
     TERM_LEN x = 10;
     PLAYER_LEVEL plev = player_ptr->lev;
-    int ask = true;
     char choice;
     char out_val[160];
     char comment[80];
@@ -746,6 +745,7 @@ bool get_element_power(PlayerType *player_ptr, SPELL_IDX *sn, bool only_browse)
             break;
         }
 
+        auto should_redraw_cursor = true;
         if (use_menu && choice != ' ') {
             switch (choice) {
             case '0':
@@ -768,7 +768,7 @@ bool get_element_power(PlayerType *player_ptr, SPELL_IDX *sn, bool only_browse)
             case '\r':
             case '\n':
                 i = menu_line - 1;
-                ask = false;
+                should_redraw_cursor = false;
                 break;
             }
 
@@ -778,7 +778,7 @@ bool get_element_power(PlayerType *player_ptr, SPELL_IDX *sn, bool only_browse)
         }
 
         int spell_max = enum2i(ElementSpells::MAX);
-        if ((choice == ' ') || (choice == '*') || (choice == '?') || (use_menu && ask)) {
+        if ((choice == ' ') || (choice == '*') || (choice == '?') || (use_menu && should_redraw_cursor)) {
             if (!redraw || use_menu) {
                 char desc[80];
                 char name[80];
@@ -828,29 +828,12 @@ bool get_element_power(PlayerType *player_ptr, SPELL_IDX *sn, bool only_browse)
         }
 
         if (!use_menu) {
-            ask = isupper(choice);
-            if (ask) {
-                choice = (char)tolower(choice);
-            }
-
-            i = (islower(choice) ? A2I(choice) : -1);
+            i = A2I(choice);
         }
 
         if ((i < 0) || (i >= num)) {
             bell();
             continue;
-        }
-
-        if (ask) {
-            char name[80];
-            char tmp_val[160];
-            elem = get_elemental_elem(player_ptr, i);
-            spell = get_elemental_info(player_ptr, i);
-            (void)sprintf(name, spell.name, get_element_name(player_ptr->element, elem));
-            (void)strnfmt(tmp_val, 78, _("%sを使いますか？", "Use %s? "), name);
-            if (!get_check(tmp_val)) {
-                continue;
-            }
         }
 
         flag = true;

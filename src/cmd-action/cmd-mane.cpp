@@ -147,7 +147,6 @@ static int get_mane_power(PlayerType *player_ptr, int *sn, bool baigaesi)
     PERCENTAGE minfail = 0;
     PLAYER_LEVEL plev = player_ptr->lev;
     PERCENTAGE chance = 0;
-    int ask;
     char choice;
     char out_val[MAX_MONSTER_NAME];
     char comment[80];
@@ -253,16 +252,8 @@ static int get_mane_power(PlayerType *player_ptr, int *sn, bool baigaesi)
             continue;
         }
 
-        /* Note verify */
-        ask = isupper(choice);
-
-        /* Lowercase */
-        if (ask) {
-            choice = (char)tolower(choice);
-        }
-
         /* Extract request */
-        i = (islower(choice) ? A2I(choice) : -1);
+        i = A2I(choice);
 
         /* Totally Illegal */
         if ((i < 0) || (i >= num)) {
@@ -272,19 +263,6 @@ static int get_mane_power(PlayerType *player_ptr, int *sn, bool baigaesi)
 
         /* Save the spell index */
         spell = monster_powers.at(mane_data->mane_list[i].spell);
-
-        /* Verify it */
-        if (ask) {
-            char tmp_val[160];
-
-            /* Prompt */
-            (void)strnfmt(tmp_val, 78, _("%sをまねますか？", "Use %s? "), spell.name);
-
-            /* Belay that order */
-            if (!get_check(tmp_val)) {
-                continue;
-            }
-        }
 
         /* Stop the loop */
         flag = true;
