@@ -1,4 +1,11 @@
-﻿#include "mind/mind-mirror-master.h"
+﻿/*!
+ * @brief 鏡使いの鏡魔法コマンド処理
+ * @date 2022/03/07
+ * @author Hourier
+ * @todo 作りかけの部分複数あり
+ */
+
+#include "mind/mind-mirror-master.h"
 #include "core/disturbance.h"
 #include "core/player-redraw-types.h"
 #include "core/player-update-types.h"

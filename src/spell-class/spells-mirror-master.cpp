@@ -1,4 +1,11 @@
-﻿#include "spell-class/spells-mirror-master.h"
+﻿/*!
+ * @brief 鏡使いの鏡魔法効果処理
+ * @date 2022/03/07
+ * @author Hourier
+ * @todo 作りかけの部分複数あり
+ */
+
+#include "spell-class/spells-mirror-master.h"
 #include "core/player-redraw-types.h"
 #include "dungeon/dungeon-flag-types.h"
 #include "dungeon/dungeon.h"
