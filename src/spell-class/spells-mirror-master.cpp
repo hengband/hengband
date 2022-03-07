@@ -4,6 +4,7 @@
 #include "dungeon/dungeon.h"
 #include "effect/attribute-types.h"
 #include "effect/effect-characteristics.h"
+#include "effect/effect-monster.h"
 #include "effect/effect-processor.h"
 #include "floor/cave.h"
 #include "game-option/map-screen-options.h"
@@ -144,4 +145,30 @@ bool SpellsMirrorMaster::mirror_concentration()
 
     this->player_ptr->redraw |= PR_MANA;
     return true;
+}
+
+/*!
+ * @brief 鏡魔法「鏡の封印」の効果処理
+ * @param dam ダメージ量
+ * @return 効果があったらTRUEを返す
+ */
+void SpellsMirrorMaster::seal_of_mirror(const int dam)
+{
+    const auto *floor_ptr = this->player_ptr->current_floor_ptr;
+    for (auto x = 0; x < floor_ptr->width; x++) {
+        for (auto y = 0; y < floor_ptr->height; y++) {
+            if (!floor_ptr->grid_array[y][x].is_mirror()) {
+                continue;
+            }
+
+            constexpr BIT_FLAGS flags = PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL | PROJECT_JUMP;
+            if (!affect_monster(this->player_ptr, 0, 0, y, x, dam, AttributeType::GENOCIDE, flags, true)) {
+                continue;
+            }
+
+            if (!floor_ptr->grid_array[y][x].m_idx) {
+                this->remove_mirror(y, x);
+            }
+        }
+    }
 }

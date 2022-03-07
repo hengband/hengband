@@ -9,6 +9,7 @@ public:
     bool mirror_tunnel();
     bool place_mirror();
     bool mirror_concentration();
+    void seal_of_mirror(const int dam);
 
 private:
     PlayerType *player_ptr;

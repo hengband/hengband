@@ -169,30 +169,6 @@ bool binding_field(PlayerType *player_ptr, int dam)
 }
 
 /*!
- * @brief 鏡魔法「鏡の封印」の効果処理
- * @param dam ダメージ量
- * @return 効果があったらTRUEを返す
- */
-void seal_of_mirror(PlayerType *player_ptr, int dam)
-{
-    for (POSITION x = 0; x < player_ptr->current_floor_ptr->width; x++) {
-        for (POSITION y = 0; y < player_ptr->current_floor_ptr->height; y++) {
-            if (!player_ptr->current_floor_ptr->grid_array[y][x].is_mirror()) {
-                continue;
-            }
-
-            if (!affect_monster(player_ptr, 0, 0, y, x, dam, AttributeType::GENOCIDE, (PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL | PROJECT_JUMP), true)) {
-                continue;
-            }
-
-            if (!player_ptr->current_floor_ptr->grid_array[y][x].m_idx) {
-                SpellsMirrorMaster(player_ptr).remove_mirror(y, x);
-            }
-        }
-    }
-}
-
-/*!
  * 幻惑の光 @ 鏡使いだけでなく混沌の戦士も使える
  * @param player_ptr プレイヤーへの参照ポインタ
  * @return 常にTRUE
@@ -415,7 +391,7 @@ bool cast_mirror_spell(PlayerType *player_ptr, mind_mirror_master_type spell)
         fire_beam(player_ptr, AttributeType::SEEKER, dir, damroll(11 + (plev - 5) / 4, 8));
         break;
     case SEALING_MIRROR:
-        seal_of_mirror(player_ptr, plev * 4 + 100);
+        SpellsMirrorMaster(player_ptr).seal_of_mirror(plev * 4 + 100);
         break;
     case WATER_SHIELD:
         t = 20 + randint1(20);
