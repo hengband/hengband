@@ -168,17 +168,16 @@ void OtherItemsEnchanter::generate_corpse()
  */
 void OtherItemsEnchanter::generate_statue()
 {
-    MonsterRaceId r_idx;
-    const auto *r_ptr = &r_info[MonsterRaceId::PLAYER];
-    while (true) {
-        r_idx = MonsterRace::pick_one_at_random();
-        r_ptr = &r_info[r_idx];
-        if (r_ptr->rarity == 0) {
-            continue;
+    auto pick_r_idx_for_statue = [] {
+        while (true) {
+            auto r_idx = MonsterRace::pick_one_at_random();
+            if (r_info[r_idx].rarity > 0) {
+                return r_idx;
+            }
         }
-
-        break;
-    }
+    };
+    auto r_idx = pick_r_idx_for_statue();
+    auto *r_ptr = &r_info[r_idx];
 
     this->o_ptr->pval = enum2i(r_idx);
     if (cheat_peek) {

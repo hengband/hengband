@@ -37,6 +37,7 @@
 #include "util/string-processor.h"
 #include "view/display-messages.h"
 #include "wizard/wizard-messages.h"
+#include <optional>
 
 #define MON_SCAT_MAXD 10 /*!< mon_scatter()関数によるモンスター配置で許される中心からの最大距離 */
 
@@ -45,7 +46,7 @@
  * @brief 護衛対象となるモンスター種族IDを渡すグローバル変数 / Hack -- help pick an escort type
  * @todo 関数ポインタの都合を配慮しながら、グローバル変数place_monster_idxを除去し、関数引数化する
  */
-static MonsterRaceId place_monster_idx = MonsterRaceId::PLAYER;
+static MonsterRaceId place_monster_idx = MonsterRace::empty_id();
 
 /*!
  * @var place_monster_m_idx
@@ -385,6 +386,30 @@ bool place_monster(PlayerType *player_ptr, POSITION y, POSITION x, BIT_FLAGS mod
     return place_monster_aux(player_ptr, 0, y, x, r_idx, mode);
 }
 
+static std::optional<MonsterRaceId> select_horde_leader_r_idx(PlayerType *player_ptr)
+{
+    const auto *floor_ptr = player_ptr->current_floor_ptr;
+
+    for (auto attempts = 1000; attempts > 0; --attempts) {
+        auto r_idx = get_mon_num(player_ptr, 0, floor_ptr->monster_level, 0);
+        if (!MonsterRace(r_idx).is_valid()) {
+            return std::nullopt;
+        }
+
+        if (r_info[r_idx].kind_flags.has(MonsterKindType::UNIQUE)) {
+            continue;
+        }
+
+        if (r_idx == MonsterRaceId::HAGURE) {
+            continue;
+        }
+
+        return r_idx;
+    }
+
+    return std::nullopt;
+}
+
 /*!
  * @brief 指定地点に1種類のモンスター種族による群れを生成する
  * @param player_ptr プレイヤーへの参照ポインタ
@@ -396,60 +421,44 @@ bool alloc_horde(PlayerType *player_ptr, POSITION y, POSITION x, summon_specific
 {
     get_mon_num_prep(player_ptr, get_monster_hook(player_ptr), get_monster_hook2(player_ptr, y, x));
 
-    auto *floor_ptr = player_ptr->current_floor_ptr;
-    MonsterRaceId r_idx = MonsterRaceId::PLAYER;
-    int attempts = 1000;
-    monster_race *r_ptr = nullptr;
-    while (--attempts) {
-        r_idx = get_mon_num(player_ptr, 0, floor_ptr->monster_level, 0);
-        if (!MonsterRace(r_idx).is_valid()) {
-            return false;
-        }
-
-        r_ptr = &r_info[r_idx];
-        if (r_ptr->kind_flags.has(MonsterKindType::UNIQUE)) {
-            continue;
-        }
-
-        if (r_idx == MonsterRaceId::HAGURE) {
-            continue;
-        }
-        break;
-    }
-
-    if (attempts < 1) {
+    auto r_idx = select_horde_leader_r_idx(player_ptr);
+    if (!r_idx.has_value()) {
         return false;
     }
 
-    attempts = 1000;
+    for (auto attempts = 1000;; --attempts) {
+        if (attempts <= 0) {
+            return false;
+        }
 
-    while (--attempts) {
-        if (place_monster_aux(player_ptr, 0, y, x, r_idx, 0L)) {
+        if (place_monster_aux(player_ptr, 0, y, x, r_idx.value(), 0L)) {
             break;
         }
     }
 
-    if (attempts < 1) {
-        return false;
-    }
-
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     MONSTER_IDX m_idx = floor_ptr->grid_array[y][x].m_idx;
-    if (floor_ptr->m_list[m_idx].mflag2.has(MonsterConstantFlagType::CHAMELEON)) {
-        r_ptr = &r_info[floor_ptr->m_list[m_idx].r_idx];
-    }
 
     POSITION cy = y;
     POSITION cx = x;
-    for (attempts = randint1(10) + 5; attempts; attempts--) {
+    for (auto attempts = randint1(10) + 5; attempts > 0; attempts--) {
         scatter(player_ptr, &cy, &cx, y, x, 5, PROJECT_NONE);
         (void)(*summon_specific)(player_ptr, m_idx, cy, cx, floor_ptr->dun_level + 5, SUMMON_KIN, PM_ALLOW_GROUP);
         y = cy;
         x = cx;
     }
 
-    if (cheat_hear) {
-        msg_format(_("モンスターの大群(%c)", "Monster horde (%c)."), r_ptr->d_char);
+    if (!cheat_hear) {
+        return true;
     }
+
+    auto *r_ptr = &r_info[r_idx.value()];
+    if (floor_ptr->m_list[m_idx].mflag2.has(MonsterConstantFlagType::CHAMELEON)) {
+        r_ptr = &r_info[floor_ptr->m_list[m_idx].r_idx];
+    }
+
+    msg_format(_("モンスターの大群(%c)", "Monster horde (%c)."), r_ptr->d_char);
+
     return true;
 }
 

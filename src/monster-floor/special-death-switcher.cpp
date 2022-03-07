@@ -488,8 +488,8 @@ static void on_dead_chest_mimic(PlayerType *player_ptr, monster_death_type *md_p
     }
 
     bool notice = false;
-    MonsterRaceId mimic_inside;
-    int num_summons;
+    auto mimic_inside = MonsterRace::empty_id();
+    auto num_summons = 0;
     auto r_idx = md_ptr->m_ptr->r_idx;
     switch (r_idx) {
     case MonsterRaceId::CHEST_MIMIC_03:
@@ -505,8 +505,6 @@ static void on_dead_chest_mimic(PlayerType *player_ptr, monster_death_type *md_p
         num_summons = one_in_(2) ? 3 : 2;
         break;
     default:
-        mimic_inside = i2enum<MonsterRaceId>(-1);
-        num_summons = 0;
         return;
     }
 

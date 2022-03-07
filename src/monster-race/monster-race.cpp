@@ -18,6 +18,19 @@ MonsterRace::MonsterRace(MonsterRaceId r_idx)
 }
 
 /*!
+ * @brief どのモンスター種族でもない事を意味する MonsterRaceId を返す
+ * @details 実態は MonsterRaceId::PLAYER だが、この値は実際にプレイヤーとしての意味として使われる場合
+ * （召喚主がプレイヤーの場合やマップ上の表示属性情報等）とどのモンスターでもない意味として使われる場合があるので、
+ * 後者ではこれを使用することでコード上の意図をわかりやすくする。
+ *
+ * @return (どのモンスター種族でもないという意味での) MonsterRaceId::PLAYER を返す
+ */
+MonsterRaceId MonsterRace::empty_id()
+{
+    return MonsterRaceId::PLAYER;
+}
+
+/*!
  * @brief (MonsterRaceId::PLAYERを除く)実在するすべてのモンスター種族IDから等確率で1つ選択する
  *
  * @return 選択したモンスター種族ID
