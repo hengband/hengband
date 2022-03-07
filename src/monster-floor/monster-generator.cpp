@@ -386,6 +386,30 @@ bool place_monster(PlayerType *player_ptr, POSITION y, POSITION x, BIT_FLAGS mod
     return place_monster_aux(player_ptr, 0, y, x, r_idx, mode);
 }
 
+static std::optional<MonsterRaceId> select_horde_leader_r_idx(PlayerType *player_ptr)
+{
+    const auto *floor_ptr = player_ptr->current_floor_ptr;
+
+    for (auto attempts = 1000; attempts > 0; --attempts) {
+        auto r_idx = get_mon_num(player_ptr, 0, floor_ptr->monster_level, 0);
+        if (!MonsterRace(r_idx).is_valid()) {
+            return std::nullopt;
+        }
+
+        if (r_info[r_idx].kind_flags.has(MonsterKindType::UNIQUE)) {
+            continue;
+        }
+
+        if (r_idx == MonsterRaceId::HAGURE) {
+            continue;
+        }
+
+        return r_idx;
+    }
+
+    return std::nullopt;
+}
+
 /*!
  * @brief 指定地点に1種類のモンスター種族による群れを生成する
  * @param player_ptr プレイヤーへの参照ポインタ
@@ -397,31 +421,7 @@ bool alloc_horde(PlayerType *player_ptr, POSITION y, POSITION x, summon_specific
 {
     get_mon_num_prep(player_ptr, get_monster_hook(player_ptr), get_monster_hook2(player_ptr, y, x));
 
-    auto *floor_ptr = player_ptr->current_floor_ptr;
-
-    auto select_r_idx = [player_ptr, floor_ptr]() -> std::optional<MonsterRaceId> {
-        int attempts = 1000;
-        while (--attempts) {
-            auto r_idx = get_mon_num(player_ptr, 0, floor_ptr->monster_level, 0);
-            if (!MonsterRace(r_idx).is_valid()) {
-                return std::nullopt;
-            }
-
-            if (r_info[r_idx].kind_flags.has(MonsterKindType::UNIQUE)) {
-                continue;
-            }
-
-            if (r_idx == MonsterRaceId::HAGURE) {
-                continue;
-            }
-
-            return r_idx;
-        }
-
-        return std::nullopt;
-    };
-
-    auto r_idx = select_r_idx();
+    auto r_idx = select_horde_leader_r_idx(player_ptr);
     if (!r_idx.has_value()) {
         return false;
     }
@@ -436,6 +436,7 @@ bool alloc_horde(PlayerType *player_ptr, POSITION y, POSITION x, summon_specific
         }
     }
 
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     MONSTER_IDX m_idx = floor_ptr->grid_array[y][x].m_idx;
 
     POSITION cy = y;
@@ -447,14 +448,17 @@ bool alloc_horde(PlayerType *player_ptr, POSITION y, POSITION x, summon_specific
         x = cx;
     }
 
-    if (cheat_hear) {
-        auto *r_ptr = &r_info[r_idx.value()];
-        if (floor_ptr->m_list[m_idx].mflag2.has(MonsterConstantFlagType::CHAMELEON)) {
-            r_ptr = &r_info[floor_ptr->m_list[m_idx].r_idx];
-        }
-
-        msg_format(_("モンスターの大群(%c)", "Monster horde (%c)."), r_ptr->d_char);
+    if (!cheat_hear) {
+        return true;
     }
+
+    auto *r_ptr = &r_info[r_idx.value()];
+    if (floor_ptr->m_list[m_idx].mflag2.has(MonsterConstantFlagType::CHAMELEON)) {
+        r_ptr = &r_info[floor_ptr->m_list[m_idx].r_idx];
+    }
+
+    msg_format(_("モンスターの大群(%c)", "Monster horde (%c)."), r_ptr->d_char);
+
     return true;
 }
 
