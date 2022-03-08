@@ -54,7 +54,7 @@ static void send_world_score_on_closing(PlayerType *player_ptr, bool do_send)
 
     player_ptr->wait_report_score = true;
     player_ptr->is_dead = false;
-    if (!save_player(player_ptr, SAVE_TYPE_CLOSE_GAME)) {
+    if (!save_player(player_ptr, SaveType::CLOSE_GAME)) {
         msg_print(_("セーブ失敗！", "death save failed!"));
     }
 }
@@ -172,7 +172,7 @@ void close_game(PlayerType *player_ptr)
         update_playtime();
         w_ptr->sf_play_time += w_ptr->play_time;
 
-        if (!save_player(player_ptr, SAVE_TYPE_CLOSE_GAME)) {
+        if (!save_player(player_ptr, SaveType::CLOSE_GAME)) {
             msg_print(_("セーブ失敗！", "death save failed!"));
         }
     } else {
