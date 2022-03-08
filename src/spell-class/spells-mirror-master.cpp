@@ -38,9 +38,9 @@ void SpellsMirrorMaster::remove_mirror(int y, int x)
     reset_bits(g_ptr->info, CAVE_OBJECT);
     g_ptr->mimic = 0;
     if (d_info[this->player_ptr->dungeon_idx].flags.has(DungeonFeatureType::DARKNESS)) {
-        g_ptr->info &= ~(CAVE_GLOW);
+        reset_bits(g_ptr->info, CAVE_GLOW);
         if (!view_torch_grids) {
-            g_ptr->info &= ~(CAVE_MARK);
+            reset_bits(g_ptr->info, CAVE_MARK);
         }
 
         if (g_ptr->m_idx) {
@@ -61,9 +61,10 @@ void SpellsMirrorMaster::remove_mirror(int y, int x)
  */
 void SpellsMirrorMaster::remove_all_mirrors(bool explode)
 {
-    for (auto x = 0; x < this->player_ptr->current_floor_ptr->width; x++) {
-        for (auto y = 0; y < this->player_ptr->current_floor_ptr->height; y++) {
-            if (!this->player_ptr->current_floor_ptr->grid_array[y][x].is_mirror()) {
+    const auto *floor_ptr = this->player_ptr->current_floor_ptr;
+    for (auto x = 0; x < floor_ptr->width; x++) {
+        for (auto y = 0; y < floor_ptr->height; y++) {
+            if (!floor_ptr->grid_array[y][x].is_mirror()) {
                 continue;
             }
 
@@ -108,17 +109,19 @@ bool SpellsMirrorMaster::place_mirror()
 {
     auto y = this->player_ptr->y;
     auto x = this->player_ptr->x;
-    if (!cave_clean_bold(this->player_ptr->current_floor_ptr, y, x)) {
+    auto *floor_ptr = this->player_ptr->current_floor_ptr;
+    if (!cave_clean_bold(floor_ptr, y, x)) {
         msg_print(_("床上のアイテムが呪文を跳ね返した。", "The object resists the spell."));
         return false;
     }
 
     /* Create a mirror */
-    this->player_ptr->current_floor_ptr->grid_array[y][x].info |= CAVE_OBJECT;
-    this->player_ptr->current_floor_ptr->grid_array[y][x].mimic = feat_mirror;
+    auto *g_ptr = &floor_ptr->grid_array[y][x];
+    set_bits(g_ptr->info, CAVE_OBJECT);
+    g_ptr->mimic = feat_mirror;
 
     /* Turn on the light */
-    this->player_ptr->current_floor_ptr->grid_array[y][x].info |= CAVE_GLOW;
+    set_bits(g_ptr->info, CAVE_GLOW);
 
     note_spot(this->player_ptr, y, x);
     lite_spot(this->player_ptr, y, x);
@@ -150,7 +153,7 @@ bool SpellsMirrorMaster::mirror_concentration()
         this->player_ptr->csp_frac = 0;
     }
 
-    this->player_ptr->redraw |= PR_MANA;
+    set_bits(this->player_ptr->redraw, PR_MANA);
     return true;
 }
 
@@ -164,7 +167,8 @@ void SpellsMirrorMaster::seal_of_mirror(const int dam)
     const auto *floor_ptr = this->player_ptr->current_floor_ptr;
     for (auto x = 0; x < floor_ptr->width; x++) {
         for (auto y = 0; y < floor_ptr->height; y++) {
-            if (!floor_ptr->grid_array[y][x].is_mirror()) {
+            const auto &g_ref = floor_ptr->grid_array[y][x];
+            if (!g_ref.is_mirror()) {
                 continue;
             }
 
@@ -173,7 +177,7 @@ void SpellsMirrorMaster::seal_of_mirror(const int dam)
                 continue;
             }
 
-            if (!floor_ptr->grid_array[y][x].m_idx) {
+            if (g_ref.m_idx == 0) {
                 this->remove_mirror(y, x);
             }
         }
