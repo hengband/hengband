@@ -2409,6 +2409,9 @@
     <ClCompile Include="..\..\src\object-use\read\parchment-read-executor.cpp">
       <Filter>object-use\read</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\spell-class\spells-mirror-master.cpp">
+      <Filter>spell-class</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\combat\shoot.h">
@@ -5235,6 +5238,9 @@
     <ClInclude Include="..\..\src\object-use\read\read-executor-base.h">
       <Filter>object-use\read</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\spell-class\spells-mirror-master.h">
+      <Filter>spell-class</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\src\wall.bmp" />
@@ -5480,6 +5486,9 @@
     </Filter>
     <Filter Include="object-use\read">
       <UniqueIdentifier>{b0af4dd7-335a-466f-adb9-cd217597e87b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="spell-class">
+      <UniqueIdentifier>{b03873b1-e021-4bfe-84e4-0fa1e0bc87a2}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

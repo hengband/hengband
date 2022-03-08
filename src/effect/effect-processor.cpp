@@ -26,6 +26,7 @@
 #include "monster/monster-info.h"
 #include "pet/pet-fall-off.h"
 #include "player/player-status.h"
+#include "spell-class/spells-mirror-master.h"
 #include "spell/range-calc.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
@@ -228,7 +229,7 @@ ProjectResult project(PlayerType *player_ptr, const MONSTER_IDX who, POSITION ra
 
             monster_target_y = ny;
             monster_target_x = nx;
-            remove_mirror(player_ptr, ny, nx);
+            SpellsMirrorMaster(player_ptr).remove_mirror(ny, nx);
             next_mirror(player_ptr, &oy, &ox, ny, nx);
             path_n = i + projection_path(player_ptr, &(path_g[i + 1]), (project_length ? project_length : get_max_range(player_ptr)), ny, nx, oy, ox, flag);
             auto y = ny;
@@ -338,7 +339,7 @@ ProjectResult project(PlayerType *player_ptr, const MONSTER_IDX who, POSITION ra
             if (player_ptr->current_floor_ptr->grid_array[ny][nx].is_mirror() && !second_step) {
                 monster_target_y = ny;
                 monster_target_x = nx;
-                remove_mirror(player_ptr, ny, nx);
+                SpellsMirrorMaster(player_ptr).remove_mirror(ny, nx);
                 auto y = ny;
                 auto x = nx;
                 for (j = 0; j <= i; j++) {

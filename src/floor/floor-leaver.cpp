@@ -31,6 +31,7 @@
 #include "player/player-status.h"
 #include "player/special-defense-types.h"
 #include "save/floor-writer.h"
+#include "spell-class/spells-mirror-master.h"
 #include "system/artifact-type-definition.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
@@ -442,7 +443,7 @@ static void exe_leave_floor(PlayerType *player_ptr, saved_floor_type *sf_ptr)
 void leave_floor(PlayerType *player_ptr)
 {
     preserve_pet(player_ptr);
-    remove_all_mirrors(player_ptr, false);
+    SpellsMirrorMaster(player_ptr).remove_all_mirrors(false);
     set_superstealth(player_ptr, false);
 
     new_floor_id = 0;

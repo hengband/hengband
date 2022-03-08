@@ -810,6 +810,8 @@ hengband_SOURCES = \
 	spell/summon-types.h \
 	spell/technic-info-table.cpp spell/technic-info-table.h \
 	\
+	spell-class/spells-mirror-master.cpp spell-class/spells-mirror-master.h \
+	\
 	spell-kind/blood-curse.cpp spell-kind/blood-curse.h \
 	spell-kind/earthquake.cpp spell-kind/earthquake.h \
 	spell-kind/magic-item-recharger.cpp spell-kind/magic-item-recharger.h \

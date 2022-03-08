@@ -16,6 +16,7 @@
 #include "monster/monster-update.h"
 #include "player/special-defense-types.h"
 #include "room/door-definition.h"
+#include "spell-class/spells-mirror-master.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
 #include "system/player-type-definition.h"
@@ -414,7 +415,7 @@ bool affect_feature(PlayerType *player_ptr, MONSTER_IDX who, POSITION r, POSITIO
         if (g_ptr->is_mirror()) {
             msg_print(_("鏡が割れた！", "The mirror was shattered!"));
             sound(SOUND_GLASS);
-            remove_mirror(player_ptr, y, x);
+            SpellsMirrorMaster(player_ptr).remove_mirror(y, x);
             project(player_ptr, 0, 2, y, x, player_ptr->lev / 2 + 5, AttributeType::SHARDS,
                 (PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL | PROJECT_JUMP | PROJECT_NO_HANGEKI));
         }
@@ -436,7 +437,7 @@ bool affect_feature(PlayerType *player_ptr, MONSTER_IDX who, POSITION r, POSITIO
         if (g_ptr->is_mirror() && player_ptr->lev < 40) {
             msg_print(_("鏡が割れた！", "The mirror was shattered!"));
             sound(SOUND_GLASS);
-            remove_mirror(player_ptr, y, x);
+            SpellsMirrorMaster(player_ptr).remove_mirror(y, x);
             project(player_ptr, 0, 2, y, x, player_ptr->lev / 2 + 5, AttributeType::SHARDS,
                 (PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL | PROJECT_JUMP | PROJECT_NO_HANGEKI));
         }
@@ -456,7 +457,7 @@ bool affect_feature(PlayerType *player_ptr, MONSTER_IDX who, POSITION r, POSITIO
     }
     case AttributeType::DISINTEGRATE: {
         if (g_ptr->is_mirror() || g_ptr->is_rune_protection() || g_ptr->is_rune_explosion()) {
-            remove_mirror(player_ptr, y, x);
+            SpellsMirrorMaster(player_ptr).remove_mirror(y, x);
         }
 
         if (f_ptr->flags.has_not(FloorFeatureType::HURT_DISI) || f_ptr->flags.has(FloorFeatureType::PERMANENT)) {

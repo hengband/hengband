@@ -831,32 +831,6 @@ void cave_alter_feat(PlayerType *player_ptr, POSITION y, POSITION x, FloorFeatur
     }
 }
 
-/* Remove a mirror */
-void remove_mirror(PlayerType *player_ptr, POSITION y, POSITION x)
-{
-    auto *g_ptr = &player_ptr->current_floor_ptr->grid_array[y][x];
-
-    /* Remove the mirror */
-    g_ptr->info &= ~(CAVE_OBJECT);
-    g_ptr->mimic = 0;
-
-    if (d_info[player_ptr->dungeon_idx].flags.has(DungeonFeatureType::DARKNESS)) {
-        g_ptr->info &= ~(CAVE_GLOW);
-        if (!view_torch_grids) {
-            g_ptr->info &= ~(CAVE_MARK);
-        }
-        if (g_ptr->m_idx) {
-            update_monster(player_ptr, g_ptr->m_idx, false);
-        }
-
-        update_local_illumination(player_ptr, y, x);
-    }
-
-    note_spot(player_ptr, y, x);
-
-    lite_spot(player_ptr, y, x);
-}
-
 /*!
  * @brief 指定されたマスがモンスターのテレポート可能先かどうかを判定する。
  * @param player_ptr プレイヤーへの参照ポインタ
