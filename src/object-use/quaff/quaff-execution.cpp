@@ -72,7 +72,7 @@ ObjectQuaffEntity::ObjectQuaffEntity(PlayerType *player_ptr)
 void ObjectQuaffEntity::execute(INVENTORY_IDX item)
 {
     PlayerEnergy(this->player_ptr).set_player_turn_energy(100);
-    if (!this->check_can_quaff()) {
+    if (!this->can_quaff()) {
         return;
     }
 
@@ -585,7 +585,7 @@ void ObjectQuaffEntity::execute(INVENTORY_IDX item)
     }
 }
 
-bool ObjectQuaffEntity::check_can_quaff()
+bool ObjectQuaffEntity::can_quaff()
 {
     if (this->player_ptr->timewalk) {
         if (flush_failure) {
