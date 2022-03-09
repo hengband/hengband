@@ -7,6 +7,7 @@
 #include "player-ability/player-ability-types.h"
 #include "save/item-writer.h"
 #include "save/save-util.h"
+#include "save/save.h"
 #include "store/store-util.h"
 #include "system/angband.h"
 #include "system/object-type-definition.h"
@@ -50,7 +51,7 @@ void wr_randomizer(void)
 /*!
  * @brief ゲームオプション情報を書き込む / Write the "options"
  */
-void wr_options(save_type type)
+void wr_options(SaveType type)
 {
     for (int i = 0; i < 4; i++) {
         wr_u32b(0L);
@@ -111,7 +112,7 @@ void wr_options(save_type type)
         c |= 0x0020;
     }
 
-    if (type == SAVE_TYPE_DEBUG) {
+    if (type == SaveType::DEBUG) {
         c |= 0xFFFF;
     }
 
