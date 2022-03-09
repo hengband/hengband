@@ -5,7 +5,7 @@
  * @todo 少し長い。switch/case文と効果処理を分離してもいいかも
  */
 
-#include "object-use/quaff-execution.h"
+#include "object-use/quaff/quaff-execution.h"
 #include "avatar/avatar.h"
 #include "birth/birth-stat.h"
 #include "core/player-update-types.h"

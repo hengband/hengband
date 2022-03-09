@@ -1487,9 +1487,6 @@
     <ClCompile Include="..\..\src\load\quest-loader.cpp">
       <Filter>load</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\object-use\quaff-execution.cpp">
-      <Filter>object-use</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\flavor\flag-inscriptions-table.cpp">
       <Filter>flavor</Filter>
     </ClCompile>
@@ -2411,6 +2408,9 @@
     </ClCompile>
     <ClCompile Include="..\..\src\spell-class\spells-mirror-master.cpp">
       <Filter>spell-class</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\object-use\quaff\quaff-execution.cpp">
+      <Filter>object-use\quaff</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -4148,9 +4148,6 @@
     <ClInclude Include="..\..\src\core\player-redraw-types.h">
       <Filter>core</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\object-use\quaff-execution.h">
-      <Filter>object-use</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\flavor\object-flavor-types.h">
       <Filter>flavor</Filter>
     </ClInclude>
@@ -5241,6 +5238,9 @@
     <ClInclude Include="..\..\src\spell-class\spells-mirror-master.h">
       <Filter>spell-class</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\object-use\quaff\quaff-execution.h">
+      <Filter>object-use\quaff</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\src\wall.bmp" />
@@ -5489,6 +5489,9 @@
     </Filter>
     <Filter Include="spell-class">
       <UniqueIdentifier>{b03873b1-e021-4bfe-84e4-0fa1e0bc87a2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="object-use\quaff">
+      <UniqueIdentifier>{5eec2f75-7108-42ad-9aa4-85b1129354db}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
