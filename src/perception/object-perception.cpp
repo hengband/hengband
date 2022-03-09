@@ -42,7 +42,7 @@ void object_known(ObjectType *o_ptr)
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param o_ptr ＊鑑定＊済にするオブジェクトの構造体参照ポインタ
  */
-void object_aware(PlayerType *player_ptr, ObjectType *o_ptr)
+void object_aware(PlayerType *player_ptr, const ObjectType *o_ptr)
 {
     const bool is_already_awared = o_ptr->is_aware();
 
@@ -86,7 +86,7 @@ void object_aware(PlayerType *player_ptr, ObjectType *o_ptr)
  * Something has been "sampled"
  * @param o_ptr 試行済にするオブジェクトの構造体参照ポインタ
  */
-void object_tried(ObjectType *o_ptr)
+void object_tried(const ObjectType *o_ptr)
 {
     k_info[o_ptr->k_idx].tried = true;
 }

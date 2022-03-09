@@ -2,6 +2,7 @@
 
 #include "system/angband.h"
 
+class ObjectType;
 class PlayerType;
 class ObjectQuaffEntity {
 public:
@@ -14,6 +15,7 @@ private:
     PlayerType *player_ptr;
 
     bool can_quaff();
+    ObjectType copy_object(const INVENTORY_IDX item);
     bool booze();
     bool detonation();
 };

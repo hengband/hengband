@@ -17,6 +17,7 @@
 #include "main/sound-of-music.h"
 #include "mutation/mutation-investor-remover.h"
 #include "object-use/item-use-checker.h"
+#include "object-use/quaff/quaff-effects.h"
 #include "object/object-broken.h"
 #include "object/object-info.h"
 #include "object/object-kind.h"
@@ -85,16 +86,12 @@ void ObjectQuaffEntity::execute(INVENTORY_IDX item)
         (void)SpellHex(this->player_ptr).stop_all_spells();
     }
 
-    auto *tmp_o_ptr = ref_item(this->player_ptr, item);
-    ObjectType forge;
-    auto *o_ptr = &forge;
-    o_ptr->copy_from(tmp_o_ptr);
-    o_ptr->number = 1;
+    const auto &o_ref = this->copy_object(item);
     vary_item(this->player_ptr, item, -1);
     sound(SOUND_QUAFF);
     auto ident = false;
-    if (o_ptr->tval == ItemKindType::POTION) {
-        switch (o_ptr->sval) {
+    if (o_ref.tval == ItemKindType::POTION) {
+        switch (o_ref.sval) {
         case SV_POTION_WATER:
             msg_print(_("口の中がさっぱりした。", "That was refreshing."));
             msg_print(_("のどの渇きが少しおさまった。", "You feel less thirsty."));
@@ -273,7 +270,7 @@ void ObjectQuaffEntity::execute(INVENTORY_IDX item)
             }
 
             if (set_fast(this->player_ptr, randint1(25) + 15, false)) {
-                    ident = true;
+                ident = true;
             }
 
             break;
@@ -537,20 +534,20 @@ void ObjectQuaffEntity::execute(INVENTORY_IDX item)
 
     if (PlayerRace(this->player_ptr).equals(PlayerRaceType::SKELETON)) {
         msg_print(_("液体の一部はあなたのアゴを素通りして落ちた！", "Some of the fluid falls through your jaws!"));
-        (void)potion_smash_effect(this->player_ptr, 0, this->player_ptr->y, this->player_ptr->x, o_ptr->k_idx);
+        (void)potion_smash_effect(this->player_ptr, 0, this->player_ptr->y, this->player_ptr->x, o_ref.k_idx);
     }
 
     this->player_ptr->update |= PU_COMBINE | PU_REORDER;
-    if (!o_ptr->is_aware()) {
+    if (!o_ref.is_aware()) {
         chg_virtue(this->player_ptr, V_PATIENCE, -1);
         chg_virtue(this->player_ptr, V_CHANCE, 1);
         chg_virtue(this->player_ptr, V_KNOWLEDGE, -1);
     }
 
-    object_tried(o_ptr);
-    if (ident && !o_ptr->is_aware()) {
-        object_aware(this->player_ptr, o_ptr);
-        gain_exp(this->player_ptr, (k_info[o_ptr->k_idx].level + (this->player_ptr->lev >> 1)) / this->player_ptr->lev);
+    object_tried(&o_ref);
+    if (ident && !o_ref.is_aware()) {
+        object_aware(this->player_ptr, &o_ref);
+        gain_exp(this->player_ptr, (k_info[o_ref.k_idx].level + (this->player_ptr->lev >> 1)) / this->player_ptr->lev);
     }
 
     this->player_ptr->window_flags |= (PW_INVEN | PW_EQUIP | PW_PLAYER);
@@ -561,11 +558,11 @@ void ObjectQuaffEntity::execute(INVENTORY_IDX item)
     switch (PlayerRace(this->player_ptr).food()) {
     case PlayerRaceFoodType::WATER:
         msg_print(_("水分を取り込んだ。", "You are moistened."));
-        set_food(this->player_ptr, std::min<short>(this->player_ptr->food + o_ptr->pval + std::max<short>(0, o_ptr->pval * 10) + 2000, PY_FOOD_MAX - 1));
+        set_food(this->player_ptr, std::min<short>(this->player_ptr->food + o_ref.pval + std::max<short>(0, o_ref.pval * 10) + 2000, PY_FOOD_MAX - 1));
         break;
     case PlayerRaceFoodType::OIL:
-        if (o_ptr->tval != ItemKindType::FLASK) {
-            set_food(this->player_ptr, this->player_ptr->food + ((o_ptr->pval) / 20));
+        if (o_ref.tval != ItemKindType::FLASK) {
+            set_food(this->player_ptr, this->player_ptr->food + ((o_ref.pval) / 20));
             break;
         }
 
@@ -573,14 +570,14 @@ void ObjectQuaffEntity::execute(INVENTORY_IDX item)
         set_food(this->player_ptr, this->player_ptr->food + 5000);
         break;
     case PlayerRaceFoodType::BLOOD:
-        (void)set_food(this->player_ptr, this->player_ptr->food + (o_ptr->pval / 10));
+        (void)set_food(this->player_ptr, this->player_ptr->food + (o_ref.pval / 10));
         break;
     case PlayerRaceFoodType::MANA:
     case PlayerRaceFoodType::CORPSE:
-        set_food(this->player_ptr, this->player_ptr->food + ((o_ptr->pval) / 20));
+        set_food(this->player_ptr, this->player_ptr->food + ((o_ref.pval) / 20));
         break;
     default:
-        (void)set_food(this->player_ptr, this->player_ptr->food + o_ptr->pval);
+        (void)set_food(this->player_ptr, this->player_ptr->food + o_ref.pval);
         break;
     }
 }
@@ -659,4 +656,12 @@ bool ObjectQuaffEntity::detonation()
     (void)bss.mod_stun(75);
     (void)bss.mod_cut(5000);
     return true;
+}
+
+ObjectType ObjectQuaffEntity::copy_object(const INVENTORY_IDX item)
+{
+    auto *tmp_o_ptr = ref_item(this->player_ptr, item);
+    auto o_val = *tmp_o_ptr;
+    o_val.number = 1;
+    return o_val;
 }
