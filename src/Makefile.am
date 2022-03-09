@@ -630,6 +630,7 @@ hengband_SOURCES = \
 	object-use/zaprod-execution.cpp object-use/zaprod-execution.h \
 	object-use/zapwand-execution.cpp object-use/zapwand-execution.h \
 	\
+	object-use/quaff/quaff-effects.cpp object-use/quaff/quaff-effects.h \
 	object-use/quaff/quaff-execution.cpp object-use/quaff/quaff-execution.h \
 	\
 	object-use/read/read-execution.cpp object-use/read/read-execution.h \

@@ -277,6 +277,7 @@
     <ClCompile Include="..\..\src\monster-race\monster-kind-mask.cpp" />
     <ClCompile Include="..\..\src\monster-race\race-resistance-mask.cpp" />
     <ClCompile Include="..\..\src\object-enchant\weapon\abstract-weapon-enchanter.cpp" />
+    <ClCompile Include="..\..\src\object-use\quaff\quaff-effects.cpp" />
     <ClCompile Include="..\..\src\object-use\read\gbh-shirt-read-executor.cpp" />
     <ClCompile Include="..\..\src\object-use\read\parchment-read-executor.cpp" />
     <ClCompile Include="..\..\src\object-use\read\read-executor-factory.cpp" />
@@ -957,6 +958,7 @@
     <ClInclude Include="..\..\src\mspell\mspell-result.h" />
     <ClInclude Include="..\..\src\object-enchant\others\apply-magic-lite.h" />
     <ClInclude Include="..\..\src\object-enchant\weapon\abstract-weapon-enchanter.h" />
+    <ClInclude Include="..\..\src\object-use\quaff\quaff-effects.h" />
     <ClInclude Include="..\..\src\object-use\read\gbh-shirt-read-executor.h" />
     <ClInclude Include="..\..\src\object-use\read\parchment-read-executor.h" />
     <ClInclude Include="..\..\src\object-use\read\read-executor-base.h" />

@@ -2412,6 +2412,9 @@
     <ClCompile Include="..\..\src\object-use\quaff\quaff-execution.cpp">
       <Filter>object-use\quaff</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\object-use\quaff\quaff-effects.cpp">
+      <Filter>object-use\quaff</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\combat\shoot.h">
@@ -5239,6 +5242,9 @@
       <Filter>spell-class</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\object-use\quaff\quaff-execution.h">
+      <Filter>object-use\quaff</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\object-use\quaff\quaff-effects.h">
       <Filter>object-use\quaff</Filter>
     </ClInclude>
   </ItemGroup>
