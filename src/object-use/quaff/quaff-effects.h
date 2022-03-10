@@ -14,6 +14,7 @@ private:
     bool salt_water();
     bool booze();
     bool sleep();
+    bool lose_memories();
     bool detonation();
     bool augmentation();
     bool polymorph();

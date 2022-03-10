@@ -98,15 +98,7 @@ bool QuaffEffects::influence(const ObjectType &o_ref)
     case SV_POTION_SLEEP:
         return this->sleep();
     case SV_POTION_LOSE_MEMORIES:
-        if (this->player_ptr->hold_exp || (this->player_ptr->exp <= 0)) {
-            break;
-        }
-
-        msg_print(_("過去の記憶が薄れていく気がする。", "You feel your memories fade."));
-        chg_virtue(this->player_ptr, V_KNOWLEDGE, -5);
-        lose_exp(this->player_ptr, this->player_ptr->exp / 4);
-        ident = true;
-        break;
+        return this->lose_memories();
     case SV_POTION_RUINATION:
         msg_print(_("身も心も弱ってきて、精気が抜けていくようだ。", "Your nerves and muscles feel weak and lifeless!"));
         take_hit(this->player_ptr, DAMAGE_LOSELIFE, damroll(10, 10), _("破滅の薬", "a potion of Ruination"));
@@ -512,6 +504,22 @@ bool QuaffEffects::sleep()
     }
 
     return BadStatusSetter(this->player_ptr).mod_paralysis(randint0(4) + 4);
+}
+
+/*!
+ * @brief 記憶喪失の薬
+ * @return 経験値が下がったか
+ */
+bool QuaffEffects::lose_memories()
+{
+    if (this->player_ptr->hold_exp || (this->player_ptr->exp <= 0)) {
+        return false;
+    }
+
+    msg_print(_("過去の記憶が薄れていく気がする。", "You feel your memories fade."));
+    chg_virtue(this->player_ptr, V_KNOWLEDGE, -5);
+    lose_exp(this->player_ptr, this->player_ptr->exp / 4);
+    return true;
 }
 
 /*!
