@@ -321,12 +321,7 @@ bool QuaffEffects::influence(const ObjectType &o_ref)
     case SV_POTION_AUGMENTATION:
         return this->augmentation();
     case SV_POTION_ENLIGHTENMENT:
-        msg_print(_("自分の置かれている状況が脳裏に浮かんできた...", "An image of your surroundings forms in your mind..."));
-        chg_virtue(this->player_ptr, V_KNOWLEDGE, 1);
-        chg_virtue(this->player_ptr, V_ENLIGHTEN, 1);
-        wiz_lite(this->player_ptr, false);
-        ident = true;
-        break;
+        return this->enlightenment();
     case SV_POTION_STAR_ENLIGHTENMENT:
         msg_print(_("更なる啓蒙を感じた...", "You begin to feel more enlightened..."));
         chg_virtue(this->player_ptr, V_KNOWLEDGE, 1);
@@ -568,6 +563,19 @@ bool QuaffEffects::augmentation()
     }
 
     return ident;
+}
+
+/*!
+ * @brief 啓蒙の薬
+ * @return 常にtrue
+ */
+bool QuaffEffects::enlightenment()
+{
+    msg_print(_("自分の置かれている状況が脳裏に浮かんできた...", "An image of your surroundings forms in your mind..."));
+    chg_virtue(this->player_ptr, V_KNOWLEDGE, 1);
+    chg_virtue(this->player_ptr, V_ENLIGHTEN, 1);
+    wiz_lite(this->player_ptr, false);
+    return true;
 }
 
 /*!

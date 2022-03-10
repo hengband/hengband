@@ -17,5 +17,6 @@ private:
     bool lose_memories();
     bool detonation();
     bool augmentation();
+    bool enlightenment();
     bool polymorph();
 };
