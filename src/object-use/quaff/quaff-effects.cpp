@@ -327,31 +327,7 @@ bool QuaffEffects::influence(const ObjectType &o_ref)
         ident = true;
         break;
     case SV_POTION_AUGMENTATION:
-        if (do_inc_stat(this->player_ptr, A_STR)) {
-            ident = true;
-        }
-
-        if (do_inc_stat(this->player_ptr, A_INT)) {
-            ident = true;
-        }
-
-        if (do_inc_stat(this->player_ptr, A_WIS)) {
-            ident = true;
-        }
-
-        if (do_inc_stat(this->player_ptr, A_DEX)) {
-            ident = true;
-        }
-
-        if (do_inc_stat(this->player_ptr, A_CON)) {
-            ident = true;
-        }
-
-        if (do_inc_stat(this->player_ptr, A_CHR)) {
-            ident = true;
-        }
-
-        break;
+        return this->augmentation();
     case SV_POTION_ENLIGHTENMENT:
         msg_print(_("自分の置かれている状況が脳裏に浮かんできた...", "An image of your surroundings forms in your mind..."));
         chg_virtue(this->player_ptr, V_KNOWLEDGE, 1);
@@ -550,6 +526,40 @@ bool QuaffEffects::detonation()
     (void)bss.mod_stun(75);
     (void)bss.mod_cut(5000);
     return true;
+}
+
+/*!
+ * @brief 増強の薬
+ * @return アビリティスコアのどれか1つでも向上したらtrue
+ */
+bool QuaffEffects::augmentation()
+{
+    auto ident = false;
+    if (do_inc_stat(this->player_ptr, A_STR)) {
+        ident = true;
+    }
+
+    if (do_inc_stat(this->player_ptr, A_INT)) {
+        ident = true;
+    }
+
+    if (do_inc_stat(this->player_ptr, A_WIS)) {
+        ident = true;
+    }
+
+    if (do_inc_stat(this->player_ptr, A_DEX)) {
+        ident = true;
+    }
+
+    if (do_inc_stat(this->player_ptr, A_CON)) {
+        ident = true;
+    }
+
+    if (do_inc_stat(this->player_ptr, A_CHR)) {
+        ident = true;
+    }
+
+    return ident;
 }
 
 /*!

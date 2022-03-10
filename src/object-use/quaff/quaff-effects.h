@@ -15,5 +15,6 @@ private:
     bool booze();
     bool sleep();
     bool detonation();
+    bool augmentation();
     bool polymorph();
 };
