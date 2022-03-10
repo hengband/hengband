@@ -74,24 +74,8 @@ bool QuaffEffects::influence(const ObjectType &o_ref)
         }
 
         break;
-    case SV_POTION_SALT_WATER: {
-        msg_print(_("うぇ！思わず吐いてしまった。", "The potion makes you vomit!"));
-        switch (PlayerRace(this->player_ptr).food()) {
-        case PlayerRaceFoodType::RATION:
-        case PlayerRaceFoodType::WATER:
-        case PlayerRaceFoodType::BLOOD:
-            (void)set_food(this->player_ptr, PY_FOOD_STARVE - 1);
-            break;
-        default:
-            break;
-        }
-
-        BadStatusSetter bss(this->player_ptr);
-        (void)bss.poison(0);
-        (void)bss.mod_paralysis(4);
-        ident = true;
-        break;
-    }
+    case SV_POTION_SALT_WATER:
+        return this->salt_water();
     case SV_POTION_POISON:
         if (!(has_resist_pois(this->player_ptr) || is_oppose_pois(this->player_ptr))) {
             if (BadStatusSetter(this->player_ptr).mod_poison(randint0(15) + 10)) {
@@ -496,8 +480,30 @@ bool QuaffEffects::influence(const ObjectType &o_ref)
 }
 
 /*!
+ * @brief 塩水の薬
+ * @return 常にtrue
+ */
+bool QuaffEffects::salt_water()
+{
+    msg_print(_("うぇ！思わず吐いてしまった。", "The potion makes you vomit!"));
+    switch (PlayerRace(this->player_ptr).food()) {
+    case PlayerRaceFoodType::RATION:
+    case PlayerRaceFoodType::WATER:
+    case PlayerRaceFoodType::BLOOD:
+        (void)set_food(this->player_ptr, PY_FOOD_STARVE - 1);
+        break;
+    default:
+        break;
+    }
+
+    BadStatusSetter bss(this->player_ptr);
+    (void)bss.poison(0);
+    (void)bss.mod_paralysis(4);
+    return true;
+}
+
+/*!
  * @brief 酔っ払いの薬
- * @param player_ptr プレイヤーへの参照ポインタ
  * @return カオス耐性があるかその他の一部確率でFALSE、それ以外はTRUE
  */
 bool QuaffEffects::booze()
@@ -542,8 +548,7 @@ bool QuaffEffects::booze()
 }
 
 /*!
- * @brief 爆発の薬の効果処理 / Fumble ramble
- * @param player_ptr プレイヤーへの参照ポインタ
+ * @brief 爆発の薬 / Fumble ramble
  * @return 常にTRUE
  */
 bool QuaffEffects::detonation()

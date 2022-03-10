@@ -11,6 +11,7 @@ public:
 private:
     PlayerType *player_ptr;
 
+    bool salt_water();
     bool booze();
     bool detonation();
 };
