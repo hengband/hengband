@@ -330,26 +330,8 @@ bool QuaffEffects::influence(const ObjectType &o_ref)
         self_knowledge(this->player_ptr);
         ident = true;
         break;
-    case SV_POTION_EXPERIENCE: {
-        if (PlayerRace(this->player_ptr).equals(PlayerRaceType::ANDROID)) {
-            break;
-        }
-
-        chg_virtue(this->player_ptr, V_ENLIGHTEN, 1);
-        if (this->player_ptr->exp >= PY_MAX_EXP) {
-            break;
-        }
-
-        auto ee = (this->player_ptr->exp / 2) + 10;
-        if (ee > 100000) {
-            ee = 100000;
-        }
-
-        msg_print(_("更に経験を積んだような気がする。", "You feel more experienced."));
-        gain_exp(this->player_ptr, ee);
-        ident = true;
-        break;
-    }
+    case SV_POTION_EXPERIENCE:
+        return this->experience();
     case SV_POTION_RESISTANCE:
         (void)set_oppose_acid(this->player_ptr, this->player_ptr->oppose_acid + randint1(20) + 20, false);
         (void)set_oppose_elec(this->player_ptr, this->player_ptr->oppose_elec + randint1(20) + 20, false);
@@ -583,6 +565,32 @@ bool QuaffEffects::star_enlightenment()
     (void)detect_objects_normal(this->player_ptr, DETECT_RAD_DEFAULT);
     identify_pack(this->player_ptr);
     self_knowledge(this->player_ptr);
+    return true;
+}
+
+/*!
+ * @brief 経験の薬
+ * @return 経験値が増えたらtrue
+ */
+bool QuaffEffects::experience()
+{
+    if (PlayerRace(this->player_ptr).equals(PlayerRaceType::ANDROID)) {
+        return false;
+    }
+
+    chg_virtue(this->player_ptr, V_ENLIGHTEN, 1);
+    if (this->player_ptr->exp >= PY_MAX_EXP) {
+        return false;
+    }
+
+    auto ee = (this->player_ptr->exp / 2) + 10;
+    constexpr int max_exp = 100000;
+    if (ee > max_exp) {
+        ee = max_exp;
+    }
+
+    msg_print(_("更に経験を積んだような気がする。", "You feel more experienced."));
+    gain_exp(this->player_ptr, ee);
     return true;
 }
 

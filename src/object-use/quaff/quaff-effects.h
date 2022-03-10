@@ -19,5 +19,6 @@ private:
     bool augmentation();
     bool enlightenment();
     bool star_enlightenment();
+    bool experience();
     bool polymorph();
 };
