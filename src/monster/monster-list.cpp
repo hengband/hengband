@@ -263,7 +263,7 @@ static bool monster_hook_chameleon(PlayerType *player_ptr, MonsterRaceId r_idx)
     if (r_ptr->flags2 & RF2_MULTIPLY) {
         return false;
     }
-    if (r_ptr->behavior_flags.has(MonsterBehaviorType::FRIENDLY) && (r_ptr->flags7 & RF7_CHAMELEON)) {
+    if (r_ptr->behavior_flags.has(MonsterBehaviorType::FRIENDLY) || (r_ptr->flags7 & RF7_CHAMELEON)) {
         return false;
     }
 
