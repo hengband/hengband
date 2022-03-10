@@ -12,6 +12,7 @@ private:
     PlayerType *player_ptr;
 
     bool salt_water();
+    bool poison();
     bool booze();
     bool sleep();
     bool lose_memories();

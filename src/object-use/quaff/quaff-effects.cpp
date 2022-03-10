@@ -69,13 +69,7 @@ bool QuaffEffects::influence(const ObjectType &o_ref)
     case SV_POTION_SALT_WATER:
         return this->salt_water();
     case SV_POTION_POISON:
-        if (!(has_resist_pois(this->player_ptr) || is_oppose_pois(this->player_ptr))) {
-            if (BadStatusSetter(this->player_ptr).mod_poison(randint0(15) + 10)) {
-                return true;
-            }
-        }
-
-        return false;
+        return this->poison();
     case SV_POTION_BLINDNESS:
         if (!has_resist_blind(this->player_ptr)) {
             if (BadStatusSetter(this->player_ptr).mod_blindness(randint0(100) + 100)) {
@@ -235,6 +229,19 @@ bool QuaffEffects::salt_water()
     (void)bss.poison(0);
     (void)bss.mod_paralysis(4);
     return true;
+}
+
+/*!
+ * @brief 毒の薬
+ * @return 毒の効果を受けたらtrue
+ */
+bool QuaffEffects::poison()
+{
+    if (has_resist_pois(this->player_ptr) || is_oppose_pois(this->player_ptr)) {
+        return false;
+    }
+
+    return BadStatusSetter(this->player_ptr).mod_poison(randint0(15) + 10);
 }
 
 /*!
