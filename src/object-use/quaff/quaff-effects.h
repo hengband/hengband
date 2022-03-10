@@ -18,5 +18,6 @@ private:
     bool detonation();
     bool augmentation();
     bool enlightenment();
+    bool star_enlightenment();
     bool polymorph();
 };

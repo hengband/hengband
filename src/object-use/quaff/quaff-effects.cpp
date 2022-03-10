@@ -323,23 +323,7 @@ bool QuaffEffects::influence(const ObjectType &o_ref)
     case SV_POTION_ENLIGHTENMENT:
         return this->enlightenment();
     case SV_POTION_STAR_ENLIGHTENMENT:
-        msg_print(_("更なる啓蒙を感じた...", "You begin to feel more enlightened..."));
-        chg_virtue(this->player_ptr, V_KNOWLEDGE, 1);
-        chg_virtue(this->player_ptr, V_ENLIGHTEN, 2);
-        msg_print(nullptr);
-        wiz_lite(this->player_ptr, false);
-        (void)do_inc_stat(this->player_ptr, A_INT);
-        (void)do_inc_stat(this->player_ptr, A_WIS);
-        (void)detect_traps(this->player_ptr, DETECT_RAD_DEFAULT, true);
-        (void)detect_doors(this->player_ptr, DETECT_RAD_DEFAULT);
-        (void)detect_stairs(this->player_ptr, DETECT_RAD_DEFAULT);
-        (void)detect_treasure(this->player_ptr, DETECT_RAD_DEFAULT);
-        (void)detect_objects_gold(this->player_ptr, DETECT_RAD_DEFAULT);
-        (void)detect_objects_normal(this->player_ptr, DETECT_RAD_DEFAULT);
-        identify_pack(this->player_ptr);
-        self_knowledge(this->player_ptr);
-        ident = true;
-        break;
+        return this->star_enlightenment();
     case SV_POTION_SELF_KNOWLEDGE:
         msg_print(_("自分自身のことが少しは分かった気がする...", "You begin to know yourself a little better..."));
         msg_print(nullptr);
@@ -575,6 +559,30 @@ bool QuaffEffects::enlightenment()
     chg_virtue(this->player_ptr, V_KNOWLEDGE, 1);
     chg_virtue(this->player_ptr, V_ENLIGHTEN, 1);
     wiz_lite(this->player_ptr, false);
+    return true;
+}
+
+/*!
+ * @brief *啓蒙*の薬
+ * @return 常にtrue
+ */
+bool QuaffEffects::star_enlightenment()
+{
+    msg_print(_("更なる啓蒙を感じた...", "You begin to feel more enlightened..."));
+    chg_virtue(this->player_ptr, V_KNOWLEDGE, 1);
+    chg_virtue(this->player_ptr, V_ENLIGHTEN, 2);
+    msg_print(nullptr);
+    wiz_lite(this->player_ptr, false);
+    (void)do_inc_stat(this->player_ptr, A_INT);
+    (void)do_inc_stat(this->player_ptr, A_WIS);
+    (void)detect_traps(this->player_ptr, DETECT_RAD_DEFAULT, true);
+    (void)detect_doors(this->player_ptr, DETECT_RAD_DEFAULT);
+    (void)detect_stairs(this->player_ptr, DETECT_RAD_DEFAULT);
+    (void)detect_treasure(this->player_ptr, DETECT_RAD_DEFAULT);
+    (void)detect_objects_gold(this->player_ptr, DETECT_RAD_DEFAULT);
+    (void)detect_objects_normal(this->player_ptr, DETECT_RAD_DEFAULT);
+    identify_pack(this->player_ptr);
+    self_knowledge(this->player_ptr);
     return true;
 }
 
