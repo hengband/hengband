@@ -181,11 +181,7 @@ bool QuaffEffects::influence(const ObjectType &o_ref)
         (void)set_invuln(this->player_ptr, this->player_ptr->invuln + randint1(4) + 4, false);
         return true;
     case SV_POTION_NEW_LIFE:
-        roll_hitdice(this->player_ptr, SPOP_NONE);
-        get_max_stats(this->player_ptr);
-        this->player_ptr->update |= PU_BONUS;
-        lose_all_mutations(this->player_ptr);
-        return true;
+        return this->new_life();
     case SV_POTION_NEO_TSUYOSHI:
         return this->neo_tsuyoshi();
     case SV_POTION_TSUYOSHI:
@@ -492,6 +488,19 @@ bool QuaffEffects::resistance()
     (void)set_oppose_fire(this->player_ptr, this->player_ptr->oppose_fire + randint1(20) + 20, false);
     (void)set_oppose_cold(this->player_ptr, this->player_ptr->oppose_cold + randint1(20) + 20, false);
     (void)set_oppose_pois(this->player_ptr, this->player_ptr->oppose_pois + randint1(20) + 20, false);
+    return true;
+}
+
+/*!
+ * @brief 新生の薬
+ * @return 常にtrue
+ */
+bool QuaffEffects::new_life()
+{
+    roll_hitdice(this->player_ptr, SPOP_NONE);
+    get_max_stats(this->player_ptr);
+    this->player_ptr->update |= PU_BONUS;
+    lose_all_mutations(this->player_ptr);
     return true;
 }
 
