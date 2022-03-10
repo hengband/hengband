@@ -141,12 +141,7 @@ bool QuaffEffects::influence(const ObjectType &o_ref)
         ident = this->detonation();
         break;
     case SV_POTION_DEATH:
-        chg_virtue(this->player_ptr, V_VITALITY, -1);
-        chg_virtue(this->player_ptr, V_UNLIFE, 5);
-        msg_print(_("死の予感が体中を駆けめぐった。", "A feeling of Death flows through your body."));
-        take_hit(this->player_ptr, DAMAGE_LOSELIFE, 5000, _("死の薬", "a potion of Death"));
-        ident = true;
-        break;
+        return this->death();
     case SV_POTION_INFRAVISION:
         if (set_tim_infra(this->player_ptr, this->player_ptr->tim_infra + 100 + randint1(100), false)) {
             ident = true;
@@ -475,7 +470,7 @@ bool QuaffEffects::ruination()
 
 /*!
  * @brief 爆発の薬 / Fumble ramble
- * @return 常にTRUE
+ * @return 常にtrue
  */
 bool QuaffEffects::detonation()
 {
@@ -484,6 +479,19 @@ bool QuaffEffects::detonation()
     BadStatusSetter bss(this->player_ptr);
     (void)bss.mod_stun(75);
     (void)bss.mod_cut(5000);
+    return true;
+}
+
+/*!
+ * @brief 死の薬
+ * @return 常にtrue
+ */
+bool QuaffEffects::death()
+{
+    chg_virtue(this->player_ptr, V_VITALITY, -1);
+    chg_virtue(this->player_ptr, V_UNLIFE, 5);
+    msg_print(_("死の予感が体中を駆けめぐった。", "A feeling of Death flows through your body."));
+    take_hit(this->player_ptr, DAMAGE_LOSELIFE, 5000, _("死の薬", "a potion of Death"));
     return true;
 }
 

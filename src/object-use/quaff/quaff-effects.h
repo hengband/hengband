@@ -17,6 +17,7 @@ private:
     bool lose_memories();
     bool ruination();
     bool detonation();
+    bool death();
     bool augmentation();
     bool enlightenment();
     bool star_enlightenment();
