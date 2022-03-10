@@ -96,21 +96,7 @@ bool QuaffEffects::influence(const ObjectType &o_ref)
         ident = this->booze();
         break;
     case SV_POTION_SLEEP:
-        if (this->player_ptr->free_act) {
-            break;
-        }
-
-        msg_print(_("あなたは眠ってしまった。", "You fall asleep."));
-        if (ironman_nightmare) {
-            msg_print(_("恐ろしい光景が頭に浮かんできた。", "A horrible vision enters your mind."));
-            sanity_blast(this->player_ptr, nullptr, false);
-        }
-
-        if (BadStatusSetter(this->player_ptr).mod_paralysis(randint0(4) + 4)) {
-            ident = true;
-        }
-
-        break;
+        return this->sleep();
     case SV_POTION_LOSE_MEMORIES:
         if (this->player_ptr->hold_exp || (this->player_ptr->exp <= 0)) {
             break;
@@ -545,6 +531,25 @@ bool QuaffEffects::booze()
     msg_print(_("知らない場所で目が醒めた。頭痛がする。", "You wake up somewhere with a sore head..."));
     msg_print(_("何も思い出せない。どうやってここへ来たのかも分からない！", "You can't remember a thing or how you got here!"));
     return ident;
+}
+
+/*!
+ * @brief 眠りの薬
+ * @return 麻痺したか否か
+ */
+bool QuaffEffects::sleep()
+{
+    if (this->player_ptr->free_act) {
+        return false;
+    }
+
+    msg_print(_("あなたは眠ってしまった。", "You fall asleep."));
+    if (ironman_nightmare) {
+        msg_print(_("恐ろしい光景が頭に浮かんできた。", "A horrible vision enters your mind."));
+        sanity_blast(this->player_ptr, nullptr, false);
+    }
+
+    return BadStatusSetter(this->player_ptr).mod_paralysis(randint0(4) + 4);
 }
 
 /*!

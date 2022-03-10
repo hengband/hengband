@@ -13,5 +13,6 @@ private:
 
     bool salt_water();
     bool booze();
+    bool sleep();
     bool detonation();
 };
