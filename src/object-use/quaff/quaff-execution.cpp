@@ -96,12 +96,7 @@ void ObjectQuaffEntity::execute(INVENTORY_IDX item)
     }
 
     this->player_ptr->update |= PU_COMBINE | PU_REORDER;
-    if (!o_ref.is_aware()) {
-        chg_virtue(this->player_ptr, V_PATIENCE, -1);
-        chg_virtue(this->player_ptr, V_CHANCE, 1);
-        chg_virtue(this->player_ptr, V_KNOWLEDGE, -1);
-    }
-
+    this->change_virtue_as_quaff(o_ref);
     object_tried(&o_ref);
     if (ident && !o_ref.is_aware()) {
         object_aware(this->player_ptr, &o_ref);
@@ -166,4 +161,15 @@ void ObjectQuaffEntity::moisten(const ObjectType &o_ref)
         (void)set_food(this->player_ptr, this->player_ptr->food + o_ref.pval);
         return;
     }
+}
+
+void ObjectQuaffEntity::change_virtue_as_quaff(const ObjectType &o_ref)
+{
+    if (o_ref.is_aware()) {
+        return;
+    }
+
+    chg_virtue(this->player_ptr, V_PATIENCE, -1);
+    chg_virtue(this->player_ptr, V_CHANCE, 1);
+    chg_virtue(this->player_ptr, V_KNOWLEDGE, -1);
 }
