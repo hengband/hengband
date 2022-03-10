@@ -72,18 +72,8 @@ ObjectQuaffEntity::ObjectQuaffEntity(PlayerType *player_ptr)
  */
 void ObjectQuaffEntity::execute(INVENTORY_IDX item)
 {
-    PlayerEnergy(this->player_ptr).set_player_turn_energy(100);
-    if (!this->can_quaff()) {
+    if (!this->can_influence()) {
         return;
-    }
-
-    if (music_singing_any(this->player_ptr)) {
-        stop_singing(this->player_ptr);
-    }
-
-    SpellHex spell_hex(this->player_ptr);
-    if (spell_hex.is_spelling_any() && !spell_hex.is_spelling_specific(HEX_INHALE)) {
-        (void)SpellHex(this->player_ptr).stop_all_spells();
     }
 
     const auto &o_ref = this->copy_object(item);
@@ -109,6 +99,25 @@ void ObjectQuaffEntity::execute(INVENTORY_IDX item)
     }
 
     this->moisten(o_ref);
+}
+
+bool ObjectQuaffEntity::can_influence()
+{
+    PlayerEnergy(this->player_ptr).set_player_turn_energy(100);
+    if (!this->can_quaff()) {
+        return false;
+    }
+
+    if (music_singing_any(this->player_ptr)) {
+        stop_singing(this->player_ptr);
+    }
+
+    SpellHex spell_hex(this->player_ptr);
+    if (spell_hex.is_spelling_any() && !spell_hex.is_spelling_specific(HEX_INHALE)) {
+        (void)SpellHex(this->player_ptr).stop_all_spells();
+    }
+
+    return true;
 }
 
 bool ObjectQuaffEntity::can_quaff()
