@@ -16,6 +16,4 @@ private:
 
     bool can_quaff();
     ObjectType copy_object(const INVENTORY_IDX item);
-    bool booze();
-    bool detonation();
 };

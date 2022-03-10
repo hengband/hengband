@@ -148,7 +148,7 @@ void ObjectQuaffEntity::execute(INVENTORY_IDX item)
 
             break;
         case SV_POTION_BOOZE:
-            ident = booze();
+            ident = QuaffEffects(this->player_ptr).booze();
             break;
         case SV_POTION_SLEEP:
             if (this->player_ptr->free_act) {
@@ -224,7 +224,7 @@ void ObjectQuaffEntity::execute(INVENTORY_IDX item)
 
             break;
         case SV_POTION_DETONATIONS:
-            ident = detonation();
+            ident = QuaffEffects(this->player_ptr).detonation();
             break;
         case SV_POTION_DEATH:
             chg_virtue(this->player_ptr, V_VITALITY, -1);
@@ -595,67 +595,6 @@ bool ObjectQuaffEntity::can_quaff()
     }
 
     return ItemUseChecker(this->player_ptr).check_stun(_("朦朧としていて瓶の蓋を開けられなかった！", "You are too stunned to quaff it!"));
-}
-
-/*!
- * @brief 酔っ払いの薬
- * @param player_ptr プレイヤーへの参照ポインタ
- * @return カオス耐性があるかその他の一部確率でFALSE、それ以外はTRUE
- */
-bool ObjectQuaffEntity::booze()
-{
-    bool ident = false;
-    auto is_monk = PlayerClass(this->player_ptr).equals(PlayerClassType::MONK);
-    if (!is_monk) {
-        chg_virtue(this->player_ptr, V_HARMONY, -1);
-    } else if (!has_resist_conf(this->player_ptr)) {
-        this->player_ptr->special_attack |= ATTACK_SUIKEN;
-    }
-
-    BadStatusSetter bss(this->player_ptr);
-    if (!has_resist_conf(this->player_ptr) && bss.confusion(randint0(20) + 15)) {
-        ident = true;
-    }
-
-    if (has_resist_chaos(this->player_ptr)) {
-        return ident;
-    }
-
-    if (one_in_(2) && bss.mod_hallucination(randint0(150) + 150)) {
-        ident = true;
-    }
-
-    if (!is_monk || !one_in_(13)) {
-        return ident;
-    }
-
-    ident = true;
-    if (one_in_(3)) {
-        lose_all_info(this->player_ptr);
-    } else {
-        wiz_dark(this->player_ptr);
-    }
-
-    (void)teleport_player_aux(this->player_ptr, 100, false, i2enum<teleport_flags>(TELEPORT_NONMAGICAL | TELEPORT_PASSIVE));
-    wiz_dark(this->player_ptr);
-    msg_print(_("知らない場所で目が醒めた。頭痛がする。", "You wake up somewhere with a sore head..."));
-    msg_print(_("何も思い出せない。どうやってここへ来たのかも分からない！", "You can't remember a thing or how you got here!"));
-    return ident;
-}
-
-/*!
- * @brief 爆発の薬の効果処理 / Fumble ramble
- * @param player_ptr プレイヤーへの参照ポインタ
- * @return 常にTRUE
- */
-bool ObjectQuaffEntity::detonation()
-{
-    msg_print(_("体の中で激しい爆発が起きた！", "Massive explosions rupture your body!"));
-    take_hit(this->player_ptr, DAMAGE_NOESCAPE, damroll(50, 20), _("爆発の薬", "a potion of Detonation"));
-    BadStatusSetter bss(this->player_ptr);
-    (void)bss.mod_stun(75);
-    (void)bss.mod_cut(5000);
-    return true;
 }
 
 ObjectType ObjectQuaffEntity::copy_object(const INVENTORY_IDX item)
