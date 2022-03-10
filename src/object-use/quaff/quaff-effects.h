@@ -1,14 +1,16 @@
 ﻿#pragma once
 
+class ObjectType;
 class PlayerType;
 class QuaffEffects {
 public:
     QuaffEffects(PlayerType *player_ptr);
 
-    // @todo switch/case文を移してくるまでの一時的なpublicメソッド.
-    bool booze();
-    bool detonation();
+    bool influence(const ObjectType &o_ref);
 
 private:
     PlayerType *player_ptr;
+
+    bool booze();
+    bool detonation();
 };
