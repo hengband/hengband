@@ -15,6 +15,7 @@ private:
     bool booze();
     bool sleep();
     bool lose_memories();
+    bool ruination();
     bool detonation();
     bool augmentation();
     bool enlightenment();

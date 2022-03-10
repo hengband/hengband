@@ -100,16 +100,7 @@ bool QuaffEffects::influence(const ObjectType &o_ref)
     case SV_POTION_LOSE_MEMORIES:
         return this->lose_memories();
     case SV_POTION_RUINATION:
-        msg_print(_("身も心も弱ってきて、精気が抜けていくようだ。", "Your nerves and muscles feel weak and lifeless!"));
-        take_hit(this->player_ptr, DAMAGE_LOSELIFE, damroll(10, 10), _("破滅の薬", "a potion of Ruination"));
-        (void)dec_stat(this->player_ptr, A_DEX, 25, true);
-        (void)dec_stat(this->player_ptr, A_WIS, 25, true);
-        (void)dec_stat(this->player_ptr, A_CON, 25, true);
-        (void)dec_stat(this->player_ptr, A_STR, 25, true);
-        (void)dec_stat(this->player_ptr, A_CHR, 25, true);
-        (void)dec_stat(this->player_ptr, A_INT, 25, true);
-        ident = true;
-        break;
+        return this->ruination();
     case SV_POTION_DEC_STR:
         if (do_dec_stat(this->player_ptr, A_STR)) {
             ident = true;
@@ -480,6 +471,23 @@ bool QuaffEffects::lose_memories()
     msg_print(_("過去の記憶が薄れていく気がする。", "You feel your memories fade."));
     chg_virtue(this->player_ptr, V_KNOWLEDGE, -5);
     lose_exp(this->player_ptr, this->player_ptr->exp / 4);
+    return true;
+}
+
+/*!
+ * @brief 破滅の薬
+ * @return 常にtrue
+ */
+bool QuaffEffects::ruination()
+{
+    msg_print(_("身も心も弱ってきて、精気が抜けていくようだ。", "Your nerves and muscles feel weak and lifeless!"));
+    take_hit(this->player_ptr, DAMAGE_LOSELIFE, damroll(10, 10), _("破滅の薬", "a potion of Ruination"));
+    (void)dec_stat(this->player_ptr, A_DEX, 25, true);
+    (void)dec_stat(this->player_ptr, A_WIS, 25, true);
+    (void)dec_stat(this->player_ptr, A_CON, 25, true);
+    (void)dec_stat(this->player_ptr, A_STR, 25, true);
+    (void)dec_stat(this->player_ptr, A_CHR, 25, true);
+    (void)dec_stat(this->player_ptr, A_INT, 25, true);
     return true;
 }
 
