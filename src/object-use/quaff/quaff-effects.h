@@ -20,6 +20,7 @@ private:
     bool ruination();
     bool detonation();
     bool death();
+    bool speed();
     bool augmentation();
     bool enlightenment();
     bool star_enlightenment();

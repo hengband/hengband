@@ -108,12 +108,7 @@ bool QuaffEffects::influence(const ObjectType &o_ref)
     case SV_POTION_BOLDNESS:
         return BadStatusSetter(this->player_ptr).fear(0);
     case SV_POTION_SPEED:
-        if (this->player_ptr->fast) {
-            (void)set_fast(this->player_ptr, this->player_ptr->fast + 5, false);
-            return false;
-        }
-
-        return set_fast(this->player_ptr, randint1(25) + 15, false);
+        return this->speed();
     case SV_POTION_RESIST_HEAT:
         return set_oppose_fire(this->player_ptr, this->player_ptr->oppose_fire + randint1(10) + 10, false);
     case SV_POTION_RESIST_COLD:
@@ -373,6 +368,20 @@ bool QuaffEffects::death()
     msg_print(_("死の予感が体中を駆けめぐった。", "A feeling of Death flows through your body."));
     take_hit(this->player_ptr, DAMAGE_LOSELIFE, 5000, _("死の薬", "a potion of Death"));
     return true;
+}
+
+/*!
+ * @brief スピードの薬
+ * @return 加速したらtrue、加速効果が切れていない状態で重ね飲みしたらfalse
+ */
+bool QuaffEffects::speed()
+{
+    if (this->player_ptr->fast) {
+        (void)set_fast(this->player_ptr, this->player_ptr->fast + 5, false);
+        return false;
+    }
+
+    return set_fast(this->player_ptr, randint1(25) + 15, false);
 }
 
 /*!
