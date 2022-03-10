@@ -51,49 +51,41 @@ bool QuaffEffects::influence(const ObjectType &o_ref)
         return false;
     }
 
-    auto ident = false;
     switch (o_ref.sval) {
     case SV_POTION_WATER:
         msg_print(_("口の中がさっぱりした。", "That was refreshing."));
         msg_print(_("のどの渇きが少しおさまった。", "You feel less thirsty."));
-        ident = true;
-        break;
+        return true;
     case SV_POTION_APPLE_JUICE:
         msg_print(_("甘くてサッパリとしていて、とてもおいしい。", "It's sweet, refreshing and very tasty."));
         msg_print(_("のどの渇きが少しおさまった。", "You feel less thirsty."));
-        ident = true;
-        break;
+        return true;
     case SV_POTION_SLIME_MOLD:
         msg_print(_("なんとも不気味な味だ。", "That was strange."));
         msg_print(_("のどの渇きが少しおさまった。", "You feel less thirsty."));
-        ident = true;
-        break;
+        return true;
     case SV_POTION_SLOWNESS:
-        if (BadStatusSetter(this->player_ptr).slowness(randint1(25) + 15, false)) {
-            ident = true;
-        }
-
-        break;
+        return BadStatusSetter(this->player_ptr).slowness(randint1(25) + 15, false);
     case SV_POTION_SALT_WATER:
         return this->salt_water();
     case SV_POTION_POISON:
         if (!(has_resist_pois(this->player_ptr) || is_oppose_pois(this->player_ptr))) {
             if (BadStatusSetter(this->player_ptr).mod_poison(randint0(15) + 10)) {
-                ident = true;
+                return true;
             }
         }
 
-        break;
+        return false;
     case SV_POTION_BLINDNESS:
         if (!has_resist_blind(this->player_ptr)) {
             if (BadStatusSetter(this->player_ptr).mod_blindness(randint0(100) + 100)) {
-                ident = true;
+                return true;
             }
         }
 
-        break;
+        return false;
     case SV_POTION_BOOZE:
-        ident = this->booze();
+        return this->booze();
         break;
     case SV_POTION_SLEEP:
         return this->sleep();
@@ -102,208 +94,89 @@ bool QuaffEffects::influence(const ObjectType &o_ref)
     case SV_POTION_RUINATION:
         return this->ruination();
     case SV_POTION_DEC_STR:
-        if (do_dec_stat(this->player_ptr, A_STR)) {
-            ident = true;
-        }
-
-        break;
+        return do_dec_stat(this->player_ptr, A_STR);
     case SV_POTION_DEC_INT:
-        if (do_dec_stat(this->player_ptr, A_INT)) {
-            ident = true;
-        }
-
-        break;
+        return do_dec_stat(this->player_ptr, A_INT);
     case SV_POTION_DEC_WIS:
-        if (do_dec_stat(this->player_ptr, A_WIS)) {
-            ident = true;
-        }
-
-        break;
+        return do_dec_stat(this->player_ptr, A_WIS);
     case SV_POTION_DEC_DEX:
-        if (do_dec_stat(this->player_ptr, A_DEX)) {
-            ident = true;
-        }
-
-        break;
+        return do_dec_stat(this->player_ptr, A_DEX);
     case SV_POTION_DEC_CON:
-        if (do_dec_stat(this->player_ptr, A_CON)) {
-            ident = true;
-        }
-
-        break;
+        return do_dec_stat(this->player_ptr, A_CON);
     case SV_POTION_DEC_CHR:
-        if (do_dec_stat(this->player_ptr, A_CHR)) {
-            ident = true;
-        }
-
-        break;
+        return do_dec_stat(this->player_ptr, A_CHR);
     case SV_POTION_DETONATIONS:
-        ident = this->detonation();
-        break;
+        return this->detonation();
     case SV_POTION_DEATH:
         return this->death();
     case SV_POTION_INFRAVISION:
-        if (set_tim_infra(this->player_ptr, this->player_ptr->tim_infra + 100 + randint1(100), false)) {
-            ident = true;
-        }
-
-        break;
+        return set_tim_infra(this->player_ptr, this->player_ptr->tim_infra + 100 + randint1(100), false);
     case SV_POTION_DETECT_INVIS:
-        if (set_tim_invis(this->player_ptr, this->player_ptr->tim_invis + 12 + randint1(12), false)) {
-            ident = true;
-        }
-
-        break;
+        return set_tim_invis(this->player_ptr, this->player_ptr->tim_invis + 12 + randint1(12), false);
     case SV_POTION_SLOW_POISON:
-        if (BadStatusSetter(this->player_ptr).poison(this->player_ptr->poisoned / 2)) {
-            ident = true;
-        }
-
-        break;
+        return BadStatusSetter(this->player_ptr).poison(this->player_ptr->poisoned / 2);
     case SV_POTION_CURE_POISON:
-        if (BadStatusSetter(this->player_ptr).poison(0)) {
-            ident = true;
-        }
-
-        break;
+        return BadStatusSetter(this->player_ptr).poison(0);
     case SV_POTION_BOLDNESS:
-        if (BadStatusSetter(this->player_ptr).fear(0)) {
-            ident = true;
-        }
-
-        break;
+        return BadStatusSetter(this->player_ptr).fear(0);
     case SV_POTION_SPEED:
         if (this->player_ptr->fast) {
             (void)set_fast(this->player_ptr, this->player_ptr->fast + 5, false);
-            break;
+            return false;
         }
 
-        if (set_fast(this->player_ptr, randint1(25) + 15, false)) {
-            ident = true;
-        }
-
-        break;
+        return set_fast(this->player_ptr, randint1(25) + 15, false);
     case SV_POTION_RESIST_HEAT:
-        if (set_oppose_fire(this->player_ptr, this->player_ptr->oppose_fire + randint1(10) + 10, false)) {
-            ident = true;
-        }
-
-        break;
+        return set_oppose_fire(this->player_ptr, this->player_ptr->oppose_fire + randint1(10) + 10, false);
     case SV_POTION_RESIST_COLD:
-        if (set_oppose_cold(this->player_ptr, this->player_ptr->oppose_cold + randint1(10) + 10, false)) {
-            ident = true;
-        }
-
-        break;
+        return set_oppose_cold(this->player_ptr, this->player_ptr->oppose_cold + randint1(10) + 10, false);
     case SV_POTION_HEROISM:
-        ident = heroism(this->player_ptr, 25);
-        break;
+        return heroism(this->player_ptr, 25);
     case SV_POTION_BESERK_STRENGTH:
-        ident = berserk(this->player_ptr, randint1(25) + 25);
-        break;
+        return berserk(this->player_ptr, randint1(25) + 25);
     case SV_POTION_CURE_LIGHT:
-        ident = cure_light_wounds(this->player_ptr, 2, 8);
-        break;
+        return cure_light_wounds(this->player_ptr, 2, 8);
     case SV_POTION_CURE_SERIOUS:
-        ident = cure_serious_wounds(this->player_ptr, 4, 8);
-        break;
+        return cure_serious_wounds(this->player_ptr, 4, 8);
     case SV_POTION_CURE_CRITICAL:
-        ident = cure_critical_wounds(this->player_ptr, damroll(6, 8));
-        break;
+        return cure_critical_wounds(this->player_ptr, damroll(6, 8));
     case SV_POTION_HEALING:
-        ident = cure_critical_wounds(this->player_ptr, 300);
-        break;
+        return cure_critical_wounds(this->player_ptr, 300);
     case SV_POTION_STAR_HEALING:
-        ident = cure_critical_wounds(this->player_ptr, 1200);
-        break;
+        return cure_critical_wounds(this->player_ptr, 1200);
     case SV_POTION_LIFE:
-        ident = life_stream(this->player_ptr, true, true);
-        break;
+        return life_stream(this->player_ptr, true, true);
     case SV_POTION_RESTORE_MANA:
-        ident = restore_mana(this->player_ptr, true);
-        break;
+        return restore_mana(this->player_ptr, true);
     case SV_POTION_RESTORE_EXP:
-        if (restore_level(this->player_ptr)) {
-            ident = true;
-        }
-
-        break;
+        return restore_level(this->player_ptr);
     case SV_POTION_RES_STR:
-        if (do_res_stat(this->player_ptr, A_STR)) {
-            ident = true;
-        }
-
-        break;
+        return do_res_stat(this->player_ptr, A_STR);
     case SV_POTION_RES_INT:
-        if (do_res_stat(this->player_ptr, A_INT)) {
-            ident = true;
-        }
-
-        break;
+        return do_res_stat(this->player_ptr, A_INT);
     case SV_POTION_RES_WIS:
-        if (do_res_stat(this->player_ptr, A_WIS)) {
-            ident = true;
-        }
-
-        break;
+        return do_res_stat(this->player_ptr, A_WIS);
     case SV_POTION_RES_DEX:
-        if (do_res_stat(this->player_ptr, A_DEX)) {
-            ident = true;
-        }
-
-        break;
+        return do_res_stat(this->player_ptr, A_DEX);
     case SV_POTION_RES_CON:
-        if (do_res_stat(this->player_ptr, A_CON)) {
-            ident = true;
-        }
-
-        break;
+        return do_res_stat(this->player_ptr, A_CON);
     case SV_POTION_RES_CHR:
-        if (do_res_stat(this->player_ptr, A_CHR)) {
-            ident = true;
-        }
-
-        break;
+        return do_res_stat(this->player_ptr, A_CHR);
     case SV_POTION_INC_STR:
-        if (do_inc_stat(this->player_ptr, A_STR)) {
-            ident = true;
-        }
-
-        break;
+        return do_inc_stat(this->player_ptr, A_STR);
     case SV_POTION_INC_INT:
-        if (do_inc_stat(this->player_ptr, A_INT)) {
-            ident = true;
-        }
-
-        break;
+        return do_inc_stat(this->player_ptr, A_INT);
     case SV_POTION_INC_WIS:
-        if (do_inc_stat(this->player_ptr, A_WIS)) {
-            ident = true;
-        }
-
-        break;
+        return do_inc_stat(this->player_ptr, A_WIS);
     case SV_POTION_INC_DEX:
-        if (do_inc_stat(this->player_ptr, A_DEX)) {
-            ident = true;
-        }
-
-        break;
+        return do_inc_stat(this->player_ptr, A_DEX);
     case SV_POTION_INC_CON:
-        if (do_inc_stat(this->player_ptr, A_CON)) {
-            ident = true;
-        }
-
-        break;
+        return do_inc_stat(this->player_ptr, A_CON);
     case SV_POTION_INC_CHR:
-        if (do_inc_stat(this->player_ptr, A_CHR)) {
-            ident = true;
-        }
-
-        break;
+        return do_inc_stat(this->player_ptr, A_CHR);
     case SV_POTION_POLY_SELF:
         do_poly_self(this->player_ptr);
-        ident = true;
-        break;
+        return true;
     case SV_POTION_AUGMENTATION:
         return this->augmentation();
     case SV_POTION_ENLIGHTENMENT:
@@ -314,38 +187,31 @@ bool QuaffEffects::influence(const ObjectType &o_ref)
         msg_print(_("自分自身のことが少しは分かった気がする...", "You begin to know yourself a little better..."));
         msg_print(nullptr);
         self_knowledge(this->player_ptr);
-        ident = true;
-        break;
+        return true;
     case SV_POTION_EXPERIENCE:
         return this->experience();
     case SV_POTION_RESISTANCE:
         return this->resistance();
     case SV_POTION_CURING:
-        if (true_healing(this->player_ptr, 50)) {
-            ident = true;
-        }
-
-        break;
+        return true_healing(this->player_ptr, 50);
     case SV_POTION_INVULNERABILITY:
         (void)set_invuln(this->player_ptr, this->player_ptr->invuln + randint1(4) + 4, false);
-        ident = true;
-        break;
+        return true;
     case SV_POTION_NEW_LIFE:
         roll_hitdice(this->player_ptr, SPOP_NONE);
         get_max_stats(this->player_ptr);
         this->player_ptr->update |= PU_BONUS;
         lose_all_mutations(this->player_ptr);
-        ident = true;
-        break;
+        return true;
     case SV_POTION_NEO_TSUYOSHI:
         return this->neo_tsuyoshi();
     case SV_POTION_TSUYOSHI:
         return this->tsuyoshi();
     case SV_POTION_POLYMORPH:
         return this->polymorph();
+    default:
+        return false;
     }
-
-    return ident;
 }
 
 /*!
