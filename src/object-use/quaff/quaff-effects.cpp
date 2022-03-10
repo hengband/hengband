@@ -349,21 +349,9 @@ bool QuaffEffects::influence(const ObjectType &o_ref)
         ident = true;
         break;
     case SV_POTION_NEO_TSUYOSHI:
-        (void)BadStatusSetter(this->player_ptr).hallucination(0);
-        (void)set_tsuyoshi(this->player_ptr, this->player_ptr->tsuyoshi + randint1(100) + 100, false);
-        ident = true;
-        break;
+        return this->neo_tsuyoshi();
     case SV_POTION_TSUYOSHI:
-        msg_print(_("「オクレ兄さん！」", "Brother OKURE!"));
-        msg_print(nullptr);
-        this->player_ptr->tsuyoshi = 1;
-        (void)set_tsuyoshi(this->player_ptr, 0, true);
-        if (!has_resist_chaos(this->player_ptr)) {
-            (void)BadStatusSetter(this->player_ptr).hallucination(50 + randint1(50));
-        }
-
-        ident = true;
-        break;
+        return this->tsuyoshi();
     case SV_POTION_POLYMORPH:
         return this->polymorph();
     }
@@ -599,6 +587,34 @@ bool QuaffEffects::experience()
 
     msg_print(_("更に経験を積んだような気がする。", "You feel more experienced."));
     gain_exp(this->player_ptr, ee);
+    return true;
+}
+
+/*!
+ * @brief ネオ・つよしスペシャルの薬
+ * @return 常にtrue
+ */
+bool QuaffEffects::neo_tsuyoshi()
+{
+    (void)BadStatusSetter(this->player_ptr).hallucination(0);
+    (void)set_tsuyoshi(this->player_ptr, this->player_ptr->tsuyoshi + randint1(100) + 100, false);
+    return true;
+}
+
+/*!
+ * @brief つよしスペシャルの薬
+ * @return 常にtrue
+ */
+bool QuaffEffects::tsuyoshi()
+{
+    msg_print(_("「オクレ兄さん！」", "Brother OKURE!"));
+    msg_print(nullptr);
+    this->player_ptr->tsuyoshi = 1;
+    (void)set_tsuyoshi(this->player_ptr, 0, true);
+    if (!has_resist_chaos(this->player_ptr)) {
+        (void)BadStatusSetter(this->player_ptr).hallucination(50 + randint1(50));
+    }
+
     return true;
 }
 
