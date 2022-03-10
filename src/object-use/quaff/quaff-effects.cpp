@@ -71,13 +71,7 @@ bool QuaffEffects::influence(const ObjectType &o_ref)
     case SV_POTION_POISON:
         return this->poison();
     case SV_POTION_BLINDNESS:
-        if (!has_resist_blind(this->player_ptr)) {
-            if (BadStatusSetter(this->player_ptr).mod_blindness(randint0(100) + 100)) {
-                return true;
-            }
-        }
-
-        return false;
+        return this->blindness();
     case SV_POTION_BOOZE:
         return this->booze();
         break;
@@ -242,6 +236,19 @@ bool QuaffEffects::poison()
     }
 
     return BadStatusSetter(this->player_ptr).mod_poison(randint0(15) + 10);
+}
+
+/*!
+ * @brief 盲目の薬
+ * @return 盲目になったらtrue
+ */
+bool QuaffEffects::blindness()
+{
+    if (has_resist_blind(this->player_ptr)) {
+        return false;
+    }
+
+    return BadStatusSetter(this->player_ptr).mod_blindness(randint0(100) + 100);
 }
 
 /*!

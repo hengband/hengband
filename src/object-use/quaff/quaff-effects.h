@@ -13,6 +13,7 @@ private:
 
     bool salt_water();
     bool poison();
+    bool blindness();
     bool booze();
     bool sleep();
     bool lose_memories();
