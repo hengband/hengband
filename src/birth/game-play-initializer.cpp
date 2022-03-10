@@ -21,6 +21,7 @@
 #include "system/floor-type-definition.h"
 #include "system/monster-race-definition.h"
 #include "system/player-type-definition.h"
+#include "util/enum-range.h"
 #include "world/world.h"
 
 /*!
@@ -188,8 +189,8 @@ void init_dungeon_quests(PlayerType *player_ptr)
     floor_ptr->quest_number = QuestId::RANDOM_QUEST1;
     parse_fixed_map(player_ptr, "q_info.txt", 0, 0, 0, 0);
     floor_ptr->quest_number = QuestId::NONE;
-    for (auto q = quest_map.find(QuestId::RANDOM_QUEST10); q != quest_map.lower_bound(QuestId::RANDOM_QUEST1) && q != quest_map.end(); q--) {
-        auto *q_ptr = &q->second;
+    for (auto q_idx : EnumRange(QuestId::RANDOM_QUEST1, QuestId::RANDOM_QUEST10)) {
+        auto *q_ptr = &quest_map[q_idx];
         monster_race *quest_r_ptr;
         q_ptr->status = QuestStatusType::TAKEN;
         determine_random_questor(player_ptr, q_ptr);
