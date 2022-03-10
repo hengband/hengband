@@ -80,7 +80,7 @@ static concptr dungeon_key_at(int index, char *buf)
  */
 static concptr quest_key_at(int index, char *buf)
 {
-    if (index >= static_cast<int>(max_q_idx)) {
+    if (index > enum2i(quest_map.rbegin()->first)) {
         return nullptr;
     }
 
