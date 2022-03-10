@@ -113,31 +113,7 @@ void ObjectQuaffEntity::execute(INVENTORY_IDX item)
         return;
     }
 
-    switch (PlayerRace(this->player_ptr).food()) {
-    case PlayerRaceFoodType::WATER:
-        msg_print(_("水分を取り込んだ。", "You are moistened."));
-        set_food(this->player_ptr, std::min<short>(this->player_ptr->food + o_ref.pval + std::max<short>(0, o_ref.pval * 10) + 2000, PY_FOOD_MAX - 1));
-        break;
-    case PlayerRaceFoodType::OIL:
-        if (o_ref.tval != ItemKindType::FLASK) {
-            set_food(this->player_ptr, this->player_ptr->food + ((o_ref.pval) / 20));
-            break;
-        }
-
-        msg_print(_("オイルを補給した。", "You replenish yourself with the oil."));
-        set_food(this->player_ptr, this->player_ptr->food + 5000);
-        break;
-    case PlayerRaceFoodType::BLOOD:
-        (void)set_food(this->player_ptr, this->player_ptr->food + (o_ref.pval / 10));
-        break;
-    case PlayerRaceFoodType::MANA:
-    case PlayerRaceFoodType::CORPSE:
-        set_food(this->player_ptr, this->player_ptr->food + ((o_ref.pval) / 20));
-        break;
-    default:
-        (void)set_food(this->player_ptr, this->player_ptr->food + o_ref.pval);
-        break;
-    }
+    this->moisten(o_ref);
 }
 
 bool ObjectQuaffEntity::can_quaff()
@@ -161,4 +137,33 @@ ObjectType ObjectQuaffEntity::copy_object(const INVENTORY_IDX item)
     auto o_val = *tmp_o_ptr;
     o_val.number = 1;
     return o_val;
+}
+
+void ObjectQuaffEntity::moisten(const ObjectType &o_ref)
+{
+    switch (PlayerRace(this->player_ptr).food()) {
+    case PlayerRaceFoodType::WATER:
+        msg_print(_("水分を取り込んだ。", "You are moistened."));
+        set_food(this->player_ptr, std::min<short>(this->player_ptr->food + o_ref.pval + std::max<short>(0, o_ref.pval * 10) + 2000, PY_FOOD_MAX - 1));
+        return;
+    case PlayerRaceFoodType::OIL:
+        if (o_ref.tval != ItemKindType::FLASK) {
+            set_food(this->player_ptr, this->player_ptr->food + ((o_ref.pval) / 20));
+            return;
+        }
+
+        msg_print(_("オイルを補給した。", "You replenish yourself with the oil."));
+        set_food(this->player_ptr, this->player_ptr->food + 5000);
+        return;
+    case PlayerRaceFoodType::BLOOD:
+        (void)set_food(this->player_ptr, this->player_ptr->food + (o_ref.pval / 10));
+        return;
+    case PlayerRaceFoodType::MANA:
+    case PlayerRaceFoodType::CORPSE:
+        set_food(this->player_ptr, this->player_ptr->food + ((o_ref.pval) / 20));
+        return;
+    default:
+        (void)set_food(this->player_ptr, this->player_ptr->food + o_ref.pval);
+        return;
+    }
 }

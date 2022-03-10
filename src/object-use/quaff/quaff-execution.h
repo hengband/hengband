@@ -16,4 +16,5 @@ private:
 
     bool can_quaff();
     ObjectType copy_object(const INVENTORY_IDX item);
+    void moisten(const ObjectType &o_ref);
 };
