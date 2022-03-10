@@ -1,10 +1,10 @@
 ﻿#pragma once
 
-enum be_type {
-    BLOW_EFFECT_TYPE_NONE = 0,
-    BLOW_EFFECT_TYPE_FEAR = 1,
-    BLOW_EFFECT_TYPE_SLEEP = 2,
-    BLOW_EFFECT_TYPE_HEAL = 3,
+enum class BlowEffectType {
+    NONE = 0,
+    FEAR = 1,
+    SLEEP = 2,
+    HEAL = 3,
 };
 
 struct mam_type;

@@ -210,10 +210,10 @@ void decide_monster_attack_effect(PlayerType *player_ptr, mam_type *mam_ptr)
         mam_ptr->pt = AttributeType::CONFUSION;
         break;
     case RaceBlowEffectType::TERRIFY:
-        mam_ptr->attribute = BLOW_EFFECT_TYPE_FEAR;
+        mam_ptr->attribute = BlowEffectType::FEAR;
         break;
     case RaceBlowEffectType::PARALYZE:
-        mam_ptr->attribute = BLOW_EFFECT_TYPE_SLEEP;
+        mam_ptr->attribute = BlowEffectType::SLEEP;
         break;
     case RaceBlowEffectType::SHATTER:
         mam_ptr->damage -= (mam_ptr->damage * ((mam_ptr->ac < 150) ? mam_ptr->ac : 150) / 250);
@@ -233,7 +233,7 @@ void decide_monster_attack_effect(PlayerType *player_ptr, mam_type *mam_ptr)
         break;
     case RaceBlowEffectType::DR_LIFE:
         mam_ptr->pt = AttributeType::HYPODYNAMIA;
-        mam_ptr->attribute = BLOW_EFFECT_TYPE_HEAL;
+        mam_ptr->attribute = BlowEffectType::HEAL;
         break;
     case RaceBlowEffectType::INERTIA:
         mam_ptr->pt = AttributeType::INERTIAL;
