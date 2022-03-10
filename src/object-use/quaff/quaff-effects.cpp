@@ -324,13 +324,7 @@ bool QuaffEffects::influence(const ObjectType &o_ref)
     case SV_POTION_EXPERIENCE:
         return this->experience();
     case SV_POTION_RESISTANCE:
-        (void)set_oppose_acid(this->player_ptr, this->player_ptr->oppose_acid + randint1(20) + 20, false);
-        (void)set_oppose_elec(this->player_ptr, this->player_ptr->oppose_elec + randint1(20) + 20, false);
-        (void)set_oppose_fire(this->player_ptr, this->player_ptr->oppose_fire + randint1(20) + 20, false);
-        (void)set_oppose_cold(this->player_ptr, this->player_ptr->oppose_cold + randint1(20) + 20, false);
-        (void)set_oppose_pois(this->player_ptr, this->player_ptr->oppose_pois + randint1(20) + 20, false);
-        ident = true;
-        break;
+        return this->resistance();
     case SV_POTION_CURING:
         if (true_healing(this->player_ptr, 50)) {
             ident = true;
@@ -587,6 +581,20 @@ bool QuaffEffects::experience()
 
     msg_print(_("更に経験を積んだような気がする。", "You feel more experienced."));
     gain_exp(this->player_ptr, ee);
+    return true;
+}
+
+/*!
+ * @brief 耐性の薬
+ * @return 経験値が増えたらtrue
+ */
+bool QuaffEffects::resistance()
+{
+    (void)set_oppose_acid(this->player_ptr, this->player_ptr->oppose_acid + randint1(20) + 20, false);
+    (void)set_oppose_elec(this->player_ptr, this->player_ptr->oppose_elec + randint1(20) + 20, false);
+    (void)set_oppose_fire(this->player_ptr, this->player_ptr->oppose_fire + randint1(20) + 20, false);
+    (void)set_oppose_cold(this->player_ptr, this->player_ptr->oppose_cold + randint1(20) + 20, false);
+    (void)set_oppose_pois(this->player_ptr, this->player_ptr->oppose_pois + randint1(20) + 20, false);
     return true;
 }
 

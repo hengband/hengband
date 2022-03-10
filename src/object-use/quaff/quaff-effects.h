@@ -21,6 +21,7 @@ private:
     bool enlightenment();
     bool star_enlightenment();
     bool experience();
+    bool resistance();
     bool neo_tsuyoshi();
     bool tsuyoshi();
     bool polymorph();
