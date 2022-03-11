@@ -32,9 +32,9 @@
 #include "object-enchant/trc-types.h"
 #include "object-enchant/trg-types.h"
 #include "object-enchant/weapon/apply-magic-arrow.h"
+#include "object-enchant/weapon/apply-magic-bow.h"
 #include "object-enchant/weapon/apply-magic-digging.h"
 #include "object-enchant/weapon/apply-magic-sword.h"
-#include "object-enchant/weapon/apply-magic-weapon.h"
 #include "object/object-kind.h"
 #include "player/player-status-flags.h"
 #include "sv-definition/sv-armor-types.h"
@@ -144,7 +144,7 @@ void apply_magic_to_object(PlayerType *player_ptr, ObjectType *o_ptr, DEPTH lev,
         DiggingEnchanter(player_ptr, o_ptr, lev, power).apply_magic();
         break;
     case ItemKindType::BOW:
-        WeaponEnchanter(player_ptr, o_ptr, lev, power).apply_magic();
+        BowEnchanter(player_ptr, o_ptr, lev, power).apply_magic();
         break;
     case ItemKindType::SHOT:
     case ItemKindType::ARROW:
