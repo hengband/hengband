@@ -70,10 +70,7 @@ static errr load_town_quest(PlayerType *player_ptr)
 
     uint16_t max_quests_load;
     byte max_rquests_load;
-    auto load_quest_result = load_quest_info(&max_quests_load, &max_rquests_load);
-    if (load_quest_result != 0) {
-        return load_quest_result;
-    }
+    load_quest_info(&max_quests_load, &max_rquests_load);
 
     analyze_quests(player_ptr, max_quests_load, max_rquests_load);
 

@@ -196,7 +196,7 @@ void set_zangband_visited_towns(PlayerType *player_ptr)
     player_ptr->visit = 1L;
 }
 
-void set_zangband_quest(PlayerType *player_ptr, quest_type *const q_ptr, int loading_quest_index, const QuestId old_inside_quest)
+void set_zangband_quest(PlayerType *player_ptr, quest_type *const q_ptr, const QuestId loading_quest_index, const QuestId old_inside_quest)
 {
     if (q_ptr->flags & QUEST_FLAG_PRESET) {
         q_ptr->dungeon = 0;
@@ -204,7 +204,7 @@ void set_zangband_quest(PlayerType *player_ptr, quest_type *const q_ptr, int loa
     }
 
     init_flags = INIT_ASSIGN;
-    player_ptr->current_floor_ptr->quest_number = i2enum<QuestId>(loading_quest_index);
+    player_ptr->current_floor_ptr->quest_number = loading_quest_index;
     parse_fixed_map(player_ptr, "q_info.txt", 0, 0, 0, 0);
     player_ptr->current_floor_ptr->quest_number = old_inside_quest;
 }

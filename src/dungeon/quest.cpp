@@ -37,7 +37,6 @@
 #include "world/world.h"
 
 std::map<QuestId, quest_type> quest_map; /*!< Quest info */
-int16_t max_q_idx; /*!< Maximum number of quests */
 char quest_text[10][80]; /*!< Quest text */
 int quest_text_line; /*!< Current line of the quest text */
 QuestId leaving_quest = QuestId::NONE;

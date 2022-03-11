@@ -107,7 +107,8 @@ void wiz_enter_quest(PlayerType *player_ptr)
     char ppp[30];
     char tmp_val[5];
     int tmp_int;
-    sprintf(ppp, "QuestID (0-%d):", max_q_idx - 1);
+    const auto quest_max = enum2i(quest_map.rbegin()->first);
+    sprintf(ppp, "QuestID (0-%u):", quest_max);
     sprintf(tmp_val, "%d", 0);
 
     if (!get_string(ppp, tmp_val, 3)) {
@@ -115,7 +116,7 @@ void wiz_enter_quest(PlayerType *player_ptr)
     }
 
     tmp_int = atoi(tmp_val);
-    if ((tmp_int < 0) || (tmp_int >= max_q_idx)) {
+    if ((tmp_int < 0) || (tmp_int > quest_max)) {
         return;
     }
 

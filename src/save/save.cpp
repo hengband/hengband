@@ -124,33 +124,33 @@ static bool wr_savefile_new(PlayerType *player_ptr, SaveType type)
     tmp16u = max_towns;
     wr_u16b(tmp16u);
 
-    tmp16u = max_q_idx;
+    tmp16u = static_cast<uint16_t>(quest_map.size());
     wr_u16b(tmp16u);
 
     tmp8u = MAX_RANDOM_QUEST - MIN_RANDOM_QUEST;
     wr_byte(tmp8u);
 
-    for (short i = 0; i < max_q_idx; i++) {
-        auto *const q_ptr = &quest_map[i2enum<QuestId>(i)];
-        wr_s16b(enum2i(q_ptr->status));
-        wr_s16b((int16_t)q_ptr->level);
-        wr_byte((byte)q_ptr->complev);
-        wr_u32b(q_ptr->comptime);
+    for (auto [q_idx, q_ref] : quest_map) {
+        wr_s16b(enum2i(q_idx));
+        wr_s16b(enum2i(q_ref.status));
+        wr_s16b((int16_t)q_ref.level);
+        wr_byte((byte)q_ref.complev);
+        wr_u32b(q_ref.comptime);
 
-        bool is_quest_running = q_ptr->status == QuestStatusType::TAKEN;
-        is_quest_running |= q_ptr->status == QuestStatusType::COMPLETED;
-        is_quest_running |= !quest_type::is_fixed(i2enum<QuestId>(i));
+        auto is_quest_running = q_ref.status == QuestStatusType::TAKEN;
+        is_quest_running |= q_ref.status == QuestStatusType::COMPLETED;
+        is_quest_running |= !quest_type::is_fixed(q_idx);
         if (!is_quest_running) {
             continue;
         }
 
-        wr_s16b((int16_t)q_ptr->cur_num);
-        wr_s16b((int16_t)q_ptr->max_num);
-        wr_s16b(enum2i(q_ptr->type));
-        wr_s16b(enum2i(q_ptr->r_idx));
-        wr_s16b(q_ptr->k_idx);
-        wr_byte((byte)q_ptr->flags);
-        wr_byte((byte)q_ptr->dungeon);
+        wr_s16b((int16_t)q_ref.cur_num);
+        wr_s16b((int16_t)q_ref.max_num);
+        wr_s16b(enum2i(q_ref.type));
+        wr_s16b(enum2i(q_ref.r_idx));
+        wr_s16b(q_ref.k_idx);
+        wr_byte((byte)q_ref.flags);
+        wr_byte((byte)q_ref.dungeon);
     }
 
     wr_s32b(player_ptr->wilderness_x);

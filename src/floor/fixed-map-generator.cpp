@@ -391,8 +391,6 @@ static bool parse_qtw_M(qtwg_type *qtwg_ptr, char **zz)
 
     if (zz[0][0] == 'T') {
         max_towns = static_cast<int16_t>(atoi(zz[1]));
-    } else if (zz[0][0] == 'Q') {
-        max_q_idx = (int16_t)atoi(zz[1]);
     } else if (zz[0][0] == 'O') {
         w_ptr->max_o_idx = (OBJECT_IDX)atoi(zz[1]);
     } else if (zz[0][0] == 'M') {
