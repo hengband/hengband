@@ -42,49 +42,12 @@ void WeaponEnchanter::apply_magic()
         return;
     }
 
-    switch (this->o_ptr->tval) {
-    case ItemKindType::BOW: {
-        if (this->power > 1) {
-            if ((this->power > 2) || one_in_(20)) {
-                become_random_artifact(this->player_ptr, this->o_ptr, false);
-                break;
-            }
-
-            this->o_ptr->ego_idx = get_random_ego(INVEN_BOW, true);
+    if (this->power > 1) {
+        if ((this->power > 2) || one_in_(20)) {
+            become_random_artifact(this->player_ptr, this->o_ptr, false);
+            return;
         }
 
-        break;
-    }
-    case ItemKindType::BOLT:
-    case ItemKindType::ARROW:
-    case ItemKindType::SHOT: {
-        if (this->power > 1) {
-            if (this->power > 2) {
-                become_random_artifact(this->player_ptr, this->o_ptr, false);
-                break;
-            }
-
-            this->o_ptr->ego_idx = get_random_ego(INVEN_AMMO, true);
-            while (one_in_(10L * this->o_ptr->dd * this->o_ptr->ds)) {
-                this->o_ptr->dd++;
-            }
-
-            if (this->o_ptr->dd > 9) {
-                this->o_ptr->dd = 9;
-            }
-
-            break;
-        }
-
-        if (this->power < -1) {
-            if (randint0(MAX_DEPTH) < this->level) {
-                this->o_ptr->ego_idx = get_random_ego(INVEN_AMMO, false);
-            }
-        }
-
-        break;
-    }
-    default:
-        break;
+        this->o_ptr->ego_idx = get_random_ego(INVEN_BOW, true);
     }
 }

@@ -2430,6 +2430,9 @@
     <ClCompile Include="..\..\src\object-enchant\weapon\apply-magic-digging.cpp">
       <Filter>object-enchant\weapon</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\object-enchant\weapon\apply-magic-arrow.cpp">
+      <Filter>object-enchant\weapon</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\combat\shoot.h">
@@ -5278,6 +5281,9 @@
       <Filter>object-enchant\weapon</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\object-enchant\weapon\apply-magic-digging.h">
+      <Filter>object-enchant\weapon</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\object-enchant\weapon\apply-magic-arrow.h">
       <Filter>object-enchant\weapon</Filter>
     </ClInclude>
   </ItemGroup>
