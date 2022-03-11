@@ -16,12 +16,12 @@
  * @details ItemLoaderBaseは純粋仮想関数を含むので参照を返す必要がある.
  * (値を返す設計はコンパイルエラー)
  */
-std::shared_ptr<ItemLoaderBase> ItemLoaderFactory::create_loader()
+std::unique_ptr<ItemLoaderBase> ItemLoaderFactory::create_loader()
 {
     auto version = get_version();
     switch (version) {
     case ItemLoaderVersionType::LOAD50:
-        return std::make_shared<ItemLoader50>();
+        return std::make_unique<ItemLoader50>();
     case ItemLoaderVersionType::LOAD51:
         // dummy yet.
     default:
