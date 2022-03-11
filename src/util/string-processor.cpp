@@ -331,11 +331,13 @@ static bool trigger_ascii_to_text(char **bufptr, concptr *strptr)
 /*
  * Hack -- convert a string into a printable form
  */
-void ascii_to_text(char *buf, std::string_view sv)
+void ascii_to_text(char *buf, std::string_view sv, size_t bufsize)
 {
     char *s = buf;
+    auto buffer_end = s + bufsize;
     auto str = sv.data();
-    while (*str) {
+    constexpr auto step_size = 4;
+    while (*str && (s + step_size < buffer_end)) {
         byte i = (byte)(*str++);
         if (i == 31) {
             if (!trigger_ascii_to_text(&s, &str)) {
