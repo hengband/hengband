@@ -31,6 +31,7 @@
 #include "object-enchant/tr-types.h"
 #include "object-enchant/trc-types.h"
 #include "object-enchant/trg-types.h"
+#include "object-enchant/weapon/apply-magic-digging.h"
 #include "object-enchant/weapon/apply-magic-sword.h"
 #include "object-enchant/weapon/apply-magic-weapon.h"
 #include "object/object-kind.h"
@@ -139,6 +140,8 @@ void apply_magic_to_object(PlayerType *player_ptr, ObjectType *o_ptr, DEPTH lev,
     // @todo ファクトリパターンで抽象化する.
     switch (o_ptr->tval) {
     case ItemKindType::DIGGING:
+        DiggingEnchanter(player_ptr, o_ptr, lev, power).apply_magic();
+        break;
     case ItemKindType::BOW:
     case ItemKindType::SHOT:
     case ItemKindType::ARROW:
