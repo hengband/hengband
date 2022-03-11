@@ -18,4 +18,6 @@ protected:
 
 private:
     PlayerType *player_ptr;
+
+    void strengthen();
 };
