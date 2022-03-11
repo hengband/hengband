@@ -55,27 +55,7 @@ void SwordEnchanter::apply_magic()
     }
 
     if (this->power < -1) {
-        if (randint0(MAX_DEPTH) < this->level) {
-            auto n = 0;
-            while (true) {
-                this->o_ptr->ego_idx = get_random_ego(INVEN_MAIN_HAND, false);
-                if (this->o_ptr->ego_idx == EgoType::WEIRD && this->o_ptr->tval != ItemKindType::SWORD) {
-                    continue;
-                }
-
-                auto *e_ptr = &e_info[this->o_ptr->ego_idx];
-                if (this->o_ptr->tval == ItemKindType::SWORD && this->o_ptr->sval == SV_HAYABUSA && e_ptr->max_pval < 0) {
-                    if (++n > 1000) {
-                        msg_print(_("エラー:隼の剣に割り当てるエゴ無し", "Error: Cannot find for Hayabusa."));
-                        return;
-                    }
-
-                    continue;
-                }
-
-                break;
-            }
-        }
+        this->give_cursed();
     }
 }
 
@@ -107,6 +87,33 @@ void SwordEnchanter::give_ego_index()
 
         break;
     default:
+        break;
+    }
+}
+
+void SwordEnchanter::give_cursed()
+{
+    if (randint0(MAX_DEPTH) >= this->level) {
+        return;
+    }
+
+    auto n = 0;
+    while (true) {
+        this->o_ptr->ego_idx = get_random_ego(INVEN_MAIN_HAND, false);
+        if ((this->o_ptr->ego_idx == EgoType::WEIRD) && (this->o_ptr->tval != ItemKindType::SWORD)) {
+            continue;
+        }
+
+        auto *e_ptr = &e_info[this->o_ptr->ego_idx];
+        if ((this->o_ptr->tval == ItemKindType::SWORD) && (this->o_ptr->sval == SV_HAYABUSA) && (e_ptr->max_pval < 0)) {
+            if (++n > 1000) {
+                msg_print(_("エラー:隼の剣に割り当てるエゴ無し", "Error: Cannot find for Hayabusa."));
+                return;
+            }
+
+            continue;
+        }
+
         break;
     }
 }
