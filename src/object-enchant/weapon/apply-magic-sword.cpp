@@ -40,35 +40,7 @@ void SwordEnchanter::apply_magic()
             return;
         }
 
-        while (true) {
-            this->o_ptr->ego_idx = get_random_ego(INVEN_MAIN_HAND, true);
-            if (this->o_ptr->ego_idx == EgoType::SHARPNESS && this->o_ptr->tval != ItemKindType::SWORD) {
-                continue;
-            }
-
-            if (this->o_ptr->ego_idx == EgoType::EARTHQUAKES && this->o_ptr->tval != ItemKindType::HAFTED) {
-                continue;
-            }
-
-            break;
-        }
-
-        switch (this->o_ptr->ego_idx) {
-        case EgoType::SHARPNESS:
-            this->o_ptr->pval = (PARAMETER_VALUE)m_bonus(5, this->level) + 1;
-            break;
-        case EgoType::EARTHQUAKES:
-            if (one_in_(3) && (this->level > 60)) {
-                this->o_ptr->art_flags.set(TR_BLOWS);
-            } else {
-                this->o_ptr->pval = (PARAMETER_VALUE)m_bonus(3, this->level);
-            }
-
-            break;
-        default:
-            break;
-        }
-
+        this->give_ego_index();
         if (!this->o_ptr->art_name) {
             while (one_in_(10L * this->o_ptr->dd * this->o_ptr->ds)) {
                 this->o_ptr->dd++;
@@ -104,5 +76,37 @@ void SwordEnchanter::apply_magic()
                 break;
             }
         }
+    }
+}
+
+void SwordEnchanter::give_ego_index()
+{
+    while (true) {
+        this->o_ptr->ego_idx = get_random_ego(INVEN_MAIN_HAND, true);
+        if (this->o_ptr->ego_idx == EgoType::SHARPNESS && this->o_ptr->tval != ItemKindType::SWORD) {
+            continue;
+        }
+
+        if (this->o_ptr->ego_idx == EgoType::EARTHQUAKES && this->o_ptr->tval != ItemKindType::HAFTED) {
+            continue;
+        }
+
+        break;
+    }
+
+    switch (this->o_ptr->ego_idx) {
+    case EgoType::SHARPNESS:
+        this->o_ptr->pval = (PARAMETER_VALUE)m_bonus(5, this->level) + 1;
+        break;
+    case EgoType::EARTHQUAKES:
+        if (one_in_(3) && (this->level > 60)) {
+            this->o_ptr->art_flags.set(TR_BLOWS);
+        } else {
+            this->o_ptr->pval = (PARAMETER_VALUE)m_bonus(3, this->level);
+        }
+
+        break;
+    default:
+        break;
     }
 }
