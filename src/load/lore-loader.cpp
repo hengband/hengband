@@ -32,11 +32,11 @@ static void migrate_old_aura_flags(monster_race *r_ptr)
 
 static void migrate_old_resistance_flags(monster_race *r_ptr, BIT_FLAGS old_flags)
 {
-    struct flag_list_ver13 {
+    struct flag_list_ver14 {
         SavedataLoreOlderThan14FlagType old_flag;
         MonsterResistanceType flag;
     };
-    const std::vector<flag_list_ver13> flag_list = {
+    const std::vector<flag_list_ver14> flag_list = {
         { SavedataLoreOlderThan14FlagType::RFR_IM_ACID, MonsterResistanceType::IMMUNE_ACID },
         { SavedataLoreOlderThan14FlagType::RFR_IM_ELEC, MonsterResistanceType::IMMUNE_ELEC },
         { SavedataLoreOlderThan14FlagType::RFR_IM_FIRE, MonsterResistanceType::IMMUNE_FIRE },
