@@ -66,8 +66,7 @@ void display_monster_drop_items(lore_type *lore_ptr)
 void display_monster_drop_golds(lore_type *lore_ptr)
 {
     auto is_item_only = lore_ptr->drop_gold == 0;
-    is_item_only |= lore_ptr->drop_flags.has(MonsterDropType::DROP_GOOD);
-    is_item_only |= lore_ptr->drop_flags.has(MonsterDropType::DROP_GREAT);
+    is_item_only |= lore_ptr->drop_flags.has_any_of({ MonsterDropType::DROP_GOOD, MonsterDropType::DROP_GREAT });
     if (is_item_only) {
         return;
     }
