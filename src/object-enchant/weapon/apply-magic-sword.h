@@ -8,7 +8,7 @@ class PlayerType;
 class SwordEnchanter : AbstractWeaponEnchanter {
 public:
     SwordEnchanter(PlayerType *player_ptr, ObjectType *o_ptr, DEPTH level, int power);
-    void apply_magic() override{};
+    void apply_magic() override;
 
 protected:
     void sval_enchant() override{};

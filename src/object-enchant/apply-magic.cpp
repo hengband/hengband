@@ -31,6 +31,7 @@
 #include "object-enchant/tr-types.h"
 #include "object-enchant/trc-types.h"
 #include "object-enchant/trg-types.h"
+#include "object-enchant/weapon/apply-magic-sword.h"
 #include "object-enchant/weapon/apply-magic-weapon.h"
 #include "object/object-kind.h"
 #include "player/player-status-flags.h"
@@ -138,19 +139,16 @@ void apply_magic_to_object(PlayerType *player_ptr, ObjectType *o_ptr, DEPTH lev,
     // @todo ファクトリパターンで抽象化する.
     switch (o_ptr->tval) {
     case ItemKindType::DIGGING:
-    case ItemKindType::HAFTED:
     case ItemKindType::BOW:
     case ItemKindType::SHOT:
     case ItemKindType::ARROW:
     case ItemKindType::BOLT:
         WeaponEnchanter(player_ptr, o_ptr, lev, power).apply_magic();
         break;
+    case ItemKindType::HAFTED:
     case ItemKindType::POLEARM:
-        WeaponEnchanter(player_ptr, o_ptr, lev, power).apply_magic();
-        break;
     case ItemKindType::SWORD:
-        // @todo いずれSwordEnchanter等作って分離する.
-        WeaponEnchanter(player_ptr, o_ptr, lev, power).apply_magic();
+        SwordEnchanter(player_ptr, o_ptr, lev, power).apply_magic();
         break;
     case ItemKindType::SHIELD:
         ShieldEnchanter(player_ptr, o_ptr, lev, power).apply_magic();
