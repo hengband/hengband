@@ -2424,6 +2424,9 @@
     <ClCompile Include="..\..\src\object-enchant\protector\apply-magic-soft-armor.cpp">
       <Filter>object-enchant\protector</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\object-enchant\weapon\apply-magic-sword.cpp">
+      <Filter>object-enchant\weapon</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\combat\shoot.h">
@@ -5267,6 +5270,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\object-enchant\protector\apply-magic-soft-armor.h">
       <Filter>object-enchant\protector</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\object-enchant\weapon\apply-magic-sword.h">
+      <Filter>object-enchant\weapon</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

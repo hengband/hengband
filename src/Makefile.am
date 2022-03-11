@@ -619,6 +619,7 @@ hengband_SOURCES = \
 	object-enchant/protector/apply-magic-soft-armor.cpp object-enchant/protector/apply-magic-soft-armor.h \
 	\
 	object-enchant/weapon/abstract-weapon-enchanter.cpp object-enchant/weapon/abstract-weapon-enchanter.h \
+	object-enchant/weapon/apply-magic-sword.cpp object-enchant/weapon/apply-magic-sword.h \
 	object-enchant/weapon/apply-magic-weapon.cpp object-enchant/weapon/apply-magic-weapon.h \
 	\
 	object-hook/hook-armor.cpp object-hook/hook-armor.h \
