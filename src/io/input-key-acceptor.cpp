@@ -391,7 +391,7 @@ int inkey_special(bool numpad_cursor)
         return (int)((unsigned char)c);
     }
 
-    ascii_to_text(buf, inkey_macro_trigger_string);
+    ascii_to_text(buf, inkey_macro_trigger_string, sizeof(buf));
     if (prefix(str, "\\[")) {
         str += 2;
         while (true) {

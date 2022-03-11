@@ -252,7 +252,7 @@ static errr interpret_e_token(char *buf)
 static errr interpret_p_token(char *buf)
 {
     char tmp[1024];
-    text_to_ascii(tmp, buf + 2);
+    text_to_ascii(tmp, buf + 2, sizeof(tmp));
     return macro_add(tmp, macro__buf.data());
 }
 
@@ -274,7 +274,7 @@ static errr interpret_c_token(char *buf)
     }
 
     char tmp[1024];
-    text_to_ascii(tmp, zz[1]);
+    text_to_ascii(tmp, zz[1], sizeof(tmp));
     if (!tmp[0] || tmp[1]) {
         return 1;
     }
@@ -527,7 +527,7 @@ errr interpret_pref_file(PlayerType *player_ptr, char *buf)
         return interpret_e_token(buf);
     case 'A': {
         /* Process "A:<str>" -- save an "action" for later */
-        text_to_ascii(macro__buf.data(), buf + 2);
+        text_to_ascii(macro__buf.data(), buf + 2, macro__buf.size());
         return 0;
     }
     case 'P':

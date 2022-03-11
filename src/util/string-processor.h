@@ -21,8 +21,8 @@ extern concptr macro_modifier_name[MAX_MACRO_MOD];
 extern concptr macro_trigger_name[MAX_MACRO_TRIG];
 extern concptr macro_trigger_keycode[2][MAX_MACRO_TRIG];
 
-void text_to_ascii(char *buf, std::string_view sv);
-void ascii_to_text(char *buf, std::string_view sv);
+void text_to_ascii(char *buf, std::string_view sv, size_t bufsize);
+void ascii_to_text(char *buf, std::string_view sv, size_t bufsize);
 size_t angband_strcpy(char *buf, concptr src, size_t bufsize);
 size_t angband_strcat(char *buf, concptr src, size_t bufsize);
 char *angband_strstr(concptr haystack, concptr needle);
