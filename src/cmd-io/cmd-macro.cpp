@@ -240,7 +240,7 @@ void do_cmd_macros(PlayerType *player_ptr)
             macro_buf[80] = '\0';
             ascii_to_text(tmp, macro_buf, sizeof(tmp));
             if (askfor(tmp, 80)) {
-                text_to_ascii(macro_buf, tmp);
+                text_to_ascii(macro_buf, tmp, sizeof(macro_buf));
                 macro_add(buf, macro_buf);
                 msg_print(_("マクロを追加しました。", "Added a macro."));
             }
@@ -291,7 +291,7 @@ void do_cmd_macros(PlayerType *player_ptr)
             macro_buf[80] = '\0';
             ascii_to_text(tmp, macro_buf, sizeof(tmp));
             if (askfor(tmp, 80)) {
-                text_to_ascii(macro_buf, tmp);
+                text_to_ascii(macro_buf, tmp, sizeof(macro_buf));
                 string_free(keymap_act[mode][(byte)(buf[0])]);
                 keymap_act[mode][(byte)(buf[0])] = string_make(macro_buf);
                 msg_print(_("キー配置を追加しました。", "Added a keymap."));
@@ -315,7 +315,7 @@ void do_cmd_macros(PlayerType *player_ptr)
                 continue;
             }
 
-            text_to_ascii(macro_buf, buf);
+            text_to_ascii(macro_buf, buf, sizeof(macro_buf));
         } else {
             bell();
         }
