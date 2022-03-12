@@ -1,18 +1,15 @@
 ﻿/*
- * @brief 鎧類に耐性等の追加効果を付与する処理
- * @date 2021/08/01
+ * @brief 鎧類に耐性等の追加効果を付与する基底処理
+ * @date 2022/03/12
  * @author Hourier
+ * @details 重鎧と軽鎧に適用. ドラゴン・スケイルメイルは対象外.
  */
 
 #include "object-enchant/protector/apply-magic-armor.h"
 #include "artifact/random-art-generator.h"
 #include "inventory/inventory-slot-types.h"
-#include "object-enchant/object-ego.h"
 #include "object/object-kind-hook.h"
-#include "player/player-personality-types.h"
-#include "sv-definition/sv-armor-types.h"
 #include "system/object-type-definition.h"
-#include "system/player-type-definition.h"
 #include "view/display-messages.h"
 
 /*
@@ -29,6 +26,7 @@ ArmorEnchanter::ArmorEnchanter(PlayerType *player_ptr, ObjectType *o_ptr, DEPTH 
 }
 
 /*
+ * @brief 重鎧/軽鎧共通のエゴ付与処理
  * @details power > 2はデバッグ専用.
  */
 void ArmorEnchanter::give_ego_index()
@@ -64,6 +62,9 @@ void ArmorEnchanter::give_ego_index()
     }
 }
 
+/*!
+ * @brief 重鎧/軽鎧共通の呪い付与処理
+ */
 void ArmorEnchanter::give_cursed()
 {
     this->o_ptr->ego_idx = get_random_ego(INVEN_BODY, false);
