@@ -2415,6 +2415,9 @@
     <ClCompile Include="..\..\src\object-use\quaff\quaff-effects.cpp">
       <Filter>object-use\quaff</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\object-enchant\protector\apply-magic-dragon-armor.cpp">
+      <Filter>object-enchant\protector</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\combat\shoot.h">
@@ -5249,6 +5252,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\monster-race\race-drop-flags.h">
       <Filter>monster-race</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\object-enchant\protector\apply-magic-dragon-armor.h">
+      <Filter>object-enchant\protector</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

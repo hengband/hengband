@@ -38,12 +38,6 @@ void ArmorEnchanter::apply_magic()
     }
 
     switch (this->o_ptr->tval) {
-    case ItemKindType::DRAG_ARMOR:
-        if ((this->power > 2) || one_in_(50)) {
-            become_random_artifact(this->player_ptr, this->o_ptr, false);
-        }
-
-        break;
     case ItemKindType::HARD_ARMOR:
         if (this->power > 1) {
             this->give_ego_index();

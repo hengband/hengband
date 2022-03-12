@@ -611,6 +611,7 @@ hengband_SOURCES = \
 	object-enchant/protector/apply-magic-boots.cpp object-enchant/protector/apply-magic-boots.h \
 	object-enchant/protector/apply-magic-cloak.cpp object-enchant/protector/apply-magic-cloak.h \
 	object-enchant/protector/apply-magic-crown.cpp object-enchant/protector/apply-magic-crown.h \
+	object-enchant/protector/apply-magic-dragon-armor.cpp object-enchant/protector/apply-magic-dragon-armor.h \
 	object-enchant/protector/apply-magic-gloves.cpp object-enchant/protector/apply-magic-gloves.h \
 	object-enchant/protector/apply-magic-helm.cpp object-enchant/protector/apply-magic-helm.h \
 	object-enchant/protector/apply-magic-shield.cpp object-enchant/protector/apply-magic-shield.h \

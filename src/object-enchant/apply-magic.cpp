@@ -21,6 +21,7 @@
 #include "object-enchant/protector/apply-magic-boots.h"
 #include "object-enchant/protector/apply-magic-cloak.h"
 #include "object-enchant/protector/apply-magic-crown.h"
+#include "object-enchant/protector/apply-magic-dragon-armor.h"
 #include "object-enchant/protector/apply-magic-gloves.h"
 #include "object-enchant/protector/apply-magic-helm.h"
 #include "object-enchant/protector/apply-magic-shield.h"
@@ -165,6 +166,8 @@ void apply_magic_to_object(PlayerType *player_ptr, ObjectType *o_ptr, DEPTH lev,
         BootsEnchanter(player_ptr, o_ptr, lev, power).apply_magic();
         break;
     case ItemKindType::DRAG_ARMOR:
+        DragonArmorEnchanter(player_ptr, o_ptr, lev, power).apply_magic();
+        break;
     case ItemKindType::HARD_ARMOR:
     case ItemKindType::SOFT_ARMOR:
         // @todo いずれSoftArmorEnchanter等作って分離する.
