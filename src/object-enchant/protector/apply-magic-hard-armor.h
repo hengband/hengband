@@ -12,4 +12,5 @@ public:
 
 protected:
     void sval_enchant() override{};
+    void give_high_ego_index() override{};
 };

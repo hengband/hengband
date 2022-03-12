@@ -64,31 +64,6 @@ void ArmorEnchanter::give_ego_index()
     }
 }
 
-/*
- * @brief ベースアイテムがローブの時、確率で永続か宵闇のローブを生成する.
- * @return 生成条件を満たしたらtrue、満たさなかったらfalse
- * @details 永続：12%、宵闇：3%
- */
-void ArmorEnchanter::give_high_ego_index()
-{
-    if ((this->o_ptr->sval != SV_ROBE) || (randint0(100) >= 15)) {
-        return;
-    }
-
-    this->is_high_ego_generated = true;
-    auto ego_robe = one_in_(5);
-    this->o_ptr->ego_idx = ego_robe ? EgoType::TWILIGHT : EgoType::PERMANENCE;
-    if (!ego_robe) {
-        return;
-    }
-
-    this->o_ptr->k_idx = lookup_kind(ItemKindType::SOFT_ARMOR, SV_TWILIGHT_ROBE);
-    this->o_ptr->sval = SV_TWILIGHT_ROBE;
-    this->o_ptr->ac = 0;
-    this->o_ptr->to_a = 0;
-    return;
-}
-
 void ArmorEnchanter::give_cursed()
 {
     this->o_ptr->ego_idx = get_random_ego(INVEN_BODY, false);
