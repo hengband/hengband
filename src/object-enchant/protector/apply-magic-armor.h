@@ -15,7 +15,6 @@ protected:
     PlayerType *player_ptr;
     bool is_high_ego_generated = false;
 
-    void sval_enchant() override{};
     void give_ego_index() override;
     void give_high_ego_index() override;
     void give_cursed() override;
