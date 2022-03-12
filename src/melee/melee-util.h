@@ -5,6 +5,8 @@
 #include "monster-attack/monster-attack-table.h"
 #include "system/angband.h"
 
+enum class BlowEffectType;
+
 /* monster-attack-monster type*/
 struct monster_type;
 struct mam_type {
