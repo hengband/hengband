@@ -43,15 +43,15 @@ int lore_do_probe(PlayerType *player_ptr, MonsterRaceId r_idx)
         }
     }
 
-    byte tmp_byte = (((r_ptr->flags1 & RF1_DROP_4D2) ? 8 : 0) + ((r_ptr->flags1 & RF1_DROP_3D2) ? 6 : 0) + ((r_ptr->flags1 & RF1_DROP_2D2) ? 4 : 0) + ((r_ptr->flags1 & RF1_DROP_1D2) ? 2 : 0) + ((r_ptr->flags1 & RF1_DROP_90) ? 1 : 0) + ((r_ptr->flags1 & RF1_DROP_60) ? 1 : 0));
+    byte tmp_byte = ((r_ptr->drop_flags.has(MonsterDropType::DROP_4D2) ? 8 : 0) + (r_ptr->drop_flags.has(MonsterDropType::DROP_3D2) ? 6 : 0) + (r_ptr->drop_flags.has(MonsterDropType::DROP_2D2) ? 4 : 0) + (r_ptr->drop_flags.has(MonsterDropType::DROP_1D2) ? 2 : 0) + (r_ptr->drop_flags.has(MonsterDropType::DROP_90) ? 1 : 0) + (r_ptr->drop_flags.has(MonsterDropType::DROP_60) ? 1 : 0));
 
-    if (!(r_ptr->flags1 & RF1_ONLY_GOLD)) {
+    if (r_ptr->drop_flags.has_not(MonsterDropType::ONLY_GOLD)) {
         if (r_ptr->r_drop_item != tmp_byte) {
             n++;
         }
         r_ptr->r_drop_item = tmp_byte;
     }
-    if (!(r_ptr->flags1 & RF1_ONLY_ITEM)) {
+    if (r_ptr->drop_flags.has_not(MonsterDropType::ONLY_ITEM)) {
         if (r_ptr->r_drop_gold != tmp_byte) {
             n++;
         }
@@ -84,12 +84,16 @@ int lore_do_probe(PlayerType *player_ptr, MonsterRaceId r_idx)
     auto behavior_flags = r_ptr->behavior_flags;
     n += behavior_flags.reset(r_ptr->r_behavior_flags).count();
 
+    auto drop_flags = r_ptr->drop_flags;
+    n += drop_flags.reset(r_ptr->r_drop_flags).count();
+
     r_ptr->r_flags1 = r_ptr->flags1;
     r_ptr->r_flags2 = r_ptr->flags2;
     r_ptr->r_flags3 = r_ptr->flags3;
     r_ptr->r_resistance_flags = r_ptr->resistance_flags;
     r_ptr->r_ability_flags = r_ptr->ability_flags;
     r_ptr->r_behavior_flags = r_ptr->behavior_flags;
+    r_ptr->r_drop_flags = r_ptr->drop_flags;
 
     if (!r_ptr->r_can_evolve) {
         n++;
@@ -126,11 +130,11 @@ void lore_treasure(PlayerType *player_ptr, MONSTER_IDX m_idx, ITEM_NUMBER num_it
         r_ptr->r_drop_gold = num_gold;
     }
 
-    if (r_ptr->flags1 & (RF1_DROP_GOOD)) {
-        r_ptr->r_flags1 |= (RF1_DROP_GOOD);
+    if (r_ptr->drop_flags.has(MonsterDropType::DROP_GOOD)) {
+        r_ptr->r_drop_flags.set(MonsterDropType::DROP_GOOD);
     }
-    if (r_ptr->flags1 & (RF1_DROP_GREAT)) {
-        r_ptr->r_flags1 |= (RF1_DROP_GREAT);
+    if (r_ptr->drop_flags.has(MonsterDropType::DROP_GREAT)) {
+        r_ptr->r_drop_flags.set(MonsterDropType::DROP_GREAT);
     }
     if (player_ptr->monster_race_idx == m_ptr->r_idx) {
         player_ptr->window_flags |= (PW_MONSTER);

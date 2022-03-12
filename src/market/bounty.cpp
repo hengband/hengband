@@ -312,7 +312,7 @@ void determine_daily_bounty(PlayerType *player_ptr, bool conv_old)
         if (r_ptr->flags2 & RF2_MULTIPLY) {
             continue;
         }
-        if ((r_ptr->flags9 & (RF9_DROP_CORPSE | RF9_DROP_SKELETON)) != (RF9_DROP_CORPSE | RF9_DROP_SKELETON)) {
+        if (!r_ptr->drop_flags.has_all_of({ MonsterDropType::DROP_CORPSE, MonsterDropType::DROP_SKELETON })) {
             continue;
         }
         if (r_ptr->rarity > 10) {
@@ -335,7 +335,7 @@ void determine_bounty_uniques(PlayerType *player_ptr)
     auto is_suitable_for_bounty = [](MonsterRaceId r_idx) {
         const auto &r_ref = r_info[r_idx];
         bool is_suitable = r_ref.kind_flags.has(MonsterKindType::UNIQUE);
-        is_suitable &= any_bits(r_ref.flags9, RF9_DROP_CORPSE | RF9_DROP_SKELETON);
+        is_suitable &= r_ref.drop_flags.has_any_of({ MonsterDropType::DROP_CORPSE, MonsterDropType::DROP_SKELETON });
         is_suitable &= r_ref.rarity <= 100;
         is_suitable &= !no_questor_or_bounty_uniques(r_idx);
         return is_suitable;

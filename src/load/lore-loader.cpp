@@ -12,6 +12,7 @@
 #include "system/angband.h"
 #include "system/monster-race-definition.h"
 #include "util/bit-flags-calculator.h"
+#include "util/enum-converter.h"
 
 static void migrate_old_aura_flags(monster_race *r_ptr)
 {
@@ -32,11 +33,11 @@ static void migrate_old_aura_flags(monster_race *r_ptr)
 
 static void migrate_old_resistance_flags(monster_race *r_ptr, BIT_FLAGS old_flags)
 {
-    struct flag_list_ver13 {
+    struct flag_list_ver14 {
         SavedataLoreOlderThan14FlagType old_flag;
         MonsterResistanceType flag;
     };
-    const std::vector<flag_list_ver13> flag_list = {
+    const std::vector<flag_list_ver14> flag_list = {
         { SavedataLoreOlderThan14FlagType::RFR_IM_ACID, MonsterResistanceType::IMMUNE_ACID },
         { SavedataLoreOlderThan14FlagType::RFR_IM_ELEC, MonsterResistanceType::IMMUNE_ELEC },
         { SavedataLoreOlderThan14FlagType::RFR_IM_FIRE, MonsterResistanceType::IMMUNE_FIRE },
@@ -69,6 +70,43 @@ static void migrate_old_resistance_flags(monster_race *r_ptr, BIT_FLAGS old_flag
             r_ptr->r_resistance_flags.set(f.flag);
         }
     }
+}
+
+static void migrate_old_drop_flags(monster_race *r_ptr, BIT_FLAGS old_flags1)
+{
+    struct flag_list_ver18 {
+        SavedataLoreOlderThan18FlagType old_flag;
+        MonsterDropType flag;
+    };
+
+    std::vector<flag_list_ver18> flag_list = {
+        { SavedataLoreOlderThan18FlagType::RF1_ONLY_GOLD, MonsterDropType::ONLY_GOLD },
+        { SavedataLoreOlderThan18FlagType::RF1_ONLY_ITEM, MonsterDropType::ONLY_ITEM },
+        { SavedataLoreOlderThan18FlagType::RF1_DROP_GOOD, MonsterDropType::DROP_GOOD },
+        { SavedataLoreOlderThan18FlagType::RF1_DROP_GREAT, MonsterDropType::DROP_GREAT },
+        { SavedataLoreOlderThan18FlagType::RF1_DROP_60, MonsterDropType::DROP_60 },
+        { SavedataLoreOlderThan18FlagType::RF1_DROP_90, MonsterDropType::DROP_90 },
+        { SavedataLoreOlderThan18FlagType::RF1_DROP_1D2, MonsterDropType::DROP_1D2 },
+        { SavedataLoreOlderThan18FlagType::RF1_DROP_2D2, MonsterDropType::DROP_2D2 },
+        { SavedataLoreOlderThan18FlagType::RF1_DROP_3D2, MonsterDropType::DROP_3D2 },
+        { SavedataLoreOlderThan18FlagType::RF1_DROP_4D2, MonsterDropType::DROP_4D2 },
+    };
+
+    for (const auto &l : flag_list) {
+        if (any_bits(old_flags1, enum2i(l.old_flag))) {
+            r_ptr->r_drop_flags.set(l.flag);
+        }
+    }
+}
+
+static void rd_r_drop_flags(monster_race *r_ptr)
+{
+    if (loading_savefile_version_is_older_than(18)) {
+        migrate_old_drop_flags(r_ptr, r_ptr->r_flags1);
+        return;
+    }
+
+    rd_FlagGroup(r_ptr->r_drop_flags, rd_byte);
 }
 
 static void rd_r_ability_flags(monster_race *r_ptr, const MonsterRaceId r_idx)
@@ -257,6 +295,7 @@ static void rd_lore(monster_race *r_ptr, const MonsterRaceId r_idx)
     rd_r_aura_flags(r_ptr);
     rd_r_behavior_flags(r_ptr);
     rd_r_kind_flags(r_ptr);
+    rd_r_drop_flags(r_ptr);
     r_ptr->max_num = rd_byte();
     r_ptr->floor_id = rd_s16b();
 
@@ -274,6 +313,7 @@ static void rd_lore(monster_race *r_ptr, const MonsterRaceId r_idx)
     r_ptr->r_ability_flags &= r_ptr->ability_flags;
     r_ptr->r_aura_flags &= r_ptr->aura_flags;
     r_ptr->r_behavior_flags &= r_ptr->behavior_flags;
+    r_ptr->r_drop_flags &= r_ptr->drop_flags;
     r_ptr->r_kind_flags &= r_ptr->kind_flags;
 }
 

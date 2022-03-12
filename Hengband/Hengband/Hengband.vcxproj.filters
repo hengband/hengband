@@ -5247,6 +5247,9 @@
     <ClInclude Include="..\..\src\object-use\quaff\quaff-effects.h">
       <Filter>object-use\quaff</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\monster-race\race-drop-flags.h">
+      <Filter>monster-race</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\src\wall.bmp" />
