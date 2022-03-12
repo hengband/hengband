@@ -44,7 +44,7 @@ void ObjectType::wipe()
  * Wipe an object clean.
  * @param j_ptr 複製元のオブジェクトの構造体参照ポインタ
  */
-void ObjectType::copy_from(ObjectType *j_ptr)
+void ObjectType::copy_from(const ObjectType *j_ptr)
 {
     *this = *j_ptr;
 }

@@ -37,7 +37,7 @@
 #include "mind/snipe-types.h"
 #include "object-activation/activation-switcher.h"
 #include "object-hook/hook-magic.h"
-#include "object-use/quaff-execution.h"
+#include "object-use/quaff/quaff-execution.h"
 #include "object-use/read/read-execution.h"
 #include "object-use/use-execution.h"
 #include "object-use/zaprod-execution.h"

@@ -68,7 +68,7 @@ public:
     int artifact_bias{}; /*!< ランダムアーティファクト生成時のバイアスID */
 
     void wipe();
-    void copy_from(ObjectType *j_ptr);
+    void copy_from(const ObjectType *j_ptr);
     void prep(KIND_OBJECT_IDX ko_idx);
     bool is_weapon() const;
     bool is_weapon_ammo() const;
