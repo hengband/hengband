@@ -26,6 +26,7 @@
 #include "object-enchant/protector/apply-magic-hard-armor.h"
 #include "object-enchant/protector/apply-magic-helm.h"
 #include "object-enchant/protector/apply-magic-shield.h"
+#include "object-enchant/protector/apply-magic-soft-armor.h"
 #include "object-enchant/special-object-flags.h"
 #include "object-enchant/tr-types.h"
 #include "object-enchant/trc-types.h"
@@ -173,8 +174,7 @@ void apply_magic_to_object(PlayerType *player_ptr, ObjectType *o_ptr, DEPTH lev,
         HardArmorEnchanter(player_ptr, o_ptr, lev, power).apply_magic();
         break;
     case ItemKindType::SOFT_ARMOR:
-        // @todo いずれSoftArmorEnchanter等作って分離する.
-        ArmorEnchanter(player_ptr, o_ptr, lev, power).apply_magic();
+        SoftArmorEnchanter(player_ptr, o_ptr, lev, power).apply_magic();
         break;
     case ItemKindType::GLOVES:
         GlovesEnchanter(player_ptr, o_ptr, lev, power).apply_magic();

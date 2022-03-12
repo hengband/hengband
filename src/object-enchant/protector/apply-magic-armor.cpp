@@ -28,59 +28,6 @@ ArmorEnchanter::ArmorEnchanter(PlayerType *player_ptr, ObjectType *o_ptr, DEPTH 
 {
 }
 
-/*!
- * @brief power > 2 はデバッグ専用.
- */
-void ArmorEnchanter::apply_magic()
-{
-    if (this->power == 0) {
-        return;
-    }
-
-    switch (this->o_ptr->tval) {
-    case ItemKindType::SOFT_ARMOR:
-        // @todo 後ほどSoftArmorEnchanterへ分離した時、このswitch文はsval_enchant() へ移動させる.
-        switch (this->o_ptr->sval) {
-        case SV_KUROSHOUZOKU:
-            this->o_ptr->pval = randint1(4);
-            break;
-        case SV_ABUNAI_MIZUGI:
-            if (this->player_ptr->ppersonality != PERSONALITY_SEXY) {
-                break;
-            }
-
-            this->o_ptr->pval = 3;
-            this->o_ptr->art_flags.set(TR_STR);
-            this->o_ptr->art_flags.set(TR_INT);
-            this->o_ptr->art_flags.set(TR_WIS);
-            this->o_ptr->art_flags.set(TR_DEX);
-            this->o_ptr->art_flags.set(TR_CON);
-            this->o_ptr->art_flags.set(TR_CHR);
-            break;
-        default:
-            break;
-        }
-
-        if (this->power > 1) {
-            this->give_high_ego_index();
-            if (this->is_high_ego_generated) {
-                return;
-            }
-
-            this->give_ego_index();
-            return;
-        }
-
-        if (this->power < -1) {
-            this->give_cursed();
-        }
-
-        return;
-    default:
-        return;
-    }
-}
-
 /*
  * @details power > 2はデバッグ専用.
  */
