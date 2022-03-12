@@ -38,17 +38,6 @@ void ArmorEnchanter::apply_magic()
     }
 
     switch (this->o_ptr->tval) {
-    case ItemKindType::HARD_ARMOR:
-        if (this->power > 1) {
-            this->give_ego_index();
-            return;
-        }
-
-        if (this->power < -1) {
-            this->give_cursed();
-        }
-
-        return;
     case ItemKindType::SOFT_ARMOR:
         // @todo 後ほどSoftArmorEnchanterへ分離した時、このswitch文はsval_enchant() へ移動させる.
         switch (this->o_ptr->sval) {

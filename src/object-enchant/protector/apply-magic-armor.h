@@ -5,7 +5,7 @@
 
 class ObjectType;
 class PlayerType;
-class ArmorEnchanter : AbstractProtectorEnchanter {
+class ArmorEnchanter : public AbstractProtectorEnchanter {
 public:
     ArmorEnchanter(PlayerType *player_ptr, ObjectType *o_ptr, DEPTH level, int power);
     virtual ~ArmorEnchanter() = default;
