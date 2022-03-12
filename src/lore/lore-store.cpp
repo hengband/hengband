@@ -84,12 +84,16 @@ int lore_do_probe(PlayerType *player_ptr, MonsterRaceId r_idx)
     auto behavior_flags = r_ptr->behavior_flags;
     n += behavior_flags.reset(r_ptr->r_behavior_flags).count();
 
+    auto drop_flags = r_ptr->drop_flags;
+    n += drop_flags.reset(r_ptr->r_drop_flags).count();
+
     r_ptr->r_flags1 = r_ptr->flags1;
     r_ptr->r_flags2 = r_ptr->flags2;
     r_ptr->r_flags3 = r_ptr->flags3;
     r_ptr->r_resistance_flags = r_ptr->resistance_flags;
     r_ptr->r_ability_flags = r_ptr->ability_flags;
     r_ptr->r_behavior_flags = r_ptr->behavior_flags;
+    r_ptr->r_drop_flags = r_ptr->drop_flags;
 
     if (!r_ptr->r_can_evolve) {
         n++;
