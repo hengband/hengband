@@ -395,7 +395,7 @@ bool cast_mirror_spell(PlayerType *player_ptr, mind_mirror_master_type spell)
             return false;
         }
 
-        fire_beam(player_ptr, AttributeType::SEEKER, dir, damroll(11 + (plev - 5) / 4, 8));
+        SpellsMirrorMaster(player_ptr).seeker_ray(dir, damroll(11 + (plev - 5) / 4, 8));
         break;
     case SEALING_MIRROR:
         SpellsMirrorMaster(player_ptr).seal_of_mirror(plev * 4 + 100);
@@ -417,7 +417,7 @@ bool cast_mirror_spell(PlayerType *player_ptr, mind_mirror_master_type spell)
             return false;
         }
 
-        fire_beam(player_ptr, AttributeType::SUPER_RAY, dir, 150 + randint1(2 * plev));
+        SpellsMirrorMaster(player_ptr).super_ray(dir, damroll(11 + (plev - 5) / 4, 8));
         break;
     case ILLUSION_LIGHT:
         tmp = g_ptr->is_mirror() ? 4 : 3;
