@@ -5,10 +5,12 @@
 #include "monster-attack/monster-attack-table.h"
 #include "system/angband.h"
 
+enum class BlowEffectType;
+
 /* monster-attack-monster type*/
 struct monster_type;
 struct mam_type {
-    int attribute;
+    BlowEffectType attribute;
     MONSTER_IDX m_idx;
     MONSTER_IDX t_idx;
     monster_type *m_ptr;

@@ -67,16 +67,18 @@ static void process_blow_effect(PlayerType *player_ptr, mam_type *mam_ptr)
 {
     auto *r_ptr = &r_info[mam_ptr->m_ptr->r_idx];
     switch (mam_ptr->attribute) {
-    case BLOW_EFFECT_TYPE_FEAR:
+    case BlowEffectType::FEAR:
         project(player_ptr, mam_ptr->m_idx, 0, mam_ptr->t_ptr->fy, mam_ptr->t_ptr->fx, mam_ptr->damage,
             AttributeType::TURN_ALL, PROJECT_KILL | PROJECT_STOP | PROJECT_AIMED);
         break;
-    case BLOW_EFFECT_TYPE_SLEEP:
+    case BlowEffectType::SLEEP:
         project(player_ptr, mam_ptr->m_idx, 0, mam_ptr->t_ptr->fy, mam_ptr->t_ptr->fx, r_ptr->level,
             AttributeType::OLD_SLEEP, PROJECT_KILL | PROJECT_STOP | PROJECT_AIMED);
         break;
-    case BLOW_EFFECT_TYPE_HEAL:
+    case BlowEffectType::HEAL:
         heal_monster_by_melee(player_ptr, mam_ptr);
+        break;
+    default:
         break;
     }
 }
@@ -249,7 +251,7 @@ static void process_melee(PlayerType *player_ptr, mam_type *mam_ptr)
     describe_silly_melee(mam_ptr);
     mam_ptr->obvious = true;
     mam_ptr->damage = damroll(mam_ptr->d_dice, mam_ptr->d_side);
-    mam_ptr->attribute = BLOW_EFFECT_TYPE_NONE;
+    mam_ptr->attribute = BlowEffectType::NONE;
     mam_ptr->pt = AttributeType::MONSTER_MELEE;
     decide_monster_attack_effect(player_ptr, mam_ptr);
     process_monster_attack_effect(player_ptr, mam_ptr);
