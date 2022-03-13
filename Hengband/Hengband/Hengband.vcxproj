@@ -273,9 +273,12 @@
     <ClCompile Include="..\..\src\load\item\item-loader-factory.cpp" />
     <ClCompile Include="..\..\src\load\monster\monster-loader-factory.cpp" />
     <ClCompile Include="..\..\src\load\player-class-specific-data-loader.cpp" />
+    <ClCompile Include="..\..\src\object-enchant\protector\apply-magic-soft-armor.cpp" />
     <ClCompile Include="..\..\src\object-enchant\others\apply-magic-lite.cpp" />
     <ClCompile Include="..\..\src\monster-race\monster-kind-mask.cpp" />
     <ClCompile Include="..\..\src\monster-race\race-resistance-mask.cpp" />
+    <ClCompile Include="..\..\src\object-enchant\protector\apply-magic-dragon-armor.cpp" />
+    <ClCompile Include="..\..\src\object-enchant\protector\apply-magic-hard-armor.cpp" />
     <ClCompile Include="..\..\src\object-enchant\weapon\abstract-weapon-enchanter.cpp" />
     <ClCompile Include="..\..\src\object-use\quaff\quaff-effects.cpp" />
     <ClCompile Include="..\..\src\object-use\read\gbh-shirt-read-executor.cpp" />
@@ -957,7 +960,10 @@
     <ClInclude Include="..\..\src\monster-race\race-resistance-mask.h" />
     <ClInclude Include="..\..\src\monster-race\race-visual-flags.h" />
     <ClInclude Include="..\..\src\mspell\mspell-result.h" />
+    <ClInclude Include="..\..\src\object-enchant\protector\apply-magic-soft-armor.h" />
     <ClInclude Include="..\..\src\object-enchant\others\apply-magic-lite.h" />
+    <ClInclude Include="..\..\src\object-enchant\protector\apply-magic-dragon-armor.h" />
+    <ClInclude Include="..\..\src\object-enchant\protector\apply-magic-hard-armor.h" />
     <ClInclude Include="..\..\src\object-enchant\weapon\abstract-weapon-enchanter.h" />
     <ClInclude Include="..\..\src\object-use\quaff\quaff-effects.h" />
     <ClInclude Include="..\..\src\object-use\read\gbh-shirt-read-executor.h" />

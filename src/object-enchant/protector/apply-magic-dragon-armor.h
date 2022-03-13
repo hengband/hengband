@@ -5,10 +5,9 @@
 
 class ObjectType;
 class PlayerType;
-class BootsEnchanter : AbstractProtectorEnchanter {
+class DragonArmorEnchanter : AbstractProtectorEnchanter {
 public:
-    BootsEnchanter(PlayerType *player_ptr, ObjectType *o_ptr, DEPTH level, int power);
-    virtual ~BootsEnchanter() = default;
+    DragonArmorEnchanter(PlayerType *player_ptr, ObjectType *o_ptr, DEPTH level, int power);
     void apply_magic() override;
 
 protected:
