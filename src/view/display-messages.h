@@ -1,6 +1,7 @@
 ﻿#pragma once
 
 #include "system/angband.h"
+#include <string_view>
 
 /*
  * OPTION: Maximum number of messages to remember (see "io.c")
@@ -13,7 +14,8 @@ extern COMMAND_CODE now_message;
 
 int32_t message_num(void);
 concptr message_str(int age);
-void message_add(concptr msg);
+void message_add(std::string_view msg);
 void msg_erase(void);
-void msg_print(concptr msg);
-void msg_format(concptr fmt, ...);
+void msg_print(std::string_view msg);
+void msg_print(std::nullptr_t);
+void msg_format(std::string_view fmt, ...);
