@@ -7,7 +7,7 @@ class ObjectType;
 class PlayerType;
 class ReadExecutorFactory {
 public:
-    static std::shared_ptr<ReadExecutorBase> create(PlayerType *player_ptr, ObjectType *o_ptr, bool known);
+    static std::unique_ptr<ReadExecutorBase> create(PlayerType *player_ptr, ObjectType *o_ptr, bool known);
 
 private:
     ReadExecutorFactory() = delete;
