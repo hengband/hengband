@@ -86,7 +86,7 @@ static bool process_bolt_reflection(PlayerType *player_ptr, EffectPlayerType *ep
         mes = _("攻撃が跳ね返った！", "The attack bounces!");
     }
 
-    msg_print(mes.data());
+    msg_print(mes);
     POSITION t_y;
     POSITION t_x;
     if (ep_ptr->who > 0) {

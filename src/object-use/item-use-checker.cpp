@@ -13,7 +13,7 @@ bool ItemUseChecker::check_stun(std::string_view mes) const
 {
     auto penalty = this->player_ptr->effects()->stun()->get_item_chance_penalty();
     if (penalty >= randint1(100)) {
-        msg_print(mes.data());
+        msg_print(mes);
         return false;
     }
 

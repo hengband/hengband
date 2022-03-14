@@ -53,7 +53,7 @@ void init_quests(void)
         std::stringstream ss;
         ss << _("ファイル読み込みエラー: ", "File loading error: ") << r.what();
 
-        msg_print(ss.str().c_str());
+        msg_print(ss.str());
         msg_print(nullptr);
         quit(_("クエスト初期化エラー", "Error of quests initializing"));
     }

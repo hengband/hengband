@@ -528,7 +528,7 @@ bool BadStatusSetter::process_stun_effect(const short v)
 void BadStatusSetter::process_stun_status(const PlayerStunRank new_rank, const short v)
 {
     auto stun_mes = PlayerStun::get_stun_mes(new_rank);
-    msg_print(stun_mes.data());
+    msg_print(stun_mes);
     this->decrease_int_wis(v);
     if (PlayerClass(this->player_ptr).lose_balance()) {
         msg_print(_("型が崩れた。", "You lose your stance."));
@@ -617,7 +617,7 @@ void BadStatusSetter::decrease_charisma(const PlayerCutRank new_rank, const shor
 {
     auto player_cut = this->player_ptr->effects()->cut();
     auto cut_mes = player_cut->get_cut_mes(new_rank);
-    msg_print(cut_mes.data());
+    msg_print(cut_mes);
     if (v <= randint1(1000) && !one_in_(16)) {
         return;
     }
