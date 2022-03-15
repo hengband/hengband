@@ -6,9 +6,10 @@
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
 #include "system/player-type-definition.h"
+#include "util/bit-flags-calculator.h"
 
 struct projection_path_type {
-    uint16_t *gp;
+    std::vector<std::pair<int, int>> *position;
     POSITION range;
     BIT_FLAGS flag;
     POSITION y1;
@@ -25,25 +26,13 @@ struct projection_path_type {
     int m;
     int half;
     int full;
-    int n;
     int k;
 };
 
-/*
- * @brief Convert a "location" (Y, X) into a "grid" (G)
- * @param y Y座標
- * @param x X座標
- * return 経路座標
- */
-static uint16_t location_to_grid(POSITION y, POSITION x)
-{
-    return 256 * y + x;
-}
-
 static projection_path_type *initialize_projection_path_type(
-    projection_path_type *pp_ptr, uint16_t *gp, POSITION range, BIT_FLAGS flag, POSITION y1, POSITION x1, POSITION y2, POSITION x2)
+    projection_path_type *pp_ptr, std::vector<std::pair<int, int>> *position, POSITION range, BIT_FLAGS flag, POSITION y1, POSITION x1, POSITION y2, POSITION x2)
 {
-    pp_ptr->gp = gp;
+    pp_ptr->position = position;
     pp_ptr->range = range;
     pp_ptr->flag = flag;
     pp_ptr->y1 = y1;
@@ -95,35 +84,34 @@ static void calc_frac(projection_path_type *pp_ptr, bool is_vertical)
 
 static void calc_projection_to_target(PlayerType *player_ptr, projection_path_type *pp_ptr, bool is_vertical)
 {
-    auto *floor_ptr = player_ptr->current_floor_ptr;
     while (true) {
-        pp_ptr->gp[pp_ptr->n++] = location_to_grid(pp_ptr->y, pp_ptr->x);
-        if ((pp_ptr->n + (pp_ptr->k >> 1)) >= pp_ptr->range) {
+        pp_ptr->position->emplace_back(pp_ptr->y, pp_ptr->x);
+        if (static_cast<int>(pp_ptr->position->size()) + pp_ptr->k / 2 >= pp_ptr->range) {
             break;
         }
 
-        if (!(pp_ptr->flag & PROJECT_THRU)) {
+        if (none_bits(pp_ptr->flag, PROJECT_THRU)) {
             if ((pp_ptr->x == pp_ptr->x2) && (pp_ptr->y == pp_ptr->y2)) {
                 break;
             }
         }
 
-        if (pp_ptr->flag & PROJECT_DISI) {
-            if ((pp_ptr->n > 0) && cave_stop_disintegration(floor_ptr, pp_ptr->y, pp_ptr->x)) {
+        if (any_bits(pp_ptr->flag, PROJECT_DISI)) {
+            if (!pp_ptr->position->empty() && cave_stop_disintegration(floor_ptr, pp_ptr->y, pp_ptr->x)) {
                 break;
             }
-        } else if (pp_ptr->flag & PROJECT_LOS) {
-            if ((pp_ptr->n > 0) && !cave_los_bold(floor_ptr, pp_ptr->y, pp_ptr->x)) {
+        } else if (any_bits(pp_ptr->flag, PROJECT_LOS)) {
+            if (!pp_ptr->position->empty() && !cave_los_bold(floor_ptr, pp_ptr->y, pp_ptr->x)) {
                 break;
             }
-        } else if (!(pp_ptr->flag & PROJECT_PATH)) {
-            if ((pp_ptr->n > 0) && !cave_has_flag_bold(floor_ptr, pp_ptr->y, pp_ptr->x, FloorFeatureType::PROJECT)) {
+        } else if (none_bits(pp_ptr->flag, PROJECT_PATH)) {
+            if (!pp_ptr->position->empty() && !cave_has_flag_bold(floor_ptr, pp_ptr->y, pp_ptr->x, FloorFeatureType::PROJECT)) {
                 break;
             }
         }
 
-        if (pp_ptr->flag & PROJECT_STOP) {
-            if ((pp_ptr->n > 0) && (player_bold(player_ptr, pp_ptr->y, pp_ptr->x) || floor_ptr->grid_array[pp_ptr->y][pp_ptr->x].m_idx != 0)) {
+        if (any_bits(pp_ptr->flag, PROJECT_STOP)) {
+            if (!pp_ptr->position->empty() && (player_bold(player_ptr, pp_ptr->y, pp_ptr->x) || floor_ptr->grid_array[pp_ptr->y][pp_ptr->x].m_idx != 0)) {
                 break;
             }
         }
@@ -183,32 +171,31 @@ static bool calc_horizontal_projection(PlayerType *player_ptr, projection_path_t
 
 static void calc_projection_others(PlayerType *player_ptr, projection_path_type *pp_ptr)
 {
-    auto *floor_ptr = player_ptr->current_floor_ptr;
     while (true) {
-        pp_ptr->gp[pp_ptr->n++] = location_to_grid(pp_ptr->y, pp_ptr->x);
-        if ((pp_ptr->n + (pp_ptr->n >> 1)) >= pp_ptr->range) {
+        pp_ptr->position->emplace_back(pp_ptr->y, pp_ptr->x);
+        if (static_cast<int>(pp_ptr->position->size()) * 3 / 2 >= pp_ptr->range) {
             break;
         }
 
-        if (((pp_ptr->flag & PROJECT_THRU) == 0) && (pp_ptr->x == pp_ptr->x2) && (pp_ptr->y == pp_ptr->y2)) {
+        if (none_bits(pp_ptr->flag, PROJECT_THRU) && (pp_ptr->x == pp_ptr->x2) && (pp_ptr->y == pp_ptr->y2)) {
             break;
         }
 
-        if (pp_ptr->flag & PROJECT_DISI) {
-            if ((pp_ptr->n > 0) && cave_stop_disintegration(floor_ptr, pp_ptr->y, pp_ptr->x)) {
+        if (any_bits(pp_ptr->flag, PROJECT_DISI)) {
+            if (!pp_ptr->position->empty() && cave_stop_disintegration(floor_ptr, pp_ptr->y, pp_ptr->x)) {
                 break;
             }
-        } else if (pp_ptr->flag & PROJECT_LOS) {
-            if ((pp_ptr->n > 0) && !cave_los_bold(floor_ptr, pp_ptr->y, pp_ptr->x)) {
+        } else if (any_bits(pp_ptr->flag, PROJECT_LOS)) {
+            if (!pp_ptr->position->empty() && !cave_los_bold(floor_ptr, pp_ptr->y, pp_ptr->x)) {
                 break;
             }
-        } else if (!(pp_ptr->flag & PROJECT_PATH)) {
-            if ((pp_ptr->n > 0) && !cave_has_flag_bold(floor_ptr, pp_ptr->y, pp_ptr->x, FloorFeatureType::PROJECT)) {
+        } else if (none_bits(pp_ptr->flag, PROJECT_PATH)) {
+            if (!pp_ptr->position->empty() && !cave_has_flag_bold(floor_ptr, pp_ptr->y, pp_ptr->x, FloorFeatureType::PROJECT)) {
                 break;
             }
         }
 
-        if (((pp_ptr->flag & PROJECT_STOP) != 0) && (pp_ptr->n > 0) && (player_bold(player_ptr, pp_ptr->y, pp_ptr->x) || floor_ptr->grid_array[pp_ptr->y][pp_ptr->x].m_idx != 0)) {
+        if (any_bits(pp_ptr->flag, PROJECT_STOP) && !pp_ptr->position->empty() && (player_bold(player_ptr, pp_ptr->y, pp_ptr->x) || floor_ptr->grid_array[pp_ptr->y][pp_ptr->x].m_idx != 0)) {
             break;
         }
 
@@ -225,7 +212,6 @@ static void calc_projection_others(PlayerType *player_ptr, projection_path_type 
  * @brief 始点から終点への直線経路を返す /
  * Determine the path taken by a projection.
  * @param player_ptr プレイヤーへの参照ポインタ
- * @param gp 経路座標リストを返す参照ポインタ
  * @param range 距離
  * @param y1 始点Y座標
  * @param x1 始点X座標
@@ -234,32 +220,31 @@ static void calc_projection_others(PlayerType *player_ptr, projection_path_type 
  * @param flag フラグID
  * @return リストの長さ
  */
-int projection_path(PlayerType *player_ptr, uint16_t *gp, POSITION range, POSITION y1, POSITION x1, POSITION y2, POSITION x2, BIT_FLAGS flag)
+projection_path::projection_path(PlayerType *player_ptr, POSITION range, POSITION y1, POSITION x1, POSITION y2, POSITION x2, BIT_FLAGS flag)
 {
+    this->position.clear();
     if ((x1 == x2) && (y1 == y2)) {
-        return 0;
+        return;
     }
 
     projection_path_type tmp_projection_path;
-    projection_path_type *pp_ptr = initialize_projection_path_type(&tmp_projection_path, gp, range, flag, y1, x1, y2, x2);
+    auto *pp_ptr = initialize_projection_path_type(&tmp_projection_path, &this->position, range, flag, y1, x1, y2, x2);
     set_asxy(pp_ptr);
     pp_ptr->half = pp_ptr->ay * pp_ptr->ax;
     pp_ptr->full = pp_ptr->half << 1;
-    pp_ptr->n = 0;
     pp_ptr->k = 0;
 
     if (calc_vertical_projection(player_ptr, pp_ptr)) {
-        return pp_ptr->n;
+        return;
     }
 
     if (calc_horizontal_projection(player_ptr, pp_ptr)) {
-        return pp_ptr->n;
+        return;
     }
 
     pp_ptr->y = y1 + pp_ptr->sy;
     pp_ptr->x = x1 + pp_ptr->sx;
     calc_projection_others(player_ptr, pp_ptr);
-    return pp_ptr->n;
 }
 
 /*
