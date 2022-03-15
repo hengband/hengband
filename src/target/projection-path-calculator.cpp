@@ -29,6 +29,36 @@ struct projection_path_type {
     int k;
 };
 
+std::vector<std::pair<int, int>>::const_iterator projection_path::begin() const
+{
+    return this->position.cbegin();
+}
+
+std::vector<std::pair<int, int>>::const_iterator projection_path::end() const
+{
+    return this->position.cend();
+}
+
+const std::pair<int, int> &projection_path::front() const
+{
+    return this->position.front();
+}
+
+const std::pair<int, int> &projection_path::back() const
+{
+    return this->position.back();
+}
+
+const std::pair<int, int> &projection_path::operator[](int num) const
+{
+    return this->position[num];
+}
+
+int projection_path::path_num() const
+{
+    return static_cast<int>(this->position.size());
+}
+
 static projection_path_type *initialize_projection_path_type(
     projection_path_type *pp_ptr, std::vector<std::pair<int, int>> *position, POSITION range, BIT_FLAGS flag, POSITION y1, POSITION x1, POSITION y2, POSITION x2)
 {
