@@ -185,7 +185,7 @@ bool eat_magic(PlayerType *player_ptr, int power)
                 o_ptr->pval = o_ptr->pval * (o_ptr->number - 1) / o_ptr->number;
             }
         } else {
-            msg_format(_("乱暴な魔法のために%sが何本か壊れた！", "Wild magic consumes your %s!"), o_name);
+            msg_format(_("乱暴な魔法のために%sが壊れた！", "Wild magic consumes your %s!"), o_name);
         }
 
         vary_item(player_ptr, item, -1);
