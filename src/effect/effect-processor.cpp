@@ -68,7 +68,6 @@ ProjectResult project(PlayerType *player_ptr, const MONSTER_IDX who, POSITION ra
     bool blind = player_ptr->blind != 0;
     bool old_hide = false;
     int path_n = 0;
-    uint16_t path_g[512];
     int grids = 0;
     POSITION gx[1024];
     POSITION gy[1024];
@@ -138,18 +137,16 @@ ProjectResult project(PlayerType *player_ptr, const MONSTER_IDX who, POSITION ra
     }
 
     /* Calculate the projection path */
-    path_n = projection_path(player_ptr, path_g, (project_length ? project_length : get_max_range(player_ptr)), y1, x1, y2, x2, flag);
+    projection_path path_g(player_ptr, (project_length ? project_length : get_max_range(player_ptr)), y1, x1, y2, x2, flag);
     handle_stuff(player_ptr);
 
-    int k;
+    int k = 0;
     auto oy = y1;
     auto ox = x1;
     auto visual = false;
     POSITION gm_rad = rad;
     bool see_s_msg = true;
-    for (k = 0; k < path_n; ++k) {
-        POSITION ny = get_grid_y(path_g[k]);
-        POSITION nx = get_grid_x(path_g[k]);
+    for (const auto &[ny, nx] : path_g) {
         if (flag & PROJECT_DISI) {
             if (cave_stop_disintegration(player_ptr->current_floor_ptr, ny, nx) && (rad > 0)) {
                 break;
@@ -199,6 +196,7 @@ ProjectResult project(PlayerType *player_ptr, const MONSTER_IDX who, POSITION ra
 
         oy = ny;
         ox = nx;
+        k++;
     }
 
     path_n = k;
@@ -233,7 +231,7 @@ ProjectResult project(PlayerType *player_ptr, const MONSTER_IDX who, POSITION ra
          */
         if (breath) {
             flag &= ~(PROJECT_HIDE);
-            breath_shape(player_ptr, path_g, path_n, &grids, gx, gy, gm, &gm_rad, rad, y1, x1, by, bx, typ);
+            breath_shape(player_ptr, path_g, path_g.path_num(), &grids, gx, gy, gm, &gm_rad, rad, y1, x1, by, bx, typ);
         } else {
             for (auto dist = 0; dist <= rad; dist++) {
                 for (auto y = by - dist; y <= by + dist; y++) {

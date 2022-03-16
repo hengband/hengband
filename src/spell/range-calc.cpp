@@ -198,7 +198,7 @@ bool in_disintegration_range(floor_type *floor_ptr, POSITION y1, POSITION x1, PO
 /*
  * breath shape
  */
-void breath_shape(PlayerType *player_ptr, uint16_t *path_g, int dist, int *pgrids, POSITION *gx, POSITION *gy, POSITION *gm, POSITION *pgm_rad, POSITION rad, POSITION y1, POSITION x1, POSITION y2, POSITION x2, AttributeType typ)
+void breath_shape(PlayerType *player_ptr, const projection_path &path, int dist, int *pgrids, POSITION *gx, POSITION *gy, POSITION *gm, POSITION *pgm_rad, POSITION rad, POSITION y1, POSITION x1, POSITION y2, POSITION x2, AttributeType typ)
 {
     POSITION by = y1;
     POSITION bx = x1;
@@ -212,8 +212,7 @@ void breath_shape(PlayerType *player_ptr, uint16_t *path_g, int dist, int *pgrid
     auto *floor_ptr = player_ptr->current_floor_ptr;
     while (bdis <= mdis) {
         if ((0 < dist) && (path_n < dist)) {
-            POSITION ny = get_grid_y(path_g[path_n]);
-            POSITION nx = get_grid_x(path_g[path_n]);
+            const auto [ny, nx] = path[path_n];
             POSITION nd = distance(ny, nx, y1, x1);
 
             if (bdis >= nd) {

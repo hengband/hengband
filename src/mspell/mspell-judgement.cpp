@@ -53,19 +53,14 @@
 bool direct_beam(PlayerType *player_ptr, POSITION y1, POSITION x1, POSITION y2, POSITION x2, monster_type *m_ptr)
 {
     auto *floor_ptr = player_ptr->current_floor_ptr;
-    uint16_t grid_g[512];
-    int grid_n = projection_path(player_ptr, grid_g, get_max_range(player_ptr), y1, x1, y2, x2, PROJECT_THRU);
-    if (!grid_n) {
+    projection_path grid_g(player_ptr, get_max_range(player_ptr), y1, x1, y2, x2, PROJECT_THRU);
+    if (grid_g.path_num()) {
         return false;
     }
 
     bool hit2 = false;
-    POSITION y, x;
     bool is_friend = is_pet(m_ptr);
-    for (int i = 0; i < grid_n; i++) {
-        y = get_grid_y(grid_g[i]);
-        x = get_grid_x(grid_g[i]);
-
+    for (const auto &[y, x] : grid_g) {
         if (y == y2 && x == x2) {
             hit2 = true;
         } else if (is_friend && floor_ptr->grid_array[y][x].m_idx > 0 && !are_enemies(player_ptr, m_ptr, &floor_ptr->m_list[floor_ptr->grid_array[y][x].m_idx])) {
@@ -111,15 +106,11 @@ bool breath_direct(PlayerType *player_ptr, POSITION y1, POSITION x1, POSITION y2
         break;
     }
 
-    uint16_t grid_g[512];
-    int grid_n = projection_path(player_ptr, grid_g, get_max_range(player_ptr), y1, x1, y2, x2, flg);
-    int i;
+    projection_path grid_g(player_ptr, get_max_range(player_ptr), y1, x1, y2, x2, flg);
+    int i = 0;
     POSITION y = y1;
     POSITION x = x1;
-    for (i = 0; i < grid_n; ++i) {
-        int ny = get_grid_y(grid_g[i]);
-        int nx = get_grid_x(grid_g[i]);
-
+    for (const auto &[ny, nx] : grid_g) {
         if (flg & PROJECT_DISI) {
             if (cave_stop_disintegration(player_ptr->current_floor_ptr, ny, nx)) {
                 break;
@@ -136,12 +127,12 @@ bool breath_direct(PlayerType *player_ptr, POSITION y1, POSITION x1, POSITION y2
 
         y = ny;
         x = nx;
+        i++;
     }
 
-    grid_n = i;
     bool hit2 = false;
     bool hityou = false;
-    if (!grid_n) {
+    if (i == 0) {
         if (flg & PROJECT_DISI) {
             if (in_disintegration_range(player_ptr->current_floor_ptr, y1, x1, y2, x2) && (distance(y1, x1, y2, x2) <= rad)) {
                 hit2 = true;
@@ -169,7 +160,7 @@ bool breath_direct(PlayerType *player_ptr, POSITION y1, POSITION x1, POSITION y2
         POSITION gx[1024], gy[1024];
         POSITION gm[32];
         POSITION gm_rad = rad;
-        breath_shape(player_ptr, grid_g, grid_n, &grids, gx, gy, gm, &gm_rad, rad, y1, x1, y, x, typ);
+        breath_shape(player_ptr, grid_g, grid_g.path_num(), &grids, gx, gy, gm, &gm_rad, rad, y1, x1, y, x, typ);
         for (i = 0; i < grids; i++) {
             y = gy[i];
             x = gx[i];
@@ -204,19 +195,16 @@ bool breath_direct(PlayerType *player_ptr, POSITION y1, POSITION x1, POSITION y2
  */
 void get_project_point(PlayerType *player_ptr, POSITION sy, POSITION sx, POSITION *ty, POSITION *tx, BIT_FLAGS flg)
 {
-    uint16_t path_g[128];
-    int path_n = projection_path(player_ptr, path_g, get_max_range(player_ptr), sy, sx, *ty, *tx, flg);
+    projection_path path_g(player_ptr, get_max_range(player_ptr), sy, sx, *ty, *tx, flg);
     *ty = sy;
     *tx = sx;
-    for (int i = 0; i < path_n; i++) {
-        sy = get_grid_y(path_g[i]);
-        sx = get_grid_x(path_g[i]);
-        if (!cave_has_flag_bold(player_ptr->current_floor_ptr, sy, sx, FloorFeatureType::PROJECT)) {
+    for (const auto &[y, x] : path_g) {
+        if (!cave_has_flag_bold(player_ptr->current_floor_ptr, y, x, FloorFeatureType::PROJECT)) {
             break;
         }
 
-        *ty = sy;
-        *tx = sx;
+        *ty = y;
+        *tx = x;
     }
 }
 

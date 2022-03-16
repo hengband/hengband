@@ -285,14 +285,12 @@ projection_path::projection_path(PlayerType *player_ptr, POSITION range, POSITIO
  */
 bool projectable(PlayerType *player_ptr, POSITION y1, POSITION x1, POSITION y2, POSITION x2)
 {
-    uint16_t grid_g[512];
-    int grid_n = projection_path(player_ptr, grid_g, (project_length ? project_length : get_max_range(player_ptr)), y1, x1, y2, x2, 0);
-    if (!grid_n) {
+    projection_path grid_g(player_ptr, (project_length ? project_length : get_max_range(player_ptr)), y1, x1, y2, x2, 0);
+    if (grid_g.path_num() == 0) {
         return true;
     }
 
-    POSITION y = get_grid_y(grid_g[grid_n - 1]);
-    POSITION x = get_grid_x(grid_g[grid_n - 1]);
+    const auto [y, x] = grid_g.back();
     if ((y != y2) || (x != x2)) {
         return false;
     }

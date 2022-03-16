@@ -119,9 +119,6 @@ bool fetch_monster(PlayerType *player_ptr)
     monster_type *m_ptr;
     MONSTER_IDX m_idx;
     GAME_TEXT m_name[MAX_NLEN];
-    int i;
-    int path_n;
-    uint16_t path_g[512];
     POSITION ty, tx;
 
     if (!target_set(player_ptr, TARGET_KILL)) {
@@ -145,11 +142,9 @@ bool fetch_monster(PlayerType *player_ptr)
     m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
     monster_desc(player_ptr, m_name, m_ptr, 0);
     msg_format(_("%sを引き戻した。", "You pull back %s."), m_name);
-    path_n = projection_path(player_ptr, path_g, get_max_range(player_ptr), target_row, target_col, player_ptr->y, player_ptr->x, 0);
+    projection_path path_g(player_ptr, get_max_range(player_ptr), target_row, target_col, player_ptr->y, player_ptr->x, 0);
     ty = target_row, tx = target_col;
-    for (i = 1; i < path_n; i++) {
-        POSITION ny = get_grid_y(path_g[i]);
-        POSITION nx = get_grid_x(path_g[i]);
+    for (const auto &[ny, nx] : path_g) {
         auto *g_ptr = &player_ptr->current_floor_ptr->grid_array[ny][nx];
 
         if (in_bounds(player_ptr->current_floor_ptr, ny, nx) && is_cave_empty_bold(player_ptr, ny, nx) && !g_ptr->is_object() && !pattern_tile(player_ptr->current_floor_ptr, ny, nx)) {
