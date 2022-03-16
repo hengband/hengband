@@ -3,6 +3,7 @@
 #include "effect/spells-effect-util.h"
 #include "floor/cave.h"
 #include "grid/feature-flag-types.h"
+#include "spell-class/spells-mirror-master.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
 #include "system/player-type-definition.h"
@@ -91,6 +92,45 @@ static void set_asxy(projection_path_type *pp_ptr)
     }
 }
 
+static bool project_stop(PlayerType *player_ptr, projection_path_type *pp_ptr)
+{
+    auto *floor_ptr = player_ptr->current_floor_ptr;
+
+    if (none_bits(pp_ptr->flag, PROJECT_THRU) && (pp_ptr->x == pp_ptr->x2) && (pp_ptr->y == pp_ptr->y2)) {
+        return true;
+    }
+
+    if (any_bits(pp_ptr->flag, PROJECT_DISI)) {
+        if (!pp_ptr->position->empty() && cave_stop_disintegration(floor_ptr, pp_ptr->y, pp_ptr->x)) {
+            return true;
+        }
+    } else if (any_bits(pp_ptr->flag, PROJECT_LOS)) {
+        if (!pp_ptr->position->empty() && !cave_los_bold(floor_ptr, pp_ptr->y, pp_ptr->x)) {
+            return true;
+        }
+    } else if (none_bits(pp_ptr->flag, PROJECT_PATH)) {
+        if (!pp_ptr->position->empty() && !cave_has_flag_bold(floor_ptr, pp_ptr->y, pp_ptr->x, FloorFeatureType::PROJECT)) {
+            return true;
+        }
+    }
+
+    if (any_bits(pp_ptr->flag, PROJECT_MIRROR)) {
+        if (!pp_ptr->position->empty() && floor_ptr->grid_array[pp_ptr->y][pp_ptr->x].is_mirror()) {
+            return true;
+        }
+    }
+
+    if (any_bits(pp_ptr->flag, PROJECT_STOP) && !pp_ptr->position->empty() && (player_bold(player_ptr, pp_ptr->y, pp_ptr->x) || floor_ptr->grid_array[pp_ptr->y][pp_ptr->x].m_idx != 0)) {
+        return true;
+    }
+
+    if (!in_bounds(floor_ptr, pp_ptr->y, pp_ptr->x)) {
+        return true;
+    }
+
+    return false;
+}
+
 static void calc_frac(projection_path_type *pp_ptr, bool is_vertical)
 {
     if (pp_ptr->m == 0) {
@@ -120,33 +160,7 @@ static void calc_projection_to_target(PlayerType *player_ptr, projection_path_ty
             break;
         }
 
-        if (none_bits(pp_ptr->flag, PROJECT_THRU)) {
-            if ((pp_ptr->x == pp_ptr->x2) && (pp_ptr->y == pp_ptr->y2)) {
-                break;
-            }
-        }
-
-        if (any_bits(pp_ptr->flag, PROJECT_DISI)) {
-            if (!pp_ptr->position->empty() && cave_stop_disintegration(floor_ptr, pp_ptr->y, pp_ptr->x)) {
-                break;
-            }
-        } else if (any_bits(pp_ptr->flag, PROJECT_LOS)) {
-            if (!pp_ptr->position->empty() && !cave_los_bold(floor_ptr, pp_ptr->y, pp_ptr->x)) {
-                break;
-            }
-        } else if (none_bits(pp_ptr->flag, PROJECT_PATH)) {
-            if (!pp_ptr->position->empty() && !cave_has_flag_bold(floor_ptr, pp_ptr->y, pp_ptr->x, FloorFeatureType::PROJECT)) {
-                break;
-            }
-        }
-
-        if (any_bits(pp_ptr->flag, PROJECT_STOP)) {
-            if (!pp_ptr->position->empty() && (player_bold(player_ptr, pp_ptr->y, pp_ptr->x) || floor_ptr->grid_array[pp_ptr->y][pp_ptr->x].m_idx != 0)) {
-                break;
-            }
-        }
-
-        if (!in_bounds(floor_ptr, pp_ptr->y, pp_ptr->x)) {
+        if (project_stop(player_ptr, pp_ptr)) {
             break;
         }
 
@@ -207,29 +221,7 @@ static void calc_projection_others(PlayerType *player_ptr, projection_path_type 
             break;
         }
 
-        if (none_bits(pp_ptr->flag, PROJECT_THRU) && (pp_ptr->x == pp_ptr->x2) && (pp_ptr->y == pp_ptr->y2)) {
-            break;
-        }
-
-        if (any_bits(pp_ptr->flag, PROJECT_DISI)) {
-            if (!pp_ptr->position->empty() && cave_stop_disintegration(floor_ptr, pp_ptr->y, pp_ptr->x)) {
-                break;
-            }
-        } else if (any_bits(pp_ptr->flag, PROJECT_LOS)) {
-            if (!pp_ptr->position->empty() && !cave_los_bold(floor_ptr, pp_ptr->y, pp_ptr->x)) {
-                break;
-            }
-        } else if (none_bits(pp_ptr->flag, PROJECT_PATH)) {
-            if (!pp_ptr->position->empty() && !cave_has_flag_bold(floor_ptr, pp_ptr->y, pp_ptr->x, FloorFeatureType::PROJECT)) {
-                break;
-            }
-        }
-
-        if (any_bits(pp_ptr->flag, PROJECT_STOP) && !pp_ptr->position->empty() && (player_bold(player_ptr, pp_ptr->y, pp_ptr->x) || floor_ptr->grid_array[pp_ptr->y][pp_ptr->x].m_idx != 0)) {
-            break;
-        }
-
-        if (!in_bounds(floor_ptr, pp_ptr->y, pp_ptr->x)) {
+        if (project_stop(player_ptr, pp_ptr)) {
             break;
         }
 
