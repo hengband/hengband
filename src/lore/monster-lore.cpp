@@ -23,6 +23,7 @@
 #include "view/display-lore-magics.h"
 #include "view/display-lore-status.h"
 #include "view/display-lore.h"
+#include <algorithm>
 
 static void set_msex_flags(lore_type *lore_ptr)
 {
@@ -145,11 +146,19 @@ void process_monster_lore(PlayerType *player_ptr, MonsterRaceId r_idx, monster_l
 {
     lore_type tmp_lore;
     lore_type *lore_ptr = initialize_lore_type(&tmp_lore, r_idx, mode);
-    for (int n = 0; n < A_MAX; n++) {
-        if (MonsterRace(lore_ptr->r_ptr->reinforce_id[n]).is_valid()) {
-            lore_ptr->reinforce = true;
-        }
-    }
+
+    auto is_valid_reinforcer = [](const auto &reinforce) {
+        auto [r_idx, dd, ds] = reinforce;
+        auto is_reinforce = MonsterRace(r_idx).is_valid();
+        is_reinforce &= dd > 0;
+        is_reinforce &= ds > 0;
+        return is_reinforce;
+    };
+
+    lore_ptr->reinforce =
+        std::find_if(
+            lore_ptr->r_ptr->reinforces.begin(), lore_ptr->r_ptr->reinforces.end(),
+            is_valid_reinforcer) != lore_ptr->r_ptr->reinforces.end();
 
     if (cheat_know || (mode == MONSTER_LORE_RESEARCH) || (mode == MONSTER_LORE_DEBUG)) {
         lore_ptr->know_everything = true;
