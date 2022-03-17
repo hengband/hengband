@@ -303,24 +303,16 @@ errr parse_r_info(std::string_view buf, angband_header *)
         }
 
     } else if (tokens[0] == "A") {
-        // A:artifact_idx:rarity:percent
-        size_t i = 0;
-        for (; i < 4; i++) {
-            if (!r_ptr->artifact_id[i]) {
-                break;
-            }
-        }
-        if (i >= 4) {
-            return PARSE_ERROR_GENERIC;
-        }
-
-        if (tokens.size() < 4) {
+        // A:artifact_idx:chance
+        if (tokens.size() < 3) {
             return PARSE_ERROR_TOO_FEW_ARGUMENTS;
         }
 
-        info_set_value(r_ptr->artifact_id[i], tokens[1]);
-        info_set_value(r_ptr->artifact_rarity[i], tokens[2]);
-        info_set_value(r_ptr->artifact_percent[i], tokens[3]);
+        ARTIFACT_IDX a_idx;
+        PERCENTAGE chance;
+        info_set_value(a_idx, tokens[1]);
+        info_set_value(chance, tokens[2]);
+        r_ptr->drop_artifacts.emplace_back(a_idx, chance);
     } else if (tokens[0] == "V") {
         // V:arena_odds
         if (tokens.size() < 2) {
