@@ -145,13 +145,19 @@ static bool restrict_monster_to_dungeon(PlayerType *player_ptr, MonsterRaceId r_
         }
 
         if (d_ptr->mon_resistance_flags.any()) {
-            if (!d_ptr->mon_resistance_flags.has_all_of(r_ptr->resistance_flags)) {
+            if (!r_ptr->resistance_flags.has_all_of(d_ptr->mon_resistance_flags)) {
                 return false;
             }
         }
 
         if (d_ptr->mon_drop_flags.any()) {
-            if (!d_ptr->mon_drop_flags.has_all_of(r_ptr->drop_flags)) {
+            if (!r_ptr->drop_flags.has_all_of(d_ptr->mon_drop_flags)) {
+                return false;
+            }
+        }
+
+        if (d_ptr->mon_kind_flags.any()) {
+            if (!r_ptr->kind_flags.has_all_of(d_ptr->mon_kind_flags)) {
                 return false;
             }
         }
@@ -214,13 +220,19 @@ static bool restrict_monster_to_dungeon(PlayerType *player_ptr, MonsterRaceId r_
         }
 
         if (d_ptr->mon_resistance_flags.any()) {
-            if (!d_ptr->mon_resistance_flags.has_all_of(r_ptr->resistance_flags)) {
+            if (!r_ptr->resistance_flags.has_all_of(d_ptr->mon_resistance_flags)) {
                 return true;
             }
         }
 
         if (d_ptr->mon_drop_flags.any()) {
-            if (!d_ptr->mon_drop_flags.has_all_of(r_ptr->drop_flags)) {
+            if (!r_ptr->drop_flags.has_all_of(d_ptr->mon_drop_flags)) {
+                return true;
+            }
+        }
+
+        if (d_ptr->mon_kind_flags.any()) {
+            if (!r_ptr->kind_flags.has_all_of(d_ptr->mon_kind_flags)) {
                 return true;
             }
         }
@@ -264,6 +276,9 @@ static bool restrict_monster_to_dungeon(PlayerType *player_ptr, MonsterRaceId r_
         if (r_ptr->drop_flags.has_any_of(d_ptr->mon_drop_flags)) {
             return true;
         }
+        if (r_ptr->kind_flags.has_any_of(d_ptr->mon_kind_flags)) {
+            return true;
+        }
         for (a = 0; a < 5; a++) {
             if (d_ptr->r_char[a] == r_ptr->d_char) {
                 return true;
@@ -301,6 +316,9 @@ static bool restrict_monster_to_dungeon(PlayerType *player_ptr, MonsterRaceId r_
             return false;
         }
         if (r_ptr->drop_flags.has_any_of(d_ptr->mon_drop_flags)) {
+            return false;
+        }
+        if (r_ptr->kind_flags.has_any_of(d_ptr->mon_kind_flags)) {
             return false;
         }
         for (a = 0; a < 5; a++) {
