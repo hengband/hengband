@@ -12,6 +12,8 @@
 #include "system/angband.h"
 #include "util/flag-group.h"
 #include <string>
+#include <tuple>
+#include <vector>
 
 /*! モンスターが1ターンに攻撃する最大回数 (射撃を含む) / The maximum number of times a monster can attack in a turn (including SHOOT) */
 constexpr int MAX_NUM_BLOWS = 4;
@@ -77,9 +79,10 @@ struct monster_race {
     EnumClassFlagGroup<MonsterResistanceType> resistance_flags; //!< 耐性フラグ / Flags R (resistances info)
     EnumClassFlagGroup<MonsterDropType> drop_flags; //!< 能力フラグ（ドロップ） / Drop Flags
     MonsterBlow blow[MAX_NUM_BLOWS]{}; //!< 打撃能力定義 / Up to four blows per round
-    MonsterRaceId reinforce_id[6]{}; //!< 指定護衛モンスター種族ID(6種まで)
-    DICE_NUMBER reinforce_dd[6]{}; //!< 指定護衛数ダイス数
-    DICE_SID reinforce_ds[6]{}; //!< 指定護衛数ダイス面
+
+    //! 指定護衛リスト <モンスター種族ID,護衛数ダイス数,護衛数ダイス面>
+    std::vector<std::tuple<MonsterRaceId, DICE_NUMBER, DICE_SID>> reinforces;
+
     ARTIFACT_IDX artifact_id[4]{}; //!< 特定アーティファクトドロップID
     RARITY artifact_rarity[4]{}; //!< 特定アーティファクトレア度
     PERCENTAGE artifact_percent[4]{}; //!< 特定アーティファクトドロップ率

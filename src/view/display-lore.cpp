@@ -535,30 +535,30 @@ static void display_monster_escort_contents(lore_type *lore_ptr)
     hooked_roff(" contain ");
 #endif
 
-    for (int n = 0; n < A_MAX; n++) {
-        bool is_reinforced = MonsterRace(lore_ptr->r_ptr->reinforce_id[n]).is_valid();
-        is_reinforced &= lore_ptr->r_ptr->reinforce_dd[n] > 0;
-        is_reinforced &= lore_ptr->r_ptr->reinforce_ds[n] > 0;
+    for (auto [r_idx, dd, ds] : lore_ptr->r_ptr->reinforces) {
+        auto is_reinforced = MonsterRace(r_idx).is_valid();
+        is_reinforced &= dd > 0;
+        is_reinforced &= ds > 0;
         if (!is_reinforced) {
             continue;
         }
 
-        monster_race *rf_ptr = &r_info[lore_ptr->r_ptr->reinforce_id[n]];
+        const auto *rf_ptr = &r_info[r_idx];
         if (rf_ptr->kind_flags.has(MonsterKindType::UNIQUE)) {
             hooked_roff(format(_("、%s", ", %s"), rf_ptr->name.c_str()));
             continue;
         }
 
 #ifdef JP
-        hooked_roff(format("、 %dd%d 体の%s", lore_ptr->r_ptr->reinforce_dd[n], lore_ptr->r_ptr->reinforce_ds[n], rf_ptr->name.c_str()));
+        hooked_roff(format("、 %dd%d 体の%s", dd, ds, rf_ptr->name.c_str()));
 #else
-        bool plural = (lore_ptr->r_ptr->reinforce_dd[n] * lore_ptr->r_ptr->reinforce_ds[n] > 1);
+        auto plural = (dd * ds > 1);
         GAME_TEXT name[MAX_NLEN];
         strcpy(name, rf_ptr->name.c_str());
         if (plural) {
             plural_aux(name);
         }
-        hooked_roff(format(",%dd%d %s", lore_ptr->r_ptr->reinforce_dd[n], lore_ptr->r_ptr->reinforce_ds[n], name));
+        hooked_roff(format(",%dd%d %s", dd, ds, name));
 #endif
     }
 
