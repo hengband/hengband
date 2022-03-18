@@ -2346,7 +2346,7 @@
     <ClCompile Include="..\..\src\object-enchant\weapon\abstract-weapon-enchanter.cpp">
       <Filter>object-enchant\weapon</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\object-enchant\weapon\apply-magic-weapon.cpp">
+    <ClCompile Include="..\..\src\object-enchant\weapon\apply-magic-bow.cpp">
       <Filter>object-enchant\weapon</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\smith\object-smith.cpp">
@@ -2423,6 +2423,15 @@
     </ClCompile>
     <ClCompile Include="..\..\src\object-enchant\protector\apply-magic-soft-armor.cpp">
       <Filter>object-enchant\protector</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\object-enchant\weapon\apply-magic-sword.cpp">
+      <Filter>object-enchant\weapon</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\object-enchant\weapon\apply-magic-digging.cpp">
+      <Filter>object-enchant\weapon</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\object-enchant\weapon\apply-magic-arrow.cpp">
+      <Filter>object-enchant\weapon</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -5169,7 +5178,7 @@
     <ClInclude Include="..\..\src\object-enchant\weapon\abstract-weapon-enchanter.h">
       <Filter>object-enchant\weapon</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\object-enchant\weapon\apply-magic-weapon.h">
+    <ClInclude Include="..\..\src\object-enchant\weapon\apply-magic-bow.h">
       <Filter>object-enchant\weapon</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\smith\object-smith.h">
@@ -5267,6 +5276,15 @@
     </ClInclude>
     <ClInclude Include="..\..\src\object-enchant\protector\apply-magic-soft-armor.h">
       <Filter>object-enchant\protector</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\object-enchant\weapon\apply-magic-sword.h">
+      <Filter>object-enchant\weapon</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\object-enchant\weapon\apply-magic-digging.h">
+      <Filter>object-enchant\weapon</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\object-enchant\weapon\apply-magic-arrow.h">
+      <Filter>object-enchant\weapon</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

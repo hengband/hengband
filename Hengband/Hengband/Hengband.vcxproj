@@ -281,6 +281,9 @@
     <ClCompile Include="..\..\src\object-enchant\protector\apply-magic-hard-armor.cpp" />
     <ClCompile Include="..\..\src\object-enchant\weapon\abstract-weapon-enchanter.cpp" />
     <ClCompile Include="..\..\src\object-use\quaff\quaff-effects.cpp" />
+    <ClCompile Include="..\..\src\object-enchant\weapon\apply-magic-arrow.cpp" />
+    <ClCompile Include="..\..\src\object-enchant\weapon\apply-magic-digging.cpp" />
+    <ClCompile Include="..\..\src\object-enchant\weapon\apply-magic-sword.cpp" />
     <ClCompile Include="..\..\src\object-use\read\gbh-shirt-read-executor.cpp" />
     <ClCompile Include="..\..\src\object-use\read\parchment-read-executor.cpp" />
     <ClCompile Include="..\..\src\object-use\read\read-executor-factory.cpp" />
@@ -683,7 +686,7 @@
     <ClCompile Include="..\..\src\racial\racial-vampire.cpp" />
     <ClCompile Include="..\..\src\object-enchant\protector\apply-magic-armor.cpp" />
     <ClCompile Include="..\..\src\object-enchant\others\apply-magic-others.cpp" />
-    <ClCompile Include="..\..\src\object-enchant\weapon\apply-magic-weapon.cpp" />
+    <ClCompile Include="..\..\src\object-enchant\weapon\apply-magic-bow.cpp" />
     <ClCompile Include="..\..\src\object-enchant\apply-magic.cpp" />
     <ClCompile Include="..\..\src\player\eldritch-horror.cpp" />
     <ClCompile Include="..\..\src\specific-object\bow.cpp" />
@@ -966,6 +969,9 @@
     <ClInclude Include="..\..\src\object-enchant\protector\apply-magic-hard-armor.h" />
     <ClInclude Include="..\..\src\object-enchant\weapon\abstract-weapon-enchanter.h" />
     <ClInclude Include="..\..\src\object-use\quaff\quaff-effects.h" />
+    <ClInclude Include="..\..\src\object-enchant\weapon\apply-magic-arrow.h" />
+    <ClInclude Include="..\..\src\object-enchant\weapon\apply-magic-digging.h" />
+    <ClInclude Include="..\..\src\object-enchant\weapon\apply-magic-sword.h" />
     <ClInclude Include="..\..\src\object-use\read\gbh-shirt-read-executor.h" />
     <ClInclude Include="..\..\src\object-use\read\parchment-read-executor.h" />
     <ClInclude Include="..\..\src\object-use\read\read-executor-base.h" />
@@ -1479,7 +1485,7 @@
     <ClInclude Include="..\..\src\object-enchant\enchanter-base.h" />
     <ClInclude Include="..\..\src\object-enchant\protector\apply-magic-armor.h" />
     <ClInclude Include="..\..\src\object-enchant\others\apply-magic-others.h" />
-    <ClInclude Include="..\..\src\object-enchant\weapon\apply-magic-weapon.h" />
+    <ClInclude Include="..\..\src\object-enchant\weapon\apply-magic-bow.h" />
     <ClInclude Include="..\..\src\object-enchant\apply-magic.h" />
     <ClInclude Include="..\..\src\player\eldritch-horror.h" />
     <ClInclude Include="..\..\src\realm\realm-types.h" />
