@@ -153,29 +153,21 @@ static void drop_corpse(PlayerType *player_ptr, monster_death_type *md_ptr)
  * @brief アーティファクトのドロップ判定処理
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param md_ptr モンスター死亡構造体への参照ポインタ
- * @return 何かドロップするなら1以上、何もドロップしないなら0
+ * @return 何かドロップするならドロップしたアーティファクトのID、何もドロップしないなら0
  */
 static ARTIFACT_IDX drop_artifact_index(PlayerType *player_ptr, monster_death_type *md_ptr)
 {
-    ARTIFACT_IDX a_idx = 0;
-    PERCENTAGE chance = 0;
-    for (int i = 0; i < 4; i++) {
-        if (!md_ptr->r_ptr->artifact_id[i]) {
-            break;
-        }
-
-        a_idx = md_ptr->r_ptr->artifact_id[i];
-        chance = md_ptr->r_ptr->artifact_percent[i];
+    for (auto [a_idx, chance] : md_ptr->r_ptr->drop_artifacts) {
         if ((randint0(100) >= chance) && !w_ptr->wizard) {
             continue;
         }
 
         if (drop_single_artifact(player_ptr, md_ptr, a_idx)) {
-            break;
+            return a_idx;
         }
     }
 
-    return a_idx;
+    return 0;
 }
 
 /*!

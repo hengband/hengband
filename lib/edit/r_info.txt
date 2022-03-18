@@ -757,7 +757,7 @@ F:EVIL | IM_ACID | IM_ELEC | IM_FIRE | IM_POIS | IM_COLD | UNIQUE |
 F:RES_LITE | RES_DARK | RES_NETH | RES_WATE | RES_PLAS | RES_SHAR | RES_SOUN |
 F:RES_CHAO | RES_NEXU | RES_DISE | RES_WALL | RES_INER | RES_TIME | RES_GRAV |
 F:KILL_WALL | FORCE_MAXHP | CAN_SWIM | DROP_CORPSE |
-A:192:1:100
+A:192:100
 S:1_IN_9 |
 S:TPORT | BLINK | TELE_AWAY
 D:$This unholy abomination will crush you. Flee while you can! 
@@ -2259,7 +2259,7 @@ F:ONLY_ITEM | DROP_1D2 | DROP_GREAT | WILD_WOOD
 F:TAKE_ITEM | OPEN_DOOR | BASH_DOOR | EVIL | DROP_SKELETON | DROP_CORPSE
 F:EAT_GIVE_DEX | EAT_LOSE_WIS
 S:1_IN_5 | SHOOT | HEAL | TRAPS
-A:221:1:5
+A:221:5
 V:75
 D:$This legendary archer steals from the rich (you qualify).
 D:この伝説の射手は金持ち（あなたは合格）から金を盗む。
@@ -6414,7 +6414,7 @@ F:PREVENT_SUDDEN_MAGIC | FORCE_MAXHP |
 F:DROP_1D2 | DROP_GOOD | OPEN_DOOR | BASH_DOOR | EVIL |
 F:IM_FIRE | IM_COLD | RES_DARK | RES_DISE | NO_CONF | NO_SLEEP | RES_TELE
 S:1_IN_8 | HEAL | HASTE | BO_FIRE
-A:99:1:66
+A:99:66
 D:$Alberich's son, born of a mortal woman won with gold.
 D:アルベリヒの息子で、金で買われた人間の女性との間に生まれた。
 D:グンター王の異父弟にあたり、奸計によってジークフリードを殺害し、
@@ -8744,7 +8744,7 @@ F:ONLY_ITEM | DROP_1D2 | DROP_GOOD |
 F:OPEN_DOOR | BASH_DOOR | 
 #F:TROLL | IM_COLD | IM_POIS
 F:IM_COLD | IM_POIS
-A:150:1:100
+A:150:100
 
 #JZ#
 #JZ#巨人ファゾルト
@@ -12259,7 +12259,7 @@ F:REGENERATE | NO_CONF | NO_SLEEP | NO_STUN | NO_FEAR | RES_TELE
 F:ONLY_ITEM | DROP_1D2 | DROP_GREAT
 F:TAKE_ITEM | OPEN_DOOR | BASH_DOOR | SMART | POWERFUL |
 S:1_IN_3 | BLIND | HEAL | BA_DARK | HASTE | CONF |
-A:43:1:15
+A:43:15
 D:$Deriving his strength from the shadows, this king of thieves 
 D:$steals only for the challenge.
 D:薄明界の大盗賊にして、暗黒界の王の一人。
@@ -12994,7 +12994,7 @@ F:CHAR_MULTI | EVIL | IM_POIS | IM_COLD | IM_FIRE | RES_NETH | RES_CHAO |
 F:PREVENT_SUDDEN_MAGIC | UNIQUE | FORCE_MAXHP | CAN_FLY |
 F:COLD_BLOOD | BASH_DOOR | NONLIVING |
 F:NO_CONF | NO_SLEEP | NO_FEAR
-A:190:1:100
+A:190:100
 V:150
 D:$The mightiest of hellblades, a black runesword which thirsts for 
 D:$your soul.
@@ -13773,7 +13773,7 @@ F:ONLY_ITEM | DROP_1D2 | DROP_4D2 | DROP_GOOD |
 F:TAKE_ITEM | OPEN_DOOR | BASH_DOOR | 
 F:IM_POIS | IM_FIRE | NO_CONF | NO_SLEEP | EVIL | RES_TELE
 S:1_IN_6 | TRAPS | S_KIN
-A:139:1:66
+A:139:66
 D:$He may not code worth a dime, but he certainly knows how to make money.
 D:彼の書くプログラムは一銭の価値もないかもしれないが、彼は金を儲ける方法を
 D:確かに知っている。
@@ -14573,7 +14573,7 @@ S:1_IN_4 |
 S:HEAL | BLIND | CONF | SCARE | CAUSE_3 | CAUSE_4 | BRAIN_SMASH | 
 S:FORGET | 
 S:S_MONSTERS
-A:214:1:5
+A:214:5
 D:$He is one of the greatest dwarven priests to walk the earth.  Fundin has 
 D:$earned a high position in the church, and his skill with both weapon and 
 D:$spell only justify his position further.  His combination of both dwarven 
@@ -14606,7 +14606,7 @@ S:1_IN_4 |
 S:HEAL | BLIND | CONF | SCARE | CAUSE_4 | BRAIN_SMASH | 
 S:FORGET | S_MONSTERS | BA_CHAO | BLINK | TPORT | TELE_TO |
 S:TELE_AWAY | S_DEMON
-A:3:1:20
+A:3:20
 D:$Once this now gnomish creature created the universe with the Jewel 
 D:$of Judgement - or so you have been told. There is little sanity left 
 D:$in his present form even if he still has the power. "He was a small 
@@ -14862,7 +14862,7 @@ S:HEAL | HASTE | TPORT | TELE_AWAY | BLIND | CONF | SCARE |
 S:CAUSE_4 | MIND_BLAST | FORGET | TRAPS | ANIM_DEAD |
 S:BO_ICEE | BA_ACID | BA_FIRE | BA_COLD | BA_WATE | 
 S:S_UNDEAD | S_DEMON | S_DRAGON | PSY_SPEAR
-A:2:1:33
+A:2:33
 D:$Originally known as the White, Saruman fell prey to Sauron's wiles. He 
 D:$searches forever for the One Ring, to become a mighty Sorcerer-King of the 
 D:$world.
@@ -14892,7 +14892,7 @@ S:HEAL | HASTE | TPORT | TELE_AWAY | BLIND | CONF | SCARE |
 S:CAUSE_4 | BRAIN_SMASH | FORGET | TRAPS | 
 S:BA_FIRE | BO_FIRE | BO_PLAS | BO_MANA | PSY_SPEAR |
 S:S_MONSTER | S_ANGEL | S_DRAGON | S_KIN 
-A:131:1:20
+A:131:20
 D:$The wizard who opposed Saruman, and in the end, was the only 
 D:$one of the Istari to succeed in his task. Gandalf is very 
 D:$wise and specializes in fire magic.
@@ -14927,8 +14927,8 @@ S:TPORT | BLINK | BA_FIRE | BA_COLD |
 S:DRAIN_MANA | CAUSE_4 | BA_ACID | TELE_AWAY |
 S:MIND_BLAST | TRAPS | HEAL |
 S:HASTE | BRAIN_SMASH | BA_CHAO | BA_DARK | PSY_SPEAR
-A:84:3:33
-A:126:1:25
+A:84:33
+A:126:25
 D:$Brand sees himself as a hero, the god creator 
 D:$and absolute monarch of a future world. Unfortunately he needs 
 D:$to erase the existing world to make his new world. "...a figure both 
@@ -15430,7 +15430,7 @@ S:SCARE | BLIND | CONF | TPORT | BLINK | TELE_AWAY | TELE_TO
 S:TRAPS | CAUSE_4 | BA_POIS | S_DEMON
 S:S_MONSTERS | PSY_SPEAR
 R:201:8d10
-A:70:1:5
+A:70:5
 D:$She is beautiful and deadly. "...I have always been very fond of Fiona. 
 D:$She is certainly the loveliest, most civilized of (all Amberites)."
 D:彼女は美しく、また危険な存在でもある。「…フィオナの事はとても好きだ。
@@ -15510,7 +15510,7 @@ S:TPORT | TELE_TO | SHOOT | SHRIEK | SCARE | DARKNESS |
 S:S_ANT | S_SPIDER | S_HOUND | S_HYDRA | TRAPS | BO_WATE | BO_ELEC
 R:151:1d6
 R:829:5d10
-A:23:1:45
+A:23:45
 V:75
 D:$Julian is at home in wild woodlands. He enjoys hunting a challenging 
 D:$prey: you. "Julian, dark hair hanging long, blue eyes containing neither 
@@ -15663,7 +15663,7 @@ S:1_IN_4 |
 S:TPORT | TELE_TO | SCARE | DARKNESS |
 S:S_DRAGON | TRAPS | BO_WATE | BO_NETH | S_UNDEAD | S_DEMON |
 S:CONF | BO_ACID | FORGET | MIND_BLAST | CAUSE_4
-A:65:1:50
+A:65:50
 V:75
 D:$Caine is perhaps the least reliable Amberite, always ready to ignore 
 D:$his pacts and promises when it suits him. "...the swarthy, dark-eyed 
@@ -16249,7 +16249,7 @@ S:1_IN_2 |
 S:CAUSE_3 | TELE_TO | BA_FIRE | DRAIN_MANA | HOLD |
 S:TRAPS | BA_WATE | BO_PLAS | BA_NETH | DISPEL | PSY_SPEAR |
 S:BA_MANA | BA_DARK | S_HI_UNDEAD | BA_CHAO | HAND_DOOM | ANIM_DEAD
-A:98:1:40
+A:98:40
 D:$Klingsor, whose hopeless effort to join the Knights of the Grail 
 D:$was thwarted, turned to black magic and became a deadly necromancer.
 D:クリングゾールは聖杯の騎士団に加わる望みを断たれ、黒魔術
@@ -16286,8 +16286,8 @@ S:CAUSE_3 | BO_ACID | BO_MANA | HOLD | BA_FIRE | BA_COLD |
 S:TRAPS | TELE_AWAY | HEAL | BRAIN_SMASH | BA_WATE | BA_NETH |
 S:FORGET | BO_WATE | BO_NETH | CAUSE_4 | DARKNESS | S_MONSTERS |
 S:BO_PLAS | S_ANGEL | PSY_SPEAR
-A:55:3:33
-A:72:1:33
+A:55:33
+A:72:33
 D:$Corwin is one of the most feared and respected Amberites; his skill 
 D:$and cunning are well known. "Green eyes, black hair, dressed in black 
 D:$and silver, yes. (Corwin) had on a cloak and it was slightly furled 
@@ -16806,8 +16806,8 @@ F:IM_FIRE | NO_CONF | NO_SLEEP | IM_POIS | HURT_COLD | GIANT |
 S:1_IN_5 |
 S:BR_FIRE | BR_PLAS | BLIND | TELE_TO | S_KIN | S_HI_UNDEAD |
 S:HAND_DOOM | TELE_AWAY | S_CYBER | S_DEMON
-A:245:3:50
-A:78:1:100
+A:245:50
+A:78:100
 D:$Surtur is also one of the most ancient of all creatures. He is a demonic 
 D:$giant of fire, who is destined to set the nine worlds afire with his 
 D:$accursed sword of doom on the day of Ragnarok.
@@ -16862,7 +16862,7 @@ S:1_IN_4 |
 S:BLIND | CONF | SCARE | 
 S:BR_FIRE | 
 S:S_DEMON | S_HI_UNDEAD
-A:71:1:50
+A:71:50
 D:$A massive form cloaked in flame.  Lungorthin stares balefully at you with 
 D:$eyes that smoulder red.  The dungeon floor where he stands is scorched by 
 D:$the heat of his body.
@@ -17361,7 +17361,7 @@ F:EVIL | DEMON | IM_FIRE | IM_ELEC | IM_POIS | RES_DARK |
 F:NO_FEAR | NO_CONF | NO_SLEEP | NO_STUN |
 S:1_IN_3 | 
 S:BR_FIRE | BR_NETH | S_KIN | S_DEMON | 
-A:212:1:50
+A:212:50
 D:$Gothmog is the Chief Balrog in Morgoth's personal guard.  He is renowned 
 D:$for slaying Ecthelion the Warder of the Gates and he has never been 
 D:$defeated in combat.  With his whip of flame and awesome fiery breath he 
@@ -17438,8 +17438,8 @@ S:BO_ICEE | BO_MANA | BO_PLAS |
 S:BA_MANA | BA_FIRE | BA_WATE | BA_NETH | BA_DARK | 
 S:S_MONSTERS | S_DEMON | S_HI_UNDEAD | S_HI_DRAGON |
 S:HAND_DOOM | ANIM_DEAD | DISPEL | PSY_SPEAR
-A:13:10:10
-A:14:1:100
+A:13:10
+A:14:100
 D:$Mighty in spells and enchantments,
 D:$ he created the One Ring.  His eyes glow with power and his gaze seeks to
 D:$ destroy your soul.  He has many servants, and rarely fights without them.
@@ -17532,8 +17532,8 @@ D:「オベロン、アンバーの君主。あの緑と金の服装で、目の
 D:高く、肩幅が広く、胸が厚い。白髪のいくらか混じった黒い顎ひげ。髪の毛は
 D:相変わらず。緑の石のはまった金の指輪、金色の剣。」
 D:（ロジャー・ゼラズニイ、岡部宏之訳「アンバーの九王子」早川書房、p.181）
-A:3:3:33
-A:42:1:50
+A:3:33
+A:42:50
 
 # Morgoth, mr normal monster!
 
@@ -17848,7 +17848,7 @@ F:OPEN_DOOR | BASH_DOOR | POWERFUL | MOVE_BODY | CAN_SWIM | RES_WATE |
 F:EVIL | IM_FIRE | IM_COLD | IM_POIS | IM_ELEC | NO_CONF | NO_SLEEP
 S:1_IN_2 | 
 S:BR_FIRE | BR_NEXU | BR_CHAO | BR_POIS | BR_DISE | BR_PLAS | BR_NUKE | BR_DARK
-A:128:1:25
+A:128:25
 V:150
 D:$Is a legendary snake, with eight necks and eight tails, living in Izumo.
 D:$  If denied sacrificial victims, it causes floods and annihilates people.
@@ -17874,7 +17874,7 @@ F:RES_CHAO | RES_NEXU | RES_DISE | RES_WALL | RES_INER | RES_TIME | RES_GRAV |
 F:RES_TELE | NO_CONF | NO_SLEEP | NO_STUN |
 S:1_IN_2 | 
 S:ROCKET | HEAL | BLINK | INVULNER
-A:16:1:50
+A:16:50
 V:900
 D:$His favorite food is grilled rice noodle. 
 D:$He is a lone wolf filled with the adventurous spirit. 
@@ -17974,7 +17974,7 @@ F:EVIL | UNDEAD | IM_COLD | IM_POIS | RES_NETH | RES_DARK | HURT_LITE |
 F:NO_CONF | NO_SLEEP | RES_TIME | RES_TELE | REFLECTING |
 S:1_IN_4 | 
 S:SCARE | S_KIN | WORLD | TELE_TO
-A:146:1:20
+A:146:20
 D:$Dio, who became an immortal vampire with the help of a stone mask,
 D:$ looks only at the adventurer.  Watch out for The World, Dio's stand
 D:$ or visual manifestation of his life energy:  "I don't know what his
@@ -19698,7 +19698,7 @@ F:UNIQUE | MALE | FORCE_MAXHP | DROP_60 | DROP_GOOD | HUMAN |
 F:DROP_1D2 | OPEN_DOOR | BASH_DOOR | SMART | POWERFUL | IM_FIRE |
 F:TAKE_ITEM | CAN_SPEAK | EVIL | NO_FEAR | NO_CONF | NO_SLEEP | 
 F:CAN_SWIM | DROP_CORPSE | AURA_FIRE | HAS_LITE_2 |
-A:154:1:10
+A:154:10
 D:$Beld seeks to conquer Lodoss and will destroy anyone who stands in his way.
 D:ベルドはロードス征服をたくらみ、立ちはだかる全てを破壊しようとした。
 
@@ -19818,7 +19818,7 @@ F:UNIQUE | MALE | CAN_SPEAK | FORCE_MAXHP | ESCORT |
 F:ONLY_ITEM | DROP_1D2 | DROP_2D2 | DROP_GOOD | DROP_CORPSE |
 F:OPEN_DOOR | BASH_DOOR | CAN_SWIM | AURA_ELEC |
 F:EVIL | GIANT | IM_POIS | IM_FIRE | IM_ELEC
-A:194:1:33
+A:194:33
 D:$Living on Mt. Oe, in the province of Tanba, this large ogre seized young
 D:$ women and treasure from nearby Kyoto.
 D:丹波の国の大江山をねぐらとし、京の都を襲っては財宝と娘を
@@ -20262,7 +20262,7 @@ F:OPEN_DOOR | GOOD | CAN_SWIM |
 F:NO_CONF | NO_SLEEP | FRIENDLY | TAKE_ITEM |
 S:1_IN_5 |
 S:BA_FIRE | HOLD | BO_FIRE | HEAL
-A:179:1:50
+A:179:50
 D:$Merlin the magician summoned this young warrior to complete a variety of
 D:$ tasks.  Pip carries a dubious sword, created by Merlin and modeled on King
 D:$ Arthur's Excalibur.
@@ -21993,7 +21993,7 @@ F:UNIQUE | MALE | WEIRD_MIND | HUMAN | CAN_SPEAK
 F:FORCE_MAXHP | WILD_ALL | DROP_CORPSE | KILL_BODY
 F:ONLY_ITEM | DROP_2D2 | DROP_GOOD |
 F:OPEN_DOOR | BASH_DOOR | NO_CONF | NO_FEAR
-A:248:1:80
+A:248:80
 D:「あの君さまはいつが盛りよな」この老剣士は今、正気でも曖昧でもなく、
 D:敵であろうと味方であろうと、間合いに入った者全てを斬る魔神と化している。
 
@@ -22454,7 +22454,7 @@ F:BASH_DOOR | NO_SLEEP | NO_CONF | NO_FEAR
 F:DROP_GREAT | ONLY_ITEM | DROP_1D2
 S:1_IN_6
 S:ANIM_DEAD | BA_LITE | CAUSE_3 | CONF | HOLD | BLIND | SHRIEK | BLINK
-A:253:1:10
+A:253:10
 D:$You are a UNIQUE.
 D:$  She will surely fail your animation!
 D:あなたはユニークな存在だ。
@@ -25361,7 +25361,7 @@ F:DROP_GREAT | DROP_1D2 | WILD_TOWN
 F:TAKE_ITEM | OPEN_DOOR | BASH_DOOR | EVIL | DROP_SKELETON | DROP_CORPSE
 F:EAT_GIVE_DEX | EAT_LOSE_WIS
 S:1_IN_5 | TRAPS
-A:268:1:20
+A:268:20
 V:75
 D:$This legendary thief steals from the rich (you qualify).
 D:この伝説の盗賊は金持ち（あなたは合格）から金を盗む
@@ -26726,4 +26726,3 @@ S:1_IN_6 | BR_ABYSS
 V:150
 D:$It's a abyssal whirlpool.
 D:深淵の渦巻きだ。
-
