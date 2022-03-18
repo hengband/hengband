@@ -967,7 +967,7 @@ bool build_type13(PlayerType *player_ptr, dun_data_type *dd_ptr)
         what[i] = what[i * 2];
 
         if (cheat_hear) {
-            msg_print(r_info[what[i]].name.c_str());
+            msg_print(r_info[what[i]].name);
         }
     }
 

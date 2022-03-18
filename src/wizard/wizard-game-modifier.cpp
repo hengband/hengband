@@ -184,6 +184,6 @@ void wiz_restore_monster_max_num(MonsterRaceId r_idx)
 
     std::stringstream ss;
     ss << r_ptr->name << _("の出現数を復元しました。", " can appear again now.");
-    msg_print(ss.str().c_str());
+    msg_print(ss.str());
     msg_print(nullptr);
 }
