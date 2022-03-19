@@ -14,6 +14,14 @@
 #include "system/monster-type-definition.h" //!< @todo 違和感、m_ptr は外から与えることとしたい.
 #include "system/player-type-definition.h"
 
+template <class T>
+static int count_lore_mflag_group(const EnumClassFlagGroup<T> &flags, const EnumClassFlagGroup<T> &r_flags)
+{
+    auto result_flags = flags;
+    auto num = result_flags.reset(r_flags).count();
+    return num;
+}
+
 /*!
  * @brief モンスターの調査による思い出補完処理 / Learn about a monster (by "probing" it)
  * @param player_ptr プレイヤーへの参照ポインタ
@@ -75,17 +83,10 @@ int lore_do_probe(PlayerType *player_ptr, MonsterRaceId r_idx)
         }
     }
 
-    auto resistance_flags = r_ptr->resistance_flags;
-    n += resistance_flags.reset(r_ptr->r_resistance_flags).count();
-
-    auto ability_flags = r_ptr->ability_flags;
-    n += ability_flags.reset(r_ptr->r_ability_flags).count();
-
-    auto behavior_flags = r_ptr->behavior_flags;
-    n += behavior_flags.reset(r_ptr->r_behavior_flags).count();
-
-    auto drop_flags = r_ptr->drop_flags;
-    n += drop_flags.reset(r_ptr->r_drop_flags).count();
+    n += count_lore_mflag_group(r_ptr->resistance_flags, r_ptr->r_resistance_flags);
+    n += count_lore_mflag_group(r_ptr->ability_flags, r_ptr->r_ability_flags);
+    n += count_lore_mflag_group(r_ptr->behavior_flags, r_ptr->r_behavior_flags);
+    n += count_lore_mflag_group(r_ptr->drop_flags, r_ptr->r_drop_flags);
 
     r_ptr->r_flags1 = r_ptr->flags1;
     r_ptr->r_flags2 = r_ptr->flags2;

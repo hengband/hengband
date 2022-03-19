@@ -20,6 +20,8 @@
 #include "system/player-type-definition.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
+#include <algorithm>
+#include <iterator>
 
 enum dungeon_mode_type {
     DUNGEON_MODE_AND = 1,
@@ -44,6 +46,32 @@ int chameleon_change_m_idx = 0;
  * @todo summon_specific_typeグローバル変数の除去と関数引数への代替を行う
  */
 summon_type summon_specific_type = SUMMON_NONE;
+
+/**
+ * @brief モンスターがダンジョンに出現できる条件を満たしているかのフラグ判定関数(AND)
+ *
+ * @param r_flags モンスター側のフラグ
+ * @param d_flags ダンジョン側の判定フラグ
+ * @return 出現可能かどうか
+ */
+template <class T>
+static bool is_possible_monster_and(const EnumClassFlagGroup<T> &r_flags, const EnumClassFlagGroup<T> &d_flags)
+{
+    return r_flags.has_all_of(d_flags);
+}
+
+/**
+ * @brief モンスターがダンジョンに出現できる条件を満たしているかのフラグ判定関数(OR)
+ *
+ * @param r_flags モンスター側のフラグ
+ * @param d_flags ダンジョン側の判定フラグ
+ * @return 出現可能かどうか
+ */
+template <class T>
+static bool is_possible_monster_or(const EnumClassFlagGroup<T> &r_flags, const EnumClassFlagGroup<T> &d_flags)
+{
+    return r_flags.has_any_of(d_flags);
+}
 
 /*!
  * @brief 指定されたモンスター種族がダンジョンの制限にかかるかどうかをチェックする / Some dungeon types restrict the possible monsters.
@@ -93,241 +121,48 @@ static bool restrict_monster_to_dungeon(PlayerType *player_ptr, MonsterRaceId r_
         return true;
     }
 
-    byte a;
     switch (d_ptr->mode) {
-    case DUNGEON_MODE_AND: {
-        if (d_ptr->mflags1) {
-            if ((d_ptr->mflags1 & r_ptr->flags1) != d_ptr->mflags1) {
-                return false;
-            }
-        }
-
-        if (d_ptr->mflags2) {
-            if ((d_ptr->mflags2 & r_ptr->flags2) != d_ptr->mflags2) {
-                return false;
-            }
-        }
-
-        if (d_ptr->mflags3) {
-            if ((d_ptr->mflags3 & r_ptr->flags3) != d_ptr->mflags3) {
-                return false;
-            }
-        }
-
-        if (d_ptr->mon_ability_flags.any()) {
-            if (!r_ptr->ability_flags.has_all_of(d_ptr->mon_ability_flags)) {
-                return false;
-            }
-        }
-
-        if (d_ptr->mon_behavior_flags.any()) {
-            if (!r_ptr->behavior_flags.has_all_of(d_ptr->mon_behavior_flags)) {
-                return false;
-            }
-        }
-
-        if (d_ptr->mflags7) {
-            if ((d_ptr->mflags7 & r_ptr->flags7) != d_ptr->mflags7) {
-                return false;
-            }
-        }
-
-        if (d_ptr->mflags8) {
-            if ((d_ptr->mflags8 & r_ptr->flags8) != d_ptr->mflags8) {
-                return false;
-            }
-        }
-
-        if (d_ptr->mflags9) {
-            if ((d_ptr->mflags9 & r_ptr->flags9) != d_ptr->mflags9) {
-                return false;
-            }
-        }
-
-        if (d_ptr->mon_resistance_flags.any()) {
-            if (!r_ptr->resistance_flags.has_all_of(d_ptr->mon_resistance_flags)) {
-                return false;
-            }
-        }
-
-        if (d_ptr->mon_drop_flags.any()) {
-            if (!r_ptr->drop_flags.has_all_of(d_ptr->mon_drop_flags)) {
-                return false;
-            }
-        }
-
-        if (d_ptr->mon_kind_flags.any()) {
-            if (!r_ptr->kind_flags.has_all_of(d_ptr->mon_kind_flags)) {
-                return false;
-            }
-        }
-
-        for (a = 0; a < 5; a++) {
-            if (d_ptr->r_char[a] && (d_ptr->r_char[a] != r_ptr->d_char)) {
-                return false;
-            }
-        }
-
-        return true;
-    }
+    case DUNGEON_MODE_AND:
     case DUNGEON_MODE_NAND: {
-        if (d_ptr->mflags1) {
-            if ((d_ptr->mflags1 & r_ptr->flags1) != d_ptr->mflags1) {
-                return true;
-            }
-        }
+        std::vector<bool> is_possible = {
+            all_bits(r_ptr->flags1, d_ptr->mflags1),
+            all_bits(r_ptr->flags2, d_ptr->mflags2),
+            all_bits(r_ptr->flags3, d_ptr->mflags3),
+            all_bits(r_ptr->flags7, d_ptr->mflags7),
+            all_bits(r_ptr->flags8, d_ptr->mflags8),
+            all_bits(r_ptr->flags9, d_ptr->mflags9),
+            is_possible_monster_and(r_ptr->ability_flags, d_ptr->mon_ability_flags),
+            is_possible_monster_and(r_ptr->behavior_flags, d_ptr->mon_behavior_flags),
+            is_possible_monster_and(r_ptr->resistance_flags, d_ptr->mon_resistance_flags),
+            is_possible_monster_and(r_ptr->drop_flags, d_ptr->mon_drop_flags),
+            is_possible_monster_and(r_ptr->kind_flags, d_ptr->mon_kind_flags),
+        };
 
-        if (d_ptr->mflags2) {
-            if ((d_ptr->mflags2 & r_ptr->flags2) != d_ptr->mflags2) {
-                return true;
-            }
-        }
+        auto result = std::all_of(is_possible.begin(), is_possible.end(), [](const auto &v) { return v; });
+        result &= std::all_of(std::begin(d_ptr->r_char), std::end(d_ptr->r_char), [r_ptr](const auto &v) { return !v || (v == r_ptr->d_char); });
 
-        if (d_ptr->mflags3) {
-            if ((d_ptr->mflags3 & r_ptr->flags3) != d_ptr->mflags3) {
-                return true;
-            }
-        }
-
-        if (d_ptr->mon_ability_flags.any()) {
-            if (!r_ptr->ability_flags.has_all_of(d_ptr->mon_ability_flags)) {
-                return true;
-            }
-        }
-
-        if (d_ptr->mon_behavior_flags.any()) {
-            if (!r_ptr->behavior_flags.has_all_of(d_ptr->mon_behavior_flags)) {
-                return true;
-            }
-        }
-
-        if (d_ptr->mflags7) {
-            if ((d_ptr->mflags7 & r_ptr->flags7) != d_ptr->mflags7) {
-                return true;
-            }
-        }
-
-        if (d_ptr->mflags8) {
-            if ((d_ptr->mflags8 & r_ptr->flags8) != d_ptr->mflags8) {
-                return true;
-            }
-        }
-
-        if (d_ptr->mflags9) {
-            if ((d_ptr->mflags9 & r_ptr->flags9) != d_ptr->mflags9) {
-                return true;
-            }
-        }
-
-        if (d_ptr->mon_resistance_flags.any()) {
-            if (!r_ptr->resistance_flags.has_all_of(d_ptr->mon_resistance_flags)) {
-                return true;
-            }
-        }
-
-        if (d_ptr->mon_drop_flags.any()) {
-            if (!r_ptr->drop_flags.has_all_of(d_ptr->mon_drop_flags)) {
-                return true;
-            }
-        }
-
-        if (d_ptr->mon_kind_flags.any()) {
-            if (!r_ptr->kind_flags.has_all_of(d_ptr->mon_kind_flags)) {
-                return true;
-            }
-        }
-
-        for (a = 0; a < 5; a++) {
-            if (d_ptr->r_char[a] && (d_ptr->r_char[a] != r_ptr->d_char)) {
-                return true;
-            }
-        }
-
-        return false;
+        return d_ptr->mode == DUNGEON_MODE_AND ? result : !result;
     }
-    case DUNGEON_MODE_OR: {
-        if (r_ptr->flags1 & d_ptr->mflags1) {
-            return true;
-        }
-        if (r_ptr->flags2 & d_ptr->mflags2) {
-            return true;
-        }
-        if (r_ptr->flags3 & d_ptr->mflags3) {
-            return true;
-        }
-        if (r_ptr->ability_flags.has_any_of(d_ptr->mon_ability_flags)) {
-            return true;
-        }
-        if (r_ptr->behavior_flags.has_any_of(d_ptr->mon_behavior_flags)) {
-            return true;
-        }
-        if (r_ptr->flags7 & d_ptr->mflags7) {
-            return true;
-        }
-        if (r_ptr->flags8 & d_ptr->mflags8) {
-            return true;
-        }
-        if (r_ptr->flags9 & d_ptr->mflags9) {
-            return true;
-        }
-        if (r_ptr->resistance_flags.has_any_of(d_ptr->mon_resistance_flags)) {
-            return true;
-        }
-        if (r_ptr->drop_flags.has_any_of(d_ptr->mon_drop_flags)) {
-            return true;
-        }
-        if (r_ptr->kind_flags.has_any_of(d_ptr->mon_kind_flags)) {
-            return true;
-        }
-        for (a = 0; a < 5; a++) {
-            if (d_ptr->r_char[a] == r_ptr->d_char) {
-                return true;
-            }
-        }
-
-        return false;
-    }
+    case DUNGEON_MODE_OR:
     case DUNGEON_MODE_NOR: {
-        if (r_ptr->flags1 & d_ptr->mflags1) {
-            return false;
-        }
-        if (r_ptr->flags2 & d_ptr->mflags2) {
-            return false;
-        }
-        if (r_ptr->flags3 & d_ptr->mflags3) {
-            return false;
-        }
-        if (r_ptr->ability_flags.has_any_of(d_ptr->mon_ability_flags)) {
-            return false;
-        }
-        if (r_ptr->behavior_flags.has_any_of(d_ptr->mon_behavior_flags)) {
-            return false;
-        }
-        if (r_ptr->flags7 & d_ptr->mflags7) {
-            return false;
-        }
-        if (r_ptr->flags8 & d_ptr->mflags8) {
-            return false;
-        }
-        if (r_ptr->flags9 & d_ptr->mflags9) {
-            return false;
-        }
-        if (r_ptr->resistance_flags.has_any_of(d_ptr->mon_resistance_flags)) {
-            return false;
-        }
-        if (r_ptr->drop_flags.has_any_of(d_ptr->mon_drop_flags)) {
-            return false;
-        }
-        if (r_ptr->kind_flags.has_any_of(d_ptr->mon_kind_flags)) {
-            return false;
-        }
-        for (a = 0; a < 5; a++) {
-            if (d_ptr->r_char[a] == r_ptr->d_char) {
-                return false;
-            }
-        }
+        std::vector<bool> is_possible = {
+            any_bits(r_ptr->flags1, d_ptr->mflags1),
+            any_bits(r_ptr->flags2, d_ptr->mflags2),
+            any_bits(r_ptr->flags3, d_ptr->mflags3),
+            any_bits(r_ptr->flags7, d_ptr->mflags7),
+            any_bits(r_ptr->flags8, d_ptr->mflags8),
+            any_bits(r_ptr->flags9, d_ptr->mflags9),
+            is_possible_monster_or(r_ptr->ability_flags, d_ptr->mon_ability_flags),
+            is_possible_monster_or(r_ptr->behavior_flags, d_ptr->mon_behavior_flags),
+            is_possible_monster_or(r_ptr->resistance_flags, d_ptr->mon_resistance_flags),
+            is_possible_monster_or(r_ptr->drop_flags, d_ptr->mon_drop_flags),
+            is_possible_monster_or(r_ptr->kind_flags, d_ptr->mon_kind_flags),
+        };
 
-        return true;
+        auto result = std::any_of(is_possible.begin(), is_possible.end(), [](const auto &v) { return v; });
+        result |= std::any_of(std::begin(d_ptr->r_char), std::end(d_ptr->r_char), [r_ptr](const auto &v) { return v == r_ptr->d_char; });
+
+        return d_ptr->mode == DUNGEON_MODE_OR ? result : !result;
     }
     }
 
