@@ -12,7 +12,6 @@
 #include "monster-race/race-flags3.h"
 #include "monster-race/race-flags7.h"
 #include "monster-race/race-flags8.h"
-#include "monster-race/race-flags9.h"
 #include "monster-race/race-kind-flags.h"
 #include "monster-race/race-visual-flags.h"
 #include "system/angband.h"

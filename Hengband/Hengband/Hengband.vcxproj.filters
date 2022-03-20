@@ -3680,9 +3680,6 @@
     <ClInclude Include="..\..\src\monster-race\race-flags7.h">
       <Filter>monster-race</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\monster-race\race-flags9.h">
-      <Filter>monster-race</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\monster-race\race-flags-resistance.h">
       <Filter>monster-race</Filter>
     </ClInclude>

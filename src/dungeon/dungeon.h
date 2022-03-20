@@ -78,7 +78,6 @@ struct dungeon_type {
     BIT_FLAGS mflags3{};
     BIT_FLAGS mflags7{};
     BIT_FLAGS mflags8{};
-    BIT_FLAGS mflags9{};
 
     EnumClassFlagGroup<MonsterAbilityType> mon_ability_flags;
     EnumClassFlagGroup<MonsterBehaviorType> mon_behavior_flags;

@@ -18,7 +18,6 @@
 #include "monster-race/race-flags1.h"
 #include "monster-race/race-flags2.h"
 #include "monster-race/race-flags7.h"
-#include "monster-race/race-flags9.h"
 #include "monster-race/race-indice-types.h"
 #include "monster/monster-list.h"
 #include "monster/monster-util.h"

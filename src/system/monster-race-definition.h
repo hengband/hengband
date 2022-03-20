@@ -70,7 +70,6 @@ struct monster_race {
     BIT_FLAGS flags3{}; //!< Flags 3 (race/resist)
     BIT_FLAGS flags7{}; //!< Flags 7 (movement related abilities)
     BIT_FLAGS flags8{}; //!< Flags 8 (wilderness info)
-    BIT_FLAGS flags9{}; //!< Flags 9 (drops info)
     EnumClassFlagGroup<MonsterAbilityType> ability_flags; //!< 能力フラグ(魔法/ブレス) / Ability Flags
     EnumClassFlagGroup<MonsterAuraType> aura_flags; //!< オーラフラグ / Aura Flags
     EnumClassFlagGroup<MonsterBehaviorType> behavior_flags; //!< 能力フラグ（習性）
