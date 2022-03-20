@@ -265,14 +265,13 @@ void SpellsMirrorMaster::project_seeker_ray(int target_x, int target_y, int dam)
     POSITION y2;
     POSITION x2;
     bool blind = this->player_ptr->blind != 0;
-    auto path_n = 0;
-    uint16_t path_g[512];
     constexpr auto typ = AttributeType::SEEKER;
-    BIT_FLAGS flag = PROJECT_BEAM | PROJECT_KILL | PROJECT_GRID | PROJECT_ITEM | PROJECT_THRU;
+    BIT_FLAGS flag = PROJECT_BEAM | PROJECT_KILL | PROJECT_GRID | PROJECT_ITEM | PROJECT_THRU | PROJECT_MIRROR;
     rakubadam_p = 0;
     rakubadam_m = 0;
     monster_target_y = this->player_ptr->y;
     monster_target_x = this->player_ptr->x;
+    auto *floor_ptr = this->player_ptr->current_floor_ptr;
 
     ProjectResult res;
 
@@ -287,23 +286,25 @@ void SpellsMirrorMaster::project_seeker_ray(int target_x, int target_y, int dam)
     }
 
     /* Calculate the projection path */
-    path_n = projection_path(this->player_ptr, path_g, (project_length ? project_length : get_max_range(this->player_ptr)), y1, x1, y2, x2, flag);
     handle_stuff(this->player_ptr);
 
-    auto last_i = 0;
     project_m_n = 0;
     project_m_x = 0;
     project_m_y = 0;
-    auto oy = y1;
-    auto ox = x1;
     auto visual = false;
-    auto *floor_ptr = this->player_ptr->current_floor_ptr;
-    for (auto i = 0; i < path_n; ++i) {
-        auto ny = get_grid_y(path_g[i]);
-        auto nx = get_grid_x(path_g[i]);
 
-        if (delay_factor > 0) {
-            if (!blind) {
+    while (true) {
+        projection_path path_g(this->player_ptr, (project_length ? project_length : get_max_range(this->player_ptr)), y1, x1, y2, x2, flag);
+
+        if (path_g.path_num() == 0) {
+            break;
+        }
+
+        for (auto path_g_ite = path_g.begin(); path_g_ite != path_g.end(); path_g_ite++) {
+            const auto [oy, ox] = *(path_g_ite == path_g.begin() ? path_g.begin() : path_g_ite - 1);
+            const auto [ny, nx] = *path_g_ite;
+
+            if (delay_factor > 0 && !blind) {
                 if (panel_contains(ny, nx) && player_has_los_bold(this->player_ptr, ny, nx)) {
                     auto p = bolt_pict(oy, ox, ny, nx, typ);
                     auto a = PICT_A(p);
@@ -325,74 +326,40 @@ void SpellsMirrorMaster::project_seeker_ray(int target_x, int target_y, int dam)
                     term_xtra(TERM_XTRA_DELAY, delay_factor);
                 }
             }
+
+            if (affect_item(this->player_ptr, 0, 0, ny, nx, dam, typ)) {
+                res.notice = true;
+            }
         }
 
-        if (affect_item(this->player_ptr, 0, 0, ny, nx, dam, typ)) {
-            res.notice = true;
-        }
-
-        if (!floor_ptr->grid_array[ny][nx].is_mirror()) {
-            oy = ny;
-            ox = nx;
-            continue;
-        }
-
-        monster_target_y = ny;
-        monster_target_x = nx;
-        SpellsMirrorMaster(this->player_ptr).remove_mirror(ny, nx);
-
-        int next_y, next_x;
-        this->next_mirror(&next_y, &next_x, ny, nx);
-
-        path_n = i + projection_path(this->player_ptr, &(path_g[i + 1]), (project_length ? project_length : get_max_range(this->player_ptr)), ny, nx, next_y, next_x, flag);
-        auto y = ny;
-        auto x = nx;
-        for (auto j = last_i; j <= i; j++) {
-            y = get_grid_y(path_g[j]);
-            x = get_grid_x(path_g[j]);
-            if (affect_monster(this->player_ptr, 0, 0, y, x, dam, typ, flag, true)) {
+        for (const auto &[py, px] : path_g) {
+            if (affect_monster(this->player_ptr, 0, 0, py, px, dam, typ, flag, true)) {
                 res.notice = true;
             }
             auto *g_ptr = &floor_ptr->grid_array[project_m_y][project_m_x];
-            if ((project_m_n == 1) && (g_ptr->m_idx > 0)) {
-                auto *m_ptr = &floor_ptr->m_list[g_ptr->m_idx];
-                if (m_ptr->ml) {
-                    if (!this->player_ptr->effects()->hallucination()->is_hallucinated()) {
-                        monster_race_track(this->player_ptr, m_ptr->ap_r_idx);
-                    }
-
-                    health_track(this->player_ptr, g_ptr->m_idx);
+            auto *m_ptr = &floor_ptr->m_list[g_ptr->m_idx];
+            if (project_m_n == 1 && g_ptr->m_idx > 0 && m_ptr->ml) {
+                if (!this->player_ptr->effects()->hallucination()->is_hallucinated()) {
+                    monster_race_track(this->player_ptr, m_ptr->ap_r_idx);
                 }
+                health_track(this->player_ptr, g_ptr->m_idx);
             }
 
-            (void)affect_feature(this->player_ptr, 0, 0, y, x, dam, typ);
+            (void)affect_feature(this->player_ptr, 0, 0, py, px, dam, typ);
         }
 
-        last_i = i;
-        oy = y;
-        ox = x;
-    }
+        const auto [y, x] = path_g.back();
 
-    for (auto i = last_i; i < path_n; i++) {
-        auto py = get_grid_y(path_g[i]);
-        auto px = get_grid_x(path_g[i]);
-        if (affect_monster(this->player_ptr, 0, 0, py, px, dam, typ, flag, true)) {
-            res.notice = true;
-        }
-        if (project_m_n == 1) {
-            auto *g_ptr = &floor_ptr->grid_array[project_m_y][project_m_x];
-            if (g_ptr->m_idx > 0) {
-                auto *m_ptr = &floor_ptr->m_list[g_ptr->m_idx];
-                if (m_ptr->ml) {
-                    if (!this->player_ptr->effects()->hallucination()->is_hallucinated()) {
-                        monster_race_track(this->player_ptr, m_ptr->ap_r_idx);
-                    }
-                    health_track(this->player_ptr, g_ptr->m_idx);
-                }
-            }
+        if (!floor_ptr->grid_array[y][x].is_mirror()) {
+            break;
         }
 
-        (void)affect_feature(this->player_ptr, 0, 0, py, px, dam, typ);
+        monster_target_y = y;
+        monster_target_x = x;
+        this->remove_mirror(y, x);
+        this->next_mirror(&y2, &x2, y, x);
+        y1 = y;
+        x1 = x;
     }
 }
 
@@ -402,14 +369,13 @@ void SpellsMirrorMaster::project_super_ray(int target_x, int target_y, int dam)
     POSITION x1;
     POSITION y2;
     POSITION x2;
-    int path_n = 0;
-    uint16_t path_g[512];
     constexpr auto typ = AttributeType::SUPER_RAY;
-    BIT_FLAGS flag = PROJECT_BEAM | PROJECT_KILL | PROJECT_GRID | PROJECT_ITEM | PROJECT_THRU;
+    BIT_FLAGS flag = PROJECT_BEAM | PROJECT_KILL | PROJECT_GRID | PROJECT_ITEM | PROJECT_THRU | PROJECT_MIRROR;
     rakubadam_p = 0;
     rakubadam_m = 0;
     monster_target_y = this->player_ptr->y;
     monster_target_x = this->player_ptr->x;
+    auto *floor_ptr = this->player_ptr->current_floor_ptr;
 
     ProjectResult res;
 
@@ -424,21 +390,81 @@ void SpellsMirrorMaster::project_super_ray(int target_x, int target_y, int dam)
     }
 
     /* Calculate the projection path */
-    path_n = projection_path(this->player_ptr, path_g, (project_length ? project_length : get_max_range(this->player_ptr)), y1, x1, y2, x2, flag);
+    projection_path path_g(this->player_ptr, (project_length ? project_length : get_max_range(this->player_ptr)), y1, x1, y2, x2, flag);
+    std::vector<projection_path> second_path_g_list;
     handle_stuff(this->player_ptr);
 
-    auto second_step = 0;
     project_m_n = 0;
     project_m_x = 0;
     project_m_y = 0;
     auto oy = y1;
     auto ox = x1;
     auto visual = false;
-    auto *floor_ptr = this->player_ptr->current_floor_ptr;
-    for (auto i = 0; i < path_n; ++i) {
-        auto ny = get_grid_y(path_g[i]);
-        auto nx = get_grid_x(path_g[i]);
-        {
+    for (const auto &[ny, nx] : path_g) {
+        if (delay_factor > 0) {
+            if (panel_contains(ny, nx) && player_has_los_bold(this->player_ptr, ny, nx)) {
+                auto p = bolt_pict(oy, ox, ny, nx, typ);
+                auto a = PICT_A(p);
+                auto c = PICT_C(p);
+                print_rel(this->player_ptr, c, a, ny, nx);
+                move_cursor_relative(ny, nx);
+                term_fresh();
+                term_xtra(TERM_XTRA_DELAY, delay_factor);
+                lite_spot(this->player_ptr, ny, nx);
+                term_fresh();
+
+                p = bolt_pict(ny, nx, ny, nx, typ);
+                a = PICT_A(p);
+                c = PICT_C(p);
+                print_rel(this->player_ptr, c, a, ny, nx);
+
+                visual = true;
+            } else if (visual) {
+                term_xtra(TERM_XTRA_DELAY, delay_factor);
+            }
+        }
+
+        if (affect_item(this->player_ptr, 0, 0, ny, nx, dam, typ)) {
+            res.notice = true;
+        }
+        if (!cave_has_flag_bold(floor_ptr, ny, nx, FloorFeatureType::PROJECT)) {
+            break;
+        }
+        oy = ny;
+        ox = nx;
+    }
+    {
+        const auto [y, x] = path_g.back();
+        if (floor_ptr->grid_array[y][x].is_mirror()) {
+            this->remove_mirror(y, x);
+            auto project_flag = flag;
+            reset_bits(project_flag, PROJECT_MIRROR);
+
+            const auto length = project_length ? project_length : get_max_range(this->player_ptr);
+            for (auto i : { 7, 8, 9, 4, 6, 1, 2, 3 }) {
+                const auto dy = ddy[i];
+                const auto dx = ddx[i];
+                second_path_g_list.emplace_back(this->player_ptr, length, y, x, y + dy, x + dx, project_flag);
+            }
+        }
+    }
+    for (const auto &[py, px] : path_g) {
+        (void)affect_monster(this->player_ptr, 0, 0, py, px, dam, typ, flag, true);
+        auto *g_ptr = &floor_ptr->grid_array[project_m_y][project_m_x];
+        auto *m_ptr = &floor_ptr->m_list[g_ptr->m_idx];
+        if (project_m_n == 1 && g_ptr->m_idx > 0 && m_ptr->ml) {
+            if (!this->player_ptr->effects()->hallucination()->is_hallucinated()) {
+                monster_race_track(this->player_ptr, m_ptr->ap_r_idx);
+            }
+            health_track(this->player_ptr, g_ptr->m_idx);
+        }
+
+        (void)affect_feature(this->player_ptr, 0, 0, py, px, dam, typ);
+    }
+    for (const auto &second_path_g : second_path_g_list) {
+        oy = path_g.back().first;
+        ox = path_g.back().second;
+        for (const auto &[ny, nx] : second_path_g) {
             if (delay_factor > 0) {
                 if (panel_contains(ny, nx) && player_has_los_bold(this->player_ptr, ny, nx)) {
                     auto p = bolt_pict(oy, ox, ny, nx, typ);
@@ -461,70 +487,28 @@ void SpellsMirrorMaster::project_super_ray(int target_x, int target_y, int dam)
                     term_xtra(TERM_XTRA_DELAY, delay_factor);
                 }
             }
-        }
 
-        if (affect_item(this->player_ptr, 0, 0, ny, nx, dam, typ)) {
-            res.notice = true;
-        }
-        if (!cave_has_flag_bold(floor_ptr, ny, nx, FloorFeatureType::PROJECT)) {
-            if (second_step) {
-                continue;
-            }
-            break;
-        }
-
-        if (floor_ptr->grid_array[ny][nx].is_mirror() && !second_step) {
-            monster_target_y = ny;
-            monster_target_x = nx;
-            SpellsMirrorMaster(this->player_ptr).remove_mirror(ny, nx);
-            auto y = ny;
-            auto x = nx;
-            for (auto j = 0; j <= i; j++) {
-                y = get_grid_y(path_g[j]);
-                x = get_grid_x(path_g[j]);
-                (void)affect_feature(this->player_ptr, 0, 0, y, x, dam, typ);
+            if (affect_item(this->player_ptr, 0, 0, ny, nx, dam, typ)) {
+                res.notice = true;
             }
 
-            path_n = i;
-            second_step = i + 1;
-            path_n += projection_path(
-                this->player_ptr, &(path_g[path_n + 1]), (project_length ? project_length : get_max_range(this->player_ptr)), y, x, y - 1, x - 1, flag);
-            path_n += projection_path(this->player_ptr, &(path_g[path_n + 1]), (project_length ? project_length : get_max_range(this->player_ptr)), y, x, y - 1, x, flag);
-            path_n += projection_path(
-                this->player_ptr, &(path_g[path_n + 1]), (project_length ? project_length : get_max_range(this->player_ptr)), y, x, y - 1, x + 1, flag);
-            path_n += projection_path(this->player_ptr, &(path_g[path_n + 1]), (project_length ? project_length : get_max_range(this->player_ptr)), y, x, y, x - 1, flag);
-            path_n += projection_path(this->player_ptr, &(path_g[path_n + 1]), (project_length ? project_length : get_max_range(this->player_ptr)), y, x, y, x + 1, flag);
-            path_n += projection_path(
-                this->player_ptr, &(path_g[path_n + 1]), (project_length ? project_length : get_max_range(this->player_ptr)), y, x, y + 1, x - 1, flag);
-            path_n += projection_path(this->player_ptr, &(path_g[path_n + 1]), (project_length ? project_length : get_max_range(this->player_ptr)), y, x, y + 1, x, flag);
-            path_n += projection_path(
-                this->player_ptr, &(path_g[path_n + 1]), (project_length ? project_length : get_max_range(this->player_ptr)), y, x, y + 1, x + 1, flag);
-
-            oy = y;
-            ox = x;
-            continue;
+            oy = ny;
+            ox = nx;
         }
-        oy = ny;
-        ox = nx;
     }
-
-    for (auto i = 0; i < path_n; i++) {
-        auto py = get_grid_y(path_g[i]);
-        auto px = get_grid_x(path_g[i]);
-        (void)affect_monster(this->player_ptr, 0, 0, py, px, dam, typ, flag, true);
-        if (project_m_n == 1) {
+    for (const auto &second_path_g : second_path_g_list) {
+        for (const auto &[py, px] : second_path_g) {
+            (void)affect_monster(this->player_ptr, 0, 0, py, px, dam, typ, flag, true);
             auto *g_ptr = &floor_ptr->grid_array[project_m_y][project_m_x];
-            if (g_ptr->m_idx > 0) {
-                auto *m_ptr = &floor_ptr->m_list[g_ptr->m_idx];
-                if (m_ptr->ml) {
-                    if (!this->player_ptr->effects()->hallucination()->is_hallucinated()) {
-                        monster_race_track(this->player_ptr, m_ptr->ap_r_idx);
-                    }
-                    health_track(this->player_ptr, g_ptr->m_idx);
+            auto *m_ptr = &floor_ptr->m_list[g_ptr->m_idx];
+            if (project_m_n == 1 && g_ptr->m_idx > 0 && m_ptr->ml) {
+                if (!this->player_ptr->effects()->hallucination()->is_hallucinated()) {
+                    monster_race_track(this->player_ptr, m_ptr->ap_r_idx);
                 }
+                health_track(this->player_ptr, g_ptr->m_idx);
             }
-        }
 
-        (void)affect_feature(this->player_ptr, 0, 0, py, px, dam, typ);
+            (void)affect_feature(this->player_ptr, 0, 0, py, px, dam, typ);
+        }
     }
 }

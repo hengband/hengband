@@ -37,7 +37,6 @@ void move_cursor_relative(int row, int col)
  */
 void print_path(PlayerType *player_ptr, POSITION y, POSITION x)
 {
-    uint16_t path_g[512];
     byte default_color = TERM_SLATE;
 
     if (!display_path || (project_length == -1)) {
@@ -45,13 +44,10 @@ void print_path(PlayerType *player_ptr, POSITION y, POSITION x)
     }
 
     auto *floor_ptr = player_ptr->current_floor_ptr;
-    int path_n = projection_path(
-        player_ptr, path_g, (project_length ? project_length : get_max_range(player_ptr)), player_ptr->y, player_ptr->x, y, x, PROJECT_PATH | PROJECT_THRU);
+    projection_path path_g(player_ptr, (project_length ? project_length : get_max_range(player_ptr)), player_ptr->y, player_ptr->x, y, x, PROJECT_PATH | PROJECT_THRU);
     player_ptr->redraw |= (PR_MAP);
     handle_stuff(player_ptr);
-    for (int i = 0; i < path_n; i++) {
-        POSITION ny = get_grid_y(path_g[i]);
-        POSITION nx = get_grid_x(path_g[i]);
+    for (const auto &[ny, nx] : path_g) {
         auto *g_ptr = &floor_ptr->grid_array[ny][nx];
         if (panel_contains(ny, nx)) {
             TERM_COLOR a = default_color;

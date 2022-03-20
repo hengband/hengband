@@ -156,23 +156,18 @@ bool raise_possible(PlayerType *player_ptr, monster_type *m_ptr)
 bool clean_shot(PlayerType *player_ptr, POSITION y1, POSITION x1, POSITION y2, POSITION x2, bool is_friend)
 {
     auto *floor_ptr = player_ptr->current_floor_ptr;
-    uint16_t grid_g[512];
-    int grid_n = projection_path(player_ptr, grid_g, get_max_range(player_ptr), y1, x1, y2, x2, 0);
-    if (!grid_n) {
+    projection_path grid_g(player_ptr, get_max_range(player_ptr), y1, x1, y2, x2, 0);
+    if (grid_g.path_num() == 0) {
         return false;
     }
 
-    POSITION y = get_grid_y(grid_g[grid_n - 1]);
-    POSITION x = get_grid_x(grid_g[grid_n - 1]);
-    if ((y != y2) || (x != x2)) {
+    const auto [last_y, last_x] = grid_g.back();
+    if ((last_y != y2) || (last_x != x2)) {
         return false;
     }
 
-    for (int i = 0; i < grid_n; i++) {
-        y = get_grid_y(grid_g[i]);
-        x = get_grid_x(grid_g[i]);
-
-        if ((floor_ptr->grid_array[y][x].m_idx > 0) && !((y == y2) && (x == x2))) {
+    for (const auto &[y, x] : grid_g) {
+        if ((floor_ptr->grid_array[y][x].m_idx > 0) && (y != y2 || x != x2)) {
             auto *m_ptr = &floor_ptr->m_list[floor_ptr->grid_array[y][x].m_idx];
             if (is_friend == is_pet(m_ptr)) {
                 return false;

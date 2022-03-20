@@ -502,8 +502,6 @@ void exe_fire(PlayerType *player_ptr, INVENTORY_IDX item, ObjectType *j_ptr, SPE
 
     GAME_TEXT o_name[MAX_NLEN];
 
-    uint16_t path_g[512]; /* For calcuration of path length */
-
     /* STICK TO */
     bool stick_to = false;
 
@@ -591,7 +589,8 @@ void exe_fire(PlayerType *player_ptr, INVENTORY_IDX item, ObjectType *j_ptr, SPE
     }
 
     /* Get projection path length */
-    tdis = projection_path(player_ptr, path_g, project_length, player_ptr->y, player_ptr->x, ty, tx, PROJECT_PATH | PROJECT_THRU) - 1;
+    projection_path path_g(player_ptr, project_length, player_ptr->y, player_ptr->x, ty, tx, PROJECT_PATH | PROJECT_THRU);
+    tdis = path_g.path_num() - 1;
 
     project_length = 0; /* reset to default */
 

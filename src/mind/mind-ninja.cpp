@@ -157,10 +157,9 @@ bool rush_attack(PlayerType *player_ptr, bool *mdeath)
         tm_idx = floor_ptr->grid_array[ty][tx].m_idx;
     }
 
-    uint16_t path_g[32];
-    int path_n = projection_path(player_ptr, path_g, project_length, player_ptr->y, player_ptr->x, ty, tx, PROJECT_STOP | PROJECT_KILL);
+    projection_path path_g(player_ptr, project_length, player_ptr->y, player_ptr->x, ty, tx, PROJECT_STOP | PROJECT_KILL);
     project_length = 0;
-    if (!path_n) {
+    if (path_g.path_num() == 0) {
         return true;
     }
 
@@ -168,11 +167,8 @@ bool rush_attack(PlayerType *player_ptr, bool *mdeath)
     tx = player_ptr->x;
     bool tmp_mdeath = false;
     bool moved = false;
-    for (int i = 0; i < path_n; i++) {
+    for (const auto &[ny, nx] : path_g) {
         monster_type *m_ptr;
-
-        int ny = get_grid_y(path_g[i]);
-        int nx = get_grid_x(path_g[i]);
 
         if (is_cave_empty_bold(player_ptr, ny, nx) && player_can_enter(player_ptr, floor_ptr->grid_array[ny][nx].feat, 0)) {
             ty = ny;
