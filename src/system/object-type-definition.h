@@ -41,7 +41,7 @@ public:
     uint8_t captured_monster_speed = 0; /*!< 捕らえたモンスターの速度 */
     short captured_monster_current_hp = 0; /*!< 捕らえたモンスターの現HP */
     short captured_monster_max_hp = 0; /*!< 捕らえたモンスターの最大HP */
-    ushort fuel = 0; /*!< 光源の残り寿命 / Extra info fuel or captured monster's current HP */
+    short fuel = 0; /*!< 光源の残り寿命 / Remaining fuel */
 
     byte smith_hit = 0; /*!< 鍛冶をした結果上昇した命中値 */
     byte smith_damage = 0; /*!< 鍛冶をした結果上昇したダメージ */
