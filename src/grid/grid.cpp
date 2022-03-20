@@ -52,6 +52,7 @@
 #include "system/monster-type-definition.h"
 #include "system/object-type-definition.h"
 #include "system/player-type-definition.h"
+#include "term/gameterm.h"
 #include "term/term-color-types.h"
 #include "util/bit-flags-calculator.h"
 #include "util/enum-converter.h"
@@ -276,6 +277,12 @@ void print_rel(PlayerType *player_ptr, char c, TERM_COLOR a, POSITION y, POSITIO
         /* Draw the char using the attr */
         term_queue_bigchar(panel_col_of(x), y - panel_row_prt, a, c, 0, 0);
     }
+}
+
+void print_bolt_pict(PlayerType *player_ptr, POSITION y, POSITION x, POSITION ny, POSITION nx, AttributeType typ)
+{
+    const auto [a, c] = bolt_pict(y, x, ny, nx, typ);
+    print_rel(player_ptr, c, a, ny, nx);
 }
 
 /*!
