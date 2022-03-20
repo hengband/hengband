@@ -290,44 +290,6 @@ const std::unordered_map<std::string_view, race_flags8> r_info_flags8 = {
 };
 
 /*!
- * モンスター特性トークンの定義9 /
- * Monster race flags
- */
-const std::unordered_map<std::string_view, race_flags9> r_info_flags9 = {
-    { "EAT_BLIND", RF9_EAT_BLIND },
-    { "EAT_CONF", RF9_EAT_CONF },
-    { "EAT_MANA", RF9_EAT_MANA },
-    { "EAT_NEXUS", RF9_EAT_NEXUS },
-    // { "EAT_BLINK", RF9_EAT_BLINK }, //<! @note フラグ未定義
-    { "EAT_SLEEP", RF9_EAT_SLEEP },
-    { "EAT_BERSERKER", RF9_EAT_BERSERKER },
-    { "EAT_ACIDIC", RF9_EAT_ACIDIC },
-    { "EAT_SPEED", RF9_EAT_SPEED },
-    { "EAT_CURE", RF9_EAT_CURE },
-    { "EAT_FIRE_RES", RF9_EAT_FIRE_RES },
-    { "EAT_COLD_RES", RF9_EAT_COLD_RES },
-    { "EAT_ACID_RES", RF9_EAT_ACID_RES },
-    { "EAT_ELEC_RES", RF9_EAT_ELEC_RES },
-    { "EAT_POIS_RES", RF9_EAT_POIS_RES },
-    { "EAT_INSANITY", RF9_EAT_INSANITY },
-    { "EAT_DRAIN_EXP", RF9_EAT_DRAIN_EXP },
-    { "EAT_POISONOUS", RF9_EAT_POISONOUS },
-    { "EAT_GIVE_STR", RF9_EAT_GIVE_STR },
-    { "EAT_GIVE_INT", RF9_EAT_GIVE_INT },
-    { "EAT_GIVE_WIS", RF9_EAT_GIVE_WIS },
-    { "EAT_GIVE_DEX", RF9_EAT_GIVE_DEX },
-    { "EAT_GIVE_CON", RF9_EAT_GIVE_CON },
-    { "EAT_GIVE_CHR", RF9_EAT_GIVE_CHR },
-    { "EAT_LOSE_STR", RF9_EAT_LOSE_STR },
-    { "EAT_LOSE_INT", RF9_EAT_LOSE_INT },
-    { "EAT_LOSE_WIS", RF9_EAT_LOSE_WIS },
-    { "EAT_LOSE_DEX", RF9_EAT_LOSE_DEX },
-    { "EAT_LOSE_CON", RF9_EAT_LOSE_CON },
-    { "EAT_LOSE_CHR", RF9_EAT_LOSE_CHR },
-    { "EAT_DRAIN_MANA", RF9_EAT_DRAIN_MANA },
-};
-
-/*!
  * モンスター特性トークンの定義R(耐性) /
  * Monster race flags
  */
