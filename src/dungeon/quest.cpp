@@ -97,7 +97,7 @@ void determine_random_questor(PlayerType *player_ptr, quest_type *q_ptr)
         if (r_ptr->flags7 & RF7_AQUATIC) {
             continue;
         }
-        if (r_ptr->flags8 & RF8_WILD_ONLY) {
+        if (r_ptr->wilderness_flags.has(MonsterWildernessType::WILD_ONLY)) {
             continue;
         }
         if (no_questor_or_bounty_uniques(r_idx)) {

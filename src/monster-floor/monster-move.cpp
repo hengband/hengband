@@ -430,7 +430,7 @@ bool process_monster_movement(PlayerType *player_ptr, turn_flags *turn_flags_ptr
         turn_flags_ptr->do_turn = true;
         feature_type *f_ptr;
         f_ptr = &f_info[g_ptr->feat];
-        if (f_ptr->flags.has(FloorFeatureType::TREE) && ((r_ptr->flags7 & RF7_CAN_FLY) == 0) && ((r_ptr->flags8 & RF8_WILD_WOOD) == 0)) {
+        if (f_ptr->flags.has(FloorFeatureType::TREE) && ((r_ptr->flags7 & RF7_CAN_FLY) == 0) && (r_ptr->wilderness_flags.has_not(MonsterWildernessType::WILD_WOOD))) {
             m_ptr->energy_need += ENERGY_NEED();
         }
 
