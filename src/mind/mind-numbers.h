@@ -42,7 +42,7 @@ enum class MindMindcrafterType : int {
     THE_WORLD = 13,
 };
 
-enum class mind_mirror_master_type : int {
+enum class MindMirrorMasterType : int {
     MIRROR_SEEING = 0,
     MAKE_MIRROR = 1,
     DRIP_LIGHT = 2,
