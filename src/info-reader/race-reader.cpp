@@ -40,10 +40,6 @@ static bool grab_one_basic_flag(monster_race *r_ptr, std::string_view what)
         return true;
     }
 
-    if (info_grab_one_flag(r_ptr->flags9, r_info_flags9, what)) {
-        return true;
-    }
-
     if (EnumClassFlagGroup<MonsterResistanceType>::grab_one_flag(r_ptr->resistance_flags, r_info_flagsr, what)) {
         return true;
     }
