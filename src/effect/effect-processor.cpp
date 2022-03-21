@@ -34,7 +34,6 @@
 #include "system/monster-type-definition.h"
 #include "system/player-type-definition.h"
 #include "target/projection-path-calculator.h"
-#include "term/gameterm.h"
 #include "timed-effect/player-hallucination.h"
 #include "timed-effect/timed-effects.h"
 #include "util/bit-flags-calculator.h"
@@ -169,22 +168,14 @@ ProjectResult project(PlayerType *player_ptr, const MONSTER_IDX who, POSITION ra
         if (delay_factor > 0) {
             if (!blind && !(flag & (PROJECT_HIDE | PROJECT_FAST))) {
                 if (panel_contains(ny, nx) && player_has_los_bold(player_ptr, ny, nx)) {
-                    uint16_t p;
-                    TERM_COLOR a;
-                    p = bolt_pict(oy, ox, ny, nx, typ);
-                    a = PICT_A(p);
-                    auto c = PICT_C(p);
-                    print_rel(player_ptr, c, a, ny, nx);
+                    print_bolt_pict(player_ptr, oy, ox, ny, nx, typ);
                     move_cursor_relative(ny, nx);
                     term_fresh();
                     term_xtra(TERM_XTRA_DELAY, delay_factor);
                     lite_spot(player_ptr, ny, nx);
                     term_fresh();
                     if (flag & (PROJECT_BEAM)) {
-                        p = bolt_pict(ny, nx, ny, nx, typ);
-                        a = PICT_A(p);
-                        c = PICT_C(p);
-                        print_rel(player_ptr, c, a, ny, nx);
+                        print_bolt_pict(player_ptr, ny, nx, ny, nx, typ);
                     }
 
                     visual = true;
@@ -284,13 +275,8 @@ ProjectResult project(PlayerType *player_ptr, const MONSTER_IDX who, POSITION ra
                 auto y = gy[i];
                 auto x = gx[i];
                 if (panel_contains(y, x) && player_has_los_bold(player_ptr, y, x)) {
-                    uint16_t p;
-                    TERM_COLOR a;
                     drawn = true;
-                    p = bolt_pict(y, x, y, x, typ);
-                    a = PICT_A(p);
-                    auto c = PICT_C(p);
-                    print_rel(player_ptr, c, a, y, x);
+                    print_bolt_pict(player_ptr, y, x, y, x, typ);
                 }
             }
 

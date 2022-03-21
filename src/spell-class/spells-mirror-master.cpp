@@ -35,7 +35,6 @@
 #include "target/grid-selector.h"
 #include "target/projection-path-calculator.h"
 #include "target/target-checker.h"
-#include "term/gameterm.h"
 #include "timed-effect/player-hallucination.h"
 #include "timed-effect/timed-effects.h"
 #include "util/bit-flags-calculator.h"
@@ -306,20 +305,14 @@ void SpellsMirrorMaster::project_seeker_ray(int target_x, int target_y, int dam)
 
             if (delay_factor > 0 && !blind) {
                 if (panel_contains(ny, nx) && player_has_los_bold(this->player_ptr, ny, nx)) {
-                    auto p = bolt_pict(oy, ox, ny, nx, typ);
-                    auto a = PICT_A(p);
-                    auto c = PICT_C(p);
-                    print_rel(this->player_ptr, c, a, ny, nx);
+                    print_bolt_pict(this->player_ptr, oy, ox, ny, nx, typ);
                     move_cursor_relative(ny, nx);
                     term_fresh();
                     term_xtra(TERM_XTRA_DELAY, delay_factor);
                     lite_spot(this->player_ptr, ny, nx);
                     term_fresh();
 
-                    p = bolt_pict(ny, nx, ny, nx, typ);
-                    a = PICT_A(p);
-                    c = PICT_C(p);
-                    print_rel(this->player_ptr, c, a, ny, nx);
+                    print_bolt_pict(this->player_ptr, ny, nx, ny, nx, typ);
 
                     visual = true;
                 } else if (visual) {
@@ -403,20 +396,14 @@ void SpellsMirrorMaster::project_super_ray(int target_x, int target_y, int dam)
     for (const auto &[ny, nx] : path_g) {
         if (delay_factor > 0) {
             if (panel_contains(ny, nx) && player_has_los_bold(this->player_ptr, ny, nx)) {
-                auto p = bolt_pict(oy, ox, ny, nx, typ);
-                auto a = PICT_A(p);
-                auto c = PICT_C(p);
-                print_rel(this->player_ptr, c, a, ny, nx);
+                print_bolt_pict(this->player_ptr, oy, ox, ny, nx, typ);
                 move_cursor_relative(ny, nx);
                 term_fresh();
                 term_xtra(TERM_XTRA_DELAY, delay_factor);
                 lite_spot(this->player_ptr, ny, nx);
                 term_fresh();
 
-                p = bolt_pict(ny, nx, ny, nx, typ);
-                a = PICT_A(p);
-                c = PICT_C(p);
-                print_rel(this->player_ptr, c, a, ny, nx);
+                print_bolt_pict(this->player_ptr, ny, nx, ny, nx, typ);
 
                 visual = true;
             } else if (visual) {
@@ -467,20 +454,14 @@ void SpellsMirrorMaster::project_super_ray(int target_x, int target_y, int dam)
         for (const auto &[ny, nx] : second_path_g) {
             if (delay_factor > 0) {
                 if (panel_contains(ny, nx) && player_has_los_bold(this->player_ptr, ny, nx)) {
-                    auto p = bolt_pict(oy, ox, ny, nx, typ);
-                    auto a = PICT_A(p);
-                    auto c = PICT_C(p);
-                    print_rel(this->player_ptr, c, a, ny, nx);
+                    print_bolt_pict(this->player_ptr, oy, ox, ny, nx, typ);
                     move_cursor_relative(ny, nx);
                     term_fresh();
                     term_xtra(TERM_XTRA_DELAY, delay_factor);
                     lite_spot(this->player_ptr, ny, nx);
                     term_fresh();
 
-                    p = bolt_pict(ny, nx, ny, nx, typ);
-                    a = PICT_A(p);
-                    c = PICT_C(p);
-                    print_rel(this->player_ptr, c, a, ny, nx);
+                    print_bolt_pict(this->player_ptr, ny, nx, ny, nx, typ);
 
                     visual = true;
                 } else if (visual) {
