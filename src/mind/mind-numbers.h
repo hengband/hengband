@@ -25,7 +25,7 @@ enum class MindForceTrainerType : int {
     LIGHT_SPEED = 13,
 };
 
-enum mind_mindcrafter_type : int {
+enum class mind_mindcrafter_type : int {
     PRECOGNITION = 0,
     NEURAL_BLAST = 1,
     MINOR_DISPLACEMENT = 2,

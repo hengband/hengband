@@ -138,7 +138,7 @@ bool cast_mindcrafter_spell(PlayerType *player_ptr, mind_mindcrafter_type spell)
     TIME_EFFECT t;
     PLAYER_LEVEL plev = player_ptr->lev;
     switch (spell) {
-    case PRECOGNITION:
+    case mind_mindcrafter_type::PRECOGNITION:
         if (plev > 44) {
             chg_virtue(player_ptr, V_KNOWLEDGE, 1);
             chg_virtue(player_ptr, V_ENLIGHTEN, 1);
@@ -169,7 +169,7 @@ bool cast_mindcrafter_spell(PlayerType *player_ptr, mind_mindcrafter_type spell)
         }
 
         break;
-    case NEURAL_BLAST:
+    case mind_mindcrafter_type::NEURAL_BLAST:
         if (!get_aim_dir(player_ptr, &dir)) {
             return false;
         }
@@ -180,13 +180,13 @@ bool cast_mindcrafter_spell(PlayerType *player_ptr, mind_mindcrafter_type spell)
             fire_ball(player_ptr, AttributeType::PSI, dir, damroll(3 + ((plev - 1) / 4), (3 + plev / 15)), 0);
         }
         break;
-    case MINOR_DISPLACEMENT:
+    case mind_mindcrafter_type::MINOR_DISPLACEMENT:
         teleport_player(player_ptr, 10, TELEPORT_SPONTANEOUS);
         break;
-    case MAJOR_DISPLACEMENT:
+    case mind_mindcrafter_type::MAJOR_DISPLACEMENT:
         teleport_player(player_ptr, plev * 5, TELEPORT_SPONTANEOUS);
         break;
-    case DOMINATION:
+    case mind_mindcrafter_type::DOMINATION:
         if (plev < 30) {
             if (!get_aim_dir(player_ptr, &dir)) {
                 return false;
@@ -198,14 +198,14 @@ bool cast_mindcrafter_spell(PlayerType *player_ptr, mind_mindcrafter_type spell)
         }
 
         break;
-    case PLUVERISE:
+    case mind_mindcrafter_type::PLUVERISE:
         if (!get_aim_dir(player_ptr, &dir)) {
             return false;
         }
 
         fire_ball(player_ptr, AttributeType::TELEKINESIS, dir, damroll(8 + ((plev - 5) / 4), 8), (plev > 20 ? (plev - 20) / 8 + 1 : 0));
         break;
-    case CHARACTER_ARMOR:
+    case mind_mindcrafter_type::CHARACTER_ARMOR:
         set_shield(player_ptr, (TIME_EFFECT)plev, false);
         if (plev > 14) {
             set_oppose_acid(player_ptr, (TIME_EFFECT)plev, false);
@@ -224,13 +224,13 @@ bool cast_mindcrafter_spell(PlayerType *player_ptr, mind_mindcrafter_type spell)
         }
 
         break;
-    case PSYCHOMETRY:
+    case mind_mindcrafter_type::PSYCHOMETRY:
         if (plev < 25) {
             return psychometry(player_ptr);
         } else {
             return ident_spell(player_ptr, false);
         }
-    case MIND_WAVE:
+    case mind_mindcrafter_type::MIND_WAVE:
         msg_print(_("精神を捻じ曲げる波動を発生させた！", "Mind-warping forces emanate from your brain!"));
         if (plev < 25) {
             project(player_ptr, 0, 2 + plev / 10, player_ptr->y, player_ptr->x, (plev * 3), AttributeType::PSI, PROJECT_KILL);
@@ -239,7 +239,7 @@ bool cast_mindcrafter_spell(PlayerType *player_ptr, mind_mindcrafter_type spell)
         }
 
         break;
-    case ADRENALINE_CHANNELING: {
+    case mind_mindcrafter_type::ADRENALINE_CHANNELING: {
         BadStatusSetter bss(player_ptr);
         (void)bss.fear(0);
         (void)bss.stun(0);
@@ -252,14 +252,14 @@ bool cast_mindcrafter_spell(PlayerType *player_ptr, mind_mindcrafter_type spell)
         (void)set_fast(player_ptr, t, false);
         break;
     }
-    case TELEKINESIS:
+    case mind_mindcrafter_type::TELEKINESIS:
         if (!get_aim_dir(player_ptr, &dir)) {
             return false;
         }
 
         fetch_item(player_ptr, dir, plev * 15, false);
         break;
-    case PSYCHIC_DRAIN:
+    case mind_mindcrafter_type::PSYCHIC_DRAIN:
         if (!get_aim_dir(player_ptr, &dir)) {
             return false;
         }
@@ -270,14 +270,14 @@ bool cast_mindcrafter_spell(PlayerType *player_ptr, mind_mindcrafter_type spell)
         }
 
         break;
-    case PSYCHO_SPEAR:
+    case mind_mindcrafter_type::PSYCHO_SPEAR:
         if (!get_aim_dir(player_ptr, &dir)) {
             return false;
         }
 
         fire_beam(player_ptr, AttributeType::PSY_SPEAR, dir, randint1(plev * 3) + plev * 3);
         break;
-    case THE_WORLD:
+    case mind_mindcrafter_type::THE_WORLD:
         time_walk(player_ptr);
         break;
     default:
