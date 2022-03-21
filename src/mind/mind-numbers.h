@@ -8,7 +8,7 @@ enum class MindBerserkerType : int {
     MASSACRE = 4,
 };
 
-enum class mind_force_trainer_type : int {
+enum class MindForceTrainerType : int {
     SMALL_FORCE_BALL = 0,
     FLASH_LIGHT = 1,
     FLYING_TECHNIQUE = 2,

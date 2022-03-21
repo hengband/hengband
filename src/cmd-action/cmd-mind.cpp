@@ -300,7 +300,7 @@ static bool switch_mind_class(PlayerType *player_ptr, cm_type *cm_ptr)
         cm_ptr->cast = cast_mindcrafter_spell(player_ptr, i2enum<mind_mindcrafter_type>(cm_ptr->n));
         return true;
     case MindKindType::KI:
-        cm_ptr->cast = cast_force_spell(player_ptr, i2enum<mind_force_trainer_type>(cm_ptr->n));
+        cm_ptr->cast = cast_force_spell(player_ptr, i2enum<MindForceTrainerType>(cm_ptr->n));
         return true;
     case MindKindType::BERSERKER:
         cm_ptr->cast = cast_berserk_spell(player_ptr, i2enum<MindBerserkerType>(cm_ptr->n));
