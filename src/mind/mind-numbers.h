@@ -66,7 +66,7 @@ enum class MindMirrorMasterType : int {
     RUFFNOR_MIRROR = 20,
 };
 
-enum mind_ninja_type : int {
+enum class mind_ninja_type : int {
     DARKNESS_CREATION = 0,
     DETECT_NEAR = 1,
     HIDE_LEAVES = 2,

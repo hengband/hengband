@@ -380,10 +380,10 @@ bool cast_ninja_spell(PlayerType *player_ptr, mind_ninja_type spell)
     PLAYER_LEVEL plev = player_ptr->lev;
     auto ninja_data = PlayerClass(player_ptr).get_specific_data<ninja_data_type>();
     switch (spell) {
-    case DARKNESS_CREATION:
+    case mind_ninja_type::DARKNESS_CREATION:
         (void)unlite_area(player_ptr, 0, 3);
         break;
-    case DETECT_NEAR:
+    case mind_ninja_type::DETECT_NEAR:
         if (plev > 44) {
             wiz_lite(player_ptr, true);
         }
@@ -400,10 +400,10 @@ bool cast_ninja_spell(PlayerType *player_ptr, mind_ninja_type spell)
         }
 
         break;
-    case HIDE_LEAVES:
+    case mind_ninja_type::HIDE_LEAVES:
         teleport_player(player_ptr, 10, TELEPORT_SPONTANEOUS);
         break;
-    case KAWARIMI:
+    case mind_ninja_type::KAWARIMI:
         if (ninja_data && !ninja_data->kawarimi) {
             msg_print(_("敵の攻撃に対して敏感になった。", "You are now prepared to evade any attacks."));
             ninja_data->kawarimi = true;
@@ -411,35 +411,35 @@ bool cast_ninja_spell(PlayerType *player_ptr, mind_ninja_type spell)
         }
 
         break;
-    case ABSCONDING:
+    case mind_ninja_type::ABSCONDING:
         teleport_player(player_ptr, player_ptr->lev * 5, TELEPORT_SPONTANEOUS);
         break;
-    case HIT_AND_AWAY:
+    case mind_ninja_type::HIT_AND_AWAY:
         if (!hit_and_away(player_ptr)) {
             return false;
         }
 
         break;
-    case BIND_MONSTER:
+    case mind_ninja_type::BIND_MONSTER:
         if (!get_aim_dir(player_ptr, &dir)) {
             return false;
         }
 
         (void)stasis_monster(player_ptr, dir);
         break;
-    case ANCIENT_KNOWLEDGE:
+    case mind_ninja_type::ANCIENT_KNOWLEDGE:
         return ident_spell(player_ptr, false);
-    case FLOATING:
+    case mind_ninja_type::FLOATING:
         set_tim_levitation(player_ptr, randint1(20) + 20, false);
         break;
-    case HIDE_FLAMES:
+    case mind_ninja_type::HIDE_FLAMES:
         fire_ball(player_ptr, AttributeType::FIRE, 0, 50 + plev, plev / 10 + 2);
         teleport_player(player_ptr, 30, TELEPORT_SPONTANEOUS);
         set_oppose_fire(player_ptr, (TIME_EFFECT)plev, false);
         break;
-    case NYUSIN:
+    case mind_ninja_type::NYUSIN:
         return rush_attack(player_ptr, nullptr);
-    case SYURIKEN_SPREADING: {
+    case mind_ninja_type::SYURIKEN_SPREADING: {
         for (int i = 0; i < 8; i++) {
             OBJECT_IDX slot;
 
@@ -465,17 +465,17 @@ bool cast_ninja_spell(PlayerType *player_ptr, mind_ninja_type spell)
 
         break;
     }
-    case CHAIN_HOOK:
+    case mind_ninja_type::CHAIN_HOOK:
         (void)fetch_monster(player_ptr);
         break;
-    case SMOKE_BALL:
+    case mind_ninja_type::SMOKE_BALL:
         if (!get_aim_dir(player_ptr, &dir)) {
             return false;
         }
 
         fire_ball(player_ptr, AttributeType::OLD_CONF, dir, plev * 3, 3);
         break;
-    case SWAP_POSITION:
+    case mind_ninja_type::SWAP_POSITION:
         project_length = -1;
         if (!get_aim_dir(player_ptr, &dir)) {
             project_length = 0;
@@ -485,20 +485,20 @@ bool cast_ninja_spell(PlayerType *player_ptr, mind_ninja_type spell)
         project_length = 0;
         (void)teleport_swap(player_ptr, dir);
         break;
-    case EXPLOSIVE_RUNE:
+    case mind_ninja_type::EXPLOSIVE_RUNE:
         create_rune_explosion(player_ptr, player_ptr->y, player_ptr->x);
         break;
-    case HIDE_MUD:
+    case mind_ninja_type::HIDE_MUD:
         (void)set_pass_wall(player_ptr, randint1(plev / 2) + plev / 2, false);
         set_oppose_acid(player_ptr, (TIME_EFFECT)plev, false);
         break;
-    case HIDE_MIST:
+    case mind_ninja_type::HIDE_MIST:
         fire_ball(player_ptr, AttributeType::POIS, 0, 75 + plev * 2 / 3, plev / 5 + 2);
         fire_ball(player_ptr, AttributeType::HYPODYNAMIA, 0, 75 + plev * 2 / 3, plev / 5 + 2);
         fire_ball(player_ptr, AttributeType::CONFUSION, 0, 75 + plev * 2 / 3, plev / 5 + 2);
         teleport_player(player_ptr, 30, TELEPORT_SPONTANEOUS);
         break;
-    case PURGATORY_FLAME: {
+    case mind_ninja_type::PURGATORY_FLAME: {
         int num = damroll(3, 9);
         for (int k = 0; k < num; k++) {
             AttributeType typ = one_in_(2) ? AttributeType::FIRE : one_in_(3) ? AttributeType::NETHER
@@ -516,7 +516,7 @@ bool cast_ninja_spell(PlayerType *player_ptr, mind_ninja_type spell)
 
         break;
     }
-    case ALTER_EGO:
+    case mind_ninja_type::ALTER_EGO:
         set_multishadow(player_ptr, 6 + randint1(6), false);
         break;
     default:
