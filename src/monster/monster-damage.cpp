@@ -444,7 +444,7 @@ void MonsterDamageProcessor::get_exp_from_mon(monster_type *m_ptr, int exp_dam)
     s64b_mul(&div_h, &div_l, 0, r_ptr->hdice * (ironman_nightmare ? 2 : 1) * compensation);
 
     /* Special penalty in the wilderness */
-    if (!this->player_ptr->current_floor_ptr->dun_level && (none_bits(r_ptr->flags8, RF8_WILD_ONLY) || r_ptr->kind_flags.has_not(MonsterKindType::UNIQUE))) {
+    if (!this->player_ptr->current_floor_ptr->dun_level && (r_ptr->wilderness_flags.has_not(MonsterWildernessType::WILD_ONLY) || r_ptr->kind_flags.has_not(MonsterKindType::UNIQUE))) {
         s64b_mul(&div_h, &div_l, 0, 5);
     }
 

@@ -96,7 +96,7 @@ bool mon_hook_quest(PlayerType *player_ptr, MonsterRaceId r_idx)
     (void)player_ptr;
 
     auto *r_ptr = &r_info[r_idx];
-    if (any_bits(r_ptr->flags8, RF8_WILD_ONLY)) {
+    if (r_ptr->wilderness_flags.has(MonsterWildernessType::WILD_ONLY)) {
         return false;
     }
 
@@ -137,12 +137,15 @@ bool mon_hook_dungeon(PlayerType *player_ptr, MonsterRaceId r_idx)
     auto *r_ptr = &r_info[r_idx];
     dungeon_type *d_ptr = &d_info[player_ptr->dungeon_idx];
 
-    if (any_bits(r_ptr->flags8, RF8_WILD_ONLY)) {
-        return any_bits(d_ptr->mflags8, RF8_WILD_MOUNTAIN) && any_bits(r_ptr->flags8, RF8_WILD_MOUNTAIN);
+    if (r_ptr->wilderness_flags.has(MonsterWildernessType::WILD_ONLY)) {
+        return d_ptr->mon_wilderness_flags.has(MonsterWildernessType::WILD_MOUNTAIN) && r_ptr->wilderness_flags.has(MonsterWildernessType::WILD_MOUNTAIN);
     }
 
-    bool land = none_bits(r_ptr->flags7, RF7_AQUATIC);
-    return none_bits(d_ptr->mflags8, RF8_WILD_MOUNTAIN | RF8_WILD_VOLCANO) || (any_bits(d_ptr->mflags8, RF8_WILD_MOUNTAIN) && (land || any_bits(r_ptr->flags8, RF8_WILD_MOUNTAIN))) || (any_bits(d_ptr->mflags8, RF8_WILD_VOLCANO) && (land || any_bits(r_ptr->flags8, RF8_WILD_VOLCANO)));
+    auto land = none_bits(r_ptr->flags7, RF7_AQUATIC);
+    auto is_mountain_monster = d_ptr->mon_wilderness_flags.has_none_of({ MonsterWildernessType::WILD_MOUNTAIN, MonsterWildernessType::WILD_VOLCANO });
+    is_mountain_monster |= d_ptr->mon_wilderness_flags.has(MonsterWildernessType::WILD_MOUNTAIN) && (land || r_ptr->wilderness_flags.has(MonsterWildernessType::WILD_MOUNTAIN));
+    is_mountain_monster |= d_ptr->mon_wilderness_flags.has(MonsterWildernessType::WILD_VOLCANO) && (land || r_ptr->wilderness_flags.has(MonsterWildernessType::WILD_VOLCANO));
+    return is_mountain_monster;
 }
 
 /*!
@@ -156,7 +159,7 @@ bool mon_hook_ocean(PlayerType *player_ptr, MonsterRaceId r_idx)
     (void)player_ptr;
 
     auto *r_ptr = &r_info[r_idx];
-    return any_bits(r_ptr->flags8, RF8_WILD_OCEAN);
+    return r_ptr->wilderness_flags.has(MonsterWildernessType::WILD_OCEAN);
 }
 
 /*!
@@ -170,7 +173,7 @@ bool mon_hook_shore(PlayerType *player_ptr, MonsterRaceId r_idx)
     (void)player_ptr;
 
     auto *r_ptr = &r_info[r_idx];
-    return any_bits(r_ptr->flags8, RF8_WILD_SHORE);
+    return r_ptr->wilderness_flags.has(MonsterWildernessType::WILD_SHORE);
 }
 
 /*!
@@ -184,7 +187,7 @@ bool mon_hook_waste(PlayerType *player_ptr, MonsterRaceId r_idx)
     (void)player_ptr;
 
     auto *r_ptr = &r_info[r_idx];
-    return any_bits(r_ptr->flags8, (RF8_WILD_WASTE | RF8_WILD_ALL));
+    return r_ptr->wilderness_flags.has_any_of({ MonsterWildernessType::WILD_WASTE, MonsterWildernessType::WILD_ALL });
 }
 
 /*!
@@ -198,7 +201,7 @@ bool mon_hook_town(PlayerType *player_ptr, MonsterRaceId r_idx)
     (void)player_ptr;
 
     auto *r_ptr = &r_info[r_idx];
-    return any_bits(r_ptr->flags8, (RF8_WILD_TOWN | RF8_WILD_ALL));
+    return r_ptr->wilderness_flags.has_any_of({ MonsterWildernessType::WILD_TOWN, MonsterWildernessType::WILD_ALL });
 }
 
 /*!
@@ -212,7 +215,7 @@ bool mon_hook_wood(PlayerType *player_ptr, MonsterRaceId r_idx)
     (void)player_ptr;
 
     auto *r_ptr = &r_info[r_idx];
-    return any_bits(r_ptr->flags8, (RF8_WILD_WOOD | RF8_WILD_ALL));
+    return r_ptr->wilderness_flags.has_any_of({ MonsterWildernessType::WILD_WOOD, MonsterWildernessType::WILD_ALL });
 }
 
 /*!
@@ -226,7 +229,7 @@ bool mon_hook_volcano(PlayerType *player_ptr, MonsterRaceId r_idx)
     (void)player_ptr;
 
     auto *r_ptr = &r_info[r_idx];
-    return any_bits(r_ptr->flags8, RF8_WILD_VOLCANO);
+    return r_ptr->wilderness_flags.has(MonsterWildernessType::WILD_VOLCANO);
 }
 
 /*!
@@ -240,7 +243,7 @@ bool mon_hook_mountain(PlayerType *player_ptr, MonsterRaceId r_idx)
     (void)player_ptr;
 
     auto *r_ptr = &r_info[r_idx];
-    return any_bits(r_ptr->flags8, RF8_WILD_MOUNTAIN);
+    return r_ptr->wilderness_flags.has(MonsterWildernessType::WILD_MOUNTAIN);
 }
 
 /*!
@@ -254,7 +257,7 @@ bool mon_hook_grass(PlayerType *player_ptr, MonsterRaceId r_idx)
     (void)player_ptr;
 
     auto *r_ptr = &r_info[r_idx];
-    return any_bits(r_ptr->flags8, (RF8_WILD_GRASS | RF8_WILD_ALL));
+    return r_ptr->wilderness_flags.has_any_of({ MonsterWildernessType::WILD_GRASS, MonsterWildernessType::WILD_ALL });
 }
 
 /*!

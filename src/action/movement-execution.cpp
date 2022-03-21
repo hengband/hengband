@@ -255,7 +255,7 @@ void exe_movement(PlayerType *player_ptr, DIRECTION dir, bool do_pickup, bool br
         player_ptr->running = 0;
         can_move = false;
     } else if (f_ptr->flags.has(FloorFeatureType::TREE) && !p_can_kill_walls) {
-        auto riding_wild_wood = player_ptr->riding && any_bits(r_info[riding_m_ptr->r_idx].flags8, RF8_WILD_WOOD);
+        auto riding_wild_wood = player_ptr->riding && r_info[riding_m_ptr->r_idx].wilderness_flags.has(MonsterWildernessType::WILD_WOOD);
         if (!PlayerClass(player_ptr).equals(PlayerClassType::RANGER) && !player_ptr->levitation && !riding_wild_wood) {
             energy.mul_player_turn_energy(2);
         }

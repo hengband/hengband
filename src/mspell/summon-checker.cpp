@@ -163,7 +163,7 @@ bool check_summon_specific(PlayerType *player_ptr, MonsterRaceId summoner_idx, M
         is_match = ((r_idx == MonsterRaceId::NOV_PALADIN) || (r_idx == MonsterRaceId::NOV_PALADIN_G) || (r_idx == MonsterRaceId::PALADIN) || (r_idx == MonsterRaceId::W_KNIGHT) || (r_idx == MonsterRaceId::ULTRA_PALADIN) || (r_idx == MonsterRaceId::KNI_TEMPLAR));
         break;
     case SUMMON_EAGLES:
-        is_match = (r_ptr->d_char == 'B') && ((r_ptr->flags8 & RF8_WILD_MOUNTAIN) != 0) && ((r_ptr->flags8 & RF8_WILD_ONLY) != 0);
+        is_match = (r_ptr->d_char == 'B') && (r_ptr->wilderness_flags.has(MonsterWildernessType::WILD_MOUNTAIN)) && (r_ptr->wilderness_flags.has(MonsterWildernessType::WILD_ONLY));
         break;
     case SUMMON_PIRANHAS:
         is_match = r_idx == MonsterRaceId::PIRANHA;
