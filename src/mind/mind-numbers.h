@@ -1,6 +1,6 @@
 ﻿#pragma once
 
-enum class mind_berserker_type : int {
+enum class MindBerserkerType : int {
     DETECT_MANACE = 0,
     CHARGE = 1,
     SMASH_TRAP = 2,
