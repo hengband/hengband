@@ -5,6 +5,7 @@
 #include "monster-race/race-drop-flags.h"
 #include "monster-race/race-kind-flags.h"
 #include "monster-race/race-visual-flags.h"
+#include "monster-race/race-wilderness-flags.h"
 
 /*!
  * モンスターの打撃手段トークンの定義 /
@@ -275,18 +276,7 @@ const std::unordered_map<std::string_view, race_flags7> r_info_flags7 = {
  * Monster race flags
  */
 const std::unordered_map<std::string_view, race_flags8> r_info_flags8 = {
-    { "WILD_ONLY", RF8_WILD_ONLY },
-    { "WILD_TOWN", RF8_WILD_TOWN },
     { "NO_QUEST", RF8_NO_QUEST },
-    { "WILD_SHORE", RF8_WILD_SHORE },
-    { "WILD_OCEAN", RF8_WILD_OCEAN },
-    { "WILD_WASTE", RF8_WILD_WASTE },
-    { "WILD_WOOD", RF8_WILD_WOOD },
-    { "WILD_VOLCANO", RF8_WILD_VOLCANO },
-    { "WILD_MOUNTAIN", RF8_WILD_MOUNTAIN },
-    { "WILD_GRASS", RF8_WILD_GRASS },
-    { "WILD_SWAMP", RF8_WILD_SWAMP },
-    { "WILD_ALL", RF8_WILD_ALL },
 };
 
 /*!
@@ -469,4 +459,18 @@ const std::unordered_map<std::string_view, MonsterDropType> r_info_drop_flags = 
     { "DROP_2D2", MonsterDropType::DROP_2D2 },
     { "DROP_3D2", MonsterDropType::DROP_3D2 },
     { "DROP_4D2", MonsterDropType::DROP_4D2 },
+};
+
+const std::unordered_map<std::string_view, MonsterWildernessType> r_info_wilderness_flags = {
+    { "WILD_ONLY", MonsterWildernessType::WILD_ONLY },
+    { "WILD_TOWN", MonsterWildernessType::WILD_TOWN },
+    { "WILD_SHORE", MonsterWildernessType::WILD_SHORE },
+    { "WILD_OCEAN", MonsterWildernessType::WILD_OCEAN },
+    { "WILD_WASTE", MonsterWildernessType::WILD_WASTE },
+    { "WILD_WOOD", MonsterWildernessType::WILD_WOOD },
+    { "WILD_VOLCANO", MonsterWildernessType::WILD_VOLCANO },
+    { "WILD_MOUNTAIN", MonsterWildernessType::WILD_MOUNTAIN },
+    { "WILD_GRASS", MonsterWildernessType::WILD_GRASS },
+    { "WILD_SWAMP", MonsterWildernessType::WILD_SWAMP },
+    { "WILD_ALL", MonsterWildernessType::WILD_ALL },
 };
