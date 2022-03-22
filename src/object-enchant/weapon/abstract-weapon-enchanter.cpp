@@ -53,10 +53,5 @@ void AbstractWeaponEnchanter::decide_skip()
 {
     if (this->power == 0) {
         this->should_skip = true;
-        return;
     }
-
-    this->should_skip |= (this->o_ptr->tval == ItemKindType::SWORD) && (this->o_ptr->sval == SV_DIAMOND_EDGE);
-    this->should_skip |= (this->o_ptr->tval == ItemKindType::SWORD) && (this->o_ptr->sval == SV_POISON_NEEDLE);
-    this->should_skip |= (this->o_ptr->tval == ItemKindType::POLEARM) && (this->o_ptr->sval == SV_DEATH_SCYTHE);
 }

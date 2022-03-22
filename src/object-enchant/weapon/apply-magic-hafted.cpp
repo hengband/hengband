@@ -8,6 +8,7 @@
 #include "floor/floor-base-definitions.h"
 #include "inventory/inventory-slot-types.h"
 #include "object-enchant/object-boost.h"
+#include "sv-definition/sv-weapon-types.h"
 #include "system/object-type-definition.h"
 
 /*!
@@ -20,6 +21,12 @@
 HaftedEnchanter::HaftedEnchanter(PlayerType *player_ptr, ObjectType *o_ptr, DEPTH level, int power)
     : MeleeWeaponEnchanter(player_ptr, o_ptr, level, power)
 {
+}
+
+void HaftedEnchanter::decide_skip()
+{
+    AbstractWeaponEnchanter::decide_skip();
+    this->should_skip |= this->o_ptr->sval == SV_DEATH_SCYTHE;
 }
 
 void HaftedEnchanter::give_ego_index()

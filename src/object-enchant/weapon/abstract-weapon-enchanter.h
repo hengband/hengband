@@ -15,6 +15,5 @@ protected:
     int power;
     bool should_skip = false;
 
-private:
-    void decide_skip();
+    virtual void decide_skip();
 };

@@ -24,6 +24,13 @@ SwordEnchanter::SwordEnchanter(PlayerType *player_ptr, ObjectType *o_ptr, DEPTH 
 {
 }
 
+void SwordEnchanter::decide_skip()
+{
+    AbstractWeaponEnchanter::decide_skip();
+    this->should_skip |= this->o_ptr->sval == SV_DIAMOND_EDGE;
+    this->should_skip |= this->o_ptr->sval == SV_POISON_NEEDLE;
+}
+
 void SwordEnchanter::give_ego_index()
 {
     while (true) {
