@@ -203,10 +203,9 @@ void update_object_by_monster_movement(PlayerType *player_ptr, turn_flags *turn_
         monster_desc(player_ptr, m_name, m_ptr, MD_INDEF_HIDDEN);
         update_object_flags(flgs, flg_monster_kind, flgr);
 
-        EnumClassFlagGroup<MonsterResistanceType> has_resistance_flags(r_ptr->resistance_flags & flgr);
         bool is_special_object = o_ptr->is_artifact();
         is_special_object |= r_ptr->kind_flags.has_any_of(flg_monster_kind);
-        is_special_object |= has_resistance_flags.count() != has_resistance_flags.size() && r_ptr->resistance_flags.has_not(MonsterResistanceType::RESIST_ALL);
+        is_special_object |= !r_ptr->resistance_flags.has_all_of(flgr) && r_ptr->resistance_flags.has_not(MonsterResistanceType::RESIST_ALL);
         monster_pickup_object(player_ptr, turn_flags_ptr, m_idx, o_ptr, is_special_object, ny, nx, m_name, o_name, this_o_idx);
     }
 }
