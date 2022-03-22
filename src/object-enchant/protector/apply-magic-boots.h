@@ -8,7 +8,6 @@ class PlayerType;
 class BootsEnchanter : public AbstractProtectorEnchanter {
 public:
     BootsEnchanter(PlayerType *player_ptr, ObjectType *o_ptr, DEPTH level, int power);
-    virtual ~BootsEnchanter() = default;
     void apply_magic() override;
 
 protected:

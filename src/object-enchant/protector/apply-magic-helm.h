@@ -8,7 +8,6 @@ class PlayerType;
 class HelmEnchanter : public AbstractProtectorEnchanter {
 public:
     HelmEnchanter(PlayerType *player_ptr, ObjectType *o_ptr, DEPTH level, int power);
-    virtual ~HelmEnchanter() = default;
     void apply_magic() override;
 
 protected:
