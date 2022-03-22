@@ -145,7 +145,7 @@ bool make_object(PlayerType *player_ptr, ObjectType *j_ptr, BIT_FLAGS mode, std:
         j_ptr->prep(k_idx);
     }
 
-    apply_magic_to_object(player_ptr, j_ptr, floor_ptr->object_level, mode);
+    ItemMagicApplier(player_ptr, j_ptr, floor_ptr->object_level, mode).execute();
     set_ammo_quantity(j_ptr);
     if (cheat_peek) {
         object_mention(player_ptr, j_ptr);

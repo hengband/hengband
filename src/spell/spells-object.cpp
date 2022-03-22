@@ -152,7 +152,7 @@ void amusement(PlayerType *player_ptr, POSITION y1, POSITION x1, int num, bool k
         if (a_idx) {
             i_ptr->fixed_artifact_idx = a_idx;
         }
-        apply_magic_to_object(player_ptr, i_ptr, 1, AM_NO_FIXED_ART);
+        ItemMagicApplier(player_ptr, i_ptr, 1, AM_NO_FIXED_ART).execute();
 
         if (amuse_info[i].flag & AMS_NO_UNIQUE) {
             if (r_info[i2enum<MonsterRaceId>(i_ptr->pval)].kind_flags.has(MonsterKindType::UNIQUE)) {

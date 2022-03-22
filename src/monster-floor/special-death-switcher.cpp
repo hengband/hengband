@@ -128,7 +128,7 @@ static void on_dead_bloodletter(PlayerType *player_ptr, monster_death_type *md_p
     ObjectType forge;
     auto *q_ptr = &forge;
     q_ptr->prep(lookup_kind(ItemKindType::SWORD, SV_BLADE_OF_CHAOS));
-    apply_magic_to_object(player_ptr, q_ptr, player_ptr->current_floor_ptr->object_level, AM_NO_FIXED_ART | md_ptr->mo_mode);
+    ItemMagicApplier(player_ptr, q_ptr, player_ptr->current_floor_ptr->object_level, AM_NO_FIXED_ART | md_ptr->mo_mode).execute();
     (void)drop_near(player_ptr, q_ptr, -1, md_ptr->md_y, md_ptr->md_x);
 }
 
@@ -221,12 +221,12 @@ static void on_dead_serpent(PlayerType *player_ptr, monster_death_type *md_ptr)
     auto *q_ptr = &forge;
     q_ptr->prep(lookup_kind(ItemKindType::HAFTED, SV_GROND));
     q_ptr->fixed_artifact_idx = ART_GROND;
-    apply_magic_to_object(player_ptr, q_ptr, -1, AM_GOOD | AM_GREAT);
+    ItemMagicApplier(player_ptr, q_ptr, -1, AM_GOOD | AM_GREAT).execute();
     (void)drop_near(player_ptr, q_ptr, -1, md_ptr->md_y, md_ptr->md_x);
     q_ptr = &forge;
     q_ptr->prep(lookup_kind(ItemKindType::CROWN, SV_CHAOS));
     q_ptr->fixed_artifact_idx = ART_CHAOS;
-    apply_magic_to_object(player_ptr, q_ptr, -1, AM_GOOD | AM_GREAT);
+    ItemMagicApplier(player_ptr, q_ptr, -1, AM_GOOD | AM_GREAT).execute();
     (void)drop_near(player_ptr, q_ptr, -1, md_ptr->md_y, md_ptr->md_x);
 }
 
@@ -255,7 +255,7 @@ static void on_dead_can_angel(PlayerType *player_ptr, monster_death_type *md_ptr
     ObjectType forge;
     auto *q_ptr = &forge;
     q_ptr->prep(lookup_kind(ItemKindType::CHEST, SV_CHEST_KANDUME));
-    apply_magic_to_object(player_ptr, q_ptr, player_ptr->current_floor_ptr->object_level, AM_NO_FIXED_ART);
+    ItemMagicApplier(player_ptr, q_ptr, player_ptr->current_floor_ptr->object_level, AM_NO_FIXED_ART).execute();
     (void)drop_near(player_ptr, q_ptr, -1, md_ptr->md_y, md_ptr->md_x);
 }
 

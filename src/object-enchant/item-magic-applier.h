@@ -4,4 +4,14 @@
 
 class ObjectType;
 class PlayerType;
-void apply_magic_to_object(PlayerType *player_ptr, ObjectType *o_ptr, DEPTH lev, BIT_FLAGS mode);
+class ItemMagicApplier {
+public:
+    ItemMagicApplier(PlayerType *player_ptr, ObjectType *o_ptr, DEPTH lev, BIT_FLAGS mode);
+    void execute();
+
+private:
+    PlayerType *player_ptr;
+    ObjectType *o_ptr;
+    DEPTH lev;
+    BIT_FLAGS mode;
+};
