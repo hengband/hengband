@@ -1,29 +1,19 @@
 ﻿/*!
  * @brief ベースアイテムを強化する処理
- * @date 2020/06/03
+ * @date 2022/03/22
  * @author Hourier
- * @todo 少し長い。要分割
  */
 
 #include "object-enchant/item-magic-applier.h"
 #include "artifact/fixed-art-generator.h"
-#include "artifact/fixed-art-types.h"
 #include "dungeon/dungeon.h"
-#include "mutation/mutation-flag-types.h"
 #include "object-enchant/enchanter-base.h"
 #include "object-enchant/enchanter-factory.h"
 #include "object-enchant/item-apply-magic.h"
 #include "object-enchant/object-curse.h"
-#include "object-enchant/object-ego.h"
 #include "object-enchant/special-object-flags.h"
-#include "object-enchant/tr-types.h"
-#include "object-enchant/trc-types.h"
-#include "object-enchant/trg-types.h"
 #include "object/object-kind.h"
 #include "player/player-status-flags.h"
-#include "sv-definition/sv-armor-types.h"
-#include "sv-definition/sv-protector-types.h"
-#include "sv-definition/sv-weapon-types.h"
 #include "system/artifact-type-definition.h"
 #include "system/floor-type-definition.h"
 #include "system/player-type-definition.h"
