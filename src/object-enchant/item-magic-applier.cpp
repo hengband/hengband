@@ -58,36 +58,19 @@ ItemMagicApplier::ItemMagicApplier(PlayerType *player_ptr, ObjectType *o_ptr, DE
  */
 void ItemMagicApplier::execute()
 {
-    auto f1 = this->lev + 10;
-    if (f1 > d_info[this->player_ptr->dungeon_idx].obj_good) {
-        f1 = d_info[this->player_ptr->dungeon_idx].obj_good;
-    }
-
-    auto f2 = f1 * 2 / 3;
-    if ((this->player_ptr->ppersonality != PERSONALITY_MUNCHKIN) && (f2 > d_info[this->player_ptr->dungeon_idx].obj_great)) {
-        f2 = d_info[this->player_ptr->dungeon_idx].obj_great;
-    }
-
-    if (has_good_luck(this->player_ptr)) {
-        f1 += 5;
-        f2 += 2;
-    } else if (this->player_ptr->muta.has(PlayerMutationType::BAD_LUCK)) {
-        f1 -= 5;
-        f2 -= 2;
-    }
-
+    auto [chance_good, chance_great] = this->calculate_chances();
     auto power = 0;
-    if (any_bits(this->mode, AM_GOOD) || magik(f1)) {
+    if (any_bits(this->mode, AM_GOOD) || magik(chance_good)) {
         power = 1;
-        if (any_bits(this->mode, AM_GREAT) || magik(f2)) {
+        if (any_bits(this->mode, AM_GREAT) || magik(chance_great)) {
             power = 2;
             if (any_bits(this->mode, AM_SPECIAL)) {
                 power = 3;
             }
         }
-    } else if (magik(f1)) {
+    } else if (magik(chance_good)) {
         power = -1;
-        if (magik(f2)) {
+        if (magik(chance_great)) {
             power = -2;
         }
     }
@@ -174,4 +157,31 @@ void ItemMagicApplier::execute()
             this->o_ptr->curse_flags.set(get_curse(2, this->o_ptr));
         }
     }
+}
+
+/*!
+ * @brief 上質及び高級品の生成確率 [%]を算出する
+ * @return 上質と高級品の生成確率組み合わせ
+ */
+std::tuple<int, int> ItemMagicApplier::calculate_chances()
+{
+    auto chance_good = this->lev + 10;
+    if (chance_good > d_info[this->player_ptr->dungeon_idx].obj_good) {
+        chance_good = d_info[this->player_ptr->dungeon_idx].obj_good;
+    }
+
+    auto chance_great = chance_good * 2 / 3;
+    if ((this->player_ptr->ppersonality != PERSONALITY_MUNCHKIN) && (chance_great > d_info[this->player_ptr->dungeon_idx].obj_great)) {
+        chance_great = d_info[this->player_ptr->dungeon_idx].obj_great;
+    }
+
+    if (has_good_luck(this->player_ptr)) {
+        chance_good += 5;
+        chance_great += 2;
+    } else if (this->player_ptr->muta.has(PlayerMutationType::BAD_LUCK)) {
+        chance_good -= 5;
+        chance_great -= 2;
+    }
+
+    return std::make_tuple(chance_good, chance_great);
 }

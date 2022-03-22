@@ -1,6 +1,7 @@
 ﻿#pragma once
 
 #include "system/angband.h"
+#include <tuple>
 
 class ObjectType;
 class PlayerType;
@@ -14,4 +15,6 @@ private:
     ObjectType *o_ptr;
     DEPTH lev;
     BIT_FLAGS mode;
+
+    std::tuple<int, int> calculate_chances();
 };
