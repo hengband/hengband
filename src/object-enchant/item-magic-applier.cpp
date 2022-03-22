@@ -60,19 +60,7 @@ void ItemMagicApplier::execute()
 {
     auto [chance_good, chance_great] = this->calculate_chances();
     auto power = this->calculate_power(chance_good, chance_great);
-    auto rolls = 0;
-    if (power >= 2) {
-        rolls = 1;
-    }
-
-    if (any_bits(this->mode, AM_GREAT | AM_SPECIAL)) {
-        rolls = 4;
-    }
-
-    if (any_bits(this->mode, AM_NO_FIXED_ART) || this->o_ptr->fixed_artifact_idx) {
-        rolls = 0;
-    }
-
+    auto rolls = this->calculate_rolls(power);
     for (auto i = 0; i < rolls; i++) {
         if (make_artifact(this->player_ptr, this->o_ptr)) {
             break;
@@ -197,4 +185,26 @@ int ItemMagicApplier::calculate_power(const int chance_good, const int chance_gr
     }
 
     return power;
+}
+
+/*!
+ * @brief 生成パワーを元にアーティファクト生成の試行回数を算出する
+ * @param power 生成パワー
+ */
+int ItemMagicApplier::calculate_rolls(const int power)
+{
+    auto rolls = 0;
+    if (power >= 2) {
+        rolls = 1;
+    }
+
+    if (any_bits(this->mode, AM_GREAT | AM_SPECIAL)) {
+        rolls = 4;
+    }
+
+    if (any_bits(this->mode, AM_NO_FIXED_ART) || this->o_ptr->fixed_artifact_idx) {
+        rolls = 0;
+    }
+
+    return rolls;
 }
