@@ -31,7 +31,7 @@
  * "greed" value is always something (?).
  * </pre>
  */
-PRICE price_item(PlayerType *player_ptr, ObjectType *o_ptr, int greed, bool flip)
+PRICE price_item(PlayerType *player_ptr, ObjectType *o_ptr, int greed, bool flip, StoreSaleType store_num)
 {
     PRICE price = object_value(o_ptr);
     if (price <= 0) {
@@ -47,7 +47,7 @@ PRICE price_item(PlayerType *player_ptr, ObjectType *o_ptr, int greed, bool flip
             adjust = 100;
         }
 
-        if (cur_store_num == StoreSaleType::BLACK) {
+        if (store_num == StoreSaleType::BLACK) {
             price = price / 2;
         }
 
@@ -58,7 +58,7 @@ PRICE price_item(PlayerType *player_ptr, ObjectType *o_ptr, int greed, bool flip
             adjust = 100;
         }
 
-        if (cur_store_num == StoreSaleType::BLACK) {
+        if (store_num == StoreSaleType::BLACK) {
             price = price * 2;
         }
 

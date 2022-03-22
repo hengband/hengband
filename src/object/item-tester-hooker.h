@@ -5,6 +5,7 @@
 #include <functional>
 #include <memory>
 
+enum class StoreSaleType;
 class ObjectType;
 class PlayerType;
 
@@ -74,6 +75,7 @@ public:
     explicit FuncItemTester(TestMemberFunctionPtr test_func);
     explicit FuncItemTester(std::function<bool(const ObjectType *)> test_func);
     explicit FuncItemTester(std::function<bool(PlayerType *, const ObjectType *)> test_func, PlayerType *player_ptr);
+    explicit FuncItemTester(std::function<bool(PlayerType *, const ObjectType *, StoreSaleType)> test_func, PlayerType *player_ptr, StoreSaleType store_num);
 
 private:
     virtual bool okay_impl(const ObjectType *o_ptr) const;

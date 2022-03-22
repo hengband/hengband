@@ -53,15 +53,14 @@ struct store_type {
     store_type &operator=(const store_type &) = delete;
 };
 
-extern StoreSaleType cur_store_num;
 extern store_type *st_ptr;
 
 class PlayerType;
 typedef bool (*black_market_crap_pf)(PlayerType *, ObjectType *);
-typedef bool (*store_will_buy_pf)(PlayerType *, const ObjectType *);
-typedef void (*mass_produce_pf)(PlayerType *, ObjectType *);
+typedef bool (*store_will_buy_pf)(PlayerType *, const ObjectType *, StoreSaleType);
+typedef void (*mass_produce_pf)(PlayerType *, ObjectType *, StoreSaleType);
 void store_delete(void);
-void store_create(PlayerType *player_ptr, KIND_OBJECT_IDX k_idx, black_market_crap_pf black_market_crap, store_will_buy_pf store_will_buy, mass_produce_pf mass_produce);
+void store_create(PlayerType *player_ptr, KIND_OBJECT_IDX k_idx, black_market_crap_pf black_market_crap, store_will_buy_pf store_will_buy, mass_produce_pf mass_produce, StoreSaleType store_num);
 void store_item_increase(INVENTORY_IDX item, ITEM_NUMBER num);
 void store_item_optimize(INVENTORY_IDX item);
 int store_carry(ObjectType *o_ptr);

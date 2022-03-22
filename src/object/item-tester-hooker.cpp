@@ -52,6 +52,18 @@ FuncItemTester::FuncItemTester(std::function<bool(PlayerType *, const ObjectType
 }
 
 /*!
+ * @brief Construct a new Func Item Tester:: Func Item Tester object
+ *
+ * @param test_func 引数に PlayerType へのポインタと ObjectType へのポインタと StoreSaleType を取り、そのオブジェクトが条件に合うならtrueを返す関数を指定する
+ * @param player_ptr test_func の PlayerType へのポインタの引数に対して渡すポインタを指定する
+ */
+FuncItemTester::FuncItemTester(std::function<bool(PlayerType *, const ObjectType *, StoreSaleType)> test_func, PlayerType *player_ptr, StoreSaleType store_num)
+    : test_func([test_func = std::move(test_func), store_num](PlayerType *player_ptr, const ObjectType *o_ptr) { return test_func(player_ptr, o_ptr, store_num); })
+    , player_ptr(player_ptr)
+{
+}
+
+/*!
  * @brief アイテムが条件を満たしているか調べる
  * Check an item against the item tester info
  * @param o_ptr 判定を行いたいオブジェクト構造体参照ポインタ
