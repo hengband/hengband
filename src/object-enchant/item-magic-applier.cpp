@@ -10,33 +10,15 @@
 #include "artifact/fixed-art-types.h"
 #include "dungeon/dungeon.h"
 #include "mutation/mutation-flag-types.h"
+#include "object-enchant/enchanter-base.h"
+#include "object-enchant/enchanter-factory.h"
 #include "object-enchant/item-apply-magic.h"
 #include "object-enchant/object-curse.h"
 #include "object-enchant/object-ego.h"
-#include "object-enchant/others/apply-magic-amulet.h"
-#include "object-enchant/others/apply-magic-lite.h"
-#include "object-enchant/others/apply-magic-others.h"
-#include "object-enchant/others/apply-magic-ring.h"
-#include "object-enchant/protector/apply-magic-armor.h"
-#include "object-enchant/protector/apply-magic-boots.h"
-#include "object-enchant/protector/apply-magic-cloak.h"
-#include "object-enchant/protector/apply-magic-crown.h"
-#include "object-enchant/protector/apply-magic-dragon-armor.h"
-#include "object-enchant/protector/apply-magic-gloves.h"
-#include "object-enchant/protector/apply-magic-hard-armor.h"
-#include "object-enchant/protector/apply-magic-helm.h"
-#include "object-enchant/protector/apply-magic-shield.h"
-#include "object-enchant/protector/apply-magic-soft-armor.h"
 #include "object-enchant/special-object-flags.h"
 #include "object-enchant/tr-types.h"
 #include "object-enchant/trc-types.h"
 #include "object-enchant/trg-types.h"
-#include "object-enchant/weapon/apply-magic-arrow.h"
-#include "object-enchant/weapon/apply-magic-bow.h"
-#include "object-enchant/weapon/apply-magic-digging.h"
-#include "object-enchant/weapon/apply-magic-hafted.h"
-#include "object-enchant/weapon/apply-magic-polearm.h"
-#include "object-enchant/weapon/apply-magic-sword.h"
 #include "object/object-kind.h"
 #include "player/player-status-flags.h"
 #include "sv-definition/sv-armor-types.h"
@@ -140,69 +122,8 @@ void apply_magic_to_object(PlayerType *player_ptr, ObjectType *o_ptr, DEPTH lev,
         return;
     }
 
-    // @todo ファクトリパターンで抽象化する.
-    switch (o_ptr->tval) {
-    case ItemKindType::DIGGING:
-        DiggingEnchanter(player_ptr, o_ptr, lev, power).apply_magic();
-        break;
-    case ItemKindType::BOW:
-        BowEnchanter(player_ptr, o_ptr, lev, power).apply_magic();
-        break;
-    case ItemKindType::SHOT:
-    case ItemKindType::ARROW:
-    case ItemKindType::BOLT:
-        ArrowEnchanter(player_ptr, o_ptr, lev, power).apply_magic();
-        break;
-    case ItemKindType::HAFTED:
-        HaftedEnchanter(player_ptr, o_ptr, lev, power).apply_magic();
-        break;
-    case ItemKindType::POLEARM:
-        PolearmEnchanter(player_ptr, o_ptr, lev, power).apply_magic();
-        break;
-    case ItemKindType::SWORD:
-        SwordEnchanter(player_ptr, o_ptr, lev, power).apply_magic();
-        break;
-    case ItemKindType::SHIELD:
-        ShieldEnchanter(player_ptr, o_ptr, lev, power).apply_magic();
-        break;
-    case ItemKindType::CLOAK:
-        CloakEnchanter(player_ptr, o_ptr, lev, power).apply_magic();
-        break;
-    case ItemKindType::HELM:
-        HelmEnchanter(player_ptr, o_ptr, lev, power).apply_magic();
-        break;
-    case ItemKindType::CROWN:
-        CrownEnchanter(player_ptr, o_ptr, lev, power).apply_magic();
-        break;
-    case ItemKindType::BOOTS:
-        BootsEnchanter(player_ptr, o_ptr, lev, power).apply_magic();
-        break;
-    case ItemKindType::DRAG_ARMOR:
-        DragonArmorEnchanter(player_ptr, o_ptr, lev, power).apply_magic();
-        break;
-    case ItemKindType::HARD_ARMOR:
-        HardArmorEnchanter(player_ptr, o_ptr, lev, power).apply_magic();
-        break;
-    case ItemKindType::SOFT_ARMOR:
-        SoftArmorEnchanter(player_ptr, o_ptr, lev, power).apply_magic();
-        break;
-    case ItemKindType::GLOVES:
-        GlovesEnchanter(player_ptr, o_ptr, lev, power).apply_magic();
-        break;
-    case ItemKindType::RING:
-        RingEnchanter(player_ptr, o_ptr, lev, power).apply_magic();
-        break;
-    case ItemKindType::AMULET:
-        AmuletEnchanter(player_ptr, o_ptr, lev, power).apply_magic();
-        break;
-    case ItemKindType::LITE:
-        LiteEnchanter(player_ptr, o_ptr, power).apply_magic();
-        break;
-    default:
-        OtherItemsEnchanter(player_ptr, o_ptr).apply_magic();
-        break;
-    }
-
+    auto enchanter = EnchanterFactory::create_enchanter(player_ptr, o_ptr, lev, power);
+    enchanter->apply_magic();
     if (o_ptr->is_ego()) {
         apply_ego(o_ptr, lev);
         return;

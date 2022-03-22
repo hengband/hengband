@@ -5,7 +5,7 @@
 
 class ObjectType;
 class PlayerType;
-class AmuletEnchanter : EnchanterBase {
+class AmuletEnchanter : public EnchanterBase {
 public:
     AmuletEnchanter(PlayerType *player_ptr, ObjectType *o_ptr, DEPTH level, int power);
     virtual ~AmuletEnchanter() = default;

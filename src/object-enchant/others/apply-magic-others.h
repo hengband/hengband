@@ -4,7 +4,7 @@
 
 class ObjectType;
 class PlayerType;
-class OtherItemsEnchanter : EnchanterBase {
+class OtherItemsEnchanter : public EnchanterBase {
 public:
     OtherItemsEnchanter(PlayerType *player_ptr, ObjectType *o_ptr);
     void apply_magic() override;

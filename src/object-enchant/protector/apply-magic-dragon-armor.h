@@ -5,7 +5,7 @@
 
 class ObjectType;
 class PlayerType;
-class DragonArmorEnchanter : AbstractProtectorEnchanter {
+class DragonArmorEnchanter : public AbstractProtectorEnchanter {
 public:
     DragonArmorEnchanter(PlayerType *player_ptr, ObjectType *o_ptr, DEPTH level, int power);
     void apply_magic() override;
