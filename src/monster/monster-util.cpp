@@ -139,7 +139,7 @@ static bool restrict_monster_to_dungeon(PlayerType *player_ptr, MonsterRaceId r_
         };
 
         auto result = std::all_of(is_possible.begin(), is_possible.end(), [](const auto &v) { return v; });
-        result &= std::all_of(std::begin(d_ptr->r_char), std::end(d_ptr->r_char), [r_ptr](const auto &v) { return !v || (v == r_ptr->d_char); });
+        result &= std::all_of(d_ptr->r_chars.begin(), d_ptr->r_chars.end(), [r_ptr](const auto &v) { return v == r_ptr->d_char; });
 
         return d_ptr->mode == DUNGEON_MODE_AND ? result : !result;
     }
@@ -160,7 +160,7 @@ static bool restrict_monster_to_dungeon(PlayerType *player_ptr, MonsterRaceId r_
         };
 
         auto result = std::any_of(is_possible.begin(), is_possible.end(), [](const auto &v) { return v; });
-        result |= std::any_of(std::begin(d_ptr->r_char), std::end(d_ptr->r_char), [r_ptr](const auto &v) { return v == r_ptr->d_char; });
+        result |= std::any_of(d_ptr->r_chars.begin(), d_ptr->r_chars.end(), [r_ptr](const auto &v) { return v == r_ptr->d_char; });
 
         return d_ptr->mode == DUNGEON_MODE_OR ? result : !result;
     }

@@ -296,11 +296,7 @@ errr parse_d_info(std::string_view buf, angband_header *)
 
             const auto &m_tokens = str_split(f, '_');
             if (m_tokens[0] == "R" && m_tokens[1] == "CHAR") {
-                if (m_tokens[2].size() > 4) {
-                    return PARSE_ERROR_GENERIC;
-                }
-
-                strcpy(d_ptr->r_char, m_tokens[2].c_str());
+                d_ptr->r_chars.insert(d_ptr->r_chars.end(), m_tokens[2].begin(), m_tokens[2].end());
                 continue;
             }
 
