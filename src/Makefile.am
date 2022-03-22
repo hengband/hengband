@@ -622,6 +622,7 @@ hengband_SOURCES = \
 	object-enchant/weapon/apply-magic-arrow.cpp object-enchant/weapon/apply-magic-arrow.h \
 	object-enchant/weapon/apply-magic-bow.cpp object-enchant/weapon/apply-magic-bow.h \
 	object-enchant/weapon/apply-magic-digging.cpp object-enchant/weapon/apply-magic-digging.h \
+	object-enchant/weapon/apply-magic-hafted.cpp object-enchant/weapon/apply-magic-hafted.h \
 	object-enchant/weapon/apply-magic-sword.cpp object-enchant/weapon/apply-magic-sword.h \
 	object-enchant/weapon/melee-weapon-enchanter.cpp object-enchant/weapon/melee-weapon-enchanter.h \
 	\

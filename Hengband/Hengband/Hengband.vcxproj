@@ -280,6 +280,7 @@
     <ClCompile Include="..\..\src\object-enchant\protector\apply-magic-dragon-armor.cpp" />
     <ClCompile Include="..\..\src\object-enchant\protector\apply-magic-hard-armor.cpp" />
     <ClCompile Include="..\..\src\object-enchant\weapon\abstract-weapon-enchanter.cpp" />
+    <ClCompile Include="..\..\src\object-enchant\weapon\apply-magic-hafted.cpp" />
     <ClCompile Include="..\..\src\object-enchant\weapon\melee-weapon-enchanter.cpp" />
     <ClCompile Include="..\..\src\object-use\quaff\quaff-effects.cpp" />
     <ClCompile Include="..\..\src\object-enchant\weapon\apply-magic-arrow.cpp" />
@@ -970,6 +971,7 @@
     <ClInclude Include="..\..\src\object-enchant\protector\apply-magic-dragon-armor.h" />
     <ClInclude Include="..\..\src\object-enchant\protector\apply-magic-hard-armor.h" />
     <ClInclude Include="..\..\src\object-enchant\weapon\abstract-weapon-enchanter.h" />
+    <ClInclude Include="..\..\src\object-enchant\weapon\apply-magic-hafted.h" />
     <ClInclude Include="..\..\src\object-enchant\weapon\melee-weapon-enchanter.h" />
     <ClInclude Include="..\..\src\object-use\quaff\quaff-effects.h" />
     <ClInclude Include="..\..\src\object-enchant\weapon\apply-magic-arrow.h" />
