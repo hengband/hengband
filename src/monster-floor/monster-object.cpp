@@ -126,8 +126,8 @@ static void update_object_flags(const TrFlags &flgs, EnumClassFlagGroup<MonsterK
  * @param o_name アイテム名
  * @param this_o_idx モンスターが乗ったオブジェクトID
  */
-static void monster_pickup_object(PlayerType *player_ptr, turn_flags *turn_flags_ptr, MONSTER_IDX m_idx, ObjectType *o_ptr, bool is_unpickable_object,
-    POSITION ny, POSITION nx, GAME_TEXT *m_name, GAME_TEXT *o_name, OBJECT_IDX this_o_idx)
+static void monster_pickup_object(PlayerType *player_ptr, turn_flags *turn_flags_ptr, const MONSTER_IDX m_idx, ObjectType *o_ptr, const bool is_unpickable_object,
+    const POSITION ny, const POSITION nx, const GAME_TEXT *m_name, const GAME_TEXT *o_name, const OBJECT_IDX this_o_idx)
 {
     auto *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
     auto *r_ptr = &r_info[m_ptr->r_idx];
@@ -203,7 +203,7 @@ void update_object_by_monster_movement(PlayerType *player_ptr, turn_flags *turn_
         monster_desc(player_ptr, m_name, m_ptr, MD_INDEF_HIDDEN);
         update_object_flags(flgs, flg_monster_kind, flgr);
 
-        bool is_unpickable_object = o_ptr->is_artifact();
+        auto is_unpickable_object = o_ptr->is_artifact();
         is_unpickable_object |= r_ptr->kind_flags.has_any_of(flg_monster_kind);
         is_unpickable_object |= !r_ptr->resistance_flags.has_all_of(flgr) && r_ptr->resistance_flags.has_not(MonsterResistanceType::RESIST_ALL);
         monster_pickup_object(player_ptr, turn_flags_ptr, m_idx, o_ptr, is_unpickable_object, ny, nx, m_name, o_name, this_o_idx);
