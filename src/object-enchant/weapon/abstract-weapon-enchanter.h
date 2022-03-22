@@ -4,7 +4,7 @@
 #include "system/angband.h"
 
 class ObjectType;
-class AbstractWeaponEnchanter : EnchanterBase {
+class AbstractWeaponEnchanter : public EnchanterBase {
 public:
     virtual ~AbstractWeaponEnchanter() = default;
 

@@ -5,21 +5,17 @@
 
 class ObjectType;
 class PlayerType;
-class MeleeWeaponEnchanter : AbstractWeaponEnchanter {
+class MeleeWeaponEnchanter : public AbstractWeaponEnchanter {
 public:
     virtual ~MeleeWeaponEnchanter() = default;
 
-    void apply_magic() override{};
+    void apply_magic() override;
 
 protected:
     MeleeWeaponEnchanter(PlayerType *player_ptr, ObjectType *o_ptr, DEPTH level, int power);
 
-    void sval_enchant() override{};
-    void give_ego_index() override{};
-    void give_high_ego_index() override{};
-    void give_cursed() override{};
-    void strengthen(){};
+    PlayerType *player_ptr;
 
 private:
-    PlayerType *player_ptr;
+    void strengthen();
 };
