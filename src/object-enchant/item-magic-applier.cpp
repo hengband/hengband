@@ -5,7 +5,7 @@
  * @todo 少し長い。要分割
  */
 
-#include "object-enchant/apply-magic.h"
+#include "object-enchant/item-magic-applier.h"
 #include "artifact/fixed-art-generator.h"
 #include "artifact/fixed-art-types.h"
 #include "dungeon/dungeon.h"

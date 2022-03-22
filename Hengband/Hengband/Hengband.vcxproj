@@ -690,7 +690,7 @@
     <ClCompile Include="..\..\src\object-enchant\protector\apply-magic-armor.cpp" />
     <ClCompile Include="..\..\src\object-enchant\others\apply-magic-others.cpp" />
     <ClCompile Include="..\..\src\object-enchant\weapon\apply-magic-bow.cpp" />
-    <ClCompile Include="..\..\src\object-enchant\apply-magic.cpp" />
+    <ClCompile Include="..\..\src\object-enchant\item-magic-applier.cpp" />
     <ClCompile Include="..\..\src\player\eldritch-horror.cpp" />
     <ClCompile Include="..\..\src\specific-object\bow.cpp" />
     <ClCompile Include="..\..\src\object\object-stack.cpp" />
@@ -1492,7 +1492,7 @@
     <ClInclude Include="..\..\src\object-enchant\protector\apply-magic-armor.h" />
     <ClInclude Include="..\..\src\object-enchant\others\apply-magic-others.h" />
     <ClInclude Include="..\..\src\object-enchant\weapon\apply-magic-bow.h" />
-    <ClInclude Include="..\..\src\object-enchant\apply-magic.h" />
+    <ClInclude Include="..\..\src\object-enchant\item-magic-applier.h" />
     <ClInclude Include="..\..\src\player\eldritch-horror.h" />
     <ClInclude Include="..\..\src\realm\realm-types.h" />
     <ClInclude Include="..\..\src\specific-object\bow.h" />

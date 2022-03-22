@@ -809,7 +809,7 @@
     <ClCompile Include="..\..\src\object-enchant\object-ego.cpp">
       <Filter>object-enchant</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\object-enchant\apply-magic.cpp">
+    <ClCompile Include="..\..\src\object-enchant\item-magic-applier.cpp">
       <Filter>object-enchant</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\perception\object-perception.cpp">
@@ -3371,7 +3371,7 @@
     <ClInclude Include="..\..\src\object-enchant\enchanter-base.h">
       <Filter>object-enchant</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\object-enchant\apply-magic.h">
+    <ClInclude Include="..\..\src\object-enchant\item-magic-applier.h">
       <Filter>object-enchant</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\perception\object-perception.h">
