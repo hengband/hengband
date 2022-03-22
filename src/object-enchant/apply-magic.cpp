@@ -35,6 +35,7 @@
 #include "object-enchant/weapon/apply-magic-bow.h"
 #include "object-enchant/weapon/apply-magic-digging.h"
 #include "object-enchant/weapon/apply-magic-hafted.h"
+#include "object-enchant/weapon/apply-magic-polearm.h"
 #include "object-enchant/weapon/apply-magic-sword.h"
 #include "object/object-kind.h"
 #include "player/player-status-flags.h"
@@ -156,6 +157,8 @@ void apply_magic_to_object(PlayerType *player_ptr, ObjectType *o_ptr, DEPTH lev,
         HaftedEnchanter(player_ptr, o_ptr, lev, power).apply_magic();
         break;
     case ItemKindType::POLEARM:
+        PolearmEnchanter(player_ptr, o_ptr, lev, power).apply_magic();
+        break;
     case ItemKindType::SWORD:
         SwordEnchanter(player_ptr, o_ptr, lev, power).apply_magic();
         break;
