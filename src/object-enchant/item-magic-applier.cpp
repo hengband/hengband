@@ -52,13 +52,7 @@ void ItemMagicApplier::execute()
     auto power = this->calculate_power(chance_good, chance_great);
     auto rolls = this->calculate_rolls(power);
     this->try_make_artifact(rolls);
-    if (this->o_ptr->is_fixed_artifact()) {
-        auto *a_ptr = apply_artifact(this->player_ptr, this->o_ptr);
-        a_ptr->cur_num = 1;
-        if (w_ptr->character_dungeon) {
-            a_ptr->floor_id = this->player_ptr->floor_id;
-        }
-
+    if (this->set_fixed_artifact_generation_info()) {
         return;
     }
 
@@ -176,6 +170,24 @@ void ItemMagicApplier::try_make_artifact(const int rolls)
             break;
         }
     }
+}
+
+/*!
+ * @brief 固定アーティファクトの生成情報を記憶する
+ */
+bool ItemMagicApplier::set_fixed_artifact_generation_info()
+{
+    if (!this->o_ptr->is_fixed_artifact()) {
+        return false;
+    }
+
+    auto *a_ptr = apply_artifact(this->player_ptr, this->o_ptr);
+    a_ptr->cur_num = 1;
+    if (w_ptr->character_dungeon) {
+        a_ptr->floor_id = this->player_ptr->floor_id;
+    }
+
+    return true;
 }
 
 /*!

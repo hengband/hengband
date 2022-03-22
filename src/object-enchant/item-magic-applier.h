@@ -20,5 +20,6 @@ private:
     int calculate_power(const int chance_good, const int chance_great);
     int calculate_rolls(const int power);
     void try_make_artifact(const int rolls);
+    bool set_fixed_artifact_generation_info();
     void apply_cursed();
 };
