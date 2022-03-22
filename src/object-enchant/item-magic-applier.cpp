@@ -59,30 +59,7 @@ ItemMagicApplier::ItemMagicApplier(PlayerType *player_ptr, ObjectType *o_ptr, DE
 void ItemMagicApplier::execute()
 {
     auto [chance_good, chance_great] = this->calculate_chances();
-    auto power = 0;
-    if (any_bits(this->mode, AM_GOOD) || magik(chance_good)) {
-        power = 1;
-        if (any_bits(this->mode, AM_GREAT) || magik(chance_great)) {
-            power = 2;
-            if (any_bits(this->mode, AM_SPECIAL)) {
-                power = 3;
-            }
-        }
-    } else if (magik(chance_good)) {
-        power = -1;
-        if (magik(chance_great)) {
-            power = -2;
-        }
-    }
-
-    if (any_bits(this->mode, AM_CURSED)) {
-        if (power > 0) {
-            power = 0 - power;
-        } else {
-            power--;
-        }
-    }
-
+    auto power = this->calculate_power(chance_good, chance_great);
     auto rolls = 0;
     if (power >= 2) {
         rolls = 1;
@@ -184,4 +161,40 @@ std::tuple<int, int> ItemMagicApplier::calculate_chances()
     }
 
     return std::make_tuple(chance_good, chance_great);
+}
+
+/*!
+ * @brief 上質/高級品/アーティファクト生成パワー計算
+ * @param chance_good 上質品が生成される確率 [%]
+ * @param chance_great 高級品が生成される確率 [%]
+ * @return 生成パワー
+ * @details アーティファクト生成はデバッグ専用
+ */
+int ItemMagicApplier::calculate_power(const int chance_good, const int chance_great)
+{
+    auto power = 0;
+    if (any_bits(this->mode, AM_GOOD) || magik(chance_good)) {
+        power = 1;
+        if (any_bits(this->mode, AM_GREAT) || magik(chance_great)) {
+            power = 2;
+            if (any_bits(this->mode, AM_SPECIAL)) {
+                power = 3;
+            }
+        }
+    } else if (magik(chance_good)) {
+        power = -1;
+        if (magik(chance_great)) {
+            power = -2;
+        }
+    }
+
+    if (any_bits(this->mode, AM_CURSED)) {
+        if (power > 0) {
+            power = 0 - power;
+        } else {
+            power--;
+        }
+    }
+
+    return power;
 }

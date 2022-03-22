@@ -17,4 +17,5 @@ private:
     BIT_FLAGS mode;
 
     std::tuple<int, int> calculate_chances();
+    int calculate_power(const int chance_good, const int chance_great);
 };
