@@ -79,36 +79,7 @@ void ItemMagicApplier::execute()
         return;
     }
 
-    if (this->o_ptr->k_idx) {
-        auto *k_ptr = &k_info[this->o_ptr->k_idx];
-        if (!k_info[this->o_ptr->k_idx].cost) {
-            set_bits(this->o_ptr->ident, IDENT_BROKEN);
-        }
-
-        if (k_ptr->gen_flags.has(ItemGenerationTraitType::CURSED)) {
-            this->o_ptr->curse_flags.set(CurseTraitType::CURSED);
-        }
-
-        if (k_ptr->gen_flags.has(ItemGenerationTraitType::HEAVY_CURSE)) {
-            this->o_ptr->curse_flags.set(CurseTraitType::HEAVY_CURSE);
-        }
-
-        if (k_ptr->gen_flags.has(ItemGenerationTraitType::PERMA_CURSE)) {
-            this->o_ptr->curse_flags.set(CurseTraitType::PERMA_CURSE);
-        }
-
-        if (k_ptr->gen_flags.has(ItemGenerationTraitType::RANDOM_CURSE0)) {
-            this->o_ptr->curse_flags.set(get_curse(0, this->o_ptr));
-        }
-
-        if (k_ptr->gen_flags.has(ItemGenerationTraitType::RANDOM_CURSE1)) {
-            this->o_ptr->curse_flags.set(get_curse(1, this->o_ptr));
-        }
-
-        if (k_ptr->gen_flags.has(ItemGenerationTraitType::RANDOM_CURSE2)) {
-            this->o_ptr->curse_flags.set(get_curse(2, this->o_ptr));
-        }
-    }
+    this->apply_cursed();
 }
 
 /*!
@@ -214,5 +185,44 @@ void ItemMagicApplier::try_make_artifact(const int rolls)
         if (make_artifact(this->player_ptr, this->o_ptr)) {
             break;
         }
+    }
+}
+
+/*!
+ * @brief アイテムに呪いフラグを付与する
+ */
+void ItemMagicApplier::apply_cursed()
+{
+    if (this->o_ptr->k_idx == 0) {
+        return;
+    }
+
+    const auto *k_ptr = &k_info[this->o_ptr->k_idx];
+    if (!k_info[this->o_ptr->k_idx].cost) {
+        set_bits(this->o_ptr->ident, IDENT_BROKEN);
+    }
+
+    if (k_ptr->gen_flags.has(ItemGenerationTraitType::CURSED)) {
+        this->o_ptr->curse_flags.set(CurseTraitType::CURSED);
+    }
+
+    if (k_ptr->gen_flags.has(ItemGenerationTraitType::HEAVY_CURSE)) {
+        this->o_ptr->curse_flags.set(CurseTraitType::HEAVY_CURSE);
+    }
+
+    if (k_ptr->gen_flags.has(ItemGenerationTraitType::PERMA_CURSE)) {
+        this->o_ptr->curse_flags.set(CurseTraitType::PERMA_CURSE);
+    }
+
+    if (k_ptr->gen_flags.has(ItemGenerationTraitType::RANDOM_CURSE0)) {
+        this->o_ptr->curse_flags.set(get_curse(0, this->o_ptr));
+    }
+
+    if (k_ptr->gen_flags.has(ItemGenerationTraitType::RANDOM_CURSE1)) {
+        this->o_ptr->curse_flags.set(get_curse(1, this->o_ptr));
+    }
+
+    if (k_ptr->gen_flags.has(ItemGenerationTraitType::RANDOM_CURSE2)) {
+        this->o_ptr->curse_flags.set(get_curse(2, this->o_ptr));
     }
 }
