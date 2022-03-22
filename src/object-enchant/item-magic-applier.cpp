@@ -61,20 +61,7 @@ void ItemMagicApplier::execute()
     auto [chance_good, chance_great] = this->calculate_chances();
     auto power = this->calculate_power(chance_good, chance_great);
     auto rolls = this->calculate_rolls(power);
-    for (auto i = 0; i < rolls; i++) {
-        if (make_artifact(this->player_ptr, this->o_ptr)) {
-            break;
-        }
-
-        if (!has_good_luck(this->player_ptr) || !one_in_(77)) {
-            continue;
-        }
-
-        if (make_artifact(this->player_ptr, this->o_ptr)) {
-            break;
-        }
-    }
-
+    this->try_make_artifact(rolls);
     if (this->o_ptr->is_fixed_artifact()) {
         auto *a_ptr = apply_artifact(this->player_ptr, this->o_ptr);
         a_ptr->cur_num = 1;
@@ -207,4 +194,25 @@ int ItemMagicApplier::calculate_rolls(const int power)
     }
 
     return rolls;
+}
+
+/*!
+ * @brief アーティファクト生成を試みる
+ * @param power 試行回数
+ */
+void ItemMagicApplier::try_make_artifact(const int rolls)
+{
+    for (auto i = 0; i < rolls; i++) {
+        if (make_artifact(this->player_ptr, this->o_ptr)) {
+            break;
+        }
+
+        if (!has_good_luck(this->player_ptr) || !one_in_(77)) {
+            continue;
+        }
+
+        if (make_artifact(this->player_ptr, this->o_ptr)) {
+            break;
+        }
+    }
 }
