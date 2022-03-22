@@ -37,24 +37,24 @@
  * @param o_ptr 強化を与えたいオブジェクトの構造体参照ポインタ
  * @param lev 生成基準階
  * @param mode 生成オプション
- * @details
- * エゴ＆アーティファクトの生成、呪い、pval強化
+ * @details エゴ＆アーティファクトの生成、呪い、pval強化
  */
 void apply_magic_to_object(PlayerType *player_ptr, ObjectType *o_ptr, DEPTH lev, BIT_FLAGS mode)
 {
     if (player_ptr->ppersonality == PERSONALITY_MUNCHKIN) {
         lev += randint0(player_ptr->lev / 2 + 10);
     }
+
     if (lev > MAX_DEPTH - 1) {
         lev = MAX_DEPTH - 1;
     }
 
-    int f1 = lev + 10;
+    auto f1 = lev + 10;
     if (f1 > d_info[player_ptr->dungeon_idx].obj_good) {
         f1 = d_info[player_ptr->dungeon_idx].obj_good;
     }
 
-    int f2 = f1 * 2 / 3;
+    auto f2 = f1 * 2 / 3;
     if ((player_ptr->ppersonality != PERSONALITY_MUNCHKIN) && (f2 > d_info[player_ptr->dungeon_idx].obj_great)) {
         f2 = d_info[player_ptr->dungeon_idx].obj_great;
     }
@@ -67,12 +67,12 @@ void apply_magic_to_object(PlayerType *player_ptr, ObjectType *o_ptr, DEPTH lev,
         f2 -= 2;
     }
 
-    int power = 0;
-    if ((mode & AM_GOOD) || magik(f1)) {
+    auto power = 0;
+    if (any_bits(mode, AM_GOOD) || magik(f1)) {
         power = 1;
-        if ((mode & AM_GREAT) || magik(f2)) {
+        if (any_bits(mode, AM_GREAT) || magik(f2)) {
             power = 2;
-            if (mode & AM_SPECIAL) {
+            if (any_bits(mode, AM_SPECIAL)) {
                 power = 3;
             }
         }
@@ -82,7 +82,8 @@ void apply_magic_to_object(PlayerType *player_ptr, ObjectType *o_ptr, DEPTH lev,
             power = -2;
         }
     }
-    if (mode & AM_CURSED) {
+
+    if (any_bits(mode, AM_CURSED)) {
         if (power > 0) {
             power = 0 - power;
         } else {
@@ -90,26 +91,30 @@ void apply_magic_to_object(PlayerType *player_ptr, ObjectType *o_ptr, DEPTH lev,
         }
     }
 
-    int rolls = 0;
+    auto rolls = 0;
     if (power >= 2) {
         rolls = 1;
     }
 
-    if (mode & (AM_GREAT | AM_SPECIAL)) {
+    if (any_bits(mode, AM_GREAT | AM_SPECIAL)) {
         rolls = 4;
     }
-    if ((mode & AM_NO_FIXED_ART) || o_ptr->fixed_artifact_idx) {
+
+    if (any_bits(mode, AM_NO_FIXED_ART) || o_ptr->fixed_artifact_idx) {
         rolls = 0;
     }
 
-    for (int i = 0; i < rolls; i++) {
+    for (auto i = 0; i < rolls; i++) {
         if (make_artifact(player_ptr, o_ptr)) {
             break;
         }
-        if (has_good_luck(player_ptr) && one_in_(77)) {
-            if (make_artifact(player_ptr, o_ptr)) {
-                break;
-            }
+
+        if (!has_good_luck(player_ptr) || !one_in_(77)) {
+            continue;
+        }
+
+        if (make_artifact(player_ptr, o_ptr)) {
+            break;
         }
     }
 
@@ -119,6 +124,7 @@ void apply_magic_to_object(PlayerType *player_ptr, ObjectType *o_ptr, DEPTH lev,
         if (w_ptr->character_dungeon) {
             a_ptr->floor_id = player_ptr->floor_id;
         }
+
         return;
     }
 
@@ -132,24 +138,29 @@ void apply_magic_to_object(PlayerType *player_ptr, ObjectType *o_ptr, DEPTH lev,
     if (o_ptr->k_idx) {
         auto *k_ptr = &k_info[o_ptr->k_idx];
         if (!k_info[o_ptr->k_idx].cost) {
-            o_ptr->ident |= (IDENT_BROKEN);
+            set_bits(o_ptr->ident, IDENT_BROKEN);
         }
 
         if (k_ptr->gen_flags.has(ItemGenerationTraitType::CURSED)) {
             o_ptr->curse_flags.set(CurseTraitType::CURSED);
         }
+
         if (k_ptr->gen_flags.has(ItemGenerationTraitType::HEAVY_CURSE)) {
             o_ptr->curse_flags.set(CurseTraitType::HEAVY_CURSE);
         }
+
         if (k_ptr->gen_flags.has(ItemGenerationTraitType::PERMA_CURSE)) {
             o_ptr->curse_flags.set(CurseTraitType::PERMA_CURSE);
         }
+
         if (k_ptr->gen_flags.has(ItemGenerationTraitType::RANDOM_CURSE0)) {
             o_ptr->curse_flags.set(get_curse(0, o_ptr));
         }
+
         if (k_ptr->gen_flags.has(ItemGenerationTraitType::RANDOM_CURSE1)) {
             o_ptr->curse_flags.set(get_curse(1, o_ptr));
         }
+
         if (k_ptr->gen_flags.has(ItemGenerationTraitType::RANDOM_CURSE2)) {
             o_ptr->curse_flags.set(get_curse(2, o_ptr));
         }
