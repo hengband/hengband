@@ -5,9 +5,9 @@
 
 class ObjectType;
 class PlayerType;
-class SwordEnchanter : public MeleeWeaponEnchanter {
+class PolearmEnchanter : public MeleeWeaponEnchanter {
 public:
-    SwordEnchanter(PlayerType *player_ptr, ObjectType *o_ptr, DEPTH level, int power);
+    PolearmEnchanter(PlayerType *player_ptr, ObjectType *o_ptr, DEPTH level, int power);
 
 protected:
     void decide_skip() override;

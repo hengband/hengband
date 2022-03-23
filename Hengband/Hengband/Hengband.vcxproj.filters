@@ -2433,6 +2433,15 @@
     <ClCompile Include="..\..\src\object-enchant\weapon\apply-magic-arrow.cpp">
       <Filter>object-enchant\weapon</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\object-enchant\weapon\melee-weapon-enchanter.cpp">
+      <Filter>object-enchant\weapon</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\object-enchant\weapon\apply-magic-hafted.cpp">
+      <Filter>object-enchant\weapon</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\object-enchant\weapon\apply-magic-polearm.cpp">
+      <Filter>object-enchant\weapon</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\combat\shoot.h">
@@ -5285,6 +5294,15 @@
     </ClInclude>
     <ClInclude Include="..\..\src\monster-race\race-wilderness-flags.h">
       <Filter>monster-race</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\object-enchant\weapon\melee-weapon-enchanter.h">
+      <Filter>object-enchant\weapon</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\object-enchant\weapon\apply-magic-hafted.h">
+      <Filter>object-enchant\weapon</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\object-enchant\weapon\apply-magic-polearm.h">
+      <Filter>object-enchant\weapon</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

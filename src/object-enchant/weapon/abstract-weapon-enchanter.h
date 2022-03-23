@@ -4,7 +4,7 @@
 #include "system/angband.h"
 
 class ObjectType;
-class AbstractWeaponEnchanter : EnchanterBase {
+class AbstractWeaponEnchanter : public EnchanterBase {
 public:
     virtual ~AbstractWeaponEnchanter() = default;
 
@@ -15,6 +15,5 @@ protected:
     int power;
     bool should_skip = false;
 
-private:
-    void decide_skip();
+    virtual void decide_skip();
 };
