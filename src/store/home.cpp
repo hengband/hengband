@@ -24,11 +24,11 @@
  * known, the player may have to pick stuff up and drop it again.
  * </pre>
  */
-int home_carry(PlayerType *player_ptr, ObjectType *o_ptr)
+int home_carry(PlayerType *player_ptr, ObjectType *o_ptr, StoreSaleType store_num)
 {
     bool old_stack_force_notes = stack_force_notes;
     bool old_stack_force_costs = stack_force_costs;
-    if (cur_store_num != StoreSaleType::HOME) {
+    if (store_num != StoreSaleType::HOME) {
         stack_force_notes = false;
         stack_force_costs = false;
     }
@@ -38,7 +38,7 @@ int home_carry(PlayerType *player_ptr, ObjectType *o_ptr)
         j_ptr = &st_ptr->stock[slot];
         if (object_similar(j_ptr, o_ptr)) {
             object_absorb(j_ptr, o_ptr);
-            if (cur_store_num != StoreSaleType::HOME) {
+            if (store_num != StoreSaleType::HOME) {
                 stack_force_notes = old_stack_force_notes;
                 stack_force_costs = old_stack_force_costs;
             }
@@ -47,7 +47,7 @@ int home_carry(PlayerType *player_ptr, ObjectType *o_ptr)
         }
     }
 
-    if (cur_store_num != StoreSaleType::HOME) {
+    if (store_num != StoreSaleType::HOME) {
         stack_force_notes = old_stack_force_notes;
         stack_force_costs = old_stack_force_costs;
     }
@@ -57,7 +57,7 @@ int home_carry(PlayerType *player_ptr, ObjectType *o_ptr)
      * 隠し機能: オプション powerup_home が設定されていると
      *           我が家が 20 ページまで使える
      */
-    if ((cur_store_num != StoreSaleType::HOME) || powerup_home) {
+    if ((store_num != StoreSaleType::HOME) || powerup_home) {
         if (st_ptr->stock_num >= st_ptr->stock_size) {
             return -1;
         }
@@ -82,7 +82,7 @@ int home_carry(PlayerType *player_ptr, ObjectType *o_ptr)
     st_ptr->stock_num++;
     st_ptr->stock[slot] = *o_ptr;
     chg_virtue(player_ptr, V_SACRIFICE, -1);
-    (void)combine_and_reorder_home(player_ptr, cur_store_num);
+    (void)combine_and_reorder_home(player_ptr, store_num);
     return slot;
 }
 

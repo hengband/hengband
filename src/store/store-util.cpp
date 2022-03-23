@@ -18,7 +18,6 @@
 #include "system/object-type-definition.h"
 #include "world/world-object.h"
 
-StoreSaleType cur_store_num = StoreSaleType::GENERAL;
 store_type *st_ptr = nullptr;
 
 /*!
@@ -137,18 +136,18 @@ static std::vector<PARAMETER_VALUE> store_same_magic_device_pvals(ObjectType *j_
  * </pre>
  */
 void store_create(
-    PlayerType *player_ptr, KIND_OBJECT_IDX fix_k_idx, black_market_crap_pf black_market_crap, store_will_buy_pf store_will_buy, mass_produce_pf mass_produce)
+    PlayerType *player_ptr, KIND_OBJECT_IDX fix_k_idx, black_market_crap_pf black_market_crap, store_will_buy_pf store_will_buy, mass_produce_pf mass_produce, StoreSaleType store_num)
 {
     if (st_ptr->stock_num >= st_ptr->stock_size) {
         return;
     }
 
-    const owner_type *ow_ptr = &owners.at(cur_store_num)[st_ptr->owner];
+    const owner_type *ow_ptr = &owners.at(store_num)[st_ptr->owner];
 
     for (int tries = 0; tries < 4; tries++) {
         KIND_OBJECT_IDX k_idx;
         DEPTH level;
-        if (cur_store_num == StoreSaleType::BLACK) {
+        if (store_num == StoreSaleType::BLACK) {
             level = 25 + randint0(25);
             k_idx = get_obj_num(player_ptr, level, 0x00000000);
             if (k_idx == 0) {
@@ -167,7 +166,7 @@ void store_create(
         q_ptr = &forge;
         q_ptr->prep(k_idx);
         apply_magic_to_object(player_ptr, q_ptr, level, AM_NO_FIXED_ART);
-        if (!(*store_will_buy)(player_ptr, q_ptr)) {
+        if (!(*store_will_buy)(player_ptr, q_ptr, store_num)) {
             continue;
         }
 
@@ -193,7 +192,7 @@ void store_create(
             continue;
         }
 
-        if (cur_store_num == StoreSaleType::BLACK) {
+        if (store_num == StoreSaleType::BLACK) {
             if (black_market_crap(player_ptr, q_ptr) || (object_value(q_ptr) < 10)) {
                 continue;
             }
@@ -203,7 +202,7 @@ void store_create(
             }
         }
 
-        mass_produce(player_ptr, q_ptr);
+        mass_produce(player_ptr, q_ptr, store_num);
         (void)store_carry(q_ptr);
         break;
     }

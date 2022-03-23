@@ -184,9 +184,9 @@ static bool check_store_book(const ObjectType *o_ptr)
     }
 }
 
-static bool switch_store_check(const ObjectType *o_ptr)
+static bool switch_store_check(const ObjectType *o_ptr, StoreSaleType store_num)
 {
-    switch (cur_store_num) {
+    switch (store_num) {
     case StoreSaleType::GENERAL:
         return check_store_general(o_ptr);
     case StoreSaleType::ARMOURY:
@@ -214,13 +214,14 @@ static bool switch_store_check(const ObjectType *o_ptr)
  * @note
  * Note that a shop-keeper must refuse to buy "worthless" items
  */
-bool store_will_buy(PlayerType *, const ObjectType *o_ptr)
+
+bool store_will_buy(PlayerType *, const ObjectType *o_ptr, StoreSaleType store_num)
 {
-    if ((cur_store_num == StoreSaleType::HOME) || (cur_store_num == StoreSaleType::MUSEUM)) {
+    if ((store_num == StoreSaleType::HOME) || (store_num == StoreSaleType::MUSEUM)) {
         return true;
     }
 
-    if (!switch_store_check(o_ptr)) {
+    if (!switch_store_check(o_ptr, store_num)) {
         return false;
     }
 
@@ -331,10 +332,10 @@ static int mass_figurine_produce(const PRICE cost)
     return size;
 }
 
-static int mass_magic_produce(const PRICE cost)
+static int mass_magic_produce(const PRICE cost, StoreSaleType store_num)
 {
     int size = 1;
-    if ((cur_store_num != StoreSaleType::BLACK) || !one_in_(3)) {
+    if ((store_num != StoreSaleType::BLACK) || !one_in_(3)) {
         return size;
     }
 
@@ -347,7 +348,7 @@ static int mass_magic_produce(const PRICE cost)
     return size;
 }
 
-static int switch_mass_production(ObjectType *o_ptr, const PRICE cost)
+static int switch_mass_production(ObjectType *o_ptr, const PRICE cost, StoreSaleType store_num)
 {
     switch (o_ptr->tval) {
     case ItemKindType::FOOD:
@@ -399,7 +400,7 @@ static int switch_mass_production(ObjectType *o_ptr, const PRICE cost)
     case ItemKindType::ROD:
     case ItemKindType::WAND:
     case ItemKindType::STAFF:
-        return mass_magic_produce(cost);
+        return mass_magic_produce(cost, store_num);
     default:
         return 1;
     }
@@ -439,10 +440,10 @@ static byte decide_discount_rate(const PRICE cost)
  * Some objects can be sold at a "discount" (in small piles)
  * </pre>
  */
-void mass_produce(PlayerType *, ObjectType *o_ptr)
+void mass_produce(PlayerType *, ObjectType *o_ptr, StoreSaleType store_num)
 {
     const PRICE cost = object_value(o_ptr);
-    int size = switch_mass_production(o_ptr, cost);
+    int size = switch_mass_production(o_ptr, cost, store_num);
     auto discount = decide_discount_rate(cost);
     if (o_ptr->art_name) {
         discount = 0;

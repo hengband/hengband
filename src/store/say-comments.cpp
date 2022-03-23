@@ -15,9 +15,9 @@
  * Successful haggle.
  * @param player_ptr プレイヤーへの参照ポインタ
  */
-void store_owner_says_comment(PlayerType *player_ptr)
+void store_owner_says_comment(PlayerType *player_ptr, StoreSaleType store_num)
 {
-    if (cur_store_num == StoreSaleType::BLACK) {
+    if (store_num == StoreSaleType::BLACK) {
         msg_print(comment_1_B[randint0(MAX_COMMENT_1)]);
     } else {
         msg_print(comment_1[randint0(MAX_COMMENT_1)]);
