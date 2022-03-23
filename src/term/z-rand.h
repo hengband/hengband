@@ -11,6 +11,9 @@
 #pragma once
 
 #include "system/h-basic.h"
+#include <iterator>
+#include <type_traits>
+#include <utility>
 
 /**** Available constants ****/
 
@@ -68,3 +71,40 @@ int16_t damroll(DICE_NUMBER num, DICE_SID sides);
 int16_t maxroll(DICE_NUMBER num, DICE_SID sides);
 int32_t div_round(int32_t n, int32_t d);
 int32_t Rand_external(int32_t m);
+
+template <typename>
+struct is_reference_wrapper : std::false_type {
+};
+template <typename T>
+struct is_reference_wrapper<std::reference_wrapper<T>> : std::true_type {
+};
+
+/*!
+ * @brief 型 T が std::reference_wrappter かどうか調べる
+ */
+template <typename T>
+constexpr auto is_reference_wrapper_v = is_reference_wrapper<T>::value;
+
+/*!
+ * @brief イテレータの範囲 [first,last) のそれぞれの要素を同じ確率で並び替える
+ * ※ イテレータの指す要素が std::reference_wrapper<T> の場合は要素の値ではなく、要素が保持している参照先の値を入れ替える。
+ * @tparam Iter イテレータの型
+ * @param first 範囲の先頭を指すイテレータ
+ * @param last 範囲の終端を指すイテレータ
+ */
+template <typename Iter>
+void rand_shuffle(Iter first, Iter last)
+{
+    using value_type = typename std::iterator_traits<Iter>::value_type;
+
+    for (auto n = std::distance(first, last) - 1; n > 0; --n) {
+        using std::swap;
+        const auto m = randint0(n + 1);
+
+        if constexpr (is_reference_wrapper_v<value_type>) {
+            swap(first[n].get(), first[m].get());
+        } else {
+            swap(first[n], first[m]);
+        }
+    }
+}

@@ -41,6 +41,7 @@
 #include "util/quarks.h"
 #include "util/string-processor.h"
 #include "world/world.h"
+#include <functional>
 #include <utility>
 
 /*!
@@ -188,7 +189,7 @@ void get_table_sindarin(char *out_string)
  */
 static void shuffle_flavors(ItemKindType tval)
 {
-    std::vector<KIND_OBJECT_IDX> k_idx_list;
+    std::vector<std::reference_wrapper<IDX>> flavor_idx_ref_list;
     for (const auto &k_ref : k_info) {
         if (k_ref.tval != tval) {
             continue;
@@ -202,14 +203,10 @@ static void shuffle_flavors(ItemKindType tval)
             continue;
         }
 
-        k_idx_list.push_back(k_ref.idx);
+        flavor_idx_ref_list.push_back(k_info[k_ref.idx].flavor);
     }
 
-    for (auto i = k_idx_list.size() - 1; i > 0; --i) {
-        object_kind *k1_ptr = &k_info[k_idx_list[i]];
-        object_kind *k2_ptr = &k_info[k_idx_list[randint0(i + 1)]];
-        std::swap(k1_ptr->flavor, k2_ptr->flavor);
-    }
+    rand_shuffle(flavor_idx_ref_list.begin(), flavor_idx_ref_list.end());
 }
 
 /*!

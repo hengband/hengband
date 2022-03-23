@@ -4,6 +4,8 @@
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
 #include "util/int-char-converter.h"
+#include <iterator>
+#include <numeric>
 
 /*!
  * ポーカーの現在の手札ID
@@ -45,18 +47,10 @@ static int cards[5];
  * @brief ポーカーの山札を切る
  * @param deck デッキの配列
  */
-static void reset_deck(int deck[])
+static void reset_deck(int (&deck)[53])
 {
-    for (int i = 0; i < 53; i++) {
-        deck[i] = i;
-    }
-
-    for (int i = 0; i < 53; i++) {
-        int tmp1 = randint0(53 - i) + i;
-        int tmp2 = deck[i];
-        deck[i] = deck[tmp1];
-        deck[tmp1] = tmp2;
-    }
+    std::iota(std::begin(deck), std::end(deck), 0);
+    rand_shuffle(std::begin(deck), std::end(deck));
 }
 
 /*!
