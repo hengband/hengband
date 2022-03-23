@@ -22,15 +22,15 @@
  * @param spell 発動する特殊技能のID
  * @return 処理を実行したらTRUE、キャンセルした場合FALSEを返す。
  */
-bool cast_berserk_spell(PlayerType *player_ptr, mind_berserker_type spell)
+bool cast_berserk_spell(PlayerType *player_ptr, MindBerserkerType spell)
 {
     POSITION y, x;
     DIRECTION dir;
     switch (spell) {
-    case DETECT_MANACE:
+    case MindBerserkerType::DETECT_MANACE:
         detect_monsters_mind(player_ptr, DETECT_RAD_DEFAULT);
         break;
-    case CHARGE: {
+    case MindBerserkerType::CHARGE: {
         if (player_ptr->riding) {
             msg_print(_("乗馬中には無理だ。", "You cannot do it when riding."));
             return false;
@@ -61,7 +61,7 @@ bool cast_berserk_spell(PlayerType *player_ptr, mind_berserker_type spell)
 
         break;
     }
-    case SMASH_TRAP: {
+    case MindBerserkerType::SMASH_TRAP: {
         if (!get_direction(player_ptr, &dir, false, false)) {
             return false;
         }
@@ -71,10 +71,10 @@ bool cast_berserk_spell(PlayerType *player_ptr, mind_berserker_type spell)
         exe_movement(player_ptr, dir, easy_disarm, true);
         break;
     }
-    case QUAKE:
+    case MindBerserkerType::QUAKE:
         earthquake(player_ptr, player_ptr->y, player_ptr->x, 8 + randint0(5), 0);
         break;
-    case MASSACRE:
+    case MindBerserkerType::MASSACRE:
         massacre(player_ptr);
         break;
     default:

@@ -297,23 +297,23 @@ static bool switch_mind_class(PlayerType *player_ptr, cm_type *cm_ptr)
 {
     switch (cm_ptr->use_mind) {
     case MindKindType::MINDCRAFTER:
-        cm_ptr->cast = cast_mindcrafter_spell(player_ptr, i2enum<mind_mindcrafter_type>(cm_ptr->n));
+        cm_ptr->cast = cast_mindcrafter_spell(player_ptr, i2enum<MindMindcrafterType>(cm_ptr->n));
         return true;
     case MindKindType::KI:
-        cm_ptr->cast = cast_force_spell(player_ptr, i2enum<mind_force_trainer_type>(cm_ptr->n));
+        cm_ptr->cast = cast_force_spell(player_ptr, i2enum<MindForceTrainerType>(cm_ptr->n));
         return true;
     case MindKindType::BERSERKER:
-        cm_ptr->cast = cast_berserk_spell(player_ptr, i2enum<mind_berserker_type>(cm_ptr->n));
+        cm_ptr->cast = cast_berserk_spell(player_ptr, i2enum<MindBerserkerType>(cm_ptr->n));
         return true;
     case MindKindType::MIRROR_MASTER:
         if (player_ptr->current_floor_ptr->grid_array[player_ptr->y][player_ptr->x].is_mirror()) {
             cm_ptr->on_mirror = true;
         }
 
-        cm_ptr->cast = cast_mirror_spell(player_ptr, i2enum<mind_mirror_master_type>(cm_ptr->n));
+        cm_ptr->cast = cast_mirror_spell(player_ptr, i2enum<MindMirrorMasterType>(cm_ptr->n));
         return true;
     case MindKindType::NINJUTSU:
-        cm_ptr->cast = cast_ninja_spell(player_ptr, i2enum<mind_ninja_type>(cm_ptr->n));
+        cm_ptr->cast = cast_ninja_spell(player_ptr, i2enum<MindNinjaType>(cm_ptr->n));
         return true;
     default:
         msg_format(_("謎の能力:%d, %d", "Mystery power:%d, %d"), cm_ptr->use_mind, cm_ptr->n);

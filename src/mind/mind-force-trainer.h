@@ -10,5 +10,5 @@ void set_lightspeed(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec);
 bool set_tim_sh_force(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec);
 bool shock_power(PlayerType *player_ptr);
 
-enum mind_force_trainer_type : int;
-bool cast_force_spell(PlayerType *player_ptr, mind_force_trainer_type spell);
+enum class MindForceTrainerType : int;
+bool cast_force_spell(PlayerType *player_ptr, MindForceTrainerType spell);
