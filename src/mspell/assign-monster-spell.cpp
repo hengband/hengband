@@ -10,7 +10,7 @@
 #include "monster/monster-status.h"
 #include "mspell/mspell-attack/mspell-ball.h"
 #include "mspell/mspell-attack/mspell-bolt.h"
-#include "mspell/mspell-breath.h"
+#include "mspell/mspell-attack/mspell-breath.h"
 #include "mspell/mspell-curse.h"
 #include "mspell/mspell-dispel.h"
 #include "mspell/mspell-floor.h"
@@ -35,30 +35,32 @@ static MonsterSpellResult monspell_to_player_impl(PlayerType *player_ptr, Monste
     case MonsterAbilityType::XXX2: break;   /* RF4_XXX2 */
     case MonsterAbilityType::XXX3: break;   /* RF4_XXX3 */
     case MonsterAbilityType::XXX4: break;   /* RF4_XXX4 */
-    case MonsterAbilityType::BR_ACID: return spell_RF4_BREATH(player_ptr, AttributeType::ACID, y, x, m_idx, 0, MONSTER_TO_PLAYER); /* RF4_BR_ACID */
-    case MonsterAbilityType::BR_ELEC: return spell_RF4_BREATH(player_ptr, AttributeType::ELEC, y, x, m_idx, 0, MONSTER_TO_PLAYER); /* RF4_BR_ELEC */
-    case MonsterAbilityType::BR_FIRE: return spell_RF4_BREATH(player_ptr, AttributeType::FIRE, y, x, m_idx, 0, MONSTER_TO_PLAYER); /* RF4_BR_FIRE */
-    case MonsterAbilityType::BR_COLD: return spell_RF4_BREATH(player_ptr, AttributeType::COLD, y, x, m_idx, 0, MONSTER_TO_PLAYER); /* RF4_BR_COLD */
-    case MonsterAbilityType::BR_POIS: return spell_RF4_BREATH(player_ptr, AttributeType::POIS, y, x, m_idx, 0, MONSTER_TO_PLAYER); /* RF4_BR_POIS */
-    case MonsterAbilityType::BR_NETH: return spell_RF4_BREATH(player_ptr, AttributeType::NETHER, y, x, m_idx, 0, MONSTER_TO_PLAYER);   /* RF4_BR_NETH */
-    case MonsterAbilityType::BR_LITE: return spell_RF4_BREATH(player_ptr, AttributeType::LITE, y, x, m_idx, 0, MONSTER_TO_PLAYER); /* RF4_BR_LITE */
-    case MonsterAbilityType::BR_DARK: return spell_RF4_BREATH(player_ptr, AttributeType::DARK, y, x, m_idx, 0, MONSTER_TO_PLAYER); /* RF4_BR_DARK */
-    case MonsterAbilityType::BR_CONF: return spell_RF4_BREATH(player_ptr, AttributeType::CONFUSION, y, x, m_idx, 0, MONSTER_TO_PLAYER); /* RF4_BR_CONF */
-    case MonsterAbilityType::BR_SOUN: return spell_RF4_BREATH(player_ptr, AttributeType::SOUND, y, x, m_idx, 0, MONSTER_TO_PLAYER); /* RF4_BR_SOUN */
-    case MonsterAbilityType::BR_CHAO: return spell_RF4_BREATH(player_ptr, AttributeType::CHAOS, y, x, m_idx, 0, MONSTER_TO_PLAYER); /* RF4_BR_CHAO */
-    case MonsterAbilityType::BR_DISE: return spell_RF4_BREATH(player_ptr, AttributeType::DISENCHANT, y, x, m_idx, 0, MONSTER_TO_PLAYER);   /* RF4_BR_DISE */
-    case MonsterAbilityType::BR_NEXU: return spell_RF4_BREATH(player_ptr, AttributeType::NEXUS, y, x, m_idx, 0, MONSTER_TO_PLAYER); /* RF4_BR_NEXU */
-    case MonsterAbilityType::BR_TIME: return spell_RF4_BREATH(player_ptr, AttributeType::TIME, y, x, m_idx, 0, MONSTER_TO_PLAYER); /* RF4_BR_TIME */
-    case MonsterAbilityType::BR_INER: return spell_RF4_BREATH(player_ptr, AttributeType::INERTIAL, y, x, m_idx, 0, MONSTER_TO_PLAYER);  /* RF4_BR_INER */
-    case MonsterAbilityType::BR_GRAV: return spell_RF4_BREATH(player_ptr, AttributeType::GRAVITY, y, x, m_idx, 0, MONSTER_TO_PLAYER);  /* RF4_BR_GRAV */
-    case MonsterAbilityType::BR_SHAR: return spell_RF4_BREATH(player_ptr, AttributeType::SHARDS, y, x, m_idx, 0, MONSTER_TO_PLAYER);   /* RF4_BR_SHAR */
-    case MonsterAbilityType::BR_PLAS: return spell_RF4_BREATH(player_ptr, AttributeType::PLASMA, y, x, m_idx, 0, MONSTER_TO_PLAYER);   /* RF4_BR_PLAS */
-    case MonsterAbilityType::BR_FORC: return spell_RF4_BREATH(player_ptr, AttributeType::FORCE, y, x, m_idx, 0, MONSTER_TO_PLAYER); /* RF4_BR_WALL */
-    case MonsterAbilityType::BR_MANA: return spell_RF4_BREATH(player_ptr, AttributeType::MANA, y, x, m_idx, 0, MONSTER_TO_PLAYER); /* RF4_BR_MANA */
-    case MonsterAbilityType::BR_NUKE: return spell_RF4_BREATH(player_ptr, AttributeType::NUKE, y, x, m_idx, 0, MONSTER_TO_PLAYER); /* RF4_BR_NUKE */
-    case MonsterAbilityType::BR_DISI: return spell_RF4_BREATH(player_ptr, AttributeType::DISINTEGRATE, y, x, m_idx, 0, MONSTER_TO_PLAYER); /* RF4_BR_DISI */
-    case MonsterAbilityType::BR_VOID: return spell_RF4_BREATH(player_ptr, AttributeType::VOID_MAGIC, y, x, m_idx, 0, MONSTER_TO_PLAYER); /* RF4_BR_VOID */
-    case MonsterAbilityType::BR_ABYSS: return spell_RF4_BREATH(player_ptr, AttributeType::ABYSS, y, x, m_idx, 0, MONSTER_TO_PLAYER); /* RF4_BR_ABYSS */
+
+    case MonsterAbilityType::BR_ACID:
+    case MonsterAbilityType::BR_ELEC:
+    case MonsterAbilityType::BR_FIRE:
+    case MonsterAbilityType::BR_COLD:
+    case MonsterAbilityType::BR_POIS:
+    case MonsterAbilityType::BR_NETH:
+    case MonsterAbilityType::BR_LITE:
+    case MonsterAbilityType::BR_DARK:
+    case MonsterAbilityType::BR_CONF:
+    case MonsterAbilityType::BR_SOUN:
+    case MonsterAbilityType::BR_CHAO:
+    case MonsterAbilityType::BR_DISE:
+    case MonsterAbilityType::BR_NEXU:
+    case MonsterAbilityType::BR_TIME:
+    case MonsterAbilityType::BR_INER:
+    case MonsterAbilityType::BR_GRAV:
+    case MonsterAbilityType::BR_SHAR:
+    case MonsterAbilityType::BR_PLAS:
+    case MonsterAbilityType::BR_FORC:
+    case MonsterAbilityType::BR_MANA:
+    case MonsterAbilityType::BR_NUKE:
+    case MonsterAbilityType::BR_DISI:
+    case MonsterAbilityType::BR_VOID:
+    case MonsterAbilityType::BR_ABYSS:
+     return spell_RF4_BREATH(player_ptr, ms_type, y, x, m_idx, 0, MONSTER_TO_PLAYER); /* RF4_BR_ABYSS */
     
     case MonsterAbilityType::BA_ACID:
     case MonsterAbilityType::BA_ELEC:
@@ -162,30 +164,32 @@ static MonsterSpellResult monspell_to_monster_impl(
     case MonsterAbilityType::XXX2: break;   /* RF4_XXX2 */
     case MonsterAbilityType::XXX3: break;   /* RF4_XXX3 */
     case MonsterAbilityType::XXX4: break;   /* RF4_XXX4 */
-    case MonsterAbilityType::BR_ACID: return spell_RF4_BREATH(player_ptr, AttributeType::ACID, y, x, m_idx, t_idx, MONSTER_TO_MONSTER); /* RF4_BR_ACID */
-    case MonsterAbilityType::BR_ELEC: return spell_RF4_BREATH(player_ptr, AttributeType::ELEC, y, x, m_idx, t_idx, MONSTER_TO_MONSTER); /* RF4_BR_ELEC */
-    case MonsterAbilityType::BR_FIRE: return spell_RF4_BREATH(player_ptr, AttributeType::FIRE, y, x, m_idx, t_idx, MONSTER_TO_MONSTER); /* RF4_BR_FIRE */
-    case MonsterAbilityType::BR_COLD: return spell_RF4_BREATH(player_ptr, AttributeType::COLD, y, x, m_idx, t_idx, MONSTER_TO_MONSTER); /* RF4_BR_COLD */
-    case MonsterAbilityType::BR_POIS: return spell_RF4_BREATH(player_ptr, AttributeType::POIS, y, x, m_idx, t_idx, MONSTER_TO_MONSTER); /* RF4_BR_POIS */
-    case MonsterAbilityType::BR_NETH: return spell_RF4_BREATH(player_ptr, AttributeType::NETHER, y, x, m_idx, t_idx, MONSTER_TO_MONSTER);  /* RF4_BR_NETH */
-    case MonsterAbilityType::BR_LITE: return spell_RF4_BREATH(player_ptr, AttributeType::LITE, y, x, m_idx, t_idx, MONSTER_TO_MONSTER); /* RF4_BR_LITE */
-    case MonsterAbilityType::BR_DARK: return spell_RF4_BREATH(player_ptr, AttributeType::DARK, y, x, m_idx, t_idx, MONSTER_TO_MONSTER); /* RF4_BR_DARK */
-    case MonsterAbilityType::BR_CONF: return spell_RF4_BREATH(player_ptr, AttributeType::CONFUSION, y, x, m_idx, t_idx, MONSTER_TO_MONSTER);   /* RF4_BR_CONF */
-    case MonsterAbilityType::BR_SOUN: return spell_RF4_BREATH(player_ptr, AttributeType::SOUND, y, x, m_idx, t_idx, MONSTER_TO_MONSTER);   /* RF4_BR_SOUN */
-    case MonsterAbilityType::BR_CHAO: return spell_RF4_BREATH(player_ptr, AttributeType::CHAOS, y, x, m_idx, t_idx, MONSTER_TO_MONSTER);   /* RF4_BR_CHAO */
-    case MonsterAbilityType::BR_DISE: return spell_RF4_BREATH(player_ptr, AttributeType::DISENCHANT, y, x, m_idx, t_idx, MONSTER_TO_MONSTER);  /* RF4_BR_DISE */
-    case MonsterAbilityType::BR_NEXU: return spell_RF4_BREATH(player_ptr, AttributeType::NEXUS, y, x, m_idx, t_idx, MONSTER_TO_MONSTER);   /* RF4_BR_NEXU */
-    case MonsterAbilityType::BR_TIME: return spell_RF4_BREATH(player_ptr, AttributeType::TIME, y, x, m_idx, t_idx, MONSTER_TO_MONSTER); /* RF4_BR_TIME */
-    case MonsterAbilityType::BR_INER: return spell_RF4_BREATH(player_ptr, AttributeType::INERTIAL, y, x, m_idx, t_idx, MONSTER_TO_MONSTER); /* RF4_BR_INER */
-    case MonsterAbilityType::BR_GRAV: return spell_RF4_BREATH(player_ptr, AttributeType::GRAVITY, y, x, m_idx, t_idx, MONSTER_TO_MONSTER); /* RF4_BR_GRAV */
-    case MonsterAbilityType::BR_SHAR: return spell_RF4_BREATH(player_ptr, AttributeType::SHARDS, y, x, m_idx, t_idx, MONSTER_TO_MONSTER);  /* RF4_BR_SHAR */
-    case MonsterAbilityType::BR_PLAS: return spell_RF4_BREATH(player_ptr, AttributeType::PLASMA, y, x, m_idx, t_idx, MONSTER_TO_MONSTER);  /* RF4_BR_PLAS */
-    case MonsterAbilityType::BR_FORC: return spell_RF4_BREATH(player_ptr, AttributeType::FORCE, y, x, m_idx, t_idx, MONSTER_TO_MONSTER);   /* RF4_BR_WALL */
-    case MonsterAbilityType::BR_MANA: return spell_RF4_BREATH(player_ptr, AttributeType::MANA, y, x, m_idx, t_idx, MONSTER_TO_MONSTER); /* RF4_BR_MANA */
-    case MonsterAbilityType::BR_NUKE: return spell_RF4_BREATH(player_ptr, AttributeType::NUKE, y, x, m_idx, t_idx, MONSTER_TO_MONSTER); /* RF4_BR_NUKE */
-    case MonsterAbilityType::BR_DISI: return spell_RF4_BREATH(player_ptr, AttributeType::DISINTEGRATE, y, x, m_idx, t_idx, MONSTER_TO_MONSTER); /* RF4_BR_DISI */
-    case MonsterAbilityType::BR_VOID: return spell_RF4_BREATH(player_ptr, AttributeType::VOID_MAGIC, y, x, m_idx, t_idx, MONSTER_TO_MONSTER); /* RF4_BR_VOID */
-    case MonsterAbilityType::BR_ABYSS: return spell_RF4_BREATH(player_ptr, AttributeType::ABYSS, y, x, m_idx, t_idx, MONSTER_TO_MONSTER); /* RF4_BR_ABYSS */
+
+    case MonsterAbilityType::BR_ACID:
+    case MonsterAbilityType::BR_ELEC:
+    case MonsterAbilityType::BR_FIRE:
+    case MonsterAbilityType::BR_COLD:
+    case MonsterAbilityType::BR_POIS:
+    case MonsterAbilityType::BR_NETH:
+    case MonsterAbilityType::BR_LITE:
+    case MonsterAbilityType::BR_DARK:
+    case MonsterAbilityType::BR_CONF:
+    case MonsterAbilityType::BR_SOUN:
+    case MonsterAbilityType::BR_CHAO:
+    case MonsterAbilityType::BR_DISE:
+    case MonsterAbilityType::BR_NEXU:
+    case MonsterAbilityType::BR_TIME:
+    case MonsterAbilityType::BR_INER:
+    case MonsterAbilityType::BR_GRAV:
+    case MonsterAbilityType::BR_SHAR:
+    case MonsterAbilityType::BR_PLAS:
+    case MonsterAbilityType::BR_FORC:
+    case MonsterAbilityType::BR_MANA:
+    case MonsterAbilityType::BR_NUKE:
+    case MonsterAbilityType::BR_DISI:
+    case MonsterAbilityType::BR_VOID:
+    case MonsterAbilityType::BR_ABYSS:
+    return spell_RF4_BREATH(player_ptr, ms_type, y, x, m_idx, t_idx, MONSTER_TO_MONSTER); /* RF4_BR_ABYSS */
     
     case MonsterAbilityType::BA_ACID:
     case MonsterAbilityType::BA_ELEC:
