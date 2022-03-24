@@ -817,7 +817,7 @@
     <ClCompile Include="..\..\src\knowledge\object-group-table.cpp" />
     <ClCompile Include="..\..\src\melee\melee-postprocess.cpp" />
     <ClCompile Include="..\..\src\combat\shoot.cpp" />
-    <ClCompile Include="..\..\src\mspell\mspell-bolt.cpp" />
+    <ClCompile Include="..\..\src\mspell\mspell-attack\mspell-bolt.cpp" />
     <ClCompile Include="..\..\src\mspell\mspell-breath.cpp" />
     <ClCompile Include="..\..\src\mspell\mspell-curse.cpp" />
     <ClCompile Include="..\..\src\mspell\mspell-damage-calculator.cpp" />
@@ -1605,7 +1605,7 @@
     <ClInclude Include="..\..\src\core\magic-effects-timeout-reducer.h" />
     <ClInclude Include="..\..\src\core\special-internal-keys.h" />
     <ClInclude Include="..\..\src\core\stuff-handler.h" />
-    <ClInclude Include="..\..\src\mspell\mspell-bolt.h" />
+    <ClInclude Include="..\..\src\mspell\mspell-attack\mspell-bolt.h" />
     <ClInclude Include="..\..\src\mspell\mspell-breath.h" />
     <ClInclude Include="..\..\src\mspell\mspell-curse.h" />
     <ClInclude Include="..\..\src\mspell\mspell-damage-calculator.h" />
