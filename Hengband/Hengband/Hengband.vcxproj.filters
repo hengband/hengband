@@ -2448,6 +2448,9 @@
     <ClCompile Include="..\..\src\mspell\mspell-data.cpp">
       <Filter>mspell</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\mspell\mspell-attack\abstract-mspell.cpp">
+      <Filter>mspell\mspell-attack</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\combat\shoot.h">
@@ -5316,6 +5319,9 @@
     <ClInclude Include="..\..\src\mspell\mspell-data.h">
       <Filter>mspell</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\mspell\mspell-attack\abstract-mspell.h">
+      <Filter>mspell\mspell-attack</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\src\wall.bmp" />
@@ -5567,6 +5573,9 @@
     </Filter>
     <Filter Include="object-use\quaff">
       <UniqueIdentifier>{5eec2f75-7108-42ad-9aa4-85b1129354db}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="mspell\mspell-attack">
+      <UniqueIdentifier>{ab971e7b-4a9e-4f88-a557-eb89840abd61}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

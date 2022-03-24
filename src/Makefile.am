@@ -553,6 +553,8 @@ hengband_SOURCES = \
 	mspell/specified-summon.cpp mspell/specified-summon.h \
 	mspell/summon-checker.cpp mspell/summon-checker.h \
 	\
+	mspell/mspell-attack/abstract-mspell.cpp mspell/mspell-attack/abstract-mspell.h \
+	\
 	mutation/gain-mutation-switcher.cpp mutation/gain-mutation-switcher.h \
 	mutation/lose-mutation-switcher.cpp mutation/lose-mutation-switcher.h \
 	mutation/mutation-calculator.cpp mutation/mutation-calculator.h \
