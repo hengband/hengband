@@ -536,6 +536,7 @@ hengband_SOURCES = \
 	mspell/mspell-checker.cpp mspell/mspell-checker.h \
 	mspell/mspell-curse.cpp mspell/mspell-curse.h \
 	mspell/mspell-damage-calculator.cpp mspell/mspell-damage-calculator.h \
+	mspell/mspell-data.cpp mspell/mspell-data.h \
 	mspell/mspell-dispel.cpp mspell/mspell-dispel.h \
 	mspell/mspell-floor.cpp mspell/mspell-floor.h \
 	mspell/mspell-judgement.cpp mspell/mspell-judgement.h \

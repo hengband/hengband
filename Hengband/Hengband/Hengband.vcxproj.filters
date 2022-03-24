@@ -2445,6 +2445,9 @@
     <ClCompile Include="..\..\src\object-enchant\enchanter-factory.cpp">
       <Filter>object-enchant</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\mspell\mspell-data.cpp">
+      <Filter>mspell</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\combat\shoot.h">
@@ -5309,6 +5312,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\object-enchant\enchanter-factory.h">
       <Filter>object-enchant</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\mspell\mspell-data.h">
+      <Filter>mspell</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
