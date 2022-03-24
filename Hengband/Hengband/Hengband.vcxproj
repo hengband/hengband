@@ -702,7 +702,7 @@
     <ClCompile Include="..\..\src\object\object-value.cpp" />
     <ClCompile Include="..\..\src\pet\pet-fall-off.cpp" />
     <ClCompile Include="..\..\src\mspell\mspell-floor.cpp" />
-    <ClCompile Include="..\..\src\mspell\mspell-particularity.cpp" />
+    <ClCompile Include="..\..\src\mspell\mspell-attack\mspell-particularity.cpp" />
     <ClCompile Include="..\..\src\mspell\mspell-special.cpp" />
     <ClCompile Include="..\..\src\mspell\mspell-status.cpp" />
     <ClCompile Include="..\..\src\system\artifact-type-definition.cpp" />
@@ -1510,7 +1510,7 @@
     <ClInclude Include="..\..\src\pet\pet-util.h" />
     <ClInclude Include="..\..\src\mspell\assign-monster-spell.h" />
     <ClInclude Include="..\..\src\mspell\mspell-floor.h" />
-    <ClInclude Include="..\..\src\mspell\mspell-particularity.h" />
+    <ClInclude Include="..\..\src\mspell\mspell-attack\mspell-particularity.h" />
     <ClInclude Include="..\..\src\mspell\mspell-special.h" />
     <ClInclude Include="..\..\src\mspell\mspell-status.h" />
     <ClInclude Include="..\..\src\system\artifact-type-definition.h" />

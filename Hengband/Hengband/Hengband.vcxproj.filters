@@ -515,9 +515,6 @@
     <ClCompile Include="..\..\src\mspell\mspell-special.cpp">
       <Filter>mspell</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\mspell\mspell-particularity.cpp">
-      <Filter>mspell</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\mspell\assign-monster-spell.cpp">
       <Filter>mspell</Filter>
     </ClCompile>
@@ -2451,6 +2448,9 @@
     <ClCompile Include="..\..\src\mspell\mspell-attack\mspell-curse.cpp">
       <Filter>mspell\mspell-attack</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\mspell\mspell-attack\mspell-particularity.cpp">
+      <Filter>mspell\mspell-attack</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\combat\shoot.h">
@@ -3000,9 +3000,6 @@
       <Filter>mspell</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\mspell\mspell-special.h">
-      <Filter>mspell</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\mspell\mspell-particularity.h">
       <Filter>mspell</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\mspell\assign-monster-spell.h">
@@ -5320,6 +5317,9 @@
       <Filter>mspell\mspell-attack</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\mspell\mspell-attack\mspell-curse.h">
+      <Filter>mspell\mspell-attack</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\mspell\mspell-attack\mspell-particularity.h">
       <Filter>mspell\mspell-attack</Filter>
     </ClInclude>
   </ItemGroup>

@@ -538,7 +538,6 @@ hengband_SOURCES = \
 	mspell/mspell-judgement.cpp mspell/mspell-judgement.h \
 	mspell/mspell-learn-checker.cpp mspell/mspell-learn-checker.h \
 	mspell/mspell-lite.cpp mspell/mspell-lite.h \
-	mspell/mspell-particularity.cpp mspell/mspell-particularity.h \
 	mspell/mspell-result.h \
 	mspell/mspell-special.cpp mspell/mspell-special.h \
 	mspell/mspell-summon.cpp mspell/mspell-summon.h \
@@ -554,6 +553,7 @@ hengband_SOURCES = \
 	mspell/mspell-attack/mspell-bolt.cpp mspell/mspell-attack/mspell-bolt.h \
 	mspell/mspell-attack/mspell-breath.cpp mspell/mspell-attack/mspell-breath.h \
 	mspell/mspell-attack/mspell-curse.cpp mspell/mspell-attack/mspell-curse.h \
+	mspell/mspell-attack/mspell-particularity.cpp mspell/mspell-attack/mspell-particularity.h \
 	\
 	mutation/gain-mutation-switcher.cpp mutation/gain-mutation-switcher.h \
 	mutation/lose-mutation-switcher.cpp mutation/lose-mutation-switcher.h \
