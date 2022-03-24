@@ -9,7 +9,7 @@
 #include "monster-race/race-ability-flags.h"
 #include "monster/monster-status.h"
 #include "mspell/mspell-attack/mspell-ball.h"
-#include "mspell/mspell-bolt.h"
+#include "mspell/mspell-attack/mspell-bolt.h"
 #include "mspell/mspell-breath.h"
 #include "mspell/mspell-curse.h"
 #include "mspell/mspell-dispel.h"
@@ -32,7 +32,6 @@ static MonsterSpellResult monspell_to_player_impl(PlayerType *player_ptr, Monste
     case MonsterAbilityType::XXX1: break;   /* RF4_XXX1 */
     case MonsterAbilityType::DISPEL: return spell_RF4_DISPEL(m_idx, player_ptr, 0, MONSTER_TO_PLAYER); /* RF4_DISPEL */
     case MonsterAbilityType::ROCKET: return spell_RF4_ROCKET(player_ptr, y, x, m_idx, 0, MONSTER_TO_PLAYER);  /* RF4_ROCKET */
-    case MonsterAbilityType::SHOOT: return spell_RF4_SHOOT(player_ptr, y, x, m_idx, 0, MONSTER_TO_PLAYER);   /* RF4_SHOOT */
     case MonsterAbilityType::XXX2: break;   /* RF4_XXX2 */
     case MonsterAbilityType::XXX3: break;   /* RF4_XXX3 */
     case MonsterAbilityType::XXX4: break;   /* RF4_XXX4 */
@@ -69,7 +68,7 @@ static MonsterSpellResult monspell_to_player_impl(PlayerType *player_ptr, Monste
          auto rad = monster_is_powerful(player_ptr->current_floor_ptr, m_idx) ? 4 : 2;
          return MSpellBall(player_ptr, m_idx, ms_type, rad, MONSTER_TO_PLAYER).shoot(y, x);
          }
-         
+
     case MonsterAbilityType::BA_POIS:
     case MonsterAbilityType::BA_NETH:
     case MonsterAbilityType::BA_NUKE:
@@ -91,18 +90,22 @@ static MonsterSpellResult monspell_to_player_impl(PlayerType *player_ptr, Monste
     case MonsterAbilityType::CAUSE_2: return spell_RF5_CAUSE_2(player_ptr, y, x, m_idx, 0, MONSTER_TO_PLAYER); /* RF5_CAUSE_2 */
     case MonsterAbilityType::CAUSE_3: return spell_RF5_CAUSE_3(player_ptr, y, x, m_idx, 0, MONSTER_TO_PLAYER); /* RF5_CAUSE_3 */
     case MonsterAbilityType::CAUSE_4: return spell_RF5_CAUSE_4(player_ptr, y, x, m_idx, 0, MONSTER_TO_PLAYER); /* RF5_CAUSE_4 */
-    case MonsterAbilityType::BO_ACID: return spell_RF5_BO_ACID(player_ptr, y, x, m_idx, 0, MONSTER_TO_PLAYER); /* RF5_BO_ACID */
-    case MonsterAbilityType::BO_ELEC: return spell_RF5_BO_ELEC(player_ptr, y, x, m_idx, 0, MONSTER_TO_PLAYER); /* RF5_BO_ELEC */
-    case MonsterAbilityType::BO_FIRE: return spell_RF5_BO_FIRE(player_ptr, y, x, m_idx, 0, MONSTER_TO_PLAYER); /* RF5_BO_FIRE */
-    case MonsterAbilityType::BO_COLD: return spell_RF5_BO_COLD(player_ptr, y, x, m_idx, 0, MONSTER_TO_PLAYER); /* RF5_BO_COLD */
-    case MonsterAbilityType::BO_NETH: return spell_RF5_BO_NETH(player_ptr, y, x, m_idx, 0, MONSTER_TO_PLAYER); /* RF5_BO_NETH */
-    case MonsterAbilityType::BO_WATE: return spell_RF5_BO_WATE(player_ptr, y, x, m_idx, 0, MONSTER_TO_PLAYER); /* RF5_BO_WATE */
-    case MonsterAbilityType::BO_MANA: return spell_RF5_BO_MANA(player_ptr, y, x, m_idx, 0, MONSTER_TO_PLAYER); /* RF5_BO_MANA */
-    case MonsterAbilityType::BO_PLAS: return spell_RF5_BO_PLAS(player_ptr, y, x, m_idx, 0, MONSTER_TO_PLAYER); /* RF5_BO_PLAS */
-    case MonsterAbilityType::BO_ICEE: return spell_RF5_BO_ICEE(player_ptr, y, x, m_idx, 0, MONSTER_TO_PLAYER); /* RF5_BO_ICEE */
-    case MonsterAbilityType::BO_VOID: return spell_RF5_BO_VOID(player_ptr, y, x, m_idx, 0, MONSTER_TO_PLAYER); /* RF5_BO_VOID */
-    case MonsterAbilityType::BO_ABYSS: return spell_RF5_BO_ABYSS(player_ptr, y, x, m_idx, 0, MONSTER_TO_PLAYER); /* RF5_BO_ABYSS */
-    case MonsterAbilityType::MISSILE: return spell_RF5_MISSILE(player_ptr, y, x, m_idx, 0, MONSTER_TO_PLAYER); /* RF5_MISSILE */
+
+    case MonsterAbilityType::SHOOT:
+    case MonsterAbilityType::BO_ACID:
+    case MonsterAbilityType::BO_ELEC:
+    case MonsterAbilityType::BO_FIRE:
+    case MonsterAbilityType::BO_COLD:
+    case MonsterAbilityType::BO_NETH:
+    case MonsterAbilityType::BO_WATE:
+    case MonsterAbilityType::BO_MANA:
+    case MonsterAbilityType::BO_PLAS:
+    case MonsterAbilityType::BO_ICEE:
+    case MonsterAbilityType::BO_VOID:
+    case MonsterAbilityType::BO_ABYSS:
+    case MonsterAbilityType::MISSILE: 
+        return MSpellBolt(player_ptr, m_idx, ms_type, MONSTER_TO_PLAYER).shoot(y,x);
+
     case MonsterAbilityType::SCARE: return spell_RF5_SCARE(m_idx, player_ptr, 0, MONSTER_TO_PLAYER); /* RF5_SCARE */
     case MonsterAbilityType::BLIND: return spell_RF5_BLIND(m_idx, player_ptr, 0, MONSTER_TO_PLAYER); /* RF5_BLIND */
     case MonsterAbilityType::CONF: return spell_RF5_CONF(m_idx, player_ptr, 0, MONSTER_TO_PLAYER); /* RF5_CONF */
@@ -156,7 +159,6 @@ static MonsterSpellResult monspell_to_monster_impl(
     case MonsterAbilityType::XXX1: break;   /* RF4_XXX1 */
     case MonsterAbilityType::DISPEL: return spell_RF4_DISPEL(m_idx, player_ptr, t_idx, MONSTER_TO_MONSTER); /* RF4_DISPEL */
     case MonsterAbilityType::ROCKET: return spell_RF4_ROCKET(player_ptr, y, x, m_idx, t_idx, MONSTER_TO_MONSTER); /* RF4_ROCKET */
-    case MonsterAbilityType::SHOOT: return spell_RF4_SHOOT(player_ptr, y, x, m_idx, t_idx, MONSTER_TO_MONSTER);  /* RF4_SHOOT */
     case MonsterAbilityType::XXX2: break;   /* RF4_XXX2 */
     case MonsterAbilityType::XXX3: break;   /* RF4_XXX3 */
     case MonsterAbilityType::XXX4: break;   /* RF4_XXX4 */
@@ -215,18 +217,21 @@ static MonsterSpellResult monspell_to_monster_impl(
     case MonsterAbilityType::CAUSE_2: return spell_RF5_CAUSE_2(player_ptr, y, x, m_idx, t_idx, MONSTER_TO_MONSTER); /* RF5_CAUSE_2 */
     case MonsterAbilityType::CAUSE_3: return spell_RF5_CAUSE_3(player_ptr, y, x, m_idx, t_idx, MONSTER_TO_MONSTER); /* RF5_CAUSE_3 */
     case MonsterAbilityType::CAUSE_4: return spell_RF5_CAUSE_4(player_ptr, y, x, m_idx, t_idx, MONSTER_TO_MONSTER); /* RF5_CAUSE_4 */
-    case MonsterAbilityType::BO_ACID: return spell_RF5_BO_ACID(player_ptr, y, x, m_idx, t_idx, MONSTER_TO_MONSTER); /* RF5_BO_ACID */
-    case MonsterAbilityType::BO_ELEC: return spell_RF5_BO_ELEC(player_ptr, y, x, m_idx, t_idx, MONSTER_TO_MONSTER); /* RF5_BO_ELEC */
-    case MonsterAbilityType::BO_FIRE: return spell_RF5_BO_FIRE(player_ptr, y, x, m_idx, t_idx, MONSTER_TO_MONSTER); /* RF5_BO_FIRE */
-    case MonsterAbilityType::BO_COLD: return spell_RF5_BO_COLD(player_ptr, y, x, m_idx, t_idx, MONSTER_TO_MONSTER); /* RF5_BO_COLD */
-    case MonsterAbilityType::BO_NETH: return spell_RF5_BO_NETH(player_ptr, y, x, m_idx, t_idx, MONSTER_TO_MONSTER); /* RF5_BO_NETH */
-    case MonsterAbilityType::BO_WATE: return spell_RF5_BO_WATE(player_ptr, y, x, m_idx, t_idx, MONSTER_TO_MONSTER); /* RF5_BO_WATE */
-    case MonsterAbilityType::BO_MANA: return spell_RF5_BO_MANA(player_ptr, y, x, m_idx, t_idx, MONSTER_TO_MONSTER); /* RF5_BO_MANA */
-    case MonsterAbilityType::BO_PLAS: return spell_RF5_BO_PLAS(player_ptr, y, x, m_idx, t_idx, MONSTER_TO_MONSTER); /* RF5_BO_PLAS */
-    case MonsterAbilityType::BO_ICEE: return spell_RF5_BO_ICEE(player_ptr, y, x, m_idx, t_idx, MONSTER_TO_MONSTER); /* RF5_BO_ICEE */
-    case MonsterAbilityType::BO_VOID: return spell_RF5_BO_VOID(player_ptr, y, x, m_idx, t_idx, MONSTER_TO_MONSTER); /* RF5_BO_VOID */
-    case MonsterAbilityType::BO_ABYSS: return spell_RF5_BO_ABYSS(player_ptr, y, x, m_idx, t_idx, MONSTER_TO_MONSTER); /* RF5_BO_ABYSS */
-    case MonsterAbilityType::MISSILE: return spell_RF5_MISSILE(player_ptr, y, x, m_idx, t_idx, MONSTER_TO_MONSTER); /* RF5_MISSILE */
+    case MonsterAbilityType::SHOOT:
+    case MonsterAbilityType::BO_ACID:
+    case MonsterAbilityType::BO_ELEC:
+    case MonsterAbilityType::BO_FIRE:
+    case MonsterAbilityType::BO_COLD:
+    case MonsterAbilityType::BO_NETH:
+    case MonsterAbilityType::BO_WATE:
+    case MonsterAbilityType::BO_MANA:
+    case MonsterAbilityType::BO_PLAS:
+    case MonsterAbilityType::BO_ICEE:
+    case MonsterAbilityType::BO_VOID:
+    case MonsterAbilityType::BO_ABYSS:
+    case MonsterAbilityType::MISSILE: 
+         return MSpellBolt(player_ptr, m_idx, t_idx, ms_type, MONSTER_TO_MONSTER).shoot(y, x);
+
     case MonsterAbilityType::SCARE: return spell_RF5_SCARE(m_idx, player_ptr, t_idx, MONSTER_TO_MONSTER); /* RF5_SCARE */
     case MonsterAbilityType::BLIND: return spell_RF5_BLIND(m_idx, player_ptr, t_idx, MONSTER_TO_MONSTER); /* RF5_BLIND */
     case MonsterAbilityType::CONF: return spell_RF5_CONF(m_idx, player_ptr, t_idx, MONSTER_TO_MONSTER); /* RF5_CONF */
