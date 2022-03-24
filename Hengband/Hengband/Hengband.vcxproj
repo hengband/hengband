@@ -818,7 +818,7 @@
     <ClCompile Include="..\..\src\melee\melee-postprocess.cpp" />
     <ClCompile Include="..\..\src\combat\shoot.cpp" />
     <ClCompile Include="..\..\src\mspell\mspell-attack\mspell-bolt.cpp" />
-    <ClCompile Include="..\..\src\mspell\mspell-breath.cpp" />
+    <ClCompile Include="..\..\src\mspell\mspell-attack\mspell-breath.cpp" />
     <ClCompile Include="..\..\src\mspell\mspell-curse.cpp" />
     <ClCompile Include="..\..\src\mspell\mspell-damage-calculator.cpp" />
     <ClCompile Include="..\..\src\mspell\mspell-learn-checker.cpp" />
@@ -1606,7 +1606,7 @@
     <ClInclude Include="..\..\src\core\special-internal-keys.h" />
     <ClInclude Include="..\..\src\core\stuff-handler.h" />
     <ClInclude Include="..\..\src\mspell\mspell-attack\mspell-bolt.h" />
-    <ClInclude Include="..\..\src\mspell\mspell-breath.h" />
+    <ClInclude Include="..\..\src\mspell\mspell-attack\mspell-breath.h" />
     <ClInclude Include="..\..\src\mspell\mspell-curse.h" />
     <ClInclude Include="..\..\src\mspell\mspell-damage-calculator.h" />
     <ClInclude Include="..\..\src\mspell\mspell-learn-checker.h" />
