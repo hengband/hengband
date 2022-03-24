@@ -11,7 +11,7 @@
 #include "mspell/mspell-attack/mspell-ball.h"
 #include "mspell/mspell-attack/mspell-bolt.h"
 #include "mspell/mspell-attack/mspell-breath.h"
-#include "mspell/mspell-curse.h"
+#include "mspell/mspell-attack/mspell-curse.h"
 #include "mspell/mspell-dispel.h"
 #include "mspell/mspell-floor.h"
 #include "mspell/mspell-learn-checker.h"
@@ -88,10 +88,12 @@ static MonsterSpellResult monspell_to_player_impl(PlayerType *player_ptr, Monste
     case MonsterAbilityType::DRAIN_MANA: return spell_RF5_DRAIN_MANA(player_ptr, y, x, m_idx, 0, MONSTER_TO_PLAYER);  /* RF5_DRAIN_MANA */
     case MonsterAbilityType::MIND_BLAST: return spell_RF5_MIND_BLAST(player_ptr, y, x, m_idx, 0, MONSTER_TO_PLAYER);  /* RF5_MIND_BLAST */
     case MonsterAbilityType::BRAIN_SMASH: return spell_RF5_BRAIN_SMASH(player_ptr, y, x, m_idx, 0, MONSTER_TO_PLAYER); /* RF5_MIND_BLAST */
-    case MonsterAbilityType::CAUSE_1: return spell_RF5_CAUSE_1(player_ptr, y, x, m_idx, 0, MONSTER_TO_PLAYER); /* RF5_CAUSE_1 */
-    case MonsterAbilityType::CAUSE_2: return spell_RF5_CAUSE_2(player_ptr, y, x, m_idx, 0, MONSTER_TO_PLAYER); /* RF5_CAUSE_2 */
-    case MonsterAbilityType::CAUSE_3: return spell_RF5_CAUSE_3(player_ptr, y, x, m_idx, 0, MONSTER_TO_PLAYER); /* RF5_CAUSE_3 */
-    case MonsterAbilityType::CAUSE_4: return spell_RF5_CAUSE_4(player_ptr, y, x, m_idx, 0, MONSTER_TO_PLAYER); /* RF5_CAUSE_4 */
+
+    case MonsterAbilityType::CAUSE_1:
+    case MonsterAbilityType::CAUSE_2:
+    case MonsterAbilityType::CAUSE_3:
+    case MonsterAbilityType::CAUSE_4: 
+        return spell_RF5_CAUSE(player_ptr, ms_type, y, x, m_idx, 0, MONSTER_TO_PLAYER); /* RF5_CAUSE_* */
 
     case MonsterAbilityType::SHOOT:
     case MonsterAbilityType::BO_ACID:
@@ -217,10 +219,13 @@ static MonsterSpellResult monspell_to_monster_impl(
     case MonsterAbilityType::DRAIN_MANA: return spell_RF5_DRAIN_MANA(player_ptr, y, x, m_idx, t_idx, MONSTER_TO_MONSTER); /* RF5_DRAIN_MANA */
     case MonsterAbilityType::MIND_BLAST: return spell_RF5_MIND_BLAST(player_ptr, y, x, m_idx, t_idx, MONSTER_TO_MONSTER); /* RF5_MIND_BLAST */
     case MonsterAbilityType::BRAIN_SMASH: return spell_RF5_BRAIN_SMASH(player_ptr, y, x, m_idx, t_idx, MONSTER_TO_MONSTER); /* RF5_BRAIN_SMASH */
-    case MonsterAbilityType::CAUSE_1: return spell_RF5_CAUSE_1(player_ptr, y, x, m_idx, t_idx, MONSTER_TO_MONSTER); /* RF5_CAUSE_1 */
-    case MonsterAbilityType::CAUSE_2: return spell_RF5_CAUSE_2(player_ptr, y, x, m_idx, t_idx, MONSTER_TO_MONSTER); /* RF5_CAUSE_2 */
-    case MonsterAbilityType::CAUSE_3: return spell_RF5_CAUSE_3(player_ptr, y, x, m_idx, t_idx, MONSTER_TO_MONSTER); /* RF5_CAUSE_3 */
-    case MonsterAbilityType::CAUSE_4: return spell_RF5_CAUSE_4(player_ptr, y, x, m_idx, t_idx, MONSTER_TO_MONSTER); /* RF5_CAUSE_4 */
+
+    case MonsterAbilityType::CAUSE_1:
+    case MonsterAbilityType::CAUSE_2:
+    case MonsterAbilityType::CAUSE_3:
+    case MonsterAbilityType::CAUSE_4:
+        return spell_RF5_CAUSE(player_ptr, ms_type, y, x, m_idx, t_idx, MONSTER_TO_MONSTER); /* RF5_CAUSE_* */
+
     case MonsterAbilityType::SHOOT:
     case MonsterAbilityType::BO_ACID:
     case MonsterAbilityType::BO_ELEC:
