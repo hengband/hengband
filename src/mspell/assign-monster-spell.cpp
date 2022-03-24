@@ -7,7 +7,8 @@
 #include "mspell/assign-monster-spell.h"
 #include "blue-magic/blue-magic-checker.h"
 #include "monster-race/race-ability-flags.h"
-#include "mspell/mspell-ball.h"
+#include "monster/monster-status.h"
+#include "mspell/mspell-attack/mspell-ball.h"
 #include "mspell/mspell-bolt.h"
 #include "mspell/mspell-breath.h"
 #include "mspell/mspell-curse.h"
@@ -55,23 +56,34 @@ static MonsterSpellResult monspell_to_player_impl(PlayerType *player_ptr, Monste
     case MonsterAbilityType::BR_PLAS: return spell_RF4_BREATH(player_ptr, AttributeType::PLASMA, y, x, m_idx, 0, MONSTER_TO_PLAYER);   /* RF4_BR_PLAS */
     case MonsterAbilityType::BR_FORC: return spell_RF4_BREATH(player_ptr, AttributeType::FORCE, y, x, m_idx, 0, MONSTER_TO_PLAYER); /* RF4_BR_WALL */
     case MonsterAbilityType::BR_MANA: return spell_RF4_BREATH(player_ptr, AttributeType::MANA, y, x, m_idx, 0, MONSTER_TO_PLAYER); /* RF4_BR_MANA */
-    case MonsterAbilityType::BA_NUKE: return spell_RF4_BA_NUKE(player_ptr, y, x, m_idx, 0, MONSTER_TO_PLAYER); /* RF4_BA_NUKE */
     case MonsterAbilityType::BR_NUKE: return spell_RF4_BREATH(player_ptr, AttributeType::NUKE, y, x, m_idx, 0, MONSTER_TO_PLAYER); /* RF4_BR_NUKE */
-    case MonsterAbilityType::BA_CHAO: return spell_RF4_BA_CHAO(player_ptr, y, x, m_idx, 0, MONSTER_TO_PLAYER); /* RF4_BA_CHAO */
     case MonsterAbilityType::BR_DISI: return spell_RF4_BREATH(player_ptr, AttributeType::DISINTEGRATE, y, x, m_idx, 0, MONSTER_TO_PLAYER); /* RF4_BR_DISI */
     case MonsterAbilityType::BR_VOID: return spell_RF4_BREATH(player_ptr, AttributeType::VOID_MAGIC, y, x, m_idx, 0, MONSTER_TO_PLAYER); /* RF4_BR_VOID */
     case MonsterAbilityType::BR_ABYSS: return spell_RF4_BREATH(player_ptr, AttributeType::ABYSS, y, x, m_idx, 0, MONSTER_TO_PLAYER); /* RF4_BR_ABYSS */
-    case MonsterAbilityType::BA_ACID: return spell_RF5_BA_ACID(player_ptr, y, x, m_idx, 0, MONSTER_TO_PLAYER); /* RF5_BA_ACID */
-    case MonsterAbilityType::BA_ELEC: return spell_RF5_BA_ELEC(player_ptr, y, x, m_idx, 0, MONSTER_TO_PLAYER); /* RF5_BA_ELEC */
-    case MonsterAbilityType::BA_FIRE: return spell_RF5_BA_FIRE(player_ptr, y, x, m_idx, 0, MONSTER_TO_PLAYER); /* RF5_BA_FIRE */
-    case MonsterAbilityType::BA_COLD: return spell_RF5_BA_COLD(player_ptr, y, x, m_idx, 0, MONSTER_TO_PLAYER); /* RF5_BA_COLD */
-    case MonsterAbilityType::BA_POIS: return spell_RF5_BA_POIS(player_ptr, y, x, m_idx, 0, MONSTER_TO_PLAYER); /* RF5_BA_POIS */
-    case MonsterAbilityType::BA_NETH: return spell_RF5_BA_NETH(player_ptr, y, x, m_idx, 0, MONSTER_TO_PLAYER); /* RF5_BA_NETH */
-    case MonsterAbilityType::BA_WATE: return spell_RF5_BA_WATE(player_ptr, y, x, m_idx, 0, MONSTER_TO_PLAYER); /* RF5_BA_WATE */
-    case MonsterAbilityType::BA_MANA: return spell_RF5_BA_MANA(player_ptr, y, x, m_idx, 0, MONSTER_TO_PLAYER); /* RF5_BA_MANA */
-    case MonsterAbilityType::BA_DARK: return spell_RF5_BA_DARK(player_ptr, y, x, m_idx, 0, MONSTER_TO_PLAYER); /* RF5_BA_DARK */
-    case MonsterAbilityType::BA_VOID: return spell_RF5_BA_VOID(player_ptr, y, x, m_idx, 0, MONSTER_TO_PLAYER); /* RF5_BA_VOID */
-    case MonsterAbilityType::BA_ABYSS: return spell_RF5_BA_ABYSS(player_ptr, y, x, m_idx, 0, MONSTER_TO_PLAYER); /* RF5_BA_ABYSS */
+    
+    case MonsterAbilityType::BA_ACID:
+    case MonsterAbilityType::BA_ELEC:
+    case MonsterAbilityType::BA_FIRE:
+    case MonsterAbilityType::BA_COLD:
+         {
+         auto rad = monster_is_powerful(player_ptr->current_floor_ptr, m_idx) ? 4 : 2;
+         return MSpellBall(player_ptr, m_idx, ms_type, rad, MONSTER_TO_PLAYER).shoot(y, x);
+         }
+         
+    case MonsterAbilityType::BA_POIS:
+    case MonsterAbilityType::BA_NETH:
+    case MonsterAbilityType::BA_NUKE:
+         return MSpellBall(player_ptr, m_idx, ms_type, 2, MONSTER_TO_PLAYER).shoot(y, x);
+
+    case MonsterAbilityType::BA_CHAO:
+    case MonsterAbilityType::BA_WATE:
+    case MonsterAbilityType::BA_MANA:
+    case MonsterAbilityType::BA_LITE:
+    case MonsterAbilityType::BA_DARK:
+    case MonsterAbilityType::BA_VOID:
+    case MonsterAbilityType::BA_ABYSS:
+         return MSpellBall(player_ptr, m_idx, ms_type, 4, MONSTER_TO_PLAYER).shoot(y, x);
+
     case MonsterAbilityType::DRAIN_MANA: return spell_RF5_DRAIN_MANA(player_ptr, y, x, m_idx, 0, MONSTER_TO_PLAYER);  /* RF5_DRAIN_MANA */
     case MonsterAbilityType::MIND_BLAST: return spell_RF5_MIND_BLAST(player_ptr, y, x, m_idx, 0, MONSTER_TO_PLAYER);  /* RF5_MIND_BLAST */
     case MonsterAbilityType::BRAIN_SMASH: return spell_RF5_BRAIN_SMASH(player_ptr, y, x, m_idx, 0, MONSTER_TO_PLAYER); /* RF5_MIND_BLAST */
@@ -83,7 +95,6 @@ static MonsterSpellResult monspell_to_player_impl(PlayerType *player_ptr, Monste
     case MonsterAbilityType::BO_ELEC: return spell_RF5_BO_ELEC(player_ptr, y, x, m_idx, 0, MONSTER_TO_PLAYER); /* RF5_BO_ELEC */
     case MonsterAbilityType::BO_FIRE: return spell_RF5_BO_FIRE(player_ptr, y, x, m_idx, 0, MONSTER_TO_PLAYER); /* RF5_BO_FIRE */
     case MonsterAbilityType::BO_COLD: return spell_RF5_BO_COLD(player_ptr, y, x, m_idx, 0, MONSTER_TO_PLAYER); /* RF5_BO_COLD */
-    case MonsterAbilityType::BA_LITE: return spell_RF5_BA_LITE(player_ptr, y, x, m_idx, 0, MONSTER_TO_PLAYER); /* RF5_BA_LITE */
     case MonsterAbilityType::BO_NETH: return spell_RF5_BO_NETH(player_ptr, y, x, m_idx, 0, MONSTER_TO_PLAYER); /* RF5_BO_NETH */
     case MonsterAbilityType::BO_WATE: return spell_RF5_BO_WATE(player_ptr, y, x, m_idx, 0, MONSTER_TO_PLAYER); /* RF5_BO_WATE */
     case MonsterAbilityType::BO_MANA: return spell_RF5_BO_MANA(player_ptr, y, x, m_idx, 0, MONSTER_TO_PLAYER); /* RF5_BO_MANA */
@@ -169,23 +180,34 @@ static MonsterSpellResult monspell_to_monster_impl(
     case MonsterAbilityType::BR_PLAS: return spell_RF4_BREATH(player_ptr, AttributeType::PLASMA, y, x, m_idx, t_idx, MONSTER_TO_MONSTER);  /* RF4_BR_PLAS */
     case MonsterAbilityType::BR_FORC: return spell_RF4_BREATH(player_ptr, AttributeType::FORCE, y, x, m_idx, t_idx, MONSTER_TO_MONSTER);   /* RF4_BR_WALL */
     case MonsterAbilityType::BR_MANA: return spell_RF4_BREATH(player_ptr, AttributeType::MANA, y, x, m_idx, t_idx, MONSTER_TO_MONSTER); /* RF4_BR_MANA */
-    case MonsterAbilityType::BA_NUKE: return spell_RF4_BA_NUKE(player_ptr, y, x, m_idx, t_idx, MONSTER_TO_MONSTER); /* RF4_BA_NUKE */
     case MonsterAbilityType::BR_NUKE: return spell_RF4_BREATH(player_ptr, AttributeType::NUKE, y, x, m_idx, t_idx, MONSTER_TO_MONSTER); /* RF4_BR_NUKE */
-    case MonsterAbilityType::BA_CHAO: return spell_RF4_BA_CHAO(player_ptr, y, x, m_idx, t_idx, MONSTER_TO_MONSTER); /* RF4_BA_CHAO */
     case MonsterAbilityType::BR_DISI: return spell_RF4_BREATH(player_ptr, AttributeType::DISINTEGRATE, y, x, m_idx, t_idx, MONSTER_TO_MONSTER); /* RF4_BR_DISI */
     case MonsterAbilityType::BR_VOID: return spell_RF4_BREATH(player_ptr, AttributeType::VOID_MAGIC, y, x, m_idx, t_idx, MONSTER_TO_MONSTER); /* RF4_BR_VOID */
     case MonsterAbilityType::BR_ABYSS: return spell_RF4_BREATH(player_ptr, AttributeType::ABYSS, y, x, m_idx, t_idx, MONSTER_TO_MONSTER); /* RF4_BR_ABYSS */
-    case MonsterAbilityType::BA_ACID: return spell_RF5_BA_ACID(player_ptr, y, x, m_idx, t_idx, MONSTER_TO_MONSTER); /* RF5_BA_ACID */
-    case MonsterAbilityType::BA_ELEC: return spell_RF5_BA_ELEC(player_ptr, y, x, m_idx, t_idx, MONSTER_TO_MONSTER); /* RF5_BA_ELEC */
-    case MonsterAbilityType::BA_FIRE: return spell_RF5_BA_FIRE(player_ptr, y, x, m_idx, t_idx, MONSTER_TO_MONSTER); /* RF5_BA_FIRE */
-    case MonsterAbilityType::BA_COLD: return spell_RF5_BA_COLD(player_ptr, y, x, m_idx, t_idx, MONSTER_TO_MONSTER); /* RF5_BA_COLD */
-    case MonsterAbilityType::BA_POIS: return spell_RF5_BA_POIS(player_ptr, y, x, m_idx, t_idx, MONSTER_TO_MONSTER); /* RF5_BA_POIS */
-    case MonsterAbilityType::BA_NETH: return spell_RF5_BA_NETH(player_ptr, y, x, m_idx, t_idx, MONSTER_TO_MONSTER); /* RF5_BA_NETH */
-    case MonsterAbilityType::BA_WATE: return spell_RF5_BA_WATE(player_ptr, y, x, m_idx, t_idx, MONSTER_TO_MONSTER); /* RF5_BA_WATE */
-    case MonsterAbilityType::BA_MANA: return spell_RF5_BA_MANA(player_ptr, y, x, m_idx, t_idx, MONSTER_TO_MONSTER); /* RF5_BA_MANA */
-    case MonsterAbilityType::BA_DARK: return spell_RF5_BA_DARK(player_ptr, y, x, m_idx, t_idx, MONSTER_TO_MONSTER); /* RF5_BA_DARK */
-    case MonsterAbilityType::BA_VOID: return spell_RF5_BA_VOID(player_ptr, y, x, m_idx, t_idx, MONSTER_TO_MONSTER); /* RF5_BA_VOID */
-    case MonsterAbilityType::BA_ABYSS: return spell_RF5_BA_ABYSS(player_ptr, y, x, m_idx, t_idx, MONSTER_TO_MONSTER); /* RF5_BA_ABYSS */
+    
+    case MonsterAbilityType::BA_ACID:
+    case MonsterAbilityType::BA_ELEC:
+    case MonsterAbilityType::BA_FIRE:
+    case MonsterAbilityType::BA_COLD:
+         {
+         auto rad = monster_is_powerful(player_ptr->current_floor_ptr, m_idx) ? 4 : 2;
+         return MSpellBall(player_ptr, m_idx, t_idx, ms_type, rad, MONSTER_TO_MONSTER).shoot(y, x);
+         }
+         
+    case MonsterAbilityType::BA_POIS:
+    case MonsterAbilityType::BA_NETH:
+    case MonsterAbilityType::BA_NUKE:
+         return MSpellBall(player_ptr, m_idx, t_idx, ms_type, 2, MONSTER_TO_MONSTER).shoot(y, x);
+
+    case MonsterAbilityType::BA_CHAO:
+    case MonsterAbilityType::BA_WATE:
+    case MonsterAbilityType::BA_MANA:
+    case MonsterAbilityType::BA_LITE:
+    case MonsterAbilityType::BA_DARK:
+    case MonsterAbilityType::BA_VOID:
+    case MonsterAbilityType::BA_ABYSS:
+         return MSpellBall(player_ptr, m_idx, t_idx, ms_type, 4, MONSTER_TO_MONSTER).shoot(y, x);
+
     case MonsterAbilityType::DRAIN_MANA: return spell_RF5_DRAIN_MANA(player_ptr, y, x, m_idx, t_idx, MONSTER_TO_MONSTER); /* RF5_DRAIN_MANA */
     case MonsterAbilityType::MIND_BLAST: return spell_RF5_MIND_BLAST(player_ptr, y, x, m_idx, t_idx, MONSTER_TO_MONSTER); /* RF5_MIND_BLAST */
     case MonsterAbilityType::BRAIN_SMASH: return spell_RF5_BRAIN_SMASH(player_ptr, y, x, m_idx, t_idx, MONSTER_TO_MONSTER); /* RF5_BRAIN_SMASH */
@@ -197,7 +219,6 @@ static MonsterSpellResult monspell_to_monster_impl(
     case MonsterAbilityType::BO_ELEC: return spell_RF5_BO_ELEC(player_ptr, y, x, m_idx, t_idx, MONSTER_TO_MONSTER); /* RF5_BO_ELEC */
     case MonsterAbilityType::BO_FIRE: return spell_RF5_BO_FIRE(player_ptr, y, x, m_idx, t_idx, MONSTER_TO_MONSTER); /* RF5_BO_FIRE */
     case MonsterAbilityType::BO_COLD: return spell_RF5_BO_COLD(player_ptr, y, x, m_idx, t_idx, MONSTER_TO_MONSTER); /* RF5_BO_COLD */
-    case MonsterAbilityType::BA_LITE: return spell_RF5_BA_LITE(player_ptr, y, x, m_idx, t_idx, MONSTER_TO_MONSTER); /* RF5_BA_LITE */
     case MonsterAbilityType::BO_NETH: return spell_RF5_BO_NETH(player_ptr, y, x, m_idx, t_idx, MONSTER_TO_MONSTER); /* RF5_BO_NETH */
     case MonsterAbilityType::BO_WATE: return spell_RF5_BO_WATE(player_ptr, y, x, m_idx, t_idx, MONSTER_TO_MONSTER); /* RF5_BO_WATE */
     case MonsterAbilityType::BO_MANA: return spell_RF5_BO_MANA(player_ptr, y, x, m_idx, t_idx, MONSTER_TO_MONSTER); /* RF5_BO_MANA */
