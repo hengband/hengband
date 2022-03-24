@@ -8,16 +8,27 @@
  * So when adding a function, please consider whether you can extract the common part to another file.
  */
 
-#include "mspell/mspell-particularity.h"
+#include "mspell/mspell-attack/mspell-particularity.h"
 #include "effect/effect-processor.h"
 #include "mind/drs-types.h"
 #include "monster-race/race-ability-flags.h"
 #include "monster/monster-update.h"
 #include "mspell/mspell-checker.h"
 #include "mspell/mspell-damage-calculator.h"
+#include "mspell/mspell-data.h"
 #include "mspell/mspell-result.h"
 #include "mspell/mspell-util.h"
 #include "system/player-type-definition.h"
+
+MSpellAttackOther::MSpellAttackOther(PlayerType *player_ptr, MONSTER_IDX m_idx, MonsterAbilityType ability, MSpellData data, int target_type, std::function<ProjectResult(POSITION, POSITION, int, AttributeType)> fire)
+    : AbstractMSpellAttack(player_ptr, m_idx, ability, data, target_type, fire)
+{
+}
+
+MSpellAttackOther::MSpellAttackOther(PlayerType *player_ptr, MONSTER_IDX m_idx, MONSTER_IDX t_idx, MonsterAbilityType ability, MSpellData data, int target_type, std::function<ProjectResult(POSITION, POSITION, int, AttributeType)> fire)
+    : AbstractMSpellAttack(player_ptr, m_idx, t_idx, ability, data, target_type, fire)
+{
+}
 
 /*!
  * @brief RF4_ROCKETの処理。ロケット。 /
@@ -32,21 +43,37 @@
  */
 MonsterSpellResult spell_RF4_ROCKET(PlayerType *player_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int target_type)
 {
-    mspell_cast_msg_blind msg(_("%^sが何かを射った。", "%^s shoots something."), _("%^sがロケットを発射した。", "%^s fires a rocket."),
-        _("%^sが%sにロケットを発射した。", "%^s fires a rocket at %s."));
+    const auto data = MSpellData({ _("%^sが何かを射った。", "%^s shoots something."),
+                                     _("%^sがロケットを発射した。", "%^s fires a rocket."),
+                                     _("%^sが%sにロケットを発射した。", "%^s fires a rocket at %s.") },
+        AttributeType::ROCKET, DRS_SHARD);
+    return MSpellAttackOther(player_ptr, m_idx, t_idx, MonsterAbilityType::ROCKET, data, target_type,
+        [=](auto y, auto x, int dam, auto attribute) { return rocket(player_ptr, y, x, m_idx, attribute, dam, 2, target_type); })
+        .shoot(y, x);
+}
 
-    monspell_message(player_ptr, m_idx, t_idx, msg, target_type);
+static bool message_hand_doom(PlayerType *player_ptr, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int target_type)
+{
+    mspell_cast_msg_simple msg(_("%^sが<破滅の手>を放った！", "%^s invokes the Hand of Doom!"),
+        _("%^sが%sに<破滅の手>を放った！", "%^s invokes the Hand of Doom upon %s!"));
 
-    const auto dam = monspell_damage(player_ptr, MonsterAbilityType::ROCKET, m_idx, DAM_ROLL);
-    const auto proj_res = rocket(player_ptr, y, x, m_idx, AttributeType::ROCKET, dam, 2, target_type);
+    simple_monspell_message(player_ptr, m_idx, t_idx, msg, target_type);
+
+    return true;
+}
+
+static auto project_hand_doom(PlayerType *player_ptr, MONSTER_IDX m_idx, POSITION y, POSITION x, int target_type)
+{
+    ProjectResult proj_res;
+    auto attribute = AttributeType::HAND_DOOM;
     if (target_type == MONSTER_TO_PLAYER) {
-        update_smart_learn(player_ptr, m_idx, DRS_SHARD);
+        const auto dam = monspell_damage(player_ptr, MonsterAbilityType::HAND_DOOM, m_idx, DAM_ROLL);
+        proj_res = pointed(player_ptr, y, x, m_idx, attribute, dam, MONSTER_TO_PLAYER);
+    } else if (target_type == MONSTER_TO_MONSTER) {
+        const auto dam = 20; /* Dummy power */
+        proj_res = pointed(player_ptr, y, x, m_idx, attribute, dam, MONSTER_TO_MONSTER);
     }
-
-    auto res = MonsterSpellResult::make_valid(dam);
-    res.learnable = proj_res.affected_player;
-
-    return res;
+    return proj_res;
 }
 
 /*!
@@ -62,24 +89,9 @@ MonsterSpellResult spell_RF4_ROCKET(PlayerType *player_ptr, POSITION y, POSITION
  */
 MonsterSpellResult spell_RF6_HAND_DOOM(PlayerType *player_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int target_type)
 {
-    mspell_cast_msg_simple msg(_("%^sが<破滅の手>を放った！", "%^s invokes the Hand of Doom!"),
-        _("%^sが%sに<破滅の手>を放った！", "%^s invokes the Hand of Doom upon %s!"));
-
-    simple_monspell_message(player_ptr, m_idx, t_idx, msg, target_type);
-
-    ProjectResult proj_res;
-    if (target_type == MONSTER_TO_PLAYER) {
-        const auto dam = monspell_damage(player_ptr, MonsterAbilityType::HAND_DOOM, m_idx, DAM_ROLL);
-        proj_res = pointed(player_ptr, y, x, m_idx, AttributeType::HAND_DOOM, dam, MONSTER_TO_PLAYER);
-    } else if (target_type == MONSTER_TO_MONSTER) {
-        const auto dam = 20; /* Dummy power */
-        proj_res = pointed(player_ptr, y, x, m_idx, AttributeType::HAND_DOOM, dam, MONSTER_TO_MONSTER);
-    }
-
-    auto res = MonsterSpellResult::make_valid();
-    res.learnable = proj_res.affected_player;
-
-    return res;
+    return MSpellAttackOther(player_ptr, m_idx, t_idx, MonsterAbilityType::HAND_DOOM, { message_hand_doom, AttributeType::MAX }, target_type,
+        [=](auto y, auto x, int, AttributeType) { return project_hand_doom(player_ptr, m_idx, y, x, target_type); })
+        .shoot(y, x);
 }
 
 /*!
@@ -94,16 +106,11 @@ MonsterSpellResult spell_RF6_HAND_DOOM(PlayerType *player_ptr, POSITION y, POSIT
  */
 MonsterSpellResult spell_RF6_PSY_SPEAR(PlayerType *player_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int target_type)
 {
-    mspell_cast_msg_blind msg(_("%^sが何かをつぶやいた。", "%^s mumbles."), _("%^sが光の剣を放った。", "%^s throws a Psycho-Spear."),
-        _("%^sが%sに向かって光の剣を放った。", "%^s throws a Psycho-spear at %s."));
+    const auto data = MSpellData({ _("%^sが何かをつぶやいた。", "%^s mumbles."), _("%^sが光の剣を放った。", "%^s throws a Psycho-Spear."),
+                                     _("%^sが%sに向かって光の剣を放った。", "%^s throws a Psycho-spear at %s.") },
+        AttributeType::PSY_SPEAR);
 
-    monspell_message(player_ptr, m_idx, t_idx, msg, target_type);
-
-    const auto dam = monspell_damage(player_ptr, MonsterAbilityType::PSY_SPEAR, m_idx, DAM_ROLL);
-    const auto proj_res = beam(player_ptr, m_idx, y, x, AttributeType::PSY_SPEAR, dam, MONSTER_TO_PLAYER);
-
-    auto res = MonsterSpellResult::make_valid(dam);
-    res.learnable = proj_res.affected_player;
-
-    return res;
+    return MSpellAttackOther(player_ptr, m_idx, t_idx, MonsterAbilityType::PSY_SPEAR, data, target_type,
+        [=](auto y, auto x, int dam, auto attribute) { return beam(player_ptr, m_idx, y, x, attribute, dam, target_type); })
+        .shoot(y, x);
 }
