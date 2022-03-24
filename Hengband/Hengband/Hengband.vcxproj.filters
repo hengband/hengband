@@ -509,9 +509,6 @@
     <ClCompile Include="..\..\src\mspell\mspell-learn-checker.cpp">
       <Filter>mspell</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\mspell\mspell-ball.cpp">
-      <Filter>mspell</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\mspell\mspell-summon.cpp">
       <Filter>mspell</Filter>
     </ClCompile>
@@ -2451,6 +2448,9 @@
     <ClCompile Include="..\..\src\mspell\mspell-attack\abstract-mspell.cpp">
       <Filter>mspell\mspell-attack</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\mspell\mspell-attack\mspell-ball.cpp">
+      <Filter>mspell\mspell-attack</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\combat\shoot.h">
@@ -2994,9 +2994,6 @@
       <Filter>mspell</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\mspell\mspell-learn-checker.h">
-      <Filter>mspell</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\mspell\mspell-ball.h">
       <Filter>mspell</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\mspell\mspell-summon.h">
@@ -5320,6 +5317,9 @@
       <Filter>mspell</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\mspell\mspell-attack\abstract-mspell.h">
+      <Filter>mspell\mspell-attack</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\mspell\mspell-attack\mspell-ball.h">
       <Filter>mspell\mspell-attack</Filter>
     </ClInclude>
   </ItemGroup>
