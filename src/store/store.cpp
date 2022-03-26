@@ -367,14 +367,14 @@ void store_maintenance(PlayerType *player_ptr, int town_num, StoreSaleType store
     }
 
     for (size_t k = 0; k < st_ptr->regular.size(); k++) {
-        store_create(player_ptr, st_ptr->regular[k], black_market_crap, store_will_buy, mass_produce, store_num);
+        store_create(player_ptr, st_ptr->regular[k], store_num);
         if (st_ptr->stock_num >= STORE_MAX_KEEP) {
             break;
         }
     }
 
     while (st_ptr->stock_num < j) {
-        store_create(player_ptr, 0, black_market_crap, store_will_buy, mass_produce, store_num);
+        store_create(player_ptr, 0, store_num);
     }
 }
 

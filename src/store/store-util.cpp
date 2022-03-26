@@ -12,6 +12,8 @@
 #include "object/object-kind.h"
 #include "object/object-value.h"
 #include "perception/object-perception.h"
+#include "store/black-market.h"
+#include "store/service-checker.h"
 #include "store/store-owners.h"
 #include "sv-definition/sv-lite-types.h"
 #include "sv-definition/sv-scroll-types.h"
@@ -135,8 +137,7 @@ static std::vector<PARAMETER_VALUE> store_same_magic_device_pvals(ObjectType *j_
  * Should we check for "permission" to have the given item?
  * </pre>
  */
-void store_create(
-    PlayerType *player_ptr, KIND_OBJECT_IDX fix_k_idx, black_market_crap_pf black_market_crap, store_will_buy_pf store_will_buy, mass_produce_pf mass_produce, StoreSaleType store_num)
+void store_create(PlayerType *player_ptr, KIND_OBJECT_IDX fix_k_idx, StoreSaleType store_num)
 {
     if (st_ptr->stock_num >= st_ptr->stock_size) {
         return;
@@ -166,7 +167,7 @@ void store_create(
         q_ptr = &forge;
         q_ptr->prep(k_idx);
         ItemMagicApplier(player_ptr, q_ptr, level, AM_NO_FIXED_ART).execute();
-        if (!(*store_will_buy)(player_ptr, q_ptr, store_num)) {
+        if (!store_will_buy(player_ptr, q_ptr, store_num)) {
             continue;
         }
 
