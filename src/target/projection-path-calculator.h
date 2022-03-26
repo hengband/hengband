@@ -7,9 +7,11 @@
 class PlayerType;
 class projection_path {
 public:
+    using const_iterator = std::vector<std::pair<int, int>>::const_iterator;
+
     projection_path(PlayerType *player_ptr, int range, int y1, int x1, int y2, int x2, BIT_FLAGS flg);
-    std::vector<std::pair<int, int>>::const_iterator begin() const;
-    std::vector<std::pair<int, int>>::const_iterator end() const;
+    const_iterator begin() const;
+    const_iterator end() const;
     const std::pair<int, int> &front() const;
     const std::pair<int, int> &back() const;
     const std::pair<int, int> &operator[](int num) const;
