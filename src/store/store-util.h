@@ -57,7 +57,7 @@ extern store_type *st_ptr;
 
 class PlayerType;
 void store_delete(void);
-void store_create(PlayerType *player_ptr, KIND_OBJECT_IDX k_idx, StoreSaleType store_num);
+std::vector<PARAMETER_VALUE> store_same_magic_device_pvals(ObjectType *j_ptr);
 void store_item_increase(INVENTORY_IDX item, ITEM_NUMBER num);
 void store_item_optimize(INVENTORY_IDX item);
 int store_carry(ObjectType *o_ptr);
