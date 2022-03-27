@@ -51,7 +51,7 @@ bool leave_store = false;
  * but not in the stores, to prevent chaos.
  * </pre>
  */
-void store_process_command(PlayerType *player_ptr)
+void store_process_command(PlayerType *player_ptr, StoreSaleType store_num)
 {
     repeat_check();
     if (rogue_like_commands && (command_cmd == 'l')) {
@@ -74,13 +74,13 @@ void store_process_command(PlayerType *player_ptr)
                 store_top = ((st_ptr->stock_num - 1) / store_bottom) * store_bottom;
             }
 
-            if ((cur_store_num == StoreSaleType::HOME) && !powerup_home) {
+            if ((store_num == StoreSaleType::HOME) && !powerup_home) {
                 if (store_top >= store_bottom) {
                     store_top = store_bottom;
                 }
             }
 
-            display_store_inventory(player_ptr);
+            display_store_inventory(player_ptr, store_num);
         }
 
         break;
@@ -100,26 +100,26 @@ void store_process_command(PlayerType *player_ptr)
                 store_top = 0;
             }
 
-            display_store_inventory(player_ptr);
+            display_store_inventory(player_ptr, store_num);
         }
 
         break;
     }
     case KTRL('R'): {
         do_cmd_redraw(player_ptr);
-        display_store(player_ptr);
+        display_store(player_ptr, store_num);
         break;
     }
     case 'g': {
-        store_purchase(player_ptr);
+        store_purchase(player_ptr, store_num);
         break;
     }
     case 'd': {
-        store_sell(player_ptr);
+        store_sell(player_ptr, store_num);
         break;
     }
     case 'x': {
-        store_examine(player_ptr);
+        store_examine(player_ptr, store_num);
         break;
     }
     case '\r': {
@@ -191,7 +191,7 @@ void store_process_command(PlayerType *player_ptr)
         player_ptr->town_num = old_town_num;
         do_cmd_player_status(player_ptr);
         player_ptr->town_num = inner_town_num;
-        display_store(player_ptr);
+        display_store(player_ptr, store_num);
         break;
     }
     case '!': {
@@ -226,7 +226,7 @@ void store_process_command(PlayerType *player_ptr)
         do_cmd_options(player_ptr);
         (void)combine_and_reorder_home(player_ptr, StoreSaleType::HOME);
         do_cmd_redraw(player_ptr);
-        display_store(player_ptr);
+        display_store(player_ptr, store_num);
         break;
     }
     case ':': {
@@ -266,7 +266,7 @@ void store_process_command(PlayerType *player_ptr)
         break;
     }
     default: {
-        if ((cur_store_num == StoreSaleType::MUSEUM) && (command_cmd == 'r')) {
+        if ((store_num == StoreSaleType::MUSEUM) && (command_cmd == 'r')) {
             museum_remove_object(player_ptr);
         } else {
             msg_print(_("そのコマンドは店の中では使えません。", "That command does not work in stores."));

@@ -1,4 +1,11 @@
-﻿#include "mind/mind-mirror-master.h"
+﻿/*!
+ * @brief 鏡使いの鏡魔法コマンド処理
+ * @date 2022/03/07
+ * @author Hourier
+ * @todo 作りかけの部分複数あり
+ */
+
+#include "mind/mind-mirror-master.h"
 #include "core/disturbance.h"
 #include "core/player-redraw-types.h"
 #include "core/player-update-types.h"
@@ -22,6 +29,7 @@
 #include "mind/mind-magic-resistance.h"
 #include "mind/mind-numbers.h"
 #include "pet/pet-util.h"
+#include "spell-class/spells-mirror-master.h"
 #include "spell-kind/spells-detection.h"
 #include "spell-kind/spells-floor.h"
 #include "spell-kind/spells-launcher.h"
@@ -38,7 +46,6 @@
 #include "target/grid-selector.h"
 #include "target/projection-path-calculator.h"
 #include "target/target-getter.h"
-#include "term/gameterm.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 #include "world/world.h"
@@ -49,59 +56,6 @@
 bool check_multishadow(PlayerType *player_ptr)
 {
     return (player_ptr->multishadow != 0) && ((w_ptr->game_turn & 1) != 0);
-}
-
-/*!
- * 静水
- * @param player_ptr プレイヤーへの参照ポインタ
- * @return ペットを操っている場合を除きTRUE
- */
-bool mirror_concentration(PlayerType *player_ptr)
-{
-    if (total_friends) {
-        msg_print(_("今はペットを操ることに集中していないと。", "Your pets demand all of your attention."));
-        return false;
-    }
-
-    if (!player_ptr->current_floor_ptr->grid_array[player_ptr->y][player_ptr->x].is_mirror()) {
-        msg_print(_("鏡の上でないと集中できない！", "There's no mirror here!"));
-        return true;
-    }
-
-    msg_print(_("少し頭がハッキリした。", "You feel your head clear a little."));
-
-    player_ptr->csp += (5 + player_ptr->lev * player_ptr->lev / 100);
-    if (player_ptr->csp >= player_ptr->msp) {
-        player_ptr->csp = player_ptr->msp;
-        player_ptr->csp_frac = 0;
-    }
-
-    player_ptr->redraw |= PR_MANA;
-    return true;
-}
-
-/*!
- * @brief 全鏡の消去 / Remove all mirrors in this floor
- * @param player_ptr プレイヤーへの参照ポインタ
- * @param explode 爆発処理を伴うならばTRUE
- */
-void remove_all_mirrors(PlayerType *player_ptr, bool explode)
-{
-    for (POSITION x = 0; x < player_ptr->current_floor_ptr->width; x++) {
-        for (POSITION y = 0; y < player_ptr->current_floor_ptr->height; y++) {
-            if (!player_ptr->current_floor_ptr->grid_array[y][x].is_mirror()) {
-                continue;
-            }
-
-            remove_mirror(player_ptr, y, x);
-            if (!explode) {
-                continue;
-            }
-
-            project(player_ptr, 0, 2, y, x, player_ptr->lev / 2 + 5, AttributeType::SHARDS,
-                (PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL | PROJECT_JUMP | PROJECT_NO_HANGEKI));
-        }
-    }
 }
 
 /*!
@@ -171,8 +125,7 @@ bool binding_field(PlayerType *player_ptr, int dam)
             if (centersign * ((point_x[0] - x) * (point_y[1] - y) - (point_y[0] - y) * (point_x[1] - x)) >= 0 && centersign * ((point_x[1] - x) * (point_y[2] - y) - (point_y[1] - y) * (point_x[2] - x)) >= 0 && centersign * ((point_x[2] - x) * (point_y[0] - y) - (point_y[2] - y) * (point_x[0] - x)) >= 0) {
                 if (player_has_los_bold(player_ptr, y, x) && projectable(player_ptr, player_ptr->y, player_ptr->x, y, x)) {
                     if (!(player_ptr->blind) && panel_contains(y, x)) {
-                        uint16_t p = bolt_pict(y, x, y, x, AttributeType::MANA);
-                        print_rel(player_ptr, PICT_C(p), PICT_A(p), y, x);
+                        print_bolt_pict(player_ptr, y, x, y, x, AttributeType::MANA);
                         move_cursor_relative(y, x);
                         term_fresh();
                         term_xtra(TERM_XTRA_DELAY, delay_factor);
@@ -214,34 +167,10 @@ bool binding_field(PlayerType *player_ptr, int dam)
 
     if (one_in_(7)) {
         msg_print(_("鏡が結界に耐えきれず、壊れてしまった。", "The field broke a mirror"));
-        remove_mirror(player_ptr, point_y[0], point_x[0]);
+        SpellsMirrorMaster(player_ptr).remove_mirror(point_y[0], point_x[0]);
     }
 
     return true;
-}
-
-/*!
- * @brief 鏡魔法「鏡の封印」の効果処理
- * @param dam ダメージ量
- * @return 効果があったらTRUEを返す
- */
-void seal_of_mirror(PlayerType *player_ptr, int dam)
-{
-    for (POSITION x = 0; x < player_ptr->current_floor_ptr->width; x++) {
-        for (POSITION y = 0; y < player_ptr->current_floor_ptr->height; y++) {
-            if (!player_ptr->current_floor_ptr->grid_array[y][x].is_mirror()) {
-                continue;
-            }
-
-            if (!affect_monster(player_ptr, 0, 0, y, x, dam, AttributeType::GENOCIDE, (PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL | PROJECT_JUMP), true)) {
-                continue;
-            }
-
-            if (!player_ptr->current_floor_ptr->grid_array[y][x].m_idx) {
-                remove_mirror(player_ptr, y, x);
-            }
-        }
-    }
 }
 
 /*!
@@ -257,51 +186,6 @@ bool confusing_light(PlayerType *player_ptr)
     confuse_monsters(player_ptr, player_ptr->lev * 4);
     turn_monsters(player_ptr, player_ptr->lev * 4);
     stasis_monsters(player_ptr, player_ptr->lev * 4);
-    return true;
-}
-
-/*!
- * @brief 鏡設置処理
- * @return 実際に設置が行われた場合TRUEを返す
- */
-bool place_mirror(PlayerType *player_ptr)
-{
-    if (!cave_clean_bold(player_ptr->current_floor_ptr, player_ptr->y, player_ptr->x)) {
-        msg_print(_("床上のアイテムが呪文を跳ね返した。", "The object resists the spell."));
-        return false;
-    }
-
-    /* Create a mirror */
-    player_ptr->current_floor_ptr->grid_array[player_ptr->y][player_ptr->x].info |= CAVE_OBJECT;
-    player_ptr->current_floor_ptr->grid_array[player_ptr->y][player_ptr->x].mimic = feat_mirror;
-
-    /* Turn on the light */
-    player_ptr->current_floor_ptr->grid_array[player_ptr->y][player_ptr->x].info |= CAVE_GLOW;
-
-    note_spot(player_ptr, player_ptr->y, player_ptr->x);
-    lite_spot(player_ptr, player_ptr->y, player_ptr->x);
-    update_local_illumination(player_ptr, player_ptr->y, player_ptr->x);
-
-    return true;
-}
-
-/*!
- * @brief 鏡抜け処理のメインルーチン /
- * Mirror Master's Dimension Door
- * @param player_ptr プレイヤーへの参照ポインタ
- * @return ターンを消費した場合TRUEを返す
- */
-bool mirror_tunnel(PlayerType *player_ptr)
-{
-    POSITION x = 0, y = 0;
-    if (!tgt_pt(player_ptr, &x, &y)) {
-        return false;
-    }
-    if (exe_dimension_door(player_ptr, x, y)) {
-        return true;
-    }
-
-    msg_print(_("鏡の世界をうまく通れなかった！", "You could not enter the mirror!"));
     return true;
 }
 
@@ -420,7 +304,7 @@ static int number_of_mirrors(floor_type *floor_ptr)
  * @param spell 発動する特殊技能のID
  * @return 処理を実行したらTRUE、キャンセルした場合FALSEを返す。
  */
-bool cast_mirror_spell(PlayerType *player_ptr, mind_mirror_master_type spell)
+bool cast_mirror_spell(PlayerType *player_ptr, MindMirrorMasterType spell)
 {
     DIRECTION dir;
     PLAYER_LEVEL plev = player_ptr->lev;
@@ -429,7 +313,7 @@ bool cast_mirror_spell(PlayerType *player_ptr, mind_mirror_master_type spell)
     POSITION x, y;
     auto *g_ptr = &player_ptr->current_floor_ptr->grid_array[player_ptr->y][player_ptr->x];
     switch (spell) {
-    case MIRROR_SEEING:
+    case MindMirrorMasterType::MIRROR_SEEING:
         tmp = g_ptr->is_mirror() ? 4 : 0;
         if (plev + tmp > 4) {
             detect_monsters_normal(player_ptr, DETECT_RAD_DEFAULT);
@@ -447,15 +331,15 @@ bool cast_mirror_spell(PlayerType *player_ptr, mind_mirror_master_type spell)
             msg_print(_("鏡がなくて集中できなかった！", "You need a mirror to concentrate!"));
         }
         break;
-    case MAKE_MIRROR:
+    case MindMirrorMasterType::MAKE_MIRROR:
         if (number_of_mirrors(player_ptr->current_floor_ptr) < 4 + plev / 10) {
-            place_mirror(player_ptr);
+            SpellsMirrorMaster(player_ptr).place_mirror();
         } else {
             msg_format(_("これ以上鏡は制御できない！", "There are too many mirrors to control!"));
         }
 
         break;
-    case DRIP_LIGHT:
+    case MindMirrorMasterType::DRIP_LIGHT:
         if (!get_aim_dir(player_ptr, &dir)) {
             return false;
         }
@@ -467,33 +351,33 @@ bool cast_mirror_spell(PlayerType *player_ptr, mind_mirror_master_type spell)
         }
 
         break;
-    case WRAPPED_MIRROR:
+    case MindMirrorMasterType::WRAPPED_MIRROR:
         teleport_player(player_ptr, 10, TELEPORT_SPONTANEOUS);
         break;
-    case MIRROR_LIGHT:
+    case MindMirrorMasterType::MIRROR_LIGHT:
         (void)lite_area(player_ptr, damroll(2, (plev / 2)), (plev / 10) + 1);
         break;
-    case WANDERING_MIRROR:
+    case MindMirrorMasterType::WANDERING_MIRROR:
         teleport_player(player_ptr, plev * 5, TELEPORT_SPONTANEOUS);
         break;
-    case ROBE_DUST:
+    case MindMirrorMasterType::ROBE_DUST:
         set_dustrobe(player_ptr, 20 + randint1(20), false);
         break;
-    case BANISHING_MIRROR:
+    case MindMirrorMasterType::BANISHING_MIRROR:
         if (!get_aim_dir(player_ptr, &dir)) {
             return false;
         }
 
         (void)fire_beam(player_ptr, AttributeType::AWAY_ALL, dir, plev);
         break;
-    case MIRROR_CRASHING:
+    case MindMirrorMasterType::MIRROR_CRASHING:
         if (!get_aim_dir(player_ptr, &dir)) {
             return false;
         }
 
         fire_ball(player_ptr, AttributeType::SHARDS, dir, damroll(8 + ((plev - 5) / 4), 8), (plev > 20 ? (plev - 20) / 8 + 1 : 0));
         break;
-    case SLEEPING_MIRROR:
+    case MindMirrorMasterType::SLEEPING_MIRROR:
         for (x = 0; x < player_ptr->current_floor_ptr->width; x++) {
             for (y = 0; y < player_ptr->current_floor_ptr->height; y++) {
                 if (player_ptr->current_floor_ptr->grid_array[y][x].is_mirror()) {
@@ -504,17 +388,17 @@ bool cast_mirror_spell(PlayerType *player_ptr, mind_mirror_master_type spell)
         }
 
         break;
-    case SEEKER_RAY:
+    case MindMirrorMasterType::SEEKER_RAY:
         if (!get_aim_dir(player_ptr, &dir)) {
             return false;
         }
 
-        fire_beam(player_ptr, AttributeType::SEEKER, dir, damroll(11 + (plev - 5) / 4, 8));
+        SpellsMirrorMaster(player_ptr).seeker_ray(dir, damroll(11 + (plev - 5) / 4, 8));
         break;
-    case SEALING_MIRROR:
-        seal_of_mirror(player_ptr, plev * 4 + 100);
+    case MindMirrorMasterType::SEALING_MIRROR:
+        SpellsMirrorMaster(player_ptr).seal_of_mirror(plev * 4 + 100);
         break;
-    case WATER_SHIELD:
+    case MindMirrorMasterType::WATER_SHIELD:
         t = 20 + randint1(20);
         set_shield(player_ptr, t, false);
         if (plev > 31) {
@@ -526,14 +410,14 @@ bool cast_mirror_spell(PlayerType *player_ptr, mind_mirror_master_type spell)
         }
 
         break;
-    case SUPER_RAY:
+    case MindMirrorMasterType::SUPER_RAY:
         if (!get_aim_dir(player_ptr, &dir)) {
             return false;
         }
 
-        fire_beam(player_ptr, AttributeType::SUPER_RAY, dir, 150 + randint1(2 * plev));
+        SpellsMirrorMaster(player_ptr).super_ray(dir, damroll(11 + (plev - 5) / 4, 8));
         break;
-    case ILLUSION_LIGHT:
+    case MindMirrorMasterType::ILLUSION_LIGHT:
         tmp = g_ptr->is_mirror() ? 4 : 3;
         slow_monsters(player_ptr, plev);
         stun_monsters(player_ptr, plev * tmp * 2);
@@ -541,7 +425,7 @@ bool cast_mirror_spell(PlayerType *player_ptr, mind_mirror_master_type spell)
         turn_monsters(player_ptr, plev * tmp);
         stasis_monsters(player_ptr, plev * tmp);
         break;
-    case MIRROR_SHIFT:
+    case MindMirrorMasterType::MIRROR_SHIFT:
         if (!g_ptr->is_mirror()) {
             msg_print(_("鏡の国の場所がわからない！", "You cannot find out where the mirror is!"));
             break;
@@ -549,21 +433,21 @@ bool cast_mirror_spell(PlayerType *player_ptr, mind_mirror_master_type spell)
 
         reserve_alter_reality(player_ptr, randint0(21) + 15);
         break;
-    case MIRROR_TUNNEL:
+    case MindMirrorMasterType::MIRROR_TUNNEL:
         msg_print(_("鏡の世界を通り抜け…  ", "You try to enter the mirror..."));
-        return mirror_tunnel(player_ptr);
-    case RECALL_MIRROR:
+        return SpellsMirrorMaster(player_ptr).mirror_tunnel();
+    case MindMirrorMasterType::RECALL_MIRROR:
         return recall_player(player_ptr, randint0(21) + 15);
-    case MULTI_SHADOW:
+    case MindMirrorMasterType::MULTI_SHADOW:
         set_multishadow(player_ptr, 6 + randint1(6), false);
         break;
-    case BINDING_FIELD:
+    case MindMirrorMasterType::BINDING_FIELD:
         if (!binding_field(player_ptr, plev * 11 + 5)) {
             msg_print(_("適当な鏡を選べなかった！", "You were not able to choose suitable mirrors!"));
         }
 
         break;
-    case RUFFNOR_MIRROR:
+    case MindMirrorMasterType::RUFFNOR_MIRROR:
         (void)set_invuln(player_ptr, randint1(4) + 4, false);
         break;
     default:

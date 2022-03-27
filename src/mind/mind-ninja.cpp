@@ -111,7 +111,7 @@ bool kawarimi(PlayerType *player_ptr, bool success)
     const int SV_WOODEN_STATUE = 0;
     q_ptr->prep(lookup_kind(ItemKindType::STATUE, SV_WOODEN_STATUE));
 
-    q_ptr->pval = MON_NINJA;
+    q_ptr->pval = enum2i(MonsterRaceId::NINJA);
     (void)drop_near(player_ptr, q_ptr, -1, y, x);
 
     if (success) {
@@ -157,10 +157,9 @@ bool rush_attack(PlayerType *player_ptr, bool *mdeath)
         tm_idx = floor_ptr->grid_array[ty][tx].m_idx;
     }
 
-    uint16_t path_g[32];
-    int path_n = projection_path(player_ptr, path_g, project_length, player_ptr->y, player_ptr->x, ty, tx, PROJECT_STOP | PROJECT_KILL);
+    projection_path path_g(player_ptr, project_length, player_ptr->y, player_ptr->x, ty, tx, PROJECT_STOP | PROJECT_KILL);
     project_length = 0;
-    if (!path_n) {
+    if (path_g.path_num() == 0) {
         return true;
     }
 
@@ -168,11 +167,8 @@ bool rush_attack(PlayerType *player_ptr, bool *mdeath)
     tx = player_ptr->x;
     bool tmp_mdeath = false;
     bool moved = false;
-    for (int i = 0; i < path_n; i++) {
+    for (const auto &[ny, nx] : path_g) {
         monster_type *m_ptr;
-
-        int ny = get_grid_y(path_g[i]);
-        int nx = get_grid_x(path_g[i]);
 
         if (is_cave_empty_bold(player_ptr, ny, nx) && player_can_enter(player_ptr, floor_ptr->grid_array[ny][nx].feat, 0)) {
             ty = ny;
@@ -377,17 +373,17 @@ bool set_superstealth(PlayerType *player_ptr, bool set)
  * @param spell 発動する特殊技能のID
  * @return 処理を実行したらTRUE、キャンセルした場合FALSEを返す。
  */
-bool cast_ninja_spell(PlayerType *player_ptr, mind_ninja_type spell)
+bool cast_ninja_spell(PlayerType *player_ptr, MindNinjaType spell)
 {
     POSITION x = 0, y = 0;
     DIRECTION dir;
     PLAYER_LEVEL plev = player_ptr->lev;
     auto ninja_data = PlayerClass(player_ptr).get_specific_data<ninja_data_type>();
     switch (spell) {
-    case DARKNESS_CREATION:
+    case MindNinjaType::DARKNESS_CREATION:
         (void)unlite_area(player_ptr, 0, 3);
         break;
-    case DETECT_NEAR:
+    case MindNinjaType::DETECT_NEAR:
         if (plev > 44) {
             wiz_lite(player_ptr, true);
         }
@@ -404,10 +400,10 @@ bool cast_ninja_spell(PlayerType *player_ptr, mind_ninja_type spell)
         }
 
         break;
-    case HIDE_LEAVES:
+    case MindNinjaType::HIDE_LEAVES:
         teleport_player(player_ptr, 10, TELEPORT_SPONTANEOUS);
         break;
-    case KAWARIMI:
+    case MindNinjaType::KAWARIMI:
         if (ninja_data && !ninja_data->kawarimi) {
             msg_print(_("敵の攻撃に対して敏感になった。", "You are now prepared to evade any attacks."));
             ninja_data->kawarimi = true;
@@ -415,35 +411,35 @@ bool cast_ninja_spell(PlayerType *player_ptr, mind_ninja_type spell)
         }
 
         break;
-    case ABSCONDING:
+    case MindNinjaType::ABSCONDING:
         teleport_player(player_ptr, player_ptr->lev * 5, TELEPORT_SPONTANEOUS);
         break;
-    case HIT_AND_AWAY:
+    case MindNinjaType::HIT_AND_AWAY:
         if (!hit_and_away(player_ptr)) {
             return false;
         }
 
         break;
-    case BIND_MONSTER:
+    case MindNinjaType::BIND_MONSTER:
         if (!get_aim_dir(player_ptr, &dir)) {
             return false;
         }
 
         (void)stasis_monster(player_ptr, dir);
         break;
-    case ANCIENT_KNOWLEDGE:
+    case MindNinjaType::ANCIENT_KNOWLEDGE:
         return ident_spell(player_ptr, false);
-    case FLOATING:
+    case MindNinjaType::FLOATING:
         set_tim_levitation(player_ptr, randint1(20) + 20, false);
         break;
-    case HIDE_FLAMES:
+    case MindNinjaType::HIDE_FLAMES:
         fire_ball(player_ptr, AttributeType::FIRE, 0, 50 + plev, plev / 10 + 2);
         teleport_player(player_ptr, 30, TELEPORT_SPONTANEOUS);
         set_oppose_fire(player_ptr, (TIME_EFFECT)plev, false);
         break;
-    case NYUSIN:
+    case MindNinjaType::NYUSIN:
         return rush_attack(player_ptr, nullptr);
-    case SYURIKEN_SPREADING: {
+    case MindNinjaType::SYURIKEN_SPREADING: {
         for (int i = 0; i < 8; i++) {
             OBJECT_IDX slot;
 
@@ -469,17 +465,17 @@ bool cast_ninja_spell(PlayerType *player_ptr, mind_ninja_type spell)
 
         break;
     }
-    case CHAIN_HOOK:
+    case MindNinjaType::CHAIN_HOOK:
         (void)fetch_monster(player_ptr);
         break;
-    case SMOKE_BALL:
+    case MindNinjaType::SMOKE_BALL:
         if (!get_aim_dir(player_ptr, &dir)) {
             return false;
         }
 
         fire_ball(player_ptr, AttributeType::OLD_CONF, dir, plev * 3, 3);
         break;
-    case SWAP_POSITION:
+    case MindNinjaType::SWAP_POSITION:
         project_length = -1;
         if (!get_aim_dir(player_ptr, &dir)) {
             project_length = 0;
@@ -489,20 +485,20 @@ bool cast_ninja_spell(PlayerType *player_ptr, mind_ninja_type spell)
         project_length = 0;
         (void)teleport_swap(player_ptr, dir);
         break;
-    case EXPLOSIVE_RUNE:
+    case MindNinjaType::EXPLOSIVE_RUNE:
         create_rune_explosion(player_ptr, player_ptr->y, player_ptr->x);
         break;
-    case HIDE_MUD:
+    case MindNinjaType::HIDE_MUD:
         (void)set_pass_wall(player_ptr, randint1(plev / 2) + plev / 2, false);
         set_oppose_acid(player_ptr, (TIME_EFFECT)plev, false);
         break;
-    case HIDE_MIST:
+    case MindNinjaType::HIDE_MIST:
         fire_ball(player_ptr, AttributeType::POIS, 0, 75 + plev * 2 / 3, plev / 5 + 2);
         fire_ball(player_ptr, AttributeType::HYPODYNAMIA, 0, 75 + plev * 2 / 3, plev / 5 + 2);
         fire_ball(player_ptr, AttributeType::CONFUSION, 0, 75 + plev * 2 / 3, plev / 5 + 2);
         teleport_player(player_ptr, 30, TELEPORT_SPONTANEOUS);
         break;
-    case PURGATORY_FLAME: {
+    case MindNinjaType::PURGATORY_FLAME: {
         int num = damroll(3, 9);
         for (int k = 0; k < num; k++) {
             AttributeType typ = one_in_(2) ? AttributeType::FIRE : one_in_(3) ? AttributeType::NETHER
@@ -520,7 +516,7 @@ bool cast_ninja_spell(PlayerType *player_ptr, mind_ninja_type spell)
 
         break;
     }
-    case ALTER_EGO:
+    case MindNinjaType::ALTER_EGO:
         set_multishadow(player_ptr, 6 + randint1(6), false);
         break;
     default:

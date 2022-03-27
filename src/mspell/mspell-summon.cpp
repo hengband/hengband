@@ -92,7 +92,7 @@ static void decide_summon_kin_caster(
     bool mon_to_mon = target_type == MONSTER_TO_MONSTER;
     bool mon_to_player = target_type == MONSTER_TO_PLAYER;
 
-    if (m_ptr->r_idx == MON_SERPENT || m_ptr->r_idx == MON_ZOMBI_SERPENT) {
+    if (m_ptr->r_idx == MonsterRaceId::SERPENT || m_ptr->r_idx == MonsterRaceId::ZOMBI_SERPENT) {
         mspell_cast_msg_blind msg(_("%^sが何かをつぶやいた。", "%^s mumbles."),
             _("%^sがダンジョンの主を召喚した。", "%^s magically summons guardians of dungeons."),
             _("%^sがダンジョンの主を召喚した。", "%^s magically summons guardians of dungeons."));
@@ -150,58 +150,58 @@ MonsterSpellResult spell_RF6_S_KIN(PlayerType *player_ptr, POSITION y, POSITION 
     decide_summon_kin_caster(player_ptr, m_idx, t_idx, target_type, m_name, m_poss, known);
     int count = 0;
     switch (m_ptr->r_idx) {
-    case MON_MENELDOR:
-    case MON_GWAIHIR:
-    case MON_THORONDOR:
+    case MonsterRaceId::MENELDOR:
+    case MonsterRaceId::GWAIHIR:
+    case MonsterRaceId::THORONDOR:
         count += summon_EAGLE(player_ptr, y, x, rlev, m_idx);
         break;
-    case MON_BULLGATES:
+    case MonsterRaceId::BULLGATES:
         count += summon_EDGE(player_ptr, y, x, rlev, m_idx);
         break;
-    case MON_SERPENT:
-    case MON_ZOMBI_SERPENT:
+    case MonsterRaceId::SERPENT:
+    case MonsterRaceId::ZOMBI_SERPENT:
         count += summon_guardian(player_ptr, y, x, rlev, m_idx, t_idx, target_type);
         break;
-    case MON_TIAMAT:
+    case MonsterRaceId::TIAMAT:
         count += summon_HIGHEST_DRAGON(player_ptr, y, x, m_idx);
         break;
-    case MON_CALDARM:
+    case MonsterRaceId::CALDARM:
         count += summon_LOCKE_CLONE(player_ptr, y, x, m_idx);
         break;
-    case MON_LOUSY:
+    case MonsterRaceId::LOUSY:
         count += summon_LOUSE(player_ptr, y, x, rlev, m_idx);
         break;
-    case MON_VAIF:
+    case MonsterRaceId::VAIF:
         count += summon_MOAI(player_ptr, y, x, rlev, m_idx);
         break;
-    case MON_DEMON_SLAYER_SENIOR:
+    case MonsterRaceId::DEMON_SLAYER_SENIOR:
         count += summon_DEMON_SLAYER(player_ptr, y, x, m_idx);
         break;
-    case MON_ALDUIN:
+    case MonsterRaceId::ALDUIN:
         count += summon_HIGHEST_DRAGON(player_ptr, y, x, m_idx);
         break;
-    case MON_MIRAAK:
+    case MonsterRaceId::MIRAAK:
         count += summon_APOCRYPHA(player_ptr, y, x, m_idx);
         break;
-    case MON_IMHOTEP:
+    case MonsterRaceId::IMHOTEP:
         count += summon_PYRAMID(player_ptr, y, x, rlev, m_idx);
         break;
-    case MON_JOBZ:
+    case MonsterRaceId::JOBZ:
         count += summon_EYE_PHORN(player_ptr, y, x, rlev, m_idx);
         break;
-    case MON_QUEEN_VESPOID:
+    case MonsterRaceId::QUEEN_VESPOID:
         count += summon_VESPOID(player_ptr, y, x, rlev, m_idx);
         break;
-    case MON_YENDOR_WIZARD_1:
+    case MonsterRaceId::YENDOR_WIZARD_1:
         count += summon_YENDER_WIZARD(player_ptr, y, x, m_idx);
         break;
-    case MON_LEE_QIEZI:
+    case MonsterRaceId::LEE_QIEZI:
         msg_print(_("しかし、誰も来てくれなかった…。", "However, no one answered the call..."));
         break;
-    case MON_THUNDERS:
+    case MonsterRaceId::THUNDERS:
         count += summon_THUNDERS(player_ptr, y, x, rlev, m_idx);
         break;
-    case MON_OOTSUKI:
+    case MonsterRaceId::OOTSUKI:
         count += summon_PLASMA(player_ptr, y, x, rlev, m_idx);
         break;
     default:
@@ -775,7 +775,7 @@ MonsterSpellResult spell_RF6_S_HI_UNDEAD(PlayerType *player_ptr, POSITION y, POS
     summon_disturb(player_ptr, target_type, known, see_either);
 
     int count = 0;
-    if (((m_ptr->r_idx == MON_MORGOTH) || (m_ptr->r_idx == MON_SAURON) || (m_ptr->r_idx == MON_ANGMAR)) && ((r_info[MON_NAZGUL].cur_num + 2) < r_info[MON_NAZGUL].max_num) && mon_to_player) {
+    if (((m_ptr->r_idx == MonsterRaceId::MORGOTH) || (m_ptr->r_idx == MonsterRaceId::SAURON) || (m_ptr->r_idx == MonsterRaceId::ANGMAR)) && ((r_info[MonsterRaceId::NAZGUL].cur_num + 2) < r_info[MonsterRaceId::NAZGUL].max_num) && mon_to_player) {
         count += summon_NAZGUL(player_ptr, y, x, m_idx);
     } else {
         mspell_cast_msg_blind msg(_("%^sが何かをつぶやいた。", "%^s mumbles."),

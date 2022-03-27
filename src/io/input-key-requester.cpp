@@ -77,7 +77,7 @@ void InputKeyRequestor::input_command()
 {
     while (true) {
         if (!macro_running() && !command_new && auto_debug_save && (!inkey_next || *inkey_next == '\0')) {
-            save_player(this->player_ptr, SAVE_TYPE_DEBUG);
+            save_player(this->player_ptr, SaveType::DEBUG);
         }
 
         if (fresh_once && macro_running()) {

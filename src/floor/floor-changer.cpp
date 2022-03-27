@@ -130,7 +130,7 @@ static void place_pet(PlayerType *player_ptr)
     for (int current_monster = 0; current_monster < max_num; current_monster++) {
         POSITION cy = 0;
         POSITION cx = 0;
-        if (party_mon[current_monster].r_idx == 0) {
+        if (!MonsterRace(party_mon[current_monster].r_idx).is_valid()) {
             continue;
         }
 

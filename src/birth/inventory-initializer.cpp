@@ -7,8 +7,8 @@
 #include "monster-race/monster-race-hook.h"
 #include "monster/monster-list.h"
 #include "monster/monster-util.h"
-#include "object-enchant/apply-magic.h"
 #include "object-enchant/item-apply-magic.h"
+#include "object-enchant/item-magic-applier.h"
 #include "object-enchant/object-ego.h"
 #include "object/object-info.h"
 #include "object/object-kind-hook.h"
@@ -103,7 +103,7 @@ static void decide_initial_items(PlayerType *player_ptr, ObjectType *q_ptr)
         get_mon_num_prep(player_ptr, monster_hook_human, nullptr);
         for (int i = rand_range(3, 4); i > 0; i--) {
             q_ptr->prep(lookup_kind(ItemKindType::CORPSE, SV_CORPSE));
-            q_ptr->pval = get_mon_num(player_ptr, 0, 2, 0);
+            q_ptr->pval = enum2i(get_mon_num(player_ptr, 0, 2, 0));
             if (q_ptr->pval) {
                 q_ptr->number = 1;
                 add_outfit(player_ptr, q_ptr);
@@ -129,7 +129,7 @@ static void decide_initial_items(PlayerType *player_ptr, ObjectType *q_ptr)
     case PlayerRaceType::ANDROID:
         /* Flasks of oil */
         q_ptr->prep(lookup_kind(ItemKindType::FLASK, SV_ANY));
-        apply_magic_to_object(player_ptr, q_ptr, 1, AM_NO_FIXED_ART);
+        ItemMagicApplier(player_ptr, q_ptr, 1, AM_NO_FIXED_ART).execute();
         q_ptr->number = (ITEM_NUMBER)rand_range(7, 12);
         add_outfit(player_ptr, q_ptr);
         break;

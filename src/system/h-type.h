@@ -79,8 +79,8 @@ typedef int16_t IDX; /*!< ゲーム中のID型を定義 */
 typedef int16_t FEAT_IDX; /*!< ゲーム中の地形ID型を定義 */
 typedef int16_t FLOOR_IDX; /*!< ゲーム中のフロアID型を定義 */
 
-typedef int16_t MONRACE_IDX; /*!< @todo monster_race_typeに差し替えて消滅させる ゲーム中のモンスター種族ID型を定義 */
-typedef int16_t MONSTER_IDX; /*!< @todo monster_race_typeに差し替えて消滅させる ゲーム中のモンスター個体ID型を定義 */
+// typedef int16_t MonsterRaceId; /*!< @todo MonsterRaceIdに差し替えて消滅させる ゲーム中のモンスター種族ID型を定義 */
+typedef int16_t MONSTER_IDX; /*!< @todo MonsterRaceIdに差し替えて消滅させる ゲーム中のモンスター個体ID型を定義 */
 typedef int16_t DUNGEON_IDX; /*!< ゲーム中のダンジョンID型を定義 */
 typedef int16_t ARTIFACT_IDX; /*!< ゲーム中のアーティファクトID型を定義 */
 typedef int16_t EGO_IDX; /*!< アイテムエゴのID型を定義 */
@@ -167,8 +167,10 @@ typedef int QUANTITY; /*!< インターフェース上の指定個数 */
 
 typedef int16_t ACTION_SKILL_POWER; /*!< 行動技能値 */
 
-enum process_result {
+enum class ProcessResult {
     PROCESS_FALSE = 0,
     PROCESS_TRUE = 1,
     PROCESS_CONTINUE = 2,
+    PROCESS_LOOP_CONTINUE = 3,
+    PROCESS_LOOP_BREAK = 4,
 };

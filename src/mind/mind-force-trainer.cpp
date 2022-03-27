@@ -268,7 +268,7 @@ bool shock_power(PlayerType *player_ptr)
  * @param spell 発動する特殊技能のID
  * @return 処理を実行したらTRUE、キャンセルした場合FALSEを返す。
  */
-bool cast_force_spell(PlayerType *player_ptr, mind_force_trainer_type spell)
+bool cast_force_spell(PlayerType *player_ptr, MindForceTrainerType spell)
 {
     DIRECTION dir;
     PLAYER_LEVEL plev = player_ptr->lev;
@@ -278,20 +278,20 @@ bool cast_force_spell(PlayerType *player_ptr, mind_force_trainer_type spell)
     }
 
     switch (spell) {
-    case SMALL_FORCE_BALL:
+    case MindForceTrainerType::SMALL_FORCE_BALL:
         if (!get_aim_dir(player_ptr, &dir)) {
             return false;
         }
 
         fire_ball(player_ptr, AttributeType::MISSILE, dir, damroll(3 + ((plev - 1) / 5) + boost / 12, 4), 0);
         break;
-    case FLASH_LIGHT:
+    case MindForceTrainerType::FLASH_LIGHT:
         (void)lite_area(player_ptr, damroll(2, (plev / 2)), (plev / 10) + 1);
         break;
-    case FLYING_TECHNIQUE:
+    case MindForceTrainerType::FLYING_TECHNIQUE:
         set_tim_levitation(player_ptr, randint1(30) + 30 + boost / 5, false);
         break;
-    case KAMEHAMEHA:
+    case MindForceTrainerType::KAMEHAMEHA:
         project_length = plev / 8 + 3;
         if (!get_aim_dir(player_ptr, &dir)) {
             return false;
@@ -299,10 +299,10 @@ bool cast_force_spell(PlayerType *player_ptr, mind_force_trainer_type spell)
 
         fire_beam(player_ptr, AttributeType::MISSILE, dir, damroll(5 + ((plev - 1) / 5) + boost / 10, 5));
         break;
-    case MAGIC_RESISTANCE:
+    case MindForceTrainerType::MAGIC_RESISTANCE:
         set_resist_magic(player_ptr, randint1(20) + 20 + boost / 5, false);
         break;
-    case IMPROVE_FORCE:
+    case MindForceTrainerType::IMPROVE_FORCE:
         msg_print(_("気を練った。", "You improved the Force."));
         set_current_ki(player_ptr, false, 70 + plev);
         player_ptr->update |= (PU_BONUS);
@@ -316,20 +316,20 @@ bool cast_force_spell(PlayerType *player_ptr, mind_force_trainer_type spell)
         }
 
         break;
-    case AURA_OF_FORCE:
+    case MindForceTrainerType::AURA_OF_FORCE:
         set_tim_sh_force(player_ptr, randint1(plev / 2) + 15 + boost / 7, false);
         break;
-    case SHOCK_POWER:
+    case MindForceTrainerType::SHOCK_POWER:
         return shock_power(player_ptr);
         break;
-    case LARGE_FORCE_BALL:
+    case MindForceTrainerType::LARGE_FORCE_BALL:
         if (!get_aim_dir(player_ptr, &dir)) {
             return false;
         }
 
         fire_ball(player_ptr, AttributeType::MISSILE, dir, damroll(10, 6) + plev * 3 / 2 + boost * 3 / 5, (plev < 30) ? 2 : 3);
         break;
-    case DISPEL_MAGIC: {
+    case MindForceTrainerType::DISPEL_MAGIC: {
         if (!target_set(player_ptr, TARGET_KILL)) {
             return false;
         }
@@ -342,7 +342,7 @@ bool cast_force_spell(PlayerType *player_ptr, mind_force_trainer_type spell)
         dispel_monster_status(player_ptr, m_idx);
         break;
     }
-    case SUMMON_GHOST: {
+    case MindForceTrainerType::SUMMON_GHOST: {
         bool success = false;
         for (int i = 0; i < 1 + boost / 100; i++) {
             if (summon_specific(player_ptr, -1, player_ptr->y, player_ptr->x, plev, SUMMON_PHANTOM, PM_FORCE_PET)) {
@@ -358,17 +358,17 @@ bool cast_force_spell(PlayerType *player_ptr, mind_force_trainer_type spell)
 
         break;
     }
-    case EXPLODING_FLAME:
+    case MindForceTrainerType::EXPLODING_FLAME:
         fire_ball(player_ptr, AttributeType::FIRE, 0, 200 + (2 * plev) + boost * 2, 10);
         break;
-    case SUPER_KAMEHAMEHA:
+    case MindForceTrainerType::SUPER_KAMEHAMEHA:
         if (!get_aim_dir(player_ptr, &dir)) {
             return false;
         }
 
         fire_beam(player_ptr, AttributeType::MANA, dir, damroll(10 + (plev / 2) + boost * 3 / 10, 15));
         break;
-    case LIGHT_SPEED:
+    case MindForceTrainerType::LIGHT_SPEED:
         set_lightspeed(player_ptr, randint1(16) + 16 + boost / 20, false);
         break;
     default:

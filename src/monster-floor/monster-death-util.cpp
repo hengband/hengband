@@ -19,23 +19,23 @@
  * Used to allocate proper treasure when "Creeping coins" die
  * Note the use of actual "monster names"
  */
-static OBJECT_SUBTYPE_VALUE get_coin_type(MONRACE_IDX r_idx)
+static OBJECT_SUBTYPE_VALUE get_coin_type(MonsterRaceId r_idx)
 {
     switch (r_idx) {
-    case MON_COPPER_COINS:
+    case MonsterRaceId::COPPER_COINS:
         return 2;
-    case MON_SILVER_COINS:
+    case MonsterRaceId::SILVER_COINS:
         return 5;
-    case MON_GOLD_COINS:
+    case MonsterRaceId::GOLD_COINS:
         return 10;
-    case MON_MITHRIL_COINS:
-    case MON_MITHRIL_GOLEM:
+    case MonsterRaceId::MITHRIL_COINS:
+    case MonsterRaceId::MITHRIL_GOLEM:
         return 16;
-    case MON_ADAMANT_COINS:
+    case MonsterRaceId::ADAMANT_COINS:
         return 17;
+    default:
+        return 0;
     }
-
-    return MON_PLAYER;
 }
 
 monster_death_type *initialize_monster_death_type(PlayerType *player_ptr, monster_death_type *md_ptr, MONSTER_IDX m_idx, bool drop_item)
@@ -44,8 +44,8 @@ monster_death_type *initialize_monster_death_type(PlayerType *player_ptr, monste
     md_ptr->m_idx = m_idx;
     md_ptr->m_ptr = &floor_ptr->m_list[m_idx];
     md_ptr->r_ptr = &r_info[md_ptr->m_ptr->r_idx];
-    md_ptr->do_gold = (none_bits(md_ptr->r_ptr->flags1, (RF1_ONLY_ITEM | RF1_DROP_GOOD | RF1_DROP_GREAT)));
-    md_ptr->do_item = (none_bits(md_ptr->r_ptr->flags1, RF1_ONLY_GOLD) || any_bits(md_ptr->r_ptr->flags1, (RF1_DROP_GOOD | RF1_DROP_GREAT)));
+    md_ptr->do_gold = (md_ptr->r_ptr->drop_flags.has_none_of({ MonsterDropType::ONLY_ITEM, MonsterDropType::DROP_GOOD, MonsterDropType::DROP_GREAT }));
+    md_ptr->do_item = (md_ptr->r_ptr->drop_flags.has_not(MonsterDropType::ONLY_GOLD) || md_ptr->r_ptr->drop_flags.has_any_of({ MonsterDropType::DROP_GOOD, MonsterDropType::DROP_GREAT }));
     md_ptr->cloned = md_ptr->m_ptr->mflag2.has(MonsterConstantFlagType::CLONED);
     md_ptr->force_coin = get_coin_type(md_ptr->m_ptr->r_idx);
     md_ptr->drop_chosen_item = drop_item && !md_ptr->cloned && !floor_ptr->inside_arena && !player_ptr->phase_out && !is_pet(md_ptr->m_ptr);

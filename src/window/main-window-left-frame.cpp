@@ -323,28 +323,28 @@ void health_redraw(PlayerType *player_ptr, bool riding)
         term_putstr(col - 2, row + 2, 12, TERM_WHITE, "      /     ");
         term_putstr(col - 2, row + 3, 12, TERM_WHITE, "      /     ");
 
-        if (player_ptr->current_floor_ptr->m_list[1].r_idx) {
+        if (MonsterRace(player_ptr->current_floor_ptr->m_list[1].r_idx).is_valid()) {
             term_putstr(col - 2, row, 2, r_info[player_ptr->current_floor_ptr->m_list[1].r_idx].x_attr,
                 format("%c", r_info[player_ptr->current_floor_ptr->m_list[1].r_idx].x_char));
             term_putstr(col - 1, row, 5, TERM_WHITE, format("%5d", player_ptr->current_floor_ptr->m_list[1].hp));
             term_putstr(col + 5, row, 6, TERM_WHITE, format("%5d", player_ptr->current_floor_ptr->m_list[1].max_maxhp));
         }
 
-        if (player_ptr->current_floor_ptr->m_list[2].r_idx) {
+        if (MonsterRace(player_ptr->current_floor_ptr->m_list[2].r_idx).is_valid()) {
             term_putstr(col - 2, row + 1, 2, r_info[player_ptr->current_floor_ptr->m_list[2].r_idx].x_attr,
                 format("%c", r_info[player_ptr->current_floor_ptr->m_list[2].r_idx].x_char));
             term_putstr(col - 1, row + 1, 5, TERM_WHITE, format("%5d", player_ptr->current_floor_ptr->m_list[2].hp));
             term_putstr(col + 5, row + 1, 6, TERM_WHITE, format("%5d", player_ptr->current_floor_ptr->m_list[2].max_maxhp));
         }
 
-        if (player_ptr->current_floor_ptr->m_list[3].r_idx) {
+        if (MonsterRace(player_ptr->current_floor_ptr->m_list[3].r_idx).is_valid()) {
             term_putstr(col - 2, row + 2, 2, r_info[player_ptr->current_floor_ptr->m_list[3].r_idx].x_attr,
                 format("%c", r_info[player_ptr->current_floor_ptr->m_list[3].r_idx].x_char));
             term_putstr(col - 1, row + 2, 5, TERM_WHITE, format("%5d", player_ptr->current_floor_ptr->m_list[3].hp));
             term_putstr(col + 5, row + 2, 6, TERM_WHITE, format("%5d", player_ptr->current_floor_ptr->m_list[3].max_maxhp));
         }
 
-        if (player_ptr->current_floor_ptr->m_list[4].r_idx) {
+        if (MonsterRace(player_ptr->current_floor_ptr->m_list[4].r_idx).is_valid()) {
             term_putstr(col - 2, row + 3, 2, r_info[player_ptr->current_floor_ptr->m_list[4].r_idx].x_attr,
                 format("%c", r_info[player_ptr->current_floor_ptr->m_list[4].r_idx].x_char));
             term_putstr(col - 1, row + 3, 5, TERM_WHITE, format("%5d", player_ptr->current_floor_ptr->m_list[4].hp));

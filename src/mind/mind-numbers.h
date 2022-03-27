@@ -1,6 +1,6 @@
 ﻿#pragma once
 
-enum mind_berserker_type : int {
+enum class MindBerserkerType : int {
     DETECT_MANACE = 0,
     CHARGE = 1,
     SMASH_TRAP = 2,
@@ -8,7 +8,7 @@ enum mind_berserker_type : int {
     MASSACRE = 4,
 };
 
-enum mind_force_trainer_type : int {
+enum class MindForceTrainerType : int {
     SMALL_FORCE_BALL = 0,
     FLASH_LIGHT = 1,
     FLYING_TECHNIQUE = 2,
@@ -25,7 +25,7 @@ enum mind_force_trainer_type : int {
     LIGHT_SPEED = 13,
 };
 
-enum mind_mindcrafter_type : int {
+enum class MindMindcrafterType : int {
     PRECOGNITION = 0,
     NEURAL_BLAST = 1,
     MINOR_DISPLACEMENT = 2,
@@ -42,7 +42,7 @@ enum mind_mindcrafter_type : int {
     THE_WORLD = 13,
 };
 
-enum mind_mirror_master_type : int {
+enum class MindMirrorMasterType : int {
     MIRROR_SEEING = 0,
     MAKE_MIRROR = 1,
     DRIP_LIGHT = 2,
@@ -66,7 +66,7 @@ enum mind_mirror_master_type : int {
     RUFFNOR_MIRROR = 20,
 };
 
-enum mind_ninja_type : int {
+enum class MindNinjaType : int {
     DARKNESS_CREATION = 0,
     DETECT_NEAR = 1,
     HIDE_LEAVES = 2,

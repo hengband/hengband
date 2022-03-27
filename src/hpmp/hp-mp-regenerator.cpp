@@ -225,7 +225,8 @@ void regenerate_captured_monsters(PlayerType *player_ptr)
         }
 
         heal = true;
-        r_ptr = &r_info[o_ptr->pval];
+        const auto r_idx = i2enum<MonsterRaceId>(o_ptr->pval);
+        r_ptr = &r_info[r_idx];
         if (o_ptr->captured_monster_current_hp < o_ptr->captured_monster_max_hp) {
             short frac = o_ptr->captured_monster_max_hp / 100;
             if (!frac) {

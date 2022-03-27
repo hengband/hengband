@@ -7,6 +7,7 @@
  */
 #define CEM_RIDING 0x0001
 #define CEM_P_CAN_ENTER_PATTERN 0x0002
+enum class MonsterRaceId : int16_t;
 struct monster_race;
 struct monster_type;
 class PlayerType;
@@ -23,5 +24,5 @@ bool is_original_ap(const monster_type *m_ptr);
 bool is_mimicry(monster_type *m_ptr);
 
 monster_race *real_r_ptr(monster_type *m_ptr);
-MONRACE_IDX real_r_idx(monster_type *m_ptr);
+MonsterRaceId real_r_idx(monster_type *m_ptr);
 void monster_name(PlayerType *player_ptr, MONSTER_IDX m_idx, char *m_name);

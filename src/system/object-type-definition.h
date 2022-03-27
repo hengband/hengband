@@ -11,7 +11,6 @@
 #include "object-enchant/tr-flags.h"
 #include "object-enchant/trc-types.h"
 #include "system/angband.h"
-#include "system/object-type-definition.h"
 #include "system/system-variables.h"
 #include "util/flag-group.h"
 #include <optional>
@@ -42,7 +41,7 @@ public:
     uint8_t captured_monster_speed = 0; /*!< 捕らえたモンスターの速度 */
     short captured_monster_current_hp = 0; /*!< 捕らえたモンスターの現HP */
     short captured_monster_max_hp = 0; /*!< 捕らえたモンスターの最大HP */
-    ushort fuel = 0; /*!< 光源の残り寿命 / Extra info fuel or captured monster's current HP */
+    short fuel = 0; /*!< 光源の残り寿命 / Remaining fuel */
 
     byte smith_hit = 0; /*!< 鍛冶をした結果上昇した命中値 */
     byte smith_damage = 0; /*!< 鍛冶をした結果上昇したダメージ */
@@ -69,7 +68,7 @@ public:
     int artifact_bias{}; /*!< ランダムアーティファクト生成時のバイアスID */
 
     void wipe();
-    void copy_from(ObjectType *j_ptr);
+    void copy_from(const ObjectType *j_ptr);
     void prep(KIND_OBJECT_IDX ko_idx);
     bool is_weapon() const;
     bool is_weapon_ammo() const;

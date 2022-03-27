@@ -1,13 +1,13 @@
 ﻿#pragma once
 
-#include "object-enchant/weapon/abstract-weapon-enchanter.h"
+#include "object-enchant/protector/abstract-protector-enchanter.h"
 #include "system/angband.h"
 
 class ObjectType;
 class PlayerType;
-class WeaponEnchanter : AbstractWeaponEnchanter {
+class DragonArmorEnchanter : public AbstractProtectorEnchanter {
 public:
-    WeaponEnchanter(PlayerType *player_ptr, ObjectType *o_ptr, DEPTH level, int power);
+    DragonArmorEnchanter(PlayerType *player_ptr, ObjectType *o_ptr, DEPTH level, int power);
     void apply_magic() override;
 
 protected:

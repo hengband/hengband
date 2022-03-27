@@ -307,7 +307,7 @@ bool life_stream(PlayerType *player_ptr, bool message, bool virtue_change)
 bool heroism(PlayerType *player_ptr, int base)
 {
     auto ident = false;
-    if (BadStatusSetter(player_ptr).afraidness(0)) {
+    if (BadStatusSetter(player_ptr).fear(0)) {
         ident = true;
     }
 
@@ -325,7 +325,7 @@ bool heroism(PlayerType *player_ptr, int base)
 bool berserk(PlayerType *player_ptr, int base)
 {
     auto ident = false;
-    if (BadStatusSetter(player_ptr).afraidness(0)) {
+    if (BadStatusSetter(player_ptr).fear(0)) {
         ident = true;
     }
 
@@ -593,7 +593,7 @@ bool cosmic_cast_off(PlayerType *player_ptr, ObjectType **o_ptr_ptr)
     TIME_EFFECT t = 20 + randint1(20);
     BadStatusSetter bss(player_ptr);
     (void)bss.mod_blindness(t);
-    (void)bss.afraidness(0);
+    (void)bss.fear(0);
     (void)set_tim_esp(player_ptr, player_ptr->tim_esp + t, false);
     (void)set_tim_regen(player_ptr, player_ptr->tim_regen + t, false);
     (void)set_hero(player_ptr, player_ptr->hero + t, false);

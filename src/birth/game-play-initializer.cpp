@@ -65,7 +65,7 @@ void player_wipe_without_name(PlayerType *player_ptr)
         q_ref.max_num = 0;
         q_ref.type = QuestKindType::NONE;
         q_ref.level = 0;
-        q_ref.r_idx = 0;
+        q_ref.r_idx = MonsterRace::empty_id();
         q_ref.complev = 0;
         q_ref.comptime = 0;
     }
@@ -81,8 +81,8 @@ void player_wipe_without_name(PlayerType *player_ptr)
     }
 
     k_info_reset();
-    for (auto &r_ref : r_info) {
-        if (r_ref.idx == 0) {
+    for (auto &[r_idx, r_ref] : r_info) {
+        if (!MonsterRace(r_ref.idx).is_valid()) {
             continue;
         }
         r_ref.cur_num = 0;
@@ -150,7 +150,7 @@ void player_wipe_without_name(PlayerType *player_ptr)
     player_ptr->current_floor_ptr->quest_number = QuestId::NONE;
 
     player_ptr->exit_bldg = true;
-    player_ptr->today_mon = 0;
+    player_ptr->knows_daily_bounty = false;
     update_gambling_monsters(player_ptr);
     player_ptr->muta.clear();
 

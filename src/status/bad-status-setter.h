@@ -22,8 +22,8 @@ public:
     bool mod_confusion(const TIME_EFFECT tmp_v);
     bool poison(const TIME_EFFECT tmp_v);
     bool mod_poison(const TIME_EFFECT tmp_v);
-    bool afraidness(const TIME_EFFECT tmp_v);
-    bool mod_afraidness(const TIME_EFFECT tmp_v);
+    bool fear(const TIME_EFFECT tmp_v);
+    bool mod_fear(const TIME_EFFECT tmp_v);
     bool paralysis(const TIME_EFFECT tmp_v);
     bool mod_paralysis(const TIME_EFFECT tmp_v);
     bool hallucination(const TIME_EFFECT tmp_v);

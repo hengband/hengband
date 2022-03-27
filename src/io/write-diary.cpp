@@ -63,7 +63,7 @@ static bool open_diary_file(FILE **fff, bool *disable_diary)
     }
 
     msg_format(_("%s を開くことができませんでした。プレイ記録を一時停止します。", "Failed to open %s. Play-Record is disabled temporarily."), buf);
-    msg_format(nullptr);
+    msg_print(nullptr);
     *disable_diary = true;
     return false;
 }

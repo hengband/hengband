@@ -53,16 +53,16 @@
  */
 static auto get_mon_evol_roots(void)
 {
-    std::set<MONRACE_IDX> evol_parents;
-    std::set<MONRACE_IDX> evol_children;
-    for (const auto &r_ref : r_info) {
-        if (r_ref.next_r_idx > 0) {
+    std::set<MonsterRaceId> evol_parents;
+    std::set<MonsterRaceId> evol_children;
+    for (const auto &[r_idx, r_ref] : r_info) {
+        if (MonsterRace(r_ref.next_r_idx).is_valid()) {
             evol_parents.emplace(r_ref.idx);
             evol_children.emplace(r_ref.next_r_idx);
         }
     }
 
-    auto evol_root_sort = [](MONRACE_IDX i1, MONRACE_IDX i2) {
+    auto evol_root_sort = [](MonsterRaceId i1, MonsterRaceId i2) {
         auto &r1 = r_info[i1];
         auto &r2 = r_info[i2];
         if (r1.level != r2.level) {
@@ -74,7 +74,7 @@ static auto get_mon_evol_roots(void)
         return i1 <= i2;
     };
 
-    std::set<MONRACE_IDX, decltype(evol_root_sort)> evol_roots(evol_root_sort);
+    std::set<MonsterRaceId, decltype(evol_root_sort)> evol_roots(evol_root_sort);
     std::set_difference(evol_parents.begin(), evol_parents.end(), evol_children.begin(), evol_children.end(),
         std::inserter(evol_roots, evol_roots.end()));
 
@@ -104,11 +104,11 @@ static SpoilerOutputResultType spoil_mon_evol(concptr fname)
 
     for (auto r_idx : get_mon_evol_roots()) {
         auto r_ptr = &r_info[r_idx];
-        fprintf(spoiler_file, _("[%d]: %s (レベル%d, '%c')\n", "[%d]: %s (Level %d, '%c')\n"), r_idx, r_ptr->name.c_str(), (int)r_ptr->level, r_ptr->d_char);
+        fprintf(spoiler_file, _("[%d]: %s (レベル%d, '%c')\n", "[%d]: %s (Level %d, '%c')\n"), enum2i(r_idx), r_ptr->name.c_str(), (int)r_ptr->level, r_ptr->d_char);
 
-        for (auto n = 1; r_ptr->next_r_idx > 0; n++) {
+        for (auto n = 1; MonsterRace(r_ptr->next_r_idx).is_valid(); n++) {
             fprintf(spoiler_file, "%*s-(%d)-> ", n * 2, "", r_ptr->next_exp);
-            fprintf(spoiler_file, "[%d]: ", r_ptr->next_r_idx);
+            fprintf(spoiler_file, "[%d]: ", enum2i(r_ptr->next_r_idx));
             r_ptr = &r_info[r_ptr->next_r_idx];
 
             fprintf(spoiler_file, _("%s (レベル%d, '%c')\n", "%s (Level %d, '%c')\n"), r_ptr->name.c_str(), (int)r_ptr->level, r_ptr->d_char);
@@ -125,43 +125,43 @@ SpoilerOutputResultType spoil_categorized_mon_desc()
 {
     auto status = spoil_mon_desc("mon-desc-ridable.txt", [](const monster_race *r_ptr) { return any_bits(r_ptr->flags7, RF7_RIDING); });
     if (status == SpoilerOutputResultType::SPOILER_OUTPUT_SUCCESS) {
-        status = spoil_mon_desc("mon-desc-wildonly.txt", [](const monster_race *r_ptr) { return any_bits(r_ptr->flags8, RF8_WILD_ONLY); });
+        status = spoil_mon_desc("mon-desc-wildonly.txt", [](const monster_race *r_ptr) { return r_ptr->wilderness_flags.has(MonsterWildernessType::WILD_ONLY); });
     }
 
     if (status == SpoilerOutputResultType::SPOILER_OUTPUT_SUCCESS) {
-        status = spoil_mon_desc("mon-desc-town.txt", [](const monster_race *r_ptr) { return any_bits(r_ptr->flags8, RF8_WILD_TOWN); });
+        status = spoil_mon_desc("mon-desc-town.txt", [](const monster_race *r_ptr) { return r_ptr->wilderness_flags.has(MonsterWildernessType::WILD_TOWN); });
     }
 
     if (status == SpoilerOutputResultType::SPOILER_OUTPUT_SUCCESS) {
-        status = spoil_mon_desc("mon-desc-shore.txt", [](const monster_race *r_ptr) { return any_bits(r_ptr->flags8, RF8_WILD_SHORE); });
+        status = spoil_mon_desc("mon-desc-shore.txt", [](const monster_race *r_ptr) { return r_ptr->wilderness_flags.has(MonsterWildernessType::WILD_SHORE); });
     }
 
     if (status == SpoilerOutputResultType::SPOILER_OUTPUT_SUCCESS) {
-        status = spoil_mon_desc("mon-desc-ocean.txt", [](const monster_race *r_ptr) { return any_bits(r_ptr->flags8, RF8_WILD_OCEAN); });
+        status = spoil_mon_desc("mon-desc-ocean.txt", [](const monster_race *r_ptr) { return r_ptr->wilderness_flags.has(MonsterWildernessType::WILD_OCEAN); });
     }
 
     if (status == SpoilerOutputResultType::SPOILER_OUTPUT_SUCCESS) {
-        status = spoil_mon_desc("mon-desc-waste.txt", [](const monster_race *r_ptr) { return any_bits(r_ptr->flags8, RF8_WILD_WASTE); });
+        status = spoil_mon_desc("mon-desc-waste.txt", [](const monster_race *r_ptr) { return r_ptr->wilderness_flags.has(MonsterWildernessType::WILD_WASTE); });
     }
 
     if (status == SpoilerOutputResultType::SPOILER_OUTPUT_SUCCESS) {
-        status = spoil_mon_desc("mon-desc-wood.txt", [](const monster_race *r_ptr) { return any_bits(r_ptr->flags8, RF8_WILD_WOOD); });
+        status = spoil_mon_desc("mon-desc-wood.txt", [](const monster_race *r_ptr) { return r_ptr->wilderness_flags.has(MonsterWildernessType::WILD_WOOD); });
     }
 
     if (status == SpoilerOutputResultType::SPOILER_OUTPUT_SUCCESS) {
-        status = spoil_mon_desc("mon-desc-volcano.txt", [](const monster_race *r_ptr) { return any_bits(r_ptr->flags8, RF8_WILD_VOLCANO); });
+        status = spoil_mon_desc("mon-desc-volcano.txt", [](const monster_race *r_ptr) { return r_ptr->wilderness_flags.has(MonsterWildernessType::WILD_VOLCANO); });
     }
 
     if (status == SpoilerOutputResultType::SPOILER_OUTPUT_SUCCESS) {
-        status = spoil_mon_desc("mon-desc-mountain.txt", [](const monster_race *r_ptr) { return any_bits(r_ptr->flags8, RF8_WILD_MOUNTAIN); });
+        status = spoil_mon_desc("mon-desc-mountain.txt", [](const monster_race *r_ptr) { return r_ptr->wilderness_flags.has(MonsterWildernessType::WILD_MOUNTAIN); });
     }
 
     if (status == SpoilerOutputResultType::SPOILER_OUTPUT_SUCCESS) {
-        status = spoil_mon_desc("mon-desc-grass.txt", [](const monster_race *r_ptr) { return any_bits(r_ptr->flags8, RF8_WILD_GRASS); });
+        status = spoil_mon_desc("mon-desc-grass.txt", [](const monster_race *r_ptr) { return r_ptr->wilderness_flags.has(MonsterWildernessType::WILD_GRASS); });
     }
 
     if (status == SpoilerOutputResultType::SPOILER_OUTPUT_SUCCESS) {
-        status = spoil_mon_desc("mon-desc-wildall.txt", [](const monster_race *r_ptr) { return any_bits(r_ptr->flags8, RF8_WILD_ALL); });
+        status = spoil_mon_desc("mon-desc-wildall.txt", [](const monster_race *r_ptr) { return r_ptr->wilderness_flags.has(MonsterWildernessType::WILD_ALL); });
     }
 
     return status;

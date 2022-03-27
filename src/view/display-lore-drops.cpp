@@ -21,9 +21,9 @@ void display_monster_drop_quantity(lore_type *lore_ptr)
 
 void display_monster_drop_quality(lore_type *lore_ptr)
 {
-    if (lore_ptr->flags1 & RF1_DROP_GREAT) {
+    if (lore_ptr->drop_flags.has(MonsterDropType::DROP_GREAT)) {
         lore_ptr->drop_quality = _("特別な", " exceptional");
-    } else if (lore_ptr->flags1 & RF1_DROP_GOOD) {
+    } else if (lore_ptr->drop_flags.has(MonsterDropType::DROP_GOOD)) {
         lore_ptr->drop_quality = _("上質な", " good");
 #ifdef JP
 #else
@@ -66,8 +66,7 @@ void display_monster_drop_items(lore_type *lore_ptr)
 void display_monster_drop_golds(lore_type *lore_ptr)
 {
     auto is_item_only = lore_ptr->drop_gold == 0;
-    is_item_only |= any_bits(lore_ptr->flags1, RF1_DROP_GOOD);
-    is_item_only |= any_bits(lore_ptr->flags1, RF1_DROP_GREAT);
+    is_item_only |= lore_ptr->drop_flags.has_any_of({ MonsterDropType::DROP_GOOD, MonsterDropType::DROP_GREAT });
     if (is_item_only) {
         return;
     }

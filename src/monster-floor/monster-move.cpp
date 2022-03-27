@@ -430,7 +430,7 @@ bool process_monster_movement(PlayerType *player_ptr, turn_flags *turn_flags_ptr
         turn_flags_ptr->do_turn = true;
         feature_type *f_ptr;
         f_ptr = &f_info[g_ptr->feat];
-        if (f_ptr->flags.has(FloorFeatureType::TREE) && ((r_ptr->flags7 & RF7_CAN_FLY) == 0) && ((r_ptr->flags8 & RF8_WILD_WOOD) == 0)) {
+        if (f_ptr->flags.has(FloorFeatureType::TREE) && ((r_ptr->flags7 & RF7_CAN_FLY) == 0) && (r_ptr->wilderness_flags.has_not(MonsterWildernessType::WILD_WOOD))) {
             m_ptr->energy_need += ENERGY_NEED();
         }
 
@@ -487,7 +487,7 @@ void process_speak_sound(PlayerType *player_ptr, MONSTER_IDX m_idx, POSITION oy,
 
     auto *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
     monster_race *ap_r_ptr = &r_info[m_ptr->ap_r_idx];
-    if (m_ptr->ap_r_idx == MON_CYBER && one_in_(CYBERNOISE) && !m_ptr->ml && (m_ptr->cdis <= MAX_SIGHT)) {
+    if (m_ptr->ap_r_idx == MonsterRaceId::CYBER && one_in_(CYBERNOISE) && !m_ptr->ml && (m_ptr->cdis <= MAX_SIGHT)) {
         if (disturb_minor) {
             disturb(player_ptr, false, false);
         }
@@ -518,7 +518,7 @@ void process_speak_sound(PlayerType *player_ptr, MONSTER_IDX m_idx, POSITION oy,
         filename = _("monspeak_j.txt", "monspeak.txt");
     }
 
-    if (get_rnd_line(filename, m_ptr->ap_r_idx, monmessage) == 0) {
+    if (get_rnd_line(filename, enum2i(m_ptr->ap_r_idx), monmessage) == 0) {
         msg_format(_("%^s%s", "%^s %s"), m_name, monmessage);
     }
 }

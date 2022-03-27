@@ -198,10 +198,10 @@ bool exe_cmd_debug(PlayerType *player_ptr, char cmd)
         patron_list[player_ptr->chaos_patron].gain_level_reward(player_ptr, command_arg);
         break;
     case 'N':
-        wiz_summon_pet(player_ptr, command_arg);
+        wiz_summon_pet(player_ptr, i2enum<MonsterRaceId>(command_arg));
         break;
     case 'n':
-        wiz_summon_specific_enemy(player_ptr, command_arg);
+        wiz_summon_specific_enemy(player_ptr, i2enum<MonsterRaceId>(command_arg));
         break;
     case 'O':
         wiz_dump_options();

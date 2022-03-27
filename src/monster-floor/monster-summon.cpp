@@ -11,6 +11,7 @@
 #include "monster-race/monster-race.h"
 #include "monster-race/race-flags1.h"
 #include "monster-race/race-flags7.h"
+#include "monster-race/race-indice-types.h"
 #include "monster/monster-info.h"
 #include "monster/monster-list.h"
 #include "monster/monster-util.h"
@@ -40,7 +41,7 @@ bool summon_unique_okay = false;
  * @param r_idx チェックするモンスター種族ID
  * @return 召喚対象にできるならばTRUE
  */
-static bool summon_specific_okay(PlayerType *player_ptr, MONRACE_IDX r_idx)
+static bool summon_specific_okay(PlayerType *player_ptr, MonsterRaceId r_idx)
 {
     auto *r_ptr = &r_info[r_idx];
     if (!mon_hook_dungeon(player_ptr, r_idx)) {
@@ -78,7 +79,7 @@ static bool summon_specific_okay(PlayerType *player_ptr, MONRACE_IDX r_idx)
         auto *m_ptr = &player_ptr->current_floor_ptr->m_list[summon_specific_who];
         return check_summon_specific(player_ptr, m_ptr->r_idx, r_idx);
     } else {
-        return check_summon_specific(player_ptr, 0, r_idx);
+        return check_summon_specific(player_ptr, MonsterRaceId::PLAYER, r_idx);
     }
 }
 
@@ -132,7 +133,7 @@ bool summon_specific(PlayerType *player_ptr, MONSTER_IDX who, POSITION y1, POSIT
     }
 
     POSITION x, y;
-    if (!mon_scatter(player_ptr, 0, &y, &x, y1, x1, 2)) {
+    if (!mon_scatter(player_ptr, MonsterRace::empty_id(), &y, &x, y1, x1, 2)) {
         return false;
     }
 
@@ -142,8 +143,8 @@ bool summon_specific(PlayerType *player_ptr, MONSTER_IDX who, POSITION y1, POSIT
     get_mon_num_prep(player_ptr, summon_specific_okay, get_monster_hook2(player_ptr, y, x));
 
     DEPTH dlev = get_dungeon_or_wilderness_level(player_ptr);
-    MONRACE_IDX r_idx = get_mon_num(player_ptr, 0, (dlev + lev) / 2 + 5, 0);
-    if (!r_idx) {
+    MonsterRaceId r_idx = get_mon_num(player_ptr, 0, (dlev + lev) / 2 + 5, 0);
+    if (!MonsterRace(r_idx).is_valid()) {
         summon_specific_type = SUMMON_NONE;
         return false;
     }
@@ -190,9 +191,9 @@ bool summon_specific(PlayerType *player_ptr, MONSTER_IDX who, POSITION y1, POSIT
  * @param mode 生成オプション
  * @return 召喚できたらtrueを返す
  */
-bool summon_named_creature(PlayerType *player_ptr, MONSTER_IDX who, POSITION oy, POSITION ox, MONRACE_IDX r_idx, BIT_FLAGS mode)
+bool summon_named_creature(PlayerType *player_ptr, MONSTER_IDX who, POSITION oy, POSITION ox, MonsterRaceId r_idx, BIT_FLAGS mode)
 {
-    if ((r_idx <= 0) || (r_idx >= static_cast<MONRACE_IDX>(r_info.size()))) {
+    if (!MonsterRace(r_idx).is_valid() || (r_idx >= static_cast<MonsterRaceId>(r_info.size()))) {
         return false;
     }
 

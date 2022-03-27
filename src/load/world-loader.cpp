@@ -63,7 +63,7 @@ void set_gambling_monsters(void)
 {
     const int max_gambling_monsters = 4;
     for (int i = 0; i < max_gambling_monsters; i++) {
-        battle_mon[i] = rd_s16b();
+        battle_mon_list[i] = i2enum<MonsterRaceId>(rd_s16b());
         if (h_older_than(0, 3, 4)) {
             set_zangband_gambling_monsters(i);
         } else {
@@ -77,7 +77,7 @@ void set_gambling_monsters(void)
  */
 void rd_autopick(PlayerType *player_ptr)
 {
-    player_ptr->autopick_autoregister = rd_byte() != 0;
+    player_ptr->autopick_autoregister = rd_bool();
 }
 
 static void set_undead_turn_limit(PlayerType *player_ptr)
@@ -126,8 +126,8 @@ static void rd_world_info(PlayerType *player_ptr)
     if (h_older_than(0, 0, 3)) {
         determine_daily_bounty(player_ptr, true);
     } else {
-        w_ptr->today_mon = rd_s16b();
-        player_ptr->today_mon = rd_s16b();
+        w_ptr->today_mon = i2enum<MonsterRaceId>(rd_s16b());
+        player_ptr->knows_daily_bounty = rd_s16b() != 0; // 現在bool型だが、かつてモンスター種族IDを保存していた仕様に合わせる
     }
 }
 
@@ -155,7 +155,7 @@ void rd_global_configurations(PlayerType *player_ptr)
     w_ptr->total_winner = rd_u16b();
     w_ptr->noscore = rd_u16b();
 
-    player_ptr->is_dead = rd_byte() != 0;
+    player_ptr->is_dead = rd_bool();
 
     player_ptr->feeling = rd_byte();
     rd_world_info(player_ptr);
@@ -173,13 +173,13 @@ void load_wilderness_info(PlayerType *player_ptr)
     if (h_older_than(0, 3, 7)) {
         player_ptr->wild_mode = false;
     } else {
-        player_ptr->wild_mode = rd_byte() != 0;
+        player_ptr->wild_mode = rd_bool();
     }
 
     if (h_older_than(0, 3, 7)) {
         player_ptr->ambush_flag = false;
     } else {
-        player_ptr->ambush_flag = rd_byte() != 0;
+        player_ptr->ambush_flag = rd_bool();
     }
 }
 

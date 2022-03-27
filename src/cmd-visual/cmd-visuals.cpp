@@ -126,7 +126,7 @@ void do_cmd_visuals(PlayerType *player_ptr)
             }
 
             auto_dump_printf(auto_dump_stream, _("\n# モンスターの[色/文字]の設定\n\n", "\n# Monster attr/char definitions\n\n"));
-            for (const auto &r_ref : r_info) {
+            for (const auto &[r_idx, r_ref] : r_info) {
                 if (r_ref.name.empty()) {
                     continue;
                 }
@@ -210,8 +210,9 @@ void do_cmd_visuals(PlayerType *player_ptr)
             break;
         }
         case '4': {
+            IDX num = 0;
             static concptr choice_msg = _("モンスターの[色/文字]を変更します", "Change monster attr/chars");
-            static MONRACE_IDX r = 0;
+            static MonsterRaceId r = r_info.begin()->second.idx;
             prt(format(_("コマンド: %s", "Command: %s"), choice_msg), 15, 0);
             while (true) {
                 auto *r_ptr = &r_info[r];
@@ -246,12 +247,13 @@ void do_cmd_visuals(PlayerType *player_ptr)
 
                 switch (c) {
                 case 'n': {
-                    IDX prev_r = r;
+                    auto prev_r = r;
                     do {
-                        if (!cmd_visuals_aux(i, &r, static_cast<IDX>(r_info.size()))) {
+                        if (!cmd_visuals_aux(i, &num, static_cast<IDX>(r_info.size()))) {
                             r = prev_r;
                             break;
                         }
+                        r = i2enum<MonsterRaceId>(num);
                     } while (r_info[r].name.empty());
                 }
 
@@ -433,7 +435,7 @@ void do_cmd_visuals(PlayerType *player_ptr)
             break;
         }
         case '7':
-            do_cmd_knowledge_monsters(player_ptr, &need_redraw, true, -1);
+            do_cmd_knowledge_monsters(player_ptr, &need_redraw, true);
             break;
         case '8':
             do_cmd_knowledge_objects(player_ptr, &need_redraw, true, -1);

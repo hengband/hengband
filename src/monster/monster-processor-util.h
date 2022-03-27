@@ -8,10 +8,13 @@
 
 #include "monster-race/race-ability-flags.h"
 #include "monster-race/race-behavior-flags.h"
+#include "monster-race/race-drop-flags.h"
 #include "monster-race/race-flags-resistance.h"
 #include "monster-race/race-kind-flags.h"
 #include "system/angband.h"
 #include "util/flag-group.h"
+
+enum class MonsterRaceId : int16_t;
 
 struct turn_flags {
     bool see_m;
@@ -41,6 +44,7 @@ struct old_race_flags {
     EnumClassFlagGroup<MonsterBehaviorType> old_r_behavior_flags;
     EnumClassFlagGroup<MonsterKindType> old_r_kind_flags;
     EnumClassFlagGroup<MonsterResistanceType> old_r_resistance_flags;
+    EnumClassFlagGroup<MonsterDropType> old_r_drop_flags;
 
     byte old_r_blows0;
     byte old_r_blows1;
@@ -63,5 +67,5 @@ coordinate_candidate init_coordinate_candidate(void);
 
 void store_enemy_approch_direction(int *mm, POSITION y, POSITION x);
 void store_moves_val(int *mm, int y, int x);
-void save_old_race_flags(MONRACE_IDX monster_race_idx, old_race_flags *old_race_flags_ptr);
+void save_old_race_flags(MonsterRaceId monster_race_idx, old_race_flags *old_race_flags_ptr);
 byte decide_monster_speed(monster_type *m_ptr);

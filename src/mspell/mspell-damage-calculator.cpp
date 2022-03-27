@@ -500,7 +500,7 @@ int monspell_damage(PlayerType *player_ptr, MonsterAbilityType ms_type, MONSTER_
  * @param TYPE  DAM_MAXで最大値を返し、DAM_MINで最小値を返す。DAM_ROLLはダイスを振って値を決定する。
  * @return 攻撃呪文のダメージを返す。攻撃呪文以外は-1を返す。
  */
-int monspell_race_damage(PlayerType *player_ptr, MonsterAbilityType ms_type, MONRACE_IDX r_idx, int TYPE)
+int monspell_race_damage(PlayerType *player_ptr, MonsterAbilityType ms_type, MonsterRaceId r_idx, int TYPE)
 {
     auto *r_ptr = &r_info[r_idx];
     DEPTH rlev = ((r_ptr->level >= 1) ? r_ptr->level : 1);

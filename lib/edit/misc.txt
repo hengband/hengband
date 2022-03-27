@@ -3,9 +3,6 @@
 # Maximum number of towns
 M:T:7
 
-# Maximum number of quests
-M:Q:100
-
 # Maximum x size of the wilderness
 M:WX:99
 

@@ -4,6 +4,7 @@
 #include "effect/effect-processor.h"
 #include "monster-floor/monster-summon.h"
 #include "monster-floor/place-monster-types.h"
+#include "monster-race/monster-race.h"
 #include "spell-kind/earthquake.h"
 #include "spell-kind/spells-sight.h"
 #include "spell-kind/spells-teleport.h"
@@ -54,7 +55,7 @@ void blood_curse_to_enemy(PlayerType *player_ptr, MONSTER_IDX m_idx)
         case 8:
             if (!count) {
                 msg_print(_("空間が歪んだ！", "Space warps about you!"));
-                if (m_ptr->r_idx) {
+                if (MonsterRace(m_ptr->r_idx).is_valid()) {
                     teleport_away(player_ptr, g_ptr->m_idx, damroll(10, 10), TELEPORT_PASSIVE);
                 }
                 if (one_in_(13)) {

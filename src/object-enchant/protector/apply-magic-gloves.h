@@ -1,15 +1,13 @@
 ﻿#pragma once
 
-#include "object-enchant/enchanter-base.h"
 #include "object-enchant/protector/abstract-protector-enchanter.h"
 #include "system/angband.h"
 
 class ObjectType;
 class PlayerType;
-class GlovesEnchanter : AbstractProtectorEnchanter {
+class GlovesEnchanter : public AbstractProtectorEnchanter {
 public:
     GlovesEnchanter(PlayerType *player_ptr, ObjectType *o_ptr, DEPTH level, int power);
-    virtual ~GlovesEnchanter() = default;
     void apply_magic() override;
 
 protected:

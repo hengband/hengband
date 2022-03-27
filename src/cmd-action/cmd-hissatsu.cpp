@@ -69,7 +69,6 @@ static int get_hissatsu_power(PlayerType *player_ptr, SPELL_IDX *sn)
     POSITION y = 1;
     POSITION x = 15;
     PLAYER_LEVEL plev = player_ptr->lev;
-    int ask = true;
     char choice;
     char out_val[160];
     SPELL_IDX sentaku[32];
@@ -118,6 +117,7 @@ static int get_hissatsu_power(PlayerType *player_ptr, SPELL_IDX *sn)
             break;
         }
 
+        auto should_redraw_cursor = true;
         if (use_menu && choice != ' ') {
             switch (choice) {
             case '0': {
@@ -186,13 +186,13 @@ static int get_hissatsu_power(PlayerType *player_ptr, SPELL_IDX *sn)
             case '\r':
             case '\n': {
                 i = menu_line - 1;
-                ask = false;
+                should_redraw_cursor = false;
                 break;
             }
             }
         }
         /* Request redraw */
-        if ((choice == ' ') || (choice == '*') || (choice == '?') || (use_menu && ask)) {
+        if ((choice == ' ') || (choice == '*') || (choice == '?') || (use_menu && should_redraw_cursor)) {
             /* Show the list */
             if (!redraw || use_menu) {
                 char psi_desc[80];
@@ -262,19 +262,8 @@ static int get_hissatsu_power(PlayerType *player_ptr, SPELL_IDX *sn)
 
         if (!use_menu) {
             if (isalpha(choice)) {
-                /* Note verify */
-                ask = (isupper(choice));
-
-                /* Lowercase */
-                if (ask) {
-                    choice = (char)tolower(choice);
-                }
-
-                /* Extract request */
-                i = (islower(choice) ? A2I(choice) : -1);
+                i = A2I(choice);
             } else {
-                ask = false; /* Can't uppercase digits */
-
                 i = choice - '0' + 26;
             }
         }
@@ -286,19 +275,6 @@ static int get_hissatsu_power(PlayerType *player_ptr, SPELL_IDX *sn)
         }
 
         j = sentaku[i];
-
-        /* Verify it */
-        if (ask) {
-            char tmp_val[160];
-
-            /* Prompt */
-            (void)strnfmt(tmp_val, 78, _("%sを使いますか？", "Use %s? "), exe_spell(player_ptr, REALM_HISSATSU, j, SpellProcessType::NAME));
-
-            /* Belay that order */
-            if (!get_check(tmp_val)) {
-                continue;
-            }
-        }
 
         /* Stop the loop */
         flag = true;

@@ -11,6 +11,7 @@
 #include "monster-floor/monster-generator.h"
 #include "monster-floor/place-monster-types.h"
 #include "monster-race/monster-race-hook.h"
+#include "monster-race/monster-race.h"
 #include "monster/monster-list.h"
 #include "monster/monster-util.h"
 #include "object-enchant/item-apply-magic.h"
@@ -94,11 +95,11 @@ bool build_type15(PlayerType *player_ptr, dun_data_type *dd_ptr)
 
         /* Place fixed lite berathers */
         for (dir1 = 4; dir1 < 8; dir1++) {
-            MONRACE_IDX r_idx = get_mon_num(player_ptr, 0, floor_ptr->dun_level, 0);
+            MonsterRaceId r_idx = get_mon_num(player_ptr, 0, floor_ptr->dun_level, 0);
 
             y = yval + 2 * ddy_ddd[dir1];
             x = xval + 2 * ddx_ddd[dir1];
-            if (r_idx) {
+            if (MonsterRace(r_idx).is_valid()) {
                 place_monster_aux(player_ptr, 0, y, x, r_idx, PM_ALLOW_SLEEP);
             }
 
@@ -138,7 +139,7 @@ bool build_type15(PlayerType *player_ptr, dun_data_type *dd_ptr)
 
     case 2: /* 1 lite breather + random object */
     {
-        MONRACE_IDX r_idx;
+        MonsterRaceId r_idx;
         DIRECTION dir1;
 
         /* Pillars */
@@ -160,7 +161,7 @@ bool build_type15(PlayerType *player_ptr, dun_data_type *dd_ptr)
         get_mon_num_prep(player_ptr, vault_aux_lite, nullptr);
 
         r_idx = get_mon_num(player_ptr, 0, floor_ptr->dun_level, 0);
-        if (r_idx) {
+        if (MonsterRace(r_idx).is_valid()) {
             place_monster_aux(player_ptr, 0, yval, xval, r_idx, 0L);
         }
 
@@ -220,11 +221,11 @@ bool build_type15(PlayerType *player_ptr, dun_data_type *dd_ptr)
 
         /* Place shard berathers */
         for (dir1 = 4; dir1 < 8; dir1++) {
-            MONRACE_IDX r_idx = get_mon_num(player_ptr, 0, floor_ptr->dun_level, 0);
+            MonsterRaceId r_idx = get_mon_num(player_ptr, 0, floor_ptr->dun_level, 0);
 
             y = yval + ddy_ddd[dir1];
             x = xval + ddx_ddd[dir1];
-            if (r_idx) {
+            if (MonsterRace(r_idx).is_valid()) {
                 place_monster_aux(player_ptr, 0, y, x, r_idx, 0L);
             }
         }

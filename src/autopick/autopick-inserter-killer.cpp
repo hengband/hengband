@@ -97,7 +97,7 @@ bool insert_macro_line(text_body_type *tb)
     flush();
 
     char tmp[1024];
-    ascii_to_text(tmp, buf);
+    ascii_to_text(tmp, buf, sizeof(tmp));
     if (!tmp[0]) {
         return false;
     }
@@ -111,7 +111,7 @@ bool insert_macro_line(text_body_type *tb)
     if (i == -1) {
         tmp[0] = '\0';
     } else {
-        ascii_to_text(tmp, macro__act[i]);
+        ascii_to_text(tmp, macro__act[i], sizeof(tmp));
     }
 
     insert_return_code(tb);
@@ -143,7 +143,7 @@ bool insert_keymap_line(text_body_type *tb)
 
     flush();
     char tmp[1024];
-    ascii_to_text(tmp, buf);
+    ascii_to_text(tmp, buf, sizeof(tmp));
     if (!tmp[0]) {
         return false;
     }
@@ -155,7 +155,7 @@ bool insert_keymap_line(text_body_type *tb)
 
     concptr act = keymap_act[mode][(byte)(buf[0])];
     if (act) {
-        ascii_to_text(tmp, act);
+        ascii_to_text(tmp, act, sizeof(tmp));
     }
 
     insert_return_code(tb);

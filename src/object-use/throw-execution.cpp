@@ -227,7 +227,8 @@ void ObjectThrowEntity::display_figurine_throw()
     }
 
     this->corruption_possibility = 100;
-    if (!(summon_named_creature(this->player_ptr, 0, this->y, this->x, this->q_ptr->pval, !(this->q_ptr->is_cursed()) ? PM_FORCE_PET : PM_NONE))) {
+    auto figure_r_idx = i2enum<MonsterRaceId>(this->q_ptr->pval);
+    if (!(summon_named_creature(this->player_ptr, 0, this->y, this->x, figure_r_idx, !(this->q_ptr->is_cursed()) ? PM_FORCE_PET : PM_NONE))) {
         msg_print(_("人形は捻じ曲がり砕け散ってしまった！", "The Figurine writhes and then shatters."));
         return;
     }

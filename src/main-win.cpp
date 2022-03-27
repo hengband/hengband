@@ -2400,7 +2400,7 @@ LRESULT PASCAL angband_window_procedure(HWND hWnd, UINT uMsg, WPARAM wParam, LPA
         p_ptr->panic_save = 1;
         signals_ignore_tstp();
         p_ptr->died_from = _("(緊急セーブ)", "(panic save)");
-        (void)save_player(p_ptr, SAVE_TYPE_CLOSE_GAME);
+        (void)save_player(p_ptr, SaveType::CLOSE_GAME);
         quit(nullptr);
         return 0;
     }

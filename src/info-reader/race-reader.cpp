@@ -7,6 +7,7 @@
 #include "player-ability/player-ability-types.h"
 #include "system/monster-race-definition.h"
 #include "term/gameterm.h"
+#include "util/enum-converter.h"
 #include "util/string-processor.h"
 #include "view/display-messages.h"
 
@@ -39,10 +40,6 @@ static bool grab_one_basic_flag(monster_race *r_ptr, std::string_view what)
         return true;
     }
 
-    if (info_grab_one_flag(r_ptr->flags9, r_info_flags9, what)) {
-        return true;
-    }
-
     if (EnumClassFlagGroup<MonsterResistanceType>::grab_one_flag(r_ptr->resistance_flags, r_info_flagsr, what)) {
         return true;
     }
@@ -60,6 +57,14 @@ static bool grab_one_basic_flag(monster_race *r_ptr, std::string_view what)
     }
 
     if (EnumClassFlagGroup<MonsterKindType>::grab_one_flag(r_ptr->kind_flags, r_info_kind_flags, what)) {
+        return true;
+    }
+
+    if (EnumClassFlagGroup<MonsterDropType>::grab_one_flag(r_ptr->drop_flags, r_info_drop_flags, what)) {
+        return true;
+    }
+
+    if (EnumClassFlagGroup<MonsterWildernessType>::grab_one_flag(r_ptr->wilderness_flags, r_info_wilderness_flags, what)) {
         return true;
     }
 
@@ -106,13 +111,10 @@ errr parse_r_info(std::string_view buf, angband_header *)
         if (i < error_idx) {
             return PARSE_ERROR_NON_SEQUENTIAL_RECORDS;
         }
-        if (i >= static_cast<int>(r_info.size())) {
-            r_info.resize(i + 1);
-        }
 
         error_idx = i;
-        r_ptr = &r_info[i];
-        r_ptr->idx = static_cast<MONRACE_IDX>(i);
+        r_ptr = &(r_info.emplace_hint(r_info.end(), i2enum<MonsterRaceId>(i), monster_race{})->second);
+        r_ptr->idx = i2enum<MonsterRaceId>(i);
 #ifdef JP
         r_ptr->name = tokens[2];
 #endif
@@ -194,17 +196,6 @@ errr parse_r_info(std::string_view buf, angband_header *)
         info_set_value(r_ptr->next_r_idx, tokens[6]);
     } else if (tokens[0] == "R") {
         // R:reinforcer_idx:number_dice
-        size_t i = 0;
-        for (; i < A_MAX; i++) {
-            if (r_ptr->reinforce_id[i] == 0) {
-                break;
-            }
-        }
-
-        if (i >= 6) {
-            return PARSE_ERROR_GENERIC;
-        }
-
         if (tokens.size() < 3) {
             return PARSE_ERROR_TOO_FEW_ARGUMENTS;
         }
@@ -213,9 +204,13 @@ errr parse_r_info(std::string_view buf, angband_header *)
         }
 
         const auto &dice = str_split(tokens[2], 'd', false, 2);
-        info_set_value(r_ptr->reinforce_id[i], tokens[1]);
-        info_set_value(r_ptr->reinforce_dd[i], dice[0]);
-        info_set_value(r_ptr->reinforce_ds[i], dice[1]);
+        MonsterRaceId r_idx;
+        DICE_NUMBER dd;
+        DICE_SID ds;
+        info_set_value(r_idx, tokens[1]);
+        info_set_value(dd, dice[0]);
+        info_set_value(ds, dice[1]);
+        r_ptr->reinforces.emplace_back(r_idx, dd, ds);
     } else if (tokens[0] == "B") {
         // B:blow_type:blow_effect:dice
         size_t i = 0;
@@ -308,24 +303,16 @@ errr parse_r_info(std::string_view buf, angband_header *)
         }
 
     } else if (tokens[0] == "A") {
-        // A:artifact_idx:rarity:percent
-        size_t i = 0;
-        for (; i < 4; i++) {
-            if (!r_ptr->artifact_id[i]) {
-                break;
-            }
-        }
-        if (i >= 4) {
-            return PARSE_ERROR_GENERIC;
-        }
-
-        if (tokens.size() < 4) {
+        // A:artifact_idx:chance
+        if (tokens.size() < 3) {
             return PARSE_ERROR_TOO_FEW_ARGUMENTS;
         }
 
-        info_set_value(r_ptr->artifact_id[i], tokens[1]);
-        info_set_value(r_ptr->artifact_rarity[i], tokens[2]);
-        info_set_value(r_ptr->artifact_percent[i], tokens[3]);
+        ARTIFACT_IDX a_idx;
+        PERCENTAGE chance;
+        info_set_value(a_idx, tokens[1]);
+        info_set_value(chance, tokens[2]);
+        r_ptr->drop_artifacts.emplace_back(a_idx, chance);
     } else if (tokens[0] == "V") {
         // V:arena_odds
         if (tokens.size() < 2) {

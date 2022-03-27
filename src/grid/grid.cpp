@@ -52,6 +52,7 @@
 #include "system/monster-type-definition.h"
 #include "system/object-type-definition.h"
 #include "system/player-type-definition.h"
+#include "term/gameterm.h"
 #include "term/term-color-types.h"
 #include "util/bit-flags-calculator.h"
 #include "util/enum-converter.h"
@@ -276,6 +277,12 @@ void print_rel(PlayerType *player_ptr, char c, TERM_COLOR a, POSITION y, POSITIO
         /* Draw the char using the attr */
         term_queue_bigchar(panel_col_of(x), y - panel_row_prt, a, c, 0, 0);
     }
+}
+
+void print_bolt_pict(PlayerType *player_ptr, POSITION y, POSITION x, POSITION ny, POSITION nx, AttributeType typ)
+{
+    const auto [a, c] = bolt_pict(y, x, ny, nx, typ);
+    print_rel(player_ptr, c, a, ny, nx);
 }
 
 /*!
@@ -829,32 +836,6 @@ void cave_alter_feat(PlayerType *player_ptr, POSITION y, POSITION x, FloorFeatur
                 (PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL | PROJECT_HIDE | PROJECT_JUMP | PROJECT_NO_HANGEKI));
         }
     }
-}
-
-/* Remove a mirror */
-void remove_mirror(PlayerType *player_ptr, POSITION y, POSITION x)
-{
-    auto *g_ptr = &player_ptr->current_floor_ptr->grid_array[y][x];
-
-    /* Remove the mirror */
-    g_ptr->info &= ~(CAVE_OBJECT);
-    g_ptr->mimic = 0;
-
-    if (d_info[player_ptr->dungeon_idx].flags.has(DungeonFeatureType::DARKNESS)) {
-        g_ptr->info &= ~(CAVE_GLOW);
-        if (!view_torch_grids) {
-            g_ptr->info &= ~(CAVE_MARK);
-        }
-        if (g_ptr->m_idx) {
-            update_monster(player_ptr, g_ptr->m_idx, false);
-        }
-
-        update_local_illumination(player_ptr, y, x);
-    }
-
-    note_spot(player_ptr, y, x);
-
-    lite_spot(player_ptr, y, x);
 }
 
 /*!

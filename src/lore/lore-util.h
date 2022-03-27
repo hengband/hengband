@@ -4,6 +4,7 @@
 #include "monster-race/monster-aura-types.h"
 #include "monster-race/race-ability-flags.h"
 #include "monster-race/race-behavior-flags.h"
+#include "monster-race/race-drop-flags.h"
 #include "monster-race/race-flags-resistance.h"
 #include "monster-race/race-kind-flags.h"
 #include "monster-race/race-visual-flags.h"
@@ -11,6 +12,8 @@
 #include "util/flag-group.h"
 #include <string>
 #include <unordered_map>
+
+enum class MonsterRaceId : int16_t;
 
 enum monster_sex {
     MSEX_NONE = 0,
@@ -39,6 +42,7 @@ struct lore_type {
     EnumClassFlagGroup<MonsterVisualType> visual_flags;
     EnumClassFlagGroup<MonsterKindType> kind_flags;
     EnumClassFlagGroup<MonsterResistanceType> resistance_flags;
+    EnumClassFlagGroup<MonsterDropType> drop_flags;
 
     BIT_FLAGS flags7;
     bool reinforce;
@@ -46,7 +50,7 @@ struct lore_type {
     BIT_FLAGS mode;
     monster_sex msex;
     bool old;
-    MONRACE_IDX r_idx;
+    MonsterRaceId r_idx;
     int vn;
     byte color[96];
     concptr vp[96];
@@ -75,7 +79,7 @@ enum monster_lore_mode {
 typedef void (*hook_c_roff_pf)(TERM_COLOR attr, concptr str);
 extern hook_c_roff_pf hook_c_roff;
 
-lore_type *initialize_lore_type(lore_type *lore_ptr, MONRACE_IDX r_idx, monster_lore_mode mode);
+lore_type *initialize_lore_type(lore_type *lore_ptr, MonsterRaceId r_idx, monster_lore_mode mode);
 void hooked_roff(concptr str);
 
 enum WHO_WORD_TYPE { WHO = 0,

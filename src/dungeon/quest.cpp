@@ -37,7 +37,6 @@
 #include "world/world.h"
 
 std::map<QuestId, quest_type> quest_map; /*!< Quest info */
-int16_t max_q_idx; /*!< Maximum number of quests */
 char quest_text[10][80]; /*!< Quest text */
 int quest_text_line; /*!< Current line of the quest text */
 QuestId leaving_quest = QuestId::NONE;
@@ -70,7 +69,7 @@ bool quest_type::is_fixed(QuestId quest_idx)
 void determine_random_questor(PlayerType *player_ptr, quest_type *q_ptr)
 {
     get_mon_num_prep(player_ptr, mon_hook_quest, nullptr);
-    MONRACE_IDX r_idx;
+    MonsterRaceId r_idx;
     while (true) {
         /*
          * Random monster 5 - 10 levels out of depth
@@ -98,7 +97,7 @@ void determine_random_questor(PlayerType *player_ptr, quest_type *q_ptr)
         if (r_ptr->flags7 & RF7_AQUATIC) {
             continue;
         }
-        if (r_ptr->flags8 & RF8_WILD_ONLY) {
+        if (r_ptr->wilderness_flags.has(MonsterWildernessType::WILD_ONLY)) {
             continue;
         }
         if (no_questor_or_bounty_uniques(r_idx)) {

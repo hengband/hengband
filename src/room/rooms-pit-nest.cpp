@@ -29,6 +29,7 @@
 #include "util/sort.h"
 #include "view/display-messages.h"
 #include "wizard/wizard-messages.h"
+#include <optional>
 #include <vector>
 
 /*!
@@ -128,8 +129,8 @@ static bool ang_sort_comp_nest_mon_info(PlayerType *player_ptr, vptr u, vptr v, 
     (void)v;
 
     nest_mon_info_type *nest_mon_info = (nest_mon_info_type *)u;
-    MONSTER_IDX w1 = nest_mon_info[a].r_idx;
-    MONSTER_IDX w2 = nest_mon_info[b].r_idx;
+    auto w1 = nest_mon_info[a].r_idx;
+    auto w2 = nest_mon_info[b].r_idx;
     monster_race *r1_ptr = &r_info[w1];
     monster_race *r2_ptr = &r_info[w2];
     int z1 = nest_mon_info[a].used;
@@ -255,28 +256,34 @@ bool build_type5(PlayerType *player_ptr, dun_data_type *dd_ptr)
 
     /* Pick some monster types */
     for (i = 0; i < NUM_NEST_MON_TYPE; i++) {
-        MONRACE_IDX r_idx = 0;
-        int attempts = 100;
-        monster_race *r_ptr = nullptr;
+        auto select_r_idx = [player_ptr, floor_ptr, &align]() -> std::optional<MonsterRaceId> {
+            for (auto attempts = 100; attempts > 0; attempts--) {
+                /* Get a (hard) monster type */
+                auto r_idx = get_mon_num(player_ptr, 0, floor_ptr->dun_level + 11, 0);
+                auto *r_ptr = &r_info[r_idx];
 
-        while (attempts--) {
-            /* Get a (hard) monster type */
-            r_idx = get_mon_num(player_ptr, 0, floor_ptr->dun_level + 11, 0);
-            r_ptr = &r_info[r_idx];
+                /* Decline incorrect alignment */
+                if (monster_has_hostile_align(player_ptr, &align, 0, 0, r_ptr)) {
+                    continue;
+                }
 
-            /* Decline incorrect alignment */
-            if (monster_has_hostile_align(player_ptr, &align, 0, 0, r_ptr)) {
-                continue;
+                /* Accept this monster */
+                if (MonsterRace(r_idx).is_valid()) {
+                    return r_idx;
+                } else {
+                    return std::nullopt;
+                }
             }
 
-            /* Accept this monster */
-            break;
-        }
+            return std::nullopt;
+        };
 
-        /* Notice failure */
-        if (!r_idx || !attempts) {
+        const auto r_idx = select_r_idx();
+        if (!r_idx.has_value()) {
             return false;
         }
+
+        const auto *r_ptr = &r_info[r_idx.value()];
 
         /* Note the alignment */
         if (r_ptr->kind_flags.has(MonsterKindType::EVIL)) {
@@ -286,7 +293,7 @@ bool build_type5(PlayerType *player_ptr, dun_data_type *dd_ptr)
             align.sub_align |= SUB_ALIGN_GOOD;
         }
 
-        nest_mon_info[i].r_idx = (int16_t)r_idx;
+        nest_mon_info[i].r_idx = r_idx.value();
         nest_mon_info[i].used = false;
     }
 
@@ -372,7 +379,7 @@ bool build_type5(PlayerType *player_ptr, dun_data_type *dd_ptr)
     /* Place some monsters */
     for (y = yval - 2; y <= yval + 2; y++) {
         for (x = xval - 9; x <= xval + 9; x++) {
-            MONRACE_IDX r_idx;
+            MonsterRaceId r_idx;
 
             i = randint0(NUM_NEST_MON_TYPE);
             r_idx = nest_mon_info[i].r_idx;
@@ -465,7 +472,7 @@ bool build_type6(PlayerType *player_ptr, dun_data_type *dd_ptr)
     POSITION y, x, y1, x1, y2, x2, xval, yval;
     int i, j;
 
-    MONRACE_IDX what[16];
+    MonsterRaceId what[16];
 
     monster_type align;
 
@@ -492,7 +499,7 @@ bool build_type6(PlayerType *player_ptr, dun_data_type *dd_ptr)
 
     /* Pick some monster types */
     for (i = 0; i < 16; i++) {
-        MONRACE_IDX r_idx = 0;
+        auto r_idx = MonsterRace::empty_id();
         int attempts = 100;
         monster_race *r_ptr = nullptr;
 
@@ -511,7 +518,7 @@ bool build_type6(PlayerType *player_ptr, dun_data_type *dd_ptr)
         }
 
         /* Notice failure */
-        if (!r_idx || !attempts) {
+        if (!MonsterRace(r_idx).is_valid() || !attempts) {
             return false;
         }
 
@@ -613,7 +620,7 @@ bool build_type6(PlayerType *player_ptr, dun_data_type *dd_ptr)
 
             /* Bubble */
             if (p1 > p2) {
-                MONRACE_IDX tmp = what[i1];
+                MonsterRaceId tmp = what[i1];
                 what[i1] = what[i2];
                 what[i2] = tmp;
             }
@@ -707,7 +714,7 @@ const int place_table_trapped_pit[TRAPPED_PIT_MONSTER_PLACE_MAX][3] = {
  * @detai;
  * 穴を掘るモンスター、壁を抜けるモンスターは却下
  */
-static bool vault_aux_trapped_pit(PlayerType *player_ptr, MONRACE_IDX r_idx)
+static bool vault_aux_trapped_pit(PlayerType *player_ptr, MonsterRaceId r_idx)
 {
     /* Unused */
     (void)player_ptr;
@@ -775,7 +782,7 @@ bool build_type13(PlayerType *player_ptr, dun_data_type *dd_ptr)
     POSITION y, x, y1, x1, y2, x2, xval, yval;
     int i, j;
 
-    MONRACE_IDX what[16];
+    MonsterRaceId what[16];
 
     monster_type align;
 
@@ -807,7 +814,7 @@ bool build_type13(PlayerType *player_ptr, dun_data_type *dd_ptr)
 
     /* Pick some monster types */
     for (i = 0; i < 16; i++) {
-        MONRACE_IDX r_idx = 0;
+        auto r_idx = MonsterRace::empty_id();
         int attempts = 100;
         monster_race *r_ptr = nullptr;
 
@@ -826,7 +833,7 @@ bool build_type13(PlayerType *player_ptr, dun_data_type *dd_ptr)
         }
 
         /* Notice failure */
-        if (!r_idx || !attempts) {
+        if (!MonsterRace(r_idx).is_valid() || !attempts) {
             return false;
         }
 
@@ -944,7 +951,7 @@ bool build_type13(PlayerType *player_ptr, dun_data_type *dd_ptr)
 
             /* Bubble */
             if (p1 > p2) {
-                MONRACE_IDX tmp = what[i1];
+                MonsterRaceId tmp = what[i1];
                 what[i1] = what[i2];
                 what[i2] = tmp;
             }
@@ -960,7 +967,7 @@ bool build_type13(PlayerType *player_ptr, dun_data_type *dd_ptr)
         what[i] = what[i * 2];
 
         if (cheat_hear) {
-            msg_print(r_info[what[i]].name.c_str());
+            msg_print(r_info[what[i]].name);
         }
     }
 

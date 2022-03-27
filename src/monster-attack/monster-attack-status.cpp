@@ -28,7 +28,7 @@ void process_blind_attack(PlayerType *player_ptr, MonsterAttackPlayer *monap_ptr
         return;
     }
 
-    auto is_dio = monap_ptr->m_ptr->r_idx == MON_DIO;
+    auto is_dio = monap_ptr->m_ptr->r_idx == MonsterRaceId::DIO;
     auto dio_msg = _("どうだッ！この血の目潰しはッ！", "How is it! This blood-blinding!");
     if (is_dio && PlayerRace(player_ptr).equals(PlayerRaceType::SKELETON)) {
         msg_print(dio_msg);
@@ -66,7 +66,7 @@ void process_terrify_attack(PlayerType *player_ptr, MonsterAttackPlayer *monap_p
         return;
     }
 
-    if (BadStatusSetter(player_ptr).mod_afraidness(3 + randint1(monap_ptr->rlev))) {
+    if (BadStatusSetter(player_ptr).mod_fear(3 + randint1(monap_ptr->rlev))) {
         monap_ptr->obvious = true;
     }
 }

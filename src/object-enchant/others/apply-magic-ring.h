@@ -5,7 +5,7 @@
 
 class ObjectType;
 class PlayerType;
-class RingEnchanter : EnchanterBase {
+class RingEnchanter : public EnchanterBase {
 public:
     RingEnchanter(PlayerType *player_ptr, ObjectType *o_ptr, DEPTH level, int power);
     virtual ~RingEnchanter() = default;

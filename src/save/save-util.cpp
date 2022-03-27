@@ -21,6 +21,15 @@ static void sf_put(byte v)
 }
 
 /*!
+ * @brief bool値をファイルに書き込む(wr_byte()の糖衣)
+ * @param v 書き込むbool値
+ */
+void wr_bool(bool v)
+{
+    wr_byte(v ? 1 : 0);
+}
+
+/*!
  * @brief 1バイトをファイルに書き込む(sf_put()の糖衣)
  * @param v 書き込むバイト
  */

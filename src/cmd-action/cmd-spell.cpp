@@ -54,7 +54,6 @@
 #include "spell/spells-describer.h"
 #include "spell/spells-execution.h"
 #include "spell/spells-summon.h"
-#include "spell/technic-info-table.h"
 #include "status/action-setter.h"
 #include "status/bad-status-setter.h"
 #include "status/base-status.h"
@@ -307,12 +306,9 @@ static int get_spell(PlayerType *player_ptr, SPELL_IDX *sn, concptr prompt, OBJE
     int i;
     SPELL_IDX spell = -1;
     int num = 0;
-    int ask = true;
-    MANA_POINT need_mana;
     SPELL_IDX spells[64];
     bool flag, redraw, okay;
     char choice;
-    const magic_type *s_ptr;
     char out_val[160];
     concptr p;
     COMMAND_CODE code;
@@ -398,6 +394,7 @@ static int get_spell(PlayerType *player_ptr, SPELL_IDX *sn, concptr prompt, OBJE
             break;
         }
 
+        auto should_redraw_cursor = true;
         if (use_menu && choice != ' ') {
             switch (choice) {
             case '0': {
@@ -424,7 +421,7 @@ static int get_spell(PlayerType *player_ptr, SPELL_IDX *sn, concptr prompt, OBJE
             case '\r':
             case '\n': {
                 i = menu_line - 1;
-                ask = false;
+                should_redraw_cursor = false;
                 break;
             }
             }
@@ -433,7 +430,7 @@ static int get_spell(PlayerType *player_ptr, SPELL_IDX *sn, concptr prompt, OBJE
             }
             /* Display a list of spells */
             print_spells(player_ptr, menu_line, spells, num, 1, 15, use_realm);
-            if (ask) {
+            if (should_redraw_cursor) {
                 continue;
             }
         } else {
@@ -463,16 +460,7 @@ static int get_spell(PlayerType *player_ptr, SPELL_IDX *sn, concptr prompt, OBJE
                 continue;
             }
 
-            /* Note verify */
-            ask = (isupper(choice));
-
-            /* Lowercase */
-            if (ask) {
-                choice = (char)tolower(choice);
-            }
-
-            /* Extract request */
-            i = (islower(choice) ? A2I(choice) : -1);
+            i = A2I(choice);
         }
 
         /* Totally Illegal */
@@ -494,41 +482,6 @@ static int get_spell(PlayerType *player_ptr, SPELL_IDX *sn, concptr prompt, OBJE
 #endif
 
             continue;
-        }
-
-        /* Verify it */
-        if (ask) {
-            char tmp_val[160];
-
-            /* Access the spell */
-            if (!is_magic(use_realm)) {
-                s_ptr = &technic_info[use_realm - MIN_TECHNIC][spell];
-            } else {
-                s_ptr = &mp_ptr->info[use_realm - 1][spell];
-            }
-
-            /* Extract mana consumption rate */
-            if (use_realm == REALM_HISSATSU) {
-                need_mana = s_ptr->smana;
-            } else {
-                need_mana = mod_need_mana(player_ptr, s_ptr->smana, spell, use_realm);
-            }
-
-            /* Prompt */
-#ifdef JP
-            jverb(prompt, jverb_buf, JVERB_AND);
-            /* 英日切り替え機能に対応 */
-            (void)strnfmt(tmp_val, 78, "%s(MP%d, 失敗率%d%%)を%sますか? ", exe_spell(player_ptr, use_realm, spell, SpellProcessType::NAME), need_mana,
-                spell_chance(player_ptr, spell, use_realm), jverb_buf);
-#else
-            (void)strnfmt(tmp_val, 78, "%^s %s (%d mana, %d%% fail)? ", prompt, exe_spell(player_ptr, use_realm, spell, SpellProcessType::NAME), need_mana,
-                spell_chance(player_ptr, spell, use_realm));
-#endif
-
-            /* Belay that order */
-            if (!get_check(tmp_val)) {
-                continue;
-            }
         }
 
         /* Stop the loop */

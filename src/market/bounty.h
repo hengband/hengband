@@ -1,5 +1,8 @@
 ﻿#pragma once
 
+#include "system/angband.h"
+
+enum class MonsterRaceId : int16_t;
 class PlayerType;
 bool exchange_cash(PlayerType *player_ptr);
 void today_target(PlayerType *player_ptr);

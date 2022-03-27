@@ -43,7 +43,7 @@ struct player_attack_type {
     MONSTER_IDX m_idx{}; //!< モンスターID
     monster_type *m_ptr{}; //!< モンスター情報(参照ポインタ)
     GAME_TEXT m_name[MAX_NLEN]{}; //!< モンスター名
-    MONRACE_IDX r_idx{}; //!< モンスター種族ID
+    MonsterRaceId r_idx{}; //!< モンスター種族ID
     monster_race *r_ptr{}; //!< モンスター種族情報(参照ポインタ)
     bool backstab{}; //!< 眠っている敵を不意打ちしたか
     bool surprise_attack{}; //!< 気づいていない敵に闇討ちしたか(忍者)

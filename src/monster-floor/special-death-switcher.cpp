@@ -28,8 +28,8 @@
 #include "monster/monster-describer.h"
 #include "monster/monster-description-types.h"
 #include "monster/monster-info.h"
-#include "object-enchant/apply-magic.h"
 #include "object-enchant/item-apply-magic.h"
+#include "object-enchant/item-magic-applier.h"
 #include "object/object-kind-hook.h"
 #include "spell/summon-types.h"
 #include "sv-definition/sv-other-types.h"
@@ -128,7 +128,7 @@ static void on_dead_bloodletter(PlayerType *player_ptr, monster_death_type *md_p
     ObjectType forge;
     auto *q_ptr = &forge;
     q_ptr->prep(lookup_kind(ItemKindType::SWORD, SV_BLADE_OF_CHAOS));
-    apply_magic_to_object(player_ptr, q_ptr, player_ptr->current_floor_ptr->object_level, AM_NO_FIXED_ART | md_ptr->mo_mode);
+    ItemMagicApplier(player_ptr, q_ptr, player_ptr->current_floor_ptr->object_level, AM_NO_FIXED_ART | md_ptr->mo_mode).execute();
     (void)drop_near(player_ptr, q_ptr, -1, md_ptr->md_y, md_ptr->md_x);
 }
 
@@ -221,12 +221,12 @@ static void on_dead_serpent(PlayerType *player_ptr, monster_death_type *md_ptr)
     auto *q_ptr = &forge;
     q_ptr->prep(lookup_kind(ItemKindType::HAFTED, SV_GROND));
     q_ptr->fixed_artifact_idx = ART_GROND;
-    apply_magic_to_object(player_ptr, q_ptr, -1, AM_GOOD | AM_GREAT);
+    ItemMagicApplier(player_ptr, q_ptr, -1, AM_GOOD | AM_GREAT).execute();
     (void)drop_near(player_ptr, q_ptr, -1, md_ptr->md_y, md_ptr->md_x);
     q_ptr = &forge;
     q_ptr->prep(lookup_kind(ItemKindType::CROWN, SV_CHAOS));
     q_ptr->fixed_artifact_idx = ART_CHAOS;
-    apply_magic_to_object(player_ptr, q_ptr, -1, AM_GOOD | AM_GREAT);
+    ItemMagicApplier(player_ptr, q_ptr, -1, AM_GOOD | AM_GREAT).execute();
     (void)drop_near(player_ptr, q_ptr, -1, md_ptr->md_y, md_ptr->md_x);
 }
 
@@ -245,9 +245,9 @@ static void on_dead_death_sword(PlayerType *player_ptr, monster_death_type *md_p
 static void on_dead_can_angel(PlayerType *player_ptr, monster_death_type *md_ptr)
 {
     bool is_drop_can = md_ptr->drop_chosen_item;
-    bool is_silver = md_ptr->m_ptr->r_idx == MON_A_SILVER;
+    bool is_silver = md_ptr->m_ptr->r_idx == MonsterRaceId::A_SILVER;
     is_silver &= md_ptr->r_ptr->r_akills % 5 == 0;
-    is_drop_can &= (md_ptr->m_ptr->r_idx == MON_A_GOLD) || is_silver;
+    is_drop_can &= (md_ptr->m_ptr->r_idx == MonsterRaceId::A_GOLD) || is_silver;
     if (!is_drop_can) {
         return;
     }
@@ -255,7 +255,7 @@ static void on_dead_can_angel(PlayerType *player_ptr, monster_death_type *md_ptr
     ObjectType forge;
     auto *q_ptr = &forge;
     q_ptr->prep(lookup_kind(ItemKindType::CHEST, SV_CHEST_KANDUME));
-    apply_magic_to_object(player_ptr, q_ptr, player_ptr->current_floor_ptr->object_level, AM_NO_FIXED_ART);
+    ItemMagicApplier(player_ptr, q_ptr, player_ptr->current_floor_ptr->object_level, AM_NO_FIXED_ART).execute();
     (void)drop_near(player_ptr, q_ptr, -1, md_ptr->md_y, md_ptr->md_x);
 }
 
@@ -283,7 +283,7 @@ static void on_dead_aqua_illusion(PlayerType *player_ptr, monster_death_type *md
         POSITION wx = md_ptr->md_x;
         bool pet = is_pet(md_ptr->m_ptr);
         BIT_FLAGS mode = dead_mode(md_ptr);
-        MONSTER_IDX smaller_bubble = md_ptr->m_ptr->r_idx - 1;
+        auto smaller_bubble = md_ptr->m_ptr->r_idx - 1;
         if (summon_named_creature(player_ptr, (pet ? -1 : md_ptr->m_idx), wy, wx, smaller_bubble, mode) && player_can_see_bold(player_ptr, wy, wx)) {
             notice = true;
         }
@@ -341,7 +341,7 @@ static void on_dead_dragon_centipede(PlayerType *player_ptr, monster_death_type 
         bool pet = is_pet(md_ptr->m_ptr);
         BIT_FLAGS mode = dead_mode(md_ptr);
 
-        MONSTER_IDX smaller_centipede = md_ptr->m_ptr->r_idx - 1;
+        auto smaller_centipede = md_ptr->m_ptr->r_idx - 1;
         if (summon_named_creature(player_ptr, (pet ? -1 : md_ptr->m_idx), wy, wx, smaller_centipede, mode) && player_can_see_bold(player_ptr, wy, wx)) {
             notice = true;
         }
@@ -488,25 +488,23 @@ static void on_dead_chest_mimic(PlayerType *player_ptr, monster_death_type *md_p
     }
 
     bool notice = false;
-    monster_race_type mimic_inside;
-    int num_summons;
+    auto mimic_inside = MonsterRace::empty_id();
+    auto num_summons = 0;
     auto r_idx = md_ptr->m_ptr->r_idx;
     switch (r_idx) {
-    case MON_CHEST_MIMIC_03:
-        mimic_inside = MON_CHEST_MIMIC_02;
+    case MonsterRaceId::CHEST_MIMIC_03:
+        mimic_inside = MonsterRaceId::CHEST_MIMIC_02;
         num_summons = 1;
         break;
-    case MON_CHEST_MIMIC_04:
-        mimic_inside = MON_CHEST_MIMIC_03;
+    case MonsterRaceId::CHEST_MIMIC_04:
+        mimic_inside = MonsterRaceId::CHEST_MIMIC_03;
         num_summons = 1;
         break;
-    case MON_CHEST_MIMIC_11:
-        mimic_inside = MON_CHEST_MIMIC_04;
+    case MonsterRaceId::CHEST_MIMIC_11:
+        mimic_inside = MonsterRaceId::CHEST_MIMIC_04;
         num_summons = one_in_(2) ? 3 : 2;
         break;
     default:
-        mimic_inside = (monster_race_type)-1;
-        num_summons = 0;
         return;
     }
 
@@ -515,7 +513,7 @@ static void on_dead_chest_mimic(PlayerType *player_ptr, monster_death_type *md_p
         auto wx = md_ptr->md_x;
         auto pet = is_pet(md_ptr->m_ptr);
         BIT_FLAGS mode = dead_mode(md_ptr);
-        if (summon_named_creature(player_ptr, (pet ? -1 : md_ptr->m_idx), wy, wx, (MONSTER_IDX)mimic_inside, (BIT_FLAGS)mode) && player_can_see_bold(player_ptr, wy, wx)) {
+        if (summon_named_creature(player_ptr, (pet ? -1 : md_ptr->m_idx), wy, wx, mimic_inside, (BIT_FLAGS)mode) && player_can_see_bold(player_ptr, wy, wx)) {
             notice = true;
         }
     }
@@ -562,7 +560,7 @@ static void on_dead_mimics(PlayerType *player_ptr, monster_death_type *md_ptr)
         drop_specific_item_on_dead(player_ptr, md_ptr, kind_is_hafted);
         return;
     case '|':
-        if (md_ptr->m_ptr->r_idx == MON_STORMBRINGER) {
+        if (md_ptr->m_ptr->r_idx == MonsterRaceId::STORMBRINGER) {
             return;
         }
 
@@ -592,84 +590,84 @@ static void on_dead_swordfish(PlayerType *player_ptr, monster_death_type *md_ptr
 void switch_special_death(PlayerType *player_ptr, monster_death_type *md_ptr, AttributeFlags attribute_flags)
 {
     switch (md_ptr->m_ptr->r_idx) {
-    case MON_PINK_HORROR:
+    case MonsterRaceId::PINK_HORROR:
         on_dead_pink_horror(player_ptr, md_ptr);
         return;
-    case MON_BLOODLETTER:
+    case MonsterRaceId::BLOODLETTER:
         on_dead_bloodletter(player_ptr, md_ptr);
         return;
-    case MON_RAAL:
+    case MonsterRaceId::RAAL:
         on_dead_raal(player_ptr, md_ptr);
         return;
-    case MON_DAWN:
+    case MonsterRaceId::DAWN:
         on_dead_dawn(player_ptr, md_ptr);
         return;
-    case MON_UNMAKER:
+    case MonsterRaceId::UNMAKER:
         on_dead_unmaker(player_ptr, md_ptr);
         break;
-    case MON_UNICORN_ORD:
-    case MON_MORGOTH:
-    case MON_ONE_RING:
+    case MonsterRaceId::UNICORN_ORD:
+    case MonsterRaceId::MORGOTH:
+    case MonsterRaceId::ONE_RING:
         on_dead_sacred_treasures(player_ptr, md_ptr);
         return;
-    case MON_SERPENT:
+    case MonsterRaceId::SERPENT:
         on_dead_serpent(player_ptr, md_ptr);
         return;
-    case MON_B_DEATH_SWORD:
+    case MonsterRaceId::B_DEATH_SWORD:
         on_dead_death_sword(player_ptr, md_ptr);
         return;
-    case MON_A_GOLD:
-    case MON_A_SILVER:
+    case MonsterRaceId::A_GOLD:
+    case MonsterRaceId::A_SILVER:
         on_dead_can_angel(player_ptr, md_ptr);
         return;
-    case MON_ROLENTO:
+    case MonsterRaceId::ROLENTO:
         on_dead_rolento(player_ptr, md_ptr);
         return;
-    case MON_MIDDLE_AQUA_FIRST:
-    case MON_LARGE_AQUA_FIRST:
-    case MON_EXTRA_LARGE_AQUA_FIRST:
-    case MON_MIDDLE_AQUA_SECOND:
-    case MON_LARGE_AQUA_SECOND:
-    case MON_EXTRA_LARGE_AQUA_SECOND:
+    case MonsterRaceId::MIDDLE_AQUA_FIRST:
+    case MonsterRaceId::LARGE_AQUA_FIRST:
+    case MonsterRaceId::EXTRA_LARGE_AQUA_FIRST:
+    case MonsterRaceId::MIDDLE_AQUA_SECOND:
+    case MonsterRaceId::LARGE_AQUA_SECOND:
+    case MonsterRaceId::EXTRA_LARGE_AQUA_SECOND:
         on_dead_aqua_illusion(player_ptr, md_ptr);
         return;
-    case MON_TOTEM_MOAI:
+    case MonsterRaceId::TOTEM_MOAI:
         on_dead_totem_moai(player_ptr, md_ptr);
         return;
-    case MON_DEMON_SLAYER_SENIOR:
+    case MonsterRaceId::DEMON_SLAYER_SENIOR:
         on_dead_demon_slayer_senior(player_ptr, md_ptr);
         return;
-    case MON_MIRMULNIR:
+    case MonsterRaceId::MIRMULNIR:
         on_dead_mirmulnir(player_ptr, md_ptr);
         return;
-    case MON_DRAGON_CENTIPEDE:
-    case MON_DRAGON_WORM:
+    case MonsterRaceId::DRAGON_CENTIPEDE:
+    case MonsterRaceId::DRAGON_WORM:
         on_dead_dragon_centipede(player_ptr, md_ptr);
         return;
-    case MON_CAIT_SITH:
+    case MonsterRaceId::CAIT_SITH:
         drop_specific_item_on_dead(player_ptr, md_ptr, kind_is_boots);
         return;
-    case MON_BIG_RAVEN:
+    case MonsterRaceId::BIG_RAVEN:
         on_dead_big_raven(player_ptr, md_ptr);
         return;
-    case MON_YENDOR_WIZARD_1:
+    case MonsterRaceId::YENDOR_WIZARD_1:
         on_dead_random_artifact(player_ptr, md_ptr, kind_is_amulet);
         return;
-    case MON_YENDOR_WIZARD_2:
+    case MonsterRaceId::YENDOR_WIZARD_2:
         drop_specific_item_on_dead(player_ptr, md_ptr, kind_is_amulet);
         return;
-    case MON_MANIMANI:
+    case MonsterRaceId::MANIMANI:
         on_dead_manimani(player_ptr, md_ptr);
         return;
-    case MON_LOSTRINGIL:
+    case MonsterRaceId::LOSTRINGIL:
         on_dead_random_artifact(player_ptr, md_ptr, kind_is_sword);
         return;
-    case MON_CHEST_MIMIC_03:
-    case MON_CHEST_MIMIC_04:
-    case MON_CHEST_MIMIC_11:
+    case MonsterRaceId::CHEST_MIMIC_03:
+    case MonsterRaceId::CHEST_MIMIC_04:
+    case MonsterRaceId::CHEST_MIMIC_11:
         on_dead_chest_mimic(player_ptr, md_ptr);
         break;
-    case MON_SWORDFISH:
+    case MonsterRaceId::SWORDFISH:
         on_dead_swordfish(player_ptr, md_ptr, attribute_flags);
         break;
     default:

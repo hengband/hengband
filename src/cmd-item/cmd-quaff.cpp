@@ -8,7 +8,7 @@
 #include "action/action-limited.h"
 #include "floor/floor-object.h"
 #include "object-hook/hook-expendable.h"
-#include "object-use/quaff-execution.h"
+#include "object-use/quaff/quaff-execution.h"
 #include "object/item-tester-hooker.h"
 #include "object/item-use-flags.h"
 #include "player-base/player-class.h"

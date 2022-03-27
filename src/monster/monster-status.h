@@ -2,6 +2,7 @@
 
 #include "system/angband.h"
 
+enum class MonsterRaceId : int16_t;
 struct floor_type;
 class PlayerType;
 struct monster_type;
@@ -12,7 +13,7 @@ int mon_damage_mod(PlayerType *player_ptr, monster_type *m_ptr, int dam, bool is
 bool monster_is_valid(monster_type *m_ptr);
 
 void dispel_monster_status(PlayerType *player_ptr, MONSTER_IDX m_idx);
-void monster_gain_exp(PlayerType *player_ptr, MONSTER_IDX m_idx, MONRACE_IDX s_idx);
+void monster_gain_exp(PlayerType *player_ptr, MONSTER_IDX m_idx, MonsterRaceId s_idx);
 
 void process_monsters_mtimed(PlayerType *player_ptr, int mtimed_idx);
 

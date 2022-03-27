@@ -102,9 +102,9 @@ SpoilerOutputResultType spoil_mon_desc(concptr fname, std::function<bool(const m
         "----------",
         "---", "---", "---", "-----", "-----", "-------------------");
 
-    std::vector<MONRACE_IDX> who;
-    for (const auto &r_ref : r_info) {
-        if (r_ref.idx > 0 && !r_ref.name.empty()) {
+    std::vector<MonsterRaceId> who;
+    for (const auto &[r_idx, r_ref] : r_info) {
+        if (MonsterRace(r_ref.idx).is_valid() && !r_ref.name.empty()) {
             who.push_back(r_ref.idx);
         }
     }
@@ -197,9 +197,9 @@ SpoilerOutputResultType spoil_mon_info(concptr fname)
     spoil_out(buf);
     spoil_out("------------------------------------------\n\n");
 
-    std::vector<MONRACE_IDX> who;
-    for (const auto &r_ref : r_info) {
-        if (r_ref.idx > 0 && !r_ref.name.empty()) {
+    std::vector<MonsterRaceId> who;
+    for (const auto &[r_idx, r_ref] : r_info) {
+        if (MonsterRace(r_ref.idx).is_valid() && !r_ref.name.empty()) {
             who.push_back(r_ref.idx);
         }
     }
@@ -221,7 +221,7 @@ SpoilerOutputResultType spoil_mon_info(concptr fname)
         spoil_out(buf);
         sprintf(buf, "=== ");
         spoil_out(buf);
-        sprintf(buf, "Num:%d  ", r_idx);
+        sprintf(buf, "Num:%d  ", enum2i(r_idx));
         spoil_out(buf);
         sprintf(buf, "Lev:%d  ", (int)r_ptr->level);
         spoil_out(buf);

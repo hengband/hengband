@@ -29,7 +29,7 @@ void museum_remove_object(PlayerType *player_ptr)
     sprintf(out_val, _("どのアイテムの展示をやめさせますか？", "Which item do you want to order to remove? "));
 
     COMMAND_CODE item;
-    if (!get_stock(&item, out_val, 0, i - 1)) {
+    if (!get_stock(&item, out_val, 0, i - 1, StoreSaleType::MUSEUM)) {
         return;
     }
 
@@ -54,5 +54,5 @@ void museum_remove_object(PlayerType *player_ptr)
         store_top -= store_bottom;
     }
 
-    display_store_inventory(player_ptr);
+    display_store_inventory(player_ptr, StoreSaleType::MUSEUM);
 }

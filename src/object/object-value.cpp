@@ -45,7 +45,8 @@ static PRICE object_value_base(const ObjectType *o_ptr)
     case ItemKindType::AMULET:
         return 45;
     case ItemKindType::FIGURINE: {
-        DEPTH level = r_info[o_ptr->pval].level;
+        auto figure_r_idx = i2enum<MonsterRaceId>(o_ptr->pval);
+        DEPTH level = r_info[figure_r_idx].level;
         if (level < 20) {
             return level * 50L;
         } else if (level < 30) {
@@ -58,12 +59,14 @@ static PRICE object_value_base(const ObjectType *o_ptr)
             return 14000 + (level - 50) * 2000;
         }
     }
-    case ItemKindType::CAPTURE:
-        if (!o_ptr->pval) {
+    case ItemKindType::CAPTURE: {
+        auto capture_r_idx = i2enum<MonsterRaceId>(o_ptr->pval);
+        if (!MonsterRace(capture_r_idx).is_valid()) {
             return 1000;
         } else {
-            return (r_info[o_ptr->pval].level) * 50 + 1000;
+            return (r_info[capture_r_idx].level) * 50 + 1000;
         }
+    }
 
     default:
         break;
@@ -317,7 +320,8 @@ PRICE object_value_real(const ObjectType *o_ptr)
         break;
     }
     case ItemKindType::FIGURINE: {
-        DEPTH level = r_info[o_ptr->pval].level;
+        auto figure_r_idx = i2enum<MonsterRaceId>(o_ptr->pval);
+        DEPTH level = r_info[figure_r_idx].level;
         if (level < 20) {
             value = level * 50L;
         } else if (level < 30) {
@@ -332,10 +336,11 @@ PRICE object_value_real(const ObjectType *o_ptr)
         break;
     }
     case ItemKindType::CAPTURE: {
-        if (!o_ptr->pval) {
+        auto capture_r_idx = i2enum<MonsterRaceId>(o_ptr->pval);
+        if (!MonsterRace(capture_r_idx).is_valid()) {
             value = 1000L;
         } else {
-            value = ((r_info[o_ptr->pval].level) * 50L + 1000);
+            value = ((r_info[capture_r_idx].level) * 50L + 1000);
         }
         break;
     }

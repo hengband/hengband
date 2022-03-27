@@ -20,7 +20,7 @@
 #include "view/display-messages.h"
 
 // Powerful monsters can resist.
-process_result effect_monster_old_poly(effect_monster_type *em_ptr)
+ProcessResult effect_monster_old_poly(effect_monster_type *em_ptr)
 {
     if (em_ptr->seen) {
         em_ptr->obvious = true;
@@ -38,10 +38,10 @@ process_result effect_monster_old_poly(effect_monster_type *em_ptr)
     }
 
     em_ptr->dam = 0;
-    return PROCESS_CONTINUE;
+    return ProcessResult::PROCESS_CONTINUE;
 }
 
-process_result effect_monster_old_clone(PlayerType *player_ptr, effect_monster_type *em_ptr)
+ProcessResult effect_monster_old_clone(PlayerType *player_ptr, effect_monster_type *em_ptr)
 {
     if (em_ptr->seen) {
         em_ptr->obvious = true;
@@ -56,7 +56,7 @@ process_result effect_monster_old_clone(PlayerType *player_ptr, effect_monster_t
     if (has_resistance) {
         em_ptr->note = _("には効果がなかった。", " is unaffected.");
         em_ptr->dam = 0;
-        return PROCESS_CONTINUE;
+        return ProcessResult::PROCESS_CONTINUE;
     }
 
     em_ptr->m_ptr->hp = em_ptr->m_ptr->maxhp;
@@ -65,10 +65,10 @@ process_result effect_monster_old_clone(PlayerType *player_ptr, effect_monster_t
     }
 
     em_ptr->dam = 0;
-    return PROCESS_CONTINUE;
+    return ProcessResult::PROCESS_CONTINUE;
 }
 
-process_result effect_monster_star_heal(PlayerType *player_ptr, effect_monster_type *em_ptr)
+ProcessResult effect_monster_star_heal(PlayerType *player_ptr, effect_monster_type *em_ptr)
 {
     if (em_ptr->seen) {
         em_ptr->obvious = true;
@@ -91,11 +91,11 @@ process_result effect_monster_star_heal(PlayerType *player_ptr, effect_monster_t
             player_ptr->redraw |= (PR_UHEALTH);
         }
 
-        return PROCESS_FALSE;
+        return ProcessResult::PROCESS_FALSE;
     }
 
     effect_monster_old_heal(player_ptr, em_ptr);
-    return PROCESS_TRUE;
+    return ProcessResult::PROCESS_TRUE;
 }
 
 // who == 0ならばプレイヤーなので、それの判定.
@@ -152,7 +152,7 @@ static void effect_monster_old_heal_recovery(PlayerType *player_ptr, effect_mons
     }
 }
 
-process_result effect_monster_old_heal(PlayerType *player_ptr, effect_monster_type *em_ptr)
+ProcessResult effect_monster_old_heal(PlayerType *player_ptr, effect_monster_type *em_ptr)
 {
     if (em_ptr->seen) {
         em_ptr->obvious = true;
@@ -169,7 +169,7 @@ process_result effect_monster_old_heal(PlayerType *player_ptr, effect_monster_ty
     }
 
     effect_monster_old_heal_check_player(player_ptr, em_ptr);
-    if (em_ptr->m_ptr->r_idx == MON_LEPER) {
+    if (em_ptr->m_ptr->r_idx == MonsterRaceId::LEPER) {
         em_ptr->heal_leper = true;
         if (!em_ptr->who) {
             chg_virtue(player_ptr, V_COMPASSION, 5);
@@ -185,10 +185,10 @@ process_result effect_monster_old_heal(PlayerType *player_ptr, effect_monster_ty
 
     em_ptr->note = _("は体力を回復したようだ。", " looks healthier.");
     em_ptr->dam = 0;
-    return PROCESS_CONTINUE;
+    return ProcessResult::PROCESS_CONTINUE;
 }
 
-process_result effect_monster_old_speed(PlayerType *player_ptr, effect_monster_type *em_ptr)
+ProcessResult effect_monster_old_speed(PlayerType *player_ptr, effect_monster_type *em_ptr)
 {
     if (em_ptr->seen) {
         em_ptr->obvious = true;
@@ -208,10 +208,10 @@ process_result effect_monster_old_speed(PlayerType *player_ptr, effect_monster_t
     }
 
     em_ptr->dam = 0;
-    return PROCESS_CONTINUE;
+    return ProcessResult::PROCESS_CONTINUE;
 }
 
-process_result effect_monster_old_slow(PlayerType *player_ptr, effect_monster_type *em_ptr)
+ProcessResult effect_monster_old_slow(PlayerType *player_ptr, effect_monster_type *em_ptr)
 {
     if (em_ptr->seen) {
         em_ptr->obvious = true;
@@ -225,7 +225,7 @@ process_result effect_monster_old_slow(PlayerType *player_ptr, effect_monster_ty
         em_ptr->note = _("には効果がなかった。", " is unaffected.");
         em_ptr->obvious = false;
         em_ptr->dam = 0;
-        return PROCESS_CONTINUE;
+        return ProcessResult::PROCESS_CONTINUE;
     }
 
     if (set_monster_slow(player_ptr, em_ptr->g_ptr->m_idx, monster_slow_remaining(em_ptr->m_ptr) + 50)) {
@@ -233,14 +233,14 @@ process_result effect_monster_old_slow(PlayerType *player_ptr, effect_monster_ty
     }
 
     em_ptr->dam = 0;
-    return PROCESS_CONTINUE;
+    return ProcessResult::PROCESS_CONTINUE;
 }
 
 /*!
  * @todo 「ユニークは (魔法では)常に眠らない」はr_infoの趣旨に反すると思われる
  * 眠る確率を半分にするとかしておいた方が良さそう
  */
-process_result effect_monster_old_sleep(PlayerType *player_ptr, effect_monster_type *em_ptr)
+ProcessResult effect_monster_old_sleep(PlayerType *player_ptr, effect_monster_type *em_ptr)
 {
     if (em_ptr->seen) {
         em_ptr->obvious = true;
@@ -265,14 +265,14 @@ process_result effect_monster_old_sleep(PlayerType *player_ptr, effect_monster_t
     }
 
     em_ptr->dam = 0;
-    return PROCESS_CONTINUE;
+    return ProcessResult::PROCESS_CONTINUE;
 }
 
 /*!
  * @todo 「ユニークは (魔法では)常に混乱しない」はr_infoの趣旨に反すると思われる
  * 眠る確率を半分にするとかしておいた方が良さそう
  */
-process_result effect_monster_old_conf(PlayerType *player_ptr, effect_monster_type *em_ptr)
+ProcessResult effect_monster_old_conf(PlayerType *player_ptr, effect_monster_type *em_ptr)
 {
     if (em_ptr->seen) {
         em_ptr->obvious = true;
@@ -296,10 +296,10 @@ process_result effect_monster_old_conf(PlayerType *player_ptr, effect_monster_ty
     }
 
     em_ptr->dam = 0;
-    return PROCESS_CONTINUE;
+    return ProcessResult::PROCESS_CONTINUE;
 }
 
-process_result effect_monster_stasis(effect_monster_type *em_ptr, bool to_evil)
+ProcessResult effect_monster_stasis(effect_monster_type *em_ptr, bool to_evil)
 {
     if (em_ptr->seen) {
         em_ptr->obvious = true;
@@ -321,10 +321,10 @@ process_result effect_monster_stasis(effect_monster_type *em_ptr, bool to_evil)
     }
 
     em_ptr->dam = 0;
-    return PROCESS_CONTINUE;
+    return ProcessResult::PROCESS_CONTINUE;
 }
 
-process_result effect_monster_stun(effect_monster_type *em_ptr)
+ProcessResult effect_monster_stun(effect_monster_type *em_ptr)
 {
     if (em_ptr->seen) {
         em_ptr->obvious = true;
@@ -341,5 +341,5 @@ process_result effect_monster_stun(effect_monster_type *em_ptr)
     }
 
     em_ptr->dam = 0;
-    return PROCESS_CONTINUE;
+    return ProcessResult::PROCESS_CONTINUE;
 }

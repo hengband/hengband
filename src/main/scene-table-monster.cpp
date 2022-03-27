@@ -160,7 +160,7 @@ static bool scene_monster(PlayerType *player_ptr, scene_type *value)
         return true;
     } else {
         value->type = TERM_XTRA_MUSIC_MONSTER;
-        value->val = m_ptr->ap_r_idx;
+        value->val = enum2i(m_ptr->ap_r_idx);
         return true;
     }
 }

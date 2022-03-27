@@ -25,6 +25,7 @@
 #include "system/player-type-definition.h"
 #include "timed-effect/player-confusion.h"
 #include "timed-effect/player-cut.h"
+#include "timed-effect/player-fear.h"
 #include "timed-effect/player-hallucination.h"
 #include "timed-effect/player-paralysis.h"
 #include "timed-effect/player-stun.h"
@@ -172,8 +173,21 @@ void rd_bounty_uniques(PlayerType *player_ptr)
         return;
     }
 
-    for (int i = 0; i < MAX_BOUNTY; i++) {
-        w_ptr->bounty_r_idx[i] = rd_s16b();
+    for (auto &[r_idx, is_achieved] : w_ptr->bounties) {
+        auto r_idx_num = rd_s16b();
+
+        if (loading_savefile_version_is_older_than(16)) {
+            constexpr auto old_achieved_flag = 10000; // かつて賞金首達成フラグとしてモンスター種族番号を10000増やしていた
+            is_achieved = false;
+            if (r_idx_num >= old_achieved_flag) {
+                r_idx_num -= old_achieved_flag;
+                is_achieved = true;
+            }
+        } else {
+            is_achieved = rd_bool();
+        }
+
+        r_idx = i2enum<MonsterRaceId>(r_idx_num);
     }
 }
 
@@ -348,7 +362,7 @@ static void rd_status(PlayerType *player_ptr)
     auto effects = player_ptr->effects();
     player_ptr->fast = rd_s16b();
     player_ptr->slow = rd_s16b();
-    player_ptr->afraid = rd_s16b();
+    effects->fear()->set(rd_s16b());
     effects->cut()->set(rd_s16b());
     effects->stun()->set(rd_s16b());
     player_ptr->poisoned = rd_s16b();

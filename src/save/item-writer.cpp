@@ -197,7 +197,7 @@ static void write_item_info(ObjectType *o_ptr, const BIT_FLAGS flags)
     }
 
     if (any_bits(flags, SaveDataItemFlagType::FUEL)) {
-        wr_u16b(o_ptr->fuel);
+        wr_s16b(o_ptr->fuel);
     }
 
     if (any_bits(flags, SaveDataItemFlagType::CAPTURED_MONSTER_CURRENT_HP)) {

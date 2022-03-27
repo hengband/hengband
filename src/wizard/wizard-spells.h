@@ -3,6 +3,8 @@
 #include "effect/attribute-types.h"
 #include "system/angband.h"
 
+enum class MonsterRaceId : int16_t;
+
 struct floor_type;
 class PlayerType;
 typedef union spell_functions {
@@ -41,6 +43,6 @@ void wiz_teleport_back(PlayerType *player_ptr);
 void wiz_learn_blue_magic_all(PlayerType *player_ptr);
 void wiz_fillup_all_smith_essences(PlayerType *player_ptr);
 void wiz_summon_random_enemy(PlayerType *player_ptr, int num);
-void wiz_summon_specific_enemy(PlayerType *player_ptr, MONRACE_IDX r_idx);
-void wiz_summon_pet(PlayerType *player_ptr, MONRACE_IDX r_idx);
+void wiz_summon_specific_enemy(PlayerType *player_ptr, MonsterRaceId r_idx);
+void wiz_summon_pet(PlayerType *player_ptr, MonsterRaceId r_idx);
 void wiz_kill_target(PlayerType *player_ptr, int dam = 1000000, AttributeType effect_idx = AttributeType::DEBUG, const bool self = false);

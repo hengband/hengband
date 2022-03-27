@@ -61,29 +61,29 @@
  * @param em_ptr モンスター効果構造体への参照ポインタ
  * @return 効果が何もないならFALSE、何かあるならTRUE
  */
-static process_result is_affective(PlayerType *player_ptr, effect_monster_type *em_ptr)
+static ProcessResult is_affective(PlayerType *player_ptr, effect_monster_type *em_ptr)
 {
     if (!em_ptr->g_ptr->m_idx) {
-        return PROCESS_FALSE;
+        return ProcessResult::PROCESS_FALSE;
     }
     if (em_ptr->who && (em_ptr->g_ptr->m_idx == em_ptr->who)) {
-        return PROCESS_FALSE;
+        return ProcessResult::PROCESS_FALSE;
     }
-    if (sukekaku && ((em_ptr->m_ptr->r_idx == MON_SUKE) || (em_ptr->m_ptr->r_idx == MON_KAKU))) {
-        return PROCESS_FALSE;
+    if (sukekaku && ((em_ptr->m_ptr->r_idx == MonsterRaceId::SUKE) || (em_ptr->m_ptr->r_idx == MonsterRaceId::KAKU))) {
+        return ProcessResult::PROCESS_FALSE;
     }
     if (em_ptr->m_ptr->hp < 0) {
-        return PROCESS_FALSE;
+        return ProcessResult::PROCESS_FALSE;
     }
     if (em_ptr->who || em_ptr->g_ptr->m_idx != player_ptr->riding) {
-        return PROCESS_TRUE;
+        return ProcessResult::PROCESS_TRUE;
     }
 
     switch (em_ptr->attribute) {
     case AttributeType::OLD_HEAL:
     case AttributeType::OLD_SPEED:
     case AttributeType::STAR_HEAL:
-        return PROCESS_TRUE;
+        return ProcessResult::PROCESS_TRUE;
     case AttributeType::OLD_SLOW:
     case AttributeType::OLD_SLEEP:
     case AttributeType::OLD_CLONE:
@@ -91,12 +91,12 @@ static process_result is_affective(PlayerType *player_ptr, effect_monster_type *
     case AttributeType::OLD_POLY:
     case AttributeType::GENOCIDE:
     case AttributeType::E_GENOCIDE:
-        return PROCESS_CONTINUE;
+        return ProcessResult::PROCESS_CONTINUE;
     default:
         break;
     }
 
-    return PROCESS_FALSE;
+    return ProcessResult::PROCESS_FALSE;
 }
 
 /*!
@@ -120,7 +120,7 @@ static void make_description_of_affecred_monster(PlayerType *player_ptr, effect_
  * 完全な耐性を持っていたら、一部属性を除いて影響は及ぼさない
  * デバッグ属性、モンスター打撃、モンスター射撃であれば貫通する
  */
-static process_result exe_affect_monster_by_effect(PlayerType *player_ptr, effect_monster_type *em_ptr, std::optional<CapturedMonsterType *> cap_mon_ptr)
+static ProcessResult exe_affect_monster_by_effect(PlayerType *player_ptr, effect_monster_type *em_ptr, std::optional<CapturedMonsterType *> cap_mon_ptr)
 {
     const std::vector<AttributeType> effect_arrtibute = {
         AttributeType::OLD_CLONE,
@@ -134,9 +134,9 @@ static process_result exe_affect_monster_by_effect(PlayerType *player_ptr, effec
         return em_ptr->attribute == attribute;
     };
 
-    process_result result = is_affective(player_ptr, em_ptr);
-    if (result != PROCESS_TRUE) {
-        if (result == PROCESS_CONTINUE) {
+    ProcessResult result = is_affective(player_ptr, em_ptr);
+    if (result != ProcessResult::PROCESS_TRUE) {
+        if (result == ProcessResult::PROCESS_CONTINUE) {
             em_ptr->note = _("には効果がなかった。", " is unaffected.");
             em_ptr->dam = 0;
         }
@@ -168,7 +168,7 @@ static process_result exe_affect_monster_by_effect(PlayerType *player_ptr, effec
         em_ptr->skipped = true;
     }
 
-    return PROCESS_CONTINUE;
+    return ProcessResult::PROCESS_CONTINUE;
 }
 
 /*!
@@ -720,9 +720,9 @@ bool affect_monster(
         disturb(player_ptr, true, true);
     }
 
-    process_result result = exe_affect_monster_by_effect(player_ptr, em_ptr, cap_mon_ptr);
-    if (result != PROCESS_CONTINUE) {
-        return (bool)result;
+    ProcessResult result = exe_affect_monster_by_effect(player_ptr, em_ptr, cap_mon_ptr);
+    if (result != ProcessResult::PROCESS_CONTINUE) {
+        return result == ProcessResult::PROCESS_TRUE;
     }
 
     if (em_ptr->skipped) {
@@ -732,12 +732,13 @@ bool affect_monster(
     exe_affect_monster_by_damage(player_ptr, em_ptr);
 
     update_phase_out_stat(player_ptr, em_ptr);
-    if (em_ptr->m_ptr->r_idx) {
+    const auto monster_is_valid = MonsterRace(em_ptr->m_ptr->r_idx).is_valid();
+    if (monster_is_valid) {
         update_monster(player_ptr, em_ptr->g_ptr->m_idx, false);
     }
 
     lite_spot(player_ptr, em_ptr->y, em_ptr->x);
-    if ((player_ptr->monster_race_idx == em_ptr->m_ptr->r_idx) && (em_ptr->seen || !em_ptr->m_ptr->r_idx)) {
+    if ((player_ptr->monster_race_idx == em_ptr->m_ptr->r_idx) && (em_ptr->seen || !monster_is_valid)) {
         player_ptr->window_flags |= (PW_MONSTER);
     }
 

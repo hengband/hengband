@@ -32,9 +32,9 @@ void PlayerStrength::set_locals()
  * @brief 腕力補正計算 - 種族
  * @return 腕力補正値
  */
-int16_t PlayerStrength::race_value()
+int16_t PlayerStrength::race_bonus()
 {
-    int16_t result = PlayerBasicStatistics::race_value();
+    int16_t result = PlayerBasicStatistics::race_bonus();
 
     result += PlayerRace(this->player_ptr).additional_strength();
 
@@ -50,7 +50,7 @@ int16_t PlayerStrength::race_value()
  * * 呪術の肉体強化で加算(+4)
  * * ネオ・つよしスペシャル中で加算(+4)
  */
-int16_t PlayerStrength::time_effect_value()
+int16_t PlayerStrength::time_effect_bonus()
 {
     int16_t result = 0;
 
@@ -80,7 +80,7 @@ int16_t PlayerStrength::time_effect_value()
  * * 白虎の構えで加算(+2)
  * * 朱雀の構えで減算(-2)
  */
-int16_t PlayerStrength::stance_value()
+int16_t PlayerStrength::stance_bonus()
 {
     int16_t result = 0;
 
@@ -106,7 +106,7 @@ int16_t PlayerStrength::stance_value()
  * * 変異MUT3_HYPER_STRで加算(+4)
  * * 変異MUT3_PUNYで減算(-4)
  */
-int16_t PlayerStrength::mutation_value()
+int16_t PlayerStrength::mutation_bonus()
 {
     int16_t result = 0;
 

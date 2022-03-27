@@ -18,6 +18,8 @@
 #include "spell/spells-util.h"
 #include "system/angband.h"
 
+enum class AttributeType;
+
 /*  A structure type for terrain template of saving dungeon floor */
 struct grid_template_type {
     BIT_FLAGS info;
@@ -52,12 +54,12 @@ bool feat_uses_special(FEAT_IDX f_idx);
 void update_local_illumination(PlayerType *player_ptr, POSITION y, POSITION x);
 bool no_lite(PlayerType *player_ptr);
 void print_rel(PlayerType *player_ptr, char c, TERM_COLOR a, POSITION y, POSITION x);
+void print_bolt_pict(PlayerType *player_ptr, POSITION y, POSITION x, POSITION ny, POSITION nx, AttributeType typ);
 void note_spot(PlayerType *player_ptr, POSITION y, POSITION x);
 void lite_spot(PlayerType *player_ptr, POSITION y, POSITION x);
 void update_flow(PlayerType *player_ptr);
 FEAT_IDX feat_state(floor_type *floor_ptr, FEAT_IDX feat, FloorFeatureType action);
 void cave_alter_feat(PlayerType *player_ptr, POSITION y, POSITION x, FloorFeatureType action);
-void remove_mirror(PlayerType *player_ptr, POSITION y, POSITION x);
 bool is_open(PlayerType *player_ptr, FEAT_IDX feat);
 bool check_local_illumination(PlayerType *player_ptr, POSITION y, POSITION x);
 bool cave_monster_teleportable_bold(PlayerType *player_ptr, MONSTER_IDX m_idx, POSITION y, POSITION x, teleport_flags mode);

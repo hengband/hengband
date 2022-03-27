@@ -70,10 +70,7 @@ static errr load_town_quest(PlayerType *player_ptr)
 
     uint16_t max_quests_load;
     byte max_rquests_load;
-    auto load_quest_result = load_quest_info(&max_quests_load, &max_rquests_load);
-    if (load_quest_result != 0) {
-        return load_quest_result;
-    }
+    load_quest_info(&max_quests_load, &max_rquests_load);
 
     analyze_quests(player_ptr, max_quests_load, max_rquests_load);
 
@@ -118,8 +115,8 @@ static void load_player_world(PlayerType *player_ptr)
     rd_winner_class();
     rd_base_info(player_ptr);
     rd_player_info(player_ptr);
-    preserve_mode = rd_byte() != 0;
-    player_ptr->wait_report_score = rd_byte() != 0;
+    preserve_mode = rd_bool();
+    player_ptr->wait_report_score = rd_bool();
     rd_dummy2();
     rd_global_configurations(player_ptr);
     rd_extra(player_ptr);

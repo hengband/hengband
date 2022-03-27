@@ -25,6 +25,7 @@
 #include "monster-race/race-flags2.h"
 #include "monster-race/race-flags7.h"
 #include "monster-race/race-flags8.h"
+#include "monster-race/race-indice-types.h"
 #include "monster-race/race-resistance-mask.h"
 #include "monster/monster-describer.h"
 #include "monster/monster-info.h"
@@ -200,9 +201,9 @@ void exe_movement(PlayerType *player_ptr, DIRECTION dir, bool do_pickup, bool br
     }
 
     monster_type *riding_m_ptr = &floor_ptr->m_list[player_ptr->riding];
-    monster_race *riding_r_ptr = &r_info[player_ptr->riding ? riding_m_ptr->r_idx : 0];
     PlayerEnergy energy(player_ptr);
     if (can_move && player_ptr->riding) {
+        const auto *riding_r_ptr = &r_info[riding_m_ptr->r_idx];
         if (riding_r_ptr->behavior_flags.has(MonsterBehaviorType::NEVER_MOVE)) {
             msg_print(_("動けない！", "Can't move!"));
             energy.reset_player_turn();
@@ -254,7 +255,8 @@ void exe_movement(PlayerType *player_ptr, DIRECTION dir, bool do_pickup, bool br
         player_ptr->running = 0;
         can_move = false;
     } else if (f_ptr->flags.has(FloorFeatureType::TREE) && !p_can_kill_walls) {
-        if (!PlayerClass(player_ptr).equals(PlayerClassType::RANGER) && !player_ptr->levitation && (!player_ptr->riding || !(riding_r_ptr->flags8 & RF8_WILD_WOOD))) {
+        auto riding_wild_wood = player_ptr->riding && r_info[riding_m_ptr->r_idx].wilderness_flags.has(MonsterWildernessType::WILD_WOOD);
+        if (!PlayerClass(player_ptr).equals(PlayerClassType::RANGER) && !player_ptr->levitation && !riding_wild_wood) {
             energy.mul_player_turn_energy(2);
         }
     } else if ((do_pickup != easy_disarm) && f_ptr->flags.has(FloorFeatureType::DISARM) && !g_ptr->mimic) {

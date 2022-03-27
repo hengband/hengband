@@ -25,7 +25,7 @@ void handle_stuff(PlayerType *player_ptr)
 /*
  * Track the given monster race
  */
-void monster_race_track(PlayerType *player_ptr, MONRACE_IDX r_idx)
+void monster_race_track(PlayerType *player_ptr, MonsterRaceId r_idx)
 {
     player_ptr->monster_race_idx = r_idx;
     player_ptr->window_flags |= (PW_MONSTER);

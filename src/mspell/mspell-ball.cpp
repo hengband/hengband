@@ -157,7 +157,7 @@ MonsterSpellResult spell_RF5_BA_FIRE(PlayerType *player_ptr, POSITION y, POSITIO
     mspell_cast_msg_blind msg;
     auto *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
 
-    if (m_ptr->r_idx == MON_ROLENTO) {
+    if (m_ptr->r_idx == MonsterRaceId::ROLENTO) {
         msg.blind = _("%sが何かを投げた。", "%^s throws something.");
         msg.to_player = _("%sは手榴弾を投げた。", "%^s throws a hand grenade.");
         msg.to_mons = _("%^sが%^sに向かって手榴弾を投げた。", "%^s throws a hand grenade.");

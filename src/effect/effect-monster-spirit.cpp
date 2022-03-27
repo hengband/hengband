@@ -18,7 +18,7 @@
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 
-process_result effect_monster_drain_mana(PlayerType *player_ptr, effect_monster_type *em_ptr)
+ProcessResult effect_monster_drain_mana(PlayerType *player_ptr, effect_monster_type *em_ptr)
 {
     if (em_ptr->seen) {
         em_ptr->obvious = true;
@@ -31,19 +31,19 @@ process_result effect_monster_drain_mana(PlayerType *player_ptr, effect_monster_
         }
 
         em_ptr->dam = 0;
-        return PROCESS_CONTINUE;
+        return ProcessResult::PROCESS_CONTINUE;
     }
 
     if (em_ptr->who <= 0) {
         msg_format(_("%sから精神エネルギーを吸いとった。", "You draw psychic energy from %s."), em_ptr->m_name);
         (void)hp_player(player_ptr, em_ptr->dam);
         em_ptr->dam = 0;
-        return PROCESS_CONTINUE;
+        return ProcessResult::PROCESS_CONTINUE;
     }
 
     if (em_ptr->m_caster_ptr->hp >= em_ptr->m_caster_ptr->maxhp) {
         em_ptr->dam = 0;
-        return PROCESS_CONTINUE;
+        return ProcessResult::PROCESS_CONTINUE;
     }
 
     em_ptr->m_caster_ptr->hp += em_ptr->dam;
@@ -65,10 +65,10 @@ process_result effect_monster_drain_mana(PlayerType *player_ptr, effect_monster_
     }
 
     em_ptr->dam = 0;
-    return PROCESS_CONTINUE;
+    return ProcessResult::PROCESS_CONTINUE;
 }
 
-process_result effect_monster_mind_blast(PlayerType *player_ptr, effect_monster_type *em_ptr)
+ProcessResult effect_monster_mind_blast(PlayerType *player_ptr, effect_monster_type *em_ptr)
 {
     if (em_ptr->seen) {
         em_ptr->obvious = true;
@@ -113,10 +113,10 @@ process_result effect_monster_mind_blast(PlayerType *player_ptr, effect_monster_
         }
     }
 
-    return PROCESS_CONTINUE;
+    return ProcessResult::PROCESS_CONTINUE;
 }
 
-process_result effect_monster_brain_smash(PlayerType *player_ptr, effect_monster_type *em_ptr)
+ProcessResult effect_monster_brain_smash(PlayerType *player_ptr, effect_monster_type *em_ptr)
 {
     if (em_ptr->seen) {
         em_ptr->obvious = true;
@@ -166,5 +166,5 @@ process_result effect_monster_brain_smash(PlayerType *player_ptr, effect_monster
         (void)set_monster_slow(player_ptr, em_ptr->g_ptr->m_idx, monster_slow_remaining(em_ptr->m_ptr) + 10);
     }
 
-    return PROCESS_CONTINUE;
+    return ProcessResult::PROCESS_CONTINUE;
 }

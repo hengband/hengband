@@ -28,6 +28,8 @@
 #include "util/int-char-converter.h"
 #include "view/display-messages.h"
 #include "world/world.h"
+#include <algorithm>
+#include <numeric>
 
 /*!
  * @brief 優勝時のメッセージを表示し、賞金を与える
@@ -197,12 +199,12 @@ void update_gambling_monsters(PlayerType *player_ptr)
         total = 0;
         tekitou = false;
         for (i = 0; i < 4; i++) {
-            MONRACE_IDX r_idx;
+            MonsterRaceId r_idx;
             int j;
             while (true) {
                 get_mon_num_prep(player_ptr, monster_can_entry_arena, nullptr);
                 r_idx = get_mon_num(player_ptr, 0, mon_level, GMN_ARENA);
-                if (!r_idx) {
+                if (!MonsterRace(r_idx).is_valid()) {
                     continue;
                 }
 
@@ -213,7 +215,7 @@ void update_gambling_monsters(PlayerType *player_ptr)
                 }
 
                 for (j = 0; j < i; j++) {
-                    if (r_idx == battle_mon[j]) {
+                    if (r_idx == battle_mon_list[j]) {
                         break;
                     }
                 }
@@ -223,17 +225,15 @@ void update_gambling_monsters(PlayerType *player_ptr)
 
                 break;
             }
-            battle_mon[i] = r_idx;
+            battle_mon_list[i] = r_idx;
             if (r_info[r_idx].level < 45) {
                 tekitou = true;
             }
         }
 
-        for (i = 0; i < 4; i++) {
-            auto *r_ptr = &r_info[battle_mon[i]];
-            power[i] = calc_monrace_power(r_ptr);
-            total += power[i];
-        }
+        std::transform(std::begin(battle_mon_list), std::end(battle_mon_list), std::begin(power),
+            [](MonsterRace r_idx) { return MonsterRace(r_idx).calc_power(); });
+        total += std::reduce(std::begin(power), std::end(power));
 
         for (i = 0; i < 4; i++) {
             if (power[i] <= 0) {
@@ -290,7 +290,7 @@ bool monster_arena_comm(PlayerType *player_ptr)
     prt(_("モンスター                                                     倍率", "Monsters                                                       Odds"), 4, 4);
     for (int i = 0; i < 4; i++) {
         char buf[MAX_MONSTER_NAME];
-        auto *r_ptr = &r_info[battle_mon[i]];
+        auto *r_ptr = &r_info[battle_mon_list[i]];
 
         sprintf(buf, _("%d) %-58s  %4ld.%02ld倍", "%d) %-58s  %4ld.%02ld"), i + 1,
             _(format("%s%s", r_ptr->name.c_str(), r_ptr->kind_flags.has(MonsterKindType::UNIQUE) ? "もどき" : "      "),

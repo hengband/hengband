@@ -416,7 +416,7 @@ void probed_monster_info(char *buf, PlayerType *player_ptr, monster_type *m_ptr,
     sprintf(buf, _("%s ... 属性:%s HP:%d/%d AC:%d 速度:%s%d 経験:", "%s ... align:%s HP:%d/%d AC:%d speed:%s%d exp:"), m_name, align, (int)m_ptr->hp,
         (int)m_ptr->maxhp, r_ptr->ac, (speed > 0) ? "+" : "", speed);
 
-    if (r_ptr->next_r_idx) {
+    if (MonsterRace(r_ptr->next_r_idx).is_valid()) {
         strcat(buf, format("%d/%d ", m_ptr->exp, r_ptr->next_exp));
     } else {
         strcat(buf, "xxx ");

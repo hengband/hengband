@@ -303,7 +303,7 @@ void init_angband(PlayerType *player_ptr, bool no_term)
     }
 
     for (const auto &d_ref : d_info) {
-        if (d_ref.idx > 0 && d_ref.final_guardian) {
+        if (d_ref.idx > 0 && MonsterRace(d_ref.final_guardian).is_valid()) {
             r_info[d_ref.final_guardian].flags7 |= RF7_GUARDIAN;
         }
     }

@@ -12,6 +12,7 @@
 #include "system/player-type-definition.h"
 #include "timed-effect/player-confusion.h"
 #include "timed-effect/player-cut.h"
+#include "timed-effect/player-fear.h"
 #include "timed-effect/player-hallucination.h"
 #include "timed-effect/player-paralysis.h"
 #include "timed-effect/player-stun.h"
@@ -110,12 +111,13 @@ void wr_player(PlayerType *player_ptr)
     wr_s32b(player_ptr->old_race2);
     wr_s16b(player_ptr->old_realm);
 
-    for (int i = 0; i < MAX_BOUNTY; i++) {
-        wr_s16b(w_ptr->bounty_r_idx[i]);
+    for (const auto &[r_idx, is_achieved] : w_ptr->bounties) {
+        wr_s16b(enum2i(r_idx));
+        wr_bool(is_achieved);
     }
 
     for (int i = 0; i < 4; i++) {
-        wr_s16b(battle_mon[i]);
+        wr_s16b(enum2i(battle_mon_list[i]));
         wr_u32b(mon_odds[i]);
     }
 
@@ -164,7 +166,7 @@ void wr_player(PlayerType *player_ptr)
     wr_s16b(player_ptr->enchant_energy_need);
     wr_s16b(player_ptr->fast);
     wr_s16b(player_ptr->slow);
-    wr_s16b(player_ptr->afraid);
+    wr_s16b(effects->fear()->current());
     wr_s16b(effects->cut()->current());
     wr_s16b(effects->stun()->current());
     wr_s16b(player_ptr->poisoned);
@@ -227,12 +229,12 @@ void wr_player(PlayerType *player_ptr)
     wr_s16b(player_ptr->ele_immune);
     wr_u32b(player_ptr->special_defense);
     wr_byte(player_ptr->knowledge);
-    wr_byte(player_ptr->autopick_autoregister);
+    wr_bool(player_ptr->autopick_autoregister);
     wr_byte(0);
     wr_byte((byte)player_ptr->action);
     wr_byte(0);
-    wr_byte(preserve_mode);
-    wr_byte(player_ptr->wait_report_score);
+    wr_bool(preserve_mode);
+    wr_bool(player_ptr->wait_report_score);
 
     for (int i = 0; i < 12; i++) {
         wr_u32b(0L);
@@ -248,15 +250,15 @@ void wr_player(PlayerType *player_ptr)
     wr_u16b(player_ptr->panic_save);
     wr_u16b(w_ptr->total_winner);
     wr_u16b(w_ptr->noscore);
-    wr_byte(player_ptr->is_dead);
+    wr_bool(player_ptr->is_dead);
     wr_byte(player_ptr->feeling);
     wr_s32b(player_ptr->current_floor_ptr->generated_turn);
     wr_s32b(player_ptr->feeling_turn);
     wr_s32b(w_ptr->game_turn);
     wr_s32b(w_ptr->dungeon_turn);
     wr_s32b(w_ptr->arena_start_turn);
-    wr_s16b(w_ptr->today_mon);
-    wr_s16b(player_ptr->today_mon);
+    wr_s16b(enum2i(w_ptr->today_mon));
+    wr_s16b(player_ptr->knows_daily_bounty ? 1 : 0); // 現在bool型だが、かつてモンスター種族IDを保存していた仕様に合わせる
     wr_s16b(player_ptr->riding);
     wr_s16b(player_ptr->floor_id);
 

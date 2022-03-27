@@ -32,9 +32,9 @@ static void macro_dump(FILE **fpp, concptr fname)
     auto_dump_printf(*fpp, _("\n# 自動マクロセーブ\n\n", "\n# Automatic macro dump\n\n"));
 
     for (int i = 0; i < macro__num; i++) {
-        ascii_to_text(buf, macro__act[i]);
+        ascii_to_text(buf, macro__act[i], sizeof(buf));
         auto_dump_printf(*fpp, "A:%s\n", buf);
-        ascii_to_text(buf, macro__pat[i]);
+        ascii_to_text(buf, macro__pat[i], sizeof(buf));
         auto_dump_printf(*fpp, "P:%s\n", buf);
         auto_dump_printf(*fpp, "\n");
     }
@@ -69,7 +69,7 @@ static void do_cmd_macro_aux(char *buf)
     buf[n] = '\0';
     flush();
     char tmp[1024];
-    ascii_to_text(tmp, buf);
+    ascii_to_text(tmp, buf, sizeof(tmp));
     term_addstr(-1, TERM_WHITE, tmp);
 }
 
@@ -89,7 +89,7 @@ static void do_cmd_macro_aux_keymap(char *buf)
     flush();
     buf[0] = inkey();
     buf[1] = '\0';
-    ascii_to_text(tmp, buf);
+    ascii_to_text(tmp, buf, sizeof(tmp));
     term_addstr(-1, TERM_WHITE, tmp);
     flush();
 }
@@ -129,8 +129,8 @@ static errr keymap_dump(concptr fname)
 
         buf[0] = (char)i;
         buf[1] = '\0';
-        ascii_to_text(key, buf);
-        ascii_to_text(buf, act);
+        ascii_to_text(key, buf, sizeof(key));
+        ascii_to_text(buf, act, sizeof(buf));
         auto_dump_printf(auto_dump_stream, "A:%s\n", buf);
         auto_dump_printf(auto_dump_stream, "C:%d:%s\n", mode, key);
     }
@@ -223,7 +223,7 @@ void do_cmd_macros(PlayerType *player_ptr)
                 // too long macro must die
                 strncpy(tmp, macro_buf, 80);
                 tmp[80] = '\0';
-                ascii_to_text(buf, tmp);
+                ascii_to_text(buf, tmp, sizeof(buf));
                 prt(buf, 22, 0);
                 msg_print(_("マクロを確認しました。", "Found a macro."));
             }
@@ -238,9 +238,9 @@ void do_cmd_macros(PlayerType *player_ptr)
             prt(_("マクロ行動: ", "Action: "), 20, 0);
             // 最後に参照したマクロデータを元に作成する（コピーを行えるように）
             macro_buf[80] = '\0';
-            ascii_to_text(tmp, macro_buf);
+            ascii_to_text(tmp, macro_buf, sizeof(tmp));
             if (askfor(tmp, 80)) {
-                text_to_ascii(macro_buf, tmp);
+                text_to_ascii(macro_buf, tmp, sizeof(macro_buf));
                 macro_add(buf, macro_buf);
                 msg_print(_("マクロを追加しました。", "Added a macro."));
             }
@@ -274,7 +274,7 @@ void do_cmd_macros(PlayerType *player_ptr)
                 // too long macro must die
                 strncpy(tmp, macro_buf, 80);
                 tmp[80] = '\0';
-                ascii_to_text(buf, tmp);
+                ascii_to_text(buf, tmp, sizeof(buf));
                 prt(buf, 22, 0);
                 msg_print(_("キー配置を確認しました。", "Found a keymap."));
             }
@@ -289,9 +289,9 @@ void do_cmd_macros(PlayerType *player_ptr)
             prt(_("行動: ", "Action: "), 20, 0);
             // 最後に参照したマクロデータを元に作成する（コピーを行えるように）
             macro_buf[80] = '\0';
-            ascii_to_text(tmp, macro_buf);
+            ascii_to_text(tmp, macro_buf, sizeof(tmp));
             if (askfor(tmp, 80)) {
-                text_to_ascii(macro_buf, tmp);
+                text_to_ascii(macro_buf, tmp, sizeof(macro_buf));
                 string_free(keymap_act[mode][(byte)(buf[0])]);
                 keymap_act[mode][(byte)(buf[0])] = string_make(macro_buf);
                 msg_print(_("キー配置を追加しました。", "Added a keymap."));
@@ -315,7 +315,7 @@ void do_cmd_macros(PlayerType *player_ptr)
                 continue;
             }
 
-            text_to_ascii(macro_buf, buf);
+            text_to_ascii(macro_buf, buf, sizeof(macro_buf));
         } else {
             bell();
         }

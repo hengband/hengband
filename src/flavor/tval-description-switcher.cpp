@@ -12,6 +12,7 @@
 #include "object/object-kind.h"
 #include "system/monster-race-definition.h"
 #include "system/object-type-definition.h"
+#include "util/enum-converter.h"
 #ifdef JP
 #else
 #include "monster-race/race-flags1.h"
@@ -20,12 +21,13 @@
 
 static void describe_monster_ball(flavor_type *flavor_ptr)
 {
-    auto *r_ptr = &r_info[flavor_ptr->o_ptr->pval];
+    const auto r_idx = i2enum<MonsterRaceId>(flavor_ptr->o_ptr->pval);
+    auto *r_ptr = &r_info[r_idx];
     if (!flavor_ptr->known) {
         return;
     }
 
-    if (!flavor_ptr->o_ptr->pval) {
+    if (!MonsterRace(r_idx).is_valid()) {
         flavor_ptr->modstr = _(" (空)", " (empty)");
         return;
     }
@@ -47,7 +49,8 @@ static void describe_monster_ball(flavor_type *flavor_ptr)
 
 static void describe_statue(flavor_type *flavor_ptr)
 {
-    auto *r_ptr = &r_info[flavor_ptr->o_ptr->pval];
+    const auto r_idx = i2enum<MonsterRaceId>(flavor_ptr->o_ptr->pval);
+    auto *r_ptr = &r_info[r_idx];
 #ifdef JP
     flavor_ptr->modstr = r_ptr->name.c_str();
 #else
@@ -63,7 +66,8 @@ static void describe_statue(flavor_type *flavor_ptr)
 
 static void describe_corpse(flavor_type *flavor_ptr)
 {
-    auto *r_ptr = &r_info[flavor_ptr->o_ptr->pval];
+    const auto r_idx = i2enum<MonsterRaceId>(flavor_ptr->o_ptr->pval);
+    auto *r_ptr = &r_info[r_idx];
     flavor_ptr->modstr = r_ptr->name.c_str();
 #ifdef JP
     flavor_ptr->basenm = "#%";

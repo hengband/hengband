@@ -30,7 +30,7 @@
 
 void wiz_enter_quest(PlayerType *player_ptr);
 void wiz_complete_quest(PlayerType *player_ptr);
-void wiz_restore_monster_max_num(MONRACE_IDX r_idx);
+void wiz_restore_monster_max_num(MonsterRaceId r_idx);
 
 /*!
  * @brief ゲーム設定コマンド一覧表
@@ -90,7 +90,7 @@ void wizard_game_modifier(PlayerType *player_ptr)
         wiz_enter_quest(player_ptr);
         break;
     case 'u':
-        wiz_restore_monster_max_num(command_arg);
+        wiz_restore_monster_max_num(i2enum<MonsterRaceId>(command_arg));
         break;
     case 't':
         set_gametime();
@@ -107,7 +107,8 @@ void wiz_enter_quest(PlayerType *player_ptr)
     char ppp[30];
     char tmp_val[5];
     int tmp_int;
-    sprintf(ppp, "QuestID (0-%d):", max_q_idx - 1);
+    const auto quest_max = enum2i(quest_map.rbegin()->first);
+    sprintf(ppp, "QuestID (0-%u):", quest_max);
     sprintf(tmp_val, "%d", 0);
 
     if (!get_string(ppp, tmp_val, 3)) {
@@ -115,7 +116,7 @@ void wiz_enter_quest(PlayerType *player_ptr)
     }
 
     tmp_int = atoi(tmp_val);
-    if ((tmp_int < 0) || (tmp_int >= max_q_idx)) {
+    if ((tmp_int < 0) || (tmp_int > quest_max)) {
         return;
     }
 
@@ -147,14 +148,14 @@ void wiz_complete_quest(PlayerType *player_ptr)
     }
 }
 
-void wiz_restore_monster_max_num(MONRACE_IDX r_idx)
+void wiz_restore_monster_max_num(MonsterRaceId r_idx)
 {
-    if (r_idx <= 0) {
+    if (!MonsterRace(r_idx).is_valid()) {
         int val;
         if (!get_value("MonsterID", 1, r_info.size() - 1, &val)) {
             return;
         }
-        r_idx = static_cast<MONRACE_IDX>(val);
+        r_idx = static_cast<MonsterRaceId>(val);
     }
 
     auto *r_ptr = &r_info[r_idx];
@@ -183,6 +184,6 @@ void wiz_restore_monster_max_num(MONRACE_IDX r_idx)
 
     std::stringstream ss;
     ss << r_ptr->name << _("の出現数を復元しました。", " can appear again now.");
-    msg_print(ss.str().c_str());
+    msg_print(ss.str());
     msg_print(nullptr);
 }

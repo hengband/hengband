@@ -37,7 +37,7 @@
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 
-process_result effect_monster_hypodynamia(PlayerType *player_ptr, effect_monster_type *em_ptr)
+ProcessResult effect_monster_hypodynamia(PlayerType *player_ptr, effect_monster_type *em_ptr)
 {
     if (em_ptr->seen) {
         em_ptr->obvious = true;
@@ -45,7 +45,7 @@ process_result effect_monster_hypodynamia(PlayerType *player_ptr, effect_monster
 
     if (monster_living(em_ptr->m_ptr->r_idx)) {
         em_ptr->do_time = (em_ptr->dam + 7) / 8;
-        return PROCESS_CONTINUE;
+        return ProcessResult::PROCESS_CONTINUE;
     }
 
     if (is_original_ap_and_seen(player_ptr, em_ptr->m_ptr)) {
@@ -63,13 +63,13 @@ process_result effect_monster_hypodynamia(PlayerType *player_ptr, effect_monster
     em_ptr->note = _("には効果がなかった。", " is unaffected.");
     em_ptr->obvious = false;
     em_ptr->dam = 0;
-    return PROCESS_CONTINUE;
+    return ProcessResult::PROCESS_CONTINUE;
 }
 
 /*!
  * @todo リファクタリング前のコード時点で、単に耐性があるだけでもダメージ0だった.
  */
-process_result effect_monster_death_ray(PlayerType *player_ptr, effect_monster_type *em_ptr)
+ProcessResult effect_monster_death_ray(PlayerType *player_ptr, effect_monster_type *em_ptr)
 {
     if (em_ptr->seen) {
         em_ptr->obvious = true;
@@ -91,7 +91,7 @@ process_result effect_monster_death_ray(PlayerType *player_ptr, effect_monster_t
         em_ptr->note = _("には完全な耐性がある！", " is immune.");
         em_ptr->obvious = false;
         em_ptr->dam = 0;
-        return PROCESS_CONTINUE;
+        return ProcessResult::PROCESS_CONTINUE;
     }
 
     bool has_resistance = (em_ptr->r_ptr->kind_flags.has(MonsterKindType::UNIQUE) && (randint1(888) != 666));
@@ -103,14 +103,14 @@ process_result effect_monster_death_ray(PlayerType *player_ptr, effect_monster_t
         em_ptr->dam = 0;
     }
 
-    return PROCESS_CONTINUE;
+    return ProcessResult::PROCESS_CONTINUE;
 }
 
-process_result effect_monster_kill_wall(PlayerType *player_ptr, effect_monster_type *em_ptr)
+ProcessResult effect_monster_kill_wall(PlayerType *player_ptr, effect_monster_type *em_ptr)
 {
     if (em_ptr->r_ptr->resistance_flags.has_not(MonsterResistanceType::HURT_ROCK)) {
         em_ptr->dam = 0;
-        return PROCESS_CONTINUE;
+        return ProcessResult::PROCESS_CONTINUE;
     }
 
     if (em_ptr->seen) {
@@ -123,10 +123,10 @@ process_result effect_monster_kill_wall(PlayerType *player_ptr, effect_monster_t
 
     em_ptr->note = _("の皮膚がただれた！", " loses some skin!");
     em_ptr->note_dies = _("はドロドロに溶けた！", " dissolves!");
-    return PROCESS_CONTINUE;
+    return ProcessResult::PROCESS_CONTINUE;
 }
 
-process_result effect_monster_hand_doom(effect_monster_type *em_ptr)
+ProcessResult effect_monster_hand_doom(effect_monster_type *em_ptr)
 {
     if (em_ptr->seen) {
         em_ptr->obvious = true;
@@ -135,7 +135,7 @@ process_result effect_monster_hand_doom(effect_monster_type *em_ptr)
     if (em_ptr->r_ptr->kind_flags.has(MonsterKindType::UNIQUE)) {
         em_ptr->note = _("には効果がなかった。", " is unaffected.");
         em_ptr->dam = 0;
-        return PROCESS_CONTINUE;
+        return ProcessResult::PROCESS_CONTINUE;
     }
 
     if ((em_ptr->who > 0) ? ((em_ptr->caster_lev + randint1(em_ptr->dam)) > (em_ptr->r_ptr->level + 10 + randint1(20)))
@@ -149,7 +149,7 @@ process_result effect_monster_hand_doom(effect_monster_type *em_ptr)
         em_ptr->dam = 0;
     }
 
-    return PROCESS_CONTINUE;
+    return ProcessResult::PROCESS_CONTINUE;
 }
 
 /*!
@@ -162,7 +162,7 @@ process_result effect_monster_hand_doom(effect_monster_type *em_ptr)
  * 寝た場合は試行終了。
  * 与える効果は減速、朦朧、混乱、睡眠。
  */
-process_result effect_monster_engetsu(PlayerType *player_ptr, effect_monster_type *em_ptr)
+ProcessResult effect_monster_engetsu(PlayerType *player_ptr, effect_monster_type *em_ptr)
 {
     if (em_ptr->seen) {
         em_ptr->obvious = true;
@@ -175,14 +175,14 @@ process_result effect_monster_engetsu(PlayerType *player_ptr, effect_monster_typ
         if (is_original_ap_and_seen(player_ptr, em_ptr->m_ptr)) {
             set_bits(em_ptr->r_ptr->r_flags2, RF2_EMPTY_MIND);
         }
-        return PROCESS_CONTINUE;
+        return ProcessResult::PROCESS_CONTINUE;
     }
 
     if (monster_csleep_remaining(em_ptr->m_ptr)) {
         em_ptr->note = _("には効果がなかった。", " is unaffected.");
         em_ptr->dam = 0;
         em_ptr->skipped = true;
-        return PROCESS_CONTINUE;
+        return ProcessResult::PROCESS_CONTINUE;
     }
 
     bool done = false;
@@ -256,10 +256,10 @@ process_result effect_monster_engetsu(PlayerType *player_ptr, effect_monster_typ
     }
 
     em_ptr->dam = 0;
-    return PROCESS_CONTINUE;
+    return ProcessResult::PROCESS_CONTINUE;
 }
 
-process_result effect_monster_genocide(PlayerType *player_ptr, effect_monster_type *em_ptr)
+ProcessResult effect_monster_genocide(PlayerType *player_ptr, effect_monster_type *em_ptr)
 {
     if (em_ptr->seen) {
         em_ptr->obvious = true;
@@ -271,14 +271,14 @@ process_result effect_monster_genocide(PlayerType *player_ptr, effect_monster_ty
             msg_format(_("%sは消滅した！", "%^s disappeared!"), em_ptr->m_name);
         }
         chg_virtue(player_ptr, V_VITALITY, -1);
-        return PROCESS_TRUE;
+        return ProcessResult::PROCESS_TRUE;
     }
 
     em_ptr->skipped = true;
-    return PROCESS_CONTINUE;
+    return ProcessResult::PROCESS_CONTINUE;
 }
 
-process_result effect_monster_photo(PlayerType *player_ptr, effect_monster_type *em_ptr)
+ProcessResult effect_monster_photo(PlayerType *player_ptr, effect_monster_type *em_ptr)
 {
     if (!em_ptr->who) {
         msg_format(_("%sを写真に撮った。", "You take a photograph of %s."), em_ptr->m_name);
@@ -299,11 +299,11 @@ process_result effect_monster_photo(PlayerType *player_ptr, effect_monster_type 
         em_ptr->dam = 0;
     }
 
-    em_ptr->photo = em_ptr->m_ptr->r_idx;
-    return PROCESS_CONTINUE;
+    em_ptr->photo = enum2i(em_ptr->m_ptr->r_idx);
+    return ProcessResult::PROCESS_CONTINUE;
 }
 
-process_result effect_monster_wounds(effect_monster_type *em_ptr)
+ProcessResult effect_monster_wounds(effect_monster_type *em_ptr)
 {
     if (em_ptr->seen) {
         em_ptr->obvious = true;
@@ -314,7 +314,7 @@ process_result effect_monster_wounds(effect_monster_type *em_ptr)
         em_ptr->dam = 0;
     }
 
-    return PROCESS_CONTINUE;
+    return ProcessResult::PROCESS_CONTINUE;
 }
 
 /*!
@@ -322,7 +322,7 @@ process_result effect_monster_wounds(effect_monster_type *em_ptr)
  * @param em_ptr モンスター効果構造体への参照ポインタ
  * @return ここのスイッチングで終るならTRUEかFALSE、後続処理を実行するならCONTINUE
  */
-process_result switch_effects_monster(PlayerType *player_ptr, effect_monster_type *em_ptr, std::optional<CapturedMonsterType *> cap_mon_ptr)
+ProcessResult switch_effects_monster(PlayerType *player_ptr, effect_monster_type *em_ptr, std::optional<CapturedMonsterType *> cap_mon_ptr)
 {
     switch (em_ptr->attribute) {
     case AttributeType::PSY_SPEAR:
@@ -479,7 +479,7 @@ process_result switch_effects_monster(PlayerType *player_ptr, effect_monster_typ
     case AttributeType::CAPTURE:
         return effect_monster_capture(player_ptr, em_ptr, cap_mon_ptr);
     case AttributeType::ATTACK:
-        return do_cmd_attack(player_ptr, em_ptr->y, em_ptr->x, i2enum<combat_options>(em_ptr->dam)) ? PROCESS_TRUE : PROCESS_FALSE;
+        return do_cmd_attack(player_ptr, em_ptr->y, em_ptr->x, i2enum<combat_options>(em_ptr->dam)) ? ProcessResult::PROCESS_TRUE : ProcessResult::PROCESS_FALSE;
     case AttributeType::ENGETSU:
         return effect_monster_engetsu(player_ptr, em_ptr);
     case AttributeType::GENOCIDE:
@@ -499,7 +499,7 @@ process_result switch_effects_monster(PlayerType *player_ptr, effect_monster_typ
     default: {
         em_ptr->skipped = true;
         em_ptr->dam = 0;
-        return PROCESS_CONTINUE;
+        return ProcessResult::PROCESS_CONTINUE;
     }
     }
 }

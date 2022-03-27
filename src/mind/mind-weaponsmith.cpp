@@ -309,7 +309,6 @@ static void add_essence(PlayerType *player_ptr, SmithCategoryType mode)
     char choice;
     concptr q, s;
     ObjectType *o_ptr;
-    int ask = true;
     char out_val[160];
     GAME_TEXT o_name[MAX_NLEN];
     int menu_line = (use_menu ? 1 : 0);
@@ -346,6 +345,7 @@ static void add_essence(PlayerType *player_ptr, SmithCategoryType mode)
                 break;
             }
 
+            auto should_redraw_cursor = true;
             if (use_menu) {
                 switch (choice) {
                 case '0': {
@@ -388,7 +388,7 @@ static void add_essence(PlayerType *player_ptr, SmithCategoryType mode)
                 case '\r':
                 case '\n': {
                     i = menu_line - 1;
-                    ask = false;
+                    should_redraw_cursor = false;
                     break;
                 }
                 }
@@ -399,7 +399,7 @@ static void add_essence(PlayerType *player_ptr, SmithCategoryType mode)
             }
 
             /* Request redraw */
-            if ((choice == ' ') || (use_menu && ask)) {
+            if ((choice == ' ') || (use_menu && should_redraw_cursor)) {
                 if (!use_menu) {
                     page++;
                 }
@@ -412,16 +412,7 @@ static void add_essence(PlayerType *player_ptr, SmithCategoryType mode)
             }
 
             if (!use_menu) {
-                /* Note verify */
-                ask = (isupper(choice));
-
-                /* Lowercase */
-                if (ask) {
-                    choice = (char)tolower(choice);
-                }
-
-                /* Extract request */
-                i = (islower(choice) ? A2I(choice) : -1);
+                i = A2I(choice);
             }
 
             effect_idx = page * effect_num_per_page + i;
@@ -429,19 +420,6 @@ static void add_essence(PlayerType *player_ptr, SmithCategoryType mode)
             if ((effect_idx < 0) || (effect_idx >= smith_effect_list_max) || smith.get_addable_count(smith_effect_list[effect_idx]) <= 0) {
                 bell();
                 continue;
-            }
-
-            /* Verify it */
-            if (ask) {
-                char tmp_val[160];
-
-                /* Prompt */
-                (void)strnfmt(tmp_val, 78, _("%sを付加しますか？ ", "Add the ability of %s? "), Smith::get_effect_name(smith_effect_list[i]));
-
-                /* Belay that order */
-                if (!get_check(tmp_val)) {
-                    continue;
-                }
             }
 
             /* Stop the loop */

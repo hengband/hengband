@@ -5,7 +5,7 @@ jp=$(grep "#define JP" autoconf.h | wc -l)
 if test $jp -eq 1; then
     # Prepare the various file paths.
     eval SRC_FILE=\${$#}
-    OBJ_FILE=$(dirname $SRC_FILE)/$(basename $SRC_FILE .cpp).o
+    OBJ_FILE=$(echo $SRC_FILE | sed -E 's/\..+$/\.o/')
     SRC_DIR=$(
         cd $(dirname $0)
         pwd

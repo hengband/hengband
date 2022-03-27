@@ -141,7 +141,7 @@ static void send_waiting_record(PlayerType *player_ptr)
     } else {
         player_ptr->wait_report_score = false;
         top_twenty(player_ptr);
-        if (!save_player(player_ptr, SAVE_TYPE_CLOSE_GAME)) {
+        if (!save_player(player_ptr, SaveType::CLOSE_GAME)) {
             msg_print(_("セーブ失敗！", "death save failed!"));
         }
     }
@@ -309,7 +309,7 @@ static void init_riding_pet(PlayerType *player_ptr, bool new_game)
         return;
     }
 
-    MONRACE_IDX pet_r_idx = pc.equals(PlayerClassType::CAVALRY) ? MON_HORSE : MON_YASE_HORSE;
+    MonsterRaceId pet_r_idx = pc.equals(PlayerClassType::CAVALRY) ? MonsterRaceId::HORSE : MonsterRaceId::YASE_HORSE;
     auto *r_ptr = &r_info[pet_r_idx];
     place_monster_aux(player_ptr, 0, player_ptr->y, player_ptr->x - 1, pet_r_idx, (PM_FORCE_PET | PM_NO_KAGE));
     auto *m_ptr = &player_ptr->current_floor_ptr->m_list[hack_m_idx_ii];

@@ -122,7 +122,7 @@ void process_monster(PlayerType *player_ptr, MONSTER_IDX m_idx)
 
     decide_drop_from_monster(player_ptr, m_idx, turn_flags_ptr->is_riding_mon);
     if (m_ptr->mflag2.has(MonsterConstantFlagType::CHAMELEON) && one_in_(13) && !monster_csleep_remaining(m_ptr)) {
-        choose_new_monster(player_ptr, m_idx, false, 0);
+        choose_new_monster(player_ptr, m_idx, false, MonsterRace::empty_id());
         r_ptr = &r_info[m_ptr->r_idx];
     }
 
@@ -266,7 +266,7 @@ bool vanish_summoned_children(PlayerType *player_ptr, MONSTER_IDX m_idx, bool se
     }
 
     // parent_m_idxが自分自身を指している場合は召喚主は消滅している
-    if (m_ptr->parent_m_idx != m_idx && (player_ptr->current_floor_ptr->m_list[m_ptr->parent_m_idx].r_idx > 0)) {
+    if (m_ptr->parent_m_idx != m_idx && MonsterRace(player_ptr->current_floor_ptr->m_list[m_ptr->parent_m_idx].r_idx).is_valid()) {
         return false;
     }
 
@@ -374,7 +374,7 @@ void process_angar(PlayerType *player_ptr, MONSTER_IDX m_idx, bool see_m)
 bool explode_grenade(PlayerType *player_ptr, MONSTER_IDX m_idx)
 {
     auto *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
-    if (m_ptr->r_idx != MON_GRENADE) {
+    if (m_ptr->r_idx != MonsterRaceId::GRENADE) {
         return false;
     }
 
@@ -392,7 +392,7 @@ void process_special(PlayerType *player_ptr, MONSTER_IDX m_idx)
 {
     auto *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
     auto *r_ptr = &r_info[m_ptr->r_idx];
-    if (r_ptr->ability_flags.has_not(MonsterAbilityType::SPECIAL) || (m_ptr->r_idx != MON_OHMU) || player_ptr->current_floor_ptr->inside_arena || player_ptr->phase_out || (r_ptr->freq_spell == 0) || (randint1(100) > r_ptr->freq_spell)) {
+    if (r_ptr->ability_flags.has_not(MonsterAbilityType::SPECIAL) || (m_ptr->r_idx != MonsterRaceId::OHMU) || player_ptr->current_floor_ptr->inside_arena || player_ptr->phase_out || (r_ptr->freq_spell == 0) || (randint1(100) > r_ptr->freq_spell)) {
         return;
     }
 
@@ -560,11 +560,11 @@ void process_monsters(PlayerType *player_ptr)
     old_race_flags tmp_flags;
     old_race_flags *old_race_flags_ptr = init_old_race_flags(&tmp_flags);
     player_ptr->current_floor_ptr->monster_noise = false;
-    MONRACE_IDX old_monster_race_idx = player_ptr->monster_race_idx;
+    MonsterRaceId old_monster_race_idx = player_ptr->monster_race_idx;
     save_old_race_flags(player_ptr->monster_race_idx, old_race_flags_ptr);
     sweep_monster_process(player_ptr);
     hack_m_idx = 0;
-    if (!player_ptr->monster_race_idx || (player_ptr->monster_race_idx != old_monster_race_idx)) {
+    if (!MonsterRace(player_ptr->monster_race_idx).is_valid() || (player_ptr->monster_race_idx != old_monster_race_idx)) {
         return;
     }
 

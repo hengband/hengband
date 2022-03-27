@@ -87,7 +87,7 @@ bool monster_can_cross_terrain(PlayerType *player_ptr, FEAT_IDX feat, monster_ra
         return false;
     }
 
-    if (f_ptr->flags.has(FloorFeatureType::MOUNTAIN) && (r_ptr->flags8 & RF8_WILD_MOUNTAIN)) {
+    if (f_ptr->flags.has(FloorFeatureType::MOUNTAIN) && (r_ptr->wilderness_flags.has(MonsterWildernessType::WILD_MOUNTAIN))) {
         return true;
     }
 
@@ -196,7 +196,7 @@ bool are_enemies(PlayerType *player_ptr, monster_type *m_ptr, monster_type *n_pt
         return true;
     }
 
-    if ((r_ptr->flags8 & (RF8_WILD_TOWN | RF8_WILD_ALL)) && (s_ptr->flags8 & (RF8_WILD_TOWN | RF8_WILD_ALL))) {
+    if (r_ptr->wilderness_flags.has_any_of({ MonsterWildernessType::WILD_TOWN, MonsterWildernessType::WILD_ALL }) && s_ptr->wilderness_flags.has_any_of({ MonsterWildernessType::WILD_TOWN, MonsterWildernessType::WILD_ALL })) {
         if (!is_pet(m_ptr) && !is_pet(n_ptr)) {
             return false;
         }
@@ -302,7 +302,7 @@ bool is_hostile(const monster_type *m_ptr)
  */
 bool is_mimicry(monster_type *m_ptr)
 {
-    if (m_ptr->ap_r_idx == MON_IT || m_ptr->ap_r_idx == MON_NULL || m_ptr->ap_r_idx == MON_BEHINDER) {
+    if (m_ptr->ap_r_idx == MonsterRaceId::IT || m_ptr->ap_r_idx == MonsterRaceId::NULL_ || m_ptr->ap_r_idx == MonsterRaceId::BEHINDER) {
         return true;
     }
 
@@ -329,14 +329,14 @@ monster_race *real_r_ptr(monster_type *m_ptr)
     return &r_info[real_r_idx(m_ptr)];
 }
 
-MONRACE_IDX real_r_idx(monster_type *m_ptr)
+MonsterRaceId real_r_idx(monster_type *m_ptr)
 {
     auto *r_ptr = &r_info[m_ptr->r_idx];
     if (m_ptr->mflag2.has(MonsterConstantFlagType::CHAMELEON)) {
         if (r_ptr->kind_flags.has(MonsterKindType::UNIQUE)) {
-            return MON_CHAMELEON_K;
+            return MonsterRaceId::CHAMELEON_K;
         } else {
-            return MON_CHAMELEON;
+            return MonsterRaceId::CHAMELEON;
         }
     }
 

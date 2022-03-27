@@ -574,7 +574,7 @@ static TERM_COLOR spell_color(AttributeType type)
  * If the distance is not "one", we (may) return "*".
  * </pre>
  */
-uint16_t bolt_pict(POSITION y, POSITION x, POSITION ny, POSITION nx, AttributeType typ)
+std::pair<TERM_COLOR, char> bolt_pict(POSITION y, POSITION x, POSITION ny, POSITION nx, AttributeType typ)
 {
     int base;
 
@@ -620,7 +620,7 @@ uint16_t bolt_pict(POSITION y, POSITION x, POSITION ny, POSITION nx, AttributeTy
     auto c = misc_to_char[base + k];
 
     /* Create pict */
-    return PICT(a, c);
+    return { a, c };
 }
 
 /*!

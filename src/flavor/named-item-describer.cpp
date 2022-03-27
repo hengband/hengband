@@ -280,7 +280,8 @@ static void describe_artifact_prefix_en(flavor_type *flavor_ptr)
         return;
     }
 
-    if ((flavor_ptr->known && flavor_ptr->o_ptr->is_artifact()) || ((flavor_ptr->o_ptr->tval == ItemKindType::CORPSE) && r_info[flavor_ptr->o_ptr->pval].kind_flags.has(MonsterKindType::UNIQUE))) {
+    const auto corpse_r_idx = i2enum<MonsterRaceId>(flavor_ptr->o_ptr->pval);
+    if ((flavor_ptr->known && flavor_ptr->o_ptr->is_artifact()) || ((flavor_ptr->o_ptr->tval == ItemKindType::CORPSE) && r_info[corpse_r_idx].kind_flags.has(MonsterKindType::UNIQUE))) {
         flavor_ptr->t = object_desc_str(flavor_ptr->t, "The ");
         return;
     }

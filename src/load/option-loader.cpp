@@ -59,8 +59,8 @@ void rd_options(void)
     cheat_sight = any_bits(c, 0x0040);
     cheat_immortal = any_bits(c, 0x0020);
 
-    autosave_l = rd_byte() != 0;
-    autosave_t = rd_byte() != 0;
+    autosave_l = rd_bool();
+    autosave_t = rd_bool();
     autosave_freq = rd_s16b();
 
     BIT_FLAGS flag[8];

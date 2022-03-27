@@ -5,7 +5,7 @@
 
 class ObjectType;
 class PlayerType;
-class LiteEnchanter : EnchanterBase {
+class LiteEnchanter : public EnchanterBase {
 public:
     LiteEnchanter(PlayerType *player_ptr, ObjectType *o_ptr, int power);
     void apply_magic() override;

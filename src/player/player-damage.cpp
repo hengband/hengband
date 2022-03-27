@@ -378,7 +378,7 @@ int take_hit(PlayerType *player_ptr, int damage_type, int damage, concptr hit_fr
         bool android = PlayerRace(player_ptr).equals(PlayerRaceType::ANDROID);
 
         /* 死んだ時に強制終了して死を回避できなくしてみた by Habu */
-        if (!cheat_save && !save_player(player_ptr, SAVE_TYPE_CLOSE_GAME)) {
+        if (!cheat_save && !save_player(player_ptr, SaveType::CLOSE_GAME)) {
             msg_print(_("セーブ失敗！", "death save failed!"));
         }
 

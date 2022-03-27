@@ -57,10 +57,6 @@ static bool grab_one_basic_monster_flag(dungeon_type *d_ptr, std::string_view wh
         return true;
     }
 
-    if (info_grab_one_flag(d_ptr->mflags9, r_info_flags9, what)) {
-        return true;
-    }
-
     if (EnumClassFlagGroup<MonsterResistanceType>::grab_one_flag(d_ptr->mon_resistance_flags, r_info_flagsr, what)) {
         return true;
     }
@@ -74,6 +70,14 @@ static bool grab_one_basic_monster_flag(dungeon_type *d_ptr, std::string_view wh
     }
 
     if (EnumClassFlagGroup<MonsterKindType>::grab_one_flag(d_ptr->mon_kind_flags, r_info_kind_flags, what)) {
+        return true;
+    }
+
+    if (EnumClassFlagGroup<MonsterDropType>::grab_one_flag(d_ptr->mon_drop_flags, r_info_drop_flags, what)) {
+        return true;
+    }
+
+    if (EnumClassFlagGroup<MonsterWildernessType>::grab_one_flag(d_ptr->mon_wilderness_flags, r_info_wilderness_flags, what)) {
         return true;
     }
 
@@ -292,11 +296,7 @@ errr parse_d_info(std::string_view buf, angband_header *)
 
             const auto &m_tokens = str_split(f, '_');
             if (m_tokens[0] == "R" && m_tokens[1] == "CHAR") {
-                if (m_tokens[2].size() > 4) {
-                    return PARSE_ERROR_GENERIC;
-                }
-
-                strcpy(d_ptr->r_char, m_tokens[2].c_str());
+                d_ptr->r_chars.insert(d_ptr->r_chars.end(), m_tokens[2].begin(), m_tokens[2].end());
                 continue;
             }
 

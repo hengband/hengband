@@ -197,11 +197,13 @@ static void trigger_text_to_ascii(char **bufptr, concptr *strptr)
  * parsing "\xFF" into a (signed) char.  Whoever thought of making
  * the "sign" of a "char" undefined is a complete moron.  Oh well.
  */
-void text_to_ascii(char *buf, std::string_view sv)
+void text_to_ascii(char *buf, std::string_view sv, size_t bufsize)
 {
     char *s = buf;
+    auto buffer_end = s + bufsize;
     auto str = sv.data();
-    while (*str) {
+    constexpr auto step_size = 1;
+    while (*str && (s + step_size < buffer_end)) {
         if (*str == '\\') {
             str++;
             if (!(*str)) {
@@ -331,11 +333,13 @@ static bool trigger_ascii_to_text(char **bufptr, concptr *strptr)
 /*
  * Hack -- convert a string into a printable form
  */
-void ascii_to_text(char *buf, std::string_view sv)
+void ascii_to_text(char *buf, std::string_view sv, size_t bufsize)
 {
     char *s = buf;
+    auto buffer_end = s + bufsize;
     auto str = sv.data();
-    while (*str) {
+    constexpr auto step_size = 4;
+    while (*str && (s + step_size < buffer_end)) {
         byte i = (byte)(*str++);
         if (i == 31) {
             if (!trigger_ascii_to_text(&s, &str)) {

@@ -32,7 +32,7 @@ void monster_desc(PlayerType *player_ptr, char *desc, monster_type *m_ptr, BIT_F
     auto is_hallucinated = player_ptr->effects()->hallucination()->is_hallucinated();
     if (is_hallucinated && !(mode & MD_IGNORE_HALLU)) {
         if (one_in_(2)) {
-            if (!get_rnd_line(_("silly_j.txt", "silly.txt"), m_ptr->r_idx, silly_name)) {
+            if (!get_rnd_line(_("silly_j.txt", "silly.txt"), enum2i(m_ptr->r_idx), silly_name)) {
                 named = true;
             }
         }
@@ -41,7 +41,8 @@ void monster_desc(PlayerType *player_ptr, char *desc, monster_type *m_ptr, BIT_F
             monster_race *hallu_race;
 
             do {
-                hallu_race = &r_info[randint1(r_info.size() - 1)];
+                auto r_idx = MonsterRace::pick_one_at_random();
+                hallu_race = &r_info[r_idx];
             } while (hallu_race->name.empty() || hallu_race->kind_flags.has(MonsterKindType::UNIQUE));
 
             strcpy(silly_name, (hallu_race->name.c_str()));

@@ -53,6 +53,19 @@ enum class SavedataLoreOlderThan14FlagType {
     RFR_RES_TELE = 0x00100000, /* Resist teleportation */
 };
 
+enum class SavedataLoreOlderThan18FlagType {
+    RF1_ONLY_GOLD = 0x00100000, /*!< モンスター特性: 財宝しか落とさない / Drop only gold */
+    RF1_ONLY_ITEM = 0x00200000, /*!< モンスター特性: アイテムしか落とさない / Drop only items */
+    RF1_DROP_60 = 0x00400000, /*!< モンスター特性: 落とすアイテム数60%で+1/ Drop an item/gold (60%) */
+    RF1_DROP_90 = 0x00800000, /*!< モンスター特性: 落とすアイテム数90%で+1 / Drop an item/gold (90%) */
+    RF1_DROP_1D2 = 0x01000000, /*!< モンスター特性: 落とすアイテム数+1d2 / Drop 1d2 items/gold */
+    RF1_DROP_2D2 = 0x02000000, /*!< モンスター特性: 落とすアイテム数+2d2 / Drop 2d2 items/gold */
+    RF1_DROP_3D2 = 0x04000000, /*!< モンスター特性: 落とすアイテム数+3d2 / Drop 3d2 items/gold */
+    RF1_DROP_4D2 = 0x08000000, /*!< モンスター特性: 落とすアイテム数+4d2 / Drop 4d2 items/gold */
+    RF1_DROP_GOOD = 0x10000000, /*!< モンスター特性: 必ず上質品をドロップする / Drop good items */
+    RF1_DROP_GREAT = 0x20000000, /*!< モンスター特性: 必ず高級品をドロップする / Drop great items */
+};
+
 enum class OldQuestId15 {
     CITY_SEA = 17,
 };

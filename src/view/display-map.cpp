@@ -62,7 +62,8 @@ static void image_object(TERM_COLOR *ap, char *cp)
 static void image_monster(TERM_COLOR *ap, char *cp)
 {
     if (use_graphics) {
-        auto *r_ptr = &r_info[randint1(r_info.size() - 1)];
+        auto r_idx = MonsterRace::pick_one_at_random();
+        auto *r_ptr = &r_info[r_idx];
         *cp = r_ptr->x_char;
         *ap = r_ptr->x_attr;
         return;
@@ -371,7 +372,8 @@ void map_info(PlayerType *player_ptr, POSITION y, POSITION x, TERM_COLOR *ap, ch
 
     if (r_ptr->visual_flags.has(MonsterVisualType::SHAPECHANGER)) {
         if (use_graphics) {
-            monster_race *tmp_r_ptr = &r_info[randint1(r_info.size() - 1)];
+            auto r_idx = MonsterRace::pick_one_at_random();
+            monster_race *tmp_r_ptr = &r_info[r_idx];
             *cp = tmp_r_ptr->x_char;
             *ap = tmp_r_ptr->x_attr;
         } else {

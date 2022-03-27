@@ -29,7 +29,7 @@ const who_word_definition Who::words = {
  */
 hook_c_roff_pf hook_c_roff = c_roff;
 
-lore_type *initialize_lore_type(lore_type *lore_ptr, MONRACE_IDX r_idx, monster_lore_mode mode)
+lore_type *initialize_lore_type(lore_type *lore_ptr, MonsterRaceId r_idx, monster_lore_mode mode)
 {
 #ifdef JP
 #else
@@ -47,6 +47,7 @@ lore_type *initialize_lore_type(lore_type *lore_ptr, MONRACE_IDX r_idx, monster_
     lore_ptr->ability_flags = (lore_ptr->r_ptr->ability_flags & lore_ptr->r_ptr->r_ability_flags);
     lore_ptr->aura_flags = (lore_ptr->r_ptr->aura_flags & lore_ptr->r_ptr->r_aura_flags);
     lore_ptr->behavior_flags = (lore_ptr->r_ptr->behavior_flags & lore_ptr->r_ptr->r_behavior_flags);
+    lore_ptr->drop_flags = (lore_ptr->r_ptr->drop_flags & lore_ptr->r_ptr->r_drop_flags);
     lore_ptr->flags7 = (lore_ptr->r_ptr->flags7 & lore_ptr->r_ptr->flags7);
     lore_ptr->resistance_flags = (lore_ptr->r_ptr->resistance_flags & lore_ptr->r_ptr->r_resistance_flags);
     lore_ptr->reinforce = false;

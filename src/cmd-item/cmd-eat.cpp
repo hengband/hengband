@@ -71,7 +71,7 @@ bool exe_eat_food_type_object(PlayerType *player_ptr, ObjectType *o_ptr)
     case SV_FOOD_BLINDNESS:
         return !has_resist_blind(player_ptr) && bss.mod_blindness(randint0(200) + 200);
     case SV_FOOD_PARANOIA:
-        return !has_resist_fear(player_ptr) && bss.mod_afraidness(randint0(10) + 10);
+        return !has_resist_fear(player_ptr) && bss.mod_fear(randint0(10) + 10);
     case SV_FOOD_CONFUSION:
         return !has_resist_conf(player_ptr) && bss.mod_confusion(randint0(10) + 10);
     case SV_FOOD_HALLUCINATION:
@@ -107,7 +107,7 @@ bool exe_eat_food_type_object(PlayerType *player_ptr, ObjectType *o_ptr)
     case SV_FOOD_CURE_BLINDNESS:
         return bss.blindness(0);
     case SV_FOOD_CURE_PARANOIA:
-        return bss.afraidness(0);
+        return bss.fear(0);
     case SV_FOOD_CURE_CONFUSION:
         return bss.confusion(0);
     case SV_FOOD_CURE_SERIOUS:
@@ -281,7 +281,8 @@ void exe_eat_food(PlayerType *player_ptr, INVENTORY_IDX item)
     auto food_type = PlayerRace(player_ptr).food();
 
     /* Balrogs change humanoid corpses to energy */
-    if (food_type == PlayerRaceFoodType::CORPSE && (o_ptr->tval == ItemKindType::CORPSE && o_ptr->sval == SV_CORPSE && angband_strchr("pht", r_info[o_ptr->pval].d_char))) {
+    const auto corpse_r_idx = i2enum<MonsterRaceId>(o_ptr->pval);
+    if (food_type == PlayerRaceFoodType::CORPSE && (o_ptr->tval == ItemKindType::CORPSE && o_ptr->sval == SV_CORPSE && angband_strchr("pht", r_info[corpse_r_idx].d_char))) {
         GAME_TEXT o_name[MAX_NLEN];
         describe_flavor(player_ptr, o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
         msg_format(_("%sは燃え上り灰になった。精力を吸収した気がする。", "%^s is burnt to ashes.  You absorb its vitality!"), o_name);

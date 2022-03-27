@@ -29,7 +29,7 @@
  * @details
  * Note that this function is one of the more "dangerous" ones...
  */
-static MONRACE_IDX poly_r_idx(PlayerType *player_ptr, MONRACE_IDX r_idx)
+static MonsterRaceId poly_r_idx(PlayerType *player_ptr, MonsterRaceId r_idx)
 {
     auto *r_ptr = &r_info[r_idx];
     if (r_ptr->kind_flags.has(MonsterKindType::UNIQUE) || any_bits(r_ptr->flags1, RF1_QUESTOR)) {
@@ -38,10 +38,10 @@ static MONRACE_IDX poly_r_idx(PlayerType *player_ptr, MONRACE_IDX r_idx)
 
     DEPTH lev1 = r_ptr->level - ((randint1(20) / randint1(9)) + 1);
     DEPTH lev2 = r_ptr->level + ((randint1(20) / randint1(9)) + 1);
-    MONRACE_IDX r;
+    MonsterRaceId r;
     for (int i = 0; i < 1000; i++) {
         r = get_mon_num(player_ptr, 0, (player_ptr->current_floor_ptr->dun_level + r_ptr->level) / 2 + 5, 0);
-        if (!r) {
+        if (!MonsterRace(r).is_valid()) {
             break;
         }
 
@@ -73,8 +73,8 @@ bool polymorph_monster(PlayerType *player_ptr, POSITION y, POSITION x)
     auto *floor_ptr = player_ptr->current_floor_ptr;
     auto *g_ptr = &floor_ptr->grid_array[y][x];
     auto *m_ptr = &floor_ptr->m_list[g_ptr->m_idx];
-    MONRACE_IDX new_r_idx;
-    MONRACE_IDX old_r_idx = m_ptr->r_idx;
+    MonsterRaceId new_r_idx;
+    MonsterRaceId old_r_idx = m_ptr->r_idx;
     bool targeted = target_who == g_ptr->m_idx;
     bool health_tracked = player_ptr->health_who == g_ptr->m_idx;
 

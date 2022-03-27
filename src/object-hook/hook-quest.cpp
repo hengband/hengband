@@ -19,8 +19,6 @@
  */
 bool object_is_bounty(PlayerType *player_ptr, ObjectType *o_ptr)
 {
-    int i;
-
     if (o_ptr->tval != ItemKindType::CORPSE) {
         return false;
     }
@@ -29,24 +27,16 @@ bool object_is_bounty(PlayerType *player_ptr, ObjectType *o_ptr)
         return false;
     }
 
-    if (player_ptr->today_mon > 0 && (streq(r_info[o_ptr->pval].name.c_str(), r_info[w_ptr->today_mon].name.c_str()))) {
+    auto corpse_r_idx = i2enum<MonsterRaceId>(o_ptr->pval);
+    if (player_ptr->knows_daily_bounty && (streq(r_info[corpse_r_idx].name.c_str(), r_info[w_ptr->today_mon].name.c_str()))) {
         return true;
     }
 
-    if (o_ptr->pval == MON_TSUCHINOKO) {
+    if (corpse_r_idx == MonsterRaceId::TSUCHINOKO) {
         return true;
     }
 
-    for (i = 0; i < MAX_BOUNTY; i++) {
-        if (o_ptr->pval == w_ptr->bounty_r_idx[i]) {
-            break;
-        }
-    }
-    if (i < MAX_BOUNTY) {
-        return true;
-    }
-
-    return false;
+    return MonsterRace(corpse_r_idx).is_bounty(true);
 }
 
 /*!

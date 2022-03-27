@@ -11,7 +11,6 @@
 #include "inventory/inventory-slot-types.h"
 #include "monster-race/monster-race-hook.h"
 #include "monster-race/monster-race.h"
-#include "monster-race/race-flags9.h"
 #include "monster-race/race-indice-types.h"
 #include "monster/monster-list.h"
 #include "monster/monster-util.h"
@@ -28,6 +27,7 @@
 #include "system/player-type-definition.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
+#include <unordered_map>
 
 /*!
  * @brief コンストラクタ
@@ -104,10 +104,10 @@ void OtherItemsEnchanter::enchant_wand_staff()
 void OtherItemsEnchanter::generate_figurine()
 {
     auto *floor_ptr = this->player_ptr->current_floor_ptr;
-    short r_idx;
+    MonsterRaceId r_idx;
     while (true) {
-        r_idx = randint1(r_info.size() - 1);
-        if (!item_monster_okay(this->player_ptr, r_idx) || (r_idx == MON_TSUCHINOKO)) {
+        r_idx = MonsterRace::pick_one_at_random();
+        if (!item_monster_okay(this->player_ptr, r_idx) || (r_idx == MonsterRaceId::TSUCHINOKO)) {
             continue;
         }
 
@@ -120,7 +120,7 @@ void OtherItemsEnchanter::generate_figurine()
         break;
     }
 
-    this->o_ptr->pval = r_idx;
+    this->o_ptr->pval = enum2i(r_idx);
     if (one_in_(6)) {
         this->o_ptr->curse_flags.set(CurseTraitType::CURSED);
     }
@@ -136,28 +136,26 @@ void OtherItemsEnchanter::generate_figurine()
  */
 void OtherItemsEnchanter::generate_corpse()
 {
-    uint32_t match = 0;
-    if (this->o_ptr->sval == SV_SKELETON) {
-        match = RF9_DROP_SKELETON;
-    } else if (this->o_ptr->sval == SV_CORPSE) {
-        match = RF9_DROP_CORPSE;
-    }
+    const std::unordered_map<OBJECT_SUBTYPE_VALUE, MonsterDropType> match = {
+        { SV_SKELETON, MonsterDropType::DROP_SKELETON },
+        { SV_CORPSE, MonsterDropType::DROP_CORPSE },
+    };
 
     get_mon_num_prep(this->player_ptr, item_monster_okay, nullptr);
     auto *floor_ptr = this->player_ptr->current_floor_ptr;
-    short r_idx;
+    MonsterRaceId r_idx;
     while (true) {
         r_idx = get_mon_num(this->player_ptr, 0, floor_ptr->dun_level, 0);
         auto &r_ref = r_info[r_idx];
         auto check = (floor_ptr->dun_level < r_ref.level) ? (r_ref.level - floor_ptr->dun_level) : 0;
-        if ((r_ref.rarity == 0) || none_bits(r_ref.flags9, match) || (randint0(check) > 0)) {
+        if ((r_ref.rarity == 0) || (match.find(o_ptr->sval) != match.end() && r_ref.drop_flags.has_not(match.at(o_ptr->sval))) || (randint0(check) > 0)) {
             continue;
         }
 
         break;
     }
 
-    this->o_ptr->pval = r_idx;
+    this->o_ptr->pval = enum2i(r_idx);
     object_aware(this->player_ptr, this->o_ptr);
     object_known(this->o_ptr);
 }
@@ -168,19 +166,18 @@ void OtherItemsEnchanter::generate_corpse()
  */
 void OtherItemsEnchanter::generate_statue()
 {
-    short r_idx;
-    const auto *r_ptr = &r_info[1];
-    while (true) {
-        r_idx = randint1(r_info.size() - 1);
-        r_ptr = &r_info[r_idx];
-        if (r_ptr->rarity == 0) {
-            continue;
+    auto pick_r_idx_for_statue = [] {
+        while (true) {
+            auto r_idx = MonsterRace::pick_one_at_random();
+            if (r_info[r_idx].rarity > 0) {
+                return r_idx;
+            }
         }
+    };
+    auto r_idx = pick_r_idx_for_statue();
+    auto *r_ptr = &r_info[r_idx];
 
-        break;
-    }
-
-    this->o_ptr->pval = r_idx;
+    this->o_ptr->pval = enum2i(r_idx);
     if (cheat_peek) {
         msg_format(_("%sの像", "Statue of %s"), r_ptr->name.c_str());
     }
