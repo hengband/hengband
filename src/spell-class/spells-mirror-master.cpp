@@ -39,6 +39,8 @@
 #include "timed-effect/timed-effects.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
+#include <algorithm>
+#include <map>
 
 SpellsMirrorMaster::SpellsMirrorMaster(PlayerType *player_ptr)
     : player_ptr(player_ptr)
@@ -356,6 +358,86 @@ void SpellsMirrorMaster::project_seeker_ray(int target_x, int target_y, int dam)
     }
 }
 
+static void draw_super_ray_pict(PlayerType *player_ptr, const std::map<int, std::vector<projection_path::const_iterator>> &pos_list_map, const std::vector<projection_path> &second_path_g_list, const std::pair<int, int> &center)
+{
+    if (delay_factor <= 0) {
+        return;
+    }
+
+    constexpr auto typ = AttributeType::SUPER_RAY;
+
+    // 8方向のスーパーレイの軌道上の最後の到達点の座標のリスト
+    std::vector<std::pair<int, int>> last_pos_list;
+    std::transform(second_path_g_list.begin(), second_path_g_list.end(), std::back_inserter(last_pos_list),
+        [](const auto &path_g) { return path_g.back(); });
+
+    // スーパーレイの描画を行った座標のリスト。スーパーレイの全ての描画完了後に描画を消去するのに使用する。
+    std::vector<std::pair<int, int>> drawn_pos_list;
+
+    for (const auto &[n, pos_list] : pos_list_map) {
+        // スーパーレイの最終到達点の座標の描画を行った座標のリスト。最終到達点の描画を '*' で上書きするのに使用する。
+        std::vector<std::pair<int, int>> drawn_last_pos_list;
+
+        for (const auto &it : pos_list) {
+            const auto [y, x] = (n == 1) ? center : *std::next(it, -1);
+            const auto [ny, nx] = *it;
+
+            if (panel_contains(y, x) && player_has_los_bold(player_ptr, y, x)) {
+                print_bolt_pict(player_ptr, y, x, y, x, typ);
+                drawn_pos_list.emplace_back(y, x);
+            }
+            if (panel_contains(ny, nx) && player_has_los_bold(player_ptr, ny, nx)) {
+                print_bolt_pict(player_ptr, y, x, ny, nx, typ);
+                if (std::find(last_pos_list.begin(), last_pos_list.end(), *it) != last_pos_list.end()) {
+                    drawn_last_pos_list.emplace_back(ny, nx);
+                }
+            }
+        }
+        term_fresh();
+        term_xtra(TERM_XTRA_DELAY, delay_factor);
+
+        for (const auto &[y, x] : drawn_last_pos_list) {
+            if (panel_contains(y, x) && player_has_los_bold(player_ptr, y, x)) {
+                print_bolt_pict(player_ptr, y, x, y, x, typ);
+                drawn_pos_list.emplace_back(y, x);
+            }
+        }
+    }
+
+    term_fresh();
+    term_xtra(TERM_XTRA_DELAY, delay_factor);
+
+    for (const auto &[y, x] : drawn_pos_list) {
+        lite_spot(player_ptr, y, x);
+    }
+}
+
+static bool activate_super_ray_effect(PlayerType *player_ptr, int y, int x, int dam, BIT_FLAGS flag)
+{
+    constexpr auto typ = AttributeType::SUPER_RAY;
+    auto notice = false;
+
+    (void)affect_feature(player_ptr, 0, 0, y, x, dam, typ);
+
+    if (affect_item(player_ptr, 0, 0, y, x, dam, typ)) {
+        notice = true;
+    }
+
+    (void)affect_monster(player_ptr, 0, 0, y, x, dam, typ, flag, true);
+
+    const auto *floor_ptr = player_ptr->current_floor_ptr;
+    const auto *g_ptr = &floor_ptr->grid_array[project_m_y][project_m_x];
+    const auto *m_ptr = &floor_ptr->m_list[g_ptr->m_idx];
+    if (project_m_n == 1 && g_ptr->m_idx > 0 && m_ptr->ml) {
+        if (!player_ptr->effects()->hallucination()->is_hallucinated()) {
+            monster_race_track(player_ptr, m_ptr->ap_r_idx);
+        }
+        health_track(player_ptr, g_ptr->m_idx);
+    }
+
+    return notice;
+}
+
 void SpellsMirrorMaster::project_super_ray(int target_x, int target_y, int dam)
 {
     POSITION y1;
@@ -393,6 +475,7 @@ void SpellsMirrorMaster::project_super_ray(int target_x, int target_y, int dam)
     auto oy = y1;
     auto ox = x1;
     auto visual = false;
+    std::vector<std::pair<int, int>> drawn_pos_list;
     for (const auto &[ny, nx] : path_g) {
         if (delay_factor > 0) {
             if (panel_contains(ny, nx) && player_has_los_bold(this->player_ptr, ny, nx)) {
@@ -405,21 +488,24 @@ void SpellsMirrorMaster::project_super_ray(int target_x, int target_y, int dam)
 
                 print_bolt_pict(this->player_ptr, ny, nx, ny, nx, typ);
 
+                drawn_pos_list.emplace_back(ny, nx);
                 visual = true;
             } else if (visual) {
                 term_xtra(TERM_XTRA_DELAY, delay_factor);
             }
         }
 
-        if (affect_item(this->player_ptr, 0, 0, ny, nx, dam, typ)) {
-            res.notice = true;
-        }
         if (!cave_has_flag_bold(floor_ptr, ny, nx, FloorFeatureType::PROJECT)) {
             break;
         }
         oy = ny;
         ox = nx;
     }
+
+    for (const auto &[y, x] : drawn_pos_list) {
+        lite_spot(player_ptr, y, x);
+    }
+
     {
         const auto [y, x] = path_g.back();
         if (floor_ptr->grid_array[y][x].is_mirror()) {
@@ -428,68 +514,37 @@ void SpellsMirrorMaster::project_super_ray(int target_x, int target_y, int dam)
             reset_bits(project_flag, PROJECT_MIRROR);
 
             const auto length = project_length ? project_length : get_max_range(this->player_ptr);
-            for (auto i : { 7, 8, 9, 4, 6, 1, 2, 3 }) {
+            for (auto i : cdd) {
                 const auto dy = ddy[i];
                 const auto dx = ddx[i];
                 second_path_g_list.emplace_back(this->player_ptr, length, y, x, y + dy, x + dx, project_flag);
             }
         }
     }
+
     for (const auto &[py, px] : path_g) {
-        (void)affect_monster(this->player_ptr, 0, 0, py, px, dam, typ, flag, true);
-        auto *g_ptr = &floor_ptr->grid_array[project_m_y][project_m_x];
-        auto *m_ptr = &floor_ptr->m_list[g_ptr->m_idx];
-        if (project_m_n == 1 && g_ptr->m_idx > 0 && m_ptr->ml) {
-            if (!this->player_ptr->effects()->hallucination()->is_hallucinated()) {
-                monster_race_track(this->player_ptr, m_ptr->ap_r_idx);
-            }
-            health_track(this->player_ptr, g_ptr->m_idx);
-        }
-
-        (void)affect_feature(this->player_ptr, 0, 0, py, px, dam, typ);
+        res.notice |= activate_super_ray_effect(this->player_ptr, py, px, dam, flag);
     }
+
+    // 起点の鏡からの距離 → 8方向へのスーパーレイの軌道上のその距離にある座標のイテレータのリストの map
+    std::map<int, std::vector<projection_path::const_iterator>> pos_list_map;
     for (const auto &second_path_g : second_path_g_list) {
-        oy = path_g.back().first;
-        ox = path_g.back().second;
-        for (const auto &[ny, nx] : second_path_g) {
-            if (delay_factor > 0) {
-                if (panel_contains(ny, nx) && player_has_los_bold(this->player_ptr, ny, nx)) {
-                    print_bolt_pict(this->player_ptr, oy, ox, ny, nx, typ);
-                    move_cursor_relative(ny, nx);
-                    term_fresh();
-                    term_xtra(TERM_XTRA_DELAY, delay_factor);
-                    lite_spot(this->player_ptr, ny, nx);
-                    term_fresh();
-
-                    print_bolt_pict(this->player_ptr, ny, nx, ny, nx, typ);
-
-                    visual = true;
-                } else if (visual) {
-                    term_xtra(TERM_XTRA_DELAY, delay_factor);
-                }
-            }
-
-            if (affect_item(this->player_ptr, 0, 0, ny, nx, dam, typ)) {
-                res.notice = true;
-            }
-
-            oy = ny;
-            ox = nx;
+        for (auto it = second_path_g.begin(); it != second_path_g.end(); ++it) {
+            const auto [o_y, o_x] = path_g.back();
+            const auto [y, x] = *it;
+            auto d = distance(o_y, o_x, y, x);
+            pos_list_map[d].push_back(it);
         }
     }
-    for (const auto &second_path_g : second_path_g_list) {
-        for (const auto &[py, px] : second_path_g) {
-            (void)affect_monster(this->player_ptr, 0, 0, py, px, dam, typ, flag, true);
-            auto *g_ptr = &floor_ptr->grid_array[project_m_y][project_m_x];
-            auto *m_ptr = &floor_ptr->m_list[g_ptr->m_idx];
-            if (project_m_n == 1 && g_ptr->m_idx > 0 && m_ptr->ml) {
-                if (!this->player_ptr->effects()->hallucination()->is_hallucinated()) {
-                    monster_race_track(this->player_ptr, m_ptr->ap_r_idx);
-                }
-                health_track(this->player_ptr, g_ptr->m_idx);
-            }
 
-            (void)affect_feature(this->player_ptr, 0, 0, py, px, dam, typ);
+    draw_super_ray_pict(this->player_ptr, pos_list_map, second_path_g_list, path_g.back());
+
+    for (auto &&[n, pos_list] : pos_list_map) {
+        rand_shuffle(pos_list.begin(), pos_list.end());
+
+        for (const auto &it : pos_list) {
+            const auto [y, x] = *it;
+            res.notice |= activate_super_ray_effect(player_ptr, y, x, dam, flag);
         }
     }
 }
