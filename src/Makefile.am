@@ -588,9 +588,10 @@ hengband_SOURCES = \
 	object-activation/activation-util.cpp object-activation/activation-util.h \
 	\
 	object-enchant/activation-info-table.cpp object-enchant/activation-info-table.h \
-	object-enchant/apply-magic.cpp object-enchant/apply-magic.h \
 	object-enchant/dragon-breaths-table.cpp object-enchant/dragon-breaths-table.h \
 	object-enchant/enchanter-base.h \
+	object-enchant/enchanter-factory.cpp object-enchant/enchanter-factory.h \
+	object-enchant/item-magic-applier.cpp object-enchant/item-magic-applier.h \
 	object-enchant/object-boost.cpp object-enchant/object-boost.h \
 	object-enchant/object-curse.cpp object-enchant/object-curse.h \
 	object-enchant/object-ego.cpp object-enchant/object-ego.h \

@@ -14,8 +14,8 @@
 #include "inventory/inventory-slot-types.h"
 #include "io/input-key-acceptor.h"
 #include "io/input-key-requester.h"
-#include "object-enchant/apply-magic.h"
 #include "object-enchant/item-apply-magic.h"
+#include "object-enchant/item-magic-applier.h"
 #include "object-enchant/object-ego.h"
 #include "object-enchant/special-object-flags.h"
 #include "object-enchant/tr-types.h"
@@ -540,32 +540,32 @@ static void wiz_reroll_item(PlayerType *player_ptr, ObjectType *o_ptr)
         /* Apply bad magic, but first clear object */
         case 'w':
             q_ptr->prep(o_ptr->k_idx);
-            apply_magic_to_object(player_ptr, q_ptr, player_ptr->current_floor_ptr->dun_level, AM_NO_FIXED_ART | AM_GOOD | AM_GREAT | AM_CURSED);
+            ItemMagicApplier(player_ptr, q_ptr, player_ptr->current_floor_ptr->dun_level, AM_NO_FIXED_ART | AM_GOOD | AM_GREAT | AM_CURSED).execute();
             break;
         /* Apply bad magic, but first clear object */
         case 'c':
             q_ptr->prep(o_ptr->k_idx);
-            apply_magic_to_object(player_ptr, q_ptr, player_ptr->current_floor_ptr->dun_level, AM_NO_FIXED_ART | AM_GOOD | AM_CURSED);
+            ItemMagicApplier(player_ptr, q_ptr, player_ptr->current_floor_ptr->dun_level, AM_NO_FIXED_ART | AM_GOOD | AM_CURSED).execute();
             break;
         /* Apply normal magic, but first clear object */
         case 'n':
             q_ptr->prep(o_ptr->k_idx);
-            apply_magic_to_object(player_ptr, q_ptr, player_ptr->current_floor_ptr->dun_level, AM_NO_FIXED_ART);
+            ItemMagicApplier(player_ptr, q_ptr, player_ptr->current_floor_ptr->dun_level, AM_NO_FIXED_ART).execute();
             break;
         /* Apply good magic, but first clear object */
         case 'g':
             q_ptr->prep(o_ptr->k_idx);
-            apply_magic_to_object(player_ptr, q_ptr, player_ptr->current_floor_ptr->dun_level, AM_NO_FIXED_ART | AM_GOOD);
+            ItemMagicApplier(player_ptr, q_ptr, player_ptr->current_floor_ptr->dun_level, AM_NO_FIXED_ART | AM_GOOD).execute();
             break;
         /* Apply great magic, but first clear object */
         case 'e':
             q_ptr->prep(o_ptr->k_idx);
-            apply_magic_to_object(player_ptr, q_ptr, player_ptr->current_floor_ptr->dun_level, AM_NO_FIXED_ART | AM_GOOD | AM_GREAT);
+            ItemMagicApplier(player_ptr, q_ptr, player_ptr->current_floor_ptr->dun_level, AM_NO_FIXED_ART | AM_GOOD | AM_GREAT).execute();
             break;
         /* Apply special magic, but first clear object */
         case 's':
             q_ptr->prep(o_ptr->k_idx);
-            apply_magic_to_object(player_ptr, q_ptr, player_ptr->current_floor_ptr->dun_level, AM_GOOD | AM_GREAT | AM_SPECIAL);
+            ItemMagicApplier(player_ptr, q_ptr, player_ptr->current_floor_ptr->dun_level, AM_GOOD | AM_GREAT | AM_SPECIAL).execute();
             if (!q_ptr->is_artifact()) {
                 become_random_artifact(player_ptr, q_ptr, false);
             }
@@ -1073,7 +1073,7 @@ WishResultType do_cmd_wishing(PlayerType *player_ptr, int prob, bool allow_art, 
             if (must || ok_art) {
                 do {
                     o_ptr->prep(k_idx);
-                    apply_magic_to_object(player_ptr, o_ptr, k_ptr->level, (AM_SPECIAL | AM_NO_FIXED_ART));
+                    ItemMagicApplier(player_ptr, o_ptr, k_ptr->level, AM_SPECIAL | AM_NO_FIXED_ART).execute();
                 } while (!o_ptr->art_name || o_ptr->fixed_artifact_idx || o_ptr->is_ego() || o_ptr->is_cursed());
 
                 if (o_ptr->art_name) {
@@ -1097,7 +1097,7 @@ WishResultType do_cmd_wishing(PlayerType *player_ptr, int prob, bool allow_art, 
                     int i = 0;
                     for (i = 0; i < max_roll; i++) {
                         o_ptr->prep(k_idx);
-                        (void)apply_magic_to_object(player_ptr, o_ptr, k_ptr->level, (AM_GREAT | AM_NO_FIXED_ART));
+                        ItemMagicApplier(player_ptr, o_ptr, k_ptr->level, AM_GREAT | AM_NO_FIXED_ART).execute();
 
                         if (o_ptr->fixed_artifact_idx || o_ptr->art_name) {
                             continue;
@@ -1133,7 +1133,7 @@ WishResultType do_cmd_wishing(PlayerType *player_ptr, int prob, bool allow_art, 
         } else {
             for (int i = 0; i < 100; i++) {
                 o_ptr->prep(k_idx);
-                apply_magic_to_object(player_ptr, o_ptr, 0, (AM_NO_FIXED_ART));
+                ItemMagicApplier(player_ptr, o_ptr, 0, AM_NO_FIXED_ART).execute();
                 if (!o_ptr->is_cursed()) {
                     break;
                 }

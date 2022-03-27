@@ -809,7 +809,7 @@
     <ClCompile Include="..\..\src\object-enchant\object-ego.cpp">
       <Filter>object-enchant</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\object-enchant\apply-magic.cpp">
+    <ClCompile Include="..\..\src\object-enchant\item-magic-applier.cpp">
       <Filter>object-enchant</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\perception\object-perception.cpp">
@@ -2442,6 +2442,9 @@
     <ClCompile Include="..\..\src\object-enchant\weapon\apply-magic-polearm.cpp">
       <Filter>object-enchant\weapon</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\object-enchant\enchanter-factory.cpp">
+      <Filter>object-enchant</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\combat\shoot.h">
@@ -3371,7 +3374,7 @@
     <ClInclude Include="..\..\src\object-enchant\enchanter-base.h">
       <Filter>object-enchant</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\object-enchant\apply-magic.h">
+    <ClInclude Include="..\..\src\object-enchant\item-magic-applier.h">
       <Filter>object-enchant</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\perception\object-perception.h">
@@ -5303,6 +5306,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\object-enchant\weapon\apply-magic-polearm.h">
       <Filter>object-enchant\weapon</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\object-enchant\enchanter-factory.h">
+      <Filter>object-enchant</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

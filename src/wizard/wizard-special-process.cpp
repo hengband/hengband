@@ -50,8 +50,8 @@
 #include "monster/monster-status.h"
 #include "monster/smart-learn-types.h"
 #include "mutation/mutation-investor-remover.h"
-#include "object-enchant/apply-magic.h"
 #include "object-enchant/item-apply-magic.h"
+#include "object-enchant/item-magic-applier.h"
 #include "object-enchant/trc-types.h"
 #include "object-enchant/trg-types.h"
 #include "object/object-kind-hook.h"
@@ -250,7 +250,7 @@ void wiz_create_item(PlayerType *player_ptr)
     ObjectType *q_ptr;
     q_ptr = &forge;
     q_ptr->prep(k_idx);
-    apply_magic_to_object(player_ptr, q_ptr, player_ptr->current_floor_ptr->dun_level, AM_NO_FIXED_ART);
+    ItemMagicApplier(player_ptr, q_ptr, player_ptr->current_floor_ptr->dun_level, AM_NO_FIXED_ART).execute();
     (void)drop_near(player_ptr, q_ptr, -1, player_ptr->y, player_ptr->x);
     msg_print("Allocated.");
 }

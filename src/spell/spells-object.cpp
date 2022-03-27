@@ -15,9 +15,9 @@
 #include "inventory/inventory-slot-types.h"
 #include "monster-race/monster-race.h"
 #include "monster-race/race-flags1.h"
-#include "object-enchant/apply-magic.h"
 #include "object-enchant/item-apply-magic.h"
 #include "object-enchant/item-feeling.h"
+#include "object-enchant/item-magic-applier.h"
 #include "object-enchant/object-boost.h"
 #include "object-enchant/object-ego.h"
 #include "object-enchant/special-object-flags.h"
@@ -152,7 +152,7 @@ void amusement(PlayerType *player_ptr, POSITION y1, POSITION x1, int num, bool k
         if (a_idx) {
             i_ptr->fixed_artifact_idx = a_idx;
         }
-        apply_magic_to_object(player_ptr, i_ptr, 1, AM_NO_FIXED_ART);
+        ItemMagicApplier(player_ptr, i_ptr, 1, AM_NO_FIXED_ART).execute();
 
         if (amuse_info[i].flag & AMS_NO_UNIQUE) {
             if (r_info[i2enum<MonsterRaceId>(i_ptr->pval)].kind_flags.has(MonsterKindType::UNIQUE)) {

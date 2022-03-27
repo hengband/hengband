@@ -5,7 +5,7 @@
 
 class ObjectType;
 class PlayerType;
-class DiggingEnchanter : AbstractWeaponEnchanter {
+class DiggingEnchanter : public AbstractWeaponEnchanter {
 public:
     DiggingEnchanter(PlayerType *player_ptr, ObjectType *o_ptr, DEPTH level, int power);
     void apply_magic() override;

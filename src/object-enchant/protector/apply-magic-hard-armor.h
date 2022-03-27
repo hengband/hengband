@@ -5,7 +5,7 @@
 
 class ObjectType;
 class PlayerType;
-class HardArmorEnchanter : ArmorEnchanter {
+class HardArmorEnchanter : public ArmorEnchanter {
 public:
     HardArmorEnchanter(PlayerType *player_ptr, ObjectType *o_ptr, DEPTH level, int power);
     void apply_magic() override;

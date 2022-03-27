@@ -11,8 +11,8 @@
 #include "grid/grid.h"
 #include "inventory/inventory-object.h"
 #include "io/command-repeater.h"
-#include "object-enchant/apply-magic.h"
 #include "object-enchant/item-apply-magic.h"
+#include "object-enchant/item-magic-applier.h"
 #include "object-enchant/object-boost.h"
 #include "object/item-tester-hooker.h"
 #include "object/item-use-flags.h"
@@ -128,7 +128,7 @@ bool create_ammo(PlayerType *player_ptr)
         q_ptr->number = (byte)rand_range(15, 30);
         object_aware(player_ptr, q_ptr);
         object_known(q_ptr);
-        apply_magic_to_object(player_ptr, q_ptr, player_ptr->lev, AM_NO_FIXED_ART);
+        ItemMagicApplier(player_ptr, q_ptr, player_ptr->lev, AM_NO_FIXED_ART).execute();
         q_ptr->discount = 99;
         int16_t slot = store_item_to_inventory(player_ptr, q_ptr);
         GAME_TEXT o_name[MAX_NLEN];
@@ -157,7 +157,7 @@ bool create_ammo(PlayerType *player_ptr)
         q_ptr->number = (byte)rand_range(5, 10);
         object_aware(player_ptr, q_ptr);
         object_known(q_ptr);
-        apply_magic_to_object(player_ptr, q_ptr, player_ptr->lev, AM_NO_FIXED_ART);
+        ItemMagicApplier(player_ptr, q_ptr, player_ptr->lev, AM_NO_FIXED_ART).execute();
         q_ptr->discount = 99;
         GAME_TEXT o_name[MAX_NLEN];
         describe_flavor(player_ptr, o_name, q_ptr, 0);
@@ -185,7 +185,7 @@ bool create_ammo(PlayerType *player_ptr)
         q_ptr->number = (byte)rand_range(4, 8);
         object_aware(player_ptr, q_ptr);
         object_known(q_ptr);
-        apply_magic_to_object(player_ptr, q_ptr, player_ptr->lev, AM_NO_FIXED_ART);
+        ItemMagicApplier(player_ptr, q_ptr, player_ptr->lev, AM_NO_FIXED_ART).execute();
         q_ptr->discount = 99;
         GAME_TEXT o_name[MAX_NLEN];
         describe_flavor(player_ptr, o_name, q_ptr, 0);
