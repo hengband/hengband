@@ -789,7 +789,7 @@ bool get_element_power(PlayerType *player_ptr, SPELL_IDX *sn, bool only_browse)
 
                 prt("", y, x);
                 put_str(_("名前", "Name"), y, x + 5);
-                put_str(_("Lv   MP   失率 効果", "Lv   MP   Fail Info"), y, x + 35);
+                put_str(_("Lv   MP   失率 効果", "Lv   MP Fail Info"), y, x + 35);
                 for (i = 0; i < spell_max; i++) {
                     elem = get_elemental_elem(player_ptr, i);
                     spell = get_elemental_info(player_ptr, i);
