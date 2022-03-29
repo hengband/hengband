@@ -7,6 +7,5 @@
 #include "system/angband.h"
 
 class PlayerType;
-void init_quests(void);
 void init_other(PlayerType *player_ptr);
 void init_alloc(void);

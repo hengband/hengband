@@ -10,7 +10,6 @@
 #include "floor/floor-util.h"
 #include "game-option/option-flags.h"
 #include "game-option/option-types-table.h"
-#include "info-reader/fixed-map-parser.h"
 #include "monster-race/monster-race.h"
 #include "object/object-kind.h"
 #include "system/alloc-entries.h"
@@ -27,37 +26,12 @@
 #include "util/tag-sorter.h"
 #include "view/display-messages.h"
 #include "world/world.h"
-#include <sstream>
-#include <stdexcept>
 
 /*!
  * @brief マクロ登録の最大数 / Maximum number of macros (see "io.c")
  * @note Default: assume at most 256 macros are used
  */
 constexpr int MACRO_MAX = 256;
-
-/*!
- * @brief クエスト情報初期化のメインルーチン /
- * Initialize quest array
- * @return エラーコード
- */
-void init_quests(void)
-{
-    try {
-        auto quest_numbers = parse_quest_info("q_info.txt");
-        quest_map[QuestId::NONE].status = QuestStatusType::UNTAKEN;
-        for (auto q : quest_numbers) {
-            quest_map[q].status = QuestStatusType::UNTAKEN;
-        }
-    } catch (std::runtime_error &r) {
-        std::stringstream ss;
-        ss << _("ファイル読み込みエラー: ", "File loading error: ") << r.what();
-
-        msg_print(ss.str());
-        msg_print(nullptr);
-        quit(_("クエスト初期化エラー", "Error of quests initializing"));
-    }
-}
 
 static void init_gf_colors()
 {

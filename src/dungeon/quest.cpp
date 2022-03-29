@@ -9,6 +9,7 @@
 #include "floor/floor-object.h"
 #include "game-option/play-record-options.h"
 #include "grid/feature.h"
+#include "info-reader/fixed-map-parser.h"
 #include "io/write-diary.h"
 #include "locale/english.h"
 #include "main/music-definitions-table.h"
@@ -35,6 +36,8 @@
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 #include "world/world.h"
+#include <sstream>
+#include <stdexcept>
 
 std::map<QuestId, quest_type> quest_map; /*!< Quest info */
 char quest_text[10][80]; /*!< Quest text */
@@ -51,6 +54,105 @@ static concptr find_quest_map[] = {
     _("何かが階段の上に書いてある:", "Something is written on the staircase"),
     _("巻物を見つけた。メッセージが書いてある:", "You find a scroll with the following message"),
 };
+
+QuestList &QuestList::get_instance()
+{
+    static QuestList instance{};
+    return instance;
+}
+
+quest_type &QuestList::operator[](QuestId id)
+{
+    return this->quest_data.at(id);
+}
+
+const quest_type &QuestList::operator[](QuestId id) const
+{
+    return this->quest_data.at(id);
+}
+
+QuestList::iterator QuestList::begin()
+{
+    return this->quest_data.begin();
+}
+
+QuestList::const_iterator QuestList::begin() const
+{
+    return this->quest_data.cbegin();
+}
+
+QuestList::iterator QuestList::end()
+{
+    return this->quest_data.end();
+}
+
+QuestList::const_iterator QuestList::end() const
+{
+    return this->quest_data.cend();
+}
+
+QuestList::reverse_iterator QuestList::rbegin()
+{
+    return this->quest_data.rbegin();
+}
+
+QuestList::const_reverse_iterator QuestList::rbegin() const
+{
+    return this->quest_data.crbegin();
+}
+
+QuestList::reverse_iterator QuestList::rend()
+{
+    return this->quest_data.rend();
+}
+
+QuestList::const_reverse_iterator QuestList::rend() const
+{
+    return this->quest_data.crend();
+}
+
+QuestList::iterator QuestList::find(QuestId id)
+{
+    return this->quest_data.find(id);
+}
+
+QuestList::const_iterator QuestList::find(QuestId id) const
+{
+    return this->quest_data.find(id);
+}
+
+size_t QuestList::size() const
+{
+    return this->quest_data.size();
+}
+
+/*!
+ * @brief クエスト情報初期化のメインルーチン /
+ * Initialize quest array
+ */
+void QuestList::initialize()
+{
+    if (initialized) {
+        return;
+    }
+    try {
+        auto quest_numbers = parse_quest_info("q_info.txt");
+        quest_type init_quest{};
+        init_quest.status = QuestStatusType::UNTAKEN;
+        this->quest_data.insert({ QuestId::NONE, init_quest });
+        for (auto q : quest_numbers) {
+            this->quest_data.insert({ q, init_quest });
+        }
+        initialized = true;
+    } catch (const std::runtime_error &r) {
+        std::stringstream ss;
+        ss << _("ファイル読み込みエラー: ", "File loading error: ") << r.what();
+
+        msg_print(ss.str());
+        msg_print(nullptr);
+        quit(_("クエスト初期化エラー", "Error of quests initializing"));
+    }
+}
 
 /*!
  * @brief 該当IDが固定クエストかどうかを判定する.
