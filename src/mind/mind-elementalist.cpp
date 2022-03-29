@@ -713,7 +713,7 @@ bool get_element_power(PlayerType *player_ptr, SPELL_IDX *sn, bool only_browse)
         }
     }
 
-    concptr p = _("元素魔法", "magic");
+    concptr p = _("元素魔法", "power");
     flag = false;
     redraw = false;
 
