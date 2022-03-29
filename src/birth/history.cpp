@@ -1517,8 +1517,8 @@ hist_type bg[MAX_BACKGROUNDS] = {
     { "あなたの下半身は二股の尾で、", 60, 172, 173, 50 },
     { "あなたの下半身は陸上の種族とあまり変わりなく、", 100, 172, 173, 50 },
 #else
-    { "Your lower body is a tail, ", 50, 172, 173, 50 },
-    { "Your lower body are two tails, ", 60, 172, 173, 50 },
+    { "Your lower body ends in a tail, ", 50, 172, 173, 50 },
+    { "Your lower body ends in two tails, ", 60, 172, 173, 50 },
     { "Your lower body is not much different from a land race, ", 100, 172, 173, 50 },
 #endif
 
