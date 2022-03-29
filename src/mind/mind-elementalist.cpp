@@ -892,7 +892,7 @@ static bool try_cast_element_spell(PlayerType *player_ptr, SPELL_IDX spell_idx, 
         flush();
     }
 
-    msg_format(_("魔力の集中に失敗した！", "You failed to concentrate hard enough for Mana!"));
+    msg_format(_("魔力の集中に失敗した！", "You failed to focus the elemental power!"));
     sound(SOUND_FAIL);
 
     if (randint1(100) < chance / 2) {
