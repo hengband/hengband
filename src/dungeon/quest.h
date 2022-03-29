@@ -156,7 +156,6 @@ private:
     ~QuestList() = default;
 };
 
-extern std::map<QuestId, quest_type> quest_map;
 extern char quest_text[10][80];
 extern int quest_text_line;
 extern QuestId leaving_quest;

@@ -438,10 +438,11 @@ static void effect_monster_captured(PlayerType *player_ptr, effect_monster_type 
  */
 ProcessResult effect_monster_capture(PlayerType *player_ptr, effect_monster_type *em_ptr, std::optional<CapturedMonsterType *> cap_mon_ptr)
 {
+    const auto &quest_list = QuestList::get_instance();
     auto *floor_ptr = player_ptr->current_floor_ptr;
 
     auto quest_monster = inside_quest(floor_ptr->quest_number);
-    quest_monster &= (quest_map[floor_ptr->quest_number].type == QuestKindType::KILL_ALL);
+    quest_monster &= (quest_list[floor_ptr->quest_number].type == QuestKindType::KILL_ALL);
     quest_monster &= !is_pet(em_ptr->m_ptr);
 
     auto cannot_capture = quest_monster;

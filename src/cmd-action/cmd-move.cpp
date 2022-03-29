@@ -53,10 +53,11 @@
  */
 static bool confirm_leave_level(PlayerType *player_ptr, bool down_stair)
 {
-    auto *q_ptr = &quest_map[player_ptr->current_floor_ptr->quest_number];
+    const auto &quest_list = QuestList::get_instance();
+    const auto *q_ptr = &quest_list[player_ptr->current_floor_ptr->quest_number];
 
     auto caution_in_tower = any_bits(q_ptr->flags, QUEST_FLAG_TOWER);
-    caution_in_tower &= q_ptr->status != QuestStatusType::STAGE_COMPLETED || (down_stair && (quest_map[QuestId::TOWER1].status != QuestStatusType::COMPLETED));
+    caution_in_tower &= q_ptr->status != QuestStatusType::STAGE_COMPLETED || (down_stair && (quest_list[QuestId::TOWER1].status != QuestStatusType::COMPLETED));
 
     auto caution_in_quest = q_ptr->type == QuestKindType::RANDOM;
     caution_in_quest |= q_ptr->flags & QUEST_FLAG_ONCE && q_ptr->status != QuestStatusType::COMPLETED;
@@ -75,6 +76,7 @@ static bool confirm_leave_level(PlayerType *player_ptr, bool down_stair)
  */
 void do_cmd_go_up(PlayerType *player_ptr)
 {
+    auto &quest_list = QuestList::get_instance();
     bool go_up = false;
     auto *g_ptr = &player_ptr->current_floor_ptr->grid_array[player_ptr->y][player_ptr->x];
     auto *f_ptr = &f_info[g_ptr->feat];
@@ -102,13 +104,13 @@ void do_cmd_go_up(PlayerType *player_ptr)
         leave_quest_check(player_ptr);
         player_ptr->current_floor_ptr->quest_number = i2enum<QuestId>(g_ptr->special);
         const auto quest_number = player_ptr->current_floor_ptr->quest_number;
-        if (quest_map[quest_number].status == QuestStatusType::UNTAKEN) {
-            if (quest_map[quest_number].type != QuestKindType::RANDOM) {
+        if (quest_list[quest_number].status == QuestStatusType::UNTAKEN) {
+            if (quest_list[quest_number].type != QuestKindType::RANDOM) {
                 init_flags = INIT_ASSIGN;
                 parse_fixed_map(player_ptr, "q_info.txt", 0, 0, 0, 0);
             }
 
-            quest_map[quest_number].status = QuestStatusType::TAKEN;
+            quest_list[quest_number].status = QuestStatusType::TAKEN;
         }
 
         if (!inside_quest(quest_number)) {
@@ -141,12 +143,12 @@ void do_cmd_go_up(PlayerType *player_ptr)
 
     const auto quest_number = player_ptr->current_floor_ptr->quest_number;
 
-    if (inside_quest(quest_number) && quest_map[quest_number].type == QuestKindType::RANDOM) {
+    if (inside_quest(quest_number) && quest_list[quest_number].type == QuestKindType::RANDOM) {
         leave_quest_check(player_ptr);
         player_ptr->current_floor_ptr->quest_number = QuestId::NONE;
     }
 
-    if (inside_quest(quest_number) && quest_map[quest_number].type != QuestKindType::RANDOM) {
+    if (inside_quest(quest_number) && quest_list[quest_number].type != QuestKindType::RANDOM) {
         leave_quest_check(player_ptr);
         player_ptr->current_floor_ptr->quest_number = i2enum<QuestId>(g_ptr->special);
         player_ptr->current_floor_ptr->dun_level = 0;
@@ -216,6 +218,7 @@ void do_cmd_go_down(PlayerType *player_ptr)
     }
 
     if (f_ptr->flags.has(FloorFeatureType::QUEST)) {
+        auto &quest_list = QuestList::get_instance();
         if (!confirm_leave_level(player_ptr, true)) {
             return;
         }
@@ -231,13 +234,13 @@ void do_cmd_go_down(PlayerType *player_ptr)
         leave_quest_check(player_ptr);
         leave_tower_check(player_ptr);
         player_ptr->current_floor_ptr->quest_number = i2enum<QuestId>(g_ptr->special);
-        if (quest_map[player_ptr->current_floor_ptr->quest_number].status == QuestStatusType::UNTAKEN) {
-            if (quest_map[player_ptr->current_floor_ptr->quest_number].type != QuestKindType::RANDOM) {
+        if (quest_list[player_ptr->current_floor_ptr->quest_number].status == QuestStatusType::UNTAKEN) {
+            if (quest_list[player_ptr->current_floor_ptr->quest_number].type != QuestKindType::RANDOM) {
                 init_flags = INIT_ASSIGN;
                 parse_fixed_map(player_ptr, "q_info.txt", 0, 0, 0, 0);
             }
 
-            quest_map[player_ptr->current_floor_ptr->quest_number].status = QuestStatusType::TAKEN;
+            quest_list[player_ptr->current_floor_ptr->quest_number].status = QuestStatusType::TAKEN;
         }
 
         if (!inside_quest(player_ptr->current_floor_ptr->quest_number)) {

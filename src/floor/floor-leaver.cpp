@@ -262,7 +262,8 @@ static void get_out_monster(PlayerType *player_ptr)
 static void preserve_info(PlayerType *player_ptr)
 {
     auto quest_r_idx = MonsterRace::empty_id();
-    for (auto &[q_idx, q_ref] : quest_map) {
+    const auto &quest_list = QuestList::get_instance();
+    for (const auto &[q_idx, q_ref] : quest_list) {
         auto quest_relating_monster = (q_ref.status == QuestStatusType::TAKEN);
         quest_relating_monster &= ((q_ref.type == QuestKindType::KILL_LEVEL) || (q_ref.type == QuestKindType::RANDOM));
         quest_relating_monster &= (q_ref.level == player_ptr->current_floor_ptr->dun_level);

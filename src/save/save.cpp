@@ -124,13 +124,14 @@ static bool wr_savefile_new(PlayerType *player_ptr, SaveType type)
     tmp16u = max_towns;
     wr_u16b(tmp16u);
 
-    tmp16u = static_cast<uint16_t>(quest_map.size());
+    const auto &quest_list = QuestList::get_instance();
+    tmp16u = static_cast<uint16_t>(quest_list.size());
     wr_u16b(tmp16u);
 
     tmp8u = MAX_RANDOM_QUEST - MIN_RANDOM_QUEST;
     wr_byte(tmp8u);
 
-    for (auto [q_idx, q_ref] : quest_map) {
+    for (const auto &[q_idx, q_ref] : quest_list) {
         wr_s16b(enum2i(q_idx));
         wr_s16b(enum2i(q_ref.status));
         wr_s16b((int16_t)q_ref.level);

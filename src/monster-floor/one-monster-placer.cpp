@@ -159,25 +159,26 @@ static bool check_quest_placeable(PlayerType *player_ptr, MonsterRaceId r_idx)
         return true;
     }
 
+    const auto &quest_list = QuestList::get_instance();
     QuestId hoge = quest_number(player_ptr, floor_ptr->dun_level);
-    if ((quest_map[hoge].type != QuestKindType::KILL_LEVEL) && (quest_map[hoge].type != QuestKindType::RANDOM)) {
+    if ((quest_list[hoge].type != QuestKindType::KILL_LEVEL) && (quest_list[hoge].type != QuestKindType::RANDOM)) {
         return true;
     }
-    if (r_idx != quest_map[hoge].r_idx) {
+    if (r_idx != quest_list[hoge].r_idx) {
         return true;
     }
     int number_mon = 0;
     for (int i2 = 0; i2 < floor_ptr->width; ++i2) {
         for (int j2 = 0; j2 < floor_ptr->height; j2++) {
             auto quest_monster = (floor_ptr->grid_array[j2][i2].m_idx > 0);
-            quest_monster &= (floor_ptr->m_list[floor_ptr->grid_array[j2][i2].m_idx].r_idx == quest_map[hoge].r_idx);
+            quest_monster &= (floor_ptr->m_list[floor_ptr->grid_array[j2][i2].m_idx].r_idx == quest_list[hoge].r_idx);
             if (quest_monster) {
                 number_mon++;
             }
         }
     }
 
-    if (number_mon + quest_map[hoge].cur_num >= quest_map[hoge].max_num) {
+    if (number_mon + quest_list[hoge].cur_num >= quest_list[hoge].max_num) {
         return false;
     }
     return true;

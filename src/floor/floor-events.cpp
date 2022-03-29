@@ -280,10 +280,11 @@ void update_dungeon_feeling(PlayerType *player_ptr)
     }
 
     auto quest_num = quest_number(player_ptr, floor_ptr->dun_level);
+    const auto &quest_list = QuestList::get_instance();
 
     auto dungeon_quest = (quest_num == QuestId::OBERON);
     dungeon_quest |= (quest_num == QuestId::SERPENT);
-    dungeon_quest |= !(quest_map[quest_num].flags & QUEST_FLAG_PRESET);
+    dungeon_quest |= !(quest_list[quest_num].flags & QUEST_FLAG_PRESET);
 
     auto feeling_quest = inside_quest(quest_num);
     feeling_quest &= quest_type::is_fixed(quest_num);
