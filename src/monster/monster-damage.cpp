@@ -335,7 +335,7 @@ void MonsterDamageProcessor::dying_scream(GAME_TEXT *m_name)
 {
     auto *m_ptr = &this->player_ptr->current_floor_ptr->m_list[this->m_idx];
     auto *r_ptr = real_r_ptr(m_ptr);
-    if (none_bits(r_ptr->flags2, RF2_CAN_SPEAK)) {
+    if (r_ptr->speak_flags.has_not(MonsterSpeakType::SPEAK_ALL)) {
         return;
     }
 

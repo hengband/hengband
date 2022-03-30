@@ -45,7 +45,7 @@ static void escape_monster(PlayerType *player_ptr, turn_flags *turn_flags_ptr, m
     }
 
     if (turn_flags_ptr->see_m) {
-        if ((r_ptr->flags2 & RF2_CAN_SPEAK) && (m_ptr->r_idx != MonsterRaceId::GRIP) && (m_ptr->r_idx != MonsterRaceId::WOLF) && (m_ptr->r_idx != MonsterRaceId::FANG) && player_has_los_bold(player_ptr, m_ptr->fy, m_ptr->fx) && projectable(player_ptr, m_ptr->fy, m_ptr->fx, player_ptr->y, player_ptr->x)) {
+        if ((r_ptr->speak_flags.has(MonsterSpeakType::SPEAK_ALL)) && (m_ptr->r_idx != MonsterRaceId::GRIP) && (m_ptr->r_idx != MonsterRaceId::WOLF) && (m_ptr->r_idx != MonsterRaceId::FANG) && player_has_los_bold(player_ptr, m_ptr->fy, m_ptr->fx) && projectable(player_ptr, m_ptr->fy, m_ptr->fx, player_ptr->y, player_ptr->x)) {
             msg_format(_("%^s「ピンチだ！退却させてもらう！」", "%^s says 'It is the pinch! I will retreat'."), m_name);
         }
 
