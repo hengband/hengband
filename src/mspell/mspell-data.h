@@ -4,6 +4,7 @@
 #include "system/angband.h"
 #include <functional>
 #include <type_traits>
+#include <unordered_map>
 
 enum class AttributeType;
 struct mspell_cast_msg_blind;
