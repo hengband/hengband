@@ -972,6 +972,7 @@
     <ClInclude Include="..\..\src\monster-race\race-kind-flags.h" />
     <ClInclude Include="..\..\src\monster-race\race-population-flags.h" />
     <ClInclude Include="..\..\src\monster-race\race-resistance-mask.h" />
+    <ClInclude Include="..\..\src\monster-race\race-speak-flags.h" />
     <ClInclude Include="..\..\src\monster-race\race-visual-flags.h" />
     <ClInclude Include="..\..\src\monster-race\race-wilderness-flags.h" />
     <ClInclude Include="..\..\src\mspell\mspell-attack\abstract-mspell.h" />

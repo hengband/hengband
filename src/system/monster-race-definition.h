@@ -10,6 +10,7 @@
 #include "monster-race/race-flags-resistance.h"
 #include "monster-race/race-kind-flags.h"
 #include "monster-race/race-population-flags.h"
+#include "monster-race/race-speak-flags.h"
 #include "monster-race/race-visual-flags.h"
 #include "monster-race/race-wilderness-flags.h"
 #include "system/angband.h"
@@ -83,6 +84,7 @@ struct monster_race {
     EnumClassFlagGroup<MonsterWildernessType> wilderness_flags; //!< 荒野フラグ / Wilderness Flags
     EnumClassFlagGroup<MonsterFeatureType> feature_flags; //!< 能力フラグ（地形関連） / Feature Flags
     EnumClassFlagGroup<MonsterPopulationType> population_flags; //!< 能力フラグ（出現数関連） / Population Flags
+    EnumClassFlagGroup<MonsterSpeakType> speak_flags; //!< 能力フラグ（セリフ） / Speaking Flags
     MonsterBlow blow[MAX_NUM_BLOWS]{}; //!< 打撃能力定義 / Up to four blows per round
 
     //! 指定護衛リスト <モンスター種族ID,護衛数ダイス数,護衛数ダイス面>
