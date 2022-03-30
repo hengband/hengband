@@ -79,8 +79,9 @@ void process_dungeon(PlayerType *player_ptr, bool load_game)
     disturb(player_ptr, true, true);
     auto quest_num = quest_number(player_ptr, floor_ptr->dun_level);
     const auto &quest_list = QuestList::get_instance();
+    auto *questor_ptr = &r_info[quest_list[quest_num].r_idx];
     if (inside_quest(quest_num)) {
-        r_info[quest_list[quest_num].r_idx].flags1 |= RF1_QUESTOR;
+        questor_ptr->flags1 |= RF1_QUESTOR;
     }
 
     if (player_ptr->max_plv < player_ptr->lev) {
@@ -240,8 +241,8 @@ void process_dungeon(PlayerType *player_ptr, bool load_game)
         }
     }
 
-    if ((inside_quest(quest_num)) && r_info[quest_list[quest_num].r_idx].kind_flags.has_not(MonsterKindType::UNIQUE)) {
-        r_info[quest_list[quest_num].r_idx].flags1 &= ~RF1_QUESTOR;
+    if ((inside_quest(quest_num)) && questor_ptr->kind_flags.has_not(MonsterKindType::UNIQUE)) {
+        questor_ptr->flags1 &= ~RF1_QUESTOR;
     }
 
     if (player_ptr->playing && !player_ptr->is_dead) {

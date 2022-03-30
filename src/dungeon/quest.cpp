@@ -441,20 +441,21 @@ void leave_tower_check(PlayerType *player_ptr)
 {
     auto &quest_list = QuestList::get_instance();
     leaving_quest = player_ptr->current_floor_ptr->quest_number;
+
+    auto &tower1 = quest_list[QuestId::TOWER1];
     bool is_leaving_from_tower = inside_quest(leaving_quest);
     is_leaving_from_tower &= quest_list[leaving_quest].type == QuestKindType::TOWER;
-    is_leaving_from_tower &= quest_list[QuestId::TOWER1].status != QuestStatusType::COMPLETED;
+    is_leaving_from_tower &= tower1.status != QuestStatusType::COMPLETED;
     if (!is_leaving_from_tower) {
         return;
     }
     if (quest_list[leaving_quest].type != QuestKindType::TOWER) {
         return;
     }
-
-    quest_list[QuestId::TOWER1].status = QuestStatusType::FAILED;
-    quest_list[QuestId::TOWER1].complev = player_ptr->lev;
+    tower1.status = QuestStatusType::FAILED;
+    tower1.complev = player_ptr->lev;
     update_playtime();
-    quest_list[QuestId::TOWER1].comptime = w_ptr->play_time;
+    tower1.comptime = w_ptr->play_time;
 }
 
 /*!

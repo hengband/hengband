@@ -179,7 +179,8 @@ int exe_write_diary_quest(PlayerType *player_ptr, int type, QuestId num)
 
     auto old_quest = player_ptr->current_floor_ptr->quest_number;
     const auto &quest_list = QuestList::get_instance();
-    player_ptr->current_floor_ptr->quest_number = (quest_list[num].type == QuestKindType::RANDOM) ? QuestId::NONE : num;
+    const auto &q_ref = quest_list[num];
+    player_ptr->current_floor_ptr->quest_number = (q_ref.type == QuestKindType::RANDOM) ? QuestId::NONE : num;
     init_flags = INIT_NAME_ONLY;
     parse_fixed_map(player_ptr, "q_info.txt", 0, 0, 0, 0);
     player_ptr->current_floor_ptr->quest_number = old_quest;
@@ -197,40 +198,40 @@ int exe_write_diary_quest(PlayerType *player_ptr, int type, QuestId num)
 
     switch (type) {
     case DIARY_FIX_QUEST_C: {
-        if (quest_list[num].flags & QUEST_FLAG_SILENT) {
+        if (q_ref.flags & QUEST_FLAG_SILENT) {
             break;
         }
 
-        fprintf(fff, _(" %2d:%02d %20s クエスト「%s」を達成した。\n", " %2d:%02d %20s completed quest '%s'.\n"), hour, min, note_level, quest_list[num].name);
+        fprintf(fff, _(" %2d:%02d %20s クエスト「%s」を達成した。\n", " %2d:%02d %20s completed quest '%s'.\n"), hour, min, note_level, q_ref.name);
         break;
     }
     case DIARY_FIX_QUEST_F: {
-        if (quest_list[num].flags & QUEST_FLAG_SILENT) {
+        if (q_ref.flags & QUEST_FLAG_SILENT) {
             break;
         }
 
-        fprintf(fff, _(" %2d:%02d %20s クエスト「%s」から命からがら逃げ帰った。\n", " %2d:%02d %20s ran away from quest '%s'.\n"), hour, min, note_level, quest_list[num].name);
+        fprintf(fff, _(" %2d:%02d %20s クエスト「%s」から命からがら逃げ帰った。\n", " %2d:%02d %20s ran away from quest '%s'.\n"), hour, min, note_level, q_ref.name);
         break;
     }
     case DIARY_RAND_QUEST_C: {
         GAME_TEXT name[MAX_NLEN];
-        strcpy(name, r_info[quest_list[num].r_idx].name.c_str());
+        strcpy(name, r_info[q_ref.r_idx].name.c_str());
         fprintf(fff, _(" %2d:%02d %20s ランダムクエスト(%s)を達成した。\n", " %2d:%02d %20s completed random quest '%s'\n"), hour, min, note_level, name);
         break;
     }
     case DIARY_RAND_QUEST_F: {
         GAME_TEXT name[MAX_NLEN];
-        strcpy(name, r_info[quest_list[num].r_idx].name.c_str());
+        strcpy(name, r_info[q_ref.r_idx].name.c_str());
         fprintf(fff, _(" %2d:%02d %20s ランダムクエスト(%s)から逃げ出した。\n", " %2d:%02d %20s ran away from quest '%s'.\n"), hour, min, note_level, name);
         break;
     }
     case DIARY_TO_QUEST: {
-        if (quest_list[num].flags & QUEST_FLAG_SILENT) {
+        if (q_ref.flags & QUEST_FLAG_SILENT) {
             break;
         }
 
         fprintf(fff, _(" %2d:%02d %20s クエスト「%s」へと突入した。\n", " %2d:%02d %20s entered the quest '%s'.\n"),
-            hour, min, note_level, quest_list[num].name);
+            hour, min, note_level, q_ref.name);
         break;
     }
     default:

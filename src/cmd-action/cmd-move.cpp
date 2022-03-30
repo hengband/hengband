@@ -104,13 +104,14 @@ void do_cmd_go_up(PlayerType *player_ptr)
         leave_quest_check(player_ptr);
         player_ptr->current_floor_ptr->quest_number = i2enum<QuestId>(g_ptr->special);
         const auto quest_number = player_ptr->current_floor_ptr->quest_number;
-        if (quest_list[quest_number].status == QuestStatusType::UNTAKEN) {
-            if (quest_list[quest_number].type != QuestKindType::RANDOM) {
+        auto &q_ref = quest_list[quest_number];
+        if (q_ref.status == QuestStatusType::UNTAKEN) {
+            if (q_ref.type != QuestKindType::RANDOM) {
                 init_flags = INIT_ASSIGN;
                 parse_fixed_map(player_ptr, "q_info.txt", 0, 0, 0, 0);
             }
 
-            quest_list[quest_number].status = QuestStatusType::TAKEN;
+            q_ref.status = QuestStatusType::TAKEN;
         }
 
         if (!inside_quest(quest_number)) {
@@ -142,13 +143,14 @@ void do_cmd_go_up(PlayerType *player_ptr)
     }
 
     const auto quest_number = player_ptr->current_floor_ptr->quest_number;
+    auto &q_ref = quest_list[quest_number];
 
-    if (inside_quest(quest_number) && quest_list[quest_number].type == QuestKindType::RANDOM) {
+    if (inside_quest(quest_number) && q_ref.type == QuestKindType::RANDOM) {
         leave_quest_check(player_ptr);
         player_ptr->current_floor_ptr->quest_number = QuestId::NONE;
     }
 
-    if (inside_quest(quest_number) && quest_list[quest_number].type != QuestKindType::RANDOM) {
+    if (inside_quest(quest_number) && q_ref.type != QuestKindType::RANDOM) {
         leave_quest_check(player_ptr);
         player_ptr->current_floor_ptr->quest_number = i2enum<QuestId>(g_ptr->special);
         player_ptr->current_floor_ptr->dun_level = 0;
@@ -234,13 +236,15 @@ void do_cmd_go_down(PlayerType *player_ptr)
         leave_quest_check(player_ptr);
         leave_tower_check(player_ptr);
         player_ptr->current_floor_ptr->quest_number = i2enum<QuestId>(g_ptr->special);
-        if (quest_list[player_ptr->current_floor_ptr->quest_number].status == QuestStatusType::UNTAKEN) {
-            if (quest_list[player_ptr->current_floor_ptr->quest_number].type != QuestKindType::RANDOM) {
+
+        auto &current_quest = quest_list[player_ptr->current_floor_ptr->quest_number];
+        if (current_quest.status == QuestStatusType::UNTAKEN) {
+            if (current_quest.type != QuestKindType::RANDOM) {
                 init_flags = INIT_ASSIGN;
                 parse_fixed_map(player_ptr, "q_info.txt", 0, 0, 0, 0);
             }
 
-            quest_list[player_ptr->current_floor_ptr->quest_number].status = QuestStatusType::TAKEN;
+            current_quest.status = QuestStatusType::TAKEN;
         }
 
         if (!inside_quest(player_ptr->current_floor_ptr->quest_number)) {
