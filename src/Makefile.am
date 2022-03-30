@@ -530,18 +530,14 @@ hengband_SOURCES = \
 	mspell/monster-power-table.cpp mspell/monster-power-table.h \
 	mspell/mspell-attack.cpp mspell/mspell-attack.h \
 	mspell/mspell-attack-util.cpp mspell/mspell-attack-util.h \
-	mspell/mspell-ball.cpp mspell/mspell-ball.h \
-	mspell/mspell-bolt.cpp mspell/mspell-bolt.h \
-	mspell/mspell-breath.cpp mspell/mspell-breath.h \
 	mspell/mspell-checker.cpp mspell/mspell-checker.h \
-	mspell/mspell-curse.cpp mspell/mspell-curse.h \
 	mspell/mspell-damage-calculator.cpp mspell/mspell-damage-calculator.h \
+	mspell/mspell-data.cpp mspell/mspell-data.h \
 	mspell/mspell-dispel.cpp mspell/mspell-dispel.h \
 	mspell/mspell-floor.cpp mspell/mspell-floor.h \
 	mspell/mspell-judgement.cpp mspell/mspell-judgement.h \
 	mspell/mspell-learn-checker.cpp mspell/mspell-learn-checker.h \
 	mspell/mspell-lite.cpp mspell/mspell-lite.h \
-	mspell/mspell-particularity.cpp mspell/mspell-particularity.h \
 	mspell/mspell-result.h \
 	mspell/mspell-special.cpp mspell/mspell-special.h \
 	mspell/mspell-summon.cpp mspell/mspell-summon.h \
@@ -551,6 +547,13 @@ hengband_SOURCES = \
 	mspell/smart-mspell-util.cpp mspell/smart-mspell-util.h \
 	mspell/specified-summon.cpp mspell/specified-summon.h \
 	mspell/summon-checker.cpp mspell/summon-checker.h \
+	\
+	mspell/mspell-attack/abstract-mspell.cpp mspell/mspell-attack/abstract-mspell.h \
+	mspell/mspell-attack/mspell-ball.cpp mspell/mspell-attack/mspell-ball.h \
+	mspell/mspell-attack/mspell-bolt.cpp mspell/mspell-attack/mspell-bolt.h \
+	mspell/mspell-attack/mspell-breath.cpp mspell/mspell-attack/mspell-breath.h \
+	mspell/mspell-attack/mspell-curse.cpp mspell/mspell-attack/mspell-curse.h \
+	mspell/mspell-attack/mspell-particularity.cpp mspell/mspell-attack/mspell-particularity.h \
 	\
 	mutation/gain-mutation-switcher.cpp mutation/gain-mutation-switcher.h \
 	mutation/lose-mutation-switcher.cpp mutation/lose-mutation-switcher.h \
