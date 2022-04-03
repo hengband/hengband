@@ -146,11 +146,11 @@ void update_monster_race_flags(PlayerType *player_ptr, turn_flags *turn_flags_pt
     }
 
     if (turn_flags_ptr->did_pass_wall) {
-        r_ptr->r_flags2 |= RF2_PASS_WALL;
+        r_ptr->r_feature_flags.set(MonsterFeatureType::PASS_WALL);
     }
 
     if (turn_flags_ptr->did_kill_wall) {
-        r_ptr->r_flags2 |= RF2_KILL_WALL;
+        r_ptr->r_feature_flags.set(MonsterFeatureType::KILL_WALL);
     }
 }
 

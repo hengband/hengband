@@ -199,7 +199,7 @@ static MonsterSpellResult spell_RF6_SPECIAL_B(PlayerType *player_ptr, POSITION y
         teleport_monster_to(player_ptr, t_idx, m_ptr->fy, m_ptr->fx, 100, i2enum<teleport_flags>(TELEPORT_NONMAGICAL | TELEPORT_PASSIVE));
     }
 
-    if ((monster_to_player && player_ptr->levitation) || (monster_to_monster && (tr_ptr->flags7 & RF7_CAN_FLY))) {
+    if ((monster_to_player && player_ptr->levitation) || (monster_to_monster && tr_ptr->feature_flags.has(MonsterFeatureType::CAN_FLY))) {
         msg.to_player = _("あなたは静かに着地した。", "You float gently down to the ground.");
         msg.to_mons = _("%^sは静かに着地した。", "%^s floats gently down to the ground.");
     } else {

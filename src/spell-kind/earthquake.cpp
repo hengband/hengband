@@ -213,7 +213,7 @@ bool earthquake(PlayerType *player_ptr, POSITION cy, POSITION cx, POSITION r, MO
                 continue;
             }
 
-            if ((r_ptr->flags2 & RF2_KILL_WALL) || (r_ptr->flags2 & RF2_PASS_WALL)) {
+            if (r_ptr->feature_flags.has(MonsterFeatureType::KILL_WALL) || r_ptr->feature_flags.has(MonsterFeatureType::PASS_WALL)) {
                 continue;
             }
 

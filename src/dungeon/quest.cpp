@@ -195,7 +195,7 @@ void determine_random_questor(PlayerType *player_ptr, quest_type *q_ptr)
         if (r_ptr->behavior_flags.has(MonsterBehaviorType::FRIENDLY)) {
             continue;
         }
-        if (r_ptr->flags7 & RF7_AQUATIC) {
+        if (r_ptr->feature_flags.has(MonsterFeatureType::AQUATIC)) {
             continue;
         }
         if (r_ptr->wilderness_flags.has(MonsterWildernessType::WILD_ONLY)) {

@@ -103,7 +103,7 @@ byte grid_type::get_distance(monster_race *r_ptr) const
 
 flow_type grid_type::get_grid_flow_type(monster_race *r_ptr) const
 {
-    return any_bits(r_ptr->flags7, RF7_CAN_FLY) ? FLOW_CAN_FLY : FLOW_NORMAL;
+    return r_ptr->feature_flags.has(MonsterFeatureType::CAN_FLY) ? FLOW_CAN_FLY : FLOW_NORMAL;
 }
 
 /*

@@ -64,7 +64,8 @@ static bool monster_hook_tanuki(PlayerType *player_ptr, MonsterRaceId r_idx)
     bool unselectable = r_ptr->kind_flags.has(MonsterKindType::UNIQUE);
     unselectable |= any_bits(r_ptr->flags2, RF2_MULTIPLY);
     unselectable |= r_ptr->behavior_flags.has(MonsterBehaviorType::FRIENDLY);
-    unselectable |= any_bits(r_ptr->flags7, RF7_AQUATIC | RF7_CHAMELEON);
+    unselectable |= r_ptr->feature_flags.has(MonsterFeatureType::AQUATIC);
+    unselectable |= any_bits(r_ptr->flags7, RF7_CHAMELEON);
     if (unselectable) {
         return false;
     }
