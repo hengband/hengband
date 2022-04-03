@@ -170,7 +170,7 @@ void update_player_window(PlayerType *player_ptr, old_race_flags *old_race_flags
         (old_race_flags_ptr->old_r_blows1 != r_ptr->r_blows[1]) || (old_race_flags_ptr->old_r_blows2 != r_ptr->r_blows[2]) ||
         (old_race_flags_ptr->old_r_blows3 != r_ptr->r_blows[3]) || (old_race_flags_ptr->old_r_cast_spell != r_ptr->r_cast_spell) ||
         (old_race_flags_ptr->old_r_behavior_flags != r_ptr->r_behavior_flags) || (old_race_flags_ptr->old_r_kind_flags != r_ptr->r_kind_flags) ||
-        (old_race_flags_ptr->old_r_drop_flags != r_ptr->r_drop_flags)) {
+        (old_race_flags_ptr->old_r_drop_flags != r_ptr->r_drop_flags) || (old_race_flags_ptr->old_r_feature_flags != r_ptr->r_feature_flags)) {
         player_ptr->window_flags |= PW_MONSTER;
     }
 }

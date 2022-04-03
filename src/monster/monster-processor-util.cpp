@@ -50,6 +50,7 @@ old_race_flags *init_old_race_flags(old_race_flags *old_race_flags_ptr)
     old_race_flags_ptr->old_r_behavior_flags.clear();
     old_race_flags_ptr->old_r_kind_flags.clear();
     old_race_flags_ptr->old_r_drop_flags.clear();
+    old_race_flags_ptr->old_r_feature_flags.clear();
 
     old_race_flags_ptr->old_r_blows0 = 0;
     old_race_flags_ptr->old_r_blows1 = 0;
@@ -300,6 +301,7 @@ void save_old_race_flags(MonsterRaceId monster_race_idx, old_race_flags *old_rac
     old_race_flags_ptr->old_r_ability_flags = r_ptr->r_ability_flags;
     old_race_flags_ptr->old_r_behavior_flags = r_ptr->r_behavior_flags;
     old_race_flags_ptr->old_r_drop_flags = r_ptr->r_drop_flags;
+    old_race_flags_ptr->old_r_feature_flags = r_ptr->r_feature_flags;
 
     old_race_flags_ptr->old_r_blows0 = r_ptr->r_blows[0];
     old_race_flags_ptr->old_r_blows1 = r_ptr->r_blows[1];
