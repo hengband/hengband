@@ -27,14 +27,17 @@ errr load_town(void)
     return 23;
 }
 
-void load_quest_info(uint16_t *max_quests_load, byte *max_rquests_load)
+std::tuple<uint16_t, byte> load_quest_info()
 {
-    *max_quests_load = rd_u16b();
+    auto max_quests_load = rd_u16b();
+    byte max_rquests_load;
     if (h_older_than(1, 0, 7)) {
-        *max_rquests_load = 10;
+        max_rquests_load = 10;
     } else {
-        *max_rquests_load = rd_byte();
+        max_rquests_load = rd_byte();
     }
+
+    return std::make_tuple(max_quests_load, max_rquests_load);
 }
 
 static void load_quest_completion(quest_type *q_ptr)
