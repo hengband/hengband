@@ -9,11 +9,26 @@ AbstractWeaponEnchanter::AbstractWeaponEnchanter(ObjectType *o_ptr, DEPTH level,
     , level(level)
     , power(power)
 {
-    this->decide_skip();
+}
+
+void AbstractWeaponEnchanter::decide_skip()
+{
+    if (this->power == 0) {
+        this->should_skip = true;
+    }
+}
+
+void AbstractWeaponEnchanter::apply_magic()
+{
     if (this->should_skip) {
         return;
     }
 
+    this->prepare_application();
+}
+
+void AbstractWeaponEnchanter::prepare_application()
+{
     auto tohit1 = static_cast<short>(randint1(5) + m_bonus(5, this->level));
     auto todam1 = static_cast<short>(randint1(5) + m_bonus(5, this->level));
     auto tohit2 = static_cast<short>(m_bonus(10, this->level));
@@ -46,12 +61,5 @@ AbstractWeaponEnchanter::AbstractWeaponEnchanter(ObjectType *o_ptr, DEPTH level,
         if (this->o_ptr->to_h + this->o_ptr->to_d < 0) {
             this->o_ptr->curse_flags.set(CurseTraitType::CURSED);
         }
-    }
-}
-
-void AbstractWeaponEnchanter::decide_skip()
-{
-    if (this->power == 0) {
-        this->should_skip = true;
     }
 }

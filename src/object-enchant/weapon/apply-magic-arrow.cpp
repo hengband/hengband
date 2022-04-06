@@ -30,6 +30,7 @@ ArrowEnchanter::ArrowEnchanter(PlayerType *player_ptr, ObjectType *o_ptr, DEPTH 
  */
 void ArrowEnchanter::apply_magic()
 {
+    this->decide_skip();
     if (this->should_skip) {
         return;
     }

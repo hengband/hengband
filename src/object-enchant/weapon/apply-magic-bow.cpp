@@ -29,6 +29,7 @@ BowEnchanter::BowEnchanter(PlayerType *player_ptr, ObjectType *o_ptr, DEPTH leve
  */
 void BowEnchanter::apply_magic()
 {
+    this->decide_skip();
     if (this->should_skip) {
         return;
     }

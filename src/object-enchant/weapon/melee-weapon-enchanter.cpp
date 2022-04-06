@@ -20,6 +20,8 @@ MeleeWeaponEnchanter::MeleeWeaponEnchanter(PlayerType *player_ptr, ObjectType *o
  */
 void MeleeWeaponEnchanter::apply_magic()
 {
+    this->decide_skip();
+    AbstractWeaponEnchanter::apply_magic();
     if (this->should_skip) {
         return;
     }
