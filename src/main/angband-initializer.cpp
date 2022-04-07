@@ -14,6 +14,7 @@
 
 #include "main/angband-initializer.h"
 #include "dungeon/dungeon.h"
+#include "dungeon/quest.h"
 #include "floor/wild.h"
 #include "info-reader/feature-reader.h"
 #include "io/files-util.h"
@@ -330,7 +331,7 @@ void init_angband(PlayerType *player_ptr, bool no_term)
     init_buildings();
 
     init_note(_("[配列を初期化しています... (クエスト)]", "[Initializing arrays... (quests)]"));
-    init_quests();
+    QuestList::get_instance().initialize();
     if (init_v_info()) {
         quit(_("vault 初期化不能", "Cannot initialize vaults"));
     }

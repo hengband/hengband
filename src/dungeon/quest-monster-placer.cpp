@@ -22,7 +22,8 @@
 bool place_quest_monsters(PlayerType *player_ptr)
 {
     auto *floor_ptr = player_ptr->current_floor_ptr;
-    for (auto &[q_idx, q_ref] : quest_map) {
+    const auto &quest_list = QuestList::get_instance();
+    for (const auto &[q_idx, q_ref] : quest_list) {
         monster_race *r_ptr;
         BIT_FLAGS mode;
 

@@ -195,14 +195,18 @@ static std::optional<std::string> search_death_cause(PlayerType *player_ptr)
     }
 
     if (inside_quest(floor_ptr->quest_number) && quest_type::is_fixed(floor_ptr->quest_number)) {
+        const auto &quest_list = QuestList::get_instance();
+
         /* Get the quest text */
         /* Bewere that INIT_ASSIGN resets the cur_num. */
         init_flags = INIT_NAME_ONLY;
         parse_fixed_map(player_ptr, "q_info.txt", 0, 0, 0, 0);
+
+        const auto *q_ptr = &quest_list[floor_ptr->quest_number];
 #ifdef JP
-        return std::string(format("…あなたは、クエスト「%s」で%sに殺された。", quest_map[floor_ptr->quest_number].name, player_ptr->died_from.c_str()));
+        return std::string(format("…あなたは、クエスト「%s」で%sに殺された。", q_ptr->name, player_ptr->died_from.c_str()));
 #else
-        return std::string(format("...You were killed by %s in the quest '%s'.", player_ptr->died_from.c_str(), quest_map[floor_ptr->quest_number].name));
+        return std::string(format("...You were killed by %s in the quest '%s'.", player_ptr->died_from.c_str(), q_ptr->name));
 #endif
     }
 
@@ -230,10 +234,11 @@ static std::optional<std::string> decide_death_in_quest(PlayerType *player_ptr)
         quest_text[i][0] = '\0';
     }
 
+    const auto &quest_list = QuestList::get_instance();
     quest_text_line = 0;
     init_flags = INIT_NAME_ONLY;
     parse_fixed_map(player_ptr, "q_info.txt", 0, 0, 0, 0);
-    return std::string(format(_("…あなたは現在、 クエスト「%s」を遂行中だ。", "...Now, you are in the quest '%s'."), quest_map[floor_ptr->quest_number].name));
+    return std::string(format(_("…あなたは現在、 クエスト「%s」を遂行中だ。", "...Now, you are in the quest '%s'."), quest_list[floor_ptr->quest_number].name));
 }
 
 /*!

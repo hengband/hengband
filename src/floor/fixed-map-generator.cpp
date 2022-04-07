@@ -303,8 +303,8 @@ static int parse_qtw_Q(qtwg_type *qtwg_ptr, char **zz)
         return PARSE_ERROR_TOO_FEW_ARGUMENTS;
     }
 
-    quest_type *q_ptr;
-    q_ptr = &(quest_map[i2enum<QuestId>(atoi(zz[0]))]);
+    auto &quest_list = QuestList::get_instance();
+    auto *q_ptr = &(quest_list[i2enum<QuestId>(atoi(zz[0]))]);
     if (parse_qtw_QQ(q_ptr, zz, num)) {
         return PARSE_ERROR_NONE;
     }

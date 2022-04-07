@@ -211,10 +211,12 @@ static concptr parse_fixed_map_expression(PlayerType *player_ptr, char **sp, cha
         sprintf(tmp, "%d", enum2i(leaving_quest));
         v = tmp;
     } else if (prefix(b + 1, "QUEST_TYPE")) {
-        sprintf(tmp, "%d", enum2i(quest_map[i2enum<QuestId>(atoi(b + 11))].type));
+        const auto &quest_list = QuestList::get_instance();
+        sprintf(tmp, "%d", enum2i(quest_list[i2enum<QuestId>(atoi(b + 11))].type));
         v = tmp;
     } else if (prefix(b + 1, "QUEST")) {
-        sprintf(tmp, "%d", enum2i(quest_map[i2enum<QuestId>(atoi(b + 6))].status));
+        const auto &quest_list = QuestList::get_instance();
+        sprintf(tmp, "%d", enum2i(quest_list[i2enum<QuestId>(atoi(b + 6))].status));
         v = tmp;
     } else if (prefix(b + 1, "RANDOM")) {
         sprintf(tmp, "%d", (int)(w_ptr->seed_town % atoi(b + 7)));
