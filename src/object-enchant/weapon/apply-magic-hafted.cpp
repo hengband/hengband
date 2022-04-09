@@ -23,10 +23,10 @@ HaftedEnchanter::HaftedEnchanter(PlayerType *player_ptr, ObjectType *o_ptr, DEPT
 {
 }
 
-void HaftedEnchanter::decide_skip()
+void HaftedEnchanter::apply_magic()
 {
-    AbstractWeaponEnchanter::decide_skip();
-    this->should_skip |= this->o_ptr->sval == SV_DEATH_SCYTHE;
+    this->decide_skip();
+    MeleeWeaponEnchanter::apply_magic();
 }
 
 void HaftedEnchanter::give_ego_index()

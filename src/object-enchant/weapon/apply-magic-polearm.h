@@ -9,6 +9,8 @@ class PolearmEnchanter : public MeleeWeaponEnchanter {
 public:
     PolearmEnchanter(PlayerType *player_ptr, ObjectType *o_ptr, DEPTH level, int power);
 
+    void apply_magic() override;
+
 protected:
     void decide_skip() override;
     void sval_enchant() override{};

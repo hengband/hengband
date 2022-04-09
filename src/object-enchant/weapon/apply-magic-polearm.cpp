@@ -22,6 +22,12 @@ PolearmEnchanter::PolearmEnchanter(PlayerType *player_ptr, ObjectType *o_ptr, DE
 {
 }
 
+void PolearmEnchanter::apply_magic()
+{
+    this->decide_skip();
+    MeleeWeaponEnchanter::apply_magic();
+}
+
 void PolearmEnchanter::decide_skip()
 {
     AbstractWeaponEnchanter::decide_skip();
