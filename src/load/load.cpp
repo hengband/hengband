@@ -56,6 +56,7 @@
  * @brief 変愚蛮怒 v2.1.3で追加された街とクエストについて読み込む
  * @param player_ptr プレイヤーへの参照ポインタ
  * @return エラーコード
+ * @details 旧海底都市クエスト (クエストNo.18)は廃止済
  */
 static errr load_town_quest(PlayerType *player_ptr)
 {
@@ -68,13 +69,8 @@ static errr load_town_quest(PlayerType *player_ptr)
         return load_town_result;
     }
 
-    uint16_t max_quests_load;
-    byte max_rquests_load;
-    load_quest_info(&max_quests_load, &max_rquests_load);
-
+    auto [max_quests_load, max_rquests_load] = load_quest_info();
     analyze_quests(player_ptr, max_quests_load, max_rquests_load);
-
-    /* Quest 18 was removed */
     if (h_older_than(1, 7, 0, 6)) {
         auto &quest_list = QuestList::get_instance();
         quest_list[i2enum<QuestId>(OLD_QUEST_WATER_CAVE)] = {};
