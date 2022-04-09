@@ -9,6 +9,8 @@ class HaftedEnchanter : public MeleeWeaponEnchanter {
 public:
     HaftedEnchanter(PlayerType *player_ptr, ObjectType *o_ptr, DEPTH level, int power);
 
+    void apply_magic() override;
+
 protected:
     void sval_enchant() override{};
     void give_ego_index() override;

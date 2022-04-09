@@ -35,6 +35,7 @@ void ArrowEnchanter::apply_magic()
         return;
     }
 
+    this->give_killing_bonus();
     if (this->power > 1) {
         if (this->power > 2) {
             become_random_artifact(this->player_ptr, this->o_ptr, false);

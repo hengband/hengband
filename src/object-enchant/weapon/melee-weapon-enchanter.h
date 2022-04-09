@@ -16,6 +16,8 @@ protected:
 
     PlayerType *player_ptr;
 
+    void prepare_magic_application();
+
 private:
     void strengthen();
 };

@@ -18,17 +18,15 @@ void AbstractWeaponEnchanter::decide_skip()
     }
 }
 
-void AbstractWeaponEnchanter::apply_magic()
+/*!
+ * @brief 武器に殺戮修正を付与する
+ */
+void AbstractWeaponEnchanter::give_killing_bonus()
 {
     if (this->should_skip) {
         return;
     }
 
-    this->prepare_application();
-}
-
-void AbstractWeaponEnchanter::prepare_application()
-{
     auto tohit1 = static_cast<short>(randint1(5) + m_bonus(5, this->level));
     auto todam1 = static_cast<short>(randint1(5) + m_bonus(5, this->level));
     auto tohit2 = static_cast<short>(m_bonus(10, this->level));

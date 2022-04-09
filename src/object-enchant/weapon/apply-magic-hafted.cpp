@@ -23,6 +23,12 @@ HaftedEnchanter::HaftedEnchanter(PlayerType *player_ptr, ObjectType *o_ptr, DEPT
 {
 }
 
+void HaftedEnchanter::apply_magic()
+{
+    this->decide_skip();
+    MeleeWeaponEnchanter::apply_magic();
+}
+
 void HaftedEnchanter::give_ego_index()
 {
     while (true) {

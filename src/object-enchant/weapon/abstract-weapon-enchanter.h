@@ -15,9 +15,6 @@ protected:
     int power;
     bool should_skip = false;
 
-    virtual void apply_magic();
+    void give_killing_bonus();
     virtual void decide_skip();
-
-private:
-    void prepare_application();
 };
