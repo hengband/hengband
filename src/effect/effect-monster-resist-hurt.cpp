@@ -682,13 +682,13 @@ ProcessResult effect_monster_void(PlayerType *player_ptr, effect_monster_type *e
         if (is_original_ap_and_seen(player_ptr, em_ptr->m_ptr)) {
             em_ptr->r_ptr->r_kind_flags.set(MonsterKindType::QUANTUM);
         }
-    } else if (any_bits(em_ptr->r_ptr->flags2, RF2_PASS_WALL)) {
+    } else if (em_ptr->r_ptr->feature_flags.has(MonsterFeatureType::PASS_WALL)) {
         em_ptr->note = _("の存在が薄れていく。", "is fading out.");
         em_ptr->note_dies = _("は消えてしまった。", "has disappeared.");
         em_ptr->dam *= 3;
         em_ptr->dam /= 2;
         if (is_original_ap_and_seen(player_ptr, em_ptr->m_ptr)) {
-            set_bits(em_ptr->r_ptr->r_flags2, RF2_PASS_WALL);
+            em_ptr->r_ptr->r_feature_flags.set(MonsterFeatureType::PASS_WALL);
         }
     } else if (em_ptr->r_ptr->resistance_flags.has_any_of({ MonsterResistanceType::RESIST_TELEPORT, MonsterResistanceType::RESIST_FORCE, MonsterResistanceType::RESIST_GRAVITY })) {
         em_ptr->note = _("には耐性がある！", " resists!");
@@ -740,7 +740,7 @@ ProcessResult effect_monster_abyss(PlayerType *player_ptr, effect_monster_type *
         if (is_original_ap_and_seen(player_ptr, em_ptr->m_ptr)) {
             em_ptr->r_ptr->r_resistance_flags.set(MonsterResistanceType::RESIST_DARK);
         }
-    } else if (!any_bits(em_ptr->r_ptr->flags7, RF7_CAN_FLY)) {
+    } else if (em_ptr->r_ptr->feature_flags.has_not(MonsterFeatureType::CAN_FLY)) {
         if (em_ptr->r_ptr->resistance_flags.has(MonsterResistanceType::RESIST_TELEPORT)) {
             em_ptr->dam *= 5;
             em_ptr->dam /= 4;

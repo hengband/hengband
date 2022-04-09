@@ -2451,6 +2451,9 @@
     <ClCompile Include="..\..\src\mspell\mspell-attack\mspell-particularity.cpp">
       <Filter>mspell\mspell-attack</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\monster-race\race-feature-mask.cpp">
+      <Filter>monster-race</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\combat\shoot.h">
@@ -5321,6 +5324,12 @@
     </ClInclude>
     <ClInclude Include="..\..\src\mspell\mspell-attack\mspell-particularity.h">
       <Filter>mspell\mspell-attack</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\monster-race\race-feature-flags.h">
+      <Filter>monster-race</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\monster-race\race-feature-mask.h">
+      <Filter>monster-race</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

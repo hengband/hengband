@@ -61,7 +61,7 @@ bool monster_can_cross_terrain(PlayerType *player_ptr, FEAT_IDX feat, monster_ra
 
     if (f_ptr->flags.has(FloorFeatureType::PATTERN)) {
         if (!(mode & CEM_RIDING)) {
-            if (!(r_ptr->flags7 & RF7_CAN_FLY)) {
+            if (r_ptr->feature_flags.has_not(MonsterFeatureType::CAN_FLY)) {
                 return false;
             }
         } else {
@@ -71,14 +71,14 @@ bool monster_can_cross_terrain(PlayerType *player_ptr, FEAT_IDX feat, monster_ra
         }
     }
 
-    if (f_ptr->flags.has(FloorFeatureType::CAN_FLY) && (r_ptr->flags7 & RF7_CAN_FLY)) {
+    if (f_ptr->flags.has(FloorFeatureType::CAN_FLY) && r_ptr->feature_flags.has(MonsterFeatureType::CAN_FLY)) {
         return true;
     }
-    if (f_ptr->flags.has(FloorFeatureType::CAN_SWIM) && (r_ptr->flags7 & RF7_CAN_SWIM)) {
+    if (f_ptr->flags.has(FloorFeatureType::CAN_SWIM) && r_ptr->feature_flags.has(MonsterFeatureType::CAN_SWIM)) {
         return true;
     }
     if (f_ptr->flags.has(FloorFeatureType::CAN_PASS)) {
-        if ((r_ptr->flags2 & RF2_PASS_WALL) && (!(mode & CEM_RIDING) || has_pass_wall(player_ptr))) {
+        if (r_ptr->feature_flags.has(MonsterFeatureType::PASS_WALL) && (!(mode & CEM_RIDING) || has_pass_wall(player_ptr))) {
             return true;
         }
     }
@@ -92,14 +92,14 @@ bool monster_can_cross_terrain(PlayerType *player_ptr, FEAT_IDX feat, monster_ra
     }
 
     if (f_ptr->flags.has(FloorFeatureType::WATER)) {
-        if (!(r_ptr->flags7 & RF7_AQUATIC)) {
+        if (r_ptr->feature_flags.has_not(MonsterFeatureType::AQUATIC)) {
             if (f_ptr->flags.has(FloorFeatureType::DEEP)) {
                 return false;
             } else if (r_ptr->aura_flags.has(MonsterAuraType::FIRE)) {
                 return false;
             }
         }
-    } else if (r_ptr->flags7 & RF7_AQUATIC) {
+    } else if (r_ptr->feature_flags.has(MonsterFeatureType::AQUATIC)) {
         return false;
     }
 

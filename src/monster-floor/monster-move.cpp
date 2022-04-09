@@ -74,7 +74,7 @@ static bool process_wall(PlayerType *player_ptr, turn_flags *turn_flags_ptr, mon
         return true;
     }
 
-    if (((r_ptr->flags2 & RF2_KILL_WALL) != 0) && (can_cross ? f_ptr->flags.has_not(FloorFeatureType::LOS) : !turn_flags_ptr->is_riding_mon) && f_ptr->flags.has(FloorFeatureType::HURT_DISI) && f_ptr->flags.has_not(FloorFeatureType::PERMANENT) && check_hp_for_feat_destruction(f_ptr, m_ptr)) {
+    if (r_ptr->feature_flags.has(MonsterFeatureType::KILL_WALL) && (can_cross ? f_ptr->flags.has_not(FloorFeatureType::LOS) : !turn_flags_ptr->is_riding_mon) && f_ptr->flags.has(FloorFeatureType::HURT_DISI) && f_ptr->flags.has_not(FloorFeatureType::PERMANENT) && check_hp_for_feat_destruction(f_ptr, m_ptr)) {
         turn_flags_ptr->do_move = true;
         if (!can_cross) {
             turn_flags_ptr->must_alter_to_move = true;
@@ -89,7 +89,7 @@ static bool process_wall(PlayerType *player_ptr, turn_flags *turn_flags_ptr, mon
     }
 
     turn_flags_ptr->do_move = true;
-    if (((r_ptr->flags2 & RF2_PASS_WALL) != 0) && (!turn_flags_ptr->is_riding_mon || has_pass_wall(player_ptr)) && f_ptr->flags.has(FloorFeatureType::CAN_PASS)) {
+    if ((r_ptr->feature_flags.has(MonsterFeatureType::PASS_WALL)) && (!turn_flags_ptr->is_riding_mon || has_pass_wall(player_ptr)) && f_ptr->flags.has(FloorFeatureType::CAN_PASS)) {
         turn_flags_ptr->did_pass_wall = true;
     }
 
@@ -330,7 +330,7 @@ static bool process_post_dig_wall(PlayerType *player_ptr, turn_flags *turn_flags
         player_ptr->update |= (PU_FLOW);
         player_ptr->window_flags |= (PW_OVERHEAD | PW_DUNGEON);
         if (is_original_ap_and_seen(player_ptr, m_ptr)) {
-            r_ptr->r_flags2 |= (RF2_KILL_WALL);
+            r_ptr->r_feature_flags.set(MonsterFeatureType::KILL_WALL);
         }
 
         return false;
@@ -401,7 +401,7 @@ bool process_monster_movement(PlayerType *player_ptr, turn_flags *turn_flags_ptr
             return false;
         }
 
-        if (turn_flags_ptr->must_alter_to_move && (r_ptr->flags7 & RF7_AQUATIC)) {
+        if (turn_flags_ptr->must_alter_to_move && r_ptr->feature_flags.has(MonsterFeatureType::AQUATIC)) {
             if (!monster_can_cross_terrain(player_ptr, g_ptr->feat, r_ptr, turn_flags_ptr->is_riding_mon ? CEM_RIDING : 0)) {
                 turn_flags_ptr->do_move = false;
             }
@@ -430,7 +430,7 @@ bool process_monster_movement(PlayerType *player_ptr, turn_flags *turn_flags_ptr
         turn_flags_ptr->do_turn = true;
         feature_type *f_ptr;
         f_ptr = &f_info[g_ptr->feat];
-        if (f_ptr->flags.has(FloorFeatureType::TREE) && ((r_ptr->flags7 & RF7_CAN_FLY) == 0) && (r_ptr->wilderness_flags.has_not(MonsterWildernessType::WILD_WOOD))) {
+        if (f_ptr->flags.has(FloorFeatureType::TREE) && r_ptr->feature_flags.has_not(MonsterFeatureType::CAN_FLY) && (r_ptr->wilderness_flags.has_not(MonsterWildernessType::WILD_WOOD))) {
             m_ptr->energy_need += ENERGY_NEED();
         }
 

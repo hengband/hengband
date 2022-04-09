@@ -3,6 +3,7 @@
 #include "monster-attack/monster-attack-table.h"
 #include "monster-race/race-ability-flags.h"
 #include "monster-race/race-drop-flags.h"
+#include "monster-race/race-feature-flags.h"
 #include "monster-race/race-kind-flags.h"
 #include "monster-race/race-visual-flags.h"
 #include "monster-race/race-wilderness-flags.h"
@@ -117,8 +118,6 @@ const std::unordered_map<std::string_view, race_flags2> r_info_flags2 = {
     { "ELDRITCH_HORROR", RF2_ELDRITCH_HORROR },
     { "FLAGS2_XX14", RF2_XX14 },
     { "FLAGS2_XX15", RF2_XX15 },
-    { "PASS_WALL", RF2_PASS_WALL },
-    { "KILL_WALL", RF2_KILL_WALL },
 };
 
 /*!
@@ -252,9 +251,6 @@ const std::unordered_map<std::string_view, MonsterAbilityType> r_info_ability_fl
  * "GUARDIAN" ... init.c d_infoの FINAL_GUARDIAN_* にて自動指定
  */
 const std::unordered_map<std::string_view, race_flags7> r_info_flags7 = {
-    { "AQUATIC", RF7_AQUATIC },
-    { "CAN_SWIM", RF7_CAN_SWIM },
-    { "CAN_FLY", RF7_CAN_FLY },
     { "NAZGUL", RF7_NAZGUL },
     { "UNIQUE2", RF7_UNIQUE2 },
     { "RIDING", RF7_RIDING },
@@ -435,4 +431,12 @@ const std::unordered_map<std::string_view, MonsterWildernessType> r_info_wildern
     { "WILD_GRASS", MonsterWildernessType::WILD_GRASS },
     { "WILD_SWAMP", MonsterWildernessType::WILD_SWAMP },
     { "WILD_ALL", MonsterWildernessType::WILD_ALL },
+};
+
+const std::unordered_map<std::string_view, MonsterFeatureType> r_info_feature_flags = {
+    { "PASS_WALL", MonsterFeatureType::PASS_WALL },
+    { "KILL_WALL", MonsterFeatureType::KILL_WALL },
+    { "AQUATIC", MonsterFeatureType::AQUATIC },
+    { "CAN_SWIM", MonsterFeatureType::CAN_SWIM },
+    { "CAN_FLY", MonsterFeatureType::CAN_FLY },
 };
