@@ -84,7 +84,7 @@ static void decide_enemy_approch_direction(PlayerType *player_ptr, MONSTER_IDX m
             continue;
         }
 
-        if (((r_ptr->flags2 & RF2_PASS_WALL) && ((m_idx != player_ptr->riding) || has_pass_wall(player_ptr))) || ((r_ptr->flags2 & RF2_KILL_WALL) && (m_idx != player_ptr->riding))) {
+        if ((r_ptr->feature_flags.has(MonsterFeatureType::PASS_WALL) && ((m_idx != player_ptr->riding) || has_pass_wall(player_ptr))) || (r_ptr->feature_flags.has(MonsterFeatureType::KILL_WALL) && (m_idx != player_ptr->riding))) {
             if (!in_disintegration_range(floor_ptr, m_ptr->fy, m_ptr->fx, t_ptr->fy, t_ptr->fx)) {
                 continue;
             }

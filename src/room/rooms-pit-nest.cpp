@@ -726,7 +726,7 @@ static bool vault_aux_trapped_pit(PlayerType *player_ptr, MonsterRaceId r_idx)
     }
 
     /* No wall passing monster */
-    if (r_ptr->flags2 & (RF2_PASS_WALL | RF2_KILL_WALL)) {
+    if (r_ptr->feature_flags.has_any_of({ MonsterFeatureType::PASS_WALL, MonsterFeatureType::KILL_WALL })) {
         return false;
     }
 

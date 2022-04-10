@@ -39,8 +39,9 @@ void QuestCompletionChecker::complete()
     this->set_quest_idx();
     auto create_stairs = false;
     auto reward = false;
-    if (inside_quest(this->quest_idx) && (quest_map[this->quest_idx].status == QuestStatusType::TAKEN)) {
-        this->q_ptr = &quest_map[this->quest_idx];
+    auto &quest_list = QuestList::get_instance();
+    if (inside_quest(this->quest_idx) && (quest_list[this->quest_idx].status == QuestStatusType::TAKEN)) {
+        this->q_ptr = &quest_list[this->quest_idx];
         auto [tmp_create_stairs, tmp_reward] = this->switch_completion();
         create_stairs = tmp_create_stairs;
         reward = tmp_reward;
@@ -91,13 +92,14 @@ static bool check_quest_completion(PlayerType *player_ptr, const quest_type &q_r
 void QuestCompletionChecker::set_quest_idx()
 {
     auto *floor_ptr = this->player_ptr->current_floor_ptr;
+    const auto &quest_list = QuestList::get_instance();
     this->quest_idx = floor_ptr->quest_number;
     if (inside_quest(this->quest_idx)) {
         return;
     }
-    auto q = std::find_if(quest_map.rbegin(), quest_map.rend(), [this](auto q) { return check_quest_completion(this->player_ptr, q.second, this->m_ptr); });
+    auto q = std::find_if(quest_list.rbegin(), quest_list.rend(), [this](auto q) { return check_quest_completion(this->player_ptr, q.second, this->m_ptr); });
 
-    if (q != quest_map.rend()) {
+    if (q != quest_list.rend()) {
         this->quest_idx = q->first;
     } else {
         this->quest_idx = QuestId::NONE;
@@ -179,6 +181,7 @@ std::tuple<bool, bool> QuestCompletionChecker::complete_random()
 
 void QuestCompletionChecker::complete_tower()
 {
+    const auto &quest_list = QuestList::get_instance();
     if (!is_hostile(this->m_ptr)) {
         return;
     }
@@ -188,9 +191,9 @@ void QuestCompletionChecker::complete_tower()
     }
 
     this->q_ptr->status = QuestStatusType::STAGE_COMPLETED;
-    auto is_tower_completed = quest_map[QuestId::TOWER1].status == QuestStatusType::STAGE_COMPLETED;
-    is_tower_completed &= quest_map[QuestId::TOWER2].status == QuestStatusType::STAGE_COMPLETED;
-    is_tower_completed &= quest_map[QuestId::TOWER3].status == QuestStatusType::STAGE_COMPLETED;
+    auto is_tower_completed = quest_list[QuestId::TOWER1].status == QuestStatusType::STAGE_COMPLETED;
+    is_tower_completed &= quest_list[QuestId::TOWER2].status == QuestStatusType::STAGE_COMPLETED;
+    is_tower_completed &= quest_list[QuestId::TOWER3].status == QuestStatusType::STAGE_COMPLETED;
     if (is_tower_completed) {
         complete_quest(this->player_ptr, QuestId::TOWER1);
     }

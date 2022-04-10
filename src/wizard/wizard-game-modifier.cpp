@@ -107,7 +107,8 @@ void wiz_enter_quest(PlayerType *player_ptr)
     char ppp[30];
     char tmp_val[5];
     int tmp_int;
-    const auto quest_max = enum2i(quest_map.rbegin()->first);
+    auto &quest_list = QuestList::get_instance();
+    const auto quest_max = enum2i(quest_list.rbegin()->first);
     sprintf(ppp, "QuestID (0-%u):", quest_max);
     sprintf(tmp_val, "%d", 0);
 
@@ -125,8 +126,8 @@ void wiz_enter_quest(PlayerType *player_ptr)
     init_flags = i2enum<init_flags_type>(INIT_SHOW_TEXT | INIT_ASSIGN);
     player_ptr->current_floor_ptr->quest_number = q_idx;
     parse_fixed_map(player_ptr, "q_info.txt", 0, 0, 0, 0);
-    quest_map[q_idx].status = QuestStatusType::TAKEN;
-    if (quest_map[q_idx].dungeon == 0) {
+    quest_list[q_idx].status = QuestStatusType::TAKEN;
+    if (quest_list[q_idx].dungeon == 0) {
         exe_enter_quest(player_ptr, q_idx);
     }
 }
@@ -143,7 +144,8 @@ void wiz_complete_quest(PlayerType *player_ptr)
         return;
     }
 
-    if (quest_map[player_ptr->current_floor_ptr->quest_number].status == QuestStatusType::TAKEN) {
+    const auto &quest_list = QuestList::get_instance();
+    if (quest_list[player_ptr->current_floor_ptr->quest_number].status == QuestStatusType::TAKEN) {
         complete_quest(player_ptr, player_ptr->current_floor_ptr->quest_number);
     }
 }

@@ -45,6 +45,7 @@ void do_cmd_checkquest(PlayerType *player_ptr)
  */
 static void do_cmd_knowledge_quests_current(PlayerType *player_ptr, FILE *fff)
 {
+    const auto &quest_list = QuestList::get_instance();
     char tmp_str[1024];
     char rand_tmp_str[512] = "\0";
     GAME_TEXT name[MAX_NLEN];
@@ -54,7 +55,7 @@ static void do_cmd_knowledge_quests_current(PlayerType *player_ptr, FILE *fff)
 
     fprintf(fff, _("《遂行中のクエスト》\n", "< Current Quest >\n"));
 
-    for (auto &[q_idx, q_ref] : quest_map) {
+    for (const auto &[q_idx, q_ref] : quest_list) {
         bool is_print = q_ref.status == QuestStatusType::TAKEN;
         is_print |= (q_ref.status == QuestStatusType::STAGE_COMPLETED) && (q_ref.type == QuestKindType::TOWER);
         is_print |= q_ref.status == QuestStatusType::COMPLETED;
@@ -186,7 +187,8 @@ static bool do_cmd_knowledge_quests_aux(PlayerType *player_ptr, FILE *fff, Quest
 {
     char tmp_str[120];
     char playtime_str[16];
-    auto *const q_ptr = &quest_map[q_idx];
+    const auto &quest_list = QuestList::get_instance();
+    const auto &q_ref = quest_list[q_idx];
 
     auto *floor_ptr = player_ptr->current_floor_ptr;
     auto is_fixed_quest = quest_type::is_fixed(q_idx);
@@ -196,29 +198,29 @@ static bool do_cmd_knowledge_quests_aux(PlayerType *player_ptr, FILE *fff, Quest
         init_flags = INIT_NAME_ONLY;
         parse_fixed_map(player_ptr, "q_info.txt", 0, 0, 0, 0);
         floor_ptr->quest_number = old_quest;
-        if (q_ptr->flags & QUEST_FLAG_SILENT) {
+        if (q_ref.flags & QUEST_FLAG_SILENT) {
             return false;
         }
     }
 
-    strnfmt(playtime_str, sizeof(playtime_str), "%02d:%02d:%02d", q_ptr->comptime / (60 * 60), (q_ptr->comptime / 60) % 60, q_ptr->comptime % 60);
+    strnfmt(playtime_str, sizeof(playtime_str), "%02d:%02d:%02d", q_ref.comptime / (60 * 60), (q_ref.comptime / 60) % 60, q_ref.comptime % 60);
 
-    if (is_fixed_quest || !MonsterRace(q_ptr->r_idx).is_valid()) {
-        sprintf(tmp_str, _("  %-35s (危険度:%3d階相当) - レベル%2d - %s\n", "  %-35s (Danger  level: %3d) - level %2d - %s\n"), q_ptr->name, (int)q_ptr->level,
-            q_ptr->complev, playtime_str);
+    if (is_fixed_quest || !MonsterRace(q_ref.r_idx).is_valid()) {
+        sprintf(tmp_str, _("  %-35s (危険度:%3d階相当) - レベル%2d - %s\n", "  %-35s (Danger  level: %3d) - level %2d - %s\n"), q_ref.name, (int)q_ref.level,
+            q_ref.complev, playtime_str);
         fputs(tmp_str, fff);
         return true;
     }
 
-    if (q_ptr->complev == 0) {
+    if (q_ref.complev == 0) {
         sprintf(tmp_str, _("  %-35s (%3d階)            -   不戦勝 - %s\n", "  %-35s (Dungeon level: %3d) - Unearned - %s\n"),
-            r_info[q_ptr->r_idx].name.c_str(), (int)q_ptr->level, playtime_str);
+            r_info[q_ref.r_idx].name.c_str(), (int)q_ref.level, playtime_str);
         fputs(tmp_str, fff);
         return true;
     }
 
-    sprintf(tmp_str, _("  %-35s (%3d階)            - レベル%2d - %s\n", "  %-35s (Dungeon level: %3d) - level %2d - %s\n"), r_info[q_ptr->r_idx].name.c_str(),
-        (int)q_ptr->level, q_ptr->complev, playtime_str);
+    sprintf(tmp_str, _("  %-35s (%3d階)            - レベル%2d - %s\n", "  %-35s (Dungeon level: %3d) - level %2d - %s\n"), r_info[q_ref.r_idx].name.c_str(),
+        (int)q_ref.level, q_ref.complev, playtime_str);
     fputs(tmp_str, fff);
     return true;
 }
@@ -234,7 +236,8 @@ void do_cmd_knowledge_quests_completed(PlayerType *player_ptr, FILE *fff, const 
     fprintf(fff, _("《達成したクエスト》\n", "< Completed Quest >\n"));
     int16_t total = 0;
     for (auto &q_idx : quest_numbers) {
-        auto &q_ref = quest_map[q_idx];
+        const auto &quest_list = QuestList::get_instance();
+        const auto &q_ref = quest_list[q_idx];
 
         if (q_ref.status == QuestStatusType::FINISHED && do_cmd_knowledge_quests_aux(player_ptr, fff, q_idx)) {
             ++total;
@@ -257,7 +260,8 @@ void do_cmd_knowledge_quests_failed(PlayerType *player_ptr, FILE *fff, const std
     fprintf(fff, _("《失敗したクエスト》\n", "< Failed Quest >\n"));
     int16_t total = 0;
     for (auto &q_idx : quest_numbers) {
-        auto &q_ref = quest_map[q_idx];
+        const auto &quest_list = QuestList::get_instance();
+        const auto &q_ref = quest_list[q_idx];
 
         if (((q_ref.status == QuestStatusType::FAILED_DONE) || (q_ref.status == QuestStatusType::FAILED)) && do_cmd_knowledge_quests_aux(player_ptr, fff, q_idx)) {
             ++total;
@@ -275,9 +279,10 @@ void do_cmd_knowledge_quests_failed(PlayerType *player_ptr, FILE *fff, const std
 static void do_cmd_knowledge_quests_wiz_random(FILE *fff)
 {
     fprintf(fff, _("《残りのランダムクエスト》\n", "< Remaining Random Quest >\n"));
+    const auto &quest_list = QuestList::get_instance();
     GAME_TEXT tmp_str[120];
     int16_t total = 0;
-    for (auto &[q_idx, q_ref] : quest_map) {
+    for (const auto &[q_idx, q_ref] : quest_list) {
         if (q_ref.flags & QUEST_FLAG_SILENT) {
             continue;
         }
@@ -307,8 +312,9 @@ void do_cmd_knowledge_quests(PlayerType *player_ptr)
     }
 
     std::vector<QuestId> quest_numbers;
-    for (auto &q : quest_map) {
-        quest_numbers.push_back(q.first);
+    const auto &quest_list = QuestList::get_instance();
+    for (const auto &[q_idx, q_ref] : quest_list) {
+        quest_numbers.push_back(q_idx);
     }
     int dummy;
     ang_sort(player_ptr, quest_numbers.data(), &dummy, quest_numbers.size(), ang_sort_comp_quest_num, ang_sort_swap_quest_num);

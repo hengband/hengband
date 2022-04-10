@@ -50,7 +50,8 @@ bool object_is_quest_target(QuestId quest_idx, ObjectType *o_ptr)
         return false;
     }
 
-    auto a_idx = quest_map[quest_idx].k_idx;
+    const auto &quest_list = QuestList::get_instance();
+    auto a_idx = quest_list[quest_idx].k_idx;
     if (a_idx == 0) {
         return false;
     }

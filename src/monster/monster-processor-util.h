@@ -9,6 +9,7 @@
 #include "monster-race/race-ability-flags.h"
 #include "monster-race/race-behavior-flags.h"
 #include "monster-race/race-drop-flags.h"
+#include "monster-race/race-feature-flags.h"
 #include "monster-race/race-flags-resistance.h"
 #include "monster-race/race-kind-flags.h"
 #include "system/angband.h"
@@ -45,6 +46,7 @@ struct old_race_flags {
     EnumClassFlagGroup<MonsterKindType> old_r_kind_flags;
     EnumClassFlagGroup<MonsterResistanceType> old_r_resistance_flags;
     EnumClassFlagGroup<MonsterDropType> old_r_drop_flags;
+    EnumClassFlagGroup<MonsterFeatureType> old_r_feature_flags;
 
     byte old_r_blows0;
     byte old_r_blows1;

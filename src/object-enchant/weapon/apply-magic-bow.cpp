@@ -29,10 +29,12 @@ BowEnchanter::BowEnchanter(PlayerType *player_ptr, ObjectType *o_ptr, DEPTH leve
  */
 void BowEnchanter::apply_magic()
 {
+    this->decide_skip();
     if (this->should_skip) {
         return;
     }
 
+    this->give_killing_bonus();
     if (this->power > 1) {
         if ((this->power > 2) || one_in_(20)) {
             become_random_artifact(this->player_ptr, this->o_ptr, false);

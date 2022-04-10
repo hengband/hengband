@@ -100,7 +100,7 @@ bool mon_hook_quest(PlayerType *player_ptr, MonsterRaceId r_idx)
         return false;
     }
 
-    if (any_bits(r_ptr->flags7, RF7_AQUATIC)) {
+    if (r_ptr->feature_flags.has(MonsterFeatureType::AQUATIC)) {
         return false;
     }
 
@@ -141,7 +141,7 @@ bool mon_hook_dungeon(PlayerType *player_ptr, MonsterRaceId r_idx)
         return d_ptr->mon_wilderness_flags.has(MonsterWildernessType::WILD_MOUNTAIN) && r_ptr->wilderness_flags.has(MonsterWildernessType::WILD_MOUNTAIN);
     }
 
-    auto land = none_bits(r_ptr->flags7, RF7_AQUATIC);
+    auto land = r_ptr->feature_flags.has_not(MonsterFeatureType::AQUATIC);
     auto is_mountain_monster = d_ptr->mon_wilderness_flags.has_none_of({ MonsterWildernessType::WILD_MOUNTAIN, MonsterWildernessType::WILD_VOLCANO });
     is_mountain_monster |= d_ptr->mon_wilderness_flags.has(MonsterWildernessType::WILD_MOUNTAIN) && (land || r_ptr->wilderness_flags.has(MonsterWildernessType::WILD_MOUNTAIN));
     is_mountain_monster |= d_ptr->mon_wilderness_flags.has(MonsterWildernessType::WILD_VOLCANO) && (land || r_ptr->wilderness_flags.has(MonsterWildernessType::WILD_VOLCANO));
@@ -272,7 +272,7 @@ bool mon_hook_deep_water(PlayerType *player_ptr, MonsterRaceId r_idx)
         return false;
     }
 
-    return any_bits(r_ptr->flags7, RF7_AQUATIC);
+    return r_ptr->feature_flags.has(MonsterFeatureType::AQUATIC);
 }
 
 /*!
@@ -302,7 +302,7 @@ bool mon_hook_lava(PlayerType *player_ptr, MonsterRaceId r_idx)
         return false;
     }
 
-    return (r_ptr->resistance_flags.has_any_of(RFR_EFF_IM_FIRE_MASK) || any_bits(r_ptr->flags7, RF7_CAN_FLY)) && r_ptr->aura_flags.has_not(MonsterAuraType::COLD);
+    return (r_ptr->resistance_flags.has_any_of(RFR_EFF_IM_FIRE_MASK) || r_ptr->feature_flags.has(MonsterFeatureType::CAN_FLY)) && r_ptr->aura_flags.has_not(MonsterAuraType::COLD);
 }
 
 /*!
@@ -316,7 +316,7 @@ bool mon_hook_floor(PlayerType *player_ptr, MonsterRaceId r_idx)
     (void)player_ptr;
 
     auto *r_ptr = &r_info[r_idx];
-    if (none_bits(r_ptr->flags7, RF7_AQUATIC) || any_bits(r_ptr->flags7, RF7_CAN_FLY)) {
+    if (r_ptr->feature_flags.has_not(MonsterFeatureType::AQUATIC) || r_ptr->feature_flags.has(MonsterFeatureType::CAN_FLY)) {
         return true;
     } else {
         return false;
@@ -340,7 +340,7 @@ bool vault_aux_lite(PlayerType *player_ptr, MonsterRaceId r_idx)
         return false;
     }
 
-    if (any_bits(r_ptr->flags2, (RF2_PASS_WALL | RF2_KILL_WALL))) {
+    if (r_ptr->feature_flags.has_any_of({ MonsterFeatureType::PASS_WALL, MonsterFeatureType::KILL_WALL })) {
         return false;
     }
 
@@ -879,7 +879,7 @@ bool monster_is_fishing_target(PlayerType *player_ptr, MonsterRaceId r_idx)
     (void)player_ptr;
 
     auto *r_ptr = &r_info[r_idx];
-    if (any_bits(r_ptr->flags7, RF7_AQUATIC) && r_ptr->kind_flags.has_not(MonsterKindType::UNIQUE) && angband_strchr("Jjlw", r_ptr->d_char)) {
+    if (r_ptr->feature_flags.has(MonsterFeatureType::AQUATIC) && r_ptr->kind_flags.has_not(MonsterKindType::UNIQUE) && angband_strchr("Jjlw", r_ptr->d_char)) {
         return true;
     } else {
         return false;
@@ -889,7 +889,7 @@ bool monster_is_fishing_target(PlayerType *player_ptr, MonsterRaceId r_idx)
 /*!
  * @brief モンスター闘技場に参加できるモンスターの判定
  * @param r_idx モンスターＩＤ
- * @details 基準はNEVER_MOVE MULTIPLY QUANTUM RF7_AQUATIC RF7_CHAMELEONのいずれも持たず、
+ * @details 基準はNEVER_MOVE MULTIPLY QUANTUM AQUATIC RF7_CHAMELEONのいずれも持たず、
  * 自爆以外のなんらかのHP攻撃手段を持っていること。
  * @return 参加できるか否か
  */
@@ -903,7 +903,7 @@ bool monster_can_entry_arena(PlayerType *player_ptr, MonsterRaceId r_idx)
     bool unselectable = r_ptr->behavior_flags.has(MonsterBehaviorType::NEVER_MOVE);
     unselectable |= any_bits(r_ptr->flags2, RF2_MULTIPLY);
     unselectable |= r_ptr->kind_flags.has(MonsterKindType::QUANTUM) && r_ptr->kind_flags.has_not(MonsterKindType::UNIQUE);
-    unselectable |= any_bits(r_ptr->flags7, RF7_AQUATIC);
+    unselectable |= r_ptr->feature_flags.has(MonsterFeatureType::AQUATIC);
     unselectable |= any_bits(r_ptr->flags7, RF7_CHAMELEON);
     if (unselectable) {
         return false;
@@ -975,5 +975,5 @@ bool item_monster_okay(PlayerType *player_ptr, MonsterRaceId r_idx)
  */
 bool vault_monster_okay(PlayerType *player_ptr, MonsterRaceId r_idx)
 {
-    return mon_hook_dungeon(player_ptr, r_idx) && r_info[r_idx].kind_flags.has_not(MonsterKindType::UNIQUE) && none_bits(r_info[r_idx].flags7, RF7_UNIQUE2) && r_info[r_idx].resistance_flags.has_not(MonsterResistanceType::RESIST_ALL) && none_bits(r_info[r_idx].flags7, RF7_AQUATIC);
+    return mon_hook_dungeon(player_ptr, r_idx) && r_info[r_idx].kind_flags.has_not(MonsterKindType::UNIQUE) && none_bits(r_info[r_idx].flags7, RF7_UNIQUE2) && r_info[r_idx].resistance_flags.has_not(MonsterResistanceType::RESIST_ALL) && r_info[r_idx].feature_flags.has_not(MonsterFeatureType::AQUATIC);
 }

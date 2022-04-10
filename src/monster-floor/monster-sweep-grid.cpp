@@ -59,7 +59,7 @@ bool MonsterSweepGrid::get_movable_grid()
     auto x2 = this->player_ptr->x;
     this->will_run = this->mon_will_run();
     auto no_flow = m_ptr->mflag2.has(MonsterConstantFlagType::NOFLOW) && floor_ptr->grid_array[m_ptr->fy][m_ptr->fx].get_cost(r_ptr) > 2;
-    this->can_pass_wall = any_bits(r_ptr->flags2, RF2_PASS_WALL) && ((this->m_idx != this->player_ptr->riding) || has_pass_wall(this->player_ptr));
+    this->can_pass_wall = r_ptr->feature_flags.has(MonsterFeatureType::PASS_WALL) && ((this->m_idx != this->player_ptr->riding) || has_pass_wall(this->player_ptr));
     if (!this->will_run && m_ptr->target_y) {
         int t_m_idx = floor_ptr->grid_array[m_ptr->target_y][m_ptr->target_x].m_idx;
         if ((t_m_idx > 0) && are_enemies(this->player_ptr, m_ptr, &floor_ptr->m_list[t_m_idx]) && los(this->player_ptr, m_ptr->fy, m_ptr->fx, m_ptr->target_y, m_ptr->target_x) && projectable(this->player_ptr, m_ptr->fy, m_ptr->fx, m_ptr->target_y, m_ptr->target_x)) {
@@ -174,7 +174,7 @@ void MonsterSweepGrid::search_room_to_run(POSITION *y, POSITION *x)
 {
     auto *floor_ptr = this->player_ptr->current_floor_ptr;
     auto *r_ptr = &r_info[floor_ptr->m_list[this->m_idx].r_idx];
-    if (r_ptr->kind_flags.has_not(MonsterKindType::ANIMAL) || this->can_pass_wall || any_bits(r_ptr->flags2, RF2_KILL_WALL)) {
+    if (r_ptr->kind_flags.has_not(MonsterKindType::ANIMAL) || this->can_pass_wall || r_ptr->feature_flags.has(MonsterFeatureType::KILL_WALL)) {
         return;
     }
 
@@ -290,11 +290,11 @@ bool MonsterSweepGrid::check_movable_grid(POSITION *yp, POSITION *xp, const bool
         return false;
     }
 
-    if (any_bits(r_ptr->flags2, RF2_PASS_WALL) && ((this->m_idx != this->player_ptr->riding) || has_pass_wall(this->player_ptr))) {
+    if (r_ptr->feature_flags.has(MonsterFeatureType::PASS_WALL) && ((this->m_idx != this->player_ptr->riding) || has_pass_wall(this->player_ptr))) {
         return false;
     }
 
-    if (any_bits(r_ptr->flags2, RF2_KILL_WALL) && (this->m_idx != this->player_ptr->riding)) {
+    if (r_ptr->feature_flags.has(MonsterFeatureType::KILL_WALL) && (this->m_idx != this->player_ptr->riding)) {
         return false;
     }
 
@@ -358,7 +358,7 @@ bool MonsterSweepGrid::is_best_cost(const POSITION y, const POSITION x, const in
     auto *floor_ptr = this->player_ptr->current_floor_ptr;
     auto *r_ptr = &r_info[floor_ptr->m_list[this->m_idx].r_idx];
     auto is_riding = this->m_idx == this->player_ptr->riding;
-    if ((none_bits(r_ptr->flags2, RF2_PASS_WALL) || (is_riding && !has_pass_wall(this->player_ptr))) && (none_bits(r_ptr->flags2, RF2_KILL_WALL) || is_riding)) {
+    if ((r_ptr->feature_flags.has_not(MonsterFeatureType::PASS_WALL) || (is_riding && !has_pass_wall(this->player_ptr))) && (r_ptr->feature_flags.has_not(MonsterFeatureType::KILL_WALL) || is_riding)) {
         if (this->cost == 0) {
             return false;
         }

@@ -136,6 +136,7 @@ static bool restrict_monster_to_dungeon(PlayerType *player_ptr, MonsterRaceId r_
             is_possible_monster_and(r_ptr->drop_flags, d_ptr->mon_drop_flags),
             is_possible_monster_and(r_ptr->kind_flags, d_ptr->mon_kind_flags),
             is_possible_monster_and(r_ptr->wilderness_flags, d_ptr->mon_wilderness_flags),
+            is_possible_monster_and(r_ptr->feature_flags, d_ptr->mon_feature_flags),
         };
 
         auto result = std::all_of(is_possible.begin(), is_possible.end(), [](const auto &v) { return v; });
@@ -157,6 +158,7 @@ static bool restrict_monster_to_dungeon(PlayerType *player_ptr, MonsterRaceId r_
             is_possible_monster_or(r_ptr->drop_flags, d_ptr->mon_drop_flags),
             is_possible_monster_or(r_ptr->kind_flags, d_ptr->mon_kind_flags),
             is_possible_monster_or(r_ptr->wilderness_flags, d_ptr->mon_wilderness_flags),
+            is_possible_monster_or(r_ptr->feature_flags, d_ptr->mon_feature_flags),
         };
 
         auto result = std::any_of(is_possible.begin(), is_possible.end(), [](const auto &v) { return v; });

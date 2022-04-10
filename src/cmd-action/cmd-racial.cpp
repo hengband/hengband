@@ -67,7 +67,7 @@ static void racial_power_display_list(PlayerType *player_ptr, rc_type *rc_ptr)
     char dummy[256];
     strcpy(dummy, "");
 
-    prt(_("                                   Lv   MP 失率 効果", "                               Lv   MP Fail Effect"), 1, x);
+    prt(_("                                   Lv   MP 失率 効果", "                                   Lv   MP Fail Effect"), 1, x);
 
     auto y = 0;
     for (; y < RC_PAGE_SIZE; y++) {

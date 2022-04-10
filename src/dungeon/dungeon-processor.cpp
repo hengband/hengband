@@ -78,8 +78,10 @@ void process_dungeon(PlayerType *player_ptr, bool load_game)
 
     disturb(player_ptr, true, true);
     auto quest_num = quest_number(player_ptr, floor_ptr->dun_level);
+    const auto &quest_list = QuestList::get_instance();
+    auto *questor_ptr = &r_info[quest_list[quest_num].r_idx];
     if (inside_quest(quest_num)) {
-        r_info[quest_map[quest_num].r_idx].flags1 |= RF1_QUESTOR;
+        set_bits(questor_ptr->flags1, RF1_QUESTOR);
     }
 
     if (player_ptr->max_plv < player_ptr->lev) {
@@ -99,20 +101,19 @@ void process_dungeon(PlayerType *player_ptr, bool load_game)
     msg_erase();
 
     w_ptr->character_xtra = true;
-    player_ptr->window_flags |= (PW_INVEN | PW_EQUIP | PW_SPELL | PW_PLAYER | PW_MONSTER | PW_OVERHEAD | PW_DUNGEON);
-    player_ptr->redraw |= (PR_WIPE | PR_BASIC | PR_EXTRA | PR_EQUIPPY | PR_MAP);
-    player_ptr->update |= (PU_BONUS | PU_HP | PU_MANA | PU_SPELLS | PU_VIEW | PU_LITE | PU_MON_LITE | PU_TORCH | PU_MONSTERS | PU_DISTANCE | PU_FLOW);
+    set_bits(player_ptr->window_flags, PW_INVEN | PW_EQUIP | PW_SPELL | PW_PLAYER | PW_MONSTER | PW_OVERHEAD | PW_DUNGEON);
+    set_bits(player_ptr->redraw, PR_WIPE | PR_BASIC | PR_EXTRA | PR_EQUIPPY | PR_MAP);
+    set_bits(player_ptr->update, PU_BONUS | PU_HP | PU_MANA | PU_SPELLS | PU_VIEW | PU_LITE | PU_MON_LITE | PU_TORCH | PU_MONSTERS | PU_DISTANCE | PU_FLOW);
     handle_stuff(player_ptr);
 
     w_ptr->character_xtra = false;
-    player_ptr->update |= (PU_BONUS | PU_HP | PU_MANA | PU_SPELLS);
-    player_ptr->update |= (PU_COMBINE | PU_REORDER);
+    set_bits(player_ptr->update, PU_BONUS | PU_HP | PU_MANA | PU_SPELLS | PU_COMBINE | PU_REORDER);
     handle_stuff(player_ptr);
     term_fresh();
 
     auto no_feeling_quest = (quest_num == QuestId::OBERON);
     no_feeling_quest |= (quest_num == QuestId::SERPENT);
-    no_feeling_quest |= none_bits(quest_map[quest_num].flags, QUEST_FLAG_PRESET);
+    no_feeling_quest |= none_bits(quest_list[quest_num].flags, QUEST_FLAG_PRESET);
     if (inside_quest(quest_num) && quest_type::is_fixed(quest_num) && !no_feeling_quest) {
         do_cmd_feeling(player_ptr);
     }
@@ -239,8 +240,8 @@ void process_dungeon(PlayerType *player_ptr, bool load_game)
         }
     }
 
-    if ((inside_quest(quest_num)) && r_info[quest_map[quest_num].r_idx].kind_flags.has_not(MonsterKindType::UNIQUE)) {
-        r_info[quest_map[quest_num].r_idx].flags1 &= ~RF1_QUESTOR;
+    if ((inside_quest(quest_num)) && questor_ptr->kind_flags.has_not(MonsterKindType::UNIQUE)) {
+        reset_bits(questor_ptr->flags1, RF1_QUESTOR);
     }
 
     if (player_ptr->playing && !player_ptr->is_dead) {

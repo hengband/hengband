@@ -713,7 +713,7 @@ bool get_element_power(PlayerType *player_ptr, SPELL_IDX *sn, bool only_browse)
         }
     }
 
-    concptr p = _("元素魔法", "magic");
+    concptr p = _("元素魔法", "power");
     flag = false;
     redraw = false;
 
@@ -789,7 +789,7 @@ bool get_element_power(PlayerType *player_ptr, SPELL_IDX *sn, bool only_browse)
 
                 prt("", y, x);
                 put_str(_("名前", "Name"), y, x + 5);
-                put_str(_("Lv   MP   失率 効果", "Lv   MP   Fail Info"), y, x + 35);
+                put_str(_("Lv   MP   失率 効果", "Lv   MP Fail Info"), y, x + 35);
                 for (i = 0; i < spell_max; i++) {
                     elem = get_elemental_elem(player_ptr, i);
                     spell = get_elemental_info(player_ptr, i);
@@ -892,7 +892,7 @@ static bool try_cast_element_spell(PlayerType *player_ptr, SPELL_IDX spell_idx, 
         flush();
     }
 
-    msg_format(_("魔力の集中に失敗した！", "You failed to concentrate hard enough for Mana!"));
+    msg_format(_("魔力の集中に失敗した！", "You failed to focus the elemental power!"));
     sound(SOUND_FAIL);
 
     if (randint1(100) < chance / 2) {

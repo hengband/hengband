@@ -66,6 +66,11 @@ enum class SavedataLoreOlderThan18FlagType {
     RF1_DROP_GREAT = 0x20000000, /*!< モンスター特性: 必ず高級品をドロップする / Drop great items */
 };
 
+enum class SavedataLoreOlderThan19FlagType {
+    RF2_PASS_WALL = 0x00040000, /*!< モンスター特性: 壁を抜けることができる / Monster can pass walls */
+    RF2_KILL_WALL = 0x00080000, /*!< モンスター特性: 壁を破壊して進む / Monster can destroy walls */
+};
+
 enum class OldQuestId15 {
     CITY_SEA = 17,
 };

@@ -15,5 +15,6 @@ protected:
     int power;
     bool should_skip = false;
 
+    void give_killing_bonus();
     virtual void decide_skip();
 };

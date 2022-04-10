@@ -9,7 +9,20 @@ AbstractWeaponEnchanter::AbstractWeaponEnchanter(ObjectType *o_ptr, DEPTH level,
     , level(level)
     , power(power)
 {
-    this->decide_skip();
+}
+
+void AbstractWeaponEnchanter::decide_skip()
+{
+    if (this->power == 0) {
+        this->should_skip = true;
+    }
+}
+
+/*!
+ * @brief 武器に殺戮修正を付与する
+ */
+void AbstractWeaponEnchanter::give_killing_bonus()
+{
     if (this->should_skip) {
         return;
     }
@@ -46,12 +59,5 @@ AbstractWeaponEnchanter::AbstractWeaponEnchanter(ObjectType *o_ptr, DEPTH level,
         if (this->o_ptr->to_h + this->o_ptr->to_d < 0) {
             this->o_ptr->curse_flags.set(CurseTraitType::CURSED);
         }
-    }
-}
-
-void AbstractWeaponEnchanter::decide_skip()
-{
-    if (this->power == 0) {
-        this->should_skip = true;
     }
 }

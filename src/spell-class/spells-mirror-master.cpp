@@ -255,8 +255,10 @@ void SpellsMirrorMaster::next_mirror(int *next_y, int *next_x, int cury, int cur
         return;
     }
 
-    *next_y = cury + randint0(5) - 2;
-    *next_x = curx + randint0(5) - 2;
+    do {
+        *next_y = cury + randint0(5) - 2;
+        *next_x = curx + randint0(5) - 2;
+    } while ((*next_y == cury) && (*next_x == curx));
 }
 
 void SpellsMirrorMaster::project_seeker_ray(int target_x, int target_y, int dam)

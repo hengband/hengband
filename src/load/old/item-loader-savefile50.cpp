@@ -143,7 +143,7 @@ void ItemLoader50::rd_item(ObjectType *o_ptr)
         o_ptr->captured_monster_current_hp = any_bits(flags, SaveDataItemFlagType::CAPTURED_MONSTER_CURRENT_HP) ? rd_s16b() : 0;
     }
 
-    if (o_ptr->is_fuel()) {
+    if (o_ptr->is_fuel() && (o_ptr->tval == ItemKindType::LITE)) {
         const auto fuel_max = o_ptr->sval == SV_LITE_TORCH ? FUEL_TORCH : FUEL_LAMP;
         if (o_ptr->fuel < 0 || o_ptr->fuel > fuel_max) {
             o_ptr->fuel = 0;

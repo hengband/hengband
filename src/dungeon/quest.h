@@ -123,7 +123,39 @@ public:
     static bool is_fixed(QuestId quest_idx);
 };
 
-extern std::map<QuestId, quest_type> quest_map;
+class QuestList final {
+public:
+    using iterator = std::map<QuestId, quest_type>::iterator;
+    using reverse_iterator = std::map<QuestId, quest_type>::reverse_iterator;
+    using const_iterator = std::map<QuestId, quest_type>::const_iterator;
+    using const_reverse_iterator = std::map<QuestId, quest_type>::const_reverse_iterator;
+    static QuestList &get_instance();
+    quest_type &operator[](QuestId id);
+    const quest_type &operator[](QuestId id) const;
+    iterator begin();
+    const_iterator begin() const;
+    iterator end();
+    const_iterator end() const;
+    reverse_iterator rbegin();
+    const_reverse_iterator rbegin() const;
+    reverse_iterator rend();
+    const_reverse_iterator rend() const;
+    iterator find(QuestId id);
+    const_iterator find(QuestId id) const;
+    size_t size() const;
+    void initialize();
+    QuestList(const QuestList &) = delete;
+    QuestList(QuestList &&) = delete;
+    QuestList &operator=(const QuestList &) = delete;
+    QuestList &operator=(QuestList &&) = delete;
+
+private:
+    bool initialized = false;
+    std::map<QuestId, quest_type> quest_data;
+    QuestList() = default;
+    ~QuestList() = default;
+};
+
 extern char quest_text[10][80];
 extern int quest_text_line;
 extern QuestId leaving_quest;
