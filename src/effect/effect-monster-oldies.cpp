@@ -51,7 +51,8 @@ ProcessResult effect_monster_old_clone(PlayerType *player_ptr, effect_monster_ty
     has_resistance |= is_pet(em_ptr->m_ptr);
     has_resistance |= em_ptr->r_ptr->kind_flags.has(MonsterKindType::UNIQUE);
     has_resistance |= any_bits(em_ptr->r_ptr->flags1, RF1_QUESTOR);
-    has_resistance |= any_bits(em_ptr->r_ptr->flags7, RF7_NAZGUL | RF7_UNIQUE2);
+    has_resistance |= em_ptr->r_ptr->population_flags.has(MonsterPopulationType::NAZGUL);
+    has_resistance |= any_bits(em_ptr->r_ptr->flags7, RF7_UNIQUE2);
 
     if (has_resistance) {
         em_ptr->note = _("には効果がなかった。", " is unaffected.");

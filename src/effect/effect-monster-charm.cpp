@@ -448,7 +448,8 @@ ProcessResult effect_monster_capture(PlayerType *player_ptr, effect_monster_type
     auto cannot_capture = quest_monster;
     cannot_capture |= em_ptr->r_ptr->kind_flags.has(MonsterKindType::UNIQUE);
     cannot_capture |= any_bits(em_ptr->r_ptr->flags1, RF1_QUESTOR);
-    cannot_capture |= any_bits(em_ptr->r_ptr->flags7, RF7_NAZGUL | RF7_UNIQUE2);
+    cannot_capture |= em_ptr->r_ptr->population_flags.has(MonsterPopulationType::NAZGUL);
+    cannot_capture |= any_bits(em_ptr->r_ptr->flags7, RF7_UNIQUE2);
     cannot_capture |= (em_ptr->m_ptr->parent_m_idx != 0);
     if (cannot_capture) {
         msg_format(_("%sには効果がなかった。", "%s is unaffected."), em_ptr->m_name);

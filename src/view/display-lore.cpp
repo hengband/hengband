@@ -197,7 +197,7 @@ static void display_number_of_nazguls(lore_type *lore_ptr)
     if (lore_ptr->mode != MONSTER_LORE_DEBUG && lore_ptr->r_ptr->r_tkills == 0) {
         return;
     }
-    if (!any_bits(lore_ptr->r_ptr->flags7, RF7_NAZGUL)) {
+    if (!lore_ptr->r_ptr->population_flags.has(MonsterPopulationType::NAZGUL)) {
         return;
     }
 
