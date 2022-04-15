@@ -222,7 +222,7 @@ ProjectResult project(PlayerType *player_ptr, const MONSTER_IDX who, POSITION ra
          */
         if (breath) {
             flag &= ~(PROJECT_HIDE);
-            breath_shape(player_ptr, path_g, path_g.path_num(), &grids, gx, gy, gm, &gm_rad, rad, y1, x1, by, bx, typ);
+            breath_shape(player_ptr, path_g, path_n, &grids, gx, gy, gm, &gm_rad, rad, y1, x1, by, bx, typ);
         } else {
             for (auto dist = 0; dist <= rad; dist++) {
                 for (auto y = by - dist; y <= by + dist; y++) {
