@@ -378,7 +378,7 @@ static void wiz_display_item(PlayerType *player_ptr, ObjectType *o_ptr)
     prt("rtsxnaeydcedwlatdcedsrekdfddrxss", ++line, j);
     prt_binary(get_seq_32bits(flgs, 32 * 1), ++line, j);
 
-    line = 10;
+    line = 13;
     prt("+------------FLAGS3------------+", line, j + 32);
     prt("fe cnn t      stdrmsiiii d ab   ", ++line, j + 32);
     prt("aa aoomywhs lleeieihgggg rtgl   ", ++line, j + 32);
