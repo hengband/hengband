@@ -26,6 +26,7 @@ HaftedEnchanter::HaftedEnchanter(PlayerType *player_ptr, ObjectType *o_ptr, DEPT
 void HaftedEnchanter::apply_magic()
 {
     this->decide_skip();
+    this->give_killing_bonus();
     MeleeWeaponEnchanter::apply_magic();
 }
 
