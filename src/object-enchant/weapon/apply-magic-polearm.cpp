@@ -25,6 +25,7 @@ PolearmEnchanter::PolearmEnchanter(PlayerType *player_ptr, ObjectType *o_ptr, DE
 void PolearmEnchanter::apply_magic()
 {
     this->decide_skip();
+    this->give_killing_bonus();
     MeleeWeaponEnchanter::apply_magic();
 }
 

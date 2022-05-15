@@ -469,7 +469,7 @@ static bool display_auto_roller_result(PlayerType *player_ptr, bool prev, char *
         term_addch(TERM_WHITE, b1);
         term_addstr(-1, TERM_WHITE, _("'r' 次の数値", "'r'eroll"));
         if (prev) {
-            term_addstr(-1, TERM_WHITE, _(", 'p' 前の数値", "'p'previous"));
+            term_addstr(-1, TERM_WHITE, _(", 'p' 前の数値", ", 'p'revious"));
         }
 
         if (mode) {
