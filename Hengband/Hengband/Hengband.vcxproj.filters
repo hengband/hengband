@@ -2454,6 +2454,9 @@
     <ClCompile Include="..\..\src\monster-race\race-feature-mask.cpp">
       <Filter>monster-race</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\timed-effect\player-acceleration.cpp">
+      <Filter>timed-effect</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\combat\shoot.h">
@@ -5330,6 +5333,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\monster-race\race-feature-mask.h">
       <Filter>monster-race</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\timed-effect\player-acceleration.h">
+      <Filter>timed-effect</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

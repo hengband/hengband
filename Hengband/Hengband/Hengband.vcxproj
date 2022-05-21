@@ -600,6 +600,7 @@
     <ClCompile Include="..\..\src\target\target-getter.cpp" />
     <ClCompile Include="..\..\src\target\target-preparation.cpp" />
     <ClCompile Include="..\..\src\target\target-setter.cpp" />
+    <ClCompile Include="..\..\src\timed-effect\player-acceleration.cpp" />
     <ClCompile Include="..\..\src\timed-effect\player-confusion.cpp" />
     <ClCompile Include="..\..\src\timed-effect\player-cut.cpp" />
     <ClCompile Include="..\..\src\timed-effect\player-fear.cpp" />
@@ -1394,6 +1395,7 @@
     <ClInclude Include="..\..\src\term\screen-processor.h" />
     <ClInclude Include="..\..\src\timed-effect\player-confusion.h" />
     <ClInclude Include="..\..\src\timed-effect\player-cut.h" />
+    <ClInclude Include="..\..\src\timed-effect\player-acceleration.h" />
     <ClInclude Include="..\..\src\timed-effect\player-fear.h" />
     <ClInclude Include="..\..\src\timed-effect\player-hallucination.h" />
     <ClInclude Include="..\..\src\timed-effect\player-paralysis.h" />

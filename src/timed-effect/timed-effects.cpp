@@ -1,4 +1,5 @@
 ﻿#include "timed-effect/timed-effects.h"
+#include "timed-effect/player-acceleration.h"
 #include "timed-effect/player-confusion.h"
 #include "timed-effect/player-cut.h"
 #include "timed-effect/player-fear.h"
@@ -13,6 +14,7 @@ TimedEffects::TimedEffects()
     , player_hallucination(std::make_shared<PlayerHallucination>())
     , player_paralysis(std::make_shared<PlayerParalysis>())
     , player_stun(std::make_shared<PlayerStun>())
+    , player_acceleration(std::make_shared<PlayerAcceleration>())
 {
 }
 
@@ -44,4 +46,9 @@ std::shared_ptr<PlayerParalysis> TimedEffects::paralysis() const
 std::shared_ptr<PlayerStun> TimedEffects::stun() const
 {
     return this->player_stun;
+}
+
+std::shared_ptr<PlayerAcceleration> TimedEffects::acceleration() const
+{
+    return this->player_acceleration;
 }
