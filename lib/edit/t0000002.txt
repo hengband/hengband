@@ -496,7 +496,7 @@ P:7:99
 
 # Starting position when coming from quest 16
 ?:[EQU $LEAVING_QUEST 16]
-P:58:157
+P:57:157
 
 # Starting position when coming from quest 26
 ?:[EQU $LEAVING_QUEST 26]
