@@ -23,6 +23,7 @@
 #include "system/angband-exceptions.h"
 #include "system/floor-type-definition.h"
 #include "system/player-type-definition.h"
+#include "timed-effect/player-acceleration.h"
 #include "timed-effect/player-confusion.h"
 #include "timed-effect/player-cut.h"
 #include "timed-effect/player-fear.h"
@@ -360,7 +361,7 @@ static void rd_energy(PlayerType *player_ptr)
 static void rd_status(PlayerType *player_ptr)
 {
     auto effects = player_ptr->effects();
-    player_ptr->fast = rd_s16b();
+    effects->acceleration()->set(rd_s16b());
     player_ptr->slow = rd_s16b();
     effects->fear()->set(rd_s16b());
     effects->cut()->set(rd_s16b());

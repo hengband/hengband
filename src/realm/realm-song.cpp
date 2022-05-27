@@ -25,6 +25,8 @@
 #include "status/experience.h"
 #include "system/player-type-definition.h"
 #include "target/target-getter.h"
+#include "timed-effect/player-acceleration.h"
+#include "timed-effect/timed-effects.h"
 #include "view/display-messages.h"
 
 /*!
@@ -693,7 +695,7 @@ concptr do_music_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessType
         }
 
         if (stop) {
-            if (!player_ptr->fast) {
+            if (!player_ptr->effects()->acceleration()->is_fast()) {
                 msg_print(_("動きの素早さがなくなったようだ。", "You feel yourself slow down."));
             }
         }
@@ -968,7 +970,7 @@ concptr do_music_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessType
                 player_ptr->update |= PU_HP;
             }
 
-            if (!player_ptr->fast) {
+            if (!player_ptr->effects()->acceleration()->is_fast()) {
                 msg_print(_("動きの素早さがなくなったようだ。", "You feel yourself slow down."));
             }
         }

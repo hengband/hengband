@@ -7,6 +7,7 @@
 #include "status/bad-status-setter.h"
 #include "status/buff-setter.h"
 #include "system/player-type-definition.h"
+#include "timed-effect/player-acceleration.h"
 #include "view/display-messages.h"
 
 void effect_player_old_heal(PlayerType *player_ptr, EffectPlayerType *ep_ptr)
@@ -25,7 +26,7 @@ void effect_player_old_speed(PlayerType *player_ptr, EffectPlayerType *ep_ptr)
         msg_print(_("何かで攻撃された！", "You are hit by something!"));
     }
 
-    (void)set_fast(player_ptr, player_ptr->fast + randint1(5), false);
+    (void)mod_acceleration(player_ptr, randint1(5), false);
     ep_ptr->dam = 0;
 }
 

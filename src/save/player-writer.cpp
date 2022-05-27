@@ -10,6 +10,7 @@
 #include "system/building-type-definition.h"
 #include "system/floor-type-definition.h"
 #include "system/player-type-definition.h"
+#include "timed-effect/player-acceleration.h"
 #include "timed-effect/player-confusion.h"
 #include "timed-effect/player-cut.h"
 #include "timed-effect/player-fear.h"
@@ -164,7 +165,7 @@ void wr_player(PlayerType *player_ptr)
     wr_s16b(0); /* old "protection" */
     wr_s16b(player_ptr->energy_need);
     wr_s16b(player_ptr->enchant_energy_need);
-    wr_s16b(player_ptr->fast);
+    wr_s16b(effects->acceleration()->current());
     wr_s16b(player_ptr->slow);
     wr_s16b(effects->fear()->current());
     wr_s16b(effects->cut()->current());

@@ -94,7 +94,6 @@ public:
 
     uint32_t count{};
 
-    TIME_EFFECT fast{}; /* Timed -- Fast */
     TIME_EFFECT slow{}; /* Timed -- Slow */
     TIME_EFFECT blind{}; /* Timed -- Blindness */
     TIME_EFFECT poisoned{}; /* Timed -- Poisoned */

@@ -110,6 +110,7 @@
 #include "system/object-type-definition.h"
 #include "system/player-type-definition.h"
 #include "term/screen-processor.h"
+#include "timed-effect/player-acceleration.h"
 #include "timed-effect/player-stun.h"
 #include "timed-effect/timed-effects.h"
 #include "util/bit-flags-calculator.h"
@@ -3154,7 +3155,7 @@ void stop_mouth(PlayerType *player_ptr)
 
 bool is_fast(PlayerType *player_ptr)
 {
-    return player_ptr->fast || music_singing(player_ptr, MUSIC_SPEED) || music_singing(player_ptr, MUSIC_SHERO);
+    return player_ptr->effects()->acceleration()->is_fast() || music_singing(player_ptr, MUSIC_SPEED) || music_singing(player_ptr, MUSIC_SHERO);
 }
 
 bool is_invuln(PlayerType *player_ptr)
