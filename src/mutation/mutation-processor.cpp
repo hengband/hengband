@@ -236,7 +236,7 @@ void process_world_aux_mutation(PlayerType *player_ptr)
         if (one_in_(2)) {
             msg_print(_("精力的でなくなった気がする。", "You feel less energetic."));
             if (player_ptr->effects()->acceleration()->is_fast()) {
-                set_fast(player_ptr, 0, true);
+                set_acceleration(player_ptr, 0, true);
             } else {
                 (void)bss.slowness(randint1(30) + 10, false);
             }
@@ -245,7 +245,7 @@ void process_world_aux_mutation(PlayerType *player_ptr)
             if (player_ptr->slow > 0) {
                 (void)bss.slowness(0, true);
             } else {
-                set_fast(player_ptr, randint1(30) + 10, false);
+                set_acceleration(player_ptr, randint1(30) + 10, false);
             }
         }
 

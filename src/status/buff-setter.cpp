@@ -117,7 +117,7 @@ void reset_tim_flags(PlayerType *player_ptr)
  * @param do_dec 現在の継続時間より長い値のみ上書きする
  * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
  */
-bool set_fast(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
+bool set_acceleration(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
 {
     bool notice = false;
     v = (v > 10000) ? 10000 : (v < 0) ? 0
@@ -161,7 +161,7 @@ bool set_fast(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
 
 bool mod_acceleration(PlayerType *player_ptr, const TIME_EFFECT v, const bool do_dec)
 {
-    return set_fast(player_ptr, player_ptr->effects()->acceleration()->current() + v, do_dec);
+    return set_acceleration(player_ptr, player_ptr->effects()->acceleration()->current() + v, do_dec);
 }
 
 /*!

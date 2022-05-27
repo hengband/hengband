@@ -447,7 +447,7 @@ concptr do_craft_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessType
             }
 
             if (cast) {
-                set_fast(player_ptr, randint1(sides) + base, false);
+                set_acceleration(player_ptr, randint1(sides) + base, false);
             }
         }
         break;

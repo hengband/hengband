@@ -351,7 +351,7 @@ concptr do_sorcery_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessTy
             }
 
             if (cast) {
-                set_fast(player_ptr, randint1(sides) + base, false);
+                set_acceleration(player_ptr, randint1(sides) + base, false);
             }
         }
         break;

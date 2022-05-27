@@ -379,7 +379,7 @@ bool QuaffEffects::speed()
         return false;
     }
 
-    return set_fast(this->player_ptr, randint1(25) + 15, false);
+    return set_acceleration(this->player_ptr, randint1(25) + 15, false);
 }
 
 /*!
