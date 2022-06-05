@@ -1352,7 +1352,7 @@ BIT_FLAGS has_vuln_lite(PlayerType *player_ptr)
 
 BIT_FLAGS has_resist_dark(PlayerType *player_ptr)
 {
-    BIT_FLAGS result = common_cause_flags(player_ptr, TR_RES_DARK);
+    BIT_FLAGS result = common_cause_flags(player_ptr, TR_RES_DARK) | common_cause_flags(player_ptr, TR_IM_DARK);
 
     if (player_ptr->ult_res) {
         result |= FLAG_CAUSE_MAGIC_TIME_EFFECT;
