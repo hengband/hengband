@@ -60,7 +60,7 @@ void rd_version_info(void)
         }
     }
 
-    load_note(format(_("バージョン %d.%d.%d のセーブデータ(SAVE%lu形式)をロード中...", "Loading a Verison %d.%d.%d savefile (SAVE%lu format)..."),
+    load_note(format(_("バージョン %d.%d.%d のセーブデータ(SAVE%lu形式)をロード中...", "Loading a version %d.%d.%d savefile (SAVE%lu format)..."),
         w_ptr->h_ver_major, w_ptr->h_ver_minor, w_ptr->h_ver_patch,
         loading_savefile_version));
 }
