@@ -44,32 +44,29 @@ void plural_aux(char *Name)
         strcpy(dummy, "piles of ");
         strcat(dummy, Name);
         strcpy(Name, dummy);
-        return;
     } else if (angband_strstr(Name, "Manes")) {
         return;
-    } else if (streq(&(Name[NameLen - 2]), "ey")) {
-        strcpy(&(Name[NameLen - 2]), "eys");
-    } else if (Name[NameLen - 1] == 'y') {
+    } else if (suffix(Name, "y") && !(NameLen >= 2 && is_a_vowel(Name[NameLen - 2]))) {
         strcpy(&(Name[NameLen - 1]), "ies");
-    } else if (streq(&(Name[NameLen - 4]), "ouse")) {
+    } else if (suffix(Name, "ouse")) {
         strcpy(&(Name[NameLen - 4]), "ice");
-    } else if (streq(&(Name[NameLen - 2]), "us")) {
+    } else if (suffix(Name, "us")) {
         strcpy(&(Name[NameLen - 2]), "i");
-    } else if (streq(&(Name[NameLen - 6]), "kelman")) {
+    } else if (suffix(Name, "kelman")) {
         strcpy(&(Name[NameLen - 6]), "kelmen");
-    } else if (streq(&(Name[NameLen - 8]), "wordsman")) {
+    } else if (suffix(Name, "wordsman")) {
         strcpy(&(Name[NameLen - 8]), "wordsmen");
-    } else if (streq(&(Name[NameLen - 7]), "oodsman")) {
+    } else if (suffix(Name, "oodsman")) {
         strcpy(&(Name[NameLen - 7]), "oodsmen");
-    } else if (streq(&(Name[NameLen - 7]), "eastman")) {
+    } else if (suffix(Name, "eastman")) {
         strcpy(&(Name[NameLen - 7]), "eastmen");
-    } else if (streq(&(Name[NameLen - 8]), "izardman")) {
+    } else if (suffix(Name, "izardman")) {
         strcpy(&(Name[NameLen - 8]), "izardmen");
-    } else if (streq(&(Name[NameLen - 5]), "geist")) {
+    } else if (suffix(Name, "geist")) {
         strcpy(&(Name[NameLen - 5]), "geister");
-    } else if (streq(&(Name[NameLen - 2]), "ex")) {
+    } else if (suffix(Name, "ex")) {
         strcpy(&(Name[NameLen - 2]), "ices");
-    } else if (streq(&(Name[NameLen - 2]), "lf")) {
+    } else if (suffix(Name, "lf")) {
         strcpy(&(Name[NameLen - 2]), "lves");
     } else if (suffix(Name, "ch") ||
                suffix(Name, "sh") ||
