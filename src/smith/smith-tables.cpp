@@ -163,8 +163,8 @@ const std::unordered_map<SmithEssenceType, concptr> Smith::essence_to_name = {
     { SmithEssenceType::LITE, _("永久光源", "perm. light") },
     { SmithEssenceType::NO_TELE, _("反テレポ", "no teleport") },
 
-    { SmithEssenceType::SLAY_EVIL, _("邪悪倍打", "slay animal") },
-    { SmithEssenceType::SLAY_ANIMAL, _("動物倍打", "slay evil") },
+    { SmithEssenceType::SLAY_EVIL, _("邪悪倍打", "slay evil") },
+    { SmithEssenceType::SLAY_ANIMAL, _("動物倍打", "slay animal") },
     { SmithEssenceType::SLAY_UNDEAD, _("不死倍打", "slay undead") },
     { SmithEssenceType::SLAY_DEMON, _("悪魔倍打", "slay demon") },
     { SmithEssenceType::SLAY_ORC, _("オーク倍打", "slay orc") },
