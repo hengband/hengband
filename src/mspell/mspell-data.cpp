@@ -61,7 +61,7 @@ MSpellDrsData::MSpellDrsData()
 }
 
 MSpellDrsData::MSpellDrsData(std::initializer_list<drs_type> drs)
-    : execute([drs](auto player_ptr, auto m_idx) {
+    : execute([drs = std::vector<drs_type>(drs)](auto player_ptr, auto m_idx) {
         for (auto &d : drs) {
             update_smart_learn(player_ptr, m_idx, d);
         }

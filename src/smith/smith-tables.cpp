@@ -163,8 +163,8 @@ const std::unordered_map<SmithEssenceType, concptr> Smith::essence_to_name = {
     { SmithEssenceType::LITE, _("永久光源", "perm. light") },
     { SmithEssenceType::NO_TELE, _("反テレポ", "no teleport") },
 
-    { SmithEssenceType::SLAY_EVIL, _("邪悪倍打", "slay animal") },
-    { SmithEssenceType::SLAY_ANIMAL, _("動物倍打", "slay evil") },
+    { SmithEssenceType::SLAY_EVIL, _("邪悪倍打", "slay evil") },
+    { SmithEssenceType::SLAY_ANIMAL, _("動物倍打", "slay animal") },
     { SmithEssenceType::SLAY_UNDEAD, _("不死倍打", "slay undead") },
     { SmithEssenceType::SLAY_DEMON, _("悪魔倍打", "slay demon") },
     { SmithEssenceType::SLAY_ORC, _("オーク倍打", "slay orc") },
@@ -490,7 +490,7 @@ const std::vector<std::shared_ptr<ISmithInfo>> Smith::smith_info_table = {
 
     make_basic_smith_info(SmithEffectType::RESISTANCE, _("全耐性", "resistance"), SmithCategoryType::RESISTANCE, { SmithEssenceType::RES_ACID, SmithEssenceType::RES_ELEC, SmithEssenceType::RES_FIRE, SmithEssenceType::RES_COLD }, 150, { TR_RES_ACID, TR_RES_ELEC, TR_RES_FIRE, TR_RES_COLD }),
     make_info<SlayingGlovesSmithInfo>(SmithEffectType::SLAY_GLOVE, _("殺戮の小手", "gauntlets of slaying"), SmithCategoryType::ETC, { SmithEssenceType::ATTACK }, 200),
-    make_basic_smith_info(SmithEffectType::EASY_2WEAPON, _("源氏の小手", "guantlets of Genji"), SmithCategoryType::ETC, { SmithEssenceType::EASY2_WEAPON }, 20, { TR_EASY2_WEAPON }),
+    make_basic_smith_info(SmithEffectType::EASY_2WEAPON, _("源氏の小手", "gauntlets of Genji"), SmithCategoryType::ETC, { SmithEssenceType::EASY2_WEAPON }, 20, { TR_EASY2_WEAPON }),
 
     make_info<ActivationSmithInfo>(SmithEffectType::ACT_QUAKE, _("地震", "quake"), SmithCategoryType::ACTIVATION, { SmithEssenceType::EATHQUAKE }, 15, RandomArtActType::QUAKE),
     make_info<ActivationSmithInfo>(SmithEffectType::ACT_RES_ACID, _("酸耐性", "resist acid"), SmithCategoryType::ACTIVATION, { SmithEssenceType::RES_ACID }, 30, RandomArtActType::RESIST_ACID),

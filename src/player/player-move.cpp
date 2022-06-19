@@ -89,7 +89,7 @@ static void discover_hidden_things(PlayerType *player_ptr, POSITION y, POSITION 
             continue;
         }
 
-        if (chest_traps[o_ptr->pval].none()) {
+        if (o_ptr->pval <= 0 || chest_traps[o_ptr->pval].none()) {
             continue;
         }
 

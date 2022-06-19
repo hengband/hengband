@@ -62,7 +62,7 @@ int count_chests(PlayerType *player_ptr, POSITION *y, POSITION *x, bool trapped)
             continue;
         }
 
-        if (trapped && (!o_ptr->is_known() || chest_traps[o_ptr->pval].none())) {
+        if (trapped && (!o_ptr->is_known() || ((o_ptr->pval > 0) && chest_traps[o_ptr->pval].none()))) {
             continue;
         }
 
