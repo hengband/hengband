@@ -8,6 +8,7 @@
  */
 void plural_aux(char *Name)
 {
+#ifndef JP
     int NameLen = strlen(Name);
 
     if (angband_strstr(Name, "Disembodied hand")) {
@@ -77,6 +78,7 @@ void plural_aux(char *Name)
     } else {
         strcpy(&(Name[NameLen]), "s");
     }
+#endif // !JP
 }
 
 /*
@@ -84,6 +86,7 @@ void plural_aux(char *Name)
  */
 bool is_a_vowel(int ch)
 {
+#ifndef JP
     switch (ch) {
     case 'a':
     case 'e':
@@ -97,6 +100,7 @@ bool is_a_vowel(int ch)
     case 'U':
         return true;
     }
+#endif // !JP
 
     return false;
 }
