@@ -37,6 +37,8 @@
 #include "system/angband.h"
 #include "system/object-type-definition.h"
 #include "system/player-type-definition.h"
+#include "timed-effect/player-acceleration.h"
+#include "timed-effect/timed-effects.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 
@@ -372,12 +374,12 @@ bool QuaffEffects::death()
  */
 bool QuaffEffects::speed()
 {
-    if (this->player_ptr->fast) {
-        (void)set_fast(this->player_ptr, this->player_ptr->fast + 5, false);
+    if (this->player_ptr->effects()->acceleration()->is_fast()) {
+        (void)mod_acceleration(this->player_ptr, 5, false);
         return false;
     }
 
-    return set_fast(this->player_ptr, randint1(25) + 15, false);
+    return set_acceleration(this->player_ptr, randint1(25) + 15, false);
 }
 
 /*!

@@ -563,7 +563,7 @@ concptr do_death_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessType
 
             if (cast) {
                 (void)berserk(player_ptr, b_base + randint1(b_base));
-                set_fast(player_ptr, randint1(sp_sides) + sp_base, false);
+                set_acceleration(player_ptr, randint1(sp_sides) + sp_base, false);
             }
         }
         break;

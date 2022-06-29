@@ -51,6 +51,7 @@
 #include "system/object-type-definition.h"
 #include "system/player-type-definition.h"
 #include "target/target-getter.h"
+#include "timed-effect/player-acceleration.h"
 #include "timed-effect/player-cut.h"
 #include "timed-effect/timed-effects.h"
 #include "util/bit-flags-calculator.h"
@@ -598,7 +599,7 @@ bool cosmic_cast_off(PlayerType *player_ptr, ObjectType **o_ptr_ptr)
     (void)set_tim_regen(player_ptr, player_ptr->tim_regen + t, false);
     (void)set_hero(player_ptr, player_ptr->hero + t, false);
     (void)set_blessed(player_ptr, player_ptr->blessed + t, false);
-    (void)set_fast(player_ptr, player_ptr->fast + t, false);
+    (void)mod_acceleration(player_ptr, t, false);
     (void)set_shero(player_ptr, player_ptr->shero + t, false);
     if (PlayerClass(player_ptr).equals(PlayerClassType::FORCETRAINER)) {
         set_current_ki(player_ptr, true, player_ptr->lev * 5 + 190);

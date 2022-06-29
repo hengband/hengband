@@ -249,7 +249,7 @@ bool cast_mindcrafter_spell(PlayerType *player_ptr, MindMindcrafterType spell)
 
         t = 10 + randint1((plev * 3) / 2);
         set_hero(player_ptr, t, false);
-        (void)set_fast(player_ptr, t, false);
+        (void)set_acceleration(player_ptr, t, false);
         break;
     }
     case MindMindcrafterType::TELEKINESIS:

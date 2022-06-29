@@ -19,6 +19,7 @@
 #include "status/buff-setter.h"
 #include "status/element-resistance.h"
 #include "system/player-type-definition.h"
+#include "timed-effect/player-acceleration.h"
 #include "timed-effect/player-confusion.h"
 #include "timed-effect/player-cut.h"
 #include "timed-effect/player-fear.h"
@@ -34,7 +35,7 @@
 void reset_tim_flags(PlayerType *player_ptr)
 {
     auto effects = player_ptr->effects();
-    player_ptr->fast = 0; /* Timed -- Fast */
+    effects->acceleration()->reset();
     player_ptr->lightspeed = 0;
     player_ptr->slow = 0; /* Timed -- Slow */
     player_ptr->blind = 0; /* Timed -- Blindness */
@@ -116,7 +117,7 @@ void reset_tim_flags(PlayerType *player_ptr)
  * @param do_dec 現在の継続時間より長い値のみ上書きする
  * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
  */
-bool set_fast(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
+bool set_acceleration(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
 {
     bool notice = false;
     v = (v > 10000) ? 10000 : (v < 0) ? 0
@@ -126,9 +127,10 @@ bool set_fast(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
         return false;
     }
 
+    auto acceleration = player_ptr->effects()->acceleration();
     if (v) {
-        if (player_ptr->fast && !do_dec) {
-            if (player_ptr->fast > v) {
+        if (acceleration->is_fast() && !do_dec) {
+            if (acceleration->current() > v) {
                 return false;
             }
         } else if (!is_fast(player_ptr) && !player_ptr->lightspeed) {
@@ -138,13 +140,13 @@ bool set_fast(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
             chg_virtue(player_ptr, V_DILIGENCE, 1);
         }
     } else {
-        if (player_ptr->fast && !player_ptr->lightspeed && !music_singing(player_ptr, MUSIC_SPEED) && !music_singing(player_ptr, MUSIC_SHERO)) {
+        if (acceleration->is_fast() && !player_ptr->lightspeed && !music_singing(player_ptr, MUSIC_SPEED) && !music_singing(player_ptr, MUSIC_SHERO)) {
             msg_print(_("動きの素早さがなくなったようだ。", "You feel yourself slow down."));
             notice = true;
         }
     }
 
-    player_ptr->fast = v;
+    acceleration->set(v);
     if (!notice) {
         return false;
     }
@@ -155,6 +157,11 @@ bool set_fast(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
     player_ptr->update |= (PU_BONUS);
     handle_stuff(player_ptr);
     return true;
+}
+
+bool mod_acceleration(PlayerType *player_ptr, const TIME_EFFECT v, const bool do_dec)
+{
+    return set_acceleration(player_ptr, player_ptr->effects()->acceleration()->current() + v, do_dec);
 }
 
 /*!

@@ -895,7 +895,7 @@ static bool use_mane(PlayerType *player_ptr, MonsterAbilityType spell)
         sleep_monster(player_ptr, dir, plev);
         break;
     case MonsterAbilityType::HASTE:
-        (void)set_fast(player_ptr, randint1(20 + plev) + plev, false);
+        (void)set_acceleration(player_ptr, randint1(20 + plev) + plev, false);
         break;
     case MonsterAbilityType::HAND_DOOM: {
         if (!get_aim_dir(player_ptr, &dir)) {
