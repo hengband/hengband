@@ -235,7 +235,7 @@ int staff_effect(PlayerType *player_ptr, OBJECT_SUBTYPE_VALUE sval, bool *use_ch
     }
 
     case SV_STAFF_SPEED: {
-        if (set_fast(player_ptr, randint1(30) + (powerful ? 30 : 15), false)) {
+        if (set_acceleration(player_ptr, randint1(30) + (powerful ? 30 : 15), false)) {
             ident = true;
         }
         break;

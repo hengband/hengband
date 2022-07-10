@@ -323,7 +323,7 @@ static bool switch_cast_blue_magic(PlayerType *player_ptr, bmc_type *bmc_ptr, Mo
     case MonsterAbilityType::HOLD:
         return cast_blue_sleep(player_ptr, bmc_ptr);
     case MonsterAbilityType::HASTE:
-        (void)set_fast(player_ptr, randint1(20 + bmc_ptr->plev) + bmc_ptr->plev, false);
+        (void)set_acceleration(player_ptr, randint1(20 + bmc_ptr->plev) + bmc_ptr->plev, false);
         return true;
     case MonsterAbilityType::HAND_DOOM:
         return cast_blue_hand_doom(player_ptr, bmc_ptr);

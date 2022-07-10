@@ -38,6 +38,7 @@
 #include "status/sight-setter.h"
 #include "system/floor-type-definition.h"
 #include "system/player-type-definition.h"
+#include "timed-effect/player-acceleration.h"
 #include "view/display-messages.h"
 
 bool switch_activation(PlayerType *player_ptr, ObjectType **o_ptr_ptr, const activation_type *const act_ptr, concptr name)
@@ -242,15 +243,15 @@ bool switch_activation(PlayerType *player_ptr, ObjectType **o_ptr_ptr, const act
         return activate_resistance_elements(player_ptr);
     case RandomArtActType::SPEED:
         msg_print(_("明るく緑色に輝いている...", "It glows bright green..."));
-        (void)set_fast(player_ptr, randint1(20) + 20, false);
+        (void)set_acceleration(player_ptr, randint1(20) + 20, false);
         return true;
     case RandomArtActType::MID_SPEED:
         msg_print(_("明るく緑色に輝いている...", "It glows bright green..."));
-        (void)set_fast(player_ptr, randint1(50) + 50, false);
+        (void)set_acceleration(player_ptr, randint1(50) + 50, false);
         return true;
     case RandomArtActType::XTRA_SPEED:
         msg_print(_("明るく輝いている...", "It glows brightly..."));
-        (void)set_fast(player_ptr, randint1(75) + 75, false);
+        (void)set_acceleration(player_ptr, randint1(75) + 75, false);
         return true;
     case RandomArtActType::WRAITH:
         set_wraith_form(player_ptr, randint1(player_ptr->lev / 2) + (player_ptr->lev / 2), false);
@@ -262,7 +263,7 @@ bool switch_activation(PlayerType *player_ptr, ObjectType **o_ptr_ptr, const act
         (void)heroism(player_ptr, 25);
         return true;
     case RandomArtActType::HERO_SPEED:
-        (void)set_fast(player_ptr, randint1(50) + 50, false);
+        (void)set_acceleration(player_ptr, randint1(50) + 50, false);
         (void)heroism(player_ptr, 50);
         return true;
     case RandomArtActType::ACID_BALL_AND_RESISTANCE:
@@ -362,7 +363,7 @@ bool switch_activation(PlayerType *player_ptr, ObjectType **o_ptr_ptr, const act
     case RandomArtActType::STRAIN_HASTE:
         msg_format(_("%sはあなたの体力を奪った...", "The %s drains your vitality..."), name);
         take_hit(player_ptr, DAMAGE_LOSELIFE, damroll(3, 8), _("加速した疲労", "the strain of haste"));
-        (void)set_fast(player_ptr, player_ptr->fast + 25 + randint1(25), false);
+        (void)mod_acceleration(player_ptr, 25 + randint1(25), false);
         return true;
     case RandomArtActType::FISHING:
         return fishing(player_ptr);

@@ -2,6 +2,8 @@
 #include "system/angband.h"
 #include "util/string-processor.h"
 
+#ifndef JP
+
 /*!
  * @brief 英単語、句、説を複数形を変換する / Pluralize a monster name
  * @param Name 変換したい文字列の参照ポインタ
@@ -100,3 +102,5 @@ bool is_a_vowel(int ch)
 
     return false;
 }
+
+#endif // !JP

@@ -662,7 +662,7 @@ concptr do_life_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessType 
 
             if (cast) {
                 TIME_EFFECT v = randint1(base) + base;
-                set_fast(player_ptr, v, false);
+                set_acceleration(player_ptr, v, false);
                 set_oppose_acid(player_ptr, v, false);
                 set_oppose_elec(player_ptr, v, false);
                 set_oppose_fire(player_ptr, v, false);

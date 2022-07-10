@@ -939,6 +939,7 @@ hengband_SOURCES = \
 	term/z-term.cpp term/z-term.h term/z-util.cpp term/z-util.h \
 	term/z-virt.cpp term/z-virt.h \
 	\
+	timed-effect/player-acceleration.cpp timed-effect/player-acceleration.h \
 	timed-effect/player-confusion.cpp timed-effect/player-confusion.h \
 	timed-effect/player-cut.cpp timed-effect/player-cut.h \
 	timed-effect/player-fear.cpp timed-effect/player-fear.h \

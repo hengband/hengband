@@ -36,7 +36,7 @@
  */
 static void dispel_player(PlayerType *player_ptr)
 {
-    (void)set_fast(player_ptr, 0, true);
+    (void)set_acceleration(player_ptr, 0, true);
     set_lightspeed(player_ptr, 0, true);
     (void)BadStatusSetter(player_ptr).slowness(0, true);
     (void)set_shield(player_ptr, 0, true);

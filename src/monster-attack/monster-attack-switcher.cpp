@@ -29,6 +29,8 @@
 #include "system/monster-type-definition.h"
 #include "system/object-type-definition.h"
 #include "system/player-type-definition.h"
+#include "timed-effect/player-acceleration.h"
+#include "timed-effect/timed-effects.h"
 #include "view/display-messages.h"
 
 /*!
@@ -301,7 +303,7 @@ static void calc_blow_drain_mana(PlayerType *player_ptr, MonsterAttackPlayer *mo
 
 static void calc_blow_inertia(PlayerType *player_ptr, MonsterAttackPlayer *monap_ptr)
 {
-    if ((player_ptr->fast > 0) || (player_ptr->pspeed >= 130)) {
+    if (player_ptr->effects()->acceleration()->is_fast() || (player_ptr->pspeed >= 130)) {
         monap_ptr->damage = monap_ptr->damage * (randint1(4) + 4) / 9;
     }
 
