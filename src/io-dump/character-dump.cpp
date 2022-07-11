@@ -556,19 +556,11 @@ static void dump_aux_home_museum(PlayerType *player_ptr, FILE *fff)
 
     TERM_LEN x = 1;
     for (int i = 0; i < store_ptr->stock_num; i++) {
-#ifdef JP
         if ((i % 12) == 0) {
-            fprintf(fff, "\n ( %d ページ )\n", x++);
+            fprintf(fff, _("\n ( %d ページ )\n", "\n ( page %d )\n"), x++);
         }
         describe_flavor(player_ptr, o_name, &store_ptr->stock[i], 0);
         fprintf(fff, "%c) %s\n", I2A(i % 12), o_name);
-#else
-        if ((i % 12) == 0) {
-            fprintf(fff, "\n ( page %d )\n", x++);
-        }
-        describe_flavor(player_ptr, o_name, &st_ptr->stock[i], 0);
-        fprintf(fff, "%c) %s\n", I2A(i % 12), o_name);
-#endif
     }
 
     fprintf(fff, "\n\n");
