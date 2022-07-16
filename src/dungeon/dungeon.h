@@ -10,6 +10,7 @@
 #include "monster-race/race-feature-flags.h"
 #include "monster-race/race-flags-resistance.h"
 #include "monster-race/race-kind-flags.h"
+#include "monster-race/race-population-flags.h"
 #include "monster-race/race-resistance-mask.h"
 #include "monster-race/race-visual-flags.h"
 #include "monster-race/race-wilderness-flags.h"
@@ -89,6 +90,7 @@ struct dungeon_type {
     EnumClassFlagGroup<MonsterDropType> mon_drop_flags;
     EnumClassFlagGroup<MonsterWildernessType> mon_wilderness_flags;
     EnumClassFlagGroup<MonsterFeatureType> mon_feature_flags;
+    EnumClassFlagGroup<MonsterPopulationType> mon_population_flags;
 
     std::vector<char> r_chars; /* Monster symbols allowed */
     KIND_OBJECT_IDX final_object{}; /* The object you'll find at the bottom */

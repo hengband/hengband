@@ -123,7 +123,7 @@ static bool check_unique_placeable(PlayerType *player_ptr, MonsterRaceId r_idx)
     }
 
     auto *r_ptr = &r_info[r_idx];
-    if ((r_ptr->kind_flags.has(MonsterKindType::UNIQUE) || any_bits(r_ptr->flags7, RF7_NAZGUL)) && (r_ptr->cur_num >= r_ptr->max_num)) {
+    if ((r_ptr->kind_flags.has(MonsterKindType::UNIQUE) || r_ptr->population_flags.has(MonsterPopulationType::NAZGUL)) && (r_ptr->cur_num >= r_ptr->max_num)) {
         return false;
     }
 
@@ -284,7 +284,7 @@ bool place_monster_one(PlayerType *player_ptr, MONSTER_IDX who, POSITION y, POSI
     }
 
     msg_format_wizard(player_ptr, CHEAT_MONSTER, _("%s(Lv%d)を生成しました。", "%s(Lv%d) was generated."), name, r_ptr->level);
-    if (r_ptr->kind_flags.has(MonsterKindType::UNIQUE) || any_bits(r_ptr->flags7, RF7_NAZGUL) || (r_ptr->level < 10)) {
+    if (r_ptr->kind_flags.has(MonsterKindType::UNIQUE) || r_ptr->population_flags.has(MonsterPopulationType::NAZGUL) || (r_ptr->level < 10)) {
         reset_bits(mode, PM_KAGE);
     }
 
@@ -428,7 +428,7 @@ bool place_monster_one(PlayerType *player_ptr, MONSTER_IDX who, POSITION y, POSI
      * Memorize location of the unique monster in saved floors.
      * A unique monster move from old saved floor.
      */
-    if (w_ptr->character_dungeon && (r_ptr->kind_flags.has(MonsterKindType::UNIQUE) || any_bits(r_ptr->flags7, RF7_NAZGUL))) {
+    if (w_ptr->character_dungeon && (r_ptr->kind_flags.has(MonsterKindType::UNIQUE) || r_ptr->population_flags.has(MonsterPopulationType::NAZGUL))) {
         real_r_ptr(m_ptr)->floor_id = player_ptr->floor_id;
     }
 

@@ -170,7 +170,7 @@ void wiz_restore_monster_max_num(MonsterRaceId r_idx)
     auto n = 0;
     if (r_ptr->kind_flags.has(MonsterKindType::UNIQUE)) {
         n = 1;
-    } else if (any_bits(r_ptr->flags7, RF7_NAZGUL)) {
+    } else if (r_ptr->population_flags.has(MonsterPopulationType::NAZGUL)) {
         n = MAX_NAZGUL_NUM;
     }
 

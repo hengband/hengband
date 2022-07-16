@@ -127,7 +127,7 @@ SpoilerOutputResultType spoil_mon_desc(concptr fname, std::function<bool(const m
 
         if (r_ptr->kind_flags.has(MonsterKindType::UNIQUE)) {
             sprintf(nam, "[U] %s", name_buf);
-        } else if (any_bits(r_ptr->flags7, RF7_NAZGUL)) {
+        } else if (r_ptr->population_flags.has(MonsterPopulationType::NAZGUL)) {
             sprintf(nam, "[N] %s", name_buf);
         } else {
             sprintf(nam, _("    %s", "The %s"), name_buf);
@@ -210,7 +210,7 @@ SpoilerOutputResultType spoil_mon_info(concptr fname)
         auto *r_ptr = &r_info[r_idx];
         if (r_ptr->kind_flags.has(MonsterKindType::UNIQUE)) {
             spoil_out("[U] ");
-        } else if (any_bits(r_ptr->flags7, RF7_NAZGUL)) {
+        } else if (r_ptr->population_flags.has(MonsterPopulationType::NAZGUL)) {
             spoil_out("[N] ");
         }
 

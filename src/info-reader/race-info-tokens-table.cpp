@@ -5,6 +5,7 @@
 #include "monster-race/race-drop-flags.h"
 #include "monster-race/race-feature-flags.h"
 #include "monster-race/race-kind-flags.h"
+#include "monster-race/race-population-flags.h"
 #include "monster-race/race-visual-flags.h"
 #include "monster-race/race-wilderness-flags.h"
 
@@ -251,7 +252,6 @@ const std::unordered_map<std::string_view, MonsterAbilityType> r_info_ability_fl
  * "GUARDIAN" ... init.c d_infoの FINAL_GUARDIAN_* にて自動指定
  */
 const std::unordered_map<std::string_view, race_flags7> r_info_flags7 = {
-    { "NAZGUL", RF7_NAZGUL },
     { "UNIQUE2", RF7_UNIQUE2 },
     { "RIDING", RF7_RIDING },
     { "KAGE", RF7_KAGE },
@@ -439,4 +439,8 @@ const std::unordered_map<std::string_view, MonsterFeatureType> r_info_feature_fl
     { "AQUATIC", MonsterFeatureType::AQUATIC },
     { "CAN_SWIM", MonsterFeatureType::CAN_SWIM },
     { "CAN_FLY", MonsterFeatureType::CAN_FLY },
+};
+
+const std::unordered_map<std::string_view, MonsterPopulationType> r_info_population_flags = {
+    { "NAZGUL", MonsterPopulationType::NAZGUL },
 };

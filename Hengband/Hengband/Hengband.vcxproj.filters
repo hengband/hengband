@@ -5337,6 +5337,9 @@
     <ClInclude Include="..\..\src\timed-effect\player-acceleration.h">
       <Filter>timed-effect</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\monster-race\race-population-flags.h">
+      <Filter>monster-race</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\src\wall.bmp" />

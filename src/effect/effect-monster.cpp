@@ -380,7 +380,7 @@ static void affected_monster_prevents_bad_status(PlayerType *player_ptr, effect_
         em_ptr->do_polymorph = false;
     }
 
-    if ((em_ptr->r_ptr->kind_flags.has(MonsterKindType::UNIQUE) || any_bits(em_ptr->r_ptr->flags1, RF1_QUESTOR) || (em_ptr->r_ptr->flags7 & RF7_NAZGUL)) && !player_ptr->phase_out && (em_ptr->who > 0) && (em_ptr->dam > em_ptr->m_ptr->hp)) {
+    if ((em_ptr->r_ptr->kind_flags.has(MonsterKindType::UNIQUE) || any_bits(em_ptr->r_ptr->flags1, RF1_QUESTOR) || (em_ptr->r_ptr->population_flags.has(MonsterPopulationType::NAZGUL))) && !player_ptr->phase_out && (em_ptr->who > 0) && (em_ptr->dam > em_ptr->m_ptr->hp)) {
         em_ptr->dam = em_ptr->m_ptr->hp;
     }
 }
