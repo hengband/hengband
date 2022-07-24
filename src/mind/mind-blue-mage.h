@@ -13,10 +13,10 @@ enum class BlueMagicType {
 class PlayerType;
 bool do_cmd_cast_learned(PlayerType *player_ptr);
 
-inline constexpr std::array BLUE_MAGIC_TYPE_LIST = {
+inline constexpr std::array<BlueMagicType, 5> BLUE_MAGIC_TYPE_LIST = { {
     BlueMagicType::BOLT,
     BlueMagicType::BALL,
     BlueMagicType::BREATH,
     BlueMagicType::SUMMON,
     BlueMagicType::OTHER,
-};
+} };
