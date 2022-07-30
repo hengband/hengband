@@ -58,7 +58,7 @@ static void set_base_name(flavor_type *flavor_ptr)
         return;
     }
 
-    flavor_ptr->basenm = (flavor_ptr->known && (flavor_ptr->o_ptr->fixed_artifact_idx != 0)) ? a_info[flavor_ptr->o_ptr->fixed_artifact_idx].name.c_str() : flavor_ptr->kindname;
+    flavor_ptr->basenm = (flavor_ptr->known && (flavor_ptr->o_ptr->fixed_artifact_idx != 0) && !(flavor_ptr->mode & OD_BASE_NAME)) ? a_info[flavor_ptr->o_ptr->fixed_artifact_idx].name.c_str() : flavor_ptr->kindname;
 }
 
 #ifdef JP
@@ -82,7 +82,7 @@ static void describe_prefix_ja(flavor_type *flavor_ptr)
  */
 static void describe_artifact_prefix_ja(flavor_type *flavor_ptr)
 {
-    if (!flavor_ptr->known) {
+    if (!flavor_ptr->known || (flavor_ptr->mode & OD_BASE_NAME)) {
         return;
     }
 
@@ -100,7 +100,7 @@ static void describe_artifact_prefix_ja(flavor_type *flavor_ptr)
  */
 static void describe_artifact_ja(flavor_type *flavor_ptr)
 {
-    if (!flavor_ptr->known) {
+    if (!flavor_ptr->known || (flavor_ptr->mode & OD_BASE_NAME)) {
         return;
     }
 
@@ -204,7 +204,7 @@ static void describe_ego_body_ja(flavor_type *flavor_ptr)
  */
 static void describe_artifact_body_ja(flavor_type *flavor_ptr)
 {
-    if (!flavor_ptr->known) {
+    if (!flavor_ptr->known || (flavor_ptr->mode & OD_BASE_NAME)) {
         return;
     }
 
@@ -307,7 +307,7 @@ static void describe_basename_en(flavor_type *flavor_ptr)
 
 static void describe_artifact_body_en(flavor_type *flavor_ptr)
 {
-    if (!flavor_ptr->known || flavor_ptr->tr_flags.has(TR_FULL_NAME)) {
+    if (!flavor_ptr->known || flavor_ptr->tr_flags.has(TR_FULL_NAME) || (flavor_ptr->mode & OD_BASE_NAME)) {
         return;
     }
 
@@ -398,7 +398,7 @@ void describe_named_item(PlayerType *player_ptr, flavor_type *flavor_ptr)
 #endif
 
 #ifdef JP
-    if (flavor_ptr->o_ptr->is_smith()) {
+    if (flavor_ptr->o_ptr->is_smith() && !(flavor_ptr->mode & OD_BASE_NAME)) {
         flavor_ptr->t = object_desc_str(flavor_ptr->t, format("鍛冶師%sの", player_ptr->name));
     }
 
@@ -411,7 +411,7 @@ void describe_named_item(PlayerType *player_ptr, flavor_type *flavor_ptr)
 #ifdef JP
     describe_artifact_body_ja(flavor_ptr);
 #else
-    if (flavor_ptr->o_ptr->is_smith()) {
+    if (flavor_ptr->o_ptr->is_smith() && !(flavor_ptr->mode & OD_BASE_NAME)) {
         flavor_ptr->t = object_desc_str(flavor_ptr->t, format(" of %s the Smith", player_ptr->name));
     }
 
