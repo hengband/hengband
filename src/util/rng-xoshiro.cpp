@@ -20,13 +20,13 @@ uint32_t u32b_rotl(uint32_t x, int k)
  * @brief デフォルトシードで乱数の内部状態を初期化したXoshiro128StarStarクラスのオブジェクトを生成する
  */
 Xoshiro128StarStar::Xoshiro128StarStar()
-    : rng_state{
-        // default seeds
-        123456789,
-        362436069,
-        521288629,
-        88675123,
-    }
+    : rng_state{ {
+          // default seeds
+          123456789,
+          362436069,
+          521288629,
+          88675123,
+      } }
 {
 }
 
