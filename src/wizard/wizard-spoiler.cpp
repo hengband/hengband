@@ -130,7 +130,7 @@ static SpoilerOutputResultType spoil_mon_evol(concptr fname)
                                                                 : SpoilerOutputResultType::SUCCESSFUL;
 }
 
-SpoilerOutputResultType spoil_categorized_mon_desc()
+static SpoilerOutputResultType spoil_categorized_mon_desc()
 {
     auto status = spoil_mon_desc("mon-desc-ridable.txt", [](const monster_race *r_ptr) { return any_bits(r_ptr->flags7, RF7_RIDING); });
     if (status == SpoilerOutputResultType::SUCCESSFUL) {
