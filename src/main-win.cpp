@@ -2663,11 +2663,11 @@ void create_debug_spoiler(void)
     init_angband(p_ptr, true);
 
     switch (output_all_spoilers()) {
-    case SpoilerOutputResultType::SPOILER_OUTPUT_SUCCESS:
+    case SpoilerOutputResultType::SUCCESSFUL:
         fprintf(stdout, "Successfully created a spoiler file.");
-    case SpoilerOutputResultType::SPOILER_OUTPUT_FAIL_FOPEN:
+    case SpoilerOutputResultType::FILE_OPEN_FAILED:
         fprintf(stderr, "Cannot create spoiler file.");
-    case SpoilerOutputResultType::SPOILER_OUTPUT_FAIL_FCLOSE:
+    case SpoilerOutputResultType::FILE_CLOSE_FAILED:
         fprintf(stderr, "Cannot close spoiler file.");
     default:
         break;

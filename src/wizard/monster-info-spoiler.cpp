@@ -87,7 +87,7 @@ SpoilerOutputResultType spoil_mon_desc(concptr fname, std::function<bool(const m
     path_build(buf, sizeof(buf), ANGBAND_DIR_USER, fname);
     spoiler_file = angband_fopen(buf, "w");
     if (!spoiler_file) {
-        return SpoilerOutputResultType::SPOILER_OUTPUT_FAIL_FOPEN;
+        return SpoilerOutputResultType::FILE_OPEN_FAILED;
     }
 
     char title[200];
@@ -160,8 +160,8 @@ SpoilerOutputResultType spoil_mon_desc(concptr fname, std::function<bool(const m
     }
 
     fprintf(spoiler_file, "\n");
-    return ferror(spoiler_file) || angband_fclose(spoiler_file) ? SpoilerOutputResultType::SPOILER_OUTPUT_FAIL_FCLOSE
-                                                                : SpoilerOutputResultType::SPOILER_OUTPUT_SUCCESS;
+    return ferror(spoiler_file) || angband_fclose(spoiler_file) ? SpoilerOutputResultType::FILE_CLOSE_FAILED
+                                                                : SpoilerOutputResultType::SUCCESSFUL;
 }
 
 /*!
@@ -188,7 +188,7 @@ SpoilerOutputResultType spoil_mon_info(concptr fname)
     path_build(buf, sizeof(buf), ANGBAND_DIR_USER, fname);
     spoiler_file = angband_fopen(buf, "w");
     if (!spoiler_file) {
-        return SpoilerOutputResultType::SPOILER_OUTPUT_FAIL_FOPEN;
+        return SpoilerOutputResultType::FILE_OPEN_FAILED;
     }
 
     char title[200];
@@ -249,6 +249,6 @@ SpoilerOutputResultType spoil_mon_info(concptr fname)
         spoil_out(nullptr);
     }
 
-    return ferror(spoiler_file) || angband_fclose(spoiler_file) ? SpoilerOutputResultType::SPOILER_OUTPUT_FAIL_FCLOSE
-                                                                : SpoilerOutputResultType::SPOILER_OUTPUT_SUCCESS;
+    return ferror(spoiler_file) || angband_fclose(spoiler_file) ? SpoilerOutputResultType::FILE_CLOSE_FAILED
+                                                                : SpoilerOutputResultType::SUCCESSFUL;
 }
