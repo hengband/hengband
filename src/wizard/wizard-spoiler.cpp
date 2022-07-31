@@ -46,6 +46,15 @@
 #include <set>
 #include <string>
 
+static constexpr std::array<std::string_view, 6> wiz_spell_stat = { {
+    _("腕力", "STR"),
+    _("知能", "INT"),
+    _("賢さ", "WIS"),
+    _("器用さ", "DEX"),
+    _("耐久力", "CON"),
+    _("魅力", "CHR"),
+} };
+
 /**
  * @brief 進化ツリーの一番根元となるモンスターのIDのリストを取得する
  *
@@ -166,15 +175,6 @@ SpoilerOutputResultType spoil_categorized_mon_desc()
 
     return status;
 }
-
-const std::array<const std::string_view, 6> wiz_spell_stat = { {
-    _("腕力", "STR"),
-    _("知能", "INT"),
-    _("賢さ", "WIS"),
-    _("器用さ", "DEX"),
-    _("耐久力", "CON"),
-    _("魅力", "CHR"),
-} };
 
 static SpoilerOutputResultType spoil_player_spell(concptr fname)
 {
