@@ -239,8 +239,8 @@ concptr PlayerSkill::skill_rank_str(PlayerSkillRank rank)
 
 void PlayerSkill::gain_melee_weapon_exp(const ObjectType *o_ptr)
 {
-    const GainAmountList gain_amount_list{ 80, 10, 1, (one_in_(2) ? 1 : 0) };
-    constexpr GainAmountList others_gain_amount_list{ 8, 1, 0, 0 };
+    const GainAmountList gain_amount_list{ { 80, 10, 1, (one_in_(2) ? 1 : 0) } };
+    constexpr GainAmountList others_gain_amount_list{ { 8, 1, 0, 0 } };
 
     for (auto sval = 0U; sval < this->player_ptr->weapon_exp[o_ptr->tval].size(); ++sval) {
         auto &now_exp = this->player_ptr->weapon_exp[o_ptr->tval][sval];
@@ -253,8 +253,8 @@ void PlayerSkill::gain_melee_weapon_exp(const ObjectType *o_ptr)
 
 void PlayerSkill::gain_range_weapon_exp(const ObjectType *o_ptr)
 {
-    constexpr GainAmountList gain_amount_list{ 80, 25, 10, 2 };
-    constexpr GainAmountList others_gain_amount_list{ 8, 2, 0, 0 };
+    constexpr GainAmountList gain_amount_list{ { 80, 25, 10, 2 } };
+    constexpr GainAmountList others_gain_amount_list{ { 8, 2, 0, 0 } };
 
     for (auto sval = 0U; sval < this->player_ptr->weapon_exp[o_ptr->tval].size(); ++sval) {
         auto &now_exp = this->player_ptr->weapon_exp[o_ptr->tval][sval];
@@ -358,8 +358,8 @@ void PlayerSkill::gain_spell_skill_exp(int realm, int spell_idx)
         return;
     }
 
-    constexpr GainAmountList gain_amount_list_first{ 60, 8, 2, 1 };
-    constexpr GainAmountList gain_amount_list_second{ 60, 8, 2, 0 };
+    constexpr GainAmountList gain_amount_list_first{ { 60, 8, 2, 1 } };
+    constexpr GainAmountList gain_amount_list_second{ { 60, 8, 2, 0 } };
 
     const auto is_first_realm = (realm == this->player_ptr->realm1);
     const auto *s_ptr = &mp_ptr->info[realm - 1][spell_idx];

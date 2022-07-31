@@ -26,6 +26,7 @@
 #include "util/angband-files.h"
 #include "util/string-processor.h"
 #include "view/display-scores.h"
+#include "wizard/spoiler-util.h"
 #include "wizard/wizard-spoiler.h"
 #include <string>
 
@@ -304,14 +305,14 @@ static bool parse_long_opt(const char *opt)
     init_stuff();
     init_angband(p_ptr, true);
     switch (output_all_spoilers()) {
-    case SpoilerOutputResultType::SPOILER_OUTPUT_SUCCESS:
+    case SpoilerOutputResultType::SUCCESSFUL:
         puts("Successfully created a spoiler file.");
         quit(nullptr);
         break;
-    case SpoilerOutputResultType::SPOILER_OUTPUT_FAIL_FOPEN:
+    case SpoilerOutputResultType::FILE_OPEN_FAILED:
         quit("Cannot create spoiler file.");
         break;
-    case SpoilerOutputResultType::SPOILER_OUTPUT_FAIL_FCLOSE:
+    case SpoilerOutputResultType::FILE_CLOSE_FAILED:
         quit("Cannot close spoiler file.");
         break;
     default:

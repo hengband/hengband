@@ -85,6 +85,14 @@ static bool grab_one_basic_monster_flag(dungeon_type *d_ptr, std::string_view wh
         return true;
     }
 
+    if (EnumClassFlagGroup<MonsterPopulationType>::grab_one_flag(d_ptr->mon_population_flags, r_info_population_flags, what)) {
+        return true;
+    }
+
+    if (EnumClassFlagGroup<MonsterSpeakType>::grab_one_flag(d_ptr->mon_speak_flags, r_info_speak_flags, what)) {
+        return true;
+    }
+
     msg_format(_("未知のモンスター・フラグ '%s'。", "Unknown monster flag '%s'."), what.data());
     return false;
 }

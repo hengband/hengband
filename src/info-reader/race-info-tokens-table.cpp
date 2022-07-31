@@ -5,6 +5,8 @@
 #include "monster-race/race-drop-flags.h"
 #include "monster-race/race-feature-flags.h"
 #include "monster-race/race-kind-flags.h"
+#include "monster-race/race-population-flags.h"
+#include "monster-race/race-speak-flags.h"
 #include "monster-race/race-visual-flags.h"
 #include "monster-race/race-wilderness-flags.h"
 
@@ -105,7 +107,6 @@ const std::unordered_map<std::string_view, race_flags1> r_info_flags1 = {
  * Monster race flags
  */
 const std::unordered_map<std::string_view, race_flags2> r_info_flags2 = {
-    { "CAN_SPEAK", RF2_CAN_SPEAK },
     { "REFLECTING", RF2_REFLECTING },
     { "INVISIBLE", RF2_INVISIBLE },
     { "COLD_BLOOD", RF2_COLD_BLOOD },
@@ -251,7 +252,6 @@ const std::unordered_map<std::string_view, MonsterAbilityType> r_info_ability_fl
  * "GUARDIAN" ... init.c d_infoの FINAL_GUARDIAN_* にて自動指定
  */
 const std::unordered_map<std::string_view, race_flags7> r_info_flags7 = {
-    { "NAZGUL", RF7_NAZGUL },
     { "UNIQUE2", RF7_UNIQUE2 },
     { "RIDING", RF7_RIDING },
     { "KAGE", RF7_KAGE },
@@ -439,4 +439,17 @@ const std::unordered_map<std::string_view, MonsterFeatureType> r_info_feature_fl
     { "AQUATIC", MonsterFeatureType::AQUATIC },
     { "CAN_SWIM", MonsterFeatureType::CAN_SWIM },
     { "CAN_FLY", MonsterFeatureType::CAN_FLY },
+};
+
+const std::unordered_map<std::string_view, MonsterPopulationType> r_info_population_flags = {
+    { "NAZGUL", MonsterPopulationType::NAZGUL },
+};
+
+const std::unordered_map<std::string_view, MonsterSpeakType> r_info_speak_flags = {
+    { "SPEAK_ALL", MonsterSpeakType::SPEAK_ALL },
+    { "SPEAK_BATTLE", MonsterSpeakType::SPEAK_BATTLE },
+    { "SPEAK_FEAR", MonsterSpeakType::SPEAK_FEAR },
+    { "SPEAK_FRIEND", MonsterSpeakType::SPEAK_FRIEND },
+    { "SPEAK_DEATH", MonsterSpeakType::SPEAK_DEATH },
+    { "SPEAK_SPAWN", MonsterSpeakType::SPEAK_SPAWN },
 };

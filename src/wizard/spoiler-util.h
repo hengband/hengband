@@ -10,10 +10,10 @@
 #define N_ELEMENTS(a) (sizeof(a) / sizeof((a)[0]))
 
 enum class SpoilerOutputResultType {
-    SPOILER_OUTPUT_CANCEL,
-    SPOILER_OUTPUT_SUCCESS,
-    SPOILER_OUTPUT_FAIL_FOPEN,
-    SPOILER_OUTPUT_FAIL_FCLOSE
+    CANCELED,
+    SUCCESSFUL,
+    FILE_OPEN_FAILED,
+    FILE_CLOSE_FAILED,
 };
 
 /* A special type used just for deailing with pvals */

@@ -95,7 +95,7 @@ SpoilerOutputResultType spoil_obj_desc(concptr fname)
     path_build(buf, sizeof(buf), ANGBAND_DIR_USER, fname);
     spoiler_file = angband_fopen(buf, "w");
     if (!spoiler_file) {
-        return SpoilerOutputResultType::SPOILER_OUTPUT_FAIL_FOPEN;
+        return SpoilerOutputResultType::FILE_OPEN_FAILED;
     }
 
     char title[200];
@@ -139,6 +139,6 @@ SpoilerOutputResultType spoil_obj_desc(concptr fname)
         }
     }
 
-    return ferror(spoiler_file) || angband_fclose(spoiler_file) ? SpoilerOutputResultType::SPOILER_OUTPUT_FAIL_FCLOSE
-                                                                : SpoilerOutputResultType::SPOILER_OUTPUT_SUCCESS;
+    return ferror(spoiler_file) || angband_fclose(spoiler_file) ? SpoilerOutputResultType::FILE_CLOSE_FAILED
+                                                                : SpoilerOutputResultType::SUCCESSFUL;
 }

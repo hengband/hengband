@@ -59,7 +59,7 @@ static bool summon_specific_okay(PlayerType *player_ptr, MonsterRaceId r_idx)
         }
     }
 
-    if (!summon_unique_okay && (r_ptr->kind_flags.has(MonsterKindType::UNIQUE) || (r_ptr->flags7 & RF7_NAZGUL))) {
+    if (!summon_unique_okay && (r_ptr->kind_flags.has(MonsterKindType::UNIQUE) || (r_ptr->population_flags.has(MonsterPopulationType::NAZGUL)))) {
         return false;
     }
 
@@ -67,7 +67,7 @@ static bool summon_specific_okay(PlayerType *player_ptr, MonsterRaceId r_idx)
         return true;
     }
 
-    if ((summon_specific_who < 0) && (r_ptr->kind_flags.has(MonsterKindType::UNIQUE) || (r_ptr->flags7 & RF7_NAZGUL)) && monster_has_hostile_align(player_ptr, nullptr, 10, -10, r_ptr)) {
+    if ((summon_specific_who < 0) && (r_ptr->kind_flags.has(MonsterKindType::UNIQUE) || (r_ptr->population_flags.has(MonsterPopulationType::NAZGUL))) && monster_has_hostile_align(player_ptr, nullptr, 10, -10, r_ptr)) {
         return false;
     }
 

@@ -949,7 +949,7 @@ bool item_monster_okay(PlayerType *player_ptr, MonsterRaceId r_idx)
         return false;
     }
 
-    if (any_bits(r_ptr->flags7, RF7_NAZGUL)) {
+    if (r_ptr->population_flags.has(MonsterPopulationType::NAZGUL)) {
         return false;
     }
 

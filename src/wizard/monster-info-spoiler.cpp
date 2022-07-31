@@ -87,7 +87,7 @@ SpoilerOutputResultType spoil_mon_desc(concptr fname, std::function<bool(const m
     path_build(buf, sizeof(buf), ANGBAND_DIR_USER, fname);
     spoiler_file = angband_fopen(buf, "w");
     if (!spoiler_file) {
-        return SpoilerOutputResultType::SPOILER_OUTPUT_FAIL_FOPEN;
+        return SpoilerOutputResultType::FILE_OPEN_FAILED;
     }
 
     char title[200];
@@ -127,7 +127,7 @@ SpoilerOutputResultType spoil_mon_desc(concptr fname, std::function<bool(const m
 
         if (r_ptr->kind_flags.has(MonsterKindType::UNIQUE)) {
             sprintf(nam, "[U] %s", name_buf);
-        } else if (any_bits(r_ptr->flags7, RF7_NAZGUL)) {
+        } else if (r_ptr->population_flags.has(MonsterPopulationType::NAZGUL)) {
             sprintf(nam, "[N] %s", name_buf);
         } else {
             sprintf(nam, _("    %s", "The %s"), name_buf);
@@ -160,8 +160,8 @@ SpoilerOutputResultType spoil_mon_desc(concptr fname, std::function<bool(const m
     }
 
     fprintf(spoiler_file, "\n");
-    return ferror(spoiler_file) || angband_fclose(spoiler_file) ? SpoilerOutputResultType::SPOILER_OUTPUT_FAIL_FCLOSE
-                                                                : SpoilerOutputResultType::SPOILER_OUTPUT_SUCCESS;
+    return ferror(spoiler_file) || angband_fclose(spoiler_file) ? SpoilerOutputResultType::FILE_CLOSE_FAILED
+                                                                : SpoilerOutputResultType::SUCCESSFUL;
 }
 
 /*!
@@ -188,7 +188,7 @@ SpoilerOutputResultType spoil_mon_info(concptr fname)
     path_build(buf, sizeof(buf), ANGBAND_DIR_USER, fname);
     spoiler_file = angband_fopen(buf, "w");
     if (!spoiler_file) {
-        return SpoilerOutputResultType::SPOILER_OUTPUT_FAIL_FOPEN;
+        return SpoilerOutputResultType::FILE_OPEN_FAILED;
     }
 
     char title[200];
@@ -210,7 +210,7 @@ SpoilerOutputResultType spoil_mon_info(concptr fname)
         auto *r_ptr = &r_info[r_idx];
         if (r_ptr->kind_flags.has(MonsterKindType::UNIQUE)) {
             spoil_out("[U] ");
-        } else if (any_bits(r_ptr->flags7, RF7_NAZGUL)) {
+        } else if (r_ptr->population_flags.has(MonsterPopulationType::NAZGUL)) {
             spoil_out("[N] ");
         }
 
@@ -249,6 +249,6 @@ SpoilerOutputResultType spoil_mon_info(concptr fname)
         spoil_out(nullptr);
     }
 
-    return ferror(spoiler_file) || angband_fclose(spoiler_file) ? SpoilerOutputResultType::SPOILER_OUTPUT_FAIL_FCLOSE
-                                                                : SpoilerOutputResultType::SPOILER_OUTPUT_SUCCESS;
+    return ferror(spoiler_file) || angband_fclose(spoiler_file) ? SpoilerOutputResultType::FILE_CLOSE_FAILED
+                                                                : SpoilerOutputResultType::SUCCESSFUL;
 }

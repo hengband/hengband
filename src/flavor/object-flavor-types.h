@@ -9,5 +9,6 @@ enum object_description_type {
     OD_STORE = 0x00000020, /* Assume to be aware and known */
     OD_NO_FLAVOR = 0x00000040, /* Allow to hidden flavor */
     OD_FORCE_FLAVOR = 0x00000080, /* Get un-shuffled flavor name */
+    OD_BASE_NAME = 0x00000100, /* Use kind name without artifact, ego, or smithing details */
     OD_DEBUG = 0x10000000, /* Print for DEBUG */
 };

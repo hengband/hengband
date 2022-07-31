@@ -182,21 +182,21 @@ enum tr_type : int32_t {
 };
 
 /** 能力値(STR,INT,WIS,DEX,CON,CHR)のpvalを増減させるフラグのリスト */
-inline constexpr std::array<tr_type, 6> TR_STATUS_LIST = {
+inline constexpr std::array<tr_type, 6> TR_STATUS_LIST = { {
     TR_STR,
     TR_INT,
     TR_WIS,
     TR_DEX,
     TR_CON,
     TR_CHR,
-};
+} };
 
 /** 能力値(STR,INT,WIS,DEX,CON,CHR)を維持するフラグのリスト */
-inline constexpr std::array<tr_type, 6> TR_SUST_STATUS_LIST = {
+inline constexpr std::array<tr_type, 6> TR_SUST_STATUS_LIST = { {
     TR_SUST_STR,
     TR_SUST_INT,
     TR_SUST_WIS,
     TR_SUST_DEX,
     TR_SUST_CON,
     TR_SUST_CHR,
-};
+} };

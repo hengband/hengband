@@ -132,64 +132,64 @@ static element_type_list element_types = {
     {
         ElementRealmType::FIRE, {
             _("炎", "Fire"),
-            { AttributeType::FIRE, AttributeType::HELL_FIRE, AttributeType::PLASMA },
-            { _("火炎", "Fire"), _("業火", "Hell Fire"), _("プラズマ", "Plasma") },
+            { { AttributeType::FIRE, AttributeType::HELL_FIRE, AttributeType::PLASMA } },
+            { { _("火炎", "Fire"), _("業火", "Hell Fire"), _("プラズマ", "Plasma") } },
             { },
         }
     },
     {
         ElementRealmType::ICE, {
             _("氷", "Ice"),
-            { AttributeType::COLD, AttributeType::INERTIAL, AttributeType::TIME },
-            { _("冷気", "Ice"), _("遅鈍", "Inertia"), _("時間逆転", "Time Stream") },
+            { { AttributeType::COLD, AttributeType::INERTIAL, AttributeType::TIME } },
+            { { _("冷気", "Ice"), _("遅鈍", "Inertia"), _("時間逆転", "Time Stream") } },
             { { AttributeType::COLD, AttributeType::ICE} },
         }
     },
     {
         ElementRealmType::SKY, {
             _("空", "Sky"),
-            { AttributeType::ELEC, AttributeType::LITE, AttributeType::MANA },
-            { _("電撃", "Lightning"), _("光", "Light"), _("魔力", "Mana") },
+            { { AttributeType::ELEC, AttributeType::LITE, AttributeType::MANA } },
+            { { _("電撃", "Lightning"), _("光", "Light"), _("魔力", "Mana") } },
             { },
         }
     },
     {
         ElementRealmType::SEA, {
             _("海", "Sea"),
-            { AttributeType::ACID, AttributeType::WATER, AttributeType::DISINTEGRATE },
-            { _("酸", "Acid"), _("水", "Water"), _("分解", "Disintegration") },
+            { { AttributeType::ACID, AttributeType::WATER, AttributeType::DISINTEGRATE } },
+            { { _("酸", "Acid"), _("水", "Water"), _("分解", "Disintegration") } },
             { },
         }
     },
     {
         ElementRealmType::DARKNESS, {
             _("闇", "Darkness"),
-            { AttributeType::DARK, AttributeType::NETHER, AttributeType::VOID_MAGIC },
-            { _("暗黒", "Darkness"), _("地獄", "Nether"), _("虚無", "void") },
+            { { AttributeType::DARK, AttributeType::NETHER, AttributeType::VOID_MAGIC } },
+            { { _("暗黒", "Darkness"), _("地獄", "Nether"), _("虚無", "void") } },
             { { AttributeType::DARK, AttributeType::ABYSS } },
         }
     },
     {
         ElementRealmType::CHAOS, {
             _("混沌", "Chaos"),
-            { AttributeType::CONFUSION, AttributeType::CHAOS, AttributeType::NEXUS },
-            { _("混乱", "Confusion"), _("カオス", "Chaos"), _("因果混乱", "Nexus") },
+            { { AttributeType::CONFUSION, AttributeType::CHAOS, AttributeType::NEXUS } },
+            { { _("混乱", "Confusion"), _("カオス", "Chaos"), _("因果混乱", "Nexus") } },
             { },
         }
     },
     {
         ElementRealmType::EARTH, {
             _("地", "Earth"),
-            { AttributeType::SHARDS, AttributeType::FORCE, AttributeType::METEOR },
-            { _("破片", "Shards"), _("フォース", "Force"), _("隕石", "Meteor") },
+            { { AttributeType::SHARDS, AttributeType::FORCE, AttributeType::METEOR } },
+            { { _("破片", "Shards"), _("フォース", "Force"), _("隕石", "Meteor") } },
             { },
         }
     },
     {
         ElementRealmType::DEATH, {
             _("瘴気", "Death"),
-            { AttributeType::POIS, AttributeType::HYPODYNAMIA, AttributeType::DISENCHANT },
-            { _("毒", "Poison"), _("吸血", "Drain Life"), _("劣化", "Disenchantment") },
+            { { AttributeType::POIS, AttributeType::HYPODYNAMIA, AttributeType::DISENCHANT } },
+            { { _("毒", "Poison"), _("吸血", "Drain Life"), _("劣化", "Disenchantment") } },
             { },
         }
     },
