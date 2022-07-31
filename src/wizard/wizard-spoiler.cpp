@@ -46,6 +46,15 @@
 #include <set>
 #include <string>
 
+static constexpr std::array<std::string_view, 6> wiz_spell_stat = { {
+    _("腕力", "STR"),
+    _("知能", "INT"),
+    _("賢さ", "WIS"),
+    _("器用さ", "DEX"),
+    _("耐久力", "CON"),
+    _("魅力", "CHR"),
+} };
+
 /**
  * @brief 進化ツリーの一番根元となるモンスターのIDのリストを取得する
  *
@@ -92,7 +101,7 @@ static SpoilerOutputResultType spoil_mon_evol(concptr fname)
     path_build(buf, sizeof buf, ANGBAND_DIR_USER, fname);
     spoiler_file = angband_fopen(buf, "w");
     if (!spoiler_file) {
-        return SpoilerOutputResultType::SPOILER_OUTPUT_FAIL_FOPEN;
+        return SpoilerOutputResultType::FILE_OPEN_FAILED;
     }
 
     char title[200];
@@ -117,64 +126,55 @@ static SpoilerOutputResultType spoil_mon_evol(concptr fname)
         fputc('\n', spoiler_file);
     }
 
-    return ferror(spoiler_file) || angband_fclose(spoiler_file) ? SpoilerOutputResultType::SPOILER_OUTPUT_FAIL_FCLOSE
-                                                                : SpoilerOutputResultType::SPOILER_OUTPUT_SUCCESS;
+    return ferror(spoiler_file) || angband_fclose(spoiler_file) ? SpoilerOutputResultType::FILE_CLOSE_FAILED
+                                                                : SpoilerOutputResultType::SUCCESSFUL;
 }
 
-SpoilerOutputResultType spoil_categorized_mon_desc()
+static SpoilerOutputResultType spoil_categorized_mon_desc()
 {
     auto status = spoil_mon_desc("mon-desc-ridable.txt", [](const monster_race *r_ptr) { return any_bits(r_ptr->flags7, RF7_RIDING); });
-    if (status == SpoilerOutputResultType::SPOILER_OUTPUT_SUCCESS) {
+    if (status == SpoilerOutputResultType::SUCCESSFUL) {
         status = spoil_mon_desc("mon-desc-wildonly.txt", [](const monster_race *r_ptr) { return r_ptr->wilderness_flags.has(MonsterWildernessType::WILD_ONLY); });
     }
 
-    if (status == SpoilerOutputResultType::SPOILER_OUTPUT_SUCCESS) {
+    if (status == SpoilerOutputResultType::SUCCESSFUL) {
         status = spoil_mon_desc("mon-desc-town.txt", [](const monster_race *r_ptr) { return r_ptr->wilderness_flags.has(MonsterWildernessType::WILD_TOWN); });
     }
 
-    if (status == SpoilerOutputResultType::SPOILER_OUTPUT_SUCCESS) {
+    if (status == SpoilerOutputResultType::SUCCESSFUL) {
         status = spoil_mon_desc("mon-desc-shore.txt", [](const monster_race *r_ptr) { return r_ptr->wilderness_flags.has(MonsterWildernessType::WILD_SHORE); });
     }
 
-    if (status == SpoilerOutputResultType::SPOILER_OUTPUT_SUCCESS) {
+    if (status == SpoilerOutputResultType::SUCCESSFUL) {
         status = spoil_mon_desc("mon-desc-ocean.txt", [](const monster_race *r_ptr) { return r_ptr->wilderness_flags.has(MonsterWildernessType::WILD_OCEAN); });
     }
 
-    if (status == SpoilerOutputResultType::SPOILER_OUTPUT_SUCCESS) {
+    if (status == SpoilerOutputResultType::SUCCESSFUL) {
         status = spoil_mon_desc("mon-desc-waste.txt", [](const monster_race *r_ptr) { return r_ptr->wilderness_flags.has(MonsterWildernessType::WILD_WASTE); });
     }
 
-    if (status == SpoilerOutputResultType::SPOILER_OUTPUT_SUCCESS) {
+    if (status == SpoilerOutputResultType::SUCCESSFUL) {
         status = spoil_mon_desc("mon-desc-wood.txt", [](const monster_race *r_ptr) { return r_ptr->wilderness_flags.has(MonsterWildernessType::WILD_WOOD); });
     }
 
-    if (status == SpoilerOutputResultType::SPOILER_OUTPUT_SUCCESS) {
+    if (status == SpoilerOutputResultType::SUCCESSFUL) {
         status = spoil_mon_desc("mon-desc-volcano.txt", [](const monster_race *r_ptr) { return r_ptr->wilderness_flags.has(MonsterWildernessType::WILD_VOLCANO); });
     }
 
-    if (status == SpoilerOutputResultType::SPOILER_OUTPUT_SUCCESS) {
+    if (status == SpoilerOutputResultType::SUCCESSFUL) {
         status = spoil_mon_desc("mon-desc-mountain.txt", [](const monster_race *r_ptr) { return r_ptr->wilderness_flags.has(MonsterWildernessType::WILD_MOUNTAIN); });
     }
 
-    if (status == SpoilerOutputResultType::SPOILER_OUTPUT_SUCCESS) {
+    if (status == SpoilerOutputResultType::SUCCESSFUL) {
         status = spoil_mon_desc("mon-desc-grass.txt", [](const monster_race *r_ptr) { return r_ptr->wilderness_flags.has(MonsterWildernessType::WILD_GRASS); });
     }
 
-    if (status == SpoilerOutputResultType::SPOILER_OUTPUT_SUCCESS) {
+    if (status == SpoilerOutputResultType::SUCCESSFUL) {
         status = spoil_mon_desc("mon-desc-wildall.txt", [](const monster_race *r_ptr) { return r_ptr->wilderness_flags.has(MonsterWildernessType::WILD_ALL); });
     }
 
     return status;
 }
-
-const std::array<const std::string_view, 6> wiz_spell_stat = { {
-    _("腕力", "STR"),
-    _("知能", "INT"),
-    _("賢さ", "WIS"),
-    _("器用さ", "DEX"),
-    _("耐久力", "CON"),
-    _("魅力", "CHR"),
-} };
 
 static SpoilerOutputResultType spoil_player_spell(concptr fname)
 {
@@ -183,7 +183,7 @@ static SpoilerOutputResultType spoil_player_spell(concptr fname)
     path_build(buf, sizeof buf, ANGBAND_DIR_USER, fname);
     spoiler_file = angband_fopen(buf, "w");
     if (!spoiler_file) {
-        return SpoilerOutputResultType::SPOILER_OUTPUT_FAIL_FOPEN;
+        return SpoilerOutputResultType::FILE_OPEN_FAILED;
     }
 
     char title[200];
@@ -234,8 +234,8 @@ static SpoilerOutputResultType spoil_player_spell(concptr fname)
         }
     }
 
-    return ferror(spoiler_file) || angband_fclose(spoiler_file) ? SpoilerOutputResultType::SPOILER_OUTPUT_FAIL_FCLOSE
-                                                                : SpoilerOutputResultType::SPOILER_OUTPUT_SUCCESS;
+    return ferror(spoiler_file) || angband_fclose(spoiler_file) ? SpoilerOutputResultType::FILE_CLOSE_FAILED
+                                                                : SpoilerOutputResultType::SUCCESSFUL;
 }
 
 /*!
@@ -246,7 +246,7 @@ void exe_output_spoilers(void)
 {
     screen_save();
     while (true) {
-        auto status = SpoilerOutputResultType::SPOILER_OUTPUT_CANCEL;
+        auto status = SpoilerOutputResultType::CANCELED;
         term_clear();
         prt("Create a spoiler file.", 2, 0);
         prt("(1) Brief Object Info (obj-desc.txt)", 5, 5);
@@ -288,16 +288,16 @@ void exe_output_spoilers(void)
         }
 
         switch (status) {
-        case SpoilerOutputResultType::SPOILER_OUTPUT_FAIL_FOPEN:
+        case SpoilerOutputResultType::FILE_OPEN_FAILED:
             msg_print("Cannot create spoiler file.");
             break;
-        case SpoilerOutputResultType::SPOILER_OUTPUT_FAIL_FCLOSE:
+        case SpoilerOutputResultType::FILE_CLOSE_FAILED:
             msg_print("Cannot close spoiler file.");
             break;
-        case SpoilerOutputResultType::SPOILER_OUTPUT_SUCCESS:
+        case SpoilerOutputResultType::SUCCESSFUL:
             msg_print("Successfully created a spoiler file.");
             break;
-        case SpoilerOutputResultType::SPOILER_OUTPUT_CANCEL:
+        case SpoilerOutputResultType::CANCELED:
             break;
         }
         msg_erase();
@@ -312,34 +312,34 @@ void exe_output_spoilers(void)
 SpoilerOutputResultType output_all_spoilers(void)
 {
     auto status = spoil_obj_desc("obj-desc.txt");
-    if (status != SpoilerOutputResultType::SPOILER_OUTPUT_SUCCESS) {
+    if (status != SpoilerOutputResultType::SUCCESSFUL) {
         return status;
     }
 
     status = spoil_fixed_artifact("artifact.txt");
-    if (status != SpoilerOutputResultType::SPOILER_OUTPUT_SUCCESS) {
+    if (status != SpoilerOutputResultType::SUCCESSFUL) {
         return status;
     }
 
     status = spoil_mon_desc("mon-desc.txt");
-    if (status != SpoilerOutputResultType::SPOILER_OUTPUT_SUCCESS) {
+    if (status != SpoilerOutputResultType::SUCCESSFUL) {
         return status;
     }
 
     status = spoil_categorized_mon_desc();
-    if (status != SpoilerOutputResultType::SPOILER_OUTPUT_SUCCESS) {
+    if (status != SpoilerOutputResultType::SUCCESSFUL) {
         return status;
     }
 
     status = spoil_mon_info("mon-info.txt");
-    if (status != SpoilerOutputResultType::SPOILER_OUTPUT_SUCCESS) {
+    if (status != SpoilerOutputResultType::SUCCESSFUL) {
         return status;
     }
 
     status = spoil_mon_evol("mon-evol.txt");
-    if (status != SpoilerOutputResultType::SPOILER_OUTPUT_SUCCESS) {
+    if (status != SpoilerOutputResultType::SUCCESSFUL) {
         return status;
     }
 
-    return SpoilerOutputResultType::SPOILER_OUTPUT_SUCCESS;
+    return SpoilerOutputResultType::SUCCESSFUL;
 }
