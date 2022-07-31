@@ -2665,10 +2665,13 @@ void create_debug_spoiler(void)
     switch (output_all_spoilers()) {
     case SpoilerOutputResultType::SUCCESSFUL:
         fprintf(stdout, "Successfully created a spoiler file.");
+        break;
     case SpoilerOutputResultType::FILE_OPEN_FAILED:
         fprintf(stderr, "Cannot create spoiler file.");
+        break;
     case SpoilerOutputResultType::FILE_CLOSE_FAILED:
         fprintf(stderr, "Cannot close spoiler file.");
+        break;
     default:
         break;
     }
