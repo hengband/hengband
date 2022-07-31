@@ -162,17 +162,6 @@ static void on_dead_dawn(PlayerType *player_ptr, monster_death_type *md_ptr)
     summon_self(player_ptr, md_ptr, SUMMON_DAWN, 7, 20, _("新たな戦士が現れた！", "A new warrior steps forth!"));
 }
 
-static void on_dead_unmaker(PlayerType *player_ptr, monster_death_type *md_ptr)
-{
-    if (is_seen(player_ptr, md_ptr->m_ptr)) {
-        GAME_TEXT m_name[MAX_NLEN];
-        monster_desc(player_ptr, m_name, md_ptr->m_ptr, MD_NONE);
-        msg_format(_("%sは辺りにログルスの残り香を撒き散らした！", "%^s sprinkled the remaining incense from Logrus!"), m_name);
-    }
-
-    (void)project(player_ptr, md_ptr->m_idx, 6, md_ptr->md_y, md_ptr->md_x, 100, AttributeType::CHAOS, PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL);
-}
-
 static void on_dead_sacred_treasures(PlayerType *player_ptr, monster_death_type *md_ptr)
 {
     if ((player_ptr->ppersonality != PERSONALITY_LAZY) || !md_ptr->drop_chosen_item) {
@@ -259,17 +248,6 @@ static void on_dead_can_angel(PlayerType *player_ptr, monster_death_type *md_ptr
     (void)drop_near(player_ptr, q_ptr, -1, md_ptr->md_y, md_ptr->md_x);
 }
 
-static void on_dead_rolento(PlayerType *player_ptr, monster_death_type *md_ptr)
-{
-    if (is_seen(player_ptr, md_ptr->m_ptr)) {
-        GAME_TEXT m_name[MAX_NLEN];
-        monster_desc(player_ptr, m_name, md_ptr->m_ptr, MD_NONE);
-        msg_format(_("%sは手榴弾を抱えて自爆した！", "%^s blew himself up with grenades!"), m_name);
-    }
-
-    (void)project(player_ptr, md_ptr->m_idx, 3, md_ptr->md_y, md_ptr->md_x, damroll(20, 10), AttributeType::FIRE, PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL);
-}
-
 static void on_dead_aqua_illusion(PlayerType *player_ptr, monster_death_type *md_ptr)
 {
     if (player_ptr->current_floor_ptr->inside_arena || player_ptr->phase_out) {
@@ -305,28 +283,6 @@ static void on_dead_totem_moai(PlayerType *player_ptr, monster_death_type *md_pt
     summon_self(player_ptr, md_ptr, SUMMON_TOTEM_MOAI, 8, 5, _("新たなモアイが現れた！", "A new moai steps forth!"));
 }
 
-static void on_dead_demon_slayer_senior(PlayerType *player_ptr, monster_death_type *md_ptr)
-{
-    if (!is_seen(player_ptr, md_ptr->m_ptr)) {
-        return;
-    }
-
-    GAME_TEXT m_name[MAX_NLEN];
-    monster_desc(player_ptr, m_name, md_ptr->m_ptr, MD_NONE);
-    msg_format(_("あなたの闘気が%sの身体をサイコロ状に切り刻んだ！", "Your fighting spirit chopped %^s's body into dice!"), m_name);
-}
-
-static void on_dead_mirmulnir(PlayerType *player_ptr, monster_death_type *md_ptr)
-{
-    if (!is_seen(player_ptr, md_ptr->m_ptr)) {
-        return;
-    }
-
-    GAME_TEXT m_name[MAX_NLEN];
-    monster_desc(player_ptr, m_name, md_ptr->m_ptr, MD_NONE);
-    msg_format(_("%s「ドヴ＠ーキン、やめろぉ！」", "%^s says, 'Dov@hkiin! No!!'"), m_name);
-}
-
 static void on_dead_dragon_centipede(PlayerType *player_ptr, monster_death_type *md_ptr)
 {
     if (player_ptr->current_floor_ptr->inside_arena || player_ptr->phase_out) {
@@ -353,21 +309,6 @@ static void on_dead_dragon_centipede(PlayerType *player_ptr, monster_death_type 
         msg_format(_("%sが再生した！", "The %s reproduced!"), m_name);
         sound(SOUND_SUMMON);
     }
-}
-
-/*!
- * @brief ビッグキューちゃん撃破時メッセージ
- * @todo 死亡時の特殊メッセージを表示するだけの処理を複数作るなら、switch/case文に分けられるように汎用化すること
- */
-static void on_dead_big_raven(PlayerType *player_ptr, monster_death_type *md_ptr)
-{
-    if (!is_seen(player_ptr, md_ptr->m_ptr)) {
-        return;
-    }
-
-    GAME_TEXT m_name[MAX_NLEN];
-    monster_desc(player_ptr, m_name, md_ptr->m_ptr, MD_NONE);
-    msg_format(_("%sはお星さまになった！", "%^s became a constellation!"), m_name);
 }
 
 /*
@@ -603,7 +544,7 @@ void switch_special_death(PlayerType *player_ptr, monster_death_type *md_ptr, At
         on_dead_dawn(player_ptr, md_ptr);
         return;
     case MonsterRaceId::UNMAKER:
-        on_dead_unmaker(player_ptr, md_ptr);
+        (void)project(player_ptr, md_ptr->m_idx, 6, md_ptr->md_y, md_ptr->md_x, 100, AttributeType::CHAOS, PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL);
         break;
     case MonsterRaceId::UNICORN_ORD:
     case MonsterRaceId::MORGOTH:
@@ -621,7 +562,7 @@ void switch_special_death(PlayerType *player_ptr, monster_death_type *md_ptr, At
         on_dead_can_angel(player_ptr, md_ptr);
         return;
     case MonsterRaceId::ROLENTO:
-        on_dead_rolento(player_ptr, md_ptr);
+        (void)project(player_ptr, md_ptr->m_idx, 3, md_ptr->md_y, md_ptr->md_x, damroll(20, 10), AttributeType::FIRE, PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL);
         return;
     case MonsterRaceId::MIDDLE_AQUA_FIRST:
     case MonsterRaceId::LARGE_AQUA_FIRST:
@@ -634,21 +575,12 @@ void switch_special_death(PlayerType *player_ptr, monster_death_type *md_ptr, At
     case MonsterRaceId::TOTEM_MOAI:
         on_dead_totem_moai(player_ptr, md_ptr);
         return;
-    case MonsterRaceId::DEMON_SLAYER_SENIOR:
-        on_dead_demon_slayer_senior(player_ptr, md_ptr);
-        return;
-    case MonsterRaceId::MIRMULNIR:
-        on_dead_mirmulnir(player_ptr, md_ptr);
-        return;
     case MonsterRaceId::DRAGON_CENTIPEDE:
     case MonsterRaceId::DRAGON_WORM:
         on_dead_dragon_centipede(player_ptr, md_ptr);
         return;
     case MonsterRaceId::CAIT_SITH:
         drop_specific_item_on_dead(player_ptr, md_ptr, kind_is_boots);
-        return;
-    case MonsterRaceId::BIG_RAVEN:
-        on_dead_big_raven(player_ptr, md_ptr);
         return;
     case MonsterRaceId::YENDOR_WIZARD_1:
         on_dead_random_artifact(player_ptr, md_ptr, kind_is_amulet);

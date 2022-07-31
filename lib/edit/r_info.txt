@@ -5564,8 +5564,6 @@ S:1_IN_3
 S:SPECIAL
 D:$An agent of supernatural beings, this creature looks like a 
 D:$huge eagle.
-#D:この生き物はなにか超自然的な存在の使いだ。 
-#D:そしてそれは大きな鷲のように見える。
 D:マンウェに遣わされた偉大な大鷲は人の言葉を話し、
 D:マイアールと同じ魂を持っていると言われる。
 D:この大鷲はその一族の一員である。
@@ -6432,8 +6430,6 @@ S:1_IN_2
 S:SPECIAL | S_KIN
 D:$An agent of supernatural beings, this creature looks like a 
 D:$huge eagle.
-#D:この生き物はなにか超自然的な存在の使いだ。 
-#D:そしてそれは大きな鷲のように見える。
 D:マンウェに遣わされた偉大な大鷲は人の言葉を話し、
 D:マイアールと同じ魂を持っていると言われる。
 D:メネルドールは一族の中でグワイヒアとその弟ランドローバルに継いで速く、
@@ -6896,8 +6892,6 @@ S:1_IN_2
 S:SPECIAL | S_KIN
 D:$An agent of supernatural beings, this creature looks like a 
 D:$huge eagle.
-#D:この生き物はなにか超自然的な存在の使いだ。 
-#D:そしてそれは大きな鷲のように見える。
 D:マンウェに遣わされた偉大な大鷲は人の言葉を話し、
 D:マイアールと同じ魂を持っていると言われる。
 D:グワイヒアは大鷲の王であり、一族の中で最も強く、速い。
@@ -8024,7 +8018,6 @@ F:ANIMAL | GOOD | RIDING
 S:1_IN_2
 S:SPECIAL | S_KIN
 D:$An agent of supernatural being, Thorondor is the lord of eagles.
-#D:ソロンドールは超自然的な存在の使いで、大鷲たちの王だ。
 D:マンウェに遣わされた偉大な大鷲は人の言葉を話し、
 D:マイアールと同じ魂を持っていると言われる。
 D:ソロンドールは全ての大鷲のうちで最初に現れた者であり、最強かつ最大の王だ。
@@ -8731,12 +8724,10 @@ B:SLASH:HURT:9d1
 B:SLASH:HURT:6d5
 B:SLASH:HURT:25d1
 B:SLASH:HURT:30d1
-#F:UNIQUE | MALE | WEIRD_MIND | SPEAK_ALL |
 F:UNIQUE | MALE | SPEAK_ALL | HUMAN |
 F:FORCE_MAXHP | WILD_ALL | DROP_CORPSE
 F:ONLY_ITEM | DROP_1D2 | DROP_GOOD |
 F:OPEN_DOOR | BASH_DOOR | 
-#F:TROLL | IM_COLD | IM_POIS
 F:IM_COLD | IM_POIS
 A:150:100
 
@@ -9238,8 +9229,6 @@ F:NO_CONF | NO_SLEEP | NO_FEAR | NONLIVING
 D:$It is a massive deep brown statue, striding towards you with an 
 D:$all-too-familiar purpose.  Your magic surprisingly feels much less 
 D:$powerful now.
-#D:それは深い茶色の堂々たる巨像で、みんなと仲良くしようと思って大股で歩み寄って
-#D:くる。このモンスターに対してはあまりの魔法の無力さに呆然とするであろう。
 D:それは深い茶色の堂々たる巨像で、誰にも明らかなありふれた目的
 D:――侵入者を殺す事！――を果たす為にあなたに向って大股で歩み寄ってくる。
 D:このモンスターに対してはあまりの魔法の無力さに呆然とするであろう。
@@ -9514,9 +9503,6 @@ S:BR_FORC
 D:$A deep brown shape is visible before you, its canine form strikes you with 
 D:$an almost physical force.  The dungeon floor buckles as if struck by a 
 D:$powerful blow as it stalks towards you.
-#D:深茶色の体をしたこの犬は精神的な力で冒険者を攻撃をしてくるが、
-#D:その力はあまりに強いためにほとんど物理的な力とかわりがない。
-#D:それが忍び寄ってくると、ダンジョンの床がまるで何かに叩かれたように歪む。
 D:深い褐色の何かの形が目の前に浮かんでいる。
 D:その犬のような形があなたに触れるとあたかも物体が当たったかのような衝撃を受ける。
 D:それが"歩く"時、ダンジョンの床がまるで強い打撃を受けたようにへこむのが見える。
@@ -16127,7 +16113,7 @@ F:DROP_60 | DROP_GOOD | POWERFUL | AURA_ELEC | AURA_FIRE | AURA_COLD |
 F:BASH_DOOR | IM_ELEC | IM_FIRE | IM_COLD | IM_POIS | IM_ACID |
 F:RES_LITE | RES_DARK | RES_WATE | RES_PLAS | RES_SHAR | RES_SOUN |
 F:RES_CHAO | RES_NEXU | RES_DISE | RES_WALL | RES_INER | RES_TIME | RES_GRAV |
-F:COLD_BLOOD | NONLIVING | RAND_50
+F:COLD_BLOOD | NONLIVING | RAND_50 | SPEAK_DEATH
 S:1_IN_5 | BR_CHAO
 D:$Summoned from the Courts of Chaos, it is a mass of sentient Logrus, 
 D:$spreading uncontrollably and destroying everything in its path.
@@ -20421,7 +20407,7 @@ F:MALE | FORCE_MAXHP | SPEAK_ALL | DROP_SKELETON | DROP_CORPSE
 F:NO_CONF | NO_SLEEP | NO_STUN | NO_FEAR | HAS_LITE_2 | HUMAN |
 F:RES_TELE | RAND_50 | ESCORT | IM_FIRE |
 F:ONLY_ITEM | DROP_1D2 | DROP_GOOD | UNIQUE |
-F:OPEN_DOOR | EVIL | BASH_DOOR | SMART
+F:OPEN_DOOR | EVIL | BASH_DOOR | SMART | SPEAK_DEATH
 V:166
 S:1_IN_3
 S:BA_FIRE | HASTE | SPECIAL
@@ -20968,6 +20954,7 @@ D:$ may be its favorite food.
 D:ディオが隠れ棲む館の門番であるこの鳥は犬が
 D:大好物なのかもしれない。
 
+#原稿が遅れるとやってくるワニ。
 N:1044:白ワニ
 E:White crocodile
 G:R:w
@@ -20983,7 +20970,6 @@ F:OPEN_DOOR | BASH_DOOR | CAN_SWIM |
 F:ANIMAL | IM_POIS | RES_WATE
 D:$This crocodile grew huge in the sewer. 
 D:$For him, an adventurer is only game.
-#D:原稿が遅れるとやってくるワニ。
 D:このワニは下水道の中で巨大に成長した。
 D:彼にとっては冒険者など獲物にすぎない。
 
@@ -21244,7 +21230,6 @@ W:0:255:0:0:0:0
 B:HIT:EAT_GOLD:1d3
 F:UNIQUE | MALE | SPEAK_ALL | UNDEAD |
 F:FORCE_MAXHP | DROP_CORPSE | WILD_TOWN | WILD_ONLY |
-#F:ONLY_ITEM | DROP_90 | DROP_GOOD | FRIENDLY |
 F:OPEN_DOOR | BASH_DOOR | 
 F:RES_NETH | NO_CONF | NO_SLEEP
 S:1_IN_4 |
@@ -21260,7 +21245,6 @@ W:0:255:0:0:0:0
 B:HIT:HURT:1d3
 F:UNIQUE | MALE | GIANT | SPEAK_ALL | HUMAN |
 F:FORCE_MAXHP | DROP_CORPSE | WILD_TOWN | WILD_ONLY
-#F:ONLY_ITEM | DROP_90 | DROP_GOOD | FRIENDLY |
 F:OPEN_DOOR | BASH_DOOR | HAS_LITE_1 |
 F:NO_CONF | NO_SLEEP
 D:$Brazen faced, this creature is more impudent than a normal troll.
@@ -21295,7 +21279,6 @@ B:HIT:HURT:25d1
 B:HIT:HURT:30d1
 F:UNIQUE | MALE | WEIRD_MIND | SPEAK_ALL |
 F:FORCE_MAXHP | WILD_ALL | DROP_CORPSE
-#F:ONLY_ITEM | DROP_1D2 | DROP_GOOD |
 F:OPEN_DOOR | BASH_DOOR | 
 F:TROLL | IM_COLD | IM_POIS
 D:$He who laughs at Groo's brains will find there is nothing to laugh 
@@ -23175,7 +23158,7 @@ B:SLASH:HURT:2d13
 B:HIT:HURT:2d15
 B:TOUCH:TERRIFY
 F:UNIQUE | FORCE_MAXHP | HUMAN | MALE | EVIL
-F:DROP_60 | DROP_90 | ONLY_ITEM | DROP_GOOD
+F:DROP_60 | DROP_90 | ONLY_ITEM | DROP_GOOD | SPEAK_DEATH
 S:1_IN_6 | S_KIN
 D:$A man without pride who hunts ogres just for money.
 D:$  This stupid man can not determine his enemy's ability.
@@ -23925,7 +23908,7 @@ B:CLAW:HURT:7d2
 B:BITE:HURT:8d2
 F:UNIQUE | FORCE_MAXHP | DROP_CORPSE | DROP_SKELETON | EVIL
 F:ONLY_ITEM | DROP_90 | DROP_1D2 | DROP_GOOD
-F:CAN_FLY | IM_FIRE | HURT_COLD
+F:SPEAK_DEATH | CAN_FLY | IM_FIRE | HURT_COLD
 F:BASH_DOOR | MOVE_BODY | DRAGON | NO_CONF | NO_SLEEP | RIDING
 S:1_IN_7 | SCARE | BR_FIRE | BA_FIRE
 D:$This dragon is the most loyal subordinate
@@ -25061,7 +25044,7 @@ B:CRUSH:SHATTER:7d12
 B:CRUSH:TERRIFY:7d12
 F:UNIQUE | FORCE_MAXHP | ANIMAL | POWERFUL | MOVE_BODY | EVIL
 F:NO_CONF | NO_SLEEP | NO_FEAR | IM_ELEC | RES_GRAV | BASH_DOOR
-F:DROP_GOOD | DROP_2D2 | ONLY_ITEM
+F:DROP_GOOD | DROP_2D2 | ONLY_ITEM | SPEAK_DEATH
 S:1_IN_6 | BA_ELEC | BR_GRAV | TELE_AWAY
 D:$It is very gentle when its head is stepped on,
 D:$ but it gets angry when a stake is driven into its ass.

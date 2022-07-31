@@ -26,6 +26,9 @@ says, 'My God, Please visit a punishment upon this unrighteous sinner!'
 N:780:Vlad Dracula, Prince of Darkness
 says, 'Faugh, I'll be back...so long as human psyche has a blackness. Ho-ho.'
 
+N:815:Unmaker
+sprinkled the remaining incense from Logrus!
+
 N:873:Combat-Echizen
 says shiftlessly, 'Oh. No.'
 
@@ -47,14 +50,26 @@ shouts, 'JuliaAAAAAAA!!!'
 N:1004:Pip, the Braver from Another World
 is killed by a cruel venturer. Go to 14.
 
+N:1013:Rolento
+blew himself up with grenades!
+
 N:1018:Raou
 points at himself and shouts, 'I finished my life with no regrets!'
 
 N:1063:lousy, the King of louses
 says, 'Ah, Hengband is too difficult!'
 
+N:1164:Senior, the nameless member of Demon Slayer Corps
+'s body is chopped into dice by your fighting spirit!
+
+N:1203:Mirmulnir, the vanguard of Alduin
+screams, 'Dov@hkiin! No!!'
+
 N:1240:Yamato, the sword master
 's editor says, 'Believe that Yamato's bravery will save the world...!  Thank you for reading!'
+
+N:1268:Raphael, the Big Raven
+became a constellation!
 
 N:1291:Diavolo
 says, 'Don't get close to me Ahhhhhhh!!!!!!'

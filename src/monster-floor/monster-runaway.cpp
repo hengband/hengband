@@ -27,16 +27,27 @@
 #include "view/display-messages.h"
 
 /*!
- * @brief HPが1/3未満になった有効的なユニークモンスターの逃走処理を行う
+ * @brief monspeak.txt において、発話ではなく行動のみが描写されているモンスターであるかを調べる
+ * @param r_idx モンスター種族ID
+ * @return 会話内容が行動のみのモンスターか否か
+ */
+static bool is_acting_monster(const MonsterRaceId r_idx)
+{
+    auto is_acting_monster = r_idx == MonsterRaceId::GRIP;
+    is_acting_monster |= r_idx == MonsterRaceId::WOLF;
+    is_acting_monster |= r_idx == MonsterRaceId::FANG;
+    return is_acting_monster;
+}
+
+/*!
+ * @brief HPが1/3未満になった友好的なユニークモンスターの逃走処理を行う
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param is_riding_mon 騎乗状態ならばTRUE
  * @param m_ptr モンスターへの参照ポインタ
  * @param m_name モンスター名称
- * @param see_m モンスターが視界内にいたらTRUE
  */
 static void escape_monster(PlayerType *player_ptr, turn_flags *turn_flags_ptr, monster_type *m_ptr, GAME_TEXT *m_name)
 {
-    auto *r_ptr = &r_info[m_ptr->r_idx];
     if (turn_flags_ptr->is_riding_mon) {
         msg_format(_("%sはあなたの束縛から脱出した。", "%^s succeeded to escape from your restriction!"), m_name);
         if (process_fall_off_horse(player_ptr, -1, false)) {
@@ -45,7 +56,17 @@ static void escape_monster(PlayerType *player_ptr, turn_flags *turn_flags_ptr, m
     }
 
     if (turn_flags_ptr->see_m) {
-        if ((r_ptr->speak_flags.has(MonsterSpeakType::SPEAK_ALL)) && (m_ptr->r_idx != MonsterRaceId::GRIP) && (m_ptr->r_idx != MonsterRaceId::WOLF) && (m_ptr->r_idx != MonsterRaceId::FANG) && player_has_los_bold(player_ptr, m_ptr->fy, m_ptr->fx) && projectable(player_ptr, m_ptr->fy, m_ptr->fx, player_ptr->y, player_ptr->x)) {
+        const auto flags = {
+            MonsterSpeakType::SPEAK_ALL,
+            MonsterSpeakType::SPEAK_BATTLE,
+            MonsterSpeakType::SPEAK_FEAR,
+        };
+
+        auto speak = r_info[m_ptr->r_idx].speak_flags.has_any_of(flags);
+        speak &= !is_acting_monster(m_ptr->r_idx);
+        speak &= player_has_los_bold(player_ptr, m_ptr->fy, m_ptr->fx);
+        speak &= projectable(player_ptr, m_ptr->fy, m_ptr->fx, player_ptr->y, player_ptr->x);
+        if (speak) {
             msg_format(_("%^s「ピンチだ！退却させてもらう！」", "%^s says 'It is the pinch! I will retreat'."), m_name);
         }
 
