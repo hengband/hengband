@@ -471,6 +471,36 @@ bool process_monster_movement(PlayerType *player_ptr, turn_flags *turn_flags_ptr
     return true;
 }
 
+static bool can_speak(const monster_race &ap_r_ref, MonsterSpeakType mon_speak_type)
+{
+    const auto can_speak_all = ap_r_ref.speak_flags.has(MonsterSpeakType::SPEAK_ALL);
+    const auto can_speak_specific = ap_r_ref.speak_flags.has(mon_speak_type);
+    return can_speak_all || can_speak_specific;
+}
+
+static std::string_view get_speak_filename(monster_type *m_ptr)
+{
+    const auto &ap_r_ref = r_info[m_ptr->ap_r_idx];
+    if (monster_fear_remaining(m_ptr) && can_speak(ap_r_ref, MonsterSpeakType::SPEAK_FEAR)) {
+        return _("monfear_j.txt", "monfear.txt");
+    }
+
+    constexpr auto monspeak_txt(_("monspeak_j.txt", "monspeak.txt"));
+    if (is_pet(m_ptr) && can_speak(ap_r_ref, MonsterSpeakType::SPEAK_BATTLE)) {
+        return monspeak_txt;
+    }
+
+    if (is_friendly(m_ptr) && can_speak(ap_r_ref, MonsterSpeakType::SPEAK_FRIEND)) {
+        return _("monfrien_j.txt", "monfrien.txt");
+    }
+
+    if (can_speak(ap_r_ref, MonsterSpeakType::SPEAK_BATTLE)) {
+        return monspeak_txt;
+    }
+
+    return "";
+}
+
 /*!
  * @brief モンスターを喋らせたり足音を立てたりする
  * @param player_ptr プレイヤーへの参照ポインタ
@@ -486,7 +516,6 @@ void process_speak_sound(PlayerType *player_ptr, MONSTER_IDX m_idx, POSITION oy,
     }
 
     auto *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
-    monster_race *ap_r_ptr = &r_info[m_ptr->ap_r_idx];
     if (m_ptr->ap_r_idx == MonsterRaceId::CYBER && one_in_(CYBERNOISE) && !m_ptr->ml && (m_ptr->cdis <= MAX_SIGHT)) {
         if (disturb_minor) {
             disturb(player_ptr, false, false);
@@ -494,31 +523,25 @@ void process_speak_sound(PlayerType *player_ptr, MONSTER_IDX m_idx, POSITION oy,
         msg_print(_("重厚な足音が聞こえた。", "You hear heavy steps."));
     }
 
-    if ((ap_r_ptr->speak_flags.has_not(MonsterSpeakType::SPEAK_ALL)) || !aware || !one_in_(SPEAK_CHANCE) || !player_has_los_bold(player_ptr, oy, ox) || !projectable(player_ptr, oy, ox, player_ptr->y, player_ptr->x)) {
+    auto can_speak = r_info[m_ptr->ap_r_idx].speak_flags.any();
+    if (!can_speak || !aware || !one_in_(SPEAK_CHANCE) || !player_has_los_bold(player_ptr, oy, ox) || !projectable(player_ptr, oy, ox, player_ptr->y, player_ptr->x)) {
         return;
     }
 
     GAME_TEXT m_name[MAX_NLEN];
     char monmessage[1024];
-    concptr filename;
-
     if (m_ptr->ml) {
         monster_desc(player_ptr, m_name, m_ptr, 0);
     } else {
         strcpy(m_name, _("それ", "It"));
     }
 
-    if (monster_fear_remaining(m_ptr)) {
-        filename = _("monfear_j.txt", "monfear.txt");
-    } else if (is_pet(m_ptr)) {
-        filename = _("monpet_j.txt", "monpet.txt");
-    } else if (is_friendly(m_ptr)) {
-        filename = _("monfrien_j.txt", "monfrien.txt");
-    } else {
-        filename = _("monspeak_j.txt", "monspeak.txt");
+    auto filename = get_speak_filename(m_ptr);
+    if (filename.empty()) {
+        return;
     }
 
-    if (get_rnd_line(filename, enum2i(m_ptr->ap_r_idx), monmessage) == 0) {
+    if (get_rnd_line(filename.data(), enum2i(m_ptr->ap_r_idx), monmessage) == 0) {
         msg_format(_("%^s%s", "%^s %s"), m_name, monmessage);
     }
 }
