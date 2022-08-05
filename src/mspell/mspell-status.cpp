@@ -543,7 +543,7 @@ MonsterSpellResult spell_RF5_SLOW(MONSTER_IDX m_idx, PlayerType *player_ptr, MON
         spell_badstatus_message_to_player(player_ptr, m_idx, msg, resist, saving_throw);
 
         if (!resist && !saving_throw) {
-            (void)BadStatusSetter(player_ptr).mod_slowness(randint0(4) + 4, false);
+            (void)BadStatusSetter(player_ptr).mod_deceleration(randint0(4) + 4, false);
         }
 
         update_smart_learn(player_ptr, m_idx, DRS_FREE);

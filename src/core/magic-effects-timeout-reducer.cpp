@@ -150,7 +150,7 @@ void reduce_magic_effects_timeout(PlayerType *player_ptr)
     }
 
     if (effects->deceleration()->is_slow()) {
-        (void)bss.mod_slowness(-1, true);
+        (void)bss.mod_deceleration(-1, true);
     }
 
     if (player_ptr->protevil) {

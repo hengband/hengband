@@ -239,12 +239,12 @@ void process_world_aux_mutation(PlayerType *player_ptr)
             if (player_ptr->effects()->acceleration()->is_fast()) {
                 set_acceleration(player_ptr, 0, true);
             } else {
-                (void)bss.slowness(randint1(30) + 10, false);
+                (void)bss.set_deceleration(randint1(30) + 10, false);
             }
         } else {
             msg_print(_("精力的になった気がする。", "You feel more energetic."));
             if (player_ptr->effects()->deceleration()->is_slow()) {
-                (void)bss.slowness(0, true);
+                (void)bss.set_deceleration(0, true);
             } else {
                 set_acceleration(player_ptr, randint1(30) + 10, false);
             }

@@ -388,7 +388,7 @@ bool BadStatusSetter::mod_hallucination(const TIME_EFFECT tmp_v)
  * @param do_dec 現在の継続時間より長い値のみ上書きする
  * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
  */
-bool BadStatusSetter::slowness(const TIME_EFFECT tmp_v, bool do_dec)
+bool BadStatusSetter::set_deceleration(const TIME_EFFECT tmp_v, bool do_dec)
 {
     auto notice = false;
     auto v = std::clamp<short>(tmp_v, 0, 10000);
@@ -428,9 +428,9 @@ bool BadStatusSetter::slowness(const TIME_EFFECT tmp_v, bool do_dec)
     return true;
 }
 
-bool BadStatusSetter::mod_slowness(const TIME_EFFECT tmp_v, bool do_dec)
+bool BadStatusSetter::mod_deceleration(const TIME_EFFECT tmp_v, bool do_dec)
 {
-    return this->slowness(this->player_ptr->effects()->deceleration()->current() + tmp_v, do_dec);
+    return this->set_deceleration(this->player_ptr->effects()->deceleration()->current() + tmp_v, do_dec);
 }
 
 /*!
