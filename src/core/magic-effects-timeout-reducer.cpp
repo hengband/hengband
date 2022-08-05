@@ -20,6 +20,7 @@
 #include "timed-effect/player-acceleration.h"
 #include "timed-effect/player-confusion.h"
 #include "timed-effect/player-cut.h"
+#include "timed-effect/player-deceleration.h"
 #include "timed-effect/player-fear.h"
 #include "timed-effect/player-hallucination.h"
 #include "timed-effect/player-paralysis.h"
@@ -148,7 +149,7 @@ void reduce_magic_effects_timeout(PlayerType *player_ptr)
         (void)mod_acceleration(player_ptr, -1, true);
     }
 
-    if (player_ptr->slow) {
+    if (effects->deceleration()->is_slow()) {
         (void)bss.mod_slowness(-1, true);
     }
 

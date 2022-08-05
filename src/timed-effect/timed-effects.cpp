@@ -1,7 +1,14 @@
-﻿#include "timed-effect/timed-effects.h"
+﻿/*!
+ * @brief プレイヤーの時限効果を表すオブジェクト群を保持する
+ * @date 2022/08/05
+ * @author Hourier
+ */
+
+#include "timed-effect/timed-effects.h"
 #include "timed-effect/player-acceleration.h"
 #include "timed-effect/player-confusion.h"
 #include "timed-effect/player-cut.h"
+#include "timed-effect/player-deceleration.h"
 #include "timed-effect/player-fear.h"
 #include "timed-effect/player-hallucination.h"
 #include "timed-effect/player-paralysis.h"
@@ -15,6 +22,7 @@ TimedEffects::TimedEffects()
     , player_paralysis(std::make_shared<PlayerParalysis>())
     , player_stun(std::make_shared<PlayerStun>())
     , player_acceleration(std::make_shared<PlayerAcceleration>())
+    , player_deceleration(std::make_shared<PlayerDeceleration>())
 {
 }
 
@@ -51,4 +59,9 @@ std::shared_ptr<PlayerStun> TimedEffects::stun() const
 std::shared_ptr<PlayerAcceleration> TimedEffects::acceleration() const
 {
     return this->player_acceleration;
+}
+
+std::shared_ptr<PlayerDeceleration> TimedEffects::deceleration() const
+{
+    return this->player_deceleration;
 }

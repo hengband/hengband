@@ -22,6 +22,7 @@
 #include "timed-effect/player-acceleration.h"
 #include "timed-effect/player-confusion.h"
 #include "timed-effect/player-cut.h"
+#include "timed-effect/player-deceleration.h"
 #include "timed-effect/player-fear.h"
 #include "timed-effect/player-hallucination.h"
 #include "timed-effect/player-paralysis.h"
@@ -37,7 +38,7 @@ void reset_tim_flags(PlayerType *player_ptr)
     auto effects = player_ptr->effects();
     effects->acceleration()->reset();
     player_ptr->lightspeed = 0;
-    player_ptr->slow = 0; /* Timed -- Slow */
+    effects->deceleration()->reset();
     player_ptr->blind = 0; /* Timed -- Blindness */
     effects->paralysis()->reset();
     effects->confusion()->reset();
