@@ -1,4 +1,11 @@
-﻿#include "timed-effect/player-acceleration.h"
+﻿/*!
+ * @brief プレイヤーの一時加速ステータス変更と判定
+ * @date 2022/08/15
+ * @author Hourier
+ */
+
+#include "timed-effect/player-acceleration.h"
+#include <stdexcept>
 
 short PlayerAcceleration::current() const
 {
@@ -12,12 +19,11 @@ bool PlayerAcceleration::is_fast() const
 
 void PlayerAcceleration::set(short value)
 {
-    this->acceleration = value;
-}
+    if (value < 0) {
+        throw std::invalid_argument("Negative value can't be set in the player's acceleration parameter!");
+    }
 
-void PlayerAcceleration::add(short value)
-{
-    this->acceleration += value;
+    this->acceleration = value;
 }
 
 void PlayerAcceleration::reset()

@@ -24,6 +24,8 @@
 #include "system/object-type-definition.h"
 #include "system/player-type-definition.h"
 #include "term/term-color-types.h"
+#include "timed-effect/player-deceleration.h"
+#include "timed-effect/timed-effects.h"
 #include "view/display-util.h"
 #include "view/status-first-page.h"
 #include "world/world.h"
@@ -178,7 +180,7 @@ static int calc_temporary_speed(PlayerType *player_ptr)
         if (is_fast(player_ptr)) {
             tmp_speed += 10;
         }
-        if (player_ptr->slow) {
+        if (player_ptr->effects()->deceleration()->is_slow()) {
             tmp_speed -= 10;
         }
         if (player_ptr->lightspeed) {

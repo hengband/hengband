@@ -2457,6 +2457,9 @@
     <ClCompile Include="..\..\src\timed-effect\player-acceleration.cpp">
       <Filter>timed-effect</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\timed-effect\player-deceleration.cpp">
+      <Filter>timed-effect</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\combat\shoot.h">
@@ -5342,6 +5345,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\monster-race\race-speak-flags.h">
       <Filter>monster-race</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\timed-effect\player-deceleration.h">
+      <Filter>timed-effect</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

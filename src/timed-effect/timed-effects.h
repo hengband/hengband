@@ -4,6 +4,7 @@
 
 class PlayerAcceleration;
 class PlayerConfusion;
+class PlayerDeceleration;
 class PlayerFear;
 class PlayerHallucination;
 class PlayerParalysis;
@@ -21,6 +22,7 @@ public:
     std::shared_ptr<PlayerParalysis> paralysis() const;
     std::shared_ptr<PlayerStun> stun() const;
     std::shared_ptr<PlayerAcceleration> acceleration() const;
+    std::shared_ptr<PlayerDeceleration> deceleration() const;
 
 private:
     std::shared_ptr<PlayerConfusion> player_confusion;
@@ -30,4 +32,5 @@ private:
     std::shared_ptr<PlayerParalysis> player_paralysis;
     std::shared_ptr<PlayerStun> player_stun;
     std::shared_ptr<PlayerAcceleration> player_acceleration;
+    std::shared_ptr<PlayerDeceleration> player_deceleration;
 };

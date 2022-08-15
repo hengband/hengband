@@ -312,7 +312,7 @@ static void calc_blow_inertia(PlayerType *player_ptr, MonsterAttackPlayer *monap
         return;
     }
 
-    if (BadStatusSetter(player_ptr).mod_slowness(4 + randint0(monap_ptr->rlev / 10), false)) {
+    if (BadStatusSetter(player_ptr).mod_deceleration(4 + randint0(monap_ptr->rlev / 10), false)) {
         monap_ptr->obvious = true;
     }
 }
