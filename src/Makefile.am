@@ -948,6 +948,7 @@ hengband_SOURCES = \
 	timed-effect/player-fear.cpp timed-effect/player-fear.h \
 	timed-effect/player-hallucination.cpp timed-effect/player-hallucination.h \
 	timed-effect/player-paralysis.cpp timed-effect/player-paralysis.h \
+	timed-effect/player-poison.cpp timed-effect/player-poison.h \
 	timed-effect/player-stun.cpp timed-effect/player-stun.h \
 	timed-effect/timed-effects.cpp timed-effect/timed-effects.h \
 	\
