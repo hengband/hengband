@@ -28,6 +28,7 @@
 #include "timed-effect/player-fear.h"
 #include "timed-effect/player-hallucination.h"
 #include "timed-effect/player-paralysis.h"
+#include "timed-effect/player-poison.h"
 #include "timed-effect/player-stun.h"
 #include "timed-effect/timed-effects.h"
 #include "view/status-bars-table.h"
@@ -481,7 +482,7 @@ void print_status(PlayerType *player_ptr)
         ADD_BAR_FLAG(BAR_CONFUSE);
     }
 
-    if (player_ptr->poisoned) {
+    if (effects->poison()->is_poisoned()) {
         ADD_BAR_FLAG(BAR_POISONED);
     }
 

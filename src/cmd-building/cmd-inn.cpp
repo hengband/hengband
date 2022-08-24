@@ -16,6 +16,7 @@
 #include "store/rumor.h"
 #include "system/player-type-definition.h"
 #include "timed-effect/player-cut.h"
+#include "timed-effect/player-poison.h"
 #include "timed-effect/player-stun.h"
 #include "timed-effect/timed-effects.h"
 #include "view/display-messages.h"
@@ -45,7 +46,8 @@ static bool buy_food(PlayerType *player_ptr)
  */
 static bool is_healthy_stay(PlayerType *player_ptr)
 {
-    if (!player_ptr->poisoned && !player_ptr->effects()->cut()->is_cut()) {
+    const auto effects = player_ptr->effects();
+    if (!effects->poison()->is_poisoned() && !effects->cut()->is_cut()) {
         return true;
     }
 

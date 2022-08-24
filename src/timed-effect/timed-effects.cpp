@@ -12,6 +12,7 @@
 #include "timed-effect/player-fear.h"
 #include "timed-effect/player-hallucination.h"
 #include "timed-effect/player-paralysis.h"
+#include "timed-effect/player-poison.h"
 #include "timed-effect/player-stun.h"
 
 TimedEffects::TimedEffects()
@@ -23,6 +24,7 @@ TimedEffects::TimedEffects()
     , player_stun(std::make_shared<PlayerStun>())
     , player_acceleration(std::make_shared<PlayerAcceleration>())
     , player_deceleration(std::make_shared<PlayerDeceleration>())
+    , player_poison(std::make_shared<PlayerPoison>())
 {
 }
 
@@ -64,4 +66,9 @@ std::shared_ptr<PlayerAcceleration> TimedEffects::acceleration() const
 std::shared_ptr<PlayerDeceleration> TimedEffects::deceleration() const
 {
     return this->player_deceleration;
+}
+
+std::shared_ptr<PlayerPoison> TimedEffects::poison() const
+{
+    return this->player_poison;
 }

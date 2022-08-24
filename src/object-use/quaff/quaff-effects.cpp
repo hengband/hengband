@@ -38,6 +38,7 @@
 #include "system/object-type-definition.h"
 #include "system/player-type-definition.h"
 #include "timed-effect/player-acceleration.h"
+#include "timed-effect/player-poison.h"
 #include "timed-effect/timed-effects.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
@@ -103,8 +104,10 @@ bool QuaffEffects::influence(const ObjectType &o_ref)
         return set_tim_infra(this->player_ptr, this->player_ptr->tim_infra + 100 + randint1(100), false);
     case SV_POTION_DETECT_INVIS:
         return set_tim_invis(this->player_ptr, this->player_ptr->tim_invis + 12 + randint1(12), false);
-    case SV_POTION_SLOW_POISON:
-        return BadStatusSetter(this->player_ptr).poison(this->player_ptr->poisoned / 2);
+    case SV_POTION_SLOW_POISON: {
+        const auto player_poison = this->player_ptr->effects()->poison();
+        return BadStatusSetter(this->player_ptr).poison(player_poison->current() / 2);
+    }
     case SV_POTION_CURE_POISON:
         return BadStatusSetter(this->player_ptr).poison(0);
     case SV_POTION_BOLDNESS:
