@@ -178,7 +178,7 @@ concptr do_life_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessType 
         }
 
         if (cast) {
-            (void)BadStatusSetter(player_ptr).poison(0);
+            (void)BadStatusSetter(player_ptr).set_poison(0);
         }
 
         break;

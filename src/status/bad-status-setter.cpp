@@ -182,7 +182,7 @@ bool BadStatusSetter::mod_confusion(const TIME_EFFECT tmp_v)
  * @param v 継続時間
  * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
  */
-bool BadStatusSetter::poison(const TIME_EFFECT tmp_v)
+bool BadStatusSetter::set_poison(const TIME_EFFECT tmp_v)
 {
     auto notice = false;
     auto v = std::clamp<short>(tmp_v, 0, 10000);
@@ -220,7 +220,7 @@ bool BadStatusSetter::poison(const TIME_EFFECT tmp_v)
 
 bool BadStatusSetter::mod_poison(const TIME_EFFECT tmp_v)
 {
-    return this->poison(this->player_ptr->effects()->poison()->current() + tmp_v);
+    return this->set_poison(this->player_ptr->effects()->poison()->current() + tmp_v);
 }
 
 /*!

@@ -103,7 +103,7 @@ bool exe_eat_food_type_object(PlayerType *player_ptr, ObjectType *o_ptr)
         (void)do_dec_stat(player_ptr, A_STR);
         return true;
     case SV_FOOD_CURE_POISON:
-        return bss.poison(0);
+        return bss.set_poison(0);
     case SV_FOOD_CURE_BLINDNESS:
         return bss.blindness(0);
     case SV_FOOD_CURE_PARANOIA:
@@ -132,7 +132,7 @@ bool exe_eat_food_type_object(PlayerType *player_ptr, ObjectType *o_ptr)
         return true;
     case SV_FOOD_WAYBREAD:
         msg_print(_("これはひじょうに美味だ。", "That tastes very good."));
-        (void)bss.poison(0);
+        (void)bss.set_poison(0);
         (void)hp_player(player_ptr, damroll(4, 8));
         return true;
     case SV_FOOD_PINT_OF_ALE:

@@ -106,10 +106,10 @@ bool QuaffEffects::influence(const ObjectType &o_ref)
         return set_tim_invis(this->player_ptr, this->player_ptr->tim_invis + 12 + randint1(12), false);
     case SV_POTION_SLOW_POISON: {
         const auto player_poison = this->player_ptr->effects()->poison();
-        return BadStatusSetter(this->player_ptr).poison(player_poison->current() / 2);
+        return BadStatusSetter(this->player_ptr).set_poison(player_poison->current() / 2);
     }
     case SV_POTION_CURE_POISON:
-        return BadStatusSetter(this->player_ptr).poison(0);
+        return BadStatusSetter(this->player_ptr).set_poison(0);
     case SV_POTION_BOLDNESS:
         return BadStatusSetter(this->player_ptr).fear(0);
     case SV_POTION_SPEED:
@@ -216,7 +216,7 @@ bool QuaffEffects::salt_water()
     }
 
     BadStatusSetter bss(this->player_ptr);
-    (void)bss.poison(0);
+    (void)bss.set_poison(0);
     (void)bss.mod_paralysis(4);
     return true;
 }
