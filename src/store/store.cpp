@@ -1,12 +1,7 @@
 ﻿/*!
  * @brief 店の処理 / Store commands
- * @date 2014/02/02
- * @author
- * Copyright (c) 1989 James E. Wilson, Robert A. Koeneke\n
- * This software may be copied and distributed for educational, research, and\n
- * not for profit purposes provided that this copyright and statement are\n
- * included in all such copies.\n
- * 2014 Deskull rearranged comment for Doxygen.
+ * @date 2022/03/26
+ * @author Hourier
  */
 
 #include "store/store.h"
@@ -18,20 +13,27 @@
 #include "io/command-repeater.h"
 #include "locale/japanese.h"
 #include "main/sound-of-music.h"
+#include "object-enchant/item-apply-magic.h"
+#include "object-enchant/item-magic-applier.h"
 #include "object-enchant/special-object-flags.h"
 #include "object/object-stack.h"
+#include "object/object-value.h"
+#include "object/tval-types.h"
 #include "perception/identification.h"
 #include "perception/object-perception.h"
 #include "store/black-market.h"
 #include "store/service-checker.h"
 #include "store/store-owners.h"
 #include "store/store-util.h"
+#include "sv-definition/sv-lite-types.h"
+#include "sv-definition/sv-scroll-types.h"
 #include "system/object-type-definition.h"
 #include "system/player-type-definition.h"
 #include "term/screen-processor.h"
 #include "util/int-char-converter.h"
 #include "util/quarks.h"
 #include "view/display-messages.h"
+#include "world/world-object.h"
 
 int store_top = 0;
 int store_bottom = 0;
@@ -300,6 +302,92 @@ void store_shuffle(PlayerType *player_ptr, StoreSaleType store_num)
 }
 
 /*!
+ * @brief 店舗の品揃え変化のためにアイテムを追加する /
+ * Creates a random item and gives it to a store
+ * @param player_ptr プレイヤーへの参照ポインタ
+ * @details
+ * <pre>
+ * This algorithm needs to be rethought.  A lot.
+ * Currently, "normal" stores use a pre-built array.
+ * Note -- the "level" given to "obj_get_num()" is a "favored"
+ * level, that is, there is a much higher chance of getting
+ * items with a level approaching that of the given level...
+ * Should we check for "permission" to have the given item?
+ * </pre>
+ */
+static void store_create(PlayerType *player_ptr, KIND_OBJECT_IDX fix_k_idx, StoreSaleType store_num)
+{
+    if (st_ptr->stock_num >= st_ptr->stock_size) {
+        return;
+    }
+
+    const owner_type *ow_ptr = &owners.at(store_num)[st_ptr->owner];
+
+    for (int tries = 0; tries < 4; tries++) {
+        KIND_OBJECT_IDX k_idx;
+        DEPTH level;
+        if (store_num == StoreSaleType::BLACK) {
+            level = 25 + randint0(25);
+            k_idx = get_obj_num(player_ptr, level, 0x00000000);
+            if (k_idx == 0) {
+                continue;
+            }
+        } else if (fix_k_idx > 0) {
+            k_idx = fix_k_idx;
+            level = rand_range(1, ow_ptr->level);
+        } else {
+            k_idx = st_ptr->table[randint0(st_ptr->table.size())];
+            level = rand_range(1, ow_ptr->level);
+        }
+
+        ObjectType forge;
+        ObjectType *q_ptr;
+        q_ptr = &forge;
+        q_ptr->prep(k_idx);
+        ItemMagicApplier(player_ptr, q_ptr, level, AM_NO_FIXED_ART).execute();
+        if (!store_will_buy(player_ptr, q_ptr, store_num)) {
+            continue;
+        }
+
+        auto pvals = store_same_magic_device_pvals(q_ptr);
+        if (pvals.size() >= 2) {
+            auto pval = pvals.at(randint0(pvals.size()));
+            q_ptr->pval = pval;
+        }
+
+        if (q_ptr->tval == ItemKindType::LITE) {
+            if (q_ptr->sval == SV_LITE_TORCH) {
+                q_ptr->fuel = FUEL_TORCH / 2;
+            }
+
+            if (q_ptr->sval == SV_LITE_LANTERN) {
+                q_ptr->fuel = FUEL_LAMP / 2;
+            }
+        }
+
+        object_known(q_ptr);
+        q_ptr->ident |= IDENT_STORE;
+        if (q_ptr->tval == ItemKindType::CHEST) {
+            continue;
+        }
+
+        if (store_num == StoreSaleType::BLACK) {
+            if (black_market_crap(player_ptr, q_ptr) || (object_value(q_ptr) < 10)) {
+                continue;
+            }
+        } else {
+            if (object_value(q_ptr) <= 0) {
+                continue;
+            }
+        }
+
+        mass_produce(player_ptr, q_ptr, store_num);
+        (void)store_carry(q_ptr);
+        break;
+    }
+}
+
+/*!
  * @brief 店の品揃えを変化させる /
  * Maintain the inventory at the stores.
  * @param player_ptr プレイヤーへの参照ポインタ
@@ -367,14 +455,14 @@ void store_maintenance(PlayerType *player_ptr, int town_num, StoreSaleType store
     }
 
     for (size_t k = 0; k < st_ptr->regular.size(); k++) {
-        store_create(player_ptr, st_ptr->regular[k], black_market_crap, store_will_buy, mass_produce, store_num);
+        store_create(player_ptr, st_ptr->regular[k], store_num);
         if (st_ptr->stock_num >= STORE_MAX_KEEP) {
             break;
         }
     }
 
     while (st_ptr->stock_num < j) {
-        store_create(player_ptr, 0, black_market_crap, store_will_buy, mass_produce, store_num);
+        store_create(player_ptr, 0, store_num);
     }
 }
 

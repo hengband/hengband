@@ -5,18 +5,11 @@
  */
 
 #include "store/store-util.h"
-#include "object-enchant/item-apply-magic.h"
 #include "object-enchant/item-feeling.h"
-#include "object-enchant/item-magic-applier.h"
 #include "object-enchant/special-object-flags.h"
 #include "object/object-kind.h"
 #include "object/object-value.h"
-#include "perception/object-perception.h"
-#include "store/store-owners.h"
-#include "sv-definition/sv-lite-types.h"
-#include "sv-definition/sv-scroll-types.h"
 #include "system/object-type-definition.h"
-#include "world/world-object.h"
 
 store_type *st_ptr = nullptr;
 
@@ -102,7 +95,7 @@ void store_delete(void)
  * @details
  * 回数の違う杖と魔法棒がスロットを圧迫するのでスロット数制限をかける
  */
-static std::vector<PARAMETER_VALUE> store_same_magic_device_pvals(ObjectType *j_ptr)
+std::vector<PARAMETER_VALUE> store_same_magic_device_pvals(ObjectType *j_ptr)
 {
     auto list = std::vector<PARAMETER_VALUE>();
     for (INVENTORY_IDX i = 0; i < st_ptr->stock_num; i++) {
@@ -119,93 +112,6 @@ static std::vector<PARAMETER_VALUE> store_same_magic_device_pvals(ObjectType *j_
         list.push_back(o_ptr->pval);
     }
     return list;
-}
-
-/*!
- * @brief 店舗の品揃え変化のためにアイテムを追加する /
- * Creates a random item and gives it to a store
- * @param player_ptr プレイヤーへの参照ポインタ
- * @details
- * <pre>
- * This algorithm needs to be rethought.  A lot.
- * Currently, "normal" stores use a pre-built array.
- * Note -- the "level" given to "obj_get_num()" is a "favored"
- * level, that is, there is a much higher chance of getting
- * items with a level approaching that of the given level...
- * Should we check for "permission" to have the given item?
- * </pre>
- */
-void store_create(
-    PlayerType *player_ptr, KIND_OBJECT_IDX fix_k_idx, black_market_crap_pf black_market_crap, store_will_buy_pf store_will_buy, mass_produce_pf mass_produce, StoreSaleType store_num)
-{
-    if (st_ptr->stock_num >= st_ptr->stock_size) {
-        return;
-    }
-
-    const owner_type *ow_ptr = &owners.at(store_num)[st_ptr->owner];
-
-    for (int tries = 0; tries < 4; tries++) {
-        KIND_OBJECT_IDX k_idx;
-        DEPTH level;
-        if (store_num == StoreSaleType::BLACK) {
-            level = 25 + randint0(25);
-            k_idx = get_obj_num(player_ptr, level, 0x00000000);
-            if (k_idx == 0) {
-                continue;
-            }
-        } else if (fix_k_idx > 0) {
-            k_idx = fix_k_idx;
-            level = rand_range(1, ow_ptr->level);
-        } else {
-            k_idx = st_ptr->table[randint0(st_ptr->table.size())];
-            level = rand_range(1, ow_ptr->level);
-        }
-
-        ObjectType forge;
-        ObjectType *q_ptr;
-        q_ptr = &forge;
-        q_ptr->prep(k_idx);
-        ItemMagicApplier(player_ptr, q_ptr, level, AM_NO_FIXED_ART).execute();
-        if (!(*store_will_buy)(player_ptr, q_ptr, store_num)) {
-            continue;
-        }
-
-        auto pvals = store_same_magic_device_pvals(q_ptr);
-        if (pvals.size() >= 2) {
-            auto pval = pvals.at(randint0(pvals.size()));
-            q_ptr->pval = pval;
-        }
-
-        if (q_ptr->tval == ItemKindType::LITE) {
-            if (q_ptr->sval == SV_LITE_TORCH) {
-                q_ptr->fuel = FUEL_TORCH / 2;
-            }
-
-            if (q_ptr->sval == SV_LITE_LANTERN) {
-                q_ptr->fuel = FUEL_LAMP / 2;
-            }
-        }
-
-        object_known(q_ptr);
-        q_ptr->ident |= IDENT_STORE;
-        if (q_ptr->tval == ItemKindType::CHEST) {
-            continue;
-        }
-
-        if (store_num == StoreSaleType::BLACK) {
-            if (black_market_crap(player_ptr, q_ptr) || (object_value(q_ptr) < 10)) {
-                continue;
-            }
-        } else {
-            if (object_value(q_ptr) <= 0) {
-                continue;
-            }
-        }
-
-        mass_produce(player_ptr, q_ptr, store_num);
-        (void)store_carry(q_ptr);
-        break;
-    }
 }
 
 /*!
