@@ -1,0 +1,3 @@
+[submodule "lib/xtra"]
+	path = lib/xtra
+	url = https://github.com/hengband/hengband.xtra
