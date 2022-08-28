@@ -28,6 +28,8 @@
 #include "system/monster-type-definition.h"
 #include "system/object-type-definition.h"
 #include "system/player-type-definition.h"
+#include "timed-effect/player-deceleration.h"
+#include "timed-effect/timed-effects.h"
 #include "util/bit-flags-calculator.h"
 
 PlayerSpeed::PlayerSpeed(PlayerType *player_ptr)
@@ -189,7 +191,7 @@ int16_t PlayerSpeed::time_effect_bonus()
         bonus += 10;
     }
 
-    if (this->player_ptr->slow) {
+    if (this->player_ptr->effects()->deceleration()->is_slow()) {
         bonus -= 10;
     }
 

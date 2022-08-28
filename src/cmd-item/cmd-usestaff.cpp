@@ -72,7 +72,7 @@ int staff_effect(PlayerType *player_ptr, OBJECT_SUBTYPE_VALUE sval, bool *use_ch
 
         break;
     case SV_STAFF_SLOWNESS: {
-        if (bss.mod_slowness(randint1(30) + 15, false)) {
+        if (bss.mod_deceleration(randint1(30) + 15, false)) {
             ident = true;
         }
         break;

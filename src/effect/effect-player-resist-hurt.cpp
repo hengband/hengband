@@ -395,7 +395,7 @@ void effect_player_inertial(PlayerType *player_ptr, EffectPlayerType *ep_ptr)
     }
 
     if (!check_multishadow(player_ptr)) {
-        (void)BadStatusSetter(player_ptr).mod_slowness(randint0(4) + 4, false);
+        (void)BadStatusSetter(player_ptr).mod_deceleration(randint0(4) + 4, false);
     }
 
     ep_ptr->get_damage = take_hit(player_ptr, DAMAGE_ATTACK, ep_ptr->dam, ep_ptr->killer);
@@ -572,7 +572,7 @@ void effect_player_gravity(PlayerType *player_ptr, EffectPlayerType *ep_ptr)
         teleport_player(player_ptr, 5, TELEPORT_PASSIVE);
         BadStatusSetter bss(player_ptr);
         if (!player_ptr->levitation) {
-            (void)bss.mod_slowness(randint0(4) + 4, false);
+            (void)bss.mod_deceleration(randint0(4) + 4, false);
         }
 
         if (!(has_resist_sound(player_ptr) || player_ptr->levitation)) {
@@ -692,7 +692,7 @@ void effect_player_void(PlayerType *player_ptr, EffectPlayerType *ep_ptr)
                                         : _("周辺の空間が歪んだ。", "Sight warps around you.");
     msg_print(effect_mes);
     if (!check_multishadow(player_ptr) && !player_ptr->levitation && !player_ptr->anti_tele) {
-        (void)BadStatusSetter(player_ptr).mod_slowness(randint0(4) + 4, false);
+        (void)BadStatusSetter(player_ptr).mod_deceleration(randint0(4) + 4, false);
     }
 
     ep_ptr->dam = ep_ptr->dam * calc_void_damage_rate(player_ptr, CALC_RAND) / 100;
@@ -714,7 +714,7 @@ void effect_player_abyss(PlayerType *player_ptr, EffectPlayerType *ep_ptr)
     }
 
     if (!player_ptr->levitation) {
-        (void)bss.mod_slowness(randint0(4) + 4, false);
+        (void)bss.mod_deceleration(randint0(4) + 4, false);
     }
 
     if (player_ptr->blind) {

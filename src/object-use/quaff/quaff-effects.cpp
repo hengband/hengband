@@ -67,7 +67,7 @@ bool QuaffEffects::influence(const ObjectType &o_ref)
         msg_print(_("のどの渇きが少しおさまった。", "You feel less thirsty."));
         return true;
     case SV_POTION_SLOWNESS:
-        return BadStatusSetter(this->player_ptr).slowness(randint1(25) + 15, false);
+        return BadStatusSetter(this->player_ptr).set_deceleration(randint1(25) + 15, false);
     case SV_POTION_SALT_WATER:
         return this->salt_water();
     case SV_POTION_POISON:

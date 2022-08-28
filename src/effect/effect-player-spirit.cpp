@@ -135,7 +135,7 @@ void effect_player_brain_smash(PlayerType *player_ptr, EffectPlayerType *ep_ptr)
         (void)bss.mod_paralysis(randint0(4) + 4);
     }
 
-    (void)bss.mod_slowness(randint0(4) + 4, false);
+    (void)bss.mod_deceleration(randint0(4) + 4, false);
 
     while (randint0(100 + ep_ptr->rlev / 2) > (std::max<short>(5, player_ptr->skill_sav))) {
         (void)do_dec_stat(player_ptr, A_INT);

@@ -21,6 +21,7 @@
 #include "system/player-type-definition.h"
 #include "timed-effect/player-confusion.h"
 #include "timed-effect/player-cut.h"
+#include "timed-effect/player-deceleration.h"
 #include "timed-effect/player-fear.h"
 #include "timed-effect/player-hallucination.h"
 #include "timed-effect/player-paralysis.h"
@@ -387,31 +388,33 @@ bool BadStatusSetter::mod_hallucination(const TIME_EFFECT tmp_v)
  * @param do_dec 現在の継続時間より長い値のみ上書きする
  * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
  */
-bool BadStatusSetter::slowness(const TIME_EFFECT tmp_v, bool do_dec)
+bool BadStatusSetter::set_deceleration(const TIME_EFFECT tmp_v, bool do_dec)
 {
     auto notice = false;
     auto v = std::clamp<short>(tmp_v, 0, 10000);
     if (this->player_ptr->is_dead) {
         return false;
     }
-
+    
+    auto deceleration = this->player_ptr->effects()->deceleration();
+    auto is_slow = deceleration->is_slow();
     if (v > 0) {
-        if (this->player_ptr->slow && !do_dec) {
-            if (this->player_ptr->slow > v) {
+        if (is_slow && !do_dec) {
+            if (deceleration->current() > v) {
                 return false;
             }
-        } else if (!this->player_ptr->slow) {
+        } else if (!is_slow) {
             msg_print(_("体の動きが遅くなってしまった！", "You feel yourself moving slower!"));
             notice = true;
         }
     } else {
-        if (this->player_ptr->slow) {
+        if (is_slow) {
             msg_print(_("動きの遅さがなくなったようだ。", "You feel yourself speed up."));
             notice = true;
         }
     }
 
-    this->player_ptr->slow = v;
+    deceleration->set(v);
     if (!notice) {
         return false;
     }
@@ -425,9 +428,9 @@ bool BadStatusSetter::slowness(const TIME_EFFECT tmp_v, bool do_dec)
     return true;
 }
 
-bool BadStatusSetter::mod_slowness(const TIME_EFFECT tmp_v, bool do_dec)
+bool BadStatusSetter::mod_deceleration(const TIME_EFFECT tmp_v, bool do_dec)
 {
-    return this->slowness(this->player_ptr->slow + tmp_v, do_dec);
+    return this->set_deceleration(this->player_ptr->effects()->deceleration()->current() + tmp_v, do_dec);
 }
 
 /*!
