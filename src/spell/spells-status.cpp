@@ -290,7 +290,7 @@ bool life_stream(PlayerType *player_ptr, bool message, bool virtue_change)
 
     restore_level(player_ptr);
     BadStatusSetter bss(player_ptr);
-    (void)bss.poison(0);
+    (void)bss.set_poison(0);
     (void)bss.blindness(0);
     (void)bss.confusion(0);
     (void)bss.hallucination(0);
@@ -407,7 +407,7 @@ bool cure_critical_wounds(PlayerType *player_ptr, int pow)
         ident = true;
     }
 
-    if (bss.poison(0)) {
+    if (bss.set_poison(0)) {
         ident = true;
     }
 
@@ -442,7 +442,7 @@ bool true_healing(PlayerType *player_ptr, int pow)
         ident = true;
     }
 
-    if (bss.poison(0)) {
+    if (bss.set_poison(0)) {
         ident = true;
     }
 

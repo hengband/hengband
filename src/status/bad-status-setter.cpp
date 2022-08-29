@@ -25,6 +25,7 @@
 #include "timed-effect/player-fear.h"
 #include "timed-effect/player-hallucination.h"
 #include "timed-effect/player-paralysis.h"
+#include "timed-effect/player-poison.h"
 #include "timed-effect/player-stun.h"
 #include "timed-effect/timed-effects.h"
 #include "view/display-messages.h"
@@ -181,7 +182,7 @@ bool BadStatusSetter::mod_confusion(const TIME_EFFECT tmp_v)
  * @param v 継続時間
  * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
  */
-bool BadStatusSetter::poison(const TIME_EFFECT tmp_v)
+bool BadStatusSetter::set_poison(const TIME_EFFECT tmp_v)
 {
     auto notice = false;
     auto v = std::clamp<short>(tmp_v, 0, 10000);
@@ -189,19 +190,21 @@ bool BadStatusSetter::poison(const TIME_EFFECT tmp_v)
         return false;
     }
 
+    const auto player_poison = this->player_ptr->effects()->poison();
+    const auto is_poisoned = player_poison->is_poisoned();
     if (v > 0) {
-        if (!this->player_ptr->poisoned) {
+        if (!is_poisoned) {
             msg_print(_("毒に侵されてしまった！", "You are poisoned!"));
             notice = true;
         }
     } else {
-        if (this->player_ptr->poisoned) {
+        if (is_poisoned) {
             msg_print(_("やっと毒の痛みがなくなった。", "You are no longer poisoned."));
             notice = true;
         }
     }
 
-    this->player_ptr->poisoned = v;
+    player_poison->set(v);
     this->player_ptr->redraw |= PR_STATUS;
     if (!notice) {
         return false;
@@ -217,7 +220,7 @@ bool BadStatusSetter::poison(const TIME_EFFECT tmp_v)
 
 bool BadStatusSetter::mod_poison(const TIME_EFFECT tmp_v)
 {
-    return this->poison(this->player_ptr->poisoned + tmp_v);
+    return this->set_poison(this->player_ptr->effects()->poison()->current() + tmp_v);
 }
 
 /*!

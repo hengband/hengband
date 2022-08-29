@@ -32,6 +32,7 @@
 #include "timed-effect/player-cut.h"
 #include "timed-effect/player-fear.h"
 #include "timed-effect/player-hallucination.h"
+#include "timed-effect/player-poison.h"
 #include "timed-effect/player-stun.h"
 #include "timed-effect/timed-effects.h"
 #include "view/display-self-info.h"
@@ -59,7 +60,7 @@ static void set_bad_status_info(PlayerType *player_ptr, self_info_type *self_ptr
         self_ptr->info[self_ptr->line++] = _("あなたはもうろうとしている。", "You are stunned.");
     }
 
-    if (player_ptr->poisoned) {
+    if (effects->poison()->is_poisoned()) {
         self_ptr->info[self_ptr->line++] = _("あなたは毒に侵されている。", "You are poisoned.");
     }
 
@@ -335,8 +336,9 @@ void report_magics(PlayerType *player_ptr)
         info[i++] = _("あなたは恐怖に侵されている", "You are terrified");
     }
 
-    if (player_ptr->poisoned) {
-        info2[i] = report_magics_aux(player_ptr->poisoned);
+    const auto player_poison = effects->poison();
+    if (player_poison->is_poisoned()) {
+        info2[i] = report_magics_aux(player_poison->current());
         info[i++] = _("あなたは毒に侵されている", "You are poisoned");
     }
 

@@ -30,6 +30,7 @@
 #include "timed-effect/player-fear.h"
 #include "timed-effect/player-hallucination.h"
 #include "timed-effect/player-paralysis.h"
+#include "timed-effect/player-poison.h"
 #include "timed-effect/player-stun.h"
 #include "timed-effect/timed-effects.h"
 #include "world/world.h"
@@ -361,13 +362,13 @@ static void rd_energy(PlayerType *player_ptr)
  */
 static void rd_status(PlayerType *player_ptr)
 {
-    auto effects = player_ptr->effects();
+    const auto effects = player_ptr->effects();
     effects->acceleration()->set(rd_s16b());
     effects->deceleration()->set(rd_s16b());
     effects->fear()->set(rd_s16b());
     effects->cut()->set(rd_s16b());
     effects->stun()->set(rd_s16b());
-    player_ptr->poisoned = rd_s16b();
+    effects->poison()->set(rd_s16b());
     effects->hallucination()->set(rd_s16b());
     player_ptr->protevil = rd_s16b();
     player_ptr->invuln = rd_s16b();

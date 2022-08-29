@@ -607,6 +607,7 @@
     <ClCompile Include="..\..\src\timed-effect\player-fear.cpp" />
     <ClCompile Include="..\..\src\timed-effect\player-hallucination.cpp" />
     <ClCompile Include="..\..\src\timed-effect\player-paralysis.cpp" />
+    <ClCompile Include="..\..\src\timed-effect\player-poison.cpp" />
     <ClCompile Include="..\..\src\timed-effect\player-stun.cpp" />
     <ClCompile Include="..\..\src\timed-effect\timed-effects.cpp" />
     <ClCompile Include="..\..\src\util\rng-xoshiro.cpp" />
@@ -1403,6 +1404,7 @@
     <ClInclude Include="..\..\src\timed-effect\player-fear.h" />
     <ClInclude Include="..\..\src\timed-effect\player-hallucination.h" />
     <ClInclude Include="..\..\src\timed-effect\player-paralysis.h" />
+    <ClInclude Include="..\..\src\timed-effect\player-poison.h" />
     <ClInclude Include="..\..\src\timed-effect\player-stun.h" />
     <ClInclude Include="..\..\src\timed-effect\timed-effects.h" />
     <ClInclude Include="..\..\src\util\bit-flags-calculator.h" />

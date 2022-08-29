@@ -26,6 +26,7 @@
 #include "timed-effect/player-fear.h"
 #include "timed-effect/player-hallucination.h"
 #include "timed-effect/player-paralysis.h"
+#include "timed-effect/player-poison.h"
 #include "timed-effect/player-stun.h"
 #include "timed-effect/timed-effects.h"
 #include "view/display-messages.h"
@@ -44,7 +45,7 @@ void reset_tim_flags(PlayerType *player_ptr)
     effects->confusion()->reset();
     effects->fear()->reset();
     effects->hallucination()->reset();
-    player_ptr->poisoned = 0; /* Timed -- Poisoned */
+    effects->poison()->reset();
     effects->cut()->reset();
     effects->stun()->reset();
 

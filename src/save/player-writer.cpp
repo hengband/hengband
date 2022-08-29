@@ -17,6 +17,7 @@
 #include "timed-effect/player-fear.h"
 #include "timed-effect/player-hallucination.h"
 #include "timed-effect/player-paralysis.h"
+#include "timed-effect/player-poison.h"
 #include "timed-effect/player-stun.h"
 #include "timed-effect/timed-effects.h"
 #include "world/world.h"
@@ -171,7 +172,7 @@ void wr_player(PlayerType *player_ptr)
     wr_s16b(effects->fear()->current());
     wr_s16b(effects->cut()->current());
     wr_s16b(effects->stun()->current());
-    wr_s16b(player_ptr->poisoned);
+    wr_s16b(effects->poison()->current());
     wr_s16b(effects->hallucination()->current());
     wr_s16b(player_ptr->protevil);
     wr_s16b(player_ptr->invuln);
