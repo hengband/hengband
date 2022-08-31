@@ -28,7 +28,7 @@ const std::vector<disp_player_line> disp_player_lines = {
     { 29, 16, 21, _("次レベル", "Exp to Adv") },
     { 29, 17, 21, _("所持金", "Gold") },
     { 29, 19, 21, _("日付", "Time") },
-    { 29, 10, 21, _("ＨＰ", "Hit point") },
+    { 29, 10, 21, _("ＨＰ", "Hit points") },
     { 29, 11, 21, _("ＭＰ", "SP (Mana)") },
     { 29, 20, 21, _("プレイ時間", "Play time") },
     { 53, 10, -1, _("打撃命中  :", "Fighting   : ") },
