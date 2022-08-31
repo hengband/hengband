@@ -859,7 +859,7 @@ Oremor nhoj いならなばねさ倒を私はにつ勝でムーゲのこ。
 敵がしっぽ巻いて逃げ出したら、穏便に追いかけましょう。最後の少しは遠隔攻撃で！
 #Vlad Dracula? Die and forget, since death is forbidden - to him, not you!
 吸血鬼『ヴラド』？やめとけ、やめとけ、アイツは死を禁じられているからな！
-#Vlad Dracula? He hungers after you and thirstes for you!
+#Vlad Dracula? He hungers after you and thirsts for you!
 吸血鬼『ヴラド』？飢えるほどお前の血を欲しているらしいぞ！
 #Luck and twice luck to meet a hydra if fearless and breath-shielded you are.
 恐れ知らずでブレスに耐性があれば、ヒドラに遭うのは倍ラッキーだ。
@@ -991,7 +991,7 @@ Oremor nhoj いならなばねさ倒を私はにつ勝でムーゲのこ。
 『黄衣の王』は助けに強いが、一人でビビってることもある。
 #Glaurung and all his kinsfolk - send them where the pepper grows! It's timing.
 今こそ、『グラウルング』とその仲間たちを、胡椒の育つ場所に送り込んでください！
-#The swamps south of the Elventown is worthy of some hunting excursions!
+#The swamps south of the Elventown are worthy of some hunting excursions!
 エルフの街の南の湿地帯は狩りの遠足の足音で騒がしい！
 #You would be amazed of what a Greater Kraken is able to give to you.
 あなたはグレータークラーケンがあなたに対して出来る事をを知ったら驚くでしょう。
@@ -1073,7 +1073,7 @@ Oremor nhoj いならなばねさ倒を私はにつ勝でムーゲのこ。
 えー、聞いたところによると、ダンジョンの主はこのことを悲観的であると考えています。
 #Don't you think you are on a descending curve, young firehead?
 若い人よ、あんたは下り坂を下ってるとは思わんかね？
-#You are starting to loose your temper? So what? Gnaw your pistachios!
+#You are starting to lose your temper? So what? Gnaw your pistachios!
 意欲がなくなってきてないか？だったら、ピスタチオを食え！
 #It shrieks? Don't bother! Presumably there will be just innocent bystanders.
 悲鳴？気にしないください。きっと無関心な傍観者がいてくださいます。
