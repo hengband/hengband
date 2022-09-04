@@ -86,54 +86,47 @@ static amuse_type amuse_info[] = { { ItemKindType::BOTTLE, SV_ANY, 5, AMS_NOTHIN
  */
 void amusement(PlayerType *player_ptr, POSITION y1, POSITION x1, int num, bool known)
 {
-    int t = 0;
-    for (int n = 0; amuse_info[n].tval != ItemKindType::NONE; n++) {
+    auto t = 0;
+    for (auto n = 0; amuse_info[n].tval != ItemKindType::NONE; n++) {
         t += amuse_info[n].prob;
     }
 
-    /* Acquirement */
-    ObjectType *i_ptr;
-    ObjectType ObjectType_body;
-    while (num) {
+    while (num > 0) {
         int i;
-        KIND_OBJECT_IDX k_idx;
-        ARTIFACT_IDX a_idx = 0;
-        int r = randint0(t);
-        bool insta_art, fixed_art;
-
+        auto r = randint0(t);
         for (i = 0;; i++) {
             r -= amuse_info[i].prob;
             if (r <= 0) {
                 break;
             }
         }
-        i_ptr = &ObjectType_body;
-        i_ptr->wipe();
-        k_idx = lookup_kind(amuse_info[i].tval, amuse_info[i].sval);
 
-        /* Paranoia - reroll if nothing */
-        if (!k_idx) {
+        const auto k_idx = lookup_kind(amuse_info[i].tval, amuse_info[i].sval);
+        if (k_idx == 0) {
             continue;
         }
 
-        /* Search an artifact index if need */
-        insta_art = k_info[k_idx].gen_flags.has(ItemGenerationTraitType::INSTA_ART);
-        fixed_art = (amuse_info[i].flag & AMS_FIXED_ART);
-
+        const auto insta_art = k_info[k_idx].gen_flags.has(ItemGenerationTraitType::INSTA_ART);
+        const auto fixed_art = any_bits(amuse_info[i].flag, AMS_FIXED_ART);
+        short a_idx = 0;
         if (insta_art || fixed_art) {
             for (const auto &a_ref : a_info) {
                 if (a_ref.idx == 0) {
                     continue;
                 }
+
                 if (insta_art && !a_ref.gen_flags.has(ItemGenerationTraitType::INSTA_ART)) {
                     continue;
                 }
+
                 if (a_ref.tval != k_info[k_idx].tval) {
                     continue;
                 }
+
                 if (a_ref.sval != k_info[k_idx].sval) {
                     continue;
                 }
+
                 if (a_ref.cur_num > 0) {
                     continue;
                 }
@@ -142,7 +135,7 @@ void amusement(PlayerType *player_ptr, POSITION y1, POSITION x1, int num, bool k
                 break;
             }
 
-            if (a_idx >= static_cast<ARTIFACT_IDX>(a_info.size())) {
+            if (a_idx >= static_cast<short>(a_info.size())) {
                 continue;
             }
         }
@@ -151,38 +144,33 @@ void amusement(PlayerType *player_ptr, POSITION y1, POSITION x1, int num, bool k
             continue;
         }
 
-        /* Make an object (if possible) */
-        i_ptr->prep(k_idx);
-        if (a_idx) {
-            i_ptr->fixed_artifact_idx = a_idx;
+        ObjectType item;
+        item.prep(k_idx);
+        if (a_idx > 0) {
+            item.fixed_artifact_idx = a_idx;
         }
-        ItemMagicApplier(player_ptr, i_ptr, 1, AM_NO_FIXED_ART).execute();
 
-        if (amuse_info[i].flag & AMS_NO_UNIQUE) {
-            if (r_info[i2enum<MonsterRaceId>(i_ptr->pval)].kind_flags.has(MonsterKindType::UNIQUE)) {
+        ItemMagicApplier(player_ptr, &item, 1, AM_NO_FIXED_ART).execute();
+        if (any_bits(amuse_info[i].flag, AMS_NO_UNIQUE)) {
+            if (r_info[i2enum<MonsterRaceId>(item.pval)].kind_flags.has(MonsterKindType::UNIQUE)) {
                 continue;
             }
         }
 
-        if (amuse_info[i].flag & AMS_MULTIPLE) {
-            i_ptr->number = randint1(3);
+        if (any_bits(amuse_info[i].flag, AMS_MULTIPLE)) {
+            item.number = randint1(3);
         }
-        if (amuse_info[i].flag & AMS_PILE) {
-            i_ptr->number = randint1(99);
+
+        if (any_bits(amuse_info[i].flag, AMS_PILE)) {
+            item.number = randint1(99);
         }
 
         if (known) {
-            object_aware(player_ptr, i_ptr);
-            object_known(i_ptr);
+            object_aware(player_ptr, &item);
+            object_known(&item);
         }
 
-        /* Paranoia - reroll if nothing */
-        if (!(i_ptr->k_idx)) {
-            continue;
-        }
-
-        (void)drop_near(player_ptr, i_ptr, -1, y1, x1);
-
+        (void)drop_near(player_ptr, &item, -1, y1, x1);
         num--;
     }
 }
