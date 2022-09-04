@@ -291,7 +291,7 @@ bool life_stream(PlayerType *player_ptr, bool message, bool virtue_change)
     restore_level(player_ptr);
     BadStatusSetter bss(player_ptr);
     (void)bss.set_poison(0);
-    (void)bss.blindness(0);
+    (void)bss.set_blindness(0);
     (void)bss.confusion(0);
     (void)bss.hallucination(0);
     (void)bss.stun(0);
@@ -349,7 +349,7 @@ bool cure_light_wounds(PlayerType *player_ptr, DICE_NUMBER dice, DICE_SID sides)
     }
 
     BadStatusSetter bss(player_ptr);
-    if (bss.blindness(0)) {
+    if (bss.set_blindness(0)) {
         ident = true;
     }
 
@@ -372,7 +372,7 @@ bool cure_serious_wounds(PlayerType *player_ptr, DICE_NUMBER dice, DICE_SID side
     }
 
     BadStatusSetter bss(player_ptr);
-    if (bss.blindness(0)) {
+    if (bss.set_blindness(0)) {
         ident = true;
     }
 
@@ -399,7 +399,7 @@ bool cure_critical_wounds(PlayerType *player_ptr, int pow)
     }
 
     BadStatusSetter bss(player_ptr);
-    if (bss.blindness(0)) {
+    if (bss.set_blindness(0)) {
         ident = true;
     }
 
@@ -434,7 +434,7 @@ bool true_healing(PlayerType *player_ptr, int pow)
     }
 
     BadStatusSetter bss(player_ptr);
-    if (bss.blindness(0)) {
+    if (bss.set_blindness(0)) {
         ident = true;
     }
 

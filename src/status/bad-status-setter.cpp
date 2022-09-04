@@ -48,7 +48,7 @@ BadStatusSetter::BadStatusSetter(PlayerType *player_ptr)
  * Note that blindness is currently the only thing which can affect\n
  * "player_can_see_bold()".\n
  */
-bool BadStatusSetter::blindness(const TIME_EFFECT tmp_v)
+bool BadStatusSetter::set_blindness(const TIME_EFFECT tmp_v)
 {
     auto notice = false;
     auto v = std::clamp<short>(tmp_v, 0, 10000);
@@ -101,7 +101,7 @@ bool BadStatusSetter::blindness(const TIME_EFFECT tmp_v)
 
 bool BadStatusSetter::mod_blindness(const TIME_EFFECT tmp_v)
 {
-    return this->blindness(this->player_ptr->effects()->blindness()->current() + tmp_v);
+    return this->set_blindness(this->player_ptr->effects()->blindness()->current() + tmp_v);
 }
 
 /*!

@@ -105,7 +105,7 @@ bool exe_eat_food_type_object(PlayerType *player_ptr, ObjectType *o_ptr)
     case SV_FOOD_CURE_POISON:
         return bss.set_poison(0);
     case SV_FOOD_CURE_BLINDNESS:
-        return bss.blindness(0);
+        return bss.set_blindness(0);
     case SV_FOOD_CURE_PARANOIA:
         return bss.fear(0);
     case SV_FOOD_CURE_CONFUSION:

@@ -131,7 +131,7 @@ static bool has_a_nightmare(PlayerType *player_ptr)
 static void back_to_health(PlayerType *player_ptr)
 {
     BadStatusSetter bss(player_ptr);
-    (void)bss.blindness(0);
+    (void)bss.set_blindness(0);
     (void)bss.confusion(0);
     player_ptr->effects()->stun()->reset();
     player_ptr->chp = player_ptr->mhp;

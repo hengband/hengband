@@ -331,7 +331,7 @@ MonsterSpellResult spell_RF5_BLIND(MONSTER_IDX m_idx, PlayerType *player_ptr, MO
         spell_badstatus_message_to_player(player_ptr, m_idx, msg, resist, saving_throw);
 
         if (!resist && !saving_throw) {
-            (void)BadStatusSetter(player_ptr).blindness(12 + randint0(4));
+            (void)BadStatusSetter(player_ptr).set_blindness(12 + randint0(4));
         }
 
         update_smart_learn(player_ptr, m_idx, DRS_BLIND);
