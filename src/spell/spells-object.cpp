@@ -116,12 +116,10 @@ static short sweep_amusement_artifact(const bool insta_art, const short k_idx)
 /*!
  * @brief 誰得ドロップを行う。
  * @param player_ptr プレイヤーへの参照ポインタ
- * @param y1 配置したいフロアのY座標
- * @param x1 配置したいフロアのX座標
  * @param num 誰得の処理回数
  * @param known TRUEならばオブジェクトが必ず＊鑑定＊済になる
  */
-void amusement(PlayerType *player_ptr, POSITION y1, POSITION x1, int num, bool known)
+void amusement(PlayerType *player_ptr, int num, bool known)
 {
     auto t = 0;
     for (auto n = 0; amuse_info[n].tval != ItemKindType::NONE; n++) {
@@ -183,7 +181,7 @@ void amusement(PlayerType *player_ptr, POSITION y1, POSITION x1, int num, bool k
             object_known(&item);
         }
 
-        (void)drop_near(player_ptr, &item, -1, y1, x1);
+        (void)drop_near(player_ptr, &item, -1, player_ptr->y, player_ptr->x);
         num--;
     }
 }
