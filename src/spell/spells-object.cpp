@@ -76,6 +76,35 @@ static amuse_type amuse_info[] = { { ItemKindType::BOTTLE, SV_ANY, 5, AMS_NOTHIN
 
     { ItemKindType::NONE, 0, 0, 0 } };
 
+static short sweep_amusement_artifact(const bool insta_art, const short k_idx)
+{
+    for (const auto &a_ref : a_info) {
+        if (a_ref.idx == 0) {
+            continue;
+        }
+
+        if (insta_art && !a_ref.gen_flags.has(ItemGenerationTraitType::INSTA_ART)) {
+            continue;
+        }
+
+        if (a_ref.tval != k_info[k_idx].tval) {
+            continue;
+        }
+
+        if (a_ref.sval != k_info[k_idx].sval) {
+            continue;
+        }
+
+        if (a_ref.cur_num > 0) {
+            continue;
+        }
+
+        return a_ref.idx;
+    }
+
+    return 0;
+}
+
 /*!
  * @brief 誰得ドロップを行う。
  * @param player_ptr プレイヤーへの参照ポインタ
@@ -110,31 +139,7 @@ void amusement(PlayerType *player_ptr, POSITION y1, POSITION x1, int num, bool k
         const auto fixed_art = any_bits(amuse_info[i].flag, AMS_FIXED_ART);
         short a_idx = 0;
         if (insta_art || fixed_art) {
-            for (const auto &a_ref : a_info) {
-                if (a_ref.idx == 0) {
-                    continue;
-                }
-
-                if (insta_art && !a_ref.gen_flags.has(ItemGenerationTraitType::INSTA_ART)) {
-                    continue;
-                }
-
-                if (a_ref.tval != k_info[k_idx].tval) {
-                    continue;
-                }
-
-                if (a_ref.sval != k_info[k_idx].sval) {
-                    continue;
-                }
-
-                if (a_ref.cur_num > 0) {
-                    continue;
-                }
-
-                a_idx = a_ref.idx;
-                break;
-            }
-
+            a_idx = sweep_amusement_artifact(insta_art, k_idx);
             if (a_idx >= static_cast<short>(a_info.size())) {
                 continue;
             }
