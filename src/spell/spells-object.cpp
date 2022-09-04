@@ -147,6 +147,10 @@ void amusement(PlayerType *player_ptr, POSITION y1, POSITION x1, int num, bool k
             }
         }
 
+        if (insta_art && (a_idx == 0)) {
+            continue;
+        }
+
         /* Make an object (if possible) */
         i_ptr->prep(k_idx);
         if (a_idx) {
