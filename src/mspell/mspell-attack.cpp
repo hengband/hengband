@@ -34,6 +34,8 @@
 #include "system/monster-type-definition.h"
 #include "system/player-type-definition.h"
 #include "target/projection-path-calculator.h"
+#include "timed-effect/player-blindness.h"
+#include "timed-effect/timed-effects.h"
 #include "view/display-messages.h"
 #include "world/world.h"
 #ifdef JP
@@ -272,8 +274,8 @@ static bool check_thrown_mspell(PlayerType *player_ptr, msa_type *msa_ptr)
 
 static void check_mspell_imitation(PlayerType *player_ptr, msa_type *msa_ptr)
 {
-    bool seen = (!player_ptr->blind && msa_ptr->m_ptr->ml);
-    bool can_imitate = player_has_los_bold(player_ptr, msa_ptr->m_ptr->fy, msa_ptr->m_ptr->fx);
+    const auto seen = (!player_ptr->effects()->blindness()->is_blind() && msa_ptr->m_ptr->ml);
+    const auto can_imitate = player_has_los_bold(player_ptr, msa_ptr->m_ptr->fy, msa_ptr->m_ptr->fx);
     PlayerClass pc(player_ptr);
     if (!seen || !can_imitate || (w_ptr->timewalk_m_idx != 0) || !pc.equals(PlayerClassType::IMITATOR)) {
         return;

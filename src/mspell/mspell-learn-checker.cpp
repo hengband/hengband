@@ -4,6 +4,8 @@
 #include "system/floor-type-definition.h"
 #include "system/monster-type-definition.h"
 #include "system/player-type-definition.h"
+#include "timed-effect/player-blindness.h"
+#include "timed-effect/timed-effects.h"
 #include "world/world.h"
 
 /*!
@@ -16,9 +18,8 @@
  */
 bool spell_learnable(PlayerType *player_ptr, MONSTER_IDX m_idx)
 {
-    auto *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
-    bool seen = (!player_ptr->blind && m_ptr->ml);
-
-    bool maneable = player_has_los_bold(player_ptr, m_ptr->fy, m_ptr->fx);
+    const auto *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
+    const auto seen = (!player_ptr->effects()->blindness()->is_blind() && m_ptr->ml);
+    const auto maneable = player_has_los_bold(player_ptr, m_ptr->fy, m_ptr->fx);
     return seen && maneable && (w_ptr->timewalk_m_idx == 0);
 }

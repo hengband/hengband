@@ -32,6 +32,8 @@
 #include "system/monster-type-definition.h"
 #include "system/player-type-definition.h"
 #include "target/projection-path-calculator.h"
+#include "timed-effect/player-blindness.h"
+#include "timed-effect/timed-effects.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 #include <string>
@@ -78,7 +80,7 @@ static bool process_bolt_reflection(PlayerType *player_ptr, EffectPlayerType *ep
     sound(SOUND_REFLECT);
 
     std::string mes;
-    if (player_ptr->blind) {
+    if (player_ptr->effects()->blindness()->is_blind()) {
         mes = _("何かが跳ね返った！", "Something bounces!");
     } else if (PlayerClass(player_ptr).samurai_stance_is(SamuraiStanceType::FUUJIN)) {
         mes = _("風の如く武器を振るって弾き返した！", "The attack bounces!");

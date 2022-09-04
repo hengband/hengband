@@ -14,6 +14,8 @@
 #include "spell/summon-types.h"
 #include "system/monster-race-definition.h"
 #include "system/player-type-definition.h"
+#include "timed-effect/player-blindness.h"
+#include "timed-effect/timed-effects.h"
 #include "view/display-messages.h"
 
 /*!
@@ -180,7 +182,7 @@ MONSTER_NUMBER summon_NAZGUL(PlayerType *player_ptr, POSITION y, POSITION x, MON
     GAME_TEXT m_name[MAX_NLEN];
     monster_name(player_ptr, m_idx, m_name);
 
-    if (player_ptr->blind) {
+    if (player_ptr->effects()->blindness()->is_blind()) {
         msg_format(_("%^sが何かをつぶやいた。", "%^s mumbles."), m_name);
     } else {
         msg_format(_("%^sが魔法で幽鬼戦隊を召喚した！", "%^s magically summons rangers of Nazgul!"), m_name);

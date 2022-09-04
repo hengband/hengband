@@ -20,6 +20,8 @@
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
 #include "system/player-type-definition.h"
+#include "timed-effect/player-blindness.h"
+#include "timed-effect/timed-effects.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 #include "world/world.h"
@@ -191,7 +193,7 @@ bool affect_feature(PlayerType *player_ptr, MONSTER_IDX who, POSITION r, POSITIO
             }
         }
 
-        if (player_ptr->blind || !player_has_los_bold(player_ptr, y, x)) {
+        if (player_ptr->effects()->blindness()->is_blind() || !player_has_los_bold(player_ptr, y, x)) {
             break;
         }
 
@@ -210,7 +212,7 @@ bool affect_feature(PlayerType *player_ptr, MONSTER_IDX who, POSITION r, POSITIO
             cave_alter_feat(player_ptr, y, x, FloorFeatureType::TUNNEL);
         }
 
-        if (player_ptr->blind || !player_has_los_bold(player_ptr, y, x)) {
+        if (player_ptr->effects()->blindness()->is_blind() || !player_has_los_bold(player_ptr, y, x)) {
             break;
         }
 

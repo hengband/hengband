@@ -46,6 +46,8 @@
 #include "target/grid-selector.h"
 #include "target/projection-path-calculator.h"
 #include "target/target-getter.h"
+#include "timed-effect/player-blindness.h"
+#include "timed-effect/timed-effects.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 #include "world/world.h"
@@ -124,7 +126,7 @@ bool binding_field(PlayerType *player_ptr, int dam)
         for (x = x1; x <= x2; x++) {
             if (centersign * ((point_x[0] - x) * (point_y[1] - y) - (point_y[0] - y) * (point_x[1] - x)) >= 0 && centersign * ((point_x[1] - x) * (point_y[2] - y) - (point_y[1] - y) * (point_x[2] - x)) >= 0 && centersign * ((point_x[2] - x) * (point_y[0] - y) - (point_y[2] - y) * (point_x[0] - x)) >= 0) {
                 if (player_has_los_bold(player_ptr, y, x) && projectable(player_ptr, player_ptr->y, player_ptr->x, y, x)) {
-                    if (!(player_ptr->blind) && panel_contains(y, x)) {
+                    if (!(player_ptr->effects()->blindness()->is_blind()) && panel_contains(y, x)) {
                         print_bolt_pict(player_ptr, y, x, y, x, AttributeType::MANA);
                         move_cursor_relative(y, x);
                         term_fresh();

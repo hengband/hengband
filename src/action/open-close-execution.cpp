@@ -27,6 +27,7 @@
 #include "system/object-type-definition.h"
 #include "system/player-type-definition.h"
 #include "term/screen-processor.h"
+#include "timed-effect/player-blindness.h"
 #include "timed-effect/player-confusion.h"
 #include "timed-effect/player-hallucination.h"
 #include "timed-effect/timed-effects.h"
@@ -57,11 +58,11 @@ bool exe_open(PlayerType *player_ptr, POSITION y, POSITION x)
     }
 
     int i = player_ptr->skill_dis;
-    if (player_ptr->blind || no_lite(player_ptr)) {
+    const auto effects = player_ptr->effects();
+    if (effects->blindness()->is_blind() || no_lite(player_ptr)) {
         i = i / 10;
     }
 
-    auto effects = player_ptr->effects();
     if (effects->confusion()->is_confused() || effects->hallucination()->is_hallucinated()) {
         i = i / 10;
     }
@@ -153,11 +154,11 @@ bool easy_open_door(PlayerType *player_ptr, POSITION y, POSITION x)
         msg_format(_("%sはがっちりと閉じられているようだ。", "The %s appears to be stuck."), f_info[g_ptr->get_feat_mimic()].name.c_str());
     } else if (f_ptr->power) {
         i = player_ptr->skill_dis;
-        if (player_ptr->blind || no_lite(player_ptr)) {
+        const auto effects = player_ptr->effects();
+        if (effects->blindness()->is_blind() || no_lite(player_ptr)) {
             i = i / 10;
         }
 
-        auto effects = player_ptr->effects();
         if (effects->confusion()->is_confused() || effects->hallucination()->is_hallucinated()) {
             i = i / 10;
         }
@@ -208,11 +209,11 @@ bool exe_disarm_chest(PlayerType *player_ptr, POSITION y, POSITION x, OBJECT_IDX
     auto *o_ptr = &player_ptr->current_floor_ptr->o_list[o_idx];
     PlayerEnergy(player_ptr).set_player_turn_energy(100);
     int i = player_ptr->skill_dis;
-    if (player_ptr->blind || no_lite(player_ptr)) {
+    const auto effects = player_ptr->effects();
+    if (effects->blindness()->is_blind() || no_lite(player_ptr)) {
         i = i / 10;
     }
 
-    auto effects = player_ptr->effects();
     if (effects->confusion()->is_confused() || effects->hallucination()->is_hallucinated()) {
         i = i / 10;
     }
@@ -272,11 +273,11 @@ bool exe_disarm(PlayerType *player_ptr, POSITION y, POSITION x, DIRECTION dir)
     bool more = false;
     int i = player_ptr->skill_dis;
     PlayerEnergy(player_ptr).set_player_turn_energy(100);
-    if (player_ptr->blind || no_lite(player_ptr)) {
+    auto effects = player_ptr->effects();
+    if (effects->blindness()->is_blind() || no_lite(player_ptr)) {
         i = i / 10;
     }
 
-    auto effects = player_ptr->effects();
     if (effects->confusion()->is_confused() || effects->hallucination()->is_hallucinated()) {
         i = i / 10;
     }

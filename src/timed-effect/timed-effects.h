@@ -3,6 +3,7 @@
 #include <memory>
 
 class PlayerAcceleration;
+class PlayerBlindness;
 class PlayerConfusion;
 class PlayerDeceleration;
 class PlayerFear;
@@ -16,6 +17,7 @@ public:
     TimedEffects();
     virtual ~TimedEffects() = default;
 
+    std::shared_ptr<PlayerBlindness> blindness() const;
     std::shared_ptr<PlayerConfusion> confusion() const;
     std::shared_ptr<PlayerCut> cut() const;
     std::shared_ptr<PlayerFear> fear() const;
@@ -27,6 +29,7 @@ public:
     std::shared_ptr<PlayerPoison> poison() const;
 
 private:
+    std::shared_ptr<PlayerBlindness> player_blindness;
     std::shared_ptr<PlayerConfusion> player_confusion;
     std::shared_ptr<PlayerCut> player_cut;
     std::shared_ptr<PlayerFear> player_fear;

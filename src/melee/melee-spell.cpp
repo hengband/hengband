@@ -18,6 +18,8 @@
 #include "system/monster-race-definition.h"
 #include "system/monster-type-definition.h"
 #include "system/player-type-definition.h"
+#include "timed-effect/player-blindness.h"
+#include "timed-effect/timed-effects.h"
 #include "view/display-messages.h"
 #include "world/world.h"
 #ifdef JP
@@ -62,7 +64,7 @@ static void process_special_melee_spell(PlayerType *player_ptr, melee_spell_type
     bool is_special_magic = ms_ptr->m_ptr->ml;
     is_special_magic &= ms_ptr->maneable;
     is_special_magic &= w_ptr->timewalk_m_idx == 0;
-    is_special_magic &= !player_ptr->blind;
+    is_special_magic &= !player_ptr->effects()->blindness()->is_blind();
     is_special_magic &= pc.equals(PlayerClassType::IMITATOR);
     is_special_magic &= ms_ptr->thrown_spell != MonsterAbilityType::SPECIAL;
     if (!is_special_magic) {

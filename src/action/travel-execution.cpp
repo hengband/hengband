@@ -19,6 +19,8 @@
 #include "system/grid-type-definition.h"
 #include "system/monster-type-definition.h"
 #include "system/player-type-definition.h"
+#include "timed-effect/player-blindness.h"
+#include "timed-effect/timed-effects.h"
 #include "view/display-messages.h"
 
 travel_type travel;
@@ -32,7 +34,8 @@ travel_type travel;
  */
 static DIRECTION travel_test(PlayerType *player_ptr, DIRECTION prev_dir)
 {
-    if (player_ptr->blind || no_lite(player_ptr)) {
+    const auto blindness = player_ptr->effects()->blindness();
+    if (blindness->is_blind() || no_lite(player_ptr)) {
         msg_print(_("目が見えない！", "You cannot see!"));
         return 0;
     }
