@@ -119,7 +119,7 @@ static short sweep_amusement_artifact(const bool insta_art, const short k_idx)
  * @param num 誰得の処理回数
  * @param known TRUEならばオブジェクトが必ず＊鑑定＊済になる
  */
-void amusement(PlayerType *player_ptr, int num, bool known)
+void generate_amusement(PlayerType *player_ptr, int num, bool known)
 {
     auto t = 0;
     for (auto n = 0; amuse_info[n].tval != ItemKindType::NONE; n++) {
