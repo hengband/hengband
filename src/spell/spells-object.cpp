@@ -52,28 +52,36 @@ struct amuse_type {
 };
 
 /*!
- * @brief 装備強化処理の失敗率定数（千分率） /
- * Used by the "enchant" function (chance of failure)
- * (modified for Zangband, we need better stuff there...) -- TY
+ * @brief 装備強化処理の失敗率定数 (千分率)
+ * @details 強化値が負値から0までは必ず成功する
+ * 正値は+15までしか鍛えることができず、+16以上への強化を試みると確実に失敗する
  */
-static int enchant_table[16] = { 0, 10, 50, 100, 200, 300, 400, 500, 650, 800, 950, 987, 993, 995, 998, 1000 };
+static constexpr std::array<int, 16> enchant_table = { { 0, 10, 50, 100, 200, 300, 400, 500, 650, 800, 950, 987, 993, 995, 998, 1000 } };
 
 /*
  * Scatter some "amusing" objects near the player
  */
 
-#define AMS_NOTHING 0x00 /* No restriction */
-#define AMS_NO_UNIQUE 0x01 /* Don't make the amusing object of uniques */
-#define AMS_FIXED_ART 0x02 /* Make a fixed artifact based on the amusing object */
-#define AMS_MULTIPLE 0x04 /* Drop 1-3 objects for one type */
-#define AMS_PILE 0x08 /* Drop 1-99 pile objects for one type */
+constexpr byte AMS_NOTHING = 0x00; /* No restriction */
+constexpr byte AMS_NO_UNIQUE = 0x01; /* Don't make the amusing object of uniques */
+constexpr byte AMS_FIXED_ART = 0x02; /* Make a fixed artifact based on the amusing object */
+constexpr byte AMS_MULTIPLE = 0x04; /* Drop 1-3 objects for one type */
+constexpr byte AMS_PILE = 0x08; /* Drop 1-99 pile objects for one type */
 
-static amuse_type amuse_info[] = { { ItemKindType::BOTTLE, SV_ANY, 5, AMS_NOTHING }, { ItemKindType::JUNK, SV_ANY, 3, AMS_MULTIPLE }, { ItemKindType::SPIKE, SV_ANY, 10, AMS_PILE }, { ItemKindType::STATUE, SV_ANY, 15, AMS_NOTHING },
-    { ItemKindType::CORPSE, SV_ANY, 15, AMS_NO_UNIQUE }, { ItemKindType::SKELETON, SV_ANY, 10, AMS_NO_UNIQUE }, { ItemKindType::FIGURINE, SV_ANY, 10, AMS_NO_UNIQUE },
-    { ItemKindType::PARCHMENT, SV_ANY, 1, AMS_NOTHING }, { ItemKindType::POLEARM, SV_TSURIZAO, 3, AMS_NOTHING }, // Fishing Pole of Taikobo
+static const std::vector<amuse_type> amuse_info = {
+    { ItemKindType::BOTTLE, SV_ANY, 5, AMS_NOTHING },
+    { ItemKindType::JUNK, SV_ANY, 3, AMS_MULTIPLE },
+    { ItemKindType::SPIKE, SV_ANY, 10, AMS_PILE },
+    { ItemKindType::STATUE, SV_ANY, 15, AMS_NOTHING },
+    { ItemKindType::CORPSE, SV_ANY, 15, AMS_NO_UNIQUE },
+    { ItemKindType::SKELETON, SV_ANY, 10, AMS_NO_UNIQUE },
+    { ItemKindType::FIGURINE, SV_ANY, 10, AMS_NO_UNIQUE },
+    { ItemKindType::PARCHMENT, SV_ANY, 1, AMS_NOTHING },
+    { ItemKindType::POLEARM, SV_TSURIZAO, 3, AMS_NOTHING }, // Fishing Pole of Taikobo
     { ItemKindType::SWORD, SV_BROKEN_DAGGER, 3, AMS_FIXED_ART }, // Broken Dagger of Magician
-    { ItemKindType::SWORD, SV_BROKEN_DAGGER, 10, AMS_NOTHING }, { ItemKindType::SWORD, SV_BROKEN_SWORD, 5, AMS_NOTHING }, { ItemKindType::SCROLL, SV_SCROLL_AMUSEMENT, 10, AMS_NOTHING },
-
+    { ItemKindType::SWORD, SV_BROKEN_DAGGER, 10, AMS_NOTHING },
+    { ItemKindType::SWORD, SV_BROKEN_SWORD, 5, AMS_NOTHING },
+    { ItemKindType::SCROLL, SV_SCROLL_AMUSEMENT, 10, AMS_NOTHING },
     { ItemKindType::NONE, 0, 0, 0 } };
 
 static short sweep_amusement_artifact(const bool insta_art, const short k_idx)
