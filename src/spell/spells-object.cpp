@@ -44,13 +44,6 @@
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 
-struct amuse_type {
-    ItemKindType tval;
-    OBJECT_SUBTYPE_VALUE sval;
-    PERCENTAGE prob;
-    byte flag;
-};
-
 /*!
  * @brief 装備強化処理の失敗率定数 (千分率)
  * @details 強化値が負値から0までは必ず成功する
@@ -61,30 +54,39 @@ static constexpr std::array<int, 16> enchant_table = { { 0, 10, 50, 100, 200, 30
 /*
  * Scatter some "amusing" objects near the player
  */
+enum class AmusementFlagType : byte {
+    NOTHING = 0x00, /* No restriction */
+    NO_UNIQUE = 0x01, /* Don't make the amusing object of uniques */
+    FIXED_ART = 0x02, /* Make a fixed artifact based on the amusing object */
+    MULTIPLE = 0x04, /* Drop 1-3 objects for one type */
+    PILE = 0x08, /* Drop 1-99 pile objects for one type */
+};
 
-constexpr byte AMS_NOTHING = 0x00; /* No restriction */
-constexpr byte AMS_NO_UNIQUE = 0x01; /* Don't make the amusing object of uniques */
-constexpr byte AMS_FIXED_ART = 0x02; /* Make a fixed artifact based on the amusing object */
-constexpr byte AMS_MULTIPLE = 0x04; /* Drop 1-3 objects for one type */
-constexpr byte AMS_PILE = 0x08; /* Drop 1-99 pile objects for one type */
+struct amuse_type {
+    ItemKindType tval;
+    OBJECT_SUBTYPE_VALUE sval;
+    PERCENTAGE prob;
+    AmusementFlagType flag;
+};
 
 static const std::vector<amuse_type> amuse_info = {
-    { ItemKindType::BOTTLE, SV_ANY, 5, AMS_NOTHING },
-    { ItemKindType::JUNK, SV_ANY, 3, AMS_MULTIPLE },
-    { ItemKindType::SPIKE, SV_ANY, 10, AMS_PILE },
-    { ItemKindType::STATUE, SV_ANY, 15, AMS_NOTHING },
-    { ItemKindType::CORPSE, SV_ANY, 15, AMS_NO_UNIQUE },
-    { ItemKindType::SKELETON, SV_ANY, 10, AMS_NO_UNIQUE },
-    { ItemKindType::FIGURINE, SV_ANY, 10, AMS_NO_UNIQUE },
-    { ItemKindType::PARCHMENT, SV_ANY, 1, AMS_NOTHING },
-    { ItemKindType::POLEARM, SV_TSURIZAO, 3, AMS_NOTHING }, // Fishing Pole of Taikobo
-    { ItemKindType::SWORD, SV_BROKEN_DAGGER, 3, AMS_FIXED_ART }, // Broken Dagger of Magician
-    { ItemKindType::SWORD, SV_BROKEN_DAGGER, 10, AMS_NOTHING },
-    { ItemKindType::SWORD, SV_BROKEN_SWORD, 5, AMS_NOTHING },
-    { ItemKindType::SCROLL, SV_SCROLL_AMUSEMENT, 10, AMS_NOTHING },
-    { ItemKindType::NONE, 0, 0, 0 } };
+    { ItemKindType::BOTTLE, SV_ANY, 5, AmusementFlagType::NOTHING },
+    { ItemKindType::JUNK, SV_ANY, 3, AmusementFlagType::MULTIPLE },
+    { ItemKindType::SPIKE, SV_ANY, 10, AmusementFlagType::PILE },
+    { ItemKindType::STATUE, SV_ANY, 15, AmusementFlagType::NOTHING },
+    { ItemKindType::CORPSE, SV_ANY, 15, AmusementFlagType::NO_UNIQUE },
+    { ItemKindType::SKELETON, SV_ANY, 10, AmusementFlagType::NO_UNIQUE },
+    { ItemKindType::FIGURINE, SV_ANY, 10, AmusementFlagType::NO_UNIQUE },
+    { ItemKindType::PARCHMENT, SV_ANY, 1, AmusementFlagType::NOTHING },
+    { ItemKindType::POLEARM, SV_TSURIZAO, 3, AmusementFlagType::NOTHING }, // Fishing Pole of Taikobo
+    { ItemKindType::SWORD, SV_BROKEN_DAGGER, 3, AmusementFlagType::FIXED_ART }, // Broken Dagger of Magician
+    { ItemKindType::SWORD, SV_BROKEN_DAGGER, 10, AmusementFlagType::NOTHING },
+    { ItemKindType::SWORD, SV_BROKEN_SWORD, 5, AmusementFlagType::NOTHING },
+    { ItemKindType::SCROLL, SV_SCROLL_AMUSEMENT, 10, AmusementFlagType::NOTHING },
+    { ItemKindType::NONE, 0, 0, AmusementFlagType::NOTHING }
+};
 
-static short sweep_amusement_artifact(const bool insta_art, const short k_idx)
+static std::optional<short> sweep_amusement_artifact(const bool insta_art, const short k_idx)
 {
     for (const auto &a_ref : a_info) {
         if (a_ref.idx == 0) {
@@ -110,7 +112,7 @@ static short sweep_amusement_artifact(const bool insta_art, const short k_idx)
         return a_ref.idx;
     }
 
-    return 0;
+    return std::nullopt;
 }
 
 /*!
@@ -142,37 +144,34 @@ void generate_amusement(PlayerType *player_ptr, int num, bool known)
         }
 
         const auto insta_art = k_info[k_idx].gen_flags.has(ItemGenerationTraitType::INSTA_ART);
-        const auto fixed_art = any_bits(amuse_info[i].flag, AMS_FIXED_ART);
-        short a_idx = 0;
+        const auto flag = enum2i(amuse_info[i].flag);
+        const auto fixed_art = any_bits(flag, enum2i(AmusementFlagType::FIXED_ART));
+        std::optional<short> opt_a_idx(std::nullopt);
         if (insta_art || fixed_art) {
-            a_idx = sweep_amusement_artifact(insta_art, k_idx);
-            if (a_idx >= static_cast<short>(a_info.size())) {
+            opt_a_idx = sweep_amusement_artifact(insta_art, k_idx);
+            if (!opt_a_idx.has_value()) {
                 continue;
             }
         }
 
-        if (insta_art && (a_idx == 0)) {
-            continue;
-        }
-
         ObjectType item;
         item.prep(k_idx);
-        if (a_idx > 0) {
-            item.fixed_artifact_idx = a_idx;
+        if (opt_a_idx.has_value()) {
+            item.fixed_artifact_idx = opt_a_idx.value();
         }
 
         ItemMagicApplier(player_ptr, &item, 1, AM_NO_FIXED_ART).execute();
-        if (any_bits(amuse_info[i].flag, AMS_NO_UNIQUE)) {
+        if (any_bits(flag, enum2i(AmusementFlagType::NO_UNIQUE))) {
             if (r_info[i2enum<MonsterRaceId>(item.pval)].kind_flags.has(MonsterKindType::UNIQUE)) {
                 continue;
             }
         }
 
-        if (any_bits(amuse_info[i].flag, AMS_MULTIPLE)) {
+        if (any_bits(flag, enum2i(AmusementFlagType::MULTIPLE))) {
             item.number = randint1(3);
         }
 
-        if (any_bits(amuse_info[i].flag, AMS_PILE)) {
+        if (any_bits(flag, enum2i(AmusementFlagType::PILE))) {
             item.number = randint1(99);
         }
 
