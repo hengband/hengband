@@ -4,7 +4,7 @@
 
 class ObjectType;
 class PlayerType;
-void amusement(PlayerType *player_ptr, POSITION y1, POSITION x1, int num, bool known);
+void generate_amusement(PlayerType *player_ptr, int num, bool known);
 void acquirement(PlayerType *player_ptr, POSITION y1, POSITION x1, int num, bool great, bool special, bool known);
 bool curse_armor(PlayerType *player_ptr);
 bool curse_weapon_object(PlayerType *player_ptr, bool force, ObjectType *o_ptr);
