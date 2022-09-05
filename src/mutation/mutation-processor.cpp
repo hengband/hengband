@@ -52,8 +52,8 @@
 #include "target/target-types.h"
 #include "term/screen-processor.h"
 #include "timed-effect/player-acceleration.h"
-#include "timed-effect/player-deceleration.h"
 #include "timed-effect/player-confusion.h"
+#include "timed-effect/player-deceleration.h"
 #include "timed-effect/timed-effects.h"
 #include "view/display-messages.h"
 

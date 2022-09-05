@@ -398,7 +398,7 @@ bool BadStatusSetter::set_deceleration(const TIME_EFFECT tmp_v, bool do_dec)
     if (this->player_ptr->is_dead) {
         return false;
     }
-    
+
     auto deceleration = this->player_ptr->effects()->deceleration();
     auto is_slow = deceleration->is_slow();
     if (v > 0) {
