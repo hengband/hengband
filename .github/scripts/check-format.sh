@@ -8,12 +8,12 @@ wget -O - https://apt.llvm.org/llvm-snapshot.gpg.key 2>/dev/null | sudo apt-key 
 cat <<EOF | sudo tee /etc/apt/sources.list.d/llvm.list >/dev/null
 deb http://apt.llvm.org/focal/ llvm-toolchain-focal main
 deb-src http://apt.llvm.org/focal/ llvm-toolchain-focal main
-# 13
-deb http://apt.llvm.org/focal/ llvm-toolchain-focal-13 main
-deb-src http://apt.llvm.org/focal/ llvm-toolchain-focal-13 main
 # 14
 deb http://apt.llvm.org/focal/ llvm-toolchain-focal-14 main
 deb-src http://apt.llvm.org/focal/ llvm-toolchain-focal-14 main
+# 15
+deb http://apt.llvm.org/focal/ llvm-toolchain-focal-15 main
+deb-src http://apt.llvm.org/focal/ llvm-toolchain-focal-15 main
 
 EOF
 
