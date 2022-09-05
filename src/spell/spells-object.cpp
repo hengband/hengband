@@ -55,11 +55,11 @@ static constexpr std::array<int, 16> enchant_table = { { 0, 10, 50, 100, 200, 30
  * Scatter some "amusing" objects near the player
  */
 enum class AmusementFlagType : byte {
-    NOTHING = 0x00, /* No restriction */
-    NO_UNIQUE = 0x01, /* Don't make the amusing object of uniques */
-    FIXED_ART = 0x02, /* Make a fixed artifact based on the amusing object */
-    MULTIPLE = 0x04, /* Drop 1-3 objects for one type */
-    PILE = 0x08, /* Drop 1-99 pile objects for one type */
+    NOTHING, /* No restriction */
+    NO_UNIQUE, /* Don't make the amusing object of uniques */
+    FIXED_ART, /* Make a fixed artifact based on the amusing object */
+    MULTIPLE, /* Drop 1-3 objects for one type */
+    PILE, /* Drop 1-99 pile objects for one type */
 };
 
 struct amuse_type {
@@ -144,8 +144,8 @@ void generate_amusement(PlayerType *player_ptr, int num, bool known)
         }
 
         const auto insta_art = k_info[k_idx].gen_flags.has(ItemGenerationTraitType::INSTA_ART);
-        const auto flag = enum2i(amuse_info[i].flag);
-        const auto fixed_art = any_bits(flag, enum2i(AmusementFlagType::FIXED_ART));
+        const auto flag = amuse_info[i].flag;
+        const auto fixed_art = flag == AmusementFlagType::FIXED_ART;
         std::optional<short> opt_a_idx(std::nullopt);
         if (insta_art || fixed_art) {
             opt_a_idx = sweep_amusement_artifact(insta_art, k_idx);
@@ -161,17 +161,17 @@ void generate_amusement(PlayerType *player_ptr, int num, bool known)
         }
 
         ItemMagicApplier(player_ptr, &item, 1, AM_NO_FIXED_ART).execute();
-        if (any_bits(flag, enum2i(AmusementFlagType::NO_UNIQUE))) {
+        if (flag == AmusementFlagType::NO_UNIQUE) {
             if (r_info[i2enum<MonsterRaceId>(item.pval)].kind_flags.has(MonsterKindType::UNIQUE)) {
                 continue;
             }
         }
 
-        if (any_bits(flag, enum2i(AmusementFlagType::MULTIPLE))) {
+        if (flag == AmusementFlagType::MULTIPLE) {
             item.number = randint1(3);
         }
 
-        if (any_bits(flag, enum2i(AmusementFlagType::PILE))) {
+        if (flag == AmusementFlagType::PILE) {
             item.number = randint1(99);
         }
 
