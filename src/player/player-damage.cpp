@@ -416,7 +416,7 @@ int take_hit(PlayerType *player_ptr, int damage_type, int damage, concptr hit_fr
                 auto is_hallucinated = effects->hallucination()->is_hallucinated();
                 auto paralysis_state = "";
                 if (effects->paralysis()->is_paralyzed()) {
-                    paralysis_state = player_ptr->free_act ? _("彫像状態で", " while being the statue") : _("麻痺状態で", " while paralyzing");
+                    paralysis_state = player_ptr->free_act ? _("彫像状態で", " while being the statue") : _("麻痺状態で", " while paralyzed");
                 }
 
                 auto hallucintion_state = is_hallucinated ? _("幻覚に歪んだ", "hallucinatingly distorted ") : "";
