@@ -1,5 +1,6 @@
 ﻿#include "system/player-type-definition.h"
 #include "market/arena-info-table.h"
+#include "timed-effect/player-blindness.h"
 #include "timed-effect/player-confusion.h"
 #include "timed-effect/player-cut.h"
 #include "timed-effect/player-deceleration.h"
@@ -46,7 +47,7 @@ bool PlayerType::is_fully_healthy() const
     auto effects = this->effects();
     auto is_fully_healthy = this->chp == this->mhp;
     is_fully_healthy &= this->csp >= this->msp;
-    is_fully_healthy &= !this->blind;
+    is_fully_healthy &= !effects->blindness()->is_blind();
     is_fully_healthy &= !effects->confusion()->is_confused();
     is_fully_healthy &= !effects->poison()->is_poisoned();
     is_fully_healthy &= !effects->fear()->is_fearful();

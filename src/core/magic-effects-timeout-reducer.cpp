@@ -18,6 +18,7 @@
 #include "status/temporary-resistance.h"
 #include "system/player-type-definition.h"
 #include "timed-effect/player-acceleration.h"
+#include "timed-effect/player-blindness.h"
 #include "timed-effect/player-confusion.h"
 #include "timed-effect/player-cut.h"
 #include "timed-effect/player-deceleration.h"
@@ -39,12 +40,12 @@ void reduce_magic_effects_timeout(PlayerType *player_ptr)
     }
 
     BadStatusSetter bss(player_ptr);
-    auto effects = player_ptr->effects();
+    const auto effects = player_ptr->effects();
     if (effects->hallucination()->is_hallucinated()) {
         (void)bss.mod_hallucination(-1);
     }
 
-    if (player_ptr->blind) {
+    if (effects->blindness()->is_blind()) {
         (void)bss.mod_blindness(-1);
     }
 

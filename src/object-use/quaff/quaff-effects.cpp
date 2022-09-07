@@ -262,7 +262,7 @@ bool QuaffEffects::booze()
     }
 
     BadStatusSetter bss(this->player_ptr);
-    if (!has_resist_conf(this->player_ptr) && bss.confusion(randint0(20) + 15)) {
+    if (!has_resist_conf(this->player_ptr) && bss.set_confusion(randint0(20) + 15)) {
         ident = true;
     }
 

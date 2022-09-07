@@ -24,6 +24,7 @@
 #include "system/floor-type-definition.h"
 #include "system/player-type-definition.h"
 #include "timed-effect/player-acceleration.h"
+#include "timed-effect/player-blindness.h"
 #include "timed-effect/player-confusion.h"
 #include "timed-effect/player-cut.h"
 #include "timed-effect/player-deceleration.h"
@@ -334,7 +335,7 @@ static void rd_bad_status(PlayerType *player_ptr)
 {
     auto effects = player_ptr->effects();
     strip_bytes(2); /* Old "rest" */
-    player_ptr->blind = rd_s16b();
+    effects->blindness()->set(rd_s16b());
     effects->paralysis()->set(rd_s16b());
     effects->confusion()->set(rd_s16b());
     player_ptr->food = rd_s16b();

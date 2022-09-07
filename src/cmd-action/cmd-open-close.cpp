@@ -27,6 +27,7 @@
 #include "system/player-type-definition.h"
 #include "target/target-getter.h"
 #include "term/screen-processor.h"
+#include "timed-effect/player-blindness.h"
 #include "timed-effect/player-confusion.h"
 #include "timed-effect/player-hallucination.h"
 #include "timed-effect/timed-effects.h"
@@ -52,11 +53,11 @@ static bool exe_open_chest(PlayerType *player_ptr, POSITION y, POSITION x, OBJEC
     if (o_ptr->pval > 0) {
         flag = false;
         int i = player_ptr->skill_dis;
-        if (player_ptr->blind || no_lite(player_ptr)) {
+        const auto effects = player_ptr->effects();
+        if (effects->blindness()->is_blind() || no_lite(player_ptr)) {
             i = i / 10;
         }
 
-        auto effects = player_ptr->effects();
         if (effects->confusion()->is_confused() || effects->hallucination()->is_hallucinated()) {
             i = i / 10;
         }

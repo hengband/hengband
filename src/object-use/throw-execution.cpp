@@ -62,6 +62,7 @@
 #include "target/target-checker.h"
 #include "target/target-getter.h"
 #include "term/screen-processor.h"
+#include "timed-effect/player-blindness.h"
 #include "timed-effect/player-hallucination.h"
 #include "timed-effect/timed-effects.h"
 #include "util/bit-flags-calculator.h"
@@ -539,7 +540,8 @@ void ObjectThrowEntity::process_boomerang_throw()
 
 void ObjectThrowEntity::display_boomerang_throw()
 {
-    if ((this->back_chance > 37) && !this->player_ptr->blind && (this->item >= 0)) {
+    const auto is_blind = this->player_ptr->effects()->blindness()->is_blind();
+    if ((this->back_chance > 37) && !is_blind && (this->item >= 0)) {
         msg_format(_("%sが手元に返ってきた。", "%s comes back to you."), this->o2_name);
         this->come_back = true;
         return;

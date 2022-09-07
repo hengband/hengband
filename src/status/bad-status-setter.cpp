@@ -19,6 +19,7 @@
 #include "status/base-status.h"
 #include "status/buff-setter.h"
 #include "system/player-type-definition.h"
+#include "timed-effect/player-blindness.h"
 #include "timed-effect/player-confusion.h"
 #include "timed-effect/player-cut.h"
 #include "timed-effect/player-deceleration.h"
@@ -47,7 +48,7 @@ BadStatusSetter::BadStatusSetter(PlayerType *player_ptr)
  * Note that blindness is currently the only thing which can affect\n
  * "player_can_see_bold()".\n
  */
-bool BadStatusSetter::blindness(const TIME_EFFECT tmp_v)
+bool BadStatusSetter::set_blindness(const TIME_EFFECT tmp_v)
 {
     auto notice = false;
     auto v = std::clamp<short>(tmp_v, 0, 10000);
@@ -55,9 +56,11 @@ bool BadStatusSetter::blindness(const TIME_EFFECT tmp_v)
         return false;
     }
 
-    PlayerRace pr(player_ptr);
+    PlayerRace pr(this->player_ptr);
+    const auto blindness = this->player_ptr->effects()->blindness();
+    const auto is_blind = blindness->is_blind();
     if (v > 0) {
-        if (!this->player_ptr->blind) {
+        if (!is_blind) {
             if (pr.equals(PlayerRaceType::ANDROID)) {
                 msg_print(_("センサーをやられた！", "The sensor broke!"));
             } else {
@@ -68,7 +71,7 @@ bool BadStatusSetter::blindness(const TIME_EFFECT tmp_v)
             chg_virtue(this->player_ptr, V_ENLIGHTEN, -1);
         }
     } else {
-        if (this->player_ptr->blind) {
+        if (is_blind) {
             if (pr.equals(PlayerRaceType::ANDROID)) {
                 msg_print(_("センサーが復旧した。", "The sensor has been restored."));
             } else {
@@ -79,7 +82,7 @@ bool BadStatusSetter::blindness(const TIME_EFFECT tmp_v)
         }
     }
 
-    this->player_ptr->blind = v;
+    blindness->set(v);
     this->player_ptr->redraw |= PR_STATUS;
     if (!notice) {
         return false;
@@ -98,7 +101,7 @@ bool BadStatusSetter::blindness(const TIME_EFFECT tmp_v)
 
 bool BadStatusSetter::mod_blindness(const TIME_EFFECT tmp_v)
 {
-    return this->blindness(this->player_ptr->blind + tmp_v);
+    return this->set_blindness(this->player_ptr->effects()->blindness()->current() + tmp_v);
 }
 
 /*!
@@ -106,7 +109,7 @@ bool BadStatusSetter::mod_blindness(const TIME_EFFECT tmp_v)
  * @param v 継続時間
  * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
  */
-bool BadStatusSetter::confusion(const TIME_EFFECT tmp_v)
+bool BadStatusSetter::set_confusion(const TIME_EFFECT tmp_v)
 {
     auto notice = false;
     auto v = std::clamp<short>(tmp_v, 0, 10000);
@@ -174,7 +177,7 @@ bool BadStatusSetter::confusion(const TIME_EFFECT tmp_v)
 
 bool BadStatusSetter::mod_confusion(const TIME_EFFECT tmp_v)
 {
-    return this->confusion(this->player_confusion->current() + tmp_v);
+    return this->set_confusion(this->player_confusion->current() + tmp_v);
 }
 
 /*!

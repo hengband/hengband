@@ -16,9 +16,9 @@ public:
     BadStatusSetter(PlayerType *player_ptr);
     virtual ~BadStatusSetter() = default;
 
-    bool blindness(const TIME_EFFECT tmp_v);
+    bool set_blindness(const TIME_EFFECT tmp_v);
     bool mod_blindness(const TIME_EFFECT tmp_v);
-    bool confusion(const TIME_EFFECT tmp_v);
+    bool set_confusion(const TIME_EFFECT tmp_v);
     bool mod_confusion(const TIME_EFFECT tmp_v);
     bool set_poison(const TIME_EFFECT tmp_v);
     bool mod_poison(const TIME_EFFECT tmp_v);

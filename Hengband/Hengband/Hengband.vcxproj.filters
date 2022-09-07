@@ -2463,6 +2463,9 @@
     <ClCompile Include="..\..\src\timed-effect\player-poison.cpp">
       <Filter>timed-effect</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\timed-effect\player-blindness.cpp">
+      <Filter>timed-effect</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\combat\shoot.h">
@@ -5353,6 +5356,9 @@
       <Filter>timed-effect</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\timed-effect\player-poison.h">
+      <Filter>timed-effect</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\timed-effect\player-blindness.h">
       <Filter>timed-effect</Filter>
     </ClInclude>
   </ItemGroup>

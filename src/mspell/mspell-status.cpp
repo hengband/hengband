@@ -35,6 +35,8 @@
 #include "system/monster-race-definition.h"
 #include "system/monster-type-definition.h"
 #include "system/player-type-definition.h"
+#include "timed-effect/player-blindness.h"
+#include "timed-effect/timed-effects.h"
 #include "view/display-messages.h"
 
 mspell_cast_msg_bad_status_to_player::mspell_cast_msg_bad_status_to_player(concptr blind, concptr not_blind, concptr resist, concptr saved_throw)
@@ -68,7 +70,7 @@ void spell_badstatus_message_to_player(PlayerType *player_ptr, MONSTER_IDX m_idx
     monster_name(player_ptr, m_idx, m_name);
 
     disturb(player_ptr, true, true);
-    if (player_ptr->blind) {
+    if (player_ptr->effects()->blindness()->is_blind()) {
         msg_format(msgs.blind, m_name);
     } else {
         msg_format(msgs.not_blind, m_name);
@@ -178,7 +180,7 @@ MonsterSpellResult spell_RF5_DRAIN_MANA(PlayerType *player_ptr, POSITION y, POSI
 MonsterSpellResult spell_RF5_MIND_BLAST(PlayerType *player_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int target_type)
 {
     auto *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
-    bool seen = (!player_ptr->blind && m_ptr->ml);
+    bool seen = (!player_ptr->effects()->blindness()->is_blind() && m_ptr->ml);
     GAME_TEXT m_name[MAX_NLEN], t_name[MAX_NLEN];
     monster_name(player_ptr, m_idx, m_name);
     monster_name(player_ptr, t_idx, t_name);
@@ -217,7 +219,7 @@ MonsterSpellResult spell_RF5_MIND_BLAST(PlayerType *player_ptr, POSITION y, POSI
 MonsterSpellResult spell_RF5_BRAIN_SMASH(PlayerType *player_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int target_type)
 {
     auto *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
-    bool seen = (!player_ptr->blind && m_ptr->ml);
+    bool seen = (!player_ptr->effects()->blindness()->is_blind() && m_ptr->ml);
     GAME_TEXT m_name[MAX_NLEN], t_name[MAX_NLEN];
     monster_name(player_ptr, m_idx, m_name);
     monster_name(player_ptr, t_idx, t_name);
@@ -329,7 +331,7 @@ MonsterSpellResult spell_RF5_BLIND(MONSTER_IDX m_idx, PlayerType *player_ptr, MO
         spell_badstatus_message_to_player(player_ptr, m_idx, msg, resist, saving_throw);
 
         if (!resist && !saving_throw) {
-            (void)BadStatusSetter(player_ptr).blindness(12 + randint0(4));
+            (void)BadStatusSetter(player_ptr).set_blindness(12 + randint0(4));
         }
 
         update_smart_learn(player_ptr, m_idx, DRS_BLIND);
@@ -502,7 +504,7 @@ MonsterSpellResult spell_RF6_HASTE(PlayerType *player_ptr, MONSTER_IDX m_idx, MO
         _("%^sが自分の体に念を送った。", format("%%^s concentrates on %s body.", m_poss)),
         _("%^sが自分の体に念を送った。", format("%%^s concentrates on %s body.", m_poss)));
 
-    monspell_message_base(player_ptr, m_idx, t_idx, msg, player_ptr->blind > 0, target_type);
+    monspell_message_base(player_ptr, m_idx, t_idx, msg, player_ptr->effects()->blindness()->is_blind(), target_type);
 
     if (set_monster_fast(player_ptr, m_idx, monster_fast_remaining(m_ptr) + 100)) {
         if (target_type == MONSTER_TO_PLAYER || (target_type == MONSTER_TO_MONSTER && see_m)) {
@@ -596,7 +598,8 @@ MonsterSpellResult spell_RF6_HEAL(PlayerType *player_ptr, MONSTER_IDX m_idx, MON
     auto *floor_ptr = player_ptr->current_floor_ptr;
     auto *m_ptr = &floor_ptr->m_list[m_idx];
     DEPTH rlev = monster_level_idx(floor_ptr, m_idx);
-    bool seen = (!player_ptr->blind && m_ptr->ml);
+    const auto is_blind = player_ptr->effects()->blindness()->is_blind();
+    const auto seen = (!is_blind && m_ptr->ml);
     GAME_TEXT m_name[MAX_NLEN];
     monster_name(player_ptr, m_idx, m_name);
     char m_poss[10];
@@ -607,7 +610,7 @@ MonsterSpellResult spell_RF6_HEAL(PlayerType *player_ptr, MONSTER_IDX m_idx, MON
     msg.to_player_false = _("%^sが自分の傷に集中した。", format("%%^s concentrates on %s wounds.", m_poss));
     msg.to_mons_false = _("%^sは自分の傷に念を集中した。", format("%%^s concentrates on %s wounds.", m_poss));
 
-    monspell_message_base(player_ptr, m_idx, t_idx, msg, player_ptr->blind > 0, target_type);
+    monspell_message_base(player_ptr, m_idx, t_idx, msg, is_blind, target_type);
 
     m_ptr->hp += (rlev * 6);
     if (m_ptr->hp >= m_ptr->maxhp) {
@@ -659,7 +662,7 @@ MonsterSpellResult spell_RF6_HEAL(PlayerType *player_ptr, MONSTER_IDX m_idx, MON
 MonsterSpellResult spell_RF6_INVULNER(PlayerType *player_ptr, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int target_type)
 {
     auto *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
-    bool seen = (!player_ptr->blind && m_ptr->ml);
+    bool seen = (!player_ptr->effects()->blindness()->is_blind() && m_ptr->ml);
     mspell_cast_msg msg(_("%^sが何かを力強くつぶやいた。", "%^s mumbles powerfully."),
         _("%^sが何かを力強くつぶやいた。", "%^s mumbles powerfully."), _("%sは無傷の球の呪文を唱えた。", "%^s casts a Globe of Invulnerability."),
         _("%sは無傷の球の呪文を唱えた。", "%^s casts a Globe of Invulnerability."));

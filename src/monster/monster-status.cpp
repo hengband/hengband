@@ -22,6 +22,7 @@
 #include "system/monster-race-definition.h"
 #include "system/monster-type-definition.h"
 #include "system/player-type-definition.h"
+#include "timed-effect/player-blindness.h"
 #include "timed-effect/player-hallucination.h"
 #include "timed-effect/timed-effects.h"
 #include "util/bit-flags-calculator.h"
@@ -85,7 +86,7 @@ int mon_damage_mod(PlayerType *player_ptr, monster_type *m_ptr, int dam, bool is
     }
 
     if (is_psy_spear) {
-        if (!player_ptr->blind && is_seen(player_ptr, m_ptr)) {
+        if (!player_ptr->effects()->blindness()->is_blind() && is_seen(player_ptr, m_ptr)) {
             msg_print(_("バリアを切り裂いた！", "The barrier is penetrated!"));
         }
 

@@ -56,6 +56,7 @@
 #include "system/monster-race-definition.h"
 #include "system/player-type-definition.h"
 #include "term/screen-processor.h"
+#include "timed-effect/player-blindness.h"
 #include "timed-effect/player-confusion.h"
 #include "timed-effect/player-cut.h"
 #include "timed-effect/player-hallucination.h"
@@ -182,7 +183,8 @@ void process_player(PlayerType *player_ptr)
         }
     }
 
-    if (player_ptr->riding && !player_ptr->effects()->confusion()->is_confused() && !player_ptr->blind) {
+    const auto effects = player_ptr->effects();
+    if (player_ptr->riding && !effects->confusion()->is_confused() && !effects->blindness()->is_blind()) {
         auto *m_ptr = &player_ptr->current_floor_ptr->m_list[player_ptr->riding];
         auto *r_ptr = &r_info[m_ptr->r_idx];
         if (monster_csleep_remaining(m_ptr)) {
@@ -281,7 +283,6 @@ void process_player(PlayerType *player_ptr)
 
         PlayerEnergy energy(player_ptr);
         energy.reset_player_turn();
-        auto effects = player_ptr->effects();
         auto is_knocked_out = effects->stun()->is_knocked_out();
         auto is_paralyzed = effects->paralysis()->is_paralyzed();
         if (player_ptr->phase_out) {

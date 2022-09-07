@@ -28,6 +28,7 @@
 #include "player/player-status.h"
 #include "system/player-type-definition.h"
 #include "term/screen-processor.h"
+#include "timed-effect/player-blindness.h"
 #include "timed-effect/player-confusion.h"
 #include "timed-effect/player-cut.h"
 #include "timed-effect/player-fear.h"
@@ -40,7 +41,7 @@
 static void set_bad_status_info(PlayerType *player_ptr, self_info_type *self_ptr)
 {
     auto effects = player_ptr->effects();
-    if (player_ptr->blind) {
+    if (effects->blindness()->is_blind()) {
         self_ptr->info[self_ptr->line++] = _("あなたは目が見えない。", "You cannot see.");
     }
 
@@ -319,13 +320,14 @@ void report_magics(PlayerType *player_ptr)
     int i = 0;
     concptr info[128];
     int info2[128];
-    auto effects = player_ptr->effects();
-    if (player_ptr->blind) {
-        info2[i] = report_magics_aux(player_ptr->blind);
+    const auto effects = player_ptr->effects();
+    const auto blindness = effects->blindness();
+    if (blindness->is_blind()) {
+        info2[i] = report_magics_aux(blindness->current());
         info[i++] = _("あなたは目が見えない", "You cannot see");
     }
 
-    auto confusion = effects->confusion();
+    const auto confusion = effects->confusion();
     if (confusion->is_confused()) {
         info2[i] = report_magics_aux(confusion->current());
         info[i++] = _("あなたは混乱している", "You are confused");

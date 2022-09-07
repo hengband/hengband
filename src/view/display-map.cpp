@@ -21,6 +21,7 @@
 #include "system/object-type-definition.h"
 #include "system/player-type-definition.h"
 #include "term/term-color-types.h"
+#include "timed-effect/player-blindness.h"
 #include "timed-effect/player-hallucination.h"
 #include "timed-effect/timed-effects.h"
 #include "util/bit-flags-calculator.h"
@@ -158,7 +159,8 @@ void map_info(PlayerType *player_ptr, POSITION y, POSITION x, TERM_COLOR *ap, ch
         auto is_visible = any_bits(g_ptr->info, (CAVE_MARK | CAVE_LITE | CAVE_MNLT));
         auto is_glowing = match_bits(g_ptr->info, CAVE_GLOW | CAVE_MNDK, CAVE_GLOW);
         auto can_view = g_ptr->is_view() && (is_glowing || player_ptr->see_nocto);
-        if ((player_ptr->blind == 0) && (is_visible || can_view)) {
+        const auto is_blind = player_ptr->effects()->blindness()->is_blind();
+        if (!is_blind && (is_visible || can_view)) {
             a = f_ptr->x_attr[F_LIT_STANDARD];
             c = f_ptr->x_char[F_LIT_STANDARD];
             if (player_ptr->wild_mode) {
@@ -197,12 +199,13 @@ void map_info(PlayerType *player_ptr, POSITION y, POSITION x, TERM_COLOR *ap, ch
         if (g_ptr->is_mark() && is_revealed_wall(floor_ptr, f_ptr, y, x)) {
             a = f_ptr->x_attr[F_LIT_STANDARD];
             c = f_ptr->x_char[F_LIT_STANDARD];
+            const auto is_blind = player_ptr->effects()->blindness()->is_blind();
             if (player_ptr->wild_mode) {
-                if (view_granite_lite && (player_ptr->blind || !is_daytime())) {
+                if (view_granite_lite && (is_blind || !is_daytime())) {
                     a = f_ptr->x_attr[F_LIT_DARK];
                     c = f_ptr->x_char[F_LIT_DARK];
                 }
-            } else if (darkened_grid(player_ptr, g_ptr) && !player_ptr->blind) {
+            } else if (darkened_grid(player_ptr, g_ptr) && !is_blind) {
                 if (f_ptr->flags.has_all_of({ FloorFeatureType::LOS, FloorFeatureType::PROJECT })) {
                     feat = (view_unsafe_grids && (g_ptr->info & CAVE_UNSAFE)) ? feat_undetected : feat_none;
                     f_ptr = &f_info[feat];
@@ -213,7 +216,7 @@ void map_info(PlayerType *player_ptr, POSITION y, POSITION x, TERM_COLOR *ap, ch
                     c = f_ptr->x_char[F_LIT_DARK];
                 }
             } else if (view_granite_lite) {
-                if (player_ptr->blind) {
+                if (is_blind) {
                     a = f_ptr->x_attr[F_LIT_DARK];
                     c = f_ptr->x_char[F_LIT_DARK];
                 } else if (g_ptr->info & (CAVE_LITE | CAVE_MNLT)) {

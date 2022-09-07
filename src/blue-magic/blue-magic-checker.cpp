@@ -22,6 +22,7 @@
 #include "status/experience.h"
 #include "system/angband.h"
 #include "system/player-type-definition.h"
+#include "timed-effect/player-blindness.h"
 #include "timed-effect/player-confusion.h"
 #include "timed-effect/player-hallucination.h"
 #include "timed-effect/player-paralysis.h"
@@ -44,12 +45,13 @@ void learn_spell(PlayerType *player_ptr, MonsterAbilityType monspell)
         return;
     }
 
-    auto effects = player_ptr->effects();
-    auto is_confused = effects->confusion()->is_confused();
-    auto is_stunned = effects->stun()->is_stunned();
-    auto is_hallucinated = effects->hallucination()->is_hallucinated();
-    auto is_paralyzed = effects->paralysis()->is_paralyzed();
-    if (is_confused || player_ptr->blind || is_hallucinated || is_stunned || is_paralyzed) {
+    const auto effects = player_ptr->effects();
+    const auto is_confused = effects->confusion()->is_confused();
+    const auto is_blind = effects->blindness()->is_blind();
+    const auto is_stunned = effects->stun()->is_stunned();
+    const auto is_hallucinated = effects->hallucination()->is_hallucinated();
+    const auto is_paralyzed = effects->paralysis()->is_paralyzed();
+    if (is_confused || is_blind || is_hallucinated || is_stunned || is_paralyzed) {
         return;
     }
 

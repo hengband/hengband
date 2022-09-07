@@ -8,6 +8,8 @@
 #include "system/monster-type-definition.h"
 #include "system/player-type-definition.h"
 #include "target/projection-path-calculator.h"
+#include "timed-effect/player-blindness.h"
+#include "timed-effect/timed-effects.h"
 #include "util/bit-flags-calculator.h"
 
 /*!
@@ -153,7 +155,7 @@ bool player_can_see_bold(PlayerType *player_ptr, POSITION y, POSITION x)
     grid_type *g_ptr;
 
     /* Blind players see nothing */
-    if (player_ptr->blind) {
+    if (player_ptr->effects()->blindness()->is_blind()) {
         return false;
     }
 

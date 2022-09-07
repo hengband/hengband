@@ -8,11 +8,13 @@
 #include "status/buff-setter.h"
 #include "system/player-type-definition.h"
 #include "timed-effect/player-acceleration.h"
+#include "timed-effect/player-blindness.h"
+#include "timed-effect/timed-effects.h"
 #include "view/display-messages.h"
 
 void effect_player_old_heal(PlayerType *player_ptr, EffectPlayerType *ep_ptr)
 {
-    if (player_ptr->blind) {
+    if (player_ptr->effects()->blindness()->is_blind()) {
         msg_print(_("何らかの攻撃によって気分がよくなった。", "You are hit by something invigorating!"));
     }
 
@@ -22,7 +24,7 @@ void effect_player_old_heal(PlayerType *player_ptr, EffectPlayerType *ep_ptr)
 
 void effect_player_old_speed(PlayerType *player_ptr, EffectPlayerType *ep_ptr)
 {
-    if (player_ptr->blind) {
+    if (player_ptr->effects()->blindness()->is_blind()) {
         msg_print(_("何かで攻撃された！", "You are hit by something!"));
     }
 
@@ -32,7 +34,7 @@ void effect_player_old_speed(PlayerType *player_ptr, EffectPlayerType *ep_ptr)
 
 void effect_player_old_slow(PlayerType *player_ptr)
 {
-    if (player_ptr->blind) {
+    if (player_ptr->effects()->blindness()->is_blind()) {
         msg_print(_("何か遅いもので攻撃された！", "You are hit by something slow!"));
     }
 
@@ -45,7 +47,7 @@ void effect_player_old_sleep(PlayerType *player_ptr, EffectPlayerType *ep_ptr)
         return;
     }
 
-    if (player_ptr->blind) {
+    if (player_ptr->effects()->blindness()->is_blind()) {
         msg_print(_("眠ってしまった！", "You fall asleep!"));
     }
 
