@@ -15,7 +15,7 @@
  * @brief 固定アーティファクト情報の構造体 / Artifact structure.
  * @details
  * @note
- * the save-file only writes "cur_num" to the savefile.
+ * the save-file only writes "is_generated" to the savefile.
  * "max_num" is always "1" (if that artifact "exists")
  */
 enum class RandomArtActType : short;
@@ -39,7 +39,7 @@ struct artifact_type {
     EnumClassFlagGroup<ItemGenerationTraitType> gen_flags; /*! アイテム生成フラグ / flags for generate */
     DEPTH level{}; /*! 基本生成階 / Artifact level */
     RARITY rarity{}; /*! レアリティ / Artifact rarity */
-    byte cur_num{}; /*! 現在の生成数 / Number created (0 or 1) */
+    bool is_generated{}; /*! 生成済か否か (生成済でも、「保存モードON」かつ「帰還等で鑑定前に消滅」したら未生成状態に戻る) */
     FLOOR_IDX floor_id{}; /*! アイテムを落としたフロアのID / Leaved on this location last time */
     RandomArtActType act_idx{}; /*! 発動能力ID / Activative ability index */
 };

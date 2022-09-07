@@ -295,7 +295,7 @@ static void new_floor_allocation(PlayerType *player_ptr, saved_floor_type *sf_pt
         }
 
         if (a_info[o_ptr->fixed_artifact_idx].floor_id == new_floor_id) {
-            a_info[o_ptr->fixed_artifact_idx].cur_num = 1;
+            a_info[o_ptr->fixed_artifact_idx].is_generated = true;
         } else {
             delete_object_idx(player_ptr, i);
         }

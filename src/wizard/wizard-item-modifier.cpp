@@ -192,7 +192,7 @@ void wiz_restore_aware_flag_of_fixed_arfifact(ARTIFACT_IDX a_idx, bool aware)
     }
 
     auto *a_ptr = &a_info[a_idx];
-    a_ptr->cur_num = aware ? 1 : 0;
+    a_ptr->is_generated = aware;
     msg_print(aware ? "Modified." : "Restored.");
 }
 
@@ -414,7 +414,7 @@ static void wiz_statistics(PlayerType *player_ptr, ObjectType *o_ptr)
     char tmp_val[80];
 
     if (o_ptr->is_fixed_artifact()) {
-        a_info[o_ptr->fixed_artifact_idx].cur_num = 0;
+        a_info[o_ptr->fixed_artifact_idx].is_generated = false;
     }
 
     uint32_t i, matches, better, worse, other, correct;
@@ -468,7 +468,7 @@ static void wiz_statistics(PlayerType *player_ptr, ObjectType *o_ptr)
             q_ptr->wipe();
             make_object(player_ptr, q_ptr, mode);
             if (q_ptr->is_fixed_artifact()) {
-                a_info[q_ptr->fixed_artifact_idx].cur_num = 0;
+                a_info[q_ptr->fixed_artifact_idx].is_generated = false;
             }
 
             if ((o_ptr->tval != q_ptr->tval) || (o_ptr->sval != q_ptr->sval)) {
@@ -492,7 +492,7 @@ static void wiz_statistics(PlayerType *player_ptr, ObjectType *o_ptr)
     }
 
     if (o_ptr->is_fixed_artifact()) {
-        a_info[o_ptr->fixed_artifact_idx].cur_num = 1;
+        a_info[o_ptr->fixed_artifact_idx].is_generated = true;
     }
 }
 
@@ -518,7 +518,7 @@ static void wiz_reroll_item(PlayerType *player_ptr, ObjectType *o_ptr)
         wiz_display_item(player_ptr, q_ptr);
         if (!get_com("[a]ccept, [w]orthless, [c]ursed, [n]ormal, [g]ood, [e]xcellent, [s]pecial? ", &ch, false)) {
             if (q_ptr->is_fixed_artifact()) {
-                a_info[q_ptr->fixed_artifact_idx].cur_num = 0;
+                a_info[q_ptr->fixed_artifact_idx].is_generated = false;
                 q_ptr->fixed_artifact_idx = 0;
             }
 
@@ -532,7 +532,7 @@ static void wiz_reroll_item(PlayerType *player_ptr, ObjectType *o_ptr)
         }
 
         if (q_ptr->is_fixed_artifact()) {
-            a_info[q_ptr->fixed_artifact_idx].cur_num = 0;
+            a_info[q_ptr->fixed_artifact_idx].is_generated = false;
             q_ptr->fixed_artifact_idx = 0;
         }
 
@@ -1022,10 +1022,10 @@ WishResultType do_cmd_wishing(PlayerType *player_ptr, int prob, bool allow_art, 
 
     if (a_ids.size() == 1) {
         ARTIFACT_IDX a_idx = a_ids.back();
-        if (must || (ok_art && !a_info[a_idx].cur_num)) {
+        if (must || (ok_art && !a_info[a_idx].is_generated)) {
             create_named_art(player_ptr, a_idx, player_ptr->y, player_ptr->x);
             if (!w_ptr->wizard) {
-                a_info[a_idx].cur_num = 1;
+                a_info[a_idx].is_generated = true;
             }
         } else {
             wishing_puff_of_smoke();
@@ -1057,10 +1057,10 @@ WishResultType do_cmd_wishing(PlayerType *player_ptr, int prob, bool allow_art, 
 
         if (a_idx > 0) {
             a_ptr = &a_info[a_idx];
-            if (must || (ok_art && !a_ptr->cur_num)) {
+            if (must || (ok_art && !a_ptr->is_generated)) {
                 create_named_art(player_ptr, a_idx, player_ptr->y, player_ptr->x);
                 if (!w_ptr->wizard) {
-                    a_info[a_idx].cur_num = 1;
+                    a_info[a_idx].is_generated = true;
                 }
             } else {
                 wishing_puff_of_smoke();
