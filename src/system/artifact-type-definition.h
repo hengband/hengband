@@ -40,7 +40,6 @@ struct artifact_type {
     DEPTH level{}; /*! 基本生成階 / Artifact level */
     RARITY rarity{}; /*! レアリティ / Artifact rarity */
     byte cur_num{}; /*! 現在の生成数 / Number created (0 or 1) */
-    byte max_num{}; /*! (未使用)最大生成数 / Unused (should be "1") */
     FLOOR_IDX floor_id{}; /*! アイテムを落としたフロアのID / Leaved on this location last time */
     RandomArtActType act_idx{}; /*! 発動能力ID / Activative ability index */
 };
