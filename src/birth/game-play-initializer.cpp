@@ -78,7 +78,7 @@ void player_wipe_without_name(PlayerType *player_ptr)
     }
 
     for (auto &a_ref : a_info) {
-        a_ref.cur_num = 0;
+        a_ref.is_generated = false;
     }
 
     k_info_reset();

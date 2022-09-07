@@ -170,7 +170,7 @@ static bool wr_savefile_new(PlayerType *player_ptr, SaveType type)
     wr_u16b(tmp16u);
     for (int i = 0; i < tmp16u; i++) {
         auto *a_ptr = &a_info[i];
-        wr_byte(a_ptr->cur_num);
+        wr_bool(a_ptr->is_generated);
         wr_s16b(a_ptr->floor_id);
     }
 

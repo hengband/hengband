@@ -179,19 +179,19 @@ static ARTIFACT_IDX drop_artifact_index(PlayerType *player_ptr, monster_death_ty
 bool drop_single_artifact(PlayerType *player_ptr, monster_death_type *md_ptr, ARTIFACT_IDX a_idx)
 {
     auto *a_ptr = &a_info[a_idx];
-    if (a_ptr->cur_num == 1) {
+    if (a_ptr->is_generated) {
         return false;
     }
 
     if (create_named_art(player_ptr, a_idx, md_ptr->md_y, md_ptr->md_x)) {
-        a_ptr->cur_num = 1;
+        a_ptr->is_generated = true;
 
         if (w_ptr->character_dungeon) {
             a_ptr->floor_id = player_ptr->floor_id;
         }
 
         if (!preserve_mode) {
-            a_ptr->cur_num = 1;
+            a_ptr->is_generated = true;
         }
 
         return true;
@@ -208,16 +208,16 @@ static KIND_OBJECT_IDX drop_dungeon_final_artifact(PlayerType *player_ptr, monst
 
     a_idx = d_info[player_ptr->dungeon_idx].final_artifact;
     auto *a_ptr = &a_info[a_idx];
-    if (a_ptr->cur_num == 1) {
+    if (a_ptr->is_generated) {
         return k_idx;
     }
     if (create_named_art(player_ptr, a_idx, md_ptr->md_y, md_ptr->md_x)) {
-        a_ptr->cur_num = 1;
+        a_ptr->is_generated = true;
         if (w_ptr->character_dungeon) {
             a_ptr->floor_id = player_ptr->floor_id;
         }
     } else if (!preserve_mode) {
-        a_ptr->cur_num = 1;
+        a_ptr->is_generated = true;
     }
 
     return d_info[player_ptr->dungeon_idx].final_object ? k_idx : 0;

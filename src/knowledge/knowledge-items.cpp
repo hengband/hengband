@@ -55,7 +55,7 @@ void do_cmd_knowledge_artifacts(PlayerType *player_ptr)
         if (a_ref.name.empty()) {
             continue;
         }
-        if (!a_ref.cur_num) {
+        if (!a_ref.is_generated) {
             continue;
         }
 

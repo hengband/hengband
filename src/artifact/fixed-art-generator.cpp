@@ -303,7 +303,7 @@ bool make_artifact(PlayerType *player_ptr, ObjectType *o_ptr)
             continue;
         }
 
-        if (a_ref.cur_num) {
+        if (a_ref.is_generated) {
             continue;
         }
 
@@ -376,7 +376,7 @@ bool make_artifact_special(PlayerType *player_ptr, ObjectType *o_ptr)
         }
 
         /*! @note 既に生成回数がカウントされたアーティファクト、QUESTITEMと非INSTA_ARTは除外 / Cannot make an artifact twice */
-        if (a_ref.cur_num) {
+        if (a_ref.is_generated) {
             continue;
         }
         if (a_ref.gen_flags.has(ItemGenerationTraitType::QUESTITEM)) {

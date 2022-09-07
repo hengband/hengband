@@ -15,15 +15,15 @@
  * @brief 固定アーティファクト情報の構造体 / Artifact structure.
  * @details
  * @note
- * the save-file only writes "cur_num" to the savefile.
+ * the save-file only writes "is_generated" to the savefile.
  * "max_num" is always "1" (if that artifact "exists")
  */
 enum class RandomArtActType : short;
 struct artifact_type {
     ARTIFACT_IDX idx{};
 
-    std::string name; /*!< アーティファクト名(headerオフセット参照) / Name (offset) */
-    std::string text; /*!< アーティファクト解説(headerオフセット参照) / Text (offset) */
+    std::string name; /*!< アーティファクト名 / Name */
+    std::string text; /*!< アーティファクト解説 / Text */
     ItemKindType tval{}; /*!< ベースアイテム大項目ID / Artifact type */
     OBJECT_SUBTYPE_VALUE sval{}; /*!< ベースアイテム小項目ID / Artifact sub type */
     PARAMETER_VALUE pval{}; /*!< pval修正値 / Artifact extra info */
@@ -39,8 +39,7 @@ struct artifact_type {
     EnumClassFlagGroup<ItemGenerationTraitType> gen_flags; /*! アイテム生成フラグ / flags for generate */
     DEPTH level{}; /*! 基本生成階 / Artifact level */
     RARITY rarity{}; /*! レアリティ / Artifact rarity */
-    byte cur_num{}; /*! 現在の生成数 / Number created (0 or 1) */
-    byte max_num{}; /*! (未使用)最大生成数 / Unused (should be "1") */
+    bool is_generated{}; /*! 生成済か否か (生成済でも、「保存モードON」かつ「帰還等で鑑定前に消滅」したら未生成状態に戻る) */
     FLOOR_IDX floor_id{}; /*! アイテムを落としたフロアのID / Leaved on this location last time */
     RandomArtActType act_idx{}; /*! 発動能力ID / Activative ability index */
 };

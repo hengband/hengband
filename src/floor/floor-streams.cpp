@@ -353,8 +353,7 @@ void build_streamer(PlayerType *player_ptr, FEAT_IDX feat, int chance)
 
                     /* Hack -- Preserve unknown artifacts */
                     if (o_ptr->is_fixed_artifact()) {
-                        /* Mega-Hack -- Preserve the artifact */
-                        a_info[o_ptr->fixed_artifact_idx].cur_num = 0;
+                        a_info[o_ptr->fixed_artifact_idx].is_generated = false;
 
                         if (cheat_peek) {
                             GAME_TEXT o_name[MAX_NLEN];

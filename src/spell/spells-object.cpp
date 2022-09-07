@@ -105,7 +105,7 @@ static std::optional<short> sweep_amusement_artifact(const bool insta_art, const
             continue;
         }
 
-        if (a_ref.cur_num > 0) {
+        if (a_ref.is_generated) {
             continue;
         }
 

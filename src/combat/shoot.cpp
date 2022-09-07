@@ -951,7 +951,7 @@ void exe_fire(PlayerType *player_ptr, INVENTORY_IDX item, ObjectType *j_ptr, SPE
             if (!o_idx) {
                 msg_format(_("%sはどこかへ行った。", "The %s went somewhere."), o_name);
                 if (q_ptr->is_fixed_artifact()) {
-                    a_info[j_ptr->fixed_artifact_idx].cur_num = 0;
+                    a_info[j_ptr->fixed_artifact_idx].is_generated = false;
                 }
                 return;
             }

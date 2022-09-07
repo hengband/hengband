@@ -80,8 +80,8 @@ static void generate_artifact(PlayerType *player_ptr, qtwg_type *qtwg_ptr, const
         return;
     }
 
-    if ((a_info[artifact_index].cur_num == 0) && create_named_art(player_ptr, artifact_index, *qtwg_ptr->y, *qtwg_ptr->x)) {
-        a_info[artifact_index].cur_num = 1;
+    if (!a_info[artifact_index].is_generated && create_named_art(player_ptr, artifact_index, *qtwg_ptr->y, *qtwg_ptr->x)) {
+        a_info[artifact_index].is_generated = true;
         return;
     }
 
@@ -257,7 +257,7 @@ static bool parse_qtw_QR(quest_type *q_ptr, char **zz, int num)
         if (a_idx < 1) {
             continue;
         }
-        if (a_info[a_idx].cur_num > 0) {
+        if (a_info[a_idx].is_generated) {
             continue;
         }
         count++;
