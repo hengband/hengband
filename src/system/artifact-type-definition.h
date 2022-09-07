@@ -22,8 +22,8 @@ enum class RandomArtActType : short;
 struct artifact_type {
     ARTIFACT_IDX idx{};
 
-    std::string name; /*!< アーティファクト名(headerオフセット参照) / Name (offset) */
-    std::string text; /*!< アーティファクト解説(headerオフセット参照) / Text (offset) */
+    std::string name; /*!< アーティファクト名 / Name */
+    std::string text; /*!< アーティファクト解説 / Text */
     ItemKindType tval{}; /*!< ベースアイテム大項目ID / Artifact type */
     OBJECT_SUBTYPE_VALUE sval{}; /*!< ベースアイテム小項目ID / Artifact sub type */
     PARAMETER_VALUE pval{}; /*!< pval修正値 / Artifact extra info */
