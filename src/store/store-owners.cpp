@@ -2,20 +2,10 @@
 #include "player-info/race-types.h"
 #include "store/store-util.h"
 
-/*!
- * @todo _() でまとめる
- */
 const std::unordered_map<StoreSaleType, std::vector<owner_type>> owners = {
-    /* General store - 32 unique names */
-    /*
-  Raistlin は dragonlance の powerful wizard 。
-  Rincewind the Chicken は Terry Pratchett の Discworld の登場人物 上記のパロディ？、
-  { "憶病者ラストリン",  200, 108, PlayerRaceType::HUMAN},
-  { "Raistlin the Chicken", 200, 108, PlayerRaceType::HUMAN},
-*/
-    {
-        StoreSaleType::GENERAL,
+    { StoreSaleType::GENERAL,
         {
+            { _("憶病者ラストリン", "Raistlin the Chicken"), 30000, 108, PlayerRaceType::HUMAN },
             { _("フレンドリーなビルボ", "Bilbo the Friendly"), 30000, 108, PlayerRaceType::HOBBIT, STORE_OBJ_STD_LEVEL },
             { _("憶病者リンスウィンド", "Rincewind the Chicken"), 30000, 108, PlayerRaceType::HUMAN, STORE_OBJ_STD_LEVEL },
             { _("背の低いサルタン", "Sultan the Midget"), 30000, 107, PlayerRaceType::GNOME, STORE_OBJ_STD_LEVEL },
@@ -55,8 +45,6 @@ const std::unordered_map<StoreSaleType, std::vector<owner_type>> owners = {
             { _("頑固者ダーグ=ロウ", "Darg-Low the Grim"), 30000, 111, PlayerRaceType::HUMAN, STORE_OBJ_STD_LEVEL },
             { _("賢者デカド", "Decado the Handsome"), 30000, 112, PlayerRaceType::DUNADAN, STORE_OBJ_STD_LEVEL },
             { _("鍛冶屋のウィーランド", "Wieland the Smith"), 30000, 112, PlayerRaceType::DWARF, STORE_OBJ_STD_LEVEL },
-            { _("醜悪コン=ダー", "Kon-Dar the Ugly"), 30000, 115, PlayerRaceType::HALF_ORC, STORE_OBJ_STD_LEVEL }, // @todo 重複.
-            { _("頑固者ダーグ=ロウ", "Darg-Low the Grim"), 30000, 111, PlayerRaceType::HUMAN, STORE_OBJ_STD_LEVEL },
             { _("ハンサムなデカド", "Decado the Handsome"), 30000, 112, PlayerRaceType::AMBERITE, STORE_OBJ_STD_LEVEL },
             { _("エロー・ドラゴンスケイル", "Elo Dragonscale"), 30000, 112, PlayerRaceType::ELF, STORE_OBJ_STD_LEVEL },
             { _("デリカトス", "Delicatus"), 30000, 115, PlayerRaceType::SPRITE, STORE_OBJ_STD_LEVEL },
