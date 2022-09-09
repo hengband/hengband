@@ -22,7 +22,7 @@ const concptr game_inscriptions[MAX_GAME_INSCRIPTIONS] = {
 };
 
 /*! オブジェクトの特性表示記号テーブルの定義(pval要素) */
-std::vector<flag_insc_table> flag_insc_plus = {
+const std::vector<flag_insc_table> flag_insc_plus = {
     { N("攻", "At"), TR_BLOWS },
     { N("速", "Sp"), TR_SPEED },
     { N("腕", "St"), TR_STR },
@@ -39,7 +39,7 @@ std::vector<flag_insc_table> flag_insc_plus = {
 };
 
 /*! オブジェクトの特性表示記号テーブルの定義(免疫) */
-std::vector<flag_insc_table> flag_insc_immune = {
+const std::vector<flag_insc_table> flag_insc_immune = {
     { N("酸", "Ac"), TR_IM_ACID },
     { N("電", "El"), TR_IM_ELEC },
     { N("火", "Fi"), TR_IM_FIRE },
@@ -48,7 +48,7 @@ std::vector<flag_insc_table> flag_insc_immune = {
 };
 
 /*! オブジェクトの特性表示記号テーブルの定義(弱点) */
-std::vector<flag_insc_table> flag_insc_vuln = {
+const std::vector<flag_insc_table> flag_insc_vuln = {
     { N("酸", "Ac"), TR_VUL_ACID, TR_IM_ACID },
     { N("電", "El"), TR_VUL_ELEC, TR_IM_ELEC },
     { N("火", "Fi"), TR_VUL_FIRE, TR_IM_FIRE },
@@ -58,7 +58,7 @@ std::vector<flag_insc_table> flag_insc_vuln = {
 };
 
 /*! オブジェクトの特性表示記号テーブルの定義(耐性) */
-std::vector<flag_insc_table> flag_insc_resistance = {
+const std::vector<flag_insc_table> flag_insc_resistance = {
     { N("酸", "Ac"), TR_RES_ACID, TR_IM_ACID },
     { N("電", "El"), TR_RES_ELEC, TR_IM_ELEC },
     { N("火", "Fi"), TR_RES_FIRE, TR_IM_FIRE },
@@ -81,7 +81,7 @@ std::vector<flag_insc_table> flag_insc_resistance = {
 };
 
 /*! オブジェクトの特性表示記号テーブルの定義(その他特性) */
-std::vector<flag_insc_table> flag_insc_misc = {
+const std::vector<flag_insc_table> flag_insc_misc = {
     { N("易", "Es"), TR_EASY_SPELL },
     { N("減", "Dm"), TR_DEC_MANA },
     { N("投", "Th"), TR_THROW },
@@ -113,7 +113,7 @@ std::vector<flag_insc_table> flag_insc_misc = {
 };
 
 /*! オブジェクトの特性表示記号テーブルの定義(オーラ) */
-std::vector<flag_insc_table> flag_insc_aura = {
+const std::vector<flag_insc_table> flag_insc_aura = {
     { N("炎", "F"), TR_SH_FIRE },
     { N("電", "E"), TR_SH_ELEC },
     { N("冷", "C"), TR_SH_COLD },
@@ -122,7 +122,7 @@ std::vector<flag_insc_table> flag_insc_aura = {
 };
 
 /*! オブジェクトの特性表示記号テーブルの定義(属性スレイ) */
-std::vector<flag_insc_table> flag_insc_brand = {
+const std::vector<flag_insc_table> flag_insc_brand = {
     { N("酸", "A"), TR_BRAND_ACID },
     { N("電", "E"), TR_BRAND_ELEC },
     { N("焼", "F"), TR_BRAND_FIRE },
@@ -138,7 +138,7 @@ std::vector<flag_insc_table> flag_insc_brand = {
 };
 
 /*! オブジェクトの特性表示記号テーブルの定義(種族スレイ) */
-std::vector<flag_insc_table> flag_insc_kill = {
+const std::vector<flag_insc_table> flag_insc_kill = {
     { N("邪", "*"), TR_KILL_EVIL },
     { N("善", "A"), TR_KILL_GOOD },
     { N("人", "p"), TR_KILL_HUMAN },
@@ -152,7 +152,7 @@ std::vector<flag_insc_table> flag_insc_kill = {
 };
 
 /*! オブジェクトの特性表示記号テーブルの定義(種族*スレイ*) */
-std::vector<flag_insc_table> flag_insc_slay = {
+const std::vector<flag_insc_table> flag_insc_slay = {
     { N("邪", "*"), TR_SLAY_EVIL, TR_KILL_EVIL },
     { N("善", "A"), TR_SLAY_GOOD, TR_KILL_GOOD },
     { N("人", "p"), TR_SLAY_HUMAN, TR_KILL_HUMAN },
@@ -166,7 +166,7 @@ std::vector<flag_insc_table> flag_insc_slay = {
 };
 
 /*! オブジェクトの特性表示記号テーブルの定義(ESP1) */
-std::vector<flag_insc_table> flag_insc_esp1 = {
+const std::vector<flag_insc_table> flag_insc_esp1 = {
     { N("感", "Tele"), TR_TELEPATHY },
     { N("邪", "Evil"), TR_ESP_EVIL },
     { N("善", "Good"), TR_ESP_GOOD },
@@ -175,7 +175,7 @@ std::vector<flag_insc_table> flag_insc_esp1 = {
 };
 
 /*! オブジェクトの特性表示記号テーブルの定義(ESP2) */
-std::vector<flag_insc_table> flag_insc_esp2 = {
+const std::vector<flag_insc_table> flag_insc_esp2 = {
     { N("人", "p"), TR_ESP_HUMAN },
     { N("竜", "D"), TR_ESP_DRAGON },
     { N("オ", "o"), TR_ESP_ORC },
@@ -187,7 +187,7 @@ std::vector<flag_insc_table> flag_insc_esp2 = {
 };
 
 /*! オブジェクトの特性表示記号テーブルの定義(能力維持) */
-std::vector<flag_insc_table> flag_insc_sust = {
+const std::vector<flag_insc_table> flag_insc_sust = {
     { N("腕", "St"), TR_SUST_STR },
     { N("知", "In"), TR_SUST_INT },
     { N("賢", "Wi"), TR_SUST_WIS },
