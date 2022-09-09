@@ -154,7 +154,7 @@ static char *inscribe_flags_aux(std::vector<flag_insc_table> &fi_vec, const TrFl
 #endif
 
     for (flag_insc_table &fi : fi_vec) {
-        if (flgs.has(fi.flag) && (fi.except_flag == -1 || flgs.has_not(i2enum<tr_type>(fi.except_flag)))) {
+        if (flgs.has(fi.flag) && (!fi.except_flag.has_value() || flgs.has_not(fi.except_flag.value()))) {
             add_inscription(&ptr, _(kanji ? fi.japanese : fi.english, fi.english));
         }
     }
@@ -172,7 +172,7 @@ static char *inscribe_flags_aux(std::vector<flag_insc_table> &fi_vec, const TrFl
 static bool has_flag_of(std::vector<flag_insc_table> &fi_vec, const TrFlags &flgs)
 {
     for (flag_insc_table &fi : fi_vec) {
-        if (flgs.has(fi.flag) && (fi.except_flag == -1 || flgs.has_not(i2enum<tr_type>(fi.except_flag)))) {
+        if (flgs.has(fi.flag) && (!fi.except_flag.has_value() || flgs.has_not(fi.except_flag.value()))) {
             return true;
         }
     }
