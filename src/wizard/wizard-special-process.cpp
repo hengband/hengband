@@ -11,6 +11,7 @@
 
 #include "wizard/wizard-special-process.h"
 #include "artifact/fixed-art-generator.h"
+#include "artifact/fixed-art-types.h"
 #include "birth/inventory-initializer.h"
 #include "cmd-io/cmd-dump.h"
 #include "cmd-io/cmd-help.h"
@@ -236,7 +237,7 @@ void wiz_create_item(PlayerType *player_ptr)
 
     if (k_info[k_idx].gen_flags.has(ItemGenerationTraitType::INSTA_ART)) {
         for (const auto &a_ref : a_info) {
-            if ((a_ref.idx == 0) || (a_ref.tval != k_info[k_idx].tval) || (a_ref.sval != k_info[k_idx].sval)) {
+            if ((a_ref.idx == FixedArtifactId::NONE) || (a_ref.tval != k_info[k_idx].tval) || (a_ref.sval != k_info[k_idx].sval)) {
                 continue;
             }
 
@@ -261,9 +262,9 @@ void wiz_create_item(PlayerType *player_ptr)
  * @param a_idx 固定アーティファクトのID
  * @return 固定アーティファクトの名称(Ex. ★ロング・ソード『リンギル』)を保持する std::string オブジェクト
  */
-static std::string wiz_make_named_artifact_desc(PlayerType *player_ptr, ARTIFACT_IDX a_idx)
+static std::string wiz_make_named_artifact_desc(PlayerType *player_ptr, FixedArtifactId a_idx)
 {
-    const auto &a_ref = a_info[a_idx];
+    const auto &a_ref = a_info[enum2i(a_idx)];
     ObjectType obj;
     obj.prep(lookup_kind(a_ref.tval, a_ref.sval));
     obj.fixed_artifact_idx = a_idx;
@@ -280,7 +281,7 @@ static std::string wiz_make_named_artifact_desc(PlayerType *player_ptr, ARTIFACT
  * @param a_idx_list 選択する候補となる固定アーティファクトのIDのリスト
  * @return 選択した固定アーティファクトのIDを返す。但しキャンセルした場合は std::nullopt を返す。
  */
-static std::optional<ARTIFACT_IDX> wiz_select_named_artifact(PlayerType *player_ptr, const std::vector<ARTIFACT_IDX> &a_idx_list)
+static std::optional<FixedArtifactId> wiz_select_named_artifact(PlayerType *player_ptr, const std::vector<FixedArtifactId> &a_idx_list)
 {
     constexpr auto MAX_PER_PAGE = 20UL;
     const auto page_max = (a_idx_list.size() - 1) / MAX_PER_PAGE + 1;
@@ -288,7 +289,7 @@ static std::optional<ARTIFACT_IDX> wiz_select_named_artifact(PlayerType *player_
 
     screen_save();
 
-    std::optional<ARTIFACT_IDX> selected_a_idx;
+    std::optional<FixedArtifactId> selected_a_idx;
 
     while (!selected_a_idx.has_value()) {
         const auto page_base_idx = current_page * MAX_PER_PAGE;
@@ -337,10 +338,10 @@ static std::optional<ARTIFACT_IDX> wiz_select_named_artifact(PlayerType *player_
  * @param group_artifact 固定アーティファクトのカテゴリ
  * @return 該当のカテゴリの固定アーティファクトのIDのリスト
  */
-static std::vector<ARTIFACT_IDX> wiz_collect_group_a_idx(const grouper &group_artifact)
+static std::vector<FixedArtifactId> wiz_collect_group_a_idx(const grouper &group_artifact)
 {
     const auto &[tval_list, name] = group_artifact;
-    std::vector<ARTIFACT_IDX> a_idx_list;
+    std::vector<FixedArtifactId> a_idx_list;
     for (auto tval : tval_list) {
         for (const auto &a_ref : a_info) {
             if (a_ref.tval == tval) {
@@ -366,7 +367,7 @@ void wiz_create_named_art(PlayerType *player_ptr)
         put_str(ss.str().c_str(), i + 1, 15);
     }
 
-    std::optional<ARTIFACT_IDX> create_a_idx;
+    std::optional<FixedArtifactId> create_a_idx;
 
     while (!create_a_idx.has_value()) {
         char cmd = ESCAPE;

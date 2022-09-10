@@ -42,12 +42,12 @@ void ItemLoader50::rd_item(ObjectType *o_ptr)
     o_ptr->weight = rd_s16b();
     if (any_bits(flags, SaveDataItemFlagType::FIXED_ARTIFACT_IDX)) {
         if (h_older_than(3, 0, 0, 2)) {
-            o_ptr->fixed_artifact_idx = rd_byte();
+            o_ptr->fixed_artifact_idx = i2enum<FixedArtifactId>(rd_byte());
         } else {
-            o_ptr->fixed_artifact_idx = rd_s16b();
+            o_ptr->fixed_artifact_idx = i2enum<FixedArtifactId>(rd_s16b());
         }
     } else {
-        o_ptr->fixed_artifact_idx = 0;
+        o_ptr->fixed_artifact_idx = FixedArtifactId::NONE;
     }
 
     o_ptr->ego_idx = i2enum<EgoType>(any_bits(flags, SaveDataItemFlagType::EGO_IDX) ? rd_byte() : 0);
@@ -188,7 +188,7 @@ void ItemLoader50::rd_item(ObjectType *o_ptr)
         return;
     }
 
-    if ((o_ptr->ego_idx == EgoType::DARK) || (o_ptr->ego_idx == EgoType::ANCIENT_CURSE) || (o_ptr->fixed_artifact_idx == ART_NIGHT)) {
+    if ((o_ptr->ego_idx == EgoType::DARK) || (o_ptr->ego_idx == EgoType::ANCIENT_CURSE) || (o_ptr->fixed_artifact_idx == FixedArtifactId::NIGHT)) {
         o_ptr->art_flags.set(TR_LITE_M1);
         o_ptr->art_flags.reset(TR_LITE_1);
         o_ptr->art_flags.reset(TR_LITE_2);

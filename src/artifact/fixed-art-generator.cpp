@@ -42,7 +42,7 @@
  */
 static bool invest_terror_mask(PlayerType *player_ptr, ObjectType *o_ptr)
 {
-    if (o_ptr->fixed_artifact_idx != ART_TERROR) {
+    if (o_ptr->fixed_artifact_idx != FixedArtifactId::TERROR) {
         return false;
     }
 
@@ -68,7 +68,7 @@ static bool invest_terror_mask(PlayerType *player_ptr, ObjectType *o_ptr)
  */
 static void milim_swimsuit(PlayerType *player_ptr, ObjectType *o_ptr)
 {
-    if ((o_ptr->fixed_artifact_idx != ART_MILIM) || (player_ptr->ppersonality != PERSONALITY_SEXY)) {
+    if ((o_ptr->fixed_artifact_idx != FixedArtifactId::MILIM) || (player_ptr->ppersonality != PERSONALITY_SEXY)) {
         return;
     }
 
@@ -95,31 +95,31 @@ static void invest_special_artifact_abilities(PlayerType *player_ptr, ObjectType
 {
     const auto pc = PlayerClass(player_ptr);
     switch (o_ptr->fixed_artifact_idx) {
-    case ART_MURAMASA:
+    case FixedArtifactId::MURAMASA:
         if (!pc.equals(PlayerClassType::SAMURAI)) {
             o_ptr->art_flags.set(TR_NO_MAGIC);
             o_ptr->curse_flags.set(CurseTraitType::HEAVY_CURSE);
         }
         return;
-    case ART_ROBINTON:
+    case FixedArtifactId::ROBINTON:
         if (pc.equals(PlayerClassType::BARD)) {
             o_ptr->art_flags.set(TR_DEC_MANA);
         }
         return;
-    case ART_XIAOLONG:
+    case FixedArtifactId::XIAOLONG:
         if (pc.equals(PlayerClassType::MONK)) {
             o_ptr->art_flags.set(TR_BLOWS);
         }
         return;
-    case ART_BLOOD:
+    case FixedArtifactId::BLOOD:
         get_bloody_moon_flags(o_ptr);
         return;
-    case ART_HEAVENLY_MAIDEN:
+    case FixedArtifactId::HEAVENLY_MAIDEN:
         if (player_ptr->psex != SEX_FEMALE) {
             o_ptr->art_flags.set(TR_AGGRAVATE);
         }
         return;
-    case ART_MILIM:
+    case FixedArtifactId::MILIM:
         milim_swimsuit(player_ptr, o_ptr);
         return;
     default:
@@ -225,7 +225,7 @@ static void invest_curse_to_fixed_artifact(artifact_type *a_ptr, ObjectType *o_p
  */
 artifact_type *apply_artifact(PlayerType *player_ptr, ObjectType *o_ptr)
 {
-    auto a_ptr = &a_info[o_ptr->fixed_artifact_idx];
+    auto a_ptr = &a_info[enum2i(o_ptr->fixed_artifact_idx)];
     o_ptr->pval = a_ptr->pval;
     o_ptr->ac = a_ptr->ac;
     o_ptr->dd = a_ptr->dd;
@@ -254,9 +254,9 @@ artifact_type *apply_artifact(PlayerType *player_ptr, ObjectType *o_ptr)
  * 仮に2個以上存在可能かつ装備品以外の固定アーティファクトが作成されれば
  * drop_near()関数の返り値は信用できなくなる.
  */
-bool create_named_art(PlayerType *player_ptr, ARTIFACT_IDX a_idx, POSITION y, POSITION x)
+bool create_named_art(PlayerType *player_ptr, FixedArtifactId a_idx, POSITION y, POSITION x)
 {
-    auto a_ptr = &a_info[a_idx];
+    auto a_ptr = &a_info[enum2i(a_idx)];
     if (a_ptr->name.empty()) {
         return false;
     }

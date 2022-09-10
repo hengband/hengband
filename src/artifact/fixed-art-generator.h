@@ -6,10 +6,11 @@
 
 #include "system/angband.h"
 
+enum class FixedArtifactId : short;
 struct artifact_type;
 class ObjectType;
 class PlayerType;
-bool create_named_art(PlayerType *player_ptr, ARTIFACT_IDX a_idx, POSITION y, POSITION x);
+bool create_named_art(PlayerType *player_ptr, FixedArtifactId a_idx, POSITION y, POSITION x);
 bool make_artifact(PlayerType *player_ptr, ObjectType *o_ptr);
 artifact_type *apply_artifact(PlayerType *player_ptr, ObjectType *o_ptr);
 bool make_artifact_special(PlayerType *player_ptr, ObjectType *o_ptr);

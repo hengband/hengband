@@ -30,6 +30,11 @@
 #include <set>
 #include <unordered_map>
 
+ObjectType::ObjectType()
+    : fixed_artifact_idx(FixedArtifactId::NONE)
+{
+}
+
 /*!
  * @brief オブジェクトを初期化する
  * Wipe an object clean.
@@ -387,7 +392,7 @@ bool ObjectType::is_artifact() const
  */
 bool ObjectType::is_fixed_artifact() const
 {
-    return this->fixed_artifact_idx != 0;
+    return this->fixed_artifact_idx != FixedArtifactId::NONE;
 }
 
 /*!
@@ -478,7 +483,11 @@ bool ObjectType::is_potion() const
  */
 bool ObjectType::is_readable() const
 {
-    return (this->tval == ItemKindType::SCROLL) || (this->tval == ItemKindType::PARCHMENT) || (this->fixed_artifact_idx == ART_GHB) || (this->fixed_artifact_idx == ART_POWER);
+    const auto is_scroll = this->tval == ItemKindType::SCROLL;
+    const auto is_parchment = this->tval == ItemKindType::PARCHMENT;
+    const auto is_ghb = this->fixed_artifact_idx == FixedArtifactId::GHB;
+    const auto is_ring_power = this->fixed_artifact_idx == FixedArtifactId::POWER;
+    return is_scroll || is_parchment || is_ghb || is_ring_power;
 }
 
 /*!

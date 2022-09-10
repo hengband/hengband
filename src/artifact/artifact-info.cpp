@@ -28,8 +28,9 @@ RandomArtActType activation_index(const ObjectType *o_ptr)
         return act_idx.value();
     }
 
-    if (o_ptr->is_fixed_artifact() && a_info[o_ptr->fixed_artifact_idx].flags.has(TR_ACTIVATE)) {
-        return a_info[o_ptr->fixed_artifact_idx].act_idx;
+    const auto fixed_art_id = enum2i(o_ptr->fixed_artifact_idx);
+    if (o_ptr->is_fixed_artifact() && a_info[fixed_art_id].flags.has(TR_ACTIVATE)) {
+        return a_info[fixed_art_id].act_idx;
     }
 
     if (o_ptr->is_ego() && e_info[o_ptr->ego_idx].flags.has(TR_ACTIVATE)) {

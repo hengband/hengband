@@ -168,22 +168,22 @@ static void on_dead_sacred_treasures(PlayerType *player_ptr, monster_death_type 
         return;
     }
 
-    ARTIFACT_IDX a_idx = 0;
+    FixedArtifactId a_idx = FixedArtifactId::NONE;
     artifact_type *a_ptr = nullptr;
     do {
         switch (randint0(3)) {
         case 0:
-            a_idx = ART_NAMAKE_HAMMER;
+            a_idx = FixedArtifactId::NAMAKE_HAMMER;
             break;
         case 1:
-            a_idx = ART_NAMAKE_BOW;
+            a_idx = FixedArtifactId::NAMAKE_BOW;
             break;
         case 2:
-            a_idx = ART_NAMAKE_ARMOR;
+            a_idx = FixedArtifactId::NAMAKE_ARMOR;
             break;
         }
 
-        a_ptr = &a_info[a_idx];
+        a_ptr = &a_info[enum2i(a_idx)];
     } while (a_ptr->is_generated);
 
     if (create_named_art(player_ptr, a_idx, md_ptr->md_y, md_ptr->md_x)) {
@@ -209,12 +209,12 @@ static void on_dead_serpent(PlayerType *player_ptr, monster_death_type *md_ptr)
     ObjectType forge;
     auto *q_ptr = &forge;
     q_ptr->prep(lookup_kind(ItemKindType::HAFTED, SV_GROND));
-    q_ptr->fixed_artifact_idx = ART_GROND;
+    q_ptr->fixed_artifact_idx = FixedArtifactId::GROND;
     ItemMagicApplier(player_ptr, q_ptr, -1, AM_GOOD | AM_GREAT).execute();
     (void)drop_near(player_ptr, q_ptr, -1, md_ptr->md_y, md_ptr->md_x);
     q_ptr = &forge;
     q_ptr->prep(lookup_kind(ItemKindType::CROWN, SV_CHAOS));
-    q_ptr->fixed_artifact_idx = ART_CHAOS;
+    q_ptr->fixed_artifact_idx = FixedArtifactId::CHAOS;
     ItemMagicApplier(player_ptr, q_ptr, -1, AM_GOOD | AM_GREAT).execute();
     (void)drop_near(player_ptr, q_ptr, -1, md_ptr->md_y, md_ptr->md_x);
 }
@@ -381,7 +381,7 @@ static void on_dead_random_artifact(PlayerType *player_ptr, monster_death_type *
             break;
         }
 
-        if ((q_ptr->fixed_artifact_idx != 0) && q_ptr->is_ego()) {
+        if ((q_ptr->fixed_artifact_idx != FixedArtifactId::NONE) && q_ptr->is_ego()) {
             continue;
         }
 
@@ -525,7 +525,7 @@ static void on_dead_swordfish(PlayerType *player_ptr, monster_death_type *md_ptr
         return;
     }
 
-    drop_single_artifact(player_ptr, md_ptr, ART_FROZEN_SWORDFISH);
+    drop_single_artifact(player_ptr, md_ptr, FixedArtifactId::FROZEN_SWORDFISH);
 }
 
 void switch_special_death(PlayerType *player_ptr, monster_death_type *md_ptr, AttributeFlags attribute_flags)

@@ -278,7 +278,7 @@ void check_find_art_quest_completion(PlayerType *player_ptr, ObjectType *o_ptr)
     for (const auto &[q_idx, q_ref] : quest_list) {
         auto found_artifact = (q_ref.type == QuestKindType::FIND_ARTIFACT);
         found_artifact &= (q_ref.status == QuestStatusType::TAKEN);
-        found_artifact &= (q_ref.k_idx == o_ptr->fixed_artifact_idx);
+        found_artifact &= (i2enum<FixedArtifactId>(q_ref.k_idx) == o_ptr->fixed_artifact_idx);
         if (found_artifact) {
             complete_quest(player_ptr, q_idx);
         }

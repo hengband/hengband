@@ -1,5 +1,6 @@
 ﻿#include "floor/fixed-map-generator.h"
 #include "artifact/fixed-art-generator.h"
+#include "artifact/fixed-art-types.h"
 #include "dungeon/quest.h"
 #include "floor/floor-object.h"
 #include "floor/floor-town.h"
@@ -74,14 +75,15 @@ static void drop_here(floor_type *floor_ptr, ObjectType *j_ptr, POSITION y, POSI
     g_ptr->o_idx_list.add(floor_ptr, o_idx);
 }
 
-static void generate_artifact(PlayerType *player_ptr, qtwg_type *qtwg_ptr, const ARTIFACT_IDX artifact_index)
+static void generate_artifact(PlayerType *player_ptr, qtwg_type *qtwg_ptr, const FixedArtifactId artifact_index)
 {
-    if (artifact_index == 0) {
+    if (artifact_index == FixedArtifactId::NONE) {
         return;
     }
 
-    if (!a_info[artifact_index].is_generated && create_named_art(player_ptr, artifact_index, *qtwg_ptr->y, *qtwg_ptr->x)) {
-        a_info[artifact_index].is_generated = true;
+    const auto int_artifact_index = enum2i(artifact_index);
+    if (!a_info[int_artifact_index].is_generated && create_named_art(player_ptr, artifact_index, *qtwg_ptr->y, *qtwg_ptr->x)) {
+        a_info[int_artifact_index].is_generated = true;
         return;
     }
 
@@ -103,7 +105,6 @@ static void parse_qtw_D(PlayerType *player_ptr, qtwg_type *qtwg_ptr, char *s)
         OBJECT_IDX object_index = letter[idx].object;
         MONSTER_IDX monster_index = letter[idx].monster;
         int random = letter[idx].random;
-        ARTIFACT_IDX artifact_index = letter[idx].artifact;
         g_ptr->feat = conv_dungeon_feat(floor_ptr, letter[idx].feature);
         if (init_flags & INIT_ONLY_FEATURES) {
             continue;
@@ -192,7 +193,7 @@ static void parse_qtw_D(PlayerType *player_ptr, qtwg_type *qtwg_ptr, char *s)
             drop_here(floor_ptr, o_ptr, *qtwg_ptr->y, *qtwg_ptr->x);
         }
 
-        generate_artifact(player_ptr, qtwg_ptr, artifact_index);
+        generate_artifact(player_ptr, qtwg_ptr, letter[idx].artifact);
         g_ptr->special = letter[idx].special;
     }
 }

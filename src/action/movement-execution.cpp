@@ -91,7 +91,6 @@ void exe_movement(PlayerType *player_ptr, DIRECTION dir, bool do_pickup, bool br
     auto *floor_ptr = player_ptr->current_floor_ptr;
     auto *g_ptr = &floor_ptr->grid_array[y][x];
     bool p_can_enter = player_can_enter(player_ptr, g_ptr->feat, CEM_P_CAN_ENTER_PATTERN);
-    bool stormbringer = false;
     if (!floor_ptr->dun_level && !player_ptr->wild_mode && ((x == 0) || (x == MAX_WID - 1) || (y == 0) || (y == MAX_HGT - 1))) {
         if (g_ptr->mimic && player_can_enter(player_ptr, g_ptr->mimic, 0)) {
             if ((y == 0) && (x == 0)) {
@@ -148,14 +147,17 @@ void exe_movement(PlayerType *player_ptr, DIRECTION dir, bool do_pickup, bool br
         p_can_enter = false;
     }
 
-    monster_type *m_ptr;
-    m_ptr = &floor_ptr->m_list[g_ptr->m_idx];
-    if (player_ptr->inventory_list[INVEN_MAIN_HAND].fixed_artifact_idx == ART_STORMBRINGER) {
-        stormbringer = true;
+    auto *m_ptr = &floor_ptr->m_list[g_ptr->m_idx];
+
+    // @todo 「特定の武器を装備している」旨のメソッドを別途作る
+    constexpr auto stormbringer = FixedArtifactId::STORMBRINGER;
+    auto is_stormbringer = false;
+    if (player_ptr->inventory_list[INVEN_MAIN_HAND].fixed_artifact_idx == stormbringer) {
+        is_stormbringer = true;
     }
 
-    if (player_ptr->inventory_list[INVEN_SUB_HAND].fixed_artifact_idx == ART_STORMBRINGER) {
-        stormbringer = true;
+    if (player_ptr->inventory_list[INVEN_SUB_HAND].fixed_artifact_idx == stormbringer) {
+        is_stormbringer = true;
     }
 
     auto *f_ptr = &f_info[g_ptr->feat];
@@ -184,7 +186,7 @@ void exe_movement(PlayerType *player_ptr, DIRECTION dir, bool do_pickup, bool br
                 health_track(player_ptr, g_ptr->m_idx);
             }
 
-            if ((stormbringer && (randint1(1000) > 666)) || PlayerClass(player_ptr).equals(PlayerClassType::BERSERKER)) {
+            if ((is_stormbringer && (randint1(1000) > 666)) || PlayerClass(player_ptr).equals(PlayerClassType::BERSERKER)) {
                 do_cmd_attack(player_ptr, y, x, HISSATSU_NONE);
                 can_move = false;
             } else if (monster_can_cross_terrain(player_ptr, floor_ptr->grid_array[player_ptr->y][player_ptr->x].feat, r_ptr, 0)) {

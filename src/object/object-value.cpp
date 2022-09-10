@@ -157,7 +157,7 @@ PRICE object_value_real(const ObjectType *o_ptr)
     PRICE value = k_info[o_ptr->k_idx].cost;
     auto flgs = object_flags(o_ptr);
     if (o_ptr->is_fixed_artifact()) {
-        auto *a_ptr = &a_info[o_ptr->fixed_artifact_idx];
+        auto *a_ptr = &a_info[enum2i(o_ptr->fixed_artifact_idx)];
         if (!a_ptr->cost) {
             return 0;
         }

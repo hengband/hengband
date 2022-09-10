@@ -320,7 +320,7 @@ errr parse_r_info(std::string_view buf, angband_header *)
             return PARSE_ERROR_TOO_FEW_ARGUMENTS;
         }
 
-        ARTIFACT_IDX a_idx;
+        FixedArtifactId a_idx;
         PERCENTAGE chance;
         info_set_value(a_idx, tokens[1]);
         info_set_value(chance, tokens[2]);

@@ -204,7 +204,11 @@ bool do_cmd_attack(PlayerType *player_ptr, POSITION y, POSITION x, combat_option
     auto is_confused = effects->confusion()->is_confused();
     auto is_stunned = effects->stun()->is_stunned();
     if (any_bits(r_ptr->flags1, RF1_FEMALE) && !(is_stunned || is_confused || is_hallucinated || !m_ptr->ml)) {
-        if ((player_ptr->inventory_list[INVEN_MAIN_HAND].fixed_artifact_idx == ART_ZANTETSU) || (player_ptr->inventory_list[INVEN_SUB_HAND].fixed_artifact_idx == ART_ZANTETSU)) {
+        // @todo 「特定の武器を装備している」旨のメソッドを別途作る
+        constexpr auto zantetsu = FixedArtifactId::ZANTETSU;
+        const auto is_main_hand_zantetsu = player_ptr->inventory_list[INVEN_MAIN_HAND].fixed_artifact_idx == zantetsu;
+        const auto is_sub_hand_zantetsu = player_ptr->inventory_list[INVEN_SUB_HAND].fixed_artifact_idx == zantetsu;
+        if (is_main_hand_zantetsu || is_sub_hand_zantetsu) {
             msg_print(_("拙者、おなごは斬れぬ！", "I can not attack women!"));
             return false;
         }
@@ -215,17 +219,18 @@ bool do_cmd_attack(PlayerType *player_ptr, POSITION y, POSITION x, combat_option
         return false;
     }
 
-    bool stormbringer = false;
     if (!is_hostile(m_ptr) && !(is_stunned || is_confused || is_hallucinated || is_shero(player_ptr) || !m_ptr->ml)) {
-        if (player_ptr->inventory_list[INVEN_MAIN_HAND].fixed_artifact_idx == ART_STORMBRINGER) {
-            stormbringer = true;
+        constexpr auto stormbringer = FixedArtifactId::STORMBRINGER;
+        auto is_stormbringer = false;
+        if (player_ptr->inventory_list[INVEN_MAIN_HAND].fixed_artifact_idx == stormbringer) {
+            is_stormbringer = true;
         }
 
-        if (player_ptr->inventory_list[INVEN_SUB_HAND].fixed_artifact_idx == ART_STORMBRINGER) {
-            stormbringer = true;
+        if (player_ptr->inventory_list[INVEN_SUB_HAND].fixed_artifact_idx == stormbringer) {
+            is_stormbringer = true;
         }
 
-        if (stormbringer) {
+        if (is_stormbringer) {
             msg_format(_("黒い刃は強欲に%sを攻撃した！", "Your black blade greedily attacks %s!"), m_name);
             chg_virtue(player_ptr, V_INDIVIDUALISM, 1);
             chg_virtue(player_ptr, V_HONOUR, -1);

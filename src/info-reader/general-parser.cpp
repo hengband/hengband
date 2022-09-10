@@ -1,4 +1,5 @@
 ﻿#include "info-reader/general-parser.h"
+#include "artifact/fixed-art-types.h"
 #include "dungeon/quest.h"
 #include "grid/feature.h"
 #include "info-reader/feature-reader.h"
@@ -89,7 +90,7 @@ parse_error_type parse_line_feature(floor_type *floor_ptr, char *buf)
     letter[index].monster = 0;
     letter[index].object = 0;
     letter[index].ego = EgoType::NONE;
-    letter[index].artifact = 0;
+    letter[index].artifact = FixedArtifactId::NONE;
     letter[index].trap = feat_none;
     letter[index].cave_info = 0;
     letter[index].special = 0;
@@ -113,15 +114,15 @@ parse_error_type parse_line_feature(floor_type *floor_ptr, char *buf)
         if (zz[6][0] == '*') {
             letter[index].random |= RANDOM_ARTIFACT;
             if (zz[6][1]) {
-                letter[index].artifact = (ARTIFACT_IDX)atoi(zz[6] + 1);
+                letter[index].artifact = i2enum<FixedArtifactId>(atoi(zz[6] + 1));
             }
         } else if (zz[6][0] == '!') {
             if (inside_quest(floor_ptr->quest_number)) {
                 const auto &quest_list = QuestList::get_instance();
-                letter[index].artifact = quest_list[floor_ptr->quest_number].k_idx;
+                letter[index].artifact = i2enum<FixedArtifactId>(quest_list[floor_ptr->quest_number].k_idx);
             }
         } else {
-            letter[index].artifact = (ARTIFACT_IDX)atoi(zz[6]);
+            letter[index].artifact = i2enum<FixedArtifactId>(atoi(zz[6]));
         }
         /* Fall through */
     case 6:

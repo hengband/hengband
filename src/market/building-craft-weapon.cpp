@@ -144,7 +144,8 @@ static void compare_weapon_aux(PlayerType *player_ptr, ObjectType *o_ptr, int co
     maxdam = calc_expect_crit(player_ptr, o_ptr->weight, o_ptr->to_h, maxdice, player_ptr->to_h[0], dokubari, impact);
     show_weapon_dmg(r++, col, mindam, maxdam, blow, dmg_bonus, _("会心:", "Critical:"), TERM_L_RED);
     if ((flgs.has(TR_VORPAL) || SpellHex(player_ptr).is_spelling_specific(HEX_RUNESWORD))) {
-        if ((o_ptr->fixed_artifact_idx == ART_VORPAL_BLADE) || (o_ptr->fixed_artifact_idx == ART_CHAINSWORD)) {
+        // @todo status-first-page::strengthen_basedam() と多重実装.
+        if ((o_ptr->fixed_artifact_idx == FixedArtifactId::VORPAL_BLADE) || (o_ptr->fixed_artifact_idx == FixedArtifactId::CHAINSWORD)) {
             vorpal_mult = 5;
             vorpal_div = 3;
         } else {

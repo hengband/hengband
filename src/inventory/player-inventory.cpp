@@ -216,7 +216,7 @@ void describe_pickup_item(PlayerType *player_ptr, OBJECT_IDX o_idx)
     describe_flavor(player_ptr, o_name, o_ptr, 0);
 
 #ifdef JP
-    if ((o_ptr->fixed_artifact_idx == ART_CRIMSON) && (player_ptr->ppersonality == PERSONALITY_COMBAT)) {
+    if ((o_ptr->fixed_artifact_idx == FixedArtifactId::CRIMSON) && (player_ptr->ppersonality == PERSONALITY_COMBAT)) {
         msg_format("こうして、%sは『クリムゾン』を手に入れた。", player_ptr->name);
         msg_print("しかし今、『混沌のサーペント』の放ったモンスターが、");
         msg_format("%sに襲いかかる．．．", player_ptr->name);

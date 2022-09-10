@@ -131,7 +131,7 @@ void wipe_o_list(floor_type *floor_ptr)
 
         if (!w_ptr->character_dungeon || preserve_mode) {
             if (o_ptr->is_fixed_artifact() && !o_ptr->is_known()) {
-                a_info[o_ptr->fixed_artifact_idx].is_generated = false;
+                a_info[enum2i(o_ptr->fixed_artifact_idx)].is_generated = false;
             }
         }
 

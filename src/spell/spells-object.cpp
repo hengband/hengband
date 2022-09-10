@@ -5,6 +5,7 @@
  */
 
 #include "spell/spells-object.h"
+#include "artifact/fixed-art-types.h"
 #include "avatar/avatar.h"
 #include "core/player-update-types.h"
 #include "core/window-redrawer.h"
@@ -86,10 +87,10 @@ static const std::vector<amuse_type> amuse_info = {
     { ItemKindType::NONE, 0, 0, AmusementFlagType::NOTHING }
 };
 
-static std::optional<short> sweep_amusement_artifact(const bool insta_art, const short k_idx)
+static std::optional<FixedArtifactId> sweep_amusement_artifact(const bool insta_art, const short k_idx)
 {
     for (const auto &a_ref : a_info) {
-        if (a_ref.idx == 0) {
+        if (a_ref.idx == FixedArtifactId::NONE) {
             continue;
         }
 
@@ -146,7 +147,7 @@ void generate_amusement(PlayerType *player_ptr, int num, bool known)
         const auto insta_art = k_info[k_idx].gen_flags.has(ItemGenerationTraitType::INSTA_ART);
         const auto flag = amuse_info[i].flag;
         const auto fixed_art = flag == AmusementFlagType::FIXED_ART;
-        std::optional<short> opt_a_idx(std::nullopt);
+        std::optional<FixedArtifactId> opt_a_idx(std::nullopt);
         if (insta_art || fixed_art) {
             opt_a_idx = sweep_amusement_artifact(insta_art, k_idx);
             if (!opt_a_idx.has_value()) {
@@ -256,7 +257,7 @@ bool curse_armor(PlayerType *player_ptr)
     chg_virtue(player_ptr, V_ENCHANT, -5);
 
     /* Blast the armor */
-    o_ptr->fixed_artifact_idx = 0;
+    o_ptr->fixed_artifact_idx = FixedArtifactId::NONE;
     o_ptr->ego_idx = EgoType::BLASTED;
     o_ptr->to_a = 0 - randint1(5) - randint1(5);
     o_ptr->to_h = 0;
@@ -312,7 +313,7 @@ bool curse_weapon_object(PlayerType *player_ptr, bool force, ObjectType *o_ptr)
     chg_virtue(player_ptr, V_ENCHANT, -5);
 
     /* Shatter the weapon */
-    o_ptr->fixed_artifact_idx = 0;
+    o_ptr->fixed_artifact_idx = FixedArtifactId::NONE;
     o_ptr->ego_idx = EgoType::SHATTERED;
     o_ptr->to_h = 0 - randint1(5) - randint1(5);
     o_ptr->to_d = 0 - randint1(5) - randint1(5);
