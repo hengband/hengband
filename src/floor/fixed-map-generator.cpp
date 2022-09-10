@@ -221,7 +221,7 @@ static bool parse_qtw_QQ(quest_type *q_ptr, char **zz, int num)
     q_ptr->max_num = (MONSTER_NUMBER)atoi(zz[5]);
     q_ptr->level = (DEPTH)atoi(zz[6]);
     q_ptr->r_idx = i2enum<MonsterRaceId>(atoi(zz[7]));
-    q_ptr->k_idx = (KIND_OBJECT_IDX)atoi(zz[8]);
+    q_ptr->reward_artifact_idx = i2enum<FixedArtifactId>(atoi(zz[8]));
     q_ptr->dungeon = (DUNGEON_IDX)atoi(zz[9]);
 
     if (num > 10) {
@@ -233,7 +233,7 @@ static bool parse_qtw_QQ(quest_type *q_ptr, char **zz, int num)
         r_ptr->flags1 |= RF1_QUESTOR;
     }
 
-    a_ptr = &a_info[q_ptr->k_idx];
+    a_ptr = &a_info[enum2i(q_ptr->reward_artifact_idx)];
     a_ptr->gen_flags.set(ItemGenerationTraitType::QUESTITEM);
     return true;
 }
@@ -252,24 +252,26 @@ static bool parse_qtw_QR(quest_type *q_ptr, char **zz, int num)
     }
 
     int count = 0;
-    ARTIFACT_IDX idx, reward_idx = 0;
-    for (idx = 2; idx < num; idx++) {
-        ARTIFACT_IDX a_idx = (ARTIFACT_IDX)atoi(zz[idx]);
-        if (a_idx < 1) {
+    FixedArtifactId reward_idx = FixedArtifactId::NONE;
+    for (auto idx = 2; idx < num; idx++) {
+        const auto a_idx = i2enum<FixedArtifactId>(atoi(zz[idx]));
+        if (a_idx == FixedArtifactId::NONE) {
             continue;
         }
-        if (a_info[a_idx].is_generated) {
+
+        if (a_info[enum2i(a_idx)].is_generated) {
             continue;
         }
+
         count++;
         if (one_in_(count)) {
             reward_idx = a_idx;
         }
     }
 
-    if (reward_idx) {
-        q_ptr->k_idx = (KIND_OBJECT_IDX)reward_idx;
-        a_info[reward_idx].gen_flags.set(ItemGenerationTraitType::QUESTITEM);
+    if (reward_idx != FixedArtifactId::NONE) {
+        q_ptr->reward_artifact_idx = reward_idx;
+        a_info[enum2i(reward_idx)].gen_flags.set(ItemGenerationTraitType::QUESTITEM);
     } else {
         q_ptr->type = QuestKindType::KILL_ALL;
     }

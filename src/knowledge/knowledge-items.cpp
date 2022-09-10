@@ -81,7 +81,7 @@ void do_cmd_knowledge_artifacts(PlayerType *player_ptr)
         }
     }
 
-    for (ARTIFACT_IDX i = 0; i < INVEN_TOTAL; i++) {
+    for (auto i = 0; i < INVEN_TOTAL; i++) {
         auto *o_ptr = &player_ptr->inventory_list[i];
         if (!o_ptr->k_idx) {
             continue;
@@ -109,8 +109,8 @@ void do_cmd_knowledge_artifacts(PlayerType *player_ptr)
         auto *a_ptr = &a_info[enum2i(a_idx)];
         GAME_TEXT base_name[MAX_NLEN];
         strcpy(base_name, _("未知の伝説のアイテム", "Unknown Artifact"));
-        ARTIFACT_IDX z = lookup_kind(a_ptr->tval, a_ptr->sval);
-        if (z) {
+        const auto z = lookup_kind(a_ptr->tval, a_ptr->sval);
+        if (z != 0) {
             ObjectType forge;
             ObjectType *q_ptr;
             q_ptr = &forge;

@@ -6,6 +6,7 @@
 #include <map>
 #include <vector>
 
+enum class FixedArtifactId : short;
 enum class MonsterRaceId : int16_t;
 
 // clang-format off
@@ -111,7 +112,7 @@ public:
     MONSTER_NUMBER cur_num; /*!< 撃破したモンスターの数 / Number killed */
     MONSTER_NUMBER max_num; /*!< 求められるモンスターの撃破数 / Number required */
 
-    KIND_OBJECT_IDX k_idx; /*!< クエスト対象のアイテムID / object index */
+    FixedArtifactId reward_artifact_idx; /*!< クエスト対象のアイテムID / object index */
     MONSTER_NUMBER num_mon; /*!< QuestKindTypeがKILL_NUMBER時の目標撃破数 number of monsters on level */
 
     BIT_FLAGS flags; /*!< クエストに関するフラグビット / quest flags */

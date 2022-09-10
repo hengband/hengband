@@ -99,7 +99,7 @@ T clamp_cast(int val)
         static_cast<int>(std::numeric_limits<T>::max())));
 }
 
-void wiz_restore_aware_flag_of_fixed_arfifact(ARTIFACT_IDX a_idx, bool aware = false);
+void wiz_restore_aware_flag_of_fixed_arfifact(FixedArtifactId a_idx, bool aware = false);
 void wiz_modify_item_activation(PlayerType *player_ptr);
 void wiz_identify_full_inventory(PlayerType *player_ptr);
 
@@ -123,10 +123,10 @@ void wizard_item_modifier(PlayerType *player_ptr)
     case '\r':
         break;
     case 'a':
-        wiz_restore_aware_flag_of_fixed_arfifact(command_arg);
+        wiz_restore_aware_flag_of_fixed_arfifact(i2enum<FixedArtifactId>(command_arg));
         break;
     case 'A':
-        wiz_restore_aware_flag_of_fixed_arfifact(command_arg, true);
+        wiz_restore_aware_flag_of_fixed_arfifact(i2enum<FixedArtifactId>(command_arg), true);
         break;
     case 'e':
         if (command_arg <= 0) {
@@ -173,10 +173,12 @@ void wizard_item_modifier(PlayerType *player_ptr)
 /*!
  * @brief 固定アーティファクトの出現フラグをリセットする
  * @param a_idx 指定したアーティファクトID
+ * @details 外からはenum class を受け取るが、この関数内では数値の直指定処理なので即数値型にキャストする.
  */
-void wiz_restore_aware_flag_of_fixed_arfifact(ARTIFACT_IDX a_idx, bool aware)
+void wiz_restore_aware_flag_of_fixed_arfifact(FixedArtifactId a_idx, bool aware)
 {
-    if (a_idx <= 0) {
+    auto int_a_idx = enum2i(a_idx);
+    if (int_a_idx <= 0) {
         char tmp[80] = "";
         sprintf(tmp, "Artifact ID (1-%d): ", static_cast<int>(a_info.size()) - 1);
         char tmp_val[10] = "";
@@ -184,15 +186,15 @@ void wiz_restore_aware_flag_of_fixed_arfifact(ARTIFACT_IDX a_idx, bool aware)
             return;
         }
 
-        a_idx = (ARTIFACT_IDX)atoi(tmp_val);
+        int_a_idx = static_cast<short>(atoi(tmp_val));
     }
 
-    if (a_idx <= 0 || a_idx >= static_cast<ARTIFACT_IDX>(a_info.size())) {
+    if (int_a_idx <= 0 || int_a_idx >= static_cast<short>(a_info.size())) {
         msg_format(_("番号は1から%dの間で指定して下さい。", "ID must be between 1 to %d."), a_info.size() - 1);
         return;
     }
 
-    auto *a_ptr = &a_info[a_idx];
+    auto *a_ptr = &a_info[int_a_idx];
     a_ptr->is_generated = aware;
     msg_print(aware ? "Modified." : "Restored.");
 }

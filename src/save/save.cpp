@@ -149,7 +149,7 @@ static bool wr_savefile_new(PlayerType *player_ptr, SaveType type)
         wr_s16b((int16_t)q_ref.max_num);
         wr_s16b(enum2i(q_ref.type));
         wr_s16b(enum2i(q_ref.r_idx));
-        wr_s16b(q_ref.k_idx);
+        wr_s16b(enum2i(q_ref.reward_artifact_idx));
         wr_byte((byte)q_ref.flags);
         wr_byte((byte)q_ref.dungeon);
     }

@@ -1,4 +1,5 @@
 ﻿#include "object-hook/hook-quest.h"
+#include "artifact/fixed-art-types.h"
 #include "cmd-building/cmd-building.h"
 #include "dungeon/quest.h"
 #include "game-option/birth-options.h"
@@ -10,6 +11,7 @@
 #include "system/monster-race-definition.h"
 #include "system/object-type-definition.h"
 #include "system/player-type-definition.h"
+#include "util/enum-converter.h"
 #include "world/world.h"
 
 /*!
@@ -51,12 +53,12 @@ bool object_is_quest_target(QuestId quest_idx, ObjectType *o_ptr)
     }
 
     const auto &quest_list = QuestList::get_instance();
-    auto a_idx = quest_list[quest_idx].k_idx;
-    if (a_idx == 0) {
+    auto a_idx = quest_list[quest_idx].reward_artifact_idx;
+    if (a_idx == FixedArtifactId::NONE) {
         return false;
     }
 
-    auto *a_ptr = &a_info[a_idx];
+    auto *a_ptr = &a_info[enum2i(a_idx)];
     if (a_ptr->gen_flags.has(ItemGenerationTraitType::INSTA_ART)) {
         return false;
     }

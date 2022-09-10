@@ -119,7 +119,7 @@ parse_error_type parse_line_feature(floor_type *floor_ptr, char *buf)
         } else if (zz[6][0] == '!') {
             if (inside_quest(floor_ptr->quest_number)) {
                 const auto &quest_list = QuestList::get_instance();
-                letter[index].artifact = i2enum<FixedArtifactId>(quest_list[floor_ptr->quest_number].k_idx);
+                letter[index].artifact = quest_list[floor_ptr->quest_number].reward_artifact_idx;
             }
         } else {
             letter[index].artifact = i2enum<FixedArtifactId>(atoi(zz[6]));
@@ -144,9 +144,9 @@ parse_error_type parse_line_feature(floor_type *floor_ptr, char *buf)
         } else if (zz[4][0] == '!') {
             if (inside_quest(floor_ptr->quest_number)) {
                 const auto &quest_list = QuestList::get_instance();
-                ARTIFACT_IDX a_idx = quest_list[floor_ptr->quest_number].k_idx;
-                if (a_idx) {
-                    auto *a_ptr = &a_info[a_idx];
+                const auto a_idx = quest_list[floor_ptr->quest_number].reward_artifact_idx;
+                if (a_idx != FixedArtifactId::NONE) {
+                    const auto *a_ptr = &a_info[enum2i(a_idx)];
                     if (a_ptr->gen_flags.has_not(ItemGenerationTraitType::INSTA_ART)) {
                         letter[index].object = lookup_kind(a_ptr->tval, a_ptr->sval);
                     }

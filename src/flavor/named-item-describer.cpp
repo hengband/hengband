@@ -320,7 +320,7 @@ static void describe_artifact_body_en(flavor_type *flavor_ptr)
     }
 
     if (flavor_ptr->o_ptr->is_fixed_artifact()) {
-        auto *a_ptr = &a_info[flavor_ptr->o_ptr->fixed_artifact_idx];
+        auto *a_ptr = &a_info[enum2i(flavor_ptr->o_ptr->fixed_artifact_idx)];
         flavor_ptr->t = object_desc_chr(flavor_ptr->t, ' ');
         flavor_ptr->t = object_desc_str(flavor_ptr->t, a_ptr->name.c_str());
         return;
