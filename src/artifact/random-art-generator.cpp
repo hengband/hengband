@@ -6,6 +6,7 @@
  */
 
 #include "artifact/random-art-generator.h"
+#include "artifact/fixed-art-types.h"
 #include "artifact/random-art-activation.h"
 #include "artifact/random-art-bias-types.h"
 #include "artifact/random-art-characteristics.h"
@@ -430,7 +431,7 @@ static void generate_unnatural_random_artifact(
 bool become_random_artifact(PlayerType *player_ptr, ObjectType *o_ptr, bool a_scroll)
 {
     o_ptr->artifact_bias = 0;
-    o_ptr->fixed_artifact_idx = 0;
+    o_ptr->fixed_artifact_idx = FixedArtifactId::NONE;
     o_ptr->ego_idx = EgoType::NONE;
     o_ptr->art_flags |= k_info[o_ptr->k_idx].flags;
 

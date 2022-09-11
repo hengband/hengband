@@ -6,6 +6,7 @@
  */
 
 #include "load/old/load-v1-5-0.h"
+#include "artifact/fixed-art-types.h"
 #include "dungeon/dungeon.h"
 #include "floor/floor-object.h"
 #include "game-option/birth-options.h"
@@ -91,7 +92,7 @@ void rd_item_old(ObjectType *o_ptr)
 
     o_ptr->weight = rd_s16b();
 
-    o_ptr->fixed_artifact_idx = rd_byte();
+    o_ptr->fixed_artifact_idx = i2enum<FixedArtifactId>(rd_byte());
 
     o_ptr->ego_idx = i2enum<EgoType>(rd_byte());
 
@@ -131,7 +132,7 @@ void rd_item_old(ObjectType *o_ptr)
                 o_ptr->curse_flags.set(CurseTraitType::PERMA_CURSE);
             }
             if (o_ptr->is_fixed_artifact()) {
-                auto *a_ptr = &a_info[o_ptr->fixed_artifact_idx];
+                auto *a_ptr = &a_info[enum2i(o_ptr->fixed_artifact_idx)];
                 if (a_ptr->gen_flags.has(ItemGenerationTraitType::HEAVY_CURSE)) {
                     o_ptr->curse_flags.set(CurseTraitType::HEAVY_CURSE);
                 }
@@ -338,10 +339,9 @@ void rd_item_old(ObjectType *o_ptr)
     }
 
     if (o_ptr->is_fixed_artifact()) {
-        artifact_type *a_ptr;
-        a_ptr = &a_info[o_ptr->fixed_artifact_idx];
+        const auto *a_ptr = &a_info[enum2i(o_ptr->fixed_artifact_idx)];
         if (a_ptr->name.empty()) {
-            o_ptr->fixed_artifact_idx = 0;
+            o_ptr->fixed_artifact_idx = FixedArtifactId::NONE;
         }
     }
 

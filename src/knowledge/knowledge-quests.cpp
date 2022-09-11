@@ -5,6 +5,7 @@
  */
 
 #include "knowledge/knowledge-quests.h"
+#include "artifact/fixed-art-types.h"
 #include "core/show-file.h"
 #include "dungeon/dungeon.h"
 #include "dungeon/quest.h"
@@ -22,6 +23,7 @@
 #include "system/player-type-definition.h"
 #include "term/screen-processor.h"
 #include "util/angband-files.h"
+#include "util/enum-converter.h"
 #include "util/sort.h"
 #include "world/world.h"
 
@@ -98,13 +100,13 @@ static void do_cmd_knowledge_quests_current(PlayerType *player_ptr, FILE *fff)
                     break;
 
                 case QuestKindType::FIND_ARTIFACT:
-                    if (q_ref.k_idx) {
-                        auto *a_ptr = &a_info[q_ref.k_idx];
+                    if (q_ref.reward_artifact_idx != FixedArtifactId::NONE) {
+                        auto *a_ptr = &a_info[enum2i(q_ref.reward_artifact_idx)];
                         ObjectType forge;
                         auto *o_ptr = &forge;
                         KIND_OBJECT_IDX k_idx = lookup_kind(a_ptr->tval, a_ptr->sval);
                         o_ptr->prep(k_idx);
-                        o_ptr->fixed_artifact_idx = q_ref.k_idx;
+                        o_ptr->fixed_artifact_idx = q_ref.reward_artifact_idx;
                         o_ptr->ident = IDENT_STORE;
                         describe_flavor(player_ptr, name, o_ptr, OD_NAME_ONLY);
                     }

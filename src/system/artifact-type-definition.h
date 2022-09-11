@@ -18,9 +18,10 @@
  * the save-file only writes "is_generated" to the savefile.
  * "max_num" is always "1" (if that artifact "exists")
  */
+enum class FixedArtifactId : short;
 enum class RandomArtActType : short;
 struct artifact_type {
-    ARTIFACT_IDX idx{};
+    FixedArtifactId idx{};
 
     std::string name; /*!< アーティファクト名 / Name */
     std::string text; /*!< アーティファクト解説 / Text */

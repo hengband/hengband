@@ -10,6 +10,7 @@
 #include "system/artifact-type-definition.h"
 #include "system/object-type-definition.h"
 #include "util/bit-flags-calculator.h"
+#include "util/enum-converter.h"
 #include "util/enum-range.h"
 #include "util/quarks.h"
 #include "wizard/spoiler-util.h"
@@ -258,7 +259,7 @@ static void analyze_misc_magic(ObjectType *o_ptr, concptr *misc_list)
  */
 static void analyze_addition(ObjectType *o_ptr, char *addition)
 {
-    auto *a_ptr = &a_info[o_ptr->fixed_artifact_idx];
+    auto *a_ptr = &a_info[enum2i(o_ptr->fixed_artifact_idx)];
     strcpy(addition, "");
 
     if (a_ptr->gen_flags.has_all_of({ ItemGenerationTraitType::XTRA_POWER, ItemGenerationTraitType::XTRA_H_RES })) {
@@ -294,7 +295,7 @@ static void analyze_addition(ObjectType *o_ptr, char *addition)
  */
 static void analyze_misc(ObjectType *o_ptr, char *misc_desc)
 {
-    auto *a_ptr = &a_info[o_ptr->fixed_artifact_idx];
+    auto *a_ptr = &a_info[enum2i(o_ptr->fixed_artifact_idx)];
     sprintf(misc_desc, _("レベル %d, 希少度 %u, %d.%d kg, ＄%ld", "Level %d, Rarity %u, %d.%d lbs, %ld Gold"), (int)a_ptr->level, a_ptr->rarity,
         _(lb_to_kg_integer(a_ptr->weight), a_ptr->weight / 10), _(lb_to_kg_fraction(a_ptr->weight), a_ptr->weight % 10), (long int)a_ptr->cost);
 }

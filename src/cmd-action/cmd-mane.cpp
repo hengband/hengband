@@ -211,7 +211,7 @@ static int get_mane_power(PlayerType *player_ptr, int *sn, bool baigaesi)
 
                     chance += player_ptr->to_m_chance;
 
-                    if (player_ptr->inventory_list[INVEN_NECK].fixed_artifact_idx == ART_GOGO_PENDANT) {
+                    if (player_ptr->inventory_list[INVEN_NECK].fixed_artifact_idx == FixedArtifactId::GOGO_PENDANT) {
                         chance -= 10;
                     }
 

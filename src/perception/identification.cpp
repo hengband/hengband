@@ -43,7 +43,7 @@ bool screen_object(PlayerType *player_ptr, ObjectType *o_ptr, BIT_FLAGS mode)
     int trivial_info = 0;
     auto flgs = object_flags(o_ptr);
 
-    shape_buffer(o_ptr->fixed_artifact_idx ? a_info[o_ptr->fixed_artifact_idx].text.c_str() : k_info[o_ptr->k_idx].text.c_str(), 77 - 15, temp, sizeof(temp));
+    shape_buffer(o_ptr->is_fixed_artifact() ? a_info[enum2i(o_ptr->fixed_artifact_idx)].text.c_str() : k_info[o_ptr->k_idx].text.c_str(), 77 - 15, temp, sizeof(temp));
 
     int i = 0;
     for (int j = 0; temp[j]; j += 1 + strlen(&temp[j])) {
@@ -65,7 +65,7 @@ bool screen_object(PlayerType *player_ptr, ObjectType *o_ptr, BIT_FLAGS mode)
         info[i++] = _("それは投げた時ペットに変化する。", "It will transform into a pet when thrown.");
     }
 
-    if (o_ptr->fixed_artifact_idx == ART_STONEMASK) {
+    if (o_ptr->fixed_artifact_idx == FixedArtifactId::STONEMASK) {
         info[i++] = _("それを装備した者は吸血鬼になる。", "It makes you turn into a vampire permanently.");
     }
 

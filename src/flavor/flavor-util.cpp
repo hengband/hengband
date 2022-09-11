@@ -197,7 +197,7 @@ char *get_ability_abbreviation(char *short_flavor, ObjectType *o_ptr, bool kanji
         flgs.reset(k_ptr->flags);
 
         if (o_ptr->is_fixed_artifact()) {
-            auto *a_ptr = &a_info[o_ptr->fixed_artifact_idx];
+            auto *a_ptr = &a_info[enum2i(o_ptr->fixed_artifact_idx)];
             flgs.reset(a_ptr->flags);
         }
 

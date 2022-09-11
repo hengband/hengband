@@ -95,7 +95,7 @@ static concptr item_activation_aux(ObjectType *o_ptr)
         desc = item_activation_dragon_breath(o_ptr);
         break;
     case RandomArtActType::AGGRAVATE:
-        if (o_ptr->fixed_artifact_idx == ART_HYOUSIGI) {
+        if (o_ptr->fixed_artifact_idx == FixedArtifactId::HYOUSIGI) {
             desc = _("拍子木を打ちならす", "beat wooden clappers");
         }
         break;

@@ -47,11 +47,12 @@ void do_cmd_knowledge_artifacts(PlayerType *player_ptr)
         return;
     }
 
-    //! @note 一般的に std::vector<bool> は使用を避けるべきとされているが、ここの用途では問題ない
-    std::vector<bool> okay(a_info.size());
+    std::map<FixedArtifactId, bool> okay;
+    for (auto i = 0U; i < a_info.size(); i++) {
+        okay.emplace(i2enum<FixedArtifactId>(i), false);
+    }
 
     for (const auto &a_ref : a_info) {
-        okay[a_ref.idx] = false;
         if (a_ref.name.empty()) {
             continue;
         }
@@ -80,7 +81,7 @@ void do_cmd_knowledge_artifacts(PlayerType *player_ptr)
         }
     }
 
-    for (ARTIFACT_IDX i = 0; i < INVEN_TOTAL; i++) {
+    for (auto i = 0; i < INVEN_TOTAL; i++) {
         auto *o_ptr = &player_ptr->inventory_list[i];
         if (!o_ptr->k_idx) {
             continue;
@@ -95,7 +96,7 @@ void do_cmd_knowledge_artifacts(PlayerType *player_ptr)
         okay[o_ptr->fixed_artifact_idx] = false;
     }
 
-    std::vector<ARTIFACT_IDX> whats;
+    std::vector<FixedArtifactId> whats;
     for (const auto &a_ref : a_info) {
         if (okay[a_ref.idx]) {
             whats.push_back(a_ref.idx);
@@ -105,11 +106,11 @@ void do_cmd_knowledge_artifacts(PlayerType *player_ptr)
     uint16_t why = 3;
     ang_sort(player_ptr, whats.data(), &why, whats.size(), ang_sort_art_comp, ang_sort_art_swap);
     for (auto a_idx : whats) {
-        auto *a_ptr = &a_info[a_idx];
+        auto *a_ptr = &a_info[enum2i(a_idx)];
         GAME_TEXT base_name[MAX_NLEN];
         strcpy(base_name, _("未知の伝説のアイテム", "Unknown Artifact"));
-        ARTIFACT_IDX z = lookup_kind(a_ptr->tval, a_ptr->sval);
-        if (z) {
+        const auto z = lookup_kind(a_ptr->tval, a_ptr->sval);
+        if (z != 0) {
             ObjectType forge;
             ObjectType *q_ptr;
             q_ptr = &forge;

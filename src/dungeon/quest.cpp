@@ -278,7 +278,7 @@ void check_find_art_quest_completion(PlayerType *player_ptr, ObjectType *o_ptr)
     for (const auto &[q_idx, q_ref] : quest_list) {
         auto found_artifact = (q_ref.type == QuestKindType::FIND_ARTIFACT);
         found_artifact &= (q_ref.status == QuestStatusType::TAKEN);
-        found_artifact &= (q_ref.k_idx == o_ptr->fixed_artifact_idx);
+        found_artifact &= (q_ref.reward_artifact_idx == o_ptr->fixed_artifact_idx);
         if (found_artifact) {
             complete_quest(player_ptr, q_idx);
         }
@@ -411,7 +411,7 @@ void leave_quest_check(PlayerType *player_ptr)
         quest_list[QuestId::TOWER1].complev = player_ptr->lev;
         break;
     case QuestKindType::FIND_ARTIFACT:
-        a_info[q_ptr->k_idx].gen_flags.reset(ItemGenerationTraitType::QUESTITEM);
+        a_info[enum2i(q_ptr->reward_artifact_idx)].gen_flags.reset(ItemGenerationTraitType::QUESTITEM);
         break;
     case QuestKindType::RANDOM:
         r_info[q_ptr->r_idx].flags1 &= ~(RF1_QUESTOR);

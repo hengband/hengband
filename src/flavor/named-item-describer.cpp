@@ -1,4 +1,5 @@
 ﻿#include "flavor/named-item-describer.h"
+#include "artifact/fixed-art-types.h"
 #include "flavor/flavor-util.h"
 #include "flavor/object-flavor-types.h"
 #include "flavor/tval-description-switcher.h"
@@ -58,7 +59,8 @@ static void set_base_name(flavor_type *flavor_ptr)
         return;
     }
 
-    flavor_ptr->basenm = (flavor_ptr->known && (flavor_ptr->o_ptr->fixed_artifact_idx != 0) && !any_bits(flavor_ptr->mode, OD_BASE_NAME)) ? a_info[flavor_ptr->o_ptr->fixed_artifact_idx].name.c_str() : flavor_ptr->kindname;
+    const auto fixed_art_id = enum2i(flavor_ptr->o_ptr->fixed_artifact_idx);
+    flavor_ptr->basenm = (flavor_ptr->known && flavor_ptr->o_ptr->is_fixed_artifact() && !any_bits(flavor_ptr->mode, OD_BASE_NAME)) ? a_info[fixed_art_id].name.c_str() : flavor_ptr->kindname;
 }
 
 #ifdef JP
@@ -119,8 +121,8 @@ static void describe_artifact_ja(flavor_type *flavor_ptr)
         return;
     }
 
-    if (flavor_ptr->o_ptr->fixed_artifact_idx && flavor_ptr->tr_flags.has_not(TR_FULL_NAME)) {
-        auto *a_ptr = &a_info[flavor_ptr->o_ptr->fixed_artifact_idx];
+    if (flavor_ptr->o_ptr->is_fixed_artifact() && flavor_ptr->tr_flags.has_not(TR_FULL_NAME)) {
+        auto *a_ptr = &a_info[enum2i(flavor_ptr->o_ptr->fixed_artifact_idx)];
         /* '『' から始まらない伝説のアイテムの名前は最初に付加する */
         if (a_ptr->name.find("『", 0, 2) != 0) {
             flavor_ptr->t = object_desc_str(flavor_ptr->t, a_ptr->name.c_str());
@@ -213,7 +215,7 @@ static void describe_artifact_body_ja(flavor_type *flavor_ptr)
     }
 
     if (flavor_ptr->o_ptr->is_fixed_artifact()) {
-        auto *a_ptr = &a_info[flavor_ptr->o_ptr->fixed_artifact_idx];
+        auto *a_ptr = &a_info[enum2i(flavor_ptr->o_ptr->fixed_artifact_idx)];
         if (a_ptr->name.find("『", 0, 2) == 0) {
             flavor_ptr->t = object_desc_str(flavor_ptr->t, a_ptr->name.c_str());
         }
@@ -318,7 +320,7 @@ static void describe_artifact_body_en(flavor_type *flavor_ptr)
     }
 
     if (flavor_ptr->o_ptr->is_fixed_artifact()) {
-        auto *a_ptr = &a_info[flavor_ptr->o_ptr->fixed_artifact_idx];
+        auto *a_ptr = &a_info[enum2i(flavor_ptr->o_ptr->fixed_artifact_idx)];
         flavor_ptr->t = object_desc_chr(flavor_ptr->t, ' ');
         flavor_ptr->t = object_desc_str(flavor_ptr->t, a_ptr->name.c_str());
         return;

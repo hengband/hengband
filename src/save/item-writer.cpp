@@ -22,7 +22,7 @@ static void write_item_flags(ObjectType *o_ptr, BIT_FLAGS *flags)
         set_bits(*flags, SaveDataItemFlagType::NUMBER);
     }
 
-    if (o_ptr->fixed_artifact_idx) {
+    if (o_ptr->is_fixed_artifact()) {
         set_bits(*flags, SaveDataItemFlagType::FIXED_ARTIFACT_IDX);
     }
 
@@ -129,7 +129,7 @@ static void write_item_info(ObjectType *o_ptr, const BIT_FLAGS flags)
 {
     wr_s16b((int16_t)o_ptr->weight);
     if (any_bits(flags, SaveDataItemFlagType::FIXED_ARTIFACT_IDX)) {
-        wr_s16b(o_ptr->fixed_artifact_idx);
+        wr_s16b(enum2i(o_ptr->fixed_artifact_idx));
     }
 
     if (any_bits(flags, SaveDataItemFlagType::EGO_IDX)) {

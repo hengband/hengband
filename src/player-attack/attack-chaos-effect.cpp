@@ -311,7 +311,7 @@ void change_monster_stat(PlayerType *player_ptr, player_attack_type *pa_ptr, con
         attack_polymorph(player_ptr, pa_ptr, y, x);
     }
 
-    if (o_ptr->fixed_artifact_idx == ART_G_HAMMER) {
+    if (o_ptr->fixed_artifact_idx == FixedArtifactId::G_HAMMER) {
         attack_golden_hammer(player_ptr, pa_ptr);
     }
 }

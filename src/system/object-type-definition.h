@@ -15,13 +15,14 @@
 #include "util/flag-group.h"
 #include <optional>
 
+enum class FixedArtifactId : short;
 enum class ItemKindType : short;
 enum class SmithEffectType : int16_t;
 enum class RandomArtActType : short;
 
 class ObjectType {
 public:
-    ObjectType() = default;
+    ObjectType();
     KIND_OBJECT_IDX k_idx{}; /*!< Kind index (zero if "dead") */
     POSITION iy{}; /*!< Y-position on map, or zero */
     POSITION ix{}; /*!< X-position on map, or zero */
@@ -33,7 +34,7 @@ public:
     byte discount{}; /*!< ゲーム中の値引き率 (0～100) / Discount (if any) */
     ITEM_NUMBER number{}; /*!< Number of items */
     WEIGHT weight{}; /*!< Item weight */
-    ARTIFACT_IDX fixed_artifact_idx{}; /*!< 固定アーティファクト番号 (固定アーティファクトでないなら0) */
+    FixedArtifactId fixed_artifact_idx; /*!< 固定アーティファクト番号 (固定アーティファクトでないなら0) */
     EgoType ego_idx{}; /*!< エゴ番号 (エゴでないなら0) */
 
     RandomArtActType activation_id{}; /*!< エゴ/アーティファクトの発動ID / Extra info activation index */

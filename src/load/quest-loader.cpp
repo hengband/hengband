@@ -1,4 +1,5 @@
 ﻿#include "load/quest-loader.h"
+#include "artifact/fixed-art-types.h"
 #include "dungeon/quest.h"
 #include "floor/floor-town.h"
 #include "load/angband-version-comparer.h"
@@ -69,9 +70,9 @@ static void load_quest_details(PlayerType *player_ptr, quest_type *q_ptr, const 
         auto &quest_list = QuestList::get_instance();
         determine_random_questor(player_ptr, &quest_list[loading_quest_index]);
     }
-    q_ptr->k_idx = rd_s16b();
-    if (q_ptr->k_idx) {
-        a_info[q_ptr->k_idx].gen_flags.set(ItemGenerationTraitType::QUESTITEM);
+    q_ptr->reward_artifact_idx = i2enum<FixedArtifactId>(rd_s16b());
+    if (q_ptr->reward_artifact_idx != FixedArtifactId::NONE) {
+        a_info[enum2i(q_ptr->reward_artifact_idx)].gen_flags.set(ItemGenerationTraitType::QUESTITEM);
     }
 
     q_ptr->flags = rd_byte();

@@ -82,7 +82,6 @@ typedef int16_t FLOOR_IDX; /*!< ゲーム中のフロアID型を定義 */
 // typedef int16_t MonsterRaceId; /*!< @todo MonsterRaceIdに差し替えて消滅させる ゲーム中のモンスター種族ID型を定義 */
 typedef int16_t MONSTER_IDX; /*!< @todo MonsterRaceIdに差し替えて消滅させる ゲーム中のモンスター個体ID型を定義 */
 typedef int16_t DUNGEON_IDX; /*!< ゲーム中のダンジョンID型を定義 */
-typedef int16_t ARTIFACT_IDX; /*!< ゲーム中のアーティファクトID型を定義 */
 typedef int16_t EGO_IDX; /*!< アイテムエゴのID型を定義 */
 typedef int16_t QUEST_IDX; /*!< ゲーム中のクエストID型を定義 */
 
