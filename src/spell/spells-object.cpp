@@ -89,8 +89,8 @@ static const std::vector<amuse_type> amuse_info = {
 
 static std::optional<FixedArtifactId> sweep_amusement_artifact(const bool insta_art, const short k_idx)
 {
-    for (const auto &a_ref : a_info) {
-        if (a_ref.idx == FixedArtifactId::NONE) {
+    for (const auto &[a_idx, a_ref] : a_info) {
+        if (a_idx == FixedArtifactId::NONE) {
             continue;
         }
 
@@ -110,7 +110,7 @@ static std::optional<FixedArtifactId> sweep_amusement_artifact(const bool insta_
             continue;
         }
 
-        return a_ref.idx;
+        return a_idx;
     }
 
     return std::nullopt;

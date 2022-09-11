@@ -259,26 +259,26 @@ static void analyze_misc_magic(ObjectType *o_ptr, concptr *misc_list)
  */
 static void analyze_addition(ObjectType *o_ptr, char *addition)
 {
-    auto *a_ptr = &a_info[enum2i(o_ptr->fixed_artifact_idx)];
+    const auto &a_ref = a_info.at(o_ptr->fixed_artifact_idx);
     strcpy(addition, "");
 
-    if (a_ptr->gen_flags.has_all_of({ ItemGenerationTraitType::XTRA_POWER, ItemGenerationTraitType::XTRA_H_RES })) {
+    if (a_ref.gen_flags.has_all_of({ ItemGenerationTraitType::XTRA_POWER, ItemGenerationTraitType::XTRA_H_RES })) {
         strcat(addition, _("能力and耐性", "Ability and Resistance"));
-    } else if (a_ptr->gen_flags.has(ItemGenerationTraitType::XTRA_POWER)) {
+    } else if (a_ref.gen_flags.has(ItemGenerationTraitType::XTRA_POWER)) {
         strcat(addition, _("能力", "Ability"));
-        if (a_ptr->gen_flags.has(ItemGenerationTraitType::XTRA_RES_OR_POWER)) {
+        if (a_ref.gen_flags.has(ItemGenerationTraitType::XTRA_RES_OR_POWER)) {
             strcat(addition, _("(1/2でand耐性)", "(plus Resistance about 1/2)"));
         }
-    } else if (a_ptr->gen_flags.has(ItemGenerationTraitType::XTRA_H_RES)) {
+    } else if (a_ref.gen_flags.has(ItemGenerationTraitType::XTRA_H_RES)) {
         strcat(addition, _("耐性", "Resistance"));
-        if (a_ptr->gen_flags.has(ItemGenerationTraitType::XTRA_RES_OR_POWER)) {
+        if (a_ref.gen_flags.has(ItemGenerationTraitType::XTRA_RES_OR_POWER)) {
             strcat(addition, _("(1/2でand能力)", "(plus Ability about 1/2)"));
         }
-    } else if (a_ptr->gen_flags.has(ItemGenerationTraitType::XTRA_RES_OR_POWER)) {
+    } else if (a_ref.gen_flags.has(ItemGenerationTraitType::XTRA_RES_OR_POWER)) {
         strcat(addition, _("能力or耐性", "Ability or Resistance"));
     }
 
-    if (a_ptr->gen_flags.has(ItemGenerationTraitType::XTRA_DICE)) {
+    if (a_ref.gen_flags.has(ItemGenerationTraitType::XTRA_DICE)) {
         if (strlen(addition) > 0) {
             strcat(addition, _("、", ", "));
         }
@@ -295,9 +295,9 @@ static void analyze_addition(ObjectType *o_ptr, char *addition)
  */
 static void analyze_misc(ObjectType *o_ptr, char *misc_desc)
 {
-    auto *a_ptr = &a_info[enum2i(o_ptr->fixed_artifact_idx)];
-    sprintf(misc_desc, _("レベル %d, 希少度 %u, %d.%d kg, ＄%ld", "Level %d, Rarity %u, %d.%d lbs, %ld Gold"), (int)a_ptr->level, a_ptr->rarity,
-        _(lb_to_kg_integer(a_ptr->weight), a_ptr->weight / 10), _(lb_to_kg_fraction(a_ptr->weight), a_ptr->weight % 10), (long int)a_ptr->cost);
+    const auto &a_ref = a_info.at(o_ptr->fixed_artifact_idx);
+    sprintf(misc_desc, _("レベル %d, 希少度 %u, %d.%d kg, ＄%ld", "Level %d, Rarity %u, %d.%d lbs, %ld Gold"), (int)a_ref.level, a_ref.rarity,
+        _(lb_to_kg_integer(a_ref.weight), a_ref.weight / 10), _(lb_to_kg_fraction(a_ref.weight), a_ref.weight % 10), (long int)a_ref.cost);
 }
 
 /*!

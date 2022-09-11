@@ -101,10 +101,10 @@ static void do_cmd_knowledge_quests_current(PlayerType *player_ptr, FILE *fff)
 
                 case QuestKindType::FIND_ARTIFACT:
                     if (q_ref.reward_artifact_idx != FixedArtifactId::NONE) {
-                        auto *a_ptr = &a_info[enum2i(q_ref.reward_artifact_idx)];
+                        const auto &a_ref = a_info.at(q_ref.reward_artifact_idx);
                         ObjectType forge;
                         auto *o_ptr = &forge;
-                        KIND_OBJECT_IDX k_idx = lookup_kind(a_ptr->tval, a_ptr->sval);
+                        KIND_OBJECT_IDX k_idx = lookup_kind(a_ref.tval, a_ref.sval);
                         o_ptr->prep(k_idx);
                         o_ptr->fixed_artifact_idx = q_ref.reward_artifact_idx;
                         o_ptr->ident = IDENT_STORE;

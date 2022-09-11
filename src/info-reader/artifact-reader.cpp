@@ -1,4 +1,5 @@
 ﻿#include "info-reader/artifact-reader.h"
+#include "artifact/fixed-art-types.h"
 #include "artifact/random-art-effects.h"
 #include "info-reader/info-reader-util.h"
 #include "info-reader/kind-info-tokens-table.h"
@@ -38,6 +39,7 @@ static bool grab_one_artifact_flag(ArtifactType *a_ptr, std::string_view what)
  * @param buf テキスト列
  * @param head ヘッダ構造体
  * @return エラーコード
+ * @todo static ArtifactType *a_ptr は設計変更で不要にできるかもしれない (mapの最終要素を取り出せば良い)
  */
 errr parse_a_info(std::string_view buf, angband_header *)
 {
@@ -50,22 +52,20 @@ errr parse_a_info(std::string_view buf, angband_header *)
             return PARSE_ERROR_GENERIC;
         }
 
-        auto i = std::stoi(tokens[1]);
-        if (i < error_idx) {
+        const auto int_idx = std::stoi(tokens[1]);
+        const auto a_idx = i2enum<FixedArtifactId>(int_idx);
+        if (int_idx < error_idx) {
             return PARSE_ERROR_NON_SEQUENTIAL_RECORDS;
         }
-        if (i >= static_cast<int>(a_info.size())) {
-            a_info.resize(i + 1);
-        }
 
-        error_idx = i;
-        a_ptr = &a_info[i];
-        a_ptr->idx = i2enum<FixedArtifactId>(i);
+        error_idx = int_idx;
+        ArtifactType artifact;
+        a_info.emplace(a_idx, artifact);
+        a_ptr = &a_info.at(a_idx);
         a_ptr->flags.set(TR_IGNORE_ACID);
         a_ptr->flags.set(TR_IGNORE_ELEC);
         a_ptr->flags.set(TR_IGNORE_FIRE);
         a_ptr->flags.set(TR_IGNORE_COLD);
-
 #ifdef JP
         a_ptr->name = tokens[2];
 #endif

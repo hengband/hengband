@@ -55,7 +55,7 @@ TrFlags object_flags(const ObjectType *o_ptr)
     auto flgs = k_ptr->flags;
 
     if (o_ptr->is_fixed_artifact()) {
-        flgs = a_info[enum2i(o_ptr->fixed_artifact_idx)].flags;
+        flgs = a_info.at(o_ptr->fixed_artifact_idx).flags;
     }
 
     object_flags_lite(o_ptr, flgs);
@@ -100,7 +100,7 @@ TrFlags object_flags_known(const ObjectType *o_ptr)
     object_flags_lite(o_ptr, flgs);
     if (spoil || o_ptr->is_fully_known()) {
         if (o_ptr->is_fixed_artifact()) {
-            flgs = a_info[enum2i(o_ptr->fixed_artifact_idx)].flags;
+            flgs = a_info.at(o_ptr->fixed_artifact_idx).flags;
         }
 
         /* Random artifact ! */

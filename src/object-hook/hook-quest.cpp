@@ -58,10 +58,10 @@ bool object_is_quest_target(QuestId quest_idx, ObjectType *o_ptr)
         return false;
     }
 
-    auto *a_ptr = &a_info[enum2i(a_idx)];
-    if (a_ptr->gen_flags.has(ItemGenerationTraitType::INSTA_ART)) {
+    const auto &a_ref = a_info.at(a_idx);
+    if (a_ref.gen_flags.has(ItemGenerationTraitType::INSTA_ART)) {
         return false;
     }
 
-    return (o_ptr->tval == a_ptr->tval) && (o_ptr->sval == a_ptr->sval);
+    return (o_ptr->tval == a_ref.tval) && (o_ptr->sval == a_ref.sval);
 }

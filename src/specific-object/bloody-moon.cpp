@@ -18,7 +18,7 @@
  */
 void get_bloody_moon_flags(ObjectType *o_ptr)
 {
-    o_ptr->art_flags = a_info[enum2i(FixedArtifactId::BLOOD)].flags;
+    o_ptr->art_flags = a_info.at(FixedArtifactId::BLOOD).flags;
 
     int dummy = randint1(2) + randint1(2);
     for (int i = 0; i < dummy; i++) {

@@ -345,7 +345,7 @@ bool destroy_area(PlayerType *player_ptr, POSITION y1, POSITION x1, POSITION r, 
 
                     /* Hack -- Preserve unknown artifacts */
                     if (o_ptr->is_fixed_artifact() && (!o_ptr->is_known() || in_generate)) {
-                        a_info[enum2i(o_ptr->fixed_artifact_idx)].is_generated = false;
+                        a_info.at(o_ptr->fixed_artifact_idx).is_generated = false;
 
                         if (in_generate && cheat_peek) {
                             GAME_TEXT o_name[MAX_NLEN];

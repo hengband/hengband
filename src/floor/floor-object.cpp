@@ -485,8 +485,7 @@ OBJECT_IDX drop_near(PlayerType *player_ptr, ObjectType *j_ptr, PERCENTAGE chanc
 
             if (preserve_mode) {
                 if (j_ptr->is_fixed_artifact() && !j_ptr->is_known()) {
-                    const auto fixed_artifact_idx = enum2i(j_ptr->fixed_artifact_idx);
-                    a_info[fixed_artifact_idx].is_generated = false;
+                    a_info.at(j_ptr->fixed_artifact_idx).is_generated = false;
                 }
             }
 
@@ -539,8 +538,7 @@ OBJECT_IDX drop_near(PlayerType *player_ptr, ObjectType *j_ptr, PERCENTAGE chanc
         }
 
         if (j_ptr->is_fixed_artifact()) {
-            const auto fixed_artifact_idx = enum2i(j_ptr->fixed_artifact_idx);
-            a_info[fixed_artifact_idx].is_generated = false;
+            a_info.at(j_ptr->fixed_artifact_idx).is_generated = false;
         }
 
         return 0;

@@ -86,26 +86,26 @@ static void print_header(void)
  */
 static bool make_fake_artifact(ObjectType *o_ptr, FixedArtifactId fixed_artifact_idx)
 {
-    auto *a_ptr = &a_info[enum2i(fixed_artifact_idx)];
-    if (a_ptr->name.empty()) {
+    auto &a_ref = a_info.at(fixed_artifact_idx);
+    if (a_ref.name.empty()) {
         return false;
     }
 
-    OBJECT_IDX i = lookup_kind(a_ptr->tval, a_ptr->sval);
+    OBJECT_IDX i = lookup_kind(a_ref.tval, a_ref.sval);
     if (!i) {
         return false;
     }
 
     o_ptr->prep(i);
     o_ptr->fixed_artifact_idx = fixed_artifact_idx;
-    o_ptr->pval = a_ptr->pval;
-    o_ptr->ac = a_ptr->ac;
-    o_ptr->dd = a_ptr->dd;
-    o_ptr->ds = a_ptr->ds;
-    o_ptr->to_a = a_ptr->to_a;
-    o_ptr->to_h = a_ptr->to_h;
-    o_ptr->to_d = a_ptr->to_d;
-    o_ptr->weight = a_ptr->weight;
+    o_ptr->pval = a_ref.pval;
+    o_ptr->ac = a_ref.ac;
+    o_ptr->dd = a_ref.dd;
+    o_ptr->ds = a_ref.ds;
+    o_ptr->to_a = a_ref.to_a;
+    o_ptr->to_h = a_ref.to_h;
+    o_ptr->to_d = a_ref.to_d;
+    o_ptr->weight = a_ref.weight;
     return true;
 }
 
@@ -164,14 +164,14 @@ SpoilerOutputResultType spoil_fixed_artifact(concptr fname)
         spoiler_blanklines(1);
 
         for (auto tval : tval_list) {
-            for (const auto &a_ref : a_info) {
+            for (const auto &[a_idx, a_ref] : a_info) {
                 if (a_ref.tval != tval) {
                     continue;
                 }
 
                 ObjectType obj;
                 obj.wipe();
-                if (!make_fake_artifact(&obj, a_ref.idx)) {
+                if (!make_fake_artifact(&obj, a_idx)) {
                     continue;
                 }
 

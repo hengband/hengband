@@ -59,8 +59,9 @@ static void set_base_name(flavor_type *flavor_ptr)
         return;
     }
 
-    const auto fixed_art_id = enum2i(flavor_ptr->o_ptr->fixed_artifact_idx);
-    flavor_ptr->basenm = (flavor_ptr->known && flavor_ptr->o_ptr->is_fixed_artifact() && !any_bits(flavor_ptr->mode, OD_BASE_NAME)) ? a_info[fixed_art_id].name.c_str() : flavor_ptr->kindname;
+    const auto fixed_art_id = flavor_ptr->o_ptr->fixed_artifact_idx;
+    const auto is_known_artifact = flavor_ptr->known && flavor_ptr->o_ptr->is_fixed_artifact() && none_bits(flavor_ptr->mode, OD_BASE_NAME);
+    flavor_ptr->basenm = is_known_artifact ? a_info.at(fixed_art_id).name.c_str() : flavor_ptr->kindname;
 }
 
 #ifdef JP
@@ -122,10 +123,10 @@ static void describe_artifact_ja(flavor_type *flavor_ptr)
     }
 
     if (flavor_ptr->o_ptr->is_fixed_artifact() && flavor_ptr->tr_flags.has_not(TR_FULL_NAME)) {
-        auto *a_ptr = &a_info[enum2i(flavor_ptr->o_ptr->fixed_artifact_idx)];
+        const auto &a_ref = a_info.at(flavor_ptr->o_ptr->fixed_artifact_idx);
         /* '『' から始まらない伝説のアイテムの名前は最初に付加する */
-        if (a_ptr->name.find("『", 0, 2) != 0) {
-            flavor_ptr->t = object_desc_str(flavor_ptr->t, a_ptr->name.c_str());
+        if (a_ref.name.find("『", 0, 2) != 0) {
+            flavor_ptr->t = object_desc_str(flavor_ptr->t, a_ref.name.c_str());
         }
 
         return;
@@ -215,9 +216,9 @@ static void describe_artifact_body_ja(flavor_type *flavor_ptr)
     }
 
     if (flavor_ptr->o_ptr->is_fixed_artifact()) {
-        auto *a_ptr = &a_info[enum2i(flavor_ptr->o_ptr->fixed_artifact_idx)];
-        if (a_ptr->name.find("『", 0, 2) == 0) {
-            flavor_ptr->t = object_desc_str(flavor_ptr->t, a_ptr->name.c_str());
+        const auto &a_ref = a_info.at(flavor_ptr->o_ptr->fixed_artifact_idx);
+        if (a_ref.name.find("『", 0, 2) == 0) {
+            flavor_ptr->t = object_desc_str(flavor_ptr->t, a_ref.name.c_str());
         }
 
         return;
@@ -250,10 +251,10 @@ static void describe_vowel(flavor_type *flavor_ptr)
 }
 
 /*!
- * @brief 0個、1個、2個以上の時に個数を書き分ける処理 / Process to write the number when there are 0, 1, or 2 or more.
- * @param flavor_ptr アイテム表記への参照ポインタ / Reference pointer to item's flavor
- * @return 1個ならFALSE、0または2個以上ならTRUE / If the number of items is 1, then FALE is returned, and if 0 or 2 or more, then TRUE is returned
- * @details 1個なら後続処理実行 / If the number of items is 1, then the continuous process will be run.
+ * @brief Process to write the number of items when there are 0, 1, or 2 or more.
+ * @param flavor_ptr Reference pointer to item's flavor
+ * @return If the number of items is 1, then FALE is returned, and if 0 or 2 or more, then TRUE is returned
+ * @details If the number of items is 1, then the continuous process will be run.
  */
 static bool describe_prefix_en(flavor_type *flavor_ptr)
 {
@@ -283,7 +284,9 @@ static void describe_artifact_prefix_en(flavor_type *flavor_ptr)
     }
 
     const auto corpse_r_idx = i2enum<MonsterRaceId>(flavor_ptr->o_ptr->pval);
-    if ((flavor_ptr->known && flavor_ptr->o_ptr->is_artifact()) || ((flavor_ptr->o_ptr->tval == ItemKindType::CORPSE) && r_info[corpse_r_idx].kind_flags.has(MonsterKindType::UNIQUE))) {
+    auto is_unique_corpse = flavor_ptr->o_ptr->tval == ItemKindType::CORPSE;
+    is_unique_corpse &= r_info[corpse_r_idx].kind_flags.has(MonsterKindType::UNIQUE);
+    if ((flavor_ptr->known && flavor_ptr->o_ptr->is_artifact()) || is_unique_corpse) {
         flavor_ptr->t = object_desc_str(flavor_ptr->t, "The ");
         return;
     }
@@ -320,9 +323,9 @@ static void describe_artifact_body_en(flavor_type *flavor_ptr)
     }
 
     if (flavor_ptr->o_ptr->is_fixed_artifact()) {
-        auto *a_ptr = &a_info[enum2i(flavor_ptr->o_ptr->fixed_artifact_idx)];
+        const auto &a_ref = a_info.at(flavor_ptr->o_ptr->fixed_artifact_idx);
         flavor_ptr->t = object_desc_chr(flavor_ptr->t, ' ');
-        flavor_ptr->t = object_desc_str(flavor_ptr->t, a_ptr->name.c_str());
+        flavor_ptr->t = object_desc_str(flavor_ptr->t, a_ref.name.c_str());
         return;
     }
 

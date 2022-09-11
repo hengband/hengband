@@ -225,7 +225,7 @@ static void invest_curse_to_fixed_artifact(const ArtifactType &a_ref, ObjectType
  */
 std::unique_ptr<ArtifactType> apply_artifact(PlayerType *player_ptr, ObjectType *o_ptr)
 {
-    auto a_ptr = std::make_unique<ArtifactType>(a_info[enum2i(o_ptr->fixed_artifact_idx)]);
+    auto a_ptr = std::make_unique<ArtifactType>(a_info.at(o_ptr->fixed_artifact_idx));
     o_ptr->pval = a_ptr->pval;
     o_ptr->ac = a_ptr->ac;
     o_ptr->dd = a_ptr->dd;
@@ -256,7 +256,7 @@ std::unique_ptr<ArtifactType> apply_artifact(PlayerType *player_ptr, ObjectType 
  */
 bool create_named_art(PlayerType *player_ptr, FixedArtifactId a_idx, POSITION y, POSITION x)
 {
-    auto a_ptr = &a_info[enum2i(a_idx)];
+    auto a_ptr = &a_info.at(a_idx);
     if (a_ptr->name.empty()) {
         return false;
     }
@@ -298,7 +298,7 @@ bool make_artifact(PlayerType *player_ptr, ObjectType *o_ptr)
         return false;
     }
 
-    for (const auto &a_ref : a_info) {
+    for (const auto &[a_idx, a_ref] : a_info) {
         if (a_ref.name.empty()) {
             continue;
         }
@@ -334,7 +334,7 @@ bool make_artifact(PlayerType *player_ptr, ObjectType *o_ptr)
             continue;
         }
 
-        o_ptr->fixed_artifact_idx = a_ref.idx;
+        o_ptr->fixed_artifact_idx = a_idx;
         return true;
     }
 
@@ -369,7 +369,7 @@ bool make_artifact_special(PlayerType *player_ptr, ObjectType *o_ptr)
     }
 
     /*! @note 全固定アーティファクト中からIDの若い順に生成対象とその確率を走査する / Check the artifact list (just the "specials") */
-    for (const auto &a_ref : a_info) {
+    for (const auto &[a_idx, a_ref] : a_info) {
         /*! @note アーティファクト名が空の不正なデータは除外する / Skip "empty" artifacts */
         if (a_ref.name.empty()) {
             continue;
@@ -386,8 +386,7 @@ bool make_artifact_special(PlayerType *player_ptr, ObjectType *o_ptr)
             continue;
         }
 
-        /*! @note アーティファクト生成階が現在に対して足りない場合は高確率で1/(不足階層*2)を満たさないと生成リストに加えられない /
-         *  XXX XXX Enforce minimum "depth" (loosely) */
+        /*! @note アーティファクト生成階が現在に対して足りない場合は高確率で1/(不足階層*2)を満たさないと生成リストに加えられない */
         if (a_ref.level > floor_ptr->object_level) {
             /* @note  / Acquire the "out-of-depth factor". Roll for out-of-depth creation. */
             int d = (a_ref.level - floor_ptr->object_level) * 2;
@@ -401,9 +400,10 @@ bool make_artifact_special(PlayerType *player_ptr, ObjectType *o_ptr)
             continue;
         }
 
-        /*! @note INSTA_ART型固定アーティファクトのベースアイテムもチェック対象とする。ベースアイテムの生成階層が足りない場合1/(不足階層*5)
-         * を満たさないと除外される。 / Find the base object. XXX XXX Enforce minimum "object" level (loosely). Acquire the "out-of-depth factor". Roll for
-         * out-of-depth creation. */
+        /*!
+         * @note INSTA_ART型固定アーティファクトのベースアイテムもチェック対象とする。
+         * ベースアイテムの生成階層が足りない場合1/(不足階層*5)を満たさないと除外される。
+         */
         k_idx = lookup_kind(a_ref.tval, a_ref.sval);
         if (k_info[k_idx].level > floor_ptr->object_level) {
             int d = (k_info[k_idx].level - floor_ptr->object_level) * 5;
@@ -416,7 +416,7 @@ bool make_artifact_special(PlayerType *player_ptr, ObjectType *o_ptr)
          * Assign the template. Mega-Hack -- mark the item as an artifact. Hack: Some artifacts get random extra powers. Success. */
         o_ptr->prep(k_idx);
 
-        o_ptr->fixed_artifact_idx = a_ref.idx;
+        o_ptr->fixed_artifact_idx = a_idx;
         return true;
     }
 

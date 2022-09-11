@@ -43,7 +43,8 @@ bool screen_object(PlayerType *player_ptr, ObjectType *o_ptr, BIT_FLAGS mode)
     int trivial_info = 0;
     auto flgs = object_flags(o_ptr);
 
-    shape_buffer(o_ptr->is_fixed_artifact() ? a_info[enum2i(o_ptr->fixed_artifact_idx)].text.c_str() : k_info[o_ptr->k_idx].text.c_str(), 77 - 15, temp, sizeof(temp));
+    const auto item_text = o_ptr->is_fixed_artifact() ? a_info.at(o_ptr->fixed_artifact_idx).text.c_str() : k_info[o_ptr->k_idx].text.c_str();
+    shape_buffer(item_text, 77 - 15, temp, sizeof(temp));
 
     int i = 0;
     for (int j = 0; temp[j]; j += 1 + strlen(&temp[j])) {
