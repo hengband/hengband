@@ -181,7 +181,7 @@ bool ItemMagicApplier::set_fixed_artifact_generation_info()
         return false;
     }
 
-    auto *a_ptr = apply_artifact(this->player_ptr, this->o_ptr);
+    auto a_ptr = apply_artifact(this->player_ptr, this->o_ptr);
     a_ptr->is_generated = true;
     if (w_ptr->character_dungeon) {
         a_ptr->floor_id = this->player_ptr->floor_id;

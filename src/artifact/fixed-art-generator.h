@@ -5,6 +5,7 @@
  */
 
 #include "system/angband.h"
+#include <memory>
 
 enum class FixedArtifactId : short;
 class ArtifactType;
@@ -12,5 +13,5 @@ class ObjectType;
 class PlayerType;
 bool create_named_art(PlayerType *player_ptr, FixedArtifactId a_idx, POSITION y, POSITION x);
 bool make_artifact(PlayerType *player_ptr, ObjectType *o_ptr);
-ArtifactType *apply_artifact(PlayerType *player_ptr, ObjectType *o_ptr);
+std::unique_ptr<ArtifactType> apply_artifact(PlayerType *player_ptr, ObjectType *o_ptr);
 bool make_artifact_special(PlayerType *player_ptr, ObjectType *o_ptr);

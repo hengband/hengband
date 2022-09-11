@@ -133,7 +133,7 @@ static void invest_special_artifact_abilities(PlayerType *player_ptr, ObjectType
  * @param a_ptr 固定アーティファクト情報への参照ポインタ
  * @param q_ptr オブジェクト情報への参照ポインタ
  */
-static void fixed_artifact_random_abilities(PlayerType *player_ptr, ArtifactType *a_ptr, ObjectType *o_ptr)
+static void fixed_artifact_random_abilities(PlayerType *player_ptr, const ArtifactType &a_ref, ObjectType *o_ptr)
 {
     auto give_power = false;
     auto give_resistance = false;
@@ -145,15 +145,15 @@ static void fixed_artifact_random_abilities(PlayerType *player_ptr, ArtifactType
 
     invest_special_artifact_abilities(player_ptr, o_ptr);
 
-    if (a_ptr->gen_flags.has(ItemGenerationTraitType::XTRA_POWER)) {
+    if (a_ref.gen_flags.has(ItemGenerationTraitType::XTRA_POWER)) {
         give_power = true;
     }
 
-    if (a_ptr->gen_flags.has(ItemGenerationTraitType::XTRA_H_RES)) {
+    if (a_ref.gen_flags.has(ItemGenerationTraitType::XTRA_H_RES)) {
         give_resistance = true;
     }
 
-    if (a_ptr->gen_flags.has(ItemGenerationTraitType::XTRA_RES_OR_POWER)) {
+    if (a_ref.gen_flags.has(ItemGenerationTraitType::XTRA_RES_OR_POWER)) {
         if (one_in_(2)) {
             give_resistance = true;
         } else {
@@ -169,7 +169,7 @@ static void fixed_artifact_random_abilities(PlayerType *player_ptr, ArtifactType
         one_high_resistance(o_ptr);
     }
 
-    if (a_ptr->gen_flags.has(ItemGenerationTraitType::XTRA_DICE)) {
+    if (a_ref.gen_flags.has(ItemGenerationTraitType::XTRA_DICE)) {
         do {
             o_ptr->dd++;
         } while (one_in_(o_ptr->dd));
@@ -186,33 +186,33 @@ static void fixed_artifact_random_abilities(PlayerType *player_ptr, ArtifactType
  * @param a_ptr 固定アーティファクト情報への参照ポインタ
  * @param q_ptr オブジェクト情報への参照ポインタ
  */
-static void invest_curse_to_fixed_artifact(ArtifactType *a_ptr, ObjectType *o_ptr)
+static void invest_curse_to_fixed_artifact(const ArtifactType &a_ref, ObjectType *o_ptr)
 {
-    if (!a_ptr->cost) {
+    if (!a_ref.cost) {
         set_bits(o_ptr->ident, IDENT_BROKEN);
     }
 
-    if (a_ptr->gen_flags.has(ItemGenerationTraitType::CURSED)) {
+    if (a_ref.gen_flags.has(ItemGenerationTraitType::CURSED)) {
         o_ptr->curse_flags.set(CurseTraitType::CURSED);
     }
 
-    if (a_ptr->gen_flags.has(ItemGenerationTraitType::HEAVY_CURSE)) {
+    if (a_ref.gen_flags.has(ItemGenerationTraitType::HEAVY_CURSE)) {
         o_ptr->curse_flags.set(CurseTraitType::HEAVY_CURSE);
     }
 
-    if (a_ptr->gen_flags.has(ItemGenerationTraitType::PERMA_CURSE)) {
+    if (a_ref.gen_flags.has(ItemGenerationTraitType::PERMA_CURSE)) {
         o_ptr->curse_flags.set(CurseTraitType::PERMA_CURSE);
     }
 
-    if (a_ptr->gen_flags.has(ItemGenerationTraitType::RANDOM_CURSE0)) {
+    if (a_ref.gen_flags.has(ItemGenerationTraitType::RANDOM_CURSE0)) {
         o_ptr->curse_flags.set(get_curse(0, o_ptr));
     }
 
-    if (a_ptr->gen_flags.has(ItemGenerationTraitType::RANDOM_CURSE1)) {
+    if (a_ref.gen_flags.has(ItemGenerationTraitType::RANDOM_CURSE1)) {
         o_ptr->curse_flags.set(get_curse(1, o_ptr));
     }
 
-    if (a_ptr->gen_flags.has(ItemGenerationTraitType::RANDOM_CURSE2)) {
+    if (a_ref.gen_flags.has(ItemGenerationTraitType::RANDOM_CURSE2)) {
         o_ptr->curse_flags.set(get_curse(2, o_ptr));
     }
 }
@@ -223,9 +223,9 @@ static void invest_curse_to_fixed_artifact(ArtifactType *a_ptr, ObjectType *o_pt
  * @param o_ptr 生成に割り当てたいオブジェクトの構造体参照ポインタ
  * @return 適用したアーティファクト情報への参照ポインタ
  */
-ArtifactType *apply_artifact(PlayerType *player_ptr, ObjectType *o_ptr)
+std::unique_ptr<ArtifactType> apply_artifact(PlayerType *player_ptr, ObjectType *o_ptr)
 {
-    auto a_ptr = &a_info[enum2i(o_ptr->fixed_artifact_idx)];
+    auto a_ptr = std::make_unique<ArtifactType>(a_info[enum2i(o_ptr->fixed_artifact_idx)]);
     o_ptr->pval = a_ptr->pval;
     o_ptr->ac = a_ptr->ac;
     o_ptr->dd = a_ptr->dd;
@@ -236,8 +236,8 @@ ArtifactType *apply_artifact(PlayerType *player_ptr, ObjectType *o_ptr)
     o_ptr->weight = a_ptr->weight;
     o_ptr->activation_id = a_ptr->act_idx;
 
-    invest_curse_to_fixed_artifact(a_ptr, o_ptr);
-    fixed_artifact_random_abilities(player_ptr, a_ptr, o_ptr);
+    invest_curse_to_fixed_artifact(*a_ptr, o_ptr);
+    fixed_artifact_random_abilities(player_ptr, *a_ptr, o_ptr);
 
     return a_ptr;
 }
