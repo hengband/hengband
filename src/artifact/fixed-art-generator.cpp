@@ -133,7 +133,7 @@ static void invest_special_artifact_abilities(PlayerType *player_ptr, ObjectType
  * @param a_ptr 固定アーティファクト情報への参照ポインタ
  * @param q_ptr オブジェクト情報への参照ポインタ
  */
-static void fixed_artifact_random_abilities(PlayerType *player_ptr, artifact_type *a_ptr, ObjectType *o_ptr)
+static void fixed_artifact_random_abilities(PlayerType *player_ptr, ArtifactType *a_ptr, ObjectType *o_ptr)
 {
     auto give_power = false;
     auto give_resistance = false;
@@ -186,7 +186,7 @@ static void fixed_artifact_random_abilities(PlayerType *player_ptr, artifact_typ
  * @param a_ptr 固定アーティファクト情報への参照ポインタ
  * @param q_ptr オブジェクト情報への参照ポインタ
  */
-static void invest_curse_to_fixed_artifact(artifact_type *a_ptr, ObjectType *o_ptr)
+static void invest_curse_to_fixed_artifact(ArtifactType *a_ptr, ObjectType *o_ptr)
 {
     if (!a_ptr->cost) {
         set_bits(o_ptr->ident, IDENT_BROKEN);
@@ -223,7 +223,7 @@ static void invest_curse_to_fixed_artifact(artifact_type *a_ptr, ObjectType *o_p
  * @param o_ptr 生成に割り当てたいオブジェクトの構造体参照ポインタ
  * @return 適用したアーティファクト情報への参照ポインタ
  */
-artifact_type *apply_artifact(PlayerType *player_ptr, ObjectType *o_ptr)
+ArtifactType *apply_artifact(PlayerType *player_ptr, ObjectType *o_ptr)
 {
     auto a_ptr = &a_info[enum2i(o_ptr->fixed_artifact_idx)];
     o_ptr->pval = a_ptr->pval;

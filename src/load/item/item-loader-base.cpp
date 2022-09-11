@@ -28,7 +28,7 @@ void ItemLoaderBase::load_item(void)
 void ItemLoaderBase::load_artifact(void)
 {
     auto loading_max_a_idx = rd_u16b();
-    artifact_type dummy;
+    ArtifactType dummy;
     for (auto i = 0U; i < loading_max_a_idx; i++) {
         auto *a_ptr = i < a_info.size() ? &a_info[i] : &dummy;
         a_ptr->is_generated = rd_bool();

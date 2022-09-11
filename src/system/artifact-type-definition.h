@@ -6,21 +6,19 @@
 #include "object-enchant/trg-types.h"
 #include "system/object-type-definition.h"
 #include "util/flag-group.h"
-
 #include <string>
 #include <vector>
 
 /*!
- * @struct artifact_type
+ * @class ArtifactType
  * @brief 固定アーティファクト情報の構造体 / Artifact structure.
- * @details
- * @note
- * the save-file only writes "is_generated" to the savefile.
- * "max_num" is always "1" (if that artifact "exists")
+ * @details is_generated フィールドのみセーブファイルへの保存対象
  */
 enum class FixedArtifactId : short;
 enum class RandomArtActType : short;
-struct artifact_type {
+class ArtifactType {
+public:
+    ArtifactType() = default;
     FixedArtifactId idx{};
 
     std::string name; /*!< アーティファクト名 / Name */
@@ -45,4 +43,4 @@ struct artifact_type {
     RandomArtActType act_idx{}; /*! 発動能力ID / Activative ability index */
 };
 
-extern std::vector<artifact_type> a_info;
+extern std::vector<ArtifactType> a_info;

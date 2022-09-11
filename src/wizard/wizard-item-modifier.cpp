@@ -1050,7 +1050,7 @@ WishResultType do_cmd_wishing(PlayerType *player_ptr, int prob, bool allow_art, 
         KIND_OBJECT_IDX k_idx = k_ids.back();
         auto *k_ptr = &k_info[k_idx];
 
-        artifact_type *a_ptr;
+        ArtifactType *a_ptr;
         FixedArtifactId a_idx = FixedArtifactId::NONE;
         if (k_ptr->gen_flags.has(ItemGenerationTraitType::INSTA_ART)) {
             for (const auto &a_ref : a_info) {

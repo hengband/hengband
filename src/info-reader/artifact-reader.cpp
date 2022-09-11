@@ -18,7 +18,7 @@
  * @param what 参照元の文字列ポインタ
  * @return 見つかったらtrue
  */
-static bool grab_one_artifact_flag(artifact_type *a_ptr, std::string_view what)
+static bool grab_one_artifact_flag(ArtifactType *a_ptr, std::string_view what)
 {
     if (TrFlags::grab_one_flag(a_ptr->flags, k_info_flags, what)) {
         return true;
@@ -41,7 +41,7 @@ static bool grab_one_artifact_flag(artifact_type *a_ptr, std::string_view what)
  */
 errr parse_a_info(std::string_view buf, angband_header *)
 {
-    static artifact_type *a_ptr = nullptr;
+    static ArtifactType *a_ptr = nullptr;
     const auto &tokens = str_split(buf, ':', false, 10);
 
     if (tokens[0] == "N") {

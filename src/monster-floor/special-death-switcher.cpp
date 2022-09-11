@@ -169,7 +169,7 @@ static void on_dead_sacred_treasures(PlayerType *player_ptr, monster_death_type 
     }
 
     FixedArtifactId a_idx = FixedArtifactId::NONE;
-    artifact_type *a_ptr = nullptr;
+    ArtifactType *a_ptr = nullptr;
     do {
         switch (randint0(3)) {
         case 0:
