@@ -38,8 +38,8 @@ int usleep(ulong usecs)
  * Hack -- External functions
  */
 #ifdef SET_UID
-extern struct passwd *getpwuid(uid_t uid);
-extern struct passwd *getpwnam(concptr name);
+struct passwd *getpwuid(uid_t uid);
+struct passwd *getpwnam(concptr name);
 #endif
 
 /*
