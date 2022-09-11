@@ -65,9 +65,14 @@ errr parse_a_info(std::string_view buf, angband_header *)
         artifact.name = tokens[2];
 #endif
         a_info.emplace(a_idx, artifact);
-    } else if (tokens[0] == "E") {
+        return PARSE_ERROR_NONE;
+    }
+
+    if (tokens[0] == "E") {
         // E:name_en
-#ifndef JP
+#ifdef JP
+        return PARSE_ERROR_NONE;
+#else
         if (tokens[1].size() == 0) {
             return PARSE_ERROR_TOO_FEW_ARGUMENTS;
         }
@@ -75,8 +80,11 @@ errr parse_a_info(std::string_view buf, angband_header *)
         const auto it = a_info.rbegin();
         auto &a_ref = it->second;
         a_ref.name = tokens[1];
+        return PARSE_ERROR_NONE;
 #endif
-    } else if (tokens[0] == "D") {
+    }
+
+    if (tokens[0] == "D") {
         // D:JapaneseText
         // D:$EnglishText
         if (tokens.size() < 2 || tokens[1].size() == 0) {
@@ -99,7 +107,10 @@ errr parse_a_info(std::string_view buf, angband_header *)
         auto &a_ref = it->second;
         append_english_text(a_ref.text, buf.substr(3));
 #endif
-    } else if (tokens[0] == "I") {
+        return PARSE_ERROR_NONE;
+    }
+
+    if (tokens[0] == "I") {
         // I:tval:sval:pval
         if (tokens.size() < 4) {
             return PARSE_ERROR_TOO_FEW_ARGUMENTS;
@@ -110,7 +121,10 @@ errr parse_a_info(std::string_view buf, angband_header *)
         info_set_value(a_ref.tval, tokens[1]);
         info_set_value(a_ref.sval, tokens[2]);
         info_set_value(a_ref.pval, tokens[3]);
-    } else if (tokens[0] == "W") {
+        return PARSE_ERROR_NONE;
+    }
+
+    if (tokens[0] == "W") {
         // W:level:ratiry:weight:cost
         if (tokens.size() < 5) {
             return PARSE_ERROR_TOO_FEW_ARGUMENTS;
@@ -122,7 +136,10 @@ errr parse_a_info(std::string_view buf, angband_header *)
         info_set_value(a_ref.rarity, tokens[2]);
         info_set_value(a_ref.weight, tokens[3]);
         info_set_value(a_ref.cost, tokens[4]);
-    } else if (tokens[0] == "P") {
+        return PARSE_ERROR_NONE;
+    }
+
+    if (tokens[0] == "P") {
         // P:ac:dd:ds:to_h:to_d:to_a
         if (tokens.size() < 6) {
             return PARSE_ERROR_TOO_FEW_ARGUMENTS;
@@ -141,7 +158,10 @@ errr parse_a_info(std::string_view buf, angband_header *)
         info_set_value(a_ref.to_h, tokens[3]);
         info_set_value(a_ref.to_d, tokens[4]);
         info_set_value(a_ref.to_a, tokens[5]);
-    } else if (tokens[0] == "U") {
+        return PARSE_ERROR_NONE;
+    }
+
+    if (tokens[0] == "U") {
         // U:activation_flag
         if (tokens.size() < 2 || tokens[1].size() == 0) {
             return PARSE_ERROR_TOO_FEW_ARGUMENTS;
@@ -155,7 +175,10 @@ errr parse_a_info(std::string_view buf, angband_header *)
         const auto it = a_info.rbegin();
         auto &a_ref = it->second;
         a_ref.act_idx = n;
-    } else if (tokens[0] == "F") {
+        return PARSE_ERROR_NONE;
+    }
+
+    if (tokens[0] == "F") {
         // F:flags
         if (tokens.size() < 2 || tokens[1].size() == 0) {
             return PARSE_ERROR_TOO_FEW_ARGUMENTS;
@@ -173,9 +196,9 @@ errr parse_a_info(std::string_view buf, angband_header *)
                 return PARSE_ERROR_INVALID_FLAG;
             }
         }
-    } else {
-        return PARSE_ERROR_UNDEFINED_DIRECTIVE;
+
+        return PARSE_ERROR_NONE;
     }
 
-    return PARSE_ERROR_NONE;
+    return PARSE_ERROR_UNDEFINED_DIRECTIVE;
 }
