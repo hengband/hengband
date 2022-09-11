@@ -358,7 +358,6 @@ static std::vector<FixedArtifactId> wiz_collect_group_a_idx(const grouper &group
 void wiz_create_named_art(PlayerType *player_ptr)
 {
     screen_save();
-
     for (auto i = 0U; i < group_artifact_list.size(); ++i) {
         const auto &[tval_lit, name] = group_artifact_list[i];
         std::stringstream ss;
@@ -368,7 +367,6 @@ void wiz_create_named_art(PlayerType *player_ptr)
     }
 
     std::optional<FixedArtifactId> create_a_idx;
-
     while (!create_a_idx.has_value()) {
         char cmd = ESCAPE;
         get_com("Kind of artifact: ", &cmd, false);
@@ -385,8 +383,23 @@ void wiz_create_named_art(PlayerType *player_ptr)
     }
 
     screen_load();
+    const auto a_idx = create_a_idx.value();
+    const auto it = a_info.find(a_idx);
+    if (it == a_info.end()) {
+        msg_print("The specified artifact is obsoleted for now.");
+        return;
+    }
 
-    create_named_art(player_ptr, create_a_idx.value(), player_ptr->y, player_ptr->x);
+    auto &a_ref = a_info.at(a_idx);
+    if (a_ref.is_generated) {
+        msg_print("It's already allocated.");
+        return;
+    }
+
+    if (create_named_art(player_ptr, a_idx, player_ptr->y, player_ptr->x)) {
+        a_ref.is_generated = true;
+    }
+
     msg_print("Allocated.");
 }
 

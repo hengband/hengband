@@ -99,7 +99,7 @@ T clamp_cast(int val)
         static_cast<int>(std::numeric_limits<T>::max())));
 }
 
-void wiz_restore_aware_flag_of_fixed_arfifact(FixedArtifactId a_idx, bool aware = false);
+void wiz_restore_aware_flag_of_fixed_arfifact(FixedArtifactId reset_artifact_idx, bool aware = false);
 void wiz_modify_item_activation(PlayerType *player_ptr);
 void wiz_identify_full_inventory(PlayerType *player_ptr);
 
@@ -175,12 +175,18 @@ void wizard_item_modifier(PlayerType *player_ptr)
  * @param a_idx 指定したアーティファクトID
  * @details 外からはenum class を受け取るが、この関数内では数値の直指定処理なので即数値型にキャストする.
  */
-void wiz_restore_aware_flag_of_fixed_arfifact(FixedArtifactId a_idx, bool aware)
+void wiz_restore_aware_flag_of_fixed_arfifact(FixedArtifactId reset_artifact_idx, bool aware)
 {
-    auto int_a_idx = enum2i(a_idx);
+    auto int_a_idx = enum2i(reset_artifact_idx);
+    std::vector<short> a_nums;
+    for (const auto &[a_idx, a_ref] : a_info) {
+        a_nums.push_back(enum2i(a_idx));
+    }
+
+    auto max_a_idx = *std::max_element(a_nums.begin(), a_nums.end());
     if (int_a_idx <= 0) {
         char tmp[80] = "";
-        sprintf(tmp, "Artifact ID (1-%d): ", static_cast<int>(a_info.size()) - 1);
+        sprintf(tmp, "Artifact ID (1-%d): ", max_a_idx);
         char tmp_val[10] = "";
         if (!get_string(tmp, tmp_val, 3)) {
             return;
@@ -189,13 +195,12 @@ void wiz_restore_aware_flag_of_fixed_arfifact(FixedArtifactId a_idx, bool aware)
         int_a_idx = static_cast<short>(atoi(tmp_val));
     }
 
-    if (int_a_idx <= 0 || int_a_idx >= static_cast<short>(a_info.size())) {
-        msg_format(_("番号は1から%dの間で指定して下さい。", "ID must be between 1 to %d."), a_info.size() - 1);
+    if ((int_a_idx <= 0) || (int_a_idx > static_cast<short>(max_a_idx))) {
+        msg_format(_("番号は1から%dの間で指定して下さい。", "ID must be between 1 to %d."), max_a_idx);
         return;
     }
 
-    auto reset_artifact_idx = i2enum<FixedArtifactId>(int_a_idx);
-    a_info.at(reset_artifact_idx).is_generated = aware;
+    a_info.at(i2enum<FixedArtifactId>(int_a_idx)).is_generated = aware;
     msg_print(aware ? "Modified." : "Restored.");
 }
 
