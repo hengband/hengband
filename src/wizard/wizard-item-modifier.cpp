@@ -173,17 +173,12 @@ void wizard_item_modifier(PlayerType *player_ptr)
 /*!
  * @brief 固定アーティファクトの出現フラグをリセットする
  * @param a_idx 指定したアーティファクトID
- * @details 外からはenum class を受け取るが、この関数内では数値の直指定処理なので即数値型にキャストする.
+ * @details 外からはenum class を受け取るが、この関数内では数値の直指定処理なので数値型にキャストする.
  */
 void wiz_restore_aware_flag_of_fixed_arfifact(FixedArtifactId reset_artifact_idx, bool aware)
 {
+    auto max_a_idx = enum2i(a_info.rbegin()->first);
     auto int_a_idx = enum2i(reset_artifact_idx);
-    std::vector<short> a_nums;
-    for (const auto &[a_idx, a_ref] : a_info) {
-        a_nums.push_back(enum2i(a_idx));
-    }
-
-    auto max_a_idx = *std::max_element(a_nums.begin(), a_nums.end());
     if (int_a_idx <= 0) {
         char tmp[80] = "";
         sprintf(tmp, "Artifact ID (1-%d): ", max_a_idx);

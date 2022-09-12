@@ -167,12 +167,7 @@ static bool wr_savefile_new(PlayerType *player_ptr, SaveType type)
         }
     }
 
-    std::vector<short> a_nums;
-    for (const auto &[a_idx, a_ref] : a_info) {
-        a_nums.push_back(enum2i(a_idx));
-    }
-
-    auto max_a_num = *std::max_element(a_nums.begin(), a_nums.end());
+    auto max_a_num = enum2i(a_info.rbegin()->first);
     tmp16u = max_a_num + 1;
     wr_u16b(tmp16u);
     ArtifactType dummy;

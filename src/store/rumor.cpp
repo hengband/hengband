@@ -68,8 +68,7 @@ void display_rumor(PlayerType *player_ptr, bool ex)
         FixedArtifactId a_idx;
         ArtifactType *a_ptr;
         while (true) {
-            a_idx = i2enum<FixedArtifactId>(rumor_num(zz[1], static_cast<IDX>(a_info.size())));
-
+            a_idx = i2enum<FixedArtifactId>(rumor_num(zz[1], enum2i(a_info.rbegin()->first)));
             a_ptr = &a_info.at(a_idx);
             if (!a_ptr->name.empty()) {
                 break;

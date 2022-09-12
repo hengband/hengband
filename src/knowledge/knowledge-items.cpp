@@ -31,7 +31,6 @@
 #include "util/sort.h"
 #include "view/display-messages.h"
 #include "world/world.h"
-
 #include <numeric>
 
 /*!
@@ -48,7 +47,8 @@ void do_cmd_knowledge_artifacts(PlayerType *player_ptr)
     }
 
     std::map<FixedArtifactId, bool> okay;
-    for (auto i = 0U; i < a_info.size(); i++) {
+    auto num_artifacts = enum2i(a_info.rbegin()->first);
+    for (auto i = 0; i <= num_artifacts; i++) {
         okay.emplace(i2enum<FixedArtifactId>(i), false);
     }
 
