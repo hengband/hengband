@@ -44,7 +44,7 @@ void verify_equip_slot(PlayerType *player_ptr, INVENTORY_IDX item)
         new_o_ptr->copy_from(o_ptr);
         inven_item_increase(player_ptr, INVEN_SUB_HAND, -((int)o_ptr->number));
         inven_item_optimize(player_ptr, INVEN_SUB_HAND);
-        if (o_ptr->allow_two_hands_wielding() && can_two_hands_wielding(player_ptr)) {
+        if (new_o_ptr->allow_two_hands_wielding() && can_two_hands_wielding(player_ptr)) {
             msg_format(_("%sを両手で構えた。", "You are wielding %s with both hands."), o_name);
         } else {
             msg_format(_("%sを%sで構えた。", "You are wielding %s in your %s hand."), o_name, (left_hander ? _("左手", "left") : _("右手", "right")));
