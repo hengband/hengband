@@ -76,6 +76,9 @@ void torch_lost_fuel(ObjectType *o_ptr)
     }
 
     o_ptr->fuel -= FUEL_TORCH / 25;
+    if (o_ptr->fuel < 0) {
+        o_ptr->fuel = 0;
+    }
 }
 
 /*!
