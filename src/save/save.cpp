@@ -41,6 +41,7 @@
 #include "util/angband-files.h"
 #include "view/display-messages.h"
 #include "world/world.h"
+#include <algorithm>
 
 /*!
  * @brief セーブデータの書き込み /
@@ -166,12 +167,16 @@ static bool wr_savefile_new(PlayerType *player_ptr, SaveType type)
         }
     }
 
-    tmp16u = static_cast<uint16_t>(a_info.size());
+    auto max_a_num = enum2i(a_info.rbegin()->first);
+    tmp16u = max_a_num + 1;
     wr_u16b(tmp16u);
-    for (int i = 0; i < tmp16u; i++) {
-        auto *a_ptr = &a_info[i];
-        wr_bool(a_ptr->is_generated);
-        wr_s16b(a_ptr->floor_id);
+    ArtifactType dummy;
+    for (auto i = 0U; i < tmp16u; i++) {
+        const auto a_idx = i2enum<FixedArtifactId>(i);
+        const auto it = a_info.find(a_idx);
+        const auto &a_ref = it != a_info.end() ? it->second : dummy;
+        wr_bool(a_ref.is_generated);
+        wr_s16b(a_ref.floor_id);
     }
 
     wr_u32b(w_ptr->sf_play_time);

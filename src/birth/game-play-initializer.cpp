@@ -77,7 +77,7 @@ void player_wipe_without_name(PlayerType *player_ptr)
         (&player_ptr->inventory_list[i])->wipe();
     }
 
-    for (auto &a_ref : a_info) {
+    for (auto &[a_idx, a_ref] : a_info) {
         a_ref.is_generated = false;
     }
 

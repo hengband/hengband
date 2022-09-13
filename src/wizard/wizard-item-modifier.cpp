@@ -99,7 +99,7 @@ T clamp_cast(int val)
         static_cast<int>(std::numeric_limits<T>::max())));
 }
 
-void wiz_restore_aware_flag_of_fixed_arfifact(FixedArtifactId a_idx, bool aware = false);
+void wiz_restore_aware_flag_of_fixed_arfifact(FixedArtifactId reset_artifact_idx, bool aware = false);
 void wiz_modify_item_activation(PlayerType *player_ptr);
 void wiz_identify_full_inventory(PlayerType *player_ptr);
 
@@ -173,14 +173,15 @@ void wizard_item_modifier(PlayerType *player_ptr)
 /*!
  * @brief 固定アーティファクトの出現フラグをリセットする
  * @param a_idx 指定したアーティファクトID
- * @details 外からはenum class を受け取るが、この関数内では数値の直指定処理なので即数値型にキャストする.
+ * @details 外からはenum class を受け取るが、この関数内では数値の直指定処理なので数値型にキャストする.
  */
-void wiz_restore_aware_flag_of_fixed_arfifact(FixedArtifactId a_idx, bool aware)
+void wiz_restore_aware_flag_of_fixed_arfifact(FixedArtifactId reset_artifact_idx, bool aware)
 {
-    auto int_a_idx = enum2i(a_idx);
+    auto max_a_idx = enum2i(a_info.rbegin()->first);
+    auto int_a_idx = enum2i(reset_artifact_idx);
     if (int_a_idx <= 0) {
         char tmp[80] = "";
-        sprintf(tmp, "Artifact ID (1-%d): ", static_cast<int>(a_info.size()) - 1);
+        sprintf(tmp, "Artifact ID (1-%d): ", max_a_idx);
         char tmp_val[10] = "";
         if (!get_string(tmp, tmp_val, 3)) {
             return;
@@ -189,13 +190,12 @@ void wiz_restore_aware_flag_of_fixed_arfifact(FixedArtifactId a_idx, bool aware)
         int_a_idx = static_cast<short>(atoi(tmp_val));
     }
 
-    if (int_a_idx <= 0 || int_a_idx >= static_cast<short>(a_info.size())) {
-        msg_format(_("番号は1から%dの間で指定して下さい。", "ID must be between 1 to %d."), a_info.size() - 1);
+    if ((int_a_idx <= 0) || (int_a_idx > static_cast<short>(max_a_idx))) {
+        msg_format(_("番号は1から%dの間で指定して下さい。", "ID must be between 1 to %d."), max_a_idx);
         return;
     }
 
-    auto *a_ptr = &a_info[int_a_idx];
-    a_ptr->is_generated = aware;
+    a_info.at(i2enum<FixedArtifactId>(int_a_idx)).is_generated = aware;
     msg_print(aware ? "Modified." : "Restored.");
 }
 
@@ -416,9 +416,8 @@ static void wiz_statistics(PlayerType *player_ptr, ObjectType *o_ptr)
     concptr p = "Enter number of items to roll: ";
     char tmp_val[80];
 
-    const auto o_fixed_artifact_idx = enum2i(o_ptr->fixed_artifact_idx);
     if (o_ptr->is_fixed_artifact()) {
-        a_info[o_fixed_artifact_idx].is_generated = false;
+        a_info.at(o_ptr->fixed_artifact_idx).is_generated = false;
     }
 
     uint32_t i, matches, better, worse, other, correct;
@@ -471,9 +470,8 @@ static void wiz_statistics(PlayerType *player_ptr, ObjectType *o_ptr)
             auto *q_ptr = &forge;
             q_ptr->wipe();
             make_object(player_ptr, q_ptr, mode);
-            const auto q_fixed_artifact_idx = enum2i(q_ptr->fixed_artifact_idx);
             if (q_ptr->is_fixed_artifact()) {
-                a_info[q_fixed_artifact_idx].is_generated = false;
+                a_info.at(q_ptr->fixed_artifact_idx).is_generated = false;
             }
 
             if ((o_ptr->tval != q_ptr->tval) || (o_ptr->sval != q_ptr->sval)) {
@@ -481,7 +479,8 @@ static void wiz_statistics(PlayerType *player_ptr, ObjectType *o_ptr)
             }
 
             correct++;
-            if ((q_ptr->pval == o_ptr->pval) && (q_ptr->to_a == o_ptr->to_a) && (q_ptr->to_h == o_ptr->to_h) && (q_ptr->to_d == o_ptr->to_d) && (q_fixed_artifact_idx == o_fixed_artifact_idx)) {
+            const auto is_same_fixed_artifact_idx = q_ptr->fixed_artifact_idx == o_ptr->fixed_artifact_idx;
+            if ((q_ptr->pval == o_ptr->pval) && (q_ptr->to_a == o_ptr->to_a) && (q_ptr->to_h == o_ptr->to_h) && (q_ptr->to_d == o_ptr->to_d) && is_same_fixed_artifact_idx) {
                 matches++;
             } else if ((q_ptr->pval >= o_ptr->pval) && (q_ptr->to_a >= o_ptr->to_a) && (q_ptr->to_h >= o_ptr->to_h) && (q_ptr->to_d >= o_ptr->to_d)) {
                 better++;
@@ -497,7 +496,7 @@ static void wiz_statistics(PlayerType *player_ptr, ObjectType *o_ptr)
     }
 
     if (o_ptr->is_fixed_artifact()) {
-        a_info[o_fixed_artifact_idx].is_generated = true;
+        a_info.at(o_ptr->fixed_artifact_idx).is_generated = true;
     }
 }
 
@@ -521,10 +520,9 @@ static void wiz_reroll_item(PlayerType *player_ptr, ObjectType *o_ptr)
     bool changed = false;
     while (true) {
         wiz_display_item(player_ptr, q_ptr);
-        const auto int_fixed_artifact_idx = enum2i(q_ptr->fixed_artifact_idx);
         if (!get_com("[a]ccept, [w]orthless, [c]ursed, [n]ormal, [g]ood, [e]xcellent, [s]pecial? ", &ch, false)) {
             if (q_ptr->is_fixed_artifact()) {
-                a_info[int_fixed_artifact_idx].is_generated = false;
+                a_info.at(q_ptr->fixed_artifact_idx).is_generated = false;
                 q_ptr->fixed_artifact_idx = FixedArtifactId::NONE;
             }
 
@@ -538,7 +536,7 @@ static void wiz_reroll_item(PlayerType *player_ptr, ObjectType *o_ptr)
         }
 
         if (q_ptr->is_fixed_artifact()) {
-            a_info[int_fixed_artifact_idx].is_generated = false;
+            a_info.at(q_ptr->fixed_artifact_idx).is_generated = false;
             q_ptr->fixed_artifact_idx = FixedArtifactId::NONE;
         }
 
@@ -952,8 +950,8 @@ WishResultType do_cmd_wishing(PlayerType *player_ptr, int prob, bool allow_art, 
 
         int len;
         int mlen = 0;
-        for (const auto &a_ref : a_info) {
-            if (a_ref.idx == FixedArtifactId::NONE || a_ref.name.empty()) {
+        for (const auto &[a_idx, a_ref] : a_info) {
+            if (a_idx == FixedArtifactId::NONE || a_ref.name.empty()) {
                 continue;
             }
 
@@ -963,7 +961,7 @@ WishResultType do_cmd_wishing(PlayerType *player_ptr, int prob, bool allow_art, 
             }
 
             o_ptr->prep(k_idx);
-            o_ptr->fixed_artifact_idx = a_ref.idx;
+            o_ptr->fixed_artifact_idx = a_idx;
 
             describe_flavor(player_ptr, o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY | OD_STORE));
 #ifndef JP
@@ -1005,7 +1003,7 @@ WishResultType do_cmd_wishing(PlayerType *player_ptr, int prob, bool allow_art, 
 #endif
 
             if (cheat_xtra) {
-                msg_format("Matching artifact No.%d %s(%s)", a_ref.idx, a_desc, _(&o_name[2], o_name));
+                msg_format("Matching artifact No.%d %s(%s)", a_idx, a_desc, _(&o_name[2], o_name));
             }
 
             std::vector<const char *> l = { a_str, a_ref.name.c_str(), _(&o_name[2], o_name) };
@@ -1013,7 +1011,7 @@ WishResultType do_cmd_wishing(PlayerType *player_ptr, int prob, bool allow_art, 
                 if (!strcmp(str, l.at(c))) {
                     len = strlen(l.at(c));
                     if (len > mlen) {
-                        a_ids.push_back(a_ref.idx);
+                        a_ids.push_back(a_idx);
                         mlen = len;
                     }
                 }
@@ -1028,11 +1026,11 @@ WishResultType do_cmd_wishing(PlayerType *player_ptr, int prob, bool allow_art, 
 
     if (a_ids.size() == 1) {
         const auto a_idx = a_ids.back();
-        const auto int_a_idx = enum2i(a_idx);
-        if (must || (ok_art && !a_info[int_a_idx].is_generated)) {
+        auto &a_ref = a_info.at(a_idx);
+        if (must || (ok_art && !a_ref.is_generated)) {
             create_named_art(player_ptr, a_idx, player_ptr->y, player_ptr->x);
             if (!w_ptr->wizard) {
-                a_info[int_a_idx].is_generated = true;
+                a_ref.is_generated = true;
             }
         } else {
             wishing_puff_of_smoke();
@@ -1050,25 +1048,23 @@ WishResultType do_cmd_wishing(PlayerType *player_ptr, int prob, bool allow_art, 
         KIND_OBJECT_IDX k_idx = k_ids.back();
         auto *k_ptr = &k_info[k_idx];
 
-        artifact_type *a_ptr;
         FixedArtifactId a_idx = FixedArtifactId::NONE;
         if (k_ptr->gen_flags.has(ItemGenerationTraitType::INSTA_ART)) {
-            for (const auto &a_ref : a_info) {
-                if (a_ref.idx == FixedArtifactId::NONE || a_ref.tval != k_ptr->tval || a_ref.sval != k_ptr->sval) {
+            for (const auto &[a_idx_loop, a_ref_loop] : a_info) {
+                if (a_idx_loop == FixedArtifactId::NONE || a_ref_loop.tval != k_ptr->tval || a_ref_loop.sval != k_ptr->sval) {
                     continue;
                 }
-                a_idx = a_ref.idx;
+                a_idx = a_idx_loop;
                 break;
             }
         }
 
         if (a_idx != FixedArtifactId::NONE) {
-            const auto int_a_idx = enum2i(a_idx);
-            a_ptr = &a_info[int_a_idx];
-            if (must || (ok_art && !a_ptr->is_generated)) {
+            auto &a_ref = a_info.at(a_idx);
+            if (must || (ok_art && !a_ref.is_generated)) {
                 create_named_art(player_ptr, a_idx, player_ptr->y, player_ptr->x);
                 if (!w_ptr->wizard) {
-                    a_info[int_a_idx].is_generated = true;
+                    a_ref.is_generated = true;
                 }
             } else {
                 wishing_puff_of_smoke();

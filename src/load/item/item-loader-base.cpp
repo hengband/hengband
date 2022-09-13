@@ -1,9 +1,11 @@
 ﻿#include "load/item/item-loader-base.h"
+#include "artifact/fixed-art-types.h"
 #include "load/angband-version-comparer.h"
 #include "load/load-util.h"
 #include "object/object-kind.h"
 #include "system/artifact-type-definition.h"
 #include "util/bit-flags-calculator.h"
+#include "util/enum-converter.h"
 
 /*!
  * @brief アイテムオブジェクトの鑑定情報をロードする.
@@ -27,16 +29,18 @@ void ItemLoaderBase::load_item(void)
  */
 void ItemLoaderBase::load_artifact(void)
 {
+    ArtifactType dummy;
     auto loading_max_a_idx = rd_u16b();
-    artifact_type dummy;
     for (auto i = 0U; i < loading_max_a_idx; i++) {
-        auto *a_ptr = i < a_info.size() ? &a_info[i] : &dummy;
-        a_ptr->is_generated = rd_bool();
+        const auto a_idx = i2enum<FixedArtifactId>(i);
+        const auto it = a_info.find(a_idx);
+        auto &artifact = it != a_info.end() ? it->second : dummy;
+        artifact.is_generated = rd_bool();
         if (h_older_than(1, 5, 0, 0)) {
-            a_ptr->floor_id = 0;
+            artifact.floor_id = 0;
             strip_bytes(3);
         } else {
-            a_ptr->floor_id = rd_s16b();
+            artifact.floor_id = rd_s16b();
         }
     }
 

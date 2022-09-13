@@ -3,4 +3,4 @@
 /*
  * The artifact arrays
  */
-std::vector<artifact_type> a_info;
+std::map<FixedArtifactId, ArtifactType> a_info;

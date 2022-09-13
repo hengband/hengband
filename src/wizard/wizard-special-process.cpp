@@ -236,12 +236,12 @@ void wiz_create_item(PlayerType *player_ptr)
     }
 
     if (k_info[k_idx].gen_flags.has(ItemGenerationTraitType::INSTA_ART)) {
-        for (const auto &a_ref : a_info) {
-            if ((a_ref.idx == FixedArtifactId::NONE) || (a_ref.tval != k_info[k_idx].tval) || (a_ref.sval != k_info[k_idx].sval)) {
+        for (const auto &[a_idx, a_ref] : a_info) {
+            if ((a_idx == FixedArtifactId::NONE) || (a_ref.tval != k_info[k_idx].tval) || (a_ref.sval != k_info[k_idx].sval)) {
                 continue;
             }
 
-            (void)create_named_art(player_ptr, a_ref.idx, player_ptr->y, player_ptr->x);
+            (void)create_named_art(player_ptr, a_idx, player_ptr->y, player_ptr->x);
             msg_print("Allocated(INSTA_ART).");
             return;
         }
@@ -264,7 +264,7 @@ void wiz_create_item(PlayerType *player_ptr)
  */
 static std::string wiz_make_named_artifact_desc(PlayerType *player_ptr, FixedArtifactId a_idx)
 {
-    const auto &a_ref = a_info[enum2i(a_idx)];
+    const auto &a_ref = a_info.at(a_idx);
     ObjectType obj;
     obj.prep(lookup_kind(a_ref.tval, a_ref.sval));
     obj.fixed_artifact_idx = a_idx;
@@ -343,9 +343,9 @@ static std::vector<FixedArtifactId> wiz_collect_group_a_idx(const grouper &group
     const auto &[tval_list, name] = group_artifact;
     std::vector<FixedArtifactId> a_idx_list;
     for (auto tval : tval_list) {
-        for (const auto &a_ref : a_info) {
+        for (const auto &[a_idx, a_ref] : a_info) {
             if (a_ref.tval == tval) {
-                a_idx_list.push_back(a_ref.idx);
+                a_idx_list.push_back(a_idx);
             }
         }
     }
@@ -358,7 +358,6 @@ static std::vector<FixedArtifactId> wiz_collect_group_a_idx(const grouper &group
 void wiz_create_named_art(PlayerType *player_ptr)
 {
     screen_save();
-
     for (auto i = 0U; i < group_artifact_list.size(); ++i) {
         const auto &[tval_lit, name] = group_artifact_list[i];
         std::stringstream ss;
@@ -368,7 +367,6 @@ void wiz_create_named_art(PlayerType *player_ptr)
     }
 
     std::optional<FixedArtifactId> create_a_idx;
-
     while (!create_a_idx.has_value()) {
         char cmd = ESCAPE;
         get_com("Kind of artifact: ", &cmd, false);
@@ -385,8 +383,23 @@ void wiz_create_named_art(PlayerType *player_ptr)
     }
 
     screen_load();
+    const auto a_idx = create_a_idx.value();
+    const auto it = a_info.find(a_idx);
+    if (it == a_info.end()) {
+        msg_print("The specified artifact is obsoleted for now.");
+        return;
+    }
 
-    create_named_art(player_ptr, create_a_idx.value(), player_ptr->y, player_ptr->x);
+    auto &a_ref = it->second;
+    if (a_ref.is_generated) {
+        msg_print("It's already allocated.");
+        return;
+    }
+
+    if (create_named_art(player_ptr, a_idx, player_ptr->y, player_ptr->x)) {
+        a_ref.is_generated = true;
+    }
+
     msg_print("Allocated.");
 }
 

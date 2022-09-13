@@ -66,11 +66,10 @@ void display_rumor(PlayerType *player_ptr, bool ex)
     char fullname[1024] = "";
     if (strcmp(zz[0], "ARTIFACT") == 0) {
         FixedArtifactId a_idx;
-        artifact_type *a_ptr;
+        ArtifactType *a_ptr;
         while (true) {
-            a_idx = i2enum<FixedArtifactId>(rumor_num(zz[1], static_cast<IDX>(a_info.size())));
-
-            a_ptr = &a_info[enum2i(a_idx)];
+            a_idx = i2enum<FixedArtifactId>(rumor_num(zz[1], enum2i(a_info.rbegin()->first)));
+            a_ptr = &a_info.at(a_idx);
             if (!a_ptr->name.empty()) {
                 break;
             }
