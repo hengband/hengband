@@ -223,23 +223,21 @@ static void invest_curse_to_fixed_artifact(const ArtifactType &a_ref, ObjectType
  * @param o_ptr 生成に割り当てたいオブジェクトの構造体参照ポインタ
  * @return 適用したアーティファクト情報への参照ポインタ
  */
-std::unique_ptr<ArtifactType> apply_artifact(PlayerType *player_ptr, ObjectType *o_ptr)
+void apply_artifact(PlayerType *player_ptr, ObjectType *o_ptr)
 {
-    auto a_ptr = std::make_unique<ArtifactType>(a_info.at(o_ptr->fixed_artifact_idx));
-    o_ptr->pval = a_ptr->pval;
-    o_ptr->ac = a_ptr->ac;
-    o_ptr->dd = a_ptr->dd;
-    o_ptr->ds = a_ptr->ds;
-    o_ptr->to_a = a_ptr->to_a;
-    o_ptr->to_h = a_ptr->to_h;
-    o_ptr->to_d = a_ptr->to_d;
-    o_ptr->weight = a_ptr->weight;
-    o_ptr->activation_id = a_ptr->act_idx;
+    auto &a_ref = a_info.at(o_ptr->fixed_artifact_idx);
+    o_ptr->pval = a_ref.pval;
+    o_ptr->ac = a_ref.ac;
+    o_ptr->dd = a_ref.dd;
+    o_ptr->ds = a_ref.ds;
+    o_ptr->to_a = a_ref.to_a;
+    o_ptr->to_h = a_ref.to_h;
+    o_ptr->to_d = a_ref.to_d;
+    o_ptr->weight = a_ref.weight;
+    o_ptr->activation_id = a_ref.act_idx;
 
-    invest_curse_to_fixed_artifact(*a_ptr, o_ptr);
-    fixed_artifact_random_abilities(player_ptr, *a_ptr, o_ptr);
-
-    return a_ptr;
+    invest_curse_to_fixed_artifact(a_ref, o_ptr);
+    fixed_artifact_random_abilities(player_ptr, a_ref, o_ptr);
 }
 
 /*!
@@ -271,7 +269,7 @@ bool create_named_art(PlayerType *player_ptr, FixedArtifactId a_idx, POSITION y,
     q_ptr->prep(i);
     q_ptr->fixed_artifact_idx = a_idx;
 
-    (void)apply_artifact(player_ptr, q_ptr);
+    apply_artifact(player_ptr, q_ptr);
 
     return drop_near(player_ptr, q_ptr, -1, y, x) > 0;
 }

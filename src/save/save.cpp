@@ -174,7 +174,7 @@ static bool wr_savefile_new(PlayerType *player_ptr, SaveType type)
     for (auto i = 0U; i < tmp16u; i++) {
         const auto a_idx = i2enum<FixedArtifactId>(i);
         const auto it = a_info.find(a_idx);
-        const auto &a_ref = it != a_info.end() ? a_info.at(a_idx) : dummy;
+        const auto &a_ref = it != a_info.end() ? it->second : dummy;
         wr_bool(a_ref.is_generated);
         wr_s16b(a_ref.floor_id);
     }

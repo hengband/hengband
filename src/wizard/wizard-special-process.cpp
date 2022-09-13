@@ -390,7 +390,7 @@ void wiz_create_named_art(PlayerType *player_ptr)
         return;
     }
 
-    auto &a_ref = a_info.at(a_idx);
+    auto &a_ref = it->second;
     if (a_ref.is_generated) {
         msg_print("It's already allocated.");
         return;
