@@ -43,6 +43,7 @@
 #include "system/player-type-definition.h"
 #include "term/screen-processor.h"
 #include "util/bit-flags-calculator.h"
+#include "util/probability-table.h"
 #include "view/display-messages.h"
 
 /*!
@@ -70,7 +71,7 @@ struct amuse_type {
     AmusementFlagType flag;
 };
 
-static const std::vector<amuse_type> amuse_info = {
+static constexpr std::array<amuse_type, 13> amuse_info = { {
     { ItemKindType::BOTTLE, SV_ANY, 5, AmusementFlagType::NOTHING },
     { ItemKindType::JUNK, SV_ANY, 3, AmusementFlagType::MULTIPLE },
     { ItemKindType::SPIKE, SV_ANY, 10, AmusementFlagType::PILE },
@@ -84,8 +85,7 @@ static const std::vector<amuse_type> amuse_info = {
     { ItemKindType::SWORD, SV_BROKEN_DAGGER, 10, AmusementFlagType::NOTHING },
     { ItemKindType::SWORD, SV_BROKEN_SWORD, 5, AmusementFlagType::NOTHING },
     { ItemKindType::SCROLL, SV_SCROLL_AMUSEMENT, 10, AmusementFlagType::NOTHING },
-    { ItemKindType::NONE, 0, 0, AmusementFlagType::NOTHING }
-};
+} };
 
 static std::optional<FixedArtifactId> sweep_amusement_artifact(const bool insta_art, const short k_idx)
 {
@@ -124,28 +124,21 @@ static std::optional<FixedArtifactId> sweep_amusement_artifact(const bool insta_
  */
 void generate_amusement(PlayerType *player_ptr, int num, bool known)
 {
-    auto t = 0;
-    for (auto n = 0; amuse_info[n].tval != ItemKindType::NONE; n++) {
-        t += amuse_info[n].prob;
+    ProbabilityTable<const amuse_type *> pt;
+    for (const auto &am_ref : amuse_info) {
+        pt.entry_item(&am_ref, am_ref.prob);
     }
 
     while (num > 0) {
-        int i;
-        auto r = randint0(t);
-        for (i = 0;; i++) {
-            r -= amuse_info[i].prob;
-            if (r <= 0) {
-                break;
-            }
-        }
+        auto am_ptr = pt.pick_one_at_random();
 
-        const auto k_idx = lookup_kind(amuse_info[i].tval, amuse_info[i].sval);
+        const auto k_idx = lookup_kind(am_ptr->tval, am_ptr->sval);
         if (k_idx == 0) {
             continue;
         }
 
         const auto insta_art = k_info[k_idx].gen_flags.has(ItemGenerationTraitType::INSTA_ART);
-        const auto flag = amuse_info[i].flag;
+        const auto flag = am_ptr->flag;
         const auto fixed_art = flag == AmusementFlagType::FIXED_ART;
         std::optional<FixedArtifactId> opt_a_idx(std::nullopt);
         if (insta_art || fixed_art) {
