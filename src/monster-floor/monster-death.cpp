@@ -184,44 +184,38 @@ bool drop_single_artifact(PlayerType *player_ptr, monster_death_type *md_ptr, Fi
         return false;
     }
 
-    if (create_named_art(player_ptr, a_idx, md_ptr->md_y, md_ptr->md_x)) {
-        a_ref.is_generated = true;
-
-        if (w_ptr->character_dungeon) {
-            a_ref.floor_id = player_ptr->floor_id;
-        }
-
-        if (!preserve_mode) {
-            a_ref.is_generated = true;
-        }
-
-        return true;
+    if (!create_named_art(player_ptr, a_idx, md_ptr->md_y, md_ptr->md_x)) {
+        return false;
     }
-    return false;
+
+    if (w_ptr->character_dungeon) {
+        a_ref.floor_id = player_ptr->floor_id;
+    }
+
+    return true;
 }
 
 static KIND_OBJECT_IDX drop_dungeon_final_artifact(PlayerType *player_ptr, monster_death_type *md_ptr, FixedArtifactId a_idx)
 {
-    auto k_idx = d_info[player_ptr->dungeon_idx].final_object != 0 ? d_info[player_ptr->dungeon_idx].final_object : lookup_kind(ItemKindType::SCROLL, SV_SCROLL_ACQUIREMENT);
-    if (d_info[player_ptr->dungeon_idx].final_artifact == FixedArtifactId::NONE) {
+    const auto &dungeon = d_info[player_ptr->dungeon_idx];
+    auto k_idx = dungeon.final_object != 0 ? dungeon.final_object : lookup_kind(ItemKindType::SCROLL, SV_SCROLL_ACQUIREMENT);
+    if (dungeon.final_artifact == FixedArtifactId::NONE) {
         return k_idx;
     }
 
-    a_idx = d_info[player_ptr->dungeon_idx].final_artifact;
+    a_idx = dungeon.final_artifact;
     auto &a_ref = a_info.at(a_idx);
     if (a_ref.is_generated) {
         return k_idx;
     }
+
     if (create_named_art(player_ptr, a_idx, md_ptr->md_y, md_ptr->md_x)) {
-        a_ref.is_generated = true;
         if (w_ptr->character_dungeon) {
             a_ref.floor_id = player_ptr->floor_id;
         }
-    } else if (!preserve_mode) {
-        a_ref.is_generated = true;
     }
 
-    return d_info[player_ptr->dungeon_idx].final_object ? k_idx : 0;
+    return dungeon.final_object ? k_idx : 0;
 }
 
 static void drop_artifact(PlayerType *player_ptr, monster_death_type *md_ptr)

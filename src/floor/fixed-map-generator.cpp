@@ -83,7 +83,6 @@ static void generate_artifact(PlayerType *player_ptr, qtwg_type *qtwg_ptr, const
 
     auto &fixed_artifact = a_info.at(artifact_index);
     if (!fixed_artifact.is_generated && create_named_art(player_ptr, artifact_index, *qtwg_ptr->y, *qtwg_ptr->x)) {
-        fixed_artifact.is_generated = true;
         return;
     }
 

@@ -1028,10 +1028,7 @@ WishResultType do_cmd_wishing(PlayerType *player_ptr, int prob, bool allow_art, 
         const auto a_idx = a_ids.back();
         auto &a_ref = a_info.at(a_idx);
         if (must || (ok_art && !a_ref.is_generated)) {
-            create_named_art(player_ptr, a_idx, player_ptr->y, player_ptr->x);
-            if (!w_ptr->wizard) {
-                a_ref.is_generated = true;
-            }
+            (void)create_named_art(player_ptr, a_idx, player_ptr->y, player_ptr->x);
         } else {
             wishing_puff_of_smoke();
         }
@@ -1062,10 +1059,7 @@ WishResultType do_cmd_wishing(PlayerType *player_ptr, int prob, bool allow_art, 
         if (a_idx != FixedArtifactId::NONE) {
             auto &a_ref = a_info.at(a_idx);
             if (must || (ok_art && !a_ref.is_generated)) {
-                create_named_art(player_ptr, a_idx, player_ptr->y, player_ptr->x);
-                if (!w_ptr->wizard) {
-                    a_ref.is_generated = true;
-                }
+                (void)create_named_art(player_ptr, a_idx, player_ptr->y, player_ptr->x);
             } else {
                 wishing_puff_of_smoke();
             }
