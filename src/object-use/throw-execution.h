@@ -74,7 +74,7 @@ private:
     bool super_boomerang{};
 
     bool check_what_throw();
-    bool check_throw_boomerang(concptr *q, concptr *s);
+    bool check_throw_boomerang();
     bool check_racial_target_bold();
     void check_racial_target_seen();
     bool check_racial_target_monster();

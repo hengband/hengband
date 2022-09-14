@@ -335,11 +335,11 @@ bool ObjectThrowEntity::check_what_throw()
         return true;
     }
 
-    concptr q, s;
-    if (!this->check_throw_boomerang(&q, &s)) {
-        return false;
+    if (this->boomerang) {
+        return this->check_throw_boomerang();
     }
 
+    concptr q, s;
     q = _("どのアイテムを投げますか? ", "Throw which item? ");
     s = _("投げるアイテムがない。", "You have nothing to throw.");
     this->o_ptr = choose_object(this->player_ptr, &this->item, q, s, USE_INVEN | USE_FLOOR | USE_EQUIP);
@@ -351,16 +351,13 @@ bool ObjectThrowEntity::check_what_throw()
     return true;
 }
 
-bool ObjectThrowEntity::check_throw_boomerang(concptr *q, concptr *s)
+bool ObjectThrowEntity::check_throw_boomerang()
 {
-    if (!this->boomerang) {
-        return true;
-    }
-
     if (has_melee_weapon(this->player_ptr, INVEN_MAIN_HAND) && has_melee_weapon(this->player_ptr, INVEN_SUB_HAND)) {
-        *q = _("どの武器を投げますか? ", "Throw which item? ");
-        *s = _("投げる武器がない。", "You have nothing to throw.");
-        this->o_ptr = choose_object(this->player_ptr, &this->item, *q, *s, USE_EQUIP, FuncItemTester(&ObjectType::is_throwable));
+        concptr q, s;
+        q = _("どの武器を投げますか? ", "Throw which item? ");
+        s = _("投げる武器がない。", "You have nothing to throw.");
+        this->o_ptr = choose_object(this->player_ptr, &this->item, q, s, USE_EQUIP, FuncItemTester(&ObjectType::is_throwable));
         if (!this->o_ptr) {
             flush();
             return false;
