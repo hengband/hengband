@@ -254,12 +254,12 @@ void apply_artifact(PlayerType *player_ptr, ObjectType *o_ptr)
  */
 bool create_named_art(PlayerType *player_ptr, FixedArtifactId a_idx, POSITION y, POSITION x)
 {
-    auto a_ptr = &a_info.at(a_idx);
-    if (a_ptr->name.empty()) {
+    auto &a_ref = a_info.at(a_idx);
+    if (a_ref.name.empty()) {
         return false;
     }
 
-    auto i = lookup_kind(a_ptr->tval, a_ptr->sval);
+    auto i = lookup_kind(a_ref.tval, a_ref.sval);
     if (i == 0) {
         return true;
     }
@@ -268,10 +268,13 @@ bool create_named_art(PlayerType *player_ptr, FixedArtifactId a_idx, POSITION y,
     auto q_ptr = &forge;
     q_ptr->prep(i);
     q_ptr->fixed_artifact_idx = a_idx;
-
     apply_artifact(player_ptr, q_ptr);
+    if (drop_near(player_ptr, q_ptr, -1, y, x) == 0) {
+        return false;
+    }
 
-    return drop_near(player_ptr, q_ptr, -1, y, x) > 0;
+    a_ref.is_generated = true;
+    return true;
 }
 
 /*!

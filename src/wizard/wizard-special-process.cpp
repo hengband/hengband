@@ -396,10 +396,7 @@ void wiz_create_named_art(PlayerType *player_ptr)
         return;
     }
 
-    if (create_named_art(player_ptr, a_idx, player_ptr->y, player_ptr->x)) {
-        a_ref.is_generated = true;
-    }
-
+    (void)create_named_art(player_ptr, a_idx, player_ptr->y, player_ptr->x);
     msg_print("Allocated.");
 }
 
