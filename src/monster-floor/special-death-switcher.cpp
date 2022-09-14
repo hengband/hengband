@@ -193,10 +193,6 @@ static void on_dead_sacred_treasures(PlayerType *player_ptr, monster_death_type 
 
         return;
     }
-
-    if (!preserve_mode) {
-        a_ptr->is_generated = true;
-    }
 }
 
 static void on_dead_serpent(PlayerType *player_ptr, monster_death_type *md_ptr)

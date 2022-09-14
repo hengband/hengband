@@ -189,10 +189,6 @@ bool drop_single_artifact(PlayerType *player_ptr, monster_death_type *md_ptr, Fi
             a_ref.floor_id = player_ptr->floor_id;
         }
 
-        if (!preserve_mode) {
-            a_ref.is_generated = true;
-        }
-
         return true;
     }
     return false;
@@ -214,8 +210,6 @@ static KIND_OBJECT_IDX drop_dungeon_final_artifact(PlayerType *player_ptr, monst
         if (w_ptr->character_dungeon) {
             a_ref.floor_id = player_ptr->floor_id;
         }
-    } else if (!preserve_mode) {
-        a_ref.is_generated = true;
     }
 
     return d_info[player_ptr->dungeon_idx].final_object ? k_idx : 0;
