@@ -361,9 +361,9 @@ void display_player_equippy(PlayerType *player_ptr, TERM_LEN y, TERM_LEN x, BIT_
         ObjectType *o_ptr;
         o_ptr = &player_ptr->inventory_list[i];
 
-        TERM_COLOR a = object_attr(o_ptr);
-        auto c = object_char(o_ptr);
-
+        auto a = o_ptr->get_color();
+        auto c = o_ptr->get_symbol();
+        
         if (!equippy_chars || !o_ptr->k_idx) {
             c = ' ';
             a = TERM_DARK;

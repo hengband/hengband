@@ -284,8 +284,8 @@ void map_info(PlayerType *player_ptr, POSITION y, POSITION x, TERM_COLOR *ap, ch
             }
         }
 
-        (*cp) = object_char(o_ptr);
-        (*ap) = object_attr(o_ptr);
+        *cp = o_ptr->get_symbol();
+        *ap = o_ptr->get_color();
         feat_priority = 20;
         if (is_hallucinated) {
             image_object(ap, cp);

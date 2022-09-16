@@ -14,13 +14,3 @@
  * The object kind arrays
  */
 std::vector<object_kind> k_info;
-
-/*
- * Return the "char" for a given item.
- * Use "flavor" if available.
- * Default to user definitions.
- */
-char object_char(ObjectType *o_ptr)
-{
-    return k_info[o_ptr->k_idx].flavor ? k_info[k_info[o_ptr->k_idx].flavor].x_char : k_info[o_ptr->k_idx].x_char;
-}

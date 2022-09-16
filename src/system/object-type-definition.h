@@ -115,4 +115,6 @@ public:
     bool is_fuel() const;
     bool is_glove_same_temper(const ObjectType *j_ptr) const;
     bool can_pile(const ObjectType *j_ptr) const;
+    TERM_COLOR get_color() const;
+    char get_symbol() const;
 };
