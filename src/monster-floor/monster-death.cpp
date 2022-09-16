@@ -157,8 +157,8 @@ static void drop_corpse(PlayerType *player_ptr, monster_death_type *md_ptr)
  */
 static void drop_artifact_from_unique(PlayerType *player_ptr, monster_death_type *md_ptr)
 {
-    for (auto [a_idx, chance] : md_ptr->r_ptr->drop_artifacts) {
-        if ((randint0(100) >= chance) && !w_ptr->wizard) {
+    for (const auto &[a_idx, chance] : md_ptr->r_ptr->drop_artifacts) {
+        if (!w_ptr->wizard && (randint0(100) >= chance)) {
             continue;
         }
 
