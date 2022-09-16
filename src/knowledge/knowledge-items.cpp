@@ -32,11 +32,11 @@
 #include "view/display-messages.h"
 #include "world/world.h"
 #include <numeric>
+#include <set>
 
 /*!
  * @brief Check the status of "artifacts"
  * @param player_ptr プレイヤーへの参照ポインタ
- * @todo okay = 既知のアーティファクト？ と思われるが確証がない分かりやすい変数名へ変更求む＆万が一未知である旨の配列なら負論理なのでゴソッと差し替えるべき
  */
 void do_cmd_knowledge_artifacts(PlayerType *player_ptr)
 {
@@ -46,11 +46,7 @@ void do_cmd_knowledge_artifacts(PlayerType *player_ptr)
         return;
     }
 
-    std::map<FixedArtifactId, bool> okay;
-    auto num_artifacts = enum2i(a_info.rbegin()->first);
-    for (auto i = 0; i <= num_artifacts; i++) {
-        okay.emplace(i2enum<FixedArtifactId>(i), false);
-    }
+    std::set<FixedArtifactId> known_list;
 
     for (const auto &[a_idx, a_ref] : a_info) {
         if (a_ref.name.empty()) {
@@ -60,7 +56,7 @@ void do_cmd_knowledge_artifacts(PlayerType *player_ptr)
             continue;
         }
 
-        okay[a_idx] = true;
+        known_list.insert(known_list.end(), a_idx);
     }
 
     for (POSITION y = 0; y < player_ptr->current_floor_ptr->height; y++) {
@@ -76,7 +72,7 @@ void do_cmd_knowledge_artifacts(PlayerType *player_ptr)
                     continue;
                 }
 
-                okay[o_ptr->fixed_artifact_idx] = false;
+                known_list.erase(o_ptr->fixed_artifact_idx);
             }
         }
     }
@@ -93,15 +89,10 @@ void do_cmd_knowledge_artifacts(PlayerType *player_ptr)
             continue;
         }
 
-        okay[o_ptr->fixed_artifact_idx] = false;
+        known_list.erase(o_ptr->fixed_artifact_idx);
     }
 
-    std::vector<FixedArtifactId> whats;
-    for (const auto &[a_idx, a_ref] : a_info) {
-        if (okay[a_idx]) {
-            whats.push_back(a_idx);
-        }
-    }
+    std::vector<FixedArtifactId> whats(known_list.begin(), known_list.end());
 
     uint16_t why = 3;
     ang_sort(player_ptr, whats.data(), &why, whats.size(), ang_sort_art_comp, ang_sort_art_swap);
