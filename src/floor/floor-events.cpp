@@ -28,6 +28,7 @@
 #include "object/object-kind.h"
 #include "object/object-mark-types.h"
 #include "object/object-value.h"
+#include "object/tval-types.h"
 #include "perception/object-perception.h"
 #include "player/special-defense-types.h"
 #include "sv-definition/sv-amulet-types.h"

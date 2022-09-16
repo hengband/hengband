@@ -7,6 +7,7 @@
 #include "object/object-kind.h"
 #include "object/object-value-calc.h"
 #include "object/object-value.h"
+#include "object/tval-types.h"
 #include "player-base/player-race.h"
 #include "player-info/equipment-info.h"
 #include "player/player-status.h"

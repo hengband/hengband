@@ -1,16 +1,13 @@
 ﻿#pragma once
 
-#include "system/angband.h"
-
 #include "object-enchant/tr-flags.h"
 #include "object-enchant/trg-types.h"
-#include "object/tval-types.h"
-#include "system/system-variables.h"
+#include "system/angband.h"
 #include "util/flag-group.h"
-
 #include <string>
 #include <vector>
 
+enum class ItemKindType : short;
 enum class RandomArtActType : short;
 struct object_kind {
     KIND_OBJECT_IDX idx{};
