@@ -9,6 +9,7 @@
 #include "object-enchant/special-object-flags.h"
 #include "object/object-kind.h"
 #include "object/object-value.h"
+#include "object/tval-types.h"
 #include "system/object-type-definition.h"
 
 store_type *st_ptr = nullptr;

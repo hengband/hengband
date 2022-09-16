@@ -18,6 +18,7 @@
 #include "object-enchant/tr-types.h"
 #include "object-enchant/trc-types.h"
 #include "object/object-kind.h"
+#include "object/tval-types.h"
 #include "perception/object-perception.h"
 #include "sv-definition/sv-lite-types.h"
 #include "sv-definition/sv-other-types.h"

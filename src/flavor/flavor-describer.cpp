@@ -22,6 +22,7 @@
 #include "object-hook/hook-quest.h"
 #include "object/object-flags.h"
 #include "object/object-kind.h"
+#include "object/tval-types.h"
 #include "perception/object-perception.h"
 #include "player-base/player-class.h"
 #include "player/player-status-table.h"

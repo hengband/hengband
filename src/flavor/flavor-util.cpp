@@ -4,6 +4,7 @@
 #include "object-enchant/tr-types.h"
 #include "object/object-flags.h"
 #include "object/object-kind.h"
+#include "object/tval-types.h"
 #include "perception/object-perception.h"
 #include "sv-definition/sv-food-types.h"
 #include "system/artifact-type-definition.h"

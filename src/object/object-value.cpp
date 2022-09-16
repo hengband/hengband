@@ -8,6 +8,7 @@
 #include "object/object-flags.h"
 #include "object/object-kind.h"
 #include "object/object-value-calc.h"
+#include "object/tval-types.h"
 #include "perception/object-perception.h"
 #include "system/artifact-type-definition.h"
 #include "system/monster-race-definition.h"

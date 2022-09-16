@@ -16,6 +16,7 @@
 #include "object-enchant/trg-types.h"
 #include "object/object-flags.h"
 #include "object/object-kind.h"
+#include "object/tval-types.h"
 #include "smith/object-smith.h"
 #include "sv-definition/sv-armor-types.h"
 #include "sv-definition/sv-lite-types.h"
@@ -27,7 +28,6 @@
 #include "term/term-color-types.h"
 #include "util/bit-flags-calculator.h"
 #include "util/string-processor.h"
-
 #include <set>
 #include <unordered_map>
 
