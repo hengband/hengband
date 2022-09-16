@@ -192,13 +192,8 @@ static void display_object_list(int col, int row, int per_page, IDX object_idx[]
         }
 
         attr = ((i + object_top == object_cur) ? cursor : attr);
-        std::string o_name;
-        if (!k_ptr->flavor || (!visual_only && k_ptr->aware)) {
-            o_name = strip_name(k_idx);
-        } else {
-            o_name = flavor_k_ptr->flavor_name;
-        }
-
+        const auto is_flavor_only = (k_ptr->flavor != 0) && (visual_only || !k_ptr->aware);
+        const auto o_name = is_flavor_only ? flavor_k_ptr->flavor_name : strip_name(k_idx);
         c_prt(attr, o_name.data(), row + i, col);
         if (per_page == 1) {
             c_prt(attr, format("%02x/%02x", flavor_k_ptr->x_attr, flavor_k_ptr->x_char), row + i, (w_ptr->wizard || visual_only) ? 64 : 68);
