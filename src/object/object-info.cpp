@@ -315,17 +315,3 @@ ObjectType *ref_item(PlayerType *player_ptr, INVENTORY_IDX item)
     auto *floor_ptr = player_ptr->current_floor_ptr;
     return item >= 0 ? &player_ptr->inventory_list[item] : &(floor_ptr->o_list[0 - item]);
 }
-
-/*
- * Return the "attr" for a given item.
- * Use "flavor" if available.
- * Default to user definitions.
- */
-TERM_COLOR object_attr(ObjectType *o_ptr)
-{
-    return ((k_info[o_ptr->k_idx].flavor)
-                ? (k_info[k_info[o_ptr->k_idx].flavor].x_attr)
-                : ((!o_ptr->k_idx || (o_ptr->tval != ItemKindType::CORPSE) || (o_ptr->sval != SV_CORPSE) || (k_info[o_ptr->k_idx].x_attr != TERM_DARK))
-                          ? (k_info[o_ptr->k_idx].x_attr)
-                          : (r_info[i2enum<MonsterRaceId>(o_ptr->pval)].x_attr)));
-}

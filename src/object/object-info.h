@@ -12,4 +12,3 @@ char index_to_label(int i);
 int16_t wield_slot(PlayerType *player_ptr, const ObjectType *o_ptr);
 bool check_book_realm(PlayerType *player_ptr, const ItemKindType book_tval, const OBJECT_SUBTYPE_VALUE book_sval);
 ObjectType *ref_item(PlayerType *player_ptr, INVENTORY_IDX item);
-TERM_COLOR object_attr(ObjectType *o_ptr);

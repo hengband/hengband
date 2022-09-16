@@ -24,6 +24,7 @@
 #include "sv-definition/sv-weapon-types.h"
 #include "system/monster-race-definition.h"
 #include "system/player-type-definition.h"
+#include "term/term-color-types.h"
 #include "util/bit-flags-calculator.h"
 #include "util/string-processor.h"
 
@@ -645,4 +646,32 @@ bool ObjectType::can_pile(const ObjectType *j_ptr) const
     }
 
     return true;
+}
+
+/*
+ * Return the "attr" for a given item.
+ * Use "flavor" if available.
+ * Default to user definitions.
+ */
+TERM_COLOR ObjectType::get_color() const
+{
+    const auto &base_item = k_info[this->k_idx];
+    const auto flavor = base_item.flavor;
+    return ((flavor != 0)
+                ? (k_info[flavor].x_attr)
+                : ((!this->k_idx || (this->tval != ItemKindType::CORPSE) || (this->sval != SV_CORPSE) || (base_item.x_attr != TERM_DARK))
+                          ? (base_item.x_attr)
+                          : (r_info[i2enum<MonsterRaceId>(this->pval)].x_attr)));
+}
+
+/*
+ * Return the "char" for a given item.
+ * Use "flavor" if available.
+ * Default to user definitions.
+ */
+char ObjectType::get_symbol() const
+{
+    const auto &base_item = k_info[this->k_idx];
+    const auto flavor = base_item.flavor;
+    return flavor ? k_info[flavor].x_char : base_item.x_char;
 }
