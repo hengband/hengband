@@ -155,19 +155,17 @@ static void drop_corpse(PlayerType *player_ptr, monster_death_type *md_ptr)
  * @param md_ptr モンスター死亡構造体への参照ポインタ
  * @return 何かドロップするならドロップしたアーティファクトのID、何もドロップしないなら0
  */
-static FixedArtifactId drop_artifact_index(PlayerType *player_ptr, monster_death_type *md_ptr)
+static void drop_artifact_from_unique(PlayerType *player_ptr, monster_death_type *md_ptr)
 {
-    for (auto [a_idx, chance] : md_ptr->r_ptr->drop_artifacts) {
-        if ((randint0(100) >= chance) && !w_ptr->wizard) {
+    for (const auto &[a_idx, chance] : md_ptr->r_ptr->drop_artifacts) {
+        if (!w_ptr->wizard && (randint0(100) >= chance)) {
             continue;
         }
 
         if (drop_single_artifact(player_ptr, md_ptr, a_idx)) {
-            return a_idx;
+            return;
         }
     }
-
-    return FixedArtifactId::NONE;
 }
 
 /*!
@@ -195,7 +193,7 @@ bool drop_single_artifact(PlayerType *player_ptr, monster_death_type *md_ptr, Fi
     return true;
 }
 
-static KIND_OBJECT_IDX drop_dungeon_final_artifact(PlayerType *player_ptr, monster_death_type *md_ptr, FixedArtifactId a_idx)
+static KIND_OBJECT_IDX drop_dungeon_final_artifact(PlayerType *player_ptr, monster_death_type *md_ptr)
 {
     const auto &dungeon = d_info[player_ptr->dungeon_idx];
     auto k_idx = dungeon.final_object != 0 ? dungeon.final_object : lookup_kind(ItemKindType::SCROLL, SV_SCROLL_ACQUIREMENT);
@@ -203,7 +201,7 @@ static KIND_OBJECT_IDX drop_dungeon_final_artifact(PlayerType *player_ptr, monst
         return k_idx;
     }
 
-    a_idx = dungeon.final_artifact;
+    const auto a_idx = dungeon.final_artifact;
     auto &a_ref = a_info.at(a_idx);
     if (a_ref.is_generated) {
         return k_idx;
@@ -218,18 +216,18 @@ static KIND_OBJECT_IDX drop_dungeon_final_artifact(PlayerType *player_ptr, monst
     return dungeon.final_object ? k_idx : 0;
 }
 
-static void drop_artifact(PlayerType *player_ptr, monster_death_type *md_ptr)
+static void drop_artifacts(PlayerType *player_ptr, monster_death_type *md_ptr)
 {
     if (!md_ptr->drop_chosen_item) {
         return;
     }
 
-    const auto a_idx = drop_artifact_index(player_ptr, md_ptr);
+    drop_artifact_from_unique(player_ptr, md_ptr);
     if (((md_ptr->r_ptr->flags7 & RF7_GUARDIAN) == 0) || (d_info[player_ptr->dungeon_idx].final_guardian != md_ptr->m_ptr->r_idx)) {
         return;
     }
 
-    KIND_OBJECT_IDX k_idx = drop_dungeon_final_artifact(player_ptr, md_ptr, a_idx);
+    KIND_OBJECT_IDX k_idx = drop_dungeon_final_artifact(player_ptr, md_ptr);
     if (k_idx != 0) {
         ObjectType forge;
         auto *q_ptr = &forge;
@@ -418,7 +416,7 @@ void monster_death(PlayerType *player_ptr, MONSTER_IDX m_idx, bool drop_item, At
     monster_drop_carried_objects(player_ptr, md_ptr->m_ptr);
     decide_drop_quality(md_ptr);
     switch_special_death(player_ptr, md_ptr, attribute_flags);
-    drop_artifact(player_ptr, md_ptr);
+    drop_artifacts(player_ptr, md_ptr);
     int drop_numbers = decide_drop_numbers(player_ptr, md_ptr, drop_item);
     coin_type = md_ptr->force_coin;
     auto *floor_ptr = player_ptr->current_floor_ptr;
