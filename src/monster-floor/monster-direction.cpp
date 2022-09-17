@@ -74,17 +74,19 @@ static void decide_enemy_approch_direction(PlayerType *player_ptr, MONSTER_IDX m
         if (t_ptr == m_ptr) {
             continue;
         }
-        if (!monster_is_valid(t_ptr)) {
+        if (!t_ptr->is_valid()) {
             continue;
         }
         if (decide_pet_approch_direction(player_ptr, m_ptr, t_ptr)) {
             continue;
         }
-        if (!are_enemies(player_ptr, m_ptr, t_ptr)) {
+        if (!are_enemies(player_ptr, *m_ptr, *t_ptr)) {
             continue;
         }
 
-        if ((r_ptr->feature_flags.has(MonsterFeatureType::PASS_WALL) && ((m_idx != player_ptr->riding) || has_pass_wall(player_ptr))) || (r_ptr->feature_flags.has(MonsterFeatureType::KILL_WALL) && (m_idx != player_ptr->riding))) {
+        const auto can_pass_wall = r_ptr->feature_flags.has(MonsterFeatureType::PASS_WALL) && ((m_idx != player_ptr->riding) || has_pass_wall(player_ptr));
+        const auto can_kill_wall = r_ptr->feature_flags.has(MonsterFeatureType::KILL_WALL) && (m_idx != player_ptr->riding);
+        if (can_pass_wall || can_kill_wall) {
             if (!in_disintegration_range(floor_ptr, m_ptr->fy, m_ptr->fx, t_ptr->fy, t_ptr->fx)) {
                 continue;
             }

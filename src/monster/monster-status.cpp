@@ -144,7 +144,7 @@ void mproc_init(floor_type *floor_ptr)
         auto *m_ptr = &floor_ptr->m_list[i];
 
         /* Ignore "dead" monsters */
-        if (!monster_is_valid(m_ptr)) {
+        if (!m_ptr->is_valid()) {
             continue;
         }
 
@@ -408,7 +408,7 @@ void monster_gain_exp(PlayerType *player_ptr, MONSTER_IDX m_idx, MonsterRaceId s
     auto *floor_ptr = player_ptr->current_floor_ptr;
     auto *m_ptr = &floor_ptr->m_list[m_idx];
 
-    if (!monster_is_valid(m_ptr)) {
+    if (!m_ptr->is_valid()) {
         return;
     }
 
@@ -521,11 +521,6 @@ void monster_gain_exp(PlayerType *player_ptr, MONSTER_IDX m_idx, MonsterRaceId s
     if (m_idx == player_ptr->riding) {
         player_ptr->update |= PU_BONUS;
     }
-}
-
-bool monster_is_valid(monster_type *m_ptr)
-{
-    return MonsterRace(m_ptr->r_idx).is_valid();
 }
 
 TIME_EFFECT monster_csleep_remaining(const monster_type *m_ptr)

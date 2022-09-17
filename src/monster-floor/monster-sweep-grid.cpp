@@ -58,14 +58,19 @@ bool MonsterSweepGrid::get_movable_grid()
     auto y2 = this->player_ptr->y;
     auto x2 = this->player_ptr->x;
     this->will_run = this->mon_will_run();
-    auto no_flow = m_ptr->mflag2.has(MonsterConstantFlagType::NOFLOW) && floor_ptr->grid_array[m_ptr->fy][m_ptr->fx].get_cost(r_ptr) > 2;
+    const auto no_flow = m_ptr->mflag2.has(MonsterConstantFlagType::NOFLOW) && (floor_ptr->grid_array[m_ptr->fy][m_ptr->fx].get_cost(r_ptr) > 2);
     this->can_pass_wall = r_ptr->feature_flags.has(MonsterFeatureType::PASS_WALL) && ((this->m_idx != this->player_ptr->riding) || has_pass_wall(this->player_ptr));
     if (!this->will_run && m_ptr->target_y) {
         int t_m_idx = floor_ptr->grid_array[m_ptr->target_y][m_ptr->target_x].m_idx;
-        if ((t_m_idx > 0) && are_enemies(this->player_ptr, m_ptr, &floor_ptr->m_list[t_m_idx]) && los(this->player_ptr, m_ptr->fy, m_ptr->fx, m_ptr->target_y, m_ptr->target_x) && projectable(this->player_ptr, m_ptr->fy, m_ptr->fx, m_ptr->target_y, m_ptr->target_x)) {
-            y = m_ptr->fy - m_ptr->target_y;
-            x = m_ptr->fx - m_ptr->target_x;
-            this->done = true;
+        if (t_m_idx > 0) {
+            const auto is_enemies = are_enemies(this->player_ptr, *m_ptr, floor_ptr->m_list[t_m_idx]);
+            const auto is_los = los(this->player_ptr, m_ptr->fy, m_ptr->fx, m_ptr->target_y, m_ptr->target_x);
+            const auto is_projectable = projectable(this->player_ptr, m_ptr->fy, m_ptr->fx, m_ptr->target_y, m_ptr->target_x);
+            if (is_enemies && is_los && is_projectable) {
+                y = m_ptr->fy - m_ptr->target_y;
+                x = m_ptr->fx - m_ptr->target_x;
+                this->done = true;
+            }
         }
     }
 

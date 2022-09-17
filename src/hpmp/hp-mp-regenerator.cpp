@@ -172,7 +172,7 @@ void regenerate_monsters(PlayerType *player_ptr)
         auto *m_ptr = &player_ptr->current_floor_ptr->m_list[i];
         auto *r_ptr = &r_info[m_ptr->r_idx];
 
-        if (!monster_is_valid(m_ptr)) {
+        if (!m_ptr->is_valid()) {
             continue;
         }
 

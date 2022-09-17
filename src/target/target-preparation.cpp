@@ -44,7 +44,7 @@ bool target_able(PlayerType *player_ptr, MONSTER_IDX m_idx)
 {
     auto *floor_ptr = player_ptr->current_floor_ptr;
     auto *m_ptr = &floor_ptr->m_list[m_idx];
-    if (!monster_is_valid(m_ptr)) {
+    if (!m_ptr->is_valid()) {
         return false;
     }
 
@@ -191,7 +191,7 @@ void target_sensing_monsters_prepare(PlayerType *player_ptr, std::vector<MONSTER
 
     for (MONSTER_IDX i = 1; i < player_ptr->current_floor_ptr->m_max; i++) {
         auto *m_ptr = &player_ptr->current_floor_ptr->m_list[i];
-        if (!monster_is_valid(m_ptr) || !m_ptr->ml || m_ptr->is_pet()) {
+        if (!m_ptr->is_valid() || !m_ptr->ml || m_ptr->is_pet()) {
             continue;
         }
 

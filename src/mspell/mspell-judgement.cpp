@@ -61,9 +61,10 @@ bool direct_beam(PlayerType *player_ptr, POSITION y1, POSITION x1, POSITION y2, 
     bool hit2 = false;
     bool is_friend = m_ptr->is_pet();
     for (const auto &[y, x] : grid_g) {
+        const auto &g_ref = floor_ptr->grid_array[y][x];
         if (y == y2 && x == x2) {
             hit2 = true;
-        } else if (is_friend && floor_ptr->grid_array[y][x].m_idx > 0 && !are_enemies(player_ptr, m_ptr, &floor_ptr->m_list[floor_ptr->grid_array[y][x].m_idx])) {
+        } else if (is_friend && g_ref.m_idx > 0 && !are_enemies(player_ptr, *m_ptr, floor_ptr->m_list[g_ref.m_idx])) {
             return false;
         }
 

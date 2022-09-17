@@ -415,7 +415,7 @@ bool set_monster_timewalk(PlayerType *player_ptr, int num, MonsterRaceId who, bo
     }
 
     while (num--) {
-        if (!monster_is_valid(m_ptr)) {
+        if (!m_ptr->is_valid()) {
             break;
         }
 

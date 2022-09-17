@@ -127,7 +127,7 @@ bool teleport_monster(PlayerType *player_ptr, DIRECTION dir, int distance)
 bool teleport_away(PlayerType *player_ptr, MONSTER_IDX m_idx, POSITION dis, teleport_flags mode)
 {
     auto *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
-    if (!monster_is_valid(m_ptr)) {
+    if (!m_ptr->is_valid()) {
         return false;
     }
 

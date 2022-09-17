@@ -178,7 +178,7 @@ static void update_unique_artifact(floor_type *floor_ptr, int16_t cur_floor_id)
     for (int i = 1; i < floor_ptr->m_max; i++) {
         monster_race *r_ptr;
         auto *m_ptr = &floor_ptr->m_list[i];
-        if (!monster_is_valid(m_ptr)) {
+        if (!m_ptr->is_valid()) {
             continue;
         }
 
@@ -255,7 +255,7 @@ static void reset_unique_by_floor_change(PlayerType *player_ptr)
     for (MONSTER_IDX i = 1; i < floor_ptr->m_max; i++) {
         monster_race *r_ptr;
         auto *m_ptr = &floor_ptr->m_list[i];
-        if (!monster_is_valid(m_ptr)) {
+        if (!m_ptr->is_valid()) {
             continue;
         }
 

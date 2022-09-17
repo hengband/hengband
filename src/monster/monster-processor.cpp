@@ -477,7 +477,9 @@ bool cast_spell(PlayerType *player_ptr, MONSTER_IDX m_idx, bool aware)
     bool counterattack = false;
     if (m_ptr->target_y) {
         MONSTER_IDX t_m_idx = player_ptr->current_floor_ptr->grid_array[m_ptr->target_y][m_ptr->target_x].m_idx;
-        if (t_m_idx && are_enemies(player_ptr, m_ptr, &player_ptr->current_floor_ptr->m_list[t_m_idx]) && projectable(player_ptr, m_ptr->fy, m_ptr->fx, m_ptr->target_y, m_ptr->target_x)) {
+        const auto &target_ref = player_ptr->current_floor_ptr->m_list[t_m_idx];
+        const auto is_projectable = projectable(player_ptr, m_ptr->fy, m_ptr->fx, m_ptr->target_y, m_ptr->target_x);
+        if (t_m_idx && are_enemies(player_ptr, *m_ptr, target_ref) && is_projectable) {
             counterattack = true;
         }
     }
@@ -586,7 +588,7 @@ void sweep_monster_process(PlayerType *player_ptr)
             return;
         }
 
-        if (!monster_is_valid(m_ptr) || player_ptr->wild_mode) {
+        if (!m_ptr->is_valid() || player_ptr->wild_mode) {
             continue;
         }
 

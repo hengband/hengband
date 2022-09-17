@@ -135,7 +135,7 @@ void wipe_monsters_list(PlayerType *player_ptr)
     auto *floor_ptr = player_ptr->current_floor_ptr;
     for (int i = floor_ptr->m_max - 1; i >= 1; i--) {
         auto *m_ptr = &floor_ptr->m_list[i];
-        if (!monster_is_valid(m_ptr)) {
+        if (!m_ptr->is_valid()) {
             continue;
         }
 

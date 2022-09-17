@@ -243,7 +243,7 @@ static void generate_gambling_arena(PlayerType *player_ptr)
 
     for (MONSTER_IDX i = 1; i < floor_ptr->m_max; i++) {
         auto *m_ptr = &floor_ptr->m_list[i];
-        if (!monster_is_valid(m_ptr)) {
+        if (!m_ptr->is_valid()) {
             continue;
         }
 

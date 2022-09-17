@@ -55,3 +55,8 @@ bool monster_type::is_mimicry() const
 
     return r_ref.behavior_flags.has(MonsterBehaviorType::NEVER_MOVE) || monster_csleep_remaining(this);
 }
+
+bool monster_type::is_valid() const
+{
+    return MonsterRace(this->r_idx).is_valid();
+}

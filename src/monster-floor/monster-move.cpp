@@ -195,7 +195,7 @@ static bool process_door(PlayerType *player_ptr, turn_flags *turn_flags_ptr, mon
 
     if (turn_flags_ptr->did_bash_door && ((randint0(100) < 50) || (feat_state(player_ptr->current_floor_ptr, g_ptr->feat, FloorFeatureType::OPEN) == g_ptr->feat) || f_ptr->flags.has(FloorFeatureType::GLASS))) {
         cave_alter_feat(player_ptr, ny, nx, FloorFeatureType::BASH);
-        if (!monster_is_valid(m_ptr)) {
+        if (!m_ptr->is_valid()) {
             player_ptr->update |= (PU_FLOW);
             player_ptr->window_flags |= (PW_OVERHEAD | PW_DUNGEON);
             if (is_original_ap_and_seen(player_ptr, m_ptr)) {
@@ -288,7 +288,7 @@ static bool process_explosive_rune(PlayerType *player_ptr, turn_flags *turn_flag
     note_spot(player_ptr, ny, nx);
     lite_spot(player_ptr, ny, nx);
 
-    if (!monster_is_valid(m_ptr)) {
+    if (!m_ptr->is_valid()) {
         return false;
     }
 
@@ -326,7 +326,7 @@ static bool process_post_dig_wall(PlayerType *player_ptr, turn_flags *turn_flags
 
     cave_alter_feat(player_ptr, ny, nx, FloorFeatureType::HURT_DISI);
 
-    if (!monster_is_valid(m_ptr)) {
+    if (!m_ptr->is_valid()) {
         player_ptr->update |= (PU_FLOW);
         player_ptr->window_flags |= (PW_OVERHEAD | PW_DUNGEON);
         if (is_original_ap_and_seen(player_ptr, m_ptr)) {

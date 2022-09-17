@@ -311,7 +311,7 @@ void mitokohmon(PlayerType *player_ptr)
         for (int i = player_ptr->current_floor_ptr->m_max - 1; i > 0; i--) {
             monster_type *m_ptr;
             m_ptr = &player_ptr->current_floor_ptr->m_list[i];
-            if (!monster_is_valid(m_ptr)) {
+            if (!m_ptr->is_valid()) {
                 continue;
             }
             if (!((m_ptr->r_idx == MonsterRaceId::SUKE) || (m_ptr->r_idx == MonsterRaceId::KAKU))) {

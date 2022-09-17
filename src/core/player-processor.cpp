@@ -132,7 +132,7 @@ void process_player(PlayerType *player_ptr)
     if (player_ptr->phase_out) {
         for (MONSTER_IDX m_idx = 1; m_idx < player_ptr->current_floor_ptr->m_max; m_idx++) {
             auto *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
-            if (!monster_is_valid(m_ptr)) {
+            if (!m_ptr->is_valid()) {
                 continue;
             }
 
@@ -342,7 +342,7 @@ void process_player(PlayerType *player_ptr)
                 monster_type *m_ptr;
                 monster_race *r_ptr;
                 m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
-                if (!monster_is_valid(m_ptr)) {
+                if (!m_ptr->is_valid()) {
                     continue;
                 }
 

@@ -214,7 +214,7 @@ void precalc_cur_num_of_pet(PlayerType *player_ptr)
     int max_num = player_ptr->wild_mode ? 1 : MAX_PARTY_MON;
     for (int i = 0; i < max_num; i++) {
         m_ptr = &party_mon[i];
-        if (!monster_is_valid(m_ptr)) {
+        if (!m_ptr->is_valid()) {
             continue;
         }
 

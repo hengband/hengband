@@ -124,7 +124,7 @@ bool MonsterDamageProcessor::mon_take_hit(concptr note)
 bool MonsterDamageProcessor::genocide_chaos_patron()
 {
     auto *m_ptr = &this->player_ptr->current_floor_ptr->m_list[this->m_idx];
-    if (!monster_is_valid(m_ptr)) {
+    if (!m_ptr->is_valid()) {
         this->m_idx = 0;
     }
 
@@ -425,7 +425,7 @@ void MonsterDamageProcessor::show_bounty_message(GAME_TEXT *m_name)
 void MonsterDamageProcessor::get_exp_from_mon(monster_type *m_ptr, int exp_dam)
 {
     auto *r_ptr = &r_info[m_ptr->r_idx];
-    if (!monster_is_valid(m_ptr) || m_ptr->is_pet() || this->player_ptr->phase_out) {
+    if (!m_ptr->is_valid() || m_ptr->is_pet() || this->player_ptr->phase_out) {
         return;
     }
 

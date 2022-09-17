@@ -184,32 +184,32 @@ static bool check_hostile_align(byte sub_align1, byte sub_align2)
  * @param n_ptr モンスター2の構造体参照ポインタ
  * @return 敵対関係にあるならばTRUEを返す
  */
-bool are_enemies(PlayerType *player_ptr, monster_type *m_ptr, monster_type *n_ptr)
+bool are_enemies(PlayerType *player_ptr, const monster_type &m1_ref, const monster_type &m2_ref)
 {
     if (player_ptr->phase_out) {
-        if (m_ptr->is_pet() || n_ptr->is_pet()) {
+        if (m1_ref.is_pet() || m2_ref.is_pet()) {
             return false;
         }
         return true;
     }
 
-    const auto &r1_ref = r_info[m_ptr->r_idx];
-    const auto &r2_ref = r_info[n_ptr->r_idx];
+    const auto &r1_ref = r_info[m1_ref.r_idx];
+    const auto &r2_ref = r_info[m2_ref.r_idx];
     const auto is_m1_wild = r1_ref.wilderness_flags.has_any_of({ MonsterWildernessType::WILD_TOWN, MonsterWildernessType::WILD_ALL });
     const auto is_m2_wild = r2_ref.wilderness_flags.has_any_of({ MonsterWildernessType::WILD_TOWN, MonsterWildernessType::WILD_ALL });
     if (is_m1_wild && is_m2_wild) {
-        if (!m_ptr->is_pet() && !n_ptr->is_pet()) {
+        if (!m1_ref.is_pet() && !m2_ref.is_pet()) {
             return false;
         }
     }
 
-    if (check_hostile_align(m_ptr->sub_align, n_ptr->sub_align)) {
-        if (m_ptr->mflag2.has_not(MonsterConstantFlagType::CHAMELEON) || n_ptr->mflag2.has_not(MonsterConstantFlagType::CHAMELEON)) {
+    if (check_hostile_align(m1_ref.sub_align, m2_ref.sub_align)) {
+        if (m1_ref.mflag2.has_not(MonsterConstantFlagType::CHAMELEON) || m2_ref.mflag2.has_not(MonsterConstantFlagType::CHAMELEON)) {
             return true;
         }
     }
 
-    if (m_ptr->is_hostile() != n_ptr->is_hostile()) {
+    if (m1_ref.is_hostile() != m2_ref.is_hostile()) {
         return true;
     }
 
@@ -261,9 +261,9 @@ bool monster_has_hostile_align(PlayerType *player_ptr, monster_type *m_ptr, int 
     return false;
 }
 
-bool is_original_ap_and_seen(PlayerType *player_ptr, monster_type *m_ptr)
+bool is_original_ap_and_seen(PlayerType *player_ptr, const monster_type *m_ptr)
 {
-    return m_ptr->ml && !player_ptr->effects()->hallucination()->is_hallucinated() && (m_ptr->ap_r_idx == m_ptr->r_idx);
+    return m_ptr->ml && !player_ptr->effects()->hallucination()->is_hallucinated() && m_ptr->is_original_ap();
 }
 
 /*!

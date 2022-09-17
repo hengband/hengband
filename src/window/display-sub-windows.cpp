@@ -552,7 +552,7 @@ static const monster_type *monster_on_floor_items(floor_type *floor_ptr, const g
     }
 
     auto m_ptr = &floor_ptr->m_list[g_ptr->m_idx];
-    if (!monster_is_valid(m_ptr) || !m_ptr->ml) {
+    if (!m_ptr->is_valid() || !m_ptr->ml) {
         return nullptr;
     }
 
