@@ -16,6 +16,4 @@ bool monster_can_enter(PlayerType *player_ptr, POSITION y, POSITION x, monster_r
 bool are_enemies(PlayerType *player_ptr, const monster_type &m1_ref, const monster_type &m2_ref);
 bool monster_has_hostile_align(PlayerType *player_ptr, monster_type *m_ptr, int pa_good, int pa_evil, monster_race *r_ptr);
 bool is_original_ap_and_seen(PlayerType *player_ptr, const monster_type *m_ptr);
-
-monster_race *real_r_ptr(monster_type *m_ptr);
 void monster_name(PlayerType *player_ptr, MONSTER_IDX m_idx, char *m_name);

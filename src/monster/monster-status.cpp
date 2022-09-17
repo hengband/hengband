@@ -448,13 +448,13 @@ void monster_gain_exp(PlayerType *player_ptr, MONSTER_IDX m_idx, MonsterRaceId s
     auto old_sub_align = m_ptr->sub_align;
 
     /* Hack -- Reduce the racial counter of previous monster */
-    real_r_ptr(m_ptr)->cur_num--;
+    m_ptr->get_real_r_ref().cur_num--;
 
     monster_desc(player_ptr, m_name, m_ptr, 0);
     m_ptr->r_idx = r_ptr->next_r_idx;
 
     /* Count the monsters on the level */
-    real_r_ptr(m_ptr)->cur_num++;
+    m_ptr->get_real_r_ref().cur_num++;
 
     m_ptr->ap_r_idx = m_ptr->r_idx;
     r_ptr = &r_info[m_ptr->r_idx];

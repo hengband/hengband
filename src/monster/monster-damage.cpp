@@ -138,14 +138,14 @@ bool MonsterDamageProcessor::genocide_chaos_patron()
 bool MonsterDamageProcessor::process_dead_exp_virtue(concptr note, monster_type *exp_mon)
 {
     auto *m_ptr = &this->player_ptr->current_floor_ptr->m_list[this->m_idx];
-    auto *r_ptr = real_r_ptr(m_ptr);
+    auto &r_ref = m_ptr->get_real_r_ref();
     if (m_ptr->hp >= 0) {
         return false;
     }
 
     this->death_special_flag_monster();
-    if (r_ptr->r_akills < MAX_SHORT) {
-        r_ptr->r_akills++;
+    if (r_ref.r_akills < MAX_SHORT) {
+        r_ref.r_akills++;
     }
 
     this->increase_kill_numbers();
@@ -155,9 +155,9 @@ bool MonsterDamageProcessor::process_dead_exp_virtue(concptr note, monster_type 
     this->dying_scream(m_name);
     AvatarChanger ac(player_ptr, m_ptr);
     ac.change_virtue();
-    if (r_ptr->kind_flags.has(MonsterKindType::UNIQUE) && record_destroy_uniq) {
+    if (r_ref.kind_flags.has(MonsterKindType::UNIQUE) && record_destroy_uniq) {
         char note_buf[160];
-        sprintf(note_buf, "%s%s", r_ptr->name.c_str(), m_ptr->mflag2.has(MonsterConstantFlagType::CLONED) ? _("(クローン)", "(Clone)") : "");
+        sprintf(note_buf, "%s%s", r_ref.name.c_str(), m_ptr->mflag2.has(MonsterConstantFlagType::CLONED) ? _("(クローン)", "(Clone)") : "");
         exe_write_diary(this->player_ptr, DIARY_UNIQUE, 0, note_buf);
     }
 
@@ -189,10 +189,10 @@ void MonsterDamageProcessor::death_special_flag_monster()
     }
 
     if (m_ptr->mflag2.has(MonsterConstantFlagType::CHAMELEON)) {
-        r_ptr = real_r_ptr(m_ptr);
+        auto &real_r_ref = m_ptr->get_real_r_ref();
         r_idx = m_ptr->get_real_r_idx();
-        if (r_ptr->r_sights < MAX_SHORT) {
-            r_ptr->r_sights++;
+        if (real_r_ref.r_sights < MAX_SHORT) {
+            real_r_ref.r_sights++;
         }
     }
 
@@ -292,22 +292,22 @@ void MonsterDamageProcessor::death_combined_uniques(const MonsterRaceId r_idx, c
 void MonsterDamageProcessor::increase_kill_numbers()
 {
     auto *m_ptr = &this->player_ptr->current_floor_ptr->m_list[this->m_idx];
-    auto *r_ptr = real_r_ptr(m_ptr);
+    auto &r_ref = m_ptr->get_real_r_ref();
     auto is_hallucinated = this->player_ptr->effects()->hallucination()->is_hallucinated();
-    if (((m_ptr->ml == 0) || is_hallucinated) && r_ptr->kind_flags.has_not(MonsterKindType::UNIQUE)) {
+    if (((m_ptr->ml == 0) || is_hallucinated) && r_ref.kind_flags.has_not(MonsterKindType::UNIQUE)) {
         return;
     }
 
     if (m_ptr->mflag2.has(MonsterConstantFlagType::KAGE) && (r_info[MonsterRaceId::KAGE].r_pkills < MAX_SHORT)) {
         r_info[MonsterRaceId::KAGE].r_pkills++;
-    } else if (r_ptr->r_pkills < MAX_SHORT) {
-        r_ptr->r_pkills++;
+    } else if (r_ref.r_pkills < MAX_SHORT) {
+        r_ref.r_pkills++;
     }
 
     if (m_ptr->mflag2.has(MonsterConstantFlagType::KAGE) && (r_info[MonsterRaceId::KAGE].r_tkills < MAX_SHORT)) {
         r_info[MonsterRaceId::KAGE].r_tkills++;
-    } else if (r_ptr->r_tkills < MAX_SHORT) {
-        r_ptr->r_tkills++;
+    } else if (r_ref.r_tkills < MAX_SHORT) {
+        r_ref.r_tkills++;
     }
 
     monster_race_track(this->player_ptr, m_ptr->ap_r_idx);
@@ -316,8 +316,8 @@ void MonsterDamageProcessor::increase_kill_numbers()
 void MonsterDamageProcessor::death_amberites(GAME_TEXT *m_name)
 {
     auto *m_ptr = &this->player_ptr->current_floor_ptr->m_list[this->m_idx];
-    auto *r_ptr = real_r_ptr(m_ptr);
-    if (r_ptr->kind_flags.has_not(MonsterKindType::AMBERITE) || one_in_(2)) {
+    const auto &r_ref = m_ptr->get_real_r_ref();
+    if (r_ref.kind_flags.has_not(MonsterKindType::AMBERITE) || one_in_(2)) {
         return;
     }
 
@@ -334,8 +334,8 @@ void MonsterDamageProcessor::death_amberites(GAME_TEXT *m_name)
 void MonsterDamageProcessor::dying_scream(GAME_TEXT *m_name)
 {
     auto *m_ptr = &this->player_ptr->current_floor_ptr->m_list[this->m_idx];
-    auto *r_ptr = real_r_ptr(m_ptr);
-    if (r_ptr->speak_flags.has_none_of({ MonsterSpeakType::SPEAK_ALL, MonsterSpeakType::SPEAK_DEATH })) {
+    const auto &r_ref = m_ptr->get_real_r_ref();
+    if (r_ref.speak_flags.has_none_of({ MonsterSpeakType::SPEAK_ALL, MonsterSpeakType::SPEAK_DEATH })) {
         return;
     }
 
@@ -355,7 +355,7 @@ void MonsterDamageProcessor::show_kill_message(concptr note, GAME_TEXT *m_name)
 {
     auto *floor_ptr = this->player_ptr->current_floor_ptr;
     auto *m_ptr = &floor_ptr->m_list[this->m_idx];
-    auto *r_ptr = real_r_ptr(m_ptr);
+    const auto &r_ref = m_ptr->get_real_r_ref();
     if (note != nullptr) {
         msg_format("%^s%s", m_name, note);
         return;
@@ -377,7 +377,7 @@ void MonsterDamageProcessor::show_kill_message(concptr note, GAME_TEXT *m_name)
 
     auto explode = false;
     for (auto i = 0; i < 4; i++) {
-        if (r_ptr->blow[i].method == RaceBlowMethodType::EXPLODE) {
+        if (r_ref.blow[i].method == RaceBlowMethodType::EXPLODE) {
             explode = true;
         }
     }
@@ -396,8 +396,8 @@ void MonsterDamageProcessor::show_bounty_message(GAME_TEXT *m_name)
 {
     auto *floor_ptr = this->player_ptr->current_floor_ptr;
     auto *m_ptr = &floor_ptr->m_list[this->m_idx];
-    auto *r_ptr = real_r_ptr(m_ptr);
-    if (r_ptr->kind_flags.has_not(MonsterKindType::UNIQUE) || m_ptr->mflag2.has(MonsterConstantFlagType::CLONED) || vanilla_town) {
+    const auto &r_ref = m_ptr->get_real_r_ref();
+    if (r_ref.kind_flags.has_not(MonsterKindType::UNIQUE) || m_ptr->mflag2.has(MonsterConstantFlagType::CLONED) || vanilla_town) {
         return;
     }
 

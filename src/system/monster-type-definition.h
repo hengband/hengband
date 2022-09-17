@@ -59,4 +59,5 @@ struct monster_type {
     bool is_mimicry() const;
     bool is_valid() const;
     MonsterRaceId get_real_r_idx() const;
+    monster_race &get_real_r_ref() const;
 };

@@ -267,16 +267,6 @@ bool is_original_ap_and_seen(PlayerType *player_ptr, const monster_type *m_ptr)
 }
 
 /*!
- * @brief モンスターの真の種族を返す / Extract monster race pointer of a monster's true form
- * @param m_ptr モンスターの参照ポインタ
- * @return 本当のモンスター種族参照ポインタ
- */
-monster_race *real_r_ptr(monster_type *m_ptr)
-{
-    return &r_info[m_ptr->get_real_r_idx()];
-}
-
-/*!
  * @brief モンスターIDを取り、モンスター名をm_nameに代入する /
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param m_idx モンスターID

@@ -70,3 +70,12 @@ MonsterRaceId monster_type::get_real_r_idx() const
 
     return r_ref.kind_flags.has(MonsterKindType::UNIQUE) ? MonsterRaceId::CHAMELEON_K : MonsterRaceId::CHAMELEON;
 }
+
+/*!
+ * @brief モンスターの真の種族を返す / Extract monster race pointer of a monster's true form
+ * @return 本当のモンスター種族参照ポインタ
+ */
+monster_race &monster_type::get_real_r_ref() const
+{
+    return r_info[this->get_real_r_idx()];
+}

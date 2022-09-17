@@ -104,7 +104,7 @@ static MONSTER_IDX decide_pet_index(PlayerType *player_ptr, const int current_mo
     return (d == 6) ? 0 : m_pop(floor_ptr);
 }
 
-static const monster_race &set_pet_params(PlayerType *player_ptr, const int current_monster, MONSTER_IDX m_idx, const POSITION cy, const POSITION cx)
+static monster_race &set_pet_params(PlayerType *player_ptr, const int current_monster, MONSTER_IDX m_idx, const POSITION cy, const POSITION cx)
 {
     auto *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
     player_ptr->current_floor_ptr->grid_array[cy][cx].m_idx = m_idx;
@@ -117,12 +117,12 @@ static const monster_race &set_pet_params(PlayerType *player_ptr, const int curr
     m_ptr->mtimed[MTIMED_CSLEEP] = 0;
     m_ptr->hold_o_idx_list.clear();
     m_ptr->target_y = 0;
-    auto *r_ptr = real_r_ptr(m_ptr);
-    if (r_ptr->behavior_flags.has(MonsterBehaviorType::PREVENT_SUDDEN_MAGIC) && !ironman_nightmare) {
+    auto &r_ref = m_ptr->get_real_r_ref();
+    if (r_ref.behavior_flags.has(MonsterBehaviorType::PREVENT_SUDDEN_MAGIC) && !ironman_nightmare) {
         m_ptr->mflag.set(MonsterTemporaryFlagType::PREVENT_MAGIC);
     }
 
-    return *r_ptr;
+    return r_ref;
 }
 
 /*!
@@ -149,7 +149,7 @@ static void place_pet(PlayerType *player_ptr)
             }
         } else {
             auto *m_ptr = &party_mon[current_monster];
-            auto *r_ptr = real_r_ptr(m_ptr);
+            auto &r_ref = m_ptr->get_real_r_ref();
             GAME_TEXT m_name[MAX_NLEN];
             monster_desc(player_ptr, m_name, m_ptr, 0);
             msg_format(_("%sとはぐれてしまった。", "You have lost sight of %s."), m_name);
@@ -158,8 +158,8 @@ static void place_pet(PlayerType *player_ptr)
                 exe_write_diary(player_ptr, DIARY_NAMED_PET, RECORD_NAMED_PET_LOST_SIGHT, m_name);
             }
 
-            if (r_ptr->cur_num) {
-                r_ptr->cur_num--;
+            if (r_ref.cur_num) {
+                r_ref.cur_num--;
             }
         }
     }
@@ -168,36 +168,36 @@ static void place_pet(PlayerType *player_ptr)
 }
 
 /*!
- * @brief ユニークモンスターやアーティファクトの所在フロアを更新する / Hack -- Update location of unique monsters and artifacts
+ * @brief ユニークモンスターやアーティファクトの所在フロアを更新する
+ * @param floor_ptr 現在フロアへのポインタ
  * @param cur_floor_id 現在のフロアID
  * @details
- * The r_ptr->floor_id and a_ptr->floor_id are not updated correctly\n
- * while new floor creation since dungeons may be re-created by\n
- * auto-scum option.\n
+ * The floor_id and floor_id are not updated correctly
+ * while new floor creation since dungeons may be re-created by
+ * auto-scum option.
  */
 static void update_unique_artifact(floor_type *floor_ptr, int16_t cur_floor_id)
 {
     for (int i = 1; i < floor_ptr->m_max; i++) {
-        monster_race *r_ptr;
-        auto *m_ptr = &floor_ptr->m_list[i];
-        if (!m_ptr->is_valid()) {
+        const auto &m_ref = floor_ptr->m_list[i];
+        if (!m_ref.is_valid()) {
             continue;
         }
 
-        r_ptr = real_r_ptr(m_ptr);
-        if (r_ptr->kind_flags.has(MonsterKindType::UNIQUE) || (r_ptr->population_flags.has(MonsterPopulationType::NAZGUL))) {
-            r_ptr->floor_id = cur_floor_id;
+        auto &r_ref = m_ref.get_real_r_ref();
+        if (r_ref.kind_flags.has(MonsterKindType::UNIQUE) || (r_ref.population_flags.has(MonsterPopulationType::NAZGUL))) {
+            r_ref.floor_id = cur_floor_id;
         }
     }
 
     for (int i = 1; i < floor_ptr->o_max; i++) {
-        auto *o_ptr = &floor_ptr->o_list[i];
-        if (!o_ptr->is_valid()) {
+        const auto &o_ref = floor_ptr->o_list[i];
+        if (!o_ref.is_valid()) {
             continue;
         }
 
-        if (o_ptr->is_fixed_artifact()) {
-            a_info.at(o_ptr->fixed_artifact_idx).floor_id = cur_floor_id;
+        if (o_ref.is_fixed_artifact()) {
+            a_info.at(o_ref.fixed_artifact_idx).floor_id = cur_floor_id;
         }
     }
 }
@@ -255,7 +255,6 @@ static void reset_unique_by_floor_change(PlayerType *player_ptr)
 {
     auto *floor_ptr = player_ptr->current_floor_ptr;
     for (MONSTER_IDX i = 1; i < floor_ptr->m_max; i++) {
-        monster_race *r_ptr;
         auto *m_ptr = &floor_ptr->m_list[i];
         if (!m_ptr->is_valid()) {
             continue;
@@ -271,12 +270,12 @@ static void reset_unique_by_floor_change(PlayerType *player_ptr)
             (void)set_monster_invulner(player_ptr, i, 0, false);
         }
 
-        r_ptr = real_r_ptr(m_ptr);
-        if (r_ptr->kind_flags.has_not(MonsterKindType::UNIQUE) && r_ptr->population_flags.has_not(MonsterPopulationType::NAZGUL)) {
+        const auto &r_ref = m_ptr->get_real_r_ref();
+        if (r_ref.kind_flags.has_not(MonsterKindType::UNIQUE) && r_ref.population_flags.has_not(MonsterPopulationType::NAZGUL)) {
             continue;
         }
 
-        if (r_ptr->floor_id != new_floor_id) {
+        if (r_ref.floor_id != new_floor_id) {
             delete_monster_idx(player_ptr, i);
         }
     }

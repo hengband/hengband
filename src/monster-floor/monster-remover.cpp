@@ -35,7 +35,7 @@ void delete_monster_idx(PlayerType *player_ptr, MONSTER_IDX i)
     POSITION y = m_ptr->fy;
     POSITION x = m_ptr->fx;
 
-    real_r_ptr(m_ptr)->cur_num--;
+    m_ptr->get_real_r_ref().cur_num--;
     if (r_ptr->flags2 & (RF2_MULTIPLY)) {
         floor_ptr->num_repro--;
     }

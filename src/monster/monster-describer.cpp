@@ -26,7 +26,7 @@ void monster_desc(PlayerType *player_ptr, char *desc, monster_type *m_ptr, BIT_F
 {
     monster_race *r_ptr;
     r_ptr = &r_info[m_ptr->ap_r_idx];
-    concptr name = (mode & MD_TRUE_NAME) ? real_r_ptr(m_ptr)->name.c_str() : r_ptr->name.c_str();
+    concptr name = (mode & MD_TRUE_NAME) ? m_ptr->get_real_r_ref().name.c_str() : r_ptr->name.c_str();
     GAME_TEXT silly_name[1024];
     bool named = false;
     auto is_hallucinated = player_ptr->effects()->hallucination()->is_hallucinated();
