@@ -392,7 +392,8 @@ bool process_monster_movement(PlayerType *player_ptr, turn_flags *turn_flags_ptr
         }
 
         if (turn_flags_ptr->is_riding_mon) {
-            if (!player_ptr->riding_ryoute && !monster_fear_remaining(&player_ptr->current_floor_ptr->m_list[player_ptr->riding])) {
+            const auto &m_ref = player_ptr->current_floor_ptr->m_list[player_ptr->riding];
+            if (!player_ptr->riding_ryoute && !m_ref.is_fearful()) {
                 turn_flags_ptr->do_move = false;
             }
         }
@@ -481,7 +482,7 @@ static bool can_speak(const monster_race &ap_r_ref, MonsterSpeakType mon_speak_t
 static std::string_view get_speak_filename(monster_type *m_ptr)
 {
     const auto &ap_r_ref = r_info[m_ptr->ap_r_idx];
-    if (monster_fear_remaining(m_ptr) && can_speak(ap_r_ref, MonsterSpeakType::SPEAK_FEAR)) {
+    if (m_ptr->is_fearful() && can_speak(ap_r_ref, MonsterSpeakType::SPEAK_FEAR)) {
         return _("monfear_j.txt", "monfear.txt");
     }
 

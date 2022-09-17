@@ -174,7 +174,7 @@ void process_monster(PlayerType *player_ptr, MONSTER_IDX m_idx)
         m_ptr->mflag2.reset(MonsterConstantFlagType::NOFLOW);
     }
 
-    if (!turn_flags_ptr->do_turn && !turn_flags_ptr->do_move && !monster_fear_remaining(m_ptr) && !turn_flags_ptr->is_riding_mon && turn_flags_ptr->aware) {
+    if (!turn_flags_ptr->do_turn && !turn_flags_ptr->do_move && !m_ptr->is_fearful() && !turn_flags_ptr->is_riding_mon && turn_flags_ptr->aware) {
         if (r_ptr->freq_spell && randint1(100) <= r_ptr->freq_spell) {
             if (make_attack_spell(player_ptr, m_idx)) {
                 return;
@@ -508,7 +508,7 @@ bool cast_spell(PlayerType *player_ptr, MONSTER_IDX m_idx, bool aware)
 bool process_monster_fear(PlayerType *player_ptr, turn_flags *turn_flags_ptr, MONSTER_IDX m_idx)
 {
     auto *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
-    bool is_battle_determined = !turn_flags_ptr->do_turn && !turn_flags_ptr->do_move && monster_fear_remaining(m_ptr) && turn_flags_ptr->aware;
+    bool is_battle_determined = !turn_flags_ptr->do_turn && !turn_flags_ptr->do_move && m_ptr->is_fearful() && turn_flags_ptr->aware;
     if (!is_battle_determined) {
         return false;
     }

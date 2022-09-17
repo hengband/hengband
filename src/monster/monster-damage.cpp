@@ -540,15 +540,15 @@ void MonsterDamageProcessor::summon_special_unique()
 void MonsterDamageProcessor::add_monster_fear()
 {
     auto *m_ptr = &this->player_ptr->current_floor_ptr->m_list[this->m_idx];
-    if (monster_fear_remaining(m_ptr) && (this->dam > 0)) {
-        auto fear_remining = monster_fear_remaining(m_ptr) - randint1(this->dam);
+    if (m_ptr->is_fearful() && (this->dam > 0)) {
+        auto fear_remining = m_ptr->get_remaining_fear() - randint1(this->dam);
         if (set_monster_monfear(this->player_ptr, this->m_idx, fear_remining)) {
             *this->fear = false;
         }
     }
 
     auto *r_ptr = &r_info[m_ptr->r_idx];
-    if (monster_fear_remaining(m_ptr) || any_bits(r_ptr->flags3, RF3_NO_FEAR)) {
+    if (m_ptr->is_fearful() || any_bits(r_ptr->flags3, RF3_NO_FEAR)) {
         return;
     }
 

@@ -129,3 +129,13 @@ bool monster_type::is_confused() const
 {
     return this->get_remaining_confusion() > 0;
 }
+
+short monster_type::get_remaining_fear() const
+{
+    return this->mtimed[MTIMED_MONFEAR];
+}
+
+bool monster_type::is_fearful() const
+{
+    return this->get_remaining_fear() > 0;
+}

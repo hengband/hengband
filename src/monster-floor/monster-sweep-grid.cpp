@@ -107,7 +107,7 @@ bool MonsterSweepGrid::mon_will_run()
         return false;
     }
 
-    if (monster_fear_remaining(m_ptr)) {
+    if (m_ptr->is_fearful()) {
         return true;
     }
 

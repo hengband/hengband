@@ -295,7 +295,7 @@ MonsterSpellResult spell_RF5_SCARE(MONSTER_IDX m_idx, PlayerType *player_ptr, MO
     spell_badstatus_message_to_mons(player_ptr, m_idx, t_idx, msg, resist, saving_throw);
 
     if (!resist && !saving_throw) {
-        set_monster_monfear(player_ptr, t_idx, monster_fear_remaining(t_ptr) + randint0(4) + 4);
+        set_monster_monfear(player_ptr, t_idx, t_ptr->get_remaining_fear() + randint0(4) + 4);
     }
 
     return res;
@@ -637,7 +637,7 @@ MonsterSpellResult spell_RF6_HEAL(PlayerType *player_ptr, MONSTER_IDX m_idx, MON
         player_ptr->redraw |= (PR_UHEALTH);
     }
 
-    if (!monster_fear_remaining(m_ptr)) {
+    if (!m_ptr->is_fearful()) {
         return res;
     }
 

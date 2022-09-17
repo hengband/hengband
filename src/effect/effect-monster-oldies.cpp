@@ -144,7 +144,7 @@ static void effect_monster_old_heal_recovery(PlayerType *player_ptr, effect_mons
         (void)set_monster_confused(player_ptr, em_ptr->g_ptr->m_idx, 0);
     }
 
-    if (monster_fear_remaining(em_ptr->m_ptr)) {
+    if (em_ptr->m_ptr->is_fearful()) {
         if (em_ptr->seen_msg) {
             msg_format(_("%^sは勇気を取り戻した。", "%^s recovers %s courage."), em_ptr->m_name, em_ptr->m_poss);
         }

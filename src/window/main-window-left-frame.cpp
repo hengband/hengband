@@ -383,7 +383,7 @@ void health_redraw(PlayerType *player_ptr, bool riding)
         attr = TERM_WHITE;
     } else if (m_ptr->is_asleep()) {
         attr = TERM_BLUE;
-    } else if (monster_fear_remaining(m_ptr)) {
+    } else if (m_ptr->is_fearful()) {
         attr = TERM_VIOLET;
     } else if (pct >= 100) {
         attr = TERM_L_GREEN;

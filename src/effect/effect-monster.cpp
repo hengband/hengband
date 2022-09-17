@@ -457,7 +457,7 @@ static void effect_damage_piles_fear(PlayerType *player_ptr, effect_monster_type
         return;
     }
 
-    (void)set_monster_monfear(player_ptr, em_ptr->g_ptr->m_idx, monster_fear_remaining(em_ptr->m_ptr) + em_ptr->do_fear);
+    (void)set_monster_monfear(player_ptr, em_ptr->g_ptr->m_idx, em_ptr->m_ptr->get_remaining_fear() + em_ptr->do_fear);
     em_ptr->get_angry = true;
 }
 

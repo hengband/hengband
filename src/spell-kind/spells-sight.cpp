@@ -428,7 +428,7 @@ void probed_monster_info(char *buf, PlayerType *player_ptr, monster_type *m_ptr,
     if (m_ptr->is_stunned()) {
         strcat(buf, _("朦朧 ", "stunned "));
     }
-    if (monster_fear_remaining(m_ptr)) {
+    if (m_ptr->is_fearful()) {
         strcat(buf, _("恐怖 ", "scared "));
     }
     if (m_ptr->is_confused()) {

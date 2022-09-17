@@ -40,7 +40,7 @@ static void write_monster_flags(monster_type *m_ptr, BIT_FLAGS *flags)
         set_bits(*flags, SaveDataMonsterFlagType::CONFUSED);
     }
 
-    if (monster_fear_remaining(m_ptr)) {
+    if (m_ptr->is_fearful()) {
         set_bits(*flags, SaveDataMonsterFlagType::MONFEAR);
     }
 

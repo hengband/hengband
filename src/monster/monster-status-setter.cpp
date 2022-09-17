@@ -291,12 +291,12 @@ bool set_monster_monfear(PlayerType *player_ptr, MONSTER_IDX m_idx, int v)
     v = (v > 200) ? 200 : (v < 0) ? 0
                                   : v;
     if (v) {
-        if (!monster_fear_remaining(m_ptr)) {
+        if (!m_ptr->is_fearful()) {
             mproc_add(floor_ptr, m_idx, MTIMED_MONFEAR);
             notice = true;
         }
     } else {
-        if (monster_fear_remaining(m_ptr)) {
+        if (m_ptr->is_fearful()) {
             mproc_remove(floor_ptr, m_idx, MTIMED_MONFEAR);
             notice = true;
         }

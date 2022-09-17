@@ -208,7 +208,9 @@ static bool check_monster_hp(PlayerType *player_ptr, mam_pp_type *mam_pp_ptr)
  */
 static void cancel_fear_by_pain(PlayerType *player_ptr, mam_pp_type *mam_pp_ptr)
 {
-    if (!monster_fear_remaining(mam_pp_ptr->m_ptr) || (mam_pp_ptr->dam <= 0) || !set_monster_monfear(player_ptr, mam_pp_ptr->m_idx, monster_fear_remaining(mam_pp_ptr->m_ptr) - randint1(mam_pp_ptr->dam / 4))) {
+    const auto &m_ref = *mam_pp_ptr->m_ptr;
+    const auto dam = mam_pp_ptr->dam;
+    if (!m_ref.is_fearful() || (dam <= 0) || !set_monster_monfear(player_ptr, mam_pp_ptr->m_idx, m_ref.get_remaining_fear() - randint1(dam / 4))) {
         return;
     }
 
@@ -223,7 +225,7 @@ static void cancel_fear_by_pain(PlayerType *player_ptr, mam_pp_type *mam_pp_ptr)
 static void make_monster_fear(PlayerType *player_ptr, mam_pp_type *mam_pp_ptr)
 {
     auto *r_ptr = &r_info[mam_pp_ptr->m_ptr->r_idx];
-    if (monster_fear_remaining(mam_pp_ptr->m_ptr) || ((r_ptr->flags3 & RF3_NO_FEAR) == 0)) {
+    if (mam_pp_ptr->m_ptr->is_fearful() || ((r_ptr->flags3 & RF3_NO_FEAR) == 0)) {
         return;
     }
 

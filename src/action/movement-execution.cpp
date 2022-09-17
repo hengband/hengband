@@ -211,7 +211,7 @@ void exe_movement(PlayerType *player_ptr, DIRECTION dir, bool do_pickup, bool br
             energy.reset_player_turn();
             can_move = false;
             disturb(player_ptr, false, true);
-        } else if (monster_fear_remaining(riding_m_ptr)) {
+        } else if (riding_m_ptr->is_fearful()) {
             GAME_TEXT steed_name[MAX_NLEN];
             monster_desc(player_ptr, steed_name, riding_m_ptr, 0);
             msg_format(_("%sが恐怖していて制御できない。", "%^s is too scared to control."), steed_name);
