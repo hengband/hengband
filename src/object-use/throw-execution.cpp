@@ -441,7 +441,7 @@ void ObjectThrowEntity::attack_racial_power()
     }
 
     MonsterDamageProcessor mdp(this->player_ptr, this->g_ptr->m_idx, this->tdam, &fear, attribute_flags);
-    if (mdp.mon_take_hit(extract_note_dies(real_r_idx(this->m_ptr)))) {
+    if (mdp.mon_take_hit(extract_note_dies(this->m_ptr->get_real_r_idx()))) {
         return;
     }
 

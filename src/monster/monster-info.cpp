@@ -273,21 +273,7 @@ bool is_original_ap_and_seen(PlayerType *player_ptr, const monster_type *m_ptr)
  */
 monster_race *real_r_ptr(monster_type *m_ptr)
 {
-    return &r_info[real_r_idx(m_ptr)];
-}
-
-MonsterRaceId real_r_idx(monster_type *m_ptr)
-{
-    auto *r_ptr = &r_info[m_ptr->r_idx];
-    if (m_ptr->mflag2.has(MonsterConstantFlagType::CHAMELEON)) {
-        if (r_ptr->kind_flags.has(MonsterKindType::UNIQUE)) {
-            return MonsterRaceId::CHAMELEON_K;
-        } else {
-            return MonsterRaceId::CHAMELEON;
-        }
-    }
-
-    return m_ptr->r_idx;
+    return &r_info[m_ptr->get_real_r_idx()];
 }
 
 /*!

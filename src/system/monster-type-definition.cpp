@@ -60,3 +60,17 @@ bool monster_type::is_valid() const
 {
     return MonsterRace(this->r_idx).is_valid();
 }
+
+MonsterRaceId monster_type::get_real_r_idx() const
+{
+    auto *r_ptr = &r_info[this->r_idx];
+    if (this->mflag2.has(MonsterConstantFlagType::CHAMELEON)) {
+        if (r_ptr->kind_flags.has(MonsterKindType::UNIQUE)) {
+            return MonsterRaceId::CHAMELEON_K;
+        } else {
+            return MonsterRaceId::CHAMELEON;
+        }
+    }
+
+    return this->r_idx;
+}

@@ -190,7 +190,7 @@ void MonsterDamageProcessor::death_special_flag_monster()
 
     if (m_ptr->mflag2.has(MonsterConstantFlagType::CHAMELEON)) {
         r_ptr = real_r_ptr(m_ptr);
-        r_idx = real_r_idx(m_ptr);
+        r_idx = m_ptr->get_real_r_idx();
         if (r_ptr->r_sights < MAX_SHORT) {
             r_ptr->r_sights++;
         }
