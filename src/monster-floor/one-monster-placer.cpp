@@ -49,7 +49,12 @@
 
 static bool is_friendly_idx(PlayerType *player_ptr, MONSTER_IDX m_idx)
 {
-    return m_idx > 0 && is_friendly(&player_ptr->current_floor_ptr->m_list[(m_idx)]);
+    if (m_idx == 0) {
+        return false;
+    }
+
+    const auto &m_ref = player_ptr->current_floor_ptr->m_list[m_idx];
+    return m_ref.is_friendly();
 }
 
 /*!

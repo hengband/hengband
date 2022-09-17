@@ -94,7 +94,7 @@ bool polymorph_monster(PlayerType *player_ptr, POSITION y, POSITION x)
     bool preserve_hold_objects = !back_m.hold_o_idx_list.empty();
 
     BIT_FLAGS mode = 0L;
-    if (is_friendly(m_ptr)) {
+    if (m_ptr->is_friendly()) {
         mode |= PM_FORCE_FRIENDLY;
     }
     if (is_pet(m_ptr)) {

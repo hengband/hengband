@@ -86,7 +86,7 @@ bool genocide_aux(PlayerType *player_ptr, MONSTER_IDX m_idx, int power, bool pla
             }
         }
 
-        if (is_friendly(m_ptr) && !is_pet(m_ptr)) {
+        if (m_ptr->is_friendly() && !is_pet(m_ptr)) {
             if (see_m) {
                 msg_format(_("%sは怒った！", "%^s gets angry!"), m_name);
             }

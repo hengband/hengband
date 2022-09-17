@@ -63,7 +63,7 @@ void set_hostile(PlayerType *player_ptr, monster_type *m_ptr)
  */
 void anger_monster(PlayerType *player_ptr, monster_type *m_ptr)
 {
-    if (player_ptr->phase_out || !is_friendly(m_ptr)) {
+    if (player_ptr->phase_out || !m_ptr->is_friendly()) {
         return;
     }
 

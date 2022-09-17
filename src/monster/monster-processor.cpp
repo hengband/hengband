@@ -329,7 +329,7 @@ void process_angar(PlayerType *player_ptr, MONSTER_IDX m_idx, bool see_m)
     auto *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
     auto *r_ptr = &r_info[m_ptr->r_idx];
     bool gets_angry = false;
-    if (is_friendly(m_ptr) && has_aggravate(player_ptr)) {
+    if (m_ptr->is_friendly() && has_aggravate(player_ptr)) {
         gets_angry = true;
     }
 

@@ -271,11 +271,6 @@ bool is_original_ap(const monster_type *m_ptr)
     return m_ptr->ap_r_idx == m_ptr->r_idx;
 }
 
-bool is_friendly(const monster_type *m_ptr)
-{
-    return m_ptr->mflag2.has(MonsterConstantFlagType::FRIENDLY);
-}
-
 bool is_pet(const monster_type *m_ptr)
 {
     return m_ptr->mflag2.has(MonsterConstantFlagType::PET);
@@ -283,7 +278,7 @@ bool is_pet(const monster_type *m_ptr)
 
 bool is_hostile(const monster_type *m_ptr)
 {
-    return !is_friendly(m_ptr) && !is_pet(m_ptr);
+    return !m_ptr->is_friendly() && !is_pet(m_ptr);
 }
 
 /*!

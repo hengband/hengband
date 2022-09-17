@@ -258,7 +258,7 @@ void ObjectThrowEntity::display_potion_throw()
 
     auto *floor_ptr = this->player_ptr->current_floor_ptr;
     auto *angry_m_ptr = &floor_ptr->m_list[floor_ptr->grid_array[this->y][this->x].m_idx];
-    if ((floor_ptr->grid_array[this->y][this->x].m_idx == 0) || !is_friendly(angry_m_ptr) || monster_invulner_remaining(angry_m_ptr)) {
+    if ((floor_ptr->grid_array[this->y][this->x].m_idx == 0) || !angry_m_ptr->is_friendly() || monster_invulner_remaining(angry_m_ptr)) {
         this->do_drop = false;
         return;
     }

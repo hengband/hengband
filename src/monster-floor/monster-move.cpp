@@ -490,7 +490,7 @@ static std::string_view get_speak_filename(monster_type *m_ptr)
         return monspeak_txt;
     }
 
-    if (is_friendly(m_ptr) && can_speak(ap_r_ref, MonsterSpeakType::SPEAK_FRIEND)) {
+    if (m_ptr->is_friendly() && can_speak(ap_r_ref, MonsterSpeakType::SPEAK_FRIEND)) {
         return _("monfrien_j.txt", "monfrien.txt");
     }
 

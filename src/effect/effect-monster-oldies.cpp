@@ -111,7 +111,7 @@ static void effect_monster_old_heal_check_player(PlayerType *player_ptr, effect_
         chg_virtue(player_ptr, V_INDIVIDUALISM, 1);
     }
 
-    if (is_friendly(em_ptr->m_ptr)) {
+    if (em_ptr->m_ptr->is_friendly()) {
         chg_virtue(player_ptr, V_HONOUR, 1);
     } else if (em_ptr->r_ptr->kind_flags.has_not(MonsterKindType::EVIL)) {
         if (em_ptr->r_ptr->kind_flags.has(MonsterKindType::GOOD)) {
@@ -203,7 +203,7 @@ ProcessResult effect_monster_old_speed(PlayerType *player_ptr, effect_monster_ty
         if (em_ptr->r_ptr->kind_flags.has(MonsterKindType::UNIQUE)) {
             chg_virtue(player_ptr, V_INDIVIDUALISM, 1);
         }
-        if (is_friendly(em_ptr->m_ptr)) {
+        if (em_ptr->m_ptr->is_friendly()) {
             chg_virtue(player_ptr, V_HONOUR, 1);
         }
     }

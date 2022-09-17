@@ -619,7 +619,7 @@ static void update_phase_out_stat(PlayerType *player_ptr, effect_monster_type *e
  */
 static void postprocess_by_effected_pet(PlayerType *player_ptr, effect_monster_type *em_ptr)
 {
-    if ((em_ptr->dam <= 0) || is_pet(em_ptr->m_ptr) || is_friendly(em_ptr->m_ptr)) {
+    if ((em_ptr->dam <= 0) || is_pet(em_ptr->m_ptr) || em_ptr->m_ptr->is_friendly()) {
         return;
     }
 
