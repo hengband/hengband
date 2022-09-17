@@ -238,7 +238,7 @@ bool decide_monster_movement_direction(PlayerType *player_ptr, DIRECTION *mm, MO
     auto *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
     auto *r_ptr = &r_info[m_ptr->r_idx];
 
-    if (monster_confused_remaining(m_ptr) || !aware) {
+    if (m_ptr->is_confused() || !aware) {
         mm[0] = mm[1] = mm[2] = mm[3] = 5;
         return true;
     }

@@ -431,9 +431,9 @@ static void effect_damage_piles_confusion(PlayerType *player_ptr, effect_monster
     }
 
     int turns = 0;
-    if (monster_confused_remaining(em_ptr->m_ptr)) {
+    if (em_ptr->m_ptr->is_confused()) {
         em_ptr->note = _("はさらに混乱したようだ。", " looks more confused.");
-        turns = monster_confused_remaining(em_ptr->m_ptr) + (em_ptr->do_conf / 2);
+        turns = em_ptr->m_ptr->get_remaining_confusion() + (em_ptr->do_conf / 2);
     } else {
         em_ptr->note = _("は混乱したようだ。", " looks confused.");
         turns = em_ptr->do_conf;

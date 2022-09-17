@@ -119,3 +119,13 @@ bool monster_type::is_stunned() const
 {
     return this->get_remaining_stun() > 0;
 }
+
+short monster_type::get_remaining_confusion() const
+{
+    return this->mtimed[MTIMED_CONFUSED];
+}
+
+bool monster_type::is_confused() const
+{
+    return this->get_remaining_confusion() > 0;
+}

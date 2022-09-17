@@ -136,7 +136,7 @@ static void effect_monster_old_heal_recovery(PlayerType *player_ptr, effect_mons
         (void)set_monster_stunned(player_ptr, em_ptr->g_ptr->m_idx, 0);
     }
 
-    if (monster_confused_remaining(em_ptr->m_ptr)) {
+    if (em_ptr->m_ptr->is_confused()) {
         if (em_ptr->seen_msg) {
             msg_format(_("%^sは混乱から立ち直った。", "%^s is no longer confused."), em_ptr->m_name);
         }

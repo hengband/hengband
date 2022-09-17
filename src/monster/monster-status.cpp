@@ -281,7 +281,7 @@ static void process_monsters_mtimed_aux(PlayerType *player_ptr, MONSTER_IDX m_id
 
     case MTIMED_CONFUSED: {
         /* Reduce the confusion */
-        if (!set_monster_confused(player_ptr, m_idx, monster_confused_remaining(m_ptr) - randint1(r_info[m_ptr->r_idx].level / 20 + 1))) {
+        if (!set_monster_confused(player_ptr, m_idx, m_ptr->get_remaining_confusion() - randint1(r_info[m_ptr->r_idx].level / 20 + 1))) {
             break;
         }
 
@@ -521,11 +521,6 @@ void monster_gain_exp(PlayerType *player_ptr, MONSTER_IDX m_idx, MonsterRaceId s
     if (m_idx == player_ptr->riding) {
         player_ptr->update |= PU_BONUS;
     }
-}
-
-TIME_EFFECT monster_confused_remaining(monster_type *m_ptr)
-{
-    return m_ptr->mtimed[MTIMED_CONFUSED];
 }
 
 TIME_EFFECT monster_fear_remaining(monster_type *m_ptr)

@@ -67,7 +67,7 @@ static void attack_confuse(PlayerType *player_ptr, player_attack_type *pa_ptr, b
         msg_format(_("%^sには効果がなかった。", "%^s is unaffected."), pa_ptr->m_name);
     } else {
         msg_format(_("%^sは混乱したようだ。", "%^s appears confused."), pa_ptr->m_name);
-        (void)set_monster_confused(player_ptr, pa_ptr->m_idx, monster_confused_remaining(pa_ptr->m_ptr) + 10 + randint0(player_ptr->lev) / 5);
+        (void)set_monster_confused(player_ptr, pa_ptr->m_idx, pa_ptr->m_ptr->get_remaining_confusion() + 10 + randint0(player_ptr->lev) / 5);
     }
 }
 

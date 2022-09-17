@@ -348,7 +348,7 @@ static bool set_melee_spell_set(PlayerType *player_ptr, melee_spell_type *ms_ptr
 
 bool check_melee_spell_set(PlayerType *player_ptr, melee_spell_type *ms_ptr)
 {
-    if (monster_confused_remaining(ms_ptr->m_ptr)) {
+    if (ms_ptr->m_ptr->is_confused()) {
         return false;
     }
 

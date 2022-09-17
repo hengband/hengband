@@ -52,7 +52,7 @@ void delete_monster_idx(PlayerType *player_ptr, MONSTER_IDX i)
     if (m_ptr->is_stunned()) {
         (void)set_monster_stunned(player_ptr, i, 0);
     }
-    if (monster_confused_remaining(m_ptr)) {
+    if (m_ptr->is_confused()) {
         (void)set_monster_confused(player_ptr, i, 0);
     }
     if (monster_fear_remaining(m_ptr)) {

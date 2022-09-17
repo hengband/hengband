@@ -260,12 +260,12 @@ bool set_monster_confused(PlayerType *player_ptr, MONSTER_IDX m_idx, int v)
     v = (v > 200) ? 200 : (v < 0) ? 0
                                   : v;
     if (v) {
-        if (!monster_confused_remaining(m_ptr)) {
+        if (!m_ptr->is_confused()) {
             mproc_add(floor_ptr, m_idx, MTIMED_CONFUSED);
             notice = true;
         }
     } else {
-        if (monster_confused_remaining(m_ptr)) {
+        if (m_ptr->is_confused()) {
             mproc_remove(floor_ptr, m_idx, MTIMED_CONFUSED);
             notice = true;
         }

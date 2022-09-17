@@ -361,7 +361,7 @@ MonsterSpellResult spell_RF5_BLIND(MONSTER_IDX m_idx, PlayerType *player_ptr, MO
     spell_badstatus_message_to_mons(player_ptr, m_idx, t_idx, msg, resist, saving_throw);
 
     if (!resist && !saving_throw) {
-        (void)set_monster_confused(player_ptr, t_idx, monster_confused_remaining(t_ptr) + 12 + randint0(4));
+        (void)set_monster_confused(player_ptr, t_idx, t_ptr->get_remaining_confusion() + 12 + randint0(4));
     }
 
     return res;
@@ -419,7 +419,7 @@ MonsterSpellResult spell_RF5_CONF(MONSTER_IDX m_idx, PlayerType *player_ptr, MON
     spell_badstatus_message_to_mons(player_ptr, m_idx, t_idx, msg, resist, saving_throw);
 
     if (!resist && !saving_throw) {
-        (void)set_monster_confused(player_ptr, t_idx, monster_confused_remaining(t_ptr) + 12 + randint0(4));
+        (void)set_monster_confused(player_ptr, t_idx, t_ptr->get_remaining_confusion() + 12 + randint0(4));
     }
 
     return res;
