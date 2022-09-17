@@ -134,7 +134,7 @@ bool MonsterAttackPlayer::check_no_blow()
         return false;
     }
 
-    return is_hostile(this->m_ptr);
+    return this->m_ptr->is_hostile();
 }
 
 /*!

@@ -396,7 +396,6 @@ MonsterSpellResult spell_RF6_DARKNESS(PlayerType *player_ptr, POSITION y, POSITI
     concptr msg_done;
     auto *floor_ptr = player_ptr->current_floor_ptr;
     auto *m_ptr = &floor_ptr->m_list[m_idx];
-    monster_type *t_ptr = &floor_ptr->m_list[t_idx];
     auto *r_ptr = &r_info[m_ptr->r_idx];
     bool can_use_lite_area = false;
     bool monster_to_monster = target_type == MONSTER_TO_MONSTER;
@@ -404,11 +403,15 @@ MonsterSpellResult spell_RF6_DARKNESS(PlayerType *player_ptr, POSITION y, POSITI
     GAME_TEXT t_name[MAX_NLEN];
     monster_name(player_ptr, t_idx, t_name);
 
-    if (PlayerClass(player_ptr).equals(PlayerClassType::NINJA) && r_ptr->kind_flags.has_not(MonsterKindType::UNDEAD) && r_ptr->resistance_flags.has_not(MonsterResistanceType::HURT_LITE) && !(r_ptr->flags7 & RF7_DARK_MASK)) {
+    const auto is_ninja = PlayerClass(player_ptr).equals(PlayerClassType::NINJA);
+    const auto is_living_monster = r_ptr->kind_flags.has_not(MonsterKindType::UNDEAD);
+    const auto is_not_weak_lite = r_ptr->resistance_flags.has_not(MonsterResistanceType::HURT_LITE);
+    if (is_ninja && is_living_monster && is_not_weak_lite && none_bits(r_ptr->flags7, RF7_DARK_MASK)) {
         can_use_lite_area = true;
     }
 
-    if (monster_to_monster && !is_hostile(t_ptr)) {
+    const auto &t_ref = floor_ptr->m_list[t_idx];
+    if (monster_to_monster && !t_ref.is_hostile()) {
         can_use_lite_area = false;
     }
 

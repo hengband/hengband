@@ -507,8 +507,11 @@ static void update_invisible_monster(PlayerType *player_ptr, um_type *um_ptr, MO
         um_ptr->m_ptr->mflag.set(MonsterTemporaryFlagType::SANITY_BLAST);
     }
 
-    if (disturb_near && (projectable(player_ptr, um_ptr->m_ptr->fy, um_ptr->m_ptr->fx, player_ptr->y, player_ptr->x) && projectable(player_ptr, player_ptr->y, player_ptr->x, um_ptr->m_ptr->fy, um_ptr->m_ptr->fx))) {
-        if (disturb_pets || is_hostile(um_ptr->m_ptr)) {
+    const auto &m_ref = *um_ptr->m_ptr;
+    const auto projectable_from_monster = projectable(player_ptr, m_ref.fy, m_ref.fx, player_ptr->y, player_ptr->x);
+    const auto projectable_from_player = projectable(player_ptr, player_ptr->y, player_ptr->x, m_ref.fy, m_ref.fx);
+    if (disturb_near && projectable_from_monster && projectable_from_player) {
+        if (disturb_pets || m_ref.is_hostile()) {
             disturb(player_ptr, true, true);
         }
     }
@@ -531,7 +534,7 @@ static void update_visible_monster(PlayerType *player_ptr, um_type *um_ptr, MONS
         player_ptr->redraw |= PR_UHEALTH;
     }
 
-    if (um_ptr->do_disturb && (disturb_pets || is_hostile(um_ptr->m_ptr))) {
+    if (um_ptr->do_disturb && (disturb_pets || um_ptr->m_ptr->is_hostile())) {
         disturb(player_ptr, true, true);
     }
 }
@@ -544,7 +547,7 @@ static bool update_clear_monster(PlayerType *player_ptr, um_type *um_ptr)
 
     if (um_ptr->m_ptr->mflag.has_not(MonsterTemporaryFlagType::VIEW)) {
         um_ptr->m_ptr->mflag.set(MonsterTemporaryFlagType::VIEW);
-        if (um_ptr->do_disturb && (disturb_pets || is_hostile(um_ptr->m_ptr))) {
+        if (um_ptr->do_disturb && (disturb_pets || um_ptr->m_ptr->is_hostile())) {
             disturb(player_ptr, true, true);
         }
     }
@@ -584,7 +587,7 @@ void update_monster(PlayerType *player_ptr, MONSTER_IDX m_idx, bool full)
     }
 
     um_ptr->m_ptr->mflag.reset(MonsterTemporaryFlagType::VIEW);
-    if (um_ptr->do_disturb && (disturb_pets || is_hostile(um_ptr->m_ptr))) {
+    if (um_ptr->do_disturb && (disturb_pets || um_ptr->m_ptr->is_hostile())) {
         disturb(player_ptr, true, true);
     }
 }

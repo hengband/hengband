@@ -325,7 +325,8 @@ bool make_attack_spell(PlayerType *player_ptr, MONSTER_IDX m_idx)
         return false;
     }
 
-    if (msa_ptr->m_ptr->mflag.has(MonsterTemporaryFlagType::PREVENT_MAGIC) || !is_hostile(msa_ptr->m_ptr) || ((msa_ptr->m_ptr->cdis > get_max_range(player_ptr)) && !msa_ptr->m_ptr->target_y)) {
+    const auto &m_ref = *msa_ptr->m_ptr;
+    if (m_ref.mflag.has(MonsterTemporaryFlagType::PREVENT_MAGIC) || !m_ref.is_hostile() || ((m_ref.cdis > get_max_range(player_ptr)) && !m_ref.target_y)) {
         return false;
     }
 

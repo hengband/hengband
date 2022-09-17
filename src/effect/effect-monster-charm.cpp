@@ -289,7 +289,7 @@ static void effect_monster_domination_addition(effect_monster_type *em_ptr)
 
 ProcessResult effect_monster_domination(PlayerType *player_ptr, effect_monster_type *em_ptr)
 {
-    if (!is_hostile(em_ptr->m_ptr)) {
+    if (!em_ptr->m_ptr->is_hostile()) {
         return ProcessResult::PROCESS_CONTINUE;
     }
 
@@ -297,7 +297,10 @@ ProcessResult effect_monster_domination(PlayerType *player_ptr, effect_monster_t
         em_ptr->obvious = true;
     }
 
-    if (em_ptr->r_ptr->kind_flags.has(MonsterKindType::UNIQUE) || any_bits(em_ptr->r_ptr->flags1, RF1_QUESTOR) || (em_ptr->r_ptr->flags3 & RF3_NO_CONF) || (em_ptr->r_ptr->level > randint1((em_ptr->dam - 10) < 1 ? 1 : (em_ptr->dam - 10)) + 10)) {
+    const auto is_unique = em_ptr->r_ptr->kind_flags.has(MonsterKindType::UNIQUE);
+    const auto is_questor = any_bits(em_ptr->r_ptr->flags1, RF1_QUESTOR);
+    const auto is_no_confusion = any_bits(em_ptr->r_ptr->flags3, RF3_NO_CONF);
+    if (is_unique || is_questor || is_no_confusion || (em_ptr->r_ptr->level > randint1((em_ptr->dam - 10) < 1 ? 1 : (em_ptr->dam - 10)) + 10)) {
         if (((em_ptr->r_ptr->flags3 & RF3_NO_CONF) != 0) && is_original_ap_and_seen(player_ptr, em_ptr->m_ptr)) {
             em_ptr->r_ptr->r_flags3 |= (RF3_NO_CONF);
         }

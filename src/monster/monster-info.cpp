@@ -209,7 +209,7 @@ bool are_enemies(PlayerType *player_ptr, monster_type *m_ptr, monster_type *n_pt
         }
     }
 
-    if (is_hostile(m_ptr) != is_hostile(n_ptr)) {
+    if (m_ptr->is_hostile() != n_ptr->is_hostile()) {
         return true;
     }
 
@@ -270,11 +270,6 @@ bool is_original_ap_and_seen(PlayerType *player_ptr, monster_type *m_ptr)
 bool is_original_ap(const monster_type *m_ptr)
 {
     return m_ptr->ap_r_idx == m_ptr->r_idx;
-}
-
-bool is_hostile(const monster_type *m_ptr)
-{
-    return !m_ptr->is_friendly() && !m_ptr->is_pet();
 }
 
 /*!

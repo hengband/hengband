@@ -255,7 +255,7 @@ bool decide_monster_movement_direction(PlayerType *player_ptr, DIRECTION *mm, MO
         return true;
     }
 
-    if (!is_hostile(m_ptr)) {
+    if (!m_ptr->is_hostile()) {
         mm[0] = mm[1] = mm[2] = mm[3] = 5;
         get_enemy_dir(player_ptr, m_idx, mm);
         return true;
