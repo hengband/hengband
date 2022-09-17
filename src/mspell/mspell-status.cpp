@@ -506,7 +506,7 @@ MonsterSpellResult spell_RF6_HASTE(PlayerType *player_ptr, MONSTER_IDX m_idx, MO
 
     monspell_message_base(player_ptr, m_idx, t_idx, msg, player_ptr->effects()->blindness()->is_blind(), target_type);
 
-    if (set_monster_fast(player_ptr, m_idx, monster_fast_remaining(m_ptr) + 100)) {
+    if (set_monster_fast(player_ptr, m_idx, m_ptr->get_remaining_acceleration() + 100)) {
         if (target_type == MONSTER_TO_PLAYER || (target_type == MONSTER_TO_MONSTER && see_m)) {
             msg_format(_("%^sの動きが速くなった。", "%^s starts moving faster."), m_name);
         }

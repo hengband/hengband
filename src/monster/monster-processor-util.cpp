@@ -323,7 +323,7 @@ byte decide_monster_speed(monster_type *m_ptr)
         speed += 5;
     }
 
-    if (monster_fast_remaining(m_ptr)) {
+    if (m_ptr->is_accelerated()) {
         speed += 10;
     }
     if (monster_slow_remaining(m_ptr)) {

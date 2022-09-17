@@ -465,7 +465,7 @@ MonsterAbilityType choose_attack_spell(PlayerType *player_ptr, msa_type *msa_ptr
         }
     }
 
-    if (!haste.empty() && (randint0(100) < 20) && !monster_fast_remaining(m_ptr)) {
+    if (!haste.empty() && (randint0(100) < 20) && !m_ptr->is_accelerated()) {
         return haste[randint0(haste.size())];
     }
 

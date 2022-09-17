@@ -195,7 +195,7 @@ ProcessResult effect_monster_old_speed(PlayerType *player_ptr, effect_monster_ty
         em_ptr->obvious = true;
     }
 
-    if (set_monster_fast(player_ptr, em_ptr->g_ptr->m_idx, monster_fast_remaining(em_ptr->m_ptr) + 100)) {
+    if (set_monster_fast(player_ptr, em_ptr->g_ptr->m_idx, em_ptr->m_ptr->get_remaining_acceleration() + 100)) {
         em_ptr->note = _("の動きが速くなった。", " starts moving faster.");
     }
 

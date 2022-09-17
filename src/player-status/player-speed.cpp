@@ -280,7 +280,7 @@ int16_t PlayerSpeed::riding_bonus()
     }
 
     bonus += (this->player_ptr->skill_exp[PlayerSkillKindType::RIDING] + this->player_ptr->lev * 160L) / 3200;
-    if (monster_fast_remaining(riding_m_ptr)) {
+    if (riding_m_ptr->is_accelerated()) {
         bonus += 10;
     }
 

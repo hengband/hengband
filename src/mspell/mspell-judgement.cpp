@@ -224,7 +224,7 @@ bool dispel_check_monster(PlayerType *player_ptr, MONSTER_IDX m_idx, MONSTER_IDX
         return true;
     }
 
-    if ((t_ptr->mspeed < 135) && monster_fast_remaining(t_ptr)) {
+    if ((t_ptr->mspeed < 135) && t_ptr->is_accelerated()) {
         return true;
     }
 
@@ -366,7 +366,8 @@ bool dispel_check(PlayerType *player_ptr, MONSTER_IDX m_idx)
         return true;
     }
 
-    if (player_ptr->riding && (player_ptr->current_floor_ptr->m_list[player_ptr->riding].mspeed < 135) && monster_fast_remaining(&player_ptr->current_floor_ptr->m_list[player_ptr->riding])) {
+    const auto &m_ref = player_ptr->current_floor_ptr->m_list[player_ptr->riding];
+    if (player_ptr->riding && (player_ptr->current_floor_ptr->m_list[player_ptr->riding].mspeed < 135) && m_ref.is_accelerated()) {
         return true;
     }
 

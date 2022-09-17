@@ -156,12 +156,12 @@ bool set_monster_fast(PlayerType *player_ptr, MONSTER_IDX m_idx, int v)
     v = (v > 200) ? 200 : (v < 0) ? 0
                                   : v;
     if (v) {
-        if (!monster_fast_remaining(m_ptr)) {
+        if (!m_ptr->is_accelerated()) {
             mproc_add(floor_ptr, m_idx, MTIMED_FAST);
             notice = true;
         }
     } else {
-        if (monster_fast_remaining(m_ptr)) {
+        if (m_ptr->is_accelerated()) {
             mproc_remove(floor_ptr, m_idx, MTIMED_FAST);
             notice = true;
         }

@@ -241,7 +241,7 @@ static void process_monsters_mtimed_aux(PlayerType *player_ptr, MONSTER_IDX m_id
 
     case MTIMED_FAST:
         /* Reduce by one, note if expires */
-        if (set_monster_fast(player_ptr, m_idx, monster_fast_remaining(m_ptr) - 1)) {
+        if (set_monster_fast(player_ptr, m_idx, m_ptr->get_remaining_acceleration() - 1)) {
             if (is_seen(player_ptr, m_ptr)) {
                 GAME_TEXT m_name[MAX_NLEN];
                 monster_desc(player_ptr, m_name, m_ptr, 0);
@@ -521,11 +521,6 @@ void monster_gain_exp(PlayerType *player_ptr, MONSTER_IDX m_idx, MonsterRaceId s
     if (m_idx == player_ptr->riding) {
         player_ptr->update |= PU_BONUS;
     }
-}
-
-TIME_EFFECT monster_fast_remaining(monster_type *m_ptr)
-{
-    return m_ptr->mtimed[MTIMED_FAST];
 }
 
 TIME_EFFECT monster_slow_remaining(monster_type *m_ptr)

@@ -240,7 +240,7 @@ void aggravate_monsters(PlayerType *player_ptr, MONSTER_IDX who)
 
         if (player_has_los_bold(player_ptr, m_ptr->fy, m_ptr->fx)) {
             if (!m_ptr->is_pet()) {
-                (void)set_monster_fast(player_ptr, i, monster_fast_remaining(m_ptr) + 100);
+                (void)set_monster_fast(player_ptr, i, m_ptr->get_remaining_acceleration() + 100);
                 speed = true;
             }
         }
@@ -386,7 +386,7 @@ void probed_monster_info(char *buf, PlayerType *player_ptr, monster_type *m_ptr,
     monster_desc(player_ptr, m_name, m_ptr, MD_IGNORE_HALLU | MD_INDEF_HIDDEN);
 
     auto speed = m_ptr->mspeed - 110;
-    if (monster_fast_remaining(m_ptr)) {
+    if (m_ptr->is_accelerated()) {
         speed += 10;
     }
     if (monster_slow_remaining(m_ptr)) {

@@ -89,3 +89,13 @@ bool monster_type::is_asleep() const
 {
     return this->get_remaining_sleep() > 0;
 }
+
+short monster_type::get_remaining_acceleration() const
+{
+    return this->mtimed[MTIMED_FAST];
+}
+
+bool monster_type::is_accelerated() const
+{
+    return this->get_remaining_acceleration() > 0;
+}
