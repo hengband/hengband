@@ -14,3 +14,8 @@ bool monster_type::is_hostile() const
 {
     return !this->is_friendly() && !this->is_pet();
 }
+
+bool monster_type::is_original_ap() const
+{
+    return this->ap_r_idx == this->r_idx;
+}

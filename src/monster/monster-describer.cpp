@@ -163,7 +163,7 @@ void monster_desc(PlayerType *player_ptr, char *desc, monster_type *m_ptr, BIT_F
 
     /* Handle all other visible monster requests */
     /* Tanuki? */
-    if (m_ptr->is_pet() && !is_original_ap(m_ptr)) {
+    if (m_ptr->is_pet() && !m_ptr->is_original_ap()) {
 #ifdef JP
         char *t;
         char buf[128];
@@ -242,7 +242,7 @@ void monster_desc(PlayerType *player_ptr, char *desc, monster_type *m_ptr, BIT_F
         }
     }
 
-    if ((mode & MD_IGNORE_HALLU) && !is_original_ap(m_ptr)) {
+    if ((mode & MD_IGNORE_HALLU) && !m_ptr->is_original_ap()) {
         strcat(desc, format("(%s)", r_info[m_ptr->r_idx].name.c_str()));
     }
 

@@ -266,12 +266,6 @@ bool is_original_ap_and_seen(PlayerType *player_ptr, monster_type *m_ptr)
     return m_ptr->ml && !player_ptr->effects()->hallucination()->is_hallucinated() && (m_ptr->ap_r_idx == m_ptr->r_idx);
 }
 
-/*  Determine monster race appearance index is same as race index */
-bool is_original_ap(const monster_type *m_ptr)
-{
-    return m_ptr->ap_r_idx == m_ptr->r_idx;
-}
-
 /*!
  * @brief モンスターがアイテム類に擬態しているかどうかを返す
  *

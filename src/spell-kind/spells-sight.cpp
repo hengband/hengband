@@ -373,7 +373,7 @@ bool deathray_monsters(PlayerType *player_ptr)
  */
 void probed_monster_info(char *buf, PlayerType *player_ptr, monster_type *m_ptr, monster_race *r_ptr)
 {
-    if (!is_original_ap(m_ptr)) {
+    if (!m_ptr->is_original_ap()) {
         if (m_ptr->mflag2.has(MonsterConstantFlagType::KAGE)) {
             m_ptr->mflag2.reset(MonsterConstantFlagType::KAGE);
         }

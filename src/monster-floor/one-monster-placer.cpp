@@ -306,7 +306,7 @@ bool place_monster_one(PlayerType *player_ptr, MONSTER_IDX who, POSITION y, POSI
 
     m_ptr->mflag.clear();
     m_ptr->mflag2.clear();
-    if (any_bits(mode, PM_MULTIPLY) && (who > 0) && !is_original_ap(&floor_ptr->m_list[who])) {
+    if (any_bits(mode, PM_MULTIPLY) && (who > 0) && !floor_ptr->m_list[who].is_original_ap()) {
         m_ptr->ap_r_idx = floor_ptr->m_list[who].ap_r_idx;
         if (floor_ptr->m_list[who].mflag2.has(MonsterConstantFlagType::KAGE)) {
             m_ptr->mflag2.set(MonsterConstantFlagType::KAGE);

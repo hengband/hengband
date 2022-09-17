@@ -446,7 +446,7 @@ bool detect_monsters_evil(PlayerType *player_ptr, POSITION range)
         }
 
         if (r_ptr->kind_flags.has(MonsterKindType::EVIL)) {
-            if (is_original_ap(m_ptr)) {
+            if (m_ptr->is_original_ap()) {
                 r_ptr->r_kind_flags.set(MonsterKindType::EVIL);
                 if (player_ptr->monster_race_idx == m_ptr->r_idx) {
                     player_ptr->window_flags |= (PW_MONSTER);

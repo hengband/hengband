@@ -12,7 +12,7 @@
 
 static void write_monster_flags(monster_type *m_ptr, BIT_FLAGS *flags)
 {
-    if (!is_original_ap(m_ptr)) {
+    if (!m_ptr->is_original_ap()) {
         set_bits(*flags, SaveDataMonsterFlagType::AP_R_IDX);
     }
 
