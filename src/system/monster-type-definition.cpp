@@ -28,33 +28,30 @@ bool monster_type::is_original_ap() const
 
 /*!
  * @brief モンスターがアイテム類に擬態しているかどうかを返す
- *
- * モンスターがアイテム類に擬態しているかどうかを返す。
- * 擬態の条件:
- * - シンボルが以下のいずれかであること: /|\()[]=$,.!?&`#%<>+~
- * - 動かない、もしくは眠っていること
- *
- * 但し、以下のモンスターは例外的に擬態しているとする
- * それ・生ける虚無『ヌル』・ビハインダー
- *
  * @param m_ptr モンスターの参照ポインタ
  * @return モンスターがアイテム類に擬態しているならTRUE、そうでなければFALSE
+ * @details
+ * ユニークミミックは常時擬態状態
+ * 一般モンスターもビハインダーだけ特別扱い
+ * その他増やしたい時はis_special_mimic に「|=」で追加すること
+ *
  */
 bool monster_type::is_mimicry() const
 {
-    if (this->ap_r_idx == MonsterRaceId::IT || this->ap_r_idx == MonsterRaceId::NULL_ || this->ap_r_idx == MonsterRaceId::BEHINDER) {
+    auto is_special_mimic = this->ap_r_idx == MonsterRaceId::BEHINDER;
+    if (is_special_mimic) {
         return true;
     }
 
-    auto *r_ptr = &r_info[this->ap_r_idx];
-
-    if (angband_strchr("/|\\()[]=$,.!?&`#%<>+~", r_ptr->d_char) == nullptr) {
+    const auto &r_ref = r_info[this->ap_r_idx];
+    const auto mimic_symbols = "/|\\()[]=$,.!?&`#%<>+~";
+    if (angband_strchr(mimic_symbols, r_ref.d_char) == nullptr) {
         return false;
     }
 
-    if (r_ptr->behavior_flags.has_not(MonsterBehaviorType::NEVER_MOVE) && !monster_csleep_remaining(this)) {
-        return false;
+    if (r_ref.kind_flags.has(MonsterKindType::UNIQUE)) {
+        return true;
     }
 
-    return true;
+    return r_ref.behavior_flags.has(MonsterBehaviorType::NEVER_MOVE) || monster_csleep_remaining(this);
 }
