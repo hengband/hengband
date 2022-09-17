@@ -276,7 +276,7 @@ bool vanish_summoned_children(PlayerType *player_ptr, MONSTER_IDX m_idx, bool se
         msg_format(_("%sは消え去った！", "%^s disappears!"), m_name);
     }
 
-    if (record_named_pet && is_pet(m_ptr) && m_ptr->nickname) {
+    if (record_named_pet && m_ptr->is_pet() && m_ptr->nickname) {
         GAME_TEXT m_name[MAX_NLEN];
         monster_desc(player_ptr, m_name, m_ptr, MD_INDEF_VISIBLE);
         exe_write_diary(player_ptr, DIARY_NAMED_PET, RECORD_NAMED_PET_LOSE_PARENT, m_name);
@@ -333,7 +333,7 @@ void process_angar(PlayerType *player_ptr, MONSTER_IDX m_idx, bool see_m)
         gets_angry = true;
     }
 
-    if (is_pet(m_ptr) && (((r_ptr->kind_flags.has(MonsterKindType::UNIQUE) || (r_ptr->population_flags.has(MonsterPopulationType::NAZGUL))) && monster_has_hostile_align(player_ptr, nullptr, 10, -10, r_ptr)) || r_ptr->resistance_flags.has(MonsterResistanceType::RESIST_ALL))) {
+    if (m_ptr->is_pet() && (((r_ptr->kind_flags.has(MonsterKindType::UNIQUE) || (r_ptr->population_flags.has(MonsterPopulationType::NAZGUL))) && monster_has_hostile_align(player_ptr, nullptr, 10, -10, r_ptr)) || r_ptr->resistance_flags.has(MonsterResistanceType::RESIST_ALL))) {
         gets_angry = true;
     }
 
@@ -342,7 +342,7 @@ void process_angar(PlayerType *player_ptr, MONSTER_IDX m_idx, bool see_m)
     }
 
     GAME_TEXT m_name[MAX_NLEN];
-    monster_desc(player_ptr, m_name, m_ptr, is_pet(m_ptr) ? MD_ASSUME_VISIBLE : 0);
+    monster_desc(player_ptr, m_name, m_ptr, m_ptr->is_pet() ? MD_ASSUME_VISIBLE : 0);
 
     /* When riding a hostile alignment pet */
     if (player_ptr->riding == m_idx) {
@@ -358,7 +358,7 @@ void process_angar(PlayerType *player_ptr, MONSTER_IDX m_idx, bool see_m)
         msg_format(_("あなたは振り落とされた。", "You have fallen."));
     }
 
-    if (is_pet(m_ptr) || see_m) {
+    if (m_ptr->is_pet() || see_m) {
         msg_format(_("%^sは突然敵にまわった！", "%^s suddenly becomes hostile!"), m_name);
     }
 
@@ -398,7 +398,7 @@ void process_special(PlayerType *player_ptr, MONSTER_IDX m_idx)
 
     int count = 0;
     DEPTH rlev = ((r_ptr->level >= 1) ? r_ptr->level : 1);
-    BIT_FLAGS p_mode = is_pet(m_ptr) ? PM_FORCE_PET : PM_NONE;
+    BIT_FLAGS p_mode = m_ptr->is_pet() ? PM_FORCE_PET : PM_NONE;
 
     for (int k = 0; k < A_MAX; k++) {
         if (summon_specific(player_ptr, m_idx, m_ptr->fy, m_ptr->fx, rlev, SUMMON_MOLD, (PM_ALLOW_GROUP | p_mode))) {
@@ -447,7 +447,7 @@ bool decide_monster_multiplication(PlayerType *player_ptr, MONSTER_IDX m_idx, PO
     }
 
     if ((k < 4) && (!k || !randint0(k * MON_MULT_ADJ))) {
-        if (multiply_monster(player_ptr, m_idx, false, (is_pet(m_ptr) ? PM_FORCE_PET : 0))) {
+        if (multiply_monster(player_ptr, m_idx, false, (m_ptr->is_pet() ? PM_FORCE_PET : 0))) {
             if (player_ptr->current_floor_ptr->m_list[hack_m_idx_ii].ml && is_original_ap_and_seen(player_ptr, m_ptr)) {
                 r_ptr->r_flags2 |= RF2_MULTIPLY;
             }
@@ -633,7 +633,7 @@ bool decide_process_continue(PlayerType *player_ptr, monster_type *m_ptr)
         m_ptr->mflag2.reset(MonsterConstantFlagType::NOFLOW);
     }
 
-    if (m_ptr->cdis <= (is_pet(m_ptr) ? (r_ptr->aaf > MAX_SIGHT ? MAX_SIGHT : r_ptr->aaf) : r_ptr->aaf)) {
+    if (m_ptr->cdis <= (m_ptr->is_pet() ? (r_ptr->aaf > MAX_SIGHT ? MAX_SIGHT : r_ptr->aaf) : r_ptr->aaf)) {
         return true;
     }
 

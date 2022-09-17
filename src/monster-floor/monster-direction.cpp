@@ -33,7 +33,7 @@
 static bool decide_pet_approch_direction(PlayerType *player_ptr, monster_type *m_ptr, monster_type *t_ptr)
 {
     auto *r_ptr = &r_info[m_ptr->r_idx];
-    if (!is_pet(m_ptr)) {
+    if (!m_ptr->is_pet()) {
         return false;
     }
 
@@ -117,7 +117,7 @@ bool get_enemy_dir(PlayerType *player_ptr, MONSTER_IDX m_idx, int *mm)
     if (player_ptr->riding_t_m_idx && player_bold(player_ptr, m_ptr->fy, m_ptr->fx)) {
         y = floor_ptr->m_list[player_ptr->riding_t_m_idx].fy;
         x = floor_ptr->m_list[player_ptr->riding_t_m_idx].fx;
-    } else if (is_pet(m_ptr) && player_ptr->pet_t_m_idx) {
+    } else if (m_ptr->is_pet() && player_ptr->pet_t_m_idx) {
         y = floor_ptr->m_list[player_ptr->pet_t_m_idx].fy;
         x = floor_ptr->m_list[player_ptr->pet_t_m_idx].fx;
     } else {
@@ -197,7 +197,7 @@ static bool random_walk(PlayerType *player_ptr, DIRECTION *mm, monster_type *m_p
 static bool decide_pet_movement_direction(MonsterSweepGrid *msd)
 {
     auto *m_ptr = &msd->player_ptr->current_floor_ptr->m_list[msd->m_idx];
-    if (!is_pet(m_ptr)) {
+    if (!m_ptr->is_pet()) {
         return false;
     }
 

@@ -94,7 +94,7 @@ bool MonsterSweepGrid::mon_will_run()
 {
     auto *m_ptr = &this->player_ptr->current_floor_ptr->m_list[this->m_idx];
     auto *r_ptr = &r_info[m_ptr->r_idx];
-    if (is_pet(m_ptr)) {
+    if (m_ptr->is_pet()) {
         return (this->player_ptr->pet_follow_distance < 0) && (m_ptr->cdis <= (0 - this->player_ptr->pet_follow_distance));
     }
 
@@ -213,7 +213,7 @@ void MonsterSweepGrid::search_pet_runnable_grid(POSITION *y, POSITION *x, bool n
 {
     auto *floor_ptr = this->player_ptr->current_floor_ptr;
     auto *m_ptr = &floor_ptr->m_list[this->m_idx];
-    if (is_pet(m_ptr) && this->will_run) {
+    if (m_ptr->is_pet() && this->will_run) {
         *y = -(*y);
         *x = -(*x);
         return;

@@ -178,7 +178,7 @@ static ProcessResult exe_affect_monster_by_effect(PlayerType *player_ptr, effect
  */
 static void effect_damage_killed_pet(PlayerType *player_ptr, effect_monster_type *em_ptr)
 {
-    bool sad = is_pet(em_ptr->m_ptr) && !(em_ptr->m_ptr->ml);
+    bool sad = em_ptr->m_ptr->is_pet() && !(em_ptr->m_ptr->ml);
     if (em_ptr->known && em_ptr->note) {
         monster_desc(player_ptr, em_ptr->m_name, em_ptr->m_ptr, MD_TRUE_NAME);
         if (em_ptr->see_s_msg) {
@@ -267,7 +267,7 @@ static bool heal_leaper(PlayerType *player_ptr, effect_monster_type *em_ptr)
         msg_print(_("不潔な病人は病気が治った！", "The Mangy looking leper is healed!"));
     }
 
-    if (record_named_pet && is_pet(em_ptr->m_ptr) && em_ptr->m_ptr->nickname) {
+    if (record_named_pet && em_ptr->m_ptr->is_pet() && em_ptr->m_ptr->nickname) {
         char m2_name[MAX_NLEN];
         monster_desc(player_ptr, m2_name, em_ptr->m_ptr, MD_INDEF_VISIBLE);
         exe_write_diary(player_ptr, DIARY_NAMED_PET, RECORD_NAMED_PET_HEAL_LEPER, m2_name);
@@ -619,20 +619,22 @@ static void update_phase_out_stat(PlayerType *player_ptr, effect_monster_type *e
  */
 static void postprocess_by_effected_pet(PlayerType *player_ptr, effect_monster_type *em_ptr)
 {
-    if ((em_ptr->dam <= 0) || is_pet(em_ptr->m_ptr) || em_ptr->m_ptr->is_friendly()) {
+    auto *m_ptr = em_ptr->m_ptr;
+    if ((em_ptr->dam <= 0) || m_ptr->is_pet() || m_ptr->is_friendly()) {
         return;
     }
 
     if (em_ptr->who == 0) {
         if (!(em_ptr->flag & PROJECT_NO_HANGEKI)) {
-            set_target(em_ptr->m_ptr, monster_target_y, monster_target_x);
+            set_target(m_ptr, monster_target_y, monster_target_x);
         }
 
         return;
     }
 
-    if ((em_ptr->who > 0) && is_pet(em_ptr->m_caster_ptr) && !player_bold(player_ptr, em_ptr->m_ptr->target_y, em_ptr->m_ptr->target_x)) {
-        set_target(em_ptr->m_ptr, em_ptr->m_caster_ptr->fy, em_ptr->m_caster_ptr->fx);
+    const auto &m_caster_ref = *em_ptr->m_caster_ptr;
+    if ((em_ptr->who > 0) && m_caster_ref.is_pet() && !player_bold(player_ptr, m_ptr->target_y, m_ptr->target_x)) {
+        set_target(m_ptr, m_caster_ref.fy, m_caster_ref.fx);
     }
 }
 

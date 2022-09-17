@@ -259,7 +259,7 @@ static void reset_unique_by_floor_change(PlayerType *player_ptr)
             continue;
         }
 
-        if (!is_pet(m_ptr)) {
+        if (!m_ptr->is_pet()) {
             m_ptr->hp = m_ptr->maxhp = m_ptr->max_maxhp;
             (void)set_monster_fast(player_ptr, i, 0);
             (void)set_monster_slow(player_ptr, i, 0);

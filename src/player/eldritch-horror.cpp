@@ -116,7 +116,7 @@ void sanity_blast(PlayerType *player_ptr, monster_type *m_ptr, bool necro)
             return;
         }
 
-        if (is_pet(m_ptr)) {
+        if (m_ptr->is_pet()) {
             return;
         }
 

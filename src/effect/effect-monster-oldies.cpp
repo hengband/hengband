@@ -48,7 +48,7 @@ ProcessResult effect_monster_old_clone(PlayerType *player_ptr, effect_monster_ty
     }
 
     bool has_resistance = (player_ptr->current_floor_ptr->inside_arena);
-    has_resistance |= is_pet(em_ptr->m_ptr);
+    has_resistance |= em_ptr->m_ptr->is_pet();
     has_resistance |= em_ptr->r_ptr->kind_flags.has(MonsterKindType::UNIQUE);
     has_resistance |= any_bits(em_ptr->r_ptr->flags1, RF1_QUESTOR);
     has_resistance |= em_ptr->r_ptr->population_flags.has(MonsterPopulationType::NAZGUL);

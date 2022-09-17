@@ -425,7 +425,7 @@ void MonsterDamageProcessor::show_bounty_message(GAME_TEXT *m_name)
 void MonsterDamageProcessor::get_exp_from_mon(monster_type *m_ptr, int exp_dam)
 {
     auto *r_ptr = &r_info[m_ptr->r_idx];
-    if (!monster_is_valid(m_ptr) || is_pet(m_ptr) || this->player_ptr->phase_out) {
+    if (!monster_is_valid(m_ptr) || m_ptr->is_pet() || this->player_ptr->phase_out) {
         return;
     }
 
@@ -510,7 +510,7 @@ void MonsterDamageProcessor::summon_special_unique()
     auto dummy_y = m_ptr->fy;
     auto dummy_x = m_ptr->fx;
     auto mode = (BIT_FLAGS)0;
-    if (is_pet(m_ptr)) {
+    if (m_ptr->is_pet()) {
         mode |= PM_FORCE_PET;
     }
 

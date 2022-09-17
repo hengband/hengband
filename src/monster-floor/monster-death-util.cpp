@@ -48,6 +48,6 @@ monster_death_type *initialize_monster_death_type(PlayerType *player_ptr, monste
     md_ptr->do_item = (md_ptr->r_ptr->drop_flags.has_not(MonsterDropType::ONLY_GOLD) || md_ptr->r_ptr->drop_flags.has_any_of({ MonsterDropType::DROP_GOOD, MonsterDropType::DROP_GREAT }));
     md_ptr->cloned = md_ptr->m_ptr->mflag2.has(MonsterConstantFlagType::CLONED);
     md_ptr->force_coin = get_coin_type(md_ptr->m_ptr->r_idx);
-    md_ptr->drop_chosen_item = drop_item && !md_ptr->cloned && !floor_ptr->inside_arena && !player_ptr->phase_out && !is_pet(md_ptr->m_ptr);
+    md_ptr->drop_chosen_item = drop_item && !md_ptr->cloned && !floor_ptr->inside_arena && !player_ptr->phase_out && !md_ptr->m_ptr->is_pet();
     return md_ptr;
 }

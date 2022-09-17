@@ -163,7 +163,7 @@ void monster_desc(PlayerType *player_ptr, char *desc, monster_type *m_ptr, BIT_F
 
     /* Handle all other visible monster requests */
     /* Tanuki? */
-    if (is_pet(m_ptr) && !is_original_ap(m_ptr)) {
+    if (m_ptr->is_pet() && !is_original_ap(m_ptr)) {
 #ifdef JP
         char *t;
         char buf[128];
@@ -214,7 +214,7 @@ void monster_desc(PlayerType *player_ptr, char *desc, monster_type *m_ptr, BIT_F
 #endif
             (void)strcat(desc, name);
         } else {
-            if (is_pet(m_ptr)) {
+            if (m_ptr->is_pet()) {
                 (void)strcpy(desc, _("あなたの", "your "));
             } else {
                 (void)strcpy(desc, _("", "the "));

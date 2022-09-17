@@ -156,7 +156,7 @@ static void monster_pickup_object(PlayerType *player_ptr, turn_flags *turn_flags
         return;
     }
 
-    if (is_pet(m_ptr)) {
+    if (m_ptr->is_pet()) {
         return;
     }
 

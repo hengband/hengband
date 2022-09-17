@@ -210,7 +210,8 @@ static bool activate_whistle(PlayerType *player_ptr, ae_type *ae_ptr)
 
     std::vector<MONSTER_IDX> who;
     for (MONSTER_IDX pet_ctr = player_ptr->current_floor_ptr->m_max - 1; pet_ctr >= 1; pet_ctr--) {
-        if (is_pet(&player_ptr->current_floor_ptr->m_list[pet_ctr]) && (player_ptr->riding != pet_ctr)) {
+        const auto &m_ref = player_ptr->current_floor_ptr->m_list[pet_ctr];
+        if (m_ref.is_pet() && (player_ptr->riding != pet_ctr)) {
             who.push_back(pet_ctr);
         }
     }

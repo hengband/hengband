@@ -186,18 +186,19 @@ static bool check_hostile_align(byte sub_align1, byte sub_align2)
  */
 bool are_enemies(PlayerType *player_ptr, monster_type *m_ptr, monster_type *n_ptr)
 {
-    auto *r_ptr = &r_info[m_ptr->r_idx];
-    monster_race *s_ptr = &r_info[n_ptr->r_idx];
-
     if (player_ptr->phase_out) {
-        if (is_pet(m_ptr) || is_pet(n_ptr)) {
+        if (m_ptr->is_pet() || n_ptr->is_pet()) {
             return false;
         }
         return true;
     }
 
-    if (r_ptr->wilderness_flags.has_any_of({ MonsterWildernessType::WILD_TOWN, MonsterWildernessType::WILD_ALL }) && s_ptr->wilderness_flags.has_any_of({ MonsterWildernessType::WILD_TOWN, MonsterWildernessType::WILD_ALL })) {
-        if (!is_pet(m_ptr) && !is_pet(n_ptr)) {
+    const auto &r1_ref = r_info[m_ptr->r_idx];
+    const auto &r2_ref = r_info[n_ptr->r_idx];
+    const auto is_m1_wild = r1_ref.wilderness_flags.has_any_of({ MonsterWildernessType::WILD_TOWN, MonsterWildernessType::WILD_ALL });
+    const auto is_m2_wild = r2_ref.wilderness_flags.has_any_of({ MonsterWildernessType::WILD_TOWN, MonsterWildernessType::WILD_ALL });
+    if (is_m1_wild && is_m2_wild) {
+        if (!m_ptr->is_pet() && !n_ptr->is_pet()) {
             return false;
         }
     }
@@ -271,14 +272,9 @@ bool is_original_ap(const monster_type *m_ptr)
     return m_ptr->ap_r_idx == m_ptr->r_idx;
 }
 
-bool is_pet(const monster_type *m_ptr)
-{
-    return m_ptr->mflag2.has(MonsterConstantFlagType::PET);
-}
-
 bool is_hostile(const monster_type *m_ptr)
 {
-    return !m_ptr->is_friendly() && !is_pet(m_ptr);
+    return !m_ptr->is_friendly() && !m_ptr->is_pet();
 }
 
 /*!

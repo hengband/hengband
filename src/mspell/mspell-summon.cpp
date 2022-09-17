@@ -59,7 +59,7 @@ static BIT_FLAGS monster_u_mode(floor_type *floor_ptr, MONSTER_IDX m_idx)
 {
     BIT_FLAGS u_mode = 0L;
     auto *m_ptr = &floor_ptr->m_list[m_idx];
-    bool pet = is_pet(m_ptr);
+    bool pet = m_ptr->is_pet();
     if (!pet) {
         u_mode |= PM_ALLOW_UNIQUE;
     }

@@ -338,7 +338,7 @@ bool place_monster_one(PlayerType *player_ptr, MONSTER_IDX who, POSITION y, POSI
     m_ptr->nickname = 0;
     m_ptr->exp = 0;
 
-    if (who > 0 && is_pet(&floor_ptr->m_list[who])) {
+    if (who > 0 && floor_ptr->m_list[who].is_pet()) {
         set_bits(mode, PM_FORCE_PET);
         m_ptr->parent_m_idx = who;
     } else {

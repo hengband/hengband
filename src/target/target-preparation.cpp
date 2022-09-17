@@ -144,17 +144,17 @@ void target_set_prepare(PlayerType *player_ptr, std::vector<POSITION> &ys, std::
 
     for (POSITION y = min_hgt; y <= max_hgt; y++) {
         for (POSITION x = min_wid; x <= max_wid; x++) {
-            grid_type *g_ptr;
             if (!target_set_accept(player_ptr, y, x)) {
                 continue;
             }
 
-            g_ptr = &player_ptr->current_floor_ptr->grid_array[y][x];
-            if ((mode & (TARGET_KILL)) && !target_able(player_ptr, g_ptr->m_idx)) {
+            const auto &g_ref = player_ptr->current_floor_ptr->grid_array[y][x];
+            if ((mode & (TARGET_KILL)) && !target_able(player_ptr, g_ref.m_idx)) {
                 continue;
             }
 
-            if ((mode & (TARGET_KILL)) && !target_pet && is_pet(&player_ptr->current_floor_ptr->m_list[g_ptr->m_idx])) {
+            const auto &m_ref = player_ptr->current_floor_ptr->m_list[g_ref.m_idx];
+            if ((mode & (TARGET_KILL)) && !target_pet && m_ref.is_pet()) {
                 continue;
             }
 
@@ -191,7 +191,7 @@ void target_sensing_monsters_prepare(PlayerType *player_ptr, std::vector<MONSTER
 
     for (MONSTER_IDX i = 1; i < player_ptr->current_floor_ptr->m_max; i++) {
         auto *m_ptr = &player_ptr->current_floor_ptr->m_list[i];
-        if (!monster_is_valid(m_ptr) || !m_ptr->ml || is_pet(m_ptr)) {
+        if (!monster_is_valid(m_ptr) || !m_ptr->ml || m_ptr->is_pet()) {
             continue;
         }
 

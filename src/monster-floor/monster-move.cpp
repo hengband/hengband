@@ -113,7 +113,7 @@ static bool bash_normal_door(PlayerType *player_ptr, turn_flags *turn_flags_ptr,
     feature_type *f_ptr;
     f_ptr = &f_info[g_ptr->feat];
     turn_flags_ptr->do_move = false;
-    if ((r_ptr->behavior_flags.has_not(MonsterBehaviorType::OPEN_DOOR)) || f_ptr->flags.has_not(FloorFeatureType::OPEN) || (is_pet(m_ptr) && ((player_ptr->pet_extra_flags & PF_OPEN_DOORS) == 0))) {
+    if ((r_ptr->behavior_flags.has_not(MonsterBehaviorType::OPEN_DOOR)) || f_ptr->flags.has_not(FloorFeatureType::OPEN) || (m_ptr->is_pet() && ((player_ptr->pet_extra_flags & PF_OPEN_DOORS) == 0))) {
         return true;
     }
 
@@ -143,7 +143,7 @@ static bool bash_normal_door(PlayerType *player_ptr, turn_flags *turn_flags_ptr,
 static void bash_glass_door(PlayerType *player_ptr, turn_flags *turn_flags_ptr, monster_type *m_ptr, feature_type *f_ptr, bool may_bash)
 {
     auto *r_ptr = &r_info[m_ptr->r_idx];
-    if (!may_bash || (r_ptr->behavior_flags.has_not(MonsterBehaviorType::BASH_DOOR)) || f_ptr->flags.has_not(FloorFeatureType::BASH) || (is_pet(m_ptr) && ((player_ptr->pet_extra_flags & PF_OPEN_DOORS) == 0))) {
+    if (!may_bash || (r_ptr->behavior_flags.has_not(MonsterBehaviorType::BASH_DOOR)) || f_ptr->flags.has_not(FloorFeatureType::BASH) || (m_ptr->is_pet() && ((player_ptr->pet_extra_flags & PF_OPEN_DOORS) == 0))) {
         return;
     }
 
@@ -232,7 +232,7 @@ static bool process_protection_rune(PlayerType *player_ptr, turn_flags *turn_fla
     }
 
     turn_flags_ptr->do_move = false;
-    if (is_pet(m_ptr) || (randint1(BREAK_RUNE_PROTECTION) >= r_ptr->level)) {
+    if (m_ptr->is_pet() || (randint1(BREAK_RUNE_PROTECTION) >= r_ptr->level)) {
         return true;
     }
 
@@ -267,7 +267,7 @@ static bool process_explosive_rune(PlayerType *player_ptr, turn_flags *turn_flag
     }
 
     turn_flags_ptr->do_move = false;
-    if (is_pet(m_ptr)) {
+    if (m_ptr->is_pet()) {
         return true;
     }
 
@@ -451,7 +451,7 @@ bool process_monster_movement(PlayerType *player_ptr, turn_flags *turn_flags_ptr
         bool is_pickup_items = (player_ptr->pet_extra_flags & PF_PICKUP_ITEMS) != 0;
         is_pickup_items &= r_ptr->behavior_flags.has(MonsterBehaviorType::TAKE_ITEM);
 
-        is_takable_or_killable &= !is_pet(m_ptr) || is_pickup_items;
+        is_takable_or_killable &= !m_ptr->is_pet() || is_pickup_items;
         if (!is_takable_or_killable) {
             if (turn_flags_ptr->do_turn) {
                 break;
@@ -486,7 +486,7 @@ static std::string_view get_speak_filename(monster_type *m_ptr)
     }
 
     constexpr auto monspeak_txt(_("monspeak_j.txt", "monspeak.txt"));
-    if (is_pet(m_ptr) && can_speak(ap_r_ref, MonsterSpeakType::SPEAK_BATTLE)) {
+    if (m_ptr->is_pet() && can_speak(ap_r_ref, MonsterSpeakType::SPEAK_BATTLE)) {
         return monspeak_txt;
     }
 

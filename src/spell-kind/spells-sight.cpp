@@ -233,13 +233,13 @@ void aggravate_monsters(PlayerType *player_ptr, MONSTER_IDX who)
                 sleep = true;
             }
 
-            if (!is_pet(m_ptr)) {
+            if (!m_ptr->is_pet()) {
                 m_ptr->mflag2.set(MonsterConstantFlagType::NOPET);
             }
         }
 
         if (player_has_los_bold(player_ptr, m_ptr->fy, m_ptr->fx)) {
-            if (!is_pet(m_ptr)) {
+            if (!m_ptr->is_pet()) {
                 (void)set_monster_fast(player_ptr, i, monster_fast_remaining(m_ptr) + 100);
                 speed = true;
             }

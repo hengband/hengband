@@ -77,7 +77,7 @@ PERCENTAGE calculate_upkeep(PlayerType *player_ptr)
         }
         auto *r_ptr = &r_info[m_ptr->r_idx];
 
-        if (!is_pet(m_ptr)) {
+        if (!m_ptr->is_pet()) {
             continue;
         }
 

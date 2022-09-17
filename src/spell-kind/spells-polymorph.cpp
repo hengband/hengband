@@ -97,7 +97,7 @@ bool polymorph_monster(PlayerType *player_ptr, POSITION y, POSITION x)
     if (m_ptr->is_friendly()) {
         mode |= PM_FORCE_FRIENDLY;
     }
-    if (is_pet(m_ptr)) {
+    if (m_ptr->is_pet()) {
         mode |= PM_FORCE_PET;
     }
     if (m_ptr->mflag2.has(MonsterConstantFlagType::NOPET)) {

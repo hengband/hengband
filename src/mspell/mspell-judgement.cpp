@@ -59,7 +59,7 @@ bool direct_beam(PlayerType *player_ptr, POSITION y1, POSITION x1, POSITION y2, 
     }
 
     bool hit2 = false;
-    bool is_friend = is_pet(m_ptr);
+    bool is_friend = m_ptr->is_pet();
     for (const auto &[y, x] : grid_g) {
         if (y == y2 && x == x2) {
             hit2 = true;

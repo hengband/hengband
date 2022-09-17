@@ -90,7 +90,7 @@ static void sweep_preserving_pet(PlayerType *player_ptr)
 
     for (MONSTER_IDX i = player_ptr->current_floor_ptr->m_max - 1, party_monster_num = 1; (i >= 1) && (party_monster_num < MAX_PARTY_MON); i--) {
         auto *m_ptr = &player_ptr->current_floor_ptr->m_list[i];
-        if (!monster_is_valid(m_ptr) || !is_pet(m_ptr) || (i == player_ptr->riding) || check_pet_preservation_conditions(player_ptr, m_ptr)) {
+        if (!monster_is_valid(m_ptr) || !m_ptr->is_pet() || (i == player_ptr->riding) || check_pet_preservation_conditions(player_ptr, m_ptr)) {
             continue;
         }
 
@@ -109,7 +109,7 @@ static void record_pet_diary(PlayerType *player_ptr)
     for (MONSTER_IDX i = player_ptr->current_floor_ptr->m_max - 1; i >= 1; i--) {
         auto *m_ptr = &player_ptr->current_floor_ptr->m_list[i];
         GAME_TEXT m_name[MAX_NLEN];
-        if (!monster_is_valid(m_ptr) || !is_pet(m_ptr) || !m_ptr->nickname || (player_ptr->riding == i)) {
+        if (!monster_is_valid(m_ptr) || !m_ptr->is_pet() || !m_ptr->nickname || (player_ptr->riding == i)) {
             continue;
         }
 

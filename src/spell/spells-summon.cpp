@@ -273,7 +273,7 @@ int summon_cyber(PlayerType *player_ptr, MONSTER_IDX who, POSITION y, POSITION x
     auto *floor_ptr = player_ptr->current_floor_ptr;
     if (who > 0) {
         auto *m_ptr = &floor_ptr->m_list[who];
-        if (is_pet(m_ptr)) {
+        if (m_ptr->is_pet()) {
             mode |= PM_FORCE_PET;
         }
     }

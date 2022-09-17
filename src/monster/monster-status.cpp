@@ -171,7 +171,7 @@ static void process_monsters_mtimed_aux(PlayerType *player_ptr, MONSTER_IDX m_id
         auto is_wakeup = false;
         if (m_ptr->cdis < AAF_LIMIT) {
             /* Handle "sensing radius" */
-            if (m_ptr->cdis <= (is_pet(m_ptr) ? ((r_ptr->aaf > MAX_SIGHT) ? MAX_SIGHT : r_ptr->aaf) : r_ptr->aaf)) {
+            if (m_ptr->cdis <= (m_ptr->is_pet() ? ((r_ptr->aaf > MAX_SIGHT) ? MAX_SIGHT : r_ptr->aaf) : r_ptr->aaf)) {
                 is_wakeup = true;
             }
 
@@ -475,7 +475,7 @@ void monster_gain_exp(PlayerType *player_ptr, MONSTER_IDX m_idx, MonsterRaceId s
     m_ptr->mspeed = get_mspeed(floor_ptr, r_ptr);
 
     /* Sub-alignment of a monster */
-    if (!is_pet(m_ptr) && r_ptr->kind_flags.has_none_of(alignment_mask)) {
+    if (!m_ptr->is_pet() && r_ptr->kind_flags.has_none_of(alignment_mask)) {
         m_ptr->sub_align = old_sub_align;
     } else {
         m_ptr->sub_align = SUB_ALIGN_NEUTRAL;
@@ -489,7 +489,7 @@ void monster_gain_exp(PlayerType *player_ptr, MONSTER_IDX m_idx, MonsterRaceId s
     }
 
     m_ptr->exp = 0;
-    if (is_pet(m_ptr) || m_ptr->ml) {
+    if (m_ptr->is_pet() || m_ptr->ml) {
         auto is_hallucinated = player_ptr->effects()->hallucination()->is_hallucinated();
         if (!ignore_unview || player_can_see_bold(player_ptr, m_ptr->fy, m_ptr->fx)) {
             if (is_hallucinated) {

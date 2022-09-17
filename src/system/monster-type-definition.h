@@ -53,4 +53,5 @@ struct monster_type {
     MONSTER_IDX parent_m_idx{}; /*!< 召喚主のモンスターID */
 
     bool is_friendly() const;
+    bool is_pet() const;
 };

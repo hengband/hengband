@@ -324,7 +324,7 @@ bool destroy_area(PlayerType *player_ptr, POSITION y1, POSITION x1, POSITION r, 
                         continue;
                     }
                 } else {
-                    if (record_named_pet && is_pet(m_ptr) && m_ptr->nickname) {
+                    if (record_named_pet && m_ptr->is_pet() && m_ptr->nickname) {
                         GAME_TEXT m_name[MAX_NLEN];
 
                         monster_desc(player_ptr, m_name, m_ptr, MD_INDEF_VISIBLE);

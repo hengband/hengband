@@ -36,7 +36,7 @@ static void vanish_nonunique(PlayerType *player_ptr, MONSTER_IDX m_idx, bool see
 
     monster_death(player_ptr, m_idx, false, AttributeType::NONE);
     delete_monster_idx(player_ptr, m_idx);
-    if (is_pet(m_ptr) && !(m_ptr->ml)) {
+    if (m_ptr->is_pet() && !(m_ptr->ml)) {
         msg_print(_("少しの間悲しい気分になった。", "You feel sad for a moment."));
     }
 }

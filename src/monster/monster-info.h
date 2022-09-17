@@ -17,7 +17,6 @@ bool are_enemies(PlayerType *player_ptr, monster_type *m_ptr1, monster_type *m_p
 bool monster_has_hostile_align(PlayerType *player_ptr, monster_type *m_ptr, int pa_good, int pa_evil, monster_race *r_ptr);
 bool is_original_ap_and_seen(PlayerType *player_ptr, monster_type *m_ptr);
 
-bool is_pet(const monster_type *m_ptr);
 bool is_hostile(const monster_type *m_ptr);
 bool is_original_ap(const monster_type *m_ptr);
 bool is_mimicry(monster_type *m_ptr);

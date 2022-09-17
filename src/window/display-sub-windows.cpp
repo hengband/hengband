@@ -149,7 +149,7 @@ void print_monster_list(floor_type *floor_ptr, const std::vector<MONSTER_IDX> &m
     size_t i;
     for (i = 0; i < monster_list.size(); i++) {
         auto m_ptr = &floor_ptr->m_list[monster_list[i]];
-        if (is_pet(m_ptr)) {
+        if (m_ptr->is_pet()) {
             continue;
         } // pet
         if (!MonsterRace(m_ptr->r_idx).is_valid()) {

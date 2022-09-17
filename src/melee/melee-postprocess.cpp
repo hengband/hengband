@@ -296,9 +296,10 @@ void mon_take_hit_mon(PlayerType *player_ptr, MONSTER_IDX m_idx, int dam, bool *
     *dead = false;
     cancel_fear_by_pain(player_ptr, mam_pp_ptr);
     make_monster_fear(player_ptr, mam_pp_ptr);
-    if ((dam > 0) && !is_pet(m_ptr) && !m_ptr->is_friendly() && (mam_pp_ptr->who != m_idx)) {
-        if (is_pet(&floor_ptr->m_list[mam_pp_ptr->who]) && !player_bold(player_ptr, m_ptr->target_y, m_ptr->target_x)) {
-            set_target(m_ptr, floor_ptr->m_list[mam_pp_ptr->who].fy, floor_ptr->m_list[mam_pp_ptr->who].fx);
+    if ((dam > 0) && !m_ptr->is_pet() && !m_ptr->is_friendly() && (mam_pp_ptr->who != m_idx)) {
+        const auto &m_ref = floor_ptr->m_list[who];
+        if (m_ref.is_pet() && !player_bold(player_ptr, m_ptr->target_y, m_ptr->target_x)) {
+            set_target(m_ptr, m_ref.fy, m_ref.fx);
         }
     }
 

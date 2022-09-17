@@ -219,7 +219,7 @@ bool MonsterAttackPlayer::check_monster_continuous_attack()
     }
 
     auto *r_ptr = &r_info[this->m_ptr->r_idx];
-    if (is_pet(this->m_ptr) && r_ptr->kind_flags.has(MonsterKindType::UNIQUE) && (this->method == RaceBlowMethodType::EXPLODE)) {
+    if (this->m_ptr->is_pet() && r_ptr->kind_flags.has(MonsterKindType::UNIQUE) && (this->method == RaceBlowMethodType::EXPLODE)) {
         this->method = RaceBlowMethodType::HIT;
         this->d_dice /= 10;
     }

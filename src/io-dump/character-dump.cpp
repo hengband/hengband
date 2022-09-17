@@ -64,7 +64,7 @@ static void dump_aux_pet(PlayerType *player_ptr, FILE *fff)
         if (!monster_is_valid(m_ptr)) {
             continue;
         }
-        if (!is_pet(m_ptr)) {
+        if (!m_ptr->is_pet()) {
             continue;
         }
         pet_settings = true;
