@@ -228,7 +228,7 @@ void aggravate_monsters(PlayerType *player_ptr, MONSTER_IDX who)
         }
 
         if (m_ptr->cdis < MAX_SIGHT * 2) {
-            if (monster_csleep_remaining(m_ptr)) {
+            if (m_ptr->is_asleep()) {
                 (void)set_monster_csleep(player_ptr, i, 0);
                 sleep = true;
             }
@@ -422,7 +422,7 @@ void probed_monster_info(char *buf, PlayerType *player_ptr, monster_type *m_ptr,
         strcat(buf, "xxx ");
     }
 
-    if (monster_csleep_remaining(m_ptr)) {
+    if (m_ptr->is_asleep()) {
         strcat(buf, _("睡眠 ", "sleeping "));
     }
     if (monster_stunned_remaining(m_ptr)) {

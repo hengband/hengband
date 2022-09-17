@@ -178,7 +178,7 @@ ProcessResult effect_monster_engetsu(PlayerType *player_ptr, effect_monster_type
         return ProcessResult::PROCESS_CONTINUE;
     }
 
-    if (monster_csleep_remaining(em_ptr->m_ptr)) {
+    if (em_ptr->m_ptr->is_asleep()) {
         em_ptr->note = _("には効果がなかった。", " is unaffected.");
         em_ptr->dam = 0;
         em_ptr->skipped = true;

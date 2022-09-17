@@ -60,4 +60,6 @@ struct monster_type {
     bool is_valid() const;
     MonsterRaceId get_real_r_idx() const;
     monster_race &get_real_r_ref() const;
+    short get_remaining_sleep() const;
+    bool is_asleep() const;
 };

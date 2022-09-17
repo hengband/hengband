@@ -40,7 +40,7 @@ void delete_monster_idx(PlayerType *player_ptr, MONSTER_IDX i)
         floor_ptr->num_repro--;
     }
 
-    if (monster_csleep_remaining(m_ptr)) {
+    if (m_ptr->is_asleep()) {
         (void)set_monster_csleep(player_ptr, i, 0);
     }
     if (monster_fast_remaining(m_ptr)) {

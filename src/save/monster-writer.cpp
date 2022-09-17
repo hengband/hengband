@@ -20,7 +20,7 @@ static void write_monster_flags(monster_type *m_ptr, BIT_FLAGS *flags)
         set_bits(*flags, SaveDataMonsterFlagType::SUB_ALIGN);
     }
 
-    if (monster_csleep_remaining(m_ptr)) {
+    if (m_ptr->is_asleep()) {
         set_bits(*flags, SaveDataMonsterFlagType::CSLEEP);
     }
 

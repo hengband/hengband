@@ -121,7 +121,7 @@ void process_monster(PlayerType *player_ptr, MONSTER_IDX m_idx)
     turn_flags_ptr->see_m = is_seen(player_ptr, m_ptr);
 
     decide_drop_from_monster(player_ptr, m_idx, turn_flags_ptr->is_riding_mon);
-    if (m_ptr->mflag2.has(MonsterConstantFlagType::CHAMELEON) && one_in_(13) && !monster_csleep_remaining(m_ptr)) {
+    if (m_ptr->mflag2.has(MonsterConstantFlagType::CHAMELEON) && one_in_(13) && !m_ptr->is_asleep()) {
         choose_new_monster(player_ptr, m_idx, false, MonsterRace::empty_id());
         r_ptr = &r_info[m_ptr->r_idx];
     }
@@ -296,7 +296,7 @@ bool awake_monster(PlayerType *player_ptr, MONSTER_IDX m_idx)
 {
     auto *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
     auto *r_ptr = &r_info[m_ptr->r_idx];
-    if (!monster_csleep_remaining(m_ptr)) {
+    if (!m_ptr->is_asleep()) {
         return true;
     }
 

@@ -260,7 +260,7 @@ bool do_cmd_attack(PlayerType *player_ptr, POSITION y, POSITION x, combat_option
         return false;
     }
 
-    if (monster_csleep_remaining(m_ptr)) {
+    if (m_ptr->is_asleep()) {
         if (r_ptr->kind_flags.has_not(MonsterKindType::EVIL) || one_in_(5)) {
             chg_virtue(player_ptr, V_COMPASSION, -1);
         }

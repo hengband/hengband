@@ -381,7 +381,7 @@ void health_redraw(PlayerType *player_ptr, bool riding)
     TERM_COLOR attr = TERM_RED;
     if (monster_invulner_remaining(m_ptr)) {
         attr = TERM_WHITE;
-    } else if (monster_csleep_remaining(m_ptr)) {
+    } else if (m_ptr->is_asleep()) {
         attr = TERM_BLUE;
     } else if (monster_fear_remaining(m_ptr)) {
         attr = TERM_VIOLET;

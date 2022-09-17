@@ -107,12 +107,12 @@ bool set_monster_csleep(PlayerType *player_ptr, MONSTER_IDX m_idx, int v)
     v = (v > 10000) ? 10000 : (v < 0) ? 0
                                       : v;
     if (v) {
-        if (!monster_csleep_remaining(m_ptr)) {
+        if (!m_ptr->is_asleep()) {
             mproc_add(floor_ptr, m_idx, MTIMED_CSLEEP);
             notice = true;
         }
     } else {
-        if (monster_csleep_remaining(m_ptr)) {
+        if (m_ptr->is_asleep()) {
             mproc_remove(floor_ptr, m_idx, MTIMED_CSLEEP);
             notice = true;
         }

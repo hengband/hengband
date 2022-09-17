@@ -210,7 +210,7 @@ static void process_monsters_mtimed_aux(PlayerType *player_ptr, MONSTER_IDX m_id
         /* Monster wakes up "a little bit" */
 
         /* Still asleep */
-        if (!set_monster_csleep(player_ptr, m_idx, monster_csleep_remaining(m_ptr) - d)) {
+        if (!set_monster_csleep(player_ptr, m_idx, m_ptr->get_remaining_sleep() - d)) {
             /* Notice the "not waking up" */
             if (is_original_ap_and_seen(player_ptr, m_ptr)) {
                 /* Hack -- Count the ignores */
@@ -521,11 +521,6 @@ void monster_gain_exp(PlayerType *player_ptr, MONSTER_IDX m_idx, MonsterRaceId s
     if (m_idx == player_ptr->riding) {
         player_ptr->update |= PU_BONUS;
     }
-}
-
-TIME_EFFECT monster_csleep_remaining(const monster_type *m_ptr)
-{
-    return m_ptr->mtimed[MTIMED_CSLEEP];
 }
 
 TIME_EFFECT monster_fast_remaining(monster_type *m_ptr)

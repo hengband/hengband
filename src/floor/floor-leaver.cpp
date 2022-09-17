@@ -67,7 +67,7 @@ static bool check_pet_preservation_conditions(PlayerType *player_ptr, monster_ty
     }
 
     POSITION dis = distance(player_ptr->y, player_ptr->x, m_ptr->fy, m_ptr->fx);
-    if (monster_confused_remaining(m_ptr) || monster_stunned_remaining(m_ptr) || monster_csleep_remaining(m_ptr) || (m_ptr->parent_m_idx != 0)) {
+    if (monster_confused_remaining(m_ptr) || monster_stunned_remaining(m_ptr) || m_ptr->is_asleep() || (m_ptr->parent_m_idx != 0)) {
         return true;
     }
 

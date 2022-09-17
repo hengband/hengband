@@ -79,7 +79,7 @@ bool genocide_aux(PlayerType *player_ptr, MONSTER_IDX m_idx, int power, bool pla
             msg_format(_("%^sには効果がなかった。", "%^s is unaffected."), m_name);
         }
 
-        if (monster_csleep_remaining(m_ptr)) {
+        if (m_ptr->is_asleep()) {
             (void)set_monster_csleep(player_ptr, m_idx, 0);
             if (m_ptr->ml) {
                 msg_format(_("%^sが目を覚ました。", "%^s wakes up."), m_name);

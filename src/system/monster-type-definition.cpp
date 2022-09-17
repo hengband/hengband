@@ -53,7 +53,7 @@ bool monster_type::is_mimicry() const
         return true;
     }
 
-    return r_ref.behavior_flags.has(MonsterBehaviorType::NEVER_MOVE) || monster_csleep_remaining(this);
+    return r_ref.behavior_flags.has(MonsterBehaviorType::NEVER_MOVE) || this->is_asleep();
 }
 
 bool monster_type::is_valid() const
@@ -78,4 +78,14 @@ MonsterRaceId monster_type::get_real_r_idx() const
 monster_race &monster_type::get_real_r_ref() const
 {
     return r_info[this->get_real_r_idx()];
+}
+
+short monster_type::get_remaining_sleep() const
+{
+    return this->mtimed[MTIMED_CSLEEP];
+}
+
+bool monster_type::is_asleep() const
+{
+    return this->get_remaining_sleep() > 0;
 }
