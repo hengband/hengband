@@ -379,7 +379,7 @@ void health_redraw(PlayerType *player_ptr, bool riding)
     int len = (pct2 < 10) ? 1 : (pct2 < 90) ? (pct2 / 10 + 1)
                                             : 10;
     TERM_COLOR attr = TERM_RED;
-    if (monster_invulner_remaining(m_ptr)) {
+    if (m_ptr->is_invulnerable()) {
         attr = TERM_WHITE;
     } else if (m_ptr->is_asleep()) {
         attr = TERM_BLUE;

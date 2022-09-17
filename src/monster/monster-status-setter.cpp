@@ -338,12 +338,12 @@ bool set_monster_invulner(PlayerType *player_ptr, MONSTER_IDX m_idx, int v, bool
     v = (v > 200) ? 200 : (v < 0) ? 0
                                   : v;
     if (v) {
-        if (!monster_invulner_remaining(m_ptr)) {
+        if (!m_ptr->is_invulnerable()) {
             mproc_add(floor_ptr, m_idx, MTIMED_INVULNER);
             notice = true;
         }
     } else {
-        if (monster_invulner_remaining(m_ptr)) {
+        if (m_ptr->is_invulnerable()) {
             mproc_remove(floor_ptr, m_idx, MTIMED_INVULNER);
             if (energy_need && !player_ptr->wild_mode) {
                 m_ptr->energy_need += ENERGY_NEED();

@@ -139,3 +139,13 @@ bool monster_type::is_fearful() const
 {
     return this->get_remaining_fear() > 0;
 }
+
+short monster_type::get_remaining_invulnerability() const
+{
+    return this->mtimed[MTIMED_INVULNER];
+}
+
+bool monster_type::is_invulnerable() const
+{
+    return this->get_remaining_invulnerability() > 0;
+}

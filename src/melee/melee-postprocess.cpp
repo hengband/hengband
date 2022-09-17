@@ -96,7 +96,7 @@ static void prepare_redraw(PlayerType *player_ptr, mam_pp_type *mam_pp_ptr)
  */
 static bool process_invulnerability(mam_pp_type *mam_pp_ptr)
 {
-    if (monster_invulner_remaining(mam_pp_ptr->m_ptr) && randint0(PENETRATE_INVULNERABILITY)) {
+    if (mam_pp_ptr->m_ptr->is_invulnerable() && randint0(PENETRATE_INVULNERABILITY)) {
         return false;
     }
 

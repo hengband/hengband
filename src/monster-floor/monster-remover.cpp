@@ -58,7 +58,7 @@ void delete_monster_idx(PlayerType *player_ptr, MONSTER_IDX i)
     if (m_ptr->is_fearful()) {
         (void)set_monster_monfear(player_ptr, i, 0);
     }
-    if (monster_invulner_remaining(m_ptr)) {
+    if (m_ptr->is_invulnerable()) {
         (void)set_monster_invulner(player_ptr, i, 0, false);
     }
 

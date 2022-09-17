@@ -687,7 +687,7 @@ MonsterSpellResult spell_RF6_INVULNER(PlayerType *player_ptr, MONSTER_IDX m_idx,
         }
     }
 
-    if (!monster_invulner_remaining(m_ptr)) {
+    if (!m_ptr->is_invulnerable()) {
         (void)set_monster_invulner(player_ptr, m_idx, randint1(4) + 4, false);
     }
 

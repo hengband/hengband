@@ -66,10 +66,12 @@ struct monster_type {
     short get_remaining_stun() const;
     short get_remaining_confusion() const;
     short get_remaining_fear() const;
+    short get_remaining_invulnerability() const;
     bool is_asleep() const;
     bool is_accelerated() const;
     bool is_decelerated() const;
     bool is_stunned() const;
     bool is_confused() const;
     bool is_fearful() const;
+    bool is_invulnerable() const;
 };

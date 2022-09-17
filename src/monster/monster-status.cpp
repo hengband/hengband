@@ -81,7 +81,7 @@ int mon_damage_mod(PlayerType *player_ptr, monster_type *m_ptr, int dam, bool is
         }
     }
 
-    if (!monster_invulner_remaining(m_ptr)) {
+    if (!m_ptr->is_invulnerable()) {
         return dam;
     }
 
@@ -324,7 +324,7 @@ static void process_monsters_mtimed_aux(PlayerType *player_ptr, MONSTER_IDX m_id
 
     case MTIMED_INVULNER: {
         /* Reduce by one, note if expires */
-        if (!set_monster_invulner(player_ptr, m_idx, monster_invulner_remaining(m_ptr) - 1, true)) {
+        if (!set_monster_invulner(player_ptr, m_idx, m_ptr->get_remaining_invulnerability() - 1, true)) {
             break;
         }
 
@@ -521,9 +521,4 @@ void monster_gain_exp(PlayerType *player_ptr, MONSTER_IDX m_idx, MonsterRaceId s
     if (m_idx == player_ptr->riding) {
         player_ptr->update |= PU_BONUS;
     }
-}
-
-TIME_EFFECT monster_invulner_remaining(monster_type *m_ptr)
-{
-    return m_ptr->mtimed[MTIMED_INVULNER];
 }
