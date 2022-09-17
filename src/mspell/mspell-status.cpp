@@ -475,7 +475,7 @@ MonsterSpellResult spell_RF5_HOLD(MONSTER_IDX m_idx, PlayerType *player_ptr, MON
     spell_badstatus_message_to_mons(player_ptr, m_idx, t_idx, msg, (bool)resist, saving_throw);
 
     if (!resist && !saving_throw) {
-        (void)set_monster_stunned(player_ptr, t_idx, monster_stunned_remaining(t_ptr) + randint1(4) + 4);
+        (void)set_monster_stunned(player_ptr, t_idx, t_ptr->get_remaining_stun() + randint1(4) + 4);
     }
 
     return res;

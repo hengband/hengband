@@ -49,7 +49,7 @@ void delete_monster_idx(PlayerType *player_ptr, MONSTER_IDX i)
     if (m_ptr->is_decelerated()) {
         (void)set_monster_slow(player_ptr, i, 0);
     }
-    if (monster_stunned_remaining(m_ptr)) {
+    if (m_ptr->is_stunned()) {
         (void)set_monster_stunned(player_ptr, i, 0);
     }
     if (monster_confused_remaining(m_ptr)) {

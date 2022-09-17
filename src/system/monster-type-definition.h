@@ -63,7 +63,9 @@ struct monster_type {
     short get_remaining_sleep() const;
     short get_remaining_acceleration() const;
     short get_remaining_deceleration() const;
+    short get_remaining_stun() const;
     bool is_asleep() const;
     bool is_accelerated() const;
     bool is_decelerated() const;
+    bool is_stunned() const;
 };

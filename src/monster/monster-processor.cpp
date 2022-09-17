@@ -131,7 +131,7 @@ void process_monster(PlayerType *player_ptr, MONSTER_IDX m_idx)
         return;
     }
 
-    if (monster_stunned_remaining(m_ptr) && one_in_(2)) {
+    if (m_ptr->is_stunned() && one_in_(2)) {
         return;
     }
 

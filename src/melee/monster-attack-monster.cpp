@@ -240,7 +240,7 @@ static void process_monster_attack_effect(PlayerType *player_ptr, mam_type *mam_
 
 static void process_melee(PlayerType *player_ptr, mam_type *mam_ptr)
 {
-    if (mam_ptr->effect != RaceBlowEffectType::NONE && !check_hit_from_monster_to_monster(mam_ptr->power, mam_ptr->rlev, mam_ptr->ac, monster_stunned_remaining(mam_ptr->m_ptr))) {
+    if (mam_ptr->effect != RaceBlowEffectType::NONE && !check_hit_from_monster_to_monster(mam_ptr->power, mam_ptr->rlev, mam_ptr->ac, mam_ptr->m_ptr->get_remaining_stun())) {
         describe_monster_missed_monster(player_ptr, mam_ptr);
         return;
     }

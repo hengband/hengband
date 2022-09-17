@@ -229,12 +229,12 @@ bool set_monster_stunned(PlayerType *player_ptr, MONSTER_IDX m_idx, int v)
     v = (v > 200) ? 200 : (v < 0) ? 0
                                   : v;
     if (v) {
-        if (!monster_stunned_remaining(m_ptr)) {
+        if (!m_ptr->is_stunned()) {
             mproc_add(floor_ptr, m_idx, MTIMED_STUNNED);
             notice = true;
         }
     } else {
-        if (monster_stunned_remaining(m_ptr)) {
+        if (m_ptr->is_stunned()) {
             mproc_remove(floor_ptr, m_idx, MTIMED_STUNNED);
             notice = true;
         }

@@ -194,9 +194,9 @@ void process_player(PlayerType *player_ptr)
             msg_format(_("%^sを起こした。", "You have woken %s up."), m_name);
         }
 
-        if (monster_stunned_remaining(m_ptr)) {
+        if (m_ptr->is_stunned()) {
             if (set_monster_stunned(player_ptr, player_ptr->riding,
-                    (randint0(r_ptr->level) < player_ptr->skill_exp[PlayerSkillKindType::RIDING]) ? 0 : (monster_stunned_remaining(m_ptr) - 1))) {
+                    (randint0(r_ptr->level) < player_ptr->skill_exp[PlayerSkillKindType::RIDING]) ? 0 : (m_ptr->get_remaining_stun() - 1))) {
                 GAME_TEXT m_name[MAX_NLEN];
                 monster_desc(player_ptr, m_name, m_ptr, 0);
                 msg_format(_("%^sを朦朧状態から立ち直らせた。", "%^s is no longer stunned."), m_name);

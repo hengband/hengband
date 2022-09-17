@@ -267,7 +267,7 @@ static void process_monsters_mtimed_aux(PlayerType *player_ptr, MONSTER_IDX m_id
         int rlev = r_info[m_ptr->r_idx].level;
 
         /* Recover from stun */
-        if (set_monster_stunned(player_ptr, m_idx, (randint0(10000) <= rlev * rlev) ? 0 : (monster_stunned_remaining(m_ptr) - 1))) {
+        if (set_monster_stunned(player_ptr, m_idx, (randint0(10000) <= rlev * rlev) ? 0 : (m_ptr->get_remaining_stun() - 1))) {
             /* Message if visible */
             if (is_seen(player_ptr, m_ptr)) {
                 GAME_TEXT m_name[MAX_NLEN];
@@ -521,11 +521,6 @@ void monster_gain_exp(PlayerType *player_ptr, MONSTER_IDX m_idx, MonsterRaceId s
     if (m_idx == player_ptr->riding) {
         player_ptr->update |= PU_BONUS;
     }
-}
-
-TIME_EFFECT monster_stunned_remaining(monster_type *m_ptr)
-{
-    return m_ptr->mtimed[MTIMED_STUNNED];
 }
 
 TIME_EFFECT monster_confused_remaining(monster_type *m_ptr)

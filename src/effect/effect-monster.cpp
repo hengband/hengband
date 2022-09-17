@@ -402,9 +402,9 @@ static void effect_damage_piles_stun(PlayerType *player_ptr, effect_monster_type
     }
 
     int turns = 0;
-    if (monster_stunned_remaining(em_ptr->m_ptr)) {
+    if (em_ptr->m_ptr->get_remaining_stun()) {
         em_ptr->note = _("はひどくもうろうとした。", " is more dazed.");
-        turns = monster_stunned_remaining(em_ptr->m_ptr) + (em_ptr->do_stun / 2);
+        turns = em_ptr->m_ptr->get_remaining_stun() + (em_ptr->do_stun / 2);
     } else {
         em_ptr->note = _("はもうろうとした。", " is dazed.");
         turns = em_ptr->do_stun;

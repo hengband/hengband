@@ -128,7 +128,7 @@ static void effect_monster_old_heal_check_player(PlayerType *player_ptr, effect_
 
 static void effect_monster_old_heal_recovery(PlayerType *player_ptr, effect_monster_type *em_ptr)
 {
-    if (monster_stunned_remaining(em_ptr->m_ptr)) {
+    if (em_ptr->m_ptr->get_remaining_stun()) {
         if (em_ptr->seen_msg) {
             msg_format(_("%^sは朦朧状態から立ち直った。", "%^s is no longer stunned."), em_ptr->m_name);
         }

@@ -109,3 +109,13 @@ bool monster_type::is_decelerated() const
 {
     return this->get_remaining_deceleration() > 0;
 }
+
+short monster_type::get_remaining_stun() const
+{
+    return this->mtimed[MTIMED_STUNNED];
+}
+
+bool monster_type::is_stunned() const
+{
+    return this->get_remaining_stun() > 0;
+}

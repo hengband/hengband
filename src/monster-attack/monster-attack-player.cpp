@@ -176,7 +176,7 @@ bool MonsterAttackPlayer::process_monster_blows()
             hit = true;
         } else {
             const int power = mbe_info[enum2i(this->effect)].power;
-            hit = check_hit_from_monster_to_player(this->player_ptr, power, this->rlev, monster_stunned_remaining(this->m_ptr));
+            hit = check_hit_from_monster_to_player(this->player_ptr, power, this->rlev, this->m_ptr->get_remaining_stun());
         }
 
         if (hit) {
