@@ -267,39 +267,6 @@ bool is_original_ap_and_seen(PlayerType *player_ptr, monster_type *m_ptr)
 }
 
 /*!
- * @brief モンスターがアイテム類に擬態しているかどうかを返す
- *
- * モンスターがアイテム類に擬態しているかどうかを返す。
- * 擬態の条件:
- * - シンボルが以下のいずれかであること: /|\()[]=$,.!?&`#%<>+~
- * - 動かない、もしくは眠っていること
- *
- * 但し、以下のモンスターは例外的に擬態しているとする
- * それ・生ける虚無『ヌル』・ビハインダー
- *
- * @param m_ptr モンスターの参照ポインタ
- * @return モンスターがアイテム類に擬態しているならTRUE、そうでなければFALSE
- */
-bool is_mimicry(monster_type *m_ptr)
-{
-    if (m_ptr->ap_r_idx == MonsterRaceId::IT || m_ptr->ap_r_idx == MonsterRaceId::NULL_ || m_ptr->ap_r_idx == MonsterRaceId::BEHINDER) {
-        return true;
-    }
-
-    auto *r_ptr = &r_info[m_ptr->ap_r_idx];
-
-    if (angband_strchr("/|\\()[]=$,.!?&`#%<>+~", r_ptr->d_char) == nullptr) {
-        return false;
-    }
-
-    if (r_ptr->behavior_flags.has_not(MonsterBehaviorType::NEVER_MOVE) && !monster_csleep_remaining(m_ptr)) {
-        return false;
-    }
-
-    return true;
-}
-
-/*!
  * @brief モンスターの真の種族を返す / Extract monster race pointer of a monster's true form
  * @param m_ptr モンスターの参照ポインタ
  * @return 本当のモンスター種族参照ポインタ

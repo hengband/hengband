@@ -528,7 +528,7 @@ bool monster_is_valid(monster_type *m_ptr)
     return MonsterRace(m_ptr->r_idx).is_valid();
 }
 
-TIME_EFFECT monster_csleep_remaining(monster_type *m_ptr)
+TIME_EFFECT monster_csleep_remaining(const monster_type *m_ptr)
 {
     return m_ptr->mtimed[MTIMED_CSLEEP];
 }
