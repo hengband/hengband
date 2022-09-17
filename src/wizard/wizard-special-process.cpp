@@ -153,7 +153,6 @@ static KIND_OBJECT_IDX wiz_select_sval(const ItemKindType tval, concptr tval_des
 {
     auto num = 0;
     KIND_OBJECT_IDX choice[80]{};
-    char buf[160]{};
     char ch;
     for (const auto &k_ref : k_info) {
         if (num >= 80) {
@@ -167,9 +166,8 @@ static KIND_OBJECT_IDX wiz_select_sval(const ItemKindType tval, concptr tval_des
         auto row = 2 + (num % 20);
         auto col = _(30, 32) * (num / 20);
         ch = listsym[num];
-        strcpy(buf, "                    ");
-        strip_name(buf, k_ref.idx);
-        prt(format("[%c] %s", ch, buf), row, col);
+        const auto buf = strip_name(k_ref.idx);
+        prt(format("[%c] %s", ch, buf.c_str()), row, col);
         choice[num++] = k_ref.idx;
     }
 

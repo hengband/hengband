@@ -155,20 +155,25 @@ void do_cmd_visuals(PlayerType *player_ptr)
 
             auto_dump_printf(auto_dump_stream, _("\n# アイテムの[色/文字]の設定\n\n", "\n# Object attr/char definitions\n\n"));
             for (const auto &k_ref : k_info) {
-                GAME_TEXT o_name[MAX_NLEN];
                 if (k_ref.name.empty()) {
                     continue;
                 }
 
+                std::string o_name("");
+                GAME_TEXT char_o_name[MAX_NLEN]{};
                 if (!k_ref.flavor) {
-                    strip_name(o_name, k_ref.idx);
+                    o_name = strip_name(k_ref.idx);
                 } else {
                     ObjectType dummy;
                     dummy.prep(k_ref.idx);
-                    describe_flavor(player_ptr, o_name, &dummy, OD_FORCE_FLAVOR);
+                    describe_flavor(player_ptr, char_o_name, &dummy, OD_FORCE_FLAVOR);
                 }
 
-                auto_dump_printf(auto_dump_stream, "# %s\n", o_name);
+                if (o_name == "") {
+                    o_name = char_o_name;
+                }
+
+                auto_dump_printf(auto_dump_stream, "# %s\n", o_name.data());
                 auto_dump_printf(auto_dump_stream, "K:%d:0x%02X/0x%02X\n\n", (int)k_ref.idx, (byte)(k_ref.x_attr), (byte)(k_ref.x_char));
             }
 

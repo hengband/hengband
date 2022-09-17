@@ -179,7 +179,6 @@ static void display_object_list(int col, int row, int per_page, IDX object_idx[]
 {
     int i;
     for (i = 0; i < per_page && (object_idx[object_top + i] >= 0); i++) {
-        GAME_TEXT o_name[MAX_NLEN];
         TERM_COLOR a;
         object_kind *flavor_k_ptr;
         KIND_OBJECT_IDX k_idx = object_idx[object_top + i];
@@ -193,13 +192,9 @@ static void display_object_list(int col, int row, int per_page, IDX object_idx[]
         }
 
         attr = ((i + object_top == object_cur) ? cursor : attr);
-        if (!k_ptr->flavor || (!visual_only && k_ptr->aware)) {
-            strip_name(o_name, k_idx);
-        } else {
-            strcpy(o_name, flavor_k_ptr->flavor_name.c_str());
-        }
-
-        c_prt(attr, o_name, row + i, col);
+        const auto is_flavor_only = (k_ptr->flavor != 0) && (visual_only || !k_ptr->aware);
+        const auto o_name = is_flavor_only ? flavor_k_ptr->flavor_name : strip_name(k_idx);
+        c_prt(attr, o_name.data(), row + i, col);
         if (per_page == 1) {
             c_prt(attr, format("%02x/%02x", flavor_k_ptr->x_attr, flavor_k_ptr->x_char), row + i, (w_ptr->wizard || visual_only) ? 64 : 68);
         }
