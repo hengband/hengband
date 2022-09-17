@@ -63,14 +63,10 @@ bool monster_type::is_valid() const
 
 MonsterRaceId monster_type::get_real_r_idx() const
 {
-    auto *r_ptr = &r_info[this->r_idx];
-    if (this->mflag2.has(MonsterConstantFlagType::CHAMELEON)) {
-        if (r_ptr->kind_flags.has(MonsterKindType::UNIQUE)) {
-            return MonsterRaceId::CHAMELEON_K;
-        } else {
-            return MonsterRaceId::CHAMELEON;
-        }
+    const auto &r_ref = r_info[this->r_idx];
+    if (this->mflag2.has_not(MonsterConstantFlagType::CHAMELEON)) {
+        return this->r_idx;
     }
 
-    return this->r_idx;
+    return r_ref.kind_flags.has(MonsterKindType::UNIQUE) ? MonsterRaceId::CHAMELEON_K : MonsterRaceId::CHAMELEON;
 }
