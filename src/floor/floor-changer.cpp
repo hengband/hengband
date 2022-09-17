@@ -43,6 +43,7 @@
 #include "system/player-type-definition.h"
 #include "timed-effect/player-blindness.h"
 #include "timed-effect/timed-effects.h"
+#include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 #include "window/main-window-util.h"
 #include "world/world.h"
@@ -103,13 +104,12 @@ static MONSTER_IDX decide_pet_index(PlayerType *player_ptr, const int current_mo
     return (d == 6) ? 0 : m_pop(floor_ptr);
 }
 
-static void set_pet_params(PlayerType *player_ptr, monster_race **r_ptr, const int current_monster, MONSTER_IDX m_idx, const POSITION cy, const POSITION cx)
+static const monster_race &set_pet_params(PlayerType *player_ptr, const int current_monster, MONSTER_IDX m_idx, const POSITION cy, const POSITION cx)
 {
     auto *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
     player_ptr->current_floor_ptr->grid_array[cy][cx].m_idx = m_idx;
     m_ptr->r_idx = party_mon[current_monster].r_idx;
     *m_ptr = party_mon[current_monster];
-    *r_ptr = real_r_ptr(m_ptr);
     m_ptr->fy = cy;
     m_ptr->fx = cx;
     m_ptr->current_floor_ptr = player_ptr->current_floor_ptr;
@@ -117,9 +117,12 @@ static void set_pet_params(PlayerType *player_ptr, monster_race **r_ptr, const i
     m_ptr->mtimed[MTIMED_CSLEEP] = 0;
     m_ptr->hold_o_idx_list.clear();
     m_ptr->target_y = 0;
-    if ((*r_ptr)->behavior_flags.has(MonsterBehaviorType::PREVENT_SUDDEN_MAGIC) && !ironman_nightmare) {
+    auto *r_ptr = real_r_ptr(m_ptr);
+    if (r_ptr->behavior_flags.has(MonsterBehaviorType::PREVENT_SUDDEN_MAGIC) && !ironman_nightmare) {
         m_ptr->mflag.set(MonsterTemporaryFlagType::PREVENT_MAGIC);
     }
+
+    return *r_ptr;
 }
 
 /*!
@@ -138,11 +141,10 @@ static void place_pet(PlayerType *player_ptr)
 
         MONSTER_IDX m_idx = decide_pet_index(player_ptr, current_monster, &cy, &cx);
         if (m_idx != 0) {
-            monster_race *r_ptr;
-            set_pet_params(player_ptr, &r_ptr, current_monster, m_idx, cy, cx);
+            auto &r_ref = set_pet_params(player_ptr, current_monster, m_idx, cy, cx);
             update_monster(player_ptr, m_idx, true);
             lite_spot(player_ptr, cy, cx);
-            if (r_ptr->flags2 & RF2_MULTIPLY) {
+            if (any_bits(r_ref.flags2, RF2_MULTIPLY)) {
                 player_ptr->current_floor_ptr->num_repro++;
             }
         } else {
