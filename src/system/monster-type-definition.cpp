@@ -99,3 +99,13 @@ bool monster_type::is_accelerated() const
 {
     return this->get_remaining_acceleration() > 0;
 }
+
+short monster_type::get_remaining_deceleration() const
+{
+    return this->mtimed[MTIMED_SLOW];
+}
+
+bool monster_type::is_decelerated() const
+{
+    return this->get_remaining_deceleration() > 0;
+}

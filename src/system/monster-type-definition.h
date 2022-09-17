@@ -62,6 +62,8 @@ struct monster_type {
     monster_race &get_real_r_ref() const;
     short get_remaining_sleep() const;
     short get_remaining_acceleration() const;
+    short get_remaining_deceleration() const;
     bool is_asleep() const;
     bool is_accelerated() const;
+    bool is_decelerated() const;
 };

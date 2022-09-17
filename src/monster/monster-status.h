@@ -16,7 +16,6 @@ void monster_gain_exp(PlayerType *player_ptr, MONSTER_IDX m_idx, MonsterRaceId s
 
 void process_monsters_mtimed(PlayerType *player_ptr, int mtimed_idx);
 
-TIME_EFFECT monster_slow_remaining(monster_type *m_ptr);
 TIME_EFFECT monster_stunned_remaining(monster_type *m_ptr);
 TIME_EFFECT monster_confused_remaining(monster_type *m_ptr);
 TIME_EFFECT monster_fear_remaining(monster_type *m_ptr);

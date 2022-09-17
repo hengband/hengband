@@ -28,7 +28,7 @@ static void write_monster_flags(monster_type *m_ptr, BIT_FLAGS *flags)
         set_bits(*flags, SaveDataMonsterFlagType::FAST);
     }
 
-    if (monster_slow_remaining(m_ptr)) {
+    if (m_ptr->is_decelerated()) {
         set_bits(*flags, SaveDataMonsterFlagType::SLOW);
     }
 

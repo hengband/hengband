@@ -389,7 +389,7 @@ void probed_monster_info(char *buf, PlayerType *player_ptr, monster_type *m_ptr,
     if (m_ptr->is_accelerated()) {
         speed += 10;
     }
-    if (monster_slow_remaining(m_ptr)) {
+    if (m_ptr->is_decelerated()) {
         speed -= 10;
     }
     if (ironman_nightmare) {

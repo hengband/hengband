@@ -284,7 +284,7 @@ int16_t PlayerSpeed::riding_bonus()
         bonus += 10;
     }
 
-    if (monster_slow_remaining(riding_m_ptr)) {
+    if (riding_m_ptr->is_decelerated()) {
         bonus -= 10;
     }
 

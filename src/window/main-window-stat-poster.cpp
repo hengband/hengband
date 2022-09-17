@@ -271,9 +271,9 @@ void print_speed(PlayerType *player_ptr)
         auto is_slow = player_ptr->effects()->deceleration()->is_slow();
         if (player_ptr->riding) {
             auto *m_ptr = &floor_ptr->m_list[player_ptr->riding];
-            if (m_ptr->is_accelerated() && !monster_slow_remaining(m_ptr)) {
+            if (m_ptr->is_accelerated() && !m_ptr->is_decelerated()) {
                 attr = TERM_L_BLUE;
-            } else if (monster_slow_remaining(m_ptr) && !m_ptr->is_accelerated()) {
+            } else if (m_ptr->is_decelerated() && !m_ptr->is_accelerated()) {
                 attr = TERM_VIOLET;
             } else {
                 attr = TERM_GREEN;
@@ -290,9 +290,9 @@ void print_speed(PlayerType *player_ptr)
         auto is_slow = player_ptr->effects()->deceleration()->is_slow();
         if (player_ptr->riding) {
             auto *m_ptr = &floor_ptr->m_list[player_ptr->riding];
-            if (m_ptr->is_accelerated() && !monster_slow_remaining(m_ptr)) {
+            if (m_ptr->is_accelerated() && !m_ptr->is_decelerated()) {
                 attr = TERM_L_BLUE;
-            } else if (monster_slow_remaining(m_ptr) && !m_ptr->is_accelerated()) {
+            } else if (m_ptr->is_decelerated() && !m_ptr->is_accelerated()) {
                 attr = TERM_VIOLET;
             } else {
                 attr = TERM_RED;

@@ -229,7 +229,7 @@ ProcessResult effect_monster_old_slow(PlayerType *player_ptr, effect_monster_typ
         return ProcessResult::PROCESS_CONTINUE;
     }
 
-    if (set_monster_slow(player_ptr, em_ptr->g_ptr->m_idx, monster_slow_remaining(em_ptr->m_ptr) + 50)) {
+    if (set_monster_slow(player_ptr, em_ptr->g_ptr->m_idx, em_ptr->m_ptr->get_remaining_deceleration() + 50)) {
         em_ptr->note = _("の動きが遅くなった。", " starts moving slower.");
     }
 

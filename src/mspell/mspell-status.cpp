@@ -575,7 +575,7 @@ MonsterSpellResult spell_RF5_SLOW(MONSTER_IDX m_idx, PlayerType *player_ptr, MON
     spell_badstatus_message_to_mons(player_ptr, m_idx, t_idx, msg, resist, saving_throw);
 
     if (!resist && !saving_throw) {
-        set_monster_slow(player_ptr, t_idx, monster_slow_remaining(t_ptr) + 50);
+        set_monster_slow(player_ptr, t_idx, t_ptr->get_remaining_deceleration() + 50);
     }
 
     return res;
