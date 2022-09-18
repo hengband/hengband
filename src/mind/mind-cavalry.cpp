@@ -47,7 +47,7 @@ bool rodeo(PlayerType *player_ptr)
     monster_desc(player_ptr, m_name, m_ptr, 0);
     msg_format(_("%sに乗った。", "You ride on %s."), m_name);
 
-    if (is_pet(m_ptr)) {
+    if (m_ptr->is_pet()) {
         return true;
     }
 

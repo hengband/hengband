@@ -65,7 +65,7 @@ static void compact_monsters_aux(PlayerType *player_ptr, MONSTER_IDX i1, MONSTER
         health_track(player_ptr, i2);
     }
 
-    if (is_pet(m_ptr)) {
+    if (m_ptr->is_pet()) {
         for (int i = 1; i < floor_ptr->m_max; i++) {
             monster_type *m2_ptr = &floor_ptr->m_list[i];
 
@@ -114,7 +114,7 @@ void compact_monsters(PlayerType *player_ptr, int size)
         for (MONSTER_IDX i = 1; i < floor_ptr->m_max; i++) {
             auto *m_ptr = &floor_ptr->m_list[i];
             auto *r_ptr = &r_info[m_ptr->r_idx];
-            if (!monster_is_valid(m_ptr)) {
+            if (!m_ptr->is_valid()) {
                 continue;
             }
             if (r_ptr->level > cur_lev) {
@@ -140,7 +140,7 @@ void compact_monsters(PlayerType *player_ptr, int size)
                 continue;
             }
 
-            if (record_named_pet && is_pet(m_ptr) && m_ptr->nickname) {
+            if (record_named_pet && m_ptr->is_pet() && m_ptr->nickname) {
                 GAME_TEXT m_name[MAX_NLEN];
                 monster_desc(player_ptr, m_name, m_ptr, MD_INDEF_VISIBLE);
                 exe_write_diary(player_ptr, DIARY_NAMED_PET, RECORD_NAMED_PET_COMPACT, m_name);

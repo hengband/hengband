@@ -175,7 +175,7 @@ void exe_movement(PlayerType *player_ptr, DIRECTION dir, bool do_pickup, bool br
         can_cast &= m_ptr->ml;
         can_cast &= !is_stunned;
         can_cast &= player_ptr->muta.has_not(PlayerMutationType::BERS_RAGE) || !is_shero(player_ptr);
-        if (!is_hostile(m_ptr) && can_cast && pattern_seq(player_ptr, player_ptr->y, player_ptr->x, y, x) && (p_can_enter || p_can_kill_walls)) {
+        if (!m_ptr->is_hostile() && can_cast && pattern_seq(player_ptr, player_ptr->y, player_ptr->x, y, x) && (p_can_enter || p_can_kill_walls)) {
             (void)set_monster_csleep(player_ptr, g_ptr->m_idx, 0);
             monster_desc(player_ptr, m_name, m_ptr, 0);
             if (m_ptr->ml) {
@@ -211,7 +211,7 @@ void exe_movement(PlayerType *player_ptr, DIRECTION dir, bool do_pickup, bool br
             energy.reset_player_turn();
             can_move = false;
             disturb(player_ptr, false, true);
-        } else if (monster_fear_remaining(riding_m_ptr)) {
+        } else if (riding_m_ptr->is_fearful()) {
             GAME_TEXT steed_name[MAX_NLEN];
             monster_desc(player_ptr, steed_name, riding_m_ptr, 0);
             msg_format(_("%sが恐怖していて制御できない。", "%^s is too scared to control."), steed_name);
@@ -241,7 +241,7 @@ void exe_movement(PlayerType *player_ptr, DIRECTION dir, bool do_pickup, bool br
             disturb(player_ptr, false, true);
         }
 
-        if (can_move && monster_stunned_remaining(riding_m_ptr) && one_in_(2)) {
+        if (can_move && riding_m_ptr->is_stunned() && one_in_(2)) {
             GAME_TEXT steed_name[MAX_NLEN];
             monster_desc(player_ptr, steed_name, riding_m_ptr, 0);
             msg_format(_("%sが朦朧としていてうまく動けない！", "You cannot control stunned %s!"), steed_name);

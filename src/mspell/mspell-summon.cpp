@@ -59,7 +59,7 @@ static BIT_FLAGS monster_u_mode(floor_type *floor_ptr, MONSTER_IDX m_idx)
 {
     BIT_FLAGS u_mode = 0L;
     auto *m_ptr = &floor_ptr->m_list[m_idx];
-    bool pet = is_pet(m_ptr);
+    bool pet = m_ptr->is_pet();
     if (!pet) {
         u_mode |= PM_ALLOW_UNIQUE;
     }
@@ -253,7 +253,7 @@ MonsterSpellResult spell_RF6_S_CYBER(PlayerType *player_ptr, POSITION y, POSITIO
     summon_disturb(player_ptr, target_type, known, see_either);
 
     int count = 0;
-    if (is_friendly(m_ptr) && mon_to_mon) {
+    if (m_ptr->is_friendly() && mon_to_mon) {
         count += summon_specific(player_ptr, m_idx, y, x, rlev, SUMMON_CYBER, (PM_ALLOW_GROUP));
     } else {
         count += summon_cyber(player_ptr, m_idx, y, x);

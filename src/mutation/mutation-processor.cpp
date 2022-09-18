@@ -435,7 +435,7 @@ void process_world_aux_mutation(PlayerType *player_ptr)
         for (MONSTER_IDX monster = 0; monster < player_ptr->current_floor_ptr->m_max; monster++) {
             auto *m_ptr = &player_ptr->current_floor_ptr->m_list[monster];
             auto *r_ptr = &r_info[m_ptr->r_idx];
-            if (!monster_is_valid(m_ptr)) {
+            if (!m_ptr->is_valid()) {
                 continue;
             }
 

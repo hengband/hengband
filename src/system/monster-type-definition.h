@@ -51,4 +51,27 @@ struct monster_type {
     /* TODO: クローン、ペット、有効化は意義が異なるので別変数に切り離すこと。save/loadのバージョン更新が面倒そうだけど */
     EnumClassFlagGroup<MonsterSmartLearnType> smart{}; /*!< モンスターのプレイヤーに対する学習状態 / Field for "smart_learn" - Some bit-flags for the "smart" field */
     MONSTER_IDX parent_m_idx{}; /*!< 召喚主のモンスターID */
+
+    bool is_friendly() const;
+    bool is_pet() const;
+    bool is_hostile() const;
+    bool is_original_ap() const;
+    bool is_mimicry() const;
+    bool is_valid() const;
+    MonsterRaceId get_real_r_idx() const;
+    monster_race &get_real_r_ref() const;
+    short get_remaining_sleep() const;
+    short get_remaining_acceleration() const;
+    short get_remaining_deceleration() const;
+    short get_remaining_stun() const;
+    short get_remaining_confusion() const;
+    short get_remaining_fear() const;
+    short get_remaining_invulnerability() const;
+    bool is_asleep() const;
+    bool is_accelerated() const;
+    bool is_decelerated() const;
+    bool is_stunned() const;
+    bool is_confused() const;
+    bool is_fearful() const;
+    bool is_invulnerable() const;
 };

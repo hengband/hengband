@@ -134,7 +134,7 @@ bool MonsterAttackPlayer::check_no_blow()
         return false;
     }
 
-    return is_hostile(this->m_ptr);
+    return this->m_ptr->is_hostile();
 }
 
 /*!
@@ -176,7 +176,7 @@ bool MonsterAttackPlayer::process_monster_blows()
             hit = true;
         } else {
             const int power = mbe_info[enum2i(this->effect)].power;
-            hit = check_hit_from_monster_to_player(this->player_ptr, power, this->rlev, monster_stunned_remaining(this->m_ptr));
+            hit = check_hit_from_monster_to_player(this->player_ptr, power, this->rlev, this->m_ptr->get_remaining_stun());
         }
 
         if (hit) {
@@ -214,12 +214,12 @@ bool MonsterAttackPlayer::process_monster_blows()
  */
 bool MonsterAttackPlayer::check_monster_continuous_attack()
 {
-    if (!monster_is_valid(this->m_ptr) || (this->method == RaceBlowMethodType::NONE)) {
+    if (!this->m_ptr->is_valid() || (this->method == RaceBlowMethodType::NONE)) {
         return false;
     }
 
     auto *r_ptr = &r_info[this->m_ptr->r_idx];
-    if (is_pet(this->m_ptr) && r_ptr->kind_flags.has(MonsterKindType::UNIQUE) && (this->method == RaceBlowMethodType::EXPLODE)) {
+    if (this->m_ptr->is_pet() && r_ptr->kind_flags.has(MonsterKindType::UNIQUE) && (this->method == RaceBlowMethodType::EXPLODE)) {
         this->method = RaceBlowMethodType::HIT;
         this->d_dice /= 10;
     }

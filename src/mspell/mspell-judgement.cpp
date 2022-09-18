@@ -59,11 +59,12 @@ bool direct_beam(PlayerType *player_ptr, POSITION y1, POSITION x1, POSITION y2, 
     }
 
     bool hit2 = false;
-    bool is_friend = is_pet(m_ptr);
+    bool is_friend = m_ptr->is_pet();
     for (const auto &[y, x] : grid_g) {
+        const auto &g_ref = floor_ptr->grid_array[y][x];
         if (y == y2 && x == x2) {
             hit2 = true;
-        } else if (is_friend && floor_ptr->grid_array[y][x].m_idx > 0 && !are_enemies(player_ptr, m_ptr, &floor_ptr->m_list[floor_ptr->grid_array[y][x].m_idx])) {
+        } else if (is_friend && g_ref.m_idx > 0 && !are_enemies(player_ptr, *m_ptr, floor_ptr->m_list[g_ref.m_idx])) {
             return false;
         }
 
@@ -218,12 +219,12 @@ void get_project_point(PlayerType *player_ptr, POSITION sy, POSITION sx, POSITIO
  */
 bool dispel_check_monster(PlayerType *player_ptr, MONSTER_IDX m_idx, MONSTER_IDX t_idx)
 {
-    monster_type *t_ptr = &player_ptr->current_floor_ptr->m_list[t_idx];
-    if (monster_invulner_remaining(t_ptr)) {
+    const auto &t_ref = player_ptr->current_floor_ptr->m_list[t_idx];
+    if (t_ref.is_invulnerable()) {
         return true;
     }
 
-    if ((t_ptr->mspeed < 135) && monster_fast_remaining(t_ptr)) {
+    if ((t_ref.mspeed < 135) && t_ref.is_accelerated()) {
         return true;
     }
 
@@ -365,7 +366,8 @@ bool dispel_check(PlayerType *player_ptr, MONSTER_IDX m_idx)
         return true;
     }
 
-    if (player_ptr->riding && (player_ptr->current_floor_ptr->m_list[player_ptr->riding].mspeed < 135) && monster_fast_remaining(&player_ptr->current_floor_ptr->m_list[player_ptr->riding])) {
+    const auto &m_ref = player_ptr->current_floor_ptr->m_list[player_ptr->riding];
+    if (player_ptr->riding && (player_ptr->current_floor_ptr->m_list[player_ptr->riding].mspeed < 135) && m_ref.is_accelerated()) {
         return true;
     }
 

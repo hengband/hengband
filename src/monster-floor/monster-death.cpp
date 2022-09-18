@@ -54,7 +54,7 @@ static void write_pet_death(PlayerType *player_ptr, monster_death_type *md_ptr)
 {
     md_ptr->md_y = md_ptr->m_ptr->fy;
     md_ptr->md_x = md_ptr->m_ptr->fx;
-    if (record_named_pet && is_pet(md_ptr->m_ptr) && md_ptr->m_ptr->nickname) {
+    if (record_named_pet && md_ptr->m_ptr->is_pet() && md_ptr->m_ptr->nickname) {
         GAME_TEXT m_name[MAX_NLEN];
         monster_desc(player_ptr, m_name, md_ptr->m_ptr, MD_INDEF_VISIBLE);
         exe_write_diary(player_ptr, DIARY_NAMED_PET, 3, m_name);
@@ -81,7 +81,7 @@ static void on_dead_explosion(PlayerType *player_ptr, monster_death_type *md_ptr
 static void on_defeat_arena_monster(PlayerType *player_ptr, monster_death_type *md_ptr)
 {
     auto *floor_ptr = player_ptr->current_floor_ptr;
-    if (!floor_ptr->inside_arena || is_pet(md_ptr->m_ptr)) {
+    if (!floor_ptr->inside_arena || md_ptr->m_ptr->is_pet()) {
         return;
     }
 
@@ -119,7 +119,7 @@ static void drop_corpse(PlayerType *player_ptr, monster_death_type *md_ptr)
     auto *floor_ptr = player_ptr->current_floor_ptr;
     bool is_drop_corpse = one_in_(md_ptr->r_ptr->kind_flags.has(MonsterKindType::UNIQUE) ? 1 : 4);
     is_drop_corpse &= md_ptr->r_ptr->drop_flags.has_any_of({ MonsterDropType::DROP_CORPSE, MonsterDropType::DROP_SKELETON });
-    is_drop_corpse &= !(floor_ptr->inside_arena || player_ptr->phase_out || md_ptr->cloned || ((md_ptr->m_ptr->r_idx == w_ptr->today_mon) && is_pet(md_ptr->m_ptr)));
+    is_drop_corpse &= !(floor_ptr->inside_arena || player_ptr->phase_out || md_ptr->cloned || ((md_ptr->m_ptr->r_idx == w_ptr->today_mon) && md_ptr->m_ptr->is_pet()));
     if (!is_drop_corpse) {
         return;
     }
@@ -282,7 +282,7 @@ static int decide_drop_numbers(PlayerType *player_ptr, monster_death_type *md_pt
         drop_numbers = 0;
     }
 
-    if (is_pet(md_ptr->m_ptr) || player_ptr->phase_out || player_ptr->current_floor_ptr->inside_arena) {
+    if (md_ptr->m_ptr->is_pet() || player_ptr->phase_out || player_ptr->current_floor_ptr->inside_arena) {
         drop_numbers = 0;
     }
 

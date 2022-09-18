@@ -289,7 +289,7 @@ static void effect_monster_domination_addition(effect_monster_type *em_ptr)
 
 ProcessResult effect_monster_domination(PlayerType *player_ptr, effect_monster_type *em_ptr)
 {
-    if (!is_hostile(em_ptr->m_ptr)) {
+    if (!em_ptr->m_ptr->is_hostile()) {
         return ProcessResult::PROCESS_CONTINUE;
     }
 
@@ -297,7 +297,10 @@ ProcessResult effect_monster_domination(PlayerType *player_ptr, effect_monster_t
         em_ptr->obvious = true;
     }
 
-    if (em_ptr->r_ptr->kind_flags.has(MonsterKindType::UNIQUE) || any_bits(em_ptr->r_ptr->flags1, RF1_QUESTOR) || (em_ptr->r_ptr->flags3 & RF3_NO_CONF) || (em_ptr->r_ptr->level > randint1((em_ptr->dam - 10) < 1 ? 1 : (em_ptr->dam - 10)) + 10)) {
+    const auto is_unique = em_ptr->r_ptr->kind_flags.has(MonsterKindType::UNIQUE);
+    const auto is_questor = any_bits(em_ptr->r_ptr->flags1, RF1_QUESTOR);
+    const auto is_no_confusion = any_bits(em_ptr->r_ptr->flags3, RF3_NO_CONF);
+    if (is_unique || is_questor || is_no_confusion || (em_ptr->r_ptr->level > randint1((em_ptr->dam - 10) < 1 ? 1 : (em_ptr->dam - 10)) + 10)) {
         if (((em_ptr->r_ptr->flags3 & RF3_NO_CONF) != 0) && is_original_ap_and_seen(player_ptr, em_ptr->m_ptr)) {
             em_ptr->r_ptr->r_flags3 |= (RF3_NO_CONF);
         }
@@ -333,9 +336,9 @@ static bool effect_monster_crusade_domination(PlayerType *player_ptr, effect_mon
         em_ptr->dam = 1;
     }
 
-    if (is_pet(em_ptr->m_ptr)) {
+    if (em_ptr->m_ptr->is_pet()) {
         em_ptr->note = _("の動きが速くなった。", " starts moving faster.");
-        (void)set_monster_fast(player_ptr, em_ptr->g_ptr->m_idx, monster_fast_remaining(em_ptr->m_ptr) + 100);
+        (void)set_monster_fast(player_ptr, em_ptr->g_ptr->m_idx, em_ptr->m_ptr->get_remaining_acceleration() + 100);
         return true;
     }
 
@@ -355,7 +358,7 @@ static bool effect_monster_crusade_domination(PlayerType *player_ptr, effect_mon
 
     em_ptr->note = _("を支配した。", " is tamed!");
     set_pet(player_ptr, em_ptr->m_ptr);
-    (void)set_monster_fast(player_ptr, em_ptr->g_ptr->m_idx, monster_fast_remaining(em_ptr->m_ptr) + 100);
+    (void)set_monster_fast(player_ptr, em_ptr->g_ptr->m_idx, em_ptr->m_ptr->get_remaining_acceleration() + 100);
     if (is_original_ap_and_seen(player_ptr, em_ptr->m_ptr)) {
         em_ptr->r_ptr->r_kind_flags.set(MonsterKindType::GOOD);
     }
@@ -393,7 +396,7 @@ ProcessResult effect_monster_crusade(PlayerType *player_ptr, effect_monster_type
  */
 static int calcutate_capturable_hp(PlayerType *player_ptr, monster_type *m_ptr, int hp)
 {
-    if (is_pet(m_ptr)) {
+    if (m_ptr->is_pet()) {
         return hp * 4L;
     }
 
@@ -443,7 +446,7 @@ ProcessResult effect_monster_capture(PlayerType *player_ptr, effect_monster_type
 
     auto quest_monster = inside_quest(floor_ptr->quest_number);
     quest_monster &= (quest_list[floor_ptr->quest_number].type == QuestKindType::KILL_ALL);
-    quest_monster &= !is_pet(em_ptr->m_ptr);
+    quest_monster &= !em_ptr->m_ptr->is_pet();
 
     auto cannot_capture = quest_monster;
     cannot_capture |= em_ptr->r_ptr->kind_flags.has(MonsterKindType::UNIQUE);

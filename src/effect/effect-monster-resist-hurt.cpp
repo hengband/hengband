@@ -504,7 +504,7 @@ ProcessResult effect_monster_inertial(PlayerType *player_ptr, effect_monster_typ
         return ProcessResult::PROCESS_CONTINUE;
     }
 
-    if (set_monster_slow(player_ptr, em_ptr->g_ptr->m_idx, monster_slow_remaining(em_ptr->m_ptr) + 50)) {
+    if (set_monster_slow(player_ptr, em_ptr->g_ptr->m_idx, em_ptr->m_ptr->get_remaining_deceleration() + 50)) {
         em_ptr->note = _("の動きが遅くなった。", " starts moving slower.");
     }
 
@@ -570,7 +570,7 @@ static void effect_monster_gravity_slow(PlayerType *player_ptr, effect_monster_t
         return;
     }
 
-    if (set_monster_slow(player_ptr, em_ptr->g_ptr->m_idx, monster_slow_remaining(em_ptr->m_ptr) + 50)) {
+    if (set_monster_slow(player_ptr, em_ptr->g_ptr->m_idx, em_ptr->m_ptr->get_remaining_deceleration() + 50)) {
         em_ptr->note = _("の動きが遅くなった。", " starts moving slower.");
     }
     em_ptr->obvious = true;
@@ -752,7 +752,7 @@ ProcessResult effect_monster_abyss(PlayerType *player_ptr, effect_monster_type *
         em_ptr->note = _("は深淵に囚われていく。", " is trapped in the abyss.");
         em_ptr->note_dies = _("は深淵に堕ちてしまった。", " has fallen into the abyss.");
 
-        if (one_in_(3) && set_monster_slow(player_ptr, em_ptr->g_ptr->m_idx, monster_slow_remaining(em_ptr->m_ptr) + 50)) {
+        if (one_in_(3) && set_monster_slow(player_ptr, em_ptr->g_ptr->m_idx, em_ptr->m_ptr->get_remaining_deceleration() + 50)) {
             em_ptr->note = _("の動きが遅くなった。", " starts moving slower.");
         }
     }

@@ -49,7 +49,12 @@
 
 static bool is_friendly_idx(PlayerType *player_ptr, MONSTER_IDX m_idx)
 {
-    return m_idx > 0 && is_friendly(&player_ptr->current_floor_ptr->m_list[(m_idx)]);
+    if (m_idx == 0) {
+        return false;
+    }
+
+    const auto &m_ref = player_ptr->current_floor_ptr->m_list[m_idx];
+    return m_ref.is_friendly();
 }
 
 /*!
@@ -301,7 +306,7 @@ bool place_monster_one(PlayerType *player_ptr, MONSTER_IDX who, POSITION y, POSI
 
     m_ptr->mflag.clear();
     m_ptr->mflag2.clear();
-    if (any_bits(mode, PM_MULTIPLY) && (who > 0) && !is_original_ap(&floor_ptr->m_list[who])) {
+    if (any_bits(mode, PM_MULTIPLY) && (who > 0) && !floor_ptr->m_list[who].is_original_ap()) {
         m_ptr->ap_r_idx = floor_ptr->m_list[who].ap_r_idx;
         if (floor_ptr->m_list[who].mflag2.has(MonsterConstantFlagType::KAGE)) {
             m_ptr->mflag2.set(MonsterConstantFlagType::KAGE);
@@ -333,7 +338,7 @@ bool place_monster_one(PlayerType *player_ptr, MONSTER_IDX who, POSITION y, POSI
     m_ptr->nickname = 0;
     m_ptr->exp = 0;
 
-    if (who > 0 && is_pet(&floor_ptr->m_list[who])) {
+    if (who > 0 && floor_ptr->m_list[who].is_pet()) {
         set_bits(mode, PM_FORCE_PET);
         m_ptr->parent_m_idx = who;
     } else {
@@ -417,19 +422,19 @@ bool place_monster_one(PlayerType *player_ptr, MONSTER_IDX who, POSITION y, POSI
 
     if (any_bits(r_ptr->flags7, RF7_SELF_LD_MASK)) {
         set_bits(player_ptr->update, PU_MON_LITE);
-    } else if (any_bits(r_ptr->flags7, RF7_HAS_LD_MASK) && !monster_csleep_remaining(m_ptr)) {
+    } else if (any_bits(r_ptr->flags7, RF7_HAS_LD_MASK) && !m_ptr->is_asleep()) {
         set_bits(player_ptr->update, PU_MON_LITE);
     }
     update_monster(player_ptr, g_ptr->m_idx, true);
 
-    real_r_ptr(m_ptr)->cur_num++;
+    m_ptr->get_real_r_ref().cur_num++;
 
     /*
      * Memorize location of the unique monster in saved floors.
      * A unique monster move from old saved floor.
      */
     if (w_ptr->character_dungeon && (r_ptr->kind_flags.has(MonsterKindType::UNIQUE) || r_ptr->population_flags.has(MonsterPopulationType::NAZGUL))) {
-        real_r_ptr(m_ptr)->floor_id = player_ptr->floor_id;
+        m_ptr->get_real_r_ref().floor_id = player_ptr->floor_id;
     }
 
     if (any_bits(r_ptr->flags2, RF2_MULTIPLY)) {

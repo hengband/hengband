@@ -165,7 +165,7 @@ bool summon_specific(PlayerType *player_ptr, MONSTER_IDX who, POSITION y1, POSIT
         notice = true;
     } else {
         auto *m_ptr = &player_ptr->current_floor_ptr->m_list[who];
-        if (is_pet(m_ptr)) {
+        if (m_ptr->is_pet()) {
             notice = true;
         } else if (is_seen(player_ptr, m_ptr)) {
             notice = true;

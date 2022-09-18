@@ -592,6 +592,7 @@
     <ClCompile Include="..\..\src\store\sell-order.cpp" />
     <ClCompile Include="..\..\src\store\service-checker.cpp" />
     <ClCompile Include="..\..\src\system\angband-version.cpp" />
+    <ClCompile Include="..\..\src\system\monster-type-definition.cpp" />
     <ClCompile Include="..\..\src\system\object-type-definition.cpp" />
     <ClCompile Include="..\..\src\system\player-type-definition.cpp" />
     <ClCompile Include="..\..\src\target\grid-selector.cpp" />

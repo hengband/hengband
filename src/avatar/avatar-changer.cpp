@@ -37,18 +37,18 @@ void AvatarChanger::change_virtue()
 {
     this->change_virtue_non_beginner();
     this->change_virtue_unique();
-    auto *r_ptr = real_r_ptr(this->m_ptr);
+    const auto &r_ref = this->m_ptr->get_real_r_ref();
     if (m_ptr->r_idx == MonsterRaceId::BEGGAR || m_ptr->r_idx == MonsterRaceId::LEPER) {
         chg_virtue(this->player_ptr, V_COMPASSION, -1);
     }
 
     this->change_virtue_good_evil();
-    if (r_ptr->kind_flags.has(MonsterKindType::UNDEAD) && r_ptr->kind_flags.has(MonsterKindType::UNIQUE)) {
+    if (r_ref.kind_flags.has(MonsterKindType::UNDEAD) && r_ref.kind_flags.has(MonsterKindType::UNIQUE)) {
         chg_virtue(this->player_ptr, V_VITALITY, 2);
     }
 
     this->change_virtue_revenge();
-    if (any_bits(r_ptr->flags2, RF2_MULTIPLY) && (r_ptr->r_akills > 1000) && one_in_(10)) {
+    if (any_bits(r_ref.flags2, RF2_MULTIPLY) && (r_ref.r_akills > 1000) && one_in_(10)) {
         chg_virtue(this->player_ptr, V_VALOUR, -1);
     }
 

@@ -45,23 +45,25 @@ static void decide_melee_spell_target(PlayerType *player_ptr, melee_spell_type *
 
 static void decide_indirection_melee_spell(PlayerType *player_ptr, melee_spell_type *ms_ptr)
 {
-    if ((ms_ptr->target_idx != 0) || (ms_ptr->m_ptr->target_y == 0)) {
+    const auto &m_ref = *ms_ptr->m_ptr;
+    if ((ms_ptr->target_idx != 0) || (m_ref.target_y == 0)) {
         return;
     }
 
     auto *floor_ptr = player_ptr->current_floor_ptr;
-    ms_ptr->target_idx = floor_ptr->grid_array[ms_ptr->m_ptr->target_y][ms_ptr->m_ptr->target_x].m_idx;
+    ms_ptr->target_idx = floor_ptr->grid_array[m_ref.target_y][m_ref.target_x].m_idx;
     if (ms_ptr->target_idx == 0) {
         return;
     }
 
     ms_ptr->t_ptr = &floor_ptr->m_list[ms_ptr->target_idx];
-    if ((ms_ptr->m_idx == ms_ptr->target_idx) || ((ms_ptr->target_idx != player_ptr->pet_t_m_idx) && !are_enemies(player_ptr, ms_ptr->m_ptr, ms_ptr->t_ptr))) {
+    const auto &t_ref = *ms_ptr->t_ptr;
+    if ((ms_ptr->m_idx == ms_ptr->target_idx) || ((ms_ptr->target_idx != player_ptr->pet_t_m_idx) && !are_enemies(player_ptr, m_ref, t_ref))) {
         ms_ptr->target_idx = 0;
         return;
     }
 
-    if (projectable(player_ptr, ms_ptr->m_ptr->fy, ms_ptr->m_ptr->fx, ms_ptr->t_ptr->fy, ms_ptr->t_ptr->fx)) {
+    if (projectable(player_ptr, m_ref.fy, m_ref.fx, t_ref.fy, t_ref.fx)) {
         return;
     }
 
@@ -86,6 +88,8 @@ static bool check_melee_spell_projection(PlayerType *player_ptr, melee_spell_typ
         start = floor_ptr->m_max + 1;
     }
 
+    const auto &m_ref = *ms_ptr->m_ptr;
+    const auto &t_ref = *ms_ptr->t_ptr;
     for (int i = start; ((i < start + floor_ptr->m_max) && (i > start - floor_ptr->m_max)); i += plus) {
         MONSTER_IDX dummy = (i % floor_ptr->m_max);
         if (!dummy) {
@@ -94,7 +98,9 @@ static bool check_melee_spell_projection(PlayerType *player_ptr, melee_spell_typ
 
         ms_ptr->target_idx = dummy;
         ms_ptr->t_ptr = &floor_ptr->m_list[ms_ptr->target_idx];
-        if (!monster_is_valid(ms_ptr->t_ptr) || (ms_ptr->m_idx == ms_ptr->target_idx) || !are_enemies(player_ptr, ms_ptr->m_ptr, ms_ptr->t_ptr) || !projectable(player_ptr, ms_ptr->m_ptr->fy, ms_ptr->m_ptr->fx, ms_ptr->t_ptr->fy, ms_ptr->t_ptr->fx)) {
+        const auto is_enemies = are_enemies(player_ptr, m_ref, t_ref);
+        const auto is_projectable = projectable(player_ptr, m_ref.fy, m_ref.fx, t_ref.fy, t_ref.fx);
+        if (!t_ref.is_valid() || (ms_ptr->m_idx == ms_ptr->target_idx) || !is_enemies || !is_projectable) {
             continue;
         }
 
@@ -110,7 +116,7 @@ static void check_darkness(PlayerType *player_ptr, melee_spell_type *ms_ptr)
         return;
     }
 
-    bool vs_ninja = PlayerClass(player_ptr).equals(PlayerClassType::NINJA) && !is_hostile(ms_ptr->t_ptr);
+    bool vs_ninja = PlayerClass(player_ptr).equals(PlayerClassType::NINJA) && !ms_ptr->t_ptr->is_hostile();
     bool can_use_lite_area = vs_ninja && ms_ptr->r_ptr->kind_flags.has_not(MonsterKindType::UNDEAD) && ms_ptr->r_ptr->resistance_flags.has_not(MonsterResistanceType::HURT_LITE) && !(ms_ptr->r_ptr->flags7 & RF7_DARK_MASK);
     if (ms_ptr->r_ptr->behavior_flags.has(MonsterBehaviorType::STUPID)) {
         return;
@@ -342,7 +348,7 @@ static bool set_melee_spell_set(PlayerType *player_ptr, melee_spell_type *ms_ptr
 
 bool check_melee_spell_set(PlayerType *player_ptr, melee_spell_type *ms_ptr)
 {
-    if (monster_confused_remaining(ms_ptr->m_ptr)) {
+    if (ms_ptr->m_ptr->is_confused()) {
         return false;
     }
 

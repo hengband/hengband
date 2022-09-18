@@ -92,7 +92,8 @@ void do_cmd_pet_dismiss(PlayerType *player_ptr)
 
     /* Process the monsters (backwards) */
     for (MONSTER_IDX pet_ctr = player_ptr->current_floor_ptr->m_max - 1; pet_ctr >= 1; pet_ctr--) {
-        if (is_pet(&player_ptr->current_floor_ptr->m_list[pet_ctr])) {
+        const auto &m_ref = player_ptr->current_floor_ptr->m_list[pet_ctr];
+        if (m_ref.is_pet()) {
             who.push_back(pet_ctr);
         }
     }
@@ -250,7 +251,7 @@ bool do_cmd_riding(PlayerType *player_ptr, bool force)
             msg_print(_("その場所にはモンスターはいません。", "There is no monster here."));
             return false;
         }
-        if (!is_pet(m_ptr) && !force) {
+        if (!m_ptr->is_pet() && !force) {
             msg_print(_("そのモンスターはペットではありません。", "That monster is not a pet."));
             return false;
         }
@@ -282,7 +283,7 @@ bool do_cmd_riding(PlayerType *player_ptr, bool force)
             return false;
         }
 
-        if (monster_csleep_remaining(m_ptr)) {
+        if (m_ptr->is_asleep()) {
             GAME_TEXT m_name[MAX_NLEN];
             monster_desc(player_ptr, m_name, m_ptr, 0);
             (void)set_monster_csleep(player_ptr, g_ptr->m_idx, 0);
@@ -336,7 +337,7 @@ static void do_name_pet(PlayerType *player_ptr)
     if (player_ptr->current_floor_ptr->grid_array[target_row][target_col].m_idx) {
         m_ptr = &player_ptr->current_floor_ptr->m_list[player_ptr->current_floor_ptr->grid_array[target_row][target_col].m_idx];
 
-        if (!is_pet(m_ptr)) {
+        if (!m_ptr->is_pet()) {
             msg_print(_("そのモンスターはペットではない。", "This monster is not a pet."));
             return;
         }
@@ -677,8 +678,8 @@ void do_cmd_pet(PlayerType *player_ptr)
     {
         /* Check pets (backwards) */
         for (pet_ctr = player_ptr->current_floor_ptr->m_max - 1; pet_ctr >= 1; pet_ctr--) {
-            /* Player has pet */
-            if (is_pet(&player_ptr->current_floor_ptr->m_list[pet_ctr])) {
+            const auto &m_ref = player_ptr->current_floor_ptr->m_list[pet_ctr];
+            if (m_ref.is_pet()) {
                 break;
             }
         }
@@ -750,8 +751,7 @@ void do_cmd_pet(PlayerType *player_ptr)
             player_ptr->pet_extra_flags &= ~(PF_PICKUP_ITEMS);
             for (pet_ctr = player_ptr->current_floor_ptr->m_max - 1; pet_ctr >= 1; pet_ctr--) {
                 m_ptr = &player_ptr->current_floor_ptr->m_list[pet_ctr];
-
-                if (is_pet(m_ptr)) {
+                if (m_ptr->is_pet()) {
                     monster_drop_carried_objects(player_ptr, m_ptr);
                 }
             }

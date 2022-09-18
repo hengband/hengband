@@ -500,14 +500,14 @@ void mineuchi(PlayerType *player_ptr, player_attack_type *pa_ptr)
     }
 
     int tmp = (10 + randint1(15) + player_ptr->lev / 5);
-    if (monster_stunned_remaining(pa_ptr->m_ptr)) {
+    if (pa_ptr->m_ptr->get_remaining_stun()) {
         msg_format(_("%sはひどくもうろうとした。", "%s is more dazed."), pa_ptr->m_name);
         tmp /= 2;
     } else {
         msg_format(_("%s はもうろうとした。", "%s is dazed."), pa_ptr->m_name);
     }
 
-    (void)set_monster_stunned(player_ptr, pa_ptr->g_ptr->m_idx, monster_stunned_remaining(pa_ptr->m_ptr) + tmp);
+    (void)set_monster_stunned(player_ptr, pa_ptr->g_ptr->m_idx, pa_ptr->m_ptr->get_remaining_stun() + tmp);
 }
 
 /*!

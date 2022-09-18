@@ -123,7 +123,7 @@ void lore_treasure(PlayerType *player_ptr, MONSTER_IDX m_idx, ITEM_NUMBER num_it
     auto *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
     auto *r_ptr = &r_info[m_ptr->r_idx];
 
-    if (!is_original_ap(m_ptr)) {
+    if (!m_ptr->is_original_ap()) {
         return;
     }
 

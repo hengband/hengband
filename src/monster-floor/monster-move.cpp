@@ -113,7 +113,7 @@ static bool bash_normal_door(PlayerType *player_ptr, turn_flags *turn_flags_ptr,
     feature_type *f_ptr;
     f_ptr = &f_info[g_ptr->feat];
     turn_flags_ptr->do_move = false;
-    if ((r_ptr->behavior_flags.has_not(MonsterBehaviorType::OPEN_DOOR)) || f_ptr->flags.has_not(FloorFeatureType::OPEN) || (is_pet(m_ptr) && ((player_ptr->pet_extra_flags & PF_OPEN_DOORS) == 0))) {
+    if ((r_ptr->behavior_flags.has_not(MonsterBehaviorType::OPEN_DOOR)) || f_ptr->flags.has_not(FloorFeatureType::OPEN) || (m_ptr->is_pet() && ((player_ptr->pet_extra_flags & PF_OPEN_DOORS) == 0))) {
         return true;
     }
 
@@ -143,7 +143,7 @@ static bool bash_normal_door(PlayerType *player_ptr, turn_flags *turn_flags_ptr,
 static void bash_glass_door(PlayerType *player_ptr, turn_flags *turn_flags_ptr, monster_type *m_ptr, feature_type *f_ptr, bool may_bash)
 {
     auto *r_ptr = &r_info[m_ptr->r_idx];
-    if (!may_bash || (r_ptr->behavior_flags.has_not(MonsterBehaviorType::BASH_DOOR)) || f_ptr->flags.has_not(FloorFeatureType::BASH) || (is_pet(m_ptr) && ((player_ptr->pet_extra_flags & PF_OPEN_DOORS) == 0))) {
+    if (!may_bash || (r_ptr->behavior_flags.has_not(MonsterBehaviorType::BASH_DOOR)) || f_ptr->flags.has_not(FloorFeatureType::BASH) || (m_ptr->is_pet() && ((player_ptr->pet_extra_flags & PF_OPEN_DOORS) == 0))) {
         return;
     }
 
@@ -195,7 +195,7 @@ static bool process_door(PlayerType *player_ptr, turn_flags *turn_flags_ptr, mon
 
     if (turn_flags_ptr->did_bash_door && ((randint0(100) < 50) || (feat_state(player_ptr->current_floor_ptr, g_ptr->feat, FloorFeatureType::OPEN) == g_ptr->feat) || f_ptr->flags.has(FloorFeatureType::GLASS))) {
         cave_alter_feat(player_ptr, ny, nx, FloorFeatureType::BASH);
-        if (!monster_is_valid(m_ptr)) {
+        if (!m_ptr->is_valid()) {
             player_ptr->update |= (PU_FLOW);
             player_ptr->window_flags |= (PW_OVERHEAD | PW_DUNGEON);
             if (is_original_ap_and_seen(player_ptr, m_ptr)) {
@@ -232,7 +232,7 @@ static bool process_protection_rune(PlayerType *player_ptr, turn_flags *turn_fla
     }
 
     turn_flags_ptr->do_move = false;
-    if (is_pet(m_ptr) || (randint1(BREAK_RUNE_PROTECTION) >= r_ptr->level)) {
+    if (m_ptr->is_pet() || (randint1(BREAK_RUNE_PROTECTION) >= r_ptr->level)) {
         return true;
     }
 
@@ -267,7 +267,7 @@ static bool process_explosive_rune(PlayerType *player_ptr, turn_flags *turn_flag
     }
 
     turn_flags_ptr->do_move = false;
-    if (is_pet(m_ptr)) {
+    if (m_ptr->is_pet()) {
         return true;
     }
 
@@ -288,7 +288,7 @@ static bool process_explosive_rune(PlayerType *player_ptr, turn_flags *turn_flag
     note_spot(player_ptr, ny, nx);
     lite_spot(player_ptr, ny, nx);
 
-    if (!monster_is_valid(m_ptr)) {
+    if (!m_ptr->is_valid()) {
         return false;
     }
 
@@ -326,7 +326,7 @@ static bool process_post_dig_wall(PlayerType *player_ptr, turn_flags *turn_flags
 
     cave_alter_feat(player_ptr, ny, nx, FloorFeatureType::HURT_DISI);
 
-    if (!monster_is_valid(m_ptr)) {
+    if (!m_ptr->is_valid()) {
         player_ptr->update |= (PU_FLOW);
         player_ptr->window_flags |= (PW_OVERHEAD | PW_DUNGEON);
         if (is_original_ap_and_seen(player_ptr, m_ptr)) {
@@ -392,7 +392,8 @@ bool process_monster_movement(PlayerType *player_ptr, turn_flags *turn_flags_ptr
         }
 
         if (turn_flags_ptr->is_riding_mon) {
-            if (!player_ptr->riding_ryoute && !monster_fear_remaining(&player_ptr->current_floor_ptr->m_list[player_ptr->riding])) {
+            const auto &m_ref = player_ptr->current_floor_ptr->m_list[player_ptr->riding];
+            if (!player_ptr->riding_ryoute && !m_ref.is_fearful()) {
                 turn_flags_ptr->do_move = false;
             }
         }
@@ -440,7 +441,7 @@ bool process_monster_movement(PlayerType *player_ptr, turn_flags *turn_flags_ptr
 
         monster_race *ap_r_ptr = &r_info[m_ptr->ap_r_idx];
         if (m_ptr->ml && (disturb_move || (disturb_near && m_ptr->mflag.has(MonsterTemporaryFlagType::VIEW) && projectable(player_ptr, player_ptr->y, player_ptr->x, m_ptr->fy, m_ptr->fx)) || (disturb_high && ap_r_ptr->r_tkills && ap_r_ptr->level >= player_ptr->lev))) {
-            if (is_hostile(m_ptr)) {
+            if (m_ptr->is_hostile()) {
                 disturb(player_ptr, false, true);
             }
         }
@@ -451,7 +452,7 @@ bool process_monster_movement(PlayerType *player_ptr, turn_flags *turn_flags_ptr
         bool is_pickup_items = (player_ptr->pet_extra_flags & PF_PICKUP_ITEMS) != 0;
         is_pickup_items &= r_ptr->behavior_flags.has(MonsterBehaviorType::TAKE_ITEM);
 
-        is_takable_or_killable &= !is_pet(m_ptr) || is_pickup_items;
+        is_takable_or_killable &= !m_ptr->is_pet() || is_pickup_items;
         if (!is_takable_or_killable) {
             if (turn_flags_ptr->do_turn) {
                 break;
@@ -481,16 +482,16 @@ static bool can_speak(const monster_race &ap_r_ref, MonsterSpeakType mon_speak_t
 static std::string_view get_speak_filename(monster_type *m_ptr)
 {
     const auto &ap_r_ref = r_info[m_ptr->ap_r_idx];
-    if (monster_fear_remaining(m_ptr) && can_speak(ap_r_ref, MonsterSpeakType::SPEAK_FEAR)) {
+    if (m_ptr->is_fearful() && can_speak(ap_r_ref, MonsterSpeakType::SPEAK_FEAR)) {
         return _("monfear_j.txt", "monfear.txt");
     }
 
     constexpr auto monspeak_txt(_("monspeak_j.txt", "monspeak.txt"));
-    if (is_pet(m_ptr) && can_speak(ap_r_ref, MonsterSpeakType::SPEAK_BATTLE)) {
+    if (m_ptr->is_pet() && can_speak(ap_r_ref, MonsterSpeakType::SPEAK_BATTLE)) {
         return monspeak_txt;
     }
 
-    if (is_friendly(m_ptr) && can_speak(ap_r_ref, MonsterSpeakType::SPEAK_FRIEND)) {
+    if (m_ptr->is_friendly() && can_speak(ap_r_ref, MonsterSpeakType::SPEAK_FRIEND)) {
         return _("monfrien_j.txt", "monfrien.txt");
     }
 

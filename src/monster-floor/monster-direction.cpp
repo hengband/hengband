@@ -33,7 +33,7 @@
 static bool decide_pet_approch_direction(PlayerType *player_ptr, monster_type *m_ptr, monster_type *t_ptr)
 {
     auto *r_ptr = &r_info[m_ptr->r_idx];
-    if (!is_pet(m_ptr)) {
+    if (!m_ptr->is_pet()) {
         return false;
     }
 
@@ -74,17 +74,19 @@ static void decide_enemy_approch_direction(PlayerType *player_ptr, MONSTER_IDX m
         if (t_ptr == m_ptr) {
             continue;
         }
-        if (!monster_is_valid(t_ptr)) {
+        if (!t_ptr->is_valid()) {
             continue;
         }
         if (decide_pet_approch_direction(player_ptr, m_ptr, t_ptr)) {
             continue;
         }
-        if (!are_enemies(player_ptr, m_ptr, t_ptr)) {
+        if (!are_enemies(player_ptr, *m_ptr, *t_ptr)) {
             continue;
         }
 
-        if ((r_ptr->feature_flags.has(MonsterFeatureType::PASS_WALL) && ((m_idx != player_ptr->riding) || has_pass_wall(player_ptr))) || (r_ptr->feature_flags.has(MonsterFeatureType::KILL_WALL) && (m_idx != player_ptr->riding))) {
+        const auto can_pass_wall = r_ptr->feature_flags.has(MonsterFeatureType::PASS_WALL) && ((m_idx != player_ptr->riding) || has_pass_wall(player_ptr));
+        const auto can_kill_wall = r_ptr->feature_flags.has(MonsterFeatureType::KILL_WALL) && (m_idx != player_ptr->riding);
+        if (can_pass_wall || can_kill_wall) {
             if (!in_disintegration_range(floor_ptr, m_ptr->fy, m_ptr->fx, t_ptr->fy, t_ptr->fx)) {
                 continue;
             }
@@ -117,7 +119,7 @@ bool get_enemy_dir(PlayerType *player_ptr, MONSTER_IDX m_idx, int *mm)
     if (player_ptr->riding_t_m_idx && player_bold(player_ptr, m_ptr->fy, m_ptr->fx)) {
         y = floor_ptr->m_list[player_ptr->riding_t_m_idx].fy;
         x = floor_ptr->m_list[player_ptr->riding_t_m_idx].fx;
-    } else if (is_pet(m_ptr) && player_ptr->pet_t_m_idx) {
+    } else if (m_ptr->is_pet() && player_ptr->pet_t_m_idx) {
         y = floor_ptr->m_list[player_ptr->pet_t_m_idx].fy;
         x = floor_ptr->m_list[player_ptr->pet_t_m_idx].fx;
     } else {
@@ -197,7 +199,7 @@ static bool random_walk(PlayerType *player_ptr, DIRECTION *mm, monster_type *m_p
 static bool decide_pet_movement_direction(MonsterSweepGrid *msd)
 {
     auto *m_ptr = &msd->player_ptr->current_floor_ptr->m_list[msd->m_idx];
-    if (!is_pet(m_ptr)) {
+    if (!m_ptr->is_pet()) {
         return false;
     }
 
@@ -236,7 +238,7 @@ bool decide_monster_movement_direction(PlayerType *player_ptr, DIRECTION *mm, MO
     auto *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
     auto *r_ptr = &r_info[m_ptr->r_idx];
 
-    if (monster_confused_remaining(m_ptr) || !aware) {
+    if (m_ptr->is_confused() || !aware) {
         mm[0] = mm[1] = mm[2] = mm[3] = 5;
         return true;
     }
@@ -255,7 +257,7 @@ bool decide_monster_movement_direction(PlayerType *player_ptr, DIRECTION *mm, MO
         return true;
     }
 
-    if (!is_hostile(m_ptr)) {
+    if (!m_ptr->is_hostile()) {
         mm[0] = mm[1] = mm[2] = mm[3] = 5;
         get_enemy_dir(player_ptr, m_idx, mm);
         return true;

@@ -159,7 +159,7 @@ bool get_direction(PlayerType *player_ptr, DIRECTION *dp, bool allow_under, bool
     } else if (player_ptr->riding && with_steed) {
         auto *m_ptr = &player_ptr->current_floor_ptr->m_list[player_ptr->riding];
         auto *r_ptr = &r_info[m_ptr->r_idx];
-        if (monster_confused_remaining(m_ptr)) {
+        if (m_ptr->is_confused()) {
             if (randint0(100) < 75) {
                 dir = ddd[randint0(8)];
             }
@@ -178,7 +178,7 @@ bool get_direction(PlayerType *player_ptr, DIRECTION *dp, bool allow_under, bool
             auto *m_ptr = &player_ptr->current_floor_ptr->m_list[player_ptr->riding];
 
             monster_desc(player_ptr, m_name, m_ptr, 0);
-            if (monster_confused_remaining(m_ptr)) {
+            if (m_ptr->is_confused()) {
                 msg_format(_("%sは混乱している。", "%^s is confused."), m_name);
             } else {
                 msg_format(_("%sは思い通りに動いてくれない。", "You cannot control %s."), m_name);
@@ -251,7 +251,7 @@ bool get_rep_dir(PlayerType *player_ptr, DIRECTION *dp, bool under)
     } else if (player_ptr->riding) {
         auto *m_ptr = &player_ptr->current_floor_ptr->m_list[player_ptr->riding];
         auto *r_ptr = &r_info[m_ptr->r_idx];
-        if (monster_confused_remaining(m_ptr)) {
+        if (m_ptr->is_confused()) {
             if (randint0(100) < 75) {
                 dir = ddd[randint0(8)];
             }
@@ -269,7 +269,7 @@ bool get_rep_dir(PlayerType *player_ptr, DIRECTION *dp, bool under)
             GAME_TEXT m_name[MAX_NLEN];
             auto *m_ptr = &player_ptr->current_floor_ptr->m_list[player_ptr->riding];
             monster_desc(player_ptr, m_name, m_ptr, 0);
-            if (monster_confused_remaining(m_ptr)) {
+            if (m_ptr->is_confused()) {
                 msg_format(_("%sは混乱している。", "%^s is confused."), m_name);
             } else {
                 msg_format(_("%sは思い通りに動いてくれない。", "You cannot control %s."), m_name);

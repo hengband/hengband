@@ -31,9 +31,9 @@ concptr look_mon_desc(monster_type *m_ptr, BIT_FLAGS mode)
     concptr attitude;
     if (!(mode & 0x01)) {
         attitude = "";
-    } else if (is_pet(m_ptr)) {
+    } else if (m_ptr->is_pet()) {
         attitude = _(", ペット", ", pet");
-    } else if (is_friendly(m_ptr)) {
+    } else if (m_ptr->is_friendly()) {
         attitude = _(", 友好的", ", friendly");
     } else {
         attitude = _("", "");

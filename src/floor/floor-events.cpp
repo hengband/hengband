@@ -129,7 +129,7 @@ static byte get_dungeon_feeling(PlayerType *player_ptr)
         auto *m_ptr = &floor_ptr->m_list[i];
         monster_race *r_ptr;
         int delta = 0;
-        if (!monster_is_valid(m_ptr) || is_pet(m_ptr)) {
+        if (!m_ptr->is_valid() || m_ptr->is_pet()) {
             continue;
         }
 

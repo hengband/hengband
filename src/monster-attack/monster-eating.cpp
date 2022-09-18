@@ -87,7 +87,7 @@ void process_eat_gold(PlayerType *player_ptr, MonsterAttackPlayer *monap_ptr)
  */
 bool check_eat_item(PlayerType *player_ptr, MonsterAttackPlayer *monap_ptr)
 {
-    if (monster_confused_remaining(monap_ptr->m_ptr)) {
+    if (monap_ptr->m_ptr->is_confused()) {
         return false;
     }
 

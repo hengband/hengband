@@ -48,7 +48,7 @@ ProcessResult effect_monster_old_clone(PlayerType *player_ptr, effect_monster_ty
     }
 
     bool has_resistance = (player_ptr->current_floor_ptr->inside_arena);
-    has_resistance |= is_pet(em_ptr->m_ptr);
+    has_resistance |= em_ptr->m_ptr->is_pet();
     has_resistance |= em_ptr->r_ptr->kind_flags.has(MonsterKindType::UNIQUE);
     has_resistance |= any_bits(em_ptr->r_ptr->flags1, RF1_QUESTOR);
     has_resistance |= em_ptr->r_ptr->population_flags.has(MonsterPopulationType::NAZGUL);
@@ -111,7 +111,7 @@ static void effect_monster_old_heal_check_player(PlayerType *player_ptr, effect_
         chg_virtue(player_ptr, V_INDIVIDUALISM, 1);
     }
 
-    if (is_friendly(em_ptr->m_ptr)) {
+    if (em_ptr->m_ptr->is_friendly()) {
         chg_virtue(player_ptr, V_HONOUR, 1);
     } else if (em_ptr->r_ptr->kind_flags.has_not(MonsterKindType::EVIL)) {
         if (em_ptr->r_ptr->kind_flags.has(MonsterKindType::GOOD)) {
@@ -128,7 +128,7 @@ static void effect_monster_old_heal_check_player(PlayerType *player_ptr, effect_
 
 static void effect_monster_old_heal_recovery(PlayerType *player_ptr, effect_monster_type *em_ptr)
 {
-    if (monster_stunned_remaining(em_ptr->m_ptr)) {
+    if (em_ptr->m_ptr->get_remaining_stun()) {
         if (em_ptr->seen_msg) {
             msg_format(_("%^sは朦朧状態から立ち直った。", "%^s is no longer stunned."), em_ptr->m_name);
         }
@@ -136,7 +136,7 @@ static void effect_monster_old_heal_recovery(PlayerType *player_ptr, effect_mons
         (void)set_monster_stunned(player_ptr, em_ptr->g_ptr->m_idx, 0);
     }
 
-    if (monster_confused_remaining(em_ptr->m_ptr)) {
+    if (em_ptr->m_ptr->is_confused()) {
         if (em_ptr->seen_msg) {
             msg_format(_("%^sは混乱から立ち直った。", "%^s is no longer confused."), em_ptr->m_name);
         }
@@ -144,7 +144,7 @@ static void effect_monster_old_heal_recovery(PlayerType *player_ptr, effect_mons
         (void)set_monster_confused(player_ptr, em_ptr->g_ptr->m_idx, 0);
     }
 
-    if (monster_fear_remaining(em_ptr->m_ptr)) {
+    if (em_ptr->m_ptr->is_fearful()) {
         if (em_ptr->seen_msg) {
             msg_format(_("%^sは勇気を取り戻した。", "%^s recovers %s courage."), em_ptr->m_name, em_ptr->m_poss);
         }
@@ -195,7 +195,7 @@ ProcessResult effect_monster_old_speed(PlayerType *player_ptr, effect_monster_ty
         em_ptr->obvious = true;
     }
 
-    if (set_monster_fast(player_ptr, em_ptr->g_ptr->m_idx, monster_fast_remaining(em_ptr->m_ptr) + 100)) {
+    if (set_monster_fast(player_ptr, em_ptr->g_ptr->m_idx, em_ptr->m_ptr->get_remaining_acceleration() + 100)) {
         em_ptr->note = _("の動きが速くなった。", " starts moving faster.");
     }
 
@@ -203,7 +203,7 @@ ProcessResult effect_monster_old_speed(PlayerType *player_ptr, effect_monster_ty
         if (em_ptr->r_ptr->kind_flags.has(MonsterKindType::UNIQUE)) {
             chg_virtue(player_ptr, V_INDIVIDUALISM, 1);
         }
-        if (is_friendly(em_ptr->m_ptr)) {
+        if (em_ptr->m_ptr->is_friendly()) {
             chg_virtue(player_ptr, V_HONOUR, 1);
         }
     }
@@ -229,7 +229,7 @@ ProcessResult effect_monster_old_slow(PlayerType *player_ptr, effect_monster_typ
         return ProcessResult::PROCESS_CONTINUE;
     }
 
-    if (set_monster_slow(player_ptr, em_ptr->g_ptr->m_idx, monster_slow_remaining(em_ptr->m_ptr) + 50)) {
+    if (set_monster_slow(player_ptr, em_ptr->g_ptr->m_idx, em_ptr->m_ptr->get_remaining_deceleration() + 50)) {
         em_ptr->note = _("の動きが遅くなった。", " starts moving slower.");
     }
 

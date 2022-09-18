@@ -219,7 +219,7 @@ void teleport_level(PlayerType *player_ptr, MONSTER_IDX m_idx)
 
     auto *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
     QuestCompletionChecker(player_ptr, m_ptr).complete();
-    if (record_named_pet && is_pet(m_ptr) && m_ptr->nickname) {
+    if (record_named_pet && m_ptr->is_pet() && m_ptr->nickname) {
         char m2_name[MAX_NLEN];
 
         monster_desc(player_ptr, m2_name, m_ptr, MD_INDEF_VISIBLE);
