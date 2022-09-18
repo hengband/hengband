@@ -22,12 +22,14 @@
 #include "system/player-type-definition.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
+#include "timed-effect/player-blindness.h"
 #include "timed-effect/player-confusion.h"
 #include "timed-effect/player-cut.h"
 #include "timed-effect/player-deceleration.h"
 #include "timed-effect/player-fear.h"
 #include "timed-effect/player-hallucination.h"
 #include "timed-effect/player-paralysis.h"
+#include "timed-effect/player-poison.h"
 #include "timed-effect/player-stun.h"
 #include "timed-effect/timed-effects.h"
 #include "view/status-bars-table.h"
@@ -469,7 +471,7 @@ void print_status(PlayerType *player_ptr)
         ADD_BAR_FLAG(BAR_HALLUCINATION);
     }
 
-    if (player_ptr->blind) {
+    if (player_ptr->effects()->blindness()->is_blind()) {
         ADD_BAR_FLAG(BAR_BLINDNESS);
     }
 
@@ -481,7 +483,7 @@ void print_status(PlayerType *player_ptr)
         ADD_BAR_FLAG(BAR_CONFUSE);
     }
 
-    if (player_ptr->poisoned) {
+    if (effects->poison()->is_poisoned()) {
         ADD_BAR_FLAG(BAR_POISONED);
     }
 

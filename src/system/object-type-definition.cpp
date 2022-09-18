@@ -16,6 +16,7 @@
 #include "object-enchant/trg-types.h"
 #include "object/object-flags.h"
 #include "object/object-kind.h"
+#include "object/tval-types.h"
 #include "smith/object-smith.h"
 #include "sv-definition/sv-armor-types.h"
 #include "sv-definition/sv-lite-types.h"
@@ -24,11 +25,16 @@
 #include "sv-definition/sv-weapon-types.h"
 #include "system/monster-race-definition.h"
 #include "system/player-type-definition.h"
+#include "term/term-color-types.h"
 #include "util/bit-flags-calculator.h"
 #include "util/string-processor.h"
-
 #include <set>
 #include <unordered_map>
+
+ObjectType::ObjectType()
+    : fixed_artifact_idx(FixedArtifactId::NONE)
+{
+}
 
 /*!
  * @brief オブジェクトを初期化する
@@ -387,7 +393,7 @@ bool ObjectType::is_artifact() const
  */
 bool ObjectType::is_fixed_artifact() const
 {
-    return this->fixed_artifact_idx != 0;
+    return this->fixed_artifact_idx != FixedArtifactId::NONE;
 }
 
 /*!
@@ -478,7 +484,11 @@ bool ObjectType::is_potion() const
  */
 bool ObjectType::is_readable() const
 {
-    return (this->tval == ItemKindType::SCROLL) || (this->tval == ItemKindType::PARCHMENT) || (this->fixed_artifact_idx == ART_GHB) || (this->fixed_artifact_idx == ART_POWER);
+    const auto is_scroll = this->tval == ItemKindType::SCROLL;
+    const auto is_parchment = this->tval == ItemKindType::PARCHMENT;
+    const auto is_ghb = this->fixed_artifact_idx == FixedArtifactId::GHB;
+    const auto is_ring_power = this->fixed_artifact_idx == FixedArtifactId::POWER;
+    return is_scroll || is_parchment || is_ghb || is_ring_power;
 }
 
 /*!
@@ -636,4 +646,32 @@ bool ObjectType::can_pile(const ObjectType *j_ptr) const
     }
 
     return true;
+}
+
+/*
+ * Return the "attr" for a given item.
+ * Use "flavor" if available.
+ * Default to user definitions.
+ */
+TERM_COLOR ObjectType::get_color() const
+{
+    const auto &base_item = k_info[this->k_idx];
+    const auto flavor = base_item.flavor;
+    return ((flavor != 0)
+                ? (k_info[flavor].x_attr)
+                : ((!this->k_idx || (this->tval != ItemKindType::CORPSE) || (this->sval != SV_CORPSE) || (base_item.x_attr != TERM_DARK))
+                          ? (base_item.x_attr)
+                          : (r_info[i2enum<MonsterRaceId>(this->pval)].x_attr)));
+}
+
+/*
+ * Return the "char" for a given item.
+ * Use "flavor" if available.
+ * Default to user definitions.
+ */
+char ObjectType::get_symbol() const
+{
+    const auto &base_item = k_info[this->k_idx];
+    const auto flavor = base_item.flavor;
+    return flavor ? k_info[flavor].x_char : base_item.x_char;
 }

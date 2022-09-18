@@ -9,6 +9,8 @@
 #include "sv-definition/sv-lite-types.h"
 #include "system/object-type-definition.h"
 #include "system/player-type-definition.h"
+#include "timed-effect/player-blindness.h"
+#include "timed-effect/timed-effects.h"
 #include "view/display-messages.h"
 #include "world/world.h"
 
@@ -49,7 +51,7 @@ void notice_lite_change(PlayerType *player_ptr, ObjectType *o_ptr)
         player_ptr->window_flags |= (PW_EQUIP);
     }
 
-    if (player_ptr->blind) {
+    if (player_ptr->effects()->blindness()->is_blind()) {
         if (o_ptr->fuel == 0) {
             o_ptr->fuel++;
         }

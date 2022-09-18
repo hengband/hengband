@@ -111,7 +111,7 @@ bool activate_scare(PlayerType *player_ptr)
 
 bool activate_aggravation(PlayerType *player_ptr, ObjectType *o_ptr, concptr name)
 {
-    if (o_ptr->fixed_artifact_idx == ART_HYOUSIGI) {
+    if (o_ptr->fixed_artifact_idx == FixedArtifactId::HYOUSIGI) {
         msg_print(_("拍子木を打った。", "You beat your wooden clappers."));
     } else {
         msg_format(_("%sは不快な物音を立てた。", "The %s sounds an unpleasant noise."), name);
@@ -379,7 +379,7 @@ bool activate_protection_elbereth(PlayerType *player_ptr)
     msg_print(_("エルベレスよ、我を護り給え！", "A Elbereth gilthoniel!"));
     create_rune_protection_one(player_ptr);
     (void)bss.fear(0);
-    (void)bss.blindness(0);
+    (void)bss.set_blindness(0);
     (void)bss.hallucination(0);
     set_blessed(player_ptr, randint0(25) + 25, true);
     set_bits(player_ptr->redraw, PR_STATS);
@@ -408,7 +408,7 @@ bool activate_tree_creation(PlayerType *player_ptr, ObjectType *o_ptr, concptr n
 bool activate_animate_dead(PlayerType *player_ptr, ObjectType *o_ptr)
 {
     msg_print(_("黄金色の光が溢れ出た...", "It emitted a golden light..."));
-    if (o_ptr->fixed_artifact_idx > 0) {
+    if (o_ptr->fixed_artifact_idx == FixedArtifactId::EXCALIBORG) {
         msg_print(_("ぴぴるぴるぴるぴぴるぴ～♪", "Pipiru piru piru pipiru pii"));
     }
 

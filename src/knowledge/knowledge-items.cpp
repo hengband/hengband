@@ -31,13 +31,12 @@
 #include "util/sort.h"
 #include "view/display-messages.h"
 #include "world/world.h"
-
 #include <numeric>
+#include <set>
 
 /*!
  * @brief Check the status of "artifacts"
  * @param player_ptr プレイヤーへの参照ポインタ
- * @todo okay = 既知のアーティファクト？ と思われるが確証がない分かりやすい変数名へ変更求む＆万が一未知である旨の配列なら負論理なのでゴソッと差し替えるべき
  */
 void do_cmd_knowledge_artifacts(PlayerType *player_ptr)
 {
@@ -47,19 +46,17 @@ void do_cmd_knowledge_artifacts(PlayerType *player_ptr)
         return;
     }
 
-    //! @note 一般的に std::vector<bool> は使用を避けるべきとされているが、ここの用途では問題ない
-    std::vector<bool> okay(a_info.size());
+    std::set<FixedArtifactId> known_list;
 
-    for (const auto &a_ref : a_info) {
-        okay[a_ref.idx] = false;
+    for (const auto &[a_idx, a_ref] : a_info) {
         if (a_ref.name.empty()) {
             continue;
         }
-        if (!a_ref.cur_num) {
+        if (!a_ref.is_generated) {
             continue;
         }
 
-        okay[a_ref.idx] = true;
+        known_list.insert(known_list.end(), a_idx);
     }
 
     for (POSITION y = 0; y < player_ptr->current_floor_ptr->height; y++) {
@@ -75,12 +72,12 @@ void do_cmd_knowledge_artifacts(PlayerType *player_ptr)
                     continue;
                 }
 
-                okay[o_ptr->fixed_artifact_idx] = false;
+                known_list.erase(o_ptr->fixed_artifact_idx);
             }
         }
     }
 
-    for (ARTIFACT_IDX i = 0; i < INVEN_TOTAL; i++) {
+    for (auto i = 0; i < INVEN_TOTAL; i++) {
         auto *o_ptr = &player_ptr->inventory_list[i];
         if (!o_ptr->k_idx) {
             continue;
@@ -92,24 +89,19 @@ void do_cmd_knowledge_artifacts(PlayerType *player_ptr)
             continue;
         }
 
-        okay[o_ptr->fixed_artifact_idx] = false;
+        known_list.erase(o_ptr->fixed_artifact_idx);
     }
 
-    std::vector<ARTIFACT_IDX> whats;
-    for (const auto &a_ref : a_info) {
-        if (okay[a_ref.idx]) {
-            whats.push_back(a_ref.idx);
-        }
-    }
+    std::vector<FixedArtifactId> whats(known_list.begin(), known_list.end());
 
     uint16_t why = 3;
     ang_sort(player_ptr, whats.data(), &why, whats.size(), ang_sort_art_comp, ang_sort_art_swap);
     for (auto a_idx : whats) {
-        auto *a_ptr = &a_info[a_idx];
+        const auto &a_ref = a_info.at(a_idx);
         GAME_TEXT base_name[MAX_NLEN];
         strcpy(base_name, _("未知の伝説のアイテム", "Unknown Artifact"));
-        ARTIFACT_IDX z = lookup_kind(a_ptr->tval, a_ptr->sval);
-        if (z) {
+        const auto z = lookup_kind(a_ref.tval, a_ref.sval);
+        if (z != 0) {
             ObjectType forge;
             ObjectType *q_ptr;
             q_ptr = &forge;
@@ -187,7 +179,6 @@ static void display_object_list(int col, int row, int per_page, IDX object_idx[]
 {
     int i;
     for (i = 0; i < per_page && (object_idx[object_top + i] >= 0); i++) {
-        GAME_TEXT o_name[MAX_NLEN];
         TERM_COLOR a;
         object_kind *flavor_k_ptr;
         KIND_OBJECT_IDX k_idx = object_idx[object_top + i];
@@ -201,13 +192,9 @@ static void display_object_list(int col, int row, int per_page, IDX object_idx[]
         }
 
         attr = ((i + object_top == object_cur) ? cursor : attr);
-        if (!k_ptr->flavor || (!visual_only && k_ptr->aware)) {
-            strip_name(o_name, k_idx);
-        } else {
-            strcpy(o_name, flavor_k_ptr->flavor_name.c_str());
-        }
-
-        c_prt(attr, o_name, row + i, col);
+        const auto is_flavor_only = (k_ptr->flavor != 0) && (visual_only || !k_ptr->aware);
+        const auto o_name = is_flavor_only ? flavor_k_ptr->flavor_name : strip_name(k_idx);
+        c_prt(attr, o_name.data(), row + i, col);
         if (per_page == 1) {
             c_prt(attr, format("%02x/%02x", flavor_k_ptr->x_attr, flavor_k_ptr->x_char), row + i, (w_ptr->wizard || visual_only) ? 64 : 68);
         }

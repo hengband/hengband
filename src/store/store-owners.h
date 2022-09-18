@@ -3,8 +3,8 @@
 #include "player-info/race-types.h"
 #include "store/store-util.h"
 #include "system/angband.h"
-#include <array>
 #include <unordered_map>
+#include <vector>
 
 /*!
  * @brief 店主データ構造体

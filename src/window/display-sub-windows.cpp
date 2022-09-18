@@ -281,8 +281,8 @@ static void display_equipment(PlayerType *player_ptr, const ItemTester &item_tes
         }
 
         if (show_item_graph) {
-            TERM_COLOR a = object_attr(o_ptr);
-            auto c = object_char(o_ptr);
+            const auto a = o_ptr->get_color();
+            const auto c = o_ptr->get_symbol();
             term_queue_bigchar(cur_col, cur_row, a, c, 0, 0);
             if (use_bigtile) {
                 cur_col++;

@@ -57,6 +57,7 @@
 #include "target/projection-path-calculator.h"
 #include "target/target-checker.h"
 #include "target/target-getter.h"
+#include "timed-effect/player-blindness.h"
 #include "timed-effect/player-confusion.h"
 #include "timed-effect/player-hallucination.h"
 #include "timed-effect/player-paralysis.h"
@@ -84,11 +85,12 @@ bool kawarimi(PlayerType *player_ptr, bool success)
         return false;
     }
 
-    auto effects = player_ptr->effects();
-    auto is_confused = effects->confusion()->is_confused();
-    auto is_hallucinated = effects->hallucination()->is_hallucinated();
-    auto is_paralyzed = effects->paralysis()->is_paralyzed();
-    if (is_confused || player_ptr->blind || is_paralyzed || is_hallucinated) {
+    const auto effects = player_ptr->effects();
+    const auto is_confused = effects->confusion()->is_confused();
+    const auto is_blind = effects->blindness()->is_blind();
+    const auto is_hallucinated = effects->hallucination()->is_hallucinated();
+    const auto is_paralyzed = effects->paralysis()->is_paralyzed();
+    if (is_confused || is_blind || is_paralyzed || is_hallucinated) {
         return false;
     }
 
@@ -231,7 +233,7 @@ bool rush_attack(PlayerType *player_ptr, bool *mdeath)
 void process_surprise_attack(PlayerType *player_ptr, player_attack_type *pa_ptr)
 {
     auto *r_ptr = &r_info[pa_ptr->m_ptr->r_idx];
-    if (!has_melee_weapon(player_ptr, INVEN_MAIN_HAND + pa_ptr->hand) || player_ptr->is_icky_wield[pa_ptr->hand]) {
+    if (!has_melee_weapon(player_ptr, enum2i(INVEN_MAIN_HAND) + pa_ptr->hand) || player_ptr->is_icky_wield[pa_ptr->hand]) {
         return;
     }
 

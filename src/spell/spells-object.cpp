@@ -5,6 +5,7 @@
  */
 
 #include "spell/spells-object.h"
+#include "artifact/fixed-art-types.h"
 #include "avatar/avatar.h"
 #include "core/player-update-types.h"
 #include "core/window-redrawer.h"
@@ -42,143 +43,138 @@
 #include "system/player-type-definition.h"
 #include "term/screen-processor.h"
 #include "util/bit-flags-calculator.h"
+#include "util/probability-table.h"
 #include "view/display-messages.h"
+
+/*!
+ * @brief 装備強化処理の失敗率定数 (千分率)
+ * @details 強化値が負値から0までは必ず成功する
+ * 正値は+15までしか鍛えることができず、+16以上への強化を試みると確実に失敗する
+ */
+static constexpr std::array<int, 16> enchant_table = { { 0, 10, 50, 100, 200, 300, 400, 500, 650, 800, 950, 987, 993, 995, 998, 1000 } };
+
+/*
+ * Scatter some "amusing" objects near the player
+ */
+enum class AmusementFlagType : byte {
+    NOTHING, /* No restriction */
+    NO_UNIQUE, /* Don't make the amusing object of uniques */
+    FIXED_ART, /* Make a fixed artifact based on the amusing object */
+    MULTIPLE, /* Drop 1-3 objects for one type */
+    PILE, /* Drop 1-99 pile objects for one type */
+};
 
 struct amuse_type {
     ItemKindType tval;
     OBJECT_SUBTYPE_VALUE sval;
     PERCENTAGE prob;
-    byte flag;
+    AmusementFlagType flag;
 };
 
-/*!
- * @brief 装備強化処理の失敗率定数（千分率） /
- * Used by the "enchant" function (chance of failure)
- * (modified for Zangband, we need better stuff there...) -- TY
- */
-static int enchant_table[16] = { 0, 10, 50, 100, 200, 300, 400, 500, 650, 800, 950, 987, 993, 995, 998, 1000 };
+static constexpr std::array<amuse_type, 13> amuse_info = { {
+    { ItemKindType::BOTTLE, SV_ANY, 5, AmusementFlagType::NOTHING },
+    { ItemKindType::JUNK, SV_ANY, 3, AmusementFlagType::MULTIPLE },
+    { ItemKindType::SPIKE, SV_ANY, 10, AmusementFlagType::PILE },
+    { ItemKindType::STATUE, SV_ANY, 15, AmusementFlagType::NOTHING },
+    { ItemKindType::CORPSE, SV_ANY, 15, AmusementFlagType::NO_UNIQUE },
+    { ItemKindType::SKELETON, SV_ANY, 10, AmusementFlagType::NO_UNIQUE },
+    { ItemKindType::FIGURINE, SV_ANY, 10, AmusementFlagType::NO_UNIQUE },
+    { ItemKindType::PARCHMENT, SV_ANY, 1, AmusementFlagType::NOTHING },
+    { ItemKindType::POLEARM, SV_TSURIZAO, 3, AmusementFlagType::NOTHING }, // Fishing Pole of Taikobo
+    { ItemKindType::SWORD, SV_BROKEN_DAGGER, 3, AmusementFlagType::FIXED_ART }, // Broken Dagger of Magician
+    { ItemKindType::SWORD, SV_BROKEN_DAGGER, 10, AmusementFlagType::NOTHING },
+    { ItemKindType::SWORD, SV_BROKEN_SWORD, 5, AmusementFlagType::NOTHING },
+    { ItemKindType::SCROLL, SV_SCROLL_AMUSEMENT, 10, AmusementFlagType::NOTHING },
+} };
 
-/*
- * Scatter some "amusing" objects near the player
- */
+static std::optional<FixedArtifactId> sweep_amusement_artifact(const bool insta_art, const short k_idx)
+{
+    for (const auto &[a_idx, a_ref] : a_info) {
+        if (a_idx == FixedArtifactId::NONE) {
+            continue;
+        }
 
-#define AMS_NOTHING 0x00 /* No restriction */
-#define AMS_NO_UNIQUE 0x01 /* Don't make the amusing object of uniques */
-#define AMS_FIXED_ART 0x02 /* Make a fixed artifact based on the amusing object */
-#define AMS_MULTIPLE 0x04 /* Drop 1-3 objects for one type */
-#define AMS_PILE 0x08 /* Drop 1-99 pile objects for one type */
+        if (insta_art && !a_ref.gen_flags.has(ItemGenerationTraitType::INSTA_ART)) {
+            continue;
+        }
 
-static amuse_type amuse_info[] = { { ItemKindType::BOTTLE, SV_ANY, 5, AMS_NOTHING }, { ItemKindType::JUNK, SV_ANY, 3, AMS_MULTIPLE }, { ItemKindType::SPIKE, SV_ANY, 10, AMS_PILE }, { ItemKindType::STATUE, SV_ANY, 15, AMS_NOTHING },
-    { ItemKindType::CORPSE, SV_ANY, 15, AMS_NO_UNIQUE }, { ItemKindType::SKELETON, SV_ANY, 10, AMS_NO_UNIQUE }, { ItemKindType::FIGURINE, SV_ANY, 10, AMS_NO_UNIQUE },
-    { ItemKindType::PARCHMENT, SV_ANY, 1, AMS_NOTHING }, { ItemKindType::POLEARM, SV_TSURIZAO, 3, AMS_NOTHING }, // Fishing Pole of Taikobo
-    { ItemKindType::SWORD, SV_BROKEN_DAGGER, 3, AMS_FIXED_ART }, // Broken Dagger of Magician
-    { ItemKindType::SWORD, SV_BROKEN_DAGGER, 10, AMS_NOTHING }, { ItemKindType::SWORD, SV_BROKEN_SWORD, 5, AMS_NOTHING }, { ItemKindType::SCROLL, SV_SCROLL_AMUSEMENT, 10, AMS_NOTHING },
+        if (a_ref.tval != k_info[k_idx].tval) {
+            continue;
+        }
 
-    { ItemKindType::NONE, 0, 0, 0 } };
+        if (a_ref.sval != k_info[k_idx].sval) {
+            continue;
+        }
+
+        if (a_ref.is_generated) {
+            continue;
+        }
+
+        return a_idx;
+    }
+
+    return std::nullopt;
+}
 
 /*!
  * @brief 誰得ドロップを行う。
  * @param player_ptr プレイヤーへの参照ポインタ
- * @param y1 配置したいフロアのY座標
- * @param x1 配置したいフロアのX座標
  * @param num 誰得の処理回数
  * @param known TRUEならばオブジェクトが必ず＊鑑定＊済になる
  */
-void amusement(PlayerType *player_ptr, POSITION y1, POSITION x1, int num, bool known)
+void generate_amusement(PlayerType *player_ptr, int num, bool known)
 {
-    int t = 0;
-    for (int n = 0; amuse_info[n].tval != ItemKindType::NONE; n++) {
-        t += amuse_info[n].prob;
+    ProbabilityTable<const amuse_type *> pt;
+    for (const auto &am_ref : amuse_info) {
+        pt.entry_item(&am_ref, am_ref.prob);
     }
 
-    /* Acquirement */
-    ObjectType *i_ptr;
-    ObjectType ObjectType_body;
-    while (num) {
-        int i;
-        KIND_OBJECT_IDX k_idx;
-        ARTIFACT_IDX a_idx = 0;
-        int r = randint0(t);
-        bool insta_art, fixed_art;
+    while (num > 0) {
+        auto am_ptr = pt.pick_one_at_random();
 
-        for (i = 0;; i++) {
-            r -= amuse_info[i].prob;
-            if (r <= 0) {
-                break;
-            }
-        }
-        i_ptr = &ObjectType_body;
-        i_ptr->wipe();
-        k_idx = lookup_kind(amuse_info[i].tval, amuse_info[i].sval);
-
-        /* Paranoia - reroll if nothing */
-        if (!k_idx) {
+        const auto k_idx = lookup_kind(am_ptr->tval, am_ptr->sval);
+        if (k_idx == 0) {
             continue;
         }
 
-        /* Search an artifact index if need */
-        insta_art = k_info[k_idx].gen_flags.has(ItemGenerationTraitType::INSTA_ART);
-        fixed_art = (amuse_info[i].flag & AMS_FIXED_ART);
-
+        const auto insta_art = k_info[k_idx].gen_flags.has(ItemGenerationTraitType::INSTA_ART);
+        const auto flag = am_ptr->flag;
+        const auto fixed_art = flag == AmusementFlagType::FIXED_ART;
+        std::optional<FixedArtifactId> opt_a_idx(std::nullopt);
         if (insta_art || fixed_art) {
-            for (const auto &a_ref : a_info) {
-                if (a_ref.idx == 0) {
-                    continue;
-                }
-                if (insta_art && !a_ref.gen_flags.has(ItemGenerationTraitType::INSTA_ART)) {
-                    continue;
-                }
-                if (a_ref.tval != k_info[k_idx].tval) {
-                    continue;
-                }
-                if (a_ref.sval != k_info[k_idx].sval) {
-                    continue;
-                }
-                if (a_ref.cur_num > 0) {
-                    continue;
-                }
-
-                a_idx = a_ref.idx;
-                break;
-            }
-
-            if (a_idx >= static_cast<ARTIFACT_IDX>(a_info.size())) {
+            opt_a_idx = sweep_amusement_artifact(insta_art, k_idx);
+            if (!opt_a_idx.has_value()) {
                 continue;
             }
         }
 
-        /* Make an object (if possible) */
-        i_ptr->prep(k_idx);
-        if (a_idx) {
-            i_ptr->fixed_artifact_idx = a_idx;
+        ObjectType item;
+        item.prep(k_idx);
+        if (opt_a_idx.has_value()) {
+            item.fixed_artifact_idx = opt_a_idx.value();
         }
-        ItemMagicApplier(player_ptr, i_ptr, 1, AM_NO_FIXED_ART).execute();
 
-        if (amuse_info[i].flag & AMS_NO_UNIQUE) {
-            if (r_info[i2enum<MonsterRaceId>(i_ptr->pval)].kind_flags.has(MonsterKindType::UNIQUE)) {
+        ItemMagicApplier(player_ptr, &item, 1, AM_NO_FIXED_ART).execute();
+        if (flag == AmusementFlagType::NO_UNIQUE) {
+            if (r_info[i2enum<MonsterRaceId>(item.pval)].kind_flags.has(MonsterKindType::UNIQUE)) {
                 continue;
             }
         }
 
-        if (amuse_info[i].flag & AMS_MULTIPLE) {
-            i_ptr->number = randint1(3);
+        if (flag == AmusementFlagType::MULTIPLE) {
+            item.number = randint1(3);
         }
-        if (amuse_info[i].flag & AMS_PILE) {
-            i_ptr->number = randint1(99);
+
+        if (flag == AmusementFlagType::PILE) {
+            item.number = randint1(99);
         }
 
         if (known) {
-            object_aware(player_ptr, i_ptr);
-            object_known(i_ptr);
+            object_aware(player_ptr, &item);
+            object_known(&item);
         }
 
-        /* Paranoia - reroll if nothing */
-        if (!(i_ptr->k_idx)) {
-            continue;
-        }
-
-        (void)drop_near(player_ptr, i_ptr, -1, y1, x1);
-
+        (void)drop_near(player_ptr, &item, -1, player_ptr->y, player_ptr->x);
         num--;
     }
 }
@@ -254,7 +250,7 @@ bool curse_armor(PlayerType *player_ptr)
     chg_virtue(player_ptr, V_ENCHANT, -5);
 
     /* Blast the armor */
-    o_ptr->fixed_artifact_idx = 0;
+    o_ptr->fixed_artifact_idx = FixedArtifactId::NONE;
     o_ptr->ego_idx = EgoType::BLASTED;
     o_ptr->to_a = 0 - randint1(5) - randint1(5);
     o_ptr->to_h = 0;
@@ -310,7 +306,7 @@ bool curse_weapon_object(PlayerType *player_ptr, bool force, ObjectType *o_ptr)
     chg_virtue(player_ptr, V_ENCHANT, -5);
 
     /* Shatter the weapon */
-    o_ptr->fixed_artifact_idx = 0;
+    o_ptr->fixed_artifact_idx = FixedArtifactId::NONE;
     o_ptr->ego_idx = EgoType::SHATTERED;
     o_ptr->to_h = 0 - randint1(5) - randint1(5);
     o_ptr->to_d = 0 - randint1(5) - randint1(5);

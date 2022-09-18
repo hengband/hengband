@@ -347,7 +347,11 @@ static MULTIPLY calc_shot_damage_with_slay(
             if (mult < 30) {
                 mult = 30;
             }
-            if ((arrow_ptr->fixed_artifact_idx == ART_BARD_ARROW) && (monster_ptr->r_idx == MonsterRaceId::SMAUG) && (player_ptr->inventory_list[INVEN_BOW].fixed_artifact_idx == ART_BARD)) {
+
+            auto can_eliminate_smaug = arrow_ptr->fixed_artifact_idx == FixedArtifactId::BARD_ARROW;
+            can_eliminate_smaug &= player_ptr->inventory_list[INVEN_BOW].fixed_artifact_idx == FixedArtifactId::BARD;
+            can_eliminate_smaug &= monster_ptr->r_idx == MonsterRaceId::SMAUG;
+            if (can_eliminate_smaug) {
                 mult *= 5;
             }
         }
@@ -685,8 +689,8 @@ void exe_fire(PlayerType *player_ptr, INVENTORY_IDX item, ObjectType *j_ptr, SPE
 
             /* The player can see the (on screen) missile */
             if (panel_contains(ny, nx) && player_can_see_bold(player_ptr, ny, nx)) {
-                auto c = object_char(q_ptr);
-                TERM_COLOR a = object_attr(q_ptr);
+                const auto a = q_ptr->get_color();
+                const auto c = q_ptr->get_symbol();
 
                 /* Draw, Hilite, Fresh, Pause, Erase */
                 if (delay_factor > 0) {
@@ -951,7 +955,7 @@ void exe_fire(PlayerType *player_ptr, INVENTORY_IDX item, ObjectType *j_ptr, SPE
             if (!o_idx) {
                 msg_format(_("%sはどこかへ行った。", "The %s went somewhere."), o_name);
                 if (q_ptr->is_fixed_artifact()) {
-                    a_info[j_ptr->fixed_artifact_idx].cur_num = 0;
+                    a_info.at(j_ptr->fixed_artifact_idx).is_generated = false;
                 }
                 return;
             }

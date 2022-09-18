@@ -54,6 +54,8 @@
 #include "system/player-type-definition.h"
 #include "term/gameterm.h"
 #include "term/term-color-types.h"
+#include "timed-effect/player-blindness.h"
+#include "timed-effect/timed-effects.h"
 #include "util/bit-flags-calculator.h"
 #include "util/enum-converter.h"
 #include "util/point-2d.h"
@@ -286,7 +288,6 @@ void print_bolt_pict(PlayerType *player_ptr, POSITION y, POSITION x, POSITION ny
 }
 
 /*!
- * @todo ここにPlayerType を追加した時のコンパイルエラーに対処できなかったので保留
  * Memorize interesting viewable object/features in the given grid
  *
  * This function should only be called on "legal" grids.
@@ -330,7 +331,7 @@ void note_spot(PlayerType *player_ptr, POSITION y, POSITION x)
     auto *g_ptr = &player_ptr->current_floor_ptr->grid_array[y][x];
 
     /* Blind players see nothing */
-    if (player_ptr->blind) {
+    if (player_ptr->effects()->blindness()->is_blind()) {
         return;
     }
 

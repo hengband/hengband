@@ -34,7 +34,6 @@ void do_cmd_knowledge_weapon_exp(PlayerType *player_ptr)
 
     for (auto tval : { ItemKindType::SWORD, ItemKindType::POLEARM, ItemKindType::HAFTED, ItemKindType::DIGGING, ItemKindType::BOW }) {
         for (int num = 0; num < 64; num++) {
-            char tmp[30];
             for (const auto &k_ref : k_info) {
                 if ((k_ref.tval != tval) || (k_ref.sval != num)) {
                     continue;
@@ -45,8 +44,8 @@ void do_cmd_knowledge_weapon_exp(PlayerType *player_ptr)
 
                 SUB_EXP weapon_exp = player_ptr->weapon_exp[tval][num];
                 SUB_EXP weapon_max = player_ptr->weapon_exp_max[tval][num];
-                strip_name(tmp, k_ref.idx);
-                fprintf(fff, "%-25s ", tmp);
+                const auto tmp = strip_name(k_ref.idx);
+                fprintf(fff, "%-25s ", tmp.data());
                 if (show_actual_value) {
                     fprintf(fff, "%4d/%4d ", weapon_exp, weapon_max);
                 }

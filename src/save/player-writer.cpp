@@ -11,12 +11,14 @@
 #include "system/floor-type-definition.h"
 #include "system/player-type-definition.h"
 #include "timed-effect/player-acceleration.h"
+#include "timed-effect/player-blindness.h"
 #include "timed-effect/player-confusion.h"
 #include "timed-effect/player-cut.h"
 #include "timed-effect/player-deceleration.h"
 #include "timed-effect/player-fear.h"
 #include "timed-effect/player-hallucination.h"
 #include "timed-effect/player-paralysis.h"
+#include "timed-effect/player-poison.h"
 #include "timed-effect/player-stun.h"
 #include "timed-effect/timed-effects.h"
 #include "world/world.h"
@@ -158,7 +160,7 @@ void wr_player(PlayerType *player_ptr)
 
     auto effects = player_ptr->effects();
     wr_s16b(0); /* old "rest" */
-    wr_s16b(player_ptr->blind);
+    wr_s16b(effects->blindness()->current());
     wr_s16b(effects->paralysis()->current());
     wr_s16b(effects->confusion()->current());
     wr_s16b(player_ptr->food);
@@ -171,7 +173,7 @@ void wr_player(PlayerType *player_ptr)
     wr_s16b(effects->fear()->current());
     wr_s16b(effects->cut()->current());
     wr_s16b(effects->stun()->current());
-    wr_s16b(player_ptr->poisoned);
+    wr_s16b(effects->poison()->current());
     wr_s16b(effects->hallucination()->current());
     wr_s16b(player_ptr->protevil);
     wr_s16b(player_ptr->invuln);

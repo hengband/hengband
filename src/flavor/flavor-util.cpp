@@ -4,6 +4,7 @@
 #include "object-enchant/tr-types.h"
 #include "object/object-flags.h"
 #include "object/object-kind.h"
+#include "object/tval-types.h"
 #include "perception/object-perception.h"
 #include "sv-definition/sv-food-types.h"
 #include "system/artifact-type-definition.h"
@@ -146,15 +147,15 @@ static void add_inscription(char **short_flavor, concptr str)
  * sprintf(t, "%+d", n), and return a pointer to the terminator.
  * Note that we always print a sign, either "+" or "-".
  */
-static char *inscribe_flags_aux(std::vector<flag_insc_table> &fi_vec, const TrFlags &flgs, bool kanji, char *ptr)
+static char *inscribe_flags_aux(const std::vector<flag_insc_table> &fi_vec, const TrFlags &flgs, bool kanji, char *ptr)
 {
 #ifdef JP
 #else
     (void)kanji;
 #endif
 
-    for (flag_insc_table &fi : fi_vec) {
-        if (flgs.has(fi.flag) && (fi.except_flag == -1 || flgs.has_not(i2enum<tr_type>(fi.except_flag)))) {
+    for (const auto &fi : fi_vec) {
+        if (flgs.has(fi.flag) && (!fi.except_flag.has_value() || flgs.has_not(fi.except_flag.value()))) {
             add_inscription(&ptr, _(kanji ? fi.japanese : fi.english, fi.english));
         }
     }
@@ -169,10 +170,10 @@ static char *inscribe_flags_aux(std::vector<flag_insc_table> &fi_vec, const TrFl
  * @param flgs 対応するオブジェクトのフラグ文字列
  * @return 1つでも該当の特性があったらTRUEを返す。
  */
-static bool has_flag_of(std::vector<flag_insc_table> &fi_vec, const TrFlags &flgs)
+static bool has_flag_of(const std::vector<flag_insc_table> &fi_vec, const TrFlags &flgs)
 {
-    for (flag_insc_table &fi : fi_vec) {
-        if (flgs.has(fi.flag) && (fi.except_flag == -1 || flgs.has_not(i2enum<tr_type>(fi.except_flag)))) {
+    for (const auto &fi : fi_vec) {
+        if (flgs.has(fi.flag) && (!fi.except_flag.has_value() || flgs.has_not(fi.except_flag.value()))) {
             return true;
         }
     }
@@ -197,8 +198,8 @@ char *get_ability_abbreviation(char *short_flavor, ObjectType *o_ptr, bool kanji
         flgs.reset(k_ptr->flags);
 
         if (o_ptr->is_fixed_artifact()) {
-            auto *a_ptr = &a_info[o_ptr->fixed_artifact_idx];
-            flgs.reset(a_ptr->flags);
+            const auto &a_ref = a_info.at(o_ptr->fixed_artifact_idx);
+            flgs.reset(a_ref.flags);
         }
 
         if (o_ptr->is_ego()) {

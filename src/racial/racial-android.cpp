@@ -7,6 +7,7 @@
 #include "object/object-kind.h"
 #include "object/object-value-calc.h"
 #include "object/object-value.h"
+#include "object/tval-types.h"
 #include "player-base/player-race.h"
 #include "player-info/equipment-info.h"
 #include "player/player-status.h"
@@ -83,8 +84,9 @@ void calc_android_exp(PlayerType *player_ptr)
         q_ptr->curse_flags.clear();
 
         if (o_ptr->is_fixed_artifact()) {
-            level = (level + std::max(a_info[o_ptr->fixed_artifact_idx].level - 8, 5)) / 2;
-            level += std::min(20, a_info[o_ptr->fixed_artifact_idx].rarity / (a_info[o_ptr->fixed_artifact_idx].gen_flags.has(ItemGenerationTraitType::INSTA_ART) ? 10 : 3));
+            const auto &fixed_artifact = a_info.at(o_ptr->fixed_artifact_idx);
+            level = (level + std::max(fixed_artifact.level - 8, 5)) / 2;
+            level += std::min(20, fixed_artifact.rarity / (fixed_artifact.gen_flags.has(ItemGenerationTraitType::INSTA_ART) ? 10 : 3));
         } else if (o_ptr->is_ego()) {
             level += std::max(3, (e_info[o_ptr->ego_idx].rating - 5) / 2);
         } else if (o_ptr->art_name) {

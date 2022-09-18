@@ -34,6 +34,7 @@
 #include "system/monster-type-definition.h"
 #include "system/player-type-definition.h"
 #include "target/projection-path-calculator.h"
+#include "timed-effect/player-blindness.h"
 #include "timed-effect/player-hallucination.h"
 #include "timed-effect/timed-effects.h"
 #include "util/bit-flags-calculator.h"
@@ -64,7 +65,6 @@ ProjectResult project(PlayerType *player_ptr, const MONSTER_IDX who, POSITION ra
     POSITION y2;
     POSITION x2;
     bool breath = false;
-    bool blind = player_ptr->blind != 0;
     bool old_hide = false;
     int path_n = 0;
     int grids = 0;
@@ -145,6 +145,7 @@ ProjectResult project(PlayerType *player_ptr, const MONSTER_IDX who, POSITION ra
     auto visual = false;
     POSITION gm_rad = rad;
     bool see_s_msg = true;
+    const auto is_blind = player_ptr->effects()->blindness()->is_blind();
     for (const auto &[ny, nx] : path_g) {
         if (flag & PROJECT_DISI) {
             if (cave_stop_disintegration(player_ptr->current_floor_ptr, ny, nx) && (rad > 0)) {
@@ -166,7 +167,7 @@ ProjectResult project(PlayerType *player_ptr, const MONSTER_IDX who, POSITION ra
         }
 
         if (delay_factor > 0) {
-            if (!blind && !(flag & (PROJECT_HIDE | PROJECT_FAST))) {
+            if (!is_blind && !(flag & (PROJECT_HIDE | PROJECT_FAST))) {
                 if (panel_contains(ny, nx) && player_has_los_bold(player_ptr, ny, nx)) {
                     print_bolt_pict(player_ptr, oy, ox, ny, nx, typ);
                     move_cursor_relative(ny, nx);
@@ -268,7 +269,7 @@ ProjectResult project(PlayerType *player_ptr, const MONSTER_IDX who, POSITION ra
         return res;
     }
 
-    if (!blind && !(flag & (PROJECT_HIDE)) && (delay_factor > 0)) {
+    if (!is_blind && !(flag & (PROJECT_HIDE)) && (delay_factor > 0)) {
         auto drawn = false;
         for (int t = 0; t <= gm_rad; t++) {
             for (int i = gm[t]; i < gm[t + 1]; i++) {

@@ -41,6 +41,8 @@
 #include "system/monster-race-definition.h"
 #include "system/object-type-definition.h"
 #include "system/player-type-definition.h"
+#include "timed-effect/player-blindness.h"
+#include "timed-effect/timed-effects.h"
 #include "view/display-messages.h"
 #include "window/main-window-util.h"
 #include "world/world.h"
@@ -193,7 +195,7 @@ static void update_unique_artifact(floor_type *floor_ptr, int16_t cur_floor_id)
         }
 
         if (o_ptr->is_fixed_artifact()) {
-            a_info[o_ptr->fixed_artifact_idx].floor_id = cur_floor_id;
+            a_info.at(o_ptr->fixed_artifact_idx).floor_id = cur_floor_id;
         }
     }
 }
@@ -294,8 +296,9 @@ static void new_floor_allocation(PlayerType *player_ptr, saved_floor_type *sf_pt
             continue;
         }
 
-        if (a_info[o_ptr->fixed_artifact_idx].floor_id == new_floor_id) {
-            a_info[o_ptr->fixed_artifact_idx].cur_num = 1;
+        auto &fixed_artifact = a_info.at(o_ptr->fixed_artifact_idx);
+        if (fixed_artifact.floor_id == new_floor_id) {
+            fixed_artifact.is_generated = true;
         } else {
             delete_object_idx(player_ptr, i);
         }
@@ -364,7 +367,7 @@ static void cut_off_the_upstair(PlayerType *player_ptr)
         return;
     }
 
-    if (!player_ptr->blind) {
+    if (!player_ptr->effects()->blindness()->is_blind()) {
         msg_print(_("突然階段が塞がれてしまった。", "Suddenly the stairs is blocked!"));
     } else {
         msg_print(_("ゴトゴトと何か音がした。", "You hear some noises."));

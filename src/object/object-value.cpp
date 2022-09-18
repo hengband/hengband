@@ -8,6 +8,7 @@
 #include "object/object-flags.h"
 #include "object/object-kind.h"
 #include "object/object-value-calc.h"
+#include "object/tval-types.h"
 #include "perception/object-perception.h"
 #include "system/artifact-type-definition.h"
 #include "system/monster-race-definition.h"
@@ -157,21 +158,21 @@ PRICE object_value_real(const ObjectType *o_ptr)
     PRICE value = k_info[o_ptr->k_idx].cost;
     auto flgs = object_flags(o_ptr);
     if (o_ptr->is_fixed_artifact()) {
-        auto *a_ptr = &a_info[o_ptr->fixed_artifact_idx];
-        if (!a_ptr->cost) {
+        const auto &a_ref = a_info.at(o_ptr->fixed_artifact_idx);
+        if (!a_ref.cost) {
             return 0;
         }
 
-        value = a_ptr->cost;
+        value = a_ref.cost;
         value += flag_cost(o_ptr, o_ptr->pval);
         return value;
     } else if (o_ptr->is_ego()) {
-        auto *e_ptr = &e_info[o_ptr->ego_idx];
-        if (!e_ptr->cost) {
+        const auto &e_ref = e_info[o_ptr->ego_idx];
+        if (!e_ref.cost) {
             return 0;
         }
 
-        value += e_ptr->cost;
+        value += e_ref.cost;
         value += flag_cost(o_ptr, o_ptr->pval);
     } else {
         if (o_ptr->art_flags.any()) {

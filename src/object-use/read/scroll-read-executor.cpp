@@ -410,11 +410,11 @@ bool ScrollReadExecutor::read()
         break;
     case SV_SCROLL_AMUSEMENT:
         this->ident = true;
-        amusement(this->player_ptr, this->player_ptr->y, this->player_ptr->x, 1, false);
+        generate_amusement(this->player_ptr, 1, false);
         break;
     case SV_SCROLL_STAR_AMUSEMENT:
         this->ident = true;
-        amusement(this->player_ptr, this->player_ptr->y, this->player_ptr->x, randint1(2) + 1, false);
+        generate_amusement(this->player_ptr, randint1(2) + 1, false);
         break;
     default:
         break;

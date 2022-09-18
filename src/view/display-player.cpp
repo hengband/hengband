@@ -356,15 +356,12 @@ std::optional<int> display_player(PlayerType *player_ptr, const int tmp_mode)
  */
 void display_player_equippy(PlayerType *player_ptr, TERM_LEN y, TERM_LEN x, BIT_FLAGS16 mode)
 {
-    int max_i = (mode & DP_WP) ? INVEN_BOW + 1 : INVEN_TOTAL;
+    const auto max_i = (mode & DP_WP) ? INVEN_BOW + 1 : INVEN_TOTAL;
     for (int i = INVEN_MAIN_HAND; i < max_i; i++) {
-        ObjectType *o_ptr;
-        o_ptr = &player_ptr->inventory_list[i];
-
-        TERM_COLOR a = object_attr(o_ptr);
-        auto c = object_char(o_ptr);
-
-        if (!equippy_chars || !o_ptr->k_idx) {
+        const auto &o_ref = player_ptr->inventory_list[i];
+        auto a = o_ref.get_color();
+        auto c = o_ref.get_symbol();
+        if (!equippy_chars || (o_ref.k_idx == 0)) {
             c = ' ';
             a = TERM_DARK;
         }

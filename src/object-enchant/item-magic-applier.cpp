@@ -144,7 +144,7 @@ int ItemMagicApplier::calculate_rolls(const int power)
         rolls = 4;
     }
 
-    if (any_bits(this->mode, AM_NO_FIXED_ART) || this->o_ptr->fixed_artifact_idx) {
+    if (any_bits(this->mode, AM_NO_FIXED_ART) || this->o_ptr->is_fixed_artifact()) {
         rolls = 0;
     }
 
@@ -181,10 +181,11 @@ bool ItemMagicApplier::set_fixed_artifact_generation_info()
         return false;
     }
 
-    auto *a_ptr = apply_artifact(this->player_ptr, this->o_ptr);
-    a_ptr->cur_num = 1;
+    apply_artifact(this->player_ptr, this->o_ptr);
+    auto &a_ref = a_info.at(this->o_ptr->fixed_artifact_idx);
+    a_ref.is_generated = true;
     if (w_ptr->character_dungeon) {
-        a_ptr->floor_id = this->player_ptr->floor_id;
+        a_ref.floor_id = this->player_ptr->floor_id;
     }
 
     return true;

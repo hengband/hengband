@@ -46,6 +46,7 @@
 #include "system/object-type-definition.h"
 #include "system/player-type-definition.h"
 #include "target/target-checker.h"
+#include "timed-effect/player-blindness.h"
 #include "timed-effect/player-confusion.h"
 #include "timed-effect/player-hallucination.h"
 #include "timed-effect/timed-effects.h"
@@ -108,11 +109,11 @@ static void discover_hidden_things(PlayerType *player_ptr, POSITION y, POSITION 
 void search(PlayerType *player_ptr)
 {
     PERCENTAGE chance = player_ptr->skill_srh;
-    if (player_ptr->blind || no_lite(player_ptr)) {
+    const auto effects = player_ptr->effects();
+    if (effects->blindness()->is_blind() || no_lite(player_ptr)) {
         chance = chance / 10;
     }
 
-    auto effects = player_ptr->effects();
     if (effects->confusion()->is_confused() || effects->hallucination()->is_hallucinated()) {
         chance = chance / 10;
     }
@@ -176,7 +177,7 @@ bool move_player_effect(PlayerType *player_ptr, POSITION ny, POSITION nx, BIT_FL
 
         player_ptr->update |= PU_VIEW | PU_LITE | PU_FLOW | PU_MON_LITE | PU_DISTANCE;
         player_ptr->window_flags |= PW_OVERHEAD | PW_DUNGEON;
-        if ((!player_ptr->blind && !no_lite(player_ptr)) || !is_trap(player_ptr, g_ptr->feat)) {
+        if ((!player_ptr->effects()->blindness()->is_blind() && !no_lite(player_ptr)) || !is_trap(player_ptr, g_ptr->feat)) {
             g_ptr->info &= ~(CAVE_UNSAFE);
         }
 

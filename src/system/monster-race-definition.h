@@ -22,6 +22,7 @@
 /*! モンスターが1ターンに攻撃する最大回数 (射撃を含む) / The maximum number of times a monster can attack in a turn (including SHOOT) */
 constexpr int MAX_NUM_BLOWS = 4;
 
+enum class FixedArtifactId : short;
 enum class MonsterRaceId : int16_t;
 
 class MonsterBlow {
@@ -91,7 +92,7 @@ struct monster_race {
     std::vector<std::tuple<MonsterRaceId, DICE_NUMBER, DICE_SID>> reinforces;
 
     //! 特定アーティファクトドロップリスト <アーティファクトID,ドロップ率>
-    std::vector<std::tuple<ARTIFACT_IDX, PERCENTAGE>> drop_artifacts;
+    std::vector<std::tuple<FixedArtifactId, PERCENTAGE>> drop_artifacts;
 
     PERCENTAGE arena_ratio{}; //!< モンスター闘技場の掛け金倍率修正値(%基準 / 0=100%) / The adjustment ratio for gambling monster
     MonsterRaceId next_r_idx{}; //!< 進化先モンスター種族ID

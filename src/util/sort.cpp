@@ -1,4 +1,5 @@
 ﻿#include "util/sort.h"
+#include "artifact/fixed-art-types.h"
 #include "dungeon/quest.h"
 #include "grid/feature.h"
 #include "grid/grid.h"
@@ -260,16 +261,17 @@ bool ang_sort_art_comp(PlayerType *player_ptr, vptr u, vptr v, int a, int b)
     uint16_t *who = (uint16_t *)(u);
     uint16_t *why = (uint16_t *)(v);
 
-    int w1 = who[a];
-    int w2 = who[b];
+    const auto w1 = i2enum<FixedArtifactId>(who[a]);
+    const auto w2 = i2enum<FixedArtifactId>(who[b]);
 
-    int z1, z2;
+    int z1;
+    int z2;
 
     /* Sort by total kills */
     if (*why >= 3) {
         /* Extract total kills */
-        z1 = enum2i(a_info[w1].tval);
-        z2 = enum2i(a_info[w2].tval);
+        z1 = enum2i(a_info.at(w1).tval);
+        z2 = enum2i(a_info.at(w2).tval);
 
         /* Compare total kills */
         if (z1 < z2) {
@@ -284,8 +286,8 @@ bool ang_sort_art_comp(PlayerType *player_ptr, vptr u, vptr v, int a, int b)
     /* Sort by monster level */
     if (*why >= 2) {
         /* Extract levels */
-        z1 = a_info[w1].sval;
-        z2 = a_info[w2].sval;
+        z1 = a_info.at(w1).sval;
+        z2 = a_info.at(w2).sval;
 
         /* Compare levels */
         if (z1 < z2) {
@@ -300,8 +302,8 @@ bool ang_sort_art_comp(PlayerType *player_ptr, vptr u, vptr v, int a, int b)
     /* Sort by monster experience */
     if (*why >= 1) {
         /* Extract experience */
-        z1 = a_info[w1].level;
-        z2 = a_info[w2].level;
+        z1 = a_info.at(w1).level;
+        z2 = a_info.at(w2).level;
 
         /* Compare experience */
         if (z1 < z2) {

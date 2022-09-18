@@ -8,12 +8,12 @@ wget -O - https://apt.llvm.org/llvm-snapshot.gpg.key 2>/dev/null | sudo apt-key 
 cat <<EOF | sudo tee /etc/apt/sources.list.d/llvm.list >/dev/null
 deb http://apt.llvm.org/focal/ llvm-toolchain-focal main
 deb-src http://apt.llvm.org/focal/ llvm-toolchain-focal main
-# 13
-deb http://apt.llvm.org/focal/ llvm-toolchain-focal-13 main
-deb-src http://apt.llvm.org/focal/ llvm-toolchain-focal-13 main
 # 14
 deb http://apt.llvm.org/focal/ llvm-toolchain-focal-14 main
 deb-src http://apt.llvm.org/focal/ llvm-toolchain-focal-14 main
+# 15
+deb http://apt.llvm.org/focal/ llvm-toolchain-focal-15 main
+deb-src http://apt.llvm.org/focal/ llvm-toolchain-focal-15 main
 
 EOF
 
@@ -23,6 +23,12 @@ sudo apt-get install clang-format-15 >/dev/null
 SRC_FILES=$(find src/ -name \*.cpp -or -name \*.h)
 
 clang-format-15 -style=file:.github/scripts/check-clang-format-style -i $SRC_FILES
+clang_format_result=$?
+
+if [ $clang_format_result -ne 0 ]; then
+    echo "Could not execute clang-format properly."
+    exit $clang_format_result
+fi
 
 DIFF_FILE=$(mktemp)
 git diff >$DIFF_FILE

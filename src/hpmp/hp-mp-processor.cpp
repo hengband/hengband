@@ -44,6 +44,7 @@
 #include "system/object-type-definition.h"
 #include "system/player-type-definition.h"
 #include "timed-effect/player-cut.h"
+#include "timed-effect/player-poison.h"
 #include "timed-effect/timed-effects.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
@@ -118,13 +119,15 @@ void process_player_hp_mp(PlayerType *player_ptr)
     bool cave_no_regen = false;
     int upkeep_factor = 0;
     int regen_amount = PY_REGEN_NORMAL;
-    if (player_ptr->poisoned && !is_invuln(player_ptr)) {
+    const auto effects = player_ptr->effects();
+    const auto player_poison = effects->poison();
+    if (player_poison->is_poisoned() && !is_invuln(player_ptr)) {
         if (take_hit(player_ptr, DAMAGE_NOESCAPE, 1, _("毒", "poison")) > 0) {
             sound(SOUND_DAMAGE_OVER_TIME);
         }
     }
 
-    auto player_cut = player_ptr->effects()->cut();
+    const auto player_cut = effects->cut();
     if (player_cut->is_cut() && !is_invuln(player_ptr)) {
         auto dam = player_cut->get_damage();
         if (take_hit(player_ptr, DAMAGE_NOESCAPE, dam, _("致命傷", "a mortal wound")) > 0) {
@@ -401,7 +404,7 @@ void process_player_hp_mp(PlayerType *player_ptr)
         }
     }
 
-    if (player_ptr->poisoned) {
+    if (player_poison->is_poisoned()) {
         regen_amount = 0;
     }
     if (player_cut->is_cut()) {

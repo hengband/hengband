@@ -42,6 +42,7 @@
 #include "util/string-processor.h"
 #include "world/world.h"
 #include <functional>
+#include <sstream>
 #include <utility>
 
 /*!
@@ -252,12 +253,12 @@ void flavor_init(void)
  * @param buf ベースアイテム格納先の参照ポインタ
  * @param k_idx ベースアイテムID
  */
-void strip_name(char *buf, KIND_OBJECT_IDX k_idx)
+std::string strip_name(KIND_OBJECT_IDX k_idx)
 {
     auto k_ptr = &k_info[k_idx];
     auto tok = str_split(k_ptr->name, ' ');
-    std::string name = "";
-    for (auto s : tok) {
+    std::stringstream name;
+    for (const auto &s : tok) {
         if (s == "" || s == "~" || s == "&" || s == "#") {
             continue;
         }
@@ -279,9 +280,9 @@ void strip_name(char *buf, KIND_OBJECT_IDX k_idx)
             endpos--;
         }
 
-        name += s.substr(offset, endpos);
+        name << s.substr(offset, endpos);
     }
 
-    name += " ";
-    strcpy(buf, name.c_str());
+    name << " ";
+    return name.str();
 }

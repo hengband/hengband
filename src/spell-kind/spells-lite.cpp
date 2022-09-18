@@ -25,6 +25,8 @@
 #include "system/monster-type-definition.h"
 #include "system/player-type-definition.h"
 #include "target/projection-path-calculator.h"
+#include "timed-effect/player-blindness.h"
+#include "timed-effect/timed-effects.h"
 #include "util/bit-flags-calculator.h"
 #include "util/point-2d.h"
 #include "view/display-messages.h"
@@ -385,7 +387,7 @@ void unlite_room(PlayerType *player_ptr, const POSITION y1, const POSITION x1)
  */
 bool starlight(PlayerType *player_ptr, bool magic)
 {
-    if (!player_ptr->blind && !magic) {
+    if (!player_ptr->effects()->blindness()->is_blind() && !magic) {
         msg_print(_("杖の先が明るく輝いた...", "The end of the staff glows brightly..."));
     }
 
@@ -426,7 +428,7 @@ bool lite_area(PlayerType *player_ptr, int dam, POSITION rad)
         return false;
     }
 
-    if (!player_ptr->blind) {
+    if (!player_ptr->effects()->blindness()->is_blind()) {
         msg_print(_("白い光が辺りを覆った。", "You are surrounded by a white light."));
     }
 
@@ -447,7 +449,7 @@ bool lite_area(PlayerType *player_ptr, int dam, POSITION rad)
  */
 bool unlite_area(PlayerType *player_ptr, int dam, POSITION rad)
 {
-    if (!player_ptr->blind) {
+    if (!player_ptr->effects()->blindness()->is_blind()) {
         msg_print(_("暗闇が辺りを覆った。", "Darkness surrounds you."));
     }
 

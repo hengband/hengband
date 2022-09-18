@@ -62,6 +62,7 @@
 #include "target/target-checker.h"
 #include "target/target-getter.h"
 #include "term/screen-processor.h"
+#include "timed-effect/player-blindness.h"
 #include "timed-effect/player-hallucination.h"
 #include "timed-effect/timed-effects.h"
 #include "util/bit-flags-calculator.h"
@@ -150,7 +151,7 @@ bool ObjectThrowEntity::calc_throw_grid()
 
 void ObjectThrowEntity::reflect_inventory_by_throw()
 {
-    if ((this->q_ptr->fixed_artifact_idx == ART_MJOLLNIR) || (this->q_ptr->fixed_artifact_idx == ART_AEGISFANG) || this->boomerang) {
+    if ((this->q_ptr->fixed_artifact_idx == FixedArtifactId::MJOLLNIR) || (this->q_ptr->fixed_artifact_idx == FixedArtifactId::AEGISFANG) || this->boomerang) {
         this->return_when_thrown = true;
     }
 
@@ -276,7 +277,7 @@ void ObjectThrowEntity::check_boomerang_throw()
     }
 
     this->back_chance = randint1(30) + 20 + ((int)(adj_dex_th[this->player_ptr->stat_index[A_DEX]]) - 128);
-    this->super_boomerang = (((this->q_ptr->fixed_artifact_idx == ART_MJOLLNIR) || (this->q_ptr->fixed_artifact_idx == ART_AEGISFANG)) && this->boomerang);
+    this->super_boomerang = (((this->q_ptr->fixed_artifact_idx == FixedArtifactId::MJOLLNIR) || (this->q_ptr->fixed_artifact_idx == FixedArtifactId::AEGISFANG)) && this->boomerang);
     this->corruption_possibility = -1;
     if (this->boomerang) {
         this->back_chance += 4 + randint1(5);
@@ -334,11 +335,11 @@ bool ObjectThrowEntity::check_what_throw()
         return true;
     }
 
-    concptr q, s;
-    if (!this->check_throw_boomerang(&q, &s)) {
-        return false;
+    if (this->boomerang) {
+        return this->check_throw_boomerang();
     }
 
+    concptr q, s;
     q = _("どのアイテムを投げますか? ", "Throw which item? ");
     s = _("投げるアイテムがない。", "You have nothing to throw.");
     this->o_ptr = choose_object(this->player_ptr, &this->item, q, s, USE_INVEN | USE_FLOOR | USE_EQUIP);
@@ -350,16 +351,13 @@ bool ObjectThrowEntity::check_what_throw()
     return true;
 }
 
-bool ObjectThrowEntity::check_throw_boomerang(concptr *q, concptr *s)
+bool ObjectThrowEntity::check_throw_boomerang()
 {
-    if (!this->boomerang) {
-        return true;
-    }
-
     if (has_melee_weapon(this->player_ptr, INVEN_MAIN_HAND) && has_melee_weapon(this->player_ptr, INVEN_SUB_HAND)) {
-        *q = _("どの武器を投げますか? ", "Throw which item? ");
-        *s = _("投げる武器がない。", "You have nothing to throw.");
-        this->o_ptr = choose_object(this->player_ptr, &this->item, *q, *s, USE_EQUIP, FuncItemTester(&ObjectType::is_throwable));
+        concptr q, s;
+        q = _("どの武器を投げますか? ", "Throw which item? ");
+        s = _("投げる武器がない。", "You have nothing to throw.");
+        this->o_ptr = choose_object(this->player_ptr, &this->item, q, s, USE_EQUIP, FuncItemTester(&ObjectType::is_throwable));
         if (!this->o_ptr) {
             flush();
             return false;
@@ -404,8 +402,8 @@ void ObjectThrowEntity::check_racial_target_seen()
         return;
     }
 
-    auto c = object_char(this->q_ptr);
-    auto a = object_attr(this->q_ptr);
+    const auto c = this->q_ptr->get_symbol();
+    const auto a = this->q_ptr->get_color();
     print_rel(this->player_ptr, c, a, this->ny[this->cur_dis], this->nx[this->cur_dis]);
     move_cursor_relative(this->ny[this->cur_dis], this->nx[this->cur_dis]);
     term_fresh();
@@ -520,8 +518,8 @@ void ObjectThrowEntity::process_boomerang_throw()
             continue;
         }
 
-        auto c = object_char(this->q_ptr);
-        auto a = object_attr(this->q_ptr);
+        const auto c = this->q_ptr->get_symbol();
+        const auto a = this->q_ptr->get_color();
         if (this->msec <= 0) {
             continue;
         }
@@ -539,7 +537,8 @@ void ObjectThrowEntity::process_boomerang_throw()
 
 void ObjectThrowEntity::display_boomerang_throw()
 {
-    if ((this->back_chance > 37) && !this->player_ptr->blind && (this->item >= 0)) {
+    const auto is_blind = this->player_ptr->effects()->blindness()->is_blind();
+    if ((this->back_chance > 37) && !is_blind && (this->item >= 0)) {
         msg_format(_("%sが手元に返ってきた。", "%s comes back to you."), this->o2_name);
         this->come_back = true;
         return;
