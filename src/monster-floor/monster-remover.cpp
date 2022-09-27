@@ -35,30 +35,30 @@ void delete_monster_idx(PlayerType *player_ptr, MONSTER_IDX i)
     POSITION y = m_ptr->fy;
     POSITION x = m_ptr->fx;
 
-    real_r_ptr(m_ptr)->cur_num--;
+    m_ptr->get_real_r_ref().cur_num--;
     if (r_ptr->flags2 & (RF2_MULTIPLY)) {
         floor_ptr->num_repro--;
     }
 
-    if (monster_csleep_remaining(m_ptr)) {
+    if (m_ptr->is_asleep()) {
         (void)set_monster_csleep(player_ptr, i, 0);
     }
-    if (monster_fast_remaining(m_ptr)) {
+    if (m_ptr->is_accelerated()) {
         (void)set_monster_fast(player_ptr, i, 0);
     }
-    if (monster_slow_remaining(m_ptr)) {
+    if (m_ptr->is_decelerated()) {
         (void)set_monster_slow(player_ptr, i, 0);
     }
-    if (monster_stunned_remaining(m_ptr)) {
+    if (m_ptr->is_stunned()) {
         (void)set_monster_stunned(player_ptr, i, 0);
     }
-    if (monster_confused_remaining(m_ptr)) {
+    if (m_ptr->is_confused()) {
         (void)set_monster_confused(player_ptr, i, 0);
     }
-    if (monster_fear_remaining(m_ptr)) {
+    if (m_ptr->is_fearful()) {
         (void)set_monster_monfear(player_ptr, i, 0);
     }
-    if (monster_invulner_remaining(m_ptr)) {
+    if (m_ptr->is_invulnerable()) {
         (void)set_monster_invulner(player_ptr, i, 0, false);
     }
 
@@ -135,7 +135,7 @@ void wipe_monsters_list(PlayerType *player_ptr)
     auto *floor_ptr = player_ptr->current_floor_ptr;
     for (int i = floor_ptr->m_max - 1; i >= 1; i--) {
         auto *m_ptr = &floor_ptr->m_list[i];
-        if (!monster_is_valid(m_ptr)) {
+        if (!m_ptr->is_valid()) {
             continue;
         }
 

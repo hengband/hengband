@@ -25,7 +25,7 @@ melee_spell_type *initialize_melee_spell_type(PlayerType *player_ptr, melee_spel
     ms_ptr->r_ptr = &r_info[ms_ptr->m_ptr->r_idx];
     ms_ptr->see_m = is_seen(player_ptr, ms_ptr->m_ptr);
     ms_ptr->maneable = player_has_los_bold(player_ptr, ms_ptr->m_ptr->fy, ms_ptr->m_ptr->fx);
-    ms_ptr->pet = is_pet(ms_ptr->m_ptr);
+    ms_ptr->pet = ms_ptr->m_ptr->is_pet();
     ms_ptr->in_no_magic_dungeon = d_info[player_ptr->dungeon_idx].flags.has(DungeonFeatureType::NO_MAGIC) && floor_ptr->dun_level && (!inside_quest(floor_ptr->quest_number) || quest_type::is_fixed(floor_ptr->quest_number));
     return ms_ptr;
 }

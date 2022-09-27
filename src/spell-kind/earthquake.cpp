@@ -277,7 +277,8 @@ bool earthquake(PlayerType *player_ptr, POSITION cy, POSITION cx, POSITION r, MO
                 }
 
                 if (gg_ptr->m_idx) {
-                    if (record_named_pet && is_pet(&floor_ptr->m_list[gg_ptr->m_idx]) && floor_ptr->m_list[gg_ptr->m_idx].nickname) {
+                    const auto &m_ref = floor_ptr->m_list[gg_ptr->m_idx];
+                    if (record_named_pet && m_ref.is_pet() && m_ref.nickname) {
                         char m2_name[MAX_NLEN];
 
                         monster_desc(player_ptr, m2_name, m_ptr, MD_INDEF_VISIBLE);

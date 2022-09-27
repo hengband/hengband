@@ -169,7 +169,7 @@ bool clean_shot(PlayerType *player_ptr, POSITION y1, POSITION x1, POSITION y2, P
     for (const auto &[y, x] : grid_g) {
         if ((floor_ptr->grid_array[y][x].m_idx > 0) && (y != y2 || x != x2)) {
             auto *m_ptr = &floor_ptr->m_list[floor_ptr->grid_array[y][x].m_idx];
-            if (is_friend == is_pet(m_ptr)) {
+            if (is_friend == m_ptr->is_pet()) {
                 return false;
             }
         }

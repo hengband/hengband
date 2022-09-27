@@ -81,7 +81,7 @@ int mon_damage_mod(PlayerType *player_ptr, monster_type *m_ptr, int dam, bool is
         }
     }
 
-    if (!monster_invulner_remaining(m_ptr)) {
+    if (!m_ptr->is_invulnerable()) {
         return dam;
     }
 
@@ -144,7 +144,7 @@ void mproc_init(floor_type *floor_ptr)
         auto *m_ptr = &floor_ptr->m_list[i];
 
         /* Ignore "dead" monsters */
-        if (!monster_is_valid(m_ptr)) {
+        if (!m_ptr->is_valid()) {
             continue;
         }
 
@@ -171,7 +171,7 @@ static void process_monsters_mtimed_aux(PlayerType *player_ptr, MONSTER_IDX m_id
         auto is_wakeup = false;
         if (m_ptr->cdis < AAF_LIMIT) {
             /* Handle "sensing radius" */
-            if (m_ptr->cdis <= (is_pet(m_ptr) ? ((r_ptr->aaf > MAX_SIGHT) ? MAX_SIGHT : r_ptr->aaf) : r_ptr->aaf)) {
+            if (m_ptr->cdis <= (m_ptr->is_pet() ? ((r_ptr->aaf > MAX_SIGHT) ? MAX_SIGHT : r_ptr->aaf) : r_ptr->aaf)) {
                 is_wakeup = true;
             }
 
@@ -210,7 +210,7 @@ static void process_monsters_mtimed_aux(PlayerType *player_ptr, MONSTER_IDX m_id
         /* Monster wakes up "a little bit" */
 
         /* Still asleep */
-        if (!set_monster_csleep(player_ptr, m_idx, monster_csleep_remaining(m_ptr) - d)) {
+        if (!set_monster_csleep(player_ptr, m_idx, m_ptr->get_remaining_sleep() - d)) {
             /* Notice the "not waking up" */
             if (is_original_ap_and_seen(player_ptr, m_ptr)) {
                 /* Hack -- Count the ignores */
@@ -241,7 +241,7 @@ static void process_monsters_mtimed_aux(PlayerType *player_ptr, MONSTER_IDX m_id
 
     case MTIMED_FAST:
         /* Reduce by one, note if expires */
-        if (set_monster_fast(player_ptr, m_idx, monster_fast_remaining(m_ptr) - 1)) {
+        if (set_monster_fast(player_ptr, m_idx, m_ptr->get_remaining_acceleration() - 1)) {
             if (is_seen(player_ptr, m_ptr)) {
                 GAME_TEXT m_name[MAX_NLEN];
                 monster_desc(player_ptr, m_name, m_ptr, 0);
@@ -253,7 +253,7 @@ static void process_monsters_mtimed_aux(PlayerType *player_ptr, MONSTER_IDX m_id
 
     case MTIMED_SLOW:
         /* Reduce by one, note if expires */
-        if (set_monster_slow(player_ptr, m_idx, monster_slow_remaining(m_ptr) - 1)) {
+        if (set_monster_slow(player_ptr, m_idx, m_ptr->get_remaining_deceleration() - 1)) {
             if (is_seen(player_ptr, m_ptr)) {
                 GAME_TEXT m_name[MAX_NLEN];
                 monster_desc(player_ptr, m_name, m_ptr, 0);
@@ -267,7 +267,7 @@ static void process_monsters_mtimed_aux(PlayerType *player_ptr, MONSTER_IDX m_id
         int rlev = r_info[m_ptr->r_idx].level;
 
         /* Recover from stun */
-        if (set_monster_stunned(player_ptr, m_idx, (randint0(10000) <= rlev * rlev) ? 0 : (monster_stunned_remaining(m_ptr) - 1))) {
+        if (set_monster_stunned(player_ptr, m_idx, (randint0(10000) <= rlev * rlev) ? 0 : (m_ptr->get_remaining_stun() - 1))) {
             /* Message if visible */
             if (is_seen(player_ptr, m_ptr)) {
                 GAME_TEXT m_name[MAX_NLEN];
@@ -281,7 +281,7 @@ static void process_monsters_mtimed_aux(PlayerType *player_ptr, MONSTER_IDX m_id
 
     case MTIMED_CONFUSED: {
         /* Reduce the confusion */
-        if (!set_monster_confused(player_ptr, m_idx, monster_confused_remaining(m_ptr) - randint1(r_info[m_ptr->r_idx].level / 20 + 1))) {
+        if (!set_monster_confused(player_ptr, m_idx, m_ptr->get_remaining_confusion() - randint1(r_info[m_ptr->r_idx].level / 20 + 1))) {
             break;
         }
 
@@ -297,7 +297,7 @@ static void process_monsters_mtimed_aux(PlayerType *player_ptr, MONSTER_IDX m_id
 
     case MTIMED_MONFEAR: {
         /* Reduce the fear */
-        if (!set_monster_monfear(player_ptr, m_idx, monster_fear_remaining(m_ptr) - randint1(r_info[m_ptr->r_idx].level / 20 + 1))) {
+        if (!set_monster_monfear(player_ptr, m_idx, m_ptr->get_remaining_fear() - randint1(r_info[m_ptr->r_idx].level / 20 + 1))) {
             break;
         }
 
@@ -324,7 +324,7 @@ static void process_monsters_mtimed_aux(PlayerType *player_ptr, MONSTER_IDX m_id
 
     case MTIMED_INVULNER: {
         /* Reduce by one, note if expires */
-        if (!set_monster_invulner(player_ptr, m_idx, monster_invulner_remaining(m_ptr) - 1, true)) {
+        if (!set_monster_invulner(player_ptr, m_idx, m_ptr->get_remaining_invulnerability() - 1, true)) {
             break;
         }
 
@@ -408,7 +408,7 @@ void monster_gain_exp(PlayerType *player_ptr, MONSTER_IDX m_idx, MonsterRaceId s
     auto *floor_ptr = player_ptr->current_floor_ptr;
     auto *m_ptr = &floor_ptr->m_list[m_idx];
 
-    if (!monster_is_valid(m_ptr)) {
+    if (!m_ptr->is_valid()) {
         return;
     }
 
@@ -448,13 +448,13 @@ void monster_gain_exp(PlayerType *player_ptr, MONSTER_IDX m_idx, MonsterRaceId s
     auto old_sub_align = m_ptr->sub_align;
 
     /* Hack -- Reduce the racial counter of previous monster */
-    real_r_ptr(m_ptr)->cur_num--;
+    m_ptr->get_real_r_ref().cur_num--;
 
     monster_desc(player_ptr, m_name, m_ptr, 0);
     m_ptr->r_idx = r_ptr->next_r_idx;
 
     /* Count the monsters on the level */
-    real_r_ptr(m_ptr)->cur_num++;
+    m_ptr->get_real_r_ref().cur_num++;
 
     m_ptr->ap_r_idx = m_ptr->r_idx;
     r_ptr = &r_info[m_ptr->r_idx];
@@ -475,7 +475,7 @@ void monster_gain_exp(PlayerType *player_ptr, MONSTER_IDX m_idx, MonsterRaceId s
     m_ptr->mspeed = get_mspeed(floor_ptr, r_ptr);
 
     /* Sub-alignment of a monster */
-    if (!is_pet(m_ptr) && r_ptr->kind_flags.has_none_of(alignment_mask)) {
+    if (!m_ptr->is_pet() && r_ptr->kind_flags.has_none_of(alignment_mask)) {
         m_ptr->sub_align = old_sub_align;
     } else {
         m_ptr->sub_align = SUB_ALIGN_NEUTRAL;
@@ -489,7 +489,7 @@ void monster_gain_exp(PlayerType *player_ptr, MONSTER_IDX m_idx, MonsterRaceId s
     }
 
     m_ptr->exp = 0;
-    if (is_pet(m_ptr) || m_ptr->ml) {
+    if (m_ptr->is_pet() || m_ptr->ml) {
         auto is_hallucinated = player_ptr->effects()->hallucination()->is_hallucinated();
         if (!ignore_unview || player_can_see_bold(player_ptr, m_ptr->fy, m_ptr->fx)) {
             if (is_hallucinated) {
@@ -521,44 +521,4 @@ void monster_gain_exp(PlayerType *player_ptr, MONSTER_IDX m_idx, MonsterRaceId s
     if (m_idx == player_ptr->riding) {
         player_ptr->update |= PU_BONUS;
     }
-}
-
-bool monster_is_valid(monster_type *m_ptr)
-{
-    return MonsterRace(m_ptr->r_idx).is_valid();
-}
-
-TIME_EFFECT monster_csleep_remaining(monster_type *m_ptr)
-{
-    return m_ptr->mtimed[MTIMED_CSLEEP];
-}
-
-TIME_EFFECT monster_fast_remaining(monster_type *m_ptr)
-{
-    return m_ptr->mtimed[MTIMED_FAST];
-}
-
-TIME_EFFECT monster_slow_remaining(monster_type *m_ptr)
-{
-    return m_ptr->mtimed[MTIMED_SLOW];
-}
-
-TIME_EFFECT monster_stunned_remaining(monster_type *m_ptr)
-{
-    return m_ptr->mtimed[MTIMED_STUNNED];
-}
-
-TIME_EFFECT monster_confused_remaining(monster_type *m_ptr)
-{
-    return m_ptr->mtimed[MTIMED_CONFUSED];
-}
-
-TIME_EFFECT monster_fear_remaining(monster_type *m_ptr)
-{
-    return m_ptr->mtimed[MTIMED_MONFEAR];
-}
-
-TIME_EFFECT monster_invulner_remaining(monster_type *m_ptr)
-{
-    return m_ptr->mtimed[MTIMED_INVULNER];
 }

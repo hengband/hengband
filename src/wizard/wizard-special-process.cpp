@@ -798,11 +798,11 @@ void wiz_zap_surrounding_monsters(PlayerType *player_ptr)
 {
     for (MONSTER_IDX i = 1; i < player_ptr->current_floor_ptr->m_max; i++) {
         auto *m_ptr = &player_ptr->current_floor_ptr->m_list[i];
-        if (!monster_is_valid(m_ptr) || (i == player_ptr->riding) || (m_ptr->cdis > MAX_SIGHT)) {
+        if (!m_ptr->is_valid() || (i == player_ptr->riding) || (m_ptr->cdis > MAX_SIGHT)) {
             continue;
         }
 
-        if (record_named_pet && is_pet(m_ptr) && m_ptr->nickname) {
+        if (record_named_pet && m_ptr->is_pet() && m_ptr->nickname) {
             GAME_TEXT m_name[MAX_NLEN];
 
             monster_desc(player_ptr, m_name, m_ptr, MD_INDEF_VISIBLE);
@@ -821,11 +821,11 @@ void wiz_zap_floor_monsters(PlayerType *player_ptr)
 {
     for (MONSTER_IDX i = 1; i < player_ptr->current_floor_ptr->m_max; i++) {
         auto *m_ptr = &player_ptr->current_floor_ptr->m_list[i];
-        if (!monster_is_valid(m_ptr) || (i == player_ptr->riding)) {
+        if (!m_ptr->is_valid() || (i == player_ptr->riding)) {
             continue;
         }
 
-        if (record_named_pet && is_pet(m_ptr) && m_ptr->nickname) {
+        if (record_named_pet && m_ptr->is_pet() && m_ptr->nickname) {
             GAME_TEXT m_name[MAX_NLEN];
             monster_desc(player_ptr, m_name, m_ptr, MD_INDEF_VISIBLE);
             exe_write_diary(player_ptr, DIARY_NAMED_PET, RECORD_NAMED_PET_WIZ_ZAP, m_name);

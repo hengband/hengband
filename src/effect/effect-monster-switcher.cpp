@@ -178,7 +178,7 @@ ProcessResult effect_monster_engetsu(PlayerType *player_ptr, effect_monster_type
         return ProcessResult::PROCESS_CONTINUE;
     }
 
-    if (monster_csleep_remaining(em_ptr->m_ptr)) {
+    if (em_ptr->m_ptr->is_asleep()) {
         em_ptr->note = _("には効果がなかった。", " is unaffected.");
         em_ptr->dam = 0;
         em_ptr->skipped = true;
@@ -199,7 +199,7 @@ ProcessResult effect_monster_engetsu(PlayerType *player_ptr, effect_monster_type
         switch (randint0(4)) {
         case 0:
             if (em_ptr->r_ptr->kind_flags.has_not(MonsterKindType::UNIQUE)) {
-                if (set_monster_slow(player_ptr, em_ptr->g_ptr->m_idx, monster_slow_remaining(em_ptr->m_ptr) + 50)) {
+                if (set_monster_slow(player_ptr, em_ptr->g_ptr->m_idx, em_ptr->m_ptr->get_remaining_deceleration() + 50)) {
                     em_ptr->note = _("の動きが遅くなった。", " starts moving slower.");
                 }
                 done = true;

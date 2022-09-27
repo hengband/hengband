@@ -240,7 +240,7 @@ static void process_monster_attack_effect(PlayerType *player_ptr, mam_type *mam_
 
 static void process_melee(PlayerType *player_ptr, mam_type *mam_ptr)
 {
-    if (mam_ptr->effect != RaceBlowEffectType::NONE && !check_hit_from_monster_to_monster(mam_ptr->power, mam_ptr->rlev, mam_ptr->ac, monster_stunned_remaining(mam_ptr->m_ptr))) {
+    if (mam_ptr->effect != RaceBlowEffectType::NONE && !check_hit_from_monster_to_monster(mam_ptr->power, mam_ptr->rlev, mam_ptr->ac, mam_ptr->m_ptr->get_remaining_stun())) {
         describe_monster_missed_monster(player_ptr, mam_ptr);
         return;
     }
@@ -296,14 +296,15 @@ static void explode_monster_by_melee(PlayerType *player_ptr, mam_type *mam_ptr)
  */
 void repeat_melee(PlayerType *player_ptr, mam_type *mam_ptr)
 {
-    auto *r_ptr = &r_info[mam_ptr->m_ptr->r_idx];
+    const auto *m_ptr = mam_ptr->m_ptr;
+    auto *r_ptr = &r_info[m_ptr->r_idx];
     for (int ap_cnt = 0; ap_cnt < MAX_NUM_BLOWS; ap_cnt++) {
         mam_ptr->effect = r_ptr->blow[ap_cnt].effect;
         mam_ptr->method = r_ptr->blow[ap_cnt].method;
         mam_ptr->d_dice = r_ptr->blow[ap_cnt].d_dice;
         mam_ptr->d_side = r_ptr->blow[ap_cnt].d_side;
 
-        if (!monster_is_valid(mam_ptr->m_ptr) || (mam_ptr->t_ptr->fx != mam_ptr->x_saver) || (mam_ptr->t_ptr->fy != mam_ptr->y_saver) || mam_ptr->method == RaceBlowMethodType::NONE) {
+        if (!m_ptr->is_valid() || (mam_ptr->t_ptr->fx != mam_ptr->x_saver) || (mam_ptr->t_ptr->fy != mam_ptr->y_saver) || mam_ptr->method == RaceBlowMethodType::NONE) {
             break;
         }
 

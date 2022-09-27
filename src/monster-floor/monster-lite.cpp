@@ -166,7 +166,7 @@ void update_mon_lite(PlayerType *player_ptr)
         for (int i = 1; i < floor_ptr->m_max; i++) {
             m_ptr = &floor_ptr->m_list[i];
             r_ptr = &r_info[m_ptr->r_idx];
-            if (!monster_is_valid(m_ptr) || (m_ptr->cdis > dis_lim)) {
+            if (!m_ptr->is_valid() || (m_ptr->cdis > dis_lim)) {
                 continue;
             }
 
@@ -193,7 +193,7 @@ void update_mon_lite(PlayerType *player_ptr)
 
             FloorFeatureType f_flag;
             if (rad > 0) {
-                if (!(r_ptr->flags7 & (RF7_SELF_LITE_1 | RF7_SELF_LITE_2)) && (monster_csleep_remaining(m_ptr) || (!floor_ptr->dun_level && is_daytime()) || player_ptr->phase_out)) {
+                if (!(r_ptr->flags7 & (RF7_SELF_LITE_1 | RF7_SELF_LITE_2)) && (m_ptr->is_asleep() || (!floor_ptr->dun_level && is_daytime()) || player_ptr->phase_out)) {
                     continue;
                 }
 
@@ -204,7 +204,7 @@ void update_mon_lite(PlayerType *player_ptr)
                 add_mon_lite = update_monster_lite;
                 f_flag = FloorFeatureType::LOS;
             } else {
-                if (!(r_ptr->flags7 & (RF7_SELF_DARK_1 | RF7_SELF_DARK_2)) && (monster_csleep_remaining(m_ptr) || (!floor_ptr->dun_level && !is_daytime()))) {
+                if (!(r_ptr->flags7 & (RF7_SELF_DARK_1 | RF7_SELF_DARK_2)) && (m_ptr->is_asleep() || (!floor_ptr->dun_level && !is_daytime()))) {
                     continue;
                 }
 

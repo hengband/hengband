@@ -49,7 +49,7 @@ bool project_all_los(PlayerType *player_ptr, AttributeType typ, int dam)
 {
     for (MONSTER_IDX i = 1; i < player_ptr->current_floor_ptr->m_max; i++) {
         auto *m_ptr = &player_ptr->current_floor_ptr->m_list[i];
-        if (!monster_is_valid(m_ptr)) {
+        if (!m_ptr->is_valid()) {
             continue;
         }
 
@@ -220,7 +220,7 @@ void aggravate_monsters(PlayerType *player_ptr, MONSTER_IDX who)
     bool speed = false;
     for (MONSTER_IDX i = 1; i < player_ptr->current_floor_ptr->m_max; i++) {
         auto *m_ptr = &player_ptr->current_floor_ptr->m_list[i];
-        if (!monster_is_valid(m_ptr)) {
+        if (!m_ptr->is_valid()) {
             continue;
         }
         if (i == who) {
@@ -228,19 +228,19 @@ void aggravate_monsters(PlayerType *player_ptr, MONSTER_IDX who)
         }
 
         if (m_ptr->cdis < MAX_SIGHT * 2) {
-            if (monster_csleep_remaining(m_ptr)) {
+            if (m_ptr->is_asleep()) {
                 (void)set_monster_csleep(player_ptr, i, 0);
                 sleep = true;
             }
 
-            if (!is_pet(m_ptr)) {
+            if (!m_ptr->is_pet()) {
                 m_ptr->mflag2.set(MonsterConstantFlagType::NOPET);
             }
         }
 
         if (player_has_los_bold(player_ptr, m_ptr->fy, m_ptr->fx)) {
-            if (!is_pet(m_ptr)) {
-                (void)set_monster_fast(player_ptr, i, monster_fast_remaining(m_ptr) + 100);
+            if (!m_ptr->is_pet()) {
+                (void)set_monster_fast(player_ptr, i, m_ptr->get_remaining_acceleration() + 100);
                 speed = true;
             }
         }
@@ -373,7 +373,7 @@ bool deathray_monsters(PlayerType *player_ptr)
  */
 void probed_monster_info(char *buf, PlayerType *player_ptr, monster_type *m_ptr, monster_race *r_ptr)
 {
-    if (!is_original_ap(m_ptr)) {
+    if (!m_ptr->is_original_ap()) {
         if (m_ptr->mflag2.has(MonsterConstantFlagType::KAGE)) {
             m_ptr->mflag2.reset(MonsterConstantFlagType::KAGE);
         }
@@ -386,10 +386,10 @@ void probed_monster_info(char *buf, PlayerType *player_ptr, monster_type *m_ptr,
     monster_desc(player_ptr, m_name, m_ptr, MD_IGNORE_HALLU | MD_INDEF_HIDDEN);
 
     auto speed = m_ptr->mspeed - 110;
-    if (monster_fast_remaining(m_ptr)) {
+    if (m_ptr->is_accelerated()) {
         speed += 10;
     }
-    if (monster_slow_remaining(m_ptr)) {
+    if (m_ptr->is_decelerated()) {
         speed -= 10;
     }
     if (ironman_nightmare) {
@@ -422,19 +422,19 @@ void probed_monster_info(char *buf, PlayerType *player_ptr, monster_type *m_ptr,
         strcat(buf, "xxx ");
     }
 
-    if (monster_csleep_remaining(m_ptr)) {
+    if (m_ptr->is_asleep()) {
         strcat(buf, _("睡眠 ", "sleeping "));
     }
-    if (monster_stunned_remaining(m_ptr)) {
+    if (m_ptr->is_stunned()) {
         strcat(buf, _("朦朧 ", "stunned "));
     }
-    if (monster_fear_remaining(m_ptr)) {
+    if (m_ptr->is_fearful()) {
         strcat(buf, _("恐怖 ", "scared "));
     }
-    if (monster_confused_remaining(m_ptr)) {
+    if (m_ptr->is_confused()) {
         strcat(buf, _("混乱 ", "confused "));
     }
-    if (monster_invulner_remaining(m_ptr)) {
+    if (m_ptr->is_invulnerable()) {
         strcat(buf, _("無敵 ", "invulnerable "));
     }
     buf[strlen(buf) - 1] = '\0';
@@ -456,7 +456,7 @@ bool probing(PlayerType *player_ptr)
     for (int i = 1; i < player_ptr->current_floor_ptr->m_max; i++) {
         auto *m_ptr = &player_ptr->current_floor_ptr->m_list[i];
         auto *r_ptr = &r_info[m_ptr->r_idx];
-        if (!monster_is_valid(m_ptr)) {
+        if (!m_ptr->is_valid()) {
             continue;
         }
         if (!player_has_los_bold(player_ptr, m_ptr->fy, m_ptr->fx)) {

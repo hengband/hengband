@@ -199,7 +199,7 @@ static bool check_mspell_unexploded(PlayerType *player_ptr, msa_type *msa_ptr)
         fail_rate = 0;
     }
 
-    if (!spell_is_inate(msa_ptr->thrown_spell) && (msa_ptr->in_no_magic_dungeon || (monster_stunned_remaining(msa_ptr->m_ptr) && one_in_(2)) || (randint0(100) < fail_rate))) {
+    if (!spell_is_inate(msa_ptr->thrown_spell) && (msa_ptr->in_no_magic_dungeon || (msa_ptr->m_ptr->get_remaining_stun() && one_in_(2)) || (randint0(100) < fail_rate))) {
         disturb(player_ptr, true, true);
         msg_format(_("%^sは呪文を唱えようとしたが失敗した。", "%^s tries to cast a spell, but fails."), msa_ptr->m_name);
         return true;
@@ -320,12 +320,13 @@ bool make_attack_spell(PlayerType *player_ptr, MONSTER_IDX m_idx)
 {
     msa_type tmp_msa;
     msa_type *msa_ptr = initialize_msa_type(player_ptr, &tmp_msa, m_idx);
-    if (monster_confused_remaining(msa_ptr->m_ptr)) {
+    if (msa_ptr->m_ptr->is_confused()) {
         reset_target(msa_ptr->m_ptr);
         return false;
     }
 
-    if (msa_ptr->m_ptr->mflag.has(MonsterTemporaryFlagType::PREVENT_MAGIC) || !is_hostile(msa_ptr->m_ptr) || ((msa_ptr->m_ptr->cdis > get_max_range(player_ptr)) && !msa_ptr->m_ptr->target_y)) {
+    const auto &m_ref = *msa_ptr->m_ptr;
+    if (m_ref.mflag.has(MonsterTemporaryFlagType::PREVENT_MAGIC) || !m_ref.is_hostile() || ((m_ref.cdis > get_max_range(player_ptr)) && !m_ref.target_y)) {
         return false;
     }
 

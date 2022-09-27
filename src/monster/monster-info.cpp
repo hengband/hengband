@@ -184,31 +184,32 @@ static bool check_hostile_align(byte sub_align1, byte sub_align2)
  * @param n_ptr モンスター2の構造体参照ポインタ
  * @return 敵対関係にあるならばTRUEを返す
  */
-bool are_enemies(PlayerType *player_ptr, monster_type *m_ptr, monster_type *n_ptr)
+bool are_enemies(PlayerType *player_ptr, const monster_type &m1_ref, const monster_type &m2_ref)
 {
-    auto *r_ptr = &r_info[m_ptr->r_idx];
-    monster_race *s_ptr = &r_info[n_ptr->r_idx];
-
     if (player_ptr->phase_out) {
-        if (is_pet(m_ptr) || is_pet(n_ptr)) {
+        if (m1_ref.is_pet() || m2_ref.is_pet()) {
             return false;
         }
         return true;
     }
 
-    if (r_ptr->wilderness_flags.has_any_of({ MonsterWildernessType::WILD_TOWN, MonsterWildernessType::WILD_ALL }) && s_ptr->wilderness_flags.has_any_of({ MonsterWildernessType::WILD_TOWN, MonsterWildernessType::WILD_ALL })) {
-        if (!is_pet(m_ptr) && !is_pet(n_ptr)) {
+    const auto &r1_ref = r_info[m1_ref.r_idx];
+    const auto &r2_ref = r_info[m2_ref.r_idx];
+    const auto is_m1_wild = r1_ref.wilderness_flags.has_any_of({ MonsterWildernessType::WILD_TOWN, MonsterWildernessType::WILD_ALL });
+    const auto is_m2_wild = r2_ref.wilderness_flags.has_any_of({ MonsterWildernessType::WILD_TOWN, MonsterWildernessType::WILD_ALL });
+    if (is_m1_wild && is_m2_wild) {
+        if (!m1_ref.is_pet() && !m2_ref.is_pet()) {
             return false;
         }
     }
 
-    if (check_hostile_align(m_ptr->sub_align, n_ptr->sub_align)) {
-        if (m_ptr->mflag2.has_not(MonsterConstantFlagType::CHAMELEON) || n_ptr->mflag2.has_not(MonsterConstantFlagType::CHAMELEON)) {
+    if (check_hostile_align(m1_ref.sub_align, m2_ref.sub_align)) {
+        if (m1_ref.mflag2.has_not(MonsterConstantFlagType::CHAMELEON) || m2_ref.mflag2.has_not(MonsterConstantFlagType::CHAMELEON)) {
             return true;
         }
     }
 
-    if (is_hostile(m_ptr) != is_hostile(n_ptr)) {
+    if (m1_ref.is_hostile() != m2_ref.is_hostile()) {
         return true;
     }
 
@@ -260,87 +261,9 @@ bool monster_has_hostile_align(PlayerType *player_ptr, monster_type *m_ptr, int 
     return false;
 }
 
-bool is_original_ap_and_seen(PlayerType *player_ptr, monster_type *m_ptr)
+bool is_original_ap_and_seen(PlayerType *player_ptr, const monster_type *m_ptr)
 {
-    return m_ptr->ml && !player_ptr->effects()->hallucination()->is_hallucinated() && (m_ptr->ap_r_idx == m_ptr->r_idx);
-}
-
-/*  Determine monster race appearance index is same as race index */
-bool is_original_ap(const monster_type *m_ptr)
-{
-    return m_ptr->ap_r_idx == m_ptr->r_idx;
-}
-
-bool is_friendly(const monster_type *m_ptr)
-{
-    return m_ptr->mflag2.has(MonsterConstantFlagType::FRIENDLY);
-}
-
-bool is_pet(const monster_type *m_ptr)
-{
-    return m_ptr->mflag2.has(MonsterConstantFlagType::PET);
-}
-
-bool is_hostile(const monster_type *m_ptr)
-{
-    return !is_friendly(m_ptr) && !is_pet(m_ptr);
-}
-
-/*!
- * @brief モンスターがアイテム類に擬態しているかどうかを返す
- *
- * モンスターがアイテム類に擬態しているかどうかを返す。
- * 擬態の条件:
- * - シンボルが以下のいずれかであること: /|\()[]=$,.!?&`#%<>+~
- * - 動かない、もしくは眠っていること
- *
- * 但し、以下のモンスターは例外的に擬態しているとする
- * それ・生ける虚無『ヌル』・ビハインダー
- *
- * @param m_ptr モンスターの参照ポインタ
- * @return モンスターがアイテム類に擬態しているならTRUE、そうでなければFALSE
- */
-bool is_mimicry(monster_type *m_ptr)
-{
-    if (m_ptr->ap_r_idx == MonsterRaceId::IT || m_ptr->ap_r_idx == MonsterRaceId::NULL_ || m_ptr->ap_r_idx == MonsterRaceId::BEHINDER) {
-        return true;
-    }
-
-    auto *r_ptr = &r_info[m_ptr->ap_r_idx];
-
-    if (angband_strchr("/|\\()[]=$,.!?&`#%<>+~", r_ptr->d_char) == nullptr) {
-        return false;
-    }
-
-    if (r_ptr->behavior_flags.has_not(MonsterBehaviorType::NEVER_MOVE) && !monster_csleep_remaining(m_ptr)) {
-        return false;
-    }
-
-    return true;
-}
-
-/*!
- * @brief モンスターの真の種族を返す / Extract monster race pointer of a monster's true form
- * @param m_ptr モンスターの参照ポインタ
- * @return 本当のモンスター種族参照ポインタ
- */
-monster_race *real_r_ptr(monster_type *m_ptr)
-{
-    return &r_info[real_r_idx(m_ptr)];
-}
-
-MonsterRaceId real_r_idx(monster_type *m_ptr)
-{
-    auto *r_ptr = &r_info[m_ptr->r_idx];
-    if (m_ptr->mflag2.has(MonsterConstantFlagType::CHAMELEON)) {
-        if (r_ptr->kind_flags.has(MonsterKindType::UNIQUE)) {
-            return MonsterRaceId::CHAMELEON_K;
-        } else {
-            return MonsterRaceId::CHAMELEON;
-        }
-    }
-
-    return m_ptr->r_idx;
+    return m_ptr->ml && !player_ptr->effects()->hallucination()->is_hallucinated() && m_ptr->is_original_ap();
 }
 
 /*!

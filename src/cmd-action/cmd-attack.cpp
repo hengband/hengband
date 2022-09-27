@@ -219,7 +219,7 @@ bool do_cmd_attack(PlayerType *player_ptr, POSITION y, POSITION x, combat_option
         return false;
     }
 
-    if (!is_hostile(m_ptr) && !(is_stunned || is_confused || is_hallucinated || is_shero(player_ptr) || !m_ptr->ml)) {
+    if (!m_ptr->is_hostile() && !(is_stunned || is_confused || is_hallucinated || is_shero(player_ptr) || !m_ptr->ml)) {
         constexpr auto stormbringer = FixedArtifactId::STORMBRINGER;
         auto is_stormbringer = false;
         if (player_ptr->inventory_list[INVEN_MAIN_HAND].fixed_artifact_idx == stormbringer) {
@@ -260,7 +260,7 @@ bool do_cmd_attack(PlayerType *player_ptr, POSITION y, POSITION x, combat_option
         return false;
     }
 
-    if (monster_csleep_remaining(m_ptr)) {
+    if (m_ptr->is_asleep()) {
         if (r_ptr->kind_flags.has_not(MonsterKindType::EVIL) || one_in_(5)) {
             chg_virtue(player_ptr, V_COMPASSION, -1);
         }

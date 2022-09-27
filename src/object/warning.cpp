@@ -382,10 +382,10 @@ bool process_warning(PlayerType *player_ptr, POSITION xx, POSITION yy)
 
             m_ptr = &player_ptr->current_floor_ptr->m_list[g_ptr->m_idx];
 
-            if (monster_csleep_remaining(m_ptr)) {
+            if (m_ptr->is_asleep()) {
                 continue;
             }
-            if (!is_hostile(m_ptr)) {
+            if (!m_ptr->is_hostile()) {
                 continue;
             }
 

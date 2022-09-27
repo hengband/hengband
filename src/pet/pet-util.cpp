@@ -72,12 +72,12 @@ PERCENTAGE calculate_upkeep(PlayerType *player_ptr)
     total_friends = 0;
     for (auto m_idx = player_ptr->current_floor_ptr->m_max - 1; m_idx >= 1; m_idx--) {
         auto *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
-        if (!monster_is_valid(m_ptr)) {
+        if (!m_ptr->is_valid()) {
             continue;
         }
         auto *r_ptr = &r_info[m_ptr->r_idx];
 
-        if (!is_pet(m_ptr)) {
+        if (!m_ptr->is_pet()) {
             continue;
         }
 
