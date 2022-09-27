@@ -471,6 +471,10 @@ void SpellsMirrorMaster::project_super_ray(int target_x, int target_y, int dam)
     std::vector<projection_path> second_path_g_list;
     handle_stuff(this->player_ptr);
 
+    if (path_g.path_num() == 0) {
+        return;
+    }
+
     project_m_n = 0;
     project_m_x = 0;
     project_m_y = 0;
