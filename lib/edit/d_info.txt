@@ -13,7 +13,7 @@
 
 # N:<index>:<name>
 # D:<long name>
-# W:<min depth>:<min depth>:<min player level>:<flags mode>:<min alloc>:<max alloc chance>:<obj good>:<obj great>:<pit>:<nest>
+# W:<min depth>:<max depth>:<min player level>:<flags mode>:<min alloc>:<max alloc chance>:<obj good>:<obj great>:<pit>:<nest>
 # L:<floor1>:<%1>:<floor2>:<%2>:<floor3>:<%3>:<tunnel%>
 # A:<wall1>:<%1>:<wall2>:<%2>:<wall3>:<%3>:<outer wall>:<inner wall>:<stream1>:<stream2>
 # F:<flags>
