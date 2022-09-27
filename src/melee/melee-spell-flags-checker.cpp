@@ -88,8 +88,6 @@ static bool check_melee_spell_projection(PlayerType *player_ptr, melee_spell_typ
         start = floor_ptr->m_max + 1;
     }
 
-    const auto &m_ref = *ms_ptr->m_ptr;
-    const auto &t_ref = *ms_ptr->t_ptr;
     for (int i = start; ((i < start + floor_ptr->m_max) && (i > start - floor_ptr->m_max)); i += plus) {
         MONSTER_IDX dummy = (i % floor_ptr->m_max);
         if (!dummy) {
@@ -98,6 +96,8 @@ static bool check_melee_spell_projection(PlayerType *player_ptr, melee_spell_typ
 
         ms_ptr->target_idx = dummy;
         ms_ptr->t_ptr = &floor_ptr->m_list[ms_ptr->target_idx];
+        const auto &m_ref = *ms_ptr->m_ptr;
+        const auto &t_ref = *ms_ptr->t_ptr;
         const auto is_enemies = are_enemies(player_ptr, m_ref, t_ref);
         const auto is_projectable = projectable(player_ptr, m_ref.fy, m_ref.fx, t_ref.fy, t_ref.fx);
         if (!t_ref.is_valid() || (ms_ptr->m_idx == ms_ptr->target_idx) || !is_enemies || !is_projectable) {
