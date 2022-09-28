@@ -135,10 +135,10 @@ SpoilerOutputResultType spoil_mon_desc(concptr fname, std::function<bool(const m
 
         sprintf(lev, "%d", (int)r_ptr->level);
         sprintf(rar, "%d", (int)r_ptr->rarity);
-        if (r_ptr->speed >= 110) {
-            sprintf(spd, "+%d", (r_ptr->speed - 110));
+        if (r_ptr->speed >= STANDARD_SPEED) {
+            sprintf(spd, "+%d", (r_ptr->speed - STANDARD_SPEED));
         } else {
-            sprintf(spd, "-%d", (110 - r_ptr->speed));
+            sprintf(spd, "-%d", (STANDARD_SPEED - r_ptr->speed));
         }
 
         sprintf(ac, "%d", r_ptr->ac);
@@ -227,10 +227,10 @@ SpoilerOutputResultType spoil_mon_info(concptr fname)
         spoil_out(buf);
         sprintf(buf, "Rar:%d  ", r_ptr->rarity);
         spoil_out(buf);
-        if (r_ptr->speed >= 110) {
-            sprintf(buf, "Spd:+%d  ", (r_ptr->speed - 110));
+        if (r_ptr->speed >= STANDARD_SPEED) {
+            sprintf(buf, "Spd:+%d  ", (r_ptr->speed - STANDARD_SPEED));
         } else {
-            sprintf(buf, "Spd:-%d  ", (110 - r_ptr->speed));
+            sprintf(buf, "Spd:-%d  ", (STANDARD_SPEED - r_ptr->speed));
         }
 
         spoil_out(buf);

@@ -270,13 +270,13 @@ int16_t PlayerSpeed::riding_bonus()
         return 0;
     }
 
-    if (riding_m_ptr->mspeed > 110) {
-        bonus = (int16_t)((speed - 110) * (this->player_ptr->skill_exp[PlayerSkillKindType::RIDING] * 3 + this->player_ptr->lev * 160L - 10000L) / (22000L));
+    if (riding_m_ptr->mspeed > STANDARD_SPEED) {
+        bonus = (int16_t)((speed - STANDARD_SPEED) * (this->player_ptr->skill_exp[PlayerSkillKindType::RIDING] * 3 + this->player_ptr->lev * 160L - 10000L) / (22000L));
         if (bonus < 0) {
             bonus = 0;
         }
     } else {
-        bonus = speed - 110;
+        bonus = speed - STANDARD_SPEED;
     }
 
     bonus += (this->player_ptr->skill_exp[PlayerSkillKindType::RIDING] + this->player_ptr->lev * 160L) / 3200;
