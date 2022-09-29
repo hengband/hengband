@@ -701,6 +701,31 @@ std::vector<std::string> str_split(std::string_view str, char delim, bool trim, 
 }
 
 /**
+ * @brief 文字列を指定した文字数で分割する
+ *
+ * 文字列 str を len で指定した文字数で分割し、分割した文字列を要素とする配列を
+ * std::vector<std::string> 型のオブジェクトとして返す。
+ * 全角文字は2文字分として扱い、全角文字の前半で分割されてしまわないように処理される。
+ *
+ * @param str 操作の対象とする文字列
+ * @param len 分割する文字数
+ * @return std::vector<std::string> 分割した文字列を要素とする配列
+ */
+std::vector<std::string> str_separate(std::string_view str, size_t len)
+{
+    std::vector<std::string> result;
+    std::vector<char> buf(len + 1);
+
+    while (!str.empty()) {
+        angband_strcpy(buf.data(), str.data(), buf.size());
+        result.emplace_back(buf.data());
+        str.remove_prefix(result.back().size());
+    }
+
+    return result;
+}
+
+/**
  * @brief 文字列から指定した文字を取り除く
  *
  * 文字列 str から文字列 erase_chars に含まれる文字をすべて削除し、

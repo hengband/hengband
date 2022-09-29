@@ -34,4 +34,5 @@ std::string str_trim(std::string_view str);
 std::string str_rtrim(std::string_view str);
 std::string str_ltrim(std::string_view str);
 std::vector<std::string> str_split(std::string_view str, char delim, bool trim = false, int num = 0);
+std::vector<std::string> str_separate(std::string_view str, size_t len);
 std::string str_erase(std::string str, std::string_view erase_chars);
