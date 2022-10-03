@@ -44,6 +44,7 @@
 #include "util/enum-converter.h"
 #include "util/int-char-converter.h"
 #include "util/sort.h"
+#include "util/string-processor.h"
 #include "view/display-messages.h"
 #include "world/world.h"
 
@@ -375,7 +376,11 @@ static void dump_aux_monsters(PlayerType *player_ptr, FILE *fff)
             buf[0] = '\0';
         }
 
-        fprintf(fff, _("  %-40s (レベル%3d)%s\n", "  %-40s (level %3d)%s\n"), r_ptr->name.c_str(), (int)r_ptr->level, buf);
+        auto name = str_separate(r_ptr->name, 40);
+        fprintf(fff, _("  %-40s (レベル%3d)%s\n", "  %-40s (level %3d)%s\n"), name.front().c_str(), (int)r_ptr->level, buf);
+        for (auto i = 1U; i < name.size(); ++i) {
+            fprintf(fff, "  %s\n", name[i].c_str());
+        }
     }
 }
 

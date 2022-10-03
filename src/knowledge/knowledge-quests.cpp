@@ -25,6 +25,7 @@
 #include "util/angband-files.h"
 #include "util/enum-converter.h"
 #include "util/sort.h"
+#include "util/string-processor.h"
 #include "world/world.h"
 
 #include <numeric>
@@ -207,23 +208,34 @@ static bool do_cmd_knowledge_quests_aux(PlayerType *player_ptr, FILE *fff, Quest
 
     strnfmt(playtime_str, sizeof(playtime_str), "%02d:%02d:%02d", q_ref.comptime / (60 * 60), (q_ref.comptime / 60) % 60, q_ref.comptime % 60);
 
+    auto fputs_name_remain = [fff](const auto &name) {
+        for (auto i = 1U; i < name.size(); ++i) {
+            fprintf(fff, "  %s\n", name[i].c_str());
+        }
+    };
+
     if (is_fixed_quest || !MonsterRace(q_ref.r_idx).is_valid()) {
-        sprintf(tmp_str, _("  %-35s (危険度:%3d階相当) - レベル%2d - %s\n", "  %-35s (Danger  level: %3d) - level %2d - %s\n"), q_ref.name, (int)q_ref.level,
+        auto name = str_separate(q_ref.name, 35);
+        sprintf(tmp_str, _("  %-35s (危険度:%3d階相当) - レベル%2d - %s\n", "  %-35s (Danger  level: %3d) - level %2d - %s\n"), name.front().c_str(), (int)q_ref.level,
             q_ref.complev, playtime_str);
         fputs(tmp_str, fff);
+        fputs_name_remain(name);
         return true;
     }
 
+    auto name = str_separate(r_info[q_ref.r_idx].name, 35);
     if (q_ref.complev == 0) {
         sprintf(tmp_str, _("  %-35s (%3d階)            -   不戦勝 - %s\n", "  %-35s (Dungeon level: %3d) - Unearned - %s\n"),
-            r_info[q_ref.r_idx].name.c_str(), (int)q_ref.level, playtime_str);
+            name.front().c_str(), (int)q_ref.level, playtime_str);
         fputs(tmp_str, fff);
+        fputs_name_remain(name);
         return true;
     }
 
-    sprintf(tmp_str, _("  %-35s (%3d階)            - レベル%2d - %s\n", "  %-35s (Dungeon level: %3d) - level %2d - %s\n"), r_info[q_ref.r_idx].name.c_str(),
+    sprintf(tmp_str, _("  %-35s (%3d階)            - レベル%2d - %s\n", "  %-35s (Dungeon level: %3d) - level %2d - %s\n"), name.front().c_str(),
         (int)q_ref.level, q_ref.complev, playtime_str);
     fputs(tmp_str, fff);
+    fputs_name_remain(name);
     return true;
 }
 
