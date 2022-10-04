@@ -251,7 +251,7 @@ void print_state(PlayerType *player_ptr)
 }
 
 /*!
- * @brief プレイヤーの行動速度を表示する / Prints the speed_value of a character.			-CJS-
+ * @brief プレイヤーの行動速度を表示する
  * @param player_ptr プレイヤーへの参照ポインタ
  */
 void print_speed(PlayerType *player_ptr)
@@ -261,13 +261,12 @@ void print_speed(PlayerType *player_ptr)
     TERM_LEN col_speed = wid + COL_SPEED;
     TERM_LEN row_speed = hgt + ROW_SPEED;
 
-    int speed_value = player_ptr->pspeed - 110;
-
+    const auto speed = player_ptr->pspeed - STANDARD_SPEED;
     auto *floor_ptr = player_ptr->current_floor_ptr;
     bool is_player_fast = is_fast(player_ptr);
     char buf[32] = "";
     TERM_COLOR attr = TERM_WHITE;
-    if (speed_value > 0) {
+    if (speed > 0) {
         auto is_slow = player_ptr->effects()->deceleration()->is_slow();
         if (player_ptr->riding) {
             auto *m_ptr = &floor_ptr->m_list[player_ptr->riding];
@@ -285,8 +284,8 @@ void print_speed(PlayerType *player_ptr)
         } else {
             attr = TERM_L_GREEN;
         }
-        sprintf(buf, "%s(+%d)", (player_ptr->riding ? _("乗馬", "Ride") : _("加速", "Fast")), speed_value);
-    } else if (speed_value < 0) {
+        sprintf(buf, "%s(+%d)", (player_ptr->riding ? _("乗馬", "Ride") : _("加速", "Fast")), speed);
+    } else if (speed < 0) {
         auto is_slow = player_ptr->effects()->deceleration()->is_slow();
         if (player_ptr->riding) {
             auto *m_ptr = &floor_ptr->m_list[player_ptr->riding];
@@ -304,7 +303,7 @@ void print_speed(PlayerType *player_ptr)
         } else {
             attr = TERM_L_UMBER;
         }
-        sprintf(buf, "%s(%d)", (player_ptr->riding ? _("乗馬", "Ride") : _("減速", "Slow")), speed_value);
+        sprintf(buf, "%s(%d)", (player_ptr->riding ? _("乗馬", "Ride") : _("減速", "Slow")), speed);
     } else if (player_ptr->riding) {
         attr = TERM_GREEN;
         strcpy(buf, _("乗馬中", "Riding"));

@@ -39,16 +39,12 @@ PlayerSpeed::PlayerSpeed(PlayerType *player_ptr)
 
 /*!
  * @brief 速度 - 初期値、下限、上限
- * @details
- * * 初期値110 - 加速+0に相当
- * * 上限209 - 加速+99相当
- * * 下限11 - 加速-99相当
  */
 void PlayerSpeed::set_locals()
 {
-    this->default_value = 110;
-    this->min_value = 11;
-    this->max_value = 209;
+    this->default_value = STANDARD_SPEED;
+    this->min_value = STANDARD_SPEED - 99;
+    this->max_value = STANDARD_SPEED + 99;
     this->tr_flag = TR_SPEED;
     this->tr_bad_flag = TR_SPEED;
 }
