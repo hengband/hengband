@@ -34,14 +34,14 @@ Download the latest version of the source files from [Releases](https://github.c
 ```
 tar -jxvf hengband-x.x.x.tar.bz2
 cd hengband-x.x.x
-./configure
+./configure --disable-japanese
 make install
 ```
 
 **Please note:**
 
  * Replace `x.x.x` with the downloaded version's number.
- * `--disable-japanese` option is required to build English version.
+ * `--disable-japanese` is required to build English version, remove it if you want to build Japanese version.
 
 To run in ASCII mode:
 
