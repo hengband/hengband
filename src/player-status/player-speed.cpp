@@ -39,16 +39,12 @@ PlayerSpeed::PlayerSpeed(PlayerType *player_ptr)
 
 /*!
  * @brief 速度 - 初期値、下限、上限
- * @details
- * * 初期値110 - 加速+0に相当
- * * 上限209 - 加速+99相当
- * * 下限11 - 加速-99相当
  */
 void PlayerSpeed::set_locals()
 {
-    this->default_value = 110;
-    this->min_value = 11;
-    this->max_value = 209;
+    this->default_value = STANDARD_SPEED;
+    this->min_value = STANDARD_SPEED - 99;
+    this->max_value = STANDARD_SPEED + 99;
     this->tr_flag = TR_SPEED;
     this->tr_bad_flag = TR_SPEED;
 }
@@ -270,13 +266,13 @@ int16_t PlayerSpeed::riding_bonus()
         return 0;
     }
 
-    if (riding_m_ptr->mspeed > 110) {
-        bonus = (int16_t)((speed - 110) * (this->player_ptr->skill_exp[PlayerSkillKindType::RIDING] * 3 + this->player_ptr->lev * 160L - 10000L) / (22000L));
+    if (riding_m_ptr->mspeed > STANDARD_SPEED) {
+        bonus = (int16_t)((speed - STANDARD_SPEED) * (this->player_ptr->skill_exp[PlayerSkillKindType::RIDING] * 3 + this->player_ptr->lev * 160L - 10000L) / (22000L));
         if (bonus < 0) {
             bonus = 0;
         }
     } else {
-        bonus = speed - 110;
+        bonus = speed - STANDARD_SPEED;
     }
 
     bonus += (this->player_ptr->skill_exp[PlayerSkillKindType::RIDING] + this->player_ptr->lev * 160L) / 3200;

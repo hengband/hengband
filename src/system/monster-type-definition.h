@@ -74,4 +74,5 @@ struct monster_type {
     bool is_confused() const;
     bool is_fearful() const;
     bool is_invulnerable() const;
+    byte get_temporary_speed() const;
 };

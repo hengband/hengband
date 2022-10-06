@@ -102,10 +102,10 @@ int MonsterRace::calc_power() const
         ret = r_ptr->hdice * (r_ptr->hside + 1);
     }
     ret = ret * (100 + r_ptr->level) / 100;
-    if (r_ptr->speed > 110) {
+    if (r_ptr->speed > STANDARD_SPEED) {
         ret = ret * (r_ptr->speed * 2 - 110) / 100;
     }
-    if (r_ptr->speed < 110) {
+    if (r_ptr->speed < STANDARD_SPEED) {
         ret = ret * (r_ptr->speed - 20) / 100;
     }
     if (num_resistances > 2) {

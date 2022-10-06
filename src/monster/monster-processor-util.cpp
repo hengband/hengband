@@ -8,7 +8,6 @@
  */
 
 #include "monster/monster-processor-util.h"
-#include "game-option/birth-options.h"
 #include "monster-race/monster-race.h"
 #include "monster/monster-status.h"
 #include "system/monster-race-definition.h"
@@ -309,26 +308,4 @@ void save_old_race_flags(MonsterRaceId monster_race_idx, old_race_flags *old_rac
     old_race_flags_ptr->old_r_blows3 = r_ptr->r_blows[3];
 
     old_race_flags_ptr->old_r_cast_spell = r_ptr->r_cast_spell;
-}
-
-/*!
- * @brief モンスターの加速値を決定する
- * @param m_ptr モンスターへの参照ポインタ
- * return モンスターの加速値
- */
-byte decide_monster_speed(monster_type *m_ptr)
-{
-    auto speed = m_ptr->mspeed;
-    if (ironman_nightmare) {
-        speed += 5;
-    }
-
-    if (m_ptr->is_accelerated()) {
-        speed += 10;
-    }
-    if (m_ptr->is_decelerated()) {
-        speed -= 10;
-    }
-
-    return speed;
 }

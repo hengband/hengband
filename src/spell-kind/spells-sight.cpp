@@ -385,17 +385,6 @@ void probed_monster_info(char *buf, PlayerType *player_ptr, monster_type *m_ptr,
     GAME_TEXT m_name[MAX_NLEN];
     monster_desc(player_ptr, m_name, m_ptr, MD_IGNORE_HALLU | MD_INDEF_HIDDEN);
 
-    auto speed = m_ptr->mspeed - 110;
-    if (m_ptr->is_accelerated()) {
-        speed += 10;
-    }
-    if (m_ptr->is_decelerated()) {
-        speed -= 10;
-    }
-    if (ironman_nightmare) {
-        speed += 5;
-    }
-
     concptr align;
     if (r_ptr->kind_flags.has_all_of(alignment_mask)) {
         align = _("善悪", "good&evil");
@@ -413,6 +402,7 @@ void probed_monster_info(char *buf, PlayerType *player_ptr, monster_type *m_ptr,
         align = _("中立", "neutral");
     }
 
+    const auto speed = m_ptr->get_temporary_speed() - STANDARD_SPEED;
     sprintf(buf, _("%s ... 属性:%s HP:%d/%d AC:%d 速度:%s%d 経験:", "%s ... align:%s HP:%d/%d AC:%d speed:%s%d exp:"), m_name, align, (int)m_ptr->hp,
         (int)m_ptr->maxhp, r_ptr->ac, (speed > 0) ? "+" : "", speed);
 
