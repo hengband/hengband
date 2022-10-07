@@ -120,36 +120,33 @@ static std::optional<BlueMagicType> select_blue_magic_type_by_menu()
  */
 static std::optional<BlueMagicType> select_blue_magic_kind_by_symbol()
 {
-    auto candidate_desc = _("[A]ボルト, [B]ボール, [C]ブレス, [D]召喚, [E]その他:", "[A] bolt, [B] ball, [C] breath, [D] summoning, [E] others:");
+    const auto candidate_desc = 
+        _("[A]ボルト, [B]ボール, [C]ブレス, [D]召喚, [E]その他:", "[A] bolt, [B] ball, [C] breath, [D] summoning, [E] others:");
 
-    while (true) {
-        char ch;
-        if (!get_com(candidate_desc, &ch, true)) {
-            return std::nullopt;
-        }
-
-        switch (ch) {
-        case 'A':
-        case 'a':
-            return BlueMagicType::BOLT;
-        case 'B':
-        case 'b':
-            return BlueMagicType::BALL;
-        case 'C':
-        case 'c':
-            return BlueMagicType::BREATH;
-        case 'D':
-        case 'd':
-            return BlueMagicType::SUMMON;
-        case 'E':
-        case 'e':
-            return BlueMagicType::OTHER;
-        default:
-            break;
-        }
+    char ch;
+    if (!get_com(candidate_desc, &ch, true)) {
+        return std::nullopt;
     }
 
-    return std::nullopt;
+    switch (ch) {
+    case 'A':
+    case 'a':
+        return BlueMagicType::BOLT;
+    case 'B':
+    case 'b':
+        return BlueMagicType::BALL;
+    case 'C':
+    case 'c':
+        return BlueMagicType::BREATH;
+    case 'D':
+    case 'd':
+        return BlueMagicType::SUMMON;
+    case 'E':
+    case 'e':
+        return BlueMagicType::OTHER;
+    default:
+        return std::nullopt;
+    }
 }
 
 /*!
