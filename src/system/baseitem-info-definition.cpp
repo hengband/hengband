@@ -7,7 +7,7 @@
  * Only "aware" and "tried" are saved in the savefile
  */
 
-#include "object/object-kind.h"
+#include "system/baseitem-info-definition.h"
 #include "system/object-type-definition.h"
 
 /*

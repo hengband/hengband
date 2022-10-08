@@ -5,7 +5,7 @@
 #include "info-reader/parse-error-types.h"
 #include "main/angband-headers.h"
 #include "object-enchant/tr-types.h"
-#include "object/object-kind.h"
+#include "system/baseitem-info-definition.h"
 #include "term/gameterm.h"
 #include "util/bit-flags-calculator.h"
 #include "util/string-processor.h"

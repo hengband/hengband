@@ -10,7 +10,6 @@
 #include "game-option/cheat-options.h"
 #include "game-option/text-display-options.h"
 #include "io-dump/dump-util.h"
-#include "object/object-kind.h"
 #include "player-info/class-info.h"
 #include "player/player-skill.h"
 #include "player/player-status.h"
@@ -18,6 +17,7 @@
 #include "spell/spells-execution.h"
 #include "spell/technic-info-table.h"
 #include "sv-definition/sv-bow-types.h"
+#include "system/baseitem-info-definition.h"
 #include "system/player-type-definition.h"
 #include "util/angband-files.h"
 

@@ -904,7 +904,7 @@
     <ClCompile Include="..\..\src\object-enchant\object-ego.cpp" />
     <ClCompile Include="..\..\src\flavor\object-flavor.cpp" />
     <ClCompile Include="..\..\src\object\item-tester-hooker.cpp" />
-    <ClCompile Include="..\..\src\object\object-kind.cpp" />
+    <ClCompile Include="..\..\src\system\baseitem-info-definition.cpp" />
     <ClCompile Include="..\..\src\object\object-kind-hook.cpp" />
     <ClCompile Include="..\..\src\object\object-broken.cpp" />
     <ClCompile Include="..\..\src\object\lite-processor.cpp" />
@@ -1951,7 +1951,7 @@
     <ClInclude Include="..\..\src\object\object-broken.h" />
     <ClInclude Include="..\..\src\object\object-info.h" />
     <ClInclude Include="..\..\src\object\object-kind-hook.h" />
-    <ClInclude Include="..\..\src\object\object-kind.h" />
+    <ClInclude Include="..\..\src\system\baseitem-info-definition.h" />
     <ClInclude Include="..\..\src\player\patron.h" />
     <ClInclude Include="..\..\src\player-info\class-info.h" />
     <ClInclude Include="..\..\src\player\player-damage.h" />

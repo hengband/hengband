@@ -14,7 +14,7 @@
 #include "io/input-key-requester.h"
 #include "io/tokenizer.h"
 #include "monster-race/monster-race.h"
-#include "object/object-kind.h"
+#include "system/baseitem-info-definition.h"
 #include "system/game-option-types.h"
 #include "system/monster-race-definition.h"
 #include "system/player-type-definition.h"
