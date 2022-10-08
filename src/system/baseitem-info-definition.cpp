@@ -13,4 +13,4 @@
 /*
  * The object kind arrays
  */
-std::vector<object_kind> k_info;
+std::vector<BaseItemInfo> k_info;

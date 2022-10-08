@@ -5,7 +5,7 @@
 
 #include "object-enchant/tr-flags.h"
 
-struct object_kind;
+class BaseItemInfo;
 class ObjectType;
 struct flavor_type {
     char *buf;
@@ -35,8 +35,8 @@ struct flavor_type {
     char fake_insc_buf[30];
     TrFlags tr_flags;
     ObjectType *bow_ptr;
-    object_kind *k_ptr;
-    object_kind *flavor_k_ptr;
+    BaseItemInfo *k_ptr;
+    BaseItemInfo *flavor_k_ptr;
     int avgdam;
 };
 

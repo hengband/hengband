@@ -13,7 +13,7 @@
 void ItemLoaderBase::load_item(void)
 {
     auto loading_max_k_idx = rd_u16b();
-    object_kind dummy;
+    BaseItemInfo dummy;
     for (auto i = 0U; i < loading_max_k_idx; i++) {
         auto *k_ptr = i < k_info.size() ? &k_info[i] : &dummy;
         auto tmp8u = rd_byte();

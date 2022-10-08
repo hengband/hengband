@@ -9,7 +9,9 @@
 
 enum class ItemKindType : short;
 enum class RandomArtActType : short;
-struct object_kind {
+class BaseItemInfo {
+public:
+    BaseItemInfo() = default;
     KIND_OBJECT_IDX idx{};
 
     std::string name; /*!< ベースアイテム名 */
@@ -58,4 +60,4 @@ struct object_kind {
     RandomArtActType act_idx{}; /*!< 発動能力のID /  Activative ability index */
 };
 
-extern std::vector<object_kind> k_info;
+extern std::vector<BaseItemInfo> k_info;

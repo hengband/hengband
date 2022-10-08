@@ -249,7 +249,7 @@ public:
 
     MonsterRaceId monster_race_idx{}; /* Monster race trackee */
 
-    KIND_OBJECT_IDX object_kind_idx{}; /* Object kind trackee */
+    KIND_OBJECT_IDX baseitem_info_idx{}; /* Object kind trackee */
 
     int16_t new_spells{}; /* Number of spells available */
     int16_t old_spells{};

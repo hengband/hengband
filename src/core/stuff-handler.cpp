@@ -36,7 +36,7 @@ void monster_race_track(PlayerType *player_ptr, MonsterRaceId r_idx)
  */
 void object_kind_track(PlayerType *player_ptr, KIND_OBJECT_IDX k_idx)
 {
-    player_ptr->object_kind_idx = k_idx;
+    player_ptr->baseitem_info_idx = k_idx;
     player_ptr->window_flags |= (PW_OBJECT);
 }
 
