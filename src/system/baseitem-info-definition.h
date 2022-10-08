@@ -12,9 +12,9 @@ enum class RandomArtActType : short;
 struct object_kind {
     KIND_OBJECT_IDX idx{};
 
-    std::string name; /*!< ベースアイテム名参照のためのネームバッファオフセット値 / Name (offset) */
-    std::string text; /*!< 解説テキスト参照のためのネームバッファオフセット値 / Text (offset) */
-    std::string flavor_name; /*!< 未確定名参照のためのネームバッファオフセット値 / Flavor name (offset) */
+    std::string name; /*!< ベースアイテム名 */
+    std::string text; /*!< 解説テキスト */
+    std::string flavor_name; /*!< 未確定名 */
 
     ItemKindType tval{}; /*!< ベースアイテム種別の大項目値 Object type */
     OBJECT_SUBTYPE_VALUE sval{}; /*!< ベースアイテム種別の小項目値 Object sub type */
@@ -27,8 +27,8 @@ struct object_kind {
 
     ARMOUR_CLASS ac{}; /*!< ベースアイテムのAC基本値 /  Base armor */
 
-    DICE_NUMBER dd{};
-    DICE_SID ds{}; /*!< ダメージダイスの数と大きさ / Damage dice/sides */
+    DICE_NUMBER dd{}; /*!< ダメージダイスの数 / Damage dice */
+    DICE_SID ds{}; /*!< ダメージダイスの大きさ / Damage sides */
 
     WEIGHT weight{}; /*!< ベースアイテムの重量 / Weight */
 
