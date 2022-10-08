@@ -1,4 +1,5 @@
 ﻿#include "system/angband.h"
+#include <vector>
 
 /*!
  * 生い立ちメッセージテーブルの構造体定義 / Player background information
@@ -12,6 +13,4 @@ struct hist_type {
     byte bonus; /*!> メッセージに伴う社会的地位の変化量(50が基準値) / Social Class Bonus + 50 */
 };
 
-#define MAX_BACKGROUNDS 593
-
-extern hist_type bg[MAX_BACKGROUNDS];
+extern const std::vector<hist_type> backgrounds;
