@@ -319,7 +319,7 @@ static void generate_area(PlayerType *player_ptr, POSITION y, POSITION x, bool b
             init_flags = INIT_CREATE_DUNGEON;
         }
 
-        parse_fixed_map(player_ptr, "t_info.txt", 0, 0, MAX_HGT, MAX_WID);
+        parse_fixed_map(player_ptr, TOWN_DEFINITION_LIST, 0, 0, MAX_HGT, MAX_WID);
         if (!corner && !border) {
             player_ptr->visit |= (1UL << (player_ptr->town_num - 1));
         }
