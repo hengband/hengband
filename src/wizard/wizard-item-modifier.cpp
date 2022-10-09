@@ -178,21 +178,11 @@ void wizard_item_modifier(PlayerType *player_ptr)
 void wiz_restore_aware_flag_of_fixed_arfifact(FixedArtifactId reset_artifact_idx, bool aware)
 {
     auto max_a_idx = enum2i(a_info.rbegin()->first);
-    auto int_a_idx = enum2i(reset_artifact_idx);
+    int int_a_idx = enum2i(reset_artifact_idx);
     if (int_a_idx <= 0) {
-        char tmp[80] = "";
-        sprintf(tmp, "Artifact ID (1-%d): ", max_a_idx);
-        char tmp_val[10] = "";
-        if (!get_string(tmp, tmp_val, 3)) {
+        if (!get_value("Artifact ID", 1, max_a_idx, &int_a_idx)) {
             return;
         }
-
-        int_a_idx = static_cast<short>(atoi(tmp_val));
-    }
-
-    if ((int_a_idx <= 0) || (int_a_idx > static_cast<short>(max_a_idx))) {
-        msg_format(_("番号は1から%dの間で指定して下さい。", "ID must be between 1 to %d."), max_a_idx);
-        return;
     }
 
     a_info.at(i2enum<FixedArtifactId>(int_a_idx)).is_generated = aware;
