@@ -773,12 +773,12 @@ void wiz_dump_options(void)
  */
 void set_gametime(void)
 {
-    int tmp_int = 0;
-    if (!get_value("Dungeon Turn", 0, w_ptr->dungeon_turn_limit - 1, &tmp_int)) {
+    int game_time = 0;
+    if (!get_value("Dungeon Turn", 0, w_ptr->dungeon_turn_limit - 1, &game_time)) {
         return;
     }
 
-    w_ptr->dungeon_turn = w_ptr->game_turn = tmp_int;
+    w_ptr->dungeon_turn = w_ptr->game_turn = game_time;
 }
 
 /*!
