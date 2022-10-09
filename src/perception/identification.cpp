@@ -105,7 +105,7 @@ bool screen_object(PlayerType *player_ptr, ObjectType *o_ptr, BIT_FLAGS mode)
 
     if (o_ptr->tval == ItemKindType::STATUE) {
         auto statue_r_idx = i2enum<MonsterRaceId>(o_ptr->pval);
-        auto *r_ptr = &r_info[statue_r_idx];
+        auto *r_ptr = &monraces_info[statue_r_idx];
         if (statue_r_idx == MonsterRaceId::BULLGATES) {
             info[i++] = _("それは部屋に飾ると恥ずかしい。", "It is shameful.");
         } else if (r_ptr->flags2 & (RF2_ELDRITCH_HORROR)) {
@@ -802,7 +802,7 @@ bool screen_object(PlayerType *player_ptr, ObjectType *o_ptr, BIT_FLAGS mode)
 
     if ((o_ptr->tval == ItemKindType::STATUE) && (o_ptr->sval == SV_PHOTO)) {
         auto statue_r_idx = i2enum<MonsterRaceId>(o_ptr->pval);
-        auto *r_ptr = &r_info[statue_r_idx];
+        auto *r_ptr = &monraces_info[statue_r_idx];
         int namelen = strlen(r_ptr->name.c_str());
         prt(format("%s: '", r_ptr->name.c_str()), 1, 15);
         term_queue_bigchar(18 + namelen, 1, r_ptr->x_attr, r_ptr->x_char, 0, 0);

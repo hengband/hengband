@@ -341,7 +341,7 @@ bool detect_monsters_normal(PlayerType *player_ptr, POSITION range)
     bool flag = false;
     for (MONSTER_IDX i = 1; i < player_ptr->current_floor_ptr->m_max; i++) {
         auto *m_ptr = &player_ptr->current_floor_ptr->m_list[i];
-        auto *r_ptr = &r_info[m_ptr->r_idx];
+        auto *r_ptr = &monraces_info[m_ptr->r_idx];
         if (!m_ptr->is_valid()) {
             continue;
         }
@@ -384,7 +384,7 @@ bool detect_monsters_invis(PlayerType *player_ptr, POSITION range)
     bool flag = false;
     for (MONSTER_IDX i = 1; i < player_ptr->current_floor_ptr->m_max; i++) {
         auto *m_ptr = &player_ptr->current_floor_ptr->m_list[i];
-        auto *r_ptr = &r_info[m_ptr->r_idx];
+        auto *r_ptr = &monraces_info[m_ptr->r_idx];
 
         if (!m_ptr->is_valid()) {
             continue;
@@ -433,7 +433,7 @@ bool detect_monsters_evil(PlayerType *player_ptr, POSITION range)
     bool flag = false;
     for (MONSTER_IDX i = 1; i < player_ptr->current_floor_ptr->m_max; i++) {
         auto *m_ptr = &player_ptr->current_floor_ptr->m_list[i];
-        auto *r_ptr = &r_info[m_ptr->r_idx];
+        auto *r_ptr = &monraces_info[m_ptr->r_idx];
         if (!m_ptr->is_valid()) {
             continue;
         }
@@ -524,7 +524,7 @@ bool detect_monsters_mind(PlayerType *player_ptr, POSITION range)
     bool flag = false;
     for (MONSTER_IDX i = 1; i < player_ptr->current_floor_ptr->m_max; i++) {
         auto *m_ptr = &player_ptr->current_floor_ptr->m_list[i];
-        auto *r_ptr = &r_info[m_ptr->r_idx];
+        auto *r_ptr = &monraces_info[m_ptr->r_idx];
         if (!m_ptr->is_valid()) {
             continue;
         }
@@ -570,7 +570,7 @@ bool detect_monsters_string(PlayerType *player_ptr, POSITION range, concptr Matc
     bool flag = false;
     for (MONSTER_IDX i = 1; i < player_ptr->current_floor_ptr->m_max; i++) {
         auto *m_ptr = &player_ptr->current_floor_ptr->m_list[i];
-        auto *r_ptr = &r_info[m_ptr->r_idx];
+        auto *r_ptr = &monraces_info[m_ptr->r_idx];
         if (!m_ptr->is_valid()) {
             continue;
         }

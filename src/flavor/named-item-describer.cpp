@@ -285,7 +285,7 @@ static void describe_artifact_prefix_en(flavor_type *flavor_ptr)
 
     const auto corpse_r_idx = i2enum<MonsterRaceId>(flavor_ptr->o_ptr->pval);
     auto is_unique_corpse = flavor_ptr->o_ptr->tval == ItemKindType::CORPSE;
-    is_unique_corpse &= r_info[corpse_r_idx].kind_flags.has(MonsterKindType::UNIQUE);
+    is_unique_corpse &= monraces_info[corpse_r_idx].kind_flags.has(MonsterKindType::UNIQUE);
     if ((flavor_ptr->known && flavor_ptr->o_ptr->is_artifact()) || is_unique_corpse) {
         flavor_ptr->t = object_desc_str(flavor_ptr->t, "The ");
         return;

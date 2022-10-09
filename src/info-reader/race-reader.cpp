@@ -102,13 +102,12 @@ static bool grab_one_spell_flag(monster_race *r_ptr, std::string_view what)
 }
 
 /*!
- * @brief モンスター種族情報(r_info)のパース関数 /
- * Initialize the "r_info" array, by parsing an ascii "template" file
+ * @brief モンスター種族情報(MonsterRaceDefinition)のパース関数
  * @param buf テキスト列
  * @param head ヘッダ構造体
  * @return エラーコード
  */
-errr parse_r_info(std::string_view buf, angband_header *)
+errr parse_monraces_info(std::string_view buf, angband_header *)
 {
     static monster_race *r_ptr = nullptr;
     const auto &tokens = str_split(buf, ':', true, 10);
@@ -125,7 +124,7 @@ errr parse_r_info(std::string_view buf, angband_header *)
         }
 
         error_idx = i;
-        r_ptr = &(r_info.emplace_hint(r_info.end(), i2enum<MonsterRaceId>(i), monster_race{})->second);
+        r_ptr = &(monraces_info.emplace_hint(monraces_info.end(), i2enum<MonsterRaceId>(i), monster_race{})->second);
         r_ptr->idx = i2enum<MonsterRaceId>(i);
 #ifdef JP
         r_ptr->name = tokens[2];

@@ -81,7 +81,7 @@ ObjectType *choose_warning_item(PlayerType *player_ptr)
  */
 static void spell_damcalc(PlayerType *player_ptr, monster_type *m_ptr, AttributeType typ, int dam, int *max)
 {
-    auto *r_ptr = &r_info[m_ptr->r_idx];
+    auto *r_ptr = &monraces_info[m_ptr->r_idx];
     int rlev = r_ptr->level;
     bool ignore_wraith_form = false;
 
@@ -389,7 +389,7 @@ bool process_warning(PlayerType *player_ptr, POSITION xx, POSITION yy)
                 continue;
             }
 
-            r_ptr = &r_info[m_ptr->r_idx];
+            r_ptr = &monraces_info[m_ptr->r_idx];
 
             /* Monster spells (only powerful ones)*/
             if (projectable(player_ptr, my, mx, yy, xx)) {

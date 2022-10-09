@@ -9,7 +9,7 @@ angband_header baseitems_header; /*!< ペースアイテム情報のヘッダ構
 angband_header class_magics_header; /*!< プレイヤー職業魔法情報のヘッダ構造体 */
 angband_header dungeons_header; /*!< ダンジョン情報のヘッダ構造体 */
 angband_header egos_header; /*!< アイテムエゴ情報のヘッダ構造体 */
+angband_header monraces_header; /*!< モンスター種族情報のヘッダ構造体 */
 angband_header terrains_header; /*!< 地形情報のヘッダ構造体 */
 angband_header v_head; /*!< Vault情報のヘッダ構造体 */
-angband_header r_head; /*!< モンスター種族情報のヘッダ構造体 */
 angband_header s_head; /*!< プレイヤー職業技能情報のヘッダ構造体 */

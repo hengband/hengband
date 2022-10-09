@@ -99,7 +99,7 @@ static eg_type *initialize_eg_type(PlayerType *player_ptr, eg_type *eg_ptr, POSI
  */
 static void evaluate_monster_exp(PlayerType *player_ptr, char *buf, monster_type *m_ptr)
 {
-    monster_race *ap_r_ptr = &r_info[m_ptr->ap_r_idx];
+    monster_race *ap_r_ptr = &monraces_info[m_ptr->ap_r_idx];
     if ((player_ptr->lev >= PY_MAX_LEVEL) || PlayerRace(player_ptr).equals(PlayerRaceType::ANDROID)) {
         sprintf(buf, "**");
         return;
@@ -229,7 +229,7 @@ static void describe_grid_monster(PlayerType *player_ptr, eg_type *eg_ptr)
 
 static void describe_monster_person(eg_type *eg_ptr)
 {
-    monster_race *ap_r_ptr = &r_info[eg_ptr->m_ptr->ap_r_idx];
+    monster_race *ap_r_ptr = &monraces_info[eg_ptr->m_ptr->ap_r_idx];
     eg_ptr->s1 = _("それは", "It is ");
     if (ap_r_ptr->flags1 & RF1_FEMALE) {
         eg_ptr->s1 = _("彼女は", "She is ");

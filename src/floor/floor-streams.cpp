@@ -340,7 +340,7 @@ void build_streamer(PlayerType *player_ptr, FEAT_IDX feat, int chance)
                 }
             }
 
-            if (g_ptr->m_idx && !(streamer_ptr->flags.has(FloorFeatureType::PLACE) && monster_can_cross_terrain(player_ptr, feat, &r_info[floor_ptr->m_list[g_ptr->m_idx].r_idx], 0))) {
+            if (g_ptr->m_idx && !(streamer_ptr->flags.has(FloorFeatureType::PLACE) && monster_can_cross_terrain(player_ptr, feat, &monraces_info[floor_ptr->m_list[g_ptr->m_idx].r_idx], 0))) {
                 /* Delete the monster (if any) */
                 delete_monster(player_ptr, ty, tx);
             }

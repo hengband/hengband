@@ -142,13 +142,13 @@ void wiz_restore_monster_max_num(MonsterRaceId r_idx)
 {
     if (!MonsterRace(r_idx).is_valid()) {
         int val = 1;
-        if (!get_value("MonsterID", 1, r_info.size() - 1, &val)) {
+        if (!get_value("MonsterID", 1, monraces_info.size() - 1, &val)) {
             return;
         }
         r_idx = static_cast<MonsterRaceId>(val);
     }
 
-    auto *r_ptr = &r_info[r_idx];
+    auto *r_ptr = &monraces_info[r_idx];
     if (r_ptr->name.empty()) {
         msg_print("そのモンスターは存在しません。");
         msg_print(nullptr);

@@ -544,7 +544,7 @@ bool ObjectType::is_offerable() const
         return false;
     }
 
-    return angband_strchr("pht", r_info[i2enum<MonsterRaceId>(this->pval)].d_char) != nullptr;
+    return angband_strchr("pht", monraces_info[i2enum<MonsterRaceId>(this->pval)].d_char) != nullptr;
 }
 
 /*!
@@ -684,7 +684,7 @@ TERM_COLOR ObjectType::get_color() const
         return base_item.x_attr;
     }
 
-    return r_info[i2enum<MonsterRaceId>(this->pval)].x_attr;
+    return monraces_info[i2enum<MonsterRaceId>(this->pval)].x_attr;
 }
 
 /*
@@ -766,7 +766,7 @@ int ObjectType::get_baseitem_price() const
 int ObjectType::calc_figurine_value() const
 {
     auto figure_r_idx = i2enum<MonsterRaceId>(this->pval);
-    auto level = r_info[figure_r_idx].level;
+    auto level = monraces_info[figure_r_idx].level;
     if (level < 20) {
         return level * 50L;
     }
@@ -793,5 +793,5 @@ int ObjectType::calc_capture_value() const
         return 1000;
     }
 
-    return (r_info[capture_r_idx].level) * 50 + 1000;
+    return (monraces_info[capture_r_idx].level) * 50 + 1000;
 }

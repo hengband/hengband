@@ -45,7 +45,7 @@ static uint32_t csleep_noise;
 bool monster_is_powerful(floor_type *floor_ptr, MONSTER_IDX m_idx)
 {
     auto *m_ptr = &floor_ptr->m_list[m_idx];
-    auto *r_ptr = &r_info[m_ptr->r_idx];
+    auto *r_ptr = &monraces_info[m_ptr->r_idx];
     return any_bits(r_ptr->flags2, RF2_POWERFUL);
 }
 
@@ -57,7 +57,7 @@ bool monster_is_powerful(floor_type *floor_ptr, MONSTER_IDX m_idx)
 DEPTH monster_level_idx(floor_type *floor_ptr, MONSTER_IDX m_idx)
 {
     auto *m_ptr = &floor_ptr->m_list[m_idx];
-    auto *r_ptr = &r_info[m_ptr->r_idx];
+    auto *r_ptr = &monraces_info[m_ptr->r_idx];
     return (r_ptr->level >= 1) ? r_ptr->level : 1;
 }
 
@@ -73,7 +73,7 @@ DEPTH monster_level_idx(floor_type *floor_ptr, MONSTER_IDX m_idx)
  */
 int mon_damage_mod(PlayerType *player_ptr, monster_type *m_ptr, int dam, bool is_psy_spear)
 {
-    auto *r_ptr = &r_info[m_ptr->r_idx];
+    auto *r_ptr = &monraces_info[m_ptr->r_idx];
     if (r_ptr->resistance_flags.has(MonsterResistanceType::RESIST_ALL) && dam > 0) {
         dam /= 100;
         if ((dam == 0) && one_in_(3)) {
@@ -167,7 +167,7 @@ static void process_monsters_mtimed_aux(PlayerType *player_ptr, MONSTER_IDX m_id
     auto *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
     switch (mtimed_idx) {
     case MTIMED_CSLEEP: {
-        auto *r_ptr = &r_info[m_ptr->r_idx];
+        auto *r_ptr = &monraces_info[m_ptr->r_idx];
         auto is_wakeup = false;
         if (m_ptr->cdis < AAF_LIMIT) {
             /* Handle "sensing radius" */
@@ -264,7 +264,7 @@ static void process_monsters_mtimed_aux(PlayerType *player_ptr, MONSTER_IDX m_id
         break;
 
     case MTIMED_STUNNED: {
-        int rlev = r_info[m_ptr->r_idx].level;
+        int rlev = monraces_info[m_ptr->r_idx].level;
 
         /* Recover from stun */
         if (set_monster_stunned(player_ptr, m_idx, (randint0(10000) <= rlev * rlev) ? 0 : (m_ptr->get_remaining_stun() - 1))) {
@@ -281,7 +281,7 @@ static void process_monsters_mtimed_aux(PlayerType *player_ptr, MONSTER_IDX m_id
 
     case MTIMED_CONFUSED: {
         /* Reduce the confusion */
-        if (!set_monster_confused(player_ptr, m_idx, m_ptr->get_remaining_confusion() - randint1(r_info[m_ptr->r_idx].level / 20 + 1))) {
+        if (!set_monster_confused(player_ptr, m_idx, m_ptr->get_remaining_confusion() - randint1(monraces_info[m_ptr->r_idx].level / 20 + 1))) {
             break;
         }
 
@@ -297,7 +297,7 @@ static void process_monsters_mtimed_aux(PlayerType *player_ptr, MONSTER_IDX m_id
 
     case MTIMED_MONFEAR: {
         /* Reduce the fear */
-        if (!set_monster_monfear(player_ptr, m_idx, m_ptr->get_remaining_fear() - randint1(r_info[m_ptr->r_idx].level / 20 + 1))) {
+        if (!set_monster_monfear(player_ptr, m_idx, m_ptr->get_remaining_fear() - randint1(monraces_info[m_ptr->r_idx].level / 20 + 1))) {
             break;
         }
 
@@ -412,8 +412,8 @@ void monster_gain_exp(PlayerType *player_ptr, MONSTER_IDX m_idx, MonsterRaceId s
         return;
     }
 
-    auto *r_ptr = &r_info[m_ptr->r_idx];
-    auto *s_ptr = &r_info[s_idx];
+    auto *r_ptr = &monraces_info[m_ptr->r_idx];
+    auto *s_ptr = &monraces_info[s_idx];
 
     if (player_ptr->phase_out || (r_ptr->next_exp == 0)) {
         return;
@@ -457,7 +457,7 @@ void monster_gain_exp(PlayerType *player_ptr, MONSTER_IDX m_idx, MonsterRaceId s
     m_ptr->get_real_r_ref().cur_num++;
 
     m_ptr->ap_r_idx = m_ptr->r_idx;
-    r_ptr = &r_info[m_ptr->r_idx];
+    r_ptr = &monraces_info[m_ptr->r_idx];
 
     m_ptr->max_maxhp = any_bits(r_ptr->flags1, RF1_FORCE_MAXHP) ? maxroll(r_ptr->hdice, r_ptr->hside) : damroll(r_ptr->hdice, r_ptr->hside);
     if (ironman_nightmare) {
@@ -496,7 +496,7 @@ void monster_gain_exp(PlayerType *player_ptr, MONSTER_IDX m_idx, MonsterRaceId s
                 monster_race *hallucinated_race = nullptr;
                 do {
                     auto r_idx = MonsterRace::pick_one_at_random();
-                    hallucinated_race = &r_info[r_idx];
+                    hallucinated_race = &monraces_info[r_idx];
                 } while (hallucinated_race->name.empty() || hallucinated_race->kind_flags.has(MonsterKindType::UNIQUE));
                 auto mes_evolution = _("%sは%sに進化した。", "%^s evolved into %s.");
                 auto mes_degeneration = _("%sは%sに退化した。", "%^s degenerated into %s.");
@@ -508,7 +508,7 @@ void monster_gain_exp(PlayerType *player_ptr, MONSTER_IDX m_idx, MonsterRaceId s
         }
 
         if (!is_hallucinated) {
-            r_info[old_r_idx].r_can_evolve = true;
+            monraces_info[old_r_idx].r_can_evolve = true;
         }
 
         /* Now you feel very close to this pet. */

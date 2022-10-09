@@ -251,7 +251,7 @@ void QuestCompletionChecker::make_reward(const Pos2D pos)
         ObjectType item;
         while (true) {
             item.wipe();
-            auto &r_ref = r_info[this->m_ptr->r_idx];
+            auto &r_ref = monraces_info[this->m_ptr->r_idx];
             (void)make_object(this->player_ptr, &item, AM_GOOD | AM_GREAT, r_ref.level);
             if (!this->check_quality(item)) {
                 continue;

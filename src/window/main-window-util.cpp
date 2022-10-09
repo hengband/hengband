@@ -347,7 +347,7 @@ void set_term_color(PlayerType *player_ptr, POSITION y, POSITION x, TERM_COLOR *
         return;
     }
 
-    auto *r_ptr = &r_info[MonsterRaceId::PLAYER];
+    auto *r_ptr = &monraces_info[MonsterRaceId::PLAYER];
     *ap = r_ptr->x_attr;
     *cp = r_ptr->x_char;
     feat_priority = 31;

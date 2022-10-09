@@ -426,7 +426,7 @@ concptr do_hissatsu_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessT
                     lite_spot(player_ptr, oy, ox);
                     lite_spot(player_ptr, ty, tx);
 
-                    if (r_info[m_ptr->r_idx].flags7 & (RF7_LITE_MASK | RF7_DARK_MASK)) {
+                    if (monraces_info[m_ptr->r_idx].flags7 & (RF7_LITE_MASK | RF7_DARK_MASK)) {
                         player_ptr->update |= (PU_MON_LITE);
                     }
                 }
@@ -839,7 +839,7 @@ concptr do_hissatsu_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessT
                 m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
 
                 /* Monster cannot move back? */
-                if (!monster_can_enter(player_ptr, ny, nx, &r_info[m_ptr->r_idx], 0)) {
+                if (!monster_can_enter(player_ptr, ny, nx, &monraces_info[m_ptr->r_idx], 0)) {
                     /* -more- */
                     if (i < 2) {
                         msg_print(nullptr);

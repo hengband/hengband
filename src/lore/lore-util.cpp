@@ -37,7 +37,7 @@ lore_type *initialize_lore_type(lore_type *lore_ptr, MonsterRaceId r_idx, monste
 #endif
     lore_ptr->r_idx = r_idx;
     lore_ptr->nightmare = ironman_nightmare && (mode != MONSTER_LORE_DEBUG);
-    lore_ptr->r_ptr = &r_info[r_idx];
+    lore_ptr->r_ptr = &monraces_info[r_idx];
     lore_ptr->speed = lore_ptr->nightmare ? lore_ptr->r_ptr->speed + 5 : lore_ptr->r_ptr->speed;
     lore_ptr->drop_gold = lore_ptr->r_ptr->r_drop_gold;
     lore_ptr->drop_item = lore_ptr->r_ptr->r_drop_item;

@@ -148,7 +148,7 @@ MonsterRaceId get_mon_num(PlayerType *player_ptr, DEPTH min_level, DEPTH max_lev
             break;
         } // sorted by depth array,
         auto r_idx = i2enum<MonsterRaceId>(entry.index);
-        auto r_ptr = &r_info[r_idx];
+        auto r_ptr = &monraces_info[r_idx];
         if (!(option & GMN_ARENA) && !chameleon_change_m_idx) {
             if ((r_ptr->kind_flags.has(MonsterKindType::UNIQUE) || r_ptr->population_flags.has(MonsterPopulationType::NAZGUL)) && (r_ptr->cur_num >= r_ptr->max_num)) {
                 continue;
@@ -159,10 +159,10 @@ MonsterRaceId get_mon_num(PlayerType *player_ptr, DEPTH min_level, DEPTH max_lev
             }
 
             if (r_idx == MonsterRaceId::BANORLUPART) {
-                if (r_info[MonsterRaceId::BANOR].cur_num > 0) {
+                if (monraces_info[MonsterRaceId::BANOR].cur_num > 0) {
                     continue;
                 }
-                if (r_info[MonsterRaceId::LUPART].cur_num > 0) {
+                if (monraces_info[MonsterRaceId::LUPART].cur_num > 0) {
                     continue;
                 }
             }
@@ -208,9 +208,9 @@ MonsterRaceId get_mon_num(PlayerType *player_ptr, DEPTH min_level, DEPTH max_lev
 static bool monster_hook_chameleon_lord(PlayerType *player_ptr, MonsterRaceId r_idx)
 {
     auto *floor_ptr = player_ptr->current_floor_ptr;
-    auto *r_ptr = &r_info[r_idx];
+    auto *r_ptr = &monraces_info[r_idx];
     auto *m_ptr = &floor_ptr->m_list[chameleon_change_m_idx];
-    monster_race *old_r_ptr = &r_info[m_ptr->r_idx];
+    monster_race *old_r_ptr = &monraces_info[m_ptr->r_idx];
 
     if (r_ptr->kind_flags.has_not(MonsterKindType::UNIQUE)) {
         return false;
@@ -219,7 +219,7 @@ static bool monster_hook_chameleon_lord(PlayerType *player_ptr, MonsterRaceId r_
         return false;
     }
 
-    if (std::abs(r_ptr->level - r_info[MonsterRaceId::CHAMELEON_K].level) > 5) {
+    if (std::abs(r_ptr->level - monraces_info[MonsterRaceId::CHAMELEON_K].level) > 5) {
         return false;
     }
 
@@ -253,9 +253,9 @@ static bool monster_hook_chameleon_lord(PlayerType *player_ptr, MonsterRaceId r_
 static bool monster_hook_chameleon(PlayerType *player_ptr, MonsterRaceId r_idx)
 {
     auto *floor_ptr = player_ptr->current_floor_ptr;
-    auto *r_ptr = &r_info[r_idx];
+    auto *r_ptr = &monraces_info[r_idx];
     auto *m_ptr = &floor_ptr->m_list[chameleon_change_m_idx];
-    monster_race *old_r_ptr = &r_info[m_ptr->r_idx];
+    monster_race *old_r_ptr = &monraces_info[m_ptr->r_idx];
 
     if (r_ptr->kind_flags.has(MonsterKindType::UNIQUE)) {
         return false;
@@ -309,13 +309,13 @@ void choose_new_monster(PlayerType *player_ptr, MONSTER_IDX m_idx, bool born, Mo
     monster_race *r_ptr;
 
     bool old_unique = false;
-    if (r_info[m_ptr->r_idx].kind_flags.has(MonsterKindType::UNIQUE)) {
+    if (monraces_info[m_ptr->r_idx].kind_flags.has(MonsterKindType::UNIQUE)) {
         old_unique = true;
     }
     if (old_unique && (r_idx == MonsterRaceId::CHAMELEON)) {
         r_idx = MonsterRaceId::CHAMELEON_K;
     }
-    r_ptr = &r_info[r_idx];
+    r_ptr = &monraces_info[r_idx];
 
     char old_m_name[MAX_NLEN];
     monster_desc(player_ptr, old_m_name, m_ptr, 0);
@@ -331,7 +331,7 @@ void choose_new_monster(PlayerType *player_ptr, MONSTER_IDX m_idx, bool born, Mo
         }
 
         if (old_unique) {
-            level = r_info[MonsterRaceId::CHAMELEON_K].level;
+            level = monraces_info[MonsterRaceId::CHAMELEON_K].level;
         } else if (!floor_ptr->dun_level) {
             level = wilderness[player_ptr->wilderness_y][player_ptr->wilderness_x].level;
         } else {
@@ -343,7 +343,7 @@ void choose_new_monster(PlayerType *player_ptr, MONSTER_IDX m_idx, bool born, Mo
         }
 
         r_idx = get_mon_num(player_ptr, 0, level, 0);
-        r_ptr = &r_info[r_idx];
+        r_ptr = &monraces_info[r_idx];
 
         chameleon_change_m_idx = 0;
         if (!MonsterRace(r_idx).is_valid()) {
@@ -357,7 +357,7 @@ void choose_new_monster(PlayerType *player_ptr, MONSTER_IDX m_idx, bool born, Mo
     lite_spot(player_ptr, m_ptr->fy, m_ptr->fx);
 
     auto old_r_idx = m_ptr->r_idx;
-    if ((r_info[old_r_idx].flags7 & (RF7_LITE_MASK | RF7_DARK_MASK)) || (r_ptr->flags7 & (RF7_LITE_MASK | RF7_DARK_MASK))) {
+    if ((monraces_info[old_r_idx].flags7 & (RF7_LITE_MASK | RF7_DARK_MASK)) || (r_ptr->flags7 & (RF7_LITE_MASK | RF7_DARK_MASK))) {
         player_ptr->update |= (PU_MON_LITE);
     }
 

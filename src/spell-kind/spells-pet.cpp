@@ -47,7 +47,7 @@ void discharge_minion(PlayerType *player_ptr)
         }
 
         monster_race *r_ptr;
-        r_ptr = &r_info[m_ptr->r_idx];
+        r_ptr = &monraces_info[m_ptr->r_idx];
         if (r_ptr->kind_flags.has(MonsterKindType::UNIQUE)) {
             GAME_TEXT m_name[MAX_NLEN];
             monster_desc(player_ptr, m_name, m_ptr, 0x00);

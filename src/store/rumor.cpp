@@ -85,8 +85,8 @@ void display_rumor(PlayerType *player_ptr, bool ex)
     } else if (strcmp(zz[0], "MONSTER") == 0) {
         monster_race *r_ptr;
         while (true) {
-            auto r_idx = i2enum<MonsterRaceId>(rumor_num(zz[1], static_cast<IDX>(r_info.size())));
-            r_ptr = &r_info[r_idx];
+            auto r_idx = i2enum<MonsterRaceId>(rumor_num(zz[1], static_cast<IDX>(monraces_info.size())));
+            r_ptr = &monraces_info[r_idx];
             if (!r_ptr->name.empty()) {
                 break;
             }

@@ -91,7 +91,7 @@ static MONSTER_IDX decide_pet_index(PlayerType *player_ptr, const int current_mo
         int j;
         for (j = 1000; j > 0; j--) {
             scatter(player_ptr, cy, cx, player_ptr->y, player_ptr->x, d, PROJECT_NONE);
-            if (monster_can_enter(player_ptr, *cy, *cx, &r_info[party_mon[current_monster].r_idx], 0)) {
+            if (monster_can_enter(player_ptr, *cy, *cx, &monraces_info[party_mon[current_monster].r_idx], 0)) {
                 break;
             }
         }

@@ -14,6 +14,6 @@ errr init_dungeons_info();
 errr init_egos_info();
 errr init_terrains_info();
 errr init_misc(PlayerType *player_ptr);
-errr init_r_info();
+errr init_monster_race_definitions();
 errr init_v_info();
 errr init_s_info();

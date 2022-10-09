@@ -165,7 +165,7 @@ void update_mon_lite(PlayerType *player_ptr)
         monster_race *r_ptr;
         for (int i = 1; i < floor_ptr->m_max; i++) {
             m_ptr = &floor_ptr->m_list[i];
-            r_ptr = &r_info[m_ptr->r_idx];
+            r_ptr = &monraces_info[m_ptr->r_idx];
             if (!m_ptr->is_valid() || (m_ptr->cdis > dis_lim)) {
                 continue;
             }

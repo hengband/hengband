@@ -425,11 +425,11 @@ void autopick_entry_from_object(PlayerType *player_ptr, autopick_type *entry, Ob
     }
 
     const auto r_idx = i2enum<MonsterRaceId>(o_ptr->pval);
-    if ((o_ptr->tval == ItemKindType::CORPSE || o_ptr->tval == ItemKindType::STATUE) && r_info[r_idx].kind_flags.has(MonsterKindType::UNIQUE)) {
+    if ((o_ptr->tval == ItemKindType::CORPSE || o_ptr->tval == ItemKindType::STATUE) && monraces_info[r_idx].kind_flags.has(MonsterKindType::UNIQUE)) {
         ADD_FLG(FLG_UNIQUE);
     }
 
-    if (o_ptr->tval == ItemKindType::CORPSE && angband_strchr("pht", r_info[r_idx].d_char)) {
+    if (o_ptr->tval == ItemKindType::CORPSE && angband_strchr("pht", monraces_info[r_idx].d_char)) {
         ADD_FLG(FLG_HUMAN);
     }
 

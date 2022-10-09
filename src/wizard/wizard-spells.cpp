@@ -205,7 +205,7 @@ void wiz_summon_specific_enemy(PlayerType *player_ptr, MonsterRaceId r_idx)
 {
     if (!MonsterRace(r_idx).is_valid()) {
         int val = 1;
-        if (!get_value("MonsterID", 1, r_info.size() - 1, &val)) {
+        if (!get_value("MonsterID", 1, monraces_info.size() - 1, &val)) {
             return;
         }
         r_idx = static_cast<MonsterRaceId>(val);
@@ -224,7 +224,7 @@ void wiz_summon_pet(PlayerType *player_ptr, MonsterRaceId r_idx)
 {
     if (!MonsterRace(r_idx).is_valid()) {
         int val = 1;
-        if (!get_value("MonsterID", 1, r_info.size() - 1, &val)) {
+        if (!get_value("MonsterID", 1, monraces_info.size() - 1, &val)) {
             return;
         }
         r_idx = static_cast<MonsterRaceId>(val);

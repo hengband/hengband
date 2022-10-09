@@ -332,7 +332,7 @@ errr parse_dungeons_info(std::string_view buf, angband_header *)
                 if (s_tokens[0] != "1") {
                     return PARSE_ERROR_GENERIC;
                 }
-                continue; //!< r_info.txtからのコピペ対策
+                continue; //!< MonsterRaceDefinitions.txtからのコピペ対策
             }
 
             if (!grab_one_spell_monster_flag(d_ptr, f)) {

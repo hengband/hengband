@@ -25,7 +25,7 @@
 void monster_desc(PlayerType *player_ptr, char *desc, monster_type *m_ptr, BIT_FLAGS mode)
 {
     monster_race *r_ptr;
-    r_ptr = &r_info[m_ptr->ap_r_idx];
+    r_ptr = &monraces_info[m_ptr->ap_r_idx];
     concptr name = (mode & MD_TRUE_NAME) ? m_ptr->get_real_r_ref().name.c_str() : r_ptr->name.c_str();
     GAME_TEXT silly_name[1024];
     bool named = false;
@@ -42,7 +42,7 @@ void monster_desc(PlayerType *player_ptr, char *desc, monster_type *m_ptr, BIT_F
 
             do {
                 auto r_idx = MonsterRace::pick_one_at_random();
-                hallu_race = &r_info[r_idx];
+                hallu_race = &monraces_info[r_idx];
             } while (hallu_race->name.empty() || hallu_race->kind_flags.has(MonsterKindType::UNIQUE));
 
             strcpy(silly_name, (hallu_race->name.c_str()));
@@ -243,7 +243,7 @@ void monster_desc(PlayerType *player_ptr, char *desc, monster_type *m_ptr, BIT_F
     }
 
     if ((mode & MD_IGNORE_HALLU) && !m_ptr->is_original_ap()) {
-        strcat(desc, format("(%s)", r_info[m_ptr->r_idx].name.c_str()));
+        strcat(desc, format("(%s)", monraces_info[m_ptr->r_idx].name.c_str()));
     }
 
     /* Handle the Possessive as a special afterthought */
@@ -263,7 +263,7 @@ void monster_desc(PlayerType *player_ptr, char *desc, monster_type *m_ptr, BIT_F
 void message_pain(PlayerType *player_ptr, MONSTER_IDX m_idx, int dam)
 {
     auto *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
-    auto *r_ptr = &r_info[m_ptr->r_idx];
+    auto *r_ptr = &monraces_info[m_ptr->r_idx];
 
     GAME_TEXT m_name[MAX_NLEN];
 

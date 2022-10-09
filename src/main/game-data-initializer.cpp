@@ -152,8 +152,8 @@ static void init_object_alloc(void)
  */
 void init_alloc(void)
 {
-    std::vector<tag_type> elements(r_info.size());
-    for (const auto &[r_idx, r_ref] : r_info) {
+    std::vector<tag_type> elements(monraces_info.size());
+    for (const auto &[r_idx, r_ref] : monraces_info) {
         if (MonsterRace(r_ref.idx).is_valid()) {
             elements[enum2i(r_ref.idx)].tag = r_ref.level;
             elements[enum2i(r_ref.idx)].index = enum2i(r_ref.idx);
@@ -161,9 +161,9 @@ void init_alloc(void)
     }
 
     tag_sort(elements.data(), elements.size());
-    alloc_race_table.assign(r_info.size(), {});
-    for (auto i = 1U; i < r_info.size(); i++) {
-        auto *r_ptr = &r_info[i2enum<MonsterRaceId>(elements[i].index)];
+    alloc_race_table.assign(monraces_info.size(), {});
+    for (auto i = 1U; i < monraces_info.size(); i++) {
+        auto *r_ptr = &monraces_info[i2enum<MonsterRaceId>(elements[i].index)];
         if (r_ptr->rarity == 0) {
             continue;
         }

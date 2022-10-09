@@ -265,7 +265,7 @@ void rd_item_old(ObjectType *o_ptr)
         }
 
         if (o_ptr->tval == ItemKindType::CAPTURE) {
-            const auto &r_ref = r_info[i2enum<MonsterRaceId>(o_ptr->pval)];
+            const auto &r_ref = monraces_info[i2enum<MonsterRaceId>(o_ptr->pval)];
             if (r_ref.flags1 & RF1_FORCE_MAXHP) {
                 o_ptr->captured_monster_max_hp = maxroll(r_ref.hdice, r_ref.hside);
             } else {
@@ -369,7 +369,7 @@ void rd_monster_old(PlayerType *player_ptr, monster_type *m_ptr)
     }
 
     if (h_older_than(1, 0, 14)) {
-        auto *r_ptr = &r_info[m_ptr->r_idx];
+        auto *r_ptr = &monraces_info[m_ptr->r_idx];
 
         m_ptr->sub_align = SUB_ALIGN_NEUTRAL;
         if (r_ptr->kind_flags.has(MonsterKindType::EVIL)) {

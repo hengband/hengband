@@ -122,7 +122,7 @@ bool raise_possible(PlayerType *player_ptr, monster_type *m_ptr)
                 auto *o_ptr = &floor_ptr->o_list[this_o_idx];
                 if (o_ptr->tval == ItemKindType::CORPSE) {
                     auto corpse_r_idx = i2enum<MonsterRaceId>(o_ptr->pval);
-                    if (!monster_has_hostile_align(player_ptr, m_ptr, 0, 0, &r_info[corpse_r_idx])) {
+                    if (!monster_has_hostile_align(player_ptr, m_ptr, 0, 0, &monraces_info[corpse_r_idx])) {
                         return true;
                     }
                 }
@@ -265,7 +265,7 @@ ProjectResult ball(PlayerType *player_ptr, POSITION y, POSITION x, MONSTER_IDX m
 ProjectResult breath(PlayerType *player_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, AttributeType typ, int dam_hp, POSITION rad, int target_type)
 {
     auto *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
-    auto *r_ptr = &r_info[m_ptr->r_idx];
+    auto *r_ptr = &monraces_info[m_ptr->r_idx];
     BIT_FLAGS flg = PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL | PROJECT_BREATH;
     if (target_type == MONSTER_TO_PLAYER) {
         flg |= PROJECT_PLAYER;

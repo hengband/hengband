@@ -82,7 +82,7 @@ void player_wipe_without_name(PlayerType *player_ptr)
     }
 
     reset_baseitem_idenditication_flags();
-    for (auto &[r_idx, r_ref] : r_info) {
+    for (auto &[r_idx, r_ref] : monraces_info) {
         if (!MonsterRace(r_ref.idx).is_valid()) {
             continue;
         }
@@ -196,7 +196,7 @@ void init_dungeon_quests(PlayerType *player_ptr)
         monster_race *quest_r_ptr;
         q_ptr->status = QuestStatusType::TAKEN;
         determine_random_questor(player_ptr, q_ptr);
-        quest_r_ptr = &r_info[q_ptr->r_idx];
+        quest_r_ptr = &monraces_info[q_ptr->r_idx];
         quest_r_ptr->flags1 |= RF1_QUESTOR;
         q_ptr->max_num = 1;
     }

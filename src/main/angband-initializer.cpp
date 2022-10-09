@@ -294,7 +294,7 @@ void init_angband(PlayerType *player_ptr, bool no_term)
     }
 
     init_note(_("[データの初期化中... (モンスター)]", "[Initializing arrays... (monsters)]"));
-    if (init_r_info()) {
+    if (init_monster_race_definitions()) {
         quit(_("モンスター初期化不能", "Cannot initialize monsters"));
     }
 
@@ -305,7 +305,7 @@ void init_angband(PlayerType *player_ptr, bool no_term)
 
     for (const auto &d_ref : dungeons_info) {
         if (d_ref.idx > 0 && MonsterRace(d_ref.final_guardian).is_valid()) {
-            r_info[d_ref.final_guardian].flags7 |= RF7_GUARDIAN;
+            monraces_info[d_ref.final_guardian].flags7 |= RF7_GUARDIAN;
         }
     }
 

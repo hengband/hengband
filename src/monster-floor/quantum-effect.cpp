@@ -87,7 +87,7 @@ static void produce_quantum_effect(PlayerType *player_ptr, MONSTER_IDX m_idx, bo
 bool process_quantum_effect(PlayerType *player_ptr, MONSTER_IDX m_idx, bool see_m)
 {
     auto *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
-    auto *r_ptr = &r_info[m_ptr->r_idx];
+    auto *r_ptr = &monraces_info[m_ptr->r_idx];
     if (r_ptr->kind_flags.has_not(MonsterKindType::QUANTUM)) {
         return false;
     }

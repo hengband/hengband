@@ -118,7 +118,7 @@ static void display_uniques(unique_list_type *unique_list_ptr, FILE *fff)
 
     char buf[80];
     for (auto r_idx : unique_list_ptr->who) {
-        auto *r_ptr = &r_info[r_idx];
+        auto *r_ptr = &monraces_info[r_idx];
 
         if (r_ptr->defeat_level && r_ptr->defeat_time) {
             sprintf(buf, _(" - レベル%2d - %d:%02d:%02d", " - level %2d - %d:%02d:%02d"), r_ptr->defeat_level, r_ptr->defeat_time / (60 * 60),
@@ -150,7 +150,7 @@ void do_cmd_knowledge_uniques(PlayerType *player_ptr, bool is_alive)
         return;
     }
 
-    for (auto &[r_idx, r_ref] : r_info) {
+    for (auto &[r_idx, r_ref] : monraces_info) {
         if (!MonsterRace(r_ref.idx).is_valid()) {
             continue;
         }

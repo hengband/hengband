@@ -157,7 +157,7 @@ static void describe_effect_source(PlayerType *player_ptr, EffectPlayerType *ep_
 {
     if (ep_ptr->who > 0) {
         ep_ptr->m_ptr = &player_ptr->current_floor_ptr->m_list[ep_ptr->who];
-        ep_ptr->rlev = (&r_info[ep_ptr->m_ptr->r_idx])->level >= 1 ? (&r_info[ep_ptr->m_ptr->r_idx])->level : 1;
+        ep_ptr->rlev = (&monraces_info[ep_ptr->m_ptr->r_idx])->level >= 1 ? (&monraces_info[ep_ptr->m_ptr->r_idx])->level : 1;
         monster_desc(player_ptr, ep_ptr->m_name, ep_ptr->m_ptr, 0);
         strcpy(ep_ptr->killer, who_name);
         return;

@@ -86,7 +86,7 @@ static void do_cmd_knowledge_quests_current(PlayerType *player_ptr, FILE *fff)
             if (q_ref.status == QuestStatusType::TAKEN || q_ref.status == QuestStatusType::STAGE_COMPLETED) {
                 switch (q_ref.type) {
                 case QuestKindType::KILL_LEVEL:
-                    r_ptr = &r_info[q_ref.r_idx];
+                    r_ptr = &monraces_info[q_ref.r_idx];
                     strcpy(name, r_ptr->name.c_str());
                     if (q_ref.max_num > 1) {
 #ifdef JP
@@ -159,7 +159,7 @@ static void do_cmd_knowledge_quests_current(PlayerType *player_ptr, FILE *fff)
             continue;
         }
 
-        r_ptr = &r_info[q_ref.r_idx];
+        r_ptr = &monraces_info[q_ref.r_idx];
         strcpy(name, r_ptr->name.c_str());
         if (q_ref.max_num <= 1) {
             sprintf(rand_tmp_str, _("  %s (%d 階) - %sを倒す。\n", "  %s (Dungeon level: %d)\n  Kill %s.\n"), q_ref.name, (int)q_ref.level, name);
@@ -223,7 +223,7 @@ static bool do_cmd_knowledge_quests_aux(PlayerType *player_ptr, FILE *fff, Quest
         return true;
     }
 
-    auto name = str_separate(r_info[q_ref.r_idx].name, 35);
+    auto name = str_separate(monraces_info[q_ref.r_idx].name, 35);
     if (q_ref.complev == 0) {
         sprintf(tmp_str, _("  %-35s (%3d階)            -   不戦勝 - %s\n", "  %-35s (Dungeon level: %3d) - Unearned - %s\n"),
             name.front().c_str(), (int)q_ref.level, playtime_str);
@@ -303,7 +303,7 @@ static void do_cmd_knowledge_quests_wiz_random(FILE *fff)
 
         if ((q_ref.type == QuestKindType::RANDOM) && (q_ref.status == QuestStatusType::TAKEN)) {
             total++;
-            sprintf(tmp_str, _("  %s (%d階, %s)\n", "  %s (%d, %s)\n"), q_ref.name, (int)q_ref.level, r_info[q_ref.r_idx].name.c_str());
+            sprintf(tmp_str, _("  %s (%d階, %s)\n", "  %s (%d, %s)\n"), q_ref.name, (int)q_ref.level, monraces_info[q_ref.r_idx].name.c_str());
             fputs(tmp_str, fff);
         }
     }

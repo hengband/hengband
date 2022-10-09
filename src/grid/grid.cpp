@@ -875,7 +875,7 @@ bool cave_monster_teleportable_bold(PlayerType *player_ptr, MONSTER_IDX m_idx, P
     }
 
     if (!(mode & TELEPORT_PASSIVE)) {
-        if (!monster_can_cross_terrain(player_ptr, g_ptr->feat, &r_info[m_ptr->r_idx], 0)) {
+        if (!monster_can_cross_terrain(player_ptr, g_ptr->feat, &monraces_info[m_ptr->r_idx], 0)) {
             return false;
         }
     }
@@ -965,7 +965,7 @@ bool player_can_enter(PlayerType *player_ptr, FEAT_IDX feature, BIT_FLAGS16 mode
 
     if (player_ptr->riding) {
         return monster_can_cross_terrain(
-            player_ptr, feature, &r_info[player_ptr->current_floor_ptr->m_list[player_ptr->riding].r_idx], mode | CEM_RIDING);
+            player_ptr, feature, &monraces_info[player_ptr->current_floor_ptr->m_list[player_ptr->riding].r_idx], mode | CEM_RIDING);
     }
 
     if (f_ptr->flags.has(FloorFeatureType::PATTERN)) {

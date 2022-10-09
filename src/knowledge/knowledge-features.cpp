@@ -376,7 +376,7 @@ void do_cmd_knowledge_dungeon(PlayerType *player_ptr)
             continue;
         }
         if (MonsterRace(d_ref.final_guardian).is_valid()) {
-            if (!r_info[d_ref.final_guardian].max_num) {
+            if (!monraces_info[d_ref.final_guardian].max_num) {
                 seiha = true;
             }
         } else if (max_dlv[d_ref.idx] == d_ref.maxdepth) {

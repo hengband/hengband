@@ -81,10 +81,8 @@ static bool is_possible_monster_or(const EnumClassFlagGroup<T> &r_flags, const E
  */
 static bool restrict_monster_to_dungeon(PlayerType *player_ptr, MonsterRaceId r_idx)
 {
-    DUNGEON_IDX d_idx = player_ptr->dungeon_idx;
-    dungeon_type *d_ptr = &dungeons_info[d_idx];
-    auto *r_ptr = &r_info[r_idx];
-
+    const auto *d_ptr = &dungeons_info[player_ptr->dungeon_idx];
+    const auto *r_ptr = &monraces_info[r_idx];
     if (d_ptr->flags.has(DungeonFeatureType::CHAMELEON)) {
         if (chameleon_change_m_idx) {
             return true;
@@ -254,7 +252,7 @@ static errr do_get_mon_num_prep(PlayerType *player_ptr, const monsterrace_hook_t
     for (auto i = 0U; i < alloc_race_table.size(); i++) {
         alloc_entry *const entry = &alloc_race_table[i];
         const auto entry_r_idx = i2enum<MonsterRaceId>(entry->index);
-        const monster_race *const r_ptr = &r_info[entry_r_idx];
+        const monster_race *const r_ptr = &monraces_info[entry_r_idx];
 
         // 生成を禁止する要素は重み 0 とする。
         entry->prob2 = 0;

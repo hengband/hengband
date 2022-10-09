@@ -105,10 +105,10 @@ bool object_sort_comp(PlayerType *player_ptr, ObjectType *o_ptr, int32_t o_value
     case ItemKindType::CAPTURE: {
         auto o_r_idx = i2enum<MonsterRaceId>(o_ptr->pval);
         auto j_r_idx = i2enum<MonsterRaceId>(j_ptr->pval);
-        if (r_info[o_r_idx].level < r_info[j_r_idx].level) {
+        if (monraces_info[o_r_idx].level < monraces_info[j_r_idx].level) {
             return true;
         }
-        if ((r_info[o_r_idx].level == r_info[j_r_idx].level) && (o_ptr->pval < j_ptr->pval)) {
+        if ((monraces_info[o_r_idx].level == monraces_info[j_r_idx].level) && (o_ptr->pval < j_ptr->pval)) {
             return true;
         }
         return false;

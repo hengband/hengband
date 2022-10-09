@@ -126,7 +126,7 @@ static void parse_qtw_D(PlayerType *player_ptr, qtwg_type *qtwg_ptr, char *s)
             }
 
             const auto r_idx = i2enum<MonsterRaceId>(monster_index);
-            auto &r_ref = r_info[r_idx];
+            auto &r_ref = monraces_info[r_idx];
 
             old_cur_num = r_ref.cur_num;
             old_max_num = r_ref.max_num;
@@ -225,7 +225,7 @@ static bool parse_qtw_QQ(quest_type *q_ptr, char **zz, int num)
         q_ptr->flags = atoi(zz[10]);
     }
 
-    auto &r_ref = r_info[q_ptr->r_idx];
+    auto &r_ref = monraces_info[q_ptr->r_idx];
     if (r_ref.kind_flags.has(MonsterKindType::UNIQUE)) {
         r_ref.flags1 |= RF1_QUESTOR;
     }

@@ -113,7 +113,7 @@ static concptr town_key_at(int index, char *buf)
  */
 static concptr monster_key_at(int index, char *buf)
 {
-    if (index >= static_cast<int>(r_info.size())) {
+    if (index >= static_cast<int>(monraces_info.size())) {
         return nullptr;
     }
 

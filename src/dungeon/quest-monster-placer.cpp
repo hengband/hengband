@@ -37,7 +37,7 @@ bool place_quest_monsters(PlayerType *player_ptr)
             continue;
         }
 
-        r_ptr = &r_info[q_ref.r_idx];
+        r_ptr = &monraces_info[q_ref.r_idx];
         if (r_ptr->kind_flags.has(MonsterKindType::UNIQUE) && (r_ptr->cur_num >= r_ptr->max_num)) {
             continue;
         }

@@ -207,14 +207,13 @@ errr init_terrains_info()
 }
 
 /*!
- * @brief モンスター種族情報読み込みのメインルーチン /
- * Initialize the "r_info" array
+ * @brief モンスター種族情報読み込みのメインルーチン
  * @return エラーコード
  */
-errr init_r_info()
+errr init_monster_race_definitions()
 {
-    init_header(&r_head);
-    return init_info("r_info.txt", r_head, r_info, parse_r_info);
+    init_header(&monraces_header);
+    return init_info("MonsterRaceDefinitions.txt", monraces_header, monraces_info, parse_monraces_info);
 }
 
 /*!

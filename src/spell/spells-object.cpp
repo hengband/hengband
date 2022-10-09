@@ -156,7 +156,7 @@ void generate_amusement(PlayerType *player_ptr, int num, bool known)
 
         ItemMagicApplier(player_ptr, &item, 1, AM_NO_FIXED_ART).execute();
         if (flag == AmusementFlagType::NO_UNIQUE) {
-            if (r_info[i2enum<MonsterRaceId>(item.pval)].kind_flags.has(MonsterKindType::UNIQUE)) {
+            if (monraces_info[i2enum<MonsterRaceId>(item.pval)].kind_flags.has(MonsterKindType::UNIQUE)) {
                 continue;
             }
         }

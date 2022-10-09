@@ -403,7 +403,7 @@ void monster_death(PlayerType *player_ptr, MONSTER_IDX m_idx, bool drop_item, At
     on_dead_explosion(player_ptr, md_ptr);
     if (md_ptr->m_ptr->mflag2.has(MonsterConstantFlagType::CHAMELEON)) {
         choose_new_monster(player_ptr, m_idx, true, MonsterRaceId::CHAMELEON);
-        md_ptr->r_ptr = &r_info[md_ptr->m_ptr->r_idx];
+        md_ptr->r_ptr = &monraces_info[md_ptr->m_ptr->r_idx];
     }
 
     QuestCompletionChecker(player_ptr, md_ptr->m_ptr).complete();
@@ -437,7 +437,7 @@ void monster_death(PlayerType *player_ptr, MONSTER_IDX m_idx, bool drop_item, At
  */
 concptr extract_note_dies(MonsterRaceId r_idx)
 {
-    auto *r_ptr = &r_info[r_idx];
+    auto *r_ptr = &monraces_info[r_idx];
     if (monster_living(r_idx)) {
         return _("は死んだ。", " dies.");
     }

@@ -110,7 +110,7 @@ static bool wr_savefile_new(PlayerType *player_ptr, SaveType type)
         wr_string(message_str(i));
     }
 
-    uint16_t tmp16u = static_cast<uint16_t>(r_info.size());
+    uint16_t tmp16u = static_cast<uint16_t>(monraces_info.size());
     wr_u16b(tmp16u);
     for (auto r_idx = 0; r_idx < tmp16u; r_idx++) {
         wr_lore(i2enum<MonsterRaceId>(r_idx));

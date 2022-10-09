@@ -216,13 +216,13 @@ int exe_write_diary_quest(PlayerType *player_ptr, int type, QuestId num)
     }
     case DIARY_RAND_QUEST_C: {
         GAME_TEXT name[MAX_NLEN];
-        strcpy(name, r_info[q_ref.r_idx].name.c_str());
+        strcpy(name, monraces_info[q_ref.r_idx].name.c_str());
         fprintf(fff, _(" %2d:%02d %20s ランダムクエスト(%s)を達成した。\n", " %2d:%02d %20s completed random quest '%s'\n"), hour, min, note_level, name);
         break;
     }
     case DIARY_RAND_QUEST_F: {
         GAME_TEXT name[MAX_NLEN];
-        strcpy(name, r_info[q_ref.r_idx].name.c_str());
+        strcpy(name, monraces_info[q_ref.r_idx].name.c_str());
         fprintf(fff, _(" %2d:%02d %20s ランダムクエスト(%s)から逃げ出した。\n", " %2d:%02d %20s ran away from quest '%s'.\n"), hour, min, note_level, name);
         break;
     }
