@@ -18,11 +18,11 @@
 #include "monster/monster-status.h"
 #include "object/item-tester-hooker.h"
 #include "object/object-info.h"
-#include "object/object-kind.h"
 #include "object/object-mark-types.h"
 #include "player/player-status-flags.h"
 #include "player/player-status.h"
 #include "spell-kind/magic-item-recharger.h"
+#include "system/baseitem-info-definition.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
 #include "system/monster-race-definition.h"
@@ -528,8 +528,8 @@ void fix_object(PlayerType *player_ptr)
         }
 
         term_activate(angband_term[j]);
-        if (player_ptr->object_kind_idx) {
-            display_koff(player_ptr, player_ptr->object_kind_idx);
+        if (player_ptr->baseitem_info_idx) {
+            display_koff(player_ptr, player_ptr->baseitem_info_idx);
         }
 
         term_fresh();

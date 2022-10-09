@@ -14,8 +14,8 @@
 #include "object-hook/hook-magic.h"
 #include "object/item-tester-hooker.h"
 #include "object/item-use-flags.h"
-#include "object/object-kind.h"
 #include "player-base/player-class.h"
+#include "system/baseitem-info-definition.h"
 #include "system/object-type-definition.h"
 #include "system/player-type-definition.h"
 #include "view/display-messages.h"
@@ -41,7 +41,7 @@ bool eat_magic(PlayerType *player_ptr, int power)
         return false;
     }
 
-    object_kind *k_ptr;
+    BaseItemInfo *k_ptr;
     k_ptr = &k_info[o_ptr->k_idx];
     DEPTH lev = k_info[o_ptr->k_idx].level;
 
