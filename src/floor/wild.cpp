@@ -401,7 +401,7 @@ void wilderness_gen(PlayerType *player_ptr)
     floor_ptr->width = MAX_WID;
     panel_row_min = floor_ptr->height;
     panel_col_min = floor_ptr->width;
-    parse_fixed_map(player_ptr, "w_info.txt", 0, 0, w_ptr->max_wild_y, w_ptr->max_wild_x);
+    parse_fixed_map(player_ptr, WILDERNESS_DEFINITION, 0, 0, w_ptr->max_wild_y, w_ptr->max_wild_x);
     POSITION x = player_ptr->wilderness_x;
     POSITION y = player_ptr->wilderness_y;
     get_mon_num_prep(player_ptr, get_monster_hook(player_ptr), nullptr);
@@ -600,7 +600,7 @@ void wilderness_gen_small(PlayerType *player_ptr)
         }
     }
 
-    parse_fixed_map(player_ptr, "w_info.txt", 0, 0, w_ptr->max_wild_y, w_ptr->max_wild_x);
+    parse_fixed_map(player_ptr, WILDERNESS_DEFINITION, 0, 0, w_ptr->max_wild_y, w_ptr->max_wild_x);
     for (int i = 0; i < w_ptr->max_wild_x; i++) {
         for (int j = 0; j < w_ptr->max_wild_y; j++) {
             if (wilderness[j][i].town && (wilderness[j][i].town != NO_TOWN)) {
