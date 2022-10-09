@@ -540,12 +540,12 @@ void wiz_create_feature(PlayerType *player_ptr)
  */
 static bool select_debugging_floor(PlayerType *player_ptr, int dungeon_type)
 {
-    auto max_depth = d_info[dungeon_type].maxdepth;
-    if ((max_depth == 0) || (dungeon_type > static_cast<int>(d_info.size()))) {
+    auto max_depth = dungeons_info[dungeon_type].maxdepth;
+    if ((max_depth == 0) || (dungeon_type > static_cast<int>(dungeons_info.size()))) {
         dungeon_type = DUNGEON_ANGBAND;
     }
 
-    auto min_depth = (int)d_info[dungeon_type].mindepth;
+    auto min_depth = (int)dungeons_info[dungeon_type].mindepth;
     while (true) {
         char ppp[80];
         char tmp_val[160];
@@ -621,12 +621,12 @@ void wiz_jump_to_dungeon(PlayerType *player_ptr)
         return;
     }
 
-    if (command_arg < d_info[dungeon_type].mindepth) {
+    if (command_arg < dungeons_info[dungeon_type].mindepth) {
         command_arg = 0;
     }
 
-    if (command_arg > d_info[dungeon_type].maxdepth) {
-        command_arg = (COMMAND_ARG)d_info[dungeon_type].maxdepth;
+    if (command_arg > dungeons_info[dungeon_type].maxdepth) {
+        command_arg = (COMMAND_ARG)dungeons_info[dungeon_type].maxdepth;
     }
 
     msg_format("You jump to dungeon level %d.", command_arg);

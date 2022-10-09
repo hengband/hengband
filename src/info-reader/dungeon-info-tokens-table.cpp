@@ -5,7 +5,7 @@
  * ダンジョン特性トークンの定義 /
  * Dungeon flags
  */
-const std::unordered_map<std::string_view, DungeonFeatureType> d_info_flags = {
+const std::unordered_map<std::string_view, DungeonFeatureType> dungeon_flags = {
     { "WINNER", DungeonFeatureType::WINNER },
     { "MAZE", DungeonFeatureType::MAZE },
     { "SMALLEST", DungeonFeatureType::SMALLEST },

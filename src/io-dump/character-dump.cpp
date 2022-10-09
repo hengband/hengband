@@ -168,7 +168,7 @@ static void dump_aux_last_message(PlayerType *player_ptr, FILE *fff)
 static void dump_aux_recall(FILE *fff)
 {
     fprintf(fff, _("\n  [帰還場所]\n\n", "\n  [Recall Depth]\n\n"));
-    for (const auto &d_ref : d_info) {
+    for (const auto &d_ref : dungeons_info) {
         bool seiha = false;
 
         if (d_ref.idx == 0 || !d_ref.maxdepth) {
@@ -577,7 +577,7 @@ static void dump_aux_home_museum(PlayerType *player_ptr, FILE *fff)
  */
 static concptr get_check_sum(void)
 {
-    return format("%02x%02x%02x%02x%02x%02x%02x%02x%02x", f_head.checksum, k_head.checksum, artifacts_header.checksum, e_head.checksum, r_head.checksum, d_head.checksum,
+    return format("%02x%02x%02x%02x%02x%02x%02x%02x%02x", f_head.checksum, k_head.checksum, artifacts_header.checksum, e_head.checksum, r_head.checksum, dungeons_header.checksum,
         m_head.checksum, s_head.checksum, v_head.checksum);
 }
 

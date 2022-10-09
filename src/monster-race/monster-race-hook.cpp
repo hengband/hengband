@@ -135,7 +135,7 @@ bool mon_hook_dungeon(PlayerType *player_ptr, MonsterRaceId r_idx)
     }
 
     auto *r_ptr = &r_info[r_idx];
-    dungeon_type *d_ptr = &d_info[player_ptr->dungeon_idx];
+    dungeon_type *d_ptr = &dungeons_info[player_ptr->dungeon_idx];
 
     if (r_ptr->wilderness_flags.has(MonsterWildernessType::WILD_ONLY)) {
         return d_ptr->mon_wilderness_flags.has(MonsterWildernessType::WILD_MOUNTAIN) && r_ptr->wilderness_flags.has(MonsterWildernessType::WILD_MOUNTAIN);

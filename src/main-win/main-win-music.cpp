@@ -64,7 +64,7 @@ static concptr basic_key_at(int index, char *buf)
  */
 static concptr dungeon_key_at(int index, char *buf)
 {
-    if (index >= static_cast<int>(d_info.size())) {
+    if (index >= static_cast<int>(dungeons_info.size())) {
         return nullptr;
     }
 

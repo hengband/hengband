@@ -299,11 +299,11 @@ void init_angband(PlayerType *player_ptr, bool no_term)
     }
 
     init_note(_("[データの初期化中... (ダンジョン)]", "[Initializing arrays... (dungeon)]"));
-    if (init_d_info()) {
+    if (init_dungeons_info()) {
         quit(_("ダンジョン初期化不能", "Cannot initialize dungeon"));
     }
 
-    for (const auto &d_ref : d_info) {
+    for (const auto &d_ref : dungeons_info) {
         if (d_ref.idx > 0 && MonsterRace(d_ref.final_guardian).is_valid()) {
             r_info[d_ref.final_guardian].flags7 |= RF7_GUARDIAN;
         }

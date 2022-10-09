@@ -178,7 +178,7 @@ void update_gambling_monsters(PlayerType *player_ptr)
     int power[4];
     bool tekitou;
 
-    for (const auto &d_ref : d_info) {
+    for (const auto &d_ref : dungeons_info) {
         if (max_dl < max_dlv[d_ref.idx]) {
             max_dl = max_dlv[d_ref.idx];
         }

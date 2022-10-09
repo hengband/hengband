@@ -205,7 +205,7 @@ void cave_set_feat(PlayerType *player_ptr, POSITION y, POSITION x, FEAT_IDX feat
     if (!w_ptr->character_dungeon) {
         g_ptr->mimic = 0;
         g_ptr->feat = feat;
-        if (f_ptr->flags.has(FloorFeatureType::GLOW) && d_info[floor_ptr->dungeon_idx].flags.has_not(DungeonFeatureType::DARKNESS)) {
+        if (f_ptr->flags.has(FloorFeatureType::GLOW) && dungeons_info[floor_ptr->dungeon_idx].flags.has_not(DungeonFeatureType::DARKNESS)) {
             for (DIRECTION i = 0; i < 9; i++) {
                 POSITION yy = y + ddy_ddd[i];
                 POSITION xx = x + ddx_ddd[i];
@@ -226,7 +226,7 @@ void cave_set_feat(PlayerType *player_ptr, POSITION y, POSITION x, FEAT_IDX feat
     g_ptr->mimic = 0;
     g_ptr->feat = feat;
     g_ptr->info &= ~(CAVE_OBJECT);
-    if (old_mirror && d_info[floor_ptr->dungeon_idx].flags.has(DungeonFeatureType::DARKNESS)) {
+    if (old_mirror && dungeons_info[floor_ptr->dungeon_idx].flags.has(DungeonFeatureType::DARKNESS)) {
         g_ptr->info &= ~(CAVE_GLOW);
         if (!view_torch_grids) {
             g_ptr->info &= ~(CAVE_MARK);
@@ -249,7 +249,7 @@ void cave_set_feat(PlayerType *player_ptr, POSITION y, POSITION x, FEAT_IDX feat
         player_ptr->update |= PU_VIEW | PU_LITE | PU_MON_LITE | PU_MONSTERS;
     }
 
-    if (f_ptr->flags.has_not(FloorFeatureType::GLOW) || d_info[player_ptr->dungeon_idx].flags.has(DungeonFeatureType::DARKNESS)) {
+    if (f_ptr->flags.has_not(FloorFeatureType::GLOW) || dungeons_info[player_ptr->dungeon_idx].flags.has(DungeonFeatureType::DARKNESS)) {
         return;
     }
 
@@ -298,9 +298,9 @@ FEAT_IDX conv_dungeon_feat(floor_type *floor_ptr, FEAT_IDX newfeat)
     case CONVERT_TYPE_SOLID:
         return feat_wall_solid;
     case CONVERT_TYPE_STREAM1:
-        return d_info[floor_ptr->dungeon_idx].stream1;
+        return dungeons_info[floor_ptr->dungeon_idx].stream1;
     case CONVERT_TYPE_STREAM2:
-        return d_info[floor_ptr->dungeon_idx].stream2;
+        return dungeons_info[floor_ptr->dungeon_idx].stream2;
     default:
         return newfeat;
     }

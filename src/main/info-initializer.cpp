@@ -154,6 +154,16 @@ errr init_artifacts_info()
 }
 
 /*!
+ * @brief ダンジョン情報読み込みのメインルーチン
+ * @return エラーコード
+ */
+errr init_dungeons_info()
+{
+    init_header(&dungeons_header);
+    return init_info("DungeonDefinitions.txt", dungeons_header, dungeons_info, parse_dungeons_info);
+}
+
+/*!
  * @brief 地形情報読み込みのメインルーチン /
  * Initialize the "f_info" array
  * @return エラーコード
@@ -195,17 +205,6 @@ errr init_r_info()
 {
     init_header(&r_head);
     return init_info("r_info.txt", r_head, r_info, parse_r_info);
-}
-
-/*!
- * @brief ダンジョン情報読み込みのメインルーチン /
- * Initialize the "d_info" array
- * @return エラーコード
- */
-errr init_d_info()
-{
-    init_header(&d_head);
-    return init_info("d_info.txt", d_head, d_info, parse_d_info);
 }
 
 /*!

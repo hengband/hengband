@@ -279,7 +279,7 @@ void determine_daily_bounty(PlayerType *player_ptr, bool conv_old)
 {
     int max_dl = 3;
     if (!conv_old) {
-        for (const auto &d_ref : d_info) {
+        for (const auto &d_ref : dungeons_info) {
             if (max_dlv[d_ref.idx] < d_ref.mindepth) {
                 continue;
             }

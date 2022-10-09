@@ -199,7 +199,7 @@ void decide_lite_area(PlayerType *player_ptr, msa_type *msa_ptr)
         return;
     }
 
-    if (d_info[player_ptr->dungeon_idx].flags.has(DungeonFeatureType::DARKNESS)) {
+    if (dungeons_info[player_ptr->dungeon_idx].flags.has(DungeonFeatureType::DARKNESS)) {
         msa_ptr->ability_flags.reset(MonsterAbilityType::DARKNESS);
         return;
     }

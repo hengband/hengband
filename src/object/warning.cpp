@@ -395,7 +395,7 @@ bool process_warning(PlayerType *player_ptr, POSITION xx, POSITION yy)
             if (projectable(player_ptr, my, mx, yy, xx)) {
                 const auto flags = r_ptr->ability_flags;
 
-                if (d_info[player_ptr->dungeon_idx].flags.has_not(DungeonFeatureType::NO_MAGIC)) {
+                if (dungeons_info[player_ptr->dungeon_idx].flags.has_not(DungeonFeatureType::NO_MAGIC)) {
                     if (flags.has(MonsterAbilityType::BA_CHAO)) {
                         spell_damcalc_by_spellnum(player_ptr, MonsterAbilityType::BA_CHAO, AttributeType::CHAOS, g_ptr->m_idx, &dam_max0);
                     }
@@ -499,7 +499,7 @@ bool process_warning(PlayerType *player_ptr, POSITION xx, POSITION yy)
                 }
             }
             /* Monster melee attacks */
-            if (r_ptr->behavior_flags.has(MonsterBehaviorType::NEVER_BLOW) || d_info[player_ptr->dungeon_idx].flags.has(DungeonFeatureType::NO_MELEE)) {
+            if (r_ptr->behavior_flags.has(MonsterBehaviorType::NEVER_BLOW) || dungeons_info[player_ptr->dungeon_idx].flags.has(DungeonFeatureType::NO_MELEE)) {
                 dam_max += dam_max0;
                 continue;
             }

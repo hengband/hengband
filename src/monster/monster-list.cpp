@@ -112,7 +112,7 @@ MonsterRaceId get_mon_num(PlayerType *player_ptr, DEPTH min_level, DEPTH max_lev
     /* starts from 0, reaches +25lv after 75days from a max_level dependent base date */
     pls_max_level = std::min(NASTY_MON_PLUS_MAX, over_days / 3);
 
-    if (d_info[player_ptr->dungeon_idx].flags.has(DungeonFeatureType::MAZE)) {
+    if (dungeons_info[player_ptr->dungeon_idx].flags.has(DungeonFeatureType::MAZE)) {
         pls_kakuritu = std::min(pls_kakuritu / 2, pls_kakuritu - 10);
         if (pls_kakuritu < 2) {
             pls_kakuritu = 2;
@@ -122,7 +122,7 @@ MonsterRaceId get_mon_num(PlayerType *player_ptr, DEPTH min_level, DEPTH max_lev
     }
 
     /* Boost the max_level */
-    if ((option & GMN_ARENA) || d_info[player_ptr->dungeon_idx].flags.has_not(DungeonFeatureType::BEGINNER)) {
+    if ((option & GMN_ARENA) || dungeons_info[player_ptr->dungeon_idx].flags.has_not(DungeonFeatureType::BEGINNER)) {
         /* Nightmare mode allows more out-of depth monsters */
         if (ironman_nightmare && !randint0(pls_kakuritu)) {
             /* What a bizarre calculation */
@@ -338,7 +338,7 @@ void choose_new_monster(PlayerType *player_ptr, MONSTER_IDX m_idx, bool born, Mo
             level = floor_ptr->dun_level;
         }
 
-        if (d_info[player_ptr->dungeon_idx].flags.has(DungeonFeatureType::CHAMELEON)) {
+        if (dungeons_info[player_ptr->dungeon_idx].flags.has(DungeonFeatureType::CHAMELEON)) {
             level += 2 + randint1(3);
         }
 

@@ -138,7 +138,7 @@ void player_wipe_without_name(PlayerType *player_ptr)
     player_ptr->pet_follow_distance = PET_FOLLOW_DIST;
     player_ptr->pet_extra_flags = (PF_TELEPORT | PF_ATTACK_SPELL | PF_SUMMON_SPELL);
 
-    for (const auto &d_ref : d_info) {
+    for (const auto &d_ref : dungeons_info) {
         max_dlv[d_ref.idx] = 0;
     }
 

@@ -366,7 +366,7 @@ void do_cmd_knowledge_dungeon(PlayerType *player_ptr)
         return;
     }
 
-    for (const auto &d_ref : d_info) {
+    for (const auto &d_ref : dungeons_info) {
         bool seiha = false;
 
         if (d_ref.idx == 0 || !d_ref.maxdepth) {

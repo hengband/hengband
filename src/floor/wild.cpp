@@ -104,7 +104,7 @@ void set_floor_and_wall(DUNGEON_IDX type)
     }
 
     cur_type = type;
-    dungeon_type *d_ptr = &d_info[type];
+    dungeon_type *d_ptr = &dungeons_info[type];
 
     set_floor_and_wall_aux(feat_ground_type, d_ptr->floor);
     set_floor_and_wall_aux(feat_wall_type, d_ptr->fill);
@@ -370,7 +370,7 @@ static void generate_area(PlayerType *player_ptr, POSITION y, POSITION x, bool b
 
     bool is_winner = wilderness[y][x].entrance > 0;
     is_winner &= (wilderness[y][x].town == 0);
-    bool is_wild_winner = d_info[wilderness[y][x].entrance].flags.has_not(DungeonFeatureType::WINNER);
+    bool is_wild_winner = dungeons_info[wilderness[y][x].entrance].flags.has_not(DungeonFeatureType::WINNER);
     is_winner &= ((w_ptr->total_winner != 0) || is_wild_winner);
     if (!is_winner) {
         return;
@@ -616,7 +616,7 @@ void wilderness_gen_small(PlayerType *player_ptr)
                 continue;
             }
 
-            if (wilderness[j][i].entrance && (w_ptr->total_winner || d_info[wilderness[j][i].entrance].flags.has_not(DungeonFeatureType::WINNER))) {
+            if (wilderness[j][i].entrance && (w_ptr->total_winner || dungeons_info[wilderness[j][i].entrance].flags.has_not(DungeonFeatureType::WINNER))) {
                 floor_ptr->grid_array[j][i].feat = feat_entrance;
                 floor_ptr->grid_array[j][i].special = (byte)wilderness[j][i].entrance;
                 floor_ptr->grid_array[j][i].info |= (CAVE_GLOW | CAVE_MARK);
@@ -777,7 +777,7 @@ parse_error_type parse_line_wilderness(PlayerType *player_ptr, char *buf, int xm
         return PARSE_ERROR_UNDEFINED_DIRECTIVE;
     }
 
-    for (const auto &d_ref : d_info) {
+    for (const auto &d_ref : dungeons_info) {
         if (d_ref.idx == 0 || !d_ref.maxdepth) {
             continue;
         }

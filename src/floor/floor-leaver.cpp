@@ -336,10 +336,10 @@ static void jump_floors(PlayerType *player_ptr)
 
     if (any_bits(player_ptr->change_floor_mode, CFM_DOWN)) {
         if (!is_in_dungeon(player_ptr)) {
-            move_num = d_info[player_ptr->dungeon_idx].mindepth;
+            move_num = dungeons_info[player_ptr->dungeon_idx].mindepth;
         }
     } else if (any_bits(player_ptr->change_floor_mode, CFM_UP)) {
-        if (player_ptr->current_floor_ptr->dun_level + move_num < d_info[player_ptr->dungeon_idx].mindepth) {
+        if (player_ptr->current_floor_ptr->dun_level + move_num < dungeons_info[player_ptr->dungeon_idx].mindepth) {
             move_num = -player_ptr->current_floor_ptr->dun_level;
         }
     }
@@ -355,8 +355,8 @@ static void exit_to_wilderness(PlayerType *player_ptr)
 
     player_ptr->leaving_dungeon = true;
     if (!vanilla_town && !lite_town) {
-        player_ptr->wilderness_y = d_info[player_ptr->dungeon_idx].dy;
-        player_ptr->wilderness_x = d_info[player_ptr->dungeon_idx].dx;
+        player_ptr->wilderness_y = dungeons_info[player_ptr->dungeon_idx].dy;
+        player_ptr->wilderness_x = dungeons_info[player_ptr->dungeon_idx].dx;
     }
 
     player_ptr->recall_dungeon = player_ptr->dungeon_idx;

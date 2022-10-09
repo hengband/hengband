@@ -195,7 +195,7 @@ bool drop_single_artifact(PlayerType *player_ptr, monster_death_type *md_ptr, Fi
 
 static KIND_OBJECT_IDX drop_dungeon_final_artifact(PlayerType *player_ptr, monster_death_type *md_ptr)
 {
-    const auto &dungeon = d_info[player_ptr->dungeon_idx];
+    const auto &dungeon = dungeons_info[player_ptr->dungeon_idx];
     auto k_idx = dungeon.final_object != 0 ? dungeon.final_object : lookup_kind(ItemKindType::SCROLL, SV_SCROLL_ACQUIREMENT);
     if (dungeon.final_artifact == FixedArtifactId::NONE) {
         return k_idx;
@@ -223,7 +223,7 @@ static void drop_artifacts(PlayerType *player_ptr, monster_death_type *md_ptr)
     }
 
     drop_artifact_from_unique(player_ptr, md_ptr);
-    if (((md_ptr->r_ptr->flags7 & RF7_GUARDIAN) == 0) || (d_info[player_ptr->dungeon_idx].final_guardian != md_ptr->m_ptr->r_idx)) {
+    if (((md_ptr->r_ptr->flags7 & RF7_GUARDIAN) == 0) || (dungeons_info[player_ptr->dungeon_idx].final_guardian != md_ptr->m_ptr->r_idx)) {
         return;
     }
 
@@ -236,7 +236,7 @@ static void drop_artifacts(PlayerType *player_ptr, monster_death_type *md_ptr)
         (void)drop_near(player_ptr, q_ptr, -1, md_ptr->md_y, md_ptr->md_x);
     }
 
-    msg_format(_("あなたは%sを制覇した！", "You have conquered %s!"), d_info[player_ptr->dungeon_idx].name.c_str());
+    msg_format(_("あなたは%sを制覇した！", "You have conquered %s!"), dungeons_info[player_ptr->dungeon_idx].name.c_str());
 }
 
 static void decide_drop_quality(monster_death_type *md_ptr)

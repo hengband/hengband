@@ -87,7 +87,7 @@ bool alloc_stairs(PlayerType *player_ptr, FEAT_IDX feat, int num, int walls)
             return true;
         }
 
-        if (floor_ptr->dun_level > d_info[floor_ptr->dungeon_idx].mindepth) {
+        if (floor_ptr->dun_level > dungeons_info[floor_ptr->dungeon_idx].mindepth) {
             shaft_num = (randint1(num + 1)) / 2;
         }
     } else if (f_ptr->flags.has(FloorFeatureType::MORE)) {
@@ -100,11 +100,11 @@ bool alloc_stairs(PlayerType *player_ptr, FEAT_IDX feat, int num, int walls)
             }
         }
 
-        if (floor_ptr->dun_level >= d_info[floor_ptr->dungeon_idx].maxdepth) {
+        if (floor_ptr->dun_level >= dungeons_info[floor_ptr->dungeon_idx].maxdepth) {
             return true;
         }
 
-        if ((floor_ptr->dun_level < d_info[floor_ptr->dungeon_idx].maxdepth - 1) && !inside_quest(quest_number(player_ptr, floor_ptr->dun_level + 1))) {
+        if ((floor_ptr->dun_level < dungeons_info[floor_ptr->dungeon_idx].maxdepth - 1) && !inside_quest(quest_number(player_ptr, floor_ptr->dun_level + 1))) {
             shaft_num = (randint1(num) + 1) / 2;
         }
     } else {

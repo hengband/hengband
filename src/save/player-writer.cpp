@@ -146,7 +146,7 @@ void wr_player(PlayerType *player_ptr)
     wr_u32b(player_ptr->csp_frac);
     wr_s16b(player_ptr->max_plv);
 
-    byte tmp8u = (byte)d_info.size();
+    byte tmp8u = (byte)dungeons_info.size();
     wr_byte(tmp8u);
     for (int i = 0; i < tmp8u; i++) {
         wr_s16b((int16_t)max_dlv[i]);

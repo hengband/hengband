@@ -284,7 +284,7 @@ static void reset_unique_by_floor_change(PlayerType *player_ptr)
 static void new_floor_allocation(PlayerType *player_ptr, saved_floor_type *sf_ptr)
 {
     GAME_TURN tmp_last_visit = sf_ptr->last_visit;
-    int alloc_chance = d_info[player_ptr->dungeon_idx].max_m_alloc_chance;
+    int alloc_chance = dungeons_info[player_ptr->dungeon_idx].max_m_alloc_chance;
     while (tmp_last_visit > w_ptr->game_turn) {
         tmp_last_visit -= TURNS_PER_TICK * TOWN_DAWN;
     }

@@ -56,7 +56,7 @@ void init_other(PlayerType *player_ptr)
         list.assign(w_ptr->max_m_idx, {});
     }
 
-    max_dlv.assign(d_info.size(), {});
+    max_dlv.assign(dungeons_info.size(), {});
     floor_ptr->grid_array.assign(MAX_HGT, std::vector<grid_type>(MAX_WID));
     init_gf_colors();
 

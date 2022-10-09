@@ -146,7 +146,7 @@ static void recursive_river(floor_type *floor_ptr, POSITION x1, POSITION y1, POS
 
                         /* Lava terrain glows */
                         if (f_info[feat1].flags.has(FloorFeatureType::LAVA)) {
-                            if (d_info[floor_ptr->dungeon_idx].flags.has_not(DungeonFeatureType::DARKNESS)) {
+                            if (dungeons_info[floor_ptr->dungeon_idx].flags.has_not(DungeonFeatureType::DARKNESS)) {
                                 g_ptr->info |= CAVE_GLOW;
                             }
                         }
@@ -176,7 +176,7 @@ void add_river(floor_type *floor_ptr, dun_data_type *dd_ptr)
     POSITION wid;
     FEAT_IDX feat1 = 0, feat2 = 0;
 
-    dungeon_ptr = &d_info[floor_ptr->dungeon_idx];
+    dungeon_ptr = &dungeons_info[floor_ptr->dungeon_idx];
 
     /* Choose water mainly */
     if ((randint1(MAX_DEPTH * 2) - 1 > floor_ptr->dun_level) && dungeon_ptr->flags.has(DungeonFeatureType::WATER_RIVER)) {
@@ -462,7 +462,7 @@ void place_trees(PlayerType *player_ptr, POSITION x, POSITION y)
                 g_ptr->mimic = 0;
 
                 /* Light area since is open above */
-                if (d_info[player_ptr->dungeon_idx].flags.has_not(DungeonFeatureType::DARKNESS)) {
+                if (dungeons_info[player_ptr->dungeon_idx].flags.has_not(DungeonFeatureType::DARKNESS)) {
                     floor_ptr->grid_array[j][i].info |= (CAVE_GLOW | CAVE_ROOM);
                 }
             }

@@ -3063,7 +3063,7 @@ long calc_score(PlayerType *player_ptr)
     }
 
     DEPTH max_dl = 0;
-    for (const auto &d_ref : d_info) {
+    for (const auto &d_ref : dungeons_info) {
         if (max_dl < max_dlv[d_ref.idx]) {
             max_dl = max_dlv[d_ref.idx];
         }

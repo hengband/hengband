@@ -16,13 +16,13 @@ static void rd_hengband_dungeons(void)
     auto max = rd_byte();
     for (auto i = 0U; i < max; i++) {
         auto tmp16s = rd_s16b();
-        if (i >= d_info.size()) {
+        if (i >= dungeons_info.size()) {
             continue;
         }
 
         max_dlv[i] = tmp16s;
-        if (max_dlv[i] > d_info[i].maxdepth) {
-            max_dlv[i] = d_info[i].maxdepth;
+        if (max_dlv[i] > dungeons_info[i].maxdepth) {
+            max_dlv[i] = dungeons_info[i].maxdepth;
         }
     }
 }

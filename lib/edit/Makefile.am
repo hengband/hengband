@@ -1,7 +1,7 @@
 ## Makefile.am -- Process this file with automake to process Makefile.in
 
 angband_files = \
-	ArtifactDefinitions.txt d_info.txt e_info.txt f_info.txt \
+	ArtifactDefinitions.txt DungeonDefinitions.txt e_info.txt f_info.txt \
 	k_info.txt misc.txt \
 	q0000001.txt q0000002.txt q0000003.txt q0000004.txt \
 	q0000005.txt q0000006.txt q0000007.txt q0000019.txt \

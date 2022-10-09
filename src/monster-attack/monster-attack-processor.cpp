@@ -50,7 +50,7 @@ void exe_monster_attack_to_player(PlayerType *player_ptr, turn_flags *turn_flags
         turn_flags_ptr->do_move = false;
     }
 
-    if (turn_flags_ptr->do_move && d_info[player_ptr->dungeon_idx].flags.has(DungeonFeatureType::NO_MELEE) && !m_ptr->is_confused()) {
+    if (turn_flags_ptr->do_move && dungeons_info[player_ptr->dungeon_idx].flags.has(DungeonFeatureType::NO_MELEE) && !m_ptr->is_confused()) {
         if (r_ptr->behavior_flags.has_not(MonsterBehaviorType::STUPID)) {
             turn_flags_ptr->do_move = false;
         } else if (is_original_ap_and_seen(player_ptr, m_ptr)) {
@@ -95,7 +95,7 @@ static bool exe_monster_attack_to_monster(PlayerType *player_ptr, MONSTER_IDX m_
     if (monst_attack_monst(player_ptr, m_idx, g_ptr->m_idx)) {
         return true;
     }
-    if (d_info[player_ptr->dungeon_idx].flags.has_not(DungeonFeatureType::NO_MELEE)) {
+    if (dungeons_info[player_ptr->dungeon_idx].flags.has_not(DungeonFeatureType::NO_MELEE)) {
         return false;
     }
     if (m_ptr->is_confused()) {

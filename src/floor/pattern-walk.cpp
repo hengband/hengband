@@ -57,8 +57,8 @@ void pattern_teleport(PlayerType *player_ptr)
                 max_level = 100;
             }
         } else {
-            max_level = d_info[player_ptr->dungeon_idx].maxdepth;
-            min_level = d_info[player_ptr->dungeon_idx].mindepth;
+            max_level = dungeons_info[player_ptr->dungeon_idx].maxdepth;
+            min_level = dungeons_info[player_ptr->dungeon_idx].mindepth;
         }
 
         sprintf(ppp, _("テレポート先:(%d-%d)", "Teleport to level (%d-%d): "), (int)min_level, (int)max_level);
