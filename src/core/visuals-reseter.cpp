@@ -20,7 +20,7 @@ void reset_visuals(PlayerType *player_ptr)
         }
     }
 
-    for (auto &k_ref : k_info) {
+    for (auto &k_ref : baseitems_info) {
         k_ref.x_attr = k_ref.d_attr;
         k_ref.x_char = k_ref.d_char;
     }

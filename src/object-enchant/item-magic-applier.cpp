@@ -200,8 +200,8 @@ void ItemMagicApplier::apply_cursed()
         return;
     }
 
-    const auto *k_ptr = &k_info[this->o_ptr->k_idx];
-    if (!k_info[this->o_ptr->k_idx].cost) {
+    const auto *k_ptr = &baseitems_info[this->o_ptr->k_idx];
+    if (!baseitems_info[this->o_ptr->k_idx].cost) {
         set_bits(this->o_ptr->ident, IDENT_BROKEN);
     }
 

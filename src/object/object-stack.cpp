@@ -133,7 +133,7 @@ int object_similar_part(const ObjectType *o_ptr, const ObjectType *j_ptr)
         break;
     }
     case ItemKindType::ROD: {
-        max_num = std::min(max_num, MAX_SHORT / k_info[o_ptr->k_idx].pval);
+        max_num = std::min(max_num, MAX_SHORT / baseitems_info[o_ptr->k_idx].pval);
         break;
     }
     case ItemKindType::GLOVES:

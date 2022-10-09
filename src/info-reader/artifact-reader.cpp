@@ -1,8 +1,8 @@
 ﻿#include "info-reader/artifact-reader.h"
 #include "artifact/fixed-art-types.h"
 #include "artifact/random-art-effects.h"
+#include "info-reader/baseitem-tokens-table.h"
 #include "info-reader/info-reader-util.h"
-#include "info-reader/kind-info-tokens-table.h"
 #include "info-reader/parse-error-types.h"
 #include "main/angband-headers.h"
 #include "object-enchant/tr-types.h"
@@ -21,11 +21,11 @@
  */
 static bool grab_one_artifact_flag(ArtifactType *a_ptr, std::string_view what)
 {
-    if (TrFlags::grab_one_flag(a_ptr->flags, k_info_flags, what)) {
+    if (TrFlags::grab_one_flag(a_ptr->flags, baseitem_flags, what)) {
         return true;
     }
 
-    if (EnumClassFlagGroup<ItemGenerationTraitType>::grab_one_flag(a_ptr->gen_flags, k_info_gen_flags, what)) {
+    if (EnumClassFlagGroup<ItemGenerationTraitType>::grab_one_flag(a_ptr->gen_flags, baseitem_geneneration_flags, what)) {
         return true;
     }
 

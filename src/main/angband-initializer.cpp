@@ -279,7 +279,7 @@ void init_angband(PlayerType *player_ptr, bool no_term)
     }
 
     init_note(_("[データの初期化中... (アイテム)]", "[Initializing arrays... (objects)]"));
-    if (init_k_info()) {
+    if (init_baseitems_info()) {
         quit(_("アイテム初期化不能", "Cannot initialize objects"));
     }
 

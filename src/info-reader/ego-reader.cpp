@@ -1,7 +1,7 @@
 ﻿#include "info-reader/ego-reader.h"
 #include "artifact/random-art-effects.h"
+#include "info-reader/baseitem-tokens-table.h"
 #include "info-reader/info-reader-util.h"
-#include "info-reader/kind-info-tokens-table.h"
 #include "info-reader/parse-error-types.h"
 #include "main/angband-headers.h"
 #include "object-enchant/object-ego.h"
@@ -20,11 +20,11 @@
  */
 static bool grab_one_ego_item_flag(ego_item_type *e_ptr, std::string_view what)
 {
-    if (TrFlags::grab_one_flag(e_ptr->flags, k_info_flags, what)) {
+    if (TrFlags::grab_one_flag(e_ptr->flags, baseitem_flags, what)) {
         return true;
     }
 
-    if (EnumClassFlagGroup<ItemGenerationTraitType>::grab_one_flag(e_ptr->gen_flags, k_info_gen_flags, what)) {
+    if (EnumClassFlagGroup<ItemGenerationTraitType>::grab_one_flag(e_ptr->gen_flags, baseitem_geneneration_flags, what)) {
         return true;
     }
 
@@ -41,12 +41,12 @@ static bool grab_one_ego_item_flag(ego_item_type *e_ptr, std::string_view what)
  */
 static bool grab_ego_generate_flags(ego_generate_type &xtra, std::string_view what)
 {
-    if (auto it = k_info_flags.find(what); it != k_info_flags.end()) {
+    if (auto it = baseitem_flags.find(what); it != baseitem_flags.end()) {
         xtra.tr_flags.push_back(it->second);
         return true;
     }
 
-    if (auto it = k_info_gen_flags.find(what); it != k_info_gen_flags.end()) {
+    if (auto it = baseitem_geneneration_flags.find(what); it != baseitem_geneneration_flags.end()) {
         xtra.trg_flags.push_back(it->second);
         return true;
     }

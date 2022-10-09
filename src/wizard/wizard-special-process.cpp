@@ -154,7 +154,7 @@ static KIND_OBJECT_IDX wiz_select_sval(const ItemKindType tval, concptr tval_des
     auto num = 0;
     KIND_OBJECT_IDX choice[80]{};
     char ch;
-    for (const auto &k_ref : k_info) {
+    for (const auto &k_ref : baseitems_info) {
         if (num >= 80) {
             break;
         }
@@ -233,9 +233,9 @@ void wiz_create_item(PlayerType *player_ptr)
         return;
     }
 
-    if (k_info[k_idx].gen_flags.has(ItemGenerationTraitType::INSTA_ART)) {
+    if (baseitems_info[k_idx].gen_flags.has(ItemGenerationTraitType::INSTA_ART)) {
         for (const auto &[a_idx, a_ref] : artifacts_info) {
-            if ((a_idx == FixedArtifactId::NONE) || (a_ref.tval != k_info[k_idx].tval) || (a_ref.sval != k_info[k_idx].sval)) {
+            if ((a_idx == FixedArtifactId::NONE) || (a_ref.tval != baseitems_info[k_idx].tval) || (a_ref.sval != baseitems_info[k_idx].sval)) {
                 continue;
             }
 
@@ -646,7 +646,7 @@ void wiz_learn_items_all(PlayerType *player_ptr)
 {
     ObjectType forge;
     ObjectType *q_ptr;
-    for (const auto &k_ref : k_info) {
+    for (const auto &k_ref : baseitems_info) {
         if (k_ref.idx > 0 && k_ref.level <= command_arg) {
             q_ptr = &forge;
             q_ptr->prep(k_ref.idx);

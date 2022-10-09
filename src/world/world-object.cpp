@@ -89,7 +89,7 @@ OBJECT_IDX get_obj_num(PlayerType *player_ptr, DEPTH level, BIT_FLAGS mode)
         }
 
         KIND_OBJECT_IDX k_idx = entry.index;
-        auto *k_ptr = &k_info[k_idx];
+        auto *k_ptr = &baseitems_info[k_idx];
 
         if ((mode & AM_FORBID_CHEST) && (k_ptr->tval == ItemKindType::CHEST)) {
             continue;

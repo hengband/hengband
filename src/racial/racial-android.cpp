@@ -69,7 +69,7 @@ void calc_android_exp(PlayerType *player_ptr)
         ObjectType forge;
         auto *q_ptr = &forge;
         uint32_t value, exp;
-        DEPTH level = std::max(k_info[o_ptr->k_idx].level - 8, 1);
+        DEPTH level = std::max(baseitems_info[o_ptr->k_idx].level - 8, 1);
 
         if ((i == INVEN_MAIN_RING) || (i == INVEN_SUB_RING) || (i == INVEN_NECK) || (i == INVEN_LITE)) {
             continue;

@@ -98,11 +98,11 @@ static std::optional<FixedArtifactId> sweep_amusement_artifact(const bool insta_
             continue;
         }
 
-        if (a_ref.tval != k_info[k_idx].tval) {
+        if (a_ref.tval != baseitems_info[k_idx].tval) {
             continue;
         }
 
-        if (a_ref.sval != k_info[k_idx].sval) {
+        if (a_ref.sval != baseitems_info[k_idx].sval) {
             continue;
         }
 
@@ -137,7 +137,7 @@ void generate_amusement(PlayerType *player_ptr, int num, bool known)
             continue;
         }
 
-        const auto insta_art = k_info[k_idx].gen_flags.has(ItemGenerationTraitType::INSTA_ART);
+        const auto insta_art = baseitems_info[k_idx].gen_flags.has(ItemGenerationTraitType::INSTA_ART);
         const auto flag = am_ptr->flag;
         const auto fixed_art = flag == AmusementFlagType::FIXED_ART;
         std::optional<FixedArtifactId> opt_a_idx(std::nullopt);

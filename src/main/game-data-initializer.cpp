@@ -107,7 +107,7 @@ static void init_object_alloc(void)
 {
     int16_t num[MAX_DEPTH]{};
     auto alloc_kind_size = 0;
-    for (const auto &k_ref : k_info) {
+    for (const auto &k_ref : baseitems_info) {
         for (auto j = 0; j < 4; j++) {
             if (k_ref.chance[j]) {
                 alloc_kind_size++;
@@ -126,7 +126,7 @@ static void init_object_alloc(void)
 
     alloc_kind_table.assign(alloc_kind_size, {});
     int16_t aux[MAX_DEPTH]{};
-    for (const auto &k_ref : k_info) {
+    for (const auto &k_ref : baseitems_info) {
         for (auto j = 0; j < 4; j++) {
             if (k_ref.chance[j] == 0) {
                 continue;

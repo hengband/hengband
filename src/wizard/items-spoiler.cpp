@@ -37,7 +37,7 @@ static void kind_info(PlayerType *player_ptr, char *buf, char *dam, char *wgt, c
     q_ptr->to_a = 0;
     q_ptr->to_h = 0;
     q_ptr->to_d = 0;
-    *lev = k_info[q_ptr->k_idx].level;
+    *lev = baseitems_info[q_ptr->k_idx].level;
     *val = q_ptr->get_price();
     if (!buf || !dam || !chance || !wgt) {
         return;
@@ -75,8 +75,8 @@ static void kind_info(PlayerType *player_ptr, char *buf, char *dam, char *wgt, c
     strcpy(chance, "");
     for (int i = 0; i < 4; i++) {
         char chance_aux[20] = "";
-        if (k_info[q_ptr->k_idx].chance[i] > 0) {
-            sprintf(chance_aux, "%s%3dF:%+4d", (i != 0 ? "/" : ""), (int)k_info[q_ptr->k_idx].locale[i], 100 / k_info[q_ptr->k_idx].chance[i]);
+        if (baseitems_info[q_ptr->k_idx].chance[i] > 0) {
+            sprintf(chance_aux, "%s%3dF:%+4d", (i != 0 ? "/" : ""), (int)baseitems_info[q_ptr->k_idx].locale[i], 100 / baseitems_info[q_ptr->k_idx].chance[i]);
             strcat(chance, chance_aux);
         }
     }
@@ -107,7 +107,7 @@ SpoilerOutputResultType spoil_obj_desc(concptr fname)
     for (const auto &[tval_list, name] : group_item_list) {
         std::vector<KIND_OBJECT_IDX> whats;
         for (auto tval : tval_list) {
-            for (const auto &k_ref : k_info) {
+            for (const auto &k_ref : baseitems_info) {
                 if ((k_ref.tval == tval) && k_ref.gen_flags.has_not(ItemGenerationTraitType::INSTA_ART)) {
                     whats.push_back(k_ref.idx);
                 }

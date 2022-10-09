@@ -34,7 +34,7 @@ void do_cmd_knowledge_weapon_exp(PlayerType *player_ptr)
 
     for (auto tval : { ItemKindType::SWORD, ItemKindType::POLEARM, ItemKindType::HAFTED, ItemKindType::DIGGING, ItemKindType::BOW }) {
         for (int num = 0; num < 64; num++) {
-            for (const auto &k_ref : k_info) {
+            for (const auto &k_ref : baseitems_info) {
                 if ((k_ref.tval != tval) || (k_ref.sval != num)) {
                     continue;
                 }

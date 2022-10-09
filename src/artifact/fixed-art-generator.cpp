@@ -406,8 +406,8 @@ bool make_artifact_special(PlayerType *player_ptr, ObjectType *o_ptr)
          * ベースアイテムの生成階層が足りない場合1/(不足階層*5)を満たさないと除外される。
          */
         k_idx = lookup_kind(a_ref.tval, a_ref.sval);
-        if (k_info[k_idx].level > floor_ptr->object_level) {
-            int d = (k_info[k_idx].level - floor_ptr->object_level) * 5;
+        if (baseitems_info[k_idx].level > floor_ptr->object_level) {
+            int d = (baseitems_info[k_idx].level - floor_ptr->object_level) * 5;
             if (!one_in_(d)) {
                 continue;
             }

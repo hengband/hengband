@@ -55,4 +55,4 @@ public:
     bool tried{}; /*!< ベースアイテムを未鑑定のまま試したことがあるか /  The player has "tried" one of the items */
 };
 
-extern std::vector<BaseItemInfo> k_info;
+extern std::vector<BaseItemInfo> baseitems_info;

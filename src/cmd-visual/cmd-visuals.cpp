@@ -154,7 +154,7 @@ void do_cmd_visuals(PlayerType *player_ptr)
             }
 
             auto_dump_printf(auto_dump_stream, _("\n# アイテムの[色/文字]の設定\n\n", "\n# Object attr/char definitions\n\n"));
-            for (const auto &k_ref : k_info) {
+            for (const auto &k_ref : baseitems_info) {
                 if (k_ref.name.empty()) {
                     continue;
                 }
@@ -290,7 +290,7 @@ void do_cmd_visuals(PlayerType *player_ptr)
             static IDX k = 0;
             prt(format(_("コマンド: %s", "Command: %s"), choice_msg), 15, 0);
             while (true) {
-                auto *k_ptr = &k_info[k];
+                auto *k_ptr = &baseitems_info[k];
                 int c;
                 IDX t;
 
@@ -327,11 +327,11 @@ void do_cmd_visuals(PlayerType *player_ptr)
                 case 'n': {
                     IDX prev_k = k;
                     do {
-                        if (!cmd_visuals_aux(i, &k, static_cast<IDX>(k_info.size()))) {
+                        if (!cmd_visuals_aux(i, &k, static_cast<IDX>(baseitems_info.size()))) {
                             k = prev_k;
                             break;
                         }
-                    } while (k_info[k].name.empty());
+                    } while (baseitems_info[k].name.empty());
                 }
 
                 break;

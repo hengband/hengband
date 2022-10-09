@@ -29,9 +29,9 @@
  * @details
  * 不具合対策で0からリセットする(セーブは0から)
  */
-static void k_info_reset(void)
+static void reset_baseitem_idenditication_flags()
 {
-    for (auto &k_ref : k_info) {
+    for (auto &k_ref : baseitems_info) {
         k_ref.tried = false;
         k_ref.aware = false;
     }
@@ -81,7 +81,7 @@ void player_wipe_without_name(PlayerType *player_ptr)
         a_ref.is_generated = false;
     }
 
-    k_info_reset();
+    reset_baseitem_idenditication_flags();
     for (auto &[r_idx, r_ref] : r_info) {
         if (!MonsterRace(r_ref.idx).is_valid()) {
             continue;

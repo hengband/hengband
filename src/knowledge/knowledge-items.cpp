@@ -130,7 +130,7 @@ static KIND_OBJECT_IDX collect_objects(int grp_cur, KIND_OBJECT_IDX object_idx[]
 {
     KIND_OBJECT_IDX object_cnt = 0;
     auto group_tval = object_group_tval[grp_cur];
-    for (const auto &k_ref : k_info) {
+    for (const auto &k_ref : baseitems_info) {
         if (k_ref.name.empty()) {
             continue;
         }
@@ -182,11 +182,11 @@ static void display_object_list(int col, int row, int per_page, IDX object_idx[]
         TERM_COLOR a;
         BaseItemInfo *flavor_k_ptr;
         KIND_OBJECT_IDX k_idx = object_idx[object_top + i];
-        auto *k_ptr = &k_info[k_idx];
+        auto *k_ptr = &baseitems_info[k_idx];
         TERM_COLOR attr = ((k_ptr->aware || visual_only) ? TERM_WHITE : TERM_SLATE);
         byte cursor = ((k_ptr->aware || visual_only) ? TERM_L_BLUE : TERM_BLUE);
         if (!visual_only && k_ptr->flavor) {
-            flavor_k_ptr = &k_info[k_ptr->flavor];
+            flavor_k_ptr = &baseitems_info[k_ptr->flavor];
         } else {
             flavor_k_ptr = k_ptr;
         }
@@ -254,7 +254,7 @@ void do_cmd_knowledge_objects(PlayerType *player_ptr, bool *need_redraw, bool vi
     term_get_size(&wid, &hgt);
 
     int browser_rows = hgt - 8;
-    std::vector<KIND_OBJECT_IDX> object_idx(k_info.size());
+    std::vector<KIND_OBJECT_IDX> object_idx(baseitems_info.size());
 
     int len;
     int max = 0;
@@ -275,11 +275,11 @@ void do_cmd_knowledge_objects(PlayerType *player_ptr, bool *need_redraw, bool vi
         object_old = -1;
         object_cnt = 0;
     } else {
-        auto *k_ptr = &k_info[direct_k_idx];
+        auto *k_ptr = &baseitems_info[direct_k_idx];
         BaseItemInfo *flavor_k_ptr;
 
         if (!visual_only && k_ptr->flavor) {
-            flavor_k_ptr = &k_info[k_ptr->flavor];
+            flavor_k_ptr = &baseitems_info[k_ptr->flavor];
         } else {
             flavor_k_ptr = k_ptr;
         }
@@ -378,10 +378,10 @@ void do_cmd_knowledge_objects(PlayerType *player_ptr, bool *need_redraw, bool vi
             display_visual_list(max + 3, 7, browser_rows - 1, wid - (max + 3), attr_top, char_left);
         }
 
-        k_ptr = &k_info[object_idx[object_cur]];
+        k_ptr = &baseitems_info[object_idx[object_cur]];
 
         if (!visual_only && k_ptr->flavor) {
-            flavor_k_ptr = &k_info[k_ptr->flavor];
+            flavor_k_ptr = &baseitems_info[k_ptr->flavor];
         } else {
             flavor_k_ptr = k_ptr;
         }

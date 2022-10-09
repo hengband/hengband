@@ -7,13 +7,13 @@
 #include "dungeon/dungeon.h"
 #include "grid/feature.h"
 #include "info-reader/artifact-reader.h"
+#include "info-reader/baseitem-reader.h"
 #include "info-reader/dungeon-reader.h"
 #include "info-reader/ego-reader.h"
 #include "info-reader/feature-reader.h"
 #include "info-reader/fixed-map-parser.h"
 #include "info-reader/general-parser.h"
 #include "info-reader/info-reader-util.h"
-#include "info-reader/kind-reader.h"
 #include "info-reader/magic-reader.h"
 #include "info-reader/race-reader.h"
 #include "info-reader/skill-reader.h"
@@ -154,6 +154,16 @@ errr init_artifacts_info()
 }
 
 /*!
+ * @brief ベースアイテム情報読み込みのメインルーチン
+ * @return エラーコード
+ */
+errr init_baseitems_info()
+{
+    init_header(&baseitems_header);
+    return init_info("BaseItemDefinitions.txt", baseitems_header, baseitems_info, parse_baseitems_info);
+}
+
+/*!
  * @brief ダンジョン情報読み込みのメインルーチン
  * @return エラーコード
  */
@@ -183,17 +193,6 @@ errr init_terrains_info()
     auto *parser = parse_terrains_info;
     auto *retoucher = retouch_terrains_info;
     return init_info("TerrainDefinitions.txt", terrains_header, terrains_info, parser, retoucher);
-}
-
-/*!
- * @brief ベースアイテム情報読み込みのメインルーチン /
- * Initialize the "k_info" array
- * @return エラーコード
- */
-errr init_k_info()
-{
-    init_header(&k_head);
-    return init_info("k_info.txt", k_head, k_info, parse_k_info);
 }
 
 /*!

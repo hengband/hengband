@@ -64,7 +64,7 @@ void ObjectType::copy_from(const ObjectType *j_ptr)
  */
 void ObjectType::prep(KIND_OBJECT_IDX ko_idx)
 {
-    auto *k_ptr = &k_info[ko_idx];
+    auto *k_ptr = &baseitems_info[ko_idx];
     auto old_stack_idx = this->stack_idx;
     wipe();
     this->stack_idx = old_stack_idx;
@@ -84,7 +84,7 @@ void ObjectType::prep(KIND_OBJECT_IDX ko_idx)
     if (k_ptr->act_idx > RandomArtActType::NONE) {
         this->activation_id = k_ptr->act_idx;
     }
-    if (k_info[this->k_idx].cost <= 0) {
+    if (baseitems_info[this->k_idx].cost <= 0) {
         this->ident |= (IDENT_BROKEN);
     }
 
@@ -449,7 +449,7 @@ bool ObjectType::is_held_by_monster() const
  */
 bool ObjectType::is_known() const
 {
-    return any_bits(this->ident, IDENT_KNOWN) || (k_info[this->k_idx].easy_know && k_info[this->k_idx].aware);
+    return any_bits(this->ident, IDENT_KNOWN) || (baseitems_info[this->k_idx].easy_know && baseitems_info[this->k_idx].aware);
 }
 
 bool ObjectType::is_fully_known() const
@@ -463,7 +463,7 @@ bool ObjectType::is_fully_known() const
  */
 bool ObjectType::is_aware() const
 {
-    return k_info[this->k_idx].aware;
+    return baseitems_info[this->k_idx].aware;
 }
 
 /*
@@ -471,7 +471,7 @@ bool ObjectType::is_aware() const
  */
 bool ObjectType::is_tried() const
 {
-    return k_info[this->k_idx].tried;
+    return baseitems_info[this->k_idx].tried;
 }
 
 /*!
@@ -480,7 +480,7 @@ bool ObjectType::is_tried() const
  */
 bool ObjectType::is_potion() const
 {
-    return k_info[this->k_idx].tval == ItemKindType::POTION;
+    return baseitems_info[this->k_idx].tval == ItemKindType::POTION;
 }
 
 /*!
@@ -671,10 +671,10 @@ bool ObjectType::can_pile(const ObjectType *j_ptr) const
  */
 TERM_COLOR ObjectType::get_color() const
 {
-    const auto &base_item = k_info[this->k_idx];
+    const auto &base_item = baseitems_info[this->k_idx];
     const auto flavor = base_item.flavor;
     if (flavor != 0) {
-        return k_info[flavor].x_attr;
+        return baseitems_info[flavor].x_attr;
     }
 
     auto has_attr = this->k_idx == 0;
@@ -695,9 +695,9 @@ TERM_COLOR ObjectType::get_color() const
  */
 char ObjectType::get_symbol() const
 {
-    const auto &base_item = k_info[this->k_idx];
+    const auto &base_item = baseitems_info[this->k_idx];
     const auto flavor = base_item.flavor;
-    return flavor ? k_info[flavor].x_char : base_item.x_char;
+    return flavor ? baseitems_info[flavor].x_char : base_item.x_char;
 }
 
 /*!
@@ -736,7 +736,7 @@ int ObjectType::get_price() const
 int ObjectType::get_baseitem_price() const
 {
     if (this->is_aware()) {
-        return k_info[this->k_idx].cost;
+        return baseitems_info[this->k_idx].cost;
     }
 
     switch (this->tval) {

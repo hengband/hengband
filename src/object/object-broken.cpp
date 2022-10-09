@@ -255,7 +255,7 @@ bool potion_smash_effect(PlayerType *player_ptr, MONSTER_IDX who, POSITION y, PO
     AttributeType dt = AttributeType::NONE;
     int dam = 0;
     bool angry = false;
-    auto *k_ptr = &k_info[k_idx];
+    auto *k_ptr = &baseitems_info[k_idx];
     switch (k_ptr->sval) {
     case SV_POTION_SALT_WATER:
     case SV_POTION_SLIME_MOLD:

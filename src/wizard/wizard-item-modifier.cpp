@@ -225,7 +225,7 @@ void wiz_identify_full_inventory(PlayerType *player_ptr)
             continue;
         }
 
-        auto k_ptr = &k_info[o_ptr->k_idx];
+        auto k_ptr = &baseitems_info[o_ptr->k_idx];
         k_ptr->aware = true; //!< @note 記録には残さないためTRUEを立てるのみ
         set_bits(o_ptr->ident, IDENT_KNOWN | IDENT_FULL_KNOWN);
         set_bits(o_ptr->marked, OM_TOUCHED);
@@ -264,7 +264,7 @@ static void prt_alloc(ItemKindType tval, OBJECT_SUBTYPE_VALUE sval, TERM_LEN row
                 prob = entry.prob1 * i * K_MAX_DEPTH / (entry.level - 1);
             }
 
-            k_ptr = &k_info[entry.index];
+            k_ptr = &baseitems_info[entry.index];
 
             total[i] += prob / (GREAT_OBJ * K_MAX_DEPTH);
             total_frac += prob % (GREAT_OBJ * K_MAX_DEPTH);
@@ -345,7 +345,7 @@ static void wiz_display_item(PlayerType *player_ptr, ObjectType *o_ptr)
     prt(buf, 2, j);
 
     auto line = 4;
-    prt(format("kind = %-5d  level = %-4d  tval = %-5d  sval = %-5d", o_ptr->k_idx, k_info[o_ptr->k_idx].level, o_ptr->tval, o_ptr->sval), line, j);
+    prt(format("kind = %-5d  level = %-4d  tval = %-5d  sval = %-5d", o_ptr->k_idx, baseitems_info[o_ptr->k_idx].level, o_ptr->tval, o_ptr->sval), line, j);
     prt(format("number = %-3d  wgt = %-6d  ac = %-5d    damage = %dd%d", o_ptr->number, o_ptr->weight, o_ptr->ac, o_ptr->dd, o_ptr->ds), ++line, j);
     prt(format("pval = %-5d  toac = %-5d  tohit = %-4d  todam = %-4d", o_ptr->pval, o_ptr->to_a, o_ptr->to_h, o_ptr->to_d), ++line, j);
     prt(format("fixed_artifact_idx = %-4d  ego_idx = %-4d  cost = %ld", o_ptr->fixed_artifact_idx, o_ptr->ego_idx, object_value_real(o_ptr)), ++line, j);
@@ -880,7 +880,7 @@ WishResultType do_cmd_wishing(PlayerType *player_ptr, int prob, bool allow_art, 
     if (exam_base) {
         int len;
         int max_len = 0;
-        for (const auto &k_ref : k_info) {
+        for (const auto &k_ref : baseitems_info) {
             if (k_ref.idx == 0 || k_ref.name.empty()) {
                 continue;
             }
@@ -1033,7 +1033,7 @@ WishResultType do_cmd_wishing(PlayerType *player_ptr, int prob, bool allow_art, 
 
     if (k_ids.size() == 1) {
         KIND_OBJECT_IDX k_idx = k_ids.back();
-        auto *k_ptr = &k_info[k_idx];
+        auto *k_ptr = &baseitems_info[k_idx];
 
         FixedArtifactId a_idx = FixedArtifactId::NONE;
         if (k_ptr->gen_flags.has(ItemGenerationTraitType::INSTA_ART)) {
