@@ -1,20 +1,12 @@
 ﻿#include "object/object-value.h"
 #include "monster-race/monster-race.h"
-#include "object-enchant/object-curse.h"
-#include "object-enchant/object-ego.h"
-#include "object-enchant/special-object-flags.h"
-#include "object-enchant/tr-types.h"
-#include "object/object-broken.h"
 #include "object/object-flags.h"
 #include "object/object-value-calc.h"
 #include "object/tval-types.h"
-#include "perception/object-perception.h"
 #include "system/artifact-type-definition.h"
 #include "system/baseitem-info-definition.h"
 #include "system/monster-race-definition.h"
-#include "system/object-type-definition.h"
 #include "system/player-type-definition.h"
-#include "util/bit-flags-calculator.h"
 
 /*!
  * @brief オブジェクトの真の価格を算出する /

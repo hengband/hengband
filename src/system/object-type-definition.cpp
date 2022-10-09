@@ -683,21 +683,16 @@ char ObjectType::get_symbol() const
  */
 int ObjectType::object_value() const
 {
-    PRICE value;
+    int value;
+    const auto is_worthless = this->is_broken() || this->is_cursed();
     if (this->is_known()) {
-        if (this->is_broken()) {
-            return 0;
-        }
-        if (this->is_cursed()) {
+        if (is_worthless) {
             return 0;
         }
 
         value = object_value_real(this);
     } else {
-        if ((this->ident & (IDENT_SENSE)) && this->is_broken()) {
-            return 0;
-        }
-        if ((this->ident & (IDENT_SENSE)) && this->is_cursed()) {
+        if (any_bits(this->ident, IDENT_SENSE) && is_worthless) {
             return 0;
         }
 
@@ -725,7 +720,6 @@ int ObjectType::object_value_base() const
     case ItemKindType::FOOD:
         return 5;
     case ItemKindType::POTION:
-        return 20;
     case ItemKindType::SCROLL:
         return 20;
     case ItemKindType::STAFF:
@@ -735,36 +729,46 @@ int ObjectType::object_value_base() const
     case ItemKindType::ROD:
         return 90;
     case ItemKindType::RING:
-        return 45;
     case ItemKindType::AMULET:
         return 45;
-    case ItemKindType::FIGURINE: {
-        auto figure_r_idx = i2enum<MonsterRaceId>(this->pval);
-        DEPTH level = r_info[figure_r_idx].level;
-        if (level < 20) {
-            return level * 50L;
-        } else if (level < 30) {
-            return 1000 + (level - 20) * 150;
-        } else if (level < 40) {
-            return 2500 + (level - 30) * 350;
-        } else if (level < 50) {
-            return 6000 + (level - 40) * 800;
-        } else {
-            return 14000 + (level - 50) * 2000;
-        }
-    }
-    case ItemKindType::CAPTURE: {
-        auto capture_r_idx = i2enum<MonsterRaceId>(this->pval);
-        if (!MonsterRace(capture_r_idx).is_valid()) {
-            return 1000;
-        } else {
-            return (r_info[capture_r_idx].level) * 50 + 1000;
-        }
-    }
-
+    case ItemKindType::FIGURINE:
+        return this->calc_figurine_value();
+    case ItemKindType::CAPTURE:
+        return this->calc_capture_value();
     default:
-        break;
+        return 0;
+    }
+}
+
+int ObjectType::calc_figurine_value() const
+{
+    auto figure_r_idx = i2enum<MonsterRaceId>(this->pval);
+    auto level = r_info[figure_r_idx].level;
+    if (level < 20) {
+        return level * 50L;
+    }
+    
+    if (level < 30) {
+        return 1000 + (level - 20) * 150;
+    }
+    
+    if (level < 40) {
+        return 2500 + (level - 30) * 350;
+    }
+    
+    if (level < 50) {
+        return 6000 + (level - 40) * 800;
     }
 
-    return 0;
+    return 14000 + (level - 50) * 2000;
+}
+
+int ObjectType::calc_capture_value() const
+{
+    auto capture_r_idx = i2enum<MonsterRaceId>(this->pval);
+    if (!MonsterRace(capture_r_idx).is_valid()) {
+        return 1000;
+    }
+
+    return (r_info[capture_r_idx].level) * 50 + 1000;
 }

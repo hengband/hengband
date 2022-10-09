@@ -121,4 +121,6 @@ public:
 
 private:
     int object_value_base() const;
+    int calc_figurine_value() const;
+    int calc_capture_value() const;
 };
