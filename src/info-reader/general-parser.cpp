@@ -30,7 +30,7 @@ dungeon_grid letter[255];
  * @param parse_info_txt_line パース関数
  * @return エラーコード
  */
-errr init_info_txt(FILE *fp, char *buf, angband_header *head, std::function<errr(std::string_view, angband_header *)> parse_info_txt_line)
+errr init_info_txt(FILE *fp, char *buf, angband_header *head, Parser parse_info_txt_line)
 {
     error_idx = -1;
     error_line = 0;
