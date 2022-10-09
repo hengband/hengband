@@ -12,9 +12,9 @@
 #include "object-hook/hook-magic.h"
 #include "object/item-tester-hooker.h"
 #include "object/item-use-flags.h"
-#include "object/object-kind.h"
 #include "perception/object-perception.h"
 #include "spell-kind/spells-perception.h"
+#include "system/baseitem-info-definition.h"
 #include "system/object-type-definition.h"
 #include "system/player-type-definition.h"
 #include "term/screen-processor.h"
@@ -47,7 +47,7 @@ void building_recharge(PlayerType *player_ptr)
         return;
     }
 
-    object_kind *k_ptr;
+    BaseItemInfo *k_ptr;
     k_ptr = &k_info[o_ptr->k_idx];
 
     /*
@@ -196,7 +196,7 @@ void building_recharge_all(PlayerType *player_ptr)
         }
 
         DEPTH lev = k_info[o_ptr->k_idx].level;
-        object_kind *k_ptr;
+        BaseItemInfo *k_ptr;
         k_ptr = &k_info[o_ptr->k_idx];
 
         switch (o_ptr->tval) {
@@ -244,7 +244,7 @@ void building_recharge_all(PlayerType *player_ptr)
     for (INVENTORY_IDX i = 0; i < INVEN_PACK; i++) {
         ObjectType *o_ptr;
         o_ptr = &player_ptr->inventory_list[i];
-        object_kind *k_ptr;
+        BaseItemInfo *k_ptr;
         k_ptr = &k_info[o_ptr->k_idx];
 
         if ((o_ptr->tval < ItemKindType::STAFF) || (o_ptr->tval > ItemKindType::ROD)) {

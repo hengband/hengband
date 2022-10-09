@@ -117,4 +117,10 @@ public:
     bool can_pile(const ObjectType *j_ptr) const;
     TERM_COLOR get_color() const;
     char get_symbol() const;
+    int get_price() const;
+
+private:
+    int get_baseitem_price() const;
+    int calc_figurine_value() const;
+    int calc_capture_value() const;
 };

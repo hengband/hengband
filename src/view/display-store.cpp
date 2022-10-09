@@ -7,12 +7,12 @@
 #include "locale/japanese.h"
 #include "object-enchant/special-object-flags.h"
 #include "object/object-info.h"
-#include "object/object-kind.h"
 #include "player/race-info-table.h"
 #include "store/pricing.h"
 #include "store/store-owners.h"
 #include "store/store-util.h"
 #include "store/store.h" //!< @todo 相互依存している、こっちは残す？.
+#include "system/baseitem-info-definition.h"
 #include "system/object-type-definition.h"
 #include "system/player-type-definition.h"
 #include "term/gameterm.h"

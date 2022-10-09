@@ -1,4 +1,5 @@
 ﻿#include "system/monster-type-definition.h"
+#include "game-option/birth-options.h"
 #include "monster-race/monster-race.h"
 #include "monster-race/race-indice-types.h"
 #include "monster-race/race-kind-flags.h"
@@ -148,4 +149,25 @@ short monster_type::get_remaining_invulnerability() const
 bool monster_type::is_invulnerable() const
 {
     return this->get_remaining_invulnerability() > 0;
+}
+
+/*
+ * @brief 悪夢モード、一時加速、一時減速に基づくモンスターの現在速度を返す
+ */
+byte monster_type::get_temporary_speed() const
+{
+    auto speed = this->mspeed;
+    if (ironman_nightmare) {
+        speed += 5;
+    }
+
+    if (this->is_accelerated()) {
+        speed += 10;
+    }
+
+    if (this->is_decelerated()) {
+        speed -= 10;
+    }
+
+    return speed;
 }

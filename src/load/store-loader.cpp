@@ -43,7 +43,7 @@ static void home_carry_load(PlayerType *player_ptr, store_type *store_ptr, Objec
         return;
     }
 
-    auto value = object_value(o_ptr);
+    const auto value = o_ptr->get_price();
     int slot;
     for (slot = 0; slot < store_ptr->stock_num; slot++) {
         if (object_sort_comp(player_ptr, o_ptr, value, &store_ptr->stock[slot])) {

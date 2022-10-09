@@ -7,9 +7,9 @@
 #include "store/store-util.h"
 #include "object-enchant/item-feeling.h"
 #include "object-enchant/special-object-flags.h"
-#include "object/object-kind.h"
 #include "object/object-value.h"
 #include "object/tval-types.h"
+#include "system/baseitem-info-definition.h"
 #include "system/object-type-definition.h"
 
 store_type *st_ptr = nullptr;
@@ -236,7 +236,7 @@ static void store_object_absorb(ObjectType *o_ptr, ObjectType *j_ptr)
  */
 int store_carry(ObjectType *o_ptr)
 {
-    PRICE value = object_value(o_ptr);
+    const auto value = o_ptr->get_price();
     if (value <= 0) {
         return -1;
     }
@@ -282,7 +282,7 @@ int store_carry(ObjectType *o_ptr)
             }
         }
 
-        PRICE j_value = object_value(j_ptr);
+        auto j_value = j_ptr->get_price();
         if (value > j_value) {
             break;
         }

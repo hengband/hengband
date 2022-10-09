@@ -138,5 +138,5 @@ bool object_sort_comp(PlayerType *player_ptr, ObjectType *o_ptr, int32_t o_value
         break;
     }
 
-    return o_value > object_value(j_ptr);
+    return o_value > j_ptr->get_price();
 }

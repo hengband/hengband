@@ -95,9 +95,6 @@
     <ClCompile Include="..\..\src\knowledge\knowledge-experiences.cpp">
       <Filter>knowledge</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\object\object-kind.cpp">
-      <Filter>object</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\object\object-kind-hook.cpp">
       <Filter>object</Filter>
     </ClCompile>
@@ -2469,6 +2466,9 @@
     <ClCompile Include="..\..\src\system\monster-type-definition.cpp">
       <Filter>system</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\system\baseitem-info-definition.cpp">
+      <Filter>system</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\combat\shoot.h">
@@ -2563,9 +2563,6 @@
     </ClInclude>
     <ClInclude Include="..\..\src\knowledge\knowledge-experiences.h">
       <Filter>knowledge</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\object\object-kind.h">
-      <Filter>object</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\object\object-kind-hook.h">
       <Filter>object</Filter>
@@ -5363,6 +5360,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\timed-effect\player-blindness.h">
       <Filter>timed-effect</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\system\baseitem-info-definition.h">
+      <Filter>system</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

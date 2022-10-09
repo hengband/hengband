@@ -56,7 +56,6 @@
 #include "object-enchant/trc-types.h"
 #include "object-enchant/trg-types.h"
 #include "object/object-kind-hook.h"
-#include "object/object-kind.h"
 #include "perception/object-perception.h"
 #include "player-base/player-class.h"
 #include "player-base/player-race.h"
@@ -81,6 +80,7 @@
 #include "status/experience.h"
 #include "system/angband-version.h"
 #include "system/artifact-type-definition.h"
+#include "system/baseitem-info-definition.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
 #include "system/monster-type-definition.h"
@@ -773,22 +773,12 @@ void wiz_dump_options(void)
  */
 void set_gametime(void)
 {
-    int tmp_int = 0;
-    char ppp[80], tmp_val[40];
-    sprintf(ppp, "Dungeon Turn (0-%ld): ", (long)w_ptr->dungeon_turn_limit);
-    sprintf(tmp_val, "%ld", (long)w_ptr->dungeon_turn);
-    if (!get_string(ppp, tmp_val, 10)) {
+    int game_time = 0;
+    if (!get_value("Dungeon Turn", 0, w_ptr->dungeon_turn_limit - 1, &game_time)) {
         return;
     }
 
-    tmp_int = atoi(tmp_val);
-    if (tmp_int >= w_ptr->dungeon_turn_limit) {
-        tmp_int = w_ptr->dungeon_turn_limit - 1;
-    } else if (tmp_int < 0) {
-        tmp_int = 0;
-    }
-
-    w_ptr->dungeon_turn = w_ptr->game_turn = tmp_int;
+    w_ptr->dungeon_turn = w_ptr->game_turn = game_time;
 }
 
 /*!

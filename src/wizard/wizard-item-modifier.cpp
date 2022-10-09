@@ -24,13 +24,13 @@
 #include "object/object-flags.h"
 #include "object/object-info.h"
 #include "object/object-kind-hook.h"
-#include "object/object-kind.h"
 #include "object/object-mark-types.h"
 #include "object/object-value.h"
 #include "spell-kind/spells-perception.h"
 #include "spell/spells-object.h"
 #include "system/alloc-entries.h"
 #include "system/artifact-type-definition.h"
+#include "system/baseitem-info-definition.h"
 #include "system/floor-type-definition.h"
 #include "system/object-type-definition.h"
 #include "system/player-type-definition.h"
@@ -178,21 +178,11 @@ void wizard_item_modifier(PlayerType *player_ptr)
 void wiz_restore_aware_flag_of_fixed_arfifact(FixedArtifactId reset_artifact_idx, bool aware)
 {
     auto max_a_idx = enum2i(a_info.rbegin()->first);
-    auto int_a_idx = enum2i(reset_artifact_idx);
+    int int_a_idx = enum2i(reset_artifact_idx);
     if (int_a_idx <= 0) {
-        char tmp[80] = "";
-        sprintf(tmp, "Artifact ID (1-%d): ", max_a_idx);
-        char tmp_val[10] = "";
-        if (!get_string(tmp, tmp_val, 3)) {
+        if (!get_value("Artifact ID", 1, max_a_idx, &int_a_idx)) {
             return;
         }
-
-        int_a_idx = static_cast<short>(atoi(tmp_val));
-    }
-
-    if ((int_a_idx <= 0) || (int_a_idx > static_cast<short>(max_a_idx))) {
-        msg_format(_("番号は1から%dの間で指定して下さい。", "ID must be between 1 to %d."), max_a_idx);
-        return;
     }
 
     a_info.at(i2enum<FixedArtifactId>(int_a_idx)).is_generated = aware;
@@ -264,7 +254,7 @@ static void prt_alloc(ItemKindType tval, OBJECT_SUBTYPE_VALUE sval, TERM_LEN row
     int home = 0;
     for (int i = 0; i < K_MAX_DEPTH; i++) {
         int total_frac = 0;
-        object_kind *k_ptr;
+        BaseItemInfo *k_ptr;
         for (const auto &entry : alloc_kind_table) {
             PERCENTAGE prob = 0;
 

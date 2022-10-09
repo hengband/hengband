@@ -98,13 +98,13 @@ static void decide_social_class(PlayerType *player_ptr, char *buf)
     while (chart != 0) {
         int i = 0;
         int roll = randint1(100);
-        while ((chart != bg[i].chart) || (roll > bg[i].roll)) {
+        while ((chart != backgrounds[i].chart) || (roll > backgrounds[i].roll)) {
             i++;
         }
 
-        (void)strcat(buf, bg[i].info);
-        social_class += (int)(bg[i].bonus) - 50;
-        chart = bg[i].next;
+        (void)strcat(buf, backgrounds[i].info);
+        social_class += (int)(backgrounds[i].bonus) - 50;
+        chart = backgrounds[i].next;
     }
 
     if (social_class > 100) {

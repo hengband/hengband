@@ -1,4 +1,5 @@
-﻿
+﻿#pragma once
+
 /*!
  * @brief ベースアイテム生成階層が加算される確率
  * @details
@@ -134,3 +135,6 @@
 #define MON_SUMMON_ADJ 2 /*!< 現在未使用 Adjust level of summoned creatures */
 #define MON_DRAIN_LIFE 2 /*!< モンスターの打撃によるプレイヤーの経験値吸収基本倍率(%) / Percent of player exp drained per hit */
 #define USE_DEVICE 3 /*!< 魔道具の最低失敗基準値 x> Harder devices x< Easier devices     */
+
+/* プレイヤー/モンスターの標準速度 (加速0) */
+constexpr auto STANDARD_SPEED = 110;

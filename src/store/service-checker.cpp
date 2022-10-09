@@ -225,7 +225,7 @@ bool store_will_buy(PlayerType *, const ObjectType *o_ptr, StoreSaleType store_n
         return false;
     }
 
-    return object_value(o_ptr) > 0;
+    return o_ptr->get_price() > 0;
 }
 
 static int mass_lite_produce(const PRICE cost)
@@ -442,7 +442,7 @@ static byte decide_discount_rate(const PRICE cost)
  */
 void mass_produce(PlayerType *, ObjectType *o_ptr, StoreSaleType store_num)
 {
-    const PRICE cost = object_value(o_ptr);
+    const auto cost = o_ptr->get_price();
     int size = switch_mass_production(o_ptr, cost, store_num);
     auto discount = decide_discount_rate(cost);
     if (o_ptr->art_name) {

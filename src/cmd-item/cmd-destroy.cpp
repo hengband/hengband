@@ -57,7 +57,7 @@ static destroy_type *initialize_destroy_type(destroy_type *destroy_ptr, ObjectTy
 
 static bool check_destory_item(PlayerType *player_ptr, destroy_type *destroy_ptr)
 {
-    if (destroy_ptr->force || (!confirm_destroy && (object_value(destroy_ptr->o_ptr) <= 0))) {
+    if (destroy_ptr->force || (!confirm_destroy && (destroy_ptr->o_ptr->get_price() <= 0))) {
         return true;
     }
 

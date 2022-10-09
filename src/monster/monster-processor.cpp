@@ -601,7 +601,7 @@ void sweep_monster_process(PlayerType *player_ptr)
             continue;
         }
 
-        byte speed = (player_ptr->riding == i) ? player_ptr->pspeed : decide_monster_speed(m_ptr);
+        byte speed = (player_ptr->riding == i) ? player_ptr->pspeed : m_ptr->get_temporary_speed();
         m_ptr->energy_need -= speed_to_energy(speed);
         if (m_ptr->energy_need > 0) {
             continue;

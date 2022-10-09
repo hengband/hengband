@@ -4,7 +4,7 @@
 #include "floor/floor-object.h"
 #include "floor/geometry.h"
 #include "grid/grid.h"
-#include "object/object-kind.h"
+#include "system/baseitem-info-definition.h"
 #include "system/floor-type-definition.h"
 #include "system/monster-type-definition.h"
 #include "system/object-type-definition.h"

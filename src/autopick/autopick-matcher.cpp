@@ -18,12 +18,12 @@
 #include "object-hook/hook-quest.h"
 #include "object-hook/hook-weapon.h"
 #include "object/object-info.h"
-#include "object/object-kind.h"
 #include "object/object-stack.h"
 #include "object/object-value.h"
 #include "perception/object-perception.h"
 #include "player-base/player-class.h"
 #include "player/player-realm.h"
+#include "system/baseitem-info-definition.h"
 #include "system/floor-type-definition.h"
 #include "system/monster-race-definition.h"
 #include "system/object-type-definition.h"
@@ -89,7 +89,7 @@ bool is_autopick_match(PlayerType *player_ptr, ObjectType *o_ptr, autopick_type 
         }
     }
 
-    if (IS_FLG(FLG_WORTHLESS) && object_value(o_ptr) > 0) {
+    if (IS_FLG(FLG_WORTHLESS) && (o_ptr->get_price() > 0)) {
         return false;
     }
 

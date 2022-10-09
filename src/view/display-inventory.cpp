@@ -9,7 +9,7 @@
 #include "object/item-tester-hooker.h"
 #include "object/item-use-flags.h"
 #include "object/object-info.h"
-#include "object/object-kind.h"
+#include "system/baseitem-info-definition.h"
 #include "system/object-type-definition.h"
 #include "system/player-type-definition.h"
 #include "term/gameterm.h"

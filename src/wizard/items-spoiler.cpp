@@ -4,9 +4,9 @@
 #include "io/files-util.h"
 #include "object-enchant/special-object-flags.h"
 #include "object-enchant/trg-types.h"
-#include "object/object-kind.h"
 #include "object/object-value.h"
 #include "system/angband-version.h"
+#include "system/baseitem-info-definition.h"
 #include "system/object-type-definition.h"
 #include "system/player-type-definition.h"
 #include "util/angband-files.h"
@@ -38,7 +38,7 @@ static void kind_info(PlayerType *player_ptr, char *buf, char *dam, char *wgt, c
     q_ptr->to_h = 0;
     q_ptr->to_d = 0;
     *lev = k_info[q_ptr->k_idx].level;
-    *val = object_value(q_ptr);
+    *val = q_ptr->get_price();
     if (!buf || !dam || !chance || !wgt) {
         return;
     }

@@ -112,35 +112,26 @@ SpoilerOutputResultType spoil_mon_desc(concptr fname, std::function<bool(const m
     ang_sort(&dummy, who.data(), &why, who.size(), ang_sort_comp_hook, ang_sort_swap_hook);
     for (auto r_idx : who) {
         auto *r_ptr = &r_info[r_idx];
-        concptr name = r_ptr->name.c_str();
         if (filter_monster && !filter_monster(r_ptr)) {
             continue;
         }
-
-        char name_buf[41];
-        angband_strcpy(name_buf, name, sizeof(name_buf));
-        name += strlen(name_buf);
 
         if (any_bits(r_ptr->flags7, RF7_KAGE)) {
             continue;
         }
 
+        const auto name = str_separate(r_ptr->name, 40);
         if (r_ptr->kind_flags.has(MonsterKindType::UNIQUE)) {
-            sprintf(nam, "[U] %s", name_buf);
+            sprintf(nam, "[U] %s", name.front().c_str());
         } else if (r_ptr->population_flags.has(MonsterPopulationType::NAZGUL)) {
-            sprintf(nam, "[N] %s", name_buf);
+            sprintf(nam, "[N] %s", name.front().c_str());
         } else {
-            sprintf(nam, _("    %s", "The %s"), name_buf);
+            sprintf(nam, _("    %s", "The %s"), name.front().c_str());
         }
 
         sprintf(lev, "%d", (int)r_ptr->level);
         sprintf(rar, "%d", (int)r_ptr->rarity);
-        if (r_ptr->speed >= 110) {
-            sprintf(spd, "+%d", (r_ptr->speed - 110));
-        } else {
-            sprintf(spd, "-%d", (110 - r_ptr->speed));
-        }
-
+        sprintf(spd, "%+d", r_ptr->speed - STANDARD_SPEED);
         sprintf(ac, "%d", r_ptr->ac);
         if (any_bits(r_ptr->flags1, RF1_FORCE_MAXHP) || (r_ptr->hside == 1)) {
             sprintf(hp, "%d", r_ptr->hdice * r_ptr->hside);
@@ -152,10 +143,8 @@ SpoilerOutputResultType spoil_mon_desc(concptr fname, std::function<bool(const m
         sprintf(symbol, "%s '%c'", attr_to_text(r_ptr), r_ptr->d_char);
         fprintf(spoiler_file, "%-45.45s%4s %4s %4s %7s %7s  %19.19s\n", nam, lev, rar, spd, hp, ac, symbol);
 
-        while (*name != '\0') {
-            angband_strcpy(name_buf, name, sizeof(name_buf));
-            name += strlen(name_buf);
-            fprintf(spoiler_file, "    %s\n", name_buf);
+        for (auto i = 1U; i < name.size(); ++i) {
+            fprintf(spoiler_file, "    %s\n", name[i].c_str());
         }
     }
 
@@ -227,12 +216,7 @@ SpoilerOutputResultType spoil_mon_info(concptr fname)
         spoil_out(buf);
         sprintf(buf, "Rar:%d  ", r_ptr->rarity);
         spoil_out(buf);
-        if (r_ptr->speed >= 110) {
-            sprintf(buf, "Spd:+%d  ", (r_ptr->speed - 110));
-        } else {
-            sprintf(buf, "Spd:-%d  ", (110 - r_ptr->speed));
-        }
-
+        sprintf(buf, "%+d", r_ptr->speed - STANDARD_SPEED);
         spoil_out(buf);
         if (any_bits(r_ptr->flags1, RF1_FORCE_MAXHP) || (r_ptr->hside == 1)) {
             sprintf(buf, "Hp:%d  ", r_ptr->hdice * r_ptr->hside);

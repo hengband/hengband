@@ -17,7 +17,6 @@
 #include "monster-attack/monster-attack-player.h"
 #include "monster/monster-status.h"
 #include "object/object-info.h"
-#include "object/object-kind.h"
 #include "object/object-mark-types.h"
 #include "player-base/player-race.h"
 #include "player-info/race-info.h"
@@ -25,6 +24,7 @@
 #include "player/player-status-flags.h"
 #include "player/player-status-table.h"
 #include "status/experience.h"
+#include "system/baseitem-info-definition.h"
 #include "system/floor-type-definition.h"
 #include "system/monster-type-definition.h"
 #include "system/object-type-definition.h"
@@ -228,7 +228,7 @@ bool process_un_power(PlayerType *player_ptr, MonsterAttackPlayer *monap_ptr)
     }
 
     bool is_magic_mastery = has_magic_mastery(player_ptr) != 0;
-    object_kind *kind_ptr = &k_info[monap_ptr->o_ptr->k_idx];
+    BaseItemInfo *kind_ptr = &k_info[monap_ptr->o_ptr->k_idx];
     PARAMETER_VALUE pval = kind_ptr->pval;
     DEPTH level = monap_ptr->rlev;
     auto drain = is_magic_mastery ? std::min<short>(pval, pval * level / 400 + pval * randint1(level) / 400) : pval;

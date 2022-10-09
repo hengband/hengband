@@ -14,7 +14,7 @@
 #include "io/input-key-requester.h"
 #include "io/tokenizer.h"
 #include "monster-race/monster-race.h"
-#include "object/object-kind.h"
+#include "system/baseitem-info-definition.h"
 #include "system/game-option-types.h"
 #include "system/monster-race-definition.h"
 #include "system/player-type-definition.h"
@@ -71,7 +71,7 @@ static errr interpret_k_token(char *buf)
         return 1;
     }
 
-    object_kind *k_ptr;
+    BaseItemInfo *k_ptr;
     int i = (int)strtol(zz[0], nullptr, 0);
     TERM_COLOR n1 = (TERM_COLOR)strtol(zz[1], nullptr, 0);
     auto n2 = static_cast<char>(strtol(zz[2], nullptr, 0));

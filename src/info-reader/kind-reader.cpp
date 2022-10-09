@@ -5,7 +5,7 @@
 #include "info-reader/parse-error-types.h"
 #include "main/angband-headers.h"
 #include "object-enchant/tr-types.h"
-#include "object/object-kind.h"
+#include "system/baseitem-info-definition.h"
 #include "term/gameterm.h"
 #include "util/bit-flags-calculator.h"
 #include "util/string-processor.h"
@@ -13,12 +13,12 @@
 
 /*!
  * @brief テキストトークンを走査してフラグを一つ得る(ベースアイテム用) /
- * Grab one flag in an object_kind from a textual string
+ * Grab one flag in an BaseItemInfo from a textual string
  * @param k_ptr 保管先のベースアイテム構造体参照ポインタ
  * @param what 参照元の文字列ポインタ
  * @return 見つけたらtrue
  */
-static bool grab_one_kind_flag(object_kind *k_ptr, std::string_view what)
+static bool grab_one_kind_flag(BaseItemInfo *k_ptr, std::string_view what)
 {
     if (TrFlags::grab_one_flag(k_ptr->flags, k_info_flags, what)) {
         return true;
@@ -39,9 +39,10 @@ static bool grab_one_kind_flag(object_kind *k_ptr, std::string_view what)
  * @param head ヘッダ構造体
  * @return エラーコード
  */
-errr parse_k_info(std::string_view buf, angband_header *)
+errr parse_k_info(std::string_view buf, angband_header *head)
 {
-    static object_kind *k_ptr = nullptr;
+    (void)head;
+    static BaseItemInfo *k_ptr = nullptr;
     const auto &tokens = str_split(buf, ':', false, 10);
 
     if (tokens[0] == "N") {
@@ -122,15 +123,14 @@ errr parse_k_info(std::string_view buf, angband_header *)
         info_set_value(k_ptr->sval, tokens[2]);
         info_set_value(k_ptr->pval, tokens[3]);
     } else if (tokens[0] == "W") {
-        // W:level:extra:weight:cost
-        if (tokens.size() < 5) {
+        // W:level:weight:cost
+        if (tokens.size() < 4) {
             return PARSE_ERROR_TOO_FEW_ARGUMENTS;
         }
 
         info_set_value(k_ptr->level, tokens[1]);
-        info_set_value(k_ptr->extra, tokens[2]);
-        info_set_value(k_ptr->weight, tokens[3]);
-        info_set_value(k_ptr->cost, tokens[4]);
+        info_set_value(k_ptr->weight, tokens[2]);
+        info_set_value(k_ptr->cost, tokens[3]);
     } else if (tokens[0] == "A") {
         // A:level/chance(:level/chance:level/chance:level/chance)
         if (tokens.size() < 2 || tokens.size() > 5) {

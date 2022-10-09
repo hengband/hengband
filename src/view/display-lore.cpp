@@ -277,6 +277,7 @@ bool display_where_to_appear(lore_type *lore_ptr)
     return true;
 }
 
+// @todo モンスターの速度表記はmonster_typeのオブジェクトメソッドにした方がベター
 void display_monster_move(lore_type *lore_ptr)
 {
 #ifdef JP
@@ -285,7 +286,7 @@ void display_monster_move(lore_type *lore_ptr)
 #endif
 
     display_random_move(lore_ptr);
-    if (lore_ptr->speed > 110) {
+    if (lore_ptr->speed > STANDARD_SPEED) {
         if (lore_ptr->speed > 139) {
             hook_c_roff(TERM_RED, _("信じ難いほど", " incredibly"));
         } else if (lore_ptr->speed > 134) {
@@ -298,7 +299,7 @@ void display_monster_move(lore_type *lore_ptr)
             hook_c_roff(TERM_L_UMBER, _("やや", " somewhat"));
         }
         hook_c_roff(TERM_L_RED, _("素早く", " quickly"));
-    } else if (lore_ptr->speed < 110) {
+    } else if (lore_ptr->speed < STANDARD_SPEED) {
         if (lore_ptr->speed < 90) {
             hook_c_roff(TERM_L_GREEN, _("信じ難いほど", " incredibly"));
         } else if (lore_ptr->speed < 95) {
@@ -333,7 +334,7 @@ void display_random_move(lore_type *lore_ptr)
     }
 
     hooked_roff(_("不規則に", " erratically"));
-    if (lore_ptr->speed != 110) {
+    if (lore_ptr->speed != STANDARD_SPEED) {
         hooked_roff(_("、かつ", ", and"));
     }
 }
