@@ -39,8 +39,9 @@ static bool grab_one_kind_flag(BaseItemInfo *k_ptr, std::string_view what)
  * @param head ヘッダ構造体
  * @return エラーコード
  */
-errr parse_k_info(std::string_view buf, angband_header *)
+errr parse_k_info(std::string_view buf, angband_header *head)
 {
+    (void)head;
     static BaseItemInfo *k_ptr = nullptr;
     const auto &tokens = str_split(buf, ':', false, 10);
 
@@ -122,15 +123,14 @@ errr parse_k_info(std::string_view buf, angband_header *)
         info_set_value(k_ptr->sval, tokens[2]);
         info_set_value(k_ptr->pval, tokens[3]);
     } else if (tokens[0] == "W") {
-        // W:level:extra:weight:cost
-        if (tokens.size() < 5) {
+        // W:level:weight:cost
+        if (tokens.size() < 4) {
             return PARSE_ERROR_TOO_FEW_ARGUMENTS;
         }
 
         info_set_value(k_ptr->level, tokens[1]);
-        info_set_value(k_ptr->extra, tokens[2]);
-        info_set_value(k_ptr->weight, tokens[3]);
-        info_set_value(k_ptr->cost, tokens[4]);
+        info_set_value(k_ptr->weight, tokens[2]);
+        info_set_value(k_ptr->cost, tokens[3]);
     } else if (tokens[0] == "A") {
         // A:level/chance(:level/chance:level/chance:level/chance)
         if (tokens.size() < 2 || tokens.size() > 5) {
