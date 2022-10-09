@@ -58,7 +58,7 @@ bool object_is_quest_target(QuestId quest_idx, ObjectType *o_ptr)
         return false;
     }
 
-    const auto &a_ref = a_info.at(a_idx);
+    const auto &a_ref = artifacts_info.at(a_idx);
     if (a_ref.gen_flags.has(ItemGenerationTraitType::INSTA_ART)) {
         return false;
     }

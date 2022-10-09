@@ -42,4 +42,4 @@ public:
     RandomArtActType act_idx{}; /*! 発動能力ID / Activative ability index */
 };
 
-extern std::map<FixedArtifactId, ArtifactType> a_info;
+extern std::map<FixedArtifactId, ArtifactType> artifacts_info;

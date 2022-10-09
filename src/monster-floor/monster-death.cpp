@@ -177,7 +177,7 @@ static void drop_artifact_from_unique(PlayerType *player_ptr, monster_death_type
  */
 bool drop_single_artifact(PlayerType *player_ptr, monster_death_type *md_ptr, FixedArtifactId a_idx)
 {
-    auto &a_ref = a_info.at(a_idx);
+    auto &a_ref = artifacts_info.at(a_idx);
     if (a_ref.is_generated) {
         return false;
     }
@@ -202,7 +202,7 @@ static KIND_OBJECT_IDX drop_dungeon_final_artifact(PlayerType *player_ptr, monst
     }
 
     const auto a_idx = dungeon.final_artifact;
-    auto &a_ref = a_info.at(a_idx);
+    auto &a_ref = artifacts_info.at(a_idx);
     if (a_ref.is_generated) {
         return k_idx;
     }

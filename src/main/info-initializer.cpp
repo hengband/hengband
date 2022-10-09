@@ -144,6 +144,16 @@ static errr init_info(std::string_view filename, angband_header &head, InfoType 
 }
 
 /*!
+ * @brief 固定アーティファクト情報読み込みのメインルーチン
+ * @return エラーコード
+ */
+errr init_artifacts_info()
+{
+    init_header(&artifacts_header);
+    return init_info("ArtifactDefinitions.txt", artifacts_header, artifacts_info, parse_artifacts_info);
+}
+
+/*!
  * @brief 地形情報読み込みのメインルーチン /
  * Initialize the "f_info" array
  * @return エラーコード
@@ -163,17 +173,6 @@ errr init_k_info()
 {
     init_header(&k_head);
     return init_info("k_info.txt", k_head, k_info, parse_k_info);
-}
-
-/*!
- * @brief 固定アーティファクト情報読み込みのメインルーチン /
- * Initialize the "a_info" array
- * @return エラーコード
- */
-errr init_a_info()
-{
-    init_header(&a_head);
-    return init_info("a_info.txt", a_head, a_info, parse_a_info);
 }
 
 /*!

@@ -43,7 +43,7 @@ bool screen_object(PlayerType *player_ptr, ObjectType *o_ptr, BIT_FLAGS mode)
     int trivial_info = 0;
     auto flgs = object_flags(o_ptr);
 
-    const auto item_text = o_ptr->is_fixed_artifact() ? a_info.at(o_ptr->fixed_artifact_idx).text.c_str() : k_info[o_ptr->k_idx].text.c_str();
+    const auto item_text = o_ptr->is_fixed_artifact() ? artifacts_info.at(o_ptr->fixed_artifact_idx).text.c_str() : k_info[o_ptr->k_idx].text.c_str();
     shape_buffer(item_text, 77 - 15, temp, sizeof(temp));
 
     int i = 0;

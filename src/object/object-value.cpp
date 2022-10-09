@@ -45,7 +45,7 @@ PRICE object_value_real(const ObjectType *o_ptr)
     PRICE value = k_info[o_ptr->k_idx].cost;
     auto flgs = object_flags(o_ptr);
     if (o_ptr->is_fixed_artifact()) {
-        const auto &a_ref = a_info.at(o_ptr->fixed_artifact_idx);
+        const auto &a_ref = artifacts_info.at(o_ptr->fixed_artifact_idx);
         if (!a_ref.cost) {
             return 0;
         }

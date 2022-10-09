@@ -89,7 +89,7 @@ static constexpr std::array<amuse_type, 13> amuse_info = { {
 
 static std::optional<FixedArtifactId> sweep_amusement_artifact(const bool insta_art, const short k_idx)
 {
-    for (const auto &[a_idx, a_ref] : a_info) {
+    for (const auto &[a_idx, a_ref] : artifacts_info) {
         if (a_idx == FixedArtifactId::NONE) {
             continue;
         }

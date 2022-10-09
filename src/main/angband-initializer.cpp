@@ -284,7 +284,7 @@ void init_angband(PlayerType *player_ptr, bool no_term)
     }
 
     init_note(_("[データの初期化中... (伝説のアイテム)]", "[Initializing arrays... (artifacts)]"));
-    if (init_a_info()) {
+    if (init_artifacts_info()) {
         quit(_("伝説のアイテム初期化不能", "Cannot initialize artifacts"));
     }
 

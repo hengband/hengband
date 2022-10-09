@@ -31,7 +31,7 @@ PRICE flag_cost(const ObjectType *o_ptr, int plusses)
     flgs.reset(k_ptr->flags);
 
     if (o_ptr->is_fixed_artifact()) {
-        const auto &a_ref = a_info.at(o_ptr->fixed_artifact_idx);
+        const auto &a_ref = artifacts_info.at(o_ptr->fixed_artifact_idx);
         flgs.reset(a_ref.flags);
     } else if (o_ptr->is_ego()) {
         const auto &e_ref = e_info[o_ptr->ego_idx];

@@ -81,7 +81,7 @@ static void generate_artifact(PlayerType *player_ptr, qtwg_type *qtwg_ptr, const
         return;
     }
 
-    auto &fixed_artifact = a_info.at(artifact_index);
+    auto &fixed_artifact = artifacts_info.at(artifact_index);
     if (!fixed_artifact.is_generated && create_named_art(player_ptr, artifact_index, *qtwg_ptr->y, *qtwg_ptr->x)) {
         return;
     }
@@ -235,11 +235,11 @@ static bool parse_qtw_QQ(quest_type *q_ptr, char **zz, int num)
     }
 
     // @note 半分デッドコード。reward_artifact_idx が定義されているクエストが1つもない.
-    if (const auto it = a_info.find(a_idx); it == a_info.end()) {
+    if (const auto it = artifacts_info.find(a_idx); it == artifacts_info.end()) {
         return true;
     }
 
-    auto &a_ref = a_info.at(q_ptr->reward_artifact_idx);
+    auto &a_ref = artifacts_info.at(q_ptr->reward_artifact_idx);
     a_ref.gen_flags.set(ItemGenerationTraitType::QUESTITEM);
     return true;
 }
@@ -265,7 +265,7 @@ static bool parse_qtw_QR(quest_type *q_ptr, char **zz, int num)
             continue;
         }
 
-        if (a_info.at(a_idx).is_generated) {
+        if (artifacts_info.at(a_idx).is_generated) {
             continue;
         }
 
@@ -277,7 +277,7 @@ static bool parse_qtw_QR(quest_type *q_ptr, char **zz, int num)
 
     if (reward_idx != FixedArtifactId::NONE) {
         q_ptr->reward_artifact_idx = reward_idx;
-        a_info.at(reward_idx).gen_flags.set(ItemGenerationTraitType::QUESTITEM);
+        artifacts_info.at(reward_idx).gen_flags.set(ItemGenerationTraitType::QUESTITEM);
     } else {
         q_ptr->type = QuestKindType::KILL_ALL;
     }

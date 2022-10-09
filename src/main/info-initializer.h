@@ -7,10 +7,10 @@
 #include "system/angband.h"
 
 class PlayerType;
+errr init_artifacts_info();
 errr init_misc(PlayerType *player_ptr);
 errr init_f_info();
 errr init_k_info();
-errr init_a_info();
 errr init_e_info();
 errr init_r_info();
 errr init_d_info();
