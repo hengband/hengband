@@ -577,7 +577,7 @@ static void dump_aux_home_museum(PlayerType *player_ptr, FILE *fff)
  */
 static concptr get_check_sum(void)
 {
-    return format("%02x%02x%02x%02x%02x%02x%02x%02x%02x", f_head.checksum, k_head.checksum, artifacts_header.checksum, e_head.checksum, r_head.checksum, dungeons_header.checksum,
+    return format("%02x%02x%02x%02x%02x%02x%02x%02x%02x", f_head.checksum, k_head.checksum, artifacts_header.checksum, egos_header.checksum, r_head.checksum, dungeons_header.checksum,
         m_head.checksum, s_head.checksum, v_head.checksum);
 }
 

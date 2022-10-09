@@ -54,7 +54,7 @@ PRICE object_value_real(const ObjectType *o_ptr)
         value += flag_cost(o_ptr, o_ptr->pval);
         return value;
     } else if (o_ptr->is_ego()) {
-        const auto &e_ref = e_info[o_ptr->ego_idx];
+        const auto &e_ref = egos_info[o_ptr->ego_idx];
         if (!e_ref.cost) {
             return 0;
         }

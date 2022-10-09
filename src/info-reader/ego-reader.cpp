@@ -55,13 +55,12 @@ static bool grab_ego_generate_flags(ego_generate_type &xtra, std::string_view wh
 }
 
 /*!
- * @brief アイテムエゴ情報(e_info)のパース関数 /
- * Initialize the "e_info" array, by parsing an ascii "template" file
+ * @brief アイテムエゴ情報(EgoDefinitions)のパース関数
  * @param buf テキスト列
  * @param head ヘッダ構造体
  * @return エラーコード
  */
-errr parse_e_info(std::string_view buf, angband_header *)
+errr parse_egos_info(std::string_view buf, angband_header *)
 {
     static ego_item_type *e_ptr = nullptr;
     const auto &tokens = str_split(buf, ':', false, 10);
@@ -80,7 +79,7 @@ errr parse_e_info(std::string_view buf, angband_header *)
         }
 
         error_idx = i;
-        e_ptr = &(e_info.emplace_hint(e_info.end(), i2enum<EgoType>(i), ego_item_type{})->second);
+        e_ptr = &(egos_info.emplace_hint(egos_info.end(), i2enum<EgoType>(i), ego_item_type{})->second);
         e_ptr->idx = i2enum<EgoType>(i);
 #ifdef JP
         e_ptr->name = tokens[2];

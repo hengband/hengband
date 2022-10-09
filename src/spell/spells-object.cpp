@@ -586,7 +586,7 @@ bool enchant_spell(PlayerType *player_ptr, HIT_PROB num_hit, int num_dam, ARMOUR
  * @brief 武器へのエゴ付加処理 /
  * Brand the current weapon
  * @param player_ptr プレイヤーへの参照ポインタ
- * @param brand_type エゴ化ID(e_info.txtとは連動していない)
+ * @param brand_type エゴ化ID(EgoDefinitionsとは連動していない)
  */
 void brand_weapon(PlayerType *player_ptr, int brand_type)
 {
@@ -600,8 +600,11 @@ void brand_weapon(PlayerType *player_ptr, int brand_type)
         return;
     }
 
-    bool is_special_item = o_ptr->k_idx && !o_ptr->is_artifact() && !o_ptr->is_ego() && !o_ptr->is_cursed() && !((o_ptr->tval == ItemKindType::SWORD) && (o_ptr->sval == SV_POISON_NEEDLE)) && !((o_ptr->tval == ItemKindType::POLEARM) && (o_ptr->sval == SV_DEATH_SCYTHE)) && !((o_ptr->tval == ItemKindType::SWORD) && (o_ptr->sval == SV_DIAMOND_EDGE));
-    if (!is_special_item) {
+    auto special_weapon = (o_ptr->tval == ItemKindType::SWORD) && (o_ptr->sval == SV_POISON_NEEDLE);
+    special_weapon |= (o_ptr->tval == ItemKindType::POLEARM) && (o_ptr->sval == SV_DEATH_SCYTHE);
+    special_weapon |= (o_ptr->tval == ItemKindType::SWORD) && (o_ptr->sval == SV_DIAMOND_EDGE);
+    const auto is_normal_item = o_ptr->k_idx && !o_ptr->is_artifact() && !o_ptr->is_ego() && !o_ptr->is_cursed() && !special_weapon;
+    if (!is_normal_item) {
         if (flush_failure) {
             flush();
         }

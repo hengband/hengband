@@ -164,6 +164,16 @@ errr init_dungeons_info()
 }
 
 /*!
+ * @brief エゴ情報読み込みのメインルーチン
+ * @return エラーコード
+ */
+errr init_egos_info()
+{
+    init_header(&egos_header);
+    return init_info("EgoDefinitions.txt", egos_header, egos_info, parse_egos_info);
+}
+
+/*!
  * @brief 地形情報読み込みのメインルーチン /
  * Initialize the "f_info" array
  * @return エラーコード
@@ -183,17 +193,6 @@ errr init_k_info()
 {
     init_header(&k_head);
     return init_info("k_info.txt", k_head, k_info, parse_k_info);
-}
-
-/*!
- * @brief 固定アーティファクト情報読み込みのメインルーチン /
- * Initialize the "e_info" array
- * @return エラーコード
- */
-errr init_e_info()
-{
-    init_header(&e_head);
-    return init_info("e_info.txt", e_head, e_info, parse_e_info);
 }
 
 /*!

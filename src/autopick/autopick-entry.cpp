@@ -385,7 +385,7 @@ void autopick_entry_from_object(PlayerType *player_ptr, autopick_type *entry, Ob
                  * are almost meaningless.
                  * Register the ego type only.
                  */
-                auto *e_ptr = &e_info[o_ptr->ego_idx];
+                auto *e_ptr = &egos_info[o_ptr->ego_idx];
 #ifdef JP
                 /* エゴ銘には「^」マークが使える */
                 sprintf(name_str, "^%s", e_ptr->name.c_str());

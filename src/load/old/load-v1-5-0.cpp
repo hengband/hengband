@@ -140,7 +140,7 @@ void rd_item_old(ObjectType *o_ptr)
                     o_ptr->curse_flags.set(CurseTraitType::PERMA_CURSE);
                 }
             } else if (o_ptr->is_ego()) {
-                const auto &e_ref = e_info[o_ptr->ego_idx];
+                const auto &e_ref = egos_info[o_ptr->ego_idx];
                 if (e_ref.gen_flags.has(ItemGenerationTraitType::HEAVY_CURSE)) {
                     o_ptr->curse_flags.set(CurseTraitType::HEAVY_CURSE);
                 }
@@ -346,7 +346,7 @@ void rd_item_old(ObjectType *o_ptr)
     }
 
     if (o_ptr->is_ego()) {
-        const auto &e_ref = e_info[o_ptr->ego_idx];
+        const auto &e_ref = egos_info[o_ptr->ego_idx];
         if (e_ref.name.empty()) {
             o_ptr->ego_idx = EgoType::NONE;
         }

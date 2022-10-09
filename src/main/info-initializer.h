@@ -9,10 +9,10 @@
 class PlayerType;
 errr init_artifacts_info();
 errr init_dungeons_info();
+errr init_egos_info();
 errr init_misc(PlayerType *player_ptr);
 errr init_f_info();
 errr init_k_info();
-errr init_e_info();
 errr init_r_info();
 errr init_v_info();
 errr init_s_info();
