@@ -39,8 +39,9 @@ static bool grab_one_kind_flag(BaseItemInfo *k_ptr, std::string_view what)
  * @param head ヘッダ構造体
  * @return エラーコード
  */
-errr parse_k_info(std::string_view buf, angband_header *)
+errr parse_k_info(std::string_view buf, angband_header *head)
 {
+    (void)head;
     static BaseItemInfo *k_ptr = nullptr;
     const auto &tokens = str_split(buf, ':', false, 10);
 
