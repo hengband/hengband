@@ -36,11 +36,9 @@ public:
     TrFlags flags{}; /*!< ベースアイテムの基本特性ビット配列 / Flags */
     EnumClassFlagGroup<ItemGenerationTraitType> gen_flags; /*!< ベースアイテムの生成特性ビット配列 / flags for generate */
 
+    DEPTH level{}; /*!< ベースアイテムの基本生成階 / Level */
     DEPTH locale[4]{}; /*!< ベースアイテムの生成階テーブル / Allocation level(s) */
     PROB chance[4]{}; /*!< ベースアイテムの生成確率テーブル / Allocation chance(s) */
-
-    DEPTH level{}; /*!< ベースアイテムの基本生成階 / Level */
-    BIT_FLAGS8 extra{}; /*!< その他色々のビットフラグ配列 / Something */
 
     TERM_COLOR d_attr{}; /*!< デフォルトのアイテムシンボルカラー / Default object attribute */
     char d_char{}; /*!< デフォルトのアイテムシンボルアルファベット / Default object character */
