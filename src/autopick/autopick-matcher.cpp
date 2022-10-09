@@ -89,7 +89,7 @@ bool is_autopick_match(PlayerType *player_ptr, ObjectType *o_ptr, autopick_type 
         }
     }
 
-    if (IS_FLG(FLG_WORTHLESS) && object_value(o_ptr) > 0) {
+    if (IS_FLG(FLG_WORTHLESS) && (o_ptr->object_value() > 0)) {
         return false;
     }
 

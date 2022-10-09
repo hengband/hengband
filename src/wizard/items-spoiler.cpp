@@ -38,7 +38,7 @@ static void kind_info(PlayerType *player_ptr, char *buf, char *dam, char *wgt, c
     q_ptr->to_h = 0;
     q_ptr->to_d = 0;
     *lev = k_info[q_ptr->k_idx].level;
-    *val = object_value(q_ptr);
+    *val = q_ptr->object_value();
     if (!buf || !dam || !chance || !wgt) {
         return;
     }

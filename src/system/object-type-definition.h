@@ -117,4 +117,8 @@ public:
     bool can_pile(const ObjectType *j_ptr) const;
     TERM_COLOR get_color() const;
     char get_symbol() const;
+    int object_value() const;
+
+private:
+    int object_value_base() const;
 };
