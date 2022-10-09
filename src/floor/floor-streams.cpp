@@ -145,7 +145,7 @@ static void recursive_river(floor_type *floor_ptr, POSITION x1, POSITION y1, POS
                         g_ptr->mimic = 0;
 
                         /* Lava terrain glows */
-                        if (f_info[feat1].flags.has(FloorFeatureType::LAVA)) {
+                        if (terrains_info[feat1].flags.has(FloorFeatureType::LAVA)) {
                             if (dungeons_info[floor_ptr->dungeon_idx].flags.has_not(DungeonFeatureType::DARKNESS)) {
                                 g_ptr->info |= CAVE_GLOW;
                             }
@@ -214,7 +214,7 @@ void add_river(floor_type *floor_ptr, dun_data_type *dd_ptr)
     }
 
     if (feat1) {
-        auto *f_ptr = &f_info[feat1];
+        auto *f_ptr = &terrains_info[feat1];
 
         /* Only add river if matches lake type or if have no lake at all */
         if (!(((dd_ptr->laketype == LAKE_T_LAVA) && f_ptr->flags.has(FloorFeatureType::LAVA)) || ((dd_ptr->laketype == LAKE_T_WATER) && f_ptr->flags.has(FloorFeatureType::WATER)) || !dd_ptr->laketype)) {
@@ -287,9 +287,9 @@ void build_streamer(PlayerType *player_ptr, FEAT_IDX feat, int chance)
     int dummy = 0;
 
     grid_type *g_ptr;
-    feature_type *f_ptr;
+    terrain_type *f_ptr;
 
-    feature_type *streamer_ptr = &f_info[feat];
+    terrain_type *streamer_ptr = &terrains_info[feat];
     bool streamer_is_wall = streamer_ptr->flags.has(FloorFeatureType::WALL) && streamer_ptr->flags.has_not(FloorFeatureType::PERMANENT);
     bool streamer_may_have_gold = streamer_ptr->flags.has(FloorFeatureType::MAY_HAVE_GOLD);
 
@@ -319,7 +319,7 @@ void build_streamer(PlayerType *player_ptr, FEAT_IDX feat, int chance)
                 break;
             }
             g_ptr = &floor_ptr->grid_array[ty][tx];
-            f_ptr = &f_info[g_ptr->feat];
+            f_ptr = &terrains_info[g_ptr->feat];
 
             if (f_ptr->flags.has(FloorFeatureType::MOVE) && f_ptr->flags.has_any_of({ FloorFeatureType::WATER, FloorFeatureType::LAVA })) {
                 continue;

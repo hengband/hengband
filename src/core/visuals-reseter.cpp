@@ -13,7 +13,7 @@
  */
 void reset_visuals(PlayerType *player_ptr)
 {
-    for (auto &f_ref : f_info) {
+    for (auto &f_ref : terrains_info) {
         for (int j = 0; j < F_LIT_MAX; j++) {
             f_ref.x_attr[j] = f_ref.d_attr[j];
             f_ref.x_char[j] = f_ref.d_char[j];

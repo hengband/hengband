@@ -490,8 +490,8 @@ void wilderness_gen(PlayerType *player_ptr)
                 continue;
             }
 
-            feature_type *f_ptr;
-            f_ptr = &f_info[g_ptr->get_feat_mimic()];
+            terrain_type *f_ptr;
+            f_ptr = &terrains_info[g_ptr->get_feat_mimic()];
             auto can_darken = !g_ptr->is_mirror();
             can_darken &= f_ptr->flags.has_none_of({ FloorFeatureType::QUEST_ENTER, FloorFeatureType::ENTRANCE });
             if (can_darken) {
@@ -519,8 +519,8 @@ void wilderness_gen(PlayerType *player_ptr)
             for (x = 0; x < floor_ptr->width; x++) {
                 grid_type *g_ptr;
                 g_ptr = &floor_ptr->grid_array[y][x];
-                feature_type *f_ptr;
-                f_ptr = &f_info[g_ptr->feat];
+                terrain_type *f_ptr;
+                f_ptr = &terrains_info[g_ptr->feat];
                 if (f_ptr->flags.has_not(FloorFeatureType::BLDG)) {
                     continue;
                 }

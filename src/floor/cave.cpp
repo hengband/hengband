@@ -73,7 +73,7 @@ bool is_cave_empty_bold2(PlayerType *player_ptr, POSITION y, POSITION x)
 
 bool cave_has_flag_bold(floor_type *floor_ptr, POSITION y, POSITION x, FloorFeatureType f_idx)
 {
-    return f_info[floor_ptr->grid_array[y][x].feat].flags.has(f_idx);
+    return terrains_info[floor_ptr->grid_array[y][x].feat].flags.has(f_idx);
 }
 
 /*
@@ -117,7 +117,7 @@ bool cave_los_bold(floor_type *floor_ptr, POSITION y, POSITION x)
  */
 bool feat_supports_los(FEAT_IDX f_idx)
 {
-    return f_info[f_idx].flags.has(FloorFeatureType::LOS);
+    return terrains_info[f_idx].flags.has(FloorFeatureType::LOS);
 }
 
 /*

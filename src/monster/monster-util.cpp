@@ -217,7 +217,7 @@ monsterrace_hook_type get_monster_hook(PlayerType *player_ptr)
  */
 monsterrace_hook_type get_monster_hook2(PlayerType *player_ptr, POSITION y, POSITION x)
 {
-    auto *f_ptr = &f_info[player_ptr->current_floor_ptr->grid_array[y][x].feat];
+    auto *f_ptr = &terrains_info[player_ptr->current_floor_ptr->grid_array[y][x].feat];
     if (f_ptr->flags.has(FloorFeatureType::WATER)) {
         return f_ptr->flags.has(FloorFeatureType::DEEP) ? (monsterrace_hook_type)mon_hook_deep_water : (monsterrace_hook_type)mon_hook_shallow_water;
     }

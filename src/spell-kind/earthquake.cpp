@@ -369,7 +369,7 @@ bool earthquake(PlayerType *player_ptr, POSITION cy, POSITION cx, POSITION r, MO
                     continue;
                 }
                 cc_ptr = &floor_ptr->grid_array[yyy][xxx];
-                if (f_info[cc_ptr->get_feat_mimic()].flags.has(FloorFeatureType::GLOW)) {
+                if (terrains_info[cc_ptr->get_feat_mimic()].flags.has(FloorFeatureType::GLOW)) {
                     g_ptr->info |= CAVE_GLOW;
                     break;
                 }

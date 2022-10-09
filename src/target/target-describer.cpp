@@ -69,7 +69,7 @@ struct eg_type {
     monster_type *m_ptr;
     OBJECT_IDX next_o_idx;
     FEAT_IDX feat;
-    feature_type *f_ptr;
+    terrain_type *f_ptr;
     concptr name;
 };
 
@@ -573,7 +573,7 @@ char examine_grid(PlayerType *player_ptr, const POSITION y, const POSITION x, ta
         eg_ptr->feat = feat_none;
     }
 
-    eg_ptr->f_ptr = &f_info[eg_ptr->feat];
+    eg_ptr->f_ptr = &terrains_info[eg_ptr->feat];
     if (!eg_ptr->boring && eg_ptr->f_ptr->flags.has_not(FloorFeatureType::REMEMBER)) {
         return (eg_ptr->query != '\r') && (eg_ptr->query != '\n') ? eg_ptr->query : 0;
     }

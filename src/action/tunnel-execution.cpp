@@ -56,7 +56,7 @@ static bool do_cmd_tunnel_test(floor_type *floor_ptr, POSITION y, POSITION x)
 bool exe_tunnel(PlayerType *player_ptr, POSITION y, POSITION x)
 {
     grid_type *g_ptr;
-    feature_type *f_ptr, *mimic_f_ptr;
+    terrain_type *f_ptr, *mimic_f_ptr;
     int power;
     concptr name;
     bool more = false;
@@ -66,9 +66,9 @@ bool exe_tunnel(PlayerType *player_ptr, POSITION y, POSITION x)
 
     PlayerEnergy(player_ptr).set_player_turn_energy(100);
     g_ptr = &player_ptr->current_floor_ptr->grid_array[y][x];
-    f_ptr = &f_info[g_ptr->feat];
+    f_ptr = &terrains_info[g_ptr->feat];
     power = f_ptr->power;
-    mimic_f_ptr = &f_info[g_ptr->get_feat_mimic()];
+    mimic_f_ptr = &terrains_info[g_ptr->get_feat_mimic()];
     name = mimic_f_ptr->name.c_str();
     sound(SOUND_DIG);
     if (f_ptr->flags.has(FloorFeatureType::PERMANENT)) {

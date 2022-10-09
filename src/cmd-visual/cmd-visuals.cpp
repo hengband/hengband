@@ -196,7 +196,7 @@ void do_cmd_visuals(PlayerType *player_ptr)
             }
 
             auto_dump_printf(auto_dump_stream, _("\n# 地形の[色/文字]の設定\n\n", "\n# Feature attr/char definitions\n\n"));
-            for (const auto &f_ref : f_info) {
+            for (const auto &f_ref : terrains_info) {
                 if (f_ref.name.empty()) {
                     continue;
                 }
@@ -363,7 +363,7 @@ void do_cmd_visuals(PlayerType *player_ptr)
             static IDX lighting_level = F_LIT_STANDARD;
             prt(format(_("コマンド: %s", "Command: %s"), choice_msg), 15, 0);
             while (true) {
-                auto *f_ptr = &f_info[f];
+                auto *f_ptr = &terrains_info[f];
                 int c;
                 IDX t;
 
@@ -402,11 +402,11 @@ void do_cmd_visuals(PlayerType *player_ptr)
                 case 'n': {
                     IDX prev_f = f;
                     do {
-                        if (!cmd_visuals_aux(i, &f, static_cast<IDX>(f_info.size()))) {
+                        if (!cmd_visuals_aux(i, &f, static_cast<IDX>(terrains_info.size()))) {
                             f = prev_f;
                             break;
                         }
-                    } while (f_info[f].name.empty() || (f_info[f].mimic != f));
+                    } while (terrains_info[f].name.empty() || (terrains_info[f].mimic != f));
                 }
 
                 break;

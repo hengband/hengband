@@ -54,12 +54,12 @@
 /*!
  * Determine if a "boundary" grid is "floor mimic"
  * @param grid_type *g_ptr
- * @param feature_type *f_ptr
- * @param feature_type  *mimic_f_ptr
+ * @param terrain_type *f_ptr
+ * @param terrain_type  *mimic_f_ptr
  * @return 移動不能であればTRUE
  * @todo 負論理なので反転させたい
  */
-static bool boundary_floor(grid_type *g_ptr, feature_type *f_ptr, feature_type *mimic_f_ptr)
+static bool boundary_floor(grid_type *g_ptr, terrain_type *f_ptr, terrain_type *mimic_f_ptr)
 {
     bool is_boundary_floor = g_ptr->mimic > 0;
     is_boundary_floor &= permanent_wall(f_ptr);
@@ -160,7 +160,7 @@ void exe_movement(PlayerType *player_ptr, DIRECTION dir, bool do_pickup, bool br
         is_stormbringer = true;
     }
 
-    auto *f_ptr = &f_info[g_ptr->feat];
+    auto *f_ptr = &terrains_info[g_ptr->feat];
     bool p_can_kill_walls = has_kill_wall(player_ptr) && f_ptr->flags.has(FloorFeatureType::HURT_DISI) && (!p_can_enter || f_ptr->flags.has_not(FloorFeatureType::LOS)) && f_ptr->flags.has_not(FloorFeatureType::PERMANENT);
     GAME_TEXT m_name[MAX_NLEN];
     bool can_move = true;
@@ -225,17 +225,17 @@ void exe_movement(PlayerType *player_ptr, DIRECTION dir, bool do_pickup, bool br
         } else if (f_ptr->flags.has(FloorFeatureType::CAN_SWIM) && (riding_r_ptr->feature_flags.has(MonsterFeatureType::CAN_SWIM))) {
             /* Allow moving */
         } else if (f_ptr->flags.has(FloorFeatureType::WATER) && riding_r_ptr->feature_flags.has_not(MonsterFeatureType::AQUATIC) && (f_ptr->flags.has(FloorFeatureType::DEEP) || riding_r_ptr->aura_flags.has(MonsterAuraType::FIRE))) {
-            msg_format(_("%sの上に行けない。", "Can't swim."), f_info[g_ptr->get_feat_mimic()].name.c_str());
+            msg_format(_("%sの上に行けない。", "Can't swim."), terrains_info[g_ptr->get_feat_mimic()].name.c_str());
             energy.reset_player_turn();
             can_move = false;
             disturb(player_ptr, false, true);
         } else if (f_ptr->flags.has_not(FloorFeatureType::WATER) && riding_r_ptr->feature_flags.has(MonsterFeatureType::AQUATIC)) {
-            msg_format(_("%sから上がれない。", "Can't land."), f_info[floor_ptr->grid_array[player_ptr->y][player_ptr->x].get_feat_mimic()].name.c_str());
+            msg_format(_("%sから上がれない。", "Can't land."), terrains_info[floor_ptr->grid_array[player_ptr->y][player_ptr->x].get_feat_mimic()].name.c_str());
             energy.reset_player_turn();
             can_move = false;
             disturb(player_ptr, false, true);
         } else if (f_ptr->flags.has(FloorFeatureType::LAVA) && riding_r_ptr->resistance_flags.has_none_of(RFR_EFF_IM_FIRE_MASK)) {
-            msg_format(_("%sの上に行けない。", "Too hot to go through."), f_info[g_ptr->get_feat_mimic()].name.c_str());
+            msg_format(_("%sの上に行けない。", "Too hot to go through."), terrains_info[g_ptr->get_feat_mimic()].name.c_str());
             energy.reset_player_turn();
             can_move = false;
             disturb(player_ptr, false, true);
@@ -252,7 +252,7 @@ void exe_movement(PlayerType *player_ptr, DIRECTION dir, bool do_pickup, bool br
 
     if (!can_move) {
     } else if (f_ptr->flags.has_not(FloorFeatureType::MOVE) && f_ptr->flags.has(FloorFeatureType::CAN_FLY) && !player_ptr->levitation) {
-        msg_format(_("空を飛ばないと%sの上には行けない。", "You need to fly to go through the %s."), f_info[g_ptr->get_feat_mimic()].name.c_str());
+        msg_format(_("空を飛ばないと%sの上には行けない。", "You need to fly to go through the %s."), terrains_info[g_ptr->get_feat_mimic()].name.c_str());
         energy.reset_player_turn();
         player_ptr->running = 0;
         can_move = false;
@@ -268,7 +268,7 @@ void exe_movement(PlayerType *player_ptr, DIRECTION dir, bool do_pickup, bool br
         }
     } else if (!p_can_enter && !p_can_kill_walls) {
         FEAT_IDX feat = g_ptr->get_feat_mimic();
-        feature_type *mimic_f_ptr = &f_info[feat];
+        terrain_type *mimic_f_ptr = &terrains_info[feat];
         concptr name = mimic_f_ptr->name.c_str();
         can_move = false;
         if (!g_ptr->is_mark() && !player_can_see_bold(player_ptr, y, x)) {

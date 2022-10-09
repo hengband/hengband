@@ -43,7 +43,7 @@
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 
-static bool check_hp_for_feat_destruction(feature_type *f_ptr, monster_type *m_ptr)
+static bool check_hp_for_feat_destruction(terrain_type *f_ptr, monster_type *m_ptr)
 {
     return f_ptr->flags.has_not(FloorFeatureType::GLASS) || r_info[m_ptr->r_idx].behavior_flags.has(MonsterBehaviorType::STUPID) || (m_ptr->hp >= std::max(m_ptr->maxhp / 3, 200));
 }
@@ -62,8 +62,8 @@ static bool process_wall(PlayerType *player_ptr, turn_flags *turn_flags_ptr, mon
     auto *r_ptr = &r_info[m_ptr->r_idx];
     grid_type *g_ptr;
     g_ptr = &player_ptr->current_floor_ptr->grid_array[ny][nx];
-    feature_type *f_ptr;
-    f_ptr = &f_info[g_ptr->feat];
+    terrain_type *f_ptr;
+    f_ptr = &terrains_info[g_ptr->feat];
     if (player_bold(player_ptr, ny, nx)) {
         turn_flags_ptr->do_move = true;
         return true;
@@ -110,8 +110,8 @@ static bool bash_normal_door(PlayerType *player_ptr, turn_flags *turn_flags_ptr,
     auto *r_ptr = &r_info[m_ptr->r_idx];
     grid_type *g_ptr;
     g_ptr = &player_ptr->current_floor_ptr->grid_array[ny][nx];
-    feature_type *f_ptr;
-    f_ptr = &f_info[g_ptr->feat];
+    terrain_type *f_ptr;
+    f_ptr = &terrains_info[g_ptr->feat];
     turn_flags_ptr->do_move = false;
     if ((r_ptr->behavior_flags.has_not(MonsterBehaviorType::OPEN_DOOR)) || f_ptr->flags.has_not(FloorFeatureType::OPEN) || (m_ptr->is_pet() && ((player_ptr->pet_extra_flags & PF_OPEN_DOORS) == 0))) {
         return true;
@@ -140,7 +140,7 @@ static bool bash_normal_door(PlayerType *player_ptr, turn_flags *turn_flags_ptr,
  * @param g_ptr グリッドへの参照ポインタ
  * @param f_ptr 地形への参照ポインタ
  */
-static void bash_glass_door(PlayerType *player_ptr, turn_flags *turn_flags_ptr, monster_type *m_ptr, feature_type *f_ptr, bool may_bash)
+static void bash_glass_door(PlayerType *player_ptr, turn_flags *turn_flags_ptr, monster_type *m_ptr, terrain_type *f_ptr, bool may_bash)
 {
     auto *r_ptr = &r_info[m_ptr->r_idx];
     if (!may_bash || (r_ptr->behavior_flags.has_not(MonsterBehaviorType::BASH_DOOR)) || f_ptr->flags.has_not(FloorFeatureType::BASH) || (m_ptr->is_pet() && ((player_ptr->pet_extra_flags & PF_OPEN_DOORS) == 0))) {
@@ -184,8 +184,8 @@ static bool process_door(PlayerType *player_ptr, turn_flags *turn_flags_ptr, mon
         return true;
     }
 
-    feature_type *f_ptr;
-    f_ptr = &f_info[g_ptr->feat];
+    terrain_type *f_ptr;
+    f_ptr = &terrains_info[g_ptr->feat];
     bool may_bash = bash_normal_door(player_ptr, turn_flags_ptr, m_ptr, ny, nx);
     bash_glass_door(player_ptr, turn_flags_ptr, m_ptr, f_ptr, may_bash);
 
@@ -208,7 +208,7 @@ static bool process_door(PlayerType *player_ptr, turn_flags *turn_flags_ptr, mon
         cave_alter_feat(player_ptr, ny, nx, FloorFeatureType::OPEN);
     }
 
-    f_ptr = &f_info[g_ptr->feat];
+    f_ptr = &terrains_info[g_ptr->feat];
     turn_flags_ptr->do_view = true;
     return true;
 }
@@ -310,8 +310,8 @@ static bool process_post_dig_wall(PlayerType *player_ptr, turn_flags *turn_flags
     auto *r_ptr = &r_info[m_ptr->r_idx];
     grid_type *g_ptr;
     g_ptr = &player_ptr->current_floor_ptr->grid_array[ny][nx];
-    feature_type *f_ptr;
-    f_ptr = &f_info[g_ptr->feat];
+    terrain_type *f_ptr;
+    f_ptr = &terrains_info[g_ptr->feat];
     if (!turn_flags_ptr->did_kill_wall || !turn_flags_ptr->do_move) {
         return true;
     }
@@ -336,7 +336,7 @@ static bool process_post_dig_wall(PlayerType *player_ptr, turn_flags *turn_flags
         return false;
     }
 
-    f_ptr = &f_info[g_ptr->feat];
+    f_ptr = &terrains_info[g_ptr->feat];
     turn_flags_ptr->do_view = true;
     turn_flags_ptr->do_turn = true;
     return true;
@@ -429,8 +429,8 @@ bool process_monster_movement(PlayerType *player_ptr, turn_flags *turn_flags_ptr
         }
 
         turn_flags_ptr->do_turn = true;
-        feature_type *f_ptr;
-        f_ptr = &f_info[g_ptr->feat];
+        terrain_type *f_ptr;
+        f_ptr = &terrains_info[g_ptr->feat];
         if (f_ptr->flags.has(FloorFeatureType::TREE) && r_ptr->feature_flags.has_not(MonsterFeatureType::CAN_FLY) && (r_ptr->wilderness_flags.has_not(MonsterWildernessType::WILD_WOOD))) {
             m_ptr->energy_need += ENERGY_NEED();
         }

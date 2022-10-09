@@ -57,9 +57,9 @@ void do_cmd_tunnel(PlayerType *player_ptr)
     grid_type *g_ptr;
     g_ptr = &player_ptr->current_floor_ptr->grid_array[y][x];
     FEAT_IDX feat = g_ptr->get_feat_mimic();
-    if (f_info[feat].flags.has(FloorFeatureType::DOOR)) {
+    if (terrains_info[feat].flags.has(FloorFeatureType::DOOR)) {
         msg_print(_("ドアは掘れない。", "You cannot tunnel through doors."));
-    } else if (f_info[feat].flags.has_not(FloorFeatureType::TUNNEL)) {
+    } else if (terrains_info[feat].flags.has_not(FloorFeatureType::TUNNEL)) {
         msg_print(_("そこは掘れない。", "You can't tunnel through that."));
     } else if (g_ptr->m_idx) {
         PlayerEnergy(player_ptr).set_player_turn_energy(100);

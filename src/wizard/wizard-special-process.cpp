@@ -505,19 +505,19 @@ void wiz_create_feature(PlayerType *player_ptr)
     g_ptr = &player_ptr->current_floor_ptr->grid_array[y][x];
 
     f_val1 = g_ptr->feat;
-    if (!get_value(_("実地形ID", "FeatureID"), 0, f_info.size() - 1, &f_val1)) {
+    if (!get_value(_("実地形ID", "FeatureID"), 0, terrains_info.size() - 1, &f_val1)) {
         return;
     }
 
     f_val2 = f_val1;
-    if (!get_value(_("偽装地形ID", "FeatureID"), 0, f_info.size() - 1, &f_val2)) {
+    if (!get_value(_("偽装地形ID", "FeatureID"), 0, terrains_info.size() - 1, &f_val2)) {
         return;
     }
 
     cave_set_feat(player_ptr, y, x, static_cast<FEAT_IDX>(f_val1));
     g_ptr->mimic = (int16_t)f_val2;
-    feature_type *f_ptr;
-    f_ptr = &f_info[g_ptr->get_feat_mimic()];
+    terrain_type *f_ptr;
+    f_ptr = &terrains_info[g_ptr->get_feat_mimic()];
 
     if (f_ptr->flags.has(FloorFeatureType::RUNE_PROTECTION) || f_ptr->flags.has(FloorFeatureType::RUNE_EXPLOSION)) {
         g_ptr->info |= CAVE_OBJECT;

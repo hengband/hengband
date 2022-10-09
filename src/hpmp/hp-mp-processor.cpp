@@ -66,7 +66,7 @@
 static bool deal_damege_by_feat(PlayerType *player_ptr, grid_type *g_ptr, concptr msg_levitation, concptr msg_normal,
     std::function<PERCENTAGE(PlayerType *)> damage_rate, std::function<void(PlayerType *, int)> additional_effect)
 {
-    auto *f_ptr = &f_info[g_ptr->feat];
+    auto *f_ptr = &terrains_info[g_ptr->feat];
     int damage = 0;
 
     if (f_ptr->flags.has(FloorFeatureType::DEEP)) {
@@ -90,13 +90,13 @@ static bool deal_damege_by_feat(PlayerType *player_ptr, grid_type *g_ptr, concpt
     if (player_ptr->levitation) {
         msg_print(msg_levitation);
 
-        take_hit(player_ptr, DAMAGE_NOESCAPE, damage, format(_("%sの上に浮遊したダメージ", "flying over %s"), f_info[g_ptr->get_feat_mimic()].name.c_str()));
+        take_hit(player_ptr, DAMAGE_NOESCAPE, damage, format(_("%sの上に浮遊したダメージ", "flying over %s"), terrains_info[g_ptr->get_feat_mimic()].name.c_str()));
 
         if (additional_effect != nullptr) {
             additional_effect(player_ptr, damage);
         }
     } else {
-        concptr name = f_info[player_ptr->current_floor_ptr->grid_array[player_ptr->y][player_ptr->x].get_feat_mimic()].name.c_str();
+        concptr name = terrains_info[player_ptr->current_floor_ptr->grid_array[player_ptr->y][player_ptr->x].get_feat_mimic()].name.c_str();
         msg_format(_("%s%s！", "The %s %s!"), name, msg_normal);
         take_hit(player_ptr, DAMAGE_NOESCAPE, damage, name);
 
@@ -115,7 +115,7 @@ static bool deal_damege_by_feat(PlayerType *player_ptr, grid_type *g_ptr, concpt
 void process_player_hp_mp(PlayerType *player_ptr)
 {
     auto *g_ptr = &player_ptr->current_floor_ptr->grid_array[player_ptr->y][player_ptr->x];
-    auto *f_ptr = &f_info[g_ptr->feat];
+    auto *f_ptr = &terrains_info[g_ptr->feat];
     bool cave_no_regen = false;
     int upkeep_factor = 0;
     int regen_amount = PY_REGEN_NORMAL;

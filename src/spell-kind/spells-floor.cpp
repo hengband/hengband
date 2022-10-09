@@ -84,8 +84,8 @@ void wiz_lite(PlayerType *player_ptr, bool ninja)
 
             /* Feature code (applying "mimic" field) */
             FEAT_IDX feat = g_ptr->get_feat_mimic();
-            feature_type *f_ptr;
-            f_ptr = &f_info[feat];
+            terrain_type *f_ptr;
+            f_ptr = &terrains_info[feat];
 
             /* Scan all neighbors */
             for (OBJECT_IDX i = 0; i < 9; i++) {
@@ -94,7 +94,7 @@ void wiz_lite(PlayerType *player_ptr, bool ninja)
                 g_ptr = &player_ptr->current_floor_ptr->grid_array[yy][xx];
 
                 /* Feature code (applying "mimic" field) */
-                f_ptr = &f_info[g_ptr->get_feat_mimic()];
+                f_ptr = &terrains_info[g_ptr->get_feat_mimic()];
 
                 /* Perma-lite the grid */
                 if (dungeons_info[player_ptr->dungeon_idx].flags.has_not(DungeonFeatureType::DARKNESS) && !ninja) {
@@ -205,8 +205,8 @@ void map_area(PlayerType *player_ptr, POSITION range)
 
             /* Feature code (applying "mimic" field) */
             FEAT_IDX feat = g_ptr->get_feat_mimic();
-            feature_type *f_ptr;
-            f_ptr = &f_info[feat];
+            terrain_type *f_ptr;
+            f_ptr = &terrains_info[feat];
 
             /* Memorize normal features */
             if (f_ptr->flags.has(FloorFeatureType::REMEMBER)) {
@@ -220,7 +220,7 @@ void map_area(PlayerType *player_ptr, POSITION range)
 
                 /* Feature code (applying "mimic" field) */
                 feat = g_ptr->get_feat_mimic();
-                f_ptr = &f_info[feat];
+                f_ptr = &terrains_info[feat];
 
                 /* Memorize walls (etc) */
                 if (f_ptr->flags.has(FloorFeatureType::REMEMBER)) {
@@ -448,7 +448,7 @@ bool destroy_area(PlayerType *player_ptr, POSITION y1, POSITION x1, POSITION r, 
                     continue;
                 }
                 cc_ptr = &floor_ptr->grid_array[yy][xx];
-                if (f_info[cc_ptr->get_feat_mimic()].flags.has(FloorFeatureType::GLOW)) {
+                if (terrains_info[cc_ptr->get_feat_mimic()].flags.has(FloorFeatureType::GLOW)) {
                     g_ptr->info |= CAVE_GLOW;
                     break;
                 }

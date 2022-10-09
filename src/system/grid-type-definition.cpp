@@ -72,7 +72,7 @@ bool grid_type::is_mark() const
 
 bool grid_type::is_mirror() const
 {
-    return this->is_object() && f_info[this->mimic].flags.has(FloorFeatureType::MIRROR);
+    return this->is_object() && terrains_info[this->mimic].flags.has(FloorFeatureType::MIRROR);
 }
 
 /*
@@ -80,7 +80,7 @@ bool grid_type::is_mirror() const
  */
 bool grid_type::is_rune_protection() const
 {
-    return this->is_object() && f_info[this->mimic].flags.has(FloorFeatureType::RUNE_PROTECTION);
+    return this->is_object() && terrains_info[this->mimic].flags.has(FloorFeatureType::RUNE_PROTECTION);
 }
 
 /*
@@ -88,7 +88,7 @@ bool grid_type::is_rune_protection() const
  */
 bool grid_type::is_rune_explosion() const
 {
-    return this->is_object() && f_info[this->mimic].flags.has(FloorFeatureType::RUNE_EXPLOSION);
+    return this->is_object() && terrains_info[this->mimic].flags.has(FloorFeatureType::RUNE_EXPLOSION);
 }
 
 byte grid_type::get_cost(monster_race *r_ptr) const
@@ -107,18 +107,18 @@ flow_type grid_type::get_grid_flow_type(monster_race *r_ptr) const
 }
 
 /*
- * @brief Get feature mimic from f_info[] (applying "mimic" field)
+ * @brief グリッドのミミック特性地形を返す
  * @param g_ptr グリッドへの参照ポインタ
  * @return 地形情報
  */
 FEAT_IDX grid_type::get_feat_mimic() const
 {
-    return f_info[this->mimic ? this->mimic : this->feat].mimic;
+    return terrains_info[this->mimic ? this->mimic : this->feat].mimic;
 }
 
 bool grid_type::cave_has_flag(FloorFeatureType feature_flags) const
 {
-    return f_info[this->feat].flags.has(feature_flags);
+    return terrains_info[this->feat].flags.has(feature_flags);
 }
 
 /*!
@@ -128,5 +128,5 @@ bool grid_type::cave_has_flag(FloorFeatureType feature_flags) const
  */
 bool grid_type::is_symbol(const int ch) const
 {
-    return f_info[this->feat].x_char[0] == ch;
+    return terrains_info[this->feat].x_char[0] == ch;
 }

@@ -78,7 +78,7 @@ void night_falls(PlayerType *player_ptr)
         for (POSITION y = 0; y < floor_ptr->height; y++) {
             for (POSITION x = 0; x < floor_ptr->width; x++) {
                 auto *g_ptr = &floor_ptr->grid_array[y][x];
-                auto *f_ptr = &f_info[g_ptr->get_feat_mimic()];
+                auto *f_ptr = &terrains_info[g_ptr->get_feat_mimic()];
                 if (g_ptr->is_mirror() || f_ptr->flags.has(FloorFeatureType::QUEST_ENTER) || f_ptr->flags.has(FloorFeatureType::ENTRANCE)) {
                     continue;
                 }
@@ -322,7 +322,7 @@ void glow_deep_lava_and_bldg(PlayerType *player_ptr)
         for (POSITION x = 0; x < floor_ptr->width; x++) {
             grid_type *g_ptr;
             g_ptr = &floor_ptr->grid_array[y][x];
-            if (f_info[g_ptr->get_feat_mimic()].flags.has_not(FloorFeatureType::GLOW)) {
+            if (terrains_info[g_ptr->get_feat_mimic()].flags.has_not(FloorFeatureType::GLOW)) {
                 continue;
             }
 

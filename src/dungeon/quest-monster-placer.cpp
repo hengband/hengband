@@ -55,11 +55,11 @@ bool place_quest_monsters(PlayerType *player_ptr)
                 int l;
                 for (l = SAFE_MAX_ATTEMPTS; l > 0; l--) {
                     grid_type *g_ptr;
-                    feature_type *f_ptr;
+                    terrain_type *f_ptr;
                     y = randint0(floor_ptr->height);
                     x = randint0(floor_ptr->width);
                     g_ptr = &floor_ptr->grid_array[y][x];
-                    f_ptr = &f_info[g_ptr->feat];
+                    f_ptr = &terrains_info[g_ptr->feat];
                     if (f_ptr->flags.has_none_of({ FloorFeatureType::MOVE, FloorFeatureType::CAN_FLY })) {
                         continue;
                     }

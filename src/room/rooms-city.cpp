@@ -145,11 +145,11 @@ static void build_stores(PlayerType *player_ptr, POSITION ltcy, POSITION ltcx, S
             break;
         }
 
-        if (auto it = std::find_if(f_info.begin(), f_info.end(),
-                [subtype = stores[i]](const feature_type &f_ref) {
+        if (auto it = std::find_if(terrains_info.begin(), terrains_info.end(),
+                [subtype = stores[i]](const terrain_type &f_ref) {
                     return f_ref.flags.has(FloorFeatureType::STORE) && (i2enum<StoreSaleType>(static_cast<int>(f_ref.subtype)) == subtype);
                 });
-            it != f_info.end()) {
+            it != terrains_info.end()) {
             cave_set_feat(player_ptr, ltcy + y, ltcx + x, (*it).idx);
             store_init(NO_TOWN, stores[i]);
         }

@@ -107,7 +107,7 @@ static bool target_set_accept(PlayerType *player_ptr, POSITION y, POSITION x)
             return true;
         }
 
-        if (f_info[g_ptr->get_feat_mimic()].flags.has(FloorFeatureType::NOTICE)) {
+        if (terrains_info[g_ptr->get_feat_mimic()].flags.has(FloorFeatureType::NOTICE)) {
             return true;
         }
     }

@@ -72,8 +72,8 @@ static bool exe_alter(PlayerType *player_ptr)
     grid_type *g_ptr;
     g_ptr = &player_ptr->current_floor_ptr->grid_array[y][x];
     FEAT_IDX feat = g_ptr->get_feat_mimic();
-    feature_type *f_ptr;
-    f_ptr = &f_info[feat];
+    terrain_type *f_ptr;
+    f_ptr = &terrains_info[feat];
     PlayerEnergy(player_ptr).set_player_turn_energy(100);
     if (g_ptr->m_idx) {
         do_cmd_attack(player_ptr, y, x, HISSATSU_NONE);

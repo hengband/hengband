@@ -80,7 +80,7 @@ static bool alloc_stairs_aux(PlayerType *player_ptr, POSITION y, POSITION x, int
 bool alloc_stairs(PlayerType *player_ptr, FEAT_IDX feat, int num, int walls)
 {
     int shaft_num = 0;
-    auto *f_ptr = &f_info[feat];
+    auto *f_ptr = &terrains_info[feat];
     auto *floor_ptr = player_ptr->current_floor_ptr;
     if (f_ptr->flags.has(FloorFeatureType::LESS)) {
         if (ironman_downward || !floor_ptr->dun_level) {

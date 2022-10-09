@@ -396,7 +396,7 @@ typedef bool (*IsWallFunc)(const floor_type *, int, int);
 static bool is_permanent_blocker(const floor_type *const floor_ptr, const int y, const int x)
 {
     const FEAT_IDX feat = floor_ptr->grid_array[y][x].feat;
-    const auto &flags = f_info[feat].flags;
+    const auto &flags = terrains_info[feat].flags;
     return flags.has(FloorFeatureType::PERMANENT) && flags.has_not(FloorFeatureType::MOVE);
 }
 

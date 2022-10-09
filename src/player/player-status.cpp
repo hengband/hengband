@@ -2782,7 +2782,7 @@ bool player_place(PlayerType *player_ptr, POSITION y, POSITION x)
 void wreck_the_pattern(PlayerType *player_ptr)
 {
     auto *floor_ptr = player_ptr->current_floor_ptr;
-    int pattern_type = f_info[floor_ptr->grid_array[player_ptr->y][player_ptr->x].feat].subtype;
+    int pattern_type = terrains_info[floor_ptr->grid_array[player_ptr->y][player_ptr->x].feat].subtype;
     if (pattern_type == PATTERN_TILE_WRECKED) {
         return;
     }
@@ -2799,7 +2799,7 @@ void wreck_the_pattern(PlayerType *player_ptr)
         POSITION r_y, r_x;
         scatter(player_ptr, &r_y, &r_x, player_ptr->y, player_ptr->x, 4, PROJECT_NONE);
 
-        if (pattern_tile(floor_ptr, r_y, r_x) && (f_info[floor_ptr->grid_array[r_y][r_x].feat].subtype != PATTERN_TILE_WRECKED)) {
+        if (pattern_tile(floor_ptr, r_y, r_x) && (terrains_info[floor_ptr->grid_array[r_y][r_x].feat].subtype != PATTERN_TILE_WRECKED)) {
             cave_set_feat(player_ptr, r_y, r_x, feat_pattern_corrupted);
         }
     }

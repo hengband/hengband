@@ -1,6 +1,6 @@
 ﻿#pragma once
 
-/*** Terrain Feature Indexes (see "lib/edit/f_info.txt") ***/
+/*** Terrain Feature Index (see "lib/edit/GridFeatureDefinitions.txt") ***/
 enum old_feature_type {
     OLD_FEAT_INVIS = 0x02,
     OLD_FEAT_RUNE_PROTECTION = 0x03,

@@ -270,7 +270,7 @@ void init_angband(PlayerType *player_ptr, bool no_term)
     }
 
     init_note(_("[データの初期化中... (地形)]", "[Initializing arrays... (features)]"));
-    if (init_f_info()) {
+    if (init_terrains_info()) {
         quit(_("地形初期化不能", "Cannot initialize features"));
     }
 

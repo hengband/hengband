@@ -310,7 +310,7 @@ bool hayagake(PlayerType *player_ptr)
     }
 
     auto *g_ptr = &player_ptr->current_floor_ptr->grid_array[player_ptr->y][player_ptr->x];
-    auto *f_ptr = &f_info[g_ptr->feat];
+    auto *f_ptr = &terrains_info[g_ptr->feat];
 
     if (f_ptr->flags.has_not(FloorFeatureType::PROJECT) || (!player_ptr->levitation && f_ptr->flags.has(FloorFeatureType::DEEP))) {
         msg_print(_("ここでは素早く動けない。", "You cannot run in here."));

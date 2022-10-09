@@ -266,7 +266,7 @@ bool do_cmd_riding(PlayerType *player_ptr, bool force)
 
         if (!can_player_ride_pet(player_ptr, g_ptr, true)) {
             /* Feature code (applying "mimic" field) */
-            auto *f_ptr = &f_info[g_ptr->get_feat_mimic()];
+            auto *f_ptr = &terrains_info[g_ptr->get_feat_mimic()];
 #ifdef JP
             msg_format("そのモンスターは%sの%sにいる。", f_ptr->name.c_str(),
                 (f_ptr->flags.has_none_of({ FloorFeatureType::MOVE, FloorFeatureType::CAN_FLY }) || f_ptr->flags.has_none_of({ FloorFeatureType::LOS, FloorFeatureType::TREE })) ? "中" : "上");

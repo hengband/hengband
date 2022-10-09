@@ -57,7 +57,7 @@ void set_friendly(monster_type *m_ptr)
  */
 bool monster_can_cross_terrain(PlayerType *player_ptr, FEAT_IDX feat, monster_race *r_ptr, BIT_FLAGS16 mode)
 {
-    auto *f_ptr = &f_info[feat];
+    auto *f_ptr = &terrains_info[feat];
 
     if (f_ptr->flags.has(FloorFeatureType::PATTERN)) {
         if (!(mode & CEM_RIDING)) {

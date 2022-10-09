@@ -125,7 +125,7 @@ static void cave_temp_room_unlite(PlayerType *player_ptr, const std::vector<Pos2
                 if (in_bounds2(player_ptr->current_floor_ptr, by, bx)) {
                     grid_type *cc_ptr = &player_ptr->current_floor_ptr->grid_array[by][bx];
 
-                    if (f_info[cc_ptr->get_feat_mimic()].flags.has(FloorFeatureType::GLOW)) {
+                    if (terrains_info[cc_ptr->get_feat_mimic()].flags.has(FloorFeatureType::GLOW)) {
                         do_dark = false;
                         break;
                     }
@@ -138,7 +138,7 @@ static void cave_temp_room_unlite(PlayerType *player_ptr, const std::vector<Pos2
         }
 
         g_ptr->info &= ~(CAVE_GLOW);
-        if (f_info[g_ptr->get_feat_mimic()].flags.has_not(FloorFeatureType::REMEMBER)) {
+        if (terrains_info[g_ptr->get_feat_mimic()].flags.has_not(FloorFeatureType::REMEMBER)) {
             if (!view_torch_grids) {
                 g_ptr->info &= ~(CAVE_MARK);
             }

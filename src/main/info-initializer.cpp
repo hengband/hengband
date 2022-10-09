@@ -174,14 +174,15 @@ errr init_egos_info()
 }
 
 /*!
- * @brief 地形情報読み込みのメインルーチン /
- * Initialize the "f_info" array
+ * @brief 地形情報読み込みのメインルーチン
  * @return エラーコード
  */
-errr init_f_info()
+errr init_terrains_info()
 {
-    init_header(&f_head);
-    return init_info("f_info.txt", f_head, f_info, parse_f_info, retouch_f_info);
+    init_header(&terrains_header);
+    auto *parser = parse_terrains_info;
+    auto *retoucher = retouch_terrains_info;
+    return init_info("TerrainDefinitions.txt", terrains_header, terrains_info, parser, retoucher);
 }
 
 /*!

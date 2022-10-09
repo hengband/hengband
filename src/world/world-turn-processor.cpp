@@ -281,7 +281,7 @@ void WorldTurnProcessor::shuffle_shopkeeper()
         }
     } while (true);
 
-    for (const auto &f_ref : f_info) {
+    for (const auto &f_ref : terrains_info) {
         if (f_ref.name.empty() || f_ref.flags.has_not(FloorFeatureType::STORE)) {
             continue;
         }

@@ -2,7 +2,7 @@
 
 angband_files = \
 	ArtifactDefinitions.txt DungeonDefinitions.txt EgoDefinitions.txt \
-	f_info.txt \
+	GridFeatureDefinitions.txt \
 	k_info.txt misc.txt \
 	q0000001.txt q0000002.txt q0000003.txt q0000004.txt \
 	q0000005.txt q0000006.txt q0000007.txt q0000019.txt \

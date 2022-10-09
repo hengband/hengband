@@ -212,11 +212,11 @@ bool ang_sort_comp_importance(PlayerType *player_ptr, vptr u, vptr v, int a, int
     }
 
     /* Priority from the terrain */
-    if (f_info[ca_ptr->feat].priority > f_info[cb_ptr->feat].priority) {
+    if (terrains_info[ca_ptr->feat].priority > terrains_info[cb_ptr->feat].priority) {
         return true;
     }
 
-    if (f_info[ca_ptr->feat].priority < f_info[cb_ptr->feat].priority) {
+    if (terrains_info[ca_ptr->feat].priority < terrains_info[cb_ptr->feat].priority) {
         return false;
     }
 
