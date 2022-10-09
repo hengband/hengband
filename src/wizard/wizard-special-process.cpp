@@ -774,18 +774,8 @@ void wiz_dump_options(void)
 void set_gametime(void)
 {
     int tmp_int = 0;
-    char ppp[80], tmp_val[40];
-    sprintf(ppp, "Dungeon Turn (0-%ld): ", (long)w_ptr->dungeon_turn_limit);
-    sprintf(tmp_val, "%ld", (long)w_ptr->dungeon_turn);
-    if (!get_string(ppp, tmp_val, 10)) {
+    if (!get_value("Dungeon Turn", 0, w_ptr->dungeon_turn_limit - 1, &tmp_int)) {
         return;
-    }
-
-    tmp_int = atoi(tmp_val);
-    if (tmp_int >= w_ptr->dungeon_turn_limit) {
-        tmp_int = w_ptr->dungeon_turn_limit - 1;
-    } else if (tmp_int < 0) {
-        tmp_int = 0;
     }
 
     w_ptr->dungeon_turn = w_ptr->game_turn = tmp_int;
