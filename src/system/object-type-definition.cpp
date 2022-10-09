@@ -157,20 +157,13 @@ bool ObjectType::is_melee_ammo() const
     case ItemKindType::DIGGING:
     case ItemKindType::BOLT:
     case ItemKindType::ARROW:
-    case ItemKindType::SHOT: {
+    case ItemKindType::SHOT:
         return true;
-    }
-    case ItemKindType::SWORD: {
-        if (this->sval != SV_POISON_NEEDLE) {
-            return true;
-        }
-    }
-
+    case ItemKindType::SWORD:
+        return this->sval != SV_POISON_NEEDLE;
     default:
-        break;
+        return false;
     }
-
-    return false;
 }
 
 /*!
@@ -200,20 +193,13 @@ bool ObjectType::is_orthodox_melee_weapons() const
     switch (this->tval) {
     case ItemKindType::HAFTED:
     case ItemKindType::POLEARM:
-    case ItemKindType::DIGGING: {
+    case ItemKindType::DIGGING:
         return true;
-    }
-    case ItemKindType::SWORD: {
-        if (this->sval != SV_POISON_NEEDLE) {
-            return true;
-        }
-    }
-
+    case ItemKindType::SWORD:
+        return this->sval != SV_POISON_NEEDLE;
     default:
-        break;
+        return false;
     }
-
-    return false;
 }
 
 /*!
@@ -241,7 +227,15 @@ bool ObjectType::is_broken_weapon() const
  */
 bool ObjectType::is_throwable() const
 {
-    return (this->tval == ItemKindType::DIGGING) || (this->tval == ItemKindType::SWORD) || (this->tval == ItemKindType::POLEARM) || (this->tval == ItemKindType::HAFTED);
+    switch (this->tval) {
+    case ItemKindType::DIGGING:
+    case ItemKindType::HAFTED:
+    case ItemKindType::POLEARM:
+    case ItemKindType::SWORD:
+        return true;
+    default:
+        return false;
+    }
 }
 
 /*!
@@ -250,7 +244,18 @@ bool ObjectType::is_throwable() const
  */
 bool ObjectType::is_wieldable_in_etheir_hand() const
 {
-    return ((ItemKindType::DIGGING <= this->tval) && (this->tval <= ItemKindType::SWORD)) || (this->tval == ItemKindType::SHIELD) || (this->tval == ItemKindType::CAPTURE) || (this->tval == ItemKindType::CARD);
+    switch (this->tval) {
+    case ItemKindType::DIGGING:
+    case ItemKindType::HAFTED:
+    case ItemKindType::POLEARM:
+    case ItemKindType::SWORD:
+    case ItemKindType::SHIELD:
+    case ItemKindType::CAPTURE:
+    case ItemKindType::CARD:
+        return true;
+    default:
+        return false;
+    }
 }
 
 /*!
@@ -519,7 +524,14 @@ bool ObjectType::can_refill_torch() const
  */
 bool ObjectType::is_rechargeable() const
 {
-    return (this->tval == ItemKindType::STAFF) || (this->tval == ItemKindType::WAND) || (this->tval == ItemKindType::ROD);
+    switch (this->tval) {
+    case ItemKindType::STAFF:
+    case ItemKindType::WAND:
+    case ItemKindType::ROD:
+        return true;
+    default:
+        return false;
+    }
 }
 
 /*!
@@ -650,25 +662,36 @@ bool ObjectType::can_pile(const ObjectType *j_ptr) const
 }
 
 /*
- * Return the "attr" for a given item.
- * Use "flavor" if available.
- * Default to user definitions.
+ * @brief アイテムの色を取得する
+ * @details 未鑑定名のあるアイテム (薬等)は、未鑑定名の割り当てられた色を返す
+ * 未鑑定名のないアイテム (魔法書等)はベースアイテム定義そのままを返す
+ * その中でモンスターの死体以外は、ベースアイテムの色を返す
+ * モンスターの死体は、元モンスターの色を返す
+ * 異常アイテム (「何か」)の場合、ベースアイテム定義に基づき黒を返す
  */
 TERM_COLOR ObjectType::get_color() const
 {
     const auto &base_item = k_info[this->k_idx];
     const auto flavor = base_item.flavor;
-    return ((flavor != 0)
-                ? (k_info[flavor].x_attr)
-                : ((!this->k_idx || (this->tval != ItemKindType::CORPSE) || (this->sval != SV_CORPSE) || (base_item.x_attr != TERM_DARK))
-                          ? (base_item.x_attr)
-                          : (r_info[i2enum<MonsterRaceId>(this->pval)].x_attr)));
+    if (flavor != 0) {
+        return k_info[flavor].x_attr;
+    }
+
+    auto has_attr = this->k_idx == 0;
+    has_attr |= (this->tval != ItemKindType::CORPSE) || (this->sval != SV_CORPSE);
+    has_attr |= base_item.x_attr != TERM_DARK;
+    if (has_attr) {
+        return base_item.x_attr;
+    }
+
+    return r_info[i2enum<MonsterRaceId>(this->pval)].x_attr;
 }
 
 /*
- * Return the "char" for a given item.
- * Use "flavor" if available.
- * Default to user definitions.
+ * @brief アイテムシンボルを取得する
+ * @details 未鑑定名のないアイテム (魔法書等)はベースアイテム定義そのまま
+ * 未鑑定名のあるアイテム (薬等)は、未鑑定名の割り当てられたシンボル
+ * @todo 色と違って変える必要はない……はず？
  */
 char ObjectType::get_symbol() const
 {
@@ -747,15 +770,15 @@ int ObjectType::calc_figurine_value() const
     if (level < 20) {
         return level * 50L;
     }
-    
+
     if (level < 30) {
         return 1000 + (level - 20) * 150;
     }
-    
+
     if (level < 40) {
         return 2500 + (level - 30) * 350;
     }
-    
+
     if (level < 50) {
         return 6000 + (level - 40) * 800;
     }
