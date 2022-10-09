@@ -178,7 +178,7 @@ void wizard_item_modifier(PlayerType *player_ptr)
 void wiz_restore_aware_flag_of_fixed_arfifact(FixedArtifactId reset_artifact_idx, bool aware)
 {
     auto max_a_idx = enum2i(a_info.rbegin()->first);
-    auto int_a_idx = static_cast<int>(enum2i(reset_artifact_idx));
+    int int_a_idx = enum2i(reset_artifact_idx);
     if (int_a_idx <= 0) {
         if (!get_value("Artifact ID", 1, max_a_idx, &int_a_idx)) {
             return;
