@@ -687,7 +687,7 @@ void wiz_reset_class(PlayerType *player_ptr)
 
     player_ptr->pclass = i2enum<PlayerClassType>(val);
     cp_ptr = &class_info[val];
-    mp_ptr = &m_info[val];
+    mp_ptr = &class_magics_info[val];
     PlayerClass(player_ptr).init_specific_data();
     player_ptr->window_flags |= PW_PLAYER;
     player_ptr->update |= PU_BONUS | PU_HP | PU_MANA | PU_SPELLS;

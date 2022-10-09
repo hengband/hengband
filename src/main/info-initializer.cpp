@@ -164,6 +164,17 @@ errr init_baseitems_info()
 }
 
 /*!
+ * @brief 職業魔法情報読み込みのメインルーチン
+ * @return エラーコード
+ */
+errr init_class_magics_info()
+{
+    init_header(&class_magics_header, PLAYER_CLASS_TYPE_MAX);
+    auto *parser = parse_class_magics_info;
+    return init_info("ClassMagicDefinitions.txt", class_magics_header, class_magics_info, parser);
+}
+
+/*!
  * @brief ダンジョン情報読み込みのメインルーチン
  * @return エラーコード
  */
@@ -229,15 +240,4 @@ errr init_s_info()
 {
     init_header(&s_head, PLAYER_CLASS_TYPE_MAX);
     return init_info("s_info.txt", s_head, s_info, parse_s_info);
-}
-
-/*!
- * @brief 職業魔法情報読み込みのメインルーチン /
- * Initialize the "m_info" array
- * @return エラーコード
- */
-errr init_m_info()
-{
-    init_header(&m_head, PLAYER_CLASS_TYPE_MAX);
-    return init_info("m_info.txt", m_head, m_info, parse_m_info);
 }

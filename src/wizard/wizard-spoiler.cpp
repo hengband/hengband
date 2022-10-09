@@ -200,7 +200,7 @@ static SpoilerOutputResultType spoil_player_spell(concptr fname)
         sprintf(buf, "[[Class: %s]]\n", class_ptr->title);
         spoil_out(buf);
 
-        auto magic_ptr = &m_info[c];
+        auto magic_ptr = &class_magics_info[c];
         concptr book_name = "なし";
         if (magic_ptr->spell_book != ItemKindType::NONE) {
             ObjectType book;

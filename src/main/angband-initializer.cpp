@@ -310,7 +310,7 @@ void init_angband(PlayerType *player_ptr, bool no_term)
     }
 
     init_note(_("[データの初期化中... (魔法)]", "[Initializing arrays... (magic)]"));
-    if (init_m_info()) {
+    if (init_class_magics_info()) {
         quit(_("魔法初期化不能", "Cannot initialize magic"));
     }
 

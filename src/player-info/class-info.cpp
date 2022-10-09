@@ -14,7 +14,7 @@
  * The magic info
  */
 const player_magic *mp_ptr;
-std::vector<player_magic> m_info;
+std::vector<player_magic> class_magics_info;
 
 const player_class_info *cp_ptr;
 
