@@ -12,4 +12,4 @@ angband_header dungeons_header; /*!< ダンジョン情報のヘッダ構造体 
 angband_header egos_header; /*!< アイテムエゴ情報のヘッダ構造体 */
 angband_header monraces_header; /*!< モンスター種族情報のヘッダ構造体 */
 angband_header terrains_header; /*!< 地形情報のヘッダ構造体 */
-angband_header v_head; /*!< Vault情報のヘッダ構造体 */
+angband_header vaults_header; /*!< Vault情報のヘッダ構造体 */

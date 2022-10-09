@@ -4,7 +4,7 @@ angband_files = \
 	ArtifactDefinitions.txt BaseItemDefinitions.txt ClassMagicDefinitions.txt \
 	ClassSkillDefinitions.txt DungeonDefinitions.txt EgoDefinitions.txt \
 	GridFeatureDefinitions.txt MonsterRaceDefinitions.txt QuestDefinitionList.txt \
-	TownDefinitionList.txt WildernessDefinition.txt \
+	TownDefinitionList.txt VaultDefinitions.txt WildernessDefinition.txt \
 	misc.txt \
 	q0000001.txt q0000002.txt q0000003.txt q0000004.txt \
 	q0000005.txt q0000006.txt q0000007.txt q0000019.txt \
@@ -17,8 +17,7 @@ angband_files = \
 	q_pref.txt q_random.txt q_serpen.txt q_warg.txt \
 	qdarkelf.txt qhaunted.txt \
 	t0000001.txt t0000002.txt t0000003.txt t0000004.txt t0000005.txt \
-	t0000006.txt t_basic.txt t_lite.txt \
-	t_pref.txt v_info.txt \
+	t0000006.txt t_basic.txt t_lite.txt t_pref.txt
 
 EXTRA_DIST = \
   $(angband_files)

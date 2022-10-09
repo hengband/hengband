@@ -332,7 +332,7 @@ void init_angband(PlayerType *player_ptr, bool no_term)
 
     init_note(_("[配列を初期化しています... (クエスト)]", "[Initializing arrays... (quests)]"));
     QuestList::get_instance().initialize();
-    if (init_v_info()) {
+    if (init_vaults_info()) {
         quit(_("vault 初期化不能", "Cannot initialize vaults"));
     }
 

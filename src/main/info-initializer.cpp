@@ -65,17 +65,6 @@ constexpr bool is_vector_v = is_vector<T>::value;
 }
 
 /*!
- * @brief 基本情報読み込みのメインルーチン /
- * Initialize misc. values
- * @param player_ptr プレイヤーへの参照ポインタ
- * @return エラーコード
- */
-errr init_misc(PlayerType *player_ptr)
-{
-    return parse_fixed_map(player_ptr, "misc.txt", 0, 0, 0, 0);
-}
-
-/*!
  * @brief ヘッダ構造体の更新
  * Initialize the header of an *_info.raw file.
  * @param head rawファイルのヘッダ
@@ -226,15 +215,24 @@ errr init_monster_race_definitions()
 }
 
 /*!
- * @brief Vault情報読み込みのメインルーチン /
- * Initialize the "v_info" array
+ * @brief Vault情報読み込みのメインルーチン
  * @return エラーコード
  * @note
  * Note that we let each entry have a unique "name" and "text" string,
  * even if the string happens to be empty (everyone has a unique '\0').
  */
-errr init_v_info()
+errr init_vaults_info()
 {
-    init_header(&v_head);
-    return init_info("v_info.txt", v_head, v_info, parse_v_info);
+    init_header(&vaults_header);
+    return init_info("VaultDefinitions.txt", vaults_header, vaults_info, parse_vaults_info);
+}
+
+/*!
+ * @brief 基本情報読み込みのメインルーチン
+ * @param player_ptr プレイヤーへの参照ポインタ
+ * @return エラーコード
+ */
+errr init_misc(PlayerType *player_ptr)
+{
+    return parse_fixed_map(player_ptr, "misc.txt", 0, 0, 0, 0);
 }
