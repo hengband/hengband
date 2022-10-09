@@ -189,7 +189,7 @@ void init_dungeon_quests(PlayerType *player_ptr)
     auto *floor_ptr = player_ptr->current_floor_ptr;
     auto &quest_list = QuestList::get_instance();
     floor_ptr->quest_number = QuestId::RANDOM_QUEST1;
-    parse_fixed_map(player_ptr, "q_info.txt", 0, 0, 0, 0);
+    parse_fixed_map(player_ptr, QUEST_DEFINITION_LIST, 0, 0, 0, 0);
     floor_ptr->quest_number = QuestId::NONE;
     for (auto q_idx : EnumRange(QuestId::RANDOM_QUEST1, QuestId::RANDOM_QUEST10)) {
         auto *q_ptr = &quest_list[q_idx];
@@ -203,11 +203,11 @@ void init_dungeon_quests(PlayerType *player_ptr)
 
     init_flags = INIT_ASSIGN;
     floor_ptr->quest_number = QuestId::OBERON;
-    parse_fixed_map(player_ptr, "q_info.txt", 0, 0, 0, 0);
+    parse_fixed_map(player_ptr, QUEST_DEFINITION_LIST, 0, 0, 0, 0);
     quest_list[QuestId::OBERON].status = QuestStatusType::TAKEN;
 
     floor_ptr->quest_number = QuestId::SERPENT;
-    parse_fixed_map(player_ptr, "q_info.txt", 0, 0, 0, 0);
+    parse_fixed_map(player_ptr, QUEST_DEFINITION_LIST, 0, 0, 0, 0);
     quest_list[QuestId::SERPENT].status = QuestStatusType::TAKEN;
     floor_ptr->quest_number = QuestId::NONE;
 }

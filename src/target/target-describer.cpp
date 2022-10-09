@@ -475,7 +475,7 @@ static concptr decide_target_floor(PlayerType *player_ptr, eg_type *eg_ptr)
         quest_text_line = 0;
         player_ptr->current_floor_ptr->quest_number = number;
         init_flags = INIT_NAME_ONLY;
-        parse_fixed_map(player_ptr, "q_info.txt", 0, 0, 0, 0);
+        parse_fixed_map(player_ptr, QUEST_DEFINITION_LIST, 0, 0, 0, 0);
         player_ptr->current_floor_ptr->quest_number = old_quest;
         return format(msg.data(), q_ptr->name, q_ptr->level);
     }

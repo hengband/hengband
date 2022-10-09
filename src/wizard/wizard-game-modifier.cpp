@@ -113,7 +113,7 @@ void wiz_enter_quest(PlayerType *player_ptr)
     auto q_idx = i2enum<QuestId>(quest_num);
     init_flags = i2enum<init_flags_type>(INIT_SHOW_TEXT | INIT_ASSIGN);
     player_ptr->current_floor_ptr->quest_number = q_idx;
-    parse_fixed_map(player_ptr, "q_info.txt", 0, 0, 0, 0);
+    parse_fixed_map(player_ptr, QUEST_DEFINITION_LIST, 0, 0, 0, 0);
     quest_list[q_idx].status = QuestStatusType::TAKEN;
     if (quest_list[q_idx].dungeon == 0) {
         exe_enter_quest(player_ptr, q_idx);

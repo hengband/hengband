@@ -135,7 +135,7 @@ void QuestList::initialize()
         return;
     }
     try {
-        auto quest_numbers = parse_quest_info("q_info.txt");
+        auto quest_numbers = parse_quest_info(QUEST_DEFINITION_LIST);
         quest_type init_quest{};
         init_quest.status = QuestStatusType::UNTAKEN;
         this->quest_data.insert({ QuestId::NONE, init_quest });

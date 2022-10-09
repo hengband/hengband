@@ -108,7 +108,7 @@ void do_cmd_go_up(PlayerType *player_ptr)
         if (q_ref.status == QuestStatusType::UNTAKEN) {
             if (q_ref.type != QuestKindType::RANDOM) {
                 init_flags = INIT_ASSIGN;
-                parse_fixed_map(player_ptr, "q_info.txt", 0, 0, 0, 0);
+                parse_fixed_map(player_ptr, QUEST_DEFINITION_LIST, 0, 0, 0, 0);
             }
 
             q_ref.status = QuestStatusType::TAKEN;
@@ -241,7 +241,7 @@ void do_cmd_go_down(PlayerType *player_ptr)
         if (current_quest.status == QuestStatusType::UNTAKEN) {
             if (current_quest.type != QuestKindType::RANDOM) {
                 init_flags = INIT_ASSIGN;
-                parse_fixed_map(player_ptr, "q_info.txt", 0, 0, 0, 0);
+                parse_fixed_map(player_ptr, QUEST_DEFINITION_LIST, 0, 0, 0, 0);
             }
 
             current_quest.status = QuestStatusType::TAKEN;

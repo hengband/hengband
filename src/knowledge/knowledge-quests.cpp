@@ -74,7 +74,7 @@ static void do_cmd_knowledge_quests_current(PlayerType *player_ptr, FILE *fff)
         quest_text_line = 0;
         player_ptr->current_floor_ptr->quest_number = q_idx;
         init_flags = INIT_SHOW_TEXT;
-        parse_fixed_map(player_ptr, "q_info.txt", 0, 0, 0, 0);
+        parse_fixed_map(player_ptr, QUEST_DEFINITION_LIST, 0, 0, 0, 0);
         player_ptr->current_floor_ptr->quest_number = old_quest;
         if (q_ref.flags & QUEST_FLAG_SILENT) {
             continue;
@@ -199,7 +199,7 @@ static bool do_cmd_knowledge_quests_aux(PlayerType *player_ptr, FILE *fff, Quest
         QuestId old_quest = floor_ptr->quest_number;
         floor_ptr->quest_number = q_idx;
         init_flags = INIT_NAME_ONLY;
-        parse_fixed_map(player_ptr, "q_info.txt", 0, 0, 0, 0);
+        parse_fixed_map(player_ptr, QUEST_DEFINITION_LIST, 0, 0, 0, 0);
         floor_ptr->quest_number = old_quest;
         if (q_ref.flags & QUEST_FLAG_SILENT) {
             return false;

@@ -183,7 +183,7 @@ int exe_write_diary_quest(PlayerType *player_ptr, int type, QuestId num)
     const auto &q_ref = quest_list[num];
     player_ptr->current_floor_ptr->quest_number = (q_ref.type == QuestKindType::RANDOM) ? QuestId::NONE : num;
     init_flags = INIT_NAME_ONLY;
-    parse_fixed_map(player_ptr, "q_info.txt", 0, 0, 0, 0);
+    parse_fixed_map(player_ptr, QUEST_DEFINITION_LIST, 0, 0, 0, 0);
     player_ptr->current_floor_ptr->quest_number = old_quest;
 
     concptr note_level = "";
