@@ -174,7 +174,7 @@ void do_cmd_knowledge_skill_exp(PlayerType *player_ptr)
 
     for (auto i : PLAYER_SKILL_KIND_TYPE_RANGE) {
         SUB_EXP skill_exp = player_ptr->skill_exp[i];
-        SUB_EXP skill_max = s_info[enum2i(player_ptr->pclass)].s_max[i];
+        SUB_EXP skill_max = class_skills_info[enum2i(player_ptr->pclass)].s_max[i];
         fprintf(fff, "%-20s ", PlayerSkill::skill_name(i));
         if (show_actual_value) {
             fprintf(fff, "%4d/%4d ", std::min(skill_exp, skill_max), skill_max);

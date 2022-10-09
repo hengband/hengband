@@ -443,8 +443,8 @@ void wiz_change_status(PlayerType *player_ptr)
     for (auto j : PLAYER_SKILL_KIND_TYPE_RANGE) {
         player_ptr->skill_exp[j] = tmp_s16b;
         auto short_pclass = enum2i(player_ptr->pclass);
-        if (player_ptr->skill_exp[j] > s_info[short_pclass].s_max[j]) {
-            player_ptr->skill_exp[j] = s_info[short_pclass].s_max[j];
+        if (player_ptr->skill_exp[j] > class_skills_info[short_pclass].s_max[j]) {
+            player_ptr->skill_exp[j] = class_skills_info[short_pclass].s_max[j];
         }
     }
 

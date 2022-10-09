@@ -579,7 +579,7 @@ static concptr get_check_sum(void)
 {
     return format("%02x%02x%02x%02x%02x%02x%02x%02x%02x", terrains_header.checksum, baseitems_header.checksum,
         artifacts_header.checksum, egos_header.checksum, monraces_header.checksum, dungeons_header.checksum,
-        class_magics_header.checksum, s_head.checksum, v_head.checksum);
+        class_magics_header.checksum, class_skills_header.checksum, v_head.checksum);
 }
 
 /*!

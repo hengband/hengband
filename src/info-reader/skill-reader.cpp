@@ -8,13 +8,12 @@
 #include "util/string-processor.h"
 
 /*!
- * @brief 職業技能情報(s_info)のパース関数 /
- * Initialize the "s_info" array, by parsing an ascii "template" file
+ * @brief 職業技能定義(ClassSkillDefinitions)のパース関数
  * @param buf テキスト列
  * @param head ヘッダ構造体
  * @return エラーコード
  */
-errr parse_s_info(std::string_view buf, angband_header *head)
+errr parse_class_skills_info(std::string_view buf, angband_header *head)
 {
     static skill_table *s_ptr = nullptr;
     const auto &tokens = str_split(buf, ':', false, 5);
@@ -34,7 +33,7 @@ errr parse_s_info(std::string_view buf, angband_header *head)
         }
 
         error_idx = i;
-        s_ptr = &s_info[i];
+        s_ptr = &class_skills_info[i];
     } else if (!s_ptr) {
         return PARSE_ERROR_MISSING_RECORD_HEADER;
     } else if (tokens[0] == "W") {

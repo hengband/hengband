@@ -315,7 +315,7 @@ void init_angband(PlayerType *player_ptr, bool no_term)
     }
 
     init_note(_("[データの初期化中... (熟練度)]", "[Initializing arrays... (skill)]"));
-    if (init_s_info()) {
+    if (init_class_skills_info()) {
         quit(_("熟練度初期化不能", "Cannot initialize skill"));
     }
 
