@@ -253,7 +253,7 @@ void reorder_pack(PlayerType *player_ptr)
             continue;
         }
 
-        o_value = o_ptr->object_value();
+        o_value = o_ptr->get_price();
         for (j = 0; j < INVEN_PACK; j++) {
             if (object_sort_comp(player_ptr, o_ptr, o_value, &player_ptr->inventory_list[j])) {
                 break;
@@ -335,7 +335,7 @@ int16_t store_item_to_inventory(PlayerType *player_ptr, ObjectType *o_ptr)
 
     i = j;
     if (i < INVEN_PACK) {
-        const auto o_value = o_ptr->object_value();
+        const auto o_value = o_ptr->get_price();
         for (j = 0; j < INVEN_PACK; j++) {
             if (object_sort_comp(player_ptr, o_ptr, o_value, &player_ptr->inventory_list[j])) {
                 break;

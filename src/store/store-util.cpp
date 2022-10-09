@@ -236,7 +236,7 @@ static void store_object_absorb(ObjectType *o_ptr, ObjectType *j_ptr)
  */
 int store_carry(ObjectType *o_ptr)
 {
-    const auto value = o_ptr->object_value();
+    const auto value = o_ptr->get_price();
     if (value <= 0) {
         return -1;
     }
@@ -282,7 +282,7 @@ int store_carry(ObjectType *o_ptr)
             }
         }
 
-        auto j_value = j_ptr->object_value();
+        auto j_value = j_ptr->get_price();
         if (value > j_value) {
             break;
         }

@@ -33,7 +33,7 @@
  */
 PRICE price_item(PlayerType *player_ptr, ObjectType *o_ptr, int greed, bool flip, StoreSaleType store_num)
 {
-    auto price = o_ptr->object_value();
+    auto price = o_ptr->get_price();
     if (price <= 0) {
         return 0L;
     }

@@ -78,7 +78,7 @@ static bool is_opt_confirm_destroy(PlayerType *player_ptr, ObjectType *o_ptr)
     }
 
     if (leave_worth) {
-        if (o_ptr->object_value() > 0) {
+        if (o_ptr->get_price() > 0) {
             return false;
         }
     }

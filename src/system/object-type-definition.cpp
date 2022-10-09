@@ -2,7 +2,7 @@
  * @file object-type-definition.h
  * @brief アイテム定義の構造体とエンティティ処理実装
  * @author Hourier
- * @date 2021/05/02
+ * @date 2022/10/09
  */
 
 #include "system/object-type-definition.h"
@@ -704,7 +704,7 @@ char ObjectType::get_symbol() const
  * @brief オブジェクト価格算出のメインルーチン
  * @return オブジェクトの判明している現価格
  */
-int ObjectType::object_value() const
+int ObjectType::get_price() const
 {
     int value;
     const auto is_worthless = this->is_broken() || this->is_cursed();
@@ -719,7 +719,7 @@ int ObjectType::object_value() const
             return 0;
         }
 
-        value = this->object_value_base();
+        value = this->get_baseitem_price();
     }
 
     if (this->discount) {
@@ -733,7 +733,7 @@ int ObjectType::object_value() const
  * @brief 未鑑定なベースアイテムの基本価格を返す
  * @return オブジェクトの未鑑定価格
  */
-int ObjectType::object_value_base() const
+int ObjectType::get_baseitem_price() const
 {
     if (this->is_aware()) {
         return k_info[this->k_idx].cost;
