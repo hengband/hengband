@@ -49,12 +49,10 @@ void init_towns(void)
                 store_ptr->regular.push_back(k_idx);
             }
 
-            for (auto k = 0; k < STORE_CHOICES; k++) {
-                auto tv = store_table[enum2i(sst)][k].tval;
-                auto sv = store_table[enum2i(sst)][k].sval;
-                if (tv == ItemKindType::NONE) {
-                    break;
-                }
+            const auto store = store_sale_table.at(sst);
+            for (const auto kind : store) {
+                auto tv = kind.tval;
+                auto sv = kind.sval;
 
                 auto k_idx = lookup_kind(tv, sv);
                 if (k_idx == 0) {
