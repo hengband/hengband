@@ -6,8 +6,6 @@
 #include "system/angband.h"
 #include <map>
 
-#define STORE_CHOICES 48 /* Number of items to choose stock from */
-
 struct store_stock_item_type {
     ItemKindType tval;
     OBJECT_SUBTYPE_VALUE sval;
