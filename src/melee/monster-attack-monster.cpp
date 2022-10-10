@@ -65,7 +65,7 @@ static void heal_monster_by_melee(PlayerType *player_ptr, mam_type *mam_ptr)
 
 static void process_blow_effect(PlayerType *player_ptr, mam_type *mam_ptr)
 {
-    auto *r_ptr = &r_info[mam_ptr->m_ptr->r_idx];
+    auto *r_ptr = &monraces_info[mam_ptr->m_ptr->r_idx];
     switch (mam_ptr->attribute) {
     case BlowEffectType::FEAR:
         project(player_ptr, mam_ptr->m_idx, 0, mam_ptr->t_ptr->fy, mam_ptr->t_ptr->fx, mam_ptr->damage,
@@ -85,8 +85,8 @@ static void process_blow_effect(PlayerType *player_ptr, mam_type *mam_ptr)
 
 static void aura_fire_by_melee(PlayerType *player_ptr, mam_type *mam_ptr)
 {
-    auto *r_ptr = &r_info[mam_ptr->m_ptr->r_idx];
-    monster_race *tr_ptr = &r_info[mam_ptr->t_ptr->r_idx];
+    auto *r_ptr = &monraces_info[mam_ptr->m_ptr->r_idx];
+    monster_race *tr_ptr = &monraces_info[mam_ptr->t_ptr->r_idx];
     if (tr_ptr->aura_flags.has_not(MonsterAuraType::FIRE) || !MonsterRace(mam_ptr->m_ptr->r_idx).is_valid()) {
         return;
     }
@@ -110,8 +110,8 @@ static void aura_fire_by_melee(PlayerType *player_ptr, mam_type *mam_ptr)
 
 static void aura_cold_by_melee(PlayerType *player_ptr, mam_type *mam_ptr)
 {
-    auto *r_ptr = &r_info[mam_ptr->m_ptr->r_idx];
-    monster_race *tr_ptr = &r_info[mam_ptr->t_ptr->r_idx];
+    auto *r_ptr = &monraces_info[mam_ptr->m_ptr->r_idx];
+    monster_race *tr_ptr = &monraces_info[mam_ptr->t_ptr->r_idx];
     if (tr_ptr->aura_flags.has_not(MonsterAuraType::COLD) || !MonsterRace(mam_ptr->m_ptr->r_idx).is_valid()) {
         return;
     }
@@ -135,8 +135,8 @@ static void aura_cold_by_melee(PlayerType *player_ptr, mam_type *mam_ptr)
 
 static void aura_elec_by_melee(PlayerType *player_ptr, mam_type *mam_ptr)
 {
-    auto *r_ptr = &r_info[mam_ptr->m_ptr->r_idx];
-    monster_race *tr_ptr = &r_info[mam_ptr->t_ptr->r_idx];
+    auto *r_ptr = &monraces_info[mam_ptr->m_ptr->r_idx];
+    monster_race *tr_ptr = &monraces_info[mam_ptr->t_ptr->r_idx];
     if (tr_ptr->aura_flags.has_not(MonsterAuraType::ELEC) || !MonsterRace(mam_ptr->m_ptr->r_idx).is_valid()) {
         return;
     }
@@ -164,12 +164,12 @@ static bool check_same_monster(PlayerType *player_ptr, mam_type *mam_ptr)
         return false;
     }
 
-    auto *r_ptr = &r_info[mam_ptr->m_ptr->r_idx];
+    auto *r_ptr = &monraces_info[mam_ptr->m_ptr->r_idx];
     if (r_ptr->behavior_flags.has(MonsterBehaviorType::NEVER_BLOW)) {
         return false;
     }
 
-    if (d_info[player_ptr->dungeon_idx].flags.has(DungeonFeatureType::NO_MELEE)) {
+    if (dungeons_info[player_ptr->dungeon_idx].flags.has(DungeonFeatureType::NO_MELEE)) {
         return false;
     }
 
@@ -290,14 +290,14 @@ static void explode_monster_by_melee(PlayerType *player_ptr, mam_type *mam_ptr)
 }
 
 /*!
- * @brief r_infoで定義した攻撃回数の分だけ、モンスターからモンスターへの直接攻撃処理を繰り返す
+ * @brief MonsterRaceDefinitionで定義した攻撃回数の分だけ、モンスターからモンスターへの直接攻撃処理を繰り返す
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param mam_ptr モンスター乱闘構造体への参照ポインタ
  */
 void repeat_melee(PlayerType *player_ptr, mam_type *mam_ptr)
 {
     const auto *m_ptr = mam_ptr->m_ptr;
-    auto *r_ptr = &r_info[m_ptr->r_idx];
+    auto *r_ptr = &monraces_info[m_ptr->r_idx];
     for (int ap_cnt = 0; ap_cnt < MAX_NUM_BLOWS; ap_cnt++) {
         mam_ptr->effect = r_ptr->blow[ap_cnt].effect;
         mam_ptr->method = r_ptr->blow[ap_cnt].method;

@@ -14,12 +14,12 @@ struct angband_header {
     uint16_t info_num; //!< このinfoのデータ数
 };
 
-extern angband_header f_head;
-extern angband_header v_head;
-extern angband_header k_head;
-extern angband_header a_head;
-extern angband_header e_head;
-extern angband_header r_head;
-extern angband_header d_head;
-extern angband_header s_head;
-extern angband_header m_head;
+extern angband_header artifacts_header;
+extern angband_header baseitems_header;
+extern angband_header class_magics_header;
+extern angband_header class_skills_header;
+extern angband_header dungeons_header;
+extern angband_header egos_header;
+extern angband_header monraces_header;
+extern angband_header terrains_header;
+extern angband_header vaults_header;

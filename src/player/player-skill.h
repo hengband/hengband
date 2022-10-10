@@ -39,7 +39,7 @@ struct skill_table {
     std::map<PlayerSkillKindType, SUB_EXP> s_max{}; /* max skill */
 };
 
-extern std::vector<skill_table> s_info;
+extern std::vector<skill_table> class_skills_info;
 
 struct monster_race;
 class ObjectType;

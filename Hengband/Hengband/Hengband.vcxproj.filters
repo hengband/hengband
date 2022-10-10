@@ -956,7 +956,7 @@
     <ClCompile Include="..\..\src\info-reader\race-info-tokens-table.cpp">
       <Filter>info-reader</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\info-reader\kind-info-tokens-table.cpp">
+    <ClCompile Include="..\..\src\info-reader\baseitem-tokens-table.cpp">
       <Filter>info-reader</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\info-reader\dungeon-info-tokens-table.cpp">
@@ -974,7 +974,7 @@
     <ClCompile Include="..\..\src\info-reader\vault-reader.cpp">
       <Filter>info-reader</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\info-reader\kind-reader.cpp">
+    <ClCompile Include="..\..\src\info-reader\baseitem-reader.cpp">
       <Filter>info-reader</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\info-reader\artifact-reader.cpp">
@@ -3557,7 +3557,7 @@
     <ClInclude Include="..\..\src\info-reader\race-info-tokens-table.h">
       <Filter>info-reader</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\info-reader\kind-info-tokens-table.h">
+    <ClInclude Include="..\..\src\info-reader\baseitem-tokens-table.h">
       <Filter>info-reader</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\info-reader\dungeon-info-tokens-table.h">
@@ -3581,7 +3581,7 @@
     <ClInclude Include="..\..\src\info-reader\vault-reader.h">
       <Filter>info-reader</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\info-reader\kind-reader.h">
+    <ClInclude Include="..\..\src\info-reader\baseitem-reader.h">
       <Filter>info-reader</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\info-reader\artifact-reader.h">

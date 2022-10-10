@@ -43,7 +43,7 @@ bool summon_unique_okay = false;
  */
 static bool summon_specific_okay(PlayerType *player_ptr, MonsterRaceId r_idx)
 {
-    auto *r_ptr = &r_info[r_idx];
+    auto *r_ptr = &monraces_info[r_idx];
     if (!mon_hook_dungeon(player_ptr, r_idx)) {
         return false;
     }
@@ -71,7 +71,7 @@ static bool summon_specific_okay(PlayerType *player_ptr, MonsterRaceId r_idx)
         return false;
     }
 
-    if ((r_ptr->flags7 & RF7_CHAMELEON) && d_info[player_ptr->dungeon_idx].flags.has(DungeonFeatureType::CHAMELEON)) {
+    if ((r_ptr->flags7 & RF7_CHAMELEON) && dungeons_info[player_ptr->dungeon_idx].flags.has(DungeonFeatureType::CHAMELEON)) {
         return true;
     }
 
@@ -193,7 +193,7 @@ bool summon_specific(PlayerType *player_ptr, MONSTER_IDX who, POSITION y1, POSIT
  */
 bool summon_named_creature(PlayerType *player_ptr, MONSTER_IDX who, POSITION oy, POSITION ox, MonsterRaceId r_idx, BIT_FLAGS mode)
 {
-    if (!MonsterRace(r_idx).is_valid() || (r_idx >= static_cast<MonsterRaceId>(r_info.size()))) {
+    if (!MonsterRace(r_idx).is_valid() || (r_idx >= static_cast<MonsterRaceId>(monraces_info.size()))) {
         return false;
     }
 

@@ -42,8 +42,8 @@ bool eat_magic(PlayerType *player_ptr, int power)
     }
 
     BaseItemInfo *k_ptr;
-    k_ptr = &k_info[o_ptr->k_idx];
-    DEPTH lev = k_info[o_ptr->k_idx].level;
+    k_ptr = &baseitems_info[o_ptr->k_idx];
+    DEPTH lev = baseitems_info[o_ptr->k_idx].level;
 
     int recharge_strength = 0;
     bool is_eating_successful = true;

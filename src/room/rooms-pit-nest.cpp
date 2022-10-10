@@ -74,7 +74,7 @@ static concptr pit_subtype_string(int type, bool nest)
     if (nest) {
         switch (type) {
         case NEST_TYPE_CLONE:
-            sprintf(inner_buf, "(%s)", r_info[vault_aux_race].name.c_str());
+            sprintf(inner_buf, "(%s)", monraces_info[vault_aux_race].name.c_str());
             break;
         case NEST_TYPE_SYMBOL_GOOD:
         case NEST_TYPE_SYMBOL_EVIL:
@@ -131,8 +131,8 @@ static bool ang_sort_comp_nest_mon_info(PlayerType *player_ptr, vptr u, vptr v, 
     nest_mon_info_type *nest_mon_info = (nest_mon_info_type *)u;
     auto w1 = nest_mon_info[a].r_idx;
     auto w2 = nest_mon_info[b].r_idx;
-    monster_race *r1_ptr = &r_info[w1];
-    monster_race *r2_ptr = &r_info[w2];
+    monster_race *r1_ptr = &monraces_info[w1];
+    monster_race *r2_ptr = &monraces_info[w2];
     int z1 = nest_mon_info[a].used;
     int z2 = nest_mon_info[b].used;
 
@@ -236,7 +236,7 @@ bool build_type5(PlayerType *player_ptr, dun_data_type *dd_ptr)
     grid_type *g_ptr;
 
     auto *floor_ptr = player_ptr->current_floor_ptr;
-    int cur_nest_type = pick_vault_type(floor_ptr, nest_types, d_info[floor_ptr->dungeon_idx].nest);
+    int cur_nest_type = pick_vault_type(floor_ptr, nest_types, dungeons_info[floor_ptr->dungeon_idx].nest);
     nest_pit_type *n_ptr;
 
     /* No type available */
@@ -260,7 +260,7 @@ bool build_type5(PlayerType *player_ptr, dun_data_type *dd_ptr)
             for (auto attempts = 100; attempts > 0; attempts--) {
                 /* Get a (hard) monster type */
                 auto r_idx = get_mon_num(player_ptr, 0, floor_ptr->dun_level + 11, 0);
-                auto *r_ptr = &r_info[r_idx];
+                auto *r_ptr = &monraces_info[r_idx];
 
                 /* Decline incorrect alignment */
                 if (monster_has_hostile_align(player_ptr, &align, 0, 0, r_ptr)) {
@@ -283,7 +283,7 @@ bool build_type5(PlayerType *player_ptr, dun_data_type *dd_ptr)
             return false;
         }
 
-        const auto *r_ptr = &r_info[r_idx.value()];
+        const auto *r_ptr = &monraces_info[r_idx.value()];
 
         /* Note the alignment */
         if (r_ptr->kind_flags.has(MonsterKindType::EVIL)) {
@@ -408,7 +408,7 @@ bool build_type5(PlayerType *player_ptr, dun_data_type *dd_ptr)
                 }
             }
 
-            msg_format_wizard(player_ptr, CHEAT_DUNGEON, "Nest構成モンスターNo.%d:%s", i, r_info[nest_mon_info[i].r_idx].name.c_str());
+            msg_format_wizard(player_ptr, CHEAT_DUNGEON, "Nest構成モンスターNo.%d:%s", i, monraces_info[nest_mon_info[i].r_idx].name.c_str());
         }
     }
 
@@ -479,7 +479,7 @@ bool build_type6(PlayerType *player_ptr, dun_data_type *dd_ptr)
     grid_type *g_ptr;
 
     auto *floor_ptr = player_ptr->current_floor_ptr;
-    int cur_pit_type = pick_vault_type(floor_ptr, pit_types, d_info[floor_ptr->dungeon_idx].pit);
+    int cur_pit_type = pick_vault_type(floor_ptr, pit_types, dungeons_info[floor_ptr->dungeon_idx].pit);
     nest_pit_type *n_ptr;
 
     /* No type available */
@@ -506,7 +506,7 @@ bool build_type6(PlayerType *player_ptr, dun_data_type *dd_ptr)
         while (attempts--) {
             /* Get a (hard) monster type */
             r_idx = get_mon_num(player_ptr, 0, floor_ptr->dun_level + 11, 0);
-            r_ptr = &r_info[r_idx];
+            r_ptr = &monraces_info[r_idx];
 
             /* Decline incorrect alignment */
             if (monster_has_hostile_align(player_ptr, &align, 0, 0, r_ptr)) {
@@ -615,8 +615,8 @@ bool build_type6(PlayerType *player_ptr, dun_data_type *dd_ptr)
             int i1 = j;
             int i2 = j + 1;
 
-            int p1 = r_info[what[i1]].level;
-            int p2 = r_info[what[i2]].level;
+            int p1 = monraces_info[what[i1]].level;
+            int p2 = monraces_info[what[i2]].level;
 
             /* Bubble */
             if (p1 > p2) {
@@ -634,7 +634,7 @@ bool build_type6(PlayerType *player_ptr, dun_data_type *dd_ptr)
     for (i = 0; i < 8; i++) {
         /* Every other entry */
         what[i] = what[i * 2];
-        msg_format_wizard(player_ptr, CHEAT_DUNGEON, _("Nest構成モンスター選択No.%d:%s", "Nest Monster Select No.%d:%s"), i, r_info[what[i]].name.c_str());
+        msg_format_wizard(player_ptr, CHEAT_DUNGEON, _("Nest構成モンスター選択No.%d:%s", "Nest Monster Select No.%d:%s"), i, monraces_info[what[i]].name.c_str());
     }
 
     /* Top and bottom rows */
@@ -719,7 +719,7 @@ static bool vault_aux_trapped_pit(PlayerType *player_ptr, MonsterRaceId r_idx)
     /* Unused */
     (void)player_ptr;
 
-    auto *r_ptr = &r_info[r_idx];
+    auto *r_ptr = &monraces_info[r_idx];
 
     if (!vault_monster_okay(player_ptr, r_idx)) {
         return false;
@@ -789,7 +789,7 @@ bool build_type13(PlayerType *player_ptr, dun_data_type *dd_ptr)
     grid_type *g_ptr;
 
     auto *floor_ptr = player_ptr->current_floor_ptr;
-    int cur_pit_type = pick_vault_type(floor_ptr, pit_types, d_info[floor_ptr->dungeon_idx].pit);
+    int cur_pit_type = pick_vault_type(floor_ptr, pit_types, dungeons_info[floor_ptr->dungeon_idx].pit);
     nest_pit_type *n_ptr;
 
     /* Only in Angband */
@@ -821,7 +821,7 @@ bool build_type13(PlayerType *player_ptr, dun_data_type *dd_ptr)
         while (attempts--) {
             /* Get a (hard) monster type */
             r_idx = get_mon_num(player_ptr, 0, floor_ptr->dun_level + 0, 0);
-            r_ptr = &r_info[r_idx];
+            r_ptr = &monraces_info[r_idx];
 
             /* Decline incorrect alignment */
             if (monster_has_hostile_align(player_ptr, &align, 0, 0, r_ptr)) {
@@ -946,8 +946,8 @@ bool build_type13(PlayerType *player_ptr, dun_data_type *dd_ptr)
             int i1 = j;
             int i2 = j + 1;
 
-            int p1 = r_info[what[i1]].level;
-            int p2 = r_info[what[i2]].level;
+            int p1 = monraces_info[what[i1]].level;
+            int p2 = monraces_info[what[i2]].level;
 
             /* Bubble */
             if (p1 > p2) {
@@ -967,7 +967,7 @@ bool build_type13(PlayerType *player_ptr, dun_data_type *dd_ptr)
         what[i] = what[i * 2];
 
         if (cheat_hear) {
-            msg_print(r_info[what[i]].name);
+            msg_print(monraces_info[what[i]].name);
         }
     }
 

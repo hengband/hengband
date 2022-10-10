@@ -79,7 +79,7 @@ bool new_player_spot(PlayerType *player_ptr)
     int max_attempts = 10000;
 
     grid_type *g_ptr;
-    feature_type *f_ptr;
+    terrain_type *f_ptr;
 
     while (max_attempts--) {
         /* Pick a legal spot */
@@ -93,7 +93,7 @@ bool new_player_spot(PlayerType *player_ptr)
             continue;
         }
         if (is_in_dungeon(player_ptr)) {
-            f_ptr = &f_info[g_ptr->feat];
+            f_ptr = &terrains_info[g_ptr->feat];
 
             if (max_attempts > 5000) /* Rule 1 */
             {
@@ -362,7 +362,7 @@ void note_spot(PlayerType *player_ptr, POSITION y, POSITION x)
     /* Hack -- memorize grids */
     if (!g_ptr->is_mark()) {
         /* Feature code (applying "mimic" field) */
-        auto *f_ptr = &f_info[g_ptr->get_feat_mimic()];
+        auto *f_ptr = &terrains_info[g_ptr->get_feat_mimic()];
 
         /* Memorize some "boring" grids */
         if (f_ptr->flags.has_not(FloorFeatureType::REMEMBER)) {
@@ -767,7 +767,7 @@ void update_flow(PlayerType *player_ptr)
  */
 FEAT_IDX feat_state(floor_type *floor_ptr, FEAT_IDX feat, FloorFeatureType action)
 {
-    auto *f_ptr = &f_info[feat];
+    auto *f_ptr = &terrains_info[feat];
     int i;
 
     /* Get the new feature */
@@ -806,8 +806,8 @@ void cave_alter_feat(PlayerType *player_ptr, POSITION y, POSITION x, FloorFeatur
     cave_set_feat(player_ptr, y, x, newfeat);
 
     if (!(feature_action_flags[enum2i(action)] & FAF_NO_DROP)) {
-        feature_type *old_f_ptr = &f_info[oldfeat];
-        auto *f_ptr = &f_info[newfeat];
+        terrain_type *old_f_ptr = &terrains_info[oldfeat];
+        auto *f_ptr = &terrains_info[newfeat];
         bool found = false;
 
         /* Handle gold */
@@ -830,7 +830,7 @@ void cave_alter_feat(PlayerType *player_ptr, POSITION y, POSITION x, FloorFeatur
     }
 
     if (feature_action_flags[enum2i(action)] & FAF_CRASH_GLASS) {
-        feature_type *old_f_ptr = &f_info[oldfeat];
+        terrain_type *old_f_ptr = &terrains_info[oldfeat];
 
         if (old_f_ptr->flags.has(FloorFeatureType::GLASS) && w_ptr->character_dungeon) {
             project(player_ptr, PROJECT_WHO_GLASS_SHARDS, 1, y, x, std::min(floor_ptr->dun_level, 100) / 4, AttributeType::SHARDS,
@@ -852,7 +852,7 @@ bool cave_monster_teleportable_bold(PlayerType *player_ptr, MONSTER_IDX m_idx, P
 {
     auto *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
     auto *g_ptr = &player_ptr->current_floor_ptr->grid_array[y][x];
-    auto *f_ptr = &f_info[g_ptr->feat];
+    auto *f_ptr = &terrains_info[g_ptr->feat];
 
     /* Require "teleportable" space */
     if (f_ptr->flags.has_not(FloorFeatureType::TELEPORTABLE)) {
@@ -875,7 +875,7 @@ bool cave_monster_teleportable_bold(PlayerType *player_ptr, MONSTER_IDX m_idx, P
     }
 
     if (!(mode & TELEPORT_PASSIVE)) {
-        if (!monster_can_cross_terrain(player_ptr, g_ptr->feat, &r_info[m_ptr->r_idx], 0)) {
+        if (!monster_can_cross_terrain(player_ptr, g_ptr->feat, &monraces_info[m_ptr->r_idx], 0)) {
             return false;
         }
     }
@@ -894,7 +894,7 @@ bool cave_monster_teleportable_bold(PlayerType *player_ptr, MONSTER_IDX m_idx, P
 bool cave_player_teleportable_bold(PlayerType *player_ptr, POSITION y, POSITION x, teleport_flags mode)
 {
     auto *g_ptr = &player_ptr->current_floor_ptr->grid_array[y][x];
-    auto *f_ptr = &f_info[g_ptr->feat];
+    auto *f_ptr = &terrains_info[g_ptr->feat];
 
     /* Require "teleportable" space */
     if (f_ptr->flags.has_not(FloorFeatureType::TELEPORTABLE)) {
@@ -950,7 +950,7 @@ bool cave_player_teleportable_bold(PlayerType *player_ptr, POSITION y, POSITION 
  */
 bool is_open(PlayerType *player_ptr, FEAT_IDX feat)
 {
-    return f_info[feat].flags.has(FloorFeatureType::CLOSE) && (feat != feat_state(player_ptr->current_floor_ptr, feat, FloorFeatureType::CLOSE));
+    return terrains_info[feat].flags.has(FloorFeatureType::CLOSE) && (feat != feat_state(player_ptr->current_floor_ptr, feat, FloorFeatureType::CLOSE));
 }
 
 /*!
@@ -961,11 +961,11 @@ bool is_open(PlayerType *player_ptr, FEAT_IDX feat)
  */
 bool player_can_enter(PlayerType *player_ptr, FEAT_IDX feature, BIT_FLAGS16 mode)
 {
-    auto *f_ptr = &f_info[feature];
+    auto *f_ptr = &terrains_info[feature];
 
     if (player_ptr->riding) {
         return monster_can_cross_terrain(
-            player_ptr, feature, &r_info[player_ptr->current_floor_ptr->m_list[player_ptr->riding].r_idx], mode | CEM_RIDING);
+            player_ptr, feature, &monraces_info[player_ptr->current_floor_ptr->m_list[player_ptr->riding].r_idx], mode | CEM_RIDING);
     }
 
     if (f_ptr->flags.has(FloorFeatureType::PATTERN)) {
@@ -1031,7 +1031,7 @@ void place_grid(PlayerType *player_ptr, grid_type *g_ptr, grid_bold_type gb_type
         break;
     }
     case GB_OUTER_NOPERM: {
-        auto *f_ptr = &f_info[feat_wall_outer];
+        auto *f_ptr = &terrains_info[feat_wall_outer];
         if (permanent_wall(f_ptr)) {
             g_ptr->feat = (int16_t)feat_state(player_ptr->current_floor_ptr, feat_wall_outer, FloorFeatureType::UNPERM);
         } else {
@@ -1055,7 +1055,7 @@ void place_grid(PlayerType *player_ptr, grid_type *g_ptr, grid_bold_type gb_type
         break;
     }
     case GB_SOLID_NOPERM: {
-        auto *f_ptr = &f_info[feat_wall_solid];
+        auto *f_ptr = &terrains_info[feat_wall_solid];
         if ((g_ptr->info & CAVE_VAULT) && permanent_wall(f_ptr)) {
             g_ptr->feat = (int16_t)feat_state(player_ptr->current_floor_ptr, feat_wall_solid, FloorFeatureType::UNPERM);
         } else {
@@ -1143,7 +1143,7 @@ int count_dt(PlayerType *player_ptr, POSITION *y, POSITION *x, bool (*test)(Play
  */
 bool feat_uses_special(FEAT_IDX f_idx)
 {
-    return f_info[(f_idx)].flags.has(FloorFeatureType::SPECIAL);
+    return terrains_info[(f_idx)].flags.has(FloorFeatureType::SPECIAL);
 }
 
 /*

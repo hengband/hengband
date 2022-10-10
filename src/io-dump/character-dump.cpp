@@ -168,7 +168,7 @@ static void dump_aux_last_message(PlayerType *player_ptr, FILE *fff)
 static void dump_aux_recall(FILE *fff)
 {
     fprintf(fff, _("\n  [帰還場所]\n\n", "\n  [Recall Depth]\n\n"));
-    for (const auto &d_ref : d_info) {
+    for (const auto &d_ref : dungeons_info) {
         bool seiha = false;
 
         if (d_ref.idx == 0 || !d_ref.maxdepth) {
@@ -178,7 +178,7 @@ static void dump_aux_recall(FILE *fff)
             continue;
         }
         if (MonsterRace(d_ref.final_guardian).is_valid()) {
-            if (!r_info[d_ref.final_guardian].max_num) {
+            if (!monraces_info[d_ref.final_guardian].max_num) {
                 seiha = true;
             }
         } else if (max_dlv[d_ref.idx] == d_ref.maxdepth) {
@@ -268,9 +268,9 @@ static void dump_aux_arena(PlayerType *player_ptr, FILE *fff)
         } else {
 #ifdef JP
             fprintf(
-                fff, "\n 闘技場: %d回戦で%sの前に敗北\n", -player_ptr->arena_number, r_info[arena_info[-1 - player_ptr->arena_number].r_idx].name.c_str());
+                fff, "\n 闘技場: %d回戦で%sの前に敗北\n", -player_ptr->arena_number, monraces_info[arena_info[-1 - player_ptr->arena_number].r_idx].name.c_str());
 #else
-            fprintf(fff, "\n Arena: Defeated by %s in the %d%s fight\n", r_info[arena_info[-1 - player_ptr->arena_number].r_idx].name.c_str(),
+            fprintf(fff, "\n Arena: Defeated by %s in the %d%s fight\n", monraces_info[arena_info[-1 - player_ptr->arena_number].r_idx].name.c_str(),
                 -player_ptr->arena_number, get_ordinal_number_suffix(-player_ptr->arena_number));
 #endif
         }
@@ -314,7 +314,7 @@ static void dump_aux_monsters(PlayerType *player_ptr, FILE *fff)
 
     /* Count monster kills */
     auto norm_total = 0;
-    for (const auto &[r_idx, r_ref] : r_info) {
+    for (const auto &[r_idx, r_ref] : monraces_info) {
         /* Ignore unused index */
         if (!MonsterRace(r_ref.idx).is_valid() || r_ref.name.empty()) {
             continue;
@@ -368,7 +368,7 @@ static void dump_aux_monsters(PlayerType *player_ptr, FILE *fff)
 
     char buf[80];
     for (auto it = who.rbegin(); it != who.rend() && std::distance(who.rbegin(), it) < 10; it++) {
-        auto *r_ptr = &r_info[*it];
+        auto *r_ptr = &monraces_info[*it];
         if (r_ptr->defeat_level && r_ptr->defeat_time) {
             sprintf(buf, _(" - レベル%2d - %d:%02d:%02d", " - level %2d - %d:%02d:%02d"), r_ptr->defeat_level, r_ptr->defeat_time / (60 * 60),
                 (r_ptr->defeat_time / 60) % 60, r_ptr->defeat_time % 60);
@@ -577,8 +577,9 @@ static void dump_aux_home_museum(PlayerType *player_ptr, FILE *fff)
  */
 static concptr get_check_sum(void)
 {
-    return format("%02x%02x%02x%02x%02x%02x%02x%02x%02x", f_head.checksum, k_head.checksum, a_head.checksum, e_head.checksum, r_head.checksum, d_head.checksum,
-        m_head.checksum, s_head.checksum, v_head.checksum);
+    return format("%02x%02x%02x%02x%02x%02x%02x%02x%02x", terrains_header.checksum, baseitems_header.checksum,
+        artifacts_header.checksum, egos_header.checksum, monraces_header.checksum, dungeons_header.checksum,
+        class_magics_header.checksum, class_skills_header.checksum, vaults_header.checksum);
 }
 
 /*!

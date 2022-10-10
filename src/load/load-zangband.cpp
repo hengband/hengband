@@ -107,7 +107,7 @@ void set_zangband_skill(PlayerType *player_ptr)
         player_ptr->skill_exp[PlayerSkillKindType::RIDING] /= 2;
     }
 
-    player_ptr->skill_exp[PlayerSkillKindType::RIDING] = std::min(player_ptr->skill_exp[PlayerSkillKindType::RIDING], s_info[enum2i(player_ptr->pclass)].s_max[PlayerSkillKindType::RIDING]);
+    player_ptr->skill_exp[PlayerSkillKindType::RIDING] = std::min(player_ptr->skill_exp[PlayerSkillKindType::RIDING], class_skills_info[enum2i(player_ptr->pclass)].s_max[PlayerSkillKindType::RIDING]);
 }
 
 void set_zangband_race(PlayerType *player_ptr)
@@ -123,7 +123,7 @@ void set_zangband_bounty_uniques(PlayerType *player_ptr)
     determine_bounty_uniques(player_ptr);
     for (auto &[r_idx, is_achieved] : w_ptr->bounties) {
         /* Is this bounty unique already dead? */
-        if (r_info[r_idx].max_num == 0) {
+        if (monraces_info[r_idx].max_num == 0) {
             is_achieved = true;
         }
     }
@@ -205,7 +205,7 @@ void set_zangband_quest(PlayerType *player_ptr, quest_type *const q_ptr, const Q
 
     init_flags = INIT_ASSIGN;
     player_ptr->current_floor_ptr->quest_number = loading_quest_index;
-    parse_fixed_map(player_ptr, "q_info.txt", 0, 0, 0, 0);
+    parse_fixed_map(player_ptr, QUEST_DEFINITION_LIST, 0, 0, 0, 0);
     player_ptr->current_floor_ptr->quest_number = old_inside_quest;
 }
 

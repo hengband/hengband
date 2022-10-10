@@ -56,7 +56,7 @@ void init_other(PlayerType *player_ptr)
         list.assign(w_ptr->max_m_idx, {});
     }
 
-    max_dlv.assign(d_info.size(), {});
+    max_dlv.assign(dungeons_info.size(), {});
     floor_ptr->grid_array.assign(MAX_HGT, std::vector<grid_type>(MAX_WID));
     init_gf_colors();
 
@@ -107,7 +107,7 @@ static void init_object_alloc(void)
 {
     int16_t num[MAX_DEPTH]{};
     auto alloc_kind_size = 0;
-    for (const auto &k_ref : k_info) {
+    for (const auto &k_ref : baseitems_info) {
         for (auto j = 0; j < 4; j++) {
             if (k_ref.chance[j]) {
                 alloc_kind_size++;
@@ -126,7 +126,7 @@ static void init_object_alloc(void)
 
     alloc_kind_table.assign(alloc_kind_size, {});
     int16_t aux[MAX_DEPTH]{};
-    for (const auto &k_ref : k_info) {
+    for (const auto &k_ref : baseitems_info) {
         for (auto j = 0; j < 4; j++) {
             if (k_ref.chance[j] == 0) {
                 continue;
@@ -152,8 +152,8 @@ static void init_object_alloc(void)
  */
 void init_alloc(void)
 {
-    std::vector<tag_type> elements(r_info.size());
-    for (const auto &[r_idx, r_ref] : r_info) {
+    std::vector<tag_type> elements(monraces_info.size());
+    for (const auto &[r_idx, r_ref] : monraces_info) {
         if (MonsterRace(r_ref.idx).is_valid()) {
             elements[enum2i(r_ref.idx)].tag = r_ref.level;
             elements[enum2i(r_ref.idx)].index = enum2i(r_ref.idx);
@@ -161,9 +161,9 @@ void init_alloc(void)
     }
 
     tag_sort(elements.data(), elements.size());
-    alloc_race_table.assign(r_info.size(), {});
-    for (auto i = 1U; i < r_info.size(); i++) {
-        auto *r_ptr = &r_info[i2enum<MonsterRaceId>(elements[i].index)];
+    alloc_race_table.assign(monraces_info.size(), {});
+    for (auto i = 1U; i < monraces_info.size(); i++) {
+        auto *r_ptr = &monraces_info[i2enum<MonsterRaceId>(elements[i].index)];
         if (r_ptr->rarity == 0) {
             continue;
         }

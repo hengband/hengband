@@ -59,7 +59,7 @@ void OtherItemsEnchanter::apply_magic()
         this->enchant_wand_staff();
         break;
     case ItemKindType::ROD:
-        this->o_ptr->pval = k_info[this->o_ptr->k_idx].pval;
+        this->o_ptr->pval = baseitems_info[this->o_ptr->k_idx].pval;
         break;
     case ItemKindType::CAPTURE:
         this->o_ptr->pval = 0;
@@ -90,7 +90,7 @@ void OtherItemsEnchanter::apply_magic()
  */
 void OtherItemsEnchanter::enchant_wand_staff()
 {
-    auto *k_ptr = &k_info[this->o_ptr->k_idx];
+    auto *k_ptr = &baseitems_info[this->o_ptr->k_idx];
     this->o_ptr->pval = k_ptr->pval / 2 + randint1((k_ptr->pval + 1) / 2);
 }
 
@@ -112,7 +112,7 @@ void OtherItemsEnchanter::generate_figurine()
             continue;
         }
 
-        auto *r_ptr = &r_info[r_idx];
+        auto *r_ptr = &monraces_info[r_idx];
         auto check = (floor_ptr->dun_level < r_ptr->level) ? (r_ptr->level - floor_ptr->dun_level) : 0;
         if ((r_ptr->rarity == 0) || (r_ptr->rarity > 100) || (randint0(check) > 0)) {
             continue;
@@ -147,7 +147,7 @@ void OtherItemsEnchanter::generate_corpse()
     MonsterRaceId r_idx;
     while (true) {
         r_idx = get_mon_num(this->player_ptr, 0, floor_ptr->dun_level, 0);
-        auto &r_ref = r_info[r_idx];
+        auto &r_ref = monraces_info[r_idx];
         auto check = (floor_ptr->dun_level < r_ref.level) ? (r_ref.level - floor_ptr->dun_level) : 0;
         if ((r_ref.rarity == 0) || (match.find(o_ptr->sval) != match.end() && r_ref.drop_flags.has_not(match.at(o_ptr->sval))) || (randint0(check) > 0)) {
             continue;
@@ -170,13 +170,13 @@ void OtherItemsEnchanter::generate_statue()
     auto pick_r_idx_for_statue = [] {
         while (true) {
             auto r_idx = MonsterRace::pick_one_at_random();
-            if (r_info[r_idx].rarity > 0) {
+            if (monraces_info[r_idx].rarity > 0) {
                 return r_idx;
             }
         }
     };
     auto r_idx = pick_r_idx_for_statue();
-    auto *r_ptr = &r_info[r_idx];
+    auto *r_ptr = &monraces_info[r_idx];
 
     this->o_ptr->pval = enum2i(r_idx);
     if (cheat_peek) {
@@ -193,7 +193,7 @@ void OtherItemsEnchanter::generate_statue()
  */
 void OtherItemsEnchanter::generate_chest()
 {
-    auto obj_level = k_info[this->o_ptr->k_idx].level;
+    auto obj_level = baseitems_info[this->o_ptr->k_idx].level;
     if (obj_level <= 0) {
         return;
     }

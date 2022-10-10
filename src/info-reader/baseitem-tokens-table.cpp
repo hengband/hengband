@@ -1,11 +1,11 @@
-﻿#include "info-reader/kind-info-tokens-table.h"
+﻿#include "info-reader/baseitem-tokens-table.h"
 
 // clang-format off
 /*!
  * オブジェクト基本特性トークンの定義 /
  * Object flags
  */
-const std::unordered_map<std::string_view, tr_type> k_info_flags = {
+const std::unordered_map<std::string_view, tr_type> baseitem_flags = {
     { "STR", TR_STR },
     { "INT", TR_INT },
     { "WIS", TR_WIS },
@@ -181,7 +181,7 @@ const std::unordered_map<std::string_view, tr_type> k_info_flags = {
  * オブジェクト生成特性トークンの定義 /
  * Object flags
  */
-const std::unordered_map<std::string_view, ItemGenerationTraitType> k_info_gen_flags = {
+const std::unordered_map<std::string_view, ItemGenerationTraitType> baseitem_geneneration_flags = {
     { "INSTA_ART", ItemGenerationTraitType::INSTA_ART },
     { "QUESTITEM", ItemGenerationTraitType::QUESTITEM },
     { "XTRA_POWER", ItemGenerationTraitType::XTRA_POWER },

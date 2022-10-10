@@ -135,8 +135,8 @@ void get_extra(PlayerType *player_ptr, bool roll_hitdie)
     }
 
     auto pclass = enum2i(player_ptr->pclass);
-    player_ptr->weapon_exp = s_info[pclass].w_start;
-    player_ptr->weapon_exp_max = s_info[pclass].w_max;
+    player_ptr->weapon_exp = class_skills_info[pclass].w_start;
+    player_ptr->weapon_exp_max = class_skills_info[pclass].w_max;
 
     if (player_ptr->ppersonality == PERSONALITY_SEXY) {
         auto &whip_exp = player_ptr->weapon_exp[ItemKindType::HAFTED][SV_WHIP];
@@ -144,7 +144,7 @@ void get_extra(PlayerType *player_ptr, bool roll_hitdie)
     }
 
     for (auto i : PLAYER_SKILL_KIND_TYPE_RANGE) {
-        player_ptr->skill_exp[i] = s_info[pclass].s_start[i];
+        player_ptr->skill_exp[i] = class_skills_info[pclass].s_start[i];
     }
 
     player_ptr->hitdie = cp_ptr->c_mhp + ap_ptr->a_mhp;

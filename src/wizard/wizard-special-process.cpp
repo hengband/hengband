@@ -154,7 +154,7 @@ static KIND_OBJECT_IDX wiz_select_sval(const ItemKindType tval, concptr tval_des
     auto num = 0;
     KIND_OBJECT_IDX choice[80]{};
     char ch;
-    for (const auto &k_ref : k_info) {
+    for (const auto &k_ref : baseitems_info) {
         if (num >= 80) {
             break;
         }
@@ -233,9 +233,9 @@ void wiz_create_item(PlayerType *player_ptr)
         return;
     }
 
-    if (k_info[k_idx].gen_flags.has(ItemGenerationTraitType::INSTA_ART)) {
-        for (const auto &[a_idx, a_ref] : a_info) {
-            if ((a_idx == FixedArtifactId::NONE) || (a_ref.tval != k_info[k_idx].tval) || (a_ref.sval != k_info[k_idx].sval)) {
+    if (baseitems_info[k_idx].gen_flags.has(ItemGenerationTraitType::INSTA_ART)) {
+        for (const auto &[a_idx, a_ref] : artifacts_info) {
+            if ((a_idx == FixedArtifactId::NONE) || (a_ref.tval != baseitems_info[k_idx].tval) || (a_ref.sval != baseitems_info[k_idx].sval)) {
                 continue;
             }
 
@@ -262,7 +262,7 @@ void wiz_create_item(PlayerType *player_ptr)
  */
 static std::string wiz_make_named_artifact_desc(PlayerType *player_ptr, FixedArtifactId a_idx)
 {
-    const auto &a_ref = a_info.at(a_idx);
+    const auto &a_ref = artifacts_info.at(a_idx);
     ObjectType obj;
     obj.prep(lookup_kind(a_ref.tval, a_ref.sval));
     obj.fixed_artifact_idx = a_idx;
@@ -341,7 +341,7 @@ static std::vector<FixedArtifactId> wiz_collect_group_a_idx(const grouper &group
     const auto &[tval_list, name] = group_artifact;
     std::vector<FixedArtifactId> a_idx_list;
     for (auto tval : tval_list) {
-        for (const auto &[a_idx, a_ref] : a_info) {
+        for (const auto &[a_idx, a_ref] : artifacts_info) {
             if (a_ref.tval == tval) {
                 a_idx_list.push_back(a_idx);
             }
@@ -382,8 +382,8 @@ void wiz_create_named_art(PlayerType *player_ptr)
 
     screen_load();
     const auto a_idx = create_a_idx.value();
-    const auto it = a_info.find(a_idx);
-    if (it == a_info.end()) {
+    const auto it = artifacts_info.find(a_idx);
+    if (it == artifacts_info.end()) {
         msg_print("The specified artifact is obsoleted for now.");
         return;
     }
@@ -443,8 +443,8 @@ void wiz_change_status(PlayerType *player_ptr)
     for (auto j : PLAYER_SKILL_KIND_TYPE_RANGE) {
         player_ptr->skill_exp[j] = tmp_s16b;
         auto short_pclass = enum2i(player_ptr->pclass);
-        if (player_ptr->skill_exp[j] > s_info[short_pclass].s_max[j]) {
-            player_ptr->skill_exp[j] = s_info[short_pclass].s_max[j];
+        if (player_ptr->skill_exp[j] > class_skills_info[short_pclass].s_max[j]) {
+            player_ptr->skill_exp[j] = class_skills_info[short_pclass].s_max[j];
         }
     }
 
@@ -505,19 +505,19 @@ void wiz_create_feature(PlayerType *player_ptr)
     g_ptr = &player_ptr->current_floor_ptr->grid_array[y][x];
 
     f_val1 = g_ptr->feat;
-    if (!get_value(_("実地形ID", "FeatureID"), 0, f_info.size() - 1, &f_val1)) {
+    if (!get_value(_("実地形ID", "FeatureID"), 0, terrains_info.size() - 1, &f_val1)) {
         return;
     }
 
     f_val2 = f_val1;
-    if (!get_value(_("偽装地形ID", "FeatureID"), 0, f_info.size() - 1, &f_val2)) {
+    if (!get_value(_("偽装地形ID", "FeatureID"), 0, terrains_info.size() - 1, &f_val2)) {
         return;
     }
 
     cave_set_feat(player_ptr, y, x, static_cast<FEAT_IDX>(f_val1));
     g_ptr->mimic = (int16_t)f_val2;
-    feature_type *f_ptr;
-    f_ptr = &f_info[g_ptr->get_feat_mimic()];
+    terrain_type *f_ptr;
+    f_ptr = &terrains_info[g_ptr->get_feat_mimic()];
 
     if (f_ptr->flags.has(FloorFeatureType::RUNE_PROTECTION) || f_ptr->flags.has(FloorFeatureType::RUNE_EXPLOSION)) {
         g_ptr->info |= CAVE_OBJECT;
@@ -540,12 +540,12 @@ void wiz_create_feature(PlayerType *player_ptr)
  */
 static bool select_debugging_floor(PlayerType *player_ptr, int dungeon_type)
 {
-    auto max_depth = d_info[dungeon_type].maxdepth;
-    if ((max_depth == 0) || (dungeon_type > static_cast<int>(d_info.size()))) {
+    auto max_depth = dungeons_info[dungeon_type].maxdepth;
+    if ((max_depth == 0) || (dungeon_type > static_cast<int>(dungeons_info.size()))) {
         dungeon_type = DUNGEON_ANGBAND;
     }
 
-    auto min_depth = (int)d_info[dungeon_type].mindepth;
+    auto min_depth = (int)dungeons_info[dungeon_type].mindepth;
     while (true) {
         char ppp[80];
         char tmp_val[160];
@@ -621,12 +621,12 @@ void wiz_jump_to_dungeon(PlayerType *player_ptr)
         return;
     }
 
-    if (command_arg < d_info[dungeon_type].mindepth) {
+    if (command_arg < dungeons_info[dungeon_type].mindepth) {
         command_arg = 0;
     }
 
-    if (command_arg > d_info[dungeon_type].maxdepth) {
-        command_arg = (COMMAND_ARG)d_info[dungeon_type].maxdepth;
+    if (command_arg > dungeons_info[dungeon_type].maxdepth) {
+        command_arg = (COMMAND_ARG)dungeons_info[dungeon_type].maxdepth;
     }
 
     msg_format("You jump to dungeon level %d.", command_arg);
@@ -646,7 +646,7 @@ void wiz_learn_items_all(PlayerType *player_ptr)
 {
     ObjectType forge;
     ObjectType *q_ptr;
-    for (const auto &k_ref : k_info) {
+    for (const auto &k_ref : baseitems_info) {
         if (k_ref.idx > 0 && k_ref.level <= command_arg) {
             q_ptr = &forge;
             q_ptr->prep(k_ref.idx);
@@ -687,7 +687,7 @@ void wiz_reset_class(PlayerType *player_ptr)
 
     player_ptr->pclass = i2enum<PlayerClassType>(val);
     cp_ptr = &class_info[val];
-    mp_ptr = &m_info[val];
+    mp_ptr = &class_magics_info[val];
     PlayerClass(player_ptr).init_specific_data();
     player_ptr->window_flags |= PW_PLAYER;
     player_ptr->update |= PU_BONUS | PU_HP | PU_MANA | PU_SPELLS;

@@ -44,7 +44,7 @@ bool build_type14(PlayerType *player_ptr, dun_data_type *dd_ptr)
 
     /* Choose lite or dark */
     auto *floor_ptr = player_ptr->current_floor_ptr;
-    light = ((floor_ptr->dun_level <= randint1(25)) && d_info[floor_ptr->dungeon_idx].flags.has_not(DungeonFeatureType::DARKNESS));
+    light = ((floor_ptr->dun_level <= randint1(25)) && dungeons_info[floor_ptr->dungeon_idx].flags.has_not(DungeonFeatureType::DARKNESS));
 
     /* Get corner values */
     y1 = yval - ysize / 2;
@@ -89,6 +89,6 @@ bool build_type14(PlayerType *player_ptr, dun_data_type *dd_ptr)
     g_ptr->mimic = g_ptr->feat;
     g_ptr->feat = trap;
 
-    msg_format_wizard(player_ptr, CHEAT_DUNGEON, _("%sの部屋が生成されました。", "Room of %s was generated."), f_info[trap].name.c_str());
+    msg_format_wizard(player_ptr, CHEAT_DUNGEON, _("%sの部屋が生成されました。", "Room of %s was generated."), terrains_info[trap].name.c_str());
     return true;
 }

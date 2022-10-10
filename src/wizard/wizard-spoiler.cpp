@@ -64,7 +64,7 @@ static auto get_mon_evol_roots(void)
 {
     std::set<MonsterRaceId> evol_parents;
     std::set<MonsterRaceId> evol_children;
-    for (const auto &[r_idx, r_ref] : r_info) {
+    for (const auto &[r_idx, r_ref] : monraces_info) {
         if (MonsterRace(r_ref.next_r_idx).is_valid()) {
             evol_parents.emplace(r_ref.idx);
             evol_children.emplace(r_ref.next_r_idx);
@@ -72,8 +72,8 @@ static auto get_mon_evol_roots(void)
     }
 
     auto evol_root_sort = [](MonsterRaceId i1, MonsterRaceId i2) {
-        auto &r1 = r_info[i1];
-        auto &r2 = r_info[i2];
+        auto &r1 = monraces_info[i1];
+        auto &r2 = monraces_info[i2];
         if (r1.level != r2.level) {
             return r1.level < r2.level;
         }
@@ -112,13 +112,13 @@ static SpoilerOutputResultType spoil_mon_evol(concptr fname)
     spoil_out("------------------------------------------\n\n");
 
     for (auto r_idx : get_mon_evol_roots()) {
-        auto r_ptr = &r_info[r_idx];
+        auto r_ptr = &monraces_info[r_idx];
         fprintf(spoiler_file, _("[%d]: %s (レベル%d, '%c')\n", "[%d]: %s (Level %d, '%c')\n"), enum2i(r_idx), r_ptr->name.c_str(), (int)r_ptr->level, r_ptr->d_char);
 
         for (auto n = 1; MonsterRace(r_ptr->next_r_idx).is_valid(); n++) {
             fprintf(spoiler_file, "%*s-(%d)-> ", n * 2, "", r_ptr->next_exp);
             fprintf(spoiler_file, "[%d]: ", enum2i(r_ptr->next_r_idx));
-            r_ptr = &r_info[r_ptr->next_r_idx];
+            r_ptr = &monraces_info[r_ptr->next_r_idx];
 
             fprintf(spoiler_file, _("%s (レベル%d, '%c')\n", "%s (Level %d, '%c')\n"), r_ptr->name.c_str(), (int)r_ptr->level, r_ptr->d_char);
         }
@@ -200,7 +200,7 @@ static SpoilerOutputResultType spoil_player_spell(concptr fname)
         sprintf(buf, "[[Class: %s]]\n", class_ptr->title);
         spoil_out(buf);
 
-        auto magic_ptr = &m_info[c];
+        auto magic_ptr = &class_magics_info[c];
         concptr book_name = "なし";
         if (magic_ptr->spell_book != ItemKindType::NONE) {
             ObjectType book;

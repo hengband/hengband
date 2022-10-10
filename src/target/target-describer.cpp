@@ -69,7 +69,7 @@ struct eg_type {
     monster_type *m_ptr;
     OBJECT_IDX next_o_idx;
     FEAT_IDX feat;
-    feature_type *f_ptr;
+    terrain_type *f_ptr;
     concptr name;
 };
 
@@ -99,7 +99,7 @@ static eg_type *initialize_eg_type(PlayerType *player_ptr, eg_type *eg_ptr, POSI
  */
 static void evaluate_monster_exp(PlayerType *player_ptr, char *buf, monster_type *m_ptr)
 {
-    monster_race *ap_r_ptr = &r_info[m_ptr->ap_r_idx];
+    monster_race *ap_r_ptr = &monraces_info[m_ptr->ap_r_idx];
     if ((player_ptr->lev >= PY_MAX_LEVEL) || PlayerRace(player_ptr).equals(PlayerRaceType::ANDROID)) {
         sprintf(buf, "**");
         return;
@@ -229,7 +229,7 @@ static void describe_grid_monster(PlayerType *player_ptr, eg_type *eg_ptr)
 
 static void describe_monster_person(eg_type *eg_ptr)
 {
-    monster_race *ap_r_ptr = &r_info[eg_ptr->m_ptr->ap_r_idx];
+    monster_race *ap_r_ptr = &monraces_info[eg_ptr->m_ptr->ap_r_idx];
     eg_ptr->s1 = _("それは", "It is ");
     if (ap_r_ptr->flags1 & RF1_FEMALE) {
         eg_ptr->s1 = _("彼女は", "She is ");
@@ -475,7 +475,7 @@ static concptr decide_target_floor(PlayerType *player_ptr, eg_type *eg_ptr)
         quest_text_line = 0;
         player_ptr->current_floor_ptr->quest_number = number;
         init_flags = INIT_NAME_ONLY;
-        parse_fixed_map(player_ptr, "q_info.txt", 0, 0, 0, 0);
+        parse_fixed_map(player_ptr, QUEST_DEFINITION_LIST, 0, 0, 0, 0);
         player_ptr->current_floor_ptr->quest_number = old_quest;
         return format(msg.data(), q_ptr->name, q_ptr->level);
     }
@@ -485,7 +485,7 @@ static concptr decide_target_floor(PlayerType *player_ptr, eg_type *eg_ptr)
     }
 
     if (eg_ptr->f_ptr->flags.has(FloorFeatureType::ENTRANCE)) {
-        return format(_("%s(%d階相当)", "%s(level %d)"), d_info[eg_ptr->g_ptr->special].text.c_str(), d_info[eg_ptr->g_ptr->special].mindepth);
+        return format(_("%s(%d階相当)", "%s(level %d)"), dungeons_info[eg_ptr->g_ptr->special].text.c_str(), dungeons_info[eg_ptr->g_ptr->special].mindepth);
     }
 
     if (eg_ptr->f_ptr->flags.has(FloorFeatureType::TOWN)) {
@@ -573,7 +573,7 @@ char examine_grid(PlayerType *player_ptr, const POSITION y, const POSITION x, ta
         eg_ptr->feat = feat_none;
     }
 
-    eg_ptr->f_ptr = &f_info[eg_ptr->feat];
+    eg_ptr->f_ptr = &terrains_info[eg_ptr->feat];
     if (!eg_ptr->boring && eg_ptr->f_ptr->flags.has_not(FloorFeatureType::REMEMBER)) {
         return (eg_ptr->query != '\r') && (eg_ptr->query != '\n') ? eg_ptr->query : 0;
     }

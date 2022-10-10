@@ -390,7 +390,7 @@ int take_hit(PlayerType *player_ptr, int damage_type, int damage, concptr hit_fr
             player_ptr->is_dead = true;
         }
         if (player_ptr->current_floor_ptr->inside_arena) {
-            concptr m_name = r_info[arena_info[player_ptr->arena_number].r_idx].name.c_str();
+            concptr m_name = monraces_info[arena_info[player_ptr->arena_number].r_idx].name.c_str();
             msg_format(_("あなたは%sの前に敗れ去った。", "You are beaten by %s."), m_name);
             msg_print(nullptr);
             if (record_arena) {
@@ -610,7 +610,7 @@ int take_hit(PlayerType *player_ptr, int damage_type, int damage, concptr hit_fr
  */
 static void process_aura_damage(monster_type *m_ptr, PlayerType *player_ptr, bool immune, MonsterAuraType aura_flag, dam_func dam_func, concptr message)
 {
-    auto *r_ptr = &r_info[m_ptr->r_idx];
+    auto *r_ptr = &monraces_info[m_ptr->r_idx];
     if (r_ptr->aura_flags.has_not(aura_flag) || immune) {
         return;
     }

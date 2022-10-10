@@ -92,7 +92,7 @@ bool mon_scatter(PlayerType *player_ptr, MonsterRaceId r_idx, POSITION *yp, POSI
                 continue;
             }
             if (MonsterRace(r_idx).is_valid()) {
-                auto *r_ptr = &r_info[r_idx];
+                auto *r_ptr = &monraces_info[r_idx];
                 if (!monster_can_enter(player_ptr, ny, nx, r_ptr, 0)) {
                     continue;
                 }
@@ -177,7 +177,7 @@ bool multiply_monster(PlayerType *player_ptr, MONSTER_IDX m_idx, bool clone, BIT
  */
 static bool place_monster_group(PlayerType *player_ptr, MONSTER_IDX who, POSITION y, POSITION x, MonsterRaceId r_idx, BIT_FLAGS mode)
 {
-    auto *r_ptr = &r_info[r_idx];
+    auto *r_ptr = &monraces_info[r_idx];
     int total = randint1(10);
 
     auto *floor_ptr = player_ptr->current_floor_ptr;
@@ -237,9 +237,9 @@ static bool place_monster_group(PlayerType *player_ptr, MONSTER_IDX who, POSITIO
  */
 static bool place_monster_can_escort(PlayerType *player_ptr, MonsterRaceId r_idx)
 {
-    auto *r_ptr = &r_info[place_monster_idx];
+    auto *r_ptr = &monraces_info[place_monster_idx];
     auto *m_ptr = &player_ptr->current_floor_ptr->m_list[place_monster_m_idx];
-    monster_race *z_ptr = &r_info[r_idx];
+    monster_race *z_ptr = &monraces_info[r_idx];
 
     if (mon_hook_dungeon(player_ptr, place_monster_idx) != mon_hook_dungeon(player_ptr, r_idx)) {
         return false;
@@ -290,7 +290,7 @@ static bool place_monster_can_escort(PlayerType *player_ptr, MonsterRaceId r_idx
  */
 bool place_monster_aux(PlayerType *player_ptr, MONSTER_IDX who, POSITION y, POSITION x, MonsterRaceId r_idx, BIT_FLAGS mode)
 {
-    auto *r_ptr = &r_info[r_idx];
+    auto *r_ptr = &monraces_info[r_idx];
 
     if (!(mode & PM_NO_KAGE) && one_in_(333)) {
         mode |= PM_KAGE;
@@ -351,7 +351,7 @@ bool place_monster_aux(PlayerType *player_ptr, MONSTER_IDX who, POSITION y, POSI
         }
 
         (void)place_monster_one(player_ptr, place_monster_m_idx, ny, nx, z, mode);
-        if ((r_info[z].flags1 & RF1_FRIENDS) || (r_ptr->flags1 & RF1_ESCORTS)) {
+        if ((monraces_info[z].flags1 & RF1_FRIENDS) || (r_ptr->flags1 & RF1_ESCORTS)) {
             (void)place_monster_group(player_ptr, place_monster_m_idx, ny, nx, z, mode);
         }
     }
@@ -373,13 +373,13 @@ bool place_monster(PlayerType *player_ptr, POSITION y, POSITION x, BIT_FLAGS mod
     MonsterRaceId r_idx;
     do {
         r_idx = get_mon_num(player_ptr, 0, player_ptr->current_floor_ptr->monster_level, 0);
-    } while ((mode & PM_NO_QUEST) && (r_info[r_idx].flags8 & RF8_NO_QUEST));
+    } while ((mode & PM_NO_QUEST) && (monraces_info[r_idx].flags8 & RF8_NO_QUEST));
 
     if (!MonsterRace(r_idx).is_valid()) {
         return false;
     }
 
-    if ((one_in_(5) || (player_ptr->current_floor_ptr->dun_level == 0)) && r_info[r_idx].kind_flags.has_not(MonsterKindType::UNIQUE) && angband_strchr("hkoptuyAHLOPTUVY", r_info[r_idx].d_char)) {
+    if ((one_in_(5) || (player_ptr->current_floor_ptr->dun_level == 0)) && monraces_info[r_idx].kind_flags.has_not(MonsterKindType::UNIQUE) && angband_strchr("hkoptuyAHLOPTUVY", monraces_info[r_idx].d_char)) {
         mode |= PM_JURAL;
     }
 
@@ -396,7 +396,7 @@ static std::optional<MonsterRaceId> select_horde_leader_r_idx(PlayerType *player
             return std::nullopt;
         }
 
-        if (r_info[r_idx].kind_flags.has(MonsterKindType::UNIQUE)) {
+        if (monraces_info[r_idx].kind_flags.has(MonsterKindType::UNIQUE)) {
             continue;
         }
 
@@ -452,9 +452,9 @@ bool alloc_horde(PlayerType *player_ptr, POSITION y, POSITION x, summon_specific
         return true;
     }
 
-    auto *r_ptr = &r_info[r_idx.value()];
+    auto *r_ptr = &monraces_info[r_idx.value()];
     if (floor_ptr->m_list[m_idx].mflag2.has(MonsterConstantFlagType::CHAMELEON)) {
-        r_ptr = &r_info[floor_ptr->m_list[m_idx].r_idx];
+        r_ptr = &monraces_info[floor_ptr->m_list[m_idx].r_idx];
     }
 
     msg_format(_("モンスターの大群(%c)", "Monster horde (%c)."), r_ptr->d_char);
@@ -470,11 +470,11 @@ bool alloc_horde(PlayerType *player_ptr, POSITION y, POSITION x, summon_specific
  */
 bool alloc_guardian(PlayerType *player_ptr, bool def_val)
 {
-    MonsterRaceId guardian = d_info[player_ptr->dungeon_idx].final_guardian;
+    MonsterRaceId guardian = dungeons_info[player_ptr->dungeon_idx].final_guardian;
     auto *floor_ptr = player_ptr->current_floor_ptr;
     bool is_guardian_applicable = MonsterRace(guardian).is_valid();
-    is_guardian_applicable &= d_info[player_ptr->dungeon_idx].maxdepth == floor_ptr->dun_level;
-    is_guardian_applicable &= r_info[guardian].cur_num < r_info[guardian].max_num;
+    is_guardian_applicable &= dungeons_info[player_ptr->dungeon_idx].maxdepth == floor_ptr->dun_level;
+    is_guardian_applicable &= monraces_info[guardian].cur_num < monraces_info[guardian].max_num;
     if (!is_guardian_applicable) {
         return def_val;
     }
@@ -488,7 +488,7 @@ bool alloc_guardian(PlayerType *player_ptr, bool def_val)
             continue;
         }
 
-        if (!monster_can_cross_terrain(player_ptr, floor_ptr->grid_array[oy][ox].feat, &r_info[guardian], 0)) {
+        if (!monster_can_cross_terrain(player_ptr, floor_ptr->grid_array[oy][ox].feat, &monraces_info[guardian], 0)) {
             try_count++;
             continue;
         }

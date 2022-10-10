@@ -7,13 +7,13 @@
 #include "system/angband.h"
 
 class PlayerType;
+errr init_artifacts_info();
+errr init_baseitems_info();
+errr init_class_magics_info();
+errr init_class_skills_info();
+errr init_dungeons_info();
+errr init_egos_info();
+errr init_monster_race_definitions();
+errr init_terrains_info();
+errr init_vaults_info();
 errr init_misc(PlayerType *player_ptr);
-errr init_f_info();
-errr init_k_info();
-errr init_a_info();
-errr init_e_info();
-errr init_r_info();
-errr init_d_info();
-errr init_v_info();
-errr init_s_info();
-errr init_m_info();

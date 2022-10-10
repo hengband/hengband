@@ -72,7 +72,7 @@ static void load_quest_details(PlayerType *player_ptr, quest_type *q_ptr, const 
     }
     q_ptr->reward_artifact_idx = i2enum<FixedArtifactId>(rd_s16b());
     if (q_ptr->reward_artifact_idx != FixedArtifactId::NONE) {
-        a_info.at(q_ptr->reward_artifact_idx).gen_flags.set(ItemGenerationTraitType::QUESTITEM);
+        artifacts_info.at(q_ptr->reward_artifact_idx).gen_flags.set(ItemGenerationTraitType::QUESTITEM);
     }
 
     q_ptr->flags = rd_byte();
@@ -179,8 +179,8 @@ void analyze_quests(PlayerType *player_ptr, const uint16_t max_quests_load, cons
         }
 
         if (q_ptr->status == QuestStatusType::TAKEN || q_ptr->status == QuestStatusType::UNTAKEN) {
-            if (r_info[q_ptr->r_idx].kind_flags.has(MonsterKindType::UNIQUE)) {
-                r_info[q_ptr->r_idx].flags1 |= RF1_QUESTOR;
+            if (monraces_info[q_ptr->r_idx].kind_flags.has(MonsterKindType::UNIQUE)) {
+                monraces_info[q_ptr->r_idx].flags1 |= RF1_QUESTOR;
             }
         }
     }

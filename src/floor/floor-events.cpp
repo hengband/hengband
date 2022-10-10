@@ -78,7 +78,7 @@ void night_falls(PlayerType *player_ptr)
         for (POSITION y = 0; y < floor_ptr->height; y++) {
             for (POSITION x = 0; x < floor_ptr->width; x++) {
                 auto *g_ptr = &floor_ptr->grid_array[y][x];
-                auto *f_ptr = &f_info[g_ptr->get_feat_mimic()];
+                auto *f_ptr = &terrains_info[g_ptr->get_feat_mimic()];
                 if (g_ptr->is_mirror() || f_ptr->flags.has(FloorFeatureType::QUEST_ENTER) || f_ptr->flags.has(FloorFeatureType::ENTRANCE)) {
                     continue;
                 }
@@ -133,7 +133,7 @@ static byte get_dungeon_feeling(PlayerType *player_ptr)
             continue;
         }
 
-        r_ptr = &r_info[m_ptr->r_idx];
+        r_ptr = &monraces_info[m_ptr->r_idx];
         if (r_ptr->kind_flags.has(MonsterKindType::UNIQUE)) {
             if (r_ptr->level + 10 > floor_ptr->dun_level) {
                 delta += (r_ptr->level + 10 - floor_ptr->dun_level) * 2 * base;
@@ -155,14 +155,14 @@ static byte get_dungeon_feeling(PlayerType *player_ptr)
 
     for (MONSTER_IDX i = 1; i < floor_ptr->o_max; i++) {
         auto *o_ptr = &floor_ptr->o_list[i];
-        auto *k_ptr = &k_info[o_ptr->k_idx];
+        auto *k_ptr = &baseitems_info[o_ptr->k_idx];
         int delta = 0;
         if (!o_ptr->is_valid() || (o_ptr->is_known() && ((o_ptr->marked & OM_TOUCHED) != 0)) || ((o_ptr->ident & IDENT_SENSE) != 0)) {
             continue;
         }
 
         if (o_ptr->is_ego()) {
-            auto *e_ptr = &e_info[o_ptr->ego_idx];
+            auto *e_ptr = &egos_info[o_ptr->ego_idx];
             delta += e_ptr->rating * base;
         }
 
@@ -313,7 +313,7 @@ void update_dungeon_feeling(PlayerType *player_ptr)
  */
 void glow_deep_lava_and_bldg(PlayerType *player_ptr)
 {
-    if (d_info[player_ptr->dungeon_idx].flags.has(DungeonFeatureType::DARKNESS)) {
+    if (dungeons_info[player_ptr->dungeon_idx].flags.has(DungeonFeatureType::DARKNESS)) {
         return;
     }
 
@@ -322,7 +322,7 @@ void glow_deep_lava_and_bldg(PlayerType *player_ptr)
         for (POSITION x = 0; x < floor_ptr->width; x++) {
             grid_type *g_ptr;
             g_ptr = &floor_ptr->grid_array[y][x];
-            if (f_info[g_ptr->get_feat_mimic()].flags.has_not(FloorFeatureType::GLOW)) {
+            if (terrains_info[g_ptr->get_feat_mimic()].flags.has_not(FloorFeatureType::GLOW)) {
                 continue;
             }
 

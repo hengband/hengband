@@ -162,7 +162,7 @@ static void locate_connected_stairs(PlayerType *player_ptr, floor_type *floor_pt
     for (POSITION y = 0; y < floor_ptr->height; y++) {
         for (POSITION x = 0; x < floor_ptr->width; x++) {
             auto *g_ptr = &floor_ptr->grid_array[y][x];
-            auto *f_ptr = &f_info[g_ptr->feat];
+            auto *f_ptr = &terrains_info[g_ptr->feat];
             bool ok = false;
             if (floor_mode & CFM_UP) {
                 if (f_ptr->flags.has_all_of({ FloorFeatureType::LESS, FloorFeatureType::STAIRS }) && f_ptr->flags.has_not(FloorFeatureType::SPECIAL)) {
@@ -295,7 +295,7 @@ static void preserve_info(PlayerType *player_ptr)
         }
 
         if (o_ptr->is_fixed_artifact()) {
-            a_info.at(o_ptr->fixed_artifact_idx).floor_id = 0;
+            artifacts_info.at(o_ptr->fixed_artifact_idx).floor_id = 0;
         }
     }
 }
@@ -307,7 +307,7 @@ static void set_grid_by_leaving_floor(PlayerType *player_ptr, grid_type **g_ptr)
     }
 
     *g_ptr = &player_ptr->current_floor_ptr->grid_array[player_ptr->y][player_ptr->x];
-    auto *f_ptr = &f_info[(*g_ptr)->feat];
+    auto *f_ptr = &terrains_info[(*g_ptr)->feat];
     if ((*g_ptr)->special && f_ptr->flags.has_not(FloorFeatureType::SPECIAL) && get_sf_ptr((*g_ptr)->special)) {
         new_floor_id = (*g_ptr)->special;
     }
@@ -336,10 +336,10 @@ static void jump_floors(PlayerType *player_ptr)
 
     if (any_bits(player_ptr->change_floor_mode, CFM_DOWN)) {
         if (!is_in_dungeon(player_ptr)) {
-            move_num = d_info[player_ptr->dungeon_idx].mindepth;
+            move_num = dungeons_info[player_ptr->dungeon_idx].mindepth;
         }
     } else if (any_bits(player_ptr->change_floor_mode, CFM_UP)) {
-        if (player_ptr->current_floor_ptr->dun_level + move_num < d_info[player_ptr->dungeon_idx].mindepth) {
+        if (player_ptr->current_floor_ptr->dun_level + move_num < dungeons_info[player_ptr->dungeon_idx].mindepth) {
             move_num = -player_ptr->current_floor_ptr->dun_level;
         }
     }
@@ -355,8 +355,8 @@ static void exit_to_wilderness(PlayerType *player_ptr)
 
     player_ptr->leaving_dungeon = true;
     if (!vanilla_town && !lite_town) {
-        player_ptr->wilderness_y = d_info[player_ptr->dungeon_idx].dy;
-        player_ptr->wilderness_x = d_info[player_ptr->dungeon_idx].dx;
+        player_ptr->wilderness_y = dungeons_info[player_ptr->dungeon_idx].dy;
+        player_ptr->wilderness_x = dungeons_info[player_ptr->dungeon_idx].dx;
     }
 
     player_ptr->recall_dungeon = player_ptr->dungeon_idx;

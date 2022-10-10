@@ -22,7 +22,7 @@ static void object_flags_lite(const ObjectType *o_ptr, TrFlags &flgs)
         return;
     }
 
-    auto *e_ptr = &e_info[o_ptr->ego_idx];
+    auto *e_ptr = &egos_info[o_ptr->ego_idx];
     flgs.set(e_ptr->flags);
 
     auto is_out_of_fuel = o_ptr->fuel == 0;
@@ -49,13 +49,13 @@ static void object_flags_lite(const ObjectType *o_ptr, TrFlags &flgs)
  */
 TrFlags object_flags(const ObjectType *o_ptr)
 {
-    auto *k_ptr = &k_info[o_ptr->k_idx];
+    auto *k_ptr = &baseitems_info[o_ptr->k_idx];
 
     /* Base object */
     auto flgs = k_ptr->flags;
 
     if (o_ptr->is_fixed_artifact()) {
-        flgs = a_info.at(o_ptr->fixed_artifact_idx).flags;
+        flgs = artifacts_info.at(o_ptr->fixed_artifact_idx).flags;
     }
 
     object_flags_lite(o_ptr, flgs);
@@ -83,7 +83,7 @@ TrFlags object_flags(const ObjectType *o_ptr)
 TrFlags object_flags_known(const ObjectType *o_ptr)
 {
     bool spoil = false;
-    auto *k_ptr = &k_info[o_ptr->k_idx];
+    auto *k_ptr = &baseitems_info[o_ptr->k_idx];
     TrFlags flgs{};
 
     if (!o_ptr->is_aware()) {
@@ -100,7 +100,7 @@ TrFlags object_flags_known(const ObjectType *o_ptr)
     object_flags_lite(o_ptr, flgs);
     if (spoil || o_ptr->is_fully_known()) {
         if (o_ptr->is_fixed_artifact()) {
-            flgs = a_info.at(o_ptr->fixed_artifact_idx).flags;
+            flgs = artifacts_info.at(o_ptr->fixed_artifact_idx).flags;
         }
 
         /* Random artifact ! */

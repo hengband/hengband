@@ -103,7 +103,7 @@ static bool exe_blue_teleport_back(PlayerType *player_ptr, GAME_TEXT *m_name)
     }
 
     m_ptr = &floor_ptr->m_list[floor_ptr->grid_array[target_row][target_col].m_idx];
-    r_ptr = &r_info[m_ptr->r_idx];
+    r_ptr = &monraces_info[m_ptr->r_idx];
     monster_desc(player_ptr, m_name, m_ptr, 0);
     if (r_ptr->resistance_flags.has_not(MonsterResistanceType::RESIST_TELEPORT)) {
         return false;

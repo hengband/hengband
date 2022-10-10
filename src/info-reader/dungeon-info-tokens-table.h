@@ -7,4 +7,4 @@
 
 enum class DungeonFeatureType;
 
-extern const std::unordered_map<std::string_view, DungeonFeatureType> d_info_flags;
+extern const std::unordered_map<std::string_view, DungeonFeatureType> dungeon_flags;

@@ -81,10 +81,8 @@ static bool is_possible_monster_or(const EnumClassFlagGroup<T> &r_flags, const E
  */
 static bool restrict_monster_to_dungeon(PlayerType *player_ptr, MonsterRaceId r_idx)
 {
-    DUNGEON_IDX d_idx = player_ptr->dungeon_idx;
-    dungeon_type *d_ptr = &d_info[d_idx];
-    auto *r_ptr = &r_info[r_idx];
-
+    const auto *d_ptr = &dungeons_info[player_ptr->dungeon_idx];
+    const auto *r_ptr = &monraces_info[r_idx];
     if (d_ptr->flags.has(DungeonFeatureType::CHAMELEON)) {
         if (chameleon_change_m_idx) {
             return true;
@@ -217,7 +215,7 @@ monsterrace_hook_type get_monster_hook(PlayerType *player_ptr)
  */
 monsterrace_hook_type get_monster_hook2(PlayerType *player_ptr, POSITION y, POSITION x)
 {
-    auto *f_ptr = &f_info[player_ptr->current_floor_ptr->grid_array[y][x].feat];
+    auto *f_ptr = &terrains_info[player_ptr->current_floor_ptr->grid_array[y][x].feat];
     if (f_ptr->flags.has(FloorFeatureType::WATER)) {
         return f_ptr->flags.has(FloorFeatureType::DEEP) ? (monsterrace_hook_type)mon_hook_deep_water : (monsterrace_hook_type)mon_hook_shallow_water;
     }
@@ -254,7 +252,7 @@ static errr do_get_mon_num_prep(PlayerType *player_ptr, const monsterrace_hook_t
     for (auto i = 0U; i < alloc_race_table.size(); i++) {
         alloc_entry *const entry = &alloc_race_table[i];
         const auto entry_r_idx = i2enum<MonsterRaceId>(entry->index);
-        const monster_race *const r_ptr = &r_info[entry_r_idx];
+        const monster_race *const r_ptr = &monraces_info[entry_r_idx];
 
         // 生成を禁止する要素は重み 0 とする。
         entry->prob2 = 0;
@@ -309,7 +307,7 @@ static errr do_get_mon_num_prep(PlayerType *player_ptr, const monsterrace_hook_t
             if (cond && !restrict_monster_to_dungeon(player_ptr, entry_r_idx)) {
                 // ダンジョンによる制約に掛かった場合、重みを special_div/64 倍する。
                 // 丸めは確率的に行う。
-                const int numer = entry->prob2 * d_info[player_ptr->dungeon_idx].special_div;
+                const int numer = entry->prob2 * dungeons_info[player_ptr->dungeon_idx].special_div;
                 const int q = numer / 64;
                 const int r = numer % 64;
                 entry->prob2 = (PROB)(randint0(64) < r ? q + 1 : q);

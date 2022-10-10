@@ -299,7 +299,7 @@ int16_t PlayerSpeed::inventory_weight_bonus()
     auto weight = calc_inventory_weight(this->player_ptr);
     if (this->player_ptr->riding) {
         auto *riding_m_ptr = &(this->player_ptr)->current_floor_ptr->m_list[this->player_ptr->riding];
-        auto *riding_r_ptr = &r_info[riding_m_ptr->r_idx];
+        auto *riding_r_ptr = &monraces_info[riding_m_ptr->r_idx];
         auto count = 1500 + riding_r_ptr->level * 25;
         if (weight > count) {
             bonus -= ((weight - count) / (count / 5));

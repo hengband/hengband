@@ -7,13 +7,13 @@
 #include "dungeon/dungeon.h"
 #include "grid/feature.h"
 #include "info-reader/artifact-reader.h"
+#include "info-reader/baseitem-reader.h"
 #include "info-reader/dungeon-reader.h"
 #include "info-reader/ego-reader.h"
 #include "info-reader/feature-reader.h"
 #include "info-reader/fixed-map-parser.h"
 #include "info-reader/general-parser.h"
 #include "info-reader/info-reader-util.h"
-#include "info-reader/kind-reader.h"
 #include "info-reader/magic-reader.h"
 #include "info-reader/race-reader.h"
 #include "info-reader/skill-reader.h"
@@ -43,6 +43,8 @@
 
 namespace {
 
+using Retoucher = void (*)(angband_header *);
+
 template <typename>
 struct is_vector : std::false_type {
 };
@@ -60,17 +62,6 @@ struct is_vector<std::vector<T, Alloc>> : std::true_type {
 template <typename T>
 constexpr bool is_vector_v = is_vector<T>::value;
 
-}
-
-/*!
- * @brief 基本情報読み込みのメインルーチン /
- * Initialize misc. values
- * @param player_ptr プレイヤーへの参照ポインタ
- * @return エラーコード
- */
-errr init_misc(PlayerType *player_ptr)
-{
-    return parse_fixed_map(player_ptr, "misc.txt", 0, 0, 0, 0);
 }
 
 /*!
@@ -99,16 +90,14 @@ static void init_header(angband_header *head, IDX num = 0)
  * even if the string happens to be empty (everyone has a unique '\0').
  */
 template <typename InfoType>
-static errr init_info(concptr filename, angband_header &head, InfoType &info, std::function<errr(std::string_view, angband_header *)> parser,
-    void (*retouch)(angband_header *head))
+static errr init_info(std::string_view filename, angband_header &head, InfoType &info, Parser parser, Retoucher retouch = nullptr)
 {
     char buf[1024];
-    path_build(buf, sizeof(buf), ANGBAND_DIR_EDIT, format("%s.txt", filename));
+    path_build(buf, sizeof(buf), ANGBAND_DIR_EDIT, filename.data());
 
-    FILE *fp = angband_fopen(buf, "r");
-
+    auto *fp = angband_fopen(buf, "r");
     if (!fp) {
-        quit(format(_("'%s.txt'ファイルをオープンできません。", "Cannot open '%s.txt' file."), filename));
+        quit(format(_("'%s'ファイルをオープンできません。", "Cannot open '%s' file."), filename));
     }
 
     constexpr auto info_is_vector = is_vector_v<InfoType>;
@@ -116,27 +105,26 @@ static errr init_info(concptr filename, angband_header &head, InfoType &info, st
         info.assign(head.info_num, {});
     }
 
-    errr err = init_info_txt(fp, buf, &head, parser);
+    const auto err = init_info_txt(fp, buf, &head, parser);
     angband_fclose(fp);
-
     if (err) {
-        concptr oops = (((err > 0) && (err < PARSE_ERROR_MAX)) ? err_str[err] : _("未知の", "unknown"));
+        const auto oops = (((err > 0) && (err < PARSE_ERROR_MAX)) ? err_str[err] : _("未知の", "unknown"));
 #ifdef JP
-        msg_format("'%s.txt'ファイルの %d 行目にエラー。", filename, error_line);
+        msg_format("'%s'ファイルの %d 行目にエラー。", filename, error_line);
 #else
-        msg_format("Error %d at line %d of '%s.txt'.", err, error_line, filename);
+        msg_format("Error %d at line %d of '%s'.", err, error_line, filename);
 #endif
         msg_format(_("レコード %d は '%s' エラーがあります。", "Record %d contains a '%s' error."), error_idx, oops);
         msg_format(_("構文 '%s'。", "Parsing '%s'."), buf);
         msg_print(nullptr);
-        quit(format(_("'%s.txt'ファイルにエラー", "Error in '%s.txt' file."), filename));
+        quit(format(_("'%s'ファイルにエラー", "Error in '%s' file."), filename));
     }
 
     if constexpr (info_is_vector) {
         info.shrink_to_fit();
     }
-    head.info_num = static_cast<uint16_t>(info.size());
 
+    head.info_num = static_cast<uint16_t>(info.size());
     if (retouch) {
         (*retouch)(&head);
     }
@@ -145,103 +133,106 @@ static errr init_info(concptr filename, angband_header &head, InfoType &info, st
 }
 
 /*!
- * @brief 地形情報読み込みのメインルーチン /
- * Initialize the "f_info" array
+ * @brief 固定アーティファクト情報読み込みのメインルーチン
  * @return エラーコード
  */
-errr init_f_info()
+errr init_artifacts_info()
 {
-    init_header(&f_head);
-    return init_info("f_info", f_head, f_info, parse_f_info, retouch_f_info);
+    init_header(&artifacts_header);
+    return init_info("ArtifactDefinitions.txt", artifacts_header, artifacts_info, parse_artifacts_info);
 }
 
 /*!
- * @brief ベースアイテム情報読み込みのメインルーチン /
- * Initialize the "k_info" array
+ * @brief ベースアイテム情報読み込みのメインルーチン
  * @return エラーコード
  */
-errr init_k_info()
+errr init_baseitems_info()
 {
-    init_header(&k_head);
-    return init_info("k_info", k_head, k_info, parse_k_info, nullptr);
+    init_header(&baseitems_header);
+    return init_info("BaseItemDefinitions.txt", baseitems_header, baseitems_info, parse_baseitems_info);
 }
 
 /*!
- * @brief 固定アーティファクト情報読み込みのメインルーチン /
- * Initialize the "a_info" array
+ * @brief 職業魔法情報読み込みのメインルーチン
  * @return エラーコード
  */
-errr init_a_info()
+errr init_class_magics_info()
 {
-    init_header(&a_head);
-    return init_info("a_info", a_head, a_info, parse_a_info, nullptr);
+    init_header(&class_magics_header, PLAYER_CLASS_TYPE_MAX);
+    auto *parser = parse_class_magics_info;
+    return init_info("ClassMagicDefinitions.txt", class_magics_header, class_magics_info, parser);
 }
 
 /*!
- * @brief 固定アーティファクト情報読み込みのメインルーチン /
- * Initialize the "e_info" array
+ * @brief 職業技能情報読み込みのメインルーチン
  * @return エラーコード
  */
-errr init_e_info()
+errr init_class_skills_info()
 {
-    init_header(&e_head);
-    return init_info("e_info", e_head, e_info, parse_e_info, nullptr);
+    init_header(&class_skills_header, PLAYER_CLASS_TYPE_MAX);
+    return init_info("ClassSkillDefinitions.txt", class_skills_header, class_skills_info, parse_class_skills_info);
+}
+/*!
+ * @brief ダンジョン情報読み込みのメインルーチン
+ * @return エラーコード
+ */
+errr init_dungeons_info()
+{
+    init_header(&dungeons_header);
+    return init_info("DungeonDefinitions.txt", dungeons_header, dungeons_info, parse_dungeons_info);
 }
 
 /*!
- * @brief モンスター種族情報読み込みのメインルーチン /
- * Initialize the "r_info" array
+ * @brief エゴ情報読み込みのメインルーチン
  * @return エラーコード
  */
-errr init_r_info()
+errr init_egos_info()
 {
-    init_header(&r_head);
-    return init_info("r_info", r_head, r_info, parse_r_info, nullptr);
+    init_header(&egos_header);
+    return init_info("EgoDefinitions.txt", egos_header, egos_info, parse_egos_info);
 }
 
 /*!
- * @brief ダンジョン情報読み込みのメインルーチン /
- * Initialize the "d_info" array
+ * @brief 地形情報読み込みのメインルーチン
  * @return エラーコード
  */
-errr init_d_info()
+errr init_terrains_info()
 {
-    init_header(&d_head);
-    return init_info("d_info", d_head, d_info, parse_d_info, nullptr);
+    init_header(&terrains_header);
+    auto *parser = parse_terrains_info;
+    auto *retoucher = retouch_terrains_info;
+    return init_info("TerrainDefinitions.txt", terrains_header, terrains_info, parser, retoucher);
 }
 
 /*!
- * @brief Vault情報読み込みのメインルーチン /
- * Initialize the "v_info" array
+ * @brief モンスター種族情報読み込みのメインルーチン
+ * @return エラーコード
+ */
+errr init_monster_race_definitions()
+{
+    init_header(&monraces_header);
+    return init_info("MonsterRaceDefinitions.txt", monraces_header, monraces_info, parse_monraces_info);
+}
+
+/*!
+ * @brief Vault情報読み込みのメインルーチン
  * @return エラーコード
  * @note
  * Note that we let each entry have a unique "name" and "text" string,
  * even if the string happens to be empty (everyone has a unique '\0').
  */
-errr init_v_info()
+errr init_vaults_info()
 {
-    init_header(&v_head);
-    return init_info("v_info", v_head, v_info, parse_v_info, nullptr);
+    init_header(&vaults_header);
+    return init_info("VaultDefinitions.txt", vaults_header, vaults_info, parse_vaults_info);
 }
 
 /*!
- * @brief 職業技能情報読み込みのメインルーチン /
- * Initialize the "s_info" array
+ * @brief 基本情報読み込みのメインルーチン
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @return エラーコード
  */
-errr init_s_info()
+errr init_misc(PlayerType *player_ptr)
 {
-    init_header(&s_head, PLAYER_CLASS_TYPE_MAX);
-    return init_info("s_info", s_head, s_info, parse_s_info, nullptr);
-}
-
-/*!
- * @brief 職業魔法情報読み込みのメインルーチン /
- * Initialize the "m_info" array
- * @return エラーコード
- */
-errr init_m_info()
-{
-    init_header(&m_head, PLAYER_CLASS_TYPE_MAX);
-    return init_info("m_info", m_head, m_info, parse_m_info, nullptr);
+    return parse_fixed_map(player_ptr, "misc.txt", 0, 0, 0, 0);
 }

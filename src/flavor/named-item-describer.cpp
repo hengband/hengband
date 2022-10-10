@@ -61,7 +61,7 @@ static void set_base_name(flavor_type *flavor_ptr)
 
     const auto fixed_art_id = flavor_ptr->o_ptr->fixed_artifact_idx;
     const auto is_known_artifact = flavor_ptr->known && flavor_ptr->o_ptr->is_fixed_artifact() && none_bits(flavor_ptr->mode, OD_BASE_NAME);
-    flavor_ptr->basenm = is_known_artifact ? a_info.at(fixed_art_id).name.c_str() : flavor_ptr->kindname;
+    flavor_ptr->basenm = is_known_artifact ? artifacts_info.at(fixed_art_id).name.c_str() : flavor_ptr->kindname;
 }
 
 #ifdef JP
@@ -123,7 +123,7 @@ static void describe_artifact_ja(flavor_type *flavor_ptr)
     }
 
     if (flavor_ptr->o_ptr->is_fixed_artifact() && flavor_ptr->tr_flags.has_not(TR_FULL_NAME)) {
-        const auto &a_ref = a_info.at(flavor_ptr->o_ptr->fixed_artifact_idx);
+        const auto &a_ref = artifacts_info.at(flavor_ptr->o_ptr->fixed_artifact_idx);
         /* '『' から始まらない伝説のアイテムの名前は最初に付加する */
         if (a_ref.name.find("『", 0, 2) != 0) {
             flavor_ptr->t = object_desc_str(flavor_ptr->t, a_ref.name.c_str());
@@ -133,7 +133,7 @@ static void describe_artifact_ja(flavor_type *flavor_ptr)
     }
 
     if (flavor_ptr->o_ptr->is_ego()) {
-        auto *e_ptr = &e_info[flavor_ptr->o_ptr->ego_idx];
+        auto *e_ptr = &egos_info[flavor_ptr->o_ptr->ego_idx];
         flavor_ptr->t = object_desc_str(flavor_ptr->t, e_ptr->name.c_str());
     }
 }
@@ -216,7 +216,7 @@ static void describe_artifact_body_ja(flavor_type *flavor_ptr)
     }
 
     if (flavor_ptr->o_ptr->is_fixed_artifact()) {
-        const auto &a_ref = a_info.at(flavor_ptr->o_ptr->fixed_artifact_idx);
+        const auto &a_ref = artifacts_info.at(flavor_ptr->o_ptr->fixed_artifact_idx);
         if (a_ref.name.find("『", 0, 2) == 0) {
             flavor_ptr->t = object_desc_str(flavor_ptr->t, a_ref.name.c_str());
         }
@@ -285,7 +285,7 @@ static void describe_artifact_prefix_en(flavor_type *flavor_ptr)
 
     const auto corpse_r_idx = i2enum<MonsterRaceId>(flavor_ptr->o_ptr->pval);
     auto is_unique_corpse = flavor_ptr->o_ptr->tval == ItemKindType::CORPSE;
-    is_unique_corpse &= r_info[corpse_r_idx].kind_flags.has(MonsterKindType::UNIQUE);
+    is_unique_corpse &= monraces_info[corpse_r_idx].kind_flags.has(MonsterKindType::UNIQUE);
     if ((flavor_ptr->known && flavor_ptr->o_ptr->is_artifact()) || is_unique_corpse) {
         flavor_ptr->t = object_desc_str(flavor_ptr->t, "The ");
         return;
@@ -323,14 +323,14 @@ static void describe_artifact_body_en(flavor_type *flavor_ptr)
     }
 
     if (flavor_ptr->o_ptr->is_fixed_artifact()) {
-        const auto &a_ref = a_info.at(flavor_ptr->o_ptr->fixed_artifact_idx);
+        const auto &a_ref = artifacts_info.at(flavor_ptr->o_ptr->fixed_artifact_idx);
         flavor_ptr->t = object_desc_chr(flavor_ptr->t, ' ');
         flavor_ptr->t = object_desc_str(flavor_ptr->t, a_ref.name.c_str());
         return;
     }
 
     if (flavor_ptr->o_ptr->is_ego()) {
-        auto *e_ptr = &e_info[flavor_ptr->o_ptr->ego_idx];
+        auto *e_ptr = &egos_info[flavor_ptr->o_ptr->ego_idx];
         flavor_ptr->t = object_desc_chr(flavor_ptr->t, ' ');
         flavor_ptr->t = object_desc_str(flavor_ptr->t, e_ptr->name.c_str());
     }

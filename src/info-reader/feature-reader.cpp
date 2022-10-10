@@ -18,12 +18,12 @@ static bool feat_tag_is_not_found = false;
 
 /*!
  * @brief テキストトークンを走査してフラグを一つ得る（地形情報向け） /
- * Grab one flag in an feature_type from a textual string
+ * Grab one flag in an terrain_type from a textual string
  * @param f_ptr 地形情報を保管する先の構造体参照ポインタ
  * @param what 参照元の文字列ポインタ
  * @return 見つけたらtrue
  */
-static bool grab_one_feat_flag(feature_type *f_ptr, std::string_view what)
+static bool grab_one_feat_flag(terrain_type *f_ptr, std::string_view what)
 {
     if (EnumClassFlagGroup<FloorFeatureType>::grab_one_flag(f_ptr->flags, f_info_flags, what)) {
         return true;
@@ -35,13 +35,13 @@ static bool grab_one_feat_flag(feature_type *f_ptr, std::string_view what)
 
 /*!
  * @brief テキストトークンを走査してフラグ(ステート)を一つ得る（地形情報向け2） /
- * Grab an action in an feature_type from a textual string
+ * Grab an action in an terrain_type from a textual string
  * @param f_ptr 地形情報を保管する先の構造体参照ポインタ
  * @param what 参照元の文字列ポインタ
  * @param count ステートの保存先ID
  * @return 見つけたらtrue
  */
-static bool grab_one_feat_action(feature_type *f_ptr, std::string_view what, int count)
+static bool grab_one_feat_action(terrain_type *f_ptr, std::string_view what, int count)
 {
     if (auto it = f_info_flags.find(what); it != f_info_flags.end()) {
         f_ptr->state[count].action = it->second;
@@ -53,15 +53,14 @@ static bool grab_one_feat_action(feature_type *f_ptr, std::string_view what, int
 }
 
 /*!
- * @brief 地形情報(f_info)のパース関数 /
- * Initialize the "f_info" array, by parsing an ascii "template" file
+ * @brief 地形情報(GridFeatureDefinitions)のパース関数
  * @param buf テキスト列
  * @param head ヘッダ構造体
  * @return エラーコード
  */
-errr parse_f_info(std::string_view buf, angband_header *)
+errr parse_terrains_info(std::string_view buf, angband_header *)
 {
-    static feature_type *f_ptr = nullptr;
+    static terrain_type *f_ptr = nullptr;
     const auto &tokens = str_split(buf, ':', false, 10);
 
     if (tokens[0] == "N") {
@@ -78,12 +77,12 @@ errr parse_f_info(std::string_view buf, angband_header *)
         if (i < error_idx) {
             return PARSE_ERROR_NON_SEQUENTIAL_RECORDS;
         }
-        if (i >= static_cast<int>(f_info.size())) {
-            f_info.resize(i + 1);
+        if (i >= static_cast<int>(terrains_info.size())) {
+            terrains_info.resize(i + 1);
         }
 
         error_idx = i;
-        f_ptr = &f_info[i];
+        f_ptr = &terrains_info[i];
         f_ptr->idx = static_cast<FEAT_IDX>(i);
         f_ptr->tag = tokens[2];
 
@@ -412,8 +411,8 @@ errr init_feat_variables(void)
  */
 FEAT_IDX f_tag_to_index(std::string_view str)
 {
-    for (size_t i = 0; i < f_head.info_num; i++) {
-        if (f_info[i].tag == str) {
+    for (size_t i = 0; i < terrains_header.info_num; i++) {
+        if (terrains_info[i].tag == str) {
             return (FEAT_IDX)i;
         }
     }
@@ -449,8 +448,8 @@ static FEAT_IDX search_real_feat(std::string feat)
         return -1;
     }
 
-    for (FEAT_IDX i = 0; i < f_head.info_num; i++) {
-        if (feat.compare(f_info[i].tag) == 0) {
+    for (FEAT_IDX i = 0; i < terrains_header.info_num; i++) {
+        if (feat.compare(terrains_info[i].tag) == 0) {
             return i;
         }
     }
@@ -460,14 +459,13 @@ static FEAT_IDX search_real_feat(std::string feat)
 }
 
 /*!
- * @brief 地形情報の各種タグからIDへ変換して結果を収める /
- * Retouch fake tags of f_info
+ * @brief 地形情報の各種タグからIDへ変換して結果を収める
  * @param head ヘッダ構造体
  */
-void retouch_f_info(angband_header *head)
+void retouch_terrains_info(angband_header *head)
 {
     for (int i = 0; i < head->info_num; i++) {
-        auto *f_ptr = &f_info[i];
+        auto *f_ptr = &terrains_info[i];
         FEAT_IDX k = search_real_feat(f_ptr->mimic_tag);
         f_ptr->mimic = k < 0 ? f_ptr->mimic : k;
         k = search_real_feat(f_ptr->destroyed_tag);

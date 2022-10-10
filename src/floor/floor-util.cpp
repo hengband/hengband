@@ -131,7 +131,7 @@ void wipe_o_list(floor_type *floor_ptr)
 
         if (!w_ptr->character_dungeon || preserve_mode) {
             if (o_ptr->is_fixed_artifact() && !o_ptr->is_known()) {
-                a_info.at(o_ptr->fixed_artifact_idx).is_generated = false;
+                artifacts_info.at(o_ptr->fixed_artifact_idx).is_generated = false;
             }
         }
 
@@ -208,6 +208,6 @@ concptr map_name(PlayerType *player_ptr)
     } else if (!floor_ptr->dun_level && player_ptr->town_num) {
         return town_info[player_ptr->town_num].name;
     } else {
-        return d_info[player_ptr->dungeon_idx].name.c_str();
+        return dungeons_info[player_ptr->dungeon_idx].name.c_str();
     }
 }

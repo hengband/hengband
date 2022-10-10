@@ -89,7 +89,7 @@ static constexpr std::array<amuse_type, 13> amuse_info = { {
 
 static std::optional<FixedArtifactId> sweep_amusement_artifact(const bool insta_art, const short k_idx)
 {
-    for (const auto &[a_idx, a_ref] : a_info) {
+    for (const auto &[a_idx, a_ref] : artifacts_info) {
         if (a_idx == FixedArtifactId::NONE) {
             continue;
         }
@@ -98,11 +98,11 @@ static std::optional<FixedArtifactId> sweep_amusement_artifact(const bool insta_
             continue;
         }
 
-        if (a_ref.tval != k_info[k_idx].tval) {
+        if (a_ref.tval != baseitems_info[k_idx].tval) {
             continue;
         }
 
-        if (a_ref.sval != k_info[k_idx].sval) {
+        if (a_ref.sval != baseitems_info[k_idx].sval) {
             continue;
         }
 
@@ -137,7 +137,7 @@ void generate_amusement(PlayerType *player_ptr, int num, bool known)
             continue;
         }
 
-        const auto insta_art = k_info[k_idx].gen_flags.has(ItemGenerationTraitType::INSTA_ART);
+        const auto insta_art = baseitems_info[k_idx].gen_flags.has(ItemGenerationTraitType::INSTA_ART);
         const auto flag = am_ptr->flag;
         const auto fixed_art = flag == AmusementFlagType::FIXED_ART;
         std::optional<FixedArtifactId> opt_a_idx(std::nullopt);
@@ -156,7 +156,7 @@ void generate_amusement(PlayerType *player_ptr, int num, bool known)
 
         ItemMagicApplier(player_ptr, &item, 1, AM_NO_FIXED_ART).execute();
         if (flag == AmusementFlagType::NO_UNIQUE) {
-            if (r_info[i2enum<MonsterRaceId>(item.pval)].kind_flags.has(MonsterKindType::UNIQUE)) {
+            if (monraces_info[i2enum<MonsterRaceId>(item.pval)].kind_flags.has(MonsterKindType::UNIQUE)) {
                 continue;
             }
         }
@@ -586,7 +586,7 @@ bool enchant_spell(PlayerType *player_ptr, HIT_PROB num_hit, int num_dam, ARMOUR
  * @brief 武器へのエゴ付加処理 /
  * Brand the current weapon
  * @param player_ptr プレイヤーへの参照ポインタ
- * @param brand_type エゴ化ID(e_info.txtとは連動していない)
+ * @param brand_type エゴ化ID(EgoDefinitionsとは連動していない)
  */
 void brand_weapon(PlayerType *player_ptr, int brand_type)
 {
@@ -600,8 +600,11 @@ void brand_weapon(PlayerType *player_ptr, int brand_type)
         return;
     }
 
-    bool is_special_item = o_ptr->k_idx && !o_ptr->is_artifact() && !o_ptr->is_ego() && !o_ptr->is_cursed() && !((o_ptr->tval == ItemKindType::SWORD) && (o_ptr->sval == SV_POISON_NEEDLE)) && !((o_ptr->tval == ItemKindType::POLEARM) && (o_ptr->sval == SV_DEATH_SCYTHE)) && !((o_ptr->tval == ItemKindType::SWORD) && (o_ptr->sval == SV_DIAMOND_EDGE));
-    if (!is_special_item) {
+    auto special_weapon = (o_ptr->tval == ItemKindType::SWORD) && (o_ptr->sval == SV_POISON_NEEDLE);
+    special_weapon |= (o_ptr->tval == ItemKindType::POLEARM) && (o_ptr->sval == SV_DEATH_SCYTHE);
+    special_weapon |= (o_ptr->tval == ItemKindType::SWORD) && (o_ptr->sval == SV_DIAMOND_EDGE);
+    const auto is_normal_item = o_ptr->k_idx && !o_ptr->is_artifact() && !o_ptr->is_ego() && !o_ptr->is_cursed() && !special_weapon;
+    if (!is_normal_item) {
         if (flush_failure) {
             flush();
         }

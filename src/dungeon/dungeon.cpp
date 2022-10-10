@@ -15,10 +15,10 @@
 /*
  * The dungeon arrays
  */
-std::vector<dungeon_type> d_info;
+std::vector<dungeon_type> dungeons_info;
 
 /*
- * Maximum number of dungeon in d_info.txt
+ * Maximum number of dungeon in DungeonDefinitions.txt
  */
 std::vector<DEPTH> max_dlv;
 
@@ -38,7 +38,7 @@ DUNGEON_IDX choose_dungeon(concptr note, POSITION y, POSITION x)
         if (max_dlv[DUNGEON_ANGBAND]) {
             return DUNGEON_ANGBAND;
         } else {
-            msg_format(_("まだ%sに入ったことはない。", "You haven't entered %s yet."), d_info[DUNGEON_ANGBAND].name.c_str());
+            msg_format(_("まだ%sに入ったことはない。", "You haven't entered %s yet."), dungeons_info[DUNGEON_ANGBAND].name.c_str());
             msg_print(nullptr);
             return 0;
         }
@@ -47,7 +47,7 @@ DUNGEON_IDX choose_dungeon(concptr note, POSITION y, POSITION x)
     std::vector<DUNGEON_IDX> dun;
 
     screen_save();
-    for (const auto &d_ref : d_info) {
+    for (const auto &d_ref : dungeons_info) {
         char buf[80];
         bool seiha = false;
 
@@ -58,7 +58,7 @@ DUNGEON_IDX choose_dungeon(concptr note, POSITION y, POSITION x)
             continue;
         }
         if (MonsterRace(d_ref.final_guardian).is_valid()) {
-            if (!r_info[d_ref.final_guardian].max_num) {
+            if (!monraces_info[d_ref.final_guardian].max_num) {
                 seiha = true;
             }
         } else if (max_dlv[d_ref.idx] == d_ref.maxdepth) {

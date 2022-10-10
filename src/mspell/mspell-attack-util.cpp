@@ -9,7 +9,7 @@ msa_type *initialize_msa_type(PlayerType *player_ptr, msa_type *msa_ptr, MONSTER
 {
     msa_ptr->m_idx = m_idx;
     msa_ptr->m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
-    msa_ptr->r_ptr = &r_info[msa_ptr->m_ptr->r_idx];
+    msa_ptr->r_ptr = &monraces_info[msa_ptr->m_ptr->r_idx];
     msa_ptr->no_inate = randint0(100) >= (msa_ptr->r_ptr->freq_spell * 2);
     msa_ptr->ability_flags = msa_ptr->r_ptr->ability_flags;
     msa_ptr->x = player_ptr->x;

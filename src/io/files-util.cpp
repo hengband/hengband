@@ -127,11 +127,11 @@ errr get_rnd_line(concptr file_name, int entry, char *output)
         if (buf[2] == '*') {
             break;
         } else if (buf[2] == 'M') {
-            if (r_info[i2enum<MonsterRaceId>(entry)].flags1 & RF1_MALE) {
+            if (monraces_info[i2enum<MonsterRaceId>(entry)].flags1 & RF1_MALE) {
                 break;
             }
         } else if (buf[2] == 'F') {
-            if (r_info[i2enum<MonsterRaceId>(entry)].flags1 & RF1_FEMALE) {
+            if (monraces_info[i2enum<MonsterRaceId>(entry)].flags1 & RF1_FEMALE) {
                 break;
             }
         } else if (sscanf(&(buf[2]), "%d", &test) != EOF) {

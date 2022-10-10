@@ -110,7 +110,7 @@ static void decide_summon_kin_caster(
             msg_format(_("%^sが何かをつぶやいた。", "%^s mumbles."), m_name);
         }
     } else if (mon_to_player || (mon_to_mon && known && see_either)) {
-        auto *r_ptr = &r_info[m_ptr->r_idx];
+        auto *r_ptr = &monraces_info[m_ptr->r_idx];
 #ifdef JP
         (void)m_poss;
 #endif
@@ -581,7 +581,7 @@ MonsterSpellResult spell_RF6_S_ANGEL(PlayerType *player_ptr, POSITION y, POSITIO
     summon_disturb(player_ptr, target_type, known, see_either);
 
     auto *m_ptr = &floor_ptr->m_list[m_idx];
-    auto *r_ptr = &r_info[m_ptr->r_idx];
+    auto *r_ptr = &monraces_info[m_ptr->r_idx];
     int num = 1;
     if (r_ptr->kind_flags.has(MonsterKindType::UNIQUE)) {
         num += r_ptr->level / 40;
@@ -778,7 +778,7 @@ MonsterSpellResult spell_RF6_S_HI_UNDEAD(PlayerType *player_ptr, POSITION y, POS
     summon_disturb(player_ptr, target_type, known, see_either);
 
     int count = 0;
-    if (((m_ptr->r_idx == MonsterRaceId::MORGOTH) || (m_ptr->r_idx == MonsterRaceId::SAURON) || (m_ptr->r_idx == MonsterRaceId::ANGMAR)) && ((r_info[MonsterRaceId::NAZGUL].cur_num + 2) < r_info[MonsterRaceId::NAZGUL].max_num) && mon_to_player) {
+    if (((m_ptr->r_idx == MonsterRaceId::MORGOTH) || (m_ptr->r_idx == MonsterRaceId::SAURON) || (m_ptr->r_idx == MonsterRaceId::ANGMAR)) && ((monraces_info[MonsterRaceId::NAZGUL].cur_num + 2) < monraces_info[MonsterRaceId::NAZGUL].max_num) && mon_to_player) {
         count += summon_NAZGUL(player_ptr, y, x, m_idx);
     } else {
         mspell_cast_msg_blind msg(_("%^sが何かをつぶやいた。", "%^s mumbles."),

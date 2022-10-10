@@ -79,7 +79,7 @@ void process_dungeon(PlayerType *player_ptr, bool load_game)
     disturb(player_ptr, true, true);
     auto quest_num = quest_number(player_ptr, floor_ptr->dun_level);
     const auto &quest_list = QuestList::get_instance();
-    auto *questor_ptr = &r_info[quest_list[quest_num].r_idx];
+    auto *questor_ptr = &monraces_info[quest_list[quest_num].r_idx];
     if (inside_quest(quest_num)) {
         set_bits(questor_ptr->flags1, RF1_QUESTOR);
     }
@@ -140,16 +140,18 @@ void process_dungeon(PlayerType *player_ptr, bool load_game)
         quest_discovery(random_quest_number(player_ptr, floor_ptr->dun_level));
         floor_ptr->quest_number = random_quest_number(player_ptr, floor_ptr->dun_level);
     }
-    const auto guardian = d_info[player_ptr->dungeon_idx].final_guardian;
-    if ((floor_ptr->dun_level == d_info[player_ptr->dungeon_idx].maxdepth) && MonsterRace(guardian).is_valid()) {
-        if (r_info[guardian].max_num)
+
+    const auto &dungeon = dungeons_info[player_ptr->dungeon_idx];
+    const auto guardian = dungeon.final_guardian;
+    if ((floor_ptr->dun_level == dungeon.maxdepth) && MonsterRace(guardian).is_valid()) {
+        const auto &guardian_ref = monraces_info[guardian];
+        if (guardian_ref.max_num) {
 #ifdef JP
-            msg_format("この階には%sの主である%sが棲んでいる。", d_info[player_ptr->dungeon_idx].name.c_str(),
-                r_info[guardian].name.c_str());
+            msg_format("この階には%sの主である%sが棲んでいる。", dungeon.name.c_str(), guardian_ref.name.c_str());
 #else
-            msg_format("%^s lives in this level as the keeper of %s.", r_info[guardian].name.c_str(),
-                d_info[player_ptr->dungeon_idx].name.c_str());
+            msg_format("%^s lives in this level as the keeper of %s.", guardian_ref.name.c_str(), dungeon.name.c_str());
 #endif
+        }
     }
 
     if (!load_game) {

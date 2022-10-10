@@ -48,7 +48,7 @@ static bool is_leave_special_item(PlayerType *player_ptr, ObjectType *o_ptr)
     PlayerClass pc(player_ptr);
     if (PlayerRace(player_ptr).equals(PlayerRaceType::BALROG)) {
         auto r_idx = i2enum<MonsterRaceId>(o_ptr->pval);
-        if (o_ptr->tval == ItemKindType::CORPSE && o_ptr->sval == SV_CORPSE && angband_strchr("pht", r_info[r_idx].d_char)) {
+        if (o_ptr->tval == ItemKindType::CORPSE && o_ptr->sval == SV_CORPSE && angband_strchr("pht", monraces_info[r_idx].d_char)) {
             return false;
         }
     } else if (pc.equals(PlayerClassType::ARCHER)) {

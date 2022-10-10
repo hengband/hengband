@@ -64,7 +64,7 @@ static concptr basic_key_at(int index, char *buf)
  */
 static concptr dungeon_key_at(int index, char *buf)
 {
-    if (index >= static_cast<int>(d_info.size())) {
+    if (index >= static_cast<int>(dungeons_info.size())) {
         return nullptr;
     }
 
@@ -113,7 +113,7 @@ static concptr town_key_at(int index, char *buf)
  */
 static concptr monster_key_at(int index, char *buf)
 {
-    if (index >= static_cast<int>(r_info.size())) {
+    if (index >= static_cast<int>(monraces_info.size())) {
         return nullptr;
     }
 

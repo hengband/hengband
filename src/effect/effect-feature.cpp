@@ -69,7 +69,7 @@ bool affect_feature(PlayerType *player_ptr, MONSTER_IDX who, POSITION r, POSITIO
 {
     auto *floor_ptr = player_ptr->current_floor_ptr;
     auto *g_ptr = &floor_ptr->grid_array[y][x];
-    auto *f_ptr = &f_info[g_ptr->feat];
+    auto *f_ptr = &terrains_info[g_ptr->feat];
 
     bool obvious = false;
     bool known = player_has_los_bold(player_ptr, y, x);
@@ -227,7 +227,7 @@ bool affect_feature(PlayerType *player_ptr, MONSTER_IDX who, POSITION r, POSITIO
         }
 
         int16_t old_mimic = g_ptr->mimic;
-        feature_type *mimic_f_ptr = &f_info[g_ptr->get_feat_mimic()];
+        terrain_type *mimic_f_ptr = &terrains_info[g_ptr->get_feat_mimic()];
 
         cave_alter_feat(player_ptr, y, x, FloorFeatureType::SPIKE);
         g_ptr->mimic = old_mimic;
@@ -249,7 +249,7 @@ bool affect_feature(PlayerType *player_ptr, MONSTER_IDX who, POSITION r, POSITIO
         }
 
         if (known && g_ptr->is_mark()) {
-            msg_format(_("%sが溶けて泥になった！", "The %s turns into mud!"), f_info[g_ptr->get_feat_mimic()].name.c_str());
+            msg_format(_("%sが溶けて泥になった！", "The %s turns into mud!"), terrains_info[g_ptr->get_feat_mimic()].name.c_str());
             obvious = true;
         }
 
@@ -339,7 +339,7 @@ bool affect_feature(PlayerType *player_ptr, MONSTER_IDX who, POSITION r, POSITIO
     }
     case AttributeType::LITE_WEAK:
     case AttributeType::LITE: {
-        if (d_info[player_ptr->dungeon_idx].flags.has(DungeonFeatureType::DARKNESS)) {
+        if (dungeons_info[player_ptr->dungeon_idx].flags.has(DungeonFeatureType::DARKNESS)) {
             break;
         }
 
@@ -379,7 +379,7 @@ bool affect_feature(PlayerType *player_ptr, MONSTER_IDX who, POSITION r, POSITIO
                 }
 
                 grid_type *cc_ptr = &floor_ptr->grid_array[by][bx];
-                if (f_info[cc_ptr->get_feat_mimic()].flags.has(FloorFeatureType::GLOW)) {
+                if (terrains_info[cc_ptr->get_feat_mimic()].flags.has(FloorFeatureType::GLOW)) {
                     do_dark = false;
                     break;
                 }
@@ -427,7 +427,7 @@ bool affect_feature(PlayerType *player_ptr, MONSTER_IDX who, POSITION r, POSITIO
         }
 
         if (known && (g_ptr->is_mark())) {
-            msg_format(_("%sが割れた！", "The %s crumbled!"), f_info[g_ptr->get_feat_mimic()].name.c_str());
+            msg_format(_("%sが割れた！", "The %s crumbled!"), terrains_info[g_ptr->get_feat_mimic()].name.c_str());
             sound(SOUND_GLASS);
         }
 
@@ -449,7 +449,7 @@ bool affect_feature(PlayerType *player_ptr, MONSTER_IDX who, POSITION r, POSITIO
         }
 
         if (known && (g_ptr->is_mark())) {
-            msg_format(_("%sが割れた！", "The %s crumbled!"), f_info[g_ptr->get_feat_mimic()].name.c_str());
+            msg_format(_("%sが割れた！", "The %s crumbled!"), terrains_info[g_ptr->get_feat_mimic()].name.c_str());
             sound(SOUND_GLASS);
         }
 

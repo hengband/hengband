@@ -129,11 +129,11 @@ static void make_tunnels(PlayerType *player_ptr, dun_data_type *dd_ptr)
 {
     for (int j = 0; j < dd_ptr->tunn_n; j++) {
         grid_type *g_ptr;
-        feature_type *f_ptr;
+        terrain_type *f_ptr;
         dd_ptr->tunnel_y = dd_ptr->tunn[j].y;
         dd_ptr->tunnel_x = dd_ptr->tunn[j].x;
         g_ptr = &player_ptr->current_floor_ptr->grid_array[dd_ptr->tunnel_y][dd_ptr->tunnel_x];
-        f_ptr = &f_info[g_ptr->feat];
+        f_ptr = &terrains_info[g_ptr->feat];
         if (f_ptr->flags.has_not(FloorFeatureType::MOVE) || f_ptr->flags.has_none_of({ FloorFeatureType::WATER, FloorFeatureType::LAVA })) {
             g_ptr->mimic = 0;
             place_grid(player_ptr, g_ptr, GB_FLOOR);
@@ -202,7 +202,7 @@ static bool make_one_floor(PlayerType *player_ptr, dun_data_type *dd_ptr, dungeo
 {
     auto *floor_ptr = player_ptr->current_floor_ptr;
 
-    if (d_info[floor_ptr->dungeon_idx].flags.has(DungeonFeatureType::NO_ROOM)) {
+    if (dungeons_info[floor_ptr->dungeon_idx].flags.has(DungeonFeatureType::NO_ROOM)) {
         make_only_tunnel_points(floor_ptr, dd_ptr);
     } else {
         if (!generate_rooms(player_ptr, dd_ptr)) {
@@ -288,7 +288,7 @@ static void place_bound_perm_wall(PlayerType *player_ptr, grid_type *g_ptr)
         return;
     }
 
-    auto *f_ptr = &f_info[g_ptr->feat];
+    auto *f_ptr = &terrains_info[g_ptr->feat];
     if (f_ptr->flags.has_any_of({ FloorFeatureType::HAS_GOLD, FloorFeatureType::HAS_ITEM }) && f_ptr->flags.has_not(FloorFeatureType::SECRET)) {
         g_ptr->feat = feat_state(player_ptr->current_floor_ptr, g_ptr->feat, FloorFeatureType::ENSECRET);
     }
@@ -425,7 +425,7 @@ bool cave_gen(PlayerType *player_ptr, concptr *why)
     }
 
     dd_ptr->cent_n = 0;
-    dungeon_type *d_ptr = &d_info[floor_ptr->dungeon_idx];
+    dungeon_type *d_ptr = &dungeons_info[floor_ptr->dungeon_idx];
     if (ironman_empty_levels || (d_ptr->flags.has(DungeonFeatureType::ARENA) && (empty_levels && one_in_(EMPTY_LEVEL)))) {
         dd_ptr->empty_level = true;
         msg_print_wizard(player_ptr, CHEAT_DUNGEON, _("アリーナレベルを生成。", "Arena level."));

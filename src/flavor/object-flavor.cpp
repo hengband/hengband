@@ -54,7 +54,7 @@
  */
 static bool object_easy_know(int i)
 {
-    auto *k_ptr = &k_info[i];
+    auto *k_ptr = &baseitems_info[i];
     switch (k_ptr->tval) {
     case ItemKindType::LIFE_BOOK:
     case ItemKindType::SORCERY_BOOK:
@@ -191,7 +191,7 @@ void get_table_sindarin(char *out_string)
 static void shuffle_flavors(ItemKindType tval)
 {
     std::vector<std::reference_wrapper<IDX>> flavor_idx_ref_list;
-    for (const auto &k_ref : k_info) {
+    for (const auto &k_ref : baseitems_info) {
         if (k_ref.tval != tval) {
             continue;
         }
@@ -204,21 +204,21 @@ static void shuffle_flavors(ItemKindType tval)
             continue;
         }
 
-        flavor_idx_ref_list.push_back(k_info[k_ref.idx].flavor);
+        flavor_idx_ref_list.push_back(baseitems_info[k_ref.idx].flavor);
     }
 
     rand_shuffle(flavor_idx_ref_list.begin(), flavor_idx_ref_list.end());
 }
 
 /*!
- * @brief ゲーム開始時に行われるベースアイテムの初期化ルーチン / Prepare the "variable" part of the "k_info" array.
+ * @brief ゲーム開始時に行われるベースアイテムの初期化ルーチン
  * @param なし
  */
 void flavor_init(void)
 {
     const auto state_backup = w_ptr->rng.get_state();
     w_ptr->rng.set_state(w_ptr->seed_flavor);
-    for (auto &k_ref : k_info) {
+    for (auto &k_ref : baseitems_info) {
         if (k_ref.flavor_name.empty()) {
             continue;
         }
@@ -235,7 +235,7 @@ void flavor_init(void)
     shuffle_flavors(ItemKindType::POTION);
     shuffle_flavors(ItemKindType::SCROLL);
     w_ptr->rng.set_state(state_backup);
-    for (auto &k_ref : k_info) {
+    for (auto &k_ref : baseitems_info) {
         if (k_ref.idx == 0 || k_ref.name.empty()) {
             continue;
         }
@@ -255,7 +255,7 @@ void flavor_init(void)
  */
 std::string strip_name(KIND_OBJECT_IDX k_idx)
 {
-    auto k_ptr = &k_info[k_idx];
+    auto k_ptr = &baseitems_info[k_idx];
     auto tok = str_split(k_ptr->name, ' ');
     std::stringstream name;
     for (const auto &s : tok) {

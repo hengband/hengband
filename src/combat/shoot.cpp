@@ -155,7 +155,7 @@ static MULTIPLY calc_shot_damage_with_slay(
 {
     MULTIPLY mult = 10;
 
-    monster_race *race_ptr = &r_info[monster_ptr->r_idx];
+    monster_race *race_ptr = &monraces_info[monster_ptr->r_idx];
 
     TrFlags flags{};
     auto arrow_flags = object_flags(arrow_ptr);
@@ -736,7 +736,7 @@ void exe_fire(PlayerType *player_ptr, INVENTORY_IDX item, ObjectType *j_ptr, SPE
                 grid_type *c_mon_ptr = &player_ptr->current_floor_ptr->grid_array[y][x];
 
                 auto *m_ptr = &player_ptr->current_floor_ptr->m_list[c_mon_ptr->m_idx];
-                auto *r_ptr = &r_info[m_ptr->r_idx];
+                auto *r_ptr = &monraces_info[m_ptr->r_idx];
 
                 /* Check the visibility */
                 visible = m_ptr->ml;
@@ -955,7 +955,7 @@ void exe_fire(PlayerType *player_ptr, INVENTORY_IDX item, ObjectType *j_ptr, SPE
             if (!o_idx) {
                 msg_format(_("%sはどこかへ行った。", "The %s went somewhere."), o_name);
                 if (q_ptr->is_fixed_artifact()) {
-                    a_info.at(j_ptr->fixed_artifact_idx).is_generated = false;
+                    artifacts_info.at(j_ptr->fixed_artifact_idx).is_generated = false;
                 }
                 return;
             }
@@ -1003,7 +1003,7 @@ bool test_hit_fire(PlayerType *player_ptr, int chance, monster_type *m_ptr, int 
 {
     int k;
     ARMOUR_CLASS ac;
-    auto *r_ptr = &r_info[m_ptr->r_idx];
+    auto *r_ptr = &monraces_info[m_ptr->r_idx];
 
     /* Percentile dice */
     k = randint1(100);

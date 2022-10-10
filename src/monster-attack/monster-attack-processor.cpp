@@ -37,7 +37,7 @@
 void exe_monster_attack_to_player(PlayerType *player_ptr, turn_flags *turn_flags_ptr, MONSTER_IDX m_idx, POSITION ny, POSITION nx)
 {
     auto *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
-    auto *r_ptr = &r_info[m_ptr->r_idx];
+    auto *r_ptr = &monraces_info[m_ptr->r_idx];
     if (!turn_flags_ptr->do_move || !player_bold(player_ptr, ny, nx)) {
         return;
     }
@@ -50,7 +50,7 @@ void exe_monster_attack_to_player(PlayerType *player_ptr, turn_flags *turn_flags
         turn_flags_ptr->do_move = false;
     }
 
-    if (turn_flags_ptr->do_move && d_info[player_ptr->dungeon_idx].flags.has(DungeonFeatureType::NO_MELEE) && !m_ptr->is_confused()) {
+    if (turn_flags_ptr->do_move && dungeons_info[player_ptr->dungeon_idx].flags.has(DungeonFeatureType::NO_MELEE) && !m_ptr->is_confused()) {
         if (r_ptr->behavior_flags.has_not(MonsterBehaviorType::STUPID)) {
             turn_flags_ptr->do_move = false;
         } else if (is_original_ap_and_seen(player_ptr, m_ptr)) {
@@ -78,7 +78,7 @@ void exe_monster_attack_to_player(PlayerType *player_ptr, turn_flags *turn_flags
 static bool exe_monster_attack_to_monster(PlayerType *player_ptr, MONSTER_IDX m_idx, grid_type *g_ptr)
 {
     auto *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
-    auto *r_ptr = &r_info[m_ptr->r_idx];
+    auto *r_ptr = &monraces_info[m_ptr->r_idx];
     monster_type *y_ptr;
     y_ptr = &player_ptr->current_floor_ptr->m_list[g_ptr->m_idx];
     if (r_ptr->behavior_flags.has(MonsterBehaviorType::NEVER_BLOW)) {
@@ -95,7 +95,7 @@ static bool exe_monster_attack_to_monster(PlayerType *player_ptr, MONSTER_IDX m_
     if (monst_attack_monst(player_ptr, m_idx, g_ptr->m_idx)) {
         return true;
     }
-    if (d_info[player_ptr->dungeon_idx].flags.has_not(DungeonFeatureType::NO_MELEE)) {
+    if (dungeons_info[player_ptr->dungeon_idx].flags.has_not(DungeonFeatureType::NO_MELEE)) {
         return false;
     }
     if (m_ptr->is_confused()) {
@@ -124,14 +124,14 @@ static bool exe_monster_attack_to_monster(PlayerType *player_ptr, MONSTER_IDX m_
 bool process_monster_attack_to_monster(PlayerType *player_ptr, turn_flags *turn_flags_ptr, MONSTER_IDX m_idx, grid_type *g_ptr, bool can_cross)
 {
     auto *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
-    auto *r_ptr = &r_info[m_ptr->r_idx];
+    auto *r_ptr = &monraces_info[m_ptr->r_idx];
     monster_type *y_ptr;
     y_ptr = &player_ptr->current_floor_ptr->m_list[g_ptr->m_idx];
     if (!turn_flags_ptr->do_move || (g_ptr->m_idx == 0)) {
         return false;
     }
 
-    monster_race *z_ptr = &r_info[y_ptr->r_idx];
+    monster_race *z_ptr = &monraces_info[y_ptr->r_idx];
     turn_flags_ptr->do_move = false;
 
     bool do_kill_body = r_ptr->behavior_flags.has(MonsterBehaviorType::KILL_BODY) && r_ptr->behavior_flags.has_not(MonsterBehaviorType::NEVER_BLOW);

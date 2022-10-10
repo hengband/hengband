@@ -55,7 +55,7 @@
 static void decide_activation_level(ae_type *ae_ptr)
 {
     if (ae_ptr->o_ptr->is_fixed_artifact()) {
-        ae_ptr->lev = a_info.at(ae_ptr->o_ptr->fixed_artifact_idx).level;
+        ae_ptr->lev = artifacts_info.at(ae_ptr->o_ptr->fixed_artifact_idx).level;
         return;
     }
 
@@ -69,7 +69,7 @@ static void decide_activation_level(ae_type *ae_ptr)
     }
 
     if (((ae_ptr->o_ptr->tval == ItemKindType::RING) || (ae_ptr->o_ptr->tval == ItemKindType::AMULET)) && ae_ptr->o_ptr->is_ego()) {
-        ae_ptr->lev = e_info[ae_ptr->o_ptr->ego_idx].level;
+        ae_ptr->lev = egos_info[ae_ptr->o_ptr->ego_idx].level;
     }
 }
 

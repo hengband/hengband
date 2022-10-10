@@ -80,31 +80,31 @@ static bool alloc_stairs_aux(PlayerType *player_ptr, POSITION y, POSITION x, int
 bool alloc_stairs(PlayerType *player_ptr, FEAT_IDX feat, int num, int walls)
 {
     int shaft_num = 0;
-    auto *f_ptr = &f_info[feat];
+    auto *f_ptr = &terrains_info[feat];
     auto *floor_ptr = player_ptr->current_floor_ptr;
     if (f_ptr->flags.has(FloorFeatureType::LESS)) {
         if (ironman_downward || !floor_ptr->dun_level) {
             return true;
         }
 
-        if (floor_ptr->dun_level > d_info[floor_ptr->dungeon_idx].mindepth) {
+        if (floor_ptr->dun_level > dungeons_info[floor_ptr->dungeon_idx].mindepth) {
             shaft_num = (randint1(num + 1)) / 2;
         }
     } else if (f_ptr->flags.has(FloorFeatureType::MORE)) {
         auto q_idx = quest_number(player_ptr, floor_ptr->dun_level);
         const auto &quest_list = QuestList::get_instance();
         if (floor_ptr->dun_level > 1 && inside_quest(q_idx)) {
-            auto *r_ptr = &r_info[quest_list[q_idx].r_idx];
+            auto *r_ptr = &monraces_info[quest_list[q_idx].r_idx];
             if (r_ptr->kind_flags.has_not(MonsterKindType::UNIQUE) || 0 < r_ptr->max_num) {
                 return true;
             }
         }
 
-        if (floor_ptr->dun_level >= d_info[floor_ptr->dungeon_idx].maxdepth) {
+        if (floor_ptr->dun_level >= dungeons_info[floor_ptr->dungeon_idx].maxdepth) {
             return true;
         }
 
-        if ((floor_ptr->dun_level < d_info[floor_ptr->dungeon_idx].maxdepth - 1) && !inside_quest(quest_number(player_ptr, floor_ptr->dun_level + 1))) {
+        if ((floor_ptr->dun_level < dungeons_info[floor_ptr->dungeon_idx].maxdepth - 1) && !inside_quest(quest_number(player_ptr, floor_ptr->dun_level + 1))) {
             shaft_num = (randint1(num) + 1) / 2;
         }
     } else {

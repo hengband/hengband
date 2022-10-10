@@ -91,7 +91,7 @@ static MONSTER_IDX decide_pet_index(PlayerType *player_ptr, const int current_mo
         int j;
         for (j = 1000; j > 0; j--) {
             scatter(player_ptr, cy, cx, player_ptr->y, player_ptr->x, d, PROJECT_NONE);
-            if (monster_can_enter(player_ptr, *cy, *cx, &r_info[party_mon[current_monster].r_idx], 0)) {
+            if (monster_can_enter(player_ptr, *cy, *cx, &monraces_info[party_mon[current_monster].r_idx], 0)) {
                 break;
             }
         }
@@ -197,7 +197,7 @@ static void update_unique_artifact(floor_type *floor_ptr, int16_t cur_floor_id)
         }
 
         if (o_ref.is_fixed_artifact()) {
-            a_info.at(o_ref.fixed_artifact_idx).floor_id = cur_floor_id;
+            artifacts_info.at(o_ref.fixed_artifact_idx).floor_id = cur_floor_id;
         }
     }
 }
@@ -284,7 +284,7 @@ static void reset_unique_by_floor_change(PlayerType *player_ptr)
 static void new_floor_allocation(PlayerType *player_ptr, saved_floor_type *sf_ptr)
 {
     GAME_TURN tmp_last_visit = sf_ptr->last_visit;
-    int alloc_chance = d_info[player_ptr->dungeon_idx].max_m_alloc_chance;
+    int alloc_chance = dungeons_info[player_ptr->dungeon_idx].max_m_alloc_chance;
     while (tmp_last_visit > w_ptr->game_turn) {
         tmp_last_visit -= TURNS_PER_TICK * TOWN_DAWN;
     }
@@ -297,7 +297,7 @@ static void new_floor_allocation(PlayerType *player_ptr, saved_floor_type *sf_pt
             continue;
         }
 
-        auto &fixed_artifact = a_info.at(o_ptr->fixed_artifact_idx);
+        auto &fixed_artifact = artifacts_info.at(o_ptr->fixed_artifact_idx);
         if (fixed_artifact.floor_id == new_floor_id) {
             fixed_artifact.is_generated = true;
         } else {

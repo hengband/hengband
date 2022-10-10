@@ -113,7 +113,7 @@ void wiz_enter_quest(PlayerType *player_ptr)
     auto q_idx = i2enum<QuestId>(quest_num);
     init_flags = i2enum<init_flags_type>(INIT_SHOW_TEXT | INIT_ASSIGN);
     player_ptr->current_floor_ptr->quest_number = q_idx;
-    parse_fixed_map(player_ptr, "q_info.txt", 0, 0, 0, 0);
+    parse_fixed_map(player_ptr, QUEST_DEFINITION_LIST, 0, 0, 0, 0);
     quest_list[q_idx].status = QuestStatusType::TAKEN;
     if (quest_list[q_idx].dungeon == 0) {
         exe_enter_quest(player_ptr, q_idx);
@@ -142,13 +142,13 @@ void wiz_restore_monster_max_num(MonsterRaceId r_idx)
 {
     if (!MonsterRace(r_idx).is_valid()) {
         int val = 1;
-        if (!get_value("MonsterID", 1, r_info.size() - 1, &val)) {
+        if (!get_value("MonsterID", 1, monraces_info.size() - 1, &val)) {
             return;
         }
         r_idx = static_cast<MonsterRaceId>(val);
     }
 
-    auto *r_ptr = &r_info[r_idx];
+    auto *r_ptr = &monraces_info[r_idx];
     if (r_ptr->name.empty()) {
         msg_print("そのモンスターは存在しません。");
         msg_print(nullptr);

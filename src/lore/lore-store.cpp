@@ -34,7 +34,7 @@ static int count_lore_mflag_group(const EnumClassFlagGroup<T> &flags, const Enum
 int lore_do_probe(PlayerType *player_ptr, MonsterRaceId r_idx)
 {
     int n = 0;
-    auto *r_ptr = &r_info[r_idx];
+    auto *r_ptr = &monraces_info[r_idx];
     if (r_ptr->r_wake != MAX_UCHAR) {
         n++;
     }
@@ -121,7 +121,7 @@ int lore_do_probe(PlayerType *player_ptr, MonsterRaceId r_idx)
 void lore_treasure(PlayerType *player_ptr, MONSTER_IDX m_idx, ITEM_NUMBER num_item, ITEM_NUMBER num_gold)
 {
     auto *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
-    auto *r_ptr = &r_info[m_ptr->r_idx];
+    auto *r_ptr = &monraces_info[m_ptr->r_idx];
 
     if (!m_ptr->is_original_ap()) {
         return;

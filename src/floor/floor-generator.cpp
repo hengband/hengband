@@ -275,7 +275,7 @@ static void generate_fixed_floor(PlayerType *player_ptr)
     }
     get_mon_num_prep(player_ptr, get_monster_hook(player_ptr), nullptr);
     init_flags = INIT_CREATE_DUNGEON;
-    parse_fixed_map(player_ptr, "q_info.txt", 0, 0, MAX_HGT, MAX_WID);
+    parse_fixed_map(player_ptr, QUEST_DEFINITION_LIST, 0, 0, MAX_HGT, MAX_WID);
 }
 
 /*!
@@ -288,13 +288,13 @@ static bool level_gen(PlayerType *player_ptr, concptr *why)
 {
     auto *floor_ptr = player_ptr->current_floor_ptr;
     DUNGEON_IDX d_idx = floor_ptr->dungeon_idx;
-    if ((always_small_levels || ironman_small_levels || (one_in_(SMALL_LEVEL) && small_levels) || d_info[d_idx].flags.has(DungeonFeatureType::BEGINNER) || d_info[d_idx].flags.has(DungeonFeatureType::SMALLEST)) && d_info[d_idx].flags.has_not(DungeonFeatureType::BIG)) {
+    if ((always_small_levels || ironman_small_levels || (one_in_(SMALL_LEVEL) && small_levels) || dungeons_info[d_idx].flags.has(DungeonFeatureType::BEGINNER) || dungeons_info[d_idx].flags.has(DungeonFeatureType::SMALLEST)) && dungeons_info[d_idx].flags.has_not(DungeonFeatureType::BIG)) {
         int level_height;
         int level_width;
-        if (d_info[d_idx].flags.has(DungeonFeatureType::SMALLEST)) {
+        if (dungeons_info[d_idx].flags.has(DungeonFeatureType::SMALLEST)) {
             level_height = 1;
             level_width = 1;
-        } else if (d_info[d_idx].flags.has(DungeonFeatureType::BEGINNER)) {
+        } else if (dungeons_info[d_idx].flags.has(DungeonFeatureType::BEGINNER)) {
             level_height = 2;
             level_width = 2;
         } else {
@@ -358,7 +358,7 @@ void clear_cave(PlayerType *player_ptr)
     floor_ptr->o_max = 1;
     floor_ptr->o_cnt = 0;
 
-    for (auto &[r_idx, r_ref] : r_info) {
+    for (auto &[r_idx, r_ref] : monraces_info) {
         r_ref.cur_num = 0;
     }
 
@@ -396,7 +396,7 @@ typedef bool (*IsWallFunc)(const floor_type *, int, int);
 static bool is_permanent_blocker(const floor_type *const floor_ptr, const int y, const int x)
 {
     const FEAT_IDX feat = floor_ptr->grid_array[y][x].feat;
-    const auto &flags = f_info[feat].flags;
+    const auto &flags = terrains_info[feat].flags;
     return flags.has(FloorFeatureType::PERMANENT) && flags.has_not(FloorFeatureType::MOVE);
 }
 

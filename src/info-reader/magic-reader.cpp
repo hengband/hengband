@@ -32,13 +32,12 @@ const std::unordered_map<std::string_view, int> name_to_stat = {
 }
 
 /*!
- * @brief 職業魔法情報(m_info)のパース関数 /
- * Initialize the "m_info" array, by parsing an ascii "template" file
+ * @brief 職業魔法情報(ClassMagicDefinitions)のパース関数
  * @param buf テキスト列
  * @param head ヘッダ構造体
  * @return エラーコード
  */
-errr parse_m_info(std::string_view buf, angband_header *head)
+errr parse_class_magics_info(std::string_view buf, angband_header *head)
 {
     static player_magic *m_ptr = nullptr;
     static int realm, magic_idx = 0, readable = 0;
@@ -59,7 +58,7 @@ errr parse_m_info(std::string_view buf, angband_header *head)
         }
 
         error_idx = i;
-        m_ptr = &m_info[i];
+        m_ptr = &class_magics_info[i];
     } else if (!m_ptr) {
         return PARSE_ERROR_MISSING_RECORD_HEADER;
     } else if (tokens[0] == "I") {

@@ -115,7 +115,7 @@ static std::optional<std::tuple<ItemKindType, OBJECT_SUBTYPE_VALUE>> check_magic
     /* Verify the spell */
     switch (tval) {
     case ItemKindType::ROD:
-        if (item.charge <= k_info[lookup_kind(ItemKindType::ROD, sval)].pval * (item.count - 1) * EATER_ROD_CHARGE) {
+        if (item.charge <= baseitems_info[lookup_kind(ItemKindType::ROD, sval)].pval * (item.count - 1) * EATER_ROD_CHARGE) {
             return std::make_tuple(tval, sval);
         }
         break;
@@ -313,7 +313,7 @@ static std::optional<std::tuple<ItemKindType, OBJECT_SUBTYPE_VALUE>> select_magi
                 }
                 x1 = ((ctr < ITEM_GROUP_SIZE / 2) ? x : x + 40);
                 y1 = ((ctr < ITEM_GROUP_SIZE / 2) ? y + ctr : y + ctr - ITEM_GROUP_SIZE / 2);
-                level = (tval == ItemKindType::ROD ? k_info[k_idx].level * 5 / 6 - 5 : k_info[k_idx].level);
+                level = (tval == ItemKindType::ROD ? baseitems_info[k_idx].level * 5 / 6 - 5 : baseitems_info[k_idx].level);
                 chance = level * 4 / 5 + 20;
                 chance -= 3 * (adj_mag_stat[player_ptr->stat_index[mp_ptr->spell_stat]] - 1);
                 level /= 2;
@@ -335,15 +335,15 @@ static std::optional<std::tuple<ItemKindType, OBJECT_SUBTYPE_VALUE>> select_magi
                 if (k_idx) {
                     if (tval == ItemKindType::ROD) {
                         strcat(dummy,
-                            format(_(" %-22.22s 充填:%2d/%2d%3d%%", " %-22.22s   (%2d/%2d) %3d%%"), k_info[k_idx].name.c_str(),
-                                item.charge ? (item.charge - 1) / (EATER_ROD_CHARGE * k_info[k_idx].pval) + 1 : 0,
+                            format(_(" %-22.22s 充填:%2d/%2d%3d%%", " %-22.22s   (%2d/%2d) %3d%%"), baseitems_info[k_idx].name.c_str(),
+                                item.charge ? (item.charge - 1) / (EATER_ROD_CHARGE * baseitems_info[k_idx].pval) + 1 : 0,
                                 item.count, chance));
-                        if (item.charge > k_info[k_idx].pval * (item.count - 1) * EATER_ROD_CHARGE) {
+                        if (item.charge > baseitems_info[k_idx].pval * (item.count - 1) * EATER_ROD_CHARGE) {
                             col = TERM_RED;
                         }
                     } else {
                         strcat(dummy,
-                            format(" %-22.22s    %2d/%2d %3d%%", k_info[k_idx].name.c_str(), (int16_t)(item.charge / EATER_CHARGE),
+                            format(" %-22.22s    %2d/%2d %3d%%", baseitems_info[k_idx].name.c_str(), (int16_t)(item.charge / EATER_CHARGE),
                                 item.count, chance));
                         if (item.charge < EATER_CHARGE) {
                             col = TERM_RED;
@@ -472,7 +472,7 @@ static std::optional<std::tuple<ItemKindType, OBJECT_SUBTYPE_VALUE>> select_magi
         if (!only_browse) {
             auto &item = item_group[i];
             if (tval == ItemKindType::ROD) {
-                if (item.charge > k_info[lookup_kind(tval, i)].pval * (item.count - 1) * EATER_ROD_CHARGE) {
+                if (item.charge > baseitems_info[lookup_kind(tval, i)].pval * (item.count - 1) * EATER_ROD_CHARGE) {
                     msg_print(_("その魔法はまだ充填している最中だ。", "The magic is still charging."));
                     msg_print(nullptr);
                     continue;
@@ -497,7 +497,7 @@ static std::optional<std::tuple<ItemKindType, OBJECT_SUBTYPE_VALUE>> select_magi
             term_erase(7, 21, 255);
             term_erase(7, 20, 255);
 
-            shape_buffer(k_info[lookup_kind(tval, i)].text.c_str(), 62, temp, sizeof(temp));
+            shape_buffer(baseitems_info[lookup_kind(tval, i)].text.c_str(), 62, temp, sizeof(temp));
             for (j = 0, line = 21; temp[j]; j += 1 + strlen(&temp[j])) {
                 prt(&temp[j], line, 10);
                 line++;
@@ -558,7 +558,7 @@ bool do_cmd_magic_eater(PlayerType *player_ptr, bool only_browse, bool powerful)
     auto [tval, sval] = result.value();
 
     auto k_idx = lookup_kind(tval, sval);
-    auto level = (tval == ItemKindType::ROD ? k_info[k_idx].level * 5 / 6 - 5 : k_info[k_idx].level);
+    auto level = (tval == ItemKindType::ROD ? baseitems_info[k_idx].level * 5 / 6 - 5 : baseitems_info[k_idx].level);
     auto chance = level * 4 / 5 + 20;
     chance -= 3 * (adj_mag_stat[player_ptr->stat_index[mp_ptr->spell_stat]] - 1);
     level /= 2;
@@ -622,7 +622,7 @@ bool do_cmd_magic_eater(PlayerType *player_ptr, bool only_browse, bool powerful)
 
     energy.set_player_turn_energy(100);
     if (tval == ItemKindType::ROD) {
-        item.charge += k_info[k_idx].pval * EATER_ROD_CHARGE;
+        item.charge += baseitems_info[k_idx].pval * EATER_ROD_CHARGE;
     } else {
         item.charge -= EATER_CHARGE;
     }

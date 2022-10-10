@@ -392,8 +392,8 @@
     <ClCompile Include="..\..\src\info-reader\feature-reader.cpp" />
     <ClCompile Include="..\..\src\info-reader\general-parser.cpp" />
     <ClCompile Include="..\..\src\info-reader\info-reader-util.cpp" />
-    <ClCompile Include="..\..\src\info-reader\kind-info-tokens-table.cpp" />
-    <ClCompile Include="..\..\src\info-reader\kind-reader.cpp" />
+    <ClCompile Include="..\..\src\info-reader\baseitem-tokens-table.cpp" />
+    <ClCompile Include="..\..\src\info-reader\baseitem-reader.cpp" />
     <ClCompile Include="..\..\src\info-reader\magic-reader.cpp" />
     <ClCompile Include="..\..\src\info-reader\race-info-tokens-table.cpp" />
     <ClCompile Include="..\..\src\info-reader\race-reader.cpp" />
@@ -1167,8 +1167,8 @@
     <ClInclude Include="..\..\src\info-reader\feature-reader.h" />
     <ClInclude Include="..\..\src\info-reader\general-parser.h" />
     <ClInclude Include="..\..\src\info-reader\info-reader-util.h" />
-    <ClInclude Include="..\..\src\info-reader\kind-info-tokens-table.h" />
-    <ClInclude Include="..\..\src\info-reader\kind-reader.h" />
+    <ClInclude Include="..\..\src\info-reader\baseitem-tokens-table.h" />
+    <ClInclude Include="..\..\src\info-reader\baseitem-reader.h" />
     <ClInclude Include="..\..\src\info-reader\magic-reader.h" />
     <ClInclude Include="..\..\src\info-reader\parse-error-types.h" />
     <ClInclude Include="..\..\src\info-reader\race-info-tokens-table.h" />

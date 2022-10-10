@@ -29,7 +29,7 @@
 static FEAT_IDX collect_features(FEAT_IDX *feat_idx, BIT_FLAGS8 mode)
 {
     FEAT_IDX feat_cnt = 0;
-    for (const auto &f_ref : f_info) {
+    for (const auto &f_ref : terrains_info) {
         if (f_ref.name.empty()) {
             continue;
         }
@@ -63,7 +63,7 @@ static void display_feature_list(int col, int row, int per_page, FEAT_IDX *feat_
     for (i = 0; i < per_page && (feat_idx[feat_top + i] >= 0); i++) {
         TERM_COLOR attr;
         FEAT_IDX f_idx = feat_idx[feat_top + i];
-        auto *f_ptr = &f_info[f_idx];
+        auto *f_ptr = &terrains_info[f_idx];
         int row_i = row + i;
         attr = ((i + feat_top == feat_cur) ? TERM_L_BLUE : TERM_WHITE);
         c_prt(attr, f_ptr->name.c_str(), row_i, col);
@@ -104,7 +104,7 @@ void do_cmd_knowledge_features(bool *need_redraw, bool visual_only, IDX direct_f
     TERM_LEN wid, hgt;
     term_get_size(&wid, &hgt);
 
-    std::vector<FEAT_IDX> feat_idx(f_info.size());
+    std::vector<FEAT_IDX> feat_idx(terrains_info.size());
 
     concptr feature_group_text[] = { "terrains", nullptr };
     int len;
@@ -130,7 +130,7 @@ void do_cmd_knowledge_features(bool *need_redraw, bool visual_only, IDX direct_f
 
         feat_cnt = 0;
     } else {
-        auto *f_ptr = &f_info[direct_f_idx];
+        auto *f_ptr = &terrains_info[direct_f_idx];
 
         feat_idx[0] = direct_f_idx;
         feat_cnt = 1;
@@ -159,7 +159,7 @@ void do_cmd_knowledge_features(bool *need_redraw, bool visual_only, IDX direct_f
     char *cur_char_ptr;
     while (!flag) {
         char ch;
-        feature_type *f_ptr;
+        terrain_type *f_ptr;
 
         if (redraw) {
             clear_from(0);
@@ -230,7 +230,7 @@ void do_cmd_knowledge_features(bool *need_redraw, bool visual_only, IDX direct_f
                 (attr_idx || char_idx) ? _(", 'c', 'p'でペースト", ", 'c', 'p' to paste") : _(", 'c'でコピー", ", 'c' to copy")),
             hgt - 1, 0);
 
-        f_ptr = &f_info[feat_idx[feat_cur]];
+        f_ptr = &terrains_info[feat_idx[feat_cur]];
         cur_attr_ptr = &f_ptr->x_attr[*lighting_level];
         cur_char_ptr = &f_ptr->x_char[*lighting_level];
 
@@ -366,7 +366,7 @@ void do_cmd_knowledge_dungeon(PlayerType *player_ptr)
         return;
     }
 
-    for (const auto &d_ref : d_info) {
+    for (const auto &d_ref : dungeons_info) {
         bool seiha = false;
 
         if (d_ref.idx == 0 || !d_ref.maxdepth) {
@@ -376,7 +376,7 @@ void do_cmd_knowledge_dungeon(PlayerType *player_ptr)
             continue;
         }
         if (MonsterRace(d_ref.final_guardian).is_valid()) {
-            if (!r_info[d_ref.final_guardian].max_num) {
+            if (!monraces_info[d_ref.final_guardian].max_num) {
                 seiha = true;
             }
         } else if (max_dlv[d_ref.idx] == d_ref.maxdepth) {

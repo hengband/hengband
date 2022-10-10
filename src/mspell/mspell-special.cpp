@@ -1,5 +1,5 @@
 ﻿/*!
- * @brief 特殊な行動を取るモンスターの具体的な行動定義 (r_infoのSPECIALフラグ)
+ * @brief 特殊な行動を取るモンスターの具体的な行動定義 (MonsterRaceDefinitionsのSPECIALフラグ)
  * @date 2020/05/16
  * @author Hourier
  */
@@ -82,7 +82,7 @@ static MonsterSpellResult spell_RF6_SPECIAL_BANORLUPART(PlayerType *player_ptr, 
         dummy_hp = 0;
         dummy_maxhp = 0;
 
-        if (!r_info[MonsterRaceId::BANOR].cur_num || !r_info[MonsterRaceId::LUPART].cur_num) {
+        if (!monraces_info[MonsterRaceId::BANOR].cur_num || !monraces_info[MonsterRaceId::LUPART].cur_num) {
             return MonsterSpellResult::make_invalid();
         }
 
@@ -164,7 +164,7 @@ static MonsterSpellResult spell_RF6_SPECIAL_B(PlayerType *player_ptr, POSITION y
     auto *floor_ptr = player_ptr->current_floor_ptr;
     auto *m_ptr = &floor_ptr->m_list[m_idx];
     monster_type *t_ptr = &floor_ptr->m_list[t_idx];
-    monster_race *tr_ptr = &r_info[t_ptr->r_idx];
+    monster_race *tr_ptr = &monraces_info[t_ptr->r_idx];
     bool monster_to_player = (target_type == MONSTER_TO_PLAYER);
     bool monster_to_monster = (target_type == MONSTER_TO_MONSTER);
     bool direct = player_bold(player_ptr, y, x);
@@ -250,7 +250,7 @@ MonsterSpellResult spell_RF6_SPECIAL(PlayerType *player_ptr, POSITION y, POSITIO
 {
     auto *floor_ptr = player_ptr->current_floor_ptr;
     auto *m_ptr = &floor_ptr->m_list[m_idx];
-    auto *r_ptr = &r_info[m_ptr->r_idx];
+    auto *r_ptr = &monraces_info[m_ptr->r_idx];
 
     switch (m_ptr->r_idx) {
     case MonsterRaceId::OHMU:

@@ -44,11 +44,11 @@ static errr interpret_r_token(char *buf)
     int i = (int)strtol(zz[0], nullptr, 0);
     TERM_COLOR n1 = (TERM_COLOR)strtol(zz[1], nullptr, 0);
     auto n2 = static_cast<char>(strtol(zz[2], nullptr, 0));
-    if (i >= static_cast<int>(r_info.size())) {
+    if (i >= static_cast<int>(monraces_info.size())) {
         return 1;
     }
 
-    r_ptr = &r_info[i2enum<MonsterRaceId>(i)];
+    r_ptr = &monraces_info[i2enum<MonsterRaceId>(i)];
     if (n1 || (!(n2 & 0x80) && n2)) {
         r_ptr->x_attr = n1;
     } /* Allow TERM_DARK text */
@@ -75,11 +75,11 @@ static errr interpret_k_token(char *buf)
     int i = (int)strtol(zz[0], nullptr, 0);
     TERM_COLOR n1 = (TERM_COLOR)strtol(zz[1], nullptr, 0);
     auto n2 = static_cast<char>(strtol(zz[2], nullptr, 0));
-    if (i >= static_cast<int>(k_info.size())) {
+    if (i >= static_cast<int>(baseitems_info.size())) {
         return 1;
     }
 
-    k_ptr = &k_info[i];
+    k_ptr = &baseitems_info[i];
     if (n1 || (!(n2 & 0x80) && n2)) {
         k_ptr->x_attr = n1;
     } /* Allow TERM_DARK text */
@@ -98,8 +98,8 @@ static errr interpret_k_token(char *buf)
  */
 static errr decide_feature_type(int i, int num, char **zz)
 {
-    feature_type *f_ptr;
-    f_ptr = &f_info[i];
+    terrain_type *f_ptr;
+    f_ptr = &terrains_info[i];
 
     TERM_COLOR n1 = (TERM_COLOR)strtol(zz[1], nullptr, 0);
     auto n2 = static_cast<char>(strtol(zz[2], nullptr, 0));
@@ -168,7 +168,7 @@ static errr interpret_f_token(char *buf)
     }
 
     int i = (int)strtol(zz[0], nullptr, 0);
-    if (i >= static_cast<int>(f_info.size())) {
+    if (i >= static_cast<int>(terrains_info.size())) {
         return 1;
     }
 
@@ -210,7 +210,7 @@ static errr interpret_u_token(char *buf)
     int j = (int)strtol(zz[0], nullptr, 0);
     TERM_COLOR n1 = (TERM_COLOR)strtol(zz[1], nullptr, 0);
     auto n2 = static_cast<char>(strtol(zz[2], nullptr, 0));
-    for (auto &k_ref : k_info) {
+    for (auto &k_ref : baseitems_info) {
         if ((k_ref.idx > 0) && (enum2i(k_ref.tval) == j)) {
             if (n1) {
                 k_ref.d_attr = n1;

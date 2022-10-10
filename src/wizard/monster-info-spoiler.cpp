@@ -103,7 +103,7 @@ SpoilerOutputResultType spoil_mon_desc(concptr fname, std::function<bool(const m
         "---", "---", "---", "-----", "-----", "-------------------");
 
     std::vector<MonsterRaceId> who;
-    for (const auto &[r_idx, r_ref] : r_info) {
+    for (const auto &[r_idx, r_ref] : monraces_info) {
         if (MonsterRace(r_ref.idx).is_valid() && !r_ref.name.empty()) {
             who.push_back(r_ref.idx);
         }
@@ -111,7 +111,7 @@ SpoilerOutputResultType spoil_mon_desc(concptr fname, std::function<bool(const m
 
     ang_sort(&dummy, who.data(), &why, who.size(), ang_sort_comp_hook, ang_sort_swap_hook);
     for (auto r_idx : who) {
-        auto *r_ptr = &r_info[r_idx];
+        auto *r_ptr = &monraces_info[r_idx];
         if (filter_monster && !filter_monster(r_ptr)) {
             continue;
         }
@@ -187,7 +187,7 @@ SpoilerOutputResultType spoil_mon_info(concptr fname)
     spoil_out("------------------------------------------\n\n");
 
     std::vector<MonsterRaceId> who;
-    for (const auto &[r_idx, r_ref] : r_info) {
+    for (const auto &[r_idx, r_ref] : monraces_info) {
         if (MonsterRace(r_ref.idx).is_valid() && !r_ref.name.empty()) {
             who.push_back(r_ref.idx);
         }
@@ -196,7 +196,7 @@ SpoilerOutputResultType spoil_mon_info(concptr fname)
     uint16_t why = 2;
     ang_sort(&dummy, who.data(), &why, who.size(), ang_sort_comp_hook, ang_sort_swap_hook);
     for (auto r_idx : who) {
-        auto *r_ptr = &r_info[r_idx];
+        auto *r_ptr = &monraces_info[r_idx];
         if (r_ptr->kind_flags.has(MonsterKindType::UNIQUE)) {
             spoil_out("[U] ");
         } else if (r_ptr->population_flags.has(MonsterPopulationType::NAZGUL)) {

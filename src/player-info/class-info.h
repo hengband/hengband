@@ -11,7 +11,7 @@
 #include <string>
 #include <vector>
 
-/** m_info.txtでMPの無い職業に設定される */
+/** ClassMagicDefinitions.txtでMPの無い職業に設定される */
 #define SPELL_FIRST_NO_SPELL 99
 
 /*
@@ -33,7 +33,7 @@ struct player_magic {
     magic_type info[MAX_MAGIC][32]{}; /* The available spells */
 };
 
-extern std::vector<player_magic> m_info;
+extern std::vector<player_magic> class_magics_info;
 extern const player_magic *mp_ptr;
 
 struct player_class_info {

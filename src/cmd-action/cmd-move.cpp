@@ -79,7 +79,7 @@ void do_cmd_go_up(PlayerType *player_ptr)
     auto &quest_list = QuestList::get_instance();
     bool go_up = false;
     auto *g_ptr = &player_ptr->current_floor_ptr->grid_array[player_ptr->y][player_ptr->x];
-    auto *f_ptr = &f_info[g_ptr->feat];
+    auto *f_ptr = &terrains_info[g_ptr->feat];
     int up_num = 0;
     PlayerClass(player_ptr).break_samurai_stance({ SamuraiStanceType::MUSOU });
 
@@ -108,7 +108,7 @@ void do_cmd_go_up(PlayerType *player_ptr)
         if (q_ref.status == QuestStatusType::UNTAKEN) {
             if (q_ref.type != QuestKindType::RANDOM) {
                 init_flags = INIT_ASSIGN;
-                parse_fixed_map(player_ptr, "q_info.txt", 0, 0, 0, 0);
+                parse_fixed_map(player_ptr, QUEST_DEFINITION_LIST, 0, 0, 0, 0);
             }
 
             q_ref.status = QuestStatusType::TAKEN;
@@ -164,7 +164,7 @@ void do_cmd_go_up(PlayerType *player_ptr)
             up_num = 1;
         }
 
-        if (player_ptr->current_floor_ptr->dun_level - up_num < d_info[player_ptr->dungeon_idx].mindepth) {
+        if (player_ptr->current_floor_ptr->dun_level - up_num < dungeons_info[player_ptr->dungeon_idx].mindepth) {
             up_num = player_ptr->current_floor_ptr->dun_level;
         }
     }
@@ -204,7 +204,7 @@ void do_cmd_go_down(PlayerType *player_ptr)
     PlayerClass(player_ptr).break_samurai_stance({ SamuraiStanceType::MUSOU });
 
     auto *g_ptr = &player_ptr->current_floor_ptr->grid_array[player_ptr->y][player_ptr->x];
-    auto *f_ptr = &f_info[g_ptr->feat];
+    auto *f_ptr = &terrains_info[g_ptr->feat];
     if (f_ptr->flags.has_not(FloorFeatureType::MORE)) {
         msg_print(_("ここには下り階段が見当たらない。", "I see no down staircase here."));
         return;
@@ -241,7 +241,7 @@ void do_cmd_go_down(PlayerType *player_ptr)
         if (current_quest.status == QuestStatusType::UNTAKEN) {
             if (current_quest.type != QuestKindType::RANDOM) {
                 init_flags = INIT_ASSIGN;
-                parse_fixed_map(player_ptr, "q_info.txt", 0, 0, 0, 0);
+                parse_fixed_map(player_ptr, QUEST_DEFINITION_LIST, 0, 0, 0, 0);
             }
 
             current_quest.status = QuestStatusType::TAKEN;
@@ -268,8 +268,8 @@ void do_cmd_go_down(PlayerType *player_ptr)
         }
 
         if (!max_dlv[target_dungeon]) {
-            msg_format(_("ここには%sの入り口(%d階相当)があります", "There is the entrance of %s (Danger level: %d)"), d_info[target_dungeon].name.c_str(),
-                d_info[target_dungeon].mindepth);
+            msg_format(_("ここには%sの入り口(%d階相当)があります", "There is the entrance of %s (Danger level: %d)"), dungeons_info[target_dungeon].name.c_str(),
+                dungeons_info[target_dungeon].mindepth);
             if (!get_check(_("本当にこのダンジョンに入りますか？", "Do you really get in this dungeon? "))) {
                 return;
             }
@@ -294,7 +294,7 @@ void do_cmd_go_down(PlayerType *player_ptr)
 
     if (!is_in_dungeon(player_ptr)) {
         player_ptr->enter_dungeon = true;
-        down_num = d_info[player_ptr->dungeon_idx].mindepth;
+        down_num = dungeons_info[player_ptr->dungeon_idx].mindepth;
     }
 
     if (record_stair) {
@@ -309,7 +309,7 @@ void do_cmd_go_down(PlayerType *player_ptr)
         msg_print(_("わざと落とし戸に落ちた。", "You deliberately jump through the trap door."));
     } else {
         if (target_dungeon) {
-            msg_format(_("%sへ入った。", "You entered %s."), d_info[player_ptr->dungeon_idx].text.c_str());
+            msg_format(_("%sへ入った。", "You entered %s."), dungeons_info[player_ptr->dungeon_idx].text.c_str());
         } else {
             if (is_echizen(player_ptr)) {
                 msg_print(_("なんだこの階段は！", "What's this STAIRWAY!"));

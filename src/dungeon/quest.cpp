@@ -135,7 +135,7 @@ void QuestList::initialize()
         return;
     }
     try {
-        auto quest_numbers = parse_quest_info("q_info.txt");
+        auto quest_numbers = parse_quest_info(QUEST_DEFINITION_LIST);
         quest_type init_quest{};
         init_quest.status = QuestStatusType::UNTAKEN;
         this->quest_data.insert({ QuestId::NONE, init_quest });
@@ -178,7 +178,7 @@ void determine_random_questor(PlayerType *player_ptr, quest_type *q_ptr)
          */
         r_idx = get_mon_num(player_ptr, 0, q_ptr->level + 5 + randint1(q_ptr->level / 10), GMN_ARENA);
         monster_race *r_ptr;
-        r_ptr = &r_info[r_idx];
+        r_ptr = &monraces_info[r_idx];
 
         if (r_ptr->kind_flags.has_not(MonsterKindType::UNIQUE)) {
             continue;
@@ -293,7 +293,7 @@ void quest_discovery(QuestId q_idx)
 {
     auto &quest_list = QuestList::get_instance();
     auto *q_ptr = &quest_list[q_idx];
-    auto *r_ptr = &r_info[q_ptr->r_idx];
+    auto *r_ptr = &monraces_info[q_ptr->r_idx];
     MONSTER_NUMBER q_num = q_ptr->max_num;
 
     if (!inside_quest(q_idx)) {
@@ -411,10 +411,10 @@ void leave_quest_check(PlayerType *player_ptr)
         quest_list[QuestId::TOWER1].complev = player_ptr->lev;
         break;
     case QuestKindType::FIND_ARTIFACT:
-        a_info.at(q_ptr->reward_artifact_idx).gen_flags.reset(ItemGenerationTraitType::QUESTITEM);
+        artifacts_info.at(q_ptr->reward_artifact_idx).gen_flags.reset(ItemGenerationTraitType::QUESTITEM);
         break;
     case QuestKindType::RANDOM:
-        r_info[q_ptr->r_idx].flags1 &= ~(RF1_QUESTOR);
+        monraces_info[q_ptr->r_idx].flags1 &= ~(RF1_QUESTOR);
         prepare_change_floor_mode(player_ptr, CFM_NO_RETURN);
         break;
     default:

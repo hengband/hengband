@@ -71,7 +71,7 @@ static bool see_wall(PlayerType *player_ptr, DIRECTION dir, POSITION y, POSITION
     }
 
     int16_t feat = g_ptr->get_feat_mimic();
-    auto *f_ptr = &f_info[feat];
+    auto *f_ptr = &terrains_info[feat];
     if (!player_can_enter(player_ptr, feat, 0)) {
         return f_ptr->flags.has_not(FloorFeatureType::DOOR);
     }
@@ -228,8 +228,8 @@ static bool run_test(PlayerType *player_ptr)
         grid_type *g_ptr;
         g_ptr = &floor_ptr->grid_array[row][col];
         FEAT_IDX feat = g_ptr->get_feat_mimic();
-        feature_type *f_ptr;
-        f_ptr = &f_info[feat];
+        terrain_type *f_ptr;
+        f_ptr = &terrains_info[feat];
         if (g_ptr->m_idx) {
             auto *m_ptr = &floor_ptr->m_list[g_ptr->m_idx];
             if (m_ptr->ml) {

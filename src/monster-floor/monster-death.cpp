@@ -177,7 +177,7 @@ static void drop_artifact_from_unique(PlayerType *player_ptr, monster_death_type
  */
 bool drop_single_artifact(PlayerType *player_ptr, monster_death_type *md_ptr, FixedArtifactId a_idx)
 {
-    auto &a_ref = a_info.at(a_idx);
+    auto &a_ref = artifacts_info.at(a_idx);
     if (a_ref.is_generated) {
         return false;
     }
@@ -195,14 +195,14 @@ bool drop_single_artifact(PlayerType *player_ptr, monster_death_type *md_ptr, Fi
 
 static KIND_OBJECT_IDX drop_dungeon_final_artifact(PlayerType *player_ptr, monster_death_type *md_ptr)
 {
-    const auto &dungeon = d_info[player_ptr->dungeon_idx];
+    const auto &dungeon = dungeons_info[player_ptr->dungeon_idx];
     auto k_idx = dungeon.final_object != 0 ? dungeon.final_object : lookup_kind(ItemKindType::SCROLL, SV_SCROLL_ACQUIREMENT);
     if (dungeon.final_artifact == FixedArtifactId::NONE) {
         return k_idx;
     }
 
     const auto a_idx = dungeon.final_artifact;
-    auto &a_ref = a_info.at(a_idx);
+    auto &a_ref = artifacts_info.at(a_idx);
     if (a_ref.is_generated) {
         return k_idx;
     }
@@ -223,7 +223,7 @@ static void drop_artifacts(PlayerType *player_ptr, monster_death_type *md_ptr)
     }
 
     drop_artifact_from_unique(player_ptr, md_ptr);
-    if (((md_ptr->r_ptr->flags7 & RF7_GUARDIAN) == 0) || (d_info[player_ptr->dungeon_idx].final_guardian != md_ptr->m_ptr->r_idx)) {
+    if (((md_ptr->r_ptr->flags7 & RF7_GUARDIAN) == 0) || (dungeons_info[player_ptr->dungeon_idx].final_guardian != md_ptr->m_ptr->r_idx)) {
         return;
     }
 
@@ -236,7 +236,7 @@ static void drop_artifacts(PlayerType *player_ptr, monster_death_type *md_ptr)
         (void)drop_near(player_ptr, q_ptr, -1, md_ptr->md_y, md_ptr->md_x);
     }
 
-    msg_format(_("あなたは%sを制覇した！", "You have conquered %s!"), d_info[player_ptr->dungeon_idx].name.c_str());
+    msg_format(_("あなたは%sを制覇した！", "You have conquered %s!"), dungeons_info[player_ptr->dungeon_idx].name.c_str());
 }
 
 static void decide_drop_quality(monster_death_type *md_ptr)
@@ -403,7 +403,7 @@ void monster_death(PlayerType *player_ptr, MONSTER_IDX m_idx, bool drop_item, At
     on_dead_explosion(player_ptr, md_ptr);
     if (md_ptr->m_ptr->mflag2.has(MonsterConstantFlagType::CHAMELEON)) {
         choose_new_monster(player_ptr, m_idx, true, MonsterRaceId::CHAMELEON);
-        md_ptr->r_ptr = &r_info[md_ptr->m_ptr->r_idx];
+        md_ptr->r_ptr = &monraces_info[md_ptr->m_ptr->r_idx];
     }
 
     QuestCompletionChecker(player_ptr, md_ptr->m_ptr).complete();
@@ -437,7 +437,7 @@ void monster_death(PlayerType *player_ptr, MONSTER_IDX m_idx, bool drop_item, At
  */
 concptr extract_note_dies(MonsterRaceId r_idx)
 {
-    auto *r_ptr = &r_info[r_idx];
+    auto *r_ptr = &monraces_info[r_idx];
     if (monster_living(r_idx)) {
         return _("は死んだ。", " dies.");
     }

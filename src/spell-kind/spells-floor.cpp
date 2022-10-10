@@ -84,8 +84,8 @@ void wiz_lite(PlayerType *player_ptr, bool ninja)
 
             /* Feature code (applying "mimic" field) */
             FEAT_IDX feat = g_ptr->get_feat_mimic();
-            feature_type *f_ptr;
-            f_ptr = &f_info[feat];
+            terrain_type *f_ptr;
+            f_ptr = &terrains_info[feat];
 
             /* Scan all neighbors */
             for (OBJECT_IDX i = 0; i < 9; i++) {
@@ -94,10 +94,10 @@ void wiz_lite(PlayerType *player_ptr, bool ninja)
                 g_ptr = &player_ptr->current_floor_ptr->grid_array[yy][xx];
 
                 /* Feature code (applying "mimic" field) */
-                f_ptr = &f_info[g_ptr->get_feat_mimic()];
+                f_ptr = &terrains_info[g_ptr->get_feat_mimic()];
 
                 /* Perma-lite the grid */
-                if (d_info[player_ptr->dungeon_idx].flags.has_not(DungeonFeatureType::DARKNESS) && !ninja) {
+                if (dungeons_info[player_ptr->dungeon_idx].flags.has_not(DungeonFeatureType::DARKNESS) && !ninja) {
                     g_ptr->info |= (CAVE_GLOW);
                 }
 
@@ -186,7 +186,7 @@ void wiz_dark(PlayerType *player_ptr)
  */
 void map_area(PlayerType *player_ptr, POSITION range)
 {
-    if (d_info[player_ptr->dungeon_idx].flags.has(DungeonFeatureType::DARKNESS)) {
+    if (dungeons_info[player_ptr->dungeon_idx].flags.has(DungeonFeatureType::DARKNESS)) {
         range /= 3;
     }
 
@@ -205,8 +205,8 @@ void map_area(PlayerType *player_ptr, POSITION range)
 
             /* Feature code (applying "mimic" field) */
             FEAT_IDX feat = g_ptr->get_feat_mimic();
-            feature_type *f_ptr;
-            f_ptr = &f_info[feat];
+            terrain_type *f_ptr;
+            f_ptr = &terrains_info[feat];
 
             /* Memorize normal features */
             if (f_ptr->flags.has(FloorFeatureType::REMEMBER)) {
@@ -220,7 +220,7 @@ void map_area(PlayerType *player_ptr, POSITION range)
 
                 /* Feature code (applying "mimic" field) */
                 feat = g_ptr->get_feat_mimic();
-                f_ptr = &f_info[feat];
+                f_ptr = &terrains_info[feat];
 
                 /* Memorize walls (etc) */
                 if (f_ptr->flags.has(FloorFeatureType::REMEMBER)) {
@@ -309,7 +309,7 @@ bool destroy_area(PlayerType *player_ptr, POSITION y1, POSITION x1, POSITION r, 
 
             if (g_ptr->m_idx) {
                 auto *m_ptr = &floor_ptr->m_list[g_ptr->m_idx];
-                auto *r_ptr = &r_info[m_ptr->r_idx];
+                auto *r_ptr = &monraces_info[m_ptr->r_idx];
 
                 if (in_generate) /* In generation */
                 {
@@ -345,7 +345,7 @@ bool destroy_area(PlayerType *player_ptr, POSITION y1, POSITION x1, POSITION r, 
 
                     /* Hack -- Preserve unknown artifacts */
                     if (o_ptr->is_fixed_artifact() && (!o_ptr->is_known() || in_generate)) {
-                        a_info.at(o_ptr->fixed_artifact_idx).is_generated = false;
+                        artifacts_info.at(o_ptr->fixed_artifact_idx).is_generated = false;
 
                         if (in_generate && cheat_peek) {
                             GAME_TEXT o_name[MAX_NLEN];
@@ -433,7 +433,7 @@ bool destroy_area(PlayerType *player_ptr, POSITION y1, POSITION x1, POSITION r, 
                 continue;
             }
 
-            if (d_info[floor_ptr->dungeon_idx].flags.has(DungeonFeatureType::DARKNESS)) {
+            if (dungeons_info[floor_ptr->dungeon_idx].flags.has(DungeonFeatureType::DARKNESS)) {
                 continue;
             }
 
@@ -448,7 +448,7 @@ bool destroy_area(PlayerType *player_ptr, POSITION y1, POSITION x1, POSITION r, 
                     continue;
                 }
                 cc_ptr = &floor_ptr->grid_array[yy][xx];
-                if (f_info[cc_ptr->get_feat_mimic()].flags.has(FloorFeatureType::GLOW)) {
+                if (terrains_info[cc_ptr->get_feat_mimic()].flags.has(FloorFeatureType::GLOW)) {
                     g_ptr->info |= CAVE_GLOW;
                     break;
                 }

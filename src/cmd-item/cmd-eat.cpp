@@ -238,7 +238,7 @@ void exe_eat_food(PlayerType *player_ptr, INVENTORY_IDX item)
     PlayerEnergy(player_ptr).set_player_turn_energy(100);
 
     /* Object level */
-    int lev = k_info[o_ptr->k_idx].level;
+    int lev = baseitems_info[o_ptr->k_idx].level;
 
     /* Identity not known yet */
     int ident = exe_eat_food_type_object(player_ptr, o_ptr);
@@ -282,7 +282,7 @@ void exe_eat_food(PlayerType *player_ptr, INVENTORY_IDX item)
 
     /* Balrogs change humanoid corpses to energy */
     const auto corpse_r_idx = i2enum<MonsterRaceId>(o_ptr->pval);
-    if (food_type == PlayerRaceFoodType::CORPSE && (o_ptr->tval == ItemKindType::CORPSE && o_ptr->sval == SV_CORPSE && angband_strchr("pht", r_info[corpse_r_idx].d_char))) {
+    if (food_type == PlayerRaceFoodType::CORPSE && (o_ptr->tval == ItemKindType::CORPSE && o_ptr->sval == SV_CORPSE && angband_strchr("pht", monraces_info[corpse_r_idx].d_char))) {
         GAME_TEXT o_name[MAX_NLEN];
         describe_flavor(player_ptr, o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
         msg_format(_("%sは燃え上り灰になった。精力を吸収した気がする。", "%^s is burnt to ashes.  You absorb its vitality!"), o_name);

@@ -84,7 +84,7 @@ void MonsterAttackPlayer::make_attack_normal()
         return;
     }
 
-    auto *r_ptr = &r_info[this->m_ptr->r_idx];
+    auto *r_ptr = &monraces_info[this->m_ptr->r_idx];
     this->rlev = ((r_ptr->level >= 1) ? r_ptr->level : 1);
     monster_desc(this->player_ptr, this->m_name, this->m_ptr, 0);
     monster_desc(this->player_ptr, this->ddesc, this->m_ptr, MD_WRONGDOER_NAME);
@@ -125,12 +125,12 @@ int MonsterAttackPlayer::stat_value(const int raw)
 
 bool MonsterAttackPlayer::check_no_blow()
 {
-    auto *r_ptr = &r_info[this->m_ptr->r_idx];
+    auto *r_ptr = &monraces_info[this->m_ptr->r_idx];
     if (r_ptr->behavior_flags.has(MonsterBehaviorType::NEVER_BLOW)) {
         return false;
     }
 
-    if (d_info[this->player_ptr->dungeon_idx].flags.has(DungeonFeatureType::NO_MELEE)) {
+    if (dungeons_info[this->player_ptr->dungeon_idx].flags.has(DungeonFeatureType::NO_MELEE)) {
         return false;
     }
 
@@ -143,7 +143,7 @@ bool MonsterAttackPlayer::check_no_blow()
  */
 bool MonsterAttackPlayer::process_monster_blows()
 {
-    auto *r_ptr = &r_info[this->m_ptr->r_idx];
+    auto *r_ptr = &monraces_info[this->m_ptr->r_idx];
     for (auto ap_cnt = 0; ap_cnt < MAX_NUM_BLOWS; ap_cnt++) {
         this->obvious = false;
         this->damage = 0;
@@ -159,7 +159,7 @@ bool MonsterAttackPlayer::process_monster_blows()
 
         // effect が RaceBlowEffectType::NONE (無効値)になることはあり得ないはずだが、万一そう
         // なっていたら単に攻撃を打ち切る。
-        // r_info.txt の "B:" トークンに effect 以降を書き忘れた場合が該当する。
+        // MonsterRaceDefinitions の "B:" トークンに effect 以降を書き忘れた場合が該当する。
         if (this->effect == RaceBlowEffectType::NONE) {
             plog("unexpected: MonsterAttackPlayer::effect == RaceBlowEffectType::NONE");
             break;
@@ -218,7 +218,7 @@ bool MonsterAttackPlayer::check_monster_continuous_attack()
         return false;
     }
 
-    auto *r_ptr = &r_info[this->m_ptr->r_idx];
+    auto *r_ptr = &monraces_info[this->m_ptr->r_idx];
     if (this->m_ptr->is_pet() && r_ptr->kind_flags.has(MonsterKindType::UNIQUE) && (this->method == RaceBlowMethodType::EXPLODE)) {
         this->method = RaceBlowMethodType::HIT;
         this->d_dice /= 10;
@@ -267,7 +267,7 @@ bool MonsterAttackPlayer::process_monster_attack_hit()
  */
 bool MonsterAttackPlayer::effect_protecion_from_evil()
 {
-    auto *r_ptr = &r_info[this->m_ptr->r_idx];
+    auto *r_ptr = &monraces_info[this->m_ptr->r_idx];
     if ((this->player_ptr->protevil <= 0) || r_ptr->kind_flags.has_not(MonsterKindType::EVIL) || (this->player_ptr->lev < this->rlev) || ((randint0(100) + this->player_ptr->lev) <= 50)) {
         return false;
     }
@@ -459,12 +459,12 @@ void MonsterAttackPlayer::gain_armor_exp()
     }
 
     auto cur = this->player_ptr->skill_exp[PlayerSkillKindType::SHIELD];
-    auto max = s_info[enum2i(this->player_ptr->pclass)].s_max[PlayerSkillKindType::SHIELD];
+    auto max = class_skills_info[enum2i(this->player_ptr->pclass)].s_max[PlayerSkillKindType::SHIELD];
     if (cur >= max) {
         return;
     }
 
-    auto *r_ptr = &r_info[this->m_ptr->r_idx];
+    auto *r_ptr = &monraces_info[this->m_ptr->r_idx];
     auto target_level = r_ptr->level;
     short increment = 0;
     if ((cur / 100) < target_level) {
@@ -489,7 +489,7 @@ void MonsterAttackPlayer::increase_blow_type_seen(const int ap_cnt)
         return;
     }
 
-    auto *r_ptr = &r_info[this->m_ptr->r_idx];
+    auto *r_ptr = &monraces_info[this->m_ptr->r_idx];
     if (!this->obvious && (this->damage == 0) && (r_ptr->r_blows[ap_cnt] <= 10)) {
         return;
     }
@@ -506,7 +506,7 @@ void MonsterAttackPlayer::postprocess_monster_blows()
     spell_hex.eyes_on_eyes();
     musou_counterattack(this->player_ptr, this);
     spell_hex.thief_teleport();
-    auto *r_ptr = &r_info[this->m_ptr->r_idx];
+    auto *r_ptr = &monraces_info[this->m_ptr->r_idx];
     if (this->player_ptr->is_dead && (r_ptr->r_deaths < MAX_SHORT) && !this->player_ptr->current_floor_ptr->inside_arena) {
         r_ptr->r_deaths++;
     }

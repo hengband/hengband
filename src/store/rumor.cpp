@@ -68,8 +68,8 @@ void display_rumor(PlayerType *player_ptr, bool ex)
         FixedArtifactId a_idx;
         ArtifactType *a_ptr;
         while (true) {
-            a_idx = i2enum<FixedArtifactId>(rumor_num(zz[1], enum2i(a_info.rbegin()->first)));
-            a_ptr = &a_info.at(a_idx);
+            a_idx = i2enum<FixedArtifactId>(rumor_num(zz[1], enum2i(artifacts_info.rbegin()->first)));
+            a_ptr = &artifacts_info.at(a_idx);
             if (!a_ptr->name.empty()) {
                 break;
             }
@@ -85,8 +85,8 @@ void display_rumor(PlayerType *player_ptr, bool ex)
     } else if (strcmp(zz[0], "MONSTER") == 0) {
         monster_race *r_ptr;
         while (true) {
-            auto r_idx = i2enum<MonsterRaceId>(rumor_num(zz[1], static_cast<IDX>(r_info.size())));
-            r_ptr = &r_info[r_idx];
+            auto r_idx = i2enum<MonsterRaceId>(rumor_num(zz[1], static_cast<IDX>(monraces_info.size())));
+            r_ptr = &monraces_info[r_idx];
             if (!r_ptr->name.empty()) {
                 break;
             }
@@ -101,8 +101,8 @@ void display_rumor(PlayerType *player_ptr, bool ex)
         DUNGEON_IDX d_idx;
         dungeon_type *d_ptr;
         while (true) {
-            d_idx = rumor_num(zz[1], static_cast<IDX>(d_info.size()));
-            d_ptr = &d_info[d_idx];
+            d_idx = rumor_num(zz[1], static_cast<IDX>(dungeons_info.size()));
+            d_ptr = &dungeons_info[d_idx];
             if (!d_ptr->name.empty()) {
                 break;
             }

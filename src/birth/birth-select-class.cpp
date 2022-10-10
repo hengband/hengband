@@ -28,7 +28,7 @@ static void enumerate_class_list(char *sym)
 {
     for (auto n = 0; n < PLAYER_CLASS_TYPE_MAX; n++) {
         cp_ptr = &class_info[n];
-        mp_ptr = &m_info[n];
+        mp_ptr = &class_magics_info[n];
         concptr str = cp_ptr->title;
         if (n < 26) {
             sym[n] = I2A(n);
@@ -64,7 +64,7 @@ static void display_class_stat(int cs, int *os, char *cur, char *sym)
         put_str("                                   ", 6, 40);
     } else {
         cp_ptr = &class_info[cs];
-        mp_ptr = &m_info[cs];
+        mp_ptr = &class_magics_info[cs];
         concptr str = cp_ptr->title;
         if (!(rp_ptr->choice & (1UL << cs))) {
             sprintf(cur, "%c%c(%s)", sym[cs], p2, str);
@@ -212,7 +212,7 @@ bool get_player_class(PlayerType *player_ptr)
 
     player_ptr->pclass = i2enum<PlayerClassType>(k);
     cp_ptr = &class_info[enum2i(player_ptr->pclass)];
-    mp_ptr = &m_info[enum2i(player_ptr->pclass)];
+    mp_ptr = &class_magics_info[enum2i(player_ptr->pclass)];
     c_put_str(TERM_L_BLUE, cp_ptr->title, 5, 15);
     return true;
 }

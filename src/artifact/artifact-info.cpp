@@ -29,18 +29,18 @@ RandomArtActType activation_index(const ObjectType *o_ptr)
     }
 
     if (o_ptr->is_fixed_artifact()) {
-        const auto &fixed_artifact = a_info.at(o_ptr->fixed_artifact_idx);
+        const auto &fixed_artifact = artifacts_info.at(o_ptr->fixed_artifact_idx);
         if (fixed_artifact.flags.has(TR_ACTIVATE)) {
             return fixed_artifact.act_idx;
         }
     }
 
-    if (o_ptr->is_ego() && e_info[o_ptr->ego_idx].flags.has(TR_ACTIVATE)) {
-        return e_info[o_ptr->ego_idx].act_idx;
+    if (o_ptr->is_ego() && egos_info[o_ptr->ego_idx].flags.has(TR_ACTIVATE)) {
+        return egos_info[o_ptr->ego_idx].act_idx;
     }
 
-    if (!o_ptr->is_random_artifact() && k_info[o_ptr->k_idx].flags.has(TR_ACTIVATE)) {
-        return k_info[o_ptr->k_idx].act_idx;
+    if (!o_ptr->is_random_artifact() && baseitems_info[o_ptr->k_idx].flags.has(TR_ACTIVATE)) {
+        return baseitems_info[o_ptr->k_idx].act_idx;
     }
 
     return o_ptr->activation_id;

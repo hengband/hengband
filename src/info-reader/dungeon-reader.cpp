@@ -20,7 +20,7 @@
  */
 static bool grab_one_dungeon_flag(dungeon_type *d_ptr, std::string_view what)
 {
-    if (EnumClassFlagGroup<DungeonFeatureType>::grab_one_flag(d_ptr->flags, d_info_flags, what)) {
+    if (EnumClassFlagGroup<DungeonFeatureType>::grab_one_flag(d_ptr->flags, dungeon_flags, what)) {
         return true;
     }
 
@@ -115,13 +115,12 @@ static bool grab_one_spell_monster_flag(dungeon_type *d_ptr, std::string_view wh
 }
 
 /*!
- * @brief ダンジョン情報(d_info)のパース関数 /
- * Initialize the "d_info" array, by parsing an ascii "template" file
+ * @brief ダンジョン情報(DungeonsDefinition)のパース関数 /
  * @param buf テキスト列
  * @param head ヘッダ構造体
  * @return エラーコード
  */
-errr parse_d_info(std::string_view buf, angband_header *)
+errr parse_dungeons_info(std::string_view buf, angband_header *)
 {
     static dungeon_type *d_ptr = nullptr;
     const auto &tokens = str_split(buf, ':', false);
@@ -136,12 +135,12 @@ errr parse_d_info(std::string_view buf, angband_header *)
         if (i < error_idx) {
             return PARSE_ERROR_NON_SEQUENTIAL_RECORDS;
         }
-        if (i >= static_cast<int>(d_info.size())) {
-            d_info.resize(i + 1);
+        if (i >= static_cast<int>(dungeons_info.size())) {
+            dungeons_info.resize(i + 1);
         }
 
         error_idx = i;
-        d_ptr = &d_info[i];
+        d_ptr = &dungeons_info[i];
         d_ptr->idx = static_cast<DUNGEON_IDX>(i);
 #ifdef JP
         d_ptr->name = tokens[2];
@@ -333,7 +332,7 @@ errr parse_d_info(std::string_view buf, angband_header *)
                 if (s_tokens[0] != "1") {
                     return PARSE_ERROR_GENERIC;
                 }
-                continue; //!< r_info.txtからのコピペ対策
+                continue; //!< MonsterRaceDefinitions.txtからのコピペ対策
             }
 
             if (!grab_one_spell_monster_flag(d_ptr, f)) {

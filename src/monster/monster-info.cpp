@@ -57,7 +57,7 @@ void set_friendly(monster_type *m_ptr)
  */
 bool monster_can_cross_terrain(PlayerType *player_ptr, FEAT_IDX feat, monster_race *r_ptr, BIT_FLAGS16 mode)
 {
-    auto *f_ptr = &f_info[feat];
+    auto *f_ptr = &terrains_info[feat];
 
     if (f_ptr->flags.has(FloorFeatureType::PATTERN)) {
         if (!(mode & CEM_RIDING)) {
@@ -193,8 +193,8 @@ bool are_enemies(PlayerType *player_ptr, const monster_type &m1_ref, const monst
         return true;
     }
 
-    const auto &r1_ref = r_info[m1_ref.r_idx];
-    const auto &r2_ref = r_info[m2_ref.r_idx];
+    const auto &r1_ref = monraces_info[m1_ref.r_idx];
+    const auto &r2_ref = monraces_info[m2_ref.r_idx];
     const auto is_m1_wild = r1_ref.wilderness_flags.has_any_of({ MonsterWildernessType::WILD_TOWN, MonsterWildernessType::WILD_ALL });
     const auto is_m2_wild = r2_ref.wilderness_flags.has_any_of({ MonsterWildernessType::WILD_TOWN, MonsterWildernessType::WILD_ALL });
     if (is_m1_wild && is_m2_wild) {

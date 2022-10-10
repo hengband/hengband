@@ -133,7 +133,7 @@ static void see_arena_poster(PlayerType *player_ptr)
     }
 
     monster_race *r_ptr;
-    r_ptr = &r_info[arena_info[player_ptr->arena_number].r_idx];
+    r_ptr = &monraces_info[arena_info[player_ptr->arena_number].r_idx];
     concptr name = r_ptr->name.c_str();
     msg_format(_("%s に挑戦するものはいないか？", "Do I hear any challenges against: %s"), name);
 
@@ -178,7 +178,7 @@ void update_gambling_monsters(PlayerType *player_ptr)
     int power[4];
     bool tekitou;
 
-    for (const auto &d_ref : d_info) {
+    for (const auto &d_ref : dungeons_info) {
         if (max_dl < max_dlv[d_ref.idx]) {
             max_dl = max_dlv[d_ref.idx];
         }
@@ -208,8 +208,8 @@ void update_gambling_monsters(PlayerType *player_ptr)
                     continue;
                 }
 
-                if (r_info[r_idx].kind_flags.has(MonsterKindType::UNIQUE) || (r_info[r_idx].flags7 & RF7_UNIQUE2)) {
-                    if ((r_info[r_idx].level + 10) > mon_level) {
+                if (monraces_info[r_idx].kind_flags.has(MonsterKindType::UNIQUE) || (monraces_info[r_idx].flags7 & RF7_UNIQUE2)) {
+                    if ((monraces_info[r_idx].level + 10) > mon_level) {
                         continue;
                     }
                 }
@@ -226,7 +226,7 @@ void update_gambling_monsters(PlayerType *player_ptr)
                 break;
             }
             battle_mon_list[i] = r_idx;
-            if (r_info[r_idx].level < 45) {
+            if (monraces_info[r_idx].level < 45) {
                 tekitou = true;
             }
         }
@@ -290,7 +290,7 @@ bool monster_arena_comm(PlayerType *player_ptr)
     prt(_("モンスター                                                     倍率", "Monsters                                                       Odds"), 4, 4);
     for (int i = 0; i < 4; i++) {
         char buf[MAX_MONSTER_NAME];
-        auto *r_ptr = &r_info[battle_mon_list[i]];
+        auto *r_ptr = &monraces_info[battle_mon_list[i]];
 
         sprintf(buf, _("%d) %-58s  %4ld.%02ld倍", "%d) %-58s  %4ld.%02ld"), i + 1,
             _(format("%s%s", r_ptr->name.c_str(), r_ptr->kind_flags.has(MonsterKindType::UNIQUE) ? "もどき" : "      "),

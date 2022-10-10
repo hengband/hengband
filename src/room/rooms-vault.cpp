@@ -40,7 +40,7 @@
 /*
  * The vault generation arrays
  */
-std::vector<vault_type> v_info;
+std::vector<vault_type> vaults_info;
 
 /*
  * This function creates a random vault that looks like a collection of bubbles.
@@ -961,7 +961,7 @@ bool build_type10(PlayerType *player_ptr, dun_data_type *dd_ptr)
     /* Select type of vault */
     do {
         vtype = randint1(15);
-    } while (d_info[floor_ptr->dungeon_idx].flags.has(DungeonFeatureType::NO_CAVE) && ((vtype == 1) || (vtype == 3) || (vtype == 8) || (vtype == 9) || (vtype == 11)));
+    } while (dungeons_info[floor_ptr->dungeon_idx].flags.has(DungeonFeatureType::NO_CAVE) && ((vtype == 1) || (vtype == 3) || (vtype == 8) || (vtype == 9) || (vtype == 11)));
 
     switch (vtype) {
         /* Build an appropriate room */
@@ -1005,7 +1005,7 @@ bool build_type10(PlayerType *player_ptr, dun_data_type *dd_ptr)
 }
 
 /*!
- * @brief v_info.txtからの部屋生成 / vaults from "v_info.txt"
+ * @brief VaultDefinitions からの部屋生成
  */
 bool build_fixed_room(PlayerType *player_ptr, dun_data_type *dd_ptr, int typ, bool more_space)
 {
@@ -1018,7 +1018,7 @@ bool build_fixed_room(PlayerType *player_ptr, dun_data_type *dd_ptr, int typ, bo
     ProbabilityTable<int> prob_table;
 
     /* Pick fixed room */
-    for (const auto &v_ref : v_info) {
+    for (const auto &v_ref : vaults_info) {
         if (v_ref.typ == typ) {
             prob_table.entry_item(v_ref.idx, 1);
         }
@@ -1026,7 +1026,7 @@ bool build_fixed_room(PlayerType *player_ptr, dun_data_type *dd_ptr, int typ, bo
 
     auto result = prob_table.pick_one_at_random();
 
-    v_ptr = &v_info[result];
+    v_ptr = &vaults_info[result];
 
     /* pick type of transformation (0-7) */
     transno = randint0(8);

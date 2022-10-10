@@ -93,7 +93,7 @@ void sanity_blast(PlayerType *player_ptr, monster_type *m_ptr, bool necro)
     int power = 100;
     if (!necro && m_ptr) {
         GAME_TEXT m_name[MAX_NLEN];
-        auto *r_ptr = &r_info[m_ptr->ap_r_idx];
+        auto *r_ptr = &monraces_info[m_ptr->ap_r_idx];
         power = r_ptr->level / 2;
         monster_desc(player_ptr, m_name, m_ptr, 0);
         if (r_ptr->kind_flags.has_not(MonsterKindType::UNIQUE)) {
@@ -155,7 +155,7 @@ void sanity_blast(PlayerType *player_ptr, monster_type *m_ptr, bool necro)
         GAME_TEXT m_name[MAX_NLEN];
         concptr desc;
         get_mon_num_prep(player_ptr, get_nightmare, nullptr);
-        r_ptr = &r_info[get_mon_num(player_ptr, 0, MAX_DEPTH, 0)];
+        r_ptr = &monraces_info[get_mon_num(player_ptr, 0, MAX_DEPTH, 0)];
         power = r_ptr->level + 10;
         desc = r_ptr->name.c_str();
         get_mon_num_prep(player_ptr, nullptr, nullptr);

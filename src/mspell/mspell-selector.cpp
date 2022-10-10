@@ -300,7 +300,7 @@ MonsterAbilityType choose_attack_spell(PlayerType *player_ptr, msa_type *msa_ptr
     std::vector<MonsterAbilityType> dispel;
 
     auto *m_ptr = &player_ptr->current_floor_ptr->m_list[msa_ptr->m_idx];
-    auto *r_ptr = &r_info[m_ptr->r_idx];
+    auto *r_ptr = &monraces_info[m_ptr->r_idx];
     if (r_ptr->flags2 & RF2_STUPID) {
         return msa_ptr->mspells[randint0(msa_ptr->mspells.size())];
     }
@@ -368,7 +368,7 @@ MonsterAbilityType choose_attack_spell(PlayerType *player_ptr, msa_type *msa_ptr
         switch (m_ptr->r_idx) {
         case MonsterRaceId::BANOR:
         case MonsterRaceId::LUPART:
-            if ((m_ptr->hp < m_ptr->maxhp / 2) && r_info[MonsterRaceId::BANOR].max_num && r_info[MonsterRaceId::LUPART].max_num) {
+            if ((m_ptr->hp < m_ptr->maxhp / 2) && monraces_info[MonsterRaceId::BANOR].max_num && monraces_info[MonsterRaceId::LUPART].max_num) {
                 success = true;
             }
             break;

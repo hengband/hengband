@@ -186,7 +186,7 @@ void process_player(PlayerType *player_ptr)
     const auto effects = player_ptr->effects();
     if (player_ptr->riding && !effects->confusion()->is_confused() && !effects->blindness()->is_blind()) {
         auto *m_ptr = &player_ptr->current_floor_ptr->m_list[player_ptr->riding];
-        auto *r_ptr = &r_info[m_ptr->r_idx];
+        auto *r_ptr = &monraces_info[m_ptr->r_idx];
         if (m_ptr->is_asleep()) {
             GAME_TEXT m_name[MAX_NLEN];
             (void)set_monster_csleep(player_ptr, player_ptr->riding, 0);
@@ -346,7 +346,7 @@ void process_player(PlayerType *player_ptr)
                     continue;
                 }
 
-                r_ptr = &r_info[m_ptr->ap_r_idx];
+                r_ptr = &monraces_info[m_ptr->ap_r_idx];
 
                 // モンスターのシンボル/カラーの更新
                 if (m_ptr->ml && r_ptr->visual_flags.has_any_of({ MonsterVisualType::MULTI_COLOR, MonsterVisualType::SHAPECHANGER })) {

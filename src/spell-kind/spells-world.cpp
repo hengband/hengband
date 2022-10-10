@@ -53,7 +53,7 @@ bool is_teleport_level_ineffective(PlayerType *player_ptr, MONSTER_IDX idx)
     auto *floor_ptr = player_ptr->current_floor_ptr;
     bool is_special_floor = floor_ptr->inside_arena || player_ptr->phase_out || (inside_quest(floor_ptr->quest_number) && !inside_quest(random_quest_number(player_ptr, floor_ptr->dun_level)));
     bool is_invalid_floor = idx <= 0;
-    is_invalid_floor &= inside_quest(quest_number(player_ptr, floor_ptr->dun_level)) || (floor_ptr->dun_level >= d_info[player_ptr->dungeon_idx].maxdepth);
+    is_invalid_floor &= inside_quest(quest_number(player_ptr, floor_ptr->dun_level)) || (floor_ptr->dun_level >= dungeons_info[player_ptr->dungeon_idx].maxdepth);
     is_invalid_floor &= player_ptr->current_floor_ptr->dun_level >= 1;
     is_invalid_floor &= ironman_downward;
     return is_special_floor || is_invalid_floor;
@@ -105,7 +105,7 @@ void teleport_level(PlayerType *player_ptr, MONSTER_IDX m_idx)
         }
     }
 
-    if ((ironman_downward && (m_idx <= 0)) || (player_ptr->current_floor_ptr->dun_level <= d_info[player_ptr->dungeon_idx].mindepth)) {
+    if ((ironman_downward && (m_idx <= 0)) || (player_ptr->current_floor_ptr->dun_level <= dungeons_info[player_ptr->dungeon_idx].mindepth)) {
 #ifdef JP
         if (see_m) {
             msg_format("%^sは床を突き破って沈んでいく。", m_name);
@@ -131,7 +131,7 @@ void teleport_level(PlayerType *player_ptr, MONSTER_IDX m_idx)
             }
 
             if (!is_in_dungeon(player_ptr)) {
-                player_ptr->current_floor_ptr->dun_level = d_info[player_ptr->dungeon_idx].mindepth;
+                player_ptr->current_floor_ptr->dun_level = dungeons_info[player_ptr->dungeon_idx].mindepth;
                 prepare_change_floor_mode(player_ptr, CFM_RAND_PLACE);
             } else {
                 prepare_change_floor_mode(player_ptr, CFM_SAVE_FLOORS | CFM_DOWN | CFM_RAND_PLACE | CFM_RAND_CONNECT);
@@ -139,7 +139,7 @@ void teleport_level(PlayerType *player_ptr, MONSTER_IDX m_idx)
 
             player_ptr->leaving = true;
         }
-    } else if (inside_quest(quest_number(player_ptr, player_ptr->current_floor_ptr->dun_level)) || (player_ptr->current_floor_ptr->dun_level >= d_info[player_ptr->dungeon_idx].maxdepth)) {
+    } else if (inside_quest(quest_number(player_ptr, player_ptr->current_floor_ptr->dun_level)) || (player_ptr->current_floor_ptr->dun_level >= dungeons_info[player_ptr->dungeon_idx].maxdepth)) {
 #ifdef JP
         if (see_m) {
             msg_format("%^sは天井を突き破って宙へ浮いていく。", m_name);
@@ -251,7 +251,7 @@ bool teleport_level_other(PlayerType *player_ptr)
     monster_type *m_ptr;
     monster_race *r_ptr;
     m_ptr = &player_ptr->current_floor_ptr->m_list[target_m_idx];
-    r_ptr = &r_info[m_ptr->r_idx];
+    r_ptr = &monraces_info[m_ptr->r_idx];
     GAME_TEXT m_name[MAX_NLEN];
     monster_desc(player_ptr, m_name, m_ptr, 0);
     msg_format(_("%^sの足を指さした。", "You gesture at %^s's feet."), m_name);
@@ -424,7 +424,8 @@ bool free_level_recall(PlayerType *player_ptr)
         return false;
     }
 
-    DEPTH max_depth = d_info[select_dungeon].maxdepth;
+    const auto &dungeon = dungeons_info[select_dungeon];
+    auto max_depth = dungeon.maxdepth;
     if (select_dungeon == DUNGEON_ANGBAND) {
         const auto &quest_list = QuestList::get_instance();
         if (quest_list[QuestId::OBERON].status != QuestStatusType::FINISHED) {
@@ -434,16 +435,16 @@ bool free_level_recall(PlayerType *player_ptr)
         }
     }
 
-    QUANTITY amt = get_quantity(
-        format(_("%sの何階にテレポートしますか？", "Teleport to which level of %s? "), d_info[select_dungeon].name.c_str()), (QUANTITY)max_depth);
+    const auto mes = _("%sの何階にテレポートしますか？", "Teleport to which level of %s? ");
+    QUANTITY amt = get_quantity(format(mes, dungeon.name.c_str()), (QUANTITY)max_depth);
     if (amt <= 0) {
         return false;
     }
 
     player_ptr->word_recall = 1;
     player_ptr->recall_dungeon = select_dungeon;
-    max_dlv[player_ptr->recall_dungeon] = ((amt > d_info[select_dungeon].maxdepth) ? d_info[select_dungeon].maxdepth
-                                                                                   : ((amt < d_info[select_dungeon].mindepth) ? d_info[select_dungeon].mindepth : amt));
+    max_dlv[player_ptr->recall_dungeon] = ((amt > dungeon.maxdepth) ? dungeon.maxdepth
+                                                                    : ((amt < dungeon.mindepth) ? dungeon.mindepth : amt));
     if (record_maxdepth) {
         exe_write_diary(player_ptr, DIARY_TRUMP, select_dungeon, _("トランプタワーで", "at Trump Tower"));
     }
@@ -474,7 +475,7 @@ bool reset_recall(PlayerType *player_ptr)
     if (!select_dungeon) {
         return false;
     }
-    sprintf(ppp, _("何階にセットしますか (%d-%d):", "Reset to which level (%d-%d): "), (int)d_info[select_dungeon].mindepth, (int)max_dlv[select_dungeon]);
+    sprintf(ppp, _("何階にセットしますか (%d-%d):", "Reset to which level (%d-%d): "), (int)dungeons_info[select_dungeon].mindepth, (int)max_dlv[select_dungeon]);
     sprintf(tmp_val, "%d", (int)std::max(player_ptr->current_floor_ptr->dun_level, 1));
 
     if (!get_string(ppp, tmp_val, 10)) {
@@ -488,8 +489,8 @@ bool reset_recall(PlayerType *player_ptr)
     if (dummy > max_dlv[select_dungeon]) {
         dummy = max_dlv[select_dungeon];
     }
-    if (dummy < d_info[select_dungeon].mindepth) {
-        dummy = d_info[select_dungeon].mindepth;
+    if (dummy < dungeons_info[select_dungeon].mindepth) {
+        dummy = dungeons_info[select_dungeon].mindepth;
     }
 
     max_dlv[select_dungeon] = dummy;
@@ -498,7 +499,7 @@ bool reset_recall(PlayerType *player_ptr)
         exe_write_diary(player_ptr, DIARY_TRUMP, select_dungeon, _("フロア・リセットで", "using a scroll of reset recall"));
     }
 #ifdef JP
-    msg_format("%sの帰還レベルを %d 階にセット。", d_info[select_dungeon].name.c_str(), dummy, dummy * 50);
+    msg_format("%sの帰還レベルを %d 階にセット。", dungeons_info[select_dungeon].name.c_str(), dummy, dummy * 50);
 #else
     msg_format("Recall depth set to level %d (%d').", dummy, dummy * 50);
 #endif

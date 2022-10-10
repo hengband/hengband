@@ -101,7 +101,7 @@ void build_cavern(PlayerType *player_ptr)
     bool light = false;
     bool done = false;
     auto *floor_ptr = player_ptr->current_floor_ptr;
-    if ((floor_ptr->dun_level <= randint1(50)) && d_info[floor_ptr->dungeon_idx].flags.has_not(DungeonFeatureType::DARKNESS)) {
+    if ((floor_ptr->dun_level <= randint1(50)) && dungeons_info[floor_ptr->dungeon_idx].flags.has_not(DungeonFeatureType::DARKNESS)) {
         light = true;
     }
 
@@ -367,8 +367,8 @@ void add_outer_wall(PlayerType *player_ptr, POSITION x, POSITION y, int light, P
     }
 
     g_ptr->info |= CAVE_ROOM;
-    feature_type *f_ptr;
-    f_ptr = &f_info[g_ptr->feat];
+    terrain_type *f_ptr;
+    f_ptr = &terrains_info[g_ptr->feat];
     if (g_ptr->is_floor()) {
         for (int i = -1; i <= 1; i++) {
             for (int j = -1; j <= 1; j++) {

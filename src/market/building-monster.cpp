@@ -86,7 +86,7 @@ bool research_mon(PlayerType *player_ptr)
     std::vector<MonsterRaceId> who;
 
     /* Collect matching monsters */
-    for (const auto &[r_idx, r_ref] : r_info) {
+    for (const auto &[r_idx, r_ref] : monraces_info) {
         /* Empty monster */
         if (!MonsterRace(r_ref.idx).is_valid() || r_ref.name.empty()) {
             continue;

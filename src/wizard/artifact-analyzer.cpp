@@ -259,7 +259,7 @@ static void analyze_misc_magic(ObjectType *o_ptr, concptr *misc_list)
  */
 static void analyze_addition(ObjectType *o_ptr, char *addition)
 {
-    const auto &a_ref = a_info.at(o_ptr->fixed_artifact_idx);
+    const auto &a_ref = artifacts_info.at(o_ptr->fixed_artifact_idx);
     strcpy(addition, "");
 
     if (a_ref.gen_flags.has_all_of({ ItemGenerationTraitType::XTRA_POWER, ItemGenerationTraitType::XTRA_H_RES })) {
@@ -295,7 +295,7 @@ static void analyze_addition(ObjectType *o_ptr, char *addition)
  */
 static void analyze_misc(ObjectType *o_ptr, char *misc_desc)
 {
-    const auto &a_ref = a_info.at(o_ptr->fixed_artifact_idx);
+    const auto &a_ref = artifacts_info.at(o_ptr->fixed_artifact_idx);
     sprintf(misc_desc, _("レベル %d, 希少度 %u, %d.%d kg, ＄%ld", "Level %d, Rarity %u, %d.%d lbs, %ld Gold"), (int)a_ref.level, a_ref.rarity,
         _(lb_to_kg_integer(a_ref.weight), a_ref.weight / 10), _(lb_to_kg_fraction(a_ref.weight), a_ref.weight % 10), (long int)a_ref.cost);
 }

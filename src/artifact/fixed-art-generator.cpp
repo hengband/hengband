@@ -225,7 +225,7 @@ static void invest_curse_to_fixed_artifact(const ArtifactType &a_ref, ObjectType
  */
 void apply_artifact(PlayerType *player_ptr, ObjectType *o_ptr)
 {
-    auto &a_ref = a_info.at(o_ptr->fixed_artifact_idx);
+    auto &a_ref = artifacts_info.at(o_ptr->fixed_artifact_idx);
     o_ptr->pval = a_ref.pval;
     o_ptr->ac = a_ref.ac;
     o_ptr->dd = a_ref.dd;
@@ -254,7 +254,7 @@ void apply_artifact(PlayerType *player_ptr, ObjectType *o_ptr)
  */
 bool create_named_art(PlayerType *player_ptr, FixedArtifactId a_idx, POSITION y, POSITION x)
 {
-    auto &a_ref = a_info.at(a_idx);
+    auto &a_ref = artifacts_info.at(a_idx);
     if (a_ref.name.empty()) {
         return false;
     }
@@ -299,7 +299,7 @@ bool make_artifact(PlayerType *player_ptr, ObjectType *o_ptr)
         return false;
     }
 
-    for (const auto &[a_idx, a_ref] : a_info) {
+    for (const auto &[a_idx, a_ref] : artifacts_info) {
         if (a_ref.name.empty()) {
             continue;
         }
@@ -370,7 +370,7 @@ bool make_artifact_special(PlayerType *player_ptr, ObjectType *o_ptr)
     }
 
     /*! @note 全固定アーティファクト中からIDの若い順に生成対象とその確率を走査する / Check the artifact list (just the "specials") */
-    for (const auto &[a_idx, a_ref] : a_info) {
+    for (const auto &[a_idx, a_ref] : artifacts_info) {
         /*! @note アーティファクト名が空の不正なデータは除外する / Skip "empty" artifacts */
         if (a_ref.name.empty()) {
             continue;
@@ -406,8 +406,8 @@ bool make_artifact_special(PlayerType *player_ptr, ObjectType *o_ptr)
          * ベースアイテムの生成階層が足りない場合1/(不足階層*5)を満たさないと除外される。
          */
         k_idx = lookup_kind(a_ref.tval, a_ref.sval);
-        if (k_info[k_idx].level > floor_ptr->object_level) {
-            int d = (k_info[k_idx].level - floor_ptr->object_level) * 5;
+        if (baseitems_info[k_idx].level > floor_ptr->object_level) {
+            int d = (baseitems_info[k_idx].level - floor_ptr->object_level) * 5;
             if (!one_in_(d)) {
                 continue;
             }

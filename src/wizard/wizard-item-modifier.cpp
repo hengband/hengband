@@ -177,7 +177,7 @@ void wizard_item_modifier(PlayerType *player_ptr)
  */
 void wiz_restore_aware_flag_of_fixed_arfifact(FixedArtifactId reset_artifact_idx, bool aware)
 {
-    auto max_a_idx = enum2i(a_info.rbegin()->first);
+    auto max_a_idx = enum2i(artifacts_info.rbegin()->first);
     int int_a_idx = enum2i(reset_artifact_idx);
     if (int_a_idx <= 0) {
         if (!get_value("Artifact ID", 1, max_a_idx, &int_a_idx)) {
@@ -185,7 +185,7 @@ void wiz_restore_aware_flag_of_fixed_arfifact(FixedArtifactId reset_artifact_idx
         }
     }
 
-    a_info.at(i2enum<FixedArtifactId>(int_a_idx)).is_generated = aware;
+    artifacts_info.at(i2enum<FixedArtifactId>(int_a_idx)).is_generated = aware;
     msg_print(aware ? "Modified." : "Restored.");
 }
 
@@ -225,7 +225,7 @@ void wiz_identify_full_inventory(PlayerType *player_ptr)
             continue;
         }
 
-        auto k_ptr = &k_info[o_ptr->k_idx];
+        auto k_ptr = &baseitems_info[o_ptr->k_idx];
         k_ptr->aware = true; //!< @note 記録には残さないためTRUEを立てるのみ
         set_bits(o_ptr->ident, IDENT_KNOWN | IDENT_FULL_KNOWN);
         set_bits(o_ptr->marked, OM_TOUCHED);
@@ -264,7 +264,7 @@ static void prt_alloc(ItemKindType tval, OBJECT_SUBTYPE_VALUE sval, TERM_LEN row
                 prob = entry.prob1 * i * K_MAX_DEPTH / (entry.level - 1);
             }
 
-            k_ptr = &k_info[entry.index];
+            k_ptr = &baseitems_info[entry.index];
 
             total[i] += prob / (GREAT_OBJ * K_MAX_DEPTH);
             total_frac += prob % (GREAT_OBJ * K_MAX_DEPTH);
@@ -345,7 +345,7 @@ static void wiz_display_item(PlayerType *player_ptr, ObjectType *o_ptr)
     prt(buf, 2, j);
 
     auto line = 4;
-    prt(format("kind = %-5d  level = %-4d  tval = %-5d  sval = %-5d", o_ptr->k_idx, k_info[o_ptr->k_idx].level, o_ptr->tval, o_ptr->sval), line, j);
+    prt(format("kind = %-5d  level = %-4d  tval = %-5d  sval = %-5d", o_ptr->k_idx, baseitems_info[o_ptr->k_idx].level, o_ptr->tval, o_ptr->sval), line, j);
     prt(format("number = %-3d  wgt = %-6d  ac = %-5d    damage = %dd%d", o_ptr->number, o_ptr->weight, o_ptr->ac, o_ptr->dd, o_ptr->ds), ++line, j);
     prt(format("pval = %-5d  toac = %-5d  tohit = %-4d  todam = %-4d", o_ptr->pval, o_ptr->to_a, o_ptr->to_h, o_ptr->to_d), ++line, j);
     prt(format("fixed_artifact_idx = %-4d  ego_idx = %-4d  cost = %ld", o_ptr->fixed_artifact_idx, o_ptr->ego_idx, object_value_real(o_ptr)), ++line, j);
@@ -407,7 +407,7 @@ static void wiz_statistics(PlayerType *player_ptr, ObjectType *o_ptr)
     char tmp_val[80];
 
     if (o_ptr->is_fixed_artifact()) {
-        a_info.at(o_ptr->fixed_artifact_idx).is_generated = false;
+        artifacts_info.at(o_ptr->fixed_artifact_idx).is_generated = false;
     }
 
     uint32_t i, matches, better, worse, other, correct;
@@ -461,7 +461,7 @@ static void wiz_statistics(PlayerType *player_ptr, ObjectType *o_ptr)
             q_ptr->wipe();
             make_object(player_ptr, q_ptr, mode);
             if (q_ptr->is_fixed_artifact()) {
-                a_info.at(q_ptr->fixed_artifact_idx).is_generated = false;
+                artifacts_info.at(q_ptr->fixed_artifact_idx).is_generated = false;
             }
 
             if ((o_ptr->tval != q_ptr->tval) || (o_ptr->sval != q_ptr->sval)) {
@@ -486,7 +486,7 @@ static void wiz_statistics(PlayerType *player_ptr, ObjectType *o_ptr)
     }
 
     if (o_ptr->is_fixed_artifact()) {
-        a_info.at(o_ptr->fixed_artifact_idx).is_generated = true;
+        artifacts_info.at(o_ptr->fixed_artifact_idx).is_generated = true;
     }
 }
 
@@ -512,7 +512,7 @@ static void wiz_reroll_item(PlayerType *player_ptr, ObjectType *o_ptr)
         wiz_display_item(player_ptr, q_ptr);
         if (!get_com("[a]ccept, [w]orthless, [c]ursed, [n]ormal, [g]ood, [e]xcellent, [s]pecial? ", &ch, false)) {
             if (q_ptr->is_fixed_artifact()) {
-                a_info.at(q_ptr->fixed_artifact_idx).is_generated = false;
+                artifacts_info.at(q_ptr->fixed_artifact_idx).is_generated = false;
                 q_ptr->fixed_artifact_idx = FixedArtifactId::NONE;
             }
 
@@ -526,7 +526,7 @@ static void wiz_reroll_item(PlayerType *player_ptr, ObjectType *o_ptr)
         }
 
         if (q_ptr->is_fixed_artifact()) {
-            a_info.at(q_ptr->fixed_artifact_idx).is_generated = false;
+            artifacts_info.at(q_ptr->fixed_artifact_idx).is_generated = false;
             q_ptr->fixed_artifact_idx = FixedArtifactId::NONE;
         }
 
@@ -880,7 +880,7 @@ WishResultType do_cmd_wishing(PlayerType *player_ptr, int prob, bool allow_art, 
     if (exam_base) {
         int len;
         int max_len = 0;
-        for (const auto &k_ref : k_info) {
+        for (const auto &k_ref : baseitems_info) {
             if (k_ref.idx == 0 || k_ref.name.empty()) {
                 continue;
             }
@@ -908,7 +908,7 @@ WishResultType do_cmd_wishing(PlayerType *player_ptr, int prob, bool allow_art, 
             KIND_OBJECT_IDX k_idx = k_ids.back();
             o_ptr->prep(k_idx);
 
-            for (const auto &[e_idx, e_ref] : e_info) {
+            for (const auto &[e_idx, e_ref] : egos_info) {
                 if (e_ref.idx == EgoType::NONE || e_ref.name.empty()) {
                     continue;
                 }
@@ -940,7 +940,7 @@ WishResultType do_cmd_wishing(PlayerType *player_ptr, int prob, bool allow_art, 
 
         int len;
         int mlen = 0;
-        for (const auto &[a_idx, a_ref] : a_info) {
+        for (const auto &[a_idx, a_ref] : artifacts_info) {
             if (a_idx == FixedArtifactId::NONE || a_ref.name.empty()) {
                 continue;
             }
@@ -1016,7 +1016,7 @@ WishResultType do_cmd_wishing(PlayerType *player_ptr, int prob, bool allow_art, 
 
     if (a_ids.size() == 1) {
         const auto a_idx = a_ids.back();
-        auto &a_ref = a_info.at(a_idx);
+        auto &a_ref = artifacts_info.at(a_idx);
         if (must || (ok_art && !a_ref.is_generated)) {
             (void)create_named_art(player_ptr, a_idx, player_ptr->y, player_ptr->x);
         } else {
@@ -1033,11 +1033,11 @@ WishResultType do_cmd_wishing(PlayerType *player_ptr, int prob, bool allow_art, 
 
     if (k_ids.size() == 1) {
         KIND_OBJECT_IDX k_idx = k_ids.back();
-        auto *k_ptr = &k_info[k_idx];
+        auto *k_ptr = &baseitems_info[k_idx];
 
         FixedArtifactId a_idx = FixedArtifactId::NONE;
         if (k_ptr->gen_flags.has(ItemGenerationTraitType::INSTA_ART)) {
-            for (const auto &[a_idx_loop, a_ref_loop] : a_info) {
+            for (const auto &[a_idx_loop, a_ref_loop] : artifacts_info) {
                 if (a_idx_loop == FixedArtifactId::NONE || a_ref_loop.tval != k_ptr->tval || a_ref_loop.sval != k_ptr->sval) {
                     continue;
                 }
@@ -1047,7 +1047,7 @@ WishResultType do_cmd_wishing(PlayerType *player_ptr, int prob, bool allow_art, 
         }
 
         if (a_idx != FixedArtifactId::NONE) {
-            auto &a_ref = a_info.at(a_idx);
+            auto &a_ref = artifacts_info.at(a_idx);
             if (must || (ok_art && !a_ref.is_generated)) {
                 (void)create_named_art(player_ptr, a_idx, player_ptr->y, player_ptr->x);
             } else {

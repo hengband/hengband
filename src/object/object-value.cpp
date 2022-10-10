@@ -36,16 +36,16 @@
  */
 PRICE object_value_real(const ObjectType *o_ptr)
 {
-    auto *k_ptr = &k_info[o_ptr->k_idx];
+    auto *k_ptr = &baseitems_info[o_ptr->k_idx];
 
-    if (!k_info[o_ptr->k_idx].cost) {
+    if (!baseitems_info[o_ptr->k_idx].cost) {
         return 0;
     }
 
-    PRICE value = k_info[o_ptr->k_idx].cost;
+    PRICE value = baseitems_info[o_ptr->k_idx].cost;
     auto flgs = object_flags(o_ptr);
     if (o_ptr->is_fixed_artifact()) {
-        const auto &a_ref = a_info.at(o_ptr->fixed_artifact_idx);
+        const auto &a_ref = artifacts_info.at(o_ptr->fixed_artifact_idx);
         if (!a_ref.cost) {
             return 0;
         }
@@ -54,7 +54,7 @@ PRICE object_value_real(const ObjectType *o_ptr)
         value += flag_cost(o_ptr, o_ptr->pval);
         return value;
     } else if (o_ptr->is_ego()) {
-        const auto &e_ref = e_info[o_ptr->ego_idx];
+        const auto &e_ref = egos_info[o_ptr->ego_idx];
         if (!e_ref.cost) {
             return 0;
         }
@@ -209,7 +209,7 @@ PRICE object_value_real(const ObjectType *o_ptr)
     }
     case ItemKindType::FIGURINE: {
         auto figure_r_idx = i2enum<MonsterRaceId>(o_ptr->pval);
-        DEPTH level = r_info[figure_r_idx].level;
+        DEPTH level = monraces_info[figure_r_idx].level;
         if (level < 20) {
             value = level * 50L;
         } else if (level < 30) {
@@ -228,7 +228,7 @@ PRICE object_value_real(const ObjectType *o_ptr)
         if (!MonsterRace(capture_r_idx).is_valid()) {
             value = 1000L;
         } else {
-            value = ((r_info[capture_r_idx].level) * 50L + 1000);
+            value = ((monraces_info[capture_r_idx].level) * 50L + 1000);
         }
         break;
     }

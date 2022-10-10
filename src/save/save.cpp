@@ -110,13 +110,13 @@ static bool wr_savefile_new(PlayerType *player_ptr, SaveType type)
         wr_string(message_str(i));
     }
 
-    uint16_t tmp16u = static_cast<uint16_t>(r_info.size());
+    uint16_t tmp16u = static_cast<uint16_t>(monraces_info.size());
     wr_u16b(tmp16u);
     for (auto r_idx = 0; r_idx < tmp16u; r_idx++) {
         wr_lore(i2enum<MonsterRaceId>(r_idx));
     }
 
-    tmp16u = static_cast<uint16_t>(k_info.size());
+    tmp16u = static_cast<uint16_t>(baseitems_info.size());
     wr_u16b(tmp16u);
     for (KIND_OBJECT_IDX k_idx = 0; k_idx < tmp16u; k_idx++) {
         wr_perception(k_idx);
@@ -167,14 +167,14 @@ static bool wr_savefile_new(PlayerType *player_ptr, SaveType type)
         }
     }
 
-    auto max_a_num = enum2i(a_info.rbegin()->first);
+    auto max_a_num = enum2i(artifacts_info.rbegin()->first);
     tmp16u = max_a_num + 1;
     wr_u16b(tmp16u);
     ArtifactType dummy;
     for (auto i = 0U; i < tmp16u; i++) {
         const auto a_idx = i2enum<FixedArtifactId>(i);
-        const auto it = a_info.find(a_idx);
-        const auto &a_ref = it != a_info.end() ? it->second : dummy;
+        const auto it = artifacts_info.find(a_idx);
+        const auto &a_ref = it != artifacts_info.end() ? it->second : dummy;
         wr_bool(a_ref.is_generated);
         wr_s16b(a_ref.floor_id);
     }

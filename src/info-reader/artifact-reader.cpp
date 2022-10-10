@@ -1,8 +1,8 @@
 ﻿#include "info-reader/artifact-reader.h"
 #include "artifact/fixed-art-types.h"
 #include "artifact/random-art-effects.h"
+#include "info-reader/baseitem-tokens-table.h"
 #include "info-reader/info-reader-util.h"
-#include "info-reader/kind-info-tokens-table.h"
 #include "info-reader/parse-error-types.h"
 #include "main/angband-headers.h"
 #include "object-enchant/tr-types.h"
@@ -21,11 +21,11 @@
  */
 static bool grab_one_artifact_flag(ArtifactType *a_ptr, std::string_view what)
 {
-    if (TrFlags::grab_one_flag(a_ptr->flags, k_info_flags, what)) {
+    if (TrFlags::grab_one_flag(a_ptr->flags, baseitem_flags, what)) {
         return true;
     }
 
-    if (EnumClassFlagGroup<ItemGenerationTraitType>::grab_one_flag(a_ptr->gen_flags, k_info_gen_flags, what)) {
+    if (EnumClassFlagGroup<ItemGenerationTraitType>::grab_one_flag(a_ptr->gen_flags, baseitem_geneneration_flags, what)) {
         return true;
     }
 
@@ -34,13 +34,12 @@ static bool grab_one_artifact_flag(ArtifactType *a_ptr, std::string_view what)
 }
 
 /*!
- * @brief 固定アーティファクト情報(a_info)のパース関数 /
- * Initialize the "a_info" array, by parsing an ascii "template" file
+ * @brief 固定アーティファクト定義(ArtifactDefinitions)のパース関数
  * @param buf テキスト列
  * @param head ヘッダ構造体
  * @return エラーコード
  */
-errr parse_a_info(std::string_view buf, angband_header *)
+errr parse_artifacts_info(std::string_view buf, angband_header *)
 {
     const auto &tokens = str_split(buf, ':', false, 10);
     if (tokens[0] == "N") {
@@ -64,7 +63,7 @@ errr parse_a_info(std::string_view buf, angband_header *)
 #ifdef JP
         artifact.name = tokens[2];
 #endif
-        a_info.emplace(a_idx, artifact);
+        artifacts_info.emplace(a_idx, artifact);
         return PARSE_ERROR_NONE;
     }
 
@@ -77,7 +76,7 @@ errr parse_a_info(std::string_view buf, angband_header *)
             return PARSE_ERROR_TOO_FEW_ARGUMENTS;
         }
 
-        const auto it = a_info.rbegin();
+        const auto it = artifacts_info.rbegin();
         auto &a_ref = it->second;
         a_ref.name = tokens[1];
         return PARSE_ERROR_NONE;
@@ -95,7 +94,7 @@ errr parse_a_info(std::string_view buf, angband_header *)
             return PARSE_ERROR_NONE;
         }
 
-        const auto it = a_info.rbegin();
+        const auto it = artifacts_info.rbegin();
         auto &a_ref = it->second;
         a_ref.text.append(buf.substr(2));
 #else
@@ -103,7 +102,7 @@ errr parse_a_info(std::string_view buf, angband_header *)
             return PARSE_ERROR_NONE;
         }
 
-        const auto it = a_info.rbegin();
+        const auto it = artifacts_info.rbegin();
         auto &a_ref = it->second;
         append_english_text(a_ref.text, buf.substr(3));
 #endif
@@ -116,7 +115,7 @@ errr parse_a_info(std::string_view buf, angband_header *)
             return PARSE_ERROR_TOO_FEW_ARGUMENTS;
         }
 
-        const auto it = a_info.rbegin();
+        const auto it = artifacts_info.rbegin();
         auto &a_ref = it->second;
         info_set_value(a_ref.tval, tokens[1]);
         info_set_value(a_ref.sval, tokens[2]);
@@ -130,7 +129,7 @@ errr parse_a_info(std::string_view buf, angband_header *)
             return PARSE_ERROR_TOO_FEW_ARGUMENTS;
         }
 
-        const auto it = a_info.rbegin();
+        const auto it = artifacts_info.rbegin();
         auto &a_ref = it->second;
         info_set_value(a_ref.level, tokens[1]);
         info_set_value(a_ref.rarity, tokens[2]);
@@ -150,7 +149,7 @@ errr parse_a_info(std::string_view buf, angband_header *)
             return PARSE_ERROR_NON_SEQUENTIAL_RECORDS;
         }
 
-        const auto it = a_info.rbegin();
+        const auto it = artifacts_info.rbegin();
         auto &a_ref = it->second;
         info_set_value(a_ref.ac, tokens[1]);
         info_set_value(a_ref.dd, dice[0]);
@@ -172,7 +171,7 @@ errr parse_a_info(std::string_view buf, angband_header *)
             return PARSE_ERROR_INVALID_FLAG;
         }
 
-        const auto it = a_info.rbegin();
+        const auto it = artifacts_info.rbegin();
         auto &a_ref = it->second;
         a_ref.act_idx = n;
         return PARSE_ERROR_NONE;
@@ -190,7 +189,7 @@ errr parse_a_info(std::string_view buf, angband_header *)
                 continue;
             }
 
-            const auto it = a_info.rbegin();
+            const auto it = artifacts_info.rbegin();
             auto *a_ptr = &it->second;
             if (!grab_one_artifact_flag(a_ptr, f)) {
                 return PARSE_ERROR_INVALID_FLAG;

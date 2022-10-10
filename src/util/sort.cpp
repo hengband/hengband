@@ -138,13 +138,13 @@ bool ang_sort_comp_importance(PlayerType *player_ptr, vptr u, vptr v, int a, int
 
     /* Extract monster race */
     if (ca_ptr->m_idx && ma_ptr->ml) {
-        ap_ra_ptr = &r_info[ma_ptr->ap_r_idx];
+        ap_ra_ptr = &monraces_info[ma_ptr->ap_r_idx];
     } else {
         ap_ra_ptr = nullptr;
     }
 
     if (cb_ptr->m_idx && mb_ptr->ml) {
-        ap_rb_ptr = &r_info[mb_ptr->ap_r_idx];
+        ap_rb_ptr = &monraces_info[mb_ptr->ap_r_idx];
     } else {
         ap_rb_ptr = nullptr;
     }
@@ -212,11 +212,11 @@ bool ang_sort_comp_importance(PlayerType *player_ptr, vptr u, vptr v, int a, int
     }
 
     /* Priority from the terrain */
-    if (f_info[ca_ptr->feat].priority > f_info[cb_ptr->feat].priority) {
+    if (terrains_info[ca_ptr->feat].priority > terrains_info[cb_ptr->feat].priority) {
         return true;
     }
 
-    if (f_info[ca_ptr->feat].priority < f_info[cb_ptr->feat].priority) {
+    if (terrains_info[ca_ptr->feat].priority < terrains_info[cb_ptr->feat].priority) {
         return false;
     }
 
@@ -270,8 +270,8 @@ bool ang_sort_art_comp(PlayerType *player_ptr, vptr u, vptr v, int a, int b)
     /* Sort by total kills */
     if (*why >= 3) {
         /* Extract total kills */
-        z1 = enum2i(a_info.at(w1).tval);
-        z2 = enum2i(a_info.at(w2).tval);
+        z1 = enum2i(artifacts_info.at(w1).tval);
+        z2 = enum2i(artifacts_info.at(w2).tval);
 
         /* Compare total kills */
         if (z1 < z2) {
@@ -286,8 +286,8 @@ bool ang_sort_art_comp(PlayerType *player_ptr, vptr u, vptr v, int a, int b)
     /* Sort by monster level */
     if (*why >= 2) {
         /* Extract levels */
-        z1 = a_info.at(w1).sval;
-        z2 = a_info.at(w2).sval;
+        z1 = artifacts_info.at(w1).sval;
+        z2 = artifacts_info.at(w2).sval;
 
         /* Compare levels */
         if (z1 < z2) {
@@ -302,8 +302,8 @@ bool ang_sort_art_comp(PlayerType *player_ptr, vptr u, vptr v, int a, int b)
     /* Sort by monster experience */
     if (*why >= 1) {
         /* Extract experience */
-        z1 = a_info.at(w1).level;
-        z2 = a_info.at(w2).level;
+        z1 = artifacts_info.at(w1).level;
+        z2 = artifacts_info.at(w2).level;
 
         /* Compare experience */
         if (z1 < z2) {
@@ -382,8 +382,8 @@ bool ang_sort_comp_pet(PlayerType *player_ptr, vptr u, vptr v, int a, int b)
 
     monster_type *m_ptr1 = &player_ptr->current_floor_ptr->m_list[w1];
     monster_type *m_ptr2 = &player_ptr->current_floor_ptr->m_list[w2];
-    monster_race *r_ptr1 = &r_info[m_ptr1->r_idx];
-    monster_race *r_ptr2 = &r_info[m_ptr2->r_idx];
+    monster_race *r_ptr1 = &monraces_info[m_ptr1->r_idx];
+    monster_race *r_ptr2 = &monraces_info[m_ptr2->r_idx];
 
     if (m_ptr1->nickname && !m_ptr2->nickname) {
         return true;
@@ -447,8 +447,8 @@ bool ang_sort_comp_hook(PlayerType *player_ptr, vptr u, vptr v, int a, int b)
     /* Sort by player kills */
     if (*why >= 4) {
         /* Extract player kills */
-        z1 = r_info[w1].r_pkills;
-        z2 = r_info[w2].r_pkills;
+        z1 = monraces_info[w1].r_pkills;
+        z2 = monraces_info[w2].r_pkills;
 
         /* Compare player kills */
         if (z1 < z2) {
@@ -462,8 +462,8 @@ bool ang_sort_comp_hook(PlayerType *player_ptr, vptr u, vptr v, int a, int b)
     /* Sort by total kills */
     if (*why >= 3) {
         /* Extract total kills */
-        z1 = r_info[w1].r_tkills;
-        z2 = r_info[w2].r_tkills;
+        z1 = monraces_info[w1].r_tkills;
+        z2 = monraces_info[w2].r_tkills;
 
         /* Compare total kills */
         if (z1 < z2) {
@@ -477,8 +477,8 @@ bool ang_sort_comp_hook(PlayerType *player_ptr, vptr u, vptr v, int a, int b)
     /* Sort by monster level */
     if (*why >= 2) {
         /* Extract levels */
-        z1 = r_info[w1].level;
-        z2 = r_info[w2].level;
+        z1 = monraces_info[w1].level;
+        z2 = monraces_info[w2].level;
 
         /* Compare levels */
         if (z1 < z2) {
@@ -492,8 +492,8 @@ bool ang_sort_comp_hook(PlayerType *player_ptr, vptr u, vptr v, int a, int b)
     /* Sort by monster experience */
     if (*why >= 1) {
         /* Extract experience */
-        z1 = r_info[w1].mexp;
-        z2 = r_info[w2].mexp;
+        z1 = monraces_info[w1].mexp;
+        z2 = monraces_info[w2].mexp;
 
         /* Compare experience */
         if (z1 < z2) {
@@ -547,8 +547,8 @@ bool ang_sort_comp_monster_level(PlayerType *player_ptr, vptr u, vptr v, int a, 
     auto w1 = who[a];
     auto w2 = who[b];
 
-    monster_race *r_ptr1 = &r_info[w1];
-    monster_race *r_ptr2 = &r_info[w2];
+    monster_race *r_ptr1 = &monraces_info[w1];
+    monster_race *r_ptr2 = &monraces_info[w2];
 
     if (r_ptr2->level > r_ptr1->level) {
         return true;
@@ -589,8 +589,8 @@ bool ang_sort_comp_pet_dismiss(PlayerType *player_ptr, vptr u, vptr v, int a, in
 
     monster_type *m_ptr1 = &player_ptr->current_floor_ptr->m_list[w1];
     monster_type *m_ptr2 = &player_ptr->current_floor_ptr->m_list[w2];
-    monster_race *r_ptr1 = &r_info[m_ptr1->r_idx];
-    monster_race *r_ptr2 = &r_info[m_ptr2->r_idx];
+    monster_race *r_ptr1 = &monraces_info[m_ptr1->r_idx];
+    monster_race *r_ptr2 = &monraces_info[m_ptr2->r_idx];
 
     if (w1 == player_ptr->riding) {
         return true;

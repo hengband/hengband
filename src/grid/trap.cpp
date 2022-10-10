@@ -171,7 +171,7 @@ FEAT_IDX choose_random_trap(PlayerType *player_ptr)
         feat = normal_traps[randint0(normal_traps.size())];
 
         /* Accept non-trapdoors */
-        if (f_info[feat].flags.has_not(FloorFeatureType::MORE)) {
+        if (terrains_info[feat].flags.has_not(FloorFeatureType::MORE)) {
             break;
         }
 
@@ -181,7 +181,7 @@ FEAT_IDX choose_random_trap(PlayerType *player_ptr)
         }
 
         /* Hack -- no trap doors on the deepest level */
-        if (floor_ptr->dun_level >= d_info[floor_ptr->dungeon_idx].maxdepth) {
+        if (floor_ptr->dun_level >= dungeons_info[floor_ptr->dungeon_idx].maxdepth) {
             continue;
         }
 
@@ -400,7 +400,7 @@ void hit_trap(PlayerType *player_ptr, bool break_trap)
     int i, num, dam;
     POSITION x = player_ptr->x, y = player_ptr->y;
     auto *g_ptr = &player_ptr->current_floor_ptr->grid_array[y][x];
-    auto *f_ptr = &f_info[g_ptr->feat];
+    auto *f_ptr = &terrains_info[g_ptr->feat];
     TrapType trap_feat_type = f_ptr->flags.has(FloorFeatureType::TRAP) ? i2enum<TrapType>(f_ptr->subtype) : TrapType::NOT_TRAP;
     concptr name = _("トラップ", "a trap");
 

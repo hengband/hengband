@@ -40,7 +40,7 @@
  */
 void roff_top(MonsterRaceId r_idx)
 {
-    auto *r_ptr = &r_info[r_idx];
+    auto *r_ptr = &monraces_info[r_idx];
     char c1 = r_ptr->d_char;
     char c2 = r_ptr->x_char;
 
@@ -544,7 +544,7 @@ static void display_monster_escort_contents(lore_type *lore_ptr)
             continue;
         }
 
-        const auto *rf_ptr = &r_info[r_idx];
+        const auto *rf_ptr = &monraces_info[r_idx];
         if (rf_ptr->kind_flags.has(MonsterKindType::UNIQUE)) {
             hooked_roff(format(_("、%s", ", %s"), rf_ptr->name.c_str()));
             continue;

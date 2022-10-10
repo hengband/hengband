@@ -1,7 +1,13 @@
-﻿#include "info-reader/kind-reader.h"
+﻿/*
+ * @brief ベースアイテム定義の読み込み処理
+ * @author Hourier
+ * @date 2022/10/10
+ */
+
+#include "info-reader/baseitem-reader.h"
 #include "artifact/random-art-effects.h"
+#include "info-reader/baseitem-tokens-table.h"
 #include "info-reader/info-reader-util.h"
-#include "info-reader/kind-info-tokens-table.h"
 #include "info-reader/parse-error-types.h"
 #include "main/angband-headers.h"
 #include "object-enchant/tr-types.h"
@@ -18,13 +24,13 @@
  * @param what 参照元の文字列ポインタ
  * @return 見つけたらtrue
  */
-static bool grab_one_kind_flag(BaseItemInfo *k_ptr, std::string_view what)
+static bool grab_one_baseitem_flag(BaseItemInfo *k_ptr, std::string_view what)
 {
-    if (TrFlags::grab_one_flag(k_ptr->flags, k_info_flags, what)) {
+    if (TrFlags::grab_one_flag(k_ptr->flags, baseitem_flags, what)) {
         return true;
     }
 
-    if (EnumClassFlagGroup<ItemGenerationTraitType>::grab_one_flag(k_ptr->gen_flags, k_info_gen_flags, what)) {
+    if (EnumClassFlagGroup<ItemGenerationTraitType>::grab_one_flag(k_ptr->gen_flags, baseitem_geneneration_flags, what)) {
         return true;
     }
 
@@ -33,13 +39,12 @@ static bool grab_one_kind_flag(BaseItemInfo *k_ptr, std::string_view what)
 }
 
 /*!
- * @brief ベースアイテム(k_info)のパース関数 /
- * Initialize the "k_info" array, by parsing an ascii "template" file
+ * @brief ベースアイテム(BaseItemDefinitions)のパース関数
  * @param buf テキスト列
  * @param head ヘッダ構造体
  * @return エラーコード
  */
-errr parse_k_info(std::string_view buf, angband_header *head)
+errr parse_baseitems_info(std::string_view buf, angband_header *head)
 {
     (void)head;
     static BaseItemInfo *k_ptr = nullptr;
@@ -55,12 +60,12 @@ errr parse_k_info(std::string_view buf, angband_header *head)
         if (i < error_idx) {
             return PARSE_ERROR_NON_SEQUENTIAL_RECORDS;
         }
-        if (i >= static_cast<int>(k_info.size())) {
-            k_info.resize(i + 1);
+        if (i >= static_cast<int>(baseitems_info.size())) {
+            baseitems_info.resize(i + 1);
         }
 
         error_idx = i;
-        k_ptr = &k_info[i];
+        k_ptr = &baseitems_info[i];
         k_ptr->idx = static_cast<KIND_OBJECT_IDX>(i);
 #ifdef JP
         k_ptr->name = tokens[2];
@@ -186,7 +191,7 @@ errr parse_k_info(std::string_view buf, angband_header *head)
             if (f.size() == 0) {
                 continue;
             }
-            if (!grab_one_kind_flag(k_ptr, f)) {
+            if (!grab_one_baseitem_flag(k_ptr, f)) {
                 return PARSE_ERROR_INVALID_FLAG;
             }
         }

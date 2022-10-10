@@ -30,7 +30,7 @@ void delete_monster_idx(PlayerType *player_ptr, MONSTER_IDX i)
 {
     auto *floor_ptr = player_ptr->current_floor_ptr;
     auto *m_ptr = &floor_ptr->m_list[i];
-    auto *r_ptr = &r_info[m_ptr->r_idx];
+    auto *r_ptr = &monraces_info[m_ptr->r_idx];
 
     POSITION y = m_ptr->fy;
     POSITION x = m_ptr->fx;
@@ -112,22 +112,22 @@ void delete_monster_idx(PlayerType *player_ptr, MONSTER_IDX i)
  */
 void wipe_monsters_list(PlayerType *player_ptr)
 {
-    if (!r_info[MonsterRaceId::BANORLUPART].max_num) {
-        if (r_info[MonsterRaceId::BANOR].max_num) {
-            r_info[MonsterRaceId::BANOR].max_num = 0;
-            r_info[MonsterRaceId::BANOR].r_pkills++;
-            r_info[MonsterRaceId::BANOR].r_akills++;
-            if (r_info[MonsterRaceId::BANOR].r_tkills < MAX_SHORT) {
-                r_info[MonsterRaceId::BANOR].r_tkills++;
+    if (!monraces_info[MonsterRaceId::BANORLUPART].max_num) {
+        if (monraces_info[MonsterRaceId::BANOR].max_num) {
+            monraces_info[MonsterRaceId::BANOR].max_num = 0;
+            monraces_info[MonsterRaceId::BANOR].r_pkills++;
+            monraces_info[MonsterRaceId::BANOR].r_akills++;
+            if (monraces_info[MonsterRaceId::BANOR].r_tkills < MAX_SHORT) {
+                monraces_info[MonsterRaceId::BANOR].r_tkills++;
             }
         }
 
-        if (r_info[MonsterRaceId::LUPART].max_num) {
-            r_info[MonsterRaceId::LUPART].max_num = 0;
-            r_info[MonsterRaceId::LUPART].r_pkills++;
-            r_info[MonsterRaceId::LUPART].r_akills++;
-            if (r_info[MonsterRaceId::LUPART].r_tkills < MAX_SHORT) {
-                r_info[MonsterRaceId::LUPART].r_tkills++;
+        if (monraces_info[MonsterRaceId::LUPART].max_num) {
+            monraces_info[MonsterRaceId::LUPART].max_num = 0;
+            monraces_info[MonsterRaceId::LUPART].r_pkills++;
+            monraces_info[MonsterRaceId::LUPART].r_akills++;
+            if (monraces_info[MonsterRaceId::LUPART].r_tkills < MAX_SHORT) {
+                monraces_info[MonsterRaceId::LUPART].r_tkills++;
             }
         }
     }
@@ -148,7 +148,7 @@ void wipe_monsters_list(PlayerType *player_ptr)
      * counters of monsters in party_mon[] are required to prevent multiple
      * generation of unique monster who is the minion of player.
      */
-    for (auto &[r_idx, r_ref] : r_info) {
+    for (auto &[r_idx, r_ref] : monraces_info) {
         r_ref.cur_num = 0;
     }
 

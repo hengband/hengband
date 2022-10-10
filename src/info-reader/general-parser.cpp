@@ -30,7 +30,7 @@ dungeon_grid letter[255];
  * @param parse_info_txt_line パース関数
  * @return エラーコード
  */
-errr init_info_txt(FILE *fp, char *buf, angband_header *head, std::function<errr(std::string_view, angband_header *)> parse_info_txt_line)
+errr init_info_txt(FILE *fp, char *buf, angband_header *head, Parser parse_info_txt_line)
 {
     error_idx = -1;
     error_line = 0;
@@ -146,7 +146,7 @@ parse_error_type parse_line_feature(floor_type *floor_ptr, char *buf)
                 const auto &quest_list = QuestList::get_instance();
                 const auto a_idx = quest_list[floor_ptr->quest_number].reward_artifact_idx;
                 if (a_idx != FixedArtifactId::NONE) {
-                    const auto &a_ref = a_info.at(a_idx);
+                    const auto &a_ref = artifacts_info.at(a_idx);
                     if (a_ref.gen_flags.has_not(ItemGenerationTraitType::INSTA_ART)) {
                         letter[index].object = lookup_kind(a_ref.tval, a_ref.sval);
                     }

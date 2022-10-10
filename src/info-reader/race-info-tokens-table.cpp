@@ -247,9 +247,9 @@ const std::unordered_map<std::string_view, MonsterAbilityType> r_info_ability_fl
 /* clang-format on */
 
 /*!
- * モンスター特性トークンの定義7 /
- * Monster race flags
- * "GUARDIAN" ... init.c d_infoの FINAL_GUARDIAN_* にて自動指定
+ * @brief モンスター特性トークンの定義7
+ * @details ダンジョンの主は、DungeonDefinitions の FINAL_GUARDIAN_HOGE にて自動指定
+ * HOGE は、MonsterRaceDefinitions で定義したモンスター種族ID
  */
 const std::unordered_map<std::string_view, race_flags7> r_info_flags7 = {
     { "UNIQUE2", RF7_UNIQUE2 },

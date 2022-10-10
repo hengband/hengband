@@ -151,7 +151,7 @@ void update_mon_lite(PlayerType *player_ptr)
     std::vector<Pos2D> points;
 
     void (*add_mon_lite)(PlayerType *, std::vector<Pos2D> &, const POSITION, const POSITION, const monster_lite_type *);
-    int dis_lim = (d_info[player_ptr->dungeon_idx].flags.has(DungeonFeatureType::DARKNESS) && !player_ptr->see_nocto) ? (MAX_SIGHT / 2 + 1) : (MAX_SIGHT + 3);
+    int dis_lim = (dungeons_info[player_ptr->dungeon_idx].flags.has(DungeonFeatureType::DARKNESS) && !player_ptr->see_nocto) ? (MAX_SIGHT / 2 + 1) : (MAX_SIGHT + 3);
     auto *floor_ptr = player_ptr->current_floor_ptr;
     for (int i = 0; i < floor_ptr->mon_lite_n; i++) {
         grid_type *g_ptr;
@@ -165,7 +165,7 @@ void update_mon_lite(PlayerType *player_ptr)
         monster_race *r_ptr;
         for (int i = 1; i < floor_ptr->m_max; i++) {
             m_ptr = &floor_ptr->m_list[i];
-            r_ptr = &r_info[m_ptr->r_idx];
+            r_ptr = &monraces_info[m_ptr->r_idx];
             if (!m_ptr->is_valid() || (m_ptr->cdis > dis_lim)) {
                 continue;
             }
@@ -197,7 +197,7 @@ void update_mon_lite(PlayerType *player_ptr)
                     continue;
                 }
 
-                if (d_info[player_ptr->dungeon_idx].flags.has(DungeonFeatureType::DARKNESS)) {
+                if (dungeons_info[player_ptr->dungeon_idx].flags.has(DungeonFeatureType::DARKNESS)) {
                     rad = 1;
                 }
 

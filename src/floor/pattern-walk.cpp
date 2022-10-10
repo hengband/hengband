@@ -57,8 +57,8 @@ void pattern_teleport(PlayerType *player_ptr)
                 max_level = 100;
             }
         } else {
-            max_level = d_info[player_ptr->dungeon_idx].maxdepth;
-            min_level = d_info[player_ptr->dungeon_idx].mindepth;
+            max_level = dungeons_info[player_ptr->dungeon_idx].maxdepth;
+            min_level = dungeons_info[player_ptr->dungeon_idx].mindepth;
         }
 
         sprintf(ppp, _("テレポート先:(%d-%d)", "Teleport to level (%d-%d): "), (int)min_level, (int)max_level);
@@ -123,7 +123,7 @@ bool pattern_effect(PlayerType *player_ptr)
         wreck_the_pattern(player_ptr);
     }
 
-    int pattern_type = f_info[floor_ptr->grid_array[player_ptr->y][player_ptr->x].feat].subtype;
+    int pattern_type = terrains_info[floor_ptr->grid_array[player_ptr->y][player_ptr->x].feat].subtype;
     switch (pattern_type) {
     case PATTERN_TILE_END:
         (void)BadStatusSetter(player_ptr).hallucination(0);
@@ -179,8 +179,8 @@ bool pattern_effect(PlayerType *player_ptr)
  */
 bool pattern_seq(PlayerType *player_ptr, POSITION c_y, POSITION c_x, POSITION n_y, POSITION n_x)
 {
-    feature_type *cur_f_ptr = &f_info[player_ptr->current_floor_ptr->grid_array[c_y][c_x].feat];
-    feature_type *new_f_ptr = &f_info[player_ptr->current_floor_ptr->grid_array[n_y][n_x].feat];
+    terrain_type *cur_f_ptr = &terrains_info[player_ptr->current_floor_ptr->grid_array[c_y][c_x].feat];
+    terrain_type *new_f_ptr = &terrains_info[player_ptr->current_floor_ptr->grid_array[n_y][n_x].feat];
     bool is_pattern_tile_cur = cur_f_ptr->flags.has(FloorFeatureType::PATTERN);
     bool is_pattern_tile_new = new_f_ptr->flags.has(FloorFeatureType::PATTERN);
     if (!is_pattern_tile_cur && !is_pattern_tile_new) {
