@@ -23,89 +23,75 @@
  * 17エントリーまで設定可能。(最後はTV_NONE で止める)
  * 種類が多すぎる場合、店舗を埋めつくすので注意。
  */
-store_stock_item_type store_regular_table[MAX_STORES][STORE_MAX_KEEP] = {
-    {
-        /* General Store */
-        { ItemKindType::FOOD, SV_FOOD_RATION },
-        { ItemKindType::LITE, SV_LITE_TORCH },
-        { ItemKindType::LITE, SV_LITE_LANTERN },
-        { ItemKindType::FLASK, SV_FLASK_OIL },
-        { ItemKindType::POTION, SV_POTION_WATER },
-        { ItemKindType::SPIKE, 0 },
-        { ItemKindType::NONE, 0 },
-    },
-    {
-        /* Armoury */
-        { ItemKindType::NONE, 0 },
-    },
-    {
-        /* Weaponsmith */
-        { ItemKindType::HISSATSU_BOOK, 0 },
-        { ItemKindType::SHOT, SV_AMMO_NORMAL },
-        { ItemKindType::SHOT, SV_AMMO_NORMAL },
-        { ItemKindType::ARROW, SV_AMMO_NORMAL },
-        { ItemKindType::ARROW, SV_AMMO_NORMAL },
-        { ItemKindType::BOLT, SV_AMMO_NORMAL },
-        { ItemKindType::BOLT, SV_AMMO_NORMAL },
-        { ItemKindType::NONE, 0 },
-    },
-    {
-        /* Temple */
-        { ItemKindType::POTION, SV_POTION_CURE_CRITICAL },
-        { ItemKindType::POTION, SV_POTION_CURE_SERIOUS },
-        { ItemKindType::POTION, SV_POTION_HEROISM },
-        { ItemKindType::SCROLL, SV_SCROLL_WORD_OF_RECALL },
-        { ItemKindType::SCROLL, SV_SCROLL_REMOVE_CURSE },
-        { ItemKindType::LIFE_BOOK, 0 },
-        { ItemKindType::CRUSADE_BOOK, 0 },
-        { ItemKindType::NONE, 0 },
-    },
-    {
-        /* Alchemy shop */
-        { ItemKindType::SCROLL, SV_SCROLL_PHASE_DOOR },
-        { ItemKindType::SCROLL, SV_SCROLL_PHASE_DOOR },
-        { ItemKindType::SCROLL, SV_SCROLL_TELEPORT },
-        { ItemKindType::SCROLL, SV_SCROLL_TELEPORT },
-        { ItemKindType::SCROLL, SV_SCROLL_RECHARGING },
-        { ItemKindType::SCROLL, SV_SCROLL_IDENTIFY },
-        { ItemKindType::SCROLL, SV_SCROLL_DETECT_GOLD },
-        { ItemKindType::NONE, 0 },
-    },
-    {
-        /* Magic User */
-        { ItemKindType::STAFF, SV_STAFF_IDENTIFY },
-        { ItemKindType::STAFF, SV_STAFF_IDENTIFY },
-        { ItemKindType::STAFF, SV_STAFF_MAPPING },
-        { ItemKindType::ARCANE_BOOK, 0 },
-        { ItemKindType::SORCERY_BOOK, 0 },
-        { ItemKindType::NONE, 0 },
-    },
-    {
-        /* Blackmarket */
-        { ItemKindType::NONE, 0 },
-    },
-    {
-        /* Home */
-        { ItemKindType::NONE, 0 },
-    },
-    {
-        /* Bookstore */
-        { ItemKindType::SORCERY_BOOK, 0 },
-        { ItemKindType::NATURE_BOOK, 0 },
-        { ItemKindType::CHAOS_BOOK, 0 },
-        { ItemKindType::DEATH_BOOK, 0 },
-        { ItemKindType::TRUMP_BOOK, 0 },
-        { ItemKindType::ARCANE_BOOK, 0 },
-        { ItemKindType::CRAFT_BOOK, 0 },
-        { ItemKindType::DEMON_BOOK, 0 },
-        { ItemKindType::MUSIC_BOOK, 0 },
-        { ItemKindType::HEX_BOOK, 0 },
-        { ItemKindType::NONE, 0 },
-    },
-    {
-        /* Museum */
-        { ItemKindType::NONE, 0 },
-    },
+const std::map<StoreSaleType, std::vector<store_stock_item_type>> store_regular_sale_table = {
+    { StoreSaleType::GENERAL,
+        {
+            { ItemKindType::FOOD, SV_FOOD_RATION },
+            { ItemKindType::LITE, SV_LITE_TORCH },
+            { ItemKindType::LITE, SV_LITE_LANTERN },
+            { ItemKindType::FLASK, SV_FLASK_OIL },
+            { ItemKindType::POTION, SV_POTION_WATER },
+            { ItemKindType::SPIKE, 0 },
+        } },
+    { StoreSaleType::ARMOURY,
+        {} },
+    { StoreSaleType::WEAPON,
+        {
+            { ItemKindType::HISSATSU_BOOK, 0 },
+            { ItemKindType::SHOT, SV_AMMO_NORMAL },
+            { ItemKindType::SHOT, SV_AMMO_NORMAL },
+            { ItemKindType::ARROW, SV_AMMO_NORMAL },
+            { ItemKindType::ARROW, SV_AMMO_NORMAL },
+            { ItemKindType::BOLT, SV_AMMO_NORMAL },
+            { ItemKindType::BOLT, SV_AMMO_NORMAL },
+        } },
+    { StoreSaleType::TEMPLE,
+        {
+            { ItemKindType::POTION, SV_POTION_CURE_CRITICAL },
+            { ItemKindType::POTION, SV_POTION_CURE_SERIOUS },
+            { ItemKindType::POTION, SV_POTION_HEROISM },
+            { ItemKindType::SCROLL, SV_SCROLL_WORD_OF_RECALL },
+            { ItemKindType::SCROLL, SV_SCROLL_REMOVE_CURSE },
+            { ItemKindType::LIFE_BOOK, 0 },
+            { ItemKindType::CRUSADE_BOOK, 0 },
+        } },
+    { StoreSaleType::ALCHEMIST,
+        {
+            { ItemKindType::SCROLL, SV_SCROLL_PHASE_DOOR },
+            { ItemKindType::SCROLL, SV_SCROLL_PHASE_DOOR },
+            { ItemKindType::SCROLL, SV_SCROLL_TELEPORT },
+            { ItemKindType::SCROLL, SV_SCROLL_TELEPORT },
+            { ItemKindType::SCROLL, SV_SCROLL_RECHARGING },
+            { ItemKindType::SCROLL, SV_SCROLL_IDENTIFY },
+            { ItemKindType::SCROLL, SV_SCROLL_DETECT_GOLD },
+        } },
+    { StoreSaleType::MAGIC,
+        {
+            { ItemKindType::STAFF, SV_STAFF_IDENTIFY },
+            { ItemKindType::STAFF, SV_STAFF_IDENTIFY },
+            { ItemKindType::STAFF, SV_STAFF_MAPPING },
+            { ItemKindType::ARCANE_BOOK, 0 },
+            { ItemKindType::SORCERY_BOOK, 0 },
+        } },
+    { StoreSaleType::BLACK,
+        {} },
+    { StoreSaleType::HOME,
+        {} },
+    { StoreSaleType::BOOK,
+        {
+            { ItemKindType::SORCERY_BOOK, 0 },
+            { ItemKindType::NATURE_BOOK, 0 },
+            { ItemKindType::CHAOS_BOOK, 0 },
+            { ItemKindType::DEATH_BOOK, 0 },
+            { ItemKindType::TRUMP_BOOK, 0 },
+            { ItemKindType::ARCANE_BOOK, 0 },
+            { ItemKindType::CRAFT_BOOK, 0 },
+            { ItemKindType::DEMON_BOOK, 0 },
+            { ItemKindType::MUSIC_BOOK, 0 },
+            { ItemKindType::HEX_BOOK, 0 },
+        } },
+    { StoreSaleType::MUSEUM,
+        {} },
 };
 
 /*!

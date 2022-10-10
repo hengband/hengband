@@ -34,9 +34,10 @@ void init_towns(void)
                 continue;
             }
 
-            for (auto k = 0; k < STORE_INVEN_MAX; k++) {
-                auto tv = store_regular_table[enum2i(sst)][k].tval;
-                auto sv = store_regular_table[enum2i(sst)][k].sval;
+            const auto store_r = store_regular_sale_table.at(sst);
+            for (const auto kind : store_r) {
+                const auto tv = kind.tval;
+                const auto sv = kind.sval;
                 if (tv == ItemKindType::NONE) {
                     break;
                 }
