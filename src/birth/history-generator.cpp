@@ -3,6 +3,8 @@
 #include "player-info/race-types.h"
 #include "system/player-type-definition.h"
 #include "util/buffer-shaper.h"
+#include <sstream>
+#include <string>
 
 static int get_history_chart(PlayerType *player_ptr)
 {
@@ -88,22 +90,21 @@ static int get_history_chart(PlayerType *player_ptr)
 /*!
  * @brief 生い立ちを画面に表示しつつ、種族から社会的地位を決定する
  * @param player_ptr プレイヤーへの参照ポインタ
- * @param buf 生い立ち情報のバッファ
- * @details 画面表示と社会的地位の決定が密結合していて分離できない
  */
-static void decide_social_class(PlayerType *player_ptr, char *buf)
+static std::string decide_social_class(PlayerType *player_ptr)
 {
-    int social_class = randint1(4);
-    int chart = get_history_chart(player_ptr);
+    short social_class = randint1(4);
+    auto chart = get_history_chart(player_ptr);
+    std::stringstream ss;
     while (chart != 0) {
-        int i = 0;
-        int roll = randint1(100);
+        auto i = 0;
+        auto roll = randint1(100);
         while ((chart != backgrounds[i].chart) || (roll > backgrounds[i].roll)) {
             i++;
         }
 
-        (void)strcat(buf, backgrounds[i].info);
-        social_class += (int)(backgrounds[i].bonus) - 50;
+        ss << backgrounds[i].info;
+        social_class += static_cast<short>(backgrounds[i].bonus) - 50;
         chart = backgrounds[i].next;
     }
 
@@ -113,45 +114,31 @@ static void decide_social_class(PlayerType *player_ptr, char *buf)
         social_class = 1;
     }
 
-    player_ptr->sc = (int16_t)social_class;
+    player_ptr->sc = social_class;
+    return ss.str();
 }
 
 /*!
- * @brief プレイヤーの生い立ちの自動生成を行う。 / Get the racial history, and social class, using the "history charts".
+ * @brief プレイヤーの生い立ちの自動生成を行う
+ * @param player_ptr プレイヤーへの参照ポインタ
  */
 void get_history(PlayerType *player_ptr)
 {
-    for (int i = 0; i < 4; i++) {
+    constexpr auto lines = 4;
+    for (int i = 0; i < lines; i++) {
         player_ptr->history[i][0] = '\0';
     }
 
-    char buf[240];
-    buf[0] = '\0';
-    decide_social_class(player_ptr, buf);
-
-    /* loop */
-    char *s;
-    for (s = buf; *s == ' '; s++) {
-        ;
-    }
-
-    int n = strlen(s);
-    while ((n > 0) && (s[n - 1] == ' ')) {
-        s[--n] = '\0';
-    }
-
-    {
-        char temp[64 * 4];
-        shape_buffer(s, 60, temp, sizeof(temp));
-        char *t;
-        t = temp;
-        for (int i = 0; i < 4; i++) {
-            if (t[0] == 0) {
-                break;
-            } else {
-                strcpy(player_ptr->history[i], t);
-                t += strlen(t) + 1;
-            }
+    auto social_class = decide_social_class(player_ptr);
+    char tmp_history[64 * lines];
+    shape_buffer(social_class.data(), 60, tmp_history, sizeof(tmp_history));
+    auto *history = tmp_history;
+    for (auto i = 0; i < lines; i++) {
+        if (history[0] == 0) {
+            return;
         }
+
+        strcpy(player_ptr->history[i], history);
+        history += strlen(history) + 1;
     }
 }
