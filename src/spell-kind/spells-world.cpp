@@ -1,10 +1,15 @@
-﻿#include "spell-kind/spells-world.h"
+﻿/*
+ * @brief 帰還やテレポート・レベル等、フロアを跨ぐ魔法効果の処理
+ * @author Hourier
+ * @date 2022/10/10
+ */
+
+#include "spell-kind/spells-world.h"
 #include "cmd-io/cmd-save.h"
 #include "core/asking-player.h"
 #include "core/player-redraw-types.h"
 #include "dungeon/dungeon.h"
 #include "dungeon/quest-completion-checker.h"
-#include "dungeon/quest.h"
 #include "floor/cave.h"
 #include "floor/floor-mode-changer.h"
 #include "floor/floor-town.h"
@@ -20,14 +25,9 @@
 #include "market/building-util.h"
 #include "monster-floor/monster-remover.h"
 #include "monster-race/monster-race.h"
-#include "monster-race/race-ability-mask.h"
-#include "monster-race/race-flags-resistance.h"
 #include "monster-race/race-flags1.h"
-#include "monster-race/race-resistance-mask.h"
 #include "monster/monster-describer.h"
 #include "monster/monster-description-types.h"
-#include "monster/monster-info.h"
-#include "player/player-status.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
 #include "system/monster-race-definition.h"
@@ -363,6 +363,76 @@ void reserve_alter_reality(PlayerType *player_ptr, TIME_EFFECT turns)
     player_ptr->alter_reality = turns;
     msg_print(_("回りの景色が変わり始めた...", "The view around you begins to change..."));
     player_ptr->redraw |= PR_STATUS;
+}
+
+/*!
+ * @brief これまでに入ったダンジョンの一覧を表示し、選択させる。
+ * @param note ダンジョンに施す処理記述
+ * @param y コンソールY座標
+ * @param x コンソールX座標
+ * @return 選択されたダンジョンID
+ */
+static DUNGEON_IDX choose_dungeon(concptr note, POSITION y, POSITION x)
+{
+    DUNGEON_IDX select_dungeon;
+    if (lite_town || vanilla_town || ironman_downward) {
+        if (max_dlv[DUNGEON_ANGBAND]) {
+            return DUNGEON_ANGBAND;
+        } else {
+            msg_format(_("まだ%sに入ったことはない。", "You haven't entered %s yet."), dungeons_info[DUNGEON_ANGBAND].name.c_str());
+            msg_print(nullptr);
+            return 0;
+        }
+    }
+
+    std::vector<DUNGEON_IDX> dun;
+
+    screen_save();
+    for (const auto &d_ref : dungeons_info) {
+        char buf[80];
+        bool seiha = false;
+
+        if (d_ref.idx == 0 || !d_ref.maxdepth) {
+            continue;
+        }
+        if (!max_dlv[d_ref.idx]) {
+            continue;
+        }
+        if (MonsterRace(d_ref.final_guardian).is_valid()) {
+            if (!monraces_info[d_ref.final_guardian].max_num) {
+                seiha = true;
+            }
+        } else if (max_dlv[d_ref.idx] == d_ref.maxdepth) {
+            seiha = true;
+        }
+
+        sprintf(buf, _("      %c) %c%-12s : 最大 %d 階", "      %c) %c%-16s : Max level %d"),
+            static_cast<char>('a' + dun.size()), seiha ? '!' : ' ', d_ref.name.c_str(), (int)max_dlv[d_ref.idx]);
+        prt(buf, y + dun.size(), x);
+        dun.push_back(d_ref.idx);
+    }
+
+    if (dun.empty()) {
+        prt(_("      選べるダンジョンがない。", "      No dungeon is available."), y, x);
+    }
+
+    prt(format(_("どのダンジョン%sしますか:", "Which dungeon do you %s?: "), note), 0, 0);
+    while (true) {
+        auto i = inkey();
+        if ((i == ESCAPE) || dun.empty()) {
+            screen_load();
+            return 0;
+        }
+        if (i >= 'a' && i < static_cast<char>('a' + dun.size())) {
+            select_dungeon = dun[i - 'a'];
+            break;
+        } else {
+            bell();
+        }
+    }
+    screen_load();
+
+    return select_dungeon;
 }
 
 /*!

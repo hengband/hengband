@@ -108,6 +108,3 @@ struct dungeon_type {
 
 extern std::vector<DEPTH> max_dlv;
 extern std::vector<dungeon_type> dungeons_info;
-
-class PlayerType;
-DUNGEON_IDX choose_dungeon(concptr note, POSITION y, POSITION x);
