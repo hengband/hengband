@@ -67,7 +67,7 @@ static bool scene_quest_basic(PlayerType *player_ptr, scene_type *value)
 
 static bool scene_town(PlayerType *player_ptr, scene_type *value)
 {
-    const bool enable = !is_in_dungeon(player_ptr) && (player_ptr->town_num > 0);
+    const auto enable = !player_ptr->current_floor_ptr->is_in_dungeon() && (player_ptr->town_num > 0);
     if (enable) {
         value->type = TERM_XTRA_MUSIC_TOWN;
         value->val = player_ptr->town_num;
@@ -77,7 +77,7 @@ static bool scene_town(PlayerType *player_ptr, scene_type *value)
 
 static bool scene_town_basic(PlayerType *player_ptr, scene_type *value)
 {
-    const bool enable = !is_in_dungeon(player_ptr) && (player_ptr->town_num > 0);
+    const auto enable = !player_ptr->current_floor_ptr->is_in_dungeon() && (player_ptr->town_num > 0);
     if (enable) {
         value->type = TERM_XTRA_MUSIC_BASIC;
         value->val = MUSIC_BASIC_TOWN;
@@ -87,7 +87,7 @@ static bool scene_town_basic(PlayerType *player_ptr, scene_type *value)
 
 static bool scene_field(PlayerType *player_ptr, scene_type *value)
 {
-    const bool enable = !is_in_dungeon(player_ptr);
+    const auto enable = !player_ptr->current_floor_ptr->is_in_dungeon();
     if (enable) {
         value->type = TERM_XTRA_MUSIC_BASIC;
 
@@ -129,7 +129,7 @@ static bool scene_dungeon(PlayerType *player_ptr, scene_type *value)
 
 static bool scene_dungeon_basic(PlayerType *player_ptr, scene_type *value)
 {
-    const bool enable = is_in_dungeon(player_ptr);
+    const auto enable = player_ptr->current_floor_ptr->is_in_dungeon();
     if (enable) {
         value->type = TERM_XTRA_MUSIC_BASIC;
 

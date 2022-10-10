@@ -378,16 +378,18 @@ errr exe_write_diary(PlayerType *player_ptr, int type, int num, concptr note)
         break;
     }
     case DIARY_WIZ_TELE: {
-        concptr to = !is_in_dungeon(player_ptr)
+        const auto &floor_ref = *player_ptr->current_floor_ptr;
+        concptr to = !floor_ref.is_in_dungeon()
                          ? _("地上", "the surface")
-                         : format(_("%d階(%s)", "level %d of %s"), player_ptr->current_floor_ptr->dun_level, dungeons_info[player_ptr->dungeon_idx].name.c_str());
+                         : format(_("%d階(%s)", "level %d of %s"), floor_ref.dun_level, dungeons_info[player_ptr->dungeon_idx].name.c_str());
         fprintf(fff, _(" %2d:%02d %20s %sへとウィザード・テレポートで移動した。\n", " %2d:%02d %20s wizard-teleported to %s.\n"), hour, min, note_level, to);
         break;
     }
     case DIARY_PAT_TELE: {
-        concptr to = !is_in_dungeon(player_ptr)
+        const auto &floor_ref = *player_ptr->current_floor_ptr;
+        concptr to = !floor_ref.is_in_dungeon()
                          ? _("地上", "the surface")
-                         : format(_("%d階(%s)", "level %d of %s"), player_ptr->current_floor_ptr->dun_level, dungeons_info[player_ptr->dungeon_idx].name.c_str());
+                         : format(_("%d階(%s)", "level %d of %s"), floor_ref.dun_level, dungeons_info[player_ptr->dungeon_idx].name.c_str());
         fprintf(fff, _(" %2d:%02d %20s %sへとパターンの力で移動した。\n", " %2d:%02d %20s used Pattern to teleport to %s.\n"), hour, min, note_level, to);
         break;
     }

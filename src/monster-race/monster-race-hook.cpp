@@ -130,7 +130,8 @@ bool mon_hook_quest(PlayerType *player_ptr, MonsterRaceId r_idx)
  */
 bool mon_hook_dungeon(PlayerType *player_ptr, MonsterRaceId r_idx)
 {
-    if (!is_in_dungeon(player_ptr) && !inside_quest(player_ptr->current_floor_ptr->quest_number)) {
+    const auto &floor_ref = *player_ptr->current_floor_ptr;
+    if (!floor_ref.is_in_dungeon() && !inside_quest(floor_ref.quest_number)) {
         return true;
     }
 

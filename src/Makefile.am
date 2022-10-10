@@ -913,7 +913,7 @@ hengband_SOURCES = \
 	system/baseitem-info-definition.cpp system/baseitem-info-definition.h \
 	system/building-type-definition.cpp system/building-type-definition.h \
 	system/dungeon-data-definition.h \
-	system/floor-type-definition.h \
+	system/floor-type-definition.cpp system/floor-type-definition.h \
 	system/grid-type-definition.cpp system/grid-type-definition.h \
 	system/game-option-types.h \
 	system/h-basic.h system/h-config.h \

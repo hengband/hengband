@@ -111,4 +111,3 @@ extern std::vector<dungeon_type> dungeons_info;
 
 class PlayerType;
 DUNGEON_IDX choose_dungeon(concptr note, POSITION y, POSITION x);
-bool is_in_dungeon(PlayerType *player_ptr);
