@@ -45,41 +45,40 @@ bool askfor(char *buf, int len, bool numpad_cursor)
      * TERM_YELLOW : Overwrite mode
      * TERM_WHITE : Insert mode
      */
-    byte color = TERM_YELLOW;
+    auto color = TERM_YELLOW;
 
     int y, x;
     term_locate(&x, &y);
     if (len < 1) {
         len = 1;
     }
+
     if ((x < 0) || (x >= 80)) {
         x = 0;
     }
+
     if (x + len > 80) {
         len = 80 - x;
     }
 
     buf[len] = '\0';
-
-    int pos = 0;
+    auto pos = 0;
     while (true) {
         term_erase(x, y, len);
         term_putstr(x, y, -1, color, buf);
-
         term_gotoxy(x + pos, y);
-        int skey = inkey_special(numpad_cursor);
-
+        const auto skey = inkey_special(numpad_cursor);
         switch (skey) {
         case SKEY_LEFT:
         case KTRL('b'): {
-            int i = 0;
+            auto i = 0;
             color = TERM_WHITE;
-
             if (0 == pos) {
                 break;
             }
+
             while (true) {
-                int next_pos = i + 1;
+                auto next_pos = i + 1;
 #ifdef JP
                 if (iskanji(buf[i])) {
                     next_pos++;
@@ -95,7 +94,6 @@ bool askfor(char *buf, int len, bool numpad_cursor)
             pos = i;
             break;
         }
-
         case SKEY_RIGHT:
         case KTRL('f'):
             color = TERM_WHITE;
@@ -113,23 +111,21 @@ bool askfor(char *buf, int len, bool numpad_cursor)
             pos++;
 #endif
             break;
-
         case ESCAPE:
             buf[0] = '\0';
             return false;
-
         case '\n':
         case '\r':
             return true;
-
         case '\010': {
-            int i = 0;
+            auto i = 0;
             color = TERM_WHITE;
-            if (0 == pos) {
+            if (pos == 0) {
                 break;
             }
+
             while (true) {
-                int next_pos = i + 1;
+                auto next_pos = i + 1;
 #ifdef JP
                 if (iskanji(buf[i])) {
                     next_pos++;
@@ -145,34 +141,33 @@ bool askfor(char *buf, int len, bool numpad_cursor)
             pos = i;
         }
             /* Fall through */
-
         case 0x7F:
         case KTRL('d'): {
             color = TERM_WHITE;
-            if ('\0' == buf[pos]) {
+            if (buf[pos] == '\0') {
                 break;
             }
-            int src = pos + 1;
+
+            auto src = pos + 1;
 #ifdef JP
             if (iskanji(buf[pos])) {
                 src++;
             }
 #endif
-
-            int dst = pos;
+            auto dst = pos;
             while ('\0' != (buf[dst++] = buf[src++])) {
                 ;
             }
+
             break;
         }
-
         default: {
             char tmp[100];
             if (skey & SKEY_MASK) {
                 break;
             }
-            char c = (char)skey;
 
+            const auto c = static_cast<char>(skey);
             if (color == TERM_YELLOW) {
                 buf[0] = '\0';
                 color = TERM_WHITE;
@@ -192,12 +187,8 @@ bool askfor(char *buf, int len, bool numpad_cursor)
             } else
 #endif
             {
-#ifdef JP
-                if (pos < len && (isprint(c) || iskana(c)))
-#else
-                if (pos < len && isprint(c))
-#endif
-                {
+                const auto is_print = _(isprint(c) || iskana(c), isprint(c));
+                if (pos < len && is_print) {
                     buf[pos++] = c;
                 } else {
                     bell();
@@ -206,7 +197,6 @@ bool askfor(char *buf, int len, bool numpad_cursor)
 
             buf[pos] = '\0';
             angband_strcat(buf, tmp, len + 1);
-
             break;
         }
         }
