@@ -1,5 +1,4 @@
 ﻿#include "info-reader/dungeon-reader.h"
-#include "dungeon/dungeon.h"
 #include "grid/feature.h"
 #include "info-reader/dungeon-info-tokens-table.h"
 #include "info-reader/feature-reader.h"
@@ -8,6 +7,7 @@
 #include "info-reader/race-info-tokens-table.h"
 #include "io/tokenizer.h"
 #include "main/angband-headers.h"
+#include "system/dungeon-info.h"
 #include "util/string-processor.h"
 #include "view/display-messages.h"
 

@@ -1,4 +1,4 @@
-﻿#include "dungeon/dungeon.h"
+﻿#include "system/dungeon-info.h"
 
 /*
  * The dungeon arrays

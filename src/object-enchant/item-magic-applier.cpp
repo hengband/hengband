@@ -6,7 +6,6 @@
 
 #include "object-enchant/item-magic-applier.h"
 #include "artifact/fixed-art-generator.h"
-#include "dungeon/dungeon.h"
 #include "object-enchant/enchanter-base.h"
 #include "object-enchant/enchanter-factory.h"
 #include "object-enchant/item-apply-magic.h"
@@ -15,6 +14,7 @@
 #include "player/player-status-flags.h"
 #include "system/artifact-type-definition.h"
 #include "system/baseitem-info-definition.h"
+#include "system/dungeon-info.h"
 #include "system/floor-type-definition.h"
 #include "system/player-type-definition.h"
 #include "util/bit-flags-calculator.h"

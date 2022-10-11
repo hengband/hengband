@@ -1,5 +1,4 @@
 ﻿#include "room/rooms-pit-nest.h"
-#include "dungeon/dungeon.h"
 #include "floor/floor-generator.h"
 #include "game-option/cheat-options.h"
 #include "game-option/cheat-types.h"
@@ -20,6 +19,7 @@
 #include "monster/monster-util.h"
 #include "room/door-definition.h"
 #include "room/space-finder.h"
+#include "system/dungeon-info.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
 #include "system/monster-race-definition.h"

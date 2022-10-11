@@ -6,7 +6,6 @@
 
 #include "avatar/avatar-changer.h"
 #include "avatar/avatar.h"
-#include "dungeon/dungeon.h"
 #include "monster-race/monster-kind-mask.h"
 #include "monster-race/monster-race.h"
 #include "monster-race/race-ability-mask.h"
@@ -15,6 +14,7 @@
 #include "monster-race/race-flags3.h"
 #include "monster-race/race-indice-types.h"
 #include "monster/monster-info.h"
+#include "system/dungeon-info.h"
 #include "system/floor-type-definition.h"
 #include "system/monster-race-definition.h"
 #include "system/monster-type-definition.h"

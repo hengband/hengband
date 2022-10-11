@@ -6,7 +6,6 @@
 
 #include "mspell/mspell-lite.h"
 #include "dungeon/dungeon-flag-types.h"
-#include "dungeon/dungeon.h"
 #include "floor/cave.h"
 #include "floor/geometry.h"
 #include "floor/line-of-sight.h"
@@ -20,6 +19,7 @@
 #include "mspell/mspell-judgement.h"
 #include "player-base/player-class.h"
 #include "spell/range-calc.h"
+#include "system/dungeon-info.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
 #include "system/monster-race-definition.h"

@@ -6,12 +6,12 @@
 
 #include "knowledge/knowledge-features.h"
 #include "core/show-file.h"
-#include "dungeon/dungeon.h"
 #include "game-option/special-options.h"
 #include "io-dump/dump-util.h"
 #include "io/input-key-acceptor.h"
 #include "knowledge/lighting-level-table.h"
 #include "monster-race/monster-race.h"
+#include "system/dungeon-info.h"
 #include "system/monster-race-definition.h"
 #include "system/player-type-definition.h"
 #include "term/screen-processor.h"

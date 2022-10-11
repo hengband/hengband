@@ -1,5 +1,4 @@
 ﻿#include "floor/object-allocator.h"
-#include "dungeon/dungeon.h"
 #include "dungeon/quest.h"
 #include "floor/cave.h"
 #include "floor/dungeon-tunnel-util.h"
@@ -13,6 +12,7 @@
 #include "grid/trap.h"
 #include "monster-race/monster-race.h"
 #include "monster-race/race-flags1.h"
+#include "system/dungeon-info.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
 #include "system/monster-race-definition.h"

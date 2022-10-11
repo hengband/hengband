@@ -6,7 +6,6 @@
  */
 
 #include "monster-floor/monster-generator.h"
-#include "dungeon/dungeon.h"
 #include "effect/effect-characteristics.h"
 #include "floor/cave.h"
 #include "floor/floor-util.h"
@@ -28,6 +27,7 @@
 #include "monster/smart-learn-types.h"
 #include "mspell/summon-checker.h"
 #include "spell/summon-types.h"
+#include "system/dungeon-info.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
 #include "system/monster-race-definition.h"

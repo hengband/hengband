@@ -7,7 +7,6 @@
 
 #include "load/old/load-v1-5-0.h"
 #include "artifact/fixed-art-types.h"
-#include "dungeon/dungeon.h"
 #include "floor/floor-object.h"
 #include "game-option/birth-options.h"
 #include "grid/feature.h"
@@ -41,6 +40,7 @@
 #include "sv-definition/sv-lite-types.h"
 #include "system/angband-exceptions.h"
 #include "system/artifact-type-definition.h"
+#include "system/dungeon-info.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
 #include "system/monster-race-definition.h"

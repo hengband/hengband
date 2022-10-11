@@ -1,5 +1,4 @@
 ﻿#include "monster-race/monster-race-hook.h"
-#include "dungeon/dungeon.h"
 #include "monster-attack/monster-attack-effect.h"
 #include "monster-attack/monster-attack-table.h"
 #include "monster-race/monster-race.h"
@@ -14,6 +13,7 @@
 #include "monster/monster-list.h"
 #include "monster/monster-util.h"
 #include "player/player-status.h"
+#include "system/dungeon-info.h"
 #include "system/floor-type-definition.h"
 #include "system/monster-race-definition.h"
 #include "system/player-type-definition.h"

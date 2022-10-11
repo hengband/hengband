@@ -1,5 +1,4 @@
 ﻿#include "store/rumor.h"
-#include "dungeon/dungeon.h"
 #include "flavor/flavor-describer.h"
 #include "flavor/object-flavor-types.h"
 #include "floor/floor-town.h"
@@ -10,6 +9,7 @@
 #include "object-enchant/special-object-flags.h"
 #include "object/object-kind-hook.h"
 #include "system/artifact-type-definition.h"
+#include "system/dungeon-info.h"
 #include "system/monster-race-definition.h"
 #include "system/object-type-definition.h"
 #include "system/player-type-definition.h"

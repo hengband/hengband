@@ -5,13 +5,13 @@
  */
 
 #include "io/write-diary.h"
-#include "dungeon/dungeon.h"
 #include "dungeon/quest.h"
 #include "info-reader/fixed-map-parser.h"
 #include "io/files-util.h"
 #include "market/arena-info-table.h"
 #include "monster-race/monster-race.h"
 #include "player/player-status.h"
+#include "system/dungeon-info.h"
 #include "system/floor-type-definition.h"
 #include "system/monster-race-definition.h"
 #include "system/player-type-definition.h"

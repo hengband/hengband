@@ -6,7 +6,6 @@
 
 #include "room/rooms-vault.h"
 #include "dungeon/dungeon-flag-types.h"
-#include "dungeon/dungeon.h"
 #include "floor/cave.h"
 #include "floor/floor-generator-util.h"
 #include "floor/floor-generator.h"
@@ -31,6 +30,7 @@
 #include "store/store-util.h"
 #include "store/store.h"
 #include "system/dungeon-data-definition.h"
+#include "system/dungeon-info.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
 #include "system/player-type-definition.h"

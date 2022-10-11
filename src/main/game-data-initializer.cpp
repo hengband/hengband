@@ -5,7 +5,6 @@
 
 #include "main/game-data-initializer.h"
 #include "cmd-io/macro-util.h"
-#include "dungeon/dungeon.h"
 #include "dungeon/quest.h"
 #include "floor/floor-util.h"
 #include "game-option/option-flags.h"
@@ -13,6 +12,7 @@
 #include "monster-race/monster-race.h"
 #include "system/alloc-entries.h"
 #include "system/baseitem-info-definition.h"
+#include "system/dungeon-info.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
 #include "system/monster-race-definition.h"
