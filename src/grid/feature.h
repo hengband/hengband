@@ -8,7 +8,7 @@
 #include <string>
 #include <vector>
 
-/* Number of feats we change to (Excluding default). Used in GridFeatureDefinitions.txt. */
+/* Number of feats we change to (Excluding default). Used in TerrainDefinitions.txt. */
 #define MAX_FEAT_STATES 8
 
 /* Lighting levels of features' attr and char */

@@ -53,7 +53,7 @@ static bool grab_one_feat_action(terrain_type *f_ptr, std::string_view what, int
 }
 
 /*!
- * @brief 地形情報(GridFeatureDefinitions)のパース関数
+ * @brief 地形情報(TerrainDefinitions)のパース関数
  * @param buf テキスト列
  * @param head ヘッダ構造体
  * @return エラーコード

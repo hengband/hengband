@@ -3,7 +3,7 @@
 angband_files = \
 	ArtifactDefinitions.txt BaseItemDefinitions.txt ClassMagicDefinitions.txt \
 	ClassSkillDefinitions.txt DungeonDefinitions.txt EgoDefinitions.txt \
-	GridFeatureDefinitions.txt MonsterRaceDefinitions.txt QuestDefinitionList.txt \
+	MonsterRaceDefinitions.txt QuestDefinitionList.txt TerrainDefinitions.txt \
 	TownDefinitionList.txt VaultDefinitions.txt WildernessDefinition.txt \
 	misc.txt \
 	q0000001.txt q0000002.txt q0000003.txt q0000004.txt \
