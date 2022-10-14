@@ -159,7 +159,7 @@ void do_cmd_knowledge_features(bool *need_redraw, bool visual_only, IDX direct_f
     char *cur_char_ptr;
     while (!flag) {
         char ch;
-        terrain_type *f_ptr;
+        TerrainType *f_ptr;
 
         if (redraw) {
             clear_from(0);

@@ -18,12 +18,12 @@ static bool feat_tag_is_not_found = false;
 
 /*!
  * @brief テキストトークンを走査してフラグを一つ得る（地形情報向け） /
- * Grab one flag in an terrain_type from a textual string
+ * Grab one flag in an TerrainType from a textual string
  * @param f_ptr 地形情報を保管する先の構造体参照ポインタ
  * @param what 参照元の文字列ポインタ
  * @return 見つけたらtrue
  */
-static bool grab_one_feat_flag(terrain_type *f_ptr, std::string_view what)
+static bool grab_one_feat_flag(TerrainType *f_ptr, std::string_view what)
 {
     if (EnumClassFlagGroup<TerrainCharacteristics>::grab_one_flag(f_ptr->flags, f_info_flags, what)) {
         return true;
@@ -35,13 +35,13 @@ static bool grab_one_feat_flag(terrain_type *f_ptr, std::string_view what)
 
 /*!
  * @brief テキストトークンを走査してフラグ(ステート)を一つ得る（地形情報向け2） /
- * Grab an action in an terrain_type from a textual string
+ * Grab an action in an TerrainType from a textual string
  * @param f_ptr 地形情報を保管する先の構造体参照ポインタ
  * @param what 参照元の文字列ポインタ
  * @param count ステートの保存先ID
  * @return 見つけたらtrue
  */
-static bool grab_one_feat_action(terrain_type *f_ptr, std::string_view what, int count)
+static bool grab_one_feat_action(TerrainType *f_ptr, std::string_view what, int count)
 {
     if (auto it = f_info_flags.find(what); it != f_info_flags.end()) {
         f_ptr->state[count].action = it->second;
@@ -60,7 +60,7 @@ static bool grab_one_feat_action(terrain_type *f_ptr, std::string_view what, int
  */
 errr parse_terrains_info(std::string_view buf, angband_header *)
 {
-    static terrain_type *f_ptr = nullptr;
+    static TerrainType *f_ptr = nullptr;
     const auto &tokens = str_split(buf, ':', false, 10);
 
     if (tokens[0] == "N") {

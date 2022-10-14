@@ -228,7 +228,7 @@ static bool run_test(PlayerType *player_ptr)
         grid_type *g_ptr;
         g_ptr = &floor_ptr->grid_array[row][col];
         FEAT_IDX feat = g_ptr->get_feat_mimic();
-        terrain_type *f_ptr;
+        TerrainType *f_ptr;
         f_ptr = &terrains_info[feat];
         if (g_ptr->m_idx) {
             auto *m_ptr = &floor_ptr->m_list[g_ptr->m_idx];

@@ -99,7 +99,7 @@ static void image_random(TERM_COLOR *ap, char *cp)
  * 周り全てが壁に囲まれている壁についてはオプション状態による。
  * 1か所でも空きがあるか、壁ではない地形、金を含む地形、永久岩は表示。
  */
-static bool is_revealed_wall(floor_type *floor_ptr, terrain_type *f_ptr, POSITION y, POSITION x)
+static bool is_revealed_wall(floor_type *floor_ptr, TerrainType *f_ptr, POSITION y, POSITION x)
 {
     if (view_hidden_walls) {
         if (view_unsafe_walls) {
@@ -128,7 +128,7 @@ static bool is_revealed_wall(floor_type *floor_ptr, terrain_type *f_ptr, POSITIO
         }
 
         FEAT_IDX f_idx = floor_ptr->grid_array[dy][dx].feat;
-        terrain_type *n_ptr = &terrains_info[f_idx];
+        TerrainType *n_ptr = &terrains_info[f_idx];
         if (n_ptr->flags.has(TerrainCharacteristics::WALL)) {
             n++;
         }

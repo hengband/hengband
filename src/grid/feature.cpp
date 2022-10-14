@@ -30,7 +30,7 @@ enum conversion_type {
 /*** Terrain feature variables ***/
 
 /* The terrain feature arrays */
-std::vector<terrain_type> terrains_info;
+std::vector<TerrainType> terrains_info;
 
 /* Nothing */
 FEAT_IDX feat_none;
@@ -179,7 +179,7 @@ bool is_ascii_graphics(char x)
 /*
  * Determine if a "feature" is "permanent wall"
  */
-bool permanent_wall(terrain_type *f_ptr)
+bool permanent_wall(TerrainType *f_ptr)
 {
     return f_ptr->flags.has_all_of({ TerrainCharacteristics::WALL, TerrainCharacteristics::PERMANENT });
 }

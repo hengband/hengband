@@ -69,7 +69,7 @@ struct eg_type {
     monster_type *m_ptr;
     OBJECT_IDX next_o_idx;
     FEAT_IDX feat;
-    terrain_type *f_ptr;
+    TerrainType *f_ptr;
     concptr name;
 };
 

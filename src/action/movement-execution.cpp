@@ -54,12 +54,12 @@
 /*!
  * Determine if a "boundary" grid is "floor mimic"
  * @param grid_type *g_ptr
- * @param terrain_type *f_ptr
- * @param terrain_type  *mimic_f_ptr
+ * @param TerrainType *f_ptr
+ * @param TerrainType  *mimic_f_ptr
  * @return 移動不能であればTRUE
  * @todo 負論理なので反転させたい
  */
-static bool boundary_floor(grid_type *g_ptr, terrain_type *f_ptr, terrain_type *mimic_f_ptr)
+static bool boundary_floor(grid_type *g_ptr, TerrainType *f_ptr, TerrainType *mimic_f_ptr)
 {
     bool is_boundary_floor = g_ptr->mimic > 0;
     is_boundary_floor &= permanent_wall(f_ptr);
@@ -268,7 +268,7 @@ void exe_movement(PlayerType *player_ptr, DIRECTION dir, bool do_pickup, bool br
         }
     } else if (!p_can_enter && !p_can_kill_walls) {
         FEAT_IDX feat = g_ptr->get_feat_mimic();
-        terrain_type *mimic_f_ptr = &terrains_info[feat];
+        TerrainType *mimic_f_ptr = &terrains_info[feat];
         concptr name = mimic_f_ptr->name.c_str();
         can_move = false;
         if (!g_ptr->is_mark() && !player_can_see_bold(player_ptr, y, x)) {

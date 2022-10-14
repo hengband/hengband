@@ -141,7 +141,7 @@ bool move_player_effect(PlayerType *player_ptr, POSITION ny, POSITION nx, BIT_FL
     auto *g_ptr = &floor_ptr->grid_array[ny][nx];
     grid_type *oc_ptr = &floor_ptr->grid_array[oy][ox];
     auto *f_ptr = &terrains_info[g_ptr->feat];
-    terrain_type *of_ptr = &terrains_info[oc_ptr->feat];
+    TerrainType *of_ptr = &terrains_info[oc_ptr->feat];
 
     if (!(mpe_mode & MPE_STAYING)) {
         MONSTER_IDX om_idx = oc_ptr->m_idx;

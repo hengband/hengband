@@ -227,7 +227,7 @@ bool affect_feature(PlayerType *player_ptr, MONSTER_IDX who, POSITION r, POSITIO
         }
 
         int16_t old_mimic = g_ptr->mimic;
-        terrain_type *mimic_f_ptr = &terrains_info[g_ptr->get_feat_mimic()];
+        TerrainType *mimic_f_ptr = &terrains_info[g_ptr->get_feat_mimic()];
 
         cave_alter_feat(player_ptr, y, x, TerrainCharacteristics::SPIKE);
         g_ptr->mimic = old_mimic;

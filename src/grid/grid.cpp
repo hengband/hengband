@@ -79,7 +79,7 @@ bool new_player_spot(PlayerType *player_ptr)
     int max_attempts = 10000;
 
     grid_type *g_ptr;
-    terrain_type *f_ptr;
+    TerrainType *f_ptr;
 
     auto *floor_ptr = player_ptr->current_floor_ptr;
     while (max_attempts--) {
@@ -807,7 +807,7 @@ void cave_alter_feat(PlayerType *player_ptr, POSITION y, POSITION x, TerrainChar
     cave_set_feat(player_ptr, y, x, newfeat);
 
     if (!(terrain_action_flags[enum2i(action)] & FAF_NO_DROP)) {
-        terrain_type *old_f_ptr = &terrains_info[oldfeat];
+        TerrainType *old_f_ptr = &terrains_info[oldfeat];
         auto *f_ptr = &terrains_info[newfeat];
         bool found = false;
 
@@ -831,7 +831,7 @@ void cave_alter_feat(PlayerType *player_ptr, POSITION y, POSITION x, TerrainChar
     }
 
     if (terrain_action_flags[enum2i(action)] & FAF_CRASH_GLASS) {
-        terrain_type *old_f_ptr = &terrains_info[oldfeat];
+        TerrainType *old_f_ptr = &terrains_info[oldfeat];
 
         if (old_f_ptr->flags.has(TerrainCharacteristics::GLASS) && w_ptr->character_dungeon) {
             project(player_ptr, PROJECT_WHO_GLASS_SHARDS, 1, y, x, std::min(floor_ptr->dun_level, 100) / 4, AttributeType::SHARDS,

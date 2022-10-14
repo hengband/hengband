@@ -129,7 +129,7 @@ static void make_tunnels(PlayerType *player_ptr, dun_data_type *dd_ptr)
 {
     for (int j = 0; j < dd_ptr->tunn_n; j++) {
         grid_type *g_ptr;
-        terrain_type *f_ptr;
+        TerrainType *f_ptr;
         dd_ptr->tunnel_y = dd_ptr->tunn[j].y;
         dd_ptr->tunnel_x = dd_ptr->tunn[j].x;
         g_ptr = &player_ptr->current_floor_ptr->grid_array[dd_ptr->tunnel_y][dd_ptr->tunnel_x];

@@ -98,7 +98,7 @@ static errr interpret_k_token(char *buf)
  */
 static errr decide_feature_type(int i, int num, char **zz)
 {
-    terrain_type *f_ptr;
+    TerrainType *f_ptr;
     f_ptr = &terrains_info[i];
 
     TERM_COLOR n1 = (TERM_COLOR)strtol(zz[1], nullptr, 0);

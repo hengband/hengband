@@ -169,7 +169,7 @@ void do_cmd_travel(PlayerType *player_ptr)
     }
 
     auto *floor_ptr = player_ptr->current_floor_ptr;
-    terrain_type *f_ptr;
+    TerrainType *f_ptr;
     f_ptr = &terrains_info[floor_ptr->grid_array[y][x].feat];
     if ((floor_ptr->grid_array[y][x].info & CAVE_MARK) && (f_ptr->flags.has(TerrainCharacteristics::WALL) || f_ptr->flags.has(TerrainCharacteristics::CAN_DIG) || (f_ptr->flags.has(TerrainCharacteristics::DOOR) && floor_ptr->grid_array[y][x].mimic))) {
         msg_print(_("そこには行くことができません！", "You cannot travel there!"));

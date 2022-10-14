@@ -287,9 +287,9 @@ void build_streamer(PlayerType *player_ptr, FEAT_IDX feat, int chance)
     int dummy = 0;
 
     grid_type *g_ptr;
-    terrain_type *f_ptr;
+    TerrainType *f_ptr;
 
-    terrain_type *streamer_ptr = &terrains_info[feat];
+    TerrainType *streamer_ptr = &terrains_info[feat];
     bool streamer_is_wall = streamer_ptr->flags.has(TerrainCharacteristics::WALL) && streamer_ptr->flags.has_not(TerrainCharacteristics::PERMANENT);
     bool streamer_may_have_gold = streamer_ptr->flags.has(TerrainCharacteristics::MAY_HAVE_GOLD);
 

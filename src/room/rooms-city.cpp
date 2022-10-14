@@ -146,7 +146,7 @@ static void build_stores(PlayerType *player_ptr, POSITION ltcy, POSITION ltcx, S
         }
 
         if (auto it = std::find_if(terrains_info.begin(), terrains_info.end(),
-                [subtype = stores[i]](const terrain_type &f_ref) {
+                [subtype = stores[i]](const TerrainType &f_ref) {
                     return f_ref.flags.has(TerrainCharacteristics::STORE) && (i2enum<StoreSaleType>(static_cast<int>(f_ref.subtype)) == subtype);
                 });
             it != terrains_info.end()) {

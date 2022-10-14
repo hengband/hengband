@@ -596,7 +596,7 @@ static void display_floor_item_list(PlayerType *player_ptr, const int y, const i
             sprintf(line, _("(X:%03d Y:%03d) %sの足元の発見済みアイテム一覧", "Found items at (%03d,%03d) under %s"), x, y, r_ptr->name.c_str());
         }
     } else {
-        const terrain_type *const f_ptr = &terrains_info[g_ptr->feat];
+        const TerrainType *const f_ptr = &terrains_info[g_ptr->feat];
         concptr fn = f_ptr->name.c_str();
         char buf[512];
 
