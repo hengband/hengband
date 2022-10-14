@@ -1,7 +1,6 @@
 ﻿#include "grid/feature.h"
 #include "core/player-update-types.h"
 #include "dungeon/dungeon-flag-types.h"
-#include "dungeon/dungeon.h"
 #include "floor/cave.h"
 #include "floor/geometry.h"
 #include "game-option/map-screen-options.h"
@@ -11,6 +10,7 @@
 #include "monster/monster-update.h"
 #include "player/special-defense-types.h"
 #include "room/door-definition.h"
+#include "system/dungeon-info.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h" // @todo 相互依存している. 後で何とかする.
 #include "system/player-type-definition.h"

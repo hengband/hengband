@@ -344,9 +344,6 @@
     <ClCompile Include="..\..\src\dungeon\dungeon-processor.cpp">
       <Filter>dungeon</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\dungeon\dungeon.cpp">
-      <Filter>dungeon</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\core\game-play.cpp">
       <Filter>core</Filter>
     </ClCompile>
@@ -2469,6 +2466,12 @@
     <ClCompile Include="..\..\src\system\baseitem-info-definition.cpp">
       <Filter>system</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\system\floor-type-definition.cpp">
+      <Filter>system</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\system\dungeon-info.cpp">
+      <Filter>system</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\combat\shoot.h">
@@ -2838,9 +2841,6 @@
       <Filter>world</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\dungeon\dungeon-processor.h">
-      <Filter>dungeon</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\dungeon\dungeon.h">
       <Filter>dungeon</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\core\game-play.h">
@@ -5362,6 +5362,9 @@
       <Filter>timed-effect</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\system\baseitem-info-definition.h">
+      <Filter>system</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\system\dungeon-info.h">
       <Filter>system</Filter>
     </ClInclude>
   </ItemGroup>

@@ -1,5 +1,4 @@
 ﻿#include "spell-kind/spells-grid.h"
-#include "dungeon/dungeon.h"
 #include "dungeon/quest.h"
 #include "floor/cave.h"
 #include "floor/floor-object.h"
@@ -9,6 +8,7 @@
 #include "grid/feature.h"
 #include "grid/grid.h"
 #include "grid/stair.h"
+#include "system/dungeon-info.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
 #include "system/player-type-definition.h"

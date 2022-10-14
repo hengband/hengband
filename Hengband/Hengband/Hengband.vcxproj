@@ -309,6 +309,7 @@
     <ClCompile Include="..\..\src\save\player-class-specific-data-writer.cpp" />
     <ClCompile Include="..\..\src\specific-object\stone-of-lore.cpp" />
     <ClCompile Include="..\..\src\spell-class\spells-mirror-master.cpp" />
+    <ClCompile Include="..\..\src\system\floor-type-definition.cpp" />
     <ClCompile Include="..\..\src\system\grid-type-definition.cpp" />
     <ClCompile Include="..\..\src\grid\feature-action-flags.cpp" />
     <ClCompile Include="..\..\src\main-win\commandline-win.cpp" />
@@ -854,7 +855,7 @@
     <ClCompile Include="..\..\src\core\show-file.cpp" />
     <ClCompile Include="..\..\src\core\speed-table.cpp" />
     <ClCompile Include="..\..\src\info-reader\fixed-map-parser.cpp" />
-    <ClCompile Include="..\..\src\dungeon\dungeon.cpp" />
+    <ClCompile Include="..\..\src\system\dungeon-info.cpp" />
     <ClCompile Include="..\..\src\locale\english.cpp" />
     <ClCompile Include="..\..\src\grid\feature.cpp" />
     <ClCompile Include="..\..\src\floor\floor-events.cpp" />
@@ -1919,7 +1920,7 @@
     <ClInclude Include="..\..\src\system\system-variables.h" />
     <ClInclude Include="..\..\src\core\speed-table.h" />
     <ClInclude Include="..\..\src\info-reader\fixed-map-parser.h" />
-    <ClInclude Include="..\..\src\dungeon\dungeon.h" />
+    <ClInclude Include="..\..\src\system\dungeon-info.h" />
     <ClInclude Include="..\..\src\grid\feature.h" />
     <ClInclude Include="..\..\src\io\files-util.h" />
     <ClInclude Include="..\..\src\floor\floor-events.h" />

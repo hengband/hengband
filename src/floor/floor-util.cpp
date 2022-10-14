@@ -4,7 +4,6 @@
  * @author deskull
  */
 #include "floor/floor-util.h"
-#include "dungeon/dungeon.h"
 #include "dungeon/quest.h"
 #include "effect/effect-characteristics.h"
 #include "floor/cave.h"
@@ -16,6 +15,7 @@
 #include "grid/feature.h"
 #include "perception/object-perception.h"
 #include "system/artifact-type-definition.h"
+#include "system/dungeon-info.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
 #include "system/monster-type-definition.h"

@@ -12,7 +12,6 @@
 #include "floor/wild.h"
 #include "core/asking-player.h"
 #include "dungeon/dungeon-flag-types.h"
-#include "dungeon/dungeon.h"
 #include "dungeon/quest.h"
 #include "floor/cave.h"
 #include "floor/floor-town.h"
@@ -38,6 +37,7 @@
 #include "realm/realm-names-table.h"
 #include "spell-realm/spells-hex.h"
 #include "status/action-setter.h"
+#include "system/dungeon-info.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
 #include "system/monster-type-definition.h"
@@ -69,7 +69,7 @@ struct border_type {
  * @param feat_type 非一様確率を再現するための要素数100の配列
  * @param prob 元の確率テーブル
  */
-static void set_floor_and_wall_aux(int16_t feat_type[100], feat_prob prob[DUNGEON_FEAT_PROB_NUM])
+static void set_floor_and_wall_aux(int16_t feat_type[100], const std::array<feat_prob, DUNGEON_FEAT_PROB_NUM> &prob)
 {
     int lim[DUNGEON_FEAT_PROB_NUM];
     lim[0] = prob[0].percent;

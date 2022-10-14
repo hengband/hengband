@@ -50,7 +50,6 @@
 #include "core/player-update-types.h"
 #include "core/special-internal-keys.h"
 #include "dungeon/dungeon-flag-types.h"
-#include "dungeon/dungeon.h"
 #include "dungeon/quest.h" //!< @do_cmd_quest() がある。後で移設する.
 #include "effect/spells-effect-util.h"
 #include "floor/wild.h"
@@ -87,6 +86,7 @@
 #include "store/cmd-store.h"
 #include "store/home.h"
 #include "store/store-util.h"
+#include "system/dungeon-info.h"
 #include "system/floor-type-definition.h"
 #include "system/player-type-definition.h"
 #include "term/screen-processor.h"

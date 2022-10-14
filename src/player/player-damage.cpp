@@ -9,7 +9,6 @@
 #include "core/player-update-types.h"
 #include "core/stuff-handler.h"
 #include "core/window-redrawer.h"
-#include "dungeon/dungeon.h"
 #include "dungeon/quest.h"
 #include "flavor/flavor-describer.h"
 #include "flavor/object-flavor-types.h"
@@ -59,6 +58,7 @@
 #include "status/base-status.h"
 #include "status/element-resistance.h"
 #include "system/building-type-definition.h"
+#include "system/dungeon-info.h"
 #include "system/floor-type-definition.h"
 #include "system/monster-race-definition.h"
 #include "system/monster-type-definition.h"
@@ -389,7 +389,9 @@ int take_hit(PlayerType *player_ptr, int damage_type, int damage, concptr hit_fr
         if (!cheat_immortal) {
             player_ptr->is_dead = true;
         }
-        if (player_ptr->current_floor_ptr->inside_arena) {
+
+        const auto &floor_ref = *player_ptr->current_floor_ptr;
+        if (floor_ref.inside_arena) {
             concptr m_name = monraces_info[arena_info[player_ptr->arena_number].r_idx].name.c_str();
             msg_format(_("あなたは%sの前に敗れ去った。", "You are beaten by %s."), m_name);
             msg_print(nullptr);
@@ -397,7 +399,7 @@ int take_hit(PlayerType *player_ptr, int damage_type, int damage, concptr hit_fr
                 exe_write_diary(player_ptr, DIARY_ARENA, -1 - player_ptr->arena_number, m_name);
             }
         } else {
-            auto q_idx = quest_number(player_ptr, player_ptr->current_floor_ptr->dun_level);
+            auto q_idx = quest_number(player_ptr, floor_ref.dun_level);
             bool seppuku = streq(hit_from, "Seppuku");
             bool winning_seppuku = w_ptr->total_winner && seppuku;
 
@@ -434,14 +436,14 @@ int take_hit(PlayerType *player_ptr, int damage_type, int damage, concptr hit_fr
             } else {
                 std::string place;
 
-                if (player_ptr->current_floor_ptr->inside_arena) {
+                if (floor_ref.inside_arena) {
                     place = _("アリーナ", "in the Arena");
-                } else if (!is_in_dungeon(player_ptr)) {
+                } else if (!floor_ref.is_in_dungeon()) {
                     place = _("地上", "on the surface");
                 } else if (inside_quest(q_idx) && (quest_type::is_fixed(q_idx) && !((q_idx == QuestId::OBERON) || (q_idx == QuestId::SERPENT)))) {
                     place = _("クエスト", "in a quest");
                 } else {
-                    place = format(_("%d階", "on level %d"), static_cast<int>(player_ptr->current_floor_ptr->dun_level));
+                    place = format(_("%d階", "on level %d"), static_cast<int>(floor_ref.dun_level));
                 }
 
 #ifdef JP

@@ -164,7 +164,6 @@ hengband_SOURCES = \
 	core/visuals-reseter.cpp core/visuals-reseter.h \
 	core/window-redrawer.cpp core/window-redrawer.h \
 	\
-	dungeon/dungeon.cpp dungeon/dungeon.h \
 	dungeon/dungeon-flag-mask.h \
 	dungeon/dungeon-flag-types.h \
 	dungeon/dungeon-processor.cpp dungeon/dungeon-processor.h \
@@ -913,7 +912,8 @@ hengband_SOURCES = \
 	system/baseitem-info-definition.cpp system/baseitem-info-definition.h \
 	system/building-type-definition.cpp system/building-type-definition.h \
 	system/dungeon-data-definition.h \
-	system/floor-type-definition.h \
+	system/dungeon-info.cpp system/dungeon-info.h \
+	system/floor-type-definition.cpp system/floor-type-definition.h \
 	system/grid-type-definition.cpp system/grid-type-definition.h \
 	system/game-option-types.h \
 	system/h-basic.h system/h-config.h \

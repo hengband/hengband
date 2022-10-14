@@ -1,6 +1,5 @@
 ﻿#include "floor/floor-leaver.h"
 #include "cmd-building/cmd-building.h"
-#include "dungeon/dungeon.h"
 #include "dungeon/quest.h"
 #include "floor/cave.h"
 #include "floor/floor-events.h"
@@ -33,6 +32,7 @@
 #include "save/floor-writer.h"
 #include "spell-class/spells-mirror-master.h"
 #include "system/artifact-type-definition.h"
+#include "system/dungeon-info.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
 #include "system/monster-race-definition.h"
@@ -319,37 +319,39 @@ static void set_grid_by_leaving_floor(PlayerType *player_ptr, grid_type **g_ptr)
 
 static void jump_floors(PlayerType *player_ptr)
 {
-    if (none_bits(player_ptr->change_floor_mode, CFM_DOWN | CFM_UP)) {
+    const auto mode = player_ptr->change_floor_mode;
+    if (none_bits(mode, CFM_DOWN | CFM_UP)) {
         return;
     }
 
     auto move_num = 0;
-    if (any_bits(player_ptr->change_floor_mode, CFM_DOWN)) {
+    if (any_bits(mode, CFM_DOWN)) {
         move_num = 1;
-    } else if (any_bits(player_ptr->change_floor_mode, CFM_UP)) {
+    } else if (any_bits(mode, CFM_UP)) {
         move_num = -1;
     }
 
-    if (any_bits(player_ptr->change_floor_mode, CFM_SHAFT)) {
+    if (any_bits(mode, CFM_SHAFT)) {
         move_num *= 2;
     }
 
-    if (any_bits(player_ptr->change_floor_mode, CFM_DOWN)) {
-        if (!is_in_dungeon(player_ptr)) {
+    auto &floor_ref = *player_ptr->current_floor_ptr;
+    if (any_bits(mode, CFM_DOWN)) {
+        if (!floor_ref.is_in_dungeon()) {
             move_num = dungeons_info[player_ptr->dungeon_idx].mindepth;
         }
-    } else if (any_bits(player_ptr->change_floor_mode, CFM_UP)) {
-        if (player_ptr->current_floor_ptr->dun_level + move_num < dungeons_info[player_ptr->dungeon_idx].mindepth) {
-            move_num = -player_ptr->current_floor_ptr->dun_level;
+    } else if (any_bits(mode, CFM_UP)) {
+        if (floor_ref.dun_level + move_num < dungeons_info[player_ptr->dungeon_idx].mindepth) {
+            move_num = -floor_ref.dun_level;
         }
     }
 
-    player_ptr->current_floor_ptr->dun_level += move_num;
+    floor_ref.dun_level += move_num;
 }
 
 static void exit_to_wilderness(PlayerType *player_ptr)
 {
-    if (is_in_dungeon(player_ptr) || (player_ptr->dungeon_idx == 0)) {
+    if (player_ptr->current_floor_ptr->is_in_dungeon() || (player_ptr->dungeon_idx == 0)) {
         return;
     }
 
@@ -464,20 +466,21 @@ void leave_floor(PlayerType *player_ptr)
 void jump_floor(PlayerType *player_ptr, DUNGEON_IDX dun_idx, DEPTH depth)
 {
     player_ptr->dungeon_idx = dun_idx;
-    player_ptr->current_floor_ptr->dun_level = depth;
+    auto &floor_ref = *player_ptr->current_floor_ptr;
+    floor_ref.dun_level = depth;
     prepare_change_floor_mode(player_ptr, CFM_RAND_PLACE);
-    if (!is_in_dungeon(player_ptr)) {
+    if (!floor_ref.is_in_dungeon()) {
         player_ptr->dungeon_idx = 0;
     }
 
-    player_ptr->current_floor_ptr->inside_arena = false;
+    floor_ref.inside_arena = false;
     player_ptr->wild_mode = false;
     leave_quest_check(player_ptr);
     if (record_stair) {
         exe_write_diary(player_ptr, DIARY_WIZ_TELE, 0, nullptr);
     }
 
-    player_ptr->current_floor_ptr->quest_number = QuestId::NONE;
+    floor_ref.quest_number = QuestId::NONE;
     PlayerEnergy(player_ptr).reset_player_turn();
     player_ptr->energy_need = 0;
     prepare_change_floor_mode(player_ptr, CFM_FIRST_FLOOR);

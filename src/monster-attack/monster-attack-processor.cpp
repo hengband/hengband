@@ -6,7 +6,6 @@
 
 #include "monster-attack/monster-attack-processor.h"
 #include "dungeon/dungeon-flag-types.h"
-#include "dungeon/dungeon.h"
 #include "floor/cave.h"
 #include "melee/monster-attack-monster.h"
 #include "monster-attack/monster-attack-player.h"
@@ -17,6 +16,7 @@
 #include "monster/monster-processor-util.h"
 #include "monster/monster-status-setter.h"
 #include "monster/monster-status.h"
+#include "system/dungeon-info.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
 #include "system/monster-race-definition.h"

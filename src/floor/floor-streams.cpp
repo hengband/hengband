@@ -14,7 +14,6 @@
 
 #include "floor/floor-streams.h"
 #include "dungeon/dungeon-flag-types.h"
-#include "dungeon/dungeon.h"
 #include "flavor/flavor-describer.h"
 #include "flavor/object-flavor-types.h"
 #include "floor/cave.h"
@@ -33,6 +32,7 @@
 #include "spell-kind/spells-floor.h"
 #include "system/artifact-type-definition.h"
 #include "system/dungeon-data-definition.h"
+#include "system/dungeon-info.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
 #include "system/monster-race-definition.h"

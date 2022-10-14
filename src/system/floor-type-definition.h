@@ -55,4 +55,6 @@ struct floor_type {
     bool monster_noise;
     QuestId quest_number; /* Inside quest level */
     bool inside_arena; /* Is character inside on_defeat_arena_monster? */
+
+    bool is_in_dungeon() const;
 };

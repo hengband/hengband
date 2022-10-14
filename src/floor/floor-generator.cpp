@@ -11,7 +11,6 @@
 
 #include "floor/floor-generator.h"
 #include "dungeon/dungeon-flag-types.h"
-#include "dungeon/dungeon.h"
 #include "dungeon/quest.h"
 #include "floor/cave-generator.h"
 #include "floor/floor-events.h"
@@ -40,6 +39,7 @@
 #include "monster/monster-util.h"
 #include "player/player-status.h"
 #include "system/building-type-definition.h"
+#include "system/dungeon-info.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
 #include "system/monster-race-definition.h"

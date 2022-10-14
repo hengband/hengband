@@ -5,13 +5,13 @@
 
 #include "action/action-limited.h"
 #include "dungeon/dungeon-flag-types.h"
-#include "dungeon/dungeon.h"
 #include "game-option/disturbance-options.h"
 #include "grid/grid.h"
 #include "main/sound-definitions-table.h"
 #include "main/sound-of-music.h"
 #include "player-base/player-class.h"
 #include "player/player-status.h"
+#include "system/dungeon-info.h"
 #include "system/floor-type-definition.h"
 #include "system/player-type-definition.h"
 #include "term/screen-processor.h"
@@ -28,7 +28,7 @@
  */
 bool cmd_limit_cast(PlayerType *player_ptr)
 {
-    if (is_in_dungeon(player_ptr) && (dungeons_info[player_ptr->dungeon_idx].flags.has(DungeonFeatureType::NO_MAGIC))) {
+    if (player_ptr->current_floor_ptr->is_in_dungeon() && (dungeons_info[player_ptr->dungeon_idx].flags.has(DungeonFeatureType::NO_MAGIC))) {
         msg_print(_("ダンジョンが魔法を吸収した！", "The dungeon absorbs all attempted magic!"));
         msg_print(nullptr);
         return true;

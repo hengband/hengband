@@ -8,7 +8,6 @@
 #include "core/speed-table.h"
 #include "core/stuff-handler.h"
 #include "core/window-redrawer.h"
-#include "dungeon/dungeon.h"
 #include "floor/floor-save-util.h"
 #include "floor/floor-util.h"
 #include "floor/geometry.h"
@@ -51,6 +50,7 @@
 #include "spell-realm/spells-hex.h"
 #include "spell-realm/spells-song.h"
 #include "status/action-setter.h"
+#include "system/dungeon-info.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
 #include "system/monster-race-definition.h"
@@ -75,13 +75,12 @@ static void process_fishing(PlayerType *player_ptr)
 {
     term_xtra(TERM_XTRA_DELAY, 10);
     if (one_in_(1000)) {
-        MonsterRaceId r_idx;
         bool success = false;
         get_mon_num_prep(player_ptr, monster_is_fishing_target, nullptr);
-        r_idx = get_mon_num(player_ptr, 0,
-            is_in_dungeon(player_ptr) ? player_ptr->current_floor_ptr->dun_level
-                                      : wilderness[player_ptr->wilderness_y][player_ptr->wilderness_x].level,
-            0);
+        auto *floor_ptr = player_ptr->current_floor_ptr;
+        const auto wild_level = wilderness[player_ptr->wilderness_y][player_ptr->wilderness_x].level;
+        const auto level = floor_ptr->is_in_dungeon() ? floor_ptr->dun_level : wild_level;
+        const auto r_idx = get_mon_num(player_ptr, 0, level, 0);
         msg_print(nullptr);
         if (MonsterRace(r_idx).is_valid() && one_in_(2)) {
             POSITION y, x;
@@ -89,7 +88,7 @@ static void process_fishing(PlayerType *player_ptr)
             x = player_ptr->x + ddx[player_ptr->fishing_dir];
             if (place_monster_aux(player_ptr, 0, y, x, r_idx, PM_NO_KAGE)) {
                 GAME_TEXT m_name[MAX_NLEN];
-                monster_desc(player_ptr, m_name, &player_ptr->current_floor_ptr->m_list[player_ptr->current_floor_ptr->grid_array[y][x].m_idx], 0);
+                monster_desc(player_ptr, m_name, &floor_ptr->m_list[floor_ptr->grid_array[y][x].m_idx], 0);
                 msg_format(_("%sが釣れた！", "You have a good catch!"), m_name);
                 success = true;
             }

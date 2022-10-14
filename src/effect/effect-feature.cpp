@@ -1,7 +1,6 @@
 ﻿#include "effect/effect-feature.h"
 #include "core/player-update-types.h"
 #include "dungeon/dungeon-flag-types.h"
-#include "dungeon/dungeon.h"
 #include "effect/effect-characteristics.h"
 #include "effect/effect-processor.h" // 暫定、後で消す.
 #include "floor/cave.h"
@@ -17,6 +16,7 @@
 #include "player/special-defense-types.h"
 #include "room/door-definition.h"
 #include "spell-class/spells-mirror-master.h"
+#include "system/dungeon-info.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
 #include "system/player-type-definition.h"

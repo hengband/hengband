@@ -9,7 +9,6 @@
 #include "core/player-redraw-types.h"
 #include "core/player-update-types.h"
 #include "core/stuff-handler.h"
-#include "dungeon/dungeon.h"
 #include "dungeon/quest.h"
 #include "floor/cave.h"
 #include "floor/floor-mode-changer.h"
@@ -36,6 +35,7 @@
 #include "spell-realm/spells-hex.h"
 #include "spell-realm/spells-song.h"
 #include "status/action-setter.h"
+#include "system/dungeon-info.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
 #include "system/player-type-definition.h"
@@ -88,6 +88,7 @@ void do_cmd_go_up(PlayerType *player_ptr)
         return;
     }
 
+    const auto &floor_ptr = player_ptr->current_floor_ptr;
     if (f_ptr->flags.has(FloorFeatureType::QUEST)) {
         if (!confirm_leave_level(player_ptr, false)) {
             return;
@@ -102,8 +103,8 @@ void do_cmd_go_up(PlayerType *player_ptr)
         sound(SOUND_STAIRWAY);
 
         leave_quest_check(player_ptr);
-        player_ptr->current_floor_ptr->quest_number = i2enum<QuestId>(g_ptr->special);
-        const auto quest_number = player_ptr->current_floor_ptr->quest_number;
+        floor_ptr->quest_number = i2enum<QuestId>(g_ptr->special);
+        const auto quest_number = floor_ptr->quest_number;
         auto &q_ref = quest_list[quest_number];
         if (q_ref.status == QuestStatusType::UNTAKEN) {
             if (q_ref.type != QuestKindType::RANDOM) {
@@ -115,7 +116,7 @@ void do_cmd_go_up(PlayerType *player_ptr)
         }
 
         if (!inside_quest(quest_number)) {
-            player_ptr->current_floor_ptr->dun_level = 0;
+            floor_ptr->dun_level = 0;
             player_ptr->word_recall = 0;
         }
 
@@ -126,7 +127,7 @@ void do_cmd_go_up(PlayerType *player_ptr)
         return;
     }
 
-    if (!is_in_dungeon(player_ptr)) {
+    if (!floor_ptr->is_in_dungeon()) {
         go_up = true;
     } else {
         go_up = confirm_leave_level(player_ptr, false);
@@ -203,7 +204,8 @@ void do_cmd_go_down(PlayerType *player_ptr)
     int down_num = 0;
     PlayerClass(player_ptr).break_samurai_stance({ SamuraiStanceType::MUSOU });
 
-    auto *g_ptr = &player_ptr->current_floor_ptr->grid_array[player_ptr->y][player_ptr->x];
+    auto *floor_ptr = player_ptr->current_floor_ptr;
+    auto *g_ptr = &floor_ptr->grid_array[player_ptr->y][player_ptr->x];
     auto *f_ptr = &terrains_info[g_ptr->feat];
     if (f_ptr->flags.has_not(FloorFeatureType::MORE)) {
         msg_print(_("ここには下り階段が見当たらない。", "I see no down staircase here."));
@@ -235,9 +237,9 @@ void do_cmd_go_down(PlayerType *player_ptr)
 
         leave_quest_check(player_ptr);
         leave_tower_check(player_ptr);
-        player_ptr->current_floor_ptr->quest_number = i2enum<QuestId>(g_ptr->special);
+        floor_ptr->quest_number = i2enum<QuestId>(g_ptr->special);
 
-        auto &current_quest = quest_list[player_ptr->current_floor_ptr->quest_number];
+        auto &current_quest = quest_list[floor_ptr->quest_number];
         if (current_quest.status == QuestStatusType::UNTAKEN) {
             if (current_quest.type != QuestKindType::RANDOM) {
                 init_flags = INIT_ASSIGN;
@@ -247,8 +249,8 @@ void do_cmd_go_down(PlayerType *player_ptr)
             current_quest.status = QuestStatusType::TAKEN;
         }
 
-        if (!inside_quest(player_ptr->current_floor_ptr->quest_number)) {
-            player_ptr->current_floor_ptr->dun_level = 0;
+        if (!inside_quest(floor_ptr->quest_number)) {
+            floor_ptr->dun_level = 0;
             player_ptr->word_recall = 0;
         }
 
@@ -260,7 +262,7 @@ void do_cmd_go_down(PlayerType *player_ptr)
     }
 
     DUNGEON_IDX target_dungeon = 0;
-    if (!is_in_dungeon(player_ptr)) {
+    if (!floor_ptr->is_in_dungeon()) {
         target_dungeon = f_ptr->flags.has(FloorFeatureType::ENTRANCE) ? g_ptr->special : DUNGEON_ANGBAND;
         if (ironman_downward && (target_dungeon != DUNGEON_ANGBAND)) {
             msg_print(_("ダンジョンの入口は塞がれている！", "The entrance of this dungeon is closed!"));
@@ -268,8 +270,9 @@ void do_cmd_go_down(PlayerType *player_ptr)
         }
 
         if (!max_dlv[target_dungeon]) {
-            msg_format(_("ここには%sの入り口(%d階相当)があります", "There is the entrance of %s (Danger level: %d)"), dungeons_info[target_dungeon].name.c_str(),
-                dungeons_info[target_dungeon].mindepth);
+            const auto mes = _("ここには%sの入り口(%d階相当)があります", "There is the entrance of %s (Danger level: %d)");
+            const auto &dungeon = dungeons_info[target_dungeon];
+            msg_format(mes, dungeon.name.c_str(), dungeon.mindepth);
             if (!get_check(_("本当にこのダンジョンに入りますか？", "Do you really get in this dungeon? "))) {
                 return;
             }
@@ -292,7 +295,7 @@ void do_cmd_go_down(PlayerType *player_ptr)
         down_num += 1;
     }
 
-    if (!is_in_dungeon(player_ptr)) {
+    if (!floor_ptr->is_in_dungeon()) {
         player_ptr->enter_dungeon = true;
         down_num = dungeons_info[player_ptr->dungeon_idx].mindepth;
     }

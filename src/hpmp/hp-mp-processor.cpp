@@ -3,7 +3,6 @@
 #include "cmd-action/cmd-pet.h"
 #include "core/player-redraw-types.h"
 #include "core/window-redrawer.h"
-#include "dungeon/dungeon.h"
 #include "flavor/flavor-describer.h"
 #include "flavor/object-flavor-types.h"
 #include "floor/pattern-walk.h"
@@ -37,6 +36,7 @@
 #include "player/special-defense-types.h"
 #include "status/bad-status-setter.h"
 #include "status/element-resistance.h"
+#include "system/dungeon-info.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
 #include "system/monster-race-definition.h"
@@ -114,7 +114,8 @@ static bool deal_damege_by_feat(PlayerType *player_ptr, grid_type *g_ptr, concpt
  */
 void process_player_hp_mp(PlayerType *player_ptr)
 {
-    auto *g_ptr = &player_ptr->current_floor_ptr->grid_array[player_ptr->y][player_ptr->x];
+    auto &floor_ref = *player_ptr->current_floor_ptr;
+    auto *g_ptr = &floor_ref.grid_array[player_ptr->y][player_ptr->x];
     auto *f_ptr = &terrains_info[g_ptr->feat];
     bool cave_no_regen = false;
     int upkeep_factor = 0;
@@ -137,8 +138,8 @@ void process_player_hp_mp(PlayerType *player_ptr)
 
     const PlayerRace race(player_ptr);
     if (race.life() == PlayerRaceLifeType::UNDEAD && race.tr_flags().has(TR_VUL_LITE)) {
-        if (!is_in_dungeon(player_ptr) && !has_resist_lite(player_ptr) && !is_invuln(player_ptr) && is_daytime()) {
-            if ((player_ptr->current_floor_ptr->grid_array[player_ptr->y][player_ptr->x].info & (CAVE_GLOW | CAVE_MNDK)) == CAVE_GLOW) {
+        if (!floor_ref.is_in_dungeon() && !has_resist_lite(player_ptr) && !is_invuln(player_ptr) && is_daytime()) {
+            if ((floor_ref.grid_array[player_ptr->y][player_ptr->x].info & (CAVE_GLOW | CAVE_MNDK)) == CAVE_GLOW) {
                 msg_print(_("日光があなたのアンデッドの肉体を焼き焦がした！", "The sun's rays scorch your undead flesh!"));
                 take_hit(player_ptr, DAMAGE_NOESCAPE, 1, _("日光", "sunlight"));
                 cave_no_regen = true;
@@ -274,9 +275,9 @@ void process_player_hp_mp(PlayerType *player_ptr)
 
     if (player_ptr->riding) {
         int damage;
-        auto auras = monraces_info[player_ptr->current_floor_ptr->m_list[player_ptr->riding].r_idx].aura_flags;
+        auto auras = monraces_info[floor_ref.m_list[player_ptr->riding].r_idx].aura_flags;
         if (auras.has(MonsterAuraType::FIRE) && !has_immune_fire(player_ptr)) {
-            damage = monraces_info[player_ptr->current_floor_ptr->m_list[player_ptr->riding].r_idx].level / 2;
+            damage = monraces_info[floor_ref.m_list[player_ptr->riding].r_idx].level / 2;
             if (race.tr_flags().has(TR_VUL_FIRE)) {
                 damage += damage / 3;
             }
@@ -293,7 +294,7 @@ void process_player_hp_mp(PlayerType *player_ptr)
         }
 
         if (auras.has(MonsterAuraType::ELEC) && !has_immune_elec(player_ptr)) {
-            damage = monraces_info[player_ptr->current_floor_ptr->m_list[player_ptr->riding].r_idx].level / 2;
+            damage = monraces_info[floor_ref.m_list[player_ptr->riding].r_idx].level / 2;
             if (race.tr_flags().has(TR_VUL_ELEC)) {
                 damage += damage / 3;
             }
@@ -310,7 +311,7 @@ void process_player_hp_mp(PlayerType *player_ptr)
         }
 
         if (auras.has(MonsterAuraType::COLD) && !has_immune_cold(player_ptr)) {
-            damage = monraces_info[player_ptr->current_floor_ptr->m_list[player_ptr->riding].r_idx].level / 2;
+            damage = monraces_info[floor_ref.m_list[player_ptr->riding].r_idx].level / 2;
             if (race.tr_flags().has(TR_VUL_COLD)) {
                 damage += damage / 3;
             }

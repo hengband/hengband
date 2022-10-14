@@ -2,7 +2,6 @@
 #include "core/asking-player.h"
 #include "core/disturbance.h"
 #include "core/player-redraw-types.h"
-#include "dungeon/dungeon.h"
 #include "effect/attribute-types.h"
 #include "floor/geometry.h"
 #include "grid/grid.h"
@@ -41,6 +40,7 @@
 #include "store/store-owners.h"
 #include "store/store-util.h"
 #include "store/store.h"
+#include "system/dungeon-info.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
 #include "system/monster-race-definition.h"
@@ -258,7 +258,7 @@ void process_world_aux_mutation(PlayerType *player_ptr)
         msg_print(_("突然ほとんど孤独になった気がする。", "You suddenly feel almost lonely."));
 
         banish_monsters(player_ptr, 100);
-        if (!is_in_dungeon(player_ptr) && player_ptr->town_num) {
+        if (!player_ptr->current_floor_ptr->is_in_dungeon() && player_ptr->town_num) {
             StoreSaleType sst;
             do {
                 sst = i2enum<StoreSaleType>(randint0(MAX_STORES));

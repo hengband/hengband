@@ -17,7 +17,6 @@
 #include "grid/grid.h"
 #include "core/window-redrawer.h"
 #include "dungeon/dungeon-flag-types.h"
-#include "dungeon/dungeon.h"
 #include "dungeon/quest.h"
 #include "effect/attribute-types.h"
 #include "effect/effect-characteristics.h"
@@ -46,6 +45,7 @@
 #include "player/player-status-flags.h"
 #include "player/player-status.h"
 #include "room/rooms-builder.h"
+#include "system/dungeon-info.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
 #include "system/monster-race-definition.h"
@@ -81,10 +81,11 @@ bool new_player_spot(PlayerType *player_ptr)
     grid_type *g_ptr;
     terrain_type *f_ptr;
 
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     while (max_attempts--) {
         /* Pick a legal spot */
-        y = (POSITION)rand_range(1, player_ptr->current_floor_ptr->height - 2);
-        x = (POSITION)rand_range(1, player_ptr->current_floor_ptr->width - 2);
+        y = (POSITION)rand_range(1, floor_ptr->height - 2);
+        x = (POSITION)rand_range(1, floor_ptr->width - 2);
 
         g_ptr = &player_ptr->current_floor_ptr->grid_array[y][x];
 
@@ -92,7 +93,7 @@ bool new_player_spot(PlayerType *player_ptr)
         if (g_ptr->m_idx) {
             continue;
         }
-        if (is_in_dungeon(player_ptr)) {
+        if (floor_ptr->is_in_dungeon()) {
             f_ptr = &terrains_info[g_ptr->feat];
 
             if (max_attempts > 5000) /* Rule 1 */
@@ -118,7 +119,7 @@ bool new_player_spot(PlayerType *player_ptr)
         if (!player_can_enter(player_ptr, g_ptr->feat, 0)) {
             continue;
         }
-        if (!in_bounds(player_ptr->current_floor_ptr, y, x)) {
+        if (!in_bounds(floor_ptr, y, x)) {
             continue;
         }
 

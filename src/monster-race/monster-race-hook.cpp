@@ -1,5 +1,4 @@
 ﻿#include "monster-race/monster-race-hook.h"
-#include "dungeon/dungeon.h"
 #include "monster-attack/monster-attack-effect.h"
 #include "monster-attack/monster-attack-table.h"
 #include "monster-race/monster-race.h"
@@ -14,6 +13,7 @@
 #include "monster/monster-list.h"
 #include "monster/monster-util.h"
 #include "player/player-status.h"
+#include "system/dungeon-info.h"
 #include "system/floor-type-definition.h"
 #include "system/monster-race-definition.h"
 #include "system/player-type-definition.h"
@@ -130,7 +130,8 @@ bool mon_hook_quest(PlayerType *player_ptr, MonsterRaceId r_idx)
  */
 bool mon_hook_dungeon(PlayerType *player_ptr, MonsterRaceId r_idx)
 {
-    if (!is_in_dungeon(player_ptr) && !inside_quest(player_ptr->current_floor_ptr->quest_number)) {
+    const auto &floor_ref = *player_ptr->current_floor_ptr;
+    if (!floor_ref.is_in_dungeon() && !inside_quest(floor_ref.quest_number)) {
         return true;
     }
 
