@@ -91,7 +91,7 @@ static void place_cave_contents(PlayerType *player_ptr, dun_data_type *dd_ptr, d
         destroy_level(player_ptr);
     }
 
-    if (has_river_flag(d_ptr) && one_in_(3) && (randint1(floor_ptr->dun_level) > 5)) {
+    if (d_ptr->has_river_flag() && one_in_(3) && (randint1(floor_ptr->dun_level) > 5)) {
         add_river(floor_ptr, dd_ptr);
     }
 

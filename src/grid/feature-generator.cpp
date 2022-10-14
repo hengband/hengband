@@ -108,11 +108,6 @@ void gen_caverns_and_lakes(PlayerType *player_ptr, dungeon_type *dungeon_ptr, du
     }
 }
 
-bool has_river_flag(dungeon_type *dungeon_ptr)
-{
-    return dungeon_ptr->flags.has_any_of(DF_RIVER_MASK);
-}
-
 /*!
  * @brief 隣接4マスに存在する通路の数を返す / Count the number of "corridor" grids adjacent to the given grid.
  * @param y1 基準となるマスのY座標

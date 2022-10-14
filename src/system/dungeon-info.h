@@ -105,6 +105,8 @@ struct dungeon_type {
     int tunnel_percent{};
     int obj_great{};
     int obj_good{};
+
+    bool has_river_flag() const;
 };
 
 extern std::vector<DEPTH> max_dlv;
