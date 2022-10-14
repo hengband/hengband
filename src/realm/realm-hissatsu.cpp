@@ -481,12 +481,12 @@ concptr do_hissatsu_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessT
                 do_cmd_attack(player_ptr, y, x, HISSATSU_HAGAN);
             }
 
-            if (!cave_has_flag_bold(player_ptr->current_floor_ptr, y, x, FloorFeatureType::HURT_ROCK)) {
+            if (!cave_has_flag_bold(player_ptr->current_floor_ptr, y, x, TerrainCharacteristics::HURT_ROCK)) {
                 break;
             }
 
             /* Destroy the feature */
-            cave_alter_feat(player_ptr, y, x, FloorFeatureType::HURT_ROCK);
+            cave_alter_feat(player_ptr, y, x, TerrainCharacteristics::HURT_ROCK);
             player_ptr->update |= (PU_FLOW);
         }
         break;
@@ -680,7 +680,7 @@ concptr do_hissatsu_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessT
                 x = player_ptr->x + ddx_ddd[dir];
                 auto *g_ptr = &player_ptr->current_floor_ptr->grid_array[y][x];
                 auto *m_ptr = &player_ptr->current_floor_ptr->m_list[g_ptr->m_idx];
-                if ((g_ptr->m_idx == 0) || (!m_ptr->ml && !cave_has_flag_bold(player_ptr->current_floor_ptr, y, x, FloorFeatureType::PROJECT))) {
+                if ((g_ptr->m_idx == 0) || (!m_ptr->ml && !cave_has_flag_bold(player_ptr->current_floor_ptr, y, x, TerrainCharacteristics::PROJECT))) {
                     continue;
                 }
 
@@ -1079,7 +1079,7 @@ concptr do_hissatsu_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessT
                 damage *= player_ptr->num_blow[i];
                 total_damage += (damage / 100);
             }
-            project(player_ptr, 0, (cave_has_flag_bold(player_ptr->current_floor_ptr, y, x, FloorFeatureType::PROJECT) ? 5 : 0), y, x, total_damage * 3 / 2, AttributeType::METEOR,
+            project(player_ptr, 0, (cave_has_flag_bold(player_ptr->current_floor_ptr, y, x, TerrainCharacteristics::PROJECT) ? 5 : 0), y, x, total_damage * 3 / 2, AttributeType::METEOR,
                 PROJECT_KILL | PROJECT_JUMP | PROJECT_ITEM);
         }
         break;

@@ -522,9 +522,9 @@ void wiz_create_feature(PlayerType *player_ptr)
     terrain_type *f_ptr;
     f_ptr = &terrains_info[g_ptr->get_feat_mimic()];
 
-    if (f_ptr->flags.has(FloorFeatureType::RUNE_PROTECTION) || f_ptr->flags.has(FloorFeatureType::RUNE_EXPLOSION)) {
+    if (f_ptr->flags.has(TerrainCharacteristics::RUNE_PROTECTION) || f_ptr->flags.has(TerrainCharacteristics::RUNE_EXPLOSION)) {
         g_ptr->info |= CAVE_OBJECT;
-    } else if (f_ptr->flags.has(FloorFeatureType::MIRROR)) {
+    } else if (f_ptr->flags.has(TerrainCharacteristics::MIRROR)) {
         g_ptr->info |= CAVE_GLOW | CAVE_OBJECT;
     }
 

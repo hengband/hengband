@@ -110,11 +110,11 @@ static bool is_revealed_wall(floor_type *floor_ptr, terrain_type *f_ptr, POSITIO
         }
     }
 
-    if (f_ptr->flags.has_not(FloorFeatureType::WALL) || f_ptr->flags.has(FloorFeatureType::HAS_GOLD)) {
+    if (f_ptr->flags.has_not(TerrainCharacteristics::WALL) || f_ptr->flags.has(TerrainCharacteristics::HAS_GOLD)) {
         return true;
     }
 
-    if (in_bounds(floor_ptr, y, x) && f_ptr->flags.has(FloorFeatureType::PERMANENT)) {
+    if (in_bounds(floor_ptr, y, x) && f_ptr->flags.has(TerrainCharacteristics::PERMANENT)) {
         return true;
     }
 
@@ -129,7 +129,7 @@ static bool is_revealed_wall(floor_type *floor_ptr, terrain_type *f_ptr, POSITIO
 
         FEAT_IDX f_idx = floor_ptr->grid_array[dy][dx].feat;
         terrain_type *n_ptr = &terrains_info[f_idx];
-        if (n_ptr->flags.has(FloorFeatureType::WALL)) {
+        if (n_ptr->flags.has(TerrainCharacteristics::WALL)) {
             n++;
         }
     }
@@ -155,7 +155,7 @@ void map_info(PlayerType *player_ptr, POSITION y, POSITION x, TERM_COLOR *ap, ch
     auto *f_ptr = &terrains_info[feat];
     TERM_COLOR a;
     char c;
-    if (f_ptr->flags.has_not(FloorFeatureType::REMEMBER)) {
+    if (f_ptr->flags.has_not(TerrainCharacteristics::REMEMBER)) {
         auto is_visible = any_bits(g_ptr->info, (CAVE_MARK | CAVE_LITE | CAVE_MNLT));
         auto is_glowing = match_bits(g_ptr->info, CAVE_GLOW | CAVE_MNDK, CAVE_GLOW);
         auto can_view = g_ptr->is_view() && (is_glowing || player_ptr->see_nocto);
@@ -206,7 +206,7 @@ void map_info(PlayerType *player_ptr, POSITION y, POSITION x, TERM_COLOR *ap, ch
                     c = f_ptr->x_char[F_LIT_DARK];
                 }
             } else if (darkened_grid(player_ptr, g_ptr) && !is_blind) {
-                if (f_ptr->flags.has_all_of({ FloorFeatureType::LOS, FloorFeatureType::PROJECT })) {
+                if (f_ptr->flags.has_all_of({ TerrainCharacteristics::LOS, TerrainCharacteristics::PROJECT })) {
                     feat = (view_unsafe_grids && (g_ptr->info & CAVE_UNSAFE)) ? feat_undetected : feat_none;
                     f_ptr = &terrains_info[feat];
                     a = f_ptr->x_attr[F_LIT_STANDARD];
@@ -231,7 +231,7 @@ void map_info(PlayerType *player_ptr, POSITION y, POSITION x, TERM_COLOR *ap, ch
                     } else if ((g_ptr->info & (CAVE_GLOW | CAVE_MNDK)) != CAVE_GLOW) {
                         a = f_ptr->x_attr[F_LIT_DARK];
                         c = f_ptr->x_char[F_LIT_DARK];
-                    } else if (f_ptr->flags.has_not(FloorFeatureType::LOS) && !check_local_illumination(player_ptr, y, x)) {
+                    } else if (f_ptr->flags.has_not(TerrainCharacteristics::LOS) && !check_local_illumination(player_ptr, y, x)) {
                         a = f_ptr->x_attr[F_LIT_DARK];
                         c = f_ptr->x_char[F_LIT_DARK];
                     }

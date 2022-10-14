@@ -269,10 +269,10 @@ bool do_cmd_riding(PlayerType *player_ptr, bool force)
             auto *f_ptr = &terrains_info[g_ptr->get_feat_mimic()];
 #ifdef JP
             msg_format("そのモンスターは%sの%sにいる。", f_ptr->name.c_str(),
-                (f_ptr->flags.has_none_of({ FloorFeatureType::MOVE, FloorFeatureType::CAN_FLY }) || f_ptr->flags.has_none_of({ FloorFeatureType::LOS, FloorFeatureType::TREE })) ? "中" : "上");
+                (f_ptr->flags.has_none_of({ TerrainCharacteristics::MOVE, TerrainCharacteristics::CAN_FLY }) || f_ptr->flags.has_none_of({ TerrainCharacteristics::LOS, TerrainCharacteristics::TREE })) ? "中" : "上");
 #else
             msg_format("This monster is %s the %s.",
-                (f_ptr->flags.has_none_of({ FloorFeatureType::MOVE, FloorFeatureType::CAN_FLY }) || f_ptr->flags.has_none_of({ FloorFeatureType::LOS, FloorFeatureType::TREE })) ? "in" : "on", f_ptr->name.c_str());
+                (f_ptr->flags.has_none_of({ TerrainCharacteristics::MOVE, TerrainCharacteristics::CAN_FLY }) || f_ptr->flags.has_none_of({ TerrainCharacteristics::LOS, TerrainCharacteristics::TREE })) ? "in" : "on", f_ptr->name.c_str());
 #endif
 
             return false;

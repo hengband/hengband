@@ -60,7 +60,7 @@ bool place_quest_monsters(PlayerType *player_ptr)
                     x = randint0(floor_ptr->width);
                     g_ptr = &floor_ptr->grid_array[y][x];
                     f_ptr = &terrains_info[g_ptr->feat];
-                    if (f_ptr->flags.has_none_of({ FloorFeatureType::MOVE, FloorFeatureType::CAN_FLY })) {
+                    if (f_ptr->flags.has_none_of({ TerrainCharacteristics::MOVE, TerrainCharacteristics::CAN_FLY })) {
                         continue;
                     }
 

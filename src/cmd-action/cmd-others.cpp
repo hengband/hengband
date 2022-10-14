@@ -80,23 +80,23 @@ static bool exe_alter(PlayerType *player_ptr)
         return false;
     }
 
-    if (f_ptr->flags.has(FloorFeatureType::OPEN)) {
+    if (f_ptr->flags.has(TerrainCharacteristics::OPEN)) {
         return exe_open(player_ptr, y, x);
     }
 
-    if (f_ptr->flags.has(FloorFeatureType::BASH)) {
+    if (f_ptr->flags.has(TerrainCharacteristics::BASH)) {
         return exe_bash(player_ptr, y, x, dir);
     }
 
-    if (f_ptr->flags.has(FloorFeatureType::TUNNEL)) {
+    if (f_ptr->flags.has(TerrainCharacteristics::TUNNEL)) {
         return exe_tunnel(player_ptr, y, x);
     }
 
-    if (f_ptr->flags.has(FloorFeatureType::CLOSE)) {
+    if (f_ptr->flags.has(TerrainCharacteristics::CLOSE)) {
         return exe_close(player_ptr, y, x);
     }
 
-    if (f_ptr->flags.has(FloorFeatureType::DISARM)) {
+    if (f_ptr->flags.has(TerrainCharacteristics::DISARM)) {
         return exe_disarm(player_ptr, y, x, dir);
     }
 

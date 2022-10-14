@@ -600,9 +600,9 @@ static void display_floor_item_list(PlayerType *player_ptr, const int y, const i
         concptr fn = f_ptr->name.c_str();
         char buf[512];
 
-        if (f_ptr->flags.has(FloorFeatureType::STORE) || (f_ptr->flags.has(FloorFeatureType::BLDG) && !floor_ptr->inside_arena)) {
+        if (f_ptr->flags.has(TerrainCharacteristics::STORE) || (f_ptr->flags.has(TerrainCharacteristics::BLDG) && !floor_ptr->inside_arena)) {
             sprintf(buf, _("%sの入口", "on the entrance of %s"), fn);
-        } else if (f_ptr->flags.has(FloorFeatureType::WALL)) {
+        } else if (f_ptr->flags.has(TerrainCharacteristics::WALL)) {
             sprintf(buf, _("%sの中", "in %s"), fn);
         } else {
             sprintf(buf, _("%s", "on %s"), fn);

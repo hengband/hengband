@@ -25,7 +25,7 @@ static bool feat_tag_is_not_found = false;
  */
 static bool grab_one_feat_flag(terrain_type *f_ptr, std::string_view what)
 {
-    if (EnumClassFlagGroup<FloorFeatureType>::grab_one_flag(f_ptr->flags, f_info_flags, what)) {
+    if (EnumClassFlagGroup<TerrainCharacteristics>::grab_one_flag(f_ptr->flags, f_info_flags, what)) {
         return true;
     }
 
@@ -89,7 +89,7 @@ errr parse_terrains_info(std::string_view buf, angband_header *)
         f_ptr->mimic = (FEAT_IDX)i;
         f_ptr->destroyed = (FEAT_IDX)i;
         for (i = 0; i < MAX_FEAT_STATES; i++) {
-            f_ptr->state[i].action = FloorFeatureType::MAX;
+            f_ptr->state[i].action = TerrainCharacteristics::MAX;
         }
 
     } else if (!f_ptr) {
@@ -216,7 +216,7 @@ errr parse_terrains_info(std::string_view buf, angband_header *)
 
         int i = 0;
         for (; i < MAX_FEAT_STATES; i++) {
-            if (f_ptr->state[i].action == FloorFeatureType::MAX) {
+            if (f_ptr->state[i].action == TerrainCharacteristics::MAX) {
                 break;
             }
         }

@@ -125,7 +125,7 @@ static void cave_temp_room_unlite(PlayerType *player_ptr, const std::vector<Pos2
                 if (in_bounds2(player_ptr->current_floor_ptr, by, bx)) {
                     grid_type *cc_ptr = &player_ptr->current_floor_ptr->grid_array[by][bx];
 
-                    if (terrains_info[cc_ptr->get_feat_mimic()].flags.has(FloorFeatureType::GLOW)) {
+                    if (terrains_info[cc_ptr->get_feat_mimic()].flags.has(TerrainCharacteristics::GLOW)) {
                         do_dark = false;
                         break;
                     }
@@ -138,7 +138,7 @@ static void cave_temp_room_unlite(PlayerType *player_ptr, const std::vector<Pos2
         }
 
         g_ptr->info &= ~(CAVE_GLOW);
-        if (terrains_info[g_ptr->get_feat_mimic()].flags.has_not(FloorFeatureType::REMEMBER)) {
+        if (terrains_info[g_ptr->get_feat_mimic()].flags.has_not(TerrainCharacteristics::REMEMBER)) {
             if (!view_torch_grids) {
                 g_ptr->info &= ~(CAVE_MARK);
             }
@@ -278,7 +278,7 @@ static void cave_temp_lite_room_aux(PlayerType *player_ptr, std::vector<Pos2D> &
  */
 static bool cave_pass_dark_bold(floor_type *floor_ptr, POSITION y, POSITION x)
 {
-    return cave_has_flag_bold(floor_ptr, y, x, FloorFeatureType::PROJECT);
+    return cave_has_flag_bold(floor_ptr, y, x, TerrainCharacteristics::PROJECT);
 }
 
 /*!
@@ -399,7 +399,7 @@ bool starlight(PlayerType *player_ptr, bool magic)
 
         while (attempts--) {
             scatter(player_ptr, &y, &x, player_ptr->y, player_ptr->x, 4, PROJECT_LOS);
-            if (!cave_has_flag_bold(player_ptr->current_floor_ptr, y, x, FloorFeatureType::PROJECT)) {
+            if (!cave_has_flag_bold(player_ptr->current_floor_ptr, y, x, TerrainCharacteristics::PROJECT)) {
                 continue;
             }
             if (!player_bold(player_ptr, y, x)) {

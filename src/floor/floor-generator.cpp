@@ -397,7 +397,7 @@ static bool is_permanent_blocker(const floor_type *const floor_ptr, const int y,
 {
     const FEAT_IDX feat = floor_ptr->grid_array[y][x].feat;
     const auto &flags = terrains_info[feat].flags;
-    return flags.has(FloorFeatureType::PERMANENT) && flags.has_not(FloorFeatureType::MOVE);
+    return flags.has(TerrainCharacteristics::PERMANENT) && flags.has_not(TerrainCharacteristics::MOVE);
 }
 
 static void floor_is_connected_dfs(const floor_type *const floor_ptr, const IsWallFunc is_wall, const int y_start, const int x_start, bool *const visited)

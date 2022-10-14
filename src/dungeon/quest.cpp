@@ -484,7 +484,7 @@ void do_cmd_quest(PlayerType *player_ptr)
 
     PlayerEnergy(player_ptr).set_player_turn_energy(100);
 
-    if (!cave_has_flag_bold(player_ptr->current_floor_ptr, player_ptr->y, player_ptr->x, FloorFeatureType::QUEST_ENTER)) {
+    if (!cave_has_flag_bold(player_ptr->current_floor_ptr, player_ptr->y, player_ptr->x, TerrainCharacteristics::QUEST_ENTER)) {
         msg_print(_("ここにはクエストの入口はない。", "You see no quest level here."));
         return;
     }

@@ -77,7 +77,7 @@ bool affect_feature(PlayerType *player_ptr, MONSTER_IDX who, POSITION r, POSITIO
     who = who ? who : 0;
     dam = (dam + r) / (r + 1);
 
-    if (f_ptr->flags.has(FloorFeatureType::TREE)) {
+    if (f_ptr->flags.has(TerrainCharacteristics::TREE)) {
         concptr message;
         switch (typ) {
         case AttributeType::POIS:
@@ -181,12 +181,12 @@ bool affect_feature(PlayerType *player_ptr, MONSTER_IDX who, POSITION r, POSITIO
                 obvious = true;
             }
 
-            cave_alter_feat(player_ptr, y, x, FloorFeatureType::DISARM);
+            cave_alter_feat(player_ptr, y, x, TerrainCharacteristics::DISARM);
         }
 
-        if (is_closed_door(player_ptr, g_ptr->feat) && f_ptr->power && f_ptr->flags.has(FloorFeatureType::OPEN)) {
+        if (is_closed_door(player_ptr, g_ptr->feat) && f_ptr->power && f_ptr->flags.has(TerrainCharacteristics::OPEN)) {
             FEAT_IDX old_feat = g_ptr->feat;
-            cave_alter_feat(player_ptr, y, x, FloorFeatureType::DISARM);
+            cave_alter_feat(player_ptr, y, x, TerrainCharacteristics::DISARM);
             if (known && (old_feat != g_ptr->feat)) {
                 msg_print(_("カチッと音がした！", "Click!"));
                 obvious = true;
@@ -203,13 +203,13 @@ bool affect_feature(PlayerType *player_ptr, MONSTER_IDX who, POSITION r, POSITIO
         break;
     }
     case AttributeType::KILL_DOOR: {
-        if (is_trap(player_ptr, g_ptr->feat) || f_ptr->flags.has(FloorFeatureType::DOOR)) {
+        if (is_trap(player_ptr, g_ptr->feat) || f_ptr->flags.has(TerrainCharacteristics::DOOR)) {
             if (known) {
                 msg_print(_("まばゆい閃光が走った！", "There is a bright flash of light!"));
                 obvious = true;
             }
 
-            cave_alter_feat(player_ptr, y, x, FloorFeatureType::TUNNEL);
+            cave_alter_feat(player_ptr, y, x, TerrainCharacteristics::TUNNEL);
         }
 
         if (player_ptr->effects()->blindness()->is_blind() || !player_has_los_bold(player_ptr, y, x)) {
@@ -222,20 +222,20 @@ bool affect_feature(PlayerType *player_ptr, MONSTER_IDX who, POSITION r, POSITIO
         break;
     }
     case AttributeType::JAM_DOOR: {
-        if (f_ptr->flags.has_not(FloorFeatureType::SPIKE)) {
+        if (f_ptr->flags.has_not(TerrainCharacteristics::SPIKE)) {
             break;
         }
 
         int16_t old_mimic = g_ptr->mimic;
         terrain_type *mimic_f_ptr = &terrains_info[g_ptr->get_feat_mimic()];
 
-        cave_alter_feat(player_ptr, y, x, FloorFeatureType::SPIKE);
+        cave_alter_feat(player_ptr, y, x, TerrainCharacteristics::SPIKE);
         g_ptr->mimic = old_mimic;
 
         note_spot(player_ptr, y, x);
         lite_spot(player_ptr, y, x);
 
-        if (!known || mimic_f_ptr->flags.has_not(FloorFeatureType::OPEN)) {
+        if (!known || mimic_f_ptr->flags.has_not(TerrainCharacteristics::OPEN)) {
             break;
         }
 
@@ -244,7 +244,7 @@ bool affect_feature(PlayerType *player_ptr, MONSTER_IDX who, POSITION r, POSITIO
         break;
     }
     case AttributeType::KILL_WALL: {
-        if (f_ptr->flags.has_not(FloorFeatureType::HURT_ROCK)) {
+        if (f_ptr->flags.has_not(TerrainCharacteristics::HURT_ROCK)) {
             break;
         }
 
@@ -253,7 +253,7 @@ bool affect_feature(PlayerType *player_ptr, MONSTER_IDX who, POSITION r, POSITIO
             obvious = true;
         }
 
-        cave_alter_feat(player_ptr, y, x, FloorFeatureType::HURT_ROCK);
+        cave_alter_feat(player_ptr, y, x, TerrainCharacteristics::HURT_ROCK);
         player_ptr->update |= (PU_FLOW);
         break;
     }
@@ -308,11 +308,11 @@ bool affect_feature(PlayerType *player_ptr, MONSTER_IDX who, POSITION r, POSITIO
         break;
     }
     case AttributeType::LAVA_FLOW: {
-        if (f_ptr->flags.has(FloorFeatureType::PERMANENT)) {
+        if (f_ptr->flags.has(TerrainCharacteristics::PERMANENT)) {
             break;
         }
         if (dam == 1) {
-            if (f_ptr->flags.has_not(FloorFeatureType::FLOOR)) {
+            if (f_ptr->flags.has_not(TerrainCharacteristics::FLOOR)) {
                 break;
             }
             cave_set_feat(player_ptr, y, x, feat_shallow_lava);
@@ -323,11 +323,11 @@ bool affect_feature(PlayerType *player_ptr, MONSTER_IDX who, POSITION r, POSITIO
         break;
     }
     case AttributeType::WATER_FLOW: {
-        if (f_ptr->flags.has(FloorFeatureType::PERMANENT)) {
+        if (f_ptr->flags.has(TerrainCharacteristics::PERMANENT)) {
             break;
         }
         if (dam == 1) {
-            if (f_ptr->flags.has_not(FloorFeatureType::FLOOR)) {
+            if (f_ptr->flags.has_not(TerrainCharacteristics::FLOOR)) {
                 break;
             }
             cave_set_feat(player_ptr, y, x, feat_shallow_water);
@@ -379,7 +379,7 @@ bool affect_feature(PlayerType *player_ptr, MONSTER_IDX who, POSITION r, POSITIO
                 }
 
                 grid_type *cc_ptr = &floor_ptr->grid_array[by][bx];
-                if (terrains_info[cc_ptr->get_feat_mimic()].flags.has(FloorFeatureType::GLOW)) {
+                if (terrains_info[cc_ptr->get_feat_mimic()].flags.has(TerrainCharacteristics::GLOW)) {
                     do_dark = false;
                     break;
                 }
@@ -393,7 +393,7 @@ bool affect_feature(PlayerType *player_ptr, MONSTER_IDX who, POSITION r, POSITIO
         g_ptr->info &= ~(CAVE_GLOW);
 
         /* Hack -- Forget "boring" grids */
-        if (f_ptr->flags.has_not(FloorFeatureType::REMEMBER) || has_element_resist(player_ptr, ElementRealmType::DARKNESS, 1)) {
+        if (f_ptr->flags.has_not(TerrainCharacteristics::REMEMBER) || has_element_resist(player_ptr, ElementRealmType::DARKNESS, 1)) {
             /* Forget */
             g_ptr->info &= ~(CAVE_MARK);
             note_spot(player_ptr, y, x);
@@ -422,7 +422,7 @@ bool affect_feature(PlayerType *player_ptr, MONSTER_IDX who, POSITION r, POSITIO
                 (PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL | PROJECT_JUMP | PROJECT_NO_HANGEKI));
         }
 
-        if (f_ptr->flags.has_not(FloorFeatureType::GLASS) || f_ptr->flags.has(FloorFeatureType::PERMANENT) || (dam < 50)) {
+        if (f_ptr->flags.has_not(TerrainCharacteristics::GLASS) || f_ptr->flags.has(TerrainCharacteristics::PERMANENT) || (dam < 50)) {
             break;
         }
 
@@ -431,7 +431,7 @@ bool affect_feature(PlayerType *player_ptr, MONSTER_IDX who, POSITION r, POSITIO
             sound(SOUND_GLASS);
         }
 
-        cave_alter_feat(player_ptr, y, x, FloorFeatureType::HURT_ROCK);
+        cave_alter_feat(player_ptr, y, x, TerrainCharacteristics::HURT_ROCK);
         player_ptr->update |= (PU_FLOW);
         break;
     }
@@ -444,7 +444,7 @@ bool affect_feature(PlayerType *player_ptr, MONSTER_IDX who, POSITION r, POSITIO
                 (PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL | PROJECT_JUMP | PROJECT_NO_HANGEKI));
         }
 
-        if (f_ptr->flags.has_not(FloorFeatureType::GLASS) || f_ptr->flags.has(FloorFeatureType::PERMANENT) || (dam < 200)) {
+        if (f_ptr->flags.has_not(TerrainCharacteristics::GLASS) || f_ptr->flags.has(TerrainCharacteristics::PERMANENT) || (dam < 200)) {
             break;
         }
 
@@ -453,7 +453,7 @@ bool affect_feature(PlayerType *player_ptr, MONSTER_IDX who, POSITION r, POSITIO
             sound(SOUND_GLASS);
         }
 
-        cave_alter_feat(player_ptr, y, x, FloorFeatureType::HURT_ROCK);
+        cave_alter_feat(player_ptr, y, x, TerrainCharacteristics::HURT_ROCK);
         player_ptr->update |= (PU_FLOW);
         break;
     }
@@ -462,11 +462,11 @@ bool affect_feature(PlayerType *player_ptr, MONSTER_IDX who, POSITION r, POSITIO
             SpellsMirrorMaster(player_ptr).remove_mirror(y, x);
         }
 
-        if (f_ptr->flags.has_not(FloorFeatureType::HURT_DISI) || f_ptr->flags.has(FloorFeatureType::PERMANENT)) {
+        if (f_ptr->flags.has_not(TerrainCharacteristics::HURT_DISI) || f_ptr->flags.has(TerrainCharacteristics::PERMANENT)) {
             break;
         }
 
-        cave_alter_feat(player_ptr, y, x, FloorFeatureType::HURT_DISI);
+        cave_alter_feat(player_ptr, y, x, TerrainCharacteristics::HURT_DISI);
         player_ptr->update |= (PU_FLOW);
         break;
     }

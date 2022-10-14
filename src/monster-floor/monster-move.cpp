@@ -45,7 +45,7 @@
 
 static bool check_hp_for_feat_destruction(terrain_type *f_ptr, monster_type *m_ptr)
 {
-    return f_ptr->flags.has_not(FloorFeatureType::GLASS) || monraces_info[m_ptr->r_idx].behavior_flags.has(MonsterBehaviorType::STUPID) || (m_ptr->hp >= std::max(m_ptr->maxhp / 3, 200));
+    return f_ptr->flags.has_not(TerrainCharacteristics::GLASS) || monraces_info[m_ptr->r_idx].behavior_flags.has(MonsterBehaviorType::STUPID) || (m_ptr->hp >= std::max(m_ptr->maxhp / 3, 200));
 }
 
 /*!
@@ -74,7 +74,7 @@ static bool process_wall(PlayerType *player_ptr, turn_flags *turn_flags_ptr, mon
         return true;
     }
 
-    if (r_ptr->feature_flags.has(MonsterFeatureType::KILL_WALL) && (can_cross ? f_ptr->flags.has_not(FloorFeatureType::LOS) : !turn_flags_ptr->is_riding_mon) && f_ptr->flags.has(FloorFeatureType::HURT_DISI) && f_ptr->flags.has_not(FloorFeatureType::PERMANENT) && check_hp_for_feat_destruction(f_ptr, m_ptr)) {
+    if (r_ptr->feature_flags.has(MonsterFeatureType::KILL_WALL) && (can_cross ? f_ptr->flags.has_not(TerrainCharacteristics::LOS) : !turn_flags_ptr->is_riding_mon) && f_ptr->flags.has(TerrainCharacteristics::HURT_DISI) && f_ptr->flags.has_not(TerrainCharacteristics::PERMANENT) && check_hp_for_feat_destruction(f_ptr, m_ptr)) {
         turn_flags_ptr->do_move = true;
         if (!can_cross) {
             turn_flags_ptr->must_alter_to_move = true;
@@ -89,7 +89,7 @@ static bool process_wall(PlayerType *player_ptr, turn_flags *turn_flags_ptr, mon
     }
 
     turn_flags_ptr->do_move = true;
-    if ((r_ptr->feature_flags.has(MonsterFeatureType::PASS_WALL)) && (!turn_flags_ptr->is_riding_mon || has_pass_wall(player_ptr)) && f_ptr->flags.has(FloorFeatureType::CAN_PASS)) {
+    if ((r_ptr->feature_flags.has(MonsterFeatureType::PASS_WALL)) && (!turn_flags_ptr->is_riding_mon || has_pass_wall(player_ptr)) && f_ptr->flags.has(TerrainCharacteristics::CAN_PASS)) {
         turn_flags_ptr->did_pass_wall = true;
     }
 
@@ -113,7 +113,7 @@ static bool bash_normal_door(PlayerType *player_ptr, turn_flags *turn_flags_ptr,
     terrain_type *f_ptr;
     f_ptr = &terrains_info[g_ptr->feat];
     turn_flags_ptr->do_move = false;
-    if ((r_ptr->behavior_flags.has_not(MonsterBehaviorType::OPEN_DOOR)) || f_ptr->flags.has_not(FloorFeatureType::OPEN) || (m_ptr->is_pet() && ((player_ptr->pet_extra_flags & PF_OPEN_DOORS) == 0))) {
+    if ((r_ptr->behavior_flags.has_not(MonsterBehaviorType::OPEN_DOOR)) || f_ptr->flags.has_not(TerrainCharacteristics::OPEN) || (m_ptr->is_pet() && ((player_ptr->pet_extra_flags & PF_OPEN_DOORS) == 0))) {
         return true;
     }
 
@@ -124,7 +124,7 @@ static bool bash_normal_door(PlayerType *player_ptr, turn_flags *turn_flags_ptr,
     }
 
     if (randint0(m_ptr->hp / 10) > f_ptr->power) {
-        cave_alter_feat(player_ptr, ny, nx, FloorFeatureType::DISARM);
+        cave_alter_feat(player_ptr, ny, nx, TerrainCharacteristics::DISARM);
         turn_flags_ptr->do_turn = true;
         return false;
     }
@@ -143,7 +143,7 @@ static bool bash_normal_door(PlayerType *player_ptr, turn_flags *turn_flags_ptr,
 static void bash_glass_door(PlayerType *player_ptr, turn_flags *turn_flags_ptr, monster_type *m_ptr, terrain_type *f_ptr, bool may_bash)
 {
     auto *r_ptr = &monraces_info[m_ptr->r_idx];
-    if (!may_bash || (r_ptr->behavior_flags.has_not(MonsterBehaviorType::BASH_DOOR)) || f_ptr->flags.has_not(FloorFeatureType::BASH) || (m_ptr->is_pet() && ((player_ptr->pet_extra_flags & PF_OPEN_DOORS) == 0))) {
+    if (!may_bash || (r_ptr->behavior_flags.has_not(MonsterBehaviorType::BASH_DOOR)) || f_ptr->flags.has_not(TerrainCharacteristics::BASH) || (m_ptr->is_pet() && ((player_ptr->pet_extra_flags & PF_OPEN_DOORS) == 0))) {
         return;
     }
 
@@ -151,7 +151,7 @@ static void bash_glass_door(PlayerType *player_ptr, turn_flags *turn_flags_ptr, 
         return;
     }
 
-    if (f_ptr->flags.has(FloorFeatureType::GLASS)) {
+    if (f_ptr->flags.has(TerrainCharacteristics::GLASS)) {
         msg_print(_("ガラスが砕ける音がした！", "You hear glass breaking!"));
     } else {
         msg_print(_("ドアを叩き開ける音がした！", "You hear a door burst open!"));
@@ -193,8 +193,8 @@ static bool process_door(PlayerType *player_ptr, turn_flags *turn_flags_ptr, mon
         return true;
     }
 
-    if (turn_flags_ptr->did_bash_door && ((randint0(100) < 50) || (feat_state(player_ptr->current_floor_ptr, g_ptr->feat, FloorFeatureType::OPEN) == g_ptr->feat) || f_ptr->flags.has(FloorFeatureType::GLASS))) {
-        cave_alter_feat(player_ptr, ny, nx, FloorFeatureType::BASH);
+    if (turn_flags_ptr->did_bash_door && ((randint0(100) < 50) || (feat_state(player_ptr->current_floor_ptr, g_ptr->feat, TerrainCharacteristics::OPEN) == g_ptr->feat) || f_ptr->flags.has(TerrainCharacteristics::GLASS))) {
+        cave_alter_feat(player_ptr, ny, nx, TerrainCharacteristics::BASH);
         if (!m_ptr->is_valid()) {
             player_ptr->update |= (PU_FLOW);
             player_ptr->window_flags |= (PW_OVERHEAD | PW_DUNGEON);
@@ -205,7 +205,7 @@ static bool process_door(PlayerType *player_ptr, turn_flags *turn_flags_ptr, mon
             return false;
         }
     } else {
-        cave_alter_feat(player_ptr, ny, nx, FloorFeatureType::OPEN);
+        cave_alter_feat(player_ptr, ny, nx, TerrainCharacteristics::OPEN);
     }
 
     f_ptr = &terrains_info[g_ptr->feat];
@@ -317,14 +317,14 @@ static bool process_post_dig_wall(PlayerType *player_ptr, turn_flags *turn_flags
     }
 
     if (one_in_(GRINDNOISE)) {
-        if (f_ptr->flags.has(FloorFeatureType::GLASS)) {
+        if (f_ptr->flags.has(TerrainCharacteristics::GLASS)) {
             msg_print(_("何かの砕ける音が聞こえる。", "There is a crashing sound."));
         } else {
             msg_print(_("ギシギシいう音が聞こえる。", "There is a grinding sound."));
         }
     }
 
-    cave_alter_feat(player_ptr, ny, nx, FloorFeatureType::HURT_DISI);
+    cave_alter_feat(player_ptr, ny, nx, TerrainCharacteristics::HURT_DISI);
 
     if (!m_ptr->is_valid()) {
         player_ptr->update |= (PU_FLOW);
@@ -431,7 +431,7 @@ bool process_monster_movement(PlayerType *player_ptr, turn_flags *turn_flags_ptr
         turn_flags_ptr->do_turn = true;
         terrain_type *f_ptr;
         f_ptr = &terrains_info[g_ptr->feat];
-        if (f_ptr->flags.has(FloorFeatureType::TREE) && r_ptr->feature_flags.has_not(MonsterFeatureType::CAN_FLY) && (r_ptr->wilderness_flags.has_not(MonsterWildernessType::WILD_WOOD))) {
+        if (f_ptr->flags.has(TerrainCharacteristics::TREE) && r_ptr->feature_flags.has_not(MonsterFeatureType::CAN_FLY) && (r_ptr->wilderness_flags.has_not(MonsterWildernessType::WILD_WOOD))) {
             m_ptr->energy_need += ENERGY_NEED();
         }
 

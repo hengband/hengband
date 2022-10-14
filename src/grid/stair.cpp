@@ -70,7 +70,7 @@ void place_random_stairs(PlayerType *player_ptr, POSITION y, POSITION x)
 bool cave_valid_bold(floor_type *floor_ptr, POSITION y, POSITION x)
 {
     auto *g_ptr = &floor_ptr->grid_array[y][x];
-    if (g_ptr->cave_has_flag(FloorFeatureType::PERMANENT)) {
+    if (g_ptr->cave_has_flag(TerrainCharacteristics::PERMANENT)) {
         return false;
     }
 

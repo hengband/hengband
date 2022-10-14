@@ -119,13 +119,13 @@ bool process_fall_off_horse(PlayerType *player_ptr, int dam, bool force)
             }
 
             /* Skip non-empty grids */
-            if (!g_ptr->cave_has_flag(FloorFeatureType::MOVE) && !g_ptr->cave_has_flag(FloorFeatureType::CAN_FLY)) {
+            if (!g_ptr->cave_has_flag(TerrainCharacteristics::MOVE) && !g_ptr->cave_has_flag(TerrainCharacteristics::CAN_FLY)) {
                 if (!can_player_ride_pet(player_ptr, g_ptr, false)) {
                     continue;
                 }
             }
 
-            if (g_ptr->cave_has_flag(FloorFeatureType::PATTERN)) {
+            if (g_ptr->cave_has_flag(TerrainCharacteristics::PATTERN)) {
                 continue;
             }
 

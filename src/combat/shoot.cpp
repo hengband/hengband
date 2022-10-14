@@ -656,7 +656,7 @@ void exe_fire(PlayerType *player_ptr, INVENTORY_IDX item, ObjectType *j_ptr, SPE
             if (snipe_type == SP_KILL_WALL) {
                 g_ptr = &player_ptr->current_floor_ptr->grid_array[ny][nx];
 
-                if (g_ptr->cave_has_flag(FloorFeatureType::HURT_ROCK) && !g_ptr->m_idx) {
+                if (g_ptr->cave_has_flag(TerrainCharacteristics::HURT_ROCK) && !g_ptr->m_idx) {
                     if (any_bits(g_ptr->info, (CAVE_MARK))) {
                         msg_print(_("岩が砕け散った。", "Wall rocks were shattered."));
                     }
@@ -665,7 +665,7 @@ void exe_fire(PlayerType *player_ptr, INVENTORY_IDX item, ObjectType *j_ptr, SPE
                     set_bits(player_ptr->update, PU_VIEW | PU_LITE | PU_FLOW | PU_MON_LITE);
 
                     /* Destroy the wall */
-                    cave_alter_feat(player_ptr, ny, nx, FloorFeatureType::HURT_ROCK);
+                    cave_alter_feat(player_ptr, ny, nx, TerrainCharacteristics::HURT_ROCK);
 
                     hit_body = true;
                     break;
@@ -673,7 +673,7 @@ void exe_fire(PlayerType *player_ptr, INVENTORY_IDX item, ObjectType *j_ptr, SPE
             }
 
             /* Stopped by walls/doors */
-            if (!cave_has_flag_bold(player_ptr->current_floor_ptr, ny, nx, FloorFeatureType::PROJECT) && !player_ptr->current_floor_ptr->grid_array[ny][nx].m_idx) {
+            if (!cave_has_flag_bold(player_ptr->current_floor_ptr, ny, nx, TerrainCharacteristics::PROJECT) && !player_ptr->current_floor_ptr->grid_array[ny][nx].m_idx) {
                 break;
             }
 
@@ -974,7 +974,7 @@ void exe_fire(PlayerType *player_ptr, INVENTORY_IDX item, ObjectType *j_ptr, SPE
 
             /* Carry object */
             m_ptr->hold_o_idx_list.add(player_ptr->current_floor_ptr, o_idx);
-        } else if (cave_has_flag_bold(player_ptr->current_floor_ptr, y, x, FloorFeatureType::PROJECT)) {
+        } else if (cave_has_flag_bold(player_ptr->current_floor_ptr, y, x, TerrainCharacteristics::PROJECT)) {
             /* Drop (or break) near that location */
             (void)drop_near(player_ptr, q_ptr, j, y, x);
         } else {

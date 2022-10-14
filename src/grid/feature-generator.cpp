@@ -132,7 +132,7 @@ static int next_to_corr(floor_type *floor_ptr, POSITION y1, POSITION x1)
         POSITION x = x1 + ddx_ddd[i];
         grid_type *g_ptr;
         g_ptr = &floor_ptr->grid_array[y][x];
-        if (g_ptr->cave_has_flag(FloorFeatureType::WALL) || !g_ptr->is_floor() || g_ptr->is_room()) {
+        if (g_ptr->cave_has_flag(TerrainCharacteristics::WALL) || !g_ptr->is_floor() || g_ptr->is_room()) {
             continue;
         }
 
@@ -155,11 +155,11 @@ static bool possible_doorway(floor_type *floor_ptr, POSITION y, POSITION x)
         return false;
     }
 
-    if (cave_has_flag_bold(floor_ptr, y - 1, x, FloorFeatureType::WALL) && cave_has_flag_bold(floor_ptr, y + 1, x, FloorFeatureType::WALL)) {
+    if (cave_has_flag_bold(floor_ptr, y - 1, x, TerrainCharacteristics::WALL) && cave_has_flag_bold(floor_ptr, y + 1, x, TerrainCharacteristics::WALL)) {
         return true;
     }
 
-    if (cave_has_flag_bold(floor_ptr, y, x - 1, FloorFeatureType::WALL) && cave_has_flag_bold(floor_ptr, y, x + 1, FloorFeatureType::WALL)) {
+    if (cave_has_flag_bold(floor_ptr, y, x - 1, TerrainCharacteristics::WALL) && cave_has_flag_bold(floor_ptr, y, x + 1, TerrainCharacteristics::WALL)) {
         return true;
     }
 
@@ -175,7 +175,7 @@ static bool possible_doorway(floor_type *floor_ptr, POSITION y, POSITION x)
 void try_door(PlayerType *player_ptr, dt_type *dt_ptr, POSITION y, POSITION x)
 {
     auto *floor_ptr = player_ptr->current_floor_ptr;
-    if (!in_bounds(floor_ptr, y, x) || cave_has_flag_bold(floor_ptr, y, x, FloorFeatureType::WALL) || floor_ptr->grid_array[y][x].is_room()) {
+    if (!in_bounds(floor_ptr, y, x) || cave_has_flag_bold(floor_ptr, y, x, TerrainCharacteristics::WALL) || floor_ptr->grid_array[y][x].is_room()) {
         return;
     }
 
