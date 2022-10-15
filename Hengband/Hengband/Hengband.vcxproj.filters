@@ -2472,6 +2472,9 @@
     <ClCompile Include="..\..\src\system\dungeon-info.cpp">
       <Filter>system</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\system\terrain-type-definition.cpp">
+      <Filter>system</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\combat\shoot.h">
@@ -5365,6 +5368,9 @@
       <Filter>system</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\system\dungeon-info.h">
+      <Filter>system</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\system\terrain-type-definition.h">
       <Filter>system</Filter>
     </ClInclude>
   </ItemGroup>

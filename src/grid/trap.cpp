@@ -39,6 +39,7 @@
 #include "system/grid-type-definition.h"
 #include "system/monster-type-definition.h"
 #include "system/player-type-definition.h"
+#include "system/terrain-type-definition.h"
 #include "target/projection-path-calculator.h"
 #include "timed-effect/player-cut.h"
 #include "timed-effect/timed-effects.h"

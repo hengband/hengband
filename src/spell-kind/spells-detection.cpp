@@ -4,7 +4,6 @@
 #include "floor/cave.h"
 #include "floor/floor-save-util.h"
 #include "floor/geometry.h"
-#include "grid/feature.h"
 #include "grid/grid.h"
 #include "grid/trap.h"
 #include "monster-race/monster-race-hook.h"
@@ -26,6 +25,7 @@
 #include "system/monster-race-definition.h"
 #include "system/object-type-definition.h"
 #include "system/player-type-definition.h"
+#include "system/terrain-type-definition.h"
 #include "util/string-processor.h"
 #include "view/display-messages.h"
 

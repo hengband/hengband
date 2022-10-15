@@ -87,6 +87,7 @@
 #include "system/monster-type-definition.h"
 #include "system/object-type-definition.h"
 #include "system/player-type-definition.h"
+#include "system/terrain-type-definition.h"
 #include "target/grid-selector.h"
 #include "term/screen-processor.h"
 #include "util/angband-files.h"

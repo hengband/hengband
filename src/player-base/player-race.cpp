@@ -6,13 +6,13 @@
  */
 #include "player-base/player-race.h"
 #include "grid/feature-flag-types.h"
-#include "grid/feature.h"
 #include "player-base/player-class.h"
 #include "player-info/mimic-info-table.h"
 #include "player/race-info-table.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
 #include "system/player-type-definition.h"
+#include "system/terrain-type-definition.h"
 #include "util/bit-flags-calculator.h"
 
 /*!

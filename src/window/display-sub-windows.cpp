@@ -29,6 +29,7 @@
 #include "system/monster-type-definition.h"
 #include "system/object-type-definition.h"
 #include "system/player-type-definition.h"
+#include "system/terrain-type-definition.h"
 #include "target/target-describer.h"
 #include "target/target-preparation.h"
 #include "target/target-setter.h"

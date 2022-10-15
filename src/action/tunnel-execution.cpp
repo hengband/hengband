@@ -7,7 +7,6 @@
 #include "avatar/avatar.h"
 #include "core/player-update-types.h"
 #include "floor/cave.h"
-#include "grid/feature.h"
 #include "grid/grid.h"
 #include "main/sound-definitions-table.h"
 #include "main/sound-of-music.h"
@@ -16,6 +15,7 @@
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
 #include "system/player-type-definition.h"
+#include "system/terrain-type-definition.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 
