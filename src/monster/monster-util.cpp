@@ -3,7 +3,6 @@
 #include "dungeon/quest.h"
 #include "floor/wild.h"
 #include "game-option/cheat-options.h"
-#include "grid/feature.h"
 #include "monster-race/monster-race-hook.h"
 #include "monster-race/monster-race.h"
 #include "monster-race/race-ability-mask.h"
@@ -18,6 +17,7 @@
 #include "system/grid-type-definition.h"
 #include "system/monster-race-definition.h"
 #include "system/player-type-definition.h"
+#include "system/terrain-type-definition.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 #include <algorithm>

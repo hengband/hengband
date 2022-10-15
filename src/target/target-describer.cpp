@@ -34,6 +34,7 @@
 #include "system/object-type-definition.h"
 #include "system/player-type-definition.h"
 #include "system/system-variables.h"
+#include "system/terrain-type-definition.h"
 #include "target/target-types.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"

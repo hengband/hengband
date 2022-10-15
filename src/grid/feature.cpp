@@ -14,6 +14,7 @@
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h" // @todo 相互依存している. 後で何とかする.
 #include "system/player-type-definition.h"
+#include "system/terrain-type-definition.h"
 #include "util/bit-flags-calculator.h"
 #include "world/world.h"
 
@@ -28,9 +29,6 @@ enum conversion_type {
 };
 
 /*** Terrain feature variables ***/
-
-/* The terrain feature arrays */
-std::vector<TerrainType> terrains_info;
 
 /* Nothing */
 FEAT_IDX feat_none;

@@ -1,7 +1,6 @@
 ﻿#include "util/sort.h"
 #include "artifact/fixed-art-types.h"
 #include "dungeon/quest.h"
-#include "grid/feature.h"
 #include "grid/grid.h"
 #include "monster-race/monster-race.h"
 #include "monster-race/race-flags1.h"
@@ -12,6 +11,7 @@
 #include "system/grid-type-definition.h"
 #include "system/monster-type-definition.h"
 #include "system/player-type-definition.h"
+#include "system/terrain-type-definition.h"
 
 /*
  * @brief クイックソートの実行 / Quick sort in place
