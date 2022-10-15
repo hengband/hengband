@@ -62,11 +62,11 @@ To run in the graphical mode:
 Run the following:
 
 ```
-./configure --with-setgid=games
+./configure --disable-japanes --with-setgid=games
 make
 ```
 
-Running the following will install the game into `/usr/local`:
+Running the following as root or with the sudo command will install the game into `/usr/local`:
 
 ```
 make install
