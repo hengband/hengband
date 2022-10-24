@@ -16,7 +16,7 @@
 
 # Town 2
 ?:[EQU $TOWN 2]
-%:t0000002.txt
+%:towns/02_Telmora.txt
 
 # Town 3
 ?:[EQU $TOWN 3]
