@@ -20,7 +20,7 @@
 
 # Town 3
 ?:[EQU $TOWN 3]
-%:t0000003.txt
+%:towns/03_Morivant.txt
 
 # Town 4
 ?:[EQU $TOWN 4]
