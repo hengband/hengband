@@ -196,7 +196,7 @@ bool activate_resistance_pois(PlayerType *player_ptr, concptr name)
 bool activate_ultimate_resistance(PlayerType *player_ptr)
 {
     TIME_EFFECT v = randint1(25) + 25;
-    (void)BadStatusSetter(player_ptr).fear(0);
+    (void)BadStatusSetter(player_ptr).set_fear(0);
     (void)set_hero(player_ptr, v, false);
     (void)hp_player(player_ptr, 10);
     (void)set_blessed(player_ptr, v, false);

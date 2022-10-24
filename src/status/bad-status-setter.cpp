@@ -231,7 +231,7 @@ bool BadStatusSetter::mod_poison(const TIME_EFFECT tmp_v)
  * @param v 継続時間
  * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
  */
-bool BadStatusSetter::fear(const TIME_EFFECT tmp_v)
+bool BadStatusSetter::set_fear(const TIME_EFFECT tmp_v)
 {
     auto notice = false;
     auto v = std::clamp<short>(tmp_v, 0, 10000);
@@ -274,7 +274,7 @@ bool BadStatusSetter::fear(const TIME_EFFECT tmp_v)
 
 bool BadStatusSetter::mod_fear(const TIME_EFFECT tmp_v)
 {
-    return this->fear(this->player_ptr->effects()->fear()->current() + tmp_v);
+    return this->set_fear(this->player_ptr->effects()->fear()->current() + tmp_v);
 }
 
 /*!

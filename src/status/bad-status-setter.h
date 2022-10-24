@@ -22,7 +22,7 @@ public:
     bool mod_confusion(const TIME_EFFECT tmp_v);
     bool set_poison(const TIME_EFFECT tmp_v);
     bool mod_poison(const TIME_EFFECT tmp_v);
-    bool fear(const TIME_EFFECT tmp_v);
+    bool set_fear(const TIME_EFFECT tmp_v);
     bool mod_fear(const TIME_EFFECT tmp_v);
     bool paralysis(const TIME_EFFECT tmp_v);
     bool mod_paralysis(const TIME_EFFECT tmp_v);

@@ -34,7 +34,7 @@ bool cleansing_nova(PlayerType *player_ptr, bool magic, bool powerful)
         ident = true;
     }
 
-    if (bss.fear(0)) {
+    if (bss.set_fear(0)) {
         ident = true;
     }
 
