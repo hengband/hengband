@@ -10,6 +10,7 @@ enum sound_type {
     SOUND_HIT,
     SOUND_ENEMY_HIT,
     SOUND_MISS,
+    SOUND_ATTACK_FAILED,
     SOUND_FLEE,
     SOUND_DROP,
     SOUND_KILL,
