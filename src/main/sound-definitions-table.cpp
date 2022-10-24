@@ -7,6 +7,7 @@
 
 const concptr angband_sound_name[SOUND_MAX] = {
     "hit",
+    "enemy_hit",
     "miss",
     "flee",
     "drop",
