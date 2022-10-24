@@ -6,13 +6,13 @@
  */
 #include "player-base/player-race.h"
 #include "grid/feature-flag-types.h"
-#include "grid/feature.h"
 #include "player-base/player-class.h"
 #include "player-info/mimic-info-table.h"
 #include "player/race-info-table.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
 #include "system/player-type-definition.h"
+#include "system/terrain-type-definition.h"
 #include "util/bit-flags-calculator.h"
 
 /*!
@@ -150,7 +150,7 @@ int16_t PlayerRace::speed() const
     if (this->equals(PlayerRaceType::MERFOLK)) {
         auto *floor_ptr = this->player_ptr->current_floor_ptr;
         auto *f_ptr = &terrains_info[floor_ptr->grid_array[this->player_ptr->y][this->player_ptr->x].feat];
-        if (f_ptr->flags.has(FloorFeatureType::WATER)) {
+        if (f_ptr->flags.has(TerrainCharacteristics::WATER)) {
             result += (2 + this->player_ptr->lev / 10);
         } else if (!this->player_ptr->levitation) {
             result -= 2;

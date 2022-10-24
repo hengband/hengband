@@ -1,7 +1,6 @@
 ﻿#include "target/target-preparation.h"
 #include "floor/cave.h"
 #include "game-option/input-options.h"
-#include "grid/feature.h"
 #include "grid/grid.h"
 #include "monster-race/monster-race.h"
 #include "monster-race/race-flags1.h"
@@ -15,6 +14,7 @@
 #include "system/monster-type-definition.h"
 #include "system/object-type-definition.h"
 #include "system/player-type-definition.h"
+#include "system/terrain-type-definition.h"
 #include "target/projection-path-calculator.h"
 #include "target/target-types.h"
 #include "timed-effect/player-hallucination.h"
@@ -107,7 +107,7 @@ static bool target_set_accept(PlayerType *player_ptr, POSITION y, POSITION x)
             return true;
         }
 
-        if (terrains_info[g_ptr->get_feat_mimic()].flags.has(FloorFeatureType::NOTICE)) {
+        if (terrains_info[g_ptr->get_feat_mimic()].flags.has(TerrainCharacteristics::NOTICE)) {
             return true;
         }
     }

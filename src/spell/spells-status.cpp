@@ -534,7 +534,7 @@ bool fishing(PlayerType *player_ptr)
     POSITION y = player_ptr->y + ddy[dir];
     POSITION x = player_ptr->x + ddx[dir];
     player_ptr->fishing_dir = dir;
-    if (!cave_has_flag_bold(player_ptr->current_floor_ptr, y, x, FloorFeatureType::WATER)) {
+    if (!cave_has_flag_bold(player_ptr->current_floor_ptr, y, x, TerrainCharacteristics::WATER)) {
         msg_print(_("そこは水辺ではない。", "You can't fish here."));
         return false;
     }

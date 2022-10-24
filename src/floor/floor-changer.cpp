@@ -41,6 +41,7 @@
 #include "system/monster-race-definition.h"
 #include "system/object-type-definition.h"
 #include "system/player-type-definition.h"
+#include "system/terrain-type-definition.h"
 #include "timed-effect/player-blindness.h"
 #include "timed-effect/timed-effects.h"
 #include "util/bit-flags-calculator.h"
@@ -348,9 +349,9 @@ static void update_new_floor_feature(PlayerType *player_ptr, saved_floor_type *s
 
     auto *g_ptr = &player_ptr->current_floor_ptr->grid_array[player_ptr->y][player_ptr->x];
     if ((player_ptr->change_floor_mode & CFM_UP) && !inside_quest(quest_number(player_ptr, player_ptr->current_floor_ptr->dun_level))) {
-        g_ptr->feat = (player_ptr->change_floor_mode & CFM_SHAFT) ? feat_state(player_ptr->current_floor_ptr, feat_down_stair, FloorFeatureType::SHAFT) : feat_down_stair;
+        g_ptr->feat = (player_ptr->change_floor_mode & CFM_SHAFT) ? feat_state(player_ptr->current_floor_ptr, feat_down_stair, TerrainCharacteristics::SHAFT) : feat_down_stair;
     } else if ((player_ptr->change_floor_mode & CFM_DOWN) && !ironman_downward) {
-        g_ptr->feat = (player_ptr->change_floor_mode & CFM_SHAFT) ? feat_state(player_ptr->current_floor_ptr, feat_up_stair, FloorFeatureType::SHAFT) : feat_up_stair;
+        g_ptr->feat = (player_ptr->change_floor_mode & CFM_SHAFT) ? feat_state(player_ptr->current_floor_ptr, feat_up_stair, TerrainCharacteristics::SHAFT) : feat_up_stair;
     }
 
     g_ptr->mimic = 0;

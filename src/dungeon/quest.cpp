@@ -7,7 +7,6 @@
 #include "floor/floor-mode-changer.h"
 #include "floor/floor-object.h"
 #include "game-option/play-record-options.h"
-#include "grid/feature.h"
 #include "info-reader/fixed-map-parser.h"
 #include "io/write-diary.h"
 #include "locale/english.h"
@@ -33,6 +32,7 @@
 #include "system/grid-type-definition.h"
 #include "system/monster-race-definition.h"
 #include "system/player-type-definition.h"
+#include "system/terrain-type-definition.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 #include "world/world.h"
@@ -484,7 +484,7 @@ void do_cmd_quest(PlayerType *player_ptr)
 
     PlayerEnergy(player_ptr).set_player_turn_energy(100);
 
-    if (!cave_has_flag_bold(player_ptr->current_floor_ptr, player_ptr->y, player_ptr->x, FloorFeatureType::QUEST_ENTER)) {
+    if (!cave_has_flag_bold(player_ptr->current_floor_ptr, player_ptr->y, player_ptr->x, TerrainCharacteristics::QUEST_ENTER)) {
         msg_print(_("ここにはクエストの入口はない。", "You see no quest level here."));
         return;
     }

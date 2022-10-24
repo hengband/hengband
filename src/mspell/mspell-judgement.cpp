@@ -121,7 +121,7 @@ bool breath_direct(PlayerType *player_ptr, POSITION y1, POSITION x1, POSITION y2
                 break;
             }
         } else {
-            if (!cave_has_flag_bold(player_ptr->current_floor_ptr, ny, nx, FloorFeatureType::PROJECT)) {
+            if (!cave_has_flag_bold(player_ptr->current_floor_ptr, ny, nx, TerrainCharacteristics::PROJECT)) {
                 break;
             }
         }
@@ -200,7 +200,7 @@ void get_project_point(PlayerType *player_ptr, POSITION sy, POSITION sx, POSITIO
     *ty = sy;
     *tx = sx;
     for (const auto &[y, x] : path_g) {
-        if (!cave_has_flag_bold(player_ptr->current_floor_ptr, y, x, FloorFeatureType::PROJECT)) {
+        if (!cave_has_flag_bold(player_ptr->current_floor_ptr, y, x, TerrainCharacteristics::PROJECT)) {
             break;
         }
 

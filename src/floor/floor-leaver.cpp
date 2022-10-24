@@ -10,7 +10,6 @@
 #include "floor/line-of-sight.h"
 #include "game-option/birth-options.h"
 #include "game-option/play-record-options.h"
-#include "grid/feature.h"
 #include "grid/grid.h"
 #include "inventory/inventory-slot-types.h"
 #include "io/write-diary.h"
@@ -38,6 +37,7 @@
 #include "system/monster-race-definition.h"
 #include "system/monster-type-definition.h"
 #include "system/player-type-definition.h"
+#include "system/terrain-type-definition.h"
 #include "target/projection-path-calculator.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
@@ -165,7 +165,7 @@ static void locate_connected_stairs(PlayerType *player_ptr, floor_type *floor_pt
             auto *f_ptr = &terrains_info[g_ptr->feat];
             bool ok = false;
             if (floor_mode & CFM_UP) {
-                if (f_ptr->flags.has_all_of({ FloorFeatureType::LESS, FloorFeatureType::STAIRS }) && f_ptr->flags.has_not(FloorFeatureType::SPECIAL)) {
+                if (f_ptr->flags.has_all_of({ TerrainCharacteristics::LESS, TerrainCharacteristics::STAIRS }) && f_ptr->flags.has_not(TerrainCharacteristics::SPECIAL)) {
                     ok = true;
                     if (g_ptr->special && g_ptr->special == sf_ptr->upper_floor_id) {
                         sx = x;
@@ -173,7 +173,7 @@ static void locate_connected_stairs(PlayerType *player_ptr, floor_type *floor_pt
                     }
                 }
             } else if (floor_mode & CFM_DOWN) {
-                if (f_ptr->flags.has_all_of({ FloorFeatureType::MORE, FloorFeatureType::STAIRS }) && f_ptr->flags.has_not(FloorFeatureType::SPECIAL)) {
+                if (f_ptr->flags.has_all_of({ TerrainCharacteristics::MORE, TerrainCharacteristics::STAIRS }) && f_ptr->flags.has_not(TerrainCharacteristics::SPECIAL)) {
                     ok = true;
                     if (g_ptr->special && g_ptr->special == sf_ptr->lower_floor_id) {
                         sx = x;
@@ -181,7 +181,7 @@ static void locate_connected_stairs(PlayerType *player_ptr, floor_type *floor_pt
                     }
                 }
             } else {
-                if (f_ptr->flags.has(FloorFeatureType::BLDG)) {
+                if (f_ptr->flags.has(TerrainCharacteristics::BLDG)) {
                     ok = true;
                 }
             }
@@ -308,11 +308,11 @@ static void set_grid_by_leaving_floor(PlayerType *player_ptr, grid_type **g_ptr)
 
     *g_ptr = &player_ptr->current_floor_ptr->grid_array[player_ptr->y][player_ptr->x];
     auto *f_ptr = &terrains_info[(*g_ptr)->feat];
-    if ((*g_ptr)->special && f_ptr->flags.has_not(FloorFeatureType::SPECIAL) && get_sf_ptr((*g_ptr)->special)) {
+    if ((*g_ptr)->special && f_ptr->flags.has_not(TerrainCharacteristics::SPECIAL) && get_sf_ptr((*g_ptr)->special)) {
         new_floor_id = (*g_ptr)->special;
     }
 
-    if (f_ptr->flags.has_all_of({ FloorFeatureType::STAIRS, FloorFeatureType::SHAFT })) {
+    if (f_ptr->flags.has_all_of({ TerrainCharacteristics::STAIRS, TerrainCharacteristics::SHAFT })) {
         prepare_change_floor_mode(player_ptr, CFM_SHAFT);
     }
 }

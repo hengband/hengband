@@ -1,7 +1,7 @@
 ﻿#include "system/grid-type-definition.h"
-#include "grid/feature.h" // @todo 相互依存している. 後で何とかする.
 #include "monster-race/race-flags7.h"
 #include "system/monster-race-definition.h"
+#include "system/terrain-type-definition.h"
 #include "util/bit-flags-calculator.h"
 
 /*!
@@ -72,7 +72,7 @@ bool grid_type::is_mark() const
 
 bool grid_type::is_mirror() const
 {
-    return this->is_object() && terrains_info[this->mimic].flags.has(FloorFeatureType::MIRROR);
+    return this->is_object() && terrains_info[this->mimic].flags.has(TerrainCharacteristics::MIRROR);
 }
 
 /*
@@ -80,7 +80,7 @@ bool grid_type::is_mirror() const
  */
 bool grid_type::is_rune_protection() const
 {
-    return this->is_object() && terrains_info[this->mimic].flags.has(FloorFeatureType::RUNE_PROTECTION);
+    return this->is_object() && terrains_info[this->mimic].flags.has(TerrainCharacteristics::RUNE_PROTECTION);
 }
 
 /*
@@ -88,7 +88,7 @@ bool grid_type::is_rune_protection() const
  */
 bool grid_type::is_rune_explosion() const
 {
-    return this->is_object() && terrains_info[this->mimic].flags.has(FloorFeatureType::RUNE_EXPLOSION);
+    return this->is_object() && terrains_info[this->mimic].flags.has(TerrainCharacteristics::RUNE_EXPLOSION);
 }
 
 byte grid_type::get_cost(monster_race *r_ptr) const
@@ -116,7 +116,7 @@ FEAT_IDX grid_type::get_feat_mimic() const
     return terrains_info[this->mimic ? this->mimic : this->feat].mimic;
 }
 
-bool grid_type::cave_has_flag(FloorFeatureType feature_flags) const
+bool grid_type::cave_has_flag(TerrainCharacteristics feature_flags) const
 {
     return terrains_info[this->feat].flags.has(feature_flags);
 }

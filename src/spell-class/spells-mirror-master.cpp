@@ -32,6 +32,7 @@
 #include "system/grid-type-definition.h"
 #include "system/monster-type-definition.h"
 #include "system/player-type-definition.h"
+#include "system/terrain-type-definition.h"
 #include "target/grid-selector.h"
 #include "target/projection-path-calculator.h"
 #include "target/target-checker.h"
@@ -501,7 +502,7 @@ void SpellsMirrorMaster::project_super_ray(int target_x, int target_y, int dam)
             }
         }
 
-        if (!cave_has_flag_bold(floor_ptr, ny, nx, FloorFeatureType::PROJECT)) {
+        if (!cave_has_flag_bold(floor_ptr, ny, nx, TerrainCharacteristics::PROJECT)) {
             break;
         }
         oy = ny;

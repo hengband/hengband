@@ -7,7 +7,6 @@
 #include "mutation/mutation-techniques.h"
 #include "cmd-action/cmd-attack.h"
 #include "floor/geometry.h"
-#include "grid/feature.h"
 #include "grid/grid.h"
 #include "monster/monster-info.h"
 #include "player/digestion-processor.h"
@@ -17,6 +16,7 @@
 #include "system/grid-type-definition.h"
 #include "system/monster-type-definition.h"
 #include "system/player-type-definition.h"
+#include "system/terrain-type-definition.h"
 #include "target/target-getter.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
@@ -37,14 +37,14 @@ bool eat_rock(PlayerType *player_ptr)
     POSITION x = player_ptr->x + ddx[dir];
     grid_type *g_ptr;
     g_ptr = &player_ptr->current_floor_ptr->grid_array[y][x];
-    terrain_type *f_ptr, *mimic_f_ptr;
+    TerrainType *f_ptr, *mimic_f_ptr;
     f_ptr = &terrains_info[g_ptr->feat];
     mimic_f_ptr = &terrains_info[g_ptr->get_feat_mimic()];
 
     stop_mouth(player_ptr);
-    if (mimic_f_ptr->flags.has_not(FloorFeatureType::HURT_ROCK)) {
+    if (mimic_f_ptr->flags.has_not(TerrainCharacteristics::HURT_ROCK)) {
         msg_print(_("この地形は食べられない。", "You cannot eat this feature."));
-    } else if (f_ptr->flags.has(FloorFeatureType::PERMANENT)) {
+    } else if (f_ptr->flags.has(TerrainCharacteristics::PERMANENT)) {
         msg_format(_("いてっ！この%sはあなたの歯より硬い！", "Ouch!  This %s is harder than your teeth!"), mimic_f_ptr->name.c_str());
     } else if (g_ptr->m_idx) {
         auto *m_ptr = &player_ptr->current_floor_ptr->m_list[g_ptr->m_idx];
@@ -53,20 +53,20 @@ bool eat_rock(PlayerType *player_ptr)
         if (!m_ptr->ml || !m_ptr->is_pet()) {
             do_cmd_attack(player_ptr, y, x, HISSATSU_NONE);
         }
-    } else if (f_ptr->flags.has(FloorFeatureType::TREE)) {
+    } else if (f_ptr->flags.has(TerrainCharacteristics::TREE)) {
         msg_print(_("木の味は好きじゃない！", "You don't like the woody taste!"));
-    } else if (f_ptr->flags.has(FloorFeatureType::GLASS)) {
+    } else if (f_ptr->flags.has(TerrainCharacteristics::GLASS)) {
         msg_print(_("ガラスの味は好きじゃない！", "You don't like the glassy taste!"));
-    } else if (f_ptr->flags.has(FloorFeatureType::DOOR) || f_ptr->flags.has(FloorFeatureType::CAN_DIG)) {
+    } else if (f_ptr->flags.has(TerrainCharacteristics::DOOR) || f_ptr->flags.has(TerrainCharacteristics::CAN_DIG)) {
         (void)set_food(player_ptr, player_ptr->food + 3000);
-    } else if (f_ptr->flags.has(FloorFeatureType::MAY_HAVE_GOLD) || f_ptr->flags.has(FloorFeatureType::HAS_GOLD)) {
+    } else if (f_ptr->flags.has(TerrainCharacteristics::MAY_HAVE_GOLD) || f_ptr->flags.has(TerrainCharacteristics::HAS_GOLD)) {
         (void)set_food(player_ptr, player_ptr->food + 5000);
     } else {
         msg_format(_("この%sはとてもおいしい！", "This %s is very filling!"), mimic_f_ptr->name.c_str());
         (void)set_food(player_ptr, player_ptr->food + 10000);
     }
 
-    cave_alter_feat(player_ptr, y, x, FloorFeatureType::HURT_ROCK);
+    cave_alter_feat(player_ptr, y, x, TerrainCharacteristics::HURT_ROCK);
     (void)move_player_effect(player_ptr, y, x, MPE_DONT_PICKUP);
     return true;
 }

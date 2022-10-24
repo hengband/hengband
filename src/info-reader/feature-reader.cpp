@@ -8,6 +8,7 @@
 #include "info-reader/parse-error-types.h"
 #include "main/angband-headers.h"
 #include "room/door-definition.h"
+#include "system/terrain-type-definition.h"
 #include "term/gameterm.h"
 #include "util/bit-flags-calculator.h"
 #include "util/string-processor.h"
@@ -18,14 +19,14 @@ static bool feat_tag_is_not_found = false;
 
 /*!
  * @brief テキストトークンを走査してフラグを一つ得る（地形情報向け） /
- * Grab one flag in an terrain_type from a textual string
+ * Grab one flag in an TerrainType from a textual string
  * @param f_ptr 地形情報を保管する先の構造体参照ポインタ
  * @param what 参照元の文字列ポインタ
  * @return 見つけたらtrue
  */
-static bool grab_one_feat_flag(terrain_type *f_ptr, std::string_view what)
+static bool grab_one_feat_flag(TerrainType *f_ptr, std::string_view what)
 {
-    if (EnumClassFlagGroup<FloorFeatureType>::grab_one_flag(f_ptr->flags, f_info_flags, what)) {
+    if (EnumClassFlagGroup<TerrainCharacteristics>::grab_one_flag(f_ptr->flags, f_info_flags, what)) {
         return true;
     }
 
@@ -35,13 +36,13 @@ static bool grab_one_feat_flag(terrain_type *f_ptr, std::string_view what)
 
 /*!
  * @brief テキストトークンを走査してフラグ(ステート)を一つ得る（地形情報向け2） /
- * Grab an action in an terrain_type from a textual string
+ * Grab an action in an TerrainType from a textual string
  * @param f_ptr 地形情報を保管する先の構造体参照ポインタ
  * @param what 参照元の文字列ポインタ
  * @param count ステートの保存先ID
  * @return 見つけたらtrue
  */
-static bool grab_one_feat_action(terrain_type *f_ptr, std::string_view what, int count)
+static bool grab_one_feat_action(TerrainType *f_ptr, std::string_view what, int count)
 {
     if (auto it = f_info_flags.find(what); it != f_info_flags.end()) {
         f_ptr->state[count].action = it->second;
@@ -60,7 +61,7 @@ static bool grab_one_feat_action(terrain_type *f_ptr, std::string_view what, int
  */
 errr parse_terrains_info(std::string_view buf, angband_header *)
 {
-    static terrain_type *f_ptr = nullptr;
+    static TerrainType *f_ptr = nullptr;
     const auto &tokens = str_split(buf, ':', false, 10);
 
     if (tokens[0] == "N") {
@@ -89,7 +90,7 @@ errr parse_terrains_info(std::string_view buf, angband_header *)
         f_ptr->mimic = (FEAT_IDX)i;
         f_ptr->destroyed = (FEAT_IDX)i;
         for (i = 0; i < MAX_FEAT_STATES; i++) {
-            f_ptr->state[i].action = FloorFeatureType::MAX;
+            f_ptr->state[i].action = TerrainCharacteristics::MAX;
         }
 
     } else if (!f_ptr) {
@@ -216,7 +217,7 @@ errr parse_terrains_info(std::string_view buf, angband_header *)
 
         int i = 0;
         for (; i < MAX_FEAT_STATES; i++) {
-            if (f_ptr->state[i].action == FloorFeatureType::MAX) {
+            if (f_ptr->state[i].action == TerrainCharacteristics::MAX) {
                 break;
             }
         }

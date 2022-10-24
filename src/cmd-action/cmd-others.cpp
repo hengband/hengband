@@ -18,7 +18,6 @@
 #include "core/player-redraw-types.h"
 #include "floor/geometry.h"
 #include "game-option/game-play-options.h"
-#include "grid/feature.h"
 #include "grid/grid.h"
 #include "io/input-key-acceptor.h"
 #include "io/input-key-requester.h"
@@ -35,6 +34,7 @@
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
 #include "system/player-type-definition.h"
+#include "system/terrain-type-definition.h"
 #include "target/target-getter.h"
 #include "term/screen-processor.h"
 #include "util/bit-flags-calculator.h"
@@ -72,7 +72,7 @@ static bool exe_alter(PlayerType *player_ptr)
     grid_type *g_ptr;
     g_ptr = &player_ptr->current_floor_ptr->grid_array[y][x];
     FEAT_IDX feat = g_ptr->get_feat_mimic();
-    terrain_type *f_ptr;
+    TerrainType *f_ptr;
     f_ptr = &terrains_info[feat];
     PlayerEnergy(player_ptr).set_player_turn_energy(100);
     if (g_ptr->m_idx) {
@@ -80,23 +80,23 @@ static bool exe_alter(PlayerType *player_ptr)
         return false;
     }
 
-    if (f_ptr->flags.has(FloorFeatureType::OPEN)) {
+    if (f_ptr->flags.has(TerrainCharacteristics::OPEN)) {
         return exe_open(player_ptr, y, x);
     }
 
-    if (f_ptr->flags.has(FloorFeatureType::BASH)) {
+    if (f_ptr->flags.has(TerrainCharacteristics::BASH)) {
         return exe_bash(player_ptr, y, x, dir);
     }
 
-    if (f_ptr->flags.has(FloorFeatureType::TUNNEL)) {
+    if (f_ptr->flags.has(TerrainCharacteristics::TUNNEL)) {
         return exe_tunnel(player_ptr, y, x);
     }
 
-    if (f_ptr->flags.has(FloorFeatureType::CLOSE)) {
+    if (f_ptr->flags.has(TerrainCharacteristics::CLOSE)) {
         return exe_close(player_ptr, y, x);
     }
 
-    if (f_ptr->flags.has(FloorFeatureType::DISARM)) {
+    if (f_ptr->flags.has(TerrainCharacteristics::DISARM)) {
         return exe_disarm(player_ptr, y, x, dir);
     }
 

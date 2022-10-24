@@ -21,6 +21,7 @@
 #include "system/grid-type-definition.h"
 #include "system/monster-type-definition.h"
 #include "system/player-type-definition.h"
+#include "system/terrain-type-definition.h"
 #include "target/projection-path-calculator.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
@@ -38,8 +39,8 @@ void call_the_void(PlayerType *player_ptr)
     for (int i = 0; i < 9; i++) {
         auto *g_ptr = &floor_ptr->grid_array[player_ptr->y + ddy_ddd[i]][player_ptr->x + ddx_ddd[i]];
 
-        if (!g_ptr->cave_has_flag(FloorFeatureType::PROJECT)) {
-            if (!g_ptr->mimic || terrains_info[g_ptr->mimic].flags.has_not(FloorFeatureType::PROJECT) || !permanent_wall(&terrains_info[g_ptr->feat])) {
+        if (!g_ptr->cave_has_flag(TerrainCharacteristics::PROJECT)) {
+            if (!g_ptr->mimic || terrains_info[g_ptr->mimic].flags.has_not(TerrainCharacteristics::PROJECT) || !permanent_wall(&terrains_info[g_ptr->feat])) {
                 do_call = false;
                 break;
             }
@@ -131,8 +132,8 @@ bool vanish_dungeon(PlayerType *player_ptr)
                 }
             }
 
-            if (f_ptr->flags.has(FloorFeatureType::HURT_DISI)) {
-                cave_alter_feat(player_ptr, y, x, FloorFeatureType::HURT_DISI);
+            if (f_ptr->flags.has(TerrainCharacteristics::HURT_DISI)) {
+                cave_alter_feat(player_ptr, y, x, TerrainCharacteristics::HURT_DISI);
             }
         }
     }
@@ -142,9 +143,9 @@ bool vanish_dungeon(PlayerType *player_ptr)
         auto *f_ptr = &terrains_info[g_ptr->mimic];
         g_ptr->info &= ~(CAVE_ROOM | CAVE_ICKY);
 
-        if (g_ptr->mimic && f_ptr->flags.has(FloorFeatureType::HURT_DISI)) {
-            g_ptr->mimic = feat_state(floor_ptr, g_ptr->mimic, FloorFeatureType::HURT_DISI);
-            if (terrains_info[g_ptr->mimic].flags.has_not(FloorFeatureType::REMEMBER)) {
+        if (g_ptr->mimic && f_ptr->flags.has(TerrainCharacteristics::HURT_DISI)) {
+            g_ptr->mimic = feat_state(floor_ptr, g_ptr->mimic, TerrainCharacteristics::HURT_DISI);
+            if (terrains_info[g_ptr->mimic].flags.has_not(TerrainCharacteristics::REMEMBER)) {
                 g_ptr->info &= ~(CAVE_MARK);
             }
         }
@@ -153,9 +154,9 @@ bool vanish_dungeon(PlayerType *player_ptr)
         f_ptr = &terrains_info[g_ptr->mimic];
         g_ptr->info &= ~(CAVE_ROOM | CAVE_ICKY);
 
-        if (g_ptr->mimic && f_ptr->flags.has(FloorFeatureType::HURT_DISI)) {
-            g_ptr->mimic = feat_state(floor_ptr, g_ptr->mimic, FloorFeatureType::HURT_DISI);
-            if (terrains_info[g_ptr->mimic].flags.has_not(FloorFeatureType::REMEMBER)) {
+        if (g_ptr->mimic && f_ptr->flags.has(TerrainCharacteristics::HURT_DISI)) {
+            g_ptr->mimic = feat_state(floor_ptr, g_ptr->mimic, TerrainCharacteristics::HURT_DISI);
+            if (terrains_info[g_ptr->mimic].flags.has_not(TerrainCharacteristics::REMEMBER)) {
                 g_ptr->info &= ~(CAVE_MARK);
             }
         }
@@ -167,9 +168,9 @@ bool vanish_dungeon(PlayerType *player_ptr)
         auto *f_ptr = &terrains_info[g_ptr->mimic];
         g_ptr->info &= ~(CAVE_ROOM | CAVE_ICKY);
 
-        if (g_ptr->mimic && f_ptr->flags.has(FloorFeatureType::HURT_DISI)) {
-            g_ptr->mimic = feat_state(floor_ptr, g_ptr->mimic, FloorFeatureType::HURT_DISI);
-            if (terrains_info[g_ptr->mimic].flags.has_not(FloorFeatureType::REMEMBER)) {
+        if (g_ptr->mimic && f_ptr->flags.has(TerrainCharacteristics::HURT_DISI)) {
+            g_ptr->mimic = feat_state(floor_ptr, g_ptr->mimic, TerrainCharacteristics::HURT_DISI);
+            if (terrains_info[g_ptr->mimic].flags.has_not(TerrainCharacteristics::REMEMBER)) {
                 g_ptr->info &= ~(CAVE_MARK);
             }
         }
@@ -178,9 +179,9 @@ bool vanish_dungeon(PlayerType *player_ptr)
         f_ptr = &terrains_info[g_ptr->mimic];
         g_ptr->info &= ~(CAVE_ROOM | CAVE_ICKY);
 
-        if (g_ptr->mimic && f_ptr->flags.has(FloorFeatureType::HURT_DISI)) {
-            g_ptr->mimic = feat_state(floor_ptr, g_ptr->mimic, FloorFeatureType::HURT_DISI);
-            if (terrains_info[g_ptr->mimic].flags.has_not(FloorFeatureType::REMEMBER)) {
+        if (g_ptr->mimic && f_ptr->flags.has(TerrainCharacteristics::HURT_DISI)) {
+            g_ptr->mimic = feat_state(floor_ptr, g_ptr->mimic, TerrainCharacteristics::HURT_DISI);
+            if (terrains_info[g_ptr->mimic].flags.has_not(TerrainCharacteristics::REMEMBER)) {
                 g_ptr->info &= ~(CAVE_MARK);
             }
         }
@@ -221,7 +222,7 @@ void cast_meteor(PlayerType *player_ptr, int dam, POSITION rad)
             }
 
             auto *floor_ptr = player_ptr->current_floor_ptr;
-            if (!in_bounds(floor_ptr, y, x) || !projectable(player_ptr, player_ptr->y, player_ptr->x, y, x) || !cave_has_flag_bold(floor_ptr, y, x, FloorFeatureType::PROJECT)) {
+            if (!in_bounds(floor_ptr, y, x) || !projectable(player_ptr, player_ptr->y, player_ptr->x, y, x) || !cave_has_flag_bold(floor_ptr, y, x, TerrainCharacteristics::PROJECT)) {
                 continue;
             }
 

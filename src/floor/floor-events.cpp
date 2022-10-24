@@ -13,7 +13,6 @@
 #include "game-option/disturbance-options.h"
 #include "game-option/map-screen-options.h"
 #include "grid/feature-flag-types.h"
-#include "grid/feature.h"
 #include "grid/grid.h"
 #include "main/sound-of-music.h"
 #include "mind/mind-ninja.h"
@@ -40,6 +39,7 @@
 #include "system/monster-type-definition.h"
 #include "system/object-type-definition.h"
 #include "system/player-type-definition.h"
+#include "system/terrain-type-definition.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 #include "world/world.h"
@@ -79,12 +79,12 @@ void night_falls(PlayerType *player_ptr)
             for (POSITION x = 0; x < floor_ptr->width; x++) {
                 auto *g_ptr = &floor_ptr->grid_array[y][x];
                 auto *f_ptr = &terrains_info[g_ptr->get_feat_mimic()];
-                if (g_ptr->is_mirror() || f_ptr->flags.has(FloorFeatureType::QUEST_ENTER) || f_ptr->flags.has(FloorFeatureType::ENTRANCE)) {
+                if (g_ptr->is_mirror() || f_ptr->flags.has(TerrainCharacteristics::QUEST_ENTER) || f_ptr->flags.has(TerrainCharacteristics::ENTRANCE)) {
                     continue;
                 }
 
                 g_ptr->info &= ~(CAVE_GLOW);
-                if (f_ptr->flags.has_not(FloorFeatureType::REMEMBER)) {
+                if (f_ptr->flags.has_not(TerrainCharacteristics::REMEMBER)) {
                     g_ptr->info &= ~(CAVE_MARK);
                     note_spot(player_ptr, y, x);
                 }
@@ -322,7 +322,7 @@ void glow_deep_lava_and_bldg(PlayerType *player_ptr)
         for (POSITION x = 0; x < floor_ptr->width; x++) {
             grid_type *g_ptr;
             g_ptr = &floor_ptr->grid_array[y][x];
-            if (terrains_info[g_ptr->get_feat_mimic()].flags.has_not(FloorFeatureType::GLOW)) {
+            if (terrains_info[g_ptr->get_feat_mimic()].flags.has_not(TerrainCharacteristics::GLOW)) {
                 continue;
             }
 

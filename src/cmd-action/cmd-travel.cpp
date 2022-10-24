@@ -3,13 +3,13 @@
 #include "core/asking-player.h"
 #include "floor/cave.h"
 #include "floor/geometry.h"
-#include "grid/feature.h"
 #include "grid/grid.h"
 #include "player/player-move.h"
 #include "player/player-status-flags.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
 #include "system/player-type-definition.h"
+#include "system/terrain-type-definition.h"
 #include "target/grid-selector.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
@@ -28,15 +28,15 @@ static int travel_flow_cost(PlayerType *player_ptr, POSITION y, POSITION x)
     int cost = 1;
     auto *g_ptr = &player_ptr->current_floor_ptr->grid_array[y][x];
     auto *f_ptr = &terrains_info[g_ptr->feat];
-    if (f_ptr->flags.has(FloorFeatureType::AVOID_RUN)) {
+    if (f_ptr->flags.has(TerrainCharacteristics::AVOID_RUN)) {
         cost += 1;
     }
 
-    if (f_ptr->flags.has_all_of({ FloorFeatureType::WATER, FloorFeatureType::DEEP }) && !player_ptr->levitation) {
+    if (f_ptr->flags.has_all_of({ TerrainCharacteristics::WATER, TerrainCharacteristics::DEEP }) && !player_ptr->levitation) {
         cost += 5;
     }
 
-    if (f_ptr->flags.has(FloorFeatureType::LAVA)) {
+    if (f_ptr->flags.has(TerrainCharacteristics::LAVA)) {
         int lava = 2;
         if (!has_resist_fire(player_ptr)) {
             lava *= 2;
@@ -46,7 +46,7 @@ static int travel_flow_cost(PlayerType *player_ptr, POSITION y, POSITION x)
             lava *= 2;
         }
 
-        if (f_ptr->flags.has(FloorFeatureType::DEEP)) {
+        if (f_ptr->flags.has(TerrainCharacteristics::DEEP)) {
             lava *= 2;
         }
 
@@ -54,11 +54,11 @@ static int travel_flow_cost(PlayerType *player_ptr, POSITION y, POSITION x)
     }
 
     if (g_ptr->is_mark()) {
-        if (f_ptr->flags.has(FloorFeatureType::DOOR)) {
+        if (f_ptr->flags.has(TerrainCharacteristics::DOOR)) {
             cost += 1;
         }
 
-        if (f_ptr->flags.has(FloorFeatureType::TRAP)) {
+        if (f_ptr->flags.has(TerrainCharacteristics::TRAP)) {
             cost += 10;
         }
     }
@@ -89,7 +89,7 @@ static void travel_flow_aux(PlayerType *player_ptr, POSITION y, POSITION x, int 
 
     int add_cost = 1;
     int from_wall = (n / TRAVEL_UNABLE);
-    if (f_ptr->flags.has(FloorFeatureType::WALL) || f_ptr->flags.has(FloorFeatureType::CAN_DIG) || (f_ptr->flags.has(FloorFeatureType::DOOR) && floor_ptr->grid_array[y][x].mimic) || (f_ptr->flags.has_not(FloorFeatureType::MOVE) && f_ptr->flags.has(FloorFeatureType::CAN_FLY) && !player_ptr->levitation)) {
+    if (f_ptr->flags.has(TerrainCharacteristics::WALL) || f_ptr->flags.has(TerrainCharacteristics::CAN_DIG) || (f_ptr->flags.has(TerrainCharacteristics::DOOR) && floor_ptr->grid_array[y][x].mimic) || (f_ptr->flags.has_not(TerrainCharacteristics::MOVE) && f_ptr->flags.has(TerrainCharacteristics::CAN_FLY) && !player_ptr->levitation)) {
         if (!wall || !from_wall) {
             return;
         }
@@ -129,7 +129,7 @@ static void travel_flow(PlayerType *player_ptr, POSITION ty, POSITION tx)
     flow_head = flow_tail = 0;
     bool wall = false;
     auto *f_ptr = &terrains_info[player_ptr->current_floor_ptr->grid_array[player_ptr->y][player_ptr->x].feat];
-    if (f_ptr->flags.has_not(FloorFeatureType::MOVE)) {
+    if (f_ptr->flags.has_not(TerrainCharacteristics::MOVE)) {
         wall = true;
     }
 
@@ -169,9 +169,9 @@ void do_cmd_travel(PlayerType *player_ptr)
     }
 
     auto *floor_ptr = player_ptr->current_floor_ptr;
-    terrain_type *f_ptr;
+    TerrainType *f_ptr;
     f_ptr = &terrains_info[floor_ptr->grid_array[y][x].feat];
-    if ((floor_ptr->grid_array[y][x].info & CAVE_MARK) && (f_ptr->flags.has(FloorFeatureType::WALL) || f_ptr->flags.has(FloorFeatureType::CAN_DIG) || (f_ptr->flags.has(FloorFeatureType::DOOR) && floor_ptr->grid_array[y][x].mimic))) {
+    if ((floor_ptr->grid_array[y][x].info & CAVE_MARK) && (f_ptr->flags.has(TerrainCharacteristics::WALL) || f_ptr->flags.has(TerrainCharacteristics::CAN_DIG) || (f_ptr->flags.has(TerrainCharacteristics::DOOR) && floor_ptr->grid_array[y][x].mimic))) {
         msg_print(_("そこには行くことができません！", "You cannot travel there!"));
         return;
     }

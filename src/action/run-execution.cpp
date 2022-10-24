@@ -10,7 +10,6 @@
 #include "floor/floor-util.h"
 #include "floor/geometry.h"
 #include "game-option/disturbance-options.h"
-#include "grid/feature.h"
 #include "grid/grid.h"
 #include "main/sound-definitions-table.h"
 #include "main/sound-of-music.h"
@@ -23,6 +22,7 @@
 #include "system/monster-type-definition.h"
 #include "system/object-type-definition.h"
 #include "system/player-type-definition.h"
+#include "system/terrain-type-definition.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 
@@ -73,15 +73,15 @@ static bool see_wall(PlayerType *player_ptr, DIRECTION dir, POSITION y, POSITION
     int16_t feat = g_ptr->get_feat_mimic();
     auto *f_ptr = &terrains_info[feat];
     if (!player_can_enter(player_ptr, feat, 0)) {
-        return f_ptr->flags.has_not(FloorFeatureType::DOOR);
+        return f_ptr->flags.has_not(TerrainCharacteristics::DOOR);
     }
 
-    if (f_ptr->flags.has(FloorFeatureType::AVOID_RUN) && !ignore_avoid_run) {
+    if (f_ptr->flags.has(TerrainCharacteristics::AVOID_RUN) && !ignore_avoid_run) {
         return true;
     }
 
-    if (f_ptr->flags.has_none_of({ FloorFeatureType::MOVE, FloorFeatureType::CAN_FLY })) {
-        return f_ptr->flags.has_not(FloorFeatureType::DOOR);
+    if (f_ptr->flags.has_none_of({ TerrainCharacteristics::MOVE, TerrainCharacteristics::CAN_FLY })) {
+        return f_ptr->flags.has_not(TerrainCharacteristics::DOOR);
     }
 
     return false;
@@ -118,7 +118,7 @@ static void run_init(PlayerType *player_ptr, DIRECTION dir)
     player_ptr->run_px = player_ptr->x;
     int row = player_ptr->y + ddy[dir];
     int col = player_ptr->x + ddx[dir];
-    ignore_avoid_run = cave_has_flag_bold(player_ptr->current_floor_ptr, row, col, FloorFeatureType::AVOID_RUN);
+    ignore_avoid_run = cave_has_flag_bold(player_ptr->current_floor_ptr, row, col, TerrainCharacteristics::AVOID_RUN);
     int i = chome[dir];
     if (see_wall(player_ptr, cycle[i + 1], player_ptr->y, player_ptr->x)) {
         find_breakleft = true;
@@ -228,7 +228,7 @@ static bool run_test(PlayerType *player_ptr)
         grid_type *g_ptr;
         g_ptr = &floor_ptr->grid_array[row][col];
         FEAT_IDX feat = g_ptr->get_feat_mimic();
-        terrain_type *f_ptr;
+        TerrainType *f_ptr;
         f_ptr = &terrains_info[feat];
         if (g_ptr->m_idx) {
             auto *m_ptr = &floor_ptr->m_list[g_ptr->m_idx];
@@ -247,15 +247,15 @@ static bool run_test(PlayerType *player_ptr)
 
         bool inv = true;
         if (g_ptr->is_mark()) {
-            bool notice = f_ptr->flags.has(FloorFeatureType::NOTICE);
-            if (notice && f_ptr->flags.has(FloorFeatureType::MOVE)) {
-                if (find_ignore_doors && f_ptr->flags.has_all_of({ FloorFeatureType::DOOR, FloorFeatureType::CLOSE })) {
+            bool notice = f_ptr->flags.has(TerrainCharacteristics::NOTICE);
+            if (notice && f_ptr->flags.has(TerrainCharacteristics::MOVE)) {
+                if (find_ignore_doors && f_ptr->flags.has_all_of({ TerrainCharacteristics::DOOR, TerrainCharacteristics::CLOSE })) {
                     notice = false;
-                } else if (find_ignore_stairs && f_ptr->flags.has(FloorFeatureType::STAIRS)) {
+                } else if (find_ignore_stairs && f_ptr->flags.has(TerrainCharacteristics::STAIRS)) {
                     notice = false;
-                } else if (f_ptr->flags.has(FloorFeatureType::LAVA) && (has_immune_fire(player_ptr) || is_invuln(player_ptr))) {
+                } else if (f_ptr->flags.has(TerrainCharacteristics::LAVA) && (has_immune_fire(player_ptr) || is_invuln(player_ptr))) {
                     notice = false;
-                } else if (f_ptr->flags.has_all_of({ FloorFeatureType::WATER, FloorFeatureType::DEEP }) && (player_ptr->levitation || player_ptr->can_swim || (calc_inventory_weight(player_ptr) <= calc_weight_limit(player_ptr)))) {
+                } else if (f_ptr->flags.has_all_of({ TerrainCharacteristics::WATER, TerrainCharacteristics::DEEP }) && (player_ptr->levitation || player_ptr->can_swim || (calc_inventory_weight(player_ptr) <= calc_weight_limit(player_ptr)))) {
                     notice = false;
                 }
             }

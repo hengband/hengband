@@ -9,7 +9,6 @@
 #include "floor/cave.h"
 #include "floor/geometry.h"
 #include "floor/line-of-sight.h"
-#include "grid/feature.h"
 #include "monster-race/monster-race.h"
 #include "monster-race/race-ability-mask.h"
 #include "monster-race/race-flags2.h"
@@ -25,6 +24,7 @@
 #include "system/monster-race-definition.h"
 #include "system/monster-type-definition.h"
 #include "system/player-type-definition.h"
+#include "system/terrain-type-definition.h"
 #include "target/projection-path-calculator.h"
 #include "util/bit-flags-calculator.h"
 
@@ -38,7 +38,7 @@
  * @param path_check 射線を判定するための関数ポインタ
  * @return 有効な座標があった場合TRUEを返す
  */
-bool adjacent_grid_check(PlayerType *player_ptr, monster_type *m_ptr, POSITION *yp, POSITION *xp, FloorFeatureType f_flag, path_check_pf path_check)
+bool adjacent_grid_check(PlayerType *player_ptr, monster_type *m_ptr, POSITION *yp, POSITION *xp, TerrainCharacteristics f_flag, path_check_pf path_check)
 {
     static int tonari_y[4][8] = { { -1, -1, -1, 0, 0, 1, 1, 1 }, { -1, -1, -1, 0, 0, 1, 1, 1 }, { 1, 1, 1, 0, 0, -1, -1, -1 }, { 1, 1, 1, 0, 0, -1, -1, -1 } };
     static int tonari_x[4][8] = { { -1, 0, 1, -1, 1, -1, 0, 1 }, { 1, 0, -1, 1, -1, 1, 0, -1 }, { -1, 0, 1, -1, 1, -1, 0, 1 }, { 1, 0, -1, 1, -1, 1, 0, -1 } };
@@ -83,10 +83,10 @@ void decide_lite_range(PlayerType *player_ptr, msa_type *msa_ptr)
     msa_ptr->x_br_lite = msa_ptr->x;
     if (los(player_ptr, msa_ptr->m_ptr->fy, msa_ptr->m_ptr->fx, msa_ptr->y_br_lite, msa_ptr->x_br_lite)) {
         auto *f_ptr = &terrains_info[player_ptr->current_floor_ptr->grid_array[msa_ptr->y_br_lite][msa_ptr->x_br_lite].feat];
-        if (f_ptr->flags.has_not(FloorFeatureType::LOS) && f_ptr->flags.has(FloorFeatureType::PROJECT) && one_in_(2)) {
+        if (f_ptr->flags.has_not(TerrainCharacteristics::LOS) && f_ptr->flags.has(TerrainCharacteristics::PROJECT) && one_in_(2)) {
             msa_ptr->ability_flags.reset(MonsterAbilityType::BR_LITE);
         }
-    } else if (!adjacent_grid_check(player_ptr, msa_ptr->m_ptr, &msa_ptr->y_br_lite, &msa_ptr->x_br_lite, FloorFeatureType::LOS, los)) {
+    } else if (!adjacent_grid_check(player_ptr, msa_ptr->m_ptr, &msa_ptr->y_br_lite, &msa_ptr->x_br_lite, TerrainCharacteristics::LOS, los)) {
         msa_ptr->ability_flags.reset(MonsterAbilityType::BR_LITE);
     }
 
@@ -101,16 +101,16 @@ void decide_lite_range(PlayerType *player_ptr, msa_type *msa_ptr)
 static void feature_projection(floor_type *floor_ptr, msa_type *msa_ptr)
 {
     auto *f_ptr = &terrains_info[floor_ptr->grid_array[msa_ptr->y][msa_ptr->x].feat];
-    if (f_ptr->flags.has(FloorFeatureType::PROJECT)) {
+    if (f_ptr->flags.has(TerrainCharacteristics::PROJECT)) {
         return;
     }
 
-    if (msa_ptr->ability_flags.has(MonsterAbilityType::BR_DISI) && f_ptr->flags.has(FloorFeatureType::HURT_DISI) && one_in_(2)) {
+    if (msa_ptr->ability_flags.has(MonsterAbilityType::BR_DISI) && f_ptr->flags.has(TerrainCharacteristics::HURT_DISI) && one_in_(2)) {
         msa_ptr->do_spell = DO_SPELL_BR_DISI;
         return;
     }
 
-    if (msa_ptr->ability_flags.has(MonsterAbilityType::BR_LITE) && f_ptr->flags.has(FloorFeatureType::LOS) && one_in_(2)) {
+    if (msa_ptr->ability_flags.has(MonsterAbilityType::BR_LITE) && f_ptr->flags.has(TerrainCharacteristics::LOS) && one_in_(2)) {
         msa_ptr->do_spell = DO_SPELL_BR_LITE;
     }
 }
@@ -179,7 +179,7 @@ bool decide_lite_projection(PlayerType *player_ptr, msa_type *msa_ptr)
     msa_ptr->success = false;
     check_lite_area_by_mspell(player_ptr, msa_ptr);
     if (!msa_ptr->success) {
-        msa_ptr->success = adjacent_grid_check(player_ptr, msa_ptr->m_ptr, &msa_ptr->y, &msa_ptr->x, FloorFeatureType::PROJECT, projectable);
+        msa_ptr->success = adjacent_grid_check(player_ptr, msa_ptr->m_ptr, &msa_ptr->y, &msa_ptr->x, TerrainCharacteristics::PROJECT, projectable);
     }
 
     decide_lite_breath(player_ptr, msa_ptr);

@@ -7,7 +7,6 @@
 #include "floor/cave.h"
 #include "floor/floor-object.h"
 #include "floor/geometry.h"
-#include "grid/feature.h"
 #include "grid/grid.h"
 #include "inventory/inventory-object.h"
 #include "io/command-repeater.h"
@@ -22,6 +21,7 @@
 #include "system/grid-type-definition.h"
 #include "system/object-type-definition.h"
 #include "system/player-type-definition.h"
+#include "system/terrain-type-definition.h"
 #include "target/target-getter.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
@@ -112,12 +112,12 @@ bool create_ammo(PlayerType *player_ptr)
         POSITION y = player_ptr->y + ddy[dir];
         POSITION x = player_ptr->x + ddx[dir];
         auto *g_ptr = &player_ptr->current_floor_ptr->grid_array[y][x];
-        if (terrains_info[g_ptr->get_feat_mimic()].flags.has_not(FloorFeatureType::CAN_DIG)) {
+        if (terrains_info[g_ptr->get_feat_mimic()].flags.has_not(TerrainCharacteristics::CAN_DIG)) {
             msg_print(_("そこには岩石がない。", "You need a pile of rubble."));
             return false;
         }
 
-        if (!g_ptr->cave_has_flag(FloorFeatureType::CAN_DIG) || !g_ptr->cave_has_flag(FloorFeatureType::HURT_ROCK)) {
+        if (!g_ptr->cave_has_flag(TerrainCharacteristics::CAN_DIG) || !g_ptr->cave_has_flag(TerrainCharacteristics::HURT_ROCK)) {
             msg_print(_("硬すぎて崩せなかった。", "You failed to make ammo."));
             return true;
         }
@@ -138,7 +138,7 @@ bool create_ammo(PlayerType *player_ptr)
             autopick_alter_item(player_ptr, slot, false);
         }
 
-        cave_alter_feat(player_ptr, y, x, FloorFeatureType::HURT_ROCK);
+        cave_alter_feat(player_ptr, y, x, TerrainCharacteristics::HURT_ROCK);
         player_ptr->update |= PU_FLOW;
         return true;
     }

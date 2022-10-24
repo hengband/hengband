@@ -17,6 +17,7 @@
 #include "system/grid-type-definition.h"
 #include "system/monster-race-definition.h"
 #include "system/player-type-definition.h"
+#include "system/terrain-type-definition.h"
 #include "util/bit-flags-calculator.h"
 #include "wizard/wizard-messages.h"
 
@@ -82,7 +83,7 @@ bool alloc_stairs(PlayerType *player_ptr, FEAT_IDX feat, int num, int walls)
     int shaft_num = 0;
     auto *f_ptr = &terrains_info[feat];
     auto *floor_ptr = player_ptr->current_floor_ptr;
-    if (f_ptr->flags.has(FloorFeatureType::LESS)) {
+    if (f_ptr->flags.has(TerrainCharacteristics::LESS)) {
         if (ironman_downward || !floor_ptr->dun_level) {
             return true;
         }
@@ -90,7 +91,7 @@ bool alloc_stairs(PlayerType *player_ptr, FEAT_IDX feat, int num, int walls)
         if (floor_ptr->dun_level > dungeons_info[floor_ptr->dungeon_idx].mindepth) {
             shaft_num = (randint1(num + 1)) / 2;
         }
-    } else if (f_ptr->flags.has(FloorFeatureType::MORE)) {
+    } else if (f_ptr->flags.has(TerrainCharacteristics::MORE)) {
         auto q_idx = quest_number(player_ptr, floor_ptr->dun_level);
         const auto &quest_list = QuestList::get_instance();
         if (floor_ptr->dun_level > 1 && inside_quest(q_idx)) {
@@ -153,7 +154,7 @@ bool alloc_stairs(PlayerType *player_ptr, FEAT_IDX feat, int num, int walls)
 
             g_ptr = &floor_ptr->grid_array[y][x];
             g_ptr->mimic = 0;
-            g_ptr->feat = (i < shaft_num) ? feat_state(player_ptr->current_floor_ptr, feat, FloorFeatureType::SHAFT) : feat;
+            g_ptr->feat = (i < shaft_num) ? feat_state(player_ptr->current_floor_ptr, feat, TerrainCharacteristics::SHAFT) : feat;
             g_ptr->info &= ~(CAVE_FLOOR);
             break;
         }

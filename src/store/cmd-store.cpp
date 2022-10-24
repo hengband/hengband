@@ -11,7 +11,6 @@
 #include "floor/wild.h"
 #include "game-option/birth-options.h"
 #include "game-option/input-options.h"
-#include "grid/feature.h"
 #include "inventory/inventory-object.h"
 #include "inventory/inventory-slot-types.h"
 #include "io/input-key-requester.h"
@@ -29,6 +28,7 @@
 #include "system/grid-type-definition.h"
 #include "system/object-type-definition.h"
 #include "system/player-type-definition.h"
+#include "system/terrain-type-definition.h"
 #include "term/screen-processor.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
@@ -64,7 +64,7 @@ void do_cmd_store(PlayerType *player_ptr)
 
     auto *floor_ptr = player_ptr->current_floor_ptr;
     const auto *g_ptr = &floor_ptr->grid_array[player_ptr->y][player_ptr->x];
-    if (!g_ptr->cave_has_flag(FloorFeatureType::STORE)) {
+    if (!g_ptr->cave_has_flag(TerrainCharacteristics::STORE)) {
         msg_print(_("ここには店がありません。", "You see no store here."));
         return;
     }

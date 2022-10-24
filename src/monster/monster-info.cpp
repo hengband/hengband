@@ -12,7 +12,6 @@
 #include "monster/monster-info.h"
 #include "floor/cave.h"
 #include "floor/wild.h"
-#include "grid/feature.h"
 #include "monster-race/monster-race.h"
 #include "monster-race/race-flags-resistance.h"
 #include "monster-race/race-flags1.h"
@@ -32,6 +31,7 @@
 #include "system/monster-race-definition.h"
 #include "system/monster-type-definition.h"
 #include "system/player-type-definition.h"
+#include "system/terrain-type-definition.h"
 #include "timed-effect/player-hallucination.h"
 #include "timed-effect/timed-effects.h"
 #include "util/bit-flags-calculator.h"
@@ -59,7 +59,7 @@ bool monster_can_cross_terrain(PlayerType *player_ptr, FEAT_IDX feat, monster_ra
 {
     auto *f_ptr = &terrains_info[feat];
 
-    if (f_ptr->flags.has(FloorFeatureType::PATTERN)) {
+    if (f_ptr->flags.has(TerrainCharacteristics::PATTERN)) {
         if (!(mode & CEM_RIDING)) {
             if (r_ptr->feature_flags.has_not(MonsterFeatureType::CAN_FLY)) {
                 return false;
@@ -71,29 +71,29 @@ bool monster_can_cross_terrain(PlayerType *player_ptr, FEAT_IDX feat, monster_ra
         }
     }
 
-    if (f_ptr->flags.has(FloorFeatureType::CAN_FLY) && r_ptr->feature_flags.has(MonsterFeatureType::CAN_FLY)) {
+    if (f_ptr->flags.has(TerrainCharacteristics::CAN_FLY) && r_ptr->feature_flags.has(MonsterFeatureType::CAN_FLY)) {
         return true;
     }
-    if (f_ptr->flags.has(FloorFeatureType::CAN_SWIM) && r_ptr->feature_flags.has(MonsterFeatureType::CAN_SWIM)) {
+    if (f_ptr->flags.has(TerrainCharacteristics::CAN_SWIM) && r_ptr->feature_flags.has(MonsterFeatureType::CAN_SWIM)) {
         return true;
     }
-    if (f_ptr->flags.has(FloorFeatureType::CAN_PASS)) {
+    if (f_ptr->flags.has(TerrainCharacteristics::CAN_PASS)) {
         if (r_ptr->feature_flags.has(MonsterFeatureType::PASS_WALL) && (!(mode & CEM_RIDING) || has_pass_wall(player_ptr))) {
             return true;
         }
     }
 
-    if (f_ptr->flags.has_not(FloorFeatureType::MOVE)) {
+    if (f_ptr->flags.has_not(TerrainCharacteristics::MOVE)) {
         return false;
     }
 
-    if (f_ptr->flags.has(FloorFeatureType::MOUNTAIN) && (r_ptr->wilderness_flags.has(MonsterWildernessType::WILD_MOUNTAIN))) {
+    if (f_ptr->flags.has(TerrainCharacteristics::MOUNTAIN) && (r_ptr->wilderness_flags.has(MonsterWildernessType::WILD_MOUNTAIN))) {
         return true;
     }
 
-    if (f_ptr->flags.has(FloorFeatureType::WATER)) {
+    if (f_ptr->flags.has(TerrainCharacteristics::WATER)) {
         if (r_ptr->feature_flags.has_not(MonsterFeatureType::AQUATIC)) {
-            if (f_ptr->flags.has(FloorFeatureType::DEEP)) {
+            if (f_ptr->flags.has(TerrainCharacteristics::DEEP)) {
                 return false;
             } else if (r_ptr->aura_flags.has(MonsterAuraType::FIRE)) {
                 return false;
@@ -103,31 +103,31 @@ bool monster_can_cross_terrain(PlayerType *player_ptr, FEAT_IDX feat, monster_ra
         return false;
     }
 
-    if (f_ptr->flags.has(FloorFeatureType::LAVA)) {
+    if (f_ptr->flags.has(TerrainCharacteristics::LAVA)) {
         if (r_ptr->resistance_flags.has_none_of(RFR_EFF_IM_FIRE_MASK)) {
             return false;
         }
     }
 
-    if (f_ptr->flags.has(FloorFeatureType::COLD_PUDDLE)) {
+    if (f_ptr->flags.has(TerrainCharacteristics::COLD_PUDDLE)) {
         if (r_ptr->resistance_flags.has_none_of(RFR_EFF_IM_COLD_MASK)) {
             return false;
         }
     }
 
-    if (f_ptr->flags.has(FloorFeatureType::ELEC_PUDDLE)) {
+    if (f_ptr->flags.has(TerrainCharacteristics::ELEC_PUDDLE)) {
         if (r_ptr->resistance_flags.has_none_of(RFR_EFF_IM_ELEC_MASK)) {
             return false;
         }
     }
 
-    if (f_ptr->flags.has(FloorFeatureType::ACID_PUDDLE)) {
+    if (f_ptr->flags.has(TerrainCharacteristics::ACID_PUDDLE)) {
         if (r_ptr->resistance_flags.has_none_of(RFR_EFF_IM_ACID_MASK)) {
             return false;
         }
     }
 
-    if (f_ptr->flags.has(FloorFeatureType::POISON_PUDDLE)) {
+    if (f_ptr->flags.has(TerrainCharacteristics::POISON_PUDDLE)) {
         if (r_ptr->resistance_flags.has_none_of(RFR_EFF_IM_POISON_MASK)) {
             return false;
         }

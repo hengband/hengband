@@ -9,6 +9,7 @@
 #include "system/grid-type-definition.h"
 #include "system/object-type-definition.h"
 #include "system/player-type-definition.h"
+#include "system/terrain-type-definition.h"
 
 /*!
  * @brief 所定の位置に上り階段か下り階段を配置する / Place an up/down staircase at given location
@@ -70,7 +71,7 @@ void place_random_stairs(PlayerType *player_ptr, POSITION y, POSITION x)
 bool cave_valid_bold(floor_type *floor_ptr, POSITION y, POSITION x)
 {
     auto *g_ptr = &floor_ptr->grid_array[y][x];
-    if (g_ptr->cave_has_flag(FloorFeatureType::PERMANENT)) {
+    if (g_ptr->cave_has_flag(TerrainCharacteristics::PERMANENT)) {
         return false;
     }
 

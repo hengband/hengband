@@ -1,11 +1,11 @@
 ﻿#include "core/visuals-reseter.h"
 #include "game-option/special-options.h"
-#include "grid/feature.h"
 #include "io/read-pref-file.h"
 #include "monster-race/monster-race.h"
 #include "system/baseitem-info-definition.h"
 #include "system/monster-race-definition.h"
 #include "system/player-type-definition.h"
+#include "system/terrain-type-definition.h"
 
 /*!
  * @brief オブジェクト、地形の表示シンボルなど初期化する / Reset the "visual" lists

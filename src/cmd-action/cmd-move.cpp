@@ -18,7 +18,6 @@
 #include "game-option/map-screen-options.h"
 #include "game-option/play-record-options.h"
 #include "game-option/special-options.h"
-#include "grid/feature.h"
 #include "info-reader/fixed-map-parser.h"
 #include "io/input-key-requester.h"
 #include "io/write-diary.h"
@@ -39,6 +38,7 @@
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
 #include "system/player-type-definition.h"
+#include "system/terrain-type-definition.h"
 #include "target/target-getter.h"
 #include "timed-effect/player-cut.h"
 #include "timed-effect/player-stun.h"
@@ -83,13 +83,13 @@ void do_cmd_go_up(PlayerType *player_ptr)
     int up_num = 0;
     PlayerClass(player_ptr).break_samurai_stance({ SamuraiStanceType::MUSOU });
 
-    if (f_ptr->flags.has_not(FloorFeatureType::LESS)) {
+    if (f_ptr->flags.has_not(TerrainCharacteristics::LESS)) {
         msg_print(_("ここには上り階段が見当たらない。", "I see no up staircase here."));
         return;
     }
 
     const auto &floor_ptr = player_ptr->current_floor_ptr;
-    if (f_ptr->flags.has(FloorFeatureType::QUEST)) {
+    if (f_ptr->flags.has(TerrainCharacteristics::QUEST)) {
         if (!confirm_leave_level(player_ptr, false)) {
             return;
         }
@@ -157,7 +157,7 @@ void do_cmd_go_up(PlayerType *player_ptr)
         player_ptr->current_floor_ptr->dun_level = 0;
         up_num = 0;
     } else {
-        if (f_ptr->flags.has(FloorFeatureType::SHAFT)) {
+        if (f_ptr->flags.has(TerrainCharacteristics::SHAFT)) {
             prepare_change_floor_mode(player_ptr, CFM_SAVE_FLOORS | CFM_UP | CFM_SHAFT);
             up_num = 2;
         } else {
@@ -207,21 +207,21 @@ void do_cmd_go_down(PlayerType *player_ptr)
     auto *floor_ptr = player_ptr->current_floor_ptr;
     auto *g_ptr = &floor_ptr->grid_array[player_ptr->y][player_ptr->x];
     auto *f_ptr = &terrains_info[g_ptr->feat];
-    if (f_ptr->flags.has_not(FloorFeatureType::MORE)) {
+    if (f_ptr->flags.has_not(TerrainCharacteristics::MORE)) {
         msg_print(_("ここには下り階段が見当たらない。", "I see no down staircase here."));
         return;
     }
 
-    if (f_ptr->flags.has(FloorFeatureType::TRAP)) {
+    if (f_ptr->flags.has(TerrainCharacteristics::TRAP)) {
         fall_trap = true;
     }
 
-    if (f_ptr->flags.has(FloorFeatureType::QUEST_ENTER)) {
+    if (f_ptr->flags.has(TerrainCharacteristics::QUEST_ENTER)) {
         do_cmd_quest(player_ptr);
         return;
     }
 
-    if (f_ptr->flags.has(FloorFeatureType::QUEST)) {
+    if (f_ptr->flags.has(TerrainCharacteristics::QUEST)) {
         auto &quest_list = QuestList::get_instance();
         if (!confirm_leave_level(player_ptr, true)) {
             return;
@@ -263,7 +263,7 @@ void do_cmd_go_down(PlayerType *player_ptr)
 
     DUNGEON_IDX target_dungeon = 0;
     if (!floor_ptr->is_in_dungeon()) {
-        target_dungeon = f_ptr->flags.has(FloorFeatureType::ENTRANCE) ? g_ptr->special : DUNGEON_ANGBAND;
+        target_dungeon = f_ptr->flags.has(TerrainCharacteristics::ENTRANCE) ? g_ptr->special : DUNGEON_ANGBAND;
         if (ironman_downward && (target_dungeon != DUNGEON_ANGBAND)) {
             msg_print(_("ダンジョンの入口は塞がれている！", "The entrance of this dungeon is closed!"));
             return;
@@ -289,7 +289,7 @@ void do_cmd_go_down(PlayerType *player_ptr)
         do_cmd_save_game(player_ptr, true);
     }
 
-    if (f_ptr->flags.has(FloorFeatureType::SHAFT)) {
+    if (f_ptr->flags.has(TerrainCharacteristics::SHAFT)) {
         down_num += 2;
     } else {
         down_num += 1;
@@ -331,7 +331,7 @@ void do_cmd_go_down(PlayerType *player_ptr)
         return;
     }
 
-    if (f_ptr->flags.has(FloorFeatureType::SHAFT)) {
+    if (f_ptr->flags.has(TerrainCharacteristics::SHAFT)) {
         prepare_change_floor_mode(player_ptr, CFM_SAVE_FLOORS | CFM_DOWN | CFM_SHAFT);
     } else {
         prepare_change_floor_mode(player_ptr, CFM_SAVE_FLOORS | CFM_DOWN);
@@ -374,7 +374,7 @@ void do_cmd_walk(PlayerType *player_ptr, bool pickup)
         more = true;
     }
 
-    if (player_ptr->wild_mode && !cave_has_flag_bold(player_ptr->current_floor_ptr, player_ptr->y, player_ptr->x, FloorFeatureType::TOWN)) {
+    if (player_ptr->wild_mode && !cave_has_flag_bold(player_ptr->current_floor_ptr, player_ptr->y, player_ptr->x, TerrainCharacteristics::TOWN)) {
         int tmp = 120 + player_ptr->lev * 10 - wilderness[player_ptr->y][player_ptr->x].level + 5;
         if (tmp < 1) {
             tmp = 1;

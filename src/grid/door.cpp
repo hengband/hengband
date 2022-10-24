@@ -8,6 +8,7 @@
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
 #include "system/player-type-definition.h"
+#include "system/terrain-type-definition.h"
 #include "util/bit-flags-calculator.h"
 
 /*
@@ -79,7 +80,7 @@ void place_secret_door(PlayerType *player_ptr, POSITION y, POSITION x, int type)
     if (type != DOOR_CURTAIN) {
         g_ptr->mimic = feat_wall_inner;
         if (feat_supports_los(g_ptr->mimic) && !feat_supports_los(g_ptr->feat)) {
-            if (terrains_info[g_ptr->mimic].flags.has(FloorFeatureType::MOVE) || terrains_info[g_ptr->mimic].flags.has(FloorFeatureType::CAN_FLY)) {
+            if (terrains_info[g_ptr->mimic].flags.has(TerrainCharacteristics::MOVE) || terrains_info[g_ptr->mimic].flags.has(TerrainCharacteristics::CAN_FLY)) {
                 g_ptr->feat = one_in_(2) ? g_ptr->mimic : feat_ground_type[randint0(100)];
             }
 
@@ -144,7 +145,7 @@ void place_random_door(PlayerType *player_ptr, POSITION y, POSITION x, bool room
         if (type != DOOR_CURTAIN) {
             g_ptr->mimic = room ? feat_wall_outer : feat_wall_type[randint0(100)];
             if (feat_supports_los(g_ptr->mimic) && !feat_supports_los(g_ptr->feat)) {
-                if (terrains_info[g_ptr->mimic].flags.has(FloorFeatureType::MOVE) || terrains_info[g_ptr->mimic].flags.has(FloorFeatureType::CAN_FLY)) {
+                if (terrains_info[g_ptr->mimic].flags.has(TerrainCharacteristics::MOVE) || terrains_info[g_ptr->mimic].flags.has(TerrainCharacteristics::CAN_FLY)) {
                     g_ptr->feat = one_in_(2) ? g_ptr->mimic : feat_ground_type[randint0(100)];
                 }
                 g_ptr->mimic = 0;

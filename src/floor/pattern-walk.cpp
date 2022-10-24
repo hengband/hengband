@@ -23,6 +23,7 @@
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
 #include "system/player-type-definition.h"
+#include "system/terrain-type-definition.h"
 #include "timed-effect/player-confusion.h"
 #include "timed-effect/player-cut.h"
 #include "timed-effect/player-hallucination.h"
@@ -179,10 +180,10 @@ bool pattern_effect(PlayerType *player_ptr)
  */
 bool pattern_seq(PlayerType *player_ptr, POSITION c_y, POSITION c_x, POSITION n_y, POSITION n_x)
 {
-    terrain_type *cur_f_ptr = &terrains_info[player_ptr->current_floor_ptr->grid_array[c_y][c_x].feat];
-    terrain_type *new_f_ptr = &terrains_info[player_ptr->current_floor_ptr->grid_array[n_y][n_x].feat];
-    bool is_pattern_tile_cur = cur_f_ptr->flags.has(FloorFeatureType::PATTERN);
-    bool is_pattern_tile_new = new_f_ptr->flags.has(FloorFeatureType::PATTERN);
+    TerrainType *cur_f_ptr = &terrains_info[player_ptr->current_floor_ptr->grid_array[c_y][c_x].feat];
+    TerrainType *new_f_ptr = &terrains_info[player_ptr->current_floor_ptr->grid_array[n_y][n_x].feat];
+    bool is_pattern_tile_cur = cur_f_ptr->flags.has(TerrainCharacteristics::PATTERN);
+    bool is_pattern_tile_new = new_f_ptr->flags.has(TerrainCharacteristics::PATTERN);
     if (!is_pattern_tile_cur && !is_pattern_tile_new) {
         return true;
     }

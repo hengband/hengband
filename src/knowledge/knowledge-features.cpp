@@ -7,6 +7,7 @@
 #include "knowledge/knowledge-features.h"
 #include "core/show-file.h"
 #include "game-option/special-options.h"
+#include "grid/feature.h"
 #include "io-dump/dump-util.h"
 #include "io/input-key-acceptor.h"
 #include "knowledge/lighting-level-table.h"
@@ -14,6 +15,7 @@
 #include "system/dungeon-info.h"
 #include "system/monster-race-definition.h"
 #include "system/player-type-definition.h"
+#include "system/terrain-type-definition.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
 #include "util/angband-files.h"
@@ -159,7 +161,7 @@ void do_cmd_knowledge_features(bool *need_redraw, bool visual_only, IDX direct_f
     char *cur_char_ptr;
     while (!flag) {
         char ch;
-        terrain_type *f_ptr;
+        TerrainType *f_ptr;
 
         if (redraw) {
             clear_from(0);

@@ -10,7 +10,6 @@
 #include "game-option/cheat-options.h"
 #include "game-option/special-options.h"
 #include "game-option/text-display-options.h"
-#include "grid/feature.h"
 #include "hpmp/hp-mp-processor.h"
 #include "hpmp/hp-mp-regenerator.h"
 #include "inventory/inventory-curse.h"
@@ -35,6 +34,7 @@
 #include "system/grid-type-definition.h"
 #include "system/monster-type-definition.h"
 #include "system/player-type-definition.h"
+#include "system/terrain-type-definition.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
 #include "util/bit-flags-calculator.h"
@@ -282,7 +282,7 @@ void WorldTurnProcessor::shuffle_shopkeeper()
     } while (true);
 
     for (const auto &f_ref : terrains_info) {
-        if (f_ref.name.empty() || f_ref.flags.has_not(FloorFeatureType::STORE)) {
+        if (f_ref.name.empty() || f_ref.flags.has_not(TerrainCharacteristics::STORE)) {
             continue;
         }
 

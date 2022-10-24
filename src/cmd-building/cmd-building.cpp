@@ -28,7 +28,6 @@
 #include "floor/floor-events.h"
 #include "floor/floor-mode-changer.h"
 #include "floor/wild.h"
-#include "grid/feature.h"
 #include "io/input-key-acceptor.h"
 #include "io/input-key-requester.h"
 #include "main/music-definitions-table.h"
@@ -63,6 +62,7 @@
 #include "system/grid-type-definition.h"
 #include "system/object-type-definition.h"
 #include "system/player-type-definition.h"
+#include "system/terrain-type-definition.h"
 #include "term/screen-processor.h"
 #include "util/bit-flags-calculator.h"
 #include "util/int-char-converter.h"
@@ -309,7 +309,7 @@ void do_cmd_building(PlayerType *player_ptr)
     PlayerEnergy energy(player_ptr);
     energy.set_player_turn_energy(100);
 
-    if (!cave_has_flag_bold(player_ptr->current_floor_ptr, player_ptr->y, player_ptr->x, FloorFeatureType::BLDG)) {
+    if (!cave_has_flag_bold(player_ptr->current_floor_ptr, player_ptr->y, player_ptr->x, TerrainCharacteristics::BLDG)) {
         msg_print(_("ここには建物はない。", "You see no building here."));
         return;
     }

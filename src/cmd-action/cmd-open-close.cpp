@@ -25,6 +25,7 @@
 #include "system/grid-type-definition.h"
 #include "system/object-type-definition.h"
 #include "system/player-type-definition.h"
+#include "system/terrain-type-definition.h"
 #include "target/target-getter.h"
 #include "term/screen-processor.h"
 #include "timed-effect/player-blindness.h"
@@ -133,7 +134,7 @@ void do_cmd_open(PlayerType *player_ptr)
         g_ptr = &player_ptr->current_floor_ptr->grid_array[y][x];
         feat = g_ptr->get_feat_mimic();
         o_idx = chest_check(player_ptr->current_floor_ptr, y, x, false);
-        if (terrains_info[feat].flags.has_not(FloorFeatureType::OPEN) && !o_idx) {
+        if (terrains_info[feat].flags.has_not(TerrainCharacteristics::OPEN) && !o_idx) {
             msg_print(_("そこには開けるものが見当たらない。", "You see nothing there to open."));
         } else if (g_ptr->m_idx && player_ptr->riding != g_ptr->m_idx) {
             PlayerEnergy(player_ptr).set_player_turn_energy(100);
@@ -185,7 +186,7 @@ void do_cmd_close(PlayerType *player_ptr)
         x = player_ptr->x + ddx[dir];
         g_ptr = &player_ptr->current_floor_ptr->grid_array[y][x];
         feat = g_ptr->get_feat_mimic();
-        if (terrains_info[feat].flags.has_not(FloorFeatureType::CLOSE)) {
+        if (terrains_info[feat].flags.has_not(TerrainCharacteristics::CLOSE)) {
             msg_print(_("そこには閉じるものが見当たらない。", "You see nothing there to close."));
         } else if (g_ptr->m_idx) {
             PlayerEnergy(player_ptr).set_player_turn_energy(100);
@@ -300,7 +301,7 @@ void do_cmd_bash(PlayerType *player_ptr)
         x = player_ptr->x + ddx[dir];
         g_ptr = &player_ptr->current_floor_ptr->grid_array[y][x];
         feat = g_ptr->get_feat_mimic();
-        if (terrains_info[feat].flags.has_not(FloorFeatureType::BASH)) {
+        if (terrains_info[feat].flags.has_not(TerrainCharacteristics::BASH)) {
             msg_print(_("そこには体当たりするものが見当たらない。", "You see nothing there to bash."));
         } else if (g_ptr->m_idx) {
             PlayerEnergy(player_ptr).set_player_turn_energy(100);
@@ -371,7 +372,7 @@ void do_cmd_spike(PlayerType *player_ptr)
     g_ptr = &player_ptr->current_floor_ptr->grid_array[y][x];
     FEAT_IDX feat = g_ptr->get_feat_mimic();
     INVENTORY_IDX item;
-    if (terrains_info[feat].flags.has_not(FloorFeatureType::SPIKE)) {
+    if (terrains_info[feat].flags.has_not(TerrainCharacteristics::SPIKE)) {
         msg_print(_("そこにはくさびを打てるものが見当たらない。", "You see nothing there to spike."));
     } else if (!get_spike(player_ptr, &item)) {
         msg_print(_("くさびを持っていない！", "You have no spikes!"));
@@ -382,7 +383,7 @@ void do_cmd_spike(PlayerType *player_ptr)
     } else {
         PlayerEnergy(player_ptr).set_player_turn_energy(100);
         msg_format(_("%sにくさびを打ち込んだ。", "You jam the %s with a spike."), terrains_info[feat].name.c_str());
-        cave_alter_feat(player_ptr, y, x, FloorFeatureType::SPIKE);
+        cave_alter_feat(player_ptr, y, x, TerrainCharacteristics::SPIKE);
         vary_item(player_ptr, item, -1);
     }
 }

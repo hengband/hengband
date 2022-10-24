@@ -87,6 +87,7 @@
 #include "system/monster-type-definition.h"
 #include "system/object-type-definition.h"
 #include "system/player-type-definition.h"
+#include "system/terrain-type-definition.h"
 #include "target/grid-selector.h"
 #include "term/screen-processor.h"
 #include "util/angband-files.h"
@@ -519,12 +520,12 @@ void wiz_create_feature(PlayerType *player_ptr)
 
     cave_set_feat(player_ptr, y, x, static_cast<FEAT_IDX>(f_val1));
     g_ptr->mimic = (int16_t)f_val2;
-    terrain_type *f_ptr;
+    TerrainType *f_ptr;
     f_ptr = &terrains_info[g_ptr->get_feat_mimic()];
 
-    if (f_ptr->flags.has(FloorFeatureType::RUNE_PROTECTION) || f_ptr->flags.has(FloorFeatureType::RUNE_EXPLOSION)) {
+    if (f_ptr->flags.has(TerrainCharacteristics::RUNE_PROTECTION) || f_ptr->flags.has(TerrainCharacteristics::RUNE_EXPLOSION)) {
         g_ptr->info |= CAVE_OBJECT;
-    } else if (f_ptr->flags.has(FloorFeatureType::MIRROR)) {
+    } else if (f_ptr->flags.has(TerrainCharacteristics::MIRROR)) {
         g_ptr->info |= CAVE_GLOW | CAVE_OBJECT;
     }
 

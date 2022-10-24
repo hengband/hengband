@@ -10,9 +10,9 @@
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
 #include "system/player-type-definition.h"
+#include "system/terrain-type-definition.h"
 #include "util/bit-flags-calculator.h"
 #include "wizard/wizard-messages.h"
-
 #include <algorithm>
 
 /*
@@ -146,8 +146,8 @@ static void build_stores(PlayerType *player_ptr, POSITION ltcy, POSITION ltcx, S
         }
 
         if (auto it = std::find_if(terrains_info.begin(), terrains_info.end(),
-                [subtype = stores[i]](const terrain_type &f_ref) {
-                    return f_ref.flags.has(FloorFeatureType::STORE) && (i2enum<StoreSaleType>(static_cast<int>(f_ref.subtype)) == subtype);
+                [subtype = stores[i]](const TerrainType &f_ref) {
+                    return f_ref.flags.has(TerrainCharacteristics::STORE) && (i2enum<StoreSaleType>(static_cast<int>(f_ref.subtype)) == subtype);
                 });
             it != terrains_info.end()) {
             cave_set_feat(player_ptr, ltcy + y, ltcx + x, (*it).idx);

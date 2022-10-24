@@ -27,6 +27,7 @@
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
 #include "system/player-type-definition.h"
+#include "system/terrain-type-definition.h"
 #include "util/bit-flags-calculator.h"
 #include "wizard/wizard-messages.h"
 
@@ -91,7 +92,7 @@ static void place_cave_contents(PlayerType *player_ptr, dun_data_type *dd_ptr, d
         destroy_level(player_ptr);
     }
 
-    if (has_river_flag(d_ptr) && one_in_(3) && (randint1(floor_ptr->dun_level) > 5)) {
+    if (d_ptr->has_river_flag() && one_in_(3) && (randint1(floor_ptr->dun_level) > 5)) {
         add_river(floor_ptr, dd_ptr);
     }
 
@@ -129,12 +130,12 @@ static void make_tunnels(PlayerType *player_ptr, dun_data_type *dd_ptr)
 {
     for (int j = 0; j < dd_ptr->tunn_n; j++) {
         grid_type *g_ptr;
-        terrain_type *f_ptr;
+        TerrainType *f_ptr;
         dd_ptr->tunnel_y = dd_ptr->tunn[j].y;
         dd_ptr->tunnel_x = dd_ptr->tunn[j].x;
         g_ptr = &player_ptr->current_floor_ptr->grid_array[dd_ptr->tunnel_y][dd_ptr->tunnel_x];
         f_ptr = &terrains_info[g_ptr->feat];
-        if (f_ptr->flags.has_not(FloorFeatureType::MOVE) || f_ptr->flags.has_none_of({ FloorFeatureType::WATER, FloorFeatureType::LAVA })) {
+        if (f_ptr->flags.has_not(TerrainCharacteristics::MOVE) || f_ptr->flags.has_none_of({ TerrainCharacteristics::WATER, TerrainCharacteristics::LAVA })) {
             g_ptr->mimic = 0;
             place_grid(player_ptr, g_ptr, GB_FLOOR);
         }
@@ -289,8 +290,8 @@ static void place_bound_perm_wall(PlayerType *player_ptr, grid_type *g_ptr)
     }
 
     auto *f_ptr = &terrains_info[g_ptr->feat];
-    if (f_ptr->flags.has_any_of({ FloorFeatureType::HAS_GOLD, FloorFeatureType::HAS_ITEM }) && f_ptr->flags.has_not(FloorFeatureType::SECRET)) {
-        g_ptr->feat = feat_state(player_ptr->current_floor_ptr, g_ptr->feat, FloorFeatureType::ENSECRET);
+    if (f_ptr->flags.has_any_of({ TerrainCharacteristics::HAS_GOLD, TerrainCharacteristics::HAS_ITEM }) && f_ptr->flags.has_not(TerrainCharacteristics::SECRET)) {
+        g_ptr->feat = feat_state(player_ptr->current_floor_ptr, g_ptr->feat, TerrainCharacteristics::ENSECRET);
     }
 
     g_ptr->mimic = g_ptr->feat;
