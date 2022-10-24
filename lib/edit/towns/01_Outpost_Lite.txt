@@ -1,4 +1,4 @@
-# File: t_lite.txt
+# File: 01_Outpost_Lite.txt
 
 # Town
 
