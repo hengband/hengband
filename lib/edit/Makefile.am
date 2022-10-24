@@ -16,10 +16,10 @@ angband_files = \
 	q0thief1.txt q0thief2.txt q0willow.txt q_oberon.txt \
 	q_pref.txt q_random.txt q_serpen.txt q_warg.txt \
 	qdarkelf.txt qhaunted.txt \
-	t0000005.txt t0000006.txt \
+	t0000006.txt \
 	towns/01_Outpost_Full.txt towns/01_Outpost_Lite.txt \
 	towns/01_Outpost_OnlyAngband.txt towns/02_Telmora.txt \
-	towns/03_Morivant.txt towns/04_Angwil.txt
+	towns/03_Morivant.txt towns/04_Angwil.txt towns/05_Zul.txt
 
 EXTRA_DIST = \
   $(angband_files)

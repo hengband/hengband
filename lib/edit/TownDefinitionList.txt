@@ -28,7 +28,7 @@
 
 # Town 5
 ?:[EQU $TOWN 5]
-%:t0000005.txt
+%:towns/05_Zul.txt
 
 # Town 6
 ?:[EQU $TOWN 6]
