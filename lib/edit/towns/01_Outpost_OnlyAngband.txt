@@ -1,4 +1,4 @@
-# File: t_lite.txt
+# File: 01_Outpost_OnlyAngband.txt
 
 # *Basic* town (vanilla style)
 

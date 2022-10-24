@@ -11,7 +11,7 @@
 ?:[AND [EQU $TOWN 1] [EQU $WILDERNESS NORMAL] ]
 %:towns/01_Outpost_Full.txt
 ?:[AND [EQU $TOWN 1] [EQU $WILDERNESS NONE] ]
-%:t_basic.txt
+%:towns/01_Outpost_OnlyAngband.txt
 ?:1
 
 # Town 2
