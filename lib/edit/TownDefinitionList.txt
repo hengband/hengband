@@ -24,7 +24,7 @@
 
 # Town 4
 ?:[EQU $TOWN 4]
-%:t0000004.txt
+%:towns/04_Angwil.txt
 
 # Town 5
 ?:[EQU $TOWN 5]
