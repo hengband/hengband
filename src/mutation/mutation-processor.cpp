@@ -137,7 +137,7 @@ void process_world_aux_mutation(PlayerType *player_ptr)
         msg_print(_("ウガァァア！", "RAAAAGHH!"));
         msg_print(_("激怒の発作に襲われた！", "You feel a fit of rage coming over you!"));
         (void)set_shero(player_ptr, 10 + randint1(player_ptr->lev), false);
-        (void)bss.fear(0);
+        (void)bss.set_fear(0);
     }
 
     if (player_ptr->muta.has(PlayerMutationType::COWARDICE) && (randint1(3000) == 13)) {

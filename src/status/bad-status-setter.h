@@ -22,17 +22,17 @@ public:
     bool mod_confusion(const TIME_EFFECT tmp_v);
     bool set_poison(const TIME_EFFECT tmp_v);
     bool mod_poison(const TIME_EFFECT tmp_v);
-    bool fear(const TIME_EFFECT tmp_v);
+    bool set_fear(const TIME_EFFECT tmp_v);
     bool mod_fear(const TIME_EFFECT tmp_v);
-    bool paralysis(const TIME_EFFECT tmp_v);
+    bool set_paralysis(const TIME_EFFECT tmp_v);
     bool mod_paralysis(const TIME_EFFECT tmp_v);
     bool hallucination(const TIME_EFFECT tmp_v);
     bool mod_hallucination(const TIME_EFFECT tmp_v);
     bool set_deceleration(const TIME_EFFECT tmp_v, bool do_dec);
     bool mod_deceleration(const TIME_EFFECT tmp_v, bool do_dec);
-    bool stun(const TIME_EFFECT tmp_v);
+    bool set_stun(const TIME_EFFECT tmp_v);
     bool mod_stun(const TIME_EFFECT tmp_v);
-    bool cut(const TIME_EFFECT tmp_v);
+    bool set_cut(const TIME_EFFECT tmp_v);
     bool mod_cut(const TIME_EFFECT tmp_v);
 
 private:

@@ -302,7 +302,7 @@ concptr do_music_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessType
             msg_print(_("激しい戦いの歌を歌った．．．", "You start singing a song of intense fighting..."));
 
             (void)hp_player(player_ptr, 10);
-            (void)BadStatusSetter(player_ptr).fear(0);
+            (void)BadStatusSetter(player_ptr).set_fear(0);
             player_ptr->update |= PU_HP;
             start_singing(player_ptr, spell, MUSIC_HERO);
         }
@@ -959,7 +959,7 @@ concptr do_music_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessType
         if (cast) {
             msg_print(_("英雄の歌を口ずさんだ．．．", "You chant a powerful, heroic call to arms..."));
             (void)hp_player(player_ptr, 10);
-            (void)BadStatusSetter(player_ptr).fear(0);
+            (void)BadStatusSetter(player_ptr).set_fear(0);
             player_ptr->update |= PU_HP;
             start_singing(player_ptr, spell, MUSIC_SHERO);
         }
@@ -1014,8 +1014,8 @@ concptr do_music_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessType
         if (cont) {
             hp_player(player_ptr, damroll(dice, sides));
             BadStatusSetter bss(player_ptr);
-            (void)bss.stun(0);
-            (void)bss.cut(0);
+            (void)bss.set_stun(0);
+            (void)bss.set_cut(0);
         }
 
         break;

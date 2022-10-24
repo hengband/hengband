@@ -674,7 +674,7 @@ concptr do_hissatsu_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessT
             POSITION y = 0, x = 0;
             auto current_cut = player_ptr->effects()->cut()->current();
             short new_cut = current_cut < 300 ? current_cut + 300 : current_cut * 2;
-            (void)BadStatusSetter(player_ptr).cut(new_cut);
+            (void)BadStatusSetter(player_ptr).set_cut(new_cut);
             for (dir = 0; dir < 8; dir++) {
                 y = player_ptr->y + ddy_ddd[dir];
                 x = player_ptr->x + ddx_ddd[dir];

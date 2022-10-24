@@ -118,7 +118,7 @@ void wiz_cure_all(PlayerType *player_ptr)
     (void)restore_mana(player_ptr, true);
     (void)set_food(player_ptr, PY_FOOD_MAX - 1);
     BadStatusSetter bss(player_ptr);
-    (void)bss.fear(0);
+    (void)bss.set_fear(0);
     (void)bss.set_deceleration(0, false);
     msg_print("You're fully cured by wizard command.");
 }

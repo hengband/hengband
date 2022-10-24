@@ -91,7 +91,7 @@ void process_paralyze_attack(PlayerType *player_ptr, MonsterAttackPlayer *monap_
     }
 
     auto is_paralyzed = player_ptr->effects()->paralysis()->is_paralyzed();
-    if (!is_paralyzed && BadStatusSetter(player_ptr).paralysis(3 + randint1(monap_ptr->rlev))) {
+    if (!is_paralyzed && BadStatusSetter(player_ptr).set_paralysis(3 + randint1(monap_ptr->rlev))) {
         monap_ptr->obvious = true;
     }
 }

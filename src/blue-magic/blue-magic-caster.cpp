@@ -331,8 +331,8 @@ static bool switch_cast_blue_magic(PlayerType *player_ptr, bmc_type *bmc_ptr, Mo
         msg_print(_("自分の傷に念を集中した。", "You concentrate on your wounds!"));
         (void)hp_player(player_ptr, bmc_ptr->plev * 4);
         BadStatusSetter bss(player_ptr);
-        (void)bss.stun(0);
-        (void)bss.cut(0);
+        (void)bss.set_stun(0);
+        (void)bss.set_cut(0);
         return true;
     }
     case MonsterAbilityType::INVULNER:
