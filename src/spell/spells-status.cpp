@@ -296,7 +296,7 @@ bool life_stream(PlayerType *player_ptr, bool message, bool virtue_change)
     (void)bss.hallucination(0);
     (void)bss.stun(0);
     (void)bss.cut(0);
-    (void)bss.paralysis(0);
+    (void)bss.set_paralysis(0);
     (void)restore_all_status(player_ptr);
     (void)set_shero(player_ptr, 0, true);
     handle_stuff(player_ptr);
