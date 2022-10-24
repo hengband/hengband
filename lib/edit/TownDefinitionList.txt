@@ -9,7 +9,7 @@
 ?:[AND [EQU $TOWN 1] [EQU $WILDERNESS LITE] ]
 %:towns/01_Outpost_Lite.txt
 ?:[AND [EQU $TOWN 1] [EQU $WILDERNESS NORMAL] ]
-%:t0000001.txt
+%:towns/01_Outpost_Full.txt
 ?:[AND [EQU $TOWN 1] [EQU $WILDERNESS NONE] ]
 %:t_basic.txt
 ?:1
