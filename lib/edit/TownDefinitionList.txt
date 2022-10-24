@@ -3,7 +3,7 @@
 # Includes the town definitions
 
 # Preferences for the town features
-%:t_pref.txt
+%:TownPreferences.txt
 
 # Town 1
 ?:[AND [EQU $TOWN 1] [EQU $WILDERNESS LITE] ]

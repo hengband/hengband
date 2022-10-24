@@ -1,4 +1,4 @@
-# File: t_pref.txt
+# File: TownPreferences.txt
 
 # Defines the preferences for the town features
 
