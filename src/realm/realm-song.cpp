@@ -1015,7 +1015,7 @@ concptr do_music_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessType
             hp_player(player_ptr, damroll(dice, sides));
             BadStatusSetter bss(player_ptr);
             (void)bss.set_stun(0);
-            (void)bss.cut(0);
+            (void)bss.set_cut(0);
         }
 
         break;

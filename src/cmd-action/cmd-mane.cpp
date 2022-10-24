@@ -912,7 +912,7 @@ static bool use_mane(PlayerType *player_ptr, MonsterAbilityType spell)
         (void)hp_player(player_ptr, plev * 6);
         BadStatusSetter bss(player_ptr);
         (void)bss.set_stun(0);
-        (void)bss.cut(0);
+        (void)bss.set_cut(0);
         break;
     }
     case MonsterAbilityType::INVULNER:

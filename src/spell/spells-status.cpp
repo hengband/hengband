@@ -295,7 +295,7 @@ bool life_stream(PlayerType *player_ptr, bool message, bool virtue_change)
     (void)bss.set_confusion(0);
     (void)bss.hallucination(0);
     (void)bss.set_stun(0);
-    (void)bss.cut(0);
+    (void)bss.set_cut(0);
     (void)bss.set_paralysis(0);
     (void)restore_all_status(player_ptr);
     (void)set_shero(player_ptr, 0, true);
@@ -380,7 +380,7 @@ bool cure_serious_wounds(PlayerType *player_ptr, DICE_NUMBER dice, DICE_SID side
         ident = true;
     }
 
-    if (bss.cut((player_ptr->effects()->cut()->current() / 2) - 50)) {
+    if (bss.set_cut((player_ptr->effects()->cut()->current() / 2) - 50)) {
         ident = true;
     }
 
@@ -415,7 +415,7 @@ bool cure_critical_wounds(PlayerType *player_ptr, int pow)
         ident = true;
     }
 
-    if (bss.cut(0)) {
+    if (bss.set_cut(0)) {
         ident = true;
     }
 
@@ -450,7 +450,7 @@ bool true_healing(PlayerType *player_ptr, int pow)
         ident = true;
     }
 
-    if (bss.cut(0)) {
+    if (bss.set_cut(0)) {
         ident = true;
     }
 

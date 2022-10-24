@@ -485,7 +485,7 @@ bool BadStatusSetter::mod_stun(const TIME_EFFECT tmp_v)
  * @details
  * Note the special code to only notice "range" changes.
  */
-bool BadStatusSetter::cut(const TIME_EFFECT tmp_v)
+bool BadStatusSetter::set_cut(const TIME_EFFECT tmp_v)
 {
     auto v = std::clamp<short>(tmp_v, 0, 10000);
     if (this->player_ptr->is_dead) {
@@ -514,7 +514,7 @@ bool BadStatusSetter::cut(const TIME_EFFECT tmp_v)
 
 bool BadStatusSetter::mod_cut(const TIME_EFFECT tmp_v)
 {
-    return this->cut(this->player_ptr->effects()->cut()->current() + tmp_v);
+    return this->set_cut(this->player_ptr->effects()->cut()->current() + tmp_v);
 }
 
 bool BadStatusSetter::process_stun_effect(const short v)

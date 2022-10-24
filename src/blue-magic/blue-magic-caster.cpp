@@ -332,7 +332,7 @@ static bool switch_cast_blue_magic(PlayerType *player_ptr, bmc_type *bmc_ptr, Mo
         (void)hp_player(player_ptr, bmc_ptr->plev * 4);
         BadStatusSetter bss(player_ptr);
         (void)bss.set_stun(0);
-        (void)bss.cut(0);
+        (void)bss.set_cut(0);
         return true;
     }
     case MonsterAbilityType::INVULNER:
