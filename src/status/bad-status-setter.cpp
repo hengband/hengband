@@ -446,7 +446,7 @@ bool BadStatusSetter::mod_deceleration(const TIME_EFFECT tmp_v, bool do_dec)
  * @details
  * Note the special code to only notice "range" changes.
  */
-bool BadStatusSetter::stun(const TIME_EFFECT tmp_v)
+bool BadStatusSetter::set_stun(const TIME_EFFECT tmp_v)
 {
     auto v = std::clamp<short>(tmp_v, 0, 10000);
     if (this->player_ptr->is_dead) {
@@ -475,7 +475,7 @@ bool BadStatusSetter::stun(const TIME_EFFECT tmp_v)
 
 bool BadStatusSetter::mod_stun(const TIME_EFFECT tmp_v)
 {
-    return this->stun(this->player_ptr->effects()->stun()->current() + tmp_v);
+    return this->set_stun(this->player_ptr->effects()->stun()->current() + tmp_v);
 }
 
 /*!

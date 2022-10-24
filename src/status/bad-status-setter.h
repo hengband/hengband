@@ -30,7 +30,7 @@ public:
     bool mod_hallucination(const TIME_EFFECT tmp_v);
     bool set_deceleration(const TIME_EFFECT tmp_v, bool do_dec);
     bool mod_deceleration(const TIME_EFFECT tmp_v, bool do_dec);
-    bool stun(const TIME_EFFECT tmp_v);
+    bool set_stun(const TIME_EFFECT tmp_v);
     bool mod_stun(const TIME_EFFECT tmp_v);
     bool cut(const TIME_EFFECT tmp_v);
     bool mod_cut(const TIME_EFFECT tmp_v);

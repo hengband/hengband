@@ -294,7 +294,7 @@ bool life_stream(PlayerType *player_ptr, bool message, bool virtue_change)
     (void)bss.set_blindness(0);
     (void)bss.set_confusion(0);
     (void)bss.hallucination(0);
-    (void)bss.stun(0);
+    (void)bss.set_stun(0);
     (void)bss.cut(0);
     (void)bss.set_paralysis(0);
     (void)restore_all_status(player_ptr);
@@ -411,7 +411,7 @@ bool cure_critical_wounds(PlayerType *player_ptr, int pow)
         ident = true;
     }
 
-    if (bss.stun(0)) {
+    if (bss.set_stun(0)) {
         ident = true;
     }
 
@@ -446,7 +446,7 @@ bool true_healing(PlayerType *player_ptr, int pow)
         ident = true;
     }
 
-    if (bss.stun(0)) {
+    if (bss.set_stun(0)) {
         ident = true;
     }
 

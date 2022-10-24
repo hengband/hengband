@@ -199,7 +199,7 @@ concptr do_crusade_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessTy
             BadStatusSetter bss(player_ptr);
             (void)bss.cut(0);
             (void)bss.set_poison(0);
-            (void)bss.stun(0);
+            (void)bss.set_stun(0);
         }
 
         break;
@@ -386,7 +386,7 @@ concptr do_crusade_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessTy
             hp_player(player_ptr, heal);
             (void)bss.set_fear(0);
             (void)bss.set_poison(0);
-            (void)bss.stun(0);
+            (void)bss.set_stun(0);
             (void)bss.cut(0);
         }
 
