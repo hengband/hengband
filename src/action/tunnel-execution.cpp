@@ -79,6 +79,7 @@ bool exe_tunnel(PlayerType *player_ptr, POSITION y, POSITION x)
         }
     } else if (f_ptr->flags.has(TerrainCharacteristics::CAN_DIG)) {
         if (player_ptr->skill_dig > randint0(20 * power)) {
+            sound(SOUND_DIG_THROUGH);
             msg_format(_("%sをくずした。", "You have removed the %s."), name);
             cave_alter_feat(player_ptr, y, x, TerrainCharacteristics::TUNNEL);
             player_ptr->update |= PU_FLOW;
@@ -89,6 +90,7 @@ bool exe_tunnel(PlayerType *player_ptr, POSITION y, POSITION x)
     } else {
         bool tree = mimic_f_ptr->flags.has(TerrainCharacteristics::TREE);
         if (player_ptr->skill_dig > power + randint0(40 * power)) {
+            sound(SOUND_DIG_THROUGH);
             if (tree) {
                 msg_format(_("%sを切り払った。", "You have cleared away the %s."), name);
             } else {

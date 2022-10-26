@@ -30,6 +30,7 @@ const concptr angband_sound_name[SOUND_MAX] = {
     "store3",
     "store4",
     "dig",
+    "dig_through",
     "opendoor",
     "shutdoor",
     "tplevel",
