@@ -62,7 +62,7 @@ To run in the graphical mode:
 Run the following:
 
 ```
-./configure --disable-japanes --with-setgid=games
+./configure --disable-japanese --with-setgid=games
 make
 ```
 
@@ -287,7 +287,7 @@ Items can be inscribed to add notes but also to trigger special behavior. Below 
       be picked up
  * `#<NAME>`
     * Displays the name as if it was an artifact name of the item.
-    * For example: **a Broad Sword (2d6) (+0,+0)** inscribed with `#of Yeeks` will be displayed as **a Broad Sword of Yeeks (2d6) (+0,+0)**
+    * For example: **a Broad Sword (2d5) (+0,+0)** inscribed with `#of Yeeks` will be displayed as **a Broad Sword of Yeeks (2d5) (+0,+0)**
  * `@X?`
     * Allows you to use a shortcut to access the item with a given command regardless of the position of the item in your inventory.
     * `X` is the command, eg `f`
