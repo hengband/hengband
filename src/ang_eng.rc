@@ -116,13 +116,13 @@ ANGBAND MENU
 			MENUITEM "&Bigtile mode", 409
 		}
 
-		POPUP "&Back ground pict"
+		POPUP "&Background image"
 		{
 			MENUITEM "&None", 440
-			MENUITEM "&Selected one", 441
-			MENUITEM "&Your preset", 442
+			MENUITEM "&Custom", 441
+			MENUITEM "&Preset", 442
 			MENUITEM SEPARATOR
-			MENUITEM "Choose BG pict", 449
+			MENUITEM "Change custom image", 449
 		}
 
 		MENUITEM SEPARATOR
