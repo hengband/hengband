@@ -37,9 +37,9 @@
 ?:[EQU $QUEST_NUMBER 8]
 %:quests/008_Oberon.txt
 
-# Serpent of Chaos
+# 混沌のサーペント討伐
 ?:[EQU $QUEST_NUMBER 9]
-%:q_serpen.txt
+%:quests/009_SerpentOfChaos.txt
 
 # Node of Sorcery
 ?:[EQU $QUEST_NUMBER 10]

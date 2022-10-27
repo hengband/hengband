@@ -15,12 +15,13 @@ angband_files = \
 	q000eric.txt q000natu.txt q000sorc.txt \
 	q00water.txt q0clone0.txt q0dumpwitness.txt q0fields.txt \
 	q0thief1.txt q0thief2.txt q0willow.txt \
-	q_pref.txt q_random.txt q_serpen.txt q_warg.txt \
+	q_pref.txt q_random.txt q_warg.txt \
 	qdarkelf.txt qhaunted.txt \
 	quests/001_ThievesHideout.txt quests/002_TheSewer.txt \
 	quests/003_LogrusMaster.txt quests/004_TheVault.txt \
 	quests/005_TheTower_1.txt quests/006_TheTower_2.txt \
-	quests/007_TheTower_3.txt quests/008_Oberon.txt
+	quests/007_TheTower_3.txt quests/008_Oberon.txt \
+	quests/009_SerpentOfChaos.txt
 
 EXTRA_DIST = \
   $(angband_files)
