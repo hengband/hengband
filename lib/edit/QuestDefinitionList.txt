@@ -33,9 +33,9 @@
 ?:[EQU $QUEST_NUMBER 7]
 %:quests/007_TheTower_3.txt
 
-# Oberon
+# オベロン討伐
 ?:[EQU $QUEST_NUMBER 8]
-%:q_oberon.txt
+%:quests/008_Oberon.txt
 
 # Serpent of Chaos
 ?:[EQU $QUEST_NUMBER 9]
