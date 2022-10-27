@@ -13,9 +13,9 @@
 ?:[EQU $QUEST_NUMBER 2]
 %:quests/002_TheSewer.txt
 
-# Druid Shop
+# ログルス使い
 ?:[EQU $QUEST_NUMBER 3]
-%:q0000003.txt
+%:quests/003_LogrusMaster.txt
 
 # Vault
 ?:[EQU $QUEST_NUMBER 4]
