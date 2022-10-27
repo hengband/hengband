@@ -12,7 +12,7 @@ angband_files = \
 	q0000020.txt q0000021.txt q0000022.txt q0000023.txt \
 	q0000027.txt \
 	q0000028.txt q00000ms.txt q000dekn.txt \
-	q000eric.txt q000natu.txt \
+	q000eric.txt \
 	q00water.txt q0clone0.txt q0dumpwitness.txt q0fields.txt \
 	q0thief1.txt q0thief2.txt q0willow.txt \
 	q_pref.txt q_random.txt q_warg.txt \
@@ -22,7 +22,7 @@ angband_files = \
 	quests/005_TheTower_1.txt quests/006_TheTower_2.txt \
 	quests/007_TheTower_3.txt quests/008_Oberon.txt \
 	quests/009_SerpentOfChaos.txt quests/010_NodeOfSorcery.txt \
-	quests/011_NodeOfChaos.txt
+	quests/011_NodeOfChaos.txt quests/012_NodeOfNature.txt
 
 EXTRA_DIST = \
   $(angband_files)

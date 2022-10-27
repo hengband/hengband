@@ -49,9 +49,9 @@
 ?:[EQU $QUEST_NUMBER 11]
 %:quests/011_NodeOfChaos.txt
 
-# Node of Nature
+# 自然魔術の特異点
 ?:[EQU $QUEST_NUMBER 12]
-%:q000natu.txt
+%:quests/012_NodeOfNature.txt
 
 # Quest #13 is still unfinished
 
