@@ -5,7 +5,7 @@
 # Preferences for the town features
 %:TownPreferences.txt
 
-# Town 1
+# 辺境の地
 ?:[AND [EQU $TOWN 1] [EQU $WILDERNESS LITE] ]
 %:towns/01_Outpost_Lite.txt
 ?:[AND [EQU $TOWN 1] [EQU $WILDERNESS NORMAL] ]
@@ -14,22 +14,22 @@
 %:towns/01_Outpost_OnlyAngband.txt
 ?:1
 
-# Town 2
+# テルモラ
 ?:[EQU $TOWN 2]
 %:towns/02_Telmora.txt
 
-# Town 3
+# モリバント
 ?:[EQU $TOWN 3]
 %:towns/03_Morivant.txt
 
-# Town 4
+# アングウィル
 ?:[EQU $TOWN 4]
 %:towns/04_Angwil.txt
 
-# Town 5
+# ズル
 ?:[EQU $TOWN 5]
 %:towns/05_Zul.txt
 
-# Town 6 (Obsoleted)
+# ルルイエ (旧クエスト『海底都市』、廃止済)
 ?:[EQU $TOWN 6]
 %:towns/06_Rlyeh_Obsoleted.txt
