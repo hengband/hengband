@@ -9,9 +9,9 @@
 ?:[EQU $QUEST_NUMBER 1]
 %:quests/001_ThievesHideout.txt
 
-# Sever
+# 下水道
 ?:[EQU $QUEST_NUMBER 2]
-%:q0000002.txt
+%:quests/002_TheSewer.txt
 
 # Druid Shop
 ?:[EQU $QUEST_NUMBER 3]
