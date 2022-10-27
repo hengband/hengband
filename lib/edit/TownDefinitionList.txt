@@ -30,7 +30,6 @@
 ?:[EQU $TOWN 5]
 %:towns/05_Zul.txt
 
-# Town 6
+# Town 6 (Obsoleted)
 ?:[EQU $TOWN 6]
-%:t0000006.txt
-
+%:towns/06_Rlyeh_Obsoleted.txt
