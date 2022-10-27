@@ -1,4 +1,4 @@
-# Town Name: Angwil
+# File: 04_Angwil.txt
 # Note: this is a mainly elven town, as you'll notice by the guild
 # leaders etc.
 #

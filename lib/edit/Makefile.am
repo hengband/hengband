@@ -4,8 +4,8 @@ angband_files = \
 	ArtifactDefinitions.txt BaseItemDefinitions.txt ClassMagicDefinitions.txt \
 	ClassSkillDefinitions.txt DungeonDefinitions.txt EgoDefinitions.txt \
 	MonsterRaceDefinitions.txt QuestDefinitionList.txt TerrainDefinitions.txt \
-	TownDefinitionList.txt VaultDefinitions.txt WildernessDefinition.txt \
-	misc.txt \
+	TownDefinitionList.txt TownPreferences.txt VaultDefinitions.txt \
+	WildernessDefinition.txt misc.txt \
 	q0000001.txt q0000002.txt q0000003.txt q0000004.txt \
 	q0000005.txt q0000006.txt q0000007.txt q0000019.txt \
 	q0000020.txt q0000021.txt q0000022.txt q0000023.txt \
@@ -16,8 +16,10 @@ angband_files = \
 	q0thief1.txt q0thief2.txt q0willow.txt q_oberon.txt \
 	q_pref.txt q_random.txt q_serpen.txt q_warg.txt \
 	qdarkelf.txt qhaunted.txt \
-	t0000001.txt t0000002.txt t0000003.txt t0000004.txt t0000005.txt \
-	t0000006.txt t_basic.txt t_lite.txt t_pref.txt
+	towns/01_Outpost_Full.txt towns/01_Outpost_Lite.txt \
+	towns/01_Outpost_OnlyAngband.txt towns/02_Telmora.txt \
+	towns/03_Morivant.txt towns/04_Angwil.txt towns/05_Zul.txt \
+	towns/06_Rlyeh_Obsoleted.txt
 
 EXTRA_DIST = \
   $(angband_files)

@@ -1,4 +1,5 @@
-# Town Name: Morivant
+# File: 03_Morivant.txt
+
 # And in case you're wondering, that grand thing in the middle
 # of town is a fountain.
 #
