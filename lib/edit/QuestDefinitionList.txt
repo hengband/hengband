@@ -41,9 +41,9 @@
 ?:[EQU $QUEST_NUMBER 9]
 %:quests/009_SerpentOfChaos.txt
 
-# Node of Sorcery
+# 仙術エネルギー特異点
 ?:[EQU $QUEST_NUMBER 10]
-%:q000sorc.txt
+%:quests/010_NodeOfSorcery.txt
 
 # Node of Chaos
 ?:[EQU $QUEST_NUMBER 11]
