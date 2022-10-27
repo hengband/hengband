@@ -45,9 +45,9 @@
 ?:[EQU $QUEST_NUMBER 10]
 %:quests/010_NodeOfSorcery.txt
 
-# Node of Chaos
+# カオスの特異点
 ?:[EQU $QUEST_NUMBER 11]
-%:q000chao.txt
+%:quests/011_NodeOfChaos.txt
 
 # Node of Nature
 ?:[EQU $QUEST_NUMBER 12]
