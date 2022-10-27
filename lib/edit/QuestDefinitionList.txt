@@ -17,9 +17,9 @@
 ?:[EQU $QUEST_NUMBER 3]
 %:quests/003_LogrusMaster.txt
 
-# Vault
+# 宝物庫
 ?:[EQU $QUEST_NUMBER 4]
-%:q0000004.txt
+%:quests/004_TheVault.txt
 
 # Tower
 ?:[EQU $QUEST_NUMBER 5]
