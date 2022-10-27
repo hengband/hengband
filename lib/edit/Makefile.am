@@ -8,7 +8,7 @@ angband_files = \
 	MonsterRaceDefinitions.txt QuestDefinitionList.txt TerrainDefinitions.txt \
 	TownDefinitionList.txt TownPreferences.txt VaultDefinitions.txt \
 	WildernessDefinition.txt misc.txt \
-	q0000007.txt q0000019.txt \
+	q0000019.txt \
 	q0000020.txt q0000021.txt q0000022.txt q0000023.txt \
 	q0000027.txt \
 	q0000028.txt q00000ms.txt q000chao.txt q000dekn.txt \
@@ -19,7 +19,8 @@ angband_files = \
 	qdarkelf.txt qhaunted.txt \
 	quests/001_ThievesHideout.txt quests/002_TheSewer.txt \
 	quests/003_LogrusMaster.txt quests/004_TheVault.txt \
-	quests/005_TheTower_1.txt quests/006_TheTower_2.txt
+	quests/005_TheTower_1.txt quests/006_TheTower_2.txt \
+	quests/007_TheTower_3.txt
 
 EXTRA_DIST = \
   $(angband_files)

@@ -29,9 +29,9 @@
 ?:[EQU $QUEST_NUMBER 6]
 %:quests/006_TheTower_2.txt
 
-# Tower part 3
+# 塔 3F
 ?:[EQU $QUEST_NUMBER 7]
-%:q0000007.txt
+%:quests/007_TheTower_3.txt
 
 # Oberon
 ?:[EQU $QUEST_NUMBER 8]
