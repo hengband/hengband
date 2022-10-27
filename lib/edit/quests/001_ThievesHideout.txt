@@ -1,4 +1,4 @@
-# q0000001.txt
+# File: 001_ThievesHideout.txt
 
 # Name
 Q:$1:N:Thieves Hideout

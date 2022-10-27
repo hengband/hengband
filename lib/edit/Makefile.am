@@ -8,7 +8,7 @@ angband_files = \
 	MonsterRaceDefinitions.txt QuestDefinitionList.txt TerrainDefinitions.txt \
 	TownDefinitionList.txt TownPreferences.txt VaultDefinitions.txt \
 	WildernessDefinition.txt misc.txt \
-	q0000001.txt q0000002.txt q0000003.txt q0000004.txt \
+	q0000002.txt q0000003.txt q0000004.txt \
 	q0000005.txt q0000006.txt q0000007.txt q0000019.txt \
 	q0000020.txt q0000021.txt q0000022.txt q0000023.txt \
 	q0000027.txt \
@@ -17,7 +17,8 @@ angband_files = \
 	q00water.txt q0clone0.txt q0dumpwitness.txt q0fields.txt \
 	q0thief1.txt q0thief2.txt q0willow.txt q_oberon.txt \
 	q_pref.txt q_random.txt q_serpen.txt q_warg.txt \
-	qdarkelf.txt qhaunted.txt
+	qdarkelf.txt qhaunted.txt \
+	quests/001_ThievesHideout.txt
 
 EXTRA_DIST = \
   $(angband_files)
