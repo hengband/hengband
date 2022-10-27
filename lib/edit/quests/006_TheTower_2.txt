@@ -1,4 +1,4 @@
-# q0000006.txt
+# File: 006_TheTower_2.txt
 
 # Name
 Q:$6:N:The Tower 2
