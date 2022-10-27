@@ -21,9 +21,9 @@
 ?:[EQU $QUEST_NUMBER 4]
 %:quests/004_TheVault.txt
 
-# Tower
+# 塔 1F
 ?:[EQU $QUEST_NUMBER 5]
-%:q0000005.txt
+%:quests/005_TheTower_1.txt
 
 # Tower part 2
 ?:[EQU $QUEST_NUMBER 6]
