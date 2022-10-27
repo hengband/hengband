@@ -54,10 +54,11 @@
 %:quests/012_NodeOfNature.txt
 
 # Quest #13 is still unfinished
+# 欠番、おそらく『海底都市』だったもの
 
-# Warg problem
+# ワーグを殱滅せよ
 ?:[EQU $QUEST_NUMBER 14]
-%:q_warg.txt
+%:quests/014_WargProblem.txt
 
 # Eric's Stronghold
 ?:[EQU $QUEST_NUMBER 15]
