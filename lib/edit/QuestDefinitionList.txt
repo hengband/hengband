@@ -68,10 +68,11 @@
 ?:[EQU $QUEST_NUMBER 16]
 %:quests/016_AssaultOnMontsalvat.txt
 
-# Quest #18 was returned!
-# Water Cave
+# クエストNo.17は欠番
+
+# 湖の洞窟
 ?:[EQU $QUEST_NUMBER 18]
-%:q00water.txt
+%:quests/018_WaterCave.txt
 
 # Doom Quest 1
 ?:[EQU $QUEST_NUMBER 19]
