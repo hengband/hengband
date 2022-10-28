@@ -134,9 +134,9 @@
 ?:[EQU $QUEST_NUMBER 33]
 %:quests/033_CloningPits.txt
 
-# Locked Room Murder Case
+# もの言えぬ証人
 ?:[EQU $QUEST_NUMBER 34]
-%:q0dumpwitness.txt
+%:quests/034_DumpWitness.txt
 
 # Random quests (always adressed with number 40)
 ?:[EQU $QUEST_NUMBER 40]

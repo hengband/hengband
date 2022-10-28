@@ -1,7 +1,7 @@
-# q0dumpwitness.txt
+# File: 034_DumpWitness.txt
+# by Christie
 
 # Name
-# from Dumb Witness -- Christie
 Q:$34:N:Dump Witness
 Q:34:N:もの言えぬ証人
 
