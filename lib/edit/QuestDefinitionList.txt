@@ -78,9 +78,9 @@
 ?:[EQU $QUEST_NUMBER 19]
 %:quests/019_DoomQuest1.txt
 
-# Vapor Quest
+# 謎の瘴気
 ?:[EQU $QUEST_NUMBER 20]
-%:q0000020.txt
+%:quests/020_VaporQuest.txt
 
 # Doom Quest 2
 ?:[EQU $QUEST_NUMBER 21]
