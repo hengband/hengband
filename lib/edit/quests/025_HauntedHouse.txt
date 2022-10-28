@@ -1,3 +1,4 @@
+# File: 025_HauntedHouse.txt
 # Haunted House, (C) Topi Ylinen 1999
 
 # Name

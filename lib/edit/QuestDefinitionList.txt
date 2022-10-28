@@ -94,13 +94,13 @@
 ?:[EQU $QUEST_NUMBER 23]
 %:quests/023_SpawningPits.txt
 
-# The Rise and Fall of Micro$oft
+# マイクロンフトの興亡
 ?:[EQU $QUEST_NUMBER 24]
-%:q00000ms.txt
+%:quests/024_MicroShaft.txt
 
-# Haunted House
+# 幽霊屋敷
 ?:[EQU $QUEST_NUMBER 25]
-%:qhaunted.txt
+%:quests/025_HauntedHouse.txt
 
 # Killing Fields
 ?:[EQU $QUEST_NUMBER 26]

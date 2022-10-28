@@ -13,7 +13,7 @@ angband_files = \
 	q0clone0.txt q0dumpwitness.txt q0fields.txt \
 	q0thief1.txt q0thief2.txt q0willow.txt \
 	q_pref.txt q_random.txt \
-	qdarkelf.txt qhaunted.txt \
+	qdarkelf.txt \
 	quests/001_ThievesHideout.txt quests/002_TheSewer.txt \
 	quests/003_LogrusMaster.txt quests/004_TheVault.txt \
 	quests/005_TheTower_1.txt quests/006_TheTower_2.txt \
@@ -24,7 +24,8 @@ angband_files = \
 	quests/016_AssaultOnMontsalvat.txt quests/018_WaterCave.txt \
 	quests/019_DoomQuest1.txt quests/020_VaporQuest.txt \
 	quests/021_DoomQuest2.txt quests/022_OrcCamp.txt \
-	quests/023_SpawningPits.txt quests/024_MicroShaft.txt
+	quests/023_SpawningPits.txt quests/024_MicroShaft.txt \
+	quests/025_HauntedHouse.txt
 
 EXTRA_DIST = \
   $(angband_files)
