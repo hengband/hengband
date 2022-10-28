@@ -3,7 +3,7 @@
 # Includes all the quest files
 
 # Quest feature preferences
-%:q_pref.txt
+%:QuestPreferences.txt
 
 # 盗賊の隠れ家
 ?:[EQU $QUEST_NUMBER 1]
