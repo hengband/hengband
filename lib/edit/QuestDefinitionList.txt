@@ -118,9 +118,9 @@
 ?:[EQU $QUEST_NUMBER 29]
 %:quests/029_TheMimicTreasure.txt
 
-# Tengu and Death Swords
+# テングとデスソード
 ?:[EQU $QUEST_NUMBER 30]
-%:q0thief2.txt
+%:quests/030_TenguAndDeathSword.txt
 
 # Old Man Willow Quest
 ?:[EQU $QUEST_NUMBER 31]

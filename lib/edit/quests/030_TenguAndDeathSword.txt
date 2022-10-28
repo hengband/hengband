@@ -1,5 +1,4 @@
-# q0thief2.txt
-# Thieves Quest 2
+# File: 030_TenguAndDeathSword.txt
 # By Shayne Steele (steele@cs.fsu.edu)
 
 # Name Tengu and Death Swords
