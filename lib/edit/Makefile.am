@@ -9,7 +9,6 @@ angband_files = \
 	TownDefinitionList.txt TownPreferences.txt VaultDefinitions.txt \
 	WildernessDefinition.txt misc.txt \
 	q0clone0.txt q0dumpwitness.txt \
-	q0willow.txt \
 	q_pref.txt q_random.txt \
 	qdarkelf.txt \
 	quests/001_ThievesHideout.txt quests/002_TheSewer.txt \
@@ -25,7 +24,8 @@ angband_files = \
 	quests/023_SpawningPits.txt quests/024_MicroShaft.txt \
 	quests/025_HauntedHouse.txt quests/026_KillingFields.txt \
 	quests/027_TheOldCatsle.txt quests/028_TheRoyalCrypt.txt \
-	quests/029_TheMimicTreasure.txt quests/030_TenguAndDeathSword.txt
+	quests/029_TheMimicTreasure.txt quests/030_TenguAndDeathSword.txt \
+	quests/031_OldManWillow.txt
 
 EXTRA_DIST = \
   $(angband_files)

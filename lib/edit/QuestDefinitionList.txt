@@ -122,9 +122,9 @@
 ?:[EQU $QUEST_NUMBER 30]
 %:quests/030_TenguAndDeathSword.txt
 
-# Old Man Willow Quest
+# 柳じじい
 ?:[EQU $QUEST_NUMBER 31]
-%:q0willow.txt
+%:quests/031_OldManWillow.txt
 
 # Dark Elven Lords Quest
 ?:[EQU $QUEST_NUMBER 32]

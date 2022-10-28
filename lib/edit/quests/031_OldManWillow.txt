@@ -1,5 +1,4 @@
-# q0willow.txt
-# Old Man Willow Quest
+# File: 031_OldManWillow.txt
 # By Shayne Steele (steele@cs.fsu.edu)
 
 # Name Old Man Willow Quest
