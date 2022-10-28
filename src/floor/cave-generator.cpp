@@ -373,9 +373,12 @@ static bool allocate_dungeon_data(PlayerType *player_ptr, dun_data_type *dd_ptr,
         floor_ptr->object_level = 1;
     }
 
-    alloc_object(player_ptr, ALLOC_SET_ROOM, ALLOC_TYP_OBJECT, randnor(DUN_AMT_ROOM, 3));
-    alloc_object(player_ptr, ALLOC_SET_BOTH, ALLOC_TYP_OBJECT, randnor(DUN_AMT_ITEM, 3));
-    alloc_object(player_ptr, ALLOC_SET_BOTH, ALLOC_TYP_GOLD, randnor(DUN_AMT_GOLD, 3));
+    constexpr auto alloc_room = 9;
+    alloc_object(player_ptr, ALLOC_SET_ROOM, ALLOC_TYP_OBJECT, randnor(alloc_room, 3));
+    constexpr auto alloc_item = 3;
+    alloc_object(player_ptr, ALLOC_SET_BOTH, ALLOC_TYP_OBJECT, randnor(alloc_item, 3));
+    constexpr auto alloc_gold = 3;
+    alloc_object(player_ptr, ALLOC_SET_BOTH, ALLOC_TYP_GOLD, randnor(alloc_gold, 3));
     floor_ptr->object_level = floor_ptr->base_level;
     if (alloc_guardian(player_ptr, true)) {
         return true;
