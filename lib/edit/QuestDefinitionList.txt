@@ -114,9 +114,9 @@
 ?:[EQU $QUEST_NUMBER 28]
 %:quests/028_TheRoyalCrypt.txt
 
-# The Mimic's Treasure
+# ミミックの財宝
 ?:[EQU $QUEST_NUMBER 29]
-%:q0thief1.txt
+%:quests/029_TheMimicTreasure.txt
 
 # Tengu and Death Swords
 ?:[EQU $QUEST_NUMBER 30]

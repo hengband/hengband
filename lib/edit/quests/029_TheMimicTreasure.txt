@@ -1,5 +1,4 @@
-# q0thief1.txt
-# Thieves Quest 1
+# File: 029_TheMimicTreasure.txt
 # By Shayne Steele (steele@cs.fsu.edu)
 
 # Name The Mimic's Treasure
