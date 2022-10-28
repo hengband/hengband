@@ -158,7 +158,7 @@ void process_drain(PlayerType *player_ptr, player_attack_type *pa_ptr, const boo
     }
 
     auto *o_ptr = &player_ptr->inventory_list[enum2i(INVEN_MAIN_HAND) + pa_ptr->hand];
-    if (o_ptr->fixed_artifact_idx == FixedArtifactId::MURAMASA) {
+    if (o_ptr->is_specific_artifact(FixedArtifactId::MURAMASA)) {
         drain_muramasa(player_ptr, pa_ptr, is_human);
     } else {
         drain_result(player_ptr, pa_ptr, drain_msg);

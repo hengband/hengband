@@ -66,7 +66,7 @@ bool screen_object(PlayerType *player_ptr, ObjectType *o_ptr, BIT_FLAGS mode)
         info[i++] = _("それは投げた時ペットに変化する。", "It will transform into a pet when thrown.");
     }
 
-    if (o_ptr->fixed_artifact_idx == FixedArtifactId::STONEMASK) {
+    if (o_ptr->is_specific_artifact(FixedArtifactId::STONEMASK)) {
         info[i++] = _("それを装備した者は吸血鬼になる。", "It makes you turn into a vampire permanently.");
     }
 

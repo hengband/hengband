@@ -118,6 +118,7 @@ public:
     TERM_COLOR get_color() const;
     char get_symbol() const;
     int get_price() const;
+    bool is_specific_artifact(FixedArtifactId id) const;
 
 private:
     int get_baseitem_price() const;

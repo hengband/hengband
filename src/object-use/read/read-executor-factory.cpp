@@ -13,11 +13,11 @@ std::unique_ptr<ReadExecutorBase> ReadExecutorFactory::create(PlayerType *player
         return std::make_unique<ScrollReadExecutor>(player_ptr, o_ptr, known);
     }
 
-    if (o_ptr->fixed_artifact_idx == FixedArtifactId::GHB) {
+    if (o_ptr->is_specific_artifact(FixedArtifactId::GHB)) {
         return std::make_unique<GbhShirtReadExecutor>();
     }
 
-    if (o_ptr->fixed_artifact_idx == FixedArtifactId::POWER) {
+    if (o_ptr->is_specific_artifact(FixedArtifactId::POWER)) {
         return std::make_unique<RingOfPowerReadExecutor>();
     }
 

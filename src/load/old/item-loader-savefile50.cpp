@@ -189,7 +189,7 @@ void ItemLoader50::rd_item(ObjectType *o_ptr)
         return;
     }
 
-    if ((o_ptr->ego_idx == EgoType::DARK) || (o_ptr->ego_idx == EgoType::ANCIENT_CURSE) || (o_ptr->fixed_artifact_idx == FixedArtifactId::NIGHT)) {
+    if ((o_ptr->ego_idx == EgoType::DARK) || (o_ptr->ego_idx == EgoType::ANCIENT_CURSE) || (o_ptr->is_specific_artifact(FixedArtifactId::NIGHT))) {
         o_ptr->art_flags.set(TR_LITE_M1);
         o_ptr->art_flags.reset(TR_LITE_1);
         o_ptr->art_flags.reset(TR_LITE_2);

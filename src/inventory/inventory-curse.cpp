@@ -477,7 +477,7 @@ void execute_cursed_items_effect(PlayerType *player_ptr)
     }
 
     auto *o_ptr = &player_ptr->inventory_list[INVEN_LITE];
-    if (o_ptr->fixed_artifact_idx != FixedArtifactId::JUDGE) {
+    if (!o_ptr->is_specific_artifact(FixedArtifactId::JUDGE)) {
         return;
     }
 

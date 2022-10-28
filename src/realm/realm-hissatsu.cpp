@@ -752,7 +752,7 @@ concptr do_hissatsu_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessT
                 auto flgs = object_flags(o_ptr);
 
                 // @todo ヴォーパルの多重定義.
-                if ((o_ptr->fixed_artifact_idx == FixedArtifactId::VORPAL_BLADE) || (o_ptr->fixed_artifact_idx == FixedArtifactId::CHAINSWORD)) {
+                if (o_ptr->is_specific_artifact(FixedArtifactId::VORPAL_BLADE) || o_ptr->is_specific_artifact(FixedArtifactId::CHAINSWORD)) {
                     /* vorpal blade */
                     basedam *= 5;
                     basedam /= 3;
@@ -1065,7 +1065,7 @@ concptr do_hissatsu_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessT
                 auto flgs = object_flags(o_ptr);
 
                 // @todo ヴォーパルの多重定義.
-                if ((o_ptr->fixed_artifact_idx == FixedArtifactId::VORPAL_BLADE) || (o_ptr->fixed_artifact_idx == FixedArtifactId::CHAINSWORD)) {
+                if (o_ptr->is_specific_artifact(FixedArtifactId::VORPAL_BLADE) || o_ptr->is_specific_artifact(FixedArtifactId::CHAINSWORD)) {
                     /* vorpal blade */
                     basedam *= 5;
                     basedam /= 3;

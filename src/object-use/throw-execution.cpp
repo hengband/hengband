@@ -151,7 +151,7 @@ bool ObjectThrowEntity::calc_throw_grid()
 
 void ObjectThrowEntity::reflect_inventory_by_throw()
 {
-    if ((this->q_ptr->fixed_artifact_idx == FixedArtifactId::MJOLLNIR) || (this->q_ptr->fixed_artifact_idx == FixedArtifactId::AEGISFANG) || this->boomerang) {
+    if (this->q_ptr->is_specific_artifact(FixedArtifactId::MJOLLNIR) || this->q_ptr->is_specific_artifact(FixedArtifactId::AEGISFANG) || this->boomerang) {
         this->return_when_thrown = true;
     }
 
@@ -277,7 +277,7 @@ void ObjectThrowEntity::check_boomerang_throw()
     }
 
     this->back_chance = randint1(30) + 20 + ((int)(adj_dex_th[this->player_ptr->stat_index[A_DEX]]) - 128);
-    this->super_boomerang = (((this->q_ptr->fixed_artifact_idx == FixedArtifactId::MJOLLNIR) || (this->q_ptr->fixed_artifact_idx == FixedArtifactId::AEGISFANG)) && this->boomerang);
+    this->super_boomerang = ((this->q_ptr->is_specific_artifact(FixedArtifactId::MJOLLNIR) || this->q_ptr->is_specific_artifact(FixedArtifactId::AEGISFANG)) && this->boomerang);
     this->corruption_possibility = -1;
     if (this->boomerang) {
         this->back_chance += 4 + randint1(5);

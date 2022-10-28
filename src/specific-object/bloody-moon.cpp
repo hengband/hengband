@@ -57,7 +57,7 @@ void get_bloody_moon_flags(ObjectType *o_ptr)
  */
 bool activate_bloody_moon(PlayerType *player_ptr, ObjectType *o_ptr)
 {
-    if (o_ptr->fixed_artifact_idx != FixedArtifactId::BLOOD) {
+    if (!o_ptr->is_specific_artifact(FixedArtifactId::BLOOD)) {
         return false;
     }
 
