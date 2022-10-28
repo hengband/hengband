@@ -74,9 +74,9 @@
 ?:[EQU $QUEST_NUMBER 18]
 %:quests/018_WaterCave.txt
 
-# Doom Quest 1
+# 破滅のクエスト1
 ?:[EQU $QUEST_NUMBER 19]
-%:q0000019.txt
+%:quests/019_DoomQuest1.txt
 
 # Vapor Quest
 ?:[EQU $QUEST_NUMBER 20]
