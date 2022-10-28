@@ -64,9 +64,9 @@
 ?:[EQU $QUEST_NUMBER 15]
 %:quests/015_EricStronghold.txt
 
-# Assault on Montsalvat
+# モンサルヴァト城への侵攻
 ?:[EQU $QUEST_NUMBER 16]
-%:q000dekn.txt
+%:quests/016_AssaultOnMontsalvat.txt
 
 # Quest #18 was returned!
 # Water Cave
