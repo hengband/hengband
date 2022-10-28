@@ -106,9 +106,9 @@
 ?:[EQU $QUEST_NUMBER 26]
 %:quests/026_KillingFields.txt
 
-# The Old Castle
+# 古い城
 ?:[EQU $QUEST_NUMBER 27]
-%:q0000027.txt
+%:quests/027_TheOldCatsle.txt
 
 # Royal Crypt
 ?:[EQU $QUEST_NUMBER 28]

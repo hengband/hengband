@@ -8,7 +8,6 @@ angband_files = \
 	MonsterRaceDefinitions.txt QuestDefinitionList.txt TerrainDefinitions.txt \
 	TownDefinitionList.txt TownPreferences.txt VaultDefinitions.txt \
 	WildernessDefinition.txt misc.txt \
-	q0000027.txt \
 	q0000028.txt \
 	q0clone0.txt q0dumpwitness.txt \
 	q0thief1.txt q0thief2.txt q0willow.txt \
@@ -25,7 +24,8 @@ angband_files = \
 	quests/019_DoomQuest1.txt quests/020_VaporQuest.txt \
 	quests/021_DoomQuest2.txt quests/022_OrcCamp.txt \
 	quests/023_SpawningPits.txt quests/024_MicroShaft.txt \
-	quests/025_HauntedHouse.txt quests/026_KillingFields.txt
+	quests/025_HauntedHouse.txt quests/026_KillingFields.txt \
+	quests/027_TheOldCatsle.txt
 
 EXTRA_DIST = \
   $(angband_files)

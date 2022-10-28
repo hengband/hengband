@@ -1,5 +1,4 @@
-# q0000027.txt
-# The Old Castle
+# File: 027_TheOldCatsle.txt
 # By Shayne Steele (steele@cs.fsu.edu)
 
 # Name
