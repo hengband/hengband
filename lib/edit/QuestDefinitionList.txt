@@ -102,9 +102,9 @@
 ?:[EQU $QUEST_NUMBER 25]
 %:quests/025_HauntedHouse.txt
 
-# Killing Fields
+# 激戦場
 ?:[EQU $QUEST_NUMBER 26]
-%:q0fields.txt
+%:quests/026_KillingFields.txt
 
 # The Old Castle
 ?:[EQU $QUEST_NUMBER 27]
