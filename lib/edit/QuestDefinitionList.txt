@@ -60,9 +60,9 @@
 ?:[EQU $QUEST_NUMBER 14]
 %:quests/014_WargProblem.txt
 
-# Eric's Stronghold
+# エリックの要塞
 ?:[EQU $QUEST_NUMBER 15]
-%:q000eric.txt
+%:quests/015_EricStronghold.txt
 
 # Assault on Montsalvat
 ?:[EQU $QUEST_NUMBER 16]

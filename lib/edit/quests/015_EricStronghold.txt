@@ -1,4 +1,4 @@
-# q000eric.txt
+# File: 015_Eric_Stronghold.txt
 
 # Name
 Q:$15:N:Eric's Stronghold
