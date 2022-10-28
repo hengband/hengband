@@ -110,9 +110,9 @@
 ?:[EQU $QUEST_NUMBER 27]
 %:quests/027_TheOldCatsle.txt
 
-# Royal Crypt
+# 王家の墓
 ?:[EQU $QUEST_NUMBER 28]
-%:q0000028.txt
+%:quests/028_TheRoyalCrypt.txt
 
 # The Mimic's Treasure
 ?:[EQU $QUEST_NUMBER 29]
