@@ -126,9 +126,9 @@
 ?:[EQU $QUEST_NUMBER 31]
 %:quests/031_OldManWillow.txt
 
-# Dark Elven Lords Quest
+# ダークエルフの王
 ?:[EQU $QUEST_NUMBER 32]
-%:qdarkelf.txt
+%:quests/032_DarkElvenLords.txt
 
 # The Cloning Pits
 ?:[EQU $QUEST_NUMBER 33]

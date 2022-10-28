@@ -10,7 +10,6 @@ angband_files = \
 	WildernessDefinition.txt misc.txt \
 	q0clone0.txt q0dumpwitness.txt \
 	q_pref.txt q_random.txt \
-	qdarkelf.txt \
 	quests/001_ThievesHideout.txt quests/002_TheSewer.txt \
 	quests/003_LogrusMaster.txt quests/004_TheVault.txt \
 	quests/005_TheTower_1.txt quests/006_TheTower_2.txt \
@@ -25,7 +24,7 @@ angband_files = \
 	quests/025_HauntedHouse.txt quests/026_KillingFields.txt \
 	quests/027_TheOldCatsle.txt quests/028_TheRoyalCrypt.txt \
 	quests/029_TheMimicTreasure.txt quests/030_TenguAndDeathSword.txt \
-	quests/031_OldManWillow.txt
+	quests/031_OldManWillow.txt quests/032_DarkElvenLords.txt
 
 EXTRA_DIST = \
   $(angband_files)

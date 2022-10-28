@@ -1,5 +1,4 @@
-# qdarkelf.txt
-# Dark Elven Lords Quest
+# File: 032_DarkElvenLords.txt
 # By Shayne Steele (steele@cs.fsu.edu)
 
 # Name Dark Elven Lords Quest
