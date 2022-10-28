@@ -90,9 +90,9 @@
 ?:[EQU $QUEST_NUMBER 22]
 %:quests/022_OrcCamp.txt
 
-# Spawning Pits
+# 増殖地獄
 ?:[EQU $QUEST_NUMBER 23]
-%:q0000023.txt
+%:quests/023_SpawningPits.txt
 
 # The Rise and Fall of Micro$oft
 ?:[EQU $QUEST_NUMBER 24]

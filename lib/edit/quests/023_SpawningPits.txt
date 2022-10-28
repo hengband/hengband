@@ -1,4 +1,4 @@
-# q0000023.txt
+# File: 023_SpawningPits.txt
 # a quick creation by Jeff Coleburn <vsp@netaxs.com>
 
 # Name
