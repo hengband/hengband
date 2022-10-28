@@ -86,9 +86,9 @@
 ?:[EQU $QUEST_NUMBER 21]
 %:quests/021_DoomQuest2.txt 
 
-# Orc Camp
+# オークのキャンプ
 ?:[EQU $QUEST_NUMBER 22]
-%:q0000022.txt
+%:quests/022_OrcCamp.txt
 
 # Spawning Pits
 ?:[EQU $QUEST_NUMBER 23]
