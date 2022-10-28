@@ -9,7 +9,7 @@ angband_files = \
 	TownDefinitionList.txt TownPreferences.txt VaultDefinitions.txt \
 	WildernessDefinition.txt misc.txt \
 	q0000027.txt \
-	q0000028.txt q00000ms.txt \
+	q0000028.txt \
 	q0clone0.txt q0dumpwitness.txt q0fields.txt \
 	q0thief1.txt q0thief2.txt q0willow.txt \
 	q_pref.txt q_random.txt \
@@ -24,7 +24,7 @@ angband_files = \
 	quests/016_AssaultOnMontsalvat.txt quests/018_WaterCave.txt \
 	quests/019_DoomQuest1.txt quests/020_VaporQuest.txt \
 	quests/021_DoomQuest2.txt quests/022_OrcCamp.txt \
-	quests/023_SpawningPits.txt
+	quests/023_SpawningPits.txt quests/024_MicroShaft.txt
 
 EXTRA_DIST = \
   $(angband_files)
