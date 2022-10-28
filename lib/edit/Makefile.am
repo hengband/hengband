@@ -8,7 +8,7 @@ angband_files = \
 	MonsterRaceDefinitions.txt QuestDefinitionList.txt TerrainDefinitions.txt \
 	TownDefinitionList.txt TownPreferences.txt VaultDefinitions.txt \
 	WildernessDefinition.txt misc.txt \
-	q0000021.txt q0000022.txt q0000023.txt \
+	q0000022.txt q0000023.txt \
 	q0000027.txt \
 	q0000028.txt q00000ms.txt \
 	q0clone0.txt q0dumpwitness.txt q0fields.txt \
@@ -23,7 +23,8 @@ angband_files = \
 	quests/011_NodeOfChaos.txt quests/012_NodeOfNature.txt \
 	quests/014_WargProblem.txt quests/015_EricStronghold.txt \
 	quests/016_AssaultOnMontsalvat.txt quests/018_WaterCave.txt \
-	quests/019_DoomQuest1.txt quests/020_VaporQuest.txt
+	quests/019_DoomQuest1.txt quests/020_VaporQuest.txt \
+	quests/021_DoomQuest2.txt
 
 EXTRA_DIST = \
   $(angband_files)

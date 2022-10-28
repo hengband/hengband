@@ -82,9 +82,9 @@
 ?:[EQU $QUEST_NUMBER 20]
 %:quests/020_VaporQuest.txt
 
-# Doom Quest 2
+# 破滅のクエスト2
 ?:[EQU $QUEST_NUMBER 21]
-%:q0000021.txt
+%:quests/021_DoomQuest2.txt 
 
 # Orc Camp
 ?:[EQU $QUEST_NUMBER 22]
