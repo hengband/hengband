@@ -1,5 +1,4 @@
-# q0clone0.txt
-# The Cloning Pits
+# File: 033_CloningPits.txt
 # By Shayne Steele (steele@cs.fsu.edu)
 
 # Name The Cloning Pits

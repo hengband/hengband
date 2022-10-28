@@ -130,9 +130,9 @@
 ?:[EQU $QUEST_NUMBER 32]
 %:quests/032_DarkElvenLords.txt
 
-# The Cloning Pits
+# クローン地獄
 ?:[EQU $QUEST_NUMBER 33]
-%:q0clone0.txt
+%:quests/033_CloningPits.txt
 
 # Locked Room Murder Case
 ?:[EQU $QUEST_NUMBER 34]
