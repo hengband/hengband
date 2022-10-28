@@ -8,7 +8,7 @@ angband_files = \
 	MonsterRaceDefinitions.txt QuestDefinitionList.txt TerrainDefinitions.txt \
 	TownDefinitionList.txt TownPreferences.txt VaultDefinitions.txt \
 	WildernessDefinition.txt misc.txt \
-	q_pref.txt q_random.txt \
+	q_pref.txt \
 	quests/001_ThievesHideout.txt quests/002_TheSewer.txt \
 	quests/003_LogrusMaster.txt quests/004_TheVault.txt \
 	quests/005_TheTower_1.txt quests/006_TheTower_2.txt \
@@ -24,7 +24,8 @@ angband_files = \
 	quests/027_TheOldCatsle.txt quests/028_TheRoyalCrypt.txt \
 	quests/029_TheMimicTreasure.txt quests/030_TenguAndDeathSword.txt \
 	quests/031_OldManWillow.txt quests/032_DarkElvenLords.txt \
-	quests/033_CloningPits.txt quests/034_DumpWitness.txt
+	quests/033_CloningPits.txt quests/034_DumpWitness.txt \
+	quests/040-049_RandomQuests.txt
 
 EXTRA_DIST = \
   $(angband_files)
