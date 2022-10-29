@@ -19,13 +19,13 @@
 #include "wizard/wizard-messages.h"
 
 /*!
- * @brief フロアに洞窟や湖を配置する / Generate various caverns and lakes
- * @details There were moved from cave_gen().
+ * @brief フロアに破壊地形、洞窟、湖、溶岩、森林等を配置する.
  */
 void gen_caverns_and_lakes(PlayerType *player_ptr, dungeon_type *dungeon_ptr, dun_data_type *dd_ptr)
 {
     auto *floor_ptr = player_ptr->current_floor_ptr;
-    if ((floor_ptr->dun_level > 30) && one_in_(DUN_DEST * 2) && small_levels && dungeon_ptr->flags.has(DungeonFeatureType::DESTROY)) {
+    constexpr auto chance_destroyed = 18;
+    if ((floor_ptr->dun_level > 30) && one_in_(chance_destroyed * 2) && small_levels && dungeon_ptr->flags.has(DungeonFeatureType::DESTROY)) {
         dd_ptr->destroyed = true;
         build_lake(player_ptr, one_in_(2) ? LAKE_T_CAVE : LAKE_T_EARTH_VAULT);
     }
