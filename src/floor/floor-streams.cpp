@@ -307,8 +307,10 @@ void build_streamer(PlayerType *player_ptr, FEAT_IDX feat, int chance)
         dummy++;
 
         /* One grid per density */
-        for (i = 0; i < DUN_STR_DEN; i++) {
-            int d = DUN_STR_RNG;
+        constexpr auto stream_density = 5;
+        for (i = 0; i < stream_density; i++) {
+            constexpr auto stream_width = 5;
+            int d = stream_width;
 
             /* Pick a nearby grid */
             while (true) {

@@ -265,14 +265,18 @@ static void make_aqua_streams(PlayerType *player_ptr, dun_data_type *dd_ptr, dun
     }
 
     if (d_ptr->stream2) {
-        for (int i = 0; i < DUN_STR_QUA; i++) {
-            build_streamer(player_ptr, d_ptr->stream2, DUN_STR_QC);
+        constexpr auto num_quartz = 4;
+        constexpr auto chance_quartz = 15;
+        for (auto i = 0; i < num_quartz; i++) {
+            build_streamer(player_ptr, d_ptr->stream2, chance_quartz);
         }
     }
 
     if (d_ptr->stream1) {
-        for (int i = 0; i < DUN_STR_MAG; i++) {
-            build_streamer(player_ptr, d_ptr->stream1, DUN_STR_MC);
+        constexpr auto num_magma = 6;
+        constexpr auto chance_magma = 30;
+        for (auto i = 0; i < num_magma; i++) {
+            build_streamer(player_ptr, d_ptr->stream1, chance_magma);
         }
     }
 }

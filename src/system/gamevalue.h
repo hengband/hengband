@@ -54,18 +54,6 @@
 
 #define MAX_VAMPIRIC_DRAIN 50 /*!< 吸血処理の最大回復HP */
 
-/*
- * Dungeon streamer generation values
- */
-#define DUN_STR_DEN 5 /* Density of streamers */
-#define DUN_STR_RNG 5 /* Width of streamers */
-#define DUN_STR_MAG 6 /* Number of magma streamers */
-#define DUN_STR_MC 30 /* 1/chance of treasure per magma */
-#define DUN_STR_QUA 4 /* Number of quartz streamers */
-#define DUN_STR_QC 15 /* 1/chance of treasure per quartz */
-#define DUN_STR_WLW 1 /* Width of lava & water streamers -KMW- */
-#define DUN_STR_DWLW 8 /* Density of water & lava streams -KMW- */
-
 #define DUN_MOS_DEN 2 /* Density of moss streamers */
 #define DUN_MOS_RNG 10 /* Width of moss streamers */
 #define DUN_STR_MOS 2 /* Number of moss streamers */
