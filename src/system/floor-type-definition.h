@@ -2,10 +2,36 @@
 
 #include "dungeon/quest.h"
 #include "floor/floor-base-definitions.h"
-#include "floor/sight-definitions.h"
 #include "monster/monster-timed-effect-types.h"
 #include "system/angband.h"
+#include <array>
 #include <vector>
+
+/*!
+ * @brief プレイヤー用光源処理配列サイズ / Max array size of player's lite
+ * @details 光源の最大半径は14,実グリッド数では581である.
+ */
+constexpr auto LITE_MAX = 600;
+
+/*!
+ * @brief モンスター用光源処理配列サイズ / Max array size of monster's lite
+ * @details 視界の最大半径は20、実際は8角形で1520グリッドである.
+ * モンスターの可視範囲はCAVE_VIEWフラグに依存する.
+ */
+constexpr auto MON_LITE_MAX = 1536;
+
+/*!
+ * @brief 視界処理配列サイズ / Max array size of the "view"
+ * @details 視界の最大半径は20、実際は8角形で1520グリッドである.
+ */
+constexpr auto VIEW_MAX = 1536;
+
+/*!
+ * @brief 再描画処理用配列サイズ / Max array size of the "redraw"
+ * @details 遅延再描画を適切に機能させるため、最大ビュー領域の 2倍の大きさにする.
+ * ビューグリッド数の最大値は1149なのでその2倍とする.
+ */
+constexpr auto REDRAW_MAX = 2298;
 
 struct grid_type;
 struct monster_type;
@@ -37,20 +63,20 @@ public:
     int16_t mproc_max[MAX_MTIMED]{}; /*!< Number of monsters to be processed */
 
     POSITION_IDX lite_n = 0; //!< Array of grids lit by player lite
-    POSITION lite_y[LITE_MAX]{};
-    POSITION lite_x[LITE_MAX]{};
+    std::array<POSITION, LITE_MAX> lite_y{};
+    std::array<POSITION, LITE_MAX> lite_x{};
 
     POSITION_IDX mon_lite_n = 0; //!< Array of grids lit by player lite
-    POSITION mon_lite_y[MON_LITE_MAX]{};
-    POSITION mon_lite_x[MON_LITE_MAX]{};
+    std::array<POSITION, MON_LITE_MAX> mon_lite_y{};
+    std::array<POSITION, MON_LITE_MAX> mon_lite_x{};
 
     POSITION_IDX view_n = 0; //!< Array of grids viewable to the player
-    POSITION view_y[VIEW_MAX]{};
-    POSITION view_x[VIEW_MAX]{};
+    std::array<POSITION, VIEW_MAX> view_y{};
+    std::array<POSITION, VIEW_MAX> view_x{};
 
     POSITION_IDX redraw_n = 0; //!< Array of grids for delayed visual updating
-    POSITION redraw_y[REDRAW_MAX]{};
-    POSITION redraw_x[REDRAW_MAX]{};
+    std::array<POSITION, REDRAW_MAX> redraw_y{};
+    std::array<POSITION, REDRAW_MAX> redraw_x{};
 
     bool monster_noise = false;
     QuestId quest_number = QuestId::NONE; /* Inside quest level */
