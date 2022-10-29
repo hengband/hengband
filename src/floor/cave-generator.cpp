@@ -83,7 +83,8 @@ static void place_cave_contents(PlayerType *player_ptr, dun_data_type *dd_ptr, d
 {
     auto *floor_ptr = player_ptr->current_floor_ptr;
     if (floor_ptr->dun_level == 1) {
-        while (one_in_(DUN_MOS_DEN)) {
+        constexpr auto density_moss = 2;
+        while (one_in_(density_moss)) {
             place_trees(player_ptr, randint1(floor_ptr->width - 2), randint1(floor_ptr->height - 2));
         }
     }

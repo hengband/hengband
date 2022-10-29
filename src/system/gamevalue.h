@@ -54,14 +54,6 @@
 
 #define MAX_VAMPIRIC_DRAIN 50 /*!< 吸血処理の最大回復HP */
 
-#define DUN_MOS_DEN 2 /* Density of moss streamers */
-#define DUN_MOS_RNG 10 /* Width of moss streamers */
-#define DUN_STR_MOS 2 /* Number of moss streamers */
-#define DUN_WAT_DEN 15 /* Density of rivers */
-#define DUN_WAT_RNG 2 /* Width of rivers */
-#define DUN_STR_WAT 3 /* Max number of rivers */
-#define DUN_WAT_CHG 50 /* 1 in 50 chance of junction in river */
-
 /* Chance of using syllables to form the name instead of the "template" files */
 #define SINDARIN_NAME 10 /*!< ランダムアーティファクトにシンダリン銘をつける確率 */
 #define TABLE_NAME 20 /*!< ランダムアーティファクトに漢字銘をつける確率(正確には TABLE_NAME - SINDARIN_NAME %)となる */
