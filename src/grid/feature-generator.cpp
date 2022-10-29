@@ -18,6 +18,33 @@
 #include "system/player-type-definition.h"
 #include "wizard/wizard-messages.h"
 
+/*
+ * @brief 洞窟らしい地形 (湖、溶岩、瓦礫、森林)の個数を決める
+ * @param d_ref ダンジョンへの参照
+ * @return briefで定義した個数
+ */
+static int calc_cavern_terrains(const dungeon_type &d_ref)
+{
+    auto count = 0;
+    if (d_ref.flags.has(DungeonFeatureType::LAKE_WATER)) {
+        count += 3;
+    }
+
+    if (d_ref.flags.has(DungeonFeatureType::LAKE_LAVA)) {
+        count += 3;
+    }
+
+    if (d_ref.flags.has(DungeonFeatureType::LAKE_RUBBLE)) {
+        count += 3;
+    }
+
+    if (d_ref.flags.has(DungeonFeatureType::LAKE_TREE)) {
+        count += 3;
+    }
+
+    return count;
+}
+
 static bool decide_cavern(const FloorType &floor_ref, const dungeon_type &dungeon_ref, const dun_data_type &dd_ref)
 {
     constexpr auto can_become_cavern = 20;
@@ -44,23 +71,7 @@ void gen_caverns_and_lakes(PlayerType *player_ptr, dungeon_type *dungeon_ptr, du
 
     constexpr auto chance_water = 24;
     if (one_in_(chance_water) && !dd_ptr->empty_level && !dd_ptr->destroyed && dungeon_ptr->flags.has_any_of(DF_LAKE_MASK)) {
-        int count = 0;
-        if (dungeon_ptr->flags.has(DungeonFeatureType::LAKE_WATER)) {
-            count += 3;
-        }
-
-        if (dungeon_ptr->flags.has(DungeonFeatureType::LAKE_LAVA)) {
-            count += 3;
-        }
-
-        if (dungeon_ptr->flags.has(DungeonFeatureType::LAKE_RUBBLE)) {
-            count += 3;
-        }
-
-        if (dungeon_ptr->flags.has(DungeonFeatureType::LAKE_TREE)) {
-            count += 3;
-        }
-
+        auto count = calc_cavern_terrains(*dungeon_ptr);
         if (dungeon_ptr->flags.has(DungeonFeatureType::LAKE_LAVA)) {
             if ((floor_ptr->dun_level > 80) && (randint0(count) < 2)) {
                 dd_ptr->laketype = LAKE_T_LAVA;
