@@ -30,7 +30,8 @@ void gen_caverns_and_lakes(PlayerType *player_ptr, dungeon_type *dungeon_ptr, du
         build_lake(player_ptr, one_in_(2) ? LAKE_T_CAVE : LAKE_T_EARTH_VAULT);
     }
 
-    if (one_in_(LAKE_LEVEL) && !dd_ptr->empty_level && !dd_ptr->destroyed && dungeon_ptr->flags.has_any_of(DF_LAKE_MASK)) {
+    constexpr auto chance_water = 24;
+    if (one_in_(chance_water) && !dd_ptr->empty_level && !dd_ptr->destroyed && dungeon_ptr->flags.has_any_of(DF_LAKE_MASK)) {
         int count = 0;
         if (dungeon_ptr->flags.has(DungeonFeatureType::LAKE_WATER)) {
             count += 3;
