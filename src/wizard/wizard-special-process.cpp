@@ -614,7 +614,7 @@ static bool select_debugging_floor(PlayerType *player_ptr, int dungeon_type)
  * @brief 任意のダンジョン及び階層に飛ぶ
  * Go to any level
  */
-static void jump_floor(PlayerType *player_ptr, DUNGEON_IDX dun_idx, DEPTH depth)
+static void wiz_jump_floor(PlayerType *player_ptr, DUNGEON_IDX dun_idx, DEPTH depth)
 {
     player_ptr->dungeon_idx = dun_idx;
     auto &floor_ref = *player_ptr->current_floor_ptr;
@@ -666,7 +666,7 @@ void wiz_jump_to_dungeon(PlayerType *player_ptr)
         do_cmd_save_game(player_ptr, true);
     }
 
-    jump_floor(player_ptr, dungeon_type, command_arg);
+    wiz_jump_floor(player_ptr, dungeon_type, command_arg);
 }
 
 /*!
