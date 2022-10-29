@@ -98,7 +98,14 @@ void gen_caverns_and_lakes(PlayerType *player_ptr, dungeon_type *dungeon_ptr, du
         }
     }
 
-    if ((floor_ptr->dun_level > DUN_CAVERN) && !dd_ptr->empty_level && dungeon_ptr->flags.has(DungeonFeatureType::CAVERN) && !dd_ptr->laketype && !dd_ptr->destroyed && (randint1(1000) < floor_ptr->dun_level)) {
+    constexpr auto can_become_cavern = 20;
+    auto should_build_cavern = floor_ptr->dun_level > can_become_cavern;
+    should_build_cavern &= !dd_ptr->empty_level;
+    should_build_cavern &= dungeon_ptr->flags.has(DungeonFeatureType::CAVERN);
+    should_build_cavern &= dd_ptr->laketype == 0;
+    should_build_cavern &= !dd_ptr->destroyed;
+    should_build_cavern &= randint1(1000) < floor_ptr->dun_level;
+    if (should_build_cavern) {
         dd_ptr->cavern = true;
         msg_print_wizard(player_ptr, CHEAT_DUNGEON, _("洞窟を生成。", "Cavern on level."));
         build_cavern(player_ptr);
