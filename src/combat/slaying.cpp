@@ -202,7 +202,7 @@ int calc_attack_damage_with_slay(PlayerType *player_ptr, ObjectType *o_ptr, int 
             mult = mult * 3 / 2 + 20;
         }
 
-        if ((o_ptr->fixed_artifact_idx == FixedArtifactId::NOTHUNG) && (m_ptr->r_idx == MonsterRaceId::FAFNER)) {
+        if ((o_ptr->is_specific_artifact(FixedArtifactId::NOTHUNG)) && (m_ptr->r_idx == MonsterRaceId::FAFNER)) {
             mult = 150;
         }
         break;

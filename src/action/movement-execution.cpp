@@ -153,16 +153,19 @@ void exe_movement(PlayerType *player_ptr, DIRECTION dir, bool do_pickup, bool br
     // @todo 「特定の武器を装備している」旨のメソッドを別途作る
     constexpr auto stormbringer = FixedArtifactId::STORMBRINGER;
     auto is_stormbringer = false;
-    if (player_ptr->inventory_list[INVEN_MAIN_HAND].fixed_artifact_idx == stormbringer) {
+    if (player_ptr->inventory_list[INVEN_MAIN_HAND].is_specific_artifact(stormbringer)) {
         is_stormbringer = true;
     }
 
-    if (player_ptr->inventory_list[INVEN_SUB_HAND].fixed_artifact_idx == stormbringer) {
+    if (player_ptr->inventory_list[INVEN_SUB_HAND].is_specific_artifact(stormbringer)) {
         is_stormbringer = true;
     }
 
     auto *f_ptr = &terrains_info[g_ptr->feat];
-    bool p_can_kill_walls = has_kill_wall(player_ptr) && f_ptr->flags.has(TerrainCharacteristics::HURT_DISI) && (!p_can_enter || f_ptr->flags.has_not(TerrainCharacteristics::LOS)) && f_ptr->flags.has_not(TerrainCharacteristics::PERMANENT);
+    auto p_can_kill_walls = has_kill_wall(player_ptr);
+    p_can_kill_walls &= f_ptr->flags.has(TerrainCharacteristics::HURT_DISI);
+    p_can_kill_walls &= !p_can_enter || f_ptr->flags.has_not(TerrainCharacteristics::LOS);
+    p_can_kill_walls &= f_ptr->flags.has_not(TerrainCharacteristics::PERMANENT);
     GAME_TEXT m_name[MAX_NLEN];
     bool can_move = true;
     bool do_past = false;

@@ -376,7 +376,7 @@ static void on_dead_random_artifact(PlayerType *player_ptr, monster_death_type *
             break;
         }
 
-        if ((q_ptr->fixed_artifact_idx != FixedArtifactId::NONE) && q_ptr->is_ego()) {
+        if (q_ptr->is_ego()) {
             continue;
         }
 

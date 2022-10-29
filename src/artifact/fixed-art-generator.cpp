@@ -42,7 +42,7 @@
  */
 static bool invest_terror_mask(PlayerType *player_ptr, ObjectType *o_ptr)
 {
-    if (o_ptr->fixed_artifact_idx != FixedArtifactId::TERROR) {
+    if (!o_ptr->is_specific_artifact(FixedArtifactId::TERROR)) {
         return false;
     }
 
@@ -68,7 +68,7 @@ static bool invest_terror_mask(PlayerType *player_ptr, ObjectType *o_ptr)
  */
 static void milim_swimsuit(PlayerType *player_ptr, ObjectType *o_ptr)
 {
-    if ((o_ptr->fixed_artifact_idx != FixedArtifactId::MILIM) || (player_ptr->ppersonality != PERSONALITY_SEXY)) {
+    if (!o_ptr->is_specific_artifact(FixedArtifactId::MILIM) || (player_ptr->ppersonality != PERSONALITY_SEXY)) {
         return;
     }
 

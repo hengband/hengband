@@ -92,7 +92,7 @@ void PlayerAlignment::update_alignment()
 
     for (int i = 0; i < 2; i++) {
         const auto &wielding_weapon = this->player_ptr->inventory_list[INVEN_MAIN_HAND + i];
-        if (!has_melee_weapon(this->player_ptr, INVEN_MAIN_HAND + i) || (wielding_weapon.fixed_artifact_idx != FixedArtifactId::IRON_BALL)) {
+        if (!has_melee_weapon(this->player_ptr, INVEN_MAIN_HAND + i) || !wielding_weapon.is_specific_artifact(FixedArtifactId::IRON_BALL)) {
             continue;
         }
 

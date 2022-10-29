@@ -1135,7 +1135,7 @@ void update_curses(PlayerType *player_ptr)
         auto obj_curse_flags = o_ptr->curse_flags;
         obj_curse_flags.reset({ CurseTraitType::CURSED, CurseTraitType::HEAVY_CURSE, CurseTraitType::PERMA_CURSE });
         player_ptr->cursed.set(obj_curse_flags);
-        if (o_ptr->fixed_artifact_idx == FixedArtifactId::CHAINSWORD) {
+        if (o_ptr->is_specific_artifact(FixedArtifactId::CHAINSWORD)) {
             player_ptr->cursed_special.set(CurseSpecialTraitType::CHAINSWORD);
         }
 

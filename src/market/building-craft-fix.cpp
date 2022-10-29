@@ -250,7 +250,7 @@ static PRICE repair_broken_weapon_aux(PlayerType *player_ptr, PRICE bcost)
     o_ptr->to_h += std::max<short>(0, (mo_ptr->to_h / 3));
     o_ptr->to_a += std::max<short>(0, (mo_ptr->to_a));
 
-    const auto is_narsil = o_ptr->fixed_artifact_idx == FixedArtifactId::NARSIL;
+    const auto is_narsil = o_ptr->is_specific_artifact(FixedArtifactId::NARSIL);
     if (is_narsil || (o_ptr->is_random_artifact() && one_in_(1)) || (o_ptr->is_ego() && one_in_(7))) {
         if (o_ptr->is_ego()) {
             o_ptr->art_flags.set(TR_IGNORE_FIRE);

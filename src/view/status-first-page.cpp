@@ -49,7 +49,7 @@ static void calc_shot_params(PlayerType *player_ptr, ObjectType *o_ptr, int *sho
     *shots = player_ptr->num_fire * 100;
     *shot_frac = ((*shots) * 100 / energy_fire) % 100;
     *shots = (*shots) / energy_fire;
-    if (o_ptr->fixed_artifact_idx != FixedArtifactId::CRIMSON) {
+    if (!o_ptr->is_specific_artifact(FixedArtifactId::CRIMSON)) {
         return;
     }
 
@@ -149,8 +149,8 @@ static bool calc_weapon_one_hand(ObjectType *o_ptr, int hand, int *damage, int *
  */
 static int strengthen_basedam(PlayerType *player_ptr, ObjectType *o_ptr, int basedam, const TrFlags &flgs)
 {
-    const auto is_vorpal_blade = o_ptr->fixed_artifact_idx == FixedArtifactId::VORPAL_BLADE;
-    const auto is_chainsword = o_ptr->fixed_artifact_idx == FixedArtifactId::CHAINSWORD;
+    const auto is_vorpal_blade = o_ptr->is_specific_artifact(FixedArtifactId::VORPAL_BLADE);
+    const auto is_chainsword = o_ptr->is_specific_artifact(FixedArtifactId::CHAINSWORD);
     if (o_ptr->is_fully_known() && (is_vorpal_blade || is_chainsword)) {
         /* vorpal blade */
         basedam *= 5;

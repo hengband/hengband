@@ -348,8 +348,8 @@ static MULTIPLY calc_shot_damage_with_slay(
                 mult = 30;
             }
 
-            auto can_eliminate_smaug = arrow_ptr->fixed_artifact_idx == FixedArtifactId::BARD_ARROW;
-            can_eliminate_smaug &= player_ptr->inventory_list[INVEN_BOW].fixed_artifact_idx == FixedArtifactId::BARD;
+            auto can_eliminate_smaug = arrow_ptr->is_specific_artifact(FixedArtifactId::BARD_ARROW);
+            can_eliminate_smaug &= player_ptr->inventory_list[INVEN_BOW].is_specific_artifact(FixedArtifactId::BARD);
             can_eliminate_smaug &= monster_ptr->r_idx == MonsterRaceId::SMAUG;
             if (can_eliminate_smaug) {
                 mult *= 5;

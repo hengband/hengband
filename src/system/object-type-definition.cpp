@@ -399,7 +399,7 @@ bool ObjectType::is_artifact() const
  */
 bool ObjectType::is_fixed_artifact() const
 {
-    return this->fixed_artifact_idx != FixedArtifactId::NONE;
+    return !this->is_specific_artifact(FixedArtifactId::NONE);
 }
 
 /*!
@@ -490,11 +490,11 @@ bool ObjectType::is_potion() const
  */
 bool ObjectType::is_readable() const
 {
-    const auto is_scroll = this->tval == ItemKindType::SCROLL;
-    const auto is_parchment = this->tval == ItemKindType::PARCHMENT;
-    const auto is_ghb = this->fixed_artifact_idx == FixedArtifactId::GHB;
-    const auto is_ring_power = this->fixed_artifact_idx == FixedArtifactId::POWER;
-    return is_scroll || is_parchment || is_ghb || is_ring_power;
+    auto can_read = this->tval == ItemKindType::SCROLL;
+    can_read |= this->tval == ItemKindType::PARCHMENT;
+    can_read |= this->is_specific_artifact(FixedArtifactId::GHB);
+    can_read |= this->is_specific_artifact(FixedArtifactId::POWER);
+    return can_read;
 }
 
 /*!
@@ -794,4 +794,9 @@ int ObjectType::calc_capture_value() const
     }
 
     return (monraces_info[capture_r_idx].level) * 50 + 1000;
+}
+
+bool ObjectType::is_specific_artifact(FixedArtifactId id) const
+{
+    return this->fixed_artifact_idx == id;
 }

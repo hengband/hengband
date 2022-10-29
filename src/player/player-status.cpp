@@ -3176,7 +3176,7 @@ bool is_shero(PlayerType *player_ptr)
 
 bool is_echizen(PlayerType *player_ptr)
 {
-    return (player_ptr->ppersonality == PERSONALITY_COMBAT) || (player_ptr->inventory_list[INVEN_BOW].fixed_artifact_idx == FixedArtifactId::CRIMSON);
+    return (player_ptr->ppersonality == PERSONALITY_COMBAT) || (player_ptr->inventory_list[INVEN_BOW].is_specific_artifact(FixedArtifactId::CRIMSON));
 }
 
 bool is_chargeman(PlayerType *player_ptr)
@@ -3227,28 +3227,28 @@ static player_hand main_attack_hand(PlayerType *player_ptr)
 
 bool set_quick_and_tiny(PlayerType *player_ptr)
 {
-    auto is_quickly_tiny = player_ptr->inventory_list[INVEN_MAIN_HAND].fixed_artifact_idx == FixedArtifactId::QUICKTHORN;
-    is_quickly_tiny &= player_ptr->inventory_list[INVEN_SUB_HAND].fixed_artifact_idx == FixedArtifactId::TINYTHORN;
+    auto is_quickly_tiny = player_ptr->inventory_list[INVEN_MAIN_HAND].is_specific_artifact(FixedArtifactId::QUICKTHORN);
+    is_quickly_tiny &= player_ptr->inventory_list[INVEN_SUB_HAND].is_specific_artifact(FixedArtifactId::TINYTHORN);
     return is_quickly_tiny;
 }
 
 bool set_musasi(PlayerType *player_ptr)
 {
-    auto is_musasi = player_ptr->inventory_list[INVEN_MAIN_HAND].fixed_artifact_idx == FixedArtifactId::MUSASI_KATANA;
-    is_musasi &= player_ptr->inventory_list[INVEN_SUB_HAND].fixed_artifact_idx == FixedArtifactId::MUSASI_WAKIZASI;
+    auto is_musasi = player_ptr->inventory_list[INVEN_MAIN_HAND].is_specific_artifact(FixedArtifactId::MUSASI_KATANA);
+    is_musasi &= player_ptr->inventory_list[INVEN_SUB_HAND].is_specific_artifact(FixedArtifactId::MUSASI_WAKIZASI);
     return is_musasi;
 }
 
 bool set_icing_and_twinkle(PlayerType *player_ptr)
 {
-    auto can_call_ice_wind_saga = player_ptr->inventory_list[INVEN_MAIN_HAND].fixed_artifact_idx == FixedArtifactId::ICINGDEATH;
-    can_call_ice_wind_saga &= player_ptr->inventory_list[INVEN_SUB_HAND].fixed_artifact_idx == FixedArtifactId::TWINKLE;
+    auto can_call_ice_wind_saga = player_ptr->inventory_list[INVEN_MAIN_HAND].is_specific_artifact(FixedArtifactId::ICINGDEATH);
+    can_call_ice_wind_saga &= player_ptr->inventory_list[INVEN_SUB_HAND].is_specific_artifact(FixedArtifactId::TWINKLE);
     return can_call_ice_wind_saga;
 }
 
 bool set_anubis_and_chariot(PlayerType *player_ptr)
 {
-    auto is_anubis_chariot = player_ptr->inventory_list[INVEN_MAIN_HAND].fixed_artifact_idx == FixedArtifactId::ANUBIS;
-    is_anubis_chariot &= player_ptr->inventory_list[INVEN_SUB_HAND].fixed_artifact_idx == FixedArtifactId::SILVER_CHARIOT;
+    auto is_anubis_chariot = player_ptr->inventory_list[INVEN_MAIN_HAND].is_specific_artifact(FixedArtifactId::ANUBIS);
+    is_anubis_chariot &= player_ptr->inventory_list[INVEN_SUB_HAND].is_specific_artifact(FixedArtifactId::SILVER_CHARIOT);
     return is_anubis_chariot;
 }

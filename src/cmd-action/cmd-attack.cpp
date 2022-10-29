@@ -206,8 +206,8 @@ bool do_cmd_attack(PlayerType *player_ptr, POSITION y, POSITION x, combat_option
     if (any_bits(r_ptr->flags1, RF1_FEMALE) && !(is_stunned || is_confused || is_hallucinated || !m_ptr->ml)) {
         // @todo 「特定の武器を装備している」旨のメソッドを別途作る
         constexpr auto zantetsu = FixedArtifactId::ZANTETSU;
-        const auto is_main_hand_zantetsu = player_ptr->inventory_list[INVEN_MAIN_HAND].fixed_artifact_idx == zantetsu;
-        const auto is_sub_hand_zantetsu = player_ptr->inventory_list[INVEN_SUB_HAND].fixed_artifact_idx == zantetsu;
+        const auto is_main_hand_zantetsu = player_ptr->inventory_list[INVEN_MAIN_HAND].is_specific_artifact(zantetsu);
+        const auto is_sub_hand_zantetsu = player_ptr->inventory_list[INVEN_SUB_HAND].is_specific_artifact(zantetsu);
         if (is_main_hand_zantetsu || is_sub_hand_zantetsu) {
             msg_print(_("拙者、おなごは斬れぬ！", "I can not attack women!"));
             return false;
@@ -222,11 +222,11 @@ bool do_cmd_attack(PlayerType *player_ptr, POSITION y, POSITION x, combat_option
     if (!m_ptr->is_hostile() && !(is_stunned || is_confused || is_hallucinated || is_shero(player_ptr) || !m_ptr->ml)) {
         constexpr auto stormbringer = FixedArtifactId::STORMBRINGER;
         auto is_stormbringer = false;
-        if (player_ptr->inventory_list[INVEN_MAIN_HAND].fixed_artifact_idx == stormbringer) {
+        if (player_ptr->inventory_list[INVEN_MAIN_HAND].is_specific_artifact(stormbringer)) {
             is_stormbringer = true;
         }
 
-        if (player_ptr->inventory_list[INVEN_SUB_HAND].fixed_artifact_idx == stormbringer) {
+        if (player_ptr->inventory_list[INVEN_SUB_HAND].is_specific_artifact(stormbringer)) {
             is_stormbringer = true;
         }
 
