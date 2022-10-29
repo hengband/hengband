@@ -1059,12 +1059,10 @@ WishResultType do_cmd_wishing(PlayerType *player_ptr, int prob, bool allow_art, 
 
         if (wish_randart) {
             if (must || ok_art) {
-                bool is_fixed_artifact;
                 do {
                     o_ptr->prep(k_idx);
                     ItemMagicApplier(player_ptr, o_ptr, k_ptr->level, AM_SPECIAL | AM_NO_FIXED_ART).execute();
-                    is_fixed_artifact = !o_ptr->is_specific_artifact(FixedArtifactId::NONE);
-                } while (!o_ptr->art_name || is_fixed_artifact || o_ptr->is_ego() || o_ptr->is_cursed());
+                } while (!o_ptr->art_name || o_ptr->is_ego() || o_ptr->is_cursed());
 
                 if (o_ptr->art_name) {
                     drop_near(player_ptr, o_ptr, -1, player_ptr->y, player_ptr->x);
@@ -1088,8 +1086,7 @@ WishResultType do_cmd_wishing(PlayerType *player_ptr, int prob, bool allow_art, 
                     for (i = 0; i < max_roll; i++) {
                         o_ptr->prep(k_idx);
                         ItemMagicApplier(player_ptr, o_ptr, k_ptr->level, AM_GREAT | AM_NO_FIXED_ART).execute();
-                        const auto is_fixed_artifact = !o_ptr->is_specific_artifact(FixedArtifactId::NONE);
-                        if (is_fixed_artifact || o_ptr->art_name) {
+                        if (o_ptr->art_name) {
                             continue;
                         }
 
