@@ -534,6 +534,36 @@ void wiz_create_feature(PlayerType *player_ptr)
     player_ptr->update |= PU_FLOW;
 }
 
+/*!
+ * @brief デバッグ帰還のダンジョンを選ぶ
+ * @param player_ptr プレイヤーへの参照ポインタ
+ * @details 範囲外の値が選択されたら再入力を促す
+ */
+static bool select_debugging_dungeon(PlayerType *player_ptr, DUNGEON_IDX *dungeon_type)
+{
+    if (command_arg > 0) {
+        return true;
+    }
+
+    while (true) {
+        char ppp[80];
+        char tmp_val[160];
+        sprintf(ppp, "Jump which dungeon : ");
+        sprintf(tmp_val, "%d", player_ptr->dungeon_idx);
+        if (!get_string(ppp, tmp_val, 2)) {
+            return false;
+        }
+
+        *dungeon_type = (DUNGEON_IDX)atoi(tmp_val);
+        if ((*dungeon_type < DUNGEON_ANGBAND) || (*dungeon_type > DUNGEON_MAX)) {
+            msg_print("Invalid dungeon. Please re-input.");
+            continue;
+        }
+
+        return true;
+    }
+}
+
 /*
  * @brief 選択したダンジョンの任意フロアを選択する
  * @param player_ptr プレイヤーへの参照ポインタ
@@ -578,36 +608,6 @@ static bool select_debugging_floor(PlayerType *player_ptr, int dungeon_type)
     }
 
     return true;
-}
-
-/*!
- * @brief デバッグ帰還のダンジョンを選ぶ
- * @param player_ptr プレイヤーへの参照ポインタ
- * @details 範囲外の値が選択されたら再入力を促す
- */
-static bool select_debugging_dungeon(PlayerType *player_ptr, DUNGEON_IDX *dungeon_type)
-{
-    if (command_arg > 0) {
-        return true;
-    }
-
-    while (true) {
-        char ppp[80];
-        char tmp_val[160];
-        sprintf(ppp, "Jump which dungeon : ");
-        sprintf(tmp_val, "%d", player_ptr->dungeon_idx);
-        if (!get_string(ppp, tmp_val, 2)) {
-            return false;
-        }
-
-        *dungeon_type = (DUNGEON_IDX)atoi(tmp_val);
-        if ((*dungeon_type < DUNGEON_ANGBAND) || (*dungeon_type > DUNGEON_MAX)) {
-            msg_print("Invalid dungeon. Please re-input.");
-            continue;
-        }
-
-        return true;
-    }
 }
 
 /*!
