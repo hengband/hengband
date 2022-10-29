@@ -226,7 +226,6 @@ hengband_SOURCES = \
 	floor/object-allocator.cpp floor/object-allocator.h \
 	floor/object-scanner.cpp floor/object-scanner.h \
 	floor/pattern-walk.cpp floor/pattern-walk.h \
-	floor/sight-definitions.h \
 	floor/tunnel-generator.cpp floor/tunnel-generator.h \
 	floor/wild.h floor/wild.cpp \
 	\

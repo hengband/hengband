@@ -14,7 +14,7 @@
  * @param y チェックするマスのY座標
  * @return 床系地形ならばTRUE
  */
-static bool get_is_floor(floor_type *floor_ptr, POSITION x, POSITION y)
+static bool get_is_floor(FloorType *floor_ptr, POSITION x, POSITION y)
 {
     if (!in_bounds(floor_ptr, y, x)) {
         return false;

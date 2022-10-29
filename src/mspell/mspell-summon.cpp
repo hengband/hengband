@@ -55,7 +55,7 @@ static void summon_disturb(PlayerType *player_ptr, int target_type, bool known, 
  * @param m_idx モンスターID
  * @return 召喚可能であればPM_ALLOW_UNIQUEを返す。
  */
-static BIT_FLAGS monster_u_mode(floor_type *floor_ptr, MONSTER_IDX m_idx)
+static BIT_FLAGS monster_u_mode(FloorType *floor_ptr, MONSTER_IDX m_idx)
 {
     BIT_FLAGS u_mode = 0L;
     auto *m_ptr = &floor_ptr->m_list[m_idx];

@@ -100,7 +100,7 @@ static void image_random(TERM_COLOR *ap, char *cp)
  * 周り全てが壁に囲まれている壁についてはオプション状態による。
  * 1か所でも空きがあるか、壁ではない地形、金を含む地形、永久岩は表示。
  */
-static bool is_revealed_wall(floor_type *floor_ptr, TerrainType *f_ptr, POSITION y, POSITION x)
+static bool is_revealed_wall(FloorType *floor_ptr, TerrainType *f_ptr, POSITION y, POSITION x)
 {
     if (view_hidden_walls) {
         if (view_unsafe_walls) {

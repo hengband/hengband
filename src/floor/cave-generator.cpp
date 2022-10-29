@@ -31,7 +31,7 @@
 #include "util/bit-flags-calculator.h"
 #include "wizard/wizard-messages.h"
 
-static void reset_lite_area(floor_type *floor_ptr)
+static void reset_lite_area(FloorType *floor_ptr)
 {
     floor_ptr->lite_n = 0;
     floor_ptr->mon_lite_n = 0;
@@ -189,7 +189,7 @@ static void make_doors(PlayerType *player_ptr, dun_data_type *dd_ptr, dt_type *d
     }
 }
 
-static void make_only_tunnel_points(floor_type *floor_ptr, dun_data_type *dd_ptr)
+static void make_only_tunnel_points(FloorType *floor_ptr, dun_data_type *dd_ptr)
 {
     int point_num = (floor_ptr->width * floor_ptr->height) / 200 + randint1(3);
     dd_ptr->cent_n = point_num;
@@ -385,7 +385,7 @@ static bool allocate_dungeon_data(PlayerType *player_ptr, dun_data_type *dd_ptr,
     return false;
 }
 
-static void decide_grid_glowing(floor_type *floor_ptr, dun_data_type *dd_ptr, dungeon_type *d_ptr)
+static void decide_grid_glowing(FloorType *floor_ptr, dun_data_type *dd_ptr, dungeon_type *d_ptr)
 {
     bool is_empty_or_dark = dd_ptr->empty_level;
     is_empty_or_dark &= !one_in_(DARK_EMPTY) || (randint1(100) > floor_ptr->dun_level);

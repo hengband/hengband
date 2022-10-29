@@ -4,7 +4,7 @@
 
 #include <list>
 
-struct floor_type;
+class FloorType;
 
 /**
  * @brief アイテムリスト(床上スタック/モンスター所持)を管理するクラス
@@ -32,7 +32,7 @@ public:
      * @param o_idx 追加するアイテムのフロア全体のアイテム配列上の要素番号
      * @param stack_idx アイテムリストに追加する位置(デフォルト:0)
      */
-    void add(floor_type *floor_ptr, OBJECT_IDX o_idx, IDX stack_idx = 0);
+    void add(FloorType *floor_ptr, OBJECT_IDX o_idx, IDX stack_idx = 0);
 
     /**
      * @brief アイテムリストからフロア全体のアイテム配列上の指定した要素番号のアイテムを削除する
@@ -49,7 +49,7 @@ public:
      * 先頭のアイテムを最後尾に移動した後各アイテムの stack_idx は1ずつインクリメントされ、
      * 最後尾に移動したアイテムの stack_idx は 1 になる。
      */
-    void rotate(floor_type *floor_ptr);
+    void rotate(FloorType *floor_ptr);
 
     //
     // 以下のメソッドは内部で保持している std::list オブジェクトに対して使用できる同名のメソッド

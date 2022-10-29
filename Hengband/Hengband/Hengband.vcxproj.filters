@@ -4367,9 +4367,6 @@
     <ClInclude Include="..\..\src\floor\floor-base-definitions.h">
       <Filter>floor</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\floor\sight-definitions.h">
-      <Filter>floor</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\system\floor-type-definition.h">
       <Filter>system</Filter>
     </ClInclude>

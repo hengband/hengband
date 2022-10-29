@@ -26,7 +26,7 @@
  * @param x 対象を行うマスのX座標
  * @return
  */
-static bool do_cmd_tunnel_test(floor_type *floor_ptr, POSITION y, POSITION x)
+static bool do_cmd_tunnel_test(FloorType *floor_ptr, POSITION y, POSITION x)
 {
     auto *g_ptr = &floor_ptr->grid_array[y][x];
     if (!g_ptr->is_mark()) {

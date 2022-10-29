@@ -177,7 +177,7 @@ static void place_pet(PlayerType *player_ptr)
  * while new floor creation since dungeons may be re-created by
  * auto-scum option.
  */
-static void update_unique_artifact(floor_type *floor_ptr, int16_t cur_floor_id)
+static void update_unique_artifact(FloorType *floor_ptr, int16_t cur_floor_id)
 {
     for (int i = 1; i < floor_ptr->m_max; i++) {
         const auto &m_ref = floor_ptr->m_list[i];

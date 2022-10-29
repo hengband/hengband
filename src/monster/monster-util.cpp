@@ -240,7 +240,7 @@ monsterrace_hook_type get_monster_hook2(PlayerType *player_ptr, POSITION y, POSI
  */
 static errr do_get_mon_num_prep(PlayerType *player_ptr, const monsterrace_hook_type hook1, const monsterrace_hook_type hook2, const bool restrict_to_dungeon)
 {
-    const floor_type *const floor_ptr = player_ptr->current_floor_ptr;
+    const FloorType *const floor_ptr = player_ptr->current_floor_ptr;
 
     // デバッグ用統計情報。
     int mon_num = 0; // 重み(prob2)が正の要素数

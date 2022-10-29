@@ -62,7 +62,7 @@ qtwg_type *initialize_quest_generator_type(qtwg_type *qtwg_ptr, char *buf, int y
  * @param x 配置先X座標
  * @return エラーコード
  */
-static void drop_here(floor_type *floor_ptr, ObjectType *j_ptr, POSITION y, POSITION x)
+static void drop_here(FloorType *floor_ptr, ObjectType *j_ptr, POSITION y, POSITION x)
 {
     OBJECT_IDX o_idx = o_pop(floor_ptr);
     ObjectType *o_ptr;

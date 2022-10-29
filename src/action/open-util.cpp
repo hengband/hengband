@@ -20,7 +20,7 @@
  * @param trapped TRUEならばトラップが存在する箱のみ、FALSEならば空でない箱全てを対象にする
  * @return 箱が存在する場合そのオブジェクトID、存在しない場合0を返す。
  */
-OBJECT_IDX chest_check(floor_type *floor_ptr, POSITION y, POSITION x, bool trapped)
+OBJECT_IDX chest_check(FloorType *floor_ptr, POSITION y, POSITION x, bool trapped)
 {
     auto *g_ptr = &floor_ptr->grid_array[y][x];
     for (const auto this_o_idx : g_ptr->o_idx_list) {

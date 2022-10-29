@@ -98,7 +98,7 @@ void decide_lite_range(PlayerType *player_ptr, msa_type *msa_ptr)
     msa_ptr->x_br_lite = 0;
 }
 
-static void feature_projection(floor_type *floor_ptr, msa_type *msa_ptr)
+static void feature_projection(FloorType *floor_ptr, msa_type *msa_ptr)
 {
     auto *f_ptr = &terrains_info[floor_ptr->grid_array[msa_ptr->y][msa_ptr->x].feat];
     if (f_ptr->flags.has(TerrainCharacteristics::PROJECT)) {

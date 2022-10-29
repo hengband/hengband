@@ -3,11 +3,11 @@
 #include "object/tval-types.h"
 #include "system/angband.h"
 
-struct floor_type;
+class FloorType;
 class PlayerType;
 class ItemTester;
 bool is_ring_slot(int i);
-bool get_tag_floor(floor_type *floor_ptr, COMMAND_CODE *cp, char tag, FLOOR_IDX floor_list[], ITEM_NUMBER floor_num);
+bool get_tag_floor(FloorType *floor_ptr, COMMAND_CODE *cp, char tag, FLOOR_IDX floor_list[], ITEM_NUMBER floor_num);
 bool get_tag(PlayerType *player_ptr, COMMAND_CODE *cp, char tag, BIT_FLAGS mode, const ItemTester &item_tester);
 bool get_item_okay(PlayerType *player_ptr, OBJECT_IDX i, const ItemTester &item_tester);
 bool get_item_allow(PlayerType *player_ptr, INVENTORY_IDX item);

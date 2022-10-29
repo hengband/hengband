@@ -3,11 +3,11 @@
 #include "system/angband.h"
 
 enum class MonsterRaceId : int16_t;
-struct floor_type;
+class FloorType;
 class PlayerType;
 struct monster_type;
-bool monster_is_powerful(floor_type *floor_ptr, MONSTER_IDX m_idx);
-DEPTH monster_level_idx(floor_type *floor_ptr, MONSTER_IDX m_idx);
+bool monster_is_powerful(FloorType *floor_ptr, MONSTER_IDX m_idx);
+DEPTH monster_level_idx(FloorType *floor_ptr, MONSTER_IDX m_idx);
 
 int mon_damage_mod(PlayerType *player_ptr, monster_type *m_ptr, int dam, bool is_psy_spear);
 
@@ -16,6 +16,6 @@ void monster_gain_exp(PlayerType *player_ptr, MONSTER_IDX m_idx, MonsterRaceId s
 
 void process_monsters_mtimed(PlayerType *player_ptr, int mtimed_idx);
 
-int get_mproc_idx(floor_type *floor_ptr, MONSTER_IDX m_idx, int mproc_type);
-void mproc_init(floor_type *floor_ptr);
-void mproc_add(floor_type *floor_ptr, MONSTER_IDX m_idx, int mproc_type);
+int get_mproc_idx(FloorType *floor_ptr, MONSTER_IDX m_idx, int mproc_type);
+void mproc_init(FloorType *floor_ptr);
+void mproc_add(FloorType *floor_ptr, MONSTER_IDX m_idx, int mproc_type);

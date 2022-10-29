@@ -365,7 +365,7 @@ void update_mon_lite(PlayerType *player_ptr)
  * @brief 画面切り替え等でモンスターの灯りを消去する
  * @param floor_ptr 現在フロアへの参照ポインタ
  */
-void clear_mon_lite(floor_type *floor_ptr)
+void clear_mon_lite(FloorType *floor_ptr)
 {
     for (int i = 0; i < floor_ptr->mon_lite_n; i++) {
         grid_type *g_ptr;

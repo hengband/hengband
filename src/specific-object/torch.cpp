@@ -200,7 +200,7 @@ void update_lite(PlayerType *player_ptr)
     std::vector<Pos2D> points;
 
     POSITION p = player_ptr->cur_lite;
-    floor_type *const floor_ptr = player_ptr->current_floor_ptr;
+    FloorType *const floor_ptr = player_ptr->current_floor_ptr;
 
     // 前回照らされていた座標たちを記録。
     for (int i = 0; i < floor_ptr->lite_n; i++) {

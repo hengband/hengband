@@ -5,11 +5,11 @@
 
 enum class MonsterRaceId : int16_t;
 
-struct floor_type;
+class FloorType;
 class PlayerType;
 typedef union spell_functions {
     struct debug_spell_type1 {
-        bool (*spell_function)(PlayerType *, floor_type *);
+        bool (*spell_function)(PlayerType *, FloorType *);
     } spell1;
 
     struct debug_spell_type2 {

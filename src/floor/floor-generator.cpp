@@ -331,7 +331,7 @@ static bool level_gen(PlayerType *player_ptr, concptr *why)
 /*!
  * @brief フロアに存在する全マスの記憶状態を初期化する / Wipe all unnecessary flags after grid_array generation
  */
-void wipe_generate_random_floor_flags(floor_type *floor_ptr)
+void wipe_generate_random_floor_flags(FloorType *floor_ptr)
 {
     for (POSITION y = 0; y < floor_ptr->height; y++) {
         for (POSITION x = 0; x < floor_ptr->width; x++) {
@@ -391,17 +391,17 @@ void clear_cave(PlayerType *player_ptr)
     floor_ptr->object_level = floor_ptr->base_level;
 }
 
-typedef bool (*IsWallFunc)(const floor_type *, int, int);
+typedef bool (*IsWallFunc)(const FloorType *, int, int);
 
 // (y,x) がプレイヤーが通れない永久地形かどうかを返す。
-static bool is_permanent_blocker(const floor_type *const floor_ptr, const int y, const int x)
+static bool is_permanent_blocker(const FloorType *const floor_ptr, const int y, const int x)
 {
     const FEAT_IDX feat = floor_ptr->grid_array[y][x].feat;
     const auto &flags = terrains_info[feat].flags;
     return flags.has(TerrainCharacteristics::PERMANENT) && flags.has_not(TerrainCharacteristics::MOVE);
 }
 
-static void floor_is_connected_dfs(const floor_type *const floor_ptr, const IsWallFunc is_wall, const int y_start, const int x_start, bool *const visited)
+static void floor_is_connected_dfs(const FloorType *const floor_ptr, const IsWallFunc is_wall, const int y_start, const int x_start, bool *const visited)
 {
     // clang-format off
     static const int DY[8] = { -1, -1, -1,  0, 0,  1, 1, 1 };
@@ -449,7 +449,7 @@ static void floor_is_connected_dfs(const floor_type *const floor_ptr, const IsWa
 // 各セルの8近傍は互いに移動可能とし、is_wall が真を返すセルのみを壁とみなす。
 //
 // 連結成分数が 0 の場合、偽を返す。
-static bool floor_is_connected(const floor_type *const floor_ptr, const IsWallFunc is_wall)
+static bool floor_is_connected(const FloorType *const floor_ptr, const IsWallFunc is_wall)
 {
     static std::array<bool, MAX_HGT * MAX_WID> visited;
 
