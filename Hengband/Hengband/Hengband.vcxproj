@@ -1139,7 +1139,6 @@
     <ClInclude Include="..\..\src\floor\line-of-sight.h" />
     <ClInclude Include="..\..\src\floor\object-allocator.h" />
     <ClInclude Include="..\..\src\floor\object-scanner.h" />
-    <ClInclude Include="..\..\src\floor\sight-definitions.h" />
     <ClInclude Include="..\..\src\floor\tunnel-generator.h" />
     <ClInclude Include="..\..\src\game-option\auto-destruction-options.h" />
     <ClInclude Include="..\..\src\game-option\birth-options.h" />
