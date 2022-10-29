@@ -18,7 +18,7 @@
 /*
  * Determines if a map location is fully inside the outer walls
  */
-bool in_bounds(floor_type *floor_ptr, POSITION y, POSITION x)
+bool in_bounds(FloorType *floor_ptr, POSITION y, POSITION x)
 {
     return (y > 0) && (x > 0) && (y < floor_ptr->height - 1) && (x < floor_ptr->width - 1);
 }
@@ -26,7 +26,7 @@ bool in_bounds(floor_type *floor_ptr, POSITION y, POSITION x)
 /*
  * Determines if a map location is on or inside the outer walls
  */
-bool in_bounds2(floor_type *floor_ptr, POSITION y, POSITION x)
+bool in_bounds2(FloorType *floor_ptr, POSITION y, POSITION x)
 {
     return (y >= 0) && (x >= 0) && (y < floor_ptr->height) && (x < floor_ptr->width);
 }
@@ -35,7 +35,7 @@ bool in_bounds2(floor_type *floor_ptr, POSITION y, POSITION x)
  * Determines if a map location is on or inside the outer walls
  * (unsigned version)
  */
-bool in_bounds2u(floor_type *floor_ptr, POSITION y, POSITION x)
+bool in_bounds2u(FloorType *floor_ptr, POSITION y, POSITION x)
 {
     return (y < floor_ptr->height) && (x < floor_ptr->width);
 }
@@ -71,7 +71,7 @@ bool is_cave_empty_bold2(PlayerType *player_ptr, POSITION y, POSITION x)
     return is_empty_grid;
 }
 
-bool cave_has_flag_bold(floor_type *floor_ptr, POSITION y, POSITION x, TerrainCharacteristics f_idx)
+bool cave_has_flag_bold(FloorType *floor_ptr, POSITION y, POSITION x, TerrainCharacteristics f_idx)
 {
     return terrains_info[floor_ptr->grid_array[y][x].feat].flags.has(f_idx);
 }
@@ -95,7 +95,7 @@ bool player_bold(PlayerType *player_ptr, POSITION y, POSITION x)
 /*
  * Does the grid stop disintegration?
  */
-bool cave_stop_disintegration(floor_type *floor_ptr, POSITION y, POSITION x)
+bool cave_stop_disintegration(FloorType *floor_ptr, POSITION y, POSITION x)
 {
     return !cave_has_flag_bold(floor_ptr, y, x, TerrainCharacteristics::PROJECT) && (!cave_has_flag_bold(floor_ptr, y, x, TerrainCharacteristics::HURT_DISI) || cave_has_flag_bold(floor_ptr, y, x, TerrainCharacteristics::PERMANENT));
 }
@@ -107,7 +107,7 @@ bool cave_stop_disintegration(floor_type *floor_ptr, POSITION y, POSITION x)
  * @param x 指定X座標
  * @return 光を通すならばtrueを返す。
  */
-bool cave_los_bold(floor_type *floor_ptr, POSITION y, POSITION x)
+bool cave_los_bold(FloorType *floor_ptr, POSITION y, POSITION x)
 {
     return feat_supports_los(floor_ptr->grid_array[y][x].feat);
 }
@@ -128,7 +128,7 @@ bool feat_supports_los(FEAT_IDX f_idx)
  * Line 2 -- forbid object terrains
  * Line 3 -- forbid normal objects
  */
-bool cave_clean_bold(floor_type *floor_ptr, POSITION y, POSITION x)
+bool cave_clean_bold(FloorType *floor_ptr, POSITION y, POSITION x)
 {
     return cave_has_flag_bold(floor_ptr, y, x, TerrainCharacteristics::FLOOR) && ((floor_ptr->grid_array[y][x].is_object()) == 0) && floor_ptr->grid_array[y][x].o_idx_list.empty();
 }
@@ -139,12 +139,12 @@ bool cave_clean_bold(floor_type *floor_ptr, POSITION y, POSITION x)
  * Line 1 -- forbid non-drops
  * Line 2 -- forbid object terrains
  */
-bool cave_drop_bold(floor_type *floor_ptr, POSITION y, POSITION x)
+bool cave_drop_bold(FloorType *floor_ptr, POSITION y, POSITION x)
 {
     return cave_has_flag_bold(floor_ptr, y, x, TerrainCharacteristics::DROP) && ((floor_ptr->grid_array[y][x].is_object()) == 0);
 }
 
-bool pattern_tile(floor_type *floor_ptr, POSITION y, POSITION x)
+bool pattern_tile(FloorType *floor_ptr, POSITION y, POSITION x)
 {
     return cave_has_flag_bold(floor_ptr, y, x, TerrainCharacteristics::PATTERN);
 }

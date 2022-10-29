@@ -70,7 +70,7 @@ ITEM_NUMBER scan_floor_items(PlayerType *player_ptr, OBJECT_IDX *items, POSITION
  */
 /*
  */
-static void prepare_label_string_floor(floor_type *floor_ptr, char *label, FLOOR_IDX floor_list[], ITEM_NUMBER floor_num)
+static void prepare_label_string_floor(FloorType *floor_ptr, char *label, FLOOR_IDX floor_list[], ITEM_NUMBER floor_num)
 {
     concptr alphabet_chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
     strcpy(label, alphabet_chars);

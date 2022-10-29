@@ -1438,7 +1438,7 @@ bool switch_element_execution(PlayerType *player_ptr)
  * @param x 指定のx座標
  * @return 暗いならTRUE、そうでないならFALSE
  */
-static bool is_target_grid_dark(floor_type *f_ptr, POSITION y, POSITION x)
+static bool is_target_grid_dark(FloorType *f_ptr, POSITION y, POSITION x)
 {
     if (any_bits(f_ptr->grid_array[y][x].info, CAVE_MNLT)) {
         return false;
@@ -1489,7 +1489,7 @@ static bool door_to_darkness(PlayerType *player_ptr, POSITION dist)
 {
     POSITION y = player_ptr->y;
     POSITION x = player_ptr->x;
-    floor_type *f_ptr;
+    FloorType *f_ptr;
 
     for (int i = 0; i < 3; i++) {
         if (!tgt_pt(player_ptr, &x, &y)) {

@@ -73,7 +73,7 @@ errr init_info_txt(FILE *fp, char *buf, angband_header *head, Parser parse_info_
  * @param buf 解析文字列
  * @return エラーコード
  */
-parse_error_type parse_line_feature(floor_type *floor_ptr, char *buf)
+parse_error_type parse_line_feature(FloorType *floor_ptr, char *buf)
 {
     if (init_flags & INIT_ONLY_BUILDINGS) {
         return PARSE_ERROR_NONE;

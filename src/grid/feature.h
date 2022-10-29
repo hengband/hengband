@@ -69,7 +69,7 @@ extern FEAT_IDX feat_wall_solid;
 extern FEAT_IDX feat_ground_type[100];
 extern FEAT_IDX feat_wall_type[100];
 
-struct floor_type;
+class FloorType;
 class PlayerType;
 class TerrainType;
 bool is_closed_door(PlayerType *player_ptr, FEAT_IDX feat);
@@ -80,4 +80,4 @@ bool permanent_wall(TerrainType *f_ptr);
 FEAT_IDX feat_locked_door_random(int door_type);
 FEAT_IDX feat_jammed_door_random(int door_type);
 void cave_set_feat(PlayerType *player_ptr, POSITION y, POSITION x, FEAT_IDX feat);
-FEAT_IDX conv_dungeon_feat(floor_type *floor_ptr, FEAT_IDX newfeat);
+FEAT_IDX conv_dungeon_feat(FloorType *floor_ptr, FEAT_IDX newfeat);

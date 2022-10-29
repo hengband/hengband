@@ -6,7 +6,7 @@
 
 #include "system/angband.h"
 
-struct floor_type;
+class FloorType;
 class PlayerType;
-OBJECT_IDX chest_check(floor_type *floor_ptr, POSITION y, POSITION x, bool trapped);
+OBJECT_IDX chest_check(FloorType *floor_ptr, POSITION y, POSITION x, bool trapped);
 int count_chests(PlayerType *player_ptr, POSITION *y, POSITION *x, bool trapped);

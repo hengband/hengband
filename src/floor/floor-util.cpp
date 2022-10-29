@@ -30,7 +30,7 @@
  * Not completely allocated, that would be inefficient
  * Not completely hardcoded, that would overflow memory
  */
-floor_type floor_info;
+FloorType floor_info;
 
 static int scent_when = 0;
 
@@ -50,7 +50,7 @@ static int scent_when = 0;
  * Whenever the age count loops, most of the scent trail is erased and
  * the age of the remainder is recalculated.
  */
-void update_smell(floor_type *floor_ptr, PlayerType *player_ptr)
+void update_smell(FloorType *floor_ptr, PlayerType *player_ptr)
 {
     /* Create a table that controls the spread of scent */
     const int scent_adjust[5][5] = {
@@ -100,7 +100,7 @@ void update_smell(floor_type *floor_ptr, PlayerType *player_ptr)
 /*
  * Hack -- forget the "flow" information
  */
-void forget_flow(floor_type *floor_ptr)
+void forget_flow(FloorType *floor_ptr)
 {
     for (POSITION y = 0; y < floor_ptr->height; y++) {
         for (POSITION x = 0; x < floor_ptr->width; x++) {
@@ -122,7 +122,7 @@ void forget_flow(floor_type *floor_ptr)
  * clear those fields for grids/monsters containing objects,
  * and we clear it once for every such object.
  */
-void wipe_o_list(floor_type *floor_ptr)
+void wipe_o_list(FloorType *floor_ptr)
 {
     for (OBJECT_IDX i = 1; i < floor_ptr->o_max; i++) {
         auto *o_ptr = &floor_ptr->o_list[i];

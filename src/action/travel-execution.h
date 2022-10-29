@@ -18,7 +18,7 @@ struct travel_type {
 
 extern travel_type travel;
 
-struct floor_type;
+class FloorType;
 class PlayerType;
 void travel_step(PlayerType *player_ptr);
-void forget_travel_flow(floor_type *floor_ptr);
+void forget_travel_flow(FloorType *floor_ptr);

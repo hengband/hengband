@@ -152,7 +152,7 @@ static void preserve_pet(PlayerType *player_ptr)
  * @brief 新フロアに移動元フロアに繋がる階段を配置する / Virtually teleport onto the stairs that is connecting between two floors.
  * @param sf_ptr 移動元の保存フロア構造体参照ポインタ
  */
-static void locate_connected_stairs(PlayerType *player_ptr, floor_type *floor_ptr, saved_floor_type *sf_ptr, BIT_FLAGS floor_mode)
+static void locate_connected_stairs(PlayerType *player_ptr, FloorType *floor_ptr, saved_floor_type *sf_ptr, BIT_FLAGS floor_mode)
 {
     POSITION sx = 0;
     POSITION sy = 0;

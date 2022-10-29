@@ -19,7 +19,7 @@
  * @param i1 オブジェクト移動元の要素番号
  * @param i2 オブジェクト移動先の要素番号
  */
-static void compact_objects_aux(floor_type *floor_ptr, OBJECT_IDX i1, OBJECT_IDX i2)
+static void compact_objects_aux(FloorType *floor_ptr, OBJECT_IDX i1, OBJECT_IDX i2)
 {
     if (i1 == i2) {
         return;

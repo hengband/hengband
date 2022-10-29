@@ -22,7 +22,7 @@
  * This routine should almost never fail, but in case it does,
  * we must be sure to handle "failure" of this routine.
  */
-OBJECT_IDX o_pop(floor_type *floor_ptr)
+OBJECT_IDX o_pop(FloorType *floor_ptr)
 {
     if (floor_ptr->o_max < w_ptr->max_o_idx) {
         OBJECT_IDX i = floor_ptr->o_max;

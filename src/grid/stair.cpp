@@ -68,7 +68,7 @@ void place_random_stairs(PlayerType *player_ptr, POSITION y, POSITION x)
  * @details
  * 条件は永久地形でなく、なおかつ該当のマスにアーティファクトが存在しないか、である。英語の旧コメントに反して＊破壊＊の抑止判定には現在使われていない。
  */
-bool cave_valid_bold(floor_type *floor_ptr, POSITION y, POSITION x)
+bool cave_valid_bold(FloorType *floor_ptr, POSITION y, POSITION x)
 {
     auto *g_ptr = &floor_ptr->grid_array[y][x];
     if (g_ptr->cave_has_flag(TerrainCharacteristics::PERMANENT)) {

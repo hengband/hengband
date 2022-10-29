@@ -277,7 +277,7 @@ void cave_set_feat(PlayerType *player_ptr, POSITION y, POSITION x, FEAT_IDX feat
     }
 }
 
-FEAT_IDX conv_dungeon_feat(floor_type *floor_ptr, FEAT_IDX newfeat)
+FEAT_IDX conv_dungeon_feat(FloorType *floor_ptr, FEAT_IDX newfeat)
 {
     auto *f_ptr = &terrains_info[newfeat];
     if (f_ptr->flags.has_not(TerrainCharacteristics::CONVERT)) {

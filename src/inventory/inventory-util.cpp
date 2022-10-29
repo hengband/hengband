@@ -45,7 +45,7 @@ bool is_ring_slot(int i)
  * Also, the tag "@xn" will work as well, where "n" is a any tag-char,\n
  * and "x" is the "current" command_cmd code.\n
  */
-bool get_tag_floor(floor_type *floor_ptr, COMMAND_CODE *cp, char tag, FLOOR_IDX floor_list[], ITEM_NUMBER floor_num)
+bool get_tag_floor(FloorType *floor_ptr, COMMAND_CODE *cp, char tag, FLOOR_IDX floor_list[], ITEM_NUMBER floor_num)
 {
     for (COMMAND_CODE i = 0; i < floor_num && i < 23; i++) {
         auto *o_ptr = &floor_ptr->o_list[floor_list[i]];

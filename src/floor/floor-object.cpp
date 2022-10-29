@@ -81,7 +81,7 @@ static void object_mention(PlayerType *player_ptr, ObjectType *o_ptr)
     msg_format_wizard(player_ptr, CHEAT_OBJECT, _("%sを生成しました。", "%s was generated."), o_name);
 }
 
-static int get_base_floor(floor_type *floor_ptr, BIT_FLAGS mode, std::optional<int> rq_mon_level)
+static int get_base_floor(FloorType *floor_ptr, BIT_FLAGS mode, std::optional<int> rq_mon_level)
 {
     if (any_bits(mode, AM_GREAT)) {
         if (rq_mon_level.has_value()) {
@@ -290,7 +290,7 @@ void delete_object_idx(PlayerType *player_ptr, OBJECT_IDX o_idx)
  * @param floo_ptr 現在フロアへの参照ポインタ
  * @param o_idx 削除対象のオブジェクト構造体ポインタ
  */
-void excise_object_idx(floor_type *floor_ptr, OBJECT_IDX o_idx)
+void excise_object_idx(FloorType *floor_ptr, OBJECT_IDX o_idx)
 {
     auto &list = get_o_idx_list_contains(floor_ptr, o_idx);
     list.remove(o_idx);
@@ -302,7 +302,7 @@ void excise_object_idx(floor_type *floor_ptr, OBJECT_IDX o_idx)
  * @param o_idx 参照を得るリストに含まれるOBJECT_IDX
  * @return o_idxを含む ObjectIndexList への参照
  */
-ObjectIndexList &get_o_idx_list_contains(floor_type *floor_ptr, OBJECT_IDX o_idx)
+ObjectIndexList &get_o_idx_list_contains(FloorType *floor_ptr, OBJECT_IDX o_idx)
 {
     auto *o_ptr = &floor_ptr->o_list[o_idx];
 
@@ -575,7 +575,7 @@ OBJECT_IDX drop_near(PlayerType *player_ptr, ObjectType *j_ptr, PERCENTAGE chanc
  * @param floo_ptr 現在フロアへの参照ポインタ
  * @param item メッセージの対象にしたいアイテム所持スロット
  */
-void floor_item_charges(floor_type *floor_ptr, INVENTORY_IDX item)
+void floor_item_charges(FloorType *floor_ptr, INVENTORY_IDX item)
 {
     auto *o_ptr = &floor_ptr->o_list[item];
     if ((o_ptr->tval != ItemKindType::STAFF) && (o_ptr->tval != ItemKindType::WAND)) {

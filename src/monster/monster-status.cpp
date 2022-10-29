@@ -42,7 +42,7 @@ static uint32_t csleep_noise;
  * @param m_idx モンスターID
  * @return POWERFULフラグがあればTRUE、なければFALSEを返す。
  */
-bool monster_is_powerful(floor_type *floor_ptr, MONSTER_IDX m_idx)
+bool monster_is_powerful(FloorType *floor_ptr, MONSTER_IDX m_idx)
 {
     auto *m_ptr = &floor_ptr->m_list[m_idx];
     auto *r_ptr = &monraces_info[m_ptr->r_idx];
@@ -54,7 +54,7 @@ bool monster_is_powerful(floor_type *floor_ptr, MONSTER_IDX m_idx)
  * @param m_idx モンスターID
  * @return モンスターのレベル
  */
-DEPTH monster_level_idx(floor_type *floor_ptr, MONSTER_IDX m_idx)
+DEPTH monster_level_idx(FloorType *floor_ptr, MONSTER_IDX m_idx)
 {
     auto *m_ptr = &floor_ptr->m_list[m_idx];
     auto *r_ptr = &monraces_info[m_ptr->r_idx];
@@ -103,7 +103,7 @@ int mon_damage_mod(PlayerType *player_ptr, monster_type *m_ptr, int dam, bool is
  * @return mproc_type モンスターの時限ステータスID
  * @return 残りターン値
  */
-int get_mproc_idx(floor_type *floor_ptr, MONSTER_IDX m_idx, int mproc_type)
+int get_mproc_idx(FloorType *floor_ptr, MONSTER_IDX m_idx, int mproc_type)
 {
     const auto &cur_mproc_list = floor_ptr->mproc_list[mproc_type];
     for (int i = floor_ptr->mproc_max[mproc_type] - 1; i >= 0; i--) {
@@ -121,7 +121,7 @@ int get_mproc_idx(floor_type *floor_ptr, MONSTER_IDX m_idx, int mproc_type)
  * @return m_idx モンスターの参照ID
  * @return mproc_type 追加したいモンスターの時限ステータスID
  */
-void mproc_add(floor_type *floor_ptr, MONSTER_IDX m_idx, int mproc_type)
+void mproc_add(FloorType *floor_ptr, MONSTER_IDX m_idx, int mproc_type)
 {
     if (floor_ptr->mproc_max[mproc_type] < w_ptr->max_m_idx) {
         floor_ptr->mproc_list[mproc_type][floor_ptr->mproc_max[mproc_type]++] = (int16_t)m_idx;
@@ -132,7 +132,7 @@ void mproc_add(floor_type *floor_ptr, MONSTER_IDX m_idx, int mproc_type)
  * @brief モンスターの時限ステータスリストを初期化する / Initialize monster process
  * @param floor_ptr 現在フロアへの参照ポインタ
  */
-void mproc_init(floor_type *floor_ptr)
+void mproc_init(FloorType *floor_ptr)
 {
     /* Reset "player_ptr->current_floor_ptr->mproc_max[]" */
     for (int i = 0; i < MAX_MTIMED; i++) {

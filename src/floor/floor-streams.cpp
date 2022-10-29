@@ -54,7 +54,7 @@
  * @param feat2 境界部地形ID
  * @param width 基本幅
  */
-static void recursive_river(floor_type *floor_ptr, POSITION x1, POSITION y1, POSITION x2, POSITION y2, FEAT_IDX feat1, FEAT_IDX feat2, POSITION width)
+static void recursive_river(FloorType *floor_ptr, POSITION x1, POSITION y1, POSITION x2, POSITION y2, FEAT_IDX feat1, FEAT_IDX feat2, POSITION width)
 {
     POSITION dx, dy, length, l, x, y;
     POSITION changex, changey;
@@ -169,7 +169,7 @@ static void recursive_river(floor_type *floor_ptr, POSITION x1, POSITION y1, POS
  * @param feat1 中央部地形ID
  * @param feat2 境界部地形ID
  */
-void add_river(floor_type *floor_ptr, dun_data_type *dd_ptr)
+void add_river(FloorType *floor_ptr, dun_data_type *dd_ptr)
 {
     dungeon_type *dungeon_ptr;
     POSITION y2, x2;

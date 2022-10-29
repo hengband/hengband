@@ -83,7 +83,7 @@ void anger_monster(PlayerType *player_ptr, monster_type *m_ptr)
  * @return m_idx モンスターの参照ID
  * @return mproc_type 削除したいモンスターの時限ステータスID
  */
-static void mproc_remove(floor_type *floor_ptr, MONSTER_IDX m_idx, int mproc_type)
+static void mproc_remove(FloorType *floor_ptr, MONSTER_IDX m_idx, int mproc_type)
 {
     int mproc_idx = get_mproc_idx(floor_ptr, m_idx, mproc_type);
     if (mproc_idx >= 0) {

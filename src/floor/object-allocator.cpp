@@ -29,7 +29,7 @@
  * @note Assumes "in_bounds()"
  * @details We count only granite walls and permanent walls.
  */
-static int next_to_walls(floor_type *floor_ptr, POSITION y, POSITION x)
+static int next_to_walls(FloorType *floor_ptr, POSITION y, POSITION x)
 {
     int k = 0;
     if (in_bounds(floor_ptr, y + 1, x) && floor_ptr->grid_array[y + 1][x].is_extra()) {
@@ -168,7 +168,7 @@ bool alloc_stairs(PlayerType *player_ptr, FEAT_IDX feat, int num, int walls)
  * @param Y 指定Y座標
  * @param X 指定X座標
  */
-static void place_rubble(floor_type *floor_ptr, POSITION y, POSITION x)
+static void place_rubble(FloorType *floor_ptr, POSITION y, POSITION x)
 {
     set_cave_feat(floor_ptr, y, x, feat_rubble);
 }

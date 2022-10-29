@@ -4,11 +4,11 @@
 
 #include <vector>
 
-struct floor_type;
+class FloorType;
 class PlayerType;
 class ItemTester;
 void fix_inventory(PlayerType *player_ptr);
-void print_monster_list(floor_type *floor_ptr, const std::vector<MONSTER_IDX> &monster_list, TERM_LEN x, TERM_LEN y, TERM_LEN max_lines);
+void print_monster_list(FloorType *floor_ptr, const std::vector<MONSTER_IDX> &monster_list, TERM_LEN x, TERM_LEN y, TERM_LEN max_lines);
 void fix_monster_list(PlayerType *player_ptr);
 void fix_equip(PlayerType *player_ptr);
 void fix_player(PlayerType *player_ptr);

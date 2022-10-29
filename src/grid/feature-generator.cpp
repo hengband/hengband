@@ -119,7 +119,7 @@ void gen_caverns_and_lakes(PlayerType *player_ptr, dungeon_type *dungeon_ptr, du
  * grids which are not in rooms.  We might want to also count stairs,\n
  * open doors, closed doors, etc.
  */
-static int next_to_corr(floor_type *floor_ptr, POSITION y1, POSITION x1)
+static int next_to_corr(FloorType *floor_ptr, POSITION y1, POSITION x1)
 {
     int k = 0;
     for (int i = 0; i < 4; i++) {
@@ -144,7 +144,7 @@ static int next_to_corr(floor_type *floor_ptr, POSITION y1, POSITION x1)
  * @return ドアを設置可能ならばTRUEを返す
  * @details まず垂直方向に、次に水平方向に調べる
  */
-static bool possible_doorway(floor_type *floor_ptr, POSITION y, POSITION x)
+static bool possible_doorway(FloorType *floor_ptr, POSITION y, POSITION x)
 {
     if (next_to_corr(floor_ptr, y, x) < 2) {
         return false;

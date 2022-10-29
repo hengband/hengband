@@ -33,7 +33,7 @@
 #include "world/world.h"
 #include <vector>
 
-using PassBoldFunc = bool (*)(floor_type *, POSITION, POSITION);
+using PassBoldFunc = bool (*)(FloorType *, POSITION, POSITION);
 
 /*!
  * @brief 指定した座標全てを照らす。
@@ -162,7 +162,7 @@ static void cave_temp_room_unlite(PlayerType *player_ptr, const std::vector<Pos2
  * @param pass_bold 地形条件を返す関数ポインタ
  * @return 該当地形の数
  */
-static int next_to_open(floor_type *floor_ptr, const POSITION cy, const POSITION cx, const PassBoldFunc pass_bold)
+static int next_to_open(FloorType *floor_ptr, const POSITION cy, const POSITION cx, const PassBoldFunc pass_bold)
 {
     int len = 0;
     int blen = 0;
@@ -191,7 +191,7 @@ static int next_to_open(floor_type *floor_ptr, const POSITION cy, const POSITION
  * @param pass_bold 地形条件を返す関数ポインタ
  * @return 該当地形の数
  */
-static int next_to_walls_adj(floor_type *floor_ptr, const POSITION cy, const POSITION cx, const PassBoldFunc pass_bold)
+static int next_to_walls_adj(FloorType *floor_ptr, const POSITION cy, const POSITION cx, const PassBoldFunc pass_bold)
 {
     POSITION y, x;
     int c = 0;
@@ -276,7 +276,7 @@ static void cave_temp_lite_room_aux(PlayerType *player_ptr, std::vector<Pos2D> &
  * @param x 指定X座標
  * @return 射線を通すならばtrueを返す。
  */
-static bool cave_pass_dark_bold(floor_type *floor_ptr, POSITION y, POSITION x)
+static bool cave_pass_dark_bold(FloorType *floor_ptr, POSITION y, POSITION x)
 {
     return cave_has_flag_bold(floor_ptr, y, x, TerrainCharacteristics::PROJECT);
 }

@@ -55,7 +55,7 @@
  * @details
  * This routine should almost never fail, but it *can* happen.
  */
-MONSTER_IDX m_pop(floor_type *floor_ptr)
+MONSTER_IDX m_pop(FloorType *floor_ptr)
 {
     /* Normal allocation */
     if (floor_ptr->m_max < w_ptr->max_m_idx) {
@@ -413,7 +413,7 @@ void choose_new_monster(PlayerType *player_ptr, MONSTER_IDX m_idx, bool born, Mo
  * @param r_ptr モンスター種族の参照ポインタ
  * @return 加速値
  */
-byte get_mspeed(floor_type *floor_ptr, monster_race *r_ptr)
+byte get_mspeed(FloorType *floor_ptr, monster_race *r_ptr)
 {
     auto mspeed = r_ptr->speed;
     if (r_ptr->kind_flags.has_not(MonsterKindType::UNIQUE) && !floor_ptr->inside_arena) {
@@ -438,7 +438,7 @@ byte get_mspeed(floor_type *floor_ptr, monster_race *r_ptr)
  * @param m_idx 隣接数を調べたいモンスターのID
  * @return 隣接しているモンスターの数
  */
-int get_monster_crowd_number(floor_type *floor_ptr, MONSTER_IDX m_idx)
+int get_monster_crowd_number(FloorType *floor_ptr, MONSTER_IDX m_idx)
 {
     auto *m_ptr = &floor_ptr->m_list[m_idx];
     POSITION my = m_ptr->fy;

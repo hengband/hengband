@@ -41,7 +41,7 @@ POSITION dist_to_line(POSITION y, POSITION x, POSITION y1, POSITION x1, POSITION
  * Modified version of los() for calculation of disintegration balls.
  * Disintegration effects are stopped by permanent walls.
  */
-bool in_disintegration_range(floor_type *floor_ptr, POSITION y1, POSITION x1, POSITION y2, POSITION x2)
+bool in_disintegration_range(FloorType *floor_ptr, POSITION y1, POSITION x1, POSITION y2, POSITION x2)
 {
     POSITION delta_y = y2 - y1;
     POSITION delta_x = x2 - x1;

@@ -49,7 +49,7 @@ static fill_data_type fill_data;
  * Store routine for the fractal floor generator
  * this routine probably should be an inline function or a macro.
  */
-static void store_height(floor_type *floor_ptr, POSITION x, POSITION y, FEAT_IDX val)
+static void store_height(FloorType *floor_ptr, POSITION x, POSITION y, FEAT_IDX val)
 {
     if (((x == fill_data.xmin) || (y == fill_data.ymin) || (x == fill_data.xmax) || (y == fill_data.ymax)) && (val <= fill_data.c1)) {
         val = fill_data.c1 + 1;
@@ -59,7 +59,7 @@ static void store_height(floor_type *floor_ptr, POSITION x, POSITION y, FEAT_IDX
     return;
 }
 
-void generate_hmap(floor_type *floor_ptr, POSITION y0, POSITION x0, POSITION xsiz, POSITION ysiz, int grd, int roug, int cutoff)
+void generate_hmap(FloorType *floor_ptr, POSITION y0, POSITION x0, POSITION xsiz, POSITION ysiz, int grd, int roug, int cutoff)
 {
     POSITION xsize = xsiz;
     POSITION ysize = ysiz;

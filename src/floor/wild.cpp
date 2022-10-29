@@ -128,7 +128,7 @@ void set_floor_and_wall(DUNGEON_IDX type)
  * @param depth_max 深みの最大値
  */
 static void perturb_point_mid(
-    floor_type *floor_ptr, FEAT_IDX x1, FEAT_IDX x2, FEAT_IDX x3, FEAT_IDX x4, POSITION xmid, POSITION ymid, FEAT_IDX rough, FEAT_IDX depth_max)
+    FloorType *floor_ptr, FEAT_IDX x1, FEAT_IDX x2, FEAT_IDX x3, FEAT_IDX x4, POSITION xmid, POSITION ymid, FEAT_IDX rough, FEAT_IDX depth_max)
 {
     FEAT_IDX tmp2 = rough * 2 + 1;
     FEAT_IDX tmp = randint1(tmp2) - (rough + 1);
@@ -159,7 +159,7 @@ static void perturb_point_mid(
  * @param rough ランダム幅
  * @param depth_max 深みの最大値
  */
-static void perturb_point_end(floor_type *floor_ptr, FEAT_IDX x1, FEAT_IDX x2, FEAT_IDX x3, POSITION xmid, POSITION ymid, FEAT_IDX rough, FEAT_IDX depth_max)
+static void perturb_point_end(FloorType *floor_ptr, FEAT_IDX x1, FEAT_IDX x2, FEAT_IDX x3, POSITION xmid, POSITION ymid, FEAT_IDX rough, FEAT_IDX depth_max)
 {
     FEAT_IDX tmp2 = rough * 2 + 1;
     FEAT_IDX tmp = randint0(tmp2) - rough;
@@ -197,7 +197,7 @@ static void perturb_point_end(floor_type *floor_ptr, FEAT_IDX x1, FEAT_IDX x2, F
  * need to be converted to features.
  * </pre>
  */
-static void plasma_recursive(floor_type *floor_ptr, POSITION x1, POSITION y1, POSITION x2, POSITION y2, FEAT_IDX depth_max, FEAT_IDX rough)
+static void plasma_recursive(FloorType *floor_ptr, POSITION x1, POSITION y1, POSITION x2, POSITION y2, FEAT_IDX depth_max, FEAT_IDX rough)
 {
     POSITION xmid = (x2 - x1) / 2 + x1;
     POSITION ymid = (y2 - y1) / 2 + y1;
@@ -231,7 +231,7 @@ static int16_t terrain_table[MAX_WILDERNESS][MAX_FEAT_IN_TERRAIN];
  * @param border 未使用
  * @param corner 広域マップの角部分としての生成ならばTRUE
  */
-static void generate_wilderness_area(floor_type *floor_ptr, int terrain, uint32_t seed, bool corner)
+static void generate_wilderness_area(FloorType *floor_ptr, int terrain, uint32_t seed, bool corner)
 {
     if (terrain == TERRAIN_EDGE) {
         for (POSITION y1 = 0; y1 < MAX_HGT; y1++) {
