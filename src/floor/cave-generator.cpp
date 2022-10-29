@@ -390,8 +390,9 @@ static bool allocate_dungeon_data(PlayerType *player_ptr, dun_data_type *dd_ptr,
 
 static void decide_grid_glowing(FloorType *floor_ptr, dun_data_type *dd_ptr, dungeon_type *d_ptr)
 {
-    bool is_empty_or_dark = dd_ptr->empty_level;
-    is_empty_or_dark &= !one_in_(DARK_EMPTY) || (randint1(100) > floor_ptr->dun_level);
+    constexpr auto chanle_wholly_dark = 5;
+    auto is_empty_or_dark = dd_ptr->empty_level;
+    is_empty_or_dark &= !one_in_(chanle_wholly_dark) || (randint1(100) > floor_ptr->dun_level);
     is_empty_or_dark &= d_ptr->flags.has_not(DungeonFeatureType::DARKNESS);
     if (!is_empty_or_dark) {
         return;
