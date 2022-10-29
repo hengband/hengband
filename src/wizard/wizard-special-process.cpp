@@ -611,6 +611,34 @@ static bool select_debugging_dungeon(PlayerType *player_ptr, DUNGEON_IDX *dungeo
 }
 
 /*!
+ * @brief 任意のダンジョン及び階層に飛ぶ
+ * Go to any level
+ */
+static void jump_floor(PlayerType *player_ptr, DUNGEON_IDX dun_idx, DEPTH depth)
+{
+    player_ptr->dungeon_idx = dun_idx;
+    auto &floor_ref = *player_ptr->current_floor_ptr;
+    floor_ref.dun_level = depth;
+    prepare_change_floor_mode(player_ptr, CFM_RAND_PLACE);
+    if (!floor_ref.is_in_dungeon()) {
+        player_ptr->dungeon_idx = 0;
+    }
+
+    floor_ref.inside_arena = false;
+    player_ptr->wild_mode = false;
+    leave_quest_check(player_ptr);
+    if (record_stair) {
+        exe_write_diary(player_ptr, DIARY_WIZ_TELE, 0, nullptr);
+    }
+
+    floor_ref.quest_number = QuestId::NONE;
+    PlayerEnergy(player_ptr).reset_player_turn();
+    player_ptr->energy_need = 0;
+    prepare_change_floor_mode(player_ptr, CFM_FIRST_FLOOR);
+    player_ptr->leaving = true;
+}
+
+/*!
  * @brief 任意のダンジョン及び階層に飛ぶtための選択処理
  * Go to any level
  */

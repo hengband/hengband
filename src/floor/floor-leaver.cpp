@@ -1,6 +1,5 @@
 ﻿#include "floor/floor-leaver.h"
 #include "cmd-building/cmd-building.h"
-#include "dungeon/quest.h"
 #include "floor/cave.h"
 #include "floor/floor-events.h"
 #include "floor/floor-mode-changer.h"
@@ -13,21 +12,13 @@
 #include "grid/grid.h"
 #include "inventory/inventory-slot-types.h"
 #include "io/write-diary.h"
-#include "mind/mind-mirror-master.h"
 #include "mind/mind-ninja.h"
 #include "monster-floor/monster-lite.h"
 #include "monster-floor/monster-remover.h"
 #include "monster-race/monster-race.h"
-#include "monster-race/race-flags1.h"
-#include "monster-race/race-flags7.h"
 #include "monster/monster-describer.h"
 #include "monster/monster-description-types.h"
-#include "monster/monster-info.h"
-#include "monster/monster-status.h"
 #include "pet/pet-util.h"
-#include "player-status/player-energy.h"
-#include "player/player-status.h"
-#include "player/special-defense-types.h"
 #include "save/floor-writer.h"
 #include "spell-class/spells-mirror-master.h"
 #include "system/artifact-type-definition.h"
@@ -35,7 +26,6 @@
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
 #include "system/monster-race-definition.h"
-#include "system/monster-type-definition.h"
 #include "system/player-type-definition.h"
 #include "system/terrain-type-definition.h"
 #include "target/projection-path-calculator.h"
@@ -457,32 +447,4 @@ void leave_floor(PlayerType *player_ptr)
     }
 
     exe_leave_floor(player_ptr, sf_ptr);
-}
-
-/*!
- * @brief 任意のダンジョン及び階層に飛ぶ
- * Go to any level
- */
-void jump_floor(PlayerType *player_ptr, DUNGEON_IDX dun_idx, DEPTH depth)
-{
-    player_ptr->dungeon_idx = dun_idx;
-    auto &floor_ref = *player_ptr->current_floor_ptr;
-    floor_ref.dun_level = depth;
-    prepare_change_floor_mode(player_ptr, CFM_RAND_PLACE);
-    if (!floor_ref.is_in_dungeon()) {
-        player_ptr->dungeon_idx = 0;
-    }
-
-    floor_ref.inside_arena = false;
-    player_ptr->wild_mode = false;
-    leave_quest_check(player_ptr);
-    if (record_stair) {
-        exe_write_diary(player_ptr, DIARY_WIZ_TELE, 0, nullptr);
-    }
-
-    floor_ref.quest_number = QuestId::NONE;
-    PlayerEnergy(player_ptr).reset_player_turn();
-    player_ptr->energy_need = 0;
-    prepare_change_floor_mode(player_ptr, CFM_FIRST_FLOOR);
-    player_ptr->leaving = true;
 }
