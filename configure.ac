@@ -17,7 +17,7 @@ AM_CONDITIONAL(SET_GID, test "$GAMEGROUP" != "")
 
 dnl generate the installation path for the ./lib/ folder
 if test "$GAMEGROUP" != ""; then
-  MY_EXPAND_DIR(game_libpath, "$datadir/games/$PACKAGE/lib/")
+  MY_EXPAND_DIR(game_libpath, "$datarootdir/games/$PACKAGE/lib/")
 else
   MY_EXPAND_DIR(game_libpath, "./lib/")
   bindir=".."
