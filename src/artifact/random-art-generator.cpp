@@ -457,7 +457,8 @@ bool become_random_artifact(PlayerType *player_ptr, ObjectType *o_ptr, bool a_sc
         curse_artifact(player_ptr, o_ptr);
     }
 
-    if (!a_cursed && one_in_(o_ptr->is_armour() ? ACTIVATION_CHANCE * 2 : ACTIVATION_CHANCE)) {
+    constexpr auto activation_chance = 3;
+    if (!a_cursed && one_in_(o_ptr->is_armour() ? activation_chance * 2 : activation_chance)) {
         o_ptr->activation_id = RandomArtActType::NONE;
         give_activation_power(o_ptr);
     }

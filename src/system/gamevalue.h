@@ -63,13 +63,6 @@
 #define BIAS_LUCK 20 /*!< 1/nの確率でrandom_resistance()で付加する元素耐性が免疫になる */
 #define IM_LUCK 7 /*!< 1/nの確率でrandom_resistance()で複数免疫の除去処理が免除される */
 
-/*! @note
- * Bias luck needs to be higher than weird luck,
- * since it is usually tested several times...
- */
-
-#define ACTIVATION_CHANCE 3 /*!< 1/nの確率でランダムアーティファクトに発動が付加される。ただし防具はさらに1/2 */
-
 #define TY_CURSE_CHANCE 200 /*!<太古の怨念の1ターン毎の発動確率(1/n)*/
 #define CHAINSWORD_NOISE 100 /*!<チェンソーの1ターン毎の発動確率(1/n)*/
 
