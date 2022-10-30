@@ -54,9 +54,6 @@
 
 #define MAX_VAMPIRIC_DRAIN 50 /*!< 吸血処理の最大回復HP */
 
-/* Chance of using syllables to form the name instead of the "template" files */
-#define SINDARIN_NAME 10 /*!< ランダムアーティファクトにシンダリン銘をつける確率 */
-#define TABLE_NAME 20 /*!< ランダムアーティファクトに漢字銘をつける確率(正確には TABLE_NAME - SINDARIN_NAME %)となる */
 #define A_CURSED 13 /*!< 1/nの確率で生成の巻物以外のランダムアーティファクトが呪いつきになる。 */
 #define WEIRD_LUCK 12 /*!< 1/nの確率でrandom_resistance()の処理中バイアス外の耐性がつき、become_random_artifactで4を超えるpvalが許可される。*/
 #define SWORDFISH_LUCK 6 /*!< 1/nの確率で一定以上のスレイダメージを超える武器のスレイ喪失が回避される。 */
