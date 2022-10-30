@@ -62,6 +62,9 @@
 #include "wizard/wizard-messages.h"
 #include "world/world.h"
 
+/*! 吸血処理の最大回復HP */
+constexpr auto MAX_VAMPIRIC_DRAIN = 50;
+
 /*!
  * @brief プレイヤーの攻撃情報を初期化する(コンストラクタ以外の分)
  */

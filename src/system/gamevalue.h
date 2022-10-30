@@ -52,8 +52,6 @@
  */
 #define MAX_REPRO 100
 
-#define MAX_VAMPIRIC_DRAIN 50 /*!< 吸血処理の最大回復HP */
-
 #define BIAS_LUCK 20 /*!< 1/nの確率でrandom_resistance()で付加する元素耐性が免疫になる */
 #define IM_LUCK 7 /*!< 1/nの確率でrandom_resistance()で複数免疫の除去処理が免除される */
 
