@@ -160,7 +160,7 @@ int acid_dam(PlayerType *player_ptr, int dam, concptr kb_str, bool aura)
     }
 
     if (aura || !check_multishadow(player_ptr)) {
-        if ((!(double_resist || has_resist_acid(player_ptr))) && one_in_(HURT_CHANCE)) {
+        if ((!(double_resist || has_resist_acid(player_ptr))) && one_in_(CHANCE_ABILITY_SCORE_DECREASE)) {
             (void)do_dec_stat(player_ptr, A_CHR);
         }
 
@@ -200,7 +200,7 @@ int elec_dam(PlayerType *player_ptr, int dam, concptr kb_str, bool aura)
     }
 
     if (aura || !check_multishadow(player_ptr)) {
-        if ((!(double_resist || has_resist_elec(player_ptr))) && one_in_(HURT_CHANCE)) {
+        if ((!(double_resist || has_resist_elec(player_ptr))) && one_in_(CHANCE_ABILITY_SCORE_DECREASE)) {
             (void)do_dec_stat(player_ptr, A_DEX);
         }
     }
@@ -236,7 +236,7 @@ int fire_dam(PlayerType *player_ptr, int dam, concptr kb_str, bool aura)
 
     dam = dam * calc_fire_damage_rate(player_ptr) / 100;
     if (aura || !check_multishadow(player_ptr)) {
-        if ((!(double_resist || has_resist_fire(player_ptr))) && one_in_(HURT_CHANCE)) {
+        if ((!(double_resist || has_resist_fire(player_ptr))) && one_in_(CHANCE_ABILITY_SCORE_DECREASE)) {
             (void)do_dec_stat(player_ptr, A_STR);
         }
     }
@@ -270,7 +270,7 @@ int cold_dam(PlayerType *player_ptr, int dam, concptr kb_str, bool aura)
 
     dam = dam * calc_cold_damage_rate(player_ptr) / 100;
     if (aura || !check_multishadow(player_ptr)) {
-        if ((!(double_resist || has_resist_cold(player_ptr))) && one_in_(HURT_CHANCE)) {
+        if ((!(double_resist || has_resist_cold(player_ptr))) && one_in_(CHANCE_ABILITY_SCORE_DECREASE)) {
             (void)do_dec_stat(player_ptr, A_STR);
         }
     }
