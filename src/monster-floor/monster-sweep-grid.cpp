@@ -103,7 +103,7 @@ bool MonsterSweepGrid::mon_will_run()
         return (this->player_ptr->pet_follow_distance < 0) && (m_ptr->cdis <= (0 - this->player_ptr->pet_follow_distance));
     }
 
-    if (m_ptr->cdis > MAX_SIGHT + 5) {
+    if (m_ptr->cdis > MAX_PLAYER_SIGHT + 5) {
         return false;
     }
 
@@ -144,7 +144,7 @@ void MonsterSweepGrid::check_hiding_grid(POSITION *y, POSITION *x, POSITION *y2,
     }
 
     if ((!los(this->player_ptr, m_ptr->fy, m_ptr->fx, this->player_ptr->y, this->player_ptr->x) || !projectable(this->player_ptr, m_ptr->fy, m_ptr->fx, this->player_ptr->y, this->player_ptr->x))) {
-        if (floor_ptr->grid_array[m_ptr->fy][m_ptr->fx].get_distance(r_ptr) >= MAX_SIGHT / 2) {
+        if (floor_ptr->grid_array[m_ptr->fy][m_ptr->fx].get_distance(r_ptr) >= MAX_PLAYER_SIGHT / 2) {
             return;
         }
     }

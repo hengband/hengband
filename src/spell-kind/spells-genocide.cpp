@@ -179,7 +179,7 @@ bool mass_genocide(PlayerType *player_ptr, int power, bool player_cast)
         if (!m_ptr->is_valid()) {
             continue;
         }
-        if (m_ptr->cdis > MAX_SIGHT) {
+        if (m_ptr->cdis > MAX_PLAYER_SIGHT) {
             continue;
         }
 
@@ -220,7 +220,7 @@ bool mass_genocide_undead(PlayerType *player_ptr, int power, bool player_cast)
         if (r_ptr->kind_flags.has_not(MonsterKindType::UNDEAD)) {
             continue;
         }
-        if (m_ptr->cdis > MAX_SIGHT) {
+        if (m_ptr->cdis > MAX_PLAYER_SIGHT) {
             continue;
         }
 

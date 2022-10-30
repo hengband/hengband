@@ -597,7 +597,7 @@ void sweep_monster_process(PlayerType *player_ptr)
             continue;
         }
 
-        if ((m_ptr->cdis >= AAF_LIMIT) || !decide_process_continue(player_ptr, m_ptr)) {
+        if ((m_ptr->cdis >= MAX_MONSTER_SENSING) || !decide_process_continue(player_ptr, m_ptr)) {
             continue;
         }
 
@@ -635,11 +635,11 @@ bool decide_process_continue(PlayerType *player_ptr, monster_type *m_ptr)
         m_ptr->mflag2.reset(MonsterConstantFlagType::NOFLOW);
     }
 
-    if (m_ptr->cdis <= (m_ptr->is_pet() ? (r_ptr->aaf > MAX_SIGHT ? MAX_SIGHT : r_ptr->aaf) : r_ptr->aaf)) {
+    if (m_ptr->cdis <= (m_ptr->is_pet() ? (r_ptr->aaf > MAX_PLAYER_SIGHT ? MAX_PLAYER_SIGHT : r_ptr->aaf) : r_ptr->aaf)) {
         return true;
     }
 
-    if ((m_ptr->cdis <= MAX_SIGHT || player_ptr->phase_out) && (player_has_los_bold(player_ptr, m_ptr->fy, m_ptr->fx) || has_aggravate(player_ptr))) {
+    if ((m_ptr->cdis <= MAX_PLAYER_SIGHT || player_ptr->phase_out) && (player_has_los_bold(player_ptr, m_ptr->fy, m_ptr->fx) || has_aggravate(player_ptr))) {
         return true;
     }
 

@@ -820,7 +820,7 @@ void wiz_zap_surrounding_monsters(PlayerType *player_ptr)
 {
     for (MONSTER_IDX i = 1; i < player_ptr->current_floor_ptr->m_max; i++) {
         auto *m_ptr = &player_ptr->current_floor_ptr->m_list[i];
-        if (!m_ptr->is_valid() || (i == player_ptr->riding) || (m_ptr->cdis > MAX_SIGHT)) {
+        if (!m_ptr->is_valid() || (i == player_ptr->riding) || (m_ptr->cdis > MAX_PLAYER_SIGHT)) {
             continue;
         }
 

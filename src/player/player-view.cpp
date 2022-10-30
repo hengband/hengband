@@ -116,11 +116,11 @@ void update_view(PlayerType *player_ptr)
 
     grid_type *g_ptr;
     if (view_reduce_view && !floor_ptr->dun_level) {
-        full = MAX_SIGHT / 2;
-        over = MAX_SIGHT * 3 / 4;
+        full = MAX_PLAYER_SIGHT / 2;
+        over = MAX_PLAYER_SIGHT * 3 / 4;
     } else {
-        full = MAX_SIGHT;
-        over = MAX_SIGHT * 3 / 2;
+        full = MAX_PLAYER_SIGHT;
+        over = MAX_PLAYER_SIGHT * 3 / 2;
     }
 
     for (n = 0; n < floor_ptr->view_n; n++) {

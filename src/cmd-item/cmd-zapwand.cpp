@@ -109,7 +109,7 @@ bool wand_effect(PlayerType *player_ptr, OBJECT_SUBTYPE_VALUE sval, DIRECTION di
     }
 
     case SV_WAND_TELEPORT_AWAY: {
-        int distance = MAX_SIGHT * (powerful ? 8 : 5);
+        int distance = MAX_PLAYER_SIGHT * (powerful ? 8 : 5);
         if (teleport_monster(player_ptr, dir, distance)) {
             ident = true;
         }

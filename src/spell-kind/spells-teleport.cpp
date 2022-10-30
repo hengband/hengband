@@ -538,10 +538,10 @@ void teleport_away_followable(PlayerType *player_ptr, MONSTER_IDX m_idx)
     bool old_ml = m_ptr->ml;
     POSITION old_cdis = m_ptr->cdis;
 
-    teleport_away(player_ptr, m_idx, MAX_SIGHT * 2 + 5, TELEPORT_SPONTANEOUS);
+    teleport_away(player_ptr, m_idx, MAX_PLAYER_SIGHT * 2 + 5, TELEPORT_SPONTANEOUS);
 
     bool is_followable = old_ml;
-    is_followable &= old_cdis <= MAX_SIGHT;
+    is_followable &= old_cdis <= MAX_PLAYER_SIGHT;
     is_followable &= w_ptr->timewalk_m_idx == 0;
     is_followable &= !player_ptr->phase_out;
     is_followable &= los(player_ptr, player_ptr->y, player_ptr->x, oldfy, oldfx);

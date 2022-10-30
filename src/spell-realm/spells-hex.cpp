@@ -382,7 +382,7 @@ void SpellHex::thief_teleport()
         msg_print(_("泥棒は笑って逃げ...ようとしたがバリアに防がれた。", "The thief flees laughing...? But a magic barrier obstructs it."));
     } else {
         msg_print(_("泥棒は笑って逃げた！", "The thief flees laughing!"));
-        teleport_away(this->player_ptr, this->monap_ptr->m_idx, MAX_SIGHT * 2 + 5, TELEPORT_SPONTANEOUS);
+        teleport_away(this->player_ptr, this->monap_ptr->m_idx, MAX_PLAYER_SIGHT * 2 + 5, TELEPORT_SPONTANEOUS);
     }
 }
 

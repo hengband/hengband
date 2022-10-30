@@ -213,7 +213,7 @@ concptr do_crusade_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessTy
         }
 
         {
-            int power = MAX_SIGHT * 5;
+            int power = MAX_PLAYER_SIGHT * 5;
             if (info) {
                 return info_power(power);
             }

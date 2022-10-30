@@ -518,7 +518,7 @@ void process_speak_sound(PlayerType *player_ptr, MONSTER_IDX m_idx, POSITION oy,
     }
 
     auto *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
-    if (m_ptr->ap_r_idx == MonsterRaceId::CYBER && one_in_(CYBERNOISE) && !m_ptr->ml && (m_ptr->cdis <= MAX_SIGHT)) {
+    if (m_ptr->ap_r_idx == MonsterRaceId::CYBER && one_in_(CYBERNOISE) && !m_ptr->ml && (m_ptr->cdis <= MAX_PLAYER_SIGHT)) {
         if (disturb_minor) {
             disturb(player_ptr, false, false);
         }

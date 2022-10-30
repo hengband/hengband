@@ -272,7 +272,7 @@ static void thief_runaway_by_melee(PlayerType *player_ptr, mam_type *mam_ptr)
             player_ptr->current_floor_ptr->monster_noise = true;
         }
 
-        teleport_away(player_ptr, mam_ptr->m_idx, MAX_SIGHT * 2 + 5, TELEPORT_SPONTANEOUS);
+        teleport_away(player_ptr, mam_ptr->m_idx, MAX_PLAYER_SIGHT * 2 + 5, TELEPORT_SPONTANEOUS);
     }
 }
 

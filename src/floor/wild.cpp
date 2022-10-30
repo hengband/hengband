@@ -929,7 +929,7 @@ bool change_wild_mode(PlayerType *player_ptr, bool encount)
             has_pet = true;
         }
 
-        if (m_ptr->is_asleep() || (m_ptr->cdis > MAX_SIGHT) || !m_ptr->is_hostile()) {
+        if (m_ptr->is_asleep() || (m_ptr->cdis > MAX_PLAYER_SIGHT) || !m_ptr->is_hostile()) {
             continue;
         }
 

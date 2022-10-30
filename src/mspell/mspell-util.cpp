@@ -54,7 +54,7 @@ bool monster_near_player(FloorType *floor_ptr, MONSTER_IDX m_idx, MONSTER_IDX t_
 {
     monster_type *m_ptr = &floor_ptr->m_list[m_idx];
     monster_type *t_ptr = &floor_ptr->m_list[t_idx];
-    return (m_ptr->cdis <= MAX_SIGHT) || (t_ptr->cdis <= MAX_SIGHT);
+    return (m_ptr->cdis <= MAX_PLAYER_SIGHT) || (t_ptr->cdis <= MAX_PLAYER_SIGHT);
 }
 
 /*!
