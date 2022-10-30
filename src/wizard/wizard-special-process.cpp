@@ -534,6 +534,36 @@ void wiz_create_feature(PlayerType *player_ptr)
     player_ptr->update |= PU_FLOW;
 }
 
+/*!
+ * @brief デバッグ帰還のダンジョンを選ぶ
+ * @param player_ptr プレイヤーへの参照ポインタ
+ * @details 範囲外の値が選択されたら再入力を促す
+ */
+static bool select_debugging_dungeon(PlayerType *player_ptr, DUNGEON_IDX *dungeon_type)
+{
+    if (command_arg > 0) {
+        return true;
+    }
+
+    while (true) {
+        char ppp[80];
+        char tmp_val[160];
+        sprintf(ppp, "Jump which dungeon : ");
+        sprintf(tmp_val, "%d", player_ptr->dungeon_idx);
+        if (!get_string(ppp, tmp_val, 2)) {
+            return false;
+        }
+
+        *dungeon_type = (DUNGEON_IDX)atoi(tmp_val);
+        if ((*dungeon_type < DUNGEON_ANGBAND) || (*dungeon_type > DUNGEON_MAX)) {
+            msg_print("Invalid dungeon. Please re-input.");
+            continue;
+        }
+
+        return true;
+    }
+}
+
 /*
  * @brief 選択したダンジョンの任意フロアを選択する
  * @param player_ptr プレイヤーへの参照ポインタ
@@ -581,33 +611,31 @@ static bool select_debugging_floor(PlayerType *player_ptr, int dungeon_type)
 }
 
 /*!
- * @brief デバッグ帰還のダンジョンを選ぶ
- * @param player_ptr プレイヤーへの参照ポインタ
- * @details 範囲外の値が選択されたら再入力を促す
+ * @brief 任意のダンジョン及び階層に飛ぶ
+ * Go to any level
  */
-static bool select_debugging_dungeon(PlayerType *player_ptr, DUNGEON_IDX *dungeon_type)
+static void wiz_jump_floor(PlayerType *player_ptr, DUNGEON_IDX dun_idx, DEPTH depth)
 {
-    if (command_arg > 0) {
-        return true;
+    player_ptr->dungeon_idx = dun_idx;
+    auto &floor_ref = *player_ptr->current_floor_ptr;
+    floor_ref.dun_level = depth;
+    prepare_change_floor_mode(player_ptr, CFM_RAND_PLACE);
+    if (!floor_ref.is_in_dungeon()) {
+        player_ptr->dungeon_idx = 0;
     }
 
-    while (true) {
-        char ppp[80];
-        char tmp_val[160];
-        sprintf(ppp, "Jump which dungeon : ");
-        sprintf(tmp_val, "%d", player_ptr->dungeon_idx);
-        if (!get_string(ppp, tmp_val, 2)) {
-            return false;
-        }
-
-        *dungeon_type = (DUNGEON_IDX)atoi(tmp_val);
-        if ((*dungeon_type < DUNGEON_ANGBAND) || (*dungeon_type > DUNGEON_MAX)) {
-            msg_print("Invalid dungeon. Please re-input.");
-            continue;
-        }
-
-        return true;
+    floor_ref.inside_arena = false;
+    player_ptr->wild_mode = false;
+    leave_quest_check(player_ptr);
+    if (record_stair) {
+        exe_write_diary(player_ptr, DIARY_WIZ_TELE, 0, nullptr);
     }
+
+    floor_ref.quest_number = QuestId::NONE;
+    PlayerEnergy(player_ptr).reset_player_turn();
+    player_ptr->energy_need = 0;
+    prepare_change_floor_mode(player_ptr, CFM_FIRST_FLOOR);
+    player_ptr->leaving = true;
 }
 
 /*!
@@ -638,7 +666,7 @@ void wiz_jump_to_dungeon(PlayerType *player_ptr)
         do_cmd_save_game(player_ptr, true);
     }
 
-    jump_floor(player_ptr, dungeon_type, command_arg);
+    wiz_jump_floor(player_ptr, dungeon_type, command_arg);
 }
 
 /*!
