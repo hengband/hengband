@@ -34,21 +34,13 @@ void init_towns(void)
                 continue;
             }
 
-            const auto store_r = store_regular_sale_table.at(sst);
-            for (const auto kind : store_r) {
-                const auto tv = kind.tval;
-                const auto sv = kind.sval;
-                auto k_idx = lookup_kind(tv, sv);
-
+            for (const auto &kind : store_regular_sale_table.at(sst)) {
+                auto k_idx = lookup_kind(kind.tval, kind.sval);
                 store_ptr->regular.push_back(k_idx);
             }
 
-            const auto store = store_sale_table.at(sst);
-            for (const auto kind : store) {
-                auto tv = kind.tval;
-                auto sv = kind.sval;
-                auto k_idx = lookup_kind(tv, sv);
-
+            for (const auto &kind : store_sale_table.at(sst)) {
+                auto k_idx = lookup_kind(kind.tval, kind.sval);
                 store_ptr->table.push_back(k_idx);
             }
         }
