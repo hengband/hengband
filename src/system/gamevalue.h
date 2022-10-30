@@ -59,8 +59,6 @@
 #define GRINDNOISE 20
 #define CYBERNOISE 20
 
-#define GROUP_MAX 32 /*!< place_monster_group() 関数によるモンスターのGROUP生成時の配置最大数 / Maximum size of a group of monsters */
-
 /* ToDo: Make this global */
 #define HURT_CHANCE 16 /*!< 属性攻撃を受けた際に能力値低下を起こす確率(1/X) / 1/x chance of reducing stats (for elemental attacks) */
 
