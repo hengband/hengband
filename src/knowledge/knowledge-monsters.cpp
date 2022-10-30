@@ -57,7 +57,7 @@ static std::vector<MonsterRaceId> collect_monsters(PlayerType *player_ptr, IDX g
     bool grp_amberite = (monster_group_char[grp_cur] == (char *)-4L);
 
     std::vector<MonsterRaceId> r_idx_list;
-    for (const auto &[r_idx, r_ref] : r_info) {
+    for (const auto &[r_idx, r_ref] : monraces_info) {
         if (r_ref.name.empty()) {
             continue;
         }
@@ -161,7 +161,7 @@ void do_cmd_knowledge_kill_count(PlayerType *player_ptr)
     }
 
     int32_t total = 0;
-    for (const auto &[r_idx, r_ref] : r_info) {
+    for (const auto &[r_idx, r_ref] : monraces_info) {
         if (r_ref.kind_flags.has(MonsterKindType::UNIQUE)) {
             bool dead = (r_ref.max_num == 0);
 
@@ -186,7 +186,7 @@ void do_cmd_knowledge_kill_count(PlayerType *player_ptr)
 
     std::vector<MonsterRaceId> who;
     total = 0;
-    for (const auto &[r_idx, r_ref] : r_info) {
+    for (const auto &[r_idx, r_ref] : monraces_info) {
         if (MonsterRace(r_ref.idx).is_valid() && !r_ref.name.empty()) {
             who.push_back(r_ref.idx);
         }
@@ -196,7 +196,7 @@ void do_cmd_knowledge_kill_count(PlayerType *player_ptr)
     char buf[80];
     ang_sort(player_ptr, who.data(), &why, who.size(), ang_sort_comp_hook, ang_sort_swap_hook);
     for (auto r_idx : who) {
-        auto *r_ptr = &r_info[r_idx];
+        auto *r_ptr = &monraces_info[r_idx];
         if (r_ptr->kind_flags.has(MonsterKindType::UNIQUE)) {
             bool dead = (r_ptr->max_num == 0);
             if (dead) {
@@ -260,7 +260,7 @@ static void display_monster_list(int col, int row, int per_page, const std::vect
     for (i = 0; i < per_page && mon_top + i < static_cast<int>(mon_idx.size()); i++) {
         TERM_COLOR attr;
         MonsterRaceId r_idx = mon_idx[mon_top + i];
-        auto *r_ptr = &r_info[r_idx];
+        auto *r_ptr = &monraces_info[r_idx];
         attr = ((i + mon_top == mon_cur) ? TERM_L_BLUE : TERM_WHITE);
         c_prt(attr, (r_ptr->name.c_str()), row + i, col);
         if (per_page == 1) {
@@ -324,8 +324,8 @@ void do_cmd_knowledge_monsters(PlayerType *player_ptr, bool *need_redraw, bool v
     } else {
         r_idx_list.push_back(direct_r_idx.value());
 
-        (void)visual_mode_command('v', &visual_list, browser_rows - 1, wid - (max + 3), &attr_top, &char_left, &r_info[direct_r_idx.value()].x_attr,
-            &r_info[direct_r_idx.value()].x_char, need_redraw);
+        (void)visual_mode_command('v', &visual_list, browser_rows - 1, wid - (max + 3), &attr_top, &char_left, &monraces_info[direct_r_idx.value()].x_attr,
+            &monraces_info[direct_r_idx.value()].x_char, need_redraw);
     }
 
     grp_idx.push_back(-1); // Sentinel
@@ -410,7 +410,7 @@ void do_cmd_knowledge_monsters(PlayerType *player_ptr, bool *need_redraw, bool v
         auto *attr_ptr = &dummy_a;
         auto *char_ptr = &dummy_c;
         if (!r_idx_list.empty()) {
-            auto *r_ptr = &r_info[r_idx_list[mon_cur]];
+            auto *r_ptr = &monraces_info[r_idx_list[mon_cur]];
             attr_ptr = &r_ptr->x_attr;
             char_ptr = &r_ptr->x_char;
 
@@ -484,7 +484,7 @@ void do_cmd_knowledge_bounty(PlayerType *player_ptr)
     }
 
     fprintf(fff, _("今日のターゲット : %s\n", "Today's target : %s\n"),
-        player_ptr->knows_daily_bounty ? r_info[w_ptr->today_mon].name.c_str() : _("不明", "unknown"));
+        player_ptr->knows_daily_bounty ? monraces_info[w_ptr->today_mon].name.c_str() : _("不明", "unknown"));
     fprintf(fff, "\n");
     fprintf(fff, _("賞金首リスト\n", "List of wanted monsters\n"));
     fprintf(fff, "----------------------------------------------\n");
@@ -492,7 +492,7 @@ void do_cmd_knowledge_bounty(PlayerType *player_ptr)
     bool listed = false;
     for (const auto &[r_idx, is_achieved] : w_ptr->bounties) {
         if (!is_achieved) {
-            fprintf(fff, "%s\n", r_info[r_idx].name.c_str());
+            fprintf(fff, "%s\n", monraces_info[r_idx].name.c_str());
             listed = true;
         }
     }

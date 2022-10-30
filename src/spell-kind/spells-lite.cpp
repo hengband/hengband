@@ -1,6 +1,5 @@
 ﻿#include "spell-kind/spells-lite.h"
 #include "dungeon/dungeon-flag-types.h"
-#include "dungeon/dungeon.h"
 #include "effect/attribute-types.h"
 #include "effect/effect-characteristics.h"
 #include "effect/effect-processor.h"
@@ -8,7 +7,6 @@
 #include "floor/floor-util.h"
 #include "floor/geometry.h"
 #include "game-option/map-screen-options.h"
-#include "grid/feature.h"
 #include "grid/grid.h"
 #include "mind/mind-ninja.h"
 #include "monster-race/monster-race.h"
@@ -19,11 +17,13 @@
 #include "monster/monster-update.h"
 #include "player/special-defense-types.h"
 #include "spell-kind/spells-launcher.h"
+#include "system/dungeon-info.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
 #include "system/monster-race-definition.h"
 #include "system/monster-type-definition.h"
 #include "system/player-type-definition.h"
+#include "system/terrain-type-definition.h"
 #include "target/projection-path-calculator.h"
 #include "timed-effect/player-blindness.h"
 #include "timed-effect/timed-effects.h"
@@ -33,7 +33,7 @@
 #include "world/world.h"
 #include <vector>
 
-using PassBoldFunc = bool (*)(floor_type *, POSITION, POSITION);
+using PassBoldFunc = bool (*)(FloorType *, POSITION, POSITION);
 
 /*!
  * @brief 指定した座標全てを照らす。
@@ -65,7 +65,7 @@ static void cave_temp_room_lite(PlayerType *player_ptr, const std::vector<Pos2D>
         if (g_ptr->m_idx) {
             PERCENTAGE chance = 25;
             auto *m_ptr = &player_ptr->current_floor_ptr->m_list[g_ptr->m_idx];
-            auto *r_ptr = &r_info[m_ptr->r_idx];
+            auto *r_ptr = &monraces_info[m_ptr->r_idx];
             update_monster(player_ptr, g_ptr->m_idx, false);
             if (r_ptr->behavior_flags.has(MonsterBehaviorType::STUPID)) {
                 chance = 10;
@@ -125,7 +125,7 @@ static void cave_temp_room_unlite(PlayerType *player_ptr, const std::vector<Pos2
                 if (in_bounds2(player_ptr->current_floor_ptr, by, bx)) {
                     grid_type *cc_ptr = &player_ptr->current_floor_ptr->grid_array[by][bx];
 
-                    if (f_info[cc_ptr->get_feat_mimic()].flags.has(FloorFeatureType::GLOW)) {
+                    if (terrains_info[cc_ptr->get_feat_mimic()].flags.has(TerrainCharacteristics::GLOW)) {
                         do_dark = false;
                         break;
                     }
@@ -138,7 +138,7 @@ static void cave_temp_room_unlite(PlayerType *player_ptr, const std::vector<Pos2
         }
 
         g_ptr->info &= ~(CAVE_GLOW);
-        if (f_info[g_ptr->get_feat_mimic()].flags.has_not(FloorFeatureType::REMEMBER)) {
+        if (terrains_info[g_ptr->get_feat_mimic()].flags.has_not(TerrainCharacteristics::REMEMBER)) {
             if (!view_torch_grids) {
                 g_ptr->info &= ~(CAVE_MARK);
             }
@@ -162,7 +162,7 @@ static void cave_temp_room_unlite(PlayerType *player_ptr, const std::vector<Pos2
  * @param pass_bold 地形条件を返す関数ポインタ
  * @return 該当地形の数
  */
-static int next_to_open(floor_type *floor_ptr, const POSITION cy, const POSITION cx, const PassBoldFunc pass_bold)
+static int next_to_open(FloorType *floor_ptr, const POSITION cy, const POSITION cx, const PassBoldFunc pass_bold)
 {
     int len = 0;
     int blen = 0;
@@ -191,7 +191,7 @@ static int next_to_open(floor_type *floor_ptr, const POSITION cy, const POSITION
  * @param pass_bold 地形条件を返す関数ポインタ
  * @return 該当地形の数
  */
-static int next_to_walls_adj(floor_type *floor_ptr, const POSITION cy, const POSITION cx, const PassBoldFunc pass_bold)
+static int next_to_walls_adj(FloorType *floor_ptr, const POSITION cy, const POSITION cx, const PassBoldFunc pass_bold)
 {
     POSITION y, x;
     int c = 0;
@@ -276,9 +276,9 @@ static void cave_temp_lite_room_aux(PlayerType *player_ptr, std::vector<Pos2D> &
  * @param x 指定X座標
  * @return 射線を通すならばtrueを返す。
  */
-static bool cave_pass_dark_bold(floor_type *floor_ptr, POSITION y, POSITION x)
+static bool cave_pass_dark_bold(FloorType *floor_ptr, POSITION y, POSITION x)
 {
-    return cave_has_flag_bold(floor_ptr, y, x, FloorFeatureType::PROJECT);
+    return cave_has_flag_bold(floor_ptr, y, x, TerrainCharacteristics::PROJECT);
 }
 
 /*!
@@ -399,7 +399,7 @@ bool starlight(PlayerType *player_ptr, bool magic)
 
         while (attempts--) {
             scatter(player_ptr, &y, &x, player_ptr->y, player_ptr->x, 4, PROJECT_LOS);
-            if (!cave_has_flag_bold(player_ptr->current_floor_ptr, y, x, FloorFeatureType::PROJECT)) {
+            if (!cave_has_flag_bold(player_ptr->current_floor_ptr, y, x, TerrainCharacteristics::PROJECT)) {
                 continue;
             }
             if (!player_bold(player_ptr, y, x)) {
@@ -423,7 +423,7 @@ bool starlight(PlayerType *player_ptr, bool magic)
  */
 bool lite_area(PlayerType *player_ptr, int dam, POSITION rad)
 {
-    if (d_info[player_ptr->dungeon_idx].flags.has(DungeonFeatureType::DARKNESS)) {
+    if (dungeons_info[player_ptr->dungeon_idx].flags.has(DungeonFeatureType::DARKNESS)) {
         msg_print(_("ダンジョンが光を吸収した。", "The darkness of this dungeon absorbs your light."));
         return false;
     }

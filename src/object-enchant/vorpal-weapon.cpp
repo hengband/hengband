@@ -58,7 +58,7 @@ static void print_vorpal_message(player_attack_type *pa_ptr, const int magnifica
  */
 static void print_chainsword_noise(ObjectType *o_ptr)
 {
-    if ((o_ptr->fixed_artifact_idx != FixedArtifactId::CHAINSWORD) || one_in_(2)) {
+    if (!o_ptr->is_specific_artifact(FixedArtifactId::CHAINSWORD) || one_in_(2)) {
         return;
     }
 
@@ -84,7 +84,7 @@ void process_vorpal_attack(PlayerType *player_ptr, player_attack_type *pa_ptr, c
     auto *o_ptr = &player_ptr->inventory_list[enum2i(INVEN_MAIN_HAND) + pa_ptr->hand];
     int vorpal_magnification = 2;
     print_chainsword_noise(o_ptr);
-    if (o_ptr->fixed_artifact_idx == FixedArtifactId::VORPAL_BLADE) {
+    if (o_ptr->is_specific_artifact(FixedArtifactId::VORPAL_BLADE)) {
         msg_print(_("目にも止まらぬヴォーパルブレード、手錬の早業！", "Your Vorpal Blade goes snicker-snack!"));
     } else {
         msg_format(_("%sをグッサリ切り裂いた！", "Your weapon cuts deep into %s!"), pa_ptr->m_name);
@@ -95,7 +95,7 @@ void process_vorpal_attack(PlayerType *player_ptr, player_attack_type *pa_ptr, c
     }
 
     pa_ptr->attack_damage *= (int)vorpal_magnification;
-    auto *r_ptr = &r_info[pa_ptr->m_ptr->r_idx];
+    auto *r_ptr = &monraces_info[pa_ptr->m_ptr->r_idx];
     if ((r_ptr->resistance_flags.has(MonsterResistanceType::RESIST_ALL) ? pa_ptr->attack_damage / 100 : pa_ptr->attack_damage) > pa_ptr->m_ptr->hp) {
         msg_format(_("%sを真っ二つにした！", "You cut %s in half!"), pa_ptr->m_name);
     } else {

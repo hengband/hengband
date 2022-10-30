@@ -1,6 +1,5 @@
 ﻿#include "melee/melee-spell-flags-checker.h"
 #include "dungeon/dungeon-flag-types.h"
-#include "dungeon/dungeon.h"
 #include "effect/effect-characteristics.h"
 #include "floor/geometry.h"
 #include "floor/line-of-sight.h"
@@ -20,6 +19,7 @@
 #include "pet/pet-util.h"
 #include "player-base/player-class.h"
 #include "spell-kind/spells-world.h"
+#include "system/dungeon-info.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
 #include "system/monster-race-definition.h"
@@ -122,7 +122,7 @@ static void check_darkness(PlayerType *player_ptr, melee_spell_type *ms_ptr)
         return;
     }
 
-    if (d_info[player_ptr->dungeon_idx].flags.has(DungeonFeatureType::DARKNESS)) {
+    if (dungeons_info[player_ptr->dungeon_idx].flags.has(DungeonFeatureType::DARKNESS)) {
         ms_ptr->ability_flags.reset(MonsterAbilityType::DARKNESS);
         return;
     }

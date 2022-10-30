@@ -1,11 +1,11 @@
 ﻿#include "racial/racial-vampire.h"
 #include "dungeon/dungeon-flag-types.h"
-#include "dungeon/dungeon.h"
 #include "floor/geometry.h"
 #include "hpmp/hp-mp-processor.h"
 #include "player/digestion-processor.h"
 #include "player/player-status.h"
 #include "spell-kind/spells-specific-bolt.h"
+#include "system/dungeon-info.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
 #include "system/player-type-definition.h"
@@ -14,7 +14,7 @@
 
 bool vampirism(PlayerType *player_ptr)
 {
-    if (d_info[player_ptr->dungeon_idx].flags.has(DungeonFeatureType::NO_MELEE)) {
+    if (dungeons_info[player_ptr->dungeon_idx].flags.has(DungeonFeatureType::NO_MELEE)) {
         msg_print(_("なぜか攻撃することができない。", "Something prevents you from attacking."));
         return false;
     }

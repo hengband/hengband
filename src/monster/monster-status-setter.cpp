@@ -37,7 +37,7 @@ void set_pet(PlayerType *player_ptr, monster_type *m_ptr)
 {
     QuestCompletionChecker(player_ptr, m_ptr).complete();
     m_ptr->mflag2.set(MonsterConstantFlagType::PET);
-    if (r_info[m_ptr->r_idx].kind_flags.has_none_of(alignment_mask)) {
+    if (monraces_info[m_ptr->r_idx].kind_flags.has_none_of(alignment_mask)) {
         m_ptr->sub_align = SUB_ALIGN_NEUTRAL;
     }
 }
@@ -83,7 +83,7 @@ void anger_monster(PlayerType *player_ptr, monster_type *m_ptr)
  * @return m_idx モンスターの参照ID
  * @return mproc_type 削除したいモンスターの時限ステータスID
  */
-static void mproc_remove(floor_type *floor_ptr, MONSTER_IDX m_idx, int mproc_type)
+static void mproc_remove(FloorType *floor_ptr, MONSTER_IDX m_idx, int mproc_type)
 {
     int mproc_idx = get_mproc_idx(floor_ptr, m_idx, mproc_type);
     if (mproc_idx >= 0) {
@@ -133,7 +133,7 @@ bool set_monster_csleep(PlayerType *player_ptr, MONSTER_IDX m_idx, int v)
         }
     }
 
-    if (r_info[m_ptr->r_idx].flags7 & RF7_HAS_LD_MASK) {
+    if (monraces_info[m_ptr->r_idx].flags7 & RF7_HAS_LD_MASK) {
         player_ptr->update |= PU_MON_LITE;
     }
 

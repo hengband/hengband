@@ -2,7 +2,6 @@
  * @brief エゴアイテムに関する処理
  * @date 2019/05/02
  * @author deskull
- * @details Ego-Item indexes (see "lib/edit/e_info.txt")
  */
 #include "object-enchant/object-ego.h"
 #include "artifact/random-art-effects.h"
@@ -20,10 +19,7 @@
 #include "util/probability-table.h"
 #include <vector>
 
-/*
- * The ego-item arrays
- */
-std::map<EgoType, ego_item_type> e_info;
+std::map<EgoType, ego_item_type> egos_info;
 
 /*!
  * @brief アイテムのエゴをレア度の重みに合わせてランダムに選択する
@@ -35,13 +31,17 @@ std::map<EgoType, ego_item_type> e_info;
 EgoType get_random_ego(byte slot, bool good)
 {
     ProbabilityTable<EgoType> prob_table;
-    for (const auto &[e_idx, e_ref] : e_info) {
+    for (const auto &[e_idx, e_ref] : egos_info) {
         if (e_ref.idx == EgoType::NONE || e_ref.slot != slot || e_ref.rarity <= 0) {
             continue;
         }
 
-        bool worthless = e_ref.rating == 0 || e_ref.gen_flags.has_any_of({ ItemGenerationTraitType::CURSED, ItemGenerationTraitType::HEAVY_CURSE, ItemGenerationTraitType::PERMA_CURSE });
-
+        const auto curses = {
+            ItemGenerationTraitType::CURSED,
+            ItemGenerationTraitType::HEAVY_CURSE,
+            ItemGenerationTraitType::PERMA_CURSE
+        };
+        const auto worthless = e_ref.rating == 0 || e_ref.gen_flags.has_any_of(curses);
         if (good != worthless) {
             prob_table.entry_item(e_ref.idx, (255 / e_ref.rarity));
         }
@@ -268,7 +268,7 @@ void ego_invest_extra_attack(ObjectType *o_ptr, ego_item_type *e_ptr, DEPTH lev)
  */
 void apply_ego(ObjectType *o_ptr, DEPTH lev)
 {
-    auto e_ptr = &e_info[o_ptr->ego_idx];
+    auto e_ptr = &egos_info[o_ptr->ego_idx];
     auto gen_flags = e_ptr->gen_flags;
 
     ego_interpret_extra_abilities(o_ptr, e_ptr, gen_flags);

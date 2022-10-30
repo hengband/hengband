@@ -11,7 +11,6 @@
 #include "core/window-redrawer.h"
 #include "floor/cave.h"
 #include "floor/geometry.h"
-#include "grid/feature.h"
 #include "grid/grid.h"
 #include "monster-attack/monster-attack-player.h"
 #include "monster-race/monster-race.h"
@@ -26,6 +25,7 @@
 #include "system/monster-race-definition.h"
 #include "system/monster-type-definition.h"
 #include "system/player-type-definition.h"
+#include "system/terrain-type-definition.h"
 #include "target/target-checker.h"
 #include "view/display-messages.h"
 
@@ -95,7 +95,7 @@ bool process_fall_off_horse(PlayerType *player_ptr, int dam, bool force)
     int sn = 0;
     GAME_TEXT m_name[MAX_NLEN];
     auto *m_ptr = &player_ptr->current_floor_ptr->m_list[player_ptr->riding];
-    auto *r_ptr = &r_info[m_ptr->r_idx];
+    auto *r_ptr = &monraces_info[m_ptr->r_idx];
 
     if (!player_ptr->riding || player_ptr->wild_mode) {
         return false;
@@ -119,13 +119,13 @@ bool process_fall_off_horse(PlayerType *player_ptr, int dam, bool force)
             }
 
             /* Skip non-empty grids */
-            if (!g_ptr->cave_has_flag(FloorFeatureType::MOVE) && !g_ptr->cave_has_flag(FloorFeatureType::CAN_FLY)) {
+            if (!g_ptr->cave_has_flag(TerrainCharacteristics::MOVE) && !g_ptr->cave_has_flag(TerrainCharacteristics::CAN_FLY)) {
                 if (!can_player_ride_pet(player_ptr, g_ptr, false)) {
                     continue;
                 }
             }
 
-            if (g_ptr->cave_has_flag(FloorFeatureType::PATTERN)) {
+            if (g_ptr->cave_has_flag(TerrainCharacteristics::PATTERN)) {
                 continue;
             }
 

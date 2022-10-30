@@ -1,0 +1,106 @@
+# File: 023_SpawningPits.txt
+# a quick creation by Jeff Coleburn <vsp@netaxs.com>
+
+# Name
+Q:$23:N:Spawning Pits
+Q:23:N:増殖地獄
+
+# Definition
+Q:$23:Q:6:0:0:0:65:0:0:0:6
+Q:23:Q:6:0:0:0:65:0:0:0:6
+
+# Description for quest
+?:[LEQ $QUEST23 2]
+Q:$23:T:A great, great evil approaches, perhaps the end for our town.
+Q:$23:T:Our scouts lie slaughtered, their bodies crushed and mangled
+Q:$23:T:by powerful beasts.  I know not what you shall face.  
+Q:$23:T:Monsters appear as if out of thin air, as if spawned by a foul  
+Q:$23:T:altar in a southern valley close to where you defeated the orcs.
+Q:$23:T:
+Q:$23:T:I am hesistant to ask for your help, knowing you may be sent 
+Q:$23:T:to your doom, and yet you are the last hope for Angwil.  
+Q:$23:T:Approach each nook carefully, as evil lies in unexpected places.
+Q:$23:T:Please prepare well, and strike hard in our names.
+Q:23:T:何か恐ろしい、とても恐ろしい邪悪な事が起ころうとしています。この街は
+Q:23:T:おしまいでしょう。我々の偵察隊は惨殺され、死体は何か恐ろしい獣によって
+Q:23:T:めちゃくちゃに押し潰されていました。あなたが何と対決する事になるのか
+Q:23:T:私には分かりません。モンスターどもはあたかも何もない所から現れるかの
+Q:23:T:ようで、あなたがオークどもを倒した場所に近い、南の谷にある禍々しい
+Q:23:T:祭壇により生み出されているようです。これがあなたの破滅になる
+Q:23:T:かもしれないと知りつつ助けを求めるのはためらわれます。しかしあなたは
+Q:23:T:アングウィルの最後の希望なのです！ダンジョンでは、引っ込んだ場所には
+Q:23:T:注意深く近付くようにしてください。邪悪なものが予期しない場所に潜んで
+Q:23:T:いるかもしれません。充分に用心し、我らの名の下に敵を討ちのめして下さい！
+?:1
+
+# Description for quest reward
+?:[EQU $QUEST23 3]
+Q:$23:T:Your valor shall go down in our legends; your name shall be
+Q:$23:T:sung by elvenkind for ages to come.  Hail the conquering hero!
+Q:$23:T:May your battles with the Serpent be as successful.
+Q:$23:T:
+Q:$23:T:Use our gift wisely, and may the light shine on you.
+Q:23:T:あなたの栄光は伝説として語り継がれることでしょう。そして我々エルフの
+Q:23:T:一族はあなたの名前をこれから幾世代も歌に唱うことでしょう。
+Q:23:T:偉大なる英雄に栄光あれ！そしてサーペントとの戦いにも勝利せんことを！
+Q:23:T:
+Q:23:T:この贈物を上手に使って下さい。勇敢な冒険者に光あれ！
+?:1
+
+# Description for quest failed
+?:[EQU $QUEST23 5]
+Q:$23:T:I've sent out someone else to do the job.  Now leave me alone!
+Q:23:T:既に他の者に仕事を任せてあります。しばらく私を一人にさせてください！
+?:1
+
+# Floor with Quylthulg
+F:a:FLOOR:8:342
+
+# Floor with Rotting quylthulg
+F:b:FLOOR:8:633
+
+# Floor with Demonic quylthulg
+F:c:FLOOR:8:727
+
+# Floor with Draconic quylthulg
+F:d:FLOOR:8:759
+
+# Floor with Master quylthulg 
+F:e:FLOOR:8:800
+
+# Dungeon layout
+D:XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+D:XXXXXXXXXXXXXXXXXXXXXXXXXXX..<.........XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+D:XXXXXXXXXXXXXXXXXXXXX9.............................XXXXXXXXXXXXXXXXXX
+D:XXXXXXXXXXXX..........................................XXXXXXXXXXXXXXX
+D:XXXXXXXXXXX...........................9..............XXXXXXXXXXXXXXXX
+D:XXXa.bXXXXX....9............XXXXXXXX............9....XXXXXXXXXXXXXXXX
+D:XXX.9..XXX...............XXXXXXXXXXXXXX................XXXXXXXXXXXXXX
+D:XX..a.XXXXX.............................................XXXXXXXXXXXXX
+D:XXX...XXXXXXX.....XX..XX..XX..XX..XX..XX..XX..XX........XXXXXXXXXXXXX
+D:XXXXX..XXXX.......XX..XX..XX..XX..XX..XX..XX..XX...a.......XXXXXXXXXX
+D:XXXXX..XXX........XX..XX..XX..XX..XX..XX..XX..XX.........XXXXXXXXXXXX
+D:XXXXXX...XXXX.....XX..XX..XX..XX..XX..XX..XX..XX..........XX9.d.9XXXX
+D:XXXXX.............XXa.XXb.XXc.XXd.XXc.XXb.XXa.XX.......XXXXX....XXXXX
+D:XXXX..............XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX.........XXX....XXXXX
+D:XXXX....................XX.c..9.XX@..b..XX................XX....XXXXX
+D:XX@...........a.........XX......XX......XX......................XXXXX
+D:XXXXXXX.................XX......XX......XX........a...............XXX
+D:XXXXXXXX...........................................................XX
+D:XXXXXXXX.............................................@...........XXXX
+D:XXXXXXXXXXX..9................XXXX............................XXXXXXX
+D:XXXXXb9............a........XXXXXXXX.a........................9b.XXXX
+D:XXXXXXXXXXX.................X......X..........................XXXXXXX
+D:XXXXXc9.....................X.X..X.X..........................9.dXXXX
+D:XXXXXXXXXXX................XX.X..X.XX..................a......XXXXXXX
+D:XXXXXd9...................XX.XX9eXX.XX........................9.cXXXX
+D:XXXXXXXXXXX...............XX.XXXXXX.XX........9...............XXXXXXX
+D:XXXXXcd...................XX........XX.........................bbXXXX
+D:XXXXXXXXXXX................XXXX..XXXX.........................XXXXXXX
+D:XXXXXXXXXXXXXX..............XXX..XXX....................XXXXXXXXXXXXX
+D:XXXXXXXXXXXXXXXXXX...................................XXXXXXXXXXXXXXXX
+D:XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+
+# Starting position
+P:1:33
+

@@ -89,7 +89,7 @@ int critical_norm(PlayerType *player_ptr, WEIGHT weight, int plus, int dam, int1
  */
 static void ninja_critical(PlayerType *player_ptr, player_attack_type *pa_ptr)
 {
-    auto *r_ptr = &r_info[pa_ptr->m_ptr->r_idx];
+    auto *r_ptr = &monraces_info[pa_ptr->m_ptr->r_idx];
     int maxhp = pa_ptr->m_ptr->maxhp;
     if (one_in_(pa_ptr->backstab ? 13 : (pa_ptr->stab_fleeing || pa_ptr->surprise_attack) ? 15
                                                                                           : 27)) {
@@ -124,7 +124,7 @@ static void ninja_critical(PlayerType *player_ptr, player_attack_type *pa_ptr)
 void critical_attack(PlayerType *player_ptr, player_attack_type *pa_ptr)
 {
     auto *o_ptr = &player_ptr->inventory_list[INVEN_MAIN_HAND + pa_ptr->hand];
-    auto *r_ptr = &r_info[pa_ptr->m_ptr->r_idx];
+    auto *r_ptr = &monraces_info[pa_ptr->m_ptr->r_idx];
     if (((o_ptr->tval == ItemKindType::SWORD) && (o_ptr->sval == SV_POISON_NEEDLE)) || (pa_ptr->mode == HISSATSU_KYUSHO)) {
         if ((randint1(randint1(r_ptr->level / 7) + 5) == 1) && r_ptr->kind_flags.has_not(MonsterKindType::UNIQUE) && !(r_ptr->flags7 & RF7_UNIQUE2)) {
             pa_ptr->attack_damage = pa_ptr->m_ptr->hp + 1;

@@ -19,7 +19,7 @@
  * @param i1 オブジェクト移動元の要素番号
  * @param i2 オブジェクト移動先の要素番号
  */
-static void compact_objects_aux(floor_type *floor_ptr, OBJECT_IDX i1, OBJECT_IDX i2)
+static void compact_objects_aux(FloorType *floor_ptr, OBJECT_IDX i1, OBJECT_IDX i2)
 {
     if (i1 == i2) {
         return;
@@ -68,7 +68,7 @@ void compact_objects(PlayerType *player_ptr, int size)
         for (OBJECT_IDX i = 1; i < floor_ptr->o_max; i++) {
             o_ptr = &floor_ptr->o_list[i];
 
-            if (!o_ptr->is_valid() || (k_info[o_ptr->k_idx].level > cur_lev)) {
+            if (!o_ptr->is_valid() || (baseitems_info[o_ptr->k_idx].level > cur_lev)) {
                 continue;
             }
 

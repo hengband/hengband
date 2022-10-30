@@ -1,0 +1,115 @@
+# File: 015_Eric_Stronghold.txt
+
+# Name
+Q:$15:N:Eric's Stronghold
+Q:15:N:エリックの要塞
+
+# type:num_mon:cur_num:max_num:level:r_idx:k_idx
+Q:$15:Q:1:0:0:1:70:813:0:0:6
+Q:15:Q:1:0:0:1:70:813:0:0:6
+
+# Description for quest
+?:[LEQ $QUEST15 2]
+Q:$15:T:When Oberon, the rightful ruler of Amber, disappeared, Eric 
+Q:$15:T:did not waste much time making his claim for the throne.
+Q:$15:T:Eric is waiting for his own coronation in a secure stronghold.
+Q:$15:T:You must eliminate him before he is crowned, or other Amberites
+Q:$15:T:may feel to obliged to obey him -- and he'll be invincible!
+Q:15:T:アンバーの正しき支配者であったオベロン王が姿を消した時、王子
+Q:15:T:エリックは自分の王位を主張するためにすぐさま行動を起こした。
+Q:15:T:エリックは今や安全な要塞の中で自分の戴冠式を待っている。
+Q:15:T:あなたは彼が戴冠する前に彼を消し去らねばならない。さもなくば
+Q:15:T:他のアンバーの王子たちは彼に服従させられ、エリックは無敵に
+Q:15:T:なってしまうのだ！
+?:1
+
+# Description for quest reward
+?:[EQU $QUEST15 3]
+Q:$15:T:You have done well. Please accept this reward.
+Q:15:T:よくやった。礼を受けとってくれ。
+?:1
+
+# Description for quest failed
+?:[EQU $QUEST15 5]
+Q:$15:T:Eric is now the King of Amber. Maybe Oberon will come back and
+Q:$15:T:take the crown, or maybe not. You have failed your mission
+Q:$15:T:and the traitor has become the supreme ruler of Amber.
+Q:15:T:エリックは今やアンバーの王だ。オベロンが帰ってきて再び玉座に
+Q:15:T:つくかもしれないが、帰ってこないかもしれない。あなたは任務に
+Q:15:T:失敗し、かの裏切り者が今やアンバーの最高支配者になってしまったのだ。
+?:1
+
+# Deep water
+F:W:DEEP_WATER:8
+
+# Tree
+F:T:TREE
+
+# Normal wall
+F:#:GRANITE
+
+# Floor + black knight 
+F:a:FLOOR:8:442
+
+# Floor + ninja
+F:b:FLOOR:8:485
+
+# Floor + Logrus master
+F:c:FLOOR:8:498
+
+# Floor + death knight
+F:d:FLOOR:8:597
+
+# Floor + enchantress
+F:e:FLOOR:8:636
+
+# Floor + sorcerer
+F:f:FLOOR:8:638
+
+# Floor + ultra-elite paladin
+F:g:FLOOR:8:699
+
+# Floor + Lord of Chaos
+F:h:FLOOR:8:737
+
+# Floor + Eric + item
+F:E:FLOOR:8:813:*
+
+# Trap
+F:^:FLOOR:8:0:0:0:0:*
+
+# Trap or OOD item
+F:$:FLOOR:8:0:*10:0:0:*
+
+# Eric's stronghold
+D:XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+D:XTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTX
+D:XTTTTTTTTTTT...........T..TT.TTTTTTTTTTTTTTTTTTTTTTTTT.TTT...........TTTTX
+D:XTTTTTTTTT......WWWWW...T..TTTTT.T..TT.TTTTTT.TT.TTT....T...WWWWW......TTX
+D:XTTTTTTT.......WW#a#WW.......T............TT...............WW#a#WW....T.TX
+D:XTTTT<TT.......W##c##WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW##e##W...TT.TX
+D:XTTT.TT........W#aaa###########.#################.###########aaa#W..TTTTTX
+D:XTT.TT...TT....WafdaD^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^DadafW...TT.TX
+D:XTT....TTT.....W#aaa##############D##########################aaa#W....TTTX
+D:XT......TTT....W##e##^^^^^^^^^^^^DbD^^^^^^^^^^^^^^#****c#gg###c##W..TTTTTX
+D:XT....TTT.TT...WW####^############D#############^^#####D#gg#b#D#WW...TTTTX
+D:XT.........TT...WW#a#^#......Dggggggggggggggggg#^^^^^^^^Dgg#bbb#W...TT.TTX
+D:XT.....TT.TT.....W#D#^#...###############################DD##D##W..TT..TTX
+D:XT......TTT.......D^^^#####***DhheeddgggDgggfgggegggdgggDccD***#W..TT...TX
+D:XT........TT......D^^^#####**EDhheeddgggDgggfgggegggdgggDccD***#W.TT....TX
+D:XTTT.......T.....W#D#^#...###############################DD##D##W.TT...TTX
+D:XTTTT...........WW#a#^#......Dggggggggggggggggg#^^^^^^^^Dgg#bbb#W..TT.TTTX
+D:XTT......T.....WW####^############D#############^^#####D#gg#b#D#WW..TTTTTX
+D:XT..TT....T....W##c##^^^^^^^^^^^^DbD^^^^^^^^^^^^^^#****c#gg###d##W...TTTTX
+D:XT.TT..T.TT....W#aaa##############D##########################aaa#W....TTTX
+D:XTTTT..TTT.....WafdaD^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^DacfaW...TTTTX
+D:XTTTTTTTT......W#aaa###########.#################.###########aaa#W...TTTTX
+D:XT..TTTT.......W##e##WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW##e##W..TTTTTX
+D:XTT..TT........WW###WW............TTT......................WW#a#WW.TTTTTTX
+D:XTTTTTTTT.......WWWWW.....TTT...TTT.TTTTTT..TTT.TTTT..TTT...WWWWW..TTTTTTX
+D:XTTTTTTTTTTT.TT........TTTT....TT.TTTTTT.TTTT.TTTT.TTTTTTTT.......TTTTTTTX
+D:XTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTX
+D:XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+
+# Starting position
+P:5:5

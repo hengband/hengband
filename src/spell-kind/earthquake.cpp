@@ -3,7 +3,6 @@
 #include "core/player-update-types.h"
 #include "core/window-redrawer.h"
 #include "dungeon/dungeon-flag-types.h"
-#include "dungeon/dungeon.h"
 #include "dungeon/quest.h"
 #include "floor/cave.h"
 #include "floor/floor-object.h"
@@ -31,11 +30,13 @@
 #include "player/player-status-flags.h"
 #include "player/special-defense-types.h"
 #include "status/bad-status-setter.h"
+#include "system/dungeon-info.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
 #include "system/monster-race-definition.h"
 #include "system/monster-type-definition.h"
 #include "system/player-type-definition.h"
+#include "system/terrain-type-definition.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 
@@ -207,7 +208,7 @@ bool earthquake(PlayerType *player_ptr, POSITION cy, POSITION cx, POSITION r, MO
             }
 
             auto *m_ptr = &floor_ptr->m_list[gg_ptr->m_idx];
-            auto *r_ptr = &r_info[m_ptr->r_idx];
+            auto *r_ptr = &monraces_info[m_ptr->r_idx];
             if (r_ptr->flags1 & RF1_QUESTOR) {
                 map[16 + yy - cy][16 + xx - cx] = false;
                 continue;
@@ -319,7 +320,7 @@ bool earthquake(PlayerType *player_ptr, POSITION cy, POSITION cx, POSITION r, MO
             }
 
             delete_all_items_from_floor(player_ptr, yy, xx);
-            int t = cave_has_flag_bold(floor_ptr, yy, xx, FloorFeatureType::PROJECT) ? randint0(100) : 200;
+            int t = cave_has_flag_bold(floor_ptr, yy, xx, TerrainCharacteristics::PROJECT) ? randint0(100) : 200;
             if (t < 20) {
                 cave_set_feat(player_ptr, yy, xx, feat_granite);
                 continue;
@@ -357,7 +358,7 @@ bool earthquake(PlayerType *player_ptr, POSITION cy, POSITION cx, POSITION r, MO
                 continue;
             }
 
-            if (d_info[player_ptr->dungeon_idx].flags.has(DungeonFeatureType::DARKNESS)) {
+            if (dungeons_info[player_ptr->dungeon_idx].flags.has(DungeonFeatureType::DARKNESS)) {
                 continue;
             }
 
@@ -369,7 +370,7 @@ bool earthquake(PlayerType *player_ptr, POSITION cy, POSITION cx, POSITION r, MO
                     continue;
                 }
                 cc_ptr = &floor_ptr->grid_array[yyy][xxx];
-                if (f_info[cc_ptr->get_feat_mimic()].flags.has(FloorFeatureType::GLOW)) {
+                if (terrains_info[cc_ptr->get_feat_mimic()].flags.has(TerrainCharacteristics::GLOW)) {
                     g_ptr->info |= CAVE_GLOW;
                     break;
                 }

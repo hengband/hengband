@@ -77,7 +77,7 @@ static player_attack_type *initialize_player_attack_type(
     pa_ptr->m_idx = g_ptr->m_idx;
     pa_ptr->m_ptr = m_ptr;
     pa_ptr->r_idx = m_ptr->r_idx;
-    pa_ptr->r_ptr = &r_info[m_ptr->r_idx];
+    pa_ptr->r_ptr = &monraces_info[m_ptr->r_idx];
     pa_ptr->ma_ptr = &ma_blows[0];
     pa_ptr->g_ptr = g_ptr;
     pa_ptr->fear = fear;
@@ -117,7 +117,7 @@ static void attack_classify(PlayerType *player_ptr, player_attack_type *pa_ptr)
  */
 static void get_bare_knuckle_exp(PlayerType *player_ptr, player_attack_type *pa_ptr)
 {
-    auto *r_ptr = &r_info[pa_ptr->m_ptr->r_idx];
+    auto *r_ptr = &monraces_info[pa_ptr->m_ptr->r_idx];
     if ((r_ptr->level + 10) <= player_ptr->lev) {
         return;
     }
@@ -144,7 +144,7 @@ static void get_weapon_exp(PlayerType *player_ptr, player_attack_type *pa_ptr)
  */
 static void get_attack_exp(PlayerType *player_ptr, player_attack_type *pa_ptr)
 {
-    auto *r_ptr = &r_info[pa_ptr->m_ptr->r_idx];
+    auto *r_ptr = &monraces_info[pa_ptr->m_ptr->r_idx];
     auto *o_ptr = &player_ptr->inventory_list[enum2i(INVEN_MAIN_HAND) + pa_ptr->hand];
     if (o_ptr->k_idx == 0) {
         get_bare_knuckle_exp(player_ptr, pa_ptr);
@@ -416,7 +416,7 @@ static void apply_damage_negative_effect(player_attack_type *pa_ptr, bool is_zan
         pa_ptr->attack_damage = 0;
     }
 
-    auto *r_ptr = &r_info[pa_ptr->m_ptr->r_idx];
+    auto *r_ptr = &monraces_info[pa_ptr->m_ptr->r_idx];
     if ((pa_ptr->mode == HISSATSU_ZANMA) && !(!monster_living(pa_ptr->m_ptr->r_idx) && r_ptr->kind_flags.has(MonsterKindType::EVIL))) {
         pa_ptr->attack_damage = 0;
     }
@@ -464,7 +464,7 @@ static bool check_fear_death(PlayerType *player_ptr, player_attack_type *pa_ptr,
     }
 
     auto *o_ptr = &player_ptr->inventory_list[enum2i(INVEN_MAIN_HAND) + pa_ptr->hand];
-    if ((o_ptr->fixed_artifact_idx == FixedArtifactId::ZANTETSU) && is_lowlevel) {
+    if ((o_ptr->is_specific_artifact(FixedArtifactId::ZANTETSU)) && is_lowlevel) {
         msg_print(_("またつまらぬものを斬ってしまった．．．", "Sigh... Another trifling thing I've cut...."));
     }
 
@@ -483,7 +483,7 @@ static void apply_actual_attack(
     PlayerType *player_ptr, player_attack_type *pa_ptr, bool *do_quake, const bool is_zantetsu_nullified, const bool is_ej_nullified)
 {
     auto *o_ptr = &player_ptr->inventory_list[enum2i(INVEN_MAIN_HAND) + pa_ptr->hand];
-    int vorpal_chance = ((o_ptr->fixed_artifact_idx == FixedArtifactId::VORPAL_BLADE) || (o_ptr->fixed_artifact_idx == FixedArtifactId::CHAINSWORD)) ? 2 : 4;
+    int vorpal_chance = (o_ptr->is_specific_artifact(FixedArtifactId::VORPAL_BLADE) || o_ptr->is_specific_artifact(FixedArtifactId::CHAINSWORD)) ? 2 : 4;
 
     sound(SOUND_HIT);
     print_surprise_attack(pa_ptr);
@@ -558,8 +558,8 @@ void exe_player_attack_to_monster(PlayerType *player_ptr, POSITION y, POSITION x
 
     int chance = calc_attack_quality(player_ptr, pa_ptr);
     auto *o_ptr = &player_ptr->inventory_list[enum2i(INVEN_MAIN_HAND) + pa_ptr->hand];
-    bool is_zantetsu_nullified = ((o_ptr->fixed_artifact_idx == FixedArtifactId::ZANTETSU) && (pa_ptr->r_ptr->d_char == 'j'));
-    bool is_ej_nullified = ((o_ptr->fixed_artifact_idx == FixedArtifactId::EXCALIBUR_J) && (pa_ptr->r_ptr->d_char == 'S'));
+    bool is_zantetsu_nullified = (o_ptr->is_specific_artifact(FixedArtifactId::ZANTETSU) && (pa_ptr->r_ptr->d_char == 'j'));
+    bool is_ej_nullified = (o_ptr->is_specific_artifact(FixedArtifactId::EXCALIBUR_J) && (pa_ptr->r_ptr->d_char == 'S'));
     calc_num_blow(player_ptr, pa_ptr);
 
     /* Attack once for each legal blow */
@@ -614,7 +614,7 @@ void massacre(PlayerType *player_ptr)
         POSITION x = player_ptr->x + ddx_ddd[dir];
         g_ptr = &player_ptr->current_floor_ptr->grid_array[y][x];
         m_ptr = &player_ptr->current_floor_ptr->m_list[g_ptr->m_idx];
-        if (g_ptr->m_idx && (m_ptr->ml || cave_has_flag_bold(player_ptr->current_floor_ptr, y, x, FloorFeatureType::PROJECT))) {
+        if (g_ptr->m_idx && (m_ptr->ml || cave_has_flag_bold(player_ptr->current_floor_ptr, y, x, TerrainCharacteristics::PROJECT))) {
             do_cmd_attack(player_ptr, y, x, HISSATSU_NONE);
         }
     }

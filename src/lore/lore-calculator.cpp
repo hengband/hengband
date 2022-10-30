@@ -57,7 +57,7 @@ void dice_to_string(int base_damage, int dice_num, int dice_side, int dice_mult,
  */
 bool know_armour(MonsterRaceId r_idx, const bool know_everything)
 {
-    auto *r_ptr = &r_info[r_idx];
+    auto *r_ptr = &monraces_info[r_idx];
     DEPTH level = r_ptr->level;
     MONSTER_NUMBER kills = r_ptr->r_tkills;
 
@@ -92,7 +92,7 @@ bool know_armour(MonsterRaceId r_idx, const bool know_everything)
  */
 bool know_damage(MonsterRaceId r_idx, int i)
 {
-    auto *r_ptr = &r_info[r_idx];
+    auto *r_ptr = &monraces_info[r_idx];
     DEPTH level = r_ptr->level;
     int32_t a = r_ptr->r_blows[i];
 

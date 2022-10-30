@@ -9,7 +9,6 @@
 #include "flavor/object-flavor-types.h"
 #include "game-option/birth-options.h"
 #include "game-option/play-record-options.h"
-#include "grid/feature.h"
 #include "inventory/inventory-object.h"
 #include "io/write-diary.h"
 #include "main/sound-definitions-table.h"
@@ -29,6 +28,7 @@
 #include "store/store.h"
 #include "system/object-type-definition.h"
 #include "system/player-type-definition.h"
+#include "system/terrain-type-definition.h"
 #include "term/screen-processor.h"
 #include "util/enum-converter.h"
 #include "util/int-char-converter.h"
@@ -147,7 +147,7 @@ static void shuffle_store(PlayerType *player_ptr, StoreSaleType store_num)
     prt("", 3, 0);
     sprintf(buf, "%s (%s)", ot_ptr->owner_name, race_info[enum2i(ot_ptr->owner_race)].title);
     put_str(buf, 3, 10);
-    sprintf(buf, "%s (%ld)", f_info[cur_store_feat].name.c_str(), (long)(ot_ptr->max_cost));
+    sprintf(buf, "%s (%ld)", terrains_info[cur_store_feat].name.c_str(), (long)(ot_ptr->max_cost));
     prt(buf, 3, 50);
 }
 

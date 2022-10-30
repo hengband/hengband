@@ -252,7 +252,7 @@ concptr do_nature_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessTyp
             if (cast) {
                 BadStatusSetter bss(player_ptr);
                 hp_player(player_ptr, damroll(dice, sides));
-                (void)bss.cut(0);
+                (void)bss.set_cut(0);
                 (void)bss.set_poison(0);
             }
         }

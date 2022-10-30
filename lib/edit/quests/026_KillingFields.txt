@@ -1,0 +1,106 @@
+# File: 026_KillingFields.txt
+# Killing Fields, (C) Topi Ylinen 1999
+
+# Name
+Q:$26:N:Killing Fields
+Q:26:N:激戦場
+
+# Definition
+Q:$26:Q:1:0:0:1:50:723:0:0:6
+Q:26:Q:1:0:0:1:50:723:0:0:6
+
+# Description for quest
+?:[LEQ $QUEST26 2]
+Q:$26:T:A mysterious army has appeared near the eastern border.
+Q:$26:T:Their troops seem endless. There is not a hope a we can
+Q:$26:T:defeat them by numbers, we have to take out their general
+Q:$26:T:to make them retreat. Your mission is to infiltrate their
+Q:$26:T:headquarters, find the horned general and then get out of
+Q:$26:T:there alive. Beware of traps!
+Q:26:T:謎の軍隊が街の東境に現れました。その軍勢はきりがないほどです。
+Q:26:T:我々が数において優ることは望めないので、撤退させるためには
+Q:26:T:敵軍の将を討つしかありません。あなたに与えられた任務は、
+Q:26:T:彼らの本拠地に侵入し、角が生えている指令官を見つけて倒し、
+Q:26:T:無事に脱出することです。トラップには気をつけて下さい！
+?:1
+
+# Description for quest reward (a Potion of Life)
+?:[EQU $QUEST26 3]
+Q:$26:T:The invasion from the east has been thwarted! As a reward,
+Q:$26:T:we will give you valuable item which may yet save your life.
+Q:26:T:東からの侵略軍は撤退しました！お礼として、あなたの命を救うであろう
+Q:26:T:貴重なアイテムを差し上げます。
+?:1
+
+# Description for quest failed
+?:[EQU $QUEST26 5]
+Q:$26:T:We have now been driven into a full war which we wished to
+Q:$26:T:avoid. You have failed your duty, your superiors and your
+Q:$26:T:country. You have lost your honour.
+Q:26:T:我々は出来るなら避けようと願っていた全面戦争に突入してしまいました。
+Q:26:T:あなたは任務に失敗し、上官を失望させ、国の期待を裏切ったのです。
+Q:26:T:あなたの名誉は地に落ちてしまいました。
+?:1
+
+# Floor with Warrior of the Dawn
+F:W:FLOOR:8:693
+
+# Floor with Warrior of the Dawn, no tele
+F:w:FLOOR:12:693
+
+# Floor with Mine-dog
+F:a:FLOOR:8:221
+
+# Floor with Landmine
+F:b:FLOOR:8:333
+
+# Floor with Timebomb
+F:c:FLOOR:8:567
+
+# Floor with the boss monster
+F:M:FLOOR:12:723
+
+# Trap
+F:^:FLOOR:8:0:0:0:0:*
+
+# Trees
+F:T:TREE
+
+# No tele
+F:s:FLOOR:12
+
+# Wall
+F:#:GRANITE:8
+
+
+# Dungeon layout
+D:XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+D:XTTTTTTT.TTTT..X^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^X
+D:XTT.TT.TT.T..T.XWW.............^XXXXX^...................^XXXXX^...^X
+D:XT.T........T..XXXXXXXXXX......^XwwwX^^^^^^^^^^^^^^^^^^^^^XwwwX^...^X
+D:XTT.......TXXXXX...............^XwwsXXXXXXXXXXXXXXXXXXXXXXXswwX^...^X
+D:XT.T.......X...X....X.X.X.XXXXXXXXXsssssssssssssssssssssssssXXX^...^X
+D:XTTT....XXXX.XcX....X.X.X.......^^XXsssssssXXXsssssssssssssXX^^^...^X
+D:XT...W..X.cb.XbX....X.X.XbbXbbXb..^XssssssXXMXXsssssssssssXX^^.....^X
+D:XT.TT...X.XXXX.X....X.X.XXXXXXX...^XsssssXXsssXXssssssssssX^^WWW..XXX
+D:XTTT....X...WX.X....X.X...........^XssssssXXsXXsssssssssssXXXXXXXXX^X
+D:XT<....WXXXX.X^X^...X.XXXXXXXXXXb.^XsssssssssXXsssssssssss#c^^^^^^^^X
+D:XT.........X^XX^^...X.cbb......Xb.^XsssssXXsssXXssssssssssXXXXXXXXX^X
+D:XTTaT......XX^XX^...Xccbb......X.^^XssssssXXsXXsssssssssssX^^.WW...^X
+D:XTTTTT.XXXXX..WX^...Xbbbb......X^^XXsssssssXXXssssssssssssXX^^^.c^.^X
+D:XTTTT..X......WX....Xbbb.......XXXXssssssssssssssssssssssssXXX^....^X
+D:XTTT...X......WXXXXXXXXX.......^XwwsXXXXXXXXXXXXXXXXXXXXXXswwX^.^..^X
+D:XTTTTT.X..b...WXa........b.....^XwwwX^^^^^^^^^^^^^^^^^^^^XwwwX^..^.^X
+D:XTTTTTTX..XXXXXXa...........^..^XXXXX^W.W.W.W......W.W.W^XXXXX^....^X
+D:XTTT...XcX.....Xa..^..^........^^^^^^^....^......^....c.^^^^^^^.^..^X
+D:XT.....XXX.XXX.Xa....^.....^...................^...^...............^X
+D:XT.......X.....Xa........^.....^...b.......^...^.....^....^..^..a..^X
+D:XT.......X.....Xa.....^......^......^..^....b..........^.c.......a.^X
+D:XTT..........TaXa...c......^......^..............^.........^...a.a.^X
+D:XTT.T.T.TTaTTTTXa............c...........^....................a.aa.^X
+D:XTTTTTTTTTTTTTTX^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^X
+D:XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+
+# Starting position
+P:10:3
+

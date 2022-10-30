@@ -13,7 +13,6 @@
  */
 
 #include "main/angband-initializer.h"
-#include "dungeon/dungeon.h"
 #include "dungeon/quest.h"
 #include "floor/wild.h"
 #include "info-reader/feature-reader.h"
@@ -26,6 +25,7 @@
 #include "monster-race/monster-race.h"
 #include "monster-race/race-flags7.h"
 #include "system/angband-version.h"
+#include "system/dungeon-info.h"
 #include "system/monster-race-definition.h"
 #include "system/system-variables.h"
 #include "term/screen-processor.h"
@@ -270,7 +270,7 @@ void init_angband(PlayerType *player_ptr, bool no_term)
     }
 
     init_note(_("[データの初期化中... (地形)]", "[Initializing arrays... (features)]"));
-    if (init_f_info()) {
+    if (init_terrains_info()) {
         quit(_("地形初期化不能", "Cannot initialize features"));
     }
 
@@ -279,43 +279,43 @@ void init_angband(PlayerType *player_ptr, bool no_term)
     }
 
     init_note(_("[データの初期化中... (アイテム)]", "[Initializing arrays... (objects)]"));
-    if (init_k_info()) {
+    if (init_baseitems_info()) {
         quit(_("アイテム初期化不能", "Cannot initialize objects"));
     }
 
     init_note(_("[データの初期化中... (伝説のアイテム)]", "[Initializing arrays... (artifacts)]"));
-    if (init_a_info()) {
+    if (init_artifacts_info()) {
         quit(_("伝説のアイテム初期化不能", "Cannot initialize artifacts"));
     }
 
     init_note(_("[データの初期化中... (名のあるアイテム)]", "[Initializing arrays... (ego-items)]"));
-    if (init_e_info()) {
+    if (init_egos_info()) {
         quit(_("名のあるアイテム初期化不能", "Cannot initialize ego-items"));
     }
 
     init_note(_("[データの初期化中... (モンスター)]", "[Initializing arrays... (monsters)]"));
-    if (init_r_info()) {
+    if (init_monster_race_definitions()) {
         quit(_("モンスター初期化不能", "Cannot initialize monsters"));
     }
 
     init_note(_("[データの初期化中... (ダンジョン)]", "[Initializing arrays... (dungeon)]"));
-    if (init_d_info()) {
+    if (init_dungeons_info()) {
         quit(_("ダンジョン初期化不能", "Cannot initialize dungeon"));
     }
 
-    for (const auto &d_ref : d_info) {
+    for (const auto &d_ref : dungeons_info) {
         if (d_ref.idx > 0 && MonsterRace(d_ref.final_guardian).is_valid()) {
-            r_info[d_ref.final_guardian].flags7 |= RF7_GUARDIAN;
+            monraces_info[d_ref.final_guardian].flags7 |= RF7_GUARDIAN;
         }
     }
 
     init_note(_("[データの初期化中... (魔法)]", "[Initializing arrays... (magic)]"));
-    if (init_m_info()) {
+    if (init_class_magics_info()) {
         quit(_("魔法初期化不能", "Cannot initialize magic"));
     }
 
     init_note(_("[データの初期化中... (熟練度)]", "[Initializing arrays... (skill)]"));
-    if (init_s_info()) {
+    if (init_class_skills_info()) {
         quit(_("熟練度初期化不能", "Cannot initialize skill"));
     }
 
@@ -332,7 +332,7 @@ void init_angband(PlayerType *player_ptr, bool no_term)
 
     init_note(_("[配列を初期化しています... (クエスト)]", "[Initializing arrays... (quests)]"));
     QuestList::get_instance().initialize();
-    if (init_v_info()) {
+    if (init_vaults_info()) {
         quit(_("vault 初期化不能", "Cannot initialize vaults"));
     }
 

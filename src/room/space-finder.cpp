@@ -1,9 +1,9 @@
 ﻿#include "room/space-finder.h"
 #include "dungeon/dungeon-flag-types.h"
-#include "dungeon/dungeon.h"
 #include "floor/cave.h"
 #include "grid/grid.h"
 #include "system/dungeon-data-definition.h"
+#include "system/dungeon-info.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
 #include "system/player-type-definition.h"
@@ -14,7 +14,7 @@
  * @param y チェックするマスのY座標
  * @return 床系地形ならばTRUE
  */
-static bool get_is_floor(floor_type *floor_ptr, POSITION x, POSITION y)
+static bool get_is_floor(FloorType *floor_ptr, POSITION x, POSITION y)
 {
     if (!in_bounds(floor_ptr, y, x)) {
         return false;
@@ -219,7 +219,7 @@ bool find_space(PlayerType *player_ptr, dun_data_type *dd_ptr, POSITION *y, POSI
         return false;
     }
 
-    if (d_info[player_ptr->current_floor_ptr->dungeon_idx].flags.has_not(DungeonFeatureType::NO_CAVE)) {
+    if (dungeons_info[player_ptr->current_floor_ptr->dungeon_idx].flags.has_not(DungeonFeatureType::NO_CAVE)) {
         pick = randint1(candidates);
     } else {
         pick = candidates / 2 + 1;

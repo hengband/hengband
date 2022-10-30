@@ -342,7 +342,7 @@ void load_lore(void)
     monster_race dummy;
     for (auto i = 0U; i < loading_max_r_idx; i++) {
         auto r_idx = static_cast<MonsterRaceId>(i);
-        auto *r_ptr = i < r_info.size() ? &r_info[r_idx] : &dummy;
+        auto *r_ptr = i < monraces_info.size() ? &monraces_info[r_idx] : &dummy;
         rd_lore(r_ptr, r_idx);
     }
 

@@ -1,6 +1,5 @@
 ﻿#include "load/player-info-loader.h"
 #include "cmd-building/cmd-building.h"
-#include "dungeon/dungeon.h"
 #include "load/angband-version-comparer.h"
 #include "load/birth-loader.h"
 #include "load/dummy-loader.h"
@@ -21,6 +20,7 @@
 #include "player/player-skill.h"
 #include "spell-realm/spells-song.h"
 #include "system/angband-exceptions.h"
+#include "system/dungeon-info.h"
 #include "system/floor-type-definition.h"
 #include "system/player-type-definition.h"
 #include "timed-effect/player-acceleration.h"
@@ -289,7 +289,8 @@ static void rd_arena(PlayerType *player_ptr)
 
     player_ptr->oldpx = rd_s16b();
     player_ptr->oldpy = rd_s16b();
-    if (h_older_than(0, 3, 13) && !is_in_dungeon(player_ptr) && !player_ptr->current_floor_ptr->inside_arena) {
+    const auto &floor_ref = *player_ptr->current_floor_ptr;
+    if (h_older_than(0, 3, 13) && !floor_ref.is_in_dungeon() && !floor_ref.inside_arena) {
         player_ptr->oldpy = 33;
         player_ptr->oldpx = 131;
     }

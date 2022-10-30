@@ -294,9 +294,9 @@ bool life_stream(PlayerType *player_ptr, bool message, bool virtue_change)
     (void)bss.set_blindness(0);
     (void)bss.set_confusion(0);
     (void)bss.hallucination(0);
-    (void)bss.stun(0);
-    (void)bss.cut(0);
-    (void)bss.paralysis(0);
+    (void)bss.set_stun(0);
+    (void)bss.set_cut(0);
+    (void)bss.set_paralysis(0);
     (void)restore_all_status(player_ptr);
     (void)set_shero(player_ptr, 0, true);
     handle_stuff(player_ptr);
@@ -308,7 +308,7 @@ bool life_stream(PlayerType *player_ptr, bool message, bool virtue_change)
 bool heroism(PlayerType *player_ptr, int base)
 {
     auto ident = false;
-    if (BadStatusSetter(player_ptr).fear(0)) {
+    if (BadStatusSetter(player_ptr).set_fear(0)) {
         ident = true;
     }
 
@@ -326,7 +326,7 @@ bool heroism(PlayerType *player_ptr, int base)
 bool berserk(PlayerType *player_ptr, int base)
 {
     auto ident = false;
-    if (BadStatusSetter(player_ptr).fear(0)) {
+    if (BadStatusSetter(player_ptr).set_fear(0)) {
         ident = true;
     }
 
@@ -380,7 +380,7 @@ bool cure_serious_wounds(PlayerType *player_ptr, DICE_NUMBER dice, DICE_SID side
         ident = true;
     }
 
-    if (bss.cut((player_ptr->effects()->cut()->current() / 2) - 50)) {
+    if (bss.set_cut((player_ptr->effects()->cut()->current() / 2) - 50)) {
         ident = true;
     }
 
@@ -411,11 +411,11 @@ bool cure_critical_wounds(PlayerType *player_ptr, int pow)
         ident = true;
     }
 
-    if (bss.stun(0)) {
+    if (bss.set_stun(0)) {
         ident = true;
     }
 
-    if (bss.cut(0)) {
+    if (bss.set_cut(0)) {
         ident = true;
     }
 
@@ -446,11 +446,11 @@ bool true_healing(PlayerType *player_ptr, int pow)
         ident = true;
     }
 
-    if (bss.stun(0)) {
+    if (bss.set_stun(0)) {
         ident = true;
     }
 
-    if (bss.cut(0)) {
+    if (bss.set_cut(0)) {
         ident = true;
     }
 
@@ -478,7 +478,7 @@ bool restore_mana(PlayerType *player_ptr, bool magic_eater)
         auto sval = 0;
         for (auto &item : magic_eater_data->get_item_group(ItemKindType::ROD)) {
             KIND_OBJECT_IDX k_idx = lookup_kind(ItemKindType::ROD, sval);
-            item.charge -= ((item.count < 10) ? EATER_ROD_CHARGE * 3 : item.count * EATER_ROD_CHARGE / 3) * k_info[k_idx].pval;
+            item.charge -= ((item.count < 10) ? EATER_ROD_CHARGE * 3 : item.count * EATER_ROD_CHARGE / 3) * baseitems_info[k_idx].pval;
             item.charge = std::max(item.charge, 0);
             ++sval;
         }
@@ -534,7 +534,7 @@ bool fishing(PlayerType *player_ptr)
     POSITION y = player_ptr->y + ddy[dir];
     POSITION x = player_ptr->x + ddx[dir];
     player_ptr->fishing_dir = dir;
-    if (!cave_has_flag_bold(player_ptr->current_floor_ptr, y, x, FloorFeatureType::WATER)) {
+    if (!cave_has_flag_bold(player_ptr->current_floor_ptr, y, x, TerrainCharacteristics::WATER)) {
         msg_print(_("そこは水辺ではない。", "You can't fish here."));
         return false;
     }
@@ -594,7 +594,7 @@ bool cosmic_cast_off(PlayerType *player_ptr, ObjectType **o_ptr_ptr)
     TIME_EFFECT t = 20 + randint1(20);
     BadStatusSetter bss(player_ptr);
     (void)bss.mod_blindness(t);
-    (void)bss.fear(0);
+    (void)bss.set_fear(0);
     (void)set_tim_esp(player_ptr, player_ptr->tim_esp + t, false);
     (void)set_tim_regen(player_ptr, player_ptr->tim_regen + t, false);
     (void)set_hero(player_ptr, player_ptr->hero + t, false);

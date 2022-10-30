@@ -10,7 +10,6 @@
  */
 
 #include "mspell/mspell-judgement.h"
-#include "dungeon/dungeon.h"
 #include "effect/attribute-types.h"
 #include "effect/effect-characteristics.h"
 #include "floor/cave.h"
@@ -32,6 +31,7 @@
 #include "realm/realm-song-numbers.h"
 #include "spell-realm/spells-song.h"
 #include "spell/range-calc.h"
+#include "system/dungeon-info.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
 #include "system/monster-race-definition.h"
@@ -121,7 +121,7 @@ bool breath_direct(PlayerType *player_ptr, POSITION y1, POSITION x1, POSITION y2
                 break;
             }
         } else {
-            if (!cave_has_flag_bold(player_ptr->current_floor_ptr, ny, nx, FloorFeatureType::PROJECT)) {
+            if (!cave_has_flag_bold(player_ptr->current_floor_ptr, ny, nx, TerrainCharacteristics::PROJECT)) {
                 break;
             }
         }
@@ -200,7 +200,7 @@ void get_project_point(PlayerType *player_ptr, POSITION sy, POSITION sx, POSITIO
     *ty = sy;
     *tx = sx;
     for (const auto &[y, x] : path_g) {
-        if (!cave_has_flag_bold(player_ptr->current_floor_ptr, y, x, FloorFeatureType::PROJECT)) {
+        if (!cave_has_flag_bold(player_ptr->current_floor_ptr, y, x, TerrainCharacteristics::PROJECT)) {
             break;
         }
 
@@ -279,7 +279,7 @@ bool dispel_check(PlayerType *player_ptr, MONSTER_IDX m_idx)
 
     const auto &floor_ref = *player_ptr->current_floor_ptr;
     auto *m_ptr = &floor_ref.m_list[m_idx];
-    auto *r_ptr = &r_info[m_ptr->r_idx];
+    auto *r_ptr = &monraces_info[m_ptr->r_idx];
     if (r_ptr->ability_flags.has(MonsterAbilityType::BR_ACID)) {
         if (!has_immune_acid(player_ptr) && (player_ptr->oppose_acid || music_singing(player_ptr, MUSIC_RESIST))) {
             return true;

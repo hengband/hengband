@@ -1,5 +1,4 @@
 ﻿#include "floor/object-allocator.h"
-#include "dungeon/dungeon.h"
 #include "dungeon/quest.h"
 #include "floor/cave.h"
 #include "floor/dungeon-tunnel-util.h"
@@ -13,10 +12,12 @@
 #include "grid/trap.h"
 #include "monster-race/monster-race.h"
 #include "monster-race/race-flags1.h"
+#include "system/dungeon-info.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
 #include "system/monster-race-definition.h"
 #include "system/player-type-definition.h"
+#include "system/terrain-type-definition.h"
 #include "util/bit-flags-calculator.h"
 #include "wizard/wizard-messages.h"
 
@@ -28,7 +29,7 @@
  * @note Assumes "in_bounds()"
  * @details We count only granite walls and permanent walls.
  */
-static int next_to_walls(floor_type *floor_ptr, POSITION y, POSITION x)
+static int next_to_walls(FloorType *floor_ptr, POSITION y, POSITION x)
 {
     int k = 0;
     if (in_bounds(floor_ptr, y + 1, x) && floor_ptr->grid_array[y + 1][x].is_extra()) {
@@ -80,31 +81,31 @@ static bool alloc_stairs_aux(PlayerType *player_ptr, POSITION y, POSITION x, int
 bool alloc_stairs(PlayerType *player_ptr, FEAT_IDX feat, int num, int walls)
 {
     int shaft_num = 0;
-    auto *f_ptr = &f_info[feat];
+    auto *f_ptr = &terrains_info[feat];
     auto *floor_ptr = player_ptr->current_floor_ptr;
-    if (f_ptr->flags.has(FloorFeatureType::LESS)) {
+    if (f_ptr->flags.has(TerrainCharacteristics::LESS)) {
         if (ironman_downward || !floor_ptr->dun_level) {
             return true;
         }
 
-        if (floor_ptr->dun_level > d_info[floor_ptr->dungeon_idx].mindepth) {
+        if (floor_ptr->dun_level > dungeons_info[floor_ptr->dungeon_idx].mindepth) {
             shaft_num = (randint1(num + 1)) / 2;
         }
-    } else if (f_ptr->flags.has(FloorFeatureType::MORE)) {
+    } else if (f_ptr->flags.has(TerrainCharacteristics::MORE)) {
         auto q_idx = quest_number(player_ptr, floor_ptr->dun_level);
         const auto &quest_list = QuestList::get_instance();
         if (floor_ptr->dun_level > 1 && inside_quest(q_idx)) {
-            auto *r_ptr = &r_info[quest_list[q_idx].r_idx];
+            auto *r_ptr = &monraces_info[quest_list[q_idx].r_idx];
             if (r_ptr->kind_flags.has_not(MonsterKindType::UNIQUE) || 0 < r_ptr->max_num) {
                 return true;
             }
         }
 
-        if (floor_ptr->dun_level >= d_info[floor_ptr->dungeon_idx].maxdepth) {
+        if (floor_ptr->dun_level >= dungeons_info[floor_ptr->dungeon_idx].maxdepth) {
             return true;
         }
 
-        if ((floor_ptr->dun_level < d_info[floor_ptr->dungeon_idx].maxdepth - 1) && !inside_quest(quest_number(player_ptr, floor_ptr->dun_level + 1))) {
+        if ((floor_ptr->dun_level < dungeons_info[floor_ptr->dungeon_idx].maxdepth - 1) && !inside_quest(quest_number(player_ptr, floor_ptr->dun_level + 1))) {
             shaft_num = (randint1(num) + 1) / 2;
         }
     } else {
@@ -153,7 +154,7 @@ bool alloc_stairs(PlayerType *player_ptr, FEAT_IDX feat, int num, int walls)
 
             g_ptr = &floor_ptr->grid_array[y][x];
             g_ptr->mimic = 0;
-            g_ptr->feat = (i < shaft_num) ? feat_state(player_ptr->current_floor_ptr, feat, FloorFeatureType::SHAFT) : feat;
+            g_ptr->feat = (i < shaft_num) ? feat_state(player_ptr->current_floor_ptr, feat, TerrainCharacteristics::SHAFT) : feat;
             g_ptr->info &= ~(CAVE_FLOOR);
             break;
         }
@@ -167,7 +168,7 @@ bool alloc_stairs(PlayerType *player_ptr, FEAT_IDX feat, int num, int walls)
  * @param Y 指定Y座標
  * @param X 指定X座標
  */
-static void place_rubble(floor_type *floor_ptr, POSITION y, POSITION x)
+static void place_rubble(FloorType *floor_ptr, POSITION y, POSITION x)
 {
     set_cave_feat(floor_ptr, y, x, feat_rubble);
 }

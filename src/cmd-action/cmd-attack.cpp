@@ -14,7 +14,6 @@
 #include "core/player-update-types.h"
 #include "core/stuff-handler.h"
 #include "dungeon/dungeon-flag-types.h"
-#include "dungeon/dungeon.h"
 #include "effect/effect-characteristics.h"
 #include "effect/effect-processor.h"
 #include "game-option/cheat-types.h"
@@ -45,6 +44,7 @@
 #include "player/player-status.h"
 #include "player/special-defense-types.h"
 #include "status/action-setter.h"
+#include "system/dungeon-info.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
 #include "system/monster-race-definition.h"
@@ -72,7 +72,7 @@ static void natural_attack(PlayerType *player_ptr, MONSTER_IDX m_idx, PlayerMuta
 {
     WEIGHT n_weight = 0;
     auto *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
-    auto *r_ptr = &r_info[m_ptr->r_idx];
+    auto *r_ptr = &monraces_info[m_ptr->r_idx];
 
     int dice_num, dice_side;
     concptr atk_desc;
@@ -175,7 +175,7 @@ bool do_cmd_attack(PlayerType *player_ptr, POSITION y, POSITION x, combat_option
 {
     auto *g_ptr = &player_ptr->current_floor_ptr->grid_array[y][x];
     auto *m_ptr = &player_ptr->current_floor_ptr->m_list[g_ptr->m_idx];
-    auto *r_ptr = &r_info[m_ptr->r_idx];
+    auto *r_ptr = &monraces_info[m_ptr->r_idx];
     GAME_TEXT m_name[MAX_NLEN];
 
     const std::initializer_list<PlayerMutationType> mutation_attack_methods = { PlayerMutationType::HORNS, PlayerMutationType::BEAK, PlayerMutationType::SCOR_TAIL, PlayerMutationType::TRUNK, PlayerMutationType::TENTACLES };
@@ -206,15 +206,15 @@ bool do_cmd_attack(PlayerType *player_ptr, POSITION y, POSITION x, combat_option
     if (any_bits(r_ptr->flags1, RF1_FEMALE) && !(is_stunned || is_confused || is_hallucinated || !m_ptr->ml)) {
         // @todo 「特定の武器を装備している」旨のメソッドを別途作る
         constexpr auto zantetsu = FixedArtifactId::ZANTETSU;
-        const auto is_main_hand_zantetsu = player_ptr->inventory_list[INVEN_MAIN_HAND].fixed_artifact_idx == zantetsu;
-        const auto is_sub_hand_zantetsu = player_ptr->inventory_list[INVEN_SUB_HAND].fixed_artifact_idx == zantetsu;
+        const auto is_main_hand_zantetsu = player_ptr->inventory_list[INVEN_MAIN_HAND].is_specific_artifact(zantetsu);
+        const auto is_sub_hand_zantetsu = player_ptr->inventory_list[INVEN_SUB_HAND].is_specific_artifact(zantetsu);
         if (is_main_hand_zantetsu || is_sub_hand_zantetsu) {
             msg_print(_("拙者、おなごは斬れぬ！", "I can not attack women!"));
             return false;
         }
     }
 
-    if (d_info[player_ptr->dungeon_idx].flags.has(DungeonFeatureType::NO_MELEE)) {
+    if (dungeons_info[player_ptr->dungeon_idx].flags.has(DungeonFeatureType::NO_MELEE)) {
         msg_print(_("なぜか攻撃することができない。", "Something prevents you from attacking."));
         return false;
     }
@@ -222,11 +222,11 @@ bool do_cmd_attack(PlayerType *player_ptr, POSITION y, POSITION x, combat_option
     if (!m_ptr->is_hostile() && !(is_stunned || is_confused || is_hallucinated || is_shero(player_ptr) || !m_ptr->ml)) {
         constexpr auto stormbringer = FixedArtifactId::STORMBRINGER;
         auto is_stormbringer = false;
-        if (player_ptr->inventory_list[INVEN_MAIN_HAND].fixed_artifact_idx == stormbringer) {
+        if (player_ptr->inventory_list[INVEN_MAIN_HAND].is_specific_artifact(stormbringer)) {
             is_stormbringer = true;
         }
 
-        if (player_ptr->inventory_list[INVEN_SUB_HAND].fixed_artifact_idx == stormbringer) {
+        if (player_ptr->inventory_list[INVEN_SUB_HAND].is_specific_artifact(stormbringer)) {
             is_stormbringer = true;
         }
 

@@ -2,7 +2,6 @@
 #include "dungeon/quest.h"
 #include "floor/floor-generator-util.h"
 #include "floor/geometry.h"
-#include "grid/feature.h"
 #include "monster-floor/monster-generator.h"
 #include "monster-floor/place-monster-types.h"
 #include "monster-race/monster-race.h"
@@ -12,6 +11,7 @@
 #include "system/grid-type-definition.h"
 #include "system/monster-race-definition.h"
 #include "system/player-type-definition.h"
+#include "system/terrain-type-definition.h"
 #include "util/bit-flags-calculator.h"
 
 /*!
@@ -37,7 +37,7 @@ bool place_quest_monsters(PlayerType *player_ptr)
             continue;
         }
 
-        r_ptr = &r_info[q_ref.r_idx];
+        r_ptr = &monraces_info[q_ref.r_idx];
         if (r_ptr->kind_flags.has(MonsterKindType::UNIQUE) && (r_ptr->cur_num >= r_ptr->max_num)) {
             continue;
         }
@@ -55,12 +55,12 @@ bool place_quest_monsters(PlayerType *player_ptr)
                 int l;
                 for (l = SAFE_MAX_ATTEMPTS; l > 0; l--) {
                     grid_type *g_ptr;
-                    feature_type *f_ptr;
+                    TerrainType *f_ptr;
                     y = randint0(floor_ptr->height);
                     x = randint0(floor_ptr->width);
                     g_ptr = &floor_ptr->grid_array[y][x];
-                    f_ptr = &f_info[g_ptr->feat];
-                    if (f_ptr->flags.has_none_of({ FloorFeatureType::MOVE, FloorFeatureType::CAN_FLY })) {
+                    f_ptr = &terrains_info[g_ptr->feat];
+                    if (f_ptr->flags.has_none_of({ TerrainCharacteristics::MOVE, TerrainCharacteristics::CAN_FLY })) {
                         continue;
                     }
 

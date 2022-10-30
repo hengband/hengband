@@ -111,7 +111,7 @@ bool QuaffEffects::influence(const ObjectType &o_ref)
     case SV_POTION_CURE_POISON:
         return BadStatusSetter(this->player_ptr).set_poison(0);
     case SV_POTION_BOLDNESS:
-        return BadStatusSetter(this->player_ptr).fear(0);
+        return BadStatusSetter(this->player_ptr).set_fear(0);
     case SV_POTION_SPEED:
         return this->speed();
     case SV_POTION_RESIST_HEAT:

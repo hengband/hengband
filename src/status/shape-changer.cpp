@@ -49,7 +49,7 @@ void do_poly_wounds(PlayerType *player_ptr)
 
     msg_print(_("新たな傷ができた！", "A new wound was created!"));
     take_hit(player_ptr, DAMAGE_LOSELIFE, change / 2, _("変化した傷", "a polymorphed wound"));
-    (void)bss.cut(change);
+    (void)bss.set_cut(change);
 }
 
 /*

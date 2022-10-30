@@ -1,0 +1,175 @@
+# File: 004_TheVault.txt
+
+# Name
+Q:$4:N:The Vault
+Q:4:N:宝物庫
+
+# Definition
+Q:$4:Q:3:0:0:0:30:0:0:0:6
+Q:4:Q:3:0:0:0:30:0:0:0:6
+
+# Random Reward (can set less than 30 items)
+Q:$4:R:88:76:90:93:98:101:102:103:105:106:110:113:114:116:118:119:128:136:145:155:167:208:213:227:228
+Q:4:R:88:76:90:93:98:101:102:103:105:106:110:113:114:116:118:119:128:136:145:155:167:208:213:227:228
+
+# Description for quest
+?:[AND [LEQ $QUEST4 2] [EQU $QUEST_TYPE4 3]]
+Q:$4:T:The vault was used outside the town as a minor fortress and
+Q:$4:T:stored many valuable items.  It has since been overrun.  Please
+Q:$4:T:find the short sword known as Sting and return it to us!
+Q:$4:T:The moment you find the sword, your quest will be complete.
+Q:$4:T:While the sword could be in any of the chambers, only look
+Q:$4:T:through one at a time. The monsters here are strong and there are
+Q:$4:T:traps to be concerned with as well.
+Q:4:T:街の外の蔵は小規模な要塞として使われていて、多くの貴重な品物が
+Q:4:T:蓄えられていました。しかし今ではモンスターどもに占拠されてしまっています。
+Q:4:T:まだ中にあるはずの伝説の武具を見つけ出し、我々の元に持ち帰って下さい！
+Q:4:T:武具を拾った時点でクエスト達成となるでしょう。しかし、どの部屋にあるか
+Q:4:T:分からないので、部屋を一つずつ見てまわって下さい。ここのモンスターは
+Q:4:T:手強く、また罠もしかけられています。くれぐれも注意して下さい。
+?:[AND [LEQ $QUEST4 2] [EQU $QUEST_TYPE4 6]]
+Q:$4:T:The vault was used outside the town as a minor fortress and
+Q:$4:T:stored many valuable items.  It is now occupied by many monsters,
+Q:$4:T:and many items are lost. However, we want to get back at least
+Q:$4:T:the vault. Please kill all monsters in the vault.
+Q:4:T:町の外の蔵は小規模な要塞として使われていて、多くの貴重な品物が
+Q:4:T:蓄えられていました。しかし今ではモンスターどもに占拠されてしまっています。
+Q:4:T:多くの品物が失われましたが、せめて蔵だけでも取り返したいのです！
+Q:4:T:蔵を占拠するモンスターを全て打ち倒してください。
+?:1
+
+# Description for quest rewarding
+?:[AND [EQU $QUEST4 3] [EQU $QUEST_TYPE4 3]]
+Q:$4:T:Please keep the weapon, it will aid you in your future quests.
+Q:4:T:その武器はお持ち下さい。これからの冒険の助けになるでしょう。
+?:[AND [EQU $QUEST4 3] [EQU $QUEST_TYPE4 6]]
+Q:$4:T:Please keep the items, it will aid you in your future quests.
+Q:4:T:蔵の物品はお礼にお持ちください。空いた蔵は演劇場にしようと思います。
+?:1
+
+# Description for quest failed
+?:[AND [EQU $QUEST4 5] [EQU $QUEST_TYPE4 3]]
+Q:$4:T:You didn't find the weapon? Well, the monsters have probably
+Q:$4:T:carried it away.  Too bad, it would have been quite helpful
+Q:$4:T:in driving the evil out of our town.
+Q:4:T:あの武器を見つけられなかったのですか？おそらく、モンスターどもが持っていって
+Q:4:T:しまったんでしょうな。とても残念です。アレはこの街から悪を一掃する
+Q:4:T:のにとても役に立ったでしょうに。
+?:[AND [EQU $QUEST4 5] [EQU $QUEST_TYPE4 6]]
+Q:$4:T:Too bad, we can not get back the vault forever......?
+Q:$4:T:なんてことだ…もう蔵を取り戻す術はないのか…？
+?:1
+
+# No-teleport Floor with rewarding artifact e.g."Sting"
+F:a:FLOOR:12:0:0:0:!
+
+# No-teleport with base object of artifact e.g."Small sword" 
+F:b:FLOOR:12:0:!
+
+# Random monster 7 levels out of depth and on no Teleportation grid
+F:*:FLOOR:12:*8
+
+# Creeping adamantite coins
+F:$:FLOOR:8:423
+# Creeping mithril coins
+F:m:FLOOR:8:239
+
+# Creeping adamantite coins on Alarm Trap
+F:1:TRAP_ALARM:8:423
+
+# Mithril golems
+F:g:FLOOR:8:464
+
+# Shrieker
+F:@:FLOOR:8:40
+# Floor with Raal's!
+F:!:FLOOR:12:557
+
+# Red dragon with Object 5 levels out of depth
+F:3:FLOOR:8:589:*5
+# fire vortex
+F:f:FLOOR:8:354
+
+
+
+# White dragon with Object 5 levels out of depth
+F:4:FLOOR:8:549:*5
+# Ice trolls
+F:I:FLOOR:8:454
+# cold vortex
+F:c:FLOOR:8:358
+
+
+# Black dragon with Object 5 levels out of depth
+F:5:FLOOR:8:592:*5
+# water vortex
+F:w:FLOOR:8:355
+
+
+# Blue dragon with Object 5 levels out of depth
+F:6:FLOOR:8:560:*5
+# young blue dragon
+F:d:FLOOR:8:459
+# energy vortex
+F:e:FLOOR:8:359
+
+# Alarm Traps
+F:^:TRAP_ALARM:12
+# Teleport Traps
+F:+:TRAP_TELEPORT:8
+
+# Dungeon
+D:XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+?:[EQU $RANDOM4 0]
+D:XXXXXXXXXXXXXXXXXXXXX.+b+a+b+..XXXXXXXXXXXXXXXXXXXXX
+?:[NOT [EQU $RANDOM4 0]]
+D:XXXXXXXXXXXXXXXXXXXXX.+b+b+b+..XXXXXXXXXXXXXXXXXXXXX
+?:1
+D:XXXXXXXXXXXXXXXXXX$......5........XXXXXXXXXXXXXXXXXX
+D:XXXXXXXXXXXXXXXXXX..w..........m..XXXXXXXXXXXXXXXXXX
+D:XXXXXXXXXXXXXXXXX........@.........XXXXXXXXXXXXXXXXX
+D:XXXXXXXXXXXXXXXXX..%.%.%^%^%.%.%.%.XXXXXXXXXXXXXXXXX
+D:XXXXXXXXXXXXXXXXX.....m^...^.......XXXXXXXXXXXXXXXXX
+D:XXXXXXXXXXXXXXXXX..5..^.....^...w..XXXXXXXXXXXXXXXXX
+D:XXXXXXXXXXXXXXXXXX...^.......^....XXXXXXXXXXXXXXXXXX
+D:XXXXXXXXXXXXXXXXXX..^..g....g.^...XXXXXXXXXXXXXXXXXX
+D:XXXXXXXXXXXXXXXXXXXXX...++++...XXXXXXXXXXXXXXXXXXXXX
+D:XXXXXXXXXXXXXXXXXXXXXXXXXDDXXXXXXXXXXXXXXXXXXXXXXXXX
+D:XXXXXXXXXXXXXXXXXXXXXXXXX..XXXXXXXXXXXXXXXXXXXXXXXXX
+D:XXXXX.....m..^.XXXXXXXXXX..XXXXXXXXXX^..6......XXXXX
+D:XX...%..4...^%....XXXXXXX..XXXXXXX.e..^......%..m.XX
+D:XX....%....^%...g.XXXXXXX..XXXXXXX.g...^....%.....XX
+D:X+.....%..^%.c....+XXXXX++++XXXXX+......^..%......+X
+?:[EQU $RANDOM4 1]
+D:Xb......%^%.......+D....+<.+....D+.......^%......6aX
+?:[NOT [EQU $RANDOM4 1]]
+D:Xb......%^%.......+D....+<.+....D+.......^%......6bX
+?:[EQU $RANDOM4 2]
+D:Xa4.....@%........+D....+..+....D+.......%@.e.....bX
+?:[NOT [EQU $RANDOM4 2]]
+D:Xb4.....@%........+D....+..+....D+.......%@.e.....bX
+?:1
+D:X+......%^%.......+XXXXX++++XXXXX+......%^........+X
+D:XX.c...%..^%....g.XXXXXXX..XXXXXXX.g...%^........$XX
+D:XX....%....^%.m...XXXXXXX..XXXXXXX....%^...m......XX
+D:XXXXX$......^..XXXXXXXXXX..XXXXXXXXXX.^........XXXXX
+D:XXXXXXXXXXXXXXXXXXXXXXXXX..XXXXXXXXXXXXXXXXXXXXXXXXX
+D:XXXXXXXXXXXXXXXXXXXXXXXXXDDXXXXXXXXXXXXXXXXXXXXXXXXX
+D:XXXXXXXXXXXXXXXXXXXXX^..+++^^^@XXXXXXXXXXXXXXXXXXXXX
+D:XXXXXXXXXXXXXXXXXX^1^^......f^^.m.XXXXXXXXXXXXXXXXXX
+D:XXXXXXXXXXXXXXXXXX^^%^.g...^^g....XXXXXXXXXXXXXXXXXX
+D:XXXXXXXXXXXXXXXXX^^!%....^^....%...XXXXXXXXXXXXXXXXX
+D:XXXXXXXXXXXXXXXXX^%%%%%^^......%...XXXXXXXXXXXXXXXXX
+D:XXXXXXXXXXXXXXXXX^^.%@^......%%%%%.XXXXXXXXXXXXXXXXX
+D:XXXXXXXXXXXXXXXXX.3.%..........%...XXXXXXXXXXXXXXXXX
+D:XXXXXXXXXXXXXXXXXX.............%..XXXXXXXXXXXXXXXXXX
+D:XXXXXXXXXXXXXXXXXX...f...3...m....XXXXXXXXXXXXXXXXXX
+?:[EQU $RANDOM4 3]
+D:XXXXXXXXXXXXXXXXXXXXX.+b+b+a+..XXXXXXXXXXXXXXXXXXXXX
+?:[NOT [EQU $RANDOM4 3]]
+D:XXXXXXXXXXXXXXXXXXXXX.+b+b+b+..XXXXXXXXXXXXXXXXXXXXX
+?:1
+D:XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+
+# Starting position
+P:17:25

@@ -1,6 +1,5 @@
 ﻿#include "floor/floor-changer.h"
 #include "action/travel-execution.h"
-#include "dungeon/dungeon.h"
 #include "dungeon/quest-monster-placer.h"
 #include "dungeon/quest.h"
 #include "effect/effect-characteristics.h"
@@ -36,11 +35,13 @@
 #include "player-base/player-class.h"
 #include "spell-kind/spells-floor.h"
 #include "system/artifact-type-definition.h"
+#include "system/dungeon-info.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
 #include "system/monster-race-definition.h"
 #include "system/object-type-definition.h"
 #include "system/player-type-definition.h"
+#include "system/terrain-type-definition.h"
 #include "timed-effect/player-blindness.h"
 #include "timed-effect/timed-effects.h"
 #include "util/bit-flags-calculator.h"
@@ -91,7 +92,7 @@ static MONSTER_IDX decide_pet_index(PlayerType *player_ptr, const int current_mo
         int j;
         for (j = 1000; j > 0; j--) {
             scatter(player_ptr, cy, cx, player_ptr->y, player_ptr->x, d, PROJECT_NONE);
-            if (monster_can_enter(player_ptr, *cy, *cx, &r_info[party_mon[current_monster].r_idx], 0)) {
+            if (monster_can_enter(player_ptr, *cy, *cx, &monraces_info[party_mon[current_monster].r_idx], 0)) {
                 break;
             }
         }
@@ -176,7 +177,7 @@ static void place_pet(PlayerType *player_ptr)
  * while new floor creation since dungeons may be re-created by
  * auto-scum option.
  */
-static void update_unique_artifact(floor_type *floor_ptr, int16_t cur_floor_id)
+static void update_unique_artifact(FloorType *floor_ptr, int16_t cur_floor_id)
 {
     for (int i = 1; i < floor_ptr->m_max; i++) {
         const auto &m_ref = floor_ptr->m_list[i];
@@ -197,7 +198,7 @@ static void update_unique_artifact(floor_type *floor_ptr, int16_t cur_floor_id)
         }
 
         if (o_ref.is_fixed_artifact()) {
-            a_info.at(o_ref.fixed_artifact_idx).floor_id = cur_floor_id;
+            artifacts_info.at(o_ref.fixed_artifact_idx).floor_id = cur_floor_id;
         }
     }
 }
@@ -284,7 +285,7 @@ static void reset_unique_by_floor_change(PlayerType *player_ptr)
 static void new_floor_allocation(PlayerType *player_ptr, saved_floor_type *sf_ptr)
 {
     GAME_TURN tmp_last_visit = sf_ptr->last_visit;
-    int alloc_chance = d_info[player_ptr->dungeon_idx].max_m_alloc_chance;
+    int alloc_chance = dungeons_info[player_ptr->dungeon_idx].max_m_alloc_chance;
     while (tmp_last_visit > w_ptr->game_turn) {
         tmp_last_visit -= TURNS_PER_TICK * TOWN_DAWN;
     }
@@ -297,7 +298,7 @@ static void new_floor_allocation(PlayerType *player_ptr, saved_floor_type *sf_pt
             continue;
         }
 
-        auto &fixed_artifact = a_info.at(o_ptr->fixed_artifact_idx);
+        auto &fixed_artifact = artifacts_info.at(o_ptr->fixed_artifact_idx);
         if (fixed_artifact.floor_id == new_floor_id) {
             fixed_artifact.is_generated = true;
         } else {
@@ -348,9 +349,9 @@ static void update_new_floor_feature(PlayerType *player_ptr, saved_floor_type *s
 
     auto *g_ptr = &player_ptr->current_floor_ptr->grid_array[player_ptr->y][player_ptr->x];
     if ((player_ptr->change_floor_mode & CFM_UP) && !inside_quest(quest_number(player_ptr, player_ptr->current_floor_ptr->dun_level))) {
-        g_ptr->feat = (player_ptr->change_floor_mode & CFM_SHAFT) ? feat_state(player_ptr->current_floor_ptr, feat_down_stair, FloorFeatureType::SHAFT) : feat_down_stair;
+        g_ptr->feat = (player_ptr->change_floor_mode & CFM_SHAFT) ? feat_state(player_ptr->current_floor_ptr, feat_down_stair, TerrainCharacteristics::SHAFT) : feat_down_stair;
     } else if ((player_ptr->change_floor_mode & CFM_DOWN) && !ironman_downward) {
-        g_ptr->feat = (player_ptr->change_floor_mode & CFM_SHAFT) ? feat_state(player_ptr->current_floor_ptr, feat_up_stair, FloorFeatureType::SHAFT) : feat_up_stair;
+        g_ptr->feat = (player_ptr->change_floor_mode & CFM_SHAFT) ? feat_state(player_ptr->current_floor_ptr, feat_up_stair, TerrainCharacteristics::SHAFT) : feat_up_stair;
     }
 
     g_ptr->mimic = 0;

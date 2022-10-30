@@ -598,7 +598,7 @@ void one_lordly_high_resistance(ObjectType *o_ptr)
  */
 void make_weight_ligten(ObjectType *o_ptr)
 {
-    o_ptr->weight = (2 * k_info[o_ptr->k_idx].weight / 3);
+    o_ptr->weight = (2 * baseitems_info[o_ptr->k_idx].weight / 3);
 }
 
 /*!
@@ -607,7 +607,7 @@ void make_weight_ligten(ObjectType *o_ptr)
  */
 void make_weight_heavy(ObjectType *o_ptr)
 {
-    o_ptr->weight = (4 * k_info[o_ptr->k_idx].weight / 3);
+    o_ptr->weight = (4 * baseitems_info[o_ptr->k_idx].weight / 3);
 }
 
 /*!

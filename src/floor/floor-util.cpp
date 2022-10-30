@@ -4,7 +4,6 @@
  * @author deskull
  */
 #include "floor/floor-util.h"
-#include "dungeon/dungeon.h"
 #include "dungeon/quest.h"
 #include "effect/effect-characteristics.h"
 #include "floor/cave.h"
@@ -16,10 +15,12 @@
 #include "grid/feature.h"
 #include "perception/object-perception.h"
 #include "system/artifact-type-definition.h"
+#include "system/dungeon-info.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
 #include "system/monster-type-definition.h"
 #include "system/player-type-definition.h"
+#include "system/terrain-type-definition.h"
 #include "target/projection-path-calculator.h"
 #include "util/bit-flags-calculator.h"
 #include "world/world.h"
@@ -29,7 +30,7 @@
  * Not completely allocated, that would be inefficient
  * Not completely hardcoded, that would overflow memory
  */
-floor_type floor_info;
+FloorType floor_info;
 
 static int scent_when = 0;
 
@@ -49,7 +50,7 @@ static int scent_when = 0;
  * Whenever the age count loops, most of the scent trail is erased and
  * the age of the remainder is recalculated.
  */
-void update_smell(floor_type *floor_ptr, PlayerType *player_ptr)
+void update_smell(FloorType *floor_ptr, PlayerType *player_ptr)
 {
     /* Create a table that controls the spread of scent */
     const int scent_adjust[5][5] = {
@@ -81,7 +82,7 @@ void update_smell(floor_type *floor_ptr, PlayerType *player_ptr)
             }
 
             g_ptr = &floor_ptr->grid_array[y][x];
-            if (!g_ptr->cave_has_flag(FloorFeatureType::MOVE) && !is_closed_door(player_ptr, g_ptr->feat)) {
+            if (!g_ptr->cave_has_flag(TerrainCharacteristics::MOVE) && !is_closed_door(player_ptr, g_ptr->feat)) {
                 continue;
             }
             if (!player_has_los_bold(player_ptr, y, x)) {
@@ -99,7 +100,7 @@ void update_smell(floor_type *floor_ptr, PlayerType *player_ptr)
 /*
  * Hack -- forget the "flow" information
  */
-void forget_flow(floor_type *floor_ptr)
+void forget_flow(FloorType *floor_ptr)
 {
     for (POSITION y = 0; y < floor_ptr->height; y++) {
         for (POSITION x = 0; x < floor_ptr->width; x++) {
@@ -121,7 +122,7 @@ void forget_flow(floor_type *floor_ptr)
  * clear those fields for grids/monsters containing objects,
  * and we clear it once for every such object.
  */
-void wipe_o_list(floor_type *floor_ptr)
+void wipe_o_list(FloorType *floor_ptr)
 {
     for (OBJECT_IDX i = 1; i < floor_ptr->o_max; i++) {
         auto *o_ptr = &floor_ptr->o_list[i];
@@ -131,7 +132,7 @@ void wipe_o_list(floor_type *floor_ptr)
 
         if (!w_ptr->character_dungeon || preserve_mode) {
             if (o_ptr->is_fixed_artifact() && !o_ptr->is_known()) {
-                a_info.at(o_ptr->fixed_artifact_idx).is_generated = false;
+                artifacts_info.at(o_ptr->fixed_artifact_idx).is_generated = false;
             }
         }
 
@@ -208,6 +209,6 @@ concptr map_name(PlayerType *player_ptr)
     } else if (!floor_ptr->dun_level && player_ptr->town_num) {
         return town_info[player_ptr->town_num].name;
     } else {
-        return d_info[player_ptr->dungeon_idx].name.c_str();
+        return dungeons_info[player_ptr->dungeon_idx].name.c_str();
     }
 }

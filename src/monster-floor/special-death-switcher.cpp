@@ -183,7 +183,7 @@ static void on_dead_sacred_treasures(PlayerType *player_ptr, monster_death_type 
             break;
         }
 
-        a_ptr = &a_info.at(a_idx);
+        a_ptr = &artifacts_info.at(a_idx);
     } while (a_ptr->is_generated);
 
     if (!create_named_art(player_ptr, a_idx, md_ptr->md_y, md_ptr->md_x)) {
@@ -376,7 +376,7 @@ static void on_dead_random_artifact(PlayerType *player_ptr, monster_death_type *
             break;
         }
 
-        if ((q_ptr->fixed_artifact_idx != FixedArtifactId::NONE) && q_ptr->is_ego()) {
+        if (q_ptr->is_ego()) {
             continue;
         }
 

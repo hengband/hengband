@@ -17,7 +17,7 @@ AM_CONDITIONAL(SET_GID, test "$GAMEGROUP" != "")
 
 dnl generate the installation path for the ./lib/ folder
 if test "$GAMEGROUP" != ""; then
-  MY_EXPAND_DIR(game_libpath, "$datadir/games/$PACKAGE/lib/")
+  MY_EXPAND_DIR(game_libpath, "$datarootdir/games/$PACKAGE/lib/")
 else
   MY_EXPAND_DIR(game_libpath, "./lib/")
   bindir=".."
@@ -150,5 +150,5 @@ AC_FUNC_STRFTIME
 AC_FUNC_VPRINTF
 AC_CHECK_FUNCS(gethostname mkdir select socket strtol vsnprintf mkstemp usleep)
 
-AC_CONFIG_FILES(Makefile src/Makefile lib/Makefile lib/apex/Makefile lib/bone/Makefile lib/data/Makefile lib/edit/Makefile lib/file/Makefile lib/help/Makefile lib/info/Makefile lib/pref/Makefile lib/save/Makefile lib/script/Makefile lib/user/Makefile lib/xtra/Makefile lib/xtra/graf/Makefile lib/xtra/music/Makefile lib/xtra/sound/Makefile)
+AC_CONFIG_FILES(Makefile src/Makefile lib/Makefile lib/apex/Makefile lib/bone/Makefile lib/data/Makefile lib/edit/Makefile lib/edit/quests/Makefile lib/edit/towns/Makefile lib/file/Makefile lib/help/Makefile lib/info/Makefile lib/pref/Makefile lib/save/Makefile lib/script/Makefile lib/user/Makefile lib/xtra/Makefile lib/xtra/graf/Makefile lib/xtra/music/Makefile lib/xtra/sound/Makefile)
 AC_OUTPUT()

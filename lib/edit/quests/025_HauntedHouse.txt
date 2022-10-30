@@ -1,0 +1,123 @@
+# File: 025_HauntedHouse.txt
+# Haunted House, (C) Topi Ylinen 1999
+
+# Name
+Q:$25:N:Haunted House
+Q:25:N:幽霊屋敷
+
+# Definition
+Q:$25:Q:6:0:0:0:48:0:0:0:6
+Q:25:Q:6:0:0:0:48:0:0:0:6
+
+# Description for quest
+?:[LEQ $QUEST25 2]
+Q:$25:T:There is something evil going on in the old, thatched house
+Q:$25:T:near the south-west corner of the city wall. People say that
+Q:$25:T:the house is haunted and refuse to go near it. We need someone
+Q:$25:T:to exorcise the evil spirits that are infesting the house.
+Q:25:T:街の城壁の南西の角にある、古い草吹きの家で何か悪いことが起こっています。
+Q:25:T:その家は呪われていて、人々を近寄せないといわれています。
+Q:25:T:我々はその家に住み着いている悪霊を退治してくれる人を探しています。
+?:1
+
+# Description for quest reward (Staff of Dispel Evil)
+?:[EQU $QUEST25 3]
+Q:$25:T:Well done, indeed! Our citizens can finally sigh in relief.
+Q:$25:T:As a reward, we would like to give you something that will
+Q:$25:T:help you sense the enemy even more efficiently!
+Q:25:T:本当に良くやってくれました！我々住民はようやく安心することが出来ます。
+Q:25:T:お礼として、邪悪な者どもを更に効果的に感知することができるアイテムを
+Q:25:T:差し上げます。
+?:1
+
+# Description for quest failed
+?:[EQU $QUEST25 5]
+Q:$25:T:Bah, what a loser!
+Q:$25:T:Fortunately, a bunch of pilgrims who were passing by turned
+Q:$25:T:out to be ultra-elite paladins on their pilgrimage to the
+Q:$25:T:holy city, and -- as a spiritual exercise -- the cleaned up
+Q:$25:T:the house without even asking for a reward. Maybe you should
+Q:$25:T:try to find them, you could learn a thing or two from them.
+Q:25:T:あぁ、何てザマでしょう！
+Q:25:T:幸運にも、この街を通りがかったたくさんの巡礼者たちは
+Q:25:T:聖なる街への巡礼の途中である、超エリートパラディンであることが
+Q:25:T:分かりました。そして彼らは修行の一環として、屋敷の亡霊どもを
+Q:25:T:追い払ってくださいました。彼らは報酬について尋ねさえしません
+Q:25:T:でしたよ。あなたも彼らを見つけて爪のアカでも煎じて飲ませて
+Q:25:T:もらってはいかがですか？
+?:1
+
+# Trap or OOD item
+F:!:FLOOR:8:0:*10:0:0:*
+
+# Floor with a Hound of Tindalos
+F:Z:FLOOR:12:739
+
+# Floor with Raal's!
+F:?:FLOOR:8:557
+
+# Floor with Ipsissimus
+F:I:FLOOR:8:571
+
+# Floor with Nexus Q
+F:Q:FLOOR:8:480
+
+# Water
+F:=:DEEP_WATER:8
+
+# Floor, no tele
+F:s:FLOOR:12
+
+# Normal wall
+F:#:GRANITE:8
+
+# Shadow Demon
+F:S:FLOOR:8:665
+
+# Hand druj
+F:j:FLOOR:8:748
+
+# Stairway to hell
+F:>:FLOOR:8:439
+
+# Skeletal Tyrannos.
+F:t:FLOOR:8:466
+
+# Spectral Tyrannos.
+F:T:FLOOR:8:705
+
+# Trap
+F:^:FLOOR:8:0:0:0:0:*
+
+# Undead Mass:
+F:m:FLOOR:8:202:0:0:0:*
+
+# Spectre:
+F:C:FLOOR:8:508
+
+# Vampire Lord:
+F:V:FLOOR:8:623
+
+# Dreadmaster:
+F:G:FLOOR:8:690
+
+# Dungeon layout
+D:XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+D:X..D!..D^^^m^^m^^^D...........X
+D:X..X.t.X^^^^^^^^^^X...........X
+D:X!XXXXXXXXXXXXXXXXX...........X
+D:XDX...............X.!!!!!!!!!.X
+D:X.................X.!XXXXXXX!.X
+D:X..XXX..........==X.!XXXXXXX!.X
+D:X.XXZX..........=IX.!!!!!!!!!.X
+D:X.XssX.====.===.=IX...........X
+D:XDX#XX.=?Q=.=Q=.=IXT..........X
+D:X..XXXDXXXXDXXXDXXXXXXXXDXXXXXX
+D:X..X^....XSSSX...XjD^^^^^^^^D!X
+D:X..X..!..XSSSX.!.XXX^...G..^XXX
+D:X<.XC...CXSSSX.V.X!D^^^^^^^^D>X
+D:XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+
+# Starting position
+P:13:1
+

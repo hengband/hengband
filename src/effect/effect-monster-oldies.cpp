@@ -238,7 +238,7 @@ ProcessResult effect_monster_old_slow(PlayerType *player_ptr, effect_monster_typ
 }
 
 /*!
- * @todo 「ユニークは (魔法では)常に眠らない」はr_infoの趣旨に反すると思われる
+ * @todo 「ユニークは (魔法では)常に眠らない」はMonsterRaceDefinitionの趣旨に反すると思われる
  * 眠る確率を半分にするとかしておいた方が良さそう
  */
 ProcessResult effect_monster_old_sleep(PlayerType *player_ptr, effect_monster_type *em_ptr)
@@ -270,7 +270,7 @@ ProcessResult effect_monster_old_sleep(PlayerType *player_ptr, effect_monster_ty
 }
 
 /*!
- * @todo 「ユニークは (魔法では)常に混乱しない」はr_infoの趣旨に反すると思われる
+ * @todo 「ユニークは (魔法では)常に混乱しない」はMonsterRaceDefinitionの趣旨に反すると思われる
  * 眠る確率を半分にするとかしておいた方が良さそう
  */
 ProcessResult effect_monster_old_conf(PlayerType *player_ptr, effect_monster_type *em_ptr)

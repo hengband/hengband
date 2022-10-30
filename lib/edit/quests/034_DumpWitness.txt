@@ -1,0 +1,90 @@
+# File: 034_DumpWitness.txt
+# by Christie
+
+# Name
+Q:$34:N:Dump Witness
+Q:34:N:もの言えぬ証人
+
+# Definition
+Q:$34:Q:6:0:0:0:5:0:0:0:6
+Q:34:Q:6:0:0:0:5:0:0:0:6
+
+# Description for quest
+?:[LEQ $QUEST34 2]
+Q:$34:T:Adventurers are dead in the building behind this one. All windows and 
+Q:$34:T:doors are locked. We guess the murderer still hides in the house.
+Q:$34:T:Your task is to clean everything up in the room.
+Q:34:T:この建物の裏の一軒家で冒険者が不審な死に方をしているとの報告がありました。
+Q:34:T:窓にも扉にも鍵がかかっており、殺戮者はまだ内部に潜んでいると思われます。
+Q:34:T:どうかあの家に潜む脅威を排除して下さい。
+?:1
+
+# Description for quest reward
+?:[EQU $QUEST34 3]
+Q:$34:T:Thank you for cleaning the room! A small reward
+Q:$34:T:awaits you outside.
+Q:34:T:怪物どもを退治して下さって有難うございます！
+Q:34:T:ささやかなお礼を外に用意しておきました。
+?:1
+
+# Description for quest failed
+?:[EQU $QUEST34 5]
+Q:$34:T:It seems like this task was too difficult for you.  Good that I
+Q:$34:T:hired another adventurer to clean up the remaining monsters.
+Q:34:T:この仕事はあなたには難しかったようですね。他の冒険者を雇って
+Q:34:T:残りの怪物を退治しますから、もういいですよ。
+?:1
+
+# Hard-Locked Glass Door
+F:+:JAMMED_GLASS_DOOR_7:8
+# Locked Glass Door
+F:4:LOCKED_GLASS_DOOR_7:8
+# Locked Door
+F:1:LOCKED_DOOR_7:8
+# Opened Door
+F:2:OPEN_DOOR:8
+# Floor with Light
+F: :FLOOR:10
+
+# Small wooden chest
+F:&:FLOOR:8:0:338
+# Ruined chest
+F:~:FLOOR:8:0:344
+
+# Human Skeleton
+F:%:FLOOR:10:0:395
+
+
+# Cloaker
+F:(:FLOOR:8:243
+# Death sword
+F:|:FLOOR:8:107
+# Killer bee
+F:I:FLOOR:8:174
+
+# Potion of cure critical wounds
+F:!:FLOOR:10:0:241
+# Potion of booze
+F:3:FLOOR:10:0:247
+# Scroll of Teleportation
+F:?:FLOOR:8:0:186
+
+
+# Dungeon layout
+D:XXXXXXXXXXXXXXXXXXXXXX
+D:X...................<X
+D:X...........X++++++X.X
+D:X...........XI~~~~~X.X
+D:X.XXXX++++XXXX4444XX.X
+D:X.X    %           X.X
+D:X.+   3 3     %    +.X
+D:X.+ 3         3(   +.X
+D:X.X  XXDXXXXX % %  +.X
+D:X.X  X %2~X|D    3 +.X
+D:X.X  XXDX&X~2      X.X
+D:X.1  X??X|X~D%!!   X.X
+D:XXXXXXXXXXXXXXXXXXXXXX
+
+# Starting position
+P:1:20
+

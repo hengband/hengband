@@ -385,7 +385,7 @@ void autopick_entry_from_object(PlayerType *player_ptr, autopick_type *entry, Ob
                  * are almost meaningless.
                  * Register the ego type only.
                  */
-                auto *e_ptr = &e_info[o_ptr->ego_idx];
+                auto *e_ptr = &egos_info[o_ptr->ego_idx];
 #ifdef JP
                 /* エゴ銘には「^」マークが使える */
                 sprintf(name_str, "^%s", e_ptr->name.c_str());
@@ -412,7 +412,7 @@ void autopick_entry_from_object(PlayerType *player_ptr, autopick_type *entry, Ob
     }
 
     if (o_ptr->is_melee_weapon()) {
-        auto *k_ptr = &k_info[o_ptr->k_idx];
+        auto *k_ptr = &baseitems_info[o_ptr->k_idx];
 
         if ((o_ptr->dd != k_ptr->dd) || (o_ptr->ds != k_ptr->ds)) {
             ADD_FLG(FLG_BOOSTED);
@@ -425,11 +425,11 @@ void autopick_entry_from_object(PlayerType *player_ptr, autopick_type *entry, Ob
     }
 
     const auto r_idx = i2enum<MonsterRaceId>(o_ptr->pval);
-    if ((o_ptr->tval == ItemKindType::CORPSE || o_ptr->tval == ItemKindType::STATUE) && r_info[r_idx].kind_flags.has(MonsterKindType::UNIQUE)) {
+    if ((o_ptr->tval == ItemKindType::CORPSE || o_ptr->tval == ItemKindType::STATUE) && monraces_info[r_idx].kind_flags.has(MonsterKindType::UNIQUE)) {
         ADD_FLG(FLG_UNIQUE);
     }
 
-    if (o_ptr->tval == ItemKindType::CORPSE && angband_strchr("pht", r_info[r_idx].d_char)) {
+    if (o_ptr->tval == ItemKindType::CORPSE && angband_strchr("pht", monraces_info[r_idx].d_char)) {
         ADD_FLG(FLG_HUMAN);
     }
 

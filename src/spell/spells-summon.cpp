@@ -227,7 +227,7 @@ bool cast_summon_greater_demon(PlayerType *player_ptr)
 
     PLAYER_LEVEL plev = player_ptr->lev;
     auto corpse_r_idx = i2enum<MonsterRaceId>(o_ptr->pval);
-    int summon_lev = plev * 2 / 3 + r_info[corpse_r_idx].level;
+    int summon_lev = plev * 2 / 3 + monraces_info[corpse_r_idx].level;
 
     if (summon_specific(player_ptr, -1, player_ptr->y, player_ptr->x, summon_lev, SUMMON_HI_DEMON, (PM_ALLOW_GROUP | PM_FORCE_PET))) {
         msg_print(_("硫黄の悪臭が充満した。", "The area fills with a stench of sulphur and brimstone."));

@@ -279,5 +279,5 @@ void player_outfit(PlayerType *player_ptr)
         add_outfit(player_ptr, q_ptr);
     }
 
-    k_info[lookup_kind(ItemKindType::POTION, SV_POTION_WATER)].aware = true;
+    baseitems_info[lookup_kind(ItemKindType::POTION, SV_POTION_WATER)].aware = true;
 }

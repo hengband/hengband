@@ -156,7 +156,7 @@ static PRICE repair_broken_weapon_aux(PlayerType *player_ptr, PRICE bcost)
     if (o_ptr->sval == SV_BROKEN_DAGGER) {
         int n = 1;
         k_idx = 0;
-        for (const auto &k_ref : k_info) {
+        for (const auto &k_ref : baseitems_info) {
             if (k_ref.tval != ItemKindType::SWORD) {
                 continue;
             }
@@ -177,7 +177,7 @@ static PRICE repair_broken_weapon_aux(PlayerType *player_ptr, PRICE bcost)
         while (true) {
             BaseItemInfo *ck_ptr;
             k_idx = lookup_kind(tval, SV_ANY);
-            ck_ptr = &k_info[k_idx];
+            ck_ptr = &baseitems_info[k_idx];
 
             if (tval == ItemKindType::SWORD) {
                 if ((ck_ptr->sval == SV_BROKEN_DAGGER) || (ck_ptr->sval == SV_BROKEN_SWORD) || (ck_ptr->sval == SV_DIAMOND_EDGE) || (ck_ptr->sval == SV_POISON_NEEDLE)) {
@@ -199,13 +199,13 @@ static PRICE repair_broken_weapon_aux(PlayerType *player_ptr, PRICE bcost)
         }
     }
 
-    int dd_bonus = o_ptr->dd - k_info[o_ptr->k_idx].dd;
-    int ds_bonus = o_ptr->ds - k_info[o_ptr->k_idx].ds;
-    dd_bonus += mo_ptr->dd - k_info[mo_ptr->k_idx].dd;
-    ds_bonus += mo_ptr->ds - k_info[mo_ptr->k_idx].ds;
+    int dd_bonus = o_ptr->dd - baseitems_info[o_ptr->k_idx].dd;
+    int ds_bonus = o_ptr->ds - baseitems_info[o_ptr->k_idx].ds;
+    dd_bonus += mo_ptr->dd - baseitems_info[mo_ptr->k_idx].dd;
+    ds_bonus += mo_ptr->ds - baseitems_info[mo_ptr->k_idx].ds;
 
     BaseItemInfo *k_ptr;
-    k_ptr = &k_info[k_idx];
+    k_ptr = &baseitems_info[k_idx];
     o_ptr->k_idx = k_idx;
     o_ptr->weight = k_ptr->weight;
     o_ptr->tval = k_ptr->tval;
@@ -250,7 +250,7 @@ static PRICE repair_broken_weapon_aux(PlayerType *player_ptr, PRICE bcost)
     o_ptr->to_h += std::max<short>(0, (mo_ptr->to_h / 3));
     o_ptr->to_a += std::max<short>(0, (mo_ptr->to_a));
 
-    const auto is_narsil = o_ptr->fixed_artifact_idx == FixedArtifactId::NARSIL;
+    const auto is_narsil = o_ptr->is_specific_artifact(FixedArtifactId::NARSIL);
     if (is_narsil || (o_ptr->is_random_artifact() && one_in_(1)) || (o_ptr->is_ego() && one_in_(7))) {
         if (o_ptr->is_ego()) {
             o_ptr->art_flags.set(TR_IGNORE_FIRE);

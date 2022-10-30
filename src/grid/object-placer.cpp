@@ -90,7 +90,7 @@ void place_object(PlayerType *player_ptr, POSITION y, POSITION x, BIT_FLAGS mode
     OBJECT_IDX o_idx = o_pop(floor_ptr);
     if (o_idx == 0) {
         if (q_ptr->is_fixed_artifact()) {
-            a_info.at(q_ptr->fixed_artifact_idx).is_generated = false;
+            artifacts_info.at(q_ptr->fixed_artifact_idx).is_generated = false;
         }
 
         return;

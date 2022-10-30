@@ -37,7 +37,7 @@ constexpr SUB_EXP SPELL_EXP_MASTER = 1600;
 /*
  * The skill table
  */
-std::vector<skill_table> s_info;
+std::vector<skill_table> class_skills_info;
 
 namespace {
 
@@ -267,7 +267,7 @@ void PlayerSkill::gain_range_weapon_exp(const ObjectType *o_ptr)
 
 void PlayerSkill::gain_martial_arts_skill_exp()
 {
-    if (this->player_ptr->skill_exp[PlayerSkillKindType::MARTIAL_ARTS] < s_info[enum2i(this->player_ptr->pclass)].s_max[PlayerSkillKindType::MARTIAL_ARTS]) {
+    if (this->player_ptr->skill_exp[PlayerSkillKindType::MARTIAL_ARTS] < class_skills_info[enum2i(this->player_ptr->pclass)].s_max[PlayerSkillKindType::MARTIAL_ARTS]) {
         const GainAmountList gain_amount_list{ 40, 5, 1, (one_in_(3) ? 1 : 0) };
         gain_attack_skill_exp(this->player_ptr, this->player_ptr->skill_exp[PlayerSkillKindType::MARTIAL_ARTS], gain_amount_list);
     }
@@ -275,7 +275,7 @@ void PlayerSkill::gain_martial_arts_skill_exp()
 
 void PlayerSkill::gain_two_weapon_skill_exp()
 {
-    if (this->player_ptr->skill_exp[PlayerSkillKindType::TWO_WEAPON] < s_info[enum2i(this->player_ptr->pclass)].s_max[PlayerSkillKindType::TWO_WEAPON]) {
+    if (this->player_ptr->skill_exp[PlayerSkillKindType::TWO_WEAPON] < class_skills_info[enum2i(this->player_ptr->pclass)].s_max[PlayerSkillKindType::TWO_WEAPON]) {
         const GainAmountList gain_amount_list{ 80, 4, 1, (one_in_(3) ? 1 : 0) };
         gain_attack_skill_exp(this->player_ptr, this->player_ptr->skill_exp[PlayerSkillKindType::TWO_WEAPON], gain_amount_list);
     }
@@ -284,12 +284,12 @@ void PlayerSkill::gain_two_weapon_skill_exp()
 void PlayerSkill::gain_riding_skill_exp_on_melee_attack(const monster_race *r_ptr)
 {
     auto now_exp = this->player_ptr->skill_exp[PlayerSkillKindType::RIDING];
-    auto max_exp = s_info[enum2i(this->player_ptr->pclass)].s_max[PlayerSkillKindType::RIDING];
+    auto max_exp = class_skills_info[enum2i(this->player_ptr->pclass)].s_max[PlayerSkillKindType::RIDING];
     if (now_exp >= max_exp) {
         return;
     }
 
-    auto riding_level = r_info[this->player_ptr->current_floor_ptr->m_list[this->player_ptr->riding].r_idx].level;
+    auto riding_level = monraces_info[this->player_ptr->current_floor_ptr->m_list[this->player_ptr->riding].r_idx].level;
     int inc = 0;
 
     if ((now_exp / 200 - 5) < r_ptr->level) {
@@ -311,12 +311,12 @@ void PlayerSkill::gain_riding_skill_exp_on_melee_attack(const monster_race *r_pt
 void PlayerSkill::gain_riding_skill_exp_on_range_attack()
 {
     auto now_exp = this->player_ptr->skill_exp[PlayerSkillKindType::RIDING];
-    auto max_exp = s_info[enum2i(this->player_ptr->pclass)].s_max[PlayerSkillKindType::RIDING];
+    auto max_exp = class_skills_info[enum2i(this->player_ptr->pclass)].s_max[PlayerSkillKindType::RIDING];
     if (now_exp >= max_exp) {
         return;
     }
 
-    if (((this->player_ptr->skill_exp[PlayerSkillKindType::RIDING] - (RIDING_EXP_BEGINNER * 2)) / 200 < r_info[this->player_ptr->current_floor_ptr->m_list[this->player_ptr->riding].r_idx].level) && one_in_(2)) {
+    if (((this->player_ptr->skill_exp[PlayerSkillKindType::RIDING] - (RIDING_EXP_BEGINNER * 2)) / 200 < monraces_info[this->player_ptr->current_floor_ptr->m_list[this->player_ptr->riding].r_idx].level) && one_in_(2)) {
         this->player_ptr->skill_exp[PlayerSkillKindType::RIDING] += 1;
         set_bits(this->player_ptr->update, PU_BONUS);
     }
@@ -325,12 +325,12 @@ void PlayerSkill::gain_riding_skill_exp_on_range_attack()
 void PlayerSkill::gain_riding_skill_exp_on_fall_off_check(int dam)
 {
     auto now_exp = this->player_ptr->skill_exp[PlayerSkillKindType::RIDING];
-    auto max_exp = s_info[enum2i(this->player_ptr->pclass)].s_max[PlayerSkillKindType::RIDING];
+    auto max_exp = class_skills_info[enum2i(this->player_ptr->pclass)].s_max[PlayerSkillKindType::RIDING];
     if (now_exp >= max_exp || max_exp <= 1000) {
         return;
     }
 
-    auto riding_level = r_info[this->player_ptr->current_floor_ptr->m_list[this->player_ptr->riding].r_idx].level;
+    auto riding_level = monraces_info[this->player_ptr->current_floor_ptr->m_list[this->player_ptr->riding].r_idx].level;
 
     if ((dam / 2 + riding_level) <= (now_exp / 30 + 10)) {
         return;
@@ -440,7 +440,7 @@ EXP PlayerSkill::exp_of_spell(int realm, int spell_idx) const
  */
 void PlayerSkill::apply_special_weapon_skill_max_values()
 {
-    this->player_ptr->weapon_exp_max = s_info[enum2i(this->player_ptr->pclass)].w_max;
+    this->player_ptr->weapon_exp_max = class_skills_info[enum2i(this->player_ptr->pclass)].w_max;
     if (PlayerClass(this->player_ptr).equals(PlayerClassType::SORCERER)) {
         return;
     }

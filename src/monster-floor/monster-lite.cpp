@@ -1,7 +1,6 @@
 ﻿#include "monster-floor/monster-lite.h"
 #include "core/player-update-types.h"
 #include "dungeon/dungeon-flag-types.h"
-#include "dungeon/dungeon.h"
 #include "floor/cave.h"
 #include "grid/feature-flag-types.h"
 #include "grid/grid.h"
@@ -12,6 +11,7 @@
 #include "player-base/player-class.h"
 #include "player-info/ninja-data-type.h"
 #include "player/special-defense-types.h"
+#include "system/dungeon-info.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
 #include "system/monster-race-definition.h"
@@ -98,17 +98,17 @@ static void update_monster_dark(
         return;
     }
 
-    if (!feat_supports_los(g_ptr->feat) && !g_ptr->cave_has_flag(FloorFeatureType::PROJECT)) {
+    if (!feat_supports_los(g_ptr->feat) && !g_ptr->cave_has_flag(TerrainCharacteristics::PROJECT)) {
         if (((y < player_ptr->y) && (y > ml_ptr->mon_fy)) || ((y > player_ptr->y) && (y < ml_ptr->mon_fy))) {
             dpf = player_ptr->y - ml_ptr->mon_fy;
             d = y - ml_ptr->mon_fy;
             midpoint = ml_ptr->mon_fx + ((player_ptr->x - ml_ptr->mon_fx) * std::abs(d)) / std::abs(dpf);
             if (x < midpoint) {
-                if (!cave_los_bold(player_ptr->current_floor_ptr, y, x + 1) && !cave_has_flag_bold(player_ptr->current_floor_ptr, y, x + 1, FloorFeatureType::PROJECT)) {
+                if (!cave_los_bold(player_ptr->current_floor_ptr, y, x + 1) && !cave_has_flag_bold(player_ptr->current_floor_ptr, y, x + 1, TerrainCharacteristics::PROJECT)) {
                     return;
                 }
             } else if (x > midpoint) {
-                if (!cave_los_bold(player_ptr->current_floor_ptr, y, x - 1) && !cave_has_flag_bold(player_ptr->current_floor_ptr, y, x - 1, FloorFeatureType::PROJECT)) {
+                if (!cave_los_bold(player_ptr->current_floor_ptr, y, x - 1) && !cave_has_flag_bold(player_ptr->current_floor_ptr, y, x - 1, TerrainCharacteristics::PROJECT)) {
                     return;
                 }
             } else if (ml_ptr->mon_invis) {
@@ -121,11 +121,11 @@ static void update_monster_dark(
             d = x - ml_ptr->mon_fx;
             midpoint = ml_ptr->mon_fy + ((player_ptr->y - ml_ptr->mon_fy) * std::abs(d)) / std::abs(dpf);
             if (y < midpoint) {
-                if (!cave_los_bold(player_ptr->current_floor_ptr, y + 1, x) && !cave_has_flag_bold(player_ptr->current_floor_ptr, y + 1, x, FloorFeatureType::PROJECT)) {
+                if (!cave_los_bold(player_ptr->current_floor_ptr, y + 1, x) && !cave_has_flag_bold(player_ptr->current_floor_ptr, y + 1, x, TerrainCharacteristics::PROJECT)) {
                     return;
                 }
             } else if (y > midpoint) {
-                if (!cave_los_bold(player_ptr->current_floor_ptr, y - 1, x) && !cave_has_flag_bold(player_ptr->current_floor_ptr, y - 1, x, FloorFeatureType::PROJECT)) {
+                if (!cave_los_bold(player_ptr->current_floor_ptr, y - 1, x) && !cave_has_flag_bold(player_ptr->current_floor_ptr, y - 1, x, TerrainCharacteristics::PROJECT)) {
                     return;
                 }
             } else if (ml_ptr->mon_invis) {
@@ -151,7 +151,7 @@ void update_mon_lite(PlayerType *player_ptr)
     std::vector<Pos2D> points;
 
     void (*add_mon_lite)(PlayerType *, std::vector<Pos2D> &, const POSITION, const POSITION, const monster_lite_type *);
-    int dis_lim = (d_info[player_ptr->dungeon_idx].flags.has(DungeonFeatureType::DARKNESS) && !player_ptr->see_nocto) ? (MAX_SIGHT / 2 + 1) : (MAX_SIGHT + 3);
+    int dis_lim = (dungeons_info[player_ptr->dungeon_idx].flags.has(DungeonFeatureType::DARKNESS) && !player_ptr->see_nocto) ? (MAX_SIGHT / 2 + 1) : (MAX_SIGHT + 3);
     auto *floor_ptr = player_ptr->current_floor_ptr;
     for (int i = 0; i < floor_ptr->mon_lite_n; i++) {
         grid_type *g_ptr;
@@ -165,7 +165,7 @@ void update_mon_lite(PlayerType *player_ptr)
         monster_race *r_ptr;
         for (int i = 1; i < floor_ptr->m_max; i++) {
             m_ptr = &floor_ptr->m_list[i];
-            r_ptr = &r_info[m_ptr->r_idx];
+            r_ptr = &monraces_info[m_ptr->r_idx];
             if (!m_ptr->is_valid() || (m_ptr->cdis > dis_lim)) {
                 continue;
             }
@@ -191,25 +191,25 @@ void update_mon_lite(PlayerType *player_ptr)
                 continue;
             }
 
-            FloorFeatureType f_flag;
+            TerrainCharacteristics f_flag;
             if (rad > 0) {
                 if (!(r_ptr->flags7 & (RF7_SELF_LITE_1 | RF7_SELF_LITE_2)) && (m_ptr->is_asleep() || (!floor_ptr->dun_level && is_daytime()) || player_ptr->phase_out)) {
                     continue;
                 }
 
-                if (d_info[player_ptr->dungeon_idx].flags.has(DungeonFeatureType::DARKNESS)) {
+                if (dungeons_info[player_ptr->dungeon_idx].flags.has(DungeonFeatureType::DARKNESS)) {
                     rad = 1;
                 }
 
                 add_mon_lite = update_monster_lite;
-                f_flag = FloorFeatureType::LOS;
+                f_flag = TerrainCharacteristics::LOS;
             } else {
                 if (!(r_ptr->flags7 & (RF7_SELF_DARK_1 | RF7_SELF_DARK_2)) && (m_ptr->is_asleep() || (!floor_ptr->dun_level && !is_daytime()))) {
                     continue;
                 }
 
                 add_mon_lite = update_monster_dark;
-                f_flag = FloorFeatureType::PROJECT;
+                f_flag = TerrainCharacteristics::PROJECT;
                 rad = -rad;
             }
 
@@ -365,7 +365,7 @@ void update_mon_lite(PlayerType *player_ptr)
  * @brief 画面切り替え等でモンスターの灯りを消去する
  * @param floor_ptr 現在フロアへの参照ポインタ
  */
-void clear_mon_lite(floor_type *floor_ptr)
+void clear_mon_lite(FloorType *floor_ptr)
 {
     for (int i = 0; i < floor_ptr->mon_lite_n; i++) {
         grid_type *g_ptr;

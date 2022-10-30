@@ -4,4 +4,4 @@
 #include <string_view>
 
 struct angband_header;
-errr parse_s_info(std::string_view buf, angband_header *head);
+errr parse_class_skills_info(std::string_view buf, angband_header *head);

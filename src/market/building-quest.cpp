@@ -38,7 +38,7 @@ static void get_questinfo(PlayerType *player_ptr, QuestId questnum, bool do_init
         init_flags = i2enum<init_flags_type>(init_flags | INIT_ASSIGN);
     }
 
-    parse_fixed_map(player_ptr, "q_info.txt", 0, 0, 0, 0);
+    parse_fixed_map(player_ptr, QUEST_DEFINITION_LIST, 0, 0, 0, 0);
     floor_ptr->quest_number = old_quest;
 }
 

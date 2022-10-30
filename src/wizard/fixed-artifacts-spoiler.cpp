@@ -86,7 +86,7 @@ static void print_header(void)
  */
 static bool make_fake_artifact(ObjectType *o_ptr, FixedArtifactId fixed_artifact_idx)
 {
-    auto &a_ref = a_info.at(fixed_artifact_idx);
+    auto &a_ref = artifacts_info.at(fixed_artifact_idx);
     if (a_ref.name.empty()) {
         return false;
     }
@@ -164,7 +164,7 @@ SpoilerOutputResultType spoil_fixed_artifact(concptr fname)
         spoiler_blanklines(1);
 
         for (auto tval : tval_list) {
-            for (const auto &[a_idx, a_ref] : a_info) {
+            for (const auto &[a_idx, a_ref] : artifacts_info) {
                 if (a_ref.tval != tval) {
                     continue;
                 }

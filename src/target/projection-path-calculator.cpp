@@ -109,7 +109,7 @@ static bool project_stop(PlayerType *player_ptr, projection_path_type *pp_ptr)
             return true;
         }
     } else if (none_bits(pp_ptr->flag, PROJECT_PATH)) {
-        if (!pp_ptr->position->empty() && !cave_has_flag_bold(floor_ptr, pp_ptr->y, pp_ptr->x, FloorFeatureType::PROJECT)) {
+        if (!pp_ptr->position->empty() && !cave_has_flag_bold(floor_ptr, pp_ptr->y, pp_ptr->x, TerrainCharacteristics::PROJECT)) {
             return true;
         }
     }

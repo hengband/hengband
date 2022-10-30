@@ -1,7 +1,6 @@
 ﻿#include "target/target-preparation.h"
 #include "floor/cave.h"
 #include "game-option/input-options.h"
-#include "grid/feature.h"
 #include "grid/grid.h"
 #include "monster-race/monster-race.h"
 #include "monster-race/race-flags1.h"
@@ -15,6 +14,7 @@
 #include "system/monster-type-definition.h"
 #include "system/object-type-definition.h"
 #include "system/player-type-definition.h"
+#include "system/terrain-type-definition.h"
 #include "target/projection-path-calculator.h"
 #include "target/target-types.h"
 #include "timed-effect/player-hallucination.h"
@@ -107,7 +107,7 @@ static bool target_set_accept(PlayerType *player_ptr, POSITION y, POSITION x)
             return true;
         }
 
-        if (f_info[g_ptr->get_feat_mimic()].flags.has(FloorFeatureType::NOTICE)) {
+        if (terrains_info[g_ptr->get_feat_mimic()].flags.has(TerrainCharacteristics::NOTICE)) {
             return true;
         }
     }
@@ -206,8 +206,8 @@ void target_sensing_monsters_prepare(PlayerType *player_ptr, std::vector<MONSTER
     auto comp_importance = [floor_ptr = player_ptr->current_floor_ptr](MONSTER_IDX idx1, MONSTER_IDX idx2) {
         auto m_ptr1 = &floor_ptr->m_list[idx1];
         auto m_ptr2 = &floor_ptr->m_list[idx2];
-        auto ap_r_ptr1 = &r_info[m_ptr1->ap_r_idx];
-        auto ap_r_ptr2 = &r_info[m_ptr2->ap_r_idx];
+        auto ap_r_ptr1 = &monraces_info[m_ptr1->ap_r_idx];
+        auto ap_r_ptr2 = &monraces_info[m_ptr2->ap_r_idx];
 
         /* Unique monsters first */
         if (ap_r_ptr1->kind_flags.has(MonsterKindType::UNIQUE) != ap_r_ptr2->kind_flags.has(MonsterKindType::UNIQUE)) {

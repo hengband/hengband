@@ -66,7 +66,7 @@ void ObjectQuaffEntity::execute(INVENTORY_IDX item)
     object_tried(&o_ref);
     if (ident && !o_ref.is_aware()) {
         object_aware(this->player_ptr, &o_ref);
-        gain_exp(this->player_ptr, (k_info[o_ref.k_idx].level + (this->player_ptr->lev >> 1)) / this->player_ptr->lev);
+        gain_exp(this->player_ptr, (baseitems_info[o_ref.k_idx].level + (this->player_ptr->lev >> 1)) / this->player_ptr->lev);
     }
 
     this->player_ptr->window_flags |= (PW_INVEN | PW_EQUIP | PW_PLAYER);

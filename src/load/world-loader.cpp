@@ -1,12 +1,12 @@
 ﻿#include "load/world-loader.h"
 #include "cmd-building/cmd-building.h"
-#include "dungeon/dungeon.h"
 #include "floor/wild.h"
 #include "load/angband-version-comparer.h"
 #include "load/load-util.h"
 #include "load/load-zangband.h"
 #include "market/bounty.h"
 #include "system/building-type-definition.h"
+#include "system/dungeon-info.h"
 #include "system/floor-type-definition.h"
 #include "system/player-type-definition.h"
 #include "world/world.h"
@@ -16,13 +16,13 @@ static void rd_hengband_dungeons(void)
     auto max = rd_byte();
     for (auto i = 0U; i < max; i++) {
         auto tmp16s = rd_s16b();
-        if (i >= d_info.size()) {
+        if (i >= dungeons_info.size()) {
             continue;
         }
 
         max_dlv[i] = tmp16s;
-        if (max_dlv[i] > d_info[i].maxdepth) {
-            max_dlv[i] = d_info[i].maxdepth;
+        if (max_dlv[i] > dungeons_info[i].maxdepth) {
+            max_dlv[i] = dungeons_info[i].maxdepth;
         }
     }
 }

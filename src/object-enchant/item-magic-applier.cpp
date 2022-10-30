@@ -6,7 +6,6 @@
 
 #include "object-enchant/item-magic-applier.h"
 #include "artifact/fixed-art-generator.h"
-#include "dungeon/dungeon.h"
 #include "object-enchant/enchanter-base.h"
 #include "object-enchant/enchanter-factory.h"
 #include "object-enchant/item-apply-magic.h"
@@ -15,6 +14,7 @@
 #include "player/player-status-flags.h"
 #include "system/artifact-type-definition.h"
 #include "system/baseitem-info-definition.h"
+#include "system/dungeon-info.h"
 #include "system/floor-type-definition.h"
 #include "system/player-type-definition.h"
 #include "util/bit-flags-calculator.h"
@@ -73,13 +73,13 @@ void ItemMagicApplier::execute()
 std::tuple<int, int> ItemMagicApplier::calculate_chances()
 {
     auto chance_good = this->lev + 10;
-    if (chance_good > d_info[this->player_ptr->dungeon_idx].obj_good) {
-        chance_good = d_info[this->player_ptr->dungeon_idx].obj_good;
+    if (chance_good > dungeons_info[this->player_ptr->dungeon_idx].obj_good) {
+        chance_good = dungeons_info[this->player_ptr->dungeon_idx].obj_good;
     }
 
     auto chance_great = chance_good * 2 / 3;
-    if ((this->player_ptr->ppersonality != PERSONALITY_MUNCHKIN) && (chance_great > d_info[this->player_ptr->dungeon_idx].obj_great)) {
-        chance_great = d_info[this->player_ptr->dungeon_idx].obj_great;
+    if ((this->player_ptr->ppersonality != PERSONALITY_MUNCHKIN) && (chance_great > dungeons_info[this->player_ptr->dungeon_idx].obj_great)) {
+        chance_great = dungeons_info[this->player_ptr->dungeon_idx].obj_great;
     }
 
     if (has_good_luck(this->player_ptr)) {
@@ -182,7 +182,7 @@ bool ItemMagicApplier::set_fixed_artifact_generation_info()
     }
 
     apply_artifact(this->player_ptr, this->o_ptr);
-    auto &a_ref = a_info.at(this->o_ptr->fixed_artifact_idx);
+    auto &a_ref = artifacts_info.at(this->o_ptr->fixed_artifact_idx);
     a_ref.is_generated = true;
     if (w_ptr->character_dungeon) {
         a_ref.floor_id = this->player_ptr->floor_id;
@@ -200,8 +200,8 @@ void ItemMagicApplier::apply_cursed()
         return;
     }
 
-    const auto *k_ptr = &k_info[this->o_ptr->k_idx];
-    if (!k_info[this->o_ptr->k_idx].cost) {
+    const auto *k_ptr = &baseitems_info[this->o_ptr->k_idx];
+    if (!baseitems_info[this->o_ptr->k_idx].cost) {
         set_bits(this->o_ptr->ident, IDENT_BROKEN);
     }
 

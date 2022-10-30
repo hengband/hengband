@@ -1,0 +1,93 @@
+# File: 011_NodeOfChaos.txt
+
+# Created by Topi Ylinen
+
+# Name
+Q:$11:N:Node of Chaos
+Q:11:N:カオスの特異点
+
+# Definition
+Q:$11:Q:6:0:0:0:65:0:0:0:6
+Q:11:Q:6:0:0:0:65:0:0:0:6
+
+# Description for quest
+?:[LEQ $QUEST11 2]
+Q:$11:T:The Wizards of Chaos have discovered a magical Node of
+Q:$11:T:Chaos in a nearby volcano. You must seek the Node and
+Q:$11:T:dispatch its guardians so that the Tower of Chaos can
+Q:$11:T:claim the mystical energies of the Node.
+Q:11:T:カオス魔法の賢者たちが、近くの火山にカオスエネルギーの特異点の存在を確認
+Q:11:T:した。我々カオス魔法の塔がその魔力の所有権を得られるように、おまえは
+Q:11:T:その特異点の場所を見つけてそこに巣食うモンスターを片づけてくるのだ。
+?:1
+
+# Description for quest reward
+?:[EQU $QUEST11 3]
+Q:$11:T:You have done well. A powerful spellbook awaits you outside.
+Q:11:T:よくやった。強力な魔法書を外に置いておいた。
+?:1
+
+# Description for quest failed
+?:[EQU $QUEST11 5]
+Q:$11:T:Begone, incompetent fool! The dimensional energies of the 
+Q:$11:T:mystic Node have faded away and are lost forever! You had
+Q:$11:T:your chance and botched the job. 
+Q:11:T:立ち去れ、無能な馬鹿者め！魔法の特異点の次元エネルギーは
+Q:11:T:消え去って永遠に失われたのだぞ！お前はせっかくのチャンスを
+Q:11:T:棒にふったのだ。
+?:1
+
+# Floor with Chaos spawn
+F:a:FLOOR:10:574
+
+# Floor with Hell hound
+F:b:FLOOR:10:829
+
+# Shallow lava with Fire elemental
+F:c:SHALLOW_LAVA:10:510
+
+# Shallow lava with Magma elemental
+F:d:SHALLOW_LAVA:10:584
+
+# Deep lava with Great Hell Wyrm
+F:e:DEEP_LAVA:10:1193
+
+# Deep lava
+F:l:DEEP_LAVA:2
+
+# Shallow lava
+F:i:SHALLOW_LAVA:2
+
+# Mountain
+F:h:MOUNTAIN_WALL
+
+# Node of Chaos layout 
+D:hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh
+D:hhllllliiiiiillllliiiiiiillllhh
+D:hllliiiciiiiiillliiiiiciiilillh
+D:hliiiicdciiiiiiiiiiiicdciiiiilh
+D:h.iiihhhhhhhhhccchhhhhhhhhiii.h
+D:h..ihhhhhhhhhcdddchhhhhhhhhi..h
+D:h..ihhh...aaaacccaaaa...hhhi..h
+D:h..ihh....aaaabbbaaaa....hhi..h
+D:h..ihh...hhhhhhhhhhhhh...hhi..h
+D:h..ihh..hh...........hh..hhi..h
+D:h..ihh..h.....cdc.....h..hhi..h
+D:h..ihh..hb...cdedc...bh..hhi..h
+D:h..ihh..bbb.cdeeedc.bbb..hhi..h
+D:h..ihh..hb...cdedc...bh..hhi..h
+D:h..ihh..h.....cdc.....h..hhi..h
+D:h..ihh..hh...........hh..hhi..h
+D:h..ihhh..hhh.......hhh..hhhi..h
+D:h..ihhh..aaaaaaaaaaaaa..hhhi..h
+D:h..ihhhh.aaaaabbbaaaaa.hhhhi..h
+D:h..ihhhhhhhhhhhhhhhhhhhhhhhi..h
+D:h..iihhhhhhhhhhhhhhhhhhhhhii..h
+D:h...iiiiiiiiiiiiiiiiiiiiiii...h
+D:h.....iiiiiiiiiiiiiiiiiii.....h
+D:h<...........................hh
+D:hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh
+
+# Starting position
+P:23:1
+

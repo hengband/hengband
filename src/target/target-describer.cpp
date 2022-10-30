@@ -1,7 +1,6 @@
 ﻿#include "target/target-describer.h"
 #include "action/travel-execution.h"
 #include "core/stuff-handler.h"
-#include "dungeon/dungeon.h"
 #include "dungeon/quest.h"
 #include "flavor/flavor-describer.h"
 #include "floor/cave.h"
@@ -27,6 +26,7 @@
 #include "player-base/player-race.h"
 #include "player/player-status-table.h"
 #include "system/building-type-definition.h"
+#include "system/dungeon-info.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
 #include "system/monster-race-definition.h"
@@ -34,6 +34,7 @@
 #include "system/object-type-definition.h"
 #include "system/player-type-definition.h"
 #include "system/system-variables.h"
+#include "system/terrain-type-definition.h"
 #include "target/target-types.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
@@ -69,7 +70,7 @@ struct eg_type {
     monster_type *m_ptr;
     OBJECT_IDX next_o_idx;
     FEAT_IDX feat;
-    feature_type *f_ptr;
+    TerrainType *f_ptr;
     concptr name;
 };
 
@@ -99,7 +100,7 @@ static eg_type *initialize_eg_type(PlayerType *player_ptr, eg_type *eg_ptr, POSI
  */
 static void evaluate_monster_exp(PlayerType *player_ptr, char *buf, monster_type *m_ptr)
 {
-    monster_race *ap_r_ptr = &r_info[m_ptr->ap_r_idx];
+    monster_race *ap_r_ptr = &monraces_info[m_ptr->ap_r_idx];
     if ((player_ptr->lev >= PY_MAX_LEVEL) || PlayerRace(player_ptr).equals(PlayerRaceType::ANDROID)) {
         sprintf(buf, "**");
         return;
@@ -229,7 +230,7 @@ static void describe_grid_monster(PlayerType *player_ptr, eg_type *eg_ptr)
 
 static void describe_monster_person(eg_type *eg_ptr)
 {
-    monster_race *ap_r_ptr = &r_info[eg_ptr->m_ptr->ap_r_idx];
+    monster_race *ap_r_ptr = &monraces_info[eg_ptr->m_ptr->ap_r_idx];
     eg_ptr->s1 = _("それは", "It is ");
     if (ap_r_ptr->flags1 & RF1_FEMALE) {
         eg_ptr->s1 = _("彼女は", "She is ");
@@ -462,7 +463,7 @@ static int16_t sweep_footing_items(PlayerType *player_ptr, eg_type *eg_ptr)
 
 static concptr decide_target_floor(PlayerType *player_ptr, eg_type *eg_ptr)
 {
-    if (eg_ptr->f_ptr->flags.has(FloorFeatureType::QUEST_ENTER)) {
+    if (eg_ptr->f_ptr->flags.has(TerrainCharacteristics::QUEST_ENTER)) {
         QuestId old_quest = player_ptr->current_floor_ptr->quest_number;
         const auto &quest_list = QuestList::get_instance();
         const QuestId number = i2enum<QuestId>(eg_ptr->g_ptr->special);
@@ -475,20 +476,20 @@ static concptr decide_target_floor(PlayerType *player_ptr, eg_type *eg_ptr)
         quest_text_line = 0;
         player_ptr->current_floor_ptr->quest_number = number;
         init_flags = INIT_NAME_ONLY;
-        parse_fixed_map(player_ptr, "q_info.txt", 0, 0, 0, 0);
+        parse_fixed_map(player_ptr, QUEST_DEFINITION_LIST, 0, 0, 0, 0);
         player_ptr->current_floor_ptr->quest_number = old_quest;
         return format(msg.data(), q_ptr->name, q_ptr->level);
     }
 
-    if (eg_ptr->f_ptr->flags.has(FloorFeatureType::BLDG) && !player_ptr->current_floor_ptr->inside_arena) {
+    if (eg_ptr->f_ptr->flags.has(TerrainCharacteristics::BLDG) && !player_ptr->current_floor_ptr->inside_arena) {
         return building[eg_ptr->f_ptr->subtype].name;
     }
 
-    if (eg_ptr->f_ptr->flags.has(FloorFeatureType::ENTRANCE)) {
-        return format(_("%s(%d階相当)", "%s(level %d)"), d_info[eg_ptr->g_ptr->special].text.c_str(), d_info[eg_ptr->g_ptr->special].mindepth);
+    if (eg_ptr->f_ptr->flags.has(TerrainCharacteristics::ENTRANCE)) {
+        return format(_("%s(%d階相当)", "%s(level %d)"), dungeons_info[eg_ptr->g_ptr->special].text.c_str(), dungeons_info[eg_ptr->g_ptr->special].mindepth);
     }
 
-    if (eg_ptr->f_ptr->flags.has(FloorFeatureType::TOWN)) {
+    if (eg_ptr->f_ptr->flags.has(TerrainCharacteristics::TOWN)) {
         return town_info[eg_ptr->g_ptr->special].name;
     }
 
@@ -573,8 +574,8 @@ char examine_grid(PlayerType *player_ptr, const POSITION y, const POSITION x, ta
         eg_ptr->feat = feat_none;
     }
 
-    eg_ptr->f_ptr = &f_info[eg_ptr->feat];
-    if (!eg_ptr->boring && eg_ptr->f_ptr->flags.has_not(FloorFeatureType::REMEMBER)) {
+    eg_ptr->f_ptr = &terrains_info[eg_ptr->feat];
+    if (!eg_ptr->boring && eg_ptr->f_ptr->flags.has_not(TerrainCharacteristics::REMEMBER)) {
         return (eg_ptr->query != '\r') && (eg_ptr->query != '\n') ? eg_ptr->query : 0;
     }
 
@@ -583,16 +584,16 @@ char examine_grid(PlayerType *player_ptr, const POSITION y, const POSITION x, ta
      * 安全を確保できたら構造体から外すことも検討する
      */
     eg_ptr->name = decide_target_floor(player_ptr, eg_ptr);
-    if (*eg_ptr->s2 && (eg_ptr->f_ptr->flags.has_none_of({ FloorFeatureType::MOVE, FloorFeatureType::CAN_FLY }) || eg_ptr->f_ptr->flags.has_none_of({ FloorFeatureType::LOS, FloorFeatureType::TREE }) || eg_ptr->f_ptr->flags.has(FloorFeatureType::TOWN))) {
+    if (*eg_ptr->s2 && (eg_ptr->f_ptr->flags.has_none_of({ TerrainCharacteristics::MOVE, TerrainCharacteristics::CAN_FLY }) || eg_ptr->f_ptr->flags.has_none_of({ TerrainCharacteristics::LOS, TerrainCharacteristics::TREE }) || eg_ptr->f_ptr->flags.has(TerrainCharacteristics::TOWN))) {
         eg_ptr->s2 = _("の中", "in ");
     }
 
-    if (eg_ptr->f_ptr->flags.has(FloorFeatureType::STORE) || eg_ptr->f_ptr->flags.has(FloorFeatureType::QUEST_ENTER) || (eg_ptr->f_ptr->flags.has(FloorFeatureType::BLDG) && !player_ptr->current_floor_ptr->inside_arena) || eg_ptr->f_ptr->flags.has(FloorFeatureType::ENTRANCE)) {
+    if (eg_ptr->f_ptr->flags.has(TerrainCharacteristics::STORE) || eg_ptr->f_ptr->flags.has(TerrainCharacteristics::QUEST_ENTER) || (eg_ptr->f_ptr->flags.has(TerrainCharacteristics::BLDG) && !player_ptr->current_floor_ptr->inside_arena) || eg_ptr->f_ptr->flags.has(TerrainCharacteristics::ENTRANCE)) {
         eg_ptr->s2 = _("の入口", "");
     }
 #ifdef JP
 #else
-    else if (eg_ptr->f_ptr->flags.has(FloorFeatureType::FLOOR) || eg_ptr->f_ptr->flags.has(FloorFeatureType::TOWN) || eg_ptr->f_ptr->flags.has(FloorFeatureType::SHALLOW) || eg_ptr->f_ptr->flags.has(FloorFeatureType::DEEP)) {
+    else if (eg_ptr->f_ptr->flags.has(TerrainCharacteristics::FLOOR) || eg_ptr->f_ptr->flags.has(TerrainCharacteristics::TOWN) || eg_ptr->f_ptr->flags.has(TerrainCharacteristics::SHALLOW) || eg_ptr->f_ptr->flags.has(TerrainCharacteristics::DEEP)) {
         eg_ptr->s3 = "";
     } else {
         eg_ptr->s3 = (is_a_vowel(eg_ptr->name[0])) ? "an " : "a ";

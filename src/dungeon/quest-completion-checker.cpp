@@ -229,7 +229,7 @@ Pos2D QuestCompletionChecker::make_stairs(const bool create_stairs)
 
     auto *floor_ptr = this->player_ptr->current_floor_ptr;
     auto *g_ptr = &floor_ptr->grid_array[y][x];
-    while (cave_has_flag_bold(floor_ptr, y, x, FloorFeatureType::PERMANENT) || !g_ptr->o_idx_list.empty() || g_ptr->is_object()) {
+    while (cave_has_flag_bold(floor_ptr, y, x, TerrainCharacteristics::PERMANENT) || !g_ptr->o_idx_list.empty() || g_ptr->is_object()) {
         int ny;
         int nx;
         scatter(this->player_ptr, &ny, &nx, y, x, 1, PROJECT_NONE);
@@ -251,7 +251,7 @@ void QuestCompletionChecker::make_reward(const Pos2D pos)
         ObjectType item;
         while (true) {
             item.wipe();
-            auto &r_ref = r_info[this->m_ptr->r_idx];
+            auto &r_ref = monraces_info[this->m_ptr->r_idx];
             (void)make_object(this->player_ptr, &item, AM_GOOD | AM_GREAT, r_ref.level);
             if (!this->check_quality(item)) {
                 continue;

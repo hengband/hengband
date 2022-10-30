@@ -23,7 +23,7 @@
 static void describe_monster_ball(flavor_type *flavor_ptr)
 {
     const auto r_idx = i2enum<MonsterRaceId>(flavor_ptr->o_ptr->pval);
-    auto *r_ptr = &r_info[r_idx];
+    auto *r_ptr = &monraces_info[r_idx];
     if (!flavor_ptr->known) {
         return;
     }
@@ -51,7 +51,7 @@ static void describe_monster_ball(flavor_type *flavor_ptr)
 static void describe_statue(flavor_type *flavor_ptr)
 {
     const auto r_idx = i2enum<MonsterRaceId>(flavor_ptr->o_ptr->pval);
-    auto *r_ptr = &r_info[r_idx];
+    auto *r_ptr = &monraces_info[r_idx];
 #ifdef JP
     flavor_ptr->modstr = r_ptr->name.c_str();
 #else
@@ -68,7 +68,7 @@ static void describe_statue(flavor_type *flavor_ptr)
 static void describe_corpse(flavor_type *flavor_ptr)
 {
     const auto r_idx = i2enum<MonsterRaceId>(flavor_ptr->o_ptr->pval);
-    auto *r_ptr = &r_info[r_idx];
+    auto *r_ptr = &monraces_info[r_idx];
     flavor_ptr->modstr = r_ptr->name.c_str();
 #ifdef JP
     flavor_ptr->basenm = "#%";

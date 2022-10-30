@@ -2,13 +2,11 @@
 #include "cmd-io/cmd-dump.h"
 #include "core/asking-player.h"
 #include "core/player-update-types.h"
-#include "dungeon/dungeon.h"
 #include "floor/cave.h"
 #include "floor/floor-events.h"
 #include "floor/floor-mode-changer.h"
 #include "floor/floor-object.h"
 #include "game-option/play-record-options.h"
-#include "grid/feature.h"
 #include "info-reader/fixed-map-parser.h"
 #include "io/write-diary.h"
 #include "locale/english.h"
@@ -29,10 +27,12 @@
 #include "player/player-personality-types.h"
 #include "player/player-status.h"
 #include "system/artifact-type-definition.h"
+#include "system/dungeon-info.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
 #include "system/monster-race-definition.h"
 #include "system/player-type-definition.h"
+#include "system/terrain-type-definition.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 #include "world/world.h"
@@ -135,7 +135,7 @@ void QuestList::initialize()
         return;
     }
     try {
-        auto quest_numbers = parse_quest_info("q_info.txt");
+        auto quest_numbers = parse_quest_info(QUEST_DEFINITION_LIST);
         quest_type init_quest{};
         init_quest.status = QuestStatusType::UNTAKEN;
         this->quest_data.insert({ QuestId::NONE, init_quest });
@@ -178,7 +178,7 @@ void determine_random_questor(PlayerType *player_ptr, quest_type *q_ptr)
          */
         r_idx = get_mon_num(player_ptr, 0, q_ptr->level + 5 + randint1(q_ptr->level / 10), GMN_ARENA);
         monster_race *r_ptr;
-        r_ptr = &r_info[r_idx];
+        r_ptr = &monraces_info[r_idx];
 
         if (r_ptr->kind_flags.has_not(MonsterKindType::UNIQUE)) {
             continue;
@@ -278,7 +278,7 @@ void check_find_art_quest_completion(PlayerType *player_ptr, ObjectType *o_ptr)
     for (const auto &[q_idx, q_ref] : quest_list) {
         auto found_artifact = (q_ref.type == QuestKindType::FIND_ARTIFACT);
         found_artifact &= (q_ref.status == QuestStatusType::TAKEN);
-        found_artifact &= (q_ref.reward_artifact_idx == o_ptr->fixed_artifact_idx);
+        found_artifact &= (o_ptr->is_specific_artifact(q_ref.reward_artifact_idx));
         if (found_artifact) {
             complete_quest(player_ptr, q_idx);
         }
@@ -293,7 +293,7 @@ void quest_discovery(QuestId q_idx)
 {
     auto &quest_list = QuestList::get_instance();
     auto *q_ptr = &quest_list[q_idx];
-    auto *r_ptr = &r_info[q_ptr->r_idx];
+    auto *r_ptr = &monraces_info[q_ptr->r_idx];
     MONSTER_NUMBER q_num = q_ptr->max_num;
 
     if (!inside_quest(q_idx)) {
@@ -411,10 +411,10 @@ void leave_quest_check(PlayerType *player_ptr)
         quest_list[QuestId::TOWER1].complev = player_ptr->lev;
         break;
     case QuestKindType::FIND_ARTIFACT:
-        a_info.at(q_ptr->reward_artifact_idx).gen_flags.reset(ItemGenerationTraitType::QUESTITEM);
+        artifacts_info.at(q_ptr->reward_artifact_idx).gen_flags.reset(ItemGenerationTraitType::QUESTITEM);
         break;
     case QuestKindType::RANDOM:
-        r_info[q_ptr->r_idx].flags1 &= ~(RF1_QUESTOR);
+        monraces_info[q_ptr->r_idx].flags1 &= ~(RF1_QUESTOR);
         prepare_change_floor_mode(player_ptr, CFM_NO_RETURN);
         break;
     default:
@@ -484,7 +484,7 @@ void do_cmd_quest(PlayerType *player_ptr)
 
     PlayerEnergy(player_ptr).set_player_turn_energy(100);
 
-    if (!cave_has_flag_bold(player_ptr->current_floor_ptr, player_ptr->y, player_ptr->x, FloorFeatureType::QUEST_ENTER)) {
+    if (!cave_has_flag_bold(player_ptr->current_floor_ptr, player_ptr->y, player_ptr->x, TerrainCharacteristics::QUEST_ENTER)) {
         msg_print(_("ここにはクエストの入口はない。", "You see no quest level here."));
         return;
     }

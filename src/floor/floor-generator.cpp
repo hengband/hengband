@@ -11,7 +11,6 @@
 
 #include "floor/floor-generator.h"
 #include "dungeon/dungeon-flag-types.h"
-#include "dungeon/dungeon.h"
 #include "dungeon/quest.h"
 #include "floor/cave-generator.h"
 #include "floor/floor-events.h"
@@ -40,12 +39,14 @@
 #include "monster/monster-util.h"
 #include "player/player-status.h"
 #include "system/building-type-definition.h"
+#include "system/dungeon-info.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
 #include "system/monster-race-definition.h"
 #include "system/monster-type-definition.h"
 #include "system/object-type-definition.h"
 #include "system/player-type-definition.h"
+#include "system/terrain-type-definition.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 #include "window/main-window-util.h"
@@ -275,7 +276,7 @@ static void generate_fixed_floor(PlayerType *player_ptr)
     }
     get_mon_num_prep(player_ptr, get_monster_hook(player_ptr), nullptr);
     init_flags = INIT_CREATE_DUNGEON;
-    parse_fixed_map(player_ptr, "q_info.txt", 0, 0, MAX_HGT, MAX_WID);
+    parse_fixed_map(player_ptr, QUEST_DEFINITION_LIST, 0, 0, MAX_HGT, MAX_WID);
 }
 
 /*!
@@ -288,13 +289,13 @@ static bool level_gen(PlayerType *player_ptr, concptr *why)
 {
     auto *floor_ptr = player_ptr->current_floor_ptr;
     DUNGEON_IDX d_idx = floor_ptr->dungeon_idx;
-    if ((always_small_levels || ironman_small_levels || (one_in_(SMALL_LEVEL) && small_levels) || d_info[d_idx].flags.has(DungeonFeatureType::BEGINNER) || d_info[d_idx].flags.has(DungeonFeatureType::SMALLEST)) && d_info[d_idx].flags.has_not(DungeonFeatureType::BIG)) {
+    if ((always_small_levels || ironman_small_levels || (one_in_(SMALL_LEVEL) && small_levels) || dungeons_info[d_idx].flags.has(DungeonFeatureType::BEGINNER) || dungeons_info[d_idx].flags.has(DungeonFeatureType::SMALLEST)) && dungeons_info[d_idx].flags.has_not(DungeonFeatureType::BIG)) {
         int level_height;
         int level_width;
-        if (d_info[d_idx].flags.has(DungeonFeatureType::SMALLEST)) {
+        if (dungeons_info[d_idx].flags.has(DungeonFeatureType::SMALLEST)) {
             level_height = 1;
             level_width = 1;
-        } else if (d_info[d_idx].flags.has(DungeonFeatureType::BEGINNER)) {
+        } else if (dungeons_info[d_idx].flags.has(DungeonFeatureType::BEGINNER)) {
             level_height = 2;
             level_width = 2;
         } else {
@@ -330,7 +331,7 @@ static bool level_gen(PlayerType *player_ptr, concptr *why)
 /*!
  * @brief フロアに存在する全マスの記憶状態を初期化する / Wipe all unnecessary flags after grid_array generation
  */
-void wipe_generate_random_floor_flags(floor_type *floor_ptr)
+void wipe_generate_random_floor_flags(FloorType *floor_ptr)
 {
     for (POSITION y = 0; y < floor_ptr->height; y++) {
         for (POSITION x = 0; x < floor_ptr->width; x++) {
@@ -358,7 +359,7 @@ void clear_cave(PlayerType *player_ptr)
     floor_ptr->o_max = 1;
     floor_ptr->o_cnt = 0;
 
-    for (auto &[r_idx, r_ref] : r_info) {
+    for (auto &[r_idx, r_ref] : monraces_info) {
         r_ref.cur_num = 0;
     }
 
@@ -390,17 +391,17 @@ void clear_cave(PlayerType *player_ptr)
     floor_ptr->object_level = floor_ptr->base_level;
 }
 
-typedef bool (*IsWallFunc)(const floor_type *, int, int);
+typedef bool (*IsWallFunc)(const FloorType *, int, int);
 
 // (y,x) がプレイヤーが通れない永久地形かどうかを返す。
-static bool is_permanent_blocker(const floor_type *const floor_ptr, const int y, const int x)
+static bool is_permanent_blocker(const FloorType *const floor_ptr, const int y, const int x)
 {
     const FEAT_IDX feat = floor_ptr->grid_array[y][x].feat;
-    const auto &flags = f_info[feat].flags;
-    return flags.has(FloorFeatureType::PERMANENT) && flags.has_not(FloorFeatureType::MOVE);
+    const auto &flags = terrains_info[feat].flags;
+    return flags.has(TerrainCharacteristics::PERMANENT) && flags.has_not(TerrainCharacteristics::MOVE);
 }
 
-static void floor_is_connected_dfs(const floor_type *const floor_ptr, const IsWallFunc is_wall, const int y_start, const int x_start, bool *const visited)
+static void floor_is_connected_dfs(const FloorType *const floor_ptr, const IsWallFunc is_wall, const int y_start, const int x_start, bool *const visited)
 {
     // clang-format off
     static const int DY[8] = { -1, -1, -1,  0, 0,  1, 1, 1 };
@@ -448,7 +449,7 @@ static void floor_is_connected_dfs(const floor_type *const floor_ptr, const IsWa
 // 各セルの8近傍は互いに移動可能とし、is_wall が真を返すセルのみを壁とみなす。
 //
 // 連結成分数が 0 の場合、偽を返す。
-static bool floor_is_connected(const floor_type *const floor_ptr, const IsWallFunc is_wall)
+static bool floor_is_connected(const FloorType *const floor_ptr, const IsWallFunc is_wall)
 {
     static std::array<bool, MAX_HGT * MAX_WID> visited;
 

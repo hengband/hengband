@@ -155,7 +155,7 @@ static MULTIPLY calc_shot_damage_with_slay(
 {
     MULTIPLY mult = 10;
 
-    monster_race *race_ptr = &r_info[monster_ptr->r_idx];
+    monster_race *race_ptr = &monraces_info[monster_ptr->r_idx];
 
     TrFlags flags{};
     auto arrow_flags = object_flags(arrow_ptr);
@@ -348,8 +348,8 @@ static MULTIPLY calc_shot_damage_with_slay(
                 mult = 30;
             }
 
-            auto can_eliminate_smaug = arrow_ptr->fixed_artifact_idx == FixedArtifactId::BARD_ARROW;
-            can_eliminate_smaug &= player_ptr->inventory_list[INVEN_BOW].fixed_artifact_idx == FixedArtifactId::BARD;
+            auto can_eliminate_smaug = arrow_ptr->is_specific_artifact(FixedArtifactId::BARD_ARROW);
+            can_eliminate_smaug &= player_ptr->inventory_list[INVEN_BOW].is_specific_artifact(FixedArtifactId::BARD);
             can_eliminate_smaug &= monster_ptr->r_idx == MonsterRaceId::SMAUG;
             if (can_eliminate_smaug) {
                 mult *= 5;
@@ -656,7 +656,7 @@ void exe_fire(PlayerType *player_ptr, INVENTORY_IDX item, ObjectType *j_ptr, SPE
             if (snipe_type == SP_KILL_WALL) {
                 g_ptr = &player_ptr->current_floor_ptr->grid_array[ny][nx];
 
-                if (g_ptr->cave_has_flag(FloorFeatureType::HURT_ROCK) && !g_ptr->m_idx) {
+                if (g_ptr->cave_has_flag(TerrainCharacteristics::HURT_ROCK) && !g_ptr->m_idx) {
                     if (any_bits(g_ptr->info, (CAVE_MARK))) {
                         msg_print(_("岩が砕け散った。", "Wall rocks were shattered."));
                     }
@@ -665,7 +665,7 @@ void exe_fire(PlayerType *player_ptr, INVENTORY_IDX item, ObjectType *j_ptr, SPE
                     set_bits(player_ptr->update, PU_VIEW | PU_LITE | PU_FLOW | PU_MON_LITE);
 
                     /* Destroy the wall */
-                    cave_alter_feat(player_ptr, ny, nx, FloorFeatureType::HURT_ROCK);
+                    cave_alter_feat(player_ptr, ny, nx, TerrainCharacteristics::HURT_ROCK);
 
                     hit_body = true;
                     break;
@@ -673,7 +673,7 @@ void exe_fire(PlayerType *player_ptr, INVENTORY_IDX item, ObjectType *j_ptr, SPE
             }
 
             /* Stopped by walls/doors */
-            if (!cave_has_flag_bold(player_ptr->current_floor_ptr, ny, nx, FloorFeatureType::PROJECT) && !player_ptr->current_floor_ptr->grid_array[ny][nx].m_idx) {
+            if (!cave_has_flag_bold(player_ptr->current_floor_ptr, ny, nx, TerrainCharacteristics::PROJECT) && !player_ptr->current_floor_ptr->grid_array[ny][nx].m_idx) {
                 break;
             }
 
@@ -736,7 +736,7 @@ void exe_fire(PlayerType *player_ptr, INVENTORY_IDX item, ObjectType *j_ptr, SPE
                 grid_type *c_mon_ptr = &player_ptr->current_floor_ptr->grid_array[y][x];
 
                 auto *m_ptr = &player_ptr->current_floor_ptr->m_list[c_mon_ptr->m_idx];
-                auto *r_ptr = &r_info[m_ptr->r_idx];
+                auto *r_ptr = &monraces_info[m_ptr->r_idx];
 
                 /* Check the visibility */
                 visible = m_ptr->ml;
@@ -955,7 +955,7 @@ void exe_fire(PlayerType *player_ptr, INVENTORY_IDX item, ObjectType *j_ptr, SPE
             if (!o_idx) {
                 msg_format(_("%sはどこかへ行った。", "The %s went somewhere."), o_name);
                 if (q_ptr->is_fixed_artifact()) {
-                    a_info.at(j_ptr->fixed_artifact_idx).is_generated = false;
+                    artifacts_info.at(j_ptr->fixed_artifact_idx).is_generated = false;
                 }
                 return;
             }
@@ -974,7 +974,7 @@ void exe_fire(PlayerType *player_ptr, INVENTORY_IDX item, ObjectType *j_ptr, SPE
 
             /* Carry object */
             m_ptr->hold_o_idx_list.add(player_ptr->current_floor_ptr, o_idx);
-        } else if (cave_has_flag_bold(player_ptr->current_floor_ptr, y, x, FloorFeatureType::PROJECT)) {
+        } else if (cave_has_flag_bold(player_ptr->current_floor_ptr, y, x, TerrainCharacteristics::PROJECT)) {
             /* Drop (or break) near that location */
             (void)drop_near(player_ptr, q_ptr, j, y, x);
         } else {
@@ -1003,7 +1003,7 @@ bool test_hit_fire(PlayerType *player_ptr, int chance, monster_type *m_ptr, int 
 {
     int k;
     ARMOUR_CLASS ac;
-    auto *r_ptr = &r_info[m_ptr->r_idx];
+    auto *r_ptr = &monraces_info[m_ptr->r_idx];
 
     /* Percentile dice */
     k = randint1(100);

@@ -9,7 +9,6 @@
 #include "core/player-update-types.h"
 #include "core/stuff-handler.h"
 #include "dungeon/dungeon-flag-types.h"
-#include "dungeon/dungeon.h"
 #include "effect/attribute-types.h"
 #include "effect/effect-characteristics.h"
 #include "effect/effect-processor.h"
@@ -42,6 +41,7 @@
 #include "spell-kind/spells-teleport.h"
 #include "spell/technic-info-table.h"
 #include "status/bad-status-setter.h"
+#include "system/dungeon-info.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
 #include "system/monster-race-definition.h"
@@ -392,7 +392,7 @@ concptr do_hissatsu_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessT
                 msg_print(_("その方向にはモンスターはいません。", "There is no monster."));
                 return nullptr;
             }
-            if (d_info[player_ptr->dungeon_idx].flags.has(DungeonFeatureType::NO_MELEE)) {
+            if (dungeons_info[player_ptr->dungeon_idx].flags.has(DungeonFeatureType::NO_MELEE)) {
                 return "";
             }
             if (player_ptr->current_floor_ptr->grid_array[y][x].m_idx) {
@@ -426,7 +426,7 @@ concptr do_hissatsu_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessT
                     lite_spot(player_ptr, oy, ox);
                     lite_spot(player_ptr, ty, tx);
 
-                    if (r_info[m_ptr->r_idx].flags7 & (RF7_LITE_MASK | RF7_DARK_MASK)) {
+                    if (monraces_info[m_ptr->r_idx].flags7 & (RF7_LITE_MASK | RF7_DARK_MASK)) {
                         player_ptr->update |= (PU_MON_LITE);
                     }
                 }
@@ -481,12 +481,12 @@ concptr do_hissatsu_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessT
                 do_cmd_attack(player_ptr, y, x, HISSATSU_HAGAN);
             }
 
-            if (!cave_has_flag_bold(player_ptr->current_floor_ptr, y, x, FloorFeatureType::HURT_ROCK)) {
+            if (!cave_has_flag_bold(player_ptr->current_floor_ptr, y, x, TerrainCharacteristics::HURT_ROCK)) {
                 break;
             }
 
             /* Destroy the feature */
-            cave_alter_feat(player_ptr, y, x, FloorFeatureType::HURT_ROCK);
+            cave_alter_feat(player_ptr, y, x, TerrainCharacteristics::HURT_ROCK);
             player_ptr->update |= (PU_FLOW);
         }
         break;
@@ -674,13 +674,13 @@ concptr do_hissatsu_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessT
             POSITION y = 0, x = 0;
             auto current_cut = player_ptr->effects()->cut()->current();
             short new_cut = current_cut < 300 ? current_cut + 300 : current_cut * 2;
-            (void)BadStatusSetter(player_ptr).cut(new_cut);
+            (void)BadStatusSetter(player_ptr).set_cut(new_cut);
             for (dir = 0; dir < 8; dir++) {
                 y = player_ptr->y + ddy_ddd[dir];
                 x = player_ptr->x + ddx_ddd[dir];
                 auto *g_ptr = &player_ptr->current_floor_ptr->grid_array[y][x];
                 auto *m_ptr = &player_ptr->current_floor_ptr->m_list[g_ptr->m_idx];
-                if ((g_ptr->m_idx == 0) || (!m_ptr->ml && !cave_has_flag_bold(player_ptr->current_floor_ptr, y, x, FloorFeatureType::PROJECT))) {
+                if ((g_ptr->m_idx == 0) || (!m_ptr->ml && !cave_has_flag_bold(player_ptr->current_floor_ptr, y, x, TerrainCharacteristics::PROJECT))) {
                     continue;
                 }
 
@@ -752,7 +752,7 @@ concptr do_hissatsu_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessT
                 auto flgs = object_flags(o_ptr);
 
                 // @todo ヴォーパルの多重定義.
-                if ((o_ptr->fixed_artifact_idx == FixedArtifactId::VORPAL_BLADE) || (o_ptr->fixed_artifact_idx == FixedArtifactId::CHAINSWORD)) {
+                if (o_ptr->is_specific_artifact(FixedArtifactId::VORPAL_BLADE) || o_ptr->is_specific_artifact(FixedArtifactId::CHAINSWORD)) {
                     /* vorpal blade */
                     basedam *= 5;
                     basedam /= 3;
@@ -824,7 +824,7 @@ concptr do_hissatsu_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessT
                     return nullptr;
                 }
 
-                if (d_info[player_ptr->dungeon_idx].flags.has(DungeonFeatureType::NO_MELEE)) {
+                if (dungeons_info[player_ptr->dungeon_idx].flags.has(DungeonFeatureType::NO_MELEE)) {
                     return "";
                 }
 
@@ -839,7 +839,7 @@ concptr do_hissatsu_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessT
                 m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
 
                 /* Monster cannot move back? */
-                if (!monster_can_enter(player_ptr, ny, nx, &r_info[m_ptr->r_idx], 0)) {
+                if (!monster_can_enter(player_ptr, ny, nx, &monraces_info[m_ptr->r_idx], 0)) {
                     /* -more- */
                     if (i < 2) {
                         msg_print(nullptr);
@@ -1049,7 +1049,7 @@ concptr do_hissatsu_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessT
             y = player_ptr->y + ddy[dir];
             x = player_ptr->x + ddx[dir];
 
-            if (d_info[player_ptr->dungeon_idx].flags.has(DungeonFeatureType::NO_MELEE)) {
+            if (dungeons_info[player_ptr->dungeon_idx].flags.has(DungeonFeatureType::NO_MELEE)) {
                 msg_print(_("なぜか攻撃することができない。", "Something prevents you from attacking."));
                 return "";
             }
@@ -1065,7 +1065,7 @@ concptr do_hissatsu_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessT
                 auto flgs = object_flags(o_ptr);
 
                 // @todo ヴォーパルの多重定義.
-                if ((o_ptr->fixed_artifact_idx == FixedArtifactId::VORPAL_BLADE) || (o_ptr->fixed_artifact_idx == FixedArtifactId::CHAINSWORD)) {
+                if (o_ptr->is_specific_artifact(FixedArtifactId::VORPAL_BLADE) || o_ptr->is_specific_artifact(FixedArtifactId::CHAINSWORD)) {
                     /* vorpal blade */
                     basedam *= 5;
                     basedam /= 3;
@@ -1079,7 +1079,7 @@ concptr do_hissatsu_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessT
                 damage *= player_ptr->num_blow[i];
                 total_damage += (damage / 100);
             }
-            project(player_ptr, 0, (cave_has_flag_bold(player_ptr->current_floor_ptr, y, x, FloorFeatureType::PROJECT) ? 5 : 0), y, x, total_damage * 3 / 2, AttributeType::METEOR,
+            project(player_ptr, 0, (cave_has_flag_bold(player_ptr->current_floor_ptr, y, x, TerrainCharacteristics::PROJECT) ? 5 : 0), y, x, total_damage * 3 / 2, AttributeType::METEOR,
                 PROJECT_KILL | PROJECT_JUMP | PROJECT_ITEM);
         }
         break;

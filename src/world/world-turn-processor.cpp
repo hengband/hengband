@@ -3,7 +3,6 @@
 #include "cmd-io/cmd-save.h"
 #include "core/disturbance.h"
 #include "core/magic-effects-timeout-reducer.h"
-#include "dungeon/dungeon.h"
 #include "floor/floor-events.h"
 #include "floor/floor-mode-changer.h"
 #include "floor/wild.h"
@@ -11,7 +10,6 @@
 #include "game-option/cheat-options.h"
 #include "game-option/special-options.h"
 #include "game-option/text-display-options.h"
-#include "grid/feature.h"
 #include "hpmp/hp-mp-processor.h"
 #include "hpmp/hp-mp-regenerator.h"
 #include "inventory/inventory-curse.h"
@@ -31,10 +29,12 @@
 #include "store/store-owners.h"
 #include "store/store-util.h"
 #include "store/store.h"
+#include "system/dungeon-info.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
 #include "system/monster-type-definition.h"
 #include "system/player-type-definition.h"
+#include "system/terrain-type-definition.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
 #include "util/bit-flags-calculator.h"
@@ -281,8 +281,8 @@ void WorldTurnProcessor::shuffle_shopkeeper()
         }
     } while (true);
 
-    for (const auto &f_ref : f_info) {
-        if (f_ref.name.empty() || f_ref.flags.has_not(FloorFeatureType::STORE)) {
+    for (const auto &f_ref : terrains_info) {
+        if (f_ref.name.empty() || f_ref.flags.has_not(TerrainCharacteristics::STORE)) {
             continue;
         }
 
@@ -302,7 +302,7 @@ void WorldTurnProcessor::shuffle_shopkeeper()
 void WorldTurnProcessor::decide_alloc_monster()
 {
     auto *floor_ptr = this->player_ptr->current_floor_ptr;
-    auto should_alloc = one_in_(d_info[this->player_ptr->dungeon_idx].max_m_alloc_chance);
+    auto should_alloc = one_in_(dungeons_info[this->player_ptr->dungeon_idx].max_m_alloc_chance);
     should_alloc &= !floor_ptr->inside_arena;
     should_alloc &= !inside_quest(floor_ptr->quest_number);
     should_alloc &= !this->player_ptr->phase_out;

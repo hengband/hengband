@@ -37,7 +37,6 @@
 
 #include "room/rooms-builder.h"
 #include "dungeon/dungeon-flag-types.h"
-#include "dungeon/dungeon.h"
 #include "floor/cave.h"
 #include "grid/door.h"
 #include "grid/feature.h"
@@ -45,9 +44,11 @@
 #include "room/cave-filler.h"
 #include "room/door-definition.h"
 #include "room/lake-types.h"
+#include "system/dungeon-info.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
 #include "system/player-type-definition.h"
+#include "system/terrain-type-definition.h"
 #include "view/display-messages.h"
 
 /*!
@@ -101,7 +102,7 @@ void build_cavern(PlayerType *player_ptr)
     bool light = false;
     bool done = false;
     auto *floor_ptr = player_ptr->current_floor_ptr;
-    if ((floor_ptr->dun_level <= randint1(50)) && d_info[floor_ptr->dungeon_idx].flags.has_not(DungeonFeatureType::DARKNESS)) {
+    if ((floor_ptr->dun_level <= randint1(50)) && dungeons_info[floor_ptr->dungeon_idx].flags.has_not(DungeonFeatureType::DARKNESS)) {
         light = true;
     }
 
@@ -367,8 +368,8 @@ void add_outer_wall(PlayerType *player_ptr, POSITION x, POSITION y, int light, P
     }
 
     g_ptr->info |= CAVE_ROOM;
-    feature_type *f_ptr;
-    f_ptr = &f_info[g_ptr->feat];
+    TerrainType *f_ptr;
+    f_ptr = &terrains_info[g_ptr->feat];
     if (g_ptr->is_floor()) {
         for (int i = -1; i <= 1; i++) {
             for (int j = -1; j <= 1; j++) {

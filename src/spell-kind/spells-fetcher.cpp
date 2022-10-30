@@ -88,7 +88,7 @@ void fetch_item(PlayerType *player_ptr, DIRECTION dir, WEIGHT wgt, bool require_
             tx += ddx[dir];
             g_ptr = &player_ptr->current_floor_ptr->grid_array[ty][tx];
 
-            if ((distance(player_ptr->y, player_ptr->x, ty, tx) > get_max_range(player_ptr)) || !cave_has_flag_bold(player_ptr->current_floor_ptr, ty, tx, FloorFeatureType::PROJECT)) {
+            if ((distance(player_ptr->y, player_ptr->x, ty, tx) > get_max_range(player_ptr)) || !cave_has_flag_bold(player_ptr->current_floor_ptr, ty, tx, TerrainCharacteristics::PROJECT)) {
                 return;
             }
         }
@@ -161,7 +161,7 @@ bool fetch_monster(PlayerType *player_ptr)
     update_monster(player_ptr, m_idx, true);
     lite_spot(player_ptr, target_row, target_col);
     lite_spot(player_ptr, ty, tx);
-    if (r_info[m_ptr->r_idx].flags7 & (RF7_LITE_MASK | RF7_DARK_MASK)) {
+    if (monraces_info[m_ptr->r_idx].flags7 & (RF7_LITE_MASK | RF7_DARK_MASK)) {
         player_ptr->update |= (PU_MON_LITE);
     }
 

@@ -1,14 +1,15 @@
 ﻿#include "grid/stair.h"
-#include "dungeon/dungeon.h"
 #include "dungeon/quest.h"
 #include "floor/cave.h"
 #include "game-option/birth-options.h"
 #include "grid/feature.h"
 #include "grid/grid.h"
+#include "system/dungeon-info.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
 #include "system/object-type-definition.h"
 #include "system/player-type-definition.h"
+#include "system/terrain-type-definition.h"
 
 /*!
  * @brief 所定の位置に上り階段か下り階段を配置する / Place an up/down staircase at given location
@@ -35,7 +36,7 @@ void place_random_stairs(PlayerType *player_ptr, POSITION y, POSITION x)
         up_stairs = false;
     }
 
-    if (floor_ptr->dun_level >= d_info[player_ptr->dungeon_idx].maxdepth) {
+    if (floor_ptr->dun_level >= dungeons_info[player_ptr->dungeon_idx].maxdepth) {
         down_stairs = false;
     }
 
@@ -67,10 +68,10 @@ void place_random_stairs(PlayerType *player_ptr, POSITION y, POSITION x)
  * @details
  * 条件は永久地形でなく、なおかつ該当のマスにアーティファクトが存在しないか、である。英語の旧コメントに反して＊破壊＊の抑止判定には現在使われていない。
  */
-bool cave_valid_bold(floor_type *floor_ptr, POSITION y, POSITION x)
+bool cave_valid_bold(FloorType *floor_ptr, POSITION y, POSITION x)
 {
     auto *g_ptr = &floor_ptr->grid_array[y][x];
-    if (g_ptr->cave_has_flag(FloorFeatureType::PERMANENT)) {
+    if (g_ptr->cave_has_flag(TerrainCharacteristics::PERMANENT)) {
         return false;
     }
 

@@ -170,7 +170,7 @@ void regenerate_monsters(PlayerType *player_ptr)
 {
     for (int i = 1; i < player_ptr->current_floor_ptr->m_max; i++) {
         auto *m_ptr = &player_ptr->current_floor_ptr->m_list[i];
-        auto *r_ptr = &r_info[m_ptr->r_idx];
+        auto *r_ptr = &monraces_info[m_ptr->r_idx];
 
         if (!m_ptr->is_valid()) {
             continue;
@@ -226,7 +226,7 @@ void regenerate_captured_monsters(PlayerType *player_ptr)
 
         heal = true;
         const auto r_idx = i2enum<MonsterRaceId>(o_ptr->pval);
-        r_ptr = &r_info[r_idx];
+        r_ptr = &monraces_info[r_idx];
         if (o_ptr->captured_monster_current_hp < o_ptr->captured_monster_max_hp) {
             short frac = o_ptr->captured_monster_max_hp / 100;
             if (!frac) {

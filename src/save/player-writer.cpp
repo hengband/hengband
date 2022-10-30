@@ -1,6 +1,5 @@
 ﻿#include "save/player-writer.h"
 #include "cmd-building/cmd-building.h"
-#include "dungeon/dungeon.h"
 #include "game-option/birth-options.h"
 #include "player-base/player-class.h"
 #include "player/player-skill.h"
@@ -8,6 +7,7 @@
 #include "save/player-class-specific-data-writer.h"
 #include "save/save-util.h"
 #include "system/building-type-definition.h"
+#include "system/dungeon-info.h"
 #include "system/floor-type-definition.h"
 #include "system/player-type-definition.h"
 #include "timed-effect/player-acceleration.h"
@@ -146,7 +146,7 @@ void wr_player(PlayerType *player_ptr)
     wr_u32b(player_ptr->csp_frac);
     wr_s16b(player_ptr->max_plv);
 
-    byte tmp8u = (byte)d_info.size();
+    byte tmp8u = (byte)dungeons_info.size();
     wr_byte(tmp8u);
     for (int i = 0; i < tmp8u; i++) {
         wr_s16b((int16_t)max_dlv[i]);

@@ -23,18 +23,18 @@
  * This table *must* be correct or drastic errors may occur!
  */
 const std::vector<hist_type> backgrounds = {
-    { _("妾腹の子で認知すらされていません。", "You are the illegitimate and unacknowledged child "), 10, _(1, 2), _(3, 2), 25 },
-    { _("妾腹の子ですが認知はされています。", "You are the illegitimate but acknowledged child "), 20, _(1, 2), _(3, 2), 35 },
-    { _("幾人かの子供のうちの一人です。", "You are one of several children "), 95, _(1, 2), _(3, 2), 45 },
-    { _("長子です。", "You are the first child "), 100, _(1, 2), _(3, 2), 50 },
+    { _("妾腹の子で認知すらされていません。", "You are the illegitimate and unacknowledged child "), 10, _(2, 1), _(3, 2), 25 },
+    { _("妾腹の子ですが認知はされています。", "You are the illegitimate but acknowledged child "), 20, _(2, 1), _(3, 2), 35 },
+    { _("幾人かの子供のうちの一人です。", "You are one of several children "), 95, _(2, 1), _(3, 2), 45 },
+    { _("長子です。", "You are the first child "), 100, _(2, 1), _(3, 2), 50 },
 
-    { _("あなたは農奴の", "of a Serf.  "), 40, 1, _(2, 3), 65 },
-    { _("あなたは自作農の", "of a Yeoman.  "), 65, 1, _(2, 3), 80 },
-    { _("あなたは町人の", "of a Townsman.  "), 80, 1, _(2, 3), 90 },
-    { _("あなたは職人の", "of a Guildsman.  "), 90, 1, _(2, 3), 105 },
-    { _("あなたは土着の騎士の", "of a Landed Knight.  "), 96, 1, _(2, 3), 120 },
-    { _("あなたは混沌の宮廷の爵位ある貴族の", "of a Noble Family in the Courts of Chaos.  "), 99, 1, _(2, 3), 130 },
-    { _("あなたはアンバーの王家の血を引く者の", "of the Royal Blood Line of Amber.  "), 100, 1, _(2, 3), 140 },
+    { _("あなたは農奴の", "of a Serf.  "), 40, _(1, 2), _(2, 3), 65 },
+    { _("あなたは自作農の", "of a Yeoman.  "), 65, _(1, 2), _(2, 3), 80 },
+    { _("あなたは町人の", "of a Townsman.  "), 80, _(1, 2), _(2, 3), 90 },
+    { _("あなたは職人の", "of a Guildsman.  "), 90, _(1, 2), _(2, 3), 105 },
+    { _("あなたは土着の騎士の", "of a Landed Knight.  "), 96, _(1, 2), _(2, 3), 120 },
+    { _("あなたは混沌の宮廷の爵位ある貴族の", "of a Noble Family in the Courts of Chaos.  "), 99, _(1, 2), _(2, 3), 130 },
+    { _("あなたはアンバーの王家の血を引く者の", "of the Royal Blood Line of Amber.  "), 100, _(1, 2), _(2, 3), 140 },
 
     { _("あなたは一家のお荷物です。", "You are the black sheep of the family.  "), 20, 3, 50, 20 },
     { _("あなたは一家の誇りです。", "You are a credit to the family.  "), 80, 3, 50, 55 },

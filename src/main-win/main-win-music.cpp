@@ -4,7 +4,6 @@
  */
 
 #include "main-win/main-win-music.h"
-#include "dungeon/dungeon.h"
 #include "dungeon/quest.h"
 #include "floor/floor-town.h"
 #include "main-win/main-win-define.h"
@@ -16,6 +15,7 @@
 #include "main/scene-table.h"
 #include "main/sound-of-music.h"
 #include "monster-race/monster-race.h"
+#include "system/dungeon-info.h"
 #include "system/monster-race-definition.h"
 #include "term/z-term.h"
 #include "util/angband-files.h"
@@ -64,7 +64,7 @@ static concptr basic_key_at(int index, char *buf)
  */
 static concptr dungeon_key_at(int index, char *buf)
 {
-    if (index >= static_cast<int>(d_info.size())) {
+    if (index >= static_cast<int>(dungeons_info.size())) {
         return nullptr;
     }
 
@@ -113,7 +113,7 @@ static concptr town_key_at(int index, char *buf)
  */
 static concptr monster_key_at(int index, char *buf)
 {
-    if (index >= static_cast<int>(r_info.size())) {
+    if (index >= static_cast<int>(monraces_info.size())) {
         return nullptr;
     }
 

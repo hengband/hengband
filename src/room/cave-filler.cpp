@@ -6,15 +6,16 @@
 
 #include "room/cave-filler.h"
 #include "dungeon/dungeon-flag-types.h"
-#include "dungeon/dungeon.h"
 #include "floor//geometry.h"
 #include "floor/cave.h"
 #include "grid/feature.h"
 #include "grid/grid.h"
 #include "room/lake-types.h"
+#include "system/dungeon-info.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
 #include "system/player-type-definition.h"
+#include "system/terrain-type-definition.h"
 #include "util/point-2d.h"
 #include <queue>
 
@@ -48,7 +49,7 @@ static fill_data_type fill_data;
  * Store routine for the fractal floor generator
  * this routine probably should be an inline function or a macro.
  */
-static void store_height(floor_type *floor_ptr, POSITION x, POSITION y, FEAT_IDX val)
+static void store_height(FloorType *floor_ptr, POSITION x, POSITION y, FEAT_IDX val)
 {
     if (((x == fill_data.xmin) || (y == fill_data.ymin) || (x == fill_data.xmax) || (y == fill_data.ymax)) && (val <= fill_data.c1)) {
         val = fill_data.c1 + 1;
@@ -58,7 +59,7 @@ static void store_height(floor_type *floor_ptr, POSITION x, POSITION y, FEAT_IDX
     return;
 }
 
-void generate_hmap(floor_type *floor_ptr, POSITION y0, POSITION x0, POSITION xsiz, POSITION ysiz, int grd, int roug, int cutoff)
+void generate_hmap(FloorType *floor_ptr, POSITION y0, POSITION x0, POSITION xsiz, POSITION ysiz, int grd, int roug, int cutoff)
 {
     POSITION xsize = xsiz;
     POSITION ysize = ysiz;
@@ -488,8 +489,8 @@ bool generate_lake(PlayerType *player_ptr, POSITION y0, POSITION x0, POSITION xs
             }
 
             floor_ptr->grid_array[y0 + y - yhsize][x0 + x - xhsize].info &= ~(CAVE_ICKY | CAVE_ROOM);
-            if (cave_has_flag_bold(floor_ptr, y0 + y - yhsize, x0 + x - xhsize, FloorFeatureType::LAVA)) {
-                if (d_info[floor_ptr->dungeon_idx].flags.has_not(DungeonFeatureType::DARKNESS)) {
+            if (cave_has_flag_bold(floor_ptr, y0 + y - yhsize, x0 + x - xhsize, TerrainCharacteristics::LAVA)) {
+                if (dungeons_info[floor_ptr->dungeon_idx].flags.has_not(DungeonFeatureType::DARKNESS)) {
                     floor_ptr->grid_array[y0 + y - yhsize][x0 + x - xhsize].info |= CAVE_GLOW;
                 }
             }

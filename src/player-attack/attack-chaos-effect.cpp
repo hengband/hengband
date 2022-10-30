@@ -280,7 +280,7 @@ static void attack_golden_hammer(PlayerType *player_ptr, player_attack_type *pa_
  */
 void change_monster_stat(PlayerType *player_ptr, player_attack_type *pa_ptr, const POSITION y, const POSITION x, int *num)
 {
-    auto *r_ptr = &r_info[pa_ptr->m_ptr->r_idx];
+    auto *r_ptr = &monraces_info[pa_ptr->m_ptr->r_idx];
     auto *o_ptr = &player_ptr->inventory_list[INVEN_MAIN_HAND + pa_ptr->hand];
 
     if (any_bits(player_ptr->special_attack, ATTACK_CONFUSE) || pa_ptr->chaos_effect == CE_CONFUSION || pa_ptr->mode == HISSATSU_CONF || SpellHex(player_ptr).is_spelling_specific(HEX_CONFUSION)) {
@@ -311,7 +311,7 @@ void change_monster_stat(PlayerType *player_ptr, player_attack_type *pa_ptr, con
         attack_polymorph(player_ptr, pa_ptr, y, x);
     }
 
-    if (o_ptr->fixed_artifact_idx == FixedArtifactId::G_HAMMER) {
+    if (o_ptr->is_specific_artifact(FixedArtifactId::G_HAMMER)) {
         attack_golden_hammer(player_ptr, pa_ptr);
     }
 }

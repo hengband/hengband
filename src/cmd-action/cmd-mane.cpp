@@ -211,7 +211,7 @@ static int get_mane_power(PlayerType *player_ptr, int *sn, bool baigaesi)
 
                     chance += player_ptr->to_m_chance;
 
-                    if (player_ptr->inventory_list[INVEN_NECK].fixed_artifact_idx == FixedArtifactId::GOGO_PENDANT) {
+                    if (player_ptr->inventory_list[INVEN_NECK].is_specific_artifact(FixedArtifactId::GOGO_PENDANT)) {
                         chance -= 10;
                     }
 
@@ -911,8 +911,8 @@ static bool use_mane(PlayerType *player_ptr, MonsterAbilityType spell)
         msg_print(_("自分の傷に念を集中した。", "You concentrate on your wounds!"));
         (void)hp_player(player_ptr, plev * 6);
         BadStatusSetter bss(player_ptr);
-        (void)bss.stun(0);
-        (void)bss.cut(0);
+        (void)bss.set_stun(0);
+        (void)bss.set_cut(0);
         break;
     }
     case MonsterAbilityType::INVULNER:
@@ -948,7 +948,7 @@ static bool use_mane(PlayerType *player_ptr, MonsterAbilityType spell)
             break;
         }
         m_ptr = &player_ptr->current_floor_ptr->m_list[player_ptr->current_floor_ptr->grid_array[target_row][target_col].m_idx];
-        r_ptr = &r_info[m_ptr->r_idx];
+        r_ptr = &monraces_info[m_ptr->r_idx];
         monster_desc(player_ptr, m_name, m_ptr, 0);
         if (r_ptr->resistance_flags.has(MonsterResistanceType::RESIST_TELEPORT)) {
             if (r_ptr->kind_flags.has(MonsterKindType::UNIQUE) || r_ptr->resistance_flags.has(MonsterResistanceType::RESIST_ALL)) {

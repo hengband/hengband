@@ -22,7 +22,6 @@
 #include "core/player-update-types.h"
 #include "core/stuff-handler.h"
 #include "core/window-redrawer.h"
-#include "dungeon/dungeon.h"
 #include "dungeon/quest.h"
 #include "flavor/flavor-describer.h"
 #include "flavor/object-flavor-types.h"
@@ -77,15 +76,18 @@
 #include "spell/spells-object.h"
 #include "spell/spells-status.h"
 #include "spell/spells-summon.h"
+#include "status/bad-status-setter.h"
 #include "status/experience.h"
 #include "system/angband-version.h"
 #include "system/artifact-type-definition.h"
 #include "system/baseitem-info-definition.h"
+#include "system/dungeon-info.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
 #include "system/monster-type-definition.h"
 #include "system/object-type-definition.h"
 #include "system/player-type-definition.h"
+#include "system/terrain-type-definition.h"
 #include "target/grid-selector.h"
 #include "term/screen-processor.h"
 #include "util/angband-files.h"
@@ -98,7 +100,6 @@
 #include "wizard/wizard-spells.h"
 #include "wizard/wizard-spoiler.h"
 #include "world/world.h"
-
 #include <algorithm>
 #include <optional>
 #include <sstream>
@@ -109,14 +110,17 @@
 #define NUM_O_BIT 32
 
 /*!
- * @brief プレイヤーを完全回復する /
- * Cure everything instantly
+ * @brief プレイヤーを完全回復する
  */
 void wiz_cure_all(PlayerType *player_ptr)
 {
     (void)life_stream(player_ptr, false, false);
     (void)restore_mana(player_ptr, true);
     (void)set_food(player_ptr, PY_FOOD_MAX - 1);
+    BadStatusSetter bss(player_ptr);
+    (void)bss.set_fear(0);
+    (void)bss.set_deceleration(0, false);
+    msg_print("You're fully cured by wizard command.");
 }
 
 static std::optional<KIND_OBJECT_IDX> wiz_select_tval()
@@ -154,7 +158,7 @@ static KIND_OBJECT_IDX wiz_select_sval(const ItemKindType tval, concptr tval_des
     auto num = 0;
     KIND_OBJECT_IDX choice[80]{};
     char ch;
-    for (const auto &k_ref : k_info) {
+    for (const auto &k_ref : baseitems_info) {
         if (num >= 80) {
             break;
         }
@@ -233,9 +237,9 @@ void wiz_create_item(PlayerType *player_ptr)
         return;
     }
 
-    if (k_info[k_idx].gen_flags.has(ItemGenerationTraitType::INSTA_ART)) {
-        for (const auto &[a_idx, a_ref] : a_info) {
-            if ((a_idx == FixedArtifactId::NONE) || (a_ref.tval != k_info[k_idx].tval) || (a_ref.sval != k_info[k_idx].sval)) {
+    if (baseitems_info[k_idx].gen_flags.has(ItemGenerationTraitType::INSTA_ART)) {
+        for (const auto &[a_idx, a_ref] : artifacts_info) {
+            if ((a_idx == FixedArtifactId::NONE) || (a_ref.tval != baseitems_info[k_idx].tval) || (a_ref.sval != baseitems_info[k_idx].sval)) {
                 continue;
             }
 
@@ -262,7 +266,7 @@ void wiz_create_item(PlayerType *player_ptr)
  */
 static std::string wiz_make_named_artifact_desc(PlayerType *player_ptr, FixedArtifactId a_idx)
 {
-    const auto &a_ref = a_info.at(a_idx);
+    const auto &a_ref = artifacts_info.at(a_idx);
     ObjectType obj;
     obj.prep(lookup_kind(a_ref.tval, a_ref.sval));
     obj.fixed_artifact_idx = a_idx;
@@ -341,7 +345,7 @@ static std::vector<FixedArtifactId> wiz_collect_group_a_idx(const grouper &group
     const auto &[tval_list, name] = group_artifact;
     std::vector<FixedArtifactId> a_idx_list;
     for (auto tval : tval_list) {
-        for (const auto &[a_idx, a_ref] : a_info) {
+        for (const auto &[a_idx, a_ref] : artifacts_info) {
             if (a_ref.tval == tval) {
                 a_idx_list.push_back(a_idx);
             }
@@ -382,8 +386,8 @@ void wiz_create_named_art(PlayerType *player_ptr)
 
     screen_load();
     const auto a_idx = create_a_idx.value();
-    const auto it = a_info.find(a_idx);
-    if (it == a_info.end()) {
+    const auto it = artifacts_info.find(a_idx);
+    if (it == artifacts_info.end()) {
         msg_print("The specified artifact is obsoleted for now.");
         return;
     }
@@ -443,8 +447,8 @@ void wiz_change_status(PlayerType *player_ptr)
     for (auto j : PLAYER_SKILL_KIND_TYPE_RANGE) {
         player_ptr->skill_exp[j] = tmp_s16b;
         auto short_pclass = enum2i(player_ptr->pclass);
-        if (player_ptr->skill_exp[j] > s_info[short_pclass].s_max[j]) {
-            player_ptr->skill_exp[j] = s_info[short_pclass].s_max[j];
+        if (player_ptr->skill_exp[j] > class_skills_info[short_pclass].s_max[j]) {
+            player_ptr->skill_exp[j] = class_skills_info[short_pclass].s_max[j];
         }
     }
 
@@ -505,75 +509,29 @@ void wiz_create_feature(PlayerType *player_ptr)
     g_ptr = &player_ptr->current_floor_ptr->grid_array[y][x];
 
     f_val1 = g_ptr->feat;
-    if (!get_value(_("実地形ID", "FeatureID"), 0, f_info.size() - 1, &f_val1)) {
+    if (!get_value(_("実地形ID", "FeatureID"), 0, terrains_info.size() - 1, &f_val1)) {
         return;
     }
 
     f_val2 = f_val1;
-    if (!get_value(_("偽装地形ID", "FeatureID"), 0, f_info.size() - 1, &f_val2)) {
+    if (!get_value(_("偽装地形ID", "FeatureID"), 0, terrains_info.size() - 1, &f_val2)) {
         return;
     }
 
     cave_set_feat(player_ptr, y, x, static_cast<FEAT_IDX>(f_val1));
     g_ptr->mimic = (int16_t)f_val2;
-    feature_type *f_ptr;
-    f_ptr = &f_info[g_ptr->get_feat_mimic()];
+    TerrainType *f_ptr;
+    f_ptr = &terrains_info[g_ptr->get_feat_mimic()];
 
-    if (f_ptr->flags.has(FloorFeatureType::RUNE_PROTECTION) || f_ptr->flags.has(FloorFeatureType::RUNE_EXPLOSION)) {
+    if (f_ptr->flags.has(TerrainCharacteristics::RUNE_PROTECTION) || f_ptr->flags.has(TerrainCharacteristics::RUNE_EXPLOSION)) {
         g_ptr->info |= CAVE_OBJECT;
-    } else if (f_ptr->flags.has(FloorFeatureType::MIRROR)) {
+    } else if (f_ptr->flags.has(TerrainCharacteristics::MIRROR)) {
         g_ptr->info |= CAVE_GLOW | CAVE_OBJECT;
     }
 
     note_spot(player_ptr, y, x);
     lite_spot(player_ptr, y, x);
     player_ptr->update |= PU_FLOW;
-}
-
-/*
- * @brief 選択したダンジョンの任意フロアを選択する
- * @param player_ptr プレイヤーへの参照ポインタ
- * @param dungeon_type ダンジョン番号
- * @return フロアを選択したらtrue、キャンセルならfalse
- * @details 0を指定すると地上に飛ぶが、元いた場所にしか飛ばない
- * @todo 可能ならダンジョンの入口 (例：ルルイエなら大洋の真ん中)へ飛べるようにしたい
- */
-static bool select_debugging_floor(PlayerType *player_ptr, int dungeon_type)
-{
-    auto max_depth = d_info[dungeon_type].maxdepth;
-    if ((max_depth == 0) || (dungeon_type > static_cast<int>(d_info.size()))) {
-        dungeon_type = DUNGEON_ANGBAND;
-    }
-
-    auto min_depth = (int)d_info[dungeon_type].mindepth;
-    while (true) {
-        char ppp[80];
-        char tmp_val[160];
-        sprintf(ppp, "Jump to level (0, %d-%d): ", min_depth, max_depth);
-        sprintf(tmp_val, "%d", (int)player_ptr->current_floor_ptr->dun_level);
-        if (!get_string(ppp, tmp_val, 10)) {
-            return false;
-        }
-
-        auto tmp_command_arg = (COMMAND_ARG)atoi(tmp_val);
-        if (tmp_command_arg == 0) {
-            command_arg = tmp_command_arg;
-            break;
-        }
-
-        auto is_valid_floor = tmp_command_arg > 0;
-        is_valid_floor &= tmp_command_arg >= min_depth;
-        is_valid_floor &= tmp_command_arg <= max_depth;
-        if (is_valid_floor) {
-            command_arg = tmp_command_arg;
-            break;
-        }
-
-        msg_print("Invalid floor. Please re-input.");
-        continue;
-    }
-
-    return true;
 }
 
 /*!
@@ -606,6 +564,80 @@ static bool select_debugging_dungeon(PlayerType *player_ptr, DUNGEON_IDX *dungeo
     }
 }
 
+/*
+ * @brief 選択したダンジョンの任意フロアを選択する
+ * @param player_ptr プレイヤーへの参照ポインタ
+ * @param dungeon_type ダンジョン番号
+ * @return フロアを選択したらtrue、キャンセルならfalse
+ * @details 0を指定すると地上に飛ぶが、元いた場所にしか飛ばない
+ * @todo 可能ならダンジョンの入口 (例：ルルイエなら大洋の真ん中)へ飛べるようにしたい
+ */
+static bool select_debugging_floor(PlayerType *player_ptr, int dungeon_type)
+{
+    auto max_depth = dungeons_info[dungeon_type].maxdepth;
+    if ((max_depth == 0) || (dungeon_type > static_cast<int>(dungeons_info.size()))) {
+        dungeon_type = DUNGEON_ANGBAND;
+    }
+
+    auto min_depth = (int)dungeons_info[dungeon_type].mindepth;
+    while (true) {
+        char ppp[80];
+        char tmp_val[160];
+        sprintf(ppp, "Jump to level (0, %d-%d): ", min_depth, max_depth);
+        sprintf(tmp_val, "%d", (int)player_ptr->current_floor_ptr->dun_level);
+        if (!get_string(ppp, tmp_val, 10)) {
+            return false;
+        }
+
+        auto tmp_command_arg = (COMMAND_ARG)atoi(tmp_val);
+        if (tmp_command_arg == 0) {
+            command_arg = tmp_command_arg;
+            break;
+        }
+
+        auto is_valid_floor = tmp_command_arg > 0;
+        is_valid_floor &= tmp_command_arg >= min_depth;
+        is_valid_floor &= tmp_command_arg <= max_depth;
+        if (is_valid_floor) {
+            command_arg = tmp_command_arg;
+            break;
+        }
+
+        msg_print("Invalid floor. Please re-input.");
+        continue;
+    }
+
+    return true;
+}
+
+/*!
+ * @brief 任意のダンジョン及び階層に飛ぶ
+ * Go to any level
+ */
+static void wiz_jump_floor(PlayerType *player_ptr, DUNGEON_IDX dun_idx, DEPTH depth)
+{
+    player_ptr->dungeon_idx = dun_idx;
+    auto &floor_ref = *player_ptr->current_floor_ptr;
+    floor_ref.dun_level = depth;
+    prepare_change_floor_mode(player_ptr, CFM_RAND_PLACE);
+    if (!floor_ref.is_in_dungeon()) {
+        player_ptr->dungeon_idx = 0;
+    }
+
+    floor_ref.inside_arena = false;
+    player_ptr->wild_mode = false;
+    leave_quest_check(player_ptr);
+    if (record_stair) {
+        exe_write_diary(player_ptr, DIARY_WIZ_TELE, 0, nullptr);
+    }
+
+    floor_ref.quest_number = QuestId::NONE;
+    PlayerEnergy(player_ptr).reset_player_turn();
+    player_ptr->energy_need = 0;
+    prepare_change_floor_mode(player_ptr, CFM_FIRST_FLOOR);
+    player_ptr->leaving = true;
+}
+
 /*!
  * @brief 任意のダンジョン及び階層に飛ぶtための選択処理
  * Go to any level
@@ -621,12 +653,12 @@ void wiz_jump_to_dungeon(PlayerType *player_ptr)
         return;
     }
 
-    if (command_arg < d_info[dungeon_type].mindepth) {
+    if (command_arg < dungeons_info[dungeon_type].mindepth) {
         command_arg = 0;
     }
 
-    if (command_arg > d_info[dungeon_type].maxdepth) {
-        command_arg = (COMMAND_ARG)d_info[dungeon_type].maxdepth;
+    if (command_arg > dungeons_info[dungeon_type].maxdepth) {
+        command_arg = (COMMAND_ARG)dungeons_info[dungeon_type].maxdepth;
     }
 
     msg_format("You jump to dungeon level %d.", command_arg);
@@ -634,7 +666,7 @@ void wiz_jump_to_dungeon(PlayerType *player_ptr)
         do_cmd_save_game(player_ptr, true);
     }
 
-    jump_floor(player_ptr, dungeon_type, command_arg);
+    wiz_jump_floor(player_ptr, dungeon_type, command_arg);
 }
 
 /*!
@@ -646,7 +678,7 @@ void wiz_learn_items_all(PlayerType *player_ptr)
 {
     ObjectType forge;
     ObjectType *q_ptr;
-    for (const auto &k_ref : k_info) {
+    for (const auto &k_ref : baseitems_info) {
         if (k_ref.idx > 0 && k_ref.level <= command_arg) {
             q_ptr = &forge;
             q_ptr->prep(k_ref.idx);
@@ -687,7 +719,7 @@ void wiz_reset_class(PlayerType *player_ptr)
 
     player_ptr->pclass = i2enum<PlayerClassType>(val);
     cp_ptr = &class_info[val];
-    mp_ptr = &m_info[val];
+    mp_ptr = &class_magics_info[val];
     PlayerClass(player_ptr).init_specific_data();
     player_ptr->window_flags |= PW_PLAYER;
     player_ptr->update |= PU_BONUS | PU_HP | PU_MANA | PU_SPELLS;

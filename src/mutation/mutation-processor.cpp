@@ -2,7 +2,6 @@
 #include "core/asking-player.h"
 #include "core/disturbance.h"
 #include "core/player-redraw-types.h"
-#include "dungeon/dungeon.h"
 #include "effect/attribute-types.h"
 #include "floor/geometry.h"
 #include "grid/grid.h"
@@ -41,6 +40,7 @@
 #include "store/store-owners.h"
 #include "store/store-util.h"
 #include "store/store.h"
+#include "system/dungeon-info.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
 #include "system/monster-race-definition.h"
@@ -137,7 +137,7 @@ void process_world_aux_mutation(PlayerType *player_ptr)
         msg_print(_("ウガァァア！", "RAAAAGHH!"));
         msg_print(_("激怒の発作に襲われた！", "You feel a fit of rage coming over you!"));
         (void)set_shero(player_ptr, 10 + randint1(player_ptr->lev), false);
-        (void)bss.fear(0);
+        (void)bss.set_fear(0);
     }
 
     if (player_ptr->muta.has(PlayerMutationType::COWARDICE) && (randint1(3000) == 13)) {
@@ -258,7 +258,7 @@ void process_world_aux_mutation(PlayerType *player_ptr)
         msg_print(_("突然ほとんど孤独になった気がする。", "You suddenly feel almost lonely."));
 
         banish_monsters(player_ptr, 100);
-        if (!is_in_dungeon(player_ptr) && player_ptr->town_num) {
+        if (!player_ptr->current_floor_ptr->is_in_dungeon() && player_ptr->town_num) {
             StoreSaleType sst;
             do {
                 sst = i2enum<StoreSaleType>(randint0(MAX_STORES));
@@ -434,7 +434,7 @@ void process_world_aux_mutation(PlayerType *player_ptr)
         int danger_amount = 0;
         for (MONSTER_IDX monster = 0; monster < player_ptr->current_floor_ptr->m_max; monster++) {
             auto *m_ptr = &player_ptr->current_floor_ptr->m_list[monster];
-            auto *r_ptr = &r_info[m_ptr->r_idx];
+            auto *r_ptr = &monraces_info[m_ptr->r_idx];
             if (!m_ptr->is_valid()) {
                 continue;
             }

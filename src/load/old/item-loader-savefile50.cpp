@@ -34,7 +34,7 @@ void ItemLoader50::rd_item(ObjectType *o_ptr)
     o_ptr->k_idx = rd_s16b();
     o_ptr->iy = rd_byte();
     o_ptr->ix = rd_byte();
-    auto *k_ptr = &k_info[o_ptr->k_idx];
+    auto *k_ptr = &baseitems_info[o_ptr->k_idx];
     o_ptr->tval = k_ptr->tval;
     o_ptr->sval = k_ptr->sval;
     o_ptr->pval = any_bits(flags, SaveDataItemFlagType::PVAL) ? rd_s16b() : 0;
@@ -189,7 +189,7 @@ void ItemLoader50::rd_item(ObjectType *o_ptr)
         return;
     }
 
-    if ((o_ptr->ego_idx == EgoType::DARK) || (o_ptr->ego_idx == EgoType::ANCIENT_CURSE) || (o_ptr->fixed_artifact_idx == FixedArtifactId::NIGHT)) {
+    if ((o_ptr->ego_idx == EgoType::DARK) || (o_ptr->ego_idx == EgoType::ANCIENT_CURSE) || (o_ptr->is_specific_artifact(FixedArtifactId::NIGHT))) {
         o_ptr->art_flags.set(TR_LITE_M1);
         o_ptr->art_flags.reset(TR_LITE_1);
         o_ptr->art_flags.reset(TR_LITE_2);

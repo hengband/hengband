@@ -1,0 +1,143 @@
+# File: q_info.txt
+
+# Includes all the quest files
+
+# Quest feature preferences
+%:QuestPreferences.txt
+
+# 盗賊の隠れ家
+?:[EQU $QUEST_NUMBER 1]
+%:quests/001_ThievesHideout.txt
+
+# 下水道
+?:[EQU $QUEST_NUMBER 2]
+%:quests/002_TheSewer.txt
+
+# ログルス使い
+?:[EQU $QUEST_NUMBER 3]
+%:quests/003_LogrusMaster.txt
+
+# 宝物庫
+?:[EQU $QUEST_NUMBER 4]
+%:quests/004_TheVault.txt
+
+# 塔 1F
+?:[EQU $QUEST_NUMBER 5]
+%:quests/005_TheTower_1.txt
+
+# 塔 2F
+?:[EQU $QUEST_NUMBER 6]
+%:quests/006_TheTower_2.txt
+
+# 塔 3F
+?:[EQU $QUEST_NUMBER 7]
+%:quests/007_TheTower_3.txt
+
+# オベロン討伐
+?:[EQU $QUEST_NUMBER 8]
+%:quests/008_Oberon.txt
+
+# 混沌のサーペント討伐
+?:[EQU $QUEST_NUMBER 9]
+%:quests/009_SerpentOfChaos.txt
+
+# 仙術エネルギー特異点
+?:[EQU $QUEST_NUMBER 10]
+%:quests/010_NodeOfSorcery.txt
+
+# カオスの特異点
+?:[EQU $QUEST_NUMBER 11]
+%:quests/011_NodeOfChaos.txt
+
+# 自然魔術の特異点
+?:[EQU $QUEST_NUMBER 12]
+%:quests/012_NodeOfNature.txt
+
+# Quest #13 is still unfinished
+# 欠番、おそらく『海底都市』だったもの
+
+# ワーグを殱滅せよ
+?:[EQU $QUEST_NUMBER 14]
+%:quests/014_WargProblem.txt
+
+# エリックの要塞
+?:[EQU $QUEST_NUMBER 15]
+%:quests/015_EricStronghold.txt
+
+# モンサルヴァト城への侵攻
+?:[EQU $QUEST_NUMBER 16]
+%:quests/016_AssaultOnMontsalvat.txt
+
+# クエストNo.17は欠番
+
+# 湖の洞窟
+?:[EQU $QUEST_NUMBER 18]
+%:quests/018_WaterCave.txt
+
+# 破滅のクエスト1
+?:[EQU $QUEST_NUMBER 19]
+%:quests/019_DoomQuest1.txt
+
+# 謎の瘴気
+?:[EQU $QUEST_NUMBER 20]
+%:quests/020_VaporQuest.txt
+
+# 破滅のクエスト2
+?:[EQU $QUEST_NUMBER 21]
+%:quests/021_DoomQuest2.txt 
+
+# オークのキャンプ
+?:[EQU $QUEST_NUMBER 22]
+%:quests/022_OrcCamp.txt
+
+# 増殖地獄
+?:[EQU $QUEST_NUMBER 23]
+%:quests/023_SpawningPits.txt
+
+# マイクロンフトの興亡
+?:[EQU $QUEST_NUMBER 24]
+%:quests/024_MicroShaft.txt
+
+# 幽霊屋敷
+?:[EQU $QUEST_NUMBER 25]
+%:quests/025_HauntedHouse.txt
+
+# 激戦場
+?:[EQU $QUEST_NUMBER 26]
+%:quests/026_KillingFields.txt
+
+# 古い城
+?:[EQU $QUEST_NUMBER 27]
+%:quests/027_TheOldCatsle.txt
+
+# 王家の墓
+?:[EQU $QUEST_NUMBER 28]
+%:quests/028_TheRoyalCrypt.txt
+
+# ミミックの財宝
+?:[EQU $QUEST_NUMBER 29]
+%:quests/029_TheMimicTreasure.txt
+
+# テングとデスソード
+?:[EQU $QUEST_NUMBER 30]
+%:quests/030_TenguAndDeathSword.txt
+
+# 柳じじい
+?:[EQU $QUEST_NUMBER 31]
+%:quests/031_OldManWillow.txt
+
+# ダークエルフの王
+?:[EQU $QUEST_NUMBER 32]
+%:quests/032_DarkElvenLords.txt
+
+# クローン地獄
+?:[EQU $QUEST_NUMBER 33]
+%:quests/033_CloningPits.txt
+
+# もの言えぬ証人
+?:[EQU $QUEST_NUMBER 34]
+%:quests/034_DumpWitness.txt
+
+# ランダムクエスト
+?:[EQU $QUEST_NUMBER 40]
+%:quests/040-049_RandomQuests.txt

@@ -14,7 +14,6 @@
 
 #include "floor/floor-streams.h"
 #include "dungeon/dungeon-flag-types.h"
-#include "dungeon/dungeon.h"
 #include "flavor/flavor-describer.h"
 #include "flavor/object-flavor-types.h"
 #include "floor/cave.h"
@@ -33,11 +32,13 @@
 #include "spell-kind/spells-floor.h"
 #include "system/artifact-type-definition.h"
 #include "system/dungeon-data-definition.h"
+#include "system/dungeon-info.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
 #include "system/monster-race-definition.h"
 #include "system/monster-type-definition.h"
 #include "system/player-type-definition.h"
+#include "system/terrain-type-definition.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 #include "wizard/wizard-messages.h"
@@ -53,7 +54,7 @@
  * @param feat2 境界部地形ID
  * @param width 基本幅
  */
-static void recursive_river(floor_type *floor_ptr, POSITION x1, POSITION y1, POSITION x2, POSITION y2, FEAT_IDX feat1, FEAT_IDX feat2, POSITION width)
+static void recursive_river(FloorType *floor_ptr, POSITION x1, POSITION y1, POSITION x2, POSITION y2, FEAT_IDX feat1, FEAT_IDX feat2, POSITION width)
 {
     POSITION dx, dy, length, l, x, y;
     POSITION changex, changey;
@@ -127,7 +128,7 @@ static void recursive_river(floor_type *floor_ptr, POSITION x1, POSITION y1, POS
                         }
 
                         /* Do not convert permanent features */
-                        if (g_ptr->cave_has_flag(FloorFeatureType::PERMANENT)) {
+                        if (g_ptr->cave_has_flag(TerrainCharacteristics::PERMANENT)) {
                             continue;
                         }
 
@@ -145,8 +146,8 @@ static void recursive_river(floor_type *floor_ptr, POSITION x1, POSITION y1, POS
                         g_ptr->mimic = 0;
 
                         /* Lava terrain glows */
-                        if (f_info[feat1].flags.has(FloorFeatureType::LAVA)) {
-                            if (d_info[floor_ptr->dungeon_idx].flags.has_not(DungeonFeatureType::DARKNESS)) {
+                        if (terrains_info[feat1].flags.has(TerrainCharacteristics::LAVA)) {
+                            if (dungeons_info[floor_ptr->dungeon_idx].flags.has_not(DungeonFeatureType::DARKNESS)) {
                                 g_ptr->info |= CAVE_GLOW;
                             }
                         }
@@ -168,7 +169,7 @@ static void recursive_river(floor_type *floor_ptr, POSITION x1, POSITION y1, POS
  * @param feat1 中央部地形ID
  * @param feat2 境界部地形ID
  */
-void add_river(floor_type *floor_ptr, dun_data_type *dd_ptr)
+void add_river(FloorType *floor_ptr, dun_data_type *dd_ptr)
 {
     dungeon_type *dungeon_ptr;
     POSITION y2, x2;
@@ -176,7 +177,7 @@ void add_river(floor_type *floor_ptr, dun_data_type *dd_ptr)
     POSITION wid;
     FEAT_IDX feat1 = 0, feat2 = 0;
 
-    dungeon_ptr = &d_info[floor_ptr->dungeon_idx];
+    dungeon_ptr = &dungeons_info[floor_ptr->dungeon_idx];
 
     /* Choose water mainly */
     if ((randint1(MAX_DEPTH * 2) - 1 > floor_ptr->dun_level) && dungeon_ptr->flags.has(DungeonFeatureType::WATER_RIVER)) {
@@ -214,10 +215,10 @@ void add_river(floor_type *floor_ptr, dun_data_type *dd_ptr)
     }
 
     if (feat1) {
-        auto *f_ptr = &f_info[feat1];
+        auto *f_ptr = &terrains_info[feat1];
 
         /* Only add river if matches lake type or if have no lake at all */
-        if (!(((dd_ptr->laketype == LAKE_T_LAVA) && f_ptr->flags.has(FloorFeatureType::LAVA)) || ((dd_ptr->laketype == LAKE_T_WATER) && f_ptr->flags.has(FloorFeatureType::WATER)) || !dd_ptr->laketype)) {
+        if (!(((dd_ptr->laketype == LAKE_T_LAVA) && f_ptr->flags.has(TerrainCharacteristics::LAVA)) || ((dd_ptr->laketype == LAKE_T_WATER) && f_ptr->flags.has(TerrainCharacteristics::WATER)) || !dd_ptr->laketype)) {
             return;
         }
     }
@@ -287,11 +288,11 @@ void build_streamer(PlayerType *player_ptr, FEAT_IDX feat, int chance)
     int dummy = 0;
 
     grid_type *g_ptr;
-    feature_type *f_ptr;
+    TerrainType *f_ptr;
 
-    feature_type *streamer_ptr = &f_info[feat];
-    bool streamer_is_wall = streamer_ptr->flags.has(FloorFeatureType::WALL) && streamer_ptr->flags.has_not(FloorFeatureType::PERMANENT);
-    bool streamer_may_have_gold = streamer_ptr->flags.has(FloorFeatureType::MAY_HAVE_GOLD);
+    TerrainType *streamer_ptr = &terrains_info[feat];
+    bool streamer_is_wall = streamer_ptr->flags.has(TerrainCharacteristics::WALL) && streamer_ptr->flags.has_not(TerrainCharacteristics::PERMANENT);
+    bool streamer_may_have_gold = streamer_ptr->flags.has(TerrainCharacteristics::MAY_HAVE_GOLD);
 
     /* Hack -- Choose starting point */
     auto *floor_ptr = player_ptr->current_floor_ptr;
@@ -319,14 +320,14 @@ void build_streamer(PlayerType *player_ptr, FEAT_IDX feat, int chance)
                 break;
             }
             g_ptr = &floor_ptr->grid_array[ty][tx];
-            f_ptr = &f_info[g_ptr->feat];
+            f_ptr = &terrains_info[g_ptr->feat];
 
-            if (f_ptr->flags.has(FloorFeatureType::MOVE) && f_ptr->flags.has_any_of({ FloorFeatureType::WATER, FloorFeatureType::LAVA })) {
+            if (f_ptr->flags.has(TerrainCharacteristics::MOVE) && f_ptr->flags.has_any_of({ TerrainCharacteristics::WATER, TerrainCharacteristics::LAVA })) {
                 continue;
             }
 
             /* Do not convert permanent features */
-            if (f_ptr->flags.has(FloorFeatureType::PERMANENT)) {
+            if (f_ptr->flags.has(TerrainCharacteristics::PERMANENT)) {
                 continue;
             }
 
@@ -340,12 +341,12 @@ void build_streamer(PlayerType *player_ptr, FEAT_IDX feat, int chance)
                 }
             }
 
-            if (g_ptr->m_idx && !(streamer_ptr->flags.has(FloorFeatureType::PLACE) && monster_can_cross_terrain(player_ptr, feat, &r_info[floor_ptr->m_list[g_ptr->m_idx].r_idx], 0))) {
+            if (g_ptr->m_idx && !(streamer_ptr->flags.has(TerrainCharacteristics::PLACE) && monster_can_cross_terrain(player_ptr, feat, &monraces_info[floor_ptr->m_list[g_ptr->m_idx].r_idx], 0))) {
                 /* Delete the monster (if any) */
                 delete_monster(player_ptr, ty, tx);
             }
 
-            if (!g_ptr->o_idx_list.empty() && streamer_ptr->flags.has_not(FloorFeatureType::DROP)) {
+            if (!g_ptr->o_idx_list.empty() && streamer_ptr->flags.has_not(TerrainCharacteristics::DROP)) {
 
                 /* Scan all objects in the grid */
                 for (const auto this_o_idx : g_ptr->o_idx_list) {
@@ -353,7 +354,7 @@ void build_streamer(PlayerType *player_ptr, FEAT_IDX feat, int chance)
 
                     /* Hack -- Preserve unknown artifacts */
                     if (o_ptr->is_fixed_artifact()) {
-                        a_info.at(o_ptr->fixed_artifact_idx).is_generated = false;
+                        artifacts_info.at(o_ptr->fixed_artifact_idx).is_generated = false;
 
                         if (cheat_peek) {
                             GAME_TEXT o_name[MAX_NLEN];
@@ -377,13 +378,13 @@ void build_streamer(PlayerType *player_ptr, FEAT_IDX feat, int chance)
             if (streamer_may_have_gold) {
                 /* Hack -- Add some known treasure */
                 if (one_in_(chance)) {
-                    cave_alter_feat(player_ptr, ty, tx, FloorFeatureType::MAY_HAVE_GOLD);
+                    cave_alter_feat(player_ptr, ty, tx, TerrainCharacteristics::MAY_HAVE_GOLD);
                 }
 
                 /* Hack -- Add some hidden treasure */
                 else if (one_in_(chance / 4)) {
-                    cave_alter_feat(player_ptr, ty, tx, FloorFeatureType::MAY_HAVE_GOLD);
-                    cave_alter_feat(player_ptr, ty, tx, FloorFeatureType::ENSECRET);
+                    cave_alter_feat(player_ptr, ty, tx, TerrainCharacteristics::MAY_HAVE_GOLD);
+                    cave_alter_feat(player_ptr, ty, tx, TerrainCharacteristics::ENSECRET);
                 }
             }
         }
@@ -445,7 +446,7 @@ void place_trees(PlayerType *player_ptr, POSITION x, POSITION y)
             }
 
             /* Want square to be in the circle and accessable. */
-            if ((distance(j, i, y, x) < 4) && !g_ptr->cave_has_flag(FloorFeatureType::PERMANENT)) {
+            if ((distance(j, i, y, x) < 4) && !g_ptr->cave_has_flag(TerrainCharacteristics::PERMANENT)) {
                 /*
                  * Clear previous contents, add feature
                  * The border mainly gets trees, while the center gets rubble
@@ -462,7 +463,7 @@ void place_trees(PlayerType *player_ptr, POSITION x, POSITION y)
                 g_ptr->mimic = 0;
 
                 /* Light area since is open above */
-                if (d_info[player_ptr->dungeon_idx].flags.has_not(DungeonFeatureType::DARKNESS)) {
+                if (dungeons_info[player_ptr->dungeon_idx].flags.has_not(DungeonFeatureType::DARKNESS)) {
                     floor_ptr->grid_array[j][i].info |= (CAVE_GLOW | CAVE_ROOM);
                 }
             }

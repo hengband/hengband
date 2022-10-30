@@ -154,7 +154,7 @@ static void check_inscription_value(PlayerType *player_ptr, ae_type *ae_ptr)
 static void check_monster_ball_use(PlayerType *player_ptr, ae_type *ae_ptr)
 {
     auto r_idx = i2enum<MonsterRaceId>(ae_ptr->o_ptr->pval);
-    if (!monster_can_enter(player_ptr, player_ptr->y + ddy[ae_ptr->dir], player_ptr->x + ddx[ae_ptr->dir], &r_info[r_idx], 0)) {
+    if (!monster_can_enter(player_ptr, player_ptr->y + ddy[ae_ptr->dir], player_ptr->x + ddx[ae_ptr->dir], &monraces_info[r_idx], 0)) {
         return;
     }
 

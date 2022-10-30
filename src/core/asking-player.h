@@ -11,8 +11,7 @@
 #define CHECK_DEFAULT_Y 0x08
 
 class PlayerType;
-bool askfor_aux(char *buf, int len, bool numpad_cursor);
-bool askfor(char *buf, int len);
+bool askfor(char *buf, int len, bool numpad_cursor = true);
 bool get_string(concptr prompt, char *buf, int len);
 bool get_check(concptr prompt);
 bool get_check_strict(PlayerType *player_ptr, concptr prompt, BIT_FLAGS mode);

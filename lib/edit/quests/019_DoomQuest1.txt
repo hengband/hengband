@@ -1,0 +1,70 @@
+# File: 019_DoomQuest1.txt
+# a quick creation by Jeff Coleburn <vsp@netaxs.com>
+
+# Name
+Q:$19:N:Doom Quest 1
+Q:19:N:破滅のクエスト１
+
+# Definition
+Q:$19:Q:6:0:0:0:15:0:0:0:6
+Q:19:Q:6:0:0:0:15:0:0:0:6
+
+# Description for quest
+?:[LEQ $QUEST19 2]
+Q:$19:T:We need your help, adventurer.  A hole has opened up to the
+Q:$19:T:northwest of our town, and strange demons lurk within.  One
+Q:$19:T:of our townspeople investigated it unwittingly and barely 
+Q:$19:T:escaped with his life!  Please destroy these demons and 
+Q:$19:T:ensure the continued safety of our town, else we are surely
+Q:$19:T:doomed.
+Q:19:T:冒険者様、あなたの力をお貸し下さい。この街の北西に
+Q:19:T:穴が口を開け、その中で奇妙な悪魔どもがうごめいています。
+Q:19:T:住民の一人がそうと知らずに入り込み、命からがら逃げ帰って
+Q:19:T:来ました！どうか悪魔を打ち倒し、これまで通り平和な街にして下さい。
+Q:19:T:さもなければ我々は確実に破滅することになるでしょう。
+?:1
+
+# Description for quest reward
+?:[EQU $QUEST19 3]
+Q:$19:T:Thank you for killing the demons! A small reward
+Q:$19:T:awaits you outside.
+Q:19:T:悪魔どもを退治して下さって有難うございます！
+Q:19:T:ささやかなお礼を外に用意しておきました。
+?:1
+
+# Description for quest failed
+?:[EQU $QUEST19 5]
+Q:$19:T:I've sent out someone else to do the job.  Now leave me alone!
+Q:19:T:既に他の者に仕事を任せてあります。しばらく私を一人にさせてください！
+?:1
+
+# Floor with Manes
+F:a:FLOOR:8:128
+
+# Floor with Imp
+F:b:FLOOR:8:296
+
+# Floor with Flying Skull
+F:c:FLOOR:8:273
+
+# Floor with Arch-Vile
+F:d:FLOOR:8:357
+
+# Rubble
+F:;:RUBBLE:8
+
+# Dungeon layout
+D:XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+D:XT....c..aaaa...XT...aX.......DcD...ca...;X.TTX
+D:XT..aaa.XXXXXX..X.bcb.D..b.b..DcD..b...XXXcc.TX
+D:X.b.....Xb......X..b..X..a....DcD....XXXX.c..TX
+D:XXXXX...X.T...b.X.....X.b..TT.DcD.aXXXXX....d.X
+D:XT..D...X......XXXXXDXX.b..TT.DcD.aXXXXX....d.X
+D:XTb.Xaa.X...b.XX......X..a....DcD...TXXXX.c..TX
+D:XXXXX...X..XXXX.c.....X..b.b..DcD..b...XXXcc.TX
+D:X<..D..aX...b........TX.......DcD...ca...;X.TTX
+D:XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+
+# Starting position
+P:8:1
+

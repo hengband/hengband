@@ -62,7 +62,7 @@ void ObjectZapWandEntity::execute(INVENTORY_IDX item)
         return;
     }
 
-    auto lev = k_info[o_ptr->k_idx].level;
+    auto lev = baseitems_info[o_ptr->k_idx].level;
     if (lev > 50) {
         lev = 50 + (lev - 50) / 2;
     }

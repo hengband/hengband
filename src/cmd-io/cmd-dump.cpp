@@ -12,7 +12,6 @@
 #include "cmd-io/cmd-dump.h"
 #include "cmd-io/feeling-table.h"
 #include "core/asking-player.h"
-#include "dungeon/dungeon.h"
 #include "dungeon/quest.h"
 #include "floor/floor-town.h"
 #include "io-dump/dump-remover.h"
@@ -28,6 +27,7 @@
 #include "player/player-status-flags.h"
 #include "player/player-status.h"
 #include "system/angband-version.h"
+#include "system/dungeon-info.h"
 #include "system/floor-type-definition.h"
 #include "system/player-type-definition.h"
 #include "term/gameterm.h"
@@ -231,12 +231,13 @@ void do_cmd_feeling(PlayerType *player_ptr)
         return;
     }
 
-    if (inside_quest(player_ptr->current_floor_ptr->quest_number) && !inside_quest(random_quest_number(player_ptr, player_ptr->current_floor_ptr->dun_level))) {
+    const auto &floor_ref = *player_ptr->current_floor_ptr;
+    if (inside_quest(floor_ref.quest_number) && !inside_quest(random_quest_number(player_ptr, floor_ref.dun_level))) {
         msg_print(_("典型的なクエストのダンジョンのようだ。", "Looks like a typical quest level."));
         return;
     }
 
-    if (player_ptr->town_num && !player_ptr->current_floor_ptr->dun_level) {
+    if (player_ptr->town_num && !floor_ref.is_in_dungeon()) {
         if (!strcmp(town_info[player_ptr->town_num].name, _("荒野", "wilderness"))) {
             msg_print(_("何かありそうな荒野のようだ。", "Looks like a strange wilderness."));
             return;
@@ -246,7 +247,7 @@ void do_cmd_feeling(PlayerType *player_ptr)
         return;
     }
 
-    if (!is_in_dungeon(player_ptr)) {
+    if (!floor_ref.is_in_dungeon()) {
         msg_print(_("典型的な荒野のようだ。", "Looks like a typical wilderness."));
         return;
     }

@@ -1,10 +1,10 @@
 ﻿#include "room/rooms-fractal.h"
 #include "dungeon/dungeon-flag-types.h"
-#include "dungeon/dungeon.h"
 #include "floor/floor-generator.h"
 #include "room/cave-filler.h"
 #include "room/rooms-normal.h"
 #include "room/space-finder.h"
+#include "system/dungeon-info.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
 #include "system/player-type-definition.h"
@@ -44,7 +44,7 @@ bool build_type9(PlayerType *player_ptr, dun_data_type *dd_ptr)
     light = done = false;
     room = true;
 
-    if ((floor_ptr->dun_level <= randint1(25)) && d_info[floor_ptr->dungeon_idx].flags.has_not(DungeonFeatureType::DARKNESS)) {
+    if ((floor_ptr->dun_level <= randint1(25)) && dungeons_info[floor_ptr->dungeon_idx].flags.has_not(DungeonFeatureType::DARKNESS)) {
         light = true;
     }
 

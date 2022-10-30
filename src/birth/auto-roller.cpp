@@ -117,7 +117,7 @@ static void decide_initial_stat(PlayerType *player_ptr, int *cval)
 {
     auto pclass = enum2i(player_ptr->pclass);
     auto &class_ptr = class_info[pclass];
-    auto &magic_ptr = m_info[pclass];
+    auto &magic_ptr = class_magics_info[pclass];
     auto is_magic_user = magic_ptr.spell_stat == A_INT || magic_ptr.spell_stat == A_WIS || magic_ptr.spell_stat == A_CHR;
     auto is_attacker = class_ptr.num > 3;
 

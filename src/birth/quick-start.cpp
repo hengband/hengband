@@ -60,7 +60,7 @@ bool ask_quick_start(PlayerType *player_ptr)
     rp_ptr = &race_info[enum2i(player_ptr->prace)];
     auto short_pclass = enum2i(player_ptr->pclass);
     cp_ptr = &class_info[short_pclass];
-    mp_ptr = &m_info[short_pclass];
+    mp_ptr = &class_magics_info[short_pclass];
     ap_ptr = &personality_info[player_ptr->ppersonality];
 
     get_extra(player_ptr, false);

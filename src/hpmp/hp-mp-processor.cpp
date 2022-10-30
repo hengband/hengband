@@ -3,11 +3,9 @@
 #include "cmd-action/cmd-pet.h"
 #include "core/player-redraw-types.h"
 #include "core/window-redrawer.h"
-#include "dungeon/dungeon.h"
 #include "flavor/flavor-describer.h"
 #include "flavor/object-flavor-types.h"
 #include "floor/pattern-walk.h"
-#include "grid/feature.h"
 #include "grid/grid.h"
 #include "hpmp/hp-mp-regenerator.h"
 #include "inventory/inventory-slot-types.h"
@@ -37,12 +35,14 @@
 #include "player/special-defense-types.h"
 #include "status/bad-status-setter.h"
 #include "status/element-resistance.h"
+#include "system/dungeon-info.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
 #include "system/monster-race-definition.h"
 #include "system/monster-type-definition.h"
 #include "system/object-type-definition.h"
 #include "system/player-type-definition.h"
+#include "system/terrain-type-definition.h"
 #include "timed-effect/player-cut.h"
 #include "timed-effect/player-poison.h"
 #include "timed-effect/timed-effects.h"
@@ -66,10 +66,10 @@
 static bool deal_damege_by_feat(PlayerType *player_ptr, grid_type *g_ptr, concptr msg_levitation, concptr msg_normal,
     std::function<PERCENTAGE(PlayerType *)> damage_rate, std::function<void(PlayerType *, int)> additional_effect)
 {
-    auto *f_ptr = &f_info[g_ptr->feat];
+    auto *f_ptr = &terrains_info[g_ptr->feat];
     int damage = 0;
 
-    if (f_ptr->flags.has(FloorFeatureType::DEEP)) {
+    if (f_ptr->flags.has(TerrainCharacteristics::DEEP)) {
         damage = 6000 + randint0(4000);
     } else if (!player_ptr->levitation) {
         damage = 3000 + randint0(2000);
@@ -90,13 +90,13 @@ static bool deal_damege_by_feat(PlayerType *player_ptr, grid_type *g_ptr, concpt
     if (player_ptr->levitation) {
         msg_print(msg_levitation);
 
-        take_hit(player_ptr, DAMAGE_NOESCAPE, damage, format(_("%sの上に浮遊したダメージ", "flying over %s"), f_info[g_ptr->get_feat_mimic()].name.c_str()));
+        take_hit(player_ptr, DAMAGE_NOESCAPE, damage, format(_("%sの上に浮遊したダメージ", "flying over %s"), terrains_info[g_ptr->get_feat_mimic()].name.c_str()));
 
         if (additional_effect != nullptr) {
             additional_effect(player_ptr, damage);
         }
     } else {
-        concptr name = f_info[player_ptr->current_floor_ptr->grid_array[player_ptr->y][player_ptr->x].get_feat_mimic()].name.c_str();
+        concptr name = terrains_info[player_ptr->current_floor_ptr->grid_array[player_ptr->y][player_ptr->x].get_feat_mimic()].name.c_str();
         msg_format(_("%s%s！", "The %s %s!"), name, msg_normal);
         take_hit(player_ptr, DAMAGE_NOESCAPE, damage, name);
 
@@ -114,8 +114,9 @@ static bool deal_damege_by_feat(PlayerType *player_ptr, grid_type *g_ptr, concpt
  */
 void process_player_hp_mp(PlayerType *player_ptr)
 {
-    auto *g_ptr = &player_ptr->current_floor_ptr->grid_array[player_ptr->y][player_ptr->x];
-    auto *f_ptr = &f_info[g_ptr->feat];
+    auto &floor_ref = *player_ptr->current_floor_ptr;
+    auto *g_ptr = &floor_ref.grid_array[player_ptr->y][player_ptr->x];
+    auto *f_ptr = &terrains_info[g_ptr->feat];
     bool cave_no_regen = false;
     int upkeep_factor = 0;
     int regen_amount = PY_REGEN_NORMAL;
@@ -137,8 +138,8 @@ void process_player_hp_mp(PlayerType *player_ptr)
 
     const PlayerRace race(player_ptr);
     if (race.life() == PlayerRaceLifeType::UNDEAD && race.tr_flags().has(TR_VUL_LITE)) {
-        if (!is_in_dungeon(player_ptr) && !has_resist_lite(player_ptr) && !is_invuln(player_ptr) && is_daytime()) {
-            if ((player_ptr->current_floor_ptr->grid_array[player_ptr->y][player_ptr->x].info & (CAVE_GLOW | CAVE_MNDK)) == CAVE_GLOW) {
+        if (!floor_ref.is_in_dungeon() && !has_resist_lite(player_ptr) && !is_invuln(player_ptr) && is_daytime()) {
+            if ((floor_ref.grid_array[player_ptr->y][player_ptr->x].info & (CAVE_GLOW | CAVE_MNDK)) == CAVE_GLOW) {
                 msg_print(_("日光があなたのアンデッドの肉体を焼き焦がした！", "The sun's rays scorch your undead flesh!"));
                 take_hit(player_ptr, DAMAGE_NOESCAPE, 1, _("日光", "sunlight"));
                 cave_no_regen = true;
@@ -165,7 +166,7 @@ void process_player_hp_mp(PlayerType *player_ptr)
         }
     }
 
-    if (f_ptr->flags.has(FloorFeatureType::LAVA) && !is_invuln(player_ptr) && !has_immune_fire(player_ptr)) {
+    if (f_ptr->flags.has(TerrainCharacteristics::LAVA) && !is_invuln(player_ptr) && !has_immune_fire(player_ptr)) {
         if (deal_damege_by_feat(
                 player_ptr, g_ptr, _("熱で火傷した！", "The heat burns you!"), _("で火傷した！", "burns you!"), calc_fire_damage_rate, nullptr)) {
             cave_no_regen = true;
@@ -173,7 +174,7 @@ void process_player_hp_mp(PlayerType *player_ptr)
         }
     }
 
-    if (f_ptr->flags.has(FloorFeatureType::COLD_PUDDLE) && !is_invuln(player_ptr) && !has_immune_cold(player_ptr)) {
+    if (f_ptr->flags.has(TerrainCharacteristics::COLD_PUDDLE) && !is_invuln(player_ptr) && !has_immune_cold(player_ptr)) {
         if (deal_damege_by_feat(
                 player_ptr, g_ptr, _("冷気に覆われた！", "The cold engulfs you!"), _("に凍えた！", "frostbites you!"), calc_cold_damage_rate, nullptr)) {
             cave_no_regen = true;
@@ -181,7 +182,7 @@ void process_player_hp_mp(PlayerType *player_ptr)
         }
     }
 
-    if (f_ptr->flags.has(FloorFeatureType::ELEC_PUDDLE) && !is_invuln(player_ptr) && !has_immune_elec(player_ptr)) {
+    if (f_ptr->flags.has(TerrainCharacteristics::ELEC_PUDDLE) && !is_invuln(player_ptr) && !has_immune_elec(player_ptr)) {
         if (deal_damege_by_feat(
                 player_ptr, g_ptr, _("電撃を受けた！", "The electricity shocks you!"), _("に感電した！", "shocks you!"), calc_elec_damage_rate, nullptr)) {
             cave_no_regen = true;
@@ -189,7 +190,7 @@ void process_player_hp_mp(PlayerType *player_ptr)
         }
     }
 
-    if (f_ptr->flags.has(FloorFeatureType::ACID_PUDDLE) && !is_invuln(player_ptr) && !has_immune_acid(player_ptr)) {
+    if (f_ptr->flags.has(TerrainCharacteristics::ACID_PUDDLE) && !is_invuln(player_ptr) && !has_immune_acid(player_ptr)) {
         if (deal_damege_by_feat(
                 player_ptr, g_ptr, _("酸が飛び散った！", "The acid melts you!"), _("に溶かされた！", "melts you!"), calc_acid_damage_rate, nullptr)) {
             cave_no_regen = true;
@@ -197,7 +198,7 @@ void process_player_hp_mp(PlayerType *player_ptr)
         }
     }
 
-    if (f_ptr->flags.has(FloorFeatureType::POISON_PUDDLE) && !is_invuln(player_ptr)) {
+    if (f_ptr->flags.has(TerrainCharacteristics::POISON_PUDDLE) && !is_invuln(player_ptr)) {
         if (deal_damege_by_feat(player_ptr, g_ptr, _("毒気を吸い込んだ！", "The gas poisons you!"), _("に毒された！", "poisons you!"), calc_acid_damage_rate,
                 [](PlayerType *player_ptr, int damage) {
                     if (!has_resist_pois(player_ptr)) {
@@ -209,7 +210,7 @@ void process_player_hp_mp(PlayerType *player_ptr)
         }
     }
 
-    if (f_ptr->flags.has_all_of({ FloorFeatureType::WATER, FloorFeatureType::DEEP }) && !player_ptr->levitation && !player_ptr->can_swim && !has_resist_water(player_ptr)) {
+    if (f_ptr->flags.has_all_of({ TerrainCharacteristics::WATER, TerrainCharacteristics::DEEP }) && !player_ptr->levitation && !player_ptr->can_swim && !has_resist_water(player_ptr)) {
         if (calc_inventory_weight(player_ptr) > calc_weight_limit(player_ptr)) {
             msg_print(_("溺れている！", "You are drowning!"));
             take_hit(player_ptr, DAMAGE_NOESCAPE, randint1(player_ptr->lev), _("溺れ", "drowning"));
@@ -274,9 +275,9 @@ void process_player_hp_mp(PlayerType *player_ptr)
 
     if (player_ptr->riding) {
         int damage;
-        auto auras = r_info[player_ptr->current_floor_ptr->m_list[player_ptr->riding].r_idx].aura_flags;
+        auto auras = monraces_info[floor_ref.m_list[player_ptr->riding].r_idx].aura_flags;
         if (auras.has(MonsterAuraType::FIRE) && !has_immune_fire(player_ptr)) {
-            damage = r_info[player_ptr->current_floor_ptr->m_list[player_ptr->riding].r_idx].level / 2;
+            damage = monraces_info[floor_ref.m_list[player_ptr->riding].r_idx].level / 2;
             if (race.tr_flags().has(TR_VUL_FIRE)) {
                 damage += damage / 3;
             }
@@ -293,7 +294,7 @@ void process_player_hp_mp(PlayerType *player_ptr)
         }
 
         if (auras.has(MonsterAuraType::ELEC) && !has_immune_elec(player_ptr)) {
-            damage = r_info[player_ptr->current_floor_ptr->m_list[player_ptr->riding].r_idx].level / 2;
+            damage = monraces_info[floor_ref.m_list[player_ptr->riding].r_idx].level / 2;
             if (race.tr_flags().has(TR_VUL_ELEC)) {
                 damage += damage / 3;
             }
@@ -310,7 +311,7 @@ void process_player_hp_mp(PlayerType *player_ptr)
         }
 
         if (auras.has(MonsterAuraType::COLD) && !has_immune_cold(player_ptr)) {
-            damage = r_info[player_ptr->current_floor_ptr->m_list[player_ptr->riding].r_idx].level / 2;
+            damage = monraces_info[floor_ref.m_list[player_ptr->riding].r_idx].level / 2;
             if (race.tr_flags().has(TR_VUL_COLD)) {
                 damage += damage / 3;
             }
@@ -334,7 +335,7 @@ void process_player_hp_mp(PlayerType *player_ptr)
      * reduced below 0 hp by being inside a stone wall; others
      * WILL BE!
      */
-    if (f_ptr->flags.has_none_of({ FloorFeatureType::MOVE, FloorFeatureType::CAN_FLY })) {
+    if (f_ptr->flags.has_none_of({ TerrainCharacteristics::MOVE, TerrainCharacteristics::CAN_FLY })) {
         if (!is_invuln(player_ptr) && !player_ptr->wraith_form && !player_ptr->tim_pass_wall && ((player_ptr->chp > (player_ptr->lev / 5)) || !has_pass_wall(player_ptr))) {
             concptr dam_desc;
             cave_no_regen = true;

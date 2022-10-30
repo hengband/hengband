@@ -1,0 +1,87 @@
+# File: 010_NodeOfSorcery.txt
+
+# Created by Topi Ylinen
+
+# Name
+Q:$10:N:Node of Sorcery
+Q:10:N:仙術エネルギー特異点
+
+# Definition
+Q:$10:Q:6:0:0:0:65:0:0:0:6
+Q:10:Q:6:0:0:0:65:0:0:0:6
+
+# Description for quest
+?:[LEQ $QUEST10 2]
+Q:$10:T:The Wizards of Sorcery have discovered a magical Node of Sorcery 
+Q:$10:T:in a damp area nearby. You must seek the Node and dispatch 
+Q:$10:T:its guardians so that the Tower of Sorcery can claim the 
+Q:$10:T:mystical energies of the Node.
+Q:10:T:仙術魔法の賢者たちが、近くの湿地に仙術エネルギーの特異点の存在を確認
+Q:10:T:した。我々仙術魔法の塔がその魔力の所有権を得られるように、おまえは
+Q:10:T:その特異点の場所を見つけてそこに巣食うモンスターを片づけてくるのだ。
+?:1
+
+# Description for quest reward
+?:[EQU $QUEST10 3]
+Q:$10:T:You have done well. A powerful spellbook awaits you outside.
+Q:10:T:よくやった。強力な魔法書を外に置いておいた。
+?:1
+
+# Description for quest failed
+?:[EQU $QUEST10 5]
+Q:$10:T:Begone, incompetent fool! The dimensional energies of the 
+Q:$10:T:mystic Node have faded away and are lost forever! You had
+Q:$10:T:your chance and botched the job. 
+Q:10:T:立ち去れ、無能な馬鹿者め！魔法の特異点の次元エネルギーは
+Q:10:T:消え去って永遠に失われたのだぞ！お前はせっかくのチャンスを
+Q:10:T:棒にふったのだ。
+?:1
+
+# Shallow water with Guardian naga
+F:a:SHALLOW_WATER:8:269
+
+# Floor with Phantom warrior
+F:b:FLOOR:8:152
+
+# Floor with Phantom beast
+F:c:FLOOR:8:385
+
+# Shallow water with Air elemental
+F:d:SHALLOW_WATER:8:526
+
+# Deep water with Great Wyrm of Many Colours
+F:e:DEEP_WATER:8:1199
+
+# Normal wall
+F:#:GRANITE
+
+# Node of Sorcery layout
+D:XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+D:XXVVVVVVVVVVVVVVVVVVVVVVVVVVVXX
+D:XVVVVVVVVVVVVVaaaVVVVVVVVVVVVVX
+D:XVVaVVVVVVVVVVVVVVVVVVVVVVVaVVX
+D:X.Vaa#########VaV#########aaV.X
+D:X..V#########VaaaV#########V..X
+D:X..V###ccbbbbbVaVbbbbbcc###V..X
+D:X..V##ccb.............bcc##V..X
+D:X..V##...#############...##V..X
+D:X..V##..##...........##..##V..X
+D:X..V##..#.....VdV.....#..##V..X
+D:X..V##..#....VdedV....#..##V..X
+D:X..V##......VdeeedV......##V..X
+D:X..V##..#....VdedV....#..##V..X
+D:X..V##..#.....VdV.....#..##V..X
+D:X..V##b.##...........##bb##V..X
+D:X..V###b.###.......###bb###V..X
+D:X..V###ccbbbbbbbbbbbbbcc###V..X
+D:X..V####cbbbbbbbbbbbbbc####V..X
+D:X..V#######################V..X
+D:X..VV#####################VV..X
+D:X...VVVVVVVVVVVVVVVVVVVVVVV...X
+D:X.....VVVVVVVVVVVVVVVVVVV.....X
+D:X<...........................XX
+D:XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+
+# Starting position
+P:23:1
+

@@ -18,7 +18,7 @@
  */
 void get_bloody_moon_flags(ObjectType *o_ptr)
 {
-    o_ptr->art_flags = a_info.at(FixedArtifactId::BLOOD).flags;
+    o_ptr->art_flags = artifacts_info.at(FixedArtifactId::BLOOD).flags;
 
     int dummy = randint1(2) + randint1(2);
     for (int i = 0; i < dummy; i++) {
@@ -57,7 +57,7 @@ void get_bloody_moon_flags(ObjectType *o_ptr)
  */
 bool activate_bloody_moon(PlayerType *player_ptr, ObjectType *o_ptr)
 {
-    if (o_ptr->fixed_artifact_idx != FixedArtifactId::BLOOD) {
+    if (!o_ptr->is_specific_artifact(FixedArtifactId::BLOOD)) {
         return false;
     }
 

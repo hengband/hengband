@@ -1,7 +1,6 @@
 ﻿#include "specific-object/torch.h"
 #include "core/player-update-types.h"
 #include "dungeon/dungeon-flag-types.h"
-#include "dungeon/dungeon.h"
 #include "floor/cave.h"
 #include "grid/grid.h"
 #include "inventory/inventory-slot-types.h"
@@ -12,6 +11,7 @@
 #include "object/tval-types.h"
 #include "player/special-defense-types.h"
 #include "sv-definition/sv-lite-types.h"
+#include "system/dungeon-info.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
 #include "system/object-type-definition.h"
@@ -142,7 +142,7 @@ void update_lite_radius(PlayerType *player_ptr)
         player_ptr->cur_lite += rad;
     }
 
-    if (d_info[player_ptr->dungeon_idx].flags.has(DungeonFeatureType::DARKNESS) && player_ptr->cur_lite > 1) {
+    if (dungeons_info[player_ptr->dungeon_idx].flags.has(DungeonFeatureType::DARKNESS) && player_ptr->cur_lite > 1) {
         player_ptr->cur_lite = 1;
     }
 
@@ -200,7 +200,7 @@ void update_lite(PlayerType *player_ptr)
     std::vector<Pos2D> points;
 
     POSITION p = player_ptr->cur_lite;
-    floor_type *const floor_ptr = player_ptr->current_floor_ptr;
+    FloorType *const floor_ptr = player_ptr->current_floor_ptr;
 
     // 前回照らされていた座標たちを記録。
     for (int i = 0; i < floor_ptr->lite_n; i++) {

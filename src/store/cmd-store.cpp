@@ -4,7 +4,6 @@
 #include "core/player-update-types.h"
 #include "core/stuff-handler.h"
 #include "core/window-redrawer.h"
-#include "dungeon/dungeon.h"
 #include "flavor/flavor-describer.h"
 #include "floor/cave.h"
 #include "floor/floor-events.h"
@@ -12,7 +11,6 @@
 #include "floor/wild.h"
 #include "game-option/birth-options.h"
 #include "game-option/input-options.h"
-#include "grid/feature.h"
 #include "inventory/inventory-object.h"
 #include "inventory/inventory-slot-types.h"
 #include "io/input-key-requester.h"
@@ -25,10 +23,12 @@
 #include "store/store-owners.h"
 #include "store/store-util.h"
 #include "store/store.h"
+#include "system/dungeon-info.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
 #include "system/object-type-definition.h"
 #include "system/player-type-definition.h"
+#include "system/terrain-type-definition.h"
 #include "term/screen-processor.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
@@ -62,10 +62,9 @@ void do_cmd_store(PlayerType *player_ptr)
     xtra_stock = std::min(14 + 26, ((h > 24) ? (h - 24) : 0));
     store_bottom = MIN_STOCK + xtra_stock;
 
-    grid_type *g_ptr;
-    g_ptr = &player_ptr->current_floor_ptr->grid_array[player_ptr->y][player_ptr->x];
-
-    if (!g_ptr->cave_has_flag(FloorFeatureType::STORE)) {
+    auto *floor_ptr = player_ptr->current_floor_ptr;
+    const auto *g_ptr = &floor_ptr->grid_array[player_ptr->y][player_ptr->x];
+    if (!g_ptr->cave_has_flag(TerrainCharacteristics::STORE)) {
         msg_print(_("ここには店がありません。", "You see no store here."));
         return;
     }
@@ -77,16 +76,17 @@ void do_cmd_store(PlayerType *player_ptr)
     //   inner_town_num は、施設内で C コマンドなどを使ったときにそのままでは現在地の偽装がバレる
     //   ため、それを糊塗するためのグローバル変数。
     //   この辺はリファクタしたい。
-    StoreSaleType store_num = i2enum<StoreSaleType>(f_info[g_ptr->feat].subtype);
+    StoreSaleType store_num = i2enum<StoreSaleType>(terrains_info[g_ptr->feat].subtype);
     old_town_num = player_ptr->town_num;
     if ((store_num == StoreSaleType::HOME) || (store_num == StoreSaleType::MUSEUM)) {
         player_ptr->town_num = 1;
     }
-    if (is_in_dungeon(player_ptr)) {
+
+    if (floor_ptr->is_in_dungeon()) {
         player_ptr->town_num = NO_TOWN;
     }
-    inner_town_num = player_ptr->town_num;
 
+    inner_town_num = player_ptr->town_num;
     if ((town_info[player_ptr->town_num].store[enum2i(store_num)].store_open >= w_ptr->game_turn) || ironman_shops) {
         msg_print(_("ドアに鍵がかかっている。", "The doors are locked."));
         player_ptr->town_num = old_town_num;
@@ -103,8 +103,8 @@ void do_cmd_store(PlayerType *player_ptr)
         town_info[player_ptr->town_num].store[enum2i(store_num)].last_visit = w_ptr->game_turn;
     }
 
-    forget_lite(player_ptr->current_floor_ptr);
-    forget_view(player_ptr->current_floor_ptr);
+    forget_lite(floor_ptr);
+    forget_view(floor_ptr);
     w_ptr->character_icky_depth = 1;
     command_arg = 0;
     command_rep = 0;

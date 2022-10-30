@@ -53,7 +53,7 @@ bool is_autopick_match(PlayerType *player_ptr, ObjectType *o_ptr, autopick_type 
     }
 
     if (IS_FLG(FLG_BOOSTED)) {
-        auto *k_ptr = &k_info[o_ptr->k_idx];
+        auto *k_ptr = &baseitems_info[o_ptr->k_idx];
         if (!o_ptr->is_melee_weapon()) {
             return false;
         }
@@ -199,11 +199,11 @@ bool is_autopick_match(PlayerType *player_ptr, ObjectType *o_ptr, autopick_type 
     }
 
     const auto r_idx = i2enum<MonsterRaceId>(o_ptr->pval);
-    if (IS_FLG(FLG_UNIQUE) && ((o_ptr->tval != ItemKindType::CORPSE && o_ptr->tval != ItemKindType::STATUE) || r_info[r_idx].kind_flags.has_not(MonsterKindType::UNIQUE))) {
+    if (IS_FLG(FLG_UNIQUE) && ((o_ptr->tval != ItemKindType::CORPSE && o_ptr->tval != ItemKindType::STATUE) || monraces_info[r_idx].kind_flags.has_not(MonsterKindType::UNIQUE))) {
         return false;
     }
 
-    if (IS_FLG(FLG_HUMAN) && (o_ptr->tval != ItemKindType::CORPSE || !angband_strchr("pht", r_info[r_idx].d_char))) {
+    if (IS_FLG(FLG_HUMAN) && (o_ptr->tval != ItemKindType::CORPSE || !angband_strchr("pht", monraces_info[r_idx].d_char))) {
         return false;
     }
 

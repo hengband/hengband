@@ -1,0 +1,161 @@
+# File: 028_TheRoyalCrypt.txt
+
+# Name
+Q:$28:N:The Royal Crypt
+Q:28:N:王家の墓
+
+# type:num_mon:cur_num:max_num:level:r_idx:k_idx
+Q:$28:Q:1:0:0:5:70:776:0:0:6
+Q:28:Q:1:0:0:5:70:776:0:0:6
+
+# Description for quest
+?:[LEQ $QUEST28 2]
+Q:$28:T:A mysterious force has entered the royal crypt and is
+Q:$28:T:desecrating the graves of the king's noble ancestors.  Their
+Q:$28:T:bodily remains have been magicly animated and their spirits
+Q:$28:T:enslaved and forcibly turned to evil.  You must enter the
+Q:$28:T:crypt and seek out the Archliches.  Once they have been
+Q:$28:T:eliminated, my guards should be able to take care of the
+Q:$28:T:rest.
+Q:28:T:不思議な力が王家の墓地に入り込み、王様の高貴な先祖たちの墓を汚して
+Q:28:T:います。先祖の遺体は魔法で操られ、その魂は悪の奴隷となってしまいました。
+Q:28:T:あなたは墓地に行き死体を操っているアーチリッチどもを見つけ出さなくては
+Q:28:T:なりません。奴らさえ倒せば、残りは我々の衛兵が片付けてくれるでしょう。
+?:1
+
+# Description for quest reward
+?:[EQU $QUEST28 3]
+Q:$28:T:How can I ever thank you? Let the people rejoice - a hero
+Q:$28:T:of legend walks this day in Outpost. My treasurer tells me
+Q:$28:T:a number of rather valuable heirlooms seem to be missing
+Q:$28:T:from the crypt - how about I turn a blind eye and we call
+Q:$28:T:it quits?
+Q:28:T:なんとお礼すればよいのでしょう！喜ばしいことです。
+Q:28:T:伝説の英雄が今この時この街を歩んでいるのです。ところで私のところの
+Q:28:T:財産管理人が、墓地にあった幾つかの先祖伝来の家宝が行方不明になったと
+Q:28:T:教えてくれました。私は見て見ぬふりをしますから、これでおあいこという
+Q:28:T:ことでいかがでしょう。
+?:1
+
+# Description for quest failed
+?:[EQU $QUEST28 5]
+Q:$28:T:I trusted you and you have failed me. Heaven knows how
+Q:$28:T:we will appease the spirits of the king's ancestors now!
+Q:28:T:私の信頼を裏切ってくれましたね。もう今となっては王の祖先
+Q:28:T:の魂を鎮めることは誰にも出来ません！
+?:1
+
+# Floor, dark, no teleport
+F:,:FLOOR:12
+
+# Deep water
+F:W:DEEP_WATER:12
+
+# Locked door (power 6)
+F:+:LOCKED_DOOR_7:12
+
+# Broken door
+F:':BROKEN_DOOR:12
+
+# Trap
+F:^:FLOOR:12:0:0:0:0:*
+
+# Normal wall
+F:#:GRANITE:12
+
+# Flor + skeleton (junk)
+F:~:FLOOR:12:0:395
+
+# Floor + crypt creep 
+F:a:FLOOR:12:124
+
+# Floor + phantom beast 
+F:b:FLOOR:12:385
+
+# Floor + greater mummy 
+F:c:FLOOR:12:522
+
+# Floor + grey wraith 
+F:d:FLOOR:12:554
+
+# Floor + master vampire 
+F:e:FLOOR:12:520
+
+# Floor + crypt thing 
+F:f:FLOOR:12:577
+
+# Floor + black wraith 
+F:g:FLOOR:12:607
+
+# Floor + monastic lich 
+F:h:FLOOR:12:1176
+
+# Floor + nether wraith 
+F:i:FLOOR:12:612
+
+# Floor + vampire lord
+F:j:FLOOR:12:623
+
+# Floor + master lich 
+F:k:FLOOR:12:658
+
+# Floor + iron lich 
+F:l:FLOOR:12:1181
+
+# Floor + dread 
+F:m:FLOOR:12:667
+
+# Floor + dreadmaster
+F:n:FLOOR:12:690
+
+# Floor + lesser black reaver
+F:o:FLOOR:12:694
+
+# Floor + demilich
+F:p:FLOOR:12:742
+
+# Floor + eye druj
+F:q:FLOOR:12:749
+
+# Floor + skull druj
+F:r:FLOOR:12:750
+
+# Floor + shadowlord
+F:s:FLOOR:12:774
+
+# Floor + archlich
+F:t:FLOOR:12:776
+
+# Floor + black reaver
+F:u:FLOOR:12:798
+
+# up staircase
+F:<:UP_STAIR:12
+
+# The Royal Catacoombs
+D:XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+D:Xf,,X,XbXaaaaaX,#,,,,,X,+,,,,,,#,,#u#,,+,,,,,,,,,,,,,,,,,,,,,,,,+,,,,,X
+D:X,,,X,XbXaaaaaX,X,,s,,X,XXXXXXXX,,###,,XXXXXXXXXXXXXXXXXXXXXXXXXX,###,X
+D:XXXX',#bX#aaaXX,XX,,,XX,X##,,,,XX,,,,,XX^^^^^^^^^^^^^^^^^^XX#X#X#,#u#,X
+D:X,,,,,XbbXXaXX,,,XX,XX,,,XX,,t,,XX,,,XX^XXXXXXXXXXXXXXXXX^X#X#X#X,###,X
+D:XXXXX,X#bbX,X,,,,,X,X,,,,,X,,,,,,XXXXX^^Xt#p#p#o#o#l#l#k#^#XXXXXX,,,,,X
+D:X,X,XX,XXXX,X,,t,,X,X,,s,,X,,t,,XXqXrXX^XXXXXXXXXXXXXXXXX^XXXqXrXX,,,,X
+D:X,,,,XX,,,,,X,,,,,X,#,,,,,X,,,,XX.....XX^^^^^^^^^^^^^^^^^^XX.....XXX+XX
+D:X,,,,,XXXXX,XXXXXXXXXXXXXXXXXXXX.......XXXXXXXXXXXXXXXXXXXX.......Xj,jX
+D:X,,,,,+,,,,,X###################.......##########<#########.......XX,XX
+D:X,,,,,XXXXX#X#XXXXXXXXXXXXXXXXXX.......XXXXXXXXXXXXXXXXXXXX.......Xj,jX
+D:X,,,,XX,,,X,X,+,,,,,X,,,,,+,,,,XX.....XXWWWWWWWWWWWWWWWWWWXX.....XXX+XX
+D:X,X,XX,dd,X,X,X,XXX,X,X#X,X,XXX,XXrXqXXWXXXXXXXXXXXXXXXXXXWXXrXqXX,,,,X
+D:XXXXX,ggd,X,X,X,Xm#,X,Xm#,X,Xm#X,XXXXXWXX,,X,X,X,X,X,X,X,XXWXXXXX,####X
+D:X~,,+,igd,,,X,X,X#X,X,XXX,X,XnmX,+,,,+WX,t,'^s^'^n^'^n^',,#W+,,,+,#oooX
+D:XX,XX,ggd,X,X,X,,,,,+,,,,,X,XXXX,XXXXXWXX,,X,X,X,X,X,X,X,XXWXXXXX,####X
+D:X~,,XX,dd,XXX#XXXXXXXXXXXXX,,,,,XX,,,XXWXXXXXXXXXXXXXXXXXXW#X,,,XX,,,,X
+D:XXX,,XX,,,XeXeXeXeXeX^^^^^XXX+XXX,#+#,XXWWWWWWWWWWWWWWWWWWXX,#+#,XXXXXX
+D:Xb##,,XXXXX+X+X+X+X+X^,,,^Xn+,+nX,#s#,XXXXXXXXXXXXXXXXXXXXX,,#s#,,X^^^X
+D:Xbb#X,,,,,,,,,,,,,,,X^,,,^XXX,XXX,###,+^^^^^^^^^^^^^^^^^^^+,,###,,#^~^X
+D:XbbbX~X~X~X~X~X~X~X~X^^^^^#n+,+nX,,,,,XcXcXcXcXcXcXcXcXcXcX,,,,,,~X^^^X
+D:XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+
+# Starting position
+P:9:3
+

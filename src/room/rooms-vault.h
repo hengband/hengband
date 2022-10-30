@@ -16,7 +16,7 @@ struct vault_type {
     POSITION wid{}; /* Vault width */
 };
 
-extern std::vector<vault_type> v_info;
+extern std::vector<vault_type> vaults_info;
 
 struct dun_data_type;
 class PlayerType;

@@ -14,7 +14,6 @@
 #include "core/stuff-handler.h"
 #include "core/window-redrawer.h"
 #include "dungeon/dungeon-flag-types.h"
-#include "dungeon/dungeon.h"
 #include "effect/effect-characteristics.h"
 #include "floor/cave.h"
 #include "floor/floor-events.h"
@@ -103,12 +102,14 @@
 #include "status/base-status.h"
 #include "sv-definition/sv-lite-types.h"
 #include "sv-definition/sv-weapon-types.h"
+#include "system/dungeon-info.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
 #include "system/monster-race-definition.h"
 #include "system/monster-type-definition.h"
 #include "system/object-type-definition.h"
 #include "system/player-type-definition.h"
+#include "system/terrain-type-definition.h"
 #include "term/screen-processor.h"
 #include "timed-effect/player-acceleration.h"
 #include "timed-effect/player-stun.h"
@@ -1976,7 +1977,7 @@ static int16_t calc_riding_bow_penalty(PlayerType *player_ptr)
             penalty = 5;
         }
     } else {
-        penalty = r_info[floor_ptr->m_list[player_ptr->riding].r_idx].level - player_ptr->skill_exp[PlayerSkillKindType::RIDING] / 80;
+        penalty = monraces_info[floor_ptr->m_list[player_ptr->riding].r_idx].level - player_ptr->skill_exp[PlayerSkillKindType::RIDING] / 80;
         penalty += 30;
         if (penalty < 30) {
             penalty = 30;
@@ -2322,7 +2323,7 @@ static short calc_to_hit(PlayerType *player_ptr, INVENTORY_IDX slot, bool is_rea
                 if (PlayerClass(player_ptr).is_tamer()) {
                     penalty = 5;
                 } else {
-                    penalty = r_info[player_ptr->current_floor_ptr->m_list[player_ptr->riding].r_idx].level - player_ptr->skill_exp[PlayerSkillKindType::RIDING] / 80;
+                    penalty = monraces_info[player_ptr->current_floor_ptr->m_list[player_ptr->riding].r_idx].level - player_ptr->skill_exp[PlayerSkillKindType::RIDING] / 80;
                     penalty += 30;
                     if (penalty < 30) {
                         penalty = 30;
@@ -2782,7 +2783,7 @@ bool player_place(PlayerType *player_ptr, POSITION y, POSITION x)
 void wreck_the_pattern(PlayerType *player_ptr)
 {
     auto *floor_ptr = player_ptr->current_floor_ptr;
-    int pattern_type = f_info[floor_ptr->grid_array[player_ptr->y][player_ptr->x].feat].subtype;
+    int pattern_type = terrains_info[floor_ptr->grid_array[player_ptr->y][player_ptr->x].feat].subtype;
     if (pattern_type == PATTERN_TILE_WRECKED) {
         return;
     }
@@ -2799,7 +2800,7 @@ void wreck_the_pattern(PlayerType *player_ptr)
         POSITION r_y, r_x;
         scatter(player_ptr, &r_y, &r_x, player_ptr->y, player_ptr->x, 4, PROJECT_NONE);
 
-        if (pattern_tile(floor_ptr, r_y, r_x) && (f_info[floor_ptr->grid_array[r_y][r_x].feat].subtype != PATTERN_TILE_WRECKED)) {
+        if (pattern_tile(floor_ptr, r_y, r_x) && (terrains_info[floor_ptr->grid_array[r_y][r_x].feat].subtype != PATTERN_TILE_WRECKED)) {
             cave_set_feat(player_ptr, r_y, r_x, feat_pattern_corrupted);
         }
     }
@@ -3063,7 +3064,7 @@ long calc_score(PlayerType *player_ptr)
     }
 
     DEPTH max_dl = 0;
-    for (const auto &d_ref : d_info) {
+    for (const auto &d_ref : dungeons_info) {
         if (max_dl < max_dlv[d_ref.idx]) {
             max_dl = max_dlv[d_ref.idx];
         }
@@ -3175,7 +3176,7 @@ bool is_shero(PlayerType *player_ptr)
 
 bool is_echizen(PlayerType *player_ptr)
 {
-    return (player_ptr->ppersonality == PERSONALITY_COMBAT) || (player_ptr->inventory_list[INVEN_BOW].fixed_artifact_idx == FixedArtifactId::CRIMSON);
+    return (player_ptr->ppersonality == PERSONALITY_COMBAT) || (player_ptr->inventory_list[INVEN_BOW].is_specific_artifact(FixedArtifactId::CRIMSON));
 }
 
 bool is_chargeman(PlayerType *player_ptr)
@@ -3226,28 +3227,28 @@ static player_hand main_attack_hand(PlayerType *player_ptr)
 
 bool set_quick_and_tiny(PlayerType *player_ptr)
 {
-    auto is_quickly_tiny = player_ptr->inventory_list[INVEN_MAIN_HAND].fixed_artifact_idx == FixedArtifactId::QUICKTHORN;
-    is_quickly_tiny &= player_ptr->inventory_list[INVEN_SUB_HAND].fixed_artifact_idx == FixedArtifactId::TINYTHORN;
+    auto is_quickly_tiny = player_ptr->inventory_list[INVEN_MAIN_HAND].is_specific_artifact(FixedArtifactId::QUICKTHORN);
+    is_quickly_tiny &= player_ptr->inventory_list[INVEN_SUB_HAND].is_specific_artifact(FixedArtifactId::TINYTHORN);
     return is_quickly_tiny;
 }
 
 bool set_musasi(PlayerType *player_ptr)
 {
-    auto is_musasi = player_ptr->inventory_list[INVEN_MAIN_HAND].fixed_artifact_idx == FixedArtifactId::MUSASI_KATANA;
-    is_musasi &= player_ptr->inventory_list[INVEN_SUB_HAND].fixed_artifact_idx == FixedArtifactId::MUSASI_WAKIZASI;
+    auto is_musasi = player_ptr->inventory_list[INVEN_MAIN_HAND].is_specific_artifact(FixedArtifactId::MUSASI_KATANA);
+    is_musasi &= player_ptr->inventory_list[INVEN_SUB_HAND].is_specific_artifact(FixedArtifactId::MUSASI_WAKIZASI);
     return is_musasi;
 }
 
 bool set_icing_and_twinkle(PlayerType *player_ptr)
 {
-    auto can_call_ice_wind_saga = player_ptr->inventory_list[INVEN_MAIN_HAND].fixed_artifact_idx == FixedArtifactId::ICINGDEATH;
-    can_call_ice_wind_saga &= player_ptr->inventory_list[INVEN_SUB_HAND].fixed_artifact_idx == FixedArtifactId::TWINKLE;
+    auto can_call_ice_wind_saga = player_ptr->inventory_list[INVEN_MAIN_HAND].is_specific_artifact(FixedArtifactId::ICINGDEATH);
+    can_call_ice_wind_saga &= player_ptr->inventory_list[INVEN_SUB_HAND].is_specific_artifact(FixedArtifactId::TWINKLE);
     return can_call_ice_wind_saga;
 }
 
 bool set_anubis_and_chariot(PlayerType *player_ptr)
 {
-    auto is_anubis_chariot = player_ptr->inventory_list[INVEN_MAIN_HAND].fixed_artifact_idx == FixedArtifactId::ANUBIS;
-    is_anubis_chariot &= player_ptr->inventory_list[INVEN_SUB_HAND].fixed_artifact_idx == FixedArtifactId::SILVER_CHARIOT;
+    auto is_anubis_chariot = player_ptr->inventory_list[INVEN_MAIN_HAND].is_specific_artifact(FixedArtifactId::ANUBIS);
+    is_anubis_chariot &= player_ptr->inventory_list[INVEN_SUB_HAND].is_specific_artifact(FixedArtifactId::SILVER_CHARIOT);
     return is_anubis_chariot;
 }

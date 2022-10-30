@@ -1,10 +1,10 @@
 ﻿#include "world/world-object.h"
 #include "dungeon/dungeon-flag-types.h"
-#include "dungeon/dungeon.h"
 #include "object-enchant/item-apply-magic.h"
 #include "object/tval-types.h"
 #include "system/alloc-entries.h"
 #include "system/baseitem-info-definition.h"
+#include "system/dungeon-info.h"
 #include "system/floor-type-definition.h"
 #include "system/object-type-definition.h"
 #include "system/player-type-definition.h"
@@ -22,7 +22,7 @@
  * This routine should almost never fail, but in case it does,
  * we must be sure to handle "failure" of this routine.
  */
-OBJECT_IDX o_pop(floor_type *floor_ptr)
+OBJECT_IDX o_pop(FloorType *floor_ptr)
 {
     if (floor_ptr->o_max < w_ptr->max_o_idx) {
         OBJECT_IDX i = floor_ptr->o_max;
@@ -74,7 +74,7 @@ OBJECT_IDX get_obj_num(PlayerType *player_ptr, DEPTH level, BIT_FLAGS mode)
         level = MAX_DEPTH - 1;
     }
 
-    if ((level > 0) && d_info[player_ptr->dungeon_idx].flags.has_not(DungeonFeatureType::BEGINNER)) {
+    if ((level > 0) && dungeons_info[player_ptr->dungeon_idx].flags.has_not(DungeonFeatureType::BEGINNER)) {
         if (one_in_(GREAT_OBJ)) {
             level = 1 + (level * MAX_DEPTH / randint1(MAX_DEPTH));
         }
@@ -89,7 +89,7 @@ OBJECT_IDX get_obj_num(PlayerType *player_ptr, DEPTH level, BIT_FLAGS mode)
         }
 
         KIND_OBJECT_IDX k_idx = entry.index;
-        auto *k_ptr = &k_info[k_idx];
+        auto *k_ptr = &baseitems_info[k_idx];
 
         if ((mode & AM_FORBID_CHEST) && (k_ptr->tval == ItemKindType::CHEST)) {
             continue;

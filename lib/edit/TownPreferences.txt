@@ -1,0 +1,94 @@
+# File: TownPreferences.txt
+
+# Defines the preferences for the town features
+
+# Dungeon entrance
+F:>:ENTRANCE:3:0:0:0:0:NONE:2
+
+# Vanilla Dungeon entrance
+F:<:ENTRANCE:3:0:0:0:0:NONE:1
+
+# Mountain chain
+F:^:MOUNTAIN:3
+
+# Floor
+F:.:FLOOR:3
+
+# Trees
+F:T:TREE:3
+
+# Deep water
+F:W:DEEP_WATER:3
+
+# Shallow water
+F:V:SHALLOW_WATER:3
+
+# Deep Lava
+F:L:DEEP_LAVA:3
+
+# Shallow Lava
+F:K:SHALLOW_LAVA:3
+
+# Chasm
+F:C:DARK_PIT:3
+
+# Dirt
+F:,:DIRT:3
+
+# Rubble
+F:;:RUBBLE:3
+
+# Grass
+F:-:GRASS:3
+
+# Permanent wall
+F:#:PERMANENT:3
+
+# General Store
+F:1:GENERAL_STORE:3
+
+# Armoury
+F:2:ARMOURY:3
+
+# Weapons Smith
+F:3:WEAPON_SMITHS:3
+
+# Temple
+F:4:TEMPLE:3
+
+# Alchemy Shop
+F:5:ALCHEMY_SHOP:3
+
+# Magic Shop
+F:6:MAGIC_SHOP:3
+
+# Black Market
+F:7:BLACK_MARKET:3
+
+# Home
+F:8:HOME:3
+
+# Bookstore
+F:9:BOOKSTORE:3
+
+# Museum
+F:0:MUSEUM:3
+
+# Buildings
+F:a:BUILDING_0:3
+F:b:BUILDING_1:3
+F:c:BUILDING_2:3
+F:d:BUILDING_3:3
+F:e:BUILDING_4:3
+F:f:BUILDING_5:3
+F:g:BUILDING_6:3
+F:h:BUILDING_7:3
+F:i:BUILDING_8:3
+F:j:BUILDING_9:3
+F:k:BUILDING_10:3
+F:l:BUILDING_11:3
+F:m:BUILDING_12:3
+F:n:BUILDING_13:3
+F:o:BUILDING_14:3
+F:p:BUILDING_15:3
+

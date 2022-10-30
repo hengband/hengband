@@ -1,0 +1,90 @@
+# File: 022_OrcCamp.txt
+# a quick creation by Jeff Coleburn <vsp@netaxs.com>
+
+# Name
+Q:$22:N:Orc Camp
+Q:22:N:オークのキャンプ
+
+# Definition
+Q:$22:Q:6:0:0:0:15:0:0:0:6
+Q:22:Q:6:0:0:0:15:0:0:0:6
+
+# Description for quest
+?:[LEQ $QUEST22 2]
+Q:$22:T:The marauding orcs approach ever closer to our quiet town, as
+Q:$22:T:is happening all over in these troubled times.  To the south
+Q:$22:T:lies a valley where our scouts have found an orc raiding party,
+Q:$22:T:preparing to overrun Angwil once and for all.  Our forces are
+Q:$22:T:committed elsewhere; please repel this threat before they reach
+Q:$22:T:our borders.
+Q:22:T:この厄介なご時勢、ご多分にもれずこの静かな街にもオークの侵略隊が
+Q:22:T:これまでになく接近しています。この街の南にある谷で、我々の斥候が
+Q:22:T:オークの侵略軍を発見しました。彼らはアングウィルに全勢力で最終的
+Q:22:T:な侵攻をするための準備をしています。我々の軍勢は他の場所へ派遣し
+Q:22:T:てしまっています。どうかオークどもが街に達する前に追い払って下さい。
+?:1
+
+# Description for quest reward
+?:[EQU $QUEST22 3]
+Q:$22:T:Thank you for your assistance.  Please accept this token of our
+Q:$22:T:appreciation.  We may have need for your help in future, as well.
+Q:22:T:協力して下さり有難うございます。この感謝の印をお受けとり下さい。
+Q:22:T:また近い将来助けていただくことになるかもしれません。
+Q:22:T:よろしくお願いします。
+?:1
+
+# Description for quest failed
+?:[EQU $QUEST22 5]
+Q:$22:T:I've sent out someone else to do the job.  Now leave me alone!
+Q:22:T:既に他の者に仕事を任せてあります。しばらく私を一人にさせてください！
+?:1
+
+# Floor with Snaga
+F:a:FLOOR:8:118
+
+# Floor with Hill orc
+F:b:FLOOR:8:149
+
+# Floor with Orc shaman
+F:c:FLOOR:8:162
+
+# Floor with Golfimbul, the Hill Orc Chief
+F:d:FLOOR:8:215
+
+# Floor with Black orc
+F:e:FLOOR:8:244
+
+# Floor with Orc captain
+F:f:FLOOR:8:285
+
+# Floor with Snaga sapper
+F:g:FLOOR:8:251
+
+# Dungeon layout
+D:XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+D:XXXXXXXXXXXXXXXXXXXXXXXXXXX..<.........XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+D:XXXXXXXXXXXXXXXXXXXXX..................c...........XXXXXXXXXXXXXXXXXX
+D:XXXXXXXXXXXX...aaa.aa.a...............................XXXXXXXXXXXXXXX
+D:XXXXXXXXXXX.....aaa.a.a...............b...b.b..b.....XXXXXXXXXXXXXXXX
+D:XXXXXXXXXXX..................XX......................XXXXXXXXXXXXXXXX
+D:XXXXXXXXXX.........aaaa.....XXXX............e..........XXXXXXXXXXXXXX
+D:XXXXXXXXXXX................XXXX.........................XXXXXXXXXXXXX
+D:XXXgggXXXXXXX........f......XXXXX.......................XXXXXXXXXXXXX
+D:XXXXXg.XXXX......c........XXXXXX......a.a..............g...XXXXXXXXXX
+D:XXXXX..XXX.................XXX......b.....a..............XXXXXXXXXXXX
+D:XXXXXXee.XXXX.......b.bb.b............c.c.........f.......XXXXXXXXXXX
+D:XXXXX...............................b.....b............XXXXXXXXXXXXXX
+D:XXXX...............e..................e.b......XXXXXX....XXXXXXXXXXXX
+D:XXXX..f....................................XXXXXXXXXXX....XXXXXXXXXXX
+D:XX...................XXXXXXXXX..........bbbb.XXXXXXXXXX.......g.XXXXX
+D:XXXXXXX.............XXXXXXXXXXXbb.b.......eeee.XXXXXX.............XXX
+D:XXXXXXXX.............XXXXXXXXX..........bbbbdbbbb..................XX
+D:XXXXXXXX..................................bbbbb..f...............XXXX
+D:XXXXXXXXXXX......e.e........c............f....................XXXXXXX
+D:XXXXXXXXXXXXXX..........................................XXXXXXXXXXXXX
+D:XXXXXXXXXXXXXXXXXX...................................XXXXXXXXXXXXXXXX
+D:XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+
+# Starting position
+P:1:33
+

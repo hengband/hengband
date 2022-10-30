@@ -64,7 +64,7 @@ void ObjectZapRodEntity::execute(INVENTORY_IDX item)
         return;
     }
 
-    auto lev = k_info[o_ptr->k_idx].level;
+    auto lev = baseitems_info[o_ptr->k_idx].level;
     auto chance = this->player_ptr->skill_dev;
     if (this->player_ptr->effects()->confusion()->is_confused()) {
         chance = chance / 2;
@@ -104,7 +104,7 @@ void ObjectZapRodEntity::execute(INVENTORY_IDX item)
         return;
     }
 
-    auto *k_ptr = &k_info[o_ptr->k_idx];
+    auto *k_ptr = &baseitems_info[o_ptr->k_idx];
     if ((o_ptr->number == 1) && (o_ptr->timeout)) {
         if (flush_failure) {
             flush();

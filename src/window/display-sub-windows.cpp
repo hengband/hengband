@@ -29,6 +29,7 @@
 #include "system/monster-type-definition.h"
 #include "system/object-type-definition.h"
 #include "system/player-type-definition.h"
+#include "system/terrain-type-definition.h"
 #include "target/target-describer.h"
 #include "target/target-preparation.h"
 #include "target/target-setter.h"
@@ -106,7 +107,7 @@ static void print_monster_line(TERM_LEN x, TERM_LEN y, monster_type *m_ptr, int 
 {
     char buf[256];
     MonsterRaceId r_idx = m_ptr->ap_r_idx;
-    auto *r_ptr = &r_info[r_idx];
+    auto *r_ptr = &monraces_info[r_idx];
 
     term_erase(0, y, 255);
     term_gotoxy(x, y);
@@ -141,7 +142,7 @@ static void print_monster_line(TERM_LEN x, TERM_LEN y, monster_type *m_ptr, int 
  * @param y 表示行
  * @param max_lines 最大何行描画するか
  */
-void print_monster_list(floor_type *floor_ptr, const std::vector<MONSTER_IDX> &monster_list, TERM_LEN x, TERM_LEN y, TERM_LEN max_lines)
+void print_monster_list(FloorType *floor_ptr, const std::vector<MONSTER_IDX> &monster_list, TERM_LEN x, TERM_LEN y, TERM_LEN max_lines)
 {
     TERM_LEN line = y;
     monster_type *last_mons = nullptr;
@@ -436,7 +437,7 @@ static void display_dungeon(PlayerType *player_ptr)
             TERM_COLOR a;
             char c;
             if (!in_bounds2(player_ptr->current_floor_ptr, y, x)) {
-                auto *f_ptr = &f_info[feat_none];
+                auto *f_ptr = &terrains_info[feat_none];
                 a = f_ptr->x_attr[F_LIT_STANDARD];
                 c = f_ptr->x_char[F_LIT_STANDARD];
                 term_queue_char(x - player_ptr->x + game_term->wid / 2 - 1, y - player_ptr->y + game_term->hgt / 2 - 1, a, c, ta, tc);
@@ -545,7 +546,7 @@ void fix_object(PlayerType *player_ptr)
  * @details
  * Lookコマンドでカーソルを合わせた場合に合わせてミミックは考慮しない。
  */
-static const monster_type *monster_on_floor_items(floor_type *floor_ptr, const grid_type *g_ptr)
+static const monster_type *monster_on_floor_items(FloorType *floor_ptr, const grid_type *g_ptr)
 {
     if (g_ptr->m_idx == 0) {
         return nullptr;
@@ -592,17 +593,17 @@ static void display_floor_item_list(PlayerType *player_ptr, const int y, const i
         if (is_hallucinated) {
             sprintf(line, _("(X:%03d Y:%03d) 何か奇妙な物の足元の発見済みアイテム一覧", "Found items at (%03d,%03d) under something strange"), x, y);
         } else {
-            const monster_race *const r_ptr = &r_info[m_ptr->ap_r_idx];
+            const monster_race *const r_ptr = &monraces_info[m_ptr->ap_r_idx];
             sprintf(line, _("(X:%03d Y:%03d) %sの足元の発見済みアイテム一覧", "Found items at (%03d,%03d) under %s"), x, y, r_ptr->name.c_str());
         }
     } else {
-        const feature_type *const f_ptr = &f_info[g_ptr->feat];
+        const TerrainType *const f_ptr = &terrains_info[g_ptr->feat];
         concptr fn = f_ptr->name.c_str();
         char buf[512];
 
-        if (f_ptr->flags.has(FloorFeatureType::STORE) || (f_ptr->flags.has(FloorFeatureType::BLDG) && !floor_ptr->inside_arena)) {
+        if (f_ptr->flags.has(TerrainCharacteristics::STORE) || (f_ptr->flags.has(TerrainCharacteristics::BLDG) && !floor_ptr->inside_arena)) {
             sprintf(buf, _("%sの入口", "on the entrance of %s"), fn);
-        } else if (f_ptr->flags.has(FloorFeatureType::WALL)) {
+        } else if (f_ptr->flags.has(TerrainCharacteristics::WALL)) {
             sprintf(buf, _("%sの中", "in %s"), fn);
         } else {
             sprintf(buf, _("%s", "on %s"), fn);

@@ -179,9 +179,9 @@ void MonsterDamageProcessor::death_special_flag_monster()
 {
     auto *m_ptr = &this->player_ptr->current_floor_ptr->m_list[this->m_idx];
     auto r_idx = m_ptr->r_idx;
-    auto *r_ptr = &r_info[r_idx];
-    if (any_bits(r_info[r_idx].flags7, RF7_TANUKI)) {
-        r_ptr = &r_info[r_idx];
+    auto *r_ptr = &monraces_info[r_idx];
+    if (any_bits(monraces_info[r_idx].flags7, RF7_TANUKI)) {
+        r_ptr = &monraces_info[r_idx];
         m_ptr->ap_r_idx = r_idx;
         if (r_ptr->r_sights < MAX_SHORT) {
             r_ptr->r_sights++;
@@ -218,7 +218,7 @@ void MonsterDamageProcessor::death_special_flag_monster()
  */
 void MonsterDamageProcessor::death_unique_monster(MonsterRaceId r_idx)
 {
-    r_info[r_idx].max_num = 0;
+    monraces_info[r_idx].max_num = 0;
     std::vector<MonsterRaceId> combined_unique_vec;
     if (!check_combined_unique(r_idx, &combined_unique_vec)) {
         return;
@@ -265,7 +265,7 @@ bool MonsterDamageProcessor::check_combined_unique(const MonsterRaceId r_idx, st
 void MonsterDamageProcessor::death_combined_uniques(const MonsterRaceId r_idx, const combined_uniques &combined_uniques)
 {
     auto death_r_idx = [](MonsterRaceId r_idx) {
-        auto &r_ref = r_info[r_idx];
+        auto &r_ref = monraces_info[r_idx];
         r_ref.max_num = 0;
         r_ref.r_pkills++;
         r_ref.r_akills++;
@@ -298,14 +298,14 @@ void MonsterDamageProcessor::increase_kill_numbers()
         return;
     }
 
-    if (m_ptr->mflag2.has(MonsterConstantFlagType::KAGE) && (r_info[MonsterRaceId::KAGE].r_pkills < MAX_SHORT)) {
-        r_info[MonsterRaceId::KAGE].r_pkills++;
+    if (m_ptr->mflag2.has(MonsterConstantFlagType::KAGE) && (monraces_info[MonsterRaceId::KAGE].r_pkills < MAX_SHORT)) {
+        monraces_info[MonsterRaceId::KAGE].r_pkills++;
     } else if (r_ref.r_pkills < MAX_SHORT) {
         r_ref.r_pkills++;
     }
 
-    if (m_ptr->mflag2.has(MonsterConstantFlagType::KAGE) && (r_info[MonsterRaceId::KAGE].r_tkills < MAX_SHORT)) {
-        r_info[MonsterRaceId::KAGE].r_tkills++;
+    if (m_ptr->mflag2.has(MonsterConstantFlagType::KAGE) && (monraces_info[MonsterRaceId::KAGE].r_tkills < MAX_SHORT)) {
+        monraces_info[MonsterRaceId::KAGE].r_tkills++;
     } else if (r_ref.r_tkills < MAX_SHORT) {
         r_ref.r_tkills++;
     }
@@ -424,7 +424,7 @@ void MonsterDamageProcessor::show_bounty_message(GAME_TEXT *m_name)
  */
 void MonsterDamageProcessor::get_exp_from_mon(monster_type *m_ptr, int exp_dam)
 {
-    auto *r_ptr = &r_info[m_ptr->r_idx];
+    auto *r_ptr = &monraces_info[m_ptr->r_idx];
     if (!m_ptr->is_valid() || m_ptr->is_pet() || this->player_ptr->phase_out) {
         return;
     }
@@ -547,7 +547,7 @@ void MonsterDamageProcessor::add_monster_fear()
         }
     }
 
-    auto *r_ptr = &r_info[m_ptr->r_idx];
+    auto *r_ptr = &monraces_info[m_ptr->r_idx];
     if (m_ptr->is_fearful() || any_bits(r_ptr->flags3, RF3_NO_FEAR)) {
         return;
     }

@@ -1,7 +1,7 @@
 ﻿#pragma once
 
-#include "grid/feature.h"
 #include "system/angband.h"
+#include "system/terrain-type-definition.h"
 
 #define FILE_NAME_SIZE 1024
 

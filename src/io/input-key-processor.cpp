@@ -50,7 +50,6 @@
 #include "core/player-update-types.h"
 #include "core/special-internal-keys.h"
 #include "dungeon/dungeon-flag-types.h"
-#include "dungeon/dungeon.h"
 #include "dungeon/quest.h" //!< @do_cmd_quest() がある。後で移設する.
 #include "effect/spells-effect-util.h"
 #include "floor/wild.h"
@@ -87,6 +86,7 @@
 #include "store/cmd-store.h"
 #include "store/home.h"
 #include "store/store-util.h"
+#include "system/dungeon-info.h"
 #include "system/floor-type-definition.h"
 #include "system/player-type-definition.h"
 #include "term/screen-processor.h"
@@ -401,7 +401,7 @@ void process_command(PlayerType *player_ptr)
             break;
         }
 
-        if (floor_ptr->dun_level && d_info[player_ptr->dungeon_idx].flags.has(DungeonFeatureType::NO_MAGIC) && !pc.equals(PlayerClassType::BERSERKER) && !pc.equals(PlayerClassType::SMITH)) {
+        if (floor_ptr->dun_level && dungeons_info[player_ptr->dungeon_idx].flags.has(DungeonFeatureType::NO_MAGIC) && !pc.equals(PlayerClassType::BERSERKER) && !pc.equals(PlayerClassType::SMITH)) {
             msg_print(_("ダンジョンが魔法を吸収した！", "The dungeon absorbs all attempted magic!"));
             msg_print(nullptr);
             break;

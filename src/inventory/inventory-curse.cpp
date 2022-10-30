@@ -402,7 +402,7 @@ static void curse_berserk_rage(PlayerType *player_ptr)
     msg_print(_("ウガァァア！", "RAAAAGHH!"));
     msg_print(_("激怒の発作に襲われた！", "You feel a fit of rage coming over you!"));
     (void)set_shero(player_ptr, duration, false);
-    (void)BadStatusSetter(player_ptr).fear(0);
+    (void)BadStatusSetter(player_ptr).set_fear(0);
 }
 
 static void curse_drain_hp(PlayerType *player_ptr)
@@ -477,7 +477,7 @@ void execute_cursed_items_effect(PlayerType *player_ptr)
     }
 
     auto *o_ptr = &player_ptr->inventory_list[INVEN_LITE];
-    if (o_ptr->fixed_artifact_idx != FixedArtifactId::JUDGE) {
+    if (!o_ptr->is_specific_artifact(FixedArtifactId::JUDGE)) {
         return;
     }
 

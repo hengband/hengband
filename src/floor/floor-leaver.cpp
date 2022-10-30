@@ -1,7 +1,5 @@
 ﻿#include "floor/floor-leaver.h"
 #include "cmd-building/cmd-building.h"
-#include "dungeon/dungeon.h"
-#include "dungeon/quest.h"
 #include "floor/cave.h"
 #include "floor/floor-events.h"
 #include "floor/floor-mode-changer.h"
@@ -11,33 +9,25 @@
 #include "floor/line-of-sight.h"
 #include "game-option/birth-options.h"
 #include "game-option/play-record-options.h"
-#include "grid/feature.h"
 #include "grid/grid.h"
 #include "inventory/inventory-slot-types.h"
 #include "io/write-diary.h"
-#include "mind/mind-mirror-master.h"
 #include "mind/mind-ninja.h"
 #include "monster-floor/monster-lite.h"
 #include "monster-floor/monster-remover.h"
 #include "monster-race/monster-race.h"
-#include "monster-race/race-flags1.h"
-#include "monster-race/race-flags7.h"
 #include "monster/monster-describer.h"
 #include "monster/monster-description-types.h"
-#include "monster/monster-info.h"
-#include "monster/monster-status.h"
 #include "pet/pet-util.h"
-#include "player-status/player-energy.h"
-#include "player/player-status.h"
-#include "player/special-defense-types.h"
 #include "save/floor-writer.h"
 #include "spell-class/spells-mirror-master.h"
 #include "system/artifact-type-definition.h"
+#include "system/dungeon-info.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
 #include "system/monster-race-definition.h"
-#include "system/monster-type-definition.h"
 #include "system/player-type-definition.h"
+#include "system/terrain-type-definition.h"
 #include "target/projection-path-calculator.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
@@ -152,7 +142,7 @@ static void preserve_pet(PlayerType *player_ptr)
  * @brief 新フロアに移動元フロアに繋がる階段を配置する / Virtually teleport onto the stairs that is connecting between two floors.
  * @param sf_ptr 移動元の保存フロア構造体参照ポインタ
  */
-static void locate_connected_stairs(PlayerType *player_ptr, floor_type *floor_ptr, saved_floor_type *sf_ptr, BIT_FLAGS floor_mode)
+static void locate_connected_stairs(PlayerType *player_ptr, FloorType *floor_ptr, saved_floor_type *sf_ptr, BIT_FLAGS floor_mode)
 {
     POSITION sx = 0;
     POSITION sy = 0;
@@ -162,10 +152,10 @@ static void locate_connected_stairs(PlayerType *player_ptr, floor_type *floor_pt
     for (POSITION y = 0; y < floor_ptr->height; y++) {
         for (POSITION x = 0; x < floor_ptr->width; x++) {
             auto *g_ptr = &floor_ptr->grid_array[y][x];
-            auto *f_ptr = &f_info[g_ptr->feat];
+            auto *f_ptr = &terrains_info[g_ptr->feat];
             bool ok = false;
             if (floor_mode & CFM_UP) {
-                if (f_ptr->flags.has_all_of({ FloorFeatureType::LESS, FloorFeatureType::STAIRS }) && f_ptr->flags.has_not(FloorFeatureType::SPECIAL)) {
+                if (f_ptr->flags.has_all_of({ TerrainCharacteristics::LESS, TerrainCharacteristics::STAIRS }) && f_ptr->flags.has_not(TerrainCharacteristics::SPECIAL)) {
                     ok = true;
                     if (g_ptr->special && g_ptr->special == sf_ptr->upper_floor_id) {
                         sx = x;
@@ -173,7 +163,7 @@ static void locate_connected_stairs(PlayerType *player_ptr, floor_type *floor_pt
                     }
                 }
             } else if (floor_mode & CFM_DOWN) {
-                if (f_ptr->flags.has_all_of({ FloorFeatureType::MORE, FloorFeatureType::STAIRS }) && f_ptr->flags.has_not(FloorFeatureType::SPECIAL)) {
+                if (f_ptr->flags.has_all_of({ TerrainCharacteristics::MORE, TerrainCharacteristics::STAIRS }) && f_ptr->flags.has_not(TerrainCharacteristics::SPECIAL)) {
                     ok = true;
                     if (g_ptr->special && g_ptr->special == sf_ptr->lower_floor_id) {
                         sx = x;
@@ -181,7 +171,7 @@ static void locate_connected_stairs(PlayerType *player_ptr, floor_type *floor_pt
                     }
                 }
             } else {
-                if (f_ptr->flags.has(FloorFeatureType::BLDG)) {
+                if (f_ptr->flags.has(TerrainCharacteristics::BLDG)) {
                     ok = true;
                 }
             }
@@ -295,7 +285,7 @@ static void preserve_info(PlayerType *player_ptr)
         }
 
         if (o_ptr->is_fixed_artifact()) {
-            a_info.at(o_ptr->fixed_artifact_idx).floor_id = 0;
+            artifacts_info.at(o_ptr->fixed_artifact_idx).floor_id = 0;
         }
     }
 }
@@ -307,56 +297,58 @@ static void set_grid_by_leaving_floor(PlayerType *player_ptr, grid_type **g_ptr)
     }
 
     *g_ptr = &player_ptr->current_floor_ptr->grid_array[player_ptr->y][player_ptr->x];
-    auto *f_ptr = &f_info[(*g_ptr)->feat];
-    if ((*g_ptr)->special && f_ptr->flags.has_not(FloorFeatureType::SPECIAL) && get_sf_ptr((*g_ptr)->special)) {
+    auto *f_ptr = &terrains_info[(*g_ptr)->feat];
+    if ((*g_ptr)->special && f_ptr->flags.has_not(TerrainCharacteristics::SPECIAL) && get_sf_ptr((*g_ptr)->special)) {
         new_floor_id = (*g_ptr)->special;
     }
 
-    if (f_ptr->flags.has_all_of({ FloorFeatureType::STAIRS, FloorFeatureType::SHAFT })) {
+    if (f_ptr->flags.has_all_of({ TerrainCharacteristics::STAIRS, TerrainCharacteristics::SHAFT })) {
         prepare_change_floor_mode(player_ptr, CFM_SHAFT);
     }
 }
 
 static void jump_floors(PlayerType *player_ptr)
 {
-    if (none_bits(player_ptr->change_floor_mode, CFM_DOWN | CFM_UP)) {
+    const auto mode = player_ptr->change_floor_mode;
+    if (none_bits(mode, CFM_DOWN | CFM_UP)) {
         return;
     }
 
     auto move_num = 0;
-    if (any_bits(player_ptr->change_floor_mode, CFM_DOWN)) {
+    if (any_bits(mode, CFM_DOWN)) {
         move_num = 1;
-    } else if (any_bits(player_ptr->change_floor_mode, CFM_UP)) {
+    } else if (any_bits(mode, CFM_UP)) {
         move_num = -1;
     }
 
-    if (any_bits(player_ptr->change_floor_mode, CFM_SHAFT)) {
+    if (any_bits(mode, CFM_SHAFT)) {
         move_num *= 2;
     }
 
-    if (any_bits(player_ptr->change_floor_mode, CFM_DOWN)) {
-        if (!is_in_dungeon(player_ptr)) {
-            move_num = d_info[player_ptr->dungeon_idx].mindepth;
+    auto &floor_ref = *player_ptr->current_floor_ptr;
+    if (any_bits(mode, CFM_DOWN)) {
+        if (!floor_ref.is_in_dungeon()) {
+            move_num = dungeons_info[player_ptr->dungeon_idx].mindepth;
         }
-    } else if (any_bits(player_ptr->change_floor_mode, CFM_UP)) {
-        if (player_ptr->current_floor_ptr->dun_level + move_num < d_info[player_ptr->dungeon_idx].mindepth) {
-            move_num = -player_ptr->current_floor_ptr->dun_level;
+    } else if (any_bits(mode, CFM_UP)) {
+        if (floor_ref.dun_level + move_num < dungeons_info[player_ptr->dungeon_idx].mindepth) {
+            move_num = -floor_ref.dun_level;
         }
     }
 
-    player_ptr->current_floor_ptr->dun_level += move_num;
+    floor_ref.dun_level += move_num;
 }
 
 static void exit_to_wilderness(PlayerType *player_ptr)
 {
-    if (is_in_dungeon(player_ptr) || (player_ptr->dungeon_idx == 0)) {
+    if (player_ptr->current_floor_ptr->is_in_dungeon() || (player_ptr->dungeon_idx == 0)) {
         return;
     }
 
     player_ptr->leaving_dungeon = true;
     if (!vanilla_town && !lite_town) {
-        player_ptr->wilderness_y = d_info[player_ptr->dungeon_idx].dy;
-        player_ptr->wilderness_x = d_info[player_ptr->dungeon_idx].dx;
+        player_ptr->wilderness_y = dungeons_info[player_ptr->dungeon_idx].dy;
+        player_ptr->wilderness_x = dungeons_info[player_ptr->dungeon_idx].dx;
     }
 
     player_ptr->recall_dungeon = player_ptr->dungeon_idx;
@@ -455,31 +447,4 @@ void leave_floor(PlayerType *player_ptr)
     }
 
     exe_leave_floor(player_ptr, sf_ptr);
-}
-
-/*!
- * @brief 任意のダンジョン及び階層に飛ぶ
- * Go to any level
- */
-void jump_floor(PlayerType *player_ptr, DUNGEON_IDX dun_idx, DEPTH depth)
-{
-    player_ptr->dungeon_idx = dun_idx;
-    player_ptr->current_floor_ptr->dun_level = depth;
-    prepare_change_floor_mode(player_ptr, CFM_RAND_PLACE);
-    if (!is_in_dungeon(player_ptr)) {
-        player_ptr->dungeon_idx = 0;
-    }
-
-    player_ptr->current_floor_ptr->inside_arena = false;
-    player_ptr->wild_mode = false;
-    leave_quest_check(player_ptr);
-    if (record_stair) {
-        exe_write_diary(player_ptr, DIARY_WIZ_TELE, 0, nullptr);
-    }
-
-    player_ptr->current_floor_ptr->quest_number = QuestId::NONE;
-    PlayerEnergy(player_ptr).reset_player_turn();
-    player_ptr->energy_need = 0;
-    prepare_change_floor_mode(player_ptr, CFM_FIRST_FLOOR);
-    player_ptr->leaving = true;
 }

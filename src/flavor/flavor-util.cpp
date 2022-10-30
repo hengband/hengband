@@ -18,7 +18,7 @@ flavor_type *initialize_flavor_type(flavor_type *flavor_ptr, char *buf, ObjectTy
     flavor_ptr->buf = buf;
     flavor_ptr->o_ptr = o_ptr;
     flavor_ptr->mode = mode;
-    flavor_ptr->kindname = k_info[o_ptr->k_idx].name.c_str();
+    flavor_ptr->kindname = baseitems_info[o_ptr->k_idx].name.c_str();
     flavor_ptr->basenm = flavor_ptr->kindname;
     flavor_ptr->modstr = "";
     flavor_ptr->aware = false;
@@ -32,8 +32,8 @@ flavor_type *initialize_flavor_type(flavor_type *flavor_ptr, char *buf, ObjectTy
     flavor_ptr->b2 = ']';
     flavor_ptr->c1 = '{';
     flavor_ptr->c2 = '}';
-    flavor_ptr->k_ptr = &k_info[o_ptr->k_idx];
-    flavor_ptr->flavor_k_ptr = &k_info[flavor_ptr->k_ptr->flavor];
+    flavor_ptr->k_ptr = &baseitems_info[o_ptr->k_idx];
+    flavor_ptr->flavor_k_ptr = &baseitems_info[flavor_ptr->k_ptr->flavor];
     return flavor_ptr;
 }
 
@@ -194,16 +194,16 @@ char *get_ability_abbreviation(char *short_flavor, ObjectType *o_ptr, bool kanji
     char *prev_ptr = short_flavor;
     auto flgs = object_flags(o_ptr);
     if (!all) {
-        auto *k_ptr = &k_info[o_ptr->k_idx];
+        auto *k_ptr = &baseitems_info[o_ptr->k_idx];
         flgs.reset(k_ptr->flags);
 
         if (o_ptr->is_fixed_artifact()) {
-            const auto &a_ref = a_info.at(o_ptr->fixed_artifact_idx);
+            const auto &a_ref = artifacts_info.at(o_ptr->fixed_artifact_idx);
             flgs.reset(a_ref.flags);
         }
 
         if (o_ptr->is_ego()) {
-            auto *e_ptr = &e_info[o_ptr->ego_idx];
+            auto *e_ptr = &egos_info[o_ptr->ego_idx];
             flgs.reset(e_ptr->flags);
         }
     }

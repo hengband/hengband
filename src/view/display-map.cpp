@@ -20,6 +20,7 @@
 #include "system/monster-type-definition.h"
 #include "system/object-type-definition.h"
 #include "system/player-type-definition.h"
+#include "system/terrain-type-definition.h"
 #include "term/term-color-types.h"
 #include "timed-effect/player-blindness.h"
 #include "timed-effect/player-hallucination.h"
@@ -44,7 +45,7 @@ char image_monster_hack[MAX_IMAGE_MONSTER_HACK] = "abcdefghijklmnopqrstuvwxyzABC
 static void image_object(TERM_COLOR *ap, char *cp)
 {
     if (use_graphics) {
-        auto *k_ptr = &k_info[randint1(k_info.size() - 1)];
+        auto *k_ptr = &baseitems_info[randint1(baseitems_info.size() - 1)];
         *cp = k_ptr->x_char;
         *ap = k_ptr->x_attr;
         return;
@@ -64,7 +65,7 @@ static void image_monster(TERM_COLOR *ap, char *cp)
 {
     if (use_graphics) {
         auto r_idx = MonsterRace::pick_one_at_random();
-        auto *r_ptr = &r_info[r_idx];
+        auto *r_ptr = &monraces_info[r_idx];
         *cp = r_ptr->x_char;
         *ap = r_ptr->x_attr;
         return;
@@ -99,7 +100,7 @@ static void image_random(TERM_COLOR *ap, char *cp)
  * 周り全てが壁に囲まれている壁についてはオプション状態による。
  * 1か所でも空きがあるか、壁ではない地形、金を含む地形、永久岩は表示。
  */
-static bool is_revealed_wall(floor_type *floor_ptr, feature_type *f_ptr, POSITION y, POSITION x)
+static bool is_revealed_wall(FloorType *floor_ptr, TerrainType *f_ptr, POSITION y, POSITION x)
 {
     if (view_hidden_walls) {
         if (view_unsafe_walls) {
@@ -110,11 +111,11 @@ static bool is_revealed_wall(floor_type *floor_ptr, feature_type *f_ptr, POSITIO
         }
     }
 
-    if (f_ptr->flags.has_not(FloorFeatureType::WALL) || f_ptr->flags.has(FloorFeatureType::HAS_GOLD)) {
+    if (f_ptr->flags.has_not(TerrainCharacteristics::WALL) || f_ptr->flags.has(TerrainCharacteristics::HAS_GOLD)) {
         return true;
     }
 
-    if (in_bounds(floor_ptr, y, x) && f_ptr->flags.has(FloorFeatureType::PERMANENT)) {
+    if (in_bounds(floor_ptr, y, x) && f_ptr->flags.has(TerrainCharacteristics::PERMANENT)) {
         return true;
     }
 
@@ -128,8 +129,8 @@ static bool is_revealed_wall(floor_type *floor_ptr, feature_type *f_ptr, POSITIO
         }
 
         FEAT_IDX f_idx = floor_ptr->grid_array[dy][dx].feat;
-        feature_type *n_ptr = &f_info[f_idx];
-        if (n_ptr->flags.has(FloorFeatureType::WALL)) {
+        TerrainType *n_ptr = &terrains_info[f_idx];
+        if (n_ptr->flags.has(TerrainCharacteristics::WALL)) {
             n++;
         }
     }
@@ -152,10 +153,10 @@ void map_info(PlayerType *player_ptr, POSITION y, POSITION x, TERM_COLOR *ap, ch
     auto *floor_ptr = player_ptr->current_floor_ptr;
     auto *g_ptr = &floor_ptr->grid_array[y][x];
     FEAT_IDX feat = g_ptr->get_feat_mimic();
-    auto *f_ptr = &f_info[feat];
+    auto *f_ptr = &terrains_info[feat];
     TERM_COLOR a;
     char c;
-    if (f_ptr->flags.has_not(FloorFeatureType::REMEMBER)) {
+    if (f_ptr->flags.has_not(TerrainCharacteristics::REMEMBER)) {
         auto is_visible = any_bits(g_ptr->info, (CAVE_MARK | CAVE_LITE | CAVE_MNLT));
         auto is_glowing = match_bits(g_ptr->info, CAVE_GLOW | CAVE_MNDK, CAVE_GLOW);
         auto can_view = g_ptr->is_view() && (is_glowing || player_ptr->see_nocto);
@@ -170,7 +171,7 @@ void map_info(PlayerType *player_ptr, POSITION y, POSITION x, TERM_COLOR *ap, ch
                 }
             } else if (darkened_grid(player_ptr, g_ptr)) {
                 feat = (view_unsafe_grids && (g_ptr->info & CAVE_UNSAFE)) ? feat_undetected : feat_none;
-                f_ptr = &f_info[feat];
+                f_ptr = &terrains_info[feat];
                 a = f_ptr->x_attr[F_LIT_STANDARD];
                 c = f_ptr->x_char[F_LIT_STANDARD];
             } else if (view_special_lite) {
@@ -191,7 +192,7 @@ void map_info(PlayerType *player_ptr, POSITION y, POSITION x, TERM_COLOR *ap, ch
             }
         } else {
             feat = (view_unsafe_grids && (g_ptr->info & CAVE_UNSAFE)) ? feat_undetected : feat_none;
-            f_ptr = &f_info[feat];
+            f_ptr = &terrains_info[feat];
             a = f_ptr->x_attr[F_LIT_STANDARD];
             c = f_ptr->x_char[F_LIT_STANDARD];
         }
@@ -206,9 +207,9 @@ void map_info(PlayerType *player_ptr, POSITION y, POSITION x, TERM_COLOR *ap, ch
                     c = f_ptr->x_char[F_LIT_DARK];
                 }
             } else if (darkened_grid(player_ptr, g_ptr) && !is_blind) {
-                if (f_ptr->flags.has_all_of({ FloorFeatureType::LOS, FloorFeatureType::PROJECT })) {
+                if (f_ptr->flags.has_all_of({ TerrainCharacteristics::LOS, TerrainCharacteristics::PROJECT })) {
                     feat = (view_unsafe_grids && (g_ptr->info & CAVE_UNSAFE)) ? feat_undetected : feat_none;
-                    f_ptr = &f_info[feat];
+                    f_ptr = &terrains_info[feat];
                     a = f_ptr->x_attr[F_LIT_STANDARD];
                     c = f_ptr->x_char[F_LIT_STANDARD];
                 } else if (view_granite_lite && view_bright_lite) {
@@ -231,7 +232,7 @@ void map_info(PlayerType *player_ptr, POSITION y, POSITION x, TERM_COLOR *ap, ch
                     } else if ((g_ptr->info & (CAVE_GLOW | CAVE_MNDK)) != CAVE_GLOW) {
                         a = f_ptr->x_attr[F_LIT_DARK];
                         c = f_ptr->x_char[F_LIT_DARK];
-                    } else if (f_ptr->flags.has_not(FloorFeatureType::LOS) && !check_local_illumination(player_ptr, y, x)) {
+                    } else if (f_ptr->flags.has_not(TerrainCharacteristics::LOS) && !check_local_illumination(player_ptr, y, x)) {
                         a = f_ptr->x_attr[F_LIT_DARK];
                         c = f_ptr->x_char[F_LIT_DARK];
                     }
@@ -239,7 +240,7 @@ void map_info(PlayerType *player_ptr, POSITION y, POSITION x, TERM_COLOR *ap, ch
             }
         } else {
             feat = (view_unsafe_grids && (g_ptr->info & CAVE_UNSAFE)) ? feat_undetected : feat_none;
-            f_ptr = &f_info[feat];
+            f_ptr = &terrains_info[feat];
             a = f_ptr->x_attr[F_LIT_STANDARD];
             c = f_ptr->x_char[F_LIT_STANDARD];
         }
@@ -305,7 +306,7 @@ void map_info(PlayerType *player_ptr, POSITION y, POSITION x, TERM_COLOR *ap, ch
         return;
     }
 
-    auto *r_ptr = &r_info[m_ptr->ap_r_idx];
+    auto *r_ptr = &monraces_info[m_ptr->ap_r_idx];
     feat_priority = 30;
     if (is_hallucinated) {
         if (r_ptr->visual_flags.has_all_of({ MonsterVisualType::CLEAR, MonsterVisualType::CLEAR_COLOR })) {
@@ -376,7 +377,7 @@ void map_info(PlayerType *player_ptr, POSITION y, POSITION x, TERM_COLOR *ap, ch
     if (r_ptr->visual_flags.has(MonsterVisualType::SHAPECHANGER)) {
         if (use_graphics) {
             auto r_idx = MonsterRace::pick_one_at_random();
-            monster_race *tmp_r_ptr = &r_info[r_idx];
+            monster_race *tmp_r_ptr = &monraces_info[r_idx];
             *cp = tmp_r_ptr->x_char;
             *ap = tmp_r_ptr->x_attr;
         } else {

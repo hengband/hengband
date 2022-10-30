@@ -3,10 +3,10 @@
 #include "util/enum-converter.h"
 
 /*!
- * @brief Feature flags - should be used instead of feature indexes unless generating.
- * Originally from UnAngband, and modified into TR-like style in Hengband
+ * @brief 地形特性フラグ群定義
+ * @details Originally from UnAngband
  */
-enum class FloorFeatureType {
+enum class TerrainCharacteristics {
     LOS = 0, /*!< 視界が通る地形である */
     PROJECT = 1, /*!< 飛び道具が通過できる地形である */
     MOVE = 2, /*!< 移動可能な地形である */
@@ -22,7 +22,7 @@ enum class FloorFeatureType {
     DISARM = 12, /*!< 解除コマンドの対象となる地形である */
     STORE = 13, /*!< 店舗の入口となる地形である */
     TUNNEL = 14, /*!< 魔王変化などで掘り進められる地形である */
-    MAY_HAVE_GOLD = 15, /*!< 何か財宝を隠した可能性のある地形である？(f_infoに使用している地形なし) */
+    MAY_HAVE_GOLD = 15, /*!< 何か財宝を隠した可能性のある地形である？(TerrainDefinitionsに使用している地形なし) */
     HAS_GOLD = 16, /*!< 財宝を含んだ地形である */
     HAS_ITEM = 17, /*!< アイテムを含んだ地形である */
     DOOR = 18, /*!< ドアのある地形である */
@@ -37,7 +37,7 @@ enum class FloorFeatureType {
     PERMANENT = 27, /*!< 絶対に破壊できない永久地形である */
     HIT_TRAP = 31, /*!< トラップのある地形である(TRAPと常に重複している？) */
     GLOW = 37, /*!< 常に光っている地形である */
-    ENSECRET = 38, /*!< 不明(f_info.txt上で利用している地形がない) */
+    ENSECRET = 38, /*!< 不明(TerrainDefinitions上で利用している地形がない) */
     WATER = 39, /*!< 水のある地形である */
     LAVA = 40, /*!< 溶岩のある地形である */
     SHALLOW = 41, /*!< 浅い地形である */
@@ -73,4 +73,4 @@ enum class FloorFeatureType {
     MAX,
 };
 
-constexpr auto FF_FLAG_MAX = enum2i(FloorFeatureType::MAX);
+constexpr auto FF_FLAG_MAX = enum2i(TerrainCharacteristics::MAX);

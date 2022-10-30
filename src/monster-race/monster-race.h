@@ -6,7 +6,7 @@
 
 enum class MonsterRaceId : int16_t;
 struct monster_race;
-extern std::map<MonsterRaceId, monster_race> r_info;
+extern std::map<MonsterRaceId, monster_race> monraces_info;
 
 class MonsterRace {
 public:
