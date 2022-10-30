@@ -1,0 +1,117 @@
+# File: 020_VaporQuest.txt
+# a quick creation by Jeff Coleburn <vsp@netaxs.com>
+
+# Name
+Q:$20:N:Vapor Quest
+Q:20:N:謎の障気
+
+# Definition
+Q:$20:Q:6:0:0:0:25:0:0:0:6
+Q:20:Q:6:0:0:0:25:0:0:0:6
+
+# Description for quest
+?:[LEQ $QUEST20 2]
+Q:$20:T:Something curious has taken root beneath our Inn.  Celebor,
+Q:$20:T:the innkeeper, has reported strange vapors and auras in the
+Q:$20:T:basement that drive out all living things.  A caged canary was
+Q:$20:T:placed there to test the air quality; it died within minutes,
+Q:$20:T:though the strange scents had vanished when the investigators
+Q:$20:T:returned.  Then, suddenly, it was as if the air itself attacked!
+Q:$20:T:Please see if you can detect what is amiss.
+Q:20:T:何か奇妙なことが宿屋の地下で起こっているようです。
+Q:20:T:宿屋の主人ケレボールは、地下室の中の奇妙な蒸気とオーラが
+Q:20:T:生きているもの全てを追い出したと言っています。カナリアを
+Q:20:T:鳥カゴに入れて置いてみたところ、ものの数分で死んでしまいました。
+Q:20:T:奇妙な臭いは調査員が戻った時には消えてしまいましたが、その時突然
+Q:20:T:あたかも空気そのものが襲ってきたと感じたそうです！どうか、何が起
+Q:20:T:きているのか確かめてきて下さい。
+?:1
+
+# Description for quest reward
+?:[EQU $QUEST20 3]
+Q:$20:T:Strange tidings indeed.  Where eldritch vapors gather, more 
+Q:$20:T:dangerous creatures are often nearby.  Perhaps this is an ill
+Q:$20:T:omen of dangers yet to come...  We may be in need of your services
+Q:$20:T:again soon; the gift waiting outside may help you detect what
+Q:$20:T:evils plague this land.
+Q:20:T:全く奇妙な話です。おどろおどろしい気が集まる場所には、更に恐ろしい
+Q:20:T:魔物がいるものです。おそらく今回の件は来たるべき危機の凶兆なので
+Q:20:T:しょう。あなたの助けが再び必要となる日がそのうち来ると思います。
+Q:20:T:外に置いてあるお礼は、この地に広がろうとしている邪悪なものを見つける
+Q:20:T:のに役立つでしょう。
+?:1
+
+# Description for quest failed
+?:[EQU $QUEST20 5]
+Q:$20:T:I've sent out someone else to do the job.  Now leave me alone!
+Q:20:T:既に他の者に仕事を任せてあります。しばらく私を一人にさせてください！
+?:1
+
+# Floor with Space Monster
+F:a:FLOOR:8:144
+
+# Floor with Clear mushroom patch
+F:b:FLOOR:8:184
+
+# Floor with Air spirit
+F:c:FLOOR:8:227
+
+# Floor with Lurker
+F:d:FLOOR:8:247
+
+# Floor with Clear hound
+F:e:FLOOR:8:282
+
+# Floor with Stunwall
+F:f:FLOOR:8:326
+
+# Floor with Landmine
+F:g:FLOOR:8:333
+
+# Floor with Vampiric Mist
+F:h:FLOOR:8:365
+
+# Floor with Black
+F:i:FLOOR:8:402
+
+# Floor with Weird fume
+F:j:FLOOR:8:625
+
+# Dungeon layout
+D:XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+D:X.T...........T.%T.....%.....T..D....%..D..%.jX
+D:X..haiahaiahai..%%.....%.hhhh..%%i...%..%.TD.TX
+D:X................%%...j%.hhhh.%%.....%.%%%%%%%X
+D:X%%%D%%%%%%%%D%%%%%%...%...g.%%..Ti..%.%hhhhhhX
+D:X.................%%%D%%%%%D%%%i..i..%.%%%%%D%X
+D:X..............j..%...........%i...i.%g%......X
+D:X.................%...........%..i...%.%..T...X
+D:X%%%%%%%gg%%%%%%%%%......a....%%%%%%%%.%%%D%%%X
+D:X%%%%%%%..%....c.....................%.D......X
+D:X%%TT%%%..%............fff...........%.%%%%%%%X
+D:X%%dd%%%T.%......d..d..%%f..a..e.e...%.%......X
+D:X%....%%..%....a.......%%f...........%.D......X
+D:X%....%%..%............fff...........%.%......X
+D:X%..a.%%..%.....................e....%.%......X
+D:X%....%%..%...............c..........%.%..T...X
+D:X%....%%..%%%%%%%%%...........%%%%%%%%.%%%%%%%X
+D:X%.a..%%..%...T...%...........%f..........%.a.X
+D:X%....%%..D......T%....bbb....%f.....e....%...X
+D:X%....%%..%%%%%%%%%%%%%%D%%%%%%f.....e....%...X
+D:X%....%%e.........%.....d.....%f....e.....%.c.X
+D:X%.i..%%....c.....%...........%f....e.e...%...X
+D:X%....%%e.........%...........%f..........%...X
+D:X%....%%..........%...c.......%f..........D...X
+D:X%....%%%%%D%%%%%%%...........%%..........%...X
+D:X%....bb.....%.a..D...........D....e......%.T.X
+D:X%....bb.....%....%.bbbbbbbbb.%%...e......%...X
+D:X%....%%%....D....%.bbbbbbbbb.%f......e...%.c.X
+D:X%....%%%....%.a..%...........%f......e...%...X
+D:X%....he.....%....%...........%f...e......%...X
+D:X%....ab.....%.c..%...<.......%f..........%..cX
+D:XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+
+# Starting position
+P:30:23
+
+

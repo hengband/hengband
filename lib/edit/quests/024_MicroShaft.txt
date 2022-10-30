@@ -1,0 +1,192 @@
+# File: 024_MicroShaft.txt
+
+# Name
+Q:$24:N:The Rise and Fall of Micro$oft
+Q:24:N:マイクロンフトの興亡
+
+# type:num_mon:cur_num:max_num:level:r_idx:k_idx
+Q:$24:Q:1:0:0:1:50:732:0:0:6
+Q:24:Q:1:0:0:1:50:732:0:0:6
+
+# Description for quest
+?:[LEQ $QUEST24 2]
+Q:$24:T:A mysterious building has appeared, with the eldritch runes "M$"
+Q:$24:T:inscribed in its walls. An aura of evil radiates from this building.
+Q:$24:T:People in nearby villages have lost their money and sanity, and
+Q:$24:T:turned into mindless zombies. Beware -- it is rumoured that the
+Q:$24:T:Dark Lord who dwells inside this mansion of vast evil is the
+Q:$24:T:Apocalyptic Beast himself! Who knows what unspeakable secrets lurk
+Q:$24:T:inside?
+Q:24:T:壁におどろおどろしい「Ｍ＄」というルーン文字が刻まれている、謎の
+Q:24:T:建物が現れました。この建物は悪のオーラを発しています。
+Q:24:T:近くの村の人々は金と理性を失い、心を持たぬゾンビとなってしまい
+Q:24:T:ました。気をつけて下さい！あの巨大な悪の城に棲む暗黒の帝王は
+Q:24:T:黙示録の獣そのものであると噂されています。そしてあの建物の中にどんな
+Q:24:T:言うもおぞましい秘密が潜んでいるのかは誰も知りません。
+?:1
+
+# Description for quest reward
+?:[EQU $QUEST24 3]
+Q:$24:T:Thank you for killing the demon! A small reward awaits you outside.
+Q:24:T:悪魔を打ち倒してくれてありがとうございます！ささやかなお礼を
+Q:24:T:外に置いておきました。
+?:1
+
+# Description for quest failed
+?:[EQU $QUEST24 5]
+Q:$24:T:You have brought a terrible thing upon us! Now Micro$oft has 
+Q:$24:T:an absolute monopoly on everything in this town, this country,
+Q:$24:T:this world! Every item sold anywhere is now M$-licenced and
+Q:$24:T:M$ gets a part of the profit. And there's no guarantee that
+Q:$24:T:the overall quality of the wares will improve...
+Q:$24:T:I notice that you have not received the Official M$ Licence 
+Q:$24:T:number on your forehead yet. I don't know if anyone will sell
+Q:$24:T:you anything before you get one.
+Q:24:T:あなたは恐ろしいことをしてしまった！マイクロンフトは今この
+Q:24:T:街、いやこの国、いや全世界で全ての市場を独占している！
+Q:24:T:あらゆる場所のあらゆる商品はＭ＄のライセンス商品となり、
+Q:24:T:Ｍ＄が利益を徴収している。しかも将来品質が改善される
+Q:24:T:保証は全く無いのだ！あなたはまだ額にマイクロンフトの
+Q:24:T:公式ライセンス番号をつけてないようだが、番号をもらわない内は
+Q:24:T:きっと誰もあなたに物を売ってくれないよ。
+?:1
+
+# Trap
+F:t:FLOOR:8:0:0:0:0:*
+
+# Darkness, no tele
+F:s:FLOOR:12
+
+# Wall
+F:#:GRANITE:8
+
+# Deep lava, no tele
+F:5:DEEP_LAVA:12
+F:6:DEEP_LAVA:12
+
+# Shallow lava, no tele
+F:l:SHALLOW_LAVA:12
+
+# Software bug
+F:a:FLOOR:8:246
+
+# Novice rogue
+F:b:FLOOR:8:44
+F:c:FLOOR:8:44
+
+# Door
+F:+:CLOSED_DOOR:8
+
+# Bandit
+F:d:FLOOR:8:150
+
+# Master rogue
+F:e:FLOOR:8:376
+
+# Master thief
+F:f:FLOOR:8:516 
+
+# Gates himself
+F:g:FLOOR:12:732
+
+# Chronium edge
+F:h:FLOOR:8:1245
+
+# Internet Exploder + no tele
+F:i:FLOOR:12:921
+
+# Money
+F:$:FLOOR:8:0:488
+
+# Money + Master Thief
+F:%:FLOOR:8:516:488
+
+# Money + Software bug
+F:&:FLOOR:8:246:488
+
+# Junk & Cursed items
+
+#F:A:FLOOR:8:0:394
+F:A:FLOOR:8
+#F:B:FLOOR:8:0:398
+F:B:FLOOR:8
+
+#F:C:SHALLOW_LAVA:12:0:57:102
+F:C:SHALLOW_LAVA:12
+#F:D:SHALLOW_LAVA:12:0:36:102
+F:D:SHALLOW_LAVA:12
+#F:E:SHALLOW_LAVA:12:0:72:102
+F:E:SHALLOW_LAVA:12
+
+#F:F:SHALLOW_LAVA:12:0:124:46
+F:F:SHALLOW_LAVA:12
+#F:G:SHALLOW_LAVA:12:0:124:45
+F:G:SHALLOW_LAVA:12
+#F:H:SHALLOW_LAVA:12:0:98:36
+F:H:SHALLOW_LAVA:12
+#F:I:SHALLOW_LAVA:12:0:99:37
+F:I:SHALLOW_LAVA:12
+#F:J:SHALLOW_LAVA:12:0:100:36
+F:J:SHALLOW_LAVA:12
+
+
+# Micro$oft HQ
+D:XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+D:Xa.A......AAXtttttttttttttttttttttttttttttttttttttttttttttttttttXABAA.........X
+D:X.......B.XXXtttttXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX+XXAAAA.........X
+D:X...B...XXXttttXXXXX...........................................XXXXX..........X
+D:X.......XtttttXX....................XXXXXXXXXXX....................XX.........X
+D:X.......XtttXXX.....................XsssssssssX.....................XXX.eeeeeeX
+D:XffffffXXttXX.......................XssssgssssX.......................XX.eeeeeX
+D:XdddddXXttXX........................XsssssssssX........................XXfffffX
+D:XeeeeeXttXX.....................llllXsssssssssXllll.....................XXX+X+X
+D:XX+XX+XtXX........h..........lllllllXsssssssssXlllllll.........h.........XXtXtX
+D:X...XtXtX.................llllllllllXsssssssssXllllllllll.................XtXtX
+D:X...XtXtX................lllllllllllXsssssssssXlllllllllll................XtXtX
+D:X...XtXtX..............lllllllllllllXsssssssssXlllllllllllll..............XtXtX
+D:X.a.XtXtX.............l55lllllllllllXsssssssssXlllllllllll55l.............XtXtX
+D:XabaXtXtX............ll5555lllllllllXsssssssssXlllllllll5555ll............XtXtX
+D:X.a.XtXtX...........llll5l555lllllllXsssssssssXlllllll555l5llll...........XtXtX
+D:X...XtXtX...........llll55ll55llllllXsssssssssXllllll55ll55llll...........XtXtX
+D:X.a.XtXtX..........llllll5lll55lllllXsssssssssXlllll55lll5llllll..........XtXtX
+D:XabaXtXtX..........llllll55lll555lllXsssssssssXlll555lll55llllll..........XtXtX
+D:XdadXtXtX.........llllllll5lllll55llXsssssssssXll55lllll5llllllll.........XtXtX
+D:XX+XXtXtX.........llllllll55lllll55lXsssssssssXl55lllll55llllllll.........XtXtX
+D:XA..XtXtX........llllllllll5llllll55XsssssssssX55llllll5llllllllll........XtXtX
+D:X.a.XtXtX........llllllllll55lllllIEXsssssssssXFJlllll55llllllllll........XtXtX
+D:Xa.aXtXtX........lllllXXXXXXXXXXXXXXXsssssssssXXXXXXXXXXXXXXXXllll........XtXtX
+D:X.a.XtXtX.......llllllXssssssssssssssssssssssssssssssssssssssXlllll.......XtXtX
+D:Xa.aXtXtX.......llllllXssssssssss666ssss666ssss666sssssssssssXlllll.......XtXtX
+D:X.a.XtXtX.......llllllXsssssssss66s66ss66s66ss66s66ssssssssssXlllll.......XtXtX
+D:X..BXtXtX.......llllllXsssssssss66sssss66sssss66sssssssssssssXlllll.......XtXtX
+D:X...XtXtX.......llllllXsisssssss6666sss6666sss6666sssssssssisXlllll.......XtXtX
+D:XX+XXtXtX.......llllllXsssssssss66s66ss66s66ss66s66ssssssssssXlllll.......XtXtX
+D:X...XtXtX.......llllllXsssssssss66s66ss66s66ss66s66ssssssssssXlllll.......XtXtX
+D:X...XtXtX.......llllllXssssssssss666ssss666ssss666sssssssssssXlllll.......XtXtX
+D:X...XtXtX........lllllXssssssssssssssssssssssssssssssssssssssXllll........XtXtX
+D:X...XtXtX........lllllXXXXXXXXXXXXXXXsssssssssXXXXXXXXXXXXXXXXllll........XtXtX
+D:X...XtXtX........llllllllllll55ll55DXsssssssssXC55ll55llllllllllll........XtXtX
+D:X...XtXtX.........llllllllll55llll5HXsssssssssXG5llll55llllllllll.........XtXtX
+D:X.XbXtXtX.........llllllll555lllll55XsssssssssX55lllll555llllllll.........XtXtX
+D:X.XbXtXtX.........lllllll55llllllll5XsssssssssX5llllllll55lllllll.........XtXtX
+D:X.XbXtXtX..........lllll55lllllllll5XsssssssssX5lllllllll55lllll..........XtXtX
+D:XAXbXtXtX...........lll55llllllllll5XssssissssX5llllllllll55lll...........XtXtX
+D:X.XbXtXtX...........ll55555555555555XsssssssssX55555555555555ll...........XtXtX
+D:X.XbXtXtX............lllllllllllllllXXXXX#XXXXXlllllllllllllll............XtXtX
+D:XAXbXtXtX.............llllllllllllllll5lllll5llllllllllllllll.............XtXtX
+D:X.XbXtXtX.......h......lllllllllllllll55lll55lllllllllllllll....h.........XtXtX
+D:X.XbXtXtXX..............lllllllllllllll5lll5lllllllllllllll..............XX+XtX
+D:X.XbXtXtXXXX..............lllllllllllll55l55lllllllllllll..............XXX$$XtX
+D:XAXcXtXtX$$XX................lllllllllll555lllllllllll................XX$$$$XtX
+D:X.XcXtXtX$$$XXX.................lllllllll5lllllllll.................XXX$$$$$XtX
+D:X.XcXtX+XX&&$XXXX...................lllllllllll...................XXXX$&$$$$XtX
+D:X.XdXtX$$$%%%$$XXXXX.....................h.....................XXXXX$$&%%$$$XtX
+D:X.XXXtX$$$$$$$$$$$XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX$$$$$$$$$$$XtX
+D:XA.AXtX$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$XtX
+D:XX+XXtXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXtX
+D:X<..XtttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttX
+D:XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+
+# Starting position
+P:53:1
+

@@ -1,0 +1,148 @@
+# File: 033_CloningPits.txt
+# By Shayne Steele (steele@cs.fsu.edu)
+
+# Name The Cloning Pits
+Q:$33:N:The Cloning Pits
+Q:33:N:クローン地獄
+
+# Definition 
+Q:$33:Q:6:0:0:0:45:0:0:0:6
+Q:33:Q:6:0:0:0:45:0:0:0:6
+
+# Description for quest
+?:[LEQ $QUEST33 2]
+Q:$33:T:For the past few years we have been cloning exceptionally powerful 
+Q:$33:T:creatures for gladiatorial combat.  Something has gone very wrong in 
+Q:$33:T:the Cloning Pits. Please eliminate ALL the clones, you will be well
+Q:$33:T:rewarded.  The active security systems have stopped working. The
+Q:$33:T:clones can use magic, teleport, summon, etc..   "The Ultimate Dungeon 
+Q:$33:T:Cleaner" security bots are no longer controlled, so you will 
+Q:$33:T:eliminate them too.  Levitation and a good distance weapon are
+Q:$33:T:needed.  The entrance to the pits is in a building behind the inn.  
+Q:33:T:ここ数年、我々は強い剣闘士の軍勢を作るため、特別に強力な生物の
+Q:33:T:クローンを作って来ました。しかしクローン研究所で何か非常にまずい
+Q:33:T:ことが起きてしまいました。どうか全てのクローンを破壊して下さい。
+Q:33:T:報酬ははずみます。内部の自動保安システムは止まってしまったため、
+Q:33:T:クローンは魔法やテレポートや召喚をすることが出来ます。
+Q:33:T:保安ロボットである『究極ダンジョンクリーナー』も暴走してしまった
+Q:33:T:ので、それらも破壊して下さい。浮遊と強力な飛び道具が必要になる
+Q:33:T:でしょう。入口は宿屋の裏の建物にあります。
+?:1
+
+# Description for quest reward
+?:[EQU $QUEST33 3]
+Q:$33:T:Impressive!! Your reward is waiting for you outside.
+Q:33:T:素晴らしい!! お礼を外に置いておきました。
+?:1
+
+# Description for quest failed
+?:[EQU $QUEST33 5]
+Q:$33:T:It seems like this task was too difficult for you.
+Q:33:T:この仕事はあなたには難しかったようですね。
+?:1
+
+# The Monsters
+# Fang, Farmer Maggot's dog (level:2, Speed:120, XP:30, #:6) *Monster food*
+F:c:FLOOR:8:c55
+
+# Freesia (level:2, Speed:120, XP:33, #:6) *Monster food*
+F:f:FLOOR:8:c57
+
+# It (level:24, Speed:110, XP:400, #:3)
+F:I:FLOOR:8:c393
+
+# Barney the Dinosaur (level:29, Speed:120, XP:500, #:3) 
+F:R:FLOOR:8:c441
+
+# The Ultimate Dungeon Cleaner (level:28, Speed:120, XP:555, #:6) 
+F:g:FLOOR:8:c451
+
+# Bokrug (level:33, Speed:110 XP:1600, #:3)
+F:S:FLOOR:8:c489
+
+# Grendel (level:27, Speed:120, XP:1500, #:5)                
+F:O:FLOOR:8:c431
+
+# Tom the Stone Troll (level:33, Speed:110, XP:2000, #:5) 
+F:M:FLOOR:8:c495
+
+# Fasolt the Giant (level:33, Speed:110, XP:2000, #:5) 
+F:P:FLOOR:8:c506
+
+# Jurt the Living Trump (level:34, Speed:120, XP:1200, #:3)
+F:p:FLOOR:8:c517
+
+# The Borshin (level:10, Speed:110, XP:45, #:4)
+F:t:FLOOR:8:c177
+
+# Rogrog the Black Troll (level:36, Speed:120, XP:5000, #:5)
+F:r:FLOOR:8:c551
+
+# The Queen Ant (level:37, Speed:120, XP:1000, #:3)
+F:a:FLOOR:8:c581
+
+# Father Dagon (level:38, Speed:120, XP:3250, #:3)
+F:u:FLOOR:8:c595
+
+# Random monster 5 levels out of depth
+F:5:FLOOR:8:*5
+
+# The Doors, Floors, an Features 
+
+# Normal floor 
+F: :FLOOR:8
+
+# locked door
+F:|:LOCKED_DOOR_7:8
+
+# Trees
+F:E:TREE:1
+
+# Deep Lava
+F:L:DEEP_LAVA:3
+
+# Chasm
+F:C:DARK_PIT:1
+
+# The Objects
+# *HEALING* potion
+F:Y:FLOOR:8:0:419
+
+# Piece of Elvish Waybread
+F:e:FLOOR:8:0:25
+
+# Dungeon layout
+D:XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+D:X                    |              | |  | |              |                    X
+D:X  O  E         O    |   r          | |  | |       M      |      P       E  P  X
+D:X        O         %%%         EE   %%%gg%%%   EE         %%%                  X
+D:X   E              %       E        LCW  WCL        E       % P            E   X
+D:X            O     %  r   E  r      LCW  WCL     M   E   M  %    P    P        X
+D:X                  %      E         LCW  WCL         E      %                  X
+D:X   O      %%%%%%%%%   r            LCW  WCL                %%%%%%%%%          X
+D:X        %%%                       LLCW  WCLL      M                %%%        X
+D:X||%%%%%%%   r       EE E         LLCCW  WCCLL          E EE    M     %%%%%%%||X
+D:X  %                              LCCWW  WWCCL                              %  X
+D:X  %LLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLCWW    WWCLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLL%  X
+D:X  %CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCW %%%% WCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC%  X
+D:X||%WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW %<|| WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW%||X
+D:X  g                                  %%%%                                  g  X
+D:X  g                                                                        g  X
+D:XEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE%%||%%EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEX
+D:XCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC%%E  E%%CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCX
+D:XEEEEEEEEEEEEEECEEEEEEEEEEECEEEEEEEE%CE  EC%EEEEEEEECEEEEEEEEEEECEEEEEEEEEEEEEEX
+D:X%%%%%%%%%%%% ECE %%%%%%% ECE %%%%%%%CE  EC%%%%%%% ECE %%%%%%% ECE %%%%%%%%%%%%X
+D:X  5 % S  S % ECE % I   % ECE % p   %CE  EC% u   % ECE % R   % ECE % a  a % 5  X
+D:X    %      % ECE %   I % ECE %   p %CE  EC%   u % ECE %   R % ECE %      %    X
+D:X 5      S  % ECE % I   % ECE % p   %CE  EC% u   % ECE % R   % ECE %  a      5 X
+D:X   5       % ECE %     % ECE %     %CEttEC%     % ECE %     % ECE %       5   X
+D:X%%%%%    %%% ECE %%   %% ECE %%   %%CE  EC%%   %% ECE %%   %% ECE %%%    %%%%%X
+D:Xccc |        ECE         ECE        CEttEC        ECE         ECE        | fffX
+D:Xccc |        ECE         ECE                      ECE         ECE        | fffX
+D:X%%%%%        ECE         ECE         %%%%         ECE         ECE        %%%%%X
+D:Xeee %                               %%YY%%                               % eeeX
+D:Xeee |                               |    |                               | eeeX
+D:XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+
+# Starting position
+P:13:39

@@ -1,0 +1,92 @@
+# File: 030_TenguAndDeathSword.txt
+# By Shayne Steele (steele@cs.fsu.edu)
+
+# Name Tengu and Death Swords
+Q:$30:N:Tengu and Death Swords
+Q:30:N:テングとデスソード
+
+# Definition 
+Q:$30:Q:6:0:0:0:25:0:0:0:6
+Q:30:Q:6:0:0:0:25:0:0:0:6
+
+# Description for quest
+?:[LEQ $QUEST30 2]
+Q:$30:T:The Magic Shop's owner is thinking of opening another Thieves Guild. 
+Q:$30:T:I do not need the competition, here is the key to the Magic Shop's
+Q:$30:T:back treasure room.  Destroy everything you find there and you will
+Q:$30:T:be rewarded.  The quest is located behind the Magic Shop.
+Q:30:T:魔法道具店の店主が新しい盗賊ギルドを開業しようとしているらしい。
+Q:30:T:俺には競争相手は要らない。ここに魔法道具店の裏の宝物庫の鍵がある。
+Q:30:T:お前がその中の全ての物を壊してくれば褒美をやる。
+Q:30:T:場所は魔法道具店の裏だ。
+?:1
+
+# Description for quest reward
+?:[EQU $QUEST30 3]
+Q:$30:T:You have done well, your reward is outside the door.
+Q:30:T:よくやった。報酬は外に置いてある。
+?:1
+
+# Description for quest failed
+?:[EQU $QUEST30 5]
+Q:$30:T:You have failed this quest, but keep what you have found. 
+Q:$30:T:Proceed to the next quest.
+Q:30:T:このクエストには失敗したようだが、見つけたアイテムはお前のものだ。
+Q:30:T:次のクエストに進め。
+?:1
+
+# The Monsters
+# Death sword (level:6, Speed:130, XP:30, #:16, Tot:480) with object 10 levels out of depth.
+F:|:FLOOR:8:107:*10
+
+# Death sword (level:6, Speed:130, XP:30, #:16, Tot:480) with object 1 levels out of depth.
+F:1:FLOOR:8:107:*1
+
+# Tengu (level:10, Speed:120, XP:40, #:8, Tot:320)
+F:u:FLOOR:8:194
+
+# Gelatinous cube (level:16, Speed:110, XP:80, #:4, Tot:320) on no-teleport grid.
+F:j:FLOOR:12:286
+
+# The doors, floors and treasures
+# Floor with amulet of Anti-Teleportation
+F:":FLOOR:8:0:522
+
+# Normal floor
+F: :FLOOR:8
+# Floor prohibits Teleport
+F:x:FLOOR:12
+
+# Alarm Traps
+F:^:TRAP_ALARM:12
+
+# Dungeon layout
+D:XXXXXXXXXXXXXXXXXXXXX
+D:XxxxxxxxxxxxxxxxxxxxX
+D:Xxjxxxxx^^^^^xxxxxjxX
+D:Xxx%%%%%%DDD%%%%%%xxX
+D:Xxx%             %xxX
+D:Xxx%  | u | u |  %xxX
+D:Xxx%             %xxX
+D:Xxx%  u 1 1 1 u  %xxX
+D:Xxx%             %xxX
+D:Xxx%  | 1 " 1 |  %xxX
+D:Xxx%             %xxX
+D:Xxx%  u 1 1 1 u  %xxX
+D:Xxx%             %xxX
+D:Xxx%  | u | u |  %xxX
+D:Xxx%             %xxX
+D:Xxx%%%%%%%%%%%%%%%xxX
+D:Xxjxxxxxx^^^xxxxxxjxX
+D:Xxxxxxxxx^<^xxxxxxxxX
+D:XXXXXXXXXXXXXXXXXXXXX
+
+# Starting position
+P:17:10
+
+
+
+
+
+
+

@@ -3,139 +3,141 @@
 # Includes all the quest files
 
 # Quest feature preferences
-%:q_pref.txt
+%:QuestPreferences.txt
 
-# Thieves Hideout
+# 盗賊の隠れ家
 ?:[EQU $QUEST_NUMBER 1]
-%:q0000001.txt
+%:quests/001_ThievesHideout.txt
 
-# Sever
+# 下水道
 ?:[EQU $QUEST_NUMBER 2]
-%:q0000002.txt
+%:quests/002_TheSewer.txt
 
-# Druid Shop
+# ログルス使い
 ?:[EQU $QUEST_NUMBER 3]
-%:q0000003.txt
+%:quests/003_LogrusMaster.txt
 
-# Vault
+# 宝物庫
 ?:[EQU $QUEST_NUMBER 4]
-%:q0000004.txt
+%:quests/004_TheVault.txt
 
-# Tower
+# 塔 1F
 ?:[EQU $QUEST_NUMBER 5]
-%:q0000005.txt
+%:quests/005_TheTower_1.txt
 
-# Tower part 2
+# 塔 2F
 ?:[EQU $QUEST_NUMBER 6]
-%:q0000006.txt
+%:quests/006_TheTower_2.txt
 
-# Tower part 3
+# 塔 3F
 ?:[EQU $QUEST_NUMBER 7]
-%:q0000007.txt
+%:quests/007_TheTower_3.txt
 
-# Oberon
+# オベロン討伐
 ?:[EQU $QUEST_NUMBER 8]
-%:q_oberon.txt
+%:quests/008_Oberon.txt
 
-# Serpent of Chaos
+# 混沌のサーペント討伐
 ?:[EQU $QUEST_NUMBER 9]
-%:q_serpen.txt
+%:quests/009_SerpentOfChaos.txt
 
-# Node of Sorcery
+# 仙術エネルギー特異点
 ?:[EQU $QUEST_NUMBER 10]
-%:q000sorc.txt
+%:quests/010_NodeOfSorcery.txt
 
-# Node of Chaos
+# カオスの特異点
 ?:[EQU $QUEST_NUMBER 11]
-%:q000chao.txt
+%:quests/011_NodeOfChaos.txt
 
-# Node of Nature
+# 自然魔術の特異点
 ?:[EQU $QUEST_NUMBER 12]
-%:q000natu.txt
+%:quests/012_NodeOfNature.txt
 
 # Quest #13 is still unfinished
+# 欠番、おそらく『海底都市』だったもの
 
-# Warg problem
+# ワーグを殱滅せよ
 ?:[EQU $QUEST_NUMBER 14]
-%:q_warg.txt
+%:quests/014_WargProblem.txt
 
-# Eric's Stronghold
+# エリックの要塞
 ?:[EQU $QUEST_NUMBER 15]
-%:q000eric.txt
+%:quests/015_EricStronghold.txt
 
-# Assault on Montsalvat
+# モンサルヴァト城への侵攻
 ?:[EQU $QUEST_NUMBER 16]
-%:q000dekn.txt
+%:quests/016_AssaultOnMontsalvat.txt
 
-# Quest #18 was returned!
-# Water Cave
+# クエストNo.17は欠番
+
+# 湖の洞窟
 ?:[EQU $QUEST_NUMBER 18]
-%:q00water.txt
+%:quests/018_WaterCave.txt
 
-# Doom Quest 1
+# 破滅のクエスト1
 ?:[EQU $QUEST_NUMBER 19]
-%:q0000019.txt
+%:quests/019_DoomQuest1.txt
 
-# Vapor Quest
+# 謎の瘴気
 ?:[EQU $QUEST_NUMBER 20]
-%:q0000020.txt
+%:quests/020_VaporQuest.txt
 
-# Doom Quest 2
+# 破滅のクエスト2
 ?:[EQU $QUEST_NUMBER 21]
-%:q0000021.txt
+%:quests/021_DoomQuest2.txt 
 
-# Orc Camp
+# オークのキャンプ
 ?:[EQU $QUEST_NUMBER 22]
-%:q0000022.txt
+%:quests/022_OrcCamp.txt
 
-# Spawning Pits
+# 増殖地獄
 ?:[EQU $QUEST_NUMBER 23]
-%:q0000023.txt
+%:quests/023_SpawningPits.txt
 
-# The Rise and Fall of Micro$oft
+# マイクロンフトの興亡
 ?:[EQU $QUEST_NUMBER 24]
-%:q00000ms.txt
+%:quests/024_MicroShaft.txt
 
-# Haunted House
+# 幽霊屋敷
 ?:[EQU $QUEST_NUMBER 25]
-%:qhaunted.txt
+%:quests/025_HauntedHouse.txt
 
-# Killing Fields
+# 激戦場
 ?:[EQU $QUEST_NUMBER 26]
-%:q0fields.txt
+%:quests/026_KillingFields.txt
 
-# The Old Castle
+# 古い城
 ?:[EQU $QUEST_NUMBER 27]
-%:q0000027.txt
+%:quests/027_TheOldCatsle.txt
 
-# Royal Crypt
+# 王家の墓
 ?:[EQU $QUEST_NUMBER 28]
-%:q0000028.txt
+%:quests/028_TheRoyalCrypt.txt
 
-# The Mimic's Treasure
+# ミミックの財宝
 ?:[EQU $QUEST_NUMBER 29]
-%:q0thief1.txt
+%:quests/029_TheMimicTreasure.txt
 
-# Tengu and Death Swords
+# テングとデスソード
 ?:[EQU $QUEST_NUMBER 30]
-%:q0thief2.txt
+%:quests/030_TenguAndDeathSword.txt
 
-# Old Man Willow Quest
+# 柳じじい
 ?:[EQU $QUEST_NUMBER 31]
-%:q0willow.txt
+%:quests/031_OldManWillow.txt
 
-# Dark Elven Lords Quest
+# ダークエルフの王
 ?:[EQU $QUEST_NUMBER 32]
-%:qdarkelf.txt
+%:quests/032_DarkElvenLords.txt
 
-# The Cloning Pits
+# クローン地獄
 ?:[EQU $QUEST_NUMBER 33]
-%:q0clone0.txt
+%:quests/033_CloningPits.txt
 
-# Locked Room Murder Case
+# もの言えぬ証人
 ?:[EQU $QUEST_NUMBER 34]
-%:q0dumpwitness.txt
+%:quests/034_DumpWitness.txt
 
-# Random quests (always adressed with number 40)
+# ランダムクエスト
 ?:[EQU $QUEST_NUMBER 40]
-%:q_random.txt
+%:quests/040-049_RandomQuests.txt
