@@ -1,16 +1,5 @@
 ﻿#pragma once
 
-/*!
- * @brief 深層モンスターが生成される(NASTY生成)の基本確率(1/x)
- * @details
- * There is a 1/25 (4%) chance of inflating the requested monster_level
- * during the creation of a monsters (see "get_mon_num()" in "monster.c").
- * Lower values yield harder monsters more often.
- */
-#define NASTY_MON_BASE 25
-#define NASTY_MON_MAX 3 /*!< 深層モンスターが1フロアに生成される最大数  */
-#define NASTY_MON_PLUS_MAX 25 /*!< 深層モンスターの階層加算最大量 */
-
 #define PENETRATE_INVULNERABILITY 13 /*!< 無敵化が破られる確率(1/x) / 1/x chance of hurting even if invulnerable! */
 
 #define MAX_TELEPORT_DISTANCE 200 /*!< テレポート最大距離 */
