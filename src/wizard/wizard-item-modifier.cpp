@@ -259,23 +259,23 @@ static void prt_alloc(ItemKindType tval, OBJECT_SUBTYPE_VALUE sval, TERM_LEN row
             PERCENTAGE prob = 0;
 
             if (entry.level <= i) {
-                prob = entry.prob1 * GREAT_OBJ * K_MAX_DEPTH;
+                prob = entry.prob1 * CHANCE_BASEITEM_LEVEL_BOOST * K_MAX_DEPTH;
             } else if (entry.level - 1 > 0) {
                 prob = entry.prob1 * i * K_MAX_DEPTH / (entry.level - 1);
             }
 
             k_ptr = &baseitems_info[entry.index];
 
-            total[i] += prob / (GREAT_OBJ * K_MAX_DEPTH);
-            total_frac += prob % (GREAT_OBJ * K_MAX_DEPTH);
+            total[i] += prob / (CHANCE_BASEITEM_LEVEL_BOOST * K_MAX_DEPTH);
+            total_frac += prob % (CHANCE_BASEITEM_LEVEL_BOOST * K_MAX_DEPTH);
 
             if ((k_ptr->tval == tval) && (k_ptr->sval == sval)) {
                 home = k_ptr->level;
-                rarity[i] += prob / (GREAT_OBJ * K_MAX_DEPTH);
+                rarity[i] += prob / (CHANCE_BASEITEM_LEVEL_BOOST * K_MAX_DEPTH);
             }
         }
 
-        total[i] += total_frac / (GREAT_OBJ * K_MAX_DEPTH);
+        total[i] += total_frac / (CHANCE_BASEITEM_LEVEL_BOOST * K_MAX_DEPTH);
     }
 
     for (int i = 0; i < 22; i++) {

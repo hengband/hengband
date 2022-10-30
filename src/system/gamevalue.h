@@ -1,15 +1,6 @@
 ﻿#pragma once
 
 /*!
- * @brief ベースアイテム生成階層が加算される確率
- * @details
- * There is a 1/10 (10%) chance of inflating the requested object_level
- * during the creation of an object (see "get_obj_num()" in "object.c").
- * Lower values yield better objects more often.
- */
-#define GREAT_OBJ 10
-
-/*!
  * @brief 深層モンスターが生成される(NASTY生成)の基本確率(1/x)
  * @details
  * There is a 1/25 (4%) chance of inflating the requested monster_level
@@ -53,6 +44,9 @@
 #define MON_SUMMON_ADJ 2 /*!< 現在未使用 Adjust level of summoned creatures */
 #define MON_DRAIN_LIFE 2 /*!< モンスターの打撃によるプレイヤーの経験値吸収基本倍率(%) / Percent of player exp drained per hit */
 #define USE_DEVICE 3 /*!< 魔道具の最低失敗基準値 x> Harder devices x< Easier devices     */
+
+/*!< ベースアイテム生成階層が加算される確率 */
+constexpr auto CHANCE_BASEITEM_LEVEL_BOOST = 10;
 
 constexpr auto MAX_PLAYER_SIGHT = 20; /*!< プレイヤーの最大視界グリッド数 */
 constexpr auto MAX_MONSTER_SENSING = 100; /*!< モンスターの最大感知グリッド数 */

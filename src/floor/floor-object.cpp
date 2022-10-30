@@ -167,7 +167,7 @@ bool make_gold(PlayerType *player_ptr, ObjectType *j_ptr)
 {
     auto *floor_ptr = player_ptr->current_floor_ptr;
     int i = ((randint1(floor_ptr->object_level + 2) + 2) / 2) - 1;
-    if (one_in_(GREAT_OBJ)) {
+    if (one_in_(CHANCE_BASEITEM_LEVEL_BOOST)) {
         i += randint1(floor_ptr->object_level + 1);
     }
 
