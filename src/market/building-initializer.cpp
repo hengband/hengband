@@ -34,33 +34,13 @@ void init_towns(void)
                 continue;
             }
 
-            for (auto k = 0; k < STORE_INVEN_MAX; k++) {
-                auto tv = store_regular_table[enum2i(sst)][k].tval;
-                auto sv = store_regular_table[enum2i(sst)][k].sval;
-                if (tv == ItemKindType::NONE) {
-                    break;
-                }
-
-                auto k_idx = lookup_kind(tv, sv);
-                if (k_idx == 0) {
-                    continue;
-                }
-
+            for (const auto &kind : store_regular_sale_table.at(sst)) {
+                auto k_idx = lookup_kind(kind.tval, kind.sval);
                 store_ptr->regular.push_back(k_idx);
             }
 
-            for (auto k = 0; k < STORE_CHOICES; k++) {
-                auto tv = store_table[enum2i(sst)][k].tval;
-                auto sv = store_table[enum2i(sst)][k].sval;
-                if (tv == ItemKindType::NONE) {
-                    break;
-                }
-
-                auto k_idx = lookup_kind(tv, sv);
-                if (k_idx == 0) {
-                    continue;
-                }
-
+            for (const auto &kind : store_sale_table.at(sst)) {
+                auto k_idx = lookup_kind(kind.tval, kind.sval);
                 store_ptr->table.push_back(k_idx);
             }
         }
