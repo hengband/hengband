@@ -38,14 +38,7 @@ void init_towns(void)
             for (const auto kind : store_r) {
                 const auto tv = kind.tval;
                 const auto sv = kind.sval;
-                if (tv == ItemKindType::NONE) {
-                    break;
-                }
-
                 auto k_idx = lookup_kind(tv, sv);
-                if (k_idx == 0) {
-                    continue;
-                }
 
                 store_ptr->regular.push_back(k_idx);
             }
@@ -54,11 +47,7 @@ void init_towns(void)
             for (const auto kind : store) {
                 auto tv = kind.tval;
                 auto sv = kind.sval;
-
                 auto k_idx = lookup_kind(tv, sv);
-                if (k_idx == 0) {
-                    continue;
-                }
 
                 store_ptr->table.push_back(k_idx);
             }
