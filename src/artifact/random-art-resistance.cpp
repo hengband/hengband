@@ -100,7 +100,7 @@ static bool switch_random_art_resistance(ObjectType *o_ptr)
 /* 一定確率で再試行する */
 static void set_weird_bias_acid(ObjectType *o_ptr)
 {
-    if (!one_in_(WEIRD_LUCK)) {
+    if (!one_in_(CHANCE_STRENGTHENING)) {
         random_resistance(o_ptr);
         return;
     }
@@ -114,7 +114,7 @@ static void set_weird_bias_acid(ObjectType *o_ptr)
 /* 一定確率で再試行する */
 static void set_weird_bias_elec(ObjectType *o_ptr)
 {
-    if (!one_in_(WEIRD_LUCK)) {
+    if (!one_in_(CHANCE_STRENGTHENING)) {
         random_resistance(o_ptr);
         return;
     }
@@ -128,7 +128,7 @@ static void set_weird_bias_elec(ObjectType *o_ptr)
 /* 一定確率で再試行する */
 static void set_weird_bias_cold(ObjectType *o_ptr)
 {
-    if (!one_in_(WEIRD_LUCK)) {
+    if (!one_in_(CHANCE_STRENGTHENING)) {
         random_resistance(o_ptr);
         return;
     }
@@ -142,7 +142,7 @@ static void set_weird_bias_cold(ObjectType *o_ptr)
 /* 一定確率で再試行する */
 static void set_weird_bias_fire(ObjectType *o_ptr)
 {
-    if (!one_in_(WEIRD_LUCK)) {
+    if (!one_in_(CHANCE_STRENGTHENING)) {
         random_resistance(o_ptr);
         return;
     }
