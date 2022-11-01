@@ -43,3 +43,19 @@ public:
 };
 
 extern std::map<FixedArtifactId, ArtifactType> artifacts_info;
+
+class ArtifactsInfo {
+public:
+    ArtifactsInfo(const ArtifactsInfo &) = delete;
+    ArtifactsInfo(ArtifactsInfo &&) = delete;
+    ArtifactsInfo &operator=(const ArtifactsInfo &) = delete;
+    ArtifactsInfo &operator=(ArtifactsInfo &&) = delete;
+    ~ArtifactsInfo() = default;
+
+    static ArtifactsInfo &get_instance();
+    ArtifactType *get_artifact(const FixedArtifactId id) const;
+
+private:
+    ArtifactsInfo() = default;
+    static ArtifactsInfo instance;
+};

@@ -69,7 +69,11 @@ void display_rumor(PlayerType *player_ptr, bool ex)
         ArtifactType *a_ptr;
         while (true) {
             a_idx = i2enum<FixedArtifactId>(rumor_num(zz[1], enum2i(artifacts_info.rbegin()->first)));
-            a_ptr = &artifacts_info.at(a_idx);
+            a_ptr = ArtifactsInfo::get_instance().get_artifact(a_idx);
+            if (a_ptr == nullptr) {
+                continue;
+            }
+
             if (!a_ptr->name.empty()) {
                 break;
             }
