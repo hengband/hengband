@@ -15,8 +15,10 @@
 #include "system/player-type-definition.h"
 #include "view/display-messages.h"
 #include "world/world.h"
+#include <string>
+#include <utility>
 
-static IDX get_rumor_num(char *zz, IDX max_idx)
+static IDX get_rumor_num(const char *zz, IDX max_idx)
 {
     if (strcmp(zz, "*") == 0) {
         return randint1(max_idx - 1);
@@ -36,6 +38,22 @@ static concptr bind_rumor_name(char *base, concptr fullname)
 
     v = base;
     return v;
+}
+
+static std::pair<FixedArtifactId, const ArtifactType *> get_artifact_definition(std::string_view zz)
+{
+    const auto max_idx = enum2i(artifacts_info.rbegin()->first);
+    while (true) {
+        const auto a_idx = i2enum<FixedArtifactId>(get_rumor_num(zz.data(), max_idx));
+        const auto *a_ptr = ArtifactsInfo::get_instance().get_artifact(a_idx);
+        if (a_ptr == nullptr) {
+            continue;
+        }
+
+        if (!a_ptr->name.empty()) {
+            return { a_idx, a_ptr };
+        }
+    }
 }
 
 void display_rumor(PlayerType *player_ptr, bool ex)
@@ -61,20 +79,7 @@ void display_rumor(PlayerType *player_ptr, bool ex)
     concptr rumor_eff_format = nullptr;
     char fullname[1024] = "";
     if (strcmp(zz[0], "ARTIFACT") == 0) {
-        FixedArtifactId a_idx;
-        ArtifactType *a_ptr;
-        while (true) {
-            a_idx = i2enum<FixedArtifactId>(get_rumor_num(zz[1], enum2i(artifacts_info.rbegin()->first)));
-            a_ptr = ArtifactsInfo::get_instance().get_artifact(a_idx);
-            if (a_ptr == nullptr) {
-                continue;
-            }
-
-            if (!a_ptr->name.empty()) {
-                break;
-            }
-        }
-
+        const auto &[a_idx, a_ptr] = get_artifact_definition(zz[1]);
         KIND_OBJECT_IDX k_idx = lookup_kind(a_ptr->tval, a_ptr->sval);
         ObjectType forge;
         auto *q_ptr = &forge;
