@@ -122,21 +122,12 @@ autopick.txt の内容も読んでおくと良いでしょう。
 り返し答えが書いてある事でしょう。
 
 
---- #ぐりっどばぐ:*.jp IRC チャンネル ---
-
-IRCnet のどれかのサーバーの #ぐりっどばぐ:*.jp チャンネルに参加しましょ
-う。開発にかかわるメンバーはここの常連で、変愚蛮怒 について語り合ってい
-ることもあります。
-詳しくはHabuさんのWebページを御覧ください。
-http://www.kmc.gr.jp/~habu/gridbug.html
-
-
 -- #NEWLINE
 Original   : (??)
 Updated    : (??)
 Updated    : Zangband DevTeam
 Updated    : Hengband 1.5.0
-
+Updated    : Hengband 3.0.0Alpha71
 
 ***** Begin Hyperlinks
 ***** [b] jcommand.txt
