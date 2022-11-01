@@ -16,11 +16,7 @@
 #include "view/display-messages.h"
 #include "world/world.h"
 
-/*
- * Display a rumor and apply its effects
- */
-
-IDX rumor_num(char *zz, IDX max_idx)
+static IDX get_rumor_num(char *zz, IDX max_idx)
 {
     if (strcmp(zz, "*") == 0) {
         return randint1(max_idx - 1);
@@ -28,7 +24,7 @@ IDX rumor_num(char *zz, IDX max_idx)
     return (IDX)atoi(zz);
 }
 
-concptr rumor_bind_name(char *base, concptr fullname)
+static concptr bind_rumor_name(char *base, concptr fullname)
 {
     char *s, *v;
     s = strstr(base, "{Name}");
@@ -68,7 +64,7 @@ void display_rumor(PlayerType *player_ptr, bool ex)
         FixedArtifactId a_idx;
         ArtifactType *a_ptr;
         while (true) {
-            a_idx = i2enum<FixedArtifactId>(rumor_num(zz[1], enum2i(artifacts_info.rbegin()->first)));
+            a_idx = i2enum<FixedArtifactId>(get_rumor_num(zz[1], enum2i(artifacts_info.rbegin()->first)));
             a_ptr = ArtifactsInfo::get_instance().get_artifact(a_idx);
             if (a_ptr == nullptr) {
                 continue;
@@ -89,7 +85,7 @@ void display_rumor(PlayerType *player_ptr, bool ex)
     } else if (strcmp(zz[0], "MONSTER") == 0) {
         monster_race *r_ptr;
         while (true) {
-            auto r_idx = i2enum<MonsterRaceId>(rumor_num(zz[1], static_cast<IDX>(monraces_info.size())));
+            auto r_idx = i2enum<MonsterRaceId>(get_rumor_num(zz[1], static_cast<IDX>(monraces_info.size())));
             r_ptr = &monraces_info[r_idx];
             if (!r_ptr->name.empty()) {
                 break;
@@ -105,7 +101,7 @@ void display_rumor(PlayerType *player_ptr, bool ex)
         DUNGEON_IDX d_idx;
         dungeon_type *d_ptr;
         while (true) {
-            d_idx = rumor_num(zz[1], static_cast<IDX>(dungeons_info.size()));
+            d_idx = get_rumor_num(zz[1], static_cast<IDX>(dungeons_info.size()));
             d_ptr = &dungeons_info[d_idx];
             if (!d_ptr->name.empty()) {
                 break;
@@ -121,7 +117,7 @@ void display_rumor(PlayerType *player_ptr, bool ex)
     } else if (strcmp(zz[0], "TOWN") == 0) {
         IDX t_idx;
         while (true) {
-            t_idx = rumor_num(zz[1], NO_TOWN);
+            t_idx = get_rumor_num(zz[1], NO_TOWN);
             if (town_info[t_idx].name[0] != '\0') {
                 break;
             }
@@ -136,7 +132,7 @@ void display_rumor(PlayerType *player_ptr, bool ex)
         }
     }
 
-    concptr rumor_msg = rumor_bind_name(zz[2], fullname);
+    concptr rumor_msg = bind_rumor_name(zz[2], fullname);
     msg_print(rumor_msg);
     if (rumor_eff_format) {
         msg_print(nullptr);
