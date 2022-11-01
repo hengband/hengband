@@ -120,14 +120,6 @@ The official Hengband website includes this score board. You can see
 hundreds of character records at here. And there is translated version
 of Japanese score board which includes over 5000 records already!
 
---- FTP Sites ---
-(ftp://clockwork.dementia.org/angband/Variant/Hengband/)
-
-Hengband sources and executables are uploaded to
-clockwork.dementia.org FTP site which include most variant of Angband.
-Links to the files are available at Thangorodrim.
-(http://www.thangorodrim.net)
-
 --- The Newsgroup (rec.games.roguelike.angband) ---
 
 The newsgroup is a forum for the discussion of all things relating to
