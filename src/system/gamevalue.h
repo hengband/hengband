@@ -2,8 +2,6 @@
 
 #define PENETRATE_INVULNERABILITY 13 /*!< 無敵化が破られる確率(1/x) / 1/x chance of hurting even if invulnerable! */
 
-#define MAX_TELEPORT_DISTANCE 200 /*!< テレポート最大距離 */
-
 /*
  * Refueling constants
  */
