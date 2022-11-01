@@ -106,15 +106,15 @@ memory containing all the experience of past incarnations.
 
 
 --- The official Hengband website ---
-(http://hengband.sourceforge.jp/en/)
+(https://hengband.github.io/en/)
 
-http://hengband.sourceforge.jp/en/ is the official Hengband website.
+https://hengband.github.io/en/ is the official Hengband website.
 It includes information on where to download the Hengband source code
 and current executables for most popular operating systems as well as
 information on current development issues.
 
 --- Hengband World Score Board ---
-(http://hengband.sourceforge.jp/en/score.html)
+(https://hengband.github.io/en/score.html)
 
 The official Hengband website includes this score board. You can see
 hundreds of character records at here. And there is translated version
