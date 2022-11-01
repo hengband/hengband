@@ -15,29 +15,54 @@
 #include "system/player-type-definition.h"
 #include "view/display-messages.h"
 #include "world/world.h"
+#include <algorithm>
 #include <string>
 #include <utility>
 
-static IDX get_rumor_num(const char *zz, IDX max_idx)
+/*
+ * @brief 固定アーティファクト、モンスター、町 をランダムに1つ選び、ダンジョンを固定的に1つ選ぶ
+ * @param zz 検索文字列
+ * @param max_idx briefに挙げた各リストにおける最大数
+ * @details rumor.txt (rumor_j.txt) の定義により、ダンジョンは鉄獄 (ダンジョンID1)が常に選ばれる
+ * その他は常にランダム ("*")
+ */
+static short get_rumor_num(std::string_view zz, short max_idx)
 {
-    if (strcmp(zz, "*") == 0) {
+    if (zz == "*") {
         return randint1(max_idx - 1);
     }
-    return (IDX)atoi(zz);
+
+    return static_cast<short>(atoi(zz.data()));
 }
 
-static concptr bind_rumor_name(char *base, concptr fullname)
+static std::string_view bind_rumor_name(std::string &base, concptr fullname)
 {
-    char *s, *v;
-    s = strstr(base, "{Name}");
+    auto *s = strstr(base.data(), "{Name}");
     if (s) {
         s[0] = '\0';
-        v = format("%s%s%s", base, fullname, (s + 6));
-        return v;
+        return format("%s%s%s", base.data(), fullname, (s + 6));
     }
 
-    v = base;
-    return v;
+    return base;
+}
+
+/*
+ * @brief 噂の、町やモンスターを表すトークンを得る
+ * @param rumor rumor.txt (rumor_j.txt)の1行
+ * @return トークン読み込み成否 とトークン群の配列
+ * @todo tmp_tokensを使わず単なるsplitにすればもっと簡略化できそう
+ */
+std::pair<bool, std::vector<std::string>> get_rumor_tokens(std::string rumor)
+{
+    constexpr auto num_tokens = 3;
+    char *tmp_tokens[num_tokens];
+    if (tokenize(rumor.data() + 2, num_tokens, tmp_tokens, TOKENIZE_CHECKQUOTE) != num_tokens) {
+        msg_print(_("この情報は間違っている。", "This information is wrong."));
+        return { false, {} };
+    }
+
+    std::vector<std::string> tokens(std::begin(tmp_tokens), std::end(tmp_tokens));
+    return { true, tokens };
 }
 
 /*!
@@ -75,25 +100,17 @@ void display_rumor(PlayerType *player_ptr, bool ex)
         return;
     }
 
-    constexpr auto num_tokens = 4;
-    char *zz[num_tokens];
-    if (tokenize(rumor + 2, 3, zz, TOKENIZE_CHECKQUOTE) != 3) {
-        msg_print(_("この情報は間違っている。", "This information is wrong."));
+    const auto &[is_correct, tokens] = get_rumor_tokens(rumor);
+    if (!is_correct) {
         return;
     }
-
-    std::vector<std::string_view> tokens{
-        zz[0],
-        zz[1],
-        zz[2],
-        zz[3],
-    };
 
     concptr rumor_eff_format = nullptr;
     char fullname[1024] = "";
     const auto &category = tokens[0];
     if (category == "ARTIFACT") {
-        const auto &[a_idx, a_ptr] = get_artifact_definition(zz[1]);
+        const auto &artifact_name = tokens[1];
+        const auto &[a_idx, a_ptr] = get_artifact_definition(artifact_name);
         KIND_OBJECT_IDX k_idx = lookup_kind(a_ptr->tval, a_ptr->sval);
         ObjectType forge;
         auto *q_ptr = &forge;
@@ -103,8 +120,10 @@ void display_rumor(PlayerType *player_ptr, bool ex)
         describe_flavor(player_ptr, fullname, q_ptr, OD_NAME_ONLY);
     } else if (category == "MONSTER") {
         monster_race *r_ptr;
+        const auto &monster_name = tokens[1];
+        const auto monraces_size = static_cast<short>(monraces_info.size());
         while (true) {
-            auto r_idx = i2enum<MonsterRaceId>(get_rumor_num(zz[1], static_cast<IDX>(monraces_info.size())));
+            auto r_idx = i2enum<MonsterRaceId>(get_rumor_num(monster_name, monraces_size));
             r_ptr = &monraces_info[r_idx];
             if (!r_ptr->name.empty()) {
                 break;
@@ -119,8 +138,10 @@ void display_rumor(PlayerType *player_ptr, bool ex)
     } else if (category == "DUNGEON") {
         DUNGEON_IDX d_idx;
         dungeon_type *d_ptr;
+        const auto dungeons_size = static_cast<short>(dungeons_info.size());
+        const auto &d_idx_str = tokens[1];
         while (true) {
-            d_idx = get_rumor_num(zz[1], static_cast<IDX>(dungeons_info.size()));
+            d_idx = get_rumor_num(d_idx_str, dungeons_size);
             d_ptr = &dungeons_info[d_idx];
             if (!d_ptr->name.empty()) {
                 break;
@@ -128,15 +149,15 @@ void display_rumor(PlayerType *player_ptr, bool ex)
         }
 
         strcpy(fullname, d_ptr->name.c_str());
-
         if (!max_dlv[d_idx]) {
             max_dlv[d_idx] = d_ptr->mindepth;
             rumor_eff_format = _("%sに帰還できるようになった。", "You can recall to %s.");
         }
     } else if (category == "TOWN") {
         IDX t_idx;
+        const auto &town_name = tokens[1];
         while (true) {
-            t_idx = get_rumor_num(zz[1], NO_TOWN);
+            t_idx = get_rumor_num(town_name, NO_TOWN);
             if (town_info[t_idx].name[0] != '\0') {
                 break;
             }
@@ -153,7 +174,8 @@ void display_rumor(PlayerType *player_ptr, bool ex)
         throw std::runtime_error("Unknown token exists in rumor.txt");
     }
 
-    concptr rumor_msg = bind_rumor_name(zz[2], fullname);
+    auto base = std::string(tokens[2]);
+    const auto rumor_msg = bind_rumor_name(base, fullname);
     msg_print(rumor_msg);
     if (rumor_eff_format) {
         msg_print(nullptr);
