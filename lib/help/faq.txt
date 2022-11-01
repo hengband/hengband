@@ -115,12 +115,6 @@ A. Here; 'https://hengband.github.io/score.html'.
    automatically register your character dump and screen shot.
 
 
-Q. Are there spoiler for more details?
-
-A. Yes. Henkma is writing spoiler page for Hengband;
-   'http://www.kmc.gr.jp/~henkma/heng-e/index.html'
-
-
 Q. Who wrote Hengband?
 
 A. Hengband is mainly based on ZAngband 2.2.8 Japanese version.
