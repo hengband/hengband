@@ -23,7 +23,7 @@
  * 17エントリーまで設定可能。(最後はTV_NONE で止める)
  * 種類が多すぎる場合、店舗を埋めつくすので注意。
  */
-const std::map<StoreSaleType, std::vector<store_stock_item_type>> store_regular_sale_table = {
+const std::map<StoreSaleType, std::vector<BaseitemKey>> store_regular_sale_table = {
     { StoreSaleType::GENERAL,
         {
             { ItemKindType::FOOD, SV_FOOD_RATION },
@@ -98,7 +98,7 @@ const std::map<StoreSaleType, std::vector<store_stock_item_type>> store_regular_
  * @brief 店舗でランダム販売するオブジェクトを定義する
  * @details tval/svalのペア
  */
-const std::map<StoreSaleType, std::vector<store_stock_item_type>> store_sale_table = {
+const std::map<StoreSaleType, std::vector<BaseitemKey>> store_sale_table = {
     { StoreSaleType::GENERAL,
         {
             /* General Store */
