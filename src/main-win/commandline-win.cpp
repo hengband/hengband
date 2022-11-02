@@ -48,7 +48,7 @@ void CommandLine::handle(void)
                 if (argv[i][0] != L'-') {
                     // "-"で始まらない最初のオプションをセーブファイル名とみなす
                     if (savefile_option.empty()) {
-                        savefile_option = to_multibyte(argv[i]).data();
+                        savefile_option = to_multibyte(argv[i]).c_str();
                     }
                 }
             }
