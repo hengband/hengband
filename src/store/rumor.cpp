@@ -29,7 +29,7 @@
 static short get_rumor_num(std::string_view zz, short max_idx)
 {
     if (zz == "*") {
-        return randint1(max_idx - 1);
+        return randint1(max_idx);
     }
 
     return static_cast<short>(atoi(zz.data()));
@@ -121,7 +121,9 @@ void display_rumor(PlayerType *player_ptr, bool ex)
     } else if (category == "MONSTER") {
         monster_race *r_ptr;
         const auto &monster_name = tokens[1];
-        const auto monraces_size = static_cast<short>(monraces_info.size());
+
+        // @details プレイヤーもダミーで入っているので、1つ引いておかないと数が合わなくなる.
+        const auto monraces_size = static_cast<short>(monraces_info.size() - 1);
         while (true) {
             auto r_idx = i2enum<MonsterRaceId>(get_rumor_num(monster_name, monraces_size));
             r_ptr = &monraces_info[r_idx];
