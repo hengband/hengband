@@ -606,7 +606,7 @@ void wilderness_gen_small(PlayerType *player_ptr)
     parse_fixed_map(player_ptr, WILDERNESS_DEFINITION, 0, 0, w_ptr->max_wild_y, w_ptr->max_wild_x);
     for (int i = 0; i < w_ptr->max_wild_x; i++) {
         for (int j = 0; j < w_ptr->max_wild_y; j++) {
-            if (wilderness[j][i].town && (wilderness[j][i].town != NO_TOWN)) {
+            if (wilderness[j][i].town && (wilderness[j][i].town != VALID_TOWNS)) {
                 floor_ptr->grid_array[j][i].feat = (int16_t)feat_town;
                 floor_ptr->grid_array[j][i].special = (int16_t)wilderness[j][i].town;
                 floor_ptr->grid_array[j][i].info |= (CAVE_GLOW | CAVE_MARK);

@@ -2,7 +2,6 @@
 #include "flavor/flavor-describer.h"
 #include "flavor/object-flavor-types.h"
 #include "floor/floor-town.h"
-#include "floor/wild.h"
 #include "io/files-util.h"
 #include "io/tokenizer.h"
 #include "monster-race/monster-race.h"
@@ -159,7 +158,7 @@ void display_rumor(PlayerType *player_ptr, bool ex)
         IDX t_idx;
         const auto &town_name = tokens[1];
         while (true) {
-            t_idx = get_rumor_num(town_name, NO_TOWN);
+            t_idx = get_rumor_num(town_name, VALID_TOWNS);
             if (town_info[t_idx].name[0] != '\0') {
                 break;
             }
