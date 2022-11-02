@@ -10,10 +10,6 @@
 
 #define MAX_SKILLS 10
 
-#define SPEAK_CHANCE 8
-#define GRINDNOISE 20
-#define CYBERNOISE 20
-
 /*
  * Misc constants
  */
