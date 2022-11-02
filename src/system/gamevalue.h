@@ -1,4 +1,10 @@
-﻿#pragma once
+﻿/*
+ * @brief ゲーム内で広範に使われる定数群の定義
+ * @author Hourier
+ * @date 2022/11/02
+ */
+
+#pragma once
 
 constexpr auto PENETRATE_INVULNERABILITY = 13; /*!< 無敵化が破られる確率(1/n) */
 constexpr auto FUEL_TORCH = 5000; /*!< 松明の基本寿命値 */
