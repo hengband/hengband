@@ -147,7 +147,7 @@ static void shuffle_store(PlayerType *player_ptr, StoreSaleType store_num)
     prt("", 3, 0);
     sprintf(buf, "%s (%s)", ot_ptr->owner_name, race_info[enum2i(ot_ptr->owner_race)].title);
     put_str(buf, 3, 10);
-    sprintf(buf, "%s (%ld)", terrains_info[cur_store_feat].name.c_str(), (long)(ot_ptr->max_cost));
+    sprintf(buf, "%s (%ld)", terrains_info[cur_store_feat].name.data(), (long)(ot_ptr->max_cost));
     prt(buf, 3, 50);
 }
 

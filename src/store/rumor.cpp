@@ -132,7 +132,7 @@ void display_rumor(PlayerType *player_ptr, bool ex)
             }
         }
 
-        strcpy(fullname, r_ptr->name.c_str());
+        strcpy(fullname, r_ptr->name.data());
 
         if (!r_ptr->r_sights) {
             r_ptr->r_sights++;
@@ -150,7 +150,7 @@ void display_rumor(PlayerType *player_ptr, bool ex)
             }
         }
 
-        strcpy(fullname, d_ptr->name.c_str());
+        strcpy(fullname, d_ptr->name.data());
         if (!max_dlv[d_idx]) {
             max_dlv[d_idx] = d_ptr->mindepth;
             rumor_eff_format = _("%sに帰還できるようになった。", "You can recall to %s.");

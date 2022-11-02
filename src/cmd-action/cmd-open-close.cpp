@@ -382,7 +382,7 @@ void do_cmd_spike(PlayerType *player_ptr)
         do_cmd_attack(player_ptr, y, x, HISSATSU_NONE);
     } else {
         PlayerEnergy(player_ptr).set_player_turn_energy(100);
-        msg_format(_("%sにくさびを打ち込んだ。", "You jam the %s with a spike."), terrains_info[feat].name.c_str());
+        msg_format(_("%sにくさびを打ち込んだ。", "You jam the %s with a spike."), terrains_info[feat].name.data());
         cave_alter_feat(player_ptr, y, x, TerrainCharacteristics::SPIKE);
         vary_item(player_ptr, item, -1);
     }

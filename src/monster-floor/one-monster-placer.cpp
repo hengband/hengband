@@ -274,7 +274,7 @@ bool place_monster_one(PlayerType *player_ptr, MONSTER_IDX who, POSITION y, POSI
     auto *floor_ptr = player_ptr->current_floor_ptr;
     auto *g_ptr = &floor_ptr->grid_array[y][x];
     auto *r_ptr = &monraces_info[r_idx];
-    concptr name = r_ptr->name.c_str();
+    concptr name = r_ptr->name.data();
 
     if (player_ptr->wild_mode || !in_bounds(floor_ptr, y, x) || !MonsterRace(r_idx).is_valid() || r_ptr->name.empty()) {
         return false;

@@ -392,7 +392,7 @@ int take_hit(PlayerType *player_ptr, int damage_type, int damage, concptr hit_fr
 
         const auto &floor_ref = *player_ptr->current_floor_ptr;
         if (floor_ref.inside_arena) {
-            concptr m_name = monraces_info[arena_info[player_ptr->arena_number].r_idx].name.c_str();
+            concptr m_name = monraces_info[arena_info[player_ptr->arena_number].r_idx].name.data();
             msg_format(_("あなたは%sの前に敗れ去った。", "You are beaten by %s."), m_name);
             msg_print(nullptr);
             if (record_arena) {
@@ -447,11 +447,11 @@ int take_hit(PlayerType *player_ptr, int damage_type, int damage, concptr hit_fr
                 }
 
 #ifdef JP
-                std::string note = format("%sで%sに殺された。", place.c_str(), player_ptr->died_from.c_str());
+                std::string note = format("%sで%sに殺された。", place.data(), player_ptr->died_from.data());
 #else
-                std::string note = format("killed by %s %s.", player_ptr->died_from.c_str(), place.c_str());
+                std::string note = format("killed by %s %s.", player_ptr->died_from.data(), place.data());
 #endif
-                exe_write_diary(player_ptr, DIARY_DESCRIPTION, 0, note.c_str());
+                exe_write_diary(player_ptr, DIARY_DESCRIPTION, 0, note.data());
             }
 
             exe_write_diary(player_ptr, DIARY_GAMESTART, 1, _("-------- ゲームオーバー --------", "--------   Game  Over   --------"));

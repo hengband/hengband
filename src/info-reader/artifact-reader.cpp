@@ -166,7 +166,7 @@ errr parse_artifacts_info(std::string_view buf, angband_header *)
             return PARSE_ERROR_TOO_FEW_ARGUMENTS;
         }
 
-        auto n = grab_one_activation_flag(tokens[1].c_str());
+        auto n = grab_one_activation_flag(tokens[1].data());
         if (n <= RandomArtActType::NONE) {
             return PARSE_ERROR_INVALID_FLAG;
         }

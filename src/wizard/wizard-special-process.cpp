@@ -171,7 +171,7 @@ static KIND_OBJECT_IDX wiz_select_sval(const ItemKindType tval, concptr tval_des
         auto col = _(30, 32) * (num / 20);
         ch = listsym[num];
         const auto buf = strip_name(k_ref.idx);
-        prt(format("[%c] %s", ch, buf.c_str()), row, col);
+        prt(format("[%c] %s", ch, buf.data()), row, col);
         choice[num++] = k_ref.idx;
     }
 
@@ -302,7 +302,7 @@ static std::optional<FixedArtifactId> wiz_select_named_artifact(PlayerType *play
         for (auto i = 0U; i < page_item_count; ++i) {
             std::stringstream ss;
             ss << I2A(i) << ") " << wiz_make_named_artifact_desc(player_ptr, a_idx_list[page_base_idx + i]);
-            put_str(ss.str().c_str(), i + 1, 15);
+            put_str(ss.str().data(), i + 1, 15);
         }
         if (page_max > 1) {
             put_str(format("-- more (%d/%d) --", current_page + 1, page_max), page_item_count + 1, 15);
@@ -365,7 +365,7 @@ void wiz_create_named_art(PlayerType *player_ptr)
         std::stringstream ss;
         ss << I2A(i) << ") " << name;
         term_erase(14, i + 1, 255);
-        put_str(ss.str().c_str(), i + 1, 15);
+        put_str(ss.str().data(), i + 1, 15);
     }
 
     std::optional<FixedArtifactId> create_a_idx;

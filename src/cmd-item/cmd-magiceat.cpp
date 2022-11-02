@@ -335,7 +335,7 @@ static std::optional<std::tuple<ItemKindType, OBJECT_SUBTYPE_VALUE>> select_magi
                 if (k_idx) {
                     if (tval == ItemKindType::ROD) {
                         strcat(dummy,
-                            format(_(" %-22.22s 充填:%2d/%2d%3d%%", " %-22.22s   (%2d/%2d) %3d%%"), baseitems_info[k_idx].name.c_str(),
+                            format(_(" %-22.22s 充填:%2d/%2d%3d%%", " %-22.22s   (%2d/%2d) %3d%%"), baseitems_info[k_idx].name.data(),
                                 item.charge ? (item.charge - 1) / (EATER_ROD_CHARGE * baseitems_info[k_idx].pval) + 1 : 0,
                                 item.count, chance));
                         if (item.charge > baseitems_info[k_idx].pval * (item.count - 1) * EATER_ROD_CHARGE) {
@@ -343,7 +343,7 @@ static std::optional<std::tuple<ItemKindType, OBJECT_SUBTYPE_VALUE>> select_magi
                         }
                     } else {
                         strcat(dummy,
-                            format(" %-22.22s    %2d/%2d %3d%%", baseitems_info[k_idx].name.c_str(), (int16_t)(item.charge / EATER_CHARGE),
+                            format(" %-22.22s    %2d/%2d %3d%%", baseitems_info[k_idx].name.data(), (int16_t)(item.charge / EATER_CHARGE),
                                 item.count, chance));
                         if (item.charge < EATER_CHARGE) {
                             col = TERM_RED;
@@ -497,7 +497,7 @@ static std::optional<std::tuple<ItemKindType, OBJECT_SUBTYPE_VALUE>> select_magi
             term_erase(7, 21, 255);
             term_erase(7, 20, 255);
 
-            shape_buffer(baseitems_info[lookup_kind(tval, i)].text.c_str(), 62, temp, sizeof(temp));
+            shape_buffer(baseitems_info[lookup_kind(tval, i)].text.data(), 62, temp, sizeof(temp));
             for (j = 0, line = 21; temp[j]; j += 1 + strlen(&temp[j])) {
                 prt(&temp[j], line, 10);
                 line++;

@@ -69,7 +69,7 @@ bool exe_tunnel(PlayerType *player_ptr, POSITION y, POSITION x)
     f_ptr = &terrains_info[g_ptr->feat];
     power = f_ptr->power;
     mimic_f_ptr = &terrains_info[g_ptr->get_feat_mimic()];
-    name = mimic_f_ptr->name.c_str();
+    name = mimic_f_ptr->name.data();
     sound(SOUND_DIG);
     if (f_ptr->flags.has(TerrainCharacteristics::PERMANENT)) {
         if (mimic_f_ptr->flags.has(TerrainCharacteristics::PERMANENT)) {

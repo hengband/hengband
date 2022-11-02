@@ -1293,7 +1293,7 @@ errr init_gcu(int argc, char *argv[])
     /* Hack -- Require large screen, or Quit with message */
     i = ((LINES < 24) || (COLS < 80));
     if (i) {
-        quit_fmt("%s needs an 80x24 'curses' screen", std::string(VARIANT_NAME).c_str());
+        quit_fmt("%s needs an 80x24 'curses' screen", std::string(VARIANT_NAME).data());
     }
 
 #ifdef A_COLOR
@@ -1599,7 +1599,7 @@ errr init_gcu(int argc, char *argv[])
 
         /* Map Terminal */
         if (remaining.cx < MIN_TERM0_COLS || remaining.cy < MIN_TERM0_LINES) {
-            quit_fmt("Failed: %s needs an %dx%d map screen, not %dx%d", std::string(VARIANT_NAME).c_str(), MIN_TERM0_COLS, MIN_TERM0_LINES, remaining.cx, remaining.cy);
+            quit_fmt("Failed: %s needs an %dx%d map screen, not %dx%d", std::string(VARIANT_NAME).data(), MIN_TERM0_COLS, MIN_TERM0_LINES, remaining.cx, remaining.cy);
         }
         data[0].r = remaining;
         term_data_init(&data[0]);

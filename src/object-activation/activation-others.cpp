@@ -179,7 +179,7 @@ bool activate_unique_detection(PlayerType *player_ptr)
 
         r_ptr = &monraces_info[m_ptr->r_idx];
         if (r_ptr->kind_flags.has(MonsterKindType::UNIQUE)) {
-            msg_format(_("%s． ", "%s. "), r_ptr->name.c_str());
+            msg_format(_("%s． ", "%s. "), r_ptr->name.data());
         }
 
         if (m_ptr->r_idx == MonsterRaceId::DIO) {

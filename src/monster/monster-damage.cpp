@@ -157,7 +157,7 @@ bool MonsterDamageProcessor::process_dead_exp_virtue(concptr note, monster_type 
     ac.change_virtue();
     if (r_ref.kind_flags.has(MonsterKindType::UNIQUE) && record_destroy_uniq) {
         char note_buf[160];
-        sprintf(note_buf, "%s%s", r_ref.name.c_str(), m_ptr->mflag2.has(MonsterConstantFlagType::CLONED) ? _("(クローン)", "(Clone)") : "");
+        sprintf(note_buf, "%s%s", r_ref.name.data(), m_ptr->mflag2.has(MonsterConstantFlagType::CLONED) ? _("(クローン)", "(Clone)") : "");
         exe_write_diary(this->player_ptr, DIARY_UNIQUE, 0, note_buf);
     }
 

@@ -501,9 +501,9 @@ void monster_gain_exp(PlayerType *player_ptr, MONSTER_IDX m_idx, MonsterRaceId s
                 auto mes_evolution = _("%sは%sに進化した。", "%^s evolved into %s.");
                 auto mes_degeneration = _("%sは%sに退化した。", "%^s degenerated into %s.");
                 auto mes = randint0(2) == 0 ? mes_evolution : mes_degeneration;
-                msg_format(mes, m_name, hallucinated_race->name.c_str());
+                msg_format(mes, m_name, hallucinated_race->name.data());
             } else {
-                msg_format(_("%sは%sに進化した。", "%^s evolved into %s."), m_name, r_ptr->name.c_str());
+                msg_format(_("%sは%sに進化した。", "%^s evolved into %s."), m_name, r_ptr->name.data());
             }
         }
 

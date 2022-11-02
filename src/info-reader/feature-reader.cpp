@@ -455,7 +455,7 @@ static FEAT_IDX search_real_feat(std::string feat)
         }
     }
 
-    msg_format(_("未定義のタグ '%s'。", "%s is undefined."), feat.c_str());
+    msg_format(_("未定義のタグ '%s'。", "%s is undefined."), feat.data());
     return -1;
 }
 

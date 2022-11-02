@@ -72,7 +72,7 @@ static void dump_magic_eater(PlayerType *player_ptr, FILE *fff)
             }
 
             char buf[128];
-            snprintf(buf, sizeof(buf), "%23s (%2d)", baseitems_info[k_idx].name.c_str(), item.count);
+            snprintf(buf, sizeof(buf), "%23s (%2d)", baseitems_info[k_idx].name.data(), item.count);
             desc_list.emplace_back(buf);
         }
 
@@ -83,7 +83,7 @@ static void dump_magic_eater(PlayerType *player_ptr, FILE *fff)
 
         uint i;
         for (i = 0; i < desc_list.size(); i++) {
-            fputs(desc_list[i].c_str(), fff);
+            fputs(desc_list[i].data(), fff);
             if (i % 3 < 2) {
                 fputs("    ", fff);
             } else {

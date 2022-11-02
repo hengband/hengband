@@ -35,7 +35,7 @@ void display_virtue(PlayerType *player_ptr, self_info_type *self_ptr)
 {
     self_ptr->info[self_ptr->line++] = "";
     std::string alg = PlayerAlignment(player_ptr).get_alignment_description(true);
-    sprintf(self_ptr->plev_buf, _("現在の属性 : %s", "Your alignment : %s"), alg.c_str());
+    sprintf(self_ptr->plev_buf, _("現在の属性 : %s", "Your alignment : %s"), alg.data());
     strcpy(self_ptr->buf[1], self_ptr->plev_buf);
     self_ptr->info[self_ptr->line++] = self_ptr->buf[1];
     for (int v_nr = 0; v_nr < 8; v_nr++) {

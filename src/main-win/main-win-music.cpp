@@ -201,7 +201,7 @@ errr play_music(int type, int val)
     strcpy(current_music_path, buf);
 
     to_wchar path(buf);
-    mci_open_parms.lpstrDeviceType = mci_device_type.c_str();
+    mci_open_parms.lpstrDeviceType = mci_device_type.data();
     mci_open_parms.lpstrElementName = path.wc_str();
     mciSendCommandW(mci_open_parms.wDeviceID, MCI_STOP, MCI_WAIT, 0);
     mciSendCommandW(mci_open_parms.wDeviceID, MCI_CLOSE, MCI_WAIT, 0);

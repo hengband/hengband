@@ -63,7 +63,7 @@ void roff_top(MonsterRaceId r_idx)
         term_addstr(-1, TERM_WHITE, "] ");
     }
 
-    term_addstr(-1, TERM_WHITE, (r_ptr->name.c_str()));
+    term_addstr(-1, TERM_WHITE, (r_ptr->name.data()));
 
     term_addstr(-1, TERM_WHITE, " ('");
     term_add_bigch(a1, c1);
@@ -546,16 +546,16 @@ static void display_monster_escort_contents(lore_type *lore_ptr)
 
         const auto *rf_ptr = &monraces_info[r_idx];
         if (rf_ptr->kind_flags.has(MonsterKindType::UNIQUE)) {
-            hooked_roff(format(_("、%s", ", %s"), rf_ptr->name.c_str()));
+            hooked_roff(format(_("、%s", ", %s"), rf_ptr->name.data()));
             continue;
         }
 
 #ifdef JP
-        hooked_roff(format("、 %dd%d 体の%s", dd, ds, rf_ptr->name.c_str()));
+        hooked_roff(format("、 %dd%d 体の%s", dd, ds, rf_ptr->name.data()));
 #else
         auto plural = (dd * ds > 1);
         GAME_TEXT name[MAX_NLEN];
-        strcpy(name, rf_ptr->name.c_str());
+        strcpy(name, rf_ptr->name.data());
         if (plural) {
             plural_aux(name);
         }

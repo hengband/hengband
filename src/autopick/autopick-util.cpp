@@ -59,7 +59,7 @@ void auto_inscribe_item(PlayerType *player_ptr, ObjectType *o_ptr, int idx)
     }
 
     if (!o_ptr->inscription) {
-        o_ptr->inscription = quark_add(autopick_list[idx].insc.c_str());
+        o_ptr->inscription = quark_add(autopick_list[idx].insc.data());
     }
 
     player_ptr->window_flags |= (PW_EQUIP | PW_INVEN);

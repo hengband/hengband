@@ -83,7 +83,7 @@ void display_wizard_sub_menu()
     for (const auto &[symbol, desc] : wizard_sub_menu_table) {
         std::stringstream ss;
         ss << symbol << ") " << desc;
-        put_str(ss.str().c_str(), r++, c);
+        put_str(ss.str().data(), r++, c);
     }
 }
 }
@@ -913,7 +913,7 @@ WishResultType do_cmd_wishing(PlayerType *player_ptr, int prob, bool allow_art, 
                     continue;
                 }
 
-                strcpy(o_name, e_ref.name.c_str());
+                strcpy(o_name, e_ref.name.data());
 #ifndef JP
                 str_tolower(o_name);
 #endif
@@ -958,7 +958,7 @@ WishResultType do_cmd_wishing(PlayerType *player_ptr, int prob, bool allow_art, 
             str_tolower(o_name);
 #endif
             a_str = a_desc;
-            strcpy(a_desc, a_ref.name.c_str());
+            strcpy(a_desc, a_ref.name.data());
 
             if (*a_str == '$') {
                 a_str++;
@@ -996,7 +996,7 @@ WishResultType do_cmd_wishing(PlayerType *player_ptr, int prob, bool allow_art, 
                 msg_format("Matching artifact No.%d %s(%s)", a_idx, a_desc, _(&o_name[2], o_name));
             }
 
-            std::vector<const char *> l = { a_str, a_ref.name.c_str(), _(&o_name[2], o_name) };
+            std::vector<const char *> l = { a_str, a_ref.name.data(), _(&o_name[2], o_name) };
             for (size_t c = 0; c < l.size(); c++) {
                 if (!strcmp(str, l.at(c))) {
                     len = strlen(l.at(c));

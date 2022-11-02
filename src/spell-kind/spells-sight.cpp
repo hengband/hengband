@@ -471,7 +471,7 @@ bool probing(PlayerType *player_ptr)
         inkey();
         term_erase(0, 0, 255);
         if (lore_do_probe(player_ptr, m_ptr->r_idx)) {
-            strcpy(buf, (r_ptr->name.c_str()));
+            strcpy(buf, (r_ptr->name.data()));
 #ifdef JP
             msg_format("%sについてさらに詳しくなった気がする。", buf);
 #else

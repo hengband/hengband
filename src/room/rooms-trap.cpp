@@ -90,6 +90,6 @@ bool build_type14(PlayerType *player_ptr, dun_data_type *dd_ptr)
     g_ptr->mimic = g_ptr->feat;
     g_ptr->feat = trap;
 
-    msg_format_wizard(player_ptr, CHEAT_DUNGEON, _("%sの部屋が生成されました。", "Room of %s was generated."), terrains_info[trap].name.c_str());
+    msg_format_wizard(player_ptr, CHEAT_DUNGEON, _("%sの部屋が生成されました。", "Room of %s was generated."), terrains_info[trap].name.data());
     return true;
 }

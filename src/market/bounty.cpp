@@ -110,7 +110,7 @@ bool exchange_cash(PlayerType *player_ptr)
         o_ptr = &player_ptr->inventory_list[i];
         const auto r_idx_of_item = static_cast<MonsterRaceId>(o_ptr->pval);
 
-        if ((o_ptr->tval == ItemKindType::CORPSE) && (o_ptr->sval == SV_CORPSE) && (streq(monraces_info[r_idx_of_item].name.c_str(), monraces_info[w_ptr->today_mon].name.c_str()))) {
+        if ((o_ptr->tval == ItemKindType::CORPSE) && (o_ptr->sval == SV_CORPSE) && (streq(monraces_info[r_idx_of_item].name.data(), monraces_info[w_ptr->today_mon].name.data()))) {
             char buf[MAX_NLEN + 32];
             describe_flavor(player_ptr, o_name, o_ptr, 0);
             sprintf(buf, _("%s を換金しますか？", "Convert %s into money? "), o_name);
@@ -130,7 +130,7 @@ bool exchange_cash(PlayerType *player_ptr)
         o_ptr = &player_ptr->inventory_list[i];
         const auto r_idx_of_item = static_cast<MonsterRaceId>(o_ptr->pval);
 
-        if ((o_ptr->tval == ItemKindType::CORPSE) && (o_ptr->sval == SV_SKELETON) && (streq(monraces_info[r_idx_of_item].name.c_str(), monraces_info[w_ptr->today_mon].name.c_str()))) {
+        if ((o_ptr->tval == ItemKindType::CORPSE) && (o_ptr->sval == SV_SKELETON) && (streq(monraces_info[r_idx_of_item].name.data(), monraces_info[w_ptr->today_mon].name.data()))) {
             char buf[MAX_NLEN + 32];
             describe_flavor(player_ptr, o_name, o_ptr, 0);
             sprintf(buf, _("%s を換金しますか？", "Convert %s into money? "), o_name);
@@ -218,7 +218,7 @@ void today_target(PlayerType *player_ptr)
 
     clear_bldg(4, 18);
     c_put_str(TERM_YELLOW, _("本日の賞金首", "Wanted monster that changes from day to day"), 5, 10);
-    sprintf(buf, _("ターゲット： %s", "target: %s"), r_ptr->name.c_str());
+    sprintf(buf, _("ターゲット： %s", "target: %s"), r_ptr->name.data());
     c_put_str(TERM_YELLOW, buf, 6, 10);
     sprintf(buf, _("死体 ---- $%d", "corpse   ---- $%d"), (int)r_ptr->level * 50 + 100);
     prt(buf, 8, 10);
@@ -258,7 +258,7 @@ void show_bounty(void)
         auto color = is_achieved ? TERM_RED : TERM_WHITE;
         auto done_mark = is_achieved ? _("(済)", "(done)") : "";
 
-        c_prt(color, format("%s %s", r_ptr->name.c_str(), done_mark), y + 7, 10);
+        c_prt(color, format("%s %s", r_ptr->name.data(), done_mark), y + 7, 10);
 
         y = (y + 1) % 10;
         if (!y && (i < std::size(w_ptr->bounties) - 1)) {
@@ -299,7 +299,7 @@ void determine_daily_bounty(PlayerType *player_ptr, bool conv_old)
         r_ptr = &monraces_info[w_ptr->today_mon];
 
         if (cheat_hear) {
-            msg_format("日替わり候補: %s ", r_ptr->name.c_str());
+            msg_format("日替わり候補: %s ", r_ptr->name.data());
         }
 
         if (r_ptr->kind_flags.has(MonsterKindType::UNIQUE)) {

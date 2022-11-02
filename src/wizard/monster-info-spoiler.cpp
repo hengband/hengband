@@ -122,11 +122,11 @@ SpoilerOutputResultType spoil_mon_desc(concptr fname, std::function<bool(const m
 
         const auto name = str_separate(r_ptr->name, 40);
         if (r_ptr->kind_flags.has(MonsterKindType::UNIQUE)) {
-            sprintf(nam, "[U] %s", name.front().c_str());
+            sprintf(nam, "[U] %s", name.front().data());
         } else if (r_ptr->population_flags.has(MonsterPopulationType::NAZGUL)) {
-            sprintf(nam, "[N] %s", name.front().c_str());
+            sprintf(nam, "[N] %s", name.front().data());
         } else {
-            sprintf(nam, _("    %s", "The %s"), name.front().c_str());
+            sprintf(nam, _("    %s", "The %s"), name.front().data());
         }
 
         sprintf(lev, "%d", (int)r_ptr->level);
@@ -144,7 +144,7 @@ SpoilerOutputResultType spoil_mon_desc(concptr fname, std::function<bool(const m
         fprintf(spoiler_file, "%-45.45s%4s %4s %4s %7s %7s  %19.19s\n", nam, lev, rar, spd, hp, ac, symbol);
 
         for (auto i = 1U; i < name.size(); ++i) {
-            fprintf(spoiler_file, "    %s\n", name[i].c_str());
+            fprintf(spoiler_file, "    %s\n", name[i].data());
         }
     }
 
@@ -203,7 +203,7 @@ SpoilerOutputResultType spoil_mon_info(concptr fname)
             spoil_out("[N] ");
         }
 
-        sprintf(buf, _("%s/%s  (", "%s%s ("), r_ptr->name.c_str(), _(r_ptr->E_name.c_str(), "")); /* ---)--- */
+        sprintf(buf, _("%s/%s  (", "%s%s ("), r_ptr->name.data(), _(r_ptr->E_name.data(), "")); /* ---)--- */
         spoil_out(buf);
         spoil_out(attr_to_text(r_ptr));
         sprintf(buf, " '%c')\n", r_ptr->d_char);
