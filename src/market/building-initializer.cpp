@@ -35,12 +35,12 @@ void init_towns(void)
             }
 
             for (const auto &kind : store_regular_sale_table.at(sst)) {
-                auto k_idx = lookup_kind(kind.tval, kind.sval);
+                auto k_idx = lookup_kind(kind.type_value, kind.subtype_value);
                 store_ptr->regular.push_back(k_idx);
             }
 
             for (const auto &kind : store_sale_table.at(sst)) {
-                auto k_idx = lookup_kind(kind.tval, kind.sval);
+                auto k_idx = lookup_kind(kind.type_value, kind.subtype_value);
                 store_ptr->table.push_back(k_idx);
             }
         }

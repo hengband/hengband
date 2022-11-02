@@ -1,4 +1,6 @@
 ﻿#include "store/articles-on-sale.h"
+#include "object/tval-types.h"
+#include "store/store-owners.h"
 #include "sv-definition/sv-amulet-types.h"
 #include "sv-definition/sv-armor-types.h"
 #include "sv-definition/sv-bow-types.h"
@@ -14,6 +16,7 @@
 #include "sv-definition/sv-staff-types.h"
 #include "sv-definition/sv-wand-types.h"
 #include "sv-definition/sv-weapon-types.h"
+#include "system/baseitem-info-definition.h"
 
 /*!
  * @brief 店舗で常時販売するオブジェクトを定義する
