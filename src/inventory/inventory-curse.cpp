@@ -218,7 +218,8 @@ static void curse_teleport(PlayerType *player_ptr)
  */
 static void occur_chainsword_effect(PlayerType *player_ptr)
 {
-    if ((player_ptr->cursed_special.has_not(CurseSpecialTraitType::CHAINSWORD)) || !one_in_(CHAINSWORD_NOISE)) {
+    constexpr auto chance_noise = 100;
+    if ((player_ptr->cursed_special.has_not(CurseSpecialTraitType::CHAINSWORD)) || !one_in_(chance_noise)) {
         return;
     }
 
@@ -443,7 +444,8 @@ static void occur_curse_effects(PlayerType *player_ptr)
 
     curse_teleport(player_ptr);
     occur_chainsword_effect(player_ptr);
-    if (player_ptr->cursed.has(CurseTraitType::TY_CURSE) && one_in_(TY_CURSE_CHANCE)) {
+    constexpr auto chance_ty_curse = 200;
+    if (player_ptr->cursed.has(CurseTraitType::TY_CURSE) && one_in_(chance_ty_curse)) {
         int count = 0;
         (void)activate_ty_curse(player_ptr, false, &count);
     }

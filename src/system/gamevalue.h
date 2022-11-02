@@ -10,9 +10,6 @@
 
 #define MAX_SKILLS 10
 
-#define TY_CURSE_CHANCE 200 /*!<太古の怨念の1ターン毎の発動確率(1/n)*/
-#define CHAINSWORD_NOISE 100 /*!<チェンソーの1ターン毎の発動確率(1/n)*/
-
 #define SPEAK_CHANCE 8
 #define GRINDNOISE 20
 #define CYBERNOISE 20
