@@ -72,7 +72,7 @@ public:
     to_multibyte(const to_multibyte &) = delete;
     char *&operator=(const char *&) = delete;
 
-    char *c_str()
+    char *data()
     {
         return buf.has_value() ? (*buf).data() : NULL;
     }
