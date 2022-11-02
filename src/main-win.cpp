@@ -338,7 +338,7 @@ static void save_prefs_aux(int i)
     }
 
     auto pwchar = td->lf.lfFaceName[0] != '\0' ? td->lf.lfFaceName : _(L"ＭＳ ゴシック", L"Courier");
-    WritePrivateProfileStringA(sec_name, "Font", to_multibyte(pwchar).data(), ini_file);
+    WritePrivateProfileStringA(sec_name, "Font", to_multibyte(pwchar).c_str(), ini_file);
 
     wsprintfA(buf, "%d", td->lf.lfWidth);
     WritePrivateProfileStringA(sec_name, "FontWid", buf, ini_file);
@@ -2245,7 +2245,7 @@ LRESULT PASCAL angband_window_procedure(HWND hWnd, UINT uMsg, WPARAM wParam, LPA
             term_no_press = false;
         } else {
             WCHAR wc[2] = { (WCHAR)wParam, '\0' };
-            term_keypress(to_multibyte(wc).data());
+            term_keypress(to_multibyte(wc).c_str());
         }
         return 0;
     }
@@ -2503,7 +2503,7 @@ LRESULT PASCAL AngbandListProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPara
             term_no_press = false;
         } else {
             WCHAR wc[2] = { (WCHAR)wParam, '\0' };
-            term_keypress(to_multibyte(wc).data());
+            term_keypress(to_multibyte(wc).c_str());
         }
         return 0;
     }

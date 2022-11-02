@@ -51,7 +51,7 @@ void save_screen_as_html(HWND hWnd)
     ofnw.Flags = OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT;
 
     if (GetSaveFileNameW(&ofnw)) {
-        do_cmd_save_screen_html_aux(to_multibyte(&buf[0]).data(), 0);
+        do_cmd_save_screen_html_aux(to_multibyte(&buf[0]).c_str(), 0);
     }
 }
 
@@ -92,7 +92,7 @@ bool get_open_filename(OPENFILENAMEW *ofn, concptr dirname, char *filename, DWOR
     // call API
     if (GetOpenFileNameW(ofn)) {
         // to multibyte
-        strncpy_s(filename, max_name_size, to_multibyte(&buf[0]).data(), _TRUNCATE);
+        strncpy_s(filename, max_name_size, to_multibyte(&buf[0]).c_str(), _TRUNCATE);
         return true;
     }
 
