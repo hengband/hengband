@@ -291,7 +291,7 @@ void WorldTurnProcessor::shuffle_shopkeeper()
         }
 
         if (cheat_xtra) {
-            msg_format(_("%sの店主をシャッフルします。", "Shuffle a Shopkeeper of %s."), f_ref.name.c_str());
+            msg_format(_("%sの店主をシャッフルします。", "Shuffle a Shopkeeper of %s."), f_ref.name.data());
         }
 
         store_shuffle(this->player_ptr, i2enum<StoreSaleType>(n));

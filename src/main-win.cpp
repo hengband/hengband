@@ -338,7 +338,7 @@ static void save_prefs_aux(int i)
     }
 
     auto pwchar = td->lf.lfFaceName[0] != '\0' ? td->lf.lfFaceName : _(L"ＭＳ ゴシック", L"Courier");
-    WritePrivateProfileStringA(sec_name, "Font", to_multibyte(pwchar).c_str(), ini_file);
+    WritePrivateProfileStringA(sec_name, "Font", to_multibyte(pwchar).data(), ini_file);
 
     wsprintfA(buf, "%d", td->lf.lfWidth);
     WritePrivateProfileStringA(sec_name, "FontWid", buf, ini_file);
@@ -1545,7 +1545,7 @@ static void check_for_save_file(const std::string &savefile_option)
         return;
     }
 
-    strcpy(savefile, savefile_option.c_str());
+    strcpy(savefile, savefile_option.data());
     validate_file(savefile);
     game_in_progress = true;
 }
@@ -2245,7 +2245,7 @@ LRESULT PASCAL angband_window_procedure(HWND hWnd, UINT uMsg, WPARAM wParam, LPA
             term_no_press = false;
         } else {
             WCHAR wc[2] = { (WCHAR)wParam, '\0' };
-            term_keypress(to_multibyte(wc).c_str());
+            term_keypress(to_multibyte(wc).data());
         }
         return 0;
     }
@@ -2503,7 +2503,7 @@ LRESULT PASCAL AngbandListProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPara
             term_no_press = false;
         } else {
             WCHAR wc[2] = { (WCHAR)wParam, '\0' };
-            term_keypress(to_multibyte(wc).c_str());
+            term_keypress(to_multibyte(wc).data());
         }
         return 0;
     }

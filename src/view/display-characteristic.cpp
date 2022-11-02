@@ -316,7 +316,7 @@ static void process_one_characteristic(PlayerType *player_ptr, TERM_LEN row, TER
         if (s == "." && (!char_stat.has_imm && !char_stat.has_vul)) {
             clr = TERM_L_DARK;
         }
-        c_put_str(clr, s.c_str(), row, col++);
+        c_put_str(clr, s.data(), row, col++);
     }
 }
 

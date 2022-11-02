@@ -133,7 +133,7 @@ void do_cmd_visuals(PlayerType *player_ptr)
                     continue;
                 }
 
-                auto_dump_printf(auto_dump_stream, "# %s\n", r_ref.name.c_str());
+                auto_dump_printf(auto_dump_stream, "# %s\n", r_ref.name.data());
                 auto_dump_printf(auto_dump_stream, "R:%d:0x%02X/0x%02X\n\n", r_ref.idx, (byte)(r_ref.x_attr), (byte)(r_ref.x_char));
             }
 
@@ -206,7 +206,7 @@ void do_cmd_visuals(PlayerType *player_ptr)
                     continue;
                 }
 
-                auto_dump_printf(auto_dump_stream, "# %s\n", (f_ref.name.c_str()));
+                auto_dump_printf(auto_dump_stream, "# %s\n", (f_ref.name.data()));
                 auto_dump_printf(auto_dump_stream, "F:%d:0x%02X/0x%02X:0x%02X/0x%02X:0x%02X/0x%02X\n\n", f_ref.idx, (byte)(f_ref.x_attr[F_LIT_STANDARD]),
                     (byte)(f_ref.x_char[F_LIT_STANDARD]), (byte)(f_ref.x_attr[F_LIT_LITE]), (byte)(f_ref.x_char[F_LIT_LITE]),
                     (byte)(f_ref.x_attr[F_LIT_DARK]), (byte)(f_ref.x_char[F_LIT_DARK]));
@@ -231,7 +231,7 @@ void do_cmd_visuals(PlayerType *player_ptr)
                 TERM_COLOR ca = r_ptr->x_attr;
                 byte cc = r_ptr->x_char;
 
-                term_putstr(5, 17, -1, TERM_WHITE, format(_("モンスター = %d, 名前 = %-40.40s", "Monster = %d, Name = %-40.40s"), r, r_ptr->name.c_str()));
+                term_putstr(5, 17, -1, TERM_WHITE, format(_("モンスター = %d, 名前 = %-40.40s", "Monster = %d, Name = %-40.40s"), r, r_ptr->name.data()));
                 term_putstr(10, 19, -1, TERM_WHITE, format(_("初期値  色 / 文字 = %3u / %3u", "Default attr/char = %3u / %3u"), da, dc));
                 term_putstr(40, 19, -1, TERM_WHITE, empty_symbol);
                 term_queue_bigchar(43, 19, da, dc, 0, 0);
@@ -303,7 +303,7 @@ void do_cmd_visuals(PlayerType *player_ptr)
 
                 term_putstr(5, 17, -1, TERM_WHITE,
                     format(
-                        _("アイテム = %d, 名前 = %-40.40s", "Object = %d, Name = %-40.40s"), k, (!k_ptr->flavor ? k_ptr->name : k_ptr->flavor_name).c_str()));
+                        _("アイテム = %d, 名前 = %-40.40s", "Object = %d, Name = %-40.40s"), k, (!k_ptr->flavor ? k_ptr->name : k_ptr->flavor_name).data()));
                 term_putstr(10, 19, -1, TERM_WHITE, format(_("初期値  色 / 文字 = %3d / %3d", "Default attr/char = %3d / %3d"), da, dc));
                 term_putstr(40, 19, -1, TERM_WHITE, empty_symbol);
                 term_queue_bigchar(43, 19, da, dc, 0, 0);
@@ -376,7 +376,7 @@ void do_cmd_visuals(PlayerType *player_ptr)
 
                 prt("", 17, 5);
                 term_putstr(5, 17, -1, TERM_WHITE,
-                    format(_("地形 = %d, 名前 = %s, 明度 = %s", "Terrain = %d, Name = %s, Lighting = %s"), f, (f_ptr->name.c_str()),
+                    format(_("地形 = %d, 名前 = %s, 明度 = %s", "Terrain = %d, Name = %s, Lighting = %s"), f, (f_ptr->name.data()),
                         lighting_level_str[lighting_level]));
                 term_putstr(10, 19, -1, TERM_WHITE, format(_("初期値  色 / 文字 = %3d / %3d", "Default attr/char = %3d / %3d"), da, dc));
                 term_putstr(40, 19, -1, TERM_WHITE, empty_symbol);

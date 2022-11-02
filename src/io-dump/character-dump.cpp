@@ -185,7 +185,7 @@ static void dump_aux_recall(FILE *fff)
             seiha = true;
         }
 
-        fprintf(fff, _("   %c%-12s: %3d 階\n", "   %c%-16s: level %3d\n"), seiha ? '!' : ' ', d_ref.name.c_str(), (int)max_dlv[d_ref.idx]);
+        fprintf(fff, _("   %c%-12s: %3d 階\n", "   %c%-16s: level %3d\n"), seiha ? '!' : ' ', d_ref.name.data(), (int)max_dlv[d_ref.idx]);
     }
 }
 
@@ -268,9 +268,9 @@ static void dump_aux_arena(PlayerType *player_ptr, FILE *fff)
         } else {
 #ifdef JP
             fprintf(
-                fff, "\n 闘技場: %d回戦で%sの前に敗北\n", -player_ptr->arena_number, monraces_info[arena_info[-1 - player_ptr->arena_number].r_idx].name.c_str());
+                fff, "\n 闘技場: %d回戦で%sの前に敗北\n", -player_ptr->arena_number, monraces_info[arena_info[-1 - player_ptr->arena_number].r_idx].name.data());
 #else
-            fprintf(fff, "\n Arena: Defeated by %s in the %d%s fight\n", monraces_info[arena_info[-1 - player_ptr->arena_number].r_idx].name.c_str(),
+            fprintf(fff, "\n Arena: Defeated by %s in the %d%s fight\n", monraces_info[arena_info[-1 - player_ptr->arena_number].r_idx].name.data(),
                 -player_ptr->arena_number, get_ordinal_number_suffix(-player_ptr->arena_number));
 #endif
         }
@@ -377,9 +377,9 @@ static void dump_aux_monsters(PlayerType *player_ptr, FILE *fff)
         }
 
         auto name = str_separate(r_ptr->name, 40);
-        fprintf(fff, _("  %-40s (レベル%3d)%s\n", "  %-40s (level %3d)%s\n"), name.front().c_str(), (int)r_ptr->level, buf);
+        fprintf(fff, _("  %-40s (レベル%3d)%s\n", "  %-40s (level %3d)%s\n"), name.front().data(), (int)r_ptr->level, buf);
         for (auto i = 1U; i < name.size(); ++i) {
-            fprintf(fff, "  %s\n", name[i].c_str());
+            fprintf(fff, "  %s\n", name[i].data());
         }
     }
 }
@@ -473,7 +473,7 @@ static void dump_aux_virtues(PlayerType *player_ptr, FILE *fff)
     }
 
     std::string alg = PlayerAlignment(player_ptr).get_alignment_description();
-    fprintf(fff, _("\n属性 : %s\n", "\nYour alignment : %s\n"), alg.c_str());
+    fprintf(fff, _("\n属性 : %s\n", "\nYour alignment : %s\n"), alg.data());
     fprintf(fff, "\n");
     dump_virtues(player_ptr, fff);
 }

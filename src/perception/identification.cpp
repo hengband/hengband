@@ -43,7 +43,7 @@ bool screen_object(PlayerType *player_ptr, ObjectType *o_ptr, BIT_FLAGS mode)
     int trivial_info = 0;
     auto flgs = object_flags(o_ptr);
 
-    const auto item_text = o_ptr->is_fixed_artifact() ? artifacts_info.at(o_ptr->fixed_artifact_idx).text.c_str() : baseitems_info[o_ptr->k_idx].text.c_str();
+    const auto item_text = o_ptr->is_fixed_artifact() ? artifacts_info.at(o_ptr->fixed_artifact_idx).text.data() : baseitems_info[o_ptr->k_idx].text.data();
     shape_buffer(item_text, 77 - 15, temp, sizeof(temp));
 
     int i = 0;
@@ -803,8 +803,8 @@ bool screen_object(PlayerType *player_ptr, ObjectType *o_ptr, BIT_FLAGS mode)
     if ((o_ptr->tval == ItemKindType::STATUE) && (o_ptr->sval == SV_PHOTO)) {
         auto statue_r_idx = i2enum<MonsterRaceId>(o_ptr->pval);
         auto *r_ptr = &monraces_info[statue_r_idx];
-        int namelen = strlen(r_ptr->name.c_str());
-        prt(format("%s: '", r_ptr->name.c_str()), 1, 15);
+        int namelen = strlen(r_ptr->name.data());
+        prt(format("%s: '", r_ptr->name.data()), 1, 15);
         term_queue_bigchar(18 + namelen, 1, r_ptr->x_attr, r_ptr->x_char, 0, 0);
         prt("'", 1, (use_bigtile ? 20 : 19) + namelen);
     } else {

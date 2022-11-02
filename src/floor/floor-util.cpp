@@ -209,6 +209,6 @@ concptr map_name(PlayerType *player_ptr)
     } else if (!floor_ptr->dun_level && player_ptr->town_num) {
         return town_info[player_ptr->town_num].name;
     } else {
-        return dungeons_info[player_ptr->dungeon_idx].name.c_str();
+        return dungeons_info[player_ptr->dungeon_idx].name.data();
     }
 }

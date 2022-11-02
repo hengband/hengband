@@ -109,7 +109,7 @@ void display_debug_menu(int page, int max_page, int page_size, int max_line)
         std::stringstream ss;
         const auto &[symbol, desc] = debug_menu_table[pos];
         ss << symbol << ") " << desc;
-        put_str(ss.str().c_str(), r++, c);
+        put_str(ss.str().data(), r++, c);
     }
     if (max_page > 1) {
         put_str("-- more --", r++, c);

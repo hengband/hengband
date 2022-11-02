@@ -180,7 +180,7 @@ void OtherItemsEnchanter::generate_statue()
 
     this->o_ptr->pval = enum2i(r_idx);
     if (cheat_peek) {
-        msg_format(_("%sの像", "Statue of %s"), r_ptr->name.c_str());
+        msg_format(_("%sの像", "Statue of %s"), r_ptr->name.data());
     }
 
     object_aware(this->player_ptr, this->o_ptr);

@@ -152,7 +152,7 @@ void get_random_name(ObjectType *o_ptr, char *return_name, bool armour, int powe
     }
 
     auto filename = get_random_art_filename(armour, power);
-    (void)get_rnd_line(filename.c_str(), o_ptr->artifact_bias, return_name);
+    (void)get_rnd_line(filename.data(), o_ptr->artifact_bias, return_name);
 #ifdef JP
     if (return_name[0] == 0) {
         get_table_name(return_name);

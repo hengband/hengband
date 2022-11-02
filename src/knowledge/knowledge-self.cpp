@@ -41,7 +41,7 @@ void do_cmd_knowledge_virtues(PlayerType *player_ptr)
     }
 
     std::string alg = PlayerAlignment(player_ptr).get_alignment_description();
-    fprintf(fff, _("現在の属性 : %s\n\n", "Your alignment : %s\n\n"), alg.c_str());
+    fprintf(fff, _("現在の属性 : %s\n\n", "Your alignment : %s\n\n"), alg.data());
     dump_virtues(player_ptr, fff);
     angband_fclose(fff);
     (void)show_file(player_ptr, true, file_name, _("八つの徳", "Virtues"), 0, 0);
@@ -162,7 +162,7 @@ static void dump_winner_classes(FILE *fff)
         }
 
         if (l.size() + t.size() + 2 > max_len) {
-            fprintf(fff, " %s\n", str_rtrim(l).c_str());
+            fprintf(fff, " %s\n", str_rtrim(l).data());
             l = "";
         }
         if (l.size() > 0) {
@@ -172,7 +172,7 @@ static void dump_winner_classes(FILE *fff)
     }
 
     if (l.size() > 0) {
-        fprintf(fff, " %s\n", str_rtrim(l).c_str());
+        fprintf(fff, " %s\n", str_rtrim(l).data());
     }
 }
 

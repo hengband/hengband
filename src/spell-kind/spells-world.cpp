@@ -379,7 +379,7 @@ static DUNGEON_IDX choose_dungeon(concptr note, POSITION y, POSITION x)
         if (max_dlv[DUNGEON_ANGBAND]) {
             return DUNGEON_ANGBAND;
         } else {
-            msg_format(_("まだ%sに入ったことはない。", "You haven't entered %s yet."), dungeons_info[DUNGEON_ANGBAND].name.c_str());
+            msg_format(_("まだ%sに入ったことはない。", "You haven't entered %s yet."), dungeons_info[DUNGEON_ANGBAND].name.data());
             msg_print(nullptr);
             return 0;
         }
@@ -407,7 +407,7 @@ static DUNGEON_IDX choose_dungeon(concptr note, POSITION y, POSITION x)
         }
 
         sprintf(buf, _("      %c) %c%-12s : 最大 %d 階", "      %c) %c%-16s : Max level %d"),
-            static_cast<char>('a' + dun.size()), seiha ? '!' : ' ', d_ref.name.c_str(), (int)max_dlv[d_ref.idx]);
+            static_cast<char>('a' + dun.size()), seiha ? '!' : ' ', d_ref.name.data(), (int)max_dlv[d_ref.idx]);
         prt(buf, y + dun.size(), x);
         dun.push_back(d_ref.idx);
     }
@@ -505,7 +505,7 @@ bool free_level_recall(PlayerType *player_ptr)
     }
 
     const auto mes = _("%sの何階にテレポートしますか？", "Teleport to which level of %s? ");
-    QUANTITY amt = get_quantity(format(mes, dungeon.name.c_str()), (QUANTITY)max_depth);
+    QUANTITY amt = get_quantity(format(mes, dungeon.name.data()), (QUANTITY)max_depth);
     if (amt <= 0) {
         return false;
     }
@@ -568,7 +568,7 @@ bool reset_recall(PlayerType *player_ptr)
         exe_write_diary(player_ptr, DIARY_TRUMP, select_dungeon, _("フロア・リセットで", "using a scroll of reset recall"));
     }
 #ifdef JP
-    msg_format("%sの帰還レベルを %d 階にセット。", dungeons_info[select_dungeon].name.c_str(), dummy, dummy * 50);
+    msg_format("%sの帰還レベルを %d 階にセット。", dungeons_info[select_dungeon].name.data(), dummy, dummy * 50);
 #else
     msg_format("Recall depth set to level %d (%d').", dummy, dummy * 50);
 #endif

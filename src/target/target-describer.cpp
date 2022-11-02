@@ -486,7 +486,7 @@ static concptr decide_target_floor(PlayerType *player_ptr, eg_type *eg_ptr)
     }
 
     if (eg_ptr->f_ptr->flags.has(TerrainCharacteristics::ENTRANCE)) {
-        return format(_("%s(%d階相当)", "%s(level %d)"), dungeons_info[eg_ptr->g_ptr->special].text.c_str(), dungeons_info[eg_ptr->g_ptr->special].mindepth);
+        return format(_("%s(%d階相当)", "%s(level %d)"), dungeons_info[eg_ptr->g_ptr->special].text.data(), dungeons_info[eg_ptr->g_ptr->special].mindepth);
     }
 
     if (eg_ptr->f_ptr->flags.has(TerrainCharacteristics::TOWN)) {
@@ -497,7 +497,7 @@ static concptr decide_target_floor(PlayerType *player_ptr, eg_type *eg_ptr)
         return _("道", "road");
     }
 
-    return eg_ptr->f_ptr->name.c_str();
+    return eg_ptr->f_ptr->name.data();
 }
 
 static void describe_grid_monster_all(eg_type *eg_ptr)

@@ -147,9 +147,9 @@ void process_dungeon(PlayerType *player_ptr, bool load_game)
         const auto &guardian_ref = monraces_info[guardian];
         if (guardian_ref.max_num) {
 #ifdef JP
-            msg_format("この階には%sの主である%sが棲んでいる。", dungeon.name.c_str(), guardian_ref.name.c_str());
+            msg_format("この階には%sの主である%sが棲んでいる。", dungeon.name.data(), guardian_ref.name.data());
 #else
-            msg_format("%^s lives in this level as the keeper of %s.", guardian_ref.name.c_str(), dungeon.name.c_str());
+            msg_format("%^s lives in this level as the keeper of %s.", guardian_ref.name.data(), dungeon.name.data());
 #endif
         }
     }

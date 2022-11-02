@@ -157,7 +157,7 @@ void sanity_blast(PlayerType *player_ptr, monster_type *m_ptr, bool necro)
         get_mon_num_prep(player_ptr, get_nightmare, nullptr);
         r_ptr = &monraces_info[get_mon_num(player_ptr, 0, MAX_DEPTH, 0)];
         power = r_ptr->level + 10;
-        desc = r_ptr->name.c_str();
+        desc = r_ptr->name.data();
         get_mon_num_prep(player_ptr, nullptr, nullptr);
 #ifdef JP
 #else

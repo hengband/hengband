@@ -57,7 +57,7 @@ void display_wizard_game_modifier_menu()
     for (const auto &[symbol, desc] : wizard_game_modifier_menu_table) {
         std::stringstream ss;
         ss << symbol << ") " << desc;
-        put_str(ss.str().c_str(), r++, c);
+        put_str(ss.str().data(), r++, c);
     }
 }
 

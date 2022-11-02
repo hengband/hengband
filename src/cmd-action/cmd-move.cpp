@@ -272,7 +272,7 @@ void do_cmd_go_down(PlayerType *player_ptr)
         if (!max_dlv[target_dungeon]) {
             const auto mes = _("ここには%sの入り口(%d階相当)があります", "There is the entrance of %s (Danger level: %d)");
             const auto &dungeon = dungeons_info[target_dungeon];
-            msg_format(mes, dungeon.name.c_str(), dungeon.mindepth);
+            msg_format(mes, dungeon.name.data(), dungeon.mindepth);
             if (!get_check(_("本当にこのダンジョンに入りますか？", "Do you really get in this dungeon? "))) {
                 return;
             }
@@ -312,7 +312,7 @@ void do_cmd_go_down(PlayerType *player_ptr)
         msg_print(_("わざと落とし戸に落ちた。", "You deliberately jump through the trap door."));
     } else {
         if (target_dungeon) {
-            msg_format(_("%sへ入った。", "You entered %s."), dungeons_info[player_ptr->dungeon_idx].text.c_str());
+            msg_format(_("%sへ入った。", "You entered %s."), dungeons_info[player_ptr->dungeon_idx].text.data());
         } else {
             if (is_echizen(player_ptr)) {
                 msg_print(_("なんだこの階段は！", "What's this STAIRWAY!"));

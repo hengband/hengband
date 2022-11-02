@@ -178,7 +178,7 @@ void display_store(PlayerType *player_ptr, StoreSaleType store_num)
         return;
     }
 
-    concptr store_name = terrains_info[cur_store_feat].name.c_str();
+    concptr store_name = terrains_info[cur_store_feat].name.data();
     concptr owner_name = (ot_ptr->owner_name);
     concptr race_name = race_info[enum2i(ot_ptr->owner_race)].title;
     char buf[80];

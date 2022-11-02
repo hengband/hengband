@@ -68,7 +68,7 @@ static void display_feature_list(int col, int row, int per_page, FEAT_IDX *feat_
         auto *f_ptr = &terrains_info[f_idx];
         int row_i = row + i;
         attr = ((i + feat_top == feat_cur) ? TERM_L_BLUE : TERM_WHITE);
-        c_prt(attr, f_ptr->name.c_str(), row_i, col);
+        c_prt(attr, f_ptr->name.data(), row_i, col);
         if (per_page == 1) {
             c_prt(attr, format("(%s)", lighting_level_str[lighting_level]), row_i, col + 1 + f_ptr->name.size());
             c_prt(attr, format("%02x/%02x", f_ptr->x_attr[lighting_level], (unsigned char)f_ptr->x_char[lighting_level]), row_i,
@@ -385,7 +385,7 @@ void do_cmd_knowledge_dungeon(PlayerType *player_ptr)
             seiha = true;
         }
 
-        fprintf(fff, _("%c%-12s :  %3d 階\n", "%c%-16s :  level %3d\n"), seiha ? '!' : ' ', d_ref.name.c_str(), (int)max_dlv[d_ref.idx]);
+        fprintf(fff, _("%c%-12s :  %3d 階\n", "%c%-16s :  level %3d\n"), seiha ? '!' : ' ', d_ref.name.data(), (int)max_dlv[d_ref.idx]);
     }
 
     angband_fclose(fff);

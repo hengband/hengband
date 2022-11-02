@@ -26,7 +26,7 @@ void monster_desc(PlayerType *player_ptr, char *desc, monster_type *m_ptr, BIT_F
 {
     monster_race *r_ptr;
     r_ptr = &monraces_info[m_ptr->ap_r_idx];
-    concptr name = (mode & MD_TRUE_NAME) ? m_ptr->get_real_r_ref().name.c_str() : r_ptr->name.c_str();
+    concptr name = (mode & MD_TRUE_NAME) ? m_ptr->get_real_r_ref().name.data() : r_ptr->name.data();
     GAME_TEXT silly_name[1024];
     bool named = false;
     auto is_hallucinated = player_ptr->effects()->hallucination()->is_hallucinated();
@@ -45,7 +45,7 @@ void monster_desc(PlayerType *player_ptr, char *desc, monster_type *m_ptr, BIT_F
                 hallu_race = &monraces_info[r_idx];
             } while (hallu_race->name.empty() || hallu_race->kind_flags.has(MonsterKindType::UNIQUE));
 
-            strcpy(silly_name, (hallu_race->name.c_str()));
+            strcpy(silly_name, (hallu_race->name.data()));
         }
 
         name = silly_name;
@@ -243,7 +243,7 @@ void monster_desc(PlayerType *player_ptr, char *desc, monster_type *m_ptr, BIT_F
     }
 
     if ((mode & MD_IGNORE_HALLU) && !m_ptr->is_original_ap()) {
-        strcat(desc, format("(%s)", monraces_info[m_ptr->r_idx].name.c_str()));
+        strcat(desc, format("(%s)", monraces_info[m_ptr->r_idx].name.data()));
     }
 
     /* Handle the Possessive as a special afterthought */

@@ -240,7 +240,7 @@ bool affect_feature(PlayerType *player_ptr, MONSTER_IDX who, POSITION r, POSITIO
             break;
         }
 
-        msg_format(_("%sに何かがつっかえて開かなくなった。", "The %s seems stuck."), mimic_f_ptr->name.c_str());
+        msg_format(_("%sに何かがつっかえて開かなくなった。", "The %s seems stuck."), mimic_f_ptr->name.data());
         obvious = true;
         break;
     }
@@ -250,7 +250,7 @@ bool affect_feature(PlayerType *player_ptr, MONSTER_IDX who, POSITION r, POSITIO
         }
 
         if (known && g_ptr->is_mark()) {
-            msg_format(_("%sが溶けて泥になった！", "The %s turns into mud!"), terrains_info[g_ptr->get_feat_mimic()].name.c_str());
+            msg_format(_("%sが溶けて泥になった！", "The %s turns into mud!"), terrains_info[g_ptr->get_feat_mimic()].name.data());
             obvious = true;
         }
 
@@ -428,7 +428,7 @@ bool affect_feature(PlayerType *player_ptr, MONSTER_IDX who, POSITION r, POSITIO
         }
 
         if (known && (g_ptr->is_mark())) {
-            msg_format(_("%sが割れた！", "The %s crumbled!"), terrains_info[g_ptr->get_feat_mimic()].name.c_str());
+            msg_format(_("%sが割れた！", "The %s crumbled!"), terrains_info[g_ptr->get_feat_mimic()].name.data());
             sound(SOUND_GLASS);
         }
 
@@ -450,7 +450,7 @@ bool affect_feature(PlayerType *player_ptr, MONSTER_IDX who, POSITION r, POSITIO
         }
 
         if (known && (g_ptr->is_mark())) {
-            msg_format(_("%sが割れた！", "The %s crumbled!"), terrains_info[g_ptr->get_feat_mimic()].name.c_str());
+            msg_format(_("%sが割れた！", "The %s crumbled!"), terrains_info[g_ptr->get_feat_mimic()].name.data());
             sound(SOUND_GLASS);
         }
 

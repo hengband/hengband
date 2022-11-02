@@ -137,7 +137,7 @@ static void display_phisique(PlayerType *player_ptr)
     display_player_one_line(ENTRY_SOCIAL, format("%d", (int)player_ptr->sc), TERM_L_BLUE);
 #endif
     std::string alg = PlayerAlignment(player_ptr).get_alignment_description();
-    display_player_one_line(ENTRY_ALIGN, format("%s", alg.c_str()), TERM_L_BLUE);
+    display_player_one_line(ENTRY_ALIGN, format("%s", alg.data()), TERM_L_BLUE);
 }
 
 /*!
@@ -188,9 +188,9 @@ static std::optional<std::string> search_death_cause(PlayerType *player_ptr)
 
     if (!floor_ptr->dun_level) {
 #ifdef JP
-        return std::string(format("…あなたは%sで%sに殺された。", map_name(player_ptr), player_ptr->died_from.c_str()));
+        return std::string(format("…あなたは%sで%sに殺された。", map_name(player_ptr), player_ptr->died_from.data()));
 #else
-        return std::string(format("...You were killed by %s in %s.", player_ptr->died_from.c_str(), map_name(player_ptr)));
+        return std::string(format("...You were killed by %s in %s.", player_ptr->died_from.data(), map_name(player_ptr)));
 #endif
     }
 
@@ -204,16 +204,16 @@ static std::optional<std::string> search_death_cause(PlayerType *player_ptr)
 
         const auto *q_ptr = &quest_list[floor_ptr->quest_number];
 #ifdef JP
-        return std::string(format("…あなたは、クエスト「%s」で%sに殺された。", q_ptr->name, player_ptr->died_from.c_str()));
+        return std::string(format("…あなたは、クエスト「%s」で%sに殺された。", q_ptr->name, player_ptr->died_from.data()));
 #else
-        return std::string(format("...You were killed by %s in the quest '%s'.", player_ptr->died_from.c_str(), q_ptr->name));
+        return std::string(format("...You were killed by %s in the quest '%s'.", player_ptr->died_from.data(), q_ptr->name));
 #endif
     }
 
 #ifdef JP
-    return std::string(format("…あなたは、%sの%d階で%sに殺された。", map_name(player_ptr), (int)floor_ptr->dun_level, player_ptr->died_from.c_str()));
+    return std::string(format("…あなたは、%sの%d階で%sに殺された。", map_name(player_ptr), (int)floor_ptr->dun_level, player_ptr->died_from.data()));
 #else
-    return std::string(format("...You were killed by %s on level %d of %s.", player_ptr->died_from.c_str(), floor_ptr->dun_level, map_name(player_ptr)));
+    return std::string(format("...You were killed by %s on level %d of %s.", player_ptr->died_from.data(), floor_ptr->dun_level, map_name(player_ptr)));
 #endif
 }
 
@@ -280,7 +280,7 @@ static int display_current_floor(const std::string &statmsg)
 {
     char temp[1000];
     constexpr auto chars_per_line = 60;
-    shape_buffer(statmsg.c_str(), chars_per_line, temp, sizeof(temp));
+    shape_buffer(statmsg.data(), chars_per_line, temp, sizeof(temp));
     auto t = temp;
     auto statmsg_size = statmsg.size();
     auto fraction = statmsg_size % (chars_per_line - 1);
@@ -321,7 +321,7 @@ std::optional<int> display_player(PlayerType *player_ptr, const int tmp_mode)
     display_player_basic_info(player_ptr);
     display_magic_realms(player_ptr);
     if (PlayerClass(player_ptr).equals(PlayerClassType::CHAOS_WARRIOR) || (player_ptr->muta.has(PlayerMutationType::CHAOS_GIFT))) {
-        display_player_one_line(ENTRY_PATRON, patron_list[player_ptr->chaos_patron].name.c_str(), TERM_L_BLUE);
+        display_player_one_line(ENTRY_PATRON, patron_list[player_ptr->chaos_patron].name.data(), TERM_L_BLUE);
     }
 
     display_phisique(player_ptr);

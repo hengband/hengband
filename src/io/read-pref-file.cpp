@@ -138,7 +138,7 @@ static errr process_pref_file_aux(PlayerType *player_ptr, concptr name, int pref
         /* Print error message */
         /* ToDo: Add better error messages */
         msg_format(_("ファイル'%s'の%d行でエラー番号%dのエラー。", "Error %d in line %d of file '%s'."), _(name, err), line, _(err, name));
-        msg_format(_("('%s'を解析中)", "Parsing '%s'"), error_line.c_str());
+        msg_format(_("('%s'を解析中)", "Parsing '%s'"), error_line.data());
         msg_print(nullptr);
     }
 

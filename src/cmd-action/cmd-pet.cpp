@@ -268,11 +268,11 @@ bool do_cmd_riding(PlayerType *player_ptr, bool force)
             /* Feature code (applying "mimic" field) */
             auto *f_ptr = &terrains_info[g_ptr->get_feat_mimic()];
 #ifdef JP
-            msg_format("そのモンスターは%sの%sにいる。", f_ptr->name.c_str(),
+            msg_format("そのモンスターは%sの%sにいる。", f_ptr->name.data(),
                 (f_ptr->flags.has_none_of({ TerrainCharacteristics::MOVE, TerrainCharacteristics::CAN_FLY }) || f_ptr->flags.has_none_of({ TerrainCharacteristics::LOS, TerrainCharacteristics::TREE })) ? "中" : "上");
 #else
             msg_format("This monster is %s the %s.",
-                (f_ptr->flags.has_none_of({ TerrainCharacteristics::MOVE, TerrainCharacteristics::CAN_FLY }) || f_ptr->flags.has_none_of({ TerrainCharacteristics::LOS, TerrainCharacteristics::TREE })) ? "in" : "on", f_ptr->name.c_str());
+                (f_ptr->flags.has_none_of({ TerrainCharacteristics::MOVE, TerrainCharacteristics::CAN_FLY }) || f_ptr->flags.has_none_of({ TerrainCharacteristics::LOS, TerrainCharacteristics::TREE })) ? "in" : "on", f_ptr->name.data());
 #endif
 
             return false;
@@ -404,7 +404,7 @@ void do_cmd_pet(PlayerType *player_ptr)
     powers[num++] = PET_DISMISS;
 
     auto is_hallucinated = player_ptr->effects()->hallucination()->is_hallucinated();
-    auto taget_of_pet = monraces_info[player_ptr->current_floor_ptr->m_list[player_ptr->pet_t_m_idx].ap_r_idx].name.c_str();
+    auto taget_of_pet = monraces_info[player_ptr->current_floor_ptr->m_list[player_ptr->pet_t_m_idx].ap_r_idx].name.data();
     auto target_of_pet_appearance = is_hallucinated ? _("何か奇妙な物", "something strange") : taget_of_pet;
     auto mes = _("ペットのターゲットを指定 (現在：%s)", "specify a target of pet (now:%s)");
     auto target_name = player_ptr->pet_t_m_idx > 0 ? target_of_pet_appearance : _("指定なし", "nothing");
@@ -559,7 +559,7 @@ void do_cmd_pet(PlayerType *player_ptr)
         while (!flag) {
             if (choice == ESCAPE) {
                 choice = ' ';
-            } else if (!get_com(prompt.c_str(), &choice, true)) {
+            } else if (!get_com(prompt.data(), &choice, true)) {
                 break;
             }
 
@@ -631,7 +631,7 @@ void do_cmd_pet(PlayerType *player_ptr)
                         }
 
                         ss << power_desc[control];
-                        prt(ss.str().c_str(), y + control, x);
+                        prt(ss.str().data(), y + control, x);
                     }
 
                     prt("", y + std::min(control, 17), x);

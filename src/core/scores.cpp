@@ -233,14 +233,14 @@ errr top_twenty(PlayerType *player_ptr)
     /* Save the cause of death (31 chars) */
     if (player_ptr->died_from.size() >= sizeof(the_score.how)) {
 #ifdef JP
-        angband_strcpy(the_score.how, player_ptr->died_from.c_str(), sizeof(the_score.how) - 2);
+        angband_strcpy(the_score.how, player_ptr->died_from.data(), sizeof(the_score.how) - 2);
         strcat(the_score.how, "…");
 #else
-        angband_strcpy(the_score.how, player_ptr->died_from.c_str(), sizeof(the_score.how) - 3);
+        angband_strcpy(the_score.how, player_ptr->died_from.data(), sizeof(the_score.how) - 3);
         strcat(the_score.how, "...");
 #endif
     } else {
-        angband_strcpy(the_score.how, player_ptr->died_from.c_str(), sizeof(the_score.how));
+        angband_strcpy(the_score.how, player_ptr->died_from.data(), sizeof(the_score.how));
     }
 
     /* Grab permissions */

@@ -35,7 +35,7 @@
  */
 bool is_autopick_match(PlayerType *player_ptr, ObjectType *o_ptr, autopick_type *entry, concptr o_name)
 {
-    concptr ptr = entry->name.c_str();
+    concptr ptr = entry->name.data();
     if (IS_FLG(FLG_UNAWARE) && o_ptr->is_aware()) {
         return false;
     }
