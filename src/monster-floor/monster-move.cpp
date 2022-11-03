@@ -179,22 +179,20 @@ static void bash_glass_door(PlayerType *player_ptr, turn_flags *turn_flags_ptr, 
 static bool process_door(PlayerType *player_ptr, turn_flags *turn_flags_ptr, monster_type *m_ptr, POSITION ny, POSITION nx)
 {
     auto *r_ptr = &monraces_info[m_ptr->r_idx];
-    grid_type *g_ptr;
-    g_ptr = &player_ptr->current_floor_ptr->grid_array[ny][nx];
-    if (!is_closed_door(player_ptr, g_ptr->feat)) {
+    const auto &g_ref = player_ptr->current_floor_ptr->grid_array[ny][nx];
+    if (!is_closed_door(player_ptr, g_ref.feat)) {
         return true;
     }
 
-    TerrainType *f_ptr;
-    f_ptr = &terrains_info[g_ptr->feat];
-    bool may_bash = bash_normal_door(player_ptr, turn_flags_ptr, m_ptr, ny, nx);
-    bash_glass_door(player_ptr, turn_flags_ptr, m_ptr, f_ptr, may_bash);
-
+    auto *terrain_ptr = &terrains_info[g_ref.feat];
+    auto may_bash = bash_normal_door(player_ptr, turn_flags_ptr, m_ptr, ny, nx);
+    bash_glass_door(player_ptr, turn_flags_ptr, m_ptr, terrain_ptr, may_bash);
     if (!turn_flags_ptr->did_open_door && !turn_flags_ptr->did_bash_door) {
         return true;
     }
 
-    if (turn_flags_ptr->did_bash_door && ((randint0(100) < 50) || (feat_state(player_ptr->current_floor_ptr, g_ptr->feat, TerrainCharacteristics::OPEN) == g_ptr->feat) || f_ptr->flags.has(TerrainCharacteristics::GLASS))) {
+    const auto is_open = feat_state(player_ptr->current_floor_ptr, g_ref.feat, TerrainCharacteristics::OPEN) == g_ref.feat;
+    if (turn_flags_ptr->did_bash_door && ((randint0(100) < 50) || is_open || terrain_ptr->flags.has(TerrainCharacteristics::GLASS))) {
         cave_alter_feat(player_ptr, ny, nx, TerrainCharacteristics::BASH);
         if (!m_ptr->is_valid()) {
             player_ptr->update |= (PU_FLOW);
@@ -209,7 +207,6 @@ static bool process_door(PlayerType *player_ptr, turn_flags *turn_flags_ptr, mon
         cave_alter_feat(player_ptr, ny, nx, TerrainCharacteristics::OPEN);
     }
 
-    f_ptr = &terrains_info[g_ptr->feat];
     turn_flags_ptr->do_view = true;
     return true;
 }
@@ -317,7 +314,8 @@ static bool process_post_dig_wall(PlayerType *player_ptr, turn_flags *turn_flags
         return true;
     }
 
-    if (one_in_(GRINDNOISE)) {
+    constexpr auto chance_sound = 20;
+    if (one_in_(chance_sound)) {
         if (f_ptr->flags.has(TerrainCharacteristics::GLASS)) {
             msg_print(_("何かの砕ける音が聞こえる。", "There is a crashing sound."));
         } else {
@@ -430,9 +428,11 @@ bool process_monster_movement(PlayerType *player_ptr, turn_flags *turn_flags_ptr
         }
 
         turn_flags_ptr->do_turn = true;
-        TerrainType *f_ptr;
-        f_ptr = &terrains_info[g_ptr->feat];
-        if (f_ptr->flags.has(TerrainCharacteristics::TREE) && r_ptr->feature_flags.has_not(MonsterFeatureType::CAN_FLY) && (r_ptr->wilderness_flags.has_not(MonsterWildernessType::WILD_WOOD))) {
+        const auto &terrain_ref = terrains_info[g_ptr->feat];
+        auto can_recover_energy = terrain_ref.flags.has(TerrainCharacteristics::TREE);
+        can_recover_energy &= r_ptr->feature_flags.has_not(MonsterFeatureType::CAN_FLY);
+        can_recover_energy &= r_ptr->wilderness_flags.has_not(MonsterWildernessType::WILD_WOOD);
+        if (can_recover_energy) {
             m_ptr->energy_need += ENERGY_NEED();
         }
 
@@ -440,8 +440,11 @@ bool process_monster_movement(PlayerType *player_ptr, turn_flags *turn_flags_ptr
             break;
         }
 
-        monster_race *ap_r_ptr = &monraces_info[m_ptr->ap_r_idx];
-        if (m_ptr->ml && (disturb_move || (disturb_near && m_ptr->mflag.has(MonsterTemporaryFlagType::VIEW) && projectable(player_ptr, player_ptr->y, player_ptr->x, m_ptr->fy, m_ptr->fx)) || (disturb_high && ap_r_ptr->r_tkills && ap_r_ptr->level >= player_ptr->lev))) {
+        const auto &ap_r_ref = monraces_info[m_ptr->ap_r_idx];
+        const auto is_projectable = projectable(player_ptr, player_ptr->y, player_ptr->x, m_ptr->fy, m_ptr->fx);
+        const auto can_see = disturb_near && m_ptr->mflag.has(MonsterTemporaryFlagType::VIEW) && is_projectable;
+        const auto is_high_level = disturb_high && (ap_r_ref.r_tkills > 0) && (ap_r_ref.level >= player_ptr->lev);
+        if (m_ptr->ml && (disturb_move || can_see || is_high_level)) {
             if (m_ptr->is_hostile()) {
                 disturb(player_ptr, false, true);
             }
@@ -518,7 +521,8 @@ void process_speak_sound(PlayerType *player_ptr, MONSTER_IDX m_idx, POSITION oy,
     }
 
     auto *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
-    if (m_ptr->ap_r_idx == MonsterRaceId::CYBER && one_in_(CYBERNOISE) && !m_ptr->ml && (m_ptr->cdis <= MAX_SIGHT)) {
+    constexpr auto chance_noise = 20;
+    if (m_ptr->ap_r_idx == MonsterRaceId::CYBER && one_in_(chance_noise) && !m_ptr->ml && (m_ptr->cdis <= MAX_PLAYER_SIGHT)) {
         if (disturb_minor) {
             disturb(player_ptr, false, false);
         }
@@ -526,7 +530,8 @@ void process_speak_sound(PlayerType *player_ptr, MONSTER_IDX m_idx, POSITION oy,
     }
 
     auto can_speak = monraces_info[m_ptr->ap_r_idx].speak_flags.any();
-    if (!can_speak || !aware || !one_in_(SPEAK_CHANCE) || !player_has_los_bold(player_ptr, oy, ox) || !projectable(player_ptr, oy, ox, player_ptr->y, player_ptr->x)) {
+    constexpr auto chance_speak = 8;
+    if (!can_speak || !aware || !one_in_(chance_speak) || !player_has_los_bold(player_ptr, oy, ox) || !projectable(player_ptr, oy, ox, player_ptr->y, player_ptr->x)) {
         return;
     }
 

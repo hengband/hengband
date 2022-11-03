@@ -29,18 +29,21 @@ static bool random_art_aura(ObjectType *o_ptr, tr_type tr_sh_flag)
 
 /*!
  * @brief 免疫フラグを付与する
- * @details フラグの付与には 1/BIAS_LUCK の確率を通過する必要があり、さらに 1/IM_LUCK の確率を通過しなければ他の免疫フラグは消去される。
  * @param o_ptr フラグを付与するオブジェクト構造体へのポインタ
  * @param tr_im_flag 付与するフラグ (TR_IM_*)
  * @return 続くフラグ付与の処理を打ち切る場合 true を返す
+ * @details フラグの付与には 1/chance_bias の確率を通過する必要がある.
+ * 更に、1/chance_immunity の確率を通過しなければ他の免疫フラグは消去される.
  */
 static bool random_art_immunity(ObjectType *o_ptr, tr_type tr_im_flag)
 {
-    if (!one_in_(BIAS_LUCK) || o_ptr->art_flags.has(tr_im_flag)) {
+    constexpr auto chance_bias = 20;
+    if (!one_in_(chance_bias) || o_ptr->art_flags.has(tr_im_flag)) {
         return false;
     }
 
-    if (!one_in_(IM_LUCK)) {
+    constexpr auto chance_immunity = 7;
+    if (!one_in_(chance_immunity)) {
         o_ptr->art_flags.reset(TR_IM_ACID);
         o_ptr->art_flags.reset(TR_IM_ELEC);
         o_ptr->art_flags.reset(TR_IM_FIRE);
@@ -100,7 +103,7 @@ static bool switch_random_art_resistance(ObjectType *o_ptr)
 /* 一定確率で再試行する */
 static void set_weird_bias_acid(ObjectType *o_ptr)
 {
-    if (!one_in_(WEIRD_LUCK)) {
+    if (!one_in_(CHANCE_STRENGTHENING)) {
         random_resistance(o_ptr);
         return;
     }
@@ -114,7 +117,7 @@ static void set_weird_bias_acid(ObjectType *o_ptr)
 /* 一定確率で再試行する */
 static void set_weird_bias_elec(ObjectType *o_ptr)
 {
-    if (!one_in_(WEIRD_LUCK)) {
+    if (!one_in_(CHANCE_STRENGTHENING)) {
         random_resistance(o_ptr);
         return;
     }
@@ -128,7 +131,7 @@ static void set_weird_bias_elec(ObjectType *o_ptr)
 /* 一定確率で再試行する */
 static void set_weird_bias_cold(ObjectType *o_ptr)
 {
-    if (!one_in_(WEIRD_LUCK)) {
+    if (!one_in_(CHANCE_STRENGTHENING)) {
         random_resistance(o_ptr);
         return;
     }
@@ -142,7 +145,7 @@ static void set_weird_bias_cold(ObjectType *o_ptr)
 /* 一定確率で再試行する */
 static void set_weird_bias_fire(ObjectType *o_ptr)
 {
-    if (!one_in_(WEIRD_LUCK)) {
+    if (!one_in_(CHANCE_STRENGTHENING)) {
         random_resistance(o_ptr);
         return;
     }

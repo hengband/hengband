@@ -1,6 +1,6 @@
 ﻿#include "room/rooms-city.h"
 #include "floor/floor-generator.h"
-#include "floor/wild.h"
+#include "floor/floor-town.h"
 #include "game-option/cheat-types.h"
 #include "grid/feature.h"
 #include "grid/grid.h"
@@ -151,7 +151,7 @@ static void build_stores(PlayerType *player_ptr, POSITION ltcy, POSITION ltcx, S
                 });
             it != terrains_info.end()) {
             cave_set_feat(player_ptr, ltcy + y, ltcx + x, (*it).idx);
-            store_init(NO_TOWN, stores[i]);
+            store_init(VALID_TOWNS, stores[i]);
         }
     }
 }

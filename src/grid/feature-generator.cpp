@@ -18,36 +18,60 @@
 #include "system/player-type-definition.h"
 #include "wizard/wizard-messages.h"
 
+/*
+ * @brief 洞窟らしい地形 (湖、溶岩、瓦礫、森林)の個数を決める
+ * @param d_ref ダンジョンへの参照
+ * @return briefで定義した個数
+ */
+static int calc_cavern_terrains(const dungeon_type &d_ref)
+{
+    auto count = 0;
+    if (d_ref.flags.has(DungeonFeatureType::LAKE_WATER)) {
+        count += 3;
+    }
+
+    if (d_ref.flags.has(DungeonFeatureType::LAKE_LAVA)) {
+        count += 3;
+    }
+
+    if (d_ref.flags.has(DungeonFeatureType::LAKE_RUBBLE)) {
+        count += 3;
+    }
+
+    if (d_ref.flags.has(DungeonFeatureType::LAKE_TREE)) {
+        count += 3;
+    }
+
+    return count;
+}
+
+static bool decide_cavern(const FloorType &floor_ref, const dungeon_type &dungeon_ref, const dun_data_type &dd_ref)
+{
+    constexpr auto can_become_cavern = 20;
+    auto should_build_cavern = floor_ref.dun_level > can_become_cavern;
+    should_build_cavern &= !dd_ref.empty_level;
+    should_build_cavern &= dungeon_ref.flags.has(DungeonFeatureType::CAVERN);
+    should_build_cavern &= dd_ref.laketype == 0;
+    should_build_cavern &= !dd_ref.destroyed;
+    should_build_cavern &= randint1(1000) < floor_ref.dun_level;
+    return should_build_cavern;
+}
+
 /*!
- * @brief フロアに洞窟や湖を配置する / Generate various caverns and lakes
- * @details There were moved from cave_gen().
+ * @brief フロアに破壊地形、洞窟、湖、溶岩、森林等を配置する.
  */
 void gen_caverns_and_lakes(PlayerType *player_ptr, dungeon_type *dungeon_ptr, dun_data_type *dd_ptr)
 {
     auto *floor_ptr = player_ptr->current_floor_ptr;
-    if ((floor_ptr->dun_level > 30) && one_in_(DUN_DEST * 2) && small_levels && dungeon_ptr->flags.has(DungeonFeatureType::DESTROY)) {
+    constexpr auto chance_destroyed = 18;
+    if ((floor_ptr->dun_level > 30) && one_in_(chance_destroyed * 2) && small_levels && dungeon_ptr->flags.has(DungeonFeatureType::DESTROY)) {
         dd_ptr->destroyed = true;
         build_lake(player_ptr, one_in_(2) ? LAKE_T_CAVE : LAKE_T_EARTH_VAULT);
     }
 
-    if (one_in_(LAKE_LEVEL) && !dd_ptr->empty_level && !dd_ptr->destroyed && dungeon_ptr->flags.has_any_of(DF_LAKE_MASK)) {
-        int count = 0;
-        if (dungeon_ptr->flags.has(DungeonFeatureType::LAKE_WATER)) {
-            count += 3;
-        }
-
-        if (dungeon_ptr->flags.has(DungeonFeatureType::LAKE_LAVA)) {
-            count += 3;
-        }
-
-        if (dungeon_ptr->flags.has(DungeonFeatureType::LAKE_RUBBLE)) {
-            count += 3;
-        }
-
-        if (dungeon_ptr->flags.has(DungeonFeatureType::LAKE_TREE)) {
-            count += 3;
-        }
-
+    constexpr auto chance_water = 24;
+    if (one_in_(chance_water) && !dd_ptr->empty_level && !dd_ptr->destroyed && dungeon_ptr->flags.has_any_of(DF_LAKE_MASK)) {
+        auto count = calc_cavern_terrains(*dungeon_ptr);
         if (dungeon_ptr->flags.has(DungeonFeatureType::LAKE_LAVA)) {
             if ((floor_ptr->dun_level > 80) && (randint0(count) < 2)) {
                 dd_ptr->laketype = LAKE_T_LAVA;
@@ -97,7 +121,8 @@ void gen_caverns_and_lakes(PlayerType *player_ptr, dungeon_type *dungeon_ptr, du
         }
     }
 
-    if ((floor_ptr->dun_level > DUN_CAVERN) && !dd_ptr->empty_level && dungeon_ptr->flags.has(DungeonFeatureType::CAVERN) && !dd_ptr->laketype && !dd_ptr->destroyed && (randint1(1000) < floor_ptr->dun_level)) {
+    const auto should_build_cavern = decide_cavern(*floor_ptr, *dungeon_ptr, *dd_ptr);
+    if (should_build_cavern) {
         dd_ptr->cavern = true;
         msg_print_wizard(player_ptr, CHEAT_DUNGEON, _("洞窟を生成。", "Cavern on level."));
         build_cavern(player_ptr);

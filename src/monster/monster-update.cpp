@@ -439,11 +439,11 @@ static void decide_sight_invisible_monster(PlayerType *player_ptr, um_type *um_p
 
     m_ptr->mflag.reset(MonsterTemporaryFlagType::ESP);
 
-    if (distance > (um_ptr->in_darkness ? MAX_SIGHT / 2 : MAX_SIGHT)) {
+    if (distance > (um_ptr->in_darkness ? MAX_PLAYER_SIGHT / 2 : MAX_PLAYER_SIGHT)) {
         return;
     }
 
-    if (!um_ptr->in_darkness || (distance <= MAX_SIGHT / 4)) {
+    if (!um_ptr->in_darkness || (distance <= MAX_PLAYER_SIGHT / 4)) {
         update_telepathy_sight(player_ptr, um_ptr, m_idx);
         update_specific_race_telepathy(player_ptr, um_ptr);
     }

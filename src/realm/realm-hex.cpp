@@ -265,7 +265,7 @@ concptr do_hex_spell(PlayerType *player_ptr, spell_hex_type spell, SpellProcessT
             return _("周囲の邪悪なモンスターを感知する。", "Detects evil monsters.");
         }
         if (info) {
-            return info_range(MAX_SIGHT);
+            return info_range(MAX_PLAYER_SIGHT);
         }
         if (cast) {
             msg_print(_("邪悪な生物の存在を感じ取ろうとした。", "You sense the presence of evil creatures."));

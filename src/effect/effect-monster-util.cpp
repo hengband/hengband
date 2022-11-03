@@ -66,7 +66,7 @@ effect_monster_type *initialize_effect_monster(PlayerType *player_ptr, effect_mo
     em_ptr->seen_msg = is_seen(player_ptr, em_ptr->m_ptr);
     em_ptr->slept = em_ptr->m_ptr->is_asleep();
     em_ptr->obvious = false;
-    em_ptr->known = ((em_ptr->m_ptr->cdis <= MAX_SIGHT) || player_ptr->phase_out);
+    em_ptr->known = ((em_ptr->m_ptr->cdis <= MAX_PLAYER_SIGHT) || player_ptr->phase_out);
     em_ptr->skipped = false;
     em_ptr->get_angry = false;
     em_ptr->do_polymorph = false;

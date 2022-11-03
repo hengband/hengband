@@ -227,7 +227,7 @@ void aggravate_monsters(PlayerType *player_ptr, MONSTER_IDX who)
             continue;
         }
 
-        if (m_ptr->cdis < MAX_SIGHT * 2) {
+        if (m_ptr->cdis < MAX_PLAYER_SIGHT * 2) {
             if (m_ptr->is_asleep()) {
                 (void)set_monster_csleep(player_ptr, i, 0);
                 sleep = true;

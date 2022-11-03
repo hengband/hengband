@@ -1,11 +1,7 @@
 ﻿#pragma once
 
 #include "system/angband.h"
-
 #include <vector>
-
-#define NO_TOWN 6
-#define SECRET_TOWN 5
 
 enum parse_error_type : int;
 

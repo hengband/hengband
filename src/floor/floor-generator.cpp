@@ -289,13 +289,19 @@ static bool level_gen(PlayerType *player_ptr, concptr *why)
 {
     auto *floor_ptr = player_ptr->current_floor_ptr;
     DUNGEON_IDX d_idx = floor_ptr->dungeon_idx;
-    if ((always_small_levels || ironman_small_levels || (one_in_(SMALL_LEVEL) && small_levels) || dungeons_info[d_idx].flags.has(DungeonFeatureType::BEGINNER) || dungeons_info[d_idx].flags.has(DungeonFeatureType::SMALLEST)) && dungeons_info[d_idx].flags.has_not(DungeonFeatureType::BIG)) {
+    const auto &dungeon = dungeons_info[d_idx];
+    constexpr auto chance_small_floor = 3;
+    auto is_small_level = always_small_levels || ironman_small_levels;
+    is_small_level |= one_in_(chance_small_floor) && small_levels;
+    is_small_level |= dungeon.flags.has(DungeonFeatureType::BEGINNER);
+    is_small_level |= dungeon.flags.has(DungeonFeatureType::SMALLEST);
+    if (is_small_level && dungeon.flags.has_not(DungeonFeatureType::BIG)) {
         int level_height;
         int level_width;
-        if (dungeons_info[d_idx].flags.has(DungeonFeatureType::SMALLEST)) {
+        if (dungeon.flags.has(DungeonFeatureType::SMALLEST)) {
             level_height = 1;
             level_width = 1;
-        } else if (dungeons_info[d_idx].flags.has(DungeonFeatureType::BEGINNER)) {
+        } else if (dungeon.flags.has(DungeonFeatureType::BEGINNER)) {
             level_height = 2;
             level_width = 2;
         } else {

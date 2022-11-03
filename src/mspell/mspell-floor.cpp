@@ -314,9 +314,9 @@ MonsterSpellResult spell_RF6_TELE_AWAY(PlayerType *player_ptr, MONSTER_IDX m_idx
     }
 
     if (t_idx == player_ptr->riding) {
-        teleport_player_away(m_idx, player_ptr, MAX_SIGHT * 2 + 5, false);
+        teleport_player_away(m_idx, player_ptr, MAX_PLAYER_SIGHT * 2 + 5, false);
     } else {
-        teleport_away(player_ptr, t_idx, MAX_SIGHT * 2 + 5, TELEPORT_PASSIVE);
+        teleport_away(player_ptr, t_idx, MAX_PLAYER_SIGHT * 2 + 5, TELEPORT_PASSIVE);
     }
     set_monster_csleep(player_ptr, t_idx, 0);
 

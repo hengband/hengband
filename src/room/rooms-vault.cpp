@@ -9,6 +9,7 @@
 #include "floor/cave.h"
 #include "floor/floor-generator-util.h"
 #include "floor/floor-generator.h"
+#include "floor/floor-town.h"
 #include "floor/geometry.h"
 #include "floor/wild.h"
 #include "game-option/cheat-types.h"
@@ -430,7 +431,7 @@ static void build_vault(
                 /* Black market in a dungeon */
             case 'S':
                 set_cave_feat(floor_ptr, y, x, feat_black_market);
-                store_init(NO_TOWN, StoreSaleType::BLACK);
+                store_init(VALID_TOWNS, StoreSaleType::BLACK);
                 break;
 
                 /* The Pattern */

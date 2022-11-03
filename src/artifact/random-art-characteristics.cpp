@@ -131,22 +131,25 @@ static std::string get_random_art_filename(const bool armour, const int power)
 }
 
 /*!
- * @brief ランダムアーティファクト生成中、対象のオブジェクトに名前を与える。/ Set name of randomartifact.
- * @details 確率によって、シンダリン銘、漢字銘、固定名のいずれか一つが与えられる。
+ * @brief ランダムアーティファクト生成中、対象のオブジェクトに名前を与える.
  * @param o_ptr 処理中のアイテム参照ポインタ
  * @param return_name 名前を返すための文字列参照ポインタ
  * @param armour 対象のオブジェクトが防具が否か
  * @param power 銘の基準となるオブジェクトの価値レベル(0=呪い、1=低位、2=中位、3以上=高位)
+ * @details 確率によって、シンダリン銘、漢字銘 (anameからランダム)、固定名のいずれか一つが与えられる.
+ * シンダリン銘：10%、漢字銘18%、固定銘72% (固定銘が尽きていたら漢字銘になることもある).
  */
 void get_random_name(ObjectType *o_ptr, char *return_name, bool armour, int power)
 {
-    PERCENTAGE prob = randint1(100);
-    if (prob <= SINDARIN_NAME) {
+    const auto prob = randint1(100);
+    constexpr auto chance_sindarin = 10;
+    if (prob <= chance_sindarin) {
         get_table_sindarin(return_name);
         return;
     }
 
-    if (prob <= TABLE_NAME) {
+    constexpr auto chance_table = 20;
+    if (prob <= chance_table) {
         get_table_name(return_name);
         return;
     }

@@ -172,7 +172,8 @@ static void decide_warrior_bias(PlayerType *player_ptr, ObjectType *o_ptr, const
 
 static bool decide_random_art_cursed(const bool a_scroll, ObjectType *o_ptr)
 {
-    if (!a_scroll && one_in_(A_CURSED)) {
+    constexpr auto chance_cursed = 13;
+    if (!a_scroll && one_in_(chance_cursed)) {
         return true;
     }
 
@@ -190,7 +191,7 @@ static int decide_random_art_power(const bool a_cursed)
         powers++;
     }
 
-    if (!a_cursed && one_in_(WEIRD_LUCK)) {
+    if (!a_cursed && one_in_(CHANCE_STRENGTHENING)) {
         powers *= 2;
     }
 
@@ -261,7 +262,7 @@ static void strengthen_pval(ObjectType *o_ptr)
         } while (o_ptr->pval < randint1(5) || one_in_(o_ptr->pval));
     }
 
-    if ((o_ptr->pval > 4) && !one_in_(WEIRD_LUCK)) {
+    if ((o_ptr->pval > 4) && !one_in_(CHANCE_STRENGTHENING)) {
         o_ptr->pval = 4;
     }
 }
@@ -457,7 +458,8 @@ bool become_random_artifact(PlayerType *player_ptr, ObjectType *o_ptr, bool a_sc
         curse_artifact(player_ptr, o_ptr);
     }
 
-    if (!a_cursed && one_in_(o_ptr->is_armour() ? ACTIVATION_CHANCE * 2 : ACTIVATION_CHANCE)) {
+    constexpr auto activation_chance = 3;
+    if (!a_cursed && one_in_(o_ptr->is_armour() ? activation_chance * 2 : activation_chance)) {
         o_ptr->activation_id = RandomArtActType::NONE;
         give_activation_power(o_ptr);
     }
@@ -469,7 +471,8 @@ bool become_random_artifact(PlayerType *player_ptr, ObjectType *o_ptr, bool a_sc
 
     reset_flags_poison_needle(o_ptr);
     int power_level = decide_random_art_power_level(o_ptr, a_cursed, total_flags);
-    while (has_extreme_damage_rate(player_ptr, o_ptr) && !one_in_(SWORDFISH_LUCK)) {
+    constexpr auto chance_avoid_weakening = 6;
+    while (has_extreme_damage_rate(player_ptr, o_ptr) && !one_in_(chance_avoid_weakening)) {
         weakening_artifact(o_ptr);
     }
 

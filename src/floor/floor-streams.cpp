@@ -96,7 +96,8 @@ static void recursive_river(FloorType *floor_ptr, POSITION x1, POSITION y1, POSI
         recursive_river(floor_ptr, x1 + dx + changex, y1 + dy + changey, x2, y2, feat1, feat2, width);
 
         /* Split the river some of the time - junctions look cool */
-        if (one_in_(DUN_WAT_CHG) && (width > 0)) {
+        constexpr auto chance_river_junction = 50;
+        if (one_in_(chance_river_junction) && (width > 0)) {
             recursive_river(floor_ptr, x1 + dx + changex, y1 + dy + changey, x1 + 8 * (dx + changex), y1 + 8 * (dy + changey), feat1, feat2, width - 1);
         }
     } else {
@@ -255,7 +256,8 @@ void add_river(FloorType *floor_ptr, dun_data_type *dd_ptr)
     }
     }
 
-    wid = randint1(DUN_WAT_RNG);
+    constexpr auto width_rivers = 2;
+    wid = randint1(width_rivers);
     recursive_river(floor_ptr, x1, y1, x2, y2, feat1, feat2, wid);
 
     /* Hack - Save the location as a "room" */
@@ -307,8 +309,10 @@ void build_streamer(PlayerType *player_ptr, FEAT_IDX feat, int chance)
         dummy++;
 
         /* One grid per density */
-        for (i = 0; i < DUN_STR_DEN; i++) {
-            int d = DUN_STR_RNG;
+        constexpr auto stream_density = 5;
+        for (i = 0; i < stream_density; i++) {
+            constexpr auto stream_width = 5;
+            int d = stream_width;
 
             /* Pick a nearby grid */
             while (true) {

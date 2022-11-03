@@ -93,7 +93,8 @@ static void pass_game_turn_by_stay(void)
         return;
     }
 
-    w_ptr->dungeon_turn += std::min<int>((w_ptr->game_turn - oldturn), TURNS_PER_TICK * 250) * INN_DUNGEON_TURN_ADJ;
+    constexpr auto stay_magnificant = 10;
+    w_ptr->dungeon_turn += std::min<int>((w_ptr->game_turn - oldturn), TURNS_PER_TICK * 250) * stay_magnificant;
     if (w_ptr->dungeon_turn > w_ptr->dungeon_turn_limit) {
         w_ptr->dungeon_turn = w_ptr->dungeon_turn_limit;
     }

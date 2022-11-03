@@ -34,7 +34,7 @@ mam_type *initialize_mam_type(PlayerType *player_ptr, mam_type *mam_ptr, MONSTER
     mam_ptr->do_silly_attack = (one_in_(2) && player_ptr->effects()->hallucination()->is_hallucinated());
     mam_ptr->power = 0;
     mam_ptr->obvious = false;
-    mam_ptr->known = (mam_ptr->m_ptr->cdis <= MAX_SIGHT) || (mam_ptr->t_ptr->cdis <= MAX_SIGHT);
+    mam_ptr->known = (mam_ptr->m_ptr->cdis <= MAX_PLAYER_SIGHT) || (mam_ptr->t_ptr->cdis <= MAX_PLAYER_SIGHT);
     mam_ptr->fear = false;
     mam_ptr->dead = false;
     return mam_ptr;

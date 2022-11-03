@@ -528,7 +528,7 @@ concptr do_life_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessType 
 
         {
             if (cast) {
-                player_ptr->current_floor_ptr->num_repro += MAX_REPRO;
+                player_ptr->current_floor_ptr->num_repro += MAX_REPRODUCTION;
             }
         }
         break;
