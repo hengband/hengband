@@ -218,6 +218,11 @@ static const std::vector<const BaseItemInfo *> &get_sorted_baseitems()
     return sorted_cache;
 }
 
+short lookup_kind(const BaseitemKey &key)
+{
+    return lookup_kind(key.tval(), key.sval());
+}
+
 /*!
  * @brief tvalとsvalに対応するベースアイテムのIDを検索する
  * Find the index of the BaseItemInfo with the given tval and sval

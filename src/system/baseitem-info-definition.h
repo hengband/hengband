@@ -37,14 +37,9 @@ public:
     ItemKindType tval() const;
     int sval() const;
 
-    /*
-     * @todo アクセシビリティによるコンパイルエラーを避けるための一時的措置.
-     * @details svalは後でoptionalにする.
-     */
-    ItemKindType type_value;
-    int subtype_value;
-
 private:
+    ItemKindType type_value;
+    int subtype_value; // @todo optionalにする.
 };
 
 enum class ItemKindType : short;
