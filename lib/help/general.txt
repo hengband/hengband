@@ -106,33 +106,19 @@ memory containing all the experience of past incarnations.
 
 
 --- The official Hengband website ---
-(http://hengband.sourceforge.jp/en/)
+(https://hengband.github.io/)
 
-http://hengband.sourceforge.jp/en/ is the official Hengband website.
+https://hengband.github.io/ is the official Hengband website.
 It includes information on where to download the Hengband source code
 and current executables for most popular operating systems as well as
 information on current development issues.
 
 --- Hengband World Score Board ---
-(http://hengband.sourceforge.jp/en/score.html)
+(https://hengband.github.io/score.html)
 
 The official Hengband website includes this score board. You can see
 hundreds of character records at here. And there is translated version
 of Japanese score board which includes over 5000 records already!
-
---- Hengband BBS ---
-(http://6904.teacup.com/combatechizen/bbs)
-
-If you read and write Japanese, you can ask question and get various
-information from this BBS (Bulletin Board System).
-
---- FTP Sites ---
-(ftp://clockwork.dementia.org/angband/Variant/Hengband/)
-
-Hengband sources and executables are uploaded to
-clockwork.dementia.org FTP site which include most variant of Angband.
-Links to the files are available at Thangorodrim.
-(http://www.thangorodrim.net)
 
 --- The Newsgroup (rec.games.roguelike.angband) ---
 
@@ -148,6 +134,7 @@ Original   : (??)
 Updated    : (??)
 Updated    : Zangband DevTeam
 Updated    : Hengband 1.5.4
+Updated    : Hengband 3.0.0Alpha71
 
 
 ***** Begin Hyperlinks

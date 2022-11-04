@@ -16,7 +16,7 @@
        ZAngband Jap ver.:   Mitsuhiro Itakura <itakura @ users.sourceforge.net>
 
            Hengband: Mr.Hoge (echizen @ users.sourceforge.jp) & Many others
-                       http://hengband.sourceforge.jp/
+                       https://hengband.github.io/
 
             Send bug report to "hengband-dev@lists.sourceforge.jp"
  

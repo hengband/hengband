@@ -16,7 +16,7 @@
        ZAngband 日本語版:    板倉充洋 < itakura＠users.sourceforge.net >
 
           変愚蛮怒: Mr.hoge (echizen＠users.sourceforge.jp) ＆ 多くの方々
-                     http://hengband.sourceforge.jp/
+                     https://hengband.github.io/
 
        変愚蛮怒 は UNIX/X11, Windows, Macintosh で動作しています。
           バグ情報などは上記 URL にある掲示板へお願いします。
