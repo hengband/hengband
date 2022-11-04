@@ -1,4 +1,6 @@
 ﻿#include "store/articles-on-sale.h"
+#include "object/tval-types.h"
+#include "store/store-owners.h"
 #include "sv-definition/sv-amulet-types.h"
 #include "sv-definition/sv-armor-types.h"
 #include "sv-definition/sv-bow-types.h"
@@ -14,6 +16,7 @@
 #include "sv-definition/sv-staff-types.h"
 #include "sv-definition/sv-wand-types.h"
 #include "sv-definition/sv-weapon-types.h"
+#include "system/baseitem-info-definition.h"
 
 /*!
  * @brief 店舗で常時販売するオブジェクトを定義する
@@ -23,7 +26,7 @@
  * 17エントリーまで設定可能。(最後はTV_NONE で止める)
  * 種類が多すぎる場合、店舗を埋めつくすので注意。
  */
-const std::map<StoreSaleType, std::vector<store_stock_item_type>> store_regular_sale_table = {
+const std::map<StoreSaleType, std::vector<BaseitemKey>> store_regular_sale_table = {
     { StoreSaleType::GENERAL,
         {
             { ItemKindType::FOOD, SV_FOOD_RATION },
@@ -98,7 +101,7 @@ const std::map<StoreSaleType, std::vector<store_stock_item_type>> store_regular_
  * @brief 店舗でランダム販売するオブジェクトを定義する
  * @details tval/svalのペア
  */
-const std::map<StoreSaleType, std::vector<store_stock_item_type>> store_sale_table = {
+const std::map<StoreSaleType, std::vector<BaseitemKey>> store_sale_table = {
     { StoreSaleType::GENERAL,
         {
             /* General Store */

@@ -8,9 +8,41 @@
  */
 
 #include "system/baseitem-info-definition.h"
-#include "system/object-type-definition.h"
+#include "object/tval-types.h"
 
-/*
- * The object kind arrays
- */
+BaseitemKey::BaseitemKey(ItemKindType type_value, int subtype_value)
+    : type_value(type_value)
+    , subtype_value(subtype_value)
+{
+}
+
+bool BaseitemKey::operator==(const BaseitemKey &other) const
+{
+    return (this->type_value == other.type_value) && (this->subtype_value == other.subtype_value);
+}
+
+// @details type_valueに大小があればそれを判定し、同一ならばsubtype_valueの大小を判定する.
+bool BaseitemKey::operator<(const BaseitemKey &other) const
+{
+    if (this->type_value < other.type_value) {
+        return true;
+    }
+
+    if (this->type_value > other.type_value) {
+        return false;
+    }
+
+    return this->subtype_value < other.subtype_value;
+}
+
+ItemKindType BaseitemKey::tval() const
+{
+    return this->type_value;
+}
+
+int BaseitemKey::sval() const
+{
+    return this->subtype_value;
+}
+
 std::vector<BaseItemInfo> baseitems_info;
