@@ -128,7 +128,7 @@ static void decide_initial_items(PlayerType *player_ptr, ObjectType *q_ptr)
         break;
     case PlayerRaceType::ANDROID:
         /* Flasks of oil */
-        q_ptr->prep(lookup_kind(ItemKindType::FLASK, SV_ANY));
+        q_ptr->prep(lookup_kind({ ItemKindType::FLASK }));
         ItemMagicApplier(player_ptr, q_ptr, 1, AM_NO_FIXED_ART).execute();
         q_ptr->number = (ITEM_NUMBER)rand_range(7, 12);
         add_outfit(player_ptr, q_ptr);

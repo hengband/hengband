@@ -23,7 +23,7 @@
  * @details
  * 上から優先して配置する。
  * 重複して同じ商品を設定した場合、数量が増える。
- * 17エントリーまで設定可能。(最後はTV_NONE で止める)
+ * 17エントリーまで設定可能。
  * 種類が多すぎる場合、店舗を埋めつくすので注意。
  */
 const std::map<StoreSaleType, std::vector<BaseitemKey>> store_regular_sale_table = {
@@ -153,7 +153,7 @@ const std::map<StoreSaleType, std::vector<BaseitemKey>> store_sale_table = {
             { ItemKindType::FIGURINE, 0 },
             { ItemKindType::WHISTLE, 1 },
             { ItemKindType::ROD, SV_ROD_PESTICIDE },
-            { ItemKindType::STATUE, SV_ANY },
+            { ItemKindType::STATUE },
         } },
 
     {
@@ -336,7 +336,7 @@ const std::map<StoreSaleType, std::vector<BaseitemKey>> store_sale_table = {
             { ItemKindType::POTION, SV_POTION_RESIST_HEAT },
             { ItemKindType::POTION, SV_POTION_RESIST_COLD },
             { ItemKindType::FIGURINE, 0 },
-            { ItemKindType::STATUE, SV_ANY },
+            { ItemKindType::STATUE },
 
             { ItemKindType::SCROLL, SV_SCROLL_REMOVE_CURSE },
             { ItemKindType::SCROLL, SV_SCROLL_REMOVE_CURSE },

@@ -231,8 +231,6 @@ short lookup_kind(const BaseitemKey &key)
 
 /*!
  * @brief tvalとsvalに対応するベースアイテムのIDを検索する
- * Find the index of the BaseItemInfo with the given tval and sval
- * svalにSV_ANYが渡された場合はtvalが一致するすべてのベースアイテムから等確率でランダムに1つを選択する
  * @param tval 検索したいベースアイテムのtval
  * @param sval 検索したいベースアイテムのsval
  * @return tvalとsvalに対応するベースアイテムが存在すればそのID、存在しなければ0
