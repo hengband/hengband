@@ -20,8 +20,13 @@ MeleeWeaponEnchanter::MeleeWeaponEnchanter(PlayerType *player_ptr, ObjectType *o
  */
 void MeleeWeaponEnchanter::apply_magic()
 {
-    if (this->should_skip) {
+    const auto enchant_flags = this->enchant_flags();
+    if (this->power == 0 || enchant_flags.has(MeleeWeaponEnchantType::ONLY_MUNDANITY)) {
         return;
+    }
+
+    if (enchant_flags.has(MeleeWeaponEnchantType::MOD_SLAYING_BONUS)) {
+        this->give_killing_bonus();
     }
 
     if (this->power > 1) {
@@ -29,23 +34,28 @@ void MeleeWeaponEnchanter::apply_magic()
         return;
     }
 
-    if (this->power < -1) {
+    if (enchant_flags.has(MeleeWeaponEnchantType::ENABLE_BECOME_EGO) && (this->power < -1)) {
         this->give_cursed();
     }
 }
 
 /*!
- * @brief アーティファクト生成・ダイス強化処理
+ * @brief エゴもしくはランダムアーティファクト生成・ダイス強化処理
  * @details power > 2はデバッグ専用.
  */
 void MeleeWeaponEnchanter::strengthen()
 {
-    if ((this->power > 2) || one_in_(40)) {
+    const auto enchant_flags = this->enchant_flags();
+
+    if (enchant_flags.has(MeleeWeaponEnchantType::ENABLE_BECOME_RANDOM_ARTIFACT) && ((this->power > 2) || one_in_(40))) {
         become_random_artifact(this->player_ptr, this->o_ptr, false);
         return;
     }
 
-    this->give_ego_index();
+    if (enchant_flags.has(MeleeWeaponEnchantType::ENABLE_BECOME_EGO)) {
+        this->give_ego_index();
+    }
+
     if (this->o_ptr->art_name > 0) {
         return;
     }

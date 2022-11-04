@@ -28,8 +28,7 @@ DiggingEnchanter::DiggingEnchanter(PlayerType *player_ptr, ObjectType *o_ptr, DE
  */
 void DiggingEnchanter::apply_magic()
 {
-    this->decide_skip();
-    if (this->should_skip) {
+    if (this->power == 0) {
         return;
     }
 

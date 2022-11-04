@@ -23,13 +23,6 @@ HaftedEnchanter::HaftedEnchanter(PlayerType *player_ptr, ObjectType *o_ptr, DEPT
 {
 }
 
-void HaftedEnchanter::apply_magic()
-{
-    this->decide_skip();
-    this->give_killing_bonus();
-    MeleeWeaponEnchanter::apply_magic();
-}
-
 void HaftedEnchanter::give_ego_index()
 {
     while (true) {
@@ -69,4 +62,9 @@ void HaftedEnchanter::give_cursed()
 
         return;
     }
+}
+
+MeleeWeaponEnchantFlags HaftedEnchanter::enchant_flags() const
+{
+    return MELEE_WEAPON_NORMAL_ENCHANT_FLAGS;
 }

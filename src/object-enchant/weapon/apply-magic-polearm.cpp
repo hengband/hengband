@@ -22,19 +22,6 @@ PolearmEnchanter::PolearmEnchanter(PlayerType *player_ptr, ObjectType *o_ptr, DE
 {
 }
 
-void PolearmEnchanter::apply_magic()
-{
-    this->decide_skip();
-    this->give_killing_bonus();
-    MeleeWeaponEnchanter::apply_magic();
-}
-
-void PolearmEnchanter::decide_skip()
-{
-    AbstractWeaponEnchanter::decide_skip();
-    this->should_skip |= this->o_ptr->sval == SV_DEATH_SCYTHE;
-}
-
 void PolearmEnchanter::give_ego_index()
 {
     while (true) {
@@ -60,5 +47,16 @@ void PolearmEnchanter::give_cursed()
         }
 
         return;
+    }
+}
+
+MeleeWeaponEnchantFlags PolearmEnchanter::enchant_flags() const
+{
+    switch (this->o_ptr->sval) {
+    case SV_DEATH_SCYTHE:
+        return { MeleeWeaponEnchantType::ONLY_MUNDANITY };
+
+    default:
+        return MELEE_WEAPON_NORMAL_ENCHANT_FLAGS;
     }
 }
