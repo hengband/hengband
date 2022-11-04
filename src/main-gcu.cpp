@@ -216,7 +216,7 @@ struct term_data {
 };
 
 /* Max number of windows on screen */
-#define MAX_TERM_DATA 4
+#define MAX_TERM_DATA 8
 
 /* Minimum main term size */
 #define MIN_TERM0_LINES 24
