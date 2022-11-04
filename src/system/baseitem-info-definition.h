@@ -11,7 +11,7 @@
 enum class ItemKindType : short;
 class BaseitemKey {
 public:
-    BaseitemKey(ItemKindType type_value, int subtype_value);
+    BaseitemKey(const ItemKindType type_value, const std::optional<int> &subtype_value = std::nullopt);
     bool operator==(const BaseitemKey &other) const;
     bool operator!=(const BaseitemKey &other) const
     {
@@ -35,11 +35,11 @@ public:
     }
 
     ItemKindType tval() const;
-    int sval() const;
+    std::optional<int> sval() const;
 
 private:
     ItemKindType type_value;
-    int subtype_value; // @todo optionalにする.
+    std::optional<int> subtype_value;
 };
 
 enum class ItemKindType : short;

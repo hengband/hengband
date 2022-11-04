@@ -220,7 +220,13 @@ static const std::vector<const BaseItemInfo *> &get_sorted_baseitems()
 
 short lookup_kind(const BaseitemKey &key)
 {
-    return lookup_kind(key.tval(), key.sval());
+    const auto sval = key.sval();
+    if (!sval.has_value()) {
+        constexpr auto any = 255;
+        return lookup_kind(key.tval(), any);
+    }
+
+    return lookup_kind(key.tval(), sval.value());
 }
 
 /*!
@@ -239,7 +245,8 @@ KIND_OBJECT_IDX lookup_kind(ItemKindType tval, OBJECT_SUBTYPE_VALUE sval)
     k_obj.tval = tval;
     k_obj.sval = sval;
 
-    if (sval == SV_ANY) {
+    constexpr auto any = 255;
+    if (sval == any) {
         auto [begin, end] = std::equal_range(sorted_cache.begin(), sorted_cache.end(), &k_obj, comp_tval);
         if (auto candidates_num = std::distance(begin, end);
             candidates_num > 0) {
