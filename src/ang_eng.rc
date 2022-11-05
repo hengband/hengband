@@ -127,10 +127,36 @@ ANGBAND MENU
 
 		MENUITEM SEPARATOR
 		MENUITEM "&Music", 420
+		POPUP "Volume"
+		{
+			MENUITEM "100%", 460
+			MENUITEM "90%", 461
+			MENUITEM "80%", 462
+			MENUITEM "70%", 463
+			MENUITEM "60%", 464
+			MENUITEM "50%", 465
+			MENUITEM "40%", 466
+			MENUITEM "30%", 467
+			MENUITEM "20%", 468
+			MENUITEM "10%", 469
+		}
 		MENUITEM "&Pause music when inactive", 421
 		MENUITEM "&Open music folder", 422
 		MENUITEM SEPARATOR
 		MENUITEM "&Sound", 410
+		POPUP "Volume"
+		{
+			MENUITEM "100%", 470
+			MENUITEM "90%", 471
+			MENUITEM "80%", 472
+			MENUITEM "70%", 473
+			MENUITEM "60%", 474
+			MENUITEM "50%", 475
+			MENUITEM "40%", 476
+			MENUITEM "30%", 477
+			MENUITEM "20%", 478
+			MENUITEM "10%", 479
+		}
 		MENUITEM "&Open sound folder", 411
 		MENUITEM SEPARATOR
 		MENUITEM "&HTML dump", 450
