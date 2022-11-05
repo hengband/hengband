@@ -3,6 +3,7 @@
 #include "system/angband.h"
 
 extern bool arg_music;
+extern byte arg_music_volume;
 extern bool arg_sound;
 extern byte arg_graphics;
 extern bool arg_monochrome;

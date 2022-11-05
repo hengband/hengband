@@ -903,7 +903,7 @@ static errr term_xtra_win_sound(int v)
     if (!use_sound) {
         return 1;
     }
-    return play_sound(v);
+    return play_sound(v, arg_music_volume);
 }
 
 /*!
@@ -915,7 +915,7 @@ static errr term_xtra_win_music(int n, int v)
         return 1;
     }
 
-    return main_win_music::play_music(n, v);
+    return main_win_music::play_music(n, v, arg_music_volume);
 }
 
 /*!
@@ -928,7 +928,7 @@ static errr term_xtra_win_scene(int v)
         return 1;
     }
 
-    return main_win_music::play_music_scene(v);
+    return main_win_music::play_music_scene(v, arg_music_volume);
 }
 
 /*!
@@ -1867,6 +1867,22 @@ static void process_menus(PlayerType *player_ptr, WORD wCmd)
             }
         } else {
             main_win_music::stop_music();
+        }
+        break;
+    }
+    case IDM_OPTIONS_MUSIC_VOLUME_010:
+    case IDM_OPTIONS_MUSIC_VOLUME_020:
+    case IDM_OPTIONS_MUSIC_VOLUME_030:
+    case IDM_OPTIONS_MUSIC_VOLUME_040:
+    case IDM_OPTIONS_MUSIC_VOLUME_050:
+    case IDM_OPTIONS_MUSIC_VOLUME_060:
+    case IDM_OPTIONS_MUSIC_VOLUME_070:
+    case IDM_OPTIONS_MUSIC_VOLUME_080:
+    case IDM_OPTIONS_MUSIC_VOLUME_090:
+    case IDM_OPTIONS_MUSIC_VOLUME_100: {
+        arg_music_volume = 10 + 10 * (IDM_OPTIONS_MUSIC_VOLUME_010 - wCmd);
+        if (use_music) {
+            main_win_music::set_music_volume(arg_music_volume);
         }
         break;
     }

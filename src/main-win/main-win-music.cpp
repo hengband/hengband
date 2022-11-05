@@ -169,10 +169,11 @@ errr stop_music(void)
     return 0;
 }
 
+#include <Digitalv.h>
 /*
  * Play a music
  */
-errr play_music(int type, int val)
+errr play_music(int type, int val, int volume)
 {
     if (type == TERM_XTRA_MUSIC_MUTE) {
         return stop_music();
@@ -206,8 +207,21 @@ errr play_music(int type, int val)
     mciSendCommandW(mci_open_parms.wDeviceID, MCI_STOP, MCI_WAIT, 0);
     mciSendCommandW(mci_open_parms.wDeviceID, MCI_CLOSE, MCI_WAIT, 0);
     mciSendCommandW(mci_open_parms.wDeviceID, MCI_OPEN, MCI_OPEN_TYPE | MCI_OPEN_ELEMENT | MCI_NOTIFY, (DWORD)&mci_open_parms);
+    set_music_volume(volume);
     // Send MCI_PLAY in the notification event once MCI_OPEN is completed
     return 0;
+}
+
+void set_music_volume(int volume)
+{
+    MCI_DGV_SETAUDIO_PARMSW mci_vol{};
+    mci_vol.dwItem = MCI_DGV_SETAUDIO_VOLUME;
+    mci_vol.dwValue = volume * 10; // 0～1000
+    mciSendCommandW(
+        mci_open_parms.wDeviceID,
+        MCI_SETAUDIO,
+        MCI_DGV_SETAUDIO_ITEM | MCI_DGV_SETAUDIO_VALUE,
+        (DWORD)&mci_vol);
 }
 
 /*
@@ -229,13 +243,13 @@ void resume_music(void)
 /*
  * Play a music matches a situation
  */
-errr play_music_scene(int val)
+errr play_music_scene(int val, int volume)
 {
     // リストの先頭から順に再生を試み、再生できたら抜ける
     auto &list = get_scene_type_list(val);
     const errr err_sucsess = 0;
     for (auto &item : list) {
-        if (play_music(item.type, item.val) == err_sucsess) {
+        if (play_music(item.type, item.val, volume) == err_sucsess) {
             break;
         }
     }

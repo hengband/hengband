@@ -128,6 +128,19 @@ ANGBAND MENU
 		MENUITEM "BGM(&M)", 420
 		MENUITEM "アクティブ時のみBGM再生(&M)", 421
 		MENUITEM "BGM設定フォルダを開く(&O)", 422
+		POPUP "音量"
+		{
+			MENUITEM "100%", 460
+			MENUITEM "90%", 461
+			MENUITEM "80%", 462
+			MENUITEM "70%", 463
+			MENUITEM "60%", 464
+			MENUITEM "50%", 465
+			MENUITEM "40%", 466
+			MENUITEM "30%", 467
+			MENUITEM "20%", 468
+			MENUITEM "10%", 469
+		}
 		MENUITEM SEPARATOR
 		MENUITEM "効果音(&S)", 410
 		MENUITEM "効果音設定フォルダを開く(&P)", 411

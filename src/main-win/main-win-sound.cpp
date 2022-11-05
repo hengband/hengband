@@ -86,7 +86,7 @@ std::queue<sound_res *> sound_queue;
  * @retval true 正常に処理された
  * @retval false 処理エラー
  */
-static bool add_sound_queue(const WAVEFORMATEX *wf, BYTE *buf, DWORD bufsize)
+static bool add_sound_queue(const WAVEFORMATEX *wf, BYTE *buf, DWORD bufsize, int volume)
 {
     // 再生完了データをキューから削除する
     while (!sound_queue.empty()) {
@@ -105,6 +105,20 @@ static bool add_sound_queue(const WAVEFORMATEX *wf, BYTE *buf, DWORD bufsize)
     MMRESULT mr = ::waveOutOpen(&res->hwo, WAVE_MAPPER, wf, NULL, NULL, CALLBACK_NULL);
     if (mr != MMSYSERR_NOERROR) {
         return false;
+    }
+
+    if (wf->wBitsPerSample == 8) {
+        for (int i = 0; i < bufsize; ++i) {
+            buf[i] = (BYTE)((uint)volume * buf[i] / 100);
+        }
+    }
+    if (wf->wBitsPerSample == 16) {
+        for (int i = 0; i < bufsize; i += 2) {
+            int sample = (int16_t)((uint16_t)buf[i + 1] << 8 | (uint16_t)buf[i]);
+            sample = volume * sample / 100;
+            buf[i + 1] = sample >> 8;
+            buf[i] = sample & 0xFF;
+        }
     }
 
     WAVEHDR *wh = &res->wh;
@@ -140,7 +154,7 @@ static bool add_sound_queue(const WAVEFORMATEX *wf, BYTE *buf, DWORD bufsize)
  * @retval true 正常に処理された
  * @retval false 処理エラー
  */
-static bool play_sound_impl(char *filename)
+static bool play_sound_impl(char *filename, int volume)
 {
     wav_reader reader;
     if (!reader.open(filename)) {
@@ -153,7 +167,7 @@ static bool play_sound_impl(char *filename)
         return false;
     }
 
-    return add_sound_queue(wf, data_buffer, reader.get_data_chunk()->cksize);
+    return add_sound_queue(wf, data_buffer, reader.get_data_chunk()->cksize, volume);
 }
 
 /*!
@@ -204,7 +218,7 @@ void finalize_sound(void)
  * @retval 1 設定なし
  * @retval -1 PlaySoundの戻り値が正常終了以外
  */
-errr play_sound(int val)
+errr play_sound(int val, int volume)
 {
     concptr filename = sound_cfg_data->get_rand(TERM_XTRA_SOUND, val);
     if (!filename) {
@@ -214,7 +228,7 @@ errr play_sound(int val)
     char buf[MAIN_WIN_MAX_PATH];
     path_build(buf, MAIN_WIN_MAX_PATH, ANGBAND_DIR_XTRA_SOUND, filename);
 
-    if (play_sound_impl(buf)) {
+    if (play_sound_impl(buf, volume)) {
         return 0;
     }
 

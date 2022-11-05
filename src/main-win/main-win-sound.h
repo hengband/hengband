@@ -8,4 +8,4 @@ extern CfgData *sound_cfg_data;
 
 void load_sound_prefs(void);
 void finalize_sound(void);
-errr play_sound(int val);
+errr play_sound(int val, int volume);
