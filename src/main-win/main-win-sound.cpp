@@ -109,15 +109,15 @@ static bool add_sound_queue(const WAVEFORMATEX *wf, BYTE *buf, DWORD bufsize, in
 
     if (wf->wBitsPerSample == 8) {
         for (int i = 0; i < bufsize; ++i) {
-            buf[i] = (BYTE)((uint)volume * buf[i] / 100);
+            buf[i] = static_cast<BYTE>(volume * buf[i] / SOUND_VOLUME_MAX);
         }
     }
     if (wf->wBitsPerSample == 16) {
         for (int i = 0; i < bufsize; i += 2) {
-            int sample = (int16_t)((uint16_t)buf[i + 1] << 8 | (uint16_t)buf[i]);
-            sample = volume * sample / 100;
-            buf[i + 1] = sample >> 8;
-            buf[i] = sample & 0xFF;
+            auto sample = static_cast<int16_t>((static_cast<uint16_t>(buf[i + 1]) << 8) | static_cast<uint16_t>(buf[i]));
+            sample = volume * sample / SOUND_VOLUME_MAX;
+            buf[i + 1] = static_cast<uint16_t>(sample) >> 8;
+            buf[i] = static_cast<uint16_t>(sample) & 0xFF;
         }
     }
 

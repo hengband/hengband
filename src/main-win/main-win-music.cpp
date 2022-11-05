@@ -20,6 +20,7 @@
 #include "term/z-term.h"
 #include "util/angband-files.h"
 #include "world/world.h"
+#include <Digitalv.h>
 
 bool use_pause_music_inactive = false;
 static int current_music_type = TERM_XTRA_MUSIC_MUTE;
@@ -169,7 +170,6 @@ errr stop_music(void)
     return 0;
 }
 
-#include <Digitalv.h>
 /*
  * Play a music
  */
@@ -216,7 +216,7 @@ void set_music_volume(int volume)
 {
     MCI_DGV_SETAUDIO_PARMSW mci_vol{};
     mci_vol.dwItem = MCI_DGV_SETAUDIO_VOLUME;
-    mci_vol.dwValue = volume * 10; // 0～1000
+    mci_vol.dwValue = volume;
     mciSendCommandW(
         mci_open_parms.wDeviceID,
         MCI_SETAUDIO,
