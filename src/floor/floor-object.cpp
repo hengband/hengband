@@ -50,12 +50,12 @@
  * @brief オブジェクト生成テーブルに生成制約を加える /
  * Apply a "object restriction function" to the "object allocation table"
  * @return 常に0を返す。
- * @details 生成の制約はグローバルのget_obj_num_hook関数ポインタで加える
+ * @details 生成の制約はグローバルのget_obj_index_hook関数ポインタで加える
  */
-static errr get_obj_num_prep(void)
+static errr get_obj_index_prep(void)
 {
     for (auto &entry : alloc_kind_table) {
-        if (!get_obj_num_hook || (*get_obj_num_hook)(entry.index)) {
+        if (!get_obj_index_hook || (*get_obj_index_hook)(entry.index)) {
             entry.prob2 = entry.prob1;
         } else {
             entry.prob2 = 0;
@@ -124,18 +124,18 @@ bool make_object(PlayerType *player_ptr, ObjectType *j_ptr, BIT_FLAGS mode, std:
     auto prob = any_bits(mode, AM_GOOD) ? 10 : 1000;
     auto base = get_base_floor(floor_ptr, mode, rq_mon_level);
     if (!one_in_(prob) || !make_artifact_special(player_ptr, j_ptr)) {
-        if (any_bits(mode, AM_GOOD) && !get_obj_num_hook) {
-            get_obj_num_hook = kind_is_good;
+        if (any_bits(mode, AM_GOOD) && !get_obj_index_hook) {
+            get_obj_index_hook = kind_is_good;
         }
 
-        if (get_obj_num_hook) {
-            get_obj_num_prep();
+        if (get_obj_index_hook) {
+            get_obj_index_prep();
         }
 
-        auto k_idx = get_obj_num(player_ptr, base, mode);
-        if (get_obj_num_hook) {
-            get_obj_num_hook = nullptr;
-            get_obj_num_prep();
+        auto k_idx = get_obj_index(player_ptr, base, mode);
+        if (get_obj_index_hook) {
+            get_obj_index_hook = nullptr;
+            get_obj_index_prep();
         }
 
         if (k_idx == 0) {

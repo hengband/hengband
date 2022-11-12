@@ -27,8 +27,8 @@ concptr ANGBAND_GRAF = "ascii";
 init_flags_type init_flags; //!< @todo このグローバル変数何とかしたい
 
 /*!
- * Function hook to restrict "get_obj_num_prep()" function
+ * Function hook to restrict "get_obj_index_prep()" function
  */
-bool (*get_obj_num_hook)(KIND_OBJECT_IDX k_idx);
+bool (*get_obj_index_hook)(KIND_OBJECT_IDX k_idx);
 
 OBJECT_SUBTYPE_VALUE coin_type;
