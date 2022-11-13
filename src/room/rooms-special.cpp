@@ -132,7 +132,7 @@ bool build_type15(PlayerType *player_ptr, dun_data_type *dd_ptr)
         }
 
         /* Place a potion */
-        get_obj_num_hook = kind_is_potion;
+        get_obj_index_hook = kind_is_potion;
         place_object(player_ptr, yval, xval, AM_NO_FIXED_ART);
         floor_ptr->grid_array[yval][xval].info |= (CAVE_ICKY);
     } break;
@@ -232,14 +232,14 @@ bool build_type15(PlayerType *player_ptr, dun_data_type *dd_ptr)
 
         /* Place two potions */
         if (one_in_(2)) {
-            get_obj_num_hook = kind_is_potion;
+            get_obj_index_hook = kind_is_potion;
             place_object(player_ptr, yval, xval - 1, AM_NO_FIXED_ART);
-            get_obj_num_hook = kind_is_potion;
+            get_obj_index_hook = kind_is_potion;
             place_object(player_ptr, yval, xval + 1, AM_NO_FIXED_ART);
         } else {
-            get_obj_num_hook = kind_is_potion;
+            get_obj_index_hook = kind_is_potion;
             place_object(player_ptr, yval - 1, xval, AM_NO_FIXED_ART);
-            get_obj_num_hook = kind_is_potion;
+            get_obj_index_hook = kind_is_potion;
             place_object(player_ptr, yval + 1, xval, AM_NO_FIXED_ART);
         }
 

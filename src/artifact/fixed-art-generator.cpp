@@ -364,8 +364,8 @@ bool make_artifact_special(PlayerType *player_ptr, ObjectType *o_ptr)
         return false;
     }
 
-    /*! @note get_obj_num_hookによる指定がある場合は生成をキャンセルする / Themed object */
-    if (get_obj_num_hook) {
+    /*! @note get_obj_index_hookによる指定がある場合は生成をキャンセルする / Themed object */
+    if (get_obj_index_hook) {
         return false;
     }
 

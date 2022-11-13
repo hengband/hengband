@@ -143,9 +143,9 @@ static void on_dead_raal(PlayerType *player_ptr, monster_death_type *md_ptr)
     auto *q_ptr = &forge;
     q_ptr->wipe();
     if ((floor_ptr->dun_level > 49) && one_in_(5)) {
-        get_obj_num_hook = kind_is_good_book;
+        get_obj_index_hook = kind_is_good_book;
     } else {
-        get_obj_num_hook = kind_is_book;
+        get_obj_index_hook = kind_is_book;
     }
 
     (void)make_object(player_ptr, q_ptr, md_ptr->mo_mode);
@@ -367,7 +367,7 @@ static void on_dead_random_artifact(PlayerType *player_ptr, monster_death_type *
     while (true) {
         // make_object() の中でアイテム種別をキャンセルしている
         // よってこのwhileループ中へ入れないと、引数で指定していない種別のアイテムが選ばれる可能性がある
-        get_obj_num_hook = object_hook_pf;
+        get_obj_index_hook = object_hook_pf;
         if (!make_equipment(player_ptr, q_ptr, drop_mode, is_object_hook_null)) {
             continue;
         }
@@ -412,7 +412,7 @@ static void drop_specific_item_on_dead(PlayerType *player_ptr, monster_death_typ
     ObjectType forge;
     auto *q_ptr = &forge;
     q_ptr->wipe();
-    get_obj_num_hook = object_hook_pf;
+    get_obj_index_hook = object_hook_pf;
     (void)make_object(player_ptr, q_ptr, md_ptr->mo_mode);
     (void)drop_near(player_ptr, q_ptr, -1, md_ptr->md_y, md_ptr->md_x);
 }

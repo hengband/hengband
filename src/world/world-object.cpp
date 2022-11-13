@@ -68,7 +68,7 @@ OBJECT_IDX o_pop(FloorType *floor_ptr)
  * Note that if no objects are "appropriate", then this function will\n
  * fail, and return zero, but this should *almost* never happen.\n
  */
-OBJECT_IDX get_obj_num(PlayerType *player_ptr, DEPTH level, BIT_FLAGS mode)
+OBJECT_IDX get_obj_index(PlayerType *player_ptr, DEPTH level, BIT_FLAGS mode)
 {
     if (level > MAX_DEPTH - 1) {
         level = MAX_DEPTH - 1;
