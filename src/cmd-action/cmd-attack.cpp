@@ -185,6 +185,7 @@ bool do_cmd_attack(PlayerType *player_ptr, POSITION y, POSITION x, combat_option
     PlayerEnergy(player_ptr).set_player_turn_energy(100);
 
     if (!can_attack_with_main_hand(player_ptr) && !can_attack_with_sub_hand(player_ptr) && player_ptr->muta.has_none_of(mutation_attack_methods)) {
+        sound(SOUND_ATTACK_FAILED);
         msg_format(_("%s攻撃できない。", "You cannot attack."), (empty_hands(player_ptr, false) == EMPTY_HAND_NONE) ? _("両手がふさがって", "") : "");
         return false;
     }
@@ -209,12 +210,14 @@ bool do_cmd_attack(PlayerType *player_ptr, POSITION y, POSITION x, combat_option
         const auto is_main_hand_zantetsu = player_ptr->inventory_list[INVEN_MAIN_HAND].is_specific_artifact(zantetsu);
         const auto is_sub_hand_zantetsu = player_ptr->inventory_list[INVEN_SUB_HAND].is_specific_artifact(zantetsu);
         if (is_main_hand_zantetsu || is_sub_hand_zantetsu) {
+            sound(SOUND_ATTACK_FAILED);
             msg_print(_("拙者、おなごは斬れぬ！", "I can not attack women!"));
             return false;
         }
     }
 
     if (dungeons_info[player_ptr->dungeon_idx].flags.has(DungeonFeatureType::NO_MELEE)) {
+        sound(SOUND_ATTACK_FAILED);
         msg_print(_("なぜか攻撃することができない。", "Something prevents you from attacking."));
         return false;
     }
@@ -251,8 +254,10 @@ bool do_cmd_attack(PlayerType *player_ptr, POSITION y, POSITION x, combat_option
 
     if (effects->fear()->is_fearful()) {
         if (m_ptr->ml) {
+            sound(SOUND_ATTACK_FAILED);
             msg_format(_("恐くて%sを攻撃できない！", "You are too fearful to attack %s!"), m_name);
         } else {
+            sound(SOUND_ATTACK_FAILED);
             msg_format(_("そっちには何か恐いものがいる！", "There is something scary in your way!"));
         }
 

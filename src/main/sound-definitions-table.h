@@ -8,7 +8,9 @@
 
 enum sound_type {
     SOUND_HIT,
+    SOUND_ENEMY_HIT,
     SOUND_MISS,
+    SOUND_ATTACK_FAILED,
     SOUND_FLEE,
     SOUND_DROP,
     SOUND_KILL,
@@ -29,6 +31,7 @@ enum sound_type {
     SOUND_STORE3,
     SOUND_STORE4,
     SOUND_DIG,
+    SOUND_DIG_THROUGH,
     SOUND_OPENDOOR,
     SOUND_SHUTDOOR,
     SOUND_TPLEVEL,
