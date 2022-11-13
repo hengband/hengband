@@ -176,7 +176,7 @@ static PRICE repair_broken_weapon_aux(PlayerType *player_ptr, PRICE bcost)
         auto tval = (one_in_(5) ? mo_ptr->tval : ItemKindType::SWORD);
         while (true) {
             BaseItemInfo *ck_ptr;
-            k_idx = lookup_kind(tval, SV_ANY);
+            k_idx = lookup_baseitem_id({ tval });
             ck_ptr = &baseitems_info[k_idx];
 
             if (tval == ItemKindType::SWORD) {

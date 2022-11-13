@@ -207,7 +207,7 @@ void do_cmd_knowledge_kill_count(PlayerType *player_ptr)
                     buf[0] = '\0';
                 }
 
-                fprintf(fff, "     %s%s\n", r_ptr->name.c_str(), buf);
+                fprintf(fff, "     %s%s\n", r_ptr->name.data(), buf);
                 total++;
             }
 
@@ -221,17 +221,17 @@ void do_cmd_knowledge_kill_count(PlayerType *player_ptr)
 
 #ifdef JP
         concptr number_of_kills = angband_strchr("pt", r_ptr->d_char) ? "人" : "体";
-        fprintf(fff, "     %3d %sの %s\n", (int)this_monster, number_of_kills, r_ptr->name.c_str());
+        fprintf(fff, "     %3d %sの %s\n", (int)this_monster, number_of_kills, r_ptr->name.data());
 #else
         if (this_monster < 2) {
-            if (angband_strstr(r_ptr->name.c_str(), "coins")) {
-                fprintf(fff, "     1 pile of %s\n", r_ptr->name.c_str());
+            if (angband_strstr(r_ptr->name.data(), "coins")) {
+                fprintf(fff, "     1 pile of %s\n", r_ptr->name.data());
             } else {
-                fprintf(fff, "     1 %s\n", r_ptr->name.c_str());
+                fprintf(fff, "     1 %s\n", r_ptr->name.data());
             }
         } else {
             char ToPlural[80];
-            strcpy(ToPlural, r_ptr->name.c_str());
+            strcpy(ToPlural, r_ptr->name.data());
             plural_aux(ToPlural);
             fprintf(fff, "     %d %s\n", this_monster, ToPlural);
         }
@@ -262,7 +262,7 @@ static void display_monster_list(int col, int row, int per_page, const std::vect
         MonsterRaceId r_idx = mon_idx[mon_top + i];
         auto *r_ptr = &monraces_info[r_idx];
         attr = ((i + mon_top == mon_cur) ? TERM_L_BLUE : TERM_WHITE);
-        c_prt(attr, (r_ptr->name.c_str()), row + i, col);
+        c_prt(attr, (r_ptr->name.data()), row + i, col);
         if (per_page == 1) {
             c_prt(attr, format("%02x/%02x", r_ptr->x_attr, r_ptr->x_char), row + i, (w_ptr->wizard || visual_only) ? 56 : 61);
         }
@@ -484,7 +484,7 @@ void do_cmd_knowledge_bounty(PlayerType *player_ptr)
     }
 
     fprintf(fff, _("今日のターゲット : %s\n", "Today's target : %s\n"),
-        player_ptr->knows_daily_bounty ? monraces_info[w_ptr->today_mon].name.c_str() : _("不明", "unknown"));
+        player_ptr->knows_daily_bounty ? monraces_info[w_ptr->today_mon].name.data() : _("不明", "unknown"));
     fprintf(fff, "\n");
     fprintf(fff, _("賞金首リスト\n", "List of wanted monsters\n"));
     fprintf(fff, "----------------------------------------------\n");
@@ -492,7 +492,7 @@ void do_cmd_knowledge_bounty(PlayerType *player_ptr)
     bool listed = false;
     for (const auto &[r_idx, is_achieved] : w_ptr->bounties) {
         if (!is_achieved) {
-            fprintf(fff, "%s\n", monraces_info[r_idx].name.c_str());
+            fprintf(fff, "%s\n", monraces_info[r_idx].name.data());
             listed = true;
         }
     }

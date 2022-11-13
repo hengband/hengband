@@ -425,7 +425,7 @@ bool decide_monster_multiplication(PlayerType *player_ptr, MONSTER_IDX m_idx, PO
 {
     auto *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
     auto *r_ptr = &monraces_info[m_ptr->r_idx];
-    if (((r_ptr->flags2 & RF2_MULTIPLY) == 0) || (player_ptr->current_floor_ptr->num_repro >= MAX_REPRO)) {
+    if (((r_ptr->flags2 & RF2_MULTIPLY) == 0) || (player_ptr->current_floor_ptr->num_repro >= MAX_REPRODUCTION)) {
         return false;
     }
 
@@ -446,7 +446,8 @@ bool decide_monster_multiplication(PlayerType *player_ptr, MONSTER_IDX m_idx, PO
         k = 8;
     }
 
-    if ((k < 4) && (!k || !randint0(k * MON_MULT_ADJ))) {
+    constexpr auto chance_reproduction = 8;
+    if ((k < 4) && (!k || !randint0(k * chance_reproduction))) {
         if (multiply_monster(player_ptr, m_idx, false, (m_ptr->is_pet() ? PM_FORCE_PET : 0))) {
             if (player_ptr->current_floor_ptr->m_list[hack_m_idx_ii].ml && is_original_ap_and_seen(player_ptr, m_ptr)) {
                 r_ptr->r_flags2 |= RF2_MULTIPLY;
@@ -597,7 +598,7 @@ void sweep_monster_process(PlayerType *player_ptr)
             continue;
         }
 
-        if ((m_ptr->cdis >= AAF_LIMIT) || !decide_process_continue(player_ptr, m_ptr)) {
+        if ((m_ptr->cdis >= MAX_MONSTER_SENSING) || !decide_process_continue(player_ptr, m_ptr)) {
             continue;
         }
 
@@ -635,11 +636,11 @@ bool decide_process_continue(PlayerType *player_ptr, monster_type *m_ptr)
         m_ptr->mflag2.reset(MonsterConstantFlagType::NOFLOW);
     }
 
-    if (m_ptr->cdis <= (m_ptr->is_pet() ? (r_ptr->aaf > MAX_SIGHT ? MAX_SIGHT : r_ptr->aaf) : r_ptr->aaf)) {
+    if (m_ptr->cdis <= (m_ptr->is_pet() ? (r_ptr->aaf > MAX_PLAYER_SIGHT ? MAX_PLAYER_SIGHT : r_ptr->aaf) : r_ptr->aaf)) {
         return true;
     }
 
-    if ((m_ptr->cdis <= MAX_SIGHT || player_ptr->phase_out) && (player_has_los_bold(player_ptr, m_ptr->fy, m_ptr->fx) || has_aggravate(player_ptr))) {
+    if ((m_ptr->cdis <= MAX_PLAYER_SIGHT || player_ptr->phase_out) && (player_has_los_bold(player_ptr, m_ptr->fy, m_ptr->fx) || has_aggravate(player_ptr))) {
         return true;
     }
 

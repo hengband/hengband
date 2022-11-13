@@ -88,13 +88,12 @@ MONSTER_IDX m_pop(FloorType *floor_ptr)
  * @param min_level 最小生成階
  * @param max_level 最大生成階
  * @return 選択されたモンスター生成種族
+ * @details nasty生成 (ゲーム内経過日数に応じて、現在フロアより深いフロアのモンスターを出現させる仕様)は
  */
 MonsterRaceId get_mon_num(PlayerType *player_ptr, DEPTH min_level, DEPTH max_level, BIT_FLAGS option)
 {
-    int pls_kakuritu, pls_max_level, over_days;
-    int delay = mysqrt(max_level * 10000L) + (max_level * 5);
-
     /* town max_level : same delay as 10F, no nasty mons till day18 */
+    auto delay = mysqrt(max_level * 10000L) + (max_level * 5);
     if (!max_level) {
         delay = 360;
     }
@@ -105,33 +104,36 @@ MonsterRaceId get_mon_num(PlayerType *player_ptr, DEPTH min_level, DEPTH max_lev
 
     /* +1 per day after the base date */
     /* base dates : day5(1F), day18(10F,0F), day34(30F), day53(60F), day69(90F) */
-    over_days = std::max<int>(0, w_ptr->dungeon_turn / (TURNS_PER_TICK * 10000L) - delay / 20);
+    const auto over_days = std::max<int>(0, w_ptr->dungeon_turn / (TURNS_PER_TICK * 10000L) - delay / 20);
 
-    /* starts from 1/25, reaches 1/3 after 44days from a max_level dependent base date */
-    pls_kakuritu = std::max(NASTY_MON_MAX, NASTY_MON_BASE - over_days / 2);
-    /* starts from 0, reaches +25lv after 75days from a max_level dependent base date */
-    pls_max_level = std::min(NASTY_MON_PLUS_MAX, over_days / 3);
-
+    /* Probability starts from 1/25, reaches 1/3 after 44days from a max_level dependent base date */
+    /* Boost level starts from 0, reaches +25lv after 75days from a max_level dependent base date */
+    constexpr auto chance_nasty_monster = 25;
+    constexpr auto max_num_nasty_monsters = 3;
+    constexpr auto max_depth_nasty_monster = 25;
+    auto chance_nasty = std::max(max_num_nasty_monsters, chance_nasty_monster - over_days / 2);
+    auto nasty_level = std::min(max_depth_nasty_monster, over_days / 3);
     if (dungeons_info[player_ptr->dungeon_idx].flags.has(DungeonFeatureType::MAZE)) {
-        pls_kakuritu = std::min(pls_kakuritu / 2, pls_kakuritu - 10);
-        if (pls_kakuritu < 2) {
-            pls_kakuritu = 2;
+        chance_nasty = std::min(chance_nasty / 2, chance_nasty - 10);
+        if (chance_nasty < 2) {
+            chance_nasty = 2;
         }
-        pls_max_level += 2;
+
+        nasty_level += 2;
         max_level += 3;
     }
 
     /* Boost the max_level */
     if ((option & GMN_ARENA) || dungeons_info[player_ptr->dungeon_idx].flags.has_not(DungeonFeatureType::BEGINNER)) {
         /* Nightmare mode allows more out-of depth monsters */
-        if (ironman_nightmare && !randint0(pls_kakuritu)) {
+        if (ironman_nightmare && !randint0(chance_nasty)) {
             /* What a bizarre calculation */
             max_level = 1 + (max_level * MAX_DEPTH / randint1(MAX_DEPTH));
         } else {
             /* Occasional "nasty" monster */
-            if (!randint0(pls_kakuritu)) {
+            if (!randint0(chance_nasty)) {
                 /* Pick a max_level bonus */
-                max_level += pls_max_level;
+                max_level += nasty_level;
             }
         }
     }

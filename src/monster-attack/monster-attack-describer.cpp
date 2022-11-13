@@ -90,7 +90,7 @@ void describe_monster_attack_method(MonsterAttackPlayer *monap_ptr)
         monap_ptr->act = _("殴られた。", "hits you.");
         monap_ptr->do_cut = monap_ptr->do_stun = 1;
         monap_ptr->touched = true;
-        sound(SOUND_HIT);
+        sound(SOUND_ENEMY_HIT);
         break;
     }
     case RaceBlowMethodType::TOUCH: {
@@ -103,14 +103,14 @@ void describe_monster_attack_method(MonsterAttackPlayer *monap_ptr)
         monap_ptr->act = _("パンチされた。", "punches you.");
         monap_ptr->touched = true;
         monap_ptr->do_stun = 1;
-        sound(SOUND_HIT);
+        sound(SOUND_ENEMY_HIT);
         break;
     }
     case RaceBlowMethodType::KICK: {
         monap_ptr->act = _("蹴られた。", "kicks you.");
         monap_ptr->touched = true;
         monap_ptr->do_stun = 1;
-        sound(SOUND_HIT);
+        sound(SOUND_ENEMY_HIT);
         break;
     }
     case RaceBlowMethodType::CLAW: {
@@ -144,7 +144,7 @@ void describe_monster_attack_method(MonsterAttackPlayer *monap_ptr)
         monap_ptr->act = _("角で突かれた。", "butts you.");
         monap_ptr->do_stun = 1;
         monap_ptr->touched = true;
-        sound(SOUND_HIT);
+        sound(SOUND_ENEMY_HIT);
         break;
     }
     case RaceBlowMethodType::CRUSH: {

@@ -76,7 +76,7 @@ static void write_birth_diary(PlayerType *player_ptr)
     sprintf(buf, _("%s性格に%sを選択した。", "%schose %s personality."), indent, personality_info[player_ptr->ppersonality].title);
     exe_write_diary(player_ptr, DIARY_DESCRIPTION, 1, buf);
     if (PlayerClass(player_ptr).equals(PlayerClassType::CHAOS_WARRIOR)) {
-        sprintf(buf, _("%s守護神%sと契約を交わした。", "%smade a contract with patron %s."), indent, patron_list[player_ptr->chaos_patron].name.c_str());
+        sprintf(buf, _("%s守護神%sと契約を交わした。", "%smade a contract with patron %s."), indent, patron_list[player_ptr->chaos_patron].name.data());
         exe_write_diary(player_ptr, DIARY_DESCRIPTION, 1, buf);
     }
 }

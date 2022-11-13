@@ -2,6 +2,9 @@
 
 #include "system/angband.h"
 
+constexpr auto BREAK_RUNE_PROTECTION = 550; /*!< 守りのルーンの強靭度 / Rune of protection resistance */
+constexpr auto BREAK_RUNE_EXPLOSION = 299; /*!< 爆発のルーンの発動しやすさ / For explosive runes */
+
 struct monster_type;
 class PlayerType;
 struct turn_flags;

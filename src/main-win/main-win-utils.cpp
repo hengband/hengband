@@ -17,12 +17,14 @@
  * 特定の名前のミューテックスオブジェクトの所有権取得を試みる。
  * 取得できない場合は他に変愚蛮怒のプロセスが起動しているとみなす。
  * 取得したミューテックスのハンドルは明示的な解放は行わず、プロセス終了時にOSが解放する。
+ * バリアント名の先頭から63文字が一致していたらそれらを同時起動できない (が、そのようなことは起きない想定)。
  * @return 起動済の変愚蛮怒プロセス有無
  */
 bool is_already_running(void)
 {
-    wchar_t wtext[32];
-    mbstowcs(wtext, VARIANT_NAME.data(), VARIANT_NAME.length());
+    constexpr auto max_mutex_length = 64;
+    wchar_t wtext[max_mutex_length]{};
+    mbstowcs(wtext, VARIANT_NAME.data(), max_mutex_length - 1);
     [[maybe_unused]] HANDLE hMutex = CreateMutexW(NULL, TRUE, wtext);
     return GetLastError() == ERROR_ALREADY_EXISTS;
 }
@@ -62,7 +64,7 @@ void save_screen_as_html(HWND hWnd)
 void open_dir_in_explorer(char *filename)
 {
     std::string str = "/select," + std::string(filename);
-    ShellExecuteW(NULL, NULL, L"explorer.exe", to_wchar(str.c_str()).wc_str(), NULL, SW_SHOWNORMAL);
+    ShellExecuteW(NULL, NULL, L"explorer.exe", to_wchar(str.data()).wc_str(), NULL, SW_SHOWNORMAL);
 }
 
 /*!

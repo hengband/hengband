@@ -97,46 +97,24 @@
 ***** <Web>
 === WEB上の変愚蛮怒サイト ===
 
---- http://hengband.sourceforge.jp/ ---
+--- https://hengband.github.io/ ---
 
-http://hengband.sourceforge.jp/ は 変愚蛮怒の公式サイトです。ここには
+https://hengband.github.io/ は 変愚蛮怒の公式サイトです。ここには
 最新のソースコードやバイナリ、スポイラーへのリンク、また役に立つページ
 や面白いページへのリンクがあります。また英語版のページへのリンクもあり
 ます。
 
---- http://hengband.sourceforge.jp/score.html
+--- https://hengband.github.io/score.html
 
 上記の変愚蛮怒の公式サイトの中にリンクがありますが、ここがスコアサーバ
 に登録された何百ものスコアダンプを公開したページです。
-
-
---- http://6904.teacup.com/combatechizen/bbs ---
-
-http://6904.teacup.com/combatechizen/bbs は変愚蛮怒について様々な質問
-や提案ができる掲示板です。何かわからない事があったらここで質問してくだ
-さい。ただし、最低限 readme.txt は全て読んでおいてください。できれば、
-掲示板の過去ログ http://hengband.sourceforge.jp/x/log-all.html.gz や
-autopick.txt の内容も読んでおくと良いでしょう。
-
-あなたが必要としている情報はきっと何度も誰かが既に聞いていて、何度も繰
-り返し答えが書いてある事でしょう。
-
-
---- #ぐりっどばぐ:*.jp IRC チャンネル ---
-
-IRCnet のどれかのサーバーの #ぐりっどばぐ:*.jp チャンネルに参加しましょ
-う。開発にかかわるメンバーはここの常連で、変愚蛮怒 について語り合ってい
-ることもあります。
-詳しくはHabuさんのWebページを御覧ください。
-http://www.kmc.gr.jp/~habu/gridbug.html
-
 
 -- #NEWLINE
 Original   : (??)
 Updated    : (??)
 Updated    : Zangband DevTeam
 Updated    : Hengband 1.5.0
-
+Updated    : Hengband 3.0.0Alpha71
 
 ***** Begin Hyperlinks
 ***** [b] jcommand.txt

@@ -259,7 +259,7 @@ bool create_named_art(PlayerType *player_ptr, FixedArtifactId a_idx, POSITION y,
         return false;
     }
 
-    auto i = lookup_kind(a_ref.tval, a_ref.sval);
+    auto i = lookup_baseitem_id({ a_ref.tval, a_ref.sval });
     if (i == 0) {
         return true;
     }
@@ -356,16 +356,14 @@ bool make_artifact(PlayerType *player_ptr, ObjectType *o_ptr)
  */
 bool make_artifact_special(PlayerType *player_ptr, ObjectType *o_ptr)
 {
-    KIND_OBJECT_IDX k_idx = 0;
-
     /*! @note 地上ではキャンセルする / No artifacts in the town */
     auto floor_ptr = player_ptr->current_floor_ptr;
     if (floor_ptr->dun_level == 0) {
         return false;
     }
 
-    /*! @note get_obj_num_hookによる指定がある場合は生成をキャンセルする / Themed object */
-    if (get_obj_num_hook) {
+    /*! @note get_obj_index_hookによる指定がある場合は生成をキャンセルする / Themed object */
+    if (get_obj_index_hook) {
         return false;
     }
 
@@ -405,7 +403,7 @@ bool make_artifact_special(PlayerType *player_ptr, ObjectType *o_ptr)
          * @note INSTA_ART型固定アーティファクトのベースアイテムもチェック対象とする。
          * ベースアイテムの生成階層が足りない場合1/(不足階層*5)を満たさないと除外される。
          */
-        k_idx = lookup_kind(a_ref.tval, a_ref.sval);
+        const auto k_idx = lookup_baseitem_id({ a_ref.tval, a_ref.sval });
         if (baseitems_info[k_idx].level > floor_ptr->object_level) {
             int d = (baseitems_info[k_idx].level - floor_ptr->object_level) * 5;
             if (!one_in_(d)) {

@@ -4,6 +4,7 @@
 #include "object-enchant/object-ego.h"
 #include "object/object-kind-hook.h"
 #include "sv-definition/sv-weapon-types.h"
+#include "system/baseitem-info-definition.h"
 #include "system/floor-type-definition.h"
 #include "system/object-type-definition.h"
 #include "system/player-type-definition.h"
@@ -112,7 +113,7 @@ void acquire_chaos_weapon(PlayerType *player_ptr)
         dummy2 = SV_BLADE_OF_CHAOS;
     }
 
-    q_ptr->prep(lookup_kind(dummy, dummy2));
+    q_ptr->prep(lookup_baseitem_id({ dummy, dummy2 }));
     q_ptr->to_h = 3 + randint1(player_ptr->current_floor_ptr->dun_level) % 10;
     q_ptr->to_d = 3 + randint1(player_ptr->current_floor_ptr->dun_level) % 10;
     one_resistance(q_ptr);

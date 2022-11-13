@@ -178,10 +178,10 @@ bool multiply_monster(PlayerType *player_ptr, MONSTER_IDX m_idx, bool clone, BIT
 static bool place_monster_group(PlayerType *player_ptr, MONSTER_IDX who, POSITION y, POSITION x, MonsterRaceId r_idx, BIT_FLAGS mode)
 {
     auto *r_ptr = &monraces_info[r_idx];
-    int total = randint1(10);
+    auto total = randint1(10);
 
     auto *floor_ptr = player_ptr->current_floor_ptr;
-    int extra = 0;
+    auto extra = 0;
     if (r_ptr->level > floor_ptr->dun_level) {
         extra = r_ptr->level - floor_ptr->dun_level;
         extra = 0 - randint1(extra);
@@ -199,17 +199,19 @@ static bool place_monster_group(PlayerType *player_ptr, MONSTER_IDX who, POSITIO
     if (total < 1) {
         total = 1;
     }
-    if (total > GROUP_MAX) {
-        total = GROUP_MAX;
+
+    constexpr auto max_monsters_count = 32;
+    if (total > max_monsters_count) {
+        total = max_monsters_count;
     }
 
-    int hack_n = 1;
-    POSITION hack_x[GROUP_MAX];
+    auto hack_n = 1;
+    POSITION hack_x[max_monsters_count]{};
     hack_x[0] = x;
-    POSITION hack_y[GROUP_MAX];
+    POSITION hack_y[max_monsters_count]{};
     hack_y[0] = y;
 
-    for (int n = 0; (n < hack_n) && (hack_n < total); n++) {
+    for (auto n = 0; (n < hack_n) && (hack_n < total); n++) {
         POSITION hx = hack_x[n];
         POSITION hy = hack_y[n];
         for (int i = 0; (i < 8) && (hack_n < total); i++) {

@@ -40,6 +40,7 @@
 #include "sv-definition/sv-lite-types.h"
 #include "system/angband-exceptions.h"
 #include "system/artifact-type-definition.h"
+#include "system/baseitem-info-definition.h"
 #include "system/dungeon-info.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
@@ -328,7 +329,7 @@ void rd_item_old(ObjectType *o_ptr)
     }
 
     if (h_older_than(0, 4, 10) && (o_ptr->ego_idx == EgoType::TWILIGHT)) {
-        o_ptr->k_idx = lookup_kind(ItemKindType::SOFT_ARMOR, SV_TWILIGHT_ROBE);
+        o_ptr->k_idx = lookup_baseitem_id({ ItemKindType::SOFT_ARMOR, SV_TWILIGHT_ROBE });
     }
 
     if (h_older_than(0, 4, 9)) {

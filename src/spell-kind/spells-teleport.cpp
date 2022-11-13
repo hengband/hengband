@@ -44,6 +44,7 @@
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 #include "world/world.h"
+#include <array>
 
 /*!
  * @brief モンスターとの位置交換処理 / Switch position with a monster.
@@ -308,27 +309,26 @@ bool teleport_player_aux(PlayerType *player_ptr, POSITION dis, bool is_quantum_e
     if (player_ptr->wild_mode) {
         return false;
     }
+
     if (!is_quantum_effect && player_ptr->anti_tele && !(mode & TELEPORT_NONMAGICAL)) {
         msg_print(_("不思議な力がテレポートを防いだ！", "A mysterious force prevents you from teleporting!"));
         return false;
     }
 
-    int candidates_at[MAX_TELEPORT_DISTANCE + 1];
-    for (int i = 0; i <= MAX_TELEPORT_DISTANCE; i++) {
-        candidates_at[i] = 0;
+    constexpr auto max_distance = 200;
+    std::array<int, max_distance + 1> candidates_at{};
+    if (dis > max_distance) {
+        dis = max_distance;
     }
 
-    if (dis > MAX_TELEPORT_DISTANCE) {
-        dis = MAX_TELEPORT_DISTANCE;
-    }
-
-    int left = std::max(1, player_ptr->x - dis);
-    int right = std::min(player_ptr->current_floor_ptr->width - 2, player_ptr->x + dis);
-    int top = std::max(1, player_ptr->y - dis);
-    int bottom = std::min(player_ptr->current_floor_ptr->height - 2, player_ptr->y + dis);
-    int total_candidates = 0;
-    for (POSITION y = top; y <= bottom; y++) {
-        for (POSITION x = left; x <= right; x++) {
+    const auto &floor_ref = *player_ptr->current_floor_ptr;
+    const auto left = std::max(1, player_ptr->x - dis);
+    const auto right = std::min(floor_ref.width - 2, player_ptr->x + dis);
+    const auto top = std::max(1, player_ptr->y - dis);
+    const auto bottom = std::min(floor_ref.height - 2, player_ptr->y + dis);
+    auto total_candidates = 0;
+    for (auto y = top; y <= bottom; y++) {
+        for (auto x = left; x <= right; x++) {
             if (!cave_player_teleportable_bold(player_ptr, y, x, mode)) {
                 continue;
             }
@@ -348,7 +348,7 @@ bool teleport_player_aux(PlayerType *player_ptr, POSITION dis, bool is_quantum_e
     }
 
     int cur_candidates;
-    int min = dis;
+    auto min = dis;
     for (cur_candidates = 0; min >= 0; min--) {
         cur_candidates += candidates_at[min];
         if (cur_candidates && (cur_candidates >= total_candidates / 2)) {
@@ -356,11 +356,12 @@ bool teleport_player_aux(PlayerType *player_ptr, POSITION dis, bool is_quantum_e
         }
     }
 
-    int pick = randint1(cur_candidates);
+    auto pick = randint1(cur_candidates);
 
     /* Search again the choosen location */
-    POSITION yy, xx = 0;
-    for (yy = top; yy <= bottom; yy++) {
+    auto yy = top;
+    auto xx = 0;
+    for (; yy <= bottom; yy++) {
         for (xx = left; xx <= right; xx++) {
             if (!cave_player_teleportable_bold(player_ptr, yy, xx, mode)) {
                 continue;
@@ -538,10 +539,10 @@ void teleport_away_followable(PlayerType *player_ptr, MONSTER_IDX m_idx)
     bool old_ml = m_ptr->ml;
     POSITION old_cdis = m_ptr->cdis;
 
-    teleport_away(player_ptr, m_idx, MAX_SIGHT * 2 + 5, TELEPORT_SPONTANEOUS);
+    teleport_away(player_ptr, m_idx, MAX_PLAYER_SIGHT * 2 + 5, TELEPORT_SPONTANEOUS);
 
     bool is_followable = old_ml;
-    is_followable &= old_cdis <= MAX_SIGHT;
+    is_followable &= old_cdis <= MAX_PLAYER_SIGHT;
     is_followable &= w_ptr->timewalk_m_idx == 0;
     is_followable &= !player_ptr->phase_out;
     is_followable &= los(player_ptr, player_ptr->y, player_ptr->x, oldfy, oldfx);

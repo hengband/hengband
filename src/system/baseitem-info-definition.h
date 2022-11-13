@@ -4,8 +4,43 @@
 #include "object-enchant/trg-types.h"
 #include "system/angband.h"
 #include "util/flag-group.h"
+#include <optional>
 #include <string>
 #include <vector>
+
+enum class ItemKindType : short;
+class BaseitemKey {
+public:
+    BaseitemKey(const ItemKindType type_value, const std::optional<int> &subtype_value = std::nullopt);
+    bool operator==(const BaseitemKey &other) const;
+    bool operator!=(const BaseitemKey &other) const
+    {
+        return !(*this == other);
+    }
+
+    bool operator<(const BaseitemKey &other) const;
+    bool operator>(const BaseitemKey &other) const
+    {
+        return other < *this;
+    }
+
+    bool operator<=(const BaseitemKey &other) const
+    {
+        return !(*this > other);
+    }
+
+    bool operator>=(const BaseitemKey &other) const
+    {
+        return !(*this < other);
+    }
+
+    ItemKindType tval() const;
+    std::optional<int> sval() const;
+
+private:
+    ItemKindType type_value;
+    std::optional<int> subtype_value;
+};
 
 enum class ItemKindType : short;
 enum class RandomArtActType : short;

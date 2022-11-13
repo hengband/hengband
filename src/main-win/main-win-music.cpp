@@ -20,6 +20,9 @@
 #include "term/z-term.h"
 #include "util/angband-files.h"
 #include "world/world.h"
+#include <algorithm>
+#include <digitalv.h>
+#include <limits>
 
 bool use_pause_music_inactive = false;
 static int current_music_type = TERM_XTRA_MUSIC_MUTE;
@@ -201,7 +204,7 @@ errr play_music(int type, int val)
     strcpy(current_music_path, buf);
 
     to_wchar path(buf);
-    mci_open_parms.lpstrDeviceType = mci_device_type.c_str();
+    mci_open_parms.lpstrDeviceType = mci_device_type.data();
     mci_open_parms.lpstrElementName = path.wc_str();
     mciSendCommandW(mci_open_parms.wDeviceID, MCI_STOP, MCI_WAIT, 0);
     mciSendCommandW(mci_open_parms.wDeviceID, MCI_CLOSE, MCI_WAIT, 0);
@@ -243,13 +246,30 @@ errr play_music_scene(int val)
     return 0;
 }
 
+void set_music_volume(int volume)
+{
+    if (current_music_type == TERM_XTRA_MUSIC_MUTE) {
+        return;
+    }
+
+    MCI_DGV_SETAUDIO_PARMSW mci_vol{};
+    mci_vol.dwItem = MCI_DGV_SETAUDIO_VOLUME;
+    mci_vol.dwValue = volume;
+    mciSendCommandW(
+        mci_open_parms.wDeviceID,
+        MCI_SETAUDIO,
+        MCI_DGV_SETAUDIO_ITEM | MCI_DGV_SETAUDIO_VALUE,
+        (DWORD)&mci_vol);
+}
+
 /*
  * Notify event
  */
-void on_mci_notify(WPARAM wFlags, LONG lDevID)
+void on_mci_notify(WPARAM wFlags, LONG lDevID, int volume)
 {
     if (wFlags == MCI_NOTIFY_SUCCESSFUL) {
         // play a music (repeat)
+        set_music_volume(volume);
         mciSendCommandW(lDevID, MCI_SEEK, MCI_SEEK_TO_START | MCI_WAIT, 0);
         mciSendCommandW(lDevID, MCI_PLAY, MCI_NOTIFY, (DWORD)&mci_play_parms);
     }

@@ -66,7 +66,7 @@ mam_pp_type *initialize_mam_pp_type(
     mam_pp_ptr->m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
     mam_pp_ptr->seen = is_seen(player_ptr, mam_pp_ptr->m_ptr);
     mam_pp_ptr->dam = dam;
-    mam_pp_ptr->known = mam_pp_ptr->m_ptr->cdis <= MAX_SIGHT;
+    mam_pp_ptr->known = mam_pp_ptr->m_ptr->cdis <= MAX_PLAYER_SIGHT;
     mam_pp_ptr->dead = dead;
     mam_pp_ptr->fear = fear;
     mam_pp_ptr->note = note;

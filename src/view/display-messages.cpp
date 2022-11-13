@@ -86,7 +86,7 @@ concptr message_str(int age)
         return "";
     }
 
-    return message_history[age]->c_str();
+    return message_history[age]->data();
 }
 
 static void message_add_aux(std::string str)
@@ -149,7 +149,7 @@ static void message_add_aux(std::string str)
         }
 
         if (str == last_message && (j < 1000)) {
-            str = format("%s <x%d>", str.c_str(), j + 1);
+            str = format("%s <x%d>", str.data(), j + 1);
             message_history.pop_front();
             if (!now_message) {
                 now_message++;

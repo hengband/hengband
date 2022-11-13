@@ -18,7 +18,7 @@ flavor_type *initialize_flavor_type(flavor_type *flavor_ptr, char *buf, ObjectTy
     flavor_ptr->buf = buf;
     flavor_ptr->o_ptr = o_ptr;
     flavor_ptr->mode = mode;
-    flavor_ptr->kindname = baseitems_info[o_ptr->k_idx].name.c_str();
+    flavor_ptr->kindname = baseitems_info[o_ptr->k_idx].name.data();
     flavor_ptr->basenm = flavor_ptr->kindname;
     flavor_ptr->modstr = "";
     flavor_ptr->aware = false;

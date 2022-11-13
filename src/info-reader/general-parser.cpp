@@ -12,6 +12,7 @@
 #include "object/object-kind-hook.h"
 #include "realm/realm-types.h"
 #include "system/artifact-type-definition.h"
+#include "system/baseitem-info-definition.h"
 #include "system/building-type-definition.h"
 #include "system/floor-type-definition.h"
 #include "system/system-variables.h"
@@ -148,7 +149,7 @@ parse_error_type parse_line_feature(FloorType *floor_ptr, char *buf)
                 if (a_idx != FixedArtifactId::NONE) {
                     const auto &a_ref = artifacts_info.at(a_idx);
                     if (a_ref.gen_flags.has_not(ItemGenerationTraitType::INSTA_ART)) {
-                        letter[index].object = lookup_kind(a_ref.tval, a_ref.sval);
+                        letter[index].object = lookup_baseitem_id({ a_ref.tval, a_ref.sval });
                     }
                 }
             }

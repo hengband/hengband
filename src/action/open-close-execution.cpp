@@ -48,7 +48,7 @@ bool exe_open(PlayerType *player_ptr, POSITION y, POSITION x)
     auto *f_ptr = &terrains_info[g_ptr->feat];
     PlayerEnergy(player_ptr).set_player_turn_energy(100);
     if (f_ptr->flags.has_not(TerrainCharacteristics::OPEN)) {
-        msg_format(_("%sはがっちりと閉じられているようだ。", "The %s appears to be stuck."), terrains_info[g_ptr->get_feat_mimic()].name.c_str());
+        msg_format(_("%sはがっちりと閉じられているようだ。", "The %s appears to be stuck."), terrains_info[g_ptr->get_feat_mimic()].name.data());
         return false;
     }
 
@@ -152,7 +152,7 @@ bool easy_open_door(PlayerType *player_ptr, POSITION y, POSITION x)
     }
 
     if (f_ptr->flags.has_not(TerrainCharacteristics::OPEN)) {
-        msg_format(_("%sはがっちりと閉じられているようだ。", "The %s appears to be stuck."), terrains_info[g_ptr->get_feat_mimic()].name.c_str());
+        msg_format(_("%sはがっちりと閉じられているようだ。", "The %s appears to be stuck."), terrains_info[g_ptr->get_feat_mimic()].name.data());
     } else if (f_ptr->power) {
         i = player_ptr->skill_dis;
         const auto effects = player_ptr->effects();
@@ -269,7 +269,7 @@ bool exe_disarm(PlayerType *player_ptr, POSITION y, POSITION x, DIRECTION dir)
 {
     auto *g_ptr = &player_ptr->current_floor_ptr->grid_array[y][x];
     auto *f_ptr = &terrains_info[g_ptr->feat];
-    concptr name = f_ptr->name.c_str();
+    concptr name = f_ptr->name.data();
     int power = f_ptr->power;
     bool more = false;
     int i = player_ptr->skill_dis;
@@ -329,7 +329,7 @@ bool exe_bash(PlayerType *player_ptr, POSITION y, POSITION x, DIRECTION dir)
     int bash = adj_str_blow[player_ptr->stat_index[A_STR]];
     int temp = f_ptr->power;
     bool more = false;
-    concptr name = terrains_info[g_ptr->get_feat_mimic()].name.c_str();
+    concptr name = terrains_info[g_ptr->get_feat_mimic()].name.data();
     PlayerEnergy(player_ptr).set_player_turn_energy(100);
     msg_format(_("%sに体当たりをした！", "You smash into the %s!"), name);
     temp = (bash - (temp * 10));

@@ -9,6 +9,7 @@
 #include "floor/cave.h"
 #include "floor/floor-generator-util.h"
 #include "floor/floor-generator.h"
+#include "floor/floor-town.h"
 #include "floor/geometry.h"
 #include "floor/wild.h"
 #include "game-option/cheat-types.h"
@@ -430,7 +431,7 @@ static void build_vault(
                 /* Black market in a dungeon */
             case 'S':
                 set_cave_feat(floor_ptr, y, x, feat_black_market);
-                store_init(NO_TOWN, StoreSaleType::BLACK);
+                store_init(VALID_TOWNS, StoreSaleType::BLACK);
                 break;
 
                 /* The Pattern */
@@ -1069,10 +1070,10 @@ bool build_fixed_room(PlayerType *player_ptr, dun_data_type *dd_ptr, int typ, bo
         return false;
     }
 
-    msg_format_wizard(player_ptr, CHEAT_DUNGEON, _("固定部屋(%s)を生成しました。", "Fixed room (%s)."), v_ptr->name.c_str());
+    msg_format_wizard(player_ptr, CHEAT_DUNGEON, _("固定部屋(%s)を生成しました。", "Fixed room (%s)."), v_ptr->name.data());
 
     /* Hack -- Build the vault */
-    build_vault(player_ptr, yval, xval, v_ptr->hgt, v_ptr->wid, v_ptr->text.c_str(), xoffset, yoffset, transno);
+    build_vault(player_ptr, yval, xval, v_ptr->hgt, v_ptr->wid, v_ptr->text.data(), xoffset, yoffset, transno);
 
     return true;
 }

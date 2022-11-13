@@ -128,9 +128,9 @@ static void display_uniques(unique_list_type *unique_list_ptr, FILE *fff)
         }
 
         const auto name = str_separate(r_ptr->name, 40);
-        fprintf(fff, _("     %-40s (レベル%3d)%s\n", "     %-40s (level %3d)%s\n"), name.front().c_str(), (int)r_ptr->level, buf);
+        fprintf(fff, _("     %-40s (レベル%3d)%s\n", "     %-40s (level %3d)%s\n"), name.front().data(), (int)r_ptr->level, buf);
         for (auto i = 1U; i < name.size(); ++i) {
-            fprintf(fff, "     %s\n", name[i].c_str());
+            fprintf(fff, "     %s\n", name[i].data());
         }
     }
 }

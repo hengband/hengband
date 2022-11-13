@@ -2,8 +2,9 @@
 #include "object/tval-types.h"
 #include "sv-definition/sv-potion-types.h"
 #include "sv-definition/sv-scroll-types.h"
+#include "system/baseitem-info-definition.h"
 
-bounty_prize_type prize_list[MAX_BOUNTY] = {
+const std::vector<BaseitemKey> prize_list = {
     { ItemKindType::POTION, SV_POTION_CURING },
     { ItemKindType::POTION, SV_POTION_SPEED },
     { ItemKindType::POTION, SV_POTION_SPEED },

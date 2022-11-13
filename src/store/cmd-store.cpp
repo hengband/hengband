@@ -8,7 +8,6 @@
 #include "floor/cave.h"
 #include "floor/floor-events.h"
 #include "floor/floor-town.h"
-#include "floor/wild.h"
 #include "game-option/birth-options.h"
 #include "game-option/input-options.h"
 #include "inventory/inventory-object.h"
@@ -83,7 +82,7 @@ void do_cmd_store(PlayerType *player_ptr)
     }
 
     if (floor_ptr->is_in_dungeon()) {
-        player_ptr->town_num = NO_TOWN;
+        player_ptr->town_num = VALID_TOWNS;
     }
 
     inner_town_num = player_ptr->town_num;

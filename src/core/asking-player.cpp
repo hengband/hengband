@@ -439,7 +439,7 @@ bool get_value(const char *text, int min, int max, int *value)
     st << text << "(" << min << "-" << max << "): ";
     int digit = std::max(std::to_string(min).length(), std::to_string(max).length());
     while (true) {
-        if (!get_string(st.str().c_str(), tmp_val, digit)) {
+        if (!get_string(st.str().data(), tmp_val, digit)) {
             return false;
         }
 

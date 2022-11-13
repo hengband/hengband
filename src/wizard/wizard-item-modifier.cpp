@@ -83,7 +83,7 @@ void display_wizard_sub_menu()
     for (const auto &[symbol, desc] : wizard_sub_menu_table) {
         std::stringstream ss;
         ss << symbol << ") " << desc;
-        put_str(ss.str().c_str(), r++, c);
+        put_str(ss.str().data(), r++, c);
     }
 }
 }
@@ -259,23 +259,23 @@ static void prt_alloc(ItemKindType tval, OBJECT_SUBTYPE_VALUE sval, TERM_LEN row
             PERCENTAGE prob = 0;
 
             if (entry.level <= i) {
-                prob = entry.prob1 * GREAT_OBJ * K_MAX_DEPTH;
+                prob = entry.prob1 * CHANCE_BASEITEM_LEVEL_BOOST * K_MAX_DEPTH;
             } else if (entry.level - 1 > 0) {
                 prob = entry.prob1 * i * K_MAX_DEPTH / (entry.level - 1);
             }
 
             k_ptr = &baseitems_info[entry.index];
 
-            total[i] += prob / (GREAT_OBJ * K_MAX_DEPTH);
-            total_frac += prob % (GREAT_OBJ * K_MAX_DEPTH);
+            total[i] += prob / (CHANCE_BASEITEM_LEVEL_BOOST * K_MAX_DEPTH);
+            total_frac += prob % (CHANCE_BASEITEM_LEVEL_BOOST * K_MAX_DEPTH);
 
             if ((k_ptr->tval == tval) && (k_ptr->sval == sval)) {
                 home = k_ptr->level;
-                rarity[i] += prob / (GREAT_OBJ * K_MAX_DEPTH);
+                rarity[i] += prob / (CHANCE_BASEITEM_LEVEL_BOOST * K_MAX_DEPTH);
             }
         }
 
-        total[i] += total_frac / (GREAT_OBJ * K_MAX_DEPTH);
+        total[i] += total_frac / (CHANCE_BASEITEM_LEVEL_BOOST * K_MAX_DEPTH);
     }
 
     for (int i = 0; i < 22; i++) {
@@ -913,7 +913,7 @@ WishResultType do_cmd_wishing(PlayerType *player_ptr, int prob, bool allow_art, 
                     continue;
                 }
 
-                strcpy(o_name, e_ref.name.c_str());
+                strcpy(o_name, e_ref.name.data());
 #ifndef JP
                 str_tolower(o_name);
 #endif
@@ -945,7 +945,7 @@ WishResultType do_cmd_wishing(PlayerType *player_ptr, int prob, bool allow_art, 
                 continue;
             }
 
-            KIND_OBJECT_IDX k_idx = lookup_kind(a_ref.tval, a_ref.sval);
+            const auto k_idx = lookup_baseitem_id({ a_ref.tval, a_ref.sval });
             if (!k_idx) {
                 continue;
             }
@@ -958,7 +958,7 @@ WishResultType do_cmd_wishing(PlayerType *player_ptr, int prob, bool allow_art, 
             str_tolower(o_name);
 #endif
             a_str = a_desc;
-            strcpy(a_desc, a_ref.name.c_str());
+            strcpy(a_desc, a_ref.name.data());
 
             if (*a_str == '$') {
                 a_str++;
@@ -996,7 +996,7 @@ WishResultType do_cmd_wishing(PlayerType *player_ptr, int prob, bool allow_art, 
                 msg_format("Matching artifact No.%d %s(%s)", a_idx, a_desc, _(&o_name[2], o_name));
             }
 
-            std::vector<const char *> l = { a_str, a_ref.name.c_str(), _(&o_name[2], o_name) };
+            std::vector<const char *> l = { a_str, a_ref.name.data(), _(&o_name[2], o_name) };
             for (size_t c = 0; c < l.size(); c++) {
                 if (!strcmp(str, l.at(c))) {
                     len = strlen(l.at(c));

@@ -59,7 +59,7 @@ public:
     CfgData *read_sections(std::initializer_list<cfg_section> sections);
     concptr get_cfg_path()
     {
-        return cfg_path.c_str();
+        return cfg_path.data();
     }
 
 protected:

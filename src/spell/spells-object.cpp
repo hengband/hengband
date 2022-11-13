@@ -64,27 +64,34 @@ enum class AmusementFlagType : byte {
     PILE, /* Drop 1-99 pile objects for one type */
 };
 
-struct amuse_type {
-    ItemKindType tval;
-    OBJECT_SUBTYPE_VALUE sval;
+class AmuseDefinition {
+public:
+    AmuseDefinition(const BaseitemKey &key, PERCENTAGE prob, AmusementFlagType flag)
+        : key(key)
+        , prob(prob)
+        , flag(flag)
+    {
+    }
+
+    BaseitemKey key;
     PERCENTAGE prob;
     AmusementFlagType flag;
 };
 
-static constexpr std::array<amuse_type, 13> amuse_info = { {
-    { ItemKindType::BOTTLE, SV_ANY, 5, AmusementFlagType::NOTHING },
-    { ItemKindType::JUNK, SV_ANY, 3, AmusementFlagType::MULTIPLE },
-    { ItemKindType::SPIKE, SV_ANY, 10, AmusementFlagType::PILE },
-    { ItemKindType::STATUE, SV_ANY, 15, AmusementFlagType::NOTHING },
-    { ItemKindType::CORPSE, SV_ANY, 15, AmusementFlagType::NO_UNIQUE },
-    { ItemKindType::SKELETON, SV_ANY, 10, AmusementFlagType::NO_UNIQUE },
-    { ItemKindType::FIGURINE, SV_ANY, 10, AmusementFlagType::NO_UNIQUE },
-    { ItemKindType::PARCHMENT, SV_ANY, 1, AmusementFlagType::NOTHING },
-    { ItemKindType::POLEARM, SV_TSURIZAO, 3, AmusementFlagType::NOTHING }, // Fishing Pole of Taikobo
-    { ItemKindType::SWORD, SV_BROKEN_DAGGER, 3, AmusementFlagType::FIXED_ART }, // Broken Dagger of Magician
-    { ItemKindType::SWORD, SV_BROKEN_DAGGER, 10, AmusementFlagType::NOTHING },
-    { ItemKindType::SWORD, SV_BROKEN_SWORD, 5, AmusementFlagType::NOTHING },
-    { ItemKindType::SCROLL, SV_SCROLL_AMUSEMENT, 10, AmusementFlagType::NOTHING },
+static const std::array<AmuseDefinition, 13> amuse_info = { {
+    { { ItemKindType::BOTTLE }, 5, AmusementFlagType::NOTHING },
+    { { ItemKindType::JUNK }, 3, AmusementFlagType::MULTIPLE },
+    { { ItemKindType::SPIKE }, 10, AmusementFlagType::PILE },
+    { { ItemKindType::STATUE }, 15, AmusementFlagType::NOTHING },
+    { { ItemKindType::CORPSE }, 15, AmusementFlagType::NO_UNIQUE },
+    { { ItemKindType::SKELETON }, 10, AmusementFlagType::NO_UNIQUE },
+    { { ItemKindType::FIGURINE }, 10, AmusementFlagType::NO_UNIQUE },
+    { { ItemKindType::PARCHMENT }, 1, AmusementFlagType::NOTHING },
+    { { ItemKindType::POLEARM, SV_TSURIZAO }, 3, AmusementFlagType::NOTHING }, // Fishing Pole of Taikobo
+    { { ItemKindType::SWORD, SV_BROKEN_DAGGER }, 3, AmusementFlagType::FIXED_ART }, // Broken Dagger of Magician
+    { { ItemKindType::SWORD, SV_BROKEN_DAGGER }, 10, AmusementFlagType::NOTHING },
+    { { ItemKindType::SWORD, SV_BROKEN_SWORD }, 5, AmusementFlagType::NOTHING },
+    { { ItemKindType::SCROLL, SV_SCROLL_AMUSEMENT }, 10, AmusementFlagType::NOTHING },
 } };
 
 static std::optional<FixedArtifactId> sweep_amusement_artifact(const bool insta_art, const short k_idx)
@@ -124,7 +131,7 @@ static std::optional<FixedArtifactId> sweep_amusement_artifact(const bool insta_
  */
 void generate_amusement(PlayerType *player_ptr, int num, bool known)
 {
-    ProbabilityTable<const amuse_type *> pt;
+    ProbabilityTable<const AmuseDefinition *> pt;
     for (const auto &am_ref : amuse_info) {
         pt.entry_item(&am_ref, am_ref.prob);
     }
@@ -132,7 +139,7 @@ void generate_amusement(PlayerType *player_ptr, int num, bool known)
     while (num > 0) {
         auto am_ptr = pt.pick_one_at_random();
 
-        const auto k_idx = lookup_kind(am_ptr->tval, am_ptr->sval);
+        const auto k_idx = lookup_baseitem_id(am_ptr->key);
         if (k_idx == 0) {
             continue;
         }

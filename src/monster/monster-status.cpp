@@ -169,14 +169,14 @@ static void process_monsters_mtimed_aux(PlayerType *player_ptr, MONSTER_IDX m_id
     case MTIMED_CSLEEP: {
         auto *r_ptr = &monraces_info[m_ptr->r_idx];
         auto is_wakeup = false;
-        if (m_ptr->cdis < AAF_LIMIT) {
+        if (m_ptr->cdis < MAX_MONSTER_SENSING) {
             /* Handle "sensing radius" */
-            if (m_ptr->cdis <= (m_ptr->is_pet() ? ((r_ptr->aaf > MAX_SIGHT) ? MAX_SIGHT : r_ptr->aaf) : r_ptr->aaf)) {
+            if (m_ptr->cdis <= (m_ptr->is_pet() ? ((r_ptr->aaf > MAX_PLAYER_SIGHT) ? MAX_PLAYER_SIGHT : r_ptr->aaf) : r_ptr->aaf)) {
                 is_wakeup = true;
             }
 
             /* Handle "sight" and "aggravation" */
-            else if ((m_ptr->cdis <= MAX_SIGHT) && (player_has_los_bold(player_ptr, m_ptr->fy, m_ptr->fx))) {
+            else if ((m_ptr->cdis <= MAX_PLAYER_SIGHT) && (player_has_los_bold(player_ptr, m_ptr->fy, m_ptr->fx))) {
                 is_wakeup = true;
             }
         }
@@ -199,7 +199,7 @@ static void process_monsters_mtimed_aux(PlayerType *player_ptr, MONSTER_IDX m_id
 
         /* Hack -- amount of "waking" */
         /* Wake up faster near the player */
-        auto d = (m_ptr->cdis < AAF_LIMIT / 2) ? (AAF_LIMIT / m_ptr->cdis) : 1;
+        auto d = (m_ptr->cdis < MAX_MONSTER_SENSING / 2) ? (MAX_MONSTER_SENSING / m_ptr->cdis) : 1;
 
         /* Hack -- amount of "waking" is affected by speed of player */
         d = (d * speed_to_energy(player_ptr->pspeed)) / 10;
@@ -501,9 +501,9 @@ void monster_gain_exp(PlayerType *player_ptr, MONSTER_IDX m_idx, MonsterRaceId s
                 auto mes_evolution = _("%sは%sに進化した。", "%^s evolved into %s.");
                 auto mes_degeneration = _("%sは%sに退化した。", "%^s degenerated into %s.");
                 auto mes = randint0(2) == 0 ? mes_evolution : mes_degeneration;
-                msg_format(mes, m_name, hallucinated_race->name.c_str());
+                msg_format(mes, m_name, hallucinated_race->name.data());
             } else {
-                msg_format(_("%sは%sに進化した。", "%^s evolved into %s."), m_name, r_ptr->name.c_str());
+                msg_format(_("%sは%sに進化した。", "%^s evolved into %s."), m_name, r_ptr->name.data());
             }
         }
 

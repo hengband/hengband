@@ -216,7 +216,7 @@ struct term_data {
 };
 
 /* Max number of windows on screen */
-#define MAX_TERM_DATA 4
+#define MAX_TERM_DATA 8
 
 /* Minimum main term size */
 #define MIN_TERM0_LINES 24
@@ -976,7 +976,7 @@ static errr game_term_xtra_gcu(int n, int v)
     /* Clear screen */
     case TERM_XTRA_CLEAR:
         touchwin(td->win);
-        (void)wclear(td->win);
+        (void)werase(td->win);
         return 0;
 
     /* Make a noise */
@@ -1293,7 +1293,7 @@ errr init_gcu(int argc, char *argv[])
     /* Hack -- Require large screen, or Quit with message */
     i = ((LINES < 24) || (COLS < 80));
     if (i) {
-        quit_fmt("%s needs an 80x24 'curses' screen", std::string(VARIANT_NAME).c_str());
+        quit_fmt("%s needs an 80x24 'curses' screen", std::string(VARIANT_NAME).data());
     }
 
 #ifdef A_COLOR
@@ -1599,7 +1599,7 @@ errr init_gcu(int argc, char *argv[])
 
         /* Map Terminal */
         if (remaining.cx < MIN_TERM0_COLS || remaining.cy < MIN_TERM0_LINES) {
-            quit_fmt("Failed: %s needs an %dx%d map screen, not %dx%d", std::string(VARIANT_NAME).c_str(), MIN_TERM0_COLS, MIN_TERM0_LINES, remaining.cx, remaining.cy);
+            quit_fmt("Failed: %s needs an %dx%d map screen, not %dx%d", std::string(VARIANT_NAME).data(), MIN_TERM0_COLS, MIN_TERM0_LINES, remaining.cx, remaining.cy);
         }
         data[0].r = remaining;
         term_data_init(&data[0]);

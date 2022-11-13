@@ -86,7 +86,7 @@ static void generate_artifact(PlayerType *player_ptr, qtwg_type *qtwg_ptr, const
         return;
     }
 
-    KIND_OBJECT_IDX k_idx = lookup_kind(ItemKindType::SCROLL, SV_SCROLL_ACQUIREMENT);
+    const auto k_idx = lookup_baseitem_id({ ItemKindType::SCROLL, SV_SCROLL_ACQUIREMENT });
     ObjectType forge;
     auto *q_ptr = &forge;
     q_ptr->prep(k_idx);

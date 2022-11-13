@@ -169,7 +169,7 @@ void process_monster_lore(PlayerType *player_ptr, MonsterRaceId r_idx, monster_l
     set_flags1(lore_ptr);
     set_race_flags(lore_ptr);
     display_kill_numbers(lore_ptr);
-    concptr tmp = lore_ptr->r_ptr->text.c_str();
+    concptr tmp = lore_ptr->r_ptr->text.data();
     if (tmp[0]) {
         hooked_roff(tmp);
         hooked_roff("\n");

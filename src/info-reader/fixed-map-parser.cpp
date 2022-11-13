@@ -305,7 +305,7 @@ parse_error_type parse_fixed_map(PlayerType *player_ptr, concptr name, int ymin,
 
 static QuestId parse_quest_number_n(const std::vector<std::string> &token)
 {
-    auto number = i2enum<QuestId>(atoi(token[1].substr(_(0, 1)).c_str()));
+    auto number = i2enum<QuestId>(atoi(token[1].substr(_(0, 1)).data()));
     return number;
 }
 
@@ -368,7 +368,7 @@ static void parse_quest_info_aux(const char *file_name, std::set<QuestId> &key_l
             break;
         }
         case '%': {
-            parse_quest_info_aux(token[1].c_str(), key_list_ref);
+            parse_quest_info_aux(token[1].data(), key_list_ref);
             break;
         }
         default:

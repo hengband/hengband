@@ -291,7 +291,7 @@ void WorldTurnProcessor::shuffle_shopkeeper()
         }
 
         if (cheat_xtra) {
-            msg_format(_("%sの店主をシャッフルします。", "Shuffle a Shopkeeper of %s."), f_ref.name.c_str());
+            msg_format(_("%sの店主をシャッフルします。", "Shuffle a Shopkeeper of %s."), f_ref.name.data());
         }
 
         store_shuffle(this->player_ptr, i2enum<StoreSaleType>(n));
@@ -307,7 +307,7 @@ void WorldTurnProcessor::decide_alloc_monster()
     should_alloc &= !inside_quest(floor_ptr->quest_number);
     should_alloc &= !this->player_ptr->phase_out;
     if (should_alloc) {
-        (void)alloc_monster(this->player_ptr, MAX_SIGHT + 5, 0, summon_specific);
+        (void)alloc_monster(this->player_ptr, MAX_PLAYER_SIGHT + 5, 0, summon_specific);
     }
 }
 

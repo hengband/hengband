@@ -388,5 +388,5 @@ XFree86 4.0 でXIMを使うときは、環境変数 XMODIFIERS に "@im=skkinput
 
 --------
 > Mr.hoge
-> http://hengband.sourceforge.jp/
+> https://hengband.github.io/
 > echizen＠users.sourceforge.jp

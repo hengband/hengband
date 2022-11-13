@@ -62,6 +62,9 @@
 #include "wizard/wizard-messages.h"
 #include "world/world.h"
 
+/*! 吸血処理の最大回復HP */
+constexpr auto MAX_VAMPIRIC_DRAIN = 50;
+
 /*!
  * @brief プレイヤーの攻撃情報を初期化する(コンストラクタ以外の分)
  */
@@ -422,6 +425,7 @@ static void apply_damage_negative_effect(player_attack_type *pa_ptr, bool is_zan
     }
 
     if (is_zantetsu_nullified) {
+        sound(SOUND_ATTACK_FAILED);
         msg_print(_("こんな軟らかいものは切れん！", "You cannot cut such an elastic thing!"));
         pa_ptr->attack_damage = 0;
     }

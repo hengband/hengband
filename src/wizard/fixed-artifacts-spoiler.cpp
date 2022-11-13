@@ -3,6 +3,7 @@
 #include "object/object-kind-hook.h"
 #include "system/angband-version.h"
 #include "system/artifact-type-definition.h"
+#include "system/baseitem-info-definition.h"
 #include "system/object-type-definition.h"
 #include "system/player-type-definition.h"
 #include "util/angband-files.h"
@@ -91,8 +92,8 @@ static bool make_fake_artifact(ObjectType *o_ptr, FixedArtifactId fixed_artifact
         return false;
     }
 
-    OBJECT_IDX i = lookup_kind(a_ref.tval, a_ref.sval);
-    if (!i) {
+    const auto i = lookup_baseitem_id({ a_ref.tval, a_ref.sval });
+    if (i == 0) {
         return false;
     }
 
