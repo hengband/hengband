@@ -84,12 +84,11 @@
 #include "util/buffer-shaper.h"
 #include "util/int-char-converter.h"
 #include "view/display-messages.h"
-
 #include <algorithm>
 #include <optional>
 #include <tuple>
 
-static std::optional<std::tuple<ItemKindType, OBJECT_SUBTYPE_VALUE>> check_magic_eater_spell_repeat(magic_eater_data_type *magic_eater_data)
+static std::optional<BaseitemKey> check_magic_eater_spell_repeat(magic_eater_data_type *magic_eater_data)
 {
     COMMAND_CODE sn;
     if (!repeat_pull(&sn)) {
@@ -115,14 +114,14 @@ static std::optional<std::tuple<ItemKindType, OBJECT_SUBTYPE_VALUE>> check_magic
     /* Verify the spell */
     switch (tval) {
     case ItemKindType::ROD:
-        if (item.charge <= baseitems_info[lookup_kind(ItemKindType::ROD, sval)].pval * (item.count - 1) * EATER_ROD_CHARGE) {
-            return std::make_tuple(tval, sval);
+        if (item.charge <= baseitems_info[lookup_baseitem_id({ ItemKindType::ROD, sval })].pval * (item.count - 1) * EATER_ROD_CHARGE) {
+            return BaseitemKey(tval, sval);
         }
         break;
     case ItemKindType::STAFF:
     case ItemKindType::WAND:
         if (item.charge >= EATER_CHARGE) {
-            return std::make_tuple(tval, sval);
+            return BaseitemKey(tval, sval);
         }
         break;
     default:
@@ -137,7 +136,7 @@ static std::optional<std::tuple<ItemKindType, OBJECT_SUBTYPE_VALUE>> check_magic
  * @param only_browse 閲覧するだけならばTRUE
  * @return 選択した魔力のID、キャンセルならば-1を返す
  */
-static std::optional<std::tuple<ItemKindType, OBJECT_SUBTYPE_VALUE>> select_magic_eater(PlayerType *player_ptr, bool only_browse)
+static std::optional<BaseitemKey> select_magic_eater(PlayerType *player_ptr, bool only_browse)
 {
     char choice;
     bool flag, request_list;
@@ -292,7 +291,7 @@ static std::optional<std::tuple<ItemKindType, OBJECT_SUBTYPE_VALUE>> select_magi
                     continue;
                 }
 
-                k_idx = lookup_kind(tval, ctr);
+                k_idx = lookup_baseitem_id({ tval, ctr });
 
                 if (use_menu) {
                     if (ctr == (menu_line - 1)) {
@@ -472,7 +471,7 @@ static std::optional<std::tuple<ItemKindType, OBJECT_SUBTYPE_VALUE>> select_magi
         if (!only_browse) {
             auto &item = item_group[i];
             if (tval == ItemKindType::ROD) {
-                if (item.charge > baseitems_info[lookup_kind(tval, i)].pval * (item.count - 1) * EATER_ROD_CHARGE) {
+                if (item.charge > baseitems_info[lookup_baseitem_id({ tval, i })].pval * (item.count - 1) * EATER_ROD_CHARGE) {
                     msg_print(_("その魔法はまだ充填している最中だ。", "The magic is still charging."));
                     msg_print(nullptr);
                     continue;
@@ -497,7 +496,7 @@ static std::optional<std::tuple<ItemKindType, OBJECT_SUBTYPE_VALUE>> select_magi
             term_erase(7, 21, 255);
             term_erase(7, 20, 255);
 
-            shape_buffer(baseitems_info[lookup_kind(tval, i)].text.data(), 62, temp, sizeof(temp));
+            shape_buffer(baseitems_info[lookup_baseitem_id({ tval, i })].text.data(), 62, temp, sizeof(temp));
             for (j = 0, line = 21; temp[j]; j += 1 + strlen(&temp[j])) {
                 prt(&temp[j], line, 10);
                 line++;
@@ -531,7 +530,7 @@ static std::optional<std::tuple<ItemKindType, OBJECT_SUBTYPE_VALUE>> select_magi
 
     repeat_push(base + i);
 
-    return std::make_tuple(tval, i);
+    return BaseitemKey(tval, i);
 }
 
 /*!
@@ -555,10 +554,10 @@ bool do_cmd_magic_eater(PlayerType *player_ptr, bool only_browse, bool powerful)
         energy.reset_player_turn();
         return false;
     }
-    auto [tval, sval] = result.value();
+    auto &baseitem = result.value();
 
-    auto k_idx = lookup_kind(tval, sval);
-    auto level = (tval == ItemKindType::ROD ? baseitems_info[k_idx].level * 5 / 6 - 5 : baseitems_info[k_idx].level);
+    auto k_idx = lookup_baseitem_id(baseitem);
+    auto level = (baseitem.tval() == ItemKindType::ROD ? baseitems_info[k_idx].level * 5 / 6 - 5 : baseitems_info[k_idx].level);
     auto chance = level * 4 / 5 + 20;
     chance -= 3 * (adj_mag_stat[player_ptr->stat_index[mp_ptr->spell_stat]] - 1);
     level /= 2;
@@ -591,33 +590,69 @@ bool do_cmd_magic_eater(PlayerType *player_ptr, bool only_browse, bool powerful)
     } else {
         DIRECTION dir = 0;
 
-        if (tval == ItemKindType::ROD) {
+        switch (baseitem.tval()) {
+        case ItemKindType::ROD: {
+            const auto opt_sval = baseitem.sval();
+            if (!opt_sval.has_value()) {
+                return false;
+            }
+
+            const auto sval = opt_sval.value();
             if ((sval >= SV_ROD_MIN_DIRECTION) && (sval != SV_ROD_HAVOC) && (sval != SV_ROD_AGGRAVATE) && (sval != SV_ROD_PESTICIDE)) {
                 if (!get_aim_dir(player_ptr, &dir)) {
                     return false;
                 }
             }
+
             (void)rod_effect(player_ptr, sval, dir, &use_charge, powerful);
             if (!use_charge) {
                 return false;
             }
-        } else if (tval == ItemKindType::WAND) {
+
+            break;
+        }
+        case ItemKindType::WAND: {
+            const auto opt_sval = baseitem.sval();
+            if (!opt_sval.has_value()) {
+                return false;
+            }
+
             if (!get_aim_dir(player_ptr, &dir)) {
                 return false;
             }
+
+            const auto sval = opt_sval.value();
             wand_effect(player_ptr, sval, dir, powerful, true);
-        } else {
+            break;
+        }
+        default:
+            const auto opt_sval = baseitem.sval();
+            if (!opt_sval.has_value()) {
+                return false;
+            }
+
+            const auto sval = opt_sval.value();
             staff_effect(player_ptr, sval, &use_charge, powerful, true, true);
             if (!use_charge) {
                 return false;
             }
+
+            break;
         }
+
         if (randint1(100) < chance) {
             chg_virtue(player_ptr, V_CHANCE, 1);
         }
     }
 
     auto magic_eater_data = PlayerClass(player_ptr).get_specific_data<magic_eater_data_type>();
+    const auto opt_sval = baseitem.sval();
+    if (!opt_sval.has_value()) {
+        return false;
+    }
+
+    const auto tval = baseitem.tval();
+    const auto sval = opt_sval.value();
     auto &item = magic_eater_data->get_item_group(tval)[sval];
 
     energy.set_player_turn_energy(100);

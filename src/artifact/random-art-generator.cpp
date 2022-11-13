@@ -42,7 +42,7 @@
 
 static bool weakening_artifact(ObjectType *o_ptr)
 {
-    KIND_OBJECT_IDX k_idx = lookup_kind(o_ptr->tval, o_ptr->sval);
+    const auto k_idx = lookup_baseitem_id({ o_ptr->tval, o_ptr->sval });
     auto *k_ptr = &baseitems_info[k_idx];
     auto flgs = object_flags(o_ptr);
 

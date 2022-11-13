@@ -10,7 +10,7 @@
 #include "system/baseitem-info-definition.h"
 #include "object/tval-types.h"
 
-BaseitemKey::BaseitemKey(ItemKindType type_value, int subtype_value)
+BaseitemKey::BaseitemKey(const ItemKindType type_value, const std::optional<int> &subtype_value)
     : type_value(type_value)
     , subtype_value(subtype_value)
 {
@@ -40,7 +40,7 @@ ItemKindType BaseitemKey::tval() const
     return this->type_value;
 }
 
-int BaseitemKey::sval() const
+std::optional<int> BaseitemKey::sval() const
 {
     return this->subtype_value;
 }

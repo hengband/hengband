@@ -66,7 +66,7 @@ static void dump_magic_eater(PlayerType *player_ptr, FILE *fff)
                 continue;
             }
 
-            KIND_OBJECT_IDX k_idx = lookup_kind(tval, i);
+            auto k_idx = lookup_baseitem_id({ tval, i });
             if (!k_idx) {
                 continue;
             }

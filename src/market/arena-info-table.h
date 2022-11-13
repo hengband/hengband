@@ -1,19 +1,28 @@
 ﻿#pragma once
 
-#include "system/angband.h"
+#include "system/baseitem-info-definition.h"
 #include <vector>
 
-enum class MonsterRaceId : int16_t;
-enum class ItemKindType : short;
-
 /*!
- * @brief 闘技場のモンスターエントリー構造体 / A structure type for on_defeat_arena_monster entry
+ * @brief 闘技場のモンスターエントリー構造体
  */
-struct arena_type {
+enum class MonsterRaceId : int16_t;
+class ArenaMonsterEntry {
+public:
+    ArenaMonsterEntry(MonsterRaceId r_idx, const BaseitemKey &key)
+        : r_idx(r_idx)
+        , key(key)
+    {
+    }
+
     MonsterRaceId r_idx; /*!< 闘技場のモンスター種族ID(0ならば表彰式) / Monster (0 means victory prizing) */
-    ItemKindType tval; /*!< モンスター打倒後に得られるアイテムの大カテゴリID / tval of prize (0 means no prize) */
-    OBJECT_SUBTYPE_VALUE sval; /*!< モンスター打倒後に得られるアイテムの小カテゴリID / sval of prize */
+    BaseitemKey key;
 };
 
-extern const std::vector<arena_type> arena_info;
-extern const int MAX_ARENA_MONS; // 表彰式までの最大数.
+extern const std::vector<ArenaMonsterEntry> arena_info;
+
+/*
+ * @brief 表彰式までの最大数.
+ * @todo arena_info を配列からvectorに変えたので、後でarena_info.size() に差し替えて廃止予定.
+ */
+extern const int MAX_ARENA_MONS;

@@ -25,6 +25,7 @@
 #include "spell/spells-execution.h"
 #include "spell/spells-util.h"
 #include "system/angband-version.h"
+#include "system/baseitem-info-definition.h"
 #include "system/monster-race-definition.h"
 #include "system/object-type-definition.h"
 #include "system/player-type-definition.h"
@@ -39,7 +40,6 @@
 #include "wizard/items-spoiler.h"
 #include "wizard/monster-info-spoiler.h"
 #include "wizard/spoiler-util.h"
-
 #include <algorithm>
 #include <array>
 #include <iterator>
@@ -205,7 +205,7 @@ static SpoilerOutputResultType spoil_player_spell(concptr fname)
         if (magic_ptr->spell_book != ItemKindType::NONE) {
             ObjectType book;
             auto o_ptr = &book;
-            o_ptr->prep(lookup_kind(magic_ptr->spell_book, 0));
+            o_ptr->prep(lookup_baseitem_id({ magic_ptr->spell_book, 0 }));
             describe_flavor(&dummy_p, title, o_ptr, OD_NAME_ONLY);
             book_name = title;
             char *s = angband_strchr(book_name, '[');

@@ -47,6 +47,7 @@
 #include "status/body-improvement.h"
 #include "status/element-resistance.h"
 #include "status/temporary-resistance.h"
+#include "system/baseitem-info-definition.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
 #include "system/monster-race-definition.h"
@@ -110,8 +111,8 @@ bool kawarimi(PlayerType *player_ptr, bool success)
 
     teleport_player(player_ptr, 10 + randint1(90), TELEPORT_SPONTANEOUS);
     q_ptr->wipe();
-    const int SV_WOODEN_STATUE = 0;
-    q_ptr->prep(lookup_kind(ItemKindType::STATUE, SV_WOODEN_STATUE));
+    const int sv_wooden_statue = 0;
+    q_ptr->prep(lookup_baseitem_id({ ItemKindType::STATUE, sv_wooden_statue }));
 
     q_ptr->pval = enum2i(MonsterRaceId::NINJA);
     (void)drop_near(player_ptr, q_ptr, -1, y, x);

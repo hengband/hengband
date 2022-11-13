@@ -92,10 +92,12 @@ static void on_defeat_arena_monster(PlayerType *player_ptr, monster_death_type *
         msg_print(_("勝利！チャンピオンへの道を進んでいる。", "Victorious! You're on your way to becoming Champion."));
     }
 
-    if (arena_info[player_ptr->arena_number].tval > ItemKindType::NONE) {
+    const auto &arena = arena_info[player_ptr->arena_number];
+    const auto tval = arena.key.tval();
+    if (tval > ItemKindType::NONE) {
         ObjectType forge;
         auto *q_ptr = &forge;
-        q_ptr->prep(lookup_kind(arena_info[player_ptr->arena_number].tval, arena_info[player_ptr->arena_number].sval));
+        q_ptr->prep(lookup_baseitem_id(arena.key));
         ItemMagicApplier(player_ptr, q_ptr, floor_ptr->object_level, AM_NO_FIXED_ART).execute();
         (void)drop_near(player_ptr, q_ptr, -1, md_ptr->md_y, md_ptr->md_x);
     }
@@ -143,7 +145,7 @@ static void drop_corpse(PlayerType *player_ptr, monster_death_type *md_ptr)
 
     ObjectType forge;
     auto *q_ptr = &forge;
-    q_ptr->prep(lookup_kind(ItemKindType::CORPSE, (corpse ? SV_CORPSE : SV_SKELETON)));
+    q_ptr->prep(lookup_baseitem_id({ ItemKindType::CORPSE, (corpse ? SV_CORPSE : SV_SKELETON) }));
     ItemMagicApplier(player_ptr, q_ptr, floor_ptr->object_level, AM_NO_FIXED_ART).execute();
     q_ptr->pval = enum2i(md_ptr->m_ptr->r_idx);
     (void)drop_near(player_ptr, q_ptr, -1, md_ptr->md_y, md_ptr->md_x);
@@ -196,7 +198,8 @@ bool drop_single_artifact(PlayerType *player_ptr, monster_death_type *md_ptr, Fi
 static KIND_OBJECT_IDX drop_dungeon_final_artifact(PlayerType *player_ptr, monster_death_type *md_ptr)
 {
     const auto &dungeon = dungeons_info[player_ptr->dungeon_idx];
-    auto k_idx = dungeon.final_object != 0 ? dungeon.final_object : lookup_kind(ItemKindType::SCROLL, SV_SCROLL_ACQUIREMENT);
+    const auto has_reward = dungeon.final_object > 0;
+    const auto k_idx = has_reward ? dungeon.final_object : lookup_baseitem_id({ ItemKindType::SCROLL, SV_SCROLL_ACQUIREMENT });
     if (dungeon.final_artifact == FixedArtifactId::NONE) {
         return k_idx;
     }

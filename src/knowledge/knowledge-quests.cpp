@@ -17,6 +17,7 @@
 #include "object-enchant/special-object-flags.h"
 #include "object/object-kind-hook.h"
 #include "system/artifact-type-definition.h"
+#include "system/baseitem-info-definition.h"
 #include "system/dungeon-info.h"
 #include "system/floor-type-definition.h"
 #include "system/monster-race-definition.h"
@@ -27,7 +28,6 @@
 #include "util/sort.h"
 #include "util/string-processor.h"
 #include "world/world.h"
-
 #include <numeric>
 
 /*!
@@ -105,7 +105,7 @@ static void do_cmd_knowledge_quests_current(PlayerType *player_ptr, FILE *fff)
                         const auto &a_ref = artifacts_info.at(q_ref.reward_artifact_idx);
                         ObjectType forge;
                         auto *o_ptr = &forge;
-                        KIND_OBJECT_IDX k_idx = lookup_kind(a_ref.tval, a_ref.sval);
+                        auto k_idx = lookup_baseitem_id({ a_ref.tval, a_ref.sval });
                         o_ptr->prep(k_idx);
                         o_ptr->fixed_artifact_idx = q_ref.reward_artifact_idx;
                         o_ptr->ident = IDENT_STORE;

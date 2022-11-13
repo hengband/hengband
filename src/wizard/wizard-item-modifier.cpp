@@ -945,7 +945,7 @@ WishResultType do_cmd_wishing(PlayerType *player_ptr, int prob, bool allow_art, 
                 continue;
             }
 
-            KIND_OBJECT_IDX k_idx = lookup_kind(a_ref.tval, a_ref.sval);
+            const auto k_idx = lookup_baseitem_id({ a_ref.tval, a_ref.sval });
             if (!k_idx) {
                 continue;
             }

@@ -100,7 +100,7 @@ void do_cmd_knowledge_artifacts(PlayerType *player_ptr)
         const auto &a_ref = artifacts_info.at(a_idx);
         GAME_TEXT base_name[MAX_NLEN];
         strcpy(base_name, _("未知の伝説のアイテム", "Unknown Artifact"));
-        const auto z = lookup_kind(a_ref.tval, a_ref.sval);
+        const auto z = lookup_baseitem_id({ a_ref.tval, a_ref.sval });
         if (z != 0) {
             ObjectType forge;
             ObjectType *q_ptr;

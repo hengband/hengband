@@ -1,13 +1,11 @@
 ﻿/*!
- * @brief enumで表現することが却って高コストになりそうなSV定義をここに格納する
+ * @brief enumで表現することが却って高コストになりそうなSV (ベースアイテムのサブタイプ)定義をここに格納する
  * @date 2020/05/28
  * @author Hourier
  */
 
 #pragma once
 
-/*** Object "sval" codes ***/
-#define SV_ANY 255
 #define SV_PHOTO 50
 
 /* The "sval" codes for TV_CORPSE */

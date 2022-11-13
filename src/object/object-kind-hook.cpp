@@ -9,8 +9,10 @@
 #include "sv-definition/sv-other-types.h"
 #include "sv-definition/sv-ring-types.h"
 #include "system/baseitem-info-definition.h"
-
 #include <algorithm>
+#include <map>
+#include <sstream>
+#include <vector>
 
 /*
  * Special "sval" limit -- first "good" magic/prayer book
@@ -182,79 +184,85 @@ bool kind_is_good(KIND_OBJECT_IDX k_idx)
     }
 }
 
-static bool comp_tval(const BaseItemInfo *a, const BaseItemInfo *b)
-{
-    return a->tval < b->tval;
-};
-
-static bool comp_tval_sval(const BaseItemInfo *a, const BaseItemInfo *b)
-{
-    if (a->tval != b->tval) {
-        return comp_tval(a, b);
-    }
-    return a->sval < b->sval;
-};
-
-/*!
- * @brief ベースアイテム群の各要素を指すポインタをtvalおよびsvalでソートした配列を取得する
- * 最初にtvalによるソートを行い、tvalが同じものはその中でsvalによるソートが行われた配列となる
- * @return 上述の処理を行った配列(静的変数)への参照を返す
+/*
+ * @brief 特定のtvalとランダムなsvalの組み合わせからベースアイテムを選択するためのキャッシュを生成する
+ * @return tvalをキーに、svalのリストを値とした辞書
  */
-static const std::vector<const BaseItemInfo *> &get_sorted_baseitems()
+static const std::map<ItemKindType, std::vector<int>> &create_baseitems_cache()
 {
-    static std::vector<const BaseItemInfo *> sorted_cache;
-
-    if (sorted_cache.empty()) {
-        for (const auto &k_ref : baseitems_info) {
-            if (k_ref.tval == ItemKindType::NONE) {
-                continue;
-            }
-            sorted_cache.push_back(&k_ref);
+    static std::map<ItemKindType, std::vector<int>> cache;
+    for (const auto &baseitem : baseitems_info) {
+        const auto tval = baseitem.tval;
+        if (tval == ItemKindType::NONE) {
+            continue;
         }
 
-        std::sort(sorted_cache.begin(), sorted_cache.end(), comp_tval_sval);
+        cache[tval].push_back(baseitem.sval);
     }
 
-    return sorted_cache;
+    return cache;
 }
 
-short lookup_kind(const BaseitemKey &key)
+/*
+ * @brief tvalとsvalに対応する、BaseitenDefinitions のIDを返すためのキャッシュを生成する
+ * @return tvalと(実在する)svalの組み合わせをキーに、ベースアイテムIDを値とした辞書
+ */
+static const std::map<BaseitemKey, short> &create_baseitem_index_chache()
 {
-    return lookup_kind(key.tval(), key.sval());
+    static std::map<BaseitemKey, short> cache;
+    for (const auto &baseitem : baseitems_info) {
+        const auto tval = baseitem.tval;
+        if (tval == ItemKindType::NONE) {
+            continue;
+        }
+
+        const BaseitemKey key(tval, baseitem.sval);
+        cache[key] = baseitem.idx;
+    }
+
+    return cache;
 }
 
 /*!
  * @brief tvalとsvalに対応するベースアイテムのIDを検索する
- * Find the index of the BaseItemInfo with the given tval and sval
- * svalにSV_ANYが渡された場合はtvalが一致するすべてのベースアイテムから等確率でランダムに1つを選択する
  * @param tval 検索したいベースアイテムのtval
  * @param sval 検索したいベースアイテムのsval
  * @return tvalとsvalに対応するベースアイテムが存在すればそのID、存在しなければ0
+ * @details 存在しないことはリファクタリング成果により考えにくく、自作の不存在例外を投げればいいはず.
+ * 但し呼び出し側全部の処理を保証するのが面倒なので旧処理のままとする.
  */
-KIND_OBJECT_IDX lookup_kind(ItemKindType tval, OBJECT_SUBTYPE_VALUE sval)
+static short exe_lookup(ItemKindType tval, int sval)
 {
-    const auto &sorted_cache = get_sorted_baseitems();
-
-    BaseItemInfo k_obj;
-    k_obj.tval = tval;
-    k_obj.sval = sval;
-
-    if (sval == SV_ANY) {
-        auto [begin, end] = std::equal_range(sorted_cache.begin(), sorted_cache.end(), &k_obj, comp_tval);
-        if (auto candidates_num = std::distance(begin, end);
-            candidates_num > 0) {
-            auto choice = randint0(candidates_num);
-            return (*std::next(begin, choice))->idx;
-        }
-
+    static const auto &cache = create_baseitem_index_chache();
+    const auto itr = cache.find({ tval, sval });
+    if (itr == cache.end()) {
         return 0;
     }
 
-    auto it = std::lower_bound(sorted_cache.begin(), sorted_cache.end(), &k_obj, comp_tval_sval);
-    if (it != sorted_cache.end() &&
-        (((*it)->tval == tval) && ((*it)->sval == sval))) {
-        return (*it)->idx;
+    return itr->second;
+}
+
+/*!
+ * @brief ベースアイテムのtval/svalからIDを引いて返す
+ * @param key tval/svalのペア、但しsvalはランダム (nullopt)の可能性がある
+ * @return ベースアイテムID
+ * @details 「tvalが不存在」という状況は事実上ないが、辞書探索のお作法として「有無チェック」を入れておく.
+ * 万が一tvalがキャッシュになかったらベースアイテムID 0を返す.
+ */
+short lookup_baseitem_id(const BaseitemKey &key)
+{
+    const auto sval = key.sval();
+    if (sval.has_value()) {
+        return exe_lookup(key.tval(), sval.value());
     }
 
-    return 0;
+    static const auto &cache = create_baseitems_cache();
+    const auto itr = cache.find(key.tval());
+    if (itr == cache.end()) {
+        return 0;
+    }
+
+    const auto &svals = itr->second;
+    const auto sval_indice = randint0(svals.size());
+    return exe_lookup(key.tval(), svals.at(sval_indice));
 }

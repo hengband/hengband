@@ -36,6 +36,7 @@
 #include "status/buff-setter.h"
 #include "status/element-resistance.h"
 #include "sv-definition/sv-food-types.h"
+#include "system/baseitem-info-definition.h"
 #include "system/object-type-definition.h"
 #include "system/player-type-definition.h"
 #include "target/target-getter.h"
@@ -146,7 +147,7 @@ concptr do_nature_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessTyp
                 msg_print(_("食料を生成した。", "A food ration is produced."));
 
                 /* Create the food ration */
-                q_ptr->prep(lookup_kind(ItemKindType::FOOD, SV_FOOD_RATION));
+                q_ptr->prep(lookup_baseitem_id({ ItemKindType::FOOD, SV_FOOD_RATION }));
 
                 /* Drop the object from heaven */
                 (void)drop_near(player_ptr, q_ptr, -1, player_ptr->y, player_ptr->x);

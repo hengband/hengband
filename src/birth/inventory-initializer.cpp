@@ -102,7 +102,7 @@ static void decide_initial_items(PlayerType *player_ptr, ObjectType *q_ptr)
         /* Demon can drain vitality from humanoid corpse */
         get_mon_num_prep(player_ptr, monster_hook_human, nullptr);
         for (int i = rand_range(3, 4); i > 0; i--) {
-            q_ptr->prep(lookup_kind(ItemKindType::CORPSE, SV_CORPSE));
+            q_ptr->prep(lookup_baseitem_id({ ItemKindType::CORPSE, SV_CORPSE }));
             q_ptr->pval = enum2i(get_mon_num(player_ptr, 0, 2, 0));
             if (q_ptr->pval) {
                 q_ptr->number = 1;
@@ -116,26 +116,26 @@ static void decide_initial_items(PlayerType *player_ptr, ObjectType *q_ptr)
     case PlayerRaceType::ZOMBIE:
     case PlayerRaceType::SPECTRE:
         /* Staff (of Nothing) */
-        q_ptr->prep(lookup_kind(ItemKindType::STAFF, SV_STAFF_NOTHING));
+        q_ptr->prep(lookup_baseitem_id({ ItemKindType::STAFF, SV_STAFF_NOTHING }));
         q_ptr->number = 1;
         add_outfit(player_ptr, q_ptr);
         break;
     case PlayerRaceType::ENT:
         /* Potions of Water */
-        q_ptr->prep(lookup_kind(ItemKindType::POTION, SV_POTION_WATER));
+        q_ptr->prep(lookup_baseitem_id({ ItemKindType::POTION, SV_POTION_WATER }));
         q_ptr->number = (ITEM_NUMBER)rand_range(15, 23);
         add_outfit(player_ptr, q_ptr);
         break;
     case PlayerRaceType::ANDROID:
         /* Flasks of oil */
-        q_ptr->prep(lookup_kind(ItemKindType::FLASK, SV_ANY));
+        q_ptr->prep(lookup_baseitem_id({ ItemKindType::FLASK }));
         ItemMagicApplier(player_ptr, q_ptr, 1, AM_NO_FIXED_ART).execute();
         q_ptr->number = (ITEM_NUMBER)rand_range(7, 12);
         add_outfit(player_ptr, q_ptr);
         break;
     default:
         /* Food rations */
-        q_ptr->prep(lookup_kind(ItemKindType::FOOD, SV_FOOD_RATION));
+        q_ptr->prep(lookup_baseitem_id({ ItemKindType::FOOD, SV_FOOD_RATION }));
         q_ptr->number = (ITEM_NUMBER)rand_range(3, 7);
         add_outfit(player_ptr, q_ptr);
     }
@@ -157,11 +157,11 @@ void player_outfit(PlayerType *player_ptr)
     PlayerClass pc(player_ptr);
     PlayerRace pr(player_ptr);
     if (pr.equals(PlayerRaceType::VAMPIRE) && !pc.equals(PlayerClassType::NINJA)) {
-        q_ptr->prep(lookup_kind(ItemKindType::SCROLL, SV_SCROLL_DARKNESS));
+        q_ptr->prep(lookup_baseitem_id({ ItemKindType::SCROLL, SV_SCROLL_DARKNESS }));
         q_ptr->number = (ITEM_NUMBER)rand_range(2, 5);
         add_outfit(player_ptr, q_ptr);
     } else if (!pc.equals(PlayerClassType::NINJA)) {
-        q_ptr->prep(lookup_kind(ItemKindType::LITE, SV_LITE_TORCH));
+        q_ptr->prep(lookup_baseitem_id({ ItemKindType::LITE, SV_LITE_TORCH }));
         q_ptr->number = (ITEM_NUMBER)rand_range(3, 7);
         q_ptr->fuel = rand_range(3, 7) * 500;
 
@@ -170,72 +170,72 @@ void player_outfit(PlayerType *player_ptr)
 
     q_ptr = &forge;
     if (pr.equals(PlayerRaceType::MERFOLK)) {
-        q_ptr->prep(lookup_kind(ItemKindType::RING, SV_RING_LEVITATION_FALL));
+        q_ptr->prep(lookup_baseitem_id({ ItemKindType::RING, SV_RING_LEVITATION_FALL }));
         q_ptr->number = 1;
         add_outfit(player_ptr, q_ptr);
     }
 
     if (pc.equals(PlayerClassType::RANGER) || pc.equals(PlayerClassType::CAVALRY)) {
-        q_ptr->prep(lookup_kind(ItemKindType::ARROW, SV_AMMO_NORMAL));
+        q_ptr->prep(lookup_baseitem_id({ ItemKindType::ARROW, SV_AMMO_NORMAL }));
         q_ptr->number = (byte)rand_range(15, 20);
         add_outfit(player_ptr, q_ptr);
     }
 
     if (pc.equals(PlayerClassType::RANGER)) {
-        q_ptr->prep(lookup_kind(ItemKindType::BOW, SV_SHORT_BOW));
+        q_ptr->prep(lookup_baseitem_id({ ItemKindType::BOW, SV_SHORT_BOW }));
         add_outfit(player_ptr, q_ptr);
     } else if (pc.equals(PlayerClassType::ARCHER)) {
-        q_ptr->prep(lookup_kind(ItemKindType::ARROW, SV_AMMO_NORMAL));
+        q_ptr->prep(lookup_baseitem_id({ ItemKindType::ARROW, SV_AMMO_NORMAL }));
         q_ptr->number = (ITEM_NUMBER)rand_range(15, 20);
         add_outfit(player_ptr, q_ptr);
     } else if (pc.equals(PlayerClassType::HIGH_MAGE) || pc.equals(PlayerClassType::ELEMENTALIST)) {
-        q_ptr->prep(lookup_kind(ItemKindType::WAND, SV_WAND_MAGIC_MISSILE));
+        q_ptr->prep(lookup_baseitem_id({ ItemKindType::WAND, SV_WAND_MAGIC_MISSILE }));
         q_ptr->number = 1;
         q_ptr->pval = (PARAMETER_VALUE)rand_range(25, 30);
         add_outfit(player_ptr, q_ptr);
     } else if (pc.equals(PlayerClassType::SORCERER)) {
         for (auto book_tval = enum2i(ItemKindType::LIFE_BOOK); book_tval <= enum2i(ItemKindType::LIFE_BOOK) + MAX_MAGIC - 1; book_tval++) {
-            q_ptr->prep(lookup_kind(i2enum<ItemKindType>(book_tval), 0));
+            q_ptr->prep(lookup_baseitem_id({ i2enum<ItemKindType>(book_tval), 0 }));
             q_ptr->number = 1;
             add_outfit(player_ptr, q_ptr);
         }
     } else if (pc.equals(PlayerClassType::TOURIST)) {
         if (player_ptr->ppersonality != PERSONALITY_SEXY) {
-            q_ptr->prep(lookup_kind(ItemKindType::SHOT, SV_AMMO_LIGHT));
+            q_ptr->prep(lookup_baseitem_id({ ItemKindType::SHOT, SV_AMMO_LIGHT }));
             q_ptr->number = rand_range(15, 20);
             add_outfit(player_ptr, q_ptr);
         }
 
-        q_ptr->prep(lookup_kind(ItemKindType::FOOD, SV_FOOD_BISCUIT));
+        q_ptr->prep(lookup_baseitem_id({ ItemKindType::FOOD, SV_FOOD_BISCUIT }));
         q_ptr->number = rand_range(2, 4);
 
         add_outfit(player_ptr, q_ptr);
 
-        q_ptr->prep(lookup_kind(ItemKindType::FOOD, SV_FOOD_WAYBREAD));
+        q_ptr->prep(lookup_baseitem_id({ ItemKindType::FOOD, SV_FOOD_WAYBREAD }));
         q_ptr->number = rand_range(2, 4);
 
         add_outfit(player_ptr, q_ptr);
 
-        q_ptr->prep(lookup_kind(ItemKindType::FOOD, SV_FOOD_JERKY));
+        q_ptr->prep(lookup_baseitem_id({ ItemKindType::FOOD, SV_FOOD_JERKY }));
         q_ptr->number = rand_range(1, 3);
 
         add_outfit(player_ptr, q_ptr);
 
-        q_ptr->prep(lookup_kind(ItemKindType::FOOD, SV_FOOD_PINT_OF_ALE));
+        q_ptr->prep(lookup_baseitem_id({ ItemKindType::FOOD, SV_FOOD_PINT_OF_ALE }));
         q_ptr->number = rand_range(2, 4);
 
         add_outfit(player_ptr, q_ptr);
 
-        q_ptr->prep(lookup_kind(ItemKindType::FOOD, SV_FOOD_PINT_OF_WINE));
+        q_ptr->prep(lookup_baseitem_id({ ItemKindType::FOOD, SV_FOOD_PINT_OF_WINE }));
         q_ptr->number = rand_range(2, 4);
 
         add_outfit(player_ptr, q_ptr);
     } else if (pc.equals(PlayerClassType::NINJA)) {
-        q_ptr->prep(lookup_kind(ItemKindType::SPIKE, 0));
+        q_ptr->prep(lookup_baseitem_id({ ItemKindType::SPIKE, 0 }));
         q_ptr->number = rand_range(15, 20);
         add_outfit(player_ptr, q_ptr);
     } else if (pc.equals(PlayerClassType::SNIPER)) {
-        q_ptr->prep(lookup_kind(ItemKindType::BOLT, SV_AMMO_NORMAL));
+        q_ptr->prep(lookup_baseitem_id({ ItemKindType::BOLT, SV_AMMO_NORMAL }));
         q_ptr->number = rand_range(15, 20);
         add_outfit(player_ptr, q_ptr);
     }
@@ -269,7 +269,7 @@ void player_outfit(PlayerType *player_ptr)
         }
 
         q_ptr = &forge;
-        q_ptr->prep(lookup_kind(tv, sv));
+        q_ptr->prep(lookup_baseitem_id({ tv, sv }));
 
         /* Only assassins get a poisoned weapon */
         if (((tv == ItemKindType::SWORD) || (tv == ItemKindType::HAFTED)) && (pc.equals(PlayerClassType::ROGUE) && (player_ptr->realm1 == REALM_DEATH))) {
@@ -279,5 +279,5 @@ void player_outfit(PlayerType *player_ptr)
         add_outfit(player_ptr, q_ptr);
     }
 
-    baseitems_info[lookup_kind(ItemKindType::POTION, SV_POTION_WATER)].aware = true;
+    baseitems_info[lookup_baseitem_id({ ItemKindType::POTION, SV_POTION_WATER })].aware = true;
 }

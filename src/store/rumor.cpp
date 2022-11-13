@@ -8,6 +8,7 @@
 #include "object-enchant/special-object-flags.h"
 #include "object/object-kind-hook.h"
 #include "system/artifact-type-definition.h"
+#include "system/baseitem-info-definition.h"
 #include "system/dungeon-info.h"
 #include "system/monster-race-definition.h"
 #include "system/object-type-definition.h"
@@ -110,7 +111,7 @@ void display_rumor(PlayerType *player_ptr, bool ex)
     if (category == "ARTIFACT") {
         const auto &artifact_name = tokens[1];
         const auto &[a_idx, a_ptr] = get_artifact_definition(artifact_name);
-        KIND_OBJECT_IDX k_idx = lookup_kind(a_ptr->tval, a_ptr->sval);
+        const auto k_idx = lookup_baseitem_id({ a_ptr->tval, a_ptr->sval });
         ObjectType forge;
         auto *q_ptr = &forge;
         q_ptr->prep(k_idx);

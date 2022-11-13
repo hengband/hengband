@@ -268,7 +268,7 @@ static std::string wiz_make_named_artifact_desc(PlayerType *player_ptr, FixedArt
 {
     const auto &a_ref = artifacts_info.at(a_idx);
     ObjectType obj;
-    obj.prep(lookup_kind(a_ref.tval, a_ref.sval));
+    obj.prep(lookup_baseitem_id({ a_ref.tval, a_ref.sval }));
     obj.fixed_artifact_idx = a_idx;
     object_known(&obj);
     char buf[MAX_NLEN];
