@@ -178,7 +178,7 @@ bool exchange_cash(PlayerType *player_ptr)
 
             msg_format(_("これで合計 %d ポイント獲得しました。", "You earned %d point%s total."), num, (num > 1 ? "s" : ""));
 
-            (&forge)->prep(lookup_kind(prize_list[num - 1]));
+            (&forge)->prep(lookup_baseitem_id(prize_list[num - 1]));
             ItemMagicApplier(player_ptr, &forge, player_ptr->current_floor_ptr->object_level, AM_NO_FIXED_ART).execute();
 
             object_aware(player_ptr, &forge);

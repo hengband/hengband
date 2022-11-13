@@ -113,7 +113,7 @@ void acquire_chaos_weapon(PlayerType *player_ptr)
         dummy2 = SV_BLADE_OF_CHAOS;
     }
 
-    q_ptr->prep(lookup_kind({ dummy, dummy2 }));
+    q_ptr->prep(lookup_baseitem_id({ dummy, dummy2 }));
     q_ptr->to_h = 3 + randint1(player_ptr->current_floor_ptr->dun_level) % 10;
     q_ptr->to_d = 3 + randint1(player_ptr->current_floor_ptr->dun_level) % 10;
     one_resistance(q_ptr);

@@ -128,7 +128,7 @@ static void on_dead_bloodletter(PlayerType *player_ptr, monster_death_type *md_p
 
     ObjectType forge;
     auto *q_ptr = &forge;
-    q_ptr->prep(lookup_kind({ ItemKindType::SWORD, SV_BLADE_OF_CHAOS }));
+    q_ptr->prep(lookup_baseitem_id({ ItemKindType::SWORD, SV_BLADE_OF_CHAOS }));
     ItemMagicApplier(player_ptr, q_ptr, player_ptr->current_floor_ptr->object_level, AM_NO_FIXED_ART | md_ptr->mo_mode).execute();
     (void)drop_near(player_ptr, q_ptr, -1, md_ptr->md_y, md_ptr->md_x);
 }
@@ -204,12 +204,12 @@ static void on_dead_serpent(PlayerType *player_ptr, monster_death_type *md_ptr)
 
     ObjectType forge;
     auto *q_ptr = &forge;
-    q_ptr->prep(lookup_kind({ ItemKindType::HAFTED, SV_GROND }));
+    q_ptr->prep(lookup_baseitem_id({ ItemKindType::HAFTED, SV_GROND }));
     q_ptr->fixed_artifact_idx = FixedArtifactId::GROND;
     ItemMagicApplier(player_ptr, q_ptr, -1, AM_GOOD | AM_GREAT).execute();
     (void)drop_near(player_ptr, q_ptr, -1, md_ptr->md_y, md_ptr->md_x);
     q_ptr = &forge;
-    q_ptr->prep(lookup_kind({ ItemKindType::CROWN, SV_CHAOS }));
+    q_ptr->prep(lookup_baseitem_id({ ItemKindType::CROWN, SV_CHAOS }));
     q_ptr->fixed_artifact_idx = FixedArtifactId::CHAOS;
     ItemMagicApplier(player_ptr, q_ptr, -1, AM_GOOD | AM_GREAT).execute();
     (void)drop_near(player_ptr, q_ptr, -1, md_ptr->md_y, md_ptr->md_x);
@@ -223,7 +223,7 @@ static void on_dead_death_sword(PlayerType *player_ptr, monster_death_type *md_p
 
     ObjectType forge;
     auto *q_ptr = &forge;
-    q_ptr->prep(lookup_kind({ ItemKindType::SWORD, randint1(2) }));
+    q_ptr->prep(lookup_baseitem_id({ ItemKindType::SWORD, randint1(2) }));
     (void)drop_near(player_ptr, q_ptr, -1, md_ptr->md_y, md_ptr->md_x);
 }
 
@@ -239,7 +239,7 @@ static void on_dead_can_angel(PlayerType *player_ptr, monster_death_type *md_ptr
 
     ObjectType forge;
     auto *q_ptr = &forge;
-    q_ptr->prep(lookup_kind({ ItemKindType::CHEST, SV_CHEST_KANDUME }));
+    q_ptr->prep(lookup_baseitem_id({ ItemKindType::CHEST, SV_CHEST_KANDUME }));
     ItemMagicApplier(player_ptr, q_ptr, player_ptr->current_floor_ptr->object_level, AM_NO_FIXED_ART).execute();
     (void)drop_near(player_ptr, q_ptr, -1, md_ptr->md_y, md_ptr->md_x);
 }

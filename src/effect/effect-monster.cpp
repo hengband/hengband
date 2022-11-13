@@ -672,7 +672,7 @@ static void postprocess_by_taking_photo(PlayerType *player_ptr, effect_monster_t
     ObjectType *q_ptr;
     ObjectType forge;
     q_ptr = &forge;
-    q_ptr->prep(lookup_kind({ ItemKindType::STATUE, SV_PHOTO }));
+    q_ptr->prep(lookup_baseitem_id({ ItemKindType::STATUE, SV_PHOTO }));
     q_ptr->pval = em_ptr->photo;
     q_ptr->ident |= (IDENT_FULL_KNOWN);
     (void)drop_near(player_ptr, q_ptr, -1, player_ptr->y, player_ptr->x);

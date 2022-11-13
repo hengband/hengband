@@ -114,7 +114,7 @@ static std::optional<BaseitemKey> check_magic_eater_spell_repeat(magic_eater_dat
     /* Verify the spell */
     switch (tval) {
     case ItemKindType::ROD:
-        if (item.charge <= baseitems_info[lookup_kind({ ItemKindType::ROD, sval })].pval * (item.count - 1) * EATER_ROD_CHARGE) {
+        if (item.charge <= baseitems_info[lookup_baseitem_id({ ItemKindType::ROD, sval })].pval * (item.count - 1) * EATER_ROD_CHARGE) {
             return BaseitemKey(tval, sval);
         }
         break;
@@ -291,7 +291,7 @@ static std::optional<BaseitemKey> select_magic_eater(PlayerType *player_ptr, boo
                     continue;
                 }
 
-                k_idx = lookup_kind({ tval, ctr });
+                k_idx = lookup_baseitem_id({ tval, ctr });
 
                 if (use_menu) {
                     if (ctr == (menu_line - 1)) {
@@ -471,7 +471,7 @@ static std::optional<BaseitemKey> select_magic_eater(PlayerType *player_ptr, boo
         if (!only_browse) {
             auto &item = item_group[i];
             if (tval == ItemKindType::ROD) {
-                if (item.charge > baseitems_info[lookup_kind({ tval, i })].pval * (item.count - 1) * EATER_ROD_CHARGE) {
+                if (item.charge > baseitems_info[lookup_baseitem_id({ tval, i })].pval * (item.count - 1) * EATER_ROD_CHARGE) {
                     msg_print(_("その魔法はまだ充填している最中だ。", "The magic is still charging."));
                     msg_print(nullptr);
                     continue;
@@ -496,7 +496,7 @@ static std::optional<BaseitemKey> select_magic_eater(PlayerType *player_ptr, boo
             term_erase(7, 21, 255);
             term_erase(7, 20, 255);
 
-            shape_buffer(baseitems_info[lookup_kind({ tval, i })].text.data(), 62, temp, sizeof(temp));
+            shape_buffer(baseitems_info[lookup_baseitem_id({ tval, i })].text.data(), 62, temp, sizeof(temp));
             for (j = 0, line = 21; temp[j]; j += 1 + strlen(&temp[j])) {
                 prt(&temp[j], line, 10);
                 line++;
@@ -556,7 +556,7 @@ bool do_cmd_magic_eater(PlayerType *player_ptr, bool only_browse, bool powerful)
     }
     auto &baseitem = result.value();
 
-    auto k_idx = lookup_kind(baseitem);
+    auto k_idx = lookup_baseitem_id(baseitem);
     auto level = (baseitem.tval() == ItemKindType::ROD ? baseitems_info[k_idx].level * 5 / 6 - 5 : baseitems_info[k_idx].level);
     auto chance = level * 4 / 5 + 20;
     chance -= 3 * (adj_mag_stat[player_ptr->stat_index[mp_ptr->spell_stat]] - 1);

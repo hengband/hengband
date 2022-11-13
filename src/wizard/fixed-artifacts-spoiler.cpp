@@ -92,7 +92,7 @@ static bool make_fake_artifact(ObjectType *o_ptr, FixedArtifactId fixed_artifact
         return false;
     }
 
-    const auto i = lookup_kind({ a_ref.tval, a_ref.sval });
+    const auto i = lookup_baseitem_id({ a_ref.tval, a_ref.sval });
     if (i == 0) {
         return false;
     }

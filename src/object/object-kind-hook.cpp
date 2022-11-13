@@ -231,7 +231,7 @@ static const std::map<BaseitemKey, short> &create_baseitem_index_chache()
  * @details 存在しないことはリファクタリング成果により考えにくく、自作の不存在例外を投げればいいはず.
  * 但し呼び出し側全部の処理を保証するのが面倒なので旧処理のままとする.
  */
-static short lookup_kind(ItemKindType tval, int sval)
+static short exe_lookup(ItemKindType tval, int sval)
 {
     static const auto &cache = create_baseitem_index_chache();
     const auto itr = cache.find({ tval, sval });
@@ -249,11 +249,11 @@ static short lookup_kind(ItemKindType tval, int sval)
  * @details 「tvalが不存在」という状況は事実上ないが、辞書探索のお作法として「有無チェック」を入れておく.
  * 万が一tvalがキャッシュになかったらベースアイテムID 0を返す.
  */
-short lookup_kind(const BaseitemKey &key)
+short lookup_baseitem_id(const BaseitemKey &key)
 {
     const auto sval = key.sval();
     if (sval.has_value()) {
-        return lookup_kind(key.tval(), sval.value());
+        return exe_lookup(key.tval(), sval.value());
     }
 
     static const auto &cache = create_baseitems_cache();
@@ -264,5 +264,5 @@ short lookup_kind(const BaseitemKey &key)
 
     const auto &svals = itr->second;
     const auto sval_indice = randint0(svals.size());
-    return lookup_kind(key.tval(), svals.at(sval_indice));
+    return exe_lookup(key.tval(), svals.at(sval_indice));
 }

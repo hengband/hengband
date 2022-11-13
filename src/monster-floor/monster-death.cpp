@@ -97,7 +97,7 @@ static void on_defeat_arena_monster(PlayerType *player_ptr, monster_death_type *
     if (tval > ItemKindType::NONE) {
         ObjectType forge;
         auto *q_ptr = &forge;
-        q_ptr->prep(lookup_kind(arena.key));
+        q_ptr->prep(lookup_baseitem_id(arena.key));
         ItemMagicApplier(player_ptr, q_ptr, floor_ptr->object_level, AM_NO_FIXED_ART).execute();
         (void)drop_near(player_ptr, q_ptr, -1, md_ptr->md_y, md_ptr->md_x);
     }
@@ -145,7 +145,7 @@ static void drop_corpse(PlayerType *player_ptr, monster_death_type *md_ptr)
 
     ObjectType forge;
     auto *q_ptr = &forge;
-    q_ptr->prep(lookup_kind({ ItemKindType::CORPSE, (corpse ? SV_CORPSE : SV_SKELETON) }));
+    q_ptr->prep(lookup_baseitem_id({ ItemKindType::CORPSE, (corpse ? SV_CORPSE : SV_SKELETON) }));
     ItemMagicApplier(player_ptr, q_ptr, floor_ptr->object_level, AM_NO_FIXED_ART).execute();
     q_ptr->pval = enum2i(md_ptr->m_ptr->r_idx);
     (void)drop_near(player_ptr, q_ptr, -1, md_ptr->md_y, md_ptr->md_x);
@@ -199,7 +199,7 @@ static KIND_OBJECT_IDX drop_dungeon_final_artifact(PlayerType *player_ptr, monst
 {
     const auto &dungeon = dungeons_info[player_ptr->dungeon_idx];
     const auto has_reward = dungeon.final_object > 0;
-    const auto k_idx = has_reward ? dungeon.final_object : lookup_kind({ ItemKindType::SCROLL, SV_SCROLL_ACQUIREMENT });
+    const auto k_idx = has_reward ? dungeon.final_object : lookup_baseitem_id({ ItemKindType::SCROLL, SV_SCROLL_ACQUIREMENT });
     if (dungeon.final_artifact == FixedArtifactId::NONE) {
         return k_idx;
     }

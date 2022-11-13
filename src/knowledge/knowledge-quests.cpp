@@ -105,7 +105,7 @@ static void do_cmd_knowledge_quests_current(PlayerType *player_ptr, FILE *fff)
                         const auto &a_ref = artifacts_info.at(q_ref.reward_artifact_idx);
                         ObjectType forge;
                         auto *o_ptr = &forge;
-                        auto k_idx = lookup_kind({ a_ref.tval, a_ref.sval });
+                        auto k_idx = lookup_baseitem_id({ a_ref.tval, a_ref.sval });
                         o_ptr->prep(k_idx);
                         o_ptr->fixed_artifact_idx = q_ref.reward_artifact_idx;
                         o_ptr->ident = IDENT_STORE;

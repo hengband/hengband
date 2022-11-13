@@ -139,7 +139,7 @@ void generate_amusement(PlayerType *player_ptr, int num, bool known)
     while (num > 0) {
         auto am_ptr = pt.pick_one_at_random();
 
-        const auto k_idx = lookup_kind(am_ptr->key);
+        const auto k_idx = lookup_baseitem_id(am_ptr->key);
         if (k_idx == 0) {
             continue;
         }
