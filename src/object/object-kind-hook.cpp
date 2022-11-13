@@ -226,15 +226,15 @@ static const std::map<BaseitemKey, short> &create_baseitem_index_chache()
 /*!
  * @brief tvalとsvalに対応するベースアイテムのIDを検索する
  * @param tval 検索したいベースアイテムのtval
- * @param sval 検索したいベースアイテムのsval
+ * @param sval 検索したいベースアイテムのsval (nulloptの可能性はない)
  * @return tvalとsvalに対応するベースアイテムが存在すればそのID、存在しなければ0
  * @details 存在しないことはリファクタリング成果により考えにくく、自作の不存在例外を投げればいいはず.
  * 但し呼び出し側全部の処理を保証するのが面倒なので旧処理のままとする.
  */
-static short exe_lookup(ItemKindType tval, int sval)
+static short exe_lookup(const BaseitemKey &key)
 {
     static const auto &cache = create_baseitem_index_chache();
-    const auto itr = cache.find({ tval, sval });
+    const auto itr = cache.find(key);
     if (itr == cache.end()) {
         return 0;
     }
@@ -253,7 +253,7 @@ short lookup_baseitem_id(const BaseitemKey &key)
 {
     const auto sval = key.sval();
     if (sval.has_value()) {
-        return exe_lookup(key.tval(), sval.value());
+        return exe_lookup(key);
     }
 
     static const auto &cache = create_baseitems_cache();
@@ -264,5 +264,5 @@ short lookup_baseitem_id(const BaseitemKey &key)
 
     const auto &svals = itr->second;
     const auto sval_indice = randint0(svals.size());
-    return exe_lookup(key.tval(), svals.at(sval_indice));
+    return exe_lookup({ key.tval(), svals.at(sval_indice) });
 }
