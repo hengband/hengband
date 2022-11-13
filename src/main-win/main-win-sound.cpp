@@ -3,6 +3,8 @@
  * @brief Windows版固有実装(効果音)
  */
 
+#define NOMINMAX
+
 #include "main-win/main-win-sound.h"
 #include "main-win/main-win-cfg-reader.h"
 #include "main-win/main-win-define.h"
@@ -78,6 +80,51 @@ struct sound_res {
 std::queue<sound_res *> sound_queue;
 
 /*!
+ * @brief PCMデータの振幅を変調する
+ *
+ * 引数で与えられたPCMデータの振幅を mult/div 倍に変調する。
+ * PCMデータのサンプリングビット数は bits_per_sample 引数で指定する。
+ * 変調した値がサンプリングビット数で表現可能な範囲に収まらない場合は表現可能な範囲の最大値/最小値に制限する。
+ * サンプリングビット数で有効なのは 8 か 16 のみであり、それ以外の値が指定された場合はなにも行わない。
+ *
+ * @param bits_per_sample PCMデータのサンプリングビット数 (8 or 16)
+ * @param pcm_buf PCMデータバッファ領域へのポインタ
+ * @param bufsize PCMデータバッファ領域のサイズ
+ * @param mult 振幅変調倍率 mult/div の mult
+ * @param div 振幅変調倍率 mult/div の div
+ */
+static void modulate_amplitude(int bits_per_sample, BYTE *pcm_buf, size_t bufsize, int mult, int div)
+{
+    auto modulate = [mult, div](auto sample) {
+        using sample_t = decltype(sample);
+        constexpr auto min = std::numeric_limits<sample_t>::min();
+        constexpr auto max = std::numeric_limits<sample_t>::max();
+        const auto modulated_sample = std::clamp<int>(sample * mult / div, min, max);
+        return static_cast<sample_t>(modulated_sample);
+    };
+
+    switch (bits_per_sample) {
+    case 8:
+        for (auto i = 0U; i < bufsize; ++i) {
+            pcm_buf[i] = modulate(pcm_buf[i]);
+        }
+        break;
+
+    case 16:
+        for (auto i = 0U; i < bufsize; i += 2) {
+            const auto sample = static_cast<int16_t>((static_cast<uint16_t>(pcm_buf[i + 1]) << 8) | static_cast<uint16_t>(pcm_buf[i]));
+            const auto modulated_sample = modulate(sample);
+            pcm_buf[i + 1] = static_cast<uint16_t>(modulated_sample) >> 8;
+            pcm_buf[i] = static_cast<uint16_t>(modulated_sample) & 0xFF;
+        }
+        break;
+
+    default:
+        break;
+    }
+}
+
+/*!
  * 効果音の再生と管理キューへの追加.
  *
  * @param wf WAVEFORMATEXへのポインタ
@@ -86,7 +133,7 @@ std::queue<sound_res *> sound_queue;
  * @retval true 正常に処理された
  * @retval false 処理エラー
  */
-static bool add_sound_queue(const WAVEFORMATEX *wf, BYTE *buf, DWORD bufsize)
+static bool add_sound_queue(const WAVEFORMATEX *wf, BYTE *buf, DWORD bufsize, int volume)
 {
     // 再生完了データをキューから削除する
     while (!sound_queue.empty()) {
@@ -106,6 +153,8 @@ static bool add_sound_queue(const WAVEFORMATEX *wf, BYTE *buf, DWORD bufsize)
     if (mr != MMSYSERR_NOERROR) {
         return false;
     }
+
+    modulate_amplitude(wf->wBitsPerSample, buf, bufsize, volume, SOUND_VOLUME_MAX);
 
     WAVEHDR *wh = &res->wh;
     wh->lpData = (LPSTR)buf;
@@ -140,7 +189,7 @@ static bool add_sound_queue(const WAVEFORMATEX *wf, BYTE *buf, DWORD bufsize)
  * @retval true 正常に処理された
  * @retval false 処理エラー
  */
-static bool play_sound_impl(char *filename)
+static bool play_sound_impl(char *filename, int volume)
 {
     wav_reader reader;
     if (!reader.open(filename)) {
@@ -153,7 +202,7 @@ static bool play_sound_impl(char *filename)
         return false;
     }
 
-    return add_sound_queue(wf, data_buffer, reader.get_data_chunk()->cksize);
+    return add_sound_queue(wf, data_buffer, reader.get_data_chunk()->cksize, volume);
 }
 
 /*!
@@ -204,7 +253,7 @@ void finalize_sound(void)
  * @retval 1 設定なし
  * @retval -1 PlaySoundの戻り値が正常終了以外
  */
-errr play_sound(int val)
+errr play_sound(int val, int volume)
 {
     concptr filename = sound_cfg_data->get_rand(TERM_XTRA_SOUND, val);
     if (!filename) {
@@ -214,7 +263,7 @@ errr play_sound(int val)
     char buf[MAIN_WIN_MAX_PATH];
     path_build(buf, MAIN_WIN_MAX_PATH, ANGBAND_DIR_XTRA_SOUND, filename);
 
-    if (play_sound_impl(buf)) {
+    if (play_sound_impl(buf, volume)) {
         return 0;
     }
 

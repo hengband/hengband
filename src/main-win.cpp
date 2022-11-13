@@ -129,6 +129,7 @@
 #include "wizard/spoiler-util.h"
 #include "wizard/wizard-spoiler.h"
 #include "world/world.h"
+#include <algorithm>
 #include <commdlg.h>
 #include <cstdlib>
 #include <direct.h>
@@ -405,10 +406,12 @@ static void save_prefs(void)
 
     strcpy(buf, arg_sound ? "1" : "0");
     WritePrivateProfileStringA("Angband", "Sound", buf, ini_file);
+    WritePrivateProfileStringA("Angband", "SoundVolumeTableIndex", std::to_string(arg_sound_volume_table_index).data(), ini_file);
 
     strcpy(buf, arg_music ? "1" : "0");
     WritePrivateProfileStringA("Angband", "Music", buf, ini_file);
     strcpy(buf, use_pause_music_inactive ? "1" : "0");
+    WritePrivateProfileStringA("Angband", "MusicVolumeTableIndex", std::to_string(arg_music_volume_table_index).data(), ini_file);
     WritePrivateProfileStringA("Angband", "MusicPauseInactive", buf, ini_file);
 
     wsprintfA(buf, "%d", current_bg_mode);
@@ -507,7 +510,9 @@ static void load_prefs(void)
     arg_bigtile = (GetPrivateProfileIntA("Angband", "Bigtile", false, ini_file) != 0);
     use_bigtile = arg_bigtile;
     arg_sound = (GetPrivateProfileIntA("Angband", "Sound", 0, ini_file) != 0);
+    arg_sound_volume_table_index = std::clamp<int>(GetPrivateProfileIntA("Angband", "SoundVolumeTableIndex", 0, ini_file), 0, SOUND_VOLUME_TABLE.size() - 1);
     arg_music = (GetPrivateProfileIntA("Angband", "Music", 0, ini_file) != 0);
+    arg_music_volume_table_index = std::clamp<int>(GetPrivateProfileIntA("Angband", "MusicVolumeTableIndex", 0, ini_file), 0, main_win_music::VOLUME_TABLE.size() - 1);
     use_pause_music_inactive = (GetPrivateProfileIntA("Angband", "MusicPauseInactive", 0, ini_file) != 0);
     current_bg_mode = static_cast<bg_mode>(GetPrivateProfileIntA("Angband", "BackGround", 0, ini_file));
     GetPrivateProfileStringA("Angband", "BackGroundBitmap", DEFAULT_BG_FILENAME, wallpaper_file, 1023, ini_file);
@@ -903,7 +908,7 @@ static errr term_xtra_win_sound(int v)
     if (!use_sound) {
         return 1;
     }
-    return play_sound(v);
+    return play_sound(v, SOUND_VOLUME_TABLE[arg_sound_volume_table_index]);
 }
 
 /*!
@@ -1522,8 +1527,12 @@ static void setup_menus(void)
     CheckMenuItem(hm, IDM_OPTIONS_NEW2_GRAPHICS, (arg_graphics == enum2i(graphics_mode::GRAPHICS_HENGBAND) ? MF_CHECKED : MF_UNCHECKED));
     CheckMenuItem(hm, IDM_OPTIONS_BIGTILE, (arg_bigtile ? MF_CHECKED : MF_UNCHECKED));
     CheckMenuItem(hm, IDM_OPTIONS_MUSIC, (arg_music ? MF_CHECKED : MF_UNCHECKED));
+    CheckMenuRadioItem(hm, IDM_OPTIONS_MUSIC_VOLUME_100, IDM_OPTIONS_MUSIC_VOLUME_010,
+        IDM_OPTIONS_MUSIC_VOLUME_100 + arg_music_volume_table_index, MF_BYCOMMAND);
     CheckMenuItem(hm, IDM_OPTIONS_MUSIC_PAUSE_INACTIVE, (use_pause_music_inactive ? MF_CHECKED : MF_UNCHECKED));
     CheckMenuItem(hm, IDM_OPTIONS_SOUND, (arg_sound ? MF_CHECKED : MF_UNCHECKED));
+    CheckMenuRadioItem(hm, IDM_OPTIONS_SOUND_VOLUME_100, IDM_OPTIONS_SOUND_VOLUME_010,
+        IDM_OPTIONS_SOUND_VOLUME_100 + arg_sound_volume_table_index, MF_BYCOMMAND);
     CheckMenuItem(hm, IDM_OPTIONS_NO_BG, ((current_bg_mode == bg_mode::BG_NONE) ? MF_CHECKED : MF_UNCHECKED));
     CheckMenuItem(hm, IDM_OPTIONS_BG, ((current_bg_mode == bg_mode::BG_ONE) ? MF_CHECKED : MF_UNCHECKED));
     CheckMenuItem(hm, IDM_OPTIONS_PRESET_BG, ((current_bg_mode == bg_mode::BG_PRESET) ? MF_CHECKED : MF_UNCHECKED));
@@ -1870,6 +1879,22 @@ static void process_menus(PlayerType *player_ptr, WORD wCmd)
         }
         break;
     }
+    case IDM_OPTIONS_MUSIC_VOLUME_100:
+    case IDM_OPTIONS_MUSIC_VOLUME_090:
+    case IDM_OPTIONS_MUSIC_VOLUME_080:
+    case IDM_OPTIONS_MUSIC_VOLUME_070:
+    case IDM_OPTIONS_MUSIC_VOLUME_060:
+    case IDM_OPTIONS_MUSIC_VOLUME_050:
+    case IDM_OPTIONS_MUSIC_VOLUME_040:
+    case IDM_OPTIONS_MUSIC_VOLUME_030:
+    case IDM_OPTIONS_MUSIC_VOLUME_020:
+    case IDM_OPTIONS_MUSIC_VOLUME_010: {
+        arg_music_volume_table_index = wCmd - IDM_OPTIONS_MUSIC_VOLUME_100;
+        if (use_music) {
+            main_win_music::set_music_volume(main_win_music::VOLUME_TABLE[arg_music_volume_table_index]);
+        }
+        break;
+    }
     case IDM_OPTIONS_MUSIC_PAUSE_INACTIVE: {
         use_pause_music_inactive = !use_pause_music_inactive;
         break;
@@ -1883,6 +1908,19 @@ static void process_menus(PlayerType *player_ptr, WORD wCmd)
     case IDM_OPTIONS_SOUND: {
         arg_sound = !arg_sound;
         change_sound_mode(arg_sound);
+        break;
+    }
+    case IDM_OPTIONS_SOUND_VOLUME_100:
+    case IDM_OPTIONS_SOUND_VOLUME_090:
+    case IDM_OPTIONS_SOUND_VOLUME_080:
+    case IDM_OPTIONS_SOUND_VOLUME_070:
+    case IDM_OPTIONS_SOUND_VOLUME_060:
+    case IDM_OPTIONS_SOUND_VOLUME_050:
+    case IDM_OPTIONS_SOUND_VOLUME_040:
+    case IDM_OPTIONS_SOUND_VOLUME_030:
+    case IDM_OPTIONS_SOUND_VOLUME_020:
+    case IDM_OPTIONS_SOUND_VOLUME_010: {
+        arg_sound_volume_table_index = wCmd - IDM_OPTIONS_SOUND_VOLUME_100;
         break;
     }
     case IDM_OPTIONS_OPEN_SOUND_DIR: {
@@ -2228,7 +2266,7 @@ LRESULT PASCAL angband_window_procedure(HWND hWnd, UINT uMsg, WPARAM wParam, LPA
         return 0;
     }
     case MM_MCINOTIFY: {
-        main_win_music::on_mci_notify(wParam, lParam);
+        main_win_music::on_mci_notify(wParam, lParam, main_win_music::VOLUME_TABLE[arg_music_volume_table_index]);
 
         return 0;
     }
