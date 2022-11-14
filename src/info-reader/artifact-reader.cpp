@@ -117,8 +117,9 @@ errr parse_artifacts_info(std::string_view buf, angband_header *)
 
         const auto it = artifacts_info.rbegin();
         auto &a_ref = it->second;
-        const auto tval = i2enum<ItemKindType>(std::stoi(tokens[1], nullptr, 10));
-        const auto sval = std::stoi(tokens[2], nullptr, 10);
+        constexpr auto base = 10;
+        const auto tval = i2enum<ItemKindType>(std::stoi(tokens[1], nullptr, base));
+        const auto sval = std::stoi(tokens[2], nullptr, base);
         a_ref.bi_key = { tval, sval };
         info_set_value(a_ref.pval, tokens[3]);
         return PARSE_ERROR_NONE;

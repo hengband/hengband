@@ -250,12 +250,11 @@ void wiz_create_item(PlayerType *player_ptr)
         }
     }
 
-    ObjectType forge;
-    ObjectType *q_ptr;
-    q_ptr = &forge;
-    q_ptr->prep(bi_id);
-    ItemMagicApplier(player_ptr, q_ptr, player_ptr->current_floor_ptr->dun_level, AM_NO_FIXED_ART).execute();
-    (void)drop_near(player_ptr, q_ptr, -1, player_ptr->y, player_ptr->x);
+    ObjectType item;
+    item.prep(bi_id);
+    ItemMagicApplier(player_ptr, &item, player_ptr->current_floor_ptr->dun_level, AM_NO_FIXED_ART).execute();
+    (void)drop_near(player_ptr, &item, -1, player_ptr->y, player_ptr->x);
+    msg_print("Allocated.");
 }
 
 /*!
@@ -267,12 +266,12 @@ void wiz_create_item(PlayerType *player_ptr)
 static std::string wiz_make_named_artifact_desc(PlayerType *player_ptr, FixedArtifactId a_idx)
 {
     const auto &a_ref = artifacts_info.at(a_idx);
-    ObjectType obj;
-    obj.prep(lookup_baseitem_id(a_ref.bi_key));
-    obj.fixed_artifact_idx = a_idx;
-    object_known(&obj);
+    ObjectType item;
+    item.prep(lookup_baseitem_id(a_ref.bi_key));
+    item.fixed_artifact_idx = a_idx;
+    object_known(&item);
     char buf[MAX_NLEN];
-    describe_flavor(player_ptr, buf, &obj, OD_NAME_ONLY);
+    describe_flavor(player_ptr, buf, &item, OD_NAME_ONLY);
     return buf;
 }
 

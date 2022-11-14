@@ -170,15 +170,14 @@ SpoilerOutputResultType spoil_fixed_artifact(concptr fname)
                     continue;
                 }
 
-                ObjectType obj;
-                obj.wipe();
-                if (!make_fake_artifact(&obj, a_idx)) {
+                ObjectType item;
+                if (!make_fake_artifact(&item, a_idx)) {
                     continue;
                 }
 
                 PlayerType dummy;
                 obj_desc_list artifact;
-                object_analyze(&dummy, &obj, &artifact);
+                object_analyze(&dummy, &item, &artifact);
                 spoiler_print_art(&artifact);
             }
         }
