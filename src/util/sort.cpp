@@ -270,8 +270,8 @@ bool ang_sort_art_comp(PlayerType *player_ptr, vptr u, vptr v, int a, int b)
     /* Sort by total kills */
     if (*why >= 3) {
         /* Extract total kills */
-        z1 = enum2i(artifacts_info.at(w1).tval);
-        z2 = enum2i(artifacts_info.at(w2).tval);
+        z1 = enum2i(artifacts_info.at(w1).bi_key.tval());
+        z2 = enum2i(artifacts_info.at(w2).bi_key.tval());
 
         /* Compare total kills */
         if (z1 < z2) {
@@ -286,8 +286,8 @@ bool ang_sort_art_comp(PlayerType *player_ptr, vptr u, vptr v, int a, int b)
     /* Sort by monster level */
     if (*why >= 2) {
         /* Extract levels */
-        z1 = artifacts_info.at(w1).sval;
-        z2 = artifacts_info.at(w2).sval;
+        z1 = artifacts_info.at(w1).bi_key.sval().value();
+        z2 = artifacts_info.at(w2).bi_key.sval().value();
 
         /* Compare levels */
         if (z1 < z2) {

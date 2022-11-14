@@ -111,7 +111,7 @@ void display_rumor(PlayerType *player_ptr, bool ex)
     if (category == "ARTIFACT") {
         const auto &artifact_name = tokens[1];
         const auto &[a_idx, a_ptr] = get_artifact_definition(artifact_name);
-        const auto k_idx = lookup_baseitem_id({ a_ptr->tval, a_ptr->sval });
+        const auto k_idx = lookup_baseitem_id(a_ptr->bi_key);
         ObjectType forge;
         auto *q_ptr = &forge;
         q_ptr->prep(k_idx);

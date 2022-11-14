@@ -231,15 +231,16 @@ static KIND_OBJECT_IDX wiz_create_itemtype()
 void wiz_create_item(PlayerType *player_ptr)
 {
     screen_save();
-    OBJECT_IDX k_idx = wiz_create_itemtype();
+    const auto bi_id = wiz_create_itemtype();
     screen_load();
-    if (!k_idx) {
+    if (bi_id == 0) {
         return;
     }
 
-    if (baseitems_info[k_idx].gen_flags.has(ItemGenerationTraitType::INSTA_ART)) {
+    const auto &baseitem = baseitems_info[bi_id];
+    if (baseitem.gen_flags.has(ItemGenerationTraitType::INSTA_ART)) {
         for (const auto &[a_idx, a_ref] : artifacts_info) {
-            if ((a_idx == FixedArtifactId::NONE) || (a_ref.tval != baseitems_info[k_idx].tval) || (a_ref.sval != baseitems_info[k_idx].sval)) {
+            if ((a_idx == FixedArtifactId::NONE) || (a_ref.bi_key.tval() != baseitem.tval) || (a_ref.bi_key.sval() != baseitem.sval)) {
                 continue;
             }
 
@@ -252,10 +253,9 @@ void wiz_create_item(PlayerType *player_ptr)
     ObjectType forge;
     ObjectType *q_ptr;
     q_ptr = &forge;
-    q_ptr->prep(k_idx);
+    q_ptr->prep(bi_id);
     ItemMagicApplier(player_ptr, q_ptr, player_ptr->current_floor_ptr->dun_level, AM_NO_FIXED_ART).execute();
     (void)drop_near(player_ptr, q_ptr, -1, player_ptr->y, player_ptr->x);
-    msg_print("Allocated.");
 }
 
 /*!
@@ -268,12 +268,11 @@ static std::string wiz_make_named_artifact_desc(PlayerType *player_ptr, FixedArt
 {
     const auto &a_ref = artifacts_info.at(a_idx);
     ObjectType obj;
-    obj.prep(lookup_baseitem_id({ a_ref.tval, a_ref.sval }));
+    obj.prep(lookup_baseitem_id(a_ref.bi_key));
     obj.fixed_artifact_idx = a_idx;
     object_known(&obj);
     char buf[MAX_NLEN];
     describe_flavor(player_ptr, buf, &obj, OD_NAME_ONLY);
-
     return buf;
 }
 
@@ -346,11 +345,12 @@ static std::vector<FixedArtifactId> wiz_collect_group_a_idx(const grouper &group
     std::vector<FixedArtifactId> a_idx_list;
     for (auto tval : tval_list) {
         for (const auto &[a_idx, a_ref] : artifacts_info) {
-            if (a_ref.tval == tval) {
+            if (a_ref.bi_key.tval() == tval) {
                 a_idx_list.push_back(a_idx);
             }
         }
     }
+
     return a_idx_list;
 }
 
@@ -378,9 +378,11 @@ void wiz_create_named_art(PlayerType *player_ptr)
             return;
         default:
             if (auto idx = A2I(cmd); idx < group_artifact_list.size()) {
-                const auto a_idx_list = wiz_collect_group_a_idx(group_artifact_list[idx]);
+                const auto &a_idx_list = wiz_collect_group_a_idx(group_artifact_list[idx]);
                 create_a_idx = wiz_select_named_artifact(player_ptr, a_idx_list);
             }
+
+            break;
         }
     }
 

@@ -259,14 +259,14 @@ bool create_named_art(PlayerType *player_ptr, FixedArtifactId a_idx, POSITION y,
         return false;
     }
 
-    auto i = lookup_baseitem_id({ a_ref.tval, a_ref.sval });
-    if (i == 0) {
+    auto bi_id = lookup_baseitem_id(a_ref.bi_key);
+    if (bi_id == 0) {
         return true;
     }
 
     ObjectType forge;
     auto q_ptr = &forge;
-    q_ptr->prep(i);
+    q_ptr->prep(bi_id);
     q_ptr->fixed_artifact_idx = a_idx;
     apply_artifact(player_ptr, q_ptr);
     if (drop_near(player_ptr, q_ptr, -1, y, x) == 0) {
@@ -316,11 +316,11 @@ bool make_artifact(PlayerType *player_ptr, ObjectType *o_ptr)
             continue;
         }
 
-        if (a_ref.tval != o_ptr->tval) {
+        if (a_ref.bi_key.tval() != o_ptr->tval) {
             continue;
         }
 
-        if (a_ref.sval != o_ptr->sval) {
+        if (a_ref.bi_key.sval() != o_ptr->sval) {
             continue;
         }
 
@@ -403,9 +403,9 @@ bool make_artifact_special(PlayerType *player_ptr, ObjectType *o_ptr)
          * @note INSTA_ART型固定アーティファクトのベースアイテムもチェック対象とする。
          * ベースアイテムの生成階層が足りない場合1/(不足階層*5)を満たさないと除外される。
          */
-        const auto k_idx = lookup_baseitem_id({ a_ref.tval, a_ref.sval });
-        if (baseitems_info[k_idx].level > floor_ptr->object_level) {
-            int d = (baseitems_info[k_idx].level - floor_ptr->object_level) * 5;
+        const auto bi_id = lookup_baseitem_id(a_ref.bi_key);
+        if (baseitems_info[bi_id].level > floor_ptr->object_level) {
+            int d = (baseitems_info[bi_id].level - floor_ptr->object_level) * 5;
             if (!one_in_(d)) {
                 continue;
             }
@@ -413,7 +413,7 @@ bool make_artifact_special(PlayerType *player_ptr, ObjectType *o_ptr)
 
         /*! @note 前述の条件を満たしたら、後のIDのアーティファクトはチェックせずすぐ確定し生成処理に移す /
          * Assign the template. Mega-Hack -- mark the item as an artifact. Hack: Some artifacts get random extra powers. Success. */
-        o_ptr->prep(k_idx);
+        o_ptr->prep(bi_id);
 
         o_ptr->fixed_artifact_idx = a_idx;
         return true;
