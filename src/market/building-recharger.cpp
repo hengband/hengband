@@ -47,7 +47,7 @@ void building_recharge(PlayerType *player_ptr)
         return;
     }
 
-    BaseItemInfo *k_ptr;
+    BaseitemInfo *k_ptr;
     k_ptr = &baseitems_info[o_ptr->k_idx];
 
     /*
@@ -196,7 +196,7 @@ void building_recharge_all(PlayerType *player_ptr)
         }
 
         DEPTH lev = baseitems_info[o_ptr->k_idx].level;
-        BaseItemInfo *k_ptr;
+        BaseitemInfo *k_ptr;
         k_ptr = &baseitems_info[o_ptr->k_idx];
 
         switch (o_ptr->tval) {
@@ -244,7 +244,7 @@ void building_recharge_all(PlayerType *player_ptr)
     for (INVENTORY_IDX i = 0; i < INVEN_PACK; i++) {
         ObjectType *o_ptr;
         o_ptr = &player_ptr->inventory_list[i];
-        BaseItemInfo *k_ptr;
+        BaseitemInfo *k_ptr;
         k_ptr = &baseitems_info[o_ptr->k_idx];
 
         if ((o_ptr->tval < ItemKindType::STAFF) || (o_ptr->tval > ItemKindType::ROD)) {

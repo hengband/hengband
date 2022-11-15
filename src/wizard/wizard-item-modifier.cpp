@@ -254,7 +254,7 @@ static void prt_alloc(ItemKindType tval, OBJECT_SUBTYPE_VALUE sval, TERM_LEN row
     int home = 0;
     for (int i = 0; i < K_MAX_DEPTH; i++) {
         int total_frac = 0;
-        BaseItemInfo *k_ptr;
+        BaseitemInfo *k_ptr;
         for (const auto &entry : alloc_kind_table) {
             PERCENTAGE prob = 0;
 

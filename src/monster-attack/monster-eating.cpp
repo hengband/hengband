@@ -228,7 +228,7 @@ bool process_un_power(PlayerType *player_ptr, MonsterAttackPlayer *monap_ptr)
     }
 
     bool is_magic_mastery = has_magic_mastery(player_ptr) != 0;
-    BaseItemInfo *kind_ptr = &baseitems_info[monap_ptr->o_ptr->k_idx];
+    BaseitemInfo *kind_ptr = &baseitems_info[monap_ptr->o_ptr->k_idx];
     PARAMETER_VALUE pval = kind_ptr->pval;
     DEPTH level = monap_ptr->rlev;
     auto drain = is_magic_mastery ? std::min<short>(pval, pval * level / 400 + pval * randint1(level) / 400) : pval;

@@ -175,7 +175,7 @@ static PRICE repair_broken_weapon_aux(PlayerType *player_ptr, PRICE bcost)
     } else {
         auto tval = (one_in_(5) ? mo_ptr->tval : ItemKindType::SWORD);
         while (true) {
-            BaseItemInfo *ck_ptr;
+            BaseitemInfo *ck_ptr;
             k_idx = lookup_baseitem_id({ tval });
             ck_ptr = &baseitems_info[k_idx];
 
@@ -204,7 +204,7 @@ static PRICE repair_broken_weapon_aux(PlayerType *player_ptr, PRICE bcost)
     dd_bonus += mo_ptr->dd - baseitems_info[mo_ptr->k_idx].dd;
     ds_bonus += mo_ptr->ds - baseitems_info[mo_ptr->k_idx].ds;
 
-    BaseItemInfo *k_ptr;
+    BaseitemInfo *k_ptr;
     k_ptr = &baseitems_info[k_idx];
     o_ptr->k_idx = k_idx;
     o_ptr->weight = k_ptr->weight;

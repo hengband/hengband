@@ -19,12 +19,12 @@
 
 /*!
  * @brief テキストトークンを走査してフラグを一つ得る(ベースアイテム用) /
- * Grab one flag in an BaseItemInfo from a textual string
+ * Grab one flag in an BaseitemInfo from a textual string
  * @param k_ptr 保管先のベースアイテム構造体参照ポインタ
  * @param what 参照元の文字列ポインタ
  * @return 見つけたらtrue
  */
-static bool grab_one_baseitem_flag(BaseItemInfo *k_ptr, std::string_view what)
+static bool grab_one_baseitem_flag(BaseitemInfo *k_ptr, std::string_view what)
 {
     if (TrFlags::grab_one_flag(k_ptr->flags, baseitem_flags, what)) {
         return true;
@@ -47,7 +47,7 @@ static bool grab_one_baseitem_flag(BaseItemInfo *k_ptr, std::string_view what)
 errr parse_baseitems_info(std::string_view buf, angband_header *head)
 {
     (void)head;
-    static BaseItemInfo *k_ptr = nullptr;
+    static BaseitemInfo *k_ptr = nullptr;
     const auto &tokens = str_split(buf, ':', false, 10);
 
     if (tokens[0] == "N") {

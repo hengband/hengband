@@ -44,9 +44,9 @@ private:
 
 enum class ItemKindType : short;
 enum class RandomArtActType : short;
-class BaseItemInfo {
+class BaseitemInfo {
 public:
-    BaseItemInfo() = default;
+    BaseitemInfo() = default;
     KIND_OBJECT_IDX idx{};
 
     std::string name; /*!< ベースアイテム名 */
@@ -90,4 +90,4 @@ public:
     bool tried{}; /*!< ベースアイテムを未鑑定のまま試したことがあるか /  The player has "tried" one of the items */
 };
 
-extern std::vector<BaseItemInfo> baseitems_info;
+extern std::vector<BaseitemInfo> baseitems_info;

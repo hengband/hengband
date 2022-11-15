@@ -45,4 +45,4 @@ std::optional<int> BaseitemKey::sval() const
     return this->subtype_value;
 }
 
-std::vector<BaseItemInfo> baseitems_info;
+std::vector<BaseitemInfo> baseitems_info;
