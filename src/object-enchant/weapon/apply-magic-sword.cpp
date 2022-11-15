@@ -24,27 +24,6 @@ SwordEnchanter::SwordEnchanter(PlayerType *player_ptr, ObjectType *o_ptr, DEPTH 
 {
 }
 
-void SwordEnchanter::decide_skip()
-{
-    AbstractWeaponEnchanter::decide_skip();
-    this->should_skip |= this->o_ptr->sval == SV_POISON_NEEDLE;
-}
-
-void SwordEnchanter::apply_magic()
-{
-    this->decide_skip();
-    if (this->should_skip) {
-        return;
-    }
-
-    this->give_killing_bonus();
-    if (this->o_ptr->sval == SV_DIAMOND_EDGE) {
-        return;
-    }
-
-    MeleeWeaponEnchanter::apply_magic();
-}
-
 void SwordEnchanter::give_ego_index()
 {
     while (true) {
@@ -85,5 +64,19 @@ void SwordEnchanter::give_cursed()
         }
 
         continue;
+    }
+}
+
+MeleeWeaponEnchantFlags SwordEnchanter::enchant_flags() const
+{
+    switch (this->o_ptr->sval) {
+    case SV_POISON_NEEDLE:
+        return { MeleeWeaponEnchantType::ONLY_MUNDANITY };
+
+    case SV_DIAMOND_EDGE:
+        return { MeleeWeaponEnchantType::MOD_SLAYING_BONUS };
+
+    default:
+        return MELEE_WEAPON_NORMAL_ENCHANT_FLAGS;
     }
 }

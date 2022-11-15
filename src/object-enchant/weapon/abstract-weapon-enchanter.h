@@ -13,8 +13,6 @@ protected:
     ObjectType *o_ptr;
     DEPTH level;
     int power;
-    bool should_skip = false;
 
     void give_killing_bonus();
-    virtual void decide_skip();
 };
