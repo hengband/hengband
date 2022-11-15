@@ -61,8 +61,8 @@ void Chest::chest_death(bool scatter, POSITION y, POSITION x, OBJECT_IDX o_idx)
     bool small;
     BIT_FLAGS mode = AM_GOOD | AM_FORBID_CHEST;
 
-    ObjectType forge;
-    ObjectType *q_ptr;
+    ItemEntity forge;
+    ItemEntity *q_ptr;
 
     auto *floor_ptr = this->player_ptr->current_floor_ptr;
     auto *o_ptr = &floor_ptr->o_list[o_idx];

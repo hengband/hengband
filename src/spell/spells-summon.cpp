@@ -219,8 +219,8 @@ bool cast_summon_greater_demon(PlayerType *player_ptr)
     concptr q = _("どの死体を捧げますか? ", "Sacrifice which corpse? ");
     concptr s = _("捧げられる死体を持っていない。", "You have nothing to sacrifice.");
     OBJECT_IDX item;
-    ObjectType *o_ptr;
-    o_ptr = choose_object(player_ptr, &item, q, s, (USE_INVEN | USE_FLOOR), FuncItemTester(&ObjectType::is_offerable));
+    ItemEntity *o_ptr;
+    o_ptr = choose_object(player_ptr, &item, q, s, (USE_INVEN | USE_FLOOR), FuncItemTester(&ItemEntity::is_offerable));
     if (!o_ptr) {
         return false;
     }

@@ -16,7 +16,7 @@
  * @param level 生成基準階
  * @param power 生成ランク
  */
-BowEnchanter::BowEnchanter(PlayerType *player_ptr, ObjectType *o_ptr, DEPTH level, int power)
+BowEnchanter::BowEnchanter(PlayerType *player_ptr, ItemEntity *o_ptr, DEPTH level, int power)
     : AbstractWeaponEnchanter(o_ptr, level, power)
     , player_ptr(player_ptr)
 {

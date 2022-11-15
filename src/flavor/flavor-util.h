@@ -6,10 +6,10 @@
 #include "object-enchant/tr-flags.h"
 
 class BaseitemInfo;
-class ObjectType;
+class ItemEntity;
 struct flavor_type {
     char *buf;
-    ObjectType *o_ptr;
+    ItemEntity *o_ptr;
     BIT_FLAGS mode;
     concptr kindname;
     concptr basenm;
@@ -34,23 +34,23 @@ struct flavor_type {
     char tmp_val2[MAX_NLEN + 10];
     char fake_insc_buf[30];
     TrFlags tr_flags;
-    ObjectType *bow_ptr;
+    ItemEntity *bow_ptr;
     BaseitemInfo *k_ptr;
     BaseitemInfo *flavor_k_ptr;
     int avgdam;
 };
 
 class PlayerType;
-flavor_type *initialize_flavor_type(flavor_type *flavor_ptr, char *buf, ObjectType *o_ptr, BIT_FLAGS mode);
+flavor_type *initialize_flavor_type(flavor_type *flavor_ptr, char *buf, ItemEntity *o_ptr, BIT_FLAGS mode);
 char *object_desc_chr(char *t, char c);
 char *object_desc_str(char *t, concptr s);
 char *object_desc_num(char *t, uint n);
 char *object_desc_int(char *t, int v);
-char *get_ability_abbreviation(char *ptr, ObjectType *o_ptr, bool kanji, bool all);
-void get_inscription(char *buff, ObjectType *o_ptr);
+char *get_ability_abbreviation(char *ptr, ItemEntity *o_ptr, bool kanji, bool all);
+void get_inscription(char *buff, ItemEntity *o_ptr);
 bool has_lite_flag(const TrFlags &flags);
 bool has_dark_flag(const TrFlags &flags);
 
 #ifdef JP
-char *object_desc_count_japanese(char *t, ObjectType *o_ptr);
+char *object_desc_count_japanese(char *t, ItemEntity *o_ptr);
 #endif

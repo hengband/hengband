@@ -4,5 +4,5 @@
  * @brief ランダムアーティファクトの耐性付加処理ヘッダ
  */
 
-class ObjectType;
-void random_resistance(ObjectType *o_ptr);
+class ItemEntity;
+void random_resistance(ItemEntity *o_ptr);

@@ -28,7 +28,7 @@
 #include "object/tval-types.h"
 #include "system/object-type-definition.h"
 
-std::unique_ptr<EnchanterBase> EnchanterFactory::create_enchanter(PlayerType *player_ptr, ObjectType *o_ptr, int lev, int power)
+std::unique_ptr<EnchanterBase> EnchanterFactory::create_enchanter(PlayerType *player_ptr, ItemEntity *o_ptr, int lev, int power)
 {
     switch (o_ptr->tval) {
     case ItemKindType::SHOT:

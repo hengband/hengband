@@ -1,5 +1,5 @@
 ﻿#pragma once
 
-class ObjectType;
+class ItemEntity;
 class PlayerType;
-bool object_is_favorite(PlayerType *player_ptr, const ObjectType *o_ptr);
+bool object_is_favorite(PlayerType *player_ptr, const ItemEntity *o_ptr);

@@ -250,7 +250,7 @@ void wiz_create_item(PlayerType *player_ptr)
         }
     }
 
-    ObjectType item;
+    ItemEntity item;
     item.prep(bi_id);
     ItemMagicApplier(player_ptr, &item, player_ptr->current_floor_ptr->dun_level, AM_NO_FIXED_ART).execute();
     (void)drop_near(player_ptr, &item, -1, player_ptr->y, player_ptr->x);
@@ -266,7 +266,7 @@ void wiz_create_item(PlayerType *player_ptr)
 static std::string wiz_make_named_artifact_desc(PlayerType *player_ptr, FixedArtifactId a_idx)
 {
     const auto &a_ref = artifacts_info.at(a_idx);
-    ObjectType item;
+    ItemEntity item;
     item.prep(lookup_baseitem_id(a_ref.bi_key));
     item.fixed_artifact_idx = a_idx;
     object_known(&item);
@@ -677,8 +677,8 @@ void wiz_jump_to_dungeon(PlayerType *player_ptr)
  */
 void wiz_learn_items_all(PlayerType *player_ptr)
 {
-    ObjectType forge;
-    ObjectType *q_ptr;
+    ItemEntity forge;
+    ItemEntity *q_ptr;
     for (const auto &k_ref : baseitems_info) {
         if (k_ref.idx > 0 && k_ref.level <= command_arg) {
             q_ptr = &forge;

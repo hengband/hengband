@@ -27,7 +27,7 @@
  * @param lev 生成基準階
  * @param mode 生成オプション
  */
-ItemMagicApplier::ItemMagicApplier(PlayerType *player_ptr, ObjectType *o_ptr, DEPTH lev, BIT_FLAGS mode)
+ItemMagicApplier::ItemMagicApplier(PlayerType *player_ptr, ItemEntity *o_ptr, DEPTH lev, BIT_FLAGS mode)
     : player_ptr(player_ptr)
     , o_ptr(o_ptr)
     , lev(lev)

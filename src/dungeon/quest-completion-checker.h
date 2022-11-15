@@ -6,7 +6,7 @@
 #include <tuple>
 
 struct monster_type;
-class ObjectType;
+class ItemEntity;
 class PlayerType;
 struct quest_type;
 class QuestCompletionChecker {
@@ -31,5 +31,5 @@ private:
     int count_all_hostile_monsters();
     Pos2D make_stairs(const bool create_stairs);
     void make_reward(const Pos2D pos);
-    bool check_quality(ObjectType &item);
+    bool check_quality(ItemEntity &item);
 };

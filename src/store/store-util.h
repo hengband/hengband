@@ -32,7 +32,7 @@ using store_k_idx = std::vector<KIND_OBJECT_IDX>;
 /*!
  * @brief 店舗の情報構造体
  */
-class ObjectType;
+class ItemEntity;
 struct store_type {
     byte type{}; //!< Store type
     byte owner{}; //!< Owner index
@@ -46,7 +46,7 @@ struct store_type {
     store_k_idx table{}; //!< Table -- Legal item kinds
     int16_t stock_num{}; //!< Stock -- Number of entries
     int16_t stock_size{}; //!< Stock -- Total Size of Array
-    std::unique_ptr<ObjectType[]> stock; //!< Stock -- Actual stock items
+    std::unique_ptr<ItemEntity[]> stock; //!< Stock -- Actual stock items
 
     store_type() = default;
     store_type(const store_type &) = delete;
@@ -57,8 +57,8 @@ extern store_type *st_ptr;
 
 class PlayerType;
 void store_delete(void);
-std::vector<PARAMETER_VALUE> store_same_magic_device_pvals(ObjectType *j_ptr);
+std::vector<PARAMETER_VALUE> store_same_magic_device_pvals(ItemEntity *j_ptr);
 void store_item_increase(INVENTORY_IDX item, ITEM_NUMBER num);
 void store_item_optimize(INVENTORY_IDX item);
-int store_carry(ObjectType *o_ptr);
-bool store_object_similar(ObjectType *o_ptr, ObjectType *j_ptr);
+int store_carry(ItemEntity *o_ptr);
+bool store_object_similar(ItemEntity *o_ptr, ItemEntity *j_ptr);

@@ -54,7 +54,7 @@ void player_wipe_without_name(PlayerType *player_ptr)
     // TODO: キャラ作成からゲーム開始までに  current_floor_ptr を参照しなければならない処理は今後整理して外す。
     player_ptr->current_floor_ptr = &floor_info;
     //! @todo std::make_shared の配列対応版は C++20 から
-    player_ptr->inventory_list = std::shared_ptr<ObjectType[]>{ new ObjectType[INVEN_TOTAL] };
+    player_ptr->inventory_list = std::shared_ptr<ItemEntity[]>{ new ItemEntity[INVEN_TOTAL] };
     for (int i = 0; i < 4; i++) {
         strcpy(player_ptr->history[i], "");
     }

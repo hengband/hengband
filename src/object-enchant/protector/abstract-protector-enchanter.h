@@ -3,13 +3,13 @@
 #include "object-enchant/enchanter-base.h"
 #include "system/angband.h"
 
-class ObjectType;
+class ItemEntity;
 class AbstractProtectorEnchanter : public EnchanterBase {
 public:
     virtual ~AbstractProtectorEnchanter() = default;
 
 protected:
-    AbstractProtectorEnchanter(ObjectType *o_ptr, DEPTH level, int power);
-    ObjectType *o_ptr;
+    AbstractProtectorEnchanter(ItemEntity *o_ptr, DEPTH level, int power);
+    ItemEntity *o_ptr;
     int power;
 };

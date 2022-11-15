@@ -6,7 +6,7 @@
 #include "system/object-type-definition.h"
 #include "system/player-type-definition.h"
 
-LiteEnchanter::LiteEnchanter(PlayerType *player_ptr, ObjectType *o_ptr, int power)
+LiteEnchanter::LiteEnchanter(PlayerType *player_ptr, ItemEntity *o_ptr, int power)
     : player_ptr(player_ptr)
     , o_ptr(o_ptr)
     , power(power)

@@ -32,7 +32,7 @@ OBJECT_IDX o_pop(FloorType *floor_ptr)
     }
 
     for (OBJECT_IDX i = 1; i < floor_ptr->o_max; i++) {
-        ObjectType *o_ptr;
+        ItemEntity *o_ptr;
         o_ptr = &floor_ptr->o_list[i];
         if (o_ptr->k_idx) {
             continue;

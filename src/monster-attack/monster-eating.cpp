@@ -117,7 +117,7 @@ static void move_item_to_monster(PlayerType *player_ptr, MonsterAttackPlayer *mo
         return;
     }
 
-    ObjectType *j_ptr;
+    ItemEntity *j_ptr;
     j_ptr = &player_ptr->current_floor_ptr->o_list[o_idx];
     j_ptr->copy_from(monap_ptr->o_ptr);
     j_ptr->number = 1;

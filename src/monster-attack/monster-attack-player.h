@@ -6,7 +6,7 @@ enum class RaceBlowEffectType;
 enum class RaceBlowMethodType;
 class PlayerType;
 struct monster_type;
-class ObjectType;
+class ItemEntity;
 class MonsterAttackPlayer {
 public:
     MonsterAttackPlayer(PlayerType *player_ptr, short m_idx);
@@ -27,7 +27,7 @@ public:
     GAME_TEXT m_name[MAX_NLEN]{};
     int d_dice = 0;
     int d_side = 0;
-    ObjectType *o_ptr = nullptr;
+    ItemEntity *o_ptr = nullptr;
     bool obvious = false;
     int damage = 0;
     bool blinked = false;

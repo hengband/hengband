@@ -46,7 +46,7 @@
  * Calculate spell damages
  * @return 警告を行う
  */
-ObjectType *choose_warning_item(PlayerType *player_ptr)
+ItemEntity *choose_warning_item(PlayerType *player_ptr)
 {
     int choices[INVEN_TOTAL - INVEN_MAIN_HAND];
 

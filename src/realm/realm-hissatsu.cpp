@@ -735,7 +735,7 @@ concptr do_hissatsu_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessT
 
         if (cast) {
             int total_damage = 0, basedam, i;
-            ObjectType *o_ptr;
+            ItemEntity *o_ptr;
             if (!get_aim_dir(player_ptr, &dir)) {
                 return nullptr;
             }
@@ -1037,7 +1037,7 @@ concptr do_hissatsu_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessT
         if (cast) {
             int total_damage = 0, basedam, i;
             POSITION y, x;
-            ObjectType *o_ptr;
+            ItemEntity *o_ptr;
 
             if (!get_direction(player_ptr, &dir, false, false)) {
                 return nullptr;

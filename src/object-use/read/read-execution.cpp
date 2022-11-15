@@ -90,7 +90,7 @@ bool ObjectReadEntity::can_read() const
     return ItemUseChecker(this->player_ptr).check_stun(_("朦朧としていて読めなかった！", "You too stunned to read it!"));
 }
 
-void ObjectReadEntity::change_virtue_as_read(ObjectType &o_ref)
+void ObjectReadEntity::change_virtue_as_read(ItemEntity &o_ref)
 {
     if (o_ref.is_aware()) {
         return;
@@ -101,7 +101,7 @@ void ObjectReadEntity::change_virtue_as_read(ObjectType &o_ref)
     chg_virtue(this->player_ptr, V_KNOWLEDGE, -1);
 }
 
-void ObjectReadEntity::gain_exp_from_item_use(ObjectType *o_ptr, bool is_identified)
+void ObjectReadEntity::gain_exp_from_item_use(ItemEntity *o_ptr, bool is_identified)
 {
     if (!is_identified || o_ptr->is_aware()) {
         return;

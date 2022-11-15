@@ -22,7 +22,7 @@
  * @param o_ptr 対象のオブジェクト構造体ポインタ
  * @return 発動実行の是非を返す。
  */
-bool activate_dragon_breath(PlayerType *player_ptr, ObjectType *o_ptr)
+bool activate_dragon_breath(PlayerType *player_ptr, ItemEntity *o_ptr)
 {
     DIRECTION dir;
     if (!get_aim_dir(player_ptr, &dir)) {
@@ -60,7 +60,7 @@ bool activate_dragon_breath(PlayerType *player_ptr, ObjectType *o_ptr)
     return true;
 }
 
-bool activate_breath_fire(PlayerType *player_ptr, ObjectType *o_ptr)
+bool activate_breath_fire(PlayerType *player_ptr, ItemEntity *o_ptr)
 {
     DIRECTION dir;
     if (!get_aim_dir(player_ptr, &dir)) {
@@ -75,7 +75,7 @@ bool activate_breath_fire(PlayerType *player_ptr, ObjectType *o_ptr)
     return true;
 }
 
-bool activate_breath_cold(PlayerType *player_ptr, ObjectType *o_ptr)
+bool activate_breath_cold(PlayerType *player_ptr, ItemEntity *o_ptr)
 {
     DIRECTION dir;
     if (!get_aim_dir(player_ptr, &dir)) {

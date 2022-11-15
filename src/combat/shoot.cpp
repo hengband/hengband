@@ -78,7 +78,7 @@
  * @param arrow_ptr 矢弾のオブジェクト構造体参照ポインタ
  * @return スナイパーの射撃属性、弓矢の属性を考慮する。デフォルトはGF_PLAYER_SHOOT。
  */
-AttributeFlags shot_attribute(PlayerType *player_ptr, ObjectType *bow_ptr, ObjectType *arrow_ptr, SPELL_IDX snipe_type)
+AttributeFlags shot_attribute(PlayerType *player_ptr, ItemEntity *bow_ptr, ItemEntity *arrow_ptr, SPELL_IDX snipe_type)
 {
     AttributeFlags attribute_flags{};
     attribute_flags.set(AttributeType::PLAYER_SHOOT);
@@ -151,7 +151,7 @@ AttributeFlags shot_attribute(PlayerType *player_ptr, ObjectType *bow_ptr, Objec
  * @return スレイ倍率をかけたダメージ量
  */
 static MULTIPLY calc_shot_damage_with_slay(
-    PlayerType *player_ptr, ObjectType *bow_ptr, ObjectType *arrow_ptr, int tdam, monster_type *monster_ptr, SPELL_IDX snipe_type)
+    PlayerType *player_ptr, ItemEntity *bow_ptr, ItemEntity *arrow_ptr, int tdam, monster_type *monster_ptr, SPELL_IDX snipe_type)
 {
     MULTIPLY mult = 10;
 
@@ -485,7 +485,7 @@ static MULTIPLY calc_shot_damage_with_slay(
  * Note that Bows of "Extra Shots" give an extra shot.
  * </pre>
  */
-void exe_fire(PlayerType *player_ptr, INVENTORY_IDX item, ObjectType *j_ptr, SPELL_IDX snipe_type)
+void exe_fire(PlayerType *player_ptr, INVENTORY_IDX item, ItemEntity *j_ptr, SPELL_IDX snipe_type)
 {
     DIRECTION dir;
     int i;
@@ -495,9 +495,9 @@ void exe_fire(PlayerType *player_ptr, INVENTORY_IDX item, ObjectType *j_ptr, SPE
     int cur_dis, visible;
     PERCENTAGE j;
 
-    ObjectType forge;
-    ObjectType *q_ptr;
-    ObjectType *o_ptr;
+    ItemEntity forge;
+    ItemEntity *q_ptr;
+    ItemEntity *o_ptr;
 
     AttributeFlags attribute_flags{};
     attribute_flags.set(AttributeType::PLAYER_SHOOT);

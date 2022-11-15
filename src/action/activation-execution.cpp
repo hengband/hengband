@@ -152,7 +152,7 @@ static bool check_activation_conditions(PlayerType *player_ptr, ae_type *ae_ptr)
  * @param o_ptr 対象のオブジェクト構造体ポインタ
  * @return 発動実行の是非を返す。
  */
-static bool activate_artifact(PlayerType *player_ptr, ObjectType *o_ptr)
+static bool activate_artifact(PlayerType *player_ptr, ItemEntity *o_ptr)
 {
     auto tmp_act_ptr = find_activation_info(o_ptr);
     if (!tmp_act_ptr.has_value()) {

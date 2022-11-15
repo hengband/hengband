@@ -198,7 +198,7 @@ static void aura_shadow_by_monster_attack(PlayerType *player_ptr, MonsterAttackP
     }
 
     int dam = 1;
-    ObjectType *o_armed_ptr = &player_ptr->inventory_list[INVEN_MAIN_HAND];
+    ItemEntity *o_armed_ptr = &player_ptr->inventory_list[INVEN_MAIN_HAND];
     auto *r_ptr = &monraces_info[monap_ptr->m_ptr->r_idx];
     const EnumClassFlagGroup<MonsterResistanceType> resist_flags = { MonsterResistanceType::RESIST_ALL, MonsterResistanceType::RESIST_DARK };
 

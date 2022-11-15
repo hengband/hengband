@@ -78,8 +78,8 @@ void inven_item_describe(PlayerType *player_ptr, INVENTORY_IDX item)
  */
 void display_koff(PlayerType *player_ptr, KIND_OBJECT_IDX k_idx)
 {
-    ObjectType forge;
-    ObjectType *q_ptr;
+    ItemEntity forge;
+    ItemEntity *q_ptr;
     int sval;
     int16_t use_realm;
     GAME_TEXT o_name[MAX_NLEN];

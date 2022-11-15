@@ -20,7 +20,7 @@
  * If player has inscribed the object with "!!", let him know when it's recharged. -LM-
  * @param o_ptr 対象オブジェクトの構造体参照ポインタ
  */
-static void recharged_notice(PlayerType *player_ptr, ObjectType *o_ptr)
+static void recharged_notice(PlayerType *player_ptr, ItemEntity *o_ptr)
 {
     if (!o_ptr->inscription) {
         return;

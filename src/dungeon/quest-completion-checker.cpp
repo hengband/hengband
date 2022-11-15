@@ -248,7 +248,7 @@ void QuestCompletionChecker::make_reward(const Pos2D pos)
 {
     auto dun_level = this->player_ptr->current_floor_ptr->dun_level;
     for (auto i = 0; i < (dun_level / 15) + 1; i++) {
-        ObjectType item;
+        ItemEntity item;
         while (true) {
             item.wipe();
             auto &r_ref = monraces_info[this->m_ptr->r_idx];
@@ -272,7 +272,7 @@ void QuestCompletionChecker::make_reward(const Pos2D pos)
  * 2. 固定アーティファクト以外の矢弾
  * 3. 穴掘りエゴの装備品
  */
-bool QuestCompletionChecker::check_quality(ObjectType &item)
+bool QuestCompletionChecker::check_quality(ItemEntity &item)
 {
     auto is_good_reward = !item.is_cursed();
     is_good_reward &= !item.is_ammo() || (item.is_ammo() && item.is_fixed_artifact());

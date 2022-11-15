@@ -341,7 +341,7 @@ bool destroy_area(PlayerType *player_ptr, POSITION y1, POSITION x1, POSITION r, 
             if (preserve_mode || in_generate) {
                 /* Scan all objects in the grid */
                 for (const auto this_o_idx : g_ptr->o_idx_list) {
-                    ObjectType *o_ptr;
+                    ItemEntity *o_ptr;
                     o_ptr = &floor_ptr->o_list[this_o_idx];
 
                     /* Hack -- Preserve unknown artifacts */

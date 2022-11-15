@@ -70,7 +70,7 @@
 #include "view/object-describer.h"
 #include "wizard/wizard-messages.h"
 
-ObjectThrowEntity::ObjectThrowEntity(PlayerType *player_ptr, ObjectType *q_ptr, const int delay_factor_val, const int mult, const bool boomerang, const OBJECT_IDX shuriken)
+ObjectThrowEntity::ObjectThrowEntity(PlayerType *player_ptr, ItemEntity *q_ptr, const int delay_factor_val, const int mult, const bool boomerang, const OBJECT_IDX shuriken)
     : q_ptr(q_ptr)
     , player_ptr(player_ptr)
     , shuriken(shuriken)
@@ -357,7 +357,7 @@ bool ObjectThrowEntity::check_throw_boomerang()
         concptr q, s;
         q = _("どの武器を投げますか? ", "Throw which item? ");
         s = _("投げる武器がない。", "You have nothing to throw.");
-        this->o_ptr = choose_object(this->player_ptr, &this->item, q, s, USE_EQUIP, FuncItemTester(&ObjectType::is_throwable));
+        this->o_ptr = choose_object(this->player_ptr, &this->item, q, s, USE_EQUIP, FuncItemTester(&ItemEntity::is_throwable));
         if (!this->o_ptr) {
             flush();
             return false;

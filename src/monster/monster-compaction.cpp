@@ -41,7 +41,7 @@ static void compact_monsters_aux(PlayerType *player_ptr, MONSTER_IDX i1, MONSTER
     g_ptr->m_idx = i2;
 
     for (const auto this_o_idx : m_ptr->hold_o_idx_list) {
-        ObjectType *o_ptr;
+        ItemEntity *o_ptr;
         o_ptr = &floor_ptr->o_list[this_o_idx];
         o_ptr->held_m_idx = i2;
     }

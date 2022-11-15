@@ -1,12 +1,12 @@
 ﻿#pragma once
 
-class ObjectType;
+class ItemEntity;
 class PlayerType;
 class QuaffEffects {
 public:
     QuaffEffects(PlayerType *player_ptr);
 
-    bool influence(const ObjectType &o_ref);
+    bool influence(const ItemEntity &o_ref);
 
 private:
     PlayerType *player_ptr;

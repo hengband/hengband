@@ -170,8 +170,8 @@ void do_cmd_store(PlayerType *player_ptr)
                 leave_store = true;
             } else {
                 int item_pos;
-                ObjectType forge;
-                ObjectType *q_ptr;
+                ItemEntity forge;
+                ItemEntity *q_ptr;
                 GAME_TEXT o_name[MAX_NLEN];
                 msg_print(_("ザックからアイテムがあふれてしまった！", "Your pack overflows!"));
                 q_ptr = &forge;

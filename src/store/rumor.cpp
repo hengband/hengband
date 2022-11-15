@@ -112,7 +112,7 @@ void display_rumor(PlayerType *player_ptr, bool ex)
         const auto &artifact_name = tokens[1];
         const auto &[a_idx, a_ptr] = get_artifact_definition(artifact_name);
         const auto k_idx = lookup_baseitem_id(a_ptr->bi_key);
-        ObjectType item;
+        ItemEntity item;
         item.prep(k_idx);
         item.fixed_artifact_idx = a_idx;
         item.ident = IDENT_STORE;

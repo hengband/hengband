@@ -64,7 +64,7 @@ void do_cmd_knowledge_artifacts(PlayerType *player_ptr)
         for (POSITION x = 0; x < player_ptr->current_floor_ptr->width; x++) {
             auto *g_ptr = &player_ptr->current_floor_ptr->grid_array[y][x];
             for (const auto this_o_idx : g_ptr->o_idx_list) {
-                ObjectType *o_ptr;
+                ItemEntity *o_ptr;
                 o_ptr = &player_ptr->current_floor_ptr->o_list[this_o_idx];
                 if (!o_ptr->is_fixed_artifact()) {
                     continue;
@@ -108,7 +108,7 @@ void do_cmd_knowledge_artifacts(PlayerType *player_ptr)
             continue;
         }
 
-        ObjectType item;
+        ItemEntity item;
         item.prep(bi_id);
         item.fixed_artifact_idx = a_idx;
         item.ident |= IDENT_STORE;
@@ -222,8 +222,8 @@ static void display_object_list(int col, int row, int per_page, IDX object_idx[]
  */
 static void desc_obj_fake(PlayerType *player_ptr, KIND_OBJECT_IDX k_idx)
 {
-    ObjectType *o_ptr;
-    ObjectType ObjectType_body;
+    ItemEntity *o_ptr;
+    ItemEntity ObjectType_body;
     o_ptr = &ObjectType_body;
     o_ptr->wipe();
     o_ptr->prep(k_idx);

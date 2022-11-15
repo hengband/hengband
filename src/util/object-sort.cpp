@@ -22,7 +22,7 @@
  * @param j_ptr 比較対象オブジェクトの構造体参照ポインタ2
  * @return o_ptrの方が上位ならばTRUEを返す。
  */
-bool object_sort_comp(PlayerType *player_ptr, ObjectType *o_ptr, int32_t o_value, ObjectType *j_ptr)
+bool object_sort_comp(PlayerType *player_ptr, ItemEntity *o_ptr, int32_t o_value, ItemEntity *j_ptr)
 {
     int o_type, j_type;
     if (!j_ptr->k_idx) {

@@ -26,7 +26,7 @@ const EnumClassFlagGroup<CurseTraitType> TRC_HEAVY_MASK({ CurseTraitType::TY_CUR
  * @param o_ptr 呪いをかけられる装備オブジェクトの構造体参照ポインタ
  * @return 与える呪いのID
  */
-CurseTraitType get_curse(int power, ObjectType *o_ptr)
+CurseTraitType get_curse(int power, ItemEntity *o_ptr)
 {
     CurseTraitType new_curse;
 

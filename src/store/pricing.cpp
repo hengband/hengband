@@ -31,7 +31,7 @@
  * "greed" value is always something (?).
  * </pre>
  */
-PRICE price_item(PlayerType *player_ptr, ObjectType *o_ptr, int greed, bool flip, StoreSaleType store_num)
+PRICE price_item(PlayerType *player_ptr, ItemEntity *o_ptr, int greed, bool flip, StoreSaleType store_num)
 {
     auto price = o_ptr->get_price();
     if (price <= 0) {

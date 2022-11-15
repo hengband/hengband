@@ -80,7 +80,7 @@ bool kawarimi(PlayerType *player_ptr, bool success)
         return false;
     }
 
-    ObjectType forge;
+    ItemEntity forge;
     auto *q_ptr = &forge;
     if (player_ptr->is_dead) {
         return false;

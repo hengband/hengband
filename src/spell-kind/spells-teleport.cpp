@@ -554,7 +554,7 @@ void teleport_away_followable(PlayerType *player_ptr, MONSTER_IDX m_idx)
     if (player_ptr->muta.has(PlayerMutationType::VTELEPORT) || PlayerClass(player_ptr).equals(PlayerClassType::IMITATOR)) {
         follow = true;
     } else {
-        ObjectType *o_ptr;
+        ItemEntity *o_ptr;
         INVENTORY_IDX i;
 
         for (i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {

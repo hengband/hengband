@@ -11,7 +11,7 @@
 
 void acquire_chaos_weapon(PlayerType *player_ptr)
 {
-    ObjectType forge;
+    ItemEntity forge;
     auto *q_ptr = &forge;
     auto dummy = ItemKindType::SWORD;
     OBJECT_SUBTYPE_VALUE dummy2;

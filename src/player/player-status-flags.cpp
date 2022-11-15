@@ -121,7 +121,7 @@ BIT_FLAGS convert_inventory_slot_type_to_flag_cause(inventory_slot_type inventor
  */
 BIT_FLAGS check_equipment_flags(PlayerType *player_ptr, tr_type tr_flag)
 {
-    ObjectType *o_ptr;
+    ItemEntity *o_ptr;
     BIT_FLAGS result = 0L;
     for (int i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
         o_ptr = &player_ptr->inventory_list[i];
@@ -713,7 +713,7 @@ BIT_FLAGS has_invuln_arrow(PlayerType *player_ptr)
 
 void check_no_flowed(PlayerType *player_ptr)
 {
-    ObjectType *o_ptr;
+    ItemEntity *o_ptr;
     bool has_sw = false, has_kabe = false;
 
     player_ptr->no_flowed = false;
@@ -793,7 +793,7 @@ BIT_FLAGS has_see_nocto(PlayerType *player_ptr)
 BIT_FLAGS has_warning(PlayerType *player_ptr)
 {
     BIT_FLAGS result = 0L;
-    ObjectType *o_ptr;
+    ItemEntity *o_ptr;
 
     for (int i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
         o_ptr = &player_ptr->inventory_list[i];
@@ -1057,7 +1057,7 @@ BIT_FLAGS has_regenerate(PlayerType *player_ptr)
 
 void update_curses(PlayerType *player_ptr)
 {
-    ObjectType *o_ptr;
+    ItemEntity *o_ptr;
     player_ptr->cursed.clear();
     player_ptr->cursed_special.clear();
 
@@ -1171,7 +1171,7 @@ BIT_FLAGS has_earthquake(PlayerType *player_ptr)
 
 void update_extra_blows(PlayerType *player_ptr)
 {
-    ObjectType *o_ptr;
+    ItemEntity *o_ptr;
     player_ptr->extra_blows[0] = player_ptr->extra_blows[1] = 0;
 
     const melee_type melee_type = player_melee_type(player_ptr);
@@ -1478,7 +1478,7 @@ BIT_FLAGS has_resist_curse(PlayerType *player_ptr)
  */
 BIT_FLAGS has_vuln_curse(PlayerType *player_ptr)
 {
-    ObjectType *o_ptr;
+    ItemEntity *o_ptr;
     BIT_FLAGS result = 0L;
     for (int i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
         o_ptr = &player_ptr->inventory_list[i];
@@ -1503,7 +1503,7 @@ BIT_FLAGS has_vuln_curse(PlayerType *player_ptr)
  */
 BIT_FLAGS has_heavy_vuln_curse(PlayerType *player_ptr)
 {
-    ObjectType *o_ptr;
+    ItemEntity *o_ptr;
     BIT_FLAGS result = 0L;
     for (int i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
         o_ptr = &player_ptr->inventory_list[i];

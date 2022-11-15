@@ -25,7 +25,7 @@
  * @param o_ptr オブジェクトの構造体参照ポインタ
  * @return 残量アリの松明ならtrue
  */
-bool is_active_torch(ObjectType *o_ptr)
+bool is_active_torch(ItemEntity *o_ptr)
 {
     return (o_ptr->tval == ItemKindType::LITE) && (o_ptr->sval == SV_LITE_TORCH) && (o_ptr->fuel > 0);
 }
@@ -36,7 +36,7 @@ bool is_active_torch(ObjectType *o_ptr)
  * @param o_ptr 投擲するオブジェクトの構造体参照ポインタ
  * @param flgs 特別に追加するフラグを返す参照ポインタ
  */
-void torch_flags(ObjectType *o_ptr, TrFlags &flgs)
+void torch_flags(ItemEntity *o_ptr, TrFlags &flgs)
 {
     if (!is_active_torch(o_ptr)) {
         return;
@@ -54,7 +54,7 @@ void torch_flags(ObjectType *o_ptr, TrFlags &flgs)
  * @param dd 特別なダイス数を返す参照ポインタ
  * @param ds 特別なダイス面数を返す参照ポインタ
  */
-void torch_dice(ObjectType *o_ptr, DICE_NUMBER *dd, DICE_SID *ds)
+void torch_dice(ItemEntity *o_ptr, DICE_NUMBER *dd, DICE_SID *ds)
 {
     if (!is_active_torch(o_ptr)) {
         return;
@@ -69,7 +69,7 @@ void torch_dice(ObjectType *o_ptr, DICE_NUMBER *dd, DICE_SID *ds)
  * Torches have special abilities when they are flaming.
  * @param o_ptr 投擲するオブジェクトの構造体参照ポインタ
  */
-void torch_lost_fuel(ObjectType *o_ptr)
+void torch_lost_fuel(ItemEntity *o_ptr)
 {
     if (!is_active_torch(o_ptr)) {
         return;
@@ -90,7 +90,7 @@ void update_lite_radius(PlayerType *player_ptr)
 {
     player_ptr->cur_lite = 0;
     for (int i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
-        ObjectType *o_ptr;
+        ItemEntity *o_ptr;
         o_ptr = &player_ptr->inventory_list[i];
         auto flgs = object_flags(o_ptr);
 

@@ -66,7 +66,7 @@ void calc_android_exp(PlayerType *player_ptr)
 
     for (int i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
         auto *o_ptr = &player_ptr->inventory_list[i];
-        ObjectType forge;
+        ItemEntity forge;
         auto *q_ptr = &forge;
         uint32_t value, exp;
         DEPTH level = std::max(baseitems_info[o_ptr->k_idx].level - 8, 1);

@@ -2,6 +2,6 @@
 
 #include "system/angband.h"
 
-class ObjectType;
+class ItemEntity;
 class PlayerType;
-int32_t flag_cost(const ObjectType *o_ptr, int plusses);
+int32_t flag_cost(const ItemEntity *o_ptr, int plusses);

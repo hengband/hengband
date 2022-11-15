@@ -531,7 +531,7 @@ static void decide_item_feeling(flavor_type *flavor_ptr)
  * @param mode 表記に関するオプション指定
  * @return 現在クエスト達成目的のアイテムならばTRUEを返す
  */
-void describe_flavor(PlayerType *player_ptr, char *buf, ObjectType *o_ptr, BIT_FLAGS mode)
+void describe_flavor(PlayerType *player_ptr, char *buf, ItemEntity *o_ptr, BIT_FLAGS mode)
 {
     flavor_type tmp_flavor;
     flavor_type *flavor_ptr = initialize_flavor_type(&tmp_flavor, buf, o_ptr, mode);

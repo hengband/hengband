@@ -39,7 +39,7 @@
 void fetch_item(PlayerType *player_ptr, DIRECTION dir, WEIGHT wgt, bool require_los)
 {
     grid_type *g_ptr;
-    ObjectType *o_ptr;
+    ItemEntity *o_ptr;
     GAME_TEXT o_name[MAX_NLEN];
 
     if (!player_ptr->current_floor_ptr->grid_array[player_ptr->y][player_ptr->x].o_idx_list.empty()) {

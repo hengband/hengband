@@ -54,7 +54,7 @@ static void compact_objects_aux(FloorType *floor_ptr, OBJECT_IDX i1, OBJECT_IDX 
  */
 void compact_objects(PlayerType *player_ptr, int size)
 {
-    ObjectType *o_ptr;
+    ItemEntity *o_ptr;
     if (size) {
         msg_print(_("アイテム情報を圧縮しています...", "Compacting objects..."));
         player_ptr->redraw |= PR_MAP;

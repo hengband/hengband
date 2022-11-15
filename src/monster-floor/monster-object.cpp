@@ -126,7 +126,7 @@ static void update_object_flags(const TrFlags &flgs, EnumClassFlagGroup<MonsterK
  * @param o_name アイテム名
  * @param this_o_idx モンスターが乗ったオブジェクトID
  */
-static void monster_pickup_object(PlayerType *player_ptr, turn_flags *turn_flags_ptr, const MONSTER_IDX m_idx, ObjectType *o_ptr, const bool is_unpickable_object,
+static void monster_pickup_object(PlayerType *player_ptr, turn_flags *turn_flags_ptr, const MONSTER_IDX m_idx, ItemEntity *o_ptr, const bool is_unpickable_object,
     const POSITION ny, const POSITION nx, const GAME_TEXT *m_name, const GAME_TEXT *o_name, const OBJECT_IDX this_o_idx)
 {
     auto *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
@@ -218,9 +218,9 @@ void update_object_by_monster_movement(PlayerType *player_ptr, turn_flags *turn_
 void monster_drop_carried_objects(PlayerType *player_ptr, monster_type *m_ptr)
 {
     for (auto it = m_ptr->hold_o_idx_list.begin(); it != m_ptr->hold_o_idx_list.end();) {
-        ObjectType forge;
-        ObjectType *o_ptr;
-        ObjectType *q_ptr;
+        ItemEntity forge;
+        ItemEntity *o_ptr;
+        ItemEntity *q_ptr;
         const OBJECT_IDX this_o_idx = *it++;
         o_ptr = &player_ptr->current_floor_ptr->o_list[this_o_idx];
         q_ptr = &forge;

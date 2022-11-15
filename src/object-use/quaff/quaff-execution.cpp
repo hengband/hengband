@@ -111,7 +111,7 @@ bool ObjectQuaffEntity::can_quaff()
     return ItemUseChecker(this->player_ptr).check_stun(_("朦朧としていて瓶の蓋を開けられなかった！", "You are too stunned to quaff it!"));
 }
 
-ObjectType ObjectQuaffEntity::copy_object(const INVENTORY_IDX item)
+ItemEntity ObjectQuaffEntity::copy_object(const INVENTORY_IDX item)
 {
     auto *tmp_o_ptr = ref_item(this->player_ptr, item);
     auto o_val = *tmp_o_ptr;
@@ -119,7 +119,7 @@ ObjectType ObjectQuaffEntity::copy_object(const INVENTORY_IDX item)
     return o_val;
 }
 
-void ObjectQuaffEntity::moisten(const ObjectType &o_ref)
+void ObjectQuaffEntity::moisten(const ItemEntity &o_ref)
 {
     switch (PlayerRace(this->player_ptr).food()) {
     case PlayerRaceFoodType::WATER:
@@ -148,7 +148,7 @@ void ObjectQuaffEntity::moisten(const ObjectType &o_ref)
     }
 }
 
-void ObjectQuaffEntity::change_virtue_as_quaff(const ObjectType &o_ref)
+void ObjectQuaffEntity::change_virtue_as_quaff(const ItemEntity &o_ref)
 {
     if (o_ref.is_aware()) {
         return;

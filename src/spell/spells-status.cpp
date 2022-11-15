@@ -560,7 +560,7 @@ bool fishing(PlayerType *player_ptr)
  * @details
  * 脱いで落とした装備にtimeoutを設定するために装備品のアドレスを返す。
  */
-bool cosmic_cast_off(PlayerType *player_ptr, ObjectType **o_ptr_ptr)
+bool cosmic_cast_off(PlayerType *player_ptr, ItemEntity **o_ptr_ptr)
 {
     auto *o_ptr = (*o_ptr_ptr);
 
@@ -576,7 +576,7 @@ bool cosmic_cast_off(PlayerType *player_ptr, ObjectType **o_ptr_ptr)
         return false;
     }
 
-    ObjectType forge;
+    ItemEntity forge;
     (&forge)->copy_from(o_ptr);
     inven_item_increase(player_ptr, slot, (0 - o_ptr->number));
     inven_item_optimize(player_ptr, slot);

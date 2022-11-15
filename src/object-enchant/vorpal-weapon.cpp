@@ -56,7 +56,7 @@ static void print_vorpal_message(player_attack_type *pa_ptr, const int magnifica
  * @brief チェンソーのノイズ音を表示する
  * @param o_ptr チェンソーへの参照ポインタ
  */
-static void print_chainsword_noise(ObjectType *o_ptr)
+static void print_chainsword_noise(ItemEntity *o_ptr)
 {
     if (!o_ptr->is_specific_artifact(FixedArtifactId::CHAINSWORD) || one_in_(2)) {
         return;

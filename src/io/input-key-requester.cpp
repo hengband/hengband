@@ -328,7 +328,7 @@ void InputKeyRequestor::sweep_confirmation_equipments()
     }
 }
 
-void InputKeyRequestor::confirm_command(ObjectType &o_ref, const int caret_command)
+void InputKeyRequestor::confirm_command(ItemEntity &o_ref, const int caret_command)
 {
     auto s = quark_str(o_ref.inscription);
     s = angband_strchr(s, '^');

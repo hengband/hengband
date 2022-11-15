@@ -271,7 +271,7 @@ void complete_quest(PlayerType *player_ptr, QuestId quest_num)
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param o_ptr 入手したオブジェクトの構造体参照ポインタ
  */
-void check_find_art_quest_completion(PlayerType *player_ptr, ObjectType *o_ptr)
+void check_find_art_quest_completion(PlayerType *player_ptr, ItemEntity *o_ptr)
 {
     const auto &quest_list = QuestList::get_instance();
     /* Check if completed a quest */

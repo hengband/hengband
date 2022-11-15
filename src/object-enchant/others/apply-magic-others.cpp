@@ -37,7 +37,7 @@
  * @param power 生成ランク
  * @details power > 2はデバッグ専用.
  */
-OtherItemsEnchanter::OtherItemsEnchanter(PlayerType *player_ptr, ObjectType *o_ptr)
+OtherItemsEnchanter::OtherItemsEnchanter(PlayerType *player_ptr, ItemEntity *o_ptr)
     : player_ptr(player_ptr)
     , o_ptr(o_ptr)
 {

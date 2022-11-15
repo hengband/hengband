@@ -21,7 +21,7 @@ void pack_overflow(PlayerType *player_ptr)
     }
 
     GAME_TEXT o_name[MAX_NLEN];
-    ObjectType *o_ptr;
+    ItemEntity *o_ptr;
     update_creature(player_ptr);
     if (!player_ptr->inventory_list[INVEN_PACK].k_idx) {
         return;

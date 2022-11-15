@@ -361,7 +361,7 @@ void wipe_generate_random_floor_flags(FloorType *floor_ptr)
 void clear_cave(PlayerType *player_ptr)
 {
     auto *floor_ptr = player_ptr->current_floor_ptr;
-    std::fill_n(floor_ptr->o_list.begin(), floor_ptr->o_max, ObjectType{});
+    std::fill_n(floor_ptr->o_list.begin(), floor_ptr->o_max, ItemEntity{});
     floor_ptr->o_max = 1;
     floor_ptr->o_cnt = 0;
 

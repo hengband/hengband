@@ -56,7 +56,7 @@ static bool fire_crimson(PlayerType *player_ptr)
     return true;
 }
 
-bool activate_crimson(PlayerType *player_ptr, ObjectType *o_ptr)
+bool activate_crimson(PlayerType *player_ptr, ItemEntity *o_ptr)
 {
     if (!o_ptr->is_specific_artifact(FixedArtifactId::CRIMSON)) {
         return false;

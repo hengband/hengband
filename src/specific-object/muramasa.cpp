@@ -7,7 +7,7 @@
 #include "system/player-type-definition.h"
 #include "view/display-messages.h"
 
-bool activate_muramasa(PlayerType *player_ptr, ObjectType *o_ptr)
+bool activate_muramasa(PlayerType *player_ptr, ItemEntity *o_ptr)
 {
     if (!o_ptr->is_specific_artifact(FixedArtifactId::MURAMASA)) {
         return false;

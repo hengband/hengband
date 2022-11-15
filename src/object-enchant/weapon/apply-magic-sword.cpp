@@ -19,7 +19,7 @@
  * @param level 生成基準階
  * @param power 生成ランク
  */
-SwordEnchanter::SwordEnchanter(PlayerType *player_ptr, ObjectType *o_ptr, DEPTH level, int power)
+SwordEnchanter::SwordEnchanter(PlayerType *player_ptr, ItemEntity *o_ptr, DEPTH level, int power)
     : MeleeWeaponEnchanter(player_ptr, o_ptr, level, power)
 {
 }

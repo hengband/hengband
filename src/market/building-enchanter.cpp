@@ -33,7 +33,7 @@ bool enchant_item(PlayerType *player_ptr, PRICE cost, HIT_PROB to_hit, int to_da
     concptr s = _("改良できるものがありません。", "You have nothing to improve.");
 
     OBJECT_IDX item;
-    ObjectType *o_ptr;
+    ItemEntity *o_ptr;
     o_ptr = choose_object(player_ptr, &item, q, s, (USE_INVEN | USE_EQUIP | IGNORE_BOTHHAND_SLOT), item_tester);
     if (!o_ptr) {
         return false;

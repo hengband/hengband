@@ -44,7 +44,7 @@
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 
-ScrollReadExecutor::ScrollReadExecutor(PlayerType *player_ptr, ObjectType *o_ptr, bool known)
+ScrollReadExecutor::ScrollReadExecutor(PlayerType *player_ptr, ItemEntity *o_ptr, bool known)
     : player_ptr(player_ptr)
     , o_ptr(o_ptr)
     , known(known)

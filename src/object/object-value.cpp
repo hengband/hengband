@@ -34,7 +34,7 @@
  *\n
  * Every wearable item with a "pval" bonus is worth extra (see below).\n
  */
-PRICE object_value_real(const ObjectType *o_ptr)
+PRICE object_value_real(const ItemEntity *o_ptr)
 {
     auto *k_ptr = &baseitems_info[o_ptr->k_idx];
 

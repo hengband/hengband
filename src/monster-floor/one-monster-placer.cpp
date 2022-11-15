@@ -234,7 +234,7 @@ static void warn_unique_generation(PlayerType *player_ptr, MonsterRaceId r_idx)
     }
 
     concptr color;
-    ObjectType *o_ptr;
+    ItemEntity *o_ptr;
     GAME_TEXT o_name[MAX_NLEN];
     if (r_ptr->level > player_ptr->lev + 30) {
         color = _("黒く", "black");

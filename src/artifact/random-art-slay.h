@@ -4,5 +4,5 @@
  * @brief ランダムアーティファクトのスレイ付加処理ヘッダ
  */
 
-class ObjectType;
-void random_slay(ObjectType *o_ptr);
+class ItemEntity;
+void random_slay(ItemEntity *o_ptr);

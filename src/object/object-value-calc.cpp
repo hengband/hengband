@@ -18,7 +18,7 @@
  * @param plusses フラグに与える価格の基本重み
  * @return オブジェクトのフラグ価格
  */
-PRICE flag_cost(const ObjectType *o_ptr, int plusses)
+PRICE flag_cost(const ItemEntity *o_ptr, int plusses)
 {
     PRICE total = 0;
     auto *k_ptr = &baseitems_info[o_ptr->k_idx];

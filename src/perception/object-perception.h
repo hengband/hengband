@@ -1,7 +1,7 @@
 ﻿#pragma once
 
-class ObjectType;
+class ItemEntity;
 class PlayerType;
-void object_known(ObjectType *o_ptr);
-void object_aware(PlayerType *player_ptr, const ObjectType *o_ptr);
-void object_tried(const ObjectType *o_ptr);
+void object_known(ItemEntity *o_ptr);
+void object_aware(PlayerType *player_ptr, const ItemEntity *o_ptr);
+void object_tried(const ItemEntity *o_ptr);

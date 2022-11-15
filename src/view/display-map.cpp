@@ -261,7 +261,7 @@ void map_info(PlayerType *player_ptr, POSITION y, POSITION x, TERM_COLOR *ap, ch
     }
 
     for (const auto this_o_idx : g_ptr->o_idx_list) {
-        ObjectType *o_ptr;
+        ItemEntity *o_ptr;
         o_ptr = &floor_ptr->o_list[this_o_idx];
         if (!(o_ptr->marked & OM_FOUND)) {
             continue;

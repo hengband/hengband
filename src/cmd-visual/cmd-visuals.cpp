@@ -166,7 +166,7 @@ void do_cmd_visuals(PlayerType *player_ptr)
                 if (!k_ref.flavor) {
                     o_name = strip_name(k_ref.idx);
                 } else {
-                    ObjectType dummy;
+                    ItemEntity dummy;
                     dummy.prep(k_ref.idx);
                     describe_flavor(player_ptr, char_o_name, &dummy, OD_FORCE_FLAVOR);
                 }

@@ -48,7 +48,7 @@ QuaffEffects::QuaffEffects(PlayerType *player_ptr)
 {
 }
 
-bool QuaffEffects::influence(const ObjectType &o_ref)
+bool QuaffEffects::influence(const ItemEntity &o_ref)
 {
     if (o_ref.tval != ItemKindType::POTION) {
         return false;
