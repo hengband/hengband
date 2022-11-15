@@ -30,7 +30,7 @@ bool rodeo(PlayerType *player_ptr)
 {
     GAME_TEXT m_name[MAX_NLEN];
     MonsterEntity *m_ptr;
-    monster_race *r_ptr;
+    MonsterRaceInfo *r_ptr;
     int rlev;
 
     if (player_ptr->riding) {

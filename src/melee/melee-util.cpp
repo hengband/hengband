@@ -27,7 +27,7 @@ mam_type *initialize_mam_type(PlayerType *player_ptr, mam_type *mam_ptr, MONSTER
     mam_ptr->touched = false;
 
     auto *r_ptr = &monraces_info[mam_ptr->m_ptr->r_idx];
-    monster_race *tr_ptr = &monraces_info[mam_ptr->t_ptr->r_idx];
+    MonsterRaceInfo *tr_ptr = &monraces_info[mam_ptr->t_ptr->r_idx];
     mam_ptr->ac = tr_ptr->ac;
     mam_ptr->rlev = ((r_ptr->level >= 1) ? r_ptr->level : 1);
     mam_ptr->blinked = false;

@@ -40,7 +40,7 @@
  * @param r_ptr モンスター情報への参照ポインタ
  * @return
  */
-static concptr decide_horror_message(monster_race *r_ptr)
+static concptr decide_horror_message(MonsterRaceInfo *r_ptr)
 {
     int horror_num = randint0(MAX_SAN_HORROR_SUM);
     if (horror_num < MAX_SAN_HORROR_COMMON) {
@@ -60,7 +60,7 @@ static concptr decide_horror_message(monster_race *r_ptr)
  * @param r_ptr モンスター情報への参照ポインタ
  * @todo m_nameとdescで何が違うのかは良く分からない
  */
-static void see_eldritch_horror(GAME_TEXT *m_name, monster_race *r_ptr)
+static void see_eldritch_horror(GAME_TEXT *m_name, MonsterRaceInfo *r_ptr)
 {
     concptr horror_message = decide_horror_message(r_ptr);
     msg_format(_("%s%sの顔を見てしまった！", "You behold the %s visage of %s!"), horror_message, m_name);
@@ -72,7 +72,7 @@ static void see_eldritch_horror(GAME_TEXT *m_name, monster_race *r_ptr)
  * @param desc モンスター名 (エルドリッチホラー持ちの全モンスターからランダム…のはず)
  * @param r_ptr モンスターへの参照ポインタ
  */
-static void feel_eldritch_horror(concptr desc, monster_race *r_ptr)
+static void feel_eldritch_horror(concptr desc, MonsterRaceInfo *r_ptr)
 {
     concptr horror_message = decide_horror_message(r_ptr);
     msg_format(_("%s%sの顔を見てしまった！", "You behold the %s visage of %s!"), horror_message, desc);
@@ -151,7 +151,7 @@ void sanity_blast(PlayerType *player_ptr, MonsterEntity *m_ptr, bool necro)
             break;
         }
     } else if (!necro) {
-        monster_race *r_ptr;
+        MonsterRaceInfo *r_ptr;
         GAME_TEXT m_name[MAX_NLEN];
         concptr desc;
         get_mon_num_prep(player_ptr, get_nightmare, nullptr);

@@ -10,7 +10,7 @@
 #include <vector>
 
 /* The monster race arrays */
-std::map<MonsterRaceId, monster_race> monraces_info;
+std::map<MonsterRaceId, MonsterRaceInfo> monraces_info;
 
 MonsterRace::MonsterRace(MonsterRaceId r_idx)
     : r_idx(r_idx)

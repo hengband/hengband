@@ -485,7 +485,7 @@ void rd_monster_old(PlayerType *player_ptr, MonsterEntity *m_ptr)
     strip_bytes(1);
 }
 
-static void move_RF3_to_RFR(monster_race *r_ptr, const BIT_FLAGS rf3, const MonsterResistanceType rfr)
+static void move_RF3_to_RFR(MonsterRaceInfo *r_ptr, const BIT_FLAGS rf3, const MonsterResistanceType rfr)
 {
     if (r_ptr->r_flags3 & rf3) {
         r_ptr->r_flags3 &= ~rf3;
@@ -493,7 +493,7 @@ static void move_RF3_to_RFR(monster_race *r_ptr, const BIT_FLAGS rf3, const Mons
     }
 }
 
-static void move_RF4_BR_to_RFR(monster_race *r_ptr, BIT_FLAGS f4, const BIT_FLAGS rf4_br, const MonsterResistanceType rfr)
+static void move_RF4_BR_to_RFR(MonsterRaceInfo *r_ptr, BIT_FLAGS f4, const BIT_FLAGS rf4_br, const MonsterResistanceType rfr)
 {
     if (f4 & rf4_br) {
         r_ptr->resistance_flags.set(rfr);
@@ -506,7 +506,7 @@ static void move_RF4_BR_to_RFR(monster_race *r_ptr, BIT_FLAGS f4, const BIT_FLAG
  * @param r_idx モンスター種族ID
  * @details 本来はr_idxからr_ptrを決定可能だが、互換性を優先するため元コードのままとする
  */
-void set_old_lore(monster_race *r_ptr, BIT_FLAGS f4, const MonsterRaceId r_idx)
+void set_old_lore(MonsterRaceInfo *r_ptr, BIT_FLAGS f4, const MonsterRaceId r_idx)
 {
     r_ptr->r_resistance_flags.clear();
     move_RF3_to_RFR(r_ptr, RF3_IM_ACID, MonsterResistanceType::IMMUNE_ACID);

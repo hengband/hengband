@@ -41,7 +41,7 @@ static errr interpret_r_token(char *buf)
         return 1;
     }
 
-    monster_race *r_ptr;
+    MonsterRaceInfo *r_ptr;
     int i = (int)strtol(zz[0], nullptr, 0);
     TERM_COLOR n1 = (TERM_COLOR)strtol(zz[1], nullptr, 0);
     auto n2 = static_cast<char>(strtol(zz[2], nullptr, 0));

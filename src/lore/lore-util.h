@@ -22,7 +22,7 @@ enum monster_sex {
     MSEX_FEMALE = 2,
 };
 
-struct monster_race;
+class MonsterRaceInfo;
 struct lore_type {
 #ifdef JP
     char jverb_buf[64];
@@ -30,7 +30,7 @@ struct lore_type {
     bool sin;
 #endif
     bool nightmare;
-    monster_race *r_ptr;
+    MonsterRaceInfo *r_ptr;
     byte speed;
     ITEM_NUMBER drop_gold;
     ITEM_NUMBER drop_item;

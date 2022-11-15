@@ -193,7 +193,7 @@ void init_dungeon_quests(PlayerType *player_ptr)
     floor_ptr->quest_number = QuestId::NONE;
     for (auto q_idx : EnumRange(QuestId::RANDOM_QUEST1, QuestId::RANDOM_QUEST10)) {
         auto *q_ptr = &quest_list[q_idx];
-        monster_race *quest_r_ptr;
+        MonsterRaceInfo *quest_r_ptr;
         q_ptr->status = QuestStatusType::TAKEN;
         determine_random_questor(player_ptr, q_ptr);
         quest_r_ptr = &monraces_info[q_ptr->r_idx];

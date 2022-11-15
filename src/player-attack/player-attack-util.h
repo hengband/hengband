@@ -35,7 +35,7 @@ enum class MagicalBrandEffectType { NONE = 0,
  */
 struct grid_type;
 ;
-struct monster_race;
+class MonsterRaceInfo;
 class MonsterEntity;
 struct player_attack_type {
     int16_t hand{}; //!< 武器の持ち手
@@ -44,7 +44,7 @@ struct player_attack_type {
     MonsterEntity *m_ptr{}; //!< モンスター情報(参照ポインタ)
     GAME_TEXT m_name[MAX_NLEN]{}; //!< モンスター名
     MonsterRaceId r_idx{}; //!< モンスター種族ID
-    monster_race *r_ptr{}; //!< モンスター種族情報(参照ポインタ)
+    MonsterRaceInfo *r_ptr{}; //!< モンスター種族情報(参照ポインタ)
     bool backstab{}; //!< 眠っている敵を不意打ちしたか
     bool surprise_attack{}; //!< 気づいていない敵に闇討ちしたか(忍者)
     bool stab_fleeing{}; //!< 逃げている敵の背後を襲ったか

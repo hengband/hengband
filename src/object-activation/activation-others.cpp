@@ -169,7 +169,7 @@ bool activate_telekinesis(PlayerType *player_ptr, concptr name)
 bool activate_unique_detection(PlayerType *player_ptr)
 {
     MonsterEntity *m_ptr;
-    monster_race *r_ptr;
+    MonsterRaceInfo *r_ptr;
     msg_print(_("奇妙な場所が頭の中に浮かんだ．．．", "Some strange places show up in your mind. And you see ..."));
     for (int i = player_ptr->current_floor_ptr->m_max - 1; i >= 1; i--) {
         m_ptr = &player_ptr->current_floor_ptr->m_list[i];

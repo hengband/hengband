@@ -995,7 +995,7 @@ void do_cmd_element_browse(PlayerType *player_ptr)
  * @param type 魔法攻撃属性
  * @return 効果があるならTRUE、なければFALSE
  */
-bool is_elemental_genocide_effective(monster_race *r_ptr, AttributeType type)
+bool is_elemental_genocide_effective(MonsterRaceInfo *r_ptr, AttributeType type)
 {
     switch (type) {
     case AttributeType::FIRE:

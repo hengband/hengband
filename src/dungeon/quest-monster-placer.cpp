@@ -24,7 +24,7 @@ bool place_quest_monsters(PlayerType *player_ptr)
     auto *floor_ptr = player_ptr->current_floor_ptr;
     const auto &quest_list = QuestList::get_instance();
     for (const auto &[q_idx, q_ref] : quest_list) {
-        monster_race *r_ptr;
+        MonsterRaceInfo *r_ptr;
         BIT_FLAGS mode;
 
         auto no_quest_monsters = q_ref.status != QuestStatusType::TAKEN;

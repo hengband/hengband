@@ -125,7 +125,7 @@ bool ang_sort_comp_importance(PlayerType *player_ptr, vptr u, vptr v, int a, int
     grid_type *cb_ptr = &player_ptr->current_floor_ptr->grid_array[y[b]][x[b]];
     MonsterEntity *ma_ptr = &player_ptr->current_floor_ptr->m_list[ca_ptr->m_idx];
     MonsterEntity *mb_ptr = &player_ptr->current_floor_ptr->m_list[cb_ptr->m_idx];
-    monster_race *ap_ra_ptr, *ap_rb_ptr;
+    MonsterRaceInfo *ap_ra_ptr, *ap_rb_ptr;
 
     /* The player grid */
     if (y[a] == player_ptr->y && x[a] == player_ptr->x) {
@@ -382,8 +382,8 @@ bool ang_sort_comp_pet(PlayerType *player_ptr, vptr u, vptr v, int a, int b)
 
     MonsterEntity *m_ptr1 = &player_ptr->current_floor_ptr->m_list[w1];
     MonsterEntity *m_ptr2 = &player_ptr->current_floor_ptr->m_list[w2];
-    monster_race *r_ptr1 = &monraces_info[m_ptr1->r_idx];
-    monster_race *r_ptr2 = &monraces_info[m_ptr2->r_idx];
+    MonsterRaceInfo *r_ptr1 = &monraces_info[m_ptr1->r_idx];
+    MonsterRaceInfo *r_ptr2 = &monraces_info[m_ptr2->r_idx];
 
     if (m_ptr1->nickname && !m_ptr2->nickname) {
         return true;
@@ -547,8 +547,8 @@ bool ang_sort_comp_monster_level(PlayerType *player_ptr, vptr u, vptr v, int a, 
     auto w1 = who[a];
     auto w2 = who[b];
 
-    monster_race *r_ptr1 = &monraces_info[w1];
-    monster_race *r_ptr2 = &monraces_info[w2];
+    MonsterRaceInfo *r_ptr1 = &monraces_info[w1];
+    MonsterRaceInfo *r_ptr2 = &monraces_info[w2];
 
     if (r_ptr2->level > r_ptr1->level) {
         return true;
@@ -589,8 +589,8 @@ bool ang_sort_comp_pet_dismiss(PlayerType *player_ptr, vptr u, vptr v, int a, in
 
     MonsterEntity *m_ptr1 = &player_ptr->current_floor_ptr->m_list[w1];
     MonsterEntity *m_ptr2 = &player_ptr->current_floor_ptr->m_list[w2];
-    monster_race *r_ptr1 = &monraces_info[m_ptr1->r_idx];
-    monster_race *r_ptr2 = &monraces_info[m_ptr2->r_idx];
+    MonsterRaceInfo *r_ptr1 = &monraces_info[m_ptr1->r_idx];
+    MonsterRaceInfo *r_ptr2 = &monraces_info[m_ptr2->r_idx];
 
     if (w1 == player_ptr->riding) {
         return true;

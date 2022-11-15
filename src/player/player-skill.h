@@ -42,7 +42,7 @@ struct skill_table {
 
 extern std::vector<skill_table> class_skills_info;
 
-struct monster_race;
+class MonsterRaceInfo;
 class ItemEntity;
 class PlayerType;
 
@@ -63,7 +63,7 @@ public:
     void gain_range_weapon_exp(const ItemEntity *o_ptr);
     void gain_martial_arts_skill_exp();
     void gain_two_weapon_skill_exp();
-    void gain_riding_skill_exp_on_melee_attack(const monster_race *r_ptr);
+    void gain_riding_skill_exp_on_melee_attack(const MonsterRaceInfo *r_ptr);
     void gain_riding_skill_exp_on_range_attack();
     void gain_riding_skill_exp_on_fall_off_check(int dam);
     void gain_spell_skill_exp(int realm, int spell_idx);

@@ -118,7 +118,7 @@ void display_rumor(PlayerType *player_ptr, bool ex)
         item.ident = IDENT_STORE;
         describe_flavor(player_ptr, fullname, &item, OD_NAME_ONLY);
     } else if (category == "MONSTER") {
-        monster_race *r_ptr;
+        MonsterRaceInfo *r_ptr;
         const auto &monster_name = tokens[1];
 
         // @details プレイヤーもダミーで入っているので、1つ引いておかないと数が合わなくなる.

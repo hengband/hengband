@@ -131,8 +131,8 @@ static bool ang_sort_comp_nest_mon_info(PlayerType *player_ptr, vptr u, vptr v, 
     nest_mon_info_type *nest_mon_info = (nest_mon_info_type *)u;
     auto w1 = nest_mon_info[a].r_idx;
     auto w2 = nest_mon_info[b].r_idx;
-    monster_race *r1_ptr = &monraces_info[w1];
-    monster_race *r2_ptr = &monraces_info[w2];
+    MonsterRaceInfo *r1_ptr = &monraces_info[w1];
+    MonsterRaceInfo *r2_ptr = &monraces_info[w2];
     int z1 = nest_mon_info[a].used;
     int z2 = nest_mon_info[b].used;
 
@@ -501,7 +501,7 @@ bool build_type6(PlayerType *player_ptr, dun_data_type *dd_ptr)
     for (i = 0; i < 16; i++) {
         auto r_idx = MonsterRace::empty_id();
         int attempts = 100;
-        monster_race *r_ptr = nullptr;
+        MonsterRaceInfo *r_ptr = nullptr;
 
         while (attempts--) {
             /* Get a (hard) monster type */
@@ -816,7 +816,7 @@ bool build_type13(PlayerType *player_ptr, dun_data_type *dd_ptr)
     for (i = 0; i < 16; i++) {
         auto r_idx = MonsterRace::empty_id();
         int attempts = 100;
-        monster_race *r_ptr = nullptr;
+        MonsterRaceInfo *r_ptr = nullptr;
 
         while (attempts--) {
             /* Get a (hard) monster type */

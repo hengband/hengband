@@ -8,7 +8,7 @@
 #include <vector>
 
 enum class MonsterRaceId : int16_t;
-struct monster_race;
+class MonsterRaceInfo;
 class MonsterEntity;
 class PlayerType;
 typedef std::vector<std::tuple<MonsterRaceId, MonsterRaceId, MonsterRaceId>> combined_uniques;

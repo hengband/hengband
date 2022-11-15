@@ -630,7 +630,7 @@ void sweep_monster_process(PlayerType *player_ptr)
  */
 bool decide_process_continue(PlayerType *player_ptr, MonsterEntity *m_ptr)
 {
-    monster_race *r_ptr;
+    MonsterRaceInfo *r_ptr;
     r_ptr = &monraces_info[m_ptr->r_idx];
     if (!player_ptr->no_flowed) {
         m_ptr->mflag2.reset(MonsterConstantFlagType::NOFLOW);

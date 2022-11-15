@@ -254,7 +254,7 @@ void show_bounty(void)
 
     for (auto i = 0U; i < std::size(w_ptr->bounties); i++) {
         const auto &[r_idx, is_achieved] = w_ptr->bounties[i];
-        monster_race *r_ptr = &monraces_info[r_idx];
+        MonsterRaceInfo *r_ptr = &monraces_info[r_idx];
 
         auto color = is_achieved ? TERM_RED : TERM_WHITE;
         auto done_mark = is_achieved ? _("(済)", "(done)") : "";
@@ -296,7 +296,7 @@ void determine_daily_bounty(PlayerType *player_ptr, bool conv_old)
 
     while (true) {
         w_ptr->today_mon = get_mon_num(player_ptr, std::min(max_dl / 2, 40), max_dl, GMN_ARENA);
-        monster_race *r_ptr;
+        MonsterRaceInfo *r_ptr;
         r_ptr = &monraces_info[w_ptr->today_mon];
 
         if (cheat_hear) {

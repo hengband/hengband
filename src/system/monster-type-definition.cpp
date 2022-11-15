@@ -76,7 +76,7 @@ MonsterRaceId MonsterEntity::get_real_r_idx() const
  * @brief モンスターの真の種族を返す / Extract monster race pointer of a monster's true form
  * @return 本当のモンスター種族参照ポインタ
  */
-monster_race &MonsterEntity::get_real_r_ref() const
+MonsterRaceInfo &MonsterEntity::get_real_r_ref() const
 {
     return monraces_info[this->get_real_r_idx()];
 }

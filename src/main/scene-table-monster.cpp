@@ -17,7 +17,7 @@
 
 struct scene_monster_info {
     MONSTER_IDX m_idx;
-    monster_race *ap_r_ptr;
+    MonsterRaceInfo *ap_r_ptr;
     GAME_TURN last_seen; //!< 最後に対象モンスター見たゲームターン
     uint32_t mute_until; //!< この時間に到達するまでモンスターBGMは設定しない
 };
@@ -29,12 +29,12 @@ inline static bool has_shadower_flag(MonsterEntity *m_ptr)
     return m_ptr->mflag2.has(MonsterConstantFlagType::KAGE);
 }
 
-inline static bool is_unique(monster_race *ap_r_ptr)
+inline static bool is_unique(MonsterRaceInfo *ap_r_ptr)
 {
     return ap_r_ptr->kind_flags.has(MonsterKindType::UNIQUE);
 }
 
-inline static bool is_unknown_monster(monster_race *ap_r_ptr)
+inline static bool is_unknown_monster(MonsterRaceInfo *ap_r_ptr)
 {
     return ap_r_ptr->r_tkills == 0;
 }
@@ -140,7 +140,7 @@ static void update_target_monster(PlayerType *player_ptr, MONSTER_IDX m_idx)
 
         if (do_dwap) {
             auto *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
-            monster_race *ap_r_ptr = &monraces_info[m_ptr->ap_r_idx];
+            MonsterRaceInfo *ap_r_ptr = &monraces_info[m_ptr->ap_r_idx];
             scene_target_monster.m_idx = m_idx;
             scene_target_monster.ap_r_ptr = ap_r_ptr;
             scene_target_monster.last_seen = get_game_turn();
@@ -245,7 +245,7 @@ void refresh_scene_monster(PlayerType *player_ptr, const std::vector<MONSTER_IDX
                 clear_scene_target_monster();
             } else {
                 auto *m_ptr = &player_ptr->current_floor_ptr->m_list[scene_target_monster.m_idx];
-                monster_race *ap_r_ptr = &monraces_info[m_ptr->ap_r_idx];
+                MonsterRaceInfo *ap_r_ptr = &monraces_info[m_ptr->ap_r_idx];
                 if (ap_r_ptr != scene_target_monster.ap_r_ptr) {
                     // 死亡、チェンジモンスター、etc.
                     clear_scene_target_monster();

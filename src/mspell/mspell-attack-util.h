@@ -16,11 +16,11 @@ enum mspell_lite_type {
 
 // Monster Spell Attack.
 class MonsterEntity;
-struct monster_race;
+class MonsterRaceInfo;
 struct msa_type {
     MONSTER_IDX m_idx;
     MonsterEntity *m_ptr;
-    monster_race *r_ptr;
+    MonsterRaceInfo *r_ptr;
     bool no_inate;
     EnumClassFlagGroup<MonsterAbilityType> ability_flags;
     POSITION x;

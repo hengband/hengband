@@ -250,7 +250,7 @@ bool teleport_level_other(PlayerType *player_ptr)
     }
 
     MonsterEntity *m_ptr;
-    monster_race *r_ptr;
+    MonsterRaceInfo *r_ptr;
     m_ptr = &player_ptr->current_floor_ptr->m_list[target_m_idx];
     r_ptr = &monraces_info[m_ptr->r_idx];
     GAME_TEXT m_name[MAX_NLEN];

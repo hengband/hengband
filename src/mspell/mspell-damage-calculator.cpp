@@ -441,7 +441,7 @@ static int monspell_damage_base(
  * @param dd ダイス数への参照ポインタ
  * @param ds ダイス面への参照ポインタ
  */
-void monspell_shoot_dice(monster_race *r_ptr, int *dd, int *ds)
+void monspell_shoot_dice(MonsterRaceInfo *r_ptr, int *dd, int *ds)
 {
     int p = -1; /* Position of SHOOT */
     int n = 0; /* Number of blows */

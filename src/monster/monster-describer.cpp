@@ -24,7 +24,7 @@
  */
 void monster_desc(PlayerType *player_ptr, char *desc, MonsterEntity *m_ptr, BIT_FLAGS mode)
 {
-    monster_race *r_ptr;
+    MonsterRaceInfo *r_ptr;
     r_ptr = &monraces_info[m_ptr->ap_r_idx];
     concptr name = (mode & MD_TRUE_NAME) ? m_ptr->get_real_r_ref().name.data() : r_ptr->name.data();
     GAME_TEXT silly_name[1024];
@@ -38,7 +38,7 @@ void monster_desc(PlayerType *player_ptr, char *desc, MonsterEntity *m_ptr, BIT_
         }
 
         if (!named) {
-            monster_race *hallu_race;
+            MonsterRaceInfo *hallu_race;
 
             do {
                 auto r_idx = MonsterRace::pick_one_at_random();

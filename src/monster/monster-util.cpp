@@ -252,7 +252,7 @@ static errr do_get_mon_num_prep(PlayerType *player_ptr, const monsterrace_hook_t
     for (auto i = 0U; i < alloc_race_table.size(); i++) {
         alloc_entry *const entry = &alloc_race_table[i];
         const auto entry_r_idx = i2enum<MonsterRaceId>(entry->index);
-        const monster_race *const r_ptr = &monraces_info[entry_r_idx];
+        const MonsterRaceInfo *const r_ptr = &monraces_info[entry_r_idx];
 
         // 生成を禁止する要素は重み 0 とする。
         entry->prob2 = 0;

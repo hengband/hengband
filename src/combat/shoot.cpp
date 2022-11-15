@@ -155,7 +155,7 @@ static MULTIPLY calc_shot_damage_with_slay(
 {
     MULTIPLY mult = 10;
 
-    monster_race *race_ptr = &monraces_info[monster_ptr->r_idx];
+    MonsterRaceInfo *race_ptr = &monraces_info[monster_ptr->r_idx];
 
     TrFlags flags{};
     auto arrow_flags = object_flags(arrow_ptr);

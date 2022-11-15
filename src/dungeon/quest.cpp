@@ -177,7 +177,7 @@ void determine_random_questor(PlayerType *player_ptr, quest_type *q_ptr)
          * (depending on level)
          */
         r_idx = get_mon_num(player_ptr, 0, q_ptr->level + 5 + randint1(q_ptr->level / 10), GMN_ARENA);
-        monster_race *r_ptr;
+        MonsterRaceInfo *r_ptr;
         r_ptr = &monraces_info[r_idx];
 
         if (r_ptr->kind_flags.has_not(MonsterKindType::UNIQUE)) {

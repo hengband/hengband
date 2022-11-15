@@ -131,7 +131,7 @@ bool process_monster_attack_to_monster(PlayerType *player_ptr, turn_flags *turn_
         return false;
     }
 
-    monster_race *z_ptr = &monraces_info[y_ptr->r_idx];
+    MonsterRaceInfo *z_ptr = &monraces_info[y_ptr->r_idx];
     turn_flags_ptr->do_move = false;
 
     bool do_kill_body = r_ptr->behavior_flags.has(MonsterBehaviorType::KILL_BODY) && r_ptr->behavior_flags.has_not(MonsterBehaviorType::NEVER_BLOW);

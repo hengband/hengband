@@ -81,7 +81,7 @@ bool teleport_swap(PlayerType *player_ptr, DIRECTION dir)
     }
 
     MonsterEntity *m_ptr;
-    monster_race *r_ptr;
+    MonsterRaceInfo *r_ptr;
     m_ptr = &player_ptr->current_floor_ptr->m_list[g_ptr->m_idx];
     r_ptr = &monraces_info[m_ptr->r_idx];
 

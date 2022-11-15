@@ -290,7 +290,7 @@ void save_old_race_flags(MonsterRaceId monster_race_idx, old_race_flags *old_rac
         return;
     }
 
-    monster_race *r_ptr;
+    MonsterRaceInfo *r_ptr;
     r_ptr = &monraces_info[monster_race_idx];
 
     old_race_flags_ptr->old_r_flags1 = r_ptr->r_flags1;

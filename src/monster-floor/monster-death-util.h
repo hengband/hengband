@@ -3,11 +3,11 @@
 #include "system/angband.h"
 
 class MonsterEntity;
-struct monster_race;
+class MonsterRaceInfo;
 struct monster_death_type {
     MONSTER_IDX m_idx;
     MonsterEntity *m_ptr;
-    monster_race *r_ptr;
+    MonsterRaceInfo *r_ptr;
     bool do_gold;
     bool do_item;
     bool cloned;

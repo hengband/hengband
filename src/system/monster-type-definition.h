@@ -17,7 +17,7 @@ constexpr int MONSTER_MAXHP = 30000; //!< モンスターの最大HP
 
 enum class MonsterRaceId : int16_t;
 class FloorType;
-struct monster_race;
+class MonsterRaceInfo;
 class MonsterEntity {
 public:
     MonsterEntity() = default;
@@ -61,7 +61,7 @@ public:
     bool is_mimicry() const;
     bool is_valid() const;
     MonsterRaceId get_real_r_idx() const;
-    monster_race &get_real_r_ref() const;
+    MonsterRaceInfo &get_real_r_ref() const;
     short get_remaining_sleep() const;
     short get_remaining_acceleration() const;
     short get_remaining_deceleration() const;

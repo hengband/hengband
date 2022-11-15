@@ -368,7 +368,7 @@ bool process_warning(PlayerType *player_ptr, POSITION xx, POSITION yy)
         for (my = yy - WARNING_AWARE_RANGE; my < yy + WARNING_AWARE_RANGE + 1; my++) {
             int dam_max0 = 0;
             MonsterEntity *m_ptr;
-            monster_race *r_ptr;
+            MonsterRaceInfo *r_ptr;
 
             if (!in_bounds(player_ptr->current_floor_ptr, my, mx) || (distance(my, mx, yy, xx) > WARNING_AWARE_RANGE)) {
                 continue;

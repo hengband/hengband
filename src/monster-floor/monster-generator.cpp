@@ -241,7 +241,7 @@ static bool place_monster_can_escort(PlayerType *player_ptr, MonsterRaceId r_idx
 {
     auto *r_ptr = &monraces_info[place_monster_idx];
     auto *m_ptr = &player_ptr->current_floor_ptr->m_list[place_monster_m_idx];
-    monster_race *z_ptr = &monraces_info[r_idx];
+    MonsterRaceInfo *z_ptr = &monraces_info[r_idx];
 
     if (mon_hook_dungeon(player_ptr, place_monster_idx) != mon_hook_dungeon(player_ptr, r_idx)) {
         return false;

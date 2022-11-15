@@ -212,7 +212,7 @@ void regenerate_captured_monsters(PlayerType *player_ptr)
 {
     bool heal = false;
     for (int i = 0; i < INVEN_TOTAL; i++) {
-        monster_race *r_ptr;
+        MonsterRaceInfo *r_ptr;
         auto *o_ptr = &player_ptr->inventory_list[i];
         if (!o_ptr->k_idx) {
             continue;

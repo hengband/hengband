@@ -49,11 +49,11 @@ struct samurai_slaying_type {
     TrFlags flags;
     MonsterEntity *m_ptr;
     combat_options mode;
-    monster_race *r_ptr;
+    MonsterRaceInfo *r_ptr;
 };
 
 static samurai_slaying_type *initialize_samurai_slaying_type(
-    samurai_slaying_type *samurai_slaying_ptr, MULTIPLY mult, const TrFlags &flags, MonsterEntity *m_ptr, combat_options mode, monster_race *r_ptr)
+    samurai_slaying_type *samurai_slaying_ptr, MULTIPLY mult, const TrFlags &flags, MonsterEntity *m_ptr, combat_options mode, MonsterRaceInfo *r_ptr)
 {
     samurai_slaying_ptr->mult = mult;
     samurai_slaying_ptr->flags = flags;

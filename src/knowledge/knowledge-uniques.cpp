@@ -49,7 +49,7 @@ unique_list_type *initialize_unique_lsit_type(unique_list_type *unique_list_ptr,
  * @return is_aliveの条件に見合うユニークがいたらTRUE、それ以外はFALSE
  * @details 闘技場のモンスターとは再戦できないので、生きているなら表示から外す
  */
-static bool sweep_uniques(monster_race *r_ptr, bool is_alive)
+static bool sweep_uniques(MonsterRaceInfo *r_ptr, bool is_alive)
 {
     if (r_ptr->name.empty()) {
         return false;

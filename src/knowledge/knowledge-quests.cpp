@@ -52,7 +52,7 @@ static void do_cmd_knowledge_quests_current(PlayerType *player_ptr, FILE *fff)
     char tmp_str[1024];
     char rand_tmp_str[512] = "\0";
     GAME_TEXT name[MAX_NLEN];
-    monster_race *r_ptr;
+    MonsterRaceInfo *r_ptr;
     int rand_level = 100;
     int total = 0;
 

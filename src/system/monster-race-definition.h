@@ -54,7 +54,10 @@ public:
  * monster recall (no knowledge of spells, etc).  All of the "recall"
  * fields have a special prefix to aid in searching for them.
  */
-struct monster_race {
+class MonsterRaceInfo {
+public:
+    MonsterRaceInfo() = default;
+
     MonsterRaceId idx{};
     std::string name; //!< 名前データのオフセット(日本語) /  Name offset(Japanese)
 #ifdef JP
