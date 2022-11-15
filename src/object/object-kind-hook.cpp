@@ -19,117 +19,117 @@ static const int SV_BOOK_MIN_GOOD = 2;
 
 /*!
  * @brief オブジェクトがクロークかどうかを判定する /
- * @param k_idx 判定したいオブジェクトのベースアイテムID
+ * @param bi_id 判定したいオブジェクトのベースアイテムID
  * @return オブジェクトがクロークならばTRUEを返す
  */
-bool kind_is_cloak(KIND_OBJECT_IDX k_idx)
+bool kind_is_cloak(short bi_id)
 {
-    return baseitems_info[k_idx].bi_key.tval() == ItemKindType::CLOAK;
+    return baseitems_info[bi_id].bi_key.tval() == ItemKindType::CLOAK;
 }
 
 /*!
  * @brief オブジェクトが竿状武器かどうかを判定する /
- * @param k_idx 判定したいオブジェクトのベースアイテムID
+ * @param bi_id 判定したいオブジェクトのベースアイテムID
  * @return オブジェクトが竿状武器ならばTRUEを返す
  */
-bool kind_is_polearm(KIND_OBJECT_IDX k_idx)
+bool kind_is_polearm(short bi_id)
 {
-    return baseitems_info[k_idx].bi_key.tval() == ItemKindType::POLEARM;
+    return baseitems_info[bi_id].bi_key.tval() == ItemKindType::POLEARM;
 }
 
 /*!
  * @brief オブジェクトが剣かどうかを判定する /
- * @param k_idx 判定したいオブジェクトのベースアイテムID
+ * @param bi_id 判定したいオブジェクトのベースアイテムID
  * @return オブジェクトが剣ならばTRUEを返す
  */
-bool kind_is_sword(KIND_OBJECT_IDX k_idx)
+bool kind_is_sword(short bi_id)
 {
-    auto *k_ptr = &baseitems_info[k_idx];
-    return (k_ptr->bi_key.tval() == ItemKindType::SWORD) && (k_ptr->bi_key.sval() > 2);
+    const auto &k_ref = baseitems_info[bi_id];
+    return (k_ref.bi_key.tval() == ItemKindType::SWORD) && (k_ref.bi_key.sval() > 2);
 }
 
 /*!
  * @brief オブジェクトが魔法書かどうかを判定する /
- * @param k_idx 判定したいオブジェクトのベースアイテムID
+ * @param bi_id 判定したいオブジェクトのベースアイテムID
  * @return オブジェクトが魔法書ならばTRUEを返す
  */
-bool kind_is_book(KIND_OBJECT_IDX k_idx)
+bool kind_is_book(short bi_id)
 {
-    auto *k_ptr = &baseitems_info[k_idx];
-    return (k_ptr->bi_key.tval() >= ItemKindType::LIFE_BOOK) && (k_ptr->bi_key.tval() <= ItemKindType::CRUSADE_BOOK);
+    const auto &k_ref = baseitems_info[bi_id];
+    return (k_ref.bi_key.tval() >= ItemKindType::LIFE_BOOK) && (k_ref.bi_key.tval() <= ItemKindType::CRUSADE_BOOK);
 }
 
 /*!
  * @brief オブジェクトがベースアイテム時点でGOODかどうかを判定する /
- * @param k_idx 判定したいオブジェクトのベースアイテムID
+ * @param bi_id 判定したいオブジェクトのベースアイテムID
  * @return オブジェクトがベースアイテム時点でGOODなアイテムならばTRUEを返す
  */
-bool kind_is_good_book(KIND_OBJECT_IDX k_idx)
+bool kind_is_good_book(short bi_id)
 {
-    auto *k_ptr = &baseitems_info[k_idx];
-    return (k_ptr->bi_key.tval() >= ItemKindType::LIFE_BOOK) && (k_ptr->bi_key.tval() <= ItemKindType::CRUSADE_BOOK) && (k_ptr->bi_key.tval() != ItemKindType::ARCANE_BOOK) && (k_ptr->bi_key.sval() > 1);
+    const auto &k_ref = baseitems_info[bi_id];
+    return (k_ref.bi_key.tval() >= ItemKindType::LIFE_BOOK) && (k_ref.bi_key.tval() <= ItemKindType::CRUSADE_BOOK) && (k_ref.bi_key.tval() != ItemKindType::ARCANE_BOOK) && (k_ref.bi_key.sval() > 1);
 }
 
 /*!
  * @brief オブジェクトが鎧かどうかを判定する /
- * @param k_idx 判定したいオブジェクトのベースアイテムID
+ * @param bi_id 判定したいオブジェクトのベースアイテムID
  * @return オブジェクトが鎧ならばTRUEを返す
  */
-bool kind_is_armor(KIND_OBJECT_IDX k_idx)
+bool kind_is_armor(short bi_id)
 {
-    return baseitems_info[k_idx].bi_key.tval() == ItemKindType::HARD_ARMOR;
+    return baseitems_info[bi_id].bi_key.tval() == ItemKindType::HARD_ARMOR;
 }
 
 /*!
  * @brief オブジェクトが打撃武器かどうかを判定する /
- * @param k_idx 判定したいオブジェクトのベースアイテムID
+ * @param bi_id 判定したいオブジェクトのベースアイテムID
  * @return オブジェクトが打撃武器ならばTRUEを返す
  */
-bool kind_is_hafted(KIND_OBJECT_IDX k_idx)
+bool kind_is_hafted(short bi_id)
 {
-    return baseitems_info[k_idx].bi_key.tval() == ItemKindType::HAFTED;
+    return baseitems_info[bi_id].bi_key.tval() == ItemKindType::HAFTED;
 }
 
 /*!
  * @brief オブジェクトが薬かどうかを判定する /
- * @param k_idx 判定したいオブジェクトのベースアイテムID
+ * @param bi_id 判定したいオブジェクトのベースアイテムID
  * @return オブジェクトが薬ならばTRUEを返す
  */
-bool kind_is_potion(KIND_OBJECT_IDX k_idx)
+bool kind_is_potion(short bi_id)
 {
-    return baseitems_info[k_idx].bi_key.tval() == ItemKindType::POTION;
+    return baseitems_info[bi_id].bi_key.tval() == ItemKindType::POTION;
 }
 
 /*!
  * @brief オブジェクトが靴かどうかを判定する /
- * @param k_idx 判定したいオブジェクトのベースアイテムID
+ * @param bi_id 判定したいオブジェクトのベースアイテムID
  * @return オブジェクトが靴ならばTRUEを返す
  */
-bool kind_is_boots(KIND_OBJECT_IDX k_idx)
+bool kind_is_boots(short bi_id)
 {
-    return baseitems_info[k_idx].bi_key.tval() == ItemKindType::BOOTS;
+    return baseitems_info[bi_id].bi_key.tval() == ItemKindType::BOOTS;
 }
 
 /*!
  * @brief オブジェクトがアミュレットかどうかを判定する /
- * @param k_idx 判定したいオブジェクトのベースアイテムID
+ * @param bi_id 判定したいオブジェクトのベースアイテムID
  * @return オブジェクトがアミュレットならばTRUEを返す
  */
-bool kind_is_amulet(KIND_OBJECT_IDX k_idx)
+bool kind_is_amulet(short bi_id)
 {
-    return baseitems_info[k_idx].bi_key.tval() == ItemKindType::AMULET;
+    return baseitems_info[bi_id].bi_key.tval() == ItemKindType::AMULET;
 }
 
 /*!
  * @brief ベースアイテムが上質として扱われるかどうかを返す。
  * Hack -- determine if a template is "good"
- * @param k_idx 判定したいベースアイテムのID
+ * @param bi_id 判定したいベースアイテムのID
  * @return ベースアイテムが上質ならばTRUEを返す。
  */
-bool kind_is_good(KIND_OBJECT_IDX k_idx)
+bool kind_is_good(short bi_id)
 {
-    auto *k_ptr = &baseitems_info[k_idx];
-    switch (k_ptr->bi_key.tval()) {
+    const auto &k_ref = baseitems_info[bi_id];
+    switch (k_ref.bi_key.tval()) {
         /* Armor -- Good unless damaged */
     case ItemKindType::HARD_ARMOR:
     case ItemKindType::SOFT_ARMOR:
@@ -140,7 +140,7 @@ bool kind_is_good(KIND_OBJECT_IDX k_idx)
     case ItemKindType::GLOVES:
     case ItemKindType::HELM:
     case ItemKindType::CROWN:
-        return k_ptr->to_a >= 0;
+        return k_ref.to_a >= 0;
 
     /* Weapons -- Good unless damaged */
     case ItemKindType::BOW:
@@ -148,7 +148,7 @@ bool kind_is_good(KIND_OBJECT_IDX k_idx)
     case ItemKindType::HAFTED:
     case ItemKindType::POLEARM:
     case ItemKindType::DIGGING:
-        return (k_ptr->to_h >= 0) && (k_ptr->to_d >= 0);
+        return (k_ref.to_h >= 0) && (k_ref.to_d >= 0);
 
     /* Ammo -- Arrows/Bolts are good */
     case ItemKindType::BOLT:
@@ -168,15 +168,15 @@ bool kind_is_good(KIND_OBJECT_IDX k_idx)
     case ItemKindType::MUSIC_BOOK:
     case ItemKindType::HISSATSU_BOOK:
     case ItemKindType::HEX_BOOK:
-        return k_ptr->bi_key.sval() >= SV_BOOK_MIN_GOOD;
+        return k_ref.bi_key.sval() >= SV_BOOK_MIN_GOOD;
 
     /* Rings -- Rings of Speed are good */
     case ItemKindType::RING:
-        return (k_ptr->bi_key.sval() == SV_RING_SPEED) || (k_ptr->bi_key.sval() == SV_RING_LORDLY);
+        return (k_ref.bi_key.sval() == SV_RING_SPEED) || (k_ref.bi_key.sval() == SV_RING_LORDLY);
 
     /* Amulets -- Amulets of the Magi and Resistance are good */
     case ItemKindType::AMULET:
-        return (k_ptr->bi_key.sval() == SV_AMULET_THE_MAGI) || (k_ptr->bi_key.sval() == SV_AMULET_RESISTANCE);
+        return (k_ref.bi_key.sval() == SV_AMULET_THE_MAGI) || (k_ref.bi_key.sval() == SV_AMULET_RESISTANCE);
     default:
         return false;
     }
