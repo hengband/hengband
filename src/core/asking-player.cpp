@@ -140,7 +140,7 @@ bool askfor(char *buf, int len, bool numpad_cursor)
 
             pos = i;
         }
-            /* Fall through */
+            [[fallthrough]];
         case 0x7F:
         case KTRL('d'): {
             color = TERM_WHITE;

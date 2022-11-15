@@ -786,7 +786,7 @@ bool get_item_floor(PlayerType *player_ptr, COMMAND_CODE *cp, concptr pmt, concp
                 break;
             }
         }
-            /* Fall through */
+            [[fallthrough]];
         default: {
             bool tag_not_found = false;
 

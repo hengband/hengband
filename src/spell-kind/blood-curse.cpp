@@ -37,7 +37,7 @@ void blood_curse_to_enemy(PlayerType *player_ptr, MONSTER_IDX m_idx)
                     break;
                 }
             }
-            /* Fall through */
+            [[fallthrough]];
         case 3:
         case 4:
         case 5:
@@ -50,7 +50,7 @@ void blood_curse_to_enemy(PlayerType *player_ptr, MONSTER_IDX m_idx)
                     break;
                 }
             }
-            /* Fall through */
+            [[fallthrough]];
         case 7:
         case 8:
             if (!count) {
@@ -65,7 +65,7 @@ void blood_curse_to_enemy(PlayerType *player_ptr, MONSTER_IDX m_idx)
                     break;
                 }
             }
-            /* Fall through */
+            [[fallthrough]];
         case 9:
         case 10:
         case 11:
@@ -74,7 +74,7 @@ void blood_curse_to_enemy(PlayerType *player_ptr, MONSTER_IDX m_idx)
             if (!one_in_(6)) {
                 break;
             }
-            /* Fall through */
+            [[fallthrough]];
         case 12:
         case 13:
         case 14:
@@ -84,14 +84,14 @@ void blood_curse_to_enemy(PlayerType *player_ptr, MONSTER_IDX m_idx)
             if (!one_in_(6)) {
                 break;
             }
-            /* Fall through */
+            [[fallthrough]];
         case 17:
         case 18:
             count += activate_hi_summon(player_ptr, m_ptr->fy, m_ptr->fx, true);
             if (!one_in_(6)) {
                 break;
             }
-            /* Fall through */
+            [[fallthrough]];
         case 19:
         case 20:
         case 21:
@@ -111,7 +111,7 @@ void blood_curse_to_enemy(PlayerType *player_ptr, MONSTER_IDX m_idx)
                 break;
             }
         }
-            /* Fall through */
+            [[fallthrough]];
         case 23:
         case 24:
         case 25:
@@ -128,7 +128,7 @@ void blood_curse_to_enemy(PlayerType *player_ptr, MONSTER_IDX m_idx)
             if (!one_in_(6)) {
                 break;
             }
-            /* Fall through */
+            [[fallthrough]];
         case 26:
         case 27:
         case 28:

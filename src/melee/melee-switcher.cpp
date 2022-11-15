@@ -164,7 +164,7 @@ void decide_monster_attack_effect(PlayerType *player_ptr, mam_type *mam_ptr)
             break;
         }
 
-        /* Fall through */
+        [[fallthrough]];
     case RaceBlowEffectType::HURT:
         mam_ptr->damage -= (mam_ptr->damage * ((mam_ptr->ac < 150) ? mam_ptr->ac : 150) / 250);
         break;

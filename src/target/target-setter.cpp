@@ -258,7 +258,7 @@ static void switch_target_input(PlayerType *player_ptr, ts_type *ts_ptr)
         ts_ptr->y = player_ptr->y;
         ts_ptr->x = player_ptr->x;
     }
-        /* Fall through */
+        [[fallthrough]];
     case 'o':
         ts_ptr->flag = false;
         return;
@@ -454,8 +454,10 @@ static void switch_next_grid_command(PlayerType *player_ptr, ts_type *ts_ptr)
         target_set_prepare(player_ptr, ys_interest, xs_interest, ts_ptr->mode);
         ts_ptr->y = player_ptr->y;
         ts_ptr->x = player_ptr->x;
+        break;
     case 'o':
-        //!< @todo ↑元からbreakしていないがFall Throughを付けてよいか不明なので保留
+        // ターゲット時の「m近」「o現」の切り替え
+        // すでに「o現」の時にoを押してもなにも起きない
         break;
     case ' ':
     case '*':

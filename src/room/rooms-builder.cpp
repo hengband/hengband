@@ -278,7 +278,7 @@ void build_recursive_room(PlayerType *player_ptr, POSITION x1, POSITION y1, POSI
         ysize = y2 - y1;
         power += 2;
     }
-        /* Fall through */
+        [[fallthrough]];
     case 4: {
         /* Try to build a room */
         if ((xsize < 3) || (ysize < 3)) {

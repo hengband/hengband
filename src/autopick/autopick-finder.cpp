@@ -174,7 +174,7 @@ byte get_string_for_search(PlayerType *player_ptr, ObjectType **o_handle, concpt
 
         case KTRL('r'):
             back = true;
-            /* Fall through */
+            [[fallthrough]];
 
         case '\n':
         case '\r':
@@ -221,7 +221,7 @@ byte get_string_for_search(PlayerType *player_ptr, ObjectType **o_handle, concpt
 
             pos = i;
         }
-            /* Fall through */
+            [[fallthrough]];
 
         case 0x7F:
         case KTRL('d'): {

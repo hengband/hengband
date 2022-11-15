@@ -349,7 +349,7 @@ void switch_monster_blow_to_player(PlayerType *player_ptr, MonsterAttackPlayer *
             break;
         }
     }
-        /* Fall through */
+        [[fallthrough]];
     case RaceBlowEffectType::HURT: { /* AC軽減あり / Player armor reduces total damage */
         monap_ptr->obvious = true;
         monap_ptr->damage -= (monap_ptr->damage * ((monap_ptr->ac < 150) ? monap_ptr->ac : 150) / 250);

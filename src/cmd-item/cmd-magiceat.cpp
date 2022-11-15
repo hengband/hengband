@@ -524,6 +524,7 @@ static std::optional<BaseitemKey> select_magic_eater(PlayerType *player_ptr, boo
         break;
     case ItemKindType::ROD:
         base = EATER_ROD_BASE;
+        break;
     default:
         break;
     }

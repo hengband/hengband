@@ -569,7 +569,7 @@ bool get_item(PlayerType *player_ptr, OBJECT_IDX *cp, concptr pmt, concptr str, 
                 break;
             }
         }
-            /* Fall through */
+            [[fallthrough]];
         default: {
             bool tag_not_found = false;
 

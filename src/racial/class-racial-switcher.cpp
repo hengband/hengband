@@ -30,7 +30,7 @@ void switch_class_racial(PlayerType *player_ptr, rc_type *rc_ptr)
             rc_ptr->add_power(rpi, RC_IDX_CLASS_0);
             break;
         }
-        /* Fall through */
+        [[fallthrough]];
     case PlayerClassType::MAGE:
     case PlayerClassType::SORCERER:
         rpi = rpi_type(_("魔力食い", "Eat Magic"));
