@@ -9,6 +9,7 @@
 #include "artifact/random-art-generator.h"
 #include "inventory/inventory-slot-types.h"
 #include "object/object-kind-hook.h"
+#include "object/tval-types.h"
 #include "system/object-type-definition.h"
 #include "view/display-messages.h"
 

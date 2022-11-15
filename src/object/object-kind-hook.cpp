@@ -5,6 +5,7 @@
  */
 
 #include "object/object-kind-hook.h"
+#include "object/tval-types.h"
 #include "sv-definition/sv-amulet-types.h"
 #include "sv-definition/sv-other-types.h"
 #include "sv-definition/sv-ring-types.h"

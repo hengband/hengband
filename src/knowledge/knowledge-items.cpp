@@ -17,6 +17,7 @@
 #include "knowledge/object-group-table.h"
 #include "object-enchant/special-object-flags.h"
 #include "object/object-kind-hook.h"
+#include "object/tval-types.h"
 #include "perception/identification.h"
 #include "perception/object-perception.h"
 #include "system/artifact-type-definition.h"

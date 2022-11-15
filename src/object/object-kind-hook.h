@@ -1,7 +1,5 @@
 ﻿#pragma once
 
-#include "object/tval-types.h"
-
 bool kind_is_cloak(short bi_id);
 bool kind_is_polearm(short bi_id);
 bool kind_is_sword(short bi_id);
