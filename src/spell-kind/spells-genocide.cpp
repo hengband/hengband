@@ -25,7 +25,7 @@
 #include "monster/monster-status.h"
 #include "player/player-damage.h"
 #include "system/floor-type-definition.h"
-#include "system/monster-race-definition.h"
+#include "system/monster-race-info.h"
 #include "system/monster-type-definition.h"
 #include "system/player-type-definition.h"
 #include "util/bit-flags-calculator.h"

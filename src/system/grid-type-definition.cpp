@@ -1,6 +1,6 @@
 ﻿#include "system/grid-type-definition.h"
 #include "monster-race/race-flags7.h"
-#include "system/monster-race-definition.h"
+#include "system/monster-race-info.h"
 #include "system/terrain-type-definition.h"
 #include "util/bit-flags-calculator.h"
 

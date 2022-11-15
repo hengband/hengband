@@ -11,7 +11,7 @@
 #include "perception/object-perception.h"
 #include "player/player-realm.h"
 #include "system/item-entity.h"
-#include "system/monster-race-definition.h"
+#include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
 
 /*!

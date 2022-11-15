@@ -4,7 +4,7 @@
 #include "monster/monster-info.h"
 #include "monster/monster-status.h"
 #include "save/save-util.h"
-#include "system/monster-race-definition.h"
+#include "system/monster-race-info.h"
 #include "system/monster-type-definition.h"
 #include "util/bit-flags-calculator.h"
 #include "util/enum-converter.h"

@@ -15,7 +15,7 @@
 #include "status/bad-status-setter.h"
 #include "status/base-status.h"
 #include "status/experience.h"
-#include "system/monster-race-definition.h"
+#include "system/monster-race-info.h"
 #include "system/monster-type-definition.h"
 #include "system/player-type-definition.h"
 #include "timed-effect/player-paralysis.h"

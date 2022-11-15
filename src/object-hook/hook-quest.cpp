@@ -9,7 +9,7 @@
 #include "system/artifact-type-definition.h"
 #include "system/floor-type-definition.h"
 #include "system/item-entity.h"
-#include "system/monster-race-definition.h"
+#include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
 #include "util/enum-converter.h"
 #include "world/world.h"

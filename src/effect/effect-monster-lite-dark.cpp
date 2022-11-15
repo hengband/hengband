@@ -4,7 +4,7 @@
 #include "monster-race/race-flags-resistance.h"
 #include "monster-race/race-flags3.h"
 #include "monster/monster-info.h"
-#include "system/monster-race-definition.h"
+#include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
 
 ProcessResult effect_monster_lite_weak(PlayerType *player_ptr, effect_monster_type *em_ptr)

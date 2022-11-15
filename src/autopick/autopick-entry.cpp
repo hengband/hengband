@@ -22,7 +22,7 @@
 #include "player/player-realm.h"
 #include "system/baseitem-info-definition.h"
 #include "system/item-entity.h"
-#include "system/monster-race-definition.h"
+#include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
 #include "util/quarks.h"
 #include "util/string-processor.h"

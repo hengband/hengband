@@ -20,7 +20,7 @@
 #include "system/artifact-type-definition.h"
 #include "system/baseitem-info-definition.h"
 #include "system/item-entity.h"
-#include "system/monster-race-definition.h"
+#include "system/monster-race-info.h"
 #include "term/screen-processor.h"
 #include "util/bit-flags-calculator.h"
 #include "util/buffer-shaper.h"

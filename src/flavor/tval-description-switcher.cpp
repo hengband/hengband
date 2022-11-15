@@ -12,7 +12,7 @@
 #include "object/tval-types.h"
 #include "system/baseitem-info-definition.h"
 #include "system/item-entity.h"
-#include "system/monster-race-definition.h"
+#include "system/monster-race-info.h"
 #include "util/enum-converter.h"
 #ifdef JP
 #else

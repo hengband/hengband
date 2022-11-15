@@ -8,7 +8,7 @@
 #include "monster-race/race-flags2.h"
 #include "monster-race/race-flags3.h"
 #include "monster-race/race-flags7.h"
-#include "system/monster-race-definition.h"
+#include "system/monster-race-info.h"
 #include "system/monster-type-definition.h"
 #include "term/term-color-types.h"
 

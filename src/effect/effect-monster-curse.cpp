@@ -2,7 +2,7 @@
 #include "effect/effect-monster-util.h"
 #include "monster-race/monster-race.h"
 #include "monster-race/race-indice-types.h"
-#include "system/monster-race-definition.h"
+#include "system/monster-race-info.h"
 #include "system/monster-type-definition.h"
 #include "view/display-messages.h"
 

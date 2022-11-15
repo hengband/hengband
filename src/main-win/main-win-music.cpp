@@ -16,7 +16,7 @@
 #include "main/sound-of-music.h"
 #include "monster-race/monster-race.h"
 #include "system/dungeon-info.h"
-#include "system/monster-race-definition.h"
+#include "system/monster-race-info.h"
 #include "term/z-term.h"
 #include "util/angband-files.h"
 #include "world/world.h"

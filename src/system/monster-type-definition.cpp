@@ -4,7 +4,7 @@
 #include "monster-race/race-indice-types.h"
 #include "monster-race/race-kind-flags.h"
 #include "monster/monster-status.h"
-#include "system/monster-race-definition.h"
+#include "system/monster-race-info.h"
 #include "util/string-processor.h"
 
 bool MonsterEntity::is_friendly() const

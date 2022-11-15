@@ -9,7 +9,7 @@
 #include "player-info/mimic-info-table.h"
 #include "player/player-status-table.h"
 #include "system/floor-type-definition.h"
-#include "system/monster-race-definition.h"
+#include "system/monster-race-info.h"
 #include "system/monster-type-definition.h"
 #include "system/player-type-definition.h"
 #include "term/screen-processor.h"

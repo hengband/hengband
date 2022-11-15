@@ -3860,7 +3860,7 @@
     <ClInclude Include="..\..\src\player-info\class-types.h">
       <Filter>player-info</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\system\monster-race-definition.h">
+    <ClInclude Include="..\..\src\system\monster-race-info.h">
       <Filter>system</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\realm\realm-types.h">

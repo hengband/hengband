@@ -918,7 +918,7 @@ hengband_SOURCES = \
 	system/h-basic.h system/h-config.h \
 	system/h-system.h system/h-type.h \
 	system/item-entity.cpp system/item-entity.h \
-	system/monster-race-definition.h \
+	system/monster-race-info.h \
 	system/monster-type-definition.cpp system/monster-type-definition.h \
 	system/player-type-definition.cpp system/player-type-definition.h \
 	system/system-variables.cpp system/system-variables.h \

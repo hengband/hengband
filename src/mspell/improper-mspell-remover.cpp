@@ -7,7 +7,7 @@
 #include "mspell/high-resistance-checker.h"
 #include "mspell/smart-mspell-util.h"
 #include "system/floor-type-definition.h"
-#include "system/monster-race-definition.h"
+#include "system/monster-race-info.h"
 #include "system/monster-type-definition.h"
 #include "system/player-type-definition.h"
 
