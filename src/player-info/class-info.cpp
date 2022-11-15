@@ -8,7 +8,7 @@
 #include "core/player-redraw-types.h"
 #include "inventory/inventory-slot-types.h"
 #include "player-info/race-info.h"
-#include "system/object-type-definition.h"
+#include "system/item-entity.h"
 
 /*
  * The magic info

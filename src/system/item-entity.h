@@ -1,7 +1,7 @@
 ﻿#pragma once
 
 /*
- * @file object-type-definition.h
+ * @file item-entity.h
  * @brief アイテム定義の構造体とエンティティ処理定義
  * @author Hourier
  * @date 2021/05/02

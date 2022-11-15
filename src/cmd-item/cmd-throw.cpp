@@ -15,7 +15,7 @@
 #include "player/special-defense-types.h"
 #include "specific-object/torch.h"
 #include "status/action-setter.h"
-#include "system/object-type-definition.h"
+#include "system/item-entity.h"
 #include "system/player-type-definition.h"
 
 ThrowCommand::ThrowCommand(PlayerType *player_ptr)

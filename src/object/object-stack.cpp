@@ -15,7 +15,7 @@
 #include "smith/object-smith.h"
 #include "sv-definition/sv-other-types.h"
 #include "system/baseitem-info-definition.h"
-#include "system/object-type-definition.h"
+#include "system/item-entity.h"
 
 /*!
  * @brief 魔法棒やロッドのスロット分割時に使用回数を分配する /

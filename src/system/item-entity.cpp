@@ -1,11 +1,11 @@
 ﻿/*
- * @file object-type-definition.h
+ * @file item-entity.cpp
  * @brief アイテム定義の構造体とエンティティ処理実装
  * @author Hourier
  * @date 2022/10/09
  */
 
-#include "system/object-type-definition.h"
+#include "system/item-entity.h"
 #include "artifact/fixed-art-types.h"
 #include "artifact/random-art-effects.h"
 #include "monster-race/monster-race.h"

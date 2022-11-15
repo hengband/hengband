@@ -27,7 +27,7 @@
 #include "system/artifact-type-definition.h"
 #include "system/baseitem-info-definition.h"
 #include "system/floor-type-definition.h"
-#include "system/object-type-definition.h"
+#include "system/item-entity.h"
 #include "system/player-type-definition.h"
 #include "util/bit-flags-calculator.h"
 

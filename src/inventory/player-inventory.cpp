@@ -28,7 +28,7 @@
 #include "spell-kind/spells-perception.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
-#include "system/object-type-definition.h"
+#include "system/item-entity.h"
 #include "system/player-type-definition.h"
 #include "target/target-checker.h"
 #include "view/display-messages.h"

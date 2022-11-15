@@ -1,7 +1,7 @@
 ﻿#pragma once
 
 #include "system/angband.h"
-#include "system/object-type-definition.h"
+#include "system/item-entity.h"
 
 struct self_info_type {
     int line;

@@ -11,7 +11,7 @@
 #include "object-hook/hook-weapon.h"
 #include "player-info/equipment-info.h"
 #include "player-status/player-hand-types.h"
-#include "system/object-type-definition.h"
+#include "system/item-entity.h"
 #include "system/player-type-definition.h"
 #include "view/display-messages.h"
 

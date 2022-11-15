@@ -6,7 +6,7 @@
 
 #include "object-enchant/weapon/apply-magic-digging.h"
 #include "artifact/random-art-generator.h"
-#include "system/object-type-definition.h"
+#include "system/item-entity.h"
 #include "system/player-type-definition.h"
 
 /*!

@@ -11,7 +11,7 @@
 #include "object-hook/hook-weapon.h"
 #include "object/tval-types.h"
 #include "sv-definition/sv-armor-types.h"
-#include "system/object-type-definition.h"
+#include "system/item-entity.h"
 #include "util/bit-flags-calculator.h"
 
 static bool random_art_bias_strength(ItemEntity *o_ptr)

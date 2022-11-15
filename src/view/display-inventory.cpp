@@ -10,7 +10,7 @@
 #include "object/item-use-flags.h"
 #include "object/object-info.h"
 #include "system/baseitem-info-definition.h"
-#include "system/object-type-definition.h"
+#include "system/item-entity.h"
 #include "system/player-type-definition.h"
 #include "term/gameterm.h"
 #include "term/screen-processor.h"

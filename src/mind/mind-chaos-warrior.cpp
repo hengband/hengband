@@ -6,7 +6,7 @@
 #include "sv-definition/sv-weapon-types.h"
 #include "system/baseitem-info-definition.h"
 #include "system/floor-type-definition.h"
-#include "system/object-type-definition.h"
+#include "system/item-entity.h"
 #include "system/player-type-definition.h"
 
 void acquire_chaos_weapon(PlayerType *player_ptr)

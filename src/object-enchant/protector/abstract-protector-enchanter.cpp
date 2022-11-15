@@ -6,7 +6,7 @@
 
 #include "object-enchant/protector/abstract-protector-enchanter.h"
 #include "object-enchant/object-boost.h"
-#include "system/object-type-definition.h"
+#include "system/item-entity.h"
 
 /*
  * @brief コンストラクタ

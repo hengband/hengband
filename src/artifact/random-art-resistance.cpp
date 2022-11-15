@@ -7,7 +7,7 @@
 #include "artifact/random-art-bias-types.h"
 #include "object-enchant/tr-types.h"
 #include "object/tval-types.h"
-#include "system/object-type-definition.h"
+#include "system/item-entity.h"
 #include "util/bit-flags-calculator.h"
 
 /*!

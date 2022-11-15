@@ -5,7 +5,7 @@
 #include "pet/pet-util.h"
 #include "player-base/player-class.h"
 #include "player-status/player-hand-types.h"
-#include "system/object-type-definition.h"
+#include "system/item-entity.h"
 #include "system/player-type-definition.h"
 #include "util/bit-flags-calculator.h"
 

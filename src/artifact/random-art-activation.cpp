@@ -8,7 +8,7 @@
 #include "artifact/random-art-effects.h"
 #include "object-enchant/object-boost.h"
 #include "object-enchant/tr-types.h"
-#include "system/object-type-definition.h"
+#include "system/item-entity.h"
 #include "util/bit-flags-calculator.h"
 #include "util/enum-converter.h"
 

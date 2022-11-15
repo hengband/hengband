@@ -3,7 +3,7 @@
 #include "inventory/inventory-slot-types.h"
 #include "object-enchant/object-ego.h"
 #include "sv-definition/sv-lite-types.h"
-#include "system/object-type-definition.h"
+#include "system/item-entity.h"
 #include "system/player-type-definition.h"
 
 LiteEnchanter::LiteEnchanter(PlayerType *player_ptr, ItemEntity *o_ptr, int power)

@@ -4,7 +4,7 @@
 #include "load/load-util.h"
 #include "load/old/item-loader-savefile50.h"
 #include "object/object-mark-types.h"
-#include "system/object-type-definition.h"
+#include "system/item-entity.h"
 #include "system/player-type-definition.h"
 
 /*!

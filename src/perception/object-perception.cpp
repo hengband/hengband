@@ -8,7 +8,7 @@
 #include "object-enchant/trg-types.h"
 #include "object/item-tester-hooker.h" // 暫定、このファイルへ引っ越す.
 #include "system/baseitem-info-definition.h"
-#include "system/object-type-definition.h"
+#include "system/item-entity.h"
 #include "system/player-type-definition.h"
 
 /*!

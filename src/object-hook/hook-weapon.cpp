@@ -5,7 +5,7 @@
 #include "object/tval-types.h"
 #include "player/player-skill.h"
 #include "sv-definition/sv-weapon-types.h"
-#include "system/object-type-definition.h"
+#include "system/item-entity.h"
 #include "system/player-type-definition.h"
 #include "util/bit-flags-calculator.h"
 

@@ -6,7 +6,7 @@
 
 #include "object-enchant/weapon/melee-weapon-enchanter.h"
 #include "artifact/random-art-generator.h"
-#include "system/object-type-definition.h"
+#include "system/item-entity.h"
 
 MeleeWeaponEnchanter::MeleeWeaponEnchanter(PlayerType *player_ptr, ItemEntity *o_ptr, DEPTH level, int power)
     : AbstractWeaponEnchanter(o_ptr, level, power)

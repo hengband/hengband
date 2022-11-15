@@ -14,7 +14,7 @@
 #include "cmd-io/cmd-save.h"
 #include "io/input-key-acceptor.h"
 #include "io/read-pref-file.h"
-#include "system/object-type-definition.h"
+#include "system/item-entity.h"
 #include "term/screen-processor.h"
 #include "util/int-char-converter.h"
 #include "world/world.h"

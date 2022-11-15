@@ -7,7 +7,7 @@
 #include "player-info/class-info.h"
 #include "player/player-realm.h"
 #include "realm/realm-names-table.h"
-#include "system/object-type-definition.h"
+#include "system/item-entity.h"
 #include "system/player-type-definition.h"
 #include "util/bit-flags-calculator.h"
 #include "util/enum-converter.h"

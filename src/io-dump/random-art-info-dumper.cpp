@@ -4,7 +4,7 @@
 #include "io/files-util.h"
 #include "perception/object-perception.h"
 #include "store/store-util.h"
-#include "system/object-type-definition.h"
+#include "system/item-entity.h"
 #include "system/player-type-definition.h"
 #include "util/angband-files.h"
 #include "view/display-messages.h"

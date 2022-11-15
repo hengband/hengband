@@ -2202,7 +2202,7 @@
     <ClCompile Include="..\..\src\view\display-scores.cpp">
       <Filter>view</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\system\object-type-definition.cpp">
+    <ClCompile Include="..\..\src\system\item-entity.cpp">
       <Filter>system</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\object\object-index-list.cpp">
@@ -3683,7 +3683,7 @@
     <ClInclude Include="..\..\src\core\speed-table.h">
       <Filter>core</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\system\object-type-definition.h">
+    <ClInclude Include="..\..\src\system\item-entity.h">
       <Filter>system</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\monster\monster-util.h">

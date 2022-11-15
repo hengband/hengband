@@ -3,7 +3,7 @@
 #include "object/object-kind-hook.h"
 #include "sv-definition/sv-food-types.h"
 #include "system/baseitem-info-definition.h"
-#include "system/object-type-definition.h"
+#include "system/item-entity.h"
 #include "system/player-type-definition.h"
 #include "view/display-messages.h"
 

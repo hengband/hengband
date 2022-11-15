@@ -594,7 +594,7 @@
     <ClCompile Include="..\..\src\store\service-checker.cpp" />
     <ClCompile Include="..\..\src\system\angband-version.cpp" />
     <ClCompile Include="..\..\src\system\monster-type-definition.cpp" />
-    <ClCompile Include="..\..\src\system\object-type-definition.cpp" />
+    <ClCompile Include="..\..\src\system\item-entity.cpp" />
     <ClCompile Include="..\..\src\system\player-type-definition.cpp" />
     <ClCompile Include="..\..\src\system\terrain-type-definition.cpp" />
     <ClCompile Include="..\..\src\target\grid-selector.cpp" />
@@ -1561,7 +1561,7 @@
     <ClInclude Include="..\..\src\system\building-type-definition.h" />
     <ClInclude Include="..\..\src\system\game-option-types.h" />
     <ClInclude Include="..\..\src\system\monster-race-definition.h" />
-    <ClInclude Include="..\..\src\system\object-type-definition.h" />
+    <ClInclude Include="..\..\src\system\item-entity.h" />
     <ClInclude Include="..\..\src\object-enchant\old-ego-extra-values.h" />
     <ClInclude Include="..\..\src\object-enchant\special-object-flags.h" />
     <ClInclude Include="..\..\src\realm\realm-hex-numbers.h" />

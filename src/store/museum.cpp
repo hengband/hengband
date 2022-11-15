@@ -4,7 +4,7 @@
 #include "store/home.h"
 #include "store/store-util.h"
 #include "store/store.h"
-#include "system/object-type-definition.h"
+#include "system/item-entity.h"
 #include "view/display-messages.h"
 #include "view/display-store.h"
 

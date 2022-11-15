@@ -10,7 +10,7 @@
 #include "player-info/magic-eater-data-type.h"
 #include "player-status/player-energy.h"
 #include "sv-definition/sv-staff-types.h"
-#include "system/object-type-definition.h"
+#include "system/item-entity.h"
 #include "system/player-type-definition.h"
 #include "view/display-messages.h"
 

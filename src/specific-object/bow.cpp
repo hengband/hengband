@@ -1,7 +1,7 @@
 ﻿#include "specific-object/bow.h"
 #include "object/tval-types.h"
 #include "sv-definition/sv-bow-types.h"
-#include "system/object-type-definition.h"
+#include "system/item-entity.h"
 
 /*!
  * @brief 射撃武器に対応する矢/弾薬のベースアイテムIDを返す /

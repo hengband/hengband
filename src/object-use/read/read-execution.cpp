@@ -22,7 +22,7 @@
 #include "spell-realm/spells-song.h"
 #include "status/experience.h"
 #include "system/baseitem-info-definition.h"
-#include "system/object-type-definition.h"
+#include "system/item-entity.h"
 #include "system/player-type-definition.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"

@@ -4,7 +4,7 @@
 #include "object/tval-types.h"
 #include "smith/smith-types.h"
 #include "sv-definition/sv-weapon-types.h"
-#include "system/object-type-definition.h"
+#include "system/item-entity.h"
 #include "system/player-type-definition.h"
 
 ISmithInfo::ISmithInfo(SmithEffectType effect, concptr name, SmithCategoryType category, std::vector<SmithEssenceType> need_essences, int consumption)

@@ -8,7 +8,7 @@
 #include "object-hook/hook-weapon.h"
 #include "object/object-info.h"
 #include "racial/racial-android.h"
-#include "system/object-type-definition.h"
+#include "system/item-entity.h"
 #include "system/player-type-definition.h"
 #include "view/display-messages.h"
 

@@ -1,7 +1,7 @@
 ﻿#include "object-hook/hook-perception.h"
 #include "object-hook/hook-weapon.h"
 #include "perception/object-perception.h"
-#include "system/object-type-definition.h"
+#include "system/item-entity.h"
 #include "system/player-type-definition.h"
 
 /*!

@@ -19,7 +19,7 @@
 #include "player-status/player-energy.h"
 #include "smith/object-smith.h"
 #include "smith/smith-types.h"
-#include "system/object-type-definition.h"
+#include "system/item-entity.h"
 #include "system/player-type-definition.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"

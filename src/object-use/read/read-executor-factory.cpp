@@ -5,7 +5,7 @@
 #include "object-use/read/ring-power-read-executor.h"
 #include "object-use/read/scroll-read-executor.h"
 #include "object/tval-types.h"
-#include "system/object-type-definition.h"
+#include "system/item-entity.h"
 
 std::unique_ptr<ReadExecutorBase> ReadExecutorFactory::create(PlayerType *player_ptr, ItemEntity *o_ptr, bool known)
 {

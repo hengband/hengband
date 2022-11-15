@@ -26,7 +26,7 @@
 #include "player/special-defense-types.h"
 #include "realm/realm-types.h"
 #include "status/action-setter.h"
-#include "system/object-type-definition.h"
+#include "system/item-entity.h"
 #include "system/player-type-definition.h"
 #include "timed-effect/player-blindness.h"
 #include "timed-effect/timed-effects.h"

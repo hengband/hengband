@@ -1,7 +1,6 @@
 ﻿#pragma once
 
-#include "system/object-type-definition.h"
-
+class ItemEntity;
 class ItemLoaderBase {
 public:
     virtual ~ItemLoaderBase() = default;

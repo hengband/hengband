@@ -3,7 +3,7 @@
 #include "load/old/item-flag-types-savefile50.h"
 #include "save/save-util.h"
 #include "system/baseitem-info-definition.h"
-#include "system/object-type-definition.h"
+#include "system/item-entity.h"
 #include "util/bit-flags-calculator.h"
 #include "util/enum-converter.h"
 #include "util/quarks.h"

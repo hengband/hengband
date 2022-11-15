@@ -12,7 +12,7 @@
 #include "store/store-util.h"
 #include "store/store.h" //!< @todo 相互依存している、こっちは残す？.
 #include "system/baseitem-info-definition.h"
-#include "system/object-type-definition.h"
+#include "system/item-entity.h"
 #include "system/player-type-definition.h"
 #include "system/terrain-type-definition.h"
 #include "term/gameterm.h"
