@@ -63,5 +63,5 @@ bool object_is_quest_target(QuestId quest_idx, ObjectType *o_ptr)
         return false;
     }
 
-    return (o_ptr->tval == a_ref.tval) && (o_ptr->sval == a_ref.sval);
+    return (o_ptr->tval == a_ref.bi_key.tval()) && (o_ptr->sval == a_ref.bi_key.sval());
 }

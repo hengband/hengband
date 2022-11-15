@@ -111,13 +111,12 @@ void display_rumor(PlayerType *player_ptr, bool ex)
     if (category == "ARTIFACT") {
         const auto &artifact_name = tokens[1];
         const auto &[a_idx, a_ptr] = get_artifact_definition(artifact_name);
-        const auto k_idx = lookup_baseitem_id({ a_ptr->tval, a_ptr->sval });
-        ObjectType forge;
-        auto *q_ptr = &forge;
-        q_ptr->prep(k_idx);
-        q_ptr->fixed_artifact_idx = a_idx;
-        q_ptr->ident = IDENT_STORE;
-        describe_flavor(player_ptr, fullname, q_ptr, OD_NAME_ONLY);
+        const auto k_idx = lookup_baseitem_id(a_ptr->bi_key);
+        ObjectType item;
+        item.prep(k_idx);
+        item.fixed_artifact_idx = a_idx;
+        item.ident = IDENT_STORE;
+        describe_flavor(player_ptr, fullname, &item, OD_NAME_ONLY);
     } else if (category == "MONSTER") {
         monster_race *r_ptr;
         const auto &monster_name = tokens[1];

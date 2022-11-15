@@ -100,18 +100,19 @@ void do_cmd_knowledge_artifacts(PlayerType *player_ptr)
         const auto &a_ref = artifacts_info.at(a_idx);
         GAME_TEXT base_name[MAX_NLEN];
         strcpy(base_name, _("未知の伝説のアイテム", "Unknown Artifact"));
-        const auto z = lookup_baseitem_id({ a_ref.tval, a_ref.sval });
-        if (z != 0) {
-            ObjectType forge;
-            ObjectType *q_ptr;
-            q_ptr = &forge;
-            q_ptr->prep(z);
-            q_ptr->fixed_artifact_idx = a_idx;
-            q_ptr->ident |= IDENT_STORE;
-            describe_flavor(player_ptr, base_name, q_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
+        const auto bi_id = lookup_baseitem_id(a_ref.bi_key);
+        constexpr auto template_basename = _("     %s\n", "     The %s\n");
+        if (bi_id == 0) {
+            fprintf(fff, template_basename, base_name);
+            continue;
         }
 
-        fprintf(fff, _("     %s\n", "     The %s\n"), base_name);
+        ObjectType item;
+        item.prep(bi_id);
+        item.fixed_artifact_idx = a_idx;
+        item.ident |= IDENT_STORE;
+        describe_flavor(player_ptr, base_name, &item, (OD_OMIT_PREFIX | OD_NAME_ONLY));
+        fprintf(fff, template_basename, base_name);
     }
 
     angband_fclose(fff);

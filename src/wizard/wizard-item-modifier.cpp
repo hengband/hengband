@@ -945,12 +945,12 @@ WishResultType do_cmd_wishing(PlayerType *player_ptr, int prob, bool allow_art, 
                 continue;
             }
 
-            const auto k_idx = lookup_baseitem_id({ a_ref.tval, a_ref.sval });
-            if (!k_idx) {
+            const auto bi_id = lookup_baseitem_id(a_ref.bi_key);
+            if (bi_id == 0) {
                 continue;
             }
 
-            o_ptr->prep(k_idx);
+            o_ptr->prep(bi_id);
             o_ptr->fixed_artifact_idx = a_idx;
 
             describe_flavor(player_ptr, o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY | OD_STORE));
@@ -1038,16 +1038,17 @@ WishResultType do_cmd_wishing(PlayerType *player_ptr, int prob, bool allow_art, 
         FixedArtifactId a_idx = FixedArtifactId::NONE;
         if (k_ptr->gen_flags.has(ItemGenerationTraitType::INSTA_ART)) {
             for (const auto &[a_idx_loop, a_ref_loop] : artifacts_info) {
-                if (a_idx_loop == FixedArtifactId::NONE || a_ref_loop.tval != k_ptr->tval || a_ref_loop.sval != k_ptr->sval) {
+                if (a_idx_loop == FixedArtifactId::NONE || a_ref_loop.bi_key.tval() != k_ptr->tval || a_ref_loop.bi_key.sval() != k_ptr->sval) {
                     continue;
                 }
+
                 a_idx = a_idx_loop;
                 break;
             }
         }
 
         if (a_idx != FixedArtifactId::NONE) {
-            auto &a_ref = artifacts_info.at(a_idx);
+            const auto &a_ref = artifacts_info.at(a_idx);
             if (must || (ok_art && !a_ref.is_generated)) {
                 (void)create_named_art(player_ptr, a_idx, player_ptr->y, player_ptr->x);
             } else {

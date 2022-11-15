@@ -92,12 +92,12 @@ static bool make_fake_artifact(ObjectType *o_ptr, FixedArtifactId fixed_artifact
         return false;
     }
 
-    const auto i = lookup_baseitem_id({ a_ref.tval, a_ref.sval });
-    if (i == 0) {
+    const auto bi_id = lookup_baseitem_id(a_ref.bi_key);
+    if (bi_id == 0) {
         return false;
     }
 
-    o_ptr->prep(i);
+    o_ptr->prep(bi_id);
     o_ptr->fixed_artifact_idx = fixed_artifact_idx;
     o_ptr->pval = a_ref.pval;
     o_ptr->ac = a_ref.ac;
@@ -166,19 +166,18 @@ SpoilerOutputResultType spoil_fixed_artifact(concptr fname)
 
         for (auto tval : tval_list) {
             for (const auto &[a_idx, a_ref] : artifacts_info) {
-                if (a_ref.tval != tval) {
+                if (a_ref.bi_key.tval() != tval) {
                     continue;
                 }
 
-                ObjectType obj;
-                obj.wipe();
-                if (!make_fake_artifact(&obj, a_idx)) {
+                ObjectType item;
+                if (!make_fake_artifact(&item, a_idx)) {
                     continue;
                 }
 
                 PlayerType dummy;
                 obj_desc_list artifact;
-                object_analyze(&dummy, &obj, &artifact);
+                object_analyze(&dummy, &item, &artifact);
                 spoiler_print_art(&artifact);
             }
         }

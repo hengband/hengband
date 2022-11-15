@@ -1,5 +1,11 @@
 ﻿#include "system/artifact-type-definition.h"
 #include "artifact/fixed-art-types.h"
+#include "object/tval-types.h"
+
+ArtifactType::ArtifactType()
+    : bi_key(BaseitemKey(ItemKindType::NONE))
+{
+}
 
 std::map<FixedArtifactId, ArtifactType> artifacts_info;
 
