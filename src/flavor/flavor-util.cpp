@@ -473,7 +473,7 @@ char *object_desc_count_japanese(char *t, ObjectType *o_ptr)
             break;
         }
     }
-        /* Fall through */
+        [[fallthrough]];
     default: {
         if (o_ptr->number < 10) {
             t = object_desc_str(t, "つ");

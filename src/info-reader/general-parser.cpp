@@ -100,7 +100,7 @@ parse_error_type parse_line_feature(FloorType *floor_ptr, char *buf)
     switch (num) {
     case 9:
         letter[index].special = (int16_t)atoi(zz[8]);
-        /* Fall through */
+        [[fallthrough]];
     case 8:
         if ((zz[7][0] == '*') && !zz[7][1]) {
             letter[index].random |= RANDOM_TRAP;
@@ -110,7 +110,7 @@ parse_error_type parse_line_feature(FloorType *floor_ptr, char *buf)
                 return PARSE_ERROR_UNDEFINED_TERRAIN_TAG;
             }
         }
-        /* Fall through */
+        [[fallthrough]];
     case 7:
         if (zz[6][0] == '*') {
             letter[index].random |= RANDOM_ARTIFACT;
@@ -125,7 +125,7 @@ parse_error_type parse_line_feature(FloorType *floor_ptr, char *buf)
         } else {
             letter[index].artifact = i2enum<FixedArtifactId>(atoi(zz[6]));
         }
-        /* Fall through */
+        [[fallthrough]];
     case 6:
         if (zz[5][0] == '*') {
             letter[index].random |= RANDOM_EGO;
@@ -135,7 +135,7 @@ parse_error_type parse_line_feature(FloorType *floor_ptr, char *buf)
         } else {
             letter[index].ego = i2enum<EgoType>(atoi(zz[5]));
         }
-        /* Fall through */
+        [[fallthrough]];
     case 5:
         if (zz[4][0] == '*') {
             letter[index].random |= RANDOM_OBJECT;
@@ -156,7 +156,7 @@ parse_error_type parse_line_feature(FloorType *floor_ptr, char *buf)
         } else {
             letter[index].object = (OBJECT_IDX)atoi(zz[4]);
         }
-        /* Fall through */
+        [[fallthrough]];
     case 4:
         if (zz[3][0] == '*') {
             letter[index].random |= RANDOM_MONSTER;
@@ -171,10 +171,10 @@ parse_error_type parse_line_feature(FloorType *floor_ptr, char *buf)
         } else {
             letter[index].monster = (MONSTER_IDX)atoi(zz[3]);
         }
-        /* Fall through */
+        [[fallthrough]];
     case 3:
         letter[index].cave_info = atoi(zz[2]);
-        /* Fall through */
+        [[fallthrough]];
     case 2:
         if ((zz[1][0] == '*') && !zz[1][1]) {
             letter[index].random |= RANDOM_FEATURE;

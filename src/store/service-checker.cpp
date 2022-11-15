@@ -110,14 +110,14 @@ static bool check_store_temple(const ObjectType *o_ptr)
             }
         }
     }
-        /* Fall through */
+        [[fallthrough]];
     case ItemKindType::POLEARM:
     case ItemKindType::SWORD:
         if (is_blessed_item(o_ptr)) {
             return true;
         }
 
-        /* Fall through */
+        [[fallthrough]];
     default:
         return false;
     }

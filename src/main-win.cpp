@@ -1943,7 +1943,7 @@ static void process_menus(PlayerType *player_ptr, WORD wCmd)
         }
         // 壁紙の設定に失敗した（ファイルが存在しない等）場合、壁紙に使うファイルを選択させる
     }
-        [[fallthrough]]; /* Fall through */
+        [[fallthrough]];
     case IDM_OPTIONS_OPEN_BG: {
         memset(&ofn, 0, sizeof(ofn));
         ofn.lStructSize = sizeof(ofn);
@@ -2035,7 +2035,7 @@ static bool process_keydown(WPARAM wParam, LPARAM lParam)
         switch (wParam) {
         case VK_DIVIDE:
             term_no_press = true;
-            [[fallthrough]]; /* Fall through */
+            [[fallthrough]];
         case VK_RETURN:
             numpad = ext_key;
             break;
@@ -2055,7 +2055,7 @@ static bool process_keydown(WPARAM wParam, LPARAM lParam)
         case VK_SEPARATOR:
         case VK_DECIMAL:
             term_no_press = true;
-            [[fallthrough]]; /* Fall through */
+            [[fallthrough]];
         case VK_CLEAR:
         case VK_HOME:
         case VK_END:
@@ -2479,7 +2479,7 @@ LRESULT PASCAL angband_window_procedure(HWND hWnd, UINT uMsg, WPARAM wParam, LPA
             }
         }
     }
-        [[fallthrough]]; /* Fall through */
+        [[fallthrough]];
     case WM_ENABLE: {
         if (wParam == FALSE && keep_subwindows) {
             for (int i = 1; i < MAX_TERM_DATA; i++) {

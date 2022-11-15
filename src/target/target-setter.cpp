@@ -258,7 +258,7 @@ static void switch_target_input(PlayerType *player_ptr, ts_type *ts_ptr)
         ts_ptr->y = player_ptr->y;
         ts_ptr->x = player_ptr->x;
     }
-        /* Fall through */
+        [[fallthrough]];
     case 'o':
         ts_ptr->flag = false;
         return;

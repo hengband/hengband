@@ -298,7 +298,7 @@ void do_cmd_knowledge_features(bool *need_redraw, bool visual_only, IDX direct_f
                     f_ptr->x_char[i] = char_old[i];
                 }
 
-                /* Fall through */
+                [[fallthrough]];
             case '\n':
             case '\r':
                 if (direct_f_idx >= 0) {

@@ -2159,21 +2159,21 @@ static short calc_to_damage(PlayerType *player_ptr, INVENTORY_IDX slot, bool is_
         }
 
         switch (player_melee_type(player_ptr)) {
-        case MELEE_TYPE_BAREHAND_TWO: /* fall through */
+        case MELEE_TYPE_BAREHAND_TWO:
         case MELEE_TYPE_WEAPON_TWOHAND:
             if (calc_hand == main_attack_hand(player_ptr)) {
                 damage += (int16_t)bonus_to_d;
             }
             break;
 
-        case MELEE_TYPE_BAREHAND_MAIN: /* fall through */
+        case MELEE_TYPE_BAREHAND_MAIN:
         case MELEE_TYPE_WEAPON_MAIN:
             if ((calc_hand == PLAYER_HAND_MAIN) && (i != INVEN_SUB_RING)) {
                 damage += (int16_t)bonus_to_d;
             }
             break;
 
-        case MELEE_TYPE_BAREHAND_SUB: /* fall through */
+        case MELEE_TYPE_BAREHAND_SUB:
         case MELEE_TYPE_WEAPON_SUB:
             if ((calc_hand == PLAYER_HAND_SUB) && (i != INVEN_MAIN_RING)) {
                 damage += (int16_t)bonus_to_d;
@@ -2270,12 +2270,12 @@ static short calc_to_hit(PlayerType *player_ptr, INVENTORY_IDX slot, bool is_rea
             if (player_ptr->riding) {
                 break;
             }
-            /* fall through */
+            [[fallthrough]];
         case MELEE_TYPE_BAREHAND_SUB:
             if (player_ptr->riding) {
                 break;
             }
-            /* fall through */
+            [[fallthrough]];
         case MELEE_TYPE_BAREHAND_TWO:
             hit += (player_ptr->skill_exp[PlayerSkillKindType::MARTIAL_ARTS] - PlayerSkill::weapon_exp_at(PlayerSkillRank::BEGINNER)) / 200;
             break;
@@ -2395,21 +2395,21 @@ static short calc_to_hit(PlayerType *player_ptr, INVENTORY_IDX slot, bool is_rea
         }
 
         switch (player_melee_type(player_ptr)) {
-        case MELEE_TYPE_BAREHAND_TWO: /* fall through */
+        case MELEE_TYPE_BAREHAND_TWO:
         case MELEE_TYPE_WEAPON_TWOHAND:
             if (calc_hand == main_attack_hand(player_ptr)) {
                 hit += (int16_t)bonus_to_h;
             }
             break;
 
-        case MELEE_TYPE_BAREHAND_MAIN: /* fall through */
+        case MELEE_TYPE_BAREHAND_MAIN:
         case MELEE_TYPE_WEAPON_MAIN:
             if ((calc_hand == PLAYER_HAND_MAIN) && (i != INVEN_SUB_RING)) {
                 hit += (int16_t)bonus_to_h;
             }
             break;
 
-        case MELEE_TYPE_BAREHAND_SUB: /* fall through */
+        case MELEE_TYPE_BAREHAND_SUB:
         case MELEE_TYPE_WEAPON_SUB:
             if ((calc_hand == PLAYER_HAND_SUB) && (i != INVEN_MAIN_RING)) {
                 hit += (int16_t)bonus_to_h;
