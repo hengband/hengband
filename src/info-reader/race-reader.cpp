@@ -189,22 +189,21 @@ errr parse_monraces_info(std::string_view buf, angband_header *)
         info_set_value(r_ptr->ac, tokens[4]);
         info_set_value(r_ptr->sleep, tokens[5]);
     } else if (tokens[0] == "W") {
-        // W:level:ratity:extra:exp:next_exp:next_id
-        if (tokens.size() < 5 || tokens.size() == 6) {
+        // W:level:ratity:exp:next_exp:next_id
+        if ((tokens.size() < 4) || (tokens.size() == 5)) {
             return PARSE_ERROR_TOO_FEW_ARGUMENTS;
         }
 
         info_set_value(r_ptr->level, tokens[1]);
         info_set_value(r_ptr->rarity, tokens[2]);
-        info_set_value(r_ptr->extra, tokens[3]);
-        info_set_value(r_ptr->mexp, tokens[4]);
+        info_set_value(r_ptr->mexp, tokens[3]);
 
-        if (tokens.size() < 6) {
+        if (tokens.size() < 5) {
             return PARSE_ERROR_NONE;
         }
 
-        info_set_value(r_ptr->next_exp, tokens[5]);
-        info_set_value(r_ptr->next_r_idx, tokens[6]);
+        info_set_value(r_ptr->next_exp, tokens[4]);
+        info_set_value(r_ptr->next_r_idx, tokens[5]);
     } else if (tokens[0] == "R") {
         // R:reinforcer_idx:number_dice
         if (tokens.size() < 3) {
