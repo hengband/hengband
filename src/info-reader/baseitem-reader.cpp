@@ -14,17 +14,18 @@
 #include "system/baseitem-info-definition.h"
 #include "term/gameterm.h"
 #include "util/bit-flags-calculator.h"
+#include "util/enum-converter.h"
 #include "util/string-processor.h"
 #include "view/display-messages.h"
 
 /*!
  * @brief テキストトークンを走査してフラグを一つ得る(ベースアイテム用) /
- * Grab one flag in an BaseItemInfo from a textual string
+ * Grab one flag in an BaseitemInfo from a textual string
  * @param k_ptr 保管先のベースアイテム構造体参照ポインタ
  * @param what 参照元の文字列ポインタ
  * @return 見つけたらtrue
  */
-static bool grab_one_baseitem_flag(BaseItemInfo *k_ptr, std::string_view what)
+static bool grab_one_baseitem_flag(BaseitemInfo *k_ptr, std::string_view what)
 {
     if (TrFlags::grab_one_flag(k_ptr->flags, baseitem_flags, what)) {
         return true;
@@ -47,7 +48,7 @@ static bool grab_one_baseitem_flag(BaseItemInfo *k_ptr, std::string_view what)
 errr parse_baseitems_info(std::string_view buf, angband_header *head)
 {
     (void)head;
-    static BaseItemInfo *k_ptr = nullptr;
+    static BaseitemInfo *k_ptr = nullptr;
     const auto &tokens = str_split(buf, ':', false, 10);
 
     if (tokens[0] == "N") {
@@ -124,8 +125,10 @@ errr parse_baseitems_info(std::string_view buf, angband_header *head)
             return PARSE_ERROR_TOO_FEW_ARGUMENTS;
         }
 
-        info_set_value(k_ptr->tval, tokens[1]);
-        info_set_value(k_ptr->sval, tokens[2]);
+        constexpr auto base = 10;
+        const auto tval = i2enum<ItemKindType>(std::stoi(tokens[1], nullptr, base));
+        const auto sval = std::stoi(tokens[2], nullptr, base);
+        k_ptr->bi_key = { tval, sval };
         info_set_value(k_ptr->pval, tokens[3]);
     } else if (tokens[0] == "W") {
         // W:level:weight:cost

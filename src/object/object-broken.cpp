@@ -255,8 +255,8 @@ bool potion_smash_effect(PlayerType *player_ptr, MONSTER_IDX who, POSITION y, PO
     AttributeType dt = AttributeType::NONE;
     int dam = 0;
     bool angry = false;
-    auto *k_ptr = &baseitems_info[k_idx];
-    switch (k_ptr->sval) {
+    const auto &k_ref = baseitems_info[k_idx];
+    switch (k_ref.bi_key.sval().value()) {
     case SV_POTION_SALT_WATER:
     case SV_POTION_SLIME_MOLD:
     case SV_POTION_LOSE_MEMORIES:
@@ -331,7 +331,7 @@ bool potion_smash_effect(PlayerType *player_ptr, MONSTER_IDX who, POSITION y, PO
         break;
     case SV_POTION_DEATH:
         dt = AttributeType::DEATH_RAY;
-        dam = k_ptr->level * 10;
+        dam = k_ref.level * 10;
         angry = true;
         radius = 1;
         break;

@@ -17,6 +17,7 @@
 #include "knowledge/object-group-table.h"
 #include "object-enchant/special-object-flags.h"
 #include "object/object-kind-hook.h"
+#include "object/tval-types.h"
 #include "perception/identification.h"
 #include "perception/object-perception.h"
 #include "system/artifact-type-definition.h"
@@ -152,13 +153,14 @@ static KIND_OBJECT_IDX collect_objects(int grp_cur, KIND_OBJECT_IDX object_idx[]
             }
         }
 
+        const auto tval = k_ref.bi_key.tval();
         if (group_tval == ItemKindType::LIFE_BOOK) {
-            if (ItemKindType::LIFE_BOOK <= k_ref.tval && k_ref.tval <= ItemKindType::HEX_BOOK) {
+            if (ItemKindType::LIFE_BOOK <= tval && tval <= ItemKindType::HEX_BOOK) {
                 object_idx[object_cnt++] = k_ref.idx;
             } else {
                 continue;
             }
-        } else if (k_ref.tval == group_tval) {
+        } else if (tval == group_tval) {
             object_idx[object_cnt++] = k_ref.idx;
         } else {
             continue;
@@ -181,7 +183,7 @@ static void display_object_list(int col, int row, int per_page, IDX object_idx[]
     int i;
     for (i = 0; i < per_page && (object_idx[object_top + i] >= 0); i++) {
         TERM_COLOR a;
-        BaseItemInfo *flavor_k_ptr;
+        BaseitemInfo *flavor_k_ptr;
         KIND_OBJECT_IDX k_idx = object_idx[object_top + i];
         auto *k_ptr = &baseitems_info[k_idx];
         TERM_COLOR attr = ((k_ptr->aware || visual_only) ? TERM_WHITE : TERM_SLATE);
@@ -277,7 +279,7 @@ void do_cmd_knowledge_objects(PlayerType *player_ptr, bool *need_redraw, bool vi
         object_cnt = 0;
     } else {
         auto *k_ptr = &baseitems_info[direct_k_idx];
-        BaseItemInfo *flavor_k_ptr;
+        BaseitemInfo *flavor_k_ptr;
 
         if (!visual_only && k_ptr->flavor) {
             flavor_k_ptr = &baseitems_info[k_ptr->flavor];
@@ -303,7 +305,7 @@ void do_cmd_knowledge_objects(PlayerType *player_ptr, bool *need_redraw, bool vi
     bool redraw = true;
     int column = 0;
     while (!flag) {
-        BaseItemInfo *k_ptr, *flavor_k_ptr;
+        BaseitemInfo *k_ptr, *flavor_k_ptr;
 
         if (redraw) {
             clear_from(0);

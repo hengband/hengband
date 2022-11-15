@@ -41,7 +41,7 @@ bool eat_magic(PlayerType *player_ptr, int power)
         return false;
     }
 
-    BaseItemInfo *k_ptr;
+    BaseitemInfo *k_ptr;
     k_ptr = &baseitems_info[o_ptr->k_idx];
     DEPTH lev = baseitems_info[o_ptr->k_idx].level;
 

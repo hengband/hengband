@@ -55,7 +55,7 @@
 static bool object_easy_know(int i)
 {
     auto *k_ptr = &baseitems_info[i];
-    switch (k_ptr->tval) {
+    switch (k_ptr->bi_key.tval()) {
     case ItemKindType::LIFE_BOOK:
     case ItemKindType::SORCERY_BOOK:
     case ItemKindType::NATURE_BOOK:
@@ -192,7 +192,7 @@ static void shuffle_flavors(ItemKindType tval)
 {
     std::vector<std::reference_wrapper<IDX>> flavor_idx_ref_list;
     for (const auto &k_ref : baseitems_info) {
-        if (k_ref.tval != tval) {
+        if (k_ref.bi_key.tval() != tval) {
             continue;
         }
 

@@ -152,45 +152,49 @@ static PRICE repair_broken_weapon_aux(PlayerType *player_ptr, PRICE bcost)
         return 0;
     }
 
-    KIND_OBJECT_IDX k_idx;
+    short bi_id;
     if (o_ptr->sval == SV_BROKEN_DAGGER) {
-        int n = 1;
-        k_idx = 0;
+        auto n = 1;
+        bi_id = 0;
         for (const auto &k_ref : baseitems_info) {
-            if (k_ref.tval != ItemKindType::SWORD) {
+            if (k_ref.bi_key.tval() != ItemKindType::SWORD) {
                 continue;
             }
-            if ((k_ref.sval == SV_BROKEN_DAGGER) || (k_ref.sval == SV_BROKEN_SWORD) || (k_ref.sval == SV_POISON_NEEDLE)) {
+
+            const auto sval = k_ref.bi_key.sval();
+            if ((sval == SV_BROKEN_DAGGER) || (sval == SV_BROKEN_SWORD) || (sval == SV_POISON_NEEDLE)) {
                 continue;
             }
+
             if (k_ref.weight > 99) {
                 continue;
             }
 
             if (one_in_(n)) {
-                k_idx = k_ref.idx;
+                bi_id = k_ref.idx;
                 n++;
             }
         }
     } else {
         auto tval = (one_in_(5) ? mo_ptr->tval : ItemKindType::SWORD);
         while (true) {
-            BaseItemInfo *ck_ptr;
-            k_idx = lookup_baseitem_id({ tval });
-            ck_ptr = &baseitems_info[k_idx];
-
+            bi_id = lookup_baseitem_id({ tval });
+            const auto &bi_ref = baseitems_info[bi_id];
+            const auto sval = bi_ref.bi_key.sval();
             if (tval == ItemKindType::SWORD) {
-                if ((ck_ptr->sval == SV_BROKEN_DAGGER) || (ck_ptr->sval == SV_BROKEN_SWORD) || (ck_ptr->sval == SV_DIAMOND_EDGE) || (ck_ptr->sval == SV_POISON_NEEDLE)) {
+                if ((sval == SV_BROKEN_DAGGER) || (sval == SV_BROKEN_SWORD) || (sval == SV_DIAMOND_EDGE) || (sval == SV_POISON_NEEDLE)) {
                     continue;
                 }
             }
+
             if (tval == ItemKindType::POLEARM) {
-                if ((ck_ptr->sval == SV_DEATH_SCYTHE) || (ck_ptr->sval == SV_TSURIZAO)) {
+                if ((sval == SV_DEATH_SCYTHE) || (sval == SV_TSURIZAO)) {
                     continue;
                 }
             }
+
             if (tval == ItemKindType::HAFTED) {
-                if ((ck_ptr->sval == SV_GROND) || (ck_ptr->sval == SV_WIZSTAFF) || (ck_ptr->sval == SV_NAMAKE_HAMMER)) {
+                if ((sval == SV_GROND) || (sval == SV_WIZSTAFF) || (sval == SV_NAMAKE_HAMMER)) {
                     continue;
                 }
             }
@@ -199,27 +203,26 @@ static PRICE repair_broken_weapon_aux(PlayerType *player_ptr, PRICE bcost)
         }
     }
 
-    int dd_bonus = o_ptr->dd - baseitems_info[o_ptr->k_idx].dd;
-    int ds_bonus = o_ptr->ds - baseitems_info[o_ptr->k_idx].ds;
+    auto dd_bonus = o_ptr->dd - baseitems_info[o_ptr->k_idx].dd;
+    auto ds_bonus = o_ptr->ds - baseitems_info[o_ptr->k_idx].ds;
     dd_bonus += mo_ptr->dd - baseitems_info[mo_ptr->k_idx].dd;
     ds_bonus += mo_ptr->ds - baseitems_info[mo_ptr->k_idx].ds;
 
-    BaseItemInfo *k_ptr;
-    k_ptr = &baseitems_info[k_idx];
-    o_ptr->k_idx = k_idx;
-    o_ptr->weight = k_ptr->weight;
-    o_ptr->tval = k_ptr->tval;
-    o_ptr->sval = k_ptr->sval;
-    o_ptr->dd = k_ptr->dd;
-    o_ptr->ds = k_ptr->ds;
+    const auto &k_ref = baseitems_info[bi_id];
+    o_ptr->k_idx = bi_id;
+    o_ptr->weight = k_ref.weight;
+    o_ptr->tval = k_ref.bi_key.tval();
+    o_ptr->sval = k_ref.bi_key.sval().value();
+    o_ptr->dd = k_ref.dd;
+    o_ptr->ds = k_ref.ds;
 
-    o_ptr->art_flags.set(k_ptr->flags);
+    o_ptr->art_flags.set(k_ref.flags);
 
-    if (k_ptr->pval) {
-        o_ptr->pval = std::max<short>(o_ptr->pval, randint1(k_ptr->pval));
+    if (k_ref.pval) {
+        o_ptr->pval = std::max<short>(o_ptr->pval, randint1(k_ref.pval));
     }
-    if (k_ptr->flags.has(TR_ACTIVATE)) {
-        o_ptr->activation_id = k_ptr->act_idx;
+    if (k_ref.flags.has(TR_ACTIVATE)) {
+        o_ptr->activation_id = k_ref.act_idx;
     }
 
     if (dd_bonus > 0) {
@@ -240,7 +243,7 @@ static PRICE repair_broken_weapon_aux(PlayerType *player_ptr, PRICE bcost)
         }
     }
 
-    if (k_ptr->flags.has(TR_BLOWS)) {
+    if (k_ref.flags.has(TR_BLOWS)) {
         auto bmax = std::min<short>(3, std::max<short>(1, 40 / (o_ptr->dd * o_ptr->ds)));
         o_ptr->pval = std::min<short>(o_ptr->pval, bmax);
     }

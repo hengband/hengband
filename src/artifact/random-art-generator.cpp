@@ -27,6 +27,7 @@
 #include "object/object-flags.h"
 #include "object/object-kind-hook.h"
 #include "object/object-value-calc.h"
+#include "object/tval-types.h"
 #include "perception/identification.h"
 #include "perception/object-perception.h"
 #include "sv-definition/sv-weapon-types.h"
