@@ -23,6 +23,7 @@ void get_height_weight(PlayerType *player_ptr)
         player_ptr->ht = randnor(rp_ptr->f_b_ht, rp_ptr->f_m_ht);
         deviation = (int)(player_ptr->ht) * 100 / (int)(rp_ptr->f_b_ht);
         player_ptr->wt = randnor((int)(rp_ptr->f_b_wt) * deviation / 100, (int)(rp_ptr->f_m_wt) * deviation / 300);
+        return;
     default:
         return;
     }
