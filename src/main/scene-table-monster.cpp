@@ -24,7 +24,7 @@ struct scene_monster_info {
 
 scene_monster_info scene_target_monster;
 
-inline static bool has_shadower_flag(monster_type *m_ptr)
+inline static bool has_shadower_flag(MonsterEntity *m_ptr)
 {
     return m_ptr->mflag2.has(MonsterConstantFlagType::KAGE);
 }

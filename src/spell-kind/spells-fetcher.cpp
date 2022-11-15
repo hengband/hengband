@@ -116,7 +116,7 @@ void fetch_item(PlayerType *player_ptr, DIRECTION dir, WEIGHT wgt, bool require_
 
 bool fetch_monster(PlayerType *player_ptr)
 {
-    monster_type *m_ptr;
+    MonsterEntity *m_ptr;
     MONSTER_IDX m_idx;
     GAME_TEXT m_name[MAX_NLEN];
     POSITION ty, tx;

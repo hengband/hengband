@@ -811,7 +811,7 @@ concptr do_hissatsu_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessT
                 POSITION ny, nx;
                 MONSTER_IDX m_idx;
                 grid_type *g_ptr;
-                monster_type *m_ptr;
+                MonsterEntity *m_ptr;
 
                 y = player_ptr->y + ddy[dir];
                 x = player_ptr->x + ddx[dir];

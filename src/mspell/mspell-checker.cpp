@@ -99,7 +99,7 @@ bool summon_possible(PlayerType *player_ptr, POSITION y1, POSITION x1)
  * @param m_ptr 判定を行いたいモンスターの構造体参照ポインタ
  * @return 死者復活が有効な状態ならばTRUEを返す。
  */
-bool raise_possible(PlayerType *player_ptr, monster_type *m_ptr)
+bool raise_possible(PlayerType *player_ptr, MonsterEntity *m_ptr)
 {
     POSITION y = m_ptr->fy;
     POSITION x = m_ptr->fx;

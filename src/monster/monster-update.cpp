@@ -49,7 +49,7 @@
 
 // Update Monster.
 struct um_type {
-    monster_type *m_ptr;
+    MonsterEntity *m_ptr;
     bool do_disturb;
     POSITION fy;
     POSITION fx;
@@ -74,7 +74,7 @@ bool update_riding_monster(PlayerType *player_ptr, turn_flags *turn_flags_ptr, M
 {
     auto *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
     auto *g_ptr = &player_ptr->current_floor_ptr->grid_array[ny][nx];
-    monster_type *y_ptr = &player_ptr->current_floor_ptr->m_list[g_ptr->m_idx];
+    MonsterEntity *y_ptr = &player_ptr->current_floor_ptr->m_list[g_ptr->m_idx];
     if (turn_flags_ptr->is_riding_mon) {
         return move_player_effect(player_ptr, ny, nx, MPE_DONT_PICKUP);
     }
@@ -119,7 +119,7 @@ void update_player_type(PlayerType *player_ptr, turn_flags *turn_flags_ptr, mons
  * @param turn_flags_ptr ターン経過処理フラグへの参照ポインタ
  * @param m_ptr モンスターへの参照ポインタ
  */
-void update_monster_race_flags(PlayerType *player_ptr, turn_flags *turn_flags_ptr, monster_type *m_ptr)
+void update_monster_race_flags(PlayerType *player_ptr, turn_flags *turn_flags_ptr, MonsterEntity *m_ptr)
 {
     auto *r_ptr = &monraces_info[m_ptr->r_idx];
     if (!is_original_ap_and_seen(player_ptr, m_ptr)) {

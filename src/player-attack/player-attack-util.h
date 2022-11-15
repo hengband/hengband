@@ -36,12 +36,12 @@ enum class MagicalBrandEffectType { NONE = 0,
 struct grid_type;
 ;
 struct monster_race;
-struct monster_type;
+class MonsterEntity;
 struct player_attack_type {
     int16_t hand{}; //!< 武器の持ち手
     grid_type *g_ptr; //!< ターゲットのいる地形情報
     MONSTER_IDX m_idx{}; //!< モンスターID
-    monster_type *m_ptr{}; //!< モンスター情報(参照ポインタ)
+    MonsterEntity *m_ptr{}; //!< モンスター情報(参照ポインタ)
     GAME_TEXT m_name[MAX_NLEN]{}; //!< モンスター名
     MonsterRaceId r_idx{}; //!< モンスター種族ID
     monster_race *r_ptr{}; //!< モンスター種族情報(参照ポインタ)

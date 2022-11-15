@@ -161,7 +161,7 @@ void update_mon_lite(PlayerType *player_ptr)
     }
 
     if (!w_ptr->timewalk_m_idx) {
-        monster_type *m_ptr;
+        MonsterEntity *m_ptr;
         monster_race *r_ptr;
         for (int i = 1; i < floor_ptr->m_max; i++) {
             m_ptr = &floor_ptr->m_list[i];

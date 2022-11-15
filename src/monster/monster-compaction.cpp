@@ -31,7 +31,7 @@ static void compact_monsters_aux(PlayerType *player_ptr, MONSTER_IDX i1, MONSTER
     }
 
     auto *floor_ptr = player_ptr->current_floor_ptr;
-    monster_type *m_ptr;
+    MonsterEntity *m_ptr;
     m_ptr = &floor_ptr->m_list[i1];
 
     POSITION y = m_ptr->fy;
@@ -67,7 +67,7 @@ static void compact_monsters_aux(PlayerType *player_ptr, MONSTER_IDX i1, MONSTER
 
     if (m_ptr->is_pet()) {
         for (int i = 1; i < floor_ptr->m_max; i++) {
-            monster_type *m2_ptr = &floor_ptr->m_list[i];
+            MonsterEntity *m2_ptr = &floor_ptr->m_list[i];
 
             if (m2_ptr->parent_m_idx == i1) {
                 m2_ptr->parent_m_idx = i2;

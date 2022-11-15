@@ -309,7 +309,7 @@ void mitokohmon(PlayerType *player_ptr)
 
     if (!count) {
         for (int i = player_ptr->current_floor_ptr->m_max - 1; i > 0; i--) {
-            monster_type *m_ptr;
+            MonsterEntity *m_ptr;
             m_ptr = &player_ptr->current_floor_ptr->m_list[i];
             if (!m_ptr->is_valid()) {
                 continue;

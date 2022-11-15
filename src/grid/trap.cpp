@@ -606,8 +606,8 @@ void hit_trap(PlayerType *player_ptr, bool break_trap)
 
                 /* Let them fight each other */
                 if (evil_idx && good_idx) {
-                    monster_type *evil_ptr = &player_ptr->current_floor_ptr->m_list[evil_idx];
-                    monster_type *good_ptr = &player_ptr->current_floor_ptr->m_list[good_idx];
+                    MonsterEntity *evil_ptr = &player_ptr->current_floor_ptr->m_list[evil_idx];
+                    MonsterEntity *good_ptr = &player_ptr->current_floor_ptr->m_list[good_idx];
                     evil_ptr->target_y = good_ptr->fy;
                     evil_ptr->target_x = good_ptr->fx;
                     good_ptr->target_y = evil_ptr->fy;

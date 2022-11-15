@@ -103,7 +103,7 @@ void fix_inventory(PlayerType *player_ptr)
  *  name: name of monster
  * </pre>
  */
-static void print_monster_line(TERM_LEN x, TERM_LEN y, monster_type *m_ptr, int n_same)
+static void print_monster_line(TERM_LEN x, TERM_LEN y, MonsterEntity *m_ptr, int n_same)
 {
     char buf[256];
     MonsterRaceId r_idx = m_ptr->ap_r_idx;
@@ -145,7 +145,7 @@ static void print_monster_line(TERM_LEN x, TERM_LEN y, monster_type *m_ptr, int 
 void print_monster_list(FloorType *floor_ptr, const std::vector<MONSTER_IDX> &monster_list, TERM_LEN x, TERM_LEN y, TERM_LEN max_lines)
 {
     TERM_LEN line = y;
-    monster_type *last_mons = nullptr;
+    MonsterEntity *last_mons = nullptr;
     int n_same = 0;
     size_t i;
     for (i = 0; i < monster_list.size(); i++) {
@@ -546,7 +546,7 @@ void fix_object(PlayerType *player_ptr)
  * @details
  * Lookコマンドでカーソルを合わせた場合に合わせてミミックは考慮しない。
  */
-static const monster_type *monster_on_floor_items(FloorType *floor_ptr, const grid_type *g_ptr)
+static const MonsterEntity *monster_on_floor_items(FloorType *floor_ptr, const grid_type *g_ptr)
 {
     if (g_ptr->m_idx == 0) {
         return nullptr;

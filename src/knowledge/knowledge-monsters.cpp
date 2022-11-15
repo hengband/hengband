@@ -117,7 +117,7 @@ void do_cmd_knowledge_pets(PlayerType *player_ptr)
         return;
     }
 
-    monster_type *m_ptr;
+    MonsterEntity *m_ptr;
     GAME_TEXT pet_name[MAX_NLEN];
     int t_friends = 0;
     for (int i = player_ptr->current_floor_ptr->m_max - 1; i >= 1; i--) {

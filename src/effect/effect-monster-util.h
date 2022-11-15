@@ -5,12 +5,12 @@
 
 struct grid_type;
 ;
-struct monster_type;
+class MonsterEntity;
 struct monster_race;
 struct effect_monster_type {
     grid_type *g_ptr;
-    monster_type *m_ptr;
-    monster_type *m_caster_ptr;
+    MonsterEntity *m_ptr;
+    MonsterEntity *m_caster_ptr;
     monster_race *r_ptr;
     char killer[MAX_MONSTER_NAME];
     bool seen;

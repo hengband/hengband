@@ -153,14 +153,14 @@ bool move_player_effect(PlayerType *player_ptr, POSITION ny, POSITION nx, BIT_FL
             g_ptr->m_idx = om_idx;
             oc_ptr->m_idx = nm_idx;
             if (om_idx > 0) {
-                monster_type *om_ptr = &floor_ptr->m_list[om_idx];
+                MonsterEntity *om_ptr = &floor_ptr->m_list[om_idx];
                 om_ptr->fy = ny;
                 om_ptr->fx = nx;
                 update_monster(player_ptr, om_idx, true);
             }
 
             if (nm_idx > 0) {
-                monster_type *nm_ptr = &floor_ptr->m_list[nm_idx];
+                MonsterEntity *nm_ptr = &floor_ptr->m_list[nm_idx];
                 nm_ptr->fy = oy;
                 nm_ptr->fx = ox;
                 update_monster(player_ptr, nm_idx, true);

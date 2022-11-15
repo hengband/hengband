@@ -38,7 +38,7 @@
  * @param path_check 射線を判定するための関数ポインタ
  * @return 有効な座標があった場合TRUEを返す
  */
-bool adjacent_grid_check(PlayerType *player_ptr, monster_type *m_ptr, POSITION *yp, POSITION *xp, TerrainCharacteristics f_flag, path_check_pf path_check)
+bool adjacent_grid_check(PlayerType *player_ptr, MonsterEntity *m_ptr, POSITION *yp, POSITION *xp, TerrainCharacteristics f_flag, path_check_pf path_check)
 {
     static int tonari_y[4][8] = { { -1, -1, -1, 0, 0, 1, 1, 1 }, { -1, -1, -1, 0, 0, 1, 1, 1 }, { 1, 1, 1, 0, 0, -1, -1, -1 }, { 1, 1, 1, 0, 0, -1, -1, -1 } };
     static int tonari_x[4][8] = { { -1, 0, 1, -1, 1, -1, 0, 1 }, { 1, 0, -1, 1, -1, 1, 0, -1 }, { -1, 0, 1, -1, 1, -1, 0, 1 }, { 1, 0, -1, 1, -1, 1, 0, -1 } };

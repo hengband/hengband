@@ -613,7 +613,7 @@ bool cosmic_cast_off(PlayerType *player_ptr, ItemEntity **o_ptr_ptr)
  * @brief プレイヤーの因果混乱処理 / Apply Nexus
  * @param m_ptr 因果混乱をプレイヤーに与えたモンスターの情報参照ポインタ
  */
-void apply_nexus(monster_type *m_ptr, PlayerType *player_ptr)
+void apply_nexus(MonsterEntity *m_ptr, PlayerType *player_ptr)
 {
     switch (randint1(7)) {
     case 1:

@@ -2,11 +2,11 @@
 
 #include "system/angband.h"
 
-struct monster_type;
+class MonsterEntity;
 struct monster_race;
 struct monster_death_type {
     MONSTER_IDX m_idx;
-    monster_type *m_ptr;
+    MonsterEntity *m_ptr;
     monster_race *r_ptr;
     bool do_gold;
     bool do_item;

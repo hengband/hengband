@@ -7,7 +7,7 @@
 #include "util/flag-group.h"
 
 struct monster_race;
-struct monster_type;
+class MonsterEntity;
 struct melee_spell_type {
     MONSTER_IDX m_idx;
     POSITION y;
@@ -22,8 +22,8 @@ struct melee_spell_type {
     char m_poss[160];
 #endif
 
-    monster_type *m_ptr;
-    monster_type *t_ptr;
+    MonsterEntity *m_ptr;
+    MonsterEntity *t_ptr;
     monster_race *r_ptr;
     bool see_m;
     bool maneable;

@@ -67,7 +67,7 @@ MONSTER_IDX m_pop(FloorType *floor_ptr)
 
     /* Recycle dead monsters */
     for (MONSTER_IDX i = 1; i < floor_ptr->m_max; i++) {
-        monster_type *m_ptr;
+        MonsterEntity *m_ptr;
         m_ptr = &floor_ptr->m_list[i];
         if (MonsterRace(m_ptr->r_idx).is_valid()) {
             continue;

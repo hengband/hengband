@@ -131,7 +131,7 @@ bool find_safety(PlayerType *player_ptr, MONSTER_IDX m_idx, POSITION *yp, POSITI
  * @param candidate 隠れられる地点の候補地
  */
 static void sweep_hiding_candidate(
-    PlayerType *player_ptr, monster_type *m_ptr, const POSITION *y_offsets, const POSITION *x_offsets, coordinate_candidate *candidate)
+    PlayerType *player_ptr, MonsterEntity *m_ptr, const POSITION *y_offsets, const POSITION *x_offsets, coordinate_candidate *candidate)
 {
     auto *r_ptr = &monraces_info[m_ptr->r_idx];
     for (POSITION i = 0, dx = x_offsets[0], dy = y_offsets[0]; dx != 0 || dy != 0; i++, dx = x_offsets[i], dy = y_offsets[i]) {

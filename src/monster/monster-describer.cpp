@@ -22,7 +22,7 @@
  * @param m_ptr モンスターの参照ポインタ
  * @param mode 呼称オプション
  */
-void monster_desc(PlayerType *player_ptr, char *desc, monster_type *m_ptr, BIT_FLAGS mode)
+void monster_desc(PlayerType *player_ptr, char *desc, MonsterEntity *m_ptr, BIT_FLAGS mode)
 {
     monster_race *r_ptr;
     r_ptr = &monraces_info[m_ptr->ap_r_idx];

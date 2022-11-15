@@ -206,7 +206,7 @@ void exe_movement(PlayerType *player_ptr, DIRECTION dir, bool do_pickup, bool br
         }
     }
 
-    monster_type *riding_m_ptr = &floor_ptr->m_list[player_ptr->riding];
+    MonsterEntity *riding_m_ptr = &floor_ptr->m_list[player_ptr->riding];
     PlayerEnergy energy(player_ptr);
     if (can_move && player_ptr->riding) {
         const auto *riding_r_ptr = &monraces_info[riding_m_ptr->r_idx];

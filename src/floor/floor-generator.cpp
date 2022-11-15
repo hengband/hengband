@@ -369,7 +369,7 @@ void clear_cave(PlayerType *player_ptr)
         r_ref.cur_num = 0;
     }
 
-    std::fill_n(floor_ptr->m_list.begin(), floor_ptr->m_max, monster_type{});
+    std::fill_n(floor_ptr->m_list.begin(), floor_ptr->m_max, MonsterEntity{});
     floor_ptr->m_max = 1;
     floor_ptr->m_cnt = 0;
     for (int i = 0; i < MAX_MTIMED; i++) {

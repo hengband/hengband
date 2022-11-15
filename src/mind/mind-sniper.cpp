@@ -400,7 +400,7 @@ static int get_snipe_power(PlayerType *player_ptr, COMMAND_CODE *sn, bool only_b
  * @param m_ptr 目標となるモンスターの構造体参照ポインタ
  * @return スレイの倍率(/10倍)
  */
-MULTIPLY calc_snipe_damage_with_slay(PlayerType *player_ptr, MULTIPLY mult, monster_type *m_ptr, SPELL_IDX snipe_type)
+MULTIPLY calc_snipe_damage_with_slay(PlayerType *player_ptr, MULTIPLY mult, MonsterEntity *m_ptr, SPELL_IDX snipe_type)
 {
     auto *r_ptr = &monraces_info[m_ptr->r_idx];
     bool seen = is_seen(player_ptr, m_ptr);

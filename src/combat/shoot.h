@@ -2,10 +2,10 @@
 
 #include "system/angband.h"
 
-struct monster_type;
+class MonsterEntity;
 class ItemEntity;
 class PlayerType;
-bool test_hit_fire(PlayerType *player_ptr, int chance, monster_type *m_ptr, int vis, char *o_name);
+bool test_hit_fire(PlayerType *player_ptr, int chance, MonsterEntity *m_ptr, int vis, char *o_name);
 int critical_shot(PlayerType *player_ptr, WEIGHT weight, int plus_ammo, int plus_bow, int dam);
 ENERGY bow_energy(OBJECT_SUBTYPE_VALUE sval);
 int bow_tmul(OBJECT_SUBTYPE_VALUE sval);

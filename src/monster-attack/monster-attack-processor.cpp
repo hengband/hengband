@@ -79,7 +79,7 @@ static bool exe_monster_attack_to_monster(PlayerType *player_ptr, MONSTER_IDX m_
 {
     auto *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
     auto *r_ptr = &monraces_info[m_ptr->r_idx];
-    monster_type *y_ptr;
+    MonsterEntity *y_ptr;
     y_ptr = &player_ptr->current_floor_ptr->m_list[g_ptr->m_idx];
     if (r_ptr->behavior_flags.has(MonsterBehaviorType::NEVER_BLOW)) {
         return false;
@@ -125,7 +125,7 @@ bool process_monster_attack_to_monster(PlayerType *player_ptr, turn_flags *turn_
 {
     auto *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
     auto *r_ptr = &monraces_info[m_ptr->r_idx];
-    monster_type *y_ptr;
+    MonsterEntity *y_ptr;
     y_ptr = &player_ptr->current_floor_ptr->m_list[g_ptr->m_idx];
     if (!turn_flags_ptr->do_move || (g_ptr->m_idx == 0)) {
         return false;

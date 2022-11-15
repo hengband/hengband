@@ -612,7 +612,7 @@ void exe_player_attack_to_monster(PlayerType *player_ptr, POSITION y, POSITION x
 void massacre(PlayerType *player_ptr)
 {
     grid_type *g_ptr;
-    monster_type *m_ptr;
+    MonsterEntity *m_ptr;
     for (DIRECTION dir = 0; dir < 8; dir++) {
         POSITION y = player_ptr->y + ddy_ddd[dir];
         POSITION x = player_ptr->x + ddx_ddd[dir];

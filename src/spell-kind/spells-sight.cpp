@@ -371,7 +371,7 @@ bool deathray_monsters(PlayerType *player_ptr)
  * @param m_ptr モンスター情報への参照ポインタ
  * @param r_ptr モンスター種族への参照ポインタ
  */
-void probed_monster_info(char *buf, PlayerType *player_ptr, monster_type *m_ptr, monster_race *r_ptr)
+void probed_monster_info(char *buf, PlayerType *player_ptr, MonsterEntity *m_ptr, monster_race *r_ptr)
 {
     if (!m_ptr->is_original_ap()) {
         if (m_ptr->mflag2.has(MonsterConstantFlagType::KAGE)) {

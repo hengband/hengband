@@ -394,7 +394,7 @@ ProcessResult effect_monster_crusade(PlayerType *player_ptr, effect_monster_type
  * @param hp 計算対象のHP
  * @return 捕まえられる最大HP
  */
-static int calcutate_capturable_hp(PlayerType *player_ptr, monster_type *m_ptr, int hp)
+static int calcutate_capturable_hp(PlayerType *player_ptr, MonsterEntity *m_ptr, int hp)
 {
     if (m_ptr->is_pet()) {
         return hp * 4L;

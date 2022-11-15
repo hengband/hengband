@@ -135,7 +135,7 @@ bool MonsterDamageProcessor::genocide_chaos_patron()
     return this->m_idx == 0;
 }
 
-bool MonsterDamageProcessor::process_dead_exp_virtue(concptr note, monster_type *exp_mon)
+bool MonsterDamageProcessor::process_dead_exp_virtue(concptr note, MonsterEntity *exp_mon)
 {
     auto *m_ptr = &this->player_ptr->current_floor_ptr->m_list[this->m_idx];
     auto &r_ref = m_ptr->get_real_r_ref();
@@ -422,7 +422,7 @@ void MonsterDamageProcessor::show_bounty_message(GAME_TEXT *m_name)
  * experience point of a monster later.
  * </pre>
  */
-void MonsterDamageProcessor::get_exp_from_mon(monster_type *m_ptr, int exp_dam)
+void MonsterDamageProcessor::get_exp_from_mon(MonsterEntity *m_ptr, int exp_dam)
 {
     auto *r_ptr = &monraces_info[m_ptr->r_idx];
     if (!m_ptr->is_valid() || m_ptr->is_pet() || this->player_ptr->phase_out) {

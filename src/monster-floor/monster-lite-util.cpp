@@ -3,7 +3,7 @@
 #include "system/monster-type-definition.h"
 #include "util/bit-flags-calculator.h"
 
-monster_lite_type *initialize_monster_lite_type(BIT_FLAGS grid_info, monster_lite_type *ml_ptr, monster_type *m_ptr)
+monster_lite_type *initialize_monster_lite_type(BIT_FLAGS grid_info, monster_lite_type *ml_ptr, MonsterEntity *m_ptr)
 {
     ml_ptr->mon_fx = m_ptr->fx;
     ml_ptr->mon_fy = m_ptr->fy;

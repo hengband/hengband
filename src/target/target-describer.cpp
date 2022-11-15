@@ -67,7 +67,7 @@ struct eg_type {
     OBJECT_IDX floor_list[23];
     ITEM_NUMBER floor_num;
     grid_type *g_ptr;
-    monster_type *m_ptr;
+    MonsterEntity *m_ptr;
     OBJECT_IDX next_o_idx;
     FEAT_IDX feat;
     TerrainType *f_ptr;
@@ -98,7 +98,7 @@ static eg_type *initialize_eg_type(PlayerType *player_ptr, eg_type *eg_ptr, POSI
 /*
  * Evaluate number of kill needed to gain level
  */
-static void evaluate_monster_exp(PlayerType *player_ptr, char *buf, monster_type *m_ptr)
+static void evaluate_monster_exp(PlayerType *player_ptr, char *buf, MonsterEntity *m_ptr)
 {
     monster_race *ap_r_ptr = &monraces_info[m_ptr->ap_r_idx];
     if ((player_ptr->lev >= PY_MAX_LEVEL) || PlayerRace(player_ptr).equals(PlayerRaceType::ANDROID)) {

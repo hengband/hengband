@@ -250,7 +250,7 @@ void mmove2(POSITION *y, POSITION *x, POSITION y1, POSITION x1, POSITION y2, POS
  * @return 個々のモンスターがプレイヤーが見えたらTRUE
  * @todo is_seen() の関数マクロをバラそうとしたがインクルード関係のコンパイルエラーで失敗
  */
-bool is_seen(PlayerType *player_ptr, monster_type *m_ptr)
+bool is_seen(PlayerType *player_ptr, MonsterEntity *m_ptr)
 {
     bool is_inside_view = !ignore_unview;
     is_inside_view |= player_ptr->phase_out;

@@ -48,7 +48,7 @@
 // Melee-post-process-type
 struct mam_pp_type {
     MONSTER_IDX m_idx;
-    monster_type *m_ptr;
+    MonsterEntity *m_ptr;
     bool seen;
     GAME_TEXT m_name[160];
     int dam;

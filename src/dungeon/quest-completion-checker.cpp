@@ -22,7 +22,7 @@
 #include "view/display-messages.h"
 #include <algorithm>
 
-QuestCompletionChecker::QuestCompletionChecker(PlayerType *player_ptr, monster_type *m_ptr)
+QuestCompletionChecker::QuestCompletionChecker(PlayerType *player_ptr, MonsterEntity *m_ptr)
     : player_ptr(player_ptr)
     , m_ptr(m_ptr)
 {
@@ -55,7 +55,7 @@ void QuestCompletionChecker::complete()
     this->make_reward(pos);
 }
 
-static bool check_quest_completion(PlayerType *player_ptr, const quest_type &q_ref, monster_type *m_ptr)
+static bool check_quest_completion(PlayerType *player_ptr, const quest_type &q_ref, MonsterEntity *m_ptr)
 {
     auto *floor_ptr = player_ptr->current_floor_ptr;
     if (q_ref.status != QuestStatusType::TAKEN) {

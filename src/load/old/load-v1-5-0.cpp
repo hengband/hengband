@@ -359,7 +359,7 @@ void rd_item_old(ItemEntity *o_ptr)
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param m_ptr モンスター保存先ポインタ
  */
-void rd_monster_old(PlayerType *player_ptr, monster_type *m_ptr)
+void rd_monster_old(PlayerType *player_ptr, MonsterEntity *m_ptr)
 {
     m_ptr->r_idx = i2enum<MonsterRaceId>(rd_s16b());
 

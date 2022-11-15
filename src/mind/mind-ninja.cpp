@@ -171,7 +171,7 @@ bool rush_attack(PlayerType *player_ptr, bool *mdeath)
     bool tmp_mdeath = false;
     bool moved = false;
     for (const auto &[ny, nx] : path_g) {
-        monster_type *m_ptr;
+        MonsterEntity *m_ptr;
 
         if (is_cave_empty_bold(player_ptr, ny, nx) && player_can_enter(player_ptr, floor_ptr->grid_array[ny][nx].feat, 0)) {
             ty = ny;

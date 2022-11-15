@@ -231,7 +231,7 @@ bool build_type5(PlayerType *player_ptr, dun_data_type *dd_ptr)
     int i;
     nest_mon_info_type nest_mon_info[NUM_NEST_MON_TYPE];
 
-    monster_type align;
+    MonsterEntity align;
 
     grid_type *g_ptr;
 
@@ -474,7 +474,7 @@ bool build_type6(PlayerType *player_ptr, dun_data_type *dd_ptr)
 
     MonsterRaceId what[16];
 
-    monster_type align;
+    MonsterEntity align;
 
     grid_type *g_ptr;
 
@@ -784,7 +784,7 @@ bool build_type13(PlayerType *player_ptr, dun_data_type *dd_ptr)
 
     MonsterRaceId what[16];
 
-    monster_type align;
+    MonsterEntity align;
 
     grid_type *g_ptr;
 

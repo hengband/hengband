@@ -11,7 +11,7 @@
 #include "util/flag-group.h"
 
 struct grid_type;
-struct monster_type;
+class MonsterEntity;
 class ItemEntity;
 class PlayerType;
 class ObjectThrowEntity {
@@ -67,7 +67,7 @@ private:
     bool come_back = false;
     bool do_drop = true;
     grid_type *g_ptr{};
-    monster_type *m_ptr{};
+    MonsterEntity *m_ptr{};
     GAME_TEXT m_name[MAX_NLEN]{};
     int back_chance{};
     char o2_name[MAX_NLEN]{};

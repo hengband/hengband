@@ -215,7 +215,7 @@ void update_object_by_monster_movement(PlayerType *player_ptr, turn_flags *turn_
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param m_ptr モンスター参照ポインタ
  */
-void monster_drop_carried_objects(PlayerType *player_ptr, monster_type *m_ptr)
+void monster_drop_carried_objects(PlayerType *player_ptr, MonsterEntity *m_ptr)
 {
     for (auto it = m_ptr->hold_o_idx_list.begin(); it != m_ptr->hold_o_idx_list.end();) {
         ItemEntity forge;

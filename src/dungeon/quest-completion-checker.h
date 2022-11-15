@@ -5,20 +5,20 @@
 #include "util/point-2d.h"
 #include <tuple>
 
-struct monster_type;
+class MonsterEntity;
 class ItemEntity;
 class PlayerType;
 struct quest_type;
 class QuestCompletionChecker {
 public:
-    QuestCompletionChecker(PlayerType *player_ptr, monster_type *m_ptr);
+    QuestCompletionChecker(PlayerType *player_ptr, MonsterEntity *m_ptr);
     virtual ~QuestCompletionChecker() = default;
 
     void complete();
 
 private:
     PlayerType *player_ptr;
-    monster_type *m_ptr;
+    MonsterEntity *m_ptr;
     QuestId quest_idx;
     quest_type *q_ptr = nullptr;
 

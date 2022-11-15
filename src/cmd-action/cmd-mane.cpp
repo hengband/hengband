@@ -931,7 +931,7 @@ static bool use_mane(PlayerType *player_ptr, MonsterAbilityType spell)
     case MonsterAbilityType::SPECIAL:
         break;
     case MonsterAbilityType::TELE_TO: {
-        monster_type *m_ptr;
+        MonsterEntity *m_ptr;
         monster_race *r_ptr;
         GAME_TEXT m_name[MAX_NLEN];
 

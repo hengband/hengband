@@ -84,7 +84,7 @@ static void feel_eldritch_horror(concptr desc, monster_race *r_ptr)
  * @param m_ptr ELDRITCH_HORRORを引き起こしたモンスターの参照ポインタ。薬・罠・魔法の影響ならnullptr
  * @param necro 暗黒領域魔法の詠唱失敗によるものならばTRUEを返す
  */
-void sanity_blast(PlayerType *player_ptr, monster_type *m_ptr, bool necro)
+void sanity_blast(PlayerType *player_ptr, MonsterEntity *m_ptr, bool necro)
 {
     if (player_ptr->phase_out || !w_ptr->character_dungeon) {
         return;

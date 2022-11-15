@@ -85,7 +85,7 @@ bool polymorph_monster(PlayerType *player_ptr, POSITION y, POSITION x)
         return false;
     }
 
-    monster_type back_m = *m_ptr;
+    MonsterEntity back_m = *m_ptr;
     new_r_idx = poly_r_idx(player_ptr, old_r_idx);
     if (new_r_idx == old_r_idx) {
         return false;

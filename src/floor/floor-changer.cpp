@@ -165,7 +165,7 @@ static void place_pet(PlayerType *player_ptr)
         }
     }
 
-    std::fill(std::begin(party_mon), std::end(party_mon), monster_type{});
+    std::fill(std::begin(party_mon), std::end(party_mon), MonsterEntity{});
 }
 
 /*!

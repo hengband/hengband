@@ -41,7 +41,7 @@ void rd_dummy_monsters(PlayerType *player_ptr)
     }
 
     auto tmp16s = rd_s16b();
-    monster_type dummy_mon;
+    MonsterEntity dummy_mon;
     auto monster_loader = MonsterLoaderFactory::create_loader(player_ptr);
     for (int i = 0; i < tmp16s; i++) {
         monster_loader->rd_monster(&dummy_mon);

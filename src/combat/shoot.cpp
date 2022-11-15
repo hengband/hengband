@@ -151,7 +151,7 @@ AttributeFlags shot_attribute(PlayerType *player_ptr, ItemEntity *bow_ptr, ItemE
  * @return スレイ倍率をかけたダメージ量
  */
 static MULTIPLY calc_shot_damage_with_slay(
-    PlayerType *player_ptr, ItemEntity *bow_ptr, ItemEntity *arrow_ptr, int tdam, monster_type *monster_ptr, SPELL_IDX snipe_type)
+    PlayerType *player_ptr, ItemEntity *bow_ptr, ItemEntity *arrow_ptr, int tdam, MonsterEntity *monster_ptr, SPELL_IDX snipe_type)
 {
     MULTIPLY mult = 10;
 
@@ -999,7 +999,7 @@ void exe_fire(PlayerType *player_ptr, INVENTORY_IDX item, ItemEntity *j_ptr, SPE
  * @return 命中と判定された場合TRUEを返す
  * @note Always miss 5%, always hit 5%, otherwise random.
  */
-bool test_hit_fire(PlayerType *player_ptr, int chance, monster_type *m_ptr, int vis, char *o_name)
+bool test_hit_fire(PlayerType *player_ptr, int chance, MonsterEntity *m_ptr, int vis, char *o_name)
 {
     int k;
     ARMOUR_CLASS ac;
