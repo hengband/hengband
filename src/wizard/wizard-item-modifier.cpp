@@ -49,7 +49,7 @@
 #include <tuple>
 #include <vector>
 
-#define K_MAX_DEPTH 110 /*!< アイテムの階層毎生成率を表示する最大階 */
+constexpr auto BASEITEM_MAX_DEPTH = 110; /*!< アイテムの階層毎生成率を表示する最大階 */
 
 namespace {
 /*!
@@ -247,51 +247,49 @@ void wiz_identify_full_inventory(PlayerType *player_ptr)
  */
 static void prt_alloc(ItemKindType tval, OBJECT_SUBTYPE_VALUE sval, TERM_LEN row, TERM_LEN col)
 {
-    uint32_t rarity[K_MAX_DEPTH] = {};
-    uint32_t total[K_MAX_DEPTH] = {};
-    int32_t display[22] = {};
+    uint32_t rarity[BASEITEM_MAX_DEPTH]{};
+    uint32_t total[BASEITEM_MAX_DEPTH]{};
+    int32_t display[22]{};
 
-    int home = 0;
-    for (int i = 0; i < K_MAX_DEPTH; i++) {
-        int total_frac = 0;
-        BaseitemInfo *k_ptr;
+    auto home = 0;
+    for (auto i = 0; i < BASEITEM_MAX_DEPTH; i++) {
+        auto total_frac = 0;
+        constexpr auto magnificant = CHANCE_BASEITEM_LEVEL_BOOST * BASEITEM_MAX_DEPTH;
         for (const auto &entry : alloc_kind_table) {
-            PERCENTAGE prob = 0;
-
+            auto prob = 0;
             if (entry.level <= i) {
-                prob = entry.prob1 * CHANCE_BASEITEM_LEVEL_BOOST * K_MAX_DEPTH;
+                prob = entry.prob1 * magnificant;
             } else if (entry.level - 1 > 0) {
-                prob = entry.prob1 * i * K_MAX_DEPTH / (entry.level - 1);
+                prob = entry.prob1 * i * BASEITEM_MAX_DEPTH / (entry.level - 1);
             }
 
-            k_ptr = &baseitems_info[entry.index];
-
-            total[i] += prob / (CHANCE_BASEITEM_LEVEL_BOOST * K_MAX_DEPTH);
-            total_frac += prob % (CHANCE_BASEITEM_LEVEL_BOOST * K_MAX_DEPTH);
+            const auto &bi_ref = baseitems_info[entry.index];
+            total[i] += prob / magnificant;
+            total_frac += prob % magnificant;
 
             BaseitemKey bi_key(tval, sval);
-            if (k_ptr->bi_key == bi_key) {
-                home = k_ptr->level;
-                rarity[i] += prob / (CHANCE_BASEITEM_LEVEL_BOOST * K_MAX_DEPTH);
+            if (bi_ref.bi_key == bi_key) {
+                home = bi_ref.level;
+                rarity[i] += prob / magnificant;
             }
         }
 
-        total[i] += total_frac / (CHANCE_BASEITEM_LEVEL_BOOST * K_MAX_DEPTH);
+        total[i] += total_frac / magnificant;
     }
 
-    for (int i = 0; i < 22; i++) {
-        int possibility = 0;
-        for (int j = i * K_MAX_DEPTH / 22; j < (i + 1) * K_MAX_DEPTH / 22; j++) {
+    for (auto i = 0; i < 22; i++) {
+        auto possibility = 0;
+        for (int j = i * BASEITEM_MAX_DEPTH / 22; j < (i + 1) * BASEITEM_MAX_DEPTH / 22; j++) {
             possibility += rarity[j] * 100000 / total[j];
         }
 
         display[i] = possibility / 5;
     }
 
-    for (int i = 0; i < 22; i++) {
+    for (auto i = 0; i < 22; i++) {
         term_putch(col, row + i + 1, TERM_WHITE, '|');
         prt(format("%2dF", (i * 5)), row + i + 1, col);
-        if ((i * K_MAX_DEPTH / 22 <= home) && (home < (i + 1) * K_MAX_DEPTH / 22)) {
+        if ((i * BASEITEM_MAX_DEPTH / 22 <= home) && (home < (i + 1) * BASEITEM_MAX_DEPTH / 22)) {
             c_prt(TERM_RED, format("%3d.%04d%%", display[i] / 1000, display[i] % 1000), row + i + 1, col + 3);
         } else {
             c_prt(TERM_WHITE, format("%3d.%04d%%", display[i] / 1000, display[i] % 1000), row + i + 1, col + 3);
@@ -1033,13 +1031,12 @@ WishResultType do_cmd_wishing(PlayerType *player_ptr, int prob, bool allow_art, 
     }
 
     if (k_ids.size() == 1) {
-        KIND_OBJECT_IDX k_idx = k_ids.back();
-        auto *k_ptr = &baseitems_info[k_idx];
-
-        FixedArtifactId a_idx = FixedArtifactId::NONE;
-        if (k_ptr->gen_flags.has(ItemGenerationTraitType::INSTA_ART)) {
+        const auto k_idx = k_ids.back();
+        const auto &k_ref = baseitems_info[k_idx];
+        auto a_idx = FixedArtifactId::NONE;
+        if (k_ref.gen_flags.has(ItemGenerationTraitType::INSTA_ART)) {
             for (const auto &[a_idx_loop, a_ref_loop] : artifacts_info) {
-                if (a_idx_loop == FixedArtifactId::NONE || a_ref_loop.bi_key != k_ptr->bi_key) {
+                if (a_idx_loop == FixedArtifactId::NONE || a_ref_loop.bi_key != k_ref.bi_key) {
                     continue;
                 }
 
@@ -1063,7 +1060,7 @@ WishResultType do_cmd_wishing(PlayerType *player_ptr, int prob, bool allow_art, 
             if (must || ok_art) {
                 do {
                     o_ptr->prep(k_idx);
-                    ItemMagicApplier(player_ptr, o_ptr, k_ptr->level, AM_SPECIAL | AM_NO_FIXED_ART).execute();
+                    ItemMagicApplier(player_ptr, o_ptr, k_ref.level, AM_SPECIAL | AM_NO_FIXED_ART).execute();
                 } while (!o_ptr->art_name || o_ptr->is_ego() || o_ptr->is_cursed());
 
                 if (o_ptr->art_name) {
@@ -1087,7 +1084,7 @@ WishResultType do_cmd_wishing(PlayerType *player_ptr, int prob, bool allow_art, 
                     int i = 0;
                     for (i = 0; i < max_roll; i++) {
                         o_ptr->prep(k_idx);
-                        ItemMagicApplier(player_ptr, o_ptr, k_ptr->level, AM_GREAT | AM_NO_FIXED_ART).execute();
+                        ItemMagicApplier(player_ptr, o_ptr, k_ref.level, AM_GREAT | AM_NO_FIXED_ART).execute();
                         if (o_ptr->art_name) {
                             continue;
                         }
