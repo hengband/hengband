@@ -157,12 +157,15 @@ static PRICE repair_broken_weapon_aux(PlayerType *player_ptr, PRICE bcost)
         int n = 1;
         k_idx = 0;
         for (const auto &k_ref : baseitems_info) {
-            if (k_ref.tval != ItemKindType::SWORD) {
+            if (k_ref.bi_key.tval() != ItemKindType::SWORD) {
                 continue;
             }
-            if ((k_ref.sval == SV_BROKEN_DAGGER) || (k_ref.sval == SV_BROKEN_SWORD) || (k_ref.sval == SV_POISON_NEEDLE)) {
+
+            const auto sval = k_ref.bi_key.sval();
+            if ((sval == SV_BROKEN_DAGGER) || (sval == SV_BROKEN_SWORD) || (sval == SV_POISON_NEEDLE)) {
                 continue;
             }
+
             if (k_ref.weight > 99) {
                 continue;
             }
@@ -175,22 +178,23 @@ static PRICE repair_broken_weapon_aux(PlayerType *player_ptr, PRICE bcost)
     } else {
         auto tval = (one_in_(5) ? mo_ptr->tval : ItemKindType::SWORD);
         while (true) {
-            BaseitemInfo *ck_ptr;
             k_idx = lookup_baseitem_id({ tval });
-            ck_ptr = &baseitems_info[k_idx];
-
+            const auto &bi_ref = baseitems_info[k_idx];
+            const auto sval = bi_ref.bi_key.sval();
             if (tval == ItemKindType::SWORD) {
-                if ((ck_ptr->sval == SV_BROKEN_DAGGER) || (ck_ptr->sval == SV_BROKEN_SWORD) || (ck_ptr->sval == SV_DIAMOND_EDGE) || (ck_ptr->sval == SV_POISON_NEEDLE)) {
+                if ((sval == SV_BROKEN_DAGGER) || (sval == SV_BROKEN_SWORD) || (sval == SV_DIAMOND_EDGE) || (sval == SV_POISON_NEEDLE)) {
                     continue;
                 }
             }
+
             if (tval == ItemKindType::POLEARM) {
-                if ((ck_ptr->sval == SV_DEATH_SCYTHE) || (ck_ptr->sval == SV_TSURIZAO)) {
+                if ((sval == SV_DEATH_SCYTHE) || (sval == SV_TSURIZAO)) {
                     continue;
                 }
             }
+
             if (tval == ItemKindType::HAFTED) {
-                if ((ck_ptr->sval == SV_GROND) || (ck_ptr->sval == SV_WIZSTAFF) || (ck_ptr->sval == SV_NAMAKE_HAMMER)) {
+                if ((sval == SV_GROND) || (sval == SV_WIZSTAFF) || (sval == SV_NAMAKE_HAMMER)) {
                     continue;
                 }
             }
@@ -208,8 +212,8 @@ static PRICE repair_broken_weapon_aux(PlayerType *player_ptr, PRICE bcost)
     k_ptr = &baseitems_info[k_idx];
     o_ptr->k_idx = k_idx;
     o_ptr->weight = k_ptr->weight;
-    o_ptr->tval = k_ptr->tval;
-    o_ptr->sval = k_ptr->sval;
+    o_ptr->tval = k_ptr->bi_key.tval();
+    o_ptr->sval = k_ptr->bi_key.sval().value();
     o_ptr->dd = k_ptr->dd;
     o_ptr->ds = k_ptr->ds;
 

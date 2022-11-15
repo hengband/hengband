@@ -105,11 +105,7 @@ static std::optional<FixedArtifactId> sweep_amusement_artifact(const bool insta_
             continue;
         }
 
-        if (a_ref.bi_key.tval() != baseitems_info[k_idx].tval) {
-            continue;
-        }
-
-        if (a_ref.bi_key.sval() != baseitems_info[k_idx].sval) {
+        if (a_ref.bi_key != baseitems_info[k_idx].bi_key) {
             continue;
         }
 

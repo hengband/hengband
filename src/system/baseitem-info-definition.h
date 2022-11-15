@@ -46,15 +46,14 @@ enum class ItemKindType : short;
 enum class RandomArtActType : short;
 class BaseitemInfo {
 public:
-    BaseitemInfo() = default;
+    BaseitemInfo();
     KIND_OBJECT_IDX idx{};
 
     std::string name; /*!< ベースアイテム名 */
     std::string text; /*!< 解説テキスト */
     std::string flavor_name; /*!< 未確定名 */
 
-    ItemKindType tval{}; /*!< ベースアイテム種別の大項目値 Object type */
-    OBJECT_SUBTYPE_VALUE sval{}; /*!< ベースアイテム種別の小項目値 Object sub type */
+    BaseitemKey bi_key;
 
     PARAMETER_VALUE pval{}; /*!< ベースアイテムのpval（能力修正共通値） Object extra info */
 

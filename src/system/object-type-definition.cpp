@@ -69,8 +69,8 @@ void ObjectType::prep(KIND_OBJECT_IDX ko_idx)
     wipe();
     this->stack_idx = old_stack_idx;
     this->k_idx = ko_idx;
-    this->tval = k_ptr->tval;
-    this->sval = k_ptr->sval;
+    this->tval = k_ptr->bi_key.tval();
+    this->sval = k_ptr->bi_key.sval().value();
     this->pval = k_ptr->pval;
     this->number = 1;
     this->weight = k_ptr->weight;
@@ -480,7 +480,7 @@ bool ObjectType::is_tried() const
  */
 bool ObjectType::is_potion() const
 {
-    return baseitems_info[this->k_idx].tval == ItemKindType::POTION;
+    return baseitems_info[this->k_idx].bi_key.tval() == ItemKindType::POTION;
 }
 
 /*!

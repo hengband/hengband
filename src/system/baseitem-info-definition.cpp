@@ -45,4 +45,9 @@ std::optional<int> BaseitemKey::sval() const
     return this->subtype_value;
 }
 
+BaseitemInfo::BaseitemInfo()
+    : bi_key(ItemKindType::NONE)
+{
+}
+
 std::vector<BaseitemInfo> baseitems_info;

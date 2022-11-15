@@ -34,11 +34,14 @@ void do_cmd_knowledge_weapon_exp(PlayerType *player_ptr)
 
     for (auto tval : { ItemKindType::SWORD, ItemKindType::POLEARM, ItemKindType::HAFTED, ItemKindType::DIGGING, ItemKindType::BOW }) {
         for (int num = 0; num < 64; num++) {
+            BaseitemKey bi_key(tval, num);
             for (const auto &k_ref : baseitems_info) {
-                if ((k_ref.tval != tval) || (k_ref.sval != num)) {
+                if (k_ref.bi_key != bi_key) {
                     continue;
                 }
-                if ((k_ref.tval == ItemKindType::BOW) && (k_ref.sval == SV_CRIMSON || k_ref.sval == SV_HARP)) {
+
+                const auto sval = k_ref.bi_key.sval();
+                if ((k_ref.bi_key.tval() == ItemKindType::BOW) && (sval == SV_CRIMSON || sval == SV_HARP)) {
                     continue;
                 }
 

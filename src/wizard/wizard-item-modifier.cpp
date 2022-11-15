@@ -269,7 +269,8 @@ static void prt_alloc(ItemKindType tval, OBJECT_SUBTYPE_VALUE sval, TERM_LEN row
             total[i] += prob / (CHANCE_BASEITEM_LEVEL_BOOST * K_MAX_DEPTH);
             total_frac += prob % (CHANCE_BASEITEM_LEVEL_BOOST * K_MAX_DEPTH);
 
-            if ((k_ptr->tval == tval) && (k_ptr->sval == sval)) {
+            BaseitemKey bi_key(tval, sval);
+            if (k_ptr->bi_key == bi_key) {
                 home = k_ptr->level;
                 rarity[i] += prob / (CHANCE_BASEITEM_LEVEL_BOOST * K_MAX_DEPTH);
             }
@@ -1038,7 +1039,7 @@ WishResultType do_cmd_wishing(PlayerType *player_ptr, int prob, bool allow_art, 
         FixedArtifactId a_idx = FixedArtifactId::NONE;
         if (k_ptr->gen_flags.has(ItemGenerationTraitType::INSTA_ART)) {
             for (const auto &[a_idx_loop, a_ref_loop] : artifacts_info) {
-                if (a_idx_loop == FixedArtifactId::NONE || a_ref_loop.bi_key.tval() != k_ptr->tval || a_ref_loop.bi_key.sval() != k_ptr->sval) {
+                if (a_idx_loop == FixedArtifactId::NONE || a_ref_loop.bi_key != k_ptr->bi_key) {
                     continue;
                 }
 

@@ -163,7 +163,7 @@ static KIND_OBJECT_IDX wiz_select_sval(const ItemKindType tval, concptr tval_des
             break;
         }
 
-        if (k_ref.idx == 0 || k_ref.tval != tval) {
+        if (k_ref.idx == 0 || k_ref.bi_key.tval() != tval) {
             continue;
         }
 
@@ -240,7 +240,7 @@ void wiz_create_item(PlayerType *player_ptr)
     const auto &baseitem = baseitems_info[bi_id];
     if (baseitem.gen_flags.has(ItemGenerationTraitType::INSTA_ART)) {
         for (const auto &[a_idx, a_ref] : artifacts_info) {
-            if ((a_idx == FixedArtifactId::NONE) || (a_ref.bi_key.tval() != baseitem.tval) || (a_ref.bi_key.sval() != baseitem.sval)) {
+            if ((a_idx == FixedArtifactId::NONE) || (a_ref.bi_key != baseitem.bi_key)) {
                 continue;
             }
 

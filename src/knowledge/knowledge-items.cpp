@@ -152,13 +152,14 @@ static KIND_OBJECT_IDX collect_objects(int grp_cur, KIND_OBJECT_IDX object_idx[]
             }
         }
 
+        const auto tval = k_ref.bi_key.tval();
         if (group_tval == ItemKindType::LIFE_BOOK) {
-            if (ItemKindType::LIFE_BOOK <= k_ref.tval && k_ref.tval <= ItemKindType::HEX_BOOK) {
+            if (ItemKindType::LIFE_BOOK <= tval && tval <= ItemKindType::HEX_BOOK) {
                 object_idx[object_cnt++] = k_ref.idx;
             } else {
                 continue;
             }
-        } else if (k_ref.tval == group_tval) {
+        } else if (tval == group_tval) {
             object_idx[object_cnt++] = k_ref.idx;
         } else {
             continue;

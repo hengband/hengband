@@ -14,6 +14,7 @@
 #include "system/baseitem-info-definition.h"
 #include "term/gameterm.h"
 #include "util/bit-flags-calculator.h"
+#include "util/enum-converter.h"
 #include "util/string-processor.h"
 #include "view/display-messages.h"
 
@@ -124,8 +125,10 @@ errr parse_baseitems_info(std::string_view buf, angband_header *head)
             return PARSE_ERROR_TOO_FEW_ARGUMENTS;
         }
 
-        info_set_value(k_ptr->tval, tokens[1]);
-        info_set_value(k_ptr->sval, tokens[2]);
+        constexpr auto base = 10;
+        const auto tval = i2enum<ItemKindType>(std::stoi(tokens[1], nullptr, base));
+        const auto sval = std::stoi(tokens[2], nullptr, base);
+        k_ptr->bi_key = { tval, sval };
         info_set_value(k_ptr->pval, tokens[3]);
     } else if (tokens[0] == "W") {
         // W:level:weight:cost
