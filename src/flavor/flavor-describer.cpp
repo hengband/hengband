@@ -31,7 +31,7 @@
 #include "specific-object/bow.h"
 #include "sv-definition/sv-lite-types.h"
 #include "sv-definition/sv-weapon-types.h"
-#include "system/baseitem-info-definition.h"
+#include "system/baseitem-info.h"
 #include "system/floor-type-definition.h"
 #include "system/item-entity.h"
 #include "system/player-type-definition.h"

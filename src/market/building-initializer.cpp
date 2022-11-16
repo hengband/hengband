@@ -7,7 +7,7 @@
 #include "store/store-util.h"
 #include "store/store.h"
 #include "system/angband.h"
-#include "system/baseitem-info-definition.h"
+#include "system/baseitem-info.h"
 #include "system/building-type-definition.h"
 #include "system/item-entity.h"
 #include <vector>

@@ -2463,7 +2463,7 @@
     <ClCompile Include="..\..\src\system\monster-entity.cpp">
       <Filter>system</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\system\baseitem-info-definition.cpp">
+    <ClCompile Include="..\..\src\system\baseitem-info.cpp">
       <Filter>system</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\system\floor-type-definition.cpp">
@@ -5361,7 +5361,7 @@
     <ClInclude Include="..\..\src\timed-effect\player-blindness.h">
       <Filter>timed-effect</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\system\baseitem-info-definition.h">
+    <ClInclude Include="..\..\src\system\baseitem-info.h">
       <Filter>system</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\system\dungeon-info.h">

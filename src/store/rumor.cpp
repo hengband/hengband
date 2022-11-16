@@ -8,7 +8,7 @@
 #include "object-enchant/special-object-flags.h"
 #include "object/object-kind-hook.h"
 #include "system/artifact-type-definition.h"
-#include "system/baseitem-info-definition.h"
+#include "system/baseitem-info.h"
 #include "system/dungeon-info.h"
 #include "system/item-entity.h"
 #include "system/monster-race-info.h"

@@ -2,7 +2,7 @@
 #include "artifact/random-art-effects.h"
 #include "object-enchant/tr-types.h"
 #include "player-ability/player-ability-types.h"
-#include "system/baseitem-info-definition.h"
+#include "system/baseitem-info.h"
 #include "system/floor-type-definition.h"
 #include "system/item-entity.h"
 #include "util/bit-flags-calculator.h"

@@ -22,7 +22,7 @@
 #include "player/player-status-flags.h"
 #include "player/player-status.h"
 #include "spell-kind/magic-item-recharger.h"
-#include "system/baseitem-info-definition.h"
+#include "system/baseitem-info.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
 #include "system/item-entity.h"

@@ -11,7 +11,7 @@
 #include "info-reader/parse-error-types.h"
 #include "main/angband-headers.h"
 #include "object-enchant/tr-types.h"
-#include "system/baseitem-info-definition.h"
+#include "system/baseitem-info.h"
 #include "term/gameterm.h"
 #include "util/bit-flags-calculator.h"
 #include "util/enum-converter.h"

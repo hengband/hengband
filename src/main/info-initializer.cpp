@@ -27,7 +27,7 @@
 #include "room/rooms-vault.h"
 #include "system/angband-version.h"
 #include "system/artifact-type-definition.h"
-#include "system/baseitem-info-definition.h"
+#include "system/baseitem-info.h"
 #include "system/dungeon-info.h"
 #include "system/monster-race-info.h"
 #include "system/player-type-definition.h"

@@ -3,7 +3,7 @@
 #include "load/angband-version-comparer.h"
 #include "load/load-util.h"
 #include "system/artifact-type-definition.h"
-#include "system/baseitem-info-definition.h"
+#include "system/baseitem-info.h"
 #include "util/bit-flags-calculator.h"
 #include "util/enum-converter.h"
 

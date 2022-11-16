@@ -10,7 +10,7 @@
 #include "monster-race/monster-race.h"
 #include "object-enchant/trg-types.h"
 #include "object/tval-types.h"
-#include "system/baseitem-info-definition.h"
+#include "system/baseitem-info.h"
 #include "system/item-entity.h"
 #include "system/monster-race-info.h"
 #include "util/enum-converter.h"

@@ -10,7 +10,7 @@
 #include "object-enchant/tr-types.h"
 #include "smith/object-smith.h"
 #include "system/artifact-type-definition.h"
-#include "system/baseitem-info-definition.h"
+#include "system/baseitem-info.h"
 #include "system/item-entity.h"
 #include "util/bit-flags-calculator.h"
 #include "util/enum-converter.h"

@@ -908,7 +908,7 @@ hengband_SOURCES = \
 	system/angband-exceptions.h \
 	system/angband-version.cpp system/angband-version.h \
 	system/artifact-type-definition.cpp system/artifact-type-definition.h \
-	system/baseitem-info-definition.cpp system/baseitem-info-definition.h \
+	system/baseitem-info.cpp system/baseitem-info.h \
 	system/building-type-definition.cpp system/building-type-definition.h \
 	system/dungeon-data-definition.h \
 	system/dungeon-info.cpp system/dungeon-info.h \

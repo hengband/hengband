@@ -14,7 +14,7 @@
 #include "perception/object-perception.h"
 #include "smith/object-smith.h"
 #include "sv-definition/sv-other-types.h"
-#include "system/baseitem-info-definition.h"
+#include "system/baseitem-info.h"
 #include "system/item-entity.h"
 
 /*!

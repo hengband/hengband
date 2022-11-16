@@ -14,7 +14,7 @@
 #include "object/item-use-flags.h"
 #include "perception/object-perception.h"
 #include "spell-kind/spells-perception.h"
-#include "system/baseitem-info-definition.h"
+#include "system/baseitem-info.h"
 #include "system/item-entity.h"
 #include "system/player-type-definition.h"
 #include "term/screen-processor.h"

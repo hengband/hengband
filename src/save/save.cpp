@@ -35,7 +35,7 @@
 #include "store/store-util.h"
 #include "system/angband-version.h"
 #include "system/artifact-type-definition.h"
-#include "system/baseitem-info-definition.h"
+#include "system/baseitem-info.h"
 #include "system/item-entity.h"
 #include "system/monster-race-info.h"
 #include "system/player-type-definition.h"

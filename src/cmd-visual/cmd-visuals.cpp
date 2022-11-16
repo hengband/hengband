@@ -16,7 +16,7 @@
 #include "knowledge/lighting-level-table.h"
 #include "main/sound-of-music.h"
 #include "monster-race/monster-race.h"
-#include "system/baseitem-info-definition.h"
+#include "system/baseitem-info.h"
 #include "system/item-entity.h"
 #include "system/monster-race-info.h"
 #include "system/player-type-definition.h"

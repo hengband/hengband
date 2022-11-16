@@ -11,7 +11,7 @@
 #include "game-option/option-types-table.h"
 #include "monster-race/monster-race.h"
 #include "system/alloc-entries.h"
-#include "system/baseitem-info-definition.h"
+#include "system/baseitem-info.h"
 #include "system/dungeon-info.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
