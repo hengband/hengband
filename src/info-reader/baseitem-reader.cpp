@@ -40,7 +40,7 @@ static bool grab_one_baseitem_flag(BaseitemInfo *k_ptr, std::string_view what)
 }
 
 /*!
- * @brief ベースアイテム(BaseItemDefinitions)のパース関数
+ * @brief ベースアイテム(BaseitemDefinitions)のパース関数
  * @param buf テキスト列
  * @param head ヘッダ構造体
  * @return エラーコード

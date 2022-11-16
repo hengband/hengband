@@ -149,7 +149,7 @@ errr init_artifacts_info()
 errr init_baseitems_info()
 {
     init_header(&baseitems_header);
-    return init_info("BaseItemDefinitions.txt", baseitems_header, baseitems_info, parse_baseitems_info);
+    return init_info("BaseitemDefinitions.txt", baseitems_header, baseitems_info, parse_baseitems_info);
 }
 
 /*!
