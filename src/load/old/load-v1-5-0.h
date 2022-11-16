@@ -1,7 +1,7 @@
 ﻿#pragma once
 
 #include "system/angband.h"
-#include "system/monster-type-definition.h"
+#include "system/monster-entity.h"
 
 // TODO: 更に分割する可能性が中程度あるのでヘッダに置いておく
 enum old_monster_resistance_type {

@@ -8,8 +8,8 @@
 #include "monster-race/race-flags-resistance.h"
 #include "player-attack/player-attack-util.h"
 #include "system/item-entity.h"
+#include "system/monster-entity.h"
 #include "system/monster-race-info.h"
-#include "system/monster-type-definition.h"
 #include "system/player-type-definition.h"
 #include "view/display-messages.h"
 

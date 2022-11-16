@@ -19,8 +19,8 @@
 #include "specific-object/torch.h"
 #include "spell-realm/spells-hex.h"
 #include "system/item-entity.h"
+#include "system/monster-entity.h"
 #include "system/monster-race-info.h"
-#include "system/monster-type-definition.h"
 #include "system/player-type-definition.h"
 #include "util/bit-flags-calculator.h"
 

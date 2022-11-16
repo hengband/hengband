@@ -593,7 +593,7 @@
     <ClCompile Include="..\..\src\store\sell-order.cpp" />
     <ClCompile Include="..\..\src\store\service-checker.cpp" />
     <ClCompile Include="..\..\src\system\angband-version.cpp" />
-    <ClCompile Include="..\..\src\system\monster-type-definition.cpp" />
+    <ClCompile Include="..\..\src\system\monster-entity.cpp" />
     <ClCompile Include="..\..\src\system\item-entity.cpp" />
     <ClCompile Include="..\..\src\system\player-type-definition.cpp" />
     <ClCompile Include="..\..\src\system\terrain-type-definition.cpp" />
@@ -1942,7 +1942,7 @@
     <ClInclude Include="..\..\src\cmd-action\cmd-mind.h" />
     <ClInclude Include="..\..\src\monster\monster-processor.h" />
     <ClInclude Include="..\..\src\monster\monster-status.h" />
-    <ClInclude Include="..\..\src\system\monster-type-definition.h" />
+    <ClInclude Include="..\..\src\system\monster-entity.h" />
     <ClInclude Include="..\..\src\monster-race\monster-race-hook.h" />
     <ClInclude Include="..\..\src\monster-race\monster-race.h" />
     <ClInclude Include="..\..\src\mutation\mutation-calculator.h" />

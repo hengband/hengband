@@ -19,7 +19,7 @@
 #include "io/cursor.h"
 #include "io/screen-util.h"
 #include "system/floor-type-definition.h"
-#include "system/monster-type-definition.h"
+#include "system/monster-entity.h"
 #include "system/player-type-definition.h"
 #include "target/target-preparation.h"
 #include "target/target-types.h"

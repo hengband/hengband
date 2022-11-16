@@ -11,8 +11,8 @@
 #include "player-info/equipment-info.h"
 #include "sv-definition/sv-weapon-types.h"
 #include "system/item-entity.h"
+#include "system/monster-entity.h"
 #include "system/monster-race-info.h"
-#include "system/monster-type-definition.h"
 #include "system/player-type-definition.h"
 #include "view/display-messages.h"
 

@@ -15,8 +15,8 @@
 #include "player/special-defense-types.h"
 #include "system/floor-type-definition.h"
 #include "system/item-entity.h"
+#include "system/monster-entity.h"
 #include "system/monster-race-info.h"
-#include "system/monster-type-definition.h"
 #include "system/player-type-definition.h"
 
 /*!<広域マップ移動時の自然回復処理カウンタ（広域マップ1マス毎に20回処理を基本とする）*/

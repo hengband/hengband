@@ -2460,7 +2460,7 @@
     <ClCompile Include="..\..\src\timed-effect\player-blindness.cpp">
       <Filter>timed-effect</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\system\monster-type-definition.cpp">
+    <ClCompile Include="..\..\src\system\monster-entity.cpp">
       <Filter>system</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\system\baseitem-info-definition.cpp">
@@ -3671,7 +3671,7 @@
     <ClInclude Include="..\..\src\player\eldritch-horror.h">
       <Filter>player</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\system\monster-type-definition.h">
+    <ClInclude Include="..\..\src\system\monster-entity.h">
       <Filter>system</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\monster\monster-processor-util.h">

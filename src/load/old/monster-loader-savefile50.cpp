@@ -3,7 +3,7 @@
 #include "load/load-util.h"
 #include "load/old/load-v1-5-0.h"
 #include "load/old/monster-flag-types-savefile50.h"
-#include "system/monster-type-definition.h"
+#include "system/monster-entity.h"
 #include "system/player-type-definition.h"
 #include "util/bit-flags-calculator.h"
 #include "util/enum-converter.h"

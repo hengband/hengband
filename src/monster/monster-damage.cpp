@@ -4,8 +4,7 @@
  * @author Hourier
  */
 
-#include <algorithm>
-
+#include "monster/monster-damage.h"
 #include "avatar/avatar-changer.h"
 #include "core/player-redraw-types.h"
 #include "core/speed-table.h"
@@ -29,7 +28,6 @@
 #include "monster-race/race-flags3.h"
 #include "monster-race/race-flags7.h"
 #include "monster-race/race-flags8.h"
-#include "monster/monster-damage.h"
 #include "monster/monster-describer.h"
 #include "monster/monster-description-types.h"
 #include "monster/monster-info.h"
@@ -41,14 +39,15 @@
 #include "spell-kind/spells-random.h"
 #include "status/experience.h"
 #include "system/floor-type-definition.h"
+#include "system/monster-entity.h"
 #include "system/monster-race-info.h"
-#include "system/monster-type-definition.h"
 #include "system/player-type-definition.h"
 #include "timed-effect/player-hallucination.h"
 #include "timed-effect/timed-effects.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 #include "world/world.h"
+#include <algorithm>
 
 /*
  * @brief コンストラクタ

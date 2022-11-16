@@ -4,8 +4,8 @@
 #include "monster-race/race-flags2.h"
 #include "monster/smart-learn-types.h"
 #include "system/floor-type-definition.h"
+#include "system/monster-entity.h"
 #include "system/monster-race-info.h"
-#include "system/monster-type-definition.h"
 #include "system/player-type-definition.h"
 
 msr_type *initialize_msr_type(PlayerType *player_ptr, msr_type *msr_ptr, MONSTER_IDX m_idx, const EnumClassFlagGroup<MonsterAbilityType> &ability_flags)

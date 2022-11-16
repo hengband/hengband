@@ -41,7 +41,7 @@
 #include "system/baseitem-info-definition.h"
 #include "system/floor-type-definition.h"
 #include "system/item-entity.h"
-#include "system/monster-type-definition.h"
+#include "system/monster-entity.h"
 #include "system/player-type-definition.h"
 #include "target/target-getter.h"
 #include "term/screen-processor.h"
