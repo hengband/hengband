@@ -7,7 +7,7 @@
 #include "object-enchant/weapon/apply-magic-bow.h"
 #include "artifact/random-art-generator.h"
 #include "inventory/inventory-slot-types.h"
-#include "system/object-type-definition.h"
+#include "system/item-entity.h"
 
 /*!
  * @brief 弓強化クラスのコンストラクタ
@@ -16,7 +16,7 @@
  * @param level 生成基準階
  * @param power 生成ランク
  */
-BowEnchanter::BowEnchanter(PlayerType *player_ptr, ObjectType *o_ptr, DEPTH level, int power)
+BowEnchanter::BowEnchanter(PlayerType *player_ptr, ItemEntity *o_ptr, DEPTH level, int power)
     : AbstractWeaponEnchanter(o_ptr, level, power)
     , player_ptr(player_ptr)
 {

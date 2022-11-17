@@ -44,11 +44,11 @@
 #include "status/experience.h"
 #include "status/shape-changer.h"
 #include "status/sight-setter.h"
-#include "system/baseitem-info-definition.h"
+#include "system/baseitem-info.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
-#include "system/monster-type-definition.h"
-#include "system/object-type-definition.h"
+#include "system/item-entity.h"
+#include "system/monster-entity.h"
 #include "system/player-type-definition.h"
 #include "target/target-getter.h"
 #include "timed-effect/player-acceleration.h"
@@ -560,7 +560,7 @@ bool fishing(PlayerType *player_ptr)
  * @details
  * 脱いで落とした装備にtimeoutを設定するために装備品のアドレスを返す。
  */
-bool cosmic_cast_off(PlayerType *player_ptr, ObjectType **o_ptr_ptr)
+bool cosmic_cast_off(PlayerType *player_ptr, ItemEntity **o_ptr_ptr)
 {
     auto *o_ptr = (*o_ptr_ptr);
 
@@ -576,7 +576,7 @@ bool cosmic_cast_off(PlayerType *player_ptr, ObjectType **o_ptr_ptr)
         return false;
     }
 
-    ObjectType forge;
+    ItemEntity forge;
     (&forge)->copy_from(o_ptr);
     inven_item_increase(player_ptr, slot, (0 - o_ptr->number));
     inven_item_optimize(player_ptr, slot);
@@ -613,7 +613,7 @@ bool cosmic_cast_off(PlayerType *player_ptr, ObjectType **o_ptr_ptr)
  * @brief プレイヤーの因果混乱処理 / Apply Nexus
  * @param m_ptr 因果混乱をプレイヤーに与えたモンスターの情報参照ポインタ
  */
-void apply_nexus(monster_type *m_ptr, PlayerType *player_ptr)
+void apply_nexus(MonsterEntity *m_ptr, PlayerType *player_ptr)
 {
     switch (randint1(7)) {
     case 1:

@@ -13,7 +13,7 @@ enum class SmithEssenceType : int16_t;
 enum class RandomArtActType : short;
 
 class PlayerType;
-class ObjectType;
+class ItemEntity;
 
 /*!
  * @brief 鍛冶効果の情報の基底クラス
@@ -29,14 +29,14 @@ public:
      * @param number 付与を行うエッセンスの個数
      * @return 鍛冶効果の付与に成功した場合は true、失敗した場合は false
      */
-    virtual bool add_essence(PlayerType *player_ptr, ObjectType *o_ptr, int number) const = 0;
+    virtual bool add_essence(PlayerType *player_ptr, ItemEntity *o_ptr, int number) const = 0;
 
     /*!
      * @brief 鍛冶効果を消去する
      *
      * @param o_ptr 鍛冶効果の消去を行うアイテム構造体へのポインタ
      */
-    virtual void erase_essence(ObjectType *o_ptr) const = 0;
+    virtual void erase_essence(ItemEntity *o_ptr) const = 0;
 
     /*!
      * @brief 鍛冶効果により与えられる特性フラグ(tr_type)のFlagGroupオブジェクトを取得する
@@ -52,7 +52,7 @@ public:
      * @param o_ptr 鍛冶を行うアイテム構造体へのポインタ
      * @return 鍛冶を行えるなら true、そうでなければ false
      */
-    virtual bool can_give_smith_effect(const ObjectType *o_ptr) const = 0;
+    virtual bool can_give_smith_effect(const ItemEntity *o_ptr) const = 0;
 
     SmithEffectType effect; //!< 鍛冶で与える効果の種類
     concptr name; //!< 鍛冶で与える能力の名称
@@ -71,13 +71,13 @@ protected:
 class BasicSmithInfo : public ISmithInfo {
 public:
     BasicSmithInfo(SmithEffectType effect, concptr name, SmithCategoryType category, std::vector<SmithEssenceType> need_essences, int consumption, TrFlags add_flags);
-    virtual bool add_essence(PlayerType *player_ptr, ObjectType *o_ptr, int number) const override;
-    virtual void erase_essence(ObjectType *o_ptr) const override;
+    virtual bool add_essence(PlayerType *player_ptr, ItemEntity *o_ptr, int number) const override;
+    virtual void erase_essence(ItemEntity *o_ptr) const override;
     virtual TrFlags tr_flags() const override;
-    virtual bool can_give_smith_effect(const ObjectType *o_ptr) const final override;
+    virtual bool can_give_smith_effect(const ItemEntity *o_ptr) const final override;
 
 private:
-    virtual bool can_give_smith_effect_impl(const ObjectType *o_ptr) const;
+    virtual bool can_give_smith_effect_impl(const ItemEntity *o_ptr) const;
     TrFlags add_flags; //!< 鍛冶で能力を与えることにより付与されるアイテム特性フラグ
 };
 
@@ -88,9 +88,9 @@ private:
 class ActivationSmithInfo : public ISmithInfo {
 public:
     ActivationSmithInfo(SmithEffectType effect, concptr name, SmithCategoryType category, std::vector<SmithEssenceType> need_essences, int consumption, RandomArtActType act_idx);
-    virtual bool add_essence(PlayerType *player_ptr, ObjectType *o_ptr, int number) const override;
-    virtual void erase_essence(ObjectType *) const override;
-    virtual bool can_give_smith_effect(const ObjectType *o_ptr) const override;
+    virtual bool add_essence(PlayerType *player_ptr, ItemEntity *o_ptr, int number) const override;
+    virtual void erase_essence(ItemEntity *) const override;
+    virtual bool can_give_smith_effect(const ItemEntity *o_ptr) const override;
 
 private:
     RandomArtActType act_idx; //!< 発動能力ID
@@ -103,9 +103,9 @@ private:
 class EnchantWeaponSmithInfo : public ISmithInfo {
 public:
     EnchantWeaponSmithInfo(SmithEffectType effect, concptr name, SmithCategoryType category, std::vector<SmithEssenceType> need_essences, int consumption);
-    virtual bool add_essence(PlayerType *player_ptr, ObjectType *o_ptr, int number) const override;
-    virtual void erase_essence(ObjectType *) const override {}
-    virtual bool can_give_smith_effect(const ObjectType *o_ptr) const override;
+    virtual bool add_essence(PlayerType *player_ptr, ItemEntity *o_ptr, int number) const override;
+    virtual void erase_essence(ItemEntity *) const override {}
+    virtual bool can_give_smith_effect(const ItemEntity *o_ptr) const override;
 };
 
 /*!
@@ -115,9 +115,9 @@ public:
 class EnchantArmourSmithInfo : public ISmithInfo {
 public:
     EnchantArmourSmithInfo(SmithEffectType effect, concptr name, SmithCategoryType category, std::vector<SmithEssenceType> need_essences, int consumption);
-    virtual bool add_essence(PlayerType *player_ptr, ObjectType *o_ptr, int number) const override;
-    virtual void erase_essence(ObjectType *) const override {}
-    virtual bool can_give_smith_effect(const ObjectType *o_ptr) const override;
+    virtual bool add_essence(PlayerType *player_ptr, ItemEntity *o_ptr, int number) const override;
+    virtual void erase_essence(ItemEntity *) const override {}
+    virtual bool can_give_smith_effect(const ItemEntity *o_ptr) const override;
 };
 
 /*!
@@ -127,9 +127,9 @@ public:
 class SustainSmithInfo : public ISmithInfo {
 public:
     SustainSmithInfo(SmithEffectType effect, concptr name, SmithCategoryType category, std::vector<SmithEssenceType> need_essences, int consumption);
-    virtual bool add_essence(PlayerType *player_ptr, ObjectType *o_ptr, int number) const override;
-    virtual void erase_essence(ObjectType *) const override {}
-    virtual bool can_give_smith_effect(const ObjectType *o_ptr) const override;
+    virtual bool add_essence(PlayerType *player_ptr, ItemEntity *o_ptr, int number) const override;
+    virtual void erase_essence(ItemEntity *) const override {}
+    virtual bool can_give_smith_effect(const ItemEntity *o_ptr) const override;
 };
 
 /*!
@@ -139,9 +139,9 @@ public:
 class SlayingGlovesSmithInfo : public BasicSmithInfo {
 public:
     SlayingGlovesSmithInfo(SmithEffectType effect, concptr name, SmithCategoryType category, std::vector<SmithEssenceType> need_essences, int consumption);
-    virtual bool add_essence(PlayerType *player_ptr, ObjectType *o_ptr, int number) const override;
-    virtual void erase_essence(ObjectType *) const override;
+    virtual bool add_essence(PlayerType *player_ptr, ItemEntity *o_ptr, int number) const override;
+    virtual void erase_essence(ItemEntity *) const override;
 
 private:
-    virtual bool can_give_smith_effect_impl(const ObjectType *o_ptr) const override;
+    virtual bool can_give_smith_effect_impl(const ItemEntity *o_ptr) const override;
 };

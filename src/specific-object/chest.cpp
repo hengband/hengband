@@ -23,7 +23,7 @@
 #include "status/element-resistance.h"
 #include "sv-definition/sv-other-types.h"
 #include "system/floor-type-definition.h"
-#include "system/object-type-definition.h"
+#include "system/item-entity.h"
 #include "system/player-type-definition.h"
 #include "view/display-messages.h"
 
@@ -61,8 +61,8 @@ void Chest::chest_death(bool scatter, POSITION y, POSITION x, OBJECT_IDX o_idx)
     bool small;
     BIT_FLAGS mode = AM_GOOD | AM_FORBID_CHEST;
 
-    ObjectType forge;
-    ObjectType *q_ptr;
+    ItemEntity forge;
+    ItemEntity *q_ptr;
 
     auto *floor_ptr = this->player_ptr->current_floor_ptr;
     auto *o_ptr = &floor_ptr->o_list[o_idx];

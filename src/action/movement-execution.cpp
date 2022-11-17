@@ -40,9 +40,9 @@
 #include "player/player-status.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
-#include "system/monster-race-definition.h"
-#include "system/monster-type-definition.h"
-#include "system/object-type-definition.h"
+#include "system/item-entity.h"
+#include "system/monster-entity.h"
+#include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
 #include "system/terrain-type-definition.h"
 #include "timed-effect/player-confusion.h"
@@ -206,7 +206,7 @@ void exe_movement(PlayerType *player_ptr, DIRECTION dir, bool do_pickup, bool br
         }
     }
 
-    monster_type *riding_m_ptr = &floor_ptr->m_list[player_ptr->riding];
+    MonsterEntity *riding_m_ptr = &floor_ptr->m_list[player_ptr->riding];
     PlayerEnergy energy(player_ptr);
     if (can_move && player_ptr->riding) {
         const auto *riding_r_ptr = &monraces_info[riding_m_ptr->r_idx];

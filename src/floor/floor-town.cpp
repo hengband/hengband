@@ -1,6 +1,5 @@
 ﻿#include "floor/floor-town.h"
-#include "store/store-util.h"
-#include "system/object-type-definition.h"
+#include "system/item-entity.h"
 
 /* Maximum number of towns */
 int16_t max_towns;

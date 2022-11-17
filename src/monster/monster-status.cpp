@@ -19,8 +19,8 @@
 #include "monster/monster-status-setter.h" //!< @todo 相互依存. 後で何とかする.
 #include "monster/monster-update.h"
 #include "system/floor-type-definition.h"
-#include "system/monster-race-definition.h"
-#include "system/monster-type-definition.h"
+#include "system/monster-entity.h"
+#include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
 #include "timed-effect/player-blindness.h"
 #include "timed-effect/player-hallucination.h"
@@ -71,7 +71,7 @@ DEPTH monster_level_idx(FloorType *floor_ptr, MONSTER_IDX m_idx)
  * @return 修正を行った結果のダメージ量
  * @details RES_ALL持ちはAC軽減後のダメージを1/100に補正する. 光の剣は無敵を無効化する. 一定確率で無敵は貫通できる.
  */
-int mon_damage_mod(PlayerType *player_ptr, monster_type *m_ptr, int dam, bool is_psy_spear)
+int mon_damage_mod(PlayerType *player_ptr, MonsterEntity *m_ptr, int dam, bool is_psy_spear)
 {
     auto *r_ptr = &monraces_info[m_ptr->r_idx];
     if (r_ptr->resistance_flags.has(MonsterResistanceType::RESIST_ALL) && dam > 0) {
@@ -493,7 +493,7 @@ void monster_gain_exp(PlayerType *player_ptr, MONSTER_IDX m_idx, MonsterRaceId s
         auto is_hallucinated = player_ptr->effects()->hallucination()->is_hallucinated();
         if (!ignore_unview || player_can_see_bold(player_ptr, m_ptr->fy, m_ptr->fx)) {
             if (is_hallucinated) {
-                monster_race *hallucinated_race = nullptr;
+                MonsterRaceInfo *hallucinated_race = nullptr;
                 do {
                     auto r_idx = MonsterRace::pick_one_at_random();
                     hallucinated_race = &monraces_info[r_idx];

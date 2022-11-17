@@ -10,12 +10,12 @@
 #include "flavor/object-flavor-types.h"
 #include "io/files-util.h"
 #include "system/angband.h"
-#include "system/object-type-definition.h"
+#include "system/item-entity.h"
 #include "system/player-type-definition.h"
 #include "term/screen-processor.h"
 #include "util/angband-files.h"
 
-ParchmentReadExecutor::ParchmentReadExecutor(PlayerType *player_ptr, ObjectType *o_ptr)
+ParchmentReadExecutor::ParchmentReadExecutor(PlayerType *player_ptr, ItemEntity *o_ptr)
     : player_ptr(player_ptr)
     , o_ptr(o_ptr)
 {

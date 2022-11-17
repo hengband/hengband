@@ -41,9 +41,9 @@
 #include "sv-definition/sv-weapon-types.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
-#include "system/monster-race-definition.h"
-#include "system/monster-type-definition.h"
-#include "system/object-type-definition.h"
+#include "system/item-entity.h"
+#include "system/monster-entity.h"
+#include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
 #include "timed-effect/player-blindness.h"
 #include "timed-effect/timed-effects.h"
@@ -121,7 +121,7 @@ BIT_FLAGS convert_inventory_slot_type_to_flag_cause(inventory_slot_type inventor
  */
 BIT_FLAGS check_equipment_flags(PlayerType *player_ptr, tr_type tr_flag)
 {
-    ObjectType *o_ptr;
+    ItemEntity *o_ptr;
     BIT_FLAGS result = 0L;
     for (int i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
         o_ptr = &player_ptr->inventory_list[i];
@@ -489,8 +489,8 @@ bool has_kill_wall(PlayerType *player_ptr)
     }
 
     if (player_ptr->riding) {
-        monster_type *riding_m_ptr = &player_ptr->current_floor_ptr->m_list[player_ptr->riding];
-        monster_race *riding_r_ptr = &monraces_info[riding_m_ptr->r_idx];
+        MonsterEntity *riding_m_ptr = &player_ptr->current_floor_ptr->m_list[player_ptr->riding];
+        MonsterRaceInfo *riding_r_ptr = &monraces_info[riding_m_ptr->r_idx];
         if (riding_r_ptr->feature_flags.has(MonsterFeatureType::KILL_WALL)) {
             return true;
         }
@@ -516,8 +516,8 @@ bool has_pass_wall(PlayerType *player_ptr)
     }
 
     if (player_ptr->riding) {
-        monster_type *riding_m_ptr = &player_ptr->current_floor_ptr->m_list[player_ptr->riding];
-        monster_race *riding_r_ptr = &monraces_info[riding_m_ptr->r_idx];
+        MonsterEntity *riding_m_ptr = &player_ptr->current_floor_ptr->m_list[player_ptr->riding];
+        MonsterRaceInfo *riding_r_ptr = &monraces_info[riding_m_ptr->r_idx];
         if (riding_r_ptr->feature_flags.has_not(MonsterFeatureType::PASS_WALL)) {
             pow = false;
         }
@@ -713,7 +713,7 @@ BIT_FLAGS has_invuln_arrow(PlayerType *player_ptr)
 
 void check_no_flowed(PlayerType *player_ptr)
 {
-    ObjectType *o_ptr;
+    ItemEntity *o_ptr;
     bool has_sw = false, has_kabe = false;
 
     player_ptr->no_flowed = false;
@@ -793,7 +793,7 @@ BIT_FLAGS has_see_nocto(PlayerType *player_ptr)
 BIT_FLAGS has_warning(PlayerType *player_ptr)
 {
     BIT_FLAGS result = 0L;
-    ObjectType *o_ptr;
+    ItemEntity *o_ptr;
 
     for (int i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
         o_ptr = &player_ptr->inventory_list[i];
@@ -1003,8 +1003,8 @@ BIT_FLAGS has_levitation(PlayerType *player_ptr)
 
     // 乗馬中は実際に浮遊するかどうかは乗馬中のモンスターに依存する
     if (player_ptr->riding) {
-        monster_type *riding_m_ptr = &player_ptr->current_floor_ptr->m_list[player_ptr->riding];
-        monster_race *riding_r_ptr = &monraces_info[riding_m_ptr->r_idx];
+        MonsterEntity *riding_m_ptr = &player_ptr->current_floor_ptr->m_list[player_ptr->riding];
+        MonsterRaceInfo *riding_r_ptr = &monraces_info[riding_m_ptr->r_idx];
         result = riding_r_ptr->feature_flags.has(MonsterFeatureType::CAN_FLY) ? FLAG_CAUSE_RIDING : FLAG_CAUSE_NONE;
     }
 
@@ -1015,8 +1015,8 @@ bool has_can_swim(PlayerType *player_ptr)
 {
     bool can_swim = false;
     if (player_ptr->riding) {
-        monster_type *riding_m_ptr = &player_ptr->current_floor_ptr->m_list[player_ptr->riding];
-        monster_race *riding_r_ptr = &monraces_info[riding_m_ptr->r_idx];
+        MonsterEntity *riding_m_ptr = &player_ptr->current_floor_ptr->m_list[player_ptr->riding];
+        MonsterRaceInfo *riding_r_ptr = &monraces_info[riding_m_ptr->r_idx];
         if (riding_r_ptr->feature_flags.has_any_of({ MonsterFeatureType::CAN_SWIM, MonsterFeatureType::AQUATIC })) {
             can_swim = true;
         }
@@ -1057,7 +1057,7 @@ BIT_FLAGS has_regenerate(PlayerType *player_ptr)
 
 void update_curses(PlayerType *player_ptr)
 {
-    ObjectType *o_ptr;
+    ItemEntity *o_ptr;
     player_ptr->cursed.clear();
     player_ptr->cursed_special.clear();
 
@@ -1171,7 +1171,7 @@ BIT_FLAGS has_earthquake(PlayerType *player_ptr)
 
 void update_extra_blows(PlayerType *player_ptr)
 {
-    ObjectType *o_ptr;
+    ItemEntity *o_ptr;
     player_ptr->extra_blows[0] = player_ptr->extra_blows[1] = 0;
 
     const melee_type melee_type = player_melee_type(player_ptr);
@@ -1478,7 +1478,7 @@ BIT_FLAGS has_resist_curse(PlayerType *player_ptr)
  */
 BIT_FLAGS has_vuln_curse(PlayerType *player_ptr)
 {
-    ObjectType *o_ptr;
+    ItemEntity *o_ptr;
     BIT_FLAGS result = 0L;
     for (int i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
         o_ptr = &player_ptr->inventory_list[i];
@@ -1503,7 +1503,7 @@ BIT_FLAGS has_vuln_curse(PlayerType *player_ptr)
  */
 BIT_FLAGS has_heavy_vuln_curse(PlayerType *player_ptr)
 {
-    ObjectType *o_ptr;
+    ItemEntity *o_ptr;
     BIT_FLAGS result = 0L;
     for (int i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
         o_ptr = &player_ptr->inventory_list[i];

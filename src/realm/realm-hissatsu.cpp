@@ -44,9 +44,9 @@
 #include "system/dungeon-info.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
-#include "system/monster-race-definition.h"
-#include "system/monster-type-definition.h"
-#include "system/object-type-definition.h"
+#include "system/item-entity.h"
+#include "system/monster-entity.h"
+#include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
 #include "target/grid-selector.h"
 #include "target/projection-path-calculator.h"
@@ -735,7 +735,7 @@ concptr do_hissatsu_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessT
 
         if (cast) {
             int total_damage = 0, basedam, i;
-            ObjectType *o_ptr;
+            ItemEntity *o_ptr;
             if (!get_aim_dir(player_ptr, &dir)) {
                 return nullptr;
             }
@@ -811,7 +811,7 @@ concptr do_hissatsu_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessT
                 POSITION ny, nx;
                 MONSTER_IDX m_idx;
                 grid_type *g_ptr;
-                monster_type *m_ptr;
+                MonsterEntity *m_ptr;
 
                 y = player_ptr->y + ddy[dir];
                 x = player_ptr->x + ddx[dir];
@@ -1037,7 +1037,7 @@ concptr do_hissatsu_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessT
         if (cast) {
             int total_damage = 0, basedam, i;
             POSITION y, x;
-            ObjectType *o_ptr;
+            ItemEntity *o_ptr;
 
             if (!get_direction(player_ptr, &dir, false, false)) {
                 return nullptr;

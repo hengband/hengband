@@ -1,7 +1,7 @@
 ﻿#pragma once
 
 /*
- * @file object-type-definition.h
+ * @file item-entity.h
  * @brief アイテム定義の構造体とエンティティ処理定義
  * @author Hourier
  * @date 2021/05/02
@@ -20,9 +20,9 @@ enum class ItemKindType : short;
 enum class SmithEffectType : int16_t;
 enum class RandomArtActType : short;
 
-class ObjectType {
+class ItemEntity {
 public:
-    ObjectType();
+    ItemEntity();
     KIND_OBJECT_IDX k_idx{}; /*!< Kind index (zero if "dead") */
     POSITION iy{}; /*!< Y-position on map, or zero */
     POSITION ix{}; /*!< X-position on map, or zero */
@@ -69,7 +69,7 @@ public:
     int artifact_bias{}; /*!< ランダムアーティファクト生成時のバイアスID */
 
     void wipe();
-    void copy_from(const ObjectType *j_ptr);
+    void copy_from(const ItemEntity *j_ptr);
     void prep(KIND_OBJECT_IDX ko_idx);
     bool is_weapon() const;
     bool is_weapon_ammo() const;
@@ -114,8 +114,8 @@ public:
     bool is_activatable() const;
     bool is_fuel() const;
     bool is_book() const;
-    bool is_glove_same_temper(const ObjectType *j_ptr) const;
-    bool can_pile(const ObjectType *j_ptr) const;
+    bool is_glove_same_temper(const ItemEntity *j_ptr) const;
+    bool can_pile(const ItemEntity *j_ptr) const;
     TERM_COLOR get_color() const;
     char get_symbol() const;
     int get_price() const;

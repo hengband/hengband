@@ -2,7 +2,7 @@
 #include "object/tval-types.h"
 #include "sv-definition/sv-potion-types.h"
 #include "sv-definition/sv-scroll-types.h"
-#include "system/baseitem-info-definition.h"
+#include "system/baseitem-info.h"
 
 const std::vector<BaseitemKey> prize_list = {
     { ItemKindType::POTION, SV_POTION_CURING },

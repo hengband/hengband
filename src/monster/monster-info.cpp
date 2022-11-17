@@ -28,8 +28,8 @@
 #include "player/player-status-flags.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
-#include "system/monster-race-definition.h"
-#include "system/monster-type-definition.h"
+#include "system/monster-entity.h"
+#include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
 #include "system/terrain-type-definition.h"
 #include "timed-effect/player-hallucination.h"
@@ -41,7 +41,7 @@
  * @brief モンスターを友好的にする
  * @param m_ptr モンスター情報構造体の参照ポインタ
  */
-void set_friendly(monster_type *m_ptr)
+void set_friendly(MonsterEntity *m_ptr)
 {
     m_ptr->mflag2.set(MonsterConstantFlagType::FRIENDLY);
 }
@@ -55,7 +55,7 @@ void set_friendly(monster_type *m_ptr)
  * @param mode オプション
  * @return 踏破可能ならばTRUEを返す
  */
-bool monster_can_cross_terrain(PlayerType *player_ptr, FEAT_IDX feat, monster_race *r_ptr, BIT_FLAGS16 mode)
+bool monster_can_cross_terrain(PlayerType *player_ptr, FEAT_IDX feat, MonsterRaceInfo *r_ptr, BIT_FLAGS16 mode)
 {
     auto *f_ptr = &terrains_info[feat];
 
@@ -146,7 +146,7 @@ bool monster_can_cross_terrain(PlayerType *player_ptr, FEAT_IDX feat, monster_ra
  * @param mode オプション
  * @return 踏破可能ならばTRUEを返す
  */
-bool monster_can_enter(PlayerType *player_ptr, POSITION y, POSITION x, monster_race *r_ptr, BIT_FLAGS16 mode)
+bool monster_can_enter(PlayerType *player_ptr, POSITION y, POSITION x, MonsterRaceInfo *r_ptr, BIT_FLAGS16 mode)
 {
     auto *g_ptr = &player_ptr->current_floor_ptr->grid_array[y][x];
     if (player_bold(player_ptr, y, x)) {
@@ -184,7 +184,7 @@ static bool check_hostile_align(byte sub_align1, byte sub_align2)
  * @param n_ptr モンスター2の構造体参照ポインタ
  * @return 敵対関係にあるならばTRUEを返す
  */
-bool are_enemies(PlayerType *player_ptr, const monster_type &m1_ref, const monster_type &m2_ref)
+bool are_enemies(PlayerType *player_ptr, const MonsterEntity &m1_ref, const MonsterEntity &m2_ref)
 {
     if (player_ptr->phase_out) {
         if (m1_ref.is_pet() || m2_ref.is_pet()) {
@@ -228,7 +228,7 @@ bool are_enemies(PlayerType *player_ptr, const monster_type &m1_ref, const monst
  * @details
  * If user is player, m_ptr == nullptr.
  */
-bool monster_has_hostile_align(PlayerType *player_ptr, monster_type *m_ptr, int pa_good, int pa_evil, monster_race *r_ptr)
+bool monster_has_hostile_align(PlayerType *player_ptr, MonsterEntity *m_ptr, int pa_good, int pa_evil, MonsterRaceInfo *r_ptr)
 {
     byte sub_align1 = SUB_ALIGN_NEUTRAL;
     byte sub_align2 = SUB_ALIGN_NEUTRAL;
@@ -261,7 +261,7 @@ bool monster_has_hostile_align(PlayerType *player_ptr, monster_type *m_ptr, int 
     return false;
 }
 
-bool is_original_ap_and_seen(PlayerType *player_ptr, const monster_type *m_ptr)
+bool is_original_ap_and_seen(PlayerType *player_ptr, const MonsterEntity *m_ptr)
 {
     return m_ptr->ml && !player_ptr->effects()->hallucination()->is_hallucinated() && m_ptr->is_original_ap();
 }

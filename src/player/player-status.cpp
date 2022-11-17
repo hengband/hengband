@@ -105,9 +105,9 @@
 #include "system/dungeon-info.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
-#include "system/monster-race-definition.h"
-#include "system/monster-type-definition.h"
-#include "system/object-type-definition.h"
+#include "system/item-entity.h"
+#include "system/monster-entity.h"
+#include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
 #include "system/terrain-type-definition.h"
 #include "term/screen-processor.h"
@@ -195,7 +195,7 @@ static void delayed_visual_update(PlayerType *player_ptr)
  * @param o_ptr 判定する射撃武器のアイテム情報参照ポインタ
  * @return 重すぎるならばTRUE
  */
-static bool is_heavy_shoot(PlayerType *player_ptr, ObjectType *o_ptr)
+static bool is_heavy_shoot(PlayerType *player_ptr, ItemEntity *o_ptr)
 {
     return calc_bow_weight_limit(player_ptr) < (o_ptr->weight / 10);
 }
@@ -209,7 +209,7 @@ WEIGHT calc_inventory_weight(PlayerType *player_ptr)
 {
     WEIGHT weight = 0;
 
-    ObjectType *o_ptr;
+    ItemEntity *o_ptr;
     for (int i = 0; i < INVEN_TOTAL; i++) {
         o_ptr = &player_ptr->inventory_list[i];
         if (!o_ptr->k_idx) {
@@ -262,7 +262,7 @@ static void update_ability_scores(PlayerType *player_ptr)
 static void update_bonuses(PlayerType *player_ptr)
 {
     auto empty_hands_status = empty_hands(player_ptr, true);
-    ObjectType *o_ptr;
+    ItemEntity *o_ptr;
 
     /* Save the old vision stuff */
     BIT_FLAGS old_telepathy = player_ptr->telepathy;
@@ -819,7 +819,7 @@ static void update_max_mana(PlayerType *player_ptr)
 
     if (any_bits(mp_ptr->spell_xtra, extra_magic_glove_reduce_mana)) {
         player_ptr->cumber_glove = false;
-        ObjectType *o_ptr;
+        ItemEntity *o_ptr;
         o_ptr = &player_ptr->inventory_list[INVEN_ARMS];
         auto flgs = object_flags(o_ptr);
         if (o_ptr->k_idx && flgs.has_not(TR_FREE_ACT) && flgs.has_not(TR_DEC_MANA) && flgs.has_not(TR_EASY_SPELL) && !((flgs.has(TR_MAGIC_MASTERY)) && (o_ptr->pval > 0)) && !((flgs.has(TR_DEX)) && (o_ptr->pval > 0))) {
@@ -1010,12 +1010,12 @@ static void update_max_mana(PlayerType *player_ptr)
  * @param o_ptr 計算する射撃武器のアイテム情報参照ポインタ
  * @return 射撃倍率の値(100で1.00倍)
  */
-int16_t calc_num_fire(PlayerType *player_ptr, ObjectType *o_ptr)
+int16_t calc_num_fire(PlayerType *player_ptr, ItemEntity *o_ptr)
 {
     int extra_shots = 0;
 
     for (int i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
-        ObjectType *q_ptr;
+        ItemEntity *q_ptr;
         q_ptr = &player_ptr->inventory_list[i];
         if (!q_ptr->k_idx) {
             continue;
@@ -1137,7 +1137,7 @@ static ACTION_SKILL_POWER calc_device_ability(PlayerType *player_ptr)
     pow += ((c_ptr->x_dev * player_ptr->lev / 10) + (ap_ptr->a_dev * player_ptr->lev / 50));
 
     for (int i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
-        ObjectType *o_ptr;
+        ItemEntity *o_ptr;
         o_ptr = &player_ptr->inventory_list[i];
         if (!o_ptr->k_idx) {
             continue;
@@ -1266,7 +1266,7 @@ static ACTION_SKILL_POWER calc_search(PlayerType *player_ptr)
     pow += (c_ptr->x_srh * player_ptr->lev / 10);
 
     for (int i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
-        ObjectType *o_ptr;
+        ItemEntity *o_ptr;
         o_ptr = &player_ptr->inventory_list[i];
         if (!o_ptr->k_idx) {
             continue;
@@ -1317,7 +1317,7 @@ static ACTION_SKILL_POWER calc_search_freq(PlayerType *player_ptr)
     pow += (c_ptr->x_fos * player_ptr->lev / 10);
 
     for (int i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
-        ObjectType *o_ptr;
+        ItemEntity *o_ptr;
         o_ptr = &player_ptr->inventory_list[i];
         if (!o_ptr->k_idx) {
             continue;
@@ -1435,7 +1435,7 @@ static ACTION_SKILL_POWER calc_to_hit_throw(PlayerType *player_ptr)
  */
 static ACTION_SKILL_POWER calc_skill_dig(PlayerType *player_ptr)
 {
-    ObjectType *o_ptr;
+    ItemEntity *o_ptr;
 
     ACTION_SKILL_POWER pow;
 
@@ -1502,7 +1502,7 @@ static bool is_heavy_wield(PlayerType *player_ptr, int i)
 
 static int16_t calc_num_blow(PlayerType *player_ptr, int i)
 {
-    ObjectType *o_ptr;
+    ItemEntity *o_ptr;
     int16_t num_blow = 1;
 
     o_ptr = &player_ptr->inventory_list[INVEN_MAIN_HAND + i];
@@ -1679,7 +1679,7 @@ static int16_t calc_to_magic_chance(PlayerType *player_ptr)
     }
 
     for (int i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
-        ObjectType *o_ptr;
+        ItemEntity *o_ptr;
         o_ptr = &player_ptr->inventory_list[i];
         if (!o_ptr->k_idx) {
             continue;
@@ -1704,7 +1704,7 @@ static ARMOUR_CLASS calc_base_ac(PlayerType *player_ptr)
     }
 
     for (int i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
-        ObjectType *o_ptr;
+        ItemEntity *o_ptr;
         o_ptr = &player_ptr->inventory_list[i];
         if (!o_ptr->k_idx) {
             continue;
@@ -1754,7 +1754,7 @@ static ARMOUR_CLASS calc_to_ac(PlayerType *player_ptr, bool is_real_value)
     }
 
     for (int i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
-        ObjectType *o_ptr;
+        ItemEntity *o_ptr;
         o_ptr = &player_ptr->inventory_list[i];
         auto flags = object_flags(o_ptr);
         if (!o_ptr->k_idx) {
@@ -2467,7 +2467,7 @@ static int16_t calc_to_hit_bow(PlayerType *player_ptr, bool is_real_value)
     pow += ((int)(adj_str_th[player_ptr->stat_index[A_STR]]) - 128);
 
     {
-        ObjectType *o_ptr;
+        ItemEntity *o_ptr;
         o_ptr = &player_ptr->inventory_list[INVEN_BOW];
         if (o_ptr->k_idx) {
             if (o_ptr->curse_flags.has(CurseTraitType::LOW_MELEE)) {
@@ -2536,7 +2536,7 @@ static int16_t calc_to_hit_bow(PlayerType *player_ptr, bool is_real_value)
 
 static int16_t calc_to_damage_misc(PlayerType *player_ptr)
 {
-    ObjectType *o_ptr;
+    ItemEntity *o_ptr;
 
     int16_t to_dam = 0;
 
@@ -2567,7 +2567,7 @@ static int16_t calc_to_damage_misc(PlayerType *player_ptr)
 
 static int16_t calc_to_hit_misc(PlayerType *player_ptr)
 {
-    ObjectType *o_ptr;
+    ItemEntity *o_ptr;
 
     int16_t to_hit = 0;
 
@@ -2740,7 +2740,7 @@ void update_creature(PlayerType *player_ptr)
  */
 bool player_has_no_spellbooks(PlayerType *player_ptr)
 {
-    ObjectType *o_ptr;
+    ItemEntity *o_ptr;
     for (int i = 0; i < INVEN_PACK; i++) {
         o_ptr = &player_ptr->inventory_list[i];
         if (o_ptr->k_idx && check_book_realm(player_ptr, o_ptr->tval, o_ptr->sval)) {

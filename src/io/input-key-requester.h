@@ -17,7 +17,7 @@ extern TERM_LEN command_gap;
 extern int16_t command_wrk;
 extern int16_t command_new;
 
-class ObjectType;
+class ItemEntity;
 class PlayerType;
 class SpecialMenuContent;
 class InputKeyRequestor {
@@ -48,7 +48,7 @@ private:
     void change_shopping_command();
     int get_caret_command();
     void sweep_confirmation_equipments();
-    void confirm_command(ObjectType &o_ref, const int caret_command);
+    void confirm_command(ItemEntity &o_ref, const int caret_command);
 
     void make_commands_frame();
     std::string switch_special_menu_condition(const SpecialMenuContent &special_menu);

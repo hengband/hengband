@@ -14,15 +14,15 @@
 #include "object-enchant/object-ego.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
-#include "system/monster-race-definition.h"
-#include "system/monster-type-definition.h"
-#include "system/object-type-definition.h"
+#include "system/item-entity.h"
+#include "system/monster-entity.h"
+#include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 #include <algorithm>
 
-QuestCompletionChecker::QuestCompletionChecker(PlayerType *player_ptr, monster_type *m_ptr)
+QuestCompletionChecker::QuestCompletionChecker(PlayerType *player_ptr, MonsterEntity *m_ptr)
     : player_ptr(player_ptr)
     , m_ptr(m_ptr)
 {
@@ -55,7 +55,7 @@ void QuestCompletionChecker::complete()
     this->make_reward(pos);
 }
 
-static bool check_quest_completion(PlayerType *player_ptr, const quest_type &q_ref, monster_type *m_ptr)
+static bool check_quest_completion(PlayerType *player_ptr, const quest_type &q_ref, MonsterEntity *m_ptr)
 {
     auto *floor_ptr = player_ptr->current_floor_ptr;
     if (q_ref.status != QuestStatusType::TAKEN) {
@@ -248,7 +248,7 @@ void QuestCompletionChecker::make_reward(const Pos2D pos)
 {
     auto dun_level = this->player_ptr->current_floor_ptr->dun_level;
     for (auto i = 0; i < (dun_level / 15) + 1; i++) {
-        ObjectType item;
+        ItemEntity item;
         while (true) {
             item.wipe();
             auto &r_ref = monraces_info[this->m_ptr->r_idx];
@@ -272,7 +272,7 @@ void QuestCompletionChecker::make_reward(const Pos2D pos)
  * 2. 固定アーティファクト以外の矢弾
  * 3. 穴掘りエゴの装備品
  */
-bool QuestCompletionChecker::check_quality(ObjectType &item)
+bool QuestCompletionChecker::check_quality(ItemEntity &item)
 {
     auto is_good_reward = !item.is_cursed();
     is_good_reward &= !item.is_ammo() || (item.is_ammo() && item.is_fixed_artifact());

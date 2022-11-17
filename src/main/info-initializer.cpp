@@ -27,9 +27,9 @@
 #include "room/rooms-vault.h"
 #include "system/angband-version.h"
 #include "system/artifact-type-definition.h"
-#include "system/baseitem-info-definition.h"
+#include "system/baseitem-info.h"
 #include "system/dungeon-info.h"
-#include "system/monster-race-definition.h"
+#include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
 #include "system/terrain-type-definition.h"
 #include "util/angband-files.h"
@@ -149,7 +149,7 @@ errr init_artifacts_info()
 errr init_baseitems_info()
 {
     init_header(&baseitems_header);
-    return init_info("BaseItemDefinitions.txt", baseitems_header, baseitems_info, parse_baseitems_info);
+    return init_info("BaseitemDefinitions.txt", baseitems_header, baseitems_info, parse_baseitems_info);
 }
 
 /*!

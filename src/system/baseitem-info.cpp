@@ -7,7 +7,7 @@
  * Only "aware" and "tried" are saved in the savefile
  */
 
-#include "system/baseitem-info-definition.h"
+#include "system/baseitem-info.h"
 #include "object/tval-types.h"
 
 BaseitemKey::BaseitemKey(const ItemKindType type_value, const std::optional<int> &subtype_value)

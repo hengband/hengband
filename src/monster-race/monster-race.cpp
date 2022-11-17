@@ -3,14 +3,14 @@
 #include "monster-race/race-flags1.h"
 #include "monster-race/race-indice-types.h"
 #include "monster-race/race-resistance-mask.h"
-#include "system/monster-race-definition.h"
+#include "system/monster-race-info.h"
 #include "util/probability-table.h"
 #include "world/world.h"
 #include <algorithm>
 #include <vector>
 
 /* The monster race arrays */
-std::map<MonsterRaceId, monster_race> monraces_info;
+std::map<MonsterRaceId, MonsterRaceInfo> monraces_info;
 
 MonsterRace::MonsterRace(MonsterRaceId r_idx)
     : r_idx(r_idx)

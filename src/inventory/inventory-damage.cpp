@@ -10,7 +10,7 @@
 #include "object/object-stack.h"
 #include "player/player-status.h"
 #include "system/floor-type-definition.h"
-#include "system/object-type-definition.h"
+#include "system/item-entity.h"
 #include "system/player-type-definition.h"
 #include "view/display-messages.h"
 
@@ -29,7 +29,7 @@ void inventory_damage(PlayerType *player_ptr, const ObjectBreaker &breaker, int 
 {
     INVENTORY_IDX i;
     int j, amt;
-    ObjectType *o_ptr;
+    ItemEntity *o_ptr;
     GAME_TEXT o_name[MAX_NLEN];
 
     if (check_multishadow(player_ptr) || player_ptr->current_floor_ptr->inside_arena) {

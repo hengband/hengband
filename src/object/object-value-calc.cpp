@@ -6,8 +6,8 @@
 #include "object-enchant/trc-types.h"
 #include "object/object-flags.h"
 #include "system/artifact-type-definition.h"
-#include "system/baseitem-info-definition.h"
-#include "system/object-type-definition.h"
+#include "system/baseitem-info.h"
+#include "system/item-entity.h"
 #include "system/player-type-definition.h"
 #include "util/bit-flags-calculator.h"
 
@@ -18,7 +18,7 @@
  * @param plusses フラグに与える価格の基本重み
  * @return オブジェクトのフラグ価格
  */
-PRICE flag_cost(const ObjectType *o_ptr, int plusses)
+PRICE flag_cost(const ItemEntity *o_ptr, int plusses)
 {
     PRICE total = 0;
     auto *k_ptr = &baseitems_info[o_ptr->k_idx];

@@ -11,8 +11,8 @@
 #include "monster-race/race-flags1.h"
 #include "monster/monster-info.h"
 #include "system/floor-type-definition.h"
-#include "system/monster-race-definition.h"
-#include "system/monster-type-definition.h" //!< @todo 違和感、m_ptr は外から与えることとしたい.
+#include "system/monster-entity.h" //!< @todo 違和感、m_ptr は外から与えることとしたい.
+#include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
 
 template <class T>

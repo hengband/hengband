@@ -38,8 +38,8 @@
 #include "system/dungeon-info.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
-#include "system/monster-race-definition.h"
-#include "system/monster-type-definition.h"
+#include "system/monster-entity.h"
+#include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
 #include "util/probability-table.h"
 #include "view/display-messages.h"
@@ -67,7 +67,7 @@ MONSTER_IDX m_pop(FloorType *floor_ptr)
 
     /* Recycle dead monsters */
     for (MONSTER_IDX i = 1; i < floor_ptr->m_max; i++) {
-        monster_type *m_ptr;
+        MonsterEntity *m_ptr;
         m_ptr = &floor_ptr->m_list[i];
         if (MonsterRace(m_ptr->r_idx).is_valid()) {
             continue;
@@ -212,7 +212,7 @@ static bool monster_hook_chameleon_lord(PlayerType *player_ptr, MonsterRaceId r_
     auto *floor_ptr = player_ptr->current_floor_ptr;
     auto *r_ptr = &monraces_info[r_idx];
     auto *m_ptr = &floor_ptr->m_list[chameleon_change_m_idx];
-    monster_race *old_r_ptr = &monraces_info[m_ptr->r_idx];
+    MonsterRaceInfo *old_r_ptr = &monraces_info[m_ptr->r_idx];
 
     if (r_ptr->kind_flags.has_not(MonsterKindType::UNIQUE)) {
         return false;
@@ -257,7 +257,7 @@ static bool monster_hook_chameleon(PlayerType *player_ptr, MonsterRaceId r_idx)
     auto *floor_ptr = player_ptr->current_floor_ptr;
     auto *r_ptr = &monraces_info[r_idx];
     auto *m_ptr = &floor_ptr->m_list[chameleon_change_m_idx];
-    monster_race *old_r_ptr = &monraces_info[m_ptr->r_idx];
+    MonsterRaceInfo *old_r_ptr = &monraces_info[m_ptr->r_idx];
 
     if (r_ptr->kind_flags.has(MonsterKindType::UNIQUE)) {
         return false;
@@ -308,7 +308,7 @@ void choose_new_monster(PlayerType *player_ptr, MONSTER_IDX m_idx, bool born, Mo
 {
     auto *floor_ptr = player_ptr->current_floor_ptr;
     auto *m_ptr = &floor_ptr->m_list[m_idx];
-    monster_race *r_ptr;
+    MonsterRaceInfo *r_ptr;
 
     bool old_unique = false;
     if (monraces_info[m_ptr->r_idx].kind_flags.has(MonsterKindType::UNIQUE)) {
@@ -415,7 +415,7 @@ void choose_new_monster(PlayerType *player_ptr, MONSTER_IDX m_idx, bool born, Mo
  * @param r_ptr モンスター種族の参照ポインタ
  * @return 加速値
  */
-byte get_mspeed(FloorType *floor_ptr, monster_race *r_ptr)
+byte get_mspeed(FloorType *floor_ptr, MonsterRaceInfo *r_ptr)
 {
     auto mspeed = r_ptr->speed;
     if (r_ptr->kind_flags.has_not(MonsterKindType::UNIQUE) && !floor_ptr->inside_arena) {

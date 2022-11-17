@@ -6,7 +6,7 @@
 #include "player-base/player-race.h"
 #include "racial/racial-android.h"
 #include "system/artifact-type-definition.h"
-#include "system/object-type-definition.h"
+#include "system/item-entity.h"
 #include "system/player-type-definition.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
@@ -16,7 +16,7 @@
  * @details スレイ2d2種、及びone_resistance()による耐性1d2種、pval2種を得る。
  * @param o_ptr 対象のオブジェクト構造体 (ブラッディムーン)のポインタ
  */
-void get_bloody_moon_flags(ObjectType *o_ptr)
+void get_bloody_moon_flags(ItemEntity *o_ptr)
 {
     o_ptr->art_flags = artifacts_info.at(FixedArtifactId::BLOOD).flags;
 
@@ -55,7 +55,7 @@ void get_bloody_moon_flags(ObjectType *o_ptr)
  * @param o_ptr ブラッディ・ムーンへの参照ポインタ
  * @return オブジェクト情報に異常がない限りTRUE
  */
-bool activate_bloody_moon(PlayerType *player_ptr, ObjectType *o_ptr)
+bool activate_bloody_moon(PlayerType *player_ptr, ItemEntity *o_ptr)
 {
     if (!o_ptr->is_specific_artifact(FixedArtifactId::BLOOD)) {
         return false;

@@ -6,7 +6,7 @@
 #include "main/sound-of-music.h"
 #include "monster-race/race-indice-types.h"
 #include "object-enchant/item-feeling.h"
-#include "system/object-type-definition.h"
+#include "system/item-entity.h"
 #include "system/player-type-definition.h"
 #include "util/quarks.h"
 
@@ -21,7 +21,7 @@ std::vector<autopick_type> autopick_list; /*!< 自動拾い/破壊設定構造�
  * When always_pickup is 'yes', we disable auto-destroyer function of
  * auto-picker/destroyer, and do only easy-auto-destroyer.
  */
-ObjectType autopick_last_destroyed_object;
+ItemEntity autopick_last_destroyed_object;
 
 /*!
  * @brief Free memory of lines_list.
@@ -52,7 +52,7 @@ int get_com_id(char key)
 /*!
  * @brief Auto inscription
  */
-void auto_inscribe_item(PlayerType *player_ptr, ObjectType *o_ptr, int idx)
+void auto_inscribe_item(PlayerType *player_ptr, ItemEntity *o_ptr, int idx)
 {
     if (idx < 0 || autopick_list[idx].insc.empty()) {
         return;

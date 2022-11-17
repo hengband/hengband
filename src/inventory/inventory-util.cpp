@@ -13,7 +13,7 @@
 #include "object/item-tester-hooker.h"
 #include "object/item-use-flags.h"
 #include "system/floor-type-definition.h"
-#include "system/object-type-definition.h"
+#include "system/item-entity.h"
 #include "system/player-type-definition.h"
 #include "util/int-char-converter.h"
 #include "util/quarks.h"
@@ -204,7 +204,7 @@ bool get_item_allow(PlayerType *player_ptr, INVENTORY_IDX item)
         return true;
     }
 
-    ObjectType *o_ptr;
+    ItemEntity *o_ptr;
     if (item >= 0) {
         o_ptr = &player_ptr->inventory_list[item];
     } else {
@@ -286,7 +286,7 @@ bool verify(PlayerType *player_ptr, concptr prompt, INVENTORY_IDX item)
 {
     GAME_TEXT o_name[MAX_NLEN];
     char out_val[MAX_NLEN + 20];
-    ObjectType *o_ptr;
+    ItemEntity *o_ptr;
     if (item >= 0) {
         o_ptr = &player_ptr->inventory_list[item];
     } else {

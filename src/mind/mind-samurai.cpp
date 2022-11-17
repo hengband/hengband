@@ -31,9 +31,9 @@
 #include "player/attack-defense-types.h"
 #include "status/action-setter.h"
 #include "system/grid-type-definition.h"
-#include "system/monster-race-definition.h"
-#include "system/monster-type-definition.h"
-#include "system/object-type-definition.h"
+#include "system/item-entity.h"
+#include "system/monster-entity.h"
+#include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
 #include "term/screen-processor.h"
 #include "timed-effect/player-cut.h"
@@ -47,13 +47,13 @@
 struct samurai_slaying_type {
     MULTIPLY mult;
     TrFlags flags;
-    monster_type *m_ptr;
+    MonsterEntity *m_ptr;
     combat_options mode;
-    monster_race *r_ptr;
+    MonsterRaceInfo *r_ptr;
 };
 
 static samurai_slaying_type *initialize_samurai_slaying_type(
-    samurai_slaying_type *samurai_slaying_ptr, MULTIPLY mult, const TrFlags &flags, monster_type *m_ptr, combat_options mode, monster_race *r_ptr)
+    samurai_slaying_type *samurai_slaying_ptr, MULTIPLY mult, const TrFlags &flags, MonsterEntity *m_ptr, combat_options mode, MonsterRaceInfo *r_ptr)
 {
     samurai_slaying_ptr->mult = mult;
     samurai_slaying_ptr->flags = flags;
@@ -322,7 +322,7 @@ static void hissatsu_keiun_kininken(PlayerType *player_ptr, samurai_slaying_type
  * @param mode 剣術のスレイ型ID
  * @return スレイの倍率(/10倍)
  */
-MULTIPLY mult_hissatsu(PlayerType *player_ptr, MULTIPLY mult, const TrFlags &flags, monster_type *m_ptr, combat_options mode)
+MULTIPLY mult_hissatsu(PlayerType *player_ptr, MULTIPLY mult, const TrFlags &flags, MonsterEntity *m_ptr, combat_options mode)
 {
     auto *r_ptr = &monraces_info[m_ptr->r_idx];
     samurai_slaying_type tmp_slaying;

@@ -44,9 +44,9 @@
 #include "status/experience.h"
 #include "sv-definition/sv-food-types.h"
 #include "sv-definition/sv-other-types.h"
-#include "system/baseitem-info-definition.h"
-#include "system/monster-race-definition.h"
-#include "system/object-type-definition.h"
+#include "system/baseitem-info.h"
+#include "system/item-entity.h"
+#include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
 #include "util/string-processor.h"
 #include "view/display-messages.h"
@@ -58,7 +58,7 @@
  * @param o_ptr 食べるオブジェクト
  * @return 鑑定されるならTRUE、されないならFALSE
  */
-bool exe_eat_food_type_object(PlayerType *player_ptr, ObjectType *o_ptr)
+bool exe_eat_food_type_object(PlayerType *player_ptr, ItemEntity *o_ptr)
 {
     if (o_ptr->tval != ItemKindType::FOOD) {
         return false;
@@ -151,7 +151,7 @@ bool exe_eat_food_type_object(PlayerType *player_ptr, ObjectType *o_ptr)
  * @param item オブジェクトのインベントリ番号
  * @return 食べようとしたらTRUE、しなかったらFALSE
  */
-bool exe_eat_charge_of_magic_device(PlayerType *player_ptr, ObjectType *o_ptr, INVENTORY_IDX item)
+bool exe_eat_charge_of_magic_device(PlayerType *player_ptr, ItemEntity *o_ptr, INVENTORY_IDX item)
 {
     if (o_ptr->tval != ItemKindType::STAFF && o_ptr->tval != ItemKindType::WAND) {
         return false;
@@ -185,8 +185,8 @@ bool exe_eat_charge_of_magic_device(PlayerType *player_ptr, ObjectType *o_ptr, I
 
         /* XXX Hack -- unstack if necessary */
         if (o_ptr->tval == ItemKindType::STAFF && (item >= 0) && (o_ptr->number > 1)) {
-            ObjectType forge;
-            ObjectType *q_ptr;
+            ItemEntity forge;
+            ItemEntity *q_ptr;
             q_ptr = &forge;
             q_ptr->copy_from(o_ptr);
 
@@ -295,7 +295,7 @@ void exe_eat_food(PlayerType *player_ptr, INVENTORY_IDX item)
 
     if (PlayerRace(player_ptr).equals(PlayerRaceType::SKELETON)) {
         if (!((o_ptr->sval == SV_FOOD_WAYBREAD) || (o_ptr->sval < SV_FOOD_BISCUIT))) {
-            ObjectType forge;
+            ItemEntity forge;
             auto *q_ptr = &forge;
 
             msg_print(_("食べ物がアゴを素通りして落ちた！", "The food falls through your jaws!"));

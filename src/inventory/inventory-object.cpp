@@ -11,7 +11,7 @@
 #include "object/object-value.h"
 #include "player-info/equipment-info.h"
 #include "spell-realm/spells-craft.h"
-#include "system/object-type-definition.h"
+#include "system/item-entity.h"
 #include "system/player-type-definition.h"
 #include "util/object-sort.h"
 #include "view/display-messages.h"
@@ -122,9 +122,9 @@ void inven_item_optimize(PlayerType *player_ptr, INVENTORY_IDX item)
  */
 void drop_from_inventory(PlayerType *player_ptr, INVENTORY_IDX item, ITEM_NUMBER amt)
 {
-    ObjectType forge;
-    ObjectType *q_ptr;
-    ObjectType *o_ptr;
+    ItemEntity forge;
+    ItemEntity *q_ptr;
+    ItemEntity *o_ptr;
     GAME_TEXT o_name[MAX_NLEN];
     o_ptr = &player_ptr->inventory_list[item];
     if (amt <= 0) {
@@ -167,13 +167,13 @@ void combine_pack(PlayerType *player_ptr)
         combined = false;
 
         for (int i = INVEN_PACK; i > 0; i--) {
-            ObjectType *o_ptr;
+            ItemEntity *o_ptr;
             o_ptr = &player_ptr->inventory_list[i];
             if (!o_ptr->k_idx) {
                 continue;
             }
             for (int j = 0; j < i; j++) {
-                ObjectType *j_ptr;
+                ItemEntity *j_ptr;
                 j_ptr = &player_ptr->inventory_list[j];
                 if (!j_ptr->k_idx) {
                     continue;
@@ -238,9 +238,9 @@ void reorder_pack(PlayerType *player_ptr)
 {
     int i, j, k;
     int32_t o_value;
-    ObjectType forge;
-    ObjectType *q_ptr;
-    ObjectType *o_ptr;
+    ItemEntity forge;
+    ItemEntity *q_ptr;
+    ItemEntity *o_ptr;
     bool flag = false;
 
     for (i = 0; i < INVEN_PACK; i++) {
@@ -300,12 +300,12 @@ void reorder_pack(PlayerType *player_ptr)
  * Note that this code must remove any location/stack information\n
  * from the object once it is placed into the inventory.\n
  */
-int16_t store_item_to_inventory(PlayerType *player_ptr, ObjectType *o_ptr)
+int16_t store_item_to_inventory(PlayerType *player_ptr, ItemEntity *o_ptr)
 {
     INVENTORY_IDX i, j, k;
     INVENTORY_IDX n = -1;
 
-    ObjectType *j_ptr;
+    ItemEntity *j_ptr;
     for (j = 0; j < INVEN_PACK; j++) {
         j_ptr = &player_ptr->inventory_list[j];
         if (!j_ptr->k_idx) {
@@ -370,7 +370,7 @@ int16_t store_item_to_inventory(PlayerType *player_ptr, ObjectType *o_ptr)
  * @param o_ptr 拾いたいオブジェクトの構造体参照ポインタ
  * @return 溢れずに済むならTRUEを返す
  */
-bool check_store_item_to_inventory(PlayerType *player_ptr, const ObjectType *o_ptr)
+bool check_store_item_to_inventory(PlayerType *player_ptr, const ItemEntity *o_ptr)
 {
     if (player_ptr->inven_cnt < INVEN_PACK) {
         return true;
@@ -406,9 +406,9 @@ bool check_store_item_to_inventory(PlayerType *player_ptr, const ObjectType *o_p
 INVENTORY_IDX inven_takeoff(PlayerType *player_ptr, INVENTORY_IDX item, ITEM_NUMBER amt)
 {
     INVENTORY_IDX slot;
-    ObjectType forge;
-    ObjectType *q_ptr;
-    ObjectType *o_ptr;
+    ItemEntity forge;
+    ItemEntity *q_ptr;
+    ItemEntity *o_ptr;
     concptr act;
     GAME_TEXT o_name[MAX_NLEN];
     o_ptr = &player_ptr->inventory_list[item];

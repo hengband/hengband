@@ -36,7 +36,7 @@
 #include "spell/spells-execution.h"
 #include "spell/technic-info-table.h"
 #include "status/action-setter.h"
-#include "system/object-type-definition.h"
+#include "system/item-entity.h"
 #include "system/player-type-definition.h"
 #include "term/screen-processor.h"
 #include "util/int-char-converter.h"
@@ -369,7 +369,7 @@ void do_cmd_gain_hissatsu(PlayerType *player_ptr)
     OBJECT_IDX item;
     int i, j;
 
-    ObjectType *o_ptr;
+    ItemEntity *o_ptr;
     concptr q, s;
 
     bool gain = false;

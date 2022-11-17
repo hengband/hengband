@@ -17,7 +17,7 @@
 #include "player/special-defense-types.h"
 #include "status/action-setter.h"
 #include "sv-definition/sv-lite-types.h"
-#include "system/object-type-definition.h"
+#include "system/item-entity.h"
 #include "system/player-type-definition.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
@@ -29,11 +29,11 @@
 static void do_cmd_refill_lamp(PlayerType *player_ptr)
 {
     OBJECT_IDX item;
-    ObjectType *o_ptr;
-    ObjectType *j_ptr;
+    ItemEntity *o_ptr;
+    ItemEntity *j_ptr;
     concptr q = _("どの油つぼから注ぎますか? ", "Refill with which flask? ");
     concptr s = _("油つぼがない。", "You have no flasks of oil.");
-    o_ptr = choose_object(player_ptr, &item, q, s, USE_INVEN | USE_FLOOR, FuncItemTester(&ObjectType::can_refill_lantern));
+    o_ptr = choose_object(player_ptr, &item, q, s, USE_INVEN | USE_FLOOR, FuncItemTester(&ItemEntity::can_refill_lantern));
     if (!o_ptr) {
         return;
     }
@@ -67,11 +67,11 @@ static void do_cmd_refill_lamp(PlayerType *player_ptr)
 static void do_cmd_refill_torch(PlayerType *player_ptr)
 {
     OBJECT_IDX item;
-    ObjectType *o_ptr;
-    ObjectType *j_ptr;
+    ItemEntity *o_ptr;
+    ItemEntity *j_ptr;
     concptr q = _("どの松明で明かりを強めますか? ", "Refuel with which torch? ");
     concptr s = _("他に松明がない。", "You have no extra torches.");
-    o_ptr = choose_object(player_ptr, &item, q, s, USE_INVEN | USE_FLOOR, FuncItemTester(&ObjectType::can_refill_torch));
+    o_ptr = choose_object(player_ptr, &item, q, s, USE_INVEN | USE_FLOOR, FuncItemTester(&ItemEntity::can_refill_torch));
     if (!o_ptr) {
         return;
     }
@@ -106,7 +106,7 @@ static void do_cmd_refill_torch(PlayerType *player_ptr)
  */
 void do_cmd_refill(PlayerType *player_ptr)
 {
-    ObjectType *o_ptr;
+    ItemEntity *o_ptr;
     o_ptr = &player_ptr->inventory_list[INVEN_LITE];
 
     PlayerClass(player_ptr).break_samurai_stance({ SamuraiStanceType::MUSOU });

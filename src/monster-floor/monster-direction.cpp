@@ -17,8 +17,8 @@
 #include "player/player-status-flags.h"
 #include "spell/range-calc.h"
 #include "system/floor-type-definition.h"
-#include "system/monster-race-definition.h"
-#include "system/monster-type-definition.h"
+#include "system/monster-entity.h"
+#include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
 #include "target/projection-path-calculator.h"
 
@@ -30,7 +30,7 @@
  * @param plus モンスターIDの増減 (1/2 の確率で+1、1/2の確率で-1)
  * @return ペットがモンスターに近づくならばTRUE
  */
-static bool decide_pet_approch_direction(PlayerType *player_ptr, monster_type *m_ptr, monster_type *t_ptr)
+static bool decide_pet_approch_direction(PlayerType *player_ptr, MonsterEntity *m_ptr, MonsterEntity *t_ptr)
 {
     auto *r_ptr = &monraces_info[m_ptr->r_idx];
     if (!m_ptr->is_pet()) {
@@ -69,7 +69,7 @@ static void decide_enemy_approch_direction(PlayerType *player_ptr, MONSTER_IDX m
         }
 
         MONSTER_IDX t_idx = dummy;
-        monster_type *t_ptr;
+        MonsterEntity *t_ptr;
         t_ptr = &floor_ptr->m_list[t_idx];
         if (t_ptr == m_ptr) {
             continue;
@@ -156,7 +156,7 @@ bool get_enemy_dir(PlayerType *player_ptr, MONSTER_IDX m_idx, int *mm)
  * @return 不規則な方向へ歩くことになったらTRUE
  * @todo "5"とはもしかして「その場に留まる」という意味か？
  */
-static bool random_walk(PlayerType *player_ptr, DIRECTION *mm, monster_type *m_ptr)
+static bool random_walk(PlayerType *player_ptr, DIRECTION *mm, MonsterEntity *m_ptr)
 {
     auto *r_ptr = &monraces_info[m_ptr->r_idx];
     if (r_ptr->behavior_flags.has_all_of({ MonsterBehaviorType::RAND_MOVE_50, MonsterBehaviorType::RAND_MOVE_25 }) && (randint0(100) < 75)) {

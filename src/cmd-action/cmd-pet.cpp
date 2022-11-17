@@ -50,9 +50,9 @@
 #include "status/action-setter.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
-#include "system/monster-race-definition.h"
-#include "system/monster-type-definition.h"
-#include "system/object-type-definition.h"
+#include "system/item-entity.h"
+#include "system/monster-entity.h"
+#include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
 #include "system/terrain-type-definition.h"
 #include "target/target-checker.h"
@@ -75,7 +75,7 @@
  */
 void do_cmd_pet_dismiss(PlayerType *player_ptr)
 {
-    monster_type *m_ptr;
+    MonsterEntity *m_ptr;
     bool all_pets = false;
     int Dismissed = 0;
 
@@ -206,7 +206,7 @@ bool do_cmd_riding(PlayerType *player_ptr, bool force)
     POSITION x, y;
     DIRECTION dir = 0;
     grid_type *g_ptr;
-    monster_type *m_ptr;
+    MonsterEntity *m_ptr;
 
     if (!get_direction(player_ptr, &dir, false, false)) {
         return false;
@@ -320,7 +320,7 @@ bool do_cmd_riding(PlayerType *player_ptr, bool force)
  */
 static void do_name_pet(PlayerType *player_ptr)
 {
-    monster_type *m_ptr;
+    MonsterEntity *m_ptr;
     char out_val[20];
     GAME_TEXT m_name[MAX_NLEN];
     bool old_name = false;
@@ -392,7 +392,7 @@ void do_cmd_pet(PlayerType *player_ptr)
     bool flag, redraw;
     char choice;
     int pet_ctr;
-    monster_type *m_ptr;
+    MonsterEntity *m_ptr;
     auto command_idx = 0;
     int menu_line = use_menu ? 1 : 0;
     auto num = 0;

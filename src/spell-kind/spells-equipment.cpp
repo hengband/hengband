@@ -8,7 +8,7 @@
 #include "object-hook/hook-weapon.h"
 #include "object/object-info.h"
 #include "racial/racial-android.h"
-#include "system/object-type-definition.h"
+#include "system/item-entity.h"
 #include "system/player-type-definition.h"
 #include "view/display-messages.h"
 
@@ -50,7 +50,7 @@ bool apply_disenchant(PlayerType *player_ptr, BIT_FLAGS mode)
         break;
     }
 
-    ObjectType *o_ptr;
+    ItemEntity *o_ptr;
     o_ptr = &player_ptr->inventory_list[t];
     if (!o_ptr->k_idx) {
         return false;

@@ -35,8 +35,9 @@
 #include "system/dungeon-info.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
-#include "system/monster-race-definition.h"
-#include "system/monster-type-definition.h"
+#include "system/item-entity.h"
+#include "system/monster-entity.h"
+#include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
 #include "system/terrain-type-definition.h"
 #include "util/bit-flags-calculator.h"
@@ -217,9 +218,12 @@ void add_river(FloorType *floor_ptr, dun_data_type *dd_ptr)
 
     if (feat1) {
         auto *f_ptr = &terrains_info[feat1];
-
-        /* Only add river if matches lake type or if have no lake at all */
-        if (!(((dd_ptr->laketype == LAKE_T_LAVA) && f_ptr->flags.has(TerrainCharacteristics::LAVA)) || ((dd_ptr->laketype == LAKE_T_WATER) && f_ptr->flags.has(TerrainCharacteristics::WATER)) || !dd_ptr->laketype)) {
+        auto is_lava = dd_ptr->laketype == LAKE_T_LAVA;
+        is_lava &= f_ptr->flags.has(TerrainCharacteristics::LAVA);
+        auto is_water = dd_ptr->laketype == LAKE_T_WATER;
+        is_water &= f_ptr->flags.has(TerrainCharacteristics::WATER);
+        const auto should_add_river = !is_lava && !is_water && (dd_ptr->laketype != 0);
+        if (should_add_river) {
             return;
         }
     }
@@ -345,7 +349,8 @@ void build_streamer(PlayerType *player_ptr, FEAT_IDX feat, int chance)
                 }
             }
 
-            if (g_ptr->m_idx && !(streamer_ptr->flags.has(TerrainCharacteristics::PLACE) && monster_can_cross_terrain(player_ptr, feat, &monraces_info[floor_ptr->m_list[g_ptr->m_idx].r_idx], 0))) {
+            auto *r_ptr = &monraces_info[floor_ptr->m_list[g_ptr->m_idx].r_idx];
+            if (g_ptr->m_idx && !(streamer_ptr->flags.has(TerrainCharacteristics::PLACE) && monster_can_cross_terrain(player_ptr, feat, r_ptr, 0))) {
                 /* Delete the monster (if any) */
                 delete_monster(player_ptr, ty, tx);
             }

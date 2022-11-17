@@ -2,6 +2,6 @@
 
 #include "system/angband.h"
 
-class ObjectType;
+class ItemEntity;
 class PlayerType;
-bool object_sort_comp(PlayerType *player_ptr, ObjectType *o_ptr, int32_t o_value, ObjectType *j_ptr);
+bool object_sort_comp(PlayerType *player_ptr, ItemEntity *o_ptr, int32_t o_value, ItemEntity *j_ptr);

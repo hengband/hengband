@@ -9,7 +9,7 @@
 #include "inventory/inventory-slot-types.h"
 #include "object-enchant/object-boost.h"
 #include "sv-definition/sv-weapon-types.h"
-#include "system/object-type-definition.h"
+#include "system/item-entity.h"
 
 /*!
  * @brief 鈍器強化クラスのコンストラクタ
@@ -18,7 +18,7 @@
  * @param level 生成基準階
  * @param power 生成ランク
  */
-HaftedEnchanter::HaftedEnchanter(PlayerType *player_ptr, ObjectType *o_ptr, DEPTH level, int power)
+HaftedEnchanter::HaftedEnchanter(PlayerType *player_ptr, ItemEntity *o_ptr, DEPTH level, int power)
     : MeleeWeaponEnchanter(player_ptr, o_ptr, level, power)
 {
 }

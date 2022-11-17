@@ -10,8 +10,8 @@
 #include "sv-definition/sv-rod-types.h"
 #include "sv-definition/sv-scroll-types.h"
 #include "sv-definition/sv-weapon-types.h"
-#include "system/monster-race-definition.h"
-#include "system/object-type-definition.h"
+#include "system/item-entity.h"
+#include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
 #include "util/bit-flags-calculator.h"
 #include "util/string-processor.h"
@@ -21,13 +21,13 @@
  * @param o_ptr 判定したいオブジェクト構造体の参照ポインタ
  * @return アイテムが祝福されたアイテムならばTRUEを返す
  */
-static bool is_blessed_item(const ObjectType *o_ptr)
+static bool is_blessed_item(const ItemEntity *o_ptr)
 {
     auto flgs = object_flags(o_ptr);
     return flgs.has(TR_BLESSED);
 }
 
-static bool check_store_general(const ObjectType *o_ptr)
+static bool check_store_general(const ItemEntity *o_ptr)
 {
     switch (o_ptr->tval) {
     case ItemKindType::ROD:
@@ -55,7 +55,7 @@ static bool check_store_general(const ObjectType *o_ptr)
     }
 }
 
-static bool check_store_armoury(const ObjectType *o_ptr)
+static bool check_store_armoury(const ItemEntity *o_ptr)
 {
     switch (o_ptr->tval) {
     case ItemKindType::BOOTS:
@@ -73,7 +73,7 @@ static bool check_store_armoury(const ObjectType *o_ptr)
     }
 }
 
-static bool check_store_weapon(const ObjectType *o_ptr)
+static bool check_store_weapon(const ItemEntity *o_ptr)
 {
     switch (o_ptr->tval) {
     case ItemKindType::SHOT:
@@ -92,7 +92,7 @@ static bool check_store_weapon(const ObjectType *o_ptr)
     }
 }
 
-static bool check_store_temple(const ObjectType *o_ptr)
+static bool check_store_temple(const ItemEntity *o_ptr)
 {
     switch (o_ptr->tval) {
     case ItemKindType::LIFE_BOOK:
@@ -123,7 +123,7 @@ static bool check_store_temple(const ObjectType *o_ptr)
     }
 }
 
-static bool check_store_alchemist(const ObjectType *o_ptr)
+static bool check_store_alchemist(const ItemEntity *o_ptr)
 {
     switch (o_ptr->tval) {
     case ItemKindType::SCROLL:
@@ -134,7 +134,7 @@ static bool check_store_alchemist(const ObjectType *o_ptr)
     }
 }
 
-static bool check_store_magic(const ObjectType *o_ptr)
+static bool check_store_magic(const ItemEntity *o_ptr)
 {
     switch (o_ptr->tval) {
     case ItemKindType::SORCERY_BOOK:
@@ -163,7 +163,7 @@ static bool check_store_magic(const ObjectType *o_ptr)
     }
 }
 
-static bool check_store_book(const ObjectType *o_ptr)
+static bool check_store_book(const ItemEntity *o_ptr)
 {
     switch (o_ptr->tval) {
     case ItemKindType::SORCERY_BOOK:
@@ -184,7 +184,7 @@ static bool check_store_book(const ObjectType *o_ptr)
     }
 }
 
-static bool switch_store_check(const ObjectType *o_ptr, StoreSaleType store_num)
+static bool switch_store_check(const ItemEntity *o_ptr, StoreSaleType store_num)
 {
     switch (store_num) {
     case StoreSaleType::GENERAL:
@@ -215,7 +215,7 @@ static bool switch_store_check(const ObjectType *o_ptr, StoreSaleType store_num)
  * Note that a shop-keeper must refuse to buy "worthless" items
  */
 
-bool store_will_buy(PlayerType *, const ObjectType *o_ptr, StoreSaleType store_num)
+bool store_will_buy(PlayerType *, const ItemEntity *o_ptr, StoreSaleType store_num)
 {
     if ((store_num == StoreSaleType::HOME) || (store_num == StoreSaleType::MUSEUM)) {
         return true;
@@ -246,7 +246,7 @@ static int mass_lite_produce(const PRICE cost)
     return size;
 }
 
-static int mass_scroll_produce(ObjectType *o_ptr, const PRICE cost)
+static int mass_scroll_produce(ItemEntity *o_ptr, const PRICE cost)
 {
     int size = 1;
     if (cost <= 60L) {
@@ -282,7 +282,7 @@ static int mass_book_produce(const PRICE cost)
     return size;
 }
 
-static int mass_equipment_produce(ObjectType *o_ptr, const PRICE cost)
+static int mass_equipment_produce(ItemEntity *o_ptr, const PRICE cost)
 {
     int size = 1;
     if (o_ptr->is_artifact() || o_ptr->is_ego()) {
@@ -348,7 +348,7 @@ static int mass_magic_produce(const PRICE cost, StoreSaleType store_num)
     return size;
 }
 
-static int switch_mass_production(ObjectType *o_ptr, const PRICE cost, StoreSaleType store_num)
+static int switch_mass_production(ItemEntity *o_ptr, const PRICE cost, StoreSaleType store_num)
 {
     switch (o_ptr->tval) {
     case ItemKindType::FOOD:
@@ -440,7 +440,7 @@ static byte decide_discount_rate(const PRICE cost)
  * Some objects can be sold at a "discount" (in small piles)
  * </pre>
  */
-void mass_produce(PlayerType *, ObjectType *o_ptr, StoreSaleType store_num)
+void mass_produce(PlayerType *, ItemEntity *o_ptr, StoreSaleType store_num)
 {
     const auto cost = o_ptr->get_price();
     int size = switch_mass_production(o_ptr, cost, store_num);

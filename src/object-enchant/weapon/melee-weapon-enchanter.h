@@ -3,7 +3,7 @@
 #include "object-enchant/weapon/abstract-weapon-enchanter.h"
 #include "system/angband.h"
 
-class ObjectType;
+class ItemEntity;
 class PlayerType;
 class MeleeWeaponEnchanter : public AbstractWeaponEnchanter {
 public:
@@ -12,7 +12,7 @@ public:
     void apply_magic() override;
 
 protected:
-    MeleeWeaponEnchanter(PlayerType *player_ptr, ObjectType *o_ptr, DEPTH level, int power);
+    MeleeWeaponEnchanter(PlayerType *player_ptr, ItemEntity *o_ptr, DEPTH level, int power);
 
     PlayerType *player_ptr;
 

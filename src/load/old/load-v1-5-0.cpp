@@ -40,12 +40,12 @@
 #include "sv-definition/sv-lite-types.h"
 #include "system/angband-exceptions.h"
 #include "system/artifact-type-definition.h"
-#include "system/baseitem-info-definition.h"
+#include "system/baseitem-info.h"
 #include "system/dungeon-info.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
-#include "system/monster-race-definition.h"
-#include "system/object-type-definition.h"
+#include "system/item-entity.h"
+#include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
 #include "util/bit-flags-calculator.h"
 #include "util/enum-converter.h"
@@ -64,7 +64,7 @@ const int QUEST_ROYAL_CRYPT = 28; // 王家の墓.
  * @brief アイテムオブジェクト1件を読み込む / Read an object
  * @param o_ptr アイテムオブジェクト読み取り先ポインタ
  */
-void rd_item_old(ObjectType *o_ptr)
+void rd_item_old(ItemEntity *o_ptr)
 {
     o_ptr->k_idx = rd_s16b();
 
@@ -359,7 +359,7 @@ void rd_item_old(ObjectType *o_ptr)
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param m_ptr モンスター保存先ポインタ
  */
-void rd_monster_old(PlayerType *player_ptr, monster_type *m_ptr)
+void rd_monster_old(PlayerType *player_ptr, MonsterEntity *m_ptr)
 {
     m_ptr->r_idx = i2enum<MonsterRaceId>(rd_s16b());
 
@@ -485,7 +485,7 @@ void rd_monster_old(PlayerType *player_ptr, monster_type *m_ptr)
     strip_bytes(1);
 }
 
-static void move_RF3_to_RFR(monster_race *r_ptr, const BIT_FLAGS rf3, const MonsterResistanceType rfr)
+static void move_RF3_to_RFR(MonsterRaceInfo *r_ptr, const BIT_FLAGS rf3, const MonsterResistanceType rfr)
 {
     if (r_ptr->r_flags3 & rf3) {
         r_ptr->r_flags3 &= ~rf3;
@@ -493,7 +493,7 @@ static void move_RF3_to_RFR(monster_race *r_ptr, const BIT_FLAGS rf3, const Mons
     }
 }
 
-static void move_RF4_BR_to_RFR(monster_race *r_ptr, BIT_FLAGS f4, const BIT_FLAGS rf4_br, const MonsterResistanceType rfr)
+static void move_RF4_BR_to_RFR(MonsterRaceInfo *r_ptr, BIT_FLAGS f4, const BIT_FLAGS rf4_br, const MonsterResistanceType rfr)
 {
     if (f4 & rf4_br) {
         r_ptr->resistance_flags.set(rfr);
@@ -506,7 +506,7 @@ static void move_RF4_BR_to_RFR(monster_race *r_ptr, BIT_FLAGS f4, const BIT_FLAG
  * @param r_idx モンスター種族ID
  * @details 本来はr_idxからr_ptrを決定可能だが、互換性を優先するため元コードのままとする
  */
-void set_old_lore(monster_race *r_ptr, BIT_FLAGS f4, const MonsterRaceId r_idx)
+void set_old_lore(MonsterRaceInfo *r_ptr, BIT_FLAGS f4, const MonsterRaceId r_idx)
 {
     r_ptr->r_resistance_flags.clear();
     move_RF3_to_RFR(r_ptr, RF3_IM_ACID, MonsterResistanceType::IMMUNE_ACID);

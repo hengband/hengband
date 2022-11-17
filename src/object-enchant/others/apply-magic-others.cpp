@@ -21,10 +21,10 @@
 #include "perception/object-perception.h"
 #include "sv-definition/sv-lite-types.h"
 #include "sv-definition/sv-other-types.h"
-#include "system/baseitem-info-definition.h"
+#include "system/baseitem-info.h"
 #include "system/floor-type-definition.h"
-#include "system/monster-race-definition.h"
-#include "system/object-type-definition.h"
+#include "system/item-entity.h"
+#include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
@@ -37,7 +37,7 @@
  * @param power 生成ランク
  * @details power > 2はデバッグ専用.
  */
-OtherItemsEnchanter::OtherItemsEnchanter(PlayerType *player_ptr, ObjectType *o_ptr)
+OtherItemsEnchanter::OtherItemsEnchanter(PlayerType *player_ptr, ItemEntity *o_ptr)
     : player_ptr(player_ptr)
     , o_ptr(o_ptr)
 {

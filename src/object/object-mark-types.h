@@ -1,5 +1,5 @@
 ﻿/*
- * @brief How object is marked (flags in ObjectType.mark)
+ * @brief How an entity of an item is marked (flags in ItemEntity::marked)
  * @date 2020/05/28
  * @author Hourier
  * @details

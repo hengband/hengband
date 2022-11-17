@@ -45,12 +45,12 @@
 #include "spell-kind/spells-polymorph.h"
 #include "spell-kind/spells-teleport.h"
 #include "sv-definition/sv-other-types.h"
-#include "system/baseitem-info-definition.h"
+#include "system/baseitem-info.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
-#include "system/monster-race-definition.h"
-#include "system/monster-type-definition.h"
-#include "system/object-type-definition.h"
+#include "system/item-entity.h"
+#include "system/monster-entity.h"
+#include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
@@ -669,8 +669,8 @@ static void postprocess_by_taking_photo(PlayerType *player_ptr, effect_monster_t
         return;
     }
 
-    ObjectType *q_ptr;
-    ObjectType forge;
+    ItemEntity *q_ptr;
+    ItemEntity forge;
     q_ptr = &forge;
     q_ptr->prep(lookup_baseitem_id({ ItemKindType::STATUE, SV_PHOTO }));
     q_ptr->pval = em_ptr->photo;

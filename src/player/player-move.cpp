@@ -42,8 +42,8 @@
 #include "system/dungeon-info.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
-#include "system/monster-type-definition.h"
-#include "system/object-type-definition.h"
+#include "system/item-entity.h"
+#include "system/monster-entity.h"
 #include "system/player-type-definition.h"
 #include "system/terrain-type-definition.h"
 #include "target/target-checker.h"
@@ -85,7 +85,7 @@ static void discover_hidden_things(PlayerType *player_ptr, POSITION y, POSITION 
     }
 
     for (const auto this_o_idx : g_ptr->o_idx_list) {
-        ObjectType *o_ptr;
+        ItemEntity *o_ptr;
         o_ptr = &floor_ptr->o_list[this_o_idx];
         if (o_ptr->tval != ItemKindType::CHEST) {
             continue;
@@ -153,14 +153,14 @@ bool move_player_effect(PlayerType *player_ptr, POSITION ny, POSITION nx, BIT_FL
             g_ptr->m_idx = om_idx;
             oc_ptr->m_idx = nm_idx;
             if (om_idx > 0) {
-                monster_type *om_ptr = &floor_ptr->m_list[om_idx];
+                MonsterEntity *om_ptr = &floor_ptr->m_list[om_idx];
                 om_ptr->fy = ny;
                 om_ptr->fx = nx;
                 update_monster(player_ptr, om_idx, true);
             }
 
             if (nm_idx > 0) {
-                monster_type *nm_ptr = &floor_ptr->m_list[nm_idx];
+                MonsterEntity *nm_ptr = &floor_ptr->m_list[nm_idx];
                 nm_ptr->fy = oy;
                 nm_ptr->fx = ox;
                 update_monster(player_ptr, nm_idx, true);

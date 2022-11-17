@@ -4,13 +4,13 @@
 #include "monster/monster-flag-types.h"
 #include "monster/monster-info.h"
 #include "monster/smart-learn-types.h"
-#include "system/monster-race-definition.h"
-#include "system/monster-type-definition.h"
+#include "system/monster-entity.h"
+#include "system/monster-race-info.h"
 
 /*
  * Monster health description
  */
-concptr look_mon_desc(monster_type *m_ptr, BIT_FLAGS mode)
+concptr look_mon_desc(MonsterEntity *m_ptr, BIT_FLAGS mode)
 {
     bool living = monster_living(m_ptr->ap_r_idx);
     int perc = m_ptr->maxhp > 0 ? 100L * m_ptr->hp / m_ptr->maxhp : 0;
@@ -40,7 +40,7 @@ concptr look_mon_desc(monster_type *m_ptr, BIT_FLAGS mode)
     }
 
     concptr clone = m_ptr->mflag2.has(MonsterConstantFlagType::CLONED) ? ", clone" : "";
-    monster_race *ap_r_ptr = &monraces_info[m_ptr->ap_r_idx];
+    MonsterRaceInfo *ap_r_ptr = &monraces_info[m_ptr->ap_r_idx];
     if (ap_r_ptr->r_tkills && m_ptr->mflag2.has_not(MonsterConstantFlagType::KAGE)) {
         return format(_("レベル%d, %s%s%s", "Level %d, %s%s%s"), ap_r_ptr->level, desc, attitude, clone);
     }

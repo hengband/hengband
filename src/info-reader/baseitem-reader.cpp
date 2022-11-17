@@ -11,7 +11,7 @@
 #include "info-reader/parse-error-types.h"
 #include "main/angband-headers.h"
 #include "object-enchant/tr-types.h"
-#include "system/baseitem-info-definition.h"
+#include "system/baseitem-info.h"
 #include "term/gameterm.h"
 #include "util/bit-flags-calculator.h"
 #include "util/enum-converter.h"
@@ -40,7 +40,7 @@ static bool grab_one_baseitem_flag(BaseitemInfo *k_ptr, std::string_view what)
 }
 
 /*!
- * @brief ベースアイテム(BaseItemDefinitions)のパース関数
+ * @brief ベースアイテム(BaseitemDefinitions)のパース関数
  * @param buf テキスト列
  * @param head ヘッダ構造体
  * @return エラーコード

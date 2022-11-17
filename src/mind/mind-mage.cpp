@@ -15,8 +15,8 @@
 #include "object/item-tester-hooker.h"
 #include "object/item-use-flags.h"
 #include "player-base/player-class.h"
-#include "system/baseitem-info-definition.h"
-#include "system/object-type-definition.h"
+#include "system/baseitem-info.h"
+#include "system/item-entity.h"
 #include "system/player-type-definition.h"
 #include "view/display-messages.h"
 
@@ -34,9 +34,9 @@ bool eat_magic(PlayerType *player_ptr, int power)
     concptr q = _("どのアイテムから魔力を吸収しますか？", "Drain which item? ");
     concptr s = _("魔力を吸収できるアイテムがありません。", "You have nothing to drain.");
 
-    ObjectType *o_ptr;
+    ItemEntity *o_ptr;
     OBJECT_IDX item;
-    o_ptr = choose_object(player_ptr, &item, q, s, (USE_INVEN | USE_FLOOR), FuncItemTester(&ObjectType::is_rechargeable));
+    o_ptr = choose_object(player_ptr, &item, q, s, (USE_INVEN | USE_FLOOR), FuncItemTester(&ItemEntity::is_rechargeable));
     if (!o_ptr) {
         return false;
     }
@@ -73,8 +73,8 @@ bool eat_magic(PlayerType *player_ptr, int power)
                 o_ptr->pval--;
 
                 if ((o_ptr->tval == ItemKindType::STAFF) && (item >= 0) && (o_ptr->number > 1)) {
-                    ObjectType forge;
-                    ObjectType *q_ptr;
+                    ItemEntity forge;
+                    ItemEntity *q_ptr;
                     q_ptr = &forge;
                     q_ptr->copy_from(o_ptr);
 

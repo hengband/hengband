@@ -38,8 +38,8 @@
 #include "system/dungeon-info.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
-#include "system/monster-race-definition.h"
-#include "system/object-type-definition.h"
+#include "system/item-entity.h"
+#include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
 #include "system/terrain-type-definition.h"
 #include "timed-effect/player-blindness.h"
@@ -105,7 +105,7 @@ static MONSTER_IDX decide_pet_index(PlayerType *player_ptr, const int current_mo
     return (d == 6) ? 0 : m_pop(floor_ptr);
 }
 
-static monster_race &set_pet_params(PlayerType *player_ptr, const int current_monster, MONSTER_IDX m_idx, const POSITION cy, const POSITION cx)
+static MonsterRaceInfo &set_pet_params(PlayerType *player_ptr, const int current_monster, MONSTER_IDX m_idx, const POSITION cy, const POSITION cx)
 {
     auto *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
     player_ptr->current_floor_ptr->grid_array[cy][cx].m_idx = m_idx;
@@ -165,7 +165,7 @@ static void place_pet(PlayerType *player_ptr)
         }
     }
 
-    std::fill(std::begin(party_mon), std::end(party_mon), monster_type{});
+    std::fill(std::begin(party_mon), std::end(party_mon), MonsterEntity{});
 }
 
 /*!

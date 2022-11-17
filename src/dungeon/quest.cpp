@@ -30,7 +30,8 @@
 #include "system/dungeon-info.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
-#include "system/monster-race-definition.h"
+#include "system/item-entity.h"
+#include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
 #include "system/terrain-type-definition.h"
 #include "util/bit-flags-calculator.h"
@@ -177,7 +178,7 @@ void determine_random_questor(PlayerType *player_ptr, quest_type *q_ptr)
          * (depending on level)
          */
         r_idx = get_mon_num(player_ptr, 0, q_ptr->level + 5 + randint1(q_ptr->level / 10), GMN_ARENA);
-        monster_race *r_ptr;
+        MonsterRaceInfo *r_ptr;
         r_ptr = &monraces_info[r_idx];
 
         if (r_ptr->kind_flags.has_not(MonsterKindType::UNIQUE)) {
@@ -271,7 +272,7 @@ void complete_quest(PlayerType *player_ptr, QuestId quest_num)
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param o_ptr 入手したオブジェクトの構造体参照ポインタ
  */
-void check_find_art_quest_completion(PlayerType *player_ptr, ObjectType *o_ptr)
+void check_find_art_quest_completion(PlayerType *player_ptr, ItemEntity *o_ptr)
 {
     const auto &quest_list = QuestList::get_instance();
     /* Check if completed a quest */

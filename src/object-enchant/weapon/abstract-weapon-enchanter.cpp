@@ -2,9 +2,9 @@
 #include "object-enchant/object-boost.h"
 #include "object/tval-types.h"
 #include "sv-definition/sv-weapon-types.h"
-#include "system/object-type-definition.h"
+#include "system/item-entity.h"
 
-AbstractWeaponEnchanter::AbstractWeaponEnchanter(ObjectType *o_ptr, DEPTH level, int power)
+AbstractWeaponEnchanter::AbstractWeaponEnchanter(ItemEntity *o_ptr, DEPTH level, int power)
     : o_ptr(o_ptr)
     , level(level)
     , power(power)

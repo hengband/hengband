@@ -27,8 +27,8 @@
 #include "monster/smart-learn-types.h"
 #include "pet/pet-util.h"
 #include "system/floor-type-definition.h"
-#include "system/monster-race-definition.h"
-#include "system/monster-type-definition.h"
+#include "system/monster-entity.h"
+#include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
@@ -117,7 +117,7 @@ void do_cmd_knowledge_pets(PlayerType *player_ptr)
         return;
     }
 
-    monster_type *m_ptr;
+    MonsterEntity *m_ptr;
     GAME_TEXT pet_name[MAX_NLEN];
     int t_friends = 0;
     for (int i = player_ptr->current_floor_ptr->m_max - 1; i >= 1; i--) {

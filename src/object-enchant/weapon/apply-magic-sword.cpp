@@ -9,7 +9,7 @@
 #include "inventory/inventory-slot-types.h"
 #include "object-enchant/object-boost.h"
 #include "sv-definition/sv-weapon-types.h"
-#include "system/object-type-definition.h"
+#include "system/item-entity.h"
 #include "view/display-messages.h"
 
 /*!
@@ -19,7 +19,7 @@
  * @param level 生成基準階
  * @param power 生成ランク
  */
-SwordEnchanter::SwordEnchanter(PlayerType *player_ptr, ObjectType *o_ptr, DEPTH level, int power)
+SwordEnchanter::SwordEnchanter(PlayerType *player_ptr, ItemEntity *o_ptr, DEPTH level, int power)
     : MeleeWeaponEnchanter(player_ptr, o_ptr, level, power)
 {
 }

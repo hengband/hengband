@@ -4,13 +4,13 @@
 #include "monster/monster-info.h"
 #include "monster/monster-status.h"
 #include "save/save-util.h"
-#include "system/monster-race-definition.h"
-#include "system/monster-type-definition.h"
+#include "system/monster-entity.h"
+#include "system/monster-race-info.h"
 #include "util/bit-flags-calculator.h"
 #include "util/enum-converter.h"
 #include "util/quarks.h"
 
-static void write_monster_flags(monster_type *m_ptr, BIT_FLAGS *flags)
+static void write_monster_flags(MonsterEntity *m_ptr, BIT_FLAGS *flags)
 {
     if (!m_ptr->is_original_ap()) {
         set_bits(*flags, SaveDataMonsterFlagType::AP_R_IDX);
@@ -79,7 +79,7 @@ static void write_monster_flags(monster_type *m_ptr, BIT_FLAGS *flags)
     wr_u32b(*flags);
 }
 
-static void write_monster_info(monster_type *m_ptr, const BIT_FLAGS flags)
+static void write_monster_info(MonsterEntity *m_ptr, const BIT_FLAGS flags)
 {
     byte tmp8u;
     if (any_bits(flags, SaveDataMonsterFlagType::FAST)) {
@@ -145,7 +145,7 @@ static void write_monster_info(monster_type *m_ptr, const BIT_FLAGS flags)
  * @brief モンスター情報を書き込む / Write a "monster" record
  * @param m_ptr モンスター情報保存元ポインタ
  */
-void wr_monster(monster_type *m_ptr)
+void wr_monster(MonsterEntity *m_ptr)
 {
     BIT_FLAGS flags = 0x00000000;
     write_monster_flags(m_ptr, &flags);

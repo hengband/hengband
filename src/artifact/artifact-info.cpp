@@ -10,8 +10,8 @@
 #include "object-enchant/tr-types.h"
 #include "smith/object-smith.h"
 #include "system/artifact-type-definition.h"
-#include "system/baseitem-info-definition.h"
-#include "system/object-type-definition.h"
+#include "system/baseitem-info.h"
+#include "system/item-entity.h"
 #include "util/bit-flags-calculator.h"
 #include "util/enum-converter.h"
 
@@ -22,7 +22,7 @@
  * @param o_ptr 対象のオブジェクト構造体ポインタ
  * @return 発動効果のIDを返す
  */
-RandomArtActType activation_index(const ObjectType *o_ptr)
+RandomArtActType activation_index(const ItemEntity *o_ptr)
 {
     if (auto act_idx = Smith::object_activation(o_ptr); act_idx.has_value()) {
         return act_idx.value();
@@ -52,7 +52,7 @@ RandomArtActType activation_index(const ObjectType *o_ptr)
  * @param o_ptr 対象のオブジェクト構造体ポインタ
  * @return 発動効果構造体のポインタを返す
  */
-std::optional<const activation_type *> find_activation_info(const ObjectType *o_ptr)
+std::optional<const activation_type *> find_activation_info(const ItemEntity *o_ptr)
 {
     const auto index = activation_index(o_ptr);
     for (const auto &p : activation_info) {

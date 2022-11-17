@@ -2,17 +2,17 @@
 
 #include "system/angband.h"
 
-struct monster_type;
+class MonsterEntity;
 class PlayerType;
 class AvatarChanger {
 public:
-    AvatarChanger(PlayerType *player_ptr, monster_type *m_ptr);
+    AvatarChanger(PlayerType *player_ptr, MonsterEntity *m_ptr);
     virtual ~AvatarChanger() = default;
     void change_virtue();
 
 private:
     PlayerType *player_ptr;
-    monster_type *m_ptr;
+    MonsterEntity *m_ptr;
     void change_virtue_non_beginner();
     void change_virtue_unique();
     void change_virtue_good_evil();

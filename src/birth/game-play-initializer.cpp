@@ -16,10 +16,11 @@
 #include "player-info/race-types.h"
 #include "player/digestion-processor.h"
 #include "system/artifact-type-definition.h"
-#include "system/baseitem-info-definition.h"
+#include "system/baseitem-info.h"
 #include "system/dungeon-info.h"
 #include "system/floor-type-definition.h"
-#include "system/monster-race-definition.h"
+#include "system/item-entity.h"
+#include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
 #include "util/enum-range.h"
 #include "world/world.h"
@@ -54,7 +55,7 @@ void player_wipe_without_name(PlayerType *player_ptr)
     // TODO: キャラ作成からゲーム開始までに  current_floor_ptr を参照しなければならない処理は今後整理して外す。
     player_ptr->current_floor_ptr = &floor_info;
     //! @todo std::make_shared の配列対応版は C++20 から
-    player_ptr->inventory_list = std::shared_ptr<ObjectType[]>{ new ObjectType[INVEN_TOTAL] };
+    player_ptr->inventory_list = std::shared_ptr<ItemEntity[]>{ new ItemEntity[INVEN_TOTAL] };
     for (int i = 0; i < 4; i++) {
         strcpy(player_ptr->history[i], "");
     }
@@ -193,7 +194,7 @@ void init_dungeon_quests(PlayerType *player_ptr)
     floor_ptr->quest_number = QuestId::NONE;
     for (auto q_idx : EnumRange(QuestId::RANDOM_QUEST1, QuestId::RANDOM_QUEST10)) {
         auto *q_ptr = &quest_list[q_idx];
-        monster_race *quest_r_ptr;
+        MonsterRaceInfo *quest_r_ptr;
         q_ptr->status = QuestStatusType::TAKEN;
         determine_random_questor(player_ptr, q_ptr);
         quest_r_ptr = &monraces_info[q_ptr->r_idx];

@@ -8,11 +8,11 @@
 #include "object-enchant/tr-types.h"
 #include "object-hook/hook-armor.h"
 #include "object/tval-types.h"
-#include "system/object-type-definition.h"
+#include "system/item-entity.h"
 #include "system/player-type-definition.h"
 #include "util/bit-flags-calculator.h"
 
-static bool invest_misc_ranger(ObjectType *o_ptr)
+static bool invest_misc_ranger(ItemEntity *o_ptr)
 {
     if (o_ptr->art_flags.has(TR_SUST_CON)) {
         return false;
@@ -22,7 +22,7 @@ static bool invest_misc_ranger(ObjectType *o_ptr)
     return one_in_(2);
 }
 
-static bool invest_misc_strength(ObjectType *o_ptr)
+static bool invest_misc_strength(ItemEntity *o_ptr)
 {
     if (o_ptr->art_flags.has(TR_SUST_STR)) {
         return false;
@@ -32,7 +32,7 @@ static bool invest_misc_strength(ObjectType *o_ptr)
     return one_in_(2);
 }
 
-static bool invest_misc_wisdom(ObjectType *o_ptr)
+static bool invest_misc_wisdom(ItemEntity *o_ptr)
 {
     if (o_ptr->art_flags.has(TR_SUST_WIS)) {
         return false;
@@ -42,7 +42,7 @@ static bool invest_misc_wisdom(ObjectType *o_ptr)
     return one_in_(2);
 }
 
-static bool invest_misc_intelligence(ObjectType *o_ptr)
+static bool invest_misc_intelligence(ItemEntity *o_ptr)
 {
     if (o_ptr->art_flags.has(TR_SUST_INT)) {
         return false;
@@ -52,7 +52,7 @@ static bool invest_misc_intelligence(ObjectType *o_ptr)
     return one_in_(2);
 }
 
-static bool invest_misc_dexterity(ObjectType *o_ptr)
+static bool invest_misc_dexterity(ItemEntity *o_ptr)
 {
     if (o_ptr->art_flags.has(TR_SUST_DEX)) {
         return false;
@@ -62,7 +62,7 @@ static bool invest_misc_dexterity(ObjectType *o_ptr)
     return one_in_(2);
 }
 
-static bool invest_misc_constitution(ObjectType *o_ptr)
+static bool invest_misc_constitution(ItemEntity *o_ptr)
 {
     if (o_ptr->art_flags.has(TR_SUST_CON)) {
         return false;
@@ -72,7 +72,7 @@ static bool invest_misc_constitution(ObjectType *o_ptr)
     return one_in_(2);
 }
 
-static bool invest_misc_charisma(ObjectType *o_ptr)
+static bool invest_misc_charisma(ItemEntity *o_ptr)
 {
     if (o_ptr->art_flags.has(TR_SUST_CHR)) {
         return false;
@@ -82,7 +82,7 @@ static bool invest_misc_charisma(ObjectType *o_ptr)
     return one_in_(2);
 }
 
-static bool invest_misc_chaos(ObjectType *o_ptr)
+static bool invest_misc_chaos(ItemEntity *o_ptr)
 {
     if (o_ptr->art_flags.has(TR_TELEPORT)) {
         return false;
@@ -92,7 +92,7 @@ static bool invest_misc_chaos(ObjectType *o_ptr)
     return one_in_(2);
 }
 
-static bool invest_misc_res_curse(ObjectType *o_ptr)
+static bool invest_misc_res_curse(ItemEntity *o_ptr)
 {
     if (o_ptr->art_flags.has(TR_RES_CURSE)) {
         return false;
@@ -107,7 +107,7 @@ static bool invest_misc_res_curse(ObjectType *o_ptr)
  * @param o_ptr 対象のオブジェクト構造体への参照ポインタ
  * @return 処理続行ならFALSE、打ち切るならTRUE
  */
-static bool switch_misc_bias(ObjectType *o_ptr)
+static bool switch_misc_bias(ItemEntity *o_ptr)
 {
     switch (o_ptr->artifact_bias) {
     case BIAS_RANGER:
@@ -137,7 +137,7 @@ static bool switch_misc_bias(ObjectType *o_ptr)
     }
 }
 
-static void invest_misc_hit_dice(ObjectType *o_ptr)
+static void invest_misc_hit_dice(ItemEntity *o_ptr)
 {
     o_ptr->art_flags.set(TR_SHOW_MODS);
     HIT_PROB bonus_h = 4 + (HIT_PROB)randint1(11);
@@ -151,7 +151,7 @@ static void invest_misc_hit_dice(ObjectType *o_ptr)
     o_ptr->to_d += bonus_d;
 }
 
-static void invest_misc_string_esp(ObjectType *o_ptr)
+static void invest_misc_string_esp(ItemEntity *o_ptr)
 {
     switch (randint1(3)) {
     case 1:
@@ -178,7 +178,7 @@ static void invest_misc_string_esp(ObjectType *o_ptr)
     }
 }
 
-static void switch_investment_weak_esps(ObjectType *o_ptr, const int *idx, const int n)
+static void switch_investment_weak_esps(ItemEntity *o_ptr, const int *idx, const int n)
 {
     switch (idx[n]) {
     case 1:
@@ -236,7 +236,7 @@ static void switch_investment_weak_esps(ObjectType *o_ptr, const int *idx, const
     }
 }
 
-static void invest_misc_weak_esps(ObjectType *o_ptr)
+static void invest_misc_weak_esps(ItemEntity *o_ptr)
 {
     int idx[3];
     idx[0] = randint1(10);
@@ -268,7 +268,7 @@ static void invest_misc_weak_esps(ObjectType *o_ptr)
  * @attention オブジェクトのtval、svalに依存したハードコーディング処理がある。
  * @param o_ptr 対象のオブジェクト構造体ポインタ
  */
-void random_misc(PlayerType *player_ptr, ObjectType *o_ptr)
+void random_misc(PlayerType *player_ptr, ItemEntity *o_ptr)
 {
     if (switch_misc_bias(o_ptr)) {
         return;

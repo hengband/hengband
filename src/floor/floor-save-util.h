@@ -1,7 +1,7 @@
 ﻿#pragma once
 
 #include "system/angband.h"
-#include "system/monster-type-definition.h"
+#include "system/monster-entity.h"
 
 #define MAX_SAVED_FLOORS 20 /*!< 保存フロアの最大数 / Maximum number of saved floors. */
 #define MAX_PARTY_MON 21 /*!< フロア移動時に先のフロアに連れて行けるペットの最大数 Maximum number of preservable pets */
@@ -22,4 +22,4 @@ extern FLOOR_IDX max_floor_id;
 
 extern FLOOR_IDX new_floor_id;
 extern uint32_t latest_visit_mark;
-extern monster_type party_mon[MAX_PARTY_MON];
+extern MonsterEntity party_mon[MAX_PARTY_MON];

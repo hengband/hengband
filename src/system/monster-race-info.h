@@ -54,7 +54,10 @@ public:
  * monster recall (no knowledge of spells, etc).  All of the "recall"
  * fields have a special prefix to aid in searching for them.
  */
-struct monster_race {
+class MonsterRaceInfo {
+public:
+    MonsterRaceInfo() = default;
+
     MonsterRaceId idx{};
     std::string name; //!< 名前データのオフセット(日本語) /  Name offset(Japanese)
 #ifdef JP
@@ -68,7 +71,6 @@ struct monster_race {
     POSITION aaf{}; //!< 感知範囲(1-100スクエア) / Area affect radius (1-100)
     byte speed{}; //!< 加速(110で+0) / Speed (normally 110)
     EXP mexp{}; //!< 殺害時基本経験値 / Exp value for kill
-    BIT_FLAGS16 extra{}; //!< 未使用 /  Unused (for now)
     RARITY freq_spell{}; //!< 魔法＆特殊能力仕様頻度(1/n) /  Spell frequency
     BIT_FLAGS flags1{}; //!< Flags 1 (general)
     BIT_FLAGS flags2{}; //!< Flags 2 (abilities)
@@ -114,7 +116,6 @@ struct monster_race {
     byte r_wake{}; //!< @に気づいて起きた数 / Number of times woken up (?)
     byte r_ignore{}; //!< @に気づいていない数 / Number of times ignored (?)
     bool r_can_evolve{}; //!< 進化するか否か / Flag being able to evolve
-    byte r_xtra2{}; //!< 未使用 / Something (unused)
     ITEM_NUMBER r_drop_gold{}; //!< これまでに撃破時に落とした財宝の数 / Max number of gold dropped at once
     ITEM_NUMBER r_drop_item{}; //!< これまでに撃破時に落としたアイテムの数 / Max number of item dropped at once
     byte r_cast_spell{}; //!< 使った魔法/ブレスの種類数 /  Max unique number of spells seen

@@ -25,10 +25,10 @@
 #include "realm/realm-names-table.h"
 #include "sv-definition/sv-other-types.h"
 #include "sv-definition/sv-ring-types.h"
-#include "system/baseitem-info-definition.h"
+#include "system/baseitem-info.h"
 #include "system/floor-type-definition.h"
-#include "system/monster-race-definition.h"
-#include "system/object-type-definition.h"
+#include "system/item-entity.h"
+#include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
 #include "term/term-color-types.h"
 #include "util/bit-flags-calculator.h"
@@ -39,7 +39,7 @@
  * @param o_ptr 名称を取得する元のオブジェクト構造体参照ポインタ
  * @return concptr 発動名称を返す文字列ポインタ
  */
-static concptr item_activation_dragon_breath(ObjectType *o_ptr)
+static concptr item_activation_dragon_breath(ItemEntity *o_ptr)
 {
     static char desc[256];
     int n = 0;
@@ -67,7 +67,7 @@ static concptr item_activation_dragon_breath(ObjectType *o_ptr)
  * @param o_ptr 名称を取得する元のオブジェクト構造体参照ポインタ
  * @return concptr 発動名称を返す文字列ポインタ
  */
-static concptr item_activation_aux(ObjectType *o_ptr)
+static concptr item_activation_aux(ItemEntity *o_ptr)
 {
     static char activation_detail[512];
     char timeout[64];
@@ -176,7 +176,7 @@ static concptr item_activation_aux(ObjectType *o_ptr)
  * @param o_ptr 名称を取得する元のオブジェクト構造体参照ポインタ
  * @return concptr 発動名称を返す文字列ポインタ
  */
-concptr activation_explanation(ObjectType *o_ptr)
+concptr activation_explanation(ItemEntity *o_ptr)
 {
     auto flgs = object_flags(o_ptr);
     if (flgs.has_not(TR_ACTIVATE)) {
@@ -216,7 +216,7 @@ char index_to_label(int i)
  * @param o_ptr 名称を取得する元のオブジェクト構造体参照ポインタ
  * @return 対応する装備部位ID
  */
-int16_t wield_slot(PlayerType *player_ptr, const ObjectType *o_ptr)
+int16_t wield_slot(PlayerType *player_ptr, const ItemEntity *o_ptr)
 {
     switch (o_ptr->tval) {
     case ItemKindType::DIGGING:
@@ -310,7 +310,7 @@ bool check_book_realm(PlayerType *player_ptr, const ItemKindType book_tval, cons
     return (get_realm1_book(player_ptr) == book_tval) || (get_realm2_book(player_ptr) == book_tval);
 }
 
-ObjectType *ref_item(PlayerType *player_ptr, INVENTORY_IDX item)
+ItemEntity *ref_item(PlayerType *player_ptr, INVENTORY_IDX item)
 {
     auto *floor_ptr = player_ptr->current_floor_ptr;
     return item >= 0 ? &player_ptr->inventory_list[item] : &(floor_ptr->o_list[0 - item]);

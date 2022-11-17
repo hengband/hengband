@@ -12,7 +12,7 @@
 #include "monster-attack/monster-attack-table.h"
 #include "monster-race/race-indice-types.h"
 #include "system/angband.h"
-#include "system/monster-type-definition.h"
+#include "system/monster-entity.h"
 
 static void show_jaian_song(MonsterAttackPlayer *monap_ptr)
 {

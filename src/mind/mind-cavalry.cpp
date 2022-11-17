@@ -16,8 +16,8 @@
 #include "pet/pet-fall-off.h"
 #include "player/player-skill.h"
 #include "system/floor-type-definition.h"
-#include "system/monster-race-definition.h"
-#include "system/monster-type-definition.h"
+#include "system/monster-entity.h"
+#include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
 #include "view/display-messages.h"
 
@@ -29,8 +29,8 @@
 bool rodeo(PlayerType *player_ptr)
 {
     GAME_TEXT m_name[MAX_NLEN];
-    monster_type *m_ptr;
-    monster_race *r_ptr;
+    MonsterEntity *m_ptr;
+    MonsterRaceInfo *r_ptr;
     int rlev;
 
     if (player_ptr->riding) {

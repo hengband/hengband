@@ -4,8 +4,9 @@
 #include "object/object-value-calc.h"
 #include "object/tval-types.h"
 #include "system/artifact-type-definition.h"
-#include "system/baseitem-info-definition.h"
-#include "system/monster-race-definition.h"
+#include "system/baseitem-info.h"
+#include "system/item-entity.h"
+#include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
 
 /*!
@@ -34,7 +35,7 @@
  *\n
  * Every wearable item with a "pval" bonus is worth extra (see below).\n
  */
-PRICE object_value_real(const ObjectType *o_ptr)
+PRICE object_value_real(const ItemEntity *o_ptr)
 {
     auto *k_ptr = &baseitems_info[o_ptr->k_idx];
 

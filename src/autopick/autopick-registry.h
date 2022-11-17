@@ -1,5 +1,5 @@
 ﻿#pragma once
 
-class ObjectType;
+class ItemEntity;
 class PlayerType;
-bool autopick_autoregister(PlayerType *player_ptr, ObjectType *o_ptr);
+bool autopick_autoregister(PlayerType *player_ptr, ItemEntity *o_ptr);

@@ -15,7 +15,7 @@
 #include "player-info/bluemage-data-type.h"
 #include "player-info/magic-eater-data-type.h"
 #include "smith/object-smith.h"
-#include "system/baseitem-info-definition.h"
+#include "system/baseitem-info.h"
 #include "system/player-type-definition.h"
 #include "util/enum-converter.h"
 #include "util/flag-group.h"

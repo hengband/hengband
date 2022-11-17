@@ -7,9 +7,9 @@
 #include "player/player-realm.h"
 #include "sv-definition/sv-weapon-types.h"
 #include "system/floor-type-definition.h"
-#include "system/monster-race-definition.h"
-#include "system/monster-type-definition.h"
-#include "system/object-type-definition.h"
+#include "system/item-entity.h"
+#include "system/monster-entity.h"
+#include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
 #include "util/bit-flags-calculator.h"
 
@@ -237,7 +237,7 @@ concptr PlayerSkill::skill_rank_str(PlayerSkillRank rank)
     return _("[不明]", "[Unknown]");
 }
 
-void PlayerSkill::gain_melee_weapon_exp(const ObjectType *o_ptr)
+void PlayerSkill::gain_melee_weapon_exp(const ItemEntity *o_ptr)
 {
     const GainAmountList gain_amount_list{ { 80, 10, 1, (one_in_(2) ? 1 : 0) } };
     constexpr GainAmountList others_gain_amount_list{ { 8, 1, 0, 0 } };
@@ -251,7 +251,7 @@ void PlayerSkill::gain_melee_weapon_exp(const ObjectType *o_ptr)
     }
 }
 
-void PlayerSkill::gain_range_weapon_exp(const ObjectType *o_ptr)
+void PlayerSkill::gain_range_weapon_exp(const ItemEntity *o_ptr)
 {
     constexpr GainAmountList gain_amount_list{ { 80, 25, 10, 2 } };
     constexpr GainAmountList others_gain_amount_list{ { 8, 2, 0, 0 } };
@@ -281,7 +281,7 @@ void PlayerSkill::gain_two_weapon_skill_exp()
     }
 }
 
-void PlayerSkill::gain_riding_skill_exp_on_melee_attack(const monster_race *r_ptr)
+void PlayerSkill::gain_riding_skill_exp_on_melee_attack(const MonsterRaceInfo *r_ptr)
 {
     auto now_exp = this->player_ptr->skill_exp[PlayerSkillKindType::RIDING];
     auto max_exp = class_skills_info[enum2i(this->player_ptr->pclass)].s_max[PlayerSkillKindType::RIDING];

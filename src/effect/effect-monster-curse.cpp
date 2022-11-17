@@ -2,8 +2,8 @@
 #include "effect/effect-monster-util.h"
 #include "monster-race/monster-race.h"
 #include "monster-race/race-indice-types.h"
-#include "system/monster-race-definition.h"
-#include "system/monster-type-definition.h"
+#include "system/monster-entity.h"
+#include "system/monster-race-info.h"
 #include "view/display-messages.h"
 
 ProcessResult effect_monster_curse_1(effect_monster_type *em_ptr)

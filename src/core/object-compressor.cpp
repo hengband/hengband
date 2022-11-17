@@ -4,13 +4,12 @@
 #include "floor/floor-object.h"
 #include "floor/geometry.h"
 #include "grid/grid.h"
-#include "system/baseitem-info-definition.h"
+#include "system/baseitem-info.h"
 #include "system/floor-type-definition.h"
-#include "system/monster-type-definition.h"
-#include "system/object-type-definition.h"
+#include "system/item-entity.h"
+#include "system/monster-entity.h"
 #include "system/player-type-definition.h"
 #include "view/display-messages.h"
-
 #include <algorithm>
 
 /*!
@@ -54,7 +53,7 @@ static void compact_objects_aux(FloorType *floor_ptr, OBJECT_IDX i1, OBJECT_IDX 
  */
 void compact_objects(PlayerType *player_ptr, int size)
 {
-    ObjectType *o_ptr;
+    ItemEntity *o_ptr;
     if (size) {
         msg_print(_("アイテム情報を圧縮しています...", "Compacting objects..."));
         player_ptr->redraw |= PR_MAP;
@@ -74,7 +73,7 @@ void compact_objects(PlayerType *player_ptr, int size)
 
             POSITION y, x;
             if (o_ptr->is_held_by_monster()) {
-                monster_type *m_ptr;
+                MonsterEntity *m_ptr;
                 m_ptr = &floor_ptr->m_list[o_ptr->held_m_idx];
                 y = m_ptr->fy;
                 x = m_ptr->fx;

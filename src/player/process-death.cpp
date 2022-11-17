@@ -23,7 +23,7 @@
 #include "store/store-util.h"
 #include "store/store.h"
 #include "system/floor-type-definition.h"
-#include "system/object-type-definition.h"
+#include "system/item-entity.h"
 #include "system/player-type-definition.h"
 #include "term/gameterm.h"
 #include "term/screen-processor.h"
@@ -255,7 +255,7 @@ void print_tomb(PlayerType *player_ptr)
  */
 static void inventory_aware(PlayerType *player_ptr)
 {
-    ObjectType *o_ptr;
+    ItemEntity *o_ptr;
     for (int i = 0; i < INVEN_TOTAL; i++) {
         o_ptr = &player_ptr->inventory_list[i];
         if (!o_ptr->k_idx) {
@@ -273,7 +273,7 @@ static void inventory_aware(PlayerType *player_ptr)
  */
 static void home_aware(PlayerType *player_ptr)
 {
-    ObjectType *o_ptr;
+    ItemEntity *o_ptr;
     store_type *store_ptr;
     for (int i = 1; i < max_towns; i++) {
         store_ptr = &town_info[i].store[enum2i(StoreSaleType::HOME)];
@@ -336,7 +336,7 @@ static void show_dead_home_items(PlayerType *player_ptr)
             for (int j = 0; (j < 12) && (i < store_ptr->stock_num); j++, i++) {
                 GAME_TEXT o_name[MAX_NLEN];
                 char tmp_val[80];
-                ObjectType *o_ptr;
+                ItemEntity *o_ptr;
                 o_ptr = &store_ptr->stock[i];
                 sprintf(tmp_val, "%c) ", I2A(j));
                 prt(tmp_val, j + 2, 4);

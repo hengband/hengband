@@ -9,7 +9,7 @@
 #include "player-info/race-info.h"
 #include "player-info/samurai-data-type.h"
 #include "player/special-defense-types.h"
-#include "system/object-type-definition.h"
+#include "system/item-entity.h"
 #include "system/player-type-definition.h"
 #include "util/bit-flags-calculator.h"
 
@@ -81,7 +81,7 @@ void known_obj_immunity(PlayerType *player_ptr, TrFlags &flags)
     flags.clear();
 
     for (int i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
-        ObjectType *o_ptr;
+        ItemEntity *o_ptr;
         o_ptr = &player_ptr->inventory_list[i];
         if (!o_ptr->k_idx) {
             continue;

@@ -8,10 +8,10 @@
 #include "object-enchant/tr-types.h"
 #include "object/tval-types.h"
 #include "sv-definition/sv-weapon-types.h"
-#include "system/object-type-definition.h"
+#include "system/item-entity.h"
 #include "util/bit-flags-calculator.h"
 
-static bool random_art_slay_bow(ObjectType *o_ptr)
+static bool random_art_slay_bow(ItemEntity *o_ptr)
 {
     if (o_ptr->tval != ItemKindType::BOW) {
         return false;
@@ -45,7 +45,7 @@ static bool random_art_slay_bow(ObjectType *o_ptr)
     }
 }
 
-static bool random_art_slay_chaos(ObjectType *o_ptr)
+static bool random_art_slay_chaos(ItemEntity *o_ptr)
 {
     if (o_ptr->art_flags.has(TR_CHAOTIC)) {
         return false;
@@ -55,7 +55,7 @@ static bool random_art_slay_chaos(ObjectType *o_ptr)
     return one_in_(2);
 }
 
-static bool random_art_brand_magical(ObjectType *o_ptr)
+static bool random_art_brand_magical(ItemEntity *o_ptr)
 {
     if (o_ptr->art_flags.has(TR_BRAND_MAGIC)) {
         return false;
@@ -65,7 +65,7 @@ static bool random_art_brand_magical(ObjectType *o_ptr)
     return one_in_(3);
 }
 
-static bool random_art_slay_vampiric(ObjectType *o_ptr)
+static bool random_art_slay_vampiric(ItemEntity *o_ptr)
 {
     if (o_ptr->art_flags.has(TR_VAMPIRIC)) {
         return false;
@@ -75,7 +75,7 @@ static bool random_art_slay_vampiric(ObjectType *o_ptr)
     return one_in_(2);
 }
 
-static bool random_art_slay_brand_acid(ObjectType *o_ptr)
+static bool random_art_slay_brand_acid(ItemEntity *o_ptr)
 {
     if (o_ptr->art_flags.has(TR_BRAND_ACID)) {
         return false;
@@ -85,7 +85,7 @@ static bool random_art_slay_brand_acid(ObjectType *o_ptr)
     return one_in_(2);
 }
 
-static bool random_art_slay_brand_elec(ObjectType *o_ptr)
+static bool random_art_slay_brand_elec(ItemEntity *o_ptr)
 {
     if (o_ptr->art_flags.has(TR_BRAND_ELEC)) {
         return false;
@@ -95,7 +95,7 @@ static bool random_art_slay_brand_elec(ObjectType *o_ptr)
     return one_in_(2);
 }
 
-static bool random_art_slay_brand_fire(ObjectType *o_ptr)
+static bool random_art_slay_brand_fire(ItemEntity *o_ptr)
 {
     if (o_ptr->art_flags.has(TR_BRAND_FIRE)) {
         return false;
@@ -105,7 +105,7 @@ static bool random_art_slay_brand_fire(ObjectType *o_ptr)
     return one_in_(2);
 }
 
-static bool random_art_slay_brand_cold(ObjectType *o_ptr)
+static bool random_art_slay_brand_cold(ItemEntity *o_ptr)
 {
     if (o_ptr->art_flags.has(TR_BRAND_COLD)) {
         return false;
@@ -115,7 +115,7 @@ static bool random_art_slay_brand_cold(ObjectType *o_ptr)
     return one_in_(2);
 }
 
-static bool random_art_slay_brand_pois(ObjectType *o_ptr)
+static bool random_art_slay_brand_pois(ItemEntity *o_ptr)
 {
     if (o_ptr->art_flags.has(TR_BRAND_POIS) || one_in_(2)) {
         return false;
@@ -125,7 +125,7 @@ static bool random_art_slay_brand_pois(ObjectType *o_ptr)
     return one_in_(2);
 }
 
-static bool random_art_slay_animal(ObjectType *o_ptr)
+static bool random_art_slay_animal(ItemEntity *o_ptr)
 {
     if (o_ptr->art_flags.has(TR_SLAY_ANIMAL)) {
         return false;
@@ -135,7 +135,7 @@ static bool random_art_slay_animal(ObjectType *o_ptr)
     return one_in_(2);
 }
 
-static bool random_art_slay_evil(ObjectType *o_ptr)
+static bool random_art_slay_evil(ItemEntity *o_ptr)
 {
     if (o_ptr->art_flags.has(TR_SLAY_EVIL)) {
         return false;
@@ -145,7 +145,7 @@ static bool random_art_slay_evil(ObjectType *o_ptr)
     return one_in_(2);
 }
 
-static bool random_art_slay_undead(ObjectType *o_ptr)
+static bool random_art_slay_undead(ItemEntity *o_ptr)
 {
     if (o_ptr->art_flags.has(TR_SLAY_UNDEAD)) {
         return false;
@@ -155,7 +155,7 @@ static bool random_art_slay_undead(ObjectType *o_ptr)
     return one_in_(2);
 }
 
-static bool random_art_slay_demon(ObjectType *o_ptr)
+static bool random_art_slay_demon(ItemEntity *o_ptr)
 {
     if (o_ptr->art_flags.has(TR_SLAY_DEMON)) {
         return false;
@@ -165,7 +165,7 @@ static bool random_art_slay_demon(ObjectType *o_ptr)
     return one_in_(2);
 }
 
-static bool switch_random_art_slay(ObjectType *o_ptr)
+static bool switch_random_art_slay(ItemEntity *o_ptr)
 {
     switch (o_ptr->artifact_bias) {
     case BIAS_CHAOS:
@@ -215,7 +215,7 @@ static bool switch_random_art_slay(ObjectType *o_ptr)
  * @attention オブジェクトのtval、svalに依存したハードコーディング処理がある。
  * @param o_ptr 対象のオブジェクト構造体ポインタ
  */
-void random_slay(ObjectType *o_ptr)
+void random_slay(ItemEntity *o_ptr)
 {
     if (random_art_slay_bow(o_ptr) || switch_random_art_slay(o_ptr)) {
         return;

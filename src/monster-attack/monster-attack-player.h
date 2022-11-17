@@ -5,8 +5,8 @@
 enum class RaceBlowEffectType;
 enum class RaceBlowMethodType;
 class PlayerType;
-struct monster_type;
-class ObjectType;
+class MonsterEntity;
+class ItemEntity;
 class MonsterAttackPlayer {
 public:
     MonsterAttackPlayer(PlayerType *player_ptr, short m_idx);
@@ -14,7 +14,7 @@ public:
     int abbreviate = 0; // 2回目以降の省略表現フラグ.
 #endif
     short m_idx;
-    monster_type *m_ptr;
+    MonsterEntity *m_ptr;
     RaceBlowMethodType method;
     RaceBlowEffectType effect;
     bool do_silly_attack;
@@ -27,7 +27,7 @@ public:
     GAME_TEXT m_name[MAX_NLEN]{};
     int d_dice = 0;
     int d_side = 0;
-    ObjectType *o_ptr = nullptr;
+    ItemEntity *o_ptr = nullptr;
     bool obvious = false;
     int damage = 0;
     bool blinked = false;

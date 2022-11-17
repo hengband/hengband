@@ -16,7 +16,7 @@
 #include "monster-race/race-indice-types.h"
 #include "player-ability/player-ability-types.h"
 #include "system/angband.h"
-#include "system/monster-race-definition.h"
+#include "system/monster-race-info.h"
 #include "term/term-color-types.h"
 #include "view/display-lore-attacks.h"
 #include "view/display-lore-drops.h"

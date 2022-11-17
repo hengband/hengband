@@ -34,8 +34,8 @@ constexpr auto VIEW_MAX = 1536;
 constexpr auto REDRAW_MAX = 2298;
 
 struct grid_type;
-struct monster_type;
-class ObjectType;
+class MonsterEntity;
+class ItemEntity;
 class FloorType {
 public:
     FloorType() = default;
@@ -51,11 +51,11 @@ public:
 
     GAME_TURN generated_turn = 0; /* Turn when level began */
 
-    std::vector<ObjectType> o_list; /*!< The array of dungeon items [max_o_idx] */
+    std::vector<ItemEntity> o_list; /*!< The array of dungeon items [max_o_idx] */
     OBJECT_IDX o_max = 0; /* Number of allocated objects */
     OBJECT_IDX o_cnt = 0; /* Number of live objects */
 
-    std::vector<monster_type> m_list; /*!< The array of dungeon monsters [max_m_idx] */
+    std::vector<MonsterEntity> m_list; /*!< The array of dungeon monsters [max_m_idx] */
     MONSTER_IDX m_max = 0; /* Number of allocated monsters */
     MONSTER_IDX m_cnt = 0; /* Number of live monsters */
 

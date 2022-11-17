@@ -13,8 +13,8 @@
 #include "monster/monster-info.h"
 #include "monster/smart-learn-types.h"
 #include "system/floor-type-definition.h"
-#include "system/monster-race-definition.h"
-#include "system/monster-type-definition.h"
+#include "system/monster-entity.h"
+#include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
 #include "view/display-messages.h"
 
@@ -46,7 +46,7 @@ void discharge_minion(PlayerType *player_ptr)
             continue;
         }
 
-        monster_race *r_ptr;
+        MonsterRaceInfo *r_ptr;
         r_ptr = &monraces_info[m_ptr->r_idx];
         if (r_ptr->kind_flags.has(MonsterKindType::UNIQUE)) {
             GAME_TEXT m_name[MAX_NLEN];

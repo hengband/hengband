@@ -2202,7 +2202,7 @@
     <ClCompile Include="..\..\src\view\display-scores.cpp">
       <Filter>view</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\system\object-type-definition.cpp">
+    <ClCompile Include="..\..\src\system\item-entity.cpp">
       <Filter>system</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\object\object-index-list.cpp">
@@ -2460,10 +2460,10 @@
     <ClCompile Include="..\..\src\timed-effect\player-blindness.cpp">
       <Filter>timed-effect</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\system\monster-type-definition.cpp">
+    <ClCompile Include="..\..\src\system\monster-entity.cpp">
       <Filter>system</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\system\baseitem-info-definition.cpp">
+    <ClCompile Include="..\..\src\system\baseitem-info.cpp">
       <Filter>system</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\system\floor-type-definition.cpp">
@@ -3671,7 +3671,7 @@
     <ClInclude Include="..\..\src\player\eldritch-horror.h">
       <Filter>player</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\system\monster-type-definition.h">
+    <ClInclude Include="..\..\src\system\monster-entity.h">
       <Filter>system</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\monster\monster-processor-util.h">
@@ -3683,7 +3683,7 @@
     <ClInclude Include="..\..\src\core\speed-table.h">
       <Filter>core</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\system\object-type-definition.h">
+    <ClInclude Include="..\..\src\system\item-entity.h">
       <Filter>system</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\monster\monster-util.h">
@@ -3860,7 +3860,7 @@
     <ClInclude Include="..\..\src\player-info\class-types.h">
       <Filter>player-info</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\system\monster-race-definition.h">
+    <ClInclude Include="..\..\src\system\monster-race-info.h">
       <Filter>system</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\realm\realm-types.h">
@@ -5361,7 +5361,7 @@
     <ClInclude Include="..\..\src\timed-effect\player-blindness.h">
       <Filter>timed-effect</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\system\baseitem-info-definition.h">
+    <ClInclude Include="..\..\src\system\baseitem-info.h">
       <Filter>system</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\system\dungeon-info.h">

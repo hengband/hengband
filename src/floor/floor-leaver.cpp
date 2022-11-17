@@ -25,7 +25,8 @@
 #include "system/dungeon-info.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
-#include "system/monster-race-definition.h"
+#include "system/item-entity.h"
+#include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
 #include "system/terrain-type-definition.h"
 #include "target/projection-path-calculator.h"
@@ -50,7 +51,7 @@ static void check_riding_preservation(PlayerType *player_ptr)
     }
 }
 
-static bool check_pet_preservation_conditions(PlayerType *player_ptr, monster_type *m_ptr)
+static bool check_pet_preservation_conditions(PlayerType *player_ptr, MonsterEntity *m_ptr)
 {
     if (reinit_wilderness) {
         return false;
@@ -220,7 +221,7 @@ static void get_out_monster(PlayerType *player_ptr)
     }
 
     while (true) {
-        monster_type *m_ptr;
+        MonsterEntity *m_ptr;
         POSITION ny = rand_spread(oy, dis);
         POSITION nx = rand_spread(ox, dis);
         tries++;

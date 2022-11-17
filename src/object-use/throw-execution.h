@@ -11,17 +11,17 @@
 #include "util/flag-group.h"
 
 struct grid_type;
-struct monster_type;
-class ObjectType;
+class MonsterEntity;
+class ItemEntity;
 class PlayerType;
 class ObjectThrowEntity {
 public:
     ObjectThrowEntity() = default;
     ObjectThrowEntity(
-        PlayerType *player_ptr, ObjectType *q_ptr, const int delay_factor_val, const int mult, const bool boomerang, const OBJECT_IDX shuriken);
+        PlayerType *player_ptr, ItemEntity *q_ptr, const int delay_factor_val, const int mult, const bool boomerang, const OBJECT_IDX shuriken);
     virtual ~ObjectThrowEntity() = default;
 
-    ObjectType *q_ptr;
+    ItemEntity *q_ptr;
     OBJECT_IDX item{};
     POSITION y{};
     POSITION x{};
@@ -59,7 +59,7 @@ private:
     int tdis{};
     int cur_dis{};
     int visible{};
-    ObjectType *o_ptr{};
+    ItemEntity *o_ptr{};
     bool hit_wall = false;
     bool return_when_thrown = false;
     GAME_TEXT o_name[MAX_NLEN]{};
@@ -67,7 +67,7 @@ private:
     bool come_back = false;
     bool do_drop = true;
     grid_type *g_ptr{};
-    monster_type *m_ptr{};
+    MonsterEntity *m_ptr{};
     GAME_TEXT m_name[MAX_NLEN]{};
     int back_chance{};
     char o2_name[MAX_NLEN]{};

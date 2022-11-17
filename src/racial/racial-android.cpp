@@ -15,8 +15,8 @@
 #include "sv-definition/sv-protector-types.h"
 #include "sv-definition/sv-weapon-types.h"
 #include "system/artifact-type-definition.h"
-#include "system/baseitem-info-definition.h"
-#include "system/object-type-definition.h"
+#include "system/baseitem-info.h"
+#include "system/item-entity.h"
 #include "system/player-type-definition.h"
 #include "target/target-getter.h"
 #include "view/display-messages.h"
@@ -66,7 +66,7 @@ void calc_android_exp(PlayerType *player_ptr)
 
     for (int i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
         auto *o_ptr = &player_ptr->inventory_list[i];
-        ObjectType forge;
+        ItemEntity forge;
         auto *q_ptr = &forge;
         uint32_t value, exp;
         DEPTH level = std::max(baseitems_info[o_ptr->k_idx].level - 8, 1);

@@ -13,7 +13,7 @@
 #include "object/item-use-flags.h"
 #include "object/object-flags.h"
 #include "racial/racial-android.h"
-#include "system/object-type-definition.h"
+#include "system/item-entity.h"
 #include "system/player-type-definition.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
@@ -29,7 +29,7 @@ bool bless_weapon(PlayerType *player_ptr)
     concptr s = _("祝福できる武器がありません。", "You have no weapon to bless.");
 
     OBJECT_IDX item;
-    auto *o_ptr = choose_object(player_ptr, &item, q, s, USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT, FuncItemTester(&ObjectType::is_weapon));
+    auto *o_ptr = choose_object(player_ptr, &item, q, s, USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT, FuncItemTester(&ItemEntity::is_weapon));
     if (!o_ptr) {
         return false;
     }

@@ -10,7 +10,7 @@
 #include "player-info/magic-eater-data-type.h"
 #include "player-status/player-energy.h"
 #include "sv-definition/sv-staff-types.h"
-#include "system/object-type-definition.h"
+#include "system/item-entity.h"
 #include "system/player-type-definition.h"
 #include "view/display-messages.h"
 
@@ -24,7 +24,7 @@ bool import_magic_device(PlayerType *player_ptr)
     concptr q = _("どのアイテムの魔力を取り込みますか? ", "Gain power of which item? ");
     concptr s = _("魔力を取り込めるアイテムがない。", "There's nothing with power to absorb.");
     OBJECT_IDX item;
-    auto *o_ptr = choose_object(player_ptr, &item, q, s, USE_INVEN | USE_FLOOR, FuncItemTester(&ObjectType::is_rechargeable));
+    auto *o_ptr = choose_object(player_ptr, &item, q, s, USE_INVEN | USE_FLOOR, FuncItemTester(&ItemEntity::is_rechargeable));
     if (!o_ptr) {
         return false;
     }

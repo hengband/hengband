@@ -28,7 +28,7 @@
 #include "object/object-mark-types.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
-#include "system/object-type-definition.h"
+#include "system/item-entity.h"
 #include "system/player-type-definition.h"
 #include "term/screen-processor.h"
 #include "view/display-messages.h"
@@ -39,7 +39,7 @@
  */
 static void autopick_delayed_alter_aux(PlayerType *player_ptr, INVENTORY_IDX item)
 {
-    ObjectType *o_ptr;
+    ItemEntity *o_ptr;
     o_ptr = ref_item(player_ptr, item);
 
     if (o_ptr->k_idx == 0 || !(o_ptr->marked & OM_AUTODESTROY)) {
@@ -88,7 +88,7 @@ void autopick_delayed_alter(PlayerType *player_ptr)
  */
 void autopick_alter_item(PlayerType *player_ptr, INVENTORY_IDX item, bool destroy)
 {
-    ObjectType *o_ptr;
+    ItemEntity *o_ptr;
     o_ptr = ref_item(player_ptr, item);
     int idx = find_autopick_list(player_ptr, o_ptr);
     auto_inscribe_item(player_ptr, o_ptr, idx);

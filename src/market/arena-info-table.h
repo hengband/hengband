@@ -1,6 +1,6 @@
 ﻿#pragma once
 
-#include "system/baseitem-info-definition.h"
+#include "system/baseitem-info.h"
 #include <vector>
 
 /*!

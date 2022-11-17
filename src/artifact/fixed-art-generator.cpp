@@ -25,9 +25,9 @@
 #include "player/player-sex.h"
 #include "specific-object/bloody-moon.h"
 #include "system/artifact-type-definition.h"
-#include "system/baseitem-info-definition.h"
+#include "system/baseitem-info.h"
 #include "system/floor-type-definition.h"
-#include "system/object-type-definition.h"
+#include "system/item-entity.h"
 #include "system/player-type-definition.h"
 #include "util/bit-flags-calculator.h"
 
@@ -40,7 +40,7 @@
  * 純戦士系職業は追加能力/耐性がもらえる。
  * それ以外では、反感、太古の怨念、呪いが付き追加能力/耐性はもらえない。
  */
-static bool invest_terror_mask(PlayerType *player_ptr, ObjectType *o_ptr)
+static bool invest_terror_mask(PlayerType *player_ptr, ItemEntity *o_ptr)
 {
     if (!o_ptr->is_specific_artifact(FixedArtifactId::TERROR)) {
         return false;
@@ -66,7 +66,7 @@ static bool invest_terror_mask(PlayerType *player_ptr, ObjectType *o_ptr)
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param o_ptr 対象のオブジェクト構造体への参照ポインタ
  */
-static void milim_swimsuit(PlayerType *player_ptr, ObjectType *o_ptr)
+static void milim_swimsuit(PlayerType *player_ptr, ItemEntity *o_ptr)
 {
     if (!o_ptr->is_specific_artifact(FixedArtifactId::MILIM) || (player_ptr->ppersonality != PERSONALITY_SEXY)) {
         return;
@@ -91,7 +91,7 @@ static void milim_swimsuit(PlayerType *player_ptr, ObjectType *o_ptr)
  * @details
  * 対象は村正、ロビントンのハープ、龍争虎鬪、ブラッディムーン、羽衣、天女の羽衣、ミリム
  */
-static void invest_special_artifact_abilities(PlayerType *player_ptr, ObjectType *o_ptr)
+static void invest_special_artifact_abilities(PlayerType *player_ptr, ItemEntity *o_ptr)
 {
     const auto pc = PlayerClass(player_ptr);
     switch (o_ptr->fixed_artifact_idx) {
@@ -133,7 +133,7 @@ static void invest_special_artifact_abilities(PlayerType *player_ptr, ObjectType
  * @param a_ptr 固定アーティファクト情報への参照ポインタ
  * @param q_ptr オブジェクト情報への参照ポインタ
  */
-static void fixed_artifact_random_abilities(PlayerType *player_ptr, const ArtifactType &a_ref, ObjectType *o_ptr)
+static void fixed_artifact_random_abilities(PlayerType *player_ptr, const ArtifactType &a_ref, ItemEntity *o_ptr)
 {
     auto give_power = false;
     auto give_resistance = false;
@@ -186,7 +186,7 @@ static void fixed_artifact_random_abilities(PlayerType *player_ptr, const Artifa
  * @param a_ptr 固定アーティファクト情報への参照ポインタ
  * @param q_ptr オブジェクト情報への参照ポインタ
  */
-static void invest_curse_to_fixed_artifact(const ArtifactType &a_ref, ObjectType *o_ptr)
+static void invest_curse_to_fixed_artifact(const ArtifactType &a_ref, ItemEntity *o_ptr)
 {
     if (!a_ref.cost) {
         set_bits(o_ptr->ident, IDENT_BROKEN);
@@ -223,7 +223,7 @@ static void invest_curse_to_fixed_artifact(const ArtifactType &a_ref, ObjectType
  * @param o_ptr 生成に割り当てたいオブジェクトの構造体参照ポインタ
  * @return 適用したアーティファクト情報への参照ポインタ
  */
-void apply_artifact(PlayerType *player_ptr, ObjectType *o_ptr)
+void apply_artifact(PlayerType *player_ptr, ItemEntity *o_ptr)
 {
     auto &a_ref = artifacts_info.at(o_ptr->fixed_artifact_idx);
     o_ptr->pval = a_ref.pval;
@@ -264,7 +264,7 @@ bool create_named_art(PlayerType *player_ptr, FixedArtifactId a_idx, POSITION y,
         return true;
     }
 
-    ObjectType forge;
+    ItemEntity forge;
     auto q_ptr = &forge;
     q_ptr->prep(bi_id);
     q_ptr->fixed_artifact_idx = a_idx;
@@ -288,7 +288,7 @@ bool create_named_art(PlayerType *player_ptr, FixedArtifactId a_idx, POSITION y,
  * This routine should only be called by "apply_magic()"\n
  * Note -- see "make_artifact_special()" and "apply_magic()"\n
  */
-bool make_artifact(PlayerType *player_ptr, ObjectType *o_ptr)
+bool make_artifact(PlayerType *player_ptr, ItemEntity *o_ptr)
 {
     auto floor_ptr = player_ptr->current_floor_ptr;
     if (floor_ptr->dun_level == 0) {
@@ -354,7 +354,7 @@ bool make_artifact(PlayerType *player_ptr, ObjectType *o_ptr)
  *\n
  * Note -- see "make_artifact()" and "apply_magic()"\n
  */
-bool make_artifact_special(PlayerType *player_ptr, ObjectType *o_ptr)
+bool make_artifact_special(PlayerType *player_ptr, ItemEntity *o_ptr)
 {
     /*! @note 地上ではキャンセルする / No artifacts in the town */
     auto floor_ptr = player_ptr->current_floor_ptr;

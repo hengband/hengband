@@ -26,11 +26,11 @@
 #include "object/object-kind-hook.h"
 #include "perception/object-perception.h"
 #include "sv-definition/sv-other-types.h"
-#include "system/baseitem-info-definition.h"
+#include "system/baseitem-info.h"
 #include "system/dungeon-info.h"
 #include "system/floor-type-definition.h"
-#include "system/monster-race-definition.h"
-#include "system/object-type-definition.h"
+#include "system/item-entity.h"
+#include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
@@ -48,7 +48,7 @@ bool exchange_cash(PlayerType *player_ptr)
 {
     bool change = false;
     GAME_TEXT o_name[MAX_NLEN];
-    ObjectType *o_ptr;
+    ItemEntity *o_ptr;
 
     for (INVENTORY_IDX i = 0; i <= INVEN_SUB_HAND; i++) {
         o_ptr = &player_ptr->inventory_list[i];
@@ -161,7 +161,7 @@ bool exchange_cash(PlayerType *player_ptr)
 
             char buf[MAX_NLEN + 20];
             INVENTORY_IDX item_new;
-            ObjectType forge;
+            ItemEntity forge;
 
             describe_flavor(player_ptr, o_name, o_ptr, 0);
             sprintf(buf, _("%sを渡しますか？", "Hand %s over? "), o_name);
@@ -254,7 +254,7 @@ void show_bounty(void)
 
     for (auto i = 0U; i < std::size(w_ptr->bounties); i++) {
         const auto &[r_idx, is_achieved] = w_ptr->bounties[i];
-        monster_race *r_ptr = &monraces_info[r_idx];
+        MonsterRaceInfo *r_ptr = &monraces_info[r_idx];
 
         auto color = is_achieved ? TERM_RED : TERM_WHITE;
         auto done_mark = is_achieved ? _("(済)", "(done)") : "";
@@ -296,7 +296,7 @@ void determine_daily_bounty(PlayerType *player_ptr, bool conv_old)
 
     while (true) {
         w_ptr->today_mon = get_mon_num(player_ptr, std::min(max_dl / 2, 40), max_dl, GMN_ARENA);
-        monster_race *r_ptr;
+        MonsterRaceInfo *r_ptr;
         r_ptr = &monraces_info[w_ptr->today_mon];
 
         if (cheat_hear) {

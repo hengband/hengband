@@ -3,11 +3,11 @@
 #include "object-enchant/protector/abstract-protector-enchanter.h"
 #include "system/angband.h"
 
-class ObjectType;
+class ItemEntity;
 class PlayerType;
 class HelmEnchanter : public AbstractProtectorEnchanter {
 public:
-    HelmEnchanter(PlayerType *player_ptr, ObjectType *o_ptr, DEPTH level, int power);
+    HelmEnchanter(PlayerType *player_ptr, ItemEntity *o_ptr, DEPTH level, int power);
     void apply_magic() override;
 
 protected:

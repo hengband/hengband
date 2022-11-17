@@ -4,7 +4,7 @@
 #include "object/tval-types.h"
 #include "smith/smith-types.h"
 #include "sv-definition/sv-weapon-types.h"
-#include "system/object-type-definition.h"
+#include "system/item-entity.h"
 #include "system/player-type-definition.h"
 
 ISmithInfo::ISmithInfo(SmithEffectType effect, concptr name, SmithCategoryType category, std::vector<SmithEssenceType> need_essences, int consumption)
@@ -27,14 +27,14 @@ BasicSmithInfo::BasicSmithInfo(SmithEffectType effect, concptr name, SmithCatego
 {
 }
 
-bool BasicSmithInfo::add_essence(PlayerType *, ObjectType *o_ptr, int) const
+bool BasicSmithInfo::add_essence(PlayerType *, ItemEntity *o_ptr, int) const
 {
     o_ptr->smith_effect = effect;
 
     return true;
 }
 
-void BasicSmithInfo::erase_essence(ObjectType *o_ptr) const
+void BasicSmithInfo::erase_essence(ItemEntity *o_ptr) const
 {
     o_ptr->smith_effect = std::nullopt;
     auto flgs = object_flags(o_ptr);
@@ -48,7 +48,7 @@ TrFlags BasicSmithInfo::tr_flags() const
     return this->add_flags;
 }
 
-bool BasicSmithInfo::can_give_smith_effect(const ObjectType *o_ptr) const
+bool BasicSmithInfo::can_give_smith_effect(const ItemEntity *o_ptr) const
 {
     /*!
      * @note 固定orランダムアーティファクトもしくはすでに鍛冶済みでないかを最初にチェックし、
@@ -62,7 +62,7 @@ bool BasicSmithInfo::can_give_smith_effect(const ObjectType *o_ptr) const
     return this->can_give_smith_effect_impl(o_ptr);
 }
 
-bool BasicSmithInfo::can_give_smith_effect_impl(const ObjectType *o_ptr) const
+bool BasicSmithInfo::can_give_smith_effect_impl(const ItemEntity *o_ptr) const
 {
     if (this->effect == SmithEffectType::XTRA_MIGHT || this->effect == SmithEffectType::XTRA_SHOTS) {
         return o_ptr->tval == ItemKindType::BOW;
@@ -89,19 +89,19 @@ ActivationSmithInfo::ActivationSmithInfo(SmithEffectType effect, concptr name, S
 {
 }
 
-bool ActivationSmithInfo::add_essence(PlayerType *, ObjectType *o_ptr, int) const
+bool ActivationSmithInfo::add_essence(PlayerType *, ItemEntity *o_ptr, int) const
 {
     o_ptr->smith_act_idx = this->act_idx;
 
     return true;
 }
 
-void ActivationSmithInfo::erase_essence(ObjectType *o_ptr) const
+void ActivationSmithInfo::erase_essence(ItemEntity *o_ptr) const
 {
     o_ptr->smith_act_idx = std::nullopt;
 }
 
-bool ActivationSmithInfo::can_give_smith_effect(const ObjectType *o_ptr) const
+bool ActivationSmithInfo::can_give_smith_effect(const ItemEntity *o_ptr) const
 {
     if (o_ptr->is_artifact() || o_ptr->smith_act_idx.has_value()) {
         return false;
@@ -115,7 +115,7 @@ EnchantWeaponSmithInfo::EnchantWeaponSmithInfo(SmithEffectType effect, concptr n
 {
 }
 
-bool EnchantWeaponSmithInfo::add_essence(PlayerType *player_ptr, ObjectType *o_ptr, int) const
+bool EnchantWeaponSmithInfo::add_essence(PlayerType *player_ptr, ItemEntity *o_ptr, int) const
 {
     const auto max_val = player_ptr->lev / 5 + 5;
     if ((o_ptr->to_h >= max_val) && (o_ptr->to_d >= max_val)) {
@@ -132,7 +132,7 @@ bool EnchantWeaponSmithInfo::add_essence(PlayerType *player_ptr, ObjectType *o_p
     return true;
 }
 
-bool EnchantWeaponSmithInfo::can_give_smith_effect(const ObjectType *o_ptr) const
+bool EnchantWeaponSmithInfo::can_give_smith_effect(const ItemEntity *o_ptr) const
 {
     return o_ptr->allow_enchant_weapon();
 }
@@ -142,7 +142,7 @@ EnchantArmourSmithInfo::EnchantArmourSmithInfo(SmithEffectType effect, concptr n
 {
 }
 
-bool EnchantArmourSmithInfo::add_essence(PlayerType *player_ptr, ObjectType *o_ptr, int) const
+bool EnchantArmourSmithInfo::add_essence(PlayerType *player_ptr, ItemEntity *o_ptr, int) const
 {
     const auto max_val = player_ptr->lev / 5 + 5;
     if (o_ptr->to_a >= max_val) {
@@ -154,7 +154,7 @@ bool EnchantArmourSmithInfo::add_essence(PlayerType *player_ptr, ObjectType *o_p
     return true;
 }
 
-bool EnchantArmourSmithInfo::can_give_smith_effect(const ObjectType *o_ptr) const
+bool EnchantArmourSmithInfo::can_give_smith_effect(const ItemEntity *o_ptr) const
 {
     return o_ptr->is_armour();
 }
@@ -164,7 +164,7 @@ SustainSmithInfo::SustainSmithInfo(SmithEffectType effect, concptr name, SmithCa
 {
 }
 
-bool SustainSmithInfo::add_essence(PlayerType *, ObjectType *o_ptr, int) const
+bool SustainSmithInfo::add_essence(PlayerType *, ItemEntity *o_ptr, int) const
 {
     o_ptr->art_flags.set(TR_IGNORE_ACID);
     o_ptr->art_flags.set(TR_IGNORE_ELEC);
@@ -174,7 +174,7 @@ bool SustainSmithInfo::add_essence(PlayerType *, ObjectType *o_ptr, int) const
     return true;
 }
 
-bool SustainSmithInfo::can_give_smith_effect(const ObjectType *o_ptr) const
+bool SustainSmithInfo::can_give_smith_effect(const ItemEntity *o_ptr) const
 {
     return o_ptr->is_weapon_armour_ammo();
 }
@@ -184,7 +184,7 @@ SlayingGlovesSmithInfo::SlayingGlovesSmithInfo(SmithEffectType effect, concptr n
 {
 }
 
-bool SlayingGlovesSmithInfo::add_essence(PlayerType *player_ptr, ObjectType *o_ptr, int number) const
+bool SlayingGlovesSmithInfo::add_essence(PlayerType *player_ptr, ItemEntity *o_ptr, int number) const
 {
     BasicSmithInfo::add_essence(player_ptr, o_ptr, number);
 
@@ -198,7 +198,7 @@ bool SlayingGlovesSmithInfo::add_essence(PlayerType *player_ptr, ObjectType *o_p
     return true;
 }
 
-void SlayingGlovesSmithInfo::erase_essence(ObjectType *o_ptr) const
+void SlayingGlovesSmithInfo::erase_essence(ItemEntity *o_ptr) const
 {
     BasicSmithInfo::erase_essence(o_ptr);
 
@@ -214,7 +214,7 @@ void SlayingGlovesSmithInfo::erase_essence(ObjectType *o_ptr) const
     }
 }
 
-bool SlayingGlovesSmithInfo::can_give_smith_effect_impl(const ObjectType *o_ptr) const
+bool SlayingGlovesSmithInfo::can_give_smith_effect_impl(const ItemEntity *o_ptr) const
 {
     return o_ptr->tval == ItemKindType::GLOVES;
 }

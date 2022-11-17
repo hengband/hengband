@@ -26,7 +26,7 @@
 #include "store/store-owners.h"
 #include "store/store-util.h"
 #include "store/store.h"
-#include "system/object-type-definition.h"
+#include "system/item-entity.h"
 #include "system/player-type-definition.h"
 #include "system/terrain-type-definition.h"
 #include "term/screen-processor.h"
@@ -46,7 +46,7 @@
  * @return プレイヤーの価格に対して店主が不服ならばTRUEを返す /
  * Return TRUE if purchase is NOT successful
  */
-static std::optional<PRICE> prompt_to_buy(PlayerType *player_ptr, ObjectType *o_ptr, StoreSaleType store_num)
+static std::optional<PRICE> prompt_to_buy(PlayerType *player_ptr, ItemEntity *o_ptr, StoreSaleType store_num)
 {
     auto price_ask = price_item(player_ptr, o_ptr, ot_ptr->inflate, false, store_num);
 
@@ -97,7 +97,7 @@ static bool show_store_select_item(COMMAND_CODE *item, const int i, StoreSaleTyp
  * @param i お店のストック数(アドレス渡し)
  * @param 取得元インベントリ番号
  */
-static void take_item_from_home(PlayerType *player_ptr, ObjectType *o_ptr, ObjectType *j_ptr, const COMMAND_CODE item)
+static void take_item_from_home(PlayerType *player_ptr, ItemEntity *o_ptr, ItemEntity *j_ptr, const COMMAND_CODE item)
 {
     const int amt = j_ptr->number;
     distribute_charges(o_ptr, j_ptr, amt);
@@ -206,11 +206,11 @@ void store_purchase(PlayerType *player_ptr, StoreSaleType store_num)
     }
 
     item = item + store_top;
-    ObjectType *o_ptr;
+    ItemEntity *o_ptr;
     o_ptr = &st_ptr->stock[item];
 
     ITEM_NUMBER amt = 1;
-    ObjectType forge;
+    ItemEntity forge;
     auto *j_ptr = &forge;
     j_ptr->copy_from(o_ptr);
 

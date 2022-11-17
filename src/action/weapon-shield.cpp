@@ -11,7 +11,7 @@
 #include "object-hook/hook-weapon.h"
 #include "player-info/equipment-info.h"
 #include "player-status/player-hand-types.h"
-#include "system/object-type-definition.h"
+#include "system/item-entity.h"
 #include "system/player-type-definition.h"
 #include "view/display-messages.h"
 
@@ -22,7 +22,7 @@
  */
 void verify_equip_slot(PlayerType *player_ptr, INVENTORY_IDX item)
 {
-    ObjectType *o_ptr, *new_o_ptr;
+    ItemEntity *o_ptr, *new_o_ptr;
     GAME_TEXT o_name[MAX_NLEN];
 
     if (item == INVEN_MAIN_HAND) {

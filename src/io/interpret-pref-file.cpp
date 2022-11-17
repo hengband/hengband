@@ -14,9 +14,9 @@
 #include "io/input-key-requester.h"
 #include "io/tokenizer.h"
 #include "monster-race/monster-race.h"
-#include "system/baseitem-info-definition.h"
+#include "system/baseitem-info.h"
 #include "system/game-option-types.h"
-#include "system/monster-race-definition.h"
+#include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
 #include "system/terrain-type-definition.h"
 #include "term/gameterm.h"
@@ -41,7 +41,7 @@ static errr interpret_r_token(char *buf)
         return 1;
     }
 
-    monster_race *r_ptr;
+    MonsterRaceInfo *r_ptr;
     int i = (int)strtol(zz[0], nullptr, 0);
     TERM_COLOR n1 = (TERM_COLOR)strtol(zz[1], nullptr, 0);
     auto n2 = static_cast<char>(strtol(zz[2], nullptr, 0));

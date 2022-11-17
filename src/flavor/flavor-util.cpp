@@ -7,13 +7,13 @@
 #include "perception/object-perception.h"
 #include "sv-definition/sv-food-types.h"
 #include "system/artifact-type-definition.h"
-#include "system/baseitem-info-definition.h"
-#include "system/object-type-definition.h"
+#include "system/baseitem-info.h"
+#include "system/item-entity.h"
 #include "util/bit-flags-calculator.h"
 #include "util/enum-converter.h"
 #include "util/quarks.h"
 
-flavor_type *initialize_flavor_type(flavor_type *flavor_ptr, char *buf, ObjectType *o_ptr, BIT_FLAGS mode)
+flavor_type *initialize_flavor_type(flavor_type *flavor_ptr, char *buf, ItemEntity *o_ptr, BIT_FLAGS mode)
 {
     flavor_ptr->buf = buf;
     flavor_ptr->o_ptr = o_ptr;
@@ -189,7 +189,7 @@ static bool has_flag_of(const std::vector<flag_insc_table> &fi_vec, const TrFlag
  * @param all TRUEならばベースアイテム上で明らかなフラグは省略する
  * @return ptrと同じアドレス
  */
-char *get_ability_abbreviation(char *short_flavor, ObjectType *o_ptr, bool kanji, bool all)
+char *get_ability_abbreviation(char *short_flavor, ItemEntity *o_ptr, bool kanji, bool all)
 {
     char *prev_ptr = short_flavor;
     auto flgs = object_flags(o_ptr);
@@ -336,7 +336,7 @@ char *get_ability_abbreviation(char *short_flavor, ObjectType *o_ptr, bool kanji
  * @param buff 特性短縮表記を格納する文字列ポインタ
  * @param o_ptr 特性短縮表記を得たいオブジェクト構造体の参照ポインタ
  */
-void get_inscription(char *buff, ObjectType *o_ptr)
+void get_inscription(char *buff, ItemEntity *o_ptr)
 {
     concptr insc = quark_str(o_ptr->inscription);
     char *ptr = buff;
@@ -408,7 +408,7 @@ void get_inscription(char *buff, ObjectType *o_ptr)
  * @details
  * cmd1.c で流用するために object_desc_japanese から移動した。
  */
-char *object_desc_count_japanese(char *t, ObjectType *o_ptr)
+char *object_desc_count_japanese(char *t, ItemEntity *o_ptr)
 {
     t = object_desc_num(t, o_ptr->number);
     switch (o_ptr->tval) {

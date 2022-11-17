@@ -13,7 +13,7 @@
  * @param level 生成基準階
  * @param power 生成ランク
  */
-HardArmorEnchanter::HardArmorEnchanter(PlayerType *player_ptr, ObjectType *o_ptr, DEPTH level, int power)
+HardArmorEnchanter::HardArmorEnchanter(PlayerType *player_ptr, ItemEntity *o_ptr, DEPTH level, int power)
     : ArmorEnchanter{ player_ptr, o_ptr, level, power }
 {
 }

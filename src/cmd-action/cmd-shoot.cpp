@@ -14,7 +14,7 @@
 #include "status/action-setter.h"
 #include "status/bad-status-setter.h"
 #include "sv-definition/sv-bow-types.h"
-#include "system/object-type-definition.h"
+#include "system/item-entity.h"
 #include "system/player-type-definition.h"
 #include "term/screen-processor.h"
 #include "view/display-messages.h"
@@ -27,7 +27,7 @@
 void do_cmd_fire(PlayerType *player_ptr, SPELL_IDX snipe_type)
 {
     OBJECT_IDX item;
-    ObjectType *j_ptr, *ammo_ptr;
+    ItemEntity *j_ptr, *ammo_ptr;
     if (player_ptr->wild_mode) {
         return;
     }

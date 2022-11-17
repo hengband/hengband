@@ -1,14 +1,14 @@
 ﻿#include "specific-object/bow.h"
 #include "object/tval-types.h"
 #include "sv-definition/sv-bow-types.h"
-#include "system/object-type-definition.h"
+#include "system/item-entity.h"
 
 /*!
  * @brief 射撃武器に対応する矢/弾薬のベースアイテムIDを返す /
  * @param o_ptr 判定する射撃武器のアイテム情報参照ポインタ
  * @return 対応する矢/弾薬のベースアイテムID
  */
-ItemKindType bow_tval_ammo(ObjectType *o_ptr)
+ItemKindType bow_tval_ammo(ItemEntity *o_ptr)
 {
     switch (o_ptr->sval) {
     case SV_SLING:

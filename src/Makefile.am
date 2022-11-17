@@ -908,7 +908,7 @@ hengband_SOURCES = \
 	system/angband-exceptions.h \
 	system/angband-version.cpp system/angband-version.h \
 	system/artifact-type-definition.cpp system/artifact-type-definition.h \
-	system/baseitem-info-definition.cpp system/baseitem-info-definition.h \
+	system/baseitem-info.cpp system/baseitem-info.h \
 	system/building-type-definition.cpp system/building-type-definition.h \
 	system/dungeon-data-definition.h \
 	system/dungeon-info.cpp system/dungeon-info.h \
@@ -917,9 +917,9 @@ hengband_SOURCES = \
 	system/game-option-types.h \
 	system/h-basic.h system/h-config.h \
 	system/h-system.h system/h-type.h \
-	system/monster-race-definition.h \
-	system/monster-type-definition.cpp system/monster-type-definition.h \
-	system/object-type-definition.cpp system/object-type-definition.h \
+	system/item-entity.cpp system/item-entity.h \
+	system/monster-entity.cpp system/monster-entity.h \
+	system/monster-race-info.h \
 	system/player-type-definition.cpp system/player-type-definition.h \
 	system/system-variables.cpp system/system-variables.h \
 	system/terrain-type-definition.cpp system/terrain-type-definition.h \

@@ -4,7 +4,7 @@
 #include "grid/grid.h"
 #include "monster/monster-info.h"
 #include "system/floor-type-definition.h"
-#include "system/monster-type-definition.h"
+#include "system/monster-entity.h"
 #include "system/player-type-definition.h"
 #include "timed-effect/player-blindness.h"
 #include "timed-effect/timed-effects.h"
@@ -39,7 +39,7 @@ mspell_cast_msg_simple::mspell_cast_msg_simple(concptr to_player, concptr to_mon
  */
 bool see_monster(PlayerType *player_ptr, MONSTER_IDX m_idx)
 {
-    monster_type *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
+    MonsterEntity *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
     return is_seen(player_ptr, m_ptr);
 }
 
@@ -52,8 +52,8 @@ bool see_monster(PlayerType *player_ptr, MONSTER_IDX m_idx)
  */
 bool monster_near_player(FloorType *floor_ptr, MONSTER_IDX m_idx, MONSTER_IDX t_idx)
 {
-    monster_type *m_ptr = &floor_ptr->m_list[m_idx];
-    monster_type *t_ptr = &floor_ptr->m_list[t_idx];
+    MonsterEntity *m_ptr = &floor_ptr->m_list[m_idx];
+    MonsterEntity *t_ptr = &floor_ptr->m_list[t_idx];
     return (m_ptr->cdis <= MAX_PLAYER_SIGHT) || (t_ptr->cdis <= MAX_PLAYER_SIGHT);
 }
 

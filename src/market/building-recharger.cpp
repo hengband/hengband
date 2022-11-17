@@ -14,8 +14,8 @@
 #include "object/item-use-flags.h"
 #include "perception/object-perception.h"
 #include "spell-kind/spells-perception.h"
-#include "system/baseitem-info-definition.h"
-#include "system/object-type-definition.h"
+#include "system/baseitem-info.h"
+#include "system/item-entity.h"
 #include "system/player-type-definition.h"
 #include "term/screen-processor.h"
 #include "view/display-messages.h"
@@ -41,8 +41,8 @@ void building_recharge(PlayerType *player_ptr)
     concptr s = _("魔力を充填すべきアイテムがない。", "You have nothing to recharge.");
 
     OBJECT_IDX item;
-    ObjectType *o_ptr;
-    o_ptr = choose_object(player_ptr, &item, q, s, (USE_INVEN | USE_FLOOR), FuncItemTester(&ObjectType::is_rechargeable));
+    ItemEntity *o_ptr;
+    o_ptr = choose_object(player_ptr, &item, q, s, (USE_INVEN | USE_FLOOR), FuncItemTester(&ItemEntity::is_rechargeable));
     if (!o_ptr) {
         return;
     }
@@ -185,7 +185,7 @@ void building_recharge_all(PlayerType *player_ptr)
     PRICE price = 0;
     PRICE total_cost = 0;
     for (INVENTORY_IDX i = 0; i < INVEN_PACK; i++) {
-        ObjectType *o_ptr;
+        ItemEntity *o_ptr;
         o_ptr = &player_ptr->inventory_list[i];
 
         if ((o_ptr->tval < ItemKindType::STAFF) || (o_ptr->tval > ItemKindType::ROD)) {
@@ -242,7 +242,7 @@ void building_recharge_all(PlayerType *player_ptr)
     }
 
     for (INVENTORY_IDX i = 0; i < INVEN_PACK; i++) {
-        ObjectType *o_ptr;
+        ItemEntity *o_ptr;
         o_ptr = &player_ptr->inventory_list[i];
         BaseitemInfo *k_ptr;
         k_ptr = &baseitems_info[o_ptr->k_idx];

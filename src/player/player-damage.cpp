@@ -60,9 +60,9 @@
 #include "system/building-type-definition.h"
 #include "system/dungeon-info.h"
 #include "system/floor-type-definition.h"
-#include "system/monster-race-definition.h"
-#include "system/monster-type-definition.h"
-#include "system/object-type-definition.h"
+#include "system/item-entity.h"
+#include "system/monster-entity.h"
+#include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
@@ -88,7 +88,7 @@ using dam_func = int (*)(PlayerType *player_ptr, int dam, concptr kb_str, bool a
  */
 static bool acid_minus_ac(PlayerType *player_ptr)
 {
-    ObjectType *o_ptr = nullptr;
+    ItemEntity *o_ptr = nullptr;
     switch (randint1(7)) {
     case 1:
         o_ptr = &player_ptr->inventory_list[INVEN_MAIN_HAND];
@@ -610,7 +610,7 @@ int take_hit(PlayerType *player_ptr, int damage_type, int damage, concptr hit_fr
  * @param dam_func ダメージ処理を行う関数の参照ポインタ
  * @param message オーラダメージを受けた際のメッセージ
  */
-static void process_aura_damage(monster_type *m_ptr, PlayerType *player_ptr, bool immune, MonsterAuraType aura_flag, dam_func dam_func, concptr message)
+static void process_aura_damage(MonsterEntity *m_ptr, PlayerType *player_ptr, bool immune, MonsterAuraType aura_flag, dam_func dam_func, concptr message)
 {
     auto *r_ptr = &monraces_info[m_ptr->r_idx];
     if (r_ptr->aura_flags.has_not(aura_flag) || immune) {
@@ -634,7 +634,7 @@ static void process_aura_damage(monster_type *m_ptr, PlayerType *player_ptr, boo
  * @param m_ptr オーラを持つモンスターの構造体参照ポインタ
  * @param player_ptr プレイヤーへの参照ポインタ
  */
-void touch_zap_player(monster_type *m_ptr, PlayerType *player_ptr)
+void touch_zap_player(MonsterEntity *m_ptr, PlayerType *player_ptr)
 {
     process_aura_damage(m_ptr, player_ptr, has_immune_fire(player_ptr) != 0, MonsterAuraType::FIRE, fire_dam, _("突然とても熱くなった！", "You are suddenly very hot!"));
     process_aura_damage(m_ptr, player_ptr, has_immune_cold(player_ptr) != 0, MonsterAuraType::COLD, cold_dam, _("突然とても寒くなった！", "You are suddenly very cold!"));

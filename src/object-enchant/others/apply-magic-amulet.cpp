@@ -11,8 +11,8 @@
 #include "object-enchant/special-object-flags.h"
 #include "object-enchant/trc-types.h"
 #include "sv-definition/sv-amulet-types.h"
-#include "system/baseitem-info-definition.h"
-#include "system/object-type-definition.h"
+#include "system/baseitem-info.h"
+#include "system/item-entity.h"
 #include "system/player-type-definition.h"
 #include "util/bit-flags-calculator.h"
 
@@ -23,7 +23,7 @@
  * @param level 生成基準階
  * @param power 生成ランク
  */
-AmuletEnchanter::AmuletEnchanter(PlayerType *player_ptr, ObjectType *o_ptr, DEPTH level, int power)
+AmuletEnchanter::AmuletEnchanter(PlayerType *player_ptr, ItemEntity *o_ptr, DEPTH level, int power)
     : player_ptr(player_ptr)
     , o_ptr(o_ptr)
     , level(level)

@@ -22,7 +22,7 @@
 #include "object/object-info.h"
 #include "perception/object-perception.h"
 #include "player/player-status-flags.h"
-#include "system/object-type-definition.h"
+#include "system/item-entity.h"
 #include "system/player-type-definition.h"
 #include "timed-effect/player-confusion.h"
 #include "timed-effect/timed-effects.h"
@@ -139,7 +139,7 @@ void sense_inventory1(PlayerType *player_ptr)
 {
     PLAYER_LEVEL plev = player_ptr->lev;
     bool heavy = false;
-    ObjectType *o_ptr;
+    ItemEntity *o_ptr;
     if (player_ptr->effects()->confusion()->is_confused()) {
         return;
     }
@@ -329,7 +329,7 @@ void sense_inventory1(PlayerType *player_ptr)
 void sense_inventory2(PlayerType *player_ptr)
 {
     PLAYER_LEVEL plev = player_ptr->lev;
-    ObjectType *o_ptr;
+    ItemEntity *o_ptr;
 
     if (player_ptr->effects()->confusion()->is_confused()) {
         return;
@@ -439,7 +439,7 @@ void sense_inventory2(PlayerType *player_ptr)
  * @param o_ptr 擬似鑑定を行うオブジェクトの参照ポインタ。
  * @return 擬似鑑定結果のIDを返す。
  */
-item_feel_type pseudo_value_check_heavy(ObjectType *o_ptr)
+item_feel_type pseudo_value_check_heavy(ItemEntity *o_ptr)
 {
     if (o_ptr->is_artifact()) {
         if (o_ptr->is_cursed() || o_ptr->is_broken()) {
@@ -485,7 +485,7 @@ item_feel_type pseudo_value_check_heavy(ObjectType *o_ptr)
  * @param o_ptr 擬似鑑定を行うオブジェクトの参照ポインタ。
  * @return 擬似鑑定結果のIDを返す。
  */
-item_feel_type pseudo_value_check_light(ObjectType *o_ptr)
+item_feel_type pseudo_value_check_light(ItemEntity *o_ptr)
 {
     if (o_ptr->is_cursed()) {
         return FEEL_CURSED;

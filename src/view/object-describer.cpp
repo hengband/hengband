@@ -8,7 +8,7 @@
 #include "player-base/player-class.h"
 #include "realm/realm-names-table.h"
 #include "spell/spell-info.h"
-#include "system/object-type-definition.h"
+#include "system/item-entity.h"
 #include "system/player-type-definition.h"
 #include "term/term-color-types.h"
 #include "view/display-messages.h"
@@ -78,8 +78,8 @@ void inven_item_describe(PlayerType *player_ptr, INVENTORY_IDX item)
  */
 void display_koff(PlayerType *player_ptr, KIND_OBJECT_IDX k_idx)
 {
-    ObjectType forge;
-    ObjectType *q_ptr;
+    ItemEntity forge;
+    ItemEntity *q_ptr;
     int sval;
     int16_t use_realm;
     GAME_TEXT o_name[MAX_NLEN];

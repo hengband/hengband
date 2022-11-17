@@ -30,9 +30,9 @@
 #include "system/dungeon-info.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
-#include "system/monster-race-definition.h"
-#include "system/monster-type-definition.h"
-#include "system/object-type-definition.h"
+#include "system/item-entity.h"
+#include "system/monster-entity.h"
+#include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
 #include "target/projection-path-calculator.h"
 #include "timed-effect/player-blindness.h"
@@ -46,7 +46,7 @@
  * Calculate spell damages
  * @return 警告を行う
  */
-ObjectType *choose_warning_item(PlayerType *player_ptr)
+ItemEntity *choose_warning_item(PlayerType *player_ptr)
 {
     int choices[INVEN_TOTAL - INVEN_MAIN_HAND];
 
@@ -79,7 +79,7 @@ ObjectType *choose_warning_item(PlayerType *player_ptr)
  * @param dam 基本ダメージ
  * @param max 算出した最大ダメージを返すポインタ
  */
-static void spell_damcalc(PlayerType *player_ptr, monster_type *m_ptr, AttributeType typ, int dam, int *max)
+static void spell_damcalc(PlayerType *player_ptr, MonsterEntity *m_ptr, AttributeType typ, int dam, int *max)
 {
     auto *r_ptr = &monraces_info[m_ptr->r_idx];
     int rlev = r_ptr->level;
@@ -278,7 +278,7 @@ static void spell_damcalc_by_spellnum(PlayerType *player_ptr, MonsterAbilityType
  * @param blow_ptr モンスターの打撃能力の構造体参照ポインタ
  * @return 算出された最大ダメージを返す。
  */
-static int blow_damcalc(monster_type *m_ptr, PlayerType *player_ptr, MonsterBlow *blow_ptr)
+static int blow_damcalc(MonsterEntity *m_ptr, PlayerType *player_ptr, MonsterBlow *blow_ptr)
 {
     int dam = blow_ptr->d_dice * blow_ptr->d_side;
     int dummy_max = 0;
@@ -367,8 +367,8 @@ bool process_warning(PlayerType *player_ptr, POSITION xx, POSITION yy)
     for (mx = xx - WARNING_AWARE_RANGE; mx < xx + WARNING_AWARE_RANGE + 1; mx++) {
         for (my = yy - WARNING_AWARE_RANGE; my < yy + WARNING_AWARE_RANGE + 1; my++) {
             int dam_max0 = 0;
-            monster_type *m_ptr;
-            monster_race *r_ptr;
+            MonsterEntity *m_ptr;
+            MonsterRaceInfo *r_ptr;
 
             if (!in_bounds(player_ptr->current_floor_ptr, my, mx) || (distance(my, mx, yy, xx) > WARNING_AWARE_RANGE)) {
                 continue;

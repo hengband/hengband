@@ -18,7 +18,7 @@
 #include "player/attack-defense-types.h"
 #include "player/special-defense-types.h"
 #include "status/action-setter.h"
-#include "system/object-type-definition.h"
+#include "system/item-entity.h"
 #include "system/player-type-definition.h"
 
 /*!
@@ -39,9 +39,9 @@ void do_cmd_read_scroll(PlayerType *player_ptr)
 
     concptr q = _("どの巻物を読みますか? ", "Read which scroll? ");
     concptr s = _("読める巻物がない。", "You have no scrolls to read.");
-    ObjectType *o_ptr;
+    ItemEntity *o_ptr;
     OBJECT_IDX item;
-    o_ptr = choose_object(player_ptr, &item, q, s, USE_INVEN | USE_FLOOR, FuncItemTester(&ObjectType::is_readable));
+    o_ptr = choose_object(player_ptr, &item, q, s, USE_INVEN | USE_FLOOR, FuncItemTester(&ItemEntity::is_readable));
     if (!o_ptr) {
         return;
     }

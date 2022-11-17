@@ -29,11 +29,11 @@
 #include "perception/object-perception.h"
 #include "system/alloc-entries.h"
 #include "system/artifact-type-definition.h"
-#include "system/baseitem-info-definition.h"
+#include "system/baseitem-info.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
-#include "system/monster-type-definition.h"
-#include "system/object-type-definition.h"
+#include "system/item-entity.h"
+#include "system/monster-entity.h"
 #include "system/player-type-definition.h"
 #include "system/system-variables.h"
 #include "target/projection-path-calculator.h"
@@ -70,7 +70,7 @@ static errr get_obj_index_prep(void)
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param o_ptr デバッグ出力するオブジェクトの構造体参照ポインタ
  */
-static void object_mention(PlayerType *player_ptr, ObjectType *o_ptr)
+static void object_mention(PlayerType *player_ptr, ItemEntity *o_ptr)
 {
     object_aware(player_ptr, o_ptr);
     object_known(o_ptr);
@@ -98,7 +98,7 @@ static int get_base_floor(FloorType *floor_ptr, BIT_FLAGS mode, std::optional<in
     return floor_ptr->object_level;
 }
 
-static void set_ammo_quantity(ObjectType *j_ptr)
+static void set_ammo_quantity(ItemEntity *j_ptr)
 {
     auto is_ammo = j_ptr->tval == ItemKindType::SPIKE;
     is_ammo |= j_ptr->tval == ItemKindType::SHOT;
@@ -118,7 +118,7 @@ static void set_ammo_quantity(ObjectType *j_ptr)
  * @param rq_mon_level ランダムクエスト討伐対象のレベル。ランダムクエスト以外の生成であれば無効値
  * @return アイテムの生成成功可否
  */
-bool make_object(PlayerType *player_ptr, ObjectType *j_ptr, BIT_FLAGS mode, std::optional<int> rq_mon_level)
+bool make_object(PlayerType *player_ptr, ItemEntity *j_ptr, BIT_FLAGS mode, std::optional<int> rq_mon_level)
 {
     auto *floor_ptr = player_ptr->current_floor_ptr;
     auto prob = any_bits(mode, AM_GOOD) ? 10 : 1000;
@@ -163,7 +163,7 @@ bool make_object(PlayerType *player_ptr, ObjectType *j_ptr, BIT_FLAGS mode, std:
  * @details
  * The location must be a legal, clean, floor grid.
  */
-bool make_gold(PlayerType *player_ptr, ObjectType *j_ptr)
+bool make_gold(PlayerType *player_ptr, ItemEntity *j_ptr)
 {
     auto *floor_ptr = player_ptr->current_floor_ptr;
     int i = ((randint1(floor_ptr->object_level + 2) + 2) / 2) - 1;
@@ -202,7 +202,7 @@ void delete_all_items_from_floor(PlayerType *player_ptr, POSITION y, POSITION x)
 
     g_ptr = &floor_ptr->grid_array[y][x];
     for (const auto this_o_idx : g_ptr->o_idx_list) {
-        ObjectType *o_ptr;
+        ItemEntity *o_ptr;
         o_ptr = &floor_ptr->o_list[this_o_idx];
         o_ptr->wipe();
         floor_ptr->o_cnt--;
@@ -268,7 +268,7 @@ void floor_item_optimize(PlayerType *player_ptr, INVENTORY_IDX item)
  */
 void delete_object_idx(PlayerType *player_ptr, OBJECT_IDX o_idx)
 {
-    ObjectType *j_ptr;
+    ItemEntity *j_ptr;
     auto *floor_ptr = player_ptr->current_floor_ptr;
     excise_object_idx(floor_ptr, o_idx);
     j_ptr = &floor_ptr->o_list[o_idx];
@@ -336,7 +336,7 @@ ObjectIndexList &get_o_idx_list_contains(FloorType *floor_ptr, OBJECT_IDX o_idx)
  * the object can combine, stack, or be placed.  Artifacts will try very\n
  * hard to be placed, including "teleporting" to a useful grid if needed.\n
  */
-OBJECT_IDX drop_near(PlayerType *player_ptr, ObjectType *j_ptr, PERCENTAGE chance, POSITION y, POSITION x)
+OBJECT_IDX drop_near(PlayerType *player_ptr, ItemEntity *j_ptr, PERCENTAGE chance, POSITION y, POSITION x)
 {
     int i, k, d, s;
     POSITION dy, dx;
@@ -394,7 +394,7 @@ OBJECT_IDX drop_near(PlayerType *player_ptr, ObjectType *j_ptr, PERCENTAGE chanc
 
             k = 0;
             for (const auto this_o_idx : g_ptr->o_idx_list) {
-                ObjectType *o_ptr;
+                ItemEntity *o_ptr;
                 o_ptr = &floor_ptr->o_list[this_o_idx];
                 if (object_similar(o_ptr, j_ptr)) {
                     comb = true;
@@ -514,7 +514,7 @@ OBJECT_IDX drop_near(PlayerType *player_ptr, ObjectType *j_ptr, PERCENTAGE chanc
 
     g_ptr = &floor_ptr->grid_array[by][bx];
     for (const auto this_o_idx : g_ptr->o_idx_list) {
-        ObjectType *o_ptr;
+        ItemEntity *o_ptr;
         o_ptr = &floor_ptr->o_list[this_o_idx];
         if (object_similar(o_ptr, j_ptr)) {
             object_absorb(o_ptr, j_ptr);
@@ -625,7 +625,7 @@ void floor_item_describe(PlayerType *player_ptr, INVENTORY_IDX item)
 /*
  * Choose an item and get auto-picker entry from it.
  */
-ObjectType *choose_object(PlayerType *player_ptr, OBJECT_IDX *idx, concptr q, concptr s, BIT_FLAGS option, const ItemTester &item_tester)
+ItemEntity *choose_object(PlayerType *player_ptr, OBJECT_IDX *idx, concptr q, concptr s, BIT_FLAGS option, const ItemTester &item_tester)
 {
     OBJECT_IDX item;
 

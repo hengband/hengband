@@ -10,9 +10,8 @@
 #include "smith/smith-info.h"
 #include "smith/smith-tables.h"
 #include "smith/smith-types.h"
-#include "system/object-type-definition.h"
+#include "system/item-entity.h"
 #include "system/player-type-definition.h"
-
 #include <algorithm>
 #include <optional>
 #include <sstream>
@@ -156,7 +155,7 @@ std::vector<SmithEssenceType> Smith::get_need_essences(SmithEffectType effect)
  * @param o_ptr 鍛冶効果を付与するアイテムへのポインタ。nullptrの場合はデフォルトの消費量が返される。
  * @return 鍛冶効果を付与する時のエッセンス消費量
  */
-int Smith::get_essence_consumption(SmithEffectType effect, const ObjectType *o_ptr)
+int Smith::get_essence_consumption(SmithEffectType effect, const ItemEntity *o_ptr)
 {
     auto info = find_smith_info(effect);
     if (!info.has_value()) {
@@ -190,7 +189,7 @@ std::unique_ptr<ItemTester> Smith::get_item_tester(SmithEffectType effect)
         return std::make_unique<TvalItemTester>(ItemKindType::NONE);
     }
 
-    auto tester_func = [i = info.value()](const ObjectType *o_ptr) {
+    auto tester_func = [i = info.value()](const ItemEntity *o_ptr) {
         return i->can_give_smith_effect(o_ptr);
     };
     return std::make_unique<FuncItemTester>(tester_func);
@@ -219,7 +218,7 @@ TrFlags Smith::get_effect_tr_flags(SmithEffectType effect)
  * @return アイテムに付与されている発動効果の発動ID(random_art_activation_type型)
  * 付与されている発動効果が無い場合は std::nullopt
  */
-std::optional<RandomArtActType> Smith::object_activation(const ObjectType *o_ptr)
+std::optional<RandomArtActType> Smith::object_activation(const ItemEntity *o_ptr)
 {
     return o_ptr->smith_act_idx;
 }
@@ -231,7 +230,7 @@ std::optional<RandomArtActType> Smith::object_activation(const ObjectType *o_ptr
  * @return アイテムに付与されている鍛冶効果を保持する std::optional オブジェクト返す。
  * 鍛冶効果が付与できないアイテムか、何も付与されていなければ std::nullopt を返す。
  */
-std::optional<SmithEffectType> Smith::object_effect(const ObjectType *o_ptr)
+std::optional<SmithEffectType> Smith::object_effect(const ItemEntity *o_ptr)
 {
     return o_ptr->smith_effect;
 }
@@ -262,7 +261,7 @@ std::vector<SmithEffectType> Smith::get_effect_list(SmithCategoryType category)
  * @param o_ptr 鍛冶効果を付与するアイテムへのポインタ。nullptrの場合はデフォルトの消費量での回数が返される。
  * @return エッセンスを付与できる回数を返す
  */
-int Smith::get_addable_count(SmithEffectType effect, const ObjectType *o_ptr) const
+int Smith::get_addable_count(SmithEffectType effect, const ItemEntity *o_ptr) const
 {
     auto info = find_smith_info(effect);
     if (!info.has_value()) {
@@ -301,7 +300,7 @@ int Smith::get_essence_num_of_posessions(SmithEssenceType essence) const
  * @param o_ptr エッセンスの抽出を行うアイテムへのポインタ
  * @return 抽出したエッセンスと抽出した量のタプルのリストを返す
  */
-Smith::DrainEssenceResult Smith::drain_essence(ObjectType *o_ptr)
+Smith::DrainEssenceResult Smith::drain_essence(ItemEntity *o_ptr)
 {
     // 抽出量を揃えるためKILLフラグのみ付いている場合はSLAYフラグも付ける
     auto old_flgs = object_flags(o_ptr);
@@ -351,7 +350,7 @@ Smith::DrainEssenceResult Smith::drain_essence(ObjectType *o_ptr)
     const auto is_artifact = o_ptr->is_artifact();
 
     // アイテムをエッセンス抽出後の状態にする
-    const ObjectType old_o = *o_ptr;
+    const ItemEntity old_o = *o_ptr;
     o_ptr->prep(o_ptr->k_idx);
 
     o_ptr->iy = old_o.iy;
@@ -437,7 +436,7 @@ Smith::DrainEssenceResult Smith::drain_essence(ObjectType *o_ptr)
  * @param number エッセンス付与数
  * @return 鍛冶効果の付与に成功したら ture、失敗したら false を返す
  */
-bool Smith::add_essence(SmithEffectType effect, ObjectType *o_ptr, int number)
+bool Smith::add_essence(SmithEffectType effect, ItemEntity *o_ptr, int number)
 {
     auto info = find_smith_info(effect);
     if (!info.has_value()) {
@@ -457,7 +456,7 @@ bool Smith::add_essence(SmithEffectType effect, ObjectType *o_ptr, int number)
  *
  * @param o_ptr 鍛冶効果を消去するアイテムへのポインタ
  */
-void Smith::erase_essence(ObjectType *o_ptr) const
+void Smith::erase_essence(ItemEntity *o_ptr) const
 {
     o_ptr->smith_act_idx = std::nullopt;
 

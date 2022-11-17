@@ -60,7 +60,7 @@
 #include "realm/realm-hex-numbers.h"
 #include "realm/realm-types.h"
 #include "status/action-setter.h"
-#include "system/object-type-definition.h"
+#include "system/item-entity.h"
 #include "system/player-type-definition.h"
 #include "term/screen-processor.h"
 #include "util/bit-flags-calculator.h"
@@ -113,7 +113,7 @@ void do_cmd_drop(PlayerType *player_ptr)
 {
     OBJECT_IDX item;
     int amt = 1;
-    ObjectType *o_ptr;
+    ItemEntity *o_ptr;
     PlayerClass(player_ptr).break_samurai_stance({ SamuraiStanceType::MUSOU });
 
     concptr q = _("どのアイテムを落としますか? ", "Drop which item? ");
@@ -151,7 +151,7 @@ void do_cmd_drop(PlayerType *player_ptr)
 void do_cmd_observe(PlayerType *player_ptr)
 {
     OBJECT_IDX item;
-    ObjectType *o_ptr;
+    ItemEntity *o_ptr;
     GAME_TEXT o_name[MAX_NLEN];
     concptr q = _("どのアイテムを調べますか? ", "Examine which item? ");
     concptr s = _("調べられるアイテムがない。", "You have nothing to examine.");
@@ -179,7 +179,7 @@ void do_cmd_observe(PlayerType *player_ptr)
 void do_cmd_uninscribe(PlayerType *player_ptr)
 {
     OBJECT_IDX item;
-    ObjectType *o_ptr;
+    ItemEntity *o_ptr;
     concptr q = _("どのアイテムの銘を消しますか? ", "Un-inscribe which item? ");
     concptr s = _("銘を消せるアイテムがない。", "You have nothing to un-inscribe.");
     o_ptr = choose_object(player_ptr, &item, q, s, (USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT));
@@ -206,7 +206,7 @@ void do_cmd_uninscribe(PlayerType *player_ptr)
 void do_cmd_inscribe(PlayerType *player_ptr)
 {
     OBJECT_IDX item;
-    ObjectType *o_ptr;
+    ItemEntity *o_ptr;
     GAME_TEXT o_name[MAX_NLEN];
     char out_val[MAX_INSCRIPTION + 1] = "";
     concptr q = _("どのアイテムに銘を刻みますか? ", "Inscribe which item? ");
@@ -241,7 +241,7 @@ void do_cmd_inscribe(PlayerType *player_ptr)
 void do_cmd_use(PlayerType *player_ptr)
 {
     OBJECT_IDX item;
-    ObjectType *o_ptr;
+    ItemEntity *o_ptr;
     if (player_ptr->wild_mode || cmd_limit_arena(player_ptr)) {
         return;
     }
@@ -308,7 +308,7 @@ void do_cmd_activate(PlayerType *player_ptr)
 
     concptr q = _("どのアイテムを始動させますか? ", "Activate which item? ");
     concptr s = _("始動できるアイテムを装備していない。", "You have nothing to activate.");
-    if (!choose_object(player_ptr, &item, q, s, (USE_EQUIP | IGNORE_BOTHHAND_SLOT), FuncItemTester(&ObjectType::is_activatable))) {
+    if (!choose_object(player_ptr, &item, q, s, (USE_EQUIP | IGNORE_BOTHHAND_SLOT), FuncItemTester(&ItemEntity::is_activatable))) {
         return;
     }
 

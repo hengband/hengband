@@ -60,7 +60,7 @@
 #include "system/building-type-definition.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
-#include "system/object-type-definition.h"
+#include "system/item-entity.h"
 #include "system/player-type-definition.h"
 #include "system/terrain-type-definition.h"
 #include "term/screen-processor.h"
@@ -165,10 +165,10 @@ static void bldg_process_command(PlayerType *player_ptr, building_type *bldg, in
         bcost = compare_weapons(player_ptr, bcost);
         break;
     case BACT_ENCHANT_WEAPON:
-        enchant_item(player_ptr, bcost, 1, 1, 0, FuncItemTester(&ObjectType::allow_enchant_melee_weapon));
+        enchant_item(player_ptr, bcost, 1, 1, 0, FuncItemTester(&ItemEntity::allow_enchant_melee_weapon));
         break;
     case BACT_ENCHANT_ARMOR:
-        enchant_item(player_ptr, bcost, 0, 0, 1, FuncItemTester(&ObjectType::is_armour));
+        enchant_item(player_ptr, bcost, 0, 0, 1, FuncItemTester(&ItemEntity::is_armour));
         break;
     case BACT_RECHARGE:
         building_recharge(player_ptr);
@@ -197,7 +197,7 @@ static void bldg_process_command(PlayerType *player_ptr, building_type *bldg, in
         paid = restore_all_status(player_ptr);
         break;
     case BACT_ENCHANT_ARROWS:
-        enchant_item(player_ptr, bcost, 1, 1, 0, FuncItemTester(&ObjectType::is_ammo));
+        enchant_item(player_ptr, bcost, 1, 1, 0, FuncItemTester(&ItemEntity::is_ammo));
         break;
     case BACT_ENCHANT_BOW:
         enchant_item(player_ptr, bcost, 1, 1, 0, TvalItemTester(ItemKindType::BOW));

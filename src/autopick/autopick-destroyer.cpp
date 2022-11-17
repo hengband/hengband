@@ -27,8 +27,8 @@
 #include "player-info/race-types.h"
 #include "sv-definition/sv-other-types.h"
 #include "sv-definition/sv-wand-types.h"
-#include "system/monster-race-definition.h"
-#include "system/object-type-definition.h"
+#include "system/item-entity.h"
+#include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
 #include "util/string-processor.h"
 #include "view/display-messages.h"
@@ -39,7 +39,7 @@
  * @param o_ptr アイテムへの参照ポインタ
  * @return 特別なクラス、かつそのクラス特有のアイテムであればFALSE、それ以外はTRUE
  */
-static bool is_leave_special_item(PlayerType *player_ptr, ObjectType *o_ptr)
+static bool is_leave_special_item(PlayerType *player_ptr, ItemEntity *o_ptr)
 {
     if (!leave_special) {
         return true;
@@ -71,7 +71,7 @@ static bool is_leave_special_item(PlayerType *player_ptr, ObjectType *o_ptr)
 /*!
  * @brief Automatically destroy items in this grid.
  */
-static bool is_opt_confirm_destroy(PlayerType *player_ptr, ObjectType *o_ptr)
+static bool is_opt_confirm_destroy(PlayerType *player_ptr, ItemEntity *o_ptr)
 {
     if (!destroy_items) {
         return false;
@@ -124,7 +124,7 @@ static bool is_opt_confirm_destroy(PlayerType *player_ptr, ObjectType *o_ptr)
     return true;
 }
 
-void auto_destroy_item(PlayerType *player_ptr, ObjectType *o_ptr, int autopick_idx)
+void auto_destroy_item(PlayerType *player_ptr, ItemEntity *o_ptr, int autopick_idx)
 {
     bool destroy = false;
     if (is_opt_confirm_destroy(player_ptr, o_ptr)) {

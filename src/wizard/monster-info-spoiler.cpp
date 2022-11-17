@@ -5,7 +5,7 @@
 #include "monster-race/race-flags7.h"
 #include "monster-race/race-flags8.h"
 #include "system/angband-version.h"
-#include "system/monster-race-definition.h"
+#include "system/monster-race-info.h"
 #include "term/term-color-types.h"
 #include "util/angband-files.h"
 #include "util/bit-flags-calculator.h"
@@ -20,7 +20,7 @@
  * @param r_ptr モンスター種族の構造体ポインタ
  * @return シンボル職の記述名
  */
-static concptr attr_to_text(monster_race *r_ptr)
+static concptr attr_to_text(MonsterRaceInfo *r_ptr)
 {
     if (r_ptr->visual_flags.has(MonsterVisualType::CLEAR_COLOR)) {
         return _("透明な", "Clear");
@@ -72,7 +72,7 @@ static concptr attr_to_text(monster_race *r_ptr)
     return _("変な色の", "Icky");
 }
 
-SpoilerOutputResultType spoil_mon_desc(concptr fname, std::function<bool(const monster_race *)> filter_monster)
+SpoilerOutputResultType spoil_mon_desc(concptr fname, std::function<bool(const MonsterRaceInfo *)> filter_monster)
 {
     PlayerType dummy;
     uint16_t why = 2;

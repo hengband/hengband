@@ -6,7 +6,7 @@
 
 #include "object-enchant/weapon/apply-magic-digging.h"
 #include "artifact/random-art-generator.h"
-#include "system/object-type-definition.h"
+#include "system/item-entity.h"
 #include "system/player-type-definition.h"
 
 /*!
@@ -16,7 +16,7 @@
  * @param level 生成基準階
  * @param power 生成ランク
  */
-DiggingEnchanter::DiggingEnchanter(PlayerType *player_ptr, ObjectType *o_ptr, DEPTH level, int power)
+DiggingEnchanter::DiggingEnchanter(PlayerType *player_ptr, ItemEntity *o_ptr, DEPTH level, int power)
     : AbstractWeaponEnchanter(o_ptr, level, power)
     , player_ptr(player_ptr)
 {

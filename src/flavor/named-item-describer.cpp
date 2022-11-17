@@ -12,6 +12,7 @@
 #include "object/object-flags.h"
 #include "perception/object-perception.h"
 #include "system/artifact-type-definition.h"
+#include "system/item-entity.h"
 #include "system/player-type-definition.h"
 #include "util/bit-flags-calculator.h"
 #include "util/quarks.h"
@@ -21,7 +22,7 @@
 #include "monster-race/monster-race.h"
 #include "monster-race/race-flags1.h"
 #include "object/tval-types.h"
-#include "system/monster-race-definition.h"
+#include "system/monster-race-info.h"
 #endif
 
 static void check_object_known_aware(flavor_type *flavor_ptr)

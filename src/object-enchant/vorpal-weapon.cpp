@@ -7,9 +7,9 @@
 #include "monster-race/monster-race.h"
 #include "monster-race/race-flags-resistance.h"
 #include "player-attack/player-attack-util.h"
-#include "system/monster-race-definition.h"
-#include "system/monster-type-definition.h"
-#include "system/object-type-definition.h"
+#include "system/item-entity.h"
+#include "system/monster-entity.h"
+#include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
 #include "view/display-messages.h"
 
@@ -56,7 +56,7 @@ static void print_vorpal_message(player_attack_type *pa_ptr, const int magnifica
  * @brief チェンソーのノイズ音を表示する
  * @param o_ptr チェンソーへの参照ポインタ
  */
-static void print_chainsword_noise(ObjectType *o_ptr)
+static void print_chainsword_noise(ItemEntity *o_ptr)
 {
     if (!o_ptr->is_specific_artifact(FixedArtifactId::CHAINSWORD) || one_in_(2)) {
         return;

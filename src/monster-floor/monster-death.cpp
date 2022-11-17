@@ -40,8 +40,9 @@
 #include "system/building-type-definition.h"
 #include "system/dungeon-info.h"
 #include "system/floor-type-definition.h"
-#include "system/monster-race-definition.h"
-#include "system/monster-type-definition.h"
+#include "system/item-entity.h"
+#include "system/monster-entity.h"
+#include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
 #include "system/system-variables.h"
 #include "timed-effect/player-hallucination.h"
@@ -95,7 +96,7 @@ static void on_defeat_arena_monster(PlayerType *player_ptr, monster_death_type *
     const auto &arena = arena_info[player_ptr->arena_number];
     const auto tval = arena.key.tval();
     if (tval > ItemKindType::NONE) {
-        ObjectType forge;
+        ItemEntity forge;
         auto *q_ptr = &forge;
         q_ptr->prep(lookup_baseitem_id(arena.key));
         ItemMagicApplier(player_ptr, q_ptr, floor_ptr->object_level, AM_NO_FIXED_ART).execute();
@@ -143,7 +144,7 @@ static void drop_corpse(PlayerType *player_ptr, monster_death_type *md_ptr)
         }
     }
 
-    ObjectType forge;
+    ItemEntity forge;
     auto *q_ptr = &forge;
     q_ptr->prep(lookup_baseitem_id({ ItemKindType::CORPSE, (corpse ? SV_CORPSE : SV_SKELETON) }));
     ItemMagicApplier(player_ptr, q_ptr, floor_ptr->object_level, AM_NO_FIXED_ART).execute();
@@ -232,7 +233,7 @@ static void drop_artifacts(PlayerType *player_ptr, monster_death_type *md_ptr)
 
     KIND_OBJECT_IDX k_idx = drop_dungeon_final_artifact(player_ptr, md_ptr);
     if (k_idx != 0) {
-        ObjectType forge;
+        ItemEntity forge;
         auto *q_ptr = &forge;
         q_ptr->prep(k_idx);
         ItemMagicApplier(player_ptr, q_ptr, player_ptr->current_floor_ptr->object_level, AM_NO_FIXED_ART | AM_GOOD).execute();
@@ -305,7 +306,7 @@ static void drop_items_golds(PlayerType *player_ptr, monster_death_type *md_ptr,
     int dump_item = 0;
     int dump_gold = 0;
     for (int i = 0; i < drop_numbers; i++) {
-        ObjectType forge;
+        ItemEntity forge;
         auto *q_ptr = &forge;
         q_ptr->wipe();
         if (md_ptr->do_gold && (!md_ptr->do_item || (randint0(100) < 50))) {

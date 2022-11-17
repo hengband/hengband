@@ -4,7 +4,7 @@
 #include "store/home.h"
 #include "store/store-util.h"
 #include "store/store.h"
-#include "system/object-type-definition.h"
+#include "system/item-entity.h"
 #include "view/display-messages.h"
 #include "view/display-store.h"
 
@@ -34,7 +34,7 @@ void museum_remove_object(PlayerType *player_ptr)
     }
 
     item = item + store_top;
-    ObjectType *o_ptr;
+    ItemEntity *o_ptr;
     o_ptr = &st_ptr->stock[item];
 
     GAME_TEXT o_name[MAX_NLEN];

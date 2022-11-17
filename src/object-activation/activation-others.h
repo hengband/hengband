@@ -2,13 +2,13 @@
 
 #include "system/angband.h"
 
-class ObjectType;
+class ItemEntity;
 class PlayerType;
 bool activate_sunlight(PlayerType *player_ptr);
 bool activate_confusion(PlayerType *player_ptr);
 bool activate_banish_evil(PlayerType *player_ptr);
 bool activate_scare(PlayerType *player_ptr);
-bool activate_aggravation(PlayerType *player_ptr, ObjectType *o_ptr, concptr name);
+bool activate_aggravation(PlayerType *player_ptr, ItemEntity *o_ptr, concptr name);
 bool activate_stone_mud(PlayerType *player_ptr);
 bool activate_judgement(PlayerType *player_ptr, concptr name);
 bool activate_telekinesis(PlayerType *player_ptr, concptr name);
@@ -40,8 +40,8 @@ bool activate_protection_rune(PlayerType *player_ptr);
 bool activate_protection_elbereth(PlayerType *player_ptr);
 bool activate_light(PlayerType *player_ptr, concptr name);
 bool activate_recall(PlayerType *player_ptr);
-bool activate_tree_creation(PlayerType *player_ptr, ObjectType *o_ptr, concptr name);
-bool activate_animate_dead(PlayerType *player_ptr, ObjectType *o_ptr);
+bool activate_tree_creation(PlayerType *player_ptr, ItemEntity *o_ptr, concptr name);
+bool activate_animate_dead(PlayerType *player_ptr, ItemEntity *o_ptr);
 bool activate_detect_treasure(PlayerType *player_ptr);
 bool activate_create_ammo(PlayerType *player_ptr);
 bool activate_dispel_magic(PlayerType *player_ptr);

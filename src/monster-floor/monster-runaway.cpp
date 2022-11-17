@@ -20,8 +20,8 @@
 #include "monster/monster-processor-util.h"
 #include "pet/pet-fall-off.h"
 #include "system/floor-type-definition.h"
-#include "system/monster-race-definition.h"
-#include "system/monster-type-definition.h"
+#include "system/monster-entity.h"
+#include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
 #include "target/projection-path-calculator.h"
 #include "view/display-messages.h"
@@ -46,7 +46,7 @@ static bool is_acting_monster(const MonsterRaceId r_idx)
  * @param m_ptr モンスターへの参照ポインタ
  * @param m_name モンスター名称
  */
-static void escape_monster(PlayerType *player_ptr, turn_flags *turn_flags_ptr, monster_type *m_ptr, GAME_TEXT *m_name)
+static void escape_monster(PlayerType *player_ptr, turn_flags *turn_flags_ptr, MonsterEntity *m_ptr, GAME_TEXT *m_name)
 {
     if (turn_flags_ptr->is_riding_mon) {
         msg_format(_("%sはあなたの束縛から脱出した。", "%^s succeeded to escape from your restriction!"), m_name);

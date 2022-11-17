@@ -6,8 +6,8 @@
 #include "smith/object-smith.h"
 #include "sv-definition/sv-lite-types.h"
 #include "system/artifact-type-definition.h"
-#include "system/baseitem-info-definition.h"
-#include "system/object-type-definition.h"
+#include "system/baseitem-info.h"
+#include "system/item-entity.h"
 #include "system/player-type-definition.h"
 #include "util/bit-flags-calculator.h"
 
@@ -16,7 +16,7 @@
  * @param o_ptr フラグ取得元のオブジェクト構造体ポインタ
  * @param flgs フラグ情報を受け取る配列
  */
-static void object_flags_lite(const ObjectType *o_ptr, TrFlags &flgs)
+static void object_flags_lite(const ItemEntity *o_ptr, TrFlags &flgs)
 {
     if (!o_ptr->is_ego()) {
         return;
@@ -47,7 +47,7 @@ static void object_flags_lite(const ObjectType *o_ptr, TrFlags &flgs)
  * @param o_ptr フラグ取得元のオブジェクト構造体ポインタ
  * @param flgs フラグ情報を受け取る配列
  */
-TrFlags object_flags(const ObjectType *o_ptr)
+TrFlags object_flags(const ItemEntity *o_ptr)
 {
     auto *k_ptr = &baseitems_info[o_ptr->k_idx];
 
@@ -80,7 +80,7 @@ TrFlags object_flags(const ObjectType *o_ptr)
  * @param o_ptr フラグ取得元のオブジェクト構造体ポインタ
  * @param flgs フラグ情報を受け取る配列
  */
-TrFlags object_flags_known(const ObjectType *o_ptr)
+TrFlags object_flags_known(const ItemEntity *o_ptr)
 {
     bool spoil = false;
     auto *k_ptr = &baseitems_info[o_ptr->k_idx];

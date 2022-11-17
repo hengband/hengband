@@ -29,9 +29,9 @@
 #include "system/dungeon-info.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
-#include "system/monster-race-definition.h"
-#include "system/monster-type-definition.h"
-#include "system/object-type-definition.h"
+#include "system/item-entity.h"
+#include "system/monster-entity.h"
+#include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
 #include "system/system-variables.h"
 #include "system/terrain-type-definition.h"
@@ -67,7 +67,7 @@ struct eg_type {
     OBJECT_IDX floor_list[23];
     ITEM_NUMBER floor_num;
     grid_type *g_ptr;
-    monster_type *m_ptr;
+    MonsterEntity *m_ptr;
     OBJECT_IDX next_o_idx;
     FEAT_IDX feat;
     TerrainType *f_ptr;
@@ -98,9 +98,9 @@ static eg_type *initialize_eg_type(PlayerType *player_ptr, eg_type *eg_ptr, POSI
 /*
  * Evaluate number of kill needed to gain level
  */
-static void evaluate_monster_exp(PlayerType *player_ptr, char *buf, monster_type *m_ptr)
+static void evaluate_monster_exp(PlayerType *player_ptr, char *buf, MonsterEntity *m_ptr)
 {
-    monster_race *ap_r_ptr = &monraces_info[m_ptr->ap_r_idx];
+    MonsterRaceInfo *ap_r_ptr = &monraces_info[m_ptr->ap_r_idx];
     if ((player_ptr->lev >= PY_MAX_LEVEL) || PlayerRace(player_ptr).equals(PlayerRaceType::ANDROID)) {
         sprintf(buf, "**");
         return;
@@ -230,7 +230,7 @@ static void describe_grid_monster(PlayerType *player_ptr, eg_type *eg_ptr)
 
 static void describe_monster_person(eg_type *eg_ptr)
 {
-    monster_race *ap_r_ptr = &monraces_info[eg_ptr->m_ptr->ap_r_idx];
+    MonsterRaceInfo *ap_r_ptr = &monraces_info[eg_ptr->m_ptr->ap_r_idx];
     eg_ptr->s1 = _("それは", "It is ");
     if (ap_r_ptr->flags1 & RF1_FEMALE) {
         eg_ptr->s1 = _("彼女は", "She is ");
@@ -250,7 +250,7 @@ static uint16_t describe_monster_item(PlayerType *player_ptr, eg_type *eg_ptr)
 {
     for (const auto this_o_idx : eg_ptr->m_ptr->hold_o_idx_list) {
         GAME_TEXT o_name[MAX_NLEN];
-        ObjectType *o_ptr;
+        ItemEntity *o_ptr;
         o_ptr = &player_ptr->current_floor_ptr->o_list[this_o_idx];
         describe_flavor(player_ptr, o_name, o_ptr, 0);
 #ifdef JP
@@ -321,7 +321,7 @@ static int16_t describe_footing(PlayerType *player_ptr, eg_type *eg_ptr)
     }
 
     GAME_TEXT o_name[MAX_NLEN];
-    ObjectType *o_ptr;
+    ItemEntity *o_ptr;
     o_ptr = &player_ptr->current_floor_ptr->o_list[eg_ptr->floor_list[0]];
     describe_flavor(player_ptr, o_name, o_ptr, 0);
 #ifdef JP
@@ -408,7 +408,7 @@ static int16_t loop_describing_grid(PlayerType *player_ptr, eg_type *eg_ptr)
     }
 }
 
-static int16_t describe_footing_sight(PlayerType *player_ptr, eg_type *eg_ptr, ObjectType *o_ptr)
+static int16_t describe_footing_sight(PlayerType *player_ptr, eg_type *eg_ptr, ItemEntity *o_ptr)
 {
     if ((o_ptr->marked & OM_FOUND) == 0) {
         return CONTINUOUS_DESCRIPTION;
@@ -450,7 +450,7 @@ static int16_t describe_footing_sight(PlayerType *player_ptr, eg_type *eg_ptr, O
 static int16_t sweep_footing_items(PlayerType *player_ptr, eg_type *eg_ptr)
 {
     for (const auto this_o_idx : eg_ptr->g_ptr->o_idx_list) {
-        ObjectType *o_ptr;
+        ItemEntity *o_ptr;
         o_ptr = &player_ptr->current_floor_ptr->o_list[this_o_idx];
         int16_t ret = describe_footing_sight(player_ptr, eg_ptr, o_ptr);
         if (within_char_util(ret)) {

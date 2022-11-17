@@ -23,8 +23,8 @@
 #include "spell-realm/spells-hex.h"
 #include "sv-definition/sv-other-types.h"
 #include "sv-definition/sv-weapon-types.h"
-#include "system/baseitem-info-definition.h"
-#include "system/object-type-definition.h"
+#include "system/baseitem-info.h"
+#include "system/item-entity.h"
 #include "system/player-type-definition.h"
 #include "term/screen-processor.h"
 #include "util/bit-flags-calculator.h"
@@ -36,7 +36,7 @@
  * @param from_ptr 修復材料オブジェクトの構造体の参照ポインタ。
  * @return 修復対象になるならTRUEを返す。
  */
-static void give_one_ability_of_object(ObjectType *to_ptr, ObjectType *from_ptr)
+static void give_one_ability_of_object(ItemEntity *to_ptr, ItemEntity *from_ptr)
 {
     auto to_flgs = object_flags(to_ptr);
     auto from_flgs = object_flags(from_ptr);
@@ -104,8 +104,8 @@ static PRICE repair_broken_weapon_aux(PlayerType *player_ptr, PRICE bcost)
     concptr s = _("修復できる折れた武器がありません。", "You have no broken weapon to repair.");
 
     OBJECT_IDX item;
-    ObjectType *o_ptr;
-    o_ptr = choose_object(player_ptr, &item, q, s, (USE_INVEN | USE_EQUIP), FuncItemTester(&ObjectType::is_broken_weapon));
+    ItemEntity *o_ptr;
+    o_ptr = choose_object(player_ptr, &item, q, s, (USE_INVEN | USE_EQUIP), FuncItemTester(&ItemEntity::is_broken_weapon));
     if (!o_ptr) {
         return 0;
     }
@@ -128,8 +128,8 @@ static PRICE repair_broken_weapon_aux(PlayerType *player_ptr, PRICE bcost)
     s = _("材料となる武器がありません。", "You have no material for the repair.");
 
     OBJECT_IDX mater;
-    ObjectType *mo_ptr;
-    mo_ptr = choose_object(player_ptr, &mater, q, s, (USE_INVEN | USE_EQUIP), FuncItemTester(&ObjectType::is_orthodox_melee_weapons));
+    ItemEntity *mo_ptr;
+    mo_ptr = choose_object(player_ptr, &mater, q, s, (USE_INVEN | USE_EQUIP), FuncItemTester(&ItemEntity::is_orthodox_melee_weapons));
     if (!mo_ptr) {
         return 0;
     }

@@ -5,7 +5,7 @@
 #include "system/artifact-type-definition.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
-#include "system/object-type-definition.h"
+#include "system/item-entity.h"
 #include "system/player-type-definition.h"
 #include "world/world-object.h"
 
@@ -33,8 +33,8 @@ void place_gold(PlayerType *player_ptr, POSITION y, POSITION x)
         return;
     }
 
-    ObjectType forge;
-    ObjectType *q_ptr;
+    ItemEntity forge;
+    ItemEntity *q_ptr;
     q_ptr = &forge;
     q_ptr->wipe();
     if (!make_gold(player_ptr, q_ptr)) {
@@ -46,7 +46,7 @@ void place_gold(PlayerType *player_ptr, POSITION y, POSITION x)
         return;
     }
 
-    ObjectType *o_ptr;
+    ItemEntity *o_ptr;
     o_ptr = &floor_ptr->o_list[o_idx];
     o_ptr->copy_from(q_ptr);
 
@@ -75,8 +75,8 @@ void place_object(PlayerType *player_ptr, POSITION y, POSITION x, BIT_FLAGS mode
 {
     auto *floor_ptr = player_ptr->current_floor_ptr;
     auto *g_ptr = &floor_ptr->grid_array[y][x];
-    ObjectType forge;
-    ObjectType *q_ptr;
+    ItemEntity forge;
+    ItemEntity *q_ptr;
     if (!in_bounds(floor_ptr, y, x) || !cave_drop_bold(floor_ptr, y, x) || !g_ptr->o_idx_list.empty()) {
         return;
     }
@@ -96,7 +96,7 @@ void place_object(PlayerType *player_ptr, POSITION y, POSITION x, BIT_FLAGS mode
         return;
     }
 
-    ObjectType *o_ptr;
+    ItemEntity *o_ptr;
     o_ptr = &floor_ptr->o_list[o_idx];
     o_ptr->copy_from(q_ptr);
 

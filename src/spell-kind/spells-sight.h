@@ -3,8 +3,8 @@
 #include "effect/attribute-types.h"
 #include "system/angband.h"
 
-struct monster_race;
-struct monster_type;
+class MonsterRaceInfo;
+class MonsterEntity;
 class PlayerType;
 bool project_all_los(PlayerType *player_ptr, AttributeType typ, int dam);
 bool speed_monsters(PlayerType *player_ptr);
@@ -30,5 +30,5 @@ bool banish_monsters(PlayerType *player_ptr, int dist);
 bool turn_evil(PlayerType *player_ptr, int dam);
 bool turn_monsters(PlayerType *player_ptr, int dam);
 bool deathray_monsters(PlayerType *player_ptr);
-void probed_monster_info(char *buf, PlayerType *player_ptr, monster_type *m_ptr, monster_race *r_ptr);
+void probed_monster_info(char *buf, PlayerType *player_ptr, MonsterEntity *m_ptr, MonsterRaceInfo *r_ptr);
 bool probing(PlayerType *player_ptr);

@@ -28,8 +28,8 @@
 #include "sv-definition/sv-staff-types.h"
 #include "sv-definition/sv-wand-types.h"
 #include "sv-definition/sv-weapon-types.h"
-#include "system/baseitem-info-definition.h"
-#include "system/object-type-definition.h"
+#include "system/baseitem-info.h"
+#include "system/item-entity.h"
 #include "system/player-type-definition.h"
 #include "util/enum-converter.h"
 #include <tuple>
@@ -39,9 +39,9 @@
  */
 void wield_all(PlayerType *player_ptr)
 {
-    ObjectType ObjectType_body;
+    ItemEntity ObjectType_body;
     for (INVENTORY_IDX item = INVEN_PACK - 1; item >= 0; item--) {
-        ObjectType *o_ptr;
+        ItemEntity *o_ptr;
         o_ptr = &player_ptr->inventory_list[item];
         if (!o_ptr->k_idx) {
             continue;
@@ -58,7 +58,7 @@ void wield_all(PlayerType *player_ptr)
             continue;
         }
 
-        ObjectType *i_ptr;
+        ItemEntity *i_ptr;
         i_ptr = &ObjectType_body;
         i_ptr->copy_from(o_ptr);
         i_ptr->number = 1;
@@ -82,7 +82,7 @@ void wield_all(PlayerType *player_ptr)
  * @details アイテムを既知のものとした上でwield_all()関数により装備させる。
  * @param o_ptr 処理したいオブジェクト構造体の参照ポインタ
  */
-void add_outfit(PlayerType *player_ptr, ObjectType *o_ptr)
+void add_outfit(PlayerType *player_ptr, ItemEntity *o_ptr)
 {
     object_aware(player_ptr, o_ptr);
     object_known(o_ptr);
@@ -91,7 +91,7 @@ void add_outfit(PlayerType *player_ptr, ObjectType *o_ptr)
     wield_all(player_ptr);
 }
 
-static void decide_initial_items(PlayerType *player_ptr, ObjectType *q_ptr)
+static void decide_initial_items(PlayerType *player_ptr, ItemEntity *q_ptr)
 {
     switch (player_ptr->prace) {
     case PlayerRaceType::VAMPIRE:
@@ -147,8 +147,8 @@ static void decide_initial_items(PlayerType *player_ptr, ObjectType *q_ptr)
  */
 void player_outfit(PlayerType *player_ptr)
 {
-    ObjectType *q_ptr;
-    ObjectType forge;
+    ItemEntity *q_ptr;
+    ItemEntity forge;
     q_ptr = &forge;
 
     decide_initial_items(player_ptr, q_ptr);

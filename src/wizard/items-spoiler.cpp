@@ -6,8 +6,8 @@
 #include "object-enchant/trg-types.h"
 #include "object/object-value.h"
 #include "system/angband-version.h"
-#include "system/baseitem-info-definition.h"
-#include "system/object-type-definition.h"
+#include "system/baseitem-info.h"
+#include "system/item-entity.h"
 #include "system/player-type-definition.h"
 #include "util/angband-files.h"
 #include "view/display-messages.h"
@@ -29,7 +29,7 @@
  */
 static void kind_info(PlayerType *player_ptr, char *buf, char *dam, char *wgt, char *chance, DEPTH *lev, PRICE *val, KIND_OBJECT_IDX k)
 {
-    ObjectType forge;
+    ItemEntity forge;
     auto *q_ptr = &forge;
     q_ptr->prep(k);
     q_ptr->ident |= IDENT_KNOWN;

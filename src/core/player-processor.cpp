@@ -53,7 +53,7 @@
 #include "system/dungeon-info.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
-#include "system/monster-race-definition.h"
+#include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
 #include "term/screen-processor.h"
 #include "timed-effect/player-blindness.h"
@@ -338,8 +338,8 @@ void process_player(PlayerType *player_ptr)
             }
 
             for (MONSTER_IDX m_idx = 1; m_idx < player_ptr->current_floor_ptr->m_max; m_idx++) {
-                monster_type *m_ptr;
-                monster_race *r_ptr;
+                MonsterEntity *m_ptr;
+                MonsterRaceInfo *r_ptr;
                 m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
                 if (!m_ptr->is_valid()) {
                     continue;
