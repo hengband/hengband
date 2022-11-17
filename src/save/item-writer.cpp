@@ -272,7 +272,7 @@ void wr_item(ItemEntity *o_ptr)
  * @brief セーブデータにアイテムの鑑定情報を書き込む / Write an "perception" record
  * @param k_idx ベースアイテムのID
  */
-void wr_perception(KIND_OBJECT_IDX k_idx)
+void wr_perception(short k_idx)
 {
     byte tmp8u = 0;
     auto *k_ptr = &baseitems_info[k_idx];

@@ -315,7 +315,7 @@ void store_shuffle(PlayerType *player_ptr, StoreSaleType store_num)
  * Should we check for "permission" to have the given item?
  * </pre>
  */
-static void store_create(PlayerType *player_ptr, KIND_OBJECT_IDX fix_k_idx, StoreSaleType store_num)
+static void store_create(PlayerType *player_ptr, short fix_k_idx, StoreSaleType store_num)
 {
     if (st_ptr->stock_num >= st_ptr->stock_size) {
         return;
@@ -324,7 +324,7 @@ static void store_create(PlayerType *player_ptr, KIND_OBJECT_IDX fix_k_idx, Stor
     const owner_type *ow_ptr = &owners.at(store_num)[st_ptr->owner];
 
     for (int tries = 0; tries < 4; tries++) {
-        KIND_OBJECT_IDX k_idx;
+        short k_idx;
         DEPTH level;
         if (store_num == StoreSaleType::BLACK) {
             level = 25 + randint0(25);

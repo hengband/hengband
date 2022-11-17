@@ -62,7 +62,7 @@ void ItemEntity::copy_from(const ItemEntity *j_ptr)
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param k_idx 新たに作成したいベースアイテム情報のID
  */
-void ItemEntity::prep(KIND_OBJECT_IDX ko_idx)
+void ItemEntity::prep(short ko_idx)
 {
     auto *k_ptr = &baseitems_info[ko_idx];
     auto old_stack_idx = this->stack_idx;

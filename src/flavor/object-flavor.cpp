@@ -253,7 +253,7 @@ void flavor_init(void)
  * @param buf ベースアイテム格納先の参照ポインタ
  * @param k_idx ベースアイテムID
  */
-std::string strip_name(KIND_OBJECT_IDX k_idx)
+std::string strip_name(short k_idx)
 {
     auto k_ptr = &baseitems_info[k_idx];
     auto tok = str_split(k_ptr->name, ' ');

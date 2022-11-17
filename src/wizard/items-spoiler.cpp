@@ -27,7 +27,7 @@
  * @param val 価値を返すバッファ参照ポインタ
  * @param k ベースアイテムID
  */
-static void kind_info(PlayerType *player_ptr, char *buf, char *dam, char *wgt, char *chance, DEPTH *lev, PRICE *val, KIND_OBJECT_IDX k)
+static void kind_info(PlayerType *player_ptr, char *buf, char *dam, char *wgt, char *chance, DEPTH *lev, PRICE *val, short k)
 {
     ItemEntity forge;
     auto *q_ptr = &forge;
@@ -105,7 +105,7 @@ SpoilerOutputResultType spoil_obj_desc(concptr fname)
     fprintf(spoiler_file, "%-37s%8s%7s%5s %40s%9s\n", "-------------------------------------", "------", "---", "---", "----------------", "----");
 
     for (const auto &[tval_list, name] : group_item_list) {
-        std::vector<KIND_OBJECT_IDX> whats;
+        std::vector<short> whats;
         for (auto tval : tval_list) {
             for (const auto &k_ref : baseitems_info) {
                 if ((k_ref.bi_key.tval() == tval) && k_ref.gen_flags.has_not(ItemGenerationTraitType::INSTA_ART)) {

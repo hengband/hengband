@@ -259,7 +259,7 @@ static std::optional<BaseitemKey> select_magic_eater(PlayerType *player_ptr, boo
             byte y, x = 0;
             OBJECT_SUBTYPE_VALUE ctr;
             PERCENTAGE chance;
-            KIND_OBJECT_IDX k_idx;
+            short k_idx;
             char dummy[80];
             POSITION x1, y1;
             DEPTH level;

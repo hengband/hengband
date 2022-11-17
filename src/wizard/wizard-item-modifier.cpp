@@ -874,7 +874,7 @@ WishResultType do_cmd_wishing(PlayerType *player_ptr, int prob, bool allow_art, 
         msg_format("Wishing %s....", buf);
     }
 
-    std::vector<KIND_OBJECT_IDX> k_ids;
+    std::vector<short> k_ids;
     std::vector<EgoType> e_ids;
     if (exam_base) {
         int len;
@@ -904,7 +904,7 @@ WishResultType do_cmd_wishing(PlayerType *player_ptr, int prob, bool allow_art, 
         }
 
         if (allow_ego && k_ids.size() == 1) {
-            KIND_OBJECT_IDX k_idx = k_ids.back();
+            short k_idx = k_ids.back();
             o_ptr->prep(k_idx);
 
             for (const auto &[e_idx, e_ref] : egos_info) {

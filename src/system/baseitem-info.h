@@ -47,7 +47,7 @@ enum class RandomArtActType : short;
 class BaseitemInfo {
 public:
     BaseitemInfo();
-    KIND_OBJECT_IDX idx{};
+    short idx{};
 
     std::string name; /*!< ベースアイテム名 */
     std::string text; /*!< 解説テキスト */

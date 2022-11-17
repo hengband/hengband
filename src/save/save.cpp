@@ -119,7 +119,7 @@ static bool wr_savefile_new(PlayerType *player_ptr, SaveType type)
 
     tmp16u = static_cast<uint16_t>(baseitems_info.size());
     wr_u16b(tmp16u);
-    for (KIND_OBJECT_IDX k_idx = 0; k_idx < tmp16u; k_idx++) {
+    for (short k_idx = 0; k_idx < tmp16u; k_idx++) {
         wr_perception(k_idx);
     }
 

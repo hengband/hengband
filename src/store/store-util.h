@@ -27,7 +27,7 @@ constexpr int MAX_STORES = enum2i(StoreSaleType::MAX); /*!< 店舗の種類最�
 
 constexpr auto STORE_SALE_TYPE_LIST = EnumRange(StoreSaleType::GENERAL, StoreSaleType::MUSEUM);
 
-using store_k_idx = std::vector<KIND_OBJECT_IDX>;
+using store_k_idx = std::vector<short>;
 
 /*!
  * @brief 店舗の情報構造体

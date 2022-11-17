@@ -249,7 +249,7 @@ bool ObjectBreaker::can_destroy(ItemEntity *o_ptr) const
  *    o_ptr --- pointer to the potion object.
  * </pre>
  */
-bool potion_smash_effect(PlayerType *player_ptr, MONSTER_IDX who, POSITION y, POSITION x, KIND_OBJECT_IDX k_idx)
+bool potion_smash_effect(PlayerType *player_ptr, MONSTER_IDX who, POSITION y, POSITION x, short k_idx)
 {
     int radius = 2;
     AttributeType dt = AttributeType::NONE;

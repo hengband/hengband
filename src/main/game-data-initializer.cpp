@@ -170,7 +170,7 @@ void init_alloc(void)
 
         auto x = r_ptr->level;
         PROB p = (100 / r_ptr->rarity);
-        alloc_race_table[i].index = (KIND_OBJECT_IDX)elements[i].index;
+        alloc_race_table[i].index = static_cast<short>(elements[i].index);
         alloc_race_table[i].level = x;
         alloc_race_table[i].prob1 = p;
         alloc_race_table[i].prob2 = p;

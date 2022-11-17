@@ -196,7 +196,7 @@ bool drop_single_artifact(PlayerType *player_ptr, monster_death_type *md_ptr, Fi
     return true;
 }
 
-static KIND_OBJECT_IDX drop_dungeon_final_artifact(PlayerType *player_ptr, monster_death_type *md_ptr)
+static short drop_dungeon_final_artifact(PlayerType *player_ptr, monster_death_type *md_ptr)
 {
     const auto &dungeon = dungeons_info[player_ptr->dungeon_idx];
     const auto has_reward = dungeon.final_object > 0;
@@ -231,7 +231,7 @@ static void drop_artifacts(PlayerType *player_ptr, monster_death_type *md_ptr)
         return;
     }
 
-    KIND_OBJECT_IDX k_idx = drop_dungeon_final_artifact(player_ptr, md_ptr);
+    short k_idx = drop_dungeon_final_artifact(player_ptr, md_ptr);
     if (k_idx != 0) {
         ItemEntity forge;
         auto *q_ptr = &forge;

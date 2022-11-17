@@ -87,7 +87,6 @@ typedef int16_t QUEST_IDX; /*!< ゲーム中のクエストID型を定義 */
 
 typedef int16_t INVENTORY_IDX; /*!< ゲーム中の所持品ID型を定義 */
 typedef int16_t OBJECT_IDX; /*!< ゲーム中のアイテムID型を定義 */
-typedef int16_t KIND_OBJECT_IDX; /*!< ゲーム中のベースアイテムID型を定義 */
 typedef int MUTATION_IDX; /*!< 突然変異のID型を定義 */
 
 typedef int32_t POSITION; /*!< ゲーム中の座標型を定義 */

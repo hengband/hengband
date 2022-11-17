@@ -276,7 +276,7 @@ bool affect_item(PlayerType *player_ptr, MONSTER_IDX who, POSITION r, POSITION y
             msg_format(_("%sは%s", "The %s%s"), o_name, note_kill);
         }
 
-        KIND_OBJECT_IDX k_idx = o_ptr->k_idx;
+        short k_idx = o_ptr->k_idx;
         bool is_potion = o_ptr->is_potion();
         delete_object_idx(player_ptr, this_o_idx);
         if (is_potion) {

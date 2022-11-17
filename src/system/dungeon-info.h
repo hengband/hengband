@@ -97,7 +97,7 @@ struct dungeon_type {
     EnumClassFlagGroup<MonsterSpeakType> mon_speak_flags;
 
     std::vector<char> r_chars; /* Monster symbols allowed */
-    KIND_OBJECT_IDX final_object{}; /* The object you'll find at the bottom */
+    short final_object{}; /* The object you'll find at the bottom */
     FixedArtifactId final_artifact{}; /* The artifact you'll find at the bottom */
     MonsterRaceId final_guardian{}; /* The artifact's guardian. If an artifact is specified, then it's NEEDED */
 

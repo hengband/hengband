@@ -76,7 +76,7 @@ void inven_item_describe(PlayerType *player_ptr, INVENTORY_IDX item)
  * @details
  * Include list of usable spells for readible books
  */
-void display_koff(PlayerType *player_ptr, KIND_OBJECT_IDX k_idx)
+void display_koff(PlayerType *player_ptr, short k_idx)
 {
     ItemEntity forge;
     ItemEntity *q_ptr;
