@@ -132,17 +132,17 @@ bool make_object(PlayerType *player_ptr, ItemEntity *j_ptr, BIT_FLAGS mode, std:
             get_obj_index_prep();
         }
 
-        auto k_idx = get_obj_index(player_ptr, base, mode);
+        auto bi_id = get_obj_index(player_ptr, base, mode);
         if (get_obj_index_hook) {
             get_obj_index_hook = nullptr;
             get_obj_index_prep();
         }
 
-        if (k_idx == 0) {
+        if (bi_id == 0) {
             return false;
         }
 
-        j_ptr->prep(k_idx);
+        j_ptr->prep(bi_id);
     }
 
     ItemMagicApplier(player_ptr, j_ptr, floor_ptr->object_level, mode).execute();
@@ -246,7 +246,7 @@ void floor_item_increase(PlayerType *player_ptr, INVENTORY_IDX item, ITEM_NUMBER
 void floor_item_optimize(PlayerType *player_ptr, INVENTORY_IDX item)
 {
     auto *o_ptr = &player_ptr->current_floor_ptr->o_list[item];
-    if (!o_ptr->k_idx) {
+    if (!o_ptr->bi_id) {
         return;
     }
     if (o_ptr->number) {

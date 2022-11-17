@@ -17,7 +17,7 @@
 bool has_melee_weapon(PlayerType *player_ptr, int slot)
 {
     const auto o_ptr = &player_ptr->inventory_list[slot];
-    return o_ptr->k_idx && o_ptr->is_melee_weapon();
+    return o_ptr->bi_id && o_ptr->is_melee_weapon();
 }
 
 /*!
@@ -28,10 +28,10 @@ bool has_melee_weapon(PlayerType *player_ptr, int slot)
 BIT_FLAGS16 empty_hands(PlayerType *player_ptr, bool riding_control)
 {
     BIT_FLAGS16 status = EMPTY_HAND_NONE;
-    if (!player_ptr->inventory_list[INVEN_MAIN_HAND].k_idx) {
+    if (!player_ptr->inventory_list[INVEN_MAIN_HAND].bi_id) {
         status |= EMPTY_HAND_MAIN;
     }
-    if (!player_ptr->inventory_list[INVEN_SUB_HAND].k_idx) {
+    if (!player_ptr->inventory_list[INVEN_SUB_HAND].bi_id) {
         status |= EMPTY_HAND_SUB;
     }
 

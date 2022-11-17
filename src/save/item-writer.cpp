@@ -243,7 +243,7 @@ void wr_item(ItemEntity *o_ptr)
     BIT_FLAGS flags = 0x00000000;
     write_item_flags(o_ptr, &flags);
 
-    wr_s16b(o_ptr->k_idx);
+    wr_s16b(o_ptr->bi_id);
     wr_byte((byte)o_ptr->iy);
     wr_byte((byte)o_ptr->ix);
     if (any_bits(flags, SaveDataItemFlagType::PVAL)) {
@@ -270,12 +270,12 @@ void wr_item(ItemEntity *o_ptr)
 
 /*!
  * @brief セーブデータにアイテムの鑑定情報を書き込む / Write an "perception" record
- * @param k_idx ベースアイテムのID
+ * @param bi_id ベースアイテムのID
  */
-void wr_perception(KIND_OBJECT_IDX k_idx)
+void wr_perception(short bi_id)
 {
     byte tmp8u = 0;
-    auto *k_ptr = &baseitems_info[k_idx];
+    auto *k_ptr = &baseitems_info[bi_id];
     if (k_ptr->aware) {
         tmp8u |= 0x01;
     }

@@ -628,7 +628,7 @@ concptr do_hex_spell(PlayerType *player_ptr, spell_hex_type spell, SpellProcessT
         if (cast) {
             auto *o_ptr = &player_ptr->inventory_list[INVEN_OUTER];
 
-            if (!o_ptr->k_idx) {
+            if (!o_ptr->bi_id) {
                 msg_print(_("クロークを身につけていない！", "You are not wearing a cloak."));
                 return nullptr;
             } else if (!o_ptr->is_cursed()) {
@@ -641,7 +641,7 @@ concptr do_hex_spell(PlayerType *player_ptr, spell_hex_type spell, SpellProcessT
         if (continuation) {
             auto *o_ptr = &player_ptr->inventory_list[INVEN_OUTER];
 
-            if ((!o_ptr->k_idx) || (!o_ptr->is_cursed())) {
+            if ((!o_ptr->bi_id) || (!o_ptr->is_cursed())) {
                 exe_spell(player_ptr, REALM_HEX, spell, SpellProcessType::STOP);
                 SpellHex spell_hex(player_ptr);
                 spell_hex.reset_casting_flag(spell);

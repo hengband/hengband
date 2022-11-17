@@ -111,9 +111,9 @@ void display_rumor(PlayerType *player_ptr, bool ex)
     if (category == "ARTIFACT") {
         const auto &artifact_name = tokens[1];
         const auto &[a_idx, a_ptr] = get_artifact_definition(artifact_name);
-        const auto k_idx = lookup_baseitem_id(a_ptr->bi_key);
+        const auto bi_id = lookup_baseitem_id(a_ptr->bi_key);
         ItemEntity item;
-        item.prep(k_idx);
+        item.prep(bi_id);
         item.fixed_artifact_idx = a_idx;
         item.ident = IDENT_STORE;
         describe_flavor(player_ptr, fullname, &item, OD_NAME_ONLY);

@@ -58,7 +58,7 @@ void ObjectQuaffEntity::execute(INVENTORY_IDX item)
     auto ident = QuaffEffects(this->player_ptr).influence(o_ref);
     if (PlayerRace(this->player_ptr).equals(PlayerRaceType::SKELETON)) {
         msg_print(_("液体の一部はあなたのアゴを素通りして落ちた！", "Some of the fluid falls through your jaws!"));
-        (void)potion_smash_effect(this->player_ptr, 0, this->player_ptr->y, this->player_ptr->x, o_ref.k_idx);
+        (void)potion_smash_effect(this->player_ptr, 0, this->player_ptr->y, this->player_ptr->x, o_ref.bi_id);
     }
 
     this->player_ptr->update |= PU_COMBINE | PU_REORDER;
@@ -66,7 +66,7 @@ void ObjectQuaffEntity::execute(INVENTORY_IDX item)
     object_tried(&o_ref);
     if (ident && !o_ref.is_aware()) {
         object_aware(this->player_ptr, &o_ref);
-        gain_exp(this->player_ptr, (baseitems_info[o_ref.k_idx].level + (this->player_ptr->lev >> 1)) / this->player_ptr->lev);
+        gain_exp(this->player_ptr, (baseitems_info[o_ref.bi_id].level + (this->player_ptr->lev >> 1)) / this->player_ptr->lev);
     }
 
     this->player_ptr->window_flags |= (PW_INVEN | PW_EQUIP | PW_PLAYER);

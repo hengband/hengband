@@ -31,10 +31,10 @@ void ItemLoader50::rd_item(ItemEntity *o_ptr)
     }
 
     auto flags = rd_u32b();
-    o_ptr->k_idx = rd_s16b();
+    o_ptr->bi_id = rd_s16b();
     o_ptr->iy = rd_byte();
     o_ptr->ix = rd_byte();
-    auto *k_ptr = &baseitems_info[o_ptr->k_idx];
+    auto *k_ptr = &baseitems_info[o_ptr->bi_id];
     o_ptr->tval = k_ptr->bi_key.tval();
     o_ptr->sval = k_ptr->bi_key.sval().value();
     o_ptr->pval = any_bits(flags, SaveDataItemFlagType::PVAL) ? rd_s16b() : 0;

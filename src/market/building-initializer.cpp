@@ -35,13 +35,13 @@ void init_towns(void)
             }
 
             for (const auto &baseitem : store_regular_sale_table.at(sst)) {
-                auto k_idx = lookup_baseitem_id(baseitem);
-                store_ptr->regular.push_back(k_idx);
+                auto bi_id = lookup_baseitem_id(baseitem);
+                store_ptr->regular.push_back(bi_id);
             }
 
             for (const auto &baseitem : store_sale_table.at(sst)) {
-                auto k_idx = lookup_baseitem_id(baseitem);
-                store_ptr->table.push_back(k_idx);
+                auto bi_id = lookup_baseitem_id(baseitem);
+                store_ptr->table.push_back(bi_id);
             }
         }
     }

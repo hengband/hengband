@@ -514,7 +514,7 @@ static void dump_aux_equipment_inventory(PlayerType *player_ptr, FILE *fff)
     fprintf(fff, _("  [キャラクタの持ち物]\n\n", "  [Character Inventory]\n\n"));
 
     for (int i = 0; i < INVEN_PACK; i++) {
-        if (!player_ptr->inventory_list[i].k_idx) {
+        if (!player_ptr->inventory_list[i].bi_id) {
             break;
         }
         describe_flavor(player_ptr, o_name, &player_ptr->inventory_list[i], 0);

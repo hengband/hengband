@@ -155,7 +155,7 @@ static byte get_dungeon_feeling(PlayerType *player_ptr)
 
     for (MONSTER_IDX i = 1; i < floor_ptr->o_max; i++) {
         auto *o_ptr = &floor_ptr->o_list[i];
-        auto *k_ptr = &baseitems_info[o_ptr->k_idx];
+        auto *k_ptr = &baseitems_info[o_ptr->bi_id];
         int delta = 0;
         if (!o_ptr->is_valid() || (o_ptr->is_known() && ((o_ptr->marked & OM_TOUCHED) != 0)) || ((o_ptr->ident & IDENT_SENSE) != 0)) {
             continue;

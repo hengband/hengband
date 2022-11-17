@@ -87,7 +87,7 @@ void SoftArmorEnchanter::give_high_ego_index()
         return;
     }
 
-    this->o_ptr->k_idx = lookup_baseitem_id({ ItemKindType::SOFT_ARMOR, SV_TWILIGHT_ROBE });
+    this->o_ptr->bi_id = lookup_baseitem_id({ ItemKindType::SOFT_ARMOR, SV_TWILIGHT_ROBE });
     this->o_ptr->sval = SV_TWILIGHT_ROBE;
     this->o_ptr->ac = 0;
     this->o_ptr->to_a = 0;

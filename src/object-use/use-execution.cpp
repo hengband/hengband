@@ -59,7 +59,7 @@ void ObjectUseEntity::execute()
         return;
     }
 
-    auto lev = baseitems_info[o_ptr->k_idx].level;
+    auto lev = baseitems_info[o_ptr->bi_id].level;
     if (lev > 50) {
         lev = 50 + (lev - 50) / 2;
     }

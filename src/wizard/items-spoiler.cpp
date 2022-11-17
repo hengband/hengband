@@ -27,7 +27,7 @@
  * @param val 価値を返すバッファ参照ポインタ
  * @param k ベースアイテムID
  */
-static void kind_info(PlayerType *player_ptr, char *buf, char *dam, char *wgt, char *chance, DEPTH *lev, PRICE *val, KIND_OBJECT_IDX k)
+static void kind_info(PlayerType *player_ptr, char *buf, char *dam, char *wgt, char *chance, DEPTH *lev, PRICE *val, short k)
 {
     ItemEntity forge;
     auto *q_ptr = &forge;
@@ -37,7 +37,7 @@ static void kind_info(PlayerType *player_ptr, char *buf, char *dam, char *wgt, c
     q_ptr->to_a = 0;
     q_ptr->to_h = 0;
     q_ptr->to_d = 0;
-    *lev = baseitems_info[q_ptr->k_idx].level;
+    *lev = baseitems_info[q_ptr->bi_id].level;
     *val = q_ptr->get_price();
     if (!buf || !dam || !chance || !wgt) {
         return;
@@ -75,8 +75,8 @@ static void kind_info(PlayerType *player_ptr, char *buf, char *dam, char *wgt, c
     strcpy(chance, "");
     for (int i = 0; i < 4; i++) {
         char chance_aux[20] = "";
-        if (baseitems_info[q_ptr->k_idx].chance[i] > 0) {
-            sprintf(chance_aux, "%s%3dF:%+4d", (i != 0 ? "/" : ""), (int)baseitems_info[q_ptr->k_idx].locale[i], 100 / baseitems_info[q_ptr->k_idx].chance[i]);
+        if (baseitems_info[q_ptr->bi_id].chance[i] > 0) {
+            sprintf(chance_aux, "%s%3dF:%+4d", (i != 0 ? "/" : ""), (int)baseitems_info[q_ptr->bi_id].locale[i], 100 / baseitems_info[q_ptr->bi_id].chance[i]);
             strcat(chance, chance_aux);
         }
     }
@@ -105,7 +105,7 @@ SpoilerOutputResultType spoil_obj_desc(concptr fname)
     fprintf(spoiler_file, "%-37s%8s%7s%5s %40s%9s\n", "-------------------------------------", "------", "---", "---", "----------------", "----");
 
     for (const auto &[tval_list, name] : group_item_list) {
-        std::vector<KIND_OBJECT_IDX> whats;
+        std::vector<short> whats;
         for (auto tval : tval_list) {
             for (const auto &k_ref : baseitems_info) {
                 if ((k_ref.bi_key.tval() == tval) && k_ref.gen_flags.has_not(ItemGenerationTraitType::INSTA_ART)) {
@@ -127,14 +127,14 @@ SpoilerOutputResultType spoil_obj_desc(concptr fname)
         });
 
         fprintf(spoiler_file, "\n\n%s\n\n", name);
-        for (const auto &k_idx : whats) {
+        for (const auto &bi_id : whats) {
             DEPTH e;
             PRICE v;
             char wgt[80];
             char chance[80];
             char dam[80];
             PlayerType dummy;
-            kind_info(&dummy, buf, dam, wgt, chance, &e, &v, k_idx);
+            kind_info(&dummy, buf, dam, wgt, chance, &e, &v, bi_id);
             fprintf(spoiler_file, "  %-35s%8s%7s%5d %-40s%9ld\n", buf, dam, wgt, static_cast<int>(e), chance, static_cast<long>(v));
         }
     }

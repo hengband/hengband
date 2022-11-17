@@ -82,7 +82,7 @@ int object_similar_part(const ItemEntity *o_ptr, const ItemEntity *j_ptr)
 {
     const int max_stack_size = 99;
     int max_num = max_stack_size;
-    if (o_ptr->k_idx != j_ptr->k_idx) {
+    if (o_ptr->bi_id != j_ptr->bi_id) {
         return 0;
     }
 
@@ -133,7 +133,7 @@ int object_similar_part(const ItemEntity *o_ptr, const ItemEntity *j_ptr)
         break;
     }
     case ItemKindType::ROD: {
-        max_num = std::min(max_num, MAX_SHORT / baseitems_info[o_ptr->k_idx].pval);
+        max_num = std::min(max_num, MAX_SHORT / baseitems_info[o_ptr->bi_id].pval);
         break;
     }
     case ItemKindType::GLOVES:

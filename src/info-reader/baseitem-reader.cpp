@@ -67,7 +67,7 @@ errr parse_baseitems_info(std::string_view buf, angband_header *head)
 
         error_idx = i;
         k_ptr = &baseitems_info[i];
-        k_ptr->idx = static_cast<KIND_OBJECT_IDX>(i);
+        k_ptr->idx = static_cast<short>(i);
 #ifdef JP
         k_ptr->name = tokens[2];
 #endif

@@ -42,7 +42,7 @@ static void autopick_delayed_alter_aux(PlayerType *player_ptr, INVENTORY_IDX ite
     ItemEntity *o_ptr;
     o_ptr = ref_item(player_ptr, item);
 
-    if (o_ptr->k_idx == 0 || !(o_ptr->marked & OM_AUTODESTROY)) {
+    if (o_ptr->bi_id == 0 || !(o_ptr->marked & OM_AUTODESTROY)) {
         return;
     }
 

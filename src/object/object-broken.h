@@ -6,7 +6,7 @@
 class ItemEntity;
 class PlayerType;
 
-bool potion_smash_effect(PlayerType *player_ptr, MONSTER_IDX who, POSITION y, POSITION x, KIND_OBJECT_IDX k_idx);
+bool potion_smash_effect(PlayerType *player_ptr, MONSTER_IDX who, POSITION y, POSITION x, short bi_id);
 PERCENTAGE breakage_chance(PlayerType *player_ptr, ItemEntity *o_ptr, bool has_archer_bonus, SPELL_IDX snipe_type);
 
 class ObjectBreaker {

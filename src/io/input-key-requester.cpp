@@ -320,7 +320,7 @@ void InputKeyRequestor::sweep_confirmation_equipments()
     auto caret_command = this->get_caret_command();
     for (auto i = enum2i(INVEN_MAIN_HAND); i < INVEN_TOTAL; i++) {
         auto &o_ref = this->player_ptr->inventory_list[i];
-        if ((o_ref.k_idx == 0) || (o_ref.inscription == 0)) {
+        if ((o_ref.bi_id == 0) || (o_ref.inscription == 0)) {
             continue;
         }
 

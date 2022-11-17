@@ -43,7 +43,7 @@ void wield_all(PlayerType *player_ptr)
     for (INVENTORY_IDX item = INVEN_PACK - 1; item >= 0; item--) {
         ItemEntity *o_ptr;
         o_ptr = &player_ptr->inventory_list[item];
-        if (!o_ptr->k_idx) {
+        if (!o_ptr->bi_id) {
             continue;
         }
 
@@ -54,7 +54,7 @@ void wield_all(PlayerType *player_ptr)
         if (slot == INVEN_LITE) {
             continue;
         }
-        if (player_ptr->inventory_list[slot].k_idx) {
+        if (player_ptr->inventory_list[slot].bi_id) {
             continue;
         }
 

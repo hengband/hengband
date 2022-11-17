@@ -87,10 +87,10 @@ static void generate_artifact(PlayerType *player_ptr, qtwg_type *qtwg_ptr, const
         return;
     }
 
-    const auto k_idx = lookup_baseitem_id({ ItemKindType::SCROLL, SV_SCROLL_ACQUIREMENT });
+    const auto bi_id = lookup_baseitem_id({ ItemKindType::SCROLL, SV_SCROLL_ACQUIREMENT });
     ItemEntity forge;
     auto *q_ptr = &forge;
-    q_ptr->prep(k_idx);
+    q_ptr->prep(bi_id);
     drop_here(player_ptr->current_floor_ptr, q_ptr, *qtwg_ptr->y, *qtwg_ptr->x);
 }
 

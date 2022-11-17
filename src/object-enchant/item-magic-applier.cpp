@@ -197,12 +197,12 @@ bool ItemMagicApplier::set_fixed_artifact_generation_info()
  */
 void ItemMagicApplier::apply_cursed()
 {
-    if (this->o_ptr->k_idx == 0) {
+    if (this->o_ptr->bi_id == 0) {
         return;
     }
 
-    const auto *k_ptr = &baseitems_info[this->o_ptr->k_idx];
-    if (!baseitems_info[this->o_ptr->k_idx].cost) {
+    const auto *k_ptr = &baseitems_info[this->o_ptr->bi_id];
+    if (!baseitems_info[this->o_ptr->bi_id].cost) {
         set_bits(this->o_ptr->ident, IDENT_BROKEN);
     }
 

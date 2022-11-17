@@ -123,9 +123,9 @@ void wiz_cure_all(PlayerType *player_ptr)
     msg_print("You're fully cured by wizard command.");
 }
 
-static std::optional<KIND_OBJECT_IDX> wiz_select_tval()
+static std::optional<short> wiz_select_tval()
 {
-    KIND_OBJECT_IDX list;
+    short list;
     char ch;
     for (list = 0; (list < 80) && (tvals[list].tval > ItemKindType::NONE); list++) {
         auto row = 2 + (list % 20);
@@ -139,7 +139,7 @@ static std::optional<KIND_OBJECT_IDX> wiz_select_tval()
         return std::nullopt;
     }
 
-    KIND_OBJECT_IDX selection;
+    short selection;
     for (selection = 0; selection < max_num; selection++) {
         if (listsym[selection] == ch) {
             break;
@@ -153,10 +153,10 @@ static std::optional<KIND_OBJECT_IDX> wiz_select_tval()
     return selection;
 }
 
-static KIND_OBJECT_IDX wiz_select_sval(const ItemKindType tval, concptr tval_description)
+static short wiz_select_sval(const ItemKindType tval, concptr tval_description)
 {
     auto num = 0;
-    KIND_OBJECT_IDX choice[80]{};
+    short choice[80]{};
     char ch;
     for (const auto &k_ref : baseitems_info) {
         if (num >= 80) {
@@ -180,7 +180,7 @@ static KIND_OBJECT_IDX wiz_select_sval(const ItemKindType tval, concptr tval_des
         return 0;
     }
 
-    KIND_OBJECT_IDX selection;
+    short selection;
     for (selection = 0; selection < max_num; selection++) {
         if (listsym[selection] == ch) {
             break;
@@ -200,10 +200,10 @@ static KIND_OBJECT_IDX wiz_select_sval(const ItemKindType tval, concptr tval_des
  * @return ベースアイテムID
  * @details
  * by RAK, heavily modified by -Bernd-
- * This function returns the k_idx of an object type, or zero if failed
+ * This function returns the bi_id of an object type, or zero if failed
  * List up to 50 choices in three columns
  */
-static KIND_OBJECT_IDX wiz_create_itemtype()
+static short wiz_create_itemtype()
 {
     term_clear();
     auto selection = wiz_select_tval();

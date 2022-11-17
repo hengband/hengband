@@ -74,7 +74,7 @@ int16_t PlayerSpeed::class_bonus()
     if (pc.equals(PlayerClassType::NINJA)) {
         if (heavy_armor(this->player_ptr)) {
             bonus -= (this->player_ptr->lev) / 10;
-        } else if ((!this->player_ptr->inventory_list[INVEN_MAIN_HAND].k_idx || can_attack_with_main_hand(this->player_ptr)) && (!this->player_ptr->inventory_list[INVEN_SUB_HAND].k_idx || can_attack_with_sub_hand(this->player_ptr))) {
+        } else if ((!this->player_ptr->inventory_list[INVEN_MAIN_HAND].bi_id || can_attack_with_main_hand(this->player_ptr)) && (!this->player_ptr->inventory_list[INVEN_SUB_HAND].bi_id || can_attack_with_sub_hand(this->player_ptr))) {
             bonus += 3;
             if (!(PlayerRace(this->player_ptr).equals(PlayerRaceType::KLACKON) || PlayerRace(this->player_ptr).equals(PlayerRaceType::SPRITE) || (this->player_ptr->ppersonality == PERSONALITY_MUNCHKIN))) {
                 bonus += (this->player_ptr->lev) / 10;

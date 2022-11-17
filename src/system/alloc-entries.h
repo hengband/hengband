@@ -18,7 +18,7 @@
  * Pass 2 is determined from allocation restriction
  */
 struct alloc_entry {
-    KIND_OBJECT_IDX index; /* The actual index */
+    short index; /* The actual index */
 
     DEPTH level; /* Base dungeon level */
     PROB prob1; /* Probability, pass 1 */

@@ -315,7 +315,7 @@ void store_shuffle(PlayerType *player_ptr, StoreSaleType store_num)
  * Should we check for "permission" to have the given item?
  * </pre>
  */
-static void store_create(PlayerType *player_ptr, KIND_OBJECT_IDX fix_k_idx, StoreSaleType store_num)
+static void store_create(PlayerType *player_ptr, short fix_k_idx, StoreSaleType store_num)
 {
     if (st_ptr->stock_num >= st_ptr->stock_size) {
         return;
@@ -324,26 +324,26 @@ static void store_create(PlayerType *player_ptr, KIND_OBJECT_IDX fix_k_idx, Stor
     const owner_type *ow_ptr = &owners.at(store_num)[st_ptr->owner];
 
     for (int tries = 0; tries < 4; tries++) {
-        KIND_OBJECT_IDX k_idx;
+        short bi_id;
         DEPTH level;
         if (store_num == StoreSaleType::BLACK) {
             level = 25 + randint0(25);
-            k_idx = get_obj_index(player_ptr, level, 0x00000000);
-            if (k_idx == 0) {
+            bi_id = get_obj_index(player_ptr, level, 0x00000000);
+            if (bi_id == 0) {
                 continue;
             }
         } else if (fix_k_idx > 0) {
-            k_idx = fix_k_idx;
+            bi_id = fix_k_idx;
             level = rand_range(1, ow_ptr->level);
         } else {
-            k_idx = st_ptr->table[randint0(st_ptr->table.size())];
+            bi_id = st_ptr->table[randint0(st_ptr->table.size())];
             level = rand_range(1, ow_ptr->level);
         }
 
         ItemEntity forge;
         ItemEntity *q_ptr;
         q_ptr = &forge;
-        q_ptr->prep(k_idx);
+        q_ptr->prep(bi_id);
         ItemMagicApplier(player_ptr, q_ptr, level, AM_NO_FIXED_ART).execute();
         if (!store_will_buy(player_ptr, q_ptr, store_num)) {
             continue;

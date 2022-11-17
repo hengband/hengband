@@ -23,7 +23,7 @@ enum class RandomArtActType : short;
 class ItemEntity {
 public:
     ItemEntity();
-    KIND_OBJECT_IDX k_idx{}; /*!< Kind index (zero if "dead") */
+    short bi_id{}; /*!< ベースアイテムID (0は、不具合調査用の無効アイテム または 何も装備していない箇所のアイテム であることを示す) */
     POSITION iy{}; /*!< Y-position on map, or zero */
     POSITION ix{}; /*!< X-position on map, or zero */
     IDX stack_idx{}; /*!< このアイテムを含むアイテムリスト内の位置(降順) */
@@ -70,7 +70,7 @@ public:
 
     void wipe();
     void copy_from(const ItemEntity *j_ptr);
-    void prep(KIND_OBJECT_IDX ko_idx);
+    void prep(short new_bi_id);
     bool is_weapon() const;
     bool is_weapon_ammo() const;
     bool is_weapon_armour_ammo() const;

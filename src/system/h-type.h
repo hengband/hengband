@@ -79,15 +79,13 @@ typedef int16_t IDX; /*!< ゲーム中のID型を定義 */
 typedef int16_t FEAT_IDX; /*!< ゲーム中の地形ID型を定義 */
 typedef int16_t FLOOR_IDX; /*!< ゲーム中のフロアID型を定義 */
 
-// typedef int16_t MonsterRaceId; /*!< @todo MonsterRaceIdに差し替えて消滅させる ゲーム中のモンスター種族ID型を定義 */
-typedef int16_t MONSTER_IDX; /*!< @todo MonsterRaceIdに差し替えて消滅させる ゲーム中のモンスター個体ID型を定義 */
+typedef int16_t MONSTER_IDX; /*!< ゲーム中のモンスター個体ID型を定義 */
 typedef int16_t DUNGEON_IDX; /*!< ゲーム中のダンジョンID型を定義 */
 typedef int16_t EGO_IDX; /*!< アイテムエゴのID型を定義 */
 typedef int16_t QUEST_IDX; /*!< ゲーム中のクエストID型を定義 */
 
 typedef int16_t INVENTORY_IDX; /*!< ゲーム中の所持品ID型を定義 */
 typedef int16_t OBJECT_IDX; /*!< ゲーム中のアイテムID型を定義 */
-typedef int16_t KIND_OBJECT_IDX; /*!< ゲーム中のベースアイテムID型を定義 */
 typedef int MUTATION_IDX; /*!< 突然変異のID型を定義 */
 
 typedef int32_t POSITION; /*!< ゲーム中の座標型を定義 */
@@ -101,7 +99,7 @@ typedef char GAME_TEXT; /*!< ゲーム中のテキスト型定義 */
  * @var typedef int32_t MANA_POINT
  * @brief MPとその増減量の型定義
  * @details
- * MANA_POINTはプレイヤーのMPの各地とその増減量の型である。
+ * MANA_POINTはプレイヤーのMPの各値とその増減量の型である。
  */
 typedef int32_t MANA_POINT; /*!< ゲーム中のMP型を定義 */
 

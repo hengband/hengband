@@ -58,17 +58,16 @@ void ItemEntity::copy_from(const ItemEntity *j_ptr)
 
 /*!
  * @brief オブジェクト構造体にベースアイテムを作成する
- * Prepare an object based on an object kind.
  * @param player_ptr プレイヤーへの参照ポインタ
- * @param k_idx 新たに作成したいベースアイテム情報のID
+ * @param bi_id 新たに作成したいベースアイテム情報のID
  */
-void ItemEntity::prep(KIND_OBJECT_IDX ko_idx)
+void ItemEntity::prep(short new_bi_id)
 {
-    auto *k_ptr = &baseitems_info[ko_idx];
+    auto *k_ptr = &baseitems_info[new_bi_id];
     auto old_stack_idx = this->stack_idx;
     wipe();
     this->stack_idx = old_stack_idx;
-    this->k_idx = ko_idx;
+    this->bi_id = new_bi_id;
     this->tval = k_ptr->bi_key.tval();
     this->sval = k_ptr->bi_key.sval().value();
     this->pval = k_ptr->pval;
@@ -84,7 +83,7 @@ void ItemEntity::prep(KIND_OBJECT_IDX ko_idx)
     if (k_ptr->act_idx > RandomArtActType::NONE) {
         this->activation_id = k_ptr->act_idx;
     }
-    if (baseitems_info[this->k_idx].cost <= 0) {
+    if (baseitems_info[this->bi_id].cost <= 0) {
         this->ident |= (IDENT_BROKEN);
     }
 
@@ -424,7 +423,7 @@ bool ItemEntity::is_nameless() const
 
 bool ItemEntity::is_valid() const
 {
-    return this->k_idx != 0;
+    return this->bi_id != 0;
 }
 
 bool ItemEntity::is_broken() const
@@ -449,7 +448,7 @@ bool ItemEntity::is_held_by_monster() const
  */
 bool ItemEntity::is_known() const
 {
-    return any_bits(this->ident, IDENT_KNOWN) || (baseitems_info[this->k_idx].easy_know && baseitems_info[this->k_idx].aware);
+    return any_bits(this->ident, IDENT_KNOWN) || (baseitems_info[this->bi_id].easy_know && baseitems_info[this->bi_id].aware);
 }
 
 bool ItemEntity::is_fully_known() const
@@ -463,7 +462,7 @@ bool ItemEntity::is_fully_known() const
  */
 bool ItemEntity::is_aware() const
 {
-    return baseitems_info[this->k_idx].aware;
+    return baseitems_info[this->bi_id].aware;
 }
 
 /*
@@ -471,7 +470,7 @@ bool ItemEntity::is_aware() const
  */
 bool ItemEntity::is_tried() const
 {
-    return baseitems_info[this->k_idx].tried;
+    return baseitems_info[this->bi_id].tried;
 }
 
 /*!
@@ -480,7 +479,7 @@ bool ItemEntity::is_tried() const
  */
 bool ItemEntity::is_potion() const
 {
-    return baseitems_info[this->k_idx].bi_key.tval() == ItemKindType::POTION;
+    return baseitems_info[this->bi_id].bi_key.tval() == ItemKindType::POTION;
 }
 
 /*!
@@ -697,13 +696,13 @@ bool ItemEntity::can_pile(const ItemEntity *j_ptr) const
  */
 TERM_COLOR ItemEntity::get_color() const
 {
-    const auto &baseitem = baseitems_info[this->k_idx];
+    const auto &baseitem = baseitems_info[this->bi_id];
     const auto flavor = baseitem.flavor;
     if (flavor != 0) {
         return baseitems_info[flavor].x_attr;
     }
 
-    auto has_attr = this->k_idx == 0;
+    auto has_attr = this->bi_id == 0;
     has_attr |= (this->tval != ItemKindType::CORPSE) || (this->sval != SV_CORPSE);
     has_attr |= baseitem.x_attr != TERM_DARK;
     if (has_attr) {
@@ -721,7 +720,7 @@ TERM_COLOR ItemEntity::get_color() const
  */
 char ItemEntity::get_symbol() const
 {
-    const auto &baseitem = baseitems_info[this->k_idx];
+    const auto &baseitem = baseitems_info[this->bi_id];
     const auto flavor = baseitem.flavor;
     return flavor ? baseitems_info[flavor].x_char : baseitem.x_char;
 }
@@ -762,7 +761,7 @@ int ItemEntity::get_price() const
 int ItemEntity::get_baseitem_price() const
 {
     if (this->is_aware()) {
-        return baseitems_info[this->k_idx].cost;
+        return baseitems_info[this->bi_id].cost;
     }
 
     switch (this->tval) {

@@ -78,7 +78,7 @@ bool get_object_for_search(PlayerType *player_ptr, ItemEntity **o_handle, concpt
  */
 bool get_destroyed_object_for_search(PlayerType *player_ptr, ItemEntity **o_handle, concptr *search_strp)
 {
-    if (!autopick_last_destroyed_object.k_idx) {
+    if (!autopick_last_destroyed_object.bi_id) {
         return false;
     }
 

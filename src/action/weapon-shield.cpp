@@ -57,7 +57,7 @@ void verify_equip_slot(PlayerType *player_ptr, INVENTORY_IDX item)
     }
 
     o_ptr = &player_ptr->inventory_list[INVEN_MAIN_HAND];
-    if (o_ptr->k_idx) {
+    if (o_ptr->bi_id) {
         describe_flavor(player_ptr, o_name, o_ptr, 0);
     }
 

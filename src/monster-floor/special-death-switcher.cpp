@@ -359,7 +359,7 @@ static bool make_equipment(PlayerType *player_ptr, ItemEntity *q_ptr, const BIT_
  * 最初のアイテム生成でいきなり☆が生成された場合を除き、中途半端な☆ (例：呪われている)は生成しない.
  * このルーチンで★は生成されないので、★生成フラグのキャンセルも不要
  */
-static void on_dead_random_artifact(PlayerType *player_ptr, monster_death_type *md_ptr, bool (*object_hook_pf)(KIND_OBJECT_IDX k_idx))
+static void on_dead_random_artifact(PlayerType *player_ptr, monster_death_type *md_ptr, bool (*object_hook_pf)(short bi_id))
 {
     ItemEntity forge;
     auto *q_ptr = &forge;
@@ -408,7 +408,7 @@ static void on_dead_manimani(PlayerType *player_ptr, monster_death_type *md_ptr)
     msg_print(_("どこからか声が聞こえる…「ハロー！　そして…グッドバイ！」", "Heard a voice from somewhere... 'Hello! And... good bye!'"));
 }
 
-static void drop_specific_item_on_dead(PlayerType *player_ptr, monster_death_type *md_ptr, bool (*object_hook_pf)(KIND_OBJECT_IDX k_idx))
+static void drop_specific_item_on_dead(PlayerType *player_ptr, monster_death_type *md_ptr, bool (*object_hook_pf)(short bi_id))
 {
     ItemEntity forge;
     auto *q_ptr = &forge;

@@ -276,11 +276,11 @@ bool affect_item(PlayerType *player_ptr, MONSTER_IDX who, POSITION r, POSITION y
             msg_format(_("%sは%s", "The %s%s"), o_name, note_kill);
         }
 
-        KIND_OBJECT_IDX k_idx = o_ptr->k_idx;
+        short bi_id = o_ptr->bi_id;
         bool is_potion = o_ptr->is_potion();
         delete_object_idx(player_ptr, this_o_idx);
         if (is_potion) {
-            (void)potion_smash_effect(player_ptr, who, y, x, k_idx);
+            (void)potion_smash_effect(player_ptr, who, y, x, bi_id);
 
             // 薬の破壊効果によりリストの次のアイテムが破壊された可能性があるのでリストの最初から処理をやり直す
             // 処理済みのアイテムは processed_list に登録されており、スキップされる

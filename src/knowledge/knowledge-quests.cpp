@@ -104,8 +104,8 @@ static void do_cmd_knowledge_quests_current(PlayerType *player_ptr, FILE *fff)
                     if (q_ref.reward_artifact_idx != FixedArtifactId::NONE) {
                         const auto &a_ref = artifacts_info.at(q_ref.reward_artifact_idx);
                         ItemEntity item;
-                        auto k_idx = lookup_baseitem_id(a_ref.bi_key);
-                        item.prep(k_idx);
+                        auto bi_id = lookup_baseitem_id(a_ref.bi_key);
+                        item.prep(bi_id);
                         item.fixed_artifact_idx = q_ref.reward_artifact_idx;
                         item.ident = IDENT_STORE;
                         describe_flavor(player_ptr, name, &item, OD_NAME_ONLY);

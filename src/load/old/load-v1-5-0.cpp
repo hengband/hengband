@@ -66,7 +66,7 @@ const int QUEST_ROYAL_CRYPT = 28; // 王家の墓.
  */
 void rd_item_old(ItemEntity *o_ptr)
 {
-    o_ptr->k_idx = rd_s16b();
+    o_ptr->bi_id = rd_s16b();
 
     o_ptr->iy = rd_byte();
     o_ptr->ix = rd_byte();
@@ -324,12 +324,12 @@ void rd_item_old(ItemEntity *o_ptr)
         strip_bytes(tmp32s);
     }
 
-    if ((o_ptr->k_idx >= 445) && (o_ptr->k_idx <= 479)) {
+    if ((o_ptr->bi_id >= 445) && (o_ptr->bi_id <= 479)) {
         return;
     }
 
     if (h_older_than(0, 4, 10) && (o_ptr->ego_idx == EgoType::TWILIGHT)) {
-        o_ptr->k_idx = lookup_baseitem_id({ ItemKindType::SOFT_ARMOR, SV_TWILIGHT_ROBE });
+        o_ptr->bi_id = lookup_baseitem_id({ ItemKindType::SOFT_ARMOR, SV_TWILIGHT_ROBE });
     }
 
     if (h_older_than(0, 4, 9)) {

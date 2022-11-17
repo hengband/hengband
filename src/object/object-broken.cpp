@@ -228,7 +228,7 @@ bool ObjectBreaker::can_destroy(ItemEntity *o_ptr) const
  * @param who 薬破損の主体ID(プレイヤー所持アイテムが壊れた場合0、床上のアイテムの場合モンスターID)
  * @param y 破壊時のY座標
  * @param x 破壊時のX座標
- * @param k_idx 破損した薬のアイテムID
+ * @param bi_id 破損した薬のアイテムID
  * @return 薬を浴びたモンスターが起こるならばTRUEを返す
  * @details
  * <pre>
@@ -249,13 +249,13 @@ bool ObjectBreaker::can_destroy(ItemEntity *o_ptr) const
  *    o_ptr --- pointer to the potion object.
  * </pre>
  */
-bool potion_smash_effect(PlayerType *player_ptr, MONSTER_IDX who, POSITION y, POSITION x, KIND_OBJECT_IDX k_idx)
+bool potion_smash_effect(PlayerType *player_ptr, MONSTER_IDX who, POSITION y, POSITION x, short bi_id)
 {
     int radius = 2;
     AttributeType dt = AttributeType::NONE;
     int dam = 0;
     bool angry = false;
-    const auto &k_ref = baseitems_info[k_idx];
+    const auto &k_ref = baseitems_info[bi_id];
     switch (k_ref.bi_key.sval().value()) {
     case SV_POTION_SALT_WATER:
     case SV_POTION_SLIME_MOLD:

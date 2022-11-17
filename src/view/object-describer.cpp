@@ -72,11 +72,11 @@ void inven_item_describe(PlayerType *player_ptr, INVENTORY_IDX item)
  * @brief 現在アクティブになっているウィンドウにオブジェクトの詳細を表示する /
  * Hack -- display an object kind in the current window
  * @param player_ptr プレイヤーへの参照ポインタ
- * @param k_idx ベースアイテムの参照ID
+ * @param bi_id ベースアイテムの参照ID
  * @details
  * Include list of usable spells for readible books
  */
-void display_koff(PlayerType *player_ptr, KIND_OBJECT_IDX k_idx)
+void display_koff(PlayerType *player_ptr, short bi_id)
 {
     ItemEntity forge;
     ItemEntity *q_ptr;
@@ -87,12 +87,12 @@ void display_koff(PlayerType *player_ptr, KIND_OBJECT_IDX k_idx)
         term_erase(0, y, 255);
     }
 
-    if (!k_idx) {
+    if (!bi_id) {
         return;
     }
     q_ptr = &forge;
 
-    q_ptr->prep(k_idx);
+    q_ptr->prep(bi_id);
     describe_flavor(player_ptr, o_name, q_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY | OD_STORE));
 
     term_putstr(0, 0, -1, TERM_WHITE, o_name);

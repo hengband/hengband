@@ -49,7 +49,7 @@ static void object_flags_lite(const ItemEntity *o_ptr, TrFlags &flgs)
  */
 TrFlags object_flags(const ItemEntity *o_ptr)
 {
-    auto *k_ptr = &baseitems_info[o_ptr->k_idx];
+    auto *k_ptr = &baseitems_info[o_ptr->bi_id];
 
     /* Base object */
     auto flgs = k_ptr->flags;
@@ -83,7 +83,7 @@ TrFlags object_flags(const ItemEntity *o_ptr)
 TrFlags object_flags_known(const ItemEntity *o_ptr)
 {
     bool spoil = false;
-    auto *k_ptr = &baseitems_info[o_ptr->k_idx];
+    auto *k_ptr = &baseitems_info[o_ptr->bi_id];
     TrFlags flgs{};
 
     if (!o_ptr->is_aware()) {
