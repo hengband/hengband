@@ -179,8 +179,8 @@ static PRICE repair_broken_weapon_aux(PlayerType *player_ptr, PRICE bcost)
         auto tval = (one_in_(5) ? mo_ptr->tval : ItemKindType::SWORD);
         while (true) {
             bi_id = lookup_baseitem_id({ tval });
-            const auto &bi_ref = baseitems_info[bi_id];
-            const auto sval = bi_ref.bi_key.sval();
+            const auto &baseitem = baseitems_info[bi_id];
+            const auto sval = baseitem.bi_key.sval();
             if (tval == ItemKindType::SWORD) {
                 if ((sval == SV_BROKEN_DAGGER) || (sval == SV_BROKEN_SWORD) || (sval == SV_DIAMOND_EDGE) || (sval == SV_POISON_NEEDLE)) {
                     continue;

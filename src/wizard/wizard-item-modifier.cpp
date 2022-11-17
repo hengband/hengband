@@ -263,13 +263,13 @@ static void prt_alloc(ItemKindType tval, OBJECT_SUBTYPE_VALUE sval, TERM_LEN row
                 prob = entry.prob1 * i * BASEITEM_MAX_DEPTH / (entry.level - 1);
             }
 
-            const auto &bi_ref = baseitems_info[entry.index];
+            const auto &baseitem = baseitems_info[entry.index];
             total[i] += prob / magnificant;
             total_frac += prob % magnificant;
 
             BaseitemKey bi_key(tval, sval);
-            if (bi_ref.bi_key == bi_key) {
-                home = bi_ref.level;
+            if (baseitem.bi_key == bi_key) {
+                home = baseitem.level;
                 rarity[i] += prob / magnificant;
             }
         }
