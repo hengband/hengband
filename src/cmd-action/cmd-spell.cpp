@@ -630,7 +630,7 @@ void do_cmd_browse(PlayerType *player_ptr)
     use_realm = tval2realm(o_ptr->tval);
 
     /* Track the object kind */
-    object_kind_track(player_ptr, o_ptr->k_idx);
+    object_kind_track(player_ptr, o_ptr->bi_id);
     handle_stuff(player_ptr);
 
     /* Extract spells */
@@ -801,7 +801,7 @@ void do_cmd_study(PlayerType *player_ptr)
     }
 
     /* Track the object kind */
-    object_kind_track(player_ptr, o_ptr->k_idx);
+    object_kind_track(player_ptr, o_ptr->bi_id);
     handle_stuff(player_ptr);
 
     /* Mage -- Learn a selected spell */
@@ -1036,7 +1036,7 @@ bool do_cmd_cast(PlayerType *player_ptr)
     }
 
     /* Track the object kind */
-    object_kind_track(player_ptr, o_ptr->k_idx);
+    object_kind_track(player_ptr, o_ptr->bi_id);
     handle_stuff(player_ptr);
 
     if (is_every_magic) {

@@ -214,7 +214,7 @@ void regenerate_captured_monsters(PlayerType *player_ptr)
     for (int i = 0; i < INVEN_TOTAL; i++) {
         MonsterRaceInfo *r_ptr;
         auto *o_ptr = &player_ptr->inventory_list[i];
-        if (!o_ptr->k_idx) {
+        if (!o_ptr->bi_id) {
             continue;
         }
         if (o_ptr->tval != ItemKindType::CAPTURE) {

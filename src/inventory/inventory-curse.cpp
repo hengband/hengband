@@ -181,7 +181,7 @@ static void curse_teleport(PlayerType *player_ptr)
     int i_keep = 0, count = 0;
     for (int i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
         o_ptr = &player_ptr->inventory_list[i];
-        if (!o_ptr->k_idx) {
+        if (!o_ptr->bi_id) {
             continue;
         }
 

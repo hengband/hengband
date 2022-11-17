@@ -44,7 +44,7 @@ bool screen_object(PlayerType *player_ptr, ItemEntity *o_ptr, BIT_FLAGS mode)
     int trivial_info = 0;
     auto flgs = object_flags(o_ptr);
 
-    const auto item_text = o_ptr->is_fixed_artifact() ? artifacts_info.at(o_ptr->fixed_artifact_idx).text.data() : baseitems_info[o_ptr->k_idx].text.data();
+    const auto item_text = o_ptr->is_fixed_artifact() ? artifacts_info.at(o_ptr->fixed_artifact_idx).text.data() : baseitems_info[o_ptr->bi_id].text.data();
     shape_buffer(item_text, 77 - 15, temp, sizeof(temp));
 
     int i = 0;

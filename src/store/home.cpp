@@ -109,7 +109,7 @@ static void sweep_reorder_store_item(ItemEntity *o_ptr, const int i, bool *combi
     for (int j = 0; j < i; j++) {
         ItemEntity *j_ptr;
         j_ptr = &st_ptr->stock[j];
-        if (!j_ptr->k_idx) {
+        if (!j_ptr->bi_id) {
             continue;
         }
 
@@ -143,7 +143,7 @@ static void exe_reorder_store_item(PlayerType *player_ptr, bool *flag)
     for (int i = 0; i < st_ptr->stock_num; i++) {
         ItemEntity *o_ptr;
         o_ptr = &st_ptr->stock[i];
-        if (!o_ptr->k_idx) {
+        if (!o_ptr->bi_id) {
             continue;
         }
 
@@ -196,7 +196,7 @@ bool combine_and_reorder_home(PlayerType *player_ptr, const StoreSaleType store_
         for (int i = st_ptr->stock_num - 1; i > 0; i--) {
             ItemEntity *o_ptr;
             o_ptr = &st_ptr->stock[i];
-            if (!o_ptr->k_idx) {
+            if (!o_ptr->bi_id) {
                 continue;
             }
 

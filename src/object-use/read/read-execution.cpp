@@ -108,6 +108,6 @@ void ObjectReadEntity::gain_exp_from_item_use(ItemEntity *o_ptr, bool is_identif
     }
 
     object_aware(this->player_ptr, o_ptr);
-    auto lev = baseitems_info[o_ptr->k_idx].level;
+    auto lev = baseitems_info[o_ptr->bi_id].level;
     gain_exp(this->player_ptr, (lev + (this->player_ptr->lev >> 1)) / this->player_ptr->lev);
 }

@@ -59,7 +59,7 @@ void recharge_magic_items(PlayerType *player_ptr)
 
     for (changed = false, i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
         auto *o_ptr = &player_ptr->inventory_list[i];
-        if (!o_ptr->k_idx) {
+        if (!o_ptr->bi_id) {
             continue;
         }
 
@@ -84,8 +84,8 @@ void recharge_magic_items(PlayerType *player_ptr)
      */
     for (changed = false, i = 0; i < INVEN_PACK; i++) {
         auto *o_ptr = &player_ptr->inventory_list[i];
-        auto *k_ptr = &baseitems_info[o_ptr->k_idx];
-        if (!o_ptr->k_idx) {
+        auto *k_ptr = &baseitems_info[o_ptr->bi_id];
+        if (!o_ptr->bi_id) {
             continue;
         }
 

@@ -81,7 +81,7 @@ void do_cmd_knowledge_artifacts(PlayerType *player_ptr)
 
     for (auto i = 0; i < INVEN_TOTAL; i++) {
         auto *o_ptr = &player_ptr->inventory_list[i];
-        if (!o_ptr->k_idx) {
+        if (!o_ptr->bi_id) {
             continue;
         }
         if (!o_ptr->is_fixed_artifact()) {
@@ -185,8 +185,8 @@ static void display_object_list(int col, int row, int per_page, IDX object_idx[]
     for (i = 0; i < per_page && (object_idx[object_top + i] >= 0); i++) {
         TERM_COLOR a;
         BaseitemInfo *flavor_k_ptr;
-        short k_idx = object_idx[object_top + i];
-        auto *k_ptr = &baseitems_info[k_idx];
+        short bi_id = object_idx[object_top + i];
+        auto *k_ptr = &baseitems_info[bi_id];
         TERM_COLOR attr = ((k_ptr->aware || visual_only) ? TERM_WHITE : TERM_SLATE);
         byte cursor = ((k_ptr->aware || visual_only) ? TERM_L_BLUE : TERM_BLUE);
         if (!visual_only && k_ptr->flavor) {
@@ -197,14 +197,14 @@ static void display_object_list(int col, int row, int per_page, IDX object_idx[]
 
         attr = ((i + object_top == object_cur) ? cursor : attr);
         const auto is_flavor_only = (k_ptr->flavor != 0) && (visual_only || !k_ptr->aware);
-        const auto o_name = is_flavor_only ? flavor_k_ptr->flavor_name : strip_name(k_idx);
+        const auto o_name = is_flavor_only ? flavor_k_ptr->flavor_name : strip_name(bi_id);
         c_prt(attr, o_name.data(), row + i, col);
         if (per_page == 1) {
             c_prt(attr, format("%02x/%02x", flavor_k_ptr->x_attr, flavor_k_ptr->x_char), row + i, (w_ptr->wizard || visual_only) ? 64 : 68);
         }
 
         if (w_ptr->wizard || visual_only) {
-            c_prt(attr, format("%d", k_idx), row + i, 70);
+            c_prt(attr, format("%d", bi_id), row + i, 70);
         }
 
         a = flavor_k_ptr->x_attr;
@@ -221,13 +221,13 @@ static void display_object_list(int col, int row, int per_page, IDX object_idx[]
 /*
  * Describe fake object
  */
-static void desc_obj_fake(PlayerType *player_ptr, short k_idx)
+static void desc_obj_fake(PlayerType *player_ptr, short bi_id)
 {
     ItemEntity *o_ptr;
     ItemEntity ObjectType_body;
     o_ptr = &ObjectType_body;
     o_ptr->wipe();
-    o_ptr->prep(k_idx);
+    o_ptr->prep(bi_id);
 
     o_ptr->ident |= IDENT_KNOWN;
     handle_stuff(player_ptr);

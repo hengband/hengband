@@ -293,7 +293,7 @@ bool lose_all_info(PlayerType *player_ptr)
     chg_virtue(player_ptr, V_ENLIGHTEN, -5);
     for (int i = 0; i < INVEN_TOTAL; i++) {
         auto *o_ptr = &player_ptr->inventory_list[i];
-        if ((o_ptr->k_idx == 0) || o_ptr->is_fully_known()) {
+        if ((o_ptr->bi_id == 0) || o_ptr->is_fully_known()) {
             continue;
         }
 

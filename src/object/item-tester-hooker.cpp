@@ -68,11 +68,11 @@ FuncItemTester::FuncItemTester(std::function<bool(PlayerType *, const ItemEntity
  * Check an item against the item tester info
  * @param o_ptr 判定を行いたいオブジェクト構造体参照ポインタ
  * @return アイテムが条件を満たしているならtrueを返す
- * @details 最初にk_idxが無効でないか等の共通の判定を行った後に子クラスで実装される okay_impl 関数の結果を返す
+ * @details 最初にbi_idが無効でないか等の共通の判定を行った後に子クラスで実装される okay_impl 関数の結果を返す
  */
 bool ItemTester::okay(const ItemEntity *o_ptr) const
 {
-    if (o_ptr->k_idx == 0) {
+    if (o_ptr->bi_id == 0) {
         return false;
     }
 

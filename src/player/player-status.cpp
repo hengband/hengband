@@ -212,7 +212,7 @@ WEIGHT calc_inventory_weight(PlayerType *player_ptr)
     ItemEntity *o_ptr;
     for (int i = 0; i < INVEN_TOTAL; i++) {
         o_ptr = &player_ptr->inventory_list[i];
-        if (!o_ptr->k_idx) {
+        if (!o_ptr->bi_id) {
             continue;
         }
         weight += o_ptr->weight * o_ptr->number;
@@ -333,7 +333,7 @@ static void update_bonuses(PlayerType *player_ptr)
 
     update_ability_scores(player_ptr);
     o_ptr = &player_ptr->inventory_list[INVEN_BOW];
-    if (o_ptr->k_idx) {
+    if (o_ptr->bi_id) {
         player_ptr->tval_ammo = bow_tval_ammo(o_ptr);
         player_ptr->num_fire = calc_num_fire(player_ptr, o_ptr);
     }
@@ -822,7 +822,7 @@ static void update_max_mana(PlayerType *player_ptr)
         ItemEntity *o_ptr;
         o_ptr = &player_ptr->inventory_list[INVEN_ARMS];
         auto flgs = object_flags(o_ptr);
-        if (o_ptr->k_idx && flgs.has_not(TR_FREE_ACT) && flgs.has_not(TR_DEC_MANA) && flgs.has_not(TR_EASY_SPELL) && !((flgs.has(TR_MAGIC_MASTERY)) && (o_ptr->pval > 0)) && !((flgs.has(TR_DEX)) && (o_ptr->pval > 0))) {
+        if (o_ptr->bi_id && flgs.has_not(TR_FREE_ACT) && flgs.has_not(TR_DEC_MANA) && flgs.has_not(TR_EASY_SPELL) && !((flgs.has(TR_MAGIC_MASTERY)) && (o_ptr->pval > 0)) && !((flgs.has(TR_DEX)) && (o_ptr->pval > 0))) {
             player_ptr->cumber_glove = true;
             msp = (3 * msp) / 4;
         }
@@ -1017,7 +1017,7 @@ int16_t calc_num_fire(PlayerType *player_ptr, ItemEntity *o_ptr)
     for (int i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
         ItemEntity *q_ptr;
         q_ptr = &player_ptr->inventory_list[i];
-        if (!q_ptr->k_idx) {
+        if (!q_ptr->bi_id) {
             continue;
         }
 
@@ -1037,7 +1037,7 @@ int16_t calc_num_fire(PlayerType *player_ptr, ItemEntity *o_ptr)
     }
 
     int num = 0;
-    if (o_ptr->k_idx == 0) {
+    if (o_ptr->bi_id == 0) {
         return (int16_t)num;
     }
 
@@ -1139,7 +1139,7 @@ static ACTION_SKILL_POWER calc_device_ability(PlayerType *player_ptr)
     for (int i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
         ItemEntity *o_ptr;
         o_ptr = &player_ptr->inventory_list[i];
-        if (!o_ptr->k_idx) {
+        if (!o_ptr->bi_id) {
             continue;
         }
         auto flgs = object_flags(o_ptr);
@@ -1268,7 +1268,7 @@ static ACTION_SKILL_POWER calc_search(PlayerType *player_ptr)
     for (int i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
         ItemEntity *o_ptr;
         o_ptr = &player_ptr->inventory_list[i];
-        if (!o_ptr->k_idx) {
+        if (!o_ptr->bi_id) {
             continue;
         }
         auto flgs = object_flags(o_ptr);
@@ -1319,7 +1319,7 @@ static ACTION_SKILL_POWER calc_search_freq(PlayerType *player_ptr)
     for (int i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
         ItemEntity *o_ptr;
         o_ptr = &player_ptr->inventory_list[i];
-        if (!o_ptr->k_idx) {
+        if (!o_ptr->bi_id) {
             continue;
         }
         auto flgs = object_flags(o_ptr);
@@ -1441,7 +1441,7 @@ static ACTION_SKILL_POWER calc_skill_dig(PlayerType *player_ptr)
 
     pow = 0;
 
-    if (PlayerRace(player_ptr).equals(PlayerRaceType::ENT) && !player_ptr->inventory_list[INVEN_MAIN_HAND].k_idx) {
+    if (PlayerRace(player_ptr).equals(PlayerRaceType::ENT) && !player_ptr->inventory_list[INVEN_MAIN_HAND].bi_id) {
         pow += player_ptr->lev * 10;
     }
 
@@ -1457,7 +1457,7 @@ static ACTION_SKILL_POWER calc_skill_dig(PlayerType *player_ptr)
 
     for (int i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
         o_ptr = &player_ptr->inventory_list[i];
-        if (!o_ptr->k_idx) {
+        if (!o_ptr->bi_id) {
             continue;
         }
         auto flgs = object_flags(o_ptr);
@@ -1509,7 +1509,7 @@ static int16_t calc_num_blow(PlayerType *player_ptr, int i)
     auto flgs = object_flags(o_ptr);
     PlayerClass pc(player_ptr);
     if (has_melee_weapon(player_ptr, INVEN_MAIN_HAND + i)) {
-        if (o_ptr->k_idx && !player_ptr->heavy_wield[i]) {
+        if (o_ptr->bi_id && !player_ptr->heavy_wield[i]) {
             int str_index, dex_index;
             int num = 0, wgt = 0, mul = 0, div = 0;
 
@@ -1681,7 +1681,7 @@ static int16_t calc_to_magic_chance(PlayerType *player_ptr)
     for (int i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
         ItemEntity *o_ptr;
         o_ptr = &player_ptr->inventory_list[i];
-        if (!o_ptr->k_idx) {
+        if (!o_ptr->bi_id) {
             continue;
         }
 
@@ -1706,7 +1706,7 @@ static ARMOUR_CLASS calc_base_ac(PlayerType *player_ptr)
     for (int i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
         ItemEntity *o_ptr;
         o_ptr = &player_ptr->inventory_list[i];
-        if (!o_ptr->k_idx) {
+        if (!o_ptr->bi_id) {
             continue;
         }
         ac += o_ptr->ac;
@@ -1757,7 +1757,7 @@ static ARMOUR_CLASS calc_to_ac(PlayerType *player_ptr, bool is_real_value)
         ItemEntity *o_ptr;
         o_ptr = &player_ptr->inventory_list[i];
         auto flags = object_flags(o_ptr);
-        if (!o_ptr->k_idx) {
+        if (!o_ptr->bi_id) {
             continue;
         }
         if (is_real_value || o_ptr->is_known()) {
@@ -1811,22 +1811,22 @@ static ARMOUR_CLASS calc_to_ac(PlayerType *player_ptr, bool is_real_value)
     }
 
     if (pc.is_martial_arts_pro() && !heavy_armor(player_ptr)) {
-        if (!(player_ptr->inventory_list[INVEN_BODY].k_idx)) {
+        if (!(player_ptr->inventory_list[INVEN_BODY].bi_id)) {
             ac += (player_ptr->lev * 3) / 2;
         }
-        if (!(player_ptr->inventory_list[INVEN_OUTER].k_idx) && (player_ptr->lev > 15)) {
+        if (!(player_ptr->inventory_list[INVEN_OUTER].bi_id) && (player_ptr->lev > 15)) {
             ac += ((player_ptr->lev - 13) / 3);
         }
-        if (!(player_ptr->inventory_list[INVEN_SUB_HAND].k_idx) && (player_ptr->lev > 10)) {
+        if (!(player_ptr->inventory_list[INVEN_SUB_HAND].bi_id) && (player_ptr->lev > 10)) {
             ac += ((player_ptr->lev - 8) / 3);
         }
-        if (!(player_ptr->inventory_list[INVEN_HEAD].k_idx) && (player_ptr->lev > 4)) {
+        if (!(player_ptr->inventory_list[INVEN_HEAD].bi_id) && (player_ptr->lev > 4)) {
             ac += (player_ptr->lev - 2) / 3;
         }
-        if (!(player_ptr->inventory_list[INVEN_ARMS].k_idx)) {
+        if (!(player_ptr->inventory_list[INVEN_ARMS].bi_id)) {
             ac += (player_ptr->lev / 2);
         }
-        if (!(player_ptr->inventory_list[INVEN_FEET].k_idx)) {
+        if (!(player_ptr->inventory_list[INVEN_FEET].bi_id)) {
             ac += (player_ptr->lev / 3);
         }
     }
@@ -1838,7 +1838,7 @@ static ARMOUR_CLASS calc_to_ac(PlayerType *player_ptr, bool is_real_value)
 
         for (int i = INVEN_MAIN_HAND; i <= INVEN_FEET; i++) {
             auto *o_ptr = &player_ptr->inventory_list[i];
-            if (!o_ptr->k_idx) {
+            if (!o_ptr->bi_id) {
                 continue;
             }
             if (!o_ptr->is_armour()) {
@@ -1884,7 +1884,7 @@ static ARMOUR_CLASS calc_to_ac(PlayerType *player_ptr, bool is_real_value)
     }
 
     if (pc.equals(PlayerClassType::NINJA)) {
-        if ((!player_ptr->inventory_list[INVEN_MAIN_HAND].k_idx || can_attack_with_main_hand(player_ptr)) && (!player_ptr->inventory_list[INVEN_SUB_HAND].k_idx || can_attack_with_sub_hand(player_ptr))) {
+        if ((!player_ptr->inventory_list[INVEN_MAIN_HAND].bi_id || can_attack_with_main_hand(player_ptr)) && (!player_ptr->inventory_list[INVEN_SUB_HAND].bi_id || can_attack_with_sub_hand(player_ptr))) {
             ac += player_ptr->lev / 2 + 5;
         }
     }
@@ -1997,7 +1997,7 @@ void put_equipment_warning(PlayerType *player_ptr)
     if (player_ptr->old_heavy_shoot != heavy_shoot) {
         if (heavy_shoot) {
             msg_print(_("こんな重い弓を装備しているのは大変だ。", "You have trouble wielding such a heavy bow."));
-        } else if (player_ptr->inventory_list[INVEN_BOW].k_idx) {
+        } else if (player_ptr->inventory_list[INVEN_BOW].bi_id) {
             msg_print(_("この弓なら装備していても辛くない。", "You have no trouble wielding your bow."));
         } else {
             msg_print(_("重い弓を装備からはずして体が楽になった。", "You feel relieved to put down your heavy bow."));
@@ -2143,7 +2143,7 @@ static short calc_to_damage(PlayerType *player_ptr, INVENTORY_IDX slot, bool is_
     for (int i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
         int bonus_to_d = 0;
         o_ptr = &player_ptr->inventory_list[i];
-        if (!o_ptr->k_idx || o_ptr->tval == ItemKindType::CAPTURE || (i == INVEN_MAIN_HAND && has_melee_weapon(player_ptr, i)) || (i == INVEN_SUB_HAND && has_melee_weapon(player_ptr, i)) || i == INVEN_BOW) {
+        if (!o_ptr->bi_id || o_ptr->tval == ItemKindType::CAPTURE || (i == INVEN_MAIN_HAND && has_melee_weapon(player_ptr, i)) || (i == INVEN_SUB_HAND && has_melee_weapon(player_ptr, i)) || i == INVEN_BOW) {
             continue;
         }
 
@@ -2376,7 +2376,7 @@ static short calc_to_hit(PlayerType *player_ptr, INVENTORY_IDX slot, bool is_rea
         auto *o_ptr = &player_ptr->inventory_list[i];
 
         /* Ignore empty hands, handed weapons, bows and capture balls */
-        if (!o_ptr->k_idx || o_ptr->tval == ItemKindType::CAPTURE || (i == INVEN_MAIN_HAND && has_melee_weapon(player_ptr, i)) || (i == INVEN_SUB_HAND && has_melee_weapon(player_ptr, i)) || i == INVEN_BOW) {
+        if (!o_ptr->bi_id || o_ptr->tval == ItemKindType::CAPTURE || (i == INVEN_MAIN_HAND && has_melee_weapon(player_ptr, i)) || (i == INVEN_SUB_HAND && has_melee_weapon(player_ptr, i)) || i == INVEN_BOW) {
             continue;
         }
 
@@ -2469,7 +2469,7 @@ static int16_t calc_to_hit_bow(PlayerType *player_ptr, bool is_real_value)
     {
         ItemEntity *o_ptr;
         o_ptr = &player_ptr->inventory_list[INVEN_BOW];
-        if (o_ptr->k_idx) {
+        if (o_ptr->bi_id) {
             if (o_ptr->curse_flags.has(CurseTraitType::LOW_MELEE)) {
                 if (o_ptr->curse_flags.has(CurseTraitType::HEAVY_CURSE)) {
                     pow -= 15;
@@ -2500,8 +2500,8 @@ static int16_t calc_to_hit_bow(PlayerType *player_ptr, bool is_real_value)
         pow += 2 * (calc_bow_weight_limit(player_ptr) - o_ptr->weight / 10);
     }
 
-    if (o_ptr->k_idx) {
-        if (o_ptr->k_idx && !is_heavy_shoot(player_ptr, &player_ptr->inventory_list[INVEN_BOW])) {
+    if (o_ptr->bi_id) {
+        if (o_ptr->bi_id && !is_heavy_shoot(player_ptr, &player_ptr->inventory_list[INVEN_BOW])) {
             if (PlayerClass(player_ptr).equals(PlayerClassType::SNIPER) && (player_ptr->tval_ammo == ItemKindType::BOLT)) {
                 pow += (10 + (player_ptr->lev / 5));
             }
@@ -2512,7 +2512,7 @@ static int16_t calc_to_hit_bow(PlayerType *player_ptr, bool is_real_value)
     for (int i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
         int bonus_to_h;
         o_ptr = &player_ptr->inventory_list[i];
-        if (!o_ptr->k_idx || o_ptr->tval == ItemKindType::CAPTURE || (i == INVEN_MAIN_HAND && has_melee_weapon(player_ptr, i)) || (i == INVEN_SUB_HAND && has_melee_weapon(player_ptr, i)) || i == INVEN_BOW) {
+        if (!o_ptr->bi_id || o_ptr->tval == ItemKindType::CAPTURE || (i == INVEN_MAIN_HAND && has_melee_weapon(player_ptr, i)) || (i == INVEN_SUB_HAND && has_melee_weapon(player_ptr, i)) || i == INVEN_BOW) {
             continue;
         }
 
@@ -2542,7 +2542,7 @@ static int16_t calc_to_damage_misc(PlayerType *player_ptr)
 
     for (int i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
         o_ptr = &player_ptr->inventory_list[i];
-        if (!o_ptr->k_idx) {
+        if (!o_ptr->bi_id) {
             continue;
         }
 
@@ -2573,7 +2573,7 @@ static int16_t calc_to_hit_misc(PlayerType *player_ptr)
 
     for (int i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
         o_ptr = &player_ptr->inventory_list[i];
-        if (!o_ptr->k_idx) {
+        if (!o_ptr->bi_id) {
             continue;
         }
 
@@ -2743,7 +2743,7 @@ bool player_has_no_spellbooks(PlayerType *player_ptr)
     ItemEntity *o_ptr;
     for (int i = 0; i < INVEN_PACK; i++) {
         o_ptr = &player_ptr->inventory_list[i];
-        if (o_ptr->k_idx && check_book_realm(player_ptr, o_ptr->tval, o_ptr->sval)) {
+        if (o_ptr->bi_id && check_book_realm(player_ptr, o_ptr->tval, o_ptr->sval)) {
             return false;
         }
     }
@@ -2751,7 +2751,7 @@ bool player_has_no_spellbooks(PlayerType *player_ptr)
     auto *floor_ptr = player_ptr->current_floor_ptr;
     for (const auto this_o_idx : floor_ptr->grid_array[player_ptr->y][player_ptr->x].o_idx_list) {
         o_ptr = &floor_ptr->o_list[this_o_idx];
-        if (o_ptr->k_idx && any_bits(o_ptr->marked, OM_FOUND) && check_book_realm(player_ptr, o_ptr->tval, o_ptr->sval)) {
+        if (o_ptr->bi_id && any_bits(o_ptr->marked, OM_FOUND) && check_book_realm(player_ptr, o_ptr->tval, o_ptr->sval)) {
             return false;
         }
     }

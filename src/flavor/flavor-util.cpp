@@ -18,7 +18,7 @@ flavor_type *initialize_flavor_type(flavor_type *flavor_ptr, char *buf, ItemEnti
     flavor_ptr->buf = buf;
     flavor_ptr->o_ptr = o_ptr;
     flavor_ptr->mode = mode;
-    flavor_ptr->kindname = baseitems_info[o_ptr->k_idx].name.data();
+    flavor_ptr->kindname = baseitems_info[o_ptr->bi_id].name.data();
     flavor_ptr->basenm = flavor_ptr->kindname;
     flavor_ptr->modstr = "";
     flavor_ptr->aware = false;
@@ -32,7 +32,7 @@ flavor_type *initialize_flavor_type(flavor_type *flavor_ptr, char *buf, ItemEnti
     flavor_ptr->b2 = ']';
     flavor_ptr->c1 = '{';
     flavor_ptr->c2 = '}';
-    flavor_ptr->k_ptr = &baseitems_info[o_ptr->k_idx];
+    flavor_ptr->k_ptr = &baseitems_info[o_ptr->bi_id];
     flavor_ptr->flavor_k_ptr = &baseitems_info[flavor_ptr->k_ptr->flavor];
     return flavor_ptr;
 }
@@ -194,7 +194,7 @@ char *get_ability_abbreviation(char *short_flavor, ItemEntity *o_ptr, bool kanji
     char *prev_ptr = short_flavor;
     auto flgs = object_flags(o_ptr);
     if (!all) {
-        auto *k_ptr = &baseitems_info[o_ptr->k_idx];
+        auto *k_ptr = &baseitems_info[o_ptr->bi_id];
         flgs.reset(k_ptr->flags);
 
         if (o_ptr->is_fixed_artifact()) {

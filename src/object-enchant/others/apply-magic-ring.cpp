@@ -228,7 +228,7 @@ void RingEnchanter::give_ego_index()
 {
     while (!this->o_ptr->is_ego()) {
         int tmp = m_bonus(10, this->level);
-        auto *k_ptr = &baseitems_info[this->o_ptr->k_idx];
+        auto *k_ptr = &baseitems_info[this->o_ptr->bi_id];
         switch (randint1(28)) {
         case 1:
         case 2:
@@ -501,7 +501,7 @@ void RingEnchanter::give_cursed()
     }
 
     while (!this->o_ptr->is_ego()) {
-        auto *k_ptr = &baseitems_info[this->o_ptr->k_idx];
+        auto *k_ptr = &baseitems_info[this->o_ptr->bi_id];
         switch (randint1(5)) {
         case 1:
             if (k_ptr->flags.has(TR_DRAIN_EXP)) {

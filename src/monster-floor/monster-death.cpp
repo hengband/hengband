@@ -200,15 +200,15 @@ static short drop_dungeon_final_artifact(PlayerType *player_ptr, monster_death_t
 {
     const auto &dungeon = dungeons_info[player_ptr->dungeon_idx];
     const auto has_reward = dungeon.final_object > 0;
-    const auto k_idx = has_reward ? dungeon.final_object : lookup_baseitem_id({ ItemKindType::SCROLL, SV_SCROLL_ACQUIREMENT });
+    const auto bi_id = has_reward ? dungeon.final_object : lookup_baseitem_id({ ItemKindType::SCROLL, SV_SCROLL_ACQUIREMENT });
     if (dungeon.final_artifact == FixedArtifactId::NONE) {
-        return k_idx;
+        return bi_id;
     }
 
     const auto a_idx = dungeon.final_artifact;
     auto &a_ref = artifacts_info.at(a_idx);
     if (a_ref.is_generated) {
-        return k_idx;
+        return bi_id;
     }
 
     if (create_named_art(player_ptr, a_idx, md_ptr->md_y, md_ptr->md_x)) {
@@ -217,7 +217,7 @@ static short drop_dungeon_final_artifact(PlayerType *player_ptr, monster_death_t
         }
     }
 
-    return dungeon.final_object ? k_idx : 0;
+    return dungeon.final_object ? bi_id : 0;
 }
 
 static void drop_artifacts(PlayerType *player_ptr, monster_death_type *md_ptr)
@@ -231,11 +231,11 @@ static void drop_artifacts(PlayerType *player_ptr, monster_death_type *md_ptr)
         return;
     }
 
-    short k_idx = drop_dungeon_final_artifact(player_ptr, md_ptr);
-    if (k_idx != 0) {
+    short bi_id = drop_dungeon_final_artifact(player_ptr, md_ptr);
+    if (bi_id != 0) {
         ItemEntity forge;
         auto *q_ptr = &forge;
-        q_ptr->prep(k_idx);
+        q_ptr->prep(bi_id);
         ItemMagicApplier(player_ptr, q_ptr, player_ptr->current_floor_ptr->object_level, AM_NO_FIXED_ART | AM_GOOD).execute();
         (void)drop_near(player_ptr, q_ptr, -1, md_ptr->md_y, md_ptr->md_x);
     }

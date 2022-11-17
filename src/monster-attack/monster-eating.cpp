@@ -143,7 +143,7 @@ void process_eat_item(PlayerType *player_ptr, MonsterAttackPlayer *monap_ptr)
         OBJECT_IDX o_idx;
         INVENTORY_IDX i_idx = (INVENTORY_IDX)randint0(INVEN_PACK);
         monap_ptr->o_ptr = &player_ptr->inventory_list[i_idx];
-        if (!monap_ptr->o_ptr->k_idx) {
+        if (!monap_ptr->o_ptr->bi_id) {
             continue;
         }
 
@@ -173,7 +173,7 @@ void process_eat_food(PlayerType *player_ptr, MonsterAttackPlayer *monap_ptr)
     for (int i = 0; i < 10; i++) {
         INVENTORY_IDX i_idx = (INVENTORY_IDX)randint0(INVEN_PACK);
         monap_ptr->o_ptr = &player_ptr->inventory_list[i_idx];
-        if (!monap_ptr->o_ptr->k_idx) {
+        if (!monap_ptr->o_ptr->bi_id) {
             continue;
         }
 
@@ -228,7 +228,7 @@ bool process_un_power(PlayerType *player_ptr, MonsterAttackPlayer *monap_ptr)
     }
 
     bool is_magic_mastery = has_magic_mastery(player_ptr) != 0;
-    BaseitemInfo *kind_ptr = &baseitems_info[monap_ptr->o_ptr->k_idx];
+    BaseitemInfo *kind_ptr = &baseitems_info[monap_ptr->o_ptr->bi_id];
     PARAMETER_VALUE pval = kind_ptr->pval;
     DEPTH level = monap_ptr->rlev;
     auto drain = is_magic_mastery ? std::min<short>(pval, pval * level / 400 + pval * randint1(level) / 400) : pval;

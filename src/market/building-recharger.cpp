@@ -48,7 +48,7 @@ void building_recharge(PlayerType *player_ptr)
     }
 
     BaseitemInfo *k_ptr;
-    k_ptr = &baseitems_info[o_ptr->k_idx];
+    k_ptr = &baseitems_info[o_ptr->bi_id];
 
     /*
      * We don't want to give the player free info about
@@ -75,7 +75,7 @@ void building_recharge(PlayerType *player_ptr)
         return;
     }
 
-    DEPTH lev = baseitems_info[o_ptr->k_idx].level;
+    DEPTH lev = baseitems_info[o_ptr->bi_id].level;
     PRICE price;
     if (o_ptr->tval == ItemKindType::ROD) {
         if (o_ptr->timeout > 0) {
@@ -86,10 +86,10 @@ void building_recharge(PlayerType *player_ptr)
             return;
         }
     } else if (o_ptr->tval == ItemKindType::STAFF) {
-        price = (baseitems_info[o_ptr->k_idx].cost / 10) * o_ptr->number;
+        price = (baseitems_info[o_ptr->bi_id].cost / 10) * o_ptr->number;
         price = std::max(10, price);
     } else {
-        price = (baseitems_info[o_ptr->k_idx].cost / 10);
+        price = (baseitems_info[o_ptr->bi_id].cost / 10);
         price = std::max(10, price);
     }
 
@@ -195,9 +195,9 @@ void building_recharge_all(PlayerType *player_ptr)
             total_cost += 50;
         }
 
-        DEPTH lev = baseitems_info[o_ptr->k_idx].level;
+        DEPTH lev = baseitems_info[o_ptr->bi_id].level;
         BaseitemInfo *k_ptr;
-        k_ptr = &baseitems_info[o_ptr->k_idx];
+        k_ptr = &baseitems_info[o_ptr->bi_id];
 
         switch (o_ptr->tval) {
         case ItemKindType::ROD:
@@ -205,13 +205,13 @@ void building_recharge_all(PlayerType *player_ptr)
             break;
 
         case ItemKindType::STAFF:
-            price = (baseitems_info[o_ptr->k_idx].cost / 10) * o_ptr->number;
+            price = (baseitems_info[o_ptr->bi_id].cost / 10) * o_ptr->number;
             price = std::max(10, price);
             price = (k_ptr->pval - o_ptr->pval) * price;
             break;
 
         case ItemKindType::WAND:
-            price = (baseitems_info[o_ptr->k_idx].cost / 10);
+            price = (baseitems_info[o_ptr->bi_id].cost / 10);
             price = std::max(10, price);
             price = (o_ptr->number * k_ptr->pval - o_ptr->pval) * price;
             break;
@@ -245,7 +245,7 @@ void building_recharge_all(PlayerType *player_ptr)
         ItemEntity *o_ptr;
         o_ptr = &player_ptr->inventory_list[i];
         BaseitemInfo *k_ptr;
-        k_ptr = &baseitems_info[o_ptr->k_idx];
+        k_ptr = &baseitems_info[o_ptr->bi_id];
 
         if ((o_ptr->tval < ItemKindType::STAFF) || (o_ptr->tval > ItemKindType::ROD)) {
             continue;

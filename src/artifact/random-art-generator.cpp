@@ -43,8 +43,8 @@
 
 static bool weakening_artifact(ItemEntity *o_ptr)
 {
-    const auto k_idx = lookup_baseitem_id({ o_ptr->tval, o_ptr->sval });
-    auto *k_ptr = &baseitems_info[k_idx];
+    const auto bi_id = lookup_baseitem_id({ o_ptr->tval, o_ptr->sval });
+    auto *k_ptr = &baseitems_info[bi_id];
     auto flgs = object_flags(o_ptr);
 
     if (flgs.has(TR_KILL_EVIL)) {
@@ -435,7 +435,7 @@ bool become_random_artifact(PlayerType *player_ptr, ItemEntity *o_ptr, bool a_sc
     o_ptr->artifact_bias = 0;
     o_ptr->fixed_artifact_idx = FixedArtifactId::NONE;
     o_ptr->ego_idx = EgoType::NONE;
-    o_ptr->art_flags |= baseitems_info[o_ptr->k_idx].flags;
+    o_ptr->art_flags |= baseitems_info[o_ptr->bi_id].flags;
 
     bool has_pval = o_ptr->pval != 0;
     decide_warrior_bias(player_ptr, o_ptr, a_scroll);

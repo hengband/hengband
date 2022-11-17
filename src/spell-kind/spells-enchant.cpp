@@ -144,7 +144,7 @@ bool mundane_spell(PlayerType *player_ptr, bool only_equip)
     byte marked = o_ptr->marked;
     uint16_t inscription = o_ptr->inscription;
 
-    o_ptr->prep(o_ptr->k_idx);
+    o_ptr->prep(o_ptr->bi_id);
 
     o_ptr->iy = iy;
     o_ptr->ix = ix;

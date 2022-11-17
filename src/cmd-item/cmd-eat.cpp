@@ -238,7 +238,7 @@ void exe_eat_food(PlayerType *player_ptr, INVENTORY_IDX item)
     PlayerEnergy(player_ptr).set_player_turn_energy(100);
 
     /* Object level */
-    int lev = baseitems_info[o_ptr->k_idx].level;
+    int lev = baseitems_info[o_ptr->bi_id].level;
 
     /* Identity not known yet */
     int ident = exe_eat_food_type_object(player_ptr, o_ptr);

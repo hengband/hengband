@@ -223,10 +223,10 @@ int16_t wield_slot(PlayerType *player_ptr, const ItemEntity *o_ptr)
     case ItemKindType::HAFTED:
     case ItemKindType::POLEARM:
     case ItemKindType::SWORD: {
-        if (!player_ptr->inventory_list[INVEN_MAIN_HAND].k_idx) {
+        if (!player_ptr->inventory_list[INVEN_MAIN_HAND].bi_id) {
             return INVEN_MAIN_HAND;
         }
-        if (player_ptr->inventory_list[INVEN_SUB_HAND].k_idx) {
+        if (player_ptr->inventory_list[INVEN_SUB_HAND].bi_id) {
             return INVEN_MAIN_HAND;
         }
         return INVEN_SUB_HAND;
@@ -234,10 +234,10 @@ int16_t wield_slot(PlayerType *player_ptr, const ItemEntity *o_ptr)
     case ItemKindType::CAPTURE:
     case ItemKindType::CARD:
     case ItemKindType::SHIELD: {
-        if (!player_ptr->inventory_list[INVEN_SUB_HAND].k_idx) {
+        if (!player_ptr->inventory_list[INVEN_SUB_HAND].bi_id) {
             return INVEN_SUB_HAND;
         }
-        if (player_ptr->inventory_list[INVEN_MAIN_HAND].k_idx) {
+        if (player_ptr->inventory_list[INVEN_MAIN_HAND].bi_id) {
             return INVEN_SUB_HAND;
         }
         return INVEN_MAIN_HAND;
@@ -246,7 +246,7 @@ int16_t wield_slot(PlayerType *player_ptr, const ItemEntity *o_ptr)
         return INVEN_BOW;
     }
     case ItemKindType::RING: {
-        if (!player_ptr->inventory_list[INVEN_MAIN_RING].k_idx) {
+        if (!player_ptr->inventory_list[INVEN_MAIN_RING].bi_id) {
             return INVEN_MAIN_RING;
         }
 

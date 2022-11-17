@@ -38,7 +38,7 @@ static errr rd_inventory(PlayerType *player_ptr)
 
         ItemEntity item;
         item_loader->rd_item(&item);
-        if (!item.k_idx) {
+        if (!item.bi_id) {
             return 53;
         }
 

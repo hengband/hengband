@@ -43,7 +43,7 @@ COMMAND_CODE show_inventory(PlayerType *player_ptr, int target_item, BIT_FLAGS m
     int len = wid - col - 1;
     for (i = 0; i < INVEN_PACK; i++) {
         o_ptr = &player_ptr->inventory_list[i];
-        if (!o_ptr->k_idx) {
+        if (!o_ptr->bi_id) {
             continue;
         }
 
@@ -153,7 +153,7 @@ void display_inventory(PlayerType *player_ptr, const ItemTester &item_tester)
 
     for (i = 0; i < INVEN_PACK; i++) {
         auto o_ptr = &player_ptr->inventory_list[i];
-        if (!o_ptr->k_idx) {
+        if (!o_ptr->bi_id) {
             continue;
         }
         z = i + 1;

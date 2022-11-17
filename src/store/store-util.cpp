@@ -49,7 +49,7 @@ void store_item_optimize(INVENTORY_IDX item)
 {
     ItemEntity *o_ptr;
     o_ptr = &st_ptr->stock[item];
-    if ((o_ptr->k_idx == 0) || (o_ptr->number != 0)) {
+    if ((o_ptr->bi_id == 0) || (o_ptr->number != 0)) {
         return;
     }
 
@@ -104,7 +104,7 @@ std::vector<PARAMETER_VALUE> store_same_magic_device_pvals(ItemEntity *j_ptr)
         if (o_ptr == j_ptr) {
             continue;
         }
-        if (o_ptr->k_idx != j_ptr->k_idx) {
+        if (o_ptr->bi_id != j_ptr->bi_id) {
             continue;
         }
         if (o_ptr->tval != ItemKindType::STAFF && o_ptr->tval != ItemKindType::WAND) {
@@ -132,7 +132,7 @@ bool store_object_similar(ItemEntity *o_ptr, ItemEntity *j_ptr)
         return false;
     }
 
-    if (o_ptr->k_idx != j_ptr->k_idx) {
+    if (o_ptr->bi_id != j_ptr->bi_id) {
         return false;
     }
 
@@ -212,7 +212,7 @@ bool store_object_similar(ItemEntity *o_ptr, ItemEntity *j_ptr)
  */
 static void store_object_absorb(ItemEntity *o_ptr, ItemEntity *j_ptr)
 {
-    int max_num = (o_ptr->tval == ItemKindType::ROD) ? std::min(99, MAX_SHORT / baseitems_info[o_ptr->k_idx].pval) : 99;
+    int max_num = (o_ptr->tval == ItemKindType::ROD) ? std::min(99, MAX_SHORT / baseitems_info[o_ptr->bi_id].pval) : 99;
     int total = o_ptr->number + j_ptr->number;
     int diff = (total > max_num) ? total - max_num : 0;
     o_ptr->number = (total > max_num) ? max_num : total;

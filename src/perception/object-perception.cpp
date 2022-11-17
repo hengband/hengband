@@ -46,7 +46,7 @@ void object_aware(PlayerType *player_ptr, const ItemEntity *o_ptr)
 {
     const bool is_already_awared = o_ptr->is_aware();
 
-    baseitems_info[o_ptr->k_idx].aware = true;
+    baseitems_info[o_ptr->bi_id].aware = true;
 
     // 以下、playrecordに記録しない場合はreturnする
     if (!record_ident) {
@@ -58,7 +58,7 @@ void object_aware(PlayerType *player_ptr, const ItemEntity *o_ptr)
     }
 
     // アーティファクト専用ベースアイテムは記録しない
-    if (baseitems_info[o_ptr->k_idx].gen_flags.has(ItemGenerationTraitType::INSTA_ART)) {
+    if (baseitems_info[o_ptr->bi_id].gen_flags.has(ItemGenerationTraitType::INSTA_ART)) {
         return;
     }
 
@@ -88,5 +88,5 @@ void object_aware(PlayerType *player_ptr, const ItemEntity *o_ptr)
  */
 void object_tried(const ItemEntity *o_ptr)
 {
-    baseitems_info[o_ptr->k_idx].tried = true;
+    baseitems_info[o_ptr->bi_id].tried = true;
 }

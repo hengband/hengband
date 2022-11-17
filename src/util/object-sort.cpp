@@ -25,7 +25,7 @@
 bool object_sort_comp(PlayerType *player_ptr, ItemEntity *o_ptr, int32_t o_value, ItemEntity *j_ptr)
 {
     int o_type, j_type;
-    if (!j_ptr->k_idx) {
+    if (!j_ptr->bi_id) {
         return true;
     }
 

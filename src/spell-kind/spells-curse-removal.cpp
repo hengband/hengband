@@ -21,7 +21,7 @@ static int exe_curse_removal(PlayerType *player_ptr, int all)
     int cnt = 0;
     for (int i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
         auto *o_ptr = &player_ptr->inventory_list[i];
-        if (!o_ptr->k_idx) {
+        if (!o_ptr->bi_id) {
             continue;
         }
         if (!o_ptr->is_cursed()) {

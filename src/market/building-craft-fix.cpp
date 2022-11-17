@@ -203,13 +203,13 @@ static PRICE repair_broken_weapon_aux(PlayerType *player_ptr, PRICE bcost)
         }
     }
 
-    auto dd_bonus = o_ptr->dd - baseitems_info[o_ptr->k_idx].dd;
-    auto ds_bonus = o_ptr->ds - baseitems_info[o_ptr->k_idx].ds;
-    dd_bonus += mo_ptr->dd - baseitems_info[mo_ptr->k_idx].dd;
-    ds_bonus += mo_ptr->ds - baseitems_info[mo_ptr->k_idx].ds;
+    auto dd_bonus = o_ptr->dd - baseitems_info[o_ptr->bi_id].dd;
+    auto ds_bonus = o_ptr->ds - baseitems_info[o_ptr->bi_id].ds;
+    dd_bonus += mo_ptr->dd - baseitems_info[mo_ptr->bi_id].dd;
+    ds_bonus += mo_ptr->ds - baseitems_info[mo_ptr->bi_id].ds;
 
     const auto &k_ref = baseitems_info[bi_id];
-    o_ptr->k_idx = bi_id;
+    o_ptr->bi_id = bi_id;
     o_ptr->weight = k_ref.weight;
     o_ptr->tval = k_ref.bi_key.tval();
     o_ptr->sval = k_ref.bi_key.sval().value();

@@ -124,7 +124,7 @@ bool get_tag(PlayerType *player_ptr, COMMAND_CODE *cp, char tag, BIT_FLAGS mode,
 
     for (COMMAND_CODE i = start; i <= end; i++) {
         auto *o_ptr = &player_ptr->inventory_list[i];
-        if ((o_ptr->k_idx == 0) || (o_ptr->inscription == 0)) {
+        if ((o_ptr->bi_id == 0) || (o_ptr->inscription == 0)) {
             continue;
         }
 
@@ -149,7 +149,7 @@ bool get_tag(PlayerType *player_ptr, COMMAND_CODE *cp, char tag, BIT_FLAGS mode,
 
     for (COMMAND_CODE i = start; i <= end; i++) {
         auto *o_ptr = &player_ptr->inventory_list[i];
-        if ((o_ptr->k_idx == 0) || (o_ptr->inscription == 0)) {
+        if ((o_ptr->bi_id == 0) || (o_ptr->inscription == 0)) {
             continue;
         }
 
@@ -247,7 +247,7 @@ INVENTORY_IDX label_to_equipment(PlayerType *player_ptr, int c)
         return is_ring_slot(i) ? i : -1;
     }
 
-    if (!player_ptr->inventory_list[i].k_idx) {
+    if (!player_ptr->inventory_list[i].bi_id) {
         return -1;
     }
 
@@ -266,7 +266,7 @@ INVENTORY_IDX label_to_inventory(PlayerType *player_ptr, int c)
 {
     INVENTORY_IDX i = (INVENTORY_IDX)(islower(c) ? A2I(c) : -1);
 
-    if ((i < 0) || (i > INVEN_PACK) || (player_ptr->inventory_list[i].k_idx == 0)) {
+    if ((i < 0) || (i > INVEN_PACK) || (player_ptr->inventory_list[i].bi_id == 0)) {
         return -1;
     }
 

@@ -94,7 +94,7 @@ static const std::array<AmuseDefinition, 13> amuse_info = { {
     { { ItemKindType::SCROLL, SV_SCROLL_AMUSEMENT }, 10, AmusementFlagType::NOTHING },
 } };
 
-static std::optional<FixedArtifactId> sweep_amusement_artifact(const bool insta_art, const short k_idx)
+static std::optional<FixedArtifactId> sweep_amusement_artifact(const bool insta_art, const short bi_id)
 {
     for (const auto &[a_idx, a_ref] : artifacts_info) {
         if (a_idx == FixedArtifactId::NONE) {
@@ -105,7 +105,7 @@ static std::optional<FixedArtifactId> sweep_amusement_artifact(const bool insta_
             continue;
         }
 
-        if (a_ref.bi_key != baseitems_info[k_idx].bi_key) {
+        if (a_ref.bi_key != baseitems_info[bi_id].bi_key) {
             continue;
         }
 
@@ -135,24 +135,24 @@ void generate_amusement(PlayerType *player_ptr, int num, bool known)
     while (num > 0) {
         auto am_ptr = pt.pick_one_at_random();
 
-        const auto k_idx = lookup_baseitem_id(am_ptr->key);
-        if (k_idx == 0) {
+        const auto bi_id = lookup_baseitem_id(am_ptr->key);
+        if (bi_id == 0) {
             continue;
         }
 
-        const auto insta_art = baseitems_info[k_idx].gen_flags.has(ItemGenerationTraitType::INSTA_ART);
+        const auto insta_art = baseitems_info[bi_id].gen_flags.has(ItemGenerationTraitType::INSTA_ART);
         const auto flag = am_ptr->flag;
         const auto fixed_art = flag == AmusementFlagType::FIXED_ART;
         std::optional<FixedArtifactId> opt_a_idx(std::nullopt);
         if (insta_art || fixed_art) {
-            opt_a_idx = sweep_amusement_artifact(insta_art, k_idx);
+            opt_a_idx = sweep_amusement_artifact(insta_art, bi_id);
             if (!opt_a_idx.has_value()) {
                 continue;
             }
         }
 
         ItemEntity item;
-        item.prep(k_idx);
+        item.prep(bi_id);
         if (opt_a_idx.has_value()) {
             item.fixed_artifact_idx = opt_a_idx.value();
         }
@@ -230,7 +230,7 @@ bool curse_armor(PlayerType *player_ptr)
     ItemEntity *o_ptr;
     o_ptr = &player_ptr->inventory_list[INVEN_BODY];
 
-    if (!o_ptr->k_idx) {
+    if (!o_ptr->bi_id) {
         return false;
     }
 
@@ -285,7 +285,7 @@ bool curse_armor(PlayerType *player_ptr)
  */
 bool curse_weapon_object(PlayerType *player_ptr, bool force, ItemEntity *o_ptr)
 {
-    if (!o_ptr->k_idx) {
+    if (!o_ptr->bi_id) {
         return false;
     }
 
@@ -606,7 +606,7 @@ void brand_weapon(PlayerType *player_ptr, int brand_type)
     auto special_weapon = (o_ptr->tval == ItemKindType::SWORD) && (o_ptr->sval == SV_POISON_NEEDLE);
     special_weapon |= (o_ptr->tval == ItemKindType::POLEARM) && (o_ptr->sval == SV_DEATH_SCYTHE);
     special_weapon |= (o_ptr->tval == ItemKindType::SWORD) && (o_ptr->sval == SV_DIAMOND_EDGE);
-    const auto is_normal_item = o_ptr->k_idx && !o_ptr->is_artifact() && !o_ptr->is_ego() && !o_ptr->is_cursed() && !special_weapon;
+    const auto is_normal_item = o_ptr->bi_id && !o_ptr->is_artifact() && !o_ptr->is_ego() && !o_ptr->is_cursed() && !special_weapon;
     if (!is_normal_item) {
         if (flush_failure) {
             flush();

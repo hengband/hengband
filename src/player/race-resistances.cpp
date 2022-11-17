@@ -83,7 +83,7 @@ void known_obj_immunity(PlayerType *player_ptr, TrFlags &flags)
     for (int i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
         ItemEntity *o_ptr;
         o_ptr = &player_ptr->inventory_list[i];
-        if (!o_ptr->k_idx) {
+        if (!o_ptr->bi_id) {
             continue;
         }
 

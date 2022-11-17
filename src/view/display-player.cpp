@@ -361,7 +361,7 @@ void display_player_equippy(PlayerType *player_ptr, TERM_LEN y, TERM_LEN x, BIT_
         const auto &o_ref = player_ptr->inventory_list[i];
         auto a = o_ref.get_color();
         auto c = o_ref.get_symbol();
-        if (!equippy_chars || (o_ref.k_idx == 0)) {
+        if (!equippy_chars || (o_ref.bi_id == 0)) {
             c = ' ';
             a = TERM_DARK;
         }

@@ -281,7 +281,7 @@ bool pulish_shield(PlayerType *player_ptr)
     GAME_TEXT o_name[MAX_NLEN];
     describe_flavor(player_ptr, o_name, o_ptr, OD_OMIT_PREFIX | OD_NAME_ONLY);
 
-    bool is_pulish_successful = o_ptr->k_idx && !o_ptr->is_artifact() && !o_ptr->is_ego();
+    bool is_pulish_successful = o_ptr->bi_id && !o_ptr->is_artifact() && !o_ptr->is_ego();
     is_pulish_successful &= !o_ptr->is_cursed();
     is_pulish_successful &= (o_ptr->sval != SV_MIRROR_SHIELD);
     if (is_pulish_successful) {

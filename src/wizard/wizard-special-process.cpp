@@ -200,7 +200,7 @@ static short wiz_select_sval(const ItemKindType tval, concptr tval_description)
  * @return ベースアイテムID
  * @details
  * by RAK, heavily modified by -Bernd-
- * This function returns the k_idx of an object type, or zero if failed
+ * This function returns the bi_id of an object type, or zero if failed
  * List up to 50 choices in three columns
  */
 static short wiz_create_itemtype()

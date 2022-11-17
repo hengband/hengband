@@ -71,7 +71,7 @@ void curse_equipment(PlayerType *player_ptr, PERCENTAGE chance, PERCENTAGE heavy
     }
 
     auto *o_ptr = &player_ptr->inventory_list[INVEN_MAIN_HAND + randint0(12)];
-    if (!o_ptr->k_idx) {
+    if (!o_ptr->bi_id) {
         return;
     }
     auto oflgs = object_flags(o_ptr);

@@ -60,8 +60,8 @@ bool recharge(PlayerType *player_ptr, int power)
     }
 
     BaseitemInfo *k_ptr;
-    k_ptr = &baseitems_info[o_ptr->k_idx];
-    DEPTH lev = baseitems_info[o_ptr->k_idx].level;
+    k_ptr = &baseitems_info[o_ptr->bi_id];
+    DEPTH lev = baseitems_info[o_ptr->bi_id].level;
 
     TIME_EFFECT recharge_amount;
     int recharge_strength;

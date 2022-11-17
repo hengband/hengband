@@ -351,7 +351,7 @@ Smith::DrainEssenceResult Smith::drain_essence(ItemEntity *o_ptr)
 
     // アイテムをエッセンス抽出後の状態にする
     const ItemEntity old_o = *o_ptr;
-    o_ptr->prep(o_ptr->k_idx);
+    o_ptr->prep(o_ptr->bi_id);
 
     o_ptr->iy = old_o.iy;
     o_ptr->ix = old_o.ix;
