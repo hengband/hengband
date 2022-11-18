@@ -133,13 +133,15 @@ static bool decide_magic_book_exp(PlayerType *player_ptr, destroy_type *destroy_
         return false;
     }
 
-    bool gain_expr = false;
+    auto gain_expr = false;
+    const auto tval = destroy_ptr->o_ptr->tval;
+    auto is_good_magic_realm = (tval == ItemKindType::LIFE_BOOK) || (tval == ItemKindType::CRUSADE_BOOK);
     if (is_good_realm(player_ptr->realm1)) {
-        if (!is_good_realm(tval2realm(destroy_ptr->q_ptr->tval))) {
+        if (!is_good_magic_realm) {
             gain_expr = true;
         }
     } else {
-        if (is_good_realm(tval2realm(destroy_ptr->q_ptr->tval))) {
+        if (is_good_magic_realm) {
             gain_expr = true;
         }
     }
