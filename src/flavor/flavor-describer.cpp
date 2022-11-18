@@ -28,7 +28,6 @@
 #include "player/player-status.h"
 #include "smith/object-smith.h"
 #include "smith/smith-types.h"
-#include "specific-object/bow.h"
 #include "sv-definition/sv-lite-types.h"
 #include "sv-definition/sv-weapon-types.h"
 #include "system/baseitem-info.h"
@@ -271,14 +270,16 @@ static void describe_fire_energy(PlayerType *player_ptr, flavor_type *flavor_ptr
 
 static void describe_bow_power(PlayerType *player_ptr, flavor_type *flavor_ptr)
 {
-    flavor_ptr->avgdam = flavor_ptr->o_ptr->dd * (flavor_ptr->o_ptr->ds + 1) * 10 / 2;
-    int tmul = bow_tmul(flavor_ptr->bow_ptr->sval);
-    if (flavor_ptr->bow_ptr->is_known()) {
-        flavor_ptr->avgdam += (flavor_ptr->bow_ptr->to_d * 10);
+    const auto *o_ptr = flavor_ptr->o_ptr;
+    const auto *bow_ptr = flavor_ptr->bow_ptr;
+    flavor_ptr->avgdam = o_ptr->dd * (o_ptr->ds + 1) * 10 / 2;
+    auto tmul = bow_tmul(bow_ptr->sval);
+    if (bow_ptr->is_known()) {
+        flavor_ptr->avgdam += (bow_ptr->to_d * 10);
     }
 
     if (flavor_ptr->known) {
-        flavor_ptr->avgdam += (flavor_ptr->o_ptr->to_d * 10);
+        flavor_ptr->avgdam += (o_ptr->to_d * 10);
     }
 
     if (player_ptr->xtra_might) {
@@ -301,7 +302,7 @@ static void describe_bow_power(PlayerType *player_ptr, flavor_type *flavor_ptr)
         flavor_ptr->t = object_desc_str(flavor_ptr->t, show_ammo_detail ? "/shot " : "/");
     }
 
-    flavor_ptr->avgdam = calc_expect_crit_shot(player_ptr, flavor_ptr->o_ptr->weight, flavor_ptr->o_ptr->to_h, flavor_ptr->bow_ptr->to_h, flavor_ptr->avgdam);
+    flavor_ptr->avgdam = calc_expect_crit_shot(player_ptr, o_ptr->weight, o_ptr->to_h, bow_ptr->to_h, flavor_ptr->avgdam);
     flavor_ptr->t = object_desc_num(flavor_ptr->t, flavor_ptr->avgdam);
     flavor_ptr->t = show_ammo_no_crit ? object_desc_str(flavor_ptr->t, show_ammo_detail ? "/crit " : "/")
                                       : object_desc_str(flavor_ptr->t, show_ammo_detail ? "/shot " : "/");
@@ -508,7 +509,12 @@ static void decide_item_feeling(flavor_type *flavor_ptr)
         return;
     }
 
-    if (((flavor_ptr->o_ptr->tval == ItemKindType::RING) || (flavor_ptr->o_ptr->tval == ItemKindType::AMULET) || (flavor_ptr->o_ptr->tval == ItemKindType::LITE) || (flavor_ptr->o_ptr->tval == ItemKindType::FIGURINE)) && flavor_ptr->aware && !flavor_ptr->known && !(flavor_ptr->o_ptr->ident & IDENT_SENSE)) {
+    const auto tval = flavor_ptr->o_ptr->tval;
+    auto unidentifiable = tval == ItemKindType::RING;
+    unidentifiable |= tval == ItemKindType::AMULET;
+    unidentifiable |= tval == ItemKindType::LITE;
+    unidentifiable |= tval == ItemKindType::FIGURINE;
+    if (unidentifiable && flavor_ptr->aware && !flavor_ptr->known && !(flavor_ptr->o_ptr->ident & IDENT_SENSE)) {
         strcpy(flavor_ptr->fake_insc_buf, _("未鑑定", "unidentified"));
         return;
     }
@@ -547,9 +553,10 @@ void describe_flavor(PlayerType *player_ptr, char *buf, ItemEntity *o_ptr, BIT_F
     describe_named_item_tval(flavor_ptr);
     if (!(mode & OD_DEBUG)) {
         flavor_ptr->bow_ptr = &player_ptr->inventory_list[INVEN_BOW];
-        if ((flavor_ptr->bow_ptr->bi_id != 0) && (flavor_ptr->o_ptr->tval == bow_tval_ammo(flavor_ptr->bow_ptr))) {
+        const BaseitemKey key(flavor_ptr->bow_ptr->tval, flavor_ptr->bow_ptr->sval);
+        if ((flavor_ptr->bow_ptr->bi_id != 0) && (key.tval() == key.get_arrow_kind())) {
             describe_bow_power(player_ptr, flavor_ptr);
-        } else if (PlayerClass(player_ptr).equals(PlayerClassType::NINJA) && (flavor_ptr->o_ptr->tval == ItemKindType::SPIKE)) {
+        } else if (PlayerClass(player_ptr).equals(PlayerClassType::NINJA) && (key.tval() == ItemKindType::SPIKE)) {
             describe_spike_power(player_ptr, flavor_ptr);
         }
     }

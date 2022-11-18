@@ -803,7 +803,6 @@ hengband_SOURCES = \
 	\
 	specific-object/blade-turner.cpp specific-object/blade-turner.h \
 	specific-object/bloody-moon.cpp specific-object/bloody-moon.h \
-	specific-object/bow.cpp specific-object/bow.h \
 	specific-object/chest.cpp specific-object/chest.h \
 	specific-object/death-crimson.cpp specific-object/death-crimson.h \
 	specific-object/death-scythe.cpp specific-object/death-scythe.h \
