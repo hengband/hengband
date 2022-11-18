@@ -89,7 +89,6 @@
 #include "realm/realm-hex-numbers.h"
 #include "realm/realm-names-table.h"
 #include "realm/realm-song-numbers.h"
-#include "specific-object/bow.h"
 #include "specific-object/torch.h"
 #include "spell-realm/spells-hex.h"
 #include "spell-realm/spells-song.h"
@@ -334,7 +333,8 @@ static void update_bonuses(PlayerType *player_ptr)
     update_ability_scores(player_ptr);
     o_ptr = &player_ptr->inventory_list[INVEN_BOW];
     if (o_ptr->bi_id) {
-        player_ptr->tval_ammo = bow_tval_ammo(o_ptr);
+        const BaseitemKey key(o_ptr->tval, o_ptr->sval);
+        player_ptr->tval_ammo = key.get_arrow_kind();
         player_ptr->num_fire = calc_num_fire(player_ptr, o_ptr);
     }
 
@@ -1048,7 +1048,8 @@ int16_t calc_num_fire(PlayerType *player_ptr, ItemEntity *o_ptr)
         return (int16_t)num;
     }
 
-    ItemKindType tval_ammo = bow_tval_ammo(o_ptr);
+    const BaseitemKey key(o_ptr->tval, o_ptr->sval);
+    const auto tval_ammo = key.get_arrow_kind();
     PlayerClass pc(player_ptr);
     if (pc.equals(PlayerClassType::RANGER) && (tval_ammo == ItemKindType::ARROW)) {
         num += (player_ptr->lev * 4);

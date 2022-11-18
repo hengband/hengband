@@ -703,7 +703,6 @@
     <ClCompile Include="..\..\src\object-enchant\weapon\apply-magic-bow.cpp" />
     <ClCompile Include="..\..\src\object-enchant\item-magic-applier.cpp" />
     <ClCompile Include="..\..\src\player\eldritch-horror.cpp" />
-    <ClCompile Include="..\..\src\specific-object\bow.cpp" />
     <ClCompile Include="..\..\src\object\object-stack.cpp" />
     <ClCompile Include="..\..\src\object\object-value-calc.cpp" />
     <ClCompile Include="..\..\src\perception\object-perception.cpp" />
@@ -1517,7 +1516,6 @@
     <ClInclude Include="..\..\src\object-enchant\item-magic-applier.h" />
     <ClInclude Include="..\..\src\player\eldritch-horror.h" />
     <ClInclude Include="..\..\src\realm\realm-types.h" />
-    <ClInclude Include="..\..\src\specific-object\bow.h" />
     <ClInclude Include="..\..\src\object\object-stack.h" />
     <ClInclude Include="..\..\src\object\object-value-calc.h" />
     <ClInclude Include="..\..\src\perception\object-perception.h" />

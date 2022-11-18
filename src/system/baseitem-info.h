@@ -37,6 +37,8 @@ public:
     ItemKindType tval() const;
     std::optional<int> sval() const;
 
+    ItemKindType get_arrow_kind() const;
+
 private:
     ItemKindType type_value;
     std::optional<int> subtype_value;

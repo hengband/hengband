@@ -28,7 +28,6 @@
 #include "player/player-status.h"
 #include "smith/object-smith.h"
 #include "smith/smith-types.h"
-#include "specific-object/bow.h"
 #include "sv-definition/sv-lite-types.h"
 #include "sv-definition/sv-weapon-types.h"
 #include "system/baseitem-info.h"
@@ -547,9 +546,10 @@ void describe_flavor(PlayerType *player_ptr, char *buf, ItemEntity *o_ptr, BIT_F
     describe_named_item_tval(flavor_ptr);
     if (!(mode & OD_DEBUG)) {
         flavor_ptr->bow_ptr = &player_ptr->inventory_list[INVEN_BOW];
-        if ((flavor_ptr->bow_ptr->bi_id != 0) && (flavor_ptr->o_ptr->tval == bow_tval_ammo(flavor_ptr->bow_ptr))) {
+        const BaseitemKey key(flavor_ptr->bow_ptr->tval, flavor_ptr->bow_ptr->sval);
+        if ((flavor_ptr->bow_ptr->bi_id != 0) && (key.tval() == key.get_arrow_kind())) {
             describe_bow_power(player_ptr, flavor_ptr);
-        } else if (PlayerClass(player_ptr).equals(PlayerClassType::NINJA) && (flavor_ptr->o_ptr->tval == ItemKindType::SPIKE)) {
+        } else if (PlayerClass(player_ptr).equals(PlayerClassType::NINJA) && (key.tval() == ItemKindType::SPIKE)) {
             describe_spike_power(player_ptr, flavor_ptr);
         }
     }
