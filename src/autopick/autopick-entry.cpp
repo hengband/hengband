@@ -433,7 +433,7 @@ void autopick_entry_from_object(PlayerType *player_ptr, autopick_type *entry, It
         ADD_FLG(FLG_HUMAN);
     }
 
-    if (o_ptr->tval >= ItemKindType::LIFE_BOOK && !check_book_realm(player_ptr, o_ptr->tval, o_ptr->sval)) {
+    if (o_ptr->tval >= ItemKindType::LIFE_BOOK && !check_book_realm(player_ptr, BaseitemKey(o_ptr->tval, o_ptr->sval))) {
         ADD_FLG(FLG_UNREADABLE);
         if (o_ptr->tval != ItemKindType::ARCANE_BOOK) {
             name = false;

@@ -58,6 +58,7 @@
 #include "status/bad-status-setter.h"
 #include "status/base-status.h"
 #include "status/experience.h"
+#include "system/baseitem-info.h"
 #include "system/floor-type-definition.h"
 #include "system/item-entity.h"
 #include "system/player-type-definition.h"
@@ -552,7 +553,7 @@ static void confirm_use_force(PlayerType *player_ptr, bool browse_only)
 
 static FuncItemTester get_castable_spellbook_tester(PlayerType *player_ptr)
 {
-    return FuncItemTester([](auto p_ptr, auto o_ptr) { return check_book_realm(p_ptr, o_ptr->tval, o_ptr->sval); }, player_ptr);
+    return FuncItemTester([](auto p_ptr, auto o_ptr) { return check_book_realm(p_ptr, { o_ptr->tval, o_ptr->sval }); }, player_ptr);
 }
 
 static FuncItemTester get_learnable_spellbook_tester(PlayerType *player_ptr)

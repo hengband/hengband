@@ -207,7 +207,7 @@ bool is_autopick_match(PlayerType *player_ptr, ItemEntity *o_ptr, autopick_type 
         return false;
     }
 
-    if (IS_FLG(FLG_UNREADABLE) && (o_ptr->tval < ItemKindType::LIFE_BOOK || check_book_realm(player_ptr, o_ptr->tval, o_ptr->sval))) {
+    if (IS_FLG(FLG_UNREADABLE) && (o_ptr->tval < ItemKindType::LIFE_BOOK || check_book_realm(player_ptr, { o_ptr->tval, o_ptr->sval }))) {
         return false;
     }
 
