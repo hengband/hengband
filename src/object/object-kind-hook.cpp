@@ -50,25 +50,25 @@ bool kind_is_sword(short bi_id)
 }
 
 /*!
- * @brief オブジェクトが魔法書かどうかを判定する /
+ * @brief オブジェクトが魔法書かどうかを判定する
  * @param bi_id 判定したいオブジェクトのベースアイテムID
  * @return オブジェクトが魔法書ならばTRUEを返す
  */
 bool kind_is_book(short bi_id)
 {
     const auto &k_ref = baseitems_info[bi_id];
-    return (k_ref.bi_key.tval() >= ItemKindType::LIFE_BOOK) && (k_ref.bi_key.tval() <= ItemKindType::CRUSADE_BOOK);
+    return k_ref.bi_key.is_spell_book();
 }
 
 /*!
- * @brief オブジェクトがベースアイテム時点でGOODかどうかを判定する /
+ * @brief オブジェクトがベースアイテム時点でGOODかどうかを判定する
  * @param bi_id 判定したいオブジェクトのベースアイテムID
  * @return オブジェクトがベースアイテム時点でGOODなアイテムならばTRUEを返す
  */
 bool kind_is_good_book(short bi_id)
 {
     const auto &k_ref = baseitems_info[bi_id];
-    return (k_ref.bi_key.tval() >= ItemKindType::LIFE_BOOK) && (k_ref.bi_key.tval() <= ItemKindType::CRUSADE_BOOK) && (k_ref.bi_key.tval() != ItemKindType::ARCANE_BOOK) && (k_ref.bi_key.sval() > 1);
+    return k_ref.bi_key.is_high_level_book();
 }
 
 /*!

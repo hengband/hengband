@@ -293,11 +293,11 @@ int16_t wield_slot(PlayerType *player_ptr, const ItemEntity *o_ptr)
  */
 bool check_book_realm(PlayerType *player_ptr, const BaseitemKey &bi_key)
 {
-    const auto tval = bi_key.tval();
-    if (tval < ItemKindType::LIFE_BOOK) {
+    if (!bi_key.is_spell_book()) {
         return false;
     }
 
+    const auto tval = bi_key.tval();
     PlayerClass pc(player_ptr);
     if (pc.equals(PlayerClassType::SORCERER)) {
         return is_magic(tval2realm(tval));

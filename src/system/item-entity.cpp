@@ -568,7 +568,7 @@ bool ItemEntity::is_activatable() const
 bool ItemEntity::is_fuel() const
 {
     auto is_fuel = (this->tval == ItemKindType::LITE) && ((this->sval == SV_LITE_TORCH) || (this->sval == SV_LITE_LANTERN));
-    is_fuel |= (this->tval == ItemKindType::FLASK) && (this->sval == SV_FLASK_OIL);
+    is_fuel |= BaseitemKey(this->tval, this->sval) == BaseitemKey(ItemKindType::FLASK, SV_FLASK_OIL);
     return is_fuel;
 }
 
@@ -576,26 +576,9 @@ bool ItemEntity::is_fuel() const
  * @brief オブジェクトが魔法書かどうかを判定する
  * @return 魔法書か否か
  */
-bool ItemEntity::is_book() const
+bool ItemEntity::is_spell_book() const
 {
-    switch (this->tval) {
-    case ItemKindType::LIFE_BOOK:
-    case ItemKindType::SORCERY_BOOK:
-    case ItemKindType::NATURE_BOOK:
-    case ItemKindType::CHAOS_BOOK:
-    case ItemKindType::DEATH_BOOK:
-    case ItemKindType::TRUMP_BOOK:
-    case ItemKindType::ARCANE_BOOK:
-    case ItemKindType::CRAFT_BOOK:
-    case ItemKindType::DEMON_BOOK:
-    case ItemKindType::CRUSADE_BOOK:
-    case ItemKindType::MUSIC_BOOK:
-    case ItemKindType::HISSATSU_BOOK:
-    case ItemKindType::HEX_BOOK:
-        return true;
-    default:
-        return false;
-    }
+    return BaseitemKey(this->tval).is_spell_book();
 }
 
 /*!

@@ -78,6 +78,41 @@ ItemKindType BaseitemKey::get_arrow_kind() const
     }
 }
 
+bool BaseitemKey::is_spell_book() const
+{
+    switch (this->type_value) {
+    case ItemKindType::LIFE_BOOK:
+    case ItemKindType::SORCERY_BOOK:
+    case ItemKindType::NATURE_BOOK:
+    case ItemKindType::CHAOS_BOOK:
+    case ItemKindType::DEATH_BOOK:
+    case ItemKindType::TRUMP_BOOK:
+    case ItemKindType::ARCANE_BOOK:
+    case ItemKindType::CRAFT_BOOK:
+    case ItemKindType::DEMON_BOOK:
+    case ItemKindType::CRUSADE_BOOK:
+    case ItemKindType::MUSIC_BOOK:
+    case ItemKindType::HISSATSU_BOOK:
+    case ItemKindType::HEX_BOOK:
+        return true;
+    default:
+        return false;
+    }
+}
+
+bool BaseitemKey::is_high_level_book() const
+{
+    if (!this->is_spell_book()) {
+        return false;
+    }
+
+    if (this->type_value == ItemKindType::ARCANE_BOOK) {
+        return false;
+    }
+
+    return this->subtype_value >= 2;
+}
+
 BaseitemInfo::BaseitemInfo()
     : bi_key(ItemKindType::NONE)
 {

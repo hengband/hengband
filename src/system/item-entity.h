@@ -113,7 +113,7 @@ public:
     bool is_offerable() const;
     bool is_activatable() const;
     bool is_fuel() const;
-    bool is_book() const;
+    bool is_spell_book() const;
     bool is_glove_same_temper(const ItemEntity *j_ptr) const;
     bool can_pile(const ItemEntity *j_ptr) const;
     TERM_COLOR get_color() const;
