@@ -359,6 +359,7 @@ void note_spot(PlayerType *player_ptr, POSITION y, POSITION x)
 
         /* Memorize objects */
         o_ptr->marked.set(OmType::FOUND);
+        player_ptr->window_flags |= PW_FOUND_ITEM_LIST;
     }
 
     /* Hack -- memorize grids */

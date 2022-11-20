@@ -123,7 +123,7 @@ void wiz_lite(PlayerType *player_ptr, bool ninja)
 
     player_ptr->update |= (PU_MONSTERS);
     player_ptr->redraw |= (PR_MAP);
-    player_ptr->window_flags |= (PW_OVERHEAD | PW_DUNGEON);
+    player_ptr->window_flags |= (PW_OVERHEAD | PW_DUNGEON | PW_FOUND_ITEM_LIST);
 
     if (player_ptr->current_floor_ptr->grid_array[player_ptr->y][player_ptr->x].info & CAVE_GLOW) {
         set_superstealth(player_ptr, false);
@@ -181,7 +181,7 @@ void wiz_dark(PlayerType *player_ptr)
     player_ptr->update |= (PU_VIEW | PU_LITE | PU_MON_LITE);
     player_ptr->update |= (PU_MONSTERS);
     player_ptr->redraw |= (PR_MAP);
-    player_ptr->window_flags |= (PW_OVERHEAD | PW_DUNGEON);
+    player_ptr->window_flags |= (PW_OVERHEAD | PW_DUNGEON | PW_FOUND_ITEM_LIST);
 }
 
 /*

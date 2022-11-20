@@ -51,6 +51,7 @@
 #include <mutex>
 #include <sstream>
 #include <string>
+#include <util/object-sort.h>
 
 /*! サブウィンドウ表示用の ItemTester オブジェクト */
 static std::unique_ptr<ItemTester> fix_item_tester = std::make_unique<AllMatchItemTester>();
@@ -663,6 +664,105 @@ void fix_floor_item_list(PlayerType *player_ptr, const int y, const int x)
         term_activate(angband_term[j]);
 
         display_floor_item_list(player_ptr, y, x);
+        term_fresh();
+
+        term_activate(old);
+    }
+}
+
+/*!
+ * @brief 発見済みのアイテム一覧を作成し、表示する
+ * @param プレイヤー情報への参照ポインタ
+ */
+static void display_found_item_list(PlayerType *player_ptr)
+{
+    // Term の行数を取得。
+    TERM_LEN term_h;
+    TERM_LEN term_w;
+    term_get_size(&term_w, &term_h);
+
+    if (term_h <= 0) {
+        return;
+    }
+
+    auto *floor_ptr = player_ptr->current_floor_ptr;
+
+    // 所持品一覧と同じ順にソートする
+    // あらかじめfloor_ptr->o_list から↓項目を取り除く
+    // bi_idが0
+    // OM_FOUNDフラグが立っていない
+    // ItemKindTypeがGOLD
+    std::vector<ItemEntity *> found_item_list;
+    for (auto &item : floor_ptr->o_list) {
+        auto item_entity_ptr = &item;
+        if (item_entity_ptr->bi_id > 0 && item_entity_ptr->marked.has(OmType::FOUND) && item_entity_ptr->tval != ItemKindType::GOLD) {
+            found_item_list.push_back(item_entity_ptr);
+        }
+    }
+
+    std::sort(
+        found_item_list.begin(), found_item_list.end(),
+        [player_ptr](ItemEntity *left, ItemEntity *right) -> bool {
+            return object_sort_comp(player_ptr, left, left->get_price(), right);
+        });
+
+    term_clear();
+    term_gotoxy(0, 0);
+
+    // 先頭行を書く。
+    term_addstr(-1, TERM_WHITE, _("発見済みのアイテム一覧", "Found items"));
+
+    // 発見済みのアイテムを表示
+    TERM_LEN term_y = 1;
+    for (auto item : found_item_list) {
+        // 途中で行数が足りなくなったら終了。
+        if (term_y >= term_h) {
+            break;
+        }
+
+        term_gotoxy(0, term_y);
+
+        // アイテムシンボル表示
+        const auto symbol_code = item->get_symbol();
+        const std::string symbol = format(" %c ", symbol_code);
+        const auto color_code_for_symbol = item->get_color();
+        term_addstr(-1, color_code_for_symbol, symbol.data());
+
+        // アイテム名表示
+        char temp[512];
+        describe_flavor(player_ptr, temp, item, 0);
+        const std::string item_description(temp);
+        const auto color_code_for_item = tval_to_attr[enum2i(item->tval) % 128];
+        term_addstr(-1, color_code_for_item, item_description.data());
+
+        // アイテム座標表示
+        const std::string item_location = format("(X:%3d Y:%3d)", item->ix, item->iy);
+        prt(item_location.data(), term_y, term_w - item_location.length() - 1);
+
+        ++term_y;
+    }
+}
+
+/*!
+ * @brief 発見済みのアイテム一覧をサブウィンドウに表示する
+ */
+void fix_found_item_list(PlayerType *player_ptr)
+{
+    for (int j = 0; j < 8; j++) {
+        if (!angband_term[j]) {
+            continue;
+        }
+        if (angband_term[j]->never_fresh) {
+            continue;
+        }
+        if (none_bits(window_flag[j], PW_FOUND_ITEM_LIST)) {
+            continue;
+        }
+
+        term_type *old = game_term;
+        term_activate(angband_term[j]);
+
+        display_found_item_list(player_ptr);
         term_fresh();
 
         term_activate(old);

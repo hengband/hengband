@@ -298,4 +298,9 @@ void window_stuff(PlayerType *player_ptr)
         // ウィンドウサイズ変更に対応できず。カーソル位置を取る必要がある。
         fix_floor_item_list(player_ptr, player_ptr->y, player_ptr->x);
     }
+
+    if (any_bits(window_flags, PW_FOUND_ITEM_LIST)) {
+        reset_bits(player_ptr->window_flags, PW_FOUND_ITEM_LIST);
+        fix_found_item_list(player_ptr);
+    }
 }
