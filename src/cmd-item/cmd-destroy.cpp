@@ -30,6 +30,7 @@
 #include "realm/realm-names-table.h"
 #include "status/action-setter.h"
 #include "status/experience.h"
+#include "system/baseitem-info.h"
 #include "system/item-entity.h"
 #include "system/player-type-definition.h"
 #include "term/screen-processor.h"
@@ -126,35 +127,30 @@ static bool decide_magic_book_exp(PlayerType *player_ptr, destroy_type *destroy_
 
     PlayerClass pc(player_ptr);
     if (pc.equals(PlayerClassType::WARRIOR) || pc.equals(PlayerClassType::BERSERKER)) {
-        return true;
+        return destroy_ptr->q_ptr->tval != ItemKindType::HISSATSU_BOOK;
     }
 
     if (!pc.equals(PlayerClassType::PALADIN)) {
         return false;
     }
 
-    bool gain_expr = false;
+    const auto tval = destroy_ptr->o_ptr->tval;
+    auto is_good_magic_realm = (tval == ItemKindType::LIFE_BOOK) || (tval == ItemKindType::CRUSADE_BOOK);
     if (is_good_realm(player_ptr->realm1)) {
-        if (!is_good_realm(tval2realm(destroy_ptr->q_ptr->tval))) {
-            gain_expr = true;
-        }
+        return !is_good_magic_realm;
     } else {
-        if (is_good_realm(tval2realm(destroy_ptr->q_ptr->tval))) {
-            gain_expr = true;
-        }
+        return is_good_magic_realm;
     }
-
-    return gain_expr;
 }
 
 static void gain_exp_by_destroying_magic_book(PlayerType *player_ptr, destroy_type *destroy_ptr)
 {
-    bool gain_expr = decide_magic_book_exp(player_ptr, destroy_ptr);
+    const auto gain_expr = decide_magic_book_exp(player_ptr, destroy_ptr);
     if (!gain_expr || (player_ptr->exp >= PY_MAX_EXP)) {
         return;
     }
 
-    int32_t tester_exp = player_ptr->max_exp / 20;
+    auto tester_exp = player_ptr->max_exp / 20;
     if (tester_exp > 10000) {
         tester_exp = 10000;
     }
@@ -173,15 +169,18 @@ static void gain_exp_by_destroying_magic_book(PlayerType *player_ptr, destroy_ty
 
 static void process_destroy_magic_book(PlayerType *player_ptr, destroy_type *destroy_ptr)
 {
-    if (!item_tester_high_level_book(destroy_ptr->q_ptr)) {
+    const auto *q_ptr = destroy_ptr->q_ptr;
+    const BaseitemKey bi_key(q_ptr->tval, q_ptr->sval);
+    if (!bi_key.is_high_level_book()) {
         return;
     }
 
+    const auto tval = bi_key.tval();
     gain_exp_by_destroying_magic_book(player_ptr, destroy_ptr);
-    if (item_tester_high_level_book(destroy_ptr->q_ptr) && destroy_ptr->q_ptr->tval == ItemKindType::LIFE_BOOK) {
+    if (tval == ItemKindType::LIFE_BOOK) {
         chg_virtue(player_ptr, V_UNLIFE, 1);
         chg_virtue(player_ptr, V_VITALITY, -1);
-    } else if (item_tester_high_level_book(destroy_ptr->q_ptr) && destroy_ptr->q_ptr->tval == ItemKindType::DEATH_BOOK) {
+    } else if (tval == ItemKindType::DEATH_BOOK) {
         chg_virtue(player_ptr, V_UNLIFE, -1);
         chg_virtue(player_ptr, V_VITALITY, 1);
     }

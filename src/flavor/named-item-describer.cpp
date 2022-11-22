@@ -410,7 +410,7 @@ void describe_named_item(PlayerType *player_ptr, flavor_type *flavor_ptr)
 
     describe_artifact_ja(flavor_ptr);
 #endif
-    if (flavor_ptr->o_ptr->is_book()) {
+    if (flavor_ptr->o_ptr->is_spell_book()) {
         // svalは0から数えているので表示用に+1している
         flavor_ptr->t = object_desc_str(flavor_ptr->t, format("Lv%d ", flavor_ptr->o_ptr->sval + 1));
     }

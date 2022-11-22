@@ -5,10 +5,11 @@
 
 #define OBJ_GOLD_LIST 480 /* First "gold" entry */
 
+class BaseitemKey;
 class ItemEntity;
 class PlayerType;
 concptr activation_explanation(ItemEntity *o_ptr);
 char index_to_label(int i);
 int16_t wield_slot(PlayerType *player_ptr, const ItemEntity *o_ptr);
-bool check_book_realm(PlayerType *player_ptr, const ItemKindType book_tval, const OBJECT_SUBTYPE_VALUE book_sval);
+bool check_book_realm(PlayerType *player_ptr, const BaseitemKey &bi_key);
 ItemEntity *ref_item(PlayerType *player_ptr, INVENTORY_IDX item);

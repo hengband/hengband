@@ -156,7 +156,7 @@ static short collect_objects(int grp_cur, short object_idx[], BIT_FLAGS8 mode)
 
         const auto tval = k_ref.bi_key.tval();
         if (group_tval == ItemKindType::LIFE_BOOK) {
-            if (ItemKindType::LIFE_BOOK <= tval && tval <= ItemKindType::HEX_BOOK) {
+            if (k_ref.bi_key.is_spell_book()) {
                 object_idx[object_cnt++] = k_ref.idx;
             } else {
                 continue;

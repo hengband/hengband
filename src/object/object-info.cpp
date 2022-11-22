@@ -286,28 +286,28 @@ int16_t wield_slot(PlayerType *player_ptr, const ItemEntity *o_ptr)
 }
 
 /*!
- * @brief tval/sval指定のベースアイテムがプレイヤーの使用可能な魔法書かどうかを返す /
- * Hack: Check if a spellbook is one of the realms we can use. -- TY
- * @param book_tval ベースアイテムのtval
- * @param book_sval ベースアイテムのsval
+ * @brief tval/sval指定のベースアイテムがプレイヤーの使用可能な魔法書かどうかを返す
+ * @param player_ptr プレイヤーへの参照ポインタ
+ * @param bi_key ベースアイテム特定キー
  * @return 使用可能な魔法書ならばTRUEを返す。
  */
-bool check_book_realm(PlayerType *player_ptr, const ItemKindType book_tval, const OBJECT_SUBTYPE_VALUE book_sval)
+bool check_book_realm(PlayerType *player_ptr, const BaseitemKey &bi_key)
 {
-    if (book_tval < ItemKindType::LIFE_BOOK) {
+    if (!bi_key.is_spell_book()) {
         return false;
     }
 
+    const auto tval = bi_key.tval();
     PlayerClass pc(player_ptr);
     if (pc.equals(PlayerClassType::SORCERER)) {
-        return is_magic(tval2realm(book_tval));
+        return is_magic(tval2realm(tval));
     } else if (pc.equals(PlayerClassType::RED_MAGE)) {
-        if (is_magic(tval2realm(book_tval))) {
-            return ((book_tval == ItemKindType::ARCANE_BOOK) || (book_sval < 2));
+        if (is_magic(tval2realm(tval))) {
+            return ((tval == ItemKindType::ARCANE_BOOK) || (bi_key.sval() < 2));
         }
     }
 
-    return (get_realm1_book(player_ptr) == book_tval) || (get_realm2_book(player_ptr) == book_tval);
+    return (get_realm1_book(player_ptr) == tval) || (get_realm2_book(player_ptr) == tval);
 }
 
 ItemEntity *ref_item(PlayerType *player_ptr, INVENTORY_IDX item)

@@ -38,7 +38,7 @@ ItemEntity::ItemEntity()
 }
 
 /*!
- * @brief オブジェクトを初期化する
+ * @brief アイテムを初期化する
  * Wipe an object clean.
  */
 void ItemEntity::wipe()
@@ -47,7 +47,7 @@ void ItemEntity::wipe()
 }
 
 /*!
- * @brief オブジェクトを複製する
+ * @brief アイテムを複製する
  * Wipe an object clean.
  * @param j_ptr 複製元のオブジェクトの構造体参照ポインタ
  */
@@ -57,7 +57,7 @@ void ItemEntity::copy_from(const ItemEntity *j_ptr)
 }
 
 /*!
- * @brief オブジェクト構造体にベースアイテムを作成する
+ * @brief アイテム構造体にベースアイテムを作成する
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param bi_id 新たに作成したいベースアイテム情報のID
  */
@@ -108,7 +108,7 @@ void ItemEntity::prep(short new_bi_id)
 }
 
 /*!
- * @brief オブジェクトが武器として装備できるかどうかを返す / Check if an object is weapon (including bows)
+ * @brief アイテムが武器として装備できるかどうかを返す / Check if an object is weapon (including bows)
  * @return 武器として使えるならばtrueを返す
  */
 bool ItemEntity::is_weapon() const
@@ -117,7 +117,7 @@ bool ItemEntity::is_weapon() const
 }
 
 /*!
- * @brief オブジェクトが武器や矢弾として使用できるかを返す / Check if an object is weapon (including bows and ammo)
+ * @brief アイテムが武器や矢弾として使用できるかを返す / Check if an object is weapon (including bows and ammo)
  * Rare weapons/aromors including Blade of Chaos, Dragon armors, etc.
  * @return 武器や矢弾として使えるならばtrueを返す
  */
@@ -127,7 +127,7 @@ bool ItemEntity::is_weapon_ammo() const
 }
 
 /*!
- * @brief オブジェクトが武器、防具、矢弾として使用できるかを返す / Check if an object is weapon, armour or ammo
+ * @brief アイテムが武器、防具、矢弾として使用できるかを返す / Check if an object is weapon, armour or ammo
  * @return 武器、防具、矢弾として使えるならばtrueを返す
  */
 bool ItemEntity::is_weapon_armour_ammo() const
@@ -136,7 +136,7 @@ bool ItemEntity::is_weapon_armour_ammo() const
 }
 
 /*!
- * @brief オブジェクトが近接武器として装備できるかを返す / Melee weapons
+ * @brief アイテムが近接武器として装備できるかを返す / Melee weapons
  * @return 近接武器として使えるならばtrueを返す
  */
 bool ItemEntity::is_melee_weapon() const
@@ -166,7 +166,7 @@ bool ItemEntity::is_melee_ammo() const
 }
 
 /*!
- * @brief オブジェクトが装備可能であるかを返す / Wearable including all weapon, all armour, bow, light source, amulet, and ring
+ * @brief アイテムが装備可能であるかを返す / Wearable including all weapon, all armour, bow, light source, amulet, and ring
  * @return 装備可能ならばTRUEを返す
  */
 bool ItemEntity::is_wearable() const
@@ -175,7 +175,7 @@ bool ItemEntity::is_wearable() const
 }
 
 /*!
- * @brief オブジェクトが装備品であるかを返す(ItemEntity::is_wearableに矢弾を含む) / Equipment including all wearable objects and ammo
+ * @brief アイテムが装備品であるかを返す(ItemEntity::is_wearableに矢弾を含む) / Equipment including all wearable objects and ammo
  * @return 装備品ならばtrueを返す
  */
 bool ItemEntity::is_equipment() const
@@ -221,7 +221,7 @@ bool ItemEntity::is_broken_weapon() const
 }
 
 /*!
- * @brief オブジェクトが投射可能な武器かどうかを返す。
+ * @brief アイテムが投射可能な武器かどうかを返す。
  * @return 投射可能な武器ならばtrue
  */
 bool ItemEntity::is_throwable() const
@@ -238,7 +238,7 @@ bool ItemEntity::is_throwable() const
 }
 
 /*!
- * @brief オブジェクトがどちらの手にも装備できる武器かどうかの判定
+ * @brief アイテムがどちらの手にも装備できる武器かどうかの判定
  * @return 左右両方の手で装備できるならばtrueを返す。
  */
 bool ItemEntity::is_wieldable_in_etheir_hand() const
@@ -258,7 +258,7 @@ bool ItemEntity::is_wieldable_in_etheir_hand() const
 }
 
 /*!
- * @brief オブジェクトが強化不能武器であるかを返す / Poison needle can not be enchanted
+ * @brief アイテムが強化不能武器であるかを返す / Poison needle can not be enchanted
  * @return 強化不能ならばtrueを返す
  */
 bool ItemEntity::refuse_enchant_weapon() const
@@ -267,7 +267,7 @@ bool ItemEntity::refuse_enchant_weapon() const
 }
 
 /*!
- * @brief オブジェクトが強化可能武器であるかを返す /
+ * @brief アイテムが強化可能武器であるかを返す /
  * Check if an object is weapon (including bows and ammo) and allows enchantment
  * @return 強化可能ならばtrueを返す
  */
@@ -277,7 +277,7 @@ bool ItemEntity::allow_enchant_weapon() const
 }
 
 /*!
- * @brief オブジェクトが強化可能な近接武器であるかを返す /
+ * @brief アイテムが強化可能な近接武器であるかを返す /
  * Check if an object is melee weapon and allows enchantment
  * @return 強化可能な近接武器ならばtrueを返す
  */
@@ -287,7 +287,7 @@ bool ItemEntity::allow_enchant_melee_weapon() const
 }
 
 /*!
- * @brief オブジェクトが両手持ち可能な武器かを返す /
+ * @brief アイテムが両手持ち可能な武器かを返す /
  * Check if an object is melee weapon and allows wielding with two-hands
  * @return 両手持ち可能ならばTRUEを返す
  */
@@ -297,7 +297,7 @@ bool ItemEntity::allow_two_hands_wielding() const
 }
 
 /*!
- * @brief オブジェクトが矢弾として使用できるかどうかを返す / Check if an object is ammo
+ * @brief アイテムが矢弾として使用できるかどうかを返す / Check if an object is ammo
  * @return 矢弾として使えるならばtrueを返す
  */
 bool ItemEntity::is_ammo() const
@@ -325,7 +325,7 @@ bool ItemEntity::is_lance() const
 }
 
 /*!
- * @brief オブジェクトが防具として装備できるかどうかを返す / Check if an object is armour
+ * @brief アイテムが防具として装備できるかどうかを返す / Check if an object is armour
  * @return 防具として装備できるならばtrueを返す
  */
 bool ItemEntity::is_armour() const
@@ -334,7 +334,7 @@ bool ItemEntity::is_armour() const
 }
 
 /*!
- * @brief オブジェクトがレアアイテムかどうかを返す /
+ * @brief アイテムがレアアイテムかどうかを返す /
  * Rare weapons/aromors including Blade of Chaos, Dragon armors, etc.
  * @return レアアイテムならばTRUEを返す
  */
@@ -363,7 +363,7 @@ bool ItemEntity::is_rare() const
 }
 
 /*!
- * @brief オブジェクトがエゴアイテムかどうかを返す
+ * @brief アイテムがエゴアイテムかどうかを返す
  * @return エゴアイテムならばtrueを返す
  */
 bool ItemEntity::is_ego() const
@@ -372,7 +372,7 @@ bool ItemEntity::is_ego() const
 }
 
 /*!
- * @brief オブジェクトが鍛冶師のエッセンス付加済みかを返す /
+ * @brief アイテムが鍛冶師のエッセンス付加済みかを返す /
  * Check if an object is made by a smith's special ability
  * @return エッセンス付加済みならばTRUEを返す
  */
@@ -382,7 +382,7 @@ bool ItemEntity::is_smith() const
 }
 
 /*!
- * @brief オブジェクトがアーティファクトかを返す /
+ * @brief アイテムがアーティファクトかを返す /
  * Check if an object is artifact
  * @return アーティファクトならばtrueを返す
  */
@@ -392,7 +392,7 @@ bool ItemEntity::is_artifact() const
 }
 
 /*!
- * @brief オブジェクトが固定アーティファクトかを返す /
+ * @brief アイテムが固定アーティファクトかを返す /
  * Check if an object is fixed artifact
  * @return 固定アーティファクトならばtrueを返す
  */
@@ -402,7 +402,7 @@ bool ItemEntity::is_fixed_artifact() const
 }
 
 /*!
- * @brief オブジェクトがランダムアーティファクトかを返す /
+ * @brief アイテムがランダムアーティファクトかを返す /
  * Check if an object is random artifact
  * @return ランダムアーティファクトならばtrueを返す
  */
@@ -412,7 +412,7 @@ bool ItemEntity::is_random_artifact() const
 }
 
 /*!
- * @brief オブジェクトが通常のアイテム(アーティファクト、エゴ、鍛冶師エッセンス付加いずれでもない)かを返す /
+ * @brief アイテムが通常のアイテム(アーティファクト、エゴ、鍛冶師エッセンス付加いずれでもない)かを返す /
  * Check if an object is neither artifact, ego, nor 'smith' object
  * @return 通常のアイテムならばtrueを返す
  */
@@ -474,7 +474,7 @@ bool ItemEntity::is_tried() const
 }
 
 /*!
- * @brief オブジェクトが薬であるかを返す
+ * @brief アイテムが薬であるかを返す
  * @return オブジェクトが薬ならばtrueを返す
  */
 bool ItemEntity::is_potion() const
@@ -483,7 +483,7 @@ bool ItemEntity::is_potion() const
 }
 
 /*!
- * @brief オブジェクトをプレイヤーが読むことができるかを判定する /
+ * @brief アイテムをプレイヤーが読むことができるかを判定する /
  * Hook to determine if an object is readable
  * @return 読むことが可能ならばtrueを返す
  */
@@ -497,7 +497,7 @@ bool ItemEntity::is_readable() const
 }
 
 /*!
- * @brief オブジェクトがランタンの燃料になるかどうかを判定する
+ * @brief アイテムがランタンの燃料になるかどうかを判定する
  * An "item_tester_hook" for refilling lanterns
  * @return オブジェクトがランタンの燃料になるならばTRUEを返す
  */
@@ -507,7 +507,7 @@ bool ItemEntity::can_refill_lantern() const
 }
 
 /*!
- * @brief オブジェクトが松明に束ねられるかどうかを判定する
+ * @brief アイテムが松明に束ねられるかどうかを判定する
  * An "item_tester_hook" for refilling torches
  * @return オブジェクトが松明に束ねられるならばTRUEを返す
  */
@@ -547,7 +547,7 @@ bool ItemEntity::is_offerable() const
 }
 
 /*!
- * @brief オブジェクトをプレイヤーが魔道具として発動できるかを判定する /
+ * @brief アイテムをプレイヤーが魔道具として発動できるかを判定する /
  * Hook to determine if an object is activatable
  * @return 魔道具として発動可能ならばTRUEを返す
  */
@@ -562,44 +562,27 @@ bool ItemEntity::is_activatable() const
 }
 
 /*!
- * @brief オブジェクトが燃料として使えるかを判定する
+ * @brief アイテムが燃料として使えるかを判定する
  * @return 燃料か否か
  */
 bool ItemEntity::is_fuel() const
 {
     auto is_fuel = (this->tval == ItemKindType::LITE) && ((this->sval == SV_LITE_TORCH) || (this->sval == SV_LITE_LANTERN));
-    is_fuel |= (this->tval == ItemKindType::FLASK) && (this->sval == SV_FLASK_OIL);
+    is_fuel |= BaseitemKey(this->tval, this->sval) == BaseitemKey(ItemKindType::FLASK, SV_FLASK_OIL);
     return is_fuel;
 }
 
 /*!
- * @brief オブジェクトが魔法書かどうかを判定する
+ * @brief アイテムが魔法書かどうかを判定する
  * @return 魔法書か否か
  */
-bool ItemEntity::is_book() const
+bool ItemEntity::is_spell_book() const
 {
-    switch (this->tval) {
-    case ItemKindType::LIFE_BOOK:
-    case ItemKindType::SORCERY_BOOK:
-    case ItemKindType::NATURE_BOOK:
-    case ItemKindType::CHAOS_BOOK:
-    case ItemKindType::DEATH_BOOK:
-    case ItemKindType::TRUMP_BOOK:
-    case ItemKindType::ARCANE_BOOK:
-    case ItemKindType::CRAFT_BOOK:
-    case ItemKindType::DEMON_BOOK:
-    case ItemKindType::CRUSADE_BOOK:
-    case ItemKindType::MUSIC_BOOK:
-    case ItemKindType::HISSATSU_BOOK:
-    case ItemKindType::HEX_BOOK:
-        return true;
-    default:
-        return false;
-    }
+    return BaseitemKey(this->tval).is_spell_book();
 }
 
 /*!
- * @brief オブジェクトが同一の命中値上昇及びダメージ上昇があるかを判定する
+ * @brief アイテムが同一の命中値上昇及びダメージ上昇があるかを判定する
  * @return 同一修正か
  * @details 鍛冶師が篭手に殺戮エッセンスを付加した場合のみこの判定に意味がある
  */
@@ -621,7 +604,7 @@ bool ItemEntity::is_glove_same_temper(const ItemEntity *j_ptr) const
 }
 
 /*!
- * @brief オブジェクトが「2つの～～」と重ねられるかを一般的に判定する
+ * @brief アイテムが「2つの～～」と重ねられるかを一般的に判定する
  * @return 重ねられるか
  * @details 個別のアイテムによっては別途条件があるが、それはこの関数では判定しない
  */
@@ -726,7 +709,7 @@ char ItemEntity::get_symbol() const
 }
 
 /*!
- * @brief オブジェクト価格算出のメインルーチン
+ * @brief アイテム価格算出のメインルーチン
  * @return オブジェクトの判明している現価格
  */
 int ItemEntity::get_price() const

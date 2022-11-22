@@ -433,7 +433,8 @@ void autopick_entry_from_object(PlayerType *player_ptr, autopick_type *entry, It
         ADD_FLG(FLG_HUMAN);
     }
 
-    if (o_ptr->tval >= ItemKindType::LIFE_BOOK && !check_book_realm(player_ptr, o_ptr->tval, o_ptr->sval)) {
+    const BaseitemKey bi_key(o_ptr->tval, o_ptr->sval);
+    if (o_ptr->is_spell_book() && !check_book_realm(player_ptr, bi_key)) {
         ADD_FLG(FLG_UNREADABLE);
         if (o_ptr->tval != ItemKindType::ARCANE_BOOK) {
             name = false;
@@ -453,16 +454,16 @@ void autopick_entry_from_object(PlayerType *player_ptr, autopick_type *entry, It
         name = false;
     }
 
-    if (o_ptr->tval >= ItemKindType::LIFE_BOOK && 0 == o_ptr->sval) {
+    if (o_ptr->is_spell_book() && (o_ptr->sval == 0)) {
         ADD_FLG(FLG_FIRST);
     }
-    if (o_ptr->tval >= ItemKindType::LIFE_BOOK && 1 == o_ptr->sval) {
+    if (o_ptr->is_spell_book() && (o_ptr->sval == 1)) {
         ADD_FLG(FLG_SECOND);
     }
-    if (o_ptr->tval >= ItemKindType::LIFE_BOOK && 2 == o_ptr->sval) {
+    if (o_ptr->is_spell_book() && (o_ptr->sval == 2)) {
         ADD_FLG(FLG_THIRD);
     }
-    if (o_ptr->tval >= ItemKindType::LIFE_BOOK && 3 == o_ptr->sval) {
+    if (o_ptr->is_spell_book() && (o_ptr->sval == 3)) {
         ADD_FLG(FLG_FOURTH);
     }
 
@@ -476,7 +477,7 @@ void autopick_entry_from_object(PlayerType *player_ptr, autopick_type *entry, It
         ADD_FLG(FLG_JUNKS);
     } else if (o_ptr->tval == ItemKindType::CORPSE) {
         ADD_FLG(FLG_CORPSES);
-    } else if (o_ptr->tval >= ItemKindType::LIFE_BOOK) {
+    } else if (o_ptr->is_spell_book()) {
         ADD_FLG(FLG_SPELLBOOKS);
     } else if (o_ptr->tval == ItemKindType::POLEARM || o_ptr->tval == ItemKindType::SWORD || o_ptr->tval == ItemKindType::DIGGING || o_ptr->tval == ItemKindType::HAFTED) {
         ADD_FLG(FLG_WEAPONS);

@@ -38,6 +38,8 @@ public:
     std::optional<int> sval() const;
 
     ItemKindType get_arrow_kind() const;
+    bool is_spell_book() const;
+    bool is_high_level_book() const;
 
 private:
     ItemKindType type_value;

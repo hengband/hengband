@@ -207,7 +207,8 @@ bool is_autopick_match(PlayerType *player_ptr, ItemEntity *o_ptr, autopick_type 
         return false;
     }
 
-    if (IS_FLG(FLG_UNREADABLE) && (o_ptr->tval < ItemKindType::LIFE_BOOK || check_book_realm(player_ptr, o_ptr->tval, o_ptr->sval))) {
+    const BaseitemKey bi_key(o_ptr->tval, o_ptr->sval);
+    if (IS_FLG(FLG_UNREADABLE) && check_book_realm(player_ptr, bi_key)) {
         return false;
     }
 
@@ -222,19 +223,19 @@ bool is_autopick_match(PlayerType *player_ptr, ItemEntity *o_ptr, autopick_type 
         return false;
     }
 
-    if (IS_FLG(FLG_FIRST) && ((o_ptr->tval < ItemKindType::LIFE_BOOK) || (o_ptr->sval) != 0)) {
+    if (IS_FLG(FLG_FIRST) && (!o_ptr->is_spell_book() || (o_ptr->sval != 0))) {
         return false;
     }
 
-    if (IS_FLG(FLG_SECOND) && ((o_ptr->tval < ItemKindType::LIFE_BOOK) || (o_ptr->sval) != 1)) {
+    if (IS_FLG(FLG_SECOND) && (!o_ptr->is_spell_book() || (o_ptr->sval != 1))) {
         return false;
     }
 
-    if (IS_FLG(FLG_THIRD) && ((o_ptr->tval < ItemKindType::LIFE_BOOK) || (o_ptr->sval) != 2)) {
+    if (IS_FLG(FLG_THIRD) && (!o_ptr->is_spell_book() || (o_ptr->sval != 2))) {
         return false;
     }
 
-    if (IS_FLG(FLG_FOURTH) && ((o_ptr->tval < ItemKindType::LIFE_BOOK) || (o_ptr->sval) != 3)) {
+    if (IS_FLG(FLG_FOURTH) && (!o_ptr->is_spell_book() || (o_ptr->sval != 3))) {
         return false;
     }
 
@@ -283,7 +284,7 @@ bool is_autopick_match(PlayerType *player_ptr, ItemEntity *o_ptr, autopick_type 
             return false;
         }
     } else if (IS_FLG(FLG_SPELLBOOKS)) {
-        if (!(o_ptr->tval >= ItemKindType::LIFE_BOOK)) {
+        if (!o_ptr->is_spell_book()) {
             return false;
         }
     } else if (IS_FLG(FLG_HAFTED)) {
