@@ -108,7 +108,7 @@ void rd_item_old(ItemEntity *o_ptr)
     o_ptr->ds = rd_byte();
 
     o_ptr->ident = rd_byte();
-    o_ptr->marked = rd_byte();
+    rd_FlagGroup_bytes(o_ptr->marked, rd_byte, 1);
 
     for (int i = 0, count = (h_older_than(1, 3, 0, 0) ? 3 : 4); i < count; i++) {
         auto tmp32u = rd_u32b();

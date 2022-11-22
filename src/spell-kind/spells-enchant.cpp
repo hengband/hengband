@@ -141,7 +141,7 @@ bool mundane_spell(PlayerType *player_ptr, bool only_equip)
     msg_print(_("まばゆい閃光が走った！", "There is a bright flash of light!"));
     POSITION iy = o_ptr->iy;
     POSITION ix = o_ptr->ix;
-    byte marked = o_ptr->marked;
+    auto marked = o_ptr->marked;
     uint16_t inscription = o_ptr->inscription;
 
     o_ptr->prep(o_ptr->bi_id);

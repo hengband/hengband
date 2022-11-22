@@ -240,7 +240,7 @@ static bool run_test(PlayerType *player_ptr)
         for (const auto this_o_idx : g_ptr->o_idx_list) {
             ItemEntity *o_ptr;
             o_ptr = &floor_ptr->o_list[this_o_idx];
-            if (o_ptr->marked & OM_FOUND) {
+            if (o_ptr->marked.has(OmType::FOUND)) {
                 return true;
             }
         }

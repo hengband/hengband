@@ -228,7 +228,7 @@ void wiz_identify_full_inventory(PlayerType *player_ptr)
         auto k_ptr = &baseitems_info[o_ptr->bi_id];
         k_ptr->aware = true; //!< @note 記録には残さないためTRUEを立てるのみ
         set_bits(o_ptr->ident, IDENT_KNOWN | IDENT_FULL_KNOWN);
-        set_bits(o_ptr->marked, OM_TOUCHED);
+        o_ptr->marked.set(OmType::TOUCHED);
     }
 
     /* Refrect item informaiton onto subwindows without updating inventory */

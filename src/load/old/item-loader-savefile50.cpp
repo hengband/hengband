@@ -60,7 +60,10 @@ void ItemLoader50::rd_item(ItemEntity *o_ptr)
     o_ptr->dd = any_bits(flags, SaveDataItemFlagType::DD) ? rd_byte() : 0;
     o_ptr->ds = any_bits(flags, SaveDataItemFlagType::DS) ? rd_byte() : 0;
     o_ptr->ident = any_bits(flags, SaveDataItemFlagType::IDENT) ? rd_byte() : 0;
-    o_ptr->marked = any_bits(flags, SaveDataItemFlagType::MARKED) ? rd_byte() : 0;
+    o_ptr->marked.clear();
+    if (any_bits(flags, SaveDataItemFlagType::MARKED)) {
+        rd_FlagGroup_bytes(o_ptr->marked, rd_byte, 1);
+    }
 
     /* Object flags */
     if (loading_savefile_version_is_older_than(7)) {

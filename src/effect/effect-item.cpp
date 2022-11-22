@@ -214,7 +214,7 @@ bool affect_item(PlayerType *player_ptr, MONSTER_IDX who, POSITION r, POSITION y
 
             o_ptr->pval = (0 - o_ptr->pval);
             object_known(o_ptr);
-            if (known && (o_ptr->marked & OM_FOUND)) {
+            if (known && o_ptr->marked.has(OmType::FOUND)) {
                 msg_print(_("カチッと音がした！", "Click!"));
                 is_item_affected = true;
             }
@@ -259,20 +259,20 @@ bool affect_item(PlayerType *player_ptr, MONSTER_IDX who, POSITION r, POSITION y
         }
 
         GAME_TEXT o_name[MAX_NLEN];
-        if (known && (o_ptr->marked & OM_FOUND)) {
+        if (known && o_ptr->marked.has(OmType::FOUND)) {
             is_item_affected = true;
             describe_flavor(player_ptr, o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
         }
 
         if ((is_artifact || ignore)) {
-            if (known && (o_ptr->marked & OM_FOUND)) {
+            if (known && o_ptr->marked.has(OmType::FOUND)) {
                 msg_format(_("%sは影響を受けない！", (plural ? "The %s are unaffected!" : "The %s is unaffected!")), o_name);
             }
 
             continue;
         }
 
-        if (known && (o_ptr->marked & OM_FOUND) && note_kill) {
+        if (known && o_ptr->marked.has(OmType::FOUND) && note_kill) {
             msg_format(_("%sは%s", "The %s%s"), o_name, note_kill);
         }
 

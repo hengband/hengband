@@ -84,7 +84,7 @@ bool psychometry(PlayerType *player_ptr)
 
     set_bits(o_ptr->ident, IDENT_SENSE);
     o_ptr->feeling = feel;
-    set_bits(o_ptr->marked, OM_TOUCHED);
+    o_ptr->marked.set(OmType::TOUCHED);
 
     set_bits(player_ptr->update, PU_COMBINE | PU_REORDER);
     set_bits(player_ptr->window_flags, PW_INVEN | PW_EQUIP | PW_PLAYER | PW_FLOOR_ITEM_LIST);

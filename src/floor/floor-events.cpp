@@ -157,7 +157,7 @@ static byte get_dungeon_feeling(PlayerType *player_ptr)
         auto *o_ptr = &floor_ptr->o_list[i];
         auto *k_ptr = &baseitems_info[o_ptr->bi_id];
         int delta = 0;
-        if (!o_ptr->is_valid() || (o_ptr->is_known() && ((o_ptr->marked & OM_TOUCHED) != 0)) || ((o_ptr->ident & IDENT_SENSE) != 0)) {
+        if (!o_ptr->is_valid() || (o_ptr->is_known() && o_ptr->marked.has(OmType::TOUCHED)) || ((o_ptr->ident & IDENT_SENSE) != 0)) {
             continue;
         }
 

@@ -62,7 +62,7 @@ static void write_item_flags(ItemEntity *o_ptr, BIT_FLAGS *flags)
         set_bits(*flags, SaveDataItemFlagType::IDENT);
     }
 
-    if (o_ptr->marked) {
+    if (o_ptr->marked.any()) {
         set_bits(*flags, SaveDataItemFlagType::MARKED);
     }
 
@@ -169,7 +169,7 @@ static void write_item_info(ItemEntity *o_ptr, const BIT_FLAGS flags)
     }
 
     if (any_bits(flags, SaveDataItemFlagType::MARKED)) {
-        wr_byte(o_ptr->marked);
+        wr_FlagGroup_bytes(o_ptr->marked, wr_byte, 1);
     }
 
     if (any_bits(flags, SaveDataItemFlagType::ART_FLAGS)) {

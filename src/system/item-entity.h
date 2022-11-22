@@ -10,6 +10,7 @@
 #include "object-enchant/object-ego.h"
 #include "object-enchant/tr-flags.h"
 #include "object-enchant/trc-types.h"
+#include "object/object-mark-types.h"
 #include "system/angband.h"
 #include "system/system-variables.h"
 #include "util/flag-group.h"
@@ -58,7 +59,7 @@ public:
     DICE_SID ds{}; /*!< Damage dice/sides */
     TIME_EFFECT timeout{}; /*!< Timeout Counter */
     byte ident{}; /*!< Special flags  */
-    byte marked{}; /*!< Object is marked */
+    EnumClassFlagGroup<OmType> marked{}; /*!< Object is marked */
     uint16_t inscription{}; /*!< Inscription index */
     uint16_t art_name{}; /*!< Artifact name (random artifacts) */
     byte feeling{}; /*!< Game generated inscription number (eg, pseudo-id) */

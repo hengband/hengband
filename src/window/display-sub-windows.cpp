@@ -619,7 +619,7 @@ static void display_floor_item_list(PlayerType *player_ptr, const int y, const i
         ItemEntity *const o_ptr = &floor_ptr->o_list[o_idx];
 
         // 未発見アイテムおよび金は対象外。
-        if (none_bits(o_ptr->marked, OM_FOUND) || o_ptr->tval == ItemKindType::GOLD) {
+        if (o_ptr->marked.has_not(OmType::FOUND) || o_ptr->tval == ItemKindType::GOLD) {
             continue;
         }
 

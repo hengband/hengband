@@ -73,7 +73,7 @@ bool identify_item(PlayerType *player_ptr, ItemEntity *o_ptr)
 
     object_aware(player_ptr, o_ptr);
     object_known(o_ptr);
-    set_bits(o_ptr->marked, OM_TOUCHED);
+    o_ptr->marked.set(OmType::TOUCHED);
 
     set_bits(player_ptr->update, PU_BONUS | PU_COMBINE | PU_REORDER);
     set_bits(player_ptr->window_flags, PW_INVEN | PW_EQUIP | PW_PLAYER | PW_FLOOR_ITEM_LIST);

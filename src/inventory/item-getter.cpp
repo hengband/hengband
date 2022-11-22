@@ -256,7 +256,7 @@ bool get_item(PlayerType *player_ptr, OBJECT_IDX *cp, concptr pmt, concptr str, 
         for (const auto this_o_idx : player_ptr->current_floor_ptr->grid_array[player_ptr->y][player_ptr->x].o_idx_list) {
             ItemEntity *o_ptr;
             o_ptr = &player_ptr->current_floor_ptr->o_list[this_o_idx];
-            if ((item_tester.okay(o_ptr) || (item_selection_ptr->mode & USE_FULL)) && (o_ptr->marked & OM_FOUND)) {
+            if ((item_tester.okay(o_ptr) || (item_selection_ptr->mode & USE_FULL)) && o_ptr->marked.has(OmType::FOUND)) {
                 item_selection_ptr->allow_floor = true;
             }
         }

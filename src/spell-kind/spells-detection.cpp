@@ -200,7 +200,7 @@ bool detect_objects_gold(PlayerType *player_ptr, POSITION range)
         }
 
         if (o_ptr->tval == ItemKindType::GOLD) {
-            o_ptr->marked |= OM_FOUND;
+            o_ptr->marked.set(OmType::FOUND);
             lite_spot(player_ptr, y, x);
             detect = true;
         }
@@ -252,7 +252,7 @@ bool detect_objects_normal(PlayerType *player_ptr, POSITION range)
         }
 
         if (o_ptr->tval != ItemKindType::GOLD) {
-            o_ptr->marked |= OM_FOUND;
+            o_ptr->marked.set(OmType::FOUND);
             lite_spot(player_ptr, y, x);
             detect = true;
         }
@@ -313,7 +313,7 @@ bool detect_objects_magic(PlayerType *player_ptr, POSITION range)
 
         tv = o_ptr->tval;
         if (o_ptr->is_artifact() || o_ptr->is_ego() || (tv == ItemKindType::WHISTLE) || (tv == ItemKindType::AMULET) || (tv == ItemKindType::RING) || (tv == ItemKindType::STAFF) || (tv == ItemKindType::WAND) || (tv == ItemKindType::ROD) || (tv == ItemKindType::SCROLL) || (tv == ItemKindType::POTION) || (tv == ItemKindType::LIFE_BOOK) || (tv == ItemKindType::SORCERY_BOOK) || (tv == ItemKindType::NATURE_BOOK) || (tv == ItemKindType::CHAOS_BOOK) || (tv == ItemKindType::DEATH_BOOK) || (tv == ItemKindType::TRUMP_BOOK) || (tv == ItemKindType::ARCANE_BOOK) || (tv == ItemKindType::CRAFT_BOOK) || (tv == ItemKindType::DEMON_BOOK) || (tv == ItemKindType::CRUSADE_BOOK) || (tv == ItemKindType::MUSIC_BOOK) || (tv == ItemKindType::HISSATSU_BOOK) || (tv == ItemKindType::HEX_BOOK) || ((o_ptr->to_a > 0) || (o_ptr->to_h + o_ptr->to_d > 0))) {
-            o_ptr->marked |= OM_FOUND;
+            o_ptr->marked.set(OmType::FOUND);
             lite_spot(player_ptr, y, x);
             detect = true;
         }
