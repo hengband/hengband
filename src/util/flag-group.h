@@ -6,6 +6,46 @@
 template <typename T>
 class EnumRange;
 
+namespace flag_group::detail {
+
+template <typename Func, size_t BITSET_SIZE>
+void read_bitset(std::bitset<BITSET_SIZE> &bs, Func rd_byte_func, size_t count)
+{
+    for (auto i = 0U; i < count; i++) {
+        const std::bitset<8> rd_byte_bs(rd_byte_func());
+
+        for (auto j = 0U; j < 8; j++) {
+            const size_t pos = i * 8 + j;
+            if (pos >= bs.size()) {
+                break;
+            }
+
+            bs[pos] = rd_byte_bs[j];
+        }
+    }
+}
+
+template <typename Func, size_t BITSET_SIZE>
+void write_bitset(const std::bitset<BITSET_SIZE> &bs, Func wr_byte_func, size_t count)
+{
+    for (auto i = 0U; i < count; i++) {
+        std::bitset<8> wr_byte_bs;
+
+        for (auto j = 0U; j < 8; j++) {
+            const size_t pos = i * 8 + j;
+            if (pos >= bs.size()) {
+                break;
+            }
+
+            wr_byte_bs[j] = bs[pos];
+        }
+
+        wr_byte_func(wr_byte_bs.to_ulong() & 0xff);
+    }
+}
+
+}
+
 /**
  * @brief フラグ集合を扱う、FlagGroupクラス
  *
@@ -415,16 +455,7 @@ public:
         auto tmp_h = rd_byte_func();
         const auto fg_size = static_cast<uint16_t>((tmp_h << 8) | tmp_l);
 
-        for (int i = 0; i < fg_size; i++) {
-            auto flag_byte = rd_byte_func();
-            std::bitset<8> flag_bits(flag_byte);
-            for (int j = 0; j < 8; j++) {
-                const size_t pos = i * 8 + j;
-                if (pos < fg.bs_.size()) {
-                    fg.bs_[pos] = flag_bits[j];
-                }
-            }
-        }
+        flag_group::detail::read_bitset(fg.bs_, rd_byte_func, fg_size);
     }
 
     /**
@@ -440,16 +471,33 @@ public:
         wr_byte_func(fg_size & 0xff);
         wr_byte_func((fg_size >> 8) & 0xff);
 
-        for (int i = 0; i < fg_size; i++) {
-            std::bitset<8> flag_bits;
-            for (int j = 0; j < 8; j++) {
-                const size_t pos = i * 8 + j;
-                if (pos < fg.bs_.size()) {
-                    flag_bits[j] = fg.bs_[pos];
-                }
-            }
-            wr_byte_func(flag_bits.to_ulong() & 0xff);
-        }
+        flag_group::detail::write_bitset(fg.bs_, wr_byte_func, fg_size);
+    }
+
+    /**
+     * @brief セーブファイルから固定バイト長でフラグ集合を読み出す
+     *
+     * @param fg 読み出したフラグ集合を格納するFlagGroupインスタンスの参照
+     * @param rd_byte_func セーブファイルから1バイトデータを読み出す関数(rd_byte)へのポインタ
+     * @param count 読み出すバイト数
+     */
+    template <typename Func>
+    friend void rd_FlagGroup_bytes(FlagGroup<FlagType, MAX> &fg, Func rd_byte_func, size_t count)
+    {
+        flag_group::detail::read_bitset(fg.bs_, rd_byte_func, count);
+    }
+
+    /**
+     * @brief セーブファイルに固定バイト長でフラグ集合を書き込む
+     *
+     * @param fg 書き込むフラグ集合を保持したFlagGroupインスタンスの参照
+     * @param wr_byte_func セーブファイルに1バイトデータを書き込む関数(wr_byte)へのポインタ
+     * @param count 書き込むバイト数
+     */
+    template <typename Func>
+    friend void wr_FlagGroup_bytes(const FlagGroup<FlagType, MAX> &fg, Func wr_byte_func, size_t count)
+    {
+        flag_group::detail::write_bitset(fg.bs_, wr_byte_func, count);
     }
 
     /**
