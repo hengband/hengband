@@ -93,7 +93,8 @@ void fix_inventory(PlayerType *player_ptr)
  * @param x 表示列
  * @param y 表示行
  * @param m_ptr 思い出を表示するモンスター情報の参照ポインタ
- * @param n_same モンスターの数の現在数
+ * @param n_same モンスター数の現在数
+ * @param n_awake 起きている数
  * @details
  * <pre>
  * nnn X LV name
@@ -103,7 +104,7 @@ void fix_inventory(PlayerType *player_ptr)
  *  name: name of monster
  * </pre>
  */
-static void print_monster_line(TERM_LEN x, TERM_LEN y, MonsterEntity *m_ptr, int n_same)
+static void print_monster_line(TERM_LEN x, TERM_LEN y, MonsterEntity *m_ptr, int n_same, int n_awake)
 {
     char buf[256];
     MonsterRaceId r_idx = m_ptr->ap_r_idx;
@@ -115,9 +116,10 @@ static void print_monster_line(TERM_LEN x, TERM_LEN y, MonsterEntity *m_ptr, int
         return;
     }
     if (r_ptr->kind_flags.has(MonsterKindType::UNIQUE)) {
-        term_addstr(-1, TERM_WHITE, MonsterRace(r_idx).is_bounty(true) ? "  W" : "  U");
+        sprintf(buf, _("%3s(覚%2d)", "%3s(%2d)"), MonsterRace(r_idx).is_bounty(true) ? "  W" : "  U", n_awake);
+        term_addstr(-1, TERM_WHITE, buf);
     } else {
-        sprintf(buf, "%3d", n_same);
+        sprintf(buf, _("%3d(覚%2d)", "%3d(%2d)"), n_same, n_awake);
         term_addstr(-1, TERM_WHITE, buf);
     }
 
@@ -145,11 +147,19 @@ static void print_monster_line(TERM_LEN x, TERM_LEN y, MonsterEntity *m_ptr, int
 void print_monster_list(FloorType *floor_ptr, const std::vector<MONSTER_IDX> &monster_list, TERM_LEN x, TERM_LEN y, TERM_LEN max_lines)
 {
     TERM_LEN line = y;
-    MonsterEntity *last_mons = nullptr;
-    int n_same = 0;
-    size_t i;
-    for (i = 0; i < monster_list.size(); i++) {
-        auto m_ptr = &floor_ptr->m_list[monster_list[i]];
+    struct info {
+        MonsterEntity *monster_entity;
+        int visible_count; // 現在数
+        int awake_count; // 起きている数
+    };
+
+    // 出現リスト表示用のデータ
+    std::vector<info> monster_list_info;
+
+    // 描画に必要なデータを集める
+    for (auto monster_index : monster_list) {
+        auto m_ptr = &floor_ptr->m_list[monster_index];
+
         if (m_ptr->is_pet()) {
             continue;
         } // pet
@@ -158,42 +168,33 @@ void print_monster_list(FloorType *floor_ptr, const std::vector<MONSTER_IDX> &mo
         } // dead?
 
         // ソート済みなので同じモンスターは連続する．これを利用して同じモンスターをカウント，まとめて表示する．
-        // 先頭モンスター
-        if (!last_mons) {
-            last_mons = m_ptr;
-            n_same = 1;
-            continue;
+        if (monster_list_info.empty() || (monster_list_info.back().monster_entity->ap_r_idx != m_ptr->ap_r_idx)) {
+            monster_list_info.push_back({ m_ptr, 0, 0 });
         }
 
-        // same race?
-        if (last_mons->ap_r_idx == m_ptr->ap_r_idx) {
-            n_same++;
-            continue; // 表示処理を次に回す
-        }
+        // 出現数をカウント
+        monster_list_info.back().visible_count++;
 
-        // last_mons と m_ptr が(見た目が)異なるなら、last_mons とその数を出力。
-        // m_ptr を新たな last_mons とする。
-        print_monster_line(x, line++, last_mons, n_same);
-        n_same = 1;
-        last_mons = m_ptr;
+        // 起きているモンスターをカウント
+        if (!m_ptr->is_asleep()) {
+            monster_list_info.back().awake_count++;
+        }
+    }
+
+    // 集めたデータを元にリストを表示する
+    for (const auto &info : monster_list_info) {
+        print_monster_line(x, line++, info.monster_entity, info.visible_count, info.awake_count);
 
         // 行数が足りなくなったら中断。
         if (line - y == max_lines) {
+            // 行数が足りなかった場合、最終行にその旨表示。
+            term_addstr(-1, TERM_WHITE, "-- and more --");
             break;
         }
     }
 
-    if (i != monster_list.size()) {
-        // 行数が足りなかった場合、最終行にその旨表示。
-        term_addstr(-1, TERM_WHITE, "-- and more --");
-    } else {
-        // 行数が足りていれば last_mons とその数を出力し、残りの行をクリア。
-        if (last_mons) {
-            print_monster_line(x, line++, last_mons, n_same);
-        }
-        for (; line < max_lines; line++) {
-            term_erase(0, line, 255);
-        }
+    for (; line < max_lines; line++) {
+        term_erase(0, line, 255);
     }
 }
 
