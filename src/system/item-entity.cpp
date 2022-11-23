@@ -141,7 +141,7 @@ bool ItemEntity::is_weapon_armour_ammo() const
  */
 bool ItemEntity::is_melee_weapon() const
 {
-    return (ItemKindType::DIGGING <= this->tval) && (this->tval <= ItemKindType::SWORD);
+    return BaseitemKey(this->tval).is_melee_weapon();
 }
 
 /*!

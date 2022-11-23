@@ -40,6 +40,7 @@ public:
     ItemKindType get_arrow_kind() const;
     bool is_spell_book() const;
     bool is_high_level_book() const;
+    bool is_melee_weapon() const;
 
 private:
     ItemKindType type_value;

@@ -113,6 +113,19 @@ bool BaseitemKey::is_high_level_book() const
     return this->subtype_value >= 2;
 }
 
+bool BaseitemKey::is_melee_weapon() const
+{
+    switch (this->type_value) {
+    case ItemKindType::POLEARM:
+    case ItemKindType::SWORD:
+    case ItemKindType::DIGGING:
+    case ItemKindType::HAFTED:
+        return true;
+    default:
+        return false;
+    }
+}
+
 BaseitemInfo::BaseitemInfo()
     : bi_key(ItemKindType::NONE)
 {
