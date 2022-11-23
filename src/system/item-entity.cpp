@@ -814,3 +814,8 @@ bool ItemEntity::is_wand_rod() const
 {
     return BaseitemKey(this->tval).is_wand_rod();
 }
+
+bool ItemEntity::is_wand_staff() const
+{
+    return BaseitemKey(this->tval).is_wand_staff();
+}

@@ -125,7 +125,7 @@ bool recharge(PlayerType *player_ptr, int power)
         msg_format(_("魔力が逆流した！%sは完全に魔力を失った。", "The recharging backfires - %s is completely drained!"), o_name);
         if ((o_ptr->tval == ItemKindType::ROD) && (o_ptr->timeout < 10000)) {
             o_ptr->timeout = (o_ptr->timeout + 100) * 2;
-        } else if ((o_ptr->tval == ItemKindType::WAND) || (o_ptr->tval == ItemKindType::STAFF)) {
+        } else if (o_ptr->is_wand_staff()) {
             o_ptr->pval = 0;
         }
         return update_player(player_ptr);

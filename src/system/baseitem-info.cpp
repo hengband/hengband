@@ -184,6 +184,17 @@ bool BaseitemKey::is_wand_rod() const
     }
 }
 
+bool BaseitemKey::is_wand_staff() const
+{
+    switch (this->type_value) {
+    case ItemKindType::WAND:
+    case ItemKindType::STAFF:
+        return true;
+    default:
+        return false;
+    }
+}
+
 bool BaseitemKey::is_mushrooms() const
 {
     if (!this->subtype_value.has_value()) {

@@ -101,17 +101,13 @@ std::vector<PARAMETER_VALUE> store_same_magic_device_pvals(ItemEntity *j_ptr)
     auto list = std::vector<PARAMETER_VALUE>();
     for (INVENTORY_IDX i = 0; i < st_ptr->stock_num; i++) {
         auto *o_ptr = &st_ptr->stock[i];
-        if (o_ptr == j_ptr) {
+        if ((o_ptr == j_ptr) || (o_ptr->bi_id != j_ptr->bi_id) || !o_ptr->is_wand_staff()) {
             continue;
         }
-        if (o_ptr->bi_id != j_ptr->bi_id) {
-            continue;
-        }
-        if (o_ptr->tval != ItemKindType::STAFF && o_ptr->tval != ItemKindType::WAND) {
-            continue;
-        }
+
         list.push_back(o_ptr->pval);
     }
+
     return list;
 }
 

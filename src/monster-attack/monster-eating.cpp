@@ -223,7 +223,7 @@ void process_eat_lite(PlayerType *player_ptr, MonsterAttackPlayer *monap_ptr)
  */
 bool process_un_power(PlayerType *player_ptr, MonsterAttackPlayer *monap_ptr)
 {
-    if (((monap_ptr->o_ptr->tval != ItemKindType::STAFF) && (monap_ptr->o_ptr->tval != ItemKindType::WAND)) || (monap_ptr->o_ptr->pval == 0)) {
+    if (!monap_ptr->o_ptr->is_wand_staff() || (monap_ptr->o_ptr->pval == 0)) {
         return false;
     }
 

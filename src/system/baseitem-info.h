@@ -45,6 +45,7 @@ public:
     bool has_unidentified_name() const;
     bool can_recharge() const;
     bool is_wand_rod() const;
+    bool is_wand_staff() const;
 
 private:
     ItemKindType type_value;
