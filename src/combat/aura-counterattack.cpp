@@ -243,7 +243,7 @@ static void aura_shadow_by_monster_attack(PlayerType *player_ptr, MonsterAttackP
     /* Some cursed armours gives an extra effect */
     for (int j = 0; j < TABLE_SIZE; j++) {
         o_armed_ptr = &player_ptr->inventory_list[table[j].slot];
-        if ((o_armed_ptr->bi_id) && o_armed_ptr->is_cursed() && o_armed_ptr->is_armour()) {
+        if ((o_armed_ptr->bi_id) && o_armed_ptr->is_cursed() && o_armed_ptr->is_protector()) {
             project(player_ptr, 0, 0, monap_ptr->m_ptr->fy, monap_ptr->m_ptr->fx, (player_ptr->lev * 2), table[j].type, flg);
         }
     }

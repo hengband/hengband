@@ -195,6 +195,36 @@ bool BaseitemKey::is_wand_staff() const
     }
 }
 
+bool BaseitemKey::is_protector() const
+{
+    switch (this->type_value) {
+    case ItemKindType::BOOTS:
+    case ItemKindType::GLOVES:
+    case ItemKindType::HELM:
+    case ItemKindType::CROWN:
+    case ItemKindType::SHIELD:
+    case ItemKindType::CLOAK:
+    case ItemKindType::SOFT_ARMOR:
+    case ItemKindType::HARD_ARMOR:
+    case ItemKindType::DRAG_ARMOR:
+        return true;
+    default:
+        return false;
+    }
+}
+
+bool BaseitemKey::can_be_aura_protector() const
+{
+    switch (this->type_value) {
+    case ItemKindType::CLOAK:
+    case ItemKindType::SOFT_ARMOR:
+    case ItemKindType::HARD_ARMOR:
+        return true;
+    default:
+        return false;
+    }
+}
+
 bool BaseitemKey::is_mushrooms() const
 {
     if (!this->subtype_value.has_value()) {

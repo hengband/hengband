@@ -19,10 +19,11 @@
  */
 bool rustproof(PlayerType *player_ptr)
 {
-    concptr q = _("どの防具に錆止めをしますか？", "Rustproof which piece of armour? ");
-    concptr s = _("錆止めできるものがありません。", "You have nothing to rustproof.");
+    const auto q = _("どの防具に錆止めをしますか？", "Rustproof which piece of armour? ");
+    const auto s = _("錆止めできるものがありません。", "You have nothing to rustproof.");
     OBJECT_IDX item;
-    auto *o_ptr = choose_object(player_ptr, &item, q, s, USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT, FuncItemTester(&ItemEntity::is_armour));
+    const auto options = USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT;
+    auto *o_ptr = choose_object(player_ptr, &item, q, s, options, FuncItemTester(&ItemEntity::is_protector));
     if (o_ptr == nullptr) {
         return false;
     }

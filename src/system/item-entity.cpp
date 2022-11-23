@@ -131,7 +131,7 @@ bool ItemEntity::is_weapon_ammo() const
  */
 bool ItemEntity::is_weapon_armour_ammo() const
 {
-    return this->is_weapon_ammo() || this->is_armour();
+    return this->is_weapon_ammo() || this->is_protector();
 }
 
 /*!
@@ -324,12 +324,21 @@ bool ItemEntity::is_lance() const
 }
 
 /*!
- * @brief アイテムが防具として装備できるかどうかを返す / Check if an object is armour
+ * @brief アイテムが防具として装備できるかどうかを返す
  * @return 防具として装備できるならばtrueを返す
  */
-bool ItemEntity::is_armour() const
+bool ItemEntity::is_protector() const
 {
-    return (TV_ARMOR_BEGIN <= this->tval) && (this->tval <= TV_ARMOR_END);
+    return BaseitemKey(this->tval).is_protector();
+}
+
+/*!
+ * @brief アイテムがオーラを纏える防具かどうかを返す
+ * @return オーラを纏えるならばtrueを返す
+ */
+bool ItemEntity::can_be_aura_protector() const
+{
+    return BaseitemKey(this->tval).can_be_aura_protector();
 }
 
 /*!

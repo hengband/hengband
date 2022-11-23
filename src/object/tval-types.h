@@ -80,7 +80,5 @@ enum class ItemKindType : short {
 #define TV_WEARABLE_END ItemKindType::CARD
 #define TV_WEAPON_BEGIN ItemKindType::BOW
 #define TV_WEAPON_END ItemKindType::SWORD
-#define TV_ARMOR_BEGIN ItemKindType::BOOTS
-#define TV_ARMOR_END ItemKindType::DRAG_ARMOR
 
 constexpr auto TV_WEAPON_RANGE = EnumRange(TV_WEAPON_BEGIN, TV_WEAPON_END);

@@ -168,7 +168,7 @@ static void bldg_process_command(PlayerType *player_ptr, building_type *bldg, in
         enchant_item(player_ptr, bcost, 1, 1, 0, FuncItemTester(&ItemEntity::allow_enchant_melee_weapon));
         break;
     case BACT_ENCHANT_ARMOR:
-        enchant_item(player_ptr, bcost, 0, 0, 1, FuncItemTester(&ItemEntity::is_armour));
+        enchant_item(player_ptr, bcost, 0, 0, 1, FuncItemTester(&ItemEntity::is_protector));
         break;
     case BACT_RECHARGE:
         building_recharge(player_ptr);

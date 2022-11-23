@@ -156,7 +156,7 @@ bool EnchantArmourSmithInfo::add_essence(PlayerType *player_ptr, ItemEntity *o_p
 
 bool EnchantArmourSmithInfo::can_give_smith_effect(const ItemEntity *o_ptr) const
 {
-    return o_ptr->is_armour();
+    return o_ptr->is_protector();
 }
 
 SustainSmithInfo::SustainSmithInfo(SmithEffectType effect, concptr name, SmithCategoryType category, std::vector<SmithEssenceType> need_essences, int consumption)

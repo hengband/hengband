@@ -46,6 +46,8 @@ public:
     bool can_recharge() const;
     bool is_wand_rod() const;
     bool is_wand_staff() const;
+    bool is_protector() const;
+    bool can_be_aura_protector() const;
 
 private:
     ItemKindType type_value;

@@ -534,15 +534,15 @@ bool enchant_spell(PlayerType *player_ptr, HIT_PROB num_hit, int num_dam, ARMOUR
 
     /* Enchant armor if requested */
     if (num_ac) {
-        item_tester = FuncItemTester(&ItemEntity::is_armour);
+        item_tester = FuncItemTester(&ItemEntity::is_protector);
     }
 
-    concptr q = _("どのアイテムを強化しますか? ", "Enchant which item? ");
-    concptr s = _("強化できるアイテムがない。", "You have nothing to enchant.");
+    const auto q = _("どのアイテムを強化しますか? ", "Enchant which item? ");
+    const auto s = _("強化できるアイテムがない。", "You have nothing to enchant.");
 
     OBJECT_IDX item;
-    ItemEntity *o_ptr;
-    o_ptr = choose_object(player_ptr, &item, q, s, (USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT), item_tester);
+    const auto options = USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT;
+    auto *o_ptr = choose_object(player_ptr, &item, q, s, options, item_tester);
     if (!o_ptr) {
         return false;
     }

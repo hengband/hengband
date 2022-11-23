@@ -90,7 +90,8 @@ public:
     bool is_ammo() const;
     bool is_convertible() const;
     bool is_lance() const;
-    bool is_armour() const;
+    bool is_protector() const;
+    bool can_be_aura_protector() const;
     bool is_rare() const;
     bool is_ego() const;
     bool is_smith() const;
