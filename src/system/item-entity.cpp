@@ -807,3 +807,8 @@ bool ItemEntity::is_specific_artifact(FixedArtifactId id) const
 {
     return this->fixed_artifact_idx == id;
 }
+
+bool ItemEntity::has_unidentified_name() const
+{
+    return BaseitemKey(this->tval).has_unidentified_name();
+}
