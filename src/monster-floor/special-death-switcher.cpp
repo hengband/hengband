@@ -324,29 +324,7 @@ static bool make_equipment(PlayerType *player_ptr, ItemEntity *q_ptr, const BIT_
         return true;
     }
 
-    auto tval = q_ptr->tval;
-    switch (tval) {
-    case ItemKindType::BOW:
-    case ItemKindType::DIGGING:
-    case ItemKindType::HAFTED:
-    case ItemKindType::POLEARM:
-    case ItemKindType::SWORD:
-    case ItemKindType::BOOTS:
-    case ItemKindType::GLOVES:
-    case ItemKindType::HELM:
-    case ItemKindType::CROWN:
-    case ItemKindType::SHIELD:
-    case ItemKindType::CLOAK:
-    case ItemKindType::SOFT_ARMOR:
-    case ItemKindType::HARD_ARMOR:
-    case ItemKindType::DRAG_ARMOR:
-    case ItemKindType::LITE:
-    case ItemKindType::AMULET:
-    case ItemKindType::RING:
-        return true;
-    default:
-        return false;
-    }
+    return q_ptr->is_wearable() && (q_ptr->tval != ItemKindType::CARD);
 }
 
 /*

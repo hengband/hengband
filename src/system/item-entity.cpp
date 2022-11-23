@@ -170,7 +170,7 @@ bool ItemEntity::is_melee_ammo() const
  */
 bool ItemEntity::is_wearable() const
 {
-    return (TV_WEARABLE_BEGIN <= this->tval) && (this->tval <= TV_WEARABLE_END);
+    return BaseitemKey(this->tval).is_wearable();
 }
 
 /*!

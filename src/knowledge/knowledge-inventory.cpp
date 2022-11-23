@@ -289,11 +289,11 @@ void do_cmd_knowledge_inventory(PlayerType *player_ptr)
 
     fprintf(fff, "%s\n", inven_res_label);
     int label_number = 0;
-    for (auto tval = enum2i(TV_WEARABLE_BEGIN); tval <= enum2i(TV_WEARABLE_END); tval++) {
+    for (auto tval : TV_WEARABLE_RANGE) {
         reset_label_number(&label_number, fff);
-        show_wearing_equipment_resistances(player_ptr, i2enum<ItemKindType>(tval), &label_number, fff);
-        show_holding_equipment_resistances(player_ptr, i2enum<ItemKindType>(tval), &label_number, fff);
-        show_home_equipment_resistances(player_ptr, i2enum<ItemKindType>(tval), &label_number, fff);
+        show_wearing_equipment_resistances(player_ptr, tval, &label_number, fff);
+        show_holding_equipment_resistances(player_ptr, tval, &label_number, fff);
+        show_home_equipment_resistances(player_ptr, tval, &label_number, fff);
     }
 
     angband_fclose(fff);

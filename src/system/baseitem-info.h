@@ -48,6 +48,7 @@ public:
     bool is_wand_staff() const;
     bool is_protector() const;
     bool can_be_aura_protector() const;
+    bool is_wearable() const;
 
 private:
     ItemKindType type_value;
