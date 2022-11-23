@@ -43,6 +43,7 @@ public:
     bool is_melee_weapon() const;
     bool is_ammo() const;
     bool has_unidentified_name() const;
+    bool can_recharge() const;
 
 private:
     ItemKindType type_value;

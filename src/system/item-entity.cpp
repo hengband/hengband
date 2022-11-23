@@ -516,20 +516,12 @@ bool ItemEntity::can_refill_torch() const
 }
 
 /*!
- * @brief 魔力充填が可能なアイテムかどうか判定する /
- * Hook for "get_item()".  Determine if something is rechargable.
+ * @brief 魔力充填が可能なアイテムかどうか判定する
  * @return 魔力充填が可能ならばTRUEを返す
  */
 bool ItemEntity::is_rechargeable() const
 {
-    switch (this->tval) {
-    case ItemKindType::STAFF:
-    case ItemKindType::WAND:
-    case ItemKindType::ROD:
-        return true;
-    default:
-        return false;
-    }
+    return BaseitemKey(this->tval).can_recharge();
 }
 
 /*!
