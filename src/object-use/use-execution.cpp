@@ -136,7 +136,7 @@ void ObjectUseEntity::execute()
     }
 
     if (this->item >= 0) {
-        inven_item_charges(this->player_ptr, this->item);
+        inven_item_charges(this->player_ptr->inventory_list[this->item]);
     } else {
         floor_item_charges(this->player_ptr->current_floor_ptr, 0 - this->item);
     }
