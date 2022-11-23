@@ -44,7 +44,7 @@ ITEM_NUMBER scan_floor_items(PlayerType *player_ptr, OBJECT_IDX *items, POSITION
             continue;
         }
 
-        if ((mode & SCAN_FLOOR_ONLY_MARKED) && !(o_ptr->marked & OM_FOUND)) {
+        if ((mode & SCAN_FLOOR_ONLY_MARKED) && o_ptr->marked.has_not(OmType::FOUND)) {
             continue;
         }
 

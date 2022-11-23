@@ -72,7 +72,7 @@ void wiz_lite(PlayerType *player_ptr, bool ninja)
         if (o_ptr->is_held_by_monster()) {
             continue;
         }
-        o_ptr->marked |= OM_FOUND;
+        o_ptr->marked.set(OmType::FOUND);
     }
 
     /* Scan all normal grids */
@@ -170,7 +170,8 @@ void wiz_dark(PlayerType *player_ptr)
         }
 
         /* Forget the object */
-        o_ptr->marked &= OM_TOUCHED;
+        // 意図としては OmType::TOUCHED を維持しつつ OmType::FOUND を消す事と思われるが一応元のロジックを維持しておく
+        o_ptr->marked &= { OmType::TOUCHED };
     }
 
     /* Forget travel route when we have forgotten map */

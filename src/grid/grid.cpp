@@ -358,7 +358,7 @@ void note_spot(PlayerType *player_ptr, POSITION y, POSITION x)
         auto *o_ptr = &player_ptr->current_floor_ptr->o_list[this_o_idx];
 
         /* Memorize objects */
-        o_ptr->marked |= OM_FOUND;
+        o_ptr->marked.set(OmType::FOUND);
     }
 
     /* Hack -- memorize grids */

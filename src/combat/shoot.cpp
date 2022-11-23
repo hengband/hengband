@@ -965,7 +965,7 @@ void exe_fire(PlayerType *player_ptr, INVENTORY_IDX item, ItemEntity *j_ptr, SPE
             o_ptr->copy_from(q_ptr);
 
             /* Forget mark */
-            reset_bits(o_ptr->marked, OM_TOUCHED);
+            o_ptr->marked.reset(OmType::TOUCHED);
 
             /* Forget location */
             o_ptr->iy = o_ptr->ix = 0;

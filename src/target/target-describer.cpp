@@ -410,7 +410,7 @@ static int16_t loop_describing_grid(PlayerType *player_ptr, eg_type *eg_ptr)
 
 static int16_t describe_footing_sight(PlayerType *player_ptr, eg_type *eg_ptr, ItemEntity *o_ptr)
 {
-    if ((o_ptr->marked & OM_FOUND) == 0) {
+    if (o_ptr->marked.has_not(OmType::FOUND)) {
         return CONTINUOUS_DESCRIPTION;
     }
 

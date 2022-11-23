@@ -354,7 +354,7 @@ int16_t store_item_to_inventory(PlayerType *player_ptr, ItemEntity *o_ptr)
     j_ptr = &player_ptr->inventory_list[i];
     j_ptr->held_m_idx = 0;
     j_ptr->iy = j_ptr->ix = 0;
-    j_ptr->marked = OM_TOUCHED;
+    j_ptr->marked.clear().set(OmType::TOUCHED);
 
     player_ptr->inven_cnt++;
     player_ptr->update |= (PU_BONUS | PU_COMBINE | PU_REORDER);

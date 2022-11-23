@@ -43,7 +43,7 @@ static errr rd_inventory(PlayerType *player_ptr)
         }
 
         if (n >= INVEN_MAIN_HAND) {
-            item.marked |= OM_TOUCHED;
+            item.marked.set(OmType::TOUCHED);
             player_ptr->inventory_list[n].copy_from(&item);
             player_ptr->equip_cnt++;
             continue;
@@ -55,7 +55,7 @@ static errr rd_inventory(PlayerType *player_ptr)
         }
 
         n = slot++;
-        item.marked |= OM_TOUCHED;
+        item.marked.set(OmType::TOUCHED);
         player_ptr->inventory_list[n].copy_from(&item);
         player_ptr->inven_cnt++;
     }

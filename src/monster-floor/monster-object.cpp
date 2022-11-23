@@ -149,7 +149,8 @@ static void monster_pickup_object(PlayerType *player_ptr, turn_flags *turn_flags
         }
 
         excise_object_idx(player_ptr->current_floor_ptr, this_o_idx);
-        o_ptr->marked &= OM_TOUCHED;
+        // 意図としては OmType::TOUCHED を維持しつつ OmType::FOUND を消す事と思われるが一応元のロジックを維持しておく
+        o_ptr->marked &= { OmType::TOUCHED };
         o_ptr->iy = o_ptr->ix = 0;
         o_ptr->held_m_idx = m_idx;
         m_ptr->hold_o_idx_list.add(player_ptr->current_floor_ptr, this_o_idx);

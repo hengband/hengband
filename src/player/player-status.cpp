@@ -2752,7 +2752,7 @@ bool player_has_no_spellbooks(PlayerType *player_ptr)
     auto *floor_ptr = player_ptr->current_floor_ptr;
     for (const auto this_o_idx : floor_ptr->grid_array[player_ptr->y][player_ptr->x].o_idx_list) {
         o_ptr = &floor_ptr->o_list[this_o_idx];
-        if (o_ptr->bi_id && any_bits(o_ptr->marked, OM_FOUND) && check_book_realm(player_ptr, { o_ptr->tval, o_ptr->sval })) {
+        if (o_ptr->bi_id && o_ptr->marked.has(OmType::FOUND) && check_book_realm(player_ptr, { o_ptr->tval, o_ptr->sval })) {
             return false;
         }
     }

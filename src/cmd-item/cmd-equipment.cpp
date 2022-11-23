@@ -293,7 +293,7 @@ void do_cmd_wield(PlayerType *player_ptr)
     }
 
     o_ptr->copy_from(q_ptr);
-    o_ptr->marked |= OM_TOUCHED;
+    o_ptr->marked.set(OmType::TOUCHED);
     player_ptr->equip_cnt++;
 
 #define STR_WIELD_HAND_RIGHT _("%s(%c)を右手に装備した。", "You are wielding %s (%c) in your right hand.")

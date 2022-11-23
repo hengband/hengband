@@ -104,8 +104,8 @@ void py_pickup_floor(PlayerType *player_ptr, bool pickup)
             player_ptr->window_flags |= (PW_PLAYER);
             delete_object_idx(player_ptr, this_o_idx);
             continue;
-        } else if (o_ptr->marked & OM_NOMSG) {
-            o_ptr->marked &= ~(OM_NOMSG);
+        } else if (o_ptr->marked.has(OmType::SUPRESS_MESSAGE)) {
+            o_ptr->marked.reset(OmType::SUPRESS_MESSAGE);
             continue;
         }
 
@@ -208,7 +208,7 @@ void describe_pickup_item(PlayerType *player_ptr, OBJECT_IDX o_idx)
     if (player_ptr->ppersonality == PERSONALITY_MUNCHKIN) {
         bool old_known = identify_item(player_ptr, o_ptr);
         autopick_alter_item(player_ptr, slot, (bool)(destroy_identify && !old_known));
-        if (o_ptr->marked & OM_AUTODESTROY) {
+        if (o_ptr->marked.has(OmType::AUTODESTROY)) {
             return;
         }
     }
@@ -278,8 +278,8 @@ void carry(PlayerType *player_ptr, bool pickup)
             continue;
         }
 
-        if (o_ptr->marked & OM_NOMSG) {
-            o_ptr->marked &= ~OM_NOMSG;
+        if (o_ptr->marked.has(OmType::SUPRESS_MESSAGE)) {
+            o_ptr->marked.reset(OmType::SUPRESS_MESSAGE);
             continue;
         }
 
