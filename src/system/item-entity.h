@@ -122,6 +122,7 @@ public:
     int get_price() const;
     bool is_specific_artifact(FixedArtifactId id) const;
     bool has_unidentified_name() const;
+    ItemKindType get_arrow_kind() const;
 
 private:
     int get_baseitem_price() const;

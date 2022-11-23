@@ -812,3 +812,8 @@ bool ItemEntity::has_unidentified_name() const
 {
     return BaseitemKey(this->tval).has_unidentified_name();
 }
+
+ItemKindType ItemEntity::get_arrow_kind() const
+{
+    return BaseitemKey(this->tval, this->sval).get_arrow_kind();
+}

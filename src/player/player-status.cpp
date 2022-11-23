@@ -333,8 +333,7 @@ static void update_bonuses(PlayerType *player_ptr)
     update_ability_scores(player_ptr);
     o_ptr = &player_ptr->inventory_list[INVEN_BOW];
     if (o_ptr->bi_id) {
-        const BaseitemKey key(o_ptr->tval, o_ptr->sval);
-        player_ptr->tval_ammo = key.get_arrow_kind();
+        player_ptr->tval_ammo = o_ptr->get_arrow_kind();
         player_ptr->num_fire = calc_num_fire(player_ptr, o_ptr);
     }
 
@@ -1048,8 +1047,7 @@ int16_t calc_num_fire(PlayerType *player_ptr, ItemEntity *o_ptr)
         return (int16_t)num;
     }
 
-    const BaseitemKey key(o_ptr->tval, o_ptr->sval);
-    const auto tval_ammo = key.get_arrow_kind();
+    const auto tval_ammo = o_ptr->get_arrow_kind();
     PlayerClass pc(player_ptr);
     if (pc.equals(PlayerClassType::RANGER) && (tval_ammo == ItemKindType::ARROW)) {
         num += (player_ptr->lev * 4);
