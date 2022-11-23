@@ -31,7 +31,7 @@
  */
 void distribute_charges(ItemEntity *o_ptr, ItemEntity *q_ptr, int amt)
 {
-    if ((o_ptr->tval != ItemKindType::WAND) && (o_ptr->tval != ItemKindType::ROD)) {
+    if (!o_ptr->is_wand_rod()) {
         return;
     }
 
@@ -66,7 +66,7 @@ void distribute_charges(ItemEntity *o_ptr, ItemEntity *q_ptr, int amt)
  */
 void reduce_charges(ItemEntity *o_ptr, int amt)
 {
-    if (((o_ptr->tval == ItemKindType::WAND) || (o_ptr->tval == ItemKindType::ROD)) && (amt < o_ptr->number)) {
+    if (o_ptr->is_wand_rod() && (amt < o_ptr->number)) {
         o_ptr->pval -= o_ptr->pval * amt / o_ptr->number;
     }
 }

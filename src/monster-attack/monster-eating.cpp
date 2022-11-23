@@ -121,7 +121,7 @@ static void move_item_to_monster(PlayerType *player_ptr, MonsterAttackPlayer *mo
     j_ptr = &player_ptr->current_floor_ptr->o_list[o_idx];
     j_ptr->copy_from(monap_ptr->o_ptr);
     j_ptr->number = 1;
-    if ((monap_ptr->o_ptr->tval == ItemKindType::ROD) || (monap_ptr->o_ptr->tval == ItemKindType::WAND)) {
+    if (monap_ptr->o_ptr->is_wand_rod()) {
         j_ptr->pval = monap_ptr->o_ptr->pval / monap_ptr->o_ptr->number;
         monap_ptr->o_ptr->pval -= j_ptr->pval;
     }

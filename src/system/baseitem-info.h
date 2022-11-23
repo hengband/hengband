@@ -44,6 +44,7 @@ public:
     bool is_ammo() const;
     bool has_unidentified_name() const;
     bool can_recharge() const;
+    bool is_wand_rod() const;
 
 private:
     ItemKindType type_value;

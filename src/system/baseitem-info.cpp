@@ -173,6 +173,17 @@ bool BaseitemKey::can_recharge() const
     }
 }
 
+bool BaseitemKey::is_wand_rod() const
+{
+    switch (this->type_value) {
+    case ItemKindType::WAND:
+    case ItemKindType::ROD:
+        return true;
+    default:
+        return false;
+    }
+}
+
 bool BaseitemKey::is_mushrooms() const
 {
     if (!this->subtype_value.has_value()) {

@@ -81,7 +81,7 @@ void store_delete(void)
         num = 1;
     }
 
-    if ((st_ptr->stock[what].tval == ItemKindType::ROD) || (st_ptr->stock[what].tval == ItemKindType::WAND)) {
+    if (st_ptr->stock[what].is_wand_rod()) {
         st_ptr->stock[what].pval -= num * st_ptr->stock[what].pval / st_ptr->stock[what].number;
     }
 
@@ -136,7 +136,7 @@ bool store_object_similar(ItemEntity *o_ptr, ItemEntity *j_ptr)
         return false;
     }
 
-    if ((o_ptr->pval != j_ptr->pval) && (o_ptr->tval != ItemKindType::WAND) && (o_ptr->tval != ItemKindType::ROD)) {
+    if ((o_ptr->pval != j_ptr->pval) && !o_ptr->is_wand_rod()) {
         return false;
     }
 
@@ -216,7 +216,7 @@ static void store_object_absorb(ItemEntity *o_ptr, ItemEntity *j_ptr)
     int total = o_ptr->number + j_ptr->number;
     int diff = (total > max_num) ? total - max_num : 0;
     o_ptr->number = (total > max_num) ? max_num : total;
-    if ((o_ptr->tval == ItemKindType::ROD) || (o_ptr->tval == ItemKindType::WAND)) {
+    if (o_ptr->is_wand_rod()) {
         o_ptr->pval += j_ptr->pval * (j_ptr->number - diff) / j_ptr->number;
     }
 }

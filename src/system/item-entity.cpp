@@ -809,3 +809,8 @@ ItemKindType ItemEntity::get_arrow_kind() const
 {
     return BaseitemKey(this->tval, this->sval).get_arrow_kind();
 }
+
+bool ItemEntity::is_wand_rod() const
+{
+    return BaseitemKey(this->tval).is_wand_rod();
+}

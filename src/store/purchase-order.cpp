@@ -319,7 +319,7 @@ void store_purchase(PlayerType *player_ptr, StoreSaleType store_num)
     describe_flavor(player_ptr, o_name, &player_ptr->inventory_list[item_new], 0);
     msg_format(_("%s(%c)を手に入れた。", "You have %s (%c)."), o_name, index_to_label(item_new));
 
-    if ((o_ptr->tval == ItemKindType::ROD) || (o_ptr->tval == ItemKindType::WAND)) {
+    if (o_ptr->is_wand_rod()) {
         o_ptr->pval -= j_ptr->pval;
     }
 
