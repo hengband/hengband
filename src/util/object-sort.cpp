@@ -41,48 +41,58 @@ static int get_item_sort_rank(const ItemEntity &item)
  */
 bool object_sort_comp(PlayerType *player_ptr, ItemEntity *o_ptr, int32_t o_value, ItemEntity *j_ptr)
 {
-    if (!j_ptr->bi_id) {
+    if (j_ptr->bi_id == 0) {
         return true;
     }
 
-    if ((o_ptr->tval == get_realm1_book(player_ptr)) && (j_ptr->tval != get_realm1_book(player_ptr))) {
+    const auto o_tval = o_ptr->tval;
+    const auto j_tval = j_ptr->tval;
+    if ((o_tval == get_realm1_book(player_ptr)) && (j_tval != get_realm1_book(player_ptr))) {
         return true;
     }
-    if ((j_ptr->tval == get_realm1_book(player_ptr)) && (o_ptr->tval != get_realm1_book(player_ptr))) {
+
+    if ((j_tval == get_realm1_book(player_ptr)) && (o_tval != get_realm1_book(player_ptr))) {
         return false;
     }
 
-    if ((o_ptr->tval == get_realm2_book(player_ptr)) && (j_ptr->tval != get_realm2_book(player_ptr))) {
+    if ((o_tval == get_realm2_book(player_ptr)) && (j_tval != get_realm2_book(player_ptr))) {
         return true;
     }
-    if ((j_ptr->tval == get_realm2_book(player_ptr)) && (o_ptr->tval != get_realm2_book(player_ptr))) {
+
+    if ((j_tval == get_realm2_book(player_ptr)) && (o_tval != get_realm2_book(player_ptr))) {
         return false;
     }
 
-    if (o_ptr->tval > j_ptr->tval) {
+    if (o_tval > j_tval) {
         return true;
     }
-    if (o_ptr->tval < j_ptr->tval) {
+
+    if (o_tval < j_tval) {
         return false;
     }
 
     if (!o_ptr->is_aware()) {
         return false;
     }
+
     if (!j_ptr->is_aware()) {
         return true;
     }
 
-    if (o_ptr->sval < j_ptr->sval) {
+    const auto o_sval = o_ptr->sval;
+    const auto j_sval = j_ptr->sval;
+    if (o_sval < j_sval) {
         return true;
     }
-    if (o_ptr->sval > j_ptr->sval) {
+
+    if (o_sval > j_sval) {
         return false;
     }
 
     if (!o_ptr->is_known()) {
         return false;
     }
+
     if (!j_ptr->is_known()) {
         return true;
     }
@@ -92,11 +102,12 @@ bool object_sort_comp(PlayerType *player_ptr, ItemEntity *o_ptr, int32_t o_value
     if (o_rank < j_rank) {
         return true;
     }
+
     if (o_rank > j_rank) {
         return false;
     }
 
-    switch (o_ptr->tval) {
+    switch (o_tval) {
     case ItemKindType::FIGURINE:
     case ItemKindType::STATUE:
     case ItemKindType::CORPSE:
@@ -106,32 +117,35 @@ bool object_sort_comp(PlayerType *player_ptr, ItemEntity *o_ptr, int32_t o_value
         if (monraces_info[o_r_idx].level < monraces_info[j_r_idx].level) {
             return true;
         }
+
         if ((monraces_info[o_r_idx].level == monraces_info[j_r_idx].level) && (o_ptr->pval < j_ptr->pval)) {
             return true;
         }
+
         return false;
     }
-
     case ItemKindType::SHOT:
     case ItemKindType::ARROW:
     case ItemKindType::BOLT:
         if (o_ptr->to_h + o_ptr->to_d < j_ptr->to_h + j_ptr->to_d) {
             return true;
         }
+
         if (o_ptr->to_h + o_ptr->to_d > j_ptr->to_h + j_ptr->to_d) {
             return false;
         }
-        break;
 
+        break;
     case ItemKindType::ROD:
         if (o_ptr->pval < j_ptr->pval) {
             return true;
         }
+
         if (o_ptr->pval > j_ptr->pval) {
             return false;
         }
-        break;
 
+        break;
     default:
         break;
     }
