@@ -14,6 +14,23 @@
 #include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
 
+static int get_item_sort_rank(const ItemEntity &item)
+{
+    if (item.is_fixed_artifact()) {
+        return 3;
+    }
+
+    if (item.art_name) {
+        return 2;
+    }
+
+    if (item.is_ego()) {
+        return 1;
+    }
+
+    return 0;
+}
+
 /*!
  * @brief オブジェクトを定義された基準に従いソートするための関数 /
  * Check if we have space for an item in the pack without overflow
@@ -24,7 +41,6 @@
  */
 bool object_sort_comp(PlayerType *player_ptr, ItemEntity *o_ptr, int32_t o_value, ItemEntity *j_ptr)
 {
-    int o_type, j_type;
     if (!j_ptr->bi_id) {
         return true;
     }
@@ -71,30 +87,12 @@ bool object_sort_comp(PlayerType *player_ptr, ItemEntity *o_ptr, int32_t o_value
         return true;
     }
 
-    if (o_ptr->is_fixed_artifact()) {
-        o_type = 3;
-    } else if (o_ptr->art_name) {
-        o_type = 2;
-    } else if (o_ptr->is_ego()) {
-        o_type = 1;
-    } else {
-        o_type = 0;
-    }
-
-    if (j_ptr->is_fixed_artifact()) {
-        j_type = 3;
-    } else if (j_ptr->art_name) {
-        j_type = 2;
-    } else if (j_ptr->is_ego()) {
-        j_type = 1;
-    } else {
-        j_type = 0;
-    }
-
-    if (o_type < j_type) {
+    const auto o_rank = get_item_sort_rank(*o_ptr);
+    const auto j_rank = get_item_sort_rank(*j_ptr);
+    if (o_rank < j_rank) {
         return true;
     }
-    if (o_type > j_type) {
+    if (o_rank > j_rank) {
         return false;
     }
 
