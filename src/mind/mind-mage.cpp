@@ -34,10 +34,9 @@ bool eat_magic(PlayerType *player_ptr, int power)
     concptr q = _("どのアイテムから魔力を吸収しますか？", "Drain which item? ");
     concptr s = _("魔力を吸収できるアイテムがありません。", "You have nothing to drain.");
 
-    ItemEntity *o_ptr;
     OBJECT_IDX item;
-    o_ptr = choose_object(player_ptr, &item, q, s, (USE_INVEN | USE_FLOOR), FuncItemTester(&ItemEntity::is_rechargeable));
-    if (!o_ptr) {
+    auto *o_ptr = choose_object(player_ptr, &item, q, s, (USE_INVEN | USE_FLOOR), FuncItemTester(&ItemEntity::can_recharge));
+    if (o_ptr == nullptr) {
         return false;
     }
 

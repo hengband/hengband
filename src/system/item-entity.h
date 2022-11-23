@@ -110,7 +110,7 @@ public:
     bool is_readable() const;
     bool can_refill_lantern() const;
     bool can_refill_torch() const;
-    bool is_rechargeable() const;
+    bool can_recharge() const;
     bool is_offerable() const;
     bool is_activatable() const;
     bool is_fuel() const;

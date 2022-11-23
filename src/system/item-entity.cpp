@@ -519,7 +519,7 @@ bool ItemEntity::can_refill_torch() const
  * @brief 魔力充填が可能なアイテムかどうか判定する
  * @return 魔力充填が可能ならばTRUEを返す
  */
-bool ItemEntity::is_rechargeable() const
+bool ItemEntity::can_recharge() const
 {
     return BaseitemKey(this->tval).can_recharge();
 }
