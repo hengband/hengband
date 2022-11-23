@@ -273,19 +273,28 @@ bool detect_objects_normal(PlayerType *player_ptr, POSITION range)
     return detect;
 }
 
+static bool is_object_magically(const ItemKindType tval)
+{
+    switch (tval) {
+    case ItemKindType::WHISTLE:
+    case ItemKindType::AMULET:
+    case ItemKindType::RING:
+    case ItemKindType::STAFF:
+    case ItemKindType::WAND:
+    case ItemKindType::ROD:
+    case ItemKindType::SCROLL:
+    case ItemKindType::POTION:
+        return true;
+    default:
+        return false;
+    }
+}
+
 /*!
- * @brief 魔法効果のあるのアイテムオブジェクトを感知する / Detect all "magic" objects on the current panel.
+ * @brief 魔法効果のあるのアイテムオブジェクトを感知する
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param range 効果範囲
- * @return 効力があった場合TRUEを返す
- * @details
- * <pre>
- * This will light up all spaces with "magic" items, including artifacts,
- * ego-items, potions, scrolls, books, rods, wands, staffs, amulets, rings,
- * and "enchanted" items of the "good" variety.
- *
- * It can probably be argued that this function is now too powerful.
- * </pre>
+ * @return 1つ以上感知したか否か
  */
 bool detect_objects_magic(PlayerType *player_ptr, POSITION range)
 {
@@ -293,27 +302,22 @@ bool detect_objects_magic(PlayerType *player_ptr, POSITION range)
         range /= 3;
     }
 
-    ItemKindType tv;
-    bool detect = false;
+    auto detect = false;
     for (OBJECT_IDX i = 1; i < player_ptr->current_floor_ptr->o_max; i++) {
         auto *o_ptr = &player_ptr->current_floor_ptr->o_list[i];
-
-        if (!o_ptr->is_valid()) {
-            continue;
-        }
-        if (o_ptr->is_held_by_monster()) {
+        if (!o_ptr->is_valid() || o_ptr->is_held_by_monster()) {
             continue;
         }
 
-        POSITION y = o_ptr->iy;
-        POSITION x = o_ptr->ix;
-
+        auto y = o_ptr->iy;
+        auto x = o_ptr->ix;
         if (distance(player_ptr->y, player_ptr->x, y, x) > range) {
             continue;
         }
 
-        tv = o_ptr->tval;
-        if (o_ptr->is_artifact() || o_ptr->is_ego() || (tv == ItemKindType::WHISTLE) || (tv == ItemKindType::AMULET) || (tv == ItemKindType::RING) || (tv == ItemKindType::STAFF) || (tv == ItemKindType::WAND) || (tv == ItemKindType::ROD) || (tv == ItemKindType::SCROLL) || (tv == ItemKindType::POTION) || (tv == ItemKindType::LIFE_BOOK) || (tv == ItemKindType::SORCERY_BOOK) || (tv == ItemKindType::NATURE_BOOK) || (tv == ItemKindType::CHAOS_BOOK) || (tv == ItemKindType::DEATH_BOOK) || (tv == ItemKindType::TRUMP_BOOK) || (tv == ItemKindType::ARCANE_BOOK) || (tv == ItemKindType::CRAFT_BOOK) || (tv == ItemKindType::DEMON_BOOK) || (tv == ItemKindType::CRUSADE_BOOK) || (tv == ItemKindType::MUSIC_BOOK) || (tv == ItemKindType::HISSATSU_BOOK) || (tv == ItemKindType::HEX_BOOK) || ((o_ptr->to_a > 0) || (o_ptr->to_h + o_ptr->to_d > 0))) {
+        auto has_bonus = o_ptr->to_a > 0;
+        has_bonus |= o_ptr->to_h + o_ptr->to_d > 0;
+        if (o_ptr->is_artifact() || o_ptr->is_ego() || is_object_magically(o_ptr->tval) || o_ptr->is_spell_book() || has_bonus) {
             o_ptr->marked.set(OmType::FOUND);
             lite_spot(player_ptr, y, x);
             detect = true;
