@@ -32,7 +32,7 @@ void AbstractWeaponEnchanter::give_killing_bonus()
     auto tohit2 = static_cast<short>(m_bonus(10, this->level));
     auto todam2 = static_cast<short>(m_bonus(10, this->level));
 
-    if ((this->o_ptr->tval == ItemKindType::BOLT) || (this->o_ptr->tval == ItemKindType::ARROW) || (this->o_ptr->tval == ItemKindType::SHOT)) {
+    if (this->o_ptr->is_ammo()) {
         tohit2 = (tohit2 + 1) / 2;
         todam2 = (todam2 + 1) / 2;
     }

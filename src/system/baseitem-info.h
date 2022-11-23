@@ -41,6 +41,7 @@ public:
     bool is_spell_book() const;
     bool is_high_level_book() const;
     bool is_melee_weapon() const;
+    bool is_ammo() const;
 
 private:
     ItemKindType type_value;

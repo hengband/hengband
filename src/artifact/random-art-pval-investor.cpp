@@ -156,7 +156,7 @@ void random_plus(ItemEntity *o_ptr)
         return;
     }
 
-    int this_type = o_ptr->is_weapon_ammo() ? 23 : 19;
+    const auto this_type = o_ptr->is_weapon_ammo() ? 23 : 19;
     switch (randint1(this_type)) {
     case 1:
     case 2:

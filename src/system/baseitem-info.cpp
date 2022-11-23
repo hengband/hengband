@@ -126,6 +126,18 @@ bool BaseitemKey::is_melee_weapon() const
     }
 }
 
+bool BaseitemKey::is_ammo() const
+{
+    switch (this->type_value) {
+    case ItemKindType::SHOT:
+    case ItemKindType::ARROW:
+    case ItemKindType::BOLT:
+        return true;
+    default:
+        return false;
+    }
+}
+
 BaseitemInfo::BaseitemInfo()
     : bi_key(ItemKindType::NONE)
 {
