@@ -76,7 +76,7 @@ bool identify_item(PlayerType *player_ptr, ItemEntity *o_ptr)
     o_ptr->marked.set(OmType::TOUCHED);
 
     set_bits(player_ptr->update, PU_BONUS | PU_COMBINE | PU_REORDER);
-    set_bits(player_ptr->window_flags, PW_INVEN | PW_EQUIP | PW_PLAYER | PW_FLOOR_ITEM_LIST);
+    set_bits(player_ptr->window_flags, PW_INVEN | PW_EQUIP | PW_PLAYER | PW_FLOOR_ITEM_LIST | PW_FOUND_ITEM_LIST);
 
     strcpy(record_o_name, o_name);
     record_turn = w_ptr->game_turn;

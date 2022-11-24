@@ -30,6 +30,7 @@
 #include "system/player-type-definition.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
+#include <core/window-redrawer.h>
 
 /*!
  * @brief オブジェクトのフラグを更新する
@@ -154,6 +155,7 @@ static void monster_pickup_object(PlayerType *player_ptr, turn_flags *turn_flags
         o_ptr->iy = o_ptr->ix = 0;
         o_ptr->held_m_idx = m_idx;
         m_ptr->hold_o_idx_list.add(player_ptr->current_floor_ptr, this_o_idx);
+        player_ptr->window_flags |= PW_FOUND_ITEM_LIST;
         return;
     }
 

@@ -262,6 +262,7 @@ bool detect_objects_normal(PlayerType *player_ptr, POSITION range)
         detect = false;
     }
     if (detect) {
+        player_ptr->window_flags |= PW_FOUND_ITEM_LIST;
         msg_print(_("アイテムの存在を感じとった！", "You sense the presence of objects!"));
     }
 
@@ -320,6 +321,7 @@ bool detect_objects_magic(PlayerType *player_ptr, POSITION range)
     }
 
     if (detect) {
+        player_ptr->window_flags |= PW_FOUND_ITEM_LIST;
         msg_print(_("魔法のアイテムの存在を感じとった！", "You sense the presence of magic objects!"));
     }
 

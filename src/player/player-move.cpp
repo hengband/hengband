@@ -234,7 +234,7 @@ bool move_player_effect(PlayerType *player_ptr, POSITION ny, POSITION nx, BIT_FL
 
     if (!player_ptr->running) {
         // 自動拾い/自動破壊により床上のアイテムリストが変化した可能性があるので表示を更新
-        set_bits(player_ptr->window_flags, PW_FLOOR_ITEM_LIST);
+        set_bits(player_ptr->window_flags, PW_FLOOR_ITEM_LIST | PW_FOUND_ITEM_LIST);
         window_stuff(player_ptr);
     }
 

@@ -579,7 +579,7 @@ static void wiz_reroll_item(PlayerType *player_ptr, ItemEntity *o_ptr)
 
     o_ptr->copy_from(q_ptr);
     set_bits(player_ptr->update, PU_BONUS | PU_COMBINE | PU_REORDER);
-    set_bits(player_ptr->window_flags, PW_INVEN | PW_EQUIP | PW_SPELL | PW_PLAYER | PW_FLOOR_ITEM_LIST);
+    set_bits(player_ptr->window_flags, PW_INVEN | PW_EQUIP | PW_SPELL | PW_PLAYER | PW_FLOOR_ITEM_LIST | PW_FOUND_ITEM_LIST);
 }
 
 /*!
@@ -724,7 +724,7 @@ void wiz_modify_item(PlayerType *player_ptr)
 
         o_ptr->copy_from(q_ptr);
         set_bits(player_ptr->update, PU_BONUS | PU_COMBINE | PU_REORDER);
-        set_bits(player_ptr->window_flags, PW_INVEN | PW_EQUIP | PW_SPELL | PW_PLAYER | PW_FLOOR_ITEM_LIST);
+        set_bits(player_ptr->window_flags, PW_INVEN | PW_EQUIP | PW_SPELL | PW_PLAYER | PW_FLOOR_ITEM_LIST | PW_FOUND_ITEM_LIST);
     } else {
         msg_print("Changes ignored.");
     }

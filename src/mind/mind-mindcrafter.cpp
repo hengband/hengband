@@ -87,7 +87,7 @@ bool psychometry(PlayerType *player_ptr)
     o_ptr->marked.set(OmType::TOUCHED);
 
     set_bits(player_ptr->update, PU_COMBINE | PU_REORDER);
-    set_bits(player_ptr->window_flags, PW_INVEN | PW_EQUIP | PW_PLAYER | PW_FLOOR_ITEM_LIST);
+    set_bits(player_ptr->window_flags, PW_INVEN | PW_EQUIP | PW_PLAYER | PW_FLOOR_ITEM_LIST | PW_FOUND_ITEM_LIST);
 
     bool okay = false;
     switch (o_ptr->tval) {
