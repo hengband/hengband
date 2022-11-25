@@ -1,8 +1,9 @@
 ﻿/*
  * @file item-entity.cpp
- * @brief アイテム定義の構造体とエンティティ処理実装
+ * @brief アイテム実体とそれにまつわる判定処理群
  * @author Hourier
- * @date 2022/10/09
+ * @date 2022/11/25
+ * @details オブジェクトの状態を変更するメソッドは道半ば
  */
 
 #include "system/item-entity.h"
@@ -11,23 +12,18 @@
 #include "monster-race/monster-race.h"
 #include "object-enchant/object-curse.h"
 #include "object-enchant/special-object-flags.h"
-#include "object-enchant/tr-types.h"
-#include "object-enchant/trc-types.h"
-#include "object-enchant/trg-types.h"
 #include "object/object-flags.h"
 #include "object/object-value.h"
 #include "object/tval-types.h"
 #include "smith/object-smith.h"
-#include "sv-definition/sv-armor-types.h"
 #include "sv-definition/sv-lite-types.h"
 #include "sv-definition/sv-other-types.h"
-#include "sv-definition/sv-protector-types.h"
 #include "sv-definition/sv-weapon-types.h"
 #include "system/baseitem-info.h"
 #include "system/monster-race-info.h"
-#include "system/player-type-definition.h"
 #include "term/term-color-types.h"
 #include "util/bit-flags-calculator.h"
+#include "util/enum-converter.h"
 #include "util/string-processor.h"
 
 ItemEntity::ItemEntity()
@@ -63,7 +59,7 @@ void ItemEntity::prep(short new_bi_id)
 {
     auto *k_ptr = &baseitems_info[new_bi_id];
     auto old_stack_idx = this->stack_idx;
-    wipe();
+    this->wipe();
     this->stack_idx = old_stack_idx;
     this->bi_id = new_bi_id;
     this->tval = k_ptr->bi_key.tval();
@@ -500,7 +496,7 @@ bool ItemEntity::is_fuel() const
 {
     const BaseitemKey bi_key(this->tval, this->sval);
     auto is_fuel = bi_key == BaseitemKey(ItemKindType::LITE, SV_LITE_TORCH);
-    is_fuel |= bi_key == BaseitemKey(ItemKindType::LITE,  SV_LITE_LANTERN);
+    is_fuel |= bi_key == BaseitemKey(ItemKindType::LITE, SV_LITE_LANTERN);
     is_fuel |= bi_key == BaseitemKey(ItemKindType::FLASK, SV_FLASK_OIL);
     return is_fuel;
 }
