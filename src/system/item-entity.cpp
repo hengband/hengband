@@ -57,46 +57,52 @@ void ItemEntity::copy_from(const ItemEntity *j_ptr)
  */
 void ItemEntity::prep(short new_bi_id)
 {
-    auto *k_ptr = &baseitems_info[new_bi_id];
+    const auto &baseitem = baseitems_info[new_bi_id];
     auto old_stack_idx = this->stack_idx;
     this->wipe();
     this->stack_idx = old_stack_idx;
     this->bi_id = new_bi_id;
-    this->tval = k_ptr->bi_key.tval();
-    this->sval = k_ptr->bi_key.sval().value();
-    this->pval = k_ptr->pval;
+    this->tval = baseitem.bi_key.tval();
+    this->sval = baseitem.bi_key.sval().value();
+    this->pval = baseitem.pval;
     this->number = 1;
-    this->weight = k_ptr->weight;
-    this->to_h = k_ptr->to_h;
-    this->to_d = k_ptr->to_d;
-    this->to_a = k_ptr->to_a;
-    this->ac = k_ptr->ac;
-    this->dd = k_ptr->dd;
-    this->ds = k_ptr->ds;
+    this->weight = baseitem.weight;
+    this->to_h = baseitem.to_h;
+    this->to_d = baseitem.to_d;
+    this->to_a = baseitem.to_a;
+    this->ac = baseitem.ac;
+    this->dd = baseitem.dd;
+    this->ds = baseitem.ds;
 
-    if (k_ptr->act_idx > RandomArtActType::NONE) {
-        this->activation_id = k_ptr->act_idx;
+    if (baseitem.act_idx > RandomArtActType::NONE) {
+        this->activation_id = baseitem.act_idx;
     }
+
     if (baseitems_info[this->bi_id].cost <= 0) {
         this->ident |= (IDENT_BROKEN);
     }
 
-    if (k_ptr->gen_flags.has(ItemGenerationTraitType::CURSED)) {
+    if (baseitem.gen_flags.has(ItemGenerationTraitType::CURSED)) {
         this->curse_flags.set(CurseTraitType::CURSED);
     }
-    if (k_ptr->gen_flags.has(ItemGenerationTraitType::HEAVY_CURSE)) {
+
+    if (baseitem.gen_flags.has(ItemGenerationTraitType::HEAVY_CURSE)) {
         this->curse_flags.set(CurseTraitType::HEAVY_CURSE);
     }
-    if (k_ptr->gen_flags.has(ItemGenerationTraitType::PERMA_CURSE)) {
+
+    if (baseitem.gen_flags.has(ItemGenerationTraitType::PERMA_CURSE)) {
         this->curse_flags.set(CurseTraitType::PERMA_CURSE);
     }
-    if (k_ptr->gen_flags.has(ItemGenerationTraitType::RANDOM_CURSE0)) {
+
+    if (baseitem.gen_flags.has(ItemGenerationTraitType::RANDOM_CURSE0)) {
         this->curse_flags.set(get_curse(0, this));
     }
-    if (k_ptr->gen_flags.has(ItemGenerationTraitType::RANDOM_CURSE1)) {
+
+    if (baseitem.gen_flags.has(ItemGenerationTraitType::RANDOM_CURSE1)) {
         this->curse_flags.set(get_curse(1, this));
     }
-    if (k_ptr->gen_flags.has(ItemGenerationTraitType::RANDOM_CURSE2)) {
+
+    if (baseitem.gen_flags.has(ItemGenerationTraitType::RANDOM_CURSE2)) {
         this->curse_flags.set(get_curse(2, this));
     }
 }
