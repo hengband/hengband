@@ -49,6 +49,7 @@ public:
     bool is_protector() const;
     bool can_be_aura_protector() const;
     bool is_wearable() const;
+    bool is_weapon() const;
 
 private:
     ItemKindType type_value;

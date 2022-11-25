@@ -113,7 +113,7 @@ void ItemEntity::prep(short new_bi_id)
  */
 bool ItemEntity::is_weapon() const
 {
-    return (TV_WEAPON_BEGIN <= this->tval) && (this->tval <= TV_WEAPON_END);
+    return BaseitemKey(this->tval).is_weapon();
 }
 
 /*!

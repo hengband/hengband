@@ -252,6 +252,20 @@ bool BaseitemKey::is_wearable() const
     }
 }
 
+bool BaseitemKey::is_weapon() const
+{
+    switch (this->type_value) {
+    case ItemKindType::BOW:
+    case ItemKindType::DIGGING:
+    case ItemKindType::HAFTED:
+    case ItemKindType::POLEARM:
+    case ItemKindType::SWORD:
+        return true;
+    default:
+        return false;
+    }
+}
+
 bool BaseitemKey::is_mushrooms() const
 {
     if (!this->subtype_value.has_value()) {
