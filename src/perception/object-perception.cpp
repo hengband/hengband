@@ -62,8 +62,7 @@ void object_aware(PlayerType *player_ptr, const ItemEntity *o_ptr)
         return;
     }
 
-    // 未鑑定名の無いアイテムは記録しない
-    if (!((o_ptr->tval >= ItemKindType::AMULET && o_ptr->tval <= ItemKindType::POTION) || o_ptr->tval == ItemKindType::FOOD)) {
+    if (!o_ptr->has_unidentified_name()) {
         return;
     }
 

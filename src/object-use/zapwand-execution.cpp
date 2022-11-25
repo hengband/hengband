@@ -125,7 +125,7 @@ void ObjectZapWandEntity::execute(INVENTORY_IDX item)
     set_bits(this->player_ptr->update, inventory_flags);
     o_ptr->pval--;
     if (item >= 0) {
-        inven_item_charges(this->player_ptr, item);
+        inven_item_charges(this->player_ptr->inventory_list[item]);
         return;
     }
 

@@ -167,7 +167,7 @@ int Smith::get_essence_consumption(SmithEffectType effect, const ItemEntity *o_p
         return consumption;
     }
 
-    if ((o_ptr->tval >= ItemKindType::SHOT) && (o_ptr->tval <= ItemKindType::BOLT)) {
+    if (o_ptr->is_ammo()) {
         consumption = (consumption + 9) / 10;
     }
 

@@ -40,10 +40,15 @@ public:
     ItemKindType get_arrow_kind() const;
     bool is_spell_book() const;
     bool is_high_level_book() const;
+    bool is_melee_weapon() const;
+    bool is_ammo() const;
+    bool has_unidentified_name() const;
 
 private:
     ItemKindType type_value;
     std::optional<int> subtype_value;
+
+    bool is_mushrooms() const;
 };
 
 enum class ItemKindType : short;

@@ -117,13 +117,12 @@ bool ItemEntity::is_weapon() const
 }
 
 /*!
- * @brief アイテムが武器や矢弾として使用できるかを返す / Check if an object is weapon (including bows and ammo)
- * Rare weapons/aromors including Blade of Chaos, Dragon armors, etc.
+ * @brief アイテムが武器や矢弾として使用できるかを返す
  * @return 武器や矢弾として使えるならばtrueを返す
  */
 bool ItemEntity::is_weapon_ammo() const
 {
-    return (TV_MISSILE_BEGIN <= this->tval) && (this->tval <= TV_WEAPON_END);
+    return this->is_weapon() || this->is_ammo();
 }
 
 /*!
@@ -141,7 +140,7 @@ bool ItemEntity::is_weapon_armour_ammo() const
  */
 bool ItemEntity::is_melee_weapon() const
 {
-    return (ItemKindType::DIGGING <= this->tval) && (this->tval <= ItemKindType::SWORD);
+    return BaseitemKey(this->tval).is_melee_weapon();
 }
 
 /*!
@@ -302,7 +301,7 @@ bool ItemEntity::allow_two_hands_wielding() const
  */
 bool ItemEntity::is_ammo() const
 {
-    return (TV_MISSILE_BEGIN <= this->tval) && (this->tval <= TV_MISSILE_END);
+    return BaseitemKey(this->tval).is_ammo();
 }
 
 /*!
@@ -807,4 +806,14 @@ int ItemEntity::calc_capture_value() const
 bool ItemEntity::is_specific_artifact(FixedArtifactId id) const
 {
     return this->fixed_artifact_idx == id;
+}
+
+bool ItemEntity::has_unidentified_name() const
+{
+    return BaseitemKey(this->tval).has_unidentified_name();
+}
+
+ItemKindType ItemEntity::get_arrow_kind() const
+{
+    return BaseitemKey(this->tval, this->sval).get_arrow_kind();
 }

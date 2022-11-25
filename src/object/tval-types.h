@@ -76,8 +76,6 @@ enum class ItemKindType : short {
 
 #define TV_EQUIP_BEGIN ItemKindType::SHOT
 #define TV_EQUIP_END ItemKindType::CARD
-#define TV_MISSILE_BEGIN ItemKindType::SHOT
-#define TV_MISSILE_END ItemKindType::BOLT
 #define TV_WEARABLE_BEGIN ItemKindType::BOW
 #define TV_WEARABLE_END ItemKindType::CARD
 #define TV_WEAPON_BEGIN ItemKindType::BOW

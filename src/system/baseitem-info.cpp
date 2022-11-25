@@ -10,6 +10,7 @@
 #include "system/baseitem-info.h"
 #include "object/tval-types.h"
 #include "sv-definition/sv-bow-types.h"
+#include "sv-definition/sv-food-types.h"
 
 BaseitemKey::BaseitemKey(const ItemKindType type_value, const std::optional<int> &subtype_value)
     : type_value(type_value)
@@ -111,6 +112,86 @@ bool BaseitemKey::is_high_level_book() const
     }
 
     return this->subtype_value >= 2;
+}
+
+bool BaseitemKey::is_melee_weapon() const
+{
+    switch (this->type_value) {
+    case ItemKindType::POLEARM:
+    case ItemKindType::SWORD:
+    case ItemKindType::DIGGING:
+    case ItemKindType::HAFTED:
+        return true;
+    default:
+        return false;
+    }
+}
+
+bool BaseitemKey::is_ammo() const
+{
+    switch (this->type_value) {
+    case ItemKindType::SHOT:
+    case ItemKindType::ARROW:
+    case ItemKindType::BOLT:
+        return true;
+    default:
+        return false;
+    }
+}
+
+/*
+ * @brief 未鑑定名を持つか否かの判定
+ * @details FOODはキノコが該当する
+ */
+bool BaseitemKey::has_unidentified_name() const
+{
+    switch (this->type_value) {
+    case ItemKindType::AMULET:
+    case ItemKindType::RING:
+    case ItemKindType::STAFF:
+    case ItemKindType::WAND:
+    case ItemKindType::ROD:
+    case ItemKindType::SCROLL:
+    case ItemKindType::POTION:
+        return true;
+    case ItemKindType::FOOD:
+        return this->is_mushrooms();
+    default:
+        return false;
+    }
+}
+
+bool BaseitemKey::is_mushrooms() const
+{
+    if (!this->subtype_value.has_value()) {
+        return false;
+    }
+
+    switch (this->subtype_value.value()) {
+    case SV_FOOD_POISON:
+    case SV_FOOD_BLINDNESS:
+    case SV_FOOD_PARANOIA:
+    case SV_FOOD_CONFUSION:
+    case SV_FOOD_HALLUCINATION:
+    case SV_FOOD_PARALYSIS:
+    case SV_FOOD_WEAKNESS:
+    case SV_FOOD_SICKNESS:
+    case SV_FOOD_STUPIDITY:
+    case SV_FOOD_NAIVETY:
+    case SV_FOOD_UNHEALTH:
+    case SV_FOOD_DISEASE:
+    case SV_FOOD_CURE_POISON:
+    case SV_FOOD_CURE_BLINDNESS:
+    case SV_FOOD_CURE_PARANOIA:
+    case SV_FOOD_CURE_CONFUSION:
+    case SV_FOOD_CURE_SERIOUS:
+    case SV_FOOD_RESTORE_STR:
+    case SV_FOOD_RESTORE_CON:
+    case SV_FOOD_RESTORING:
+        return true;
+    default:
+        return false;
+    }
 }
 
 BaseitemInfo::BaseitemInfo()

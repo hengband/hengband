@@ -14,34 +14,31 @@
 #include "view/display-messages.h"
 
 /*!
- * @brief 魔道具の使用回数の残量を示すメッセージを表示する /
- * Describe the charges on an item in the inventory.
- * @param player_ptr プレイヤーへの参照ポインタ
- * @param item 残量を表示したいプレイヤーのアイテム所持スロット
+ * @brief 魔道具の使用回数の残量を示すメッセージを表示する
+ * @param item 残量を表示したいインベントリ内のアイテム
  */
-void inven_item_charges(PlayerType *player_ptr, INVENTORY_IDX item)
+void inven_item_charges(const ItemEntity &item)
 {
-    auto *o_ptr = &player_ptr->inventory_list[item];
-    if ((o_ptr->tval != ItemKindType::STAFF) && (o_ptr->tval != ItemKindType::WAND)) {
+    const auto tval = item.tval;
+    if ((tval != ItemKindType::STAFF) && (tval != ItemKindType::WAND)) {
         return;
     }
-    if (!o_ptr->is_known()) {
+
+    if (!item.is_known()) {
         return;
     }
 
 #ifdef JP
-    if (o_ptr->pval <= 0) {
+    if (item.pval <= 0) {
         msg_print("もう魔力が残っていない。");
     } else {
-        msg_format("あと %d 回分の魔力が残っている。", o_ptr->pval);
+        msg_format("あと %d 回分の魔力が残っている。", item.pval);
     }
 #else
-    if (o_ptr->pval != 1) {
-        msg_format("You have %d charges remaining.", o_ptr->pval);
-    }
-
-    else {
-        msg_format("You have %d charge remaining.", o_ptr->pval);
+    if (item.pval != 1) {
+        msg_format("You have %d charges remaining.", item.pval);
+    } else {
+        msg_format("You have %d charge remaining.", item.pval);
     }
 #endif
 }
@@ -52,7 +49,7 @@ void inven_item_charges(PlayerType *player_ptr, INVENTORY_IDX item)
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param item 残量を表示したいプレイヤーのアイテム所持スロット
  */
-void inven_item_describe(PlayerType *player_ptr, INVENTORY_IDX item)
+void inven_item_describe(PlayerType *player_ptr, short item)
 {
     auto *o_ptr = &player_ptr->inventory_list[item];
     GAME_TEXT o_name[MAX_NLEN];
