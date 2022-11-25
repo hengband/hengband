@@ -1726,7 +1726,6 @@
     <ClCompile Include="..\..\src\util\angband-files.cpp" />
     <ClCompile Include="..\..\src\util\object-sort.cpp" />
     <ClCompile Include="..\..\src\util\string-processor.cpp" />
-    <ClCompile Include="..\..\src\util\tag-sorter.cpp" />
     <ClCompile Include="..\..\src\view\display-birth.cpp" />
     <ClCompile Include="..\..\src\view\display-characteristic.cpp" />
     <ClCompile Include="..\..\src\view\display-fruit.cpp" />
@@ -1807,7 +1806,6 @@
     <ClInclude Include="..\..\src\util\object-sort.h" />
     <ClInclude Include="..\..\src\util\rng-xoshiro.h" />
     <ClInclude Include="..\..\src\util\string-processor.h" />
-    <ClInclude Include="..\..\src\util\tag-sorter.h" />
     <ClInclude Include="..\..\src\view\display-birth.h" />
     <ClInclude Include="..\..\src\view\display-inventory.h" />
     <ClInclude Include="..\..\src\view\display-lore-attacks.h" />
