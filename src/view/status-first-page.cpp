@@ -45,7 +45,7 @@ static void calc_shot_params(PlayerType *player_ptr, ItemEntity *o_ptr, int *sho
         return;
     }
 
-    ENERGY energy_fire = bow_energy(o_ptr->sval);
+    const auto energy_fire = o_ptr->get_bow_energy();
     *shots = player_ptr->num_fire * 100;
     *shot_frac = ((*shots) * 100 / energy_fire) % 100;
     *shots = (*shots) / energy_fire;

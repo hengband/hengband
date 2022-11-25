@@ -57,6 +57,7 @@ public:
     bool is_throwable() const;
     bool is_wieldable_in_etheir_hand() const;
     bool is_rare() const;
+    short get_bow_energy() const;
 
 private:
     ItemKindType type_value;

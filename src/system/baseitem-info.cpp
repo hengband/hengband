@@ -408,6 +408,26 @@ bool BaseitemKey::is_rare() const
     return false;
 }
 
+short BaseitemKey::get_bow_energy() const
+{
+    if ((this->type_value != ItemKindType::BOW) || !this->subtype_value.has_value()) {
+        throw std::logic_error("This item is not a bow!");
+    }
+
+    switch (this->subtype_value.value()) {
+    case SV_SLING:
+        return 8000;
+    case SV_NAMAKE_BOW:
+        return 7777;
+    case SV_LIGHT_XBOW:
+        return 12000;
+    case SV_HEAVY_XBOW:
+        return 13333;
+    default:
+        return 10000;
+    }
+}
+
 bool BaseitemKey::is_mushrooms() const
 {
     if (!this->subtype_value.has_value()) {

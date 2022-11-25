@@ -763,3 +763,8 @@ bool ItemEntity::is_wand_staff() const
 {
     return BaseitemKey(this->tval).is_wand_staff();
 }
+
+short ItemEntity::get_bow_energy() const
+{
+    return BaseitemKey(this->tval, this->sval).get_bow_energy();
+}

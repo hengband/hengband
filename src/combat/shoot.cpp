@@ -541,7 +541,7 @@ void exe_fire(PlayerType *player_ptr, INVENTORY_IDX item, ItemEntity *j_ptr, SPE
         chance = (player_ptr->skill_thb + ((player_ptr->weapon_exp[j_ptr->tval][j_ptr->sval] - (PlayerSkill::weapon_exp_at(PlayerSkillRank::MASTER) / 2)) / 200 + bonus) * BTH_PLUS_ADJ);
     }
 
-    PlayerEnergy(player_ptr).set_player_turn_energy(bow_energy(j_ptr->sval));
+    PlayerEnergy(player_ptr).set_player_turn_energy(j_ptr->get_bow_energy());
     tmul = bow_tmul(j_ptr->sval);
 
     /* Get extra "power" from "extra might" */
@@ -1113,57 +1113,6 @@ int critical_shot(PlayerType *player_ptr, WEIGHT weight, int plus_ammo, int plus
     }
 
     return dam;
-}
-
-/*!
- * @brief 射撃武器の攻撃に必要な基本消費エネルギーを返す/Return bow energy
- * @param sval 射撃武器のアイテム副分類ID
- * @return 消費する基本エネルギー
- */
-ENERGY bow_energy(OBJECT_SUBTYPE_VALUE sval)
-{
-    ENERGY energy = 10000;
-
-    /* Analyze the launcher */
-    switch (sval) {
-        /* Sling and ammo */
-    case SV_SLING: {
-        energy = 8000;
-        break;
-    }
-
-    /* Short Bow and Arrow */
-    case SV_SHORT_BOW: {
-        energy = 10000;
-        break;
-    }
-
-    /* Long Bow and Arrow */
-    case SV_LONG_BOW: {
-        energy = 10000;
-        break;
-    }
-
-    /* Bow of irresponsiblity and Arrow */
-    case SV_NAMAKE_BOW: {
-        energy = 7777;
-        break;
-    }
-
-    /* Light Crossbow and Bolt */
-    case SV_LIGHT_XBOW: {
-        energy = 12000;
-        break;
-    }
-
-    /* Heavy Crossbow and Bolt */
-    case SV_HEAVY_XBOW: {
-        energy = 13333;
-        break;
-    }
-    }
-
-    return energy;
 }
 
 /*
