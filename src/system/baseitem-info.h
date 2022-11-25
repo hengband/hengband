@@ -50,6 +50,7 @@ public:
     bool can_be_aura_protector() const;
     bool is_wearable() const;
     bool is_weapon() const;
+    bool is_equipement() const;
 
 private:
     ItemKindType type_value;

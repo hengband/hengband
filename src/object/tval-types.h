@@ -74,8 +74,5 @@ enum class ItemKindType : short {
     GOLD = 127, /* Gold can only be picked up by players */
 };
 
-#define TV_EQUIP_BEGIN ItemKindType::SHOT
-#define TV_EQUIP_END ItemKindType::CARD
-
 constexpr auto TV_WEARABLE_RANGE = EnumRange(ItemKindType::BOW, ItemKindType::CARD);
 constexpr auto TV_WEAPON_RANGE = EnumRange(ItemKindType::BOW, ItemKindType::SWORD);

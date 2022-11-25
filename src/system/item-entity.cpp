@@ -179,7 +179,7 @@ bool ItemEntity::is_wearable() const
  */
 bool ItemEntity::is_equipment() const
 {
-    return (TV_EQUIP_BEGIN <= this->tval) && (this->tval <= TV_EQUIP_END);
+    return BaseitemKey(this->tval).is_equipement();
 }
 
 /*!
