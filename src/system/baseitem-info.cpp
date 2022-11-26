@@ -17,6 +17,10 @@
 #include <set>
 #include <unordered_map>
 
+namespace {
+constexpr auto ITEM_NOT_BOW = "This item is not a bow!";
+}
+
 BaseitemKey::BaseitemKey(const ItemKindType type_value, const std::optional<int> &subtype_value)
     : type_value(type_value)
     , subtype_value(subtype_value)
@@ -411,7 +415,7 @@ bool BaseitemKey::is_rare() const
 short BaseitemKey::get_bow_energy() const
 {
     if ((this->type_value != ItemKindType::BOW) || !this->subtype_value.has_value()) {
-        throw std::logic_error("This item is not a bow!");
+        throw std::logic_error(ITEM_NOT_BOW);
     }
 
     switch (this->subtype_value.value()) {
@@ -425,6 +429,27 @@ short BaseitemKey::get_bow_energy() const
         return 13333;
     default:
         return 10000;
+    }
+}
+
+int BaseitemKey::get_arrow_magnification() const
+{
+    if ((this->type_value != ItemKindType::BOW) || !this->subtype_value.has_value()) {
+        throw std::logic_error(ITEM_NOT_BOW);
+    }
+
+    switch (this->subtype_value.value()) {
+    case SV_SLING:
+    case SV_SHORT_BOW:
+        return 2;
+    case SV_LONG_BOW:
+    case SV_NAMAKE_BOW:
+    case SV_LIGHT_XBOW:
+        return 3;
+    case SV_HEAVY_XBOW:
+        return 4;
+    default:
+        return 0;
     }
 }
 

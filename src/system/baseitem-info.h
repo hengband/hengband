@@ -58,6 +58,7 @@ public:
     bool is_wieldable_in_etheir_hand() const;
     bool is_rare() const;
     short get_bow_energy() const;
+    int get_arrow_magnification() const;
 
 private:
     ItemKindType type_value;

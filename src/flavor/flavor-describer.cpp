@@ -153,7 +153,7 @@ static void describe_weapon_dice(PlayerType *player_ptr, flavor_type *flavor_ptr
 
 static void describe_bow(PlayerType *player_ptr, flavor_type *flavor_ptr)
 {
-    flavor_ptr->power = bow_tmul(flavor_ptr->o_ptr->sval);
+    flavor_ptr->power = flavor_ptr->o_ptr->get_arrow_magnification();
     if (flavor_ptr->tr_flags.has(TR_XTRA_MIGHT)) {
         flavor_ptr->power++;
     }
@@ -275,7 +275,7 @@ static void describe_bow_power(PlayerType *player_ptr, flavor_type *flavor_ptr)
     const auto *o_ptr = flavor_ptr->o_ptr;
     const auto *bow_ptr = flavor_ptr->bow_ptr;
     flavor_ptr->avgdam = o_ptr->dd * (o_ptr->ds + 1) * 10 / 2;
-    auto tmul = bow_tmul(bow_ptr->sval);
+    auto tmul = bow_ptr->get_arrow_magnification();
     if (bow_ptr->is_known()) {
         flavor_ptr->avgdam += (bow_ptr->to_d * 10);
     }

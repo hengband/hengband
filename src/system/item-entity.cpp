@@ -768,3 +768,8 @@ short ItemEntity::get_bow_energy() const
 {
     return BaseitemKey(this->tval, this->sval).get_bow_energy();
 }
+
+int ItemEntity::get_arrow_magnification() const
+{
+    return BaseitemKey(this->tval, this->sval).get_arrow_magnification();
+}
