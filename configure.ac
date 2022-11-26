@@ -1,6 +1,7 @@
 dnl Process this file with autoconf to produce a configure script.
 AC_INIT(hengband, 3.0.0.0)
 
+AC_CONFIG_MACRO_DIRS([m4])
 AC_CONFIG_HEADERS(src/autoconf.h)
 AC_CONFIG_SRCDIR(src/main.cpp)
 AM_INIT_AUTOMAKE
@@ -44,11 +45,7 @@ AC_SUBST(DEFAULT_VAR_PATH)
 dnl Checks for programs.
 AC_LANG(C++)
 AC_PROG_CXX
-m4_ifdef([AX_CXX_COMPILE_STDCXX_17], [
-  AX_CXX_COMPILE_STDCXX_17
-], [
-  AC_MSG_ERROR([AX_CXX_COMPILE_STDCXX_17 macro is not defined. You need to install autoconf-archive.])
-])
+AX_CXX_COMPILE_STDCXX(17, [ext], [mandatory])
 PKG_PROG_PKG_CONFIG
 
 AC_ARG_ENABLE(japanese,
