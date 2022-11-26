@@ -1,5 +1,9 @@
 ﻿#pragma once
 
+#include "monster/monster-timed-effect-types.h"
+#include <map>
+#include <string>
+
 /*
  * Some screen locations for various display routines
  * Currently, row 8 and 15 are the only "blank" rows.
@@ -11,12 +15,6 @@
 
 #define ROW_TITLE 2
 #define COL_TITLE 0 /* <title> or <mode> */
-
-#define ROW_DAY 21
-#define COL_DAY 0 /* day */
-
-#define ROW_DUNGEON 22
-#define COL_DUNGEON 0 /* dungeon */
 
 #define ROW_LEVEL 3
 #define COL_LEVEL 0 /* "LEVEL xxxxxx" */
@@ -45,23 +43,29 @@
 #define ROW_CURSP 15
 #define COL_CURSP 0 /* "Cur SP xxxxx" */
 
-#define ROW_RIDING_INFO 16
-#define COL_RIDING_INFO 0 /* "xxxxxxxxxxxx" */
-
-#define ROW_INFO 17
-#define COL_INFO 0 /* "xxxxxxxxxxxx" */
-
-#define ROW_CUT 18
+#define ROW_CUT 16
 #define COL_CUT 0 /* <cut> */
 
-#define ROW_STUN 19
+#define ROW_STUN 17
 #define COL_STUN 0 /* <stun> */
 
-#define ROW_HUNGRY 20
+#define ROW_HUNGRY 18
 #define COL_HUNGRY 0 /* "Weak" / "Hungry" / "Full" / "Gorged" */
 
-#define ROW_STATE 20
+#define ROW_STATE 19
 #define COL_STATE 7 /* <state> */
+
+#define ROW_RIDING_INFO 21
+#define COL_RIDING_INFO 0 /* "xxxxxxxxxxxx" */
+
+#define ROW_INFO 24
+#define COL_INFO 0 /* "xxxxxxxxxxxx" */
+
+#define ROW_DAY 32
+#define COL_DAY 0 /* day */
+
+#define ROW_DUNGEON 33
+#define COL_DUNGEON 0 /* dungeon */
 
 #define ROW_SPEED (-1)
 #define COL_SPEED (-24) /* "Slow (-NN)" or "Fast (+NN)" */
@@ -75,3 +79,5 @@
 #define ROW_STATBAR (-1)
 #define COL_STATBAR 0
 #define MAX_COL_STATBAR (-26)
+
+extern const std::map<monster_timed_effect_type, std::string> effect_type_to_label;
