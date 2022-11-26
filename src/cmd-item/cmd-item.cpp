@@ -240,19 +240,17 @@ void do_cmd_inscribe(PlayerType *player_ptr)
  */
 void do_cmd_use(PlayerType *player_ptr)
 {
-    OBJECT_IDX item;
-    ItemEntity *o_ptr;
     if (player_ptr->wild_mode || cmd_limit_arena(player_ptr)) {
         return;
     }
 
     PlayerClass(player_ptr).break_samurai_stance({ SamuraiStanceType::MUSOU, SamuraiStanceType::KOUKIJIN });
-
-    concptr q = _("どれを使いますか？", "Use which item? ");
-    concptr s = _("使えるものがありません。", "You have nothing to use.");
-    o_ptr = choose_object(
-        player_ptr, &item, q, s, (USE_INVEN | USE_EQUIP | USE_FLOOR | IGNORE_BOTHHAND_SLOT), FuncItemTester(item_tester_hook_use, player_ptr));
-    if (!o_ptr) {
+    const auto q = _("どれを使いますか？", "Use which item? ");
+    const auto s = _("使えるものがありません。", "You have nothing to use.");
+    const auto options = USE_INVEN | USE_EQUIP | USE_FLOOR | IGNORE_BOTHHAND_SLOT;
+    short item;
+    const auto *o_ptr = choose_object(player_ptr, &item, q, s, options, FuncItemTester(item_tester_hook_use, player_ptr));
+    if (o_ptr == nullptr) {
         return;
     }
 
