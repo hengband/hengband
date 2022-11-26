@@ -26,14 +26,12 @@
  */
 void do_cmd_fire(PlayerType *player_ptr, SPELL_IDX snipe_type)
 {
-    OBJECT_IDX item;
-    ItemEntity *j_ptr, *ammo_ptr;
     if (player_ptr->wild_mode) {
         return;
     }
 
     player_ptr->is_fired = false;
-    j_ptr = &player_ptr->inventory_list[INVEN_BOW];
+    auto *j_ptr = &player_ptr->inventory_list[INVEN_BOW];
     if (j_ptr->tval == ItemKindType::NONE) {
         msg_print(_("射撃用の武器を持っていない。", "You have nothing to fire with."));
         flush();
@@ -53,10 +51,10 @@ void do_cmd_fire(PlayerType *player_ptr, SPELL_IDX snipe_type)
     }
 
     PlayerClass(player_ptr).break_samurai_stance({ SamuraiStanceType::MUSOU });
-
-    concptr q = _("どれを撃ちますか? ", "Fire which item? ");
-    concptr s = _("発射されるアイテムがありません。", "You have nothing to fire.");
-    ammo_ptr = choose_object(player_ptr, &item, q, s, USE_INVEN | USE_FLOOR, TvalItemTester(player_ptr->tval_ammo));
+    const auto q = _("どれを撃ちますか? ", "Fire which item? ");
+    const auto s = _("発射されるアイテムがありません。", "You have nothing to fire.");
+    short item;
+    const auto *ammo_ptr = choose_object(player_ptr, &item, q, s, USE_INVEN | USE_FLOOR, TvalItemTester(player_ptr->tval_ammo));
     if (!ammo_ptr) {
         flush();
         return;
