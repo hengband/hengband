@@ -773,3 +773,8 @@ int ItemEntity::get_arrow_magnification() const
 {
     return BaseitemKey(this->tval, this->sval).get_arrow_magnification();
 }
+
+bool ItemEntity::is_aiming_rod() const
+{
+    return BaseitemKey(this->tval, this->sval).is_aiming_rod();
+}

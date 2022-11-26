@@ -72,8 +72,6 @@
 #include "player-status/player-energy.h"
 #include "player/player-status-table.h"
 #include "spell/spell-info.h"
-#include "sv-definition/sv-other-types.h"
-#include "sv-definition/sv-rod-types.h"
 #include "system/baseitem-info.h"
 #include "system/player-type-definition.h"
 #include "target/target-getter.h"
@@ -598,14 +596,11 @@ bool do_cmd_magic_eater(PlayerType *player_ptr, bool only_browse, bool powerful)
                 return false;
             }
 
-            const auto sval = opt_sval.value();
-            if ((sval >= SV_ROD_MIN_DIRECTION) && (sval != SV_ROD_HAVOC) && (sval != SV_ROD_AGGRAVATE) && (sval != SV_ROD_PESTICIDE)) {
-                if (!get_aim_dir(player_ptr, &dir)) {
-                    return false;
-                }
+            if (baseitem.is_aiming_rod() && !get_aim_dir(player_ptr, &dir)) {
+                return false;
             }
 
-            (void)rod_effect(player_ptr, sval, dir, &use_charge, powerful);
+            (void)rod_effect(player_ptr, opt_sval.value(), dir, &use_charge, powerful);
             if (!use_charge) {
                 return false;
             }

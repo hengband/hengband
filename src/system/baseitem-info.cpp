@@ -13,12 +13,14 @@
 #include "sv-definition/sv-bow-types.h"
 #include "sv-definition/sv-food-types.h"
 #include "sv-definition/sv-protector-types.h"
+#include "sv-definition/sv-rod-types.h"
 #include "sv-definition/sv-weapon-types.h"
 #include <set>
 #include <unordered_map>
 
 namespace {
 constexpr auto ITEM_NOT_BOW = "This item is not a bow!";
+constexpr auto ITEM_NOT_ROD = "This item is not a rod!";
 }
 
 BaseitemKey::BaseitemKey(const ItemKindType type_value, const std::optional<int> &subtype_value)
@@ -450,6 +452,35 @@ int BaseitemKey::get_arrow_magnification() const
         return 4;
     default:
         return 0;
+    }
+}
+
+bool BaseitemKey::is_aiming_rod() const
+{
+    if ((this->type_value != ItemKindType::ROD) || !this->subtype_value.has_value()) {
+        throw std::logic_error(ITEM_NOT_ROD);
+    }
+
+    switch (this->subtype_value.value()) {
+    case SV_ROD_TELEPORT_AWAY:
+    case SV_ROD_DISARMING:
+    case SV_ROD_LITE:
+    case SV_ROD_SLEEP_MONSTER:
+    case SV_ROD_SLOW_MONSTER:
+    case SV_ROD_HYPODYNAMIA:
+    case SV_ROD_POLYMORPH:
+    case SV_ROD_ACID_BOLT:
+    case SV_ROD_ELEC_BOLT:
+    case SV_ROD_FIRE_BOLT:
+    case SV_ROD_COLD_BOLT:
+    case SV_ROD_ACID_BALL:
+    case SV_ROD_ELEC_BALL:
+    case SV_ROD_FIRE_BALL:
+    case SV_ROD_COLD_BALL:
+    case SV_ROD_STONE_TO_MUD:
+        return true;
+    default:
+        return false;
     }
 }
 
