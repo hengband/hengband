@@ -580,17 +580,12 @@ void do_cmd_browse(PlayerType *player_ptr)
 {
     OBJECT_IDX item;
     OBJECT_SUBTYPE_VALUE sval;
-    int16_t use_realm = 0;
     int j, line;
     SPELL_IDX spell = -1;
     int num = 0;
 
     SPELL_IDX spells[64];
     char temp[62 * 4];
-
-    ItemEntity *o_ptr;
-
-    concptr q, s;
 
     /* Warriors are illiterate */
     PlayerClass pc(player_ptr);
@@ -611,12 +606,10 @@ void do_cmd_browse(PlayerType *player_ptr)
     /* Restrict choices to "useful" books */
     auto item_tester = get_learnable_spellbook_tester(player_ptr);
 
-    q = _("どの本を読みますか? ", "Browse which book? ");
-    s = _("読める本がない。", "You have no books that you can read.");
-
-    o_ptr = choose_object(player_ptr, &item, q, s, USE_INVEN | USE_FLOOR | (pc.equals(PlayerClassType::FORCETRAINER) ? USE_FORCE : 0), item_tester);
-
-    if (!o_ptr) {
+    const auto q = _("どの本を読みますか? ", "Browse which book? ");
+    const auto s = _("読める本がない。", "You have no books that you can read.");
+    const auto *o_ptr = choose_object(player_ptr, &item, q, s, USE_INVEN | USE_FLOOR | (pc.equals(PlayerClassType::FORCETRAINER) ? USE_FORCE : 0), item_tester);
+    if (o_ptr == nullptr) {
         if (item == INVEN_FORCE) /* the_force */
         {
             do_cmd_mind_browse(player_ptr);
@@ -628,7 +621,7 @@ void do_cmd_browse(PlayerType *player_ptr)
     /* Access the item's sval */
     sval = o_ptr->sval;
 
-    use_realm = tval2realm(o_ptr->tval);
+    short use_realm = tval2realm(o_ptr->tval);
 
     /* Track the object kind */
     object_kind_track(player_ptr, o_ptr->bi_id);
@@ -733,31 +726,22 @@ static void change_realm2(PlayerType *player_ptr, int16_t next_realm)
  */
 void do_cmd_study(PlayerType *player_ptr)
 {
-    int i;
-    OBJECT_IDX item;
-    OBJECT_SUBTYPE_VALUE sval;
-    int increment = 0;
-    bool learned = false;
+    auto increment = 0;
+    auto learned = false;
 
     /* Spells of realm2 will have an increment of +32 */
     SPELL_IDX spell = -1;
-    concptr p = spell_category_name(mp_ptr->spell_book);
-    ItemEntity *o_ptr;
-    concptr q, s;
-
+    const auto p = spell_category_name(mp_ptr->spell_book);
     if (!player_ptr->realm1) {
         msg_print(_("本を読むことができない！", "You cannot read books!"));
         return;
     }
 
-    if (cmd_limit_blind(player_ptr)) {
-        return;
-    }
-    if (cmd_limit_confused(player_ptr)) {
+    if (cmd_limit_blind(player_ptr) || cmd_limit_confused(player_ptr)) {
         return;
     }
 
-    if (!(player_ptr->new_spells)) {
+    if (player_ptr->new_spells == 0) {
         msg_format(_("新しい%sを覚えることはできない！", "You cannot learn any new %ss!"), p);
         return;
     }
@@ -779,18 +763,16 @@ void do_cmd_study(PlayerType *player_ptr)
     /* Restrict choices to "useful" books */
     auto item_tester = get_learnable_spellbook_tester(player_ptr);
 
-    q = _("どの本から学びますか? ", "Study which book? ");
-    s = _("読める本がない。", "You have no books that you can read.");
+    const auto q = _("どの本から学びますか? ", "Study which book? ");
+    const auto s = _("読める本がない。", "You have no books that you can read.");
 
-    o_ptr = choose_object(player_ptr, &item, q, s, (USE_INVEN | USE_FLOOR), item_tester);
-
-    if (!o_ptr) {
+    short item;
+    const auto *o_ptr = choose_object(player_ptr, &item, q, s, (USE_INVEN | USE_FLOOR), item_tester);
+    if (o_ptr == nullptr) {
         return;
     }
 
-    /* Access the item's sval */
-    sval = o_ptr->sval;
-
+    const auto sval = o_ptr->sval;
     if (o_ptr->tval == get_realm2_book(player_ptr)) {
         increment = 32;
     } else if (o_ptr->tval != get_realm1_book(player_ptr)) {
@@ -891,6 +873,7 @@ void do_cmd_study(PlayerType *player_ptr)
         msg_format(_("%sの熟練度が%sに上がった。", "Your proficiency of %s is now %s rank."), name, new_rank_str);
     } else {
         /* Find the next open entry in "player_ptr->spell_order[]" */
+        int i;
         for (i = 0; i < 64; i++) {
             /* Stop at the first empty space */
             if (player_ptr->spell_order[i] == 99) {
@@ -952,21 +935,15 @@ void do_cmd_study(PlayerType *player_ptr)
  */
 bool do_cmd_cast(PlayerType *player_ptr)
 {
-    OBJECT_IDX item;
-    OBJECT_SUBTYPE_VALUE sval;
     SPELL_IDX spell;
     int16_t realm;
     int chance;
-    int increment = 0;
+    auto increment = 0;
     int16_t use_realm;
     MANA_POINT need_mana;
 
-    concptr prayer;
-    ItemEntity *o_ptr;
     const magic_type *s_ptr;
-    concptr q, s;
-
-    bool over_exerted = false;
+    auto over_exerted = false;
 
     /* Require spell ability */
     PlayerClass pc(player_ptr);
@@ -983,6 +960,7 @@ bool do_cmd_cast(PlayerType *player_ptr)
             msg_print(_("目が見えない！", "You cannot see!"));
             flush();
         }
+
         return false;
     }
 
@@ -1012,26 +990,23 @@ bool do_cmd_cast(PlayerType *player_ptr)
         }
     }
 
-    prayer = spell_category_name(mp_ptr->spell_book);
-
-    q = _("どの呪文書を使いますか? ", "Use which book? ");
-    s = _("呪文書がない！", "You have no spell books!");
-
+    const auto prayer = spell_category_name(mp_ptr->spell_book);
+    const auto q = _("どの呪文書を使いますか? ", "Use which book? ");
+    const auto s = _("呪文書がない！", "You have no spell books!");
     auto item_tester = get_castable_spellbook_tester(player_ptr);
-
-    o_ptr = choose_object(player_ptr, &item, q, s, USE_INVEN | USE_FLOOR | (pc.equals(PlayerClassType::FORCETRAINER) ? USE_FORCE : 0), item_tester);
-    if (!o_ptr) {
-        if (item == INVEN_FORCE) /* the_force */
-        {
+    const auto options = USE_INVEN | USE_FLOOR | (pc.equals(PlayerClassType::FORCETRAINER) ? USE_FORCE : 0);
+    short item;
+    const auto *o_ptr = choose_object(player_ptr, &item, q, s, options, item_tester);
+    if (o_ptr == nullptr) {
+        if (item == INVEN_FORCE) {
             do_cmd_mind(player_ptr);
             return true; //!< 錬気キャンセル時の処理がない
         }
+
         return false;
     }
 
-    /* Access the item's sval */
-    sval = o_ptr->sval;
-
+    const auto sval = o_ptr->sval;
     if (!is_every_magic && (o_ptr->tval == get_realm2_book(player_ptr))) {
         increment = 32;
     }
