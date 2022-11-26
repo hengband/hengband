@@ -53,15 +53,13 @@ bool recharge(PlayerType *player_ptr, int power)
     concptr s = _("魔力を充填すべきアイテムがない。", "You have nothing to recharge.");
 
     OBJECT_IDX item;
-    ItemEntity *o_ptr;
-    o_ptr = choose_object(player_ptr, &item, q, s, (USE_INVEN | USE_FLOOR), FuncItemTester(&ItemEntity::is_rechargeable));
-    if (!o_ptr) {
+    auto *o_ptr = choose_object(player_ptr, &item, q, s, (USE_INVEN | USE_FLOOR), FuncItemTester(&ItemEntity::can_recharge));
+    if (o_ptr == nullptr) {
         return false;
     }
 
-    BaseitemInfo *k_ptr;
-    k_ptr = &baseitems_info[o_ptr->bi_id];
-    DEPTH lev = baseitems_info[o_ptr->bi_id].level;
+    const auto &baseitem = baseitems_info[o_ptr->bi_id];
+    const auto lev = baseitem.level;
 
     TIME_EFFECT recharge_amount;
     int recharge_strength;
@@ -92,7 +90,7 @@ bool recharge(PlayerType *player_ptr, int power)
         if (one_in_(recharge_strength)) {
             is_recharge_successful = false;
         } else {
-            recharge_amount = randint1(1 + k_ptr->pval / 2);
+            recharge_amount = randint1(1 + baseitem.pval / 2);
             if ((o_ptr->tval == ItemKindType::WAND) && (o_ptr->number > 1)) {
                 recharge_amount += (randint1(recharge_amount * (o_ptr->number - 1))) / 2;
                 if (recharge_amount < 1) {
@@ -127,7 +125,7 @@ bool recharge(PlayerType *player_ptr, int power)
         msg_format(_("魔力が逆流した！%sは完全に魔力を失った。", "The recharging backfires - %s is completely drained!"), o_name);
         if ((o_ptr->tval == ItemKindType::ROD) && (o_ptr->timeout < 10000)) {
             o_ptr->timeout = (o_ptr->timeout + 100) * 2;
-        } else if ((o_ptr->tval == ItemKindType::WAND) || (o_ptr->tval == ItemKindType::STAFF)) {
+        } else if (o_ptr->is_wand_staff()) {
             o_ptr->pval = 0;
         }
         return update_player(player_ptr);
@@ -204,7 +202,7 @@ bool recharge(PlayerType *player_ptr, int power)
         }
 
         if (o_ptr->tval == ItemKindType::ROD) {
-            o_ptr->timeout = (o_ptr->number - 1) * k_ptr->pval;
+            o_ptr->timeout = (o_ptr->number - 1) * baseitem.pval;
         }
         if (o_ptr->tval == ItemKindType::WAND) {
             o_ptr->pval = 0;

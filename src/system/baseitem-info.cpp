@@ -161,6 +161,97 @@ bool BaseitemKey::has_unidentified_name() const
     }
 }
 
+bool BaseitemKey::can_recharge() const
+{
+    switch (this->type_value) {
+    case ItemKindType::STAFF:
+    case ItemKindType::WAND:
+    case ItemKindType::ROD:
+        return true;
+    default:
+        return false;
+    }
+}
+
+bool BaseitemKey::is_wand_rod() const
+{
+    switch (this->type_value) {
+    case ItemKindType::WAND:
+    case ItemKindType::ROD:
+        return true;
+    default:
+        return false;
+    }
+}
+
+bool BaseitemKey::is_wand_staff() const
+{
+    switch (this->type_value) {
+    case ItemKindType::WAND:
+    case ItemKindType::STAFF:
+        return true;
+    default:
+        return false;
+    }
+}
+
+bool BaseitemKey::is_protector() const
+{
+    switch (this->type_value) {
+    case ItemKindType::BOOTS:
+    case ItemKindType::GLOVES:
+    case ItemKindType::HELM:
+    case ItemKindType::CROWN:
+    case ItemKindType::SHIELD:
+    case ItemKindType::CLOAK:
+    case ItemKindType::SOFT_ARMOR:
+    case ItemKindType::HARD_ARMOR:
+    case ItemKindType::DRAG_ARMOR:
+        return true;
+    default:
+        return false;
+    }
+}
+
+bool BaseitemKey::can_be_aura_protector() const
+{
+    switch (this->type_value) {
+    case ItemKindType::CLOAK:
+    case ItemKindType::SOFT_ARMOR:
+    case ItemKindType::HARD_ARMOR:
+        return true;
+    default:
+        return false;
+    }
+}
+
+bool BaseitemKey::is_wearable() const
+{
+    switch (this->type_value) {
+    case ItemKindType::BOW:
+    case ItemKindType::DIGGING:
+    case ItemKindType::HAFTED:
+    case ItemKindType::POLEARM:
+    case ItemKindType::SWORD:
+    case ItemKindType::BOOTS:
+    case ItemKindType::GLOVES:
+    case ItemKindType::HELM:
+    case ItemKindType::CROWN:
+    case ItemKindType::SHIELD:
+    case ItemKindType::CLOAK:
+    case ItemKindType::SOFT_ARMOR:
+    case ItemKindType::HARD_ARMOR:
+    case ItemKindType::DRAG_ARMOR:
+    case ItemKindType::LITE:
+    case ItemKindType::AMULET:
+    case ItemKindType::RING:
+    case ItemKindType::CARD:
+        return true;
+    default:
+        return false;
+    }
+}
+
 bool BaseitemKey::is_mushrooms() const
 {
     if (!this->subtype_value.has_value()) {

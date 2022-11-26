@@ -43,6 +43,12 @@ public:
     bool is_melee_weapon() const;
     bool is_ammo() const;
     bool has_unidentified_name() const;
+    bool can_recharge() const;
+    bool is_wand_rod() const;
+    bool is_wand_staff() const;
+    bool is_protector() const;
+    bool can_be_aura_protector() const;
+    bool is_wearable() const;
 
 private:
     ItemKindType type_value;

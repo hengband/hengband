@@ -131,7 +131,7 @@ bool ItemEntity::is_weapon_ammo() const
  */
 bool ItemEntity::is_weapon_armour_ammo() const
 {
-    return this->is_weapon_ammo() || this->is_armour();
+    return this->is_weapon_ammo() || this->is_protector();
 }
 
 /*!
@@ -170,7 +170,7 @@ bool ItemEntity::is_melee_ammo() const
  */
 bool ItemEntity::is_wearable() const
 {
-    return (TV_WEARABLE_BEGIN <= this->tval) && (this->tval <= TV_WEARABLE_END);
+    return BaseitemKey(this->tval).is_wearable();
 }
 
 /*!
@@ -324,12 +324,21 @@ bool ItemEntity::is_lance() const
 }
 
 /*!
- * @brief アイテムが防具として装備できるかどうかを返す / Check if an object is armour
+ * @brief アイテムが防具として装備できるかどうかを返す
  * @return 防具として装備できるならばtrueを返す
  */
-bool ItemEntity::is_armour() const
+bool ItemEntity::is_protector() const
 {
-    return (TV_ARMOR_BEGIN <= this->tval) && (this->tval <= TV_ARMOR_END);
+    return BaseitemKey(this->tval).is_protector();
+}
+
+/*!
+ * @brief アイテムがオーラを纏える防具かどうかを返す
+ * @return オーラを纏えるならばtrueを返す
+ */
+bool ItemEntity::can_be_aura_protector() const
+{
+    return BaseitemKey(this->tval).can_be_aura_protector();
 }
 
 /*!
@@ -516,20 +525,12 @@ bool ItemEntity::can_refill_torch() const
 }
 
 /*!
- * @brief 魔力充填が可能なアイテムかどうか判定する /
- * Hook for "get_item()".  Determine if something is rechargable.
+ * @brief 魔力充填が可能なアイテムかどうか判定する
  * @return 魔力充填が可能ならばTRUEを返す
  */
-bool ItemEntity::is_rechargeable() const
+bool ItemEntity::can_recharge() const
 {
-    switch (this->tval) {
-    case ItemKindType::STAFF:
-    case ItemKindType::WAND:
-    case ItemKindType::ROD:
-        return true;
-    default:
-        return false;
-    }
+    return BaseitemKey(this->tval).can_recharge();
 }
 
 /*!
@@ -816,4 +817,14 @@ bool ItemEntity::has_unidentified_name() const
 ItemKindType ItemEntity::get_arrow_kind() const
 {
     return BaseitemKey(this->tval, this->sval).get_arrow_kind();
+}
+
+bool ItemEntity::is_wand_rod() const
+{
+    return BaseitemKey(this->tval).is_wand_rod();
+}
+
+bool ItemEntity::is_wand_staff() const
+{
+    return BaseitemKey(this->tval).is_wand_staff();
 }

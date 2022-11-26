@@ -36,25 +36,18 @@ void building_recharge(PlayerType *player_ptr)
     msg_flag = false;
     clear_bldg(4, 18);
     prt(_("  再充填の費用はアイテムの種類によります。", "  The prices of recharge depend on the type."), 6, 0);
-
-    concptr q = _("どのアイテムに魔力を充填しますか? ", "Recharge which item? ");
-    concptr s = _("魔力を充填すべきアイテムがない。", "You have nothing to recharge.");
-
+    const auto q = _("どのアイテムに魔力を充填しますか? ", "Recharge which item? ");
+    const auto s = _("魔力を充填すべきアイテムがない。", "You have nothing to recharge.");
     OBJECT_IDX item;
-    ItemEntity *o_ptr;
-    o_ptr = choose_object(player_ptr, &item, q, s, (USE_INVEN | USE_FLOOR), FuncItemTester(&ItemEntity::is_rechargeable));
-    if (!o_ptr) {
+    auto *o_ptr = choose_object(player_ptr, &item, q, s, (USE_INVEN | USE_FLOOR), FuncItemTester(&ItemEntity::can_recharge));
+    if (o_ptr == nullptr) {
         return;
     }
-
-    BaseitemInfo *k_ptr;
-    k_ptr = &baseitems_info[o_ptr->bi_id];
 
     /*
      * We don't want to give the player free info about
      * the level of the item or the number of charges.
      */
-    /* The item must be "known" */
     char tmp_str[MAX_NLEN];
     if (!o_ptr->is_known()) {
         msg_format(_("充填する前に鑑定されている必要があります！", "The item must be identified first!"));
@@ -75,25 +68,26 @@ void building_recharge(PlayerType *player_ptr)
         return;
     }
 
-    DEPTH lev = baseitems_info[o_ptr->bi_id].level;
-    PRICE price;
+    const auto &baseitem = baseitems_info[o_ptr->bi_id];
+    const auto lev = baseitem.level;
+    int price;
     if (o_ptr->tval == ItemKindType::ROD) {
         if (o_ptr->timeout > 0) {
-            price = (lev * 50 * o_ptr->timeout) / k_ptr->pval;
+            price = (lev * 50 * o_ptr->timeout) / baseitem.pval;
         } else {
             price = 0;
             msg_format(_("それは再充填する必要はありません。", "That doesn't need to be recharged."));
             return;
         }
     } else if (o_ptr->tval == ItemKindType::STAFF) {
-        price = (baseitems_info[o_ptr->bi_id].cost / 10) * o_ptr->number;
+        price = (baseitem.cost / 10) * o_ptr->number;
         price = std::max(10, price);
     } else {
-        price = (baseitems_info[o_ptr->bi_id].cost / 10);
+        price = baseitem.cost / 10;
         price = std::max(10, price);
     }
 
-    if (o_ptr->tval == ItemKindType::WAND && (o_ptr->pval / o_ptr->number >= k_ptr->pval)) {
+    if ((o_ptr->tval == ItemKindType::WAND) && (o_ptr->pval / o_ptr->number >= baseitem.pval)) {
         if (o_ptr->number > 1) {
             msg_print(_("この魔法棒はもう充分に充填されています。", "These wands are already fully charged."));
         } else {
@@ -101,7 +95,7 @@ void building_recharge(PlayerType *player_ptr)
         }
 
         return;
-    } else if (o_ptr->tval == ItemKindType::STAFF && o_ptr->pval >= k_ptr->pval) {
+    } else if ((o_ptr->tval == ItemKindType::STAFF) && o_ptr->pval >= baseitem.pval) {
         if (o_ptr->number > 1) {
             msg_print(_("この杖はもう充分に充填されています。", "These staffs are already fully charged."));
         } else {
@@ -121,7 +115,6 @@ void building_recharge(PlayerType *player_ptr)
         return;
     }
 
-    PARAMETER_VALUE charges;
     if (o_ptr->tval == ItemKindType::ROD) {
 #ifdef JP
         if (get_check(format("そのロッドを＄%d で再充填しますか？", price)))
@@ -137,20 +130,19 @@ void building_recharge(PlayerType *player_ptr)
     } else {
         int max_charges;
         if (o_ptr->tval == ItemKindType::STAFF) {
-            max_charges = k_ptr->pval - o_ptr->pval;
+            max_charges = baseitem.pval - o_ptr->pval;
         } else {
-            max_charges = o_ptr->number * k_ptr->pval - o_ptr->pval;
+            max_charges = o_ptr->number * baseitem.pval - o_ptr->pval;
         }
 
-        charges = (PARAMETER_VALUE)get_quantity(
-            format(_("一回分＄%d で何回分充填しますか？", "Add how many charges for %d gold apiece? "), price), std::min(player_ptr->au / price, max_charges));
-
+        const auto mes = _("一回分＄%d で何回分充填しますか？", "Add how many charges for %d gold apiece? ");
+        const auto charges = get_quantity(format(mes, price), std::min(player_ptr->au / price, max_charges));
         if (charges < 1) {
             return;
         }
 
         price *= charges;
-        o_ptr->pval += charges;
+        o_ptr->pval += static_cast<short>(charges);
         o_ptr->ident &= ~(IDENT_EMPTY);
     }
 
@@ -182,40 +174,34 @@ void building_recharge_all(PlayerType *player_ptr)
     clear_bldg(4, 18);
     prt(_("  再充填の費用はアイテムの種類によります。", "  The prices of recharge depend on the type."), 6, 0);
 
-    PRICE price = 0;
-    PRICE total_cost = 0;
-    for (INVENTORY_IDX i = 0; i < INVEN_PACK; i++) {
-        ItemEntity *o_ptr;
-        o_ptr = &player_ptr->inventory_list[i];
-
-        if ((o_ptr->tval < ItemKindType::STAFF) || (o_ptr->tval > ItemKindType::ROD)) {
+    auto price = 0;
+    auto total_cost = 0;
+    for (short i = 0; i < INVEN_PACK; i++) {
+        const auto &item = player_ptr->inventory_list[i];
+        if (!item.can_recharge()) {
             continue;
         }
-        if (!o_ptr->is_known()) {
+
+        if (!item.is_known()) {
             total_cost += 50;
         }
 
-        DEPTH lev = baseitems_info[o_ptr->bi_id].level;
-        BaseitemInfo *k_ptr;
-        k_ptr = &baseitems_info[o_ptr->bi_id];
-
-        switch (o_ptr->tval) {
+        const auto lev = baseitems_info[item.bi_id].level;
+        const auto &baseitem = baseitems_info[item.bi_id];
+        switch (item.tval) {
         case ItemKindType::ROD:
-            price = (lev * 50 * o_ptr->timeout) / k_ptr->pval;
+            price = (lev * 50 * item.timeout) / baseitem.pval;
             break;
-
         case ItemKindType::STAFF:
-            price = (baseitems_info[o_ptr->bi_id].cost / 10) * o_ptr->number;
+            price = (baseitems_info[item.bi_id].cost / 10) * item.number;
             price = std::max(10, price);
-            price = (k_ptr->pval - o_ptr->pval) * price;
+            price = (baseitem.pval - item.pval) * price;
             break;
-
         case ItemKindType::WAND:
-            price = (baseitems_info[o_ptr->bi_id].cost / 10);
+            price = (baseitems_info[item.bi_id].cost / 10);
             price = std::max(10, price);
-            price = (o_ptr->number * k_ptr->pval - o_ptr->pval) * price;
+            price = (item.number * baseitem.pval - item.pval) * price;
             break;
-
         default:
             break;
         }
@@ -241,13 +227,10 @@ void building_recharge_all(PlayerType *player_ptr)
         return;
     }
 
-    for (INVENTORY_IDX i = 0; i < INVEN_PACK; i++) {
-        ItemEntity *o_ptr;
-        o_ptr = &player_ptr->inventory_list[i];
-        BaseitemInfo *k_ptr;
-        k_ptr = &baseitems_info[o_ptr->bi_id];
-
-        if ((o_ptr->tval < ItemKindType::STAFF) || (o_ptr->tval > ItemKindType::ROD)) {
+    for (short i = 0; i < INVEN_PACK; i++) {
+        auto *o_ptr = &player_ptr->inventory_list[i];
+        const auto &baseitem = baseitems_info[o_ptr->bi_id];
+        if (!o_ptr->can_recharge()) {
             continue;
         }
 
@@ -261,20 +244,19 @@ void building_recharge_all(PlayerType *player_ptr)
             o_ptr->timeout = 0;
             break;
         case ItemKindType::STAFF:
-            if (o_ptr->pval < k_ptr->pval) {
-                o_ptr->pval = k_ptr->pval;
+            if (o_ptr->pval < baseitem.pval) {
+                o_ptr->pval = baseitem.pval;
             }
 
             o_ptr->ident &= ~(IDENT_EMPTY);
             break;
         case ItemKindType::WAND:
-            if (o_ptr->pval < o_ptr->number * k_ptr->pval) {
-                o_ptr->pval = o_ptr->number * k_ptr->pval;
+            if (o_ptr->pval < o_ptr->number * baseitem.pval) {
+                o_ptr->pval = o_ptr->number * baseitem.pval;
             }
 
             o_ptr->ident &= ~(IDENT_EMPTY);
             break;
-
         default:
             break;
         }

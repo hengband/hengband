@@ -19,12 +19,7 @@
  */
 void inven_item_charges(const ItemEntity &item)
 {
-    const auto tval = item.tval;
-    if ((tval != ItemKindType::STAFF) && (tval != ItemKindType::WAND)) {
-        return;
-    }
-
-    if (!item.is_known()) {
+    if (!item.is_wand_staff() || !item.is_known()) {
         return;
     }
 

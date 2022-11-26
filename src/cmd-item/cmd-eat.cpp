@@ -153,7 +153,7 @@ bool exe_eat_food_type_object(PlayerType *player_ptr, ItemEntity *o_ptr)
  */
 bool exe_eat_charge_of_magic_device(PlayerType *player_ptr, ItemEntity *o_ptr, INVENTORY_IDX item)
 {
-    if (o_ptr->tval != ItemKindType::STAFF && o_ptr->tval != ItemKindType::WAND) {
+    if (!o_ptr->is_wand_staff()) {
         return false;
     }
 

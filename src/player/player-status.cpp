@@ -1713,7 +1713,7 @@ static ARMOUR_CLASS calc_base_ac(PlayerType *player_ptr)
 
     const auto o_ptr_mh = &player_ptr->inventory_list[INVEN_MAIN_HAND];
     const auto o_ptr_sh = &player_ptr->inventory_list[INVEN_SUB_HAND];
-    if (o_ptr_mh->is_armour() || o_ptr_sh->is_armour()) {
+    if (o_ptr_mh->is_protector() || o_ptr_sh->is_protector()) {
         ac += player_ptr->skill_exp[PlayerSkillKindType::SHIELD] * (1 + player_ptr->lev / 22) / 2000;
     }
 
@@ -1840,7 +1840,7 @@ static ARMOUR_CLASS calc_to_ac(PlayerType *player_ptr, bool is_real_value)
             if (!o_ptr->bi_id) {
                 continue;
             }
-            if (!o_ptr->is_armour()) {
+            if (!o_ptr->is_protector()) {
                 continue;
             }
             if (!o_ptr->is_cursed()) {

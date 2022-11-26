@@ -275,7 +275,7 @@ static void strengthen_pval(ItemEntity *o_ptr)
  */
 static void invest_positive_modified_value(ItemEntity *o_ptr)
 {
-    if (o_ptr->is_armour()) {
+    if (o_ptr->is_protector()) {
         o_ptr->to_a += randint1(o_ptr->to_a > 19 ? 1 : 20 - o_ptr->to_a);
         return;
     }
@@ -298,7 +298,7 @@ static void invest_positive_modified_value(ItemEntity *o_ptr)
  */
 static void invest_negative_modified_value(ItemEntity *o_ptr)
 {
-    if (!o_ptr->is_armour()) {
+    if (!o_ptr->is_protector()) {
         return;
     }
 
@@ -385,7 +385,7 @@ static int decide_random_art_power_level(ItemEntity *o_ptr, const bool a_cursed,
 static void name_unnatural_random_artifact(PlayerType *player_ptr, ItemEntity *o_ptr, const bool a_scroll, const int power_level, GAME_TEXT *new_name)
 {
     if (!a_scroll) {
-        get_random_name(o_ptr, new_name, o_ptr->is_armour(), power_level);
+        get_random_name(o_ptr, new_name, o_ptr->is_protector(), power_level);
         return;
     }
 
@@ -460,7 +460,7 @@ bool become_random_artifact(PlayerType *player_ptr, ItemEntity *o_ptr, bool a_sc
     }
 
     constexpr auto activation_chance = 3;
-    if (!a_cursed && one_in_(o_ptr->is_armour() ? activation_chance * 2 : activation_chance)) {
+    if (!a_cursed && one_in_(o_ptr->is_protector() ? activation_chance * 2 : activation_chance)) {
         o_ptr->activation_id = RandomArtActType::NONE;
         give_activation_power(o_ptr);
     }

@@ -90,7 +90,8 @@ public:
     bool is_ammo() const;
     bool is_convertible() const;
     bool is_lance() const;
-    bool is_armour() const;
+    bool is_protector() const;
+    bool can_be_aura_protector() const;
     bool is_rare() const;
     bool is_ego() const;
     bool is_smith() const;
@@ -110,7 +111,7 @@ public:
     bool is_readable() const;
     bool can_refill_lantern() const;
     bool can_refill_torch() const;
-    bool is_rechargeable() const;
+    bool can_recharge() const;
     bool is_offerable() const;
     bool is_activatable() const;
     bool is_fuel() const;
@@ -123,6 +124,8 @@ public:
     bool is_specific_artifact(FixedArtifactId id) const;
     bool has_unidentified_name() const;
     ItemKindType get_arrow_kind() const;
+    bool is_wand_rod() const;
+    bool is_wand_staff() const;
 
 private:
     int get_baseitem_price() const;

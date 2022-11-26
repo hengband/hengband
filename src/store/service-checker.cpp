@@ -451,7 +451,7 @@ void mass_produce(PlayerType *, ItemEntity *o_ptr, StoreSaleType store_num)
 
     o_ptr->discount = discount;
     o_ptr->number = size - (size * discount / 100);
-    if ((o_ptr->tval == ItemKindType::ROD) || (o_ptr->tval == ItemKindType::WAND)) {
+    if (o_ptr->is_wand_rod()) {
         o_ptr->pval *= (PARAMETER_VALUE)o_ptr->number;
     }
 }

@@ -483,7 +483,7 @@ static void describe_remaining(flavor_type *flavor_ptr)
         return;
     }
 
-    if (((flavor_ptr->o_ptr->tval == ItemKindType::STAFF) || (flavor_ptr->o_ptr->tval == ItemKindType::WAND))) {
+    if (flavor_ptr->o_ptr->is_wand_staff()) {
         describe_charges_staff_wand(flavor_ptr);
     } else if (flavor_ptr->o_ptr->tval == ItemKindType::ROD) {
         describe_charges_rod(flavor_ptr);

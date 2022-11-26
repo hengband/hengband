@@ -578,10 +578,7 @@ OBJECT_IDX drop_near(PlayerType *player_ptr, ItemEntity *j_ptr, PERCENTAGE chanc
 void floor_item_charges(FloorType *floor_ptr, INVENTORY_IDX item)
 {
     auto *o_ptr = &floor_ptr->o_list[item];
-    if ((o_ptr->tval != ItemKindType::STAFF) && (o_ptr->tval != ItemKindType::WAND)) {
-        return;
-    }
-    if (!o_ptr->is_known()) {
+    if (!o_ptr->is_wand_staff() || !o_ptr->is_known()) {
         return;
     }
 

@@ -469,7 +469,7 @@ void autopick_entry_from_object(PlayerType *player_ptr, autopick_type *entry, It
 
     if (o_ptr->is_ammo()) {
         ADD_FLG(FLG_MISSILES);
-    } else if (o_ptr->tval == ItemKindType::SCROLL || o_ptr->tval == ItemKindType::STAFF || o_ptr->tval == ItemKindType::WAND || o_ptr->tval == ItemKindType::ROD) {
+    } else if (o_ptr->tval == ItemKindType::SCROLL || o_ptr->is_wand_staff() || o_ptr->is_wand_rod()) {
         ADD_FLG(FLG_DEVICES);
     } else if (o_ptr->tval == ItemKindType::LITE) {
         ADD_FLG(FLG_LIGHTS);

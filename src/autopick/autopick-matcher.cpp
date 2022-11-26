@@ -248,7 +248,7 @@ bool is_autopick_match(PlayerType *player_ptr, ItemEntity *o_ptr, autopick_type 
             return false;
         }
     } else if (IS_FLG(FLG_ARMORS)) {
-        if (!o_ptr->is_armour()) {
+        if (!o_ptr->is_protector()) {
             return false;
         }
     } else if (IS_FLG(FLG_MISSILES)) {

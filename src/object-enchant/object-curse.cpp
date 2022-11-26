@@ -49,7 +49,7 @@ CurseTraitType get_curse(int power, ItemEntity *o_ptr)
         if (new_curse == CurseTraitType::LOW_MELEE && !o_ptr->is_weapon()) {
             continue;
         }
-        if (new_curse == CurseTraitType::LOW_AC && !o_ptr->is_armour()) {
+        if (new_curse == CurseTraitType::LOW_AC && !o_ptr->is_protector()) {
             continue;
         }
         break;

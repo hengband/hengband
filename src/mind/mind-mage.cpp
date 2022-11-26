@@ -34,10 +34,9 @@ bool eat_magic(PlayerType *player_ptr, int power)
     concptr q = _("どのアイテムから魔力を吸収しますか？", "Drain which item? ");
     concptr s = _("魔力を吸収できるアイテムがありません。", "You have nothing to drain.");
 
-    ItemEntity *o_ptr;
     OBJECT_IDX item;
-    o_ptr = choose_object(player_ptr, &item, q, s, (USE_INVEN | USE_FLOOR), FuncItemTester(&ItemEntity::is_rechargeable));
-    if (!o_ptr) {
+    auto *o_ptr = choose_object(player_ptr, &item, q, s, (USE_INVEN | USE_FLOOR), FuncItemTester(&ItemEntity::can_recharge));
+    if (o_ptr == nullptr) {
         return false;
     }
 
@@ -104,7 +103,7 @@ bool eat_magic(PlayerType *player_ptr, int power)
         msg_format(_("魔力が逆流した！%sは完全に魔力を失った。", "The recharging backfires - %s is completely drained!"), o_name);
         if (o_ptr->tval == ItemKindType::ROD) {
             o_ptr->timeout = k_ptr->pval * o_ptr->number;
-        } else if ((o_ptr->tval == ItemKindType::WAND) || (o_ptr->tval == ItemKindType::STAFF)) {
+        } else if (o_ptr->is_wand_staff()) {
             o_ptr->pval = 0;
         }
 
