@@ -9,8 +9,17 @@
 
 #include "system/baseitem-info.h"
 #include "object/tval-types.h"
+#include "sv-definition/sv-armor-types.h"
 #include "sv-definition/sv-bow-types.h"
 #include "sv-definition/sv-food-types.h"
+#include "sv-definition/sv-protector-types.h"
+#include "sv-definition/sv-weapon-types.h"
+#include <set>
+#include <unordered_map>
+
+namespace {
+constexpr auto ITEM_NOT_BOW = "This item is not a bow!";
+}
 
 BaseitemKey::BaseitemKey(const ItemKindType type_value, const std::optional<int> &subtype_value)
     : type_value(type_value)
@@ -249,6 +258,198 @@ bool BaseitemKey::is_wearable() const
         return true;
     default:
         return false;
+    }
+}
+
+bool BaseitemKey::is_weapon() const
+{
+    switch (this->type_value) {
+    case ItemKindType::BOW:
+    case ItemKindType::DIGGING:
+    case ItemKindType::HAFTED:
+    case ItemKindType::POLEARM:
+    case ItemKindType::SWORD:
+        return true;
+    default:
+        return false;
+    }
+}
+
+bool BaseitemKey::is_equipement() const
+{
+    switch (this->type_value) {
+    case ItemKindType::SHOT:
+    case ItemKindType::ARROW:
+    case ItemKindType::BOLT:
+    case ItemKindType::BOW:
+    case ItemKindType::DIGGING:
+    case ItemKindType::HAFTED:
+    case ItemKindType::POLEARM:
+    case ItemKindType::SWORD:
+    case ItemKindType::BOOTS:
+    case ItemKindType::GLOVES:
+    case ItemKindType::HELM:
+    case ItemKindType::CROWN:
+    case ItemKindType::SHIELD:
+    case ItemKindType::CLOAK:
+    case ItemKindType::SOFT_ARMOR:
+    case ItemKindType::HARD_ARMOR:
+    case ItemKindType::DRAG_ARMOR:
+    case ItemKindType::LITE:
+    case ItemKindType::AMULET:
+    case ItemKindType::RING:
+    case ItemKindType::CARD:
+        return true;
+    default:
+        return false;
+    }
+}
+
+bool BaseitemKey::is_melee_ammo() const
+{
+    switch (this->type_value) {
+    case ItemKindType::HAFTED:
+    case ItemKindType::POLEARM:
+    case ItemKindType::DIGGING:
+    case ItemKindType::BOLT:
+    case ItemKindType::ARROW:
+    case ItemKindType::SHOT:
+        return true;
+    case ItemKindType::SWORD:
+        return this->subtype_value != SV_POISON_NEEDLE;
+    default:
+        return false;
+    }
+}
+
+bool BaseitemKey::is_orthodox_melee_weapon() const
+{
+    switch (this->type_value) {
+    case ItemKindType::HAFTED:
+    case ItemKindType::POLEARM:
+    case ItemKindType::DIGGING:
+        return true;
+    case ItemKindType::SWORD:
+        return this->subtype_value != SV_POISON_NEEDLE;
+    default:
+        return false;
+    }
+}
+
+bool BaseitemKey::is_broken_weapon() const
+{
+    if (this->type_value != ItemKindType::SWORD) {
+        return false;
+    }
+
+    if (!this->subtype_value.has_value()) {
+        return false;
+    }
+
+    switch (this->subtype_value.value()) {
+    case SV_BROKEN_DAGGER:
+    case SV_BROKEN_SWORD:
+        return true;
+    default:
+        return false;
+    }
+}
+
+bool BaseitemKey::is_throwable() const
+{
+    switch (this->type_value) {
+    case ItemKindType::DIGGING:
+    case ItemKindType::HAFTED:
+    case ItemKindType::POLEARM:
+    case ItemKindType::SWORD:
+        return true;
+    default:
+        return false;
+    }
+}
+
+bool BaseitemKey::is_wieldable_in_etheir_hand() const
+{
+    switch (this->type_value) {
+    case ItemKindType::DIGGING:
+    case ItemKindType::HAFTED:
+    case ItemKindType::POLEARM:
+    case ItemKindType::SWORD:
+    case ItemKindType::SHIELD:
+    case ItemKindType::CAPTURE:
+    case ItemKindType::CARD:
+        return true;
+    default:
+        return false;
+    }
+}
+
+bool BaseitemKey::is_rare() const
+{
+    static const std::unordered_map<ItemKindType, const std::set<int>> rare_table = {
+        { ItemKindType::HAFTED, { SV_MACE_OF_DISRUPTION, SV_WIZSTAFF } },
+        { ItemKindType::POLEARM, { SV_SCYTHE_OF_SLICING, SV_DEATH_SCYTHE } },
+        { ItemKindType::SWORD, { SV_BLADE_OF_CHAOS, SV_DIAMOND_EDGE, SV_POISON_NEEDLE, SV_HAYABUSA } },
+        { ItemKindType::SHIELD, { SV_DRAGON_SHIELD, SV_MIRROR_SHIELD } },
+        { ItemKindType::HELM, { SV_DRAGON_HELM } },
+        { ItemKindType::BOOTS, { SV_PAIR_OF_DRAGON_GREAVE } },
+        { ItemKindType::CLOAK, { SV_ELVEN_CLOAK, SV_ETHEREAL_CLOAK, SV_SHADOW_CLOAK, SV_MAGIC_RESISTANCE_CLOAK } },
+        { ItemKindType::GLOVES, { SV_SET_OF_DRAGON_GLOVES } },
+        { ItemKindType::SOFT_ARMOR, { SV_KUROSHOUZOKU, SV_ABUNAI_MIZUGI } },
+        { ItemKindType::HARD_ARMOR, { SV_MITHRIL_CHAIN_MAIL, SV_MITHRIL_PLATE_MAIL, SV_ADAMANTITE_PLATE_MAIL } },
+        { ItemKindType::DRAG_ARMOR, { /* Any */ } },
+    };
+
+    if (!this->subtype_value.has_value()) {
+        return false;
+    }
+
+    if (auto it = rare_table.find(this->type_value); it != rare_table.end()) {
+        const auto &svals = it->second;
+        return svals.empty() || (svals.find(this->subtype_value.value()) != svals.end());
+    }
+
+    return false;
+}
+
+short BaseitemKey::get_bow_energy() const
+{
+    if ((this->type_value != ItemKindType::BOW) || !this->subtype_value.has_value()) {
+        throw std::logic_error(ITEM_NOT_BOW);
+    }
+
+    switch (this->subtype_value.value()) {
+    case SV_SLING:
+        return 8000;
+    case SV_NAMAKE_BOW:
+        return 7777;
+    case SV_LIGHT_XBOW:
+        return 12000;
+    case SV_HEAVY_XBOW:
+        return 13333;
+    default:
+        return 10000;
+    }
+}
+
+int BaseitemKey::get_arrow_magnification() const
+{
+    if ((this->type_value != ItemKindType::BOW) || !this->subtype_value.has_value()) {
+        throw std::logic_error(ITEM_NOT_BOW);
+    }
+
+    switch (this->subtype_value.value()) {
+    case SV_SLING:
+    case SV_SHORT_BOW:
+        return 2;
+    case SV_LONG_BOW:
+    case SV_NAMAKE_BOW:
+    case SV_LIGHT_XBOW:
+        return 3;
+    case SV_HEAVY_XBOW:
+        return 4;
+    default:
+        return 0;
     }
 }
 

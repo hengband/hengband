@@ -126,6 +126,8 @@ public:
     ItemKindType get_arrow_kind() const;
     bool is_wand_rod() const;
     bool is_wand_staff() const;
+    short get_bow_energy() const;
+    int get_arrow_magnification() const;
 
 private:
     int get_baseitem_price() const;

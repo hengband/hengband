@@ -49,6 +49,16 @@ public:
     bool is_protector() const;
     bool can_be_aura_protector() const;
     bool is_wearable() const;
+    bool is_weapon() const;
+    bool is_equipement() const;
+    bool is_melee_ammo() const;
+    bool is_orthodox_melee_weapon() const;
+    bool is_broken_weapon() const;
+    bool is_throwable() const;
+    bool is_wieldable_in_etheir_hand() const;
+    bool is_rare() const;
+    short get_bow_energy() const;
+    int get_arrow_magnification() const;
 
 private:
     ItemKindType type_value;

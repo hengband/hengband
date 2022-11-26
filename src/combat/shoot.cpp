@@ -488,14 +488,7 @@ static MULTIPLY calc_shot_damage_with_slay(
  */
 void exe_fire(PlayerType *player_ptr, INVENTORY_IDX item, ItemEntity *j_ptr, SPELL_IDX snipe_type)
 {
-    DIRECTION dir;
-    int i;
     POSITION y, x, ny, nx, ty, tx, prev_y, prev_x;
-    int tdam_base, tdis, thits, tmul;
-    int bonus, chance;
-    int cur_dis, visible;
-    PERCENTAGE j;
-
     ItemEntity forge;
     ItemEntity *q_ptr;
     ItemEntity *o_ptr;
@@ -503,12 +496,8 @@ void exe_fire(PlayerType *player_ptr, INVENTORY_IDX item, ItemEntity *j_ptr, SPE
     AttributeFlags attribute_flags{};
     attribute_flags.set(AttributeType::PLAYER_SHOOT);
 
-    bool hit_body = false;
-
-    GAME_TEXT o_name[MAX_NLEN];
-
-    /* STICK TO */
-    bool stick_to = false;
+    auto hit_body = false;
+    auto stick_to = false;
 
     /* Access the item (if in the pack) */
     if (item >= 0) {
@@ -522,27 +511,30 @@ void exe_fire(PlayerType *player_ptr, INVENTORY_IDX item, ItemEntity *j_ptr, SPE
         snipe_type = SP_NONE;
     }
 
+    GAME_TEXT o_name[MAX_NLEN];
     describe_flavor(player_ptr, o_name, o_ptr, OD_OMIT_PREFIX);
 
     /* Use the proper number of shots */
-    thits = player_ptr->num_fire;
+    auto thits = player_ptr->num_fire;
 
     /* Use a base distance */
-    tdis = 10;
+    auto tdis = 10;
 
     /* Base damage from thrown object plus launcher bonus */
-    tdam_base = damroll(o_ptr->dd, o_ptr->ds) + o_ptr->to_d + j_ptr->to_d;
+    auto tdam_base = damroll(o_ptr->dd, o_ptr->ds) + o_ptr->to_d + j_ptr->to_d;
 
     /* Actually "fire" the object */
-    bonus = (player_ptr->to_h_b + o_ptr->to_h + j_ptr->to_h);
+    auto bonus = (player_ptr->to_h_b + o_ptr->to_h + j_ptr->to_h);
+    int chance;
+    auto weapon_exp = player_ptr->weapon_exp[j_ptr->tval][j_ptr->sval];
     if ((j_ptr->sval == SV_LIGHT_XBOW) || (j_ptr->sval == SV_HEAVY_XBOW)) {
-        chance = (player_ptr->skill_thb + (player_ptr->weapon_exp[j_ptr->tval][j_ptr->sval] / 400 + bonus) * BTH_PLUS_ADJ);
+        chance = (player_ptr->skill_thb + (weapon_exp / 400 + bonus) * BTH_PLUS_ADJ);
     } else {
-        chance = (player_ptr->skill_thb + ((player_ptr->weapon_exp[j_ptr->tval][j_ptr->sval] - (PlayerSkill::weapon_exp_at(PlayerSkillRank::MASTER) / 2)) / 200 + bonus) * BTH_PLUS_ADJ);
+        chance = (player_ptr->skill_thb + ((weapon_exp - (PlayerSkill::weapon_exp_at(PlayerSkillRank::MASTER) / 2)) / 200 + bonus) * BTH_PLUS_ADJ);
     }
 
-    PlayerEnergy(player_ptr).set_player_turn_energy(bow_energy(j_ptr->sval));
-    tmul = bow_tmul(j_ptr->sval);
+    PlayerEnergy(player_ptr).set_player_turn_energy(j_ptr->get_bow_energy());
+    auto tmul = j_ptr->get_arrow_magnification();
 
     /* Get extra "power" from "extra might" */
     if (player_ptr->xtra_might) {
@@ -567,6 +559,7 @@ void exe_fire(PlayerType *player_ptr, INVENTORY_IDX item, ItemEntity *j_ptr, SPE
     project_length = tdis + 1;
 
     /* Get a direction (or cancel) */
+    DIRECTION dir;
     if (!get_aim_dir(player_ptr, &dir)) {
         PlayerEnergy(player_ptr).reset_player_turn();
 
@@ -609,7 +602,7 @@ void exe_fire(PlayerType *player_ptr, INVENTORY_IDX item, ItemEntity *j_ptr, SPE
     }
 
     /* Take a (partial) turn */
-    PlayerEnergy(player_ptr).div_player_turn_energy((ENERGY)thits);
+    PlayerEnergy(player_ptr).div_player_turn_energy(thits);
     player_ptr->is_fired = true;
 
     /* Sniper - Difficult to shot twice at 1 turn */
@@ -618,7 +611,7 @@ void exe_fire(PlayerType *player_ptr, INVENTORY_IDX item, ItemEntity *j_ptr, SPE
     }
 
     /* Sniper - Repeat shooting when double shots */
-    for (i = 0; i < ((snipe_type == SP_DOUBLE) ? 2 : 1); i++) {
+    for (auto i = 0; i < ((snipe_type == SP_DOUBLE) ? 2 : 1); i++) {
         /* Start at the player */
         y = player_ptr->y;
         x = player_ptr->x;
@@ -640,7 +633,7 @@ void exe_fire(PlayerType *player_ptr, INVENTORY_IDX item, ItemEntity *j_ptr, SPE
         hit_body = false;
 
         /* Travel until stopped */
-        for (cur_dis = 0; cur_dis <= tdis;) {
+        for (auto cur_dis = 0; cur_dis <= tdis;) {
             grid_type *g_ptr;
 
             /* Hack -- Stop at the target */
@@ -740,7 +733,7 @@ void exe_fire(PlayerType *player_ptr, INVENTORY_IDX item, ItemEntity *j_ptr, SPE
                 auto *r_ptr = &monraces_info[m_ptr->r_idx];
 
                 /* Check the visibility */
-                visible = m_ptr->ml;
+                auto visible = m_ptr->ml;
 
                 /* Note the collision */
                 hit_body = true;
@@ -946,7 +939,7 @@ void exe_fire(PlayerType *player_ptr, INVENTORY_IDX item, ItemEntity *j_ptr, SPE
         }
 
         /* Chance of breakage (during attacks) */
-        j = (hit_body ? breakage_chance(player_ptr, q_ptr, PlayerClass(player_ptr).equals(PlayerClassType::ARCHER), snipe_type) : 0);
+        auto j = (hit_body ? breakage_chance(player_ptr, q_ptr, PlayerClass(player_ptr).equals(PlayerClassType::ARCHER), snipe_type) : 0);
 
         if (stick_to) {
             MONSTER_IDX m_idx = player_ptr->current_floor_ptr->grid_array[y][x].m_idx;
@@ -1113,106 +1106,6 @@ int critical_shot(PlayerType *player_ptr, WEIGHT weight, int plus_ammo, int plus
     }
 
     return dam;
-}
-
-/*!
- * @brief 射撃武器の攻撃に必要な基本消費エネルギーを返す/Return bow energy
- * @param sval 射撃武器のアイテム副分類ID
- * @return 消費する基本エネルギー
- */
-ENERGY bow_energy(OBJECT_SUBTYPE_VALUE sval)
-{
-    ENERGY energy = 10000;
-
-    /* Analyze the launcher */
-    switch (sval) {
-        /* Sling and ammo */
-    case SV_SLING: {
-        energy = 8000;
-        break;
-    }
-
-    /* Short Bow and Arrow */
-    case SV_SHORT_BOW: {
-        energy = 10000;
-        break;
-    }
-
-    /* Long Bow and Arrow */
-    case SV_LONG_BOW: {
-        energy = 10000;
-        break;
-    }
-
-    /* Bow of irresponsiblity and Arrow */
-    case SV_NAMAKE_BOW: {
-        energy = 7777;
-        break;
-    }
-
-    /* Light Crossbow and Bolt */
-    case SV_LIGHT_XBOW: {
-        energy = 12000;
-        break;
-    }
-
-    /* Heavy Crossbow and Bolt */
-    case SV_HEAVY_XBOW: {
-        energy = 13333;
-        break;
-    }
-    }
-
-    return energy;
-}
-
-/*
- * Return bow tmul
- */
-int bow_tmul(OBJECT_SUBTYPE_VALUE sval)
-{
-    int tmul = 0;
-
-    /* Analyze the launcher */
-    switch (sval) {
-        /* Sling and ammo */
-    case SV_SLING: {
-        tmul = 2;
-        break;
-    }
-
-    /* Short Bow and Arrow */
-    case SV_SHORT_BOW: {
-        tmul = 2;
-        break;
-    }
-
-    /* Long Bow and Arrow */
-    case SV_LONG_BOW: {
-        tmul = 3;
-        break;
-    }
-
-    /* Bow of irresponsiblity and Arrow */
-    case SV_NAMAKE_BOW: {
-        tmul = 3;
-        break;
-    }
-
-    /* Light Crossbow and Bolt */
-    case SV_LIGHT_XBOW: {
-        tmul = 3;
-        break;
-    }
-
-    /* Heavy Crossbow and Bolt */
-    case SV_HEAVY_XBOW: {
-        tmul = 4;
-        break;
-    }
-    }
-
-    return tmul;
 }
 
 /*!

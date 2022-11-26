@@ -1,8 +1,9 @@
 ﻿/*
  * @file item-entity.cpp
- * @brief アイテム定義の構造体とエンティティ処理実装
+ * @brief アイテム実体とそれにまつわる判定処理群
  * @author Hourier
- * @date 2022/10/09
+ * @date 2022/11/25
+ * @details オブジェクトの状態を変更するメソッドは道半ば
  */
 
 #include "system/item-entity.h"
@@ -11,26 +12,19 @@
 #include "monster-race/monster-race.h"
 #include "object-enchant/object-curse.h"
 #include "object-enchant/special-object-flags.h"
-#include "object-enchant/tr-types.h"
-#include "object-enchant/trc-types.h"
-#include "object-enchant/trg-types.h"
 #include "object/object-flags.h"
 #include "object/object-value.h"
 #include "object/tval-types.h"
 #include "smith/object-smith.h"
-#include "sv-definition/sv-armor-types.h"
 #include "sv-definition/sv-lite-types.h"
 #include "sv-definition/sv-other-types.h"
-#include "sv-definition/sv-protector-types.h"
 #include "sv-definition/sv-weapon-types.h"
 #include "system/baseitem-info.h"
 #include "system/monster-race-info.h"
-#include "system/player-type-definition.h"
 #include "term/term-color-types.h"
 #include "util/bit-flags-calculator.h"
+#include "util/enum-converter.h"
 #include "util/string-processor.h"
-#include <set>
-#include <unordered_map>
 
 ItemEntity::ItemEntity()
     : fixed_artifact_idx(FixedArtifactId::NONE)
@@ -63,46 +57,52 @@ void ItemEntity::copy_from(const ItemEntity *j_ptr)
  */
 void ItemEntity::prep(short new_bi_id)
 {
-    auto *k_ptr = &baseitems_info[new_bi_id];
+    const auto &baseitem = baseitems_info[new_bi_id];
     auto old_stack_idx = this->stack_idx;
-    wipe();
+    this->wipe();
     this->stack_idx = old_stack_idx;
     this->bi_id = new_bi_id;
-    this->tval = k_ptr->bi_key.tval();
-    this->sval = k_ptr->bi_key.sval().value();
-    this->pval = k_ptr->pval;
+    this->tval = baseitem.bi_key.tval();
+    this->sval = baseitem.bi_key.sval().value();
+    this->pval = baseitem.pval;
     this->number = 1;
-    this->weight = k_ptr->weight;
-    this->to_h = k_ptr->to_h;
-    this->to_d = k_ptr->to_d;
-    this->to_a = k_ptr->to_a;
-    this->ac = k_ptr->ac;
-    this->dd = k_ptr->dd;
-    this->ds = k_ptr->ds;
+    this->weight = baseitem.weight;
+    this->to_h = baseitem.to_h;
+    this->to_d = baseitem.to_d;
+    this->to_a = baseitem.to_a;
+    this->ac = baseitem.ac;
+    this->dd = baseitem.dd;
+    this->ds = baseitem.ds;
 
-    if (k_ptr->act_idx > RandomArtActType::NONE) {
-        this->activation_id = k_ptr->act_idx;
+    if (baseitem.act_idx > RandomArtActType::NONE) {
+        this->activation_id = baseitem.act_idx;
     }
+
     if (baseitems_info[this->bi_id].cost <= 0) {
         this->ident |= (IDENT_BROKEN);
     }
 
-    if (k_ptr->gen_flags.has(ItemGenerationTraitType::CURSED)) {
+    if (baseitem.gen_flags.has(ItemGenerationTraitType::CURSED)) {
         this->curse_flags.set(CurseTraitType::CURSED);
     }
-    if (k_ptr->gen_flags.has(ItemGenerationTraitType::HEAVY_CURSE)) {
+
+    if (baseitem.gen_flags.has(ItemGenerationTraitType::HEAVY_CURSE)) {
         this->curse_flags.set(CurseTraitType::HEAVY_CURSE);
     }
-    if (k_ptr->gen_flags.has(ItemGenerationTraitType::PERMA_CURSE)) {
+
+    if (baseitem.gen_flags.has(ItemGenerationTraitType::PERMA_CURSE)) {
         this->curse_flags.set(CurseTraitType::PERMA_CURSE);
     }
-    if (k_ptr->gen_flags.has(ItemGenerationTraitType::RANDOM_CURSE0)) {
+
+    if (baseitem.gen_flags.has(ItemGenerationTraitType::RANDOM_CURSE0)) {
         this->curse_flags.set(get_curse(0, this));
     }
-    if (k_ptr->gen_flags.has(ItemGenerationTraitType::RANDOM_CURSE1)) {
+
+    if (baseitem.gen_flags.has(ItemGenerationTraitType::RANDOM_CURSE1)) {
         this->curse_flags.set(get_curse(1, this));
     }
-    if (k_ptr->gen_flags.has(ItemGenerationTraitType::RANDOM_CURSE2)) {
+
+    if (baseitem.gen_flags.has(ItemGenerationTraitType::RANDOM_CURSE2)) {
         this->curse_flags.set(get_curse(2, this));
     }
 }
@@ -113,7 +113,7 @@ void ItemEntity::prep(short new_bi_id)
  */
 bool ItemEntity::is_weapon() const
 {
-    return (TV_WEAPON_BEGIN <= this->tval) && (this->tval <= TV_WEAPON_END);
+    return BaseitemKey(this->tval).is_weapon();
 }
 
 /*!
@@ -149,19 +149,7 @@ bool ItemEntity::is_melee_weapon() const
  */
 bool ItemEntity::is_melee_ammo() const
 {
-    switch (this->tval) {
-    case ItemKindType::HAFTED:
-    case ItemKindType::POLEARM:
-    case ItemKindType::DIGGING:
-    case ItemKindType::BOLT:
-    case ItemKindType::ARROW:
-    case ItemKindType::SHOT:
-        return true;
-    case ItemKindType::SWORD:
-        return this->sval != SV_POISON_NEEDLE;
-    default:
-        return false;
-    }
+    return BaseitemKey(this->tval, this->sval).is_melee_ammo();
 }
 
 /*!
@@ -179,7 +167,7 @@ bool ItemEntity::is_wearable() const
  */
 bool ItemEntity::is_equipment() const
 {
-    return (TV_EQUIP_BEGIN <= this->tval) && (this->tval <= TV_EQUIP_END);
+    return BaseitemKey(this->tval).is_equipement();
 }
 
 /*!
@@ -188,16 +176,7 @@ bool ItemEntity::is_equipment() const
  */
 bool ItemEntity::is_orthodox_melee_weapons() const
 {
-    switch (this->tval) {
-    case ItemKindType::HAFTED:
-    case ItemKindType::POLEARM:
-    case ItemKindType::DIGGING:
-        return true;
-    case ItemKindType::SWORD:
-        return this->sval != SV_POISON_NEEDLE;
-    default:
-        return false;
-    }
+    return BaseitemKey(this->tval, this->sval).is_orthodox_melee_weapon();
 }
 
 /*!
@@ -206,17 +185,7 @@ bool ItemEntity::is_orthodox_melee_weapons() const
  */
 bool ItemEntity::is_broken_weapon() const
 {
-    if (this->tval != ItemKindType::SWORD) {
-        return false;
-    }
-
-    switch (this->sval) {
-    case SV_BROKEN_DAGGER:
-    case SV_BROKEN_SWORD:
-        return true;
-    }
-
-    return false;
+    return BaseitemKey(this->tval, this->sval).is_broken_weapon();
 }
 
 /*!
@@ -225,15 +194,7 @@ bool ItemEntity::is_broken_weapon() const
  */
 bool ItemEntity::is_throwable() const
 {
-    switch (this->tval) {
-    case ItemKindType::DIGGING:
-    case ItemKindType::HAFTED:
-    case ItemKindType::POLEARM:
-    case ItemKindType::SWORD:
-        return true;
-    default:
-        return false;
-    }
+    return BaseitemKey(this->tval).is_throwable();
 }
 
 /*!
@@ -242,18 +203,7 @@ bool ItemEntity::is_throwable() const
  */
 bool ItemEntity::is_wieldable_in_etheir_hand() const
 {
-    switch (this->tval) {
-    case ItemKindType::DIGGING:
-    case ItemKindType::HAFTED:
-    case ItemKindType::POLEARM:
-    case ItemKindType::SWORD:
-    case ItemKindType::SHIELD:
-    case ItemKindType::CAPTURE:
-    case ItemKindType::CARD:
-        return true;
-    default:
-        return false;
-    }
+    return BaseitemKey(this->tval).is_wieldable_in_etheir_hand();
 }
 
 /*!
@@ -262,7 +212,7 @@ bool ItemEntity::is_wieldable_in_etheir_hand() const
  */
 bool ItemEntity::refuse_enchant_weapon() const
 {
-    return (this->tval == ItemKindType::SWORD) && (this->sval == SV_POISON_NEEDLE);
+    return BaseitemKey(this->tval, this->sval) == BaseitemKey(ItemKindType::SWORD, SV_POISON_NEEDLE);
 }
 
 /*!
@@ -311,15 +261,16 @@ bool ItemEntity::is_ammo() const
  */
 bool ItemEntity::is_convertible() const
 {
-    auto is_convertible = ((this->tval == ItemKindType::JUNK) || (this->tval == ItemKindType::SKELETON));
-    is_convertible |= ((this->tval == ItemKindType::CORPSE) && (this->sval == SV_SKELETON));
+    auto is_convertible = (this->tval == ItemKindType::JUNK) || (this->tval == ItemKindType::SKELETON);
+    is_convertible |= BaseitemKey(this->tval, this->sval) == BaseitemKey(ItemKindType::CORPSE, SV_SKELETON);
     return is_convertible;
 }
 
 bool ItemEntity::is_lance() const
 {
-    auto is_lance = this->tval == ItemKindType::POLEARM;
-    is_lance &= (this->sval == SV_LANCE) || (this->sval == SV_HEAVY_LANCE);
+    const BaseitemKey bi_key(this->tval, this->sval);
+    auto is_lance = bi_key == BaseitemKey(ItemKindType::POLEARM, SV_LANCE);
+    is_lance |= bi_key == BaseitemKey(ItemKindType::POLEARM, SV_HEAVY_LANCE);
     return is_lance;
 }
 
@@ -348,26 +299,7 @@ bool ItemEntity::can_be_aura_protector() const
  */
 bool ItemEntity::is_rare() const
 {
-    static const std::unordered_map<ItemKindType, const std::set<OBJECT_SUBTYPE_VALUE>> rare_table = {
-        { ItemKindType::HAFTED, { SV_MACE_OF_DISRUPTION, SV_WIZSTAFF } },
-        { ItemKindType::POLEARM, { SV_SCYTHE_OF_SLICING, SV_DEATH_SCYTHE } },
-        { ItemKindType::SWORD, { SV_BLADE_OF_CHAOS, SV_DIAMOND_EDGE, SV_POISON_NEEDLE, SV_HAYABUSA } },
-        { ItemKindType::SHIELD, { SV_DRAGON_SHIELD, SV_MIRROR_SHIELD } },
-        { ItemKindType::HELM, { SV_DRAGON_HELM } },
-        { ItemKindType::BOOTS, { SV_PAIR_OF_DRAGON_GREAVE } },
-        { ItemKindType::CLOAK, { SV_ELVEN_CLOAK, SV_ETHEREAL_CLOAK, SV_SHADOW_CLOAK, SV_MAGIC_RESISTANCE_CLOAK } },
-        { ItemKindType::GLOVES, { SV_SET_OF_DRAGON_GLOVES } },
-        { ItemKindType::SOFT_ARMOR, { SV_KUROSHOUZOKU, SV_ABUNAI_MIZUGI } },
-        { ItemKindType::HARD_ARMOR, { SV_MITHRIL_CHAIN_MAIL, SV_MITHRIL_PLATE_MAIL, SV_ADAMANTITE_PLATE_MAIL } },
-        { ItemKindType::DRAG_ARMOR, { /* Any */ } },
-    };
-
-    if (auto it = rare_table.find(this->tval); it != rare_table.end()) {
-        const auto &svals = it->second;
-        return svals.empty() || (svals.find(this->sval) != svals.end());
-    }
-
-    return false;
+    return BaseitemKey(this->tval, this->sval).is_rare();
 }
 
 /*!
@@ -456,7 +388,8 @@ bool ItemEntity::is_held_by_monster() const
  */
 bool ItemEntity::is_known() const
 {
-    return any_bits(this->ident, IDENT_KNOWN) || (baseitems_info[this->bi_id].easy_know && baseitems_info[this->bi_id].aware);
+    const auto &baseitem = baseitems_info[this->bi_id];
+    return any_bits(this->ident, IDENT_KNOWN) || (baseitem.easy_know && baseitem.aware);
 }
 
 bool ItemEntity::is_fully_known() const
@@ -487,7 +420,7 @@ bool ItemEntity::is_tried() const
  */
 bool ItemEntity::is_potion() const
 {
-    return baseitems_info[this->bi_id].bi_key.tval() == ItemKindType::POTION;
+    return this->tval == ItemKindType::POTION;
 }
 
 /*!
@@ -511,7 +444,7 @@ bool ItemEntity::is_readable() const
  */
 bool ItemEntity::can_refill_lantern() const
 {
-    return (this->tval == ItemKindType::FLASK) || ((this->tval == ItemKindType::LITE) && (this->sval == SV_LITE_LANTERN));
+    return (this->tval == ItemKindType::FLASK) || (BaseitemKey(this->tval, this->sval) == BaseitemKey(ItemKindType::LITE, SV_LITE_LANTERN));
 }
 
 /*!
@@ -521,7 +454,7 @@ bool ItemEntity::can_refill_lantern() const
  */
 bool ItemEntity::can_refill_torch() const
 {
-    return (this->tval == ItemKindType::LITE) && (this->sval == SV_LITE_TORCH);
+    return BaseitemKey(this->tval, this->sval) == BaseitemKey(ItemKindType::LITE, SV_LITE_TORCH);
 }
 
 /*!
@@ -539,7 +472,7 @@ bool ItemEntity::can_recharge() const
  */
 bool ItemEntity::is_offerable() const
 {
-    if ((this->tval != ItemKindType::CORPSE) || (this->sval != SV_CORPSE)) {
+    if (BaseitemKey(this->tval, this->sval) != BaseitemKey(ItemKindType::CORPSE, SV_CORPSE)) {
         return false;
     }
 
@@ -567,8 +500,10 @@ bool ItemEntity::is_activatable() const
  */
 bool ItemEntity::is_fuel() const
 {
-    auto is_fuel = (this->tval == ItemKindType::LITE) && ((this->sval == SV_LITE_TORCH) || (this->sval == SV_LITE_LANTERN));
-    is_fuel |= BaseitemKey(this->tval, this->sval) == BaseitemKey(ItemKindType::FLASK, SV_FLASK_OIL);
+    const BaseitemKey bi_key(this->tval, this->sval);
+    auto is_fuel = bi_key == BaseitemKey(ItemKindType::LITE, SV_LITE_TORCH);
+    is_fuel |= bi_key == BaseitemKey(ItemKindType::LITE, SV_LITE_LANTERN);
+    is_fuel |= bi_key == BaseitemKey(ItemKindType::FLASK, SV_FLASK_OIL);
     return is_fuel;
 }
 
@@ -686,7 +621,7 @@ TERM_COLOR ItemEntity::get_color() const
     }
 
     auto has_attr = this->bi_id == 0;
-    has_attr |= (this->tval != ItemKindType::CORPSE) || (this->sval != SV_CORPSE);
+    has_attr |= BaseitemKey(this->tval, this->sval) != BaseitemKey(ItemKindType::CORPSE, SV_CORPSE);
     has_attr |= baseitem.x_attr != TERM_DARK;
     if (has_attr) {
         return baseitem.x_attr;
@@ -827,4 +762,14 @@ bool ItemEntity::is_wand_rod() const
 bool ItemEntity::is_wand_staff() const
 {
     return BaseitemKey(this->tval).is_wand_staff();
+}
+
+short ItemEntity::get_bow_energy() const
+{
+    return BaseitemKey(this->tval, this->sval).get_bow_energy();
+}
+
+int ItemEntity::get_arrow_magnification() const
+{
+    return BaseitemKey(this->tval, this->sval).get_arrow_magnification();
 }

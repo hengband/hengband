@@ -153,7 +153,7 @@ static void describe_weapon_dice(PlayerType *player_ptr, flavor_type *flavor_ptr
 
 static void describe_bow(PlayerType *player_ptr, flavor_type *flavor_ptr)
 {
-    flavor_ptr->power = bow_tmul(flavor_ptr->o_ptr->sval);
+    flavor_ptr->power = flavor_ptr->o_ptr->get_arrow_magnification();
     if (flavor_ptr->tr_flags.has(TR_XTRA_MIGHT)) {
         flavor_ptr->power++;
     }
@@ -177,7 +177,7 @@ static void describe_bow(PlayerType *player_ptr, flavor_type *flavor_ptr)
         return;
     }
 
-    flavor_ptr->fire_rate = bow_energy(flavor_ptr->o_ptr->sval) / num_fire;
+    flavor_ptr->fire_rate = flavor_ptr->o_ptr->get_bow_energy() / num_fire;
     flavor_ptr->t = object_desc_chr(flavor_ptr->t, ' ');
     flavor_ptr->t = object_desc_chr(flavor_ptr->t, flavor_ptr->p1);
     flavor_ptr->t = object_desc_num(flavor_ptr->t, flavor_ptr->fire_rate / 100);
@@ -242,7 +242,7 @@ static void describe_named_item_tval(flavor_type *flavor_ptr)
 
 static void describe_fire_energy(PlayerType *player_ptr, flavor_type *flavor_ptr)
 {
-    ENERGY energy_fire = bow_energy(flavor_ptr->bow_ptr->sval);
+    const auto energy_fire = flavor_ptr->bow_ptr->get_bow_energy();
     if (player_ptr->num_fire == 0) {
         flavor_ptr->t = object_desc_chr(flavor_ptr->t, '0');
         return;
@@ -256,7 +256,9 @@ static void describe_fire_energy(PlayerType *player_ptr, flavor_type *flavor_ptr
         return;
     }
 
-    int percent = calc_crit_ratio_shot(player_ptr, flavor_ptr->known ? flavor_ptr->o_ptr->to_h : 0, flavor_ptr->known ? flavor_ptr->bow_ptr->to_h : 0);
+    const auto o_bonus = flavor_ptr->known ? flavor_ptr->o_ptr->to_h : 0;
+    const auto bow_bonus = flavor_ptr->known ? flavor_ptr->bow_ptr->to_h : 0;
+    const auto percent = calc_crit_ratio_shot(player_ptr, o_bonus, bow_bonus);
     flavor_ptr->t = object_desc_chr(flavor_ptr->t, '/');
     flavor_ptr->t = object_desc_num(flavor_ptr->t, percent / 100);
     flavor_ptr->t = object_desc_chr(flavor_ptr->t, '.');
@@ -273,7 +275,7 @@ static void describe_bow_power(PlayerType *player_ptr, flavor_type *flavor_ptr)
     const auto *o_ptr = flavor_ptr->o_ptr;
     const auto *bow_ptr = flavor_ptr->bow_ptr;
     flavor_ptr->avgdam = o_ptr->dd * (o_ptr->ds + 1) * 10 / 2;
-    auto tmul = bow_tmul(bow_ptr->sval);
+    auto tmul = bow_ptr->get_arrow_magnification();
     if (bow_ptr->is_known()) {
         flavor_ptr->avgdam += (bow_ptr->to_d * 10);
     }
