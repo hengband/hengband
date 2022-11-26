@@ -1220,9 +1220,6 @@
     <ClCompile Include="..\..\src\game-option\keymap-directory-getter.cpp">
       <Filter>game-option</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\util\tag-sorter.cpp">
-      <Filter>util</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\util\buffer-shaper.cpp">
       <Filter>util</Filter>
     </ClCompile>
@@ -3904,9 +3901,6 @@
     </ClInclude>
     <ClInclude Include="..\..\src\io\command-repeater.h">
       <Filter>io</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\util\tag-sorter.h">
-      <Filter>util</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\game-option\cheat-types.h">
       <Filter>game-option</Filter>

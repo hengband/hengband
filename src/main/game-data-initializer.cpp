@@ -23,9 +23,9 @@
 #include "util/angband-files.h"
 #include "util/bit-flags-calculator.h"
 #include "util/quarks.h"
-#include "util/tag-sorter.h"
 #include "view/display-messages.h"
 #include "world/world.h"
+#include <algorithm>
 
 /*!
  * @brief マクロ登録の最大数 / Maximum number of macros (see "io.c")
@@ -152,28 +152,28 @@ static void init_object_alloc(void)
  */
 void init_alloc(void)
 {
-    std::vector<tag_type> elements(monraces_info.size());
+    std::vector<const MonsterRaceInfo *> elements;
     for (const auto &[r_idx, r_ref] : monraces_info) {
         if (MonsterRace(r_ref.idx).is_valid()) {
-            elements[enum2i(r_ref.idx)].tag = r_ref.level;
-            elements[enum2i(r_ref.idx)].index = enum2i(r_ref.idx);
+            elements.push_back(&r_ref);
         }
     }
 
-    tag_sort(elements.data(), elements.size());
-    alloc_race_table.assign(monraces_info.size(), {});
-    for (auto i = 1U; i < monraces_info.size(); i++) {
-        auto *r_ptr = &monraces_info[i2enum<MonsterRaceId>(elements[i].index)];
+    std::sort(elements.begin(), elements.end(),
+        [](const MonsterRaceInfo *r1_ptr, const MonsterRaceInfo *r2_ptr) {
+            return r1_ptr->level < r2_ptr->level;
+        });
+
+    alloc_race_table.clear();
+    for (const auto r_ptr : elements) {
         if (r_ptr->rarity == 0) {
             continue;
         }
 
-        auto x = r_ptr->level;
-        PROB p = (100 / r_ptr->rarity);
-        alloc_race_table[i].index = static_cast<short>(elements[i].index);
-        alloc_race_table[i].level = x;
-        alloc_race_table[i].prob1 = p;
-        alloc_race_table[i].prob2 = p;
+        const auto index = static_cast<short>(r_ptr->idx);
+        const auto level = r_ptr->level;
+        const auto prob = static_cast<PROB>(100 / r_ptr->rarity);
+        alloc_race_table.push_back({ index, level, prob, prob });
     }
 
     init_object_alloc();
