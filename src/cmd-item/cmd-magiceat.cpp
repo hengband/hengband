@@ -132,7 +132,7 @@ static std::optional<BaseitemKey> check_magic_eater_spell_repeat(magic_eater_dat
 /*!
  * @brief 魔道具術師の取り込んだ魔力一覧から選択/閲覧する /
  * @param only_browse 閲覧するだけならばTRUE
- * @return 選択した魔力のID、キャンセルならば-1を返す
+ * @return 選択したアイテムのベースアイテムキー、キャンセルならばnullopt
  */
 static std::optional<BaseitemKey> select_magic_eater(PlayerType *player_ptr, bool only_browse)
 {
@@ -591,8 +591,8 @@ bool do_cmd_magic_eater(PlayerType *player_ptr, bool only_browse, bool powerful)
 
         switch (baseitem.tval()) {
         case ItemKindType::ROD: {
-            const auto opt_sval = baseitem.sval();
-            if (!opt_sval.has_value()) {
+            const auto sval = baseitem.sval();
+            if (!sval.has_value()) {
                 return false;
             }
 
@@ -600,7 +600,7 @@ bool do_cmd_magic_eater(PlayerType *player_ptr, bool only_browse, bool powerful)
                 return false;
             }
 
-            (void)rod_effect(player_ptr, opt_sval.value(), dir, &use_charge, powerful);
+            (void)rod_effect(player_ptr, sval.value(), dir, &use_charge, powerful);
             if (!use_charge) {
                 return false;
             }
@@ -608,8 +608,8 @@ bool do_cmd_magic_eater(PlayerType *player_ptr, bool only_browse, bool powerful)
             break;
         }
         case ItemKindType::WAND: {
-            const auto opt_sval = baseitem.sval();
-            if (!opt_sval.has_value()) {
+            const auto sval = baseitem.sval();
+            if (!sval.has_value()) {
                 return false;
             }
 
@@ -617,18 +617,16 @@ bool do_cmd_magic_eater(PlayerType *player_ptr, bool only_browse, bool powerful)
                 return false;
             }
 
-            const auto sval = opt_sval.value();
-            wand_effect(player_ptr, sval, dir, powerful, true);
+            (void)wand_effect(player_ptr, sval.value(), dir, powerful, true);
             break;
         }
         default:
-            const auto opt_sval = baseitem.sval();
-            if (!opt_sval.has_value()) {
+            const auto sval = baseitem.sval();
+            if (!sval.has_value()) {
                 return false;
             }
 
-            const auto sval = opt_sval.value();
-            staff_effect(player_ptr, sval, &use_charge, powerful, true, true);
+            (void)staff_effect(player_ptr, sval.value(), &use_charge, powerful, true, true);
             if (!use_charge) {
                 return false;
             }
