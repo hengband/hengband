@@ -11,6 +11,17 @@
 #include "system/player-type-definition.h"
 #include "util/bit-flags-calculator.h"
 
+static bool has_fuel(int sval)
+{
+    switch (sval) {
+    case SV_LITE_TORCH:
+    case SV_LITE_LANTERN:
+        return true;
+    default:
+        return false;
+    }
+}
+
 /*!
  * @brief 光源用のフラグを付与する
  * @param o_ptr フラグ取得元のオブジェクト構造体ポインタ
@@ -22,21 +33,22 @@ static void object_flags_lite(const ItemEntity *o_ptr, TrFlags &flgs)
         return;
     }
 
-    auto *e_ptr = &egos_info[o_ptr->ego_idx];
-    flgs.set(e_ptr->flags);
+    const auto &ego = egos_info[o_ptr->ego_idx];
+    flgs.set(ego.flags);
 
-    auto is_out_of_fuel = o_ptr->fuel == 0;
-    if ((o_ptr->ego_idx == EgoType::AURA_FIRE) && is_out_of_fuel && (o_ptr->sval <= SV_LITE_LANTERN)) {
+    const auto is_out_of_fuel = o_ptr->fuel == 0;
+    const auto sval = o_ptr->sval;
+    if ((o_ptr->ego_idx == EgoType::AURA_FIRE) && is_out_of_fuel && has_fuel(sval)) {
         flgs.reset(TR_SH_FIRE);
         return;
     }
 
-    if ((o_ptr->ego_idx == EgoType::LITE_INFRA) && is_out_of_fuel && (o_ptr->sval <= SV_LITE_LANTERN)) {
+    if ((o_ptr->ego_idx == EgoType::LITE_INFRA) && is_out_of_fuel && has_fuel(sval)) {
         flgs.reset(TR_INFRA);
         return;
     }
 
-    if ((o_ptr->ego_idx == EgoType::LITE_EYE) && is_out_of_fuel && (o_ptr->sval <= SV_LITE_LANTERN)) {
+    if ((o_ptr->ego_idx == EgoType::LITE_EYE) && is_out_of_fuel && has_fuel(sval)) {
         flgs.reset(TR_RES_BLIND);
         flgs.reset(TR_SEE_INVIS);
     }
