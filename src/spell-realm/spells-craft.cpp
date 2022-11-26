@@ -269,11 +269,11 @@ bool choose_ele_immune(PlayerType *player_ptr, TIME_EFFECT immune_turn)
  */
 bool pulish_shield(PlayerType *player_ptr)
 {
-    concptr q = _("どの盾を磨きますか？", "Polish which shield? ");
-    concptr s = _("磨く盾がありません。", "You have no shield to polish.");
-
-    OBJECT_IDX item;
-    auto *o_ptr = choose_object(player_ptr, &item, q, s, USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT, TvalItemTester(ItemKindType::SHIELD));
+    const auto q = _("どの盾を磨きますか？", "Polish which shield? ");
+    const auto s = _("磨く盾がありません。", "You have no shield to polish.");
+    const auto options = USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT;
+    short item;
+    auto *o_ptr = choose_object(player_ptr, &item, q, s, options, TvalItemTester(ItemKindType::SHIELD));
     if (o_ptr == nullptr) {
         return false;
     }
@@ -281,7 +281,7 @@ bool pulish_shield(PlayerType *player_ptr)
     GAME_TEXT o_name[MAX_NLEN];
     describe_flavor(player_ptr, o_name, o_ptr, OD_OMIT_PREFIX | OD_NAME_ONLY);
 
-    bool is_pulish_successful = o_ptr->bi_id && !o_ptr->is_artifact() && !o_ptr->is_ego();
+    auto is_pulish_successful = (o_ptr->bi_id > 0) && !o_ptr->is_artifact() && !o_ptr->is_ego();
     is_pulish_successful &= !o_ptr->is_cursed();
     is_pulish_successful &= (o_ptr->sval != SV_MIRROR_SHIELD);
     if (is_pulish_successful) {
