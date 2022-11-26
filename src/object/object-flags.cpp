@@ -4,7 +4,6 @@
 #include "object-enchant/tr-types.h"
 #include "perception/object-perception.h"
 #include "smith/object-smith.h"
-#include "sv-definition/sv-lite-types.h"
 #include "system/artifact-type-definition.h"
 #include "system/baseitem-info.h"
 #include "system/item-entity.h"
@@ -22,21 +21,21 @@ static void object_flags_lite(const ItemEntity *o_ptr, TrFlags &flgs)
         return;
     }
 
-    auto *e_ptr = &egos_info[o_ptr->ego_idx];
-    flgs.set(e_ptr->flags);
+    const auto &ego = egos_info[o_ptr->ego_idx];
+    flgs.set(ego.flags);
 
-    auto is_out_of_fuel = o_ptr->fuel == 0;
-    if ((o_ptr->ego_idx == EgoType::AURA_FIRE) && is_out_of_fuel && (o_ptr->sval <= SV_LITE_LANTERN)) {
+    const auto is_out_of_fuel = o_ptr->fuel == 0;
+    if ((o_ptr->ego_idx == EgoType::AURA_FIRE) && is_out_of_fuel && o_ptr->is_lite_requiring_fuel()) {
         flgs.reset(TR_SH_FIRE);
         return;
     }
 
-    if ((o_ptr->ego_idx == EgoType::LITE_INFRA) && is_out_of_fuel && (o_ptr->sval <= SV_LITE_LANTERN)) {
+    if ((o_ptr->ego_idx == EgoType::LITE_INFRA) && is_out_of_fuel && o_ptr->is_lite_requiring_fuel()) {
         flgs.reset(TR_INFRA);
         return;
     }
 
-    if ((o_ptr->ego_idx == EgoType::LITE_EYE) && is_out_of_fuel && (o_ptr->sval <= SV_LITE_LANTERN)) {
+    if ((o_ptr->ego_idx == EgoType::LITE_EYE) && is_out_of_fuel && o_ptr->is_lite_requiring_fuel()) {
         flgs.reset(TR_RES_BLIND);
         flgs.reset(TR_SEE_INVIS);
     }

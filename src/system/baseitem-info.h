@@ -59,6 +59,8 @@ public:
     bool is_rare() const;
     short get_bow_energy() const;
     int get_arrow_magnification() const;
+    bool is_aiming_rod() const;
+    bool is_lite_requiring_fuel() const;
 
 private:
     ItemKindType type_value;

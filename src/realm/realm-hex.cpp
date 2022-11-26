@@ -59,24 +59,6 @@
 #endif
 
 /*!
- * @brief 呪術領域の武器呪縛の対象にできる武器かどうかを返す。 / An "item_tester_hook" for offer
- * @param o_ptr オブジェクト構造体の参照ポインタ
- * @return 呪縛可能な武器ならばTRUEを返す
- */
-static bool item_tester_hook_weapon_except_bow(const ItemEntity *o_ptr)
-{
-    switch (o_ptr->tval) {
-    case ItemKindType::SWORD:
-    case ItemKindType::HAFTED:
-    case ItemKindType::POLEARM:
-    case ItemKindType::DIGGING:
-        return true;
-    default:
-        return false;
-    }
-}
-
-/*!
  * @brief 呪術領域魔法の各処理を行う
  * @param spell 魔法ID
  * @param mode 処理内容 (SpellProcessType::NAME / SPELL_DESC / SpellProcessType::INFO / SpellProcessType::CAST / SPELL_CONT / SpellProcessType::STOP)
@@ -190,7 +172,7 @@ concptr do_hex_spell(PlayerType *player_ptr, spell_hex_type spell, SpellProcessT
             q = _("どれを呪いますか？", "Which weapon do you curse?");
             s = _("武器を装備していない。", "You're not wielding a weapon.");
 
-            o_ptr = choose_object(player_ptr, &item, q, s, (USE_EQUIP), FuncItemTester(item_tester_hook_weapon_except_bow));
+            o_ptr = choose_object(player_ptr, &item, q, s, (USE_EQUIP), FuncItemTester(&ItemEntity::is_melee_weapon));
             if (!o_ptr) {
                 return "";
             }

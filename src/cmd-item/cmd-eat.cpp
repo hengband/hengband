@@ -58,14 +58,14 @@
  * @param o_ptr 食べるオブジェクト
  * @return 鑑定されるならTRUE、されないならFALSE
  */
-bool exe_eat_food_type_object(PlayerType *player_ptr, ItemEntity *o_ptr)
+static bool exe_eat_food_type_object(PlayerType *player_ptr, const BaseitemKey &bi_key)
 {
-    if (o_ptr->tval != ItemKindType::FOOD) {
+    if (bi_key.tval() != ItemKindType::FOOD) {
         return false;
     }
 
     BadStatusSetter bss(player_ptr);
-    switch (o_ptr->sval) {
+    switch (bi_key.sval().value()) {
     case SV_FOOD_POISON:
         return (!(has_resist_pois(player_ptr) || is_oppose_pois(player_ptr))) && bss.mod_poison(randint0(10) + 10);
     case SV_FOOD_BLINDNESS:
@@ -148,72 +148,63 @@ bool exe_eat_food_type_object(PlayerType *player_ptr, ItemEntity *o_ptr)
  * @brief 魔法道具のチャージをの食料として食べたときの効果を発動
  * @param player_ptr プレイヤー情報への参照ポインタ
  * @param o_ptr 食べるオブジェクト
- * @param item オブジェクトのインベントリ番号
+ * @param inventory オブジェクトのインベントリ番号
  * @return 食べようとしたらTRUE、しなかったらFALSE
  */
-bool exe_eat_charge_of_magic_device(PlayerType *player_ptr, ItemEntity *o_ptr, INVENTORY_IDX item)
+static bool exe_eat_charge_of_magic_device(PlayerType *player_ptr, ItemEntity *o_ptr, short inventory)
 {
-    if (!o_ptr->is_wand_staff()) {
+    if (!o_ptr->is_wand_staff() || (PlayerRace(player_ptr).food() != PlayerRaceFoodType::MANA)) {
         return false;
     }
 
-    if (PlayerRace(player_ptr).food() == PlayerRaceFoodType::MANA) {
-        concptr staff;
-
-        if (o_ptr->tval == ItemKindType::STAFF && (item < 0) && (o_ptr->number > 1)) {
-            msg_print(_("まずは杖を拾わなければ。", "You must first pick up the staffs."));
-            return true;
-        }
-
-        staff = (o_ptr->tval == ItemKindType::STAFF) ? _("杖", "staff") : _("魔法棒", "wand");
-
-        /* "Eat" charges */
-        if (o_ptr->pval == 0) {
-            msg_format(_("この%sにはもう魔力が残っていない。", "The %s has no charges left."), staff);
-            o_ptr->ident |= (IDENT_EMPTY);
-            player_ptr->window_flags |= (PW_INVEN);
-            return true;
-        }
-
-        msg_format(_("あなたは%sの魔力をエネルギー源として吸収した。", "You absorb mana of the %s as your energy."), staff);
-
-        /* Use a single charge */
-        o_ptr->pval--;
-
-        /* Eat a charge */
-        set_food(player_ptr, player_ptr->food + 5000);
-
-        /* XXX Hack -- unstack if necessary */
-        if (o_ptr->tval == ItemKindType::STAFF && (item >= 0) && (o_ptr->number > 1)) {
-            ItemEntity forge;
-            ItemEntity *q_ptr;
-            q_ptr = &forge;
-            q_ptr->copy_from(o_ptr);
-
-            /* Modify quantity */
-            q_ptr->number = 1;
-
-            /* Restore the charges */
-            o_ptr->pval++;
-
-            /* Unstack the used item */
-            o_ptr->number--;
-            item = store_item_to_inventory(player_ptr, q_ptr);
-
-            msg_format(_("杖をまとめなおした。", "You unstack your staff."));
-        }
-
-        if (item >= 0) {
-            inven_item_charges(player_ptr->inventory_list[item]);
-        } else {
-            floor_item_charges(player_ptr->current_floor_ptr, 0 - item);
-        }
-
-        player_ptr->window_flags |= (PW_INVEN | PW_EQUIP);
+    const auto is_staff = o_ptr->tval == ItemKindType::STAFF;
+    if (is_staff && (inventory < 0) && (o_ptr->number > 1)) {
+        msg_print(_("まずは杖を拾わなければ。", "You must first pick up the staffs."));
         return true;
     }
 
-    return false;
+    const auto staff = is_staff ? _("杖", "staff") : _("魔法棒", "wand");
+
+    /* "Eat" charges */
+    if (o_ptr->pval == 0) {
+        msg_format(_("この%sにはもう魔力が残っていない。", "The %s has no charges left."), staff);
+        o_ptr->ident |= IDENT_EMPTY;
+        player_ptr->window_flags |= PW_INVEN;
+        return true;
+    }
+
+    msg_format(_("あなたは%sの魔力をエネルギー源として吸収した。", "You absorb mana of the %s as your energy."), staff);
+
+    /* Use a single charge */
+    o_ptr->pval--;
+
+    /* Eat a charge */
+    set_food(player_ptr, player_ptr->food + 5000);
+
+    /* XXX Hack -- unstack if necessary */
+    if (is_staff && (inventory >= 0) && (o_ptr->number > 1)) {
+        auto item = *o_ptr;
+
+        /* Modify quantity */
+        item.number = 1;
+
+        /* Restore the charges */
+        o_ptr->pval++;
+
+        /* Unstack the used item */
+        o_ptr->number--;
+        inventory = store_item_to_inventory(player_ptr, &item);
+        msg_format(_("杖をまとめなおした。", "You unstack your staff."));
+    }
+
+    if (inventory >= 0) {
+        inven_item_charges(player_ptr->inventory_list[inventory]);
+    } else {
+        floor_item_charges(player_ptr->current_floor_ptr, 0 - inventory);
+    }
+
+    player_ptr->window_flags |= PW_INVEN | PW_EQUIP;
+    return true;
 }
 
 /*!
@@ -241,7 +232,7 @@ void exe_eat_food(PlayerType *player_ptr, INVENTORY_IDX item)
     int lev = baseitems_info[o_ptr->bi_id].level;
 
     /* Identity not known yet */
-    int ident = exe_eat_food_type_object(player_ptr, o_ptr);
+    int ident = exe_eat_food_type_object(player_ptr, { o_ptr->tval, o_ptr->sval });
 
     /*
      * Store what may have to be updated for the inventory (including
