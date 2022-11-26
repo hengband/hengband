@@ -366,20 +366,8 @@ void do_cmd_hissatsu(PlayerType *player_ptr)
  */
 void do_cmd_gain_hissatsu(PlayerType *player_ptr)
 {
-    OBJECT_IDX item;
-    int i, j;
-
-    ItemEntity *o_ptr;
-    concptr q, s;
-
-    bool gain = false;
-
     PlayerClass(player_ptr).break_samurai_stance({ SamuraiStanceType::MUSOU, SamuraiStanceType::KOUKIJIN });
-
-    if (cmd_limit_blind(player_ptr)) {
-        return;
-    }
-    if (cmd_limit_confused(player_ptr)) {
+    if (cmd_limit_blind(player_ptr) || cmd_limit_confused(player_ptr)) {
         return;
     }
 
@@ -394,18 +382,20 @@ void do_cmd_gain_hissatsu(PlayerType *player_ptr)
     msg_format("You can learn %d new special attack%s.", player_ptr->new_spells, (player_ptr->new_spells == 1 ? "" : "s"));
 #endif
 
-    q = _("どの書から学びますか? ", "Study which book? ");
-    s = _("読める書がない。", "You have no books that you can read.");
-
-    o_ptr = choose_object(player_ptr, &item, q, s, (USE_INVEN | USE_FLOOR), TvalItemTester(ItemKindType::HISSATSU_BOOK));
-    if (!o_ptr) {
+    const auto q = _("どの書から学びますか? ", "Study which book? ");
+    const auto s = _("読める書がない。", "You have no books that you can read.");
+    short item;
+    const auto *o_ptr = choose_object(player_ptr, &item, q, s, (USE_INVEN | USE_FLOOR), TvalItemTester(ItemKindType::HISSATSU_BOOK));
+    if (o_ptr == nullptr) {
         return;
     }
 
-    for (i = o_ptr->sval * 8; i < o_ptr->sval * 8 + 8; i++) {
+    auto gain = false;
+    for (auto i = o_ptr->sval * 8; i < o_ptr->sval * 8 + 8; i++) {
         if (player_ptr->spell_learned1 & (1UL << i)) {
             continue;
         }
+
         if (technic_info[TECHNIC_HISSATSU][i].slevel > player_ptr->lev) {
             continue;
         }
@@ -413,12 +403,14 @@ void do_cmd_gain_hissatsu(PlayerType *player_ptr)
         player_ptr->spell_learned1 |= (1UL << i);
         player_ptr->spell_worked1 |= (1UL << i);
         msg_format(_("%sの技を覚えた。", "You have learned the special attack of %s."), exe_spell(player_ptr, REALM_HISSATSU, i, SpellProcessType::NAME));
+        int j;
         for (j = 0; j < 64; j++) {
             /* Stop at the first empty space */
             if (player_ptr->spell_order[j] == 99) {
                 break;
             }
         }
+
         player_ptr->spell_order[j] = i;
         gain = true;
     }
