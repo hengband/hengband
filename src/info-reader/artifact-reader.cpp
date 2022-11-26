@@ -96,7 +96,7 @@ errr parse_artifacts_info(std::string_view buf, angband_header *)
 
         const auto it = artifacts_info.rbegin();
         auto &a_ref = it->second;
-        a_ref.text.append(buf.substr(2));
+        a_ref.text.append(tokens[1]);
 #else
         if (tokens[1][0] != '$') {
             return PARSE_ERROR_NONE;
@@ -104,7 +104,7 @@ errr parse_artifacts_info(std::string_view buf, angband_header *)
 
         const auto it = artifacts_info.rbegin();
         auto &a_ref = it->second;
-        append_english_text(a_ref.text, buf.substr(3));
+        append_english_text(a_ref.text, tokens[1].substr(1));
 #endif
         return PARSE_ERROR_NONE;
     }
