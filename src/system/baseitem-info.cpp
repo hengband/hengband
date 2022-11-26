@@ -12,6 +12,7 @@
 #include "sv-definition/sv-armor-types.h"
 #include "sv-definition/sv-bow-types.h"
 #include "sv-definition/sv-food-types.h"
+#include "sv-definition/sv-lite-types.h"
 #include "sv-definition/sv-protector-types.h"
 #include "sv-definition/sv-rod-types.h"
 #include "sv-definition/sv-weapon-types.h"
@@ -21,6 +22,7 @@
 namespace {
 constexpr auto ITEM_NOT_BOW = "This item is not a bow!";
 constexpr auto ITEM_NOT_ROD = "This item is not a rod!";
+constexpr auto ITEM_NOT_LITE = "This item is not a lite!";
 }
 
 BaseitemKey::BaseitemKey(const ItemKindType type_value, const std::optional<int> &subtype_value)
@@ -478,6 +480,21 @@ bool BaseitemKey::is_aiming_rod() const
     case SV_ROD_FIRE_BALL:
     case SV_ROD_COLD_BALL:
     case SV_ROD_STONE_TO_MUD:
+        return true;
+    default:
+        return false;
+    }
+}
+
+bool BaseitemKey::is_lite_requiring_fuel() const
+{
+    if ((this->type_value != ItemKindType::LITE) || !this->subtype_value.has_value()) {
+        throw std::logic_error(ITEM_NOT_LITE);
+    }
+
+    switch (this->subtype_value.value()) {
+    case SV_LITE_TORCH:
+    case SV_LITE_LANTERN:
         return true;
     default:
         return false;

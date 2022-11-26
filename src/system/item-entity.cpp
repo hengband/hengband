@@ -778,3 +778,8 @@ bool ItemEntity::is_aiming_rod() const
 {
     return BaseitemKey(this->tval, this->sval).is_aiming_rod();
 }
+
+bool ItemEntity::is_lite_requiring_fuel() const
+{
+    return BaseitemKey(this->tval, this->sval).is_lite_requiring_fuel();
+}
