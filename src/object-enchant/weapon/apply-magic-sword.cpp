@@ -27,7 +27,8 @@ SwordEnchanter::SwordEnchanter(PlayerType *player_ptr, ItemEntity *o_ptr, DEPTH 
 void SwordEnchanter::decide_skip()
 {
     AbstractWeaponEnchanter::decide_skip();
-    this->should_skip |= this->o_ptr->sval == SV_POISON_NEEDLE;
+    const auto sval = this->o_ptr->bi_key.sval();
+    this->should_skip |= sval == SV_POISON_NEEDLE;
 }
 
 void SwordEnchanter::apply_magic()
@@ -38,7 +39,8 @@ void SwordEnchanter::apply_magic()
     }
 
     this->give_killing_bonus();
-    if (this->o_ptr->sval == SV_DIAMOND_EDGE) {
+    const auto sval = this->o_ptr->bi_key.sval();
+    if (sval == SV_DIAMOND_EDGE) {
         return;
     }
 
@@ -72,10 +74,11 @@ void SwordEnchanter::give_cursed()
     }
 
     auto n = 0;
+    const auto sval = this->o_ptr->bi_key.sval();
     while (true) {
         this->o_ptr->ego_idx = get_random_ego(INVEN_MAIN_HAND, false);
         const auto *e_ptr = &egos_info[this->o_ptr->ego_idx];
-        if ((this->o_ptr->sval != SV_HAYABUSA) || (e_ptr->max_pval >= 0)) {
+        if ((sval != SV_HAYABUSA) || (e_ptr->max_pval >= 0)) {
             return;
         }
 

@@ -30,7 +30,7 @@
 
 std::unique_ptr<EnchanterBase> EnchanterFactory::create_enchanter(PlayerType *player_ptr, ItemEntity *o_ptr, int lev, int power)
 {
-    switch (o_ptr->tval) {
+    switch (o_ptr->bi_key.tval()) {
     case ItemKindType::SHOT:
     case ItemKindType::ARROW:
     case ItemKindType::BOLT:

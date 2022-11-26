@@ -49,7 +49,8 @@ OtherItemsEnchanter::OtherItemsEnchanter(PlayerType *player_ptr, ItemEntity *o_p
  */
 void OtherItemsEnchanter::apply_magic()
 {
-    switch (this->o_ptr->tval) {
+    const auto tval = this->o_ptr->bi_key.tval();
+    switch (tval) {
     case ItemKindType::FLASK:
         this->o_ptr->fuel = this->o_ptr->pval;
         this->o_ptr->pval = 0;
@@ -149,7 +150,12 @@ void OtherItemsEnchanter::generate_corpse()
         r_idx = get_mon_num(this->player_ptr, 0, floor_ptr->dun_level, 0);
         auto &r_ref = monraces_info[r_idx];
         auto check = (floor_ptr->dun_level < r_ref.level) ? (r_ref.level - floor_ptr->dun_level) : 0;
-        if ((r_ref.rarity == 0) || (match.find(o_ptr->sval) != match.end() && r_ref.drop_flags.has_not(match.at(o_ptr->sval))) || (randint0(check) > 0)) {
+        const auto sval = this->o_ptr->bi_key.sval();
+        if (!sval.has_value()) {
+            continue;
+        }
+
+        if ((r_ref.rarity == 0) || (match.find(sval.value()) != match.end() && r_ref.drop_flags.has_not(match.at(sval.value()))) || (randint0(check) > 0)) {
             continue;
         }
 
@@ -199,7 +205,7 @@ void OtherItemsEnchanter::generate_chest()
     }
 
     this->o_ptr->pval = randint1(obj_level);
-    if (this->o_ptr->sval == SV_CHEST_KANDUME) {
+    if (this->o_ptr->bi_key.sval() == SV_CHEST_KANDUME) {
         this->o_ptr->pval = 6;
     }
 

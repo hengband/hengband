@@ -28,7 +28,7 @@ HelmEnchanter::HelmEnchanter(PlayerType *player_ptr, ItemEntity *o_ptr, DEPTH le
 
 void HelmEnchanter::apply_magic()
 {
-    if (this->o_ptr->sval == SV_DRAGON_HELM) {
+    if (this->o_ptr->bi_key.sval() == SV_DRAGON_HELM) {
         dragon_resist(this->o_ptr);
         if (!one_in_(3)) {
             return;

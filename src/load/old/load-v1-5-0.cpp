@@ -71,19 +71,19 @@ void rd_item_old(ItemEntity *o_ptr)
     o_ptr->iy = rd_byte();
     o_ptr->ix = rd_byte();
 
-    /* Type/Subtype */
-    o_ptr->tval = i2enum<ItemKindType>(rd_byte());
-    o_ptr->sval = rd_byte();
+    const auto tval = i2enum<ItemKindType>(rd_byte());
+    const auto sval = rd_byte();
+    o_ptr->bi_key = BaseitemKey(tval, sval);
 
     if (h_older_than(0, 4, 4)) {
-        if (o_ptr->tval == i2enum<ItemKindType>(100)) {
-            o_ptr->tval = ItemKindType::GOLD;
+        if (tval == i2enum<ItemKindType>(100)) {
+            o_ptr->bi_key = BaseitemKey(ItemKindType::GOLD, sval);
         }
-        if (o_ptr->tval == i2enum<ItemKindType>(98)) {
-            o_ptr->tval = ItemKindType::MUSIC_BOOK;
+        if (tval == i2enum<ItemKindType>(98)) {
+            o_ptr->bi_key = BaseitemKey(ItemKindType::MUSIC_BOOK, sval);
         }
-        if (o_ptr->tval == i2enum<ItemKindType>(110)) {
-            o_ptr->tval = ItemKindType::HISSATSU_BOOK;
+        if (tval == i2enum<ItemKindType>(110)) {
+            o_ptr->bi_key = BaseitemKey(ItemKindType::HISSATSU_BOOK, sval);
         }
     }
 
@@ -259,13 +259,13 @@ void rd_item_old(ItemEntity *o_ptr)
         o_ptr->smith_hit = 0;
         o_ptr->smith_damage = 0;
         o_ptr->captured_monster_max_hp = 0;
-        if (o_ptr->tval == ItemKindType::CHEST) {
+        if (tval == ItemKindType::CHEST) {
             o_ptr->chest_level = xtra1;
-        } else if (o_ptr->tval == ItemKindType::CAPTURE) {
+        } else if (tval == ItemKindType::CAPTURE) {
             o_ptr->captured_monster_speed = xtra1;
         }
 
-        if (o_ptr->tval == ItemKindType::CAPTURE) {
+        if (tval == ItemKindType::CAPTURE) {
             const auto &r_ref = monraces_info[i2enum<MonsterRaceId>(o_ptr->pval)];
             if (r_ref.flags1 & RF1_FORCE_MAXHP) {
                 o_ptr->captured_monster_max_hp = maxroll(r_ref.hdice, r_ref.hside);
@@ -288,9 +288,9 @@ void rd_item_old(ItemEntity *o_ptr)
         }
 
         auto xtra4 = rd_s16b();
-        if (o_ptr->tval == ItemKindType::LITE) {
+        if (tval == ItemKindType::LITE) {
             o_ptr->fuel = xtra4;
-        } else if (o_ptr->tval == ItemKindType::CAPTURE) {
+        } else if (tval == ItemKindType::CAPTURE) {
             o_ptr->captured_monster_current_hp = xtra4;
         } else {
             o_ptr->smith_hit = static_cast<byte>(xtra4 >> 8);

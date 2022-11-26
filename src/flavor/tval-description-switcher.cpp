@@ -334,7 +334,7 @@ static void describe_book_hex(flavor_type *flavor_ptr)
 
 void switch_tval_description(flavor_type *flavor_ptr)
 {
-    switch (flavor_ptr->o_ptr->tval) {
+    switch (flavor_ptr->o_ptr->bi_key.tval()) {
     case ItemKindType::NONE:
         flavor_ptr->basenm = _("(なし)", "(Nothing)");
         break;

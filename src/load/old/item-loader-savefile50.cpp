@@ -34,9 +34,8 @@ void ItemLoader50::rd_item(ItemEntity *o_ptr)
     o_ptr->bi_id = rd_s16b();
     o_ptr->iy = rd_byte();
     o_ptr->ix = rd_byte();
-    auto *k_ptr = &baseitems_info[o_ptr->bi_id];
-    o_ptr->tval = k_ptr->bi_key.tval();
-    o_ptr->sval = k_ptr->bi_key.sval().value();
+    auto &baseitem = baseitems_info[o_ptr->bi_id];
+    o_ptr->bi_key = baseitem.bi_key;
     o_ptr->pval = any_bits(flags, SaveDataItemFlagType::PVAL) ? rd_s16b() : 0;
     o_ptr->discount = any_bits(flags, SaveDataItemFlagType::DISCOUNT) ? rd_byte() : 0;
     o_ptr->number = any_bits(flags, SaveDataItemFlagType::NUMBER) ? rd_byte() : 1;
@@ -119,11 +118,12 @@ void ItemLoader50::rd_item(ItemEntity *o_ptr)
     }
 
     // xtra3フィールドが複数目的に共用されていた頃の名残.
+    const auto tval = o_ptr->bi_key.tval();
     if (loading_savefile_version_is_older_than(12)) {
         uint8_t tmp8s = any_bits(flags, SavedataItemOlderThan12FlagType::XTRA3) ? rd_byte() : 0;
-        if (o_ptr->tval == ItemKindType::CHEST) {
+        if (tval == ItemKindType::CHEST) {
             o_ptr->chest_level = tmp8s;
-        } else if (o_ptr->tval == ItemKindType::CAPTURE) {
+        } else if (tval == ItemKindType::CAPTURE) {
             o_ptr->captured_monster_speed = tmp8s;
         }
     } else {
@@ -136,7 +136,7 @@ void ItemLoader50::rd_item(ItemEntity *o_ptr)
         int16_t xtra4 = any_bits(flags, SavedataItemOlderThan13FlagType::XTRA4) ? rd_s16b() : 0;
         if (o_ptr->is_fuel()) {
             o_ptr->fuel = static_cast<short>(xtra4);
-        } else if (o_ptr->tval == ItemKindType::CAPTURE) {
+        } else if (tval == ItemKindType::CAPTURE) {
             o_ptr->captured_monster_current_hp = xtra4;
         } else {
             o_ptr->smith_hit = static_cast<byte>(xtra4 >> 8);
@@ -147,8 +147,8 @@ void ItemLoader50::rd_item(ItemEntity *o_ptr)
         o_ptr->captured_monster_current_hp = any_bits(flags, SaveDataItemFlagType::CAPTURED_MONSTER_CURRENT_HP) ? rd_s16b() : 0;
     }
 
-    if (o_ptr->is_fuel() && (o_ptr->tval == ItemKindType::LITE)) {
-        const auto fuel_max = o_ptr->sval == SV_LITE_TORCH ? FUEL_TORCH : FUEL_LAMP;
+    if (o_ptr->is_fuel() && (o_ptr->bi_key.tval() == ItemKindType::LITE)) {
+        const auto fuel_max = o_ptr->bi_key.sval() == SV_LITE_TORCH ? FUEL_TORCH : FUEL_LAMP;
         if (o_ptr->fuel < 0 || o_ptr->fuel > fuel_max) {
             o_ptr->fuel = 0;
         }
@@ -200,42 +200,43 @@ void ItemLoader50::rd_item(ItemEntity *o_ptr)
         return;
     }
 
+    const auto sval = o_ptr->bi_key.sval();
     if (o_ptr->ego_idx == EgoType::LITE_DARKNESS) {
-        if (o_ptr->tval != ItemKindType::LITE) {
+        if (tval != ItemKindType::LITE) {
             o_ptr->art_flags.set(TR_LITE_M1);
             return;
         }
 
-        if (o_ptr->sval == SV_LITE_TORCH) {
+        if (sval == SV_LITE_TORCH) {
             o_ptr->art_flags.set(TR_LITE_M1);
-        } else if (o_ptr->sval == SV_LITE_LANTERN) {
+        } else if (sval == SV_LITE_LANTERN) {
             o_ptr->art_flags.set(TR_LITE_M2);
-        } else if (o_ptr->sval == SV_LITE_FEANOR) {
+        } else if (sval == SV_LITE_FEANOR) {
             o_ptr->art_flags.set(TR_LITE_M3);
         }
 
         return;
     }
 
-    if (o_ptr->tval == ItemKindType::LITE) {
+    if (tval == ItemKindType::LITE) {
         if (o_ptr->is_fixed_artifact()) {
             o_ptr->art_flags.set(TR_LITE_3);
             return;
         }
 
-        if (o_ptr->sval == SV_LITE_TORCH) {
+        if (sval == SV_LITE_TORCH) {
             o_ptr->art_flags.set(TR_LITE_1);
             o_ptr->art_flags.set(TR_LITE_FUEL);
             return;
         }
 
-        if (o_ptr->sval == SV_LITE_LANTERN) {
+        if (sval == SV_LITE_LANTERN) {
             o_ptr->art_flags.set(TR_LITE_2);
             o_ptr->art_flags.set(TR_LITE_FUEL);
             return;
         }
 
-        if (o_ptr->sval == SV_LITE_FEANOR) {
+        if (sval == SV_LITE_FEANOR) {
             o_ptr->art_flags.set(TR_LITE_2);
             return;
         }

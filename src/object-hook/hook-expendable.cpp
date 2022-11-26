@@ -25,7 +25,8 @@
  */
 bool item_tester_hook_eatable(PlayerType *player_ptr, const ItemEntity *o_ptr)
 {
-    if (o_ptr->tval == ItemKindType::FOOD) {
+    const auto tval = o_ptr->bi_key.tval();
+    if (tval == ItemKindType::FOOD) {
         return true;
     }
 
@@ -36,7 +37,7 @@ bool item_tester_hook_eatable(PlayerType *player_ptr, const ItemEntity *o_ptr)
         }
     } else if (food_type == PlayerRaceFoodType::CORPSE) {
         auto corpse_r_idx = i2enum<MonsterRaceId>(o_ptr->pval);
-        if (o_ptr->tval == ItemKindType::CORPSE && o_ptr->sval == SV_CORPSE && angband_strchr("pht", monraces_info[corpse_r_idx].d_char)) {
+        if ((o_ptr->bi_key == BaseitemKey(ItemKindType::CORPSE, SV_CORPSE)) && angband_strchr("pht", monraces_info[corpse_r_idx].d_char)) {
             return true;
         }
     }
@@ -52,15 +53,12 @@ bool item_tester_hook_eatable(PlayerType *player_ptr, const ItemEntity *o_ptr)
  */
 bool item_tester_hook_quaff(PlayerType *player_ptr, const ItemEntity *o_ptr)
 {
-    if (o_ptr->tval == ItemKindType::POTION) {
+    const auto &bi_key = o_ptr->bi_key;
+    if (bi_key.tval() == ItemKindType::POTION) {
         return true;
     }
 
-    if (PlayerRace(player_ptr).food() == PlayerRaceFoodType::OIL && o_ptr->tval == ItemKindType::FLASK && o_ptr->sval == SV_FLASK_OIL) {
-        return true;
-    }
-
-    return false;
+    return (PlayerRace(player_ptr).food() == PlayerRaceFoodType::OIL) && (bi_key == BaseitemKey(ItemKindType::FLASK, SV_FLASK_OIL));
 }
 
 /*!

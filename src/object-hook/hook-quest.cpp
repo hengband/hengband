@@ -21,7 +21,7 @@
  */
 bool object_is_bounty(PlayerType *player_ptr, ItemEntity *o_ptr)
 {
-    if (o_ptr->tval != ItemKindType::CORPSE) {
+    if (o_ptr->bi_key.tval() != ItemKindType::CORPSE) {
         return false;
     }
 
@@ -63,5 +63,5 @@ bool object_is_quest_target(QuestId quest_idx, ItemEntity *o_ptr)
         return false;
     }
 
-    return (o_ptr->tval == a_ref.bi_key.tval()) && (o_ptr->sval == a_ref.bi_key.sval());
+    return o_ptr->bi_key == a_ref.bi_key;
 }

@@ -12,6 +12,7 @@
 #include "object-enchant/trc-types.h"
 #include "object/object-mark-types.h"
 #include "system/angband.h"
+#include "system/baseitem-info.h"
 #include "system/system-variables.h"
 #include "util/flag-group.h"
 #include <optional>
@@ -28,9 +29,7 @@ public:
     POSITION iy{}; /*!< Y-position on map, or zero */
     POSITION ix{}; /*!< X-position on map, or zero */
     IDX stack_idx{}; /*!< このアイテムを含むアイテムリスト内の位置(降順) */
-    ItemKindType tval{}; /*!< Item type (from kind) */
-
-    OBJECT_SUBTYPE_VALUE sval{}; /*!< Item sub-type (from kind) */
+    BaseitemKey bi_key;
     PARAMETER_VALUE pval{}; /*!< Item extra-parameter */
     byte discount{}; /*!< ゲーム中の値引き率 (0～100) / Discount (if any) */
     ITEM_NUMBER number{}; /*!< Number of items */

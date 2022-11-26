@@ -183,7 +183,7 @@ static void parse_qtw_D(PlayerType *player_ptr, qtwg_type *qtwg_ptr, char *s)
             ItemEntity tmp_object;
             auto *o_ptr = &tmp_object;
             o_ptr->prep(object_index);
-            if (o_ptr->tval == ItemKindType::GOLD) {
+            if (o_ptr->bi_key.tval() == ItemKindType::GOLD) {
                 coin_type = object_index - OBJ_GOLD_LIST;
                 make_gold(player_ptr, o_ptr);
                 coin_type = 0;

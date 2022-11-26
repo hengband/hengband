@@ -31,7 +31,7 @@ BootsEnchanter::BootsEnchanter(PlayerType *player_ptr, ItemEntity *o_ptr, DEPTH 
  */
 void BootsEnchanter::apply_magic()
 {
-    if (this->o_ptr->sval == SV_PAIR_OF_DRAGON_GREAVE) {
+    if (this->o_ptr->bi_key.sval() == SV_PAIR_OF_DRAGON_GREAVE) {
         dragon_resist(this->o_ptr);
         if (!one_in_(3)) {
             return;

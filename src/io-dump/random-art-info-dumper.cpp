@@ -55,7 +55,7 @@ static void spoiler_print_randart(ItemEntity *o_ptr, obj_desc_list *art_ptr)
 static void spoil_random_artifact_aux(PlayerType *player_ptr, ItemEntity *o_ptr, ItemKindType tval)
 {
     obj_desc_list artifact;
-    if (!o_ptr->is_known() || !o_ptr->art_name || o_ptr->tval != tval) {
+    if (!o_ptr->is_known() || !o_ptr->art_name || (o_ptr->bi_key.tval() != tval)) {
         return;
     }
 

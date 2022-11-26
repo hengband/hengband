@@ -96,7 +96,7 @@ void py_pickup_floor(PlayerType *player_ptr, bool pickup)
         o_ptr = &player_ptr->current_floor_ptr->o_list[this_o_idx];
         describe_flavor(player_ptr, o_name, o_ptr, 0);
         disturb(player_ptr, false, false);
-        if (o_ptr->tval == ItemKindType::GOLD) {
+        if (o_ptr->bi_key.tval() == ItemKindType::GOLD) {
             msg_format(_(" $%ld の価値がある%sを見つけた。", "You have found %ld gold pieces worth of %s."), (long)o_ptr->pval, o_name);
             sound(SOUND_SELL);
             player_ptr->au += o_ptr->pval;
@@ -267,7 +267,7 @@ void carry(PlayerType *player_ptr, bool pickup)
         GAME_TEXT o_name[MAX_NLEN];
         describe_flavor(player_ptr, o_name, o_ptr, 0);
         disturb(player_ptr, false, false);
-        if (o_ptr->tval == ItemKindType::GOLD) {
+        if (o_ptr->bi_key.tval() == ItemKindType::GOLD) {
             int value = (long)o_ptr->pval;
             delete_object_idx(player_ptr, this_o_idx);
             msg_format(_(" $%ld の価値がある%sを見つけた。", "You collect %ld gold pieces worth of %s."), (long)value, o_name);

@@ -69,7 +69,7 @@ PRICE object_value_real(const ItemEntity *o_ptr)
     }
 
     /* Analyze pval bonus for normal object */
-    switch (o_ptr->tval) {
+    switch (o_ptr->bi_key.tval()) {
     case ItemKindType::SHOT:
     case ItemKindType::ARROW:
     case ItemKindType::BOLT:
@@ -142,7 +142,7 @@ PRICE object_value_real(const ItemEntity *o_ptr)
         break;
     }
 
-    switch (o_ptr->tval) {
+    switch (o_ptr->bi_key.tval()) {
     case ItemKindType::WAND: {
         /* Pay extra for charges, depending on standard number of
          * charges.  Handle new-style wands correctly. -LM-

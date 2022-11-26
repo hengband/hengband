@@ -45,8 +45,8 @@ bool object_sort_comp(PlayerType *player_ptr, ItemEntity *o_ptr, int32_t o_value
         return true;
     }
 
-    const auto o_tval = o_ptr->tval;
-    const auto j_tval = j_ptr->tval;
+    const auto o_tval = o_ptr->bi_key.tval();
+    const auto j_tval = j_ptr->bi_key.tval();
     if ((o_tval == get_realm1_book(player_ptr)) && (j_tval != get_realm1_book(player_ptr))) {
         return true;
     }
@@ -79,8 +79,8 @@ bool object_sort_comp(PlayerType *player_ptr, ItemEntity *o_ptr, int32_t o_value
         return true;
     }
 
-    const auto o_sval = o_ptr->sval;
-    const auto j_sval = j_ptr->sval;
+    const auto o_sval = o_ptr->bi_key.sval();
+    const auto j_sval = j_ptr->bi_key.sval();
     if (o_sval < j_sval) {
         return true;
     }

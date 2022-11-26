@@ -107,10 +107,12 @@ static void display_hit_damage(PlayerType *player_ptr)
         show_todam += o_ptr->to_d;
     }
 
-    if ((o_ptr->sval == SV_LIGHT_XBOW) || (o_ptr->sval == SV_HEAVY_XBOW)) {
-        show_tohit += player_ptr->weapon_exp[o_ptr->tval][o_ptr->sval] / 400;
+    const auto tval = o_ptr->bi_key.tval();
+    const auto sval = o_ptr->bi_key.sval().value();
+    if ((sval == SV_LIGHT_XBOW) || (sval == SV_HEAVY_XBOW)) {
+        show_tohit += player_ptr->weapon_exp[tval][sval] / 400;
     } else {
-        show_tohit += (player_ptr->weapon_exp[o_ptr->tval][o_ptr->sval] - (PlayerSkill::weapon_exp_at(PlayerSkillRank::MASTER) / 2)) / 200;
+        show_tohit += (player_ptr->weapon_exp[tval][sval] - (PlayerSkill::weapon_exp_at(PlayerSkillRank::MASTER) / 2)) / 200;
     }
 
     show_tohit += player_ptr->skill_thb / BTH_PLUS_ADJ;

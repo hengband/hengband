@@ -53,9 +53,7 @@ BreakerCold::BreakerCold()
  */
 bool BreakerAcid::hates(ItemEntity *o_ptr) const
 {
-    /* Analyze the type */
-    switch (o_ptr->tval) {
-        /* Wearable items */
+    switch (o_ptr->bi_key.tval()) {
     case ItemKindType::ARROW:
     case ItemKindType::BOLT:
     case ItemKindType::BOW:
@@ -70,33 +68,17 @@ bool BreakerAcid::hates(ItemEntity *o_ptr) const
     case ItemKindType::CLOAK:
     case ItemKindType::SOFT_ARMOR:
     case ItemKindType::HARD_ARMOR:
-    case ItemKindType::DRAG_ARMOR: {
-        return true;
-    }
-
-    /* Staffs/Scrolls are wood/paper */
+    case ItemKindType::DRAG_ARMOR:
     case ItemKindType::STAFF:
-    case ItemKindType::SCROLL: {
-        return true;
-    }
-
-    /* Ouch */
-    case ItemKindType::CHEST: {
-        return true;
-    }
-
-    /* Junk is useless */
+    case ItemKindType::SCROLL:
+    case ItemKindType::CHEST:
     case ItemKindType::SKELETON:
     case ItemKindType::BOTTLE:
-    case ItemKindType::JUNK: {
+    case ItemKindType::JUNK:
         return true;
-    }
-
     default:
-        break;
+        return false;
     }
-
-    return false;
 }
 
 /*!
@@ -107,17 +89,13 @@ bool BreakerAcid::hates(ItemEntity *o_ptr) const
  */
 bool BreakerElec::hates(ItemEntity *o_ptr) const
 {
-    switch (o_ptr->tval) {
+    switch (o_ptr->bi_key.tval()) {
     case ItemKindType::RING:
-    case ItemKindType::WAND: {
+    case ItemKindType::WAND:
         return true;
-    }
-
     default:
-        break;
+        return false;
     }
-
-    return false;
 }
 
 /*!
@@ -131,9 +109,7 @@ bool BreakerElec::hates(ItemEntity *o_ptr) const
  */
 bool BreakerFire::hates(ItemEntity *o_ptr) const
 {
-    /* Analyze the type */
-    switch (o_ptr->tval) {
-        /* Wearable */
+    switch (o_ptr->bi_key.tval()) {
     case ItemKindType::LITE:
     case ItemKindType::ARROW:
     case ItemKindType::BOW:
@@ -142,11 +118,7 @@ bool BreakerFire::hates(ItemEntity *o_ptr) const
     case ItemKindType::BOOTS:
     case ItemKindType::GLOVES:
     case ItemKindType::CLOAK:
-    case ItemKindType::SOFT_ARMOR: {
-        return true;
-    }
-
-    /* Books */
+    case ItemKindType::SOFT_ARMOR:
     case ItemKindType::LIFE_BOOK:
     case ItemKindType::SORCERY_BOOK:
     case ItemKindType::NATURE_BOOK:
@@ -159,26 +131,14 @@ bool BreakerFire::hates(ItemEntity *o_ptr) const
     case ItemKindType::CRUSADE_BOOK:
     case ItemKindType::MUSIC_BOOK:
     case ItemKindType::HISSATSU_BOOK:
-    case ItemKindType::HEX_BOOK: {
-        return true;
-    }
-
-    /* Chests */
-    case ItemKindType::CHEST: {
-        return true;
-    }
-
-    /* Staffs/Scrolls burn */
+    case ItemKindType::HEX_BOOK:
+    case ItemKindType::CHEST:
     case ItemKindType::STAFF:
-    case ItemKindType::SCROLL: {
+    case ItemKindType::SCROLL:
         return true;
-    }
-
     default:
-        break;
+        return false;
     }
-
-    return false;
 }
 
 /*!
@@ -189,18 +149,14 @@ bool BreakerFire::hates(ItemEntity *o_ptr) const
  */
 bool BreakerCold::hates(ItemEntity *o_ptr) const
 {
-    switch (o_ptr->tval) {
+    switch (o_ptr->bi_key.tval()) {
     case ItemKindType::POTION:
     case ItemKindType::FLASK:
-    case ItemKindType::BOTTLE: {
+    case ItemKindType::BOTTLE:
         return true;
-    }
-
     default:
-        break;
+        return false;
     }
-
-    return false;
 }
 
 /*!
@@ -215,11 +171,9 @@ bool ObjectBreaker::can_destroy(ItemEntity *o_ptr) const
     if (!this->hates(o_ptr)) {
         return false;
     }
+
     auto flgs = object_flags(o_ptr);
-    if (flgs.has(this->ignore_flg)) {
-        return false;
-    }
-    return true;
+    return flgs.has_not(this->ignore_flg);
 }
 
 /*!
@@ -425,7 +379,7 @@ PERCENTAGE breakage_chance(PlayerType *player_ptr, ItemEntity *o_ptr, bool has_a
 
     /* Examine the item type */
     PERCENTAGE archer_bonus = (has_archer_bonus ? (PERCENTAGE)(player_ptr->lev - 1) / 7 + 4 : 0);
-    switch (o_ptr->tval) {
+    switch (o_ptr->bi_key.tval()) {
         /* Always break */
     case ItemKindType::FLASK:
     case ItemKindType::POTION:

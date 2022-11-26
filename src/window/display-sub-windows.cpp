@@ -275,7 +275,7 @@ static void display_equipment(PlayerType *player_ptr, const ItemTester &item_tes
             attr = TERM_WHITE;
         } else {
             describe_flavor(player_ptr, o_name, o_ptr, 0);
-            attr = tval_to_attr[enum2i(o_ptr->tval) % 128];
+            attr = tval_to_attr[enum2i(o_ptr->bi_key.tval()) % 128];
         }
 
         int n = strlen(o_name);
@@ -617,10 +617,9 @@ static void display_floor_item_list(PlayerType *player_ptr, const int y, const i
     // (y,x) のアイテムを1行に1個ずつ書く。
     TERM_LEN term_y = 1;
     for (const auto o_idx : g_ptr->o_idx_list) {
-        ItemEntity *const o_ptr = &floor_ptr->o_list[o_idx];
-
-        // 未発見アイテムおよび金は対象外。
-        if (o_ptr->marked.has_not(OmType::FOUND) || o_ptr->tval == ItemKindType::GOLD) {
+        auto *const o_ptr = &floor_ptr->o_list[o_idx];
+        const auto tval = o_ptr->bi_key.tval();
+        if (o_ptr->marked.has_not(OmType::FOUND) || tval == ItemKindType::GOLD) {
             continue;
         }
 
@@ -636,7 +635,7 @@ static void display_floor_item_list(PlayerType *player_ptr, const int y, const i
             term_addstr(-1, TERM_WHITE, _("何か奇妙な物", "something strange"));
         } else {
             describe_flavor(player_ptr, line, o_ptr, 0);
-            TERM_COLOR attr = tval_to_attr[enum2i(o_ptr->tval) % 128];
+            TERM_COLOR attr = tval_to_attr[enum2i(tval) % 128];
             term_addstr(-1, attr, line);
         }
 
@@ -695,7 +694,7 @@ static void display_found_item_list(PlayerType *player_ptr)
     std::vector<ItemEntity *> found_item_list;
     for (auto &item : floor_ptr->o_list) {
         auto item_entity_ptr = &item;
-        if (item_entity_ptr->bi_id > 0 && item_entity_ptr->marked.has(OmType::FOUND) && item_entity_ptr->tval != ItemKindType::GOLD) {
+        if (item_entity_ptr->bi_id > 0 && item_entity_ptr->marked.has(OmType::FOUND) && item_entity_ptr->bi_key.tval() != ItemKindType::GOLD) {
             found_item_list.push_back(item_entity_ptr);
         }
     }
@@ -732,7 +731,7 @@ static void display_found_item_list(PlayerType *player_ptr)
         char temp[512];
         describe_flavor(player_ptr, temp, item, 0);
         const std::string item_description(temp);
-        const auto color_code_for_item = tval_to_attr[enum2i(item->tval) % 128];
+        const auto color_code_for_item = tval_to_attr[enum2i(item->bi_key.tval()) % 128];
         term_addstr(-1, color_code_for_item, item_description.data());
 
         // アイテム座標表示

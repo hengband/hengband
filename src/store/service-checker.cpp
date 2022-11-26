@@ -18,22 +18,23 @@
 
 /*!
  * @brief オブジェクトが祝福されているかの判定を返す /
- * @param o_ptr 判定したいオブジェクト構造体の参照ポインタ
+ * @param item_ptr 判定したいオブジェクト構造体の参照ポインタ
  * @return アイテムが祝福されたアイテムならばTRUEを返す
  */
-static bool is_blessed_item(const ItemEntity *o_ptr)
+static bool is_blessed_item(const ItemEntity *item_ptr)
 {
-    auto flgs = object_flags(o_ptr);
+    auto flgs = object_flags(item_ptr);
     return flgs.has(TR_BLESSED);
 }
 
-static bool check_store_general(const ItemEntity *o_ptr)
+static bool check_store_general(const ItemEntity &item)
 {
-    switch (o_ptr->tval) {
+    const auto &bi_key = item.bi_key;
+    switch (bi_key.tval()) {
     case ItemKindType::ROD:
-        return (o_ptr->sval == SV_ROD_PESTICIDE);
+        return (bi_key.sval() == SV_ROD_PESTICIDE);
     case ItemKindType::POTION:
-        return (o_ptr->sval == SV_POTION_WATER);
+        return (bi_key.sval() == SV_POTION_WATER);
     case ItemKindType::WHISTLE:
     case ItemKindType::FOOD:
     case ItemKindType::LITE:
@@ -55,9 +56,9 @@ static bool check_store_general(const ItemEntity *o_ptr)
     }
 }
 
-static bool check_store_armoury(const ItemEntity *o_ptr)
+static bool check_store_armoury(const ItemEntity &item)
 {
-    switch (o_ptr->tval) {
+    switch (item.bi_key.tval()) {
     case ItemKindType::BOOTS:
     case ItemKindType::GLOVES:
     case ItemKindType::CROWN:
@@ -73,9 +74,9 @@ static bool check_store_armoury(const ItemEntity *o_ptr)
     }
 }
 
-static bool check_store_weapon(const ItemEntity *o_ptr)
+static bool check_store_weapon(const ItemEntity &item)
 {
-    switch (o_ptr->tval) {
+    switch (item.bi_key.tval()) {
     case ItemKindType::SHOT:
     case ItemKindType::BOLT:
     case ItemKindType::ARROW:
@@ -86,15 +87,15 @@ static bool check_store_weapon(const ItemEntity *o_ptr)
     case ItemKindType::HISSATSU_BOOK:
         return true;
     case ItemKindType::HAFTED:
-        return o_ptr->sval != SV_WIZSTAFF;
+        return item.bi_key.sval() != SV_WIZSTAFF;
     default:
         return false;
     }
 }
 
-static bool check_store_temple(const ItemEntity *o_ptr)
+static bool check_store_temple(const ItemEntity &item)
 {
-    switch (o_ptr->tval) {
+    switch (item.bi_key.tval()) {
     case ItemKindType::LIFE_BOOK:
     case ItemKindType::CRUSADE_BOOK:
     case ItemKindType::SCROLL:
@@ -103,7 +104,7 @@ static bool check_store_temple(const ItemEntity *o_ptr)
         return true;
     case ItemKindType::FIGURINE:
     case ItemKindType::STATUE: {
-        auto *r_ptr = &monraces_info[i2enum<MonsterRaceId>(o_ptr->pval)];
+        auto *r_ptr = &monraces_info[i2enum<MonsterRaceId>(item.pval)];
         if (r_ptr->kind_flags.has_not(MonsterKindType::EVIL)) {
             if ((r_ptr->kind_flags.has(MonsterKindType::GOOD)) || (r_ptr->kind_flags.has(MonsterKindType::ANIMAL)) || (angband_strchr("?!", r_ptr->d_char) != nullptr)) {
                 return true;
@@ -113,7 +114,7 @@ static bool check_store_temple(const ItemEntity *o_ptr)
         [[fallthrough]];
     case ItemKindType::POLEARM:
     case ItemKindType::SWORD:
-        if (is_blessed_item(o_ptr)) {
+        if (is_blessed_item(&item)) {
             return true;
         }
 
@@ -123,9 +124,9 @@ static bool check_store_temple(const ItemEntity *o_ptr)
     }
 }
 
-static bool check_store_alchemist(const ItemEntity *o_ptr)
+static bool check_store_alchemist(const ItemEntity &item)
 {
-    switch (o_ptr->tval) {
+    switch (item.bi_key.tval()) {
     case ItemKindType::SCROLL:
     case ItemKindType::POTION:
         return true;
@@ -134,9 +135,9 @@ static bool check_store_alchemist(const ItemEntity *o_ptr)
     }
 }
 
-static bool check_store_magic(const ItemEntity *o_ptr)
+static bool check_store_magic(const ItemEntity &item)
 {
-    switch (o_ptr->tval) {
+    switch (item.bi_key.tval()) {
     case ItemKindType::SORCERY_BOOK:
     case ItemKindType::NATURE_BOOK:
     case ItemKindType::CHAOS_BOOK:
@@ -157,15 +158,15 @@ static bool check_store_magic(const ItemEntity *o_ptr)
     case ItemKindType::FIGURINE:
         return true;
     case ItemKindType::HAFTED:
-        return o_ptr->sval == SV_WIZSTAFF;
+        return item.bi_key.sval() == SV_WIZSTAFF;
     default:
         return false;
     }
 }
 
-static bool check_store_book(const ItemEntity *o_ptr)
+static bool check_store_book(const ItemEntity &item)
 {
-    switch (o_ptr->tval) {
+    switch (item.bi_key.tval()) {
     case ItemKindType::SORCERY_BOOK:
     case ItemKindType::NATURE_BOOK:
     case ItemKindType::CHAOS_BOOK:
@@ -184,23 +185,23 @@ static bool check_store_book(const ItemEntity *o_ptr)
     }
 }
 
-static bool switch_store_check(const ItemEntity *o_ptr, StoreSaleType store_num)
+static bool switch_store_check(const ItemEntity &item, StoreSaleType store_num)
 {
     switch (store_num) {
     case StoreSaleType::GENERAL:
-        return check_store_general(o_ptr);
+        return check_store_general(item);
     case StoreSaleType::ARMOURY:
-        return check_store_armoury(o_ptr);
+        return check_store_armoury(item);
     case StoreSaleType::WEAPON:
-        return check_store_weapon(o_ptr);
+        return check_store_weapon(item);
     case StoreSaleType::TEMPLE:
-        return check_store_temple(o_ptr);
+        return check_store_temple(item);
     case StoreSaleType::ALCHEMIST:
-        return check_store_alchemist(o_ptr);
+        return check_store_alchemist(item);
     case StoreSaleType::MAGIC:
-        return check_store_magic(o_ptr);
+        return check_store_magic(item);
     case StoreSaleType::BOOK:
-        return check_store_book(o_ptr);
+        return check_store_book(item);
     default:
         return true;
     }
@@ -221,7 +222,7 @@ bool store_will_buy(PlayerType *, const ItemEntity *o_ptr, StoreSaleType store_n
         return true;
     }
 
-    if (!switch_store_check(o_ptr, store_num)) {
+    if (!switch_store_check(*o_ptr, store_num)) {
         return false;
     }
 
@@ -246,7 +247,7 @@ static int mass_lite_produce(const PRICE cost)
     return size;
 }
 
-static int mass_scroll_produce(ItemEntity *o_ptr, const PRICE cost)
+static int mass_scroll_produce(const ItemEntity &item, const PRICE cost)
 {
     int size = 1;
     if (cost <= 60L) {
@@ -257,11 +258,12 @@ static int mass_scroll_produce(ItemEntity *o_ptr, const PRICE cost)
         size += damroll(1, 5);
     }
 
-    if (o_ptr->sval == SV_SCROLL_STAR_IDENTIFY) {
+    const auto sval = item.bi_key.sval();
+    if (sval == SV_SCROLL_STAR_IDENTIFY) {
         size += damroll(3, 5);
     }
 
-    if (o_ptr->sval == SV_SCROLL_STAR_REMOVE_CURSE) {
+    if (sval == SV_SCROLL_STAR_REMOVE_CURSE) {
         size += damroll(1, 4);
     }
 
@@ -282,10 +284,10 @@ static int mass_book_produce(const PRICE cost)
     return size;
 }
 
-static int mass_equipment_produce(ItemEntity *o_ptr, const PRICE cost)
+static int mass_equipment_produce(const ItemEntity &item, const PRICE cost)
 {
     int size = 1;
-    if (o_ptr->is_artifact() || o_ptr->is_ego()) {
+    if (item.is_artifact() || item.is_ego()) {
         return size;
     }
 
@@ -348,16 +350,16 @@ static int mass_magic_produce(const PRICE cost, StoreSaleType store_num)
     return size;
 }
 
-static int switch_mass_production(ItemEntity *o_ptr, const PRICE cost, StoreSaleType store_num)
+static int switch_mass_production(const ItemEntity &item, const PRICE cost, StoreSaleType store_num)
 {
-    switch (o_ptr->tval) {
+    switch (item.bi_key.tval()) {
     case ItemKindType::FOOD:
     case ItemKindType::FLASK:
     case ItemKindType::LITE:
         return mass_lite_produce(cost);
     case ItemKindType::POTION:
     case ItemKindType::SCROLL:
-        return mass_scroll_produce(o_ptr, cost);
+        return mass_scroll_produce(item, cost);
     case ItemKindType::LIFE_BOOK:
     case ItemKindType::SORCERY_BOOK:
     case ItemKindType::NATURE_BOOK:
@@ -385,7 +387,7 @@ static int switch_mass_production(ItemEntity *o_ptr, const PRICE cost, StoreSale
     case ItemKindType::HAFTED:
     case ItemKindType::DIGGING:
     case ItemKindType::BOW:
-        return mass_equipment_produce(o_ptr, cost);
+        return mass_equipment_produce(item, cost);
     case ItemKindType::SPIKE:
     case ItemKindType::SHOT:
     case ItemKindType::ARROW:
@@ -440,10 +442,10 @@ static byte decide_discount_rate(const PRICE cost)
  * Some objects can be sold at a "discount" (in small piles)
  * </pre>
  */
-void mass_produce(PlayerType *, ItemEntity *o_ptr, StoreSaleType store_num)
+void mass_produce(ItemEntity *o_ptr, StoreSaleType store_num)
 {
     const auto cost = o_ptr->get_price();
-    int size = switch_mass_production(o_ptr, cost, store_num);
+    int size = switch_mass_production(*o_ptr, cost, store_num);
     auto discount = decide_discount_rate(cost);
     if (o_ptr->art_name) {
         discount = 0;

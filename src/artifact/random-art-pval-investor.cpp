@@ -76,7 +76,7 @@ static bool random_art_bias_charisma(ItemEntity *o_ptr)
 
 static bool random_art_bias_magic_mastery(ItemEntity *o_ptr)
 {
-    if ((o_ptr->tval != ItemKindType::GLOVES) || o_ptr->art_flags.has(TR_MAGIC_MASTERY)) {
+    if ((o_ptr->bi_key.tval() != ItemKindType::GLOVES) || o_ptr->art_flags.has(TR_MAGIC_MASTERY)) {
         return false;
     }
 
@@ -135,7 +135,10 @@ static bool switch_random_art_bias(ItemEntity *o_ptr)
 
 static bool random_art_bias_decrease_mana(ItemEntity *o_ptr)
 {
-    if (((o_ptr->artifact_bias != BIAS_MAGE) && (o_ptr->artifact_bias != BIAS_PRIESTLY)) || (o_ptr->tval != ItemKindType::SOFT_ARMOR) || (o_ptr->sval != SV_ROBE) || o_ptr->art_flags.has(TR_DEC_MANA) || !one_in_(3)) {
+    auto should_skip = (o_ptr->artifact_bias != BIAS_MAGE) && (o_ptr->artifact_bias != BIAS_PRIESTLY);
+    should_skip |= o_ptr->bi_key != BaseitemKey(ItemKindType::SOFT_ARMOR, SV_ROBE);
+    should_skip |= o_ptr->art_flags.has(TR_DEC_MANA);
+    if (should_skip || !one_in_(3)) {
         return false;
     }
 
@@ -249,7 +252,7 @@ void random_plus(ItemEntity *o_ptr)
         break;
     case 22:
     case 23:
-        if (o_ptr->tval == ItemKindType::BOW) {
+        if (o_ptr->bi_key.tval() == ItemKindType::BOW) {
             random_plus(o_ptr);
             break;
         }

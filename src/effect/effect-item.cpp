@@ -179,7 +179,7 @@ bool affect_item(PlayerType *player_ptr, MONSTER_IDX who, POSITION r, POSITION y
             note_kill = _("壊れてしまった！", (plural ? " are destroyed!" : " is destroyed!"));
             if (flags.has(TR_RES_CHAOS)) {
                 ignore = true;
-            } else if ((o_ptr->tval == ItemKindType::SCROLL) && (o_ptr->sval == SV_SCROLL_CHAOS)) {
+            } else if (o_ptr->bi_key == BaseitemKey(ItemKindType::SCROLL, SV_SCROLL_CHAOS)) {
                 ignore = true;
             }
             break;
@@ -205,9 +205,10 @@ bool affect_item(PlayerType *player_ptr, MONSTER_IDX who, POSITION r, POSITION y
         }
         case AttributeType::KILL_TRAP:
         case AttributeType::KILL_DOOR: {
-            if (o_ptr->tval != ItemKindType::CHEST) {
+            if (o_ptr->bi_key.tval() != ItemKindType::CHEST) {
                 break;
             }
+
             if (o_ptr->pval <= 0) {
                 break;
             }
@@ -222,7 +223,7 @@ bool affect_item(PlayerType *player_ptr, MONSTER_IDX who, POSITION r, POSITION y
             break;
         }
         case AttributeType::ANIM_DEAD: {
-            if (o_ptr->tval != ItemKindType::CORPSE) {
+            if (o_ptr->bi_key.tval() != ItemKindType::CORPSE) {
                 break;
             }
 
@@ -233,7 +234,8 @@ bool affect_item(PlayerType *player_ptr, MONSTER_IDX who, POSITION r, POSITION y
 
             for (int i = 0; i < o_ptr->number; i++) {
                 auto corpse_r_idx = i2enum<MonsterRaceId>(o_ptr->pval);
-                if (((o_ptr->sval == SV_CORPSE) && (randint1(100) > 80)) || ((o_ptr->sval == SV_SKELETON) && (randint1(100) > 60))) {
+                const auto sval = o_ptr->bi_key.sval().value();
+                if (((sval == SV_CORPSE) && (randint1(100) > 80)) || ((sval == SV_SKELETON) && (randint1(100) > 60))) {
                     if (!note_kill) {
                         note_kill = _("灰になった。", (plural ? " become dust." : " becomes dust."));
                     }

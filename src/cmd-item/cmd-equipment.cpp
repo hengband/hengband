@@ -147,8 +147,8 @@ void do_cmd_wield(PlayerType *player_ptr)
 
     const auto o_ptr_mh = &player_ptr->inventory_list[INVEN_MAIN_HAND];
     const auto o_ptr_sh = &player_ptr->inventory_list[INVEN_SUB_HAND];
-
-    switch (o_ptr->tval) {
+    const auto tval = o_ptr->bi_key.tval();
+    switch (tval) {
     case ItemKindType::CAPTURE:
     case ItemKindType::SHIELD:
     case ItemKindType::CARD:
@@ -165,7 +165,7 @@ void do_cmd_wield(PlayerType *player_ptr)
         } else if (has_melee_weapon(player_ptr, INVEN_SUB_HAND)) {
             slot = INVEN_MAIN_HAND;
         } else if (o_ptr_mh->bi_id && o_ptr_sh->bi_id &&
-                   ((o_ptr->tval == ItemKindType::CAPTURE) || (!o_ptr_mh->is_melee_weapon() && !o_ptr_sh->is_melee_weapon()))) {
+                   ((tval == ItemKindType::CAPTURE) || (!o_ptr_mh->is_melee_weapon() && !o_ptr_sh->is_melee_weapon()))) {
             q = _("どちらの手に装備しますか?", "Equip which hand? ");
             s = _("おっと。", "Oops.");
             if (!choose_object(player_ptr, &slot, q, s, (USE_EQUIP), FuncItemTester(&ItemEntity::is_wieldable_in_etheir_hand))) {

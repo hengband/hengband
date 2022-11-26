@@ -324,7 +324,7 @@ static bool make_equipment(PlayerType *player_ptr, ItemEntity *q_ptr, const BIT_
         return true;
     }
 
-    return q_ptr->is_wearable() && (q_ptr->tval != ItemKindType::CARD);
+    return q_ptr->is_wearable() && (q_ptr->bi_key.tval() != ItemKindType::CARD);
 }
 
 /*

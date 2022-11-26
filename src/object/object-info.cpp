@@ -82,12 +82,12 @@ static concptr item_activation_aux(ItemEntity *o_ptr)
     case RandomArtActType::NONE:
         break;
     case RandomArtActType::BR_FIRE:
-        if ((o_ptr->tval == ItemKindType::RING) && (o_ptr->sval == SV_RING_FLAMES)) {
+        if (o_ptr->bi_key == BaseitemKey(ItemKindType::RING, SV_RING_FLAMES)) {
             desc = _("火炎のブレス (200) と火への耐性", "breathe fire (200) and resist fire");
         }
         break;
     case RandomArtActType::BR_COLD:
-        if ((o_ptr->tval == ItemKindType::RING) && (o_ptr->sval == SV_RING_ICE)) {
+        if (o_ptr->bi_key == BaseitemKey(ItemKindType::RING, SV_RING_ICE)) {
             desc = _("冷気のブレス (200) と冷気への耐性", "breathe cold (200) and resist cold");
         }
         break;
@@ -143,10 +143,10 @@ static concptr item_activation_aux(ItemEntity *o_ptr)
         /* Activations that have special timeout */
         switch (act_ptr->index) {
         case RandomArtActType::BR_FIRE:
-            sprintf(timeout, _("%d ターン毎", "every %d turns"), ((o_ptr->tval == ItemKindType::RING) && (o_ptr->sval == SV_RING_FLAMES)) ? 200 : 250);
+            sprintf(timeout, _("%d ターン毎", "every %d turns"), o_ptr->bi_key == BaseitemKey(ItemKindType::RING, SV_RING_FLAMES) ? 200 : 250);
             break;
         case RandomArtActType::BR_COLD:
-            sprintf(timeout, _("%d ターン毎", "every %d turns"), ((o_ptr->tval == ItemKindType::RING) && (o_ptr->sval == SV_RING_ICE)) ? 200 : 250);
+            sprintf(timeout, _("%d ターン毎", "every %d turns"), o_ptr->bi_key == BaseitemKey(ItemKindType::RING, SV_RING_ICE) ? 200 : 250);
             break;
         case RandomArtActType::TERROR:
             strcpy(timeout, _("3*(レベル+10) ターン毎", "every 3 * (level+10) turns"));
@@ -187,11 +187,12 @@ concptr activation_explanation(ItemEntity *o_ptr)
         return item_activation_aux(o_ptr);
     }
 
-    if (o_ptr->tval == ItemKindType::WHISTLE) {
+    const auto tval = o_ptr->bi_key.tval();
+    if (tval == ItemKindType::WHISTLE) {
         return _("ペット呼び寄せ : 100+d100ターン毎", "call pet every 100+d100 turns");
     }
 
-    if (o_ptr->tval == ItemKindType::CAPTURE) {
+    if (tval == ItemKindType::CAPTURE) {
         return _("モンスターを捕える、又は解放する。", "captures or releases a monster.");
     }
 
@@ -218,71 +219,61 @@ char index_to_label(int i)
  */
 int16_t wield_slot(PlayerType *player_ptr, const ItemEntity *o_ptr)
 {
-    switch (o_ptr->tval) {
+    switch (o_ptr->bi_key.tval()) {
     case ItemKindType::DIGGING:
     case ItemKindType::HAFTED:
     case ItemKindType::POLEARM:
-    case ItemKindType::SWORD: {
+    case ItemKindType::SWORD:
         if (!player_ptr->inventory_list[INVEN_MAIN_HAND].bi_id) {
             return INVEN_MAIN_HAND;
         }
+
         if (player_ptr->inventory_list[INVEN_SUB_HAND].bi_id) {
             return INVEN_MAIN_HAND;
         }
+
         return INVEN_SUB_HAND;
-    }
     case ItemKindType::CAPTURE:
     case ItemKindType::CARD:
-    case ItemKindType::SHIELD: {
+    case ItemKindType::SHIELD:
         if (!player_ptr->inventory_list[INVEN_SUB_HAND].bi_id) {
             return INVEN_SUB_HAND;
         }
+
         if (player_ptr->inventory_list[INVEN_MAIN_HAND].bi_id) {
             return INVEN_SUB_HAND;
         }
+
         return INVEN_MAIN_HAND;
-    }
-    case ItemKindType::BOW: {
+    case ItemKindType::BOW:
         return INVEN_BOW;
-    }
-    case ItemKindType::RING: {
+    case ItemKindType::RING:
         if (!player_ptr->inventory_list[INVEN_MAIN_RING].bi_id) {
             return INVEN_MAIN_RING;
         }
 
         return INVEN_SUB_RING;
-    }
     case ItemKindType::AMULET:
-    case ItemKindType::WHISTLE: {
+    case ItemKindType::WHISTLE:
         return INVEN_NECK;
-    }
-    case ItemKindType::LITE: {
+    case ItemKindType::LITE:
         return INVEN_LITE;
-    }
     case ItemKindType::DRAG_ARMOR:
     case ItemKindType::HARD_ARMOR:
-    case ItemKindType::SOFT_ARMOR: {
+    case ItemKindType::SOFT_ARMOR:
         return INVEN_BODY;
-    }
-    case ItemKindType::CLOAK: {
+    case ItemKindType::CLOAK:
         return INVEN_OUTER;
-    }
     case ItemKindType::CROWN:
-    case ItemKindType::HELM: {
+    case ItemKindType::HELM:
         return INVEN_HEAD;
-    }
-    case ItemKindType::GLOVES: {
+    case ItemKindType::GLOVES:
         return INVEN_ARMS;
-    }
-    case ItemKindType::BOOTS: {
+    case ItemKindType::BOOTS:
         return INVEN_FEET;
-    }
-
     default:
-        break;
+        return -1;
     }
-
-    return -1;
 }
 
 /*!

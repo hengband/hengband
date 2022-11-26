@@ -91,7 +91,8 @@ bool ObjectThrowEntity::check_can_throw()
         return false;
     }
 
-    if (this->player_ptr->current_floor_ptr->inside_arena && !this->boomerang && (this->o_ptr->tval != ItemKindType::SPIKE)) {
+    const auto is_spike = this->o_ptr->bi_key.tval() == ItemKindType::SPIKE;
+    if (this->player_ptr->current_floor_ptr->inside_arena && !this->boomerang && !is_spike) {
         msg_print(_("アリーナではアイテムを使えない！", "You're in the arena now. This is hand-to-hand!"));
         msg_print(nullptr);
         return false;
@@ -181,7 +182,10 @@ void ObjectThrowEntity::set_class_specific_throw_params()
     this->y = this->player_ptr->y;
     this->x = this->player_ptr->x;
     handle_stuff(this->player_ptr);
-    this->shuriken = pc.equals(PlayerClassType::NINJA) && ((this->q_ptr->tval == ItemKindType::SPIKE) || ((this->obj_flags.has(TR_THROW)) && (this->q_ptr->tval == ItemKindType::SWORD)));
+    const auto tval = this->q_ptr->bi_key.tval();
+    const auto is_spike = tval == ItemKindType::SPIKE;
+    const auto is_sword = tval == ItemKindType::SWORD;
+    this->shuriken = pc.equals(PlayerClassType::NINJA) && (is_spike || ((this->obj_flags.has(TR_THROW)) && is_sword));
 }
 
 void ObjectThrowEntity::set_racial_chance()
@@ -223,7 +227,7 @@ void ObjectThrowEntity::exe_throw()
 
 void ObjectThrowEntity::display_figurine_throw()
 {
-    if ((this->q_ptr->tval != ItemKindType::FIGURINE) || this->player_ptr->current_floor_ptr->inside_arena) {
+    if ((this->q_ptr->bi_key.tval() != ItemKindType::FIGURINE) || this->player_ptr->current_floor_ptr->inside_arena) {
         return;
     }
 
@@ -388,7 +392,8 @@ bool ObjectThrowEntity::check_racial_target_bold()
     }
 
     this->hit_wall = true;
-    return (this->q_ptr->tval == ItemKindType::FIGURINE) || this->q_ptr->is_potion() || (floor_ptr->grid_array[this->ny[this->cur_dis]][this->nx[this->cur_dis]].m_idx == 0);
+    const auto is_figurine = this->q_ptr->bi_key.tval() == ItemKindType::FIGURINE;
+    return is_figurine || this->q_ptr->is_potion() || (floor_ptr->grid_array[this->ny[this->cur_dis]][this->nx[this->cur_dis]].m_idx == 0);
 }
 
 void ObjectThrowEntity::check_racial_target_seen()

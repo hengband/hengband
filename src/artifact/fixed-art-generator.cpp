@@ -316,11 +316,7 @@ bool make_artifact(PlayerType *player_ptr, ItemEntity *o_ptr)
             continue;
         }
 
-        if (a_ref.bi_key.tval() != o_ptr->tval) {
-            continue;
-        }
-
-        if (a_ref.bi_key.sval() != o_ptr->sval) {
+        if (a_ref.bi_key != o_ptr->bi_key) {
             continue;
         }
 

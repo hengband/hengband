@@ -54,7 +54,7 @@ bool exchange_cash(PlayerType *player_ptr)
         o_ptr = &player_ptr->inventory_list[i];
         const auto r_idx_of_item = static_cast<MonsterRaceId>(o_ptr->pval);
 
-        if ((o_ptr->tval == ItemKindType::CAPTURE) && (r_idx_of_item == MonsterRaceId::TSUCHINOKO)) {
+        if ((o_ptr->bi_key.tval() == ItemKindType::CAPTURE) && (r_idx_of_item == MonsterRaceId::TSUCHINOKO)) {
             char buf[MAX_NLEN + 32];
             describe_flavor(player_ptr, o_name, o_ptr, 0);
             sprintf(buf, _("%s を換金しますか？", "Convert %s into money? "), o_name);
@@ -73,7 +73,7 @@ bool exchange_cash(PlayerType *player_ptr)
         o_ptr = &player_ptr->inventory_list[i];
         const auto r_idx_of_item = static_cast<MonsterRaceId>(o_ptr->pval);
 
-        if ((o_ptr->tval == ItemKindType::CORPSE) && (o_ptr->sval == SV_CORPSE) && (r_idx_of_item == MonsterRaceId::TSUCHINOKO)) {
+        if (o_ptr->bi_key == BaseitemKey(ItemKindType::CORPSE, SV_CORPSE) && (r_idx_of_item == MonsterRaceId::TSUCHINOKO)) {
             char buf[MAX_NLEN + 32];
             describe_flavor(player_ptr, o_name, o_ptr, 0);
             sprintf(buf, _("%s を換金しますか？", "Convert %s into money? "), o_name);
@@ -92,7 +92,7 @@ bool exchange_cash(PlayerType *player_ptr)
         o_ptr = &player_ptr->inventory_list[i];
         const auto r_idx_of_item = static_cast<MonsterRaceId>(o_ptr->pval);
 
-        if ((o_ptr->tval == ItemKindType::CORPSE) && (o_ptr->sval == SV_SKELETON) && (r_idx_of_item == MonsterRaceId::TSUCHINOKO)) {
+        if (o_ptr->bi_key == BaseitemKey(ItemKindType::CORPSE, SV_SKELETON) && (r_idx_of_item == MonsterRaceId::TSUCHINOKO)) {
             char buf[MAX_NLEN + 32];
             describe_flavor(player_ptr, o_name, o_ptr, 0);
             sprintf(buf, _("%s を換金しますか？", "Convert %s into money? "), o_name);
@@ -111,7 +111,7 @@ bool exchange_cash(PlayerType *player_ptr)
         o_ptr = &player_ptr->inventory_list[i];
         const auto r_idx_of_item = static_cast<MonsterRaceId>(o_ptr->pval);
 
-        if ((o_ptr->tval == ItemKindType::CORPSE) && (o_ptr->sval == SV_CORPSE) && (streq(monraces_info[r_idx_of_item].name.data(), monraces_info[w_ptr->today_mon].name.data()))) {
+        if (o_ptr->bi_key == BaseitemKey(ItemKindType::CORPSE, SV_CORPSE) && (streq(monraces_info[r_idx_of_item].name.data(), monraces_info[w_ptr->today_mon].name.data()))) {
             char buf[MAX_NLEN + 32];
             describe_flavor(player_ptr, o_name, o_ptr, 0);
             sprintf(buf, _("%s を換金しますか？", "Convert %s into money? "), o_name);
@@ -131,7 +131,7 @@ bool exchange_cash(PlayerType *player_ptr)
         o_ptr = &player_ptr->inventory_list[i];
         const auto r_idx_of_item = static_cast<MonsterRaceId>(o_ptr->pval);
 
-        if ((o_ptr->tval == ItemKindType::CORPSE) && (o_ptr->sval == SV_SKELETON) && (streq(monraces_info[r_idx_of_item].name.data(), monraces_info[w_ptr->today_mon].name.data()))) {
+        if (o_ptr->bi_key == BaseitemKey(ItemKindType::CORPSE, SV_SKELETON) && (streq(monraces_info[r_idx_of_item].name.data(), monraces_info[w_ptr->today_mon].name.data()))) {
             char buf[MAX_NLEN + 32];
             describe_flavor(player_ptr, o_name, o_ptr, 0);
             sprintf(buf, _("%s を換金しますか？", "Convert %s into money? "), o_name);
@@ -155,7 +155,7 @@ bool exchange_cash(PlayerType *player_ptr)
             o_ptr = &player_ptr->inventory_list[i];
             const auto r_idx_of_item = static_cast<MonsterRaceId>(o_ptr->pval);
 
-            if ((o_ptr->tval != ItemKindType::CORPSE) || (r_idx_of_item != r_idx)) {
+            if ((o_ptr->bi_key.tval() != ItemKindType::CORPSE) || (r_idx_of_item != r_idx)) {
                 continue;
             }
 

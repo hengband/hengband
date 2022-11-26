@@ -31,7 +31,7 @@ GlovesEnchanter::GlovesEnchanter(PlayerType *player_ptr, ItemEntity *o_ptr, DEPT
  */
 void GlovesEnchanter::apply_magic()
 {
-    if (this->o_ptr->sval == SV_SET_OF_DRAGON_GLOVES) {
+    if (this->o_ptr->bi_key.sval() == SV_SET_OF_DRAGON_GLOVES) {
         dragon_resist(this->o_ptr);
         if (!one_in_(3)) {
             return;

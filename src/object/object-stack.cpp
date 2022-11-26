@@ -40,7 +40,7 @@ void distribute_charges(ItemEntity *o_ptr, ItemEntity *q_ptr, int amt)
         o_ptr->pval -= q_ptr->pval;
     }
 
-    if ((o_ptr->tval != ItemKindType::ROD) || !o_ptr->timeout) {
+    if ((o_ptr->bi_key.tval() != ItemKindType::ROD) || !o_ptr->timeout) {
         return;
     }
 
@@ -86,19 +86,19 @@ int object_similar_part(const ItemEntity *o_ptr, const ItemEntity *j_ptr)
         return 0;
     }
 
-    switch (o_ptr->tval) {
+    switch (o_ptr->bi_key.tval()) {
     case ItemKindType::CHEST:
     case ItemKindType::CARD:
     case ItemKindType::CAPTURE: {
         return 0;
     }
     case ItemKindType::STATUE: {
-        if ((o_ptr->sval != SV_PHOTO) || (j_ptr->sval != SV_PHOTO)) {
+        const auto o_sval = o_ptr->bi_key.sval();
+        const auto j_sval = j_ptr->bi_key.sval();
+        if ((o_sval != SV_PHOTO) || (j_sval != SV_PHOTO) || (o_ptr->pval != j_ptr->pval)) {
             return 0;
         }
-        if (o_ptr->pval != j_ptr->pval) {
-            return 0;
-        }
+
         break;
     }
     case ItemKindType::FIGURINE:
@@ -286,12 +286,14 @@ void object_absorb(ItemEntity *o_ptr, ItemEntity *j_ptr)
     if (o_ptr->discount < j_ptr->discount) {
         o_ptr->discount = j_ptr->discount;
     }
-    if (o_ptr->tval == ItemKindType::ROD) {
+
+    const auto tval = o_ptr->bi_key.tval();
+    if (tval == ItemKindType::ROD) {
         o_ptr->pval += j_ptr->pval * (j_ptr->number - diff) / j_ptr->number;
         o_ptr->timeout += j_ptr->timeout * (j_ptr->number - diff) / j_ptr->number;
     }
 
-    if (o_ptr->tval == ItemKindType::WAND) {
+    if (tval == ItemKindType::WAND) {
         o_ptr->pval += j_ptr->pval * (j_ptr->number - diff) / j_ptr->number;
     }
 }

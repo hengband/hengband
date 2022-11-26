@@ -165,7 +165,7 @@ static MULTIPLY calc_shot_damage_with_slay(
     flags = bow_flags | arrow_flags;
 
     /* Some "weapons" and "ammo" do extra damage */
-    switch (arrow_ptr->tval) {
+    switch (arrow_ptr->bi_key.tval()) {
     case ItemKindType::SHOT:
     case ItemKindType::ARROW:
     case ItemKindType::BOLT: {
@@ -524,10 +524,12 @@ void exe_fire(PlayerType *player_ptr, INVENTORY_IDX item, ItemEntity *j_ptr, SPE
     auto tdam_base = damroll(o_ptr->dd, o_ptr->ds) + o_ptr->to_d + j_ptr->to_d;
 
     /* Actually "fire" the object */
+    const auto tval = j_ptr->bi_key.tval();
+    const auto sval = j_ptr->bi_key.sval().value();
     auto bonus = (player_ptr->to_h_b + o_ptr->to_h + j_ptr->to_h);
     int chance;
-    auto weapon_exp = player_ptr->weapon_exp[j_ptr->tval][j_ptr->sval];
-    if ((j_ptr->sval == SV_LIGHT_XBOW) || (j_ptr->sval == SV_HEAVY_XBOW)) {
+    auto weapon_exp = player_ptr->weapon_exp[tval][sval];
+    if ((sval == SV_LIGHT_XBOW) || (sval == SV_HEAVY_XBOW)) {
         chance = (player_ptr->skill_thb + (weapon_exp / 400 + bonus) * BTH_PLUS_ADJ);
     } else {
         chance = (player_ptr->skill_thb + ((weapon_exp - (PlayerSkill::weapon_exp_at(PlayerSkillRank::MASTER) / 2)) / 200 + bonus) * BTH_PLUS_ADJ);
@@ -552,7 +554,7 @@ void exe_fire(PlayerType *player_ptr, INVENTORY_IDX item, ItemEntity *j_ptr, SPE
 
     /* Base range */
     tdis = 13 + tmul / 80;
-    if ((j_ptr->sval == SV_LIGHT_XBOW) || (j_ptr->sval == SV_HEAVY_XBOW)) {
+    if ((sval == SV_LIGHT_XBOW) || (sval == SV_HEAVY_XBOW)) {
         tdis -= (5 - (sniper_concent + 1) / 2);
     }
 
@@ -789,7 +791,9 @@ void exe_fire(PlayerType *player_ptr, INVENTORY_IDX item, ItemEntity *j_ptr, SPE
                     }
 
                     if (snipe_type == SP_NEEDLE) {
-                        if ((randint1(randint1(r_ptr->level / (3 + sniper_concent)) + (8 - sniper_concent)) == 1) && r_ptr->kind_flags.has_not(MonsterKindType::UNIQUE) && none_bits(r_ptr->flags7, RF7_UNIQUE2)) {
+                        const auto is_unique = r_ptr->kind_flags.has(MonsterKindType::UNIQUE);
+                        const auto fatality = randint1(r_ptr->level / (3 + sniper_concent)) + (8 - sniper_concent);
+                        if ((randint1(fatality) == 1) && !is_unique && none_bits(r_ptr->flags7, RF7_UNIQUE2)) {
                             GAME_TEXT m_name[MAX_NLEN];
 
                             /* Get "the monster" or "it" */
@@ -1064,16 +1068,16 @@ bool test_hit_fire(PlayerType *player_ptr, int chance, MonsterEntity *m_ptr, int
  */
 int critical_shot(PlayerType *player_ptr, WEIGHT weight, int plus_ammo, int plus_bow, int dam)
 {
-    int i, k;
     auto *j_ptr = &player_ptr->inventory_list[INVEN_BOW];
 
     /* Extract "shot" power */
-    i = player_ptr->to_h_b + plus_ammo;
-
+    auto i = player_ptr->to_h_b + plus_ammo;
+    const auto tval = j_ptr->bi_key.tval();
+    const auto sval = j_ptr->bi_key.sval().value();
     if (player_ptr->tval_ammo == ItemKindType::BOLT) {
-        i = (player_ptr->skill_thb + (player_ptr->weapon_exp[j_ptr->tval][j_ptr->sval] / 400 + i) * BTH_PLUS_ADJ);
+        i = (player_ptr->skill_thb + (player_ptr->weapon_exp[tval][sval] / 400 + i) * BTH_PLUS_ADJ);
     } else {
-        i = (player_ptr->skill_thb + ((player_ptr->weapon_exp[j_ptr->tval][j_ptr->sval] - (PlayerSkill::weapon_exp_at(PlayerSkillRank::MASTER) / 2)) / 200 + i) * BTH_PLUS_ADJ);
+        i = (player_ptr->skill_thb + ((player_ptr->weapon_exp[tval][sval] - (PlayerSkill::weapon_exp_at(PlayerSkillRank::MASTER) / 2)) / 200 + i) * BTH_PLUS_ADJ);
     }
 
     PlayerClass pc(player_ptr);
@@ -1091,8 +1095,7 @@ int critical_shot(PlayerType *player_ptr, WEIGHT weight, int plus_ammo, int plus
 
     /* Critical hit */
     if (randint1(10000) <= i) {
-        k = weight * randint1(500);
-
+        const auto k = weight * randint1(500);
         if (k < 900) {
             msg_print(_("手ごたえがあった！", "It was a good hit!"));
             dam += (dam / 2);
@@ -1118,16 +1121,16 @@ int critical_shot(PlayerType *player_ptr, WEIGHT weight, int plus_ammo, int plus
  */
 int calc_crit_ratio_shot(PlayerType *player_ptr, int plus_ammo, int plus_bow)
 {
-    int i;
     auto *j_ptr = &player_ptr->inventory_list[INVEN_BOW];
 
     /* Extract "shot" power */
-    i = player_ptr->to_h_b + plus_ammo;
-
+    auto i = player_ptr->to_h_b + plus_ammo;
+    const auto tval = j_ptr->bi_key.tval();
+    const auto sval = j_ptr->bi_key.sval().value();
     if (player_ptr->tval_ammo == ItemKindType::BOLT) {
-        i = (player_ptr->skill_thb + (player_ptr->weapon_exp[j_ptr->tval][j_ptr->sval] / 400 + i) * BTH_PLUS_ADJ);
+        i = (player_ptr->skill_thb + (player_ptr->weapon_exp[tval][sval] / 400 + i) * BTH_PLUS_ADJ);
     } else {
-        i = (player_ptr->skill_thb + ((player_ptr->weapon_exp[j_ptr->tval][j_ptr->sval] - (PlayerSkill::weapon_exp_at(PlayerSkillRank::MASTER) / 2)) / 200 + i) * BTH_PLUS_ADJ);
+        i = (player_ptr->skill_thb + ((player_ptr->weapon_exp[tval][sval] - (PlayerSkill::weapon_exp_at(PlayerSkillRank::MASTER) / 2)) / 200 + i) * BTH_PLUS_ADJ);
     }
 
     PlayerClass pc(player_ptr);
