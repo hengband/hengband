@@ -160,23 +160,21 @@ concptr do_hex_spell(PlayerType *player_ptr, spell_hex_type spell, SpellProcessT
         if (name) {
             return _("武器呪縛", "Curse weapon");
         }
+
         if (description) {
             return _("装備している武器を呪う。", "Curses your weapon.");
         }
+
         if (cast) {
-            OBJECT_IDX item;
-            concptr q, s;
-            GAME_TEXT o_name[MAX_NLEN];
-            ItemEntity *o_ptr;
-
-            q = _("どれを呪いますか？", "Which weapon do you curse?");
-            s = _("武器を装備していない。", "You're not wielding a weapon.");
-
-            o_ptr = choose_object(player_ptr, &item, q, s, (USE_EQUIP), FuncItemTester(&ItemEntity::is_melee_weapon));
-            if (!o_ptr) {
+            const auto q = _("どれを呪いますか？", "Which weapon do you curse?");
+            const auto s = _("武器を装備していない。", "You're not wielding a weapon.");
+            short item;
+            auto *o_ptr = choose_object(player_ptr, &item, q, s, (USE_EQUIP), FuncItemTester(&ItemEntity::is_melee_weapon));
+            if (o_ptr == nullptr) {
                 return "";
             }
 
+            GAME_TEXT o_name[MAX_NLEN];
             describe_flavor(player_ptr, o_name, o_ptr, OD_NAME_ONLY);
             auto f = object_flags(o_ptr);
 
