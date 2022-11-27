@@ -491,7 +491,7 @@ void autopick_entry_from_object(PlayerType *player_ptr, autopick_type *entry, It
         ADD_FLG(FLG_RINGS);
     } else if (tval == ItemKindType::AMULET) {
         ADD_FLG(FLG_AMULETS);
-    } else if (tval == ItemKindType::DRAG_ARMOR || tval == ItemKindType::HARD_ARMOR || tval == ItemKindType::SOFT_ARMOR) {
+    } else if (o_ptr->is_armour()) {
         ADD_FLG(FLG_SUITS);
     } else if (tval == ItemKindType::CLOAK) {
         ADD_FLG(FLG_CLOAKS);

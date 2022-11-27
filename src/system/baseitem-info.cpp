@@ -511,6 +511,18 @@ bool BaseitemKey::is_junk() const
     }
 }
 
+bool BaseitemKey::is_armour() const
+{
+    switch (this->type_value) {
+    case ItemKindType::SOFT_ARMOR:
+    case ItemKindType::HARD_ARMOR:
+    case ItemKindType::DRAG_ARMOR:
+        return true;
+    default:
+        return false;
+    }
+}
+
 bool BaseitemKey::is_mushrooms() const
 {
     if (!this->subtype_value.has_value()) {
