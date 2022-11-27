@@ -10,7 +10,7 @@
 #include "save/save.h"
 #include "store/store-util.h"
 #include "system/angband.h"
-#include "system/object-type-definition.h"
+#include "system/item-entity.h"
 #include "world/world.h"
 
 /*!

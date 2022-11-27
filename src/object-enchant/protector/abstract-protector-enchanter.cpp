@@ -6,7 +6,7 @@
 
 #include "object-enchant/protector/abstract-protector-enchanter.h"
 #include "object-enchant/object-boost.h"
-#include "system/object-type-definition.h"
+#include "system/item-entity.h"
 
 /*
  * @brief コンストラクタ
@@ -14,7 +14,7 @@
  * @param level 生成基準階
  * @param power 生成ランク
  */
-AbstractProtectorEnchanter::AbstractProtectorEnchanter(ObjectType *o_ptr, DEPTH level, int power)
+AbstractProtectorEnchanter::AbstractProtectorEnchanter(ItemEntity *o_ptr, DEPTH level, int power)
     : o_ptr(o_ptr)
     , power(power)
 {

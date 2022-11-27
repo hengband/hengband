@@ -24,8 +24,8 @@
 #include "spell-realm/spells-hex.h"
 #include "spell-realm/spells-song.h"
 #include "status/experience.h"
-#include "system/baseitem-info-definition.h"
-#include "system/object-type-definition.h"
+#include "system/baseitem-info.h"
+#include "system/item-entity.h"
 #include "system/player-type-definition.h"
 #include "term/screen-processor.h"
 #include "view/display-messages.h"
@@ -58,7 +58,7 @@ void ObjectQuaffEntity::execute(INVENTORY_IDX item)
     auto ident = QuaffEffects(this->player_ptr).influence(o_ref);
     if (PlayerRace(this->player_ptr).equals(PlayerRaceType::SKELETON)) {
         msg_print(_("液体の一部はあなたのアゴを素通りして落ちた！", "Some of the fluid falls through your jaws!"));
-        (void)potion_smash_effect(this->player_ptr, 0, this->player_ptr->y, this->player_ptr->x, o_ref.k_idx);
+        (void)potion_smash_effect(this->player_ptr, 0, this->player_ptr->y, this->player_ptr->x, o_ref.bi_id);
     }
 
     this->player_ptr->update |= PU_COMBINE | PU_REORDER;
@@ -66,7 +66,7 @@ void ObjectQuaffEntity::execute(INVENTORY_IDX item)
     object_tried(&o_ref);
     if (ident && !o_ref.is_aware()) {
         object_aware(this->player_ptr, &o_ref);
-        gain_exp(this->player_ptr, (baseitems_info[o_ref.k_idx].level + (this->player_ptr->lev >> 1)) / this->player_ptr->lev);
+        gain_exp(this->player_ptr, (baseitems_info[o_ref.bi_id].level + (this->player_ptr->lev >> 1)) / this->player_ptr->lev);
     }
 
     this->player_ptr->window_flags |= (PW_INVEN | PW_EQUIP | PW_PLAYER);
@@ -111,7 +111,7 @@ bool ObjectQuaffEntity::can_quaff()
     return ItemUseChecker(this->player_ptr).check_stun(_("朦朧としていて瓶の蓋を開けられなかった！", "You are too stunned to quaff it!"));
 }
 
-ObjectType ObjectQuaffEntity::copy_object(const INVENTORY_IDX item)
+ItemEntity ObjectQuaffEntity::copy_object(const INVENTORY_IDX item)
 {
     auto *tmp_o_ptr = ref_item(this->player_ptr, item);
     auto o_val = *tmp_o_ptr;
@@ -119,7 +119,7 @@ ObjectType ObjectQuaffEntity::copy_object(const INVENTORY_IDX item)
     return o_val;
 }
 
-void ObjectQuaffEntity::moisten(const ObjectType &o_ref)
+void ObjectQuaffEntity::moisten(const ItemEntity &o_ref)
 {
     switch (PlayerRace(this->player_ptr).food()) {
     case PlayerRaceFoodType::WATER:
@@ -148,7 +148,7 @@ void ObjectQuaffEntity::moisten(const ObjectType &o_ref)
     }
 }
 
-void ObjectQuaffEntity::change_virtue_as_quaff(const ObjectType &o_ref)
+void ObjectQuaffEntity::change_virtue_as_quaff(const ItemEntity &o_ref)
 {
     if (o_ref.is_aware()) {
         return;

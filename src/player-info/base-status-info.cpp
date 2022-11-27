@@ -11,7 +11,7 @@ void set_equipment_influence(PlayerType *player_ptr, self_info_type *self_ptr)
 {
     for (int k = INVEN_MAIN_HAND; k < INVEN_TOTAL; k++) {
         auto *o_ptr = &player_ptr->inventory_list[k];
-        if (o_ptr->k_idx == 0) {
+        if (o_ptr->bi_id == 0) {
             continue;
         }
 

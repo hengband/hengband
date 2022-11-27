@@ -118,8 +118,8 @@ const concptr window_flag_desc[32] = {
     _("アイテムの詳細", "Display object recall"),
     _("自分の周囲を表示", "Display dungeon view"),
     _("記念撮影", "Display snap-shot"),
-    _("足元/床上のアイテム一覧", "Display items on floor"),
-    nullptr,
+    _("足元/床上のアイテム一覧", "Display items on grid"),
+    _("発見済みのアイテム一覧", "Display found items"),
     nullptr,
     nullptr,
     nullptr,
@@ -501,17 +501,17 @@ static TERM_COLOR spell_color(AttributeType type)
             return mh_attr(2);
         case AttributeType::DISINTEGRATE:
             return 0x05;
-        case AttributeType::PSI: /* fall through */
-        case AttributeType::PSI_DRAIN: /* fall through */
-        case AttributeType::TELEKINESIS: /* fall through */
-        case AttributeType::DOMINATION: /* fall through */
-        case AttributeType::DRAIN_MANA: /* fall through */
-        case AttributeType::MIND_BLAST: /* fall through */
+        case AttributeType::PSI:
+        case AttributeType::PSI_DRAIN:
+        case AttributeType::TELEKINESIS:
+        case AttributeType::DOMINATION:
+        case AttributeType::DRAIN_MANA:
+        case AttributeType::MIND_BLAST:
         case AttributeType::BRAIN_SMASH:
             return 0x09;
-        case AttributeType::CAUSE_1: /* fall through */
-        case AttributeType::CAUSE_2: /* fall through */
-        case AttributeType::CAUSE_3: /* fall through */
+        case AttributeType::CAUSE_1:
+        case AttributeType::CAUSE_2:
+        case AttributeType::CAUSE_3:
         case AttributeType::CAUSE_4:
             return 0x0E;
         case AttributeType::HAND_DOOM:

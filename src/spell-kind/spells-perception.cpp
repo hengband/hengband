@@ -22,12 +22,11 @@
 #include "object/object-mark-types.h"
 #include "perception/identification.h"
 #include "perception/object-perception.h"
-#include "system/object-type-definition.h"
+#include "system/item-entity.h"
 #include "system/player-type-definition.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 #include "world/world.h"
-
 #include <memory>
 
 /*!
@@ -40,7 +39,7 @@ void identify_pack(PlayerType *player_ptr)
 {
     for (INVENTORY_IDX i = 0; i < INVEN_TOTAL; i++) {
         auto *o_ptr = &player_ptr->inventory_list[i];
-        if (!o_ptr->k_idx) {
+        if (!o_ptr->bi_id) {
             continue;
         }
 
@@ -56,7 +55,7 @@ void identify_pack(PlayerType *player_ptr)
  * @param o_ptr 鑑定されるアイテムの情報参照ポインタ
  * @return 実際に鑑定できたらTRUEを返す
  */
-bool identify_item(PlayerType *player_ptr, ObjectType *o_ptr)
+bool identify_item(PlayerType *player_ptr, ItemEntity *o_ptr)
 {
     GAME_TEXT o_name[MAX_NLEN];
     describe_flavor(player_ptr, o_name, o_ptr, 0);
@@ -74,10 +73,10 @@ bool identify_item(PlayerType *player_ptr, ObjectType *o_ptr)
 
     object_aware(player_ptr, o_ptr);
     object_known(o_ptr);
-    set_bits(o_ptr->marked, OM_TOUCHED);
+    o_ptr->marked.set(OmType::TOUCHED);
 
     set_bits(player_ptr->update, PU_BONUS | PU_COMBINE | PU_REORDER);
-    set_bits(player_ptr->window_flags, PW_INVEN | PW_EQUIP | PW_PLAYER | PW_FLOOR_ITEM_LIST);
+    set_bits(player_ptr->window_flags, PW_INVEN | PW_EQUIP | PW_PLAYER | PW_FLOOR_ITEM_LIST | PW_FOUND_ITEM_LIST);
 
     strcpy(record_o_name, o_name);
     record_turn = w_ptr->game_turn;
@@ -113,7 +112,7 @@ bool ident_spell(PlayerType *player_ptr, bool only_equip)
         q = _("どのアイテムを鑑定しますか? ", "Identify which item? ");
     } else {
         if (only_equip) {
-            item_tester = std::make_unique<FuncItemTester>(&ObjectType::is_weapon_armour_ammo);
+            item_tester = std::make_unique<FuncItemTester>(&ItemEntity::is_weapon_armour_ammo);
         } else {
             item_tester = std::make_unique<AllMatchItemTester>();
         }
@@ -122,7 +121,7 @@ bool ident_spell(PlayerType *player_ptr, bool only_equip)
 
     concptr s = _("鑑定するべきアイテムがない。", "You have nothing to identify.");
     OBJECT_IDX item;
-    ObjectType *o_ptr;
+    ItemEntity *o_ptr;
     o_ptr = choose_object(player_ptr, &item, q, s, (USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT), *item_tester);
     if (!o_ptr) {
         return false;
@@ -163,7 +162,7 @@ bool identify_fully(PlayerType *player_ptr, bool only_equip)
         q = _("どのアイテムを*鑑定*しますか? ", "*Identify* which item? ");
     } else {
         if (only_equip) {
-            item_tester = std::make_unique<FuncItemTester>(&ObjectType::is_weapon_armour_ammo);
+            item_tester = std::make_unique<FuncItemTester>(&ItemEntity::is_weapon_armour_ammo);
         } else {
             item_tester = std::make_unique<AllMatchItemTester>();
         }
@@ -173,7 +172,7 @@ bool identify_fully(PlayerType *player_ptr, bool only_equip)
     concptr s = _("*鑑定*するべきアイテムがない。", "You have nothing to *identify*.");
 
     OBJECT_IDX item;
-    ObjectType *o_ptr;
+    ItemEntity *o_ptr;
     o_ptr = choose_object(player_ptr, &item, q, s, (USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT), *item_tester);
     if (!o_ptr) {
         return false;

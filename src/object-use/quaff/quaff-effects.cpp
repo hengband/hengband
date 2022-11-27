@@ -35,7 +35,7 @@
 #include "status/sight-setter.h"
 #include "sv-definition/sv-potion-types.h"
 #include "system/angband.h"
-#include "system/object-type-definition.h"
+#include "system/item-entity.h"
 #include "system/player-type-definition.h"
 #include "timed-effect/player-acceleration.h"
 #include "timed-effect/player-poison.h"
@@ -48,7 +48,7 @@ QuaffEffects::QuaffEffects(PlayerType *player_ptr)
 {
 }
 
-bool QuaffEffects::influence(const ObjectType &o_ref)
+bool QuaffEffects::influence(const ItemEntity &o_ref)
 {
     if (o_ref.tval != ItemKindType::POTION) {
         return false;

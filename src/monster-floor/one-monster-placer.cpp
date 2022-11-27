@@ -40,7 +40,7 @@
 #include "player/player-status.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
-#include "system/monster-race-definition.h"
+#include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
@@ -234,7 +234,7 @@ static void warn_unique_generation(PlayerType *player_ptr, MonsterRaceId r_idx)
     }
 
     concptr color;
-    ObjectType *o_ptr;
+    ItemEntity *o_ptr;
     GAME_TEXT o_name[MAX_NLEN];
     if (r_ptr->level > player_ptr->lev + 30) {
         color = _("黒く", "black");
@@ -299,7 +299,7 @@ bool place_monster_one(PlayerType *player_ptr, MONSTER_IDX who, POSITION y, POSI
         return false;
     }
 
-    monster_type *m_ptr;
+    MonsterEntity *m_ptr;
     m_ptr = &floor_ptr->m_list[g_ptr->m_idx];
     m_ptr->r_idx = r_idx;
     m_ptr->ap_r_idx = initial_r_appearance(player_ptr, r_idx, mode);

@@ -21,8 +21,8 @@
 #include "player-base/player-class.h"
 #include "player-status/player-energy.h"
 #include "status/experience.h"
-#include "system/baseitem-info-definition.h"
-#include "system/object-type-definition.h"
+#include "system/baseitem-info.h"
+#include "system/item-entity.h"
 #include "system/player-type-definition.h"
 #include "term/screen-processor.h"
 #include "timed-effect/player-confusion.h"
@@ -59,7 +59,7 @@ void ObjectUseEntity::execute()
         return;
     }
 
-    auto lev = baseitems_info[o_ptr->k_idx].level;
+    auto lev = baseitems_info[o_ptr->bi_id].level;
     if (lev > 50) {
         lev = 50 + (lev - 50) / 2;
     }
@@ -117,7 +117,7 @@ void ObjectUseEntity::execute()
         gain_exp(this->player_ptr, (lev + (this->player_ptr->lev >> 1)) / this->player_ptr->lev);
     }
 
-    set_bits(this->player_ptr->window_flags, PW_INVEN | PW_EQUIP | PW_PLAYER | PW_FLOOR_ITEM_LIST);
+    set_bits(this->player_ptr->window_flags, PW_INVEN | PW_EQUIP | PW_PLAYER | PW_FLOOR_ITEM_LIST | PW_FOUND_ITEM_LIST);
     set_bits(this->player_ptr->update, inventory_flags);
     if (!use_charge) {
         return;
@@ -125,7 +125,7 @@ void ObjectUseEntity::execute()
 
     o_ptr->pval--;
     if ((this->item >= 0) && (o_ptr->number > 1)) {
-        ObjectType forge;
+        ItemEntity forge;
         auto *q_ptr = &forge;
         q_ptr->copy_from(o_ptr);
         q_ptr->number = 1;
@@ -136,7 +136,7 @@ void ObjectUseEntity::execute()
     }
 
     if (this->item >= 0) {
-        inven_item_charges(this->player_ptr, this->item);
+        inven_item_charges(this->player_ptr->inventory_list[this->item]);
     } else {
         floor_item_charges(this->player_ptr->current_floor_ptr, 0 - this->item);
     }

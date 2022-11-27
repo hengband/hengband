@@ -1,9 +1,8 @@
 ﻿#pragma once
 
+#include "store/store-util.h"
 #include "system/angband.h"
 #include <vector>
-
-struct store_type;
 
 /*
  * A structure describing a town with

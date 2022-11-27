@@ -47,12 +47,12 @@
 #include "status/body-improvement.h"
 #include "status/element-resistance.h"
 #include "status/temporary-resistance.h"
-#include "system/baseitem-info-definition.h"
+#include "system/baseitem-info.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
-#include "system/monster-race-definition.h"
-#include "system/monster-type-definition.h"
-#include "system/object-type-definition.h"
+#include "system/item-entity.h"
+#include "system/monster-entity.h"
+#include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
 #include "system/terrain-type-definition.h"
 #include "target/projection-path-calculator.h"
@@ -80,7 +80,7 @@ bool kawarimi(PlayerType *player_ptr, bool success)
         return false;
     }
 
-    ObjectType forge;
+    ItemEntity forge;
     auto *q_ptr = &forge;
     if (player_ptr->is_dead) {
         return false;
@@ -171,7 +171,7 @@ bool rush_attack(PlayerType *player_ptr, bool *mdeath)
     bool tmp_mdeath = false;
     bool moved = false;
     for (const auto &[ny, nx] : path_g) {
-        monster_type *m_ptr;
+        MonsterEntity *m_ptr;
 
         if (is_cave_empty_bold(player_ptr, ny, nx) && player_can_enter(player_ptr, floor_ptr->grid_array[ny][nx].feat, 0)) {
             ty = ny;

@@ -109,7 +109,7 @@
       <WarningLevel>EnableAllWarnings</WarningLevel>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <CompileAs>CompileAsCpp</CompileAs>
-      <DisableSpecificWarnings>4061;4062;4127;4244;4255;4365;4514;4668;4710;4820;4996;4774;5045;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4061;4062;4127;4244;4255;4365;4514;4668;4710;4820;4996;4774;5045;5264;%(DisableSpecificWarnings)</DisableSpecificWarnings>
       <ConformanceMode>true</ConformanceMode>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <AdditionalIncludeDirectories>..\..\src;curl\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
@@ -593,8 +593,8 @@
     <ClCompile Include="..\..\src\store\sell-order.cpp" />
     <ClCompile Include="..\..\src\store\service-checker.cpp" />
     <ClCompile Include="..\..\src\system\angband-version.cpp" />
-    <ClCompile Include="..\..\src\system\monster-type-definition.cpp" />
-    <ClCompile Include="..\..\src\system\object-type-definition.cpp" />
+    <ClCompile Include="..\..\src\system\monster-entity.cpp" />
+    <ClCompile Include="..\..\src\system\item-entity.cpp" />
     <ClCompile Include="..\..\src\system\player-type-definition.cpp" />
     <ClCompile Include="..\..\src\system\terrain-type-definition.cpp" />
     <ClCompile Include="..\..\src\target\grid-selector.cpp" />
@@ -703,7 +703,6 @@
     <ClCompile Include="..\..\src\object-enchant\weapon\apply-magic-bow.cpp" />
     <ClCompile Include="..\..\src\object-enchant\item-magic-applier.cpp" />
     <ClCompile Include="..\..\src\player\eldritch-horror.cpp" />
-    <ClCompile Include="..\..\src\specific-object\bow.cpp" />
     <ClCompile Include="..\..\src\object\object-stack.cpp" />
     <ClCompile Include="..\..\src\object\object-value-calc.cpp" />
     <ClCompile Include="..\..\src\perception\object-perception.cpp" />
@@ -906,7 +905,7 @@
     <ClCompile Include="..\..\src\object-enchant\object-ego.cpp" />
     <ClCompile Include="..\..\src\flavor\object-flavor.cpp" />
     <ClCompile Include="..\..\src\object\item-tester-hooker.cpp" />
-    <ClCompile Include="..\..\src\system\baseitem-info-definition.cpp" />
+    <ClCompile Include="..\..\src\system\baseitem-info.cpp" />
     <ClCompile Include="..\..\src\object\object-kind-hook.cpp" />
     <ClCompile Include="..\..\src\object\object-broken.cpp" />
     <ClCompile Include="..\..\src\object\lite-processor.cpp" />
@@ -1517,7 +1516,6 @@
     <ClInclude Include="..\..\src\object-enchant\item-magic-applier.h" />
     <ClInclude Include="..\..\src\player\eldritch-horror.h" />
     <ClInclude Include="..\..\src\realm\realm-types.h" />
-    <ClInclude Include="..\..\src\specific-object\bow.h" />
     <ClInclude Include="..\..\src\object\object-stack.h" />
     <ClInclude Include="..\..\src\object\object-value-calc.h" />
     <ClInclude Include="..\..\src\perception\object-perception.h" />
@@ -1560,8 +1558,8 @@
     <ClInclude Include="..\..\src\object\object-mark-types.h" />
     <ClInclude Include="..\..\src\system\building-type-definition.h" />
     <ClInclude Include="..\..\src\system\game-option-types.h" />
-    <ClInclude Include="..\..\src\system\monster-race-definition.h" />
-    <ClInclude Include="..\..\src\system\object-type-definition.h" />
+    <ClInclude Include="..\..\src\system\monster-race-info.h" />
+    <ClInclude Include="..\..\src\system\item-entity.h" />
     <ClInclude Include="..\..\src\object-enchant\old-ego-extra-values.h" />
     <ClInclude Include="..\..\src\object-enchant\special-object-flags.h" />
     <ClInclude Include="..\..\src\realm\realm-hex-numbers.h" />
@@ -1728,7 +1726,6 @@
     <ClCompile Include="..\..\src\util\angband-files.cpp" />
     <ClCompile Include="..\..\src\util\object-sort.cpp" />
     <ClCompile Include="..\..\src\util\string-processor.cpp" />
-    <ClCompile Include="..\..\src\util\tag-sorter.cpp" />
     <ClCompile Include="..\..\src\view\display-birth.cpp" />
     <ClCompile Include="..\..\src\view\display-characteristic.cpp" />
     <ClCompile Include="..\..\src\view\display-fruit.cpp" />
@@ -1809,7 +1806,6 @@
     <ClInclude Include="..\..\src\util\object-sort.h" />
     <ClInclude Include="..\..\src\util\rng-xoshiro.h" />
     <ClInclude Include="..\..\src\util\string-processor.h" />
-    <ClInclude Include="..\..\src\util\tag-sorter.h" />
     <ClInclude Include="..\..\src\view\display-birth.h" />
     <ClInclude Include="..\..\src\view\display-inventory.h" />
     <ClInclude Include="..\..\src\view\display-lore-attacks.h" />
@@ -1942,7 +1938,7 @@
     <ClInclude Include="..\..\src\cmd-action\cmd-mind.h" />
     <ClInclude Include="..\..\src\monster\monster-processor.h" />
     <ClInclude Include="..\..\src\monster\monster-status.h" />
-    <ClInclude Include="..\..\src\system\monster-type-definition.h" />
+    <ClInclude Include="..\..\src\system\monster-entity.h" />
     <ClInclude Include="..\..\src\monster-race\monster-race-hook.h" />
     <ClInclude Include="..\..\src\monster-race\monster-race.h" />
     <ClInclude Include="..\..\src\mutation\mutation-calculator.h" />
@@ -1953,7 +1949,7 @@
     <ClInclude Include="..\..\src\object\object-broken.h" />
     <ClInclude Include="..\..\src\object\object-info.h" />
     <ClInclude Include="..\..\src\object\object-kind-hook.h" />
-    <ClInclude Include="..\..\src\system\baseitem-info-definition.h" />
+    <ClInclude Include="..\..\src\system\baseitem-info.h" />
     <ClInclude Include="..\..\src\player\patron.h" />
     <ClInclude Include="..\..\src\player-info\class-info.h" />
     <ClInclude Include="..\..\src\player\player-damage.h" />

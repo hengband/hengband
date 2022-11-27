@@ -2,9 +2,9 @@
 #include "object-enchant/object-boost.h"
 #include "object/tval-types.h"
 #include "sv-definition/sv-weapon-types.h"
-#include "system/object-type-definition.h"
+#include "system/item-entity.h"
 
-AbstractWeaponEnchanter::AbstractWeaponEnchanter(ObjectType *o_ptr, DEPTH level, int power)
+AbstractWeaponEnchanter::AbstractWeaponEnchanter(ItemEntity *o_ptr, DEPTH level, int power)
     : o_ptr(o_ptr)
     , level(level)
     , power(power)
@@ -32,7 +32,7 @@ void AbstractWeaponEnchanter::give_killing_bonus()
     auto tohit2 = static_cast<short>(m_bonus(10, this->level));
     auto todam2 = static_cast<short>(m_bonus(10, this->level));
 
-    if ((this->o_ptr->tval == ItemKindType::BOLT) || (this->o_ptr->tval == ItemKindType::ARROW) || (this->o_ptr->tval == ItemKindType::SHOT)) {
+    if (this->o_ptr->is_ammo()) {
         tohit2 = (tohit2 + 1) / 2;
         todam2 = (todam2 + 1) / 2;
     }

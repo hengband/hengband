@@ -96,7 +96,7 @@ errr parse_artifacts_info(std::string_view buf, angband_header *)
 
         const auto it = artifacts_info.rbegin();
         auto &a_ref = it->second;
-        a_ref.text.append(buf.substr(2));
+        a_ref.text.append(tokens[1]);
 #else
         if (tokens[1][0] != '$') {
             return PARSE_ERROR_NONE;
@@ -104,7 +104,7 @@ errr parse_artifacts_info(std::string_view buf, angband_header *)
 
         const auto it = artifacts_info.rbegin();
         auto &a_ref = it->second;
-        append_english_text(a_ref.text, buf.substr(3));
+        append_english_text(a_ref.text, tokens[1].substr(1));
 #endif
         return PARSE_ERROR_NONE;
     }
@@ -117,8 +117,10 @@ errr parse_artifacts_info(std::string_view buf, angband_header *)
 
         const auto it = artifacts_info.rbegin();
         auto &a_ref = it->second;
-        info_set_value(a_ref.tval, tokens[1]);
-        info_set_value(a_ref.sval, tokens[2]);
+        constexpr auto base = 10;
+        const auto tval = i2enum<ItemKindType>(std::stoi(tokens[1], nullptr, base));
+        const auto sval = std::stoi(tokens[2], nullptr, base);
+        a_ref.bi_key = { tval, sval };
         info_set_value(a_ref.pval, tokens[3]);
         return PARSE_ERROR_NONE;
     }

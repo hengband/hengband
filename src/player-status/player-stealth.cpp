@@ -13,7 +13,7 @@
 #include "player/player-status.h"
 #include "player/race-info-table.h"
 #include "spell-realm/spells-hex.h"
-#include "system/object-type-definition.h"
+#include "system/item-entity.h"
 #include "system/player-type-definition.h"
 #include "util/bit-flags-calculator.h"
 #include "util/enum-converter.h"
@@ -74,7 +74,7 @@ int16_t PlayerStealth::class_bonus()
     int16_t bonus = 0;
     if (heavy_armor(this->player_ptr)) {
         bonus -= (this->player_ptr->lev) / 10;
-    } else if ((!this->player_ptr->inventory_list[INVEN_MAIN_HAND].k_idx || can_attack_with_main_hand(this->player_ptr)) && (!this->player_ptr->inventory_list[INVEN_SUB_HAND].k_idx || can_attack_with_sub_hand(this->player_ptr))) {
+    } else if ((!this->player_ptr->inventory_list[INVEN_MAIN_HAND].bi_id || can_attack_with_main_hand(this->player_ptr)) && (!this->player_ptr->inventory_list[INVEN_SUB_HAND].bi_id || can_attack_with_sub_hand(this->player_ptr))) {
         bonus += (this->player_ptr->lev) / 10;
     }
 

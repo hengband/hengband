@@ -2,7 +2,7 @@
 #include "floor/floor-town.h"
 #include "store/store-owners.h"
 #include "store/store-util.h"
-#include "system/object-type-definition.h"
+#include "system/item-entity.h"
 #include "system/player-type-definition.h"
 
 /*!
@@ -17,7 +17,7 @@
  * Based on a suggestion by "Lee Vogt" <lvogt@cig.mcel.mot.com>
  * </pre>
  */
-bool black_market_crap(PlayerType *player_ptr, ObjectType *o_ptr)
+bool black_market_crap(PlayerType *player_ptr, ItemEntity *o_ptr)
 {
     if (o_ptr->is_ego()) {
         return false;
@@ -42,7 +42,7 @@ bool black_market_crap(PlayerType *player_ptr, ObjectType *o_ptr)
 
         for (int j = 0; j < town_info[player_ptr->town_num].store[enum2i(sst)].stock_num; j++) {
             auto *j_ptr = &town_info[player_ptr->town_num].store[enum2i(sst)].stock[j];
-            if (o_ptr->k_idx == j_ptr->k_idx) {
+            if (o_ptr->bi_id == j_ptr->bi_id) {
                 return true;
             }
         }

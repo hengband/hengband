@@ -13,7 +13,7 @@
 #include "object/item-tester-hooker.h"
 #include "object/item-use-flags.h"
 #include "system/floor-type-definition.h"
-#include "system/object-type-definition.h"
+#include "system/item-entity.h"
 #include "system/player-type-definition.h"
 #include "util/int-char-converter.h"
 #include "util/quarks.h"
@@ -124,7 +124,7 @@ bool get_tag(PlayerType *player_ptr, COMMAND_CODE *cp, char tag, BIT_FLAGS mode,
 
     for (COMMAND_CODE i = start; i <= end; i++) {
         auto *o_ptr = &player_ptr->inventory_list[i];
-        if ((o_ptr->k_idx == 0) || (o_ptr->inscription == 0)) {
+        if ((o_ptr->bi_id == 0) || (o_ptr->inscription == 0)) {
             continue;
         }
 
@@ -149,7 +149,7 @@ bool get_tag(PlayerType *player_ptr, COMMAND_CODE *cp, char tag, BIT_FLAGS mode,
 
     for (COMMAND_CODE i = start; i <= end; i++) {
         auto *o_ptr = &player_ptr->inventory_list[i];
-        if ((o_ptr->k_idx == 0) || (o_ptr->inscription == 0)) {
+        if ((o_ptr->bi_id == 0) || (o_ptr->inscription == 0)) {
             continue;
         }
 
@@ -204,7 +204,7 @@ bool get_item_allow(PlayerType *player_ptr, INVENTORY_IDX item)
         return true;
     }
 
-    ObjectType *o_ptr;
+    ItemEntity *o_ptr;
     if (item >= 0) {
         o_ptr = &player_ptr->inventory_list[item];
     } else {
@@ -247,7 +247,7 @@ INVENTORY_IDX label_to_equipment(PlayerType *player_ptr, int c)
         return is_ring_slot(i) ? i : -1;
     }
 
-    if (!player_ptr->inventory_list[i].k_idx) {
+    if (!player_ptr->inventory_list[i].bi_id) {
         return -1;
     }
 
@@ -266,7 +266,7 @@ INVENTORY_IDX label_to_inventory(PlayerType *player_ptr, int c)
 {
     INVENTORY_IDX i = (INVENTORY_IDX)(islower(c) ? A2I(c) : -1);
 
-    if ((i < 0) || (i > INVEN_PACK) || (player_ptr->inventory_list[i].k_idx == 0)) {
+    if ((i < 0) || (i > INVEN_PACK) || (player_ptr->inventory_list[i].bi_id == 0)) {
         return -1;
     }
 
@@ -286,7 +286,7 @@ bool verify(PlayerType *player_ptr, concptr prompt, INVENTORY_IDX item)
 {
     GAME_TEXT o_name[MAX_NLEN];
     char out_val[MAX_NLEN + 20];
-    ObjectType *o_ptr;
+    ItemEntity *o_ptr;
     if (item >= 0) {
         o_ptr = &player_ptr->inventory_list[item];
     } else {

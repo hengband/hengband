@@ -11,9 +11,9 @@
 #include "monster/monster-status.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
-#include "system/monster-race-definition.h"
-#include "system/monster-type-definition.h"
-#include "system/object-type-definition.h"
+#include "system/item-entity.h"
+#include "system/monster-entity.h"
+#include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
 #include "target/target-checker.h"
 #include "view/display-messages.h"
@@ -31,7 +31,7 @@ static void compact_monsters_aux(PlayerType *player_ptr, MONSTER_IDX i1, MONSTER
     }
 
     auto *floor_ptr = player_ptr->current_floor_ptr;
-    monster_type *m_ptr;
+    MonsterEntity *m_ptr;
     m_ptr = &floor_ptr->m_list[i1];
 
     POSITION y = m_ptr->fy;
@@ -41,7 +41,7 @@ static void compact_monsters_aux(PlayerType *player_ptr, MONSTER_IDX i1, MONSTER
     g_ptr->m_idx = i2;
 
     for (const auto this_o_idx : m_ptr->hold_o_idx_list) {
-        ObjectType *o_ptr;
+        ItemEntity *o_ptr;
         o_ptr = &floor_ptr->o_list[this_o_idx];
         o_ptr->held_m_idx = i2;
     }
@@ -67,7 +67,7 @@ static void compact_monsters_aux(PlayerType *player_ptr, MONSTER_IDX i1, MONSTER
 
     if (m_ptr->is_pet()) {
         for (int i = 1; i < floor_ptr->m_max; i++) {
-            monster_type *m2_ptr = &floor_ptr->m_list[i];
+            MonsterEntity *m2_ptr = &floor_ptr->m_list[i];
 
             if (m2_ptr->parent_m_idx == i1) {
                 m2_ptr->parent_m_idx = i2;

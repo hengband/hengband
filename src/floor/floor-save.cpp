@@ -18,8 +18,8 @@
 #include "monster/monster-info.h"
 #include "monster/monster-status.h"
 #include "system/floor-type-definition.h"
-#include "system/monster-race-definition.h"
-#include "system/monster-type-definition.h"
+#include "system/monster-entity.h"
+#include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
 #include "util/angband-files.h"
 #include "view/display-messages.h"
@@ -210,7 +210,7 @@ FLOOR_IDX get_new_floor_id(PlayerType *player_ptr)
  */
 void precalc_cur_num_of_pet(PlayerType *player_ptr)
 {
-    monster_type *m_ptr;
+    MonsterEntity *m_ptr;
     int max_num = player_ptr->wild_mode ? 1 : MAX_PARTY_MON;
     for (int i = 0; i < max_num; i++) {
         m_ptr = &party_mon[i];

@@ -10,7 +10,7 @@
 #include "object/object-stack.h"
 #include "player/player-status.h"
 #include "system/floor-type-definition.h"
-#include "system/object-type-definition.h"
+#include "system/item-entity.h"
 #include "system/player-type-definition.h"
 #include "view/display-messages.h"
 
@@ -29,7 +29,7 @@ void inventory_damage(PlayerType *player_ptr, const ObjectBreaker &breaker, int 
 {
     INVENTORY_IDX i;
     int j, amt;
-    ObjectType *o_ptr;
+    ItemEntity *o_ptr;
     GAME_TEXT o_name[MAX_NLEN];
 
     if (check_multishadow(player_ptr) || player_ptr->current_floor_ptr->inside_arena) {
@@ -39,7 +39,7 @@ void inventory_damage(PlayerType *player_ptr, const ObjectBreaker &breaker, int 
     /* Scan through the slots backwards */
     for (i = 0; i < INVEN_PACK; i++) {
         o_ptr = &player_ptr->inventory_list[i];
-        if (!o_ptr->k_idx) {
+        if (!o_ptr->bi_id) {
             continue;
         }
 
@@ -89,7 +89,7 @@ void inventory_damage(PlayerType *player_ptr, const ObjectBreaker &breaker, int 
 
         /* Potions smash open */
         if (o_ptr->is_potion()) {
-            (void)potion_smash_effect(player_ptr, 0, player_ptr->y, player_ptr->x, o_ptr->k_idx);
+            (void)potion_smash_effect(player_ptr, 0, player_ptr->y, player_ptr->x, o_ptr->bi_id);
         }
 
         /* Reduce the charges of rods/wands */

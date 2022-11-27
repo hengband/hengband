@@ -2,7 +2,7 @@
 
 #include "system/angband.h"
 
-class ObjectType;
+class ItemEntity;
 class PlayerType;
 class ObjectQuaffEntity {
 public:
@@ -16,7 +16,7 @@ private:
 
     bool can_influence();
     bool can_quaff();
-    ObjectType copy_object(const INVENTORY_IDX item);
-    void moisten(const ObjectType &o_ref);
-    void change_virtue_as_quaff(const ObjectType &o_ref);
+    ItemEntity copy_object(const INVENTORY_IDX item);
+    void moisten(const ItemEntity &o_ref);
+    void change_virtue_as_quaff(const ItemEntity &o_ref);
 };

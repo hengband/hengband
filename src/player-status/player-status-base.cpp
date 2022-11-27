@@ -2,7 +2,7 @@
 #include "inventory/inventory-slot-types.h"
 #include "object/object-flags.h"
 #include "player/player-status.h"
-#include "system/object-type-definition.h"
+#include "system/item-entity.h"
 #include "system/player-type-definition.h"
 #include "util/bit-flags-calculator.h"
 
@@ -213,7 +213,7 @@ BIT_FLAGS PlayerStatusBase::equipments_flags(tr_type check_flag)
     BIT_FLAGS flags = 0;
     for (int i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
         auto *o_ptr = &player_ptr->inventory_list[i];
-        if (!o_ptr->k_idx) {
+        if (!o_ptr->bi_id) {
             continue;
         }
 
@@ -236,7 +236,7 @@ BIT_FLAGS PlayerStatusBase::equipments_bad_flags(tr_type check_flag)
     BIT_FLAGS flags = 0;
     for (int i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
         auto *o_ptr = &player_ptr->inventory_list[i];
-        if (!o_ptr->k_idx) {
+        if (!o_ptr->bi_id) {
             continue;
         }
 
@@ -262,7 +262,7 @@ int16_t PlayerStatusBase::equipments_bonus()
     for (int i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
         auto *o_ptr = &player_ptr->inventory_list[i];
         auto o_flags = object_flags(o_ptr);
-        if (!o_ptr->k_idx) {
+        if (!o_ptr->bi_id) {
             continue;
         }
 

@@ -9,7 +9,7 @@
 #include "object-hook/hook-armor.h"
 #include "object-hook/hook-weapon.h"
 #include "object/object-flags.h"
-#include "system/object-type-definition.h"
+#include "system/item-entity.h"
 #include "system/player-type-definition.h"
 #include "util/bit-flags-calculator.h"
 #include "util/enum-converter.h"
@@ -26,7 +26,7 @@ const EnumClassFlagGroup<CurseTraitType> TRC_HEAVY_MASK({ CurseTraitType::TY_CUR
  * @param o_ptr 呪いをかけられる装備オブジェクトの構造体参照ポインタ
  * @return 与える呪いのID
  */
-CurseTraitType get_curse(int power, ObjectType *o_ptr)
+CurseTraitType get_curse(int power, ItemEntity *o_ptr)
 {
     CurseTraitType new_curse;
 
@@ -49,7 +49,7 @@ CurseTraitType get_curse(int power, ObjectType *o_ptr)
         if (new_curse == CurseTraitType::LOW_MELEE && !o_ptr->is_weapon()) {
             continue;
         }
-        if (new_curse == CurseTraitType::LOW_AC && !o_ptr->is_armour()) {
+        if (new_curse == CurseTraitType::LOW_AC && !o_ptr->is_protector()) {
             continue;
         }
         break;
@@ -71,7 +71,7 @@ void curse_equipment(PlayerType *player_ptr, PERCENTAGE chance, PERCENTAGE heavy
     }
 
     auto *o_ptr = &player_ptr->inventory_list[INVEN_MAIN_HAND + randint0(12)];
-    if (!o_ptr->k_idx) {
+    if (!o_ptr->bi_id) {
         return;
     }
     auto oflgs = object_flags(o_ptr);

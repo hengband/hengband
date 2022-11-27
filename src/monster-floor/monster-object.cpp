@@ -24,12 +24,13 @@
 #include "object/object-mark-types.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
-#include "system/monster-race-definition.h"
-#include "system/monster-type-definition.h"
-#include "system/object-type-definition.h"
+#include "system/item-entity.h"
+#include "system/monster-entity.h"
+#include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
+#include <core/window-redrawer.h>
 
 /*!
  * @brief オブジェクトのフラグを更新する
@@ -126,7 +127,7 @@ static void update_object_flags(const TrFlags &flgs, EnumClassFlagGroup<MonsterK
  * @param o_name アイテム名
  * @param this_o_idx モンスターが乗ったオブジェクトID
  */
-static void monster_pickup_object(PlayerType *player_ptr, turn_flags *turn_flags_ptr, const MONSTER_IDX m_idx, ObjectType *o_ptr, const bool is_unpickable_object,
+static void monster_pickup_object(PlayerType *player_ptr, turn_flags *turn_flags_ptr, const MONSTER_IDX m_idx, ItemEntity *o_ptr, const bool is_unpickable_object,
     const POSITION ny, const POSITION nx, const GAME_TEXT *m_name, const GAME_TEXT *o_name, const OBJECT_IDX this_o_idx)
 {
     auto *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
@@ -149,10 +150,12 @@ static void monster_pickup_object(PlayerType *player_ptr, turn_flags *turn_flags
         }
 
         excise_object_idx(player_ptr->current_floor_ptr, this_o_idx);
-        o_ptr->marked &= OM_TOUCHED;
+        // 意図としては OmType::TOUCHED を維持しつつ OmType::FOUND を消す事と思われるが一応元のロジックを維持しておく
+        o_ptr->marked &= { OmType::TOUCHED };
         o_ptr->iy = o_ptr->ix = 0;
         o_ptr->held_m_idx = m_idx;
         m_ptr->hold_o_idx_list.add(player_ptr->current_floor_ptr, this_o_idx);
+        player_ptr->window_flags |= PW_FOUND_ITEM_LIST;
         return;
     }
 
@@ -215,12 +218,12 @@ void update_object_by_monster_movement(PlayerType *player_ptr, turn_flags *turn_
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param m_ptr モンスター参照ポインタ
  */
-void monster_drop_carried_objects(PlayerType *player_ptr, monster_type *m_ptr)
+void monster_drop_carried_objects(PlayerType *player_ptr, MonsterEntity *m_ptr)
 {
     for (auto it = m_ptr->hold_o_idx_list.begin(); it != m_ptr->hold_o_idx_list.end();) {
-        ObjectType forge;
-        ObjectType *o_ptr;
-        ObjectType *q_ptr;
+        ItemEntity forge;
+        ItemEntity *o_ptr;
+        ItemEntity *q_ptr;
         const OBJECT_IDX this_o_idx = *it++;
         o_ptr = &player_ptr->current_floor_ptr->o_list[this_o_idx];
         q_ptr = &forge;

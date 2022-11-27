@@ -8,8 +8,8 @@
 #include <vector>
 
 enum class MonsterRaceId : int16_t;
-struct monster_race;
-struct monster_type;
+class MonsterRaceInfo;
+class MonsterEntity;
 class PlayerType;
 typedef std::vector<std::tuple<MonsterRaceId, MonsterRaceId, MonsterRaceId>> combined_uniques;
 class MonsterDamageProcessor {
@@ -25,9 +25,9 @@ private:
     int dam;
     bool *fear;
     AttributeFlags attribute_flags{};
-    void get_exp_from_mon(monster_type *m_ptr, int exp_dam);
+    void get_exp_from_mon(MonsterEntity *m_ptr, int exp_dam);
     bool genocide_chaos_patron();
-    bool process_dead_exp_virtue(concptr note, monster_type *exp_mon);
+    bool process_dead_exp_virtue(concptr note, MonsterEntity *exp_mon);
     void death_special_flag_monster();
     void death_unique_monster(MonsterRaceId r_idx);
     bool check_combined_unique(const MonsterRaceId r_idx, std::vector<MonsterRaceId> *combined_uniques);

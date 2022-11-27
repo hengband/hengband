@@ -17,7 +17,7 @@ void set_class_ability_info(PlayerType *player_ptr, self_info_type *self_ptr)
         if (player_ptr->realm1 == REALM_HEX) {
             break;
         }
-        /* Fall through */
+        [[fallthrough]];
     case PlayerClassType::MAGE:
     case PlayerClassType::SORCERER:
         if (player_ptr->lev > 24) {

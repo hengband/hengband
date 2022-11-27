@@ -18,9 +18,10 @@ enum window_redraw_type {
     PW_OBJECT          = 1U <<  9, /*!<サブウィンドウ描画フラグ: アイテムの知識 / Display object recall */
     PW_DUNGEON         = 1U << 10, /*!<サブウィンドウ描画フラグ: ダンジョンの地形 / Display dungeon view */
     PW_SNAPSHOT        = 1U << 11, /*!<サブウィンドウ描画フラグ: 記念写真 / Display snap-shot */
-    PW_FLOOR_ITEM_LIST = 1U << 12, /*!<サブウィンドウ描画フラグ: 床上のアイテム一覧 / Display items at feet */
+    PW_FLOOR_ITEM_LIST = 1U << 12, /*!<サブウィンドウ描画フラグ: 床上のアイテム一覧 / Display items on grid */
+    PW_FOUND_ITEM_LIST = 1U << 13, /*!<サブウィンドウ描画フラグ: 発見済みのアイテム一覧 / Display found items*/
 
-    PW_ALL = (PW_INVEN | PW_EQUIP | PW_SPELL | PW_PLAYER | PW_MONSTER_LIST | PW_MESSAGE | PW_OVERHEAD | PW_MONSTER | PW_OBJECT | PW_DUNGEON | PW_SNAPSHOT | PW_FLOOR_ITEM_LIST),
+    PW_ALL = (PW_INVEN | PW_EQUIP | PW_SPELL | PW_PLAYER | PW_MONSTER_LIST | PW_MESSAGE | PW_OVERHEAD | PW_MONSTER | PW_OBJECT | PW_DUNGEON | PW_SNAPSHOT | PW_FLOOR_ITEM_LIST | PW_FOUND_ITEM_LIST),
 };
 
 // clang-format on

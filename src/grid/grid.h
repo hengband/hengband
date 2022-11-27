@@ -45,7 +45,7 @@ enum grid_bold_type {
 class FloorType;
 struct grid_type;
 class PlayerType;
-struct monster_race;
+class MonsterRaceInfo;
 enum class TerrainCharacteristics;
 bool new_player_spot(PlayerType *player_ptr);
 bool is_hidden_door(PlayerType *player_ptr, grid_type *g_ptr);

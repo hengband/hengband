@@ -4,7 +4,7 @@
 #include "load/monster/monster-loader-factory.h"
 #include "load/old/monster-loader-savefile50.h"
 #include "system/floor-type-definition.h"
-#include "system/monster-type-definition.h"
+#include "system/monster-entity.h"
 #include "system/player-type-definition.h"
 
 /*!
@@ -41,7 +41,7 @@ void rd_dummy_monsters(PlayerType *player_ptr)
     }
 
     auto tmp16s = rd_s16b();
-    monster_type dummy_mon;
+    MonsterEntity dummy_mon;
     auto monster_loader = MonsterLoaderFactory::create_loader(player_ptr);
     for (int i = 0; i < tmp16s; i++) {
         monster_loader->rd_monster(&dummy_mon);

@@ -8,7 +8,7 @@
 #include "object/object-flags.h"
 #include "object/object-info.h"
 #include "system/artifact-type-definition.h"
-#include "system/object-type-definition.h"
+#include "system/item-entity.h"
 #include "util/bit-flags-calculator.h"
 #include "util/enum-converter.h"
 #include "util/enum-range.h"
@@ -51,7 +51,7 @@ static concptr *spoiler_flag_aux(const TrFlags &art_flags, const flag_desc *flag
  * @param o_ptr 記述を得たいオブジェクトの参照ポインタ
  * @param desc_ptr 記述内容を返すための文字列参照ポインタ
  */
-static void analyze_general(PlayerType *player_ptr, ObjectType *o_ptr, char *desc_ptr)
+static void analyze_general(PlayerType *player_ptr, ItemEntity *o_ptr, char *desc_ptr)
 {
     describe_flavor(player_ptr, desc_ptr, o_ptr, OD_NAME_AND_ENCHANT | OD_STORE | OD_DEBUG);
 }
@@ -63,7 +63,7 @@ static void analyze_general(PlayerType *player_ptr, ObjectType *o_ptr, char *des
  * @param o_ptr オブジェクト構造体の参照ポインタ
  * @param pi_ptr pval修正構造体の参照ポインタ
  */
-static void analyze_pval(ObjectType *o_ptr, pval_info_type *pi_ptr)
+static void analyze_pval(ItemEntity *o_ptr, pval_info_type *pi_ptr)
 {
     concptr *affects_list;
     if (!o_ptr->pval) {
@@ -90,7 +90,7 @@ static void analyze_pval(ObjectType *o_ptr, pval_info_type *pi_ptr)
  * @param o_ptr オブジェクト構造体の参照ポインタ
  * @param slay_list 種族スレイ構造体の参照ポインタ
  */
-static void analyze_slay(ObjectType *o_ptr, concptr *slay_list)
+static void analyze_slay(ItemEntity *o_ptr, concptr *slay_list)
 {
     auto flgs = object_flags(o_ptr);
     slay_list = spoiler_flag_aux(flgs, slay_flags_desc, slay_list, N_ELEMENTS(slay_flags_desc));
@@ -103,7 +103,7 @@ static void analyze_slay(ObjectType *o_ptr, concptr *slay_list)
  * @param o_ptr オブジェクト構造体の参照ポインタ
  * @param brand_list 属性ブランド構造体の参照ポインタ
  */
-static void analyze_brand(ObjectType *o_ptr, concptr *brand_list)
+static void analyze_brand(ItemEntity *o_ptr, concptr *brand_list)
 {
     auto flgs = object_flags(o_ptr);
     brand_list = spoiler_flag_aux(flgs, brand_flags_desc, brand_list, N_ELEMENTS(brand_flags_desc));
@@ -116,7 +116,7 @@ static void analyze_brand(ObjectType *o_ptr, concptr *brand_list)
  * @param o_ptr オブジェクト構造体の参照ポインタ
  * @param resist_list 通常耐性構造体の参照ポインタ
  */
-static void analyze_resist(ObjectType *o_ptr, concptr *resist_list)
+static void analyze_resist(ItemEntity *o_ptr, concptr *resist_list)
 {
     auto flgs = object_flags(o_ptr);
     resist_list = spoiler_flag_aux(flgs, resist_flags_desc, resist_list, N_ELEMENTS(resist_flags_desc));
@@ -129,7 +129,7 @@ static void analyze_resist(ObjectType *o_ptr, concptr *resist_list)
  * @param o_ptr オブジェクト構造体の参照ポインタ
  * @param immune_list 免疫構造体の参照ポインタ
  */
-static void analyze_immune(ObjectType *o_ptr, concptr *immune_list)
+static void analyze_immune(ItemEntity *o_ptr, concptr *immune_list)
 {
     auto flgs = object_flags(o_ptr);
     immune_list = spoiler_flag_aux(flgs, immune_flags_desc, immune_list, N_ELEMENTS(immune_flags_desc));
@@ -142,7 +142,7 @@ static void analyze_immune(ObjectType *o_ptr, concptr *immune_list)
  * @param o_ptr オブジェクト構造体の参照ポインタ
  * @param immune_list 弱点構造体の参照ポインタ
  */
-static void analyze_vulnerable(ObjectType *o_ptr, concptr *vulnerable_list)
+static void analyze_vulnerable(ItemEntity *o_ptr, concptr *vulnerable_list)
 {
     auto flgs = object_flags(o_ptr);
     vulnerable_list = spoiler_flag_aux(flgs, vulnerable_flags_desc, vulnerable_list, N_ELEMENTS(vulnerable_flags_desc));
@@ -155,7 +155,7 @@ static void analyze_vulnerable(ObjectType *o_ptr, concptr *vulnerable_list)
  * @param o_ptr オブジェクト構造体の参照ポインタ
  * @param sustain_list 維持特性構造体の参照ポインタ
  */
-static void analyze_sustains(ObjectType *o_ptr, concptr *sustain_list)
+static void analyze_sustains(ItemEntity *o_ptr, concptr *sustain_list)
 {
     auto flgs = object_flags(o_ptr);
     if (flgs.has_all_of(EnumRange(TR_SUST_STR, TR_SUST_CHR))) {
@@ -174,7 +174,7 @@ static void analyze_sustains(ObjectType *o_ptr, concptr *sustain_list)
  * @param o_ptr オブジェクト構造体の参照ポインタ
  * @param misc_list その他の特性構造体の参照ポインタ
  */
-static void analyze_misc_magic(ObjectType *o_ptr, concptr *misc_list)
+static void analyze_misc_magic(ItemEntity *o_ptr, concptr *misc_list)
 {
     char desc[256];
 
@@ -257,7 +257,7 @@ static void analyze_misc_magic(ObjectType *o_ptr, concptr *misc_list)
  * @param o_ptr オブジェクト構造体の参照ポインタ
  * @param addition 追加ランダム耐性構造体の参照ポインタ
  */
-static void analyze_addition(ObjectType *o_ptr, char *addition)
+static void analyze_addition(ItemEntity *o_ptr, char *addition)
 {
     const auto &a_ref = artifacts_info.at(o_ptr->fixed_artifact_idx);
     strcpy(addition, "");
@@ -293,7 +293,7 @@ static void analyze_addition(ObjectType *o_ptr, char *addition)
  * @param o_ptr オブジェクト構造体の参照ポインタ
  * @param misc_desc 基本情報を収める文字列参照ポインタ
  */
-static void analyze_misc(ObjectType *o_ptr, char *misc_desc)
+static void analyze_misc(ItemEntity *o_ptr, char *misc_desc)
 {
     const auto &a_ref = artifacts_info.at(o_ptr->fixed_artifact_idx);
     sprintf(misc_desc, _("レベル %d, 希少度 %u, %d.%d kg, ＄%ld", "Level %d, Rarity %u, %d.%d lbs, %ld Gold"), (int)a_ref.level, a_ref.rarity,
@@ -308,7 +308,7 @@ static void analyze_misc(ObjectType *o_ptr, char *misc_desc)
  * @param o_ptr オブジェクト構造体の参照ポインタ
  * @param desc_ptr 全アーティファクト情報を収める文字列参照ポインタ
  */
-void object_analyze(PlayerType *player_ptr, ObjectType *o_ptr, obj_desc_list *desc_ptr)
+void object_analyze(PlayerType *player_ptr, ItemEntity *o_ptr, obj_desc_list *desc_ptr)
 {
     analyze_general(player_ptr, o_ptr, desc_ptr->description);
     analyze_pval(o_ptr, &desc_ptr->pval_info);
@@ -331,7 +331,7 @@ void object_analyze(PlayerType *player_ptr, ObjectType *o_ptr, obj_desc_list *de
  * @param o_ptr ランダムアーティファクトのオブジェクト構造体参照ポインタ
  * @param desc_ptr 記述内容を収める構造体参照ポインタ
  */
-void random_artifact_analyze(PlayerType *player_ptr, ObjectType *o_ptr, obj_desc_list *desc_ptr)
+void random_artifact_analyze(PlayerType *player_ptr, ItemEntity *o_ptr, obj_desc_list *desc_ptr)
 {
     analyze_general(player_ptr, o_ptr, desc_ptr->description);
     analyze_pval(o_ptr, &desc_ptr->pval_info);

@@ -49,9 +49,9 @@
 #include "system/angband.h"
 #include "system/dungeon-info.h"
 #include "system/floor-type-definition.h"
-#include "system/monster-race-definition.h"
-#include "system/monster-type-definition.h"
-#include "system/object-type-definition.h"
+#include "system/item-entity.h"
+#include "system/monster-entity.h"
+#include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
 #include "timed-effect/player-cut.h"
 #include "timed-effect/player-hallucination.h"
@@ -454,7 +454,7 @@ void MonsterAttackPlayer::gain_armor_exp()
 {
     const auto o_ptr_mh = &this->player_ptr->inventory_list[INVEN_MAIN_HAND];
     const auto o_ptr_sh = &this->player_ptr->inventory_list[INVEN_SUB_HAND];
-    if (!o_ptr_mh->is_armour() && !o_ptr_sh->is_armour()) {
+    if (!o_ptr_mh->is_protector() && !o_ptr_sh->is_protector()) {
         return;
     }
 

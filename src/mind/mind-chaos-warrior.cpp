@@ -4,14 +4,14 @@
 #include "object-enchant/object-ego.h"
 #include "object/object-kind-hook.h"
 #include "sv-definition/sv-weapon-types.h"
-#include "system/baseitem-info-definition.h"
+#include "system/baseitem-info.h"
 #include "system/floor-type-definition.h"
-#include "system/object-type-definition.h"
+#include "system/item-entity.h"
 #include "system/player-type-definition.h"
 
 void acquire_chaos_weapon(PlayerType *player_ptr)
 {
-    ObjectType forge;
+    ItemEntity forge;
     auto *q_ptr = &forge;
     auto dummy = ItemKindType::SWORD;
     OBJECT_SUBTYPE_VALUE dummy2;

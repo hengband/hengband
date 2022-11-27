@@ -35,8 +35,9 @@
 #include "store/store-util.h"
 #include "system/angband-version.h"
 #include "system/artifact-type-definition.h"
-#include "system/baseitem-info-definition.h"
-#include "system/monster-race-definition.h"
+#include "system/baseitem-info.h"
+#include "system/item-entity.h"
+#include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
 #include "util/angband-files.h"
 #include "view/display-messages.h"
@@ -118,8 +119,8 @@ static bool wr_savefile_new(PlayerType *player_ptr, SaveType type)
 
     tmp16u = static_cast<uint16_t>(baseitems_info.size());
     wr_u16b(tmp16u);
-    for (KIND_OBJECT_IDX k_idx = 0; k_idx < tmp16u; k_idx++) {
-        wr_perception(k_idx);
+    for (short bi_id = 0; bi_id < tmp16u; bi_id++) {
+        wr_perception(bi_id);
     }
 
     tmp16u = max_towns;
@@ -204,7 +205,7 @@ static bool wr_savefile_new(PlayerType *player_ptr, SaveType type)
 
     for (int i = 0; i < INVEN_TOTAL; i++) {
         auto *o_ptr = &player_ptr->inventory_list[i];
-        if (!o_ptr->k_idx) {
+        if (!o_ptr->bi_id) {
             continue;
         }
 

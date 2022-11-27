@@ -8,13 +8,13 @@
 enum class BlowEffectType;
 
 /* monster-attack-monster type*/
-struct monster_type;
+class MonsterEntity;
 struct mam_type {
     BlowEffectType attribute;
     MONSTER_IDX m_idx;
     MONSTER_IDX t_idx;
-    monster_type *m_ptr;
-    monster_type *t_ptr;
+    MonsterEntity *m_ptr;
+    MonsterEntity *t_ptr;
     GAME_TEXT m_name[MAX_NLEN];
     GAME_TEXT t_name[MAX_NLEN];
     int damage;

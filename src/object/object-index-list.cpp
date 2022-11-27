@@ -1,6 +1,6 @@
 ﻿#include "object/object-index-list.h"
 #include "system/floor-type-definition.h"
-#include "system/object-type-definition.h"
+#include "system/item-entity.h"
 
 #include <algorithm>
 

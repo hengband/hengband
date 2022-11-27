@@ -3,7 +3,7 @@
 #include "load/angband-version-comparer.h"
 #include "load/load-util.h"
 #include "system/artifact-type-definition.h"
-#include "system/baseitem-info-definition.h"
+#include "system/baseitem-info.h"
 #include "util/bit-flags-calculator.h"
 #include "util/enum-converter.h"
 
@@ -13,7 +13,7 @@
 void ItemLoaderBase::load_item(void)
 {
     auto loading_max_k_idx = rd_u16b();
-    BaseItemInfo dummy;
+    BaseitemInfo dummy;
     for (auto i = 0U; i < loading_max_k_idx; i++) {
         auto *k_ptr = i < baseitems_info.size() ? &baseitems_info[i] : &dummy;
         auto tmp8u = rd_byte();

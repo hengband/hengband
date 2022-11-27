@@ -25,9 +25,9 @@
 #include "spell-realm/spells-hex.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
-#include "system/monster-race-definition.h"
-#include "system/monster-type-definition.h"
-#include "system/object-type-definition.h"
+#include "system/item-entity.h"
+#include "system/monster-entity.h"
+#include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
 #include "view/display-messages.h"
 
@@ -198,7 +198,7 @@ static void aura_shadow_by_monster_attack(PlayerType *player_ptr, MonsterAttackP
     }
 
     int dam = 1;
-    ObjectType *o_armed_ptr = &player_ptr->inventory_list[INVEN_MAIN_HAND];
+    ItemEntity *o_armed_ptr = &player_ptr->inventory_list[INVEN_MAIN_HAND];
     auto *r_ptr = &monraces_info[monap_ptr->m_ptr->r_idx];
     const EnumClassFlagGroup<MonsterResistanceType> resist_flags = { MonsterResistanceType::RESIST_ALL, MonsterResistanceType::RESIST_DARK };
 
@@ -210,13 +210,13 @@ static void aura_shadow_by_monster_attack(PlayerType *player_ptr, MonsterAttackP
         return;
     }
 
-    if (o_armed_ptr->k_idx) {
+    if (o_armed_ptr->bi_id) {
         int basedam = ((o_armed_ptr->dd + player_ptr->to_dd[0]) * (o_armed_ptr->ds + player_ptr->to_ds[0] + 1));
         dam = basedam / 2 + o_armed_ptr->to_d + player_ptr->to_d[0];
     }
 
     o_armed_ptr = &player_ptr->inventory_list[INVEN_BODY];
-    if ((o_armed_ptr->k_idx) && o_armed_ptr->is_cursed()) {
+    if ((o_armed_ptr->bi_id) && o_armed_ptr->is_cursed()) {
         dam *= 2;
     }
 
@@ -243,7 +243,7 @@ static void aura_shadow_by_monster_attack(PlayerType *player_ptr, MonsterAttackP
     /* Some cursed armours gives an extra effect */
     for (int j = 0; j < TABLE_SIZE; j++) {
         o_armed_ptr = &player_ptr->inventory_list[table[j].slot];
-        if ((o_armed_ptr->k_idx) && o_armed_ptr->is_cursed() && o_armed_ptr->is_armour()) {
+        if ((o_armed_ptr->bi_id) && o_armed_ptr->is_cursed() && o_armed_ptr->is_protector()) {
             project(player_ptr, 0, 0, monap_ptr->m_ptr->fy, monap_ptr->m_ptr->fx, (player_ptr->lev * 2), table[j].type, flg);
         }
     }

@@ -15,8 +15,8 @@
 #include "object/item-tester-hooker.h"
 #include "object/item-use-flags.h"
 #include "player-base/player-class.h"
-#include "system/baseitem-info-definition.h"
-#include "system/object-type-definition.h"
+#include "system/baseitem-info.h"
+#include "system/item-entity.h"
 #include "system/player-type-definition.h"
 #include "view/display-messages.h"
 
@@ -31,32 +31,28 @@ bool eat_magic(PlayerType *player_ptr, int power)
     byte fail_type = 1;
     GAME_TEXT o_name[MAX_NLEN];
 
-    concptr q = _("どのアイテムから魔力を吸収しますか？", "Drain which item? ");
-    concptr s = _("魔力を吸収できるアイテムがありません。", "You have nothing to drain.");
-
-    ObjectType *o_ptr;
-    OBJECT_IDX item;
-    o_ptr = choose_object(player_ptr, &item, q, s, (USE_INVEN | USE_FLOOR), FuncItemTester(&ObjectType::is_rechargeable));
-    if (!o_ptr) {
+    const auto q = _("どのアイテムから魔力を吸収しますか？", "Drain which item? ");
+    const auto s = _("魔力を吸収できるアイテムがありません。", "You have nothing to drain.");
+    short item;
+    auto *o_ptr = choose_object(player_ptr, &item, q, s, (USE_INVEN | USE_FLOOR), FuncItemTester(&ItemEntity::can_recharge));
+    if (o_ptr == nullptr) {
         return false;
     }
 
-    BaseItemInfo *k_ptr;
-    k_ptr = &baseitems_info[o_ptr->k_idx];
-    DEPTH lev = baseitems_info[o_ptr->k_idx].level;
-
-    int recharge_strength = 0;
-    bool is_eating_successful = true;
+    const auto &baseitem = baseitems_info[o_ptr->bi_id];
+    const auto lev = baseitem.level;
+    auto recharge_strength = 0;
+    auto is_eating_successful = true;
     if (o_ptr->tval == ItemKindType::ROD) {
         recharge_strength = ((power > lev / 2) ? (power - lev / 2) : 0) / 5;
         if (one_in_(recharge_strength)) {
             is_eating_successful = false;
         } else {
-            if (o_ptr->timeout > (o_ptr->number - 1) * k_ptr->pval) {
+            if (o_ptr->timeout > (o_ptr->number - 1) * baseitem.pval) {
                 msg_print(_("充填中のロッドから魔力を吸収することはできません。", "You can't absorb energy from a discharged rod."));
             } else {
                 player_ptr->csp += lev;
-                o_ptr->timeout += k_ptr->pval;
+                o_ptr->timeout += baseitem.pval;
             }
         }
     } else {
@@ -73,8 +69,8 @@ bool eat_magic(PlayerType *player_ptr, int power)
                 o_ptr->pval--;
 
                 if ((o_ptr->tval == ItemKindType::STAFF) && (item >= 0) && (o_ptr->number > 1)) {
-                    ObjectType forge;
-                    ObjectType *q_ptr;
+                    ItemEntity forge;
+                    ItemEntity *q_ptr;
                     q_ptr = &forge;
                     q_ptr->copy_from(o_ptr);
 
@@ -103,8 +99,8 @@ bool eat_magic(PlayerType *player_ptr, int power)
         describe_flavor(player_ptr, o_name, o_ptr, OD_NAME_ONLY);
         msg_format(_("魔力が逆流した！%sは完全に魔力を失った。", "The recharging backfires - %s is completely drained!"), o_name);
         if (o_ptr->tval == ItemKindType::ROD) {
-            o_ptr->timeout = k_ptr->pval * o_ptr->number;
-        } else if ((o_ptr->tval == ItemKindType::WAND) || (o_ptr->tval == ItemKindType::STAFF)) {
+            o_ptr->timeout = baseitem.pval * o_ptr->number;
+        } else if (o_ptr->is_wand_staff()) {
             o_ptr->pval = 0;
         }
 
@@ -168,7 +164,7 @@ bool eat_magic(PlayerType *player_ptr, int power)
     if (fail_type == 1) {
         if (o_ptr->tval == ItemKindType::ROD) {
             msg_format(_("ロッドは破損を免れたが、魔力は全て失なわれた。", "You save your rod from destruction, but all charges are lost."), o_name);
-            o_ptr->timeout = k_ptr->pval * o_ptr->number;
+            o_ptr->timeout = baseitem.pval * o_ptr->number;
         } else if (o_ptr->tval == ItemKindType::WAND) {
             msg_format(_("%sは破損を免れたが、魔力が全て失われた。", "You save your %s from destruction, but all charges are lost."), o_name);
             o_ptr->pval = 0;
@@ -180,7 +176,7 @@ bool eat_magic(PlayerType *player_ptr, int power)
             msg_format(_("乱暴な魔法のために%sが一本壊れた！", "Wild magic consumes one of your %s!"), o_name);
             /* Reduce rod stack maximum timeout, drain wands. */
             if (o_ptr->tval == ItemKindType::ROD) {
-                o_ptr->timeout = std::min<short>(o_ptr->timeout, k_ptr->pval * (o_ptr->number - 1));
+                o_ptr->timeout = std::min<short>(o_ptr->timeout, baseitem.pval * (o_ptr->number - 1));
             } else if (o_ptr->tval == ItemKindType::WAND) {
                 o_ptr->pval = o_ptr->pval * (o_ptr->number - 1) / o_ptr->number;
             }

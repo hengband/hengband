@@ -9,7 +9,8 @@
 #include "artifact/random-art-generator.h"
 #include "inventory/inventory-slot-types.h"
 #include "object/object-kind-hook.h"
-#include "system/object-type-definition.h"
+#include "object/tval-types.h"
+#include "system/item-entity.h"
 #include "view/display-messages.h"
 
 /*
@@ -19,7 +20,7 @@
  * @param level 生成基準階
  * @param power 生成ランク
  */
-ArmorEnchanter::ArmorEnchanter(PlayerType *player_ptr, ObjectType *o_ptr, DEPTH level, int power)
+ArmorEnchanter::ArmorEnchanter(PlayerType *player_ptr, ItemEntity *o_ptr, DEPTH level, int power)
     : AbstractProtectorEnchanter{ o_ptr, level, power }
     , player_ptr(player_ptr)
 {

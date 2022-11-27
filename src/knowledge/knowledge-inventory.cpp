@@ -21,7 +21,7 @@
 #include "sv-definition/sv-amulet-types.h"
 #include "sv-definition/sv-protector-types.h"
 #include "sv-definition/sv-ring-types.h"
-#include "system/object-type-definition.h"
+#include "system/item-entity.h"
 #include "system/player-type-definition.h"
 #include "util/angband-files.h"
 #include "util/bit-flags-calculator.h"
@@ -63,7 +63,7 @@ static void print_flag(tr_type tr, const TrFlags &flags, FILE *fff)
  * @param tval アイテム主分類番号
  * @return 特殊なアイテムならTRUE
  */
-static bool determine_spcial_item_type(ObjectType *o_ptr, ItemKindType tval)
+static bool determine_spcial_item_type(ItemEntity *o_ptr, ItemKindType tval)
 {
     bool is_special_item_type = (o_ptr->is_wearable() && o_ptr->is_ego()) || ((tval == ItemKindType::AMULET) && (o_ptr->sval == SV_AMULET_RESISTANCE)) || ((tval == ItemKindType::RING) && (o_ptr->sval == SV_RING_LORDLY)) || ((tval == ItemKindType::SHIELD) && (o_ptr->sval == SV_DRAGON_SHIELD)) || ((tval == ItemKindType::HELM) && (o_ptr->sval == SV_DRAGON_HELM)) || ((tval == ItemKindType::GLOVES) && (o_ptr->sval == SV_SET_OF_DRAGON_GLOVES)) || ((tval == ItemKindType::BOOTS) && (o_ptr->sval == SV_PAIR_OF_DRAGON_GREAVE)) || o_ptr->is_artifact();
 
@@ -76,9 +76,9 @@ static bool determine_spcial_item_type(ObjectType *o_ptr, ItemKindType tval)
  * @param tval アイテム主分類番号
  * @return 必要があるならTRUE
  */
-static bool check_item_knowledge(ObjectType *o_ptr, ItemKindType tval)
+static bool check_item_knowledge(ItemEntity *o_ptr, ItemKindType tval)
 {
-    if (o_ptr->k_idx == 0) {
+    if (o_ptr->bi_id == 0) {
         return false;
     }
     if (o_ptr->tval != tval) {
@@ -100,7 +100,7 @@ static bool check_item_knowledge(ObjectType *o_ptr, ItemKindType tval)
  * @param fff 一時ファイルへの参照ポインタ
  * @todo ここの関数から表示用の関数に移したい
  */
-static void display_identified_resistances_flag(ObjectType *o_ptr, FILE *fff)
+static void display_identified_resistances_flag(ItemEntity *o_ptr, FILE *fff)
 {
     auto flags = object_flags_known(o_ptr);
 
@@ -141,7 +141,7 @@ static void display_identified_resistances_flag(ObjectType *o_ptr, FILE *fff)
  * @param o_ptr アイテムへの参照ポインタ
  * @param where アイテムの場所 (手持ち、家等) を示す文字列への参照ポインタ
  */
-static void do_cmd_knowledge_inventory_aux(PlayerType *player_ptr, FILE *fff, ObjectType *o_ptr, char *where)
+static void do_cmd_knowledge_inventory_aux(PlayerType *player_ptr, FILE *fff, ItemEntity *o_ptr, char *where)
 {
     int i = 0;
     GAME_TEXT o_name[MAX_NLEN];
@@ -289,11 +289,11 @@ void do_cmd_knowledge_inventory(PlayerType *player_ptr)
 
     fprintf(fff, "%s\n", inven_res_label);
     int label_number = 0;
-    for (auto tval = enum2i(TV_WEARABLE_BEGIN); tval <= enum2i(TV_WEARABLE_END); tval++) {
+    for (auto tval : TV_WEARABLE_RANGE) {
         reset_label_number(&label_number, fff);
-        show_wearing_equipment_resistances(player_ptr, i2enum<ItemKindType>(tval), &label_number, fff);
-        show_holding_equipment_resistances(player_ptr, i2enum<ItemKindType>(tval), &label_number, fff);
-        show_home_equipment_resistances(player_ptr, i2enum<ItemKindType>(tval), &label_number, fff);
+        show_wearing_equipment_resistances(player_ptr, tval, &label_number, fff);
+        show_holding_equipment_resistances(player_ptr, tval, &label_number, fff);
+        show_home_equipment_resistances(player_ptr, tval, &label_number, fff);
     }
 
     angband_fclose(fff);

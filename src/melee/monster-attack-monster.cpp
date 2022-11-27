@@ -33,8 +33,8 @@
 #include "spell-realm/spells-hex.h"
 #include "system/dungeon-info.h"
 #include "system/floor-type-definition.h"
-#include "system/monster-race-definition.h"
-#include "system/monster-type-definition.h"
+#include "system/monster-entity.h"
+#include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
 #include "view/display-messages.h"
 
@@ -86,7 +86,7 @@ static void process_blow_effect(PlayerType *player_ptr, mam_type *mam_ptr)
 static void aura_fire_by_melee(PlayerType *player_ptr, mam_type *mam_ptr)
 {
     auto *r_ptr = &monraces_info[mam_ptr->m_ptr->r_idx];
-    monster_race *tr_ptr = &monraces_info[mam_ptr->t_ptr->r_idx];
+    MonsterRaceInfo *tr_ptr = &monraces_info[mam_ptr->t_ptr->r_idx];
     if (tr_ptr->aura_flags.has_not(MonsterAuraType::FIRE) || !MonsterRace(mam_ptr->m_ptr->r_idx).is_valid()) {
         return;
     }
@@ -111,7 +111,7 @@ static void aura_fire_by_melee(PlayerType *player_ptr, mam_type *mam_ptr)
 static void aura_cold_by_melee(PlayerType *player_ptr, mam_type *mam_ptr)
 {
     auto *r_ptr = &monraces_info[mam_ptr->m_ptr->r_idx];
-    monster_race *tr_ptr = &monraces_info[mam_ptr->t_ptr->r_idx];
+    MonsterRaceInfo *tr_ptr = &monraces_info[mam_ptr->t_ptr->r_idx];
     if (tr_ptr->aura_flags.has_not(MonsterAuraType::COLD) || !MonsterRace(mam_ptr->m_ptr->r_idx).is_valid()) {
         return;
     }
@@ -136,7 +136,7 @@ static void aura_cold_by_melee(PlayerType *player_ptr, mam_type *mam_ptr)
 static void aura_elec_by_melee(PlayerType *player_ptr, mam_type *mam_ptr)
 {
     auto *r_ptr = &monraces_info[mam_ptr->m_ptr->r_idx];
-    monster_race *tr_ptr = &monraces_info[mam_ptr->t_ptr->r_idx];
+    MonsterRaceInfo *tr_ptr = &monraces_info[mam_ptr->t_ptr->r_idx];
     if (tr_ptr->aura_flags.has_not(MonsterAuraType::ELEC) || !MonsterRace(mam_ptr->m_ptr->r_idx).is_valid()) {
         return;
     }

@@ -36,15 +36,15 @@
 #include "player/player-status-flags.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
-#include "system/monster-race-definition.h"
-#include "system/monster-type-definition.h"
+#include "system/monster-entity.h"
+#include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
 #include "system/terrain-type-definition.h"
 #include "target/projection-path-calculator.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 
-static bool check_hp_for_feat_destruction(TerrainType *f_ptr, monster_type *m_ptr)
+static bool check_hp_for_feat_destruction(TerrainType *f_ptr, MonsterEntity *m_ptr)
 {
     return f_ptr->flags.has_not(TerrainCharacteristics::GLASS) || monraces_info[m_ptr->r_idx].behavior_flags.has(MonsterBehaviorType::STUPID) || (m_ptr->hp >= std::max(m_ptr->maxhp / 3, 200));
 }
@@ -58,7 +58,7 @@ static bool check_hp_for_feat_destruction(TerrainType *f_ptr, monster_type *m_pt
  * @param can_cross モンスターが地形を踏破できるならばTRUE
  * @return 透過も破壊もしなかった場合はFALSE、それ以外はTRUE
  */
-static bool process_wall(PlayerType *player_ptr, turn_flags *turn_flags_ptr, monster_type *m_ptr, POSITION ny, POSITION nx, bool can_cross)
+static bool process_wall(PlayerType *player_ptr, turn_flags *turn_flags_ptr, MonsterEntity *m_ptr, POSITION ny, POSITION nx, bool can_cross)
 {
     auto *r_ptr = &monraces_info[m_ptr->r_idx];
     grid_type *g_ptr;
@@ -106,7 +106,7 @@ static bool process_wall(PlayerType *player_ptr, turn_flags *turn_flags_ptr, mon
  * @param nx モンスターのX座標
  * @return ここではドアを開けず、ガラスのドアを開ける可能性があるならTRUE
  */
-static bool bash_normal_door(PlayerType *player_ptr, turn_flags *turn_flags_ptr, monster_type *m_ptr, POSITION ny, POSITION nx)
+static bool bash_normal_door(PlayerType *player_ptr, turn_flags *turn_flags_ptr, MonsterEntity *m_ptr, POSITION ny, POSITION nx)
 {
     auto *r_ptr = &monraces_info[m_ptr->r_idx];
     grid_type *g_ptr;
@@ -141,7 +141,7 @@ static bool bash_normal_door(PlayerType *player_ptr, turn_flags *turn_flags_ptr,
  * @param g_ptr グリッドへの参照ポインタ
  * @param f_ptr 地形への参照ポインタ
  */
-static void bash_glass_door(PlayerType *player_ptr, turn_flags *turn_flags_ptr, monster_type *m_ptr, TerrainType *f_ptr, bool may_bash)
+static void bash_glass_door(PlayerType *player_ptr, turn_flags *turn_flags_ptr, MonsterEntity *m_ptr, TerrainType *f_ptr, bool may_bash)
 {
     auto *r_ptr = &monraces_info[m_ptr->r_idx];
     if (!may_bash || (r_ptr->behavior_flags.has_not(MonsterBehaviorType::BASH_DOOR)) || f_ptr->flags.has_not(TerrainCharacteristics::BASH) || (m_ptr->is_pet() && ((player_ptr->pet_extra_flags & PF_OPEN_DOORS) == 0))) {
@@ -176,7 +176,7 @@ static void bash_glass_door(PlayerType *player_ptr, turn_flags *turn_flags_ptr, 
  * @param nx モンスターのX座標
  * @return モンスターが死亡した場合のみFALSE
  */
-static bool process_door(PlayerType *player_ptr, turn_flags *turn_flags_ptr, monster_type *m_ptr, POSITION ny, POSITION nx)
+static bool process_door(PlayerType *player_ptr, turn_flags *turn_flags_ptr, MonsterEntity *m_ptr, POSITION ny, POSITION nx)
 {
     auto *r_ptr = &monraces_info[m_ptr->r_idx];
     const auto &g_ref = player_ptr->current_floor_ptr->grid_array[ny][nx];
@@ -220,7 +220,7 @@ static bool process_door(PlayerType *player_ptr, turn_flags *turn_flags_ptr, mon
  * @param nx モンスターのX座標
  * @return ルーンのある/なし
  */
-static bool process_protection_rune(PlayerType *player_ptr, turn_flags *turn_flags_ptr, monster_type *m_ptr, POSITION ny, POSITION nx)
+static bool process_protection_rune(PlayerType *player_ptr, turn_flags *turn_flags_ptr, MonsterEntity *m_ptr, POSITION ny, POSITION nx)
 {
     grid_type *g_ptr;
     g_ptr = &player_ptr->current_floor_ptr->grid_array[ny][nx];
@@ -255,7 +255,7 @@ static bool process_protection_rune(PlayerType *player_ptr, turn_flags *turn_fla
  * @param nx モンスターのX座標
  * @return モンスターが死亡した場合のみFALSE
  */
-static bool process_explosive_rune(PlayerType *player_ptr, turn_flags *turn_flags_ptr, monster_type *m_ptr, POSITION ny, POSITION nx)
+static bool process_explosive_rune(PlayerType *player_ptr, turn_flags *turn_flags_ptr, MonsterEntity *m_ptr, POSITION ny, POSITION nx)
 {
     grid_type *g_ptr;
     g_ptr = &player_ptr->current_floor_ptr->grid_array[ny][nx];
@@ -303,7 +303,7 @@ static bool process_explosive_rune(PlayerType *player_ptr, turn_flags *turn_flag
  * @param nx モンスターのX座標
  * @return モンスターが死亡した場合のみFALSE
  */
-static bool process_post_dig_wall(PlayerType *player_ptr, turn_flags *turn_flags_ptr, monster_type *m_ptr, POSITION ny, POSITION nx)
+static bool process_post_dig_wall(PlayerType *player_ptr, turn_flags *turn_flags_ptr, MonsterEntity *m_ptr, POSITION ny, POSITION nx)
 {
     auto *r_ptr = &monraces_info[m_ptr->r_idx];
     grid_type *g_ptr;
@@ -476,14 +476,14 @@ bool process_monster_movement(PlayerType *player_ptr, turn_flags *turn_flags_ptr
     return true;
 }
 
-static bool can_speak(const monster_race &ap_r_ref, MonsterSpeakType mon_speak_type)
+static bool can_speak(const MonsterRaceInfo &ap_r_ref, MonsterSpeakType mon_speak_type)
 {
     const auto can_speak_all = ap_r_ref.speak_flags.has(MonsterSpeakType::SPEAK_ALL);
     const auto can_speak_specific = ap_r_ref.speak_flags.has(mon_speak_type);
     return can_speak_all || can_speak_specific;
 }
 
-static std::string_view get_speak_filename(monster_type *m_ptr)
+static std::string_view get_speak_filename(MonsterEntity *m_ptr)
 {
     const auto &ap_r_ref = monraces_info[m_ptr->ap_r_idx];
     if (m_ptr->is_fearful() && can_speak(ap_r_ref, MonsterSpeakType::SPEAK_FEAR)) {
@@ -559,7 +559,7 @@ void process_speak_sound(PlayerType *player_ptr, MONSTER_IDX m_idx, POSITION oy,
  * @param y 目標y座標
  * @param x 目標x座標
  */
-void set_target(monster_type *m_ptr, POSITION y, POSITION x)
+void set_target(MonsterEntity *m_ptr, POSITION y, POSITION x)
 {
     m_ptr->target_y = y;
     m_ptr->target_x = x;
@@ -569,7 +569,7 @@ void set_target(monster_type *m_ptr, POSITION y, POSITION x)
  * @brief モンスターの目標地点をリセットする / Reset the target of counter attack
  * @param m_ptr モンスターの参照ポインタ
  */
-void reset_target(monster_type *m_ptr)
+void reset_target(MonsterEntity *m_ptr)
 {
     set_target(m_ptr, 0, 0);
 }

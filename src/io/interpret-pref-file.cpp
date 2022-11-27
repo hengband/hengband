@@ -14,9 +14,9 @@
 #include "io/input-key-requester.h"
 #include "io/tokenizer.h"
 #include "monster-race/monster-race.h"
-#include "system/baseitem-info-definition.h"
+#include "system/baseitem-info.h"
 #include "system/game-option-types.h"
-#include "system/monster-race-definition.h"
+#include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
 #include "system/terrain-type-definition.h"
 #include "term/gameterm.h"
@@ -41,7 +41,7 @@ static errr interpret_r_token(char *buf)
         return 1;
     }
 
-    monster_race *r_ptr;
+    MonsterRaceInfo *r_ptr;
     int i = (int)strtol(zz[0], nullptr, 0);
     TERM_COLOR n1 = (TERM_COLOR)strtol(zz[1], nullptr, 0);
     auto n2 = static_cast<char>(strtol(zz[2], nullptr, 0));
@@ -72,7 +72,7 @@ static errr interpret_k_token(char *buf)
         return 1;
     }
 
-    BaseItemInfo *k_ptr;
+    BaseitemInfo *k_ptr;
     int i = (int)strtol(zz[0], nullptr, 0);
     TERM_COLOR n1 = (TERM_COLOR)strtol(zz[1], nullptr, 0);
     auto n2 = static_cast<char>(strtol(zz[2], nullptr, 0));
@@ -208,14 +208,15 @@ static errr interpret_u_token(char *buf)
         return 1;
     }
 
-    int j = (int)strtol(zz[0], nullptr, 0);
-    TERM_COLOR n1 = (TERM_COLOR)strtol(zz[1], nullptr, 0);
-    auto n2 = static_cast<char>(strtol(zz[2], nullptr, 0));
+    const auto tval = i2enum<ItemKindType>(std::stoi(zz[0], nullptr, 0));
+    const auto n1 = static_cast<uint8_t>(std::stoi(zz[1], nullptr, 0));
+    const auto n2 = static_cast<char>(strtol(zz[2], nullptr, 0));
     for (auto &k_ref : baseitems_info) {
-        if ((k_ref.idx > 0) && (enum2i(k_ref.tval) == j)) {
+        if ((k_ref.idx > 0) && (k_ref.bi_key.tval() == tval)) {
             if (n1) {
                 k_ref.d_attr = n1;
             }
+
             if (n2) {
                 k_ref.d_char = n2;
             }

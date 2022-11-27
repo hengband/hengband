@@ -37,24 +37,50 @@ public:
     ItemKindType tval() const;
     std::optional<int> sval() const;
 
+    ItemKindType get_arrow_kind() const;
+    bool is_spell_book() const;
+    bool is_high_level_book() const;
+    bool is_melee_weapon() const;
+    bool is_ammo() const;
+    bool has_unidentified_name() const;
+    bool can_recharge() const;
+    bool is_wand_rod() const;
+    bool is_wand_staff() const;
+    bool is_protector() const;
+    bool can_be_aura_protector() const;
+    bool is_wearable() const;
+    bool is_weapon() const;
+    bool is_equipement() const;
+    bool is_melee_ammo() const;
+    bool is_orthodox_melee_weapon() const;
+    bool is_broken_weapon() const;
+    bool is_throwable() const;
+    bool is_wieldable_in_etheir_hand() const;
+    bool is_rare() const;
+    short get_bow_energy() const;
+    int get_arrow_magnification() const;
+    bool is_aiming_rod() const;
+    bool is_lite_requiring_fuel() const;
+
 private:
     ItemKindType type_value;
     std::optional<int> subtype_value;
+
+    bool is_mushrooms() const;
 };
 
 enum class ItemKindType : short;
 enum class RandomArtActType : short;
-class BaseItemInfo {
+class BaseitemInfo {
 public:
-    BaseItemInfo() = default;
-    KIND_OBJECT_IDX idx{};
+    BaseitemInfo();
+    short idx{};
 
     std::string name; /*!< ベースアイテム名 */
     std::string text; /*!< 解説テキスト */
     std::string flavor_name; /*!< 未確定名 */
 
-    ItemKindType tval{}; /*!< ベースアイテム種別の大項目値 Object type */
-    OBJECT_SUBTYPE_VALUE sval{}; /*!< ベースアイテム種別の小項目値 Object sub type */
+    BaseitemKey bi_key;
 
     PARAMETER_VALUE pval{}; /*!< ベースアイテムのpval（能力修正共通値） Object extra info */
 
@@ -90,4 +116,4 @@ public:
     bool tried{}; /*!< ベースアイテムを未鑑定のまま試したことがあるか /  The player has "tried" one of the items */
 };
 
-extern std::vector<BaseItemInfo> baseitems_info;
+extern std::vector<BaseitemInfo> baseitems_info;

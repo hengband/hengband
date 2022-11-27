@@ -4,7 +4,7 @@
 
 enum class MonsterLoaderVersionType;
 class PlayerType;
-struct monster_type;
+class MonsterEntity;
 class MonsterLoaderBase;
 class MonsterLoaderFactory {
 public:

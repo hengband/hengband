@@ -80,12 +80,12 @@
 #include "status/experience.h"
 #include "system/angband-version.h"
 #include "system/artifact-type-definition.h"
-#include "system/baseitem-info-definition.h"
+#include "system/baseitem-info.h"
 #include "system/dungeon-info.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
-#include "system/monster-type-definition.h"
-#include "system/object-type-definition.h"
+#include "system/item-entity.h"
+#include "system/monster-entity.h"
 #include "system/player-type-definition.h"
 #include "system/terrain-type-definition.h"
 #include "target/grid-selector.h"
@@ -123,9 +123,9 @@ void wiz_cure_all(PlayerType *player_ptr)
     msg_print("You're fully cured by wizard command.");
 }
 
-static std::optional<KIND_OBJECT_IDX> wiz_select_tval()
+static std::optional<short> wiz_select_tval()
 {
-    KIND_OBJECT_IDX list;
+    short list;
     char ch;
     for (list = 0; (list < 80) && (tvals[list].tval > ItemKindType::NONE); list++) {
         auto row = 2 + (list % 20);
@@ -139,7 +139,7 @@ static std::optional<KIND_OBJECT_IDX> wiz_select_tval()
         return std::nullopt;
     }
 
-    KIND_OBJECT_IDX selection;
+    short selection;
     for (selection = 0; selection < max_num; selection++) {
         if (listsym[selection] == ch) {
             break;
@@ -153,17 +153,17 @@ static std::optional<KIND_OBJECT_IDX> wiz_select_tval()
     return selection;
 }
 
-static KIND_OBJECT_IDX wiz_select_sval(const ItemKindType tval, concptr tval_description)
+static short wiz_select_sval(const ItemKindType tval, concptr tval_description)
 {
     auto num = 0;
-    KIND_OBJECT_IDX choice[80]{};
+    short choice[80]{};
     char ch;
     for (const auto &k_ref : baseitems_info) {
         if (num >= 80) {
             break;
         }
 
-        if (k_ref.idx == 0 || k_ref.tval != tval) {
+        if (k_ref.idx == 0 || k_ref.bi_key.tval() != tval) {
             continue;
         }
 
@@ -180,7 +180,7 @@ static KIND_OBJECT_IDX wiz_select_sval(const ItemKindType tval, concptr tval_des
         return 0;
     }
 
-    KIND_OBJECT_IDX selection;
+    short selection;
     for (selection = 0; selection < max_num; selection++) {
         if (listsym[selection] == ch) {
             break;
@@ -200,10 +200,10 @@ static KIND_OBJECT_IDX wiz_select_sval(const ItemKindType tval, concptr tval_des
  * @return ベースアイテムID
  * @details
  * by RAK, heavily modified by -Bernd-
- * This function returns the k_idx of an object type, or zero if failed
+ * This function returns the bi_id of an object type, or zero if failed
  * List up to 50 choices in three columns
  */
-static KIND_OBJECT_IDX wiz_create_itemtype()
+static short wiz_create_itemtype()
 {
     term_clear();
     auto selection = wiz_select_tval();
@@ -231,15 +231,16 @@ static KIND_OBJECT_IDX wiz_create_itemtype()
 void wiz_create_item(PlayerType *player_ptr)
 {
     screen_save();
-    OBJECT_IDX k_idx = wiz_create_itemtype();
+    const auto bi_id = wiz_create_itemtype();
     screen_load();
-    if (!k_idx) {
+    if (bi_id == 0) {
         return;
     }
 
-    if (baseitems_info[k_idx].gen_flags.has(ItemGenerationTraitType::INSTA_ART)) {
+    const auto &baseitem = baseitems_info[bi_id];
+    if (baseitem.gen_flags.has(ItemGenerationTraitType::INSTA_ART)) {
         for (const auto &[a_idx, a_ref] : artifacts_info) {
-            if ((a_idx == FixedArtifactId::NONE) || (a_ref.tval != baseitems_info[k_idx].tval) || (a_ref.sval != baseitems_info[k_idx].sval)) {
+            if ((a_idx == FixedArtifactId::NONE) || (a_ref.bi_key != baseitem.bi_key)) {
                 continue;
             }
 
@@ -249,12 +250,10 @@ void wiz_create_item(PlayerType *player_ptr)
         }
     }
 
-    ObjectType forge;
-    ObjectType *q_ptr;
-    q_ptr = &forge;
-    q_ptr->prep(k_idx);
-    ItemMagicApplier(player_ptr, q_ptr, player_ptr->current_floor_ptr->dun_level, AM_NO_FIXED_ART).execute();
-    (void)drop_near(player_ptr, q_ptr, -1, player_ptr->y, player_ptr->x);
+    ItemEntity item;
+    item.prep(bi_id);
+    ItemMagicApplier(player_ptr, &item, player_ptr->current_floor_ptr->dun_level, AM_NO_FIXED_ART).execute();
+    (void)drop_near(player_ptr, &item, -1, player_ptr->y, player_ptr->x);
     msg_print("Allocated.");
 }
 
@@ -267,13 +266,12 @@ void wiz_create_item(PlayerType *player_ptr)
 static std::string wiz_make_named_artifact_desc(PlayerType *player_ptr, FixedArtifactId a_idx)
 {
     const auto &a_ref = artifacts_info.at(a_idx);
-    ObjectType obj;
-    obj.prep(lookup_baseitem_id({ a_ref.tval, a_ref.sval }));
-    obj.fixed_artifact_idx = a_idx;
-    object_known(&obj);
+    ItemEntity item;
+    item.prep(lookup_baseitem_id(a_ref.bi_key));
+    item.fixed_artifact_idx = a_idx;
+    object_known(&item);
     char buf[MAX_NLEN];
-    describe_flavor(player_ptr, buf, &obj, OD_NAME_ONLY);
-
+    describe_flavor(player_ptr, buf, &item, OD_NAME_ONLY);
     return buf;
 }
 
@@ -346,11 +344,12 @@ static std::vector<FixedArtifactId> wiz_collect_group_a_idx(const grouper &group
     std::vector<FixedArtifactId> a_idx_list;
     for (auto tval : tval_list) {
         for (const auto &[a_idx, a_ref] : artifacts_info) {
-            if (a_ref.tval == tval) {
+            if (a_ref.bi_key.tval() == tval) {
                 a_idx_list.push_back(a_idx);
             }
         }
     }
+
     return a_idx_list;
 }
 
@@ -378,9 +377,11 @@ void wiz_create_named_art(PlayerType *player_ptr)
             return;
         default:
             if (auto idx = A2I(cmd); idx < group_artifact_list.size()) {
-                const auto a_idx_list = wiz_collect_group_a_idx(group_artifact_list[idx]);
+                const auto &a_idx_list = wiz_collect_group_a_idx(group_artifact_list[idx]);
                 create_a_idx = wiz_select_named_artifact(player_ptr, a_idx_list);
             }
+
+            break;
         }
     }
 
@@ -676,8 +677,8 @@ void wiz_jump_to_dungeon(PlayerType *player_ptr)
  */
 void wiz_learn_items_all(PlayerType *player_ptr)
 {
-    ObjectType forge;
-    ObjectType *q_ptr;
+    ItemEntity forge;
+    ItemEntity *q_ptr;
     for (const auto &k_ref : baseitems_info) {
         if (k_ref.idx > 0 && k_ref.level <= command_arg) {
             q_ptr = &forge;

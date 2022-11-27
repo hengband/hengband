@@ -42,9 +42,9 @@
 #include "system/dungeon-info.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
-#include "system/monster-race-definition.h"
-#include "system/monster-type-definition.h"
-#include "system/object-type-definition.h"
+#include "system/item-entity.h"
+#include "system/monster-entity.h"
+#include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
 #include "system/terrain-type-definition.h"
 #include "util/bit-flags-calculator.h"
@@ -361,7 +361,7 @@ void wipe_generate_random_floor_flags(FloorType *floor_ptr)
 void clear_cave(PlayerType *player_ptr)
 {
     auto *floor_ptr = player_ptr->current_floor_ptr;
-    std::fill_n(floor_ptr->o_list.begin(), floor_ptr->o_max, ObjectType{});
+    std::fill_n(floor_ptr->o_list.begin(), floor_ptr->o_max, ItemEntity{});
     floor_ptr->o_max = 1;
     floor_ptr->o_cnt = 0;
 
@@ -369,7 +369,7 @@ void clear_cave(PlayerType *player_ptr)
         r_ref.cur_num = 0;
     }
 
-    std::fill_n(floor_ptr->m_list.begin(), floor_ptr->m_max, monster_type{});
+    std::fill_n(floor_ptr->m_list.begin(), floor_ptr->m_max, MonsterEntity{});
     floor_ptr->m_max = 1;
     floor_ptr->m_cnt = 0;
     for (int i = 0; i < MAX_MTIMED; i++) {

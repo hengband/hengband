@@ -1,7 +1,7 @@
 ﻿#pragma once
 
 /*
- * @file object-type-definition.h
+ * @file item-entity.h
  * @brief アイテム定義の構造体とエンティティ処理定義
  * @author Hourier
  * @date 2021/05/02
@@ -10,6 +10,7 @@
 #include "object-enchant/object-ego.h"
 #include "object-enchant/tr-flags.h"
 #include "object-enchant/trc-types.h"
+#include "object/object-mark-types.h"
 #include "system/angband.h"
 #include "system/system-variables.h"
 #include "util/flag-group.h"
@@ -20,10 +21,10 @@ enum class ItemKindType : short;
 enum class SmithEffectType : int16_t;
 enum class RandomArtActType : short;
 
-class ObjectType {
+class ItemEntity {
 public:
-    ObjectType();
-    KIND_OBJECT_IDX k_idx{}; /*!< Kind index (zero if "dead") */
+    ItemEntity();
+    short bi_id{}; /*!< ベースアイテムID (0は、不具合調査用の無効アイテム または 何も装備していない箇所のアイテム であることを示す) */
     POSITION iy{}; /*!< Y-position on map, or zero */
     POSITION ix{}; /*!< X-position on map, or zero */
     IDX stack_idx{}; /*!< このアイテムを含むアイテムリスト内の位置(降順) */
@@ -58,7 +59,7 @@ public:
     DICE_SID ds{}; /*!< Damage dice/sides */
     TIME_EFFECT timeout{}; /*!< Timeout Counter */
     byte ident{}; /*!< Special flags  */
-    byte marked{}; /*!< Object is marked */
+    EnumClassFlagGroup<OmType> marked{}; /*!< Object is marked */
     uint16_t inscription{}; /*!< Inscription index */
     uint16_t art_name{}; /*!< Artifact name (random artifacts) */
     byte feeling{}; /*!< Game generated inscription number (eg, pseudo-id) */
@@ -69,8 +70,8 @@ public:
     int artifact_bias{}; /*!< ランダムアーティファクト生成時のバイアスID */
 
     void wipe();
-    void copy_from(const ObjectType *j_ptr);
-    void prep(KIND_OBJECT_IDX ko_idx);
+    void copy_from(const ItemEntity *j_ptr);
+    void prep(short new_bi_id);
     bool is_weapon() const;
     bool is_weapon_ammo() const;
     bool is_weapon_armour_ammo() const;
@@ -89,7 +90,8 @@ public:
     bool is_ammo() const;
     bool is_convertible() const;
     bool is_lance() const;
-    bool is_armour() const;
+    bool is_protector() const;
+    bool can_be_aura_protector() const;
     bool is_rare() const;
     bool is_ego() const;
     bool is_smith() const;
@@ -109,17 +111,25 @@ public:
     bool is_readable() const;
     bool can_refill_lantern() const;
     bool can_refill_torch() const;
-    bool is_rechargeable() const;
+    bool can_recharge() const;
     bool is_offerable() const;
     bool is_activatable() const;
     bool is_fuel() const;
-    bool is_book() const;
-    bool is_glove_same_temper(const ObjectType *j_ptr) const;
-    bool can_pile(const ObjectType *j_ptr) const;
+    bool is_spell_book() const;
+    bool is_glove_same_temper(const ItemEntity *j_ptr) const;
+    bool can_pile(const ItemEntity *j_ptr) const;
     TERM_COLOR get_color() const;
     char get_symbol() const;
     int get_price() const;
     bool is_specific_artifact(FixedArtifactId id) const;
+    bool has_unidentified_name() const;
+    ItemKindType get_arrow_kind() const;
+    bool is_wand_rod() const;
+    bool is_wand_staff() const;
+    short get_bow_energy() const;
+    int get_arrow_magnification() const;
+    bool is_aiming_rod() const;
+    bool is_lite_requiring_fuel() const;
 
 private:
     int get_baseitem_price() const;

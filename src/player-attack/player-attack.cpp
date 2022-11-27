@@ -51,9 +51,9 @@
 #include "sv-definition/sv-weapon-types.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
-#include "system/monster-race-definition.h"
-#include "system/monster-type-definition.h"
-#include "system/object-type-definition.h"
+#include "system/item-entity.h"
+#include "system/monster-entity.h"
+#include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
 #include "timed-effect/player-cut.h"
 #include "timed-effect/timed-effects.h"
@@ -149,7 +149,7 @@ static void get_attack_exp(PlayerType *player_ptr, player_attack_type *pa_ptr)
 {
     auto *r_ptr = &monraces_info[pa_ptr->m_ptr->r_idx];
     auto *o_ptr = &player_ptr->inventory_list[enum2i(INVEN_MAIN_HAND) + pa_ptr->hand];
-    if (o_ptr->k_idx == 0) {
+    if (o_ptr->bi_id == 0) {
         get_bare_knuckle_exp(player_ptr, pa_ptr);
         return;
     }
@@ -373,7 +373,7 @@ static void calc_attack_damage(PlayerType *player_ptr, player_attack_type *pa_pt
         return;
     }
 
-    if (o_ptr->k_idx) {
+    if (o_ptr->bi_id) {
         process_weapon_attack(player_ptr, pa_ptr, do_quake, vorpal_cut, vorpal_chance);
     }
 }
@@ -612,7 +612,7 @@ void exe_player_attack_to_monster(PlayerType *player_ptr, POSITION y, POSITION x
 void massacre(PlayerType *player_ptr)
 {
     grid_type *g_ptr;
-    monster_type *m_ptr;
+    MonsterEntity *m_ptr;
     for (DIRECTION dir = 0; dir < 8; dir++) {
         POSITION y = player_ptr->y + ddy_ddd[dir];
         POSITION x = player_ptr->x + ddx_ddd[dir];

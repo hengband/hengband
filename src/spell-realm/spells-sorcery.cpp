@@ -10,7 +10,7 @@
 #include "object-hook/hook-expendable.h"
 #include "object/item-use-flags.h"
 #include "object/object-value.h"
-#include "system/object-type-definition.h"
+#include "system/item-entity.h"
 #include "system/player-type-definition.h"
 #include "view/display-messages.h"
 
@@ -30,7 +30,7 @@ bool alchemy(PlayerType *player_ptr)
     concptr q = _("どのアイテムを金に変えますか？", "Turn which item to gold? ");
     concptr s = _("金に変えられる物がありません。", "You have nothing to turn to gold.");
     OBJECT_IDX item;
-    ObjectType *o_ptr;
+    ItemEntity *o_ptr;
     o_ptr = choose_object(player_ptr, &item, q, s, (USE_INVEN | USE_FLOOR));
     if (!o_ptr) {
         return false;

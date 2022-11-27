@@ -5,7 +5,7 @@
 #include "effect/effect-processor.h"
 #include "floor/geometry.h"
 #include "player-base/player-class.h"
-#include "system/object-type-definition.h"
+#include "system/item-entity.h"
 #include "system/player-type-definition.h"
 #include "target/target-checker.h"
 #include "target/target-getter.h"
@@ -56,7 +56,7 @@ static bool fire_crimson(PlayerType *player_ptr)
     return true;
 }
 
-bool activate_crimson(PlayerType *player_ptr, ObjectType *o_ptr)
+bool activate_crimson(PlayerType *player_ptr, ItemEntity *o_ptr)
 {
     if (!o_ptr->is_specific_artifact(FixedArtifactId::CRIMSON)) {
         return false;

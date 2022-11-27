@@ -28,7 +28,7 @@
 #include "object/object-mark-types.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
-#include "system/object-type-definition.h"
+#include "system/item-entity.h"
 #include "system/player-type-definition.h"
 #include "term/screen-processor.h"
 #include "view/display-messages.h"
@@ -39,10 +39,10 @@
  */
 static void autopick_delayed_alter_aux(PlayerType *player_ptr, INVENTORY_IDX item)
 {
-    ObjectType *o_ptr;
+    ItemEntity *o_ptr;
     o_ptr = ref_item(player_ptr, item);
 
-    if (o_ptr->k_idx == 0 || !(o_ptr->marked & OM_AUTODESTROY)) {
+    if (o_ptr->bi_id == 0 || o_ptr->marked.has_not(OmType::AUTODESTROY)) {
         return;
     }
 
@@ -88,7 +88,7 @@ void autopick_delayed_alter(PlayerType *player_ptr)
  */
 void autopick_alter_item(PlayerType *player_ptr, INVENTORY_IDX item, bool destroy)
 {
-    ObjectType *o_ptr;
+    ItemEntity *o_ptr;
     o_ptr = ref_item(player_ptr, item);
     int idx = find_autopick_list(player_ptr, o_ptr);
     auto_inscribe_item(player_ptr, o_ptr, idx);
@@ -117,7 +117,7 @@ void autopick_pickup_items(PlayerType *player_ptr, grid_type *g_ptr)
             GAME_TEXT o_name[MAX_NLEN];
             describe_flavor(player_ptr, o_name, o_ptr, 0);
             msg_format(_("ザックには%sを入れる隙間がない。", "You have no room for %s."), o_name);
-            o_ptr->marked |= OM_NOMSG;
+            o_ptr->marked.set(OmType::SUPRESS_MESSAGE);
             continue;
         }
 
@@ -128,14 +128,14 @@ void autopick_pickup_items(PlayerType *player_ptr, grid_type *g_ptr)
 
         char out_val[MAX_NLEN + 20];
         GAME_TEXT o_name[MAX_NLEN];
-        if (o_ptr->marked & OM_NO_QUERY) {
+        if (o_ptr->marked.has(OmType::NO_QUERY)) {
             continue;
         }
 
         describe_flavor(player_ptr, o_name, o_ptr, 0);
         sprintf(out_val, _("%sを拾いますか? ", "Pick up %s? "), o_name);
         if (!get_check(out_val)) {
-            o_ptr->marked |= OM_NOMSG | OM_NO_QUERY;
+            o_ptr->marked.set({ OmType::SUPRESS_MESSAGE, OmType::NO_QUERY });
             continue;
         }
 

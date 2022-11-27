@@ -12,6 +12,7 @@
 #include "object/object-flags.h"
 #include "perception/object-perception.h"
 #include "system/artifact-type-definition.h"
+#include "system/item-entity.h"
 #include "system/player-type-definition.h"
 #include "util/bit-flags-calculator.h"
 #include "util/quarks.h"
@@ -21,7 +22,7 @@
 #include "monster-race/monster-race.h"
 #include "monster-race/race-flags1.h"
 #include "object/tval-types.h"
-#include "system/monster-race-definition.h"
+#include "system/monster-race-info.h"
 #endif
 
 static void check_object_known_aware(flavor_type *flavor_ptr)
@@ -409,7 +410,7 @@ void describe_named_item(PlayerType *player_ptr, flavor_type *flavor_ptr)
 
     describe_artifact_ja(flavor_ptr);
 #endif
-    if (flavor_ptr->o_ptr->is_book()) {
+    if (flavor_ptr->o_ptr->is_spell_book()) {
         // svalは0から数えているので表示用に+1している
         flavor_ptr->t = object_desc_str(flavor_ptr->t, format("Lv%d ", flavor_ptr->o_ptr->sval + 1));
     }

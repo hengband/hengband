@@ -7,9 +7,9 @@
 #include "monster/monster-status.h"
 #include "player-info/equipment-info.h"
 #include "system/floor-type-definition.h"
-#include "system/monster-race-definition.h"
-#include "system/monster-type-definition.h"
-#include "system/object-type-definition.h"
+#include "system/item-entity.h"
+#include "system/monster-entity.h"
+#include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
 #include "util/bit-flags-calculator.h"
 
@@ -441,7 +441,7 @@ static int monspell_damage_base(
  * @param dd ダイス数への参照ポインタ
  * @param ds ダイス面への参照ポインタ
  */
-void monspell_shoot_dice(monster_race *r_ptr, int *dd, int *ds)
+void monspell_shoot_dice(MonsterRaceInfo *r_ptr, int *dd, int *ds)
 {
     int p = -1; /* Position of SHOOT */
     int n = 0; /* Number of blows */
@@ -524,7 +524,7 @@ int monspell_bluemage_damage(PlayerType *player_ptr, MonsterAbilityType ms_type,
 {
     int hp = player_ptr->chp;
     int shoot_dd = 1, shoot_ds = 1, shoot_base = 0;
-    ObjectType *o_ptr = nullptr;
+    ItemEntity *o_ptr = nullptr;
 
     if (has_melee_weapon(player_ptr, INVEN_MAIN_HAND)) {
         o_ptr = &player_ptr->inventory_list[INVEN_MAIN_HAND];

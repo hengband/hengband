@@ -26,8 +26,8 @@
 #include "status/base-status.h"
 #include "status/element-resistance.h"
 #include "status/experience.h"
-#include "system/monster-type-definition.h"
-#include "system/object-type-definition.h"
+#include "system/item-entity.h"
+#include "system/monster-entity.h"
 #include "system/player-type-definition.h"
 #include "timed-effect/player-acceleration.h"
 #include "timed-effect/timed-effects.h"
@@ -110,7 +110,7 @@ static void calc_blow_un_power(PlayerType *player_ptr, MonsterAttackPlayer *mona
     for (int i = 0; i < max_draining_item; i++) {
         INVENTORY_IDX i_idx = (INVENTORY_IDX)randint0(INVEN_PACK);
         monap_ptr->o_ptr = &player_ptr->inventory_list[i_idx];
-        if (monap_ptr->o_ptr->k_idx == 0) {
+        if (monap_ptr->o_ptr->bi_id == 0) {
             continue;
         }
 
@@ -349,7 +349,7 @@ void switch_monster_blow_to_player(PlayerType *player_ptr, MonsterAttackPlayer *
             break;
         }
     }
-        /* Fall through */
+        [[fallthrough]];
     case RaceBlowEffectType::HURT: { /* AC軽減あり / Player armor reduces total damage */
         monap_ptr->obvious = true;
         monap_ptr->damage -= (monap_ptr->damage * ((monap_ptr->ac < 150) ? monap_ptr->ac : 150) / 250);

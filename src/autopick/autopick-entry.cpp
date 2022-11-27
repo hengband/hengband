@@ -20,9 +20,9 @@
 #include "perception/object-perception.h"
 #include "player-base/player-class.h"
 #include "player/player-realm.h"
-#include "system/baseitem-info-definition.h"
-#include "system/monster-race-definition.h"
-#include "system/object-type-definition.h"
+#include "system/baseitem-info.h"
+#include "system/item-entity.h"
+#include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
 #include "util/quarks.h"
 #include "util/string-processor.h"
@@ -324,7 +324,7 @@ bool autopick_new_entry(autopick_type *entry, concptr str, bool allow_default)
 /*!
  * @brief Get auto-picker entry from o_ptr.
  */
-void autopick_entry_from_object(PlayerType *player_ptr, autopick_type *entry, ObjectType *o_ptr)
+void autopick_entry_from_object(PlayerType *player_ptr, autopick_type *entry, ItemEntity *o_ptr)
 {
     /* Assume that object name is to be added */
     bool name = true;
@@ -412,7 +412,7 @@ void autopick_entry_from_object(PlayerType *player_ptr, autopick_type *entry, Ob
     }
 
     if (o_ptr->is_melee_weapon()) {
-        auto *k_ptr = &baseitems_info[o_ptr->k_idx];
+        auto *k_ptr = &baseitems_info[o_ptr->bi_id];
 
         if ((o_ptr->dd != k_ptr->dd) || (o_ptr->ds != k_ptr->ds)) {
             ADD_FLG(FLG_BOOSTED);
@@ -433,7 +433,8 @@ void autopick_entry_from_object(PlayerType *player_ptr, autopick_type *entry, Ob
         ADD_FLG(FLG_HUMAN);
     }
 
-    if (o_ptr->tval >= ItemKindType::LIFE_BOOK && !check_book_realm(player_ptr, o_ptr->tval, o_ptr->sval)) {
+    const BaseitemKey bi_key(o_ptr->tval, o_ptr->sval);
+    if (o_ptr->is_spell_book() && !check_book_realm(player_ptr, bi_key)) {
         ADD_FLG(FLG_UNREADABLE);
         if (o_ptr->tval != ItemKindType::ARCANE_BOOK) {
             name = false;
@@ -453,22 +454,22 @@ void autopick_entry_from_object(PlayerType *player_ptr, autopick_type *entry, Ob
         name = false;
     }
 
-    if (o_ptr->tval >= ItemKindType::LIFE_BOOK && 0 == o_ptr->sval) {
+    if (o_ptr->is_spell_book() && (o_ptr->sval == 0)) {
         ADD_FLG(FLG_FIRST);
     }
-    if (o_ptr->tval >= ItemKindType::LIFE_BOOK && 1 == o_ptr->sval) {
+    if (o_ptr->is_spell_book() && (o_ptr->sval == 1)) {
         ADD_FLG(FLG_SECOND);
     }
-    if (o_ptr->tval >= ItemKindType::LIFE_BOOK && 2 == o_ptr->sval) {
+    if (o_ptr->is_spell_book() && (o_ptr->sval == 2)) {
         ADD_FLG(FLG_THIRD);
     }
-    if (o_ptr->tval >= ItemKindType::LIFE_BOOK && 3 == o_ptr->sval) {
+    if (o_ptr->is_spell_book() && (o_ptr->sval == 3)) {
         ADD_FLG(FLG_FOURTH);
     }
 
     if (o_ptr->is_ammo()) {
         ADD_FLG(FLG_MISSILES);
-    } else if (o_ptr->tval == ItemKindType::SCROLL || o_ptr->tval == ItemKindType::STAFF || o_ptr->tval == ItemKindType::WAND || o_ptr->tval == ItemKindType::ROD) {
+    } else if (o_ptr->tval == ItemKindType::SCROLL || o_ptr->is_wand_staff() || o_ptr->is_wand_rod()) {
         ADD_FLG(FLG_DEVICES);
     } else if (o_ptr->tval == ItemKindType::LITE) {
         ADD_FLG(FLG_LIGHTS);
@@ -476,7 +477,7 @@ void autopick_entry_from_object(PlayerType *player_ptr, autopick_type *entry, Ob
         ADD_FLG(FLG_JUNKS);
     } else if (o_ptr->tval == ItemKindType::CORPSE) {
         ADD_FLG(FLG_CORPSES);
-    } else if (o_ptr->tval >= ItemKindType::LIFE_BOOK) {
+    } else if (o_ptr->is_spell_book()) {
         ADD_FLG(FLG_SPELLBOOKS);
     } else if (o_ptr->tval == ItemKindType::POLEARM || o_ptr->tval == ItemKindType::SWORD || o_ptr->tval == ItemKindType::DIGGING || o_ptr->tval == ItemKindType::HAFTED) {
         ADD_FLG(FLG_WEAPONS);
@@ -730,7 +731,7 @@ bool entry_from_choosed_object(PlayerType *player_ptr, autopick_type *entry)
 {
     concptr q = _("どのアイテムを登録しますか? ", "Enter which item? ");
     concptr s = _("アイテムを持っていない。", "You have nothing to enter.");
-    ObjectType *o_ptr;
+    ItemEntity *o_ptr;
     o_ptr = choose_object(player_ptr, nullptr, q, s, USE_INVEN | USE_FLOOR | USE_EQUIP);
     if (!o_ptr) {
         return false;

@@ -15,7 +15,7 @@
 #include "player/special-defense-types.h"
 #include "specific-object/torch.h"
 #include "status/action-setter.h"
-#include "system/object-type-definition.h"
+#include "system/item-entity.h"
 #include "system/player-type-definition.h"
 
 ThrowCommand::ThrowCommand(PlayerType *player_ptr)
@@ -49,7 +49,7 @@ bool ThrowCommand::do_cmd_throw(int mult, bool boomerang, OBJECT_IDX shuriken)
     PlayerClass pc(this->player_ptr);
     pc.break_samurai_stance({ SamuraiStanceType::MUSOU });
 
-    ObjectType tmp_object;
+    ItemEntity tmp_object;
     ObjectThrowEntity ote(this->player_ptr, &tmp_object, delay_factor, mult, boomerang, shuriken);
     if (!ote.check_can_throw()) {
         return false;

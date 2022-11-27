@@ -11,8 +11,8 @@
 #include "object/item-use-flags.h"
 #include "object/object-info.h"
 #include "player/player-status-flags.h"
-#include "system/baseitem-info-definition.h"
-#include "system/object-type-definition.h"
+#include "system/baseitem-info.h"
+#include "system/item-entity.h"
 #include "system/player-type-definition.h"
 #include "term/gameterm.h"
 #include "term/screen-processor.h"
@@ -28,7 +28,7 @@ COMMAND_CODE show_equipment(PlayerType *player_ptr, int target_item, BIT_FLAGS m
 {
     COMMAND_CODE i;
     int j, k, l;
-    ObjectType *o_ptr;
+    ItemEntity *o_ptr;
     char tmp_val[80];
     GAME_TEXT o_name[MAX_NLEN];
     COMMAND_CODE out_index[23];

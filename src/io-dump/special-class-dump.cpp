@@ -15,7 +15,7 @@
 #include "player-info/bluemage-data-type.h"
 #include "player-info/magic-eater-data-type.h"
 #include "smith/object-smith.h"
-#include "system/baseitem-info-definition.h"
+#include "system/baseitem-info.h"
 #include "system/player-type-definition.h"
 #include "util/enum-converter.h"
 #include "util/flag-group.h"
@@ -66,13 +66,13 @@ static void dump_magic_eater(PlayerType *player_ptr, FILE *fff)
                 continue;
             }
 
-            auto k_idx = lookup_baseitem_id({ tval, i });
-            if (!k_idx) {
+            auto bi_id = lookup_baseitem_id({ tval, i });
+            if (!bi_id) {
                 continue;
             }
 
             char buf[128];
-            snprintf(buf, sizeof(buf), "%23s (%2d)", baseitems_info[k_idx].name.data(), item.count);
+            snprintf(buf, sizeof(buf), "%23s (%2d)", baseitems_info[bi_id].name.data(), item.count);
             desc_list.emplace_back(buf);
         }
 

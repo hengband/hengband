@@ -45,7 +45,7 @@
 #include "spell-kind/spells-perception.h"
 #include "status/action-setter.h"
 #include "status/shape-changer.h"
-#include "system/object-type-definition.h"
+#include "system/item-entity.h"
 #include "system/player-type-definition.h"
 #include "term/screen-processor.h"
 #include "util/int-char-converter.h"
@@ -55,12 +55,12 @@
 /*!
  * @brief 装備時にアイテムを呪う処理
  */
-static void do_curse_on_equip(OBJECT_IDX slot, ObjectType *o_ptr, PlayerType *player_ptr)
+static void do_curse_on_equip(OBJECT_IDX slot, ItemEntity *o_ptr, PlayerType *player_ptr)
 {
     if (set_anubis_and_chariot(player_ptr) && ((slot == INVEN_MAIN_HAND) || (slot == INVEN_SUB_HAND))) {
 
-        ObjectType *anubis = &(player_ptr->inventory_list[INVEN_MAIN_HAND]);
-        ObjectType *chariot = &(player_ptr->inventory_list[INVEN_SUB_HAND]);
+        ItemEntity *anubis = &(player_ptr->inventory_list[INVEN_MAIN_HAND]);
+        ItemEntity *chariot = &(player_ptr->inventory_list[INVEN_SUB_HAND]);
 
         anubis->curse_flags.set(CurseTraitType::PERSISTENT_CURSE);
         anubis->curse_flags.set(CurseTraitType::HEAVY_CURSE);
@@ -128,9 +128,9 @@ void do_cmd_equip(PlayerType *player_ptr)
 void do_cmd_wield(PlayerType *player_ptr)
 {
     OBJECT_IDX item, slot;
-    ObjectType forge;
-    ObjectType *q_ptr;
-    ObjectType *o_ptr;
+    ItemEntity forge;
+    ItemEntity *q_ptr;
+    ItemEntity *o_ptr;
     concptr act;
     GAME_TEXT o_name[MAX_NLEN];
     OBJECT_IDX need_switch_wielding = 0;
@@ -155,7 +155,7 @@ void do_cmd_wield(PlayerType *player_ptr)
         if (has_melee_weapon(player_ptr, INVEN_MAIN_HAND) && has_melee_weapon(player_ptr, INVEN_SUB_HAND)) {
             q = _("どちらの武器と取り替えますか?", "Replace which weapon? ");
             s = _("おっと。", "Oops.");
-            if (!choose_object(player_ptr, &slot, q, s, (USE_EQUIP | IGNORE_BOTHHAND_SLOT), FuncItemTester(&ObjectType::is_melee_weapon))) {
+            if (!choose_object(player_ptr, &slot, q, s, (USE_EQUIP | IGNORE_BOTHHAND_SLOT), FuncItemTester(&ItemEntity::is_melee_weapon))) {
                 return;
             }
 
@@ -164,11 +164,11 @@ void do_cmd_wield(PlayerType *player_ptr)
             }
         } else if (has_melee_weapon(player_ptr, INVEN_SUB_HAND)) {
             slot = INVEN_MAIN_HAND;
-        } else if (o_ptr_mh->k_idx && o_ptr_sh->k_idx &&
+        } else if (o_ptr_mh->bi_id && o_ptr_sh->bi_id &&
                    ((o_ptr->tval == ItemKindType::CAPTURE) || (!o_ptr_mh->is_melee_weapon() && !o_ptr_sh->is_melee_weapon()))) {
             q = _("どちらの手に装備しますか?", "Equip which hand? ");
             s = _("おっと。", "Oops.");
-            if (!choose_object(player_ptr, &slot, q, s, (USE_EQUIP), FuncItemTester(&ObjectType::is_wieldable_in_etheir_hand))) {
+            if (!choose_object(player_ptr, &slot, q, s, (USE_EQUIP), FuncItemTester(&ItemEntity::is_wieldable_in_etheir_hand))) {
                 return;
             }
         }
@@ -182,14 +182,14 @@ void do_cmd_wield(PlayerType *player_ptr)
             if (!get_check(_("二刀流で戦いますか？", "Dual wielding? "))) {
                 slot = INVEN_MAIN_HAND;
             }
-        } else if (!o_ptr_mh->k_idx && has_melee_weapon(player_ptr, INVEN_SUB_HAND)) {
+        } else if (!o_ptr_mh->bi_id && has_melee_weapon(player_ptr, INVEN_SUB_HAND)) {
             if (!get_check(_("二刀流で戦いますか？", "Dual wielding? "))) {
                 slot = INVEN_SUB_HAND;
             }
-        } else if (o_ptr_mh->k_idx && o_ptr_sh->k_idx) {
+        } else if (o_ptr_mh->bi_id && o_ptr_sh->bi_id) {
             q = _("どちらの手に装備しますか?", "Equip which hand? ");
             s = _("おっと。", "Oops.");
-            if (!choose_object(player_ptr, &slot, q, s, (USE_EQUIP), FuncItemTester(&ObjectType::is_wieldable_in_etheir_hand))) {
+            if (!choose_object(player_ptr, &slot, q, s, (USE_EQUIP), FuncItemTester(&ItemEntity::is_wieldable_in_etheir_hand))) {
                 return;
             }
 
@@ -200,7 +200,7 @@ void do_cmd_wield(PlayerType *player_ptr)
 
         break;
     case ItemKindType::RING:
-        if (player_ptr->inventory_list[INVEN_SUB_RING].k_idx && player_ptr->inventory_list[INVEN_MAIN_RING].k_idx) {
+        if (player_ptr->inventory_list[INVEN_SUB_RING].bi_id && player_ptr->inventory_list[INVEN_MAIN_RING].bi_id) {
             q = _("どちらの指輪と取り替えますか?", "Replace which ring? ");
         } else {
             q = _("どちらの手に装備しますか?", "Equip which hand? ");
@@ -255,10 +255,10 @@ void do_cmd_wield(PlayerType *player_ptr)
 
     sound(SOUND_WIELD);
     if (need_switch_wielding && !player_ptr->inventory_list[need_switch_wielding].is_cursed()) {
-        ObjectType *slot_o_ptr = &player_ptr->inventory_list[slot];
-        ObjectType *switch_o_ptr = &player_ptr->inventory_list[need_switch_wielding];
-        ObjectType object_tmp;
-        ObjectType *otmp_ptr = &object_tmp;
+        ItemEntity *slot_o_ptr = &player_ptr->inventory_list[slot];
+        ItemEntity *switch_o_ptr = &player_ptr->inventory_list[need_switch_wielding];
+        ItemEntity object_tmp;
+        ItemEntity *otmp_ptr = &object_tmp;
         GAME_TEXT switch_name[MAX_NLEN];
         describe_flavor(player_ptr, switch_name, switch_o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
         otmp_ptr->copy_from(switch_o_ptr);
@@ -288,12 +288,12 @@ void do_cmd_wield(PlayerType *player_ptr)
     }
 
     o_ptr = &player_ptr->inventory_list[slot];
-    if (o_ptr->k_idx) {
+    if (o_ptr->bi_id) {
         (void)inven_takeoff(player_ptr, slot, 255);
     }
 
     o_ptr->copy_from(q_ptr);
-    o_ptr->marked |= OM_TOUCHED;
+    o_ptr->marked.set(OmType::TOUCHED);
     player_ptr->equip_cnt++;
 
 #define STR_WIELD_HAND_RIGHT _("%s(%c)を右手に装備した。", "You are wielding %s (%c) in your right hand.")
@@ -354,7 +354,7 @@ void do_cmd_wield(PlayerType *player_ptr)
 void do_cmd_takeoff(PlayerType *player_ptr)
 {
     OBJECT_IDX item;
-    ObjectType *o_ptr;
+    ItemEntity *o_ptr;
     PlayerClass pc(player_ptr);
     pc.break_samurai_stance({ SamuraiStanceType::MUSOU });
 

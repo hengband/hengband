@@ -4,8 +4,7 @@
  * @author Hourier
  */
 
-#include <algorithm>
-
+#include "monster/monster-damage.h"
 #include "avatar/avatar-changer.h"
 #include "core/player-redraw-types.h"
 #include "core/speed-table.h"
@@ -29,7 +28,6 @@
 #include "monster-race/race-flags3.h"
 #include "monster-race/race-flags7.h"
 #include "monster-race/race-flags8.h"
-#include "monster/monster-damage.h"
 #include "monster/monster-describer.h"
 #include "monster/monster-description-types.h"
 #include "monster/monster-info.h"
@@ -41,14 +39,15 @@
 #include "spell-kind/spells-random.h"
 #include "status/experience.h"
 #include "system/floor-type-definition.h"
-#include "system/monster-race-definition.h"
-#include "system/monster-type-definition.h"
+#include "system/monster-entity.h"
+#include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
 #include "timed-effect/player-hallucination.h"
 #include "timed-effect/timed-effects.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 #include "world/world.h"
+#include <algorithm>
 
 /*
  * @brief コンストラクタ
@@ -135,7 +134,7 @@ bool MonsterDamageProcessor::genocide_chaos_patron()
     return this->m_idx == 0;
 }
 
-bool MonsterDamageProcessor::process_dead_exp_virtue(concptr note, monster_type *exp_mon)
+bool MonsterDamageProcessor::process_dead_exp_virtue(concptr note, MonsterEntity *exp_mon)
 {
     auto *m_ptr = &this->player_ptr->current_floor_ptr->m_list[this->m_idx];
     auto &r_ref = m_ptr->get_real_r_ref();
@@ -422,7 +421,7 @@ void MonsterDamageProcessor::show_bounty_message(GAME_TEXT *m_name)
  * experience point of a monster later.
  * </pre>
  */
-void MonsterDamageProcessor::get_exp_from_mon(monster_type *m_ptr, int exp_dam)
+void MonsterDamageProcessor::get_exp_from_mon(MonsterEntity *m_ptr, int exp_dam)
 {
     auto *r_ptr = &monraces_info[m_ptr->r_idx];
     if (!m_ptr->is_valid() || m_ptr->is_pet() || this->player_ptr->phase_out) {

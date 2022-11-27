@@ -17,10 +17,11 @@
 #include "object-enchant/special-object-flags.h"
 #include "object/object-kind-hook.h"
 #include "system/artifact-type-definition.h"
-#include "system/baseitem-info-definition.h"
+#include "system/baseitem-info.h"
 #include "system/dungeon-info.h"
 #include "system/floor-type-definition.h"
-#include "system/monster-race-definition.h"
+#include "system/item-entity.h"
+#include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
 #include "term/screen-processor.h"
 #include "util/angband-files.h"
@@ -52,7 +53,7 @@ static void do_cmd_knowledge_quests_current(PlayerType *player_ptr, FILE *fff)
     char tmp_str[1024];
     char rand_tmp_str[512] = "\0";
     GAME_TEXT name[MAX_NLEN];
-    monster_race *r_ptr;
+    MonsterRaceInfo *r_ptr;
     int rand_level = 100;
     int total = 0;
 
@@ -82,7 +83,6 @@ static void do_cmd_knowledge_quests_current(PlayerType *player_ptr, FILE *fff)
         total++;
         if (q_ref.type != QuestKindType::RANDOM) {
             char note[512] = "\0";
-
             if (q_ref.status == QuestStatusType::TAKEN || q_ref.status == QuestStatusType::STAGE_COMPLETED) {
                 switch (q_ref.type) {
                 case QuestKindType::KILL_LEVEL:
@@ -98,25 +98,24 @@ static void do_cmd_knowledge_quests_current(PlayerType *player_ptr, FILE *fff)
                     } else {
                         sprintf(note, _(" - %sを倒す。", " - kill %s."), name);
                     }
-                    break;
 
+                    break;
                 case QuestKindType::FIND_ARTIFACT:
                     if (q_ref.reward_artifact_idx != FixedArtifactId::NONE) {
                         const auto &a_ref = artifacts_info.at(q_ref.reward_artifact_idx);
-                        ObjectType forge;
-                        auto *o_ptr = &forge;
-                        auto k_idx = lookup_baseitem_id({ a_ref.tval, a_ref.sval });
-                        o_ptr->prep(k_idx);
-                        o_ptr->fixed_artifact_idx = q_ref.reward_artifact_idx;
-                        o_ptr->ident = IDENT_STORE;
-                        describe_flavor(player_ptr, name, o_ptr, OD_NAME_ONLY);
+                        ItemEntity item;
+                        auto bi_id = lookup_baseitem_id(a_ref.bi_key);
+                        item.prep(bi_id);
+                        item.fixed_artifact_idx = q_ref.reward_artifact_idx;
+                        item.ident = IDENT_STORE;
+                        describe_flavor(player_ptr, name, &item, OD_NAME_ONLY);
                     }
+
                     sprintf(note, _("\n   - %sを見つけ出す。", "\n   - Find %s."), name);
                     break;
                 case QuestKindType::FIND_EXIT:
                     sprintf(note, _(" - 出口に到達する。", " - Reach exit."));
                     break;
-
                 case QuestKindType::KILL_NUMBER:
 #ifdef JP
                     sprintf(note, " - %d 体のモンスターを倒す。(あと %d 体)", (int)q_ref.max_num, (int)(q_ref.max_num - q_ref.cur_num));

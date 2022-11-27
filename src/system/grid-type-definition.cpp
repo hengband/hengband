@@ -1,6 +1,6 @@
 ﻿#include "system/grid-type-definition.h"
 #include "monster-race/race-flags7.h"
-#include "system/monster-race-definition.h"
+#include "system/monster-race-info.h"
 #include "system/terrain-type-definition.h"
 #include "util/bit-flags-calculator.h"
 
@@ -91,17 +91,17 @@ bool grid_type::is_rune_explosion() const
     return this->is_object() && terrains_info[this->mimic].flags.has(TerrainCharacteristics::RUNE_EXPLOSION);
 }
 
-byte grid_type::get_cost(monster_race *r_ptr) const
+byte grid_type::get_cost(MonsterRaceInfo *r_ptr) const
 {
     return this->costs[get_grid_flow_type(r_ptr)];
 }
 
-byte grid_type::get_distance(monster_race *r_ptr) const
+byte grid_type::get_distance(MonsterRaceInfo *r_ptr) const
 {
     return this->dists[get_grid_flow_type(r_ptr)];
 }
 
-flow_type grid_type::get_grid_flow_type(monster_race *r_ptr) const
+flow_type grid_type::get_grid_flow_type(MonsterRaceInfo *r_ptr) const
 {
     return r_ptr->feature_flags.has(MonsterFeatureType::CAN_FLY) ? FLOW_CAN_FLY : FLOW_NORMAL;
 }

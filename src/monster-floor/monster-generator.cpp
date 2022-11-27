@@ -30,8 +30,8 @@
 #include "system/dungeon-info.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
-#include "system/monster-race-definition.h"
-#include "system/monster-type-definition.h"
+#include "system/monster-entity.h"
+#include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
 #include "target/projection-path-calculator.h"
 #include "util/string-processor.h"
@@ -241,7 +241,7 @@ static bool place_monster_can_escort(PlayerType *player_ptr, MonsterRaceId r_idx
 {
     auto *r_ptr = &monraces_info[place_monster_idx];
     auto *m_ptr = &player_ptr->current_floor_ptr->m_list[place_monster_m_idx];
-    monster_race *z_ptr = &monraces_info[r_idx];
+    MonsterRaceInfo *z_ptr = &monraces_info[r_idx];
 
     if (mon_hook_dungeon(player_ptr, place_monster_idx) != mon_hook_dungeon(player_ptr, r_idx)) {
         return false;

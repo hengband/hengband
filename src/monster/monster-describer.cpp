@@ -7,8 +7,8 @@
 #include "monster/monster-flag-types.h"
 #include "monster/monster-info.h"
 #include "system/floor-type-definition.h"
-#include "system/monster-race-definition.h"
-#include "system/monster-type-definition.h"
+#include "system/monster-entity.h"
+#include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
 #include "timed-effect/player-hallucination.h"
 #include "timed-effect/timed-effects.h"
@@ -22,9 +22,9 @@
  * @param m_ptr モンスターの参照ポインタ
  * @param mode 呼称オプション
  */
-void monster_desc(PlayerType *player_ptr, char *desc, monster_type *m_ptr, BIT_FLAGS mode)
+void monster_desc(PlayerType *player_ptr, char *desc, MonsterEntity *m_ptr, BIT_FLAGS mode)
 {
-    monster_race *r_ptr;
+    MonsterRaceInfo *r_ptr;
     r_ptr = &monraces_info[m_ptr->ap_r_idx];
     concptr name = (mode & MD_TRUE_NAME) ? m_ptr->get_real_r_ref().name.data() : r_ptr->name.data();
     GAME_TEXT silly_name[1024];
@@ -38,7 +38,7 @@ void monster_desc(PlayerType *player_ptr, char *desc, monster_type *m_ptr, BIT_F
         }
 
         if (!named) {
-            monster_race *hallu_race;
+            MonsterRaceInfo *hallu_race;
 
             do {
                 auto r_idx = MonsterRace::pick_one_at_random();

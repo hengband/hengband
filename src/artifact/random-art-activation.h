@@ -4,5 +4,5 @@
  * @brief ランダムアーティファクトの発動実装ヘッダ
  */
 
-class ObjectType;
-void give_activation_power(ObjectType *o_ptr);
+class ItemEntity;
+void give_activation_power(ItemEntity *o_ptr);

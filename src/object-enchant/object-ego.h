@@ -272,7 +272,7 @@ struct ego_item_type {
 
 extern std::map<EgoType, ego_item_type> egos_info;
 
-class ObjectType;
+class ItemEntity;
 class PlayerType;
 EgoType get_random_ego(byte slot, bool good);
-void apply_ego(ObjectType *o_ptr, DEPTH lev);
+void apply_ego(ItemEntity *o_ptr, DEPTH lev);

@@ -34,9 +34,9 @@ void monster_race_track(PlayerType *player_ptr, MonsterRaceId r_idx)
 /*
  * Track the given object kind
  */
-void object_kind_track(PlayerType *player_ptr, KIND_OBJECT_IDX k_idx)
+void object_kind_track(PlayerType *player_ptr, short bi_id)
 {
-    player_ptr->baseitem_info_idx = k_idx;
+    player_ptr->baseitem_info_idx = bi_id;
     player_ptr->window_flags |= (PW_OBJECT);
 }
 

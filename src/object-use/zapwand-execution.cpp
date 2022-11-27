@@ -17,8 +17,8 @@
 #include "player-status/player-energy.h"
 #include "status/experience.h"
 #include "sv-definition/sv-wand-types.h"
-#include "system/baseitem-info-definition.h"
-#include "system/object-type-definition.h"
+#include "system/baseitem-info.h"
+#include "system/item-entity.h"
 #include "system/player-type-definition.h"
 #include "target/target-getter.h"
 #include "term/screen-processor.h"
@@ -62,7 +62,7 @@ void ObjectZapWandEntity::execute(INVENTORY_IDX item)
         return;
     }
 
-    auto lev = baseitems_info[o_ptr->k_idx].level;
+    auto lev = baseitems_info[o_ptr->bi_id].level;
     if (lev > 50) {
         lev = 50 + (lev - 50) / 2;
     }
@@ -121,11 +121,11 @@ void ObjectZapWandEntity::execute(INVENTORY_IDX item)
         gain_exp(this->player_ptr, (lev + (this->player_ptr->lev >> 1)) / this->player_ptr->lev);
     }
 
-    set_bits(this->player_ptr->window_flags, PW_INVEN | PW_EQUIP | PW_PLAYER | PW_FLOOR_ITEM_LIST);
+    set_bits(this->player_ptr->window_flags, PW_INVEN | PW_EQUIP | PW_PLAYER | PW_FLOOR_ITEM_LIST | PW_FOUND_ITEM_LIST);
     set_bits(this->player_ptr->update, inventory_flags);
     o_ptr->pval--;
     if (item >= 0) {
-        inven_item_charges(this->player_ptr, item);
+        inven_item_charges(this->player_ptr->inventory_list[item]);
         return;
     }
 

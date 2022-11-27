@@ -7,7 +7,7 @@
 #include "inventory/inventory-slot-types.h"
 #include "object/object-info.h"
 #include "player/player-status.h"
-#include "system/object-type-definition.h"
+#include "system/item-entity.h"
 #include "system/player-type-definition.h"
 #include "view/display-messages.h"
 
@@ -16,14 +16,14 @@
  */
 void pack_overflow(PlayerType *player_ptr)
 {
-    if (player_ptr->inventory_list[INVEN_PACK].k_idx == 0) {
+    if (player_ptr->inventory_list[INVEN_PACK].bi_id == 0) {
         return;
     }
 
     GAME_TEXT o_name[MAX_NLEN];
-    ObjectType *o_ptr;
+    ItemEntity *o_ptr;
     update_creature(player_ptr);
-    if (!player_ptr->inventory_list[INVEN_PACK].k_idx) {
+    if (!player_ptr->inventory_list[INVEN_PACK].bi_id) {
         return;
     }
 

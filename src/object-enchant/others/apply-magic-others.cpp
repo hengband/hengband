@@ -21,10 +21,10 @@
 #include "perception/object-perception.h"
 #include "sv-definition/sv-lite-types.h"
 #include "sv-definition/sv-other-types.h"
-#include "system/baseitem-info-definition.h"
+#include "system/baseitem-info.h"
 #include "system/floor-type-definition.h"
-#include "system/monster-race-definition.h"
-#include "system/object-type-definition.h"
+#include "system/item-entity.h"
+#include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
@@ -37,7 +37,7 @@
  * @param power 生成ランク
  * @details power > 2はデバッグ専用.
  */
-OtherItemsEnchanter::OtherItemsEnchanter(PlayerType *player_ptr, ObjectType *o_ptr)
+OtherItemsEnchanter::OtherItemsEnchanter(PlayerType *player_ptr, ItemEntity *o_ptr)
     : player_ptr(player_ptr)
     , o_ptr(o_ptr)
 {
@@ -59,7 +59,7 @@ void OtherItemsEnchanter::apply_magic()
         this->enchant_wand_staff();
         break;
     case ItemKindType::ROD:
-        this->o_ptr->pval = baseitems_info[this->o_ptr->k_idx].pval;
+        this->o_ptr->pval = baseitems_info[this->o_ptr->bi_id].pval;
         break;
     case ItemKindType::CAPTURE:
         this->o_ptr->pval = 0;
@@ -90,7 +90,7 @@ void OtherItemsEnchanter::apply_magic()
  */
 void OtherItemsEnchanter::enchant_wand_staff()
 {
-    auto *k_ptr = &baseitems_info[this->o_ptr->k_idx];
+    auto *k_ptr = &baseitems_info[this->o_ptr->bi_id];
     this->o_ptr->pval = k_ptr->pval / 2 + randint1((k_ptr->pval + 1) / 2);
 }
 
@@ -193,7 +193,7 @@ void OtherItemsEnchanter::generate_statue()
  */
 void OtherItemsEnchanter::generate_chest()
 {
-    auto obj_level = baseitems_info[this->o_ptr->k_idx].level;
+    auto obj_level = baseitems_info[this->o_ptr->bi_id].level;
     if (obj_level <= 0) {
         return;
     }

@@ -59,8 +59,8 @@
 #include "system/floor-type-definition.h"
 #include "system/game-option-types.h"
 #include "system/grid-type-definition.h"
-#include "system/monster-race-definition.h"
-#include "system/monster-type-definition.h"
+#include "system/monster-entity.h"
+#include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
 #include "target/grid-selector.h"
 #include "target/target-getter.h"
@@ -995,7 +995,7 @@ void do_cmd_element_browse(PlayerType *player_ptr)
  * @param type 魔法攻撃属性
  * @return 効果があるならTRUE、なければFALSE
  */
-bool is_elemental_genocide_effective(monster_race *r_ptr, AttributeType type)
+bool is_elemental_genocide_effective(MonsterRaceInfo *r_ptr, AttributeType type)
 {
     switch (type) {
     case AttributeType::FIRE:

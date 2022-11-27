@@ -28,9 +28,9 @@
 #include "status/bad-status-setter.h"
 #include "sv-definition/sv-other-types.h"
 #include "system/floor-type-definition.h"
-#include "system/monster-race-definition.h"
-#include "system/monster-type-definition.h"
-#include "system/object-type-definition.h"
+#include "system/item-entity.h"
+#include "system/monster-entity.h"
+#include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
 #include "target/projection-path-calculator.h"
 #include "util/string-processor.h"
@@ -219,8 +219,8 @@ bool cast_summon_greater_demon(PlayerType *player_ptr)
     concptr q = _("どの死体を捧げますか? ", "Sacrifice which corpse? ");
     concptr s = _("捧げられる死体を持っていない。", "You have nothing to sacrifice.");
     OBJECT_IDX item;
-    ObjectType *o_ptr;
-    o_ptr = choose_object(player_ptr, &item, q, s, (USE_INVEN | USE_FLOOR), FuncItemTester(&ObjectType::is_offerable));
+    ItemEntity *o_ptr;
+    o_ptr = choose_object(player_ptr, &item, q, s, (USE_INVEN | USE_FLOOR), FuncItemTester(&ItemEntity::is_offerable));
     if (!o_ptr) {
         return false;
     }
@@ -309,7 +309,7 @@ void mitokohmon(PlayerType *player_ptr)
 
     if (!count) {
         for (int i = player_ptr->current_floor_ptr->m_max - 1; i > 0; i--) {
-            monster_type *m_ptr;
+            MonsterEntity *m_ptr;
             m_ptr = &player_ptr->current_floor_ptr->m_list[i];
             if (!m_ptr->is_valid()) {
                 continue;

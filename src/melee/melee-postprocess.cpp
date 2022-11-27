@@ -39,8 +39,8 @@
 #include "player-info/race-types.h"
 #include "player/player-personality-types.h"
 #include "system/floor-type-definition.h"
-#include "system/monster-race-definition.h"
-#include "system/monster-type-definition.h"
+#include "system/monster-entity.h"
+#include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
@@ -48,7 +48,7 @@
 // Melee-post-process-type
 struct mam_pp_type {
     MONSTER_IDX m_idx;
-    monster_type *m_ptr;
+    MonsterEntity *m_ptr;
     bool seen;
     GAME_TEXT m_name[160];
     int dam;

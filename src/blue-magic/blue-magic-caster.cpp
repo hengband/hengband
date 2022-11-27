@@ -33,8 +33,8 @@
 #include "status/buff-setter.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
-#include "system/monster-race-definition.h"
-#include "system/monster-type-definition.h"
+#include "system/monster-entity.h"
+#include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
 #include "target/projection-path-calculator.h"
 #include "target/target-checker.h"
@@ -95,8 +95,8 @@ static bool cast_blue_hand_doom(PlayerType *player_ptr, bmc_type *bmc_ptr)
 
 static bool exe_blue_teleport_back(PlayerType *player_ptr, GAME_TEXT *m_name)
 {
-    monster_type *m_ptr;
-    monster_race *r_ptr;
+    MonsterEntity *m_ptr;
+    MonsterRaceInfo *r_ptr;
     auto *floor_ptr = player_ptr->current_floor_ptr;
     if ((floor_ptr->grid_array[target_row][target_col].m_idx == 0) || !player_has_los_bold(player_ptr, target_row, target_col) || !projectable(player_ptr, player_ptr->y, player_ptr->x, target_row, target_col)) {
         return true;

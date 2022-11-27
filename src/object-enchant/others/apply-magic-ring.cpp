@@ -11,8 +11,8 @@
 #include "object-enchant/special-object-flags.h"
 #include "object-enchant/trc-types.h"
 #include "sv-definition/sv-ring-types.h"
-#include "system/baseitem-info-definition.h"
-#include "system/object-type-definition.h"
+#include "system/baseitem-info.h"
+#include "system/item-entity.h"
 #include "system/player-type-definition.h"
 #include "util/bit-flags-calculator.h"
 
@@ -23,7 +23,7 @@
  * @param level 生成基準階
  * @param power 生成ランク
  */
-RingEnchanter::RingEnchanter(PlayerType *player_ptr, ObjectType *o_ptr, DEPTH level, int power)
+RingEnchanter::RingEnchanter(PlayerType *player_ptr, ItemEntity *o_ptr, DEPTH level, int power)
     : player_ptr(player_ptr)
     , o_ptr(o_ptr)
     , level(level)
@@ -228,7 +228,7 @@ void RingEnchanter::give_ego_index()
 {
     while (!this->o_ptr->is_ego()) {
         int tmp = m_bonus(10, this->level);
-        auto *k_ptr = &baseitems_info[this->o_ptr->k_idx];
+        auto *k_ptr = &baseitems_info[this->o_ptr->bi_id];
         switch (randint1(28)) {
         case 1:
         case 2:
@@ -501,7 +501,7 @@ void RingEnchanter::give_cursed()
     }
 
     while (!this->o_ptr->is_ego()) {
-        auto *k_ptr = &baseitems_info[this->o_ptr->k_idx];
+        auto *k_ptr = &baseitems_info[this->o_ptr->bi_id];
         switch (randint1(5)) {
         case 1:
             if (k_ptr->flags.has(TR_DRAIN_EXP)) {

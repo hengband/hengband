@@ -6,8 +6,8 @@
 #include "system/angband.h"
 #include "util/flag-group.h"
 
-struct monster_race;
-struct monster_type;
+class MonsterRaceInfo;
+class MonsterEntity;
 struct melee_spell_type {
     MONSTER_IDX m_idx;
     POSITION y;
@@ -22,9 +22,9 @@ struct melee_spell_type {
     char m_poss[160];
 #endif
 
-    monster_type *m_ptr;
-    monster_type *t_ptr;
-    monster_race *r_ptr;
+    MonsterEntity *m_ptr;
+    MonsterEntity *t_ptr;
+    MonsterRaceInfo *r_ptr;
     bool see_m;
     bool maneable;
     bool pet;

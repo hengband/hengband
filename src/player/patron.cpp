@@ -32,7 +32,7 @@
 #include "status/experience.h"
 #include "status/shape-changer.h"
 #include "system/floor-type-definition.h"
-#include "system/object-type-definition.h"
+#include "system/item-entity.h"
 #include "system/player-type-definition.h"
 #include "view/display-messages.h"
 
@@ -412,7 +412,7 @@ void Patron::gain_level_reward(PlayerType *player_ptr_, int chosen_reward)
 
         case REW_CURSE_AR:
 
-            if (!this->player_ptr->inventory_list[INVEN_BODY].k_idx) {
+            if (!this->player_ptr->inventory_list[INVEN_BODY].bi_id) {
                 break;
             }
             msg_format(_("%sの声が響き渡った:", "The voice of %s booms out:"), this->name.data());
@@ -454,7 +454,7 @@ void Patron::gain_level_reward(PlayerType *player_ptr_, int chosen_reward)
                     (void)curse_weapon_object(player_ptr, false, &this->player_ptr->inventory_list[slot]);
                     reward = format(_("%sが破壊された。", "destroying %s"), o_name);
                 } else {
-                    if (!this->player_ptr->inventory_list[INVEN_BODY].k_idx) {
+                    if (!this->player_ptr->inventory_list[INVEN_BODY].bi_id) {
                         break;
                     }
                     describe_flavor(player_ptr, o_name, &this->player_ptr->inventory_list[INVEN_BODY], OD_NAME_ONLY);

@@ -3,7 +3,7 @@
 #include "inventory/inventory-slot-types.h"
 #include "player/player-status-flags.h"
 #include "player/player-status-table.h"
-#include "system/object-type-definition.h"
+#include "system/item-entity.h"
 #include "system/player-type-definition.h"
 
 /*!

@@ -4,7 +4,7 @@
 #include "load/load-util.h"
 #include "load/old/item-loader-savefile50.h"
 #include "object/object-mark-types.h"
-#include "system/object-type-definition.h"
+#include "system/item-entity.h"
 #include "system/player-type-definition.h"
 
 /*!
@@ -25,7 +25,7 @@ static errr rd_inventory(PlayerType *player_ptr)
     player_ptr->equip_cnt = 0;
 
     //! @todo std::make_shared の配列対応版は C++20 から
-    player_ptr->inventory_list = std::shared_ptr<ObjectType[]>{ new ObjectType[INVEN_TOTAL] };
+    player_ptr->inventory_list = std::shared_ptr<ItemEntity[]>{ new ItemEntity[INVEN_TOTAL] };
 
     int slot = 0;
     auto item_loader = ItemLoaderFactory::create_loader();
@@ -36,14 +36,14 @@ static errr rd_inventory(PlayerType *player_ptr)
             break;
         }
 
-        ObjectType item;
+        ItemEntity item;
         item_loader->rd_item(&item);
-        if (!item.k_idx) {
+        if (!item.bi_id) {
             return 53;
         }
 
         if (n >= INVEN_MAIN_HAND) {
-            item.marked |= OM_TOUCHED;
+            item.marked.set(OmType::TOUCHED);
             player_ptr->inventory_list[n].copy_from(&item);
             player_ptr->equip_cnt++;
             continue;
@@ -55,7 +55,7 @@ static errr rd_inventory(PlayerType *player_ptr)
         }
 
         n = slot++;
-        item.marked |= OM_TOUCHED;
+        item.marked.set(OmType::TOUCHED);
         player_ptr->inventory_list[n].copy_from(&item);
         player_ptr->inven_cnt++;
     }

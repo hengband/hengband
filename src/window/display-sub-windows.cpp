@@ -22,12 +22,12 @@
 #include "player/player-status-flags.h"
 #include "player/player-status.h"
 #include "spell-kind/magic-item-recharger.h"
-#include "system/baseitem-info-definition.h"
+#include "system/baseitem-info.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
-#include "system/monster-race-definition.h"
-#include "system/monster-type-definition.h"
-#include "system/object-type-definition.h"
+#include "system/item-entity.h"
+#include "system/monster-entity.h"
+#include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
 #include "system/terrain-type-definition.h"
 #include "target/target-describer.h"
@@ -51,6 +51,7 @@
 #include <mutex>
 #include <sstream>
 #include <string>
+#include <util/object-sort.h>
 
 /*! サブウィンドウ表示用の ItemTester オブジェクト */
 static std::unique_ptr<ItemTester> fix_item_tester = std::make_unique<AllMatchItemTester>();
@@ -93,7 +94,8 @@ void fix_inventory(PlayerType *player_ptr)
  * @param x 表示列
  * @param y 表示行
  * @param m_ptr 思い出を表示するモンスター情報の参照ポインタ
- * @param n_same モンスターの数の現在数
+ * @param n_same モンスター数の現在数
+ * @param n_awake 起きている数
  * @details
  * <pre>
  * nnn X LV name
@@ -103,7 +105,7 @@ void fix_inventory(PlayerType *player_ptr)
  *  name: name of monster
  * </pre>
  */
-static void print_monster_line(TERM_LEN x, TERM_LEN y, monster_type *m_ptr, int n_same)
+static void print_monster_line(TERM_LEN x, TERM_LEN y, MonsterEntity *m_ptr, int n_same, int n_awake)
 {
     char buf[256];
     MonsterRaceId r_idx = m_ptr->ap_r_idx;
@@ -115,9 +117,10 @@ static void print_monster_line(TERM_LEN x, TERM_LEN y, monster_type *m_ptr, int 
         return;
     }
     if (r_ptr->kind_flags.has(MonsterKindType::UNIQUE)) {
-        term_addstr(-1, TERM_WHITE, MonsterRace(r_idx).is_bounty(true) ? "  W" : "  U");
+        sprintf(buf, _("%3s(覚%2d)", "%3s(%2d)"), MonsterRace(r_idx).is_bounty(true) ? "  W" : "  U", n_awake);
+        term_addstr(-1, TERM_WHITE, buf);
     } else {
-        sprintf(buf, "%3d", n_same);
+        sprintf(buf, _("%3d(覚%2d)", "%3d(%2d)"), n_same, n_awake);
         term_addstr(-1, TERM_WHITE, buf);
     }
 
@@ -145,11 +148,19 @@ static void print_monster_line(TERM_LEN x, TERM_LEN y, monster_type *m_ptr, int 
 void print_monster_list(FloorType *floor_ptr, const std::vector<MONSTER_IDX> &monster_list, TERM_LEN x, TERM_LEN y, TERM_LEN max_lines)
 {
     TERM_LEN line = y;
-    monster_type *last_mons = nullptr;
-    int n_same = 0;
-    size_t i;
-    for (i = 0; i < monster_list.size(); i++) {
-        auto m_ptr = &floor_ptr->m_list[monster_list[i]];
+    struct info {
+        MonsterEntity *monster_entity;
+        int visible_count; // 現在数
+        int awake_count; // 起きている数
+    };
+
+    // 出現リスト表示用のデータ
+    std::vector<info> monster_list_info;
+
+    // 描画に必要なデータを集める
+    for (auto monster_index : monster_list) {
+        auto m_ptr = &floor_ptr->m_list[monster_index];
+
         if (m_ptr->is_pet()) {
             continue;
         } // pet
@@ -158,42 +169,33 @@ void print_monster_list(FloorType *floor_ptr, const std::vector<MONSTER_IDX> &mo
         } // dead?
 
         // ソート済みなので同じモンスターは連続する．これを利用して同じモンスターをカウント，まとめて表示する．
-        // 先頭モンスター
-        if (!last_mons) {
-            last_mons = m_ptr;
-            n_same = 1;
-            continue;
+        if (monster_list_info.empty() || (monster_list_info.back().monster_entity->ap_r_idx != m_ptr->ap_r_idx)) {
+            monster_list_info.push_back({ m_ptr, 0, 0 });
         }
 
-        // same race?
-        if (last_mons->ap_r_idx == m_ptr->ap_r_idx) {
-            n_same++;
-            continue; // 表示処理を次に回す
-        }
+        // 出現数をカウント
+        monster_list_info.back().visible_count++;
 
-        // last_mons と m_ptr が(見た目が)異なるなら、last_mons とその数を出力。
-        // m_ptr を新たな last_mons とする。
-        print_monster_line(x, line++, last_mons, n_same);
-        n_same = 1;
-        last_mons = m_ptr;
+        // 起きているモンスターをカウント
+        if (!m_ptr->is_asleep()) {
+            monster_list_info.back().awake_count++;
+        }
+    }
+
+    // 集めたデータを元にリストを表示する
+    for (const auto &info : monster_list_info) {
+        print_monster_line(x, line++, info.monster_entity, info.visible_count, info.awake_count);
 
         // 行数が足りなくなったら中断。
         if (line - y == max_lines) {
+            // 行数が足りなかった場合、最終行にその旨表示。
+            term_addstr(-1, TERM_WHITE, "-- and more --");
             break;
         }
     }
 
-    if (i != monster_list.size()) {
-        // 行数が足りなかった場合、最終行にその旨表示。
-        term_addstr(-1, TERM_WHITE, "-- and more --");
-    } else {
-        // 行数が足りていれば last_mons とその数を出力し、残りの行をクリア。
-        if (last_mons) {
-            print_monster_line(x, line++, last_mons, n_same);
-        }
-        for (; line < max_lines; line++) {
-            term_erase(0, line, 255);
-        }
+    for (; line < max_lines; line++) {
+        term_erase(0, line, 255);
     }
 }
 
@@ -546,7 +548,7 @@ void fix_object(PlayerType *player_ptr)
  * @details
  * Lookコマンドでカーソルを合わせた場合に合わせてミミックは考慮しない。
  */
-static const monster_type *monster_on_floor_items(FloorType *floor_ptr, const grid_type *g_ptr)
+static const MonsterEntity *monster_on_floor_items(FloorType *floor_ptr, const grid_type *g_ptr)
 {
     if (g_ptr->m_idx == 0) {
         return nullptr;
@@ -593,7 +595,7 @@ static void display_floor_item_list(PlayerType *player_ptr, const int y, const i
         if (is_hallucinated) {
             sprintf(line, _("(X:%03d Y:%03d) 何か奇妙な物の足元の発見済みアイテム一覧", "Found items at (%03d,%03d) under something strange"), x, y);
         } else {
-            const monster_race *const r_ptr = &monraces_info[m_ptr->ap_r_idx];
+            const MonsterRaceInfo *const r_ptr = &monraces_info[m_ptr->ap_r_idx];
             sprintf(line, _("(X:%03d Y:%03d) %sの足元の発見済みアイテム一覧", "Found items at (%03d,%03d) under %s"), x, y, r_ptr->name.data());
         }
     } else {
@@ -615,10 +617,10 @@ static void display_floor_item_list(PlayerType *player_ptr, const int y, const i
     // (y,x) のアイテムを1行に1個ずつ書く。
     TERM_LEN term_y = 1;
     for (const auto o_idx : g_ptr->o_idx_list) {
-        ObjectType *const o_ptr = &floor_ptr->o_list[o_idx];
+        ItemEntity *const o_ptr = &floor_ptr->o_list[o_idx];
 
         // 未発見アイテムおよび金は対象外。
-        if (none_bits(o_ptr->marked, OM_FOUND) || o_ptr->tval == ItemKindType::GOLD) {
+        if (o_ptr->marked.has_not(OmType::FOUND) || o_ptr->tval == ItemKindType::GOLD) {
             continue;
         }
 
@@ -662,6 +664,105 @@ void fix_floor_item_list(PlayerType *player_ptr, const int y, const int x)
         term_activate(angband_term[j]);
 
         display_floor_item_list(player_ptr, y, x);
+        term_fresh();
+
+        term_activate(old);
+    }
+}
+
+/*!
+ * @brief 発見済みのアイテム一覧を作成し、表示する
+ * @param プレイヤー情報への参照ポインタ
+ */
+static void display_found_item_list(PlayerType *player_ptr)
+{
+    // Term の行数を取得。
+    TERM_LEN term_h;
+    TERM_LEN term_w;
+    term_get_size(&term_w, &term_h);
+
+    if (term_h <= 0) {
+        return;
+    }
+
+    auto *floor_ptr = player_ptr->current_floor_ptr;
+
+    // 所持品一覧と同じ順にソートする
+    // あらかじめfloor_ptr->o_list から↓項目を取り除く
+    // bi_idが0
+    // OM_FOUNDフラグが立っていない
+    // ItemKindTypeがGOLD
+    std::vector<ItemEntity *> found_item_list;
+    for (auto &item : floor_ptr->o_list) {
+        auto item_entity_ptr = &item;
+        if (item_entity_ptr->bi_id > 0 && item_entity_ptr->marked.has(OmType::FOUND) && item_entity_ptr->tval != ItemKindType::GOLD) {
+            found_item_list.push_back(item_entity_ptr);
+        }
+    }
+
+    std::sort(
+        found_item_list.begin(), found_item_list.end(),
+        [player_ptr](ItemEntity *left, ItemEntity *right) -> bool {
+            return object_sort_comp(player_ptr, left, left->get_price(), right);
+        });
+
+    term_clear();
+    term_gotoxy(0, 0);
+
+    // 先頭行を書く。
+    term_addstr(-1, TERM_WHITE, _("発見済みのアイテム一覧", "Found items"));
+
+    // 発見済みのアイテムを表示
+    TERM_LEN term_y = 1;
+    for (auto item : found_item_list) {
+        // 途中で行数が足りなくなったら終了。
+        if (term_y >= term_h) {
+            break;
+        }
+
+        term_gotoxy(0, term_y);
+
+        // アイテムシンボル表示
+        const auto symbol_code = item->get_symbol();
+        const std::string symbol = format(" %c ", symbol_code);
+        const auto color_code_for_symbol = item->get_color();
+        term_addstr(-1, color_code_for_symbol, symbol.data());
+
+        // アイテム名表示
+        char temp[512];
+        describe_flavor(player_ptr, temp, item, 0);
+        const std::string item_description(temp);
+        const auto color_code_for_item = tval_to_attr[enum2i(item->tval) % 128];
+        term_addstr(-1, color_code_for_item, item_description.data());
+
+        // アイテム座標表示
+        const std::string item_location = format("(X:%3d Y:%3d)", item->ix, item->iy);
+        prt(item_location.data(), term_y, term_w - item_location.length() - 1);
+
+        ++term_y;
+    }
+}
+
+/*!
+ * @brief 発見済みのアイテム一覧をサブウィンドウに表示する
+ */
+void fix_found_item_list(PlayerType *player_ptr)
+{
+    for (int j = 0; j < 8; j++) {
+        if (!angband_term[j]) {
+            continue;
+        }
+        if (angband_term[j]->never_fresh) {
+            continue;
+        }
+        if (none_bits(window_flag[j], PW_FOUND_ITEM_LIST)) {
+            continue;
+        }
+
+        term_type *old = game_term;
+        term_activate(angband_term[j]);
+
+        display_found_item_list(player_ptr);
         term_fresh();
 
         term_activate(old);

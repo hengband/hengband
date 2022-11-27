@@ -9,7 +9,7 @@
 #include "inventory/inventory-slot-types.h"
 #include "object-enchant/object-boost.h"
 #include "object-enchant/object-ego.h"
-#include "system/object-type-definition.h"
+#include "system/item-entity.h"
 
 /*
  * @brief コンストラクタ
@@ -18,7 +18,7 @@
  * @param level 生成基準階
  * @param power 生成ランク
  */
-CrownEnchanter::CrownEnchanter(PlayerType *player_ptr, ObjectType *o_ptr, DEPTH level, int power)
+CrownEnchanter::CrownEnchanter(PlayerType *player_ptr, ItemEntity *o_ptr, DEPTH level, int power)
     : AbstractProtectorEnchanter{ o_ptr, level, power }
     , player_ptr(player_ptr)
 {

@@ -19,12 +19,11 @@
 #include "sv-definition/sv-scroll-types.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
-#include "system/monster-type-definition.h"
-#include "system/object-type-definition.h"
+#include "system/item-entity.h"
+#include "system/monster-entity.h"
 #include "system/player-type-definition.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
-
 #include <set>
 
 /*!
@@ -215,7 +214,7 @@ bool affect_item(PlayerType *player_ptr, MONSTER_IDX who, POSITION r, POSITION y
 
             o_ptr->pval = (0 - o_ptr->pval);
             object_known(o_ptr);
-            if (known && (o_ptr->marked & OM_FOUND)) {
+            if (known && o_ptr->marked.has(OmType::FOUND)) {
                 msg_print(_("カチッと音がした！", "Click!"));
                 is_item_affected = true;
             }
@@ -260,28 +259,28 @@ bool affect_item(PlayerType *player_ptr, MONSTER_IDX who, POSITION r, POSITION y
         }
 
         GAME_TEXT o_name[MAX_NLEN];
-        if (known && (o_ptr->marked & OM_FOUND)) {
+        if (known && o_ptr->marked.has(OmType::FOUND)) {
             is_item_affected = true;
             describe_flavor(player_ptr, o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
         }
 
         if ((is_artifact || ignore)) {
-            if (known && (o_ptr->marked & OM_FOUND)) {
+            if (known && o_ptr->marked.has(OmType::FOUND)) {
                 msg_format(_("%sは影響を受けない！", (plural ? "The %s are unaffected!" : "The %s is unaffected!")), o_name);
             }
 
             continue;
         }
 
-        if (known && (o_ptr->marked & OM_FOUND) && note_kill) {
+        if (known && o_ptr->marked.has(OmType::FOUND) && note_kill) {
             msg_format(_("%sは%s", "The %s%s"), o_name, note_kill);
         }
 
-        KIND_OBJECT_IDX k_idx = o_ptr->k_idx;
+        short bi_id = o_ptr->bi_id;
         bool is_potion = o_ptr->is_potion();
         delete_object_idx(player_ptr, this_o_idx);
         if (is_potion) {
-            (void)potion_smash_effect(player_ptr, who, y, x, k_idx);
+            (void)potion_smash_effect(player_ptr, who, y, x, bi_id);
 
             // 薬の破壊効果によりリストの次のアイテムが破壊された可能性があるのでリストの最初から処理をやり直す
             // 処理済みのアイテムは processed_list に登録されており、スキップされる

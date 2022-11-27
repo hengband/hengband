@@ -13,9 +13,10 @@
 #include "object-enchant/special-object-flags.h"
 #include "player/player-status-flags.h"
 #include "system/artifact-type-definition.h"
-#include "system/baseitem-info-definition.h"
+#include "system/baseitem-info.h"
 #include "system/dungeon-info.h"
 #include "system/floor-type-definition.h"
+#include "system/item-entity.h"
 #include "system/player-type-definition.h"
 #include "util/bit-flags-calculator.h"
 #include "world/world.h"
@@ -27,7 +28,7 @@
  * @param lev 生成基準階
  * @param mode 生成オプション
  */
-ItemMagicApplier::ItemMagicApplier(PlayerType *player_ptr, ObjectType *o_ptr, DEPTH lev, BIT_FLAGS mode)
+ItemMagicApplier::ItemMagicApplier(PlayerType *player_ptr, ItemEntity *o_ptr, DEPTH lev, BIT_FLAGS mode)
     : player_ptr(player_ptr)
     , o_ptr(o_ptr)
     , lev(lev)
@@ -196,12 +197,12 @@ bool ItemMagicApplier::set_fixed_artifact_generation_info()
  */
 void ItemMagicApplier::apply_cursed()
 {
-    if (this->o_ptr->k_idx == 0) {
+    if (this->o_ptr->bi_id == 0) {
         return;
     }
 
-    const auto *k_ptr = &baseitems_info[this->o_ptr->k_idx];
-    if (!baseitems_info[this->o_ptr->k_idx].cost) {
+    const auto *k_ptr = &baseitems_info[this->o_ptr->bi_id];
+    if (!baseitems_info[this->o_ptr->bi_id].cost) {
         set_bits(this->o_ptr->ident, IDENT_BROKEN);
     }
 

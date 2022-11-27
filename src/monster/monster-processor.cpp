@@ -62,8 +62,8 @@
 #include "spell/summon-types.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
-#include "system/monster-race-definition.h"
-#include "system/monster-type-definition.h"
+#include "system/monster-entity.h"
+#include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
 #include "target/projection-path-calculator.h"
 #include "view/display-messages.h"
@@ -81,7 +81,7 @@ bool cast_spell(PlayerType *player_ptr, MONSTER_IDX m_idx, bool aware);
 bool process_monster_fear(PlayerType *player_ptr, turn_flags *turn_flags_ptr, MONSTER_IDX m_idx);
 
 void sweep_monster_process(PlayerType *player_ptr);
-bool decide_process_continue(PlayerType *player_ptr, monster_type *m_ptr);
+bool decide_process_continue(PlayerType *player_ptr, MonsterEntity *m_ptr);
 
 /*!
  * @brief モンスター単体の1ターン行動処理メインルーチン /
@@ -582,7 +582,7 @@ void sweep_monster_process(PlayerType *player_ptr)
 {
     auto *floor_ptr = player_ptr->current_floor_ptr;
     for (MONSTER_IDX i = floor_ptr->m_max - 1; i >= 1; i--) {
-        monster_type *m_ptr;
+        MonsterEntity *m_ptr;
         m_ptr = &floor_ptr->m_list[i];
 
         if (player_ptr->leaving) {
@@ -628,9 +628,9 @@ void sweep_monster_process(PlayerType *player_ptr)
  * @param m_ptr モンスターへの参照ポインタ
  * @return 後続処理が必要ならTRUE
  */
-bool decide_process_continue(PlayerType *player_ptr, monster_type *m_ptr)
+bool decide_process_continue(PlayerType *player_ptr, MonsterEntity *m_ptr)
 {
-    monster_race *r_ptr;
+    MonsterRaceInfo *r_ptr;
     r_ptr = &monraces_info[m_ptr->r_idx];
     if (!player_ptr->no_flowed) {
         m_ptr->mflag2.reset(MonsterConstantFlagType::NOFLOW);

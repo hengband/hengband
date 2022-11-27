@@ -55,9 +55,9 @@
 #include "status/buff-setter.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
-#include "system/monster-race-definition.h"
-#include "system/monster-type-definition.h"
-#include "system/object-type-definition.h"
+#include "system/item-entity.h"
+#include "system/monster-entity.h"
+#include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
 #include "target/projection-path-calculator.h"
 #include "target/target-checker.h"
@@ -931,8 +931,8 @@ static bool use_mane(PlayerType *player_ptr, MonsterAbilityType spell)
     case MonsterAbilityType::SPECIAL:
         break;
     case MonsterAbilityType::TELE_TO: {
-        monster_type *m_ptr;
-        monster_race *r_ptr;
+        MonsterEntity *m_ptr;
+        MonsterRaceInfo *r_ptr;
         GAME_TEXT m_name[MAX_NLEN];
 
         if (!target_set(player_ptr, TARGET_KILL)) {

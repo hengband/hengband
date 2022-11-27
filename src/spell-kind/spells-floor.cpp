@@ -48,8 +48,9 @@
 #include "system/dungeon-info.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
-#include "system/monster-race-definition.h"
-#include "system/monster-type-definition.h"
+#include "system/item-entity.h"
+#include "system/monster-entity.h"
+#include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
 #include "system/terrain-type-definition.h"
 #include "util/bit-flags-calculator.h"
@@ -71,7 +72,7 @@ void wiz_lite(PlayerType *player_ptr, bool ninja)
         if (o_ptr->is_held_by_monster()) {
             continue;
         }
-        o_ptr->marked |= OM_FOUND;
+        o_ptr->marked.set(OmType::FOUND);
     }
 
     /* Scan all normal grids */
@@ -122,7 +123,7 @@ void wiz_lite(PlayerType *player_ptr, bool ninja)
 
     player_ptr->update |= (PU_MONSTERS);
     player_ptr->redraw |= (PR_MAP);
-    player_ptr->window_flags |= (PW_OVERHEAD | PW_DUNGEON);
+    player_ptr->window_flags |= (PW_OVERHEAD | PW_DUNGEON | PW_FOUND_ITEM_LIST);
 
     if (player_ptr->current_floor_ptr->grid_array[player_ptr->y][player_ptr->x].info & CAVE_GLOW) {
         set_superstealth(player_ptr, false);
@@ -169,7 +170,8 @@ void wiz_dark(PlayerType *player_ptr)
         }
 
         /* Forget the object */
-        o_ptr->marked &= OM_TOUCHED;
+        // 意図としては OmType::TOUCHED を維持しつつ OmType::FOUND を消す事と思われるが一応元のロジックを維持しておく
+        o_ptr->marked &= { OmType::TOUCHED };
     }
 
     /* Forget travel route when we have forgotten map */
@@ -179,7 +181,7 @@ void wiz_dark(PlayerType *player_ptr)
     player_ptr->update |= (PU_VIEW | PU_LITE | PU_MON_LITE);
     player_ptr->update |= (PU_MONSTERS);
     player_ptr->redraw |= (PR_MAP);
-    player_ptr->window_flags |= (PW_OVERHEAD | PW_DUNGEON);
+    player_ptr->window_flags |= (PW_OVERHEAD | PW_DUNGEON | PW_FOUND_ITEM_LIST);
 }
 
 /*
@@ -341,7 +343,7 @@ bool destroy_area(PlayerType *player_ptr, POSITION y1, POSITION x1, POSITION r, 
             if (preserve_mode || in_generate) {
                 /* Scan all objects in the grid */
                 for (const auto this_o_idx : g_ptr->o_idx_list) {
-                    ObjectType *o_ptr;
+                    ItemEntity *o_ptr;
                     o_ptr = &floor_ptr->o_list[this_o_idx];
 
                     /* Hack -- Preserve unknown artifacts */

@@ -13,9 +13,9 @@
 #include "monster/monster-util.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
-#include "system/monster-race-definition.h"
-#include "system/monster-type-definition.h"
-#include "system/object-type-definition.h"
+#include "system/item-entity.h"
+#include "system/monster-entity.h"
+#include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
 #include "target/target-checker.h"
 #include "util/bit-flags-calculator.h"
@@ -85,7 +85,7 @@ bool polymorph_monster(PlayerType *player_ptr, POSITION y, POSITION x)
         return false;
     }
 
-    monster_type back_m = *m_ptr;
+    MonsterEntity back_m = *m_ptr;
     new_r_idx = poly_r_idx(player_ptr, old_r_idx);
     if (new_r_idx == old_r_idx) {
         return false;

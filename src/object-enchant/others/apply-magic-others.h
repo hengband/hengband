@@ -2,11 +2,11 @@
 
 #include "object-enchant/enchanter-base.h"
 
-class ObjectType;
+class ItemEntity;
 class PlayerType;
 class OtherItemsEnchanter : public EnchanterBase {
 public:
-    OtherItemsEnchanter(PlayerType *player_ptr, ObjectType *o_ptr);
+    OtherItemsEnchanter(PlayerType *player_ptr, ItemEntity *o_ptr);
     void apply_magic() override;
 
     void sval_enchant() override{};
@@ -16,7 +16,7 @@ public:
 
 private:
     PlayerType *player_ptr;
-    ObjectType *o_ptr;
+    ItemEntity *o_ptr;
 
     void enchant_wand_staff();
     void generate_figurine();

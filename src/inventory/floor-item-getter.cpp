@@ -25,7 +25,7 @@
 #include "player/player-status-flags.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
-#include "system/object-type-definition.h"
+#include "system/item-entity.h"
 #include "system/player-type-definition.h"
 #include "term/gameterm.h"
 #include "term/screen-processor.h"
@@ -786,7 +786,7 @@ bool get_item_floor(PlayerType *player_ptr, COMMAND_CODE *cp, concptr pmt, concp
                 break;
             }
         }
-            /* Fall through */
+            [[fallthrough]];
         default: {
             bool tag_not_found = false;
 

@@ -16,7 +16,7 @@
 #include "object-enchant/item-feeling.h"
 #include "object-enchant/special-object-flags.h"
 #include "perception/object-perception.h"
-#include "system/object-type-definition.h"
+#include "system/item-entity.h"
 #include "system/player-type-definition.h"
 #include "util/angband-files.h"
 #include "view/display-messages.h"
@@ -109,7 +109,7 @@ static bool clear_auto_register(PlayerType *player_ptr)
 /*!
  * @brief Automatically register an auto-destroy preference line
  */
-bool autopick_autoregister(PlayerType *player_ptr, ObjectType *o_ptr)
+bool autopick_autoregister(PlayerType *player_ptr, ItemEntity *o_ptr)
 {
     autopick_type an_entry, *entry = &an_entry;
     int autopick_registered = find_autopick_list(player_ptr, o_ptr);

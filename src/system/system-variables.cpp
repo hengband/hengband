@@ -29,6 +29,6 @@ init_flags_type init_flags; //!< @todo このグローバル変数何とかし�
 /*!
  * Function hook to restrict "get_obj_index_prep()" function
  */
-bool (*get_obj_index_hook)(KIND_OBJECT_IDX k_idx);
+bool (*get_obj_index_hook)(short bi_id);
 
 OBJECT_SUBTYPE_VALUE coin_type;

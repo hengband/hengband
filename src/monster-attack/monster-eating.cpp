@@ -24,10 +24,10 @@
 #include "player/player-status-flags.h"
 #include "player/player-status-table.h"
 #include "status/experience.h"
-#include "system/baseitem-info-definition.h"
+#include "system/baseitem-info.h"
 #include "system/floor-type-definition.h"
-#include "system/monster-type-definition.h"
-#include "system/object-type-definition.h"
+#include "system/item-entity.h"
+#include "system/monster-entity.h"
 #include "system/player-type-definition.h"
 #include "timed-effect/player-blindness.h"
 #include "timed-effect/player-paralysis.h"
@@ -117,16 +117,16 @@ static void move_item_to_monster(PlayerType *player_ptr, MonsterAttackPlayer *mo
         return;
     }
 
-    ObjectType *j_ptr;
+    ItemEntity *j_ptr;
     j_ptr = &player_ptr->current_floor_ptr->o_list[o_idx];
     j_ptr->copy_from(monap_ptr->o_ptr);
     j_ptr->number = 1;
-    if ((monap_ptr->o_ptr->tval == ItemKindType::ROD) || (monap_ptr->o_ptr->tval == ItemKindType::WAND)) {
+    if (monap_ptr->o_ptr->is_wand_rod()) {
         j_ptr->pval = monap_ptr->o_ptr->pval / monap_ptr->o_ptr->number;
         monap_ptr->o_ptr->pval -= j_ptr->pval;
     }
 
-    j_ptr->marked = OM_TOUCHED;
+    j_ptr->marked.clear().set(OmType::TOUCHED);
     j_ptr->held_m_idx = monap_ptr->m_idx;
     monap_ptr->m_ptr->hold_o_idx_list.add(player_ptr->current_floor_ptr, o_idx);
 }
@@ -143,7 +143,7 @@ void process_eat_item(PlayerType *player_ptr, MonsterAttackPlayer *monap_ptr)
         OBJECT_IDX o_idx;
         INVENTORY_IDX i_idx = (INVENTORY_IDX)randint0(INVEN_PACK);
         monap_ptr->o_ptr = &player_ptr->inventory_list[i_idx];
-        if (!monap_ptr->o_ptr->k_idx) {
+        if (!monap_ptr->o_ptr->bi_id) {
             continue;
         }
 
@@ -173,7 +173,7 @@ void process_eat_food(PlayerType *player_ptr, MonsterAttackPlayer *monap_ptr)
     for (int i = 0; i < 10; i++) {
         INVENTORY_IDX i_idx = (INVENTORY_IDX)randint0(INVEN_PACK);
         monap_ptr->o_ptr = &player_ptr->inventory_list[i_idx];
-        if (!monap_ptr->o_ptr->k_idx) {
+        if (!monap_ptr->o_ptr->bi_id) {
             continue;
         }
 
@@ -223,12 +223,12 @@ void process_eat_lite(PlayerType *player_ptr, MonsterAttackPlayer *monap_ptr)
  */
 bool process_un_power(PlayerType *player_ptr, MonsterAttackPlayer *monap_ptr)
 {
-    if (((monap_ptr->o_ptr->tval != ItemKindType::STAFF) && (monap_ptr->o_ptr->tval != ItemKindType::WAND)) || (monap_ptr->o_ptr->pval == 0)) {
+    if (!monap_ptr->o_ptr->is_wand_staff() || (monap_ptr->o_ptr->pval == 0)) {
         return false;
     }
 
     bool is_magic_mastery = has_magic_mastery(player_ptr) != 0;
-    BaseItemInfo *kind_ptr = &baseitems_info[monap_ptr->o_ptr->k_idx];
+    BaseitemInfo *kind_ptr = &baseitems_info[monap_ptr->o_ptr->bi_id];
     PARAMETER_VALUE pval = kind_ptr->pval;
     DEPTH level = monap_ptr->rlev;
     auto drain = is_magic_mastery ? std::min<short>(pval, pval * level / 400 + pval * randint1(level) / 400) : pval;

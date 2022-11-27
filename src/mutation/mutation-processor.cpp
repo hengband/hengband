@@ -43,9 +43,9 @@
 #include "system/dungeon-info.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
-#include "system/monster-race-definition.h"
-#include "system/monster-type-definition.h"
-#include "system/object-type-definition.h"
+#include "system/item-entity.h"
+#include "system/monster-entity.h"
+#include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
 #include "target/target-checker.h"
 #include "target/target-setter.h"
@@ -271,7 +271,7 @@ void process_world_aux_mutation(PlayerType *player_ptr)
     }
 
     if (player_ptr->muta.has(PlayerMutationType::EAT_LIGHT) && one_in_(3000)) {
-        ObjectType *o_ptr;
+        ItemEntity *o_ptr;
 
         msg_print(_("影につつまれた。", "A shadow passes over you."));
         msg_print(nullptr);
@@ -505,7 +505,7 @@ void process_world_aux_mutation(PlayerType *player_ptr)
 bool drop_weapons(PlayerType *player_ptr)
 {
     INVENTORY_IDX slot = 0;
-    ObjectType *o_ptr = nullptr;
+    ItemEntity *o_ptr = nullptr;
 
     if (player_ptr->wild_mode) {
         return false;

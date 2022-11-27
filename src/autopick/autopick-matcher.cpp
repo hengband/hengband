@@ -23,17 +23,17 @@
 #include "perception/object-perception.h"
 #include "player-base/player-class.h"
 #include "player/player-realm.h"
-#include "system/baseitem-info-definition.h"
+#include "system/baseitem-info.h"
 #include "system/floor-type-definition.h"
-#include "system/monster-race-definition.h"
-#include "system/object-type-definition.h"
+#include "system/item-entity.h"
+#include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
 #include "util/string-processor.h"
 
 /*!
  * @brief A function for Auto-picker/destroyer Examine whether the object matches to the entry
  */
-bool is_autopick_match(PlayerType *player_ptr, ObjectType *o_ptr, autopick_type *entry, concptr o_name)
+bool is_autopick_match(PlayerType *player_ptr, ItemEntity *o_ptr, autopick_type *entry, concptr o_name)
 {
     concptr ptr = entry->name.data();
     if (IS_FLG(FLG_UNAWARE) && o_ptr->is_aware()) {
@@ -53,7 +53,7 @@ bool is_autopick_match(PlayerType *player_ptr, ObjectType *o_ptr, autopick_type 
     }
 
     if (IS_FLG(FLG_BOOSTED)) {
-        auto *k_ptr = &baseitems_info[o_ptr->k_idx];
+        auto *k_ptr = &baseitems_info[o_ptr->bi_id];
         if (!o_ptr->is_melee_weapon()) {
             return false;
         }
@@ -207,7 +207,8 @@ bool is_autopick_match(PlayerType *player_ptr, ObjectType *o_ptr, autopick_type 
         return false;
     }
 
-    if (IS_FLG(FLG_UNREADABLE) && (o_ptr->tval < ItemKindType::LIFE_BOOK || check_book_realm(player_ptr, o_ptr->tval, o_ptr->sval))) {
+    const BaseitemKey bi_key(o_ptr->tval, o_ptr->sval);
+    if (IS_FLG(FLG_UNREADABLE) && check_book_realm(player_ptr, bi_key)) {
         return false;
     }
 
@@ -222,19 +223,19 @@ bool is_autopick_match(PlayerType *player_ptr, ObjectType *o_ptr, autopick_type 
         return false;
     }
 
-    if (IS_FLG(FLG_FIRST) && ((o_ptr->tval < ItemKindType::LIFE_BOOK) || (o_ptr->sval) != 0)) {
+    if (IS_FLG(FLG_FIRST) && (!o_ptr->is_spell_book() || (o_ptr->sval != 0))) {
         return false;
     }
 
-    if (IS_FLG(FLG_SECOND) && ((o_ptr->tval < ItemKindType::LIFE_BOOK) || (o_ptr->sval) != 1)) {
+    if (IS_FLG(FLG_SECOND) && (!o_ptr->is_spell_book() || (o_ptr->sval != 1))) {
         return false;
     }
 
-    if (IS_FLG(FLG_THIRD) && ((o_ptr->tval < ItemKindType::LIFE_BOOK) || (o_ptr->sval) != 2)) {
+    if (IS_FLG(FLG_THIRD) && (!o_ptr->is_spell_book() || (o_ptr->sval != 2))) {
         return false;
     }
 
-    if (IS_FLG(FLG_FOURTH) && ((o_ptr->tval < ItemKindType::LIFE_BOOK) || (o_ptr->sval) != 3)) {
+    if (IS_FLG(FLG_FOURTH) && (!o_ptr->is_spell_book() || (o_ptr->sval != 3))) {
         return false;
     }
 
@@ -247,7 +248,7 @@ bool is_autopick_match(PlayerType *player_ptr, ObjectType *o_ptr, autopick_type 
             return false;
         }
     } else if (IS_FLG(FLG_ARMORS)) {
-        if (!o_ptr->is_armour()) {
+        if (!o_ptr->is_protector()) {
             return false;
         }
     } else if (IS_FLG(FLG_MISSILES)) {
@@ -283,7 +284,7 @@ bool is_autopick_match(PlayerType *player_ptr, ObjectType *o_ptr, autopick_type 
             return false;
         }
     } else if (IS_FLG(FLG_SPELLBOOKS)) {
-        if (!(o_ptr->tval >= ItemKindType::LIFE_BOOK)) {
+        if (!o_ptr->is_spell_book()) {
             return false;
         }
     } else if (IS_FLG(FLG_HAFTED)) {

@@ -6,10 +6,10 @@
 #include "object-enchant/tr-flags.h"
 
 class MonsterAttackPlayer;
-struct monster_type;
+class MonsterEntity;
 struct player_attack_type;
 class PlayerType;
-MULTIPLY mult_hissatsu(PlayerType *player_ptr, MULTIPLY mult, const TrFlags &flgs, monster_type *m_ptr, combat_options mode);
+MULTIPLY mult_hissatsu(PlayerType *player_ptr, MULTIPLY mult, const TrFlags &flgs, MonsterEntity *m_ptr, combat_options mode);
 void concentration(PlayerType *player_ptr);
 bool choose_samurai_stance(PlayerType *player_ptr);
 int calc_attack_quality(PlayerType *player_ptr, player_attack_type *pa_ptr);

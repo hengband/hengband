@@ -33,9 +33,9 @@
 #include "spell-kind/spells-teleport.h"
 #include "spell-realm/spells-hex.h"
 #include "system/floor-type-definition.h"
-#include "system/monster-race-definition.h"
-#include "system/monster-type-definition.h"
-#include "system/object-type-definition.h"
+#include "system/item-entity.h"
+#include "system/monster-entity.h"
+#include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
@@ -264,7 +264,7 @@ static void attack_golden_hammer(PlayerType *player_ptr, player_attack_type *pa_
     GAME_TEXT o_name[MAX_NLEN];
     describe_flavor(player_ptr, o_name, q_ptr, OD_NAME_ONLY);
     q_ptr->held_m_idx = 0;
-    q_ptr->marked = OM_TOUCHED;
+    q_ptr->marked.clear().set(OmType::TOUCHED);
     m_ptr->hold_o_idx_list.pop_front();
     msg_format(_("%sを奪った。", "You snatched %s."), o_name);
     store_item_to_inventory(player_ptr, q_ptr);

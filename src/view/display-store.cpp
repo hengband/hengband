@@ -11,8 +11,8 @@
 #include "store/store-owners.h"
 #include "store/store-util.h"
 #include "store/store.h" //!< @todo 相互依存している、こっちは残す？.
-#include "system/baseitem-info-definition.h"
-#include "system/object-type-definition.h"
+#include "system/baseitem-info.h"
+#include "system/item-entity.h"
 #include "system/player-type-definition.h"
 #include "system/terrain-type-definition.h"
 #include "term/gameterm.h"
@@ -42,7 +42,7 @@ void store_prt_gold(PlayerType *player_ptr)
  */
 void display_entry(PlayerType *player_ptr, int pos, StoreSaleType store_num)
 {
-    ObjectType *o_ptr;
+    ItemEntity *o_ptr;
     o_ptr = &st_ptr->stock[pos];
     int i = (pos % store_bottom);
 

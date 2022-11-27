@@ -10,7 +10,7 @@
 #include "perception/object-perception.h"
 #include "player/player-status-flags.h"
 #include "spell-kind/spells-floor.h"
-#include "system/object-type-definition.h"
+#include "system/item-entity.h"
 #include "system/player-type-definition.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
@@ -293,7 +293,7 @@ bool lose_all_info(PlayerType *player_ptr)
     chg_virtue(player_ptr, V_ENLIGHTEN, -5);
     for (int i = 0; i < INVEN_TOTAL; i++) {
         auto *o_ptr = &player_ptr->inventory_list[i];
-        if ((o_ptr->k_idx == 0) || o_ptr->is_fully_known()) {
+        if ((o_ptr->bi_id == 0) || o_ptr->is_fully_known()) {
             continue;
         }
 
@@ -304,7 +304,7 @@ bool lose_all_info(PlayerType *player_ptr)
     }
 
     set_bits(player_ptr->update, PU_BONUS | PU_COMBINE | PU_REORDER);
-    set_bits(player_ptr->window_flags, PW_INVEN | PW_EQUIP | PW_PLAYER | PW_FLOOR_ITEM_LIST);
+    set_bits(player_ptr->window_flags, PW_INVEN | PW_EQUIP | PW_PLAYER | PW_FLOOR_ITEM_LIST | PW_FOUND_ITEM_LIST);
     wiz_dark(player_ptr);
     return true;
 }

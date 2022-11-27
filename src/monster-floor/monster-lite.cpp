@@ -14,8 +14,8 @@
 #include "system/dungeon-info.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
-#include "system/monster-race-definition.h"
-#include "system/monster-type-definition.h"
+#include "system/monster-entity.h"
+#include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
 #include "util/point-2d.h"
 #include "view/display-messages.h"
@@ -161,8 +161,8 @@ void update_mon_lite(PlayerType *player_ptr)
     }
 
     if (!w_ptr->timewalk_m_idx) {
-        monster_type *m_ptr;
-        monster_race *r_ptr;
+        MonsterEntity *m_ptr;
+        MonsterRaceInfo *r_ptr;
         for (int i = 1; i < floor_ptr->m_max; i++) {
             m_ptr = &floor_ptr->m_list[i];
             r_ptr = &monraces_info[m_ptr->r_idx];

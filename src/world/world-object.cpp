@@ -3,10 +3,10 @@
 #include "object-enchant/item-apply-magic.h"
 #include "object/tval-types.h"
 #include "system/alloc-entries.h"
-#include "system/baseitem-info-definition.h"
+#include "system/baseitem-info.h"
 #include "system/dungeon-info.h"
 #include "system/floor-type-definition.h"
-#include "system/object-type-definition.h"
+#include "system/item-entity.h"
 #include "system/player-type-definition.h"
 #include "util/probability-table.h"
 #include "view/display-messages.h"
@@ -32,9 +32,9 @@ OBJECT_IDX o_pop(FloorType *floor_ptr)
     }
 
     for (OBJECT_IDX i = 1; i < floor_ptr->o_max; i++) {
-        ObjectType *o_ptr;
+        ItemEntity *o_ptr;
         o_ptr = &floor_ptr->o_list[i];
-        if (o_ptr->k_idx) {
+        if (o_ptr->bi_id) {
             continue;
         }
         floor_ptr->o_cnt++;
@@ -88,10 +88,8 @@ OBJECT_IDX get_obj_index(PlayerType *player_ptr, DEPTH level, BIT_FLAGS mode)
             break;
         }
 
-        KIND_OBJECT_IDX k_idx = entry.index;
-        auto *k_ptr = &baseitems_info[k_idx];
-
-        if ((mode & AM_FORBID_CHEST) && (k_ptr->tval == ItemKindType::CHEST)) {
+        const auto &k_ref = baseitems_info[entry.index];
+        if ((mode & AM_FORBID_CHEST) && (k_ref.bi_key.tval() == ItemKindType::CHEST)) {
             continue;
         }
 

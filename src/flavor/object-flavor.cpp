@@ -36,7 +36,7 @@
 #include "player/player-status.h"
 #include "sv-definition/sv-food-types.h"
 #include "sv-definition/sv-lite-types.h"
-#include "system/baseitem-info-definition.h"
+#include "system/baseitem-info.h"
 #include "util/bit-flags-calculator.h"
 #include "util/quarks.h"
 #include "util/string-processor.h"
@@ -55,7 +55,7 @@
 static bool object_easy_know(int i)
 {
     auto *k_ptr = &baseitems_info[i];
-    switch (k_ptr->tval) {
+    switch (k_ptr->bi_key.tval()) {
     case ItemKindType::LIFE_BOOK:
     case ItemKindType::SORCERY_BOOK:
     case ItemKindType::NATURE_BOOK:
@@ -192,7 +192,7 @@ static void shuffle_flavors(ItemKindType tval)
 {
     std::vector<std::reference_wrapper<IDX>> flavor_idx_ref_list;
     for (const auto &k_ref : baseitems_info) {
-        if (k_ref.tval != tval) {
+        if (k_ref.bi_key.tval() != tval) {
             continue;
         }
 
@@ -251,11 +251,11 @@ void flavor_init(void)
 /*!
  * @brief nameバッファ内からベースアイテム名を返す / Strip an "object name" into a buffer
  * @param buf ベースアイテム格納先の参照ポインタ
- * @param k_idx ベースアイテムID
+ * @param bi_id ベースアイテムID
  */
-std::string strip_name(KIND_OBJECT_IDX k_idx)
+std::string strip_name(short bi_id)
 {
-    auto k_ptr = &baseitems_info[k_idx];
+    auto k_ptr = &baseitems_info[bi_id];
     auto tok = str_split(k_ptr->name, ' ');
     std::stringstream name;
     for (const auto &s : tok) {

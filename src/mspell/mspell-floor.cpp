@@ -38,8 +38,8 @@
 #include "spell-kind/spells-world.h"
 #include "spell-realm/spells-hex.h"
 #include "system/floor-type-definition.h"
-#include "system/monster-race-definition.h"
-#include "system/monster-type-definition.h"
+#include "system/monster-entity.h"
+#include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
 #include "timed-effect/player-blindness.h"
 #include "timed-effect/timed-effects.h"
@@ -186,8 +186,8 @@ MonsterSpellResult spell_RF6_TELE_TO(PlayerType *player_ptr, MONSTER_IDX m_idx, 
 
     auto *floor_ptr = player_ptr->current_floor_ptr;
     auto *m_ptr = &floor_ptr->m_list[m_idx];
-    monster_type *t_ptr = &floor_ptr->m_list[t_idx];
-    monster_race *tr_ptr = &monraces_info[t_ptr->r_idx];
+    MonsterEntity *t_ptr = &floor_ptr->m_list[t_idx];
+    MonsterRaceInfo *tr_ptr = &monraces_info[t_ptr->r_idx];
 
     mspell_cast_msg_simple msg(_("%^sがあなたを引き戻した。", "%^s commands you to return."),
         _("%^sが%sを引き戻した。", "%^s commands %s to return."));
@@ -257,8 +257,8 @@ MonsterSpellResult spell_RF6_TELE_AWAY(PlayerType *player_ptr, MONSTER_IDX m_idx
     res.learnable = target_type == MONSTER_TO_PLAYER;
 
     auto *floor_ptr = player_ptr->current_floor_ptr;
-    monster_type *t_ptr = &floor_ptr->m_list[t_idx];
-    monster_race *tr_ptr = &monraces_info[t_ptr->r_idx];
+    MonsterEntity *t_ptr = &floor_ptr->m_list[t_idx];
+    MonsterRaceInfo *tr_ptr = &monraces_info[t_ptr->r_idx];
 
     mspell_cast_msg_simple msg(_("%^sにテレポートさせられた。", "%^s teleports you away."),
         _("%^sは%sをテレポートさせた。", "%^s teleports %s away."));
@@ -337,8 +337,8 @@ MonsterSpellResult spell_RF6_TELE_LEVEL(PlayerType *player_ptr, MONSTER_IDX m_id
     const auto res = MonsterSpellResult::make_valid();
 
     auto *floor_ptr = player_ptr->current_floor_ptr;
-    monster_type *t_ptr = &floor_ptr->m_list[t_idx];
-    monster_race *tr_ptr = &monraces_info[t_ptr->r_idx];
+    MonsterEntity *t_ptr = &floor_ptr->m_list[t_idx];
+    MonsterRaceInfo *tr_ptr = &monraces_info[t_ptr->r_idx];
     DEPTH rlev = monster_level_idx(floor_ptr, m_idx);
     bool resist, saving_throw;
 

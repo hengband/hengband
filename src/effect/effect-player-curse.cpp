@@ -6,7 +6,7 @@
 #include "object-enchant/object-curse.h"
 #include "player/player-damage.h"
 #include "status/bad-status-setter.h"
-#include "system/monster-type-definition.h"
+#include "system/monster-entity.h"
 #include "system/player-type-definition.h"
 #include "view/display-messages.h"
 #include "world/world.h"

@@ -6,9 +6,9 @@
 #include "hpmp/hp-mp-regenerator.h"
 #include "inventory/inventory-slot-types.h"
 #include "object/tval-types.h"
-#include "system/baseitem-info-definition.h"
+#include "system/baseitem-info.h"
 #include "system/floor-type-definition.h"
-#include "system/object-type-definition.h"
+#include "system/item-entity.h"
 #include "system/player-type-definition.h"
 #include "util/quarks.h"
 #include "util/string-processor.h"
@@ -20,7 +20,7 @@
  * If player has inscribed the object with "!!", let him know when it's recharged. -LM-
  * @param o_ptr 対象オブジェクトの構造体参照ポインタ
  */
-static void recharged_notice(PlayerType *player_ptr, ObjectType *o_ptr)
+static void recharged_notice(PlayerType *player_ptr, ItemEntity *o_ptr)
 {
     if (!o_ptr->inscription) {
         return;
@@ -59,7 +59,7 @@ void recharge_magic_items(PlayerType *player_ptr)
 
     for (changed = false, i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
         auto *o_ptr = &player_ptr->inventory_list[i];
-        if (!o_ptr->k_idx) {
+        if (!o_ptr->bi_id) {
             continue;
         }
 
@@ -84,8 +84,8 @@ void recharge_magic_items(PlayerType *player_ptr)
      */
     for (changed = false, i = 0; i < INVEN_PACK; i++) {
         auto *o_ptr = &player_ptr->inventory_list[i];
-        auto *k_ptr = &baseitems_info[o_ptr->k_idx];
-        if (!o_ptr->k_idx) {
+        auto *k_ptr = &baseitems_info[o_ptr->bi_id];
+        if (!o_ptr->bi_id) {
             continue;
         }
 

@@ -7,7 +7,7 @@
 #include "object-enchant/protector/apply-magic-dragon-armor.h"
 #include "artifact/random-art-generator.h"
 #include "object-enchant/protector/abstract-protector-enchanter.h"
-#include "system/object-type-definition.h"
+#include "system/item-entity.h"
 #include "system/player-type-definition.h"
 
 /*
@@ -17,7 +17,7 @@
  * @param level 生成基準階
  * @param power 生成ランク
  */
-DragonArmorEnchanter::DragonArmorEnchanter(PlayerType *player_ptr, ObjectType *o_ptr, DEPTH level, int power)
+DragonArmorEnchanter::DragonArmorEnchanter(PlayerType *player_ptr, ItemEntity *o_ptr, DEPTH level, int power)
     : AbstractProtectorEnchanter{ o_ptr, level, power }
     , player_ptr(player_ptr)
 {

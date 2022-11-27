@@ -803,7 +803,6 @@ hengband_SOURCES = \
 	\
 	specific-object/blade-turner.cpp specific-object/blade-turner.h \
 	specific-object/bloody-moon.cpp specific-object/bloody-moon.h \
-	specific-object/bow.cpp specific-object/bow.h \
 	specific-object/chest.cpp specific-object/chest.h \
 	specific-object/death-crimson.cpp specific-object/death-crimson.h \
 	specific-object/death-scythe.cpp specific-object/death-scythe.h \
@@ -908,7 +907,7 @@ hengband_SOURCES = \
 	system/angband-exceptions.h \
 	system/angband-version.cpp system/angband-version.h \
 	system/artifact-type-definition.cpp system/artifact-type-definition.h \
-	system/baseitem-info-definition.cpp system/baseitem-info-definition.h \
+	system/baseitem-info.cpp system/baseitem-info.h \
 	system/building-type-definition.cpp system/building-type-definition.h \
 	system/dungeon-data-definition.h \
 	system/dungeon-info.cpp system/dungeon-info.h \
@@ -917,9 +916,9 @@ hengband_SOURCES = \
 	system/game-option-types.h \
 	system/h-basic.h system/h-config.h \
 	system/h-system.h system/h-type.h \
-	system/monster-race-definition.h \
-	system/monster-type-definition.cpp system/monster-type-definition.h \
-	system/object-type-definition.cpp system/object-type-definition.h \
+	system/item-entity.cpp system/item-entity.h \
+	system/monster-entity.cpp system/monster-entity.h \
+	system/monster-race-info.h \
 	system/player-type-definition.cpp system/player-type-definition.h \
 	system/system-variables.cpp system/system-variables.h \
 	system/terrain-type-definition.cpp system/terrain-type-definition.h \
@@ -967,7 +966,6 @@ hengband_SOURCES = \
 	util/rng-xoshiro.cpp util/rng-xoshiro.h \
 	util/sort.cpp util/sort.h \
 	util/string-processor.cpp util/string-processor.h \
-	util/tag-sorter.cpp util/tag-sorter.h \
 	\
 	view/display-birth.cpp view/display-birth.h \
 	view/display-characteristic.cpp view/display-characteristic.h \

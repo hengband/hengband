@@ -36,10 +36,10 @@
 #include "sv-definition/sv-scroll-types.h"
 #include "sv-definition/sv-weapon-types.h"
 #include "system/artifact-type-definition.h"
-#include "system/baseitem-info-definition.h"
+#include "system/baseitem-info.h"
 #include "system/floor-type-definition.h"
-#include "system/monster-race-definition.h"
-#include "system/object-type-definition.h"
+#include "system/item-entity.h"
+#include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
 #include "term/screen-processor.h"
 #include "util/bit-flags-calculator.h"
@@ -94,7 +94,7 @@ static const std::array<AmuseDefinition, 13> amuse_info = { {
     { { ItemKindType::SCROLL, SV_SCROLL_AMUSEMENT }, 10, AmusementFlagType::NOTHING },
 } };
 
-static std::optional<FixedArtifactId> sweep_amusement_artifact(const bool insta_art, const short k_idx)
+static std::optional<FixedArtifactId> sweep_amusement_artifact(const bool insta_art, const short bi_id)
 {
     for (const auto &[a_idx, a_ref] : artifacts_info) {
         if (a_idx == FixedArtifactId::NONE) {
@@ -105,11 +105,7 @@ static std::optional<FixedArtifactId> sweep_amusement_artifact(const bool insta_
             continue;
         }
 
-        if (a_ref.tval != baseitems_info[k_idx].tval) {
-            continue;
-        }
-
-        if (a_ref.sval != baseitems_info[k_idx].sval) {
+        if (a_ref.bi_key != baseitems_info[bi_id].bi_key) {
             continue;
         }
 
@@ -139,24 +135,24 @@ void generate_amusement(PlayerType *player_ptr, int num, bool known)
     while (num > 0) {
         auto am_ptr = pt.pick_one_at_random();
 
-        const auto k_idx = lookup_baseitem_id(am_ptr->key);
-        if (k_idx == 0) {
+        const auto bi_id = lookup_baseitem_id(am_ptr->key);
+        if (bi_id == 0) {
             continue;
         }
 
-        const auto insta_art = baseitems_info[k_idx].gen_flags.has(ItemGenerationTraitType::INSTA_ART);
+        const auto insta_art = baseitems_info[bi_id].gen_flags.has(ItemGenerationTraitType::INSTA_ART);
         const auto flag = am_ptr->flag;
         const auto fixed_art = flag == AmusementFlagType::FIXED_ART;
         std::optional<FixedArtifactId> opt_a_idx(std::nullopt);
         if (insta_art || fixed_art) {
-            opt_a_idx = sweep_amusement_artifact(insta_art, k_idx);
+            opt_a_idx = sweep_amusement_artifact(insta_art, bi_id);
             if (!opt_a_idx.has_value()) {
                 continue;
             }
         }
 
-        ObjectType item;
-        item.prep(k_idx);
+        ItemEntity item;
+        item.prep(bi_id);
         if (opt_a_idx.has_value()) {
             item.fixed_artifact_idx = opt_a_idx.value();
         }
@@ -199,8 +195,8 @@ void generate_amusement(PlayerType *player_ptr, int num, bool known)
  */
 void acquirement(PlayerType *player_ptr, POSITION y1, POSITION x1, int num, bool great, bool special, bool known)
 {
-    ObjectType *i_ptr;
-    ObjectType ObjectType_body;
+    ItemEntity *i_ptr;
+    ItemEntity ObjectType_body;
     BIT_FLAGS mode = AM_GOOD | (great || special ? AM_GREAT : AM_NONE) | (special ? AM_SPECIAL : AM_NONE);
 
     /* Acquirement */
@@ -231,10 +227,10 @@ void acquirement(PlayerType *player_ptr, POSITION y1, POSITION x1, int num, bool
 bool curse_armor(PlayerType *player_ptr)
 {
     /* Curse the body armor */
-    ObjectType *o_ptr;
+    ItemEntity *o_ptr;
     o_ptr = &player_ptr->inventory_list[INVEN_BODY];
 
-    if (!o_ptr->k_idx) {
+    if (!o_ptr->bi_id) {
         return false;
     }
 
@@ -287,9 +283,9 @@ bool curse_armor(PlayerType *player_ptr)
  * @return 何も持っていない場合を除き、常にTRUEを返す
  * @todo 元のreturnは間違っているが、修正後の↓文がどれくらい正しいかは要チェック
  */
-bool curse_weapon_object(PlayerType *player_ptr, bool force, ObjectType *o_ptr)
+bool curse_weapon_object(PlayerType *player_ptr, bool force, ItemEntity *o_ptr)
 {
-    if (!o_ptr->k_idx) {
+    if (!o_ptr->bi_id) {
         return false;
     }
 
@@ -384,7 +380,7 @@ void brand_bolts(PlayerType *player_ptr)
  * Break the curse of an item
  * @param o_ptr 呪い装備情報の参照ポインタ
  */
-static void break_curse(ObjectType *o_ptr)
+static void break_curse(ItemEntity *o_ptr)
 {
     BIT_FLAGS is_curse_broken = o_ptr->is_cursed() && o_ptr->curse_flags.has_not(CurseTraitType::PERMA_CURSE) && o_ptr->curse_flags.has_not(CurseTraitType::HEAVY_CURSE) && (randint0(100) < 25);
     if (!is_curse_broken) {
@@ -421,7 +417,7 @@ static void break_curse(ObjectType *o_ptr)
  * the larger the pile, the lower the chance of success.
  * </pre>
  */
-bool enchant_equipment(PlayerType *player_ptr, ObjectType *o_ptr, int n, int eflag)
+bool enchant_equipment(PlayerType *player_ptr, ItemEntity *o_ptr, int n, int eflag)
 {
     /* Large piles resist enchantment */
     int prob = o_ptr->number * 100;
@@ -513,7 +509,7 @@ bool enchant_equipment(PlayerType *player_ptr, ObjectType *o_ptr, int n, int efl
         return false;
     }
     set_bits(player_ptr->update, PU_BONUS | PU_COMBINE | PU_REORDER);
-    set_bits(player_ptr->window_flags, PW_INVEN | PW_EQUIP | PW_PLAYER | PW_FLOOR_ITEM_LIST);
+    set_bits(player_ptr->window_flags, PW_INVEN | PW_EQUIP | PW_PLAYER | PW_FLOOR_ITEM_LIST | PW_FOUND_ITEM_LIST);
 
     /* Success */
     return true;
@@ -534,19 +530,19 @@ bool enchant_equipment(PlayerType *player_ptr, ObjectType *o_ptr, int n, int efl
 bool enchant_spell(PlayerType *player_ptr, HIT_PROB num_hit, int num_dam, ARMOUR_CLASS num_ac)
 {
     /* Assume enchant weapon */
-    FuncItemTester item_tester(&ObjectType::allow_enchant_weapon);
+    FuncItemTester item_tester(&ItemEntity::allow_enchant_weapon);
 
     /* Enchant armor if requested */
     if (num_ac) {
-        item_tester = FuncItemTester(&ObjectType::is_armour);
+        item_tester = FuncItemTester(&ItemEntity::is_protector);
     }
 
-    concptr q = _("どのアイテムを強化しますか? ", "Enchant which item? ");
-    concptr s = _("強化できるアイテムがない。", "You have nothing to enchant.");
+    const auto q = _("どのアイテムを強化しますか? ", "Enchant which item? ");
+    const auto s = _("強化できるアイテムがない。", "You have nothing to enchant.");
 
     OBJECT_IDX item;
-    ObjectType *o_ptr;
-    o_ptr = choose_object(player_ptr, &item, q, s, (USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT), item_tester);
+    const auto options = USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT;
+    auto *o_ptr = choose_object(player_ptr, &item, q, s, options, item_tester);
     if (!o_ptr) {
         return false;
     }
@@ -601,8 +597,8 @@ void brand_weapon(PlayerType *player_ptr, int brand_type)
     concptr s = _("強化できる武器がない。", "You have nothing to enchant.");
 
     OBJECT_IDX item;
-    ObjectType *o_ptr;
-    o_ptr = choose_object(player_ptr, &item, q, s, USE_EQUIP | IGNORE_BOTHHAND_SLOT, FuncItemTester(&ObjectType::allow_enchant_melee_weapon));
+    ItemEntity *o_ptr;
+    o_ptr = choose_object(player_ptr, &item, q, s, USE_EQUIP | IGNORE_BOTHHAND_SLOT, FuncItemTester(&ItemEntity::allow_enchant_melee_weapon));
     if (!o_ptr) {
         return;
     }
@@ -610,7 +606,7 @@ void brand_weapon(PlayerType *player_ptr, int brand_type)
     auto special_weapon = (o_ptr->tval == ItemKindType::SWORD) && (o_ptr->sval == SV_POISON_NEEDLE);
     special_weapon |= (o_ptr->tval == ItemKindType::POLEARM) && (o_ptr->sval == SV_DEATH_SCYTHE);
     special_weapon |= (o_ptr->tval == ItemKindType::SWORD) && (o_ptr->sval == SV_DIAMOND_EDGE);
-    const auto is_normal_item = o_ptr->k_idx && !o_ptr->is_artifact() && !o_ptr->is_ego() && !o_ptr->is_cursed() && !special_weapon;
+    const auto is_normal_item = o_ptr->bi_id && !o_ptr->is_artifact() && !o_ptr->is_ego() && !o_ptr->is_cursed() && !special_weapon;
     if (!is_normal_item) {
         if (flush_failure) {
             flush();

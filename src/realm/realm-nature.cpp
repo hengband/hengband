@@ -36,8 +36,8 @@
 #include "status/buff-setter.h"
 #include "status/element-resistance.h"
 #include "sv-definition/sv-food-types.h"
-#include "system/baseitem-info-definition.h"
-#include "system/object-type-definition.h"
+#include "system/baseitem-info.h"
+#include "system/item-entity.h"
 #include "system/player-type-definition.h"
 #include "target/target-getter.h"
 #include "view/display-messages.h"
@@ -143,7 +143,7 @@ concptr do_nature_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessTyp
 
         {
             if (cast) {
-                ObjectType forge, *q_ptr = &forge;
+                ItemEntity forge, *q_ptr = &forge;
                 msg_print(_("食料を生成した。", "A food ration is produced."));
 
                 /* Create the food ration */

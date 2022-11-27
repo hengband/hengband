@@ -30,9 +30,9 @@
 #include "spell/spells-object.h"
 #include "system/alloc-entries.h"
 #include "system/artifact-type-definition.h"
-#include "system/baseitem-info-definition.h"
+#include "system/baseitem-info.h"
 #include "system/floor-type-definition.h"
-#include "system/object-type-definition.h"
+#include "system/item-entity.h"
 #include "system/player-type-definition.h"
 #include "system/system-variables.h"
 #include "term/screen-processor.h"
@@ -49,7 +49,7 @@
 #include <tuple>
 #include <vector>
 
-#define K_MAX_DEPTH 110 /*!< アイテムの階層毎生成率を表示する最大階 */
+constexpr auto BASEITEM_MAX_DEPTH = 110; /*!< アイテムの階層毎生成率を表示する最大階 */
 
 namespace {
 /*!
@@ -221,14 +221,14 @@ void wiz_identify_full_inventory(PlayerType *player_ptr)
 {
     for (int i = 0; i < INVEN_TOTAL; i++) {
         auto *o_ptr = &player_ptr->inventory_list[i];
-        if (!o_ptr->k_idx) {
+        if (!o_ptr->bi_id) {
             continue;
         }
 
-        auto k_ptr = &baseitems_info[o_ptr->k_idx];
+        auto k_ptr = &baseitems_info[o_ptr->bi_id];
         k_ptr->aware = true; //!< @note 記録には残さないためTRUEを立てるのみ
         set_bits(o_ptr->ident, IDENT_KNOWN | IDENT_FULL_KNOWN);
-        set_bits(o_ptr->marked, OM_TOUCHED);
+        o_ptr->marked.set(OmType::TOUCHED);
     }
 
     /* Refrect item informaiton onto subwindows without updating inventory */
@@ -247,50 +247,49 @@ void wiz_identify_full_inventory(PlayerType *player_ptr)
  */
 static void prt_alloc(ItemKindType tval, OBJECT_SUBTYPE_VALUE sval, TERM_LEN row, TERM_LEN col)
 {
-    uint32_t rarity[K_MAX_DEPTH] = {};
-    uint32_t total[K_MAX_DEPTH] = {};
-    int32_t display[22] = {};
+    uint32_t rarity[BASEITEM_MAX_DEPTH]{};
+    uint32_t total[BASEITEM_MAX_DEPTH]{};
+    int32_t display[22]{};
 
-    int home = 0;
-    for (int i = 0; i < K_MAX_DEPTH; i++) {
-        int total_frac = 0;
-        BaseItemInfo *k_ptr;
+    auto home = 0;
+    for (auto i = 0; i < BASEITEM_MAX_DEPTH; i++) {
+        auto total_frac = 0;
+        constexpr auto magnificant = CHANCE_BASEITEM_LEVEL_BOOST * BASEITEM_MAX_DEPTH;
         for (const auto &entry : alloc_kind_table) {
-            PERCENTAGE prob = 0;
-
+            auto prob = 0;
             if (entry.level <= i) {
-                prob = entry.prob1 * CHANCE_BASEITEM_LEVEL_BOOST * K_MAX_DEPTH;
+                prob = entry.prob1 * magnificant;
             } else if (entry.level - 1 > 0) {
-                prob = entry.prob1 * i * K_MAX_DEPTH / (entry.level - 1);
+                prob = entry.prob1 * i * BASEITEM_MAX_DEPTH / (entry.level - 1);
             }
 
-            k_ptr = &baseitems_info[entry.index];
+            const auto &baseitem = baseitems_info[entry.index];
+            total[i] += prob / magnificant;
+            total_frac += prob % magnificant;
 
-            total[i] += prob / (CHANCE_BASEITEM_LEVEL_BOOST * K_MAX_DEPTH);
-            total_frac += prob % (CHANCE_BASEITEM_LEVEL_BOOST * K_MAX_DEPTH);
-
-            if ((k_ptr->tval == tval) && (k_ptr->sval == sval)) {
-                home = k_ptr->level;
-                rarity[i] += prob / (CHANCE_BASEITEM_LEVEL_BOOST * K_MAX_DEPTH);
+            BaseitemKey bi_key(tval, sval);
+            if (baseitem.bi_key == bi_key) {
+                home = baseitem.level;
+                rarity[i] += prob / magnificant;
             }
         }
 
-        total[i] += total_frac / (CHANCE_BASEITEM_LEVEL_BOOST * K_MAX_DEPTH);
+        total[i] += total_frac / magnificant;
     }
 
-    for (int i = 0; i < 22; i++) {
-        int possibility = 0;
-        for (int j = i * K_MAX_DEPTH / 22; j < (i + 1) * K_MAX_DEPTH / 22; j++) {
+    for (auto i = 0; i < 22; i++) {
+        auto possibility = 0;
+        for (int j = i * BASEITEM_MAX_DEPTH / 22; j < (i + 1) * BASEITEM_MAX_DEPTH / 22; j++) {
             possibility += rarity[j] * 100000 / total[j];
         }
 
         display[i] = possibility / 5;
     }
 
-    for (int i = 0; i < 22; i++) {
+    for (auto i = 0; i < 22; i++) {
         term_putch(col, row + i + 1, TERM_WHITE, '|');
         prt(format("%2dF", (i * 5)), row + i + 1, col);
-        if ((i * K_MAX_DEPTH / 22 <= home) && (home < (i + 1) * K_MAX_DEPTH / 22)) {
+        if ((i * BASEITEM_MAX_DEPTH / 22 <= home) && (home < (i + 1) * BASEITEM_MAX_DEPTH / 22)) {
             c_prt(TERM_RED, format("%3d.%04d%%", display[i] / 1000, display[i] % 1000), row + i + 1, col + 3);
         } else {
             c_prt(TERM_WHITE, format("%3d.%04d%%", display[i] / 1000, display[i] % 1000), row + i + 1, col + 3);
@@ -322,7 +321,7 @@ static void prt_binary(BIT_FLAGS flags, const int row, int col)
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param o_ptr 詳細を表示するアイテム情報の参照ポインタ
  */
-static void wiz_display_item(PlayerType *player_ptr, ObjectType *o_ptr)
+static void wiz_display_item(PlayerType *player_ptr, ItemEntity *o_ptr)
 {
     auto flgs = object_flags(o_ptr);
     auto get_seq_32bits = [](const TrFlags &flgs, uint start) {
@@ -345,7 +344,7 @@ static void wiz_display_item(PlayerType *player_ptr, ObjectType *o_ptr)
     prt(buf, 2, j);
 
     auto line = 4;
-    prt(format("kind = %-5d  level = %-4d  tval = %-5d  sval = %-5d", o_ptr->k_idx, baseitems_info[o_ptr->k_idx].level, o_ptr->tval, o_ptr->sval), line, j);
+    prt(format("kind = %-5d  level = %-4d  tval = %-5d  sval = %-5d", o_ptr->bi_id, baseitems_info[o_ptr->bi_id].level, o_ptr->tval, o_ptr->sval), line, j);
     prt(format("number = %-3d  wgt = %-6d  ac = %-5d    damage = %dd%d", o_ptr->number, o_ptr->weight, o_ptr->ac, o_ptr->dd, o_ptr->ds), ++line, j);
     prt(format("pval = %-5d  toac = %-5d  tohit = %-4d  todam = %-4d", o_ptr->pval, o_ptr->to_a, o_ptr->to_h, o_ptr->to_d), ++line, j);
     prt(format("fixed_artifact_idx = %-4d  ego_idx = %-4d  cost = %ld", o_ptr->fixed_artifact_idx, o_ptr->ego_idx, object_value_real(o_ptr)), ++line, j);
@@ -400,7 +399,7 @@ static void wiz_display_item(PlayerType *player_ptr, ObjectType *o_ptr)
  * counter flags to prevent weirdness.  We use the items to collect
  * statistics on item creation relative to the initial item.
  */
-static void wiz_statistics(PlayerType *player_ptr, ObjectType *o_ptr)
+static void wiz_statistics(PlayerType *player_ptr, ItemEntity *o_ptr)
 {
     concptr q = "Rolls: %ld  Correct: %ld  Matches: %ld  Better: %ld  Worse: %ld  Other: %ld";
     concptr p = "Enter number of items to roll: ";
@@ -456,7 +455,7 @@ static void wiz_statistics(PlayerType *player_ptr, ObjectType *o_ptr)
                 term_fresh();
             }
 
-            ObjectType forge;
+            ItemEntity forge;
             auto *q_ptr = &forge;
             q_ptr->wipe();
             make_object(player_ptr, q_ptr, mode);
@@ -495,14 +494,14 @@ static void wiz_statistics(PlayerType *player_ptr, ObjectType *o_ptr)
  * Apply magic to an item or turn it into an artifact. -Bernd-
  * @param o_ptr 再生成の対象となるアイテム情報の参照ポインタ
  */
-static void wiz_reroll_item(PlayerType *player_ptr, ObjectType *o_ptr)
+static void wiz_reroll_item(PlayerType *player_ptr, ItemEntity *o_ptr)
 {
     if (o_ptr->is_artifact()) {
         return;
     }
 
-    ObjectType forge;
-    ObjectType *q_ptr;
+    ItemEntity forge;
+    ItemEntity *q_ptr;
     q_ptr = &forge;
     q_ptr->copy_from(o_ptr);
 
@@ -533,32 +532,32 @@ static void wiz_reroll_item(PlayerType *player_ptr, ObjectType *o_ptr)
         switch (tolower(ch)) {
         /* Apply bad magic, but first clear object */
         case 'w':
-            q_ptr->prep(o_ptr->k_idx);
+            q_ptr->prep(o_ptr->bi_id);
             ItemMagicApplier(player_ptr, q_ptr, player_ptr->current_floor_ptr->dun_level, AM_NO_FIXED_ART | AM_GOOD | AM_GREAT | AM_CURSED).execute();
             break;
         /* Apply bad magic, but first clear object */
         case 'c':
-            q_ptr->prep(o_ptr->k_idx);
+            q_ptr->prep(o_ptr->bi_id);
             ItemMagicApplier(player_ptr, q_ptr, player_ptr->current_floor_ptr->dun_level, AM_NO_FIXED_ART | AM_GOOD | AM_CURSED).execute();
             break;
         /* Apply normal magic, but first clear object */
         case 'n':
-            q_ptr->prep(o_ptr->k_idx);
+            q_ptr->prep(o_ptr->bi_id);
             ItemMagicApplier(player_ptr, q_ptr, player_ptr->current_floor_ptr->dun_level, AM_NO_FIXED_ART).execute();
             break;
         /* Apply good magic, but first clear object */
         case 'g':
-            q_ptr->prep(o_ptr->k_idx);
+            q_ptr->prep(o_ptr->bi_id);
             ItemMagicApplier(player_ptr, q_ptr, player_ptr->current_floor_ptr->dun_level, AM_NO_FIXED_ART | AM_GOOD).execute();
             break;
         /* Apply great magic, but first clear object */
         case 'e':
-            q_ptr->prep(o_ptr->k_idx);
+            q_ptr->prep(o_ptr->bi_id);
             ItemMagicApplier(player_ptr, q_ptr, player_ptr->current_floor_ptr->dun_level, AM_NO_FIXED_ART | AM_GOOD | AM_GREAT).execute();
             break;
         /* Apply special magic, but first clear object */
         case 's':
-            q_ptr->prep(o_ptr->k_idx);
+            q_ptr->prep(o_ptr->bi_id);
             ItemMagicApplier(player_ptr, q_ptr, player_ptr->current_floor_ptr->dun_level, AM_GOOD | AM_GREAT | AM_SPECIAL).execute();
             if (!q_ptr->is_artifact()) {
                 become_random_artifact(player_ptr, q_ptr, false);
@@ -580,7 +579,7 @@ static void wiz_reroll_item(PlayerType *player_ptr, ObjectType *o_ptr)
 
     o_ptr->copy_from(q_ptr);
     set_bits(player_ptr->update, PU_BONUS | PU_COMBINE | PU_REORDER);
-    set_bits(player_ptr->window_flags, PW_INVEN | PW_EQUIP | PW_SPELL | PW_PLAYER | PW_FLOOR_ITEM_LIST);
+    set_bits(player_ptr->window_flags, PW_INVEN | PW_EQUIP | PW_SPELL | PW_PLAYER | PW_FLOOR_ITEM_LIST | PW_FOUND_ITEM_LIST);
 }
 
 /*!
@@ -588,7 +587,7 @@ static void wiz_reroll_item(PlayerType *player_ptr, ObjectType *o_ptr)
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param o_ptr 調整するアイテムの参照ポインタ
  */
-static void wiz_tweak_item(PlayerType *player_ptr, ObjectType *o_ptr)
+static void wiz_tweak_item(PlayerType *player_ptr, ItemEntity *o_ptr)
 {
     if (o_ptr->is_artifact()) {
         return;
@@ -635,7 +634,7 @@ static void wiz_tweak_item(PlayerType *player_ptr, ObjectType *o_ptr)
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param o_ptr 変更するアイテム情報構造体の参照ポインタ
  */
-static void wiz_quantity_item(ObjectType *o_ptr)
+static void wiz_quantity_item(ItemEntity *o_ptr)
 {
     if (o_ptr->is_artifact()) {
         return;
@@ -676,7 +675,7 @@ void wiz_modify_item(PlayerType *player_ptr)
     concptr q = "Play with which object? ";
     concptr s = "You have nothing to play with.";
     OBJECT_IDX item;
-    ObjectType *o_ptr;
+    ItemEntity *o_ptr;
     o_ptr = choose_object(player_ptr, &item, q, s, USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT);
     if (!o_ptr) {
         return;
@@ -684,8 +683,8 @@ void wiz_modify_item(PlayerType *player_ptr)
 
     screen_save();
 
-    ObjectType forge;
-    ObjectType *q_ptr;
+    ItemEntity forge;
+    ItemEntity *q_ptr;
     q_ptr = &forge;
     q_ptr->copy_from(o_ptr);
     char ch;
@@ -725,7 +724,7 @@ void wiz_modify_item(PlayerType *player_ptr)
 
         o_ptr->copy_from(q_ptr);
         set_bits(player_ptr->update, PU_BONUS | PU_COMBINE | PU_REORDER);
-        set_bits(player_ptr->window_flags, PW_INVEN | PW_EQUIP | PW_SPELL | PW_PLAYER | PW_FLOOR_ITEM_LIST);
+        set_bits(player_ptr->window_flags, PW_INVEN | PW_EQUIP | PW_SPELL | PW_PLAYER | PW_FLOOR_ITEM_LIST | PW_FOUND_ITEM_LIST);
     } else {
         msg_print("Changes ignored.");
     }
@@ -734,7 +733,7 @@ void wiz_modify_item(PlayerType *player_ptr)
 /*!
  * @brief オブジェクトの装備スロットがエゴが有効なスロットかどうか判定
  */
-static int is_slot_able_to_be_ego(PlayerType *player_ptr, ObjectType *o_ptr)
+static int is_slot_able_to_be_ego(PlayerType *player_ptr, ItemEntity *o_ptr)
 {
     int slot = wield_slot(player_ptr, o_ptr);
 
@@ -788,7 +787,7 @@ WishResultType do_cmd_wishing(PlayerType *player_ptr, int prob, bool allow_art, 
 
     char buf[MAX_NLEN] = "\0";
     char *str = buf;
-    ObjectType forge;
+    ItemEntity forge;
     auto *o_ptr = &forge;
     char o_name[MAX_NLEN];
 
@@ -875,7 +874,7 @@ WishResultType do_cmd_wishing(PlayerType *player_ptr, int prob, bool allow_art, 
         msg_format("Wishing %s....", buf);
     }
 
-    std::vector<KIND_OBJECT_IDX> k_ids;
+    std::vector<short> k_ids;
     std::vector<EgoType> e_ids;
     if (exam_base) {
         int len;
@@ -905,8 +904,8 @@ WishResultType do_cmd_wishing(PlayerType *player_ptr, int prob, bool allow_art, 
         }
 
         if (allow_ego && k_ids.size() == 1) {
-            KIND_OBJECT_IDX k_idx = k_ids.back();
-            o_ptr->prep(k_idx);
+            short bi_id = k_ids.back();
+            o_ptr->prep(bi_id);
 
             for (const auto &[e_idx, e_ref] : egos_info) {
                 if (e_ref.idx == EgoType::NONE || e_ref.name.empty()) {
@@ -945,12 +944,12 @@ WishResultType do_cmd_wishing(PlayerType *player_ptr, int prob, bool allow_art, 
                 continue;
             }
 
-            const auto k_idx = lookup_baseitem_id({ a_ref.tval, a_ref.sval });
-            if (!k_idx) {
+            const auto bi_id = lookup_baseitem_id(a_ref.bi_key);
+            if (bi_id == 0) {
                 continue;
             }
 
-            o_ptr->prep(k_idx);
+            o_ptr->prep(bi_id);
             o_ptr->fixed_artifact_idx = a_idx;
 
             describe_flavor(player_ptr, o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY | OD_STORE));
@@ -1032,22 +1031,22 @@ WishResultType do_cmd_wishing(PlayerType *player_ptr, int prob, bool allow_art, 
     }
 
     if (k_ids.size() == 1) {
-        KIND_OBJECT_IDX k_idx = k_ids.back();
-        auto *k_ptr = &baseitems_info[k_idx];
-
-        FixedArtifactId a_idx = FixedArtifactId::NONE;
-        if (k_ptr->gen_flags.has(ItemGenerationTraitType::INSTA_ART)) {
+        const auto bi_id = k_ids.back();
+        const auto &k_ref = baseitems_info[bi_id];
+        auto a_idx = FixedArtifactId::NONE;
+        if (k_ref.gen_flags.has(ItemGenerationTraitType::INSTA_ART)) {
             for (const auto &[a_idx_loop, a_ref_loop] : artifacts_info) {
-                if (a_idx_loop == FixedArtifactId::NONE || a_ref_loop.tval != k_ptr->tval || a_ref_loop.sval != k_ptr->sval) {
+                if (a_idx_loop == FixedArtifactId::NONE || a_ref_loop.bi_key != k_ref.bi_key) {
                     continue;
                 }
+
                 a_idx = a_idx_loop;
                 break;
             }
         }
 
         if (a_idx != FixedArtifactId::NONE) {
-            auto &a_ref = artifacts_info.at(a_idx);
+            const auto &a_ref = artifacts_info.at(a_idx);
             if (must || (ok_art && !a_ref.is_generated)) {
                 (void)create_named_art(player_ptr, a_idx, player_ptr->y, player_ptr->x);
             } else {
@@ -1060,8 +1059,8 @@ WishResultType do_cmd_wishing(PlayerType *player_ptr, int prob, bool allow_art, 
         if (wish_randart) {
             if (must || ok_art) {
                 do {
-                    o_ptr->prep(k_idx);
-                    ItemMagicApplier(player_ptr, o_ptr, k_ptr->level, AM_SPECIAL | AM_NO_FIXED_ART).execute();
+                    o_ptr->prep(bi_id);
+                    ItemMagicApplier(player_ptr, o_ptr, k_ref.level, AM_SPECIAL | AM_NO_FIXED_ART).execute();
                 } while (!o_ptr->art_name || o_ptr->is_ego() || o_ptr->is_cursed());
 
                 if (o_ptr->art_name) {
@@ -1077,15 +1076,15 @@ WishResultType do_cmd_wishing(PlayerType *player_ptr, int prob, bool allow_art, 
         if (allow_ego && (wish_ego || e_ids.size() > 0)) {
             if (must || ok_ego) {
                 if (e_ids.size() > 0) {
-                    o_ptr->prep(k_idx);
+                    o_ptr->prep(bi_id);
                     o_ptr->ego_idx = e_ids[0];
                     apply_ego(o_ptr, player_ptr->current_floor_ptr->base_level);
                 } else {
                     int max_roll = 1000;
                     int i = 0;
                     for (i = 0; i < max_roll; i++) {
-                        o_ptr->prep(k_idx);
-                        ItemMagicApplier(player_ptr, o_ptr, k_ptr->level, AM_GREAT | AM_NO_FIXED_ART).execute();
+                        o_ptr->prep(bi_id);
+                        ItemMagicApplier(player_ptr, o_ptr, k_ref.level, AM_GREAT | AM_NO_FIXED_ART).execute();
                         if (o_ptr->art_name) {
                             continue;
                         }
@@ -1119,7 +1118,7 @@ WishResultType do_cmd_wishing(PlayerType *player_ptr, int prob, bool allow_art, 
             res = WishResultType::EGO;
         } else {
             for (int i = 0; i < 100; i++) {
-                o_ptr->prep(k_idx);
+                o_ptr->prep(bi_id);
                 ItemMagicApplier(player_ptr, o_ptr, 0, AM_NO_FIXED_ART).execute();
                 if (!o_ptr->is_cursed()) {
                     break;

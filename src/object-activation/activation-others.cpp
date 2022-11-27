@@ -48,9 +48,9 @@
 #include "status/buff-setter.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
-#include "system/monster-race-definition.h"
-#include "system/monster-type-definition.h"
-#include "system/object-type-definition.h"
+#include "system/item-entity.h"
+#include "system/monster-entity.h"
+#include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
 #include "target/projection-path-calculator.h"
 #include "target/target-checker.h"
@@ -109,7 +109,7 @@ bool activate_scare(PlayerType *player_ptr)
     return true;
 }
 
-bool activate_aggravation(PlayerType *player_ptr, ObjectType *o_ptr, concptr name)
+bool activate_aggravation(PlayerType *player_ptr, ItemEntity *o_ptr, concptr name)
 {
     if (o_ptr->is_specific_artifact(FixedArtifactId::HYOUSIGI)) {
         msg_print(_("拍子木を打った。", "You beat your wooden clappers."));
@@ -168,8 +168,8 @@ bool activate_telekinesis(PlayerType *player_ptr, concptr name)
 
 bool activate_unique_detection(PlayerType *player_ptr)
 {
-    monster_type *m_ptr;
-    monster_race *r_ptr;
+    MonsterEntity *m_ptr;
+    MonsterRaceInfo *r_ptr;
     msg_print(_("奇妙な場所が頭の中に浮かんだ．．．", "Some strange places show up in your mind. And you see ..."));
     for (int i = player_ptr->current_floor_ptr->m_max - 1; i >= 1; i--) {
         m_ptr = &player_ptr->current_floor_ptr->m_list[i];
@@ -399,13 +399,13 @@ bool activate_recall(PlayerType *player_ptr)
     return recall_player(player_ptr, randint0(21) + 15);
 }
 
-bool activate_tree_creation(PlayerType *player_ptr, ObjectType *o_ptr, concptr name)
+bool activate_tree_creation(PlayerType *player_ptr, ItemEntity *o_ptr, concptr name)
 {
     msg_format(_("%s%sから明るい緑の光があふれ出た...", "The %s%s wells with clear light..."), name, quark_str(o_ptr->art_name));
     return tree_creation(player_ptr, player_ptr->y, player_ptr->x);
 }
 
-bool activate_animate_dead(PlayerType *player_ptr, ObjectType *o_ptr)
+bool activate_animate_dead(PlayerType *player_ptr, ItemEntity *o_ptr)
 {
     msg_print(_("黄金色の光が溢れ出た...", "It emitted a golden light..."));
     if (o_ptr->is_specific_artifact(FixedArtifactId::EXCALIBORG)) {

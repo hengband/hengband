@@ -22,7 +22,7 @@
 #include "system/building-type-definition.h"
 #include "system/dungeon-info.h"
 #include "system/floor-type-definition.h"
-#include "system/monster-race-definition.h"
+#include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
 #include "term/screen-processor.h"
 #include "util/int-char-converter.h"
@@ -132,7 +132,7 @@ static void see_arena_poster(PlayerType *player_ptr)
         return;
     }
 
-    monster_race *r_ptr;
+    MonsterRaceInfo *r_ptr;
     r_ptr = &monraces_info[arena_info[player_ptr->arena_number].r_idx];
     concptr name = r_ptr->name.data();
     msg_format(_("%s に挑戦するものはいないか？", "Do I hear any challenges against: %s"), name);

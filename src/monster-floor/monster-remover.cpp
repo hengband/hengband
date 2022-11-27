@@ -13,9 +13,9 @@
 #include "monster/monster-status.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
-#include "system/monster-race-definition.h"
-#include "system/monster-type-definition.h"
-#include "system/object-type-definition.h"
+#include "system/item-entity.h"
+#include "system/monster-entity.h"
+#include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
 #include "target/target-checker.h"
 
@@ -89,7 +89,7 @@ void delete_monster_idx(PlayerType *player_ptr, MONSTER_IDX i)
     // 召喚元のモンスターが消滅した時は、召喚されたモンスターのparent_m_idxが
     // 召喚されたモンスター自身のm_idxを指すようにする
     for (MONSTER_IDX child_m_idx = 1; child_m_idx < floor_ptr->m_max; child_m_idx++) {
-        monster_type *child_m_ptr = &floor_ptr->m_list[child_m_idx];
+        MonsterEntity *child_m_ptr = &floor_ptr->m_list[child_m_idx];
         if (MonsterRace(child_m_ptr->r_idx).is_valid() && child_m_ptr->parent_m_idx == i) {
             child_m_ptr->parent_m_idx = child_m_idx;
         }

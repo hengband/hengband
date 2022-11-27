@@ -37,8 +37,8 @@
 #include "system/dungeon-info.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
-#include "system/monster-race-definition.h"
-#include "system/monster-type-definition.h"
+#include "system/monster-entity.h"
+#include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
 #include "target/projection-path-calculator.h"
 #include "timed-effect/player-blindness.h"
@@ -49,7 +49,7 @@
 
 // Update Monster.
 struct um_type {
-    monster_type *m_ptr;
+    MonsterEntity *m_ptr;
     bool do_disturb;
     POSITION fy;
     POSITION fx;
@@ -74,7 +74,7 @@ bool update_riding_monster(PlayerType *player_ptr, turn_flags *turn_flags_ptr, M
 {
     auto *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
     auto *g_ptr = &player_ptr->current_floor_ptr->grid_array[ny][nx];
-    monster_type *y_ptr = &player_ptr->current_floor_ptr->m_list[g_ptr->m_idx];
+    MonsterEntity *y_ptr = &player_ptr->current_floor_ptr->m_list[g_ptr->m_idx];
     if (turn_flags_ptr->is_riding_mon) {
         return move_player_effect(player_ptr, ny, nx, MPE_DONT_PICKUP);
     }
@@ -101,7 +101,7 @@ bool update_riding_monster(PlayerType *player_ptr, turn_flags *turn_flags_ptr, M
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param turn_flags_ptr ターン経過処理フラグへの参照ポインタ
  */
-void update_player_type(PlayerType *player_ptr, turn_flags *turn_flags_ptr, monster_race *r_ptr)
+void update_player_type(PlayerType *player_ptr, turn_flags *turn_flags_ptr, MonsterRaceInfo *r_ptr)
 {
     if (turn_flags_ptr->do_view) {
         player_ptr->update |= PU_FLOW;
@@ -119,7 +119,7 @@ void update_player_type(PlayerType *player_ptr, turn_flags *turn_flags_ptr, mons
  * @param turn_flags_ptr ターン経過処理フラグへの参照ポインタ
  * @param m_ptr モンスターへの参照ポインタ
  */
-void update_monster_race_flags(PlayerType *player_ptr, turn_flags *turn_flags_ptr, monster_type *m_ptr)
+void update_monster_race_flags(PlayerType *player_ptr, turn_flags *turn_flags_ptr, MonsterEntity *m_ptr)
 {
     auto *r_ptr = &monraces_info[m_ptr->r_idx];
     if (!is_original_ap_and_seen(player_ptr, m_ptr)) {
@@ -163,7 +163,7 @@ void update_monster_race_flags(PlayerType *player_ptr, turn_flags *turn_flags_pt
  */
 void update_player_window(PlayerType *player_ptr, old_race_flags *old_race_flags_ptr)
 {
-    monster_race *r_ptr;
+    MonsterRaceInfo *r_ptr;
     r_ptr = &monraces_info[player_ptr->monster_race_idx];
     if ((old_race_flags_ptr->old_r_flags1 != r_ptr->r_flags1) || (old_race_flags_ptr->old_r_flags2 != r_ptr->r_flags2) ||
         (old_race_flags_ptr->old_r_flags3 != r_ptr->r_flags3) || (old_race_flags_ptr->old_r_ability_flags != r_ptr->r_ability_flags) ||
@@ -210,7 +210,7 @@ static POSITION decide_updated_distance(PlayerType *player_ptr, um_type *um_ptr)
     return distance;
 }
 
-static void update_smart_stupid_flags(monster_race *r_ptr)
+static void update_smart_stupid_flags(MonsterRaceInfo *r_ptr)
 {
     if (r_ptr->r_behavior_flags.has(MonsterBehaviorType::SMART)) {
         r_ptr->r_behavior_flags.set(MonsterBehaviorType::SMART);
@@ -569,7 +569,7 @@ void update_monster(PlayerType *player_ptr, MONSTER_IDX m_idx, bool full)
     um_type tmp_um;
     um_type *um_ptr = initialize_um_type(player_ptr, &tmp_um, m_idx, full);
     if (disturb_high) {
-        monster_race *ap_r_ptr = &monraces_info[um_ptr->m_ptr->ap_r_idx];
+        MonsterRaceInfo *ap_r_ptr = &monraces_info[um_ptr->m_ptr->ap_r_idx];
         if (ap_r_ptr->r_tkills && ap_r_ptr->level >= player_ptr->lev) {
             um_ptr->do_disturb = true;
         }

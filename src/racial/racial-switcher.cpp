@@ -102,7 +102,7 @@ bool switch_class_racial_execution(PlayerType *player_ptr, const int32_t command
             return retval;
         }
 
-        /* Fall through */
+        [[fallthrough]];
     case PlayerClassType::MAGE:
     case PlayerClassType::SORCERER:
         return eat_magic(player_ptr, player_ptr->lev * 2);

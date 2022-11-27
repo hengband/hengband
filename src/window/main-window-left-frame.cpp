@@ -9,8 +9,8 @@
 #include "player-info/mimic-info-table.h"
 #include "player/player-status-table.h"
 #include "system/floor-type-definition.h"
-#include "system/monster-race-definition.h"
-#include "system/monster-type-definition.h"
+#include "system/monster-entity.h"
+#include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
@@ -311,7 +311,7 @@ void health_redraw(PlayerType *player_ptr, bool riding)
         col = COL_INFO;
     }
 
-    monster_type *m_ptr;
+    MonsterEntity *m_ptr;
     m_ptr = &player_ptr->current_floor_ptr->m_list[health_who];
 
     if (w_ptr->wizard && player_ptr->phase_out) {

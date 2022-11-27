@@ -14,7 +14,7 @@
 #include "cmd-io/cmd-save.h"
 #include "io/input-key-acceptor.h"
 #include "io/read-pref-file.h"
-#include "system/object-type-definition.h"
+#include "system/item-entity.h"
 #include "term/screen-processor.h"
 #include "util/int-char-converter.h"
 #include "world/world.h"
@@ -140,7 +140,7 @@ void do_cmd_edit_autopick(PlayerType *player_ptr)
 
     update_playtime();
     init_autopick();
-    if (autopick_last_destroyed_object.k_idx) {
+    if (autopick_last_destroyed_object.bi_id) {
         autopick_entry_from_object(player_ptr, entry, &autopick_last_destroyed_object);
         tb->last_destroyed = autopick_line_from_entry_kill(entry);
     }

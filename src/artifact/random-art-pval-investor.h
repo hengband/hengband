@@ -4,5 +4,5 @@
  * @brief ランダムアーティファクトのpval付加処理ヘッダ
  */
 
-class ObjectType;
-void random_plus(ObjectType *o_ptr);
+class ItemEntity;
+void random_plus(ItemEntity *o_ptr);

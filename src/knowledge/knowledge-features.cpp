@@ -13,7 +13,7 @@
 #include "knowledge/lighting-level-table.h"
 #include "monster-race/monster-race.h"
 #include "system/dungeon-info.h"
-#include "system/monster-race-definition.h"
+#include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
 #include "system/terrain-type-definition.h"
 #include "term/screen-processor.h"
@@ -298,7 +298,7 @@ void do_cmd_knowledge_features(bool *need_redraw, bool visual_only, IDX direct_f
                     f_ptr->x_char[i] = char_old[i];
                 }
 
-                /* Fall through */
+                [[fallthrough]];
             case '\n':
             case '\r':
                 if (direct_f_idx >= 0) {

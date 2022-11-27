@@ -1,5 +1,4 @@
-﻿#include <string>
-
+﻿#include "io-dump/character-dump.h"
 #include "artifact/fixed-art-types.h"
 #include "avatar/avatar.h"
 #include "cmd-building/cmd-building.h"
@@ -9,7 +8,6 @@
 #include "game-option/birth-options.h"
 #include "game-option/game-play-options.h"
 #include "inventory/inventory-slot-types.h"
-#include "io-dump/character-dump.h"
 #include "io-dump/player-status-dump.h"
 #include "io-dump/special-class-dump.h"
 #include "io/mutations-dump.h"
@@ -37,9 +35,9 @@
 #include "system/building-type-definition.h"
 #include "system/dungeon-info.h"
 #include "system/floor-type-definition.h"
-#include "system/monster-race-definition.h"
-#include "system/monster-type-definition.h"
-#include "system/object-type-definition.h"
+#include "system/item-entity.h"
+#include "system/monster-entity.h"
+#include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
 #include "util/enum-converter.h"
 #include "util/int-char-converter.h"
@@ -47,8 +45,8 @@
 #include "util/string-processor.h"
 #include "view/display-messages.h"
 #include "world/world.h"
-
 #include <numeric>
+#include <string>
 
 /*!
  * @brief プレイヤーのペット情報をファイルにダンプする
@@ -516,7 +514,7 @@ static void dump_aux_equipment_inventory(PlayerType *player_ptr, FILE *fff)
     fprintf(fff, _("  [キャラクタの持ち物]\n\n", "  [Character Inventory]\n\n"));
 
     for (int i = 0; i < INVEN_PACK; i++) {
-        if (!player_ptr->inventory_list[i].k_idx) {
+        if (!player_ptr->inventory_list[i].bi_id) {
             break;
         }
         describe_flavor(player_ptr, o_name, &player_ptr->inventory_list[i], 0);

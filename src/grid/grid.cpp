@@ -48,9 +48,9 @@
 #include "system/dungeon-info.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
-#include "system/monster-race-definition.h"
-#include "system/monster-type-definition.h"
-#include "system/object-type-definition.h"
+#include "system/item-entity.h"
+#include "system/monster-entity.h"
+#include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
 #include "system/terrain-type-definition.h"
 #include "term/gameterm.h"
@@ -358,7 +358,8 @@ void note_spot(PlayerType *player_ptr, POSITION y, POSITION x)
         auto *o_ptr = &player_ptr->current_floor_ptr->o_list[this_o_idx];
 
         /* Memorize objects */
-        o_ptr->marked |= OM_FOUND;
+        o_ptr->marked.set(OmType::FOUND);
+        player_ptr->window_flags |= PW_FOUND_ITEM_LIST;
     }
 
     /* Hack -- memorize grids */

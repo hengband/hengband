@@ -2,13 +2,13 @@
 #include "artifact/random-art-effects.h"
 #include "load/old/item-flag-types-savefile50.h"
 #include "save/save-util.h"
-#include "system/baseitem-info-definition.h"
-#include "system/object-type-definition.h"
+#include "system/baseitem-info.h"
+#include "system/item-entity.h"
 #include "util/bit-flags-calculator.h"
 #include "util/enum-converter.h"
 #include "util/quarks.h"
 
-static void write_item_flags(ObjectType *o_ptr, BIT_FLAGS *flags)
+static void write_item_flags(ItemEntity *o_ptr, BIT_FLAGS *flags)
 {
     if (o_ptr->pval) {
         set_bits(*flags, SaveDataItemFlagType::PVAL);
@@ -62,7 +62,7 @@ static void write_item_flags(ObjectType *o_ptr, BIT_FLAGS *flags)
         set_bits(*flags, SaveDataItemFlagType::IDENT);
     }
 
-    if (o_ptr->marked) {
+    if (o_ptr->marked.any()) {
         set_bits(*flags, SaveDataItemFlagType::MARKED);
     }
 
@@ -125,7 +125,7 @@ static void write_item_flags(ObjectType *o_ptr, BIT_FLAGS *flags)
     wr_u32b(*flags);
 }
 
-static void write_item_info(ObjectType *o_ptr, const BIT_FLAGS flags)
+static void write_item_info(ItemEntity *o_ptr, const BIT_FLAGS flags)
 {
     wr_s16b((int16_t)o_ptr->weight);
     if (any_bits(flags, SaveDataItemFlagType::FIXED_ARTIFACT_IDX)) {
@@ -169,7 +169,7 @@ static void write_item_info(ObjectType *o_ptr, const BIT_FLAGS flags)
     }
 
     if (any_bits(flags, SaveDataItemFlagType::MARKED)) {
-        wr_byte(o_ptr->marked);
+        wr_FlagGroup_bytes(o_ptr->marked, wr_byte, 1);
     }
 
     if (any_bits(flags, SaveDataItemFlagType::ART_FLAGS)) {
@@ -238,12 +238,12 @@ static void write_item_info(ObjectType *o_ptr, const BIT_FLAGS flags)
  * @brief アイテムオブジェクトを書き込む / Write an "item" record
  * @param o_ptr アイテムオブジェクト保存元ポインタ
  */
-void wr_item(ObjectType *o_ptr)
+void wr_item(ItemEntity *o_ptr)
 {
     BIT_FLAGS flags = 0x00000000;
     write_item_flags(o_ptr, &flags);
 
-    wr_s16b(o_ptr->k_idx);
+    wr_s16b(o_ptr->bi_id);
     wr_byte((byte)o_ptr->iy);
     wr_byte((byte)o_ptr->ix);
     if (any_bits(flags, SaveDataItemFlagType::PVAL)) {
@@ -270,12 +270,12 @@ void wr_item(ObjectType *o_ptr)
 
 /*!
  * @brief セーブデータにアイテムの鑑定情報を書き込む / Write an "perception" record
- * @param k_idx ベースアイテムのID
+ * @param bi_id ベースアイテムのID
  */
-void wr_perception(KIND_OBJECT_IDX k_idx)
+void wr_perception(short bi_id)
 {
     byte tmp8u = 0;
-    auto *k_ptr = &baseitems_info[k_idx];
+    auto *k_ptr = &baseitems_info[bi_id];
     if (k_ptr->aware) {
         tmp8u |= 0x01;
     }

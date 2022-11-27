@@ -20,8 +20,8 @@
 #include "player/player-status.h"
 #include "sv-definition/sv-bow-types.h"
 #include "system/floor-type-definition.h"
-#include "system/monster-type-definition.h"
-#include "system/object-type-definition.h"
+#include "system/item-entity.h"
+#include "system/monster-entity.h"
 #include "system/player-type-definition.h"
 #include "term/term-color-types.h"
 #include "timed-effect/player-deceleration.h"
@@ -125,8 +125,8 @@ static void display_hit_damage(PlayerType *player_ptr)
 static void display_shoot_magnification(PlayerType *player_ptr)
 {
     int tmul = 0;
-    if (player_ptr->inventory_list[INVEN_BOW].k_idx) {
-        tmul = bow_tmul(player_ptr->inventory_list[INVEN_BOW].sval);
+    if (player_ptr->inventory_list[INVEN_BOW].bi_id) {
+        tmul = player_ptr->inventory_list[INVEN_BOW].get_arrow_magnification();
         if (player_ptr->xtra_might) {
             tmul++;
         }

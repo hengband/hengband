@@ -30,8 +30,8 @@
 #include "system/dungeon-info.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
-#include "system/monster-race-definition.h"
-#include "system/monster-type-definition.h"
+#include "system/monster-entity.h"
+#include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
 #include "target/projection-path-calculator.h"
 #include "target/target-checker.h"
@@ -249,8 +249,8 @@ bool teleport_level_other(PlayerType *player_ptr)
         return true;
     }
 
-    monster_type *m_ptr;
-    monster_race *r_ptr;
+    MonsterEntity *m_ptr;
+    MonsterRaceInfo *r_ptr;
     m_ptr = &player_ptr->current_floor_ptr->m_list[target_m_idx];
     r_ptr = &monraces_info[m_ptr->r_idx];
     GAME_TEXT m_name[MAX_NLEN];

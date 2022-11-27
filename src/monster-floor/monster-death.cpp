@@ -40,8 +40,9 @@
 #include "system/building-type-definition.h"
 #include "system/dungeon-info.h"
 #include "system/floor-type-definition.h"
-#include "system/monster-race-definition.h"
-#include "system/monster-type-definition.h"
+#include "system/item-entity.h"
+#include "system/monster-entity.h"
+#include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
 #include "system/system-variables.h"
 #include "timed-effect/player-hallucination.h"
@@ -95,7 +96,7 @@ static void on_defeat_arena_monster(PlayerType *player_ptr, monster_death_type *
     const auto &arena = arena_info[player_ptr->arena_number];
     const auto tval = arena.key.tval();
     if (tval > ItemKindType::NONE) {
-        ObjectType forge;
+        ItemEntity forge;
         auto *q_ptr = &forge;
         q_ptr->prep(lookup_baseitem_id(arena.key));
         ItemMagicApplier(player_ptr, q_ptr, floor_ptr->object_level, AM_NO_FIXED_ART).execute();
@@ -143,7 +144,7 @@ static void drop_corpse(PlayerType *player_ptr, monster_death_type *md_ptr)
         }
     }
 
-    ObjectType forge;
+    ItemEntity forge;
     auto *q_ptr = &forge;
     q_ptr->prep(lookup_baseitem_id({ ItemKindType::CORPSE, (corpse ? SV_CORPSE : SV_SKELETON) }));
     ItemMagicApplier(player_ptr, q_ptr, floor_ptr->object_level, AM_NO_FIXED_ART).execute();
@@ -195,19 +196,19 @@ bool drop_single_artifact(PlayerType *player_ptr, monster_death_type *md_ptr, Fi
     return true;
 }
 
-static KIND_OBJECT_IDX drop_dungeon_final_artifact(PlayerType *player_ptr, monster_death_type *md_ptr)
+static short drop_dungeon_final_artifact(PlayerType *player_ptr, monster_death_type *md_ptr)
 {
     const auto &dungeon = dungeons_info[player_ptr->dungeon_idx];
     const auto has_reward = dungeon.final_object > 0;
-    const auto k_idx = has_reward ? dungeon.final_object : lookup_baseitem_id({ ItemKindType::SCROLL, SV_SCROLL_ACQUIREMENT });
+    const auto bi_id = has_reward ? dungeon.final_object : lookup_baseitem_id({ ItemKindType::SCROLL, SV_SCROLL_ACQUIREMENT });
     if (dungeon.final_artifact == FixedArtifactId::NONE) {
-        return k_idx;
+        return bi_id;
     }
 
     const auto a_idx = dungeon.final_artifact;
     auto &a_ref = artifacts_info.at(a_idx);
     if (a_ref.is_generated) {
-        return k_idx;
+        return bi_id;
     }
 
     if (create_named_art(player_ptr, a_idx, md_ptr->md_y, md_ptr->md_x)) {
@@ -216,7 +217,7 @@ static KIND_OBJECT_IDX drop_dungeon_final_artifact(PlayerType *player_ptr, monst
         }
     }
 
-    return dungeon.final_object ? k_idx : 0;
+    return dungeon.final_object ? bi_id : 0;
 }
 
 static void drop_artifacts(PlayerType *player_ptr, monster_death_type *md_ptr)
@@ -230,11 +231,11 @@ static void drop_artifacts(PlayerType *player_ptr, monster_death_type *md_ptr)
         return;
     }
 
-    KIND_OBJECT_IDX k_idx = drop_dungeon_final_artifact(player_ptr, md_ptr);
-    if (k_idx != 0) {
-        ObjectType forge;
+    short bi_id = drop_dungeon_final_artifact(player_ptr, md_ptr);
+    if (bi_id != 0) {
+        ItemEntity forge;
         auto *q_ptr = &forge;
-        q_ptr->prep(k_idx);
+        q_ptr->prep(bi_id);
         ItemMagicApplier(player_ptr, q_ptr, player_ptr->current_floor_ptr->object_level, AM_NO_FIXED_ART | AM_GOOD).execute();
         (void)drop_near(player_ptr, q_ptr, -1, md_ptr->md_y, md_ptr->md_x);
     }
@@ -305,7 +306,7 @@ static void drop_items_golds(PlayerType *player_ptr, monster_death_type *md_ptr,
     int dump_item = 0;
     int dump_gold = 0;
     for (int i = 0; i < drop_numbers; i++) {
-        ObjectType forge;
+        ItemEntity forge;
         auto *q_ptr = &forge;
         q_ptr->wipe();
         if (md_ptr->do_gold && (!md_ptr->do_item || (randint0(100) < 50))) {

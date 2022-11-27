@@ -24,7 +24,7 @@
 #include "status/experience.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
-#include "system/object-type-definition.h"
+#include "system/item-entity.h"
 #include "system/player-type-definition.h"
 #include "term/screen-processor.h"
 #include "util/int-char-converter.h"
@@ -242,7 +242,7 @@ bool exe_cmd_debug(PlayerType *player_ptr, char cmd)
         break;
     case 'X':
         for (INVENTORY_IDX i = INVEN_TOTAL - 1; i >= 0; i--) {
-            if (player_ptr->inventory_list[i].k_idx) {
+            if (player_ptr->inventory_list[i].bi_id) {
                 drop_from_inventory(player_ptr, i, 999);
             }
         }

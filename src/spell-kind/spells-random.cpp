@@ -115,7 +115,7 @@ bool activate_ty_curse(PlayerType *player_ptr, bool stop_ty, int *count)
                     break;
                 }
             }
-            /* Fall through */
+            [[fallthrough]];
         case 30:
         case 31:
             if (!(*count)) {
@@ -127,7 +127,7 @@ bool activate_ty_curse(PlayerType *player_ptr, bool stop_ty, int *count)
                     break;
                 }
             }
-            /* Fall through */
+            [[fallthrough]];
         case 32:
         case 33:
             if (!(*count)) {
@@ -140,7 +140,7 @@ bool activate_ty_curse(PlayerType *player_ptr, bool stop_ty, int *count)
                     break;
                 }
             }
-            /* Fall through */
+            [[fallthrough]];
         case 34:
             msg_print(_("エネルギーのうねりを感じた！", "You feel a surge of energy!"));
             wall_breaker(player_ptr);
@@ -152,7 +152,7 @@ bool activate_ty_curse(PlayerType *player_ptr, bool stop_ty, int *count)
             if (!one_in_(6)) {
                 break;
             }
-            /* Fall through */
+            [[fallthrough]];
         case 1:
         case 2:
         case 3:
@@ -162,7 +162,7 @@ bool activate_ty_curse(PlayerType *player_ptr, bool stop_ty, int *count)
             if (!one_in_(6)) {
                 break;
             }
-            /* Fall through */
+            [[fallthrough]];
         case 4:
         case 5:
         case 6:
@@ -170,7 +170,7 @@ bool activate_ty_curse(PlayerType *player_ptr, bool stop_ty, int *count)
             if (!one_in_(6)) {
                 break;
             }
-            /* Fall through */
+            [[fallthrough]];
         case 7:
         case 8:
         case 9:
@@ -180,7 +180,7 @@ bool activate_ty_curse(PlayerType *player_ptr, bool stop_ty, int *count)
             if (!one_in_(6)) {
                 break;
             }
-            /* Fall through */
+            [[fallthrough]];
         case 10:
         case 11:
         case 12:
@@ -189,7 +189,7 @@ bool activate_ty_curse(PlayerType *player_ptr, bool stop_ty, int *count)
             if (!one_in_(6)) {
                 break;
             }
-            /* Fall through */
+            [[fallthrough]];
         case 13:
         case 14:
         case 15:
@@ -209,7 +209,7 @@ bool activate_ty_curse(PlayerType *player_ptr, bool stop_ty, int *count)
                 break;
             }
         }
-            /* Fall through */
+            [[fallthrough]];
         case 21:
         case 22:
         case 23:
@@ -217,14 +217,14 @@ bool activate_ty_curse(PlayerType *player_ptr, bool stop_ty, int *count)
             if (!one_in_(6)) {
                 break;
             }
-            /* Fall through */
+            [[fallthrough]];
         case 24:
             msg_print(_("ほえ？私は誰？ここで何してる？", "Huh? Who am I? What am I doing here?"));
             lose_all_info(player_ptr);
             if (!one_in_(6)) {
                 break;
             }
-            /* Fall through */
+            [[fallthrough]];
         case 25:
             if ((floor_ptr->dun_level > 65) && !stop_ty) {
                 (*count) += summon_cyber(player_ptr, -1, player_ptr->y, player_ptr->x);
@@ -235,7 +235,7 @@ bool activate_ty_curse(PlayerType *player_ptr, bool stop_ty, int *count)
             if (!one_in_(6)) {
                 break;
             }
-            /* Fall through */
+            [[fallthrough]];
         default:
             for (int i = 0; i < A_MAX; i++) {
                 do {

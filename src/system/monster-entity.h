@@ -17,8 +17,10 @@ constexpr int MONSTER_MAXHP = 30000; //!< モンスターの最大HP
 
 enum class MonsterRaceId : int16_t;
 class FloorType;
-struct monster_race;
-struct monster_type {
+class MonsterRaceInfo;
+class MonsterEntity {
+public:
+    MonsterEntity() = default;
     MonsterRaceId r_idx{}; /*!< モンスターの実種族ID (これが0の時は死亡扱いになる) / Monster race index 0 = dead. */
     MonsterRaceId ap_r_idx{}; /*!< モンスターの外見種族ID（あやしい影、たぬき、ジュラル星人誤認などにより変化する）Monster race appearance index */
     FloorType *current_floor_ptr{}; /*!< 所在フロアID（現状はFloorType構造体によるオブジェクトは1つしかないためソースコード設計上の意義以外はない）*/
@@ -59,7 +61,7 @@ struct monster_type {
     bool is_mimicry() const;
     bool is_valid() const;
     MonsterRaceId get_real_r_idx() const;
-    monster_race &get_real_r_ref() const;
+    MonsterRaceInfo &get_real_r_ref() const;
     short get_remaining_sleep() const;
     short get_remaining_acceleration() const;
     short get_remaining_deceleration() const;

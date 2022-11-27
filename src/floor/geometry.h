@@ -34,5 +34,5 @@ POSITION distance(POSITION y1, POSITION x1, POSITION y2, POSITION x2);
 void mmove2(POSITION *y, POSITION *x, POSITION y1, POSITION x1, POSITION y2, POSITION x2);
 bool player_can_see_bold(PlayerType *player_ptr, POSITION y, POSITION x);
 
-struct monster_type;
-bool is_seen(PlayerType *player_ptr, monster_type *m_ptr);
+class MonsterEntity;
+bool is_seen(PlayerType *player_ptr, MonsterEntity *m_ptr);

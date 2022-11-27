@@ -12,8 +12,8 @@
 #include "object/tval-types.h"
 #include "sv-definition/sv-lite-types.h"
 #include "system/angband.h"
-#include "system/baseitem-info-definition.h"
-#include "system/object-type-definition.h"
+#include "system/baseitem-info.h"
+#include "system/item-entity.h"
 #include "system/player-type-definition.h"
 #include "util/bit-flags-calculator.h"
 #include "util/enum-converter.h"
@@ -23,7 +23,7 @@
  * @brief アイテムオブジェクトを読み込む(v3.0.0 Savefile ver50まで)
  * @param o_ptr アイテムオブジェクト保存先ポインタ
  */
-void ItemLoader50::rd_item(ObjectType *o_ptr)
+void ItemLoader50::rd_item(ItemEntity *o_ptr)
 {
     if (h_older_than(1, 5, 0, 0)) {
         rd_item_old(o_ptr);
@@ -31,12 +31,12 @@ void ItemLoader50::rd_item(ObjectType *o_ptr)
     }
 
     auto flags = rd_u32b();
-    o_ptr->k_idx = rd_s16b();
+    o_ptr->bi_id = rd_s16b();
     o_ptr->iy = rd_byte();
     o_ptr->ix = rd_byte();
-    auto *k_ptr = &baseitems_info[o_ptr->k_idx];
-    o_ptr->tval = k_ptr->tval;
-    o_ptr->sval = k_ptr->sval;
+    auto *k_ptr = &baseitems_info[o_ptr->bi_id];
+    o_ptr->tval = k_ptr->bi_key.tval();
+    o_ptr->sval = k_ptr->bi_key.sval().value();
     o_ptr->pval = any_bits(flags, SaveDataItemFlagType::PVAL) ? rd_s16b() : 0;
     o_ptr->discount = any_bits(flags, SaveDataItemFlagType::DISCOUNT) ? rd_byte() : 0;
     o_ptr->number = any_bits(flags, SaveDataItemFlagType::NUMBER) ? rd_byte() : 1;
@@ -60,7 +60,10 @@ void ItemLoader50::rd_item(ObjectType *o_ptr)
     o_ptr->dd = any_bits(flags, SaveDataItemFlagType::DD) ? rd_byte() : 0;
     o_ptr->ds = any_bits(flags, SaveDataItemFlagType::DS) ? rd_byte() : 0;
     o_ptr->ident = any_bits(flags, SaveDataItemFlagType::IDENT) ? rd_byte() : 0;
-    o_ptr->marked = any_bits(flags, SaveDataItemFlagType::MARKED) ? rd_byte() : 0;
+    o_ptr->marked.clear();
+    if (any_bits(flags, SaveDataItemFlagType::MARKED)) {
+        rd_FlagGroup_bytes(o_ptr->marked, rd_byte, 1);
+    }
 
     /* Object flags */
     if (loading_savefile_version_is_older_than(7)) {

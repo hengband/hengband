@@ -1,7 +1,7 @@
 ﻿#include "view/display-lore-magics.h"
 #include "lore/lore-util.h"
 #include "monster-race/race-flags2.h"
-#include "system/monster-race-definition.h"
+#include "system/monster-race-info.h"
 #include "term/term-color-types.h"
 
 void display_monster_breath(lore_type *lore_ptr)

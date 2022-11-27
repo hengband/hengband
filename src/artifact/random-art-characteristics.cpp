@@ -11,14 +11,14 @@
 #include "object-enchant/trc-types.h"
 #include "object/object-flags.h"
 #include "player-base/player-class.h"
-#include "system/object-type-definition.h"
+#include "system/item-entity.h"
 #include "system/player-type-definition.h"
 #include "util/bit-flags-calculator.h"
 #include "wizard/wizard-messages.h"
 #include <sstream>
 #include <string_view>
 
-static void pval_subtraction(ObjectType *o_ptr)
+static void pval_subtraction(ItemEntity *o_ptr)
 {
     if (o_ptr->pval > 0) {
         o_ptr->pval = 0 - (o_ptr->pval + randint1(4));
@@ -37,7 +37,7 @@ static void pval_subtraction(ObjectType *o_ptr)
     }
 }
 
-static void add_negative_flags(ObjectType *o_ptr)
+static void add_negative_flags(ItemEntity *o_ptr)
 {
     if (one_in_(4)) {
         o_ptr->curse_flags.set(CurseTraitType::PERMA_CURSE);
@@ -87,7 +87,7 @@ static void add_negative_flags(ObjectType *o_ptr)
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param o_ptr 対象のオブジェクト構造体ポインタ
  */
-void curse_artifact(PlayerType *player_ptr, ObjectType *o_ptr)
+void curse_artifact(PlayerType *player_ptr, ItemEntity *o_ptr)
 {
     pval_subtraction(o_ptr);
     o_ptr->curse_flags.set({ CurseTraitType::HEAVY_CURSE, CurseTraitType::CURSED });
@@ -139,7 +139,7 @@ static std::string get_random_art_filename(const bool armour, const int power)
  * @details 確率によって、シンダリン銘、漢字銘 (anameからランダム)、固定名のいずれか一つが与えられる.
  * シンダリン銘：10%、漢字銘18%、固定銘72% (固定銘が尽きていたら漢字銘になることもある).
  */
-void get_random_name(ObjectType *o_ptr, char *return_name, bool armour, int power)
+void get_random_name(ItemEntity *o_ptr, char *return_name, bool armour, int power)
 {
     const auto prob = randint1(100);
     constexpr auto chance_sindarin = 10;
@@ -164,7 +164,7 @@ void get_random_name(ObjectType *o_ptr, char *return_name, bool armour, int powe
 }
 
 /*対邪平均ダメージの計算処理*/
-static int calc_arm_avgdamage(PlayerType *player_ptr, ObjectType *o_ptr)
+static int calc_arm_avgdamage(PlayerType *player_ptr, ItemEntity *o_ptr)
 {
     auto flgs = object_flags(o_ptr);
     int base, forced, vorpal;
@@ -195,7 +195,7 @@ static int calc_arm_avgdamage(PlayerType *player_ptr, ObjectType *o_ptr)
     return dam;
 }
 
-bool has_extreme_damage_rate(PlayerType *player_ptr, ObjectType *o_ptr)
+bool has_extreme_damage_rate(PlayerType *player_ptr, ItemEntity *o_ptr)
 {
     auto flgs = object_flags(o_ptr);
     if (flgs.has(TR_VAMPIRIC)) {
