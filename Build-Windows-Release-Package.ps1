@@ -37,7 +37,7 @@ function BuildPackage ($package_name, $package_unique_files, $build_conf) {
     Get-ChildItem -Path $tempDir | Compress-Archive -Force -Verbose -DestinationPath $package_path
 
     # 作業用テンポラリフォルダ削除
-    $tempDir | Where-Object { Test-Path $_ } | ForEach-Object { Get-ChildItem $_ -File -Recurse | Remove-Item; $_ } | Remove-Item -Recurse
+    $tempDir | Where-Object { Test-Path $_ } | ForEach-Object { Get-ChildItem $_ -File -Recurse | Remove-Item; $_ } | Remove-Item -Recurse -Force
 }
 
 # 日本語版
