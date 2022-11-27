@@ -481,7 +481,7 @@ void autopick_entry_from_object(PlayerType *player_ptr, autopick_type *entry, It
         ADD_FLG(FLG_CORPSES);
     } else if (o_ptr->is_spell_book()) {
         ADD_FLG(FLG_SPELLBOOKS);
-    } else if (tval == ItemKindType::POLEARM || tval == ItemKindType::SWORD || tval == ItemKindType::DIGGING || tval == ItemKindType::HAFTED) {
+    } else if (o_ptr->is_melee_weapon()) {
         ADD_FLG(FLG_WEAPONS);
     } else if (tval == ItemKindType::SHIELD) {
         ADD_FLG(FLG_SHIELDS);
