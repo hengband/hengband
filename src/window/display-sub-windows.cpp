@@ -521,21 +521,18 @@ void fix_monster(PlayerType *player_ptr)
  */
 void fix_object(PlayerType *player_ptr)
 {
-    for (int j = 0; j < 8; j++) {
-        term_type *old = game_term;
-        if (!angband_term[j]) {
+    for (auto i = 0; i < 8; i++) {
+        auto *old = game_term;
+        if (angband_term[i] == nullptr) {
             continue;
         }
 
-        if (!(window_flag[j] & (PW_OBJECT))) {
+        if (none_bits(window_flag[i], PW_OBJECT)) {
             continue;
         }
 
-        term_activate(angband_term[j]);
-        if (player_ptr->baseitem_info_idx) {
-            display_koff(player_ptr, player_ptr->baseitem_info_idx);
-        }
-
+        term_activate(angband_term[i]);
+        display_koff(player_ptr);
         term_fresh();
         term_activate(old);
     }

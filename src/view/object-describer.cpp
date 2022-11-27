@@ -61,25 +61,22 @@ void inven_item_describe(PlayerType *player_ptr, short item)
 }
 
 /*!
- * @brief 現在アクティブになっているウィンドウにオブジェクトの詳細を表示する /
- * Hack -- display an object kind in the current window
+ * @brief 現在アクティブになっているウィンドウにオブジェクトの詳細を表示する
  * @param player_ptr プレイヤーへの参照ポインタ
- * @param bi_id ベースアイテムの参照ID
- * @details
- * Include list of usable spells for readible books
+ * @details Include list of usable spells for readible books
  */
-void display_koff(PlayerType *player_ptr, short bi_id)
+void display_koff(PlayerType *player_ptr)
 {
-    for (int y = 0; y < game_term->hgt; y++) {
-        term_erase(0, y, 255);
-    }
-
-    if (!bi_id) {
+    if (player_ptr->tracking_bi_id == 0) {
         return;
     }
 
+    for (auto y = 0; y < game_term->hgt; y++) {
+        term_erase(0, y, 255);
+    }
+
     ItemEntity item;
-    item.prep(bi_id);
+    item.prep(player_ptr->tracking_bi_id);
     GAME_TEXT o_name[MAX_NLEN];
     describe_flavor(player_ptr, o_name, &item, (OD_OMIT_PREFIX | OD_NAME_ONLY | OD_STORE));
 
