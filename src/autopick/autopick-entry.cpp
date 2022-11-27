@@ -475,7 +475,7 @@ void autopick_entry_from_object(PlayerType *player_ptr, autopick_type *entry, It
         ADD_FLG(FLG_DEVICES);
     } else if (tval == ItemKindType::LITE) {
         ADD_FLG(FLG_LIGHTS);
-    } else if (tval == ItemKindType::SKELETON || tval == ItemKindType::BOTTLE || tval == ItemKindType::JUNK || tval == ItemKindType::STATUE) {
+    } else if (o_ptr->is_junk()) {
         ADD_FLG(FLG_JUNKS);
     } else if (tval == ItemKindType::CORPSE) {
         ADD_FLG(FLG_CORPSES);

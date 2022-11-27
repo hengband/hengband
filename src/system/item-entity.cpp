@@ -784,3 +784,8 @@ bool ItemEntity::is_lite_requiring_fuel() const
 {
     return this->bi_key.is_lite_requiring_fuel();
 }
+
+bool ItemEntity::is_junk() const
+{
+    return this->bi_key.is_junk();
+}

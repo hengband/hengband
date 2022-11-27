@@ -129,6 +129,7 @@ public:
     int get_arrow_magnification() const;
     bool is_aiming_rod() const;
     bool is_lite_requiring_fuel() const;
+    bool is_junk() const;
 
 private:
     int get_baseitem_price() const;

@@ -498,6 +498,19 @@ bool BaseitemKey::is_lite_requiring_fuel() const
     }
 }
 
+bool BaseitemKey::is_junk() const
+{
+    switch (this->type_value) {
+    case ItemKindType::SKELETON:
+    case ItemKindType::BOTTLE:
+    case ItemKindType::JUNK:
+    case ItemKindType::STATUE:
+        return true;
+    default:
+        return false;
+    }
+}
+
 bool BaseitemKey::is_mushrooms() const
 {
     if (!this->subtype_value.has_value()) {
