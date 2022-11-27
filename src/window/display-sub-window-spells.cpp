@@ -179,17 +179,17 @@ static void display_spell_list(PlayerType *player_ptr)
  */
 void fix_spell(PlayerType *player_ptr)
 {
-    for (int j = 0; j < 8; j++) {
+    for (auto i = 0U; i < angband_terms.size(); ++i) {
         term_type *old = game_term;
-        if (!angband_term[j]) {
+        if (!angband_terms[i]) {
             continue;
         }
 
-        if (!(window_flag[j] & (PW_SPELL))) {
+        if (!(window_flag[i] & (PW_SPELL))) {
             continue;
         }
 
-        term_activate(angband_term[j]);
+        term_activate(angband_terms[i]);
         display_spell_list(player_ptr);
         term_fresh();
         player_ptr->window_flags &= ~(PW_SPELL);

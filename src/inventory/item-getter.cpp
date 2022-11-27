@@ -296,16 +296,16 @@ bool get_item(PlayerType *player_ptr, OBJECT_IDX *cp, concptr pmt, concptr str, 
         COMMAND_CODE get_item_label = 0;
         int ni = 0;
         int ne = 0;
-        for (int j = 0; j < 8; j++) {
-            if (!angband_term[j]) {
+        for (auto i = 0U; i < angband_terms.size(); ++i) {
+            if (!angband_terms[i]) {
                 continue;
             }
 
-            if (window_flag[j] & (PW_INVEN)) {
+            if (window_flag[i] & (PW_INVEN)) {
                 ni++;
             }
 
-            if (window_flag[j] & (PW_EQUIP)) {
+            if (window_flag[i] & (PW_EQUIP)) {
                 ne++;
             }
         }

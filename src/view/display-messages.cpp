@@ -195,14 +195,14 @@ void message_add(std::string_view msg)
 
 bool is_msg_window_flowed(void)
 {
-    int i;
-    for (i = 0; i < 8; i++) {
-        if (angband_term[i] && (window_flag[i] & PW_MESSAGE)) {
+    auto i = 0U;
+    for (; i < angband_terms.size(); ++i) {
+        if (angband_terms[i] && (window_flag[i] & PW_MESSAGE)) {
             break;
         }
     }
     if (i < 8) {
-        if (num_more < angband_term[i]->hgt) {
+        if (num_more < angband_terms[i]->hgt) {
             return false;
         }
 
