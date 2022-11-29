@@ -66,11 +66,7 @@ std::optional<int> BaseitemKey::sval() const
  */
 ItemKindType BaseitemKey::get_arrow_kind() const
 {
-    if (this->type_value != ItemKindType::BOW) {
-        return ItemKindType::NONE;
-    }
-
-    if (!this->subtype_value.has_value()) {
+    if ((this->type_value != ItemKindType::BOW) || !this->subtype_value.has_value()) {
         return ItemKindType::NONE;
     }
 
