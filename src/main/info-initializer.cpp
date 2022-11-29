@@ -102,7 +102,8 @@ static errr init_info(std::string_view filename, angband_header &head, InfoType 
 
     constexpr auto info_is_vector = is_vector_v<InfoType>;
     if constexpr (info_is_vector) {
-        info.assign(head.info_num, {});
+        using value_type = typename InfoType::value_type;
+        info.assign(head.info_num, value_type{});
     }
 
     const auto err = init_info_txt(fp, buf, &head, parser);
