@@ -116,11 +116,9 @@ static void describe_chest(flavor_type *flavor_ptr)
     describe_chest_trap(flavor_ptr);
 }
 
-static void decide_tval_show(flavor_type *flavor_ptr)
+static bool should_show_ac_bonus(const ItemEntity &item)
 {
-    if (flavor_ptr->o_ptr->ac) {
-        flavor_ptr->show_armour = true;
-    }
+    return (item.ac != 0) || item.is_protector();
 }
 
 static bool should_show_slaying_bonus(const ItemEntity &item)
@@ -346,7 +344,7 @@ static void describe_spike_power(PlayerType *player_ptr, flavor_type *flavor_ptr
 
 static void describe_known_item_ac(flavor_type *flavor_ptr)
 {
-    if (flavor_ptr->show_armour) {
+    if (should_show_ac_bonus(*flavor_ptr->o_ptr)) {
         flavor_ptr->t = object_desc_chr(flavor_ptr->t, ' ');
         flavor_ptr->t = object_desc_chr(flavor_ptr->t, flavor_ptr->b1);
         flavor_ptr->t = object_desc_num(flavor_ptr->t, flavor_ptr->o_ptr->ac);
@@ -373,7 +371,7 @@ static void describe_ac(flavor_type *flavor_ptr)
         return;
     }
 
-    if (!flavor_ptr->show_armour) {
+    if (!should_show_ac_bonus(*flavor_ptr->o_ptr)) {
         return;
     }
 
@@ -568,7 +566,6 @@ void describe_flavor(PlayerType *player_ptr, char *buf, ItemEntity *o_ptr, BIT_F
     }
 
     describe_chest(flavor_ptr);
-    decide_tval_show(flavor_ptr);
     describe_tval(player_ptr, flavor_ptr);
     describe_named_item_tval(flavor_ptr);
     if (!(mode & OD_DEBUG)) {

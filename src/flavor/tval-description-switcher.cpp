@@ -374,7 +374,6 @@ void switch_tval_description(flavor_type *flavor_ptr)
     case ItemKindType::SOFT_ARMOR:
     case ItemKindType::HARD_ARMOR:
     case ItemKindType::DRAG_ARMOR:
-        flavor_ptr->show_armour = true;
         break;
     case ItemKindType::LITE:
         break;
