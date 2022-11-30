@@ -118,21 +118,39 @@ static void describe_chest(flavor_type *flavor_ptr)
 
 static void decide_tval_show(flavor_type *flavor_ptr)
 {
-    if (flavor_ptr->tr_flags.has(TR_SHOW_MODS)) {
-        flavor_ptr->show_weapon = true;
-    }
-
-    if (flavor_ptr->o_ptr->is_smith() && (Smith::object_effect(flavor_ptr->o_ptr) == SmithEffectType::SLAY_GLOVE)) {
-        flavor_ptr->show_weapon = true;
-    }
-
-    if (flavor_ptr->o_ptr->to_h && flavor_ptr->o_ptr->to_d) {
-        flavor_ptr->show_weapon = true;
-    }
-
     if (flavor_ptr->o_ptr->ac) {
         flavor_ptr->show_armour = true;
     }
+}
+
+static bool should_show_slaying_bonus(const ItemEntity &item)
+{
+    if (object_flags(&item).has(TR_SHOW_MODS)) {
+        return true;
+    }
+
+    if (item.is_smith() && (Smith::object_effect(&item) == SmithEffectType::SLAY_GLOVE)) {
+        return true;
+    }
+
+    if ((item.to_h != 0) && (item.to_d != 0)) {
+        return true;
+    }
+
+    if (item.is_weapon_ammo()) {
+        return true;
+    }
+
+    if (item.tval == ItemKindType::RING) {
+        const auto &baseitem = baseitems_info[item.bi_id];
+        const auto base_has_no_bonus = (baseitem.to_h == 0) && (baseitem.to_d == 0);
+        const auto item_has_bonus = (item.to_h != 0) || (item.to_d != 0);
+        if (base_has_no_bonus && item_has_bonus) {
+            return true;
+        }
+    }
+
+    return false;
 }
 
 static void describe_weapon_dice(PlayerType *player_ptr, flavor_type *flavor_ptr)
@@ -214,7 +232,7 @@ static void describe_named_item_tval(flavor_type *flavor_ptr)
         return;
     }
 
-    if (flavor_ptr->show_weapon) {
+    if (should_show_slaying_bonus(*flavor_ptr->o_ptr)) {
         flavor_ptr->t = object_desc_chr(flavor_ptr->t, ' ');
         flavor_ptr->t = object_desc_chr(flavor_ptr->t, flavor_ptr->p1);
         flavor_ptr->t = object_desc_int(flavor_ptr->t, flavor_ptr->o_ptr->to_h);
