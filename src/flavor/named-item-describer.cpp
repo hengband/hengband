@@ -25,35 +25,6 @@
 #include "system/monster-race-info.h"
 #endif
 
-static void check_object_known_aware(flavor_type *flavor_ptr)
-{
-    flavor_ptr->tr_flags = object_flags(flavor_ptr->o_ptr);
-    if (flavor_ptr->o_ptr->is_aware()) {
-        flavor_ptr->aware = true;
-    }
-
-    if (flavor_ptr->o_ptr->is_known()) {
-        flavor_ptr->known = true;
-    }
-
-    if (flavor_ptr->aware && ((flavor_ptr->mode & OD_NO_FLAVOR) || plain_descriptions)) {
-        flavor_ptr->flavor = false;
-    }
-
-    if ((flavor_ptr->mode & OD_STORE) || (flavor_ptr->o_ptr->ident & IDENT_STORE)) {
-        flavor_ptr->flavor = false;
-        flavor_ptr->aware = true;
-        flavor_ptr->known = true;
-    }
-
-    if (flavor_ptr->mode & OD_FORCE_FLAVOR) {
-        flavor_ptr->aware = false;
-        flavor_ptr->flavor = true;
-        flavor_ptr->known = false;
-        flavor_ptr->flavor_k_ptr = flavor_ptr->k_ptr;
-    }
-}
-
 static void set_base_name(flavor_type *flavor_ptr)
 {
     if (!flavor_ptr->aware || flavor_ptr->tr_flags.has_not(TR_FULL_NAME)) {
@@ -387,7 +358,6 @@ static void describe_inscription(flavor_type *flavor_ptr)
 
 void describe_named_item(PlayerType *player_ptr, flavor_type *flavor_ptr)
 {
-    check_object_known_aware(flavor_ptr);
     switch_tval_description(flavor_ptr);
     set_base_name(flavor_ptr);
     flavor_ptr->t = flavor_ptr->tmp_val;

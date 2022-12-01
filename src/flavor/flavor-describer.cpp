@@ -38,6 +38,35 @@
 #include "util/string-processor.h"
 #include "window/display-sub-window-items.h"
 
+static void check_object_known_aware(flavor_type *flavor_ptr)
+{
+    flavor_ptr->tr_flags = object_flags(flavor_ptr->o_ptr);
+    if (flavor_ptr->o_ptr->is_aware()) {
+        flavor_ptr->aware = true;
+    }
+
+    if (flavor_ptr->o_ptr->is_known()) {
+        flavor_ptr->known = true;
+    }
+
+    if (flavor_ptr->aware && ((flavor_ptr->mode & OD_NO_FLAVOR) || plain_descriptions)) {
+        flavor_ptr->flavor = false;
+    }
+
+    if ((flavor_ptr->mode & OD_STORE) || (flavor_ptr->o_ptr->ident & IDENT_STORE)) {
+        flavor_ptr->flavor = false;
+        flavor_ptr->aware = true;
+        flavor_ptr->known = true;
+    }
+
+    if (flavor_ptr->mode & OD_FORCE_FLAVOR) {
+        flavor_ptr->aware = false;
+        flavor_ptr->flavor = true;
+        flavor_ptr->known = false;
+        flavor_ptr->flavor_k_ptr = flavor_ptr->k_ptr;
+    }
+}
+
 static void describe_chest_trap(flavor_type *flavor_ptr)
 {
     auto trap_kinds = chest_traps[flavor_ptr->o_ptr->pval];
@@ -116,23 +145,39 @@ static void describe_chest(flavor_type *flavor_ptr)
     describe_chest_trap(flavor_ptr);
 }
 
-static void decide_tval_show(flavor_type *flavor_ptr)
+static bool should_show_ac_bonus(const ItemEntity &item)
 {
-    if (flavor_ptr->tr_flags.has(TR_SHOW_MODS)) {
-        flavor_ptr->show_weapon = true;
+    return (item.ac != 0) || item.is_protector();
+}
+
+static bool should_show_slaying_bonus(const ItemEntity &item)
+{
+    if (object_flags(&item).has(TR_SHOW_MODS)) {
+        return true;
     }
 
-    if (flavor_ptr->o_ptr->is_smith() && (Smith::object_effect(flavor_ptr->o_ptr) == SmithEffectType::SLAY_GLOVE)) {
-        flavor_ptr->show_weapon = true;
+    if (item.is_smith() && (Smith::object_effect(&item) == SmithEffectType::SLAY_GLOVE)) {
+        return true;
     }
 
-    if (flavor_ptr->o_ptr->to_h && flavor_ptr->o_ptr->to_d) {
-        flavor_ptr->show_weapon = true;
+    if ((item.to_h != 0) && (item.to_d != 0)) {
+        return true;
     }
 
-    if (flavor_ptr->o_ptr->ac) {
-        flavor_ptr->show_armour = true;
+    if (item.is_weapon_ammo()) {
+        return true;
     }
+
+    if (item.tval == ItemKindType::RING) {
+        const auto &baseitem = baseitems_info[item.bi_id];
+        const auto base_has_no_bonus = (baseitem.to_h == 0) && (baseitem.to_d == 0);
+        const auto item_has_bonus = (item.to_h != 0) || (item.to_d != 0);
+        if (base_has_no_bonus && item_has_bonus) {
+            return true;
+        }
+    }
+
+    return false;
 }
 
 static void describe_weapon_dice(PlayerType *player_ptr, flavor_type *flavor_ptr)
@@ -214,7 +259,7 @@ static void describe_named_item_tval(flavor_type *flavor_ptr)
         return;
     }
 
-    if (flavor_ptr->show_weapon) {
+    if (should_show_slaying_bonus(*flavor_ptr->o_ptr)) {
         flavor_ptr->t = object_desc_chr(flavor_ptr->t, ' ');
         flavor_ptr->t = object_desc_chr(flavor_ptr->t, flavor_ptr->p1);
         flavor_ptr->t = object_desc_int(flavor_ptr->t, flavor_ptr->o_ptr->to_h);
@@ -328,7 +373,7 @@ static void describe_spike_power(PlayerType *player_ptr, flavor_type *flavor_ptr
 
 static void describe_known_item_ac(flavor_type *flavor_ptr)
 {
-    if (flavor_ptr->show_armour) {
+    if (should_show_ac_bonus(*flavor_ptr->o_ptr)) {
         flavor_ptr->t = object_desc_chr(flavor_ptr->t, ' ');
         flavor_ptr->t = object_desc_chr(flavor_ptr->t, flavor_ptr->b1);
         flavor_ptr->t = object_desc_num(flavor_ptr->t, flavor_ptr->o_ptr->ac);
@@ -355,7 +400,7 @@ static void describe_ac(flavor_type *flavor_ptr)
         return;
     }
 
-    if (!flavor_ptr->show_armour) {
+    if (!should_show_ac_bonus(*flavor_ptr->o_ptr)) {
         return;
     }
 
@@ -543,6 +588,7 @@ void describe_flavor(PlayerType *player_ptr, char *buf, ItemEntity *o_ptr, BIT_F
 {
     flavor_type tmp_flavor;
     flavor_type *flavor_ptr = initialize_flavor_type(&tmp_flavor, buf, o_ptr, mode);
+    check_object_known_aware(flavor_ptr);
     describe_named_item(player_ptr, flavor_ptr);
     if (flavor_ptr->mode & OD_NAME_ONLY || o_ptr->bi_id == 0) {
         angband_strcpy(flavor_ptr->buf, flavor_ptr->tmp_val, MAX_NLEN);
@@ -550,7 +596,6 @@ void describe_flavor(PlayerType *player_ptr, char *buf, ItemEntity *o_ptr, BIT_F
     }
 
     describe_chest(flavor_ptr);
-    decide_tval_show(flavor_ptr);
     describe_tval(player_ptr, flavor_ptr);
     describe_named_item_tval(flavor_ptr);
     if (!(mode & OD_DEBUG)) {

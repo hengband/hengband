@@ -19,8 +19,6 @@ struct flavor_type {
     bool aware;
     bool known; // 鑑定 or *鑑定* 済.
     bool flavor;
-    bool show_weapon;
-    bool show_armour;
     concptr s;
     concptr s0;
     char *t;

@@ -111,10 +111,6 @@ static void describe_ring(flavor_type *flavor_ptr)
     } else {
         flavor_ptr->basenm = _("#指輪", "& # Ring~");
     }
-
-    if (!flavor_ptr->k_ptr->to_h && !flavor_ptr->k_ptr->to_d && (flavor_ptr->o_ptr->to_h || flavor_ptr->o_ptr->to_d)) {
-        flavor_ptr->show_weapon = true;
-    }
 }
 
 static void describe_staff(flavor_type *flavor_ptr)
@@ -368,7 +364,6 @@ void switch_tval_description(flavor_type *flavor_ptr)
     case ItemKindType::POLEARM:
     case ItemKindType::SWORD:
     case ItemKindType::DIGGING:
-        flavor_ptr->show_weapon = true;
         break;
     case ItemKindType::BOOTS:
     case ItemKindType::GLOVES:
@@ -379,7 +374,6 @@ void switch_tval_description(flavor_type *flavor_ptr)
     case ItemKindType::SOFT_ARMOR:
     case ItemKindType::HARD_ARMOR:
     case ItemKindType::DRAG_ARMOR:
-        flavor_ptr->show_armour = true;
         break;
     case ItemKindType::LITE:
         break;

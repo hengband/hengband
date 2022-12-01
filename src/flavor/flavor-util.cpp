@@ -24,8 +24,6 @@ flavor_type *initialize_flavor_type(flavor_type *flavor_ptr, char *buf, ItemEnti
     flavor_ptr->aware = false;
     flavor_ptr->known = false;
     flavor_ptr->flavor = true;
-    flavor_ptr->show_weapon = false;
-    flavor_ptr->show_armour = false;
     flavor_ptr->p1 = '(';
     flavor_ptr->p2 = ')';
     flavor_ptr->b1 = '[';
