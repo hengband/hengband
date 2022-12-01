@@ -16,6 +16,7 @@
 #include "view/display-messages.h"
 #include "world/world.h"
 #include <algorithm>
+#include <stdexcept>
 #include <string>
 #include <utility>
 

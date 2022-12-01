@@ -48,6 +48,7 @@
 #include "window/main-window-equipments.h"
 #include "window/main-window-util.h"
 #include "world/world.h"
+#include <algorithm>
 #include <mutex>
 #include <sstream>
 #include <string>

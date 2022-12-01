@@ -17,6 +17,7 @@
 #include "sv-definition/sv-rod-types.h"
 #include "sv-definition/sv-weapon-types.h"
 #include <set>
+#include <stdexcept>
 #include <unordered_map>
 
 namespace {
