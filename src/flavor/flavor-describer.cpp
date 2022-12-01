@@ -38,6 +38,35 @@
 #include "util/string-processor.h"
 #include "window/display-sub-window-items.h"
 
+static void check_object_known_aware(flavor_type *flavor_ptr)
+{
+    flavor_ptr->tr_flags = object_flags(flavor_ptr->o_ptr);
+    if (flavor_ptr->o_ptr->is_aware()) {
+        flavor_ptr->aware = true;
+    }
+
+    if (flavor_ptr->o_ptr->is_known()) {
+        flavor_ptr->known = true;
+    }
+
+    if (flavor_ptr->aware && ((flavor_ptr->mode & OD_NO_FLAVOR) || plain_descriptions)) {
+        flavor_ptr->flavor = false;
+    }
+
+    if ((flavor_ptr->mode & OD_STORE) || (flavor_ptr->o_ptr->ident & IDENT_STORE)) {
+        flavor_ptr->flavor = false;
+        flavor_ptr->aware = true;
+        flavor_ptr->known = true;
+    }
+
+    if (flavor_ptr->mode & OD_FORCE_FLAVOR) {
+        flavor_ptr->aware = false;
+        flavor_ptr->flavor = true;
+        flavor_ptr->known = false;
+        flavor_ptr->flavor_k_ptr = flavor_ptr->k_ptr;
+    }
+}
+
 static void describe_chest_trap(flavor_type *flavor_ptr)
 {
     auto trap_kinds = chest_traps[flavor_ptr->o_ptr->pval];
@@ -559,6 +588,7 @@ void describe_flavor(PlayerType *player_ptr, char *buf, ItemEntity *o_ptr, BIT_F
 {
     flavor_type tmp_flavor;
     flavor_type *flavor_ptr = initialize_flavor_type(&tmp_flavor, buf, o_ptr, mode);
+    check_object_known_aware(flavor_ptr);
     describe_named_item(player_ptr, flavor_ptr);
     if (flavor_ptr->mode & OD_NAME_ONLY || o_ptr->bi_id == 0) {
         angband_strcpy(flavor_ptr->buf, flavor_ptr->tmp_val, MAX_NLEN);
