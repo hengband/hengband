@@ -9,6 +9,7 @@
 #include "monster-race/race-ability-flags.h"
 #include "mspell/mspell-damage-calculator.h"
 #include "system/player-type-definition.h"
+#include "term/z-form.h"
 
 /*!
  * @brief モンスター魔法をプレイヤーが使用する場合の換算レベル
@@ -26,9 +27,9 @@ PLAYER_LEVEL get_pseudo_monstetr_level(PlayerType *player_ptr)
  * @param SPELL_NUM 呪文番号
  * @param plev プレイヤーレベル
  * @param msg 表示する文字列
- * @param tmp 返すメッセージを格納する配列
+ * @return std::string 潜在的な損傷の説明
  */
-static void set_bluemage_damage(PlayerType *player_ptr, MonsterAbilityType ms_type, PLAYER_LEVEL plev, concptr msg, char *tmp)
+static std::string set_bluemage_damage(PlayerType *player_ptr, MonsterAbilityType ms_type, PLAYER_LEVEL plev, concptr msg)
 {
     int base_damage = monspell_bluemage_damage(player_ptr, ms_type, plev, BASE_DAM);
     int dice_num = monspell_bluemage_damage(player_ptr, ms_type, plev, DICE_NUM);
@@ -37,65 +38,24 @@ static void set_bluemage_damage(PlayerType *player_ptr, MonsterAbilityType ms_ty
     int dice_div = monspell_bluemage_damage(player_ptr, ms_type, plev, DICE_DIV);
     char dmg_str[80];
     dice_to_string(base_damage, dice_num, dice_side, dice_mult, dice_div, dmg_str);
-    sprintf(tmp, " %s %s", msg, dmg_str);
+    return format(" %s %s", msg, dmg_str);
 }
 
 /*!
  * @brief 受け取ったモンスター魔法のIDに応じて青魔法の効果情報をまとめたフォーマットを返す
  * @param player_ptr プレイヤーへの参照ポインタ
- * @param p 情報を返す文字列参照ポインタ
  * @param power モンスター魔法のID
+ * @return std::string パワーについてのコメント
  */
-void learnt_info(PlayerType *player_ptr, char *p, MonsterAbilityType power)
+std::string learnt_info(PlayerType *player_ptr, MonsterAbilityType power)
 {
     PLAYER_LEVEL plev = get_pseudo_monstetr_level(player_ptr);
 
-    strcpy(p, "");
-
     switch (power) {
-    case MonsterAbilityType::SHRIEK:
-    case MonsterAbilityType::XXX1:
-    case MonsterAbilityType::XXX2:
-    case MonsterAbilityType::XXX3:
-    case MonsterAbilityType::XXX4:
-    case MonsterAbilityType::SCARE:
-    case MonsterAbilityType::BLIND:
-    case MonsterAbilityType::CONF:
-    case MonsterAbilityType::SLOW:
-    case MonsterAbilityType::HOLD:
-    case MonsterAbilityType::HAND_DOOM:
-    case MonsterAbilityType::WORLD:
-    case MonsterAbilityType::SPECIAL:
-    case MonsterAbilityType::TELE_TO:
-    case MonsterAbilityType::TELE_AWAY:
-    case MonsterAbilityType::TELE_LEVEL:
-    case MonsterAbilityType::DARKNESS:
-    case MonsterAbilityType::TRAPS:
-    case MonsterAbilityType::FORGET:
-    case MonsterAbilityType::S_KIN:
-    case MonsterAbilityType::S_CYBER:
-    case MonsterAbilityType::S_MONSTER:
-    case MonsterAbilityType::S_MONSTERS:
-    case MonsterAbilityType::S_ANT:
-    case MonsterAbilityType::S_SPIDER:
-    case MonsterAbilityType::S_HOUND:
-    case MonsterAbilityType::S_HYDRA:
-    case MonsterAbilityType::S_ANGEL:
-    case MonsterAbilityType::S_DEMON:
-    case MonsterAbilityType::S_UNDEAD:
-    case MonsterAbilityType::S_DRAGON:
-    case MonsterAbilityType::S_HI_UNDEAD:
-    case MonsterAbilityType::S_HI_DRAGON:
-    case MonsterAbilityType::S_AMBERITES:
-    case MonsterAbilityType::S_UNIQUE:
-        break;
     case MonsterAbilityType::BA_MANA:
     case MonsterAbilityType::BA_DARK:
     case MonsterAbilityType::BA_LITE:
-        set_bluemage_damage(player_ptr, power, plev, KWD_DAM, p);
-        break;
-    case MonsterAbilityType::DISPEL:
-        break;
+        return set_bluemage_damage(player_ptr, power, plev, KWD_DAM);
     case MonsterAbilityType::ROCKET:
     case MonsterAbilityType::SHOOT:
     case MonsterAbilityType::BR_ACID:
@@ -133,11 +93,9 @@ void learnt_info(PlayerType *player_ptr, char *p, MonsterAbilityType power)
     case MonsterAbilityType::BA_WATE:
     case MonsterAbilityType::BA_VOID:
     case MonsterAbilityType::BA_ABYSS:
-        set_bluemage_damage(player_ptr, power, plev, KWD_DAM, p);
-        break;
+        return set_bluemage_damage(player_ptr, power, plev, KWD_DAM);
     case MonsterAbilityType::DRAIN_MANA:
-        set_bluemage_damage(player_ptr, power, plev, KWD_HEAL, p);
-        break;
+        return set_bluemage_damage(player_ptr, power, plev, KWD_HEAL);
     case MonsterAbilityType::MIND_BLAST:
     case MonsterAbilityType::BRAIN_SMASH:
     case MonsterAbilityType::CAUSE_1:
@@ -156,31 +114,22 @@ void learnt_info(PlayerType *player_ptr, char *p, MonsterAbilityType power)
     case MonsterAbilityType::BO_VOID:
     case MonsterAbilityType::BO_ICEE:
     case MonsterAbilityType::MISSILE:
-        set_bluemage_damage(player_ptr, power, plev, KWD_DAM, p);
-        break;
+        return set_bluemage_damage(player_ptr, power, plev, KWD_DAM);
     case MonsterAbilityType::HASTE:
-        sprintf(p, " %sd%d+%d", KWD_DURATION, 20 + plev, plev);
-        break;
+        return format(" %sd%d+%d", KWD_DURATION, 20 + plev, plev);
     case MonsterAbilityType::HEAL:
-        set_bluemage_damage(player_ptr, power, plev, KWD_HEAL, p);
-        break;
+        return set_bluemage_damage(player_ptr, power, plev, KWD_HEAL);
     case MonsterAbilityType::INVULNER:
-        sprintf(p, " %sd7+7", KWD_DURATION);
-        break;
+        return format(" %sd7+7", KWD_DURATION);
     case MonsterAbilityType::BLINK:
-        sprintf(p, " %s10", KWD_SPHERE);
-        break;
+        return format(" %s10", KWD_SPHERE);
     case MonsterAbilityType::TPORT:
-        sprintf(p, " %s%d", KWD_SPHERE, plev * 5);
-        break;
+        return format(" %s%d", KWD_SPHERE, plev * 5);
     case MonsterAbilityType::PSY_SPEAR:
-        set_bluemage_damage(player_ptr, power, plev, KWD_DAM, p);
-        break;
-        break;
+        return set_bluemage_damage(player_ptr, power, plev, KWD_DAM);
     case MonsterAbilityType::RAISE_DEAD:
-        sprintf(p, " %s5", KWD_SPHERE);
-        break;
+        return format(" %s5", KWD_SPHERE);
     default:
-        break;
+        return std::string();
     }
 }

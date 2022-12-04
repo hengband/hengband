@@ -5,9 +5,10 @@
  */
 
 #include "system/angband.h"
+#include <string>
 
 enum class MonsterAbilityType;
 
 class PlayerType;
 PLAYER_LEVEL get_pseudo_monstetr_level(PlayerType *player_ptr);
-void learnt_info(PlayerType *player_ptr, char *p, MonsterAbilityType power);
+std::string learnt_info(PlayerType *player_ptr, MonsterAbilityType power);
