@@ -37,6 +37,7 @@
 #include "util/bit-flags-calculator.h"
 #include "util/string-processor.h"
 #include "window/display-sub-window-items.h"
+#include <sstream>
 
 static void check_object_known_aware(flavor_type *flavor_ptr)
 {
@@ -67,82 +68,70 @@ static void check_object_known_aware(flavor_type *flavor_ptr)
     }
 }
 
-static void describe_chest_trap(flavor_type *flavor_ptr)
+static std::string describe_chest_trap(const ItemEntity &item)
 {
-    auto trap_kinds = chest_traps[flavor_ptr->o_ptr->pval];
+    auto trap_kinds = chest_traps[item.pval];
     if (trap_kinds.count() >= 2) {
-        flavor_ptr->t = object_desc_str(flavor_ptr->t, _("(マルチ・トラップ)", " (Multiple Traps)"));
-        return;
+        return _("(マルチ・トラップ)", " (Multiple Traps)");
     }
 
     auto trap_kind = trap_kinds.first();
     if (!trap_kind.has_value()) {
-        flavor_ptr->t = object_desc_str(flavor_ptr->t, _("(施錠)", " (Locked)"));
-        return;
+        return _("(施錠)", " (Locked)");
     }
 
     switch (trap_kind.value()) {
     case ChestTrapType::LOSE_STR:
-        flavor_ptr->t = object_desc_str(flavor_ptr->t, _("(毒針)", " (Poison Needle)"));
-        break;
+        return _("(毒針)", " (Poison Needle)");
     case ChestTrapType::LOSE_CON:
-        flavor_ptr->t = object_desc_str(flavor_ptr->t, _("(毒針)", " (Poison Needle)"));
-        break;
+        return _("(毒針)", " (Poison Needle)");
     case ChestTrapType::POISON:
-        flavor_ptr->t = object_desc_str(flavor_ptr->t, _("(ガス・トラップ)", " (Gas Trap)"));
-        break;
+        return _("(ガス・トラップ)", " (Gas Trap)");
     case ChestTrapType::PARALYZE:
-        flavor_ptr->t = object_desc_str(flavor_ptr->t, _("(ガス・トラップ)", " (Gas Trap)"));
-        break;
+        return _("(ガス・トラップ)", " (Gas Trap)");
     case ChestTrapType::EXPLODE:
-        flavor_ptr->t = object_desc_str(flavor_ptr->t, _("(爆発装置)", " (Explosive Device)"));
-        break;
+        return _("(爆発装置)", " (Explosive Device)");
     case ChestTrapType::SUMMON:
     case ChestTrapType::BIRD_STORM:
     case ChestTrapType::E_SUMMON:
     case ChestTrapType::H_SUMMON:
-        flavor_ptr->t = object_desc_str(flavor_ptr->t, _("(召喚のルーン)", " (Summoning Runes)"));
-        break;
+        return _("(召喚のルーン)", " (Summoning Runes)");
     case ChestTrapType::RUNES_OF_EVIL:
-        flavor_ptr->t = object_desc_str(flavor_ptr->t, _("(邪悪なルーン)", " (Gleaming Black Runes)"));
-        break;
+        return _("(邪悪なルーン)", " (Gleaming Black Runes)");
     case ChestTrapType::ALARM:
-        flavor_ptr->t = object_desc_str(flavor_ptr->t, _("(警報装置)", " (Alarm)"));
-        break;
+        return _("(警報装置)", " (Alarm)");
     case ChestTrapType::SCATTER:
-        flavor_ptr->t = object_desc_str(flavor_ptr->t, _("(アイテム散乱)", " (Scatter)"));
-        break;
+        return _("(アイテム散乱)", " (Scatter)");
     case ChestTrapType::MAX:
         throw("Invalid chest trap type is specified!");
     }
+
+    return "";
 }
 
-static void describe_chest(flavor_type *flavor_ptr)
+static std::string describe_chest(const ItemEntity &item, const describe_option_type &opt)
 {
-    if (flavor_ptr->o_ptr->bi_key.tval() != ItemKindType::CHEST) {
-        return;
+    if (item.bi_key.tval() != ItemKindType::CHEST) {
+        return "";
     }
 
-    if (!flavor_ptr->known) {
-        return;
+    if (!opt.known) {
+        return "";
     }
 
-    if (!flavor_ptr->o_ptr->pval) {
-        flavor_ptr->t = object_desc_str(flavor_ptr->t, _("(空)", " (empty)"));
-        return;
+    if (!item.pval) {
+        return _("(空)", " (empty)");
     }
 
-    if (flavor_ptr->o_ptr->pval < 0) {
-        if (chest_traps[0 - flavor_ptr->o_ptr->pval].any()) {
-            flavor_ptr->t = object_desc_str(flavor_ptr->t, _("(解除済)", " (disarmed)"));
+    if (item.pval < 0) {
+        if (chest_traps[0 - item.pval].any()) {
+            return _("(解除済)", " (disarmed)");
         } else {
-            flavor_ptr->t = object_desc_str(flavor_ptr->t, _("(非施錠)", " (unlocked)"));
+            return _("(非施錠)", " (unlocked)");
         }
-
-        return;
     }
 
-    describe_chest_trap(flavor_ptr);
+    return describe_chest_trap(item);
 }
 
 static bool should_show_ac_bonus(const ItemEntity &item)
@@ -180,61 +169,50 @@ static bool should_show_slaying_bonus(const ItemEntity &item)
     return false;
 }
 
-static void describe_weapon_dice(PlayerType *player_ptr, flavor_type *flavor_ptr)
+static std::string describe_weapon_dice(PlayerType *player_ptr, const ItemEntity &item, const describe_option_type &opt)
 {
-    if (!flavor_ptr->known && object_is_quest_target(player_ptr->current_floor_ptr->quest_number, flavor_ptr->o_ptr)) {
-        return;
+    if (!opt.known && object_is_quest_target(player_ptr->current_floor_ptr->quest_number, &item)) {
+        return "";
     }
 
-    flavor_ptr->t = object_desc_chr(flavor_ptr->t, ' ');
-    flavor_ptr->t = object_desc_chr(flavor_ptr->t, flavor_ptr->p1);
-    auto is_bonus = (player_ptr->riding > 0) && flavor_ptr->o_ptr->is_lance();
-    auto bonus = is_bonus ? 2 : 0;
-    flavor_ptr->t = object_desc_num(flavor_ptr->t, flavor_ptr->o_ptr->dd + bonus);
-    flavor_ptr->t = object_desc_chr(flavor_ptr->t, 'd');
-    flavor_ptr->t = object_desc_num(flavor_ptr->t, flavor_ptr->o_ptr->ds);
-    flavor_ptr->t = object_desc_chr(flavor_ptr->t, flavor_ptr->p2);
+    const auto is_bonus = (player_ptr->riding > 0) && item.is_lance();
+    const auto bonus = is_bonus ? 2 : 0;
+    return format(" (%dd%d)", item.dd + bonus, item.ds);
 }
 
-static void describe_bow(PlayerType *player_ptr, flavor_type *flavor_ptr)
+static std::string describe_bow_power(PlayerType *player_ptr, const ItemEntity &item, const describe_option_type &opt)
 {
-    flavor_ptr->power = flavor_ptr->o_ptr->get_arrow_magnification();
-    if (flavor_ptr->tr_flags.has(TR_XTRA_MIGHT)) {
-        flavor_ptr->power++;
+    auto power = item.get_arrow_magnification();
+    const auto tr_flags = object_flags(&item);
+    if (tr_flags.has(TR_XTRA_MIGHT)) {
+        power++;
     }
 
-    flavor_ptr->t = object_desc_chr(flavor_ptr->t, ' ');
-    flavor_ptr->t = object_desc_chr(flavor_ptr->t, flavor_ptr->p1);
-    flavor_ptr->t = object_desc_chr(flavor_ptr->t, 'x');
-    flavor_ptr->t = object_desc_num(flavor_ptr->t, flavor_ptr->power);
-    flavor_ptr->t = object_desc_chr(flavor_ptr->t, flavor_ptr->p2);
+    std::stringstream ss;
+    ss << format(" (x%d)", power);
 
-    int num_fire = 100;
-    if (!(flavor_ptr->mode & OD_DEBUG)) {
-        num_fire = calc_num_fire(player_ptr, flavor_ptr->o_ptr);
+    auto num_fire = 100;
+    if (none_bits(opt.mode, OD_DEBUG)) {
+        num_fire = calc_num_fire(player_ptr, &item);
     } else {
-        auto flgs = object_flags(flavor_ptr->o_ptr);
-        if (flgs.has(TR_XTRA_SHOTS)) {
+        if (tr_flags.has(TR_XTRA_SHOTS)) {
             num_fire += 100;
         }
     }
-    if ((num_fire == 0) || (flavor_ptr->power <= 0) || !flavor_ptr->known) {
-        return;
+
+    if ((num_fire == 0) || (power <= 0) || !opt.known) {
+        return ss.str();
     }
 
-    flavor_ptr->fire_rate = flavor_ptr->o_ptr->get_bow_energy() / num_fire;
-    flavor_ptr->t = object_desc_chr(flavor_ptr->t, ' ');
-    flavor_ptr->t = object_desc_chr(flavor_ptr->t, flavor_ptr->p1);
-    flavor_ptr->t = object_desc_num(flavor_ptr->t, flavor_ptr->fire_rate / 100);
-    flavor_ptr->t = object_desc_chr(flavor_ptr->t, '.');
-    flavor_ptr->t = object_desc_num(flavor_ptr->t, flavor_ptr->fire_rate % 100);
-    flavor_ptr->t = object_desc_str(flavor_ptr->t, "turn");
-    flavor_ptr->t = object_desc_chr(flavor_ptr->t, flavor_ptr->p2);
+    const auto fire_rate = item.get_bow_energy() / num_fire;
+    ss << format(" (%d.%dturn)", fire_rate / 100, fire_rate % 100);
+
+    return ss.str();
 }
 
-static void describe_tval(PlayerType *player_ptr, flavor_type *flavor_ptr)
+static std::string describe_weapon_dice_or_bow_power(PlayerType *player_ptr, const ItemEntity &item, const describe_option_type &opt)
 {
-    switch (flavor_ptr->o_ptr->bi_key.tval()) {
+    switch (item.bi_key.tval()) {
     case ItemKindType::SHOT:
     case ItemKindType::BOLT:
     case ItemKindType::ARROW:
@@ -242,47 +220,33 @@ static void describe_tval(PlayerType *player_ptr, flavor_type *flavor_ptr)
     case ItemKindType::POLEARM:
     case ItemKindType::SWORD:
     case ItemKindType::DIGGING:
-        describe_weapon_dice(player_ptr, flavor_ptr);
-        break;
+        return describe_weapon_dice(player_ptr, item, opt);
     case ItemKindType::BOW:
-        describe_bow(player_ptr, flavor_ptr);
-        break;
-
+        return describe_bow_power(player_ptr, item, opt);
     default:
-        break;
+        return "";
     }
 }
 
-static void describe_named_item_tval(flavor_type *flavor_ptr)
+static std::string describe_accuracy_and_damage_bonus(const ItemEntity &item, const describe_option_type &opt)
 {
-    if (!flavor_ptr->known) {
-        return;
+    if (!opt.known) {
+        return "";
     }
 
-    if (should_show_slaying_bonus(*flavor_ptr->o_ptr)) {
-        flavor_ptr->t = object_desc_chr(flavor_ptr->t, ' ');
-        flavor_ptr->t = object_desc_chr(flavor_ptr->t, flavor_ptr->p1);
-        flavor_ptr->t = object_desc_int(flavor_ptr->t, flavor_ptr->o_ptr->to_h);
-        flavor_ptr->t = object_desc_chr(flavor_ptr->t, ',');
-        flavor_ptr->t = object_desc_int(flavor_ptr->t, flavor_ptr->o_ptr->to_d);
-        flavor_ptr->t = object_desc_chr(flavor_ptr->t, flavor_ptr->p2);
-        return;
+    if (should_show_slaying_bonus(item)) {
+        return format(" (%+d,%+d)", item.to_h, item.to_d);
     }
 
-    if (flavor_ptr->o_ptr->to_h != 0) {
-        flavor_ptr->t = object_desc_chr(flavor_ptr->t, ' ');
-        flavor_ptr->t = object_desc_chr(flavor_ptr->t, flavor_ptr->p1);
-        flavor_ptr->t = object_desc_int(flavor_ptr->t, flavor_ptr->o_ptr->to_h);
-        flavor_ptr->t = object_desc_chr(flavor_ptr->t, flavor_ptr->p2);
-        return;
+    if (item.to_h != 0) {
+        return format(" (%+d)", item.to_h);
     }
 
-    if (flavor_ptr->o_ptr->to_d != 0) {
-        flavor_ptr->t = object_desc_chr(flavor_ptr->t, ' ');
-        flavor_ptr->t = object_desc_chr(flavor_ptr->t, flavor_ptr->p1);
-        flavor_ptr->t = object_desc_int(flavor_ptr->t, flavor_ptr->o_ptr->to_d);
-        flavor_ptr->t = object_desc_chr(flavor_ptr->t, flavor_ptr->p2);
+    if (item.to_d != 0) {
+        return format(" (%+d)", item.to_d);
     }
+
+    return "";
 }
 
 static void describe_fire_energy(PlayerType *player_ptr, flavor_type *flavor_ptr)
@@ -625,21 +589,24 @@ void describe_flavor(PlayerType *player_ptr, char *buf, ItemEntity *o_ptr, BIT_F
     flavor_type *flavor_ptr = initialize_flavor_type(&tmp_flavor, buf, o_ptr, mode);
 
     check_object_known_aware(flavor_ptr);
-    const auto opt = decide_describe_option(*o_ptr, mode);
-    auto desc = describe_named_item(player_ptr, *o_ptr, opt);
-
-    // describe_named_item までのリファクタリングを確認するための暫定措置
-    strcpy(flavor_ptr->tmp_val, desc.data());
-    flavor_ptr->t = flavor_ptr->tmp_val + strlen(flavor_ptr->tmp_val);
+    const auto &item = *o_ptr;
+    const auto opt = decide_describe_option(item, mode);
+    std::stringstream desc_ss;
+    desc_ss << describe_named_item(player_ptr, item, opt);
 
     if (flavor_ptr->mode & OD_NAME_ONLY || o_ptr->bi_id == 0) {
-        angband_strcpy(flavor_ptr->buf, flavor_ptr->tmp_val, MAX_NLEN);
+        angband_strcpy(buf, desc_ss.str().data(), MAX_NLEN);
         return;
     }
 
-    describe_chest(flavor_ptr);
-    describe_tval(player_ptr, flavor_ptr);
-    describe_named_item_tval(flavor_ptr);
+    desc_ss << describe_chest(item, opt)
+            << describe_weapon_dice_or_bow_power(player_ptr, item, opt)
+            << describe_accuracy_and_damage_bonus(item, opt);
+
+    // ここまでのリファクタリングを確認するための暫定措置
+    angband_strcpy(flavor_ptr->tmp_val, desc_ss.str().data(), sizeof(flavor_ptr->tmp_val));
+    flavor_ptr->t = flavor_ptr->tmp_val + strlen(flavor_ptr->tmp_val);
+
     if (!(mode & OD_DEBUG)) {
         flavor_ptr->bow_ptr = &player_ptr->inventory_list[INVEN_BOW];
         const auto tval = flavor_ptr->o_ptr->bi_key.tval();

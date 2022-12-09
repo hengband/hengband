@@ -194,7 +194,7 @@ static void delayed_visual_update(PlayerType *player_ptr)
  * @param o_ptr 判定する射撃武器のアイテム情報参照ポインタ
  * @return 重すぎるならばTRUE
  */
-static bool is_heavy_shoot(PlayerType *player_ptr, ItemEntity *o_ptr)
+static bool is_heavy_shoot(PlayerType *player_ptr, const ItemEntity *o_ptr)
 {
     return calc_bow_weight_limit(player_ptr) < (o_ptr->weight / 10);
 }
@@ -1036,7 +1036,7 @@ static void update_max_mana(PlayerType *player_ptr)
  * @param o_ptr 計算する射撃武器のアイテム情報参照ポインタ
  * @return 射撃倍率の値(100で1.00倍)
  */
-int16_t calc_num_fire(PlayerType *player_ptr, ItemEntity *o_ptr)
+short calc_num_fire(PlayerType *player_ptr, const ItemEntity *o_ptr)
 {
     int extra_shots = 0;
 
