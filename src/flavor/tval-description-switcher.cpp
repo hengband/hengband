@@ -6,6 +6,7 @@
 
 #include "flavor/tval-description-switcher.h"
 #include "flavor/flavor-util.h"
+#include "flavor/object-flavor-types.h"
 #include "locale/english.h"
 #include "monster-race/monster-race.h"
 #include "object-enchant/trg-types.h"
@@ -13,6 +14,7 @@
 #include "system/baseitem-info.h"
 #include "system/item-entity.h"
 #include "system/monster-race-info.h"
+#include "util/bit-flags-calculator.h"
 #include "util/enum-converter.h"
 #ifdef JP
 #else
@@ -20,324 +22,349 @@
 #include "player-info/class-info.h"
 #endif
 
-static void describe_monster_ball(flavor_type *flavor_ptr)
+static std::pair<std::string, std::string> describe_monster_ball(const ItemEntity &item, const describe_option_type &opt)
 {
-    const auto r_idx = i2enum<MonsterRaceId>(flavor_ptr->o_ptr->pval);
+    const auto &basename = baseitems_info[item.bi_id].name;
+    const auto r_idx = i2enum<MonsterRaceId>(item.pval);
     auto *r_ptr = &monraces_info[r_idx];
-    if (!flavor_ptr->known) {
-        return;
+    if (!opt.known) {
+        return { basename, "" };
     }
 
     if (!MonsterRace(r_idx).is_valid()) {
-        flavor_ptr->modstr = _(" (空)", " (empty)");
-        return;
+        return { basename, _(" (空)", " (empty)") };
     }
 
 #ifdef JP
-    sprintf(flavor_ptr->tmp_val2, " (%s)", r_ptr->name.data());
-    flavor_ptr->modstr = flavor_ptr->tmp_val2;
+    std::string modstr = format(" (%s)", r_ptr->name.data());
 #else
-    flavor_ptr->t = format("%s", r_ptr->name.data());
+    std::string modstr;
     if (r_ptr->kind_flags.has_not(MonsterKindType::UNIQUE)) {
-        sprintf(flavor_ptr->tmp_val2, " (%s%s)", (is_a_vowel(*flavor_ptr->t) ? "an " : "a "), flavor_ptr->t);
-        flavor_ptr->modstr = flavor_ptr->tmp_val2;
+        modstr = format(" (%s%s)", (is_a_vowel(r_ptr->name[0]) ? "an " : "a "), r_ptr->name.data());
     } else {
-        sprintf(flavor_ptr->tmp_val2, "(%s)", flavor_ptr->t);
-        flavor_ptr->modstr = flavor_ptr->t;
+        modstr = format(" (%s)", r_ptr->name.data());
     }
 #endif
+    return { basename, modstr };
 }
 
-static void describe_statue(flavor_type *flavor_ptr)
+static std::pair<std::string, std::string> describe_statue(const ItemEntity &item)
 {
-    const auto r_idx = i2enum<MonsterRaceId>(flavor_ptr->o_ptr->pval);
+    const auto &basename = baseitems_info[item.bi_id].name;
+    const auto r_idx = i2enum<MonsterRaceId>(item.pval);
     auto *r_ptr = &monraces_info[r_idx];
 #ifdef JP
-    flavor_ptr->modstr = r_ptr->name.data();
+    const auto &modstr = r_ptr->name;
 #else
-    flavor_ptr->t = format("%s", r_ptr->name.data());
+    std::string modstr;
     if (r_ptr->kind_flags.has_not(MonsterKindType::UNIQUE)) {
-        sprintf(flavor_ptr->tmp_val2, "%s%s", (is_a_vowel(*flavor_ptr->t) ? "an " : "a "), flavor_ptr->t);
-        flavor_ptr->modstr = flavor_ptr->tmp_val2;
+        modstr = format("%s%s", (is_a_vowel(r_ptr->name[0]) ? "an " : "a "), r_ptr->name.data());
     } else {
-        flavor_ptr->modstr = flavor_ptr->t;
+        modstr = r_ptr->name;
     }
 #endif
+    return { basename, modstr };
 }
 
-static void describe_corpse(flavor_type *flavor_ptr)
+static std::pair<std::string, std::string> describe_corpse(const ItemEntity &item)
 {
-    const auto r_idx = i2enum<MonsterRaceId>(flavor_ptr->o_ptr->pval);
+    const auto r_idx = i2enum<MonsterRaceId>(item.pval);
     auto *r_ptr = &monraces_info[r_idx];
-    flavor_ptr->modstr = r_ptr->name.data();
+    const auto &modstr = r_ptr->name;
 #ifdef JP
-    flavor_ptr->basenm = "#%";
+    const auto basename = "#%";
 #else
-    if (r_ptr->kind_flags.has(MonsterKindType::UNIQUE)) {
-        flavor_ptr->basenm = "& % of #";
-    } else {
-        flavor_ptr->basenm = "& # %";
-    }
+    const auto basename =
+        (r_ptr->kind_flags.has(MonsterKindType::UNIQUE))
+            ? "& % of #"
+            : "& # %";
 #endif
+    return { modstr, basename };
 }
 
-static void describe_amulet(flavor_type *flavor_ptr)
+/*!
+ * @brief アイテムの未鑑定名を表す文字列を取得する
+ *
+ * 未鑑定名はゲーム開始時にシャッフルされるが、
+ * opt.mode の OD_FORCE_FLAVOR ビットが ON の場合シャッフルされていない未鑑定名を返す
+ * （未鑑定名からアイテムがバレるのを防ぐため、シンボルエディタで使用される）
+ * OFF の場合シャッフルされた未鑑定名を返す
+ *
+ * @param item 対象アイテムの ItemEntity オブジェクトへの参照
+ * @param opt アイテム表示オプション
+ * @return アイテムの未鑑定名を表す文字列
+ */
+static std::string flavor_name_of(const ItemEntity &item, const describe_option_type &opt)
 {
-    if (flavor_ptr->aware && (flavor_ptr->o_ptr->is_fixed_artifact() || flavor_ptr->k_ptr->gen_flags.has(ItemGenerationTraitType::INSTA_ART))) {
-        return;
-    }
-
-    flavor_ptr->modstr = flavor_ptr->flavor_k_ptr->flavor_name.data();
-    if (!flavor_ptr->flavor) {
-        flavor_ptr->basenm = _("%のアミュレット", "& Amulet~ of %");
-    } else if (flavor_ptr->aware) {
-        flavor_ptr->basenm = _("%の#アミュレット", "& # Amulet~ of %");
-    } else {
-        flavor_ptr->basenm = _("#アミュレット", "& # Amulet~");
-    }
+    const auto &baseitem = baseitems_info[item.bi_id];
+    return any_bits(opt.mode, OD_FORCE_FLAVOR)
+               ? baseitem.flavor_name
+               : baseitems_info[baseitem.flavor].flavor_name;
 }
 
-static void describe_ring(flavor_type *flavor_ptr)
+static std::pair<std::string, std::string> describe_amulet(const ItemEntity &item, const describe_option_type &opt)
 {
-    if (flavor_ptr->aware && (flavor_ptr->o_ptr->is_fixed_artifact() || flavor_ptr->k_ptr->gen_flags.has(ItemGenerationTraitType::INSTA_ART))) {
-        return;
+    const auto &baseitem = baseitems_info[item.bi_id];
+    if (opt.aware && (item.is_fixed_artifact() || baseitem.gen_flags.has(ItemGenerationTraitType::INSTA_ART))) {
+        return { baseitem.name, "" };
     }
 
-    flavor_ptr->modstr = flavor_ptr->flavor_k_ptr->flavor_name.data();
-    if (!flavor_ptr->flavor) {
-        flavor_ptr->basenm = _("%の指輪", "& Ring~ of %");
-    } else if (flavor_ptr->aware) {
-        flavor_ptr->basenm = _("%の#指輪", "& # Ring~ of %");
+    if (!opt.flavor) {
+        return { _("%のアミュレット", "& Amulet~ of %"), "" };
+    } else if (opt.aware) {
+        return { _("%の#アミュレット", "& # Amulet~ of %"), flavor_name_of(item, opt) };
     } else {
-        flavor_ptr->basenm = _("#指輪", "& # Ring~");
+        return { _("#アミュレット", "& # Amulet~"), flavor_name_of(item, opt) };
     }
 }
 
-static void describe_staff(flavor_type *flavor_ptr)
+static std::pair<std::string, std::string> describe_ring(const ItemEntity &item, const describe_option_type &opt)
 {
-    flavor_ptr->modstr = flavor_ptr->flavor_k_ptr->flavor_name.data();
-    if (!flavor_ptr->flavor) {
-        flavor_ptr->basenm = _("%の杖", "& Staff~ of %");
-    } else if (flavor_ptr->aware) {
-        flavor_ptr->basenm = _("%の#杖", "& # Staff~ of %");
+    const auto &baseitem = baseitems_info[item.bi_id];
+    if (opt.aware && (item.is_fixed_artifact() || baseitem.gen_flags.has(ItemGenerationTraitType::INSTA_ART))) {
+        return { baseitem.name, "" };
+    }
+
+    if (!opt.flavor) {
+        return { _("%の指輪", "& Ring~ of %"), "" };
+    } else if (opt.aware) {
+        return { _("%の#指輪", "& # Ring~ of %"), flavor_name_of(item, opt) };
     } else {
-        flavor_ptr->basenm = _("#杖", "& # Staff~");
+        return { _("#指輪", "& # Ring~"), flavor_name_of(item, opt) };
     }
 }
 
-static void describe_wand(flavor_type *flavor_ptr)
+static std::pair<std::string, std::string> describe_staff(const ItemEntity &item, const describe_option_type &opt)
 {
-    flavor_ptr->modstr = flavor_ptr->flavor_k_ptr->flavor_name.data();
-    if (!flavor_ptr->flavor) {
-        flavor_ptr->basenm = _("%の魔法棒", "& Wand~ of %");
-    } else if (flavor_ptr->aware) {
-        flavor_ptr->basenm = _("%の#魔法棒", "& # Wand~ of %");
+    if (!opt.flavor) {
+        return { _("%の杖", "& Staff~ of %"), "" };
+    } else if (opt.aware) {
+        return { _("%の#杖", "& # Staff~ of %"), flavor_name_of(item, opt) };
     } else {
-        flavor_ptr->basenm = _("#魔法棒", "& # Wand~");
+        return { _("#杖", "& # Staff~"), flavor_name_of(item, opt) };
     }
 }
 
-static void describe_rod(flavor_type *flavor_ptr)
+static std::pair<std::string, std::string> describe_wand(const ItemEntity &item, const describe_option_type &opt)
 {
-    flavor_ptr->modstr = flavor_ptr->flavor_k_ptr->flavor_name.data();
-    if (!flavor_ptr->flavor) {
-        flavor_ptr->basenm = _("%のロッド", "& Rod~ of %");
-    } else if (flavor_ptr->aware) {
-        flavor_ptr->basenm = _("%の#ロッド", "& # Rod~ of %");
+    if (!opt.flavor) {
+        return { _("%の魔法棒", "& Wand~ of %"), "" };
+    } else if (opt.aware) {
+        return { _("%の#魔法棒", "& # Wand~ of %"), flavor_name_of(item, opt) };
     } else {
-        flavor_ptr->basenm = _("#ロッド", "& # Rod~");
+        return { _("#魔法棒", "& # Wand~"), flavor_name_of(item, opt) };
     }
 }
 
-static void describe_scroll(flavor_type *flavor_ptr)
+static std::pair<std::string, std::string> describe_rod(const ItemEntity &item, const describe_option_type &opt)
 {
-    flavor_ptr->modstr = flavor_ptr->flavor_k_ptr->flavor_name.data();
-    if (!flavor_ptr->flavor) {
-        flavor_ptr->basenm = _("%の巻物", "& Scroll~ of %");
-    } else if (flavor_ptr->aware) {
-        flavor_ptr->basenm = _("「#」と書かれた%の巻物", "& Scroll~ titled \"#\" of %");
+    if (!opt.flavor) {
+        return { _("%のロッド", "& Rod~ of %"), "" };
+    } else if (opt.aware) {
+        return { _("%の#ロッド", "& # Rod~ of %"), flavor_name_of(item, opt) };
     } else {
-        flavor_ptr->basenm = _("「#」と書かれた巻物", "& Scroll~ titled \"#\"");
+        return { _("#ロッド", "& # Rod~"), flavor_name_of(item, opt) };
     }
 }
 
-static void describe_potion(flavor_type *flavor_ptr)
+static std::pair<std::string, std::string> describe_scroll(const ItemEntity &item, const describe_option_type &opt)
 {
-    flavor_ptr->modstr = flavor_ptr->flavor_k_ptr->flavor_name.data();
-    if (!flavor_ptr->flavor) {
-        flavor_ptr->basenm = _("%の薬", "& Potion~ of %");
-    } else if (flavor_ptr->aware) {
-        flavor_ptr->basenm = _("%の#薬", "& # Potion~ of %");
+    if (!opt.flavor) {
+        return { _("%の巻物", "& Scroll~ of %"), "" };
+    } else if (opt.aware) {
+        return { _("「#」と書かれた%の巻物", "& Scroll~ titled \"#\" of %"), flavor_name_of(item, opt) };
     } else {
-        flavor_ptr->basenm = _("#薬", "& # Potion~");
+        return { _("「#」と書かれた巻物", "& Scroll~ titled \"#\""), flavor_name_of(item, opt) };
     }
 }
 
-static void describe_food(flavor_type *flavor_ptr)
+static std::pair<std::string, std::string> describe_potion(const ItemEntity &item, const describe_option_type &opt)
 {
-    if (flavor_ptr->k_ptr->flavor_name.empty()) {
-        return;
-    }
-
-    flavor_ptr->modstr = flavor_ptr->flavor_k_ptr->flavor_name.data();
-    if (!flavor_ptr->flavor) {
-        flavor_ptr->basenm = _("%のキノコ", "& Mushroom~ of %");
-    } else if (flavor_ptr->aware) {
-        flavor_ptr->basenm = _("%の#キノコ", "& # Mushroom~ of %");
+    if (!opt.flavor) {
+        return { _("%の薬", "& Potion~ of %"), "" };
+    } else if (opt.aware) {
+        return { _("%の#薬", "& # Potion~ of %"), flavor_name_of(item, opt) };
     } else {
-        flavor_ptr->basenm = _("#キノコ", "& # Mushroom~");
+        return { _("#薬", "& # Potion~"), flavor_name_of(item, opt) };
     }
 }
 
-static void describe_book_life(flavor_type *flavor_ptr)
+static std::pair<std::string, std::string> describe_food(const ItemEntity &item, const describe_option_type &opt)
+{
+    const auto &baseitem = baseitems_info[item.bi_id];
+    if (baseitem.flavor_name.empty()) {
+        return { baseitem.name, "" };
+    }
+
+    if (!opt.flavor) {
+        return { _("%のキノコ", "& Mushroom~ of %"), "" };
+    } else if (opt.aware) {
+        return { _("%の#キノコ", "& # Mushroom~ of %"), flavor_name_of(item, opt) };
+    } else {
+        return { _("#キノコ", "& # Mushroom~"), flavor_name_of(item, opt) };
+    }
+}
+
+static std::pair<std::string, std::string> describe_book_life()
 {
 #ifdef JP
-    flavor_ptr->basenm = "生命の魔法書%";
-#else
-    if (mp_ptr->spell_book == ItemKindType::LIFE_BOOK) {
-        flavor_ptr->basenm = "& Book~ of Life Magic %";
-    } else {
-        flavor_ptr->basenm = "& Life Spellbook~ %";
-    }
-#endif
-}
-
-static void describe_book_sorcery(flavor_type *flavor_ptr)
-{
-#ifdef JP
-    flavor_ptr->basenm = "仙術の魔法書%";
-#else
-    if (mp_ptr->spell_book == ItemKindType::LIFE_BOOK) {
-        flavor_ptr->basenm = "& Book~ of Sorcery %";
-    } else {
-        flavor_ptr->basenm = "& Sorcery Spellbook~ %";
-    }
-#endif
-}
-
-static void describe_book_nature(flavor_type *flavor_ptr)
-{
-#ifdef JP
-    flavor_ptr->basenm = "自然の魔法書%";
+    return { "生命の魔法書%", "" };
 #else
     if (mp_ptr->spell_book == ItemKindType::LIFE_BOOK) {
-        flavor_ptr->basenm = "& Book~ of Nature Magic %";
+        return { "& Book~ of Life Magic %", "" };
     } else {
-        flavor_ptr->basenm = "& Nature Spellbook~ %";
+        return { "& Life Spellbook~ %", "" };
     }
 #endif
 }
 
-static void describe_book_chaos(flavor_type *flavor_ptr)
+static std::pair<std::string, std::string> describe_book_sorcery()
 {
 #ifdef JP
-    flavor_ptr->basenm = "カオスの魔法書%";
+    return { "仙術の魔法書%", "" };
 #else
     if (mp_ptr->spell_book == ItemKindType::LIFE_BOOK) {
-        flavor_ptr->basenm = "& Book~ of Chaos Magic %";
+        return { "& Book~ of Sorcery %", "" };
     } else {
-        flavor_ptr->basenm = "& Chaos Spellbook~ %";
+        return { "& Sorcery Spellbook~ %", "" };
     }
 #endif
 }
 
-static void describe_book_death(flavor_type *flavor_ptr)
+static std::pair<std::string, std::string> describe_book_nature()
 {
 #ifdef JP
-    flavor_ptr->basenm = "暗黒の魔法書%";
+    return { "自然の魔法書%", "" };
 #else
     if (mp_ptr->spell_book == ItemKindType::LIFE_BOOK) {
-        flavor_ptr->basenm = "& Book~ of Death Magic %";
+        return { "& Book~ of Nature Magic %", "" };
     } else {
-        flavor_ptr->basenm = "& Death Spellbook~ %";
+        return { "& Nature Spellbook~ %", "" };
     }
 #endif
 }
 
-static void describe_book_trump(flavor_type *flavor_ptr)
+static std::pair<std::string, std::string> describe_book_chaos()
 {
 #ifdef JP
-    flavor_ptr->basenm = "トランプの魔法書%";
+    return { "カオスの魔法書%", "" };
 #else
     if (mp_ptr->spell_book == ItemKindType::LIFE_BOOK) {
-        flavor_ptr->basenm = "& Book~ of Trump Magic %";
+        return { "& Book~ of Chaos Magic %", "" };
     } else {
-        flavor_ptr->basenm = "& Trump Spellbook~ %";
+        return { "& Chaos Spellbook~ %", "" };
     }
 #endif
 }
 
-static void describe_book_arcane(flavor_type *flavor_ptr)
+static std::pair<std::string, std::string> describe_book_death()
 {
 #ifdef JP
-    flavor_ptr->basenm = "秘術の魔法書%";
+    return { "暗黒の魔法書%", "" };
 #else
     if (mp_ptr->spell_book == ItemKindType::LIFE_BOOK) {
-        flavor_ptr->basenm = "& Book~ of Arcane Magic %";
+        return { "& Book~ of Death Magic %", "" };
     } else {
-        flavor_ptr->basenm = "& Arcane Spellbook~ %";
+        return { "& Death Spellbook~ %", "" };
     }
 #endif
 }
 
-static void describe_book_craft(flavor_type *flavor_ptr)
+static std::pair<std::string, std::string> describe_book_trump()
 {
 #ifdef JP
-    flavor_ptr->basenm = "匠の魔法書%";
+    return { "トランプの魔法書%", "" };
 #else
     if (mp_ptr->spell_book == ItemKindType::LIFE_BOOK) {
-        flavor_ptr->basenm = "& Book~ of Craft Magic %";
+        return { "& Book~ of Trump Magic %", "" };
     } else {
-        flavor_ptr->basenm = "& Craft Spellbook~ %";
+        return { "& Trump Spellbook~ %", "" };
     }
 #endif
 }
 
-static void describe_book_demon(flavor_type *flavor_ptr)
+static std::pair<std::string, std::string> describe_book_arcane()
 {
 #ifdef JP
-    flavor_ptr->basenm = "悪魔の魔法書%";
+    return { "秘術の魔法書%", "" };
 #else
     if (mp_ptr->spell_book == ItemKindType::LIFE_BOOK) {
-        flavor_ptr->basenm = "& Book~ of Daemon Magic %";
+        return { "& Book~ of Arcane Magic %", "" };
     } else {
-        flavor_ptr->basenm = "& Daemon Spellbook~ %";
+        return { "& Arcane Spellbook~ %", "" };
     }
 #endif
 }
 
-static void describe_book_crusade(flavor_type *flavor_ptr)
+static std::pair<std::string, std::string> describe_book_craft()
 {
 #ifdef JP
-    flavor_ptr->basenm = "破邪の魔法書%";
+    return { "匠の魔法書%", "" };
 #else
     if (mp_ptr->spell_book == ItemKindType::LIFE_BOOK) {
-        flavor_ptr->basenm = "& Book~ of Crusade Magic %";
+        return { "& Book~ of Craft Magic %", "" };
     } else {
-        flavor_ptr->basenm = "& Crusade Spellbook~ %";
+        return { "& Craft Spellbook~ %", "" };
     }
 #endif
 }
 
-static void describe_book_hex(flavor_type *flavor_ptr)
+static std::pair<std::string, std::string> describe_book_demon()
 {
 #ifdef JP
-    flavor_ptr->basenm = "呪術の魔法書%";
+    return { "悪魔の魔法書%", "" };
 #else
     if (mp_ptr->spell_book == ItemKindType::LIFE_BOOK) {
-        flavor_ptr->basenm = "& Book~ of Hex Magic %";
+        return { "& Book~ of Daemon Magic %", "" };
     } else {
-        flavor_ptr->basenm = "& Hex Spellbook~ %";
+        return { "& Daemon Spellbook~ %", "" };
     }
 #endif
 }
 
-void switch_tval_description(flavor_type *flavor_ptr)
+static std::pair<std::string, std::string> describe_book_crusade()
 {
-    switch (flavor_ptr->o_ptr->bi_key.tval()) {
+#ifdef JP
+    return { "破邪の魔法書%", "" };
+#else
+    if (mp_ptr->spell_book == ItemKindType::LIFE_BOOK) {
+        return { "& Book~ of Crusade Magic %", "" };
+    } else {
+        return { "& Crusade Spellbook~ %", "" };
+    }
+#endif
+}
+
+static std::pair<std::string, std::string> describe_book_hex()
+{
+#ifdef JP
+    return { "呪術の魔法書%", "" };
+#else
+    if (mp_ptr->spell_book == ItemKindType::LIFE_BOOK) {
+        return { "& Book~ of Hex Magic %", "" };
+    } else {
+        return { "& Hex Spellbook~ %", "" };
+    }
+#endif
+}
+
+/*!
+ * @brief アイテムの tval に従う記述を得る
+ *
+ * アイテムの tval に従いベース名称(basename)と修正文字列(modstr)を得る。
+ * basename と modstr がどのような使われ方をするかは、describe_body() を参照。
+ *
+ * @param item アイテムへの参照
+ * @param opt 記述オプション
+ * @return std::pair<std::string, std::string> {basename, modstr} のペア
+ */
+std::pair<std::string, std::string> switch_tval_description(const ItemEntity &item, const describe_option_type &opt)
+{
+    const auto &basename = baseitems_info[item.bi_id].name;
+
+    switch (item.bi_key.tval()) {
     case ItemKindType::NONE:
-        flavor_ptr->basenm = _("(なし)", "(Nothing)");
-        break;
+        return { _("(なし)", "(Nothing)"), "" };
     case ItemKindType::SKELETON:
     case ItemKindType::BOTTLE:
     case ItemKindType::JUNK:
@@ -345,17 +372,14 @@ void switch_tval_description(flavor_type *flavor_ptr)
     case ItemKindType::FLASK:
     case ItemKindType::CHEST:
     case ItemKindType::WHISTLE:
-        break;
+        return { basename, "" };
     case ItemKindType::CAPTURE:
-        describe_monster_ball(flavor_ptr);
-        break;
+        return describe_monster_ball(item, opt);
     case ItemKindType::FIGURINE:
     case ItemKindType::STATUE:
-        describe_statue(flavor_ptr);
-        break;
+        return describe_statue(item);
     case ItemKindType::CORPSE:
-        describe_corpse(flavor_ptr);
-        break;
+        return describe_corpse(item);
     case ItemKindType::SHOT:
     case ItemKindType::BOLT:
     case ItemKindType::ARROW:
@@ -364,7 +388,6 @@ void switch_tval_description(flavor_type *flavor_ptr)
     case ItemKindType::POLEARM:
     case ItemKindType::SWORD:
     case ItemKindType::DIGGING:
-        break;
     case ItemKindType::BOOTS:
     case ItemKindType::GLOVES:
     case ItemKindType::CLOAK:
@@ -374,82 +397,57 @@ void switch_tval_description(flavor_type *flavor_ptr)
     case ItemKindType::SOFT_ARMOR:
     case ItemKindType::HARD_ARMOR:
     case ItemKindType::DRAG_ARMOR:
-        break;
     case ItemKindType::LITE:
-        break;
+        return { basename, "" };
     case ItemKindType::AMULET:
-        describe_amulet(flavor_ptr);
-        break;
+        return describe_amulet(item, opt);
     case ItemKindType::RING:
-        describe_ring(flavor_ptr);
-        break;
+        return describe_ring(item, opt);
     case ItemKindType::CARD:
-        break;
+        return { basename, "" };
     case ItemKindType::STAFF:
-        describe_staff(flavor_ptr);
-        break;
+        return describe_staff(item, opt);
     case ItemKindType::WAND:
-        describe_wand(flavor_ptr);
-        break;
+        return describe_wand(item, opt);
     case ItemKindType::ROD:
-        describe_rod(flavor_ptr);
-        break;
+        return describe_rod(item, opt);
     case ItemKindType::SCROLL:
-        describe_scroll(flavor_ptr);
-        break;
+        return describe_scroll(item, opt);
     case ItemKindType::POTION:
-        describe_potion(flavor_ptr);
-        break;
+        return describe_potion(item, opt);
     case ItemKindType::FOOD:
-        describe_food(flavor_ptr);
-        break;
+        return describe_food(item, opt);
     case ItemKindType::PARCHMENT:
-        flavor_ptr->basenm = _("羊皮紙 - %", "& Parchment~ - %");
-        break;
+        return { _("羊皮紙 - %", "& Parchment~ - %"), "" };
     case ItemKindType::LIFE_BOOK:
-        describe_book_life(flavor_ptr);
-        break;
+        return describe_book_life();
     case ItemKindType::SORCERY_BOOK:
-        describe_book_sorcery(flavor_ptr);
-        break;
+        return describe_book_sorcery();
     case ItemKindType::NATURE_BOOK:
-        describe_book_nature(flavor_ptr);
-        break;
+        return describe_book_nature();
     case ItemKindType::CHAOS_BOOK:
-        describe_book_chaos(flavor_ptr);
-        break;
+        return describe_book_chaos();
     case ItemKindType::DEATH_BOOK:
-        describe_book_death(flavor_ptr);
-        break;
+        return describe_book_death();
     case ItemKindType::TRUMP_BOOK:
-        describe_book_trump(flavor_ptr);
-        break;
+        return describe_book_trump();
     case ItemKindType::ARCANE_BOOK:
-        describe_book_arcane(flavor_ptr);
-        break;
+        return describe_book_arcane();
     case ItemKindType::CRAFT_BOOK:
-        describe_book_craft(flavor_ptr);
-        break;
+        return describe_book_craft();
     case ItemKindType::DEMON_BOOK:
-        describe_book_demon(flavor_ptr);
-        break;
+        return describe_book_demon();
     case ItemKindType::CRUSADE_BOOK:
-        describe_book_crusade(flavor_ptr);
-        break;
+        return describe_book_crusade();
     case ItemKindType::MUSIC_BOOK:
-        flavor_ptr->basenm = _("歌集%", "& Song Book~ %");
-        break;
+        return { _("歌集%", "& Song Book~ %"), "" };
     case ItemKindType::HISSATSU_BOOK:
-        flavor_ptr->basenm = _("& 武芸の書%", "Book~ of Kendo %");
-        break;
+        return { _("& 武芸の書%", "Book~ of Kendo %"), "" };
     case ItemKindType::HEX_BOOK:
-        describe_book_hex(flavor_ptr);
-        break;
+        return describe_book_hex();
     case ItemKindType::GOLD:
-        strcpy(flavor_ptr->buf, flavor_ptr->basenm);
-        return;
+        return { basename, "" };
     default:
-        strcpy(flavor_ptr->buf, _("(なし)", "(nothing)"));
-        return;
+        return { _("(なし)", "(nothing)"), "" };
     }
 }

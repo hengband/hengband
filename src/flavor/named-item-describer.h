@@ -1,5 +1,8 @@
 ﻿#pragma once
 
-struct flavor_type;
+#include <string>
+
+struct describe_option_type;
 class PlayerType;
-void describe_named_item(PlayerType *player_ptr, flavor_type *flavor_ptr);
+class ItemEntity;
+std::string describe_named_item(PlayerType *player_ptr, const ItemEntity &item, const describe_option_type &opt);
