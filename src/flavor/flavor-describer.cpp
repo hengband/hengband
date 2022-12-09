@@ -578,6 +578,39 @@ static void decide_item_feeling(flavor_type *flavor_ptr)
     }
 }
 
+static describe_option_type decide_describe_option(const ItemEntity &item, BIT_FLAGS mode)
+{
+    describe_option_type opt{};
+    opt.mode = mode;
+    opt.flavor = true;
+
+    if (item.is_aware()) {
+        opt.aware = true;
+    }
+
+    if (item.is_known()) {
+        opt.known = true;
+    }
+
+    if (opt.aware && (any_bits(mode, OD_NO_FLAVOR) || plain_descriptions)) {
+        opt.flavor = false;
+    }
+
+    if (any_bits(mode, OD_STORE) || any_bits(item.ident, IDENT_STORE)) {
+        opt.flavor = false;
+        opt.aware = true;
+        opt.known = true;
+    }
+
+    if (any_bits(mode, OD_FORCE_FLAVOR)) {
+        opt.aware = false;
+        opt.flavor = true;
+        opt.known = false;
+    }
+
+    return opt;
+}
+
 /*!
  * @brief オブジェクトの各表記を返すメイン関数 / Creates a description of the item "o_ptr", and stores it in "out_val".
  * @param player_ptr プレイヤーへの参照ポインタ
@@ -590,8 +623,15 @@ void describe_flavor(PlayerType *player_ptr, char *buf, ItemEntity *o_ptr, BIT_F
 {
     flavor_type tmp_flavor;
     flavor_type *flavor_ptr = initialize_flavor_type(&tmp_flavor, buf, o_ptr, mode);
+
     check_object_known_aware(flavor_ptr);
-    describe_named_item(player_ptr, flavor_ptr);
+    const auto opt = decide_describe_option(*o_ptr, mode);
+    auto desc = describe_named_item(player_ptr, *o_ptr, opt);
+
+    // describe_named_item までのリファクタリングを確認するための暫定措置
+    strcpy(flavor_ptr->tmp_val, desc.data());
+    flavor_ptr->t = flavor_ptr->tmp_val + strlen(flavor_ptr->tmp_val);
+
     if (flavor_ptr->mode & OD_NAME_ONLY || o_ptr->bi_id == 0) {
         angband_strcpy(flavor_ptr->buf, flavor_ptr->tmp_val, MAX_NLEN);
         return;

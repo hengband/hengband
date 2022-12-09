@@ -24,131 +24,140 @@
 #include "object/tval-types.h"
 #include "system/monster-race-info.h"
 #endif
+#include <sstream>
 
-static void set_base_name(flavor_type *flavor_ptr)
+static std::string get_fullname_if_set(const ItemEntity &item, const describe_option_type &opt)
 {
-    if (!flavor_ptr->aware || flavor_ptr->tr_flags.has_not(TR_FULL_NAME)) {
-        return;
+    if (!opt.aware || object_flags(&item).has_not(TR_FULL_NAME)) {
+        return "";
     }
 
-    const auto fixed_art_id = flavor_ptr->o_ptr->fixed_artifact_idx;
-    const auto is_known_artifact = flavor_ptr->known && flavor_ptr->o_ptr->is_fixed_artifact() && none_bits(flavor_ptr->mode, OD_BASE_NAME);
-    flavor_ptr->basenm = is_known_artifact ? artifacts_info.at(fixed_art_id).name.data() : flavor_ptr->kindname;
+    const auto fixed_art_id = item.fixed_artifact_idx;
+    const auto is_known_artifact = opt.known && item.is_fixed_artifact() && none_bits(opt.mode, OD_BASE_NAME);
+    return is_known_artifact ? artifacts_info.at(fixed_art_id).name : baseitems_info[item.bi_id].name;
 }
 
 #ifdef JP
-static void describe_prefix_ja(flavor_type *flavor_ptr)
+/*!
+ * @brief アイテムの個数を記述する
+ *
+ * @param item アイテムへの参照
+ * @param opt 記述オプション
+ * @return アイテムの個数を記述した文字列
+ */
+static std::string describe_item_count_ja(const ItemEntity &item, const describe_option_type &opt)
 {
-    flavor_ptr->s = flavor_ptr->basenm[0] == '&' ? flavor_ptr->basenm + 2 : flavor_ptr->basenm;
-    if (flavor_ptr->mode & OD_OMIT_PREFIX) {
-        return;
+    if (any_bits(opt.mode, OD_OMIT_PREFIX) || (item.number <= 1)) {
+        return "";
     }
 
-    if (flavor_ptr->o_ptr->number > 1) {
-        flavor_ptr->t = object_desc_count_japanese(flavor_ptr->t, flavor_ptr->o_ptr);
-        flavor_ptr->t = object_desc_str(flavor_ptr->t, "の ");
-    }
+    // TODO: object_desc_count_japanese の std::string へのインターフェース変更は別途行う
+    char num_buf[16]{};
+    object_desc_count_japanese(num_buf, &item);
+    return std::string(num_buf) + "の ";
 }
 
 /*!
- * @brief アーティファクトの表記処理
- * @param アイテム表記への参照ポインタ
- * @details 英語の場合アーティファクトは The が付くので分かるが、日本語では分からないのでマークをつける.
+ * @brief アーティファクトであるマークを記述する
+ *
+ * 英語の場合アーティファクトは The が付くので分かるが、日本語では分からないので
+ * 固定アーティファクトなら「★」、ランダムアーティファクトなら「☆」マークをつける.
+ *
+ * @param item アイテムへの参照
+ * @param opt 記述オプション
  */
-static void describe_artifact_prefix_ja(flavor_type *flavor_ptr)
+static std::string describe_artifact_mark_ja(const ItemEntity &item, const describe_option_type &opt)
 {
-    if (!flavor_ptr->known || any_bits(flavor_ptr->mode, OD_BASE_NAME)) {
-        return;
+    if (!opt.known || any_bits(opt.mode, OD_BASE_NAME)) {
+        return "";
     }
 
-    if (flavor_ptr->o_ptr->is_fixed_artifact()) {
-        flavor_ptr->t = object_desc_str(flavor_ptr->t, "★");
-    } else if (flavor_ptr->o_ptr->art_name) {
-        flavor_ptr->t = object_desc_str(flavor_ptr->t, "☆");
+    if (item.is_fixed_artifact()) {
+        return "★";
+    } else if (item.art_name) {
+        return "☆";
     }
+
+    return "";
 }
 
 /*!
- * @brief アーティファクトの説明表記
- * @param flavor_ptr アイテム表記への参照ポインタ
- * @details ランダムアーティファクト、固定アーティファクト、エゴの順に評価する
+ * @brief アイテムの固有名称（アイテム本体の手前に表記するもの）を記述する
+ *
+ * 例）
+ * 固定/ランダムアーティファクト: ★リリアのダガー → "リリアの"
+ * エゴアイテム: (聖戦者)ロング・ソード → "(聖戦者)"
+ *
+ * @param item アイテムへの参照
+ * @param opt 記述オプション
+ * @return 記述した文字列
  */
-static void describe_artifact_ja(flavor_type *flavor_ptr)
+static std::string describe_unique_name_before_body_ja(const ItemEntity &item, const describe_option_type &opt)
 {
-    if (!flavor_ptr->known || any_bits(flavor_ptr->mode, OD_BASE_NAME)) {
-        return;
+    if (!opt.known || any_bits(opt.mode, OD_BASE_NAME)) {
+        return "";
     }
 
-    if (flavor_ptr->o_ptr->art_name) {
-        concptr temp = quark_str(flavor_ptr->o_ptr->art_name);
+    if (item.art_name) {
+        concptr temp = quark_str(item.art_name);
 
         /* '『' から始まらない伝説のアイテムの名前は最初に付加する */
         /* 英語版のセーブファイルから来た 'of XXX' は,「XXXの」と表示する */
         if (strncmp(temp, "of ", 3) == 0) {
-            flavor_ptr->t = object_desc_str(flavor_ptr->t, &temp[3]);
-            flavor_ptr->t = object_desc_str(flavor_ptr->t, "の");
+            std::stringstream ss;
+            ss << &temp[3] << "の";
+            return ss.str();
         } else if ((strncmp(temp, "『", 2) != 0) && (strncmp(temp, "《", 2) != 0) && (temp[0] != '\'')) {
-            flavor_ptr->t = object_desc_str(flavor_ptr->t, temp);
+            return temp;
         }
-
-        return;
     }
 
-    if (flavor_ptr->o_ptr->is_fixed_artifact() && flavor_ptr->tr_flags.has_not(TR_FULL_NAME)) {
-        const auto &a_ref = artifacts_info.at(flavor_ptr->o_ptr->fixed_artifact_idx);
+    if (item.is_fixed_artifact() && object_flags(&item).has_not(TR_FULL_NAME)) {
+        const auto &a_ref = artifacts_info.at(item.fixed_artifact_idx);
         /* '『' から始まらない伝説のアイテムの名前は最初に付加する */
         if (a_ref.name.find("『", 0, 2) != 0) {
-            flavor_ptr->t = object_desc_str(flavor_ptr->t, a_ref.name.data());
+            return a_ref.name;
         }
 
-        return;
+        return "";
     }
 
-    if (flavor_ptr->o_ptr->is_ego()) {
-        auto *e_ptr = &egos_info[flavor_ptr->o_ptr->ego_idx];
-        flavor_ptr->t = object_desc_str(flavor_ptr->t, e_ptr->name.data());
+    if (item.is_ego()) {
+        return egos_info[item.ego_idx].name;
     }
+
+    return "";
 }
 
-/*!
- * @brief ランダムアーティファクトの表記
- * @param flavor_ptr アイテム表記への参照ポインタ
- * @return ランダムアーティファクトならTRUE、違うならFALSE
- * @details ランダムアーティファクトの名前はセーブファイルに記録されるので、英語版の名前もそれらしく変換する.
- */
-static bool describe_random_artifact_body_ja(flavor_type *flavor_ptr)
+static std::optional<std::string> describe_random_artifact_name_after_body_ja(const ItemEntity &item)
 {
-    if (flavor_ptr->o_ptr->art_name == 0) {
-        return false;
+    if (item.art_name == 0) {
+        return std::nullopt;
     }
 
     char temp[256];
     int itemp;
-    strcpy(temp, quark_str(flavor_ptr->o_ptr->art_name));
+    strcpy(temp, quark_str(item.art_name));
     if (strncmp(temp, "『", 2) == 0 || strncmp(temp, "《", 2) == 0) {
-        flavor_ptr->t = object_desc_str(flavor_ptr->t, temp);
-        return true;
+        return temp;
     }
 
     if (temp[0] != '\'') {
-        return true;
+        return "";
     }
 
     itemp = strlen(temp);
     temp[itemp - 1] = 0;
-    flavor_ptr->t = object_desc_str(flavor_ptr->t, "『");
-    flavor_ptr->t = object_desc_str(flavor_ptr->t, &temp[1]);
-    flavor_ptr->t = object_desc_str(flavor_ptr->t, "』");
-    return true;
+    return format("『%s』", &temp[1]);
 }
 
-static void describe_ego_body_ja(flavor_type *flavor_ptr)
+static std::string describe_fake_artifact_name_after_body_ja(const ItemEntity &item)
 {
-    if (!flavor_ptr->o_ptr->inscription) {
-        return;
+    if (!item.inscription) {
+        return "";
     }
 
-    concptr str = quark_str(flavor_ptr->o_ptr->inscription);
+    concptr str = quark_str(item.inscription);
     while (*str) {
         if (iskanji(*str)) {
             str += 2;
@@ -163,239 +172,267 @@ static void describe_ego_body_ja(flavor_type *flavor_ptr)
     }
 
     if (*str == '\0') {
-        return;
+        return "";
     }
 
-    concptr str_aux = angband_strchr(quark_str(flavor_ptr->o_ptr->inscription), '#');
-    flavor_ptr->t = object_desc_str(flavor_ptr->t, "『");
-    flavor_ptr->t = object_desc_str(flavor_ptr->t, &str_aux[1]);
-    flavor_ptr->t = object_desc_str(flavor_ptr->t, "』");
+    concptr str_aux = angband_strchr(quark_str(item.inscription), '#');
+    return format("『%s』", str_aux + 1);
 }
 
 /*!
- * @brief アーティファクトのアイテム名を表記する
- * @param flavor_ptr アイテム表記への参照ポインタ
- * @details '『'から始まる伝説のアイテムの名前は最後に付加する
+ * @brief アイテムの固有名称（アイテム本体の後に表記するもの）を記述する。
+ *
+ * 例）
+ * 固定/ランダムアーティファクト: ★ロング・ソード『リンギル』 → "『リンギル』"
+ * 銘刻みによる疑似アーティファクト: ロング・ソード『AIR』 → "『AIR』"
+ * エゴアイテムはアイテム本体の後に記述されるタイプのものは存在しない。
+ *
+ * 銘刻みによる疑似アーティファクトは、銘の最後に #foobar と刻むことにより
+ * ゲーム上の表記が「アイテム名『foobar』」のようになる機能。
+ *
+ * @param item アイテムへの参照
+ * @param opt 記述オプション
+ * @return 記述した文字列
  */
-static void describe_artifact_body_ja(flavor_type *flavor_ptr)
+static std::string describe_unique_name_after_body_ja(const ItemEntity &item, const describe_option_type &opt)
 {
-    if (!flavor_ptr->known || any_bits(flavor_ptr->mode, OD_BASE_NAME)) {
-        return;
+    if (!opt.known || any_bits(opt.mode, OD_BASE_NAME)) {
+        return "";
     }
 
-    if (describe_random_artifact_body_ja(flavor_ptr)) {
-        return;
+    if (auto body = describe_random_artifact_name_after_body_ja(item); body.has_value()) {
+        return body.value();
     }
 
-    if (flavor_ptr->o_ptr->is_fixed_artifact()) {
-        const auto &a_ref = artifacts_info.at(flavor_ptr->o_ptr->fixed_artifact_idx);
+    if (item.is_fixed_artifact()) {
+        const auto &a_ref = artifacts_info.at(item.fixed_artifact_idx);
         if (a_ref.name.find("『", 0, 2) == 0) {
-            flavor_ptr->t = object_desc_str(flavor_ptr->t, a_ref.name.data());
+            return a_ref.name;
         }
 
-        return;
+        return "";
     }
 
-    describe_ego_body_ja(flavor_ptr);
+    return describe_fake_artifact_name_after_body_ja(item);
 }
 #else
 
-static void describe_vowel(flavor_type *flavor_ptr)
+static std::string describe_vowel(const ItemEntity &item, std::string_view basename, std::string_view modstr)
 {
     bool vowel;
-    switch (*flavor_ptr->s) {
+    switch (basename[0]) {
     case '#':
-        vowel = is_a_vowel(flavor_ptr->modstr[0]);
+        vowel = is_a_vowel(modstr[0]);
         break;
     case '%':
-        vowel = is_a_vowel(*flavor_ptr->kindname);
+        vowel = is_a_vowel(baseitems_info[item.bi_id].name[0]);
         break;
     default:
-        vowel = is_a_vowel(*flavor_ptr->s);
+        vowel = is_a_vowel(basename[0]);
         break;
     }
 
-    if (vowel) {
-        flavor_ptr->t = object_desc_str(flavor_ptr->t, "an ");
-    } else {
-        flavor_ptr->t = object_desc_str(flavor_ptr->t, "a ");
-    }
+    return (vowel) ? "an " : "a ";
 }
 
-/*!
- * @brief Process to write the number of items when there are 0, 1, or 2 or more.
- * @param flavor_ptr Reference pointer to item's flavor
- * @return If the number of items is 1, then FALE is returned, and if 0 or 2 or more, then TRUE is returned
- * @details If the number of items is 1, then the continuous process will be run.
- */
-static bool describe_prefix_en(flavor_type *flavor_ptr)
+static std::string describe_prefix_en(const ItemEntity &item)
 {
-    if (flavor_ptr->o_ptr->number <= 0) {
-        flavor_ptr->t = object_desc_str(flavor_ptr->t, "no more ");
-        return true;
+    if (item.number <= 0) {
+        return "no more ";
     }
 
-    if (flavor_ptr->o_ptr->number == 1) {
-        return false;
+    if (item.number == 1) {
+        return "";
     }
 
-    flavor_ptr->t = object_desc_num(flavor_ptr->t, flavor_ptr->o_ptr->number);
-    flavor_ptr->t = object_desc_chr(flavor_ptr->t, ' ');
-    return true;
+    return std::to_string(item.number) + ' ';
 }
 
-static void describe_artifact_prefix_en(flavor_type *flavor_ptr)
+static std::string describe_item_count_or_article_en(const ItemEntity &item, const describe_option_type &opt, std::string_view basename, std::string_view modstr)
 {
-    flavor_ptr->s = flavor_ptr->basenm + 2;
-    if (flavor_ptr->mode & OD_OMIT_PREFIX) {
-        return;
+    if (any_bits(opt.mode, OD_OMIT_PREFIX)) {
+        return "";
     }
 
-    if (describe_prefix_en(flavor_ptr)) {
-        return;
+    if (auto prefix = describe_prefix_en(item); !prefix.empty()) {
+        return prefix;
     }
 
-    const auto corpse_r_idx = i2enum<MonsterRaceId>(flavor_ptr->o_ptr->pval);
-    auto is_unique_corpse = flavor_ptr->o_ptr->bi_key.tval() == ItemKindType::CORPSE;
+    const auto corpse_r_idx = i2enum<MonsterRaceId>(item.pval);
+    auto is_unique_corpse = item.bi_key.tval() == ItemKindType::CORPSE;
     is_unique_corpse &= monraces_info[corpse_r_idx].kind_flags.has(MonsterKindType::UNIQUE);
-    if ((flavor_ptr->known && flavor_ptr->o_ptr->is_artifact()) || is_unique_corpse) {
-        flavor_ptr->t = object_desc_str(flavor_ptr->t, "The ");
-        return;
+    if ((opt.known && item.is_artifact()) || is_unique_corpse) {
+        return "The ";
     }
 
-    describe_vowel(flavor_ptr);
+    return describe_vowel(item, basename, modstr);
 }
 
-static void describe_basename_en(flavor_type *flavor_ptr)
+static std::string describe_item_count_or_definite_article_en(const ItemEntity &item, const describe_option_type &opt)
 {
-    flavor_ptr->s = flavor_ptr->basenm;
-    if (flavor_ptr->mode & OD_OMIT_PREFIX) {
-        return;
+    if (any_bits(opt.mode, OD_OMIT_PREFIX)) {
+        return "";
     }
 
-    if (describe_prefix_en(flavor_ptr)) {
-        return;
+    if (auto prefix = describe_prefix_en(item); !prefix.empty()) {
+        return prefix;
     }
 
-    if (flavor_ptr->known && flavor_ptr->o_ptr->is_artifact()) {
-        flavor_ptr->t = object_desc_str(flavor_ptr->t, "The ");
+    if (opt.known && item.is_artifact()) {
+        return "The ";
     }
+
+    return "";
 }
 
-static void describe_artifact_body_en(flavor_type *flavor_ptr)
+static std::string describe_unique_name_after_body_en(const ItemEntity &item, const describe_option_type &opt)
 {
-    if (!flavor_ptr->known || flavor_ptr->tr_flags.has(TR_FULL_NAME) || any_bits(flavor_ptr->mode, OD_BASE_NAME)) {
-        return;
+    if (!opt.known || object_flags(&item).has(TR_FULL_NAME) || any_bits(opt.mode, OD_BASE_NAME)) {
+        return "";
     }
 
-    if (flavor_ptr->o_ptr->art_name) {
-        flavor_ptr->t = object_desc_chr(flavor_ptr->t, ' ');
-        flavor_ptr->t = object_desc_str(flavor_ptr->t, quark_str(flavor_ptr->o_ptr->art_name));
-        return;
+    std::stringstream ss;
+
+    if (item.art_name) {
+        ss << ' ' << quark_str(item.art_name);
+        return ss.str();
     }
 
-    if (flavor_ptr->o_ptr->is_fixed_artifact()) {
-        const auto &a_ref = artifacts_info.at(flavor_ptr->o_ptr->fixed_artifact_idx);
-        flavor_ptr->t = object_desc_chr(flavor_ptr->t, ' ');
-        flavor_ptr->t = object_desc_str(flavor_ptr->t, a_ref.name.data());
-        return;
+    if (item.is_fixed_artifact()) {
+        const auto &a_ref = artifacts_info.at(item.fixed_artifact_idx);
+        ss << ' ' << a_ref.name;
+        return ss.str();
     }
 
-    if (flavor_ptr->o_ptr->is_ego()) {
-        auto *e_ptr = &egos_info[flavor_ptr->o_ptr->ego_idx];
-        flavor_ptr->t = object_desc_chr(flavor_ptr->t, ' ');
-        flavor_ptr->t = object_desc_str(flavor_ptr->t, e_ptr->name.data());
+    if (item.is_ego()) {
+        ss << ' ' << egos_info[item.ego_idx].name;
     }
 
-    if (flavor_ptr->o_ptr->inscription && angband_strchr(quark_str(flavor_ptr->o_ptr->inscription), '#')) {
-        concptr str = angband_strchr(quark_str(flavor_ptr->o_ptr->inscription), '#');
-        flavor_ptr->t = object_desc_chr(flavor_ptr->t, ' ');
-        flavor_ptr->t = object_desc_str(flavor_ptr->t, &str[1]);
+    if (item.inscription) {
+        if (auto str = angband_strchr(quark_str(item.inscription), '#'); str != nullptr) {
+            ss << ' ' << str + 1;
+        }
     }
+
+    return ss.str();
 }
 #endif
 
 /*!
- * @brief 銘を表記する
- * @param flavor_ptr アイテム表記への参照ポインタ
- * @details ランダムアーティファクト、固定アーティファクト、エゴの順に評価する
+ * @brief アイテム本体の名称を記述する
+ *
+ * 基本的には basename の内容がそのまま記述されるが、basename 上の特定の文字に対して以下の修正が行われる。
+ *
+ * - '#' が modstr の内容で置き換えられる:
+ *   主に未鑑定名やモンスターボール・像・死体などのモンスター名の部分に使用される
+ * - '%' が item のベースアイテム名で置き換えられる:
+ *   BaseitemDefinition.txt でカテゴリ内における名称のみが記述されているものに使用される。
+ *   たとえば薬の場合 basename は「%の薬」となっており、BaseitemDefinition.txt 内で記述されている
+ *   "体力回復" により '%' が置き換えられ「体力回復の薬」と表記されるといった具合。
+ * - '~' がアイテムが複数の場合複数形表現で置き換えられる（英語版のみ）
+ *
+ * @param item アイテムへの参照
+ * @param opt 記述オプション
+ * @param basename アイテム本体のベースとなる文字列
+ * @param modstr ベースとなる文字列上の特定の文字を置き換える文字列
+ * @return 記述した文字列
  */
-static void describe_inscription(flavor_type *flavor_ptr)
+static std::string describe_body(const ItemEntity &item, [[maybe_unused]] const describe_option_type &opt, std::string_view basename, std::string_view modstr)
 {
-    for (flavor_ptr->s0 = nullptr; *flavor_ptr->s || flavor_ptr->s0;) {
-        if (!*flavor_ptr->s) {
-            flavor_ptr->s = flavor_ptr->s0 + 1;
-            flavor_ptr->s0 = nullptr;
-        } else if ((*flavor_ptr->s == '#') && !flavor_ptr->s0) {
-            flavor_ptr->s0 = flavor_ptr->s;
-            flavor_ptr->s = flavor_ptr->modstr;
-            flavor_ptr->modstr = "";
-        } else if ((*flavor_ptr->s == '%') && !flavor_ptr->s0) {
-            flavor_ptr->s0 = flavor_ptr->s;
-            flavor_ptr->s = flavor_ptr->kindname;
-            flavor_ptr->kindname = "";
-        }
+    std::stringstream ss;
 
-#ifdef JP
-#else
-        else if (*flavor_ptr->s == '~') {
-            if (!(flavor_ptr->mode & OD_NO_PLURAL) && (flavor_ptr->o_ptr->number != 1)) {
-                char k = flavor_ptr->t[-1];
+    for (auto it = basename.begin(), it_end = basename.end(); it != it_end; ++it) {
+        switch (*it) {
+        case '#':
+            ss << modstr;
+            break;
+
+        case '%':
+            ss << baseitems_info[item.bi_id].name;
+            break;
+
+#ifndef JP
+        case '~':
+            if (none_bits(opt.mode, OD_NO_PLURAL) && (item.number != 1)) {
+                char k = *std::next(it, -1);
                 if ((k == 's') || (k == 'h')) {
-                    *flavor_ptr->t++ = 'e';
+                    ss << 'e';
                 }
 
-                *flavor_ptr->t++ = 's';
+                ss << 's';
             }
-
-            flavor_ptr->s++;
-        }
+            break;
 #endif
-        else
-            *flavor_ptr->t++ = *flavor_ptr->s++;
+
+        default:
+            ss << *it;
+#ifdef JP
+            if (iskanji(*it)) {
+                ++it;
+                ss << *it;
+            }
+#endif
+            break;
+        }
     }
+
+    return ss.str();
 }
 
-void describe_named_item(PlayerType *player_ptr, flavor_type *flavor_ptr)
+/*!
+ * @brief アイテム名を記述する
+ *
+ * @param item アイテムへの参照
+ * @param opt 記述オプション
+ * @return std::string 記述したアイテム名
+ */
+std::string describe_named_item(PlayerType *player_ptr, const ItemEntity &item, const describe_option_type &opt)
 {
-    switch_tval_description(flavor_ptr);
-    set_base_name(flavor_ptr);
-    flavor_ptr->t = flavor_ptr->tmp_val;
-#ifdef JP
-    describe_prefix_ja(flavor_ptr);
-    describe_artifact_prefix_ja(flavor_ptr);
-#else
+    auto [basename, modstr] = switch_tval_description(item, opt);
+    if (auto name = get_fullname_if_set(item, opt); !name.empty()) {
+        basename = std::move(name);
+    }
+    std::string_view basename_sv = basename;
+    std::stringstream ss;
 
-    if (flavor_ptr->basenm[0] == '&') {
-        describe_artifact_prefix_en(flavor_ptr);
+#ifdef JP
+    if (basename_sv[0] == '&') {
+        basename_sv.remove_prefix(2);
+    }
+    ss << describe_item_count_ja(item, opt)
+       << describe_artifact_mark_ja(item, opt);
+#else
+    if (basename_sv[0] == '&') {
+        basename_sv.remove_prefix(2);
+        ss << describe_item_count_or_article_en(item, opt, basename_sv, modstr);
     } else {
-        describe_basename_en(flavor_ptr);
+        ss << describe_item_count_or_definite_article_en(item, opt);
     }
 #endif
 
 #ifdef JP
-    if (flavor_ptr->o_ptr->is_smith() && !any_bits(flavor_ptr->mode, OD_BASE_NAME)) {
-        flavor_ptr->t = object_desc_str(flavor_ptr->t, format("鍛冶師%sの", player_ptr->name));
+    if (item.is_smith() && none_bits(opt.mode, OD_BASE_NAME)) {
+        ss << format("鍛冶師%sの", player_ptr->name);
     }
 
-    describe_artifact_ja(flavor_ptr);
+    ss << describe_unique_name_before_body_ja(item, opt);
 #endif
-    if (flavor_ptr->o_ptr->is_spell_book()) {
+    if (item.is_spell_book()) {
         // svalは0から数えているので表示用に+1している
-        const auto sval = flavor_ptr->o_ptr->bi_key.sval().value();
-        flavor_ptr->t = object_desc_str(flavor_ptr->t, format("Lv%d ", sval + 1));
+        ss << format("Lv%d ", item.bi_key.sval().value() + 1);
     }
 
-    describe_inscription(flavor_ptr);
-    *flavor_ptr->t = '\0';
+    ss << describe_body(item, opt, basename_sv, modstr);
 
 #ifdef JP
-    describe_artifact_body_ja(flavor_ptr);
+    ss << describe_unique_name_after_body_ja(item, opt);
 #else
-    if (flavor_ptr->o_ptr->is_smith() && !any_bits(flavor_ptr->mode, OD_BASE_NAME)) {
-        flavor_ptr->t = object_desc_str(flavor_ptr->t, format(" of %s the Smith", player_ptr->name));
+    if (item.is_smith() && none_bits(opt.mode, OD_BASE_NAME)) {
+        ss << format(" of %s the Smith", player_ptr->name);
     }
 
-    describe_artifact_body_en(flavor_ptr);
+    ss << describe_unique_name_after_body_en(item, opt);
 #endif
+
+    return ss.str();
 }
