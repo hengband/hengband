@@ -195,8 +195,8 @@ void update_object_by_monster_movement(PlayerType *player_ptr, turn_flags *turn_
         auto *o_ptr = &player_ptr->current_floor_ptr->o_list[this_o_idx];
 
         if (turn_flags_ptr->do_take) {
-            /* Skip gold, corpse and statue */
-            if (o_ptr->tval == ItemKindType::GOLD || (o_ptr->tval == ItemKindType::CORPSE) || (o_ptr->tval == ItemKindType::STATUE)) {
+            const auto tval = o_ptr->bi_key.tval();
+            if (tval == ItemKindType::GOLD || (tval == ItemKindType::CORPSE) || (tval == ItemKindType::STATUE)) {
                 continue;
             }
         }

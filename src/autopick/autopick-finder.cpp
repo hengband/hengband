@@ -36,7 +36,7 @@
 int find_autopick_list(PlayerType *player_ptr, ItemEntity *o_ptr)
 {
     GAME_TEXT o_name[MAX_NLEN];
-    if (o_ptr->tval == ItemKindType::GOLD) {
+    if (o_ptr->bi_key.tval() == ItemKindType::GOLD) {
         return -1;
     }
 

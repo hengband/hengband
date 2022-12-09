@@ -40,15 +40,16 @@ void ArmorEnchanter::give_ego_index()
     while (true) {
         auto valid = true;
         this->o_ptr->ego_idx = get_random_ego(INVEN_BODY, true);
+        const auto tval = this->o_ptr->bi_key.tval();
         switch (this->o_ptr->ego_idx) {
         case EgoType::DWARVEN:
-            if (this->o_ptr->tval != ItemKindType::HARD_ARMOR) {
+            if (tval != ItemKindType::HARD_ARMOR) {
                 valid = false;
             }
 
             break;
         case EgoType::DRUID:
-            if (this->o_ptr->tval != ItemKindType::SOFT_ARMOR) {
+            if (tval != ItemKindType::SOFT_ARMOR) {
                 valid = false;
             }
 

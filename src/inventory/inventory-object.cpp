@@ -65,7 +65,7 @@ void inven_item_increase(PlayerType *player_ptr, INVENTORY_IDX item, ITEM_NUMBER
     if (!(item == INVEN_MAIN_HAND) && !(item == INVEN_SUB_HAND)) {
         return;
     }
-    if (has_melee_weapon(player_ptr, INVEN_MAIN_HAND + INVEN_SUB_HAND - item)) {
+    if (has_melee_weapon(player_ptr, enum2i(INVEN_MAIN_HAND + INVEN_SUB_HAND) - item)) {
         return;
     }
 
@@ -205,12 +205,13 @@ void combine_pack(PlayerType *player_ptr)
                     int remain = j_ptr->number + o_ptr->number - max_num;
                     object_absorb(j_ptr, o_ptr);
                     o_ptr->number = remain;
-                    if (o_ptr->tval == ItemKindType::ROD) {
+                    const auto tval = o_ptr->bi_key.tval();
+                    if (tval == ItemKindType::ROD) {
                         o_ptr->pval = o_ptr->pval * remain / old_num;
                         o_ptr->timeout = o_ptr->timeout * remain / old_num;
                     }
 
-                    if (o_ptr->tval == ItemKindType::WAND) {
+                    if (tval == ItemKindType::WAND) {
                         o_ptr->pval = o_ptr->pval * remain / old_num;
                     }
                 }

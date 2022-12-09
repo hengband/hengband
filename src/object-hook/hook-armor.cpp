@@ -13,7 +13,7 @@
  */
 bool item_tester_hook_wear(PlayerType *player_ptr, const ItemEntity *o_ptr)
 {
-    if ((o_ptr->tval == ItemKindType::SOFT_ARMOR) && (o_ptr->sval == SV_ABUNAI_MIZUGI)) {
+    if (o_ptr->bi_key == BaseitemKey(ItemKindType::SOFT_ARMOR, SV_ABUNAI_MIZUGI)) {
         if (player_ptr->psex == SEX_MALE) {
             return false;
         }

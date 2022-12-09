@@ -67,7 +67,12 @@ void RingEnchanter::apply_magic()
 
 void RingEnchanter::sval_enchant()
 {
-    switch (this->o_ptr->sval) {
+    const auto sval = this->o_ptr->bi_key.sval();
+    if (!sval.has_value()) {
+        return;
+    }
+
+    switch (sval.value()) {
     case SV_RING_ATTACKS:
         this->o_ptr->pval = (PARAMETER_VALUE)m_bonus(2, this->level);
         if (one_in_(15)) {
@@ -400,7 +405,12 @@ void RingEnchanter::give_ego_index()
 
 void RingEnchanter::give_high_ego_index()
 {
-    switch (this->o_ptr->sval) {
+    const auto sval = this->o_ptr->bi_key.sval();
+    if (!sval.has_value()) {
+        return;
+    }
+
+    switch (sval.value()) {
     case SV_RING_SPEED:
         if (!one_in_(3)) {
             break;

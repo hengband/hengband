@@ -45,7 +45,7 @@ static void kind_info(PlayerType *player_ptr, char *buf, char *dam, char *wgt, c
 
     describe_flavor(player_ptr, buf, q_ptr, OD_NAME_ONLY | OD_STORE);
     strcpy(dam, "");
-    switch (q_ptr->tval) {
+    switch (q_ptr->bi_key.tval()) {
     case ItemKindType::SHOT:
     case ItemKindType::BOLT:
     case ItemKindType::ARROW:

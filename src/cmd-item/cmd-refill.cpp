@@ -106,16 +106,14 @@ static void do_cmd_refill_torch(PlayerType *player_ptr)
  */
 void do_cmd_refill(PlayerType *player_ptr)
 {
-    ItemEntity *o_ptr;
-    o_ptr = &player_ptr->inventory_list[INVEN_LITE];
-
     PlayerClass(player_ptr).break_samurai_stance({ SamuraiStanceType::MUSOU });
-
-    if (o_ptr->tval != ItemKindType::LITE) {
+    const auto *o_ptr = &player_ptr->inventory_list[INVEN_LITE];
+    const auto &bi_key = o_ptr->bi_key;
+    if (bi_key.tval() != ItemKindType::LITE) {
         msg_print(_("光源を装備していない。", "You are not wielding a light."));
-    } else if (o_ptr->sval == SV_LITE_LANTERN) {
+    } else if (bi_key.sval() == SV_LITE_LANTERN) {
         do_cmd_refill_lamp(player_ptr);
-    } else if (o_ptr->sval == SV_LITE_TORCH) {
+    } else if (bi_key.sval() == SV_LITE_TORCH) {
         do_cmd_refill_torch(player_ptr);
     } else {
         msg_print(_("この光源は寿命を延ばせない。", "Your light cannot be refilled."));

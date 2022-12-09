@@ -171,8 +171,8 @@ static void ego_interpret_extra_abilities(ItemEntity *o_ptr, ego_item_type *e_pt
 
         auto n = xtra.tr_flags.size();
         if (n > 0) {
-            auto f = xtra.tr_flags[randint0(n)];
-            auto except = (f == TR_VORPAL && o_ptr->tval != ItemKindType::SWORD);
+            const auto f = xtra.tr_flags[randint0(n)];
+            const auto except = (f == TR_VORPAL) && (o_ptr->bi_key.tval() != ItemKindType::SWORD);
             if (!except) {
                 o_ptr->art_flags.set(f);
             }
@@ -238,9 +238,11 @@ void ego_invest_extra_attack(ItemEntity *o_ptr, ego_item_type *e_ptr, DEPTH lev)
         if (o_ptr->pval > 3) {
             o_ptr->pval = 3;
         }
-        if ((o_ptr->tval == ItemKindType::SWORD) && (o_ptr->sval == SV_HAYABUSA)) {
+
+        if (o_ptr->bi_key == BaseitemKey(ItemKindType::SWORD, SV_HAYABUSA)) {
             o_ptr->pval += randint1(2);
         }
+
         return;
     }
 
@@ -343,7 +345,7 @@ void apply_ego(ItemEntity *o_ptr, DEPTH lev)
         if (e_ptr->max_pval) {
             if (o_ptr->ego_idx == EgoType::BAT) {
                 o_ptr->pval = randint1(e_ptr->max_pval);
-                if (o_ptr->sval == SV_ELVEN_CLOAK) {
+                if (o_ptr->bi_key.sval() == SV_ELVEN_CLOAK) {
                     o_ptr->pval += randint1(2);
                 }
             } else {
@@ -363,7 +365,7 @@ void apply_ego(ItemEntity *o_ptr, DEPTH lev)
             o_ptr->pval = randint1(o_ptr->pval);
         }
 
-        if ((o_ptr->tval == ItemKindType::SWORD) && (o_ptr->sval == SV_HAYABUSA) && (o_ptr->pval > 2) && (o_ptr->ego_idx != EgoType::ATTACKS)) {
+        if ((o_ptr->bi_key == BaseitemKey(ItemKindType::SWORD, SV_HAYABUSA)) && (o_ptr->pval > 2) && (o_ptr->ego_idx != EgoType::ATTACKS)) {
             o_ptr->pval = 2;
         }
     }

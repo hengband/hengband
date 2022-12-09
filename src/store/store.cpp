@@ -355,19 +355,21 @@ static void store_create(PlayerType *player_ptr, short fix_k_idx, StoreSaleType 
             q_ptr->pval = pval;
         }
 
-        if (q_ptr->tval == ItemKindType::LITE) {
-            if (q_ptr->sval == SV_LITE_TORCH) {
+        const auto tval = q_ptr->bi_key.tval();
+        const auto sval = q_ptr->bi_key.sval();
+        if (tval == ItemKindType::LITE) {
+            if (sval == SV_LITE_TORCH) {
                 q_ptr->fuel = FUEL_TORCH / 2;
             }
 
-            if (q_ptr->sval == SV_LITE_LANTERN) {
+            if (sval == SV_LITE_LANTERN) {
                 q_ptr->fuel = FUEL_LAMP / 2;
             }
         }
 
         object_known(q_ptr);
         q_ptr->ident |= IDENT_STORE;
-        if (q_ptr->tval == ItemKindType::CHEST) {
+        if (tval == ItemKindType::CHEST) {
             continue;
         }
 
@@ -381,7 +383,7 @@ static void store_create(PlayerType *player_ptr, short fix_k_idx, StoreSaleType 
             }
         }
 
-        mass_produce(player_ptr, q_ptr, store_num);
+        mass_produce(q_ptr, store_num);
         (void)store_carry(q_ptr);
         break;
     }

@@ -84,7 +84,6 @@
 #include "view/display-messages.h"
 #include <algorithm>
 #include <optional>
-#include <tuple>
 
 static std::optional<BaseitemKey> check_magic_eater_spell_repeat(magic_eater_data_type *magic_eater_data)
 {

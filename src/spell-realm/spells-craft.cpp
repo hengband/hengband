@@ -283,7 +283,7 @@ bool pulish_shield(PlayerType *player_ptr)
 
     auto is_pulish_successful = (o_ptr->bi_id > 0) && !o_ptr->is_artifact() && !o_ptr->is_ego();
     is_pulish_successful &= !o_ptr->is_cursed();
-    is_pulish_successful &= (o_ptr->sval != SV_MIRROR_SHIELD);
+    is_pulish_successful &= (o_ptr->bi_key.sval() != SV_MIRROR_SHIELD);
     if (is_pulish_successful) {
 #ifdef JP
         msg_format("%sは輝いた！", o_name);

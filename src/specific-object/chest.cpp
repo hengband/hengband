@@ -56,24 +56,18 @@ Chest::Chest(PlayerType *player_ptr)
  */
 void Chest::chest_death(bool scatter, POSITION y, POSITION x, OBJECT_IDX o_idx)
 {
-    int number;
-
-    bool small;
     BIT_FLAGS mode = AM_GOOD | AM_FORBID_CHEST;
-
-    ItemEntity forge;
-    ItemEntity *q_ptr;
-
     auto *floor_ptr = this->player_ptr->current_floor_ptr;
     auto *o_ptr = &floor_ptr->o_list[o_idx];
 
     /* Small chests often hold "gold" */
-    small = (o_ptr->sval < SV_CHEST_MIN_LARGE);
+    const auto sval = o_ptr->bi_key.sval().value();
+    auto small = sval < SV_CHEST_MIN_LARGE;
 
     /* Determine how much to drop (see above) */
-    number = (o_ptr->sval % SV_CHEST_MIN_LARGE) * 2;
+    auto number = (sval % SV_CHEST_MIN_LARGE) * 2;
 
-    if (o_ptr->sval == SV_CHEST_KANDUME) {
+    if (sval == SV_CHEST_KANDUME) {
         number = 5;
         small = false;
         mode |= AM_GREAT;
@@ -89,6 +83,8 @@ void Chest::chest_death(bool scatter, POSITION y, POSITION x, OBJECT_IDX o_idx)
     }
 
     /* Drop some objects (non-chests) */
+    ItemEntity forge;
+    ItemEntity *q_ptr;
     for (; number > 0; --number) {
         q_ptr = &forge;
         q_ptr->wipe();

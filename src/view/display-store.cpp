@@ -75,7 +75,7 @@ void display_entry(PlayerType *player_ptr, int pos, StoreSaleType store_num)
         GAME_TEXT o_name[MAX_NLEN];
         describe_flavor(player_ptr, o_name, o_ptr, 0);
         o_name[maxwid] = '\0';
-        c_put_str(tval_to_attr[enum2i(o_ptr->tval)], o_name, i + 6, cur_col);
+        c_put_str(tval_to_attr[enum2i(o_ptr->bi_key.tval())], o_name, i + 6, cur_col);
         if (show_weights) {
             WEIGHT wgt = o_ptr->weight;
             sprintf(out_val, _("%3d.%1d kg", "%3d.%d lb"), _(lb_to_kg_integer(wgt), wgt / 10), _(lb_to_kg_fraction(wgt), wgt % 10));
@@ -93,7 +93,7 @@ void display_entry(PlayerType *player_ptr, int pos, StoreSaleType store_num)
     GAME_TEXT o_name[MAX_NLEN];
     describe_flavor(player_ptr, o_name, o_ptr, 0);
     o_name[maxwid] = '\0';
-    c_put_str(tval_to_attr[enum2i(o_ptr->tval)], o_name, i + 6, cur_col);
+    c_put_str(tval_to_attr[enum2i(o_ptr->bi_key.tval())], o_name, i + 6, cur_col);
 
     if (show_weights) {
         int wgt = o_ptr->weight;

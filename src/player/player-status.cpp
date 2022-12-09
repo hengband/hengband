@@ -385,7 +385,19 @@ static void update_bonuses(PlayerType *player_ptr)
         set_bits(player_ptr->update, PU_MONSTERS);
     }
 
-    if ((player_ptr->esp_animal != old_esp_animal) || (player_ptr->esp_undead != old_esp_undead) || (player_ptr->esp_demon != old_esp_demon) || (player_ptr->esp_orc != old_esp_orc) || (player_ptr->esp_troll != old_esp_troll) || (player_ptr->esp_giant != old_esp_giant) || (player_ptr->esp_dragon != old_esp_dragon) || (player_ptr->esp_human != old_esp_human) || (player_ptr->esp_evil != old_esp_evil) || (player_ptr->esp_good != old_esp_good) || (player_ptr->esp_nonliving != old_esp_nonliving) || (player_ptr->esp_unique != old_esp_unique)) {
+    auto is_esp_updated = player_ptr->esp_animal != old_esp_animal;
+    is_esp_updated |= player_ptr->esp_undead != old_esp_undead;
+    is_esp_updated |= player_ptr->esp_demon != old_esp_demon;
+    is_esp_updated |= player_ptr->esp_orc != old_esp_orc;
+    is_esp_updated |= player_ptr->esp_troll != old_esp_troll;
+    is_esp_updated |= player_ptr->esp_giant != old_esp_giant;
+    is_esp_updated |= player_ptr->esp_dragon != old_esp_dragon;
+    is_esp_updated |= player_ptr->esp_human != old_esp_human;
+    is_esp_updated |= player_ptr->esp_evil != old_esp_evil;
+    is_esp_updated |= player_ptr->esp_good != old_esp_good;
+    is_esp_updated |= player_ptr->esp_nonliving != old_esp_nonliving;
+    is_esp_updated |= player_ptr->esp_unique != old_esp_unique;
+    if (is_esp_updated) {
         set_bits(player_ptr->update, PU_MONSTERS);
     }
 
@@ -818,10 +830,15 @@ static void update_max_mana(PlayerType *player_ptr)
 
     if (any_bits(mp_ptr->spell_xtra, extra_magic_glove_reduce_mana)) {
         player_ptr->cumber_glove = false;
-        ItemEntity *o_ptr;
-        o_ptr = &player_ptr->inventory_list[INVEN_ARMS];
+        auto *o_ptr = &player_ptr->inventory_list[INVEN_ARMS];
         auto flgs = object_flags(o_ptr);
-        if (o_ptr->bi_id && flgs.has_not(TR_FREE_ACT) && flgs.has_not(TR_DEC_MANA) && flgs.has_not(TR_EASY_SPELL) && !((flgs.has(TR_MAGIC_MASTERY)) && (o_ptr->pval > 0)) && !((flgs.has(TR_DEX)) && (o_ptr->pval > 0))) {
+        auto should_mp_decrease = o_ptr->bi_id != 0;
+        should_mp_decrease &= flgs.has_not(TR_FREE_ACT);
+        should_mp_decrease &= flgs.has_not(TR_DEC_MANA);
+        should_mp_decrease &= flgs.has_not(TR_EASY_SPELL);
+        should_mp_decrease &= flgs.has_not(TR_MAGIC_MASTERY) || (o_ptr->pval <= 0);
+        should_mp_decrease &= flgs.has_not(TR_DEX) || (o_ptr->pval <= 0);
+        if (should_mp_decrease) {
             player_ptr->cumber_glove = true;
             msp = (3 * msp) / 4;
         }
@@ -829,13 +846,19 @@ static void update_max_mana(PlayerType *player_ptr)
 
     player_ptr->cumber_armor = false;
 
-    int cur_wgt = 0;
-    if (player_ptr->inventory_list[INVEN_MAIN_HAND].tval > ItemKindType::SWORD) {
-        cur_wgt += player_ptr->inventory_list[INVEN_MAIN_HAND].weight;
+    auto cur_wgt = 0;
+    const auto &item_main_hand = player_ptr->inventory_list[INVEN_MAIN_HAND];
+    const auto tval_main = item_main_hand.bi_key.tval();
+    if (tval_main > ItemKindType::SWORD) {
+        cur_wgt += item_main_hand.weight;
     }
-    if (player_ptr->inventory_list[INVEN_SUB_HAND].tval > ItemKindType::SWORD) {
-        cur_wgt += player_ptr->inventory_list[INVEN_SUB_HAND].weight;
+
+    const auto &item_sub_hand = player_ptr->inventory_list[INVEN_SUB_HAND];
+    const auto tval_sub = item_sub_hand.bi_key.tval();
+    if (item_sub_hand.bi_key.tval() > ItemKindType::SWORD) {
+        cur_wgt += item_sub_hand.weight;
     }
+
     cur_wgt += player_ptr->inventory_list[INVEN_BODY].weight;
     cur_wgt += player_ptr->inventory_list[INVEN_HEAD].weight;
     cur_wgt += player_ptr->inventory_list[INVEN_OUTER].weight;
@@ -849,62 +872,66 @@ static void update_max_mana(PlayerType *player_ptr)
     case PlayerClassType::MONK:
     case PlayerClassType::FORCETRAINER:
     case PlayerClassType::SORCERER:
-    case PlayerClassType::ELEMENTALIST: {
-        if (player_ptr->inventory_list[INVEN_MAIN_HAND].tval <= ItemKindType::SWORD) {
-            cur_wgt += player_ptr->inventory_list[INVEN_MAIN_HAND].weight;
+    case PlayerClassType::ELEMENTALIST:
+        if (tval_main <= ItemKindType::SWORD) {
+            cur_wgt += item_main_hand.weight;
         }
-        if (player_ptr->inventory_list[INVEN_SUB_HAND].tval <= ItemKindType::SWORD) {
-            cur_wgt += player_ptr->inventory_list[INVEN_SUB_HAND].weight;
+
+        if (tval_sub <= ItemKindType::SWORD) {
+            cur_wgt += item_sub_hand.weight;
         }
+
         break;
-    }
     case PlayerClassType::PRIEST:
     case PlayerClassType::BARD:
-    case PlayerClassType::TOURIST: {
-        if (player_ptr->inventory_list[INVEN_MAIN_HAND].tval <= ItemKindType::SWORD) {
-            cur_wgt += player_ptr->inventory_list[INVEN_MAIN_HAND].weight * 2 / 3;
+    case PlayerClassType::TOURIST:
+        if (tval_main <= ItemKindType::SWORD) {
+            cur_wgt += item_main_hand.weight * 2 / 3;
         }
-        if (player_ptr->inventory_list[INVEN_SUB_HAND].tval <= ItemKindType::SWORD) {
-            cur_wgt += player_ptr->inventory_list[INVEN_SUB_HAND].weight * 2 / 3;
+
+        if (tval_sub <= ItemKindType::SWORD) {
+            cur_wgt += item_sub_hand.weight * 2 / 3;
         }
+
         break;
-    }
     case PlayerClassType::MINDCRAFTER:
     case PlayerClassType::BEASTMASTER:
-    case PlayerClassType::MIRROR_MASTER: {
-        if (player_ptr->inventory_list[INVEN_MAIN_HAND].tval <= ItemKindType::SWORD) {
-            cur_wgt += player_ptr->inventory_list[INVEN_MAIN_HAND].weight / 2;
+    case PlayerClassType::MIRROR_MASTER:
+        if (tval_main <= ItemKindType::SWORD) {
+            cur_wgt += item_main_hand.weight / 2;
         }
-        if (player_ptr->inventory_list[INVEN_SUB_HAND].tval <= ItemKindType::SWORD) {
-            cur_wgt += player_ptr->inventory_list[INVEN_SUB_HAND].weight / 2;
+
+        if (tval_sub <= ItemKindType::SWORD) {
+            cur_wgt += item_sub_hand.weight / 2;
         }
+
         break;
-    }
     case PlayerClassType::ROGUE:
     case PlayerClassType::RANGER:
     case PlayerClassType::RED_MAGE:
-    case PlayerClassType::WARRIOR_MAGE: {
-        if (player_ptr->inventory_list[INVEN_MAIN_HAND].tval <= ItemKindType::SWORD) {
-            cur_wgt += player_ptr->inventory_list[INVEN_MAIN_HAND].weight / 3;
+    case PlayerClassType::WARRIOR_MAGE:
+        if (tval_main <= ItemKindType::SWORD) {
+            cur_wgt += item_main_hand.weight / 3;
         }
-        if (player_ptr->inventory_list[INVEN_SUB_HAND].tval <= ItemKindType::SWORD) {
-            cur_wgt += player_ptr->inventory_list[INVEN_SUB_HAND].weight / 3;
+
+        if (tval_sub <= ItemKindType::SWORD) {
+            cur_wgt += item_sub_hand.weight / 3;
         }
+
         break;
-    }
     case PlayerClassType::PALADIN:
-    case PlayerClassType::CHAOS_WARRIOR: {
-        if (player_ptr->inventory_list[INVEN_MAIN_HAND].tval <= ItemKindType::SWORD) {
-            cur_wgt += player_ptr->inventory_list[INVEN_MAIN_HAND].weight / 5;
+    case PlayerClassType::CHAOS_WARRIOR:
+        if (tval_main <= ItemKindType::SWORD) {
+            cur_wgt += item_main_hand.weight / 5;
         }
-        if (player_ptr->inventory_list[INVEN_SUB_HAND].tval <= ItemKindType::SWORD) {
-            cur_wgt += player_ptr->inventory_list[INVEN_SUB_HAND].weight / 5;
+
+        if (tval_sub <= ItemKindType::SWORD) {
+            cur_wgt += item_sub_hand.weight / 5;
         }
+
         break;
-    }
-    default: {
+    default:
         break;
-    }
     }
 
     int max_wgt = mp_ptr->spell_weight;
@@ -1565,7 +1592,7 @@ static int16_t calc_num_blow(PlayerType *player_ptr, int i)
                 num_blow -= 1;
             }
 
-            if ((o_ptr->tval == ItemKindType::SWORD) && (o_ptr->sval == SV_POISON_NEEDLE)) {
+            if (o_ptr->bi_key == BaseitemKey(ItemKindType::SWORD, SV_POISON_NEEDLE)) {
                 num_blow = 1;
             }
 
@@ -1883,7 +1910,9 @@ static ARMOUR_CLASS calc_to_ac(PlayerType *player_ptr, bool is_real_value)
     }
 
     if (pc.equals(PlayerClassType::NINJA)) {
-        if ((!player_ptr->inventory_list[INVEN_MAIN_HAND].bi_id || can_attack_with_main_hand(player_ptr)) && (!player_ptr->inventory_list[INVEN_SUB_HAND].bi_id || can_attack_with_sub_hand(player_ptr))) {
+        const auto bi_id_main = player_ptr->inventory_list[INVEN_MAIN_HAND].bi_id;
+        const auto bi_id_sub = player_ptr->inventory_list[INVEN_SUB_HAND].bi_id;
+        if (((bi_id_main == 0) || can_attack_with_main_hand(player_ptr)) && ((bi_id_sub == 0) || can_attack_with_sub_hand(player_ptr))) {
             ac += player_ptr->lev / 2 + 5;
         }
     }
@@ -1930,7 +1959,7 @@ int16_t calc_double_weapon_penalty(PlayerType *player_ptr, INVENTORY_IDX slot)
             penalty = std::min(0, penalty);
         }
 
-        if (player_ptr->inventory_list[slot].tval == ItemKindType::POLEARM) {
+        if (player_ptr->inventory_list[slot].bi_key.tval() == ItemKindType::POLEARM) {
             penalty += 10;
         }
     }
@@ -2105,7 +2134,8 @@ static short calc_to_damage(PlayerType *player_ptr, INVENTORY_IDX slot, bool is_
     auto player_stun = player_ptr->effects()->stun();
     damage -= player_stun->get_damage_penalty();
     PlayerClass pc(player_ptr);
-    if (pc.equals(PlayerClassType::PRIEST) && (flgs.has_not(TR_BLESSED)) && ((o_ptr->tval == ItemKindType::SWORD) || (o_ptr->tval == ItemKindType::POLEARM))) {
+    const auto tval = o_ptr->bi_key.tval();
+    if (pc.equals(PlayerClassType::PRIEST) && (flgs.has_not(TR_BLESSED)) && ((tval == ItemKindType::SWORD) || (tval == ItemKindType::POLEARM))) {
         damage -= 2;
     } else if (pc.equals(PlayerClassType::BERSERKER)) {
         damage += player_ptr->lev / 6;
@@ -2113,7 +2143,9 @@ static short calc_to_damage(PlayerType *player_ptr, INVENTORY_IDX slot, bool is_
             damage += player_ptr->lev / 6;
         }
     } else if (pc.equals(PlayerClassType::SORCERER)) {
-        if (!((o_ptr->tval == ItemKindType::HAFTED) && ((o_ptr->sval == SV_WIZSTAFF) || (o_ptr->sval == SV_NAMAKE_HAMMER)))) {
+        auto is_suitable = o_ptr->bi_key == BaseitemKey(ItemKindType::HAFTED, SV_WIZSTAFF);
+        is_suitable |= o_ptr->bi_key == BaseitemKey(ItemKindType::HAFTED, SV_NAMAKE_HAMMER);
+        if (!is_suitable) {
             damage -= 200;
         } else {
             damage -= 10;
@@ -2142,7 +2174,8 @@ static short calc_to_damage(PlayerType *player_ptr, INVENTORY_IDX slot, bool is_
     for (int i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
         int bonus_to_d = 0;
         o_ptr = &player_ptr->inventory_list[i];
-        if (!o_ptr->bi_id || o_ptr->tval == ItemKindType::CAPTURE || (i == INVEN_MAIN_HAND && has_melee_weapon(player_ptr, i)) || (i == INVEN_SUB_HAND && has_melee_weapon(player_ptr, i)) || i == INVEN_BOW) {
+        const auto has_melee = has_melee_weapon(player_ptr, i);
+        if ((o_ptr->bi_id == 0) || (o_ptr->bi_key.tval() == ItemKindType::CAPTURE) || ((i == INVEN_MAIN_HAND) && has_melee) || ((i == INVEN_SUB_HAND) && has_melee) || (i == INVEN_BOW)) {
             continue;
         }
 
@@ -2297,7 +2330,9 @@ static short calc_to_hit(PlayerType *player_ptr, INVENTORY_IDX slot, bool is_rea
         auto flgs = object_flags(o_ptr);
 
         /* Traind bonuses */
-        hit += (player_ptr->weapon_exp[o_ptr->tval][o_ptr->sval] - PlayerSkill::weapon_exp_at(PlayerSkillRank::BEGINNER)) / 200;
+        const auto tval = o_ptr->bi_key.tval();
+        const auto sval = o_ptr->bi_key.sval().value();
+        hit += (player_ptr->weapon_exp[tval][sval] - PlayerSkill::weapon_exp_at(PlayerSkillRank::BEGINNER)) / 200;
 
         /* Weight penalty */
         if (calc_weapon_weight_limit(player_ptr) < o_ptr->weight / 10) {
@@ -2334,7 +2369,7 @@ static short calc_to_hit(PlayerType *player_ptr, INVENTORY_IDX slot, bool is_rea
         }
 
         /* Class penalties */
-        if (pc.equals(PlayerClassType::PRIEST) && (flgs.has_not(TR_BLESSED)) && ((o_ptr->tval == ItemKindType::SWORD) || (o_ptr->tval == ItemKindType::POLEARM))) {
+        if (pc.equals(PlayerClassType::PRIEST) && (flgs.has_not(TR_BLESSED)) && ((tval == ItemKindType::SWORD) || (tval == ItemKindType::POLEARM))) {
             hit -= 2;
         } else if (pc.equals(PlayerClassType::BERSERKER)) {
             hit += player_ptr->lev / 5;
@@ -2342,7 +2377,9 @@ static short calc_to_hit(PlayerType *player_ptr, INVENTORY_IDX slot, bool is_rea
                 hit += player_ptr->lev / 5;
             }
         } else if (pc.equals(PlayerClassType::SORCERER)) {
-            if (!((o_ptr->tval == ItemKindType::HAFTED) && ((o_ptr->sval == SV_WIZSTAFF) || (o_ptr->sval == SV_NAMAKE_HAMMER)))) {
+            auto is_suitable = o_ptr->bi_key == BaseitemKey(ItemKindType::HAFTED, SV_WIZSTAFF);
+            is_suitable |= o_ptr->bi_key == BaseitemKey(ItemKindType::HAFTED, SV_NAMAKE_HAMMER);
+            if (!is_suitable) {
                 hit -= 200;
             } else {
                 hit -= 30;
@@ -2375,7 +2412,8 @@ static short calc_to_hit(PlayerType *player_ptr, INVENTORY_IDX slot, bool is_rea
         auto *o_ptr = &player_ptr->inventory_list[i];
 
         /* Ignore empty hands, handed weapons, bows and capture balls */
-        if (!o_ptr->bi_id || o_ptr->tval == ItemKindType::CAPTURE || (i == INVEN_MAIN_HAND && has_melee_weapon(player_ptr, i)) || (i == INVEN_SUB_HAND && has_melee_weapon(player_ptr, i)) || i == INVEN_BOW) {
+        const auto has_melee = has_melee_weapon(player_ptr, i);
+        if (!o_ptr->bi_id || o_ptr->bi_key.tval() == ItemKindType::CAPTURE || (i == INVEN_MAIN_HAND && has_melee) || (i == INVEN_SUB_HAND && has_melee) || i == INVEN_BOW) {
             continue;
         }
 
@@ -2511,7 +2549,8 @@ static int16_t calc_to_hit_bow(PlayerType *player_ptr, bool is_real_value)
     for (int i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
         int bonus_to_h;
         o_ptr = &player_ptr->inventory_list[i];
-        if (!o_ptr->bi_id || o_ptr->tval == ItemKindType::CAPTURE || (i == INVEN_MAIN_HAND && has_melee_weapon(player_ptr, i)) || (i == INVEN_SUB_HAND && has_melee_weapon(player_ptr, i)) || i == INVEN_BOW) {
+        const auto has_melee = has_melee_weapon(player_ptr, i);
+        if ((o_ptr->bi_id == 0) || (o_ptr->bi_key.tval() == ItemKindType::CAPTURE) || ((i == INVEN_MAIN_HAND) && has_melee) || ((i == INVEN_SUB_HAND) && has_melee) || i == INVEN_BOW) {
             continue;
         }
 
@@ -2742,7 +2781,7 @@ bool player_has_no_spellbooks(PlayerType *player_ptr)
     ItemEntity *o_ptr;
     for (int i = 0; i < INVEN_PACK; i++) {
         o_ptr = &player_ptr->inventory_list[i];
-        if (o_ptr->bi_id && check_book_realm(player_ptr, { o_ptr->tval, o_ptr->sval })) {
+        if (o_ptr->bi_id && check_book_realm(player_ptr, o_ptr->bi_key)) {
             return false;
         }
     }
@@ -2750,7 +2789,7 @@ bool player_has_no_spellbooks(PlayerType *player_ptr)
     auto *floor_ptr = player_ptr->current_floor_ptr;
     for (const auto this_o_idx : floor_ptr->grid_array[player_ptr->y][player_ptr->x].o_idx_list) {
         o_ptr = &floor_ptr->o_list[this_o_idx];
-        if (o_ptr->bi_id && o_ptr->marked.has(OmType::FOUND) && check_book_realm(player_ptr, { o_ptr->tval, o_ptr->sval })) {
+        if (o_ptr->bi_id && o_ptr->marked.has(OmType::FOUND) && check_book_realm(player_ptr, o_ptr->bi_key)) {
             return false;
         }
     }

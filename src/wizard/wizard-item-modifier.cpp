@@ -245,7 +245,7 @@ void wiz_identify_full_inventory(PlayerType *player_ptr)
  * @param row 表示列
  * @param col 表示行
  */
-static void prt_alloc(ItemKindType tval, OBJECT_SUBTYPE_VALUE sval, TERM_LEN row, TERM_LEN col)
+static void prt_alloc(const BaseitemKey &bi_key, TERM_LEN row, TERM_LEN col)
 {
     uint32_t rarity[BASEITEM_MAX_DEPTH]{};
     uint32_t total[BASEITEM_MAX_DEPTH]{};
@@ -267,7 +267,6 @@ static void prt_alloc(ItemKindType tval, OBJECT_SUBTYPE_VALUE sval, TERM_LEN row
             total[i] += prob / magnificant;
             total_frac += prob % magnificant;
 
-            BaseitemKey bi_key(tval, sval);
             if (baseitem.bi_key == bi_key) {
                 home = baseitem.level;
                 rarity[i] += prob / magnificant;
@@ -338,13 +337,15 @@ static void wiz_display_item(PlayerType *player_ptr, ItemEntity *o_ptr)
         prt("", i, j - 2);
     }
 
-    prt_alloc(o_ptr->tval, o_ptr->sval, 1, 0);
+    prt_alloc(o_ptr->bi_key, 1, 0);
     char buf[256];
     describe_flavor(player_ptr, buf, o_ptr, OD_STORE);
     prt(buf, 2, j);
 
     auto line = 4;
-    prt(format("kind = %-5d  level = %-4d  tval = %-5d  sval = %-5d", o_ptr->bi_id, baseitems_info[o_ptr->bi_id].level, o_ptr->tval, o_ptr->sval), line, j);
+    const auto &bi_key = o_ptr->bi_key;
+    const auto item_level = baseitems_info[o_ptr->bi_id].level;
+    prt(format("kind = %-5d  level = %-4d  tval = %-5d  sval = %-5d", o_ptr->bi_id, item_level, bi_key.tval(), bi_key.sval().value()), line, j);
     prt(format("number = %-3d  wgt = %-6d  ac = %-5d    damage = %dd%d", o_ptr->number, o_ptr->weight, o_ptr->ac, o_ptr->dd, o_ptr->ds), ++line, j);
     prt(format("pval = %-5d  toac = %-5d  tohit = %-4d  todam = %-4d", o_ptr->pval, o_ptr->to_a, o_ptr->to_h, o_ptr->to_d), ++line, j);
     prt(format("fixed_artifact_idx = %-4d  ego_idx = %-4d  cost = %ld", o_ptr->fixed_artifact_idx, o_ptr->ego_idx, object_value_real(o_ptr)), ++line, j);
@@ -463,7 +464,7 @@ static void wiz_statistics(PlayerType *player_ptr, ItemEntity *o_ptr)
                 artifacts_info.at(q_ptr->fixed_artifact_idx).is_generated = false;
             }
 
-            if ((o_ptr->tval != q_ptr->tval) || (o_ptr->sval != q_ptr->sval)) {
+            if (o_ptr->bi_key != q_ptr->bi_key) {
                 continue;
             }
 
@@ -656,7 +657,7 @@ static void wiz_quantity_item(ItemEntity *o_ptr)
         o_ptr->number = (byte)tmp_int;
     }
 
-    if (o_ptr->tval == ItemKindType::ROD) {
+    if (o_ptr->bi_key.tval() == ItemKindType::ROD) {
         o_ptr->pval = o_ptr->pval * o_ptr->number / tmp_qnt;
     }
 }
@@ -741,7 +742,7 @@ static int is_slot_able_to_be_ego(PlayerType *player_ptr, ItemEntity *o_ptr)
         return slot;
     }
 
-    if ((o_ptr->tval == ItemKindType::SHOT) || (o_ptr->tval == ItemKindType::ARROW) || (o_ptr->tval == ItemKindType::BOLT)) {
+    if (o_ptr->is_ammo()) {
         return INVEN_AMMO;
     }
 

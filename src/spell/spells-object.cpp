@@ -342,7 +342,7 @@ void brand_bolts(PlayerType *player_ptr)
         auto *o_ptr = &player_ptr->inventory_list[i];
 
         /* Skip non-bolts */
-        if (o_ptr->tval != ItemKindType::BOLT) {
+        if (o_ptr->bi_key.tval() != ItemKindType::BOLT) {
             continue;
         }
 
@@ -423,7 +423,7 @@ bool enchant_equipment(PlayerType *player_ptr, ItemEntity *o_ptr, int n, int efl
     int prob = o_ptr->number * 100;
 
     /* Missiles are easy to enchant */
-    if ((o_ptr->tval == ItemKindType::BOLT) || (o_ptr->tval == ItemKindType::ARROW) || (o_ptr->tval == ItemKindType::SHOT)) {
+    if (o_ptr->is_ammo()) {
         prob = prob / 20;
     }
 
@@ -603,9 +603,10 @@ void brand_weapon(PlayerType *player_ptr, int brand_type)
         return;
     }
 
-    auto special_weapon = (o_ptr->tval == ItemKindType::SWORD) && (o_ptr->sval == SV_POISON_NEEDLE);
-    special_weapon |= (o_ptr->tval == ItemKindType::POLEARM) && (o_ptr->sval == SV_DEATH_SCYTHE);
-    special_weapon |= (o_ptr->tval == ItemKindType::SWORD) && (o_ptr->sval == SV_DIAMOND_EDGE);
+    const auto &bi_key = o_ptr->bi_key;
+    auto special_weapon = bi_key == BaseitemKey(ItemKindType::SWORD, SV_POISON_NEEDLE);
+    special_weapon |= bi_key == BaseitemKey(ItemKindType::POLEARM, SV_DEATH_SCYTHE);
+    special_weapon |= bi_key == BaseitemKey(ItemKindType::SWORD, SV_DIAMOND_EDGE);
     const auto is_normal_item = o_ptr->bi_id && !o_ptr->is_artifact() && !o_ptr->is_ego() && !o_ptr->is_cursed() && !special_weapon;
     if (!is_normal_item) {
         if (flush_failure) {
@@ -624,13 +625,13 @@ void brand_weapon(PlayerType *player_ptr, int brand_type)
     concptr act = nullptr;
     switch (brand_type) {
     case 17:
-        if (o_ptr->tval == ItemKindType::SWORD) {
+        if (o_ptr->bi_key.tval() == ItemKindType::SWORD) {
             act = _("は鋭さを増した！", "becomes very sharp!");
 
             o_ptr->ego_idx = EgoType::SHARPNESS;
             o_ptr->pval = (PARAMETER_VALUE)m_bonus(5, player_ptr->current_floor_ptr->dun_level) + 1;
 
-            if ((o_ptr->sval == SV_HAYABUSA) && (o_ptr->pval > 2)) {
+            if ((o_ptr->bi_key.sval() == SV_HAYABUSA) && (o_ptr->pval > 2)) {
                 o_ptr->pval = 2;
             }
         } else {

@@ -176,15 +176,16 @@ bool store_object_similar(ItemEntity *o_ptr, ItemEntity *j_ptr)
         return false;
     }
 
-    if (o_ptr->tval == ItemKindType::CHEST) {
+    const auto tval = o_ptr->bi_key.tval();
+    if (tval == ItemKindType::CHEST) {
         return false;
     }
 
-    if (o_ptr->tval == ItemKindType::STATUE) {
+    if (tval == ItemKindType::STATUE) {
         return false;
     }
 
-    if (o_ptr->tval == ItemKindType::CAPTURE) {
+    if (tval == ItemKindType::CAPTURE) {
         return false;
     }
 
@@ -208,7 +209,7 @@ bool store_object_similar(ItemEntity *o_ptr, ItemEntity *j_ptr)
  */
 static void store_object_absorb(ItemEntity *o_ptr, ItemEntity *j_ptr)
 {
-    int max_num = (o_ptr->tval == ItemKindType::ROD) ? std::min(99, MAX_SHORT / baseitems_info[o_ptr->bi_id].pval) : 99;
+    int max_num = (o_ptr->bi_key.tval() == ItemKindType::ROD) ? std::min(99, MAX_SHORT / baseitems_info[o_ptr->bi_id].pval) : 99;
     int total = o_ptr->number + j_ptr->number;
     int diff = (total > max_num) ? total - max_num : 0;
     o_ptr->number = (total > max_num) ? max_num : total;
@@ -254,22 +255,29 @@ int store_carry(ItemEntity *o_ptr)
         return -1;
     }
 
+    const auto o_tval = o_ptr->bi_key.tval();
+    const auto o_sval = o_ptr->bi_key.sval();
     for (slot = 0; slot < st_ptr->stock_num; slot++) {
-        ItemEntity *j_ptr;
-        j_ptr = &st_ptr->stock[slot];
-        if (o_ptr->tval > j_ptr->tval) {
+        const auto *j_ptr = &st_ptr->stock[slot];
+        const auto j_tval = j_ptr->bi_key.tval();
+        const auto j_sval = j_ptr->bi_key.sval();
+        if (o_tval > j_tval) {
             break;
         }
-        if (o_ptr->tval < j_ptr->tval) {
+
+        if (o_tval < j_tval) {
             continue;
         }
-        if (o_ptr->sval < j_ptr->sval) {
+
+        if (o_sval < j_sval) {
             break;
         }
-        if (o_ptr->sval > j_ptr->sval) {
+
+        if (o_sval > j_sval) {
             continue;
         }
-        if (o_ptr->tval == ItemKindType::ROD) {
+
+        if (o_tval == ItemKindType::ROD) {
             if (o_ptr->pval < j_ptr->pval) {
                 break;
             }
@@ -282,6 +290,7 @@ int store_carry(ItemEntity *o_ptr)
         if (value > j_value) {
             break;
         }
+
         if (value < j_value) {
             continue;
         }

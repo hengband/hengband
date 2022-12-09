@@ -271,8 +271,6 @@ void process_world_aux_mutation(PlayerType *player_ptr)
     }
 
     if (player_ptr->muta.has(PlayerMutationType::EAT_LIGHT) && one_in_(3000)) {
-        ItemEntity *o_ptr;
-
         msg_print(_("影につつまれた。", "A shadow passes over you."));
         msg_print(nullptr);
 
@@ -280,14 +278,13 @@ void process_world_aux_mutation(PlayerType *player_ptr)
             hp_player(player_ptr, 10);
         }
 
-        o_ptr = &player_ptr->inventory_list[INVEN_LITE];
-
-        if (o_ptr->tval == ItemKindType::LITE) {
-            if (!o_ptr->is_fixed_artifact() && (o_ptr->fuel > 0)) {
-                hp_player(player_ptr, o_ptr->fuel / 20);
-                o_ptr->fuel /= 2;
+        auto &item = player_ptr->inventory_list[INVEN_LITE];
+        if (item.bi_key.tval() == ItemKindType::LITE) {
+            if (!item.is_fixed_artifact() && (item.fuel > 0)) {
+                hp_player(player_ptr, item.fuel / 20);
+                item.fuel /= 2;
                 msg_print(_("光源からエネルギーを吸収した！", "You absorb energy from your light!"));
-                notice_lite_change(player_ptr, o_ptr);
+                notice_lite_change(player_ptr, &item);
             }
         }
 

@@ -63,11 +63,11 @@ bool heavy_armor(PlayerType *player_ptr)
     }
 
     WEIGHT monk_arm_wgt = 0;
-    if (player_ptr->inventory_list[INVEN_MAIN_HAND].tval > ItemKindType::SWORD) {
+    if (player_ptr->inventory_list[INVEN_MAIN_HAND].bi_key.tval() > ItemKindType::SWORD) {
         monk_arm_wgt += player_ptr->inventory_list[INVEN_MAIN_HAND].weight;
     }
 
-    if (player_ptr->inventory_list[INVEN_SUB_HAND].tval > ItemKindType::SWORD) {
+    if (player_ptr->inventory_list[INVEN_SUB_HAND].bi_key.tval() > ItemKindType::SWORD) {
         monk_arm_wgt += player_ptr->inventory_list[INVEN_SUB_HAND].weight;
     }
 

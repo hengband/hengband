@@ -87,7 +87,7 @@ static void discover_hidden_things(PlayerType *player_ptr, POSITION y, POSITION 
     for (const auto this_o_idx : g_ptr->o_idx_list) {
         ItemEntity *o_ptr;
         o_ptr = &floor_ptr->o_list[this_o_idx];
-        if (o_ptr->tval != ItemKindType::CHEST) {
+        if (o_ptr->bi_key.tval() != ItemKindType::CHEST) {
             continue;
         }
 

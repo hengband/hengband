@@ -90,7 +90,7 @@ bool psychometry(PlayerType *player_ptr)
     set_bits(player_ptr->window_flags, PW_INVEN | PW_EQUIP | PW_PLAYER | PW_FLOOR_ITEM_LIST | PW_FOUND_ITEM_LIST);
 
     bool okay = false;
-    switch (o_ptr->tval) {
+    switch (o_ptr->bi_key.tval()) {
     case ItemKindType::SHOT:
     case ItemKindType::ARROW:
     case ItemKindType::BOLT:

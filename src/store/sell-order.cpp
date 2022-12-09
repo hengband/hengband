@@ -91,9 +91,9 @@ void store_sell(PlayerType *player_ptr, StoreSaleType store_num)
     }
 
     OBJECT_IDX item;
-    ItemEntity *o_ptr;
-    o_ptr = choose_object(player_ptr, &item, q, s_none, USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT, FuncItemTester(store_will_buy, player_ptr, store_num));
-    if (!o_ptr) {
+    const auto options = USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT;
+    auto *o_ptr = choose_object(player_ptr, &item, q, s_none, options, FuncItemTester(store_will_buy, player_ptr, store_num));
+    if (o_ptr == nullptr) {
         return;
     }
 
@@ -147,7 +147,8 @@ void store_sell(PlayerType *player_ptr, StoreSaleType store_num)
                 chg_virtue(player_ptr, V_JUSTICE, -1);
             }
 
-            if ((o_ptr->tval == ItemKindType::BOTTLE) && (store_num != StoreSaleType::HOME)) {
+            const auto tval = o_ptr->bi_key.tval();
+            if ((tval == ItemKindType::BOTTLE) && (store_num != StoreSaleType::HOME)) {
                 chg_virtue(player_ptr, V_NATURE, 1);
             }
 
@@ -173,7 +174,7 @@ void store_sell(PlayerType *player_ptr, StoreSaleType store_num)
                 exe_write_diary(player_ptr, DIARY_SELL, 0, o_name);
             }
 
-            if (!((o_ptr->tval == ItemKindType::FIGURINE) && (value > 0))) {
+            if (!((tval == ItemKindType::FIGURINE) && (value > 0))) {
                 purchase_analyze(player_ptr, price, value, dummy);
             }
 

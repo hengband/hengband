@@ -254,7 +254,7 @@ void do_cmd_use(PlayerType *player_ptr)
         return;
     }
 
-    switch (o_ptr->tval) {
+    switch (o_ptr->bi_key.tval()) {
     case ItemKindType::SPIKE:
         do_cmd_spike(player_ptr);
         break;

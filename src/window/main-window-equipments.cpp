@@ -52,7 +52,7 @@ COMMAND_CODE show_equipment(PlayerType *player_ptr, int target_item, BIT_FLAGS m
             out_color[k] = TERM_WHITE;
         } else {
             (void)strcpy(out_desc[k], o_name);
-            out_color[k] = tval_to_attr[enum2i(o_ptr->tval) % 128];
+            out_color[k] = tval_to_attr[enum2i(o_ptr->bi_key.tval()) % 128];
         }
 
         out_index[k] = i;

@@ -282,7 +282,7 @@ void store_purchase(PlayerType *player_ptr, StoreSaleType store_num)
     if (store_num == StoreSaleType::BLACK) {
         chg_virtue(player_ptr, V_JUSTICE, -1);
     }
-    if ((o_ptr->tval == ItemKindType::BOTTLE) && (store_num != StoreSaleType::HOME)) {
+    if ((o_ptr->bi_key.tval() == ItemKindType::BOTTLE) && (store_num != StoreSaleType::HOME)) {
         chg_virtue(player_ptr, V_NATURE, -1);
     }
 

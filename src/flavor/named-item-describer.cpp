@@ -256,7 +256,7 @@ static void describe_artifact_prefix_en(flavor_type *flavor_ptr)
     }
 
     const auto corpse_r_idx = i2enum<MonsterRaceId>(flavor_ptr->o_ptr->pval);
-    auto is_unique_corpse = flavor_ptr->o_ptr->tval == ItemKindType::CORPSE;
+    auto is_unique_corpse = flavor_ptr->o_ptr->bi_key.tval() == ItemKindType::CORPSE;
     is_unique_corpse &= monraces_info[corpse_r_idx].kind_flags.has(MonsterKindType::UNIQUE);
     if ((flavor_ptr->known && flavor_ptr->o_ptr->is_artifact()) || is_unique_corpse) {
         flavor_ptr->t = object_desc_str(flavor_ptr->t, "The ");
@@ -382,7 +382,8 @@ void describe_named_item(PlayerType *player_ptr, flavor_type *flavor_ptr)
 #endif
     if (flavor_ptr->o_ptr->is_spell_book()) {
         // svalは0から数えているので表示用に+1している
-        flavor_ptr->t = object_desc_str(flavor_ptr->t, format("Lv%d ", flavor_ptr->o_ptr->sval + 1));
+        const auto sval = flavor_ptr->o_ptr->bi_key.sval().value();
+        flavor_ptr->t = object_desc_str(flavor_ptr->t, format("Lv%d ", sval + 1));
     }
 
     describe_inscription(flavor_ptr);

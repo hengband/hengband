@@ -100,10 +100,8 @@ static int get_base_floor(FloorType *floor_ptr, BIT_FLAGS mode, std::optional<in
 
 static void set_ammo_quantity(ItemEntity *j_ptr)
 {
-    auto is_ammo = j_ptr->tval == ItemKindType::SPIKE;
-    is_ammo |= j_ptr->tval == ItemKindType::SHOT;
-    is_ammo |= j_ptr->tval == ItemKindType::ARROW;
-    is_ammo |= j_ptr->tval == ItemKindType::BOLT;
+    auto is_ammo = j_ptr->is_ammo();
+    is_ammo |= j_ptr->bi_key.tval() == ItemKindType::SPIKE;
     if (is_ammo && !j_ptr->is_fixed_artifact()) {
         j_ptr->number = damroll(6, 7);
     }
@@ -575,24 +573,24 @@ OBJECT_IDX drop_near(PlayerType *player_ptr, ItemEntity *j_ptr, PERCENTAGE chanc
  * @param floo_ptr 現在フロアへの参照ポインタ
  * @param item メッセージの対象にしたいアイテム所持スロット
  */
-void floor_item_charges(FloorType *floor_ptr, INVENTORY_IDX item)
+void floor_item_charges(FloorType *floor_ptr, INVENTORY_IDX inventory)
 {
-    auto *o_ptr = &floor_ptr->o_list[item];
-    if (!o_ptr->is_wand_staff() || !o_ptr->is_known()) {
+    const auto &item = floor_ptr->o_list[inventory];
+    if (!item.is_wand_staff() || !item.is_known()) {
         return;
     }
 
 #ifdef JP
-    if (o_ptr->pval <= 0) {
+    if (item.pval <= 0) {
         msg_print("この床上のアイテムは、もう魔力が残っていない。");
     } else {
-        msg_format("この床上のアイテムは、あと %d 回分の魔力が残っている。", o_ptr->pval);
+        msg_format("この床上のアイテムは、あと %d 回分の魔力が残っている。", item.pval);
     }
 #else
-    if (o_ptr->pval != 1) {
-        msg_format("There are %d charges remaining.", o_ptr->pval);
+    if (item.pval != 1) {
+        msg_format("There are %d charges remaining.", item.pval);
     } else {
-        msg_format("There is %d charge remaining.", o_ptr->pval);
+        msg_format("There is %d charge remaining.", item.pval);
     }
 #endif
 }

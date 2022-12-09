@@ -553,7 +553,7 @@ static void confirm_use_force(PlayerType *player_ptr, bool browse_only)
 
 static FuncItemTester get_castable_spellbook_tester(PlayerType *player_ptr)
 {
-    return FuncItemTester([](auto p_ptr, auto o_ptr) { return check_book_realm(p_ptr, { o_ptr->tval, o_ptr->sval }); }, player_ptr);
+    return FuncItemTester([](auto p_ptr, auto o_ptr) { return check_book_realm(p_ptr, o_ptr->bi_key); }, player_ptr);
 }
 
 static FuncItemTester get_learnable_spellbook_tester(PlayerType *player_ptr)
@@ -579,7 +579,6 @@ static FuncItemTester get_learnable_spellbook_tester(PlayerType *player_ptr)
 void do_cmd_browse(PlayerType *player_ptr)
 {
     OBJECT_IDX item;
-    OBJECT_SUBTYPE_VALUE sval;
     int j, line;
     SPELL_IDX spell = -1;
     int num = 0;
@@ -619,9 +618,9 @@ void do_cmd_browse(PlayerType *player_ptr)
     }
 
     /* Access the item's sval */
-    sval = o_ptr->sval;
-
-    short use_realm = tval2realm(o_ptr->tval);
+    const auto tval = o_ptr->bi_key.tval();
+    const auto sval = o_ptr->bi_key.sval().value();
+    short use_realm = tval2realm(tval);
 
     /* Track the object kind */
     object_kind_track(player_ptr, o_ptr->bi_id);
@@ -642,7 +641,7 @@ void do_cmd_browse(PlayerType *player_ptr)
     /* Keep browsing spells.  Exit browsing on cancel. */
     while (true) {
         /* Ask for a spell, allow cancel */
-        if (!get_spell(player_ptr, &spell, _("読む", "browse"), o_ptr->sval, true, use_realm)) {
+        if (!get_spell(player_ptr, &spell, _("読む", "browse"), sval, true, use_realm)) {
             /* If cancelled, leave immediately. */
             if (spell == -1) {
                 break;
@@ -772,14 +771,16 @@ void do_cmd_study(PlayerType *player_ptr)
         return;
     }
 
-    const auto sval = o_ptr->sval;
-    if (o_ptr->tval == get_realm2_book(player_ptr)) {
+    const auto tval = o_ptr->bi_key.tval();
+    const auto sval = o_ptr->bi_key.sval().value();
+    if (tval == get_realm2_book(player_ptr)) {
         increment = 32;
-    } else if (o_ptr->tval != get_realm1_book(player_ptr)) {
+    } else if (tval != get_realm1_book(player_ptr)) {
         if (!get_check(_("本当に魔法の領域を変更しますか？", "Really, change magic realm? "))) {
             return;
         }
-        change_realm2(player_ptr, tval2realm(o_ptr->tval));
+
+        change_realm2(player_ptr, tval2realm(tval));
         increment = 32;
     }
 
@@ -790,7 +791,7 @@ void do_cmd_study(PlayerType *player_ptr)
     /* Mage -- Learn a selected spell */
     if (mp_ptr->spell_book != ItemKindType::LIFE_BOOK) {
         /* Ask for a spell, allow cancel */
-        if (!get_spell(player_ptr, &spell, _("学ぶ", "study"), sval, false, tval2realm(o_ptr->tval)) && (spell == -1)) {
+        if (!get_spell(player_ptr, &spell, _("学ぶ", "study"), sval, false, tval2realm(tval)) && (spell == -1)) {
             return;
         }
     }
@@ -1006,8 +1007,9 @@ bool do_cmd_cast(PlayerType *player_ptr)
         return false;
     }
 
-    const auto sval = o_ptr->sval;
-    if (!is_every_magic && (o_ptr->tval == get_realm2_book(player_ptr))) {
+    const auto tval = o_ptr->bi_key.tval();
+    const auto sval = o_ptr->bi_key.sval().value();
+    if (!is_every_magic && (tval == get_realm2_book(player_ptr))) {
         increment = 32;
     }
 
@@ -1016,7 +1018,7 @@ bool do_cmd_cast(PlayerType *player_ptr)
     handle_stuff(player_ptr);
 
     if (is_every_magic) {
-        realm = tval2realm(o_ptr->tval);
+        realm = tval2realm(tval);
     } else if (increment) {
         realm = player_ptr->realm2;
     } else {
@@ -1044,7 +1046,7 @@ bool do_cmd_cast(PlayerType *player_ptr)
     }
 #endif
 
-    use_realm = tval2realm(o_ptr->tval);
+    use_realm = tval2realm(tval);
     if (use_realm == REALM_HEX) {
         if (SpellHex(player_ptr).is_spelling_specific(spell)) {
             msg_print(_("その呪文はすでに詠唱中だ。", "You are already casting it."));
@@ -1140,21 +1142,21 @@ bool do_cmd_cast(PlayerType *player_ptr)
         /* Failure casting may activate some side effect */
         exe_spell(player_ptr, realm, spell, SpellProcessType::FAIL);
 
-        if ((o_ptr->tval == ItemKindType::CHAOS_BOOK) && (randint1(100) < spell)) {
+        if ((tval == ItemKindType::CHAOS_BOOK) && (randint1(100) < spell)) {
             msg_print(_("カオス的な効果を発生した！", "You produce a chaotic effect!"));
             wild_magic(player_ptr, spell);
-        } else if ((o_ptr->tval == ItemKindType::DEATH_BOOK) && (randint1(100) < spell)) {
+        } else if ((tval == ItemKindType::DEATH_BOOK) && (randint1(100) < spell)) {
             if ((sval == 3) && one_in_(2)) {
                 sanity_blast(player_ptr, 0, true);
             } else {
                 msg_print(_("痛い！", "It hurts!"));
-                take_hit(player_ptr, DAMAGE_LOSELIFE, damroll(o_ptr->sval + 1, 6), _("暗黒魔法の逆流", "a miscast Death spell"));
+                take_hit(player_ptr, DAMAGE_LOSELIFE, damroll(sval + 1, 6), _("暗黒魔法の逆流", "a miscast Death spell"));
 
                 if ((spell > 15) && one_in_(6) && !player_ptr->hold_exp) {
                     lose_exp(player_ptr, spell * 250);
                 }
             }
-        } else if ((o_ptr->tval == ItemKindType::MUSIC_BOOK) && (randint1(200) < spell)) {
+        } else if ((tval == ItemKindType::MUSIC_BOOK) && (randint1(200) < spell)) {
             msg_print(_("いやな音が響いた", "An infernal sound echoed."));
             aggravate_monsters(player_ptr, 0);
         }

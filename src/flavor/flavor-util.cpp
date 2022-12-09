@@ -409,7 +409,7 @@ void get_inscription(char *buff, ItemEntity *o_ptr)
 char *object_desc_count_japanese(char *t, ItemEntity *o_ptr)
 {
     t = object_desc_num(t, o_ptr->number);
-    switch (o_ptr->tval) {
+    switch (o_ptr->bi_key.tval()) {
     case ItemKindType::BOLT:
     case ItemKindType::ARROW:
     case ItemKindType::POLEARM:
@@ -466,7 +466,7 @@ char *object_desc_count_japanese(char *t, ItemEntity *o_ptr)
         break;
     }
     case ItemKindType::FOOD: {
-        if (o_ptr->sval == SV_FOOD_JERKY) {
+        if (o_ptr->bi_key.sval().value() == SV_FOOD_JERKY) {
             t = object_desc_str(t, "切れ");
             break;
         }

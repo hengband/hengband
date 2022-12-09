@@ -97,7 +97,7 @@ void ObjectUseEntity::execute()
     }
 
     sound(SOUND_ZAP);
-    auto ident = staff_effect(this->player_ptr, o_ptr->sval, &use_charge, false, false, o_ptr->is_aware());
+    auto ident = staff_effect(this->player_ptr, o_ptr->bi_key.sval().value(), &use_charge, false, false, o_ptr->is_aware());
     if (!(o_ptr->is_aware())) {
         chg_virtue(this->player_ptr, V_PATIENCE, -1);
         chg_virtue(this->player_ptr, V_CHANCE, 1);

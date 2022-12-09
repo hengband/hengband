@@ -21,11 +21,12 @@
  */
 bool item_tester_hook_use(PlayerType *player_ptr, const ItemEntity *o_ptr)
 {
-    if (o_ptr->tval == player_ptr->tval_ammo) {
+    const auto tval = o_ptr->bi_key.tval();
+    if (tval == player_ptr->tval_ammo) {
         return true;
     }
 
-    switch (o_ptr->tval) {
+    switch (tval) {
     case ItemKindType::SPIKE:
     case ItemKindType::STAFF:
     case ItemKindType::WAND:
@@ -73,13 +74,14 @@ bool item_tester_learn_spell(PlayerType *player_ptr, const ItemEntity *o_ptr)
         }
     }
 
-    if ((o_ptr->tval == ItemKindType::MUSIC_BOOK) && pc.equals(PlayerClassType::BARD)) {
+    const auto tval = o_ptr->bi_key.tval();
+    if ((tval == ItemKindType::MUSIC_BOOK) && pc.equals(PlayerClassType::BARD)) {
         return true;
     }
 
-    if (!is_magic(tval2realm(o_ptr->tval))) {
+    if (!is_magic(tval2realm(tval))) {
         return false;
     }
 
-    return (get_realm1_book(player_ptr) == o_ptr->tval) || (get_realm2_book(player_ptr) == o_ptr->tval) || (choices & (0x0001U << (tval2realm(o_ptr->tval) - 1)));
+    return (get_realm1_book(player_ptr) == tval) || (get_realm2_book(player_ptr) == tval) || (choices & (0x0001U << (tval2realm(tval) - 1)));
 }

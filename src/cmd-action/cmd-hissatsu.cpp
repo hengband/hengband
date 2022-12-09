@@ -390,8 +390,9 @@ void do_cmd_gain_hissatsu(PlayerType *player_ptr)
         return;
     }
 
+    const auto sval = o_ptr->bi_key.sval().value();
     auto gain = false;
-    for (auto i = o_ptr->sval * 8; i < o_ptr->sval * 8 + 8; i++) {
+    for (auto i = sval * 8; i < sval * 8 + 8; i++) {
         if (player_ptr->spell_learned1 & (1UL << i)) {
             continue;
         }

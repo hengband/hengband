@@ -29,7 +29,8 @@ bool import_magic_device(PlayerType *player_ptr)
         return false;
     }
 
-    if (o_ptr->tval == ItemKindType::STAFF && o_ptr->sval == SV_STAFF_NOTHING) {
+    const auto bi_key = o_ptr->bi_key;
+    if (bi_key == BaseitemKey(ItemKindType::STAFF, SV_STAFF_NOTHING)) {
         msg_print(_("この杖には発動の為の能力は何も備わっていないようだ。", "This staff doesn't have any magical ability."));
         return false;
     }
@@ -45,16 +46,15 @@ bool import_magic_device(PlayerType *player_ptr)
     }
 
     auto magic_eater_data = PlayerClass(player_ptr).get_specific_data<magic_eater_data_type>();
-    auto &target_item = magic_eater_data->get_item_group(o_ptr->tval)[o_ptr->sval];
-
-    PARAMETER_VALUE pval = o_ptr->pval;
-
-    if (o_ptr->tval == ItemKindType::ROD) {
+    const auto tval = bi_key.tval();
+    auto &target_item = magic_eater_data->get_item_group(tval)[bi_key.sval().value()];
+    auto pval = o_ptr->pval;
+    if (tval == ItemKindType::ROD) {
         target_item.count = std::min<byte>(target_item.count + o_ptr->number, 99);
     } else {
         for (auto num = o_ptr->number; num > 0; num--) {
             int gain_num = pval;
-            if (o_ptr->tval == ItemKindType::WAND) {
+            if (tval == ItemKindType::WAND) {
                 gain_num = (pval + num - 1) / num;
             }
             if (target_item.count > 0) {
@@ -67,7 +67,7 @@ bool import_magic_device(PlayerType *player_ptr)
             target_item.count = std::min<byte>(target_item.count + gain_num, 99);
             target_item.charge += pval * EATER_CHARGE;
             target_item.charge = std::min(target_item.charge, target_item.count * EATER_CHARGE);
-            if (o_ptr->tval == ItemKindType::WAND) {
+            if (tval == ItemKindType::WAND) {
                 pval -= (pval + num - 1) / num;
             }
         }
