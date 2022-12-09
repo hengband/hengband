@@ -475,13 +475,13 @@ void autopick_entry_from_object(PlayerType *player_ptr, autopick_type *entry, It
         ADD_FLG(FLG_DEVICES);
     } else if (tval == ItemKindType::LITE) {
         ADD_FLG(FLG_LIGHTS);
-    } else if (tval == ItemKindType::SKELETON || tval == ItemKindType::BOTTLE || tval == ItemKindType::JUNK || tval == ItemKindType::STATUE) {
+    } else if (o_ptr->is_junk()) {
         ADD_FLG(FLG_JUNKS);
     } else if (tval == ItemKindType::CORPSE) {
         ADD_FLG(FLG_CORPSES);
     } else if (o_ptr->is_spell_book()) {
         ADD_FLG(FLG_SPELLBOOKS);
-    } else if (tval == ItemKindType::POLEARM || tval == ItemKindType::SWORD || tval == ItemKindType::DIGGING || tval == ItemKindType::HAFTED) {
+    } else if (o_ptr->is_melee_weapon()) {
         ADD_FLG(FLG_WEAPONS);
     } else if (tval == ItemKindType::SHIELD) {
         ADD_FLG(FLG_SHIELDS);
@@ -491,7 +491,7 @@ void autopick_entry_from_object(PlayerType *player_ptr, autopick_type *entry, It
         ADD_FLG(FLG_RINGS);
     } else if (tval == ItemKindType::AMULET) {
         ADD_FLG(FLG_AMULETS);
-    } else if (tval == ItemKindType::DRAG_ARMOR || tval == ItemKindType::HARD_ARMOR || tval == ItemKindType::SOFT_ARMOR) {
+    } else if (o_ptr->is_armour()) {
         ADD_FLG(FLG_SUITS);
     } else if (tval == ItemKindType::CLOAK) {
         ADD_FLG(FLG_CLOAKS);

@@ -311,7 +311,7 @@ bool is_autopick_match(PlayerType *player_ptr, ItemEntity *o_ptr, autopick_type 
             return false;
         }
     } else if (IS_FLG(FLG_SUITS)) {
-        if (!(tval == ItemKindType::DRAG_ARMOR || tval == ItemKindType::HARD_ARMOR || tval == ItemKindType::SOFT_ARMOR)) {
+        if (!o_ptr->is_armour()) {
             return false;
         }
     } else if (IS_FLG(FLG_CLOAKS)) {

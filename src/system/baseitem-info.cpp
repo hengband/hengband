@@ -68,7 +68,7 @@ std::optional<int> BaseitemKey::sval() const
 ItemKindType BaseitemKey::get_arrow_kind() const
 {
     if ((this->type_value != ItemKindType::BOW) || !this->subtype_value.has_value()) {
-        return ItemKindType::NONE;
+        throw std::logic_error(ITEM_NOT_BOW);
     }
 
     switch (this->subtype_value.value()) {
@@ -492,6 +492,31 @@ bool BaseitemKey::is_lite_requiring_fuel() const
     switch (this->subtype_value.value()) {
     case SV_LITE_TORCH:
     case SV_LITE_LANTERN:
+        return true;
+    default:
+        return false;
+    }
+}
+
+bool BaseitemKey::is_junk() const
+{
+    switch (this->type_value) {
+    case ItemKindType::SKELETON:
+    case ItemKindType::BOTTLE:
+    case ItemKindType::JUNK:
+    case ItemKindType::STATUE:
+        return true;
+    default:
+        return false;
+    }
+}
+
+bool BaseitemKey::is_armour() const
+{
+    switch (this->type_value) {
+    case ItemKindType::SOFT_ARMOR:
+    case ItemKindType::HARD_ARMOR:
+    case ItemKindType::DRAG_ARMOR:
         return true;
     default:
         return false;

@@ -111,7 +111,7 @@ static bool is_opt_confirm_destroy(PlayerType *player_ptr, ItemEntity *o_ptr)
     }
 
     if (leave_junk) {
-        if ((tval == ItemKindType::SKELETON) || (tval == ItemKindType::BOTTLE) || (tval == ItemKindType::JUNK) || (tval == ItemKindType::STATUE)) {
+        if (o_ptr->is_junk()) {
             return false;
         }
     }
