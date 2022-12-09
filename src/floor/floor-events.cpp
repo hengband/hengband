@@ -155,7 +155,6 @@ static byte get_dungeon_feeling(PlayerType *player_ptr)
 
     for (MONSTER_IDX i = 1; i < floor_ptr->o_max; i++) {
         auto *o_ptr = &floor_ptr->o_list[i];
-        auto *k_ptr = &baseitems_info[o_ptr->bi_id];
         int delta = 0;
         if (!o_ptr->is_valid() || (o_ptr->is_known() && o_ptr->marked.has(OmType::TOUCHED)) || ((o_ptr->ident & IDENT_SENSE) != 0)) {
             continue;
@@ -218,8 +217,9 @@ static byte get_dungeon_feeling(PlayerType *player_ptr)
             delta += 15 * base;
         }
 
-        if (!o_ptr->is_cursed() && !o_ptr->is_broken() && k_ptr->level > floor_ptr->dun_level) {
-            delta += (k_ptr->level - floor_ptr->dun_level) * base;
+        const auto &baseitem = baseitems_info[o_ptr->bi_id];
+        if (!o_ptr->is_cursed() && !o_ptr->is_broken() && baseitem.level > floor_ptr->dun_level) {
+            delta += (baseitem.level - floor_ptr->dun_level) * base;
         }
 
         rating += rating_boost(delta);

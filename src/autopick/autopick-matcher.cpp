@@ -53,12 +53,12 @@ bool is_autopick_match(PlayerType *player_ptr, ItemEntity *o_ptr, autopick_type 
     }
 
     if (IS_FLG(FLG_BOOSTED)) {
-        auto *k_ptr = &baseitems_info[o_ptr->bi_id];
         if (!o_ptr->is_melee_weapon()) {
             return false;
         }
 
-        if ((o_ptr->dd == k_ptr->dd) && (o_ptr->ds == k_ptr->ds)) {
+        const auto &baseitem = baseitems_info[o_ptr->bi_id];
+        if ((o_ptr->dd == baseitem.dd) && (o_ptr->ds == baseitem.ds)) {
             return false;
         }
 

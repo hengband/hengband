@@ -37,7 +37,7 @@
  */
 PRICE object_value_real(const ItemEntity *o_ptr)
 {
-    auto *k_ptr = &baseitems_info[o_ptr->bi_id];
+    const auto &baseitem = baseitems_info[o_ptr->bi_id];
 
     if (!baseitems_info[o_ptr->bi_id].cost) {
         return 0;
@@ -147,14 +147,14 @@ PRICE object_value_real(const ItemEntity *o_ptr)
         /* Pay extra for charges, depending on standard number of
          * charges.  Handle new-style wands correctly. -LM-
          */
-        value += (value * o_ptr->pval / o_ptr->number / (k_ptr->pval * 2));
+        value += (value * o_ptr->pval / o_ptr->number / (baseitem.pval * 2));
         break;
     }
     case ItemKindType::STAFF: {
         /* Pay extra for charges, depending on standard number of
          * charges.  -LM-
          */
-        value += (value * o_ptr->pval / (k_ptr->pval * 2));
+        value += (value * o_ptr->pval / (baseitem.pval * 2));
         break;
     }
     case ItemKindType::RING:
@@ -179,7 +179,7 @@ PRICE object_value_real(const ItemEntity *o_ptr)
             return 0;
         }
 
-        value += (((o_ptr->to_h - k_ptr->to_h) + (o_ptr->to_d - k_ptr->to_d)) * 200L + (o_ptr->to_a) * 100L);
+        value += (((o_ptr->to_h - baseitem.to_h) + (o_ptr->to_d - baseitem.to_d)) * 200L + (o_ptr->to_a) * 100L);
         break;
     }
     case ItemKindType::BOW:
@@ -192,8 +192,8 @@ PRICE object_value_real(const ItemEntity *o_ptr)
         }
 
         value += ((o_ptr->to_h + o_ptr->to_d + o_ptr->to_a) * 100L);
-        value += (o_ptr->dd - k_ptr->dd) * o_ptr->ds * 250L;
-        value += (o_ptr->ds - k_ptr->ds) * o_ptr->dd * 250L;
+        value += (o_ptr->dd - baseitem.dd) * o_ptr->ds * 250L;
+        value += (o_ptr->ds - baseitem.ds) * o_ptr->dd * 250L;
         break;
     }
     case ItemKindType::SHOT:
@@ -204,8 +204,8 @@ PRICE object_value_real(const ItemEntity *o_ptr)
         }
 
         value += ((o_ptr->to_h + o_ptr->to_d) * 5L);
-        value += (o_ptr->dd - k_ptr->dd) * o_ptr->ds * 5L;
-        value += (o_ptr->ds - k_ptr->ds) * o_ptr->dd * 5L;
+        value += (o_ptr->dd - baseitem.dd) * o_ptr->ds * 5L;
+        value += (o_ptr->ds - baseitem.ds) * o_ptr->dd * 5L;
         break;
     }
     case ItemKindType::FIGURINE: {

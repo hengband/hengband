@@ -225,8 +225,8 @@ void wiz_identify_full_inventory(PlayerType *player_ptr)
             continue;
         }
 
-        auto k_ptr = &baseitems_info[o_ptr->bi_id];
-        k_ptr->aware = true; //!< @note 記録には残さないためTRUEを立てるのみ
+        auto &baseitem = baseitems_info[o_ptr->bi_id];
+        baseitem.aware = true; //!< @note 記録には残さないためTRUEを立てるのみ
         set_bits(o_ptr->ident, IDENT_KNOWN | IDENT_FULL_KNOWN);
         o_ptr->marked.set(OmType::TOUCHED);
     }

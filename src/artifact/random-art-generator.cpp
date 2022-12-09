@@ -44,7 +44,7 @@
 static bool weakening_artifact(ItemEntity *o_ptr)
 {
     const auto bi_id = lookup_baseitem_id(o_ptr->bi_key);
-    auto *k_ptr = &baseitems_info[bi_id];
+    const auto &baseitem = baseitems_info[bi_id];
     auto flgs = object_flags(o_ptr);
 
     if (flgs.has(TR_KILL_EVIL)) {
@@ -53,12 +53,12 @@ static bool weakening_artifact(ItemEntity *o_ptr)
         return true;
     }
 
-    if (k_ptr->dd < o_ptr->dd) {
+    if (baseitem.dd < o_ptr->dd) {
         o_ptr->dd--;
         return true;
     }
 
-    if (k_ptr->ds < o_ptr->ds) {
+    if (baseitem.ds < o_ptr->ds) {
         o_ptr->ds--;
         return true;
     }

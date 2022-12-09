@@ -184,31 +184,26 @@ static void display_object_list(int col, int row, int per_page, IDX object_idx[]
     int i;
     for (i = 0; i < per_page && (object_idx[object_top + i] >= 0); i++) {
         TERM_COLOR a;
-        BaseitemInfo *flavor_k_ptr;
         short bi_id = object_idx[object_top + i];
-        auto *k_ptr = &baseitems_info[bi_id];
-        TERM_COLOR attr = ((k_ptr->aware || visual_only) ? TERM_WHITE : TERM_SLATE);
-        byte cursor = ((k_ptr->aware || visual_only) ? TERM_L_BLUE : TERM_BLUE);
-        if (!visual_only && k_ptr->flavor) {
-            flavor_k_ptr = &baseitems_info[k_ptr->flavor];
-        } else {
-            flavor_k_ptr = k_ptr;
-        }
+        const auto &baseitem = baseitems_info[bi_id];
+        TERM_COLOR attr = ((baseitem.aware || visual_only) ? TERM_WHITE : TERM_SLATE);
+        byte cursor = ((baseitem.aware || visual_only) ? TERM_L_BLUE : TERM_BLUE);
+        const auto &flavor_baseitem = !visual_only && baseitem.flavor ? baseitems_info[baseitem.flavor] : baseitems_info[bi_id];
 
         attr = ((i + object_top == object_cur) ? cursor : attr);
-        const auto is_flavor_only = (k_ptr->flavor != 0) && (visual_only || !k_ptr->aware);
-        const auto o_name = is_flavor_only ? flavor_k_ptr->flavor_name : strip_name(bi_id);
+        const auto is_flavor_only = (baseitem.flavor != 0) && (visual_only || !baseitem.aware);
+        const auto o_name = is_flavor_only ? flavor_baseitem.flavor_name : strip_name(bi_id);
         c_prt(attr, o_name.data(), row + i, col);
         if (per_page == 1) {
-            c_prt(attr, format("%02x/%02x", flavor_k_ptr->x_attr, flavor_k_ptr->x_char), row + i, (w_ptr->wizard || visual_only) ? 64 : 68);
+            c_prt(attr, format("%02x/%02x", flavor_baseitem.x_attr, flavor_baseitem.x_char), row + i, (w_ptr->wizard || visual_only) ? 64 : 68);
         }
 
         if (w_ptr->wizard || visual_only) {
             c_prt(attr, format("%d", bi_id), row + i, 70);
         }
 
-        a = flavor_k_ptr->x_attr;
-        auto c = flavor_k_ptr->x_char;
+        a = flavor_baseitem.x_attr;
+        auto c = flavor_baseitem.x_char;
 
         term_queue_bigchar(use_bigtile ? 76 : 77, row + i, a, c, 0, 0);
     }
@@ -279,21 +274,14 @@ void do_cmd_knowledge_objects(PlayerType *player_ptr, bool *need_redraw, bool vi
         object_old = -1;
         object_cnt = 0;
     } else {
-        auto *k_ptr = &baseitems_info[direct_k_idx];
-        BaseitemInfo *flavor_k_ptr;
-
-        if (!visual_only && k_ptr->flavor) {
-            flavor_k_ptr = &baseitems_info[k_ptr->flavor];
-        } else {
-            flavor_k_ptr = k_ptr;
-        }
-
+        auto &baseitem = baseitems_info[direct_k_idx];
+        auto &flavor_baseitem = !visual_only && baseitem.flavor ? baseitems_info[baseitem.flavor] : baseitem;
         object_idx[0] = direct_k_idx;
         object_old = direct_k_idx;
         object_cnt = 1;
         object_idx[1] = -1;
         (void)visual_mode_command(
-            'v', &visual_list, browser_rows - 1, wid - (max + 3), &attr_top, &char_left, &flavor_k_ptr->x_attr, &flavor_k_ptr->x_char, need_redraw);
+            'v', &visual_list, browser_rows - 1, wid - (max + 3), &attr_top, &char_left, &flavor_baseitem.x_attr, &flavor_baseitem.x_char, need_redraw);
     }
 
     grp_idx[grp_cnt] = -1;
@@ -306,8 +294,6 @@ void do_cmd_knowledge_objects(PlayerType *player_ptr, bool *need_redraw, bool vi
     bool redraw = true;
     int column = 0;
     while (!flag) {
-        BaseitemInfo *k_ptr, *flavor_k_ptr;
-
         if (redraw) {
             clear_from(0);
 
@@ -382,13 +368,8 @@ void do_cmd_knowledge_objects(PlayerType *player_ptr, bool *need_redraw, bool vi
             display_visual_list(max + 3, 7, browser_rows - 1, wid - (max + 3), attr_top, char_left);
         }
 
-        k_ptr = &baseitems_info[object_idx[object_cur]];
-
-        if (!visual_only && k_ptr->flavor) {
-            flavor_k_ptr = &baseitems_info[k_ptr->flavor];
-        } else {
-            flavor_k_ptr = k_ptr;
-        }
+        auto &baseitem = baseitems_info[object_idx[object_cur]];
+        auto &flavor_baseitem = !visual_only && baseitem.flavor ? baseitems_info[baseitem.flavor] : baseitem;
 
 #ifdef JP
         prt(format("<方向>%s%s%s, ESC", (!visual_list && !visual_only) ? ", 'r'で詳細を見る" : "", visual_list ? ", ENTERで決定" : ", 'v'でシンボル変更",
@@ -412,7 +393,7 @@ void do_cmd_knowledge_objects(PlayerType *player_ptr, bool *need_redraw, bool vi
         }
 
         if (visual_list) {
-            place_visual_list_cursor(max + 3, 7, flavor_k_ptr->x_attr, flavor_k_ptr->x_char, attr_top, char_left);
+            place_visual_list_cursor(max + 3, 7, flavor_baseitem.x_attr, flavor_baseitem.x_char, attr_top, char_left);
         } else if (!column) {
             term_gotoxy(0, 6 + (grp_cur - grp_top));
         } else {
@@ -421,7 +402,7 @@ void do_cmd_knowledge_objects(PlayerType *player_ptr, bool *need_redraw, bool vi
 
         char ch = inkey();
         if (visual_mode_command(
-                ch, &visual_list, browser_rows - 1, wid - (max + 3), &attr_top, &char_left, &flavor_k_ptr->x_attr, &flavor_k_ptr->x_char, need_redraw)) {
+                ch, &visual_list, browser_rows - 1, wid - (max + 3), &attr_top, &char_left, &flavor_baseitem.x_attr, &flavor_baseitem.x_char, need_redraw)) {
             if (direct_k_idx >= 0) {
                 switch (ch) {
                 case '\n':

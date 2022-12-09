@@ -275,12 +275,12 @@ void wr_item(ItemEntity *o_ptr)
 void wr_perception(short bi_id)
 {
     byte tmp8u = 0;
-    auto *k_ptr = &baseitems_info[bi_id];
-    if (k_ptr->aware) {
+    const auto &baseitem = baseitems_info[bi_id];
+    if (baseitem.aware) {
         tmp8u |= 0x01;
     }
 
-    if (k_ptr->tried) {
+    if (baseitem.tried) {
         tmp8u |= 0x02;
     }
 

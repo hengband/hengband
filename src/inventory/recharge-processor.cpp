@@ -84,13 +84,13 @@ void recharge_magic_items(PlayerType *player_ptr)
      */
     for (changed = false, i = 0; i < INVEN_PACK; i++) {
         auto *o_ptr = &player_ptr->inventory_list[i];
-        auto *k_ptr = &baseitems_info[o_ptr->bi_id];
+        const auto &baseitem = baseitems_info[o_ptr->bi_id];
         if (!o_ptr->bi_id) {
             continue;
         }
 
         if ((o_ptr->bi_key.tval() == ItemKindType::ROD) && (o_ptr->timeout)) {
-            TIME_EFFECT temp = (o_ptr->timeout + (k_ptr->pval - 1)) / k_ptr->pval;
+            TIME_EFFECT temp = (o_ptr->timeout + (baseitem.pval - 1)) / baseitem.pval;
             if (temp > o_ptr->number) {
                 temp = (TIME_EFFECT)o_ptr->number;
             }
@@ -103,7 +103,7 @@ void recharge_magic_items(PlayerType *player_ptr)
             if (!(o_ptr->timeout)) {
                 recharged_notice(player_ptr, o_ptr);
                 changed = true;
-            } else if (o_ptr->timeout % k_ptr->pval) {
+            } else if (o_ptr->timeout % baseitem.pval) {
                 changed = true;
             }
         }
