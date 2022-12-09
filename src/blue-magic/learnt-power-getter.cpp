@@ -329,11 +329,9 @@ static void describe_blue_magic_name(PlayerType *player_ptr, int menu_line, cons
         const auto &mp = monster_powers.at(spell);
         auto need_mana = mod_need_mana(player_ptr, mp.smana, 0, REALM_NONE);
         auto chance = calculate_blue_magic_failure_probability(player_ptr, mp, need_mana);
-        char comment[80];
-        learnt_info(player_ptr, comment, spell);
         char psi_desc[80];
         close_blue_magic_name(psi_desc, sizeof(psi_desc), i, menu_line);
-        angband_strcat(psi_desc, format(" %-26s %3d %3d%%%s", mp.name, need_mana, chance, comment), sizeof(psi_desc));
+        angband_strcat(psi_desc, format(" %-26s %3d %3d%%%s", mp.name, need_mana, chance, learnt_info(player_ptr, spell).data()), sizeof(psi_desc));
         prt(psi_desc, y_base + i + 1, x_base);
     }
 
