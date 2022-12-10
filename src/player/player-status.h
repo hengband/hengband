@@ -14,7 +14,7 @@ WEIGHT calc_weapon_weight_limit(PlayerType *player_ptr);
 WEIGHT calc_bow_weight_limit(PlayerType *player_ptr);
 WEIGHT calc_inventory_weight(PlayerType *player_ptr);
 
-int16_t calc_num_fire(PlayerType *player_ptr, ItemEntity *o_ptr);
+short calc_num_fire(PlayerType *player_ptr, const ItemEntity *o_ptr);
 WEIGHT calc_weight_limit(PlayerType *player_ptr);
 void update_creature(PlayerType *player_ptr);
 bool player_has_no_spellbooks(PlayerType *player_ptr);

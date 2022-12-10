@@ -12,7 +12,6 @@ struct flavor_type {
     ItemEntity *o_ptr;
     BIT_FLAGS mode;
     int power;
-    int fire_rate;
     bool aware;
     bool known; // 鑑定 or *鑑定* 済.
     bool flavor;

@@ -19,7 +19,7 @@
  * @param o_ptr 対象のオブジェクト構造体ポインタ
  * @return オブジェクトが報酬対象になるならTRUEを返す
  */
-bool object_is_bounty(PlayerType *player_ptr, ItemEntity *o_ptr)
+bool object_is_bounty(PlayerType *player_ptr, const ItemEntity *o_ptr)
 {
     if (o_ptr->bi_key.tval() != ItemKindType::CORPSE) {
         return false;
@@ -46,7 +46,7 @@ bool object_is_bounty(PlayerType *player_ptr, ItemEntity *o_ptr)
  * @param o_ptr 特性短縮表記を得たいオブジェクト構造体の参照ポインタ
  * @return 現在クエスト達成目的のアイテムならばTRUEを返す。
  */
-bool object_is_quest_target(QuestId quest_idx, ItemEntity *o_ptr)
+bool object_is_quest_target(QuestId quest_idx, const ItemEntity *o_ptr)
 {
     if (!inside_quest(quest_idx)) {
         return false;
