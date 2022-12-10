@@ -115,14 +115,10 @@ static void display_bow_hit_damage(PlayerType *player_ptr)
         show_tohit += (weapon_exps[0] - median_skill_exp) / bow_magnification;
     } else {
         const auto sval = item.bi_key.sval().value();
-        switch (sval) {
-        case SV_LIGHT_XBOW:
-        case SV_HEAVY_XBOW:
+        if (item.is_cross_bow()) {
             show_tohit += weapon_exps[sval] / xbow_magnification;
-            break;
-        default:
+        } else {
             show_tohit += (weapon_exps[sval] - median_skill_exp) / bow_magnification;
-            break;
         }
     }
 
