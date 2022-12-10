@@ -433,10 +433,7 @@ void print_health(PlayerType *player_ptr, bool riding)
 
     const auto &monster = player_ptr->current_floor_ptr->m_list[monster_idx.value()];
 
-    // 視認できない
-    // プレイヤーが幻覚を見ている
-    // 死亡している
-    if ((!monster.ml) || (player_ptr->effects()->hallucination()->is_hallucinated()) || (monster.hp < 0)) {
+    if ((!monster.ml) || (player_ptr->effects()->hallucination()->is_hallucinated()) || (monster.is_dead())) {
         term_putstr(col, row + ROW_OFFSET_HEALTH, MAX_WIDTH, TERM_WHITE, "[----------]");
         return;
     }
