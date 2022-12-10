@@ -64,7 +64,7 @@ static void check_object_known_aware(flavor_type *flavor_ptr)
         flavor_ptr->aware = false;
         flavor_ptr->flavor = true;
         flavor_ptr->known = false;
-        flavor_ptr->flavor_k_ptr = flavor_ptr->k_ptr;
+        flavor_ptr->flavor_bii_ptr = flavor_ptr->bii_ptr;
     }
 }
 
@@ -374,10 +374,6 @@ static std::string describe_charges_rod(const ItemEntity &item)
     }
 
     const auto timeout_per_one = baseitems_info[item.bi_id].pval;
-    if (timeout_per_one <= 0) {
-        return "";
-    }
-
     auto num_of_charging = (item.timeout + (timeout_per_one - 1)) / timeout_per_one;
     if (num_of_charging > item.number) {
         num_of_charging = item.number;

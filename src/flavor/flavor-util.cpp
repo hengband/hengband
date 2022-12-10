@@ -27,8 +27,8 @@ flavor_type *initialize_flavor_type(flavor_type *flavor_ptr, char *buf, ItemEnti
     flavor_ptr->b2 = ']';
     flavor_ptr->c1 = '{';
     flavor_ptr->c2 = '}';
-    flavor_ptr->k_ptr = &baseitems_info[o_ptr->bi_id];
-    flavor_ptr->flavor_k_ptr = &baseitems_info[flavor_ptr->k_ptr->flavor];
+    flavor_ptr->bii_ptr = &baseitems_info[o_ptr->bi_id];
+    flavor_ptr->flavor_bii_ptr = &baseitems_info[flavor_ptr->bii_ptr->flavor];
     return flavor_ptr;
 }
 

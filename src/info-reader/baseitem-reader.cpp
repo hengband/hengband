@@ -11,6 +11,7 @@
 #include "info-reader/parse-error-types.h"
 #include "main/angband-headers.h"
 #include "object-enchant/tr-types.h"
+#include "object/tval-types.h"
 #include "system/baseitem-info.h"
 #include "term/gameterm.h"
 #include "util/bit-flags-calculator.h"
@@ -130,6 +131,9 @@ errr parse_baseitems_info(std::string_view buf, angband_header *head)
         const auto sval = std::stoi(tokens[2], nullptr, base);
         bii_ptr->bi_key = { tval, sval };
         info_set_value(bii_ptr->pval, tokens[3]);
+        if ((tval == ItemKindType::ROD) && (bii_ptr->pval <= 0)) {
+            return PAESE_ERROR_INVALID_PVAL;
+        }
     } else if (tokens[0] == "W") {
         // W:level:weight:cost
         if (tokens.size() < 4) {

@@ -27,8 +27,8 @@ struct flavor_type {
     char fake_insc_buf[30];
     TrFlags tr_flags;
     ItemEntity *bow_ptr;
-    BaseitemInfo *k_ptr;
-    BaseitemInfo *flavor_k_ptr;
+    BaseitemInfo *bii_ptr;
+    BaseitemInfo *flavor_bii_ptr;
     int avgdam;
 };
 
