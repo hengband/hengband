@@ -443,9 +443,9 @@ int inkey_special(bool numpad_cursor)
  */
 void stop_term_fresh(void)
 {
-    for (int j = 0; j < 8; j++) {
-        if (angband_terms[j]) {
-            angband_terms[j]->never_fresh = true;
+    for (auto &angband_term : angband_terms) {
+        if (angband_term != nullptr) {
+            angband_term->never_fresh = true;
         }
     }
 }
@@ -455,9 +455,9 @@ void stop_term_fresh(void)
  */
 void start_term_fresh(void)
 {
-    for (int j = 0; j < 8; j++) {
-        if (angband_terms[j]) {
-            angband_terms[j]->never_fresh = false;
+    for (auto &angband_term : angband_terms) {
+        if (angband_term != nullptr) {
+            angband_term->never_fresh = false;
         }
     }
 }
