@@ -302,12 +302,12 @@ static void print_health_monster_in_arena_for_wizard(PlayerType *player_ptr)
 
         term_putstr(col - 2, row + rowOffset, 12, TERM_WHITE, "      /     ");
 
-        auto &monsterEntity = player_ptr->current_floor_ptr->m_list[monsterListIndex];
-        if (MonsterRace(monsterEntity.r_idx).is_valid()) {
-            term_putstr(col - 2, row + rowOffset, 2, monraces_info[monsterEntity.r_idx].x_attr,
-                format("%c", monraces_info[player_ptr->current_floor_ptr->m_list[monsterListIndex].r_idx].x_char));
-            term_putstr(col - 1, row + rowOffset, 5, TERM_WHITE, format("%5d", monsterEntity.hp));
-            term_putstr(col + 5, row + rowOffset, 6, TERM_WHITE, format("%5d", monsterEntity.max_maxhp));
+        auto &monster = player_ptr->current_floor_ptr->m_list[monsterListIndex];
+        if (MonsterRace(monster.r_idx).is_valid()) {
+            term_putstr(col - 2, row + rowOffset, 2, monraces_info[monster.r_idx].x_attr,
+                format("%c", monraces_info[monster.r_idx].x_char));
+            term_putstr(col - 1, row + rowOffset, 5, TERM_WHITE, format("%5d", monster.hp));
+            term_putstr(col + 5, row + rowOffset, 6, TERM_WHITE, format("%5d", monster.max_maxhp));
         }
     }
 }
@@ -315,6 +315,7 @@ static void print_health_monster_in_arena_for_wizard(PlayerType *player_ptr)
 /*!
  * @brief 対象のモンスターからcondition_layout_infoのリストを生成して返す
  * @param monster 対象のモンスター
+ * @return condition_layout_infoのリスト
  */
 static std::vector<condition_layout_info> get_condition_layout_info(const MonsterEntity &monster)
 {
@@ -346,25 +347,30 @@ static std::vector<condition_layout_info> get_condition_layout_info(const Monste
 }
 
 /*!
- * @brief 対象のモンスターからHPバーの色を算出する
+ * @brief 対象のモンスターの状態（無敵、起きているか、HPの割合）に応じてHPバーの色を算出する
  * @param monster 対象のモンスター
+ * @return HPバーの色
  */
 static TERM_COLOR get_monster_hp_point_bar_color(const MonsterEntity &monster)
 {
-    int pct = monster.maxhp > 0 ? 100L * monster.hp / monster.maxhp : 0;
+    auto pct = monster.maxhp > 0 ? 100 * monster.hp / monster.maxhp : 0;
 
-    // HPの割合に応じてHPバーの色を設定
     if (monster.is_invulnerable()) {
         return TERM_WHITE;
-    } else if (monster.is_asleep()) {
+    }
+    if (monster.is_asleep()) {
         return TERM_BLUE;
-    } else if (pct >= 100) {
+    }
+    if (pct >= 100) {
         return TERM_L_GREEN;
-    } else if (pct >= 60) {
+    }
+    if (pct >= 60) {
         return TERM_YELLOW;
-    } else if (pct >= 25) {
+    }
+    if (pct >= 25) {
         return TERM_ORANGE;
-    } else if (pct >= 10) {
+    }
+    if (pct >= 10) {
         return TERM_L_RED;
     }
     return TERM_RED;
@@ -433,7 +439,7 @@ void print_health(PlayerType *player_ptr, bool riding)
 
     const auto &monster = player_ptr->current_floor_ptr->m_list[monster_idx.value()];
 
-    if ((!monster.ml) || (player_ptr->effects()->hallucination()->is_hallucinated()) || (monster.is_dead())) {
+    if ((!monster.ml) || (player_ptr->effects()->hallucination()->is_hallucinated()) || monster.is_dead()) {
         term_putstr(col, row + ROW_OFFSET_HEALTH, MAX_WIDTH, TERM_WHITE, "[----------]");
         return;
     }
