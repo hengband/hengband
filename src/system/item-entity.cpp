@@ -794,3 +794,8 @@ bool ItemEntity::is_armour() const
 {
     return this->bi_key.is_armour();
 }
+
+bool ItemEntity::is_cross_bow() const
+{
+    return this->bi_key.is_cross_bow();
+}
