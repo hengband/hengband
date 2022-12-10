@@ -1065,8 +1065,7 @@ bool test_hit_fire(PlayerType *player_ptr, int chance, MonsterEntity *m_ptr, int
 }
 
 /*!
- * @brief プレイヤーからモンスターへの射撃クリティカル判定 /
- * Critical hits (from objects thrown by player) Factor in item weight, total plusses, and player level.
+ * @brief プレイヤーからモンスターへの射撃クリティカル判定
  * @param weight 矢弾の重量
  * @param plus_ammo 矢弾の命中修正
  * @param plus_bow 弓の命中修正
@@ -1075,53 +1074,52 @@ bool test_hit_fire(PlayerType *player_ptr, int chance, MonsterEntity *m_ptr, int
  */
 int critical_shot(PlayerType *player_ptr, WEIGHT weight, int plus_ammo, int plus_bow, int dam)
 {
-    auto *j_ptr = &player_ptr->inventory_list[INVEN_BOW];
-
-    /* Extract "shot" power */
-    auto i = player_ptr->to_h_b + plus_ammo;
-    const auto tval = j_ptr->bi_key.tval();
+    const auto &item = player_ptr->inventory_list[INVEN_BOW];
+    const auto bonus = player_ptr->to_h_b + plus_ammo;
+    const auto tval = item.bi_key.tval();
     const auto median_skill_exp = PlayerSkill::weapon_exp_at(PlayerSkillRank::MASTER) / 2;
     const auto &weapon_exps = player_ptr->weapon_exp[tval];
     constexpr auto bow_magnification = 200;
     constexpr auto xbow_magnification = 400;
+    int power;
     if (tval == ItemKindType::NONE) {
-        i = player_ptr->skill_thb + ((weapon_exps[0] - median_skill_exp) / bow_magnification + i) * BTH_PLUS_ADJ;
+        power = player_ptr->skill_thb + ((weapon_exps[0] - median_skill_exp) / bow_magnification + bonus) * BTH_PLUS_ADJ;
     } else {
-        const auto sval = j_ptr->bi_key.sval().value();
+        const auto sval = item.bi_key.sval().value();
         const auto weapon_exp = weapon_exps[sval];
         if (player_ptr->tval_ammo == ItemKindType::BOLT) {
-            i = (player_ptr->skill_thb + (weapon_exp / xbow_magnification + i) * BTH_PLUS_ADJ);
+            power = (player_ptr->skill_thb + (weapon_exp / xbow_magnification + bonus) * BTH_PLUS_ADJ);
         } else {
-            i = player_ptr->skill_thb + ((weapon_exp - median_skill_exp) / bow_magnification + i) * BTH_PLUS_ADJ;
+            power = player_ptr->skill_thb + ((weapon_exp - median_skill_exp) / bow_magnification + bonus) * BTH_PLUS_ADJ;
         }
     }
 
     PlayerClass pc(player_ptr);
-    auto sniper_data = pc.get_specific_data<sniper_data_type>();
-    auto sniper_concent = sniper_data ? sniper_data->concent : 0;
+    const auto sniper_data = pc.get_specific_data<sniper_data_type>();
+    const auto sniper_concent = sniper_data ? sniper_data->concent : 0;
 
     /* Snipers can shot more critically with crossbows */
-    i += ((i * sniper_concent) / 5);
+    power += ((power * sniper_concent) / 5);
     if (pc.equals(PlayerClassType::SNIPER) && (player_ptr->tval_ammo == ItemKindType::BOLT)) {
-        i *= 2;
+        power *= 2;
     }
 
     /* Good bow makes more critical */
-    i += plus_bow * 8 * (sniper_concent + 5);
+    power += plus_bow * 8 * (sniper_concent + 5);
+    if (randint1(10000) > power) {
+        return dam;
+    }
 
-    /* Critical hit */
-    if (randint1(10000) <= i) {
-        const auto k = weight * randint1(500);
-        if (k < 900) {
-            msg_print(_("手ごたえがあった！", "It was a good hit!"));
-            dam += (dam / 2);
-        } else if (k < 1350) {
-            msg_print(_("かなりの手ごたえがあった！", "It was a great hit!"));
-            dam *= 2;
-        } else {
-            msg_print(_("会心の一撃だ！", "It was a superb hit!"));
-            dam *= 3;
-        }
+    const auto k = weight * randint1(500);
+    if (k < 900) {
+        msg_print(_("手ごたえがあった！", "It was a good hit!"));
+        dam += (dam / 2);
+    } else if (k < 1350) {
+        msg_print(_("かなりの手ごたえがあった！", "It was a great hit!"));
+        dam *= 2;
+    } else {
+        msg_print(_("会心の一撃だ！", "It was a superb hit!"));
+        dam *= 3;
     }
 
     return dam;
