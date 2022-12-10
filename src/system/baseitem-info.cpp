@@ -523,6 +523,21 @@ bool BaseitemKey::is_armour() const
     }
 }
 
+bool BaseitemKey::is_cross_bow() const
+{
+    if ((this->type_value != ItemKindType::BOW) || !this->subtype_value.has_value()) {
+        return false;
+    }
+
+    switch (this->subtype_value.value()) {
+    case SV_LIGHT_XBOW:
+    case SV_HEAVY_XBOW:
+        return true;
+    default:
+        return false;
+    }
+}
+
 bool BaseitemKey::is_mushrooms() const
 {
     if (!this->subtype_value.has_value()) {
