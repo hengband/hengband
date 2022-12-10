@@ -77,27 +77,23 @@ TrFlags object_flags(const ItemEntity *o_ptr)
  */
 TrFlags object_flags_known(const ItemEntity *o_ptr)
 {
-    bool spoil = false;
     TrFlags flgs{};
-
     if (!o_ptr->is_aware()) {
         return flgs;
     }
 
     const auto &baseitem = baseitems_info[o_ptr->bi_id];
     flgs = baseitem.flags;
-
     if (!o_ptr->is_known()) {
         return flgs;
     }
 
     object_flags_lite(o_ptr, flgs);
-    if (spoil || o_ptr->is_fully_known()) {
+    if (o_ptr->is_fully_known()) {
         if (o_ptr->is_fixed_artifact()) {
             flgs = artifacts_info.at(o_ptr->fixed_artifact_idx).flags;
         }
 
-        /* Random artifact ! */
         flgs.set(o_ptr->art_flags);
     }
 
@@ -105,6 +101,7 @@ TrFlags object_flags_known(const ItemEntity *o_ptr)
         auto tr_flags = Smith::get_effect_tr_flags(effect.value());
         flgs.set(tr_flags);
     }
+
     if (Smith::object_activation(o_ptr).has_value()) {
         flgs.set(TR_ACTIVATE);
     }
