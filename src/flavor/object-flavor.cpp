@@ -191,20 +191,20 @@ void get_table_sindarin(char *out_string)
 static void shuffle_flavors(ItemKindType tval)
 {
     std::vector<std::reference_wrapper<IDX>> flavor_idx_ref_list;
-    for (const auto &k_ref : baseitems_info) {
-        if (k_ref.bi_key.tval() != tval) {
+    for (const auto &baseitem : baseitems_info) {
+        if (baseitem.bi_key.tval() != tval) {
             continue;
         }
 
-        if (!k_ref.flavor) {
+        if (baseitem.flavor == 0) {
             continue;
         }
 
-        if (k_ref.flags.has(TR_FIXED_FLAVOR)) {
+        if (baseitem.flags.has(TR_FIXED_FLAVOR)) {
             continue;
         }
 
-        flavor_idx_ref_list.push_back(baseitems_info[k_ref.idx].flavor);
+        flavor_idx_ref_list.push_back(baseitems_info[baseitem.idx].flavor);
     }
 
     rand_shuffle(flavor_idx_ref_list.begin(), flavor_idx_ref_list.end());

@@ -156,18 +156,18 @@ void do_cmd_visuals(PlayerType *player_ptr)
             }
 
             auto_dump_printf(auto_dump_stream, _("\n# アイテムの[色/文字]の設定\n\n", "\n# Object attr/char definitions\n\n"));
-            for (const auto &k_ref : baseitems_info) {
-                if (k_ref.name.empty()) {
+            for (const auto &baseitem : baseitems_info) {
+                if (baseitem.name.empty()) {
                     continue;
                 }
 
                 std::string o_name("");
                 GAME_TEXT char_o_name[MAX_NLEN]{};
-                if (!k_ref.flavor) {
-                    o_name = strip_name(k_ref.idx);
+                if (baseitem.flavor == 0) {
+                    o_name = strip_name(baseitem.idx);
                 } else {
                     ItemEntity dummy;
-                    dummy.prep(k_ref.idx);
+                    dummy.prep(baseitem.idx);
                     describe_flavor(player_ptr, char_o_name, &dummy, OD_FORCE_FLAVOR);
                 }
 
@@ -176,7 +176,7 @@ void do_cmd_visuals(PlayerType *player_ptr)
                 }
 
                 auto_dump_printf(auto_dump_stream, "# %s\n", o_name.data());
-                auto_dump_printf(auto_dump_stream, "K:%d:0x%02X/0x%02X\n\n", (int)k_ref.idx, (byte)(k_ref.x_attr), (byte)(k_ref.x_char));
+                auto_dump_printf(auto_dump_stream, "K:%d:0x%02X/0x%02X\n\n", (int)baseitem.idx, (byte)(baseitem.x_attr), (byte)(baseitem.x_char));
             }
 
             close_auto_dump(&auto_dump_stream, mark);

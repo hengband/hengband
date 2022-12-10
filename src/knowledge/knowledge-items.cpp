@@ -133,36 +133,33 @@ static short collect_objects(int grp_cur, short object_idx[], BIT_FLAGS8 mode)
 {
     short object_cnt = 0;
     auto group_tval = object_group_tval[grp_cur];
-    for (const auto &k_ref : baseitems_info) {
-        if (k_ref.name.empty()) {
+    for (const auto &baseitem : baseitems_info) {
+        if (baseitem.name.empty()) {
             continue;
         }
 
         if (!(mode & 0x02)) {
             if (!w_ptr->wizard) {
-                if (!k_ref.flavor) {
-                    continue;
-                }
-                if (!k_ref.aware) {
+                if ((baseitem.flavor == 0) || !baseitem.aware) {
                     continue;
                 }
             }
 
-            auto k = std::reduce(std::begin(k_ref.chance), std::end(k_ref.chance), 0);
+            auto k = std::reduce(std::begin(baseitem.chance), std::end(baseitem.chance), 0);
             if (!k) {
                 continue;
             }
         }
 
-        const auto tval = k_ref.bi_key.tval();
+        const auto tval = baseitem.bi_key.tval();
         if (group_tval == ItemKindType::LIFE_BOOK) {
-            if (k_ref.bi_key.is_spell_book()) {
-                object_idx[object_cnt++] = k_ref.idx;
+            if (baseitem.bi_key.is_spell_book()) {
+                object_idx[object_cnt++] = baseitem.idx;
             } else {
                 continue;
             }
         } else if (tval == group_tval) {
-            object_idx[object_cnt++] = k_ref.idx;
+            object_idx[object_cnt++] = baseitem.idx;
         } else {
             continue;
         }

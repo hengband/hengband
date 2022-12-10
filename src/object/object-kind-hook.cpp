@@ -45,8 +45,8 @@ bool kind_is_polearm(short bi_id)
  */
 bool kind_is_sword(short bi_id)
 {
-    const auto &k_ref = baseitems_info[bi_id];
-    return (k_ref.bi_key.tval() == ItemKindType::SWORD) && (k_ref.bi_key.sval() > 2);
+    const auto &baseitem = baseitems_info[bi_id];
+    return (baseitem.bi_key.tval() == ItemKindType::SWORD) && (baseitem.bi_key.sval() > 2);
 }
 
 /*!
@@ -56,8 +56,8 @@ bool kind_is_sword(short bi_id)
  */
 bool kind_is_book(short bi_id)
 {
-    const auto &k_ref = baseitems_info[bi_id];
-    return k_ref.bi_key.is_spell_book();
+    const auto &baseitem = baseitems_info[bi_id];
+    return baseitem.bi_key.is_spell_book();
 }
 
 /*!
@@ -67,8 +67,8 @@ bool kind_is_book(short bi_id)
  */
 bool kind_is_good_book(short bi_id)
 {
-    const auto &k_ref = baseitems_info[bi_id];
-    return k_ref.bi_key.is_high_level_book();
+    const auto &baseitem = baseitems_info[bi_id];
+    return baseitem.bi_key.is_high_level_book();
 }
 
 /*!
@@ -129,8 +129,8 @@ bool kind_is_amulet(short bi_id)
  */
 bool kind_is_good(short bi_id)
 {
-    const auto &k_ref = baseitems_info[bi_id];
-    switch (k_ref.bi_key.tval()) {
+    const auto &baseitem = baseitems_info[bi_id];
+    switch (baseitem.bi_key.tval()) {
         /* Armor -- Good unless damaged */
     case ItemKindType::HARD_ARMOR:
     case ItemKindType::SOFT_ARMOR:
@@ -141,7 +141,7 @@ bool kind_is_good(short bi_id)
     case ItemKindType::GLOVES:
     case ItemKindType::HELM:
     case ItemKindType::CROWN:
-        return k_ref.to_a >= 0;
+        return baseitem.to_a >= 0;
 
     /* Weapons -- Good unless damaged */
     case ItemKindType::BOW:
@@ -149,7 +149,7 @@ bool kind_is_good(short bi_id)
     case ItemKindType::HAFTED:
     case ItemKindType::POLEARM:
     case ItemKindType::DIGGING:
-        return (k_ref.to_h >= 0) && (k_ref.to_d >= 0);
+        return (baseitem.to_h >= 0) && (baseitem.to_d >= 0);
 
     /* Ammo -- Arrows/Bolts are good */
     case ItemKindType::BOLT:
@@ -169,15 +169,15 @@ bool kind_is_good(short bi_id)
     case ItemKindType::MUSIC_BOOK:
     case ItemKindType::HISSATSU_BOOK:
     case ItemKindType::HEX_BOOK:
-        return k_ref.bi_key.sval() >= SV_BOOK_MIN_GOOD;
+        return baseitem.bi_key.sval() >= SV_BOOK_MIN_GOOD;
 
     /* Rings -- Rings of Speed are good */
     case ItemKindType::RING:
-        return (k_ref.bi_key.sval() == SV_RING_SPEED) || (k_ref.bi_key.sval() == SV_RING_LORDLY);
+        return (baseitem.bi_key.sval() == SV_RING_SPEED) || (baseitem.bi_key.sval() == SV_RING_LORDLY);
 
     /* Amulets -- Amulets of the Magi and Resistance are good */
     case ItemKindType::AMULET:
-        return (k_ref.bi_key.sval() == SV_AMULET_THE_MAGI) || (k_ref.bi_key.sval() == SV_AMULET_RESISTANCE);
+        return (baseitem.bi_key.sval() == SV_AMULET_THE_MAGI) || (baseitem.bi_key.sval() == SV_AMULET_RESISTANCE);
     default:
         return false;
     }

@@ -20,9 +20,9 @@ void reset_visuals(PlayerType *player_ptr)
         }
     }
 
-    for (auto &k_ref : baseitems_info) {
-        k_ref.x_attr = k_ref.d_attr;
-        k_ref.x_char = k_ref.d_char;
+    for (auto &baseitem : baseitems_info) {
+        baseitem.x_attr = baseitem.d_attr;
+        baseitem.x_char = baseitem.d_char;
     }
 
     for (auto &[r_idx, r_ref] : monraces_info) {
