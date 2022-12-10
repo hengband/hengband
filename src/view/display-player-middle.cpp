@@ -6,6 +6,7 @@
 #include "mind/stances-table.h"
 #include "monster/monster-status.h"
 #include "object-enchant/special-object-flags.h"
+#include "object/tval-types.h"
 #include "perception/object-perception.h"
 #include "player-base/player-class.h"
 #include "player-base/player-race.h"
@@ -106,11 +107,19 @@ static void display_bow_hit_damage(PlayerType *player_ptr)
     }
 
     const auto tval = item.bi_key.tval();
-    const auto sval = item.bi_key.sval().value();
-    if ((sval == SV_LIGHT_XBOW) || (sval == SV_HEAVY_XBOW)) {
-        show_tohit += player_ptr->weapon_exp[tval][sval] / 400;
+    const auto median_skill_exp = PlayerSkill::weapon_exp_at(PlayerSkillRank::MASTER) / 2;
+    const auto &weapon_exps = player_ptr->weapon_exp[tval];
+    constexpr auto bow_magnification = 200;
+    constexpr auto xbow_magnification = 400;
+    if (tval == ItemKindType::NONE) {
+        show_tohit += (weapon_exps[0] - median_skill_exp) / bow_magnification;
     } else {
-        show_tohit += (player_ptr->weapon_exp[tval][sval] - (PlayerSkill::weapon_exp_at(PlayerSkillRank::MASTER) / 2)) / 200;
+        const auto sval = item.bi_key.sval().value();
+        if ((sval == SV_LIGHT_XBOW) || (sval == SV_HEAVY_XBOW)) {
+            show_tohit += weapon_exps[sval] / xbow_magnification;
+        } else {
+            show_tohit += (weapon_exps[sval] - median_skill_exp) / bow_magnification;
+        }
     }
 
     show_tohit += player_ptr->skill_thb / BTH_PLUS_ADJ;
