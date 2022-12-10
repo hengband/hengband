@@ -6,6 +6,7 @@
 #include "mind/stances-table.h"
 #include "monster/monster-status.h"
 #include "object-enchant/special-object-flags.h"
+#include "object/tval-types.h"
 #include "perception/object-perception.h"
 #include "player-base/player-class.h"
 #include "player-base/player-race.h"
@@ -92,31 +93,40 @@ static void display_sub_hand(PlayerType *player_ptr)
 }
 
 /*!
- * @brief 武器による命中率とダメージの補正を表示する
+ * @brief 弓による命中率とダメージの補正を表示する
  * @param player_ptr プレイヤーへの参照ポインタ
  */
-static void display_hit_damage(PlayerType *player_ptr)
+static void display_bow_hit_damage(PlayerType *player_ptr)
 {
-    auto *o_ptr = &player_ptr->inventory_list[INVEN_BOW];
-    HIT_PROB show_tohit = player_ptr->dis_to_h_b;
-    int show_todam = 0;
-    if (o_ptr->is_known()) {
-        show_tohit += o_ptr->to_h;
-    }
-    if (o_ptr->is_known()) {
-        show_todam += o_ptr->to_d;
+    const auto &item = player_ptr->inventory_list[INVEN_BOW];
+    auto show_tohit = player_ptr->dis_to_h_b;
+    auto show_todam = 0;
+    if (item.is_known()) {
+        show_tohit += item.to_h;
+        show_todam += item.to_d;
     }
 
-    const auto tval = o_ptr->bi_key.tval();
-    const auto sval = o_ptr->bi_key.sval().value();
-    if ((sval == SV_LIGHT_XBOW) || (sval == SV_HEAVY_XBOW)) {
-        show_tohit += player_ptr->weapon_exp[tval][sval] / 400;
+    const auto tval = item.bi_key.tval();
+    const auto median_skill_exp = PlayerSkill::weapon_exp_at(PlayerSkillRank::MASTER) / 2;
+    const auto &weapon_exps = player_ptr->weapon_exp[tval];
+    constexpr auto bow_magnification = 200;
+    constexpr auto xbow_magnification = 400;
+    if (tval == ItemKindType::NONE) {
+        show_tohit += (weapon_exps[0] - median_skill_exp) / bow_magnification;
     } else {
-        show_tohit += (player_ptr->weapon_exp[tval][sval] - (PlayerSkill::weapon_exp_at(PlayerSkillRank::MASTER) / 2)) / 200;
+        const auto sval = item.bi_key.sval().value();
+        switch (sval) {
+        case SV_LIGHT_XBOW:
+        case SV_HEAVY_XBOW:
+            show_tohit += weapon_exps[sval] / xbow_magnification;
+            break;
+        default:
+            show_tohit += (weapon_exps[sval] - median_skill_exp) / bow_magnification;
+            break;
+        }
     }
 
     show_tohit += player_ptr->skill_thb / BTH_PLUS_ADJ;
-
     display_player_one_line(ENTRY_SHOOT_HIT_DAM, format("(%+d,%+d)", show_tohit, show_todam), TERM_L_BLUE);
 }
 
@@ -331,7 +341,7 @@ void display_player_middle(PlayerType *player_ptr)
     }
 
     display_sub_hand(player_ptr);
-    display_hit_damage(player_ptr);
+    display_bow_hit_damage(player_ptr);
     display_shoot_magnification(player_ptr);
     display_player_one_line(ENTRY_BASE_AC, format("[%d,%+d]", player_ptr->dis_ac, player_ptr->dis_to_a), TERM_L_BLUE);
 
