@@ -92,23 +92,21 @@ static void display_sub_hand(PlayerType *player_ptr)
 }
 
 /*!
- * @brief 武器による命中率とダメージの補正を表示する
+ * @brief 弓による命中率とダメージの補正を表示する
  * @param player_ptr プレイヤーへの参照ポインタ
  */
-static void display_hit_damage(PlayerType *player_ptr)
+static void display_bow_hit_damage(PlayerType *player_ptr)
 {
-    auto *o_ptr = &player_ptr->inventory_list[INVEN_BOW];
-    HIT_PROB show_tohit = player_ptr->dis_to_h_b;
-    int show_todam = 0;
-    if (o_ptr->is_known()) {
-        show_tohit += o_ptr->to_h;
-    }
-    if (o_ptr->is_known()) {
-        show_todam += o_ptr->to_d;
+    const auto &item = player_ptr->inventory_list[INVEN_BOW];
+    auto show_tohit = player_ptr->dis_to_h_b;
+    auto show_todam = 0;
+    if (item.is_known()) {
+        show_tohit += item.to_h;
+        show_todam += item.to_d;
     }
 
-    const auto tval = o_ptr->bi_key.tval();
-    const auto sval = o_ptr->bi_key.sval().value();
+    const auto tval = item.bi_key.tval();
+    const auto sval = item.bi_key.sval().value();
     if ((sval == SV_LIGHT_XBOW) || (sval == SV_HEAVY_XBOW)) {
         show_tohit += player_ptr->weapon_exp[tval][sval] / 400;
     } else {
@@ -116,7 +114,6 @@ static void display_hit_damage(PlayerType *player_ptr)
     }
 
     show_tohit += player_ptr->skill_thb / BTH_PLUS_ADJ;
-
     display_player_one_line(ENTRY_SHOOT_HIT_DAM, format("(%+d,%+d)", show_tohit, show_todam), TERM_L_BLUE);
 }
 
@@ -331,7 +328,7 @@ void display_player_middle(PlayerType *player_ptr)
     }
 
     display_sub_hand(player_ptr);
-    display_hit_damage(player_ptr);
+    display_bow_hit_damage(player_ptr);
     display_shoot_magnification(player_ptr);
     display_player_one_line(ENTRY_BASE_AC, format("[%d,%+d]", player_ptr->dis_ac, player_ptr->dis_to_a), TERM_L_BLUE);
 
