@@ -108,10 +108,10 @@ static void init_object_alloc()
     short num[MAX_DEPTH]{};
     auto alloc_kind_size = 0;
     for (const auto &baseitem : baseitems_info) {
-        for (auto i = 0U; i < baseitem.chance.size(); i++) {
-            if (baseitem.chance[i]) {
+        for (auto i = 0U; i < baseitem.alloc_chances.size(); i++) {
+            if (baseitem.alloc_chances[i]) {
                 alloc_kind_size++;
-                num[baseitem.locale[i]]++;
+                num[baseitem.alloc_levels[i]]++;
             }
         }
     }
@@ -127,13 +127,13 @@ static void init_object_alloc()
     alloc_kind_table.assign(alloc_kind_size, {});
     short aux[MAX_DEPTH]{};
     for (const auto &baseitem : baseitems_info) {
-        for (auto i = 0U; i < baseitem.chance.size(); i++) {
-            if (baseitem.chance[i] == 0) {
+        for (auto i = 0U; i < baseitem.alloc_chances.size(); i++) {
+            if (baseitem.alloc_chances[i] == 0) {
                 continue;
             }
 
-            const auto x = baseitem.locale[i];
-            const short p = 100 / baseitem.chance[i];
+            const auto x = baseitem.alloc_levels[i];
+            const short p = 100 / baseitem.alloc_chances[i];
             const auto y = (x > 0) ? num[x - 1] : 0;
             const auto z = y + aux[x];
             alloc_kind_table[z].index = baseitem.idx;

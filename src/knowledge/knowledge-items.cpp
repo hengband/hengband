@@ -145,7 +145,7 @@ static short collect_objects(int grp_cur, short object_idx[], BIT_FLAGS8 mode)
                 }
             }
 
-            auto k = std::reduce(std::begin(baseitem.chance), std::end(baseitem.chance), 0);
+            auto k = std::reduce(std::begin(baseitem.alloc_chances), std::end(baseitem.alloc_chances), 0);
             if (!k) {
                 continue;
             }
