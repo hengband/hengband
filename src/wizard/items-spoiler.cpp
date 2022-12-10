@@ -73,10 +73,11 @@ static void kind_info(PlayerType *player_ptr, char *buf, char *dam, char *wgt, c
     }
 
     strcpy(chance, "");
-    for (int i = 0; i < 4; i++) {
+    const auto &baseitem = baseitems_info[q_ptr->bi_id];
+    for (auto i = 0U; i < baseitem.chance.size(); i++) {
         char chance_aux[20] = "";
-        if (baseitems_info[q_ptr->bi_id].chance[i] > 0) {
-            sprintf(chance_aux, "%s%3dF:%+4d", (i != 0 ? "/" : ""), (int)baseitems_info[q_ptr->bi_id].locale[i], 100 / baseitems_info[q_ptr->bi_id].chance[i]);
+        if (baseitem.chance[i] > 0) {
+            sprintf(chance_aux, "%s%3dF:%+4d", (i != 0 ? "/" : ""), (int)baseitem.locale[i], 100 / baseitem.chance[i]);
             strcat(chance, chance_aux);
         }
     }

@@ -103,15 +103,15 @@ void init_other(PlayerType *player_ptr)
  * Initialize some other arrays
  * @return エラーコード
  */
-static void init_object_alloc(void)
+static void init_object_alloc()
 {
-    int16_t num[MAX_DEPTH]{};
+    short num[MAX_DEPTH]{};
     auto alloc_kind_size = 0;
     for (const auto &baseitem : baseitems_info) {
-        for (auto j = 0; j < 4; j++) {
-            if (baseitem.chance[j]) {
+        for (auto i = 0U; i < baseitem.chance.size(); i++) {
+            if (baseitem.chance[i]) {
                 alloc_kind_size++;
-                num[baseitem.locale[j]]++;
+                num[baseitem.locale[i]]++;
             }
         }
     }
@@ -125,17 +125,17 @@ static void init_object_alloc(void)
     }
 
     alloc_kind_table.assign(alloc_kind_size, {});
-    int16_t aux[MAX_DEPTH]{};
+    short aux[MAX_DEPTH]{};
     for (const auto &baseitem : baseitems_info) {
-        for (auto j = 0; j < 4; j++) {
-            if (baseitem.chance[j] == 0) {
+        for (auto i = 0U; i < baseitem.chance.size(); i++) {
+            if (baseitem.chance[i] == 0) {
                 continue;
             }
 
-            auto x = baseitem.locale[j];
-            PROB p = (100 / baseitem.chance[j]);
-            auto y = (x > 0) ? num[x - 1] : 0;
-            auto z = y + aux[x];
+            const auto x = baseitem.locale[i];
+            const short p = 100 / baseitem.chance[i];
+            const auto y = (x > 0) ? num[x - 1] : 0;
+            const auto z = y + aux[x];
             alloc_kind_table[z].index = baseitem.idx;
             alloc_kind_table[z].level = x;
             alloc_kind_table[z].prob1 = p;
