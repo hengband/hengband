@@ -1,4 +1,4 @@
-#include "window/main-window-left-frame.h"
+﻿#include "window/main-window-left-frame.h"
 #include "game-option/special-options.h"
 #include "game-option/text-display-options.h"
 #include "market/arena-info-table.h"
@@ -346,6 +346,31 @@ static std::vector<condition_layout_info> get_condition_layout_info(const Monste
 }
 
 /*!
+ * @brief 対象のモンスターからHPバーの色を算出する
+ * @param monster 対象のモンスター
+ */
+static TERM_COLOR get_monster_hp_point_bar_color(const MonsterEntity &monster)
+{
+    int pct = monster.maxhp > 0 ? 100L * monster.hp / monster.maxhp : 0;
+
+    // HPの割合に応じてHPバーの色を設定
+    if (monster.is_invulnerable()) {
+        return TERM_WHITE;
+    } else if (monster.is_asleep()) {
+        return TERM_BLUE;
+    } else if (pct >= 100) {
+        return TERM_L_GREEN;
+    } else if (pct >= 60) {
+        return TERM_YELLOW;
+    } else if (pct >= 25) {
+        return TERM_ORANGE;
+    } else if (pct >= 10) {
+        return TERM_L_RED;
+    }
+    return TERM_RED;
+}
+
+/*!
  * @brief モンスターの体力ゲージを表示する
  * @param riding TRUEならば騎乗中のモンスターの体力、FALSEならターゲットモンスターの体力を表示する。表示位置は固定。
  * @details
@@ -417,29 +442,10 @@ void print_health(PlayerType *player_ptr, bool riding)
     }
 
     // HPの割合計算
-    int pct = monster.maxhp > 0 ? 100L * monster.hp / monster.maxhp : 0;
     int pct2 = monster.maxhp > 0 ? 100L * monster.hp / monster.max_maxhp : 0;
     int len = (pct2 < 10) ? 1 : (pct2 < 90) ? (pct2 / 10 + 1)
                                             : 10;
-
-    // HPの割合に応じてHPバーの色を設定
-    TERM_COLOR hit_point_bar_clor = TERM_L_GREEN;
-    if (monster.is_invulnerable()) {
-        hit_point_bar_clor = TERM_WHITE;
-    } else if (monster.is_asleep()) {
-        hit_point_bar_clor = TERM_BLUE;
-    } else if (pct >= 100) {
-        hit_point_bar_clor = TERM_L_GREEN;
-    } else if (pct >= 60) {
-        hit_point_bar_clor = TERM_YELLOW;
-    } else if (pct >= 25) {
-        hit_point_bar_clor = TERM_ORANGE;
-    } else if (pct >= 10) {
-        hit_point_bar_clor = TERM_L_RED;
-    } else {
-        hit_point_bar_clor = TERM_RED;
-    }
-
+    auto hit_point_bar_clor = get_monster_hp_point_bar_color(monster);
     const auto &ap_r_ref = monraces_info[monster.ap_r_idx];
 
     // 名前
