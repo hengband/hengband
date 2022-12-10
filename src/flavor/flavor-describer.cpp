@@ -352,139 +352,122 @@ static std::string describe_ac(const ItemEntity &item, const describe_option_typ
     return format(" [%d]", item.ac);
 }
 
-static void describe_charges_staff_wand(flavor_type *flavor_ptr)
+static std::string describe_charges_staff_wand(const ItemEntity &item)
 {
-    flavor_ptr->t = object_desc_chr(flavor_ptr->t, ' ');
-    flavor_ptr->t = object_desc_chr(flavor_ptr->t, flavor_ptr->p1);
-    if ((flavor_ptr->o_ptr->bi_key.tval() == ItemKindType::STAFF) && (flavor_ptr->o_ptr->number > 1)) {
-        flavor_ptr->t = object_desc_num(flavor_ptr->t, flavor_ptr->o_ptr->number);
-        flavor_ptr->t = object_desc_str(flavor_ptr->t, "x ");
+    std::string staff_num;
+    if ((item.bi_key.tval() == ItemKindType::STAFF) && (item.number > 1)) {
+        staff_num = format("%dx ", item.number);
     }
 
-    flavor_ptr->t = object_desc_num(flavor_ptr->t, flavor_ptr->o_ptr->pval);
-    flavor_ptr->t = object_desc_str(flavor_ptr->t, _("回分", " charge"));
-#ifdef JP
-#else
-    if (flavor_ptr->o_ptr->pval != 1) {
-        flavor_ptr->t = object_desc_chr(flavor_ptr->t, 's');
-    }
-#endif
-
-    flavor_ptr->t = object_desc_chr(flavor_ptr->t, flavor_ptr->p2);
+    const auto charge_str = _("回分", (item.pval != 1 ? " charge" : " charges"));
+    return format(" (%s%d%s)", staff_num.data(), item.pval, charge_str);
 }
 
-static void describe_charges_rod(flavor_type *flavor_ptr)
+static std::string describe_charges_rod(const ItemEntity &item)
 {
-    if (flavor_ptr->o_ptr->timeout == 0) {
-        return;
+    if (item.timeout <= 0) {
+        return "";
     }
 
-    if (flavor_ptr->o_ptr->number <= 1) {
-        flavor_ptr->t = object_desc_str(flavor_ptr->t, _("(充填中)", " (charging)"));
-        return;
+    if (item.number <= 1) {
+        return _("(充填中)", " (charging)");
     }
 
-    if (flavor_ptr->k_ptr->pval == 0) {
-        flavor_ptr->k_ptr->pval = 1;
+    const auto timeout_per_one = baseitems_info[item.bi_id].pval;
+    if (timeout_per_one <= 0) {
+        return "";
     }
 
-    flavor_ptr->power = (flavor_ptr->o_ptr->timeout + (flavor_ptr->k_ptr->pval - 1)) / flavor_ptr->k_ptr->pval;
-    if (flavor_ptr->power > flavor_ptr->o_ptr->number) {
-        flavor_ptr->power = flavor_ptr->o_ptr->number;
+    auto num_of_charging = (item.timeout + (timeout_per_one - 1)) / timeout_per_one;
+    if (num_of_charging > item.number) {
+        num_of_charging = item.number;
     }
 
-    flavor_ptr->t = object_desc_str(flavor_ptr->t, " (");
-    flavor_ptr->t = object_desc_num(flavor_ptr->t, flavor_ptr->power);
-    flavor_ptr->t = object_desc_str(flavor_ptr->t, _("本 充填中)", " charging)"));
+    return format(" (%d%s)", num_of_charging, _("本 充填中", " charging"));
 }
 
-static void describe_specific_pval(flavor_type *flavor_ptr)
+static std::string describe_pval_type(const ItemEntity &item)
 {
-    if (flavor_ptr->tr_flags.has(TR_SPEED)) {
-        flavor_ptr->t = object_desc_str(flavor_ptr->t, _("加速", " to speed"));
-        return;
+    const auto tr_flags = object_flags(&item);
+    if (tr_flags.has(TR_HIDE_TYPE)) {
+        return "";
     }
 
-    if (flavor_ptr->tr_flags.has(TR_BLOWS)) {
-        flavor_ptr->t = object_desc_str(flavor_ptr->t, _("攻撃", " attack"));
-#ifdef JP
-#else
-        if (std::abs(flavor_ptr->o_ptr->pval) != 1) {
-            flavor_ptr->t = object_desc_chr(flavor_ptr->t, 's');
-        }
-#endif
-
-        return;
+    if (tr_flags.has(TR_SPEED)) {
+        return _("加速", " to speed");
     }
 
-    if (flavor_ptr->tr_flags.has(TR_STEALTH)) {
-        flavor_ptr->t = object_desc_str(flavor_ptr->t, _("隠密", " to stealth"));
-        return;
+    if (tr_flags.has(TR_BLOWS)) {
+        return _("攻撃", ((std::abs(item.pval) == 1) ? " attack" : " attacks"));
     }
 
-    if (flavor_ptr->tr_flags.has(TR_SEARCH)) {
-        flavor_ptr->t = object_desc_str(flavor_ptr->t, _("探索", " to searching"));
-        return;
+    if (tr_flags.has(TR_STEALTH)) {
+        return _("隠密", " to stealth");
     }
 
-    if (flavor_ptr->tr_flags.has(TR_INFRA)) {
-        flavor_ptr->t = object_desc_str(flavor_ptr->t, _("赤外線視力", " to infravision"));
+    if (tr_flags.has(TR_SEARCH)) {
+        return _("探索", " to searching");
     }
+
+    if (tr_flags.has(TR_INFRA)) {
+        return _("赤外線視力", " to infravision");
+    }
+
+    return "";
 }
 
-static void describe_pval(flavor_type *flavor_ptr)
+static std::string describe_pval(const ItemEntity &item)
 {
-    if (flavor_ptr->tr_flags.has_none_of(TR_PVAL_FLAG_MASK)) {
-        return;
+    const auto tr_flags = object_flags(&item);
+    if (tr_flags.has_none_of(TR_PVAL_FLAG_MASK)) {
+        return "";
     }
 
-    flavor_ptr->t = object_desc_chr(flavor_ptr->t, ' ');
-    flavor_ptr->t = object_desc_chr(flavor_ptr->t, flavor_ptr->p1);
-    flavor_ptr->t = object_desc_int(flavor_ptr->t, flavor_ptr->o_ptr->pval);
-    if (flavor_ptr->tr_flags.has(TR_HIDE_TYPE)) {
-        flavor_ptr->t = object_desc_chr(flavor_ptr->t, flavor_ptr->p2);
-        return;
-    }
-
-    describe_specific_pval(flavor_ptr);
-    flavor_ptr->t = object_desc_chr(flavor_ptr->t, flavor_ptr->p2);
+    const auto pval_type = describe_pval_type(item);
+    return format(" (%+d%s)", item.pval, pval_type.data());
 }
 
-static void describe_lamp_life(flavor_type *flavor_ptr)
+static std::string describe_lamp_life(const ItemEntity &item)
 {
-    const auto &bi_key = flavor_ptr->o_ptr->bi_key;
-    if ((bi_key.tval() != ItemKindType::LITE) || (flavor_ptr->o_ptr->is_fixed_artifact() || (bi_key.sval() == SV_LITE_FEANOR))) {
-        return;
+    const auto &bi_key = item.bi_key;
+    if ((bi_key.tval() != ItemKindType::LITE) || (item.is_fixed_artifact() || (bi_key.sval() == SV_LITE_FEANOR))) {
+        return "";
     }
 
-    flavor_ptr->t = object_desc_str(flavor_ptr->t, _("(", " (with "));
-    auto fuel_magnification = flavor_ptr->o_ptr->ego_idx == EgoType::LITE_LONG ? 2 : 1;
-    flavor_ptr->t = object_desc_num(flavor_ptr->t, fuel_magnification * flavor_ptr->o_ptr->fuel);
-    flavor_ptr->t = object_desc_str(flavor_ptr->t, _("ターンの寿命)", " turns of light)"));
+    const auto fuel_magnification = item.ego_idx == EgoType::LITE_LONG ? 2 : 1;
+    std::stringstream ss;
+    ss << _("(", " (with ")
+       << fuel_magnification * item.fuel
+       << _("ターンの寿命)", " turns of light)");
+
+    return ss.str();
 }
 
 /*!
  * @brief 杖や光源等、寿命のあるアイテムの残り回数やターン表記
  * @param アイテム表記への参照ポインタ
  */
-static void describe_remaining(flavor_type *flavor_ptr)
+static std::string describe_remaining(const ItemEntity &item, const describe_option_type &opt)
 {
-    if (!flavor_ptr->known) {
-        return;
+    if (!opt.known) {
+        return "";
     }
 
-    const auto tval = flavor_ptr->o_ptr->bi_key.tval();
-    if (flavor_ptr->o_ptr->is_wand_staff()) {
-        describe_charges_staff_wand(flavor_ptr);
+    std::stringstream ss;
+    const auto tval = item.bi_key.tval();
+    if (item.is_wand_staff()) {
+        ss << describe_charges_staff_wand(item);
     } else if (tval == ItemKindType::ROD) {
-        describe_charges_rod(flavor_ptr);
+        ss << describe_charges_rod(item);
     }
 
-    describe_pval(flavor_ptr);
-    describe_lamp_life(flavor_ptr);
-    if (flavor_ptr->o_ptr->timeout && (tval != ItemKindType::ROD)) {
-        flavor_ptr->t = object_desc_str(flavor_ptr->t, _("(充填中)", " (charging)"));
+    ss << describe_pval(item)
+       << describe_lamp_life(item);
+    if (item.timeout && (tval != ItemKindType::ROD)) {
+        ss << _("(充填中)", " (charging)");
     }
+
+    return ss.str();
 }
 
 static void decide_item_feeling(flavor_type *flavor_ptr)
@@ -592,7 +575,13 @@ void describe_flavor(PlayerType *player_ptr, char *buf, ItemEntity *o_ptr, BIT_F
     }
 
     desc_ss << describe_ac(item, opt);
-    if (flavor_ptr->mode & OD_NAME_AND_ENCHANT) {
+    if (any_bits(mode, OD_NAME_AND_ENCHANT)) {
+        angband_strcpy(buf, desc_ss.str().data(), MAX_NLEN);
+        return;
+    }
+
+    desc_ss << describe_remaining(item, opt);
+    if (any_bits(mode, OD_OMIT_INSCRIPTION)) {
         angband_strcpy(buf, desc_ss.str().data(), MAX_NLEN);
         return;
     }
@@ -600,12 +589,6 @@ void describe_flavor(PlayerType *player_ptr, char *buf, ItemEntity *o_ptr, BIT_F
     // ここまでのリファクタリングを確認するための暫定措置
     angband_strcpy(flavor_ptr->tmp_val, desc_ss.str().data(), sizeof(flavor_ptr->tmp_val));
     flavor_ptr->t = flavor_ptr->tmp_val + strlen(flavor_ptr->tmp_val);
-
-    describe_remaining(flavor_ptr);
-    if (flavor_ptr->mode & OD_OMIT_INSCRIPTION) {
-        angband_strcpy(flavor_ptr->buf, flavor_ptr->tmp_val, MAX_NLEN);
-        return;
-    }
 
     display_short_flavors(flavor_ptr);
     decide_item_feeling(flavor_ptr);
