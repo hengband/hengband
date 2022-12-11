@@ -187,8 +187,6 @@ void describe_pickup_item(PlayerType *player_ptr, OBJECT_IDX o_idx)
 #ifdef JP
     GAME_TEXT o_name[MAX_NLEN];
     GAME_TEXT old_name[MAX_NLEN];
-    char kazu_str[80];
-    int hirottakazu;
 #else
     GAME_TEXT o_name[MAX_NLEN];
 #endif
@@ -198,8 +196,8 @@ void describe_pickup_item(PlayerType *player_ptr, OBJECT_IDX o_idx)
 
 #ifdef JP
     describe_flavor(player_ptr, old_name, o_ptr, OD_NAME_ONLY);
-    object_desc_count_japanese(kazu_str, o_ptr);
-    hirottakazu = o_ptr->number;
+    const auto picked_count_str = describe_count_with_counter_suffix(*o_ptr);
+    const auto picked_count = o_ptr->number;
 #endif
 
     INVENTORY_IDX slot = store_item_to_inventory(player_ptr, o_ptr);
@@ -224,8 +222,8 @@ void describe_pickup_item(PlayerType *player_ptr, OBJECT_IDX o_idx)
         if (plain_pickup) {
             msg_format("%s(%c)を持っている。", o_name, index_to_label(slot));
         } else {
-            if (o_ptr->number > hirottakazu) {
-                msg_format("%s拾って、%s(%c)を持っている。", kazu_str, o_name, index_to_label(slot));
+            if (o_ptr->number > picked_count) {
+                msg_format("%s拾って、%s(%c)を持っている。", picked_count_str.data(), o_name, index_to_label(slot));
             } else {
                 msg_format("%s(%c)を拾った。", o_name, index_to_label(slot));
             }

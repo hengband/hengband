@@ -12,6 +12,7 @@
 #include "util/bit-flags-calculator.h"
 #include "util/enum-converter.h"
 #include "util/quarks.h"
+#include <sstream>
 
 flavor_type *initialize_flavor_type(flavor_type *flavor_ptr, char *buf, ItemEntity *o_ptr, BIT_FLAGS mode)
 {
@@ -397,34 +398,31 @@ void get_inscription(char *buff, const ItemEntity *o_ptr)
 
 #ifdef JP
 /*!
- * @brief 日本語の個数表示ルーチン
- * @param t 保管先文字列ポインタ
- * @param o_ptr 記述したいオブジェクトの構造体参照ポインタ
- * @details
- * cmd1.c で流用するために object_desc_japanese から移動した。
+ * @brief アイテムにふさわしい助数詞をつけて数を記述する
+ * @param item 数を記述したいアイテムの参照
+ * @return 記述した文字列
  */
-char *object_desc_count_japanese(char *t, const ItemEntity *o_ptr)
+std::string describe_count_with_counter_suffix(const ItemEntity &item)
 {
-    t = object_desc_num(t, o_ptr->number);
-    switch (o_ptr->bi_key.tval()) {
+    std::stringstream ss;
+    ss << item.number;
+
+    switch (item.bi_key.tval()) {
     case ItemKindType::BOLT:
     case ItemKindType::ARROW:
     case ItemKindType::POLEARM:
     case ItemKindType::STAFF:
     case ItemKindType::WAND:
     case ItemKindType::ROD:
-    case ItemKindType::DIGGING: {
-        t = object_desc_str(t, "本");
+    case ItemKindType::DIGGING:
+        ss << "本";
         break;
-    }
-    case ItemKindType::SCROLL: {
-        t = object_desc_str(t, "巻");
+    case ItemKindType::SCROLL:
+        ss << "巻";
         break;
-    }
-    case ItemKindType::POTION: {
-        t = object_desc_str(t, "服");
+    case ItemKindType::POTION:
+        ss << "服";
         break;
-    }
     case ItemKindType::LIFE_BOOK:
     case ItemKindType::SORCERY_BOOK:
     case ItemKindType::NATURE_BOOK:
@@ -437,48 +435,44 @@ char *object_desc_count_japanese(char *t, const ItemEntity *o_ptr)
     case ItemKindType::CRUSADE_BOOK:
     case ItemKindType::MUSIC_BOOK:
     case ItemKindType::HISSATSU_BOOK:
-    case ItemKindType::HEX_BOOK: {
-        t = object_desc_str(t, "冊");
+    case ItemKindType::HEX_BOOK:
+        ss << "冊";
         break;
-    }
     case ItemKindType::SOFT_ARMOR:
     case ItemKindType::HARD_ARMOR:
     case ItemKindType::DRAG_ARMOR:
-    case ItemKindType::CLOAK: {
-        t = object_desc_str(t, "着");
+    case ItemKindType::CLOAK:
+        ss << "着";
         break;
-    }
     case ItemKindType::SWORD:
     case ItemKindType::HAFTED:
-    case ItemKindType::BOW: {
-        t = object_desc_str(t, "振");
+    case ItemKindType::BOW:
+        ss << "振";
         break;
-    }
-    case ItemKindType::BOOTS: {
-        t = object_desc_str(t, "足");
+    case ItemKindType::BOOTS:
+        ss << "足";
         break;
-    }
-    case ItemKindType::CARD: {
-        t = object_desc_str(t, "枚");
+
+    case ItemKindType::CARD:
+        ss << "枚";
         break;
-    }
-    case ItemKindType::FOOD: {
-        if (o_ptr->bi_key.sval().value() == SV_FOOD_JERKY) {
-            t = object_desc_str(t, "切れ");
+
+    case ItemKindType::FOOD:
+        if (item.bi_key.sval().value() == SV_FOOD_JERKY) {
+            ss << "切れ";
             break;
         }
-    }
         [[fallthrough]];
-    default: {
-        if (o_ptr->number < 10) {
-            t = object_desc_str(t, "つ");
+    default:
+        if (item.number < 10) {
+            ss << "つ";
         } else {
-            t = object_desc_str(t, "個");
+            ss << "個";
         }
         break;
     }
-    }
-    return t;
+
+    return ss.str();
 }
 #endif
 

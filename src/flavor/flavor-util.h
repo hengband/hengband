@@ -51,5 +51,5 @@ bool has_lite_flag(const TrFlags &flags);
 bool has_dark_flag(const TrFlags &flags);
 
 #ifdef JP
-char *object_desc_count_japanese(char *t, const ItemEntity *o_ptr);
+std::string describe_count_with_counter_suffix(const ItemEntity &item);
 #endif
