@@ -294,20 +294,20 @@ static void print_health_monster_in_arena_for_wizard(PlayerType *player_ptr)
     int row = ROW_INFO - 1;
     int col = COL_INFO + 2;
 
-    const int MAX_NUM_OF_MONSTER_IN_ARENA = 4;
+    const int max_num_of_monster_in_arena = 4;
 
-    for (int i = 0; i < MAX_NUM_OF_MONSTER_IN_ARENA; i++) {
-        auto rowOffset = i;
-        auto monsterListIndex = i + 1; // m_listの1-4に闘技場のモンスターデータが入っている
+    for (int i = 0; i < max_num_of_monster_in_arena; i++) {
+        auto row_offset = i;
+        auto monster_list_index = i + 1; // m_listの1-4に闘技場のモンスターデータが入っている
 
-        term_putstr(col - 2, row + rowOffset, 12, TERM_WHITE, "      /     ");
+        term_putstr(col - 2, row + row_offset, 12, TERM_WHITE, "      /     ");
 
-        auto &monster = player_ptr->current_floor_ptr->m_list[monsterListIndex];
+        auto &monster = player_ptr->current_floor_ptr->m_list[monster_list_index];
         if (MonsterRace(monster.r_idx).is_valid()) {
-            term_putstr(col - 2, row + rowOffset, 2, monraces_info[monster.r_idx].x_attr,
+            term_putstr(col - 2, row + row_offset, 2, monraces_info[monster.r_idx].x_attr,
                 format("%c", monraces_info[monster.r_idx].x_char));
-            term_putstr(col - 1, row + rowOffset, 5, TERM_WHITE, format("%5d", monster.hp));
-            term_putstr(col + 5, row + rowOffset, 6, TERM_WHITE, format("%5d", monster.max_maxhp));
+            term_putstr(col - 1, row + row_offset, 5, TERM_WHITE, format("%5d", monster.hp));
+            term_putstr(col + 5, row + row_offset, 6, TERM_WHITE, format("%5d", monster.max_maxhp));
         }
     }
 }
@@ -419,28 +419,28 @@ void print_health(PlayerType *player_ptr, bool riding)
         col = COL_INFO;
     }
 
-    const int MAX_HEIGHT_RIDING = 3; // 騎乗時に描画する高さの最大範囲
-    const int MAX_HEIGHT = 6; // 通常時に描画する高さの最大範囲
-    const int MAX_WIDTH = 12; // 表示幅
+    const int max_height_riding = 3; // 騎乗時に描画する高さの最大範囲
+    const int max_height = 6; // 通常時に描画する高さの最大範囲
+    const int max_width = 12; // 表示幅
 
     // 表示範囲を一旦全部消す
-    int range = riding ? MAX_HEIGHT_RIDING : MAX_HEIGHT;
+    int range = riding ? max_height_riding : max_height;
     for (int y = row; y < row + range; y++) {
-        term_erase(col, y, MAX_WIDTH);
+        term_erase(col, y, max_width);
     }
 
     if (!monster_idx.has_value()) {
         return;
     }
 
-    const int ROW_OFFSET_NAME = 0; // 名前
-    const int ROW_OFFSET_HEALTH = 1; // HP
-    const int ROW_OFFSET_CONDITION = 2; // 状態異常
+    const int row_offset_name = 0; // 名前
+    const int row_offset_health = 1; // HP
+    const int row_offset_condition = 2; // 状態異常
 
     const auto &monster = player_ptr->current_floor_ptr->m_list[monster_idx.value()];
 
     if ((!monster.ml) || (player_ptr->effects()->hallucination()->is_hallucinated()) || monster.is_dead()) {
-        term_putstr(col, row + ROW_OFFSET_HEALTH, MAX_WIDTH, TERM_WHITE, "[----------]");
+        term_putstr(col, row + row_offset_health, max_width, TERM_WHITE, "[----------]");
         return;
     }
 
@@ -448,15 +448,15 @@ void print_health(PlayerType *player_ptr, bool riding)
     int pct2 = monster.maxhp > 0 ? 100L * monster.hp / monster.max_maxhp : 0;
     int len = (pct2 < 10) ? 1 : (pct2 < 90) ? (pct2 / 10 + 1)
                                             : 10;
-    auto hit_point_bar_clor = get_monster_hp_point_bar_color(monster);
+    auto hit_point_bar_color = get_monster_hp_point_bar_color(monster);
     const auto &ap_r_ref = monraces_info[monster.ap_r_idx];
 
     // 名前
     // 表示枠に収まらない場合は途中で切る
-    term_putstr(col, row + ROW_OFFSET_NAME, MAX_WIDTH, TERM_WHITE, str_separate(ap_r_ref.name, MAX_WIDTH)[0].data());
+    term_putstr(col, row + row_offset_name, max_width, TERM_WHITE, str_separate(ap_r_ref.name, max_width)[0].data());
     // HPの割合
-    term_putstr(col, row + ROW_OFFSET_HEALTH, MAX_WIDTH, TERM_WHITE, "[----------]");
-    term_putstr(col + 1, row + ROW_OFFSET_HEALTH, len, hit_point_bar_clor, "**********");
+    term_putstr(col, row + row_offset_health, max_width, TERM_WHITE, "[----------]");
+    term_putstr(col + 1, row + row_offset_health, len, hit_point_bar_color, "**********");
 
     // 騎乗中のモンスターの状態異常は表示しない
     if (riding) {
@@ -469,11 +469,11 @@ void print_health(PlayerType *player_ptr, bool riding)
     // 一時的状態異常
     // MAX_WIDTHを超えたら次の行に移動する
     for (const auto &info : get_condition_layout_info(monster)) {
-        if (col_offset + info.label.length() - 1 > MAX_WIDTH) { // 改行が必要かどうかチェック。length() - 1してるのは\0の分を文字数から取り除くため
+        if (col_offset + info.label.length() - 1 > max_width) { // 改行が必要かどうかチェック。length() - 1してるのは\0の分を文字数から取り除くため
             col_offset = 0;
             row_offset++;
         }
-        term_putstr(col + col_offset, row + ROW_OFFSET_CONDITION + row_offset, MAX_WIDTH, info.color, info.label.data());
+        term_putstr(col + col_offset, row + row_offset_condition + row_offset, max_width, info.color, info.label.data());
         col_offset += info.label.length() + 1; // 文字数と空白の分だけoffsetを加算
     }
 }
