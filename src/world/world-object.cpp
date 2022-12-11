@@ -88,7 +88,7 @@ OBJECT_IDX get_obj_index(PlayerType *player_ptr, DEPTH level, BIT_FLAGS mode)
             break;
         }
 
-        const auto &baseitem = baseitems_info[entry.index];
+        const auto &baseitem = baseitems_info.at(entry.index);
         if ((mode & AM_FORBID_CHEST) && (baseitem.bi_key.tval() == ItemKindType::CHEST)) {
             continue;
         }

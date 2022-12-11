@@ -54,7 +54,7 @@
  */
 static bool object_easy_know(int i)
 {
-    const auto &baseitem = baseitems_info[i];
+    const auto &baseitem = baseitems_info.at(i);
     switch (baseitem.bi_key.tval()) {
     case ItemKindType::LIFE_BOOK:
     case ItemKindType::SORCERY_BOOK:
@@ -204,7 +204,7 @@ static void shuffle_flavors(ItemKindType tval)
             continue;
         }
 
-        flavor_idx_ref_list.push_back(baseitems_info[bi_id].flavor);
+        flavor_idx_ref_list.push_back(baseitems_info.at(bi_id).flavor);
     }
 
     rand_shuffle(flavor_idx_ref_list.begin(), flavor_idx_ref_list.end());
@@ -255,7 +255,7 @@ void flavor_init(void)
  */
 std::string strip_name(short bi_id)
 {
-    const auto &baseitem = baseitems_info[bi_id];
+    const auto &baseitem = baseitems_info.at(bi_id);
     auto tok = str_split(baseitem.name, ' ');
     std::stringstream name;
     for (const auto &s : tok) {

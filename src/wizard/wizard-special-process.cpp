@@ -237,7 +237,7 @@ void wiz_create_item(PlayerType *player_ptr)
         return;
     }
 
-    const auto &baseitem = baseitems_info[bi_id];
+    const auto &baseitem = baseitems_info.at(bi_id);
     if (baseitem.gen_flags.has(ItemGenerationTraitType::INSTA_ART)) {
         for (const auto &[a_idx, a_ref] : artifacts_info) {
             if ((a_idx == FixedArtifactId::NONE) || (a_ref.bi_key != baseitem.bi_key)) {

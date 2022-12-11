@@ -229,7 +229,7 @@ void exe_eat_food(PlayerType *player_ptr, INVENTORY_IDX item)
     PlayerEnergy(player_ptr).set_player_turn_energy(100);
 
     /* Object level */
-    int lev = baseitems_info[o_ptr->bi_id].level;
+    auto lev = baseitems_info.at(o_ptr->bi_id).level;
 
     /* Identity not known yet */
     const auto &bi_key = o_ptr->bi_key;

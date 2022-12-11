@@ -22,7 +22,7 @@ PRICE flag_cost(const ItemEntity *o_ptr, int plusses)
 {
     PRICE total = 0;
     auto flgs = object_flags(o_ptr);
-    const auto &baseitem = baseitems_info[o_ptr->bi_id];
+    const auto &baseitem = baseitems_info.at(o_ptr->bi_id);
     flgs.reset(baseitem.flags);
 
     if (o_ptr->is_fixed_artifact()) {

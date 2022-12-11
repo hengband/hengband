@@ -79,7 +79,7 @@ static errr interpret_k_token(char *buf)
         return 1;
     }
 
-    auto *bii_ptr = &baseitems_info[i];
+    auto *bii_ptr = &baseitems_info.at(i);
     if (n1 || (!(n2 & 0x80) && n2)) {
         bii_ptr->x_attr = n1;
     } /* Allow TERM_DARK text */

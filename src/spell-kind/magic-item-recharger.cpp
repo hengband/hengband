@@ -58,7 +58,7 @@ bool recharge(PlayerType *player_ptr, int power)
         return false;
     }
 
-    const auto &baseitem = baseitems_info[o_ptr->bi_id];
+    const auto &baseitem = baseitems_info.at(o_ptr->bi_id);
     const auto lev = baseitem.level;
 
     TIME_EFFECT recharge_amount;

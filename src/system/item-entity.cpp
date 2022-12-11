@@ -58,7 +58,7 @@ void ItemEntity::copy_from(const ItemEntity *j_ptr)
  */
 void ItemEntity::prep(short new_bi_id)
 {
-    const auto &baseitem = baseitems_info[new_bi_id];
+    const auto &baseitem = baseitems_info.at(new_bi_id);
     auto old_stack_idx = this->stack_idx;
     this->wipe();
     this->stack_idx = old_stack_idx;
@@ -78,7 +78,7 @@ void ItemEntity::prep(short new_bi_id)
         this->activation_id = baseitem.act_idx;
     }
 
-    if (baseitems_info[this->bi_id].cost <= 0) {
+    if (baseitems_info.at(this->bi_id).cost <= 0) {
         this->ident |= (IDENT_BROKEN);
     }
 
@@ -388,7 +388,7 @@ bool ItemEntity::is_held_by_monster() const
  */
 bool ItemEntity::is_known() const
 {
-    const auto &baseitem = baseitems_info[this->bi_id];
+    const auto &baseitem = baseitems_info.at(this->bi_id);
     return any_bits(this->ident, IDENT_KNOWN) || (baseitem.easy_know && baseitem.aware);
 }
 
@@ -403,7 +403,7 @@ bool ItemEntity::is_fully_known() const
  */
 bool ItemEntity::is_aware() const
 {
-    return baseitems_info[this->bi_id].aware;
+    return baseitems_info.at(this->bi_id).aware;
 }
 
 /*
@@ -411,7 +411,7 @@ bool ItemEntity::is_aware() const
  */
 bool ItemEntity::is_tried() const
 {
-    return baseitems_info[this->bi_id].tried;
+    return baseitems_info.at(this->bi_id).tried;
 }
 
 /*!
@@ -615,10 +615,10 @@ bool ItemEntity::can_pile(const ItemEntity *j_ptr) const
  */
 TERM_COLOR ItemEntity::get_color() const
 {
-    const auto &baseitem = baseitems_info[this->bi_id];
+    const auto &baseitem = baseitems_info.at(this->bi_id);
     const auto flavor = baseitem.flavor;
     if (flavor != 0) {
-        return baseitems_info[flavor].x_attr;
+        return baseitems_info.at(flavor).x_attr;
     }
 
     auto has_attr = this->bi_id == 0;
@@ -639,9 +639,9 @@ TERM_COLOR ItemEntity::get_color() const
  */
 char ItemEntity::get_symbol() const
 {
-    const auto &baseitem = baseitems_info[this->bi_id];
+    const auto &baseitem = baseitems_info.at(this->bi_id);
     const auto flavor = baseitem.flavor;
-    return flavor ? baseitems_info[flavor].x_char : baseitem.x_char;
+    return flavor ? baseitems_info.at(flavor).x_char : baseitem.x_char;
 }
 
 /*!
@@ -680,7 +680,7 @@ int ItemEntity::get_price() const
 int ItemEntity::get_baseitem_price() const
 {
     if (this->is_aware()) {
-        return baseitems_info[this->bi_id].cost;
+        return baseitems_info.at(this->bi_id).cost;
     }
 
     switch (this->bi_key.tval()) {

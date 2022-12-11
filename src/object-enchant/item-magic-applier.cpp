@@ -201,8 +201,8 @@ void ItemMagicApplier::apply_cursed()
         return;
     }
 
-    const auto &baseitem = baseitems_info[this->o_ptr->bi_id];
-    if (!baseitems_info[this->o_ptr->bi_id].cost) {
+    const auto &baseitem = baseitems_info.at(this->o_ptr->bi_id);
+    if (baseitem.cost == 0) {
         set_bits(this->o_ptr->ident, IDENT_BROKEN);
     }
 

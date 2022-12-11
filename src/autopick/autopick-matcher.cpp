@@ -57,7 +57,7 @@ bool is_autopick_match(PlayerType *player_ptr, ItemEntity *o_ptr, autopick_type 
             return false;
         }
 
-        const auto &baseitem = baseitems_info[o_ptr->bi_id];
+        const auto &baseitem = baseitems_info.at(o_ptr->bi_id);
         if ((o_ptr->dd == baseitem.dd) && (o_ptr->ds == baseitem.ds)) {
             return false;
         }

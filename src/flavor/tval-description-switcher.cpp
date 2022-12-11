@@ -24,7 +24,7 @@
 
 static std::pair<std::string, std::string> describe_monster_ball(const ItemEntity &item, const describe_option_type &opt)
 {
-    const auto &basename = baseitems_info[item.bi_id].name;
+    const auto &basename = baseitems_info.at(item.bi_id).name;
     const auto r_idx = i2enum<MonsterRaceId>(item.pval);
     auto *r_ptr = &monraces_info[r_idx];
     if (!opt.known) {
@@ -50,7 +50,7 @@ static std::pair<std::string, std::string> describe_monster_ball(const ItemEntit
 
 static std::pair<std::string, std::string> describe_statue(const ItemEntity &item)
 {
-    const auto &basename = baseitems_info[item.bi_id].name;
+    const auto &basename = baseitems_info.at(item.bi_id).name;
     const auto r_idx = i2enum<MonsterRaceId>(item.pval);
     auto *r_ptr = &monraces_info[r_idx];
 #ifdef JP
@@ -96,15 +96,15 @@ static std::pair<std::string, std::string> describe_corpse(const ItemEntity &ite
  */
 static std::string flavor_name_of(const ItemEntity &item, const describe_option_type &opt)
 {
-    const auto &baseitem = baseitems_info[item.bi_id];
+    const auto &baseitem = baseitems_info.at(item.bi_id);
     return any_bits(opt.mode, OD_FORCE_FLAVOR)
                ? baseitem.flavor_name
-               : baseitems_info[baseitem.flavor].flavor_name;
+               : baseitems_info.at(baseitem.flavor).flavor_name;
 }
 
 static std::pair<std::string, std::string> describe_amulet(const ItemEntity &item, const describe_option_type &opt)
 {
-    const auto &baseitem = baseitems_info[item.bi_id];
+    const auto &baseitem = baseitems_info.at(item.bi_id);
     if (opt.aware && (item.is_fixed_artifact() || baseitem.gen_flags.has(ItemGenerationTraitType::INSTA_ART))) {
         return { baseitem.name, "" };
     }
@@ -120,7 +120,7 @@ static std::pair<std::string, std::string> describe_amulet(const ItemEntity &ite
 
 static std::pair<std::string, std::string> describe_ring(const ItemEntity &item, const describe_option_type &opt)
 {
-    const auto &baseitem = baseitems_info[item.bi_id];
+    const auto &baseitem = baseitems_info.at(item.bi_id);
     if (opt.aware && (item.is_fixed_artifact() || baseitem.gen_flags.has(ItemGenerationTraitType::INSTA_ART))) {
         return { baseitem.name, "" };
     }
@@ -191,7 +191,7 @@ static std::pair<std::string, std::string> describe_potion(const ItemEntity &ite
 
 static std::pair<std::string, std::string> describe_food(const ItemEntity &item, const describe_option_type &opt)
 {
-    const auto &baseitem = baseitems_info[item.bi_id];
+    const auto &baseitem = baseitems_info.at(item.bi_id);
     if (baseitem.flavor_name.empty()) {
         return { baseitem.name, "" };
     }
@@ -360,7 +360,7 @@ static std::pair<std::string, std::string> describe_book_hex()
  */
 std::pair<std::string, std::string> switch_tval_description(const ItemEntity &item, const describe_option_type &opt)
 {
-    const auto &basename = baseitems_info[item.bi_id].name;
+    const auto &basename = baseitems_info.at(item.bi_id).name;
 
     switch (item.bi_key.tval()) {
     case ItemKindType::NONE:

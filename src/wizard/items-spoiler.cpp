@@ -12,7 +12,6 @@
 #include "util/angband-files.h"
 #include "view/display-messages.h"
 #include "wizard/spoiler-util.h"
-
 #include <algorithm>
 
 /*!
@@ -36,7 +35,7 @@ static void describe_baseitem_info(PlayerType *player_ptr, char *name, char *dam
     q_ptr->to_a = 0;
     q_ptr->to_h = 0;
     q_ptr->to_d = 0;
-    *level = baseitems_info[q_ptr->bi_id].level;
+    *level = baseitems_info.at(q_ptr->bi_id).level;
     *value = q_ptr->get_price();
     if (!name || !damage_desc || !chance_desc || !weight_desc) {
         return;

@@ -48,7 +48,7 @@ static void object_flags_lite(const ItemEntity *o_ptr, TrFlags &flgs)
  */
 TrFlags object_flags(const ItemEntity *o_ptr)
 {
-    const auto &baseitem = baseitems_info[o_ptr->bi_id];
+    const auto &baseitem = baseitems_info.at(o_ptr->bi_id);
     auto flgs = baseitem.flags;
 
     if (o_ptr->is_fixed_artifact()) {
@@ -82,7 +82,7 @@ TrFlags object_flags_known(const ItemEntity *o_ptr)
         return flgs;
     }
 
-    const auto &baseitem = baseitems_info[o_ptr->bi_id];
+    const auto &baseitem = baseitems_info.at(o_ptr->bi_id);
     flgs = baseitem.flags;
     if (!o_ptr->is_known()) {
         return flgs;

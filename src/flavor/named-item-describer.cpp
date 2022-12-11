@@ -34,7 +34,7 @@ static std::string get_fullname_if_set(const ItemEntity &item, const describe_op
 
     const auto fixed_art_id = item.fixed_artifact_idx;
     const auto is_known_artifact = opt.known && item.is_fixed_artifact() && none_bits(opt.mode, OD_BASE_NAME);
-    return is_known_artifact ? artifacts_info.at(fixed_art_id).name : baseitems_info[item.bi_id].name;
+    return is_known_artifact ? artifacts_info.at(fixed_art_id).name : baseitems_info.at(item.bi_id).name;
 }
 
 #ifdef JP
@@ -222,7 +222,7 @@ static std::string describe_vowel(const ItemEntity &item, std::string_view basen
         vowel = is_a_vowel(modstr[0]);
         break;
     case '%':
-        vowel = is_a_vowel(baseitems_info[item.bi_id].name[0]);
+        vowel = is_a_vowel(baseitems_info.at(item.bi_id).name[0]);
         break;
     default:
         vowel = is_a_vowel(basename[0]);
@@ -345,7 +345,7 @@ static std::string describe_body(const ItemEntity &item, [[maybe_unused]] const 
             break;
 
         case '%':
-            ss << baseitems_info[item.bi_id].name;
+            ss << baseitems_info.at(item.bi_id).name;
             break;
 
 #ifndef JP

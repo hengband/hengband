@@ -179,7 +179,7 @@ static PRICE repair_broken_weapon_aux(PlayerType *player_ptr, PRICE bcost)
         auto tval = (one_in_(5) ? mo_ptr->bi_key.tval() : ItemKindType::SWORD);
         while (true) {
             crafting_bi_id = lookup_baseitem_id({ tval });
-            const auto &crafting_baseitem = baseitems_info[crafting_bi_id];
+            const auto &crafting_baseitem = baseitems_info.at(crafting_bi_id);
             const auto sval = crafting_baseitem.bi_key.sval();
             if (tval == ItemKindType::SWORD) {
                 if ((sval == SV_BROKEN_DAGGER) || (sval == SV_BROKEN_SWORD) || (sval == SV_DIAMOND_EDGE) || (sval == SV_POISON_NEEDLE)) {
@@ -203,24 +203,26 @@ static PRICE repair_broken_weapon_aux(PlayerType *player_ptr, PRICE bcost)
         }
     }
 
-    auto dd_bonus = o_ptr->dd - baseitems_info[o_ptr->bi_id].dd;
-    auto ds_bonus = o_ptr->ds - baseitems_info[o_ptr->bi_id].ds;
-    dd_bonus += mo_ptr->dd - baseitems_info[mo_ptr->bi_id].dd;
-    ds_bonus += mo_ptr->ds - baseitems_info[mo_ptr->bi_id].ds;
+    const auto &broken_baseitem = baseitems_info.at(o_ptr->bi_id);
+    auto dd_bonus = o_ptr->dd - broken_baseitem.dd;
+    auto ds_bonus = o_ptr->ds - broken_baseitem.ds;
+    const auto &material_baseitem = baseitems_info.at(mo_ptr->bi_id);
+    dd_bonus += mo_ptr->dd - material_baseitem.dd;
+    ds_bonus += mo_ptr->ds - material_baseitem.ds;
 
-    const auto &baseitem = baseitems_info[crafting_bi_id];
+    const auto &crafting_baseitem = baseitems_info.at(crafting_bi_id);
     o_ptr->bi_id = crafting_bi_id;
-    o_ptr->weight = baseitem.weight;
-    o_ptr->bi_key = baseitem.bi_key;
-    o_ptr->dd = baseitem.dd;
-    o_ptr->ds = baseitem.ds;
-    o_ptr->art_flags.set(baseitem.flags);
-    if (baseitem.pval) {
-        o_ptr->pval = std::max<short>(o_ptr->pval, randint1(baseitem.pval));
+    o_ptr->weight = crafting_baseitem.weight;
+    o_ptr->bi_key = crafting_baseitem.bi_key;
+    o_ptr->dd = crafting_baseitem.dd;
+    o_ptr->ds = crafting_baseitem.ds;
+    o_ptr->art_flags.set(crafting_baseitem.flags);
+    if (crafting_baseitem.pval) {
+        o_ptr->pval = std::max<short>(o_ptr->pval, randint1(crafting_baseitem.pval));
     }
 
-    if (baseitem.flags.has(TR_ACTIVATE)) {
-        o_ptr->activation_id = baseitem.act_idx;
+    if (crafting_baseitem.flags.has(TR_ACTIVATE)) {
+        o_ptr->activation_id = crafting_baseitem.act_idx;
     }
 
     if (dd_bonus > 0) {
@@ -241,7 +243,7 @@ static PRICE repair_broken_weapon_aux(PlayerType *player_ptr, PRICE bcost)
         }
     }
 
-    if (baseitem.flags.has(TR_BLOWS)) {
+    if (broken_baseitem.flags.has(TR_BLOWS)) {
         auto bmax = std::min<short>(3, std::max<short>(1, 40 / (o_ptr->dd * o_ptr->ds)));
         o_ptr->pval = std::min<short>(o_ptr->pval, bmax);
     }

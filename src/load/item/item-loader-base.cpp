@@ -15,7 +15,7 @@ void ItemLoaderBase::load_item(void)
     auto loading_max_k_idx = rd_u16b();
     BaseitemInfo dummy;
     for (auto i = 0U; i < loading_max_k_idx; i++) {
-        auto *bii_ptr = i < baseitems_info.size() ? &baseitems_info[i] : &dummy;
+        auto *bii_ptr = i < baseitems_info.size() ? &baseitems_info.at(i) : &dummy;
         auto tmp8u = rd_byte();
         bii_ptr->aware = any_bits(tmp8u, 0x01);
         bii_ptr->tried = any_bits(tmp8u, 0x02);

@@ -205,11 +205,11 @@ bool ObjectBreaker::can_destroy(ItemEntity *o_ptr) const
  */
 bool potion_smash_effect(PlayerType *player_ptr, MONSTER_IDX who, POSITION y, POSITION x, short bi_id)
 {
-    int radius = 2;
-    AttributeType dt = AttributeType::NONE;
-    int dam = 0;
-    bool angry = false;
-    const auto &baseitem = baseitems_info[bi_id];
+    auto radius = 2;
+    auto dt = AttributeType::NONE;
+    auto dam = 0;
+    auto angry = false;
+    const auto &baseitem = baseitems_info.at(bi_id);
     switch (baseitem.bi_key.sval().value()) {
     case SV_POTION_SALT_WATER:
     case SV_POTION_SLIME_MOLD:

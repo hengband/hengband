@@ -193,11 +193,11 @@ static void display_object_list(int col, int row, int per_page, const std::vecto
     int i;
     for (i = 0; i < per_page && (object_idx[object_top + i] >= 0); i++) {
         TERM_COLOR a;
-        short bi_id = object_idx[object_top + i];
-        const auto &baseitem = baseitems_info[bi_id];
+        const short bi_id = object_idx[object_top + i];
+        const auto &baseitem = baseitems_info.at(bi_id);
         TERM_COLOR attr = ((baseitem.aware || visual_only) ? TERM_WHITE : TERM_SLATE);
         byte cursor = ((baseitem.aware || visual_only) ? TERM_L_BLUE : TERM_BLUE);
-        const auto &flavor_baseitem = !visual_only && baseitem.flavor ? baseitems_info[baseitem.flavor] : baseitems_info[bi_id];
+        const auto &flavor_baseitem = !visual_only && baseitem.flavor ? baseitems_info.at(baseitem.flavor) : baseitem;
 
         attr = ((i + object_top == object_cur) ? cursor : attr);
         const auto is_flavor_only = (baseitem.flavor != 0) && (visual_only || !baseitem.aware);
@@ -283,8 +283,8 @@ void do_cmd_knowledge_objects(PlayerType *player_ptr, bool *need_redraw, bool vi
         object_old = -1;
         object_cnt = 0;
     } else {
-        auto &baseitem = baseitems_info[direct_k_idx];
-        auto &flavor_baseitem = !visual_only && baseitem.flavor ? baseitems_info[baseitem.flavor] : baseitem;
+        auto &baseitem = baseitems_info.at(direct_k_idx);
+        auto &flavor_baseitem = !visual_only && baseitem.flavor ? baseitems_info.at(baseitem.flavor) : baseitem;
         object_idx[0] = direct_k_idx;
         object_old = direct_k_idx;
         object_cnt = 1;
@@ -381,8 +381,8 @@ void do_cmd_knowledge_objects(PlayerType *player_ptr, bool *need_redraw, bool vi
             display_visual_list(max + 3, 7, browser_rows - 1, wid - (max + 3), attr_top, char_left);
         }
 
-        auto &baseitem = baseitems_info[object_idx[object_cur]];
-        auto &flavor_baseitem = !visual_only && baseitem.flavor ? baseitems_info[baseitem.flavor] : baseitem;
+        auto &baseitem = baseitems_info.at(object_idx[object_cur]);
+        auto &flavor_baseitem = !visual_only && baseitem.flavor ? baseitems_info.at(baseitem.flavor) : baseitem;
 
 #ifdef JP
         prt(format("<方向>%s%s%s, ESC", (!visual_list && !visual_only) ? ", 'r'で詳細を見る" : "", visual_list ? ", ENTERで決定" : ", 'v'でシンボル変更",

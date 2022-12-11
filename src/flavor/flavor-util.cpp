@@ -97,7 +97,7 @@ char *get_ability_abbreviation(char *short_flavor, const ItemEntity *o_ptr, bool
     char *prev_ptr = short_flavor;
     auto flgs = object_flags(o_ptr);
     if (!all) {
-        const auto &baseitem = baseitems_info[o_ptr->bi_id];
+        const auto &baseitem = baseitems_info.at(o_ptr->bi_id);
         flgs.reset(baseitem.flags);
 
         if (o_ptr->is_fixed_artifact()) {

@@ -217,7 +217,7 @@ static byte get_dungeon_feeling(PlayerType *player_ptr)
             delta += 15 * base;
         }
 
-        const auto &baseitem = baseitems_info[o_ptr->bi_id];
+        const auto &baseitem = baseitems_info.at(o_ptr->bi_id);
         if (!o_ptr->is_cursed() && !o_ptr->is_broken() && baseitem.level > floor_ptr->dun_level) {
             delta += (baseitem.level - floor_ptr->dun_level) * base;
         }

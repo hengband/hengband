@@ -225,7 +225,7 @@ void wiz_identify_full_inventory(PlayerType *player_ptr)
             continue;
         }
 
-        auto &baseitem = baseitems_info[o_ptr->bi_id];
+        auto &baseitem = baseitems_info.at(o_ptr->bi_id);
         baseitem.aware = true; //!< @note 記録には残さないためTRUEを立てるのみ
         set_bits(o_ptr->ident, IDENT_KNOWN | IDENT_FULL_KNOWN);
         o_ptr->marked.set(OmType::TOUCHED);
@@ -263,7 +263,7 @@ static void prt_alloc(const BaseitemKey &bi_key, TERM_LEN row, TERM_LEN col)
                 prob = entry.prob1 * i * BASEITEM_MAX_DEPTH / (entry.level - 1);
             }
 
-            const auto &baseitem = baseitems_info[entry.index];
+            const auto &baseitem = baseitems_info.at(entry.index);
             total[i] += prob / magnificant;
             total_frac += prob % magnificant;
 
@@ -344,7 +344,7 @@ static void wiz_display_item(PlayerType *player_ptr, ItemEntity *o_ptr)
 
     auto line = 4;
     const auto &bi_key = o_ptr->bi_key;
-    const auto item_level = baseitems_info[o_ptr->bi_id].level;
+    const auto item_level = baseitems_info.at(o_ptr->bi_id).level;
     prt(format("kind = %-5d  level = %-4d  tval = %-5d  sval = %-5d", o_ptr->bi_id, item_level, bi_key.tval(), bi_key.sval().value()), line, j);
     prt(format("number = %-3d  wgt = %-6d  ac = %-5d    damage = %dd%d", o_ptr->number, o_ptr->weight, o_ptr->ac, o_ptr->dd, o_ptr->ds), ++line, j);
     prt(format("pval = %-5d  toac = %-5d  tohit = %-4d  todam = %-4d", o_ptr->pval, o_ptr->to_a, o_ptr->to_h, o_ptr->to_d), ++line, j);
@@ -1033,7 +1033,7 @@ WishResultType do_cmd_wishing(PlayerType *player_ptr, int prob, bool allow_art, 
 
     if (k_ids.size() == 1) {
         const auto bi_id = k_ids.back();
-        const auto &baseitem = baseitems_info[bi_id];
+        const auto &baseitem = baseitems_info.at(bi_id);
         auto a_idx = FixedArtifactId::NONE;
         if (baseitem.gen_flags.has(ItemGenerationTraitType::INSTA_ART)) {
             for (const auto &[a_idx_loop, a_ref_loop] : artifacts_info) {

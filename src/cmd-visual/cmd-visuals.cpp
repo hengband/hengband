@@ -292,7 +292,7 @@ void do_cmd_visuals(PlayerType *player_ptr)
             static short k = 0;
             prt(format(_("コマンド: %s", "Command: %s"), choice_msg), 15, 0);
             while (true) {
-                auto &baseitem = baseitems_info[k];
+                auto &baseitem = baseitems_info.at(k);
                 int c;
                 IDX t;
 
@@ -333,7 +333,7 @@ void do_cmd_visuals(PlayerType *player_ptr)
                             k = prev_k;
                             break;
                         }
-                    } while (baseitems_info[k].name.empty());
+                    } while (baseitems_info.at(k).name.empty());
                 }
 
                 break;
