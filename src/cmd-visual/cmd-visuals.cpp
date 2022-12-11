@@ -156,18 +156,18 @@ void do_cmd_visuals(PlayerType *player_ptr)
             }
 
             auto_dump_printf(auto_dump_stream, _("\n# アイテムの[色/文字]の設定\n\n", "\n# Object attr/char definitions\n\n"));
-            for (const auto &k_ref : baseitems_info) {
-                if (k_ref.name.empty()) {
+            for (const auto &baseitem : baseitems_info) {
+                if (baseitem.name.empty()) {
                     continue;
                 }
 
                 std::string o_name("");
                 GAME_TEXT char_o_name[MAX_NLEN]{};
-                if (!k_ref.flavor) {
-                    o_name = strip_name(k_ref.idx);
+                if (baseitem.flavor == 0) {
+                    o_name = strip_name(baseitem.idx);
                 } else {
                     ItemEntity dummy;
-                    dummy.prep(k_ref.idx);
+                    dummy.prep(baseitem.idx);
                     describe_flavor(player_ptr, char_o_name, &dummy, OD_FORCE_FLAVOR);
                 }
 
@@ -176,7 +176,7 @@ void do_cmd_visuals(PlayerType *player_ptr)
                 }
 
                 auto_dump_printf(auto_dump_stream, "# %s\n", o_name.data());
-                auto_dump_printf(auto_dump_stream, "K:%d:0x%02X/0x%02X\n\n", (int)k_ref.idx, (byte)(k_ref.x_attr), (byte)(k_ref.x_char));
+                auto_dump_printf(auto_dump_stream, "K:%d:0x%02X/0x%02X\n\n", (int)baseitem.idx, (byte)(baseitem.x_attr), (byte)(baseitem.x_char));
             }
 
             close_auto_dump(&auto_dump_stream, mark);
@@ -289,21 +289,21 @@ void do_cmd_visuals(PlayerType *player_ptr)
         }
         case '5': {
             static concptr choice_msg = _("アイテムの[色/文字]を変更します", "Change object attr/chars");
-            static IDX k = 0;
+            static short k = 0;
             prt(format(_("コマンド: %s", "Command: %s"), choice_msg), 15, 0);
             while (true) {
-                auto *k_ptr = &baseitems_info[k];
+                auto &baseitem = baseitems_info[k];
                 int c;
                 IDX t;
 
-                TERM_COLOR da = k_ptr->d_attr;
-                auto dc = k_ptr->d_char;
-                TERM_COLOR ca = k_ptr->x_attr;
-                auto cc = k_ptr->x_char;
+                TERM_COLOR da = baseitem.d_attr;
+                auto dc = baseitem.d_char;
+                TERM_COLOR ca = baseitem.x_attr;
+                auto cc = baseitem.x_char;
 
                 term_putstr(5, 17, -1, TERM_WHITE,
                     format(
-                        _("アイテム = %d, 名前 = %-40.40s", "Object = %d, Name = %-40.40s"), k, (!k_ptr->flavor ? k_ptr->name : k_ptr->flavor_name).data()));
+                        _("アイテム = %d, 名前 = %-40.40s", "Object = %d, Name = %-40.40s"), k, (!baseitem.flavor ? baseitem.name : baseitem.flavor_name).data()));
                 term_putstr(10, 19, -1, TERM_WHITE, format(_("初期値  色 / 文字 = %3d / %3d", "Default attr/char = %3d / %3d"), da, dc));
                 term_putstr(40, 19, -1, TERM_WHITE, empty_symbol);
                 term_queue_bigchar(43, 19, da, dc, 0, 0);
@@ -327,9 +327,9 @@ void do_cmd_visuals(PlayerType *player_ptr)
 
                 switch (c) {
                 case 'n': {
-                    IDX prev_k = k;
+                    short prev_k = k;
                     do {
-                        if (!cmd_visuals_aux(i, &k, static_cast<IDX>(baseitems_info.size()))) {
+                        if (!cmd_visuals_aux(i, &k, static_cast<short>(baseitems_info.size()))) {
                             k = prev_k;
                             break;
                         }
@@ -338,15 +338,15 @@ void do_cmd_visuals(PlayerType *player_ptr)
 
                 break;
                 case 'a':
-                    t = (int)k_ptr->x_attr;
+                    t = (int)baseitem.x_attr;
                     (void)cmd_visuals_aux(i, &t, 256);
-                    k_ptr->x_attr = (byte)t;
+                    baseitem.x_attr = (byte)t;
                     need_redraw = true;
                     break;
                 case 'c':
-                    t = (int)k_ptr->x_char;
+                    t = (int)baseitem.x_char;
                     (void)cmd_visuals_aux(i, &t, 256);
-                    k_ptr->x_char = (byte)t;
+                    baseitem.x_char = (byte)t;
                     need_redraw = true;
                     break;
                 case 'v':

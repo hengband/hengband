@@ -54,8 +54,8 @@
  */
 static bool object_easy_know(int i)
 {
-    auto *k_ptr = &baseitems_info[i];
-    switch (k_ptr->bi_key.tval()) {
+    const auto &baseitem = baseitems_info[i];
+    switch (baseitem.bi_key.tval()) {
     case ItemKindType::LIFE_BOOK:
     case ItemKindType::SORCERY_BOOK:
     case ItemKindType::NATURE_BOOK:
@@ -191,20 +191,20 @@ void get_table_sindarin(char *out_string)
 static void shuffle_flavors(ItemKindType tval)
 {
     std::vector<std::reference_wrapper<IDX>> flavor_idx_ref_list;
-    for (const auto &k_ref : baseitems_info) {
-        if (k_ref.bi_key.tval() != tval) {
+    for (const auto &baseitem : baseitems_info) {
+        if (baseitem.bi_key.tval() != tval) {
             continue;
         }
 
-        if (!k_ref.flavor) {
+        if (baseitem.flavor == 0) {
             continue;
         }
 
-        if (k_ref.flags.has(TR_FIXED_FLAVOR)) {
+        if (baseitem.flags.has(TR_FIXED_FLAVOR)) {
             continue;
         }
 
-        flavor_idx_ref_list.push_back(baseitems_info[k_ref.idx].flavor);
+        flavor_idx_ref_list.push_back(baseitems_info[baseitem.idx].flavor);
     }
 
     rand_shuffle(flavor_idx_ref_list.begin(), flavor_idx_ref_list.end());
@@ -218,12 +218,12 @@ void flavor_init(void)
 {
     const auto state_backup = w_ptr->rng.get_state();
     w_ptr->rng.set_state(w_ptr->seed_flavor);
-    for (auto &k_ref : baseitems_info) {
-        if (k_ref.flavor_name.empty()) {
+    for (auto &baseitem : baseitems_info) {
+        if (baseitem.flavor_name.empty()) {
             continue;
         }
 
-        k_ref.flavor = k_ref.idx;
+        baseitem.flavor = baseitem.idx;
     }
 
     shuffle_flavors(ItemKindType::RING);
@@ -235,16 +235,16 @@ void flavor_init(void)
     shuffle_flavors(ItemKindType::POTION);
     shuffle_flavors(ItemKindType::SCROLL);
     w_ptr->rng.set_state(state_backup);
-    for (auto &k_ref : baseitems_info) {
-        if (k_ref.idx == 0 || k_ref.name.empty()) {
+    for (auto &baseitem : baseitems_info) {
+        if (baseitem.idx == 0 || baseitem.name.empty()) {
             continue;
         }
 
-        if (!k_ref.flavor) {
-            k_ref.aware = true;
+        if (!baseitem.flavor) {
+            baseitem.aware = true;
         }
 
-        k_ref.easy_know = object_easy_know(k_ref.idx);
+        baseitem.easy_know = object_easy_know(baseitem.idx);
     }
 }
 
@@ -255,8 +255,8 @@ void flavor_init(void)
  */
 std::string strip_name(short bi_id)
 {
-    auto k_ptr = &baseitems_info[bi_id];
-    auto tok = str_split(k_ptr->name, ' ');
+    const auto &baseitem = baseitems_info[bi_id];
+    auto tok = str_split(baseitem.name, ' ');
     std::stringstream name;
     for (const auto &s : tok) {
         if (s == "" || s == "~" || s == "&" || s == "#") {

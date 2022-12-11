@@ -11,6 +11,7 @@
 #include "info-reader/parse-error-types.h"
 #include "main/angband-headers.h"
 #include "object-enchant/tr-types.h"
+#include "object/tval-types.h"
 #include "system/baseitem-info.h"
 #include "term/gameterm.h"
 #include "util/bit-flags-calculator.h"
@@ -21,17 +22,17 @@
 /*!
  * @brief テキストトークンを走査してフラグを一つ得る(ベースアイテム用) /
  * Grab one flag in an BaseitemInfo from a textual string
- * @param k_ptr 保管先のベースアイテム構造体参照ポインタ
+ * @param bii_ptr 保管先のベースアイテム構造体参照ポインタ
  * @param what 参照元の文字列ポインタ
  * @return 見つけたらtrue
  */
-static bool grab_one_baseitem_flag(BaseitemInfo *k_ptr, std::string_view what)
+static bool grab_one_baseitem_flag(BaseitemInfo *bii_ptr, std::string_view what)
 {
-    if (TrFlags::grab_one_flag(k_ptr->flags, baseitem_flags, what)) {
+    if (TrFlags::grab_one_flag(bii_ptr->flags, baseitem_flags, what)) {
         return true;
     }
 
-    if (EnumClassFlagGroup<ItemGenerationTraitType>::grab_one_flag(k_ptr->gen_flags, baseitem_geneneration_flags, what)) {
+    if (EnumClassFlagGroup<ItemGenerationTraitType>::grab_one_flag(bii_ptr->gen_flags, baseitem_geneneration_flags, what)) {
         return true;
     }
 
@@ -48,7 +49,7 @@ static bool grab_one_baseitem_flag(BaseitemInfo *k_ptr, std::string_view what)
 errr parse_baseitems_info(std::string_view buf, angband_header *head)
 {
     (void)head;
-    static BaseitemInfo *k_ptr = nullptr;
+    static BaseitemInfo *bii_ptr = nullptr;
     const auto &tokens = str_split(buf, ':', false, 10);
 
     if (tokens[0] == "N") {
@@ -66,16 +67,16 @@ errr parse_baseitems_info(std::string_view buf, angband_header *head)
         }
 
         error_idx = i;
-        k_ptr = &baseitems_info[i];
-        k_ptr->idx = static_cast<short>(i);
+        bii_ptr = &baseitems_info[i];
+        bii_ptr->idx = static_cast<short>(i);
 #ifdef JP
-        k_ptr->name = tokens[2];
+        bii_ptr->name = tokens[2];
 #endif
         if (tokens.size() > 3) {
-            k_ptr->flavor_name = tokens[3];
+            bii_ptr->flavor_name = tokens[3];
         }
 
-    } else if (!k_ptr) {
+    } else if (!bii_ptr) {
         return PARSE_ERROR_MISSING_RECORD_HEADER;
     } else if (tokens[0] == "E") {
         // E:name_en
@@ -83,10 +84,10 @@ errr parse_baseitems_info(std::string_view buf, angband_header *head)
         if (tokens.size() < 2 || tokens[1].size() == 0) {
             return PARSE_ERROR_TOO_FEW_ARGUMENTS;
         }
-        k_ptr->name = tokens[1];
+        bii_ptr->name = tokens[1];
 
         if (tokens.size() > 2) {
-            k_ptr->flavor_name = tokens[2];
+            bii_ptr->flavor_name = tokens[2];
         }
 #endif
     } else if (tokens[0] == "D") {
@@ -99,12 +100,12 @@ errr parse_baseitems_info(std::string_view buf, angband_header *head)
         if (tokens[1][0] == '$') {
             return PARSE_ERROR_NONE;
         }
-        k_ptr->text.append(buf.substr(2));
+        bii_ptr->text.append(buf.substr(2));
 #else
         if (tokens[1][0] != '$') {
             return PARSE_ERROR_NONE;
         }
-        append_english_text(k_ptr->text, buf.substr(3));
+        append_english_text(bii_ptr->text, buf.substr(3));
 #endif
     } else if (tokens[0] == "G") {
         // G:color:symbol
@@ -117,8 +118,8 @@ errr parse_baseitems_info(std::string_view buf, angband_header *head)
             return PARSE_ERROR_GENERIC;
         }
 
-        k_ptr->d_attr = a;
-        k_ptr->d_char = tokens[1][0];
+        bii_ptr->d_attr = a;
+        bii_ptr->d_char = tokens[1][0];
     } else if (tokens[0] == "I") {
         // I:tval:sval:pval
         if (tokens.size() < 4) {
@@ -128,17 +129,20 @@ errr parse_baseitems_info(std::string_view buf, angband_header *head)
         constexpr auto base = 10;
         const auto tval = i2enum<ItemKindType>(std::stoi(tokens[1], nullptr, base));
         const auto sval = std::stoi(tokens[2], nullptr, base);
-        k_ptr->bi_key = { tval, sval };
-        info_set_value(k_ptr->pval, tokens[3]);
+        bii_ptr->bi_key = { tval, sval };
+        info_set_value(bii_ptr->pval, tokens[3]);
+        if ((tval == ItemKindType::ROD) && (bii_ptr->pval <= 0)) {
+            return PAESE_ERROR_INVALID_PVAL;
+        }
     } else if (tokens[0] == "W") {
         // W:level:weight:cost
         if (tokens.size() < 4) {
             return PARSE_ERROR_TOO_FEW_ARGUMENTS;
         }
 
-        info_set_value(k_ptr->level, tokens[1]);
-        info_set_value(k_ptr->weight, tokens[2]);
-        info_set_value(k_ptr->cost, tokens[3]);
+        info_set_value(bii_ptr->level, tokens[1]);
+        info_set_value(bii_ptr->weight, tokens[2]);
+        info_set_value(bii_ptr->cost, tokens[3]);
     } else if (tokens[0] == "A") {
         // A:level/chance(:level/chance:level/chance:level/chance)
         if (tokens.size() < 2 || tokens.size() > 5) {
@@ -151,8 +155,8 @@ errr parse_baseitems_info(std::string_view buf, angband_header *head)
             if (rarity.size() != 2 || rarity[0].size() == 0 || rarity[1].size() == 0) {
                 return PARSE_ERROR_NON_SEQUENTIAL_RECORDS;
             }
-            info_set_value(k_ptr->locale[i], rarity[0]);
-            info_set_value(k_ptr->chance[i], rarity[1]);
+            info_set_value(bii_ptr->locale[i], rarity[0]);
+            info_set_value(bii_ptr->chance[i], rarity[1]);
             i++;
         }
     } else if (tokens[0] == "P") {
@@ -166,12 +170,12 @@ errr parse_baseitems_info(std::string_view buf, angband_header *head)
             return PARSE_ERROR_NON_SEQUENTIAL_RECORDS;
         }
 
-        info_set_value(k_ptr->ac, tokens[1]);
-        info_set_value(k_ptr->dd, dice[0]);
-        info_set_value(k_ptr->ds, dice[1]);
-        info_set_value(k_ptr->to_h, tokens[3]);
-        info_set_value(k_ptr->to_d, tokens[4]);
-        info_set_value(k_ptr->to_a, tokens[5]);
+        info_set_value(bii_ptr->ac, tokens[1]);
+        info_set_value(bii_ptr->dd, dice[0]);
+        info_set_value(bii_ptr->ds, dice[1]);
+        info_set_value(bii_ptr->to_h, tokens[3]);
+        info_set_value(bii_ptr->to_d, tokens[4]);
+        info_set_value(bii_ptr->to_a, tokens[5]);
     } else if (tokens[0] == "U") {
         // U:activation_flag
         if (tokens.size() < 2 || tokens[1].size() == 0) {
@@ -182,7 +186,7 @@ errr parse_baseitems_info(std::string_view buf, angband_header *head)
             return PARSE_ERROR_INVALID_FLAG;
         }
 
-        k_ptr->act_idx = n;
+        bii_ptr->act_idx = n;
     } else if (tokens[0] == "F") {
         // F:flags
         if (tokens.size() < 2 || tokens[1].size() == 0) {
@@ -194,7 +198,7 @@ errr parse_baseitems_info(std::string_view buf, angband_header *head)
             if (f.size() == 0) {
                 continue;
             }
-            if (!grab_one_baseitem_flag(k_ptr, f)) {
+            if (!grab_one_baseitem_flag(bii_ptr, f)) {
                 return PARSE_ERROR_INVALID_FLAG;
             }
         }

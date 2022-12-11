@@ -35,19 +35,19 @@ void do_cmd_knowledge_weapon_exp(PlayerType *player_ptr)
     for (auto tval : { ItemKindType::SWORD, ItemKindType::POLEARM, ItemKindType::HAFTED, ItemKindType::DIGGING, ItemKindType::BOW }) {
         for (int num = 0; num < 64; num++) {
             BaseitemKey bi_key(tval, num);
-            for (const auto &k_ref : baseitems_info) {
-                if (k_ref.bi_key != bi_key) {
+            for (const auto &baseitem : baseitems_info) {
+                if (baseitem.bi_key != bi_key) {
                     continue;
                 }
 
-                const auto sval = k_ref.bi_key.sval();
-                if ((k_ref.bi_key.tval() == ItemKindType::BOW) && (sval == SV_CRIMSON || sval == SV_HARP)) {
+                const auto sval = baseitem.bi_key.sval();
+                if ((baseitem.bi_key.tval() == ItemKindType::BOW) && (sval == SV_CRIMSON || sval == SV_HARP)) {
                     continue;
                 }
 
                 SUB_EXP weapon_exp = player_ptr->weapon_exp[tval][num];
                 SUB_EXP weapon_max = player_ptr->weapon_exp_max[tval][num];
-                const auto tmp = strip_name(k_ref.idx);
+                const auto tmp = strip_name(baseitem.idx);
                 fprintf(fff, "%-25s ", tmp.data());
                 if (show_actual_value) {
                     fprintf(fff, "%4d/%4d ", weapon_exp, weapon_max);

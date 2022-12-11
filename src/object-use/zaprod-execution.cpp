@@ -104,7 +104,7 @@ void ObjectZapRodEntity::execute(INVENTORY_IDX item)
         return;
     }
 
-    auto *k_ptr = &baseitems_info[o_ptr->bi_id];
+    const auto &baseitem = baseitems_info[o_ptr->bi_id];
     if ((o_ptr->number == 1) && (o_ptr->timeout)) {
         if (flush_failure) {
             flush();
@@ -112,7 +112,7 @@ void ObjectZapRodEntity::execute(INVENTORY_IDX item)
 
         msg_print(_("このロッドはまだ魔力を充填している最中だ。", "The rod is still charging."));
         return;
-    } else if ((o_ptr->number > 1) && (o_ptr->timeout > k_ptr->pval * (o_ptr->number - 1))) {
+    } else if ((o_ptr->number > 1) && (o_ptr->timeout > baseitem.pval * (o_ptr->number - 1))) {
         if (flush_failure) {
             flush();
         }
@@ -124,7 +124,7 @@ void ObjectZapRodEntity::execute(INVENTORY_IDX item)
     sound(SOUND_ZAP);
     auto ident = rod_effect(this->player_ptr, o_ptr->bi_key.sval().value(), dir, &use_charge, false);
     if (use_charge) {
-        o_ptr->timeout += k_ptr->pval;
+        o_ptr->timeout += baseitem.pval;
     }
 
     this->player_ptr->update |= PU_COMBINE | PU_REORDER;

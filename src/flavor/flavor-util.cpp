@@ -27,8 +27,8 @@ flavor_type *initialize_flavor_type(flavor_type *flavor_ptr, char *buf, ItemEnti
     flavor_ptr->b2 = ']';
     flavor_ptr->c1 = '{';
     flavor_ptr->c2 = '}';
-    flavor_ptr->k_ptr = &baseitems_info[o_ptr->bi_id];
-    flavor_ptr->flavor_k_ptr = &baseitems_info[flavor_ptr->k_ptr->flavor];
+    flavor_ptr->bii_ptr = &baseitems_info[o_ptr->bi_id];
+    flavor_ptr->flavor_bii_ptr = &baseitems_info[flavor_ptr->bii_ptr->flavor];
     return flavor_ptr;
 }
 
@@ -189,8 +189,8 @@ char *get_ability_abbreviation(char *short_flavor, ItemEntity *o_ptr, bool kanji
     char *prev_ptr = short_flavor;
     auto flgs = object_flags(o_ptr);
     if (!all) {
-        auto *k_ptr = &baseitems_info[o_ptr->bi_id];
-        flgs.reset(k_ptr->flags);
+        const auto &baseitem = baseitems_info[o_ptr->bi_id];
+        flgs.reset(baseitem.flags);
 
         if (o_ptr->is_fixed_artifact()) {
             const auto &a_ref = artifacts_info.at(o_ptr->fixed_artifact_idx);

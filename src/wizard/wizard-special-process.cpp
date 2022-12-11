@@ -158,21 +158,21 @@ static short wiz_select_sval(const ItemKindType tval, concptr tval_description)
     auto num = 0;
     short choice[80]{};
     char ch;
-    for (const auto &k_ref : baseitems_info) {
+    for (const auto &baseitem : baseitems_info) {
         if (num >= 80) {
             break;
         }
 
-        if (k_ref.idx == 0 || k_ref.bi_key.tval() != tval) {
+        if ((baseitem.idx == 0) || baseitem.bi_key.tval() != tval) {
             continue;
         }
 
         auto row = 2 + (num % 20);
         auto col = _(30, 32) * (num / 20);
         ch = listsym[num];
-        const auto buf = strip_name(k_ref.idx);
+        const auto buf = strip_name(baseitem.idx);
         prt(format("[%c] %s", ch, buf.data()), row, col);
-        choice[num++] = k_ref.idx;
+        choice[num++] = baseitem.idx;
     }
 
     auto max_num = num;
@@ -679,10 +679,10 @@ void wiz_learn_items_all(PlayerType *player_ptr)
 {
     ItemEntity forge;
     ItemEntity *q_ptr;
-    for (const auto &k_ref : baseitems_info) {
-        if (k_ref.idx > 0 && k_ref.level <= command_arg) {
+    for (const auto &baseitem : baseitems_info) {
+        if (baseitem.idx > 0 && baseitem.level <= command_arg) {
             q_ptr = &forge;
-            q_ptr->prep(k_ref.idx);
+            q_ptr->prep(baseitem.idx);
             object_aware(player_ptr, q_ptr);
         }
     }

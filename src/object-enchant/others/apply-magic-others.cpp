@@ -91,8 +91,8 @@ void OtherItemsEnchanter::apply_magic()
  */
 void OtherItemsEnchanter::enchant_wand_staff()
 {
-    auto *k_ptr = &baseitems_info[this->o_ptr->bi_id];
-    this->o_ptr->pval = k_ptr->pval / 2 + randint1((k_ptr->pval + 1) / 2);
+    const auto &baseitem = baseitems_info[this->o_ptr->bi_id];
+    this->o_ptr->pval = baseitem.pval / 2 + randint1((baseitem.pval + 1) / 2);
 }
 
 /*

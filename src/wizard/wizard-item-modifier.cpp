@@ -225,8 +225,8 @@ void wiz_identify_full_inventory(PlayerType *player_ptr)
             continue;
         }
 
-        auto k_ptr = &baseitems_info[o_ptr->bi_id];
-        k_ptr->aware = true; //!< @note 記録には残さないためTRUEを立てるのみ
+        auto &baseitem = baseitems_info[o_ptr->bi_id];
+        baseitem.aware = true; //!< @note 記録には残さないためTRUEを立てるのみ
         set_bits(o_ptr->ident, IDENT_KNOWN | IDENT_FULL_KNOWN);
         o_ptr->marked.set(OmType::TOUCHED);
     }
@@ -880,25 +880,25 @@ WishResultType do_cmd_wishing(PlayerType *player_ptr, int prob, bool allow_art, 
     if (exam_base) {
         int len;
         int max_len = 0;
-        for (const auto &k_ref : baseitems_info) {
-            if (k_ref.idx == 0 || k_ref.name.empty()) {
+        for (const auto &baseitem : baseitems_info) {
+            if (baseitem.idx == 0 || baseitem.name.empty()) {
                 continue;
             }
 
-            o_ptr->prep(k_ref.idx);
+            o_ptr->prep(baseitem.idx);
             describe_flavor(player_ptr, o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY | OD_STORE));
 #ifndef JP
             str_tolower(o_name);
 #endif
             if (cheat_xtra) {
-                msg_format("Matching object No.%d %s", k_ref.idx, o_name);
+                msg_format("Matching object No.%d %s", baseitem.idx, o_name);
             }
 
             len = strlen(o_name);
 
             if (_(!strrncmp(str, o_name, len), !strncmp(str, o_name, len))) {
                 if (len > max_len) {
-                    k_ids.push_back(k_ref.idx);
+                    k_ids.push_back(baseitem.idx);
                     max_len = len;
                 }
             }
@@ -1033,11 +1033,11 @@ WishResultType do_cmd_wishing(PlayerType *player_ptr, int prob, bool allow_art, 
 
     if (k_ids.size() == 1) {
         const auto bi_id = k_ids.back();
-        const auto &k_ref = baseitems_info[bi_id];
+        const auto &baseitem = baseitems_info[bi_id];
         auto a_idx = FixedArtifactId::NONE;
-        if (k_ref.gen_flags.has(ItemGenerationTraitType::INSTA_ART)) {
+        if (baseitem.gen_flags.has(ItemGenerationTraitType::INSTA_ART)) {
             for (const auto &[a_idx_loop, a_ref_loop] : artifacts_info) {
-                if (a_idx_loop == FixedArtifactId::NONE || a_ref_loop.bi_key != k_ref.bi_key) {
+                if (a_idx_loop == FixedArtifactId::NONE || a_ref_loop.bi_key != baseitem.bi_key) {
                     continue;
                 }
 
@@ -1061,7 +1061,7 @@ WishResultType do_cmd_wishing(PlayerType *player_ptr, int prob, bool allow_art, 
             if (must || ok_art) {
                 do {
                     o_ptr->prep(bi_id);
-                    ItemMagicApplier(player_ptr, o_ptr, k_ref.level, AM_SPECIAL | AM_NO_FIXED_ART).execute();
+                    ItemMagicApplier(player_ptr, o_ptr, baseitem.level, AM_SPECIAL | AM_NO_FIXED_ART).execute();
                 } while (!o_ptr->art_name || o_ptr->is_ego() || o_ptr->is_cursed());
 
                 if (o_ptr->art_name) {
@@ -1085,7 +1085,7 @@ WishResultType do_cmd_wishing(PlayerType *player_ptr, int prob, bool allow_art, 
                     int i = 0;
                     for (i = 0; i < max_roll; i++) {
                         o_ptr->prep(bi_id);
-                        ItemMagicApplier(player_ptr, o_ptr, k_ref.level, AM_GREAT | AM_NO_FIXED_ART).execute();
+                        ItemMagicApplier(player_ptr, o_ptr, baseitem.level, AM_GREAT | AM_NO_FIXED_ART).execute();
                         if (o_ptr->art_name) {
                             continue;
                         }

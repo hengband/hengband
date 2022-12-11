@@ -201,32 +201,32 @@ void ItemMagicApplier::apply_cursed()
         return;
     }
 
-    const auto *k_ptr = &baseitems_info[this->o_ptr->bi_id];
+    const auto &baseitem = baseitems_info[this->o_ptr->bi_id];
     if (!baseitems_info[this->o_ptr->bi_id].cost) {
         set_bits(this->o_ptr->ident, IDENT_BROKEN);
     }
 
-    if (k_ptr->gen_flags.has(ItemGenerationTraitType::CURSED)) {
+    if (baseitem.gen_flags.has(ItemGenerationTraitType::CURSED)) {
         this->o_ptr->curse_flags.set(CurseTraitType::CURSED);
     }
 
-    if (k_ptr->gen_flags.has(ItemGenerationTraitType::HEAVY_CURSE)) {
+    if (baseitem.gen_flags.has(ItemGenerationTraitType::HEAVY_CURSE)) {
         this->o_ptr->curse_flags.set(CurseTraitType::HEAVY_CURSE);
     }
 
-    if (k_ptr->gen_flags.has(ItemGenerationTraitType::PERMA_CURSE)) {
+    if (baseitem.gen_flags.has(ItemGenerationTraitType::PERMA_CURSE)) {
         this->o_ptr->curse_flags.set(CurseTraitType::PERMA_CURSE);
     }
 
-    if (k_ptr->gen_flags.has(ItemGenerationTraitType::RANDOM_CURSE0)) {
+    if (baseitem.gen_flags.has(ItemGenerationTraitType::RANDOM_CURSE0)) {
         this->o_ptr->curse_flags.set(get_curse(0, this->o_ptr));
     }
 
-    if (k_ptr->gen_flags.has(ItemGenerationTraitType::RANDOM_CURSE1)) {
+    if (baseitem.gen_flags.has(ItemGenerationTraitType::RANDOM_CURSE1)) {
         this->o_ptr->curse_flags.set(get_curse(1, this->o_ptr));
     }
 
-    if (k_ptr->gen_flags.has(ItemGenerationTraitType::RANDOM_CURSE2)) {
+    if (baseitem.gen_flags.has(ItemGenerationTraitType::RANDOM_CURSE2)) {
         this->o_ptr->curse_flags.set(get_curse(2, this->o_ptr));
     }
 }
