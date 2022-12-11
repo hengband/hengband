@@ -1,5 +1,6 @@
 ﻿#include "flavor/flavor-util.h"
 #include "flavor/flag-inscriptions-table.h"
+#include "object-enchant/tr-flags.h"
 #include "object-enchant/tr-types.h"
 #include "object/object-flags.h"
 #include "object/tval-types.h"
@@ -9,6 +10,16 @@
 #include "util/quarks.h"
 #include "util/string-processor.h"
 #include <sstream>
+
+static bool has_lite_flag(const TrFlags &flags)
+{
+    return flags.has(TR_LITE_1) || flags.has(TR_LITE_2) || flags.has(TR_LITE_3);
+}
+
+static bool has_dark_flag(const TrFlags &flags)
+{
+    return flags.has(TR_LITE_M1) || flags.has(TR_LITE_M2) || flags.has(TR_LITE_M3);
+}
 
 /*!
  * @brief オブジェクトフラグを追加する
@@ -371,13 +382,3 @@ std::string describe_count_with_counter_suffix(const ItemEntity &item)
     return ss.str();
 }
 #endif
-
-bool has_lite_flag(const TrFlags &flags)
-{
-    return flags.has(TR_LITE_1) || flags.has(TR_LITE_2) || flags.has(TR_LITE_3);
-}
-
-bool has_dark_flag(const TrFlags &flags)
-{
-    return flags.has(TR_LITE_M1) || flags.has(TR_LITE_M2) || flags.has(TR_LITE_M3);
-}
