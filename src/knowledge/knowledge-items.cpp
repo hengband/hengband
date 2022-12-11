@@ -122,6 +122,30 @@ void do_cmd_knowledge_artifacts(PlayerType *player_ptr)
     fd_kill(file_name);
 }
 
+/*!
+ * @brief ベースアイテムの出現率チェック処理
+ * @param mode グループ化モード (0x02 表示専用)
+ * @param baseitem ベースアイテムへの参照
+ * @return collect_objects() の処理を続行するか否か
+ */
+static bool check_baseitem_chance(const BIT_FLAGS8 mode, const BaseitemInfo &baseitem)
+{
+    if (mode & 0x02) {
+        return true;
+    }
+
+    if (!w_ptr->wizard && ((baseitem.flavor == 0) || !baseitem.aware)) {
+        return false;
+    }
+
+    const auto &alloc_tables = baseitem.alloc_tables;
+    const auto sum_chances = std::accumulate(alloc_tables.begin(), alloc_tables.end(), 0, [](int sum, const auto &table) {
+        return sum + table.chance;
+    });
+
+    return sum_chances > 0;
+}
+
 /*
  * Build a list of object indexes in the given group. Return the number
  * of objects in the group.
@@ -132,27 +156,10 @@ void do_cmd_knowledge_artifacts(PlayerType *player_ptr)
 static short collect_objects(int grp_cur, short object_idx[], BIT_FLAGS8 mode)
 {
     short object_cnt = 0;
-    auto group_tval = object_group_tval[grp_cur];
+    const auto group_tval = object_group_tval[grp_cur];
     for (const auto &baseitem : baseitems_info) {
-        if (baseitem.name.empty()) {
+        if (baseitem.name.empty() || !check_baseitem_chance(mode, baseitem)) {
             continue;
-        }
-
-        if (!(mode & 0x02)) {
-            if (!w_ptr->wizard) {
-                if ((baseitem.flavor == 0) || !baseitem.aware) {
-                    continue;
-                }
-            }
-
-            const auto &alloc_tables = baseitem.alloc_tables;
-            const auto sum_chances = std::accumulate(alloc_tables.begin(), alloc_tables.end(), 0, [](int sum, const auto &table) {
-                return sum + table.chance;
-            });
-
-            if (sum_chances == 0) {
-                continue;
-            }
         }
 
         const auto tval = baseitem.bi_key.tval();
