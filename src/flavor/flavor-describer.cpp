@@ -39,35 +39,6 @@
 #include "util/string-processor.h"
 #include <sstream>
 
-static void check_object_known_aware(flavor_type *flavor_ptr)
-{
-    flavor_ptr->tr_flags = object_flags(flavor_ptr->o_ptr);
-    if (flavor_ptr->o_ptr->is_aware()) {
-        flavor_ptr->aware = true;
-    }
-
-    if (flavor_ptr->o_ptr->is_known()) {
-        flavor_ptr->known = true;
-    }
-
-    if (flavor_ptr->aware && ((flavor_ptr->mode & OD_NO_FLAVOR) || plain_descriptions)) {
-        flavor_ptr->flavor = false;
-    }
-
-    if ((flavor_ptr->mode & OD_STORE) || (flavor_ptr->o_ptr->ident & IDENT_STORE)) {
-        flavor_ptr->flavor = false;
-        flavor_ptr->aware = true;
-        flavor_ptr->known = true;
-    }
-
-    if (flavor_ptr->mode & OD_FORCE_FLAVOR) {
-        flavor_ptr->aware = false;
-        flavor_ptr->flavor = true;
-        flavor_ptr->known = false;
-        flavor_ptr->flavor_bii_ptr = flavor_ptr->bii_ptr;
-    }
-}
-
 static std::string describe_chest_trap(const ItemEntity &item)
 {
     auto trap_kinds = chest_traps[item.pval];
@@ -613,16 +584,12 @@ static describe_option_type decide_describe_option(const ItemEntity &item, BIT_F
  */
 void describe_flavor(PlayerType *player_ptr, char *buf, ItemEntity *o_ptr, BIT_FLAGS mode)
 {
-    flavor_type tmp_flavor;
-    flavor_type *flavor_ptr = initialize_flavor_type(&tmp_flavor, buf, o_ptr, mode);
-
-    check_object_known_aware(flavor_ptr);
     const auto &item = *o_ptr;
     const auto opt = decide_describe_option(item, mode);
     std::stringstream desc_ss;
     desc_ss << describe_named_item(player_ptr, item, opt);
 
-    if (flavor_ptr->mode & OD_NAME_ONLY || o_ptr->bi_id == 0) {
+    if (any_bits(mode, OD_NAME_ONLY) || (o_ptr->bi_id == 0)) {
         angband_strcpy(buf, desc_ss.str().data(), MAX_NLEN);
         return;
     }
@@ -633,7 +600,7 @@ void describe_flavor(PlayerType *player_ptr, char *buf, ItemEntity *o_ptr, BIT_F
 
     if (none_bits(mode, OD_DEBUG)) {
         const auto &bow = player_ptr->inventory_list[INVEN_BOW];
-        const auto tval = flavor_ptr->o_ptr->bi_key.tval();
+        const auto tval = item.bi_key.tval();
         if ((bow.bi_id != 0) && (tval == bow.get_arrow_kind())) {
             desc_ss << describe_ammo_detail(player_ptr, item, bow, opt);
         } else if (PlayerClass(player_ptr).equals(PlayerClassType::NINJA) && (tval == ItemKindType::SPIKE)) {
