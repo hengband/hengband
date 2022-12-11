@@ -1,134 +1,26 @@
 ﻿#include "flavor/flavor-util.h"
 #include "flavor/flag-inscriptions-table.h"
-#include "object-enchant/object-ego.h"
 #include "object-enchant/tr-types.h"
 #include "object/object-flags.h"
 #include "object/tval-types.h"
-#include "perception/object-perception.h"
 #include "sv-definition/sv-food-types.h"
 #include "system/artifact-type-definition.h"
-#include "system/baseitem-info.h"
 #include "system/item-entity.h"
-#include "util/bit-flags-calculator.h"
-#include "util/enum-converter.h"
 #include "util/quarks.h"
+#include "util/string-processor.h"
 #include <sstream>
-
-flavor_type *initialize_flavor_type(flavor_type *flavor_ptr, char *buf, ItemEntity *o_ptr, BIT_FLAGS mode)
-{
-    flavor_ptr->buf = buf;
-    flavor_ptr->o_ptr = o_ptr;
-    flavor_ptr->mode = mode;
-    flavor_ptr->aware = false;
-    flavor_ptr->known = false;
-    flavor_ptr->flavor = true;
-    flavor_ptr->p1 = '(';
-    flavor_ptr->p2 = ')';
-    flavor_ptr->b1 = '[';
-    flavor_ptr->b2 = ']';
-    flavor_ptr->c1 = '{';
-    flavor_ptr->c2 = '}';
-    flavor_ptr->bii_ptr = &baseitems_info[o_ptr->bi_id];
-    flavor_ptr->flavor_bii_ptr = &baseitems_info[flavor_ptr->bii_ptr->flavor];
-    return flavor_ptr;
-}
-
-/*!
- * @brief 対象文字配列に一文字だけをコピーする。
- * @param t 保管先文字列ポインタ
- * @param c 保管したい1文字
- * @details
- * Print a char "c" into a string "t", as if by sprintf(t, "%c", c),\n
- * and return a pointer to the terminator (t + 1).\n
- */
-char *object_desc_chr(char *t, char c)
-{
-    *t++ = c;
-    *t = '\0';
-    return t;
-}
-
-/*!
- * @brief 対象文字配列に文字列をコピーする。
- * @param t 保管先文字列ポインタ
- * @param s コピーしたい文字列ポインタ
- * @return 保管先の末尾アドレス
- * @details
- * Print a string "s" into a string "t", as if by strcpy(t, s),
- * and return a pointer to the terminator.
- */
-char *object_desc_str(char *t, concptr s)
-{
-    while (*s) {
-        *t++ = *s++;
-    }
-
-    *t = '\0';
-    return t;
-}
-
-/*!
- * @brief 対象文字配列に符号なし整数値をコピーする。
- * @param t 保管先文字列ポインタ
- * @param n コピーしたい数値
- * @details
- * Print an unsigned number "n" into a string "t", actually by
- * sprintf(t, "%u", n), and return a pointer to the terminator.
- */
-char *object_desc_num(char *t, uint n)
-{
-    int ret = sprintf(t, "%u", n);
-    if (ret < 0) {
-        // error
-        ret = 0;
-        *t = '\0';
-    }
-    return t + ret;
-}
-
-/*!
- * @brief 対象文字配列に符号あり整数値をコピーする。
- * @param t 保管先文字列ポインタ
- * @param v コピーしたい数値
- * @details
- * Print an signed number "v" into a string "t", as if by
- * sprintf(t, "%+d", n), and return a pointer to the terminator.
- * Note that we always print a sign, either "+" or "-".
- */
-char *object_desc_int(char *t, int v)
-{
-    uint p, n;
-    if (v < 0) {
-        n = 0 - v;
-        *t++ = '-';
-    } else {
-        n = v;
-        *t++ = '+';
-    }
-
-    /* loop */
-    for (p = 1; n >= p * 10; p = p * 10) {
-        ;
-    }
-
-    while (p >= 1) {
-        *t++ = '0' + n / p;
-        n = n % p;
-        p = p / 10;
-    }
-
-    *t = '\0';
-    return t;
-}
 
 /*!
  * @brief オブジェクトフラグを追加する
  * @param short_flavor フラグの短縮表現 (反魔法/アンチテレポの"["、耐性の"r"、耐混乱の"乱" 等)
  * @param ptr 特性短縮表記を格納する文字列ポインタ
+ *
+ * @todo バッファサイズが不明なのでとりあえず16バイト決め打ちで angband_strcpy を呼び出している。
+ * get_ability_abbrev のインターフェースを std::string を返すように変更するときに合わせて修正すること。
  */
 static void add_inscription(char **short_flavor, concptr str)
 {
-    *short_flavor = object_desc_str(*short_flavor, str);
+    *short_flavor += angband_strcpy(*short_flavor, str, 16);
 }
 
 /*!
@@ -142,6 +34,9 @@ static void add_inscription(char **short_flavor, concptr str)
  * Print an signed number "v" into a string "t", as if by
  * sprintf(t, "%+d", n), and return a pointer to the terminator.
  * Note that we always print a sign, either "+" or "-".
+ *
+ * @todo バッファサイズが不明なのでとりあえず16バイト決め打ちで angband_strcpy を呼び出している。
+ * get_ability_abbrev のインターフェースを std::string を返すように変更するときに合わせて修正すること。
  */
 static char *inscribe_flags_aux(const std::vector<flag_insc_table> &fi_vec, const TrFlags &flgs, bool kanji, char *ptr)
 {
@@ -152,7 +47,8 @@ static char *inscribe_flags_aux(const std::vector<flag_insc_table> &fi_vec, cons
 
     for (const auto &fi : fi_vec) {
         if (flgs.has(fi.flag) && (!fi.except_flag.has_value() || flgs.has_not(fi.except_flag.value()))) {
-            add_inscription(&ptr, _(kanji ? fi.japanese : fi.english, fi.english));
+            const auto flag_str = _(kanji ? fi.japanese : fi.english, fi.english);
+            ptr += angband_strcpy(ptr, flag_str, 16);
         }
     }
 
