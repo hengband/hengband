@@ -51,10 +51,7 @@ static std::string describe_item_count_ja(const ItemEntity &item, const describe
         return "";
     }
 
-    // TODO: object_desc_count_japanese の std::string へのインターフェース変更は別途行う
-    char num_buf[16]{};
-    object_desc_count_japanese(num_buf, &item);
-    return std::string(num_buf) + "の ";
+    return describe_count_with_counter_suffix(item) + "の ";
 }
 
 /*!
