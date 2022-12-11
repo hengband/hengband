@@ -35,6 +35,7 @@
 #include "world/world.h"
 #include <numeric>
 #include <set>
+#include <vector>
 
 /*!
  * @brief Check the status of "artifacts"
@@ -153,7 +154,7 @@ static bool check_baseitem_chance(const BIT_FLAGS8 mode, const BaseitemInfo &bas
  * mode & 0x01 : check for non-empty group
  * mode & 0x02 : visual operation only
  */
-static short collect_objects(int grp_cur, short object_idx[], BIT_FLAGS8 mode)
+static short collect_objects(int grp_cur, std::vector<short> &object_idx, BIT_FLAGS8 mode)
 {
     short object_cnt = 0;
     const auto group_tval = object_group_tval[grp_cur];
@@ -187,7 +188,7 @@ static short collect_objects(int grp_cur, short object_idx[], BIT_FLAGS8 mode)
 /*
  * Display the objects in a group.
  */
-static void display_object_list(int col, int row, int per_page, IDX object_idx[], int object_cur, int object_top, bool visual_only)
+static void display_object_list(int col, int row, int per_page, const std::vector<short> &object_idx, int object_cur, int object_top, bool visual_only)
 {
     int i;
     for (i = 0; i < per_page && (object_idx[object_top + i] >= 0); i++) {
@@ -274,7 +275,7 @@ void do_cmd_knowledge_objects(PlayerType *player_ptr, bool *need_redraw, bool vi
                 max = len;
             }
 
-            if (collect_objects(i, object_idx.data(), mode)) {
+            if (collect_objects(i, object_idx, mode)) {
                 grp_idx[grp_cnt++] = i;
             }
         }
@@ -288,8 +289,12 @@ void do_cmd_knowledge_objects(PlayerType *player_ptr, bool *need_redraw, bool vi
         object_old = direct_k_idx;
         object_cnt = 1;
         object_idx[1] = -1;
+        const auto height = browser_rows - 1;
+        const auto width = wid - (max + 3);
+        auto *x_attr = &flavor_baseitem.x_attr;
+        auto *x_char = &flavor_baseitem.x_char;
         (void)visual_mode_command(
-            'v', &visual_list, browser_rows - 1, wid - (max + 3), &attr_top, &char_left, &flavor_baseitem.x_attr, &flavor_baseitem.x_char, need_redraw);
+            'v', &visual_list, height, width, &attr_top, &char_left, x_attr, x_char, need_redraw);
     }
 
     grp_idx[grp_cnt] = -1;
@@ -356,7 +361,7 @@ void do_cmd_knowledge_objects(PlayerType *player_ptr, bool *need_redraw, bool vi
             display_group_list(0, 6, max, browser_rows, grp_idx, tmp_texts.data(), grp_cur, grp_top);
             if (old_grp_cur != grp_cur) {
                 old_grp_cur = grp_cur;
-                object_cnt = collect_objects(grp_idx[grp_cur], object_idx.data(), mode);
+                object_cnt = collect_objects(grp_idx[grp_cur], object_idx, mode);
             }
 
             while (object_cur < object_top) {
@@ -369,10 +374,10 @@ void do_cmd_knowledge_objects(PlayerType *player_ptr, bool *need_redraw, bool vi
         }
 
         if (!visual_list) {
-            display_object_list(max + 3, 6, browser_rows, object_idx.data(), object_cur, object_top, visual_only);
+            display_object_list(max + 3, 6, browser_rows, object_idx, object_cur, object_top, visual_only);
         } else {
             object_top = object_cur;
-            display_object_list(max + 3, 6, 1, object_idx.data(), object_cur, object_top, visual_only);
+            display_object_list(max + 3, 6, 1, object_idx, object_cur, object_top, visual_only);
             display_visual_list(max + 3, 7, browser_rows - 1, wid - (max + 3), attr_top, char_left);
         }
 
@@ -409,8 +414,12 @@ void do_cmd_knowledge_objects(PlayerType *player_ptr, bool *need_redraw, bool vi
         }
 
         char ch = inkey();
+        const auto height = browser_rows - 1;
+        const auto width = wid - (max + 3);
+        auto *x_attr = &flavor_baseitem.x_attr;
+        auto *x_char = &flavor_baseitem.x_char;
         if (visual_mode_command(
-                ch, &visual_list, browser_rows - 1, wid - (max + 3), &attr_top, &char_left, &flavor_baseitem.x_attr, &flavor_baseitem.x_char, need_redraw)) {
+                ch, &visual_list, height, width, &attr_top, &char_left, x_attr, x_char, need_redraw)) {
             if (direct_k_idx >= 0) {
                 switch (ch) {
                 case '\n':
