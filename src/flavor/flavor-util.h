@@ -45,8 +45,8 @@ char *object_desc_chr(char *t, char c);
 char *object_desc_str(char *t, concptr s);
 char *object_desc_num(char *t, uint n);
 char *object_desc_int(char *t, int v);
-char *get_ability_abbreviation(char *ptr, ItemEntity *o_ptr, bool kanji, bool all);
-void get_inscription(char *buff, ItemEntity *o_ptr);
+char *get_ability_abbreviation(char *ptr, const ItemEntity *o_ptr, bool kanji, bool all);
+void get_inscription(char *buff, const ItemEntity *o_ptr);
 bool has_lite_flag(const TrFlags &flags);
 bool has_dark_flag(const TrFlags &flags);
 

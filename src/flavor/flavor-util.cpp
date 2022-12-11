@@ -184,7 +184,7 @@ static bool has_flag_of(const std::vector<flag_insc_table> &fi_vec, const TrFlag
  * @param all TRUEならばベースアイテム上で明らかなフラグは省略する
  * @return ptrと同じアドレス
  */
-char *get_ability_abbreviation(char *short_flavor, ItemEntity *o_ptr, bool kanji, bool all)
+char *get_ability_abbreviation(char *short_flavor, const ItemEntity *o_ptr, bool kanji, bool all)
 {
     char *prev_ptr = short_flavor;
     auto flgs = object_flags(o_ptr);
@@ -331,7 +331,7 @@ char *get_ability_abbreviation(char *short_flavor, ItemEntity *o_ptr, bool kanji
  * @param buff 特性短縮表記を格納する文字列ポインタ
  * @param o_ptr 特性短縮表記を得たいオブジェクト構造体の参照ポインタ
  */
-void get_inscription(char *buff, ItemEntity *o_ptr)
+void get_inscription(char *buff, const ItemEntity *o_ptr)
 {
     concptr insc = quark_str(o_ptr->inscription);
     char *ptr = buff;
