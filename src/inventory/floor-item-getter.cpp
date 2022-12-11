@@ -304,8 +304,8 @@ bool get_item_floor(PlayerType *player_ptr, COMMAND_CODE *cp, concptr pmt, concp
     while (!fis_ptr->done) {
         int ni = 0;
         int ne = 0;
-        for (int i = 0; i < 8; i++) {
-            if (!angband_term[i]) {
+        for (auto i = 0U; i < angband_terms.size(); ++i) {
+            if (!angband_terms[i]) {
                 continue;
             }
 

@@ -2162,7 +2162,7 @@ static void game_term_nuke_x11(term_type *)
             XftDrawDestroy(iwin->draw);
         }
 #endif
-        angband_term[i] = nullptr;
+        angband_terms[i] = nullptr;
     }
 
     if (Metadpy->xim) {
@@ -2502,7 +2502,7 @@ errr init_x11(int argc, char *argv[])
     for (i = 0; i < num_term; i++) {
         term_data *td = &data[i];
         term_data_init(td, i);
-        angband_term[i] = game_term;
+        angband_terms[i] = game_term;
     }
 
     Infowin_set(data[0].win.get());

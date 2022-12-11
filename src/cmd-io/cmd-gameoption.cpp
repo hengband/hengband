@@ -308,17 +308,17 @@ static void do_cmd_options_win(PlayerType *player_ptr)
         }
     }
 
-    for (j = 0; j < 8; j++) {
+    for (auto term_index = 0U; term_index < angband_terms.size(); ++term_index) {
         term_type *old = game_term;
-        if (!angband_term[j]) {
+        if (!angband_terms[term_index]) {
             continue;
         }
 
-        if (window_flag[j] == old_flag[j]) {
+        if (window_flag[term_index] == old_flag[term_index]) {
             continue;
         }
 
-        term_activate(angband_term[j]);
+        term_activate(angband_terms[term_index]);
         term_clear();
         term_fresh();
         term_activate(old);

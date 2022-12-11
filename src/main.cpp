@@ -51,20 +51,18 @@
  */
 static void quit_hook(concptr s)
 {
-    int j;
-
     /* Unused */
     (void)s;
 
     /* Scan windows */
-    for (j = 8 - 1; j >= 0; j--) {
+    for (auto i = static_cast<int>(angband_terms.size()); i >= 0; i--) {
         /* Unused */
-        if (!angband_term[j]) {
+        if (!angband_terms[i]) {
             continue;
         }
 
         /* Nuke it */
-        term_nuke(angband_term[j]);
+        term_nuke(angband_terms[i]);
     }
 }
 

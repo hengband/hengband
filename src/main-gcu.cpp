@@ -1455,7 +1455,7 @@ errr init_gcu(int argc, char *argv[])
             term_data_init_gcu(&data[next_win], rows, cols, y, x);
 
             /* Remember the term */
-            angband_term[next_win] = &data[next_win].t;
+            angband_terms[next_win] = &data[next_win].t;
 
             /* One more window */
             next_win++;
@@ -1603,12 +1603,12 @@ errr init_gcu(int argc, char *argv[])
         }
         data[0].r = remaining;
         term_data_init(&data[0]);
-        angband_term[0] = game_term;
+        angband_terms[0] = game_term;
 
         /* Child Terminals */
         for (next_term = 1; next_term < term_ct; next_term++) {
             term_data_init(&data[next_term]);
-            angband_term[next_term] = game_term;
+            angband_terms[next_term] = game_term;
         }
     }
 

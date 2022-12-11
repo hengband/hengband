@@ -235,9 +235,9 @@ void window_stuff(PlayerType *player_ptr)
     }
 
     BIT_FLAGS mask = 0L;
-    for (int j = 0; j < 8; j++) {
-        if (angband_term[j] && !angband_term[j]->never_fresh) {
-            mask |= window_flag[j];
+    for (auto i = 0U; i < angband_terms.size(); ++i) {
+        if (angband_terms[i] && !angband_terms[i]->never_fresh) {
+            mask |= window_flag[i];
         }
     }
     BIT_FLAGS window_flags = player_ptr->window_flags & mask;

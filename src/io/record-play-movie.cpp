@@ -65,7 +65,7 @@ static errr (*old_text_hook)(int x, int y, int n, TERM_COLOR a, concptr s);
 
 static void disable_chuukei_server(void)
 {
-    term_type *t = angband_term[0];
+    term_type *t = angband_terms[0];
     t->xtra_hook = old_xtra_hook;
     t->curs_hook = old_curs_hook;
     t->bigcurs_hook = old_bigcurs_hook;
@@ -255,7 +255,7 @@ static errr send_bigcurs_to_chuukei_server(int x, int y)
  */
 void prepare_chuukei_hooks(void)
 {
-    term_type *t0 = angband_term[0];
+    term_type *t0 = angband_terms[0];
 
     /* Save original z-term hooks */
     old_xtra_hook = t0->xtra_hook;
@@ -507,7 +507,7 @@ static bool flush_ringbuf_client(void)
             euc2sjis(mesg);
 #endif
             update_term_size(x, y, len);
-            (void)((*angband_term[0]->text_hook)(x, y, len, (byte)col, mesg));
+            (void)((*angband_terms[0]->text_hook)(x, y, len, (byte)col, mesg));
             memcpy(&game_term->scr->c[y][x], mesg, len);
             for (i = x; i < x + len; i++) {
                 game_term->scr->a[y][i] = col;
@@ -520,7 +520,7 @@ static bool flush_ringbuf_client(void)
             }
             mesg[i] = '\0';
             update_term_size(x, y, len);
-            (void)((*angband_term[0]->text_hook)(x, y, len, (byte)col, mesg));
+            (void)((*angband_terms[0]->text_hook)(x, y, len, (byte)col, mesg));
             memcpy(&game_term->scr->c[y][x], mesg, len);
             for (i = x; i < x + len; i++) {
                 game_term->scr->a[y][i] = col;
@@ -529,30 +529,30 @@ static bool flush_ringbuf_client(void)
 
         case 's': /* 一文字 */
             update_term_size(x, y, 1);
-            (void)((*angband_term[0]->text_hook)(x, y, 1, (byte)col, mesg));
+            (void)((*angband_terms[0]->text_hook)(x, y, 1, (byte)col, mesg));
             memcpy(&game_term->scr->c[y][x], mesg, 1);
             game_term->scr->a[y][x] = col;
             break;
 
         case 'w':
             update_term_size(x, y, len);
-            (void)((*angband_term[0]->wipe_hook)(x, y, len));
+            (void)((*angband_terms[0]->wipe_hook)(x, y, len));
             break;
 
         case 'x':
             if (x == TERM_XTRA_CLEAR) {
                 term_clear();
             }
-            (void)((*angband_term[0]->xtra_hook)(x, 0));
+            (void)((*angband_terms[0]->xtra_hook)(x, 0));
             break;
 
         case 'c':
             update_term_size(x, y, 1);
-            (void)((*angband_term[0]->curs_hook)(x, y));
+            (void)((*angband_terms[0]->curs_hook)(x, y));
             break;
         case 'C':
             update_term_size(x, y, 1);
-            (void)((*angband_term[0]->bigcurs_hook)(x, y));
+            (void)((*angband_terms[0]->bigcurs_hook)(x, y));
             break;
         }
     }

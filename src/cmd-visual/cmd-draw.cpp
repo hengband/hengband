@@ -59,12 +59,12 @@ void do_cmd_redraw(PlayerType *player_ptr)
     }
 
     term_type *old = game_term;
-    for (int j = 0; j < 8; j++) {
-        if (!angband_term[j]) {
+    for (auto i = 0U; i < angband_terms.size(); ++i) {
+        if (!angband_terms[i]) {
             continue;
         }
 
-        term_activate(angband_term[j]);
+        term_activate(angband_terms[i]);
         term_redraw();
         term_fresh();
         term_activate(old);

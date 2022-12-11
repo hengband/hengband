@@ -1405,7 +1405,7 @@ static void init_windows(void)
         td->size_hack = false;
 
         term_data_link(td);
-        angband_term[i] = &td->t;
+        angband_terms[i] = &td->t;
 
         if (td->visible) {
             /* Activate the window */
@@ -1437,7 +1437,7 @@ static void init_windows(void)
     td->size_hack = false;
 
     term_data_link(td);
-    angband_term[0] = &td->t;
+    angband_terms[0] = &td->t;
     normsize.x = td->cols;
     normsize.y = td->rows;
 
