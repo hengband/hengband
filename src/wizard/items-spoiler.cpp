@@ -74,10 +74,10 @@ static void kind_info(PlayerType *player_ptr, char *buf, char *dam, char *wgt, c
 
     strcpy(chance, "");
     const auto &baseitem = baseitems_info[q_ptr->bi_id];
-    for (auto i = 0U; i < baseitem.alloc_chances.size(); i++) {
+    for (auto i = 0U; i < baseitem.alloc_tables.size(); i++) {
         char chance_aux[20] = "";
-        if (baseitem.alloc_chances[i] > 0) {
-            sprintf(chance_aux, "%s%3dF:%+4d", (i != 0 ? "/" : ""), (int)baseitem.alloc_levels[i], 100 / baseitem.alloc_chances[i]);
+        if (baseitem.alloc_tables[i].chance > 0) {
+            sprintf(chance_aux, "%s%3dF:%+4d", (i != 0 ? "/" : ""), (int)baseitem.alloc_tables[i].level, 100 / baseitem.alloc_tables[i].chance);
             strcat(chance, chance_aux);
         }
     }

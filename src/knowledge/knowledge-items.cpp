@@ -145,8 +145,12 @@ static short collect_objects(int grp_cur, short object_idx[], BIT_FLAGS8 mode)
                 }
             }
 
-            auto k = std::reduce(std::begin(baseitem.alloc_chances), std::end(baseitem.alloc_chances), 0);
-            if (!k) {
+            const auto &alloc_tables = baseitem.alloc_tables;
+            const auto sum_chances = std::accumulate(alloc_tables.begin(), alloc_tables.end(), 0, [](int sum, const auto &table) {
+                return sum + table.chance;
+            });
+
+            if (sum_chances == 0) {
                 continue;
             }
         }
