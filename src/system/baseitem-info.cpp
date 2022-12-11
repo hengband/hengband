@@ -576,4 +576,4 @@ BaseitemInfo::BaseitemInfo()
 {
 }
 
-std::vector<BaseitemInfo> baseitems_info;
+std::map<short, BaseitemInfo> baseitems_info;

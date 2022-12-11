@@ -157,8 +157,8 @@ static bool check_baseitem_chance(const BIT_FLAGS8 mode, const BaseitemInfo &bas
 static short collect_objects(int grp_cur, std::vector<short> &object_idx, BIT_FLAGS8 mode)
 {
     short object_cnt = 0;
-    const auto group_tval = object_group_tval[grp_cur];
-    for (const auto &baseitem : baseitems_info) {
+    auto group_tval = object_group_tval[grp_cur];
+    for (const auto &[bi_id, baseitem] : baseitems_info) {
         if (baseitem.name.empty() || !check_baseitem_chance(mode, baseitem)) {
             continue;
         }
@@ -166,12 +166,12 @@ static short collect_objects(int grp_cur, std::vector<short> &object_idx, BIT_FL
         const auto tval = baseitem.bi_key.tval();
         if (group_tval == ItemKindType::LIFE_BOOK) {
             if (baseitem.bi_key.is_spell_book()) {
-                object_idx[object_cnt++] = baseitem.idx;
+                object_idx[object_cnt++] = bi_id;
             } else {
                 continue;
             }
         } else if (tval == group_tval) {
-            object_idx[object_cnt++] = baseitem.idx;
+            object_idx[object_cnt++] = bi_id;
         } else {
             continue;
         }

@@ -191,7 +191,7 @@ void get_table_sindarin(char *out_string)
 static void shuffle_flavors(ItemKindType tval)
 {
     std::vector<std::reference_wrapper<IDX>> flavor_idx_ref_list;
-    for (const auto &baseitem : baseitems_info) {
+    for (const auto &[bi_id, baseitem] : baseitems_info) {
         if (baseitem.bi_key.tval() != tval) {
             continue;
         }
@@ -204,7 +204,7 @@ static void shuffle_flavors(ItemKindType tval)
             continue;
         }
 
-        flavor_idx_ref_list.push_back(baseitems_info[baseitem.idx].flavor);
+        flavor_idx_ref_list.push_back(baseitems_info[bi_id].flavor);
     }
 
     rand_shuffle(flavor_idx_ref_list.begin(), flavor_idx_ref_list.end());
@@ -218,12 +218,12 @@ void flavor_init(void)
 {
     const auto state_backup = w_ptr->rng.get_state();
     w_ptr->rng.set_state(w_ptr->seed_flavor);
-    for (auto &baseitem : baseitems_info) {
+    for (auto &[bi_id, baseitem] : baseitems_info) {
         if (baseitem.flavor_name.empty()) {
             continue;
         }
 
-        baseitem.flavor = baseitem.idx;
+        baseitem.flavor = bi_id;
     }
 
     shuffle_flavors(ItemKindType::RING);
@@ -235,8 +235,8 @@ void flavor_init(void)
     shuffle_flavors(ItemKindType::POTION);
     shuffle_flavors(ItemKindType::SCROLL);
     w_ptr->rng.set_state(state_backup);
-    for (auto &baseitem : baseitems_info) {
-        if (baseitem.idx == 0 || baseitem.name.empty()) {
+    for (auto &[bi_id, baseitem] : baseitems_info) {
+        if (bi_id == 0 || baseitem.name.empty()) {
             continue;
         }
 
@@ -244,7 +244,7 @@ void flavor_init(void)
             baseitem.aware = true;
         }
 
-        baseitem.easy_know = object_easy_know(baseitem.idx);
+        baseitem.easy_know = object_easy_know(bi_id);
     }
 }
 

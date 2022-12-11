@@ -190,7 +190,8 @@ bool kind_is_good(short bi_id)
 static const std::map<ItemKindType, std::vector<int>> &create_baseitems_cache()
 {
     static std::map<ItemKindType, std::vector<int>> cache;
-    for (const auto &baseitem : baseitems_info) {
+    for (const auto &[bi_id, baseitem] : baseitems_info) {
+        (void)bi_id;
         const auto &bi_key = baseitem.bi_key;
         const auto tval = bi_key.tval();
         if (tval == ItemKindType::NONE) {
@@ -210,13 +211,13 @@ static const std::map<ItemKindType, std::vector<int>> &create_baseitems_cache()
 static const std::map<BaseitemKey, short> &create_baseitem_index_chache()
 {
     static std::map<BaseitemKey, short> cache;
-    for (const auto &baseitem : baseitems_info) {
+    for (const auto &[bi_id, baseitem] : baseitems_info) {
         const auto &bi_key = baseitem.bi_key;
         if (bi_key.tval() == ItemKindType::NONE) {
             continue;
         }
 
-        cache[bi_key] = baseitem.idx;
+        cache[bi_key] = bi_id;
     }
 
     return cache;

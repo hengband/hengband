@@ -152,35 +152,35 @@ static PRICE repair_broken_weapon_aux(PlayerType *player_ptr, PRICE bcost)
         return 0;
     }
 
-    short bi_id;
+    short crafting_bi_id;
     if (o_ptr->bi_key.sval() == SV_BROKEN_DAGGER) {
         auto n = 1;
-        bi_id = 0;
-        for (const auto &baseitem : baseitems_info) {
-            if (baseitem.bi_key.tval() != ItemKindType::SWORD) {
+        crafting_bi_id = 0;
+        for (const auto &[bi_id, fixing_baseitem] : baseitems_info) {
+            if (fixing_baseitem.bi_key.tval() != ItemKindType::SWORD) {
                 continue;
             }
 
-            const auto sval = baseitem.bi_key.sval();
+            const auto sval = fixing_baseitem.bi_key.sval();
             if ((sval == SV_BROKEN_DAGGER) || (sval == SV_BROKEN_SWORD) || (sval == SV_POISON_NEEDLE)) {
                 continue;
             }
 
-            if (baseitem.weight > 99) {
+            if (fixing_baseitem.weight > 99) {
                 continue;
             }
 
             if (one_in_(n)) {
-                bi_id = baseitem.idx;
+                crafting_bi_id = bi_id;
                 n++;
             }
         }
     } else {
         auto tval = (one_in_(5) ? mo_ptr->bi_key.tval() : ItemKindType::SWORD);
         while (true) {
-            bi_id = lookup_baseitem_id({ tval });
-            const auto &baseitem = baseitems_info[bi_id];
-            const auto sval = baseitem.bi_key.sval();
+            crafting_bi_id = lookup_baseitem_id({ tval });
+            const auto &crafting_baseitem = baseitems_info[crafting_bi_id];
+            const auto sval = crafting_baseitem.bi_key.sval();
             if (tval == ItemKindType::SWORD) {
                 if ((sval == SV_BROKEN_DAGGER) || (sval == SV_BROKEN_SWORD) || (sval == SV_DIAMOND_EDGE) || (sval == SV_POISON_NEEDLE)) {
                     continue;
@@ -208,8 +208,8 @@ static PRICE repair_broken_weapon_aux(PlayerType *player_ptr, PRICE bcost)
     dd_bonus += mo_ptr->dd - baseitems_info[mo_ptr->bi_id].dd;
     ds_bonus += mo_ptr->ds - baseitems_info[mo_ptr->bi_id].ds;
 
-    const auto &baseitem = baseitems_info[bi_id];
-    o_ptr->bi_id = bi_id;
+    const auto &baseitem = baseitems_info[crafting_bi_id];
+    o_ptr->bi_id = crafting_bi_id;
     o_ptr->weight = baseitem.weight;
     o_ptr->bi_key = baseitem.bi_key;
     o_ptr->dd = baseitem.dd;

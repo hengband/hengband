@@ -32,7 +32,8 @@
  */
 static void reset_baseitem_idenditication_flags()
 {
-    for (auto &baseitem : baseitems_info) {
+    for (auto &[bi_id, baseitem] : baseitems_info) {
+        (void)bi_id;
         baseitem.tried = false;
         baseitem.aware = false;
     }

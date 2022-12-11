@@ -49,34 +49,31 @@ static bool grab_one_baseitem_flag(BaseitemInfo *bii_ptr, std::string_view what)
 errr parse_baseitems_info(std::string_view buf, angband_header *head)
 {
     (void)head;
-    static BaseitemInfo *bii_ptr = nullptr;
     const auto &tokens = str_split(buf, ':', false, 10);
-
     if (tokens[0] == "N") {
         // N:index:name_ja
         if (tokens.size() < 3 || tokens[1].size() == 0) {
             return PARSE_ERROR_TOO_FEW_ARGUMENTS;
         }
 
-        auto i = std::stoi(tokens[1]);
+        auto i = static_cast<short>(std::stoi(tokens[1]));
         if (i < error_idx) {
             return PARSE_ERROR_NON_SEQUENTIAL_RECORDS;
         }
-        if (i >= static_cast<int>(baseitems_info.size())) {
-            baseitems_info.resize(i + 1);
+
+        if (i >= static_cast<short>(baseitems_info.size())) {
+            baseitems_info.emplace(i, BaseitemInfo());
         }
 
         error_idx = i;
-        bii_ptr = &baseitems_info[i];
-        bii_ptr->idx = static_cast<short>(i);
+        auto &baseitem = baseitems_info[i];
 #ifdef JP
-        bii_ptr->name = tokens[2];
+        baseitem.name = tokens[2];
 #endif
         if (tokens.size() > 3) {
-            bii_ptr->flavor_name = tokens[3];
+            baseitem.flavor_name = tokens[3];
         }
-
-    } else if (!bii_ptr) {
+    } else if (baseitems_info.empty()) {
         return PARSE_ERROR_MISSING_RECORD_HEADER;
     } else if (tokens[0] == "E") {
         // E:name_en
@@ -84,10 +81,12 @@ errr parse_baseitems_info(std::string_view buf, angband_header *head)
         if (tokens.size() < 2 || tokens[1].size() == 0) {
             return PARSE_ERROR_TOO_FEW_ARGUMENTS;
         }
-        bii_ptr->name = tokens[1];
 
+        const auto itr = baseitems_info.rbegin();
+        auto &baseitem = itr->second;
+        baseitem.name = tokens[1];
         if (tokens.size() > 2) {
-            bii_ptr->flavor_name = tokens[2];
+            baseitem.flavor_name = tokens[2];
         }
 #endif
     } else if (tokens[0] == "D") {
@@ -100,13 +99,14 @@ errr parse_baseitems_info(std::string_view buf, angband_header *head)
         if (tokens[1][0] == '$') {
             return PARSE_ERROR_NONE;
         }
-        bii_ptr->text.append(buf.substr(2));
 #else
         if (tokens[1][0] != '$') {
             return PARSE_ERROR_NONE;
         }
-        append_english_text(bii_ptr->text, buf.substr(3));
 #endif
+        const auto itr = baseitems_info.rbegin();
+        auto &baseitem = itr->second;
+        baseitem.text.append(tokens[1].substr(_(0, 1)));
     } else if (tokens[0] == "G") {
         // G:color:symbol
         if (tokens.size() < 3 || tokens[1].size() == 0 || tokens[2].size() == 0) {
@@ -118,8 +118,10 @@ errr parse_baseitems_info(std::string_view buf, angband_header *head)
             return PARSE_ERROR_GENERIC;
         }
 
-        bii_ptr->d_attr = a;
-        bii_ptr->d_char = tokens[1][0];
+        const auto itr = baseitems_info.rbegin();
+        auto &baseitem = itr->second;
+        baseitem.d_attr = a;
+        baseitem.d_char = tokens[1][0];
     } else if (tokens[0] == "I") {
         // I:tval:sval:pval
         if (tokens.size() < 4) {
@@ -129,9 +131,11 @@ errr parse_baseitems_info(std::string_view buf, angband_header *head)
         constexpr auto base = 10;
         const auto tval = i2enum<ItemKindType>(std::stoi(tokens[1], nullptr, base));
         const auto sval = std::stoi(tokens[2], nullptr, base);
-        bii_ptr->bi_key = { tval, sval };
-        info_set_value(bii_ptr->pval, tokens[3]);
-        if ((tval == ItemKindType::ROD) && (bii_ptr->pval <= 0)) {
+        const auto itr = baseitems_info.rbegin();
+        auto &baseitem = itr->second;
+        baseitem.bi_key = { tval, sval };
+        info_set_value(baseitem.pval, tokens[3]);
+        if ((tval == ItemKindType::ROD) && (baseitem.pval <= 0)) {
             return PAESE_ERROR_INVALID_PVAL;
         }
     } else if (tokens[0] == "W") {
@@ -140,9 +144,11 @@ errr parse_baseitems_info(std::string_view buf, angband_header *head)
             return PARSE_ERROR_TOO_FEW_ARGUMENTS;
         }
 
-        info_set_value(bii_ptr->level, tokens[1]);
-        info_set_value(bii_ptr->weight, tokens[2]);
-        info_set_value(bii_ptr->cost, tokens[3]);
+        const auto itr = baseitems_info.rbegin();
+        auto &baseitem = itr->second;
+        info_set_value(baseitem.level, tokens[1]);
+        info_set_value(baseitem.weight, tokens[2]);
+        info_set_value(baseitem.cost, tokens[3]);
     } else if (tokens[0] == "A") {
         // A:level/chance(:level/chance:level/chance:level/chance)
         if (tokens.size() < 2 || tokens.size() > 5) {
@@ -156,7 +162,9 @@ errr parse_baseitems_info(std::string_view buf, angband_header *head)
                 return PARSE_ERROR_NON_SEQUENTIAL_RECORDS;
             }
 
-            auto &table = bii_ptr->alloc_tables[i];
+            const auto itr = baseitems_info.rbegin();
+            auto &baseitem = itr->second;
+            auto &table = baseitem.alloc_tables[i];
             info_set_value(table.level, rarity[0]);
             info_set_value(table.chance, rarity[1]);
             i++;
@@ -172,12 +180,14 @@ errr parse_baseitems_info(std::string_view buf, angband_header *head)
             return PARSE_ERROR_NON_SEQUENTIAL_RECORDS;
         }
 
-        info_set_value(bii_ptr->ac, tokens[1]);
-        info_set_value(bii_ptr->dd, dice[0]);
-        info_set_value(bii_ptr->ds, dice[1]);
-        info_set_value(bii_ptr->to_h, tokens[3]);
-        info_set_value(bii_ptr->to_d, tokens[4]);
-        info_set_value(bii_ptr->to_a, tokens[5]);
+        const auto itr = baseitems_info.rbegin();
+        auto &baseitem = itr->second;
+        info_set_value(baseitem.ac, tokens[1]);
+        info_set_value(baseitem.dd, dice[0]);
+        info_set_value(baseitem.ds, dice[1]);
+        info_set_value(baseitem.to_h, tokens[3]);
+        info_set_value(baseitem.to_d, tokens[4]);
+        info_set_value(baseitem.to_a, tokens[5]);
     } else if (tokens[0] == "U") {
         // U:activation_flag
         if (tokens.size() < 2 || tokens[1].size() == 0) {
@@ -188,7 +198,9 @@ errr parse_baseitems_info(std::string_view buf, angband_header *head)
             return PARSE_ERROR_INVALID_FLAG;
         }
 
-        bii_ptr->act_idx = n;
+        const auto itr = baseitems_info.rbegin();
+        auto &baseitem = itr->second;
+        baseitem.act_idx = n;
     } else if (tokens[0] == "F") {
         // F:flags
         if (tokens.size() < 2 || tokens[1].size() == 0) {
@@ -200,6 +212,9 @@ errr parse_baseitems_info(std::string_view buf, angband_header *head)
             if (f.size() == 0) {
                 continue;
             }
+
+            const auto itr = baseitems_info.rbegin();
+            auto *bii_ptr = &itr->second;
             if (!grab_one_baseitem_flag(bii_ptr, f)) {
                 return PARSE_ERROR_INVALID_FLAG;
             }

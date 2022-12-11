@@ -5,9 +5,9 @@
 #include "system/angband.h"
 #include "util/flag-group.h"
 #include <array>
+#include <map>
 #include <optional>
 #include <string>
-#include <vector>
 
 enum class ItemKindType : short;
 class BaseitemKey {
@@ -78,7 +78,6 @@ enum class RandomArtActType : short;
 class BaseitemInfo {
 public:
     BaseitemInfo();
-    short idx{};
 
     std::string name; /*!< ベースアイテム名 */
     std::string text; /*!< 解説テキスト */
@@ -125,4 +124,4 @@ public:
     bool tried{}; /*!< ベースアイテムを未鑑定のまま試したことがあるか /  The player has "tried" one of the items */
 };
 
-extern std::vector<BaseitemInfo> baseitems_info;
+extern std::map<short, BaseitemInfo> baseitems_info;

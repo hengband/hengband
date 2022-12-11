@@ -880,25 +880,25 @@ WishResultType do_cmd_wishing(PlayerType *player_ptr, int prob, bool allow_art, 
     if (exam_base) {
         int len;
         int max_len = 0;
-        for (const auto &baseitem : baseitems_info) {
-            if (baseitem.idx == 0 || baseitem.name.empty()) {
+        for (const auto &[bi_id, baseitem] : baseitems_info) {
+            if (bi_id == 0 || baseitem.name.empty()) {
                 continue;
             }
 
-            o_ptr->prep(baseitem.idx);
+            o_ptr->prep(bi_id);
             describe_flavor(player_ptr, o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY | OD_STORE));
 #ifndef JP
             str_tolower(o_name);
 #endif
             if (cheat_xtra) {
-                msg_format("Matching object No.%d %s", baseitem.idx, o_name);
+                msg_format("Matching object No.%d %s", bi_id, o_name);
             }
 
             len = strlen(o_name);
 
             if (_(!strrncmp(str, o_name, len), !strncmp(str, o_name, len))) {
                 if (len > max_len) {
-                    k_ids.push_back(baseitem.idx);
+                    k_ids.push_back(bi_id);
                     max_len = len;
                 }
             }

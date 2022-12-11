@@ -210,8 +210,8 @@ static errr interpret_u_token(char *buf)
     const auto tval = i2enum<ItemKindType>(std::stoi(zz[0], nullptr, 0));
     const auto n1 = static_cast<uint8_t>(std::stoi(zz[1], nullptr, 0));
     const auto n2 = static_cast<char>(strtol(zz[2], nullptr, 0));
-    for (auto &baseitem : baseitems_info) {
-        if ((baseitem.idx > 0) && (baseitem.bi_key.tval() == tval)) {
+    for (auto &[bi_id, baseitem] : baseitems_info) {
+        if ((bi_id > 0) && (baseitem.bi_key.tval() == tval)) {
             if (n1) {
                 baseitem.d_attr = n1;
             }

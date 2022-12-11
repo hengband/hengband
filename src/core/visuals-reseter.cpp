@@ -20,7 +20,8 @@ void reset_visuals(PlayerType *player_ptr)
         }
     }
 
-    for (auto &baseitem : baseitems_info) {
+    for (auto &[bi_id, baseitem] : baseitems_info) {
+        (void)bi_id;
         baseitem.x_attr = baseitem.d_attr;
         baseitem.x_char = baseitem.d_char;
     }

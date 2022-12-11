@@ -107,7 +107,8 @@ static void init_object_alloc()
 {
     short num[MAX_DEPTH]{};
     auto alloc_kind_size = 0;
-    for (const auto &baseitem : baseitems_info) {
+    for (const auto &[bi_id, baseitem] : baseitems_info) {
+        (void)bi_id;
         for (const auto &[level, chance] : baseitem.alloc_tables) {
             if (chance != 0) {
                 alloc_kind_size++;
@@ -125,8 +126,8 @@ static void init_object_alloc()
     }
 
     alloc_kind_table.assign(alloc_kind_size, {});
-    short aux[MAX_DEPTH]{};
-    for (const auto &baseitem : baseitems_info) {
+    int16_t aux[MAX_DEPTH]{};
+    for (const auto &[bi_id, baseitem] : baseitems_info) {
         for (const auto &[level, chance] : baseitem.alloc_tables) {
             if (chance == 0) {
                 continue;
@@ -136,7 +137,7 @@ static void init_object_alloc()
             const short p = 100 / chance;
             const auto y = (x > 0) ? num[x - 1] : 0;
             const auto z = y + aux[x];
-            alloc_kind_table[z].index = baseitem.idx;
+            alloc_kind_table[z].index = bi_id;
             alloc_kind_table[z].level = x;
             alloc_kind_table[z].prob1 = p;
             alloc_kind_table[z].prob2 = p;
