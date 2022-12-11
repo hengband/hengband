@@ -55,7 +55,7 @@ static void quit_hook(concptr s)
     (void)s;
 
     /* Scan windows */
-    for (int i = static_cast<int>(angband_terms.size()); i >= 0; i--) {
+    for (auto i = static_cast<int>(angband_terms.size()); i >= 0; i--) {
         /* Unused */
         if (!angband_terms[i]) {
             continue;
