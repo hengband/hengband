@@ -812,9 +812,6 @@
     <ClCompile Include="..\..\src\spell\range-calc.cpp">
       <Filter>spell</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\specific-object\bow.cpp">
-      <Filter>specific-object</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\specific-object\chest.cpp">
       <Filter>specific-object</Filter>
     </ClCompile>
@@ -2469,6 +2466,9 @@
     <ClCompile Include="..\..\src\system\terrain-type-definition.cpp">
       <Filter>system</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\monster-race\race-brightness-mask.cpp">
+      <Filter>monster-race</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\combat\shoot.h">
@@ -3406,9 +3406,6 @@
     </ClInclude>
     <ClInclude Include="..\..\src\realm\realm-song-numbers.h">
       <Filter>realm</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\specific-object\bow.h">
-      <Filter>specific-object</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\specific-object\chest.h">
       <Filter>specific-object</Filter>
@@ -5357,6 +5354,12 @@
     </ClInclude>
     <ClInclude Include="..\..\src\system\terrain-type-definition.h">
       <Filter>system</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\monster-race\race-brightness-flags.h">
+      <Filter>monster-race</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\monster-race\race-brightness-mask.h">
+      <Filter>monster-race</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
