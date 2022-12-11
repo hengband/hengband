@@ -1529,9 +1529,6 @@
     <ClCompile Include="..\..\src\window\main-window-equipments.cpp">
       <Filter>window</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\window\display-sub-window-items.cpp">
-      <Filter>window</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\window\display-sub-windows.cpp">
       <Filter>window</Filter>
     </ClCompile>
@@ -4251,9 +4248,6 @@
       <Filter>core</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\window\main-window-equipments.h">
-      <Filter>window</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\window\display-sub-window-items.h">
       <Filter>window</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\window\display-sub-windows.h">
