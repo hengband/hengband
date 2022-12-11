@@ -73,9 +73,15 @@ errr parse_baseitems_info(std::string_view buf, angband_header *head)
         if (tokens.size() > 3) {
             baseitem.flavor_name = tokens[3];
         }
-    } else if (baseitems_info.empty()) {
+
+        return PARSE_ERROR_NONE;
+    }
+
+    if (baseitems_info.empty()) {
         return PARSE_ERROR_MISSING_RECORD_HEADER;
-    } else if (tokens[0] == "E") {
+    }
+
+    if (tokens[0] == "E") {
         // E:name_en
 #ifndef JP
         if (tokens.size() < 2 || tokens[1].size() == 0) {
@@ -89,7 +95,10 @@ errr parse_baseitems_info(std::string_view buf, angband_header *head)
             baseitem.flavor_name = tokens[2];
         }
 #endif
-    } else if (tokens[0] == "D") {
+        return PARSE_ERROR_NONE;
+    }
+
+    if (tokens[0] == "D") {
         // D:text_ja
         // D:$text_en
         if (tokens.size() < 2 || tokens[1].size() == 0) {
@@ -107,7 +116,10 @@ errr parse_baseitems_info(std::string_view buf, angband_header *head)
         const auto itr = baseitems_info.rbegin();
         auto &baseitem = itr->second;
         baseitem.text.append(tokens[1].substr(_(0, 1)));
-    } else if (tokens[0] == "G") {
+        return PARSE_ERROR_NONE;
+    }
+
+    if (tokens[0] == "G") {
         // G:color:symbol
         if (tokens.size() < 3 || tokens[1].size() == 0 || tokens[2].size() == 0) {
             return PARSE_ERROR_TOO_FEW_ARGUMENTS;
@@ -122,7 +134,10 @@ errr parse_baseitems_info(std::string_view buf, angband_header *head)
         auto &baseitem = itr->second;
         baseitem.d_attr = a;
         baseitem.d_char = tokens[1][0];
-    } else if (tokens[0] == "I") {
+        return PARSE_ERROR_NONE;
+    }
+
+    if (tokens[0] == "I") {
         // I:tval:sval:pval
         if (tokens.size() < 4) {
             return PARSE_ERROR_TOO_FEW_ARGUMENTS;
@@ -138,7 +153,11 @@ errr parse_baseitems_info(std::string_view buf, angband_header *head)
         if ((tval == ItemKindType::ROD) && (baseitem.pval <= 0)) {
             return PAESE_ERROR_INVALID_PVAL;
         }
-    } else if (tokens[0] == "W") {
+
+        return PARSE_ERROR_NONE;
+    }
+
+    if (tokens[0] == "W") {
         // W:level:weight:cost
         if (tokens.size() < 4) {
             return PARSE_ERROR_TOO_FEW_ARGUMENTS;
@@ -149,7 +168,10 @@ errr parse_baseitems_info(std::string_view buf, angband_header *head)
         info_set_value(baseitem.level, tokens[1]);
         info_set_value(baseitem.weight, tokens[2]);
         info_set_value(baseitem.cost, tokens[3]);
-    } else if (tokens[0] == "A") {
+        return PARSE_ERROR_NONE;
+    }
+
+    if (tokens[0] == "A") {
         // A:level/chance(:level/chance:level/chance:level/chance)
         if (tokens.size() < 2 || tokens.size() > 5) {
             return PARSE_ERROR_TOO_FEW_ARGUMENTS;
@@ -169,7 +191,11 @@ errr parse_baseitems_info(std::string_view buf, angband_header *head)
             info_set_value(table.chance, rarity[1]);
             i++;
         }
-    } else if (tokens[0] == "P") {
+
+        return PARSE_ERROR_NONE;
+    }
+
+    if (tokens[0] == "P") {
         // P:ac:dd:ds:to_h:to_d:to_a
         if (tokens.size() < 6) {
             return PARSE_ERROR_TOO_FEW_ARGUMENTS;
@@ -188,7 +214,10 @@ errr parse_baseitems_info(std::string_view buf, angband_header *head)
         info_set_value(baseitem.to_h, tokens[3]);
         info_set_value(baseitem.to_d, tokens[4]);
         info_set_value(baseitem.to_a, tokens[5]);
-    } else if (tokens[0] == "U") {
+        return PARSE_ERROR_NONE;
+    }
+
+    if (tokens[0] == "U") {
         // U:activation_flag
         if (tokens.size() < 2 || tokens[1].size() == 0) {
             return PARSE_ERROR_TOO_FEW_ARGUMENTS;
@@ -201,7 +230,10 @@ errr parse_baseitems_info(std::string_view buf, angband_header *head)
         const auto itr = baseitems_info.rbegin();
         auto &baseitem = itr->second;
         baseitem.act_idx = n;
-    } else if (tokens[0] == "F") {
+        return PARSE_ERROR_NONE;
+    }
+
+    if (tokens[0] == "F") {
         // F:flags
         if (tokens.size() < 2 || tokens[1].size() == 0) {
             return PARSE_ERROR_TOO_FEW_ARGUMENTS;
@@ -219,9 +251,9 @@ errr parse_baseitems_info(std::string_view buf, angband_header *head)
                 return PARSE_ERROR_INVALID_FLAG;
             }
         }
-    } else {
-        return PARSE_ERROR_UNDEFINED_DIRECTIVE;
+
+        return PARSE_ERROR_NONE;
     }
 
-    return PARSE_ERROR_NONE;
+    return PARSE_ERROR_UNDEFINED_DIRECTIVE;
 }

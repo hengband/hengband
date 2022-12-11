@@ -67,6 +67,10 @@ errr parse_artifacts_info(std::string_view buf, angband_header *)
         return PARSE_ERROR_NONE;
     }
 
+    if (artifacts_info.empty()) {
+        return PARSE_ERROR_MISSING_RECORD_HEADER;
+    }
+
     if (tokens[0] == "E") {
         // E:name_en
 #ifdef JP
