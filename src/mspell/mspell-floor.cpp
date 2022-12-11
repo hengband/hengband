@@ -14,6 +14,7 @@
 #include "mind/drs-types.h"
 #include "monster-race/monster-race.h"
 #include "monster-race/race-ability-flags.h"
+#include "monster-race/race-brightness-mask.h"
 #include "monster-race/race-flags-resistance.h"
 #include "monster-race/race-flags1.h"
 #include "monster-race/race-flags3.h"
@@ -406,7 +407,7 @@ MonsterSpellResult spell_RF6_DARKNESS(PlayerType *player_ptr, POSITION y, POSITI
     const auto is_ninja = PlayerClass(player_ptr).equals(PlayerClassType::NINJA);
     const auto is_living_monster = r_ptr->kind_flags.has_not(MonsterKindType::UNDEAD);
     const auto is_not_weak_lite = r_ptr->resistance_flags.has_not(MonsterResistanceType::HURT_LITE);
-    if (is_ninja && is_living_monster && is_not_weak_lite && none_bits(r_ptr->flags7, RF7_DARK_MASK)) {
+    if (is_ninja && is_living_monster && is_not_weak_lite && r_ptr->brightness_flags.has_none_of(dark_mask)) {
         can_use_lite_area = true;
     }
 

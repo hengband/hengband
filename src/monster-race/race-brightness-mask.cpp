@@ -27,3 +27,5 @@ const EnumClassFlagGroup<MonsterBrightnessType> self_ld_mask = {
     MonsterBrightnessType::SELF_DARK_1,
     MonsterBrightnessType::SELF_DARK_2
 };
+
+const EnumClassFlagGroup<MonsterBrightnessType> ld_mask = EnumClassFlagGroup<MonsterBrightnessType>(lite_mask).set(dark_mask);

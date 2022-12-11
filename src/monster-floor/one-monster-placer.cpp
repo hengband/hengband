@@ -24,6 +24,7 @@
 #include "monster-floor/place-monster-types.h"
 #include "monster-race/monster-kind-mask.h"
 #include "monster-race/monster-race.h"
+#include "monster-race/race-brightness-mask.h"
 #include "monster-race/race-flags1.h"
 #include "monster-race/race-flags2.h"
 #include "monster-race/race-flags3.h"
@@ -420,9 +421,9 @@ bool place_monster_one(PlayerType *player_ptr, MONSTER_IDX who, POSITION y, POSI
         m_ptr->mflag.set(MonsterTemporaryFlagType::BORN);
     }
 
-    if (any_bits(r_ptr->flags7, RF7_SELF_LD_MASK)) {
+    if (r_ptr->brightness_flags.has_any_of(self_ld_mask)) {
         set_bits(player_ptr->update, PU_MON_LITE);
-    } else if (any_bits(r_ptr->flags7, RF7_HAS_LD_MASK) && !m_ptr->is_asleep()) {
+    } else if (r_ptr->brightness_flags.has_any_of(has_ld_mask) && !m_ptr->is_asleep()) {
         set_bits(player_ptr->update, PU_MON_LITE);
     }
     update_monster(player_ptr, g_ptr->m_idx, true);

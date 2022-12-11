@@ -11,6 +11,7 @@
 #include "floor/line-of-sight.h"
 #include "monster-race/monster-race.h"
 #include "monster-race/race-ability-mask.h"
+#include "monster-race/race-brightness-mask.h"
 #include "monster-race/race-flags2.h"
 #include "monster-race/race-flags3.h"
 #include "monster-race/race-flags7.h"
@@ -193,7 +194,7 @@ void decide_lite_area(PlayerType *player_ptr, msa_type *msa_ptr)
     }
 
     PlayerClass pc(player_ptr);
-    bool can_use_lite_area = pc.equals(PlayerClassType::NINJA) && msa_ptr->r_ptr->kind_flags.has_not(MonsterKindType::UNDEAD) && msa_ptr->r_ptr->resistance_flags.has_not(MonsterResistanceType::HURT_LITE) && ((msa_ptr->r_ptr->flags7 & RF7_DARK_MASK) == 0);
+    bool can_use_lite_area = pc.equals(PlayerClassType::NINJA) && msa_ptr->r_ptr->kind_flags.has_not(MonsterKindType::UNDEAD) && msa_ptr->r_ptr->resistance_flags.has_not(MonsterResistanceType::HURT_LITE) && (msa_ptr->r_ptr->brightness_flags.has_none_of(dark_mask));
 
     if (msa_ptr->r_ptr->behavior_flags.has(MonsterBehaviorType::STUPID)) {
         return;

@@ -11,6 +11,7 @@
 #include "monster-floor/monster-move.h"
 #include "monster-race/monster-kind-mask.h"
 #include "monster-race/monster-race.h"
+#include "monster-race/race-brightness-mask.h"
 #include "monster-race/race-flags3.h"
 #include "monster-race/race-flags7.h"
 #include "monster-race/race-indice-types.h"
@@ -133,7 +134,7 @@ bool set_monster_csleep(PlayerType *player_ptr, MONSTER_IDX m_idx, int v)
         }
     }
 
-    if (monraces_info[m_ptr->r_idx].flags7 & RF7_HAS_LD_MASK) {
+    if (monraces_info[m_ptr->r_idx].brightness_flags.has_any_of(has_ld_mask)) {
         player_ptr->update |= PU_MON_LITE;
     }
 
