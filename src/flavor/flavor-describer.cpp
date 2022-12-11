@@ -35,38 +35,9 @@
 #include "system/item-entity.h"
 #include "system/player-type-definition.h"
 #include "util/bit-flags-calculator.h"
+#include "util/quarks.h"
 #include "util/string-processor.h"
-#include "window/display-sub-window-items.h"
 #include <sstream>
-
-static void check_object_known_aware(flavor_type *flavor_ptr)
-{
-    flavor_ptr->tr_flags = object_flags(flavor_ptr->o_ptr);
-    if (flavor_ptr->o_ptr->is_aware()) {
-        flavor_ptr->aware = true;
-    }
-
-    if (flavor_ptr->o_ptr->is_known()) {
-        flavor_ptr->known = true;
-    }
-
-    if (flavor_ptr->aware && ((flavor_ptr->mode & OD_NO_FLAVOR) || plain_descriptions)) {
-        flavor_ptr->flavor = false;
-    }
-
-    if ((flavor_ptr->mode & OD_STORE) || (flavor_ptr->o_ptr->ident & IDENT_STORE)) {
-        flavor_ptr->flavor = false;
-        flavor_ptr->aware = true;
-        flavor_ptr->known = true;
-    }
-
-    if (flavor_ptr->mode & OD_FORCE_FLAVOR) {
-        flavor_ptr->aware = false;
-        flavor_ptr->flavor = true;
-        flavor_ptr->known = false;
-        flavor_ptr->flavor_bii_ptr = flavor_ptr->bii_ptr;
-    }
-}
 
 static std::string describe_chest_trap(const ItemEntity &item)
 {
@@ -466,37 +437,108 @@ static std::string describe_remaining(const ItemEntity &item, const describe_opt
     return ss.str();
 }
 
-static void decide_item_feeling(flavor_type *flavor_ptr)
+static std::string describe_item_feeling(const ItemEntity &item, const describe_option_type &opt)
 {
-    flavor_ptr->fake_insc_buf[0] = '\0';
-    if (flavor_ptr->o_ptr->feeling) {
-        strcpy(flavor_ptr->fake_insc_buf, game_inscriptions[flavor_ptr->o_ptr->feeling]);
-        return;
+    if ((0 < item.feeling) && (item.feeling < std::size(game_inscriptions))) {
+        return game_inscriptions[item.feeling];
     }
 
-    if (flavor_ptr->o_ptr->is_cursed() && (flavor_ptr->known || (flavor_ptr->o_ptr->ident & IDENT_SENSE))) {
-        strcpy(flavor_ptr->fake_insc_buf, _("呪われている", "cursed"));
-        return;
+    if (item.is_cursed() && (opt.known || any_bits(item.ident, IDENT_SENSE))) {
+        return _("呪われている", "cursed");
     }
 
-    const auto tval = flavor_ptr->o_ptr->bi_key.tval();
+    const auto tval = item.bi_key.tval();
     auto unidentifiable = tval == ItemKindType::RING;
     unidentifiable |= tval == ItemKindType::AMULET;
     unidentifiable |= tval == ItemKindType::LITE;
     unidentifiable |= tval == ItemKindType::FIGURINE;
-    if (unidentifiable && flavor_ptr->aware && !flavor_ptr->known && !(flavor_ptr->o_ptr->ident & IDENT_SENSE)) {
-        strcpy(flavor_ptr->fake_insc_buf, _("未鑑定", "unidentified"));
-        return;
+    if (unidentifiable && opt.aware && !opt.known && none_bits(item.ident, IDENT_SENSE)) {
+        return _("未鑑定", "unidentified");
     }
 
-    if (!flavor_ptr->known && (flavor_ptr->o_ptr->ident & IDENT_EMPTY)) {
-        strcpy(flavor_ptr->fake_insc_buf, _("空", "empty"));
-        return;
+    if (!opt.known && any_bits(item.ident, IDENT_EMPTY)) {
+        return _("空", "empty");
     }
 
-    if (!flavor_ptr->aware && flavor_ptr->o_ptr->is_tried()) {
-        strcpy(flavor_ptr->fake_insc_buf, _("未判明", "tried"));
+    if (!opt.aware && item.is_tried()) {
+        return _("未判明", "tried");
     }
+
+    return "";
+}
+
+static std::string describe_ability_abbrev(const ItemEntity &item)
+{
+    auto should_describe = abbrev_extra || abbrev_all;
+    should_describe &= item.is_fully_known();
+    should_describe &= (item.inscription == 0) || !angband_strchr(quark_str(item.inscription), '%');
+    if (!should_describe) {
+        return "";
+    }
+
+    char buf[1024]{};
+    const auto is_kanji = _(true, false);
+    get_ability_abbreviation(buf, &item, is_kanji, abbrev_all);
+
+    return buf;
+}
+
+static std::string describe_player_inscription(const ItemEntity &item)
+{
+    if (item.inscription == 0) {
+        return "";
+    }
+
+    char insc[1024]{};
+    get_inscription(insc, &item);
+    return insc;
+}
+
+static std::string describe_item_discount(const ItemEntity &item, bool hide_discount)
+{
+    if ((item.discount == 0) || (hide_discount && none_bits(item.ident, IDENT_STORE))) {
+        return "";
+    }
+
+    return format("%d%s", item.discount, _("%引き", "% off"));
+}
+
+/*!
+ * @brief アイテムの銘を記述する
+ *
+ * 以下の情報を銘として記述する。複数ある場合は順にカンマ区切りで併記する。
+ * 但し、アイテムの特性かプレイヤーの刻んだ銘が表記される場合、
+ * 店舗で売られている時を除き割引情報は省略される。(この仕様必要か？)
+ *
+ * - 簡易鑑定情報
+ * - 割引情報
+ * - アイテムの特性の簡略表記
+ * - プレイヤーが刻んだ銘
+ *
+ * @param item アイテムへの参照
+ * @param opt 記述オプション
+ * @return 記述した銘
+ */
+static std::string describe_inscription(const ItemEntity &item, const describe_option_type &opt)
+{
+    const auto feeling = describe_item_feeling(item, opt);
+    const auto ability_abbrev = describe_ability_abbrev(item);
+    const auto player_insc = describe_player_inscription(item);
+    const auto hide_discount = !ability_abbrev.empty() || !player_insc.empty();
+    const auto discount = describe_item_discount(item, hide_discount);
+
+    std::stringstream ss;
+    auto first = true;
+    for (const auto &str : { feeling, discount, ability_abbrev, player_insc }) {
+        if (str.empty()) {
+            continue;
+        }
+        ss << (first ? "" : ", ") << str;
+        first = false;
+    }
+
+    const auto insc = ss.str();
+    return insc.empty() ? "" : format(" {%s}", insc.data());
 }
 
 static describe_option_type decide_describe_option(const ItemEntity &item, BIT_FLAGS mode)
@@ -542,16 +584,12 @@ static describe_option_type decide_describe_option(const ItemEntity &item, BIT_F
  */
 void describe_flavor(PlayerType *player_ptr, char *buf, ItemEntity *o_ptr, BIT_FLAGS mode)
 {
-    flavor_type tmp_flavor;
-    flavor_type *flavor_ptr = initialize_flavor_type(&tmp_flavor, buf, o_ptr, mode);
-
-    check_object_known_aware(flavor_ptr);
     const auto &item = *o_ptr;
     const auto opt = decide_describe_option(item, mode);
     std::stringstream desc_ss;
     desc_ss << describe_named_item(player_ptr, item, opt);
 
-    if (flavor_ptr->mode & OD_NAME_ONLY || o_ptr->bi_id == 0) {
+    if (any_bits(mode, OD_NAME_ONLY) || (o_ptr->bi_id == 0)) {
         angband_strcpy(buf, desc_ss.str().data(), MAX_NLEN);
         return;
     }
@@ -562,7 +600,7 @@ void describe_flavor(PlayerType *player_ptr, char *buf, ItemEntity *o_ptr, BIT_F
 
     if (none_bits(mode, OD_DEBUG)) {
         const auto &bow = player_ptr->inventory_list[INVEN_BOW];
-        const auto tval = flavor_ptr->o_ptr->bi_key.tval();
+        const auto tval = item.bi_key.tval();
         if ((bow.bi_id != 0) && (tval == bow.get_arrow_kind())) {
             desc_ss << describe_ammo_detail(player_ptr, item, bow, opt);
         } else if (PlayerClass(player_ptr).equals(PlayerClassType::NINJA) && (tval == ItemKindType::SPIKE)) {
@@ -582,13 +620,6 @@ void describe_flavor(PlayerType *player_ptr, char *buf, ItemEntity *o_ptr, BIT_F
         return;
     }
 
-    // ここまでのリファクタリングを確認するための暫定措置
-    angband_strcpy(flavor_ptr->tmp_val, desc_ss.str().data(), sizeof(flavor_ptr->tmp_val));
-    flavor_ptr->t = flavor_ptr->tmp_val + strlen(flavor_ptr->tmp_val);
-
-    display_short_flavors(flavor_ptr);
-    decide_item_feeling(flavor_ptr);
-    display_item_discount(flavor_ptr);
-    display_item_fake_inscription(flavor_ptr);
-    angband_strcpy(flavor_ptr->buf, flavor_ptr->tmp_val, MAX_NLEN);
+    desc_ss << describe_inscription(item, opt);
+    angband_strcpy(buf, desc_ss.str().data(), MAX_NLEN);
 }
