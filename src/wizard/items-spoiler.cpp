@@ -27,7 +27,7 @@
  * @param val 価値を返すバッファ参照ポインタ
  * @param k ベースアイテムID
  */
-static void kind_info(PlayerType *player_ptr, char *buf, char *dam, char *wgt, char *chance, DEPTH *lev, PRICE *val, short k)
+static void kind_info(PlayerType *player_ptr, char *buf, char *dam, char *wgt, char *chance_desc, DEPTH *lev, PRICE *val, short k)
 {
     ItemEntity forge;
     auto *q_ptr = &forge;
@@ -39,7 +39,7 @@ static void kind_info(PlayerType *player_ptr, char *buf, char *dam, char *wgt, c
     q_ptr->to_d = 0;
     *lev = baseitems_info[q_ptr->bi_id].level;
     *val = q_ptr->get_price();
-    if (!buf || !dam || !chance || !wgt) {
+    if (!buf || !dam || !chance_desc || !wgt) {
         return;
     }
 
@@ -72,13 +72,14 @@ static void kind_info(PlayerType *player_ptr, char *buf, char *dam, char *wgt, c
         break;
     }
 
-    strcpy(chance, "");
+    strcpy(chance_desc, "");
     const auto &baseitem = baseitems_info[q_ptr->bi_id];
     for (auto i = 0U; i < baseitem.alloc_tables.size(); i++) {
+        const auto &[level, chance] = baseitem.alloc_tables[i];
         char chance_aux[20] = "";
-        if (baseitem.alloc_tables[i].chance > 0) {
-            sprintf(chance_aux, "%s%3dF:%+4d", (i != 0 ? "/" : ""), (int)baseitem.alloc_tables[i].level, 100 / baseitem.alloc_tables[i].chance);
-            strcat(chance, chance_aux);
+        if (chance > 0) {
+            sprintf(chance_aux, "%s%3dF:%+4d", (i != 0 ? "/" : ""), level, 100 / chance);
+            strcat(chance_desc, chance_aux);
         }
     }
 
