@@ -51,6 +51,7 @@ lore_type *initialize_lore_type(lore_type *lore_ptr, MonsterRaceId r_idx, monste
     lore_ptr->flags7 = (lore_ptr->r_ptr->flags7 & lore_ptr->r_ptr->flags7);
     lore_ptr->resistance_flags = (lore_ptr->r_ptr->resistance_flags & lore_ptr->r_ptr->r_resistance_flags);
     lore_ptr->feature_flags = (lore_ptr->r_ptr->feature_flags & lore_ptr->r_ptr->r_feature_flags);
+    lore_ptr->brightness_flags = lore_ptr->r_ptr->brightness_flags;
     lore_ptr->reinforce = false;
     lore_ptr->know_everything = false;
     lore_ptr->mode = mode;

@@ -5,6 +5,7 @@
 #include "monster-race/monster-aura-types.h"
 #include "monster-race/race-ability-flags.h"
 #include "monster-race/race-behavior-flags.h"
+#include "monster-race/race-brightness-flags.h"
 #include "monster-race/race-drop-flags.h"
 #include "monster-race/race-feature-flags.h"
 #include "monster-race/race-flags-resistance.h"
@@ -43,3 +44,4 @@ extern const std::unordered_map<std::string_view, MonsterWildernessType> r_info_
 extern const std::unordered_map<std::string_view, MonsterFeatureType> r_info_feature_flags;
 extern const std::unordered_map<std::string_view, MonsterPopulationType> r_info_population_flags;
 extern const std::unordered_map<std::string_view, MonsterSpeakType> r_info_speak_flags;
+extern const std::unordered_map<std::string_view, MonsterBrightnessType> r_info_brightness_flags;

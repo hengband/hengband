@@ -2,6 +2,7 @@
 #include "monster-attack/monster-attack-effect.h"
 #include "monster-attack/monster-attack-table.h"
 #include "monster-race/race-ability-flags.h"
+#include "monster-race/race-brightness-flags.h"
 #include "monster-race/race-drop-flags.h"
 #include "monster-race/race-feature-flags.h"
 #include "monster-race/race-kind-flags.h"
@@ -255,16 +256,8 @@ const std::unordered_map<std::string_view, race_flags7> r_info_flags7 = {
     { "UNIQUE2", RF7_UNIQUE2 },
     { "RIDING", RF7_RIDING },
     { "KAGE", RF7_KAGE },
-    { "HAS_LITE_1", RF7_HAS_LITE_1 },
-    { "SELF_LITE_1", RF7_SELF_LITE_1 },
-    { "HAS_LITE_2", RF7_HAS_LITE_2 },
-    { "SELF_LITE_2", RF7_SELF_LITE_2 },
     { "CHAMELEON", RF7_CHAMELEON },
     { "TANUKI", RF7_TANUKI },
-    { "HAS_DARK_1", RF7_HAS_DARK_1 },
-    { "SELF_DARK_1", RF7_SELF_DARK_1 },
-    { "HAS_DARK_2", RF7_HAS_DARK_2 },
-    { "SELF_DARK_2", RF7_SELF_DARK_2 },
 };
 
 /*!
@@ -452,4 +445,15 @@ const std::unordered_map<std::string_view, MonsterSpeakType> r_info_speak_flags 
     { "SPEAK_FRIEND", MonsterSpeakType::SPEAK_FRIEND },
     { "SPEAK_DEATH", MonsterSpeakType::SPEAK_DEATH },
     { "SPEAK_SPAWN", MonsterSpeakType::SPEAK_SPAWN },
+};
+
+const std::unordered_map<std::string_view, MonsterBrightnessType> r_info_brightness_flags = {
+    { "HAS_LITE_1", MonsterBrightnessType::HAS_LITE_1 },
+    { "SELF_LITE_1", MonsterBrightnessType::SELF_LITE_1 },
+    { "HAS_LITE_2", MonsterBrightnessType::HAS_LITE_2 },
+    { "SELF_LITE_2", MonsterBrightnessType::SELF_LITE_2 },
+    { "HAS_DARK_1", MonsterBrightnessType::HAS_DARK_1 },
+    { "SELF_DARK_1", MonsterBrightnessType::SELF_DARK_1 },
+    { "HAS_DARK_2", MonsterBrightnessType::HAS_DARK_2 },
+    { "SELF_DARK_2", MonsterBrightnessType::SELF_DARK_2 },
 };

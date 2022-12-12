@@ -17,6 +17,8 @@
 #include "grid/grid.h"
 #include "mind/drs-types.h"
 #include "monster-race/monster-race.h"
+#include "monster-race/race-brightness-flags.h"
+#include "monster-race/race-brightness-mask.h"
 #include "monster-race/race-flags1.h"
 #include "monster-race/race-flags2.h"
 #include "monster-race/race-flags3.h"
@@ -103,12 +105,13 @@ bool update_riding_monster(PlayerType *player_ptr, turn_flags *turn_flags_ptr, M
  */
 void update_player_type(PlayerType *player_ptr, turn_flags *turn_flags_ptr, MonsterRaceInfo *r_ptr)
 {
+    auto except_has_lite = EnumClassFlagGroup<MonsterBrightnessType>(self_ld_mask).set({ MonsterBrightnessType::HAS_DARK_1, MonsterBrightnessType::HAS_DARK_2 });
     if (turn_flags_ptr->do_view) {
         player_ptr->update |= PU_FLOW;
         player_ptr->window_flags |= PW_OVERHEAD | PW_DUNGEON;
     }
 
-    if (turn_flags_ptr->do_move && ((r_ptr->flags7 & (RF7_SELF_LD_MASK | RF7_HAS_DARK_1 | RF7_HAS_DARK_2)) || ((r_ptr->flags7 & (RF7_HAS_LITE_1 | RF7_HAS_LITE_2)) && !player_ptr->phase_out))) {
+    if (turn_flags_ptr->do_move && (r_ptr->brightness_flags.has_any_of(except_has_lite) || (r_ptr->brightness_flags.has_any_of({ MonsterBrightnessType::HAS_LITE_1, MonsterBrightnessType::HAS_LITE_2 }) && !player_ptr->phase_out))) {
         player_ptr->update |= PU_MON_LITE;
     }
 }

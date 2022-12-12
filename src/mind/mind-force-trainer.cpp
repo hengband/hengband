@@ -15,6 +15,7 @@
 #include "monster-floor/monster-summon.h"
 #include "monster-floor/place-monster-types.h"
 #include "monster-race/monster-race.h"
+#include "monster-race/race-brightness-mask.h"
 #include "monster-race/race-flags7.h"
 #include "monster/monster-describer.h"
 #include "monster/monster-status.h"
@@ -255,7 +256,7 @@ bool shock_power(PlayerType *player_ptr)
     lite_spot(player_ptr, oy, ox);
     lite_spot(player_ptr, ty, tx);
 
-    if (r_ptr->flags7 & (RF7_LITE_MASK | RF7_DARK_MASK)) {
+    if (r_ptr->brightness_flags.has_any_of(ld_mask)) {
         player_ptr->update |= (PU_MON_LITE);
     }
 

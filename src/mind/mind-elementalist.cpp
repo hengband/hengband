@@ -33,6 +33,7 @@
 #include "mind/mind-explanations-table.h"
 #include "mind/mind-mindcrafter.h"
 #include "monster-race/monster-race.h"
+#include "monster-race/race-brightness-flags.h"
 #include "monster-race/race-flags-resistance.h"
 #include "monster-race/race-flags3.h"
 #include "monster-race/race-flags7.h"
@@ -1463,16 +1464,16 @@ static bool is_target_grid_dark(FloorType *f_ptr, POSITION y, POSITION x)
 
             POSITION d = distance(dy, dx, y, x);
             auto *r_ptr = &monraces_info[f_ptr->m_list[m_idx].r_idx];
-            if (d <= 1 && any_bits(r_ptr->flags7, RF7_HAS_LITE_1 | RF7_SELF_LITE_1)) {
+            if (d <= 1 && r_ptr->brightness_flags.has_any_of({ MonsterBrightnessType::HAS_LITE_1, MonsterBrightnessType::SELF_LITE_1 })) {
                 return false;
             }
-            if (d <= 2 && any_bits(r_ptr->flags7, RF7_HAS_LITE_2 | RF7_SELF_LITE_2)) {
+            if (d <= 2 && r_ptr->brightness_flags.has_any_of({ MonsterBrightnessType::HAS_LITE_2, MonsterBrightnessType::SELF_LITE_2 })) {
                 return false;
             }
-            if (d <= 1 && any_bits(r_ptr->flags7, RF7_HAS_DARK_1 | RF7_SELF_DARK_1)) {
+            if (d <= 1 && r_ptr->brightness_flags.has_any_of({ MonsterBrightnessType::HAS_DARK_1, MonsterBrightnessType::SELF_DARK_1 })) {
                 is_dark = true;
             }
-            if (d <= 2 && any_bits(r_ptr->flags7, RF7_HAS_DARK_2 | RF7_SELF_DARK_2)) {
+            if (d <= 2 && r_ptr->brightness_flags.has_any_of({ MonsterBrightnessType::HAS_DARK_2, MonsterBrightnessType::SELF_DARK_2 })) {
                 is_dark = true;
             }
         }
