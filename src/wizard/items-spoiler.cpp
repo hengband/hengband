@@ -20,12 +20,12 @@
  * @param name 名称を返すバッファ参照ポインタ
  * @param damage_desc ダメージダイス記述を返すバッファ参照ポインタ
  * @param weight_desc 重量記述を返すバッファ参照ポインタ
- * @param level 生成階記述を返すバッファ参照ポインタ
+ * @param level_desc 生成階記述を返すバッファ参照ポインタ
  * @param chance 生成機会を返すバッファ参照ポインタ
  * @param value 価値を返すバッファ参照ポインタ
  * @param bi_id ベースアイテムID
  */
-static void describe_baseitem_info(PlayerType *player_ptr, char *name, char *damage_desc, char *weight_desc, char *chance_desc, DEPTH *level, PRICE *value, short bi_id)
+static void describe_baseitem_info(PlayerType *player_ptr, char *name, char *damage_desc, char *weight_desc, char *chance_desc, DEPTH *level_desc, PRICE *value, short bi_id)
 {
     ItemEntity forge;
     auto *q_ptr = &forge;
@@ -35,7 +35,7 @@ static void describe_baseitem_info(PlayerType *player_ptr, char *name, char *dam
     q_ptr->to_a = 0;
     q_ptr->to_h = 0;
     q_ptr->to_d = 0;
-    *level = baseitems_info.at(q_ptr->bi_id).level;
+    *level_desc = baseitems_info.at(q_ptr->bi_id).level;
     *value = q_ptr->get_price();
     if (!name || !damage_desc || !chance_desc || !weight_desc) {
         return;
