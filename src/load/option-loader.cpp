@@ -10,63 +10,38 @@
 #include "util/bit-flags-calculator.h"
 #include "world/world.h"
 #include <array>
+#include <vector>
 
-static constexpr auto OPTIONS_SIZE = 8;
-
-static void load_option_flags()
+static std::vector<uint32_t> load_flags(const uint32_t masks[])
 {
-    std::array<uint32_t, OPTIONS_SIZE> flags{};
-    for (auto n = 0; n < OPTIONS_SIZE; n++) {
-        flags[n] = rd_u32b();
+    constexpr auto options_size = 8;
+    std::array<uint32_t, options_size> tmp_flags{};
+    for (auto n = 0; n < options_size; n++) {
+        tmp_flags[n] = rd_u32b();
     }
 
-    std::array<uint32_t, OPTIONS_SIZE> masks{};
-    for (auto n = 0; n < OPTIONS_SIZE; n++) {
-        masks[n] = rd_u32b();
+    std::array<uint32_t, options_size> tmp_masks{};
+    for (auto n = 0; n < options_size; n++) {
+        tmp_masks[n] = rd_u32b();
     }
 
-    for (auto n = 0; n < OPTIONS_SIZE; n++) {
-        for (auto i = 0; i < OPTIONS_SIZE * sizeof(uint32_t); i++) {
+    std::vector<uint32_t> flags(options_size);
+    for (auto n = 0; n < options_size; n++) {
+        for (auto i = 0; i < options_size * sizeof(uint32_t); i++) {
             const auto bits = 1U << i;
-            if (none_bits(masks[n], bits) || none_bits(option_mask[n], bits)) {
+            if (none_bits(tmp_masks[n], bits) || none_bits(masks[n], bits)) {
                 continue;
             }
 
-            if (any_bits(flags[n], bits)) {
-                option_flag[n] |= bits;
+            if (any_bits(tmp_flags[n], bits)) {
+                flags[n] |= bits;
             } else {
-                option_flag[n] &= ~bits;
+                flags[n] &= ~bits;
             }
         }
     }
-}
 
-static void load_window_flags()
-{
-    std::array<uint32_t, OPTIONS_SIZE> flags{};
-    for (auto n = 0; n < OPTIONS_SIZE; n++) {
-        flags[n] = rd_u32b();
-    }
-
-    std::array<uint32_t, OPTIONS_SIZE> masks{};
-    for (auto n = 0; n < OPTIONS_SIZE; n++) {
-        masks[n] = rd_u32b();
-    }
-
-    for (auto n = 0; n < OPTIONS_SIZE; n++) {
-        for (auto i = 0; i < OPTIONS_SIZE * sizeof(uint32_t); i++) {
-            const auto bits = 1U << i;
-            if (none_bits(masks[n], bits) || none_bits(window_mask[n], bits)) {
-                continue;
-            }
-
-            if (any_bits(flags[n], bits)) {
-                window_flag[n] |= bits;
-            } else {
-                window_flag[n] &= ~bits;
-            }
-        }
-    }
+    return flags;
 }
 
 /*!
@@ -122,11 +97,13 @@ void rd_options()
     autosave_t = rd_bool();
     autosave_freq = rd_s16b();
 
-    load_option_flags();
+    auto options = load_flags(option_mask);
+    std::copy(options.begin(), options.end(), option_flag);
     if (h_older_than(0, 4, 5)) {
         load_zangband_options();
     }
 
     extract_option_vars();
-    load_window_flags();
+    auto windows = load_flags(window_mask);
+    std::copy(windows.begin(), windows.end(), window_flag);
 }
