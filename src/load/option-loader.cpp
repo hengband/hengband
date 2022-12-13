@@ -40,6 +40,37 @@ static void load_option_flags()
     }
 }
 
+static void load_window_flags()
+{
+    std::array<uint32_t, OPTIONS_SIZE> flags{};
+    for (auto n = 0; n < OPTIONS_SIZE; n++) {
+        flags[n] = rd_u32b();
+    }
+
+    std::array<uint32_t, OPTIONS_SIZE> masks{};
+    for (auto n = 0; n < OPTIONS_SIZE; n++) {
+        masks[n] = rd_u32b();
+    }
+
+    for (auto n = 0; n < OPTIONS_SIZE; n++) {
+        for (auto i = 0; i < OPTIONS_SIZE * sizeof(uint32_t); i++) {
+            if (!(masks[n] & (1UL << i))) {
+                continue;
+            }
+
+            if (!(window_mask[n] & (1UL << i))) {
+                continue;
+            }
+
+            if (flags[n] & (1UL << i)) {
+                window_flag[n] |= (1UL << i);
+            } else {
+                window_flag[n] &= ~(1UL << i);
+            }
+        }
+    }
+}
+
 /*!
  * @brief ゲームオプションを読み込む / Read options (ignore most pre-2.8.0 options)
  * @details
@@ -52,7 +83,7 @@ static void load_option_flags()
  * The window options are stored in the same way, but note that each
  * window gets 32 options, and their order is fixed by certain defines.
  */
-void rd_options(void)
+void rd_options()
 {
     strip_bytes(16);
 
@@ -99,30 +130,5 @@ void rd_options(void)
     }
 
     extract_option_vars();
-    std::array<uint32_t, OPTIONS_SIZE> flag{};
-    for (int n = 0; n < 8; n++) {
-        flag[n] = rd_u32b();
-    }
-
-    std::array<uint32_t, OPTIONS_SIZE> mask{};
-    for (int n = 0; n < 8; n++) {
-        mask[n] = rd_u32b();
-    }
-
-    for (int n = 0; n < 8; n++) {
-        for (int i = 0; i < 32; i++) {
-            if (!(mask[n] & (1UL << i))) {
-                continue;
-            }
-            if (!(window_mask[n] & (1UL << i))) {
-                continue;
-            }
-
-            if (flag[n] & (1UL << i)) {
-                window_flag[n] |= (1UL << i);
-            } else {
-                window_flag[n] &= ~(1UL << i);
-            }
-        }
-    }
+    load_window_flags();
 }
