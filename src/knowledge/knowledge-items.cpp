@@ -35,6 +35,7 @@
 #include "world/world.h"
 #include <numeric>
 #include <set>
+#include <vector>
 
 /*!
  * @brief Check the status of "artifacts"
@@ -122,6 +123,30 @@ void do_cmd_knowledge_artifacts(PlayerType *player_ptr)
     fd_kill(file_name);
 }
 
+/*!
+ * @brief ベースアイテムの出現率チェック処理
+ * @param mode グループ化モード (0x02 表示専用)
+ * @param baseitem ベースアイテムへの参照
+ * @return collect_objects() の処理を続行するか否か
+ */
+static bool check_baseitem_chance(const BIT_FLAGS8 mode, const BaseitemInfo &baseitem)
+{
+    if (mode & 0x02) {
+        return true;
+    }
+
+    if (!w_ptr->wizard && ((baseitem.flavor == 0) || !baseitem.aware)) {
+        return false;
+    }
+
+    const auto &alloc_tables = baseitem.alloc_tables;
+    const auto sum_chances = std::accumulate(alloc_tables.begin(), alloc_tables.end(), 0, [](int sum, const auto &table) {
+        return sum + table.chance;
+    });
+
+    return sum_chances > 0;
+}
+
 /*
  * Build a list of object indexes in the given group. Return the number
  * of objects in the group.
@@ -129,26 +154,13 @@ void do_cmd_knowledge_artifacts(PlayerType *player_ptr)
  * mode & 0x01 : check for non-empty group
  * mode & 0x02 : visual operation only
  */
-static short collect_objects(int grp_cur, short object_idx[], BIT_FLAGS8 mode)
+static short collect_objects(int grp_cur, std::vector<short> &object_idx, BIT_FLAGS8 mode)
 {
     short object_cnt = 0;
-    auto group_tval = object_group_tval[grp_cur];
+    const auto group_tval = object_group_tval[grp_cur];
     for (const auto &baseitem : baseitems_info) {
-        if (baseitem.name.empty()) {
+        if (baseitem.name.empty() || !check_baseitem_chance(mode, baseitem)) {
             continue;
-        }
-
-        if (!(mode & 0x02)) {
-            if (!w_ptr->wizard) {
-                if ((baseitem.flavor == 0) || !baseitem.aware) {
-                    continue;
-                }
-            }
-
-            auto k = std::reduce(std::begin(baseitem.chance), std::end(baseitem.chance), 0);
-            if (!k) {
-                continue;
-            }
         }
 
         const auto tval = baseitem.bi_key.tval();
@@ -176,7 +188,7 @@ static short collect_objects(int grp_cur, short object_idx[], BIT_FLAGS8 mode)
 /*
  * Display the objects in a group.
  */
-static void display_object_list(int col, int row, int per_page, IDX object_idx[], int object_cur, int object_top, bool visual_only)
+static void display_object_list(int col, int row, int per_page, const std::vector<short> &object_idx, int object_cur, int object_top, bool visual_only)
 {
     int i;
     for (i = 0; i < per_page && (object_idx[object_top + i] >= 0); i++) {
@@ -263,7 +275,7 @@ void do_cmd_knowledge_objects(PlayerType *player_ptr, bool *need_redraw, bool vi
                 max = len;
             }
 
-            if (collect_objects(i, object_idx.data(), mode)) {
+            if (collect_objects(i, object_idx, mode)) {
                 grp_idx[grp_cnt++] = i;
             }
         }
@@ -277,8 +289,12 @@ void do_cmd_knowledge_objects(PlayerType *player_ptr, bool *need_redraw, bool vi
         object_old = direct_k_idx;
         object_cnt = 1;
         object_idx[1] = -1;
+        const auto height = browser_rows - 1;
+        const auto width = wid - (max + 3);
+        auto *x_attr = &flavor_baseitem.x_attr;
+        auto *x_char = &flavor_baseitem.x_char;
         (void)visual_mode_command(
-            'v', &visual_list, browser_rows - 1, wid - (max + 3), &attr_top, &char_left, &flavor_baseitem.x_attr, &flavor_baseitem.x_char, need_redraw);
+            'v', &visual_list, height, width, &attr_top, &char_left, x_attr, x_char, need_redraw);
     }
 
     grp_idx[grp_cnt] = -1;
@@ -345,7 +361,7 @@ void do_cmd_knowledge_objects(PlayerType *player_ptr, bool *need_redraw, bool vi
             display_group_list(0, 6, max, browser_rows, grp_idx, tmp_texts.data(), grp_cur, grp_top);
             if (old_grp_cur != grp_cur) {
                 old_grp_cur = grp_cur;
-                object_cnt = collect_objects(grp_idx[grp_cur], object_idx.data(), mode);
+                object_cnt = collect_objects(grp_idx[grp_cur], object_idx, mode);
             }
 
             while (object_cur < object_top) {
@@ -358,10 +374,10 @@ void do_cmd_knowledge_objects(PlayerType *player_ptr, bool *need_redraw, bool vi
         }
 
         if (!visual_list) {
-            display_object_list(max + 3, 6, browser_rows, object_idx.data(), object_cur, object_top, visual_only);
+            display_object_list(max + 3, 6, browser_rows, object_idx, object_cur, object_top, visual_only);
         } else {
             object_top = object_cur;
-            display_object_list(max + 3, 6, 1, object_idx.data(), object_cur, object_top, visual_only);
+            display_object_list(max + 3, 6, 1, object_idx, object_cur, object_top, visual_only);
             display_visual_list(max + 3, 7, browser_rows - 1, wid - (max + 3), attr_top, char_left);
         }
 
@@ -398,8 +414,12 @@ void do_cmd_knowledge_objects(PlayerType *player_ptr, bool *need_redraw, bool vi
         }
 
         char ch = inkey();
+        const auto height = browser_rows - 1;
+        const auto width = wid - (max + 3);
+        auto *x_attr = &flavor_baseitem.x_attr;
+        auto *x_char = &flavor_baseitem.x_char;
         if (visual_mode_command(
-                ch, &visual_list, browser_rows - 1, wid - (max + 3), &attr_top, &char_left, &flavor_baseitem.x_attr, &flavor_baseitem.x_char, need_redraw)) {
+                ch, &visual_list, height, width, &attr_top, &char_left, x_attr, x_char, need_redraw)) {
             if (direct_k_idx >= 0) {
                 switch (ch) {
                 case '\n':

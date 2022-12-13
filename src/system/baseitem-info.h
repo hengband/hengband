@@ -4,6 +4,7 @@
 #include "object-enchant/trg-types.h"
 #include "system/angband.h"
 #include "util/flag-group.h"
+#include <array>
 #include <optional>
 #include <string>
 #include <vector>
@@ -101,8 +102,13 @@ public:
     EnumClassFlagGroup<ItemGenerationTraitType> gen_flags; /*!< ベースアイテムの生成特性ビット配列 / flags for generate */
 
     DEPTH level{}; /*!< ベースアイテムの基本生成階 / Level */
-    DEPTH locale[4]{}; /*!< ベースアイテムの生成階テーブル / Allocation level(s) */
-    PROB chance[4]{}; /*!< ベースアイテムの生成確率テーブル / Allocation chance(s) */
+
+    struct alloc_table {
+        int level; /*!< ベースアイテムの生成階 */
+        short chance; /*!< ベースアイテムの生成確率 */
+    };
+
+    std::array<alloc_table, 4> alloc_tables{}; /*!< ベースアイテムの生成テーブル */
 
     TERM_COLOR d_attr{}; /*!< デフォルトのアイテムシンボルカラー / Default object attribute */
     char d_char{}; /*!< デフォルトのアイテムシンボルアルファベット / Default object character */

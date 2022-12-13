@@ -155,8 +155,10 @@ errr parse_baseitems_info(std::string_view buf, angband_header *head)
             if (rarity.size() != 2 || rarity[0].size() == 0 || rarity[1].size() == 0) {
                 return PARSE_ERROR_NON_SEQUENTIAL_RECORDS;
             }
-            info_set_value(bii_ptr->locale[i], rarity[0]);
-            info_set_value(bii_ptr->chance[i], rarity[1]);
+
+            auto &table = bii_ptr->alloc_tables[i];
+            info_set_value(table.level, rarity[0]);
+            info_set_value(table.chance, rarity[1]);
             i++;
         }
     } else if (tokens[0] == "P") {

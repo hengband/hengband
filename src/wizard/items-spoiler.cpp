@@ -16,46 +16,45 @@
 #include <algorithm>
 
 /*!
- * @brief ベースアイテムの各情報を文字列化する /
- * Describe the kind
+ * @brief ベースアイテムの各情報を文字列化する
  * @param player_ptr プレイヤーへの参照ポインタ
- * @param buf 名称を返すバッファ参照ポインタ
- * @param dam ダメージダイス記述を返すバッファ参照ポインタ
- * @param wgt 重量記述を返すバッファ参照ポインタ
- * @param lev 生成階記述を返すバッファ参照ポインタ
+ * @param name 名称を返すバッファ参照ポインタ
+ * @param damage_desc ダメージダイス記述を返すバッファ参照ポインタ
+ * @param weight_desc 重量記述を返すバッファ参照ポインタ
+ * @param level 生成階記述を返すバッファ参照ポインタ
  * @param chance 生成機会を返すバッファ参照ポインタ
- * @param val 価値を返すバッファ参照ポインタ
- * @param k ベースアイテムID
+ * @param value 価値を返すバッファ参照ポインタ
+ * @param bi_id ベースアイテムID
  */
-static void kind_info(PlayerType *player_ptr, char *buf, char *dam, char *wgt, char *chance, DEPTH *lev, PRICE *val, short k)
+static void describe_baseitem_info(PlayerType *player_ptr, char *name, char *damage_desc, char *weight_desc, char *chance_desc, DEPTH *level, PRICE *value, short bi_id)
 {
     ItemEntity forge;
     auto *q_ptr = &forge;
-    q_ptr->prep(k);
+    q_ptr->prep(bi_id);
     q_ptr->ident |= IDENT_KNOWN;
     q_ptr->pval = 0;
     q_ptr->to_a = 0;
     q_ptr->to_h = 0;
     q_ptr->to_d = 0;
-    *lev = baseitems_info[q_ptr->bi_id].level;
-    *val = q_ptr->get_price();
-    if (!buf || !dam || !chance || !wgt) {
+    *level = baseitems_info[q_ptr->bi_id].level;
+    *value = q_ptr->get_price();
+    if (!name || !damage_desc || !chance_desc || !weight_desc) {
         return;
     }
 
-    describe_flavor(player_ptr, buf, q_ptr, OD_NAME_ONLY | OD_STORE);
-    strcpy(dam, "");
+    describe_flavor(player_ptr, name, q_ptr, OD_NAME_ONLY | OD_STORE);
+    strcpy(damage_desc, "");
     switch (q_ptr->bi_key.tval()) {
     case ItemKindType::SHOT:
     case ItemKindType::BOLT:
     case ItemKindType::ARROW:
-        sprintf(dam, "%dd%d", q_ptr->dd, q_ptr->ds);
+        sprintf(damage_desc, "%dd%d", q_ptr->dd, q_ptr->ds);
         break;
     case ItemKindType::HAFTED:
     case ItemKindType::POLEARM:
     case ItemKindType::SWORD:
     case ItemKindType::DIGGING:
-        sprintf(dam, "%dd%d", q_ptr->dd, q_ptr->ds);
+        sprintf(damage_desc, "%dd%d", q_ptr->dd, q_ptr->ds);
         break;
     case ItemKindType::BOOTS:
     case ItemKindType::GLOVES:
@@ -66,22 +65,24 @@ static void kind_info(PlayerType *player_ptr, char *buf, char *dam, char *wgt, c
     case ItemKindType::SOFT_ARMOR:
     case ItemKindType::HARD_ARMOR:
     case ItemKindType::DRAG_ARMOR:
-        sprintf(dam, "%d", q_ptr->ac);
+        sprintf(damage_desc, "%d", q_ptr->ac);
         break;
     default:
         break;
     }
 
-    strcpy(chance, "");
-    for (int i = 0; i < 4; i++) {
+    strcpy(chance_desc, "");
+    const auto &baseitem = baseitems_info[q_ptr->bi_id];
+    for (auto i = 0U; i < baseitem.alloc_tables.size(); i++) {
+        const auto &[level, chance] = baseitem.alloc_tables[i];
         char chance_aux[20] = "";
-        if (baseitems_info[q_ptr->bi_id].chance[i] > 0) {
-            sprintf(chance_aux, "%s%3dF:%+4d", (i != 0 ? "/" : ""), (int)baseitems_info[q_ptr->bi_id].locale[i], 100 / baseitems_info[q_ptr->bi_id].chance[i]);
-            strcat(chance, chance_aux);
+        if (chance > 0) {
+            sprintf(chance_aux, "%s%3dF:%+4d", (i != 0 ? "/" : ""), level, 100 / chance);
+            strcat(chance_desc, chance_aux);
         }
     }
 
-    sprintf(wgt, "%3d.%d", (int)(q_ptr->weight / 10), (int)(q_ptr->weight % 10));
+    sprintf(weight_desc, "%3d.%d", (int)(q_ptr->weight / 10), (int)(q_ptr->weight % 10));
 }
 
 /*!
@@ -121,8 +122,8 @@ SpoilerOutputResultType spoil_obj_desc(concptr fname)
             PlayerType dummy;
             DEPTH d1, d2;
             PRICE p1, p2;
-            kind_info(&dummy, nullptr, nullptr, nullptr, nullptr, &d1, &p1, k1_idx);
-            kind_info(&dummy, nullptr, nullptr, nullptr, nullptr, &d2, &p2, k2_idx);
+            describe_baseitem_info(&dummy, nullptr, nullptr, nullptr, nullptr, &d1, &p1, k1_idx);
+            describe_baseitem_info(&dummy, nullptr, nullptr, nullptr, nullptr, &d2, &p2, k2_idx);
             return (p1 != p2) ? p1 < p2 : d1 < d2;
         });
 
@@ -134,7 +135,7 @@ SpoilerOutputResultType spoil_obj_desc(concptr fname)
             char chance[80];
             char dam[80];
             PlayerType dummy;
-            kind_info(&dummy, buf, dam, wgt, chance, &e, &v, bi_id);
+            describe_baseitem_info(&dummy, buf, dam, wgt, chance, &e, &v, bi_id);
             fprintf(spoiler_file, "  %-35s%8s%7s%5d %-40s%9ld\n", buf, dam, wgt, static_cast<int>(e), chance, static_cast<long>(v));
         }
     }
