@@ -55,14 +55,15 @@ static void quit_hook(concptr s)
     (void)s;
 
     /* Scan windows */
-    for (auto i = static_cast<int>(angband_terms.size()); i >= 0; i--) {
+    for (auto it = angband_terms.rbegin(); it != angband_terms.rend(); ++it) {
+        auto term = *it;
         /* Unused */
-        if (!angband_terms[i]) {
+        if (term == nullptr) {
             continue;
         }
 
         /* Nuke it */
-        term_nuke(angband_terms[i]);
+        term_nuke(term);
     }
 }
 
