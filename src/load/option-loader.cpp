@@ -27,14 +27,15 @@ static void load_option_flags()
 
     for (auto n = 0; n < OPTIONS_SIZE; n++) {
         for (auto i = 0; i < OPTIONS_SIZE * sizeof(uint32_t); i++) {
-            if (none_bits(masks[n], 1U << i) || none_bits(option_mask[n], 1U << i)) {
+            const auto bits = 1U << i;
+            if (none_bits(masks[n], bits) || none_bits(option_mask[n], bits)) {
                 continue;
             }
 
-            if (flags[n] & (1UL << i)) {
-                option_flag[n] |= (1UL << i);
+            if (any_bits(flags[n], bits)) {
+                option_flag[n] |= bits;
             } else {
-                option_flag[n] &= ~(1UL << i);
+                option_flag[n] &= ~bits;
             }
         }
     }
@@ -54,18 +55,15 @@ static void load_window_flags()
 
     for (auto n = 0; n < OPTIONS_SIZE; n++) {
         for (auto i = 0; i < OPTIONS_SIZE * sizeof(uint32_t); i++) {
-            if (!(masks[n] & (1UL << i))) {
+            const auto bits = 1U << i;
+            if (none_bits(masks[n], bits) || none_bits(window_mask[n], bits)) {
                 continue;
             }
 
-            if (!(window_mask[n] & (1UL << i))) {
-                continue;
-            }
-
-            if (flags[n] & (1UL << i)) {
-                window_flag[n] |= (1UL << i);
+            if (any_bits(flags[n], bits)) {
+                window_flag[n] |= bits;
             } else {
-                window_flag[n] &= ~(1UL << i);
+                window_flag[n] &= ~bits;
             }
         }
     }
