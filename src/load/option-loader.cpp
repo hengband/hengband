@@ -9,6 +9,36 @@
 #include "system/angband.h"
 #include "util/bit-flags-calculator.h"
 #include "world/world.h"
+#include <array>
+
+static constexpr auto OPTIONS_SIZE = 8;
+
+static void load_option_flags()
+{
+    std::array<uint32_t, OPTIONS_SIZE> flags{};
+    for (auto n = 0; n < OPTIONS_SIZE; n++) {
+        flags[n] = rd_u32b();
+    }
+
+    std::array<uint32_t, OPTIONS_SIZE> masks{};
+    for (auto n = 0; n < OPTIONS_SIZE; n++) {
+        masks[n] = rd_u32b();
+    }
+
+    for (auto n = 0; n < OPTIONS_SIZE; n++) {
+        for (auto i = 0; i < OPTIONS_SIZE * sizeof(uint32_t); i++) {
+            if (none_bits(masks[n], 1U << i) || none_bits(option_mask[n], 1U << i)) {
+                continue;
+            }
+
+            if (flags[n] & (1UL << i)) {
+                option_flag[n] |= (1UL << i);
+            } else {
+                option_flag[n] &= ~(1UL << i);
+            }
+        }
+    }
+}
 
 /*!
  * @brief ゲームオプションを読み込む / Read options (ignore most pre-2.8.0 options)
@@ -63,39 +93,18 @@ void rd_options(void)
     autosave_t = rd_bool();
     autosave_freq = rd_s16b();
 
-    BIT_FLAGS flag[8];
-    for (int n = 0; n < 8; n++) {
-        flag[n] = rd_u32b();
-    }
-
-    BIT_FLAGS mask[8];
-    for (int n = 0; n < 8; n++) {
-        mask[n] = rd_u32b();
-    }
-
-    for (auto n = 0; n < 8; n++) {
-        for (auto i = 0; i < 32; i++) {
-            if (none_bits(mask[n], 1U << i) || none_bits(option_mask[n], 1U << i)) {
-                continue;
-            }
-
-            if (flag[n] & (1UL << i)) {
-                option_flag[n] |= (1UL << i);
-            } else {
-                option_flag[n] &= ~(1UL << i);
-            }
-        }
-    }
-
+    load_option_flags();
     if (h_older_than(0, 4, 5)) {
         load_zangband_options();
     }
 
     extract_option_vars();
+    std::array<uint32_t, OPTIONS_SIZE> flag{};
     for (int n = 0; n < 8; n++) {
         flag[n] = rd_u32b();
     }
 
+    std::array<uint32_t, OPTIONS_SIZE> mask{};
     for (int n = 0; n < 8; n++) {
         mask[n] = rd_u32b();
     }
