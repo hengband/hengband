@@ -13,6 +13,7 @@
 #include "target/target-checker.h"
 #include "target/target-setter.h"
 #include "target/target-types.h"
+#include "term/z-form.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 #include "window/main-window-util.h"
@@ -55,29 +56,28 @@ void do_cmd_locate(PlayerType *player_ptr)
 {
     DIRECTION dir;
     POSITION y1, x1;
-    GAME_TEXT tmp_val[80];
-    GAME_TEXT out_val[MAX_MONSTER_NAME];
     TERM_LEN wid, hgt;
     get_screen_size(&wid, &hgt);
     POSITION y2 = y1 = panel_row_min;
     POSITION x2 = x1 = panel_col_min;
     while (true) {
+        std::string tmp_val;
         if ((y2 == y1) && (x2 == x1)) {
-            strcpy(tmp_val, _("真上", "\0"));
+            tmp_val = _("真上", "");
         } else {
-            sprintf(tmp_val, "%s%s", ((y2 < y1) ? _("北", " North") : (y2 > y1) ? _("南", " South")
-                                                                                : ""),
-                ((x2 < x1) ? _("西", " West") : (x2 > x1) ? _("東", " East")
-                                                          : ""));
+            tmp_val.append((y2 < y1) ? _("北", " North") : (y2 > y1) ? _("南", " South")
+                                                                     : "");
+            tmp_val.append((x2 < x1) ? _("西", " West") : (x2 > x1) ? _("東", " East")
+                                                                    : "");
         }
 
-        sprintf(out_val, _("マップ位置 [%d(%02d),%d(%02d)] (プレイヤーの%s)  方向?", "Map sector [%d(%02d),%d(%02d)], which is%s your sector.  Direction?"),
-            y2 / (hgt / 2), y2 % (hgt / 2), x2 / (wid / 2), x2 % (wid / 2), tmp_val);
+        std::string out_val = format(_("マップ位置 [%d(%02d),%d(%02d)] (プレイヤーの%s)  方向?", "Map sector [%d(%02d),%d(%02d)], which is%s your sector.  Direction?"),
+            y2 / (hgt / 2), y2 % (hgt / 2), x2 / (wid / 2), x2 % (wid / 2), tmp_val.data());
 
         dir = 0;
         while (!dir) {
             char command;
-            if (!get_com(out_val, &command, true)) {
+            if (!get_com(out_val.data(), &command, true)) {
                 break;
             }
 

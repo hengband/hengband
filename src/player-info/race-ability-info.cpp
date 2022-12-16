@@ -1,6 +1,7 @@
 ﻿#include "player-info/race-ability-info.h"
 #include "player-info/self-info-util.h"
 #include "system/player-type-definition.h"
+#include "term/z-form.h"
 
 /*!
  * @brief レイシャルパワーの説明文を表示する
@@ -84,7 +85,7 @@ void set_race_ability_info(PlayerType *player_ptr, self_info_type *self_ptr)
         break;
     case PlayerRaceType::CYCLOPS:
         if (player_ptr->lev >= 20) {
-            sprintf(self_ptr->plev_buf, _("あなたは %d ダメージの岩石を投げることができる。(15 MP)", "You can throw a boulder, dam. %d (cost 15)."),
+            strnfmt(self_ptr->plev_buf, sizeof(self_ptr->plev_buf), _("あなたは %d ダメージの岩石を投げることができる。(15 MP)", "You can throw a boulder, dam. %d (cost 15)."),
                 (3 * player_ptr->lev) / 2);
             self_ptr->info[self_ptr->line++] = self_ptr->plev_buf;
         }
@@ -98,15 +99,15 @@ void set_race_ability_info(PlayerType *player_ptr, self_info_type *self_ptr)
         break;
     case PlayerRaceType::KLACKON:
         if (player_ptr->lev >= 9) {
-            sprintf(
-                self_ptr->plev_buf, _("あなたは %d ダメージの酸を吹きかけることができる。(9 MP)", "You can spit acid, dam. %d (cost 9)."), player_ptr->lev);
+            strnfmt(
+                self_ptr->plev_buf, sizeof(self_ptr->plev_buf), _("あなたは %d ダメージの酸を吹きかけることができる。(9 MP)", "You can spit acid, dam. %d (cost 9)."), player_ptr->lev);
             self_ptr->info[self_ptr->line++] = self_ptr->plev_buf;
         }
 
         break;
     case PlayerRaceType::KOBOLD:
         if (player_ptr->lev >= 12) {
-            sprintf(self_ptr->plev_buf, _("あなたは %d ダメージの毒矢を投げることができる。(8 MP)", "You can throw a dart of poison, dam. %d (cost 8)."),
+            strnfmt(self_ptr->plev_buf, sizeof(self_ptr->plev_buf), _("あなたは %d ダメージの毒矢を投げることができる。(8 MP)", "You can throw a dart of poison, dam. %d (cost 8)."),
                 player_ptr->lev);
             self_ptr->info[self_ptr->line++] = self_ptr->plev_buf;
         }
@@ -114,20 +115,20 @@ void set_race_ability_info(PlayerType *player_ptr, self_info_type *self_ptr)
         break;
     case PlayerRaceType::DARK_ELF:
         if (player_ptr->lev >= 2) {
-            sprintf(self_ptr->plev_buf, _("あなたは %d ダメージのマジック・ミサイルの呪文を使える。(2 MP)", "You can cast a Magic Missile, dam %d (cost 2)."),
+            strnfmt(self_ptr->plev_buf, sizeof(self_ptr->plev_buf), _("あなたは %d ダメージのマジック・ミサイルの呪文を使える。(2 MP)", "You can cast a Magic Missile, dam %d (cost 2)."),
                 (3 + ((player_ptr->lev - 1) / 5)));
             self_ptr->info[self_ptr->line++] = self_ptr->plev_buf;
         }
 
         break;
     case PlayerRaceType::DRACONIAN:
-        sprintf(self_ptr->plev_buf, _("あなたは %d ダメージのブレスを吐くことができる。(%d MP)", "You can breathe, dam. %d (cost %d)."), 2 * player_ptr->lev,
+        strnfmt(self_ptr->plev_buf, sizeof(self_ptr->plev_buf), _("あなたは %d ダメージのブレスを吐くことができる。(%d MP)", "You can breathe, dam. %d (cost %d)."), 2 * player_ptr->lev,
             player_ptr->lev);
         self_ptr->info[self_ptr->line++] = self_ptr->plev_buf;
         break;
     case PlayerRaceType::MIND_FLAYER:
         if (player_ptr->lev >= 15) {
-            sprintf(self_ptr->plev_buf, _("あなたは %d ダメージの精神攻撃をすることができる。(12 MP)", "You can mind blast your enemies, dam %d (cost 12)."),
+            strnfmt(self_ptr->plev_buf, sizeof(self_ptr->plev_buf), _("あなたは %d ダメージの精神攻撃をすることができる。(12 MP)", "You can mind blast your enemies, dam %d (cost 12)."),
                 player_ptr->lev);
         }
 
@@ -135,14 +136,14 @@ void set_race_ability_info(PlayerType *player_ptr, self_info_type *self_ptr)
         break;
     case PlayerRaceType::IMP:
         if (player_ptr->lev >= 30) {
-            sprintf(self_ptr->plev_buf, _("あなたは %d ダメージのファイア・ボールの呪文を使える。(15 MP)", "You can cast a Fire Ball, dam. %d (cost 15)."),
+            strnfmt(self_ptr->plev_buf, sizeof(self_ptr->plev_buf), _("あなたは %d ダメージのファイア・ボールの呪文を使える。(15 MP)", "You can cast a Fire Ball, dam. %d (cost 15)."),
                 player_ptr->lev);
             self_ptr->info[self_ptr->line++] = self_ptr->plev_buf;
             break;
         }
 
         if (player_ptr->lev >= 9) {
-            sprintf(self_ptr->plev_buf, _("あなたは %d ダメージのファイア・ボルトの呪文を使える。(15 MP)", "You can cast a Fire Bolt, dam. %d (cost 15)."),
+            strnfmt(self_ptr->plev_buf, sizeof(self_ptr->plev_buf), _("あなたは %d ダメージのファイア・ボルトの呪文を使える。(15 MP)", "You can cast a Fire Bolt, dam. %d (cost 15)."),
                 player_ptr->lev);
             self_ptr->info[self_ptr->line++] = self_ptr->plev_buf;
         }
@@ -166,7 +167,7 @@ void set_race_ability_info(PlayerType *player_ptr, self_info_type *self_ptr)
             break;
         }
 
-        sprintf(self_ptr->plev_buf, _("あなたは敵から %d HP の生命力を吸収できる。(%d MP)", "You can steal life from a foe, dam. %d (cost %d)."),
+        strnfmt(self_ptr->plev_buf, sizeof(self_ptr->plev_buf), _("あなたは敵から %d HP の生命力を吸収できる。(%d MP)", "You can steal life from a foe, dam. %d (cost %d)."),
             player_ptr->lev * 2, 1 + (player_ptr->lev / 3));
         self_ptr->info[self_ptr->line++] = self_ptr->plev_buf;
         break;
@@ -183,7 +184,7 @@ void set_race_ability_info(PlayerType *player_ptr, self_info_type *self_ptr)
 
         break;
     case PlayerRaceType::BALROG:
-        sprintf(self_ptr->plev_buf, _("あなたは %d ダメージの地獄か火炎のブレスを吐くことができる。(%d MP)", "You can breathe nether, dam. %d (cost %d)."),
+        strnfmt(self_ptr->plev_buf, sizeof(self_ptr->plev_buf), _("あなたは %d ダメージの地獄か火炎のブレスを吐くことができる。(%d MP)", "You can breathe nether, dam. %d (cost %d)."),
             3 * player_ptr->lev, 10 + player_ptr->lev / 3);
         self_ptr->info[self_ptr->line++] = self_ptr->plev_buf;
         break;
@@ -195,20 +196,20 @@ void set_race_ability_info(PlayerType *player_ptr, self_info_type *self_ptr)
         break;
     case PlayerRaceType::ANDROID:
         if (player_ptr->lev < 10) {
-            sprintf(self_ptr->plev_buf, _("あなたは %d ダメージのレイガンを撃つことができる。(7 MP)", "You can fire a ray gun with damage %d (cost 7)."),
+            strnfmt(self_ptr->plev_buf, sizeof(self_ptr->plev_buf), _("あなたは %d ダメージのレイガンを撃つことができる。(7 MP)", "You can fire a ray gun with damage %d (cost 7)."),
                 (player_ptr->lev + 1) / 2);
         } else if (player_ptr->lev < 25) {
-            sprintf(self_ptr->plev_buf, _("あなたは %d ダメージのブラスターを撃つことができる。(13 MP)", "You can fire a blaster with damage %d (cost 13)."),
+            strnfmt(self_ptr->plev_buf, sizeof(self_ptr->plev_buf), _("あなたは %d ダメージのブラスターを撃つことができる。(13 MP)", "You can fire a blaster with damage %d (cost 13)."),
                 player_ptr->lev);
         } else if (player_ptr->lev < 35) {
-            sprintf(self_ptr->plev_buf, _("あなたは %d ダメージのバズーカを撃つことができる。(26 MP)", "You can fire a bazooka with damage %d (cost 26)."),
+            strnfmt(self_ptr->plev_buf, sizeof(self_ptr->plev_buf), _("あなたは %d ダメージのバズーカを撃つことができる。(26 MP)", "You can fire a bazooka with damage %d (cost 26)."),
                 player_ptr->lev * 2);
         } else if (player_ptr->lev < 45) {
-            sprintf(self_ptr->plev_buf,
+            strnfmt(self_ptr->plev_buf, sizeof(self_ptr->plev_buf),
                 _("あなたは %d ダメージのビームキャノンを撃つことができる。(40 MP)", "You can fire a beam cannon with damage %d (cost 40)."),
                 player_ptr->lev * 2);
         } else {
-            sprintf(self_ptr->plev_buf, _("あなたは %d ダメージのロケットを撃つことができる。(60 MP)", "You can fire a rocket with damage %d (cost 60)."),
+            strnfmt(self_ptr->plev_buf, sizeof(self_ptr->plev_buf), _("あなたは %d ダメージのロケットを撃つことができる。(60 MP)", "You can fire a rocket with damage %d (cost 60)."),
                 player_ptr->lev * 5);
         }
 

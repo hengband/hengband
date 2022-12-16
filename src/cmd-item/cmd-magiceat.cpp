@@ -77,6 +77,7 @@
 #include "target/target-getter.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
+#include "term/z-form.h"
 #include "timed-effect/player-stun.h"
 #include "timed-effect/timed-effects.h"
 #include "util/buffer-shaper.h"
@@ -257,12 +258,9 @@ static std::optional<BaseitemKey> select_magic_eater(PlayerType *player_ptr, boo
             OBJECT_SUBTYPE_VALUE ctr;
             PERCENTAGE chance;
             short bi_id;
-            char dummy[80];
             POSITION x1, y1;
             DEPTH level;
             byte col;
-
-            strcpy(dummy, "");
 
             for (y = 1; y < 20; y++) {
                 prt("", y, x);
@@ -290,11 +288,12 @@ static std::optional<BaseitemKey> select_magic_eater(PlayerType *player_ptr, boo
 
                 bi_id = lookup_baseitem_id({ tval, ctr });
 
+                std::string dummy;
                 if (use_menu) {
                     if (ctr == (menu_line - 1)) {
-                        strcpy(dummy, _("》", "> "));
+                        dummy = _("》", "> ");
                     } else {
-                        strcpy(dummy, "  ");
+                        dummy = "  ";
                     }
                 }
                 /* letter/number for power selection */
@@ -305,7 +304,7 @@ static std::optional<BaseitemKey> select_magic_eater(PlayerType *player_ptr, boo
                     } else {
                         letter = '0' + ctr - 26;
                     }
-                    sprintf(dummy, "%c)", letter);
+                    dummy = format("%c)", letter);
                 }
                 x1 = ((ctr < ITEM_GROUP_SIZE / 2) ? x : x + 40);
                 y1 = ((ctr < ITEM_GROUP_SIZE / 2) ? y + ctr : y + ctr - ITEM_GROUP_SIZE / 2);
@@ -330,7 +329,7 @@ static std::optional<BaseitemKey> select_magic_eater(PlayerType *player_ptr, boo
 
                 if (bi_id) {
                     if (tval == ItemKindType::ROD) {
-                        strcat(dummy,
+                        dummy.append(
                             format(_(" %-22.22s 充填:%2d/%2d%3d%%", " %-22.22s   (%2d/%2d) %3d%%"), baseitems_info[bi_id].name.data(),
                                 item.charge ? (item.charge - 1) / (EATER_ROD_CHARGE * baseitems_info[bi_id].pval) + 1 : 0,
                                 item.count, chance));
@@ -338,7 +337,7 @@ static std::optional<BaseitemKey> select_magic_eater(PlayerType *player_ptr, boo
                             col = TERM_RED;
                         }
                     } else {
-                        strcat(dummy,
+                        dummy.append(
                             format(" %-22.22s    %2d/%2d %3d%%", baseitems_info[bi_id].name.data(), (int16_t)(item.charge / EATER_CHARGE),
                                 item.count, chance));
                         if (item.charge < EATER_CHARGE) {
@@ -346,9 +345,9 @@ static std::optional<BaseitemKey> select_magic_eater(PlayerType *player_ptr, boo
                         }
                     }
                 } else {
-                    strcpy(dummy, "");
+                    dummy.clear();
                 }
-                c_prt(col, dummy, y1, x1);
+                c_prt(col, dummy.data(), y1, x1);
             }
         }
 

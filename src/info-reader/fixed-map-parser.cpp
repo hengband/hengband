@@ -26,7 +26,6 @@
 #include <sstream>
 #include <stdexcept>
 
-static char tmp[8];
 static concptr variant = "ZANGBAND";
 
 /*!
@@ -39,6 +38,7 @@ static concptr variant = "ZANGBAND";
  */
 static concptr parse_fixed_map_expression(PlayerType *player_ptr, char **sp, char *fp)
 {
+    static std::string tmp;
     char b1 = '[';
     char b2 = ']';
 
@@ -199,39 +199,38 @@ static concptr parse_fixed_map_expression(PlayerType *player_ptr, char **sp, cha
         *tpn = '\0';
         v = tmp_player_name;
     } else if (streq(b + 1, "TOWN")) {
-        sprintf(tmp, "%d", player_ptr->town_num);
-        v = tmp;
+        tmp = std::to_string(player_ptr->town_num);
+        v = tmp.data();
     } else if (streq(b + 1, "LEVEL")) {
-        sprintf(tmp, "%d", player_ptr->lev);
-        v = tmp;
+        tmp = std::to_string(player_ptr->lev);
+        v = tmp.data();
     } else if (streq(b + 1, "QUEST_NUMBER")) {
-        sprintf(tmp, "%d", enum2i(player_ptr->current_floor_ptr->quest_number));
-        v = tmp;
+        tmp = std::to_string(enum2i(player_ptr->current_floor_ptr->quest_number));
+        v = tmp.data();
     } else if (streq(b + 1, "LEAVING_QUEST")) {
-        sprintf(tmp, "%d", enum2i(leaving_quest));
-        v = tmp;
+        tmp = std::to_string(enum2i(leaving_quest));
+        v = tmp.data();
     } else if (prefix(b + 1, "QUEST_TYPE")) {
         const auto &quest_list = QuestList::get_instance();
-        sprintf(tmp, "%d", enum2i(quest_list[i2enum<QuestId>(atoi(b + 11))].type));
-        v = tmp;
+        tmp = std::to_string(enum2i(quest_list[i2enum<QuestId>(atoi(b + 11))].type));
+        v = tmp.data();
     } else if (prefix(b + 1, "QUEST")) {
         const auto &quest_list = QuestList::get_instance();
-        sprintf(tmp, "%d", enum2i(quest_list[i2enum<QuestId>(atoi(b + 6))].status));
-        v = tmp;
+        tmp = std::to_string(enum2i(quest_list[i2enum<QuestId>(atoi(b + 6))].status));
+        v = tmp.data();
     } else if (prefix(b + 1, "RANDOM")) {
-        sprintf(tmp, "%d", (int)(w_ptr->seed_town % atoi(b + 7)));
-        v = tmp;
+        tmp = std::to_string((int)(w_ptr->seed_town % atoi(b + 7)));
+        v = tmp.data();
     } else if (streq(b + 1, "VARIANT")) {
         v = variant;
     } else if (streq(b + 1, "WILDERNESS")) {
         if (vanilla_town) {
-            sprintf(tmp, "NONE");
+            v = "NONE";
         } else if (lite_town) {
-            sprintf(tmp, "LITE");
+            v = "LITE";
         } else {
-            sprintf(tmp, "NORMAL");
+            v = "NORMAL";
         }
-        v = tmp;
     } else if (streq(b + 1, "IRONMAN_DOWNWARD")) {
         v = (ironman_downward ? "1" : "0");
     }

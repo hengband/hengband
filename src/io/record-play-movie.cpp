@@ -14,6 +14,7 @@
 #include "locale/japanese.h"
 #include "system/player-type-definition.h"
 #include "term/gameterm.h"
+#include "term/z-form.h"
 #include "util/angband-files.h"
 #include "view/display-messages.h"
 #include <algorithm>
@@ -101,44 +102,44 @@ static long get_current_time(void)
 }
 
 /* リングバッファ構造体に buf の内容を加える */
-static errr insert_ringbuf(char *buf)
+static errr insert_ringbuf(const std::string &buf)
 {
-    int len;
-    len = strlen(buf) + 1; /* +1は終端文字分 */
-
     if (movie_mode) {
-        fd_write(movie_fd, buf, len);
+        fd_write(movie_fd, buf.data(), buf.length());
+        fd_write(movie_fd, "", 1);
         return 0;
     }
 
     /* バッファをオーバー */
-    if (ring.inlen + len >= RINGBUF_SIZE) {
+    if (ring.inlen + buf.length() + 1 >= RINGBUF_SIZE) {
         return -1;
     }
 
     /* バッファの終端までに収まる */
-    if (ring.wptr + len < RINGBUF_SIZE) {
-        memcpy(ring.buf + ring.wptr, buf, len);
-        ring.wptr += len;
+    if (ring.wptr + buf.length() + 1 < RINGBUF_SIZE) {
+        memcpy(ring.buf + ring.wptr, buf.data(), buf.length());
+        *(ring.buf + ring.wptr + buf.length()) = '\0';
+        ring.wptr += buf.length() + 1;
     }
     /* バッファの終端までに収まらない(ピッタリ収まる場合も含む) */
     else {
         int head = RINGBUF_SIZE - ring.wptr; /* 前半 */
-        int tail = len - head; /* 後半 */
+        int tail = buf.length() - head; /* 後半 */
 
-        memcpy(ring.buf + ring.wptr, buf, head);
-        memcpy(ring.buf, buf + head, tail);
-        ring.wptr = tail;
+        memcpy(ring.buf + ring.wptr, buf.data(), head);
+        memcpy(ring.buf, buf.data() + head, tail);
+        *(ring.buf + tail) = '\0';
+        ring.wptr = tail + 1;
     }
 
-    ring.inlen += len;
+    ring.inlen += buf.length() + 1;
 
     /* Success */
     return 0;
 }
 
 /* strが同じ文字の繰り返しかどうか調べる */
-static bool string_is_repeat(char *str, int len)
+static bool string_is_repeat(concptr str, int len)
 {
     char c = str[0];
     int i;
@@ -169,54 +170,41 @@ static bool string_is_repeat(char *str, int len)
 
 static errr send_text_to_chuukei_server(TERM_LEN x, TERM_LEN y, int len, TERM_COLOR col, concptr str)
 {
-    char buf[1024 + 32];
-    char buf2[1024];
-
-    strncpy(buf2, str, len);
-    buf2[len] = '\0';
-
     if (len == 1) {
-        sprintf(buf, "s%c%c%c%c", x + 1, y + 1, col, buf2[0]);
-    } else if (string_is_repeat(buf2, len)) {
-        int i;
-        for (i = len; i > 0; i -= 127) {
-            sprintf(buf, "n%c%c%c%c%c", x + 1, y + 1, std::min<int>(i, 127), col, buf2[0]);
+        insert_ringbuf(std::string("s").append(1, x + 1).append(1, y + 1).append(1, col).append(1, *str));
+    } else if (string_is_repeat(str, len)) {
+        while (len > 127) {
+            insert_ringbuf(std::string("n").append(1, x + 1).append(1, y + 1).append(1, 127).append(1, col).append(1, *str));
+            x += 127;
+            len -= 127;
         }
+        insert_ringbuf(std::string("n").append(1, x + 1).append(1, y + 1).append(1, len).append(1, col).append(1, *str));
     } else {
+        std::string buf = "t";
+        buf.append(1, x + 1).append(1, y + 1).append(1, len).append(1, col).append(str, len);
 #if defined(SJIS) && defined(JP)
-        sjis2euc(buf2);
+        sjis2euc(buf.data() + 5);
 #endif
-        sprintf(buf, "t%c%c%c%c%s", x + 1, y + 1, len, col, buf2);
+        insert_ringbuf(buf);
     }
-
-    insert_ringbuf(buf);
 
     return (*old_text_hook)(x, y, len, col, str);
 }
 
 static errr send_wipe_to_chuukei_server(int x, int y, int len)
 {
-    char buf[1024];
-
-    sprintf(buf, "w%c%c%c", x + 1, y + 1, len);
-
-    insert_ringbuf(buf);
+    insert_ringbuf(std::string("w").append(1, x + 1).append(1, y + 1).append(1, len));
 
     return (*old_wipe_hook)(x, y, len);
 }
 
 static errr send_xtra_to_chuukei_server(int n, int v)
 {
-    char buf[1024];
-
     if (n == TERM_XTRA_CLEAR || n == TERM_XTRA_FRESH || n == TERM_XTRA_SHAPE) {
-        sprintf(buf, "x%c", n + 1);
-
-        insert_ringbuf(buf);
+        insert_ringbuf(std::string("x").append(1, n + 1));
 
         if (n == TERM_XTRA_FRESH) {
-            sprintf(buf, "d%ld", get_current_time() - epoch_time);
-            insert_ringbuf(buf);
+            insert_ringbuf(std::string("d").append(std::to_string(get_current_time() - epoch_time)));
         }
     }
 
@@ -230,22 +218,14 @@ static errr send_xtra_to_chuukei_server(int n, int v)
 
 static errr send_curs_to_chuukei_server(int x, int y)
 {
-    char buf[1024];
-
-    sprintf(buf, "c%c%c", x + 1, y + 1);
-
-    insert_ringbuf(buf);
+    insert_ringbuf(std::string("c").append(1, x + 1).append(1, y + 1));
 
     return (*old_curs_hook)(x, y);
 }
 
 static errr send_bigcurs_to_chuukei_server(int x, int y)
 {
-    char buf[1024];
-
-    sprintf(buf, "C%c%c", x + 1, y + 1);
-
-    insert_ringbuf(buf);
+    insert_ringbuf(std::string("C").append(1, x + 1).append(1, y + 1));
 
     return (*old_bigcurs_hook)(x, y);
 }
@@ -277,17 +257,16 @@ void prepare_chuukei_hooks(void)
  */
 void prepare_movie_hooks(PlayerType *player_ptr)
 {
-    char buf[1024];
-    char tmp[80];
-
     if (movie_mode) {
         movie_mode = 0;
         disable_chuukei_server();
         fd_close(movie_fd);
         msg_print(_("録画を終了しました。", "Stopped recording."));
     } else {
-        sprintf(tmp, "%s.amv", player_ptr->base_name);
+        char tmp[80];
+        strnfmt(tmp, sizeof(tmp), "%s.amv", player_ptr->base_name);
         if (get_string(_("ムービー記録ファイル: ", "Movie file name: "), tmp, 80)) {
+            char buf[1024];
             int fd;
 
             path_build(buf, sizeof(buf), ANGBAND_DIR_USER, tmp);
@@ -296,14 +275,15 @@ void prepare_movie_hooks(PlayerType *player_ptr)
 
             /* Existing file */
             if (fd >= 0) {
-                char out_val[sizeof(buf) + 128];
                 (void)fd_close(fd);
 
                 /* Build query */
-                (void)sprintf(out_val, _("現存するファイルに上書きしますか? (%s)", "Replace existing file %s? "), buf);
+                std::string query = _("現存するファイルに上>書きしますか? (", "Replace existing file ");
+                query.append(buf);
+                query.append(_(")", "? "));
 
                 /* Ask */
-                if (!get_check(out_val)) {
+                if (!get_check(query.data())) {
                     return;
                 }
 
@@ -354,7 +334,7 @@ static int read_movie_file(void)
     static char recv_buf[RECVBUF_SIZE];
     static int remain_bytes = 0;
     int recv_bytes;
-    int i;
+    int i, start;
 
     recv_bytes = read(movie_fd, recv_buf + remain_bytes, RECVBUF_SIZE - remain_bytes);
 
@@ -365,25 +345,29 @@ static int read_movie_file(void)
     /* 前回残ったデータ量に今回読んだデータ量を追加 */
     remain_bytes += recv_bytes;
 
-    for (i = 0; i < remain_bytes; i++) {
+    for (i = 0, start = 0; i < remain_bytes; i++) {
         /* データのくぎり('\0')を探す */
         if (recv_buf[i] == '\0') {
             /* 'd'で始まるデータ(タイムスタンプ)の場合は
                描画キューに保存する処理を呼ぶ */
-            if ((recv_buf[0] == 'd') && (handle_movie_timestamp_data(atoi(recv_buf + 1)) < 0)) {
+            if ((recv_buf[start] == 'd') && (handle_movie_timestamp_data(atoi(recv_buf + start + 1)) < 0)) {
                 return -1;
             }
 
             /* 受信データを保存 */
-            if (insert_ringbuf(recv_buf) < 0) {
+            if (insert_ringbuf(recv_buf + start) < 0) {
                 return -1;
             }
 
-            /* 次のデータ移行をrecv_bufの先頭に移動 */
-            memmove(recv_buf, recv_buf + i + 1, remain_bytes - i - 1);
-
-            remain_bytes -= (i + 1);
-            i = 0;
+            start = i + 1;
+        }
+    }
+    if (start > 0) {
+        if (remain_bytes >= start) {
+            memmove(recv_buf, recv_buf + start, remain_bytes - start);
+            remain_bytes -= start;
+        } else {
+            remain_bytes = 0;
         }
     }
 

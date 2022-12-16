@@ -31,6 +31,7 @@
 #include "system/item-entity.h"
 #include "system/player-type-definition.h"
 #include "target/target-checker.h"
+#include "term/z-form.h"
 #include "view/display-messages.h"
 #include "world/world.h"
 #ifdef JP
@@ -159,7 +160,7 @@ void py_pickup_floor(PlayerType *player_ptr, bool pickup)
         char out_val[MAX_NLEN + 20];
         o_ptr = &player_ptr->current_floor_ptr->o_list[floor_o_idx];
         describe_flavor(player_ptr, o_name, o_ptr, 0);
-        (void)sprintf(out_val, _("%sを拾いますか? ", "Pick up %s? "), o_name);
+        strnfmt(out_val, sizeof(out_val), _("%sを拾いますか? ", "Pick up %s? "), o_name);
         if (!get_check(out_val)) {
             return;
         }
@@ -294,7 +295,7 @@ void carry(PlayerType *player_ptr, bool pickup)
         int is_pickup_successful = true;
         if (carry_query_flag) {
             char out_val[MAX_NLEN + 20];
-            sprintf(out_val, _("%sを拾いますか? ", "Pick up %s? "), o_name);
+            strnfmt(out_val, sizeof(out_val), _("%sを拾いますか? ", "Pick up %s? "), o_name);
             is_pickup_successful = get_check(out_val);
         }
 

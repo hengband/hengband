@@ -32,6 +32,7 @@
 #include "status/action-setter.h"
 #include "system/player-type-definition.h"
 #include "term/screen-processor.h"
+#include "term/z-form.h"
 #include "util/bit-flags-calculator.h"
 #include "util/buffer-shaper.h"
 #include "util/int-char-converter.h"
@@ -64,8 +65,6 @@ static void racial_power_erase_cursor(rc_type *rc_ptr)
 static void racial_power_display_list(PlayerType *player_ptr, rc_type *rc_ptr)
 {
     TERM_LEN x = 11;
-    char dummy[256];
-    strcpy(dummy, "");
 
     prt(_("                                   Lv   MP 失率 効果", "                                   Lv   MP Fail Effect"), 1, x);
 
@@ -76,8 +75,9 @@ static void racial_power_display_list(PlayerType *player_ptr, rc_type *rc_ptr)
             break;
         }
 
+        std::string dummy;
         if (use_menu) {
-            strcpy(dummy, "    ");
+            dummy = "    ";
         } else {
             char letter;
             if (ctr < 26) {
@@ -86,15 +86,15 @@ static void racial_power_display_list(PlayerType *player_ptr, rc_type *rc_ptr)
                 letter = '0' + ctr - 26;
             }
 
-            sprintf(dummy, " %c) ", letter);
+            dummy = format(" %c) ", letter);
         }
 
         auto &rpi = rc_ptr->power_desc[ctr];
-        strcat(dummy,
+        dummy.append(
             format("%-30.30s %2d %4d %3d%% %s", rpi.racial_name.data(), rpi.min_level, rpi.cost, 100 - racial_chance(player_ptr, &rc_ptr->power_desc[ctr]),
                 rpi.info.data()));
 
-        prt(dummy, 2 + y, x);
+        prt(dummy.data(), 2 + y, x);
     }
 
     prt("", 2 + y, x);

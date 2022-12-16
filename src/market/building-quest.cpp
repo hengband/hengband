@@ -13,6 +13,7 @@
 #include "system/player-type-definition.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
+#include "term/z-form.h"
 #include "view/display-messages.h"
 
 /*!
@@ -48,15 +49,13 @@ static void get_questinfo(PlayerType *player_ptr, QuestId questnum, bool do_init
  * @param questnum クエストのID
  * @param do_init クエストの開始処理か(true)、結果処理か(FALSE)
  */
-void print_questinfo(PlayerType *player_ptr, QuestId questnum, bool do_init)
+static void print_questinfo(PlayerType *player_ptr, QuestId questnum, bool do_init)
 {
     get_questinfo(player_ptr, questnum, do_init);
 
     const auto &quest_list = QuestList::get_instance();
     const auto *q_ptr = &quest_list[questnum];
-    GAME_TEXT tmp_str[80];
-    sprintf(tmp_str, _("クエスト情報 (危険度: %d 階相当)", "Quest Information (Danger level: %d)"), (int)q_ptr->level);
-    prt(tmp_str, 5, 0);
+    prt(format(_("クエスト情報 (危険度: %d 階相当)", "Quest Information (Danger level: %d)"), (int)q_ptr->level), 5, 0);
     prt(q_ptr->name, 7, 0);
 
     for (int i = 0; i < 10; i++) {

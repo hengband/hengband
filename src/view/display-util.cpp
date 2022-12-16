@@ -1,5 +1,6 @@
 ﻿#include "view/display-util.h"
 #include "term/term-color-types.h"
+#include <string>
 #include <vector>
 
 namespace {
@@ -85,7 +86,11 @@ void display_player_one_line(int entry, concptr val, TERM_COLOR attr)
     }
 
     int val_len = len - head_len;
-    char buf[40];
-    sprintf(buf, "%*.*s", val_len, val_len, val);
-    term_putstr(col + head_len, row, -1, attr, buf);
+    int ncopy = (int)std::min<size_t>((size_t)val_len, strlen(val));
+    std::string buf;
+    if (ncopy < val_len) {
+        buf.append(val_len - ncopy, ' ');
+    }
+    buf.append(val, ncopy);
+    term_putstr(col + head_len, row, -1, attr, buf.data());
 }

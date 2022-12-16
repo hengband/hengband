@@ -37,6 +37,7 @@
 #include "system/system-variables.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
+#include "term/z-form.h"
 #include "util/bit-flags-calculator.h"
 #include "util/int-char-converter.h"
 #include "util/string-processor.h"
@@ -435,7 +436,7 @@ static void wiz_statistics(PlayerType *player_ptr, ItemEntity *o_ptr)
             break;
         }
 
-        sprintf(tmp_val, "%ld", (long int)test_roll);
+        strnfmt(tmp_val, sizeof(tmp_val), "%ld", (long int)test_roll);
         if (get_string(p, tmp_val, 10)) {
             test_roll = atol(tmp_val);
         }
@@ -596,7 +597,7 @@ static void wiz_tweak_item(PlayerType *player_ptr, ItemEntity *o_ptr)
 
     concptr p = "Enter new 'pval' setting: ";
     char tmp_val[80];
-    sprintf(tmp_val, "%d", o_ptr->pval);
+    strnfmt(tmp_val, sizeof(tmp_val), "%d", o_ptr->pval);
     if (!get_string(p, tmp_val, 5)) {
         return;
     }
@@ -604,7 +605,7 @@ static void wiz_tweak_item(PlayerType *player_ptr, ItemEntity *o_ptr)
     o_ptr->pval = clamp_cast<int16_t>(atoi(tmp_val));
     wiz_display_item(player_ptr, o_ptr);
     p = "Enter new 'to_a' setting: ";
-    sprintf(tmp_val, "%d", o_ptr->to_a);
+    strnfmt(tmp_val, sizeof(tmp_val), "%d", o_ptr->to_a);
     if (!get_string(p, tmp_val, 5)) {
         return;
     }
@@ -612,7 +613,7 @@ static void wiz_tweak_item(PlayerType *player_ptr, ItemEntity *o_ptr)
     o_ptr->to_a = clamp_cast<int16_t>(atoi(tmp_val));
     wiz_display_item(player_ptr, o_ptr);
     p = "Enter new 'to_h' setting: ";
-    sprintf(tmp_val, "%d", o_ptr->to_h);
+    strnfmt(tmp_val, sizeof(tmp_val), "%d", o_ptr->to_h);
     if (!get_string(p, tmp_val, 5)) {
         return;
     }
@@ -620,7 +621,7 @@ static void wiz_tweak_item(PlayerType *player_ptr, ItemEntity *o_ptr)
     o_ptr->to_h = clamp_cast<int16_t>(atoi(tmp_val));
     wiz_display_item(player_ptr, o_ptr);
     p = "Enter new 'to_d' setting: ";
-    sprintf(tmp_val, "%d", (int)o_ptr->to_d);
+    strnfmt(tmp_val, sizeof(tmp_val), "%d", (int)o_ptr->to_d);
     if (!get_string(p, tmp_val, 5)) {
         return;
     }
@@ -643,7 +644,7 @@ static void wiz_quantity_item(ItemEntity *o_ptr)
 
     int tmp_qnt = o_ptr->number;
     char tmp_val[100];
-    sprintf(tmp_val, "%d", (int)o_ptr->number);
+    strnfmt(tmp_val, sizeof(tmp_val), "%d", (int)o_ptr->number);
     if (get_string("Quantity: ", tmp_val, 2)) {
         int tmp_int = atoi(tmp_val);
         if (tmp_int < 1) {

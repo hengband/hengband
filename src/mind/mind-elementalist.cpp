@@ -67,6 +67,7 @@
 #include "target/target-getter.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
+#include "term/z-form.h"
 #include "timed-effect/player-stun.h"
 #include "timed-effect/timed-effects.h"
 #include "util/bit-flags-calculator.h"
@@ -692,7 +693,7 @@ static MANA_POINT decide_element_mana_cost(PlayerType *player_ptr, mind_type spe
  * @param only_browse 閲覧モードかどうか
  * @return 選んだらTRUE、選ばなかったらFALSE
  */
-bool get_element_power(PlayerType *player_ptr, SPELL_IDX *sn, bool only_browse)
+static bool get_element_power(PlayerType *player_ptr, SPELL_IDX *sn, bool only_browse)
 {
     SPELL_IDX i;
     int num = 0;
@@ -781,8 +782,6 @@ bool get_element_power(PlayerType *player_ptr, SPELL_IDX *sn, bool only_browse)
         int spell_max = enum2i(ElementSpells::MAX);
         if ((choice == ' ') || (choice == '*') || (choice == '?') || (use_menu && should_redraw_cursor)) {
             if (!redraw || use_menu) {
-                char desc[80];
-                char name[80];
                 redraw = true;
                 if (!only_browse && !use_menu) {
                     screen_save();
@@ -803,20 +802,21 @@ bool get_element_power(PlayerType *player_ptr, SPELL_IDX *sn, bool only_browse)
                     int mana_cost = decide_element_mana_cost(player_ptr, spell);
                     get_element_effect_info(player_ptr, i, comment);
 
+                    std::string desc;
                     if (use_menu) {
                         if (i == (menu_line - 1)) {
-                            strcpy(desc, _("  》 ", "  >  "));
+                            desc = _("  》 ", "  >  ");
                         } else {
-                            strcpy(desc, "     ");
+                            desc = "     ";
                         }
                     } else {
-                        sprintf(desc, "  %c) ", I2A(i));
+                        desc = format("  %c) ", I2A(i));
                     }
 
                     concptr s = get_element_name(player_ptr->element, elem);
-                    sprintf(name, spell.name, s);
-                    strcat(desc, format("%-30s%2d %4d %3d%%%s", name, spell.min_lev, mana_cost, chance, comment));
-                    prt(desc, y + i + 1, x);
+                    std::string name = format(spell.name, s);
+                    desc.append(format("%-30s%2d %4d %3d%%%s", name.data(), spell.min_lev, mana_cost, chance, comment));
+                    prt(desc.data(), y + i + 1, x);
                 }
 
                 prt("", y + i + 1, x);
@@ -1114,7 +1114,6 @@ bool has_element_resist(PlayerType *player_ptr, ElementRealmType realm, PLAYER_L
  */
 static void display_realm_cursor(int i, int n, term_color_type color)
 {
-    char cur[80];
     char sym;
     concptr name;
     if (i == n) {
@@ -1124,9 +1123,8 @@ static void display_realm_cursor(int i, int n, term_color_type color)
         sym = I2A(i);
         name = element_types.at(i2enum<ElementRealmType>(i + 1)).title.data();
     }
-    sprintf(cur, "%c) %s", sym, name);
 
-    c_put_str(color, cur, 12 + (i / 5), 2 + 15 * (i % 5));
+    c_put_str(color, format("%c) %s", sym, name), 12 + (i / 5), 2 + 15 * (i % 5));
 }
 
 /*!
@@ -1181,13 +1179,12 @@ static int get_element_realm(PlayerType *player_ptr, int is, int n)
     int os = cs;
     int k;
 
-    char buf[80];
-    sprintf(buf, _("領域を選んで下さい(%c-%c) ('='初期オプション設定): ", "Choose a realm (%c-%c) ('=' for options): "), I2A(0), I2A(n - 1));
+    std::string buf = format(_("領域を選んで下さい(%c-%c) ('='初期オプション設定): ", "Choose a realm (%c-%c) ('=' for options): "), I2A(0), I2A(n - 1));
 
     while (true) {
         display_realm_cursor(os, n, TERM_WHITE);
         display_realm_cursor(cs, n, TERM_YELLOW);
-        put_str(buf, 10, 10);
+        put_str(buf.data(), 10, 10);
         os = cs;
 
         char c = inkey();

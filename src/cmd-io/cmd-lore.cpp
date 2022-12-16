@@ -13,6 +13,7 @@
 #include "term/gameterm.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
+#include "term/z-form.h"
 #include "util/int-char-converter.h"
 #include "util/sort.h"
 #include "util/string-processor.h"
@@ -37,7 +38,6 @@
 void do_cmd_query_symbol(PlayerType *player_ptr)
 {
     char sym, query;
-    char buf[256];
 
     bool all = false;
     bool uniq = false;
@@ -62,32 +62,33 @@ void do_cmd_query_symbol(PlayerType *player_ptr)
         }
     }
 
+    std::string buf;
     if (sym == KTRL('A')) {
         all = true;
-        strcpy(buf, _("全モンスターのリスト", "Full monster list."));
+        buf = _("全モンスターのリスト", "Full monster list.");
     } else if (sym == KTRL('U')) {
         all = uniq = true;
-        strcpy(buf, _("ユニーク・モンスターのリスト", "Unique monster list."));
+        buf = _("ユニーク・モンスターのリスト", "Unique monster list.");
     } else if (sym == KTRL('N')) {
         all = norm = true;
-        strcpy(buf, _("ユニーク外モンスターのリスト", "Non-unique monster list."));
+        buf = _("ユニーク外モンスターのリスト", "Non-unique monster list.");
     } else if (sym == KTRL('R')) {
         all = ride = true;
-        strcpy(buf, _("乗馬可能モンスターのリスト", "Ridable monster list."));
+        buf = _("乗馬可能モンスターのリスト", "Ridable monster list.");
     } else if (sym == KTRL('M')) {
         all = true;
         if (!get_string(_("名前(英語の場合小文字で可)", "Enter name:"), temp, 70)) {
             temp[0] = 0;
             return;
         }
-        sprintf(buf, _("名前:%sにマッチ", "Monsters' names with \"%s\""), temp);
+        buf = format(_("名前:%sにマッチ", "Monsters' names with \"%s\""), temp);
     } else if (ident_info[ident_i]) {
-        sprintf(buf, "%c - %s.", sym, ident_info[ident_i] + 2);
+        buf = format("%c - %s.", sym, ident_info[ident_i] + 2);
     } else {
-        sprintf(buf, "%c - %s", sym, _("無効な文字", "Unknown Symbol"));
+        buf = format("%c - %s", sym, _("無効な文字", "Unknown Symbol"));
     }
 
-    prt(buf, 0, 0);
+    prt(buf.data(), 0, 0);
     std::vector<MonsterRaceId> who;
     for (const auto &[r_idx, r_ref] : monraces_info) {
         if (!cheat_know && !r_ref.r_sights) {
@@ -152,7 +153,7 @@ void do_cmd_query_symbol(PlayerType *player_ptr)
 
     put_str(_("思い出を見ますか? (k:殺害順/y/n): ", "Recall details? (k/y/n): "), 0, _(36, 40));
     query = inkey();
-    prt(buf, 0, 0);
+    prt(buf.data(), 0, 0);
     why = 2;
     ang_sort(player_ptr, who.data(), &why, who.size(), ang_sort_comp_hook, ang_sort_swap_hook);
     if (query == 'k') {
@@ -213,5 +214,5 @@ void do_cmd_query_symbol(PlayerType *player_ptr)
         }
     }
 
-    prt(buf, 0, 0);
+    prt(buf.data(), 0, 0);
 }

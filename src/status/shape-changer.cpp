@@ -117,8 +117,7 @@ void do_poly_self(PlayerType *player_ptr)
 
     PlayerRace pr(player_ptr);
     if ((power > randint0(20)) && one_in_(3) && !pr.equals(PlayerRaceType::ANDROID)) {
-        char effect_msg[80] = "";
-        char sex_msg[32] = "";
+        std::string effect_msg, sex_msg;
         PlayerRaceType new_race;
 
         power -= 10;
@@ -127,11 +126,11 @@ void do_poly_self(PlayerType *player_ptr)
             if (player_ptr->psex == SEX_MALE) {
                 player_ptr->psex = SEX_FEMALE;
                 sp_ptr = &sex_info[player_ptr->psex];
-                sprintf(sex_msg, _("女性の", "female"));
+                sex_msg = _("女性の", "female");
             } else {
                 player_ptr->psex = SEX_MALE;
                 sp_ptr = &sex_info[player_ptr->psex];
-                sprintf(sex_msg, _("男性の", "male"));
+                sex_msg = _("男性の", "male");
             }
         }
 
@@ -148,10 +147,11 @@ void do_poly_self(PlayerType *player_ptr)
 
             (void)dec_stat(player_ptr, A_CHR, randint1(6), true);
 
-            if (sex_msg[0]) {
-                sprintf(effect_msg, _("奇形の%s", "deformed %s "), sex_msg);
+            if (sex_msg.length()) {
+                effect_msg = _("奇形の", "deformed ");
+                effect_msg.append(sex_msg).append(_("", " "));
             } else {
-                sprintf(effect_msg, _("奇形の", "deformed "));
+                effect_msg = _("奇形の", "deformed ");
             }
         }
 
@@ -167,7 +167,7 @@ void do_poly_self(PlayerType *player_ptr)
             new_race = (PlayerRaceType)randint0(MAX_RACES);
         } while (pr.equals(new_race) || (new_race == PlayerRaceType::ANDROID));
 
-        change_race(player_ptr, new_race, effect_msg);
+        change_race(player_ptr, new_race, effect_msg.data());
     }
 
     if ((power > randint0(30)) && one_in_(6)) {

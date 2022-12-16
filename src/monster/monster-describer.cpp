@@ -225,9 +225,9 @@ void monster_desc(PlayerType *player_ptr, char *desc, MonsterEntity *m_ptr, BIT_
     }
 
     if (m_ptr->nickname) {
-        char buf[128];
-        sprintf(buf, _("「%s」", " called %s"), quark_str(m_ptr->nickname));
-        strcat(desc, buf);
+        std::string buf = _("「", " called ");
+        buf.append(quark_str(m_ptr->nickname)).append(_("」", ""));
+        strcat(desc, buf.data());
     }
 
     if (player_ptr->riding && (&floor_ptr->m_list[player_ptr->riding] == m_ptr)) {

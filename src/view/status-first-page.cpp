@@ -27,6 +27,7 @@
 #include "system/item-entity.h"
 #include "system/player-type-definition.h"
 #include "term/term-color-types.h"
+#include "term/z-form.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-util.h"
 
@@ -178,57 +179,55 @@ static int strengthen_basedam(PlayerType *player_ptr, ItemEntity *o_ptr, int bas
  * @param x 技能値
  * @param y 技能値に対するランク基準比
  */
-static concptr likert(int x, int y)
+static std::string likert(int x, int y)
 {
-    static char dummy[20] = "", dummy2[20] = "";
-    memset(dummy, 0, strlen(dummy));
-    memset(dummy2, 0, strlen(dummy2));
+    std::string result;
     if (y <= 0) {
         y = 1;
     }
 
     if (show_actual_value) {
-        sprintf(dummy, "%3d-", x);
+        result = format("%3d-", x);
     }
 
     if (x < 0) {
         likert_color = TERM_L_DARK;
-        strcat(dummy, _("最低", "Very Bad"));
-        return dummy;
+        result.append(_("最低", "Very Bad"));
+        return result;
     }
 
     switch ((x / y)) {
     case 0:
     case 1: {
         likert_color = TERM_RED;
-        strcat(dummy, _("悪い", "Bad"));
+        result.append(_("悪い", "Bad"));
         break;
     }
     case 2: {
         likert_color = TERM_L_RED;
-        strcat(dummy, _("劣る", "Poor"));
+        result.append(_("劣る", "Poor"));
         break;
     }
     case 3:
     case 4: {
         likert_color = TERM_ORANGE;
-        strcat(dummy, _("普通", "Fair"));
+        result.append(_("普通", "Fair"));
         break;
     }
     case 5: {
         likert_color = TERM_YELLOW;
-        strcat(dummy, _("良い", "Good"));
+        result.append(_("良い", "Good"));
         break;
     }
     case 6: {
         likert_color = TERM_YELLOW;
-        strcat(dummy, _("大変良い", "Very Good"));
+        result.append(_("大変良い", "Very Good"));
         break;
     }
     case 7:
     case 8: {
         likert_color = TERM_L_GREEN;
-        strcat(dummy, _("卓越", "Excellent"));
+        result.append(_("卓越", "Excellent"));
         break;
     }
     case 9:
@@ -237,7 +236,7 @@ static concptr likert(int x, int y)
     case 12:
     case 13: {
         likert_color = TERM_GREEN;
-        strcat(dummy, _("超越", "Superb"));
+        result.append(_("超越", "Superb"));
         break;
     }
     case 14:
@@ -245,18 +244,17 @@ static concptr likert(int x, int y)
     case 16:
     case 17: {
         likert_color = TERM_BLUE;
-        strcat(dummy, _("英雄的", "Heroic"));
+        result.append(_("英雄的", "Heroic"));
         break;
     }
     default: {
         likert_color = TERM_VIOLET;
-        sprintf(dummy2, _("伝説的[%d]", "Legendary[%d]"), (int)((((x / y) - 17) * 5) / 2));
-        strcat(dummy, dummy2);
+        result.append(format(_("伝説的[%d]", "Legendary[%d]"), (int)((((x / y) - 17) * 5) / 2)));
         break;
     }
     }
 
-    return dummy;
+    return result;
 }
 
 /*!
@@ -354,35 +352,23 @@ static void display_first_page(PlayerType *player_ptr, int xthb, int *damage, in
     int xfos = player_ptr->skill_fos;
     int xdig = player_ptr->skill_dig;
 
-    concptr desc = likert(xthn, 12);
-    display_player_one_line(ENTRY_SKILL_FIGHT, desc, likert_color);
+    display_player_one_line(ENTRY_SKILL_FIGHT, likert(xthn, 12).data(), likert_color);
 
-    desc = likert(xthb, 12);
-    display_player_one_line(ENTRY_SKILL_SHOOT, desc, likert_color);
+    display_player_one_line(ENTRY_SKILL_SHOOT, likert(xthb, 12).data(), likert_color);
 
-    desc = likert(xsav, 7);
-    display_player_one_line(ENTRY_SKILL_SAVING, desc, likert_color);
+    display_player_one_line(ENTRY_SKILL_SAVING, likert(xsav, 7).data(), likert_color);
 
-    desc = likert((xstl > 0) ? xstl : -1, 1);
-    display_player_one_line(ENTRY_SKILL_STEALTH, desc, likert_color);
+    display_player_one_line(ENTRY_SKILL_STEALTH, likert((xstl > 0) ? xstl : -1, 1).data(), likert_color);
 
-    desc = likert(xfos, 6);
-    display_player_one_line(ENTRY_SKILL_PERCEP, desc, likert_color);
+    display_player_one_line(ENTRY_SKILL_PERCEP, likert(xfos, 6).data(), likert_color);
 
-    desc = likert(xsrh, 6);
-    display_player_one_line(ENTRY_SKILL_SEARCH, desc, likert_color);
+    display_player_one_line(ENTRY_SKILL_SEARCH, likert(xsrh, 6).data(), likert_color);
 
-    desc = likert(xdis, 8);
-    display_player_one_line(ENTRY_SKILL_DISARM, desc, likert_color);
+    display_player_one_line(ENTRY_SKILL_DISARM, likert(xdis, 8).data(), likert_color);
 
-    desc = likert(xdev, 6);
-    display_player_one_line(ENTRY_SKILL_DEVICE, desc, likert_color);
+    display_player_one_line(ENTRY_SKILL_DEVICE, likert(xdev, 6).data(), likert_color);
 
-    desc = likert(xdev, 6);
-    display_player_one_line(ENTRY_SKILL_DEVICE, desc, likert_color);
-
-    desc = likert(xdig, 4);
-    display_player_one_line(ENTRY_SKILL_DIG, desc, likert_color);
+    display_player_one_line(ENTRY_SKILL_DIG, likert(xdig, 4).data(), likert_color);
 
     if (!muta_att) {
         display_player_one_line(ENTRY_BLOWS, format("%d+%d", blows1, blows2), TERM_L_BLUE);
@@ -392,6 +378,7 @@ static void display_first_page(PlayerType *player_ptr, int xthb, int *damage, in
 
     display_player_one_line(ENTRY_SHOTS, format("%d.%02d", shots, shot_frac), TERM_L_BLUE);
 
+    concptr desc;
     if ((damage[0] + damage[1]) == 0) {
         desc = "nil!";
     } else {

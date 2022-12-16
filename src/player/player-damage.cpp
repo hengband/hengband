@@ -297,7 +297,6 @@ int take_hit(PlayerType *player_ptr, int damage_type, int damage, concptr hit_fr
     int old_chp = player_ptr->chp;
 
     char death_message[1024];
-    char tmp[1024];
 
     int warning = (player_ptr->mhp * hitpoint_warn / 10);
     if (player_ptr->is_dead) {
@@ -580,8 +579,7 @@ int take_hit(PlayerType *player_ptr, int damage_type, int damage, concptr hit_fr
                 hit_from = _("何か", "something");
             }
 
-            sprintf(tmp, _("%sによってピンチに陥った。", "was in a critical situation because of %s."), hit_from);
-            exe_write_diary(player_ptr, DIARY_DESCRIPTION, 0, tmp);
+            exe_write_diary(player_ptr, DIARY_DESCRIPTION, 0, std::string(_(hit_from, "was in a critical situation because of ")).append(_("によってピンチに陥った。", ".")).data());
         }
 
         if (auto_more) {

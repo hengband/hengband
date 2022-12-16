@@ -13,6 +13,8 @@
 #include "system/player-type-definition.h"
 #include "term/gameterm.h"
 #include "term/screen-processor.h"
+#include "term/z-form.h"
+#include "util/string-processor.h"
 
 /*!
  * @brief 床に落ちているオブジェクトの数を返す / scan floor items
@@ -154,20 +156,20 @@ COMMAND_CODE show_floor_items(PlayerType *player_ptr, int target_item, POSITION 
         prt("", j + 1, col ? col - 2 : col);
         if (use_menu && target_item) {
             if (j == (target_item - 1)) {
-                strcpy(tmp_val, _("》", "> "));
+                angband_strcpy(tmp_val, _("》", "> "), sizeof(tmp_val));
                 target_item_label = m;
             } else {
-                strcpy(tmp_val, "   ");
+                angband_strcpy(tmp_val, "   ", sizeof(tmp_val));
             }
         } else {
-            sprintf(tmp_val, "%c)", floor_label[j]);
+            strnfmt(tmp_val, sizeof(tmp_val), "%c)", floor_label[j]);
         }
 
         put_str(tmp_val, j + 1, col);
         c_put_str(out_color[j], out_desc[j], j + 1, col + 3);
         if (show_weights && (o_ptr->bi_key.tval() != ItemKindType::GOLD)) {
             int wgt = o_ptr->weight * o_ptr->number;
-            sprintf(tmp_val, _("%3d.%1d kg", "%3d.%1d lb"), _(lb_to_kg_integer(wgt), wgt / 10), _(lb_to_kg_fraction(wgt), wgt % 10));
+            strnfmt(tmp_val, sizeof(tmp_val), _("%3d.%1d kg", "%3d.%1d lb"), _(lb_to_kg_integer(wgt), wgt / 10), _(lb_to_kg_fraction(wgt), wgt % 10));
             prt(tmp_val, j + 1, wid - 9);
         }
     }

@@ -21,8 +21,16 @@
 #include "system/monster-entity.h"
 #include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
+#include "term/z-form.h"
 #include "util/angband-files.h"
 #include "view/display-messages.h"
+
+static std::string get_saved_floor_name(int level)
+{
+    char ext[32];
+    strnfmt(ext, sizeof(ext), ".F%02d", level);
+    return std::string(savefile).append(ext);
+}
 
 static void check_saved_tmp_files(const int fd, bool *force)
 {
@@ -54,18 +62,17 @@ static void check_saved_tmp_files(const int fd, bool *force)
  */
 void init_saved_floors(PlayerType *player_ptr, bool force)
 {
-    char floor_savefile[sizeof(savefile) + 32];
     int fd = -1;
     BIT_FLAGS mode = 0644;
     for (int i = 0; i < MAX_SAVED_FLOORS; i++) {
         saved_floor_type *sf_ptr = &saved_floors[i];
-        sprintf(floor_savefile, "%s.F%02d", savefile, i);
+        std::string floor_savefile = get_saved_floor_name(i);
         safe_setuid_grab(player_ptr);
-        fd = fd_make(floor_savefile, mode);
+        fd = fd_make(floor_savefile.data(), mode);
         safe_setuid_drop();
         check_saved_tmp_files(fd, &force);
         safe_setuid_grab(player_ptr);
-        (void)fd_kill(floor_savefile);
+        (void)fd_kill(floor_savefile.data());
         safe_setuid_drop();
         sf_ptr->floor_id = 0;
     }
@@ -84,16 +91,14 @@ void init_saved_floors(PlayerType *player_ptr, bool force)
  */
 void clear_saved_floor_files(PlayerType *player_ptr)
 {
-    char floor_savefile[sizeof(savefile) + 32];
     for (int i = 0; i < MAX_SAVED_FLOORS; i++) {
         saved_floor_type *sf_ptr = &saved_floors[i];
         if ((sf_ptr->floor_id == 0) || (sf_ptr->floor_id == player_ptr->floor_id)) {
             continue;
         }
 
-        sprintf(floor_savefile, "%s.F%02d", savefile, i);
         safe_setuid_grab(player_ptr);
-        (void)fd_kill(floor_savefile);
+        (void)fd_kill(get_saved_floor_name(i).data());
         safe_setuid_drop();
     }
 }
@@ -126,7 +131,6 @@ saved_floor_type *get_sf_ptr(FLOOR_IDX floor_id)
  */
 void kill_saved_floor(PlayerType *player_ptr, saved_floor_type *sf_ptr)
 {
-    char floor_savefile[sizeof(savefile) + 32];
     if (!sf_ptr || (sf_ptr->floor_id == 0)) {
         return;
     }
@@ -137,9 +141,8 @@ void kill_saved_floor(PlayerType *player_ptr, saved_floor_type *sf_ptr)
         return;
     }
 
-    sprintf(floor_savefile, "%s.F%02d", savefile, (int)sf_ptr->savefile_id);
     safe_setuid_grab(player_ptr);
-    (void)fd_kill(floor_savefile);
+    (void)fd_kill(get_saved_floor_name((int)sf_ptr->savefile_id).data());
     safe_setuid_drop();
     sf_ptr->floor_id = 0;
 }

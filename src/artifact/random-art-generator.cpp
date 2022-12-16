@@ -383,40 +383,39 @@ static int decide_random_art_power_level(ItemEntity *o_ptr, const bool a_cursed,
     return 3;
 }
 
-static void name_unnatural_random_artifact(PlayerType *player_ptr, ItemEntity *o_ptr, const bool a_scroll, const int power_level, GAME_TEXT *new_name)
+static std::string name_unnatural_random_artifact(PlayerType *player_ptr, ItemEntity *o_ptr, const bool a_scroll, const int power_level)
 {
+    GAME_TEXT new_name[1024] = "";
+
     if (!a_scroll) {
         get_random_name(o_ptr, new_name, o_ptr->is_protector(), power_level);
-        return;
+        return new_name;
     }
 
-    GAME_TEXT dummy_name[MAX_NLEN] = "";
     concptr ask_msg = _("このアーティファクトを何と名付けますか？", "What do you want to call the artifact? ");
     object_aware(player_ptr, o_ptr);
     object_known(o_ptr);
     o_ptr->ident |= IDENT_FULL_KNOWN;
     o_ptr->art_name = quark_add("");
     (void)screen_object(player_ptr, o_ptr, 0L);
-    if (!get_string(ask_msg, dummy_name, sizeof dummy_name) || !dummy_name[0]) {
+    if (!get_string(ask_msg, new_name, sizeof new_name) || !new_name[0]) {
         if (one_in_(2)) {
-            get_table_sindarin_aux(dummy_name);
+            get_table_sindarin_aux(new_name);
         } else {
-            get_table_name_aux(dummy_name);
+            get_table_name_aux(new_name);
         }
     }
 
-    sprintf(new_name, _("《%s》", "'%s'"), dummy_name);
     chg_virtue(player_ptr, V_INDIVIDUALISM, 2);
     chg_virtue(player_ptr, V_ENCHANT, 5);
+    return std::string(_("《", "'")).append(new_name).append(_("》", "'"));
 }
 
 static void generate_unnatural_random_artifact(
     PlayerType *player_ptr, ItemEntity *o_ptr, const bool a_scroll, const int power_level, const int max_powers, const int total_flags)
 {
-    GAME_TEXT new_name[1024];
-    strcpy(new_name, "");
-    name_unnatural_random_artifact(player_ptr, o_ptr, a_scroll, power_level, new_name);
-    o_ptr->art_name = quark_add(new_name);
+    auto new_name = name_unnatural_random_artifact(player_ptr, o_ptr, a_scroll, power_level);
+    o_ptr->art_name = quark_add(new_name.data());
     msg_format_wizard(player_ptr, CHEAT_OBJECT,
         _("パワー %d で 価値%ld のランダムアーティファクト生成 バイアスは「%s」", "Random artifact generated - Power:%d Value:%d Bias:%s."), max_powers,
         total_flags, artifact_bias_name[o_ptr->artifact_bias]);
