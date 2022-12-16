@@ -35,35 +35,24 @@ static void add_inscription(char **short_flavor, concptr str)
 }
 
 /*!
- * @brief get_inscriptionのサブセットとしてオブジェクトの特性フラグを返す / Helper function for get_inscription()
+ * @brief get_inscriptionのサブセットとしてアイテムの特性フラグを表す文字列を返す
  * @param fi_vec 参照する特性表示記号テーブル
- * @param flgs 対応するオブジェクトのフラグ文字列
- * @param kanji TRUEならば漢字記述/FALSEならば英語記述
- * @param ptr フラグ群を保管する文字列参照ポインタ
- * @return フラグ群を保管する文字列参照ポインタ(ptrと同じ)
- * @details
- * Print an signed number "v" into a string "t", as if by
- * sprintf(t, "%+d", n), and return a pointer to the terminator.
- * Note that we always print a sign, either "+" or "-".
- *
- * @todo バッファサイズが不明なのでとりあえず16バイト決め打ちで angband_strcpy を呼び出している。
- * get_ability_abbrev のインターフェースを std::string を返すように変更するときに合わせて修正すること。
+ * @param flgs 対応するアイテムの特性フラグ
+ * @param is_kanji trueならば漢字記述/falseならば英語記述
+ * @return アイテムの特性フラグを表す文字列
  */
-static char *inscribe_flags_aux(const std::vector<flag_insc_table> &fi_vec, const TrFlags &flgs, bool kanji, char *ptr)
+static std::string inscribe_flags_aux(const std::vector<flag_insc_table> &fi_vec, const TrFlags &flgs, [[maybe_unused]] bool is_kanji)
 {
-#ifdef JP
-#else
-    (void)kanji;
-#endif
+    std::stringstream ss;
 
     for (const auto &fi : fi_vec) {
         if (flgs.has(fi.flag) && (!fi.except_flag.has_value() || flgs.has_not(fi.except_flag.value()))) {
-            const auto flag_str = _(kanji ? fi.japanese : fi.english, fi.english);
-            ptr += angband_strcpy(ptr, flag_str, 16);
+            const auto flag_str = _(is_kanji ? fi.japanese : fi.english, fi.english);
+            ss << flag_str;
         }
     }
 
-    return ptr;
+    return ss.str();
 }
 
 /*!
@@ -85,28 +74,26 @@ static bool has_flag_of(const std::vector<flag_insc_table> &fi_vec, const TrFlag
 }
 
 /*!
- * @brief オブジェクト名の特性短縮表記をまとめて提示する。
- * @param short_flavor 特性短縮表記を格納する文字列ポインタ
- * @param o_ptr 特性短縮表記を得たいオブジェクト構造体の参照ポインタ
- * @param kanji TRUEならば漢字表記 / FALSEなら英語表記
- * @param all TRUEならばベースアイテム上で明らかなフラグは省略する
- * @return ptrと同じアドレス
+ * @brief アイテムの特性短縮表記をまとめて提示する。
+ * @param item 特性短縮表記を得たいアイテムの参照
+ * @param is_kanji trueならば漢字表記 / falseなら英語表記
+ * @param all falseならばベースアイテム上で明らかなフラグは省略する
+ * @return アイテムの特性短縮表記
  */
-char *get_ability_abbreviation(char *short_flavor, const ItemEntity *o_ptr, bool kanji, bool all)
+std::string get_ability_abbreviation(const ItemEntity &item, bool is_kanji, bool all)
 {
-    char *prev_ptr = short_flavor;
-    auto flgs = object_flags(o_ptr);
+    auto flgs = object_flags(&item);
     if (!all) {
-        const auto &baseitem = baseitems_info[o_ptr->bi_id];
+        const auto &baseitem = baseitems_info[item.bi_id];
         flgs.reset(baseitem.flags);
 
-        if (o_ptr->is_fixed_artifact()) {
-            const auto &a_ref = artifacts_info.at(o_ptr->fixed_artifact_idx);
+        if (item.is_fixed_artifact()) {
+            const auto &a_ref = artifacts_info.at(item.fixed_artifact_idx);
             flgs.reset(a_ref.flags);
         }
 
-        if (o_ptr->is_ego()) {
-            auto *e_ptr = &egos_info[o_ptr->ego_idx];
+        if (item.is_ego()) {
+            auto *e_ptr = &egos_info[item.ego_idx];
             flgs.reset(e_ptr->flags);
         }
     }
@@ -134,104 +121,107 @@ char *get_ability_abbreviation(char *short_flavor, const ItemEntity *o_ptr, bool
         }
     }
 
-    if (has_flag_of(flag_insc_plus, flgs) && kanji) {
-        add_inscription(&short_flavor, "+");
+    std::stringstream ss;
+    auto prev_tellp = ss.tellp();
+
+    if (has_flag_of(flag_insc_plus, flgs) && is_kanji) {
+        ss << '+';
     }
 
-    short_flavor = inscribe_flags_aux(flag_insc_plus, flgs, kanji, short_flavor);
+    ss << inscribe_flags_aux(flag_insc_plus, flgs, is_kanji);
 
     if (has_flag_of(flag_insc_immune, flgs)) {
-        if (!kanji && short_flavor != prev_ptr) {
-            add_inscription(&short_flavor, ";");
-            prev_ptr = short_flavor;
+        if (!is_kanji && (ss.tellp() != prev_tellp)) {
+            ss << ';';
+            prev_tellp = ss.tellp();
         }
 
-        add_inscription(&short_flavor, "*");
+        ss << '*';
     }
 
-    short_flavor = inscribe_flags_aux(flag_insc_immune, flgs, kanji, short_flavor);
+    ss << inscribe_flags_aux(flag_insc_immune, flgs, is_kanji);
 
     if (has_flag_of(flag_insc_vuln, flgs)) {
-        if (!kanji && short_flavor != prev_ptr) {
-            add_inscription(&short_flavor, ";");
-            prev_ptr = short_flavor;
+        if (!is_kanji && (ss.tellp() != prev_tellp)) {
+            ss << ';';
+            prev_tellp = ss.tellp();
         }
 
-        add_inscription(&short_flavor, "v");
+        ss << 'v';
     }
 
-    short_flavor = inscribe_flags_aux(flag_insc_vuln, flgs, kanji, short_flavor);
+    ss << inscribe_flags_aux(flag_insc_vuln, flgs, is_kanji);
 
     if (has_flag_of(flag_insc_resistance, flgs)) {
-        if (kanji) {
-            add_inscription(&short_flavor, "r");
-        } else if (short_flavor != prev_ptr) {
-            add_inscription(&short_flavor, ";");
-            prev_ptr = short_flavor;
+        if (is_kanji) {
+            ss << 'r';
+        } else if (ss.tellp() != prev_tellp) {
+            ss << ';';
+            prev_tellp = ss.tellp();
         }
     }
 
-    short_flavor = inscribe_flags_aux(flag_insc_resistance, flgs, kanji, short_flavor);
+    ss << inscribe_flags_aux(flag_insc_resistance, flgs, is_kanji);
 
-    if (has_flag_of(flag_insc_misc, flgs) && (short_flavor != prev_ptr)) {
-        add_inscription(&short_flavor, ";");
-        prev_ptr = short_flavor;
+    if (has_flag_of(flag_insc_misc, flgs) && (ss.tellp() != prev_tellp)) {
+        ss << ';';
+        prev_tellp = ss.tellp();
     }
 
-    short_flavor = inscribe_flags_aux(flag_insc_misc, flgs, kanji, short_flavor);
+    ss << inscribe_flags_aux(flag_insc_misc, flgs, is_kanji);
 
     if (has_flag_of(flag_insc_aura, flgs)) {
-        add_inscription(&short_flavor, "[");
+        ss << '[';
     }
 
-    short_flavor = inscribe_flags_aux(flag_insc_aura, flgs, kanji, short_flavor);
+    ss << inscribe_flags_aux(flag_insc_aura, flgs, is_kanji);
 
     if (has_flag_of(flag_insc_brand, flgs)) {
-        add_inscription(&short_flavor, "|");
+        ss << '|';
     }
 
-    short_flavor = inscribe_flags_aux(flag_insc_brand, flgs, kanji, short_flavor);
+    ss << inscribe_flags_aux(flag_insc_brand, flgs, is_kanji);
 
     if (has_flag_of(flag_insc_kill, flgs)) {
-        add_inscription(&short_flavor, "/X");
+        ss << "/X";
     }
 
-    short_flavor = inscribe_flags_aux(flag_insc_kill, flgs, kanji, short_flavor);
+    ss << inscribe_flags_aux(flag_insc_kill, flgs, is_kanji);
 
     if (has_flag_of(flag_insc_slay, flgs)) {
-        add_inscription(&short_flavor, "/");
+        ss << '/';
     }
 
-    short_flavor = inscribe_flags_aux(flag_insc_slay, flgs, kanji, short_flavor);
+    ss << inscribe_flags_aux(flag_insc_slay, flgs, is_kanji);
 
-    if (kanji) {
+    if (is_kanji) {
         if (has_flag_of(flag_insc_esp1, flgs) || has_flag_of(flag_insc_esp2, flgs)) {
-            add_inscription(&short_flavor, "~");
+            ss << '~';
         }
 
-        short_flavor = inscribe_flags_aux(flag_insc_esp1, flgs, kanji, short_flavor);
-        short_flavor = inscribe_flags_aux(flag_insc_esp2, flgs, kanji, short_flavor);
+        ss << inscribe_flags_aux(flag_insc_esp1, flgs, is_kanji)
+           << inscribe_flags_aux(flag_insc_esp2, flgs, is_kanji);
     } else {
         if (has_flag_of(flag_insc_esp1, flgs)) {
-            add_inscription(&short_flavor, "~");
+            ss << '~';
         }
 
-        short_flavor = inscribe_flags_aux(flag_insc_esp1, flgs, kanji, short_flavor);
+        ss << inscribe_flags_aux(flag_insc_esp1, flgs, is_kanji);
 
         if (has_flag_of(flag_insc_esp2, flgs)) {
-            add_inscription(&short_flavor, "~");
+            ss << '~';
         }
 
-        short_flavor = inscribe_flags_aux(flag_insc_esp2, flgs, kanji, short_flavor);
+        ss << inscribe_flags_aux(flag_insc_esp2, flgs, is_kanji);
     }
 
     if (has_flag_of(flag_insc_sust, flgs)) {
-        add_inscription(&short_flavor, "(");
+        ss << '(';
     }
 
-    short_flavor = inscribe_flags_aux(flag_insc_sust, flgs, kanji, short_flavor);
-    *short_flavor = '\0';
-    return short_flavor;
+    ss << inscribe_flags_aux(flag_insc_sust, flgs, is_kanji);
+
+    return ss.str();
 }
 
 /*!
@@ -291,7 +281,8 @@ void get_inscription(char *buff, const ItemEntity *o_ptr)
                 all = false;
             }
 
-            ptr = get_ability_abbreviation(ptr, o_ptr, kanji, all);
+            const auto ability_abbrev = get_ability_abbreviation(*o_ptr, kanji, all);
+            ptr += angband_strcpy(ptr, ability_abbrev.data(), ability_abbrev.size());
             if (ptr == start) {
                 add_inscription(&ptr, " ");
             }

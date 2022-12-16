@@ -476,11 +476,8 @@ static std::string describe_ability_abbrev(const ItemEntity &item)
         return "";
     }
 
-    char buf[1024]{};
     const auto is_kanji = _(true, false);
-    get_ability_abbreviation(buf, &item, is_kanji, abbrev_all);
-
-    return buf;
+    return get_ability_abbreviation(item, is_kanji, abbrev_all);
 }
 
 static std::string describe_player_inscription(const ItemEntity &item)

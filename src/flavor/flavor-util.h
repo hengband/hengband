@@ -10,7 +10,7 @@ struct describe_option_type {
 };
 
 class ItemEntity;
-char *get_ability_abbreviation(char *ptr, const ItemEntity *o_ptr, bool kanji, bool all);
+std::string get_ability_abbreviation(const ItemEntity &o_ptr, bool is_kanji, bool all);
 void get_inscription(char *buff, const ItemEntity *o_ptr);
 
 #ifdef JP
