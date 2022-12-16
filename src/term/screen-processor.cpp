@@ -77,36 +77,36 @@ void screen_load(ScreenLoadOptType opt)
  * At the given location, using the given attribute, if allowed,
  * add the given string.  Do not clear the line.
  */
-void c_put_str(TERM_COLOR attr, concptr str, TERM_LEN row, TERM_LEN col)
+void c_put_str(TERM_COLOR attr, std::string_view sv, TERM_LEN row, TERM_LEN col)
 {
-    term_putstr(col, row, -1, attr, str);
+    term_putstr(col, row, -1, attr, sv);
 }
 
 /*
  * As above, but in "white"
  */
-void put_str(concptr str, TERM_LEN row, TERM_LEN col)
+void put_str(std::string_view sv, TERM_LEN row, TERM_LEN col)
 {
-    term_putstr(col, row, -1, TERM_WHITE, str);
+    term_putstr(col, row, -1, TERM_WHITE, sv);
 }
 
 /*
  * Display a string on the screen using an attribute, and clear
  * to the end of the line.
  */
-void c_prt(TERM_COLOR attr, concptr str, TERM_LEN row, TERM_LEN col)
+void c_prt(TERM_COLOR attr, std::string_view sv, TERM_LEN row, TERM_LEN col)
 {
     term_erase(col, row, 255);
-    term_addstr(-1, attr, str);
+    term_addstr(-1, attr, sv);
 }
 
 /*
  * As above, but in "white"
  */
-void prt(concptr str, TERM_LEN row, TERM_LEN col)
+void prt(std::string_view sv, TERM_LEN row, TERM_LEN col)
 {
     /* Spawn */
-    c_prt(TERM_WHITE, str, row, col);
+    c_prt(TERM_WHITE, sv, row, col);
 }
 
 /*

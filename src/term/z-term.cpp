@@ -396,7 +396,7 @@ void term_queue_line(TERM_LEN x, TERM_LEN y, int n, TERM_COLOR *a, char *c, TERM
  * a valid location, so the first "n" characters of "s" can all be added
  * starting at (x,y) without causing any illegal operations.
  */
-static void term_queue_chars(TERM_LEN x, TERM_LEN y, int n, TERM_COLOR a, concptr s)
+static void term_queue_chars(TERM_LEN x, TERM_LEN y, int n, TERM_COLOR a, std::string_view sv)
 {
     TERM_LEN x1 = -1, x2 = -1;
 
@@ -415,7 +415,7 @@ static void term_queue_chars(TERM_LEN x, TERM_LEN y, int n, TERM_COLOR a, concpt
 
 #ifdef JP
     /* 表示文字なし */
-    if (n == 0 || *s == 0) {
+    if (n == 0 || sv.empty()) {
         return;
     }
     /*
@@ -430,7 +430,7 @@ static void term_queue_chars(TERM_LEN x, TERM_LEN y, int n, TERM_COLOR a, concpt
     }
 #endif
     /* Queue the attr/chars */
-    for (; n; x++, s++, n--) {
+    for (auto s = sv.begin(); (n > 0) && (s != sv.end()); x++, s++, n--) {
 #ifdef JP
         /* 特殊文字としてMSBが立っている可能性がある */
         /* その場合attrのMSBも立っているのでこれで識別する */
@@ -1441,9 +1441,8 @@ errr term_add_bigch(TERM_COLOR a, char c)
  * positive value, future calls to either function will
  * return negative ones.
  */
-errr term_addstr(int n, TERM_COLOR a, concptr s)
+errr term_addstr(int n, TERM_COLOR a, std::string_view sv)
 {
-    int k;
     TERM_LEN w = game_term->wid;
     errr res = 0;
 
@@ -1453,23 +1452,21 @@ errr term_addstr(int n, TERM_COLOR a, concptr s)
     }
 
     /* Obtain maximal length */
-    k = (n < 0) ? (w + 1) : n;
+    const auto max_len = (n < 0) ? (w + 1) : n;
 
     /* Obtain the usable string length */
-    for (n = 0; (n < k) && s[n]; n++) { /* loop */
-        ;
-    }
+    auto len = std::min<int>(max_len, sv.length());
 
     /* React to reaching the edge of the screen */
-    if (game_term->scr->cx + n >= w) {
-        res = n = w - game_term->scr->cx;
+    if (game_term->scr->cx + len >= w) {
+        res = len = w - game_term->scr->cx;
     }
 
     /* Queue the first "n" characters for display */
-    term_queue_chars(game_term->scr->cx, game_term->scr->cy, n, a, s);
+    term_queue_chars(game_term->scr->cx, game_term->scr->cy, len, a, sv);
 
     /* Advance the cursor */
-    game_term->scr->cx += n;
+    game_term->scr->cx += len;
 
     /* Notice "Useless" cursor */
     if (res) {
@@ -1502,7 +1499,7 @@ errr term_putch(TERM_LEN x, TERM_LEN y, TERM_COLOR a, char c)
 /*
  * Move to a location and, using an attr, add a string
  */
-errr term_putstr(TERM_LEN x, TERM_LEN y, int n, TERM_COLOR a, concptr s)
+errr term_putstr(TERM_LEN x, TERM_LEN y, int n, TERM_COLOR a, std::string_view sv)
 {
     errr res;
 
@@ -1512,7 +1509,7 @@ errr term_putstr(TERM_LEN x, TERM_LEN y, int n, TERM_COLOR a, concptr s)
     }
 
     /* Then add the string */
-    if ((res = term_addstr(n, a, s)) != 0) {
+    if ((res = term_addstr(n, a, sv)) != 0) {
         return res;
     }
 
