@@ -1,5 +1,5 @@
 ﻿#include "window/main-window-row-column.h"
-#include <locale/language-switcher.h>
+#include "locale/language-switcher.h"
 
 const std::map<monster_timed_effect_type, std::string> effect_type_to_label = {
     { MTIMED_CSLEEP, _("睡眠", "sleep") },
