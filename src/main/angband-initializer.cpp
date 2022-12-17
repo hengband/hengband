@@ -182,9 +182,9 @@ static void init_note_no_term(concptr str)
  * functions are "supposed" to work under any conditions.
  * </pre>
  */
-static void init_angband_aux(concptr why)
+static void init_angband_aux(const std::string &why)
 {
-    plog(why);
+    plog(why.data());
     plog(_("'lib'ディレクトリが存在しないか壊れているようです。", "The 'lib' directory is probably missing or broken."));
     plog(_("ひょっとするとアーカイブが正しく解凍されていないのかもしれません。", "The 'lib' directory is probably missing or broken."));
     plog(_("該当する'README'ファイルを読んで確認してみて下さい。", "See the 'README' file for more information."));
@@ -218,8 +218,9 @@ void init_angband(PlayerType *player_ptr, bool no_term)
     path_build(buf, sizeof(buf), ANGBAND_DIR_FILE, _("news_j.txt", "news.txt"));
     int fd = fd_open(buf, O_RDONLY);
     if (fd < 0) {
-        char why[sizeof(buf) + 128];
-        sprintf(why, _("'%s'ファイルにアクセスできません!", "Cannot access the '%s' file!"), buf);
+        std::string why = _("'", "Cannot access the '");
+        why.append(buf);
+        why.append(_("'ファイルにアクセスできません!", "' file!"));
         init_angband_aux(why);
     }
 
@@ -251,8 +252,9 @@ void init_angband(PlayerType *player_ptr, bool no_term)
         fd = fd_make(buf, file_permission);
         safe_setuid_drop();
         if (fd < 0) {
-            char why[sizeof(buf) + 128];
-            sprintf(why, _("'%s'ファイルを作成できません!", "Cannot create the '%s' file!"), buf);
+            std::string why = _("'", "Cannot create the '");
+            why.append(buf);
+            why.append(_("'ファイルを作成できません!", "' file!"));
             init_angband_aux(why);
         }
     }
@@ -341,9 +343,7 @@ void init_angband(PlayerType *player_ptr, bool no_term)
     init_note(_("[データの初期化中... (アロケーション)]", "[Initializing arrays... (alloc)]"));
     init_alloc();
     init_note(_("[ユーザー設定ファイルを初期化しています...]", "[Initializing user pref files...]"));
-    strcpy(buf, "pref.prf");
-    process_pref_file(player_ptr, buf);
-    sprintf(buf, "pref-%s.prf", ANGBAND_SYS);
-    process_pref_file(player_ptr, buf);
+    process_pref_file(player_ptr, "pref.prf");
+    process_pref_file(player_ptr, std::string("pref-").append(ANGBAND_SYS).append(".prf").data());
     init_note(_("[初期化終了]", "[Initialization complete]"));
 }
