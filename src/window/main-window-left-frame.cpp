@@ -23,6 +23,14 @@
 #include "world/world.h"
 
 /*!
+ * @brief ターゲットしているモンスターの情報部に表示する状態異常と文字色の対応を保持する構造体
+ */
+struct condition_layout_info {
+    std::string label;
+    TERM_COLOR color;
+};
+
+/*!
  * @brief プレイヤーの称号を表示する / Prints "title", including "wizard" or "winner" as needed.
  */
 void print_title(PlayerType *player_ptr)
@@ -273,8 +281,99 @@ void print_frame_basic(PlayerType *player_ptr)
     print_sp(player_ptr);
     print_gold(player_ptr);
     print_depth(player_ptr);
-    health_redraw(player_ptr, false);
-    health_redraw(player_ptr, true);
+    print_health(player_ptr, true);
+    print_health(player_ptr, false);
+}
+
+/*!
+ * @brief wizardモード中の闘技場情報を表示する
+ * @param player_ptr プレイヤーへの参照ポインタ
+ */
+static void print_health_monster_in_arena_for_wizard(PlayerType *player_ptr)
+{
+    int row = ROW_INFO - 1;
+    int col = COL_INFO + 2;
+
+    const int max_num_of_monster_in_arena = 4;
+
+    for (int i = 0; i < max_num_of_monster_in_arena; i++) {
+        auto row_offset = i;
+        auto monster_list_index = i + 1; // m_listの1-4に闘技場のモンスターデータが入っている
+
+        term_putstr(col - 2, row + row_offset, 12, TERM_WHITE, "      /     ");
+
+        auto &monster = player_ptr->current_floor_ptr->m_list[monster_list_index];
+        if (MonsterRace(monster.r_idx).is_valid()) {
+            term_putstr(col - 2, row + row_offset, 2, monraces_info[monster.r_idx].x_attr,
+                format("%c", monraces_info[monster.r_idx].x_char));
+            term_putstr(col - 1, row + row_offset, 5, TERM_WHITE, format("%5d", monster.hp));
+            term_putstr(col + 5, row + row_offset, 6, TERM_WHITE, format("%5d", monster.max_maxhp));
+        }
+    }
+}
+
+/*!
+ * @brief 対象のモンスターからcondition_layout_infoのリストを生成して返す
+ * @param monster 対象のモンスター
+ * @return condition_layout_infoのリスト
+ */
+static std::vector<condition_layout_info> get_condition_layout_info(const MonsterEntity &monster)
+{
+    std::vector<condition_layout_info> result;
+
+    if (monster.is_invulnerable()) {
+        result.push_back({ effect_type_to_label.at(MTIMED_INVULNER), TERM_WHITE });
+    }
+    if (monster.is_accelerated()) {
+        result.push_back({ effect_type_to_label.at(MTIMED_FAST), TERM_L_GREEN });
+    }
+    if (monster.is_decelerated()) {
+        result.push_back({ effect_type_to_label.at(MTIMED_SLOW), TERM_UMBER });
+    }
+    if (monster.is_fearful()) {
+        result.push_back({ effect_type_to_label.at(MTIMED_MONFEAR), TERM_SLATE });
+    }
+    if (monster.is_confused()) {
+        result.push_back({ effect_type_to_label.at(MTIMED_CONFUSED), TERM_L_UMBER });
+    }
+    if (monster.is_asleep()) {
+        result.push_back({ effect_type_to_label.at(MTIMED_CSLEEP), TERM_BLUE });
+    }
+    if (monster.is_stunned()) {
+        result.push_back({ effect_type_to_label.at(MTIMED_STUNNED), TERM_ORANGE });
+    }
+
+    return result;
+}
+
+/*!
+ * @brief 対象のモンスターの状態（無敵、起きているか、HPの割合）に応じてHPバーの色を算出する
+ * @param monster 対象のモンスター
+ * @return HPバーの色
+ */
+static TERM_COLOR get_monster_hp_point_bar_color(const MonsterEntity &monster)
+{
+    auto pct = monster.maxhp > 0 ? 100 * monster.hp / monster.maxhp : 0;
+
+    if (monster.is_invulnerable()) {
+        return TERM_WHITE;
+    }
+    if (monster.is_asleep()) {
+        return TERM_BLUE;
+    }
+    if (pct >= 100) {
+        return TERM_L_GREEN;
+    }
+    if (pct >= 60) {
+        return TERM_YELLOW;
+    }
+    if (pct >= 25) {
+        return TERM_ORANGE;
+    }
+    if (pct >= 10) {
+        return TERM_L_RED;
+    }
+    return TERM_RED;
 }
 
 /*!
@@ -296,105 +395,85 @@ void print_frame_basic(PlayerType *player_ptr)
  * health-bar stops tracking any monster that "disappears".
  * </pre>
  */
-void health_redraw(PlayerType *player_ptr, bool riding)
+void print_health(PlayerType *player_ptr, bool riding)
 {
-    int16_t health_who;
+    std::optional<short> monster_idx;
     int row, col;
 
     if (riding) {
-        health_who = player_ptr->riding;
+        if (player_ptr->riding > 0) {
+            monster_idx = player_ptr->riding;
+        }
         row = ROW_RIDING_INFO;
         col = COL_RIDING_INFO;
     } else {
-        health_who = player_ptr->health_who;
+        // ウィザードモードで闘技場観戦時の表示
+        if (w_ptr->wizard && player_ptr->phase_out) {
+            print_health_monster_in_arena_for_wizard(player_ptr);
+            return;
+        }
+        if (player_ptr->health_who > 0) {
+            monster_idx = player_ptr->health_who;
+        }
         row = ROW_INFO;
         col = COL_INFO;
     }
 
-    MonsterEntity *m_ptr;
-    m_ptr = &player_ptr->current_floor_ptr->m_list[health_who];
+    const int max_height_riding = 3; // 騎乗時に描画する高さの最大範囲
+    const int max_height = 6; // 通常時に描画する高さの最大範囲
+    const int max_width = 12; // 表示幅
 
-    if (w_ptr->wizard && player_ptr->phase_out) {
-        row = ROW_INFO - 1;
-        col = COL_INFO + 2;
+    // 表示範囲を一旦全部消す
+    int range = riding ? max_height_riding : max_height;
+    for (int y = row; y < row + range; y++) {
+        term_erase(col, y, max_width);
+    }
 
-        term_putstr(col - 2, row, 12, TERM_WHITE, "      /     ");
-        term_putstr(col - 2, row + 1, 12, TERM_WHITE, "      /     ");
-        term_putstr(col - 2, row + 2, 12, TERM_WHITE, "      /     ");
-        term_putstr(col - 2, row + 3, 12, TERM_WHITE, "      /     ");
-
-        if (MonsterRace(player_ptr->current_floor_ptr->m_list[1].r_idx).is_valid()) {
-            term_putstr(col - 2, row, 2, monraces_info[player_ptr->current_floor_ptr->m_list[1].r_idx].x_attr,
-                format("%c", monraces_info[player_ptr->current_floor_ptr->m_list[1].r_idx].x_char));
-            term_putstr(col - 1, row, 5, TERM_WHITE, format("%5d", player_ptr->current_floor_ptr->m_list[1].hp));
-            term_putstr(col + 5, row, 6, TERM_WHITE, format("%5d", player_ptr->current_floor_ptr->m_list[1].max_maxhp));
-        }
-
-        if (MonsterRace(player_ptr->current_floor_ptr->m_list[2].r_idx).is_valid()) {
-            term_putstr(col - 2, row + 1, 2, monraces_info[player_ptr->current_floor_ptr->m_list[2].r_idx].x_attr,
-                format("%c", monraces_info[player_ptr->current_floor_ptr->m_list[2].r_idx].x_char));
-            term_putstr(col - 1, row + 1, 5, TERM_WHITE, format("%5d", player_ptr->current_floor_ptr->m_list[2].hp));
-            term_putstr(col + 5, row + 1, 6, TERM_WHITE, format("%5d", player_ptr->current_floor_ptr->m_list[2].max_maxhp));
-        }
-
-        if (MonsterRace(player_ptr->current_floor_ptr->m_list[3].r_idx).is_valid()) {
-            term_putstr(col - 2, row + 2, 2, monraces_info[player_ptr->current_floor_ptr->m_list[3].r_idx].x_attr,
-                format("%c", monraces_info[player_ptr->current_floor_ptr->m_list[3].r_idx].x_char));
-            term_putstr(col - 1, row + 2, 5, TERM_WHITE, format("%5d", player_ptr->current_floor_ptr->m_list[3].hp));
-            term_putstr(col + 5, row + 2, 6, TERM_WHITE, format("%5d", player_ptr->current_floor_ptr->m_list[3].max_maxhp));
-        }
-
-        if (MonsterRace(player_ptr->current_floor_ptr->m_list[4].r_idx).is_valid()) {
-            term_putstr(col - 2, row + 3, 2, monraces_info[player_ptr->current_floor_ptr->m_list[4].r_idx].x_attr,
-                format("%c", monraces_info[player_ptr->current_floor_ptr->m_list[4].r_idx].x_char));
-            term_putstr(col - 1, row + 3, 5, TERM_WHITE, format("%5d", player_ptr->current_floor_ptr->m_list[4].hp));
-            term_putstr(col + 5, row + 3, 6, TERM_WHITE, format("%5d", player_ptr->current_floor_ptr->m_list[4].max_maxhp));
-        }
-
+    if (!monster_idx.has_value()) {
         return;
     }
 
-    if (!health_who) {
-        term_erase(col, row, 12);
+    const int row_offset_name = 0; // 名前
+    const int row_offset_health = 1; // HP
+    const int row_offset_condition = 2; // 状態異常
+
+    const auto &monster = player_ptr->current_floor_ptr->m_list[monster_idx.value()];
+
+    if ((!monster.ml) || (player_ptr->effects()->hallucination()->is_hallucinated()) || monster.is_dead()) {
+        term_putstr(col, row + row_offset_health, max_width, TERM_WHITE, "[----------]");
         return;
     }
 
-    if (!m_ptr->ml) {
-        term_putstr(col, row, 12, TERM_WHITE, "[----------]");
-        return;
-    }
-
-    if (player_ptr->effects()->hallucination()->is_hallucinated()) {
-        term_putstr(col, row, 12, TERM_WHITE, "[----------]");
-        return;
-    }
-
-    if (m_ptr->hp < 0) {
-        term_putstr(col, row, 12, TERM_WHITE, "[----------]");
-        return;
-    }
-
-    int pct = m_ptr->maxhp > 0 ? 100L * m_ptr->hp / m_ptr->maxhp : 0;
-    int pct2 = m_ptr->maxhp > 0 ? 100L * m_ptr->hp / m_ptr->max_maxhp : 0;
+    // HPの割合計算
+    int pct2 = monster.maxhp > 0 ? 100L * monster.hp / monster.max_maxhp : 0;
     int len = (pct2 < 10) ? 1 : (pct2 < 90) ? (pct2 / 10 + 1)
                                             : 10;
-    TERM_COLOR attr = TERM_RED;
-    if (m_ptr->is_invulnerable()) {
-        attr = TERM_WHITE;
-    } else if (m_ptr->is_asleep()) {
-        attr = TERM_BLUE;
-    } else if (m_ptr->is_fearful()) {
-        attr = TERM_VIOLET;
-    } else if (pct >= 100) {
-        attr = TERM_L_GREEN;
-    } else if (pct >= 60) {
-        attr = TERM_YELLOW;
-    } else if (pct >= 25) {
-        attr = TERM_ORANGE;
-    } else if (pct >= 10) {
-        attr = TERM_L_RED;
+    auto hit_point_bar_color = get_monster_hp_point_bar_color(monster);
+    const auto &ap_r_ref = monraces_info[monster.ap_r_idx];
+
+    // 名前
+    // 表示枠に収まらない場合は途中で切る
+    term_putstr(col, row + row_offset_name, max_width, TERM_WHITE, str_separate(ap_r_ref.name, max_width)[0].data());
+    // HPの割合
+    term_putstr(col, row + row_offset_health, max_width, TERM_WHITE, "[----------]");
+    term_putstr(col + 1, row + row_offset_health, len, hit_point_bar_color, "**********");
+
+    // 騎乗中のモンスターの状態異常は表示しない
+    if (riding) {
+        return;
     }
 
-    term_putstr(col, row, 12, TERM_WHITE, "[----------]");
-    term_putstr(col + 1, row, len, attr, "**********");
+    int col_offset = 0;
+    int row_offset = 0;
+
+    // 一時的状態異常
+    // MAX_WIDTHを超えたら次の行に移動する
+    for (const auto &info : get_condition_layout_info(monster)) {
+        if (col_offset + info.label.length() - 1 > max_width) { // 改行が必要かどうかチェック。length() - 1してるのは\0の分を文字数から取り除くため
+            col_offset = 0;
+            row_offset++;
+        }
+        term_putstr(col + col_offset, row + row_offset_condition + row_offset, max_width, info.color, info.label.data());
+        col_offset += info.label.length() + 1; // 文字数と空白の分だけoffsetを加算
+    }
 }

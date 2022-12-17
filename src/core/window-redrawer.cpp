@@ -165,14 +165,14 @@ void redraw_stuff(PlayerType *player_ptr)
         print_depth(player_ptr);
     }
 
-    if (player_ptr->redraw & (PR_HEALTH)) {
-        player_ptr->redraw &= ~(PR_HEALTH);
-        health_redraw(player_ptr, false);
-    }
-
     if (player_ptr->redraw & (PR_UHEALTH)) {
         player_ptr->redraw &= ~(PR_UHEALTH);
-        health_redraw(player_ptr, true);
+        print_health(player_ptr, true);
+    }
+
+    if (player_ptr->redraw & (PR_HEALTH)) {
+        player_ptr->redraw &= ~(PR_HEALTH);
+        print_health(player_ptr, false);
     }
 
     if (player_ptr->redraw & (PR_EXTRA)) {

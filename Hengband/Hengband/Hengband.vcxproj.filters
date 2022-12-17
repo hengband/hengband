@@ -2466,6 +2466,9 @@
     <ClCompile Include="..\..\src\system\terrain-type-definition.cpp">
       <Filter>system</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\window\main-window-row-column.cpp">
+      <Filter>window</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\src\monster-race\race-brightness-mask.cpp">
       <Filter>monster-race</Filter>
     </ClCompile>
