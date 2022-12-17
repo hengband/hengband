@@ -38,6 +38,7 @@
 #include "target/target-setter.h"
 #include "target/target-types.h"
 #include "term/screen-processor.h"
+#include "term/z-form.h"
 #include "util/int-char-converter.h"
 #include "view/display-messages.h"
 #include "world/world.h"
@@ -297,7 +298,7 @@ bool tele_town(PlayerType *player_ptr)
             continue;
         }
 
-        sprintf(buf, "%c) %-20s", I2A(i - 1), town_info[i].name);
+        strnfmt(buf, sizeof(buf), "%c) %-20s", I2A(i - 1), town_info[i].name);
         prt(buf, 5 + i, 5);
         num++;
     }
@@ -406,8 +407,7 @@ static DUNGEON_IDX choose_dungeon(concptr note, POSITION y, POSITION x)
             seiha = true;
         }
 
-        sprintf(buf, _("      %c) %c%-12s : 最大 %d 階", "      %c) %c%-16s : Max level %d"),
-            static_cast<char>('a' + dun.size()), seiha ? '!' : ' ', d_ref.name.data(), (int)max_dlv[d_ref.idx]);
+        strnfmt(buf, sizeof(buf), _("      %c) %c%-12s : 最大 %d 階", "      %c) %c%-16s : Max level %d"), static_cast<char>('a' + dun.size()), seiha ? '!' : ' ', d_ref.name.data(), (int)max_dlv[d_ref.idx]);
         prt(buf, y + dun.size(), x);
         dun.push_back(d_ref.idx);
     }
@@ -532,8 +532,6 @@ bool free_level_recall(PlayerType *player_ptr)
 bool reset_recall(PlayerType *player_ptr)
 {
     int select_dungeon, dummy = 0;
-    char ppp[80];
-    char tmp_val[160];
 
     select_dungeon = choose_dungeon(_("をセット", "reset"), 2, 14);
     if (ironman_downward) {
@@ -544,8 +542,10 @@ bool reset_recall(PlayerType *player_ptr)
     if (!select_dungeon) {
         return false;
     }
-    sprintf(ppp, _("何階にセットしますか (%d-%d):", "Reset to which level (%d-%d): "), (int)dungeons_info[select_dungeon].mindepth, (int)max_dlv[select_dungeon]);
-    sprintf(tmp_val, "%d", (int)std::max(player_ptr->current_floor_ptr->dun_level, 1));
+    char ppp[80];
+    strnfmt(ppp, sizeof(ppp), _("何階にセットしますか (%d-%d):", "Reset to which level (%d-%d): "), (int)dungeons_info[select_dungeon].mindepth, (int)max_dlv[select_dungeon]);
+    char tmp_val[160];
+    strnfmt(tmp_val, sizeof(tmp_val), "%d", (int)std::max(player_ptr->current_floor_ptr->dun_level, 1));
 
     if (!get_string(ppp, tmp_val, 10)) {
         return false;

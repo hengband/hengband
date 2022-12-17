@@ -7,6 +7,7 @@
 #include "mspell/mspell-damage-calculator.h"
 #include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
+#include "util/string-processor.h"
 
 /*!
  * @brief ダイス目を文字列に変換する
@@ -27,20 +28,20 @@ void dice_to_string(int base_damage, int dice_num, int dice_side, int dice_mult,
     }
 
     if (base_damage != 0) {
-        sprintf(base, "%d+", base_damage);
+        strnfmt(base, sizeof(base), "%d+", base_damage);
     }
 
     if (dice_num == 1) {
-        sprintf(dice, "d%d", dice_side);
+        strnfmt(dice, sizeof(dice), "d%d", dice_side);
     } else {
-        sprintf(dice, "%dd%d", dice_num, dice_side);
+        strnfmt(dice, sizeof(dice), "%dd%d", dice_num, dice_side);
     }
 
     if (dice_mult != 1 || dice_div != 1) {
         if (dice_div == 1) {
-            sprintf(mult, "*%d", dice_mult);
+            strnfmt(mult, sizeof(mult), "*%d", dice_mult);
         } else {
-            sprintf(mult, "*(%d/%d)", dice_mult, dice_div);
+            strnfmt(mult, sizeof(mult), "*(%d/%d)", dice_mult, dice_div);
         }
     }
 
@@ -125,21 +126,23 @@ bool know_damage(MonsterRaceId r_idx, int i)
 void set_damage(PlayerType *player_ptr, lore_type *lore_ptr, MonsterAbilityType ms_type, concptr msg)
 {
     MonsterRaceId r_idx = lore_ptr->r_idx;
+    char *tmp = lore_ptr->tmp_msg[lore_ptr->vn];
+    size_t tmpsz = sizeof(lore_ptr->tmp_msg[lore_ptr->vn]);
+
+    if (!know_armour(r_idx, lore_ptr->know_everything)) {
+        strnfmt(tmp, tmpsz, msg, "");
+        return;
+    }
+
     int base_damage = monspell_race_damage(player_ptr, ms_type, r_idx, BASE_DAM);
     int dice_num = monspell_race_damage(player_ptr, ms_type, r_idx, DICE_NUM);
     int dice_side = monspell_race_damage(player_ptr, ms_type, r_idx, DICE_SIDE);
     int dice_mult = monspell_race_damage(player_ptr, ms_type, r_idx, DICE_MULT);
     int dice_div = monspell_race_damage(player_ptr, ms_type, r_idx, DICE_DIV);
-    char dmg_str[80], dice_str[sizeof(dmg_str) + 10];
-    char *tmp = lore_ptr->tmp_msg[lore_ptr->vn];
-    dice_to_string(base_damage, dice_num, dice_side, dice_mult, dice_div, dmg_str);
-    sprintf(dice_str, "(%s)", dmg_str);
-
-    if (know_armour(r_idx, lore_ptr->know_everything)) {
-        sprintf(tmp, msg, dice_str);
-    } else {
-        sprintf(tmp, msg, "");
-    }
+    char dmg_str[80] = "(";
+    dice_to_string(base_damage, dice_num, dice_side, dice_mult, dice_div, dmg_str + 1);
+    angband_strcat(dmg_str, ")", sizeof(dmg_str));
+    strnfmt(tmp, tmpsz, msg, dmg_str);
 }
 
 void set_drop_flags(lore_type *lore_ptr)

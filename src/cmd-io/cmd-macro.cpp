@@ -11,6 +11,7 @@
 #include "system/player-type-definition.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
+#include "term/z-form.h"
 #include "util/angband-files.h"
 #include "util/int-char-converter.h"
 #include "util/string-processor.h"
@@ -186,7 +187,7 @@ void do_cmd_macros(PlayerType *player_ptr)
         if (key == '1') {
             prt(_("コマンド: ユーザー設定ファイルのロード", "Command: Load a user pref file"), 16, 0);
             prt(_("ファイル: ", "File: "), 18, 0);
-            sprintf(tmp, "%s.prf", player_ptr->base_name);
+            strnfmt(tmp, sizeof(tmp), "%s.prf", player_ptr->base_name);
             if (!askfor(tmp, 80)) {
                 continue;
             }
@@ -202,7 +203,7 @@ void do_cmd_macros(PlayerType *player_ptr)
         } else if (key == '2') {
             prt(_("コマンド: マクロをファイルに追加する", "Command: Append macros to a file"), 16, 0);
             prt(_("ファイル: ", "File: "), 18, 0);
-            sprintf(tmp, "%s.prf", player_ptr->base_name);
+            strnfmt(tmp, sizeof(tmp), "%s.prf", player_ptr->base_name);
             if (!askfor(tmp, 80)) {
                 continue;
             }
@@ -253,7 +254,7 @@ void do_cmd_macros(PlayerType *player_ptr)
         } else if (key == '6') {
             prt(_("コマンド: キー配置をファイルに追加する", "Command: Append keymaps to a file"), 16, 0);
             prt(_("ファイル: ", "File: "), 18, 0);
-            sprintf(tmp, "%s.prf", player_ptr->base_name);
+            strnfmt(tmp, sizeof(tmp), "%s.prf", player_ptr->base_name);
             if (!askfor(tmp, 80)) {
                 continue;
             }

@@ -167,7 +167,7 @@ static uint vstrnfmt_aux_dflt(char *buf, uint max, concptr fmt, vptr arg)
     fmt = fmt ? fmt : 0;
 
     /* Pointer display */
-    sprintf(tmp, "<<%p>>", arg);
+    snprintf(tmp, sizeof(tmp), "<<%p>>", arg);
     len = strlen(tmp);
     if (len >= max) {
         len = max - 1;
@@ -413,7 +413,7 @@ uint vstrnfmt(char *buf, uint max, concptr fmt, va_list vp)
                     arg = va_arg(vp, int);
 
                     /* Hack -- append the "length" */
-                    sprintf(aux + q, "%d", arg);
+                    snprintf(aux + q, sizeof(aux) - q, "%d", arg);
 
                     /* Hack -- accept the "length" */
                     while (aux[q]) {
@@ -457,7 +457,7 @@ uint vstrnfmt(char *buf, uint max, concptr fmt, va_list vp)
             arg = va_arg(vp, int);
 
             /* Format the argument */
-            sprintf(tmp, "%c", arg);
+            snprintf(tmp, sizeof(tmp), "%c", arg);
 
             break;
         }
@@ -472,7 +472,7 @@ uint vstrnfmt(char *buf, uint max, concptr fmt, va_list vp)
                 arg = va_arg(vp, long);
 
                 /* Format the argument */
-                sprintf(tmp, aux, arg);
+                snprintf(tmp, sizeof(tmp), aux, arg);
             } else if (do_long_long) {
                 long long arg;
 
@@ -480,7 +480,7 @@ uint vstrnfmt(char *buf, uint max, concptr fmt, va_list vp)
                 arg = va_arg(vp, long long);
 
                 /* Format the argument */
-                sprintf(tmp, aux, arg);
+                snprintf(tmp, sizeof(tmp), aux, arg);
             } else {
                 int arg;
 
@@ -488,7 +488,7 @@ uint vstrnfmt(char *buf, uint max, concptr fmt, va_list vp)
                 arg = va_arg(vp, int);
 
                 /* Format the argument */
-                sprintf(tmp, aux, arg);
+                snprintf(tmp, sizeof(tmp), aux, arg);
             }
 
             break;
@@ -505,20 +505,20 @@ uint vstrnfmt(char *buf, uint max, concptr fmt, va_list vp)
                 /* Access next argument */
                 arg = va_arg(vp, ulong);
 
-                sprintf(tmp, aux, arg);
+                snprintf(tmp, sizeof(tmp), aux, arg);
             } else if (do_long_long) {
                 unsigned long long arg;
 
                 /* Access next argument */
                 arg = va_arg(vp, unsigned long long);
 
-                sprintf(tmp, aux, arg);
+                snprintf(tmp, sizeof(tmp), aux, arg);
             } else {
                 uint arg;
 
                 /* Access next argument */
                 arg = va_arg(vp, uint);
-                sprintf(tmp, aux, arg);
+                snprintf(tmp, sizeof(tmp), aux, arg);
             }
 
             break;
@@ -536,7 +536,7 @@ uint vstrnfmt(char *buf, uint max, concptr fmt, va_list vp)
             arg = va_arg(vp, double);
 
             /* Format the argument */
-            sprintf(tmp, aux, arg);
+            snprintf(tmp, sizeof(tmp), aux, arg);
 
             break;
         }
@@ -549,7 +549,7 @@ uint vstrnfmt(char *buf, uint max, concptr fmt, va_list vp)
             arg = va_arg(vp, vptr);
 
             /* Format the argument */
-            sprintf(tmp, aux, arg);
+            snprintf(tmp, sizeof(tmp), aux, arg);
 
             break;
         }
@@ -572,7 +572,7 @@ uint vstrnfmt(char *buf, uint max, concptr fmt, va_list vp)
             arg2[1023] = '\0';
 
             /* Format the argument */
-            sprintf(tmp, aux, arg);
+            snprintf(tmp, sizeof(tmp), aux, arg);
 
             break;
         }
@@ -586,7 +586,7 @@ uint vstrnfmt(char *buf, uint max, concptr fmt, va_list vp)
             arg = va_arg(vp, vptr);
 
             /* Format the "user data" */
-            sprintf(tmp, aux, arg);
+            snprintf(tmp, sizeof(tmp), aux, arg);
 
             break;
         }

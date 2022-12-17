@@ -30,6 +30,7 @@
 #include "system/item-entity.h"
 #include "system/player-type-definition.h"
 #include "term/screen-processor.h"
+#include "term/z-form.h"
 #include "util/int-char-converter.h"
 #include "util/quarks.h"
 #include "view/display-messages.h"
@@ -164,9 +165,9 @@ int get_stock(COMMAND_CODE *com_val, concptr pmt, int i, int j, [[maybe_unused]]
     char hi = (j > 25) ? toupper(I2A(j - 26)) : I2A(j);
     char out_val[160];
 #ifdef JP
-    (void)sprintf(out_val, "(%s:%c-%c, ESCで中断) %s", (((store_num == StoreSaleType::HOME) || (store_num == StoreSaleType::MUSEUM)) ? "アイテム" : "商品"), lo, hi, pmt);
+    strnfmt(out_val, sizeof(out_val), "(%s:%c-%c, ESCで中断) %s", (((store_num == StoreSaleType::HOME) || (store_num == StoreSaleType::MUSEUM)) ? "アイテム" : "商品"), lo, hi, pmt);
 #else
-    (void)sprintf(out_val, "(Items %c-%c, ESC to exit) %s", lo, hi, pmt);
+    strnfmt(out_val, sizeof(out_val), "(Items %c-%c, ESC to exit) %s", lo, hi, pmt);
 #endif
 
     char command;
@@ -223,11 +224,8 @@ void store_examine(PlayerType *player_ptr, StoreSaleType store_num)
         i = store_bottom;
     }
 
-    char out_val[160];
-    sprintf(out_val, _("どれを調べますか？", "Which item do you want to examine? "));
-
     COMMAND_CODE item;
-    if (!get_stock(&item, out_val, 0, i - 1, store_num)) {
+    if (!get_stock(&item, _("どれを調べますか？", "Which item do you want to examine? "), 0, i - 1, store_num)) {
         return;
     }
     item = item + store_top;

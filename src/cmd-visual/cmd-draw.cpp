@@ -15,6 +15,7 @@
 #include "term/gameterm.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
+#include "term/z-form.h"
 #include "util/int-char-converter.h"
 #include "util/string-processor.h"
 #include "view/display-messages.h"
@@ -99,7 +100,7 @@ void do_cmd_player_status(PlayerType *player_ptr)
             get_name(player_ptr);
             process_player_name(player_ptr);
         } else if (c == 'f') {
-            sprintf(tmp, "%s.txt", player_ptr->base_name);
+            strnfmt(tmp, sizeof(tmp), "%s.txt", player_ptr->base_name);
             if (get_string(_("ファイル名: ", "File name: "), tmp, 80)) {
                 if (tmp[0] && (tmp[0] != ' ')) {
                     update_playtime();

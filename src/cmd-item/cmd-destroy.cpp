@@ -34,6 +34,7 @@
 #include "system/item-entity.h"
 #include "system/player-type-definition.h"
 #include "term/screen-processor.h"
+#include "term/z-form.h"
 #include "util/int-char-converter.h"
 #include "view/display-messages.h"
 
@@ -63,7 +64,7 @@ static bool check_destory_item(PlayerType *player_ptr, destroy_type *destroy_ptr
     }
 
     describe_flavor(player_ptr, destroy_ptr->o_name, destroy_ptr->o_ptr, OD_OMIT_PREFIX);
-    sprintf(destroy_ptr->out_val, _("本当に%sを壊しますか? [y/n/Auto]", "Really destroy %s? [y/n/Auto]"), destroy_ptr->o_name);
+    strnfmt(destroy_ptr->out_val, sizeof(destroy_ptr->out_val), _("本当に%sを壊しますか? [y/n/Auto]", "Really destroy %s? [y/n/Auto]"), destroy_ptr->o_name);
     msg_print(nullptr);
     message_add(destroy_ptr->out_val);
     player_ptr->window_flags |= PW_MESSAGE;

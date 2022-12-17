@@ -28,6 +28,7 @@
 #include "player/player-status.h"
 #include "system/player-type-definition.h"
 #include "term/screen-processor.h"
+#include "term/z-form.h"
 #include "timed-effect/player-blindness.h"
 #include "timed-effect/player-confusion.h"
 #include "timed-effect/player-cut.h"
@@ -436,7 +437,7 @@ void report_magics(PlayerType *player_ptr)
     int k = 2;
     char buf[80];
     for (int j = 0; j < i; j++) {
-        sprintf(buf, _("%-28s : 期間 - %s ", "%s %s."), info[j], report_magic_durations[info2[j]]);
+        strnfmt(buf, sizeof(buf), _("%-28s : 期間 - %s ", "%s %s."), info[j], report_magic_durations[info2[j]]);
         prt(buf, k++, 15);
 
         /* Every 20 entries (lines 2 to 21), start over */

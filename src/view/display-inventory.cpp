@@ -15,6 +15,8 @@
 #include "term/gameterm.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
+#include "term/z-form.h"
+#include "util/string-processor.h"
 
 /*!
  * @brief 所持アイテムの表示を行う /
@@ -93,15 +95,15 @@ COMMAND_CODE show_inventory(PlayerType *player_ptr, int target_item, BIT_FLAGS m
         prt("", j + 1, col ? col - 2 : col);
         if (use_menu && target_item) {
             if (j == (target_item - 1)) {
-                strcpy(tmp_val, _("》", "> "));
+                angband_strcpy(tmp_val, _("》", "> "), sizeof(tmp_val));
                 target_item_label = i;
             } else {
-                strcpy(tmp_val, "  ");
+                angband_strcpy(tmp_val, "  ", sizeof(tmp_val));
             }
         } else if (i <= INVEN_PACK) {
-            sprintf(tmp_val, "%c)", inven_label[i]);
+            strnfmt(tmp_val, sizeof(tmp_val), "%c)", inven_label[i]);
         } else {
-            sprintf(tmp_val, "%c)", index_to_label(i));
+            strnfmt(tmp_val, sizeof(tmp_val), "%c)", index_to_label(i));
         }
 
         put_str(tmp_val, j + 1, col);
@@ -120,7 +122,7 @@ COMMAND_CODE show_inventory(PlayerType *player_ptr, int target_item, BIT_FLAGS m
         c_put_str(out_color[j], out_desc[j], j + 1, cur_col);
         if (show_weights) {
             int wgt = o_ptr->weight * o_ptr->number;
-            (void)sprintf(tmp_val, _("%3d.%1d kg", "%3d.%1d lb"), _(lb_to_kg_integer(wgt), wgt / 10), _(lb_to_kg_fraction(wgt), wgt % 10));
+            strnfmt(tmp_val, sizeof(tmp_val), _("%3d.%1d kg", "%3d.%1d lb"), _(lb_to_kg_integer(wgt), wgt / 10), _(lb_to_kg_fraction(wgt), wgt % 10));
             prt(tmp_val, j + 1, wid - 9);
         }
     }
@@ -166,7 +168,7 @@ void display_inventory(PlayerType *player_ptr, const ItemTester &item_tester)
 
         auto o_ptr = &player_ptr->inventory_list[i];
         auto do_disp = item_tester.okay(o_ptr);
-        strcpy(tmp_val, "   ");
+        angband_strcpy(tmp_val, "   ", sizeof(tmp_val));
         if (do_disp) {
             tmp_val[0] = index_to_label(i);
             tmp_val[1] = ')';
@@ -197,7 +199,9 @@ void display_inventory(PlayerType *player_ptr, const ItemTester &item_tester)
 
         if (show_weights) {
             int wgt = o_ptr->weight * o_ptr->number;
-            sprintf(tmp_val, _("%3d.%1d kg", "%3d.%1d lb"), _(lb_to_kg_integer(wgt), wgt / 10), _(lb_to_kg_fraction(wgt), wgt % 10));
+            strnfmt(tmp_val, sizeof(tmp_val), _("%3d.%1d kg", "%3d.%1d lb"),
+                _(lb_to_kg_integer(wgt), wgt / 10),
+                _(lb_to_kg_fraction(wgt), wgt % 10));
             prt(tmp_val, i, wid - 9);
         }
     }

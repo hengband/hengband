@@ -39,6 +39,7 @@
 #include "system/monster-entity.h"
 #include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
+#include "term/z-form.h"
 #include "util/enum-converter.h"
 #include "util/int-char-converter.h"
 #include "util/sort.h"
@@ -368,7 +369,7 @@ static void dump_aux_monsters(PlayerType *player_ptr, FILE *fff)
     for (auto it = who.rbegin(); it != who.rend() && std::distance(who.rbegin(), it) < 10; it++) {
         auto *r_ptr = &monraces_info[*it];
         if (r_ptr->defeat_level && r_ptr->defeat_time) {
-            sprintf(buf, _(" - レベル%2d - %d:%02d:%02d", " - level %2d - %d:%02d:%02d"), r_ptr->defeat_level, r_ptr->defeat_time / (60 * 60),
+            strnfmt(buf, sizeof(buf), _(" - レベル%2d - %d:%02d:%02d", " - level %2d - %d:%02d:%02d"), r_ptr->defeat_level, r_ptr->defeat_time / (60 * 60),
                 (r_ptr->defeat_time / 60) % 60, r_ptr->defeat_time % 60);
         } else {
             buf[0] = '\0';
