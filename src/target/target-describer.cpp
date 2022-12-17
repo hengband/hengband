@@ -38,6 +38,7 @@
 #include "target/target-types.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
+#include "term/z-form.h"
 #include "timed-effect/player-hallucination.h"
 #include "timed-effect/timed-effects.h"
 #include "util/bit-flags-calculator.h"
@@ -98,18 +99,16 @@ static eg_type *initialize_eg_type(PlayerType *player_ptr, eg_type *eg_ptr, POSI
 /*
  * Evaluate number of kill needed to gain level
  */
-static void evaluate_monster_exp(PlayerType *player_ptr, char *buf, MonsterEntity *m_ptr)
+static std::string evaluate_monster_exp(PlayerType *player_ptr, MonsterEntity *m_ptr)
 {
     MonsterRaceInfo *ap_r_ptr = &monraces_info[m_ptr->ap_r_idx];
     if ((player_ptr->lev >= PY_MAX_LEVEL) || PlayerRace(player_ptr).equals(PlayerRaceType::ANDROID)) {
-        sprintf(buf, "**");
-        return;
+        return "**";
     }
 
     if (!ap_r_ptr->r_tkills || m_ptr->mflag2.has(MonsterConstantFlagType::KAGE)) {
         if (!w_ptr->wizard) {
-            sprintf(buf, "??");
-            return;
+            return "??";
         }
     }
 
@@ -129,7 +128,7 @@ static void evaluate_monster_exp(PlayerType *player_ptr, char *buf, MonsterEntit
     s64b_div(&exp_adv, &exp_adv_frac, exp_mon, exp_mon_frac);
 
     auto num = std::min<uint>(999, exp_adv_frac);
-    sprintf(buf, "%03ld", (long int)num);
+    return format("%03ld", (long int)num);
 }
 
 static void describe_scan_result(PlayerType *player_ptr, eg_type *eg_ptr)
@@ -169,9 +168,9 @@ static ProcessResult describe_hallucinated_target(PlayerType *player_ptr, eg_typ
 
     concptr name = _("何か奇妙な物", "something strange");
 #ifdef JP
-    sprintf(eg_ptr->out_val, "%s%s%s%s [%s]", eg_ptr->s1, name, eg_ptr->s2, eg_ptr->s3, eg_ptr->info);
+    strnfmt(eg_ptr->out_val, sizeof(eg_ptr->out_val), "%s%s%s%s [%s]", eg_ptr->s1, name, eg_ptr->s2, eg_ptr->s3, eg_ptr->info);
 #else
-    sprintf(eg_ptr->out_val, "%s%s%s%s [%s]", eg_ptr->s1, eg_ptr->s2, eg_ptr->s3, name, eg_ptr->info);
+    strnfmt(eg_ptr->out_val, sizeof(eg_ptr->out_val), "%s%s%s%s [%s]", eg_ptr->s1, eg_ptr->s2, eg_ptr->s3, name, eg_ptr->info);
 #endif
     prt(eg_ptr->out_val, 0, 0);
     move_cursor_relative(eg_ptr->y, eg_ptr->x);
@@ -199,7 +198,6 @@ static void describe_grid_monster(PlayerType *player_ptr, eg_type *eg_ptr)
     GAME_TEXT m_name[MAX_NLEN];
     monster_desc(player_ptr, m_name, eg_ptr->m_ptr, MD_INDEF_VISIBLE);
     while (true) {
-        char acount[10];
         if (recall) {
             if (describe_grid_lore(player_ptr, eg_ptr)) {
                 return;
@@ -209,12 +207,12 @@ static void describe_grid_monster(PlayerType *player_ptr, eg_type *eg_ptr)
             continue;
         }
 
-        evaluate_monster_exp(player_ptr, acount, eg_ptr->m_ptr);
+        std::string acount = evaluate_monster_exp(player_ptr, eg_ptr->m_ptr);
 #ifdef JP
-        sprintf(eg_ptr->out_val, "[%s]%s%s(%s)%s%s [r思 %s%s]", acount, eg_ptr->s1, m_name, look_mon_desc(eg_ptr->m_ptr, 0x01), eg_ptr->s2, eg_ptr->s3,
+        strnfmt(eg_ptr->out_val, sizeof(eg_ptr->out_val), "[%s]%s%s(%s)%s%s [r思 %s%s]", acount.data(), eg_ptr->s1, m_name, look_mon_desc(eg_ptr->m_ptr, 0x01), eg_ptr->s2, eg_ptr->s3,
             eg_ptr->x_info, eg_ptr->info);
 #else
-        sprintf(eg_ptr->out_val, "[%s]%s%s%s%s(%s) [r, %s%s]", acount, eg_ptr->s1, eg_ptr->s2, eg_ptr->s3, m_name, look_mon_desc(eg_ptr->m_ptr, 0x01),
+        strnfmt(eg_ptr->out_val, sizeof(eg_ptr->out_val), "[%s]%s%s%s%s(%s) [r, %s%s]", acount.data(), eg_ptr->s1, eg_ptr->s2, eg_ptr->s3, m_name, look_mon_desc(eg_ptr->m_ptr, 0x01),
             eg_ptr->x_info, eg_ptr->info);
 #endif
         prt(eg_ptr->out_val, 0, 0);
@@ -254,9 +252,9 @@ static uint16_t describe_monster_item(PlayerType *player_ptr, eg_type *eg_ptr)
         o_ptr = &player_ptr->current_floor_ptr->o_list[this_o_idx];
         describe_flavor(player_ptr, o_name, o_ptr, 0);
 #ifdef JP
-        sprintf(eg_ptr->out_val, "%s%s%s%s[%s]", eg_ptr->s1, o_name, eg_ptr->s2, eg_ptr->s3, eg_ptr->info);
+        strnfmt(eg_ptr->out_val, sizeof(eg_ptr->out_val), "%s%s%s%s[%s]", eg_ptr->s1, o_name, eg_ptr->s2, eg_ptr->s3, eg_ptr->info);
 #else
-        sprintf(eg_ptr->out_val, "%s%s%s%s [%s]", eg_ptr->s1, eg_ptr->s2, eg_ptr->s3, o_name, eg_ptr->info);
+        strnfmt(eg_ptr->out_val, sizeof(eg_ptr->out_val), "%s%s%s%s [%s]", eg_ptr->s1, eg_ptr->s2, eg_ptr->s3, o_name, eg_ptr->info);
 #endif
         prt(eg_ptr->out_val, 0, 0);
         move_cursor_relative(eg_ptr->y, eg_ptr->x);
@@ -325,9 +323,9 @@ static int16_t describe_footing(PlayerType *player_ptr, eg_type *eg_ptr)
     o_ptr = &player_ptr->current_floor_ptr->o_list[eg_ptr->floor_list[0]];
     describe_flavor(player_ptr, o_name, o_ptr, 0);
 #ifdef JP
-    sprintf(eg_ptr->out_val, "%s%s%s%s[%s]", eg_ptr->s1, o_name, eg_ptr->s2, eg_ptr->s3, eg_ptr->info);
+    strnfmt(eg_ptr->out_val, sizeof(eg_ptr->out_val), "%s%s%s%s[%s]", eg_ptr->s1, o_name, eg_ptr->s2, eg_ptr->s3, eg_ptr->info);
 #else
-    sprintf(eg_ptr->out_val, "%s%s%s%s [%s]", eg_ptr->s1, eg_ptr->s2, eg_ptr->s3, o_name, eg_ptr->info);
+    strnfmt(eg_ptr->out_val, sizeof(eg_ptr->out_val), "%s%s%s%s [%s]", eg_ptr->s1, eg_ptr->s2, eg_ptr->s3, o_name, eg_ptr->info);
 #endif
     prt(eg_ptr->out_val, 0, 0);
     move_cursor_relative(eg_ptr->y, eg_ptr->x);
@@ -342,9 +340,9 @@ static int16_t describe_footing_items(eg_type *eg_ptr)
     }
 
 #ifdef JP
-    sprintf(eg_ptr->out_val, "%s %d個のアイテム%s%s ['x'で一覧, %s]", eg_ptr->s1, (int)eg_ptr->floor_num, eg_ptr->s2, eg_ptr->s3, eg_ptr->info);
+    strnfmt(eg_ptr->out_val, sizeof(eg_ptr->out_val), "%s %d個のアイテム%s%s ['x'で一覧, %s]", eg_ptr->s1, (int)eg_ptr->floor_num, eg_ptr->s2, eg_ptr->s3, eg_ptr->info);
 #else
-    sprintf(eg_ptr->out_val, "%s%s%sa pile of %d items [x,%s]", eg_ptr->s1, eg_ptr->s2, eg_ptr->s3, (int)eg_ptr->floor_num, eg_ptr->info);
+    strnfmt(eg_ptr->out_val, sizeof(eg_ptr->out_val), "%s%s%sa pile of %d items [x,%s]", eg_ptr->s1, eg_ptr->s2, eg_ptr->s3, (int)eg_ptr->floor_num, eg_ptr->info);
 #endif
     prt(eg_ptr->out_val, 0, 0);
     move_cursor_relative(eg_ptr->y, eg_ptr->x);
@@ -364,9 +362,9 @@ static char describe_footing_many_items(PlayerType *player_ptr, eg_type *eg_ptr,
         (void)show_floor_items(player_ptr, 0, eg_ptr->y, eg_ptr->x, min_width, AllMatchItemTester());
         show_gold_on_floor = false;
 #ifdef JP
-        sprintf(eg_ptr->out_val, "%s %d個のアイテム%s%s [Enterで次へ, %s]", eg_ptr->s1, (int)eg_ptr->floor_num, eg_ptr->s2, eg_ptr->s3, eg_ptr->info);
+        strnfmt(eg_ptr->out_val, sizeof(eg_ptr->out_val), "%s %d個のアイテム%s%s [Enterで次へ, %s]", eg_ptr->s1, (int)eg_ptr->floor_num, eg_ptr->s2, eg_ptr->s3, eg_ptr->info);
 #else
-        sprintf(eg_ptr->out_val, "%s%s%sa pile of %d items [Enter,%s]", eg_ptr->s1, eg_ptr->s2, eg_ptr->s3, (int)eg_ptr->floor_num, eg_ptr->info);
+        strnfmt(eg_ptr->out_val, sizeof(eg_ptr->out_val), "%s%s%sa pile of %d items [Enter,%s]", eg_ptr->s1, eg_ptr->s2, eg_ptr->s3, (int)eg_ptr->floor_num, eg_ptr->info);
 #endif
         prt(eg_ptr->out_val, 0, 0);
         eg_ptr->query = inkey();
@@ -418,9 +416,9 @@ static int16_t describe_footing_sight(PlayerType *player_ptr, eg_type *eg_ptr, I
     eg_ptr->boring = false;
     describe_flavor(player_ptr, o_name, o_ptr, 0);
 #ifdef JP
-    sprintf(eg_ptr->out_val, "%s%s%s%s[%s]", eg_ptr->s1, o_name, eg_ptr->s2, eg_ptr->s3, eg_ptr->info);
+    strnfmt(eg_ptr->out_val, sizeof(eg_ptr->out_val), "%s%s%s%s[%s]", eg_ptr->s1, o_name, eg_ptr->s2, eg_ptr->s3, eg_ptr->info);
 #else
-    sprintf(eg_ptr->out_val, "%s%s%s%s [%s]", eg_ptr->s1, eg_ptr->s2, eg_ptr->s3, o_name, eg_ptr->info);
+    strnfmt(eg_ptr->out_val, sizeof(eg_ptr->out_val), "%s%s%s%s [%s]", eg_ptr->s1, eg_ptr->s2, eg_ptr->s3, o_name, eg_ptr->info);
 #endif
     prt(eg_ptr->out_val, 0, 0);
     move_cursor_relative(eg_ptr->y, eg_ptr->x);
@@ -504,27 +502,27 @@ static void describe_grid_monster_all(eg_type *eg_ptr)
 {
     if (!w_ptr->wizard) {
 #ifdef JP
-        sprintf(eg_ptr->out_val, "%s%s%s%s[%s]", eg_ptr->s1, eg_ptr->name, eg_ptr->s2, eg_ptr->s3, eg_ptr->info);
+        strnfmt(eg_ptr->out_val, sizeof(eg_ptr->out_val), "%s%s%s%s[%s]", eg_ptr->s1, eg_ptr->name, eg_ptr->s2, eg_ptr->s3, eg_ptr->info);
 #else
-        sprintf(eg_ptr->out_val, "%s%s%s%s [%s]", eg_ptr->s1, eg_ptr->s2, eg_ptr->s3, eg_ptr->name, eg_ptr->info);
+        strnfmt(eg_ptr->out_val, sizeof(eg_ptr->out_val), "%s%s%s%s [%s]", eg_ptr->s1, eg_ptr->s2, eg_ptr->s3, eg_ptr->name, eg_ptr->info);
 #endif
         return;
     }
 
-    char f_idx_str[32];
+    std::string f_idx_str;
     if (eg_ptr->g_ptr->mimic) {
-        sprintf(f_idx_str, "%d/%d", eg_ptr->g_ptr->feat, eg_ptr->g_ptr->mimic);
+        f_idx_str = format("%d/%d", eg_ptr->g_ptr->feat, eg_ptr->g_ptr->mimic);
     } else {
-        sprintf(f_idx_str, "%d", eg_ptr->g_ptr->feat);
+        f_idx_str = std::to_string(eg_ptr->g_ptr->feat);
     }
 
 #ifdef JP
-    sprintf(eg_ptr->out_val, "%s%s%s%s[%s] %x %s %d %d %d (%d,%d) %d", eg_ptr->s1, eg_ptr->name, eg_ptr->s2, eg_ptr->s3, eg_ptr->info,
-        (uint)eg_ptr->g_ptr->info, f_idx_str, eg_ptr->g_ptr->dists[FLOW_NORMAL], eg_ptr->g_ptr->costs[FLOW_NORMAL], eg_ptr->g_ptr->when, (int)eg_ptr->y,
+    strnfmt(eg_ptr->out_val, sizeof(eg_ptr->out_val), "%s%s%s%s[%s] %x %s %d %d %d (%d,%d) %d", eg_ptr->s1, eg_ptr->name, eg_ptr->s2, eg_ptr->s3, eg_ptr->info,
+        (uint)eg_ptr->g_ptr->info, f_idx_str.data(), eg_ptr->g_ptr->dists[FLOW_NORMAL], eg_ptr->g_ptr->costs[FLOW_NORMAL], eg_ptr->g_ptr->when, (int)eg_ptr->y,
         (int)eg_ptr->x, travel.cost[eg_ptr->y][eg_ptr->x]);
 #else
-    sprintf(eg_ptr->out_val, "%s%s%s%s [%s] %x %s %d %d %d (%d,%d)", eg_ptr->s1, eg_ptr->s2, eg_ptr->s3, eg_ptr->name, eg_ptr->info, eg_ptr->g_ptr->info,
-        f_idx_str, eg_ptr->g_ptr->dists[FLOW_NORMAL], eg_ptr->g_ptr->costs[FLOW_NORMAL], eg_ptr->g_ptr->when, (int)eg_ptr->y, (int)eg_ptr->x);
+    strnfmt(eg_ptr->out_val, sizeof(eg_ptr->out_val), "%s%s%s%s [%s] %x %s %d %d %d (%d,%d)", eg_ptr->s1, eg_ptr->s2, eg_ptr->s3, eg_ptr->name, eg_ptr->info, eg_ptr->g_ptr->info,
+        f_idx_str.data(), eg_ptr->g_ptr->dists[FLOW_NORMAL], eg_ptr->g_ptr->costs[FLOW_NORMAL], eg_ptr->g_ptr->when, (int)eg_ptr->y, (int)eg_ptr->x);
 #endif
 }
 
