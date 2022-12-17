@@ -23,6 +23,7 @@
 #include "system/terrain-type-definition.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
+#include "term/z-form.h"
 #include "util/angband-files.h"
 #include "util/int-char-converter.h"
 #include "view/display-messages.h"
@@ -38,7 +39,7 @@ static bool cmd_visuals_aux(int i, IDX *num, IDX max)
 {
     if (iscntrl(i)) {
         char str[10] = "";
-        sprintf(str, "%d", *num);
+        strnfmt(str, sizeof(str), "%d", *num);
         if (!get_string(format("Input new number(0-%d): ", max - 1), str, 4)) {
             return false;
         }
@@ -104,7 +105,7 @@ void do_cmd_visuals(PlayerType *player_ptr)
         case '0': {
             prt(_("コマンド: ユーザー設定ファイルのロード", "Command: Load a user pref file"), 15, 0);
             prt(_("ファイル: ", "File: "), 17, 0);
-            sprintf(tmp, "%s.prf", player_ptr->base_name);
+            strnfmt(tmp, sizeof(tmp), "%s.prf", player_ptr->base_name);
             if (!askfor(tmp, 70)) {
                 continue;
             }
@@ -117,7 +118,7 @@ void do_cmd_visuals(PlayerType *player_ptr)
             static concptr mark = "Monster attr/chars";
             prt(_("コマンド: モンスターの[色/文字]をファイルに書き出します", "Command: Dump monster attr/chars"), 15, 0);
             prt(_("ファイル: ", "File: "), 17, 0);
-            sprintf(tmp, "%s.prf", player_ptr->base_name);
+            strnfmt(tmp, sizeof(tmp), "%s.prf", player_ptr->base_name);
             if (!askfor(tmp, 70)) {
                 continue;
             }
@@ -145,7 +146,7 @@ void do_cmd_visuals(PlayerType *player_ptr)
             static concptr mark = "Object attr/chars";
             prt(_("コマンド: アイテムの[色/文字]をファイルに書き出します", "Command: Dump object attr/chars"), 15, 0);
             prt(_("ファイル: ", "File: "), 17, 0);
-            sprintf(tmp, "%s.prf", player_ptr->base_name);
+            strnfmt(tmp, sizeof(tmp), "%s.prf", player_ptr->base_name);
             if (!askfor(tmp, 70)) {
                 continue;
             }
@@ -187,7 +188,7 @@ void do_cmd_visuals(PlayerType *player_ptr)
             static concptr mark = "Feature attr/chars";
             prt(_("コマンド: 地形の[色/文字]をファイルに書き出します", "Command: Dump feature attr/chars"), 15, 0);
             prt(_("ファイル: ", "File: "), 17, 0);
-            sprintf(tmp, "%s.prf", player_ptr->base_name);
+            strnfmt(tmp, sizeof(tmp), "%s.prf", player_ptr->base_name);
             if (!askfor(tmp, 70)) {
                 continue;
             }

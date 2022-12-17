@@ -10,6 +10,7 @@
 #include "system/player-type-definition.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
+#include "term/z-form.h"
 #include "util/int-char-converter.h"
 #include "util/string-processor.h"
 #include "view/display-messages.h"
@@ -385,14 +386,14 @@ QUANTITY get_quantity(concptr prompt, QUANTITY max)
     }
 
     if (!prompt) {
-        sprintf(tmp, _("いくつですか (1-%d): ", "Quantity (1-%d): "), max);
+        strnfmt(tmp, sizeof(tmp), _("いくつですか (1-%d): ", "Quantity (1-%d): "), max);
         prompt = tmp;
     }
 
     msg_print(nullptr);
     prt(prompt, 0, 0);
     amt = 1;
-    sprintf(buf, "%d", amt);
+    strnfmt(buf, sizeof(buf), "%d", amt);
 
     /*
      * Ask for a quantity

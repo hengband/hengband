@@ -37,6 +37,7 @@
 #include "store/store-owners.h"
 #include "store/store.h"
 #include "system/player-type-definition.h"
+#include "term/z-form.h"
 #include "util/enum-converter.h"
 #include "view/display-messages.h"
 #include "world/world.h"
@@ -58,25 +59,25 @@ static void write_birth_diary(PlayerType *player_ptr)
     exe_write_diary(player_ptr, DIARY_GAMESTART, 1, _("-------- 新規ゲーム開始 --------", "------- Started New Game -------"));
     exe_write_diary(player_ptr, DIARY_DIALY, 0, nullptr);
     char buf[80];
-    sprintf(buf, _("%s性別に%sを選択した。", "%schose %s gender."), indent, sex_info[player_ptr->psex].title);
+    strnfmt(buf, sizeof(buf), _("%s性別に%sを選択した。", "%schose %s gender."), indent, sex_info[player_ptr->psex].title);
     exe_write_diary(player_ptr, DIARY_DESCRIPTION, 1, buf);
-    sprintf(buf, _("%s種族に%sを選択した。", "%schose %s race."), indent, race_info[enum2i(player_ptr->prace)].title);
+    strnfmt(buf, sizeof(buf), _("%s種族に%sを選択した。", "%schose %s race."), indent, race_info[enum2i(player_ptr->prace)].title);
     exe_write_diary(player_ptr, DIARY_DESCRIPTION, 1, buf);
-    sprintf(buf, _("%s職業に%sを選択した。", "%schose %s class."), indent, class_info[enum2i(player_ptr->pclass)].title);
+    strnfmt(buf, sizeof(buf), _("%s職業に%sを選択した。", "%schose %s class."), indent, class_info[enum2i(player_ptr->pclass)].title);
     exe_write_diary(player_ptr, DIARY_DESCRIPTION, 1, buf);
     if (player_ptr->realm1) {
-        sprintf(buf, _("%s魔法の領域に%s%sを選択した。", "%schose %s%s."), indent, realm_names[player_ptr->realm1],
+        strnfmt(buf, sizeof(buf), _("%s魔法の領域に%s%sを選択した。", "%schose %s%s."), indent, realm_names[player_ptr->realm1],
             player_ptr->realm2 ? format(_("と%s", " and %s realms"), realm_names[player_ptr->realm2]) : _("", " realm"));
         exe_write_diary(player_ptr, DIARY_DESCRIPTION, 1, buf);
     }
     if (player_ptr->element) {
-        sprintf(buf, _("%s元素系統に%sを選択した。", "%schose %s system."), indent, get_element_title(player_ptr->element));
+        strnfmt(buf, sizeof(buf), _("%s元素系統に%sを選択した。", "%schose %s system."), indent, get_element_title(player_ptr->element));
         exe_write_diary(player_ptr, DIARY_DESCRIPTION, 1, buf);
     }
-    sprintf(buf, _("%s性格に%sを選択した。", "%schose %s personality."), indent, personality_info[player_ptr->ppersonality].title);
+    strnfmt(buf, sizeof(buf), _("%s性格に%sを選択した。", "%schose %s personality."), indent, personality_info[player_ptr->ppersonality].title);
     exe_write_diary(player_ptr, DIARY_DESCRIPTION, 1, buf);
     if (PlayerClass(player_ptr).equals(PlayerClassType::CHAOS_WARRIOR)) {
-        sprintf(buf, _("%s守護神%sと契約を交わした。", "%smade a contract with patron %s."), indent, patron_list[player_ptr->chaos_patron].name.data());
+        strnfmt(buf, sizeof(buf), _("%s守護神%sと契約を交わした。", "%smade a contract with patron %s."), indent, patron_list[player_ptr->chaos_patron].name.data());
         exe_write_diary(player_ptr, DIARY_DESCRIPTION, 1, buf);
     }
 }

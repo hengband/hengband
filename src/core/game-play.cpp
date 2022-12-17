@@ -90,6 +90,7 @@
 #include "target/target-checker.h"
 #include "term/gameterm.h"
 #include "term/screen-processor.h"
+#include "term/z-form.h"
 #include "util/angband-files.h"
 #include "view/display-messages.h"
 #include "view/display-player.h"
@@ -284,7 +285,7 @@ static void generate_world(PlayerType *player_ptr, bool new_game)
     }
 
     char buf[80];
-    sprintf(buf, _("%sに降り立った。", "arrived in %s."), map_name(player_ptr));
+    strnfmt(buf, sizeof(buf), _("%sに降り立った。", "arrived in %s."), map_name(player_ptr));
     exe_write_diary(player_ptr, DIARY_DESCRIPTION, 0, buf);
 }
 

@@ -17,6 +17,8 @@
 #include "term/gameterm.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
+#include "term/z-form.h"
+#include "util/string-processor.h"
 
 /*!
  * @brief メインウィンドウの右上に装備アイテムの表示させる
@@ -88,15 +90,15 @@ COMMAND_CODE show_equipment(PlayerType *player_ptr, int target_item, BIT_FLAGS m
         prt("", j + 1, col ? col - 2 : col);
         if (use_menu && target_item) {
             if (j == (target_item - 1)) {
-                strcpy(tmp_val, _("》", "> "));
+                angband_strcpy(tmp_val, _("》", "> "), sizeof(tmp_val));
                 target_item_label = i;
             } else {
-                strcpy(tmp_val, "  ");
+                angband_strcpy(tmp_val, "  ", sizeof(tmp_val));
             }
         } else if (i >= INVEN_MAIN_HAND) {
-            sprintf(tmp_val, "%c)", equip_label[i - INVEN_MAIN_HAND]);
+            strnfmt(tmp_val, sizeof(tmp_val), "%c)", equip_label[i - INVEN_MAIN_HAND]);
         } else {
-            sprintf(tmp_val, "%c)", index_to_label(i));
+            strnfmt(tmp_val, sizeof(tmp_val), "%c)", index_to_label(i));
         }
 
         put_str(tmp_val, j + 1, col);
@@ -113,7 +115,7 @@ COMMAND_CODE show_equipment(PlayerType *player_ptr, int target_item, BIT_FLAGS m
         }
 
         if (show_labels) {
-            (void)sprintf(tmp_val, _("%-7s: ", "%-14s: "), mention_use(player_ptr, i));
+            strnfmt(tmp_val, sizeof(tmp_val), _("%-7s: ", "%-14s: "), mention_use(player_ptr, i));
             put_str(tmp_val, j + 1, cur_col);
             c_put_str(out_color[j], out_desc[j], j + 1, _(cur_col + 9, cur_col + 16));
         } else {
@@ -125,7 +127,7 @@ COMMAND_CODE show_equipment(PlayerType *player_ptr, int target_item, BIT_FLAGS m
         }
 
         int wgt = o_ptr->weight * o_ptr->number;
-        (void)sprintf(tmp_val, _("%3d.%1d kg", "%3d.%d lb"), _(lb_to_kg_integer(wgt), wgt / 10), _(lb_to_kg_fraction(wgt), wgt % 10));
+        strnfmt(tmp_val, sizeof(tmp_val), _("%3d.%1d kg", "%3d.%d lb"), _(lb_to_kg_integer(wgt), wgt / 10), _(lb_to_kg_fraction(wgt), wgt % 10));
         prt(tmp_val, j + 1, wid - 9);
     }
 

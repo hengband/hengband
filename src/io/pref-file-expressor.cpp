@@ -5,6 +5,7 @@
 #include "realm/realm-names-table.h"
 #include "system/player-type-definition.h"
 #include "system/system-variables.h"
+#include "term/z-form.h"
 #include "util/string-processor.h"
 
 /*!
@@ -208,7 +209,7 @@ concptr process_pref_file_expr(PlayerType *player_ptr, char **sp, char *fp)
         v = realm_names[player_ptr->realm2];
 #endif
     } else if (streq(b + 1, "LEVEL")) {
-        sprintf(tmp, "%02d", player_ptr->lev);
+        strnfmt(tmp, sizeof(tmp), "%02d", player_ptr->lev);
         v = tmp;
     } else if (streq(b + 1, "AUTOREGISTER")) {
         if (player_ptr->autopick_autoregister) {
@@ -217,7 +218,7 @@ concptr process_pref_file_expr(PlayerType *player_ptr, char **sp, char *fp)
             v = "0";
         }
     } else if (streq(b + 1, "MONEY")) {
-        sprintf(tmp, "%09ld", (long int)player_ptr->au);
+        strnfmt(tmp, sizeof(tmp), "%09ld", (long int)player_ptr->au);
         v = tmp;
     }
 

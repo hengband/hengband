@@ -24,7 +24,9 @@
 #include "system/player-type-definition.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
+#include "term/z-form.h"
 #include "util/bit-flags-calculator.h"
+#include "util/string-processor.h"
 #include "view/display-messages.h"
 #include "world/world.h"
 
@@ -623,10 +625,10 @@ void display_monster_launching(PlayerType *player_ptr, lore_type *lore_ptr)
     }
 
     if (know_armour(lore_ptr->r_idx, lore_ptr->know_everything)) {
-        sprintf(lore_ptr->tmp_msg[lore_ptr->vn], _("威力 %dd%d の射撃をする", "fire an arrow (Power:%dd%d)"), lore_ptr->r_ptr->blow[p].d_dice,
+        strnfmt(lore_ptr->tmp_msg[lore_ptr->vn], sizeof(lore_ptr->tmp_msg[lore_ptr->vn]), _("威力 %dd%d の射撃をする", "fire an arrow (Power:%dd%d)"), lore_ptr->r_ptr->blow[p].d_dice,
             lore_ptr->r_ptr->blow[p].d_side);
     } else {
-        sprintf(lore_ptr->tmp_msg[lore_ptr->vn], _("射撃をする", "fire an arrow"));
+        angband_strcpy(lore_ptr->tmp_msg[lore_ptr->vn], _("射撃をする", "fire an arrow"), sizeof(lore_ptr->tmp_msg[lore_ptr->vn]));
     }
 
     lore_ptr->vp[lore_ptr->vn] = lore_ptr->tmp_msg[lore_ptr->vn];
