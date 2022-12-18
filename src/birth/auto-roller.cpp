@@ -13,6 +13,7 @@
 #include "system/player-type-definition.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
+#include "term/z-form.h"
 #include "util/int-char-converter.h"
 
 /*! オートローラの能力値的要求水準 / Autoroll limit */
@@ -161,29 +162,32 @@ static void decide_initial_stat(PlayerType *player_ptr, int *cval)
 
 /*!
  * @brief オートローラの設定能力値行を作成する
- * @param cur カーソル文字列を入れるバッファ
  * @param cval 設定能力値配列
  * @param cs カーソル位置(能力値番号)
+ * @return カーソル文字列
  */
-static void cursor_of_adjusted_stat(char *cur, int *cval, int cs)
+static std::string cursor_of_adjusted_stat(const int *cval, int cs)
 {
-    char inp[80], maxv[80];
     auto j = rp_ptr->r_adj[cs] + cp_ptr->c_adj[cs] + ap_ptr->a_adj[cs];
     auto m = adjust_stat(17, j);
+    char maxv[20];
     if (m > 18) {
-        sprintf(maxv, "18/%02d", (m - 18));
+        strnfmt(maxv, sizeof(maxv), "18/%02d", (m - 18));
     } else {
-        sprintf(maxv, "%2d", m);
+        strnfmt(maxv, sizeof(maxv), "%2d", m);
     }
 
     m = adjust_stat(cval[cs], j);
+    char inp[20];
     if (m > 18) {
-        sprintf(inp, "18/%02d", (m - 18));
+        strnfmt(inp, sizeof(inp), "18/%02d", (m - 18));
     } else {
-        sprintf(inp, "%2d", m);
+        strnfmt(inp, sizeof(inp), "%2d", m);
     }
 
-    sprintf(cur, "%6s       %2d   %+3d  %+3d  %+3d  =  %6s  %6s", stat_names[cs], cval[cs], rp_ptr->r_adj[cs], cp_ptr->c_adj[cs], ap_ptr->a_adj[cs], inp, maxv);
+    char cur[60];
+    strnfmt(cur, sizeof(cur), "%6s       %2d   %+3d  %+3d  %+3d  =  %6s  %6s", stat_names[cs], cval[cs], rp_ptr->r_adj[cs], cp_ptr->c_adj[cs], ap_ptr->a_adj[cs], inp, maxv);
+    return cur;
 }
 
 /*!
@@ -192,14 +196,16 @@ static void cursor_of_adjusted_stat(char *cur, int *cval, int cs)
  */
 static void display_autoroller_chance(int *cval)
 {
-    char buf[320];
+    concptr buf;
+    char work[60];
     autoroll_chance = get_autoroller_prob(cval);
     if (autoroll_chance == -999) {
-        sprintf(buf, _("確率: 不可能(合計86超)       ", "Prob: Impossible(>86 tot stats)"));
+        buf = _("確率: 不可能(合計86超)       ", "Prob: Impossible(>86 tot stats)");
     } else if (autoroll_chance < 1) {
-        sprintf(buf, _("確率: 非常に容易(1/10000以上)", "Prob: Quite Easy(>1/10000)     "));
+        buf = _("確率: 非常に容易(1/10000以上)", "Prob: Quite Easy(>1/10000)     ");
     } else {
-        sprintf(buf, _("確率: 約 1/%8d00             ", "Prob: ~ 1/%8d00                "), autoroll_chance);
+        strnfmt(work, sizeof(work), _("確率: 約 1/%8d00             ", "Prob: ~ 1/%8d00                "), autoroll_chance);
+        buf = work;
     }
     put_str(buf, 23, 25);
 }
@@ -218,15 +224,13 @@ bool get_stat_limits(PlayerType *player_ptr)
     int cval[A_MAX]{};
     decide_initial_stat(player_ptr, cval);
 
-    char buf[320];
-    char cur[160];
     for (int i = 0; i < A_MAX; i++) {
-        cursor_of_adjusted_stat(buf, cval, i);
-        put_str(buf, 14 + i, 10);
+        put_str(cursor_of_adjusted_stat(cval, i).data(), 14 + i, 10);
     }
 
     display_autoroller_chance(cval);
 
+    std::string cur;
     int cs = 0;
     int os = A_MAX;
     while (true) {
@@ -236,14 +240,14 @@ bool get_stat_limits(PlayerType *player_ptr)
             } else if (os == A_MAX) {
                 c_put_str(TERM_WHITE, _("決定する", "Accept"), 21, 35);
             } else if (os < A_MAX) {
-                c_put_str(TERM_WHITE, cur, 14 + os, 10);
+                c_put_str(TERM_WHITE, cur.data(), 14 + os, 10);
             }
 
             if (cs == A_MAX) {
                 c_put_str(TERM_YELLOW, _("決定する", "Accept"), 21, 35);
             } else {
-                cursor_of_adjusted_stat(cur, cval, cs);
-                c_put_str(TERM_YELLOW, cur, 14 + cs, 10);
+                cur = cursor_of_adjusted_stat(cval, cs);
+                c_put_str(TERM_YELLOW, cur.data(), 14 + cs, 10);
             }
 
             os = cs;
@@ -367,7 +371,6 @@ bool get_chara_limits(PlayerType *player_ptr, chara_limit_type *chara_limit_ptr)
 {
 #define MAXITEMS 8
 
-    char buf[80], cur[80];
     concptr itemname[] = { _("年齢", "age"), _("身長(インチ)", "height"), _("体重(ポンド)", "weight"), _("社会的地位", "social class") };
 
     clear_from(10);
@@ -442,14 +445,16 @@ bool get_chara_limits(PlayerType *player_ptr, chara_limit_type *chara_limit_ptr)
     }
 
     for (int i = 0; i < 4; i++) {
-        sprintf(buf, "%-12s (%3d - %3d)", itemname[i], mval[i * 2], mval[i * 2 + 1]);
+        char buf[40];
+        strnfmt(buf, sizeof(buf), "%-12s (%3d - %3d)", itemname[i], mval[i * 2], mval[i * 2 + 1]);
         put_str(buf, 14 + i, 20);
         for (int j = 0; j < 2; j++) {
-            sprintf(buf, "     %3d", cval[i * 2 + j]);
+            strnfmt(buf, sizeof(buf), "     %3d", cval[i * 2 + j]);
             put_str(buf, 14 + i, 45 + 8 * j);
         }
     }
 
+    char cur[40] = "";
     int cs = 0;
     int os = MAXITEMS;
     while (true) {
@@ -464,7 +469,7 @@ bool get_chara_limits(PlayerType *player_ptr, chara_limit_type *chara_limit_ptr)
             if (cs == MAXITEMS) {
                 c_put_str(TERM_YELLOW, accept, 19, 35);
             } else {
-                sprintf(cur, "     %3d", cval[cs]);
+                strnfmt(cur, sizeof(cur), "     %3d", cval[cs]);
                 c_put_str(TERM_YELLOW, cur, 14 + cs / 2, 45 + 8 * (cs % 2));
             }
 
