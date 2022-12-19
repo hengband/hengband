@@ -214,7 +214,7 @@ bool askfor(char *buf, int len, bool numpad_cursor)
  *
  * We clear the input, and return FALSE, on "ESCAPE".
  */
-bool get_string(concptr prompt, char *buf, int len)
+bool get_string(std::string_view prompt, char *buf, int len)
 {
     bool res;
     msg_print(nullptr);
@@ -231,7 +231,7 @@ bool get_string(concptr prompt, char *buf, int len)
  *
  * Note that "[y/n]" is appended to the prompt.
  */
-bool get_check(concptr prompt)
+bool get_check(std::string_view prompt)
 {
     return get_check_strict(p_ptr, prompt, 0);
 }
@@ -244,23 +244,22 @@ bool get_check(concptr prompt)
  * mode & CHECK_NO_HISTORY  : no message_add
  * mode & CHECK_DEFAULT_Y   : accept any key as y, except n and Esc.
  */
-bool get_check_strict(PlayerType *player_ptr, concptr prompt, BIT_FLAGS mode)
+bool get_check_strict(PlayerType *player_ptr, std::string_view prompt, BIT_FLAGS mode)
 {
-    char buf[80];
     if (!rogue_like_commands) {
         mode &= ~CHECK_OKAY_CANCEL;
     }
 
+    std::stringstream ss;
+    ss << prompt;
     if (mode & CHECK_OKAY_CANCEL) {
-        angband_strcpy(buf, prompt, sizeof(buf) - 15);
-        strcat(buf, "[(O)k/(C)ancel]");
+        ss << "[(O)k/(C)ancel]";
     } else if (mode & CHECK_DEFAULT_Y) {
-        angband_strcpy(buf, prompt, sizeof(buf) - 5);
-        strcat(buf, "[Y/n]");
+        ss << "[Y/n]";
     } else {
-        angband_strcpy(buf, prompt, sizeof(buf) - 5);
-        strcat(buf, "[y/n]");
+        ss << "[y/n]";
     }
+    const auto buf = ss.str();
 
     if (auto_more) {
         player_ptr->window_flags |= PW_MESSAGE;
@@ -325,7 +324,7 @@ bool get_check_strict(PlayerType *player_ptr, concptr prompt, BIT_FLAGS mode)
  *
  * Returns TRUE unless the character is "Escape"
  */
-bool get_com(concptr prompt, char *command, bool z_escape)
+bool get_com(std::string_view prompt, char *command, bool z_escape)
 {
     msg_print(nullptr);
     prt(prompt, 0, 0);
@@ -431,13 +430,13 @@ void pause_line(int row)
     prt("", row, 0);
 }
 
-bool get_value(const char *text, int min, int max, int *value)
+bool get_value(std::string_view prompt, int min, int max, int *value)
 {
     std::stringstream st;
     int val;
     char tmp_val[12] = "";
     std::to_chars(std::begin(tmp_val), std::end(tmp_val) - 1, *value);
-    st << text << "(" << min << "-" << max << "): ";
+    st << prompt << "(" << min << "-" << max << "): ";
     int digit = std::max(std::to_string(min).length(), std::to_string(max).length());
     while (true) {
         if (!get_string(st.str().data(), tmp_val, digit)) {
