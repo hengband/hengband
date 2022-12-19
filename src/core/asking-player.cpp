@@ -350,7 +350,7 @@ bool get_com(std::string_view prompt, char *command, bool z_escape)
  *
  * Hack -- allow "command_arg" to specify a quantity
  */
-QUANTITY get_quantity(concptr prompt, QUANTITY max)
+QUANTITY get_quantity(std::optional<std::string_view> prompt_opt, QUANTITY max)
 {
     // FIXME : QUANTITY、COMMAND_CODE、その他の型サイズがまちまちな変数とのやり取りが多数ある。この処理での数の入力を0からSHRT_MAXに制限することで不整合の発生を回避する。
     max = std::clamp<QUANTITY>(max, 0, SHRT_MAX);
@@ -384,7 +384,10 @@ QUANTITY get_quantity(concptr prompt, QUANTITY max)
         return amt;
     }
 
-    if (!prompt) {
+    std::string_view prompt;
+    if (prompt_opt.has_value()) {
+        prompt = prompt_opt.value();
+    } else {
         strnfmt(tmp, sizeof(tmp), _("いくつですか (1-%d): ", "Quantity (1-%d): "), max);
         prompt = tmp;
     }

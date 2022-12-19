@@ -231,7 +231,7 @@ void store_purchase(PlayerType *player_ptr, StoreSaleType store_num)
             msg_format(_("一つにつき $%ldです。", "That costs %ld gold per item."), (long)(best));
         }
 
-        amt = get_quantity(nullptr, o_ptr->number);
+        amt = get_quantity(std::nullopt, o_ptr->number);
         if (amt <= 0) {
             return;
         }
