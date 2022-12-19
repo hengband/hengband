@@ -332,31 +332,31 @@ static void display_first_page(PlayerType *player_ptr, int xthb, int *damage, in
     int xdig = player_ptr->skill_dig;
 
     auto sd = likert(xthn, 12);
-    display_player_one_line(ENTRY_SKILL_FIGHT, sd.first.data(), sd.second);
+    display_player_one_line(ENTRY_SKILL_FIGHT, sd.first, sd.second);
 
     sd = likert(xthb, 12);
-    display_player_one_line(ENTRY_SKILL_SHOOT, sd.first.data(), sd.second);
+    display_player_one_line(ENTRY_SKILL_SHOOT, sd.first, sd.second);
 
     sd = likert(xsav, 7);
-    display_player_one_line(ENTRY_SKILL_SAVING, sd.first.data(), sd.second);
+    display_player_one_line(ENTRY_SKILL_SAVING, sd.first, sd.second);
 
     sd = likert((xstl > 0) ? xstl : -1, 1);
-    display_player_one_line(ENTRY_SKILL_STEALTH, sd.first.data(), sd.second);
+    display_player_one_line(ENTRY_SKILL_STEALTH, sd.first, sd.second);
 
     sd = likert(xfos, 6);
-    display_player_one_line(ENTRY_SKILL_PERCEP, sd.first.data(), sd.second);
+    display_player_one_line(ENTRY_SKILL_PERCEP, sd.first, sd.second);
 
     sd = likert(xsrh, 6);
-    display_player_one_line(ENTRY_SKILL_SEARCH, sd.first.data(), sd.second);
+    display_player_one_line(ENTRY_SKILL_SEARCH, sd.first, sd.second);
 
     sd = likert(xdis, 8);
-    display_player_one_line(ENTRY_SKILL_DISARM, sd.first.data(), sd.second);
+    display_player_one_line(ENTRY_SKILL_DISARM, sd.first, sd.second);
 
     sd = likert(xdev, 6);
-    display_player_one_line(ENTRY_SKILL_DEVICE, sd.first.data(), sd.second);
+    display_player_one_line(ENTRY_SKILL_DEVICE, sd.first, sd.second);
 
     sd = likert(xdig, 4);
-    display_player_one_line(ENTRY_SKILL_DIG, sd.first.data(), sd.second);
+    display_player_one_line(ENTRY_SKILL_DIG, sd.first, sd.second);
 
     if (!muta_att) {
         display_player_one_line(ENTRY_BLOWS, format("%d+%d", blows1, blows2), TERM_L_BLUE);
