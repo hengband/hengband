@@ -486,9 +486,7 @@ static std::string describe_player_inscription(const ItemEntity &item)
         return "";
     }
 
-    char insc[1024]{};
-    get_inscription(insc, &item);
-    return insc;
+    return get_inscription(item);
 }
 
 static std::string describe_item_discount(const ItemEntity &item, bool hide_discount)

@@ -22,19 +22,6 @@ static bool has_dark_flag(const TrFlags &flags)
 }
 
 /*!
- * @brief オブジェクトフラグを追加する
- * @param short_flavor フラグの短縮表現 (反魔法/アンチテレポの"["、耐性の"r"、耐混乱の"乱" 等)
- * @param ptr 特性短縮表記を格納する文字列ポインタ
- *
- * @todo バッファサイズが不明なのでとりあえず16バイト決め打ちで angband_strcpy を呼び出している。
- * get_ability_abbrev のインターフェースを std::string を返すように変更するときに合わせて修正すること。
- */
-static void add_inscription(char **short_flavor, concptr str)
-{
-    *short_flavor += angband_strcpy(*short_flavor, str, 16);
-}
-
-/*!
  * @brief get_inscriptionのサブセットとしてアイテムの特性フラグを表す文字列を返す
  * @param fi_vec 参照する特性表示記号テーブル
  * @param flgs 対応するアイテムの特性フラグ
@@ -229,69 +216,69 @@ std::string get_ability_abbreviation(const ItemEntity &item, bool is_kanji, bool
  * @param buff 特性短縮表記を格納する文字列ポインタ
  * @param o_ptr 特性短縮表記を得たいオブジェクト構造体の参照ポインタ
  */
-void get_inscription(char *buff, const ItemEntity *o_ptr)
+std::string get_inscription(const ItemEntity &item)
 {
-    concptr insc = quark_str(o_ptr->inscription);
-    char *ptr = buff;
-    if (!o_ptr->is_fully_known()) {
-        while (*insc) {
-            if (*insc == '#') {
+    const auto insc = quark_str(item.inscription);
+    std::stringstream ss;
+
+    if (!item.is_fully_known()) {
+        for (std::string_view sv = insc; !sv.empty(); sv.remove_prefix(1)) {
+            if (sv.front() == '#') {
                 break;
             }
-            if (buff > ptr + MAX_INSCRIPTION - 1) {
+            if (ss.tellp() > MAX_INSCRIPTION - 1) {
                 break;
             }
 #ifdef JP
-            if (iskanji(*insc)) {
-                *buff++ = *insc++;
+            if (iskanji(sv.front())) {
+                ss << sv.front();
+                sv.remove_prefix(1);
             }
 #endif
-            *buff++ = *insc++;
+            ss << sv.front();
         }
 
-        *buff = '\0';
-        return;
+        return ss.str();
     }
 
-    *buff = '\0';
-    for (; *insc; insc++) {
-        if (*insc == '#') {
-            break;
-        } else if ('%' == *insc) {
-            bool kanji = false;
-            bool all;
-            concptr start = ptr;
-            if (ptr >= buff + MAX_NLEN) {
-                continue;
+    for (std::string_view sv = insc; !sv.empty(); sv.remove_prefix(1)) {
+        switch (sv.front()) {
+        case '#':
+            return ss.str();
+        case '%': {
+            const auto start_pos = ss.tellp();
+            if (start_pos >= MAX_NLEN) {
+                break;
             }
 
+            auto is_kanji = false;
 #ifdef JP
-            if ('%' == insc[1]) {
-                insc++;
-                kanji = false;
+            if ((sv.size() > 1) && ('%' == sv[1])) {
+                sv.remove_prefix(1);
             } else {
-                kanji = true;
+                is_kanji = true;
             }
 #endif
 
-            if ('a' == insc[1] && 'l' == insc[2] && 'l' == insc[3]) {
+            auto all = false;
+            if (sv.substr(1, 3) == "all") {
                 all = true;
-                insc += 3;
-            } else {
-                all = false;
+                sv.remove_prefix(3);
             }
 
-            const auto ability_abbrev = get_ability_abbreviation(*o_ptr, kanji, all);
-            ptr += angband_strcpy(ptr, ability_abbrev.data(), ability_abbrev.size());
-            if (ptr == start) {
-                add_inscription(&ptr, " ");
+            ss << get_ability_abbreviation(item, is_kanji, all);
+            if (ss.tellp() == start_pos) {
+                ss << ' ';
             }
-        } else {
-            *ptr++ = *insc;
+            break;
+        }
+        default:
+            ss << sv.front();
+            break;
         }
     }
 
-    *ptr = '\0';
+    return ss.str();
 }
 
 #ifdef JP
