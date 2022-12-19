@@ -8,6 +8,7 @@
 #include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
 #include "util/string-processor.h"
+#include <sstream>
 
 /*!
  * @brief ダイス目を文字列に変換する
@@ -16,36 +17,34 @@
  * @param dice_side ダイス面
  * @param dice_mult ダイス倍率
  * @param dice_div ダイス除数
- * @param msg 文字列を格納するポインタ
+ * @return std::string サイコロ式の印刷可能なバージョン
  */
-void dice_to_string(int base_damage, int dice_num, int dice_side, int dice_mult, int dice_div, char *msg)
+std::string dice_to_string(int base_damage, int dice_num, int dice_side, int dice_mult, int dice_div)
 {
-    char base[80] = "", dice[80] = "", mult[80] = "";
-
     if (dice_num == 0) {
-        sprintf(msg, "%d", base_damage);
-        return;
+        return std::to_string(base_damage);
     }
 
+    std::stringstream ss;
     if (base_damage != 0) {
-        strnfmt(base, sizeof(base), "%d+", base_damage);
+        ss << base_damage << '+';
     }
 
-    if (dice_num == 1) {
-        strnfmt(dice, sizeof(dice), "d%d", dice_side);
-    } else {
-        strnfmt(dice, sizeof(dice), "%dd%d", dice_num, dice_side);
+    if (dice_num != 1) {
+        ss << dice_num;
     }
+    ss << 'd' << dice_side;
 
     if (dice_mult != 1 || dice_div != 1) {
+        ss << '*';
         if (dice_div == 1) {
-            strnfmt(mult, sizeof(mult), "*%d", dice_mult);
+            ss << dice_mult;
         } else {
-            strnfmt(mult, sizeof(mult), "*(%d/%d)", dice_mult, dice_div);
+            ss << '(' << dice_mult << '/' << dice_div << ')';
         }
     }
 
-    sprintf(msg, "%s%s%s", base, dice, mult);
+    return ss.str();
 }
 
 /*!
@@ -139,10 +138,7 @@ void set_damage(PlayerType *player_ptr, lore_type *lore_ptr, MonsterAbilityType 
     int dice_side = monspell_race_damage(player_ptr, ms_type, r_idx, DICE_SIDE);
     int dice_mult = monspell_race_damage(player_ptr, ms_type, r_idx, DICE_MULT);
     int dice_div = monspell_race_damage(player_ptr, ms_type, r_idx, DICE_DIV);
-    char dmg_str[80] = "(";
-    dice_to_string(base_damage, dice_num, dice_side, dice_mult, dice_div, dmg_str + 1);
-    angband_strcat(dmg_str, ")", sizeof(dmg_str));
-    strnfmt(tmp, tmpsz, msg, dmg_str);
+    strnfmt(tmp, tmpsz, msg, std::string("(").append(dice_to_string(base_damage, dice_num, dice_side, dice_mult, dice_div)).append(")").data());
 }
 
 void set_drop_flags(lore_type *lore_ptr)
