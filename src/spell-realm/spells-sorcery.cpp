@@ -39,7 +39,7 @@ bool alchemy(PlayerType *player_ptr)
 
     int amt = 1;
     if (o_ptr->number > 1) {
-        amt = get_quantity(nullptr, o_ptr->number);
+        amt = get_quantity(std::nullopt, o_ptr->number);
         if (amt <= 0) {
             return false;
         }

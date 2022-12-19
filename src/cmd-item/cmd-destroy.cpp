@@ -110,7 +110,7 @@ static bool select_destroying_item(PlayerType *player_ptr, destroy_type *destroy
         return true;
     }
 
-    destroy_ptr->amt = get_quantity(nullptr, destroy_ptr->o_ptr->number);
+    destroy_ptr->amt = get_quantity(std::nullopt, destroy_ptr->o_ptr->number);
     return destroy_ptr->amt > 0;
 }
 

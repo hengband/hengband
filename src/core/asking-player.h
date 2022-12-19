@@ -1,6 +1,7 @@
 ﻿#pragma once
 
 #include "system/angband.h"
+#include <optional>
 #include <string_view>
 
 /*
@@ -17,6 +18,6 @@ bool get_string(std::string_view prompt, char *buf, int len);
 bool get_check(std::string_view prompt);
 bool get_check_strict(PlayerType *player_ptr, std::string_view prompt, BIT_FLAGS mode);
 bool get_com(std::string_view prompt, char *command, bool z_escape);
-QUANTITY get_quantity(concptr prompt, QUANTITY max);
+QUANTITY get_quantity(std::optional<std::string_view> prompt_opt, QUANTITY max);
 void pause_line(int row);
 bool get_value(std::string_view prompt, int min, int max, int *value);
