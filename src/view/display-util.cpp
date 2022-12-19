@@ -1,5 +1,6 @@
 ﻿#include "view/display-util.h"
 #include "term/term-color-types.h"
+#include <string>
 #include <vector>
 
 namespace {
