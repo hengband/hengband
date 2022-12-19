@@ -66,7 +66,7 @@ const std::vector<disp_player_line> disp_player_lines = {
  * @param val 値を保管した文字列ポインタ
  * @param attr 項目表示の色
  */
-void display_player_one_line(int entry, concptr val, TERM_COLOR attr)
+void display_player_one_line(int entry, std::string_view val, TERM_COLOR attr)
 {
     auto head = disp_player_lines[entry].header;
     auto head_len = strlen(head);
@@ -75,17 +75,16 @@ void display_player_one_line(int entry, concptr val, TERM_COLOR attr)
     auto len = disp_player_lines[entry].len;
     term_putstr(col, row, -1, TERM_WHITE, head);
 
-    if (!val) {
-        return;
-    }
-
     if (len <= 0) {
         term_putstr(col + head_len, row, -1, attr, val);
         return;
     }
 
     int val_len = len - head_len;
-    char buf[40];
-    sprintf(buf, "%*.*s", val_len, val_len, val);
-    term_putstr(col + head_len, row, -1, attr, buf);
+    std::string str;
+    if (val_len > static_cast<int>(val.length())) {
+        str.append(val_len - val.length(), ' ');
+    }
+    str.append(val);
+    term_putstr(col + head_len, row, -1, attr, str);
 }

@@ -321,7 +321,7 @@ std::optional<int> display_player(PlayerType *player_ptr, const int tmp_mode)
     display_player_basic_info(player_ptr);
     display_magic_realms(player_ptr);
     if (PlayerClass(player_ptr).equals(PlayerClassType::CHAOS_WARRIOR) || (player_ptr->muta.has(PlayerMutationType::CHAOS_GIFT))) {
-        display_player_one_line(ENTRY_PATRON, patron_list[player_ptr->chaos_patron].name.data(), TERM_L_BLUE);
+        display_player_one_line(ENTRY_PATRON, patron_list[player_ptr->chaos_patron].name, TERM_L_BLUE);
     }
 
     display_phisique(player_ptr);
