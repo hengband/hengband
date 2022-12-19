@@ -17,6 +17,6 @@ void c_put_str(TERM_COLOR attr, std::string_view sv, TERM_LEN row, TERM_LEN col)
 void put_str(std::string_view sv, TERM_LEN row, TERM_LEN col);
 void c_prt(TERM_COLOR attr, std::string_view sv, TERM_LEN row, TERM_LEN col);
 void prt(std::string_view sv, TERM_LEN row, TERM_LEN col);
-void c_roff(TERM_COLOR attr, concptr str);
-void roff(concptr str);
+void c_roff(TERM_COLOR attr, std::string_view str);
+void roff(std::string_view str);
 void clear_from(int row);

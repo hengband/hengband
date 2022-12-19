@@ -13,6 +13,7 @@
 #include "system/angband.h"
 #include "util/flag-group.h"
 #include <string>
+#include <string_view>
 #include <unordered_map>
 
 enum class MonsterRaceId : int16_t;
@@ -80,11 +81,11 @@ enum monster_lore_mode {
     MONSTER_LORE_DEBUG
 };
 
-typedef void (*hook_c_roff_pf)(TERM_COLOR attr, concptr str);
+using hook_c_roff_pf = void (*)(TERM_COLOR attr, std::string_view str);
 extern hook_c_roff_pf hook_c_roff;
 
 lore_type *initialize_lore_type(lore_type *lore_ptr, MonsterRaceId r_idx, monster_lore_mode mode);
-void hooked_roff(concptr str);
+void hooked_roff(std::string_view str);
 
 enum WHO_WORD_TYPE { WHO = 0,
     WHOSE = 1,

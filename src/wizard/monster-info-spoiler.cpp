@@ -159,10 +159,10 @@ SpoilerOutputResultType spoil_mon_desc(concptr fname, std::function<bool(const M
  * @param attr 未使用
  * @param str 文字列参照ポインタ
  */
-static void roff_func(TERM_COLOR attr, concptr str)
+static void roff_func(TERM_COLOR attr, std::string_view str)
 {
     (void)attr;
-    spoil_out(str);
+    spoil_out(str.data());
 }
 
 /*!
