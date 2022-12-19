@@ -13,7 +13,6 @@
 #include "util/angband-files.h"
 #include "view/display-messages.h"
 #include "wizard/spoiler-util.h"
-
 #include <algorithm>
 
 /*!
@@ -27,7 +26,8 @@
  * @param value 価値を返すバッファ参照ポインタ
  * @param bi_id ベースアイテムID
  */
-static void describe_baseitem_info(PlayerType *player_ptr, char *name, std::string *damage_desc, std::string *weight_desc, std::string *chance_desc, DEPTH *level, PRICE *value, short bi_id)
+static void describe_baseitem_info(PlayerType *player_ptr,
+    char *name, std::string *damage_desc, std::string *weight_desc, std::string *chance_desc, DEPTH *level_desc, PRICE *value, short bi_id)
 {
     ItemEntity forge;
     auto *q_ptr = &forge;
@@ -37,7 +37,7 @@ static void describe_baseitem_info(PlayerType *player_ptr, char *name, std::stri
     q_ptr->to_a = 0;
     q_ptr->to_h = 0;
     q_ptr->to_d = 0;
-    *level = baseitems_info[q_ptr->bi_id].level;
+    *level_desc = baseitems_info[q_ptr->bi_id].level;
     *value = q_ptr->get_price();
     if (!name || !damage_desc || !chance_desc || !weight_desc) {
         return;
