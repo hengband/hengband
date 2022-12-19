@@ -5,6 +5,7 @@
 #include <algorithm>
 #include <bitset>
 #include <string>
+#include <string_view>
 
 extern FILE *loading_savefile;
 extern uint32_t loading_savefile_version;
@@ -13,7 +14,7 @@ extern uint32_t v_check;
 extern uint32_t x_check;
 extern byte kanji_code;
 
-void load_note(concptr msg);
+void load_note(std::string_view msg);
 byte sf_get(void);
 bool rd_bool();
 byte rd_byte();

@@ -64,7 +64,7 @@ lore_type *initialize_lore_type(lore_type *lore_ptr, MonsterRaceId r_idx, monste
  * @brief モンスターの思い出メッセージをあらかじめ指定された関数ポインタに基づき出力する
  * @param str 出力文字列
  */
-void hooked_roff(concptr str)
+void hooked_roff(std::string_view str)
 {
     hook_c_roff(TERM_WHITE, str);
 }

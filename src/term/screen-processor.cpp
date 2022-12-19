@@ -123,7 +123,7 @@ void prt(std::string_view sv, TERM_LEN row, TERM_LEN col)
  * This function will correctly handle any width up to the maximum legal
  * value of 256, though it works best for a standard 80 character width.
  */
-void c_roff(TERM_COLOR a, concptr str)
+void c_roff(TERM_COLOR a, std::string_view str)
 {
     int w, h;
     (void)term_get_size(&w, &h);
@@ -135,7 +135,7 @@ void c_roff(TERM_COLOR a, concptr str)
         return;
     }
 
-    for (concptr s = str; *s; s++) {
+    for (auto s = str.begin(); s != str.end(); s++) {
         char ch;
 #ifdef JP
         int k_flag = iskanji(*s);
@@ -250,7 +250,7 @@ void c_roff(TERM_COLOR a, concptr str)
 /*
  * As above, but in "white"
  */
-void roff(concptr str)
+void roff(std::string_view str)
 {
     /* Spawn */
     c_roff(TERM_WHITE, str);

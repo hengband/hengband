@@ -116,7 +116,7 @@ void display_roff(PlayerType *player_ptr)
  * @param roff_func 出力処理を行う関数ポインタ
  * @todo ここのroff_funcの引数にFILE* を追加しないとspoiler_file をローカル関数化することができないと判明した、保留.
  */
-void output_monster_spoiler(MonsterRaceId r_idx, void (*roff_func)(TERM_COLOR attr, concptr str))
+void output_monster_spoiler(MonsterRaceId r_idx, hook_c_roff_pf roff_func)
 {
     hook_c_roff = roff_func;
     PlayerType dummy;
