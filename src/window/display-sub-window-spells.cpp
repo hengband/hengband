@@ -150,7 +150,8 @@ static void display_spell_list(PlayerType *player_ptr)
                 s_ptr = &mp_ptr->info[((j < 1) ? player_ptr->realm1 : player_ptr->realm2) - 1][i % 32];
             }
 
-            strcpy(name, exe_spell(player_ptr, (j < 1) ? player_ptr->realm1 : player_ptr->realm2, i % 32, SpellProcessType::NAME));
+            const auto spell_name = exe_spell(player_ptr, (j < 1) ? player_ptr->realm1 : player_ptr->realm2, i % 32, SpellProcessType::NAME);
+            strcpy(name, spell_name->data());
 
             if (s_ptr->slevel >= 99) {
                 strcpy(name, _("(判読不能)", "(illegible)"));

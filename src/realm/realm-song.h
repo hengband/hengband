@@ -4,4 +4,4 @@
 #include "system/angband.h"
 
 class PlayerType;
-concptr do_music_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessType mode);
+std::optional<std::string> do_music_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessType mode);

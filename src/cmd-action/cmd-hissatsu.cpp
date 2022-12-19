@@ -243,7 +243,8 @@ static int get_hissatsu_power(PlayerType *player_ptr, SPELL_IDX *sn)
                     }
 
                     /* Dump the spell --(-- */
-                    strcat(psi_desc, format(" %-18s%2d %3d", exe_spell(player_ptr, REALM_HISSATSU, i, SpellProcessType::NAME), spell.slevel, spell.smana));
+                    const auto spell_name = exe_spell(player_ptr, REALM_HISSATSU, i, SpellProcessType::NAME);
+                    strcat(psi_desc, format(" %-18s%2d %3d", spell_name->data(), spell.slevel, spell.smana));
                     prt(psi_desc, y + (line % 17) + (line >= 17), x + (line / 17) * 30);
                     prt("", y + (line % 17) + (line >= 17) + 1, x + (line / 17) * 30);
                 }
@@ -403,7 +404,8 @@ void do_cmd_gain_hissatsu(PlayerType *player_ptr)
 
         player_ptr->spell_learned1 |= (1UL << i);
         player_ptr->spell_worked1 |= (1UL << i);
-        msg_format(_("%sの技を覚えた。", "You have learned the special attack of %s."), exe_spell(player_ptr, REALM_HISSATSU, i, SpellProcessType::NAME));
+        const auto spell_name = exe_spell(player_ptr, REALM_HISSATSU, i, SpellProcessType::NAME);
+        msg_format(_("%sの技を覚えた。", "You have learned the special attack of %s."), spell_name->data());
         int j;
         for (j = 0; j < 64; j++) {
             /* Stop at the first empty space */

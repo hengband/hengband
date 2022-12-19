@@ -2,6 +2,8 @@
 
 #include "spell/spells-util.h"
 #include "system/angband.h"
+#include <optional>
+#include <string>
 
 class PlayerType;
-concptr do_sorcery_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessType mode);
+std::optional<std::string> do_sorcery_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessType mode);

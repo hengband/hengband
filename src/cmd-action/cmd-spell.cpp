@@ -670,7 +670,8 @@ void do_cmd_browse(PlayerType *player_ptr)
         term_erase(14, 12, 255);
         term_erase(14, 11, 255);
 
-        shape_buffer(exe_spell(player_ptr, use_realm, spell, SpellProcessType::DESCRIPTION), 62, temp, sizeof(temp));
+        const auto spell_desc = exe_spell(player_ptr, use_realm, spell, SpellProcessType::DESCRIPTION);
+        shape_buffer(spell_desc->data(), 62, temp, sizeof(temp));
 
         for (j = 0, line = 11; temp[j]; j += 1 + strlen(&temp[j])) {
             prt(&temp[j], line, 15);
@@ -855,16 +856,16 @@ void do_cmd_study(PlayerType *player_ptr)
     if (learned) {
         auto max_exp = PlayerSkill::spell_exp_at((spell < 32) ? PlayerSkillRank::MASTER : PlayerSkillRank::EXPERT);
         int old_exp = player_ptr->spell_exp[spell];
-        concptr name = exe_spell(player_ptr, increment ? player_ptr->realm2 : player_ptr->realm1, spell % 32, SpellProcessType::NAME);
+        const auto spell_name = exe_spell(player_ptr, increment ? player_ptr->realm2 : player_ptr->realm1, spell % 32, SpellProcessType::NAME);
 
         if (old_exp >= max_exp) {
             msg_format(_("その%sは完全に使いこなせるので学ぶ必要はない。", "You don't need to study this %s anymore."), p);
             return;
         }
 #ifdef JP
-        if (!get_check(format("%sの%sをさらに学びます。よろしいですか？", name, p)))
+        if (!get_check(format("%sの%sをさらに学びます。よろしいですか？", spell_name->data(), p)))
 #else
-        if (!get_check(format("You will study a %s of %s again. Are you sure? ", p, name)))
+        if (!get_check(format("You will study a %s of %s again. Are you sure? ", p, spell_name->data())))
 #endif
         {
             return;
@@ -872,7 +873,7 @@ void do_cmd_study(PlayerType *player_ptr)
 
         auto new_rank = PlayerSkill(player_ptr).gain_spell_skill_exp_over_learning(spell);
         auto new_rank_str = PlayerSkill::skill_rank_str(new_rank);
-        msg_format(_("%sの熟練度が%sに上がった。", "Your proficiency of %s is now %s rank."), name, new_rank_str);
+        msg_format(_("%sの熟練度が%sに上がった。", "Your proficiency of %s is now %s rank."), spell_name->data(), new_rank_str);
     } else {
         /* Find the next open entry in "player_ptr->spell_order[]" */
         int i;
@@ -887,15 +888,16 @@ void do_cmd_study(PlayerType *player_ptr)
         player_ptr->spell_order[i++] = spell;
 
         /* Mention the result */
+        const auto spell_name = exe_spell(player_ptr, increment ? player_ptr->realm2 : player_ptr->realm1, spell % 32, SpellProcessType::NAME);
 #ifdef JP
         /* 英日切り替え機能に対応 */
         if (mp_ptr->spell_book == ItemKindType::MUSIC_BOOK) {
-            msg_format("%sを学んだ。", exe_spell(player_ptr, increment ? player_ptr->realm2 : player_ptr->realm1, spell % 32, SpellProcessType::NAME));
+            msg_format("%sを学んだ。", spell_name->data());
         } else {
-            msg_format("%sの%sを学んだ。", exe_spell(player_ptr, increment ? player_ptr->realm2 : player_ptr->realm1, spell % 32, SpellProcessType::NAME), p);
+            msg_format("%sの%sを学んだ。", spell_name->data(), p);
         }
 #else
-        msg_format("You have learned the %s of %s.", p, exe_spell(player_ptr, increment ? player_ptr->realm2 : player_ptr->realm1, spell % 32, SpellProcessType::NAME));
+        msg_format("You have learned the %s of %s.", p, spell_name->data());
 #endif
     }
 

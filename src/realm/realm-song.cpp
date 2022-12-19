@@ -54,9 +54,9 @@ static void start_singing(PlayerType *player_ptr, SPELL_IDX spell, int32_t song)
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param spell 歌ID
  * @param mode 処理内容 (SpellProcessType::NAME / SPELL_DESC / SpellProcessType::INFO / SpellProcessType::CAST / SpellProcessType::FAIL / SPELL_CONT / SpellProcessType::STOP)
- * @return SpellProcessType::NAME / SPELL_DESC / SpellProcessType::INFO 時には文字列ポインタを返す。SpellProcessType::CAST / SpellProcessType::FAIL / SPELL_CONT / SpellProcessType::STOP 時はnullptr文字列を返す。
+ * @return SpellProcessType::NAME / SPELL_DESC / SpellProcessType::INFO 時には文字列を返す。SpellProcessType::CAST / SpellProcessType::FAIL / SPELL_CONT / SpellProcessType::STOP 時は std::nullopt を返す。
  */
-concptr do_music_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessType mode)
+std::optional<std::string> do_music_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessType mode)
 {
     bool name = mode == SpellProcessType::NAME;
     bool desc = mode == SpellProcessType::DESCRIPTION;
@@ -150,7 +150,7 @@ concptr do_music_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessType
 
             if (cast) {
                 if (!get_aim_dir(player_ptr, &dir)) {
-                    return nullptr;
+                    return std::nullopt;
                 }
 
                 fire_bolt(player_ptr, AttributeType::SOUND, dir, damroll(dice, sides));
@@ -820,7 +820,7 @@ concptr do_music_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessType
 
             if (cast) {
                 if (!get_aim_dir(player_ptr, &dir)) {
-                    return nullptr;
+                    return std::nullopt;
                 }
 
                 fire_beam(player_ptr, AttributeType::SOUND, dir, damroll(dice, sides));
@@ -1067,7 +1067,7 @@ concptr do_music_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessType
 
             if (cast) {
                 if (!get_aim_dir(player_ptr, &dir)) {
-                    return nullptr;
+                    return std::nullopt;
                 }
 
                 fire_ball(player_ptr, AttributeType::SOUND, dir, damroll(dice, sides), rad);
