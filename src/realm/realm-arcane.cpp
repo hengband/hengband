@@ -30,9 +30,9 @@
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param spell 魔法ID
  * @param mode 処理内容 (SpellProcessType::NAME / SPELL_DESC / SpellProcessType::INFO / SpellProcessType::CAST)
- * @return SpellProcessType::NAME / SPELL_DESC / SpellProcessType::INFO 時には文字列ポインタを返す。SpellProcessType::CAST時はnullptr文字列を返す。
+ * @return SpellProcessType::NAME / SPELL_DESC / SpellProcessType::INFO 時には文字列を返す。SpellProcessType::CAST時は std::nullopt を返す。
  */
-concptr do_arcane_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessType mode)
+std::optional<std::string> do_arcane_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessType mode)
 {
     bool name = mode == SpellProcessType::NAME;
     bool desc = mode == SpellProcessType::DESCRIPTION;
@@ -61,7 +61,7 @@ concptr do_arcane_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessTyp
 
             if (cast) {
                 if (!get_aim_dir(player_ptr, &dir)) {
-                    return nullptr;
+                    return std::nullopt;
                 }
 
                 fire_bolt_or_beam(player_ptr, beam_chance(player_ptr) - 10, AttributeType::ELEC, dir, damroll(dice, sides));
@@ -80,7 +80,7 @@ concptr do_arcane_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessTyp
         {
             if (cast) {
                 if (!get_aim_dir(player_ptr, &dir)) {
-                    return nullptr;
+                    return std::nullopt;
                 }
 
                 wizard_lock(player_ptr, dir);
@@ -185,7 +185,7 @@ concptr do_arcane_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessTyp
         {
             if (cast) {
                 if (!get_aim_dir(player_ptr, &dir)) {
-                    return nullptr;
+                    return std::nullopt;
                 }
 
                 destroy_door(player_ptr, dir);
@@ -472,7 +472,7 @@ concptr do_arcane_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessTyp
         {
             if (cast) {
                 if (!ident_spell(player_ptr, false)) {
-                    return nullptr;
+                    return std::nullopt;
                 }
             }
         }
@@ -497,7 +497,7 @@ concptr do_arcane_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessTyp
 
             if (cast) {
                 if (!get_aim_dir(player_ptr, &dir)) {
-                    return nullptr;
+                    return std::nullopt;
                 }
 
                 wall_to_mud(player_ptr, dir, 20 + randint1(30));
@@ -523,7 +523,7 @@ concptr do_arcane_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessTyp
 
             if (cast) {
                 if (!get_aim_dir(player_ptr, &dir)) {
-                    return nullptr;
+                    return std::nullopt;
                 }
 
                 msg_print(_("光線が放たれた。", "A line of light appears."));
@@ -595,7 +595,7 @@ concptr do_arcane_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessTyp
         {
             if (cast) {
                 if (!get_check(_("本当に他の階にテレポートしますか？", "Are you sure? (Teleport Level)"))) {
-                    return nullptr;
+                    return std::nullopt;
                 }
                 teleport_level(player_ptr, 0);
             }
@@ -619,7 +619,7 @@ concptr do_arcane_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessTyp
 
             if (cast) {
                 if (!get_aim_dir(player_ptr, &dir)) {
-                    return nullptr;
+                    return std::nullopt;
                 }
 
                 fire_beam(player_ptr, AttributeType::AWAY_ALL, dir, power);
@@ -647,7 +647,7 @@ concptr do_arcane_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessTyp
                 AttributeType type;
 
                 if (!get_aim_dir(player_ptr, &dir)) {
-                    return nullptr;
+                    return std::nullopt;
                 }
 
                 switch (randint1(4)) {
@@ -711,7 +711,7 @@ concptr do_arcane_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessTyp
 
             if (cast) {
                 if (!recall_player(player_ptr, randint0(21) + 15)) {
-                    return nullptr;
+                    return std::nullopt;
                 }
             }
         }

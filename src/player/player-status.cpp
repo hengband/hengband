@@ -606,10 +606,11 @@ static void update_num_of_spells(PlayerType *player_ptr)
             which = player_ptr->realm2;
         }
 
+        const auto spell_name = exe_spell(player_ptr, which, j % 32, SpellProcessType::NAME);
 #ifdef JP
-        msg_format("%sの%sを忘れてしまった。", exe_spell(player_ptr, which, j % 32, SpellProcessType::NAME), p);
+        msg_format("%sの%sを忘れてしまった。", spell_name->data(), p);
 #else
-        msg_format("You have forgotten the %s of %s.", p, exe_spell(player_ptr, which, j % 32, SpellProcessType::NAME));
+        msg_format("You have forgotten the %s of %s.", p, spell_name->data());
 #endif
         player_ptr->new_spells++;
     }
@@ -650,10 +651,11 @@ static void update_num_of_spells(PlayerType *player_ptr)
             which = player_ptr->realm2;
         }
 
+        const auto spell_name = exe_spell(player_ptr, which, j % 32, SpellProcessType::NAME);
 #ifdef JP
-        msg_format("%sの%sを忘れてしまった。", exe_spell(player_ptr, which, j % 32, SpellProcessType::NAME), p);
+        msg_format("%sの%sを忘れてしまった。", spell_name->data(), p);
 #else
-        msg_format("You have forgotten the %s of %s.", p, exe_spell(player_ptr, which, j % 32, SpellProcessType::NAME));
+        msg_format("You have forgotten the %s of %s.", p, spell_name->data());
 #endif
         player_ptr->new_spells++;
     }
@@ -710,10 +712,11 @@ static void update_num_of_spells(PlayerType *player_ptr)
             which = player_ptr->realm2;
         }
 
+        const auto spell_name = exe_spell(player_ptr, which, j % 32, SpellProcessType::NAME);
 #ifdef JP
-        msg_format("%sの%sを思い出した。", exe_spell(player_ptr, which, j % 32, SpellProcessType::NAME), p);
+        msg_format("%sの%sを思い出した。", spell_name->data(), p);
 #else
-        msg_format("You have remembered the %s of %s.", p, exe_spell(player_ptr, which, j % 32, SpellProcessType::NAME));
+        msg_format("You have remembered the %s of %s.", p, spell_name->data());
 #endif
         player_ptr->new_spells--;
     }

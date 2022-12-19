@@ -30,9 +30,9 @@
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param spell 魔法ID
  * @param mode 処理内容 (SpellProcessType::NAME / SPELL_DESC / SpellProcessType::INFO / SpellProcessType::CAST)
- * @return SpellProcessType::NAME / SPELL_DESC / SpellProcessType::INFO 時には文字列ポインタを返す。SpellProcessType::CAST時はnullptr文字列を返す。
+ * @return SpellProcessType::NAME / SPELL_DESC / SpellProcessType::INFO 時には文字列を返す。SpellProcessType::CAST時は std::nullopt を返す。
  */
-concptr do_chaos_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessType mode)
+std::optional<std::string> do_chaos_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessType mode)
 {
     bool name = mode == SpellProcessType::NAME;
     bool desc = mode == SpellProcessType::DESCRIPTION;
@@ -61,7 +61,7 @@ concptr do_chaos_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessType
 
             if (cast) {
                 if (!get_aim_dir(player_ptr, &dir)) {
-                    return nullptr;
+                    return std::nullopt;
                 }
 
                 fire_bolt_or_beam(player_ptr, beam_chance(player_ptr) - 10, AttributeType::MISSILE, dir, damroll(dice, sides));
@@ -158,7 +158,7 @@ concptr do_chaos_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessType
 
             if (cast) {
                 if (!get_aim_dir(player_ptr, &dir)) {
-                    return nullptr;
+                    return std::nullopt;
                 }
 
                 fire_ball(player_ptr, AttributeType::MISSILE, dir, damroll(dice, sides) + base, rad);
@@ -190,7 +190,7 @@ concptr do_chaos_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessType
 
             if (cast) {
                 if (!get_aim_dir(player_ptr, &dir)) {
-                    return nullptr;
+                    return std::nullopt;
                 }
 
                 fire_bolt_or_beam(player_ptr, beam_chance(player_ptr), AttributeType::FIRE, dir, damroll(dice, sides));
@@ -216,7 +216,7 @@ concptr do_chaos_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessType
 
             if (cast) {
                 if (!get_aim_dir(player_ptr, &dir)) {
-                    return nullptr;
+                    return std::nullopt;
                 }
 
                 fire_ball(player_ptr, AttributeType::DISINTEGRATE, dir, damroll(dice, sides), 0);
@@ -261,7 +261,7 @@ concptr do_chaos_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessType
             if (cast) {
 
                 if (!get_aim_dir(player_ptr, &dir)) {
-                    return nullptr;
+                    return std::nullopt;
                 }
 
                 cast_wonder(player_ptr, dir);
@@ -287,7 +287,7 @@ concptr do_chaos_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessType
 
             if (cast) {
                 if (!get_aim_dir(player_ptr, &dir)) {
-                    return nullptr;
+                    return std::nullopt;
                 }
 
                 fire_bolt_or_beam(player_ptr, beam_chance(player_ptr), AttributeType::CHAOS, dir, damroll(dice, sides));
@@ -336,7 +336,7 @@ concptr do_chaos_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessType
 
             if (cast) {
                 if (!get_aim_dir(player_ptr, &dir)) {
-                    return nullptr;
+                    return std::nullopt;
                 }
 
                 fire_beam(player_ptr, AttributeType::MANA, dir, damroll(dice, sides));
@@ -362,7 +362,7 @@ concptr do_chaos_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessType
 
             if (cast) {
                 if (!get_aim_dir(player_ptr, &dir)) {
-                    return nullptr;
+                    return std::nullopt;
                 }
 
                 fire_ball(player_ptr, AttributeType::FIRE, dir, dam, rad);
@@ -387,7 +387,7 @@ concptr do_chaos_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessType
 
             if (cast) {
                 if (!get_aim_dir(player_ptr, &dir)) {
-                    return nullptr;
+                    return std::nullopt;
                 }
 
                 fire_beam(player_ptr, AttributeType::AWAY_ALL, dir, power);
@@ -431,7 +431,7 @@ concptr do_chaos_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessType
 
             if (cast) {
                 if (!get_aim_dir(player_ptr, &dir)) {
-                    return nullptr;
+                    return std::nullopt;
                 }
 
                 fire_ball(player_ptr, AttributeType::CHAOS, dir, dam, rad);
@@ -456,7 +456,7 @@ concptr do_chaos_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessType
 
             if (cast) {
                 if (!get_aim_dir(player_ptr, &dir)) {
-                    return nullptr;
+                    return std::nullopt;
                 }
 
                 poly_monster(player_ptr, dir, plev);
@@ -504,7 +504,7 @@ concptr do_chaos_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessType
             }
             if (cast) {
                 if (!recharge(player_ptr, power)) {
-                    return nullptr;
+                    return std::nullopt;
                 }
             }
         }
@@ -528,7 +528,7 @@ concptr do_chaos_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessType
 
             if (cast) {
                 if (!get_aim_dir(player_ptr, &dir)) {
-                    return nullptr;
+                    return std::nullopt;
                 }
 
                 fire_ball(player_ptr, AttributeType::DISINTEGRATE, dir, dam, rad);
@@ -576,7 +576,7 @@ concptr do_chaos_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessType
 
             if (cast) {
                 if (!get_aim_dir(player_ptr, &dir)) {
-                    return nullptr;
+                    return std::nullopt;
                 }
 
                 msg_print(_("ロケット発射！", "You launch a rocket!"));
@@ -633,7 +633,7 @@ concptr do_chaos_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessType
 
             if (cast) {
                 if (!get_aim_dir(player_ptr, &dir)) {
-                    return nullptr;
+                    return std::nullopt;
                 }
                 fire_beam(player_ptr, AttributeType::GRAVITY, dir, damroll(dice, sides));
             }
@@ -714,7 +714,7 @@ concptr do_chaos_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessType
         {
             if (cast) {
                 if (!get_check(_("変身します。よろしいですか？", "You will polymorph yourself. Are you sure? "))) {
-                    return nullptr;
+                    return std::nullopt;
                 }
                 do_poly_self(player_ptr);
             }
@@ -739,7 +739,7 @@ concptr do_chaos_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessType
 
             if (cast) {
                 if (!get_aim_dir(player_ptr, &dir)) {
-                    return nullptr;
+                    return std::nullopt;
                 }
                 fire_ball(player_ptr, AttributeType::MANA, dir, dam, rad);
             }
@@ -764,7 +764,7 @@ concptr do_chaos_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessType
 
             if (cast) {
                 if (!get_aim_dir(player_ptr, &dir)) {
-                    return nullptr;
+                    return std::nullopt;
                 }
 
                 fire_ball(player_ptr, AttributeType::CHAOS, dir, dam, rad);

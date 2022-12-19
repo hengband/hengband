@@ -24,9 +24,9 @@
  * @brief 匠領域魔法の各処理を行う
  * @param spell 魔法ID
  * @param mode 処理内容 (SpellProcessType::NAME / SPELL_DESC / SpellProcessType::INFO / SpellProcessType::CAST)
- * @return SpellProcessType::NAME / SPELL_DESC / SpellProcessType::INFO 時には文字列ポインタを返す。SpellProcessType::CAST時はnullptr文字列を返す。
+ * @return SpellProcessType::NAME / SPELL_DESC / SpellProcessType::INFO 時には文字列を返す。SpellProcessType::CAST時は std::nullopt を返す。
  */
-concptr do_craft_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessType mode)
+std::optional<std::string> do_craft_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessType mode)
 {
     bool name = mode == SpellProcessType::NAME;
     bool desc = mode == SpellProcessType::DESCRIPTION;
@@ -353,7 +353,7 @@ concptr do_craft_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessType
 
             if (cast) {
                 if (!choose_ele_attack(player_ptr)) {
-                    return nullptr;
+                    return std::nullopt;
                 }
             }
         }
@@ -540,7 +540,7 @@ concptr do_craft_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessType
         {
             if (cast) {
                 if (!mundane_spell(player_ptr, true)) {
-                    return nullptr;
+                    return std::nullopt;
                 }
             }
         }
@@ -572,7 +572,7 @@ concptr do_craft_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessType
         {
             if (cast) {
                 if (!identify_fully(player_ptr, false)) {
-                    return nullptr;
+                    return std::nullopt;
                 }
             }
         }
@@ -589,7 +589,7 @@ concptr do_craft_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessType
         {
             if (cast) {
                 if (!enchant_spell(player_ptr, randint0(4) + 1, randint0(4) + 1, 0)) {
-                    return nullptr;
+                    return std::nullopt;
                 }
             }
         }
@@ -606,7 +606,7 @@ concptr do_craft_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessType
         {
             if (cast) {
                 if (!enchant_spell(player_ptr, 0, 0, randint0(3) + 2)) {
-                    return nullptr;
+                    return std::nullopt;
                 }
             }
         }
@@ -657,7 +657,7 @@ concptr do_craft_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessType
 
             if (cast) {
                 if (!choose_ele_immune(player_ptr, base + randint1(base))) {
-                    return nullptr;
+                    return std::nullopt;
                 }
             }
         }

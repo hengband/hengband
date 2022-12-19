@@ -312,7 +312,8 @@ void print_spells(PlayerType *player_ptr, SPELL_IDX target_spell, SPELL_IDX *spe
             continue;
         }
 
-        strcpy(info, exe_spell(player_ptr, use_realm, spell, SpellProcessType::INFO));
+        const auto spell_info = exe_spell(player_ptr, use_realm, spell, SpellProcessType::INFO);
+        strcpy(info, spell_info->data());
         concptr comment = info;
         byte line_attr = TERM_WHITE;
         if (pc.is_every_magic()) {
@@ -337,11 +338,12 @@ void print_spells(PlayerType *player_ptr, SPELL_IDX target_spell, SPELL_IDX *spe
             line_attr = TERM_L_GREEN;
         }
 
+        const auto spell_name = exe_spell(player_ptr, use_realm, spell, SpellProcessType::NAME);
         if (use_realm == REALM_HISSATSU) {
-            strcat(out_val, format("%-25s %2d %4d", exe_spell(player_ptr, use_realm, spell, SpellProcessType::NAME), s_ptr->slevel, need_mana));
+            strcat(out_val, format("%-25s %2d %4d", spell_name->data(), s_ptr->slevel, need_mana));
         } else {
             strcat(out_val,
-                format("%-25s%c%-4s %2d %4d %3d%% %s", exe_spell(player_ptr, use_realm, spell, SpellProcessType::NAME), (max ? '!' : ' '), ryakuji, s_ptr->slevel,
+                format("%-25s%c%-4s %2d %4d %3d%% %s", spell_name->data(), (max ? '!' : ' '), ryakuji, s_ptr->slevel,
                     need_mana, spell_chance(player_ptr, spell, use_realm), comment));
         }
 
