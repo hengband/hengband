@@ -9,6 +9,8 @@
 #include "system/player-type-definition.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
+#include "term/z-form.h"
+#include "util/string-processor.h"
 #include "view/display-fruit.h"
 #include "view/display-messages.h"
 
@@ -26,7 +28,7 @@ bool gamble_comm(PlayerType *player_ptr, int cmd)
     int32_t maxbet;
     int32_t oldgold;
 
-    char out_val[160], tmp_str[80], again;
+    char out_val[160] = "", again;
     concptr p;
 
     screen_save();
@@ -48,14 +50,11 @@ bool gamble_comm(PlayerType *player_ptr, int cmd)
     maxbet = player_ptr->lev * 200;
     maxbet = std::min(maxbet, player_ptr->au);
 
-    strcpy(out_val, "");
-    sprintf(tmp_str, _("賭け金 (1-%ld)？", "Your wager (1-%ld) ? "), (long int)maxbet);
-
     /*
      * Use get_string() because we may need more than
      * the int16_t value returned by get_quantity().
      */
-    if (!get_string(tmp_str, out_val, 32)) {
+    if (!get_string(format(_("賭け金 (1-%ld)？", "Your wager (1-%ld) ? "), (long int)maxbet), out_val, 32)) {
         msg_print(nullptr);
         screen_load();
         return true;
@@ -83,10 +82,8 @@ bool gamble_comm(PlayerType *player_ptr, int cmd)
     odds = 0;
     oldgold = player_ptr->au;
 
-    sprintf(tmp_str, _("ゲーム前の所持金: %9ld", "Gold before game: %9ld"), (long int)oldgold);
-    prt(tmp_str, 20, 2);
-    sprintf(tmp_str, _("現在の掛け金:     %9ld", "Current Wager:    %9ld"), (long int)wager);
-    prt(tmp_str, 21, 2);
+    prt(format(_("ゲーム前の所持金: %9ld", "Gold before game: %9ld"), (long int)oldgold), 20, 2);
+    prt(format(_("現在の掛け金:     %9ld", "Current Wager:    %9ld"), (long int)wager), 21, 2);
 
     do {
         player_ptr->au -= wager;
@@ -99,12 +96,10 @@ bool gamble_comm(PlayerType *player_ptr, int cmd)
             roll1 = randint1(10);
             roll2 = randint1(10);
             choice = randint1(10);
-            sprintf(tmp_str, _("黒ダイス: %d        黒ダイス: %d", "Black die: %d       Black Die: %d"), roll1, roll2);
 
-            prt(tmp_str, 8, 3);
-            sprintf(tmp_str, _("赤ダイス: %d", "Red die: %d"), choice);
+            prt(format(_("黒ダイス: %d        黒ダイス: %d", "Black die: %d       Black Die: %d"), roll1, roll2), 8, 3);
 
-            prt(tmp_str, 11, 14);
+            prt(format(_("赤ダイス: %d", "Red die: %d"), choice), 11, 14);
             if (((choice > roll1) && (choice < roll2)) || ((choice < roll1) && (choice > roll2))) {
                 win = 1;
             }
@@ -118,8 +113,7 @@ bool gamble_comm(PlayerType *player_ptr, int cmd)
             roll2 = randint1(6);
             roll3 = roll1 + roll2;
             choice = roll3;
-            sprintf(tmp_str, _("１振りめ: %d %d      Total: %d", "First roll: %d %d    Total: %d"), roll1, roll2, roll3);
-            prt(tmp_str, 7, 5);
+            prt(format(_("１振りめ: %d %d      Total: %d", "First roll: %d %d    Total: %d"), roll1, roll2, roll3), 7, 5);
             if ((roll3 == 7) || (roll3 == 11)) {
                 win = 1;
             } else if ((roll3 == 2) || (roll3 == 3) || (roll3 == 12)) {
@@ -132,8 +126,7 @@ bool gamble_comm(PlayerType *player_ptr, int cmd)
                     roll1 = randint1(6);
                     roll2 = randint1(6);
                     roll3 = roll1 + roll2;
-                    sprintf(tmp_str, _("出目: %d %d          合計:      %d", "Roll result: %d %d   Total:     %d"), roll1, roll2, roll3);
-                    prt(tmp_str, 8, 5);
+                    prt(format(_("出目: %d %d          合計:      %d", "Roll result: %d %d   Total:     %d"), roll1, roll2, roll3), 8, 5);
                     if (roll3 == choice) {
                         win = 1;
                     } else if (roll3 == 7) {
@@ -167,8 +160,7 @@ bool gamble_comm(PlayerType *player_ptr, int cmd)
             }
             msg_print(nullptr);
             roll1 = randint0(10);
-            sprintf(tmp_str, _("ルーレットは回り、止まった。勝者は %d番だ。", "The wheel spins to a stop and the winner is %d"), roll1);
-            prt(tmp_str, 13, 3);
+            prt(format(_("ルーレットは回り、止まった。勝者は %d番だ。", "The wheel spins to a stop and the winner is %d"), roll1), 13, 3);
             prt("", 9, 0);
             prt("*", 9, (3 * roll1 + 5));
             if (roll1 == choice) {
@@ -256,17 +248,14 @@ bool gamble_comm(PlayerType *player_ptr, int cmd)
             prt(_("あなたの勝ち", "YOU WON"), 16, 37);
 
             player_ptr->au += odds * wager;
-            sprintf(tmp_str, _("倍率: %d", "Payoff: %d"), odds);
 
-            prt(tmp_str, 17, 37);
+            prt(format(_("倍率: %d", "Payoff: %d"), odds), 17, 37);
         } else {
             prt(_("あなたの負け", "You Lost"), 16, 37);
             prt("", 17, 37);
         }
 
-        sprintf(tmp_str, _("現在の所持金:     %9ld", "Current Gold:     %9ld"), (long int)player_ptr->au);
-
-        prt(tmp_str, 22, 2);
+        prt(format(_("現在の所持金:     %9ld", "Current Gold:     %9ld"), (long int)player_ptr->au), 22, 2);
         prt(_("もう一度(Y/N)？", "Again(Y/N)?"), 18, 37);
 
         move_cursor(18, 52);

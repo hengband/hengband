@@ -70,21 +70,21 @@ static std::optional<PRICE> prompt_to_buy(PlayerType *player_ptr, ItemEntity *o_
  */
 static bool show_store_select_item(COMMAND_CODE *item, const int i, StoreSaleType store_num)
 {
-    char out_val[160];
+    concptr prompt;
 
     switch (store_num) {
     case StoreSaleType::HOME:
-        sprintf(out_val, _("どのアイテムを取りますか? ", "Which item do you want to take? "));
+        prompt = _("どのアイテムを取りますか? ", "Which item do you want to take? ");
         break;
     case StoreSaleType::BLACK:
-        sprintf(out_val, _("どれ? ", "Which item, huh? "));
+        prompt = _("どれ? ", "Which item, huh? ");
         break;
     default:
-        sprintf(out_val, _("どの品物が欲しいんだい? ", "Which item are you interested in? "));
+        prompt = _("どの品物が欲しいんだい? ", "Which item are you interested in? ");
         break;
     }
 
-    return get_stock(item, out_val, 0, i - 1, store_num) != 0;
+    return get_stock(item, prompt, 0, i - 1, store_num) != 0;
 }
 
 /*!
@@ -140,15 +140,11 @@ static void shuffle_store(PlayerType *player_ptr, StoreSaleType store_num)
         return;
     }
 
-    char buf[80];
-
     msg_print(_("店主は引退した。", "The shopkeeper retires."));
     store_shuffle(player_ptr, store_num);
     prt("", 3, 0);
-    sprintf(buf, "%s (%s)", ot_ptr->owner_name, race_info[enum2i(ot_ptr->owner_race)].title);
-    put_str(buf, 3, 10);
-    sprintf(buf, "%s (%ld)", terrains_info[cur_store_feat].name.data(), (long)(ot_ptr->max_cost));
-    prt(buf, 3, 50);
+    put_str(format("%s (%s)", ot_ptr->owner_name, race_info[enum2i(ot_ptr->owner_race)].title), 3, 10);
+    prt(format("%s (%ld)", terrains_info[cur_store_feat].name.data(), (long)(ot_ptr->max_cost)), 3, 50);
 }
 
 static void switch_store_stock(PlayerType *player_ptr, const int i, const COMMAND_CODE item, StoreSaleType store_num)

@@ -15,6 +15,7 @@
 #include "term/gameterm.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
+#include "term/z-form.h"
 #include "timed-effect/player-stun.h"
 #include "timed-effect/timed-effects.h"
 #include "util/int-char-converter.h"
@@ -33,7 +34,6 @@ static void display_spell_list(PlayerType *player_ptr)
     int m[9];
     const magic_type *s_ptr;
     GAME_TEXT name[MAX_NLEN];
-    char out_val[160];
 
     clear_from(0);
 
@@ -53,7 +53,6 @@ static void display_spell_list(PlayerType *player_ptr)
         PERCENTAGE chance = 0;
         mind_type spell;
         char comment[80];
-        char psi_desc[160];
         MindKindType use_mind;
         bool use_hp = false;
 
@@ -124,9 +123,8 @@ static void display_spell_list(PlayerType *player_ptr)
             }
 
             mindcraft_info(player_ptr, comment, use_mind, i);
-            sprintf(psi_desc, "  %c) %-30s%2d %4d %3d%%%s", I2A(i), spell.name, spell.min_lev, spell.mana_cost, chance, comment);
 
-            term_putstr(x, y + i + 1, -1, a, psi_desc);
+            term_putstr(x, y + i + 1, -1, a, format("  %c) %-30s%2d %4d %3d%%%s", I2A(i), spell.name, spell.min_lev, spell.mana_cost, chance, comment));
         }
 
         return;
@@ -164,10 +162,8 @@ static void display_spell_list(PlayerType *player_ptr)
                 a = TERM_YELLOW;
             }
 
-            sprintf(out_val, "%c/%c) %-20.20s", I2A(n / 8), I2A(n % 8), name);
-
             m[j] = y + n;
-            term_putstr(x, m[j], -1, a, out_val);
+            term_putstr(x, m[j], -1, a, format("%c/%c) %-20.20s", I2A(n / 8), I2A(n % 8), name));
             n++;
         }
     }

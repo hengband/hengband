@@ -84,7 +84,7 @@ void do_cmd_colors(PlayerType *player_ptr)
         if (i == '1') {
             prt(_("コマンド: ユーザー設定ファイルをロードします", "Command: Load a user pref file"), 8, 0);
             prt(_("ファイル: ", "File: "), 10, 0);
-            sprintf(tmp, "%s.prf", player_ptr->base_name);
+            strnfmt(tmp, sizeof(tmp), "%s.prf", player_ptr->base_name);
             if (!askfor(tmp, 70)) {
                 continue;
             }
@@ -96,7 +96,7 @@ void do_cmd_colors(PlayerType *player_ptr)
             static concptr mark = "Colors";
             prt(_("コマンド: カラーの設定をファイルに書き出します", "Command: Dump colors"), 8, 0);
             prt(_("ファイル: ", "File: "), 10, 0);
-            sprintf(tmp, "%s.prf", player_ptr->base_name);
+            strnfmt(tmp, sizeof(tmp), "%s.prf", player_ptr->base_name);
             if (!askfor(tmp, 70)) {
                 continue;
             }
@@ -270,17 +270,11 @@ void do_cmd_time(PlayerType *player_ptr)
     int day, hour, min;
     extract_day_hour_min(player_ptr, &day, &hour, &min);
 
-    char desc[1024];
-    strcpy(desc, _("変な時刻だ。", "It is a strange time."));
+    std::string desc = _("変な時刻だ。", "It is a strange time.");
 
-    char day_buf[20];
-    if (day < MAX_DAYS) {
-        sprintf(day_buf, "%d", day);
-    } else {
-        strcpy(day_buf, "*****");
-    }
+    std::string day_buf = (day < MAX_DAYS) ? std::to_string(day) : "*****";
 
-    msg_format(_("%s日目, 時刻は%d:%02d %sです。", "This is day %s. The time is %d:%02d %s."), day_buf, (hour % 12 == 0) ? 12 : (hour % 12), min,
+    msg_format(_("%s日目, 時刻は%d:%02d %sです。", "This is day %s. The time is %d:%02d %s."), day_buf.data(), (hour % 12 == 0) ? 12 : (hour % 12), min,
         (hour < 12) ? "AM" : "PM");
 
     char buf[1024];
@@ -327,7 +321,7 @@ void do_cmd_time(PlayerType *player_ptr)
         if (buf[0] == 'D') {
             num++;
             if (!randint0(num)) {
-                strcpy(desc, buf + 2);
+                desc = buf + 2;
             }
 
             continue;

@@ -20,6 +20,7 @@
 #include "term/gameterm.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
+#include "term/z-form.h"
 #include "util/bit-flags-calculator.h"
 #include "util/int-char-converter.h"
 #include "util/string-processor.h"
@@ -93,21 +94,16 @@ static void do_cmd_options_autosave(PlayerType *player_ptr, concptr info)
 {
     char ch;
     int i, k = 0, n = 2;
-    char buf[80];
     term_clear();
     while (true) {
-        sprintf(buf,
-            _("%s ( リターンで次へ, y/n でセット, F で頻度を入力, ESC で決定 ) ", "%s (RET to advance, y/n to set, 'F' for frequency, ESC to accept) "), info);
-        prt(buf, 0, 0);
+        prt(format(_("%s ( リターンで次へ, y/n でセット, F で頻度を入力, ESC で決定 ) ", "%s (RET to advance, y/n to set, 'F' for frequency, ESC to accept) "), info), 0, 0);
         for (i = 0; i < n; i++) {
             byte a = TERM_WHITE;
             if (i == k) {
                 a = TERM_L_BLUE;
             }
 
-            sprintf(
-                buf, "%-48s: %s (%s)", autosave_info[i].o_desc, (*autosave_info[i].o_var ? _("はい  ", "yes") : _("いいえ", "no ")), autosave_info[i].o_text);
-            c_prt(a, buf, i + 2, 0);
+            c_prt(a, format("%-48s: %s (%s)", autosave_info[i].o_desc, (*autosave_info[i].o_var ? _("はい  ", "yes") : _("いいえ", "no ")), autosave_info[i].o_text), i + 2, 0);
         }
 
         prt(format(_("自動セーブの頻度： %d ターン毎", "Timed autosave frequency: every %d turns"), autosave_freq), 5, 0);
@@ -336,9 +332,7 @@ static void do_cmd_options_cheat(PlayerType *player_ptr, concptr info)
     auto k = 0U;
     const auto n = cheat_info.size();
     while (true) {
-        char buf[80];
-        sprintf(buf, _("%s ( リターンで次へ, y/n でセット, ESC で決定 )", "%s (RET to advance, y/n to set, ESC to accept) "), info);
-        prt(buf, 0, 0);
+        prt(format(_("%s ( リターンで次へ, y/n でセット, ESC で決定 )", "%s (RET to advance, y/n to set, ESC to accept) "), info), 0, 0);
 
 #ifdef JP
         /* 詐欺オプションをうっかりいじってしまう人がいるようなので注意 */
@@ -353,8 +347,7 @@ static void do_cmd_options_cheat(PlayerType *player_ptr, concptr info)
                 a = TERM_L_BLUE;
             }
 
-            sprintf(buf, "%-48s: %s (%s)", cheat_info[i].o_desc, (*cheat_info[i].o_var ? _("はい  ", "yes") : _("いいえ", "no ")), cheat_info[i].o_text);
-            c_prt(enum2i(a), buf, i + 2, 0);
+            c_prt(enum2i(a), format("%-48s: %s (%s)", cheat_info[i].o_desc, (*cheat_info[i].o_var ? _("はい  ", "yes") : _("いいえ", "no ")), cheat_info[i].o_text), i + 2, 0);
         }
 
         move_cursor(k + 2, 50);
@@ -396,8 +389,7 @@ static void do_cmd_options_cheat(PlayerType *player_ptr, concptr info)
             k = (k + 1) % n;
             break;
         case '?':
-            strnfmt(buf, sizeof(buf), _("joption.txt#%s", "option.txt#%s"), cheat_info[k].o_text);
-            (void)show_file(player_ptr, true, buf, nullptr, 0, 0);
+            (void)show_file(player_ptr, true, std::string(_("joption.txt#", "option.txt#")).append(cheat_info[k].o_text).data(), nullptr, 0, 0);
             term_clear();
             break;
         default:
@@ -648,7 +640,6 @@ void do_cmd_options_aux(PlayerType *player_ptr, game_option_types page, concptr 
     char ch;
     int i, k = 0, n = 0, l;
     int opt[24];
-    char buf[80];
     bool browse_only = (page == OPT_PAGE_BIRTH) && w_ptr->character_generated && (!w_ptr->wizard || !allow_debug_opts);
 
     for (i = 0; i < 24; i++) {
@@ -664,9 +655,7 @@ void do_cmd_options_aux(PlayerType *player_ptr, game_option_types page, concptr 
     term_clear();
     while (true) {
         DIRECTION dir;
-        sprintf(buf, _("%s (リターン:次, %sESC:終了, ?:ヘルプ) ", "%s (RET:next, %s, ?:help) "), info,
-            browse_only ? _("", "ESC:exit") : _("y/n:変更, ", "y/n:change, ESC:accept"));
-        prt(buf, 0, 0);
+        prt(format(_("%s (リターン:次, %sESC:終了, ?:ヘルプ) ", "%s (RET:next, %s, ?:help) "), info, browse_only ? _("", "ESC:exit") : _("y/n:変更, ", "y/n:change, ESC:accept")), 0, 0);
         if (page == OPT_PAGE_AUTODESTROY) {
             c_prt(TERM_YELLOW, _("以下のオプションは、簡易自動破壊を使用するときのみ有効", "Following options will protect items from easy auto-destroyer."), 6,
                 _(6, 3));
@@ -678,12 +667,12 @@ void do_cmd_options_aux(PlayerType *player_ptr, game_option_types page, concptr 
                 a = TERM_L_BLUE;
             }
 
-            sprintf(buf, "%-48s: %s (%.19s)", option_info[opt[i]].o_desc, (*option_info[opt[i]].o_var ? _("はい  ", "yes") : _("いいえ", "no ")),
+            std::string label = format("%-48s: %s (%.19s)", option_info[opt[i]].o_desc, (*option_info[opt[i]].o_var ? _("はい  ", "yes") : _("いいえ", "no ")),
                 option_info[opt[i]].o_text);
             if ((page == OPT_PAGE_AUTODESTROY) && i > 2) {
-                c_prt(a, buf, i + 5, 0);
+                c_prt(a, label, i + 5, 0);
             } else {
-                c_prt(a, buf, i + 2, 0);
+                c_prt(a, label, i + 2, 0);
             }
         }
 
@@ -744,8 +733,7 @@ void do_cmd_options_aux(PlayerType *player_ptr, game_option_types page, concptr 
             break;
         }
         case '?': {
-            strnfmt(buf, sizeof(buf), _("joption.txt#%s", "option.txt#%s"), option_info[opt[k]].o_text);
-            (void)show_file(player_ptr, true, buf, nullptr, 0, 0);
+            (void)show_file(player_ptr, true, std::string(_("joption.txt#", "option.txt#")).append(option_info[opt[k]].o_text).data(), nullptr, 0, 0);
             term_clear();
             break;
         }

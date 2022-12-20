@@ -20,42 +20,35 @@
  */
 void spoiler_outlist(concptr header, concptr *list, char separator)
 {
-    char line[MAX_LINE_LEN + 20], buf[80];
     if (*list == nullptr) {
         return;
     }
 
-    strcpy(line, spoiler_indent);
+    std::string line = spoiler_indent;
     if (header && (header[0])) {
-        strcat(line, header);
-        strcat(line, " ");
+        line.append(header).append(" ");
     }
 
-    int buf_len;
-    int line_len = strlen(line);
     while (true) {
-        strcpy(buf, *list);
-        buf_len = strlen(buf);
+        std::string elem = *list;
         if (list[1]) {
-            sprintf(buf + buf_len, "%c ", separator);
-            buf_len += 2;
+            elem.push_back(separator);
+            elem.push_back(' ');
         }
 
-        if (line_len + buf_len <= MAX_LINE_LEN) {
-            strcat(line, buf);
-            line_len += buf_len;
+        if (line.length() + elem.length() <= MAX_LINE_LEN) {
+            line.append(elem);
         } else {
-            if (line_len > 1 && line[line_len - 1] == ' ' && line[line_len - 2] == list_separator) {
-                line[line_len - 2] = '\0';
-                fprintf(spoiler_file, "%s\n", line);
-                sprintf(line, "%s%s", spoiler_indent, buf);
+            if (line.length() > 1 && line[line.length() - 1] == ' ' && line[line.length() - 2] == list_separator) {
+                line[line.length() - 2] = '\0';
+                fprintf(spoiler_file, "%s\n", line.data());
+                line = spoiler_indent;
+                line.append(elem);
             } else {
-                fprintf(spoiler_file, "%s\n", line);
-                concptr ident2 = "      ";
-                sprintf(line, "%s%s", ident2, buf);
+                fprintf(spoiler_file, "%s\n", line.data());
+                line = "      ";
+                line.append(elem);
             }
-
-            line_len = strlen(line);
         }
 
         if (!*++list) {
@@ -63,7 +56,7 @@ void spoiler_outlist(concptr header, concptr *list, char separator)
         }
     }
 
-    fprintf(spoiler_file, "%s\n", line);
+    fprintf(spoiler_file, "%s\n", line.data());
 }
 
 /*!
@@ -71,11 +64,9 @@ void spoiler_outlist(concptr header, concptr *list, char separator)
  */
 static void print_header(void)
 {
-    char buf[360];
     char title[180];
     put_version(title);
-    sprintf(buf, "Artifact Spoilers for Hengband Version %s", title);
-    spoiler_underline(buf);
+    spoiler_underline(std::string("Artifact Spoilers for Hengband Version ").append(title).data());
 }
 
 /*!
@@ -118,11 +109,9 @@ static bool make_fake_artifact(ItemEntity *o_ptr, FixedArtifactId fixed_artifact
 static void spoiler_print_art(obj_desc_list *art_ptr)
 {
     pval_info_type *pval_ptr = &art_ptr->pval_info;
-    char buf[80];
     fprintf(spoiler_file, "%s\n", art_ptr->description);
     if (pval_ptr->pval_desc[0]) {
-        sprintf(buf, _("%sの修正:", "%s to"), pval_ptr->pval_desc);
-        spoiler_outlist(buf, pval_ptr->pval_affects, item_separator);
+        spoiler_outlist(std::string(pval_ptr->pval_desc).append(_("の修正:", " to")).data(), pval_ptr->pval_affects, item_separator);
     }
 
     spoiler_outlist(_("対:", "Slay"), art_ptr->slays, item_separator);

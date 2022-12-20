@@ -152,7 +152,7 @@ void sanity_blast(PlayerType *player_ptr, MonsterEntity *m_ptr, bool necro)
         }
     } else if (!necro) {
         MonsterRaceInfo *r_ptr;
-        GAME_TEXT m_name[MAX_NLEN];
+        std::string m_name;
         concptr desc;
         get_mon_num_prep(player_ptr, get_nightmare, nullptr);
         r_ptr = &monraces_info[get_mon_num(player_ptr, 0, MAX_DEPTH, 0)];
@@ -163,10 +163,10 @@ void sanity_blast(PlayerType *player_ptr, MonsterEntity *m_ptr, bool necro)
 #else
 
         if (r_ptr->kind_flags.has_not(MonsterKindType::UNIQUE)) {
-            sprintf(m_name, "%s %s", (is_a_vowel(desc[0]) ? "an" : "a"), desc);
-        } else
+            m_name = (is_a_vowel(desc[0])) ? "an " : "a ";
+        }
 #endif
-        sprintf(m_name, "%s", desc);
+        m_name.append(desc);
 
         if (r_ptr->kind_flags.has_not(MonsterKindType::UNIQUE)) {
             if (r_ptr->flags1 & RF1_FRIENDS) {
@@ -177,12 +177,12 @@ void sanity_blast(PlayerType *player_ptr, MonsterEntity *m_ptr, bool necro)
         }
 
         if (saving_throw(player_ptr->skill_sav * 100 / power)) {
-            msg_format(_("夢の中で%sに追いかけられた。", "%^s chases you through your dreams."), m_name);
+            msg_format(_("夢の中で%sに追いかけられた。", "%^s chases you through your dreams."), m_name.data());
             return;
         }
 
         if (player_ptr->effects()->hallucination()->is_hallucinated()) {
-            msg_format(_("%s%sの顔を見てしまった！", "You behold the %s visage of %s!"), funny_desc[randint0(MAX_SAN_FUNNY)], m_name);
+            msg_format(_("%s%sの顔を見てしまった！", "You behold the %s visage of %s!"), funny_desc[randint0(MAX_SAN_FUNNY)], m_name.data());
             if (one_in_(3)) {
                 msg_print(funny_comments[randint0(MAX_SAN_COMMENT)]);
                 BadStatusSetter(player_ptr).mod_hallucination(randint1(r_ptr->level));

@@ -328,9 +328,8 @@ void autopick_entry_from_object(PlayerType *player_ptr, autopick_type *entry, It
 {
     /* Assume that object name is to be added */
     bool name = true;
-    GAME_TEXT name_str[MAX_NLEN + 32];
-    name_str[0] = '\0';
     auto insc = quark_str(o_ptr->inscription);
+    entry->name.clear();
     entry->insc = insc != nullptr ? insc : "";
     entry->action = DO_AUTOPICK | DO_DISPLAY;
     entry->flag[0] = entry->flag[1] = 0L;
@@ -388,10 +387,11 @@ void autopick_entry_from_object(PlayerType *player_ptr, autopick_type *entry, It
                 auto *e_ptr = &egos_info[o_ptr->ego_idx];
 #ifdef JP
                 /* エゴ銘には「^」マークが使える */
-                sprintf(name_str, "^%s", e_ptr->name.data());
+                entry->name = "^";
+                entry->name.append(e_ptr->name);
 #else
-                /* We ommit the basename and cannot use the ^ mark */
-                strcpy(name_str, e_ptr->name.data());
+                /* We omit the basename and cannot use the ^ mark */
+                entry->name = e_ptr->name;
 #endif
                 name = false;
                 if (!o_ptr->is_rare()) {
@@ -503,8 +503,7 @@ void autopick_entry_from_object(PlayerType *player_ptr, autopick_type *entry, It
     }
 
     if (!name) {
-        str_tolower(name_str);
-        entry->name = name_str;
+        str_tolower(entry->name.data());
         return;
     }
 
@@ -515,9 +514,8 @@ void autopick_entry_from_object(PlayerType *player_ptr, autopick_type *entry, It
      * If necessary, add a '^' which indicates the
      * beginning of line.
      */
-    sprintf(name_str, "%s%s", is_hat_added ? "^" : "", o_name);
-    str_tolower(name_str);
-    entry->name = name_str;
+    entry->name = std::string(is_hat_added ? "^" : "").append(o_name);
+    str_tolower(entry->name.data());
 }
 
 /*!

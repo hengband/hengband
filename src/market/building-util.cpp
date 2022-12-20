@@ -1,6 +1,7 @@
 ﻿#include "market/building-util.h"
 #include "system/player-type-definition.h"
 #include "term/screen-processor.h"
+#include "term/z-form.h"
 
 /*!
  * @brief コンソールに表示された施設に関する情報を消去する / Clear the building information
@@ -21,8 +22,6 @@ void clear_bldg(int min_row, int max_row)
  */
 void building_prt_gold(PlayerType *player_ptr)
 {
-    char tmp_str[80];
     prt(_("手持ちのお金: ", "Gold Remaining: "), 23, 53);
-    sprintf(tmp_str, "%9ld", (long)player_ptr->au);
-    prt(tmp_str, 23, 68);
+    prt(format("%9ld", (long)player_ptr->au), 23, 68);
 }

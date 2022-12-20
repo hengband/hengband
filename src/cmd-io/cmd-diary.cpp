@@ -12,6 +12,7 @@
 #include "player/player-personality.h"
 #include "system/player-type-definition.h"
 #include "term/screen-processor.h"
+#include "term/z-form.h"
 #include "util/angband-files.h"
 #include "util/int-char-converter.h"
 #include "view/display-messages.h"
@@ -23,26 +24,26 @@
  */
 static void display_diary(PlayerType *player_ptr)
 {
-    char diary_title[256];
-    GAME_TEXT file_name[MAX_NLEN];
+    std::string file_name = _("playrecord-", "playrec-");
+    file_name.append(savefile_base).append(".txt");
     char buf[1024];
-    char tmp[80];
-    sprintf(file_name, _("playrecord-%s.txt", "playrec-%s.txt"), savefile_base);
-    path_build(buf, sizeof(buf), ANGBAND_DIR_USER, file_name);
+    path_build(buf, sizeof(buf), ANGBAND_DIR_USER, file_name.data());
 
     PlayerClass pc(player_ptr);
+    concptr tmp;
     if (pc.is_tough()) {
-        strcpy(tmp, subtitle[randint0(MAX_SUBTITLE - 1)]);
+        tmp = subtitle[randint0(MAX_SUBTITLE - 1)];
     } else if (pc.is_wizard()) {
-        strcpy(tmp, subtitle[randint0(MAX_SUBTITLE - 1) + 1]);
+        tmp = subtitle[randint0(MAX_SUBTITLE - 1) + 1];
     } else {
-        strcpy(tmp, subtitle[randint0(MAX_SUBTITLE - 2) + 1]);
+        tmp = subtitle[randint0(MAX_SUBTITLE - 2) + 1];
     }
 
+    char diary_title[256];
 #ifdef JP
-    sprintf(diary_title, "「%s%s%sの伝説 -%s-」", ap_ptr->title, ap_ptr->no ? "の" : "", player_ptr->name, tmp);
+    strnfmt(diary_title, sizeof(diary_title), "「%s%s%sの伝説 -%s-」", ap_ptr->title, ap_ptr->no ? "の" : "", player_ptr->name, tmp);
 #else
-    sprintf(diary_title, "Legend of %s %s '%s'", ap_ptr->title, player_ptr->name, tmp);
+    strnfmt(diary_title, sizeof(diary_title), "Legend of %s %s '%s'", ap_ptr->title, player_ptr->name, tmp);
 #endif
 
     (void)show_file(player_ptr, false, buf, diary_title, -1, 0);
@@ -71,14 +72,14 @@ static void do_cmd_last_get(PlayerType *player_ptr)
     }
 
     char buf[256];
-    sprintf(buf, _("%sの入手を記録します。", "Do you really want to record getting %s? "), record_o_name);
+    strnfmt(buf, sizeof(buf), _("%sの入手を記録します。", "Do you really want to record getting %s? "), record_o_name);
     if (!get_check(buf)) {
         return;
     }
 
     GAME_TURN turn_tmp = w_ptr->game_turn;
     w_ptr->game_turn = record_turn;
-    sprintf(buf, _("%sを手に入れた。", "discover %s."), record_o_name);
+    strnfmt(buf, sizeof(buf), _("%sを手に入れた。", "discover %s."), record_o_name);
     exe_write_diary(player_ptr, DIARY_DESCRIPTION, 0, buf);
     w_ptr->game_turn = turn_tmp;
 }
@@ -88,15 +89,15 @@ static void do_cmd_last_get(PlayerType *player_ptr)
  */
 static void do_cmd_erase_diary(void)
 {
-    GAME_TEXT file_name[MAX_NLEN];
     char buf[256];
     FILE *fff = nullptr;
 
     if (!get_check(_("本当に記録を消去しますか？", "Do you really want to delete all your records? "))) {
         return;
     }
-    sprintf(file_name, _("playrecord-%s.txt", "playrec-%s.txt"), savefile_base);
-    path_build(buf, sizeof(buf), ANGBAND_DIR_USER, file_name);
+    std::string file_name = _("playrecord-", "playrec-");
+    file_name.append(savefile_base).append(".txt");
+    path_build(buf, sizeof(buf), ANGBAND_DIR_USER, file_name.data());
     fd_kill(buf);
 
     fff = angband_fopen(buf, "w");

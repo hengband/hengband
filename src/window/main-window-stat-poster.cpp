@@ -22,6 +22,7 @@
 #include "system/player-type-definition.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
+#include "term/z-form.h"
 #include "timed-effect/player-blindness.h"
 #include "timed-effect/player-confusion.h"
 #include "timed-effect/player-cut.h"
@@ -158,37 +159,38 @@ void print_hunger(PlayerType *player_ptr)
 void print_state(PlayerType *player_ptr)
 {
     TERM_COLOR attr = TERM_WHITE;
-    GAME_TEXT text[16];
+    std::string text;
     if (command_rep) {
         if (command_rep > 999) {
-            (void)sprintf(text, "%2d00", command_rep / 100);
+            text = format("%2d00", command_rep / 100);
         } else {
-            (void)sprintf(text, "  %2d", command_rep);
+            text = format("  %2d", command_rep);
         }
 
-        c_put_str(attr, format("%5.5s", text), ROW_STATE, COL_STATE);
+        c_put_str(attr, format("%5.5s", text.data()), ROW_STATE, COL_STATE);
         return;
     }
 
     switch (player_ptr->action) {
     case ACTION_SEARCH: {
-        strcpy(text, _("探索", "Sear"));
+        text = _("探索", "Sear");
         break;
     }
     case ACTION_REST:
-        strcpy(text, _("    ", "    "));
         if (player_ptr->resting > 0) {
-            sprintf(text, "%4d", player_ptr->resting);
+            text = format("%4d", player_ptr->resting);
         } else if (player_ptr->resting == COMMAND_ARG_REST_FULL_HEALING) {
-            text[0] = text[1] = text[2] = text[3] = '*';
+            text = "****";
         } else if (player_ptr->resting == COMMAND_ARG_REST_UNTIL_DONE) {
-            text[0] = text[1] = text[2] = text[3] = '&';
+            text = "&&&&";
+        } else {
+            text = "    ";
         }
 
         break;
 
     case ACTION_LEARN: {
-        strcpy(text, _("学習", "lear"));
+        text = _("学習", "lear");
         auto bluemage_data = PlayerClass(player_ptr).get_specific_data<bluemage_data_type>();
         if (bluemage_data->new_magic_learned) {
             attr = TERM_L_RED;
@@ -196,7 +198,7 @@ void print_state(PlayerType *player_ptr)
         break;
     }
     case ACTION_FISH: {
-        strcpy(text, _("釣り", "fish"));
+        text = _("釣り", "fish");
         break;
     }
     case ACTION_MONK_STANCE: {
@@ -218,36 +220,36 @@ void print_state(PlayerType *player_ptr)
             default:
                 break;
             }
-            strcpy(text, monk_stances[enum2i(stance) - 1].desc);
+            text = monk_stances[enum2i(stance) - 1].desc;
         }
         break;
     }
     case ACTION_SAMURAI_STANCE: {
         if (auto stance = PlayerClass(player_ptr).get_samurai_stance();
             stance != SamuraiStanceType::NONE) {
-            strcpy(text, samurai_stances[enum2i(stance) - 1].desc);
+            text = samurai_stances[enum2i(stance) - 1].desc;
         }
         break;
     }
     case ACTION_SING: {
-        strcpy(text, _("歌  ", "Sing"));
+        text = _("歌  ", "Sing");
         break;
     }
     case ACTION_HAYAGAKE: {
-        strcpy(text, _("速駆", "Fast"));
+        text = _("速駆", "Fast");
         break;
     }
     case ACTION_SPELL: {
-        strcpy(text, _("詠唱", "Spel"));
+        text = _("詠唱", "Spel");
         break;
     }
     default: {
-        strcpy(text, "    ");
+        text = "    ";
         break;
     }
     }
 
-    c_put_str(attr, format("%5.5s", text), ROW_STATE, COL_STATE);
+    c_put_str(attr, format("%5.5s", text.data()), ROW_STATE, COL_STATE);
 }
 
 /*!
@@ -264,7 +266,7 @@ void print_speed(PlayerType *player_ptr)
     const auto speed = player_ptr->pspeed - STANDARD_SPEED;
     auto *floor_ptr = player_ptr->current_floor_ptr;
     bool is_player_fast = is_fast(player_ptr);
-    char buf[32] = "";
+    std::string buf;
     TERM_COLOR attr = TERM_WHITE;
     if (speed > 0) {
         auto is_slow = player_ptr->effects()->deceleration()->is_slow();
@@ -284,7 +286,7 @@ void print_speed(PlayerType *player_ptr)
         } else {
             attr = TERM_L_GREEN;
         }
-        sprintf(buf, "%s(+%d)", (player_ptr->riding ? _("乗馬", "Ride") : _("加速", "Fast")), speed);
+        buf = format("%s(+%d)", (player_ptr->riding ? _("乗馬", "Ride") : _("加速", "Fast")), speed);
     } else if (speed < 0) {
         auto is_slow = player_ptr->effects()->deceleration()->is_slow();
         if (player_ptr->riding) {
@@ -303,13 +305,13 @@ void print_speed(PlayerType *player_ptr)
         } else {
             attr = TERM_L_UMBER;
         }
-        sprintf(buf, "%s(%d)", (player_ptr->riding ? _("乗馬", "Ride") : _("減速", "Slow")), speed);
+        buf = format("%s(%d)", (player_ptr->riding ? _("乗馬", "Ride") : _("減速", "Slow")), speed);
     } else if (player_ptr->riding) {
         attr = TERM_GREEN;
-        strcpy(buf, _("乗馬中", "Riding"));
+        buf = _("乗馬中", "Riding");
     }
 
-    c_put_str(attr, format("%-9s", buf), row_speed, col_speed);
+    c_put_str(attr, format("%-9s", buf.data()), row_speed, col_speed);
 }
 
 /*!

@@ -126,15 +126,14 @@ void autopick_pickup_items(PlayerType *player_ptr, grid_type *g_ptr)
             continue;
         }
 
-        char out_val[MAX_NLEN + 20];
-        GAME_TEXT o_name[MAX_NLEN];
         if (o_ptr->marked.has(OmType::NO_QUERY)) {
             continue;
         }
 
+        GAME_TEXT o_name[MAX_NLEN];
         describe_flavor(player_ptr, o_name, o_ptr, 0);
-        sprintf(out_val, _("%sを拾いますか? ", "Pick up %s? "), o_name);
-        if (!get_check(out_val)) {
+        auto prompt = std::string(_(o_name, "Pick up ")).append(_("を拾いますか", o_name)).append("? ");
+        if (!get_check(prompt)) {
             o_ptr->marked.set({ OmType::SUPRESS_MESSAGE, OmType::NO_QUERY });
             continue;
         }

@@ -48,6 +48,7 @@
 #include "system/item-entity.h"
 #include "system/player-type-definition.h"
 #include "term/screen-processor.h"
+#include "term/z-form.h"
 #include "util/int-char-converter.h"
 #include "view/display-inventory.h"
 #include "view/display-messages.h"
@@ -90,7 +91,6 @@ static void do_curse_on_equip(OBJECT_IDX slot, ItemEntity *o_ptr, PlayerType *pl
  */
 void do_cmd_equip(PlayerType *player_ptr)
 {
-    char out_val[160];
     command_wrk = true;
     if (easy_floor) {
         command_wrk = USE_EQUIP;
@@ -100,10 +100,11 @@ void do_cmd_equip(PlayerType *player_ptr)
     (void)show_equipment(player_ptr, 0, USE_FULL, AllMatchItemTester());
     auto weight = calc_inventory_weight(player_ptr);
     auto weight_lim = calc_weight_limit(player_ptr);
+    std::string out_val;
 #ifdef JP
-    sprintf(out_val, "装備： 合計 %3d.%1d kg (限界の%d%%) コマンド: ", lb_to_kg_integer(weight), lb_to_kg_fraction(weight), weight * 100 / weight_lim);
+    out_val = format("装備： 合計 %3d.%1d kg (限界の%d%%) コマンド: ", lb_to_kg_integer(weight), lb_to_kg_fraction(weight), weight * 100 / weight_lim);
 #else
-    sprintf(out_val, "Equipment: carrying %d.%d pounds (%d%% of capacity). Command: ", weight / 10, weight % 10, weight * 100 / weight_lim);
+    out_val = format("Equipment: carrying %d.%d pounds (%d%% of capacity). Command: ", weight / 10, weight % 10, weight * 100 / weight_lim);
 #endif
 
     prt(out_val, 0, 0);
@@ -231,24 +232,16 @@ void do_cmd_wield(PlayerType *player_ptr)
     }
 
     if (confirm_wear && ((o_ptr->is_cursed() && o_ptr->is_known()) || ((o_ptr->ident & IDENT_SENSE) && (FEEL_BROKEN <= o_ptr->feeling) && (o_ptr->feeling <= FEEL_CURSED)))) {
-        char dummy[MAX_NLEN + 80];
         describe_flavor(player_ptr, o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
-        sprintf(dummy, _("本当に%s{呪われている}を使いますか？", "Really use the %s {cursed}? "), o_name);
-
-        if (!get_check(dummy)) {
+        if (!get_check(format(_("本当に%s{呪われている}を使いますか？", "Really use the %s {cursed}? "), o_name))) {
             return;
         }
     }
 
     PlayerRace pr(player_ptr);
     if (o_ptr->is_specific_artifact(FixedArtifactId::STONEMASK) && o_ptr->is_known() && !pr.equals(PlayerRaceType::VAMPIRE) && !pr.equals(PlayerRaceType::ANDROID)) {
-        char dummy[MAX_NLEN + 100];
         describe_flavor(player_ptr, o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
-        sprintf(dummy,
-            _("%sを装備すると吸血鬼になります。よろしいですか？", "%s will transform you into a vampire permanently when equipped. Do you become a vampire? "),
-            o_name);
-
-        if (!get_check(dummy)) {
+        if (!get_check(format(_("%sを装備すると吸血鬼になります。よろしいですか？", "%s will transform you into a vampire permanently when equipped. Do you become a vampire? "), o_name))) {
             return;
         }
     }

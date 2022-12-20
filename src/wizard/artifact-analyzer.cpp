@@ -9,10 +9,12 @@
 #include "object/object-info.h"
 #include "system/artifact-type-definition.h"
 #include "system/item-entity.h"
+#include "term/z-form.h"
 #include "util/bit-flags-calculator.h"
 #include "util/enum-converter.h"
 #include "util/enum-range.h"
 #include "util/quarks.h"
+#include "util/string-processor.h"
 #include "wizard/spoiler-util.h"
 
 /*!
@@ -73,7 +75,7 @@ static void analyze_pval(ItemEntity *o_ptr, pval_info_type *pi_ptr)
 
     auto flgs = object_flags(o_ptr);
     affects_list = pi_ptr->pval_affects;
-    sprintf(pi_ptr->pval_desc, "%s%d", o_ptr->pval >= 0 ? "+" : "", o_ptr->pval);
+    strnfmt(pi_ptr->pval_desc, sizeof(pi_ptr->pval_desc), "%s%d", o_ptr->pval >= 0 ? "+" : "", o_ptr->pval);
     if (flgs.has_all_of(EnumRange(TR_STR, TR_CHR))) {
         *affects_list++ = _("全能力", "All stats");
     } else if (flgs.has_any_of(EnumRange(TR_STR, TR_CHR))) {
@@ -176,8 +178,6 @@ static void analyze_sustains(ItemEntity *o_ptr, concptr *sustain_list)
  */
 static void analyze_misc_magic(ItemEntity *o_ptr, concptr *misc_list)
 {
-    char desc[256];
-
     auto flgs = object_flags(o_ptr);
     misc_list = spoiler_flag_aux(flgs, misc_flags2_desc, misc_list, N_ELEMENTS(misc_flags2_desc));
     misc_list = spoiler_flag_aux(flgs, misc_flags3_desc, misc_list, N_ELEMENTS(misc_flags3_desc));
@@ -210,22 +210,21 @@ static void analyze_misc_magic(ItemEntity *o_ptr, concptr *misc_list)
         rad++;
     }
 
+    std::string desc;
     if (flgs.has(TR_LITE_FUEL)) {
         if (rad > 0) {
-            sprintf(desc, _("それは燃料補給によって明かり(半径 %d)を授ける。", "It provides light (radius %d) when fueled."), (int)rad);
+            desc = format(_("それは燃料補給によって明かり(半径 %d)を授ける。", "It provides light (radius %d) when fueled."), (int)rad);
         }
     } else {
         if (rad > 0) {
-            sprintf(desc, _("永久光源(半径 %d)", "Permanent Light(radius %d)"), (int)rad);
-        }
-
-        if (rad < 0) {
-            sprintf(desc, _("永久光源(半径-%d)。", "Permanent Light(radius -%d)"), (int)-rad);
+            desc = format(_("永久光源(半径 %d)", "Permanent Light(radius %d)"), (int)rad);
+        } else if (rad < 0) {
+            desc = format(_("永久光源(半径-%d)。", "Permanent Light(radius -%d)"), (int)-rad);
         }
     }
 
     if (rad != 0) {
-        *misc_list++ = quark_str(quark_add(desc));
+        *misc_list++ = quark_str(quark_add(desc.data()));
     }
 
     if (flgs.has(TR_TY_CURSE)) {
@@ -256,33 +255,34 @@ static void analyze_misc_magic(ItemEntity *o_ptr, concptr *misc_list)
  * Note additional ability and/or resistance of fixed artifacts
  * @param o_ptr オブジェクト構造体の参照ポインタ
  * @param addition 追加ランダム耐性構造体の参照ポインタ
+ * @param addition_sz addition に書き込めるバイト数
  */
-static void analyze_addition(ItemEntity *o_ptr, char *addition)
+static void analyze_addition(ItemEntity *o_ptr, char *addition, size_t addition_sz)
 {
     const auto &a_ref = artifacts_info.at(o_ptr->fixed_artifact_idx);
     strcpy(addition, "");
 
     if (a_ref.gen_flags.has_all_of({ ItemGenerationTraitType::XTRA_POWER, ItemGenerationTraitType::XTRA_H_RES })) {
-        strcat(addition, _("能力and耐性", "Ability and Resistance"));
+        angband_strcat(addition, _("能力and耐性", "Ability and Resistance"), addition_sz);
     } else if (a_ref.gen_flags.has(ItemGenerationTraitType::XTRA_POWER)) {
-        strcat(addition, _("能力", "Ability"));
+        angband_strcat(addition, _("能力", "Ability"), addition_sz);
         if (a_ref.gen_flags.has(ItemGenerationTraitType::XTRA_RES_OR_POWER)) {
-            strcat(addition, _("(1/2でand耐性)", "(plus Resistance about 1/2)"));
+            angband_strcat(addition, _("(1/2でand耐性)", "(plus Resistance about 1/2)"), addition_sz);
         }
     } else if (a_ref.gen_flags.has(ItemGenerationTraitType::XTRA_H_RES)) {
-        strcat(addition, _("耐性", "Resistance"));
+        angband_strcat(addition, _("耐性", "Resistance"), addition_sz);
         if (a_ref.gen_flags.has(ItemGenerationTraitType::XTRA_RES_OR_POWER)) {
-            strcat(addition, _("(1/2でand能力)", "(plus Ability about 1/2)"));
+            angband_strcat(addition, _("(1/2でand能力)", "(plus Ability about 1/2)"), addition_sz);
         }
     } else if (a_ref.gen_flags.has(ItemGenerationTraitType::XTRA_RES_OR_POWER)) {
-        strcat(addition, _("能力or耐性", "Ability or Resistance"));
+        angband_strcat(addition, _("能力or耐性", "Ability or Resistance"), addition_sz);
     }
 
     if (a_ref.gen_flags.has(ItemGenerationTraitType::XTRA_DICE)) {
         if (strlen(addition) > 0) {
-            strcat(addition, _("、", ", "));
+            angband_strcat(addition, _("、", ", "), addition_sz);
         }
-        strcat(addition, _("ダイス数", "Dice number"));
+        angband_strcat(addition, _("ダイス数", "Dice number"), addition_sz);
     }
 }
 
@@ -292,11 +292,12 @@ static void analyze_addition(ItemEntity *o_ptr, char *addition)
  * and its value in gold pieces
  * @param o_ptr オブジェクト構造体の参照ポインタ
  * @param misc_desc 基本情報を収める文字列参照ポインタ
+ * @param misc_desc_sz misc_desc に書き込めるバイト数
  */
-static void analyze_misc(ItemEntity *o_ptr, char *misc_desc)
+static void analyze_misc(ItemEntity *o_ptr, char *misc_desc, size_t misc_desc_sz)
 {
     const auto &a_ref = artifacts_info.at(o_ptr->fixed_artifact_idx);
-    sprintf(misc_desc, _("レベル %d, 希少度 %u, %d.%d kg, ＄%ld", "Level %d, Rarity %u, %d.%d lbs, %ld Gold"), (int)a_ref.level, a_ref.rarity,
+    strnfmt(misc_desc, misc_desc_sz, _("レベル %d, 希少度 %u, %d.%d kg, ＄%ld", "Level %d, Rarity %u, %d.%d lbs, %ld Gold"), (int)a_ref.level, a_ref.rarity,
         _(lb_to_kg_integer(a_ref.weight), a_ref.weight / 10), _(lb_to_kg_fraction(a_ref.weight), a_ref.weight % 10), (long int)a_ref.cost);
 }
 
@@ -319,8 +320,8 @@ void object_analyze(PlayerType *player_ptr, ItemEntity *o_ptr, obj_desc_list *de
     analyze_vulnerable(o_ptr, desc_ptr->vulnerables);
     analyze_sustains(o_ptr, desc_ptr->sustains);
     analyze_misc_magic(o_ptr, desc_ptr->misc_magic);
-    analyze_addition(o_ptr, desc_ptr->addition);
-    analyze_misc(o_ptr, desc_ptr->misc_desc);
+    analyze_addition(o_ptr, desc_ptr->addition, sizeof(desc_ptr->addition));
+    analyze_misc(o_ptr, desc_ptr->misc_desc, sizeof(desc_ptr->misc_desc));
     desc_ptr->activation = activation_explanation(o_ptr);
 }
 
@@ -343,6 +344,6 @@ void random_artifact_analyze(PlayerType *player_ptr, ItemEntity *o_ptr, obj_desc
     analyze_sustains(o_ptr, desc_ptr->sustains);
     analyze_misc_magic(o_ptr, desc_ptr->misc_magic);
     desc_ptr->activation = activation_explanation(o_ptr);
-    sprintf(desc_ptr->misc_desc, _("重さ %d.%d kg", "Weight %d.%d lbs"), _(lb_to_kg_integer(o_ptr->weight), o_ptr->weight / 10),
+    strnfmt(desc_ptr->misc_desc, sizeof(desc_ptr->misc_desc), _("重さ %d.%d kg", "Weight %d.%d lbs"), _(lb_to_kg_integer(o_ptr->weight), o_ptr->weight / 10),
         _(lb_to_kg_fraction(o_ptr->weight), o_ptr->weight % 10));
 }

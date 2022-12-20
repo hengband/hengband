@@ -5,6 +5,7 @@
 #include "system/player-type-definition.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
+#include "term/z-form.h"
 #include "view/display-player-stat-info.h"
 
 /*!
@@ -19,17 +20,8 @@ void display_player_misc_info(PlayerType *player_ptr)
     put_str(_("種族  :", "Race  :"), 4, 1);
     put_str(_("職業  :", "Class :"), 5, 1);
 
-    char buf[80];
-    char tmp[80];
-    strcpy(tmp, ap_ptr->title);
-#ifdef JP
-    if (ap_ptr->no == 1) {
-        strcat(tmp, "の");
-    }
-#else
-    strcat(tmp, " ");
-#endif
-    strcat(tmp, player_ptr->name);
+    std::string tmp = ap_ptr->title;
+    tmp.append(_(ap_ptr->no == 1 ? "の" : "", " ")).append(player_ptr->name);
 
     c_put_str(TERM_L_BLUE, tmp, 1, 34);
     c_put_str(TERM_L_BLUE, sp_ptr->title, 3, 9);
@@ -40,10 +32,7 @@ void display_player_misc_info(PlayerType *player_ptr)
     put_str(_("ＨＰ  :", "Hits  :"), 7, 1);
     put_str(_("ＭＰ  :", "Mana  :"), 8, 1);
 
-    (void)sprintf(buf, "%d", (int)player_ptr->lev);
-    c_put_str(TERM_L_BLUE, buf, 6, 9);
-    (void)sprintf(buf, "%d/%d", (int)player_ptr->chp, (int)player_ptr->mhp);
-    c_put_str(TERM_L_BLUE, buf, 7, 9);
-    (void)sprintf(buf, "%d/%d", (int)player_ptr->csp, (int)player_ptr->msp);
-    c_put_str(TERM_L_BLUE, buf, 8, 9);
+    c_put_str(TERM_L_BLUE, format("%d", (int)player_ptr->lev), 6, 9);
+    c_put_str(TERM_L_BLUE, format("%d/%d", (int)player_ptr->chp, (int)player_ptr->mhp), 7, 9);
+    c_put_str(TERM_L_BLUE, format("%d/%d", (int)player_ptr->csp, (int)player_ptr->msp), 8, 9);
 }

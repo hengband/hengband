@@ -39,6 +39,7 @@
 #include "system/item-entity.h"
 #include "system/player-type-definition.h"
 #include "term/screen-processor.h"
+#include "term/z-form.h"
 #include "util/int-char-converter.h"
 #include "view/display-messages.h"
 
@@ -195,7 +196,6 @@ static int get_hissatsu_power(PlayerType *player_ptr, SPELL_IDX *sn)
         if ((choice == ' ') || (choice == '*') || (choice == '?') || (use_menu && should_redraw_cursor)) {
             /* Show the list */
             if (!redraw || use_menu) {
-                char psi_desc[80];
                 int line;
                 redraw = true;
                 if (!use_menu) {
@@ -225,11 +225,12 @@ static int get_hissatsu_power(PlayerType *player_ptr, SPELL_IDX *sn)
                     if (!(player_ptr->spell_learned1 & (1UL << i))) {
                         continue;
                     }
+                    std::string psi_desc;
                     if (use_menu) {
                         if (i == (menu_line - 1)) {
-                            strcpy(psi_desc, _("  》", "  > "));
+                            psi_desc = _("  》", "  > ");
                         } else {
-                            strcpy(psi_desc, "    ");
+                            psi_desc = "    ";
                         }
 
                     } else {
@@ -239,12 +240,12 @@ static int get_hissatsu_power(PlayerType *player_ptr, SPELL_IDX *sn)
                         } else {
                             letter = '0' + line - 27;
                         }
-                        sprintf(psi_desc, "  %c)", letter);
+                        psi_desc = format("  %c)", letter);
                     }
 
                     /* Dump the spell --(-- */
                     const auto spell_name = exe_spell(player_ptr, REALM_HISSATSU, i, SpellProcessType::NAME);
-                    strcat(psi_desc, format(" %-18s%2d %3d", spell_name->data(), spell.slevel, spell.smana));
+                    psi_desc.append(format(" %-18s%2d %3d", spell_name->data(), spell.slevel, spell.smana));
                     prt(psi_desc, y + (line % 17) + (line >= 17), x + (line / 17) * 30);
                     prt("", y + (line % 17) + (line >= 17) + 1, x + (line / 17) * 30);
                 }

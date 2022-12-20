@@ -82,12 +82,8 @@ static bool display_player_info(PlayerType *player_ptr, int mode)
  */
 static void display_player_basic_info(PlayerType *player_ptr)
 {
-    char tmp[64];
-#ifdef JP
-    sprintf(tmp, "%s%s%s", ap_ptr->title, ap_ptr->no == 1 ? "の" : "", player_ptr->name);
-#else
-    sprintf(tmp, "%s %s", ap_ptr->title, player_ptr->name);
-#endif
+    std::string tmp = ap_ptr->title;
+    tmp.append(_(ap_ptr->no == 1 ? "の" : "", " ")).append(player_ptr->name);
 
     display_player_one_line(ENTRY_NAME, tmp, TERM_L_BLUE);
     display_player_one_line(ENTRY_SEX, sp_ptr->title, TERM_L_BLUE);
@@ -105,13 +101,14 @@ static void display_magic_realms(PlayerType *player_ptr)
         return;
     }
 
-    char tmp[64];
+    std::string tmp;
     if (PlayerClass(player_ptr).equals(PlayerClassType::ELEMENTALIST)) {
-        sprintf(tmp, "%s", get_element_title(player_ptr->element));
+        tmp = get_element_title(player_ptr->element);
     } else if (player_ptr->realm2) {
-        sprintf(tmp, "%s, %s", realm_names[player_ptr->realm1], realm_names[player_ptr->realm2]);
+        tmp = realm_names[player_ptr->realm1];
+        tmp.append(", ").append(realm_names[player_ptr->realm2]);
     } else {
-        strcpy(tmp, realm_names[player_ptr->realm1]);
+        tmp = realm_names[player_ptr->realm1];
     }
 
     display_player_one_line(ENTRY_REALM, tmp, TERM_L_BLUE);

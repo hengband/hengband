@@ -8,6 +8,7 @@
 #include "term/gameterm.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
+#include "term/z-form.h"
 #include "util/angband-files.h"
 #include "util/int-char-converter.h"
 #include "util/string-processor.h"
@@ -135,50 +136,43 @@ bool show_file(PlayerType *player_ptr, bool show_version, concptr name, concptr 
     int wid, hgt;
     term_get_size(&wid, &hgt);
 
-    char finder_str[81];
-    strcpy(finder_str, "");
+    char finder_str[81] = "";
 
-    char shower_str[81];
-    strcpy(shower_str, "");
+    char shower_str[81] = "";
 
-    char caption[1024 + 256];
-    strcpy(caption, "");
+    std::string caption;
 
     char hook[68][32];
     for (int i = 0; i < 68; i++) {
         hook[i][0] = '\0';
     }
 
-    char filename[1024];
-    strcpy(filename, name);
-    int n = strlen(filename);
-
-    concptr tag = nullptr;
-    for (int i = 0; i < n; i++) {
-        if (filename[i] == '#') {
-            filename[i] = '\0';
-            tag = filename + i + 1;
-            break;
-        }
+    std::string stripped_name;
+    concptr tag = angband_strstr(name, "#");
+    if (tag) {
+        stripped_name.append(name, tag - name);
+        name = stripped_name.data();
+        ++tag;
     }
 
-    name = filename;
     FILE *fff = nullptr;
     char path[1024];
     if (what) {
-        strcpy(caption, what);
-        strcpy(path, name);
+        caption = what;
+        angband_strcpy(path, name, sizeof(path));
         fff = angband_fopen(path, "r");
     }
 
     if (!fff) {
-        sprintf(caption, _("ヘルプ・ファイル'%s'", "Help file '%s'"), name);
+        caption = _("ヘルプ・ファイル'", "Help file '");
+        caption.append(name).append("'");
         path_build(path, sizeof(path), ANGBAND_DIR_HELP, name);
         fff = angband_fopen(path, "r");
     }
 
     if (!fff) {
-        sprintf(caption, _("スポイラー・ファイル'%s'", "Info file '%s'"), name);
+        caption = _("スポイラー・ファイル'", "Info file '");
+        caption.append(name).append("'");
         path_build(path, sizeof(path), ANGBAND_DIR_INFO, name);
         fff = angband_fopen(path, "r");
     }
@@ -192,7 +186,8 @@ bool show_file(PlayerType *player_ptr, bool show_version, concptr name, concptr 
             }
         }
 
-        sprintf(caption, _("スポイラー・ファイル'%s'", "Info file '%s'"), name);
+        caption = _("スポイラー・ファイル'", "Info file '");
+        caption.append(name).append("'");
         fff = angband_fopen(path, "r");
     }
 
@@ -321,7 +316,7 @@ bool show_file(PlayerType *player_ptr, bool show_version, concptr name, concptr 
             continue;
         }
 
-        prt(format(_("[変愚蛮怒 %d.%d.%d, %s, %d/%d]", "[Hengband %d.%d.%d, %s, Line %d/%d]"), H_VER_MAJOR, H_VER_MINOR, H_VER_PATCH, caption,
+        prt(format(_("[変愚蛮怒 %d.%d.%d, %s, %d/%d]", "[Hengband %d.%d.%d, %s, Line %d/%d]"), H_VER_MAJOR, H_VER_MINOR, H_VER_PATCH, caption.data(),
                 line, size),
             0, 0);
 
@@ -330,7 +325,7 @@ bool show_file(PlayerType *player_ptr, bool show_version, concptr name, concptr 
             put_version(title);
             prt(format("[%s]", title), 0, 0);
         } else {
-            prt(format(_("[%s, %d/%d]", "[%s, Line %d/%d]"), caption, line, size), 0, 0);
+            prt(format(_("[%s, %d/%d]", "[%s, Line %d/%d]"), caption.data(), line, size), 0, 0);
         }
 
         if (size <= rows) {
@@ -487,9 +482,7 @@ bool show_file(PlayerType *player_ptr, bool show_version, concptr name, concptr 
         if (skey == '|') {
             FILE *ffp;
             char buff[1024];
-            char xtmp[sizeof(caption) + 128];
-
-            strcpy(xtmp, "");
+            char xtmp[81] = "";
 
             if (!get_string(_("ファイル名: ", "File name: "), xtmp, 80)) {
                 continue;
@@ -508,9 +501,7 @@ bool show_file(PlayerType *player_ptr, bool show_version, concptr name, concptr 
                 break;
             }
 
-            sprintf(xtmp, "%s: %s", player_ptr->name, what ? what : caption);
-            angband_fputs(ffp, xtmp, 80);
-            angband_fputs(ffp, "\n", 80);
+            fprintf(ffp, "%s: %s\n", player_ptr->name, what ? what : caption.data());
 
             while (!angband_fgets(fff, buff, sizeof(buff))) {
                 angband_fputs(ffp, buff, 80);

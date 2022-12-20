@@ -17,6 +17,7 @@
 #include "system/terrain-type-definition.h"
 #include "term/gameterm.h"
 #include "term/screen-processor.h"
+#include "term/z-form.h"
 #include "util/enum-converter.h"
 #include "util/int-char-converter.h"
 
@@ -29,9 +30,7 @@
 void store_prt_gold(PlayerType *player_ptr)
 {
     prt(_("手持ちのお金: ", "Gold Remaining: "), 19 + xtra_stock, 53);
-    char out_val[64];
-    sprintf(out_val, "%9ld", (long)player_ptr->au);
-    prt(out_val, 19 + xtra_stock, 68);
+    prt(format("%9ld", (long)player_ptr->au), 19 + xtra_stock, 68);
 }
 
 /*!
@@ -47,9 +46,7 @@ void display_entry(PlayerType *player_ptr, int pos, StoreSaleType store_num)
     int i = (pos % store_bottom);
 
     /* Label it, clear the line --(-- */
-    char out_val[160];
-    (void)sprintf(out_val, "%c) ", ((i > 25) ? toupper(I2A(i - 26)) : I2A(i)));
-    prt(out_val, i + 6, 0);
+    prt(format("%c) ", ((i > 25) ? toupper(I2A(i - 26)) : I2A(i))), i + 6, 0);
 
     int cur_col = 3;
     if (show_item_graph) {
@@ -78,8 +75,7 @@ void display_entry(PlayerType *player_ptr, int pos, StoreSaleType store_num)
         c_put_str(tval_to_attr[enum2i(o_ptr->bi_key.tval())], o_name, i + 6, cur_col);
         if (show_weights) {
             WEIGHT wgt = o_ptr->weight;
-            sprintf(out_val, _("%3d.%1d kg", "%3d.%d lb"), _(lb_to_kg_integer(wgt), wgt / 10), _(lb_to_kg_fraction(wgt), wgt % 10));
-            put_str(out_val, i + 6, _(67, 68));
+            put_str(format(_("%3d.%1d kg", "%3d.%d lb"), _(lb_to_kg_integer(wgt), wgt / 10), _(lb_to_kg_fraction(wgt), wgt % 10)), i + 6, _(67, 68));
         }
 
         return;
@@ -97,14 +93,12 @@ void display_entry(PlayerType *player_ptr, int pos, StoreSaleType store_num)
 
     if (show_weights) {
         int wgt = o_ptr->weight;
-        sprintf(out_val, "%3d.%1d", _(lb_to_kg_integer(wgt), wgt / 10), _(lb_to_kg_fraction(wgt), wgt % 10));
-        put_str(out_val, i + 6, _(60, 61));
+        put_str(format("%3d.%1d", _(lb_to_kg_integer(wgt), wgt / 10), _(lb_to_kg_fraction(wgt), wgt % 10)), i + 6, _(60, 61));
     }
 
     const auto price = price_item(player_ptr, o_ptr, ot_ptr->inflate, false, store_num);
 
-    (void)sprintf(out_val, "%9ld  ", (long)price);
-    put_str(out_val, i + 6, 68);
+    put_str(format("%9ld  ", (long)price), i + 6, 68);
 }
 
 /*!
@@ -181,12 +175,9 @@ void display_store(PlayerType *player_ptr, StoreSaleType store_num)
     concptr store_name = terrains_info[cur_store_feat].name.data();
     concptr owner_name = (ot_ptr->owner_name);
     concptr race_name = race_info[enum2i(ot_ptr->owner_race)].title;
-    char buf[80];
-    sprintf(buf, "%s (%s)", owner_name, race_name);
-    put_str(buf, 3, 10);
+    put_str(format("%s (%s)", owner_name, race_name), 3, 10);
 
-    sprintf(buf, "%s (%ld)", store_name, (long)(ot_ptr->max_cost));
-    prt(buf, 3, 50);
+    prt(format("%s (%ld)", store_name, (long)(ot_ptr->max_cost)), 3, 50);
 
     put_str(_("商品の一覧", "Item Description"), 5, 5);
     if (show_weights) {

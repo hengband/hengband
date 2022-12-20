@@ -23,6 +23,7 @@
 #include "system/player-type-definition.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
+#include "term/z-form.h"
 #include "util/bit-flags-calculator.h"
 #include "util/buffer-shaper.h"
 #include "util/int-char-converter.h"
@@ -471,14 +472,10 @@ static void add_essence(PlayerType *player_ptr, SmithCategoryType mode)
             }
             o_ptr->pval = 1;
         } else if (o_ptr->pval == 0) {
-            char tmp[80];
-            char tmp_val[8];
+            char tmp_val[8] = "1";
             auto limit = std::min(5, smith.get_addable_count(effect, o_ptr));
 
-            sprintf(tmp, _("いくつ付加しますか？ (1-%d): ", "Enchant how many? (1-%d): "), limit);
-            strcpy(tmp_val, "1");
-
-            if (!get_string(tmp, tmp_val, 1)) {
+            if (!get_string(format(_("いくつ付加しますか？ (1-%d): ", "Enchant how many? (1-%d): "), limit), tmp_val, 1)) {
                 return;
             }
             o_ptr->pval = static_cast<PARAMETER_VALUE>(std::clamp(atoi(tmp_val), 1, limit));

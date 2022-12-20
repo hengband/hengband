@@ -37,6 +37,7 @@
 #include "term/gameterm.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
+#include "term/z-form.h"
 #include "timed-effect/player-hallucination.h"
 #include "timed-effect/timed-effects.h"
 #include "util/bit-flags-calculator.h"
@@ -108,7 +109,7 @@ void fix_inventory(PlayerType *player_ptr)
  */
 static void print_monster_line(TERM_LEN x, TERM_LEN y, MonsterEntity *m_ptr, int n_same, int n_awake)
 {
-    char buf[256];
+    std::string buf;
     MonsterRaceId r_idx = m_ptr->ap_r_idx;
     auto *r_ptr = &monraces_info[r_idx];
 
@@ -118,26 +119,24 @@ static void print_monster_line(TERM_LEN x, TERM_LEN y, MonsterEntity *m_ptr, int
         return;
     }
     if (r_ptr->kind_flags.has(MonsterKindType::UNIQUE)) {
-        sprintf(buf, _("%3s(覚%2d)", "%3s(%2d)"), MonsterRace(r_idx).is_bounty(true) ? "  W" : "  U", n_awake);
-        term_addstr(-1, TERM_WHITE, buf);
+        buf = format(_("%3s(覚%2d)", "%3s(%2d)"), MonsterRace(r_idx).is_bounty(true) ? "  W" : "  U", n_awake);
     } else {
-        sprintf(buf, _("%3d(覚%2d)", "%3d(%2d)"), n_same, n_awake);
-        term_addstr(-1, TERM_WHITE, buf);
+        buf = format(_("%3d(覚%2d)", "%3d(%2d)"), n_same, n_awake);
     }
+    term_addstr(-1, TERM_WHITE, buf);
 
     term_addstr(-1, TERM_WHITE, " ");
     term_add_bigch(r_ptr->x_attr, r_ptr->x_char);
 
     if (r_ptr->r_tkills && m_ptr->mflag2.has_not(MonsterConstantFlagType::KAGE)) {
-        sprintf(buf, " %2d", (int)r_ptr->level);
+        buf = format(" %2d", (int)r_ptr->level);
     } else {
-        strcpy(buf, " ??");
+        buf = " ??";
     }
 
     term_addstr(-1, TERM_WHITE, buf);
 
-    sprintf(buf, " %s ", r_ptr->name.data());
-    term_addstr(-1, TERM_WHITE, buf);
+    term_addstr(-1, TERM_WHITE, format(" %s ", r_ptr->name.data()));
 }
 
 /*!
@@ -250,7 +249,6 @@ static void display_equipment(PlayerType *player_ptr, const ItemTester &item_tes
     term_get_size(&wid, &hgt);
 
     TERM_COLOR attr = TERM_WHITE;
-    char tmp_val[80];
     GAME_TEXT o_name[MAX_NLEN];
     for (int i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
         int cur_row = i - INVEN_MAIN_HAND;
@@ -260,7 +258,7 @@ static void display_equipment(PlayerType *player_ptr, const ItemTester &item_tes
 
         auto o_ptr = &player_ptr->inventory_list[i];
         auto do_disp = player_ptr->select_ring_slot ? is_ring_slot(i) : item_tester.okay(o_ptr);
-        strcpy(tmp_val, "   ");
+        std::string tmp_val = "   ";
 
         if (do_disp) {
             tmp_val[0] = index_to_label(i);
@@ -298,7 +296,7 @@ static void display_equipment(PlayerType *player_ptr, const ItemTester &item_tes
         term_putstr(cur_col, cur_row, n, attr, o_name);
         if (show_weights) {
             int wgt = o_ptr->weight * o_ptr->number;
-            sprintf(tmp_val, _("%3d.%1d kg", "%3d.%1d lb"), _(lb_to_kg_integer(wgt), wgt / 10), _(lb_to_kg_fraction(wgt), wgt % 10));
+            tmp_val = format(_("%3d.%1d kg", "%3d.%1d lb"), _(lb_to_kg_integer(wgt), wgt / 10), _(lb_to_kg_fraction(wgt), wgt % 10));
             prt(tmp_val, cur_row, wid - (show_labels ? 28 : 9));
         }
 
@@ -583,32 +581,32 @@ static void display_floor_item_list(PlayerType *player_ptr, const int y, const i
 
     auto *floor_ptr = player_ptr->current_floor_ptr;
     const auto *g_ptr = &floor_ptr->grid_array[y][x];
-    char line[1024];
+    std::string line;
 
     // 先頭行を書く。
     auto is_hallucinated = player_ptr->effects()->hallucination()->is_hallucinated();
     if (player_bold(player_ptr, y, x)) {
-        sprintf(line, _("(X:%03d Y:%03d) あなたの足元のアイテム一覧", "Items at (%03d,%03d) under you"), x, y);
+        line = format(_("(X:%03d Y:%03d) あなたの足元のアイテム一覧", "Items at (%03d,%03d) under you"), x, y);
     } else if (const auto *m_ptr = monster_on_floor_items(floor_ptr, g_ptr); m_ptr != nullptr) {
         if (is_hallucinated) {
-            sprintf(line, _("(X:%03d Y:%03d) 何か奇妙な物の足元の発見済みアイテム一覧", "Found items at (%03d,%03d) under something strange"), x, y);
+            line = format(_("(X:%03d Y:%03d) 何か奇妙な物の足元の発見済みアイテム一覧", "Found items at (%03d,%03d) under something strange"), x, y);
         } else {
             const MonsterRaceInfo *const r_ptr = &monraces_info[m_ptr->ap_r_idx];
-            sprintf(line, _("(X:%03d Y:%03d) %sの足元の発見済みアイテム一覧", "Found items at (%03d,%03d) under %s"), x, y, r_ptr->name.data());
+            line = format(_("(X:%03d Y:%03d) %sの足元の発見済みアイテム一覧", "Found items at (%03d,%03d) under %s"), x, y, r_ptr->name.data());
         }
     } else {
         const TerrainType *const f_ptr = &terrains_info[g_ptr->feat];
         concptr fn = f_ptr->name.data();
-        char buf[512];
+        std::string buf;
 
         if (f_ptr->flags.has(TerrainCharacteristics::STORE) || (f_ptr->flags.has(TerrainCharacteristics::BLDG) && !floor_ptr->inside_arena)) {
-            sprintf(buf, _("%sの入口", "on the entrance of %s"), fn);
+            buf = format(_("%sの入口", "on the entrance of %s"), fn);
         } else if (f_ptr->flags.has(TerrainCharacteristics::WALL)) {
-            sprintf(buf, _("%sの中", "in %s"), fn);
+            buf = format(_("%sの中", "in %s"), fn);
         } else {
-            sprintf(buf, _("%s", "on %s"), fn);
+            buf = format(_("%s", "on %s"), fn);
         }
-        sprintf(line, _("(X:%03d Y:%03d) %sの上の発見済みアイテム一覧", "Found items at (X:%03d Y:%03d) %s"), x, y, buf);
+        line = format(_("(X:%03d Y:%03d) %sの上の発見済みアイテム一覧", "Found items at (X:%03d Y:%03d) %s"), x, y, buf.data());
     }
     term_addstr(-1, TERM_WHITE, line);
 
@@ -632,9 +630,10 @@ static void display_floor_item_list(PlayerType *player_ptr, const int y, const i
         if (is_hallucinated) {
             term_addstr(-1, TERM_WHITE, _("何か奇妙な物", "something strange"));
         } else {
-            describe_flavor(player_ptr, line, o_ptr, 0);
+            char buf[1024];
+            describe_flavor(player_ptr, buf, o_ptr, 0);
             TERM_COLOR attr = tval_to_attr[enum2i(tval) % 128];
-            term_addstr(-1, attr, line);
+            term_addstr(-1, attr, buf);
         }
 
         ++term_y;
