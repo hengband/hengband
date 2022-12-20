@@ -34,12 +34,15 @@
 #include "system/player-type-definition.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
+#include "term/z-form.h"
 #include "util/buffer-shaper.h"
 #include "util/enum-converter.h"
 #include "util/int-char-converter.h"
+#include "util/string-processor.h"
 #include "view/display-birth.h" // 暫定。後で消す予定。
 #include "view/display-player.h" // 暫定。後で消す.
 #include "world/world.h"
+#include <sstream>
 
 /*!
  * オートローラーの内容を描画する間隔 /
@@ -83,30 +86,38 @@ static void display_help_on_sex_select(PlayerType *player_ptr, char c)
 }
 
 /*!
- * @brief プレイヤーの性別選択を行う / Player sex
- * @param player_ptr プレイヤーへの参照ポインタ
- * @buf 表示用バッファ
- * @return やり直すならFALSE、それ以外はTRUE
+ * @brief 表示されている性別のラベルを取得する
+ * @param cs 性別の指標
+ * @return std::string 表示するラベルを保持
  */
-static bool get_player_sex(PlayerType *player_ptr, char *buf)
+static std::string birth_sex_label(int cs)
 {
     const char p2 = ')';
-    char cur[80];
-    sprintf(cur, _("%c%c%s", "%c%c %s"), '*', p2, _("ランダム", "Random"));
+    std::stringstream ss;
+
+    if (cs < 0 || cs >= MAX_SEXES) {
+        ss << '*' << p2 << _("ランダム", "Random");
+    } else {
+        ss << I2A(cs) << p2 << sex_info[cs].title;
+    }
+    return ss.str();
+}
+
+/*!
+ * @brief プレイヤーの性別選択を行う / Player sex
+ * @param player_ptr プレイヤーへの参照ポインタ
+ * @return やり直すならFALSE、それ以外はTRUE
+ */
+static bool get_player_sex(PlayerType *player_ptr)
+{
     int k = -1;
     int cs = 0;
     int os = MAX_SEXES;
+    auto cur = birth_sex_label(os);
     while (true) {
         if (cs != os) {
             put_str(cur, 12 + (os / 5), 2 + 15 * (os % 5));
-            if (cs == MAX_SEXES) {
-                sprintf(cur, _("%c%c%s", "%c%c %s"), '*', p2, _("ランダム", "Random"));
-            } else {
-                sp_ptr = &sex_info[cs];
-                concptr str = sp_ptr->title;
-                sprintf(cur, _("%c%c%s", "%c%c %s"), I2A(cs), p2, str);
-            }
-
+            cur = birth_sex_label(cs);
             c_put_str(TERM_YELLOW, cur, 12 + (cs / 5), 2 + 15 * (cs % 5));
             os = cs;
         }
@@ -115,7 +126,8 @@ static bool get_player_sex(PlayerType *player_ptr, char *buf)
             break;
         }
 
-        sprintf(buf, _("性別を選んで下さい (%c-%c) ('='初期オプション設定): ", "Choose a sex (%c-%c) ('=' for options): "), I2A(0), I2A(1));
+        char buf[80];
+        strnfmt(buf, sizeof(buf), _("性別を選んで下さい (%c-%c) ('='初期オプション設定): ", "Choose a sex (%c-%c) ('=' for options): "), I2A(0), I2A(1));
         put_str(buf, 10, 10);
         char c = inkey();
         if (c == 'Q') {
@@ -263,8 +275,7 @@ static bool let_player_select_personality(PlayerType *player_ptr)
 
 static bool let_player_build_character(PlayerType *player_ptr)
 {
-    char buf[80];
-    if (!get_player_sex(player_ptr, buf)) {
+    if (!get_player_sex(player_ptr)) {
         return false;
     }
 
@@ -301,23 +312,23 @@ static void display_initial_options(PlayerType *player_ptr)
     put_str("                                   ", 3, 40);
     put_str(_("修正の合計値", "Your total modification"), 3, 40);
     put_str(_("腕力 知能 賢さ 器用 耐久 魅力 経験 ", "Str  Int  Wis  Dex  Con  Chr   EXP "), 4, 40);
-    sprintf(buf, "%+3d  %+3d  %+3d  %+3d  %+3d  %+3d %+4d%% ", adj[0], adj[1], adj[2], adj[3], adj[4], adj[5], expfact);
+    strnfmt(buf, sizeof(buf), "%+3d  %+3d  %+3d  %+3d  %+3d  %+3d %+4d%% ", adj[0], adj[1], adj[2], adj[3], adj[4], adj[5], expfact);
     c_put_str(TERM_L_BLUE, buf, 5, 40);
 
     put_str("HD ", 6, 40);
-    sprintf(buf, "%2d", rp_ptr->r_mhp + cp_ptr->c_mhp + ap_ptr->a_mhp);
+    strnfmt(buf, sizeof(buf), "%2d", rp_ptr->r_mhp + cp_ptr->c_mhp + ap_ptr->a_mhp);
     c_put_str(TERM_L_BLUE, buf, 6, 43);
 
     put_str(_("隠密", "Stealth"), 6, 47);
     if (PlayerClass(player_ptr).equals(PlayerClassType::BERSERKER)) {
-        strcpy(buf, "xx");
+        angband_strcpy(buf, "xx", sizeof(buf));
     } else {
-        sprintf(buf, "%+2d", rp_ptr->r_stl + cp_ptr->c_stl + ap_ptr->a_stl);
+        strnfmt(buf, sizeof(buf), "%+2d", rp_ptr->r_stl + cp_ptr->c_stl + ap_ptr->a_stl);
     }
     c_put_str(TERM_L_BLUE, buf, 6, _(52, 55));
 
     put_str(_("赤外線視力", "Infra"), 6, _(56, 59));
-    sprintf(buf, _("%2dft", "%2dft"), 10 * rp_ptr->infra);
+    strnfmt(buf, sizeof(buf), _("%2dft", "%2dft"), 10 * rp_ptr->infra);
     c_put_str(TERM_L_BLUE, buf, 6, _(67, 65));
 
     clear_from(10);
@@ -338,11 +349,11 @@ static void display_auto_roller_success_rate(const int col)
     char buf[32];
 
     if (autoroll_chance >= 1) {
-        sprintf(buf, _("確率 :  1/%8d00", "Prob :  1/%8d00"), autoroll_chance);
+        strnfmt(buf, sizeof(buf), _("確率 :  1/%8d00", "Prob :  1/%8d00"), autoroll_chance);
     } else if (autoroll_chance == -999) {
-        sprintf(buf, _("確率 :     不可能", "Prob :     Impossible"));
+        angband_strcpy(buf, _("確率 :     不可能", "Prob :     Impossible"), sizeof(buf));
     } else {
-        sprintf(buf, _("確率 :     1/10000以上", "Prob :     >1/10000"));
+        angband_strcpy(buf, _("確率 :     1/10000以上", "Prob :     >1/10000"), sizeof(buf));
     }
     put_str(buf, 11, col + 10);
 
@@ -592,12 +603,8 @@ static void set_name_history(PlayerType *player_ptr)
 bool player_birth_wizard(PlayerType *player_ptr)
 {
     display_initial_birth_message(player_ptr);
-    const char p2 = ')';
-    char buf[80];
     for (int n = 0; n < MAX_SEXES; n++) {
-        sp_ptr = &sex_info[n];
-        sprintf(buf, _("%c%c%s", "%c%c %s"), I2A(n), p2, sp_ptr->title);
-        put_str(buf, 12 + (n / 5), 2 + 15 * (n % 5));
+        put_str(birth_sex_label(n), 12 + (n / 5), 2 + 15 * (n % 5));
     }
 
     if (!let_player_build_character(player_ptr)) {
