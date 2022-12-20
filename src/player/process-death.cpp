@@ -42,172 +42,149 @@
  * Centers a string within a GRAVE_LINE_WIDTH character string		-JWT-
  * @details
  */
-static void center_string(char *buf, concptr str)
+static std::string center_string(const std::string &str)
 {
-    int i = strlen(str);
-    int j = GRAVE_LINE_WIDTH / 2 - i / 2;
-    (void)sprintf(buf, "%*s%s%*s", j, "", str, GRAVE_LINE_WIDTH - i - j, "");
+    int j = GRAVE_LINE_WIDTH / 2 - str.length() / 2;
+    return std::string(j, ' ').append(str).append(GRAVE_LINE_WIDTH - str.length() - j, ' ');
 }
 
 /*!
  * @brief 墓に基本情報を表示
  * @param player_ptr プレイヤーへの参照ポインタ
- * @param buf 墓テンプレ
  */
-static void show_basic_params(PlayerType *player_ptr, char *buf)
+static void show_basic_params(PlayerType *player_ptr)
 {
-    char tomb_message[160];
-    (void)sprintf(tomb_message, _("レベル: %d", "Level: %d"), (int)player_ptr->lev);
-    center_string(buf, tomb_message);
-    put_str(buf, 11, 11);
+    put_str(center_string(format(_("レベル: %d", "Level: %d"), (int)player_ptr->lev)), 11, 11);
 
-    (void)sprintf(tomb_message, _("経験値: %ld", "Exp: %ld"), (long)player_ptr->exp);
-    center_string(buf, tomb_message);
-    put_str(buf, 12, 11);
+    put_str(center_string(format(_("経験値: %ld", "Exp: %ld"), (long)player_ptr->exp)), 12, 11);
 
-    (void)sprintf(tomb_message, _("所持金: %ld", "AU: %ld"), (long)player_ptr->au);
-    center_string(buf, tomb_message);
-    put_str(buf, 13, 11);
+    put_str(center_string(format(_("所持金: %ld", "AU: %ld"), (long)player_ptr->au)), 13, 11);
 }
 
 #ifdef JP
 /*!
  * @brief プレイヤーを殺したモンスターを表示する (日本語版専用)
  * @param player_ptr プレイヤーへの参照ポインタ
- * @param buf 墓テンプレ
- * @param tomb_message 墓碑に刻む言葉
- * @return 追加の行数
+ * @return メッセージと余分な行数のペア
  */
-static int show_killing_monster(PlayerType *player_ptr, char *buf, char *tomb_message, size_t tomb_message_size)
+static std::pair<std::string, int> show_killing_monster(PlayerType *player_ptr)
 {
-    shape_buffer(player_ptr->died_from.data(), GRAVE_LINE_WIDTH + 1, tomb_message, tomb_message_size);
-    char *t;
-    t = tomb_message + strlen(tomb_message) + 1;
+    char buf[160];
+    shape_buffer(player_ptr->died_from.data(), GRAVE_LINE_WIDTH + 1, buf, sizeof(buf));
+    char *t = buf + strlen(buf) + 1;
     if (!*t) {
-        return 0;
+        return std::make_pair(buf, 0);
     }
 
-    char killer[MAX_MONSTER_NAME];
-    strcpy(killer, t); /* 2nd line */
+    std::string killer = t; /* 2nd line */
     if (*(t + strlen(t) + 1)) /* Does 3rd line exist? */
     {
-        for (t = killer + strlen(killer) - 2; iskanji(*(t - 1)); t--) { /* Loop */
-            ;
+        auto i = (killer.length() > 2) ? 0 : killer.length() - 2;
+        while (i > 0 && iskanji(killer[i - 1])) {
+            --i;
         }
-        strcpy(t, "…");
-    } else if (angband_strstr(tomb_message, "『") && suffix(killer, "』")) {
-        char killer2[MAX_MONSTER_NAME];
-        char *name_head = angband_strstr(tomb_message, "『");
-        sprintf(killer2, "%s%s", name_head, killer);
-        if (strlen(killer2) <= GRAVE_LINE_WIDTH) {
-            strcpy(killer, killer2);
+        killer.erase(i);
+        killer.append("…");
+    } else if (angband_strstr(buf, "『") && suffix(killer.data(), "』")) {
+        char *name_head = angband_strstr(buf, "『");
+        std::string killer2 = name_head;
+        killer2.append(killer);
+        if (killer2.length() <= GRAVE_LINE_WIDTH) {
+            killer = killer2;
             *name_head = '\0';
         }
-    } else if (angband_strstr(tomb_message, "「") && suffix(killer, "」")) {
-        char killer2[MAX_MONSTER_NAME];
-        char *name_head = angband_strstr(tomb_message, "「");
-        sprintf(killer2, "%s%s", name_head, killer);
-        if (strlen(killer2) <= GRAVE_LINE_WIDTH) {
-            strcpy(killer, killer2);
+    } else if (angband_strstr(buf, "「") && suffix(killer.data(), "」")) {
+        char *name_head = angband_strstr(buf, "「");
+        std::string killer2 = name_head;
+        killer2.append(killer);
+        if (killer2.length() <= GRAVE_LINE_WIDTH) {
+            killer = killer2;
             *name_head = '\0';
         }
     }
 
-    center_string(buf, killer);
-    put_str(buf, 15, 11);
-    return 1;
+    put_str(center_string(killer), 15, 11);
+    return std::make_pair(buf, 1);
 }
 
 /*!
  * @brief どこで死んだかを表示する (日本語版専用)
  * @param player_ptr プレイヤーへの参照ポインタ
- * @param buf 墓テンプレ
- * @param tomb_message 表示する文字列
  * @param extra_line 追加の行数
  */
-static void show_dead_place(PlayerType *player_ptr, char *buf, char *tomb_message, int extra_line)
+static void show_dead_place(PlayerType *player_ptr, int extra_line)
 {
     if (streq(player_ptr->died_from, "ripe") || streq(player_ptr->died_from, "Seppuku")) {
         return;
     }
 
+    std::string place;
     if (player_ptr->current_floor_ptr->dun_level == 0) {
         concptr field_name = player_ptr->town_num ? "街" : "荒野";
         if (streq(player_ptr->died_from, "途中終了")) {
-            sprintf(tomb_message, "%sで死んだ", field_name);
+            place = format("%sで死んだ", field_name);
         } else {
-            sprintf(tomb_message, "に%sで殺された", field_name);
+            place = format("に%sで殺された", field_name);
         }
+    } else if (streq(player_ptr->died_from, "途中終了")) {
+        place = format("地下 %d 階で死んだ", (int)player_ptr->current_floor_ptr->dun_level);
     } else {
-        if (streq(player_ptr->died_from, "途中終了")) {
-            sprintf(tomb_message, "地下 %d 階で死んだ", (int)player_ptr->current_floor_ptr->dun_level);
-        } else {
-            sprintf(tomb_message, "に地下 %d 階で殺された", (int)player_ptr->current_floor_ptr->dun_level);
-        }
+        place = format("に地下 %d 階で殺された", (int)player_ptr->current_floor_ptr->dun_level);
     }
 
-    center_string(buf, tomb_message);
-    put_str(buf, 15 + extra_line, 11);
+    put_str(center_string(place), 15 + extra_line, 11);
 }
 
 /*!
  * @brief 墓に刻む言葉を細かく表示 (日本語版専用)
  * @param player_ptr プレイヤーへの参照ポインタ
- * @param buf 墓テンプレ
  */
-static void show_tomb_detail(PlayerType *player_ptr, char *buf)
+static void show_tomb_detail(PlayerType *player_ptr)
 {
-    char tomb_message[160];
-    int extra_line = 0;
+    auto tomb_message = std::make_pair(std::string(), 0);
     if (streq(player_ptr->died_from, "途中終了")) {
-        strcpy(tomb_message, "<自殺>");
+        tomb_message.first = "<自殺>";
     } else if (streq(player_ptr->died_from, "ripe")) {
-        strcpy(tomb_message, "引退後に天寿を全う");
+        tomb_message.first = "引退後に天寿を全う";
     } else if (streq(player_ptr->died_from, "Seppuku")) {
-        strcpy(tomb_message, "勝利の後、切腹");
+        tomb_message.first = "勝利の後、切腹";
     } else {
-        extra_line = show_killing_monster(player_ptr, buf, tomb_message, sizeof(tomb_message));
+        tomb_message = show_killing_monster(player_ptr);
     }
 
-    center_string(buf, tomb_message);
-    put_str(buf, 14, 11);
+    put_str(center_string(tomb_message.first), 14, 11);
 
-    show_dead_place(player_ptr, buf, tomb_message, extra_line);
+    show_dead_place(player_ptr, tomb_message.second);
 }
 #else
 
 /*!
  * @brief Detailed display of words engraved on the tomb (English version only)
  * @param player_ptr reference pointer to the player
- * @param buf template of the tomb
  * @return nothing
  */
-static void show_tomb_detail(PlayerType *player_ptr, char *buf)
+static void show_tomb_detail(PlayerType *player_ptr)
 {
-    char tomb_message[160];
-    (void)sprintf(tomb_message, "Killed on Level %d", player_ptr->current_floor_ptr->dun_level);
-    center_string(buf, tomb_message);
-    put_str(buf, 14, 11);
+    put_str(center_string(format("Killed on Level %d", player_ptr->current_floor_ptr->dun_level)), 14, 11);
 
-    shape_buffer(format("by %s.", player_ptr->died_from.data()), GRAVE_LINE_WIDTH + 1, tomb_message, sizeof(tomb_message));
-    center_string(buf, tomb_message);
-    char *t;
-    put_str(buf, 15, 11);
-    t = tomb_message + strlen(tomb_message) + 1;
+    char buf[160];
+    shape_buffer(format("by %s.", player_ptr->died_from.data()), GRAVE_LINE_WIDTH + 1, buf, sizeof(buf));
+    put_str(center_string(buf), 15, 11);
+    char *t = buf + strlen(buf) + 1;
     if (!*t) {
         return;
     }
 
-    char killer[MAX_MONSTER_NAME];
-    strcpy(killer, t); /* 2nd line */
+    std::string killer = t; /* 2nd line */
     if (*(t + strlen(t) + 1)) /* Does 3rd line exist? */
     {
-        int dummy_len = strlen(killer);
-        strcpy(killer + std::min(dummy_len, GRAVE_LINE_WIDTH - 3), "...");
+        if (killer.length() > GRAVE_LINE_WIDTH - 3) {
+            killer.erase(GRAVE_LINE_WIDTH - 3);
+        }
+        killer.append("...");
     }
 
-    center_string(buf, killer);
-    put_str(buf, 16, 11);
+    put_str(center_string(killer), 16, 11);
 }
 #endif
 
@@ -223,29 +200,22 @@ void print_tomb(PlayerType *player_ptr)
     read_dead_file(buf, sizeof(buf));
     concptr p = w_ptr->total_winner ? _("偉大なる者", "Magnificent") : player_titles[enum2i(player_ptr->pclass)][(player_ptr->lev - 1) / 5].data();
 
-    center_string(buf, player_ptr->name);
-    put_str(buf, 6, 11);
+    put_str(center_string(player_ptr->name), 6, 11);
 
 #ifdef JP
 #else
-    center_string(buf, "the");
-    put_str(buf, 7, 11);
+    put_str(center_string("the"), 7, 11);
 #endif
 
-    center_string(buf, p);
-    put_str(buf, 8, 11);
+    put_str(center_string(p), 8, 11);
 
-    center_string(buf, cp_ptr->title);
-    put_str(buf, 10, 11);
+    put_str(center_string(cp_ptr->title), 10, 11);
 
-    show_basic_params(player_ptr, buf);
-    show_tomb_detail(player_ptr, buf);
+    show_basic_params(player_ptr);
+    show_tomb_detail(player_ptr);
 
-    char current_time[80];
     time_t ct = time((time_t *)0);
-    (void)sprintf(current_time, "%-.24s", ctime(&ct));
-    center_string(buf, current_time);
-    put_str(buf, 17, 11);
+    put_str(center_string(format("%-.24s", ctime(&ct))), 17, 11);
     msg_format(_("さようなら、%s!", "Goodbye, %s!"), player_ptr->name);
 }
 
@@ -335,11 +305,9 @@ static void show_dead_home_items(PlayerType *player_ptr)
             term_clear();
             for (int j = 0; (j < 12) && (i < store_ptr->stock_num); j++, i++) {
                 GAME_TEXT o_name[MAX_NLEN];
-                char tmp_val[80];
                 ItemEntity *o_ptr;
                 o_ptr = &store_ptr->stock[i];
-                sprintf(tmp_val, "%c) ", I2A(j));
-                prt(tmp_val, j + 2, 4);
+                prt(format("%c) ", I2A(j)), j + 2, 4);
                 describe_flavor(player_ptr, o_name, o_ptr, 0);
                 c_put_str(tval_to_attr[enum2i(o_ptr->bi_key.tval())], o_name, j + 2, 7);
             }
@@ -362,9 +330,8 @@ static void export_player_info(PlayerType *player_ptr)
     prt(_("キャラクターの記録をファイルに書き出すことができます。", "You may now dump a character record to one or more files."), 21, 0);
     prt(_("リターンキーでキャラクターを見ます。ESCで中断します。", "Then, hit RETURN to see the character, or ESC to abort."), 22, 0);
     while (true) {
-        char out_val[160];
+        char out_val[160] = "";
         put_str(_("ファイルネーム: ", "Filename: "), 23, 0);
-        strcpy(out_val, "");
         if (!askfor(out_val, 60)) {
             return;
         }
