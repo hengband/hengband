@@ -6,10 +6,11 @@
 #include "system/player-type-definition.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
+#include "term/z-form.h"
 #include "util/int-char-converter.h"
+#include "util/string-processor.h"
 #include "world/world.h"
-
-static const char p2 = ')';
+#include <sstream>
 
 static TERM_COLOR birth_class_color(PlayerClassType cs)
 {
@@ -24,77 +25,81 @@ static TERM_COLOR birth_class_color(PlayerClassType cs)
     return TERM_WHITE;
 }
 
+static std::string birth_class_label(int cs, concptr sym)
+{
+    const char p2 = ')';
+    std::stringstream ss;
+
+    if (cs < 0 || cs >= PLAYER_CLASS_TYPE_MAX) {
+        ss << '*' << p2 << _("ランダム", "Random");
+    } else {
+        ss << sym[cs] << p2;
+        if (!(rp_ptr->choice & (1UL << cs))) {
+            ss << '(' << class_info[cs].title << ')';
+        } else {
+            ss << class_info[cs].title;
+        }
+    }
+    return ss.str();
+}
+
 static void enumerate_class_list(char *sym)
 {
     for (auto n = 0; n < PLAYER_CLASS_TYPE_MAX; n++) {
         cp_ptr = &class_info[n];
         mp_ptr = &class_magics_info[n];
-        concptr str = cp_ptr->title;
         if (n < 26) {
             sym[n] = I2A(n);
         } else {
             sym[n] = ('A' + n - 26);
         }
 
-        char buf[80];
-        if (!(rp_ptr->choice & (1UL << n))) {
-            sprintf(buf, "%c%c(%s)", sym[n], p2, str);
-        } else {
-            sprintf(buf, "%c%c%s", sym[n], p2, str);
-        }
-
         auto cs = i2enum<PlayerClassType>(n);
-        c_put_str(birth_class_color(cs), buf, 13 + (n / 4), 2 + 19 * (n % 4));
+        c_put_str(birth_class_color(cs), birth_class_label(n, sym), 13 + (n / 4), 2 + 19 * (n % 4));
     }
 }
 
-static void display_class_stat(int cs, int *os, char *cur, char *sym)
+static std::string display_class_stat(int cs, int *os, const std::string &cur, concptr sym)
 {
     if (cs == *os) {
-        return;
+        return cur;
     }
 
     auto pclass = i2enum<PlayerClassType>(*os);
     c_put_str(birth_class_color(pclass), cur, 13 + (*os / 4), 2 + 19 * (*os % 4));
     put_str("                                   ", 3, 40);
+    auto result = birth_class_label(cs, sym);
     if (cs == PLAYER_CLASS_TYPE_MAX) {
-        sprintf(cur, "%c%c%s", '*', p2, _("ランダム", "Random"));
         put_str("                                   ", 4, 40);
         put_str("                                   ", 5, 40);
         put_str("                                   ", 6, 40);
     } else {
         cp_ptr = &class_info[cs];
         mp_ptr = &class_magics_info[cs];
-        concptr str = cp_ptr->title;
-        if (!(rp_ptr->choice & (1UL << cs))) {
-            sprintf(cur, "%c%c(%s)", sym[cs], p2, str);
-        } else {
-            sprintf(cur, "%c%c%s", sym[cs], p2, str);
-        }
 
         c_put_str(TERM_L_BLUE, cp_ptr->title, 3, 40);
         put_str(_("の職業修正", ": Class modification"), 3, 40 + strlen(cp_ptr->title));
         put_str(_("腕力 知能 賢さ 器用 耐久 魅力 経験 ", "Str  Int  Wis  Dex  Con  Chr   EXP "), 4, 40);
         char buf[80];
-        sprintf(buf, "%+3d  %+3d  %+3d  %+3d  %+3d  %+3d %+4d%% ", cp_ptr->c_adj[0], cp_ptr->c_adj[1], cp_ptr->c_adj[2], cp_ptr->c_adj[3], cp_ptr->c_adj[4],
-            cp_ptr->c_adj[5], cp_ptr->c_exp);
+        strnfmt(buf, sizeof(buf), "%+3d  %+3d  %+3d  %+3d  %+3d  %+3d %+4d%% ", cp_ptr->c_adj[0], cp_ptr->c_adj[1], cp_ptr->c_adj[2], cp_ptr->c_adj[3], cp_ptr->c_adj[4], cp_ptr->c_adj[5], cp_ptr->c_exp);
         c_put_str(TERM_L_BLUE, buf, 5, 40);
 
         put_str("HD", 6, 40);
-        sprintf(buf, "%+3d", cp_ptr->c_mhp);
+        strnfmt(buf, sizeof(buf), "%+3d", cp_ptr->c_mhp);
         c_put_str(TERM_L_BLUE, buf, 6, 42);
 
         put_str(_("隠密", "Stealth"), 6, 47);
         if (i2enum<PlayerClassType>(cs) == PlayerClassType::BERSERKER) {
-            strcpy(buf, " xx");
+            angband_strcpy(buf, " xx", sizeof(buf));
         } else {
-            sprintf(buf, " %+2d", cp_ptr->c_stl);
+            strnfmt(buf, sizeof(buf), " %+2d", cp_ptr->c_stl);
         }
         c_put_str(TERM_L_BLUE, buf, 6, _(51, 54));
     }
 
-    c_put_str(TERM_YELLOW, cur, 13 + (cs / 4), 2 + 19 * (cs % 4));
+    c_put_str(TERM_YELLOW, result, 13 + (cs / 4), 2 + 19 * (cs % 4));
     *os = cs;
+    return result;
 }
 
 static void interpret_class_select_key_move(char c, int *cs)
@@ -124,21 +129,21 @@ static void interpret_class_select_key_move(char c, int *cs)
     }
 }
 
-static bool select_class(PlayerType *player_ptr, char *cur, char *sym, int *k)
+static bool select_class(PlayerType *player_ptr, concptr sym, int *k)
 {
     auto cs = player_ptr->pclass;
     auto os = PlayerClassType::MAX;
     int int_os = enum2i(os);
     int int_cs = enum2i(cs);
+    auto cur = birth_class_label(int_os, sym);
     while (true) {
-        display_class_stat(int_cs, &int_os, cur, sym);
+        cur = display_class_stat(int_cs, &int_os, cur, sym);
         if (*k >= 0) {
             break;
         }
 
         char buf[80];
-        sprintf(buf, _("職業を選んで下さい (%c-%c) ('='初期オプション設定, 灰色:勝利済): ", "Choose a class (%c-%c) ('=' for options, Gray is winner): "),
-            sym[0], sym[PLAYER_CLASS_TYPE_MAX - 1]);
+        strnfmt(buf, sizeof(buf), _("職業を選んで下さい (%c-%c) ('='初期オプション設定, 灰色:勝利済): ", "Choose a class (%c-%c) ('=' for options, Gray is winner): "), sym[0], sym[PLAYER_CLASS_TYPE_MAX - 1]);
 
         put_str(buf, 10, 6);
         char c = inkey();
@@ -203,10 +208,8 @@ bool get_player_class(PlayerType *player_ptr)
     char sym[PLAYER_CLASS_TYPE_MAX];
     enumerate_class_list(sym);
 
-    char cur[80];
-    sprintf(cur, "%c%c%s", '*', p2, _("ランダム", "Random"));
     int k = -1;
-    if (!select_class(player_ptr, cur, sym, &k)) {
+    if (!select_class(player_ptr, sym, &k)) {
         return false;
     }
 

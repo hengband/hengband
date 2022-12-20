@@ -6,69 +6,77 @@
 #include "system/player-type-definition.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
+#include "term/z-form.h"
 #include "util/enum-converter.h"
 #include "util/int-char-converter.h"
+#include <sstream>
 
-static const char p2 = ')';
+static std::string birth_race_label(int cs, concptr sym)
+{
+    const char p2 = ')';
+    std::stringstream ss;
+
+    if (cs < 0 || cs >= MAX_RACES) {
+        ss << '*' << p2 << _("ランダム", "Random");
+    } else {
+        ss << sym[cs] << p2 << race_info[cs].title;
+    }
+    return ss.str();
+}
 
 static void enumerate_race_list(char *sym)
 {
-    char buf[80];
     for (int n = 0; n < MAX_RACES; n++) {
         rp_ptr = &race_info[n];
-        concptr str = rp_ptr->title;
         if (n < 26) {
             sym[n] = I2A(n);
         } else {
             sym[n] = ('A' + n - 26);
         }
 
-        sprintf(buf, "%c%c%s", sym[n], p2, str);
-        put_str(buf, 12 + (n / 5), 1 + 16 * (n % 5));
+        put_str(birth_race_label(n, sym), 12 + (n / 5), 1 + 16 * (n % 5));
     }
 }
 
-static void display_race_stat(int cs, int *os, char *cur, char *sym)
+static std::string display_race_stat(int cs, int *os, const std::string &cur, concptr sym)
 {
-    char buf[80];
     if (cs == *os) {
-        return;
+        return cur;
     }
 
     c_put_str(TERM_WHITE, cur, 12 + (*os / 5), 1 + 16 * (*os % 5));
     put_str("                                   ", 3, 40);
+    auto result = birth_race_label(cs, sym);
     if (cs == MAX_RACES) {
-        sprintf(cur, "%c%c%s", '*', p2, _("ランダム", "Random"));
         put_str("                                   ", 4, 40);
         put_str("                                   ", 5, 40);
         put_str("                                   ", 6, 40);
     } else {
         rp_ptr = &race_info[cs];
-        concptr str = rp_ptr->title;
-        sprintf(cur, "%c%c%s", sym[cs], p2, str);
         c_put_str(TERM_L_BLUE, rp_ptr->title, 3, 40);
         put_str(_("腕力 知能 賢さ 器用 耐久 魅力 経験 ", "Str  Int  Wis  Dex  Con  Chr   EXP "), 4, 40);
         put_str(_("の種族修正", ": Race modification"), 3, 40 + strlen(rp_ptr->title));
 
-        sprintf(buf, "%+3d  %+3d  %+3d  %+3d  %+3d  %+3d %+4d%% ", rp_ptr->r_adj[0], rp_ptr->r_adj[1], rp_ptr->r_adj[2], rp_ptr->r_adj[3], rp_ptr->r_adj[4],
-            rp_ptr->r_adj[5], (rp_ptr->r_exp - 100));
+        char buf[80];
+        strnfmt(buf, sizeof(buf), "%+3d  %+3d  %+3d  %+3d  %+3d  %+3d %+4d%% ", rp_ptr->r_adj[0], rp_ptr->r_adj[1], rp_ptr->r_adj[2], rp_ptr->r_adj[3], rp_ptr->r_adj[4], rp_ptr->r_adj[5], (rp_ptr->r_exp - 100));
         c_put_str(TERM_L_BLUE, buf, 5, 40);
 
         put_str("HD ", 6, 40);
-        sprintf(buf, "%2d", rp_ptr->r_mhp);
+        strnfmt(buf, sizeof(buf), "%2d", rp_ptr->r_mhp);
         c_put_str(TERM_L_BLUE, buf, 6, 43);
 
         put_str(_("隠密", "Stealth"), 6, 47);
-        sprintf(buf, "%+2d", rp_ptr->r_stl);
+        strnfmt(buf, sizeof(buf), "%+2d", rp_ptr->r_stl);
         c_put_str(TERM_L_BLUE, buf, 6, _(52, 55));
 
         put_str(_("赤外線視力", "Infra"), 6, _(56, 59));
-        sprintf(buf, _("%2dft", "%2dft"), 10 * rp_ptr->infra);
+        strnfmt(buf, sizeof(buf), _("%2dft", "%2dft"), 10 * rp_ptr->infra);
         c_put_str(TERM_L_BLUE, buf, 6, _(67, 65));
     }
 
-    c_put_str(TERM_YELLOW, cur, 12 + (cs / 5), 1 + 16 * (cs % 5));
+    c_put_str(TERM_YELLOW, result, 12 + (cs / 5), 1 + 16 * (cs % 5));
     *os = cs;
+    return result;
 }
 
 static void interpret_race_select_key_move(char c, int *cs)
@@ -100,18 +108,17 @@ static void interpret_race_select_key_move(char c, int *cs)
 
 static bool select_race(PlayerType *player_ptr, char *sym, int *k)
 {
-    char cur[80];
-    sprintf(cur, "%c%c%s", '*', p2, _("ランダム", "Random"));
     auto cs = enum2i(player_ptr->prace);
     int os = MAX_RACES;
+    std::string cur = birth_race_label(os, sym);
     while (true) {
-        display_race_stat(cs, &os, cur, sym);
+        cur = display_race_stat(cs, &os, cur, sym);
         if (*k >= 0) {
             break;
         }
 
         char buf[80];
-        sprintf(buf, _("種族を選んで下さい (%c-%c) ('='初期オプション設定): ", "Choose a race (%c-%c) ('=' for options): "), sym[0], sym[MAX_RACES - 1]);
+        strnfmt(buf, sizeof(buf), _("種族を選んで下さい (%c-%c) ('='初期オプション設定): ", "Choose a race (%c-%c) ('=' for options): "), sym[0], sym[MAX_RACES - 1]);
         put_str(buf, 10, 10);
         char c = inkey();
         if (c == 'Q') {
