@@ -1,13 +1,14 @@
 ﻿#pragma once
 
 #include "system/angband.h"
+#include <string>
 
 class PlayerType;
 class PlayerAlignment {
 public:
     PlayerAlignment(PlayerType *player_ptr);
     virtual ~PlayerAlignment() = default;
-    concptr get_alignment_description(bool with_value = false);
+    std::string get_alignment_description(bool with_value = false);
     void update_alignment();
 
 private:

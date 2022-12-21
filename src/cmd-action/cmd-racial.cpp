@@ -92,7 +92,8 @@ static void racial_power_display_list(PlayerType *player_ptr, rc_type *rc_ptr)
         auto &rpi = rc_ptr->power_desc[ctr];
         dummy.append(
             format("%-30.30s %2d %4d %3d%% %s", rpi.racial_name.data(), rpi.min_level, rpi.cost, 100 - racial_chance(player_ptr, &rc_ptr->power_desc[ctr]),
-                rpi.info.data()));
+                rpi.info.data())
+                .data());
 
         prt(dummy, 2 + y, x);
     }

@@ -16,6 +16,7 @@
 #include "view/display-messages.h"
 #include "world/world.h"
 #include <algorithm>
+#include <sstream>
 #include <stdexcept>
 #include <string>
 #include <utility>
@@ -36,15 +37,18 @@ static short get_rumor_num(std::string_view zz, short max_idx)
     return static_cast<short>(atoi(zz.data()));
 }
 
-static std::string_view bind_rumor_name(std::string &base, concptr fullname)
+static std::string bind_rumor_name(std::string_view base, concptr fullname)
 {
-    auto *s = strstr(base.data(), "{Name}");
-    if (s) {
-        s[0] = '\0';
-        return format("%s%s%s", base.data(), fullname, (s + 6));
+    if (const auto pos = base.find("{Name}");
+        pos != std::string::npos) {
+        const auto head = base.substr(0, pos);
+        const auto tail = base.substr(pos + 6);
+        std::stringstream ss;
+        ss << head << fullname << tail;
+        return ss.str();
     }
 
-    return base;
+    return std::string(base);
 }
 
 /*
@@ -176,8 +180,7 @@ void display_rumor(PlayerType *player_ptr, bool ex)
         throw std::runtime_error("Unknown token exists in rumor.txt");
     }
 
-    auto base = std::string(tokens[2]);
-    const auto rumor_msg = bind_rumor_name(base, fullname);
+    const auto rumor_msg = bind_rumor_name(tokens[2], fullname);
     msg_print(rumor_msg);
     if (rumor_eff_format) {
         msg_print(nullptr);

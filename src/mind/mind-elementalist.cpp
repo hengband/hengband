@@ -371,7 +371,7 @@ concptr get_element_name(int realm_idx, int n)
  * @param spell_idx 呪文番号
  * @return 説明文
  */
-static concptr get_element_tip(PlayerType *player_ptr, int spell_idx)
+static std::string get_element_tip(PlayerType *player_ptr, int spell_idx)
 {
     auto realm = i2enum<ElementRealmType>(player_ptr->element);
     auto spell = i2enum<ElementSpells>(spell_idx);
@@ -979,7 +979,7 @@ void do_cmd_element_browse(PlayerType *player_ptr)
         term_erase(12, 18, 255);
         term_erase(12, 17, 255);
         term_erase(12, 16, 255);
-        shape_buffer(get_element_tip(player_ptr, n), 62, temp, sizeof(temp));
+        shape_buffer(get_element_tip(player_ptr, n).data(), 62, temp, sizeof(temp));
         for (int j = 0, line = 17; temp[j]; j += (1 + strlen(&temp[j]))) {
             prt(&temp[j], line, 15);
             line++;

@@ -12,6 +12,7 @@
 #define INCLUDED_Z_FORM_H
 
 #include "system/h-basic.h"
+#include <string>
 
 /*
  * This file provides functions very similar to "sprintf()", but which
@@ -32,14 +33,11 @@ extern uint vstrnfmt(char *buf, uint max, concptr fmt, va_list vp);
 /* Simple interface to "vstrnfmt()" */
 extern uint strnfmt(char *buf, uint max, concptr fmt, ...);
 
-/* Simple interface to "vstrnfmt()", assuming infinite length */
-extern uint strfmt(char *buf, concptr fmt, ...);
-
 /* Format arguments into a static resizing buffer */
-extern char *vformat(concptr fmt, va_list vp);
+extern std::string vformat(concptr fmt, va_list vp);
 
 /* Simple interface to "vformat()" */
-extern char *format(concptr fmt, ...);
+extern std::string format(concptr fmt, ...);
 
 /* Vararg interface to "plog()", using "format()" */
 extern void plog_fmt(concptr fmt, ...);

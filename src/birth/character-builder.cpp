@@ -67,7 +67,7 @@ static void write_birth_diary(PlayerType *player_ptr)
     exe_write_diary(player_ptr, DIARY_DESCRIPTION, 1, buf);
     if (player_ptr->realm1) {
         strnfmt(buf, sizeof(buf), _("%s魔法の領域に%s%sを選択した。", "%schose %s%s."), indent, realm_names[player_ptr->realm1],
-            player_ptr->realm2 ? format(_("と%s", " and %s realms"), realm_names[player_ptr->realm2]) : _("", " realm"));
+            player_ptr->realm2 ? format(_("と%s", " and %s realms"), realm_names[player_ptr->realm2]).data() : _("", " realm"));
         exe_write_diary(player_ptr, DIARY_DESCRIPTION, 1, buf);
     }
     if (player_ptr->element) {

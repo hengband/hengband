@@ -2,6 +2,7 @@
 
 #include "system/angband.h"
 #include "wizard/spoiler-table.h"
+#include <string_view>
 
 /* MAX_LINE_LEN specifies when a line should wrap. */
 #define MAX_LINE_LEN 75
@@ -53,4 +54,4 @@ extern FILE *spoiler_file;
 
 void spoiler_blanklines(int n);
 void spoiler_underline(concptr str);
-void spoil_out(concptr str);
+void spoil_out(std::string_view sv, bool flush_buffer = false);

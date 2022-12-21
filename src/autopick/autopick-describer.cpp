@@ -231,7 +231,7 @@ static void describe_autpick_jp(char *buff, autopick_type *entry, autopick_descr
     if (describer->insc) {
         char tmp[MAX_INSCRIPTION + 1] = "";
         angband_strcat(tmp, describer->insc, MAX_INSCRIPTION);
-        angband_strcat(buff, format("に「%s」", tmp), MAX_INSCRIPTION + 6);
+        angband_strcat(buff, format("に「%s」", tmp).data(), MAX_INSCRIPTION + 6);
 
         if (angband_strstr(describer->insc, "%%all")) {
             strcat(buff, "(%%allは全能力を表す英字の記号で置換)");
@@ -485,7 +485,7 @@ void describe_autopick_en(char *buff, autopick_type *entry, autopick_describer *
     }
 
     if (describer->insc) {
-        strncat(buff, format("and inscribe \"%s\"", describer->insc), 80);
+        strncat(buff, format("and inscribe \"%s\"", describer->insc).data(), 80);
 
         if (angband_strstr(describer->insc, "%all")) {
             strcat(buff, ", replacing %all with code string representing all abilities,");

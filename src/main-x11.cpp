@@ -2208,7 +2208,7 @@ static errr term_data_init(term_data *td, int i)
     XWMHints *wh;
 #endif
 
-    font = getenv(format("ANGBAND_X11_FONT_%d", i));
+    font = getenv(format("ANGBAND_X11_FONT_%d", i).data());
     if (!font) {
         font = getenv("ANGBAND_X11_FONT");
     }
@@ -2245,19 +2245,19 @@ static errr term_data_init(term_data *td, int i)
         }
     }
 
-    str = getenv(format("ANGBAND_X11_AT_X_%d", i));
+    str = getenv(format("ANGBAND_X11_AT_X_%d", i).data());
     x = (str != nullptr) ? atoi(str) : -1;
 
-    str = getenv(format("ANGBAND_X11_AT_Y_%d", i));
+    str = getenv(format("ANGBAND_X11_AT_Y_%d", i).data());
     y = (str != nullptr) ? atoi(str) : -1;
 
-    str = getenv(format("ANGBAND_X11_COLS_%d", i));
+    str = getenv(format("ANGBAND_X11_COLS_%d", i).data());
     val = (str != nullptr) ? atoi(str) : -1;
     if (val > 0) {
         cols = val;
     }
 
-    str = getenv(format("ANGBAND_X11_ROWS_%d", i));
+    str = getenv(format("ANGBAND_X11_ROWS_%d", i).data());
     val = (str != nullptr) ? atoi(str) : -1;
     if (val > 0) {
         rows = val;
@@ -2272,13 +2272,13 @@ static errr term_data_init(term_data *td, int i)
         }
     }
 
-    str = getenv(format("ANGBAND_X11_IBOX_%d", i));
+    str = getenv(format("ANGBAND_X11_IBOX_%d", i).data());
     val = (str != nullptr) ? atoi(str) : -1;
     if (val > 0) {
         ox = val;
     }
 
-    str = getenv(format("ANGBAND_X11_IBOY_%d", i));
+    str = getenv(format("ANGBAND_X11_IBOY_%d", i).data());
     val = (str != nullptr) ? atoi(str) : -1;
     if (val > 0) {
         oy = val;

@@ -564,13 +564,13 @@ concptr autopick_line_from_entry(autopick_type *entry)
 
     if (IS_FLG(FLG_MORE_DICE)) {
         ADD_KEY(KEY_MORE_THAN);
-        strcat(ptr, format("%d", entry->dice));
+        strcat(ptr, format("%d", entry->dice).data());
         ADD_KEY(KEY_DICE);
     }
 
     if (IS_FLG(FLG_MORE_BONUS)) {
         ADD_KEY(KEY_MORE_BONUS);
-        strcat(ptr, format("%d", entry->bonus));
+        strcat(ptr, format("%d", entry->bonus).data());
         ADD_KEY(KEY_MORE_BONUS2);
     }
 

@@ -69,7 +69,7 @@ bool get_object_for_search(PlayerType *player_ptr, ItemEntity **o_handle, concpt
     string_free(*search_strp);
     char buf[MAX_NLEN + 20];
     describe_flavor(player_ptr, buf, *o_handle, (OD_NO_FLAVOR | OD_OMIT_PREFIX | OD_NO_PLURAL));
-    *search_strp = string_make(format("<%s>", buf));
+    *search_strp = string_make(format("<%s>", buf).data());
     return true;
 }
 
@@ -86,7 +86,7 @@ bool get_destroyed_object_for_search(PlayerType *player_ptr, ItemEntity **o_hand
     string_free(*search_strp);
     char buf[MAX_NLEN + 20];
     describe_flavor(player_ptr, buf, *o_handle, (OD_NO_FLAVOR | OD_OMIT_PREFIX | OD_NO_PLURAL));
-    *search_strp = string_make(format("<%s>", buf));
+    *search_strp = string_make(format("<%s>", buf).data());
     return true;
 }
 

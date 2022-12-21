@@ -15,12 +15,19 @@ class FloorType;
 class PlayerType;
 
 struct mspell_cast_msg {
-    mspell_cast_msg(concptr to_player_true, concptr to_mons_true, concptr to_player_false, concptr to_mons_false);
+    template <typename T, typename U, typename V, typename W>
+    mspell_cast_msg(T &&to_player_true, U &&to_mons_true, V &&to_player_false, W &&to_mons_false)
+        : to_player_true(std::forward<T>(to_player_true))
+        , to_mons_true(std::forward<U>(to_mons_true))
+        , to_player_false(std::forward<V>(to_player_false))
+        , to_mons_false(std::forward<W>(to_mons_false))
+    {
+    }
     mspell_cast_msg() = default;
-    concptr to_player_true; /*!< msg_flagがTRUEかつプレイヤー対象*/
-    concptr to_mons_true; /*!< msg_flagがTRUEかつモンスター対象*/
-    concptr to_player_false; /*!< msg_flagがFALSEかつプレイヤー対象*/
-    concptr to_mons_false; /*!< msg_flagがFALSEかつモンスター対象*/
+    std::string to_player_true; /*!< msg_flagがTRUEかつプレイヤー対象*/
+    std::string to_mons_true; /*!< msg_flagがTRUEかつモンスター対象*/
+    std::string to_player_false; /*!< msg_flagがFALSEかつプレイヤー対象*/
+    std::string to_mons_false; /*!< msg_flagがFALSEかつモンスター対象*/
 };
 
 struct mspell_cast_msg_blind {

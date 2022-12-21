@@ -26,7 +26,7 @@ PlayerAlignment::PlayerAlignment(PlayerType *player_ptr)
  * @param with_value 徳の情報と一緒に表示する時だけtrue
  * @return アライメントの表記を返す。
  */
-concptr PlayerAlignment::get_alignment_description(bool with_value)
+std::string PlayerAlignment::get_alignment_description(bool with_value)
 {
     auto s = alignment_label();
     if (with_value || show_actual_value) {

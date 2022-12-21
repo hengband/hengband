@@ -654,19 +654,10 @@ uint vstrnfmt(char *buf, uint max, concptr fmt, va_list vp)
     return n;
 }
 
-/*
- * Do a vstrnfmt (see above) into a (growable) static buffer.
- * This buffer is usable for very short term formatting of results.
- */
-char *vformat(concptr fmt, va_list vp)
+std::string vformat(concptr fmt, va_list vp)
 {
     /* Initial allocation */
-    static std::vector<char> format_buf(1024);
-
-    /* Null format yields last result */
-    if (!fmt) {
-        return format_buf.data();
-    }
+    std::vector<char> format_buf(1024);
 
     /* Keep going until successful */
     while (true) {
@@ -684,8 +675,8 @@ char *vformat(concptr fmt, va_list vp)
         format_buf.resize(format_buf.size() * 2);
     }
 
-    /* Return the new buffer */
-    return format_buf.data();
+    /* Return the new string */
+    return std::string(format_buf.data());
 }
 
 /*
@@ -711,44 +702,20 @@ uint strnfmt(char *buf, uint max, concptr fmt, ...)
 }
 
 /*
- * Do a vstrnfmt (see above) into a buffer of unknown size.
- * Since the buffer size is unknown, the user better verify the args.
- */
-uint strfmt(char *buf, concptr fmt, ...)
-{
-    uint len;
-
-    va_list vp;
-
-    /* Begin the Varargs Stuff */
-    va_start(vp, fmt);
-
-    /* Build the string, assume 32K buffer */
-    len = vstrnfmt(buf, 32767, fmt, vp);
-
-    /* End the Varargs Stuff */
-    va_end(vp);
-
-    /* Return the number of bytes written */
-    return len;
-}
-
-/*
  * Do a vstrnfmt() into (see above) into a (growable) static buffer.
  * This buffer is usable for very short term formatting of results.
  * Note that the buffer is (technically) writable, but only up to
  * the length of the string contained inside it.
  */
-char *format(concptr fmt, ...)
+std::string format(concptr fmt, ...)
 {
-    char *res;
     va_list vp;
 
     /* Begin the Varargs Stuff */
     va_start(vp, fmt);
 
     /* Format the args */
-    res = vformat(fmt, vp);
+    auto res = vformat(fmt, vp);
 
     /* End the Varargs Stuff */
     va_end(vp);
@@ -762,20 +729,19 @@ char *format(concptr fmt, ...)
  */
 void plog_fmt(concptr fmt, ...)
 {
-    char *res;
     va_list vp;
 
     /* Begin the Varargs Stuff */
     va_start(vp, fmt);
 
     /* Format the args */
-    res = vformat(fmt, vp);
+    auto res = vformat(fmt, vp);
 
     /* End the Varargs Stuff */
     va_end(vp);
 
     /* Call plog */
-    plog(res);
+    plog(res.data());
 }
 
 /*
@@ -783,20 +749,19 @@ void plog_fmt(concptr fmt, ...)
  */
 void quit_fmt(concptr fmt, ...)
 {
-    char *res;
     va_list vp;
 
     /* Begin the Varargs Stuff */
     va_start(vp, fmt);
 
     /* Format */
-    res = vformat(fmt, vp);
+    auto res = vformat(fmt, vp);
 
     /* End the Varargs Stuff */
     va_end(vp);
 
     /* Call quit() */
-    quit(res);
+    quit(res.data());
 }
 
 /*
@@ -804,18 +769,17 @@ void quit_fmt(concptr fmt, ...)
  */
 void core_fmt(concptr fmt, ...)
 {
-    char *res;
     va_list vp;
 
     /* Begin the Varargs Stuff */
     va_start(vp, fmt);
 
     /* If requested, Do a virtual fprintf to stderr */
-    res = vformat(fmt, vp);
+    auto res = vformat(fmt, vp);
 
     /* End the Varargs Stuff */
     va_end(vp);
 
     /* Call core() */
-    core(res);
+    core(res.data());
 }

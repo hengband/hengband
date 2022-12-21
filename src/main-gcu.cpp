@@ -1499,13 +1499,13 @@ errr init_gcu(int argc, char *argv[])
 
                 i++;
                 if (i >= argc) {
-                    quit(format("Missing size specifier for -%s", left ? "left" : "right"));
+                    quit_fmt("Missing size specifier for -%s", left ? "left" : "right");
                 }
 
                 arg = argv[i];
                 tmp = strchr(arg, 'x');
                 if (!tmp) {
-                    quit(format("Expected something like -%s 60x27,* for two %s hand terminals of 60 columns, the first 27 lines and the second whatever is left.", left ? "left" : "right", left ? "left" : "right"));
+                    quit_fmt("Expected something like -%s 60x27,* for two %s hand terminals of 60 columns, the first 27 lines and the second whatever is left.", left ? "left" : "right", left ? "left" : "right");
                 }
                 cx = atoi(arg);
                 remaining.cx -= cx;
@@ -1530,11 +1530,11 @@ errr init_gcu(int argc, char *argv[])
                         cy = remaining.y + remaining.cy - y;
                     }
                     if (next_term >= MAX_TERM_DATA) {
-                        quit(format("Too many terminals. Only %d are allowed.", MAX_TERM_DATA));
+                        quit_fmt("Too many terminals. Only %d are allowed.", MAX_TERM_DATA);
                     }
                     if (cy <= 0) {
-                        quit(format("Out of bounds in -%s: %d is too large (%d rows max for this strip)",
-                            left ? "left" : "right", cys[j], remaining.cy));
+                        quit_fmt("Out of bounds in -%s: %d is too large (%d rows max for this strip)",
+                            left ? "left" : "right", cys[j], remaining.cy);
                     }
                     data[next_term++].r = rect(x, y, cx, cy);
                     y += cy + spacer_cy;
@@ -1547,13 +1547,13 @@ errr init_gcu(int argc, char *argv[])
 
                 i++;
                 if (i >= argc) {
-                    quit(format("Missing size specifier for -%s", top ? "top" : "bottom"));
+                    quit_fmt("Missing size specifier for -%s", top ? "top" : "bottom");
                 }
 
                 arg = argv[i];
                 tmp = strchr(arg, 'x');
                 if (!tmp) {
-                    quit(format("Expected something like -%s *x7 for a single %s terminal of 7 lines using as many columns as are available.", top ? "top" : "bottom", top ? "top" : "bottom"));
+                    quit_fmt("Expected something like -%s *x7 for a single %s terminal of 7 lines using as many columns as are available.", top ? "top" : "bottom", top ? "top" : "bottom");
                 }
                 tmp++;
                 cy = atoi(tmp);
@@ -1580,11 +1580,11 @@ errr init_gcu(int argc, char *argv[])
                         cx = remaining.x + remaining.cx - x;
                     }
                     if (next_term >= MAX_TERM_DATA) {
-                        quit(format("Too many terminals. Only %d are allowed.", MAX_TERM_DATA));
+                        quit_fmt("Too many terminals. Only %d are allowed.", MAX_TERM_DATA);
                     }
                     if (cx <= 0) {
-                        quit(format("Out of bounds in -%s: %d is too large (%d cols max for this strip)",
-                            top ? "top" : "bottom", cxs[j], remaining.cx));
+                        quit_fmt("Out of bounds in -%s: %d is too large (%d cols max for this strip)",
+                            top ? "top" : "bottom", cxs[j], remaining.cx);
                     }
                     data[next_term++].r = rect(x, y, cx, cy);
                     x += cx + spacer_cx;

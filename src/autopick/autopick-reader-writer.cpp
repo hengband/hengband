@@ -8,6 +8,7 @@
 #include "util/angband-files.h"
 #include "util/string-processor.h"
 #include "view/display-messages.h"
+#include <stdexcept>
 
 /*!
  * @brief Load an autopick preference file
@@ -16,14 +17,14 @@ void autopick_load_pref(PlayerType *player_ptr, bool disp_mes)
 {
     GAME_TEXT buf[80];
     init_autopick();
-    angband_strcpy(buf, pickpref_filename(player_ptr, PT_WITH_PNAME), sizeof(buf));
+    angband_strcpy(buf, pickpref_filename(player_ptr, PT_WITH_PNAME).data(), sizeof(buf));
     errr err = process_autopick_file(player_ptr, buf);
     if (err == 0 && disp_mes) {
         msg_format(_("%sを読み込みました。", "Loaded '%s'."), buf);
     }
 
     if (err < 0) {
-        angband_strcpy(buf, pickpref_filename(player_ptr, PT_DEFAULT), sizeof(buf));
+        angband_strcpy(buf, pickpref_filename(player_ptr, PT_DEFAULT).data(), sizeof(buf));
         err = process_autopick_file(player_ptr, buf);
         if (err == 0 && disp_mes) {
             msg_format(_("%sを読み込みました。", "Loaded '%s'."), buf);
@@ -38,7 +39,7 @@ void autopick_load_pref(PlayerType *player_ptr, bool disp_mes)
 /*!
  * @brief Get file name for autopick preference
  */
-concptr pickpref_filename(PlayerType *player_ptr, int filename_mode)
+std::string pickpref_filename(PlayerType *player_ptr, int filename_mode)
 {
     static const char namebase[] = _("picktype", "pickpref");
 
@@ -50,7 +51,7 @@ concptr pickpref_filename(PlayerType *player_ptr, int filename_mode)
         return format("%s-%s.prf", namebase, player_ptr->base_name);
 
     default:
-        return nullptr;
+        throw std::invalid_argument(format("The value of argument 'filename_mode' is invalid: %d", filename_mode));
     }
 }
 
@@ -95,14 +96,14 @@ static void prepare_default_pickpref(PlayerType *player_ptr)
         _("自動拾いのユーザー設定ファイルがまだ書かれていないので、", "Since user pref file for autopick is not yet created,"),
         _("基本的な自動拾い設定ファイルをlib/pref/picktype.prfからコピーします。", "the default setting is loaded from lib/pref/pickpref.prf ."), nullptr };
 
-    concptr filename = pickpref_filename(player_ptr, PT_DEFAULT);
+    const auto filename = pickpref_filename(player_ptr, PT_DEFAULT);
     for (int i = 0; messages[i]; i++) {
         msg_print(messages[i]);
     }
 
     msg_print(nullptr);
     char buf[1024];
-    path_build(buf, sizeof(buf), ANGBAND_DIR_USER, filename);
+    path_build(buf, sizeof(buf), ANGBAND_DIR_USER, filename.data());
     FILE *user_fp;
     user_fp = angband_fopen(buf, "w");
     if (!user_fp) {
@@ -115,7 +116,7 @@ static void prepare_default_pickpref(PlayerType *player_ptr)
     }
 
     fprintf(user_fp, "#***\n\n\n");
-    path_build(buf, sizeof(buf), ANGBAND_DIR_PREF, filename);
+    path_build(buf, sizeof(buf), ANGBAND_DIR_PREF, filename.data());
     FILE *pref_fp;
     pref_fp = angband_fopen(buf, "r");
 
@@ -140,19 +141,18 @@ std::vector<concptr> read_pickpref_text_lines(PlayerType *player_ptr, int *filen
 {
     /* Try a filename with player name */
     *filename_mode_p = PT_WITH_PNAME;
-    char buf[1024];
-    strcpy(buf, pickpref_filename(player_ptr, *filename_mode_p));
-    std::vector<concptr> lines_list = read_text_lines(buf);
+    auto filename = pickpref_filename(player_ptr, *filename_mode_p);
+    std::vector<concptr> lines_list = read_text_lines(filename.data());
 
     if (lines_list.empty()) {
         *filename_mode_p = PT_DEFAULT;
-        strcpy(buf, pickpref_filename(player_ptr, *filename_mode_p));
-        lines_list = read_text_lines(buf);
+        filename = pickpref_filename(player_ptr, *filename_mode_p);
+        lines_list = read_text_lines(filename.data());
     }
 
     if (lines_list.empty()) {
         prepare_default_pickpref(player_ptr);
-        lines_list = read_text_lines(buf);
+        lines_list = read_text_lines(filename.data());
     }
 
     if (lines_list.empty()) {
