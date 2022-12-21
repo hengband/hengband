@@ -385,11 +385,8 @@ static int decide_random_art_power_level(ItemEntity *o_ptr, const bool a_cursed,
 
 static std::string name_unnatural_random_artifact(PlayerType *player_ptr, ItemEntity *o_ptr, const bool a_scroll, const int power_level)
 {
-    GAME_TEXT new_name[1024] = "";
-
     if (!a_scroll) {
-        get_random_name(o_ptr, new_name, o_ptr->is_protector(), power_level);
-        return new_name;
+        return get_random_name(*o_ptr, o_ptr->is_protector(), power_level);
     }
 
     concptr ask_msg = _("このアーティファクトを何と名付けますか？", "What do you want to call the artifact? ");
@@ -398,6 +395,7 @@ static std::string name_unnatural_random_artifact(PlayerType *player_ptr, ItemEn
     o_ptr->ident |= IDENT_FULL_KNOWN;
     o_ptr->art_name = quark_add("");
     (void)screen_object(player_ptr, o_ptr, 0L);
+    char new_name[1024] = "";
     if (!get_string(ask_msg, new_name, sizeof new_name) || !new_name[0]) {
         if (one_in_(2)) {
             get_table_sindarin_aux(new_name);
