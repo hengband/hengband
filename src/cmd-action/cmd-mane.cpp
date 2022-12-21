@@ -65,6 +65,7 @@
 #include "target/target-setter.h"
 #include "target/target-types.h"
 #include "term/screen-processor.h"
+#include "term/z-form.h"
 #include "timed-effect/player-stun.h"
 #include "timed-effect/timed-effects.h"
 #include "util/enum-converter.h"
@@ -180,7 +181,6 @@ static int get_mane_power(PlayerType *player_ptr, int *sn, bool baigaesi)
         if ((choice == ' ') || (choice == '*') || (choice == '?')) {
             /* Show the list */
             if (!redraw) {
-                char psi_desc[160];
                 redraw = true;
                 screen_save();
 
@@ -233,8 +233,7 @@ static int get_mane_power(PlayerType *player_ptr, int *sn, bool baigaesi)
                     mane_info(player_ptr, comment, mane.spell, (baigaesi ? mane.damage * 2 : mane.damage));
 
                     /* Dump the spell --(-- */
-                    sprintf(psi_desc, "  %c) %-30s %3d%%%s", I2A(i), spell.name, chance, comment);
-                    prt(psi_desc, y + i + 1, x);
+                    prt(format("  %c) %-30s %3d%%%s", I2A(i), spell.name, chance, comment), y + i + 1, x);
                 }
 
                 /* Clear the bottom line */

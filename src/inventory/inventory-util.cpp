@@ -285,7 +285,6 @@ INVENTORY_IDX label_to_inventory(PlayerType *player_ptr, int c)
 bool verify(PlayerType *player_ptr, concptr prompt, INVENTORY_IDX item)
 {
     GAME_TEXT o_name[MAX_NLEN];
-    char out_val[MAX_NLEN + 20];
     ItemEntity *o_ptr;
     if (item >= 0) {
         o_ptr = &player_ptr->inventory_list[item];
@@ -294,7 +293,11 @@ bool verify(PlayerType *player_ptr, concptr prompt, INVENTORY_IDX item)
     }
 
     describe_flavor(player_ptr, o_name, o_ptr, 0);
-    (void)sprintf(out_val, _("%s%sですか? ", "%s %s? "), prompt, o_name);
+    std::string out_val = prompt;
+#ifndef JP
+    out_val.append(" ");
+#endif
+    out_val.append(o_name).append(_("ですか? ", "? "));
     return get_check(out_val);
 }
 

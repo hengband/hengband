@@ -192,18 +192,18 @@ errr top_twenty(PlayerType *player_ptr)
     char buf[32];
 
     /* Save the version */
-    sprintf(the_score.what, "%u.%u.%u", H_VER_MAJOR, H_VER_MINOR, H_VER_PATCH);
+    snprintf(the_score.what, sizeof(the_score.what), "%u.%u.%u", H_VER_MAJOR, H_VER_MINOR, H_VER_PATCH);
 
     /* Calculate and save the points */
-    sprintf(the_score.pts, "%9ld", (long)calc_score(player_ptr));
+    snprintf(the_score.pts, sizeof(the_score.pts), "%9ld", (long)calc_score(player_ptr));
     the_score.pts[9] = '\0';
 
     /* Save the current gold */
-    sprintf(the_score.gold, "%9lu", (long)player_ptr->au);
+    snprintf(the_score.gold, sizeof(the_score.gold), "%9lu", (long)player_ptr->au);
     the_score.gold[9] = '\0';
 
     /* Save the current turn */
-    sprintf(the_score.turns, "%9lu", (long)turn_real(player_ptr, w_ptr->game_turn));
+    snprintf(the_score.turns, sizeof(the_score.turns), "%9lu", (long)turn_real(player_ptr, w_ptr->game_turn));
     the_score.turns[9] = '\0';
 
     time_t ct = time((time_t *)0);
@@ -212,11 +212,11 @@ errr top_twenty(PlayerType *player_ptr)
     strftime(the_score.day, 10, "@%Y%m%d", localtime(&ct));
 
     /* Save the player name (15 chars) */
-    sprintf(the_score.who, "%-.15s", player_ptr->name);
+    snprintf(the_score.who, sizeof(the_score.who), "%-.15s", player_ptr->name);
 
     /* Save the player info */
-    sprintf(the_score.uid, "%7u", player_ptr->player_uid);
-    sprintf(the_score.sex, "%c", (player_ptr->psex ? 'm' : 'f'));
+    snprintf(the_score.uid, sizeof(the_score.uid), "%7u", player_ptr->player_uid);
+    snprintf(the_score.sex, sizeof(the_score.sex), "%c", (player_ptr->psex ? 'm' : 'f'));
     snprintf(buf, sizeof(buf), "%2d", std::min(enum2i(player_ptr->prace), MAX_RACES));
     memcpy(the_score.p_r, buf, 3);
     snprintf(buf, sizeof(buf), "%2d", enum2i(std::min(player_ptr->pclass, PlayerClassType::MAX)));
@@ -225,19 +225,19 @@ errr top_twenty(PlayerType *player_ptr)
     memcpy(the_score.p_a, buf, 3);
 
     /* Save the level and such */
-    sprintf(the_score.cur_lev, "%3d", std::min<ushort>(player_ptr->lev, 999));
-    sprintf(the_score.cur_dun, "%3d", (int)player_ptr->current_floor_ptr->dun_level);
-    sprintf(the_score.max_lev, "%3d", std::min<ushort>(player_ptr->max_plv, 999));
-    sprintf(the_score.max_dun, "%3d", (int)max_dlv[player_ptr->dungeon_idx]);
+    snprintf(the_score.cur_lev, sizeof(the_score.cur_lev), "%3d", std::min<ushort>(player_ptr->lev, 999));
+    snprintf(the_score.cur_dun, sizeof(the_score.cur_dun), "%3d", (int)player_ptr->current_floor_ptr->dun_level);
+    snprintf(the_score.max_lev, sizeof(the_score.max_lev), "%3d", std::min<ushort>(player_ptr->max_plv, 999));
+    snprintf(the_score.max_dun, sizeof(the_score.max_dun), "%3d", (int)max_dlv[player_ptr->dungeon_idx]);
 
     /* Save the cause of death (31 chars) */
     if (player_ptr->died_from.size() >= sizeof(the_score.how)) {
 #ifdef JP
         angband_strcpy(the_score.how, player_ptr->died_from.data(), sizeof(the_score.how) - 2);
-        strcat(the_score.how, "…");
+        angband_strcat(the_score.how, "…", sizeof(the_score.how));
 #else
         angband_strcpy(the_score.how, player_ptr->died_from.data(), sizeof(the_score.how) - 3);
-        strcat(the_score.how, "...");
+        angband_strcat(the_score.how, "...", sizeof(the_score.how));
 #endif
     } else {
         angband_strcpy(the_score.how, player_ptr->died_from.data(), sizeof(the_score.how));
@@ -302,26 +302,26 @@ errr predict_score(PlayerType *player_ptr)
     }
 
     /* Save the version */
-    sprintf(the_score.what, "%u.%u.%u", H_VER_MAJOR, H_VER_MINOR, H_VER_PATCH);
+    snprintf(the_score.what, sizeof(the_score.what), "%u.%u.%u", H_VER_MAJOR, H_VER_MINOR, H_VER_PATCH);
 
     /* Calculate and save the points */
-    sprintf(the_score.pts, "%9ld", (long)calc_score(player_ptr));
+    snprintf(the_score.pts, sizeof(the_score.pts), "%9ld", (long)calc_score(player_ptr));
 
     /* Save the current gold */
-    sprintf(the_score.gold, "%9lu", (long)player_ptr->au);
+    snprintf(the_score.gold, sizeof(the_score.gold), "%9lu", (long)player_ptr->au);
 
     /* Save the current turn */
-    sprintf(the_score.turns, "%9lu", (long)turn_real(player_ptr, w_ptr->game_turn));
+    snprintf(the_score.turns, sizeof(the_score.turns), "%9lu", (long)turn_real(player_ptr, w_ptr->game_turn));
 
     /* Hack -- no time needed */
-    strcpy(the_score.day, _("今日", "TODAY"));
+    angband_strcpy(the_score.day, _("今日", "TODAY"), sizeof(the_score.day));
 
     /* Save the player name (15 chars) */
-    sprintf(the_score.who, "%-.15s", player_ptr->name);
+    snprintf(the_score.who, sizeof(the_score.who), "%-.15s", player_ptr->name);
 
     /* Save the player info */
-    sprintf(the_score.uid, "%7u", player_ptr->player_uid);
-    sprintf(the_score.sex, "%c", (player_ptr->psex ? 'm' : 'f'));
+    snprintf(the_score.uid, sizeof(the_score.uid), "%7u", player_ptr->player_uid);
+    snprintf(the_score.sex, sizeof(the_score.sex), "%c", (player_ptr->psex ? 'm' : 'f'));
     snprintf(buf, sizeof(buf), "%2d", std::min(enum2i(player_ptr->prace), MAX_RACES));
     memcpy(the_score.p_r, buf, 3);
     snprintf(buf, sizeof(buf), "%2d", enum2i(std::min(player_ptr->pclass, PlayerClassType::MAX)));
@@ -330,10 +330,10 @@ errr predict_score(PlayerType *player_ptr)
     memcpy(the_score.p_a, buf, 3);
 
     /* Save the level and such */
-    sprintf(the_score.cur_lev, "%3d", std::min<ushort>(player_ptr->lev, 999));
-    sprintf(the_score.cur_dun, "%3d", (int)player_ptr->current_floor_ptr->dun_level);
-    sprintf(the_score.max_lev, "%3d", std::min<ushort>(player_ptr->max_plv, 999));
-    sprintf(the_score.max_dun, "%3d", (int)max_dlv[player_ptr->dungeon_idx]);
+    snprintf(the_score.cur_lev, sizeof(the_score.cur_lev), "%3d", std::min<ushort>(player_ptr->lev, 999));
+    snprintf(the_score.cur_dun, sizeof(the_score.cur_dun), "%3d", (int)player_ptr->current_floor_ptr->dun_level);
+    snprintf(the_score.max_lev, sizeof(the_score.max_lev), "%3d", std::min<ushort>(player_ptr->max_plv, 999));
+    snprintf(the_score.max_dun, sizeof(the_score.max_dun), "%3d", (int)max_dlv[player_ptr->dungeon_idx]);
 
     /* まだ死んでいないときの識別文字 */
     strcpy(the_score.how, _("yet", "nobody (yet!)"));
@@ -396,9 +396,9 @@ void show_highclass(PlayerType *player_ptr)
         clev = (PLAYER_LEVEL)atoi(the_score.cur_lev);
 
 #ifdef JP
-        sprintf(out_val, "   %3d) %sの%s (レベル %2d)", (m + 1), race_info[pr].title, the_score.who, clev);
+        snprintf(out_val, sizeof(out_val), "   %3d) %sの%s (レベル %2d)", (m + 1), race_info[pr].title, the_score.who, clev);
 #else
-        sprintf(out_val, "%3d) %s the %s (Level %2d)", (m + 1), the_score.who, race_info[pr].title, clev);
+        snprintf(out_val, sizeof(out_val), "%3d) %s the %s (Level %2d)", (m + 1), the_score.who, race_info[pr].title, clev);
 #endif
 
         prt(out_val, (m + 7), 0);
@@ -407,9 +407,9 @@ void show_highclass(PlayerType *player_ptr)
     }
 
 #ifdef JP
-    sprintf(out_val, "あなた) %sの%s (レベル %2d)", race_info[enum2i(player_ptr->prace)].title, player_ptr->name, player_ptr->lev);
+    snprintf(out_val, sizeof(out_val), "あなた) %sの%s (レベル %2d)", race_info[enum2i(player_ptr->prace)].title, player_ptr->name, player_ptr->lev);
 #else
-    sprintf(out_val, "You) %s the %s (Level %2d)", player_ptr->name, race_info[enum2i(player_ptr->prace)].title, player_ptr->lev);
+    snprintf(out_val, sizeof(out_val), "You) %s the %s (Level %2d)", player_ptr->name, race_info[enum2i(player_ptr->prace)].title, player_ptr->lev);
 #endif
 
     prt(out_val, (m + 8), 0);
@@ -436,14 +436,12 @@ void race_score(PlayerType *player_ptr, int race_num)
     int i = 0, j, m = 0;
     int pr, clev, lastlev;
     high_score the_score;
-    char buf[1024], out_val[256], tmp_str[80];
+    char buf[1024], out_val[256];
 
     lastlev = 0;
 
     /* rr9: TODO - pluralize the race */
-    sprintf(tmp_str, _("最高の%s", "The Greatest of all the %s"), race_info[race_num].title);
-
-    prt(tmp_str, 5, 15);
+    prt(std::string(_("最高の", "The Greatest of all the ")).append(race_info[race_num].title), 5, 15);
     path_build(buf, sizeof(buf), ANGBAND_DIR_APEX, "scores.raw");
 
     highscore_fd = fd_open(buf, O_RDONLY);
@@ -479,9 +477,9 @@ void race_score(PlayerType *player_ptr, int race_num)
 
         if (pr == race_num) {
 #ifdef JP
-            sprintf(out_val, "   %3d) %sの%s (レベル %2d)", (m + 1), race_info[pr].title, the_score.who, clev);
+            snprintf(out_val, sizeof(out_val), "   %3d) %sの%s (レベル %2d)", (m + 1), race_info[pr].title, the_score.who, clev);
 #else
-            sprintf(out_val, "%3d) %s the %s (Level %3d)", (m + 1), the_score.who, race_info[pr].title, clev);
+            snprintf(out_val, sizeof(out_val), "%3d) %s the %s (Level %3d)", (m + 1), the_score.who, race_info[pr].title, clev);
 #endif
 
             prt(out_val, (m + 7), 0);
@@ -494,9 +492,9 @@ void race_score(PlayerType *player_ptr, int race_num)
     /* add player if qualified */
     if ((enum2i(player_ptr->prace) == race_num) && (player_ptr->lev >= lastlev)) {
 #ifdef JP
-        sprintf(out_val, "あなた) %sの%s (レベル %2d)", race_info[enum2i(player_ptr->prace)].title, player_ptr->name, player_ptr->lev);
+        snprintf(out_val, sizeof(out_val), "あなた) %sの%s (レベル %2d)", race_info[enum2i(player_ptr->prace)].title, player_ptr->name, player_ptr->lev);
 #else
-        sprintf(out_val, "You) %s the %s (Level %3d)", player_ptr->name, race_info[enum2i(player_ptr->prace)].title, player_ptr->lev);
+        snprintf(out_val, sizeof(out_val), "You) %s the %s (Level %3d)", player_ptr->name, race_info[enum2i(player_ptr->prace)].title, player_ptr->lev);
 #endif
 
         prt(out_val, (m + 8), 0);

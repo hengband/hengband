@@ -13,6 +13,7 @@
 #include "target/target-checker.h"
 #include "target/target-setter.h"
 #include "target/target-types.h"
+#include "term/z-form.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 #include "window/main-window-util.h"
@@ -53,26 +54,21 @@ void do_cmd_look(PlayerType *player_ptr)
  */
 void do_cmd_locate(PlayerType *player_ptr)
 {
+    const char *dirstrings[3][3] = {
+        { _("北西", " northwest of"), _("北", " north of"), _("北東", " northeast of") },
+        { _("西", " west of"), _("真上", ""), _("東", " east of") },
+        { _("南西", " southwest of"), _("南", " south of"), _("南東", " southeast of") },
+    };
     DIRECTION dir;
     POSITION y1, x1;
-    GAME_TEXT tmp_val[80];
-    GAME_TEXT out_val[MAX_MONSTER_NAME];
     TERM_LEN wid, hgt;
     get_screen_size(&wid, &hgt);
     POSITION y2 = y1 = panel_row_min;
     POSITION x2 = x1 = panel_col_min;
     while (true) {
-        if ((y2 == y1) && (x2 == x1)) {
-            strcpy(tmp_val, _("真上", "\0"));
-        } else {
-            sprintf(tmp_val, "%s%s", ((y2 < y1) ? _("北", " North") : (y2 > y1) ? _("南", " South")
-                                                                                : ""),
-                ((x2 < x1) ? _("西", " West") : (x2 > x1) ? _("東", " East")
-                                                          : ""));
-        }
-
-        sprintf(out_val, _("マップ位置 [%d(%02d),%d(%02d)] (プレイヤーの%s)  方向?", "Map sector [%d(%02d),%d(%02d)], which is%s your sector.  Direction?"),
-            y2 / (hgt / 2), y2 % (hgt / 2), x2 / (wid / 2), x2 % (wid / 2), tmp_val);
+        std::string_view dirstring = dirstrings[(y2 < y1) ? 0 : ((y2 > y1) ? 2 : 1)][(x2 < x1) ? 0 : ((x2 > x1) ? 2 : 1)];
+        std::string out_val = format(_("マップ位置 [%d(%02d),%d(%02d)] (プレイヤーの%s)  方向?", "Map sector [%d(%02d),%d(%02d)], which is%s your sector.  Direction?"),
+            y2 / (hgt / 2), y2 % (hgt / 2), x2 / (wid / 2), x2 % (wid / 2), dirstring.data());
 
         dir = 0;
         while (!dir) {

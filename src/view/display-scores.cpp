@@ -9,6 +9,7 @@
 #include "system/angband.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
+#include "term/z-form.h"
 #include "util/angband-files.h"
 #include "util/int-char-converter.h"
 
@@ -70,10 +71,8 @@ void display_scores(int from, int to, int note, high_score *score)
     for (auto k = from, place = k + 1; k < num_scores; k += per_screen) {
         term_clear();
         put_str(_("                変愚蛮怒: 勇者の殿堂", "                Hengband Hall of Fame"), 0, 0);
-        GAME_TEXT tmp_val[160];
         if (k > 0) {
-            sprintf(tmp_val, _("( %d 位以下 )", "(from position %d)"), k + 1);
-            put_str(tmp_val, 0, 40);
+            put_str(format(_("( %d 位以下 )", "(from position %d)"), k + 1), 0, 40);
         }
 
         for (auto n = 0, j = k; (j < num_scores) && (n < per_screen); place++, j++, n++) {
@@ -117,72 +116,71 @@ void display_scores(int from, int to, int note, high_score *score)
                 ;
             }
 
+            std::string alt_when;
             if ((*when == '@') && strlen(when) == 9) {
-                sprintf(tmp_val, "%.4s-%.2s-%.2s", when + 1, when + 5, when + 7);
-                when = tmp_val;
+                alt_when = format("%.4s-%.2s-%.2s", when + 1, when + 5, when + 7);
+                when = alt_when.data();
             }
 
-            GAME_TEXT out_val[256];
+            std::string out_val;
 #ifdef JP
-            /*sprintf(out_val, "%3d.%9s  %s%s%sという名の%sの%s (レベル %d)", */
-            sprintf(out_val, "%3d.%9s  %s%s%s - %s%s (レベル %d)", place, the_score.pts, personality_info[pa].title, (personality_info[pa].no ? "の" : ""),
+            /* out_val = format("%3d.%9s  %s%s%sという名の%sの%s (レベル %d)", */
+            out_val = format("%3d.%9s  %s%s%s - %s%s (レベル %d)", place, the_score.pts, personality_info[pa].title, (personality_info[pa].no ? "の" : ""),
                 the_score.who, race_info[pr].title, class_info[pc].title, clev);
 
 #else
-            sprintf(out_val, "%3d.%9s  %s %s the %s %s, Level %d", place, the_score.pts, personality_info[pa].title, the_score.who, race_info[pr].title,
+            out_val = format("%3d.%9s  %s %s the %s %s, Level %d", place, the_score.pts, personality_info[pa].title, the_score.who, race_info[pr].title,
                 class_info[pc].title, clev);
 #endif
             if (mlev > clev) {
-                strcat(out_val, format(_(" (最高%d)", " (Max %d)"), mlev));
+                out_val.append(format(_(" (最高%d)", " (Max %d)"), mlev));
             }
 
             c_put_str(attr, out_val, n * 4 + 2, 0);
 #ifdef JP
             if (mdun != 0) {
-                sprintf(out_val, "    最高%3d階", mdun);
+                out_val = format("    最高%3d階", mdun);
             } else {
-                sprintf(out_val, "             ");
+                out_val = "             ";
             }
 
             /* 死亡原因をオリジナルより細かく表示 */
             if (streq(the_score.how, "yet")) {
-                sprintf(out_val + 13, "  まだ生きている (%d%s)", cdun, "階");
+                out_val.append(format("  まだ生きている (%d%s)", cdun, "階"));
             } else if (streq(the_score.how, "ripe")) {
-                sprintf(out_val + 13, "  勝利の後に引退 (%d%s)", cdun, "階");
+                out_val.append(format("  勝利の後に引退 (%d%s)", cdun, "階"));
             } else if (streq(the_score.how, "Seppuku")) {
-                sprintf(out_val + 13, "  勝利の後に切腹 (%d%s)", cdun, "階");
+                out_val.append(format("  勝利の後に切腹 (%d%s)", cdun, "階"));
             } else {
                 codeconv(the_score.how);
                 if (!cdun) {
-                    sprintf(out_val + 13, "  地上で%sに殺された", the_score.how);
+                    out_val.append(format("  地上で%sに殺された", the_score.how));
                 } else {
-                    sprintf(out_val + 13, "  %d階で%sに殺された", cdun, the_score.how);
+                    out_val.append(format("  %d階で%sに殺された", cdun, the_score.how));
                 }
             }
 #else
             if (!cdun) {
-                sprintf(out_val, "               Killed by %s on the surface", the_score.how);
+                out_val = format("               Killed by %s on the surface", the_score.how);
             } else {
-                sprintf(out_val, "               Killed by %s on %s %d", the_score.how, "Dungeon Level", cdun);
+                out_val = format("               Killed by %s on %s %d", the_score.how, "Dungeon Level", cdun);
             }
 
             if (mdun > cdun) {
-                strcat(out_val, format(" (Max %d)", mdun));
+                out_val.append(format(" (Max %d)", mdun));
             }
 #endif
             c_put_str(attr, out_val, n * 4 + 3, 0);
 #ifdef JP
-            char buf[11];
-
             /* 日付を 19yy/mm/dd の形式に変更する */
             if (strlen(when) == 8 && when[2] == '/' && when[5] == '/') {
-                sprintf(buf, "%d%s/%.5s", 19 + (when[6] < '8'), when + 6, when);
-                when = buf;
+                alt_when = format("%d%s/%.5s", 19 + (when[6] < '8'), when + 6, when);
+                when = alt_when.data();
             }
 
-            sprintf(out_val, "        (ユーザー:%s, 日付:%s, 所持金:%s, ターン:%s)", user, when, gold, aged);
+            out_val = format("        (ユーザー:%s, 日付:%s, 所持金:%s, ターン:%s)", user, when, gold, aged);
 #else
-            sprintf(out_val, "               (User %s, Date %s, Gold %s, Turn %s).", user, when, gold, aged);
+            out_val = format("               (User %s, Date %s, Gold %s, Turn %s).", user, when, gold, aged);
 #endif
 
             c_put_str(attr, out_val, n * 4 + 4, 0);

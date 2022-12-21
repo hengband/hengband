@@ -30,6 +30,7 @@
 #include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
 #include "term/screen-processor.h"
+#include "term/z-form.h"
 #include "util/angband-files.h"
 #include "util/bit-flags-calculator.h"
 #include "util/int-char-converter.h"
@@ -106,8 +107,7 @@ static SpoilerOutputResultType spoil_mon_evol(concptr fname)
 
     char title[200];
     put_version(title);
-    sprintf(buf, "Monster Spoilers for %s\n", title);
-    spoil_out(buf);
+    spoil_out(std::string("Monster Spoilers for ").append(title).append("\n").data());
 
     spoil_out("------------------------------------------\n\n");
 
@@ -188,8 +188,7 @@ static SpoilerOutputResultType spoil_player_spell(concptr fname)
 
     char title[200];
     put_version(title);
-    sprintf(buf, "Player Spells for %s\n", title);
-    spoil_out(buf);
+    spoil_out(format("Player spells for %s\n", title));
     spoil_out("------------------------------------------\n\n");
 
     PlayerType dummy_p;
@@ -197,8 +196,7 @@ static SpoilerOutputResultType spoil_player_spell(concptr fname)
 
     for (int c = 0; c < PLAYER_CLASS_TYPE_MAX; c++) {
         auto class_ptr = &class_info[c];
-        sprintf(buf, "[[Class: %s]]\n", class_ptr->title);
-        spoil_out(buf);
+        spoil_out(format("[[Class: %s]]\n", class_ptr->title));
 
         auto magic_ptr = &class_magics_info[c];
         concptr book_name = "なし";
@@ -212,23 +210,19 @@ static SpoilerOutputResultType spoil_player_spell(concptr fname)
             *s = '\0';
         }
 
-        sprintf(buf, "BookType:%s Stat:%s Xtra:%x Type:%d Weight:%d\n", book_name, wiz_spell_stat[magic_ptr->spell_stat].data(), magic_ptr->spell_xtra,
-            magic_ptr->spell_type, magic_ptr->spell_weight);
-        spoil_out(buf);
+        spoil_out(format("BookType:%s Stat:%s Xtra:%x Type:%d Weight:%d\n", book_name, wiz_spell_stat[magic_ptr->spell_stat].data(), magic_ptr->spell_xtra, magic_ptr->spell_type, magic_ptr->spell_weight));
         if (magic_ptr->spell_book == ItemKindType::NONE) {
             spoil_out(_("呪文なし\n\n", "No spells.\n\n"));
             continue;
         }
 
         for (int16_t r = 1; r < MAX_MAGIC; r++) {
-            sprintf(buf, "[Realm: %s]\n", realm_names[r]);
-            spoil_out(buf);
+            spoil_out(format("[Realm: %s]\n", realm_names[r]));
             spoil_out("Name                     Lv Cst Dif Exp\n");
             for (SPELL_IDX i = 0; i < 32; i++) {
                 auto spell_ptr = &magic_ptr->info[r][i];
                 const auto spell_name = exe_spell(&dummy_p, r, i, SpellProcessType::NAME);
-                sprintf(buf, "%-24s %2d %3d %3d %3d\n", spell_name->data(), spell_ptr->slevel, spell_ptr->smana, spell_ptr->sfail, spell_ptr->sexp);
-                spoil_out(buf);
+                spoil_out(format("%-24s %2d %3d %3d %3d\n", spell_name->data(), spell_ptr->slevel, spell_ptr->smana, spell_ptr->sfail, spell_ptr->sexp));
             }
             spoil_out("\n");
         }

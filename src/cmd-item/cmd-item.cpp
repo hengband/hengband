@@ -63,6 +63,7 @@
 #include "system/item-entity.h"
 #include "system/player-type-definition.h"
 #include "term/screen-processor.h"
+#include "term/z-form.h"
 #include "util/bit-flags-calculator.h"
 #include "util/int-char-converter.h"
 #include "util/quarks.h"
@@ -75,7 +76,6 @@
  */
 void do_cmd_inven(PlayerType *player_ptr)
 {
-    char out_val[160];
     command_wrk = false;
     if (easy_floor) {
         command_wrk = USE_INVEN;
@@ -85,10 +85,11 @@ void do_cmd_inven(PlayerType *player_ptr)
     (void)show_inventory(player_ptr, 0, USE_FULL, AllMatchItemTester());
     WEIGHT weight = calc_inventory_weight(player_ptr);
     WEIGHT weight_lim = calc_weight_limit(player_ptr);
+    std::string out_val;
 #ifdef JP
-    sprintf(out_val, "持ち物： 合計 %3d.%1d kg (限界の%ld%%) コマンド: ", lb_to_kg_integer(weight), lb_to_kg_fraction(weight),
+    out_val = format("持ち物： 合計 %3d.%1d kg (限界の%ld%%) コマンド: ", lb_to_kg_integer(weight), lb_to_kg_fraction(weight),
 #else
-    sprintf(out_val, "Inventory: carrying %d.%d pounds (%ld%% of capacity). Command: ", weight / 10, weight % 10,
+    out_val = format("Inventory: carrying %d.%d pounds (%ld%% of capacity). Command: ", weight / 10, weight % 10,
 #endif
         (long int)(weight * 100) / weight_lim);
 

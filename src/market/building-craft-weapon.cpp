@@ -23,6 +23,7 @@
 #include "system/player-type-definition.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
+#include "term/z-form.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 #include "world/world.h"
@@ -99,11 +100,9 @@ static uint32_t calc_expect_dice(
 static void show_weapon_dmg(int r, int c, int mindice, int maxdice, int blows, int dam_bonus, concptr attr, byte color)
 {
     c_put_str(color, attr, r, c);
-    GAME_TEXT tmp_str[80];
     int mindam = blows * (mindice + dam_bonus);
     int maxdam = blows * (maxdice + dam_bonus);
-    sprintf(tmp_str, _("１ターン: %d-%d ダメージ", "Attack: %d-%d damage"), mindam, maxdam);
-    put_str(tmp_str, r, c + 8);
+    put_str(format(_("１ターン: %d-%d ダメージ", "Attack: %d-%d damage"), mindam, maxdam), r, c + 8);
 }
 
 /*!
@@ -312,7 +311,6 @@ static void compare_weapon_aux(PlayerType *player_ptr, ItemEntity *o_ptr, int co
 static void list_weapon(PlayerType *player_ptr, ItemEntity *o_ptr, TERM_LEN row, TERM_LEN col)
 {
     GAME_TEXT o_name[MAX_NLEN];
-    GAME_TEXT tmp_str[80];
 
     DICE_NUMBER eff_dd = o_ptr->dd + player_ptr->to_dd[0];
     DICE_SID eff_ds = o_ptr->ds + player_ptr->to_ds[0];
@@ -320,23 +318,27 @@ static void list_weapon(PlayerType *player_ptr, ItemEntity *o_ptr, TERM_LEN row,
 
     describe_flavor(player_ptr, o_name, o_ptr, OD_NAME_ONLY);
     c_put_str(TERM_YELLOW, o_name, row, col);
-    sprintf(tmp_str, _("攻撃回数: %d", "Number of Blows: %d"), player_ptr->num_blow[0]);
-    put_str(tmp_str, row + 1, col);
+    put_str(format(_("攻撃回数: %d", "Number of Blows: %d"), player_ptr->num_blow[0]), row + 1, col);
 
-    sprintf(tmp_str, _("命中率:  0  50 100 150 200 (敵のAC)", "To Hit:  0  50 100 150 200 (AC)"));
-    put_str(tmp_str, row + 2, col);
-    sprintf(tmp_str, "        %2d  %2d  %2d  %2d  %2d (%%)", (int)hit_chance(player_ptr, hit_reliability, 0), (int)hit_chance(player_ptr, hit_reliability, 50),
-        (int)hit_chance(player_ptr, hit_reliability, 100), (int)hit_chance(player_ptr, hit_reliability, 150), (int)hit_chance(player_ptr, hit_reliability, 200));
-    put_str(tmp_str, row + 3, col);
+    put_str(_("命中率:  0  50 100 150 200 (敵のAC)", "To Hit:  0  50 100 150 200 (AC)"), row + 2, col);
+    put_str(format("        %2d  %2d  %2d  %2d  %2d (%%)",
+                (int)hit_chance(player_ptr, hit_reliability, 0),
+                (int)hit_chance(player_ptr, hit_reliability, 50),
+                (int)hit_chance(player_ptr, hit_reliability, 100),
+                (int)hit_chance(player_ptr, hit_reliability, 150),
+                (int)hit_chance(player_ptr, hit_reliability, 200)),
+        row + 3, col);
     c_put_str(TERM_YELLOW, _("可能なダメージ:", "Possible Damage:"), row + 5, col);
 
-    sprintf(tmp_str, _("攻撃一回につき %d-%d", "One Strike: %d-%d damage"), (int)(eff_dd + o_ptr->to_d + player_ptr->to_d[0]),
-        (int)(eff_ds * eff_dd + o_ptr->to_d + player_ptr->to_d[0]));
-    put_str(tmp_str, row + 6, col + 1);
+    put_str(format(_("攻撃一回につき %d-%d", "One Strike: %d-%d damage"),
+                (int)(eff_dd + o_ptr->to_d + player_ptr->to_d[0]),
+                (int)(eff_ds * eff_dd + o_ptr->to_d + player_ptr->to_d[0])),
+        row + 6, col + 1);
 
-    sprintf(tmp_str, _("１ターンにつき %d-%d", "One Attack: %d-%d damage"), (int)(player_ptr->num_blow[0] * (eff_dd + o_ptr->to_d + player_ptr->to_d[0])),
-        (int)(player_ptr->num_blow[0] * (eff_ds * eff_dd + o_ptr->to_d + player_ptr->to_d[0])));
-    put_str(tmp_str, row + 7, col + 1);
+    put_str(format(_("１ターンにつき %d-%d", "One Attack: %d-%d damage"),
+                (int)(player_ptr->num_blow[0] * (eff_dd + o_ptr->to_d + player_ptr->to_d[0])),
+                (int)(player_ptr->num_blow[0] * (eff_ds * eff_dd + o_ptr->to_d + player_ptr->to_d[0]))),
+        row + 7, col + 1);
 }
 
 /*!

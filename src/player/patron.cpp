@@ -143,7 +143,6 @@ Patron::Patron(const char *name, std::vector<patron_reward> reward_table, player
 void Patron::gain_level_reward(PlayerType *player_ptr_, int chosen_reward)
 {
     this->player_ptr = player_ptr_;
-    char wrath_reason[32] = "";
     int nasty_chance = 6;
     int type;
     patron_reward effect;
@@ -183,7 +182,8 @@ void Patron::gain_level_reward(PlayerType *player_ptr_, int chosen_reward)
     }
     type--;
 
-    sprintf(wrath_reason, _("%sの怒り", "the Wrath of %s"), this->name.data());
+    std::string wrath_reason = _(this->name, "the Wrath of ");
+    wrath_reason.append(_("の怒り", this->name));
 
     effect = this->reward_table[type];
 
@@ -375,7 +375,7 @@ void Patron::gain_level_reward(PlayerType *player_ptr_, int chosen_reward)
             msg_print(_("「苦しむがよい、無能な愚か者よ！」", "'Suffer, pathetic fool!'"));
 
             fire_ball(player_ptr, AttributeType::DISINTEGRATE, 0, this->player_ptr->lev * 4, 4);
-            take_hit(player_ptr, DAMAGE_NOESCAPE, this->player_ptr->lev * 4, wrath_reason);
+            take_hit(player_ptr, DAMAGE_NOESCAPE, this->player_ptr->lev * 4, wrath_reason.data());
             reward = _("分解の球が発生した。", "generating disintegration ball");
             break;
 
@@ -476,7 +476,7 @@ void Patron::gain_level_reward(PlayerType *player_ptr_, int chosen_reward)
             msg_format(_("%sの声が轟き渡った:", "The voice of %s thunders:"), this->name.data());
             msg_print(_("「死ぬがよい、下僕よ！」", "'Die, mortal!'"));
 
-            take_hit(player_ptr, DAMAGE_LOSELIFE, this->player_ptr->lev * 4, wrath_reason);
+            take_hit(player_ptr, DAMAGE_LOSELIFE, this->player_ptr->lev * 4, wrath_reason.data());
             for (int stat = 0; stat < A_MAX; stat++) {
                 (void)dec_stat(player_ptr, stat, 10 + randint1(15), false);
             }

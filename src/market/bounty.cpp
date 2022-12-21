@@ -34,6 +34,7 @@
 #include "system/player-type-definition.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
+#include "term/z-form.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 #include "world/world.h"
@@ -55,10 +56,8 @@ bool exchange_cash(PlayerType *player_ptr)
         const auto r_idx_of_item = static_cast<MonsterRaceId>(o_ptr->pval);
 
         if ((o_ptr->bi_key.tval() == ItemKindType::CAPTURE) && (r_idx_of_item == MonsterRaceId::TSUCHINOKO)) {
-            char buf[MAX_NLEN + 32];
             describe_flavor(player_ptr, o_name, o_ptr, 0);
-            sprintf(buf, _("%s を換金しますか？", "Convert %s into money? "), o_name);
-            if (get_check(buf)) {
+            if (get_check(format(_("%s を換金しますか？", "Convert %s into money? "), o_name))) {
                 msg_format(_("賞金 %ld＄を手に入れた。", "You get %ldgp."), (long int)(1000000L * o_ptr->number));
                 player_ptr->au += 1000000L * o_ptr->number;
                 player_ptr->redraw |= (PR_GOLD);
@@ -74,10 +73,8 @@ bool exchange_cash(PlayerType *player_ptr)
         const auto r_idx_of_item = static_cast<MonsterRaceId>(o_ptr->pval);
 
         if (o_ptr->bi_key == BaseitemKey(ItemKindType::CORPSE, SV_CORPSE) && (r_idx_of_item == MonsterRaceId::TSUCHINOKO)) {
-            char buf[MAX_NLEN + 32];
             describe_flavor(player_ptr, o_name, o_ptr, 0);
-            sprintf(buf, _("%s を換金しますか？", "Convert %s into money? "), o_name);
-            if (get_check(buf)) {
+            if (get_check(format(_("%s を換金しますか？", "Convert %s into money? "), o_name))) {
                 msg_format(_("賞金 %ld＄を手に入れた。", "You get %ldgp."), (long int)(200000L * o_ptr->number));
                 player_ptr->au += 200000L * o_ptr->number;
                 player_ptr->redraw |= (PR_GOLD);
@@ -93,10 +90,8 @@ bool exchange_cash(PlayerType *player_ptr)
         const auto r_idx_of_item = static_cast<MonsterRaceId>(o_ptr->pval);
 
         if (o_ptr->bi_key == BaseitemKey(ItemKindType::CORPSE, SV_SKELETON) && (r_idx_of_item == MonsterRaceId::TSUCHINOKO)) {
-            char buf[MAX_NLEN + 32];
             describe_flavor(player_ptr, o_name, o_ptr, 0);
-            sprintf(buf, _("%s を換金しますか？", "Convert %s into money? "), o_name);
-            if (get_check(buf)) {
+            if (get_check(format(_("%s を換金しますか？", "Convert %s into money? "), o_name))) {
                 msg_format(_("賞金 %ld＄を手に入れた。", "You get %ldgp."), (long int)(100000L * o_ptr->number));
                 player_ptr->au += 100000L * o_ptr->number;
                 player_ptr->redraw |= (PR_GOLD);
@@ -112,10 +107,8 @@ bool exchange_cash(PlayerType *player_ptr)
         const auto r_idx_of_item = static_cast<MonsterRaceId>(o_ptr->pval);
 
         if (o_ptr->bi_key == BaseitemKey(ItemKindType::CORPSE, SV_CORPSE) && (streq(monraces_info[r_idx_of_item].name.data(), monraces_info[w_ptr->today_mon].name.data()))) {
-            char buf[MAX_NLEN + 32];
             describe_flavor(player_ptr, o_name, o_ptr, 0);
-            sprintf(buf, _("%s を換金しますか？", "Convert %s into money? "), o_name);
-            if (get_check(buf)) {
+            if (get_check(format(_("%s を換金しますか？", "Convert %s into money? "), o_name))) {
                 msg_format(
                     _("賞金 %ld＄を手に入れた。", "You get %ldgp."), (long int)((monraces_info[w_ptr->today_mon].level * 50 + 100) * o_ptr->number));
                 player_ptr->au += (monraces_info[w_ptr->today_mon].level * 50 + 100) * o_ptr->number;
@@ -132,10 +125,8 @@ bool exchange_cash(PlayerType *player_ptr)
         const auto r_idx_of_item = static_cast<MonsterRaceId>(o_ptr->pval);
 
         if (o_ptr->bi_key == BaseitemKey(ItemKindType::CORPSE, SV_SKELETON) && (streq(monraces_info[r_idx_of_item].name.data(), monraces_info[w_ptr->today_mon].name.data()))) {
-            char buf[MAX_NLEN + 32];
             describe_flavor(player_ptr, o_name, o_ptr, 0);
-            sprintf(buf, _("%s を換金しますか？", "Convert %s into money? "), o_name);
-            if (get_check(buf)) {
+            if (get_check(format(_("%s を換金しますか？", "Convert %s into money? "), o_name))) {
                 msg_format(_("賞金 %ld＄を手に入れた。", "You get %ldgp."), (long int)((monraces_info[w_ptr->today_mon].level * 30 + 60) * o_ptr->number));
                 player_ptr->au += (monraces_info[w_ptr->today_mon].level * 30 + 60) * o_ptr->number;
                 player_ptr->redraw |= (PR_GOLD);
@@ -159,13 +150,11 @@ bool exchange_cash(PlayerType *player_ptr)
                 continue;
             }
 
-            char buf[MAX_NLEN + 20];
             INVENTORY_IDX item_new;
             ItemEntity forge;
 
             describe_flavor(player_ptr, o_name, o_ptr, 0);
-            sprintf(buf, _("%sを渡しますか？", "Hand %s over? "), o_name);
-            if (!get_check(buf)) {
+            if (!get_check(format(_("%sを渡しますか？", "Hand %s over? "), o_name))) {
                 continue;
             }
 
@@ -214,17 +203,13 @@ bool exchange_cash(PlayerType *player_ptr)
  */
 void today_target(PlayerType *player_ptr)
 {
-    char buf[160];
     auto *r_ptr = &monraces_info[w_ptr->today_mon];
 
     clear_bldg(4, 18);
     c_put_str(TERM_YELLOW, _("本日の賞金首", "Wanted monster that changes from day to day"), 5, 10);
-    sprintf(buf, _("ターゲット： %s", "target: %s"), r_ptr->name.data());
-    c_put_str(TERM_YELLOW, buf, 6, 10);
-    sprintf(buf, _("死体 ---- $%d", "corpse   ---- $%d"), (int)r_ptr->level * 50 + 100);
-    prt(buf, 8, 10);
-    sprintf(buf, _("骨   ---- $%d", "skeleton ---- $%d"), (int)r_ptr->level * 30 + 60);
-    prt(buf, 9, 10);
+    c_put_str(TERM_YELLOW, format(_("ターゲット： %s", "target: %s"), r_ptr->name.data()), 6, 10);
+    prt(format(_("死体 ---- $%d", "corpse   ---- $%d"), (int)r_ptr->level * 50 + 100), 8, 10);
+    prt(format(_("骨   ---- $%d", "skeleton ---- $%d"), (int)r_ptr->level * 30 + 60), 9, 10);
     player_ptr->knows_daily_bounty = true;
 }
 

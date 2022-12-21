@@ -15,6 +15,7 @@
 #include "system/player-type-definition.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
+#include "term/z-form.h"
 #include "timed-effect/player-stun.h"
 #include "timed-effect/timed-effects.h"
 #include "util/bit-flags-calculator.h"
@@ -254,8 +255,6 @@ void print_spells(PlayerType *player_ptr, SPELL_IDX target_spell, SPELL_IDX *spe
 
     int i;
     const magic_type *s_ptr;
-    char info[80];
-    char out_val[160];
     char ryakuji[5];
     bool max = false;
     for (i = 0; i < num; i++) {
@@ -296,25 +295,25 @@ void print_spells(PlayerType *player_ptr, SPELL_IDX target_spell, SPELL_IDX *spe
             ryakuji[4] = '\0';
         }
 
+        std::string out_val;
         if (use_menu && target_spell) {
             if (i == (target_spell - 1)) {
-                strcpy(out_val, _("  》 ", "  >  "));
+                out_val = _("  》 ", "  >  ");
             } else {
-                strcpy(out_val, "     ");
+                out_val = "     ";
             }
         } else {
-            sprintf(out_val, "  %c) ", I2A(i));
+            out_val = format("  %c) ", I2A(i));
         }
 
         if (s_ptr->slevel >= 99) {
-            strcat(out_val, format("%-30s", _("(判読不能)", "(illegible)")));
+            out_val.append(format("%-30s", _("(判読不能)", "(illegible)")));
             c_prt(TERM_L_DARK, out_val, y + i + 1, x);
             continue;
         }
 
-        const auto spell_info = exe_spell(player_ptr, use_realm, spell, SpellProcessType::INFO);
-        strcpy(info, spell_info->data());
-        concptr comment = info;
+        const auto info = exe_spell(player_ptr, use_realm, spell, SpellProcessType::INFO);
+        concptr comment = info->data();
         byte line_attr = TERM_WHITE;
         if (pc.is_every_magic()) {
             if (s_ptr->slevel > player_ptr->max_plv) {
@@ -340,11 +339,10 @@ void print_spells(PlayerType *player_ptr, SPELL_IDX target_spell, SPELL_IDX *spe
 
         const auto spell_name = exe_spell(player_ptr, use_realm, spell, SpellProcessType::NAME);
         if (use_realm == REALM_HISSATSU) {
-            strcat(out_val, format("%-25s %2d %4d", spell_name->data(), s_ptr->slevel, need_mana));
+            out_val.append(format("%-25s %2d %4d", spell_name->data(), s_ptr->slevel, need_mana));
         } else {
-            strcat(out_val,
-                format("%-25s%c%-4s %2d %4d %3d%% %s", spell_name->data(), (max ? '!' : ' '), ryakuji, s_ptr->slevel,
-                    need_mana, spell_chance(player_ptr, spell, use_realm), comment));
+            out_val.append(format("%-25s%c%-4s %2d %4d %3d%% %s", spell_name->data(), (max ? '!' : ' '), ryakuji, s_ptr->slevel,
+                need_mana, spell_chance(player_ptr, spell, use_realm), comment));
         }
 
         c_prt(line_attr, out_val, y + i + 1, x);

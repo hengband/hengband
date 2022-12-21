@@ -21,6 +21,7 @@
 #include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
 #include "term/screen-processor.h"
+#include "term/z-form.h"
 #include "util/angband-files.h"
 #include "view/display-messages.h"
 
@@ -63,10 +64,10 @@ errr file_character(PlayerType *player_ptr, concptr name)
     path_build(buf, sizeof(buf), ANGBAND_DIR_USER, name);
     int fd = fd_open(buf, O_RDONLY);
     if (fd >= 0) {
-        char out_val[sizeof(buf) + 128];
+        std::string query = _("現存するファイル ", "Replace existing file ");
+        query.append(buf).append(_(" に上書きしますか? ", "? "));
         (void)fd_close(fd);
-        (void)sprintf(out_val, _("現存するファイル %s に上書きしますか? ", "Replace existing file %s? "), buf);
-        if (get_check_strict(player_ptr, out_val, CHECK_NO_HISTORY)) {
+        if (get_check_strict(player_ptr, query, CHECK_NO_HISTORY)) {
             fd = -1;
         }
     }
@@ -221,9 +222,9 @@ static errr counts_seek(PlayerType *player_ptr, int fd, uint32_t where, bool fla
     char temp1[128], temp2[128];
     auto short_pclass = enum2i(player_ptr->pclass);
 #ifdef SAVEFILE_USE_UID
-    (void)sprintf(temp1, "%d.%s.%d%d%d", player_ptr->player_uid, savefile_base, short_pclass, player_ptr->ppersonality, player_ptr->age);
+    strnfmt(temp1, sizeof(temp1), "%d.%s.%d%d%d", player_ptr->player_uid, savefile_base, short_pclass, player_ptr->ppersonality, player_ptr->age);
 #else
-    (void)sprintf(temp1, "%s.%d%d%d", savefile_base, short_pclass, player_ptr->ppersonality, player_ptr->age);
+    strnfmt(temp1, sizeof(temp1), "%s.%d%d%d", savefile_base, short_pclass, player_ptr->ppersonality, player_ptr->age);
 #endif
     for (int i = 0; temp1[i]; i++) {
         temp1[i] ^= (i + 1) * 63;

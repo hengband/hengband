@@ -14,6 +14,7 @@
 #include "system/player-type-definition.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
+#include "term/z-form.h"
 #include "timed-effect/player-hallucination.h"
 #include "timed-effect/timed-effects.h"
 #include "util/string-processor.h"
@@ -58,8 +59,7 @@ void print_title(PlayerType *player_ptr)
  */
 void print_level(PlayerType *player_ptr)
 {
-    char tmp[32];
-    sprintf(tmp, "%5d", player_ptr->lev);
+    std::string tmp = format("%5d", player_ptr->lev);
     if (player_ptr->lev >= player_ptr->max_plv) {
         put_str(_("レベル ", "LEVEL "), ROW_LEVEL, 0);
         c_put_str(TERM_L_GREEN, tmp, ROW_LEVEL, COL_LEVEL + 7);
@@ -74,16 +74,16 @@ void print_level(PlayerType *player_ptr)
  */
 void print_exp(PlayerType *player_ptr)
 {
-    char out_val[32];
+    std::string out_val;
 
     PlayerRace pr(player_ptr);
     if ((!exp_need) || pr.equals(PlayerRaceType::ANDROID)) {
-        (void)sprintf(out_val, "%8ld", (long)player_ptr->exp);
+        out_val = format("%8ld", (long)player_ptr->exp);
     } else {
         if (player_ptr->lev >= PY_MAX_LEVEL) {
-            (void)sprintf(out_val, "********");
+            out_val = "********";
         } else {
-            (void)sprintf(out_val, "%8ld", (long)(player_exp[player_ptr->lev - 1] * player_ptr->expfact / 100L) - player_ptr->exp);
+            out_val = format("%8ld", (long)(player_exp[player_ptr->lev - 1] * player_ptr->expfact / 100L) - player_ptr->exp);
         }
     }
 
@@ -105,18 +105,9 @@ void print_exp(PlayerType *player_ptr)
  */
 void print_ac(PlayerType *player_ptr)
 {
-    char tmp[32];
-
-#ifdef JP
     /* AC の表示方式を変更している */
-    put_str(" ＡＣ(     )", ROW_AC, COL_AC);
-    sprintf(tmp, "%5d", player_ptr->dis_ac + player_ptr->dis_to_a);
-    c_put_str(TERM_L_GREEN, tmp, ROW_AC, COL_AC + 6);
-#else
-    put_str("Cur AC ", ROW_AC, COL_AC);
-    sprintf(tmp, "%5d", player_ptr->dis_ac + player_ptr->dis_to_a);
-    c_put_str(TERM_L_GREEN, tmp, ROW_AC, COL_AC + 7);
-#endif
+    put_str(_(" ＡＣ(     )", "Cur AC "), ROW_AC, COL_AC);
+    c_put_str(TERM_L_GREEN, format("%5d", player_ptr->dis_ac + player_ptr->dis_to_a), ROW_AC, COL_AC + _(6, 7));
 }
 
 /*!
@@ -124,9 +115,7 @@ void print_ac(PlayerType *player_ptr)
  */
 void print_hp(PlayerType *player_ptr)
 {
-    char tmp[32];
     put_str("HP", ROW_CURHP, COL_CURHP);
-    sprintf(tmp, "%4ld", (long int)player_ptr->chp);
     TERM_COLOR color;
     if (player_ptr->chp >= player_ptr->mhp) {
         color = TERM_L_GREEN;
@@ -136,11 +125,10 @@ void print_hp(PlayerType *player_ptr)
         color = TERM_RED;
     }
 
-    c_put_str(color, tmp, ROW_CURHP, COL_CURHP + 3);
+    c_put_str(color, format("%4ld", (long int)player_ptr->chp), ROW_CURHP, COL_CURHP + 3);
     put_str("/", ROW_CURHP, COL_CURHP + 7);
-    sprintf(tmp, "%4ld", (long int)player_ptr->mhp);
     color = TERM_L_GREEN;
-    c_put_str(color, tmp, ROW_CURHP, COL_CURHP + 8);
+    c_put_str(color, format("%4ld", (long int)player_ptr->mhp), ROW_CURHP, COL_CURHP + 8);
 }
 
 /*!
@@ -148,14 +136,12 @@ void print_hp(PlayerType *player_ptr)
  */
 void print_sp(PlayerType *player_ptr)
 {
-    char tmp[32];
-    byte color;
     if ((mp_ptr->spell_book == ItemKindType::NONE) && mp_ptr->spell_first == SPELL_FIRST_NO_SPELL) {
         return;
     }
 
     put_str(_("MP", "SP"), ROW_CURSP, COL_CURSP);
-    sprintf(tmp, "%4ld", (long int)player_ptr->csp);
+    byte color;
     if (player_ptr->csp >= player_ptr->msp) {
         color = TERM_L_GREEN;
     } else if (player_ptr->csp > (player_ptr->msp * mana_warn) / 10) {
@@ -164,11 +150,10 @@ void print_sp(PlayerType *player_ptr)
         color = TERM_RED;
     }
 
-    c_put_str(color, tmp, ROW_CURSP, COL_CURSP + 3);
+    c_put_str(color, format("%4ld", (long int)player_ptr->csp), ROW_CURSP, COL_CURSP + 3);
     put_str("/", ROW_CURSP, COL_CURSP + 7);
-    sprintf(tmp, "%4ld", (long int)player_ptr->msp);
     color = TERM_L_GREEN;
-    c_put_str(color, tmp, ROW_CURSP, COL_CURSP + 8);
+    c_put_str(color, format("%4ld", (long int)player_ptr->msp), ROW_CURSP, COL_CURSP + 8);
 }
 
 /*!
@@ -177,10 +162,8 @@ void print_sp(PlayerType *player_ptr)
  */
 void print_gold(PlayerType *player_ptr)
 {
-    char tmp[32];
     put_str(_("＄ ", "AU "), ROW_GOLD, COL_GOLD);
-    sprintf(tmp, "%9ld", (long)player_ptr->au);
-    c_put_str(TERM_L_GREEN, tmp, ROW_GOLD, COL_GOLD + 3);
+    c_put_str(TERM_L_GREEN, format("%9ld", (long)player_ptr->au), ROW_GOLD, COL_GOLD + 3);
 }
 
 /*!
@@ -189,7 +172,6 @@ void print_gold(PlayerType *player_ptr)
  */
 void print_depth(PlayerType *player_ptr)
 {
-    char depths[32];
     TERM_COLOR attr = TERM_WHITE;
 
     TERM_LEN wid, hgt;
@@ -199,21 +181,20 @@ void print_depth(PlayerType *player_ptr)
 
     auto *floor_ptr = player_ptr->current_floor_ptr;
     if (!floor_ptr->dun_level) {
-        strcpy(depths, _("地上", "Surf."));
-        c_prt(attr, format("%7s", depths), row_depth, col_depth);
+        c_prt(attr, format("%7s", _("地上", "Surf.")), row_depth, col_depth);
         return;
     }
 
     if (inside_quest(floor_ptr->quest_number) && !player_ptr->dungeon_idx) {
-        strcpy(depths, _("地上", "Quest"));
-        c_prt(attr, format("%7s", depths), row_depth, col_depth);
+        c_prt(attr, format("%7s", _("地上", "Quest")), row_depth, col_depth);
         return;
     }
 
+    std::string depths;
     if (depth_in_feet) {
-        (void)sprintf(depths, _("%d ft", "%d ft"), (int)floor_ptr->dun_level * 50);
+        depths = format(_("%d ft", "%d ft"), (int)floor_ptr->dun_level * 50);
     } else {
-        (void)sprintf(depths, _("%d 階", "Lev %d"), (int)floor_ptr->dun_level);
+        depths = format(_("%d 階", "Lev %d"), (int)floor_ptr->dun_level);
     }
 
     switch (player_ptr->feeling) {
@@ -252,7 +233,7 @@ void print_depth(PlayerType *player_ptr)
         break; /* Boring place */
     }
 
-    c_prt(attr, format("%7s", depths), row_depth, col_depth);
+    c_prt(attr, format("%7s", depths.data()), row_depth, col_depth);
 }
 
 /*!

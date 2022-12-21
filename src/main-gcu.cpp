@@ -597,16 +597,16 @@ static bool init_sound(void)
     }
 
     int i;
-    char wav[128];
     char buf[1024];
 
     /* Prepare the sounds */
     for (i = 1; i < SOUND_MAX; i++) {
         /* Extract name of sound file */
-        sprintf(wav, "%s.wav", angband_sound_name[i]);
+        std::string wav = angband_sound_name[i];
+        wav.append(".wav");
 
         /* Access the sound */
-        path_build(buf, sizeof(buf), ANGBAND_DIR_XTRA_SOUND, wav);
+        path_build(buf, sizeof(buf), ANGBAND_DIR_XTRA_SOUND, wav.data());
 
         /* Save the sound filename, if it exists */
         if (check_file(buf)) {
@@ -875,8 +875,6 @@ static errr game_term_xtra_gcu_event(int v)
  */
 static errr game_term_xtra_gcu_sound(int v)
 {
-    char buf[1024];
-
     /* Sound disabled */
     if (!use_sound) {
         return 1;
@@ -892,11 +890,9 @@ static errr game_term_xtra_gcu_sound(int v)
         return 1;
     }
 
-    sprintf(buf, "./gcusound.sh %s\n", sound_file[v]);
-
-    return system(buf) < 0;
-
-    return 0;
+    std::string buf = "./gcusound.sh ";
+    buf.append(sound_file[v]).append("\n");
+    return system(buf.data()) < 0;
 }
 
 static int scale_color(int i, int j, int scale)

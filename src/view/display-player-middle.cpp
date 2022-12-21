@@ -25,6 +25,7 @@
 #include "system/monster-entity.h"
 #include "system/player-type-definition.h"
 #include "term/term-color-types.h"
+#include "term/z-form.h"
 #include "timed-effect/player-deceleration.h"
 #include "timed-effect/timed-effects.h"
 #include "view/display-util.h"
@@ -52,9 +53,7 @@ static void display_player_melee_bonus(PlayerType *player_ptr, int hand, int han
 
     show_tohit += player_ptr->skill_thn / BTH_PLUS_ADJ;
 
-    char buf[160];
-    sprintf(buf, "(%+d,%+d)", (int)show_tohit, (int)show_todam);
-
+    std::string buf = format("(%+d,%+d)", (int)show_tohit, (int)show_todam);
     if (!has_melee_weapon(player_ptr, INVEN_MAIN_HAND) && !has_melee_weapon(player_ptr, INVEN_SUB_HAND)) {
         display_player_one_line(ENTRY_BARE_HAND, buf, TERM_L_BLUE);
     } else if (has_two_handed_weapons(player_ptr)) {
@@ -220,16 +219,16 @@ static int calc_temporary_speed(PlayerType *player_ptr)
  */
 static void display_player_speed(PlayerType *player_ptr, TERM_COLOR attr, int base_speed, int tmp_speed)
 {
-    char buf[160];
+    std::string buf;
     if (tmp_speed) {
         if (!player_ptr->riding) {
             if (player_ptr->lightspeed) {
-                sprintf(buf, _("光速化 (+99)", "Lightspeed (+99)"));
+                buf = _("光速化 (+99)", "Lightspeed (+99)");
             } else {
-                sprintf(buf, "(%+d%+d)", base_speed - tmp_speed, tmp_speed);
+                buf = format("(%+d%+d)", base_speed - tmp_speed, tmp_speed);
             }
         } else {
-            sprintf(buf, _("乗馬中 (%+d%+d)", "Riding (%+d%+d)"), base_speed - tmp_speed, tmp_speed);
+            buf = format(_("乗馬中 (%+d%+d)", "Riding (%+d%+d)"), base_speed - tmp_speed, tmp_speed);
         }
 
         if (tmp_speed > 0) {
@@ -239,9 +238,9 @@ static void display_player_speed(PlayerType *player_ptr, TERM_COLOR attr, int ba
         }
     } else {
         if (!player_ptr->riding) {
-            sprintf(buf, "(%+d)", base_speed);
+            buf = format("(%+d)", base_speed);
         } else {
-            sprintf(buf, _("乗馬中 (%+d)", "Riding (%+d)"), base_speed);
+            buf = format(_("乗馬中 (%+d)", "Riding (%+d)"), base_speed);
         }
     }
 
@@ -287,11 +286,11 @@ static void display_playtime_in_game(PlayerType *player_ptr)
     int day, hour, min;
     extract_day_hour_min(player_ptr, &day, &hour, &min);
 
-    char buf[160];
+    std::string buf;
     if (day < MAX_DAYS) {
-        sprintf(buf, _("%d日目 %2d:%02d", "Day %d %2d:%02d"), day, hour, min);
+        buf = format(_("%d日目 %2d:%02d", "Day %d %2d:%02d"), day, hour, min);
     } else {
-        sprintf(buf, _("*****日目 %2d:%02d", "Day ***** %2d:%02d"), hour, min);
+        buf = format(_("*****日目 %2d:%02d", "Day ***** %2d:%02d"), hour, min);
     }
 
     display_player_one_line(ENTRY_DAY, buf, TERM_L_GREEN);

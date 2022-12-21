@@ -12,6 +12,7 @@
 #include "monster-race/race-flags1.h"
 #include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
+#include "term/z-form.h"
 #include "util/angband-files.h"
 #include "util/sort.h"
 #include "util/string-processor.h"
@@ -116,19 +117,17 @@ static void display_uniques(unique_list_type *unique_list_ptr, FILE *fff)
         fputs(no_unique_desc, fff);
     }
 
-    char buf[80];
     for (auto r_idx : unique_list_ptr->who) {
         auto *r_ptr = &monraces_info[r_idx];
+        std::string details;
 
         if (r_ptr->defeat_level && r_ptr->defeat_time) {
-            sprintf(buf, _(" - レベル%2d - %d:%02d:%02d", " - level %2d - %d:%02d:%02d"), r_ptr->defeat_level, r_ptr->defeat_time / (60 * 60),
+            details = format(_(" - レベル%2d - %d:%02d:%02d", " - level %2d - %d:%02d:%02d"), r_ptr->defeat_level, r_ptr->defeat_time / (60 * 60),
                 (r_ptr->defeat_time / 60) % 60, r_ptr->defeat_time % 60);
-        } else {
-            buf[0] = '\0';
         }
 
         const auto name = str_separate(r_ptr->name, 40);
-        fprintf(fff, _("     %-40s (レベル%3d)%s\n", "     %-40s (level %3d)%s\n"), name.front().data(), (int)r_ptr->level, buf);
+        fprintf(fff, _("     %-40s (レベル%3d)%s\n", "     %-40s (level %3d)%s\n"), name.front().data(), (int)r_ptr->level, details.data());
         for (auto i = 1U; i < name.size(); ++i) {
             fprintf(fff, "     %s\n", name[i].data());
         }
