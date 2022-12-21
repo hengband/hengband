@@ -18,14 +18,14 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v3
         with:
           submodules: true
 
       - if: ${{ inputs.use-ccache }}
-        uses: hendrikmuhs/ccache-action@v1
+        uses: hendrikmuhs/ccache-action@v1.2
 
       - name: Configuring ccache to use precompiled headers
         if: ${{ inputs.use-ccache }}
@@ -42,7 +42,6 @@ jobs:
             libncursesw5-dev \
             libcurl4-openssl-dev \
             nkf \
-            clang-11 \
 
       - name: Generate configure
         run: ./bootstrap
