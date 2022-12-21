@@ -495,7 +495,7 @@ int take_hit(PlayerType *player_ptr, int damage_type, int damage, concptr hit_fr
 
                 if (death_message[0] == '\0') {
 #ifdef JP
-                    strcpy(death_message, format("あなたは%sました。", android ? "壊れ" : "死に"));
+                    strcpy(death_message, format("あなたは%sました。", android ? "壊れ" : "死に").data());
 #else
                     strcpy(death_message, android ? "You are broken." : "You die.");
 #endif

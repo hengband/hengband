@@ -135,7 +135,7 @@ void c_roff(TERM_COLOR a, std::string_view str)
         return;
     }
 
-    for (auto s = str.begin(); s != str.end(); s++) {
+    for (auto s = str.data(); *s != '\0'; ++s) {
         char ch;
 #ifdef JP
         int k_flag = iskanji(*s);

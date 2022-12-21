@@ -216,7 +216,7 @@ void draw_text_editor(PlayerType *player_ptr, text_body_type *tb)
     }
 
     autopick_type an_entry, *entry = &an_entry;
-    concptr str1 = nullptr, str2 = nullptr;
+    std::string str1, str2;
     for (int j = 0; j < DESCRIPT_HGT; j++) {
         term_erase(0, tb->hgt + 2 + j, tb->wid);
     }
@@ -293,10 +293,10 @@ void draw_text_editor(PlayerType *player_ptr, text_body_type *tb)
         }
     }
 
-    if (str1) {
+    if (!str1.empty()) {
         prt(str1, tb->hgt + 1 + 1, 0);
     }
-    if (str2) {
+    if (!str2.empty()) {
         prt(str2, tb->hgt + 1 + 2, 0);
     }
 }

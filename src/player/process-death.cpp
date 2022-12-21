@@ -168,7 +168,7 @@ static void show_tomb_detail(PlayerType *player_ptr)
     put_str(center_string(format("Killed on Level %d", player_ptr->current_floor_ptr->dun_level)), 14, 11);
 
     char buf[160];
-    shape_buffer(format("by %s.", player_ptr->died_from.data()), GRAVE_LINE_WIDTH + 1, buf, sizeof(buf));
+    shape_buffer(format("by %s.", player_ptr->died_from.data()).data(), GRAVE_LINE_WIDTH + 1, buf, sizeof(buf));
     put_str(center_string(buf), 15, 11);
     char *t = buf + strlen(buf) + 1;
     if (!*t) {

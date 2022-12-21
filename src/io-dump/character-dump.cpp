@@ -574,7 +574,7 @@ static void dump_aux_home_museum(PlayerType *player_ptr, FILE *fff)
  * @brief チェックサム情報を出力 / Get check sum in string form
  * @return チェックサム情報の文字列
  */
-static concptr get_check_sum(void)
+static std::string get_check_sum(void)
 {
     return format("%02x%02x%02x%02x%02x%02x%02x%02x%02x", terrains_header.checksum, baseitems_header.checksum,
         artifacts_header.checksum, egos_header.checksum, monraces_header.checksum, dungeons_header.checksum,
@@ -611,5 +611,5 @@ void make_character_dump(PlayerType *player_ptr, FILE *fff)
     dump_aux_equipment_inventory(player_ptr, fff);
     dump_aux_home_museum(player_ptr, fff);
 
-    fprintf(fff, _("  [チェックサム: \"%s\"]\n\n", "  [Check Sum: \"%s\"]\n\n"), get_check_sum());
+    fprintf(fff, _("  [チェックサム: \"%s\"]\n\n", "  [Check Sum: \"%s\"]\n\n"), get_check_sum().data());
 }

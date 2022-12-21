@@ -72,7 +72,7 @@ struct eg_type {
     OBJECT_IDX next_o_idx;
     FEAT_IDX feat;
     TerrainType *f_ptr;
-    concptr name;
+    std::string name;
 };
 
 static eg_type *initialize_eg_type(PlayerType *player_ptr, eg_type *eg_ptr, POSITION y, POSITION x, target_type mode, concptr info)
@@ -208,11 +208,12 @@ static void describe_grid_monster(PlayerType *player_ptr, eg_type *eg_ptr)
         }
 
         std::string acount = evaluate_monster_exp(player_ptr, eg_ptr->m_ptr);
+        const auto mon_desc = look_mon_desc(eg_ptr->m_ptr, 0x01);
 #ifdef JP
-        strnfmt(eg_ptr->out_val, sizeof(eg_ptr->out_val), "[%s]%s%s(%s)%s%s [r思 %s%s]", acount.data(), eg_ptr->s1, m_name, look_mon_desc(eg_ptr->m_ptr, 0x01), eg_ptr->s2, eg_ptr->s3,
+        strnfmt(eg_ptr->out_val, sizeof(eg_ptr->out_val), "[%s]%s%s(%s)%s%s [r思 %s%s]", acount.data(), eg_ptr->s1, m_name, mon_desc.data(), eg_ptr->s2, eg_ptr->s3,
             eg_ptr->x_info, eg_ptr->info);
 #else
-        strnfmt(eg_ptr->out_val, sizeof(eg_ptr->out_val), "[%s]%s%s%s%s(%s) [r, %s%s]", acount.data(), eg_ptr->s1, eg_ptr->s2, eg_ptr->s3, m_name, look_mon_desc(eg_ptr->m_ptr, 0x01),
+        strnfmt(eg_ptr->out_val, sizeof(eg_ptr->out_val), "[%s]%s%s%s%s(%s) [r, %s%s]", acount.data(), eg_ptr->s1, eg_ptr->s2, eg_ptr->s3, m_name, mon_desc.data(),
             eg_ptr->x_info, eg_ptr->info);
 #endif
         prt(eg_ptr->out_val, 0, 0);
@@ -459,7 +460,7 @@ static int16_t sweep_footing_items(PlayerType *player_ptr, eg_type *eg_ptr)
     return CONTINUOUS_DESCRIPTION;
 }
 
-static concptr decide_target_floor(PlayerType *player_ptr, eg_type *eg_ptr)
+static std::string decide_target_floor(PlayerType *player_ptr, eg_type *eg_ptr)
 {
     if (eg_ptr->f_ptr->flags.has(TerrainCharacteristics::QUEST_ENTER)) {
         QuestId old_quest = player_ptr->current_floor_ptr->quest_number;
@@ -502,9 +503,9 @@ static void describe_grid_monster_all(eg_type *eg_ptr)
 {
     if (!w_ptr->wizard) {
 #ifdef JP
-        strnfmt(eg_ptr->out_val, sizeof(eg_ptr->out_val), "%s%s%s%s[%s]", eg_ptr->s1, eg_ptr->name, eg_ptr->s2, eg_ptr->s3, eg_ptr->info);
+        strnfmt(eg_ptr->out_val, sizeof(eg_ptr->out_val), "%s%s%s%s[%s]", eg_ptr->s1, eg_ptr->name.data(), eg_ptr->s2, eg_ptr->s3, eg_ptr->info);
 #else
-        strnfmt(eg_ptr->out_val, sizeof(eg_ptr->out_val), "%s%s%s%s [%s]", eg_ptr->s1, eg_ptr->s2, eg_ptr->s3, eg_ptr->name, eg_ptr->info);
+        strnfmt(eg_ptr->out_val, sizeof(eg_ptr->out_val), "%s%s%s%s [%s]", eg_ptr->s1, eg_ptr->s2, eg_ptr->s3, eg_ptr->name.data(), eg_ptr->info);
 #endif
         return;
     }
@@ -517,11 +518,11 @@ static void describe_grid_monster_all(eg_type *eg_ptr)
     }
 
 #ifdef JP
-    strnfmt(eg_ptr->out_val, sizeof(eg_ptr->out_val), "%s%s%s%s[%s] %x %s %d %d %d (%d,%d) %d", eg_ptr->s1, eg_ptr->name, eg_ptr->s2, eg_ptr->s3, eg_ptr->info,
+    strnfmt(eg_ptr->out_val, sizeof(eg_ptr->out_val), "%s%s%s%s[%s] %x %s %d %d %d (%d,%d) %d", eg_ptr->s1, eg_ptr->name.data(), eg_ptr->s2, eg_ptr->s3, eg_ptr->info,
         (uint)eg_ptr->g_ptr->info, f_idx_str.data(), eg_ptr->g_ptr->dists[FLOW_NORMAL], eg_ptr->g_ptr->costs[FLOW_NORMAL], eg_ptr->g_ptr->when, (int)eg_ptr->y,
         (int)eg_ptr->x, travel.cost[eg_ptr->y][eg_ptr->x]);
 #else
-    strnfmt(eg_ptr->out_val, sizeof(eg_ptr->out_val), "%s%s%s%s [%s] %x %s %d %d %d (%d,%d)", eg_ptr->s1, eg_ptr->s2, eg_ptr->s3, eg_ptr->name, eg_ptr->info, eg_ptr->g_ptr->info,
+    strnfmt(eg_ptr->out_val, sizeof(eg_ptr->out_val), "%s%s%s%s [%s] %x %s %d %d %d (%d,%d)", eg_ptr->s1, eg_ptr->s2, eg_ptr->s3, eg_ptr->name.data(), eg_ptr->info, eg_ptr->g_ptr->info,
         f_idx_str.data(), eg_ptr->g_ptr->dists[FLOW_NORMAL], eg_ptr->g_ptr->costs[FLOW_NORMAL], eg_ptr->g_ptr->when, (int)eg_ptr->y, (int)eg_ptr->x);
 #endif
 }

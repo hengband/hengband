@@ -366,7 +366,7 @@ static void display_first_page(PlayerType *player_ptr, int xthb, int *damage, in
 
     display_player_one_line(ENTRY_SHOTS, format("%d.%02d", shots, shot_frac), TERM_L_BLUE);
 
-    concptr desc;
+    std::string desc;
     if ((damage[0] + damage[1]) == 0) {
         desc = "nil!";
     } else {

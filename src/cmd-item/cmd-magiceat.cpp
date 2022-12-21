@@ -332,14 +332,16 @@ static std::optional<BaseitemKey> select_magic_eater(PlayerType *player_ptr, boo
                         dummy.append(
                             format(_(" %-22.22s 充填:%2d/%2d%3d%%", " %-22.22s   (%2d/%2d) %3d%%"), baseitems_info[bi_id].name.data(),
                                 item.charge ? (item.charge - 1) / (EATER_ROD_CHARGE * baseitems_info[bi_id].pval) + 1 : 0,
-                                item.count, chance));
+                                item.count, chance)
+                                .data());
                         if (item.charge > baseitems_info[bi_id].pval * (item.count - 1) * EATER_ROD_CHARGE) {
                             col = TERM_RED;
                         }
                     } else {
                         dummy.append(
                             format(" %-22.22s    %2d/%2d %3d%%", baseitems_info[bi_id].name.data(), (int16_t)(item.charge / EATER_CHARGE),
-                                item.count, chance));
+                                item.count, chance)
+                                .data());
                         if (item.charge < EATER_CHARGE) {
                             col = TERM_RED;
                         }

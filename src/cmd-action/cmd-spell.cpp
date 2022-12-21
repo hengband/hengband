@@ -98,7 +98,7 @@ const uint32_t fake_spell_flags[4] = { 0x000000ff, 0x0000ff00, 0x00ff0000, 0xff0
  * @param base 固定値
  * @return フォーマットに従い整形された文字列
  */
-concptr info_string_dice(concptr str, DICE_NUMBER dice, DICE_SID sides, int base)
+std::string info_string_dice(concptr str, DICE_NUMBER dice, DICE_SID sides, int base)
 {
     /* Fix value */
     if (!dice) {
@@ -123,7 +123,7 @@ concptr info_string_dice(concptr str, DICE_NUMBER dice, DICE_SID sides, int base
  * @param base 固定値
  * @return フォーマットに従い整形された文字列
  */
-concptr info_damage(DICE_NUMBER dice, DICE_SID sides, int base)
+std::string info_damage(DICE_NUMBER dice, DICE_SID sides, int base)
 {
     return info_string_dice(_("損傷:", "dam "), dice, sides, base);
 }
@@ -134,7 +134,7 @@ concptr info_damage(DICE_NUMBER dice, DICE_SID sides, int base)
  * @param sides ダイス目
  * @return フォーマットに従い整形された文字列
  */
-concptr info_duration(int base, DICE_SID sides)
+std::string info_duration(int base, DICE_SID sides)
 {
     return format(_("期間:%d+1d%d", "dur %d+1d%d"), base, sides);
 }
@@ -144,7 +144,7 @@ concptr info_duration(int base, DICE_SID sides)
  * @param range 効果範囲
  * @return フォーマットに従い整形された文字列
  */
-concptr info_range(POSITION range)
+std::string info_range(POSITION range)
 {
     return format(_("範囲:%d", "range %d"), range);
 }
@@ -156,7 +156,7 @@ concptr info_range(POSITION range)
  * @param base 固定値
  * @return フォーマットに従い整形された文字列
  */
-concptr info_heal(DICE_NUMBER dice, DICE_SID sides, int base)
+std::string info_heal(DICE_NUMBER dice, DICE_SID sides, int base)
 {
     return info_string_dice(_("回復:", "heal "), dice, sides, base);
 }
@@ -167,7 +167,7 @@ concptr info_heal(DICE_NUMBER dice, DICE_SID sides, int base)
  * @param sides ダイス目
  * @return フォーマットに従い整形された文字列
  */
-concptr info_delay(int base, DICE_SID sides)
+std::string info_delay(int base, DICE_SID sides)
 {
     return format(_("遅延:%d+1d%d", "delay %d+1d%d"), base, sides);
 }
@@ -177,7 +177,7 @@ concptr info_delay(int base, DICE_SID sides)
  * @param dam 固定値
  * @return フォーマットに従い整形された文字列
  */
-concptr info_multi_damage(int dam)
+std::string info_multi_damage(int dam)
 {
     return format(_("損傷:各%d", "dam %d each"), dam);
 }
@@ -188,7 +188,7 @@ concptr info_multi_damage(int dam)
  * @param sides ダイス目
  * @return フォーマットに従い整形された文字列
  */
-concptr info_multi_damage_dice(DICE_NUMBER dice, DICE_SID sides)
+std::string info_multi_damage_dice(DICE_NUMBER dice, DICE_SID sides)
 {
     return format(_("損傷:各%dd%d", "dam %dd%d each"), dice, sides);
 }
@@ -198,7 +198,7 @@ concptr info_multi_damage_dice(DICE_NUMBER dice, DICE_SID sides)
  * @param power 固定値
  * @return フォーマットに従い整形された文字列
  */
-concptr info_power(int power)
+std::string info_power(int power)
 {
     return format(_("効力:%d", "power %d"), power);
 }
@@ -212,7 +212,7 @@ concptr info_power(int power)
 /*
  * Generate power info string such as "power 1d100"
  */
-concptr info_power_dice(DICE_NUMBER dice, DICE_SID sides)
+std::string info_power_dice(DICE_NUMBER dice, DICE_SID sides)
 {
     return format(_("効力:%dd%d", "power %dd%d"), dice, sides);
 }
@@ -222,7 +222,7 @@ concptr info_power_dice(DICE_NUMBER dice, DICE_SID sides)
  * @param rad 効果半径
  * @return フォーマットに従い整形された文字列
  */
-concptr info_radius(POSITION rad)
+std::string info_radius(POSITION rad)
 {
     return format(_("半径:%d", "rad %d"), rad);
 }
@@ -232,7 +232,7 @@ concptr info_radius(POSITION rad)
  * @param weight 最大重量
  * @return フォーマットに従い整形された文字列
  */
-concptr info_weight(WEIGHT weight)
+std::string info_weight(WEIGHT weight)
 {
 #ifdef JP
     return format("最大重量:%d.%dkg", lb_to_kg_integer(weight), lb_to_kg_fraction(weight));

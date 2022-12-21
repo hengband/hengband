@@ -146,7 +146,7 @@ void Patron::gain_level_reward(PlayerType *player_ptr_, int chosen_reward)
     int nasty_chance = 6;
     int type;
     patron_reward effect;
-    concptr reward = nullptr;
+    std::string reward;
     GAME_TEXT o_name[MAX_NLEN];
 
     int count = 0;
@@ -579,8 +579,9 @@ void Patron::gain_level_reward(PlayerType *player_ptr_, int chosen_reward)
             msg_format(_("「あー、あー、答えは %d/%d。質問は何？」", "'Uh... uh... the answer's %d/%d, what's the question?'"), type, effect);
         }
     }
-    if (reward) {
-        exe_write_diary(player_ptr, DIARY_DESCRIPTION, 0, format(_("パトロンの報酬で%s", "The patron rewarded you with %s."), reward));
+    if (!reward.empty()) {
+        const auto note = format(_("パトロンの報酬で%s", "The patron rewarded you with %s."), reward.data());
+        exe_write_diary(player_ptr, DIARY_DESCRIPTION, 0, note.data());
     }
 }
 

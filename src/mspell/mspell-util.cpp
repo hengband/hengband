@@ -10,14 +10,6 @@
 #include "timed-effect/timed-effects.h"
 #include "view/display-messages.h"
 
-mspell_cast_msg::mspell_cast_msg(concptr to_player_true, concptr to_mons_true, concptr to_player_false, concptr to_mons_false)
-    : to_player_true(to_player_true)
-    , to_mons_true(to_mons_true)
-    , to_player_false(to_player_false)
-    , to_mons_false(to_mons_false)
-{
-}
-
 mspell_cast_msg_blind::mspell_cast_msg_blind(concptr blind, concptr to_player, concptr to_mons)
     : blind(blind)
     , to_player(to_player)
