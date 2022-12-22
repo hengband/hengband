@@ -24,8 +24,6 @@ void birth_put_stats(PlayerType *player_ptr)
     for (int i = 0; i < A_MAX; i++) {
         int j = rp_ptr->r_adj[i] + cp_ptr->c_adj[i] + ap_ptr->a_adj[i];
         int m = adjust_stat(player_ptr->stat_max[i], j);
-        char buf[80];
-        cnv_stat(m, buf);
-        c_put_str(TERM_L_GREEN, buf, 3 + i, col + 24);
+        c_put_str(TERM_L_GREEN, cnv_stat(m), 3 + i, col + 24);
     }
 }
