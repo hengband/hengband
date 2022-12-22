@@ -27,7 +27,7 @@ jobs:
     needs: [check_bom, check_format]
     uses: ./.github/workflows/build-with-autotools.yml
     with:
-      cxx: clang++-11
+      cxx: clang++-14
       cxx-flags: "-pipe -O3 -Werror -Wall -Wextra -Wno-unused-const-variable -Wno-invalid-source-encoding"
       configure-opts: "--disable-pch"
       use-ccache: true
@@ -37,7 +37,7 @@ jobs:
     needs: build_test_clang_without_pch
     uses: ./.github/workflows/build-with-autotools.yml
     with:
-      cxx: g++
+      cxx: g++-11
       cxx-flags: "-pipe -O3 -Werror -Wall -Wextra"
       use-ccache: true
 
@@ -46,7 +46,7 @@ jobs:
     needs: build_test_japanese
     uses: ./.github/workflows/build-with-autotools.yml
     with:
-      cxx: g++
+      cxx: g++-11
       cxx-flags: "-pipe -O3 -Werror -Wall -Wextra"
       configure-opts: "--disable-japanese"
       use-ccache: true
