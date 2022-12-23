@@ -104,17 +104,17 @@ errr file_character(PlayerType *player_ptr, concptr name)
  */
 errr get_random_line(concptr file_name, int entry, char *output)
 {
-    char buf[1024];
-    path_build(buf, sizeof(buf), ANGBAND_DIR_FILE, file_name);
-    FILE *fp;
-    fp = angband_fopen(buf, "r");
+    char filename[1024];
+    path_build(filename, sizeof(filename), ANGBAND_DIR_FILE, file_name);
+    auto *fp = angband_fopen(filename, "r");
     if (!fp) {
         return -1;
     }
 
     int test;
-    int line_num = 0;
+    auto line_num = 0;
     while (true) {
+        char buf[1024];
         if (angband_fgets(fp, buf, sizeof(buf)) != 0) {
             angband_fclose(fp);
             return -1;
@@ -127,7 +127,9 @@ errr get_random_line(concptr file_name, int entry, char *output)
 
         if (buf[2] == '*') {
             break;
-        } else if (buf[2] == 'M') {
+        }
+        
+        if (buf[2] == 'M') {
             if (monraces_info[i2enum<MonsterRaceId>(entry)].flags1 & RF1_MALE) {
                 break;
             }
@@ -146,20 +148,19 @@ errr get_random_line(concptr file_name, int entry, char *output)
         }
     }
 
-    int counter;
-    for (counter = 0;; counter++) {
+    auto counter = 0;
+    while (true) {
+        char buf[1024];
         while (true) {
-            test = angband_fgets(fp, buf, sizeof(buf));
-            if (!test) {
-                /* Ignore lines starting with 'N:' */
-                if ((buf[0] == 'N') && (buf[1] == ':')) {
-                    continue;
-                }
+            if (angband_fgets(fp, buf, sizeof(buf))) {
+                break;
+            }
 
-                if (buf[0] != '#') {
-                    break;
-                }
-            } else {
+            if ((buf[0] == 'N') && (buf[1] == ':')) {
+                continue;
+            }
+
+            if (buf[0] != '#') {
                 break;
             }
         }
@@ -171,6 +172,8 @@ errr get_random_line(concptr file_name, int entry, char *output)
         if (one_in_(counter + 1)) {
             strcpy(output, buf);
         }
+
+        counter++;
     }
 
     angband_fclose(fp);
