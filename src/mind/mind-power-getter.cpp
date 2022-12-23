@@ -255,8 +255,7 @@ void MindPowerGetter::display_each_mind_chance()
         }
 
         calculate_mind_chance(has_weapon);
-        char comment[80];
-        mindcraft_info(this->player_ptr, comment, this->use_mind, this->index);
+        const auto comment = mindcraft_info(this->player_ptr, this->use_mind, this->index);
         std::string psi_desc;
         if (use_menu) {
             if (this->index == (this->menu_line - 1)) {
@@ -269,7 +268,7 @@ void MindPowerGetter::display_each_mind_chance()
         }
 
         psi_desc.append(format("%-30s%2d %4d%s %3d%%%s", this->spell->name, this->spell->min_lev, mana_cost,
-            (((this->use_mind == MindKindType::MINDCRAFTER) && (this->index == 13)) ? _("～", "~ ") : "  "), chance, comment));
+            (((this->use_mind == MindKindType::MINDCRAFTER) && (this->index == 13)) ? _("～", "~ ") : "  "), chance, comment.data()));
         prt(psi_desc, y + this->index + 1, x);
     }
 }
