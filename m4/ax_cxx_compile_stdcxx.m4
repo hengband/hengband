@@ -279,11 +279,11 @@ namespace cxx11
     }
 
     int
-    test(const int c, volatile int v)
+    test(const int c, int v)
     {
       static_assert(is_same<int, decltype(0)>::value == true, "");
       static_assert(is_same<int, decltype(c)>::value == false, "");
-      static_assert(is_same<int, decltype(v)>::value == false, "");
+      static_assert(is_same<int, decltype(v)>::value == true, "");
       auto ac = c;
       auto av = v;
       auto sumi = ac + av + 'x';
@@ -914,7 +914,7 @@ namespace cxx17
     struct S
     {
       int x1 : 2;
-      volatile double y1;
+      double y1;
     };
 
     S f3()
