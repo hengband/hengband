@@ -48,15 +48,20 @@ constexpr auto GRAVE_DEAD_PLACE_ROW = _(15, 14);
 constexpr auto GRAVE_DEAD_DATETIME_ROW = 17;
 
 /*!
- * @brief 墓石の真ん中に文字列を書き込む /
- * Centers a string within a GRAVE_LINE_WIDTH character string		-JWT-
- * @details
+ * @brief 墓石に文字列を表示する
+ *
+ * 墓石のアスキーアート上に与えられた文字列 str を row で指定された行に表示する
+ * 表示する位置は GRAVE_LINE_START_COL から GRAVE_LIEN_WIDTH 文字分の幅で、
+ * それより str の幅が小さい場合は中央寄せして表示する。
+ *
+ * @param str 表示する文字列
+ * @param row 表示する行
  */
-static std::string center_string(std::string_view str)
+static void show_tomb_line(std::string_view str, int row)
 {
     const auto head = GRAVE_LINE_WIDTH / 2 - str.length() / 2;
     const auto tail = GRAVE_LINE_WIDTH - str.length() - head;
-    return std::string(head, ' ').append(str).append(tail, ' ');
+    put_str(std::string(head, ' ').append(str).append(tail, ' '), row, GRAVE_LINE_START_COL);
 }
 
 /*!
@@ -65,11 +70,11 @@ static std::string center_string(std::string_view str)
  */
 static void show_basic_params(PlayerType *player_ptr)
 {
-    put_str(center_string(format(_("レベル: %d", "Level: %d"), (int)player_ptr->lev)), GRAVE_LEVEL_ROW, GRAVE_LINE_START_COL);
+    show_tomb_line(format(_("レベル: %d", "Level: %d"), (int)player_ptr->lev), GRAVE_LEVEL_ROW);
 
-    put_str(center_string(format(_("経験値: %ld", "Exp: %ld"), (long)player_ptr->exp)), GRAVE_EXP_ROW, GRAVE_LINE_START_COL);
+    show_tomb_line(format(_("経験値: %ld", "Exp: %ld"), (long)player_ptr->exp), GRAVE_EXP_ROW);
 
-    put_str(center_string(format(_("所持金: %ld", "AU: %ld"), (long)player_ptr->au)), GRAVE_AU_ROW, GRAVE_LINE_START_COL);
+    show_tomb_line(format(_("所持金: %ld", "AU: %ld"), (long)player_ptr->au), GRAVE_AU_ROW);
 }
 
 #ifdef JP
@@ -90,7 +95,7 @@ static int show_killing_monster(PlayerType *player_ptr)
 {
     const auto lines = shape_buffer(player_ptr->died_from, GRAVE_LINE_WIDTH + 1);
     if (lines.size() == 1) {
-        put_str(center_string(lines[0]), GRAVE_KILLER_NAME_ROW, GRAVE_LINE_START_COL);
+        show_tomb_line(lines[0], GRAVE_KILLER_NAME_ROW);
         return 0;
     }
 
@@ -98,8 +103,8 @@ static int show_killing_monster(PlayerType *player_ptr)
         char buf[GRAVE_LINE_WIDTH + 1];
         angband_strcpy(buf, lines[1].data(), sizeof(buf) - 2);
         angband_strcat(buf, "…", sizeof(buf));
-        put_str(center_string(lines[0]), GRAVE_KILLER_NAME_ROW, GRAVE_LINE_START_COL);
-        put_str(center_string(buf), GRAVE_KILLER_NAME_ROW + 1, GRAVE_LINE_START_COL);
+        show_tomb_line(lines[0], GRAVE_KILLER_NAME_ROW);
+        show_tomb_line(buf, GRAVE_KILLER_NAME_ROW + 1);
         return 1;
     }
 
@@ -110,14 +115,14 @@ static int show_killing_monster(PlayerType *player_ptr)
         if (lines[0].length() + lines[1].length() - start_pos <= GRAVE_LINE_WIDTH) {
             const auto name = lines[0].substr(start_pos).append(lines[1]);
             std::string_view title(lines[0].begin(), lines[0].begin() + start_pos);
-            put_str(center_string(title), GRAVE_KILLER_NAME_ROW, GRAVE_LINE_START_COL);
-            put_str(center_string(name), GRAVE_KILLER_NAME_ROW + 1, GRAVE_LINE_START_COL);
+            show_tomb_line(title, GRAVE_KILLER_NAME_ROW);
+            show_tomb_line(name, GRAVE_KILLER_NAME_ROW + 1);
             return 1;
         }
     }
 
-    put_str(center_string(lines[0]), GRAVE_KILLER_NAME_ROW, GRAVE_LINE_START_COL);
-    put_str(center_string(lines[1]), GRAVE_KILLER_NAME_ROW + 1, GRAVE_LINE_START_COL);
+    show_tomb_line(lines[0], GRAVE_KILLER_NAME_ROW);
+    show_tomb_line(lines[1], GRAVE_KILLER_NAME_ROW + 1);
     return 1;
 }
 
@@ -146,7 +151,7 @@ static void show_dead_place(PlayerType *player_ptr, int extra_line)
         place = format("に地下 %d 階で殺された", (int)player_ptr->current_floor_ptr->dun_level);
     }
 
-    put_str(center_string(place), GRAVE_DEAD_PLACE_ROW + extra_line, GRAVE_LINE_START_COL);
+    show_tomb_line(place, GRAVE_DEAD_PLACE_ROW + extra_line);
 }
 
 /*!
@@ -157,11 +162,11 @@ static void show_tomb_detail(PlayerType *player_ptr)
 {
     auto offset = 0;
     if (streq(player_ptr->died_from, "途中終了")) {
-        put_str(center_string("<自殺>"), GRAVE_KILLER_NAME_ROW, GRAVE_LINE_START_COL);
+        show_tomb_line("<自殺>", GRAVE_KILLER_NAME_ROW);
     } else if (streq(player_ptr->died_from, "ripe")) {
-        put_str(center_string("引退後に天寿を全う"), GRAVE_KILLER_NAME_ROW, GRAVE_LINE_START_COL);
+        show_tomb_line("引退後に天寿を全う", GRAVE_KILLER_NAME_ROW);
     } else if (streq(player_ptr->died_from, "Seppuku")) {
-        put_str(center_string("勝利の後、切腹"), GRAVE_KILLER_NAME_ROW, GRAVE_LINE_START_COL);
+        show_tomb_line("勝利の後、切腹", GRAVE_KILLER_NAME_ROW);
     } else {
         offset = show_killing_monster(player_ptr);
     }
@@ -177,10 +182,10 @@ static void show_tomb_detail(PlayerType *player_ptr)
  */
 static void show_tomb_detail(PlayerType *player_ptr)
 {
-    put_str(center_string(format("Killed on Level %d", player_ptr->current_floor_ptr->dun_level)), GRAVE_DEAD_PLACE_ROW, GRAVE_LINE_START_COL);
+    show_tomb_line(format("Killed on Level %d", player_ptr->current_floor_ptr->dun_level), GRAVE_DEAD_PLACE_ROW);
 
     auto lines = shape_buffer(format("by %s.", player_ptr->died_from.data()).data(), GRAVE_LINE_WIDTH + 1);
-    put_str(center_string(lines[0]), GRAVE_KILLER_NAME_ROW, GRAVE_LINE_START_COL);
+    show_tomb_line(lines[0], GRAVE_KILLER_NAME_ROW);
     if (lines.size() == 1) {
         return;
     }
@@ -192,7 +197,7 @@ static void show_tomb_detail(PlayerType *player_ptr)
         lines[1].append("...");
     }
 
-    put_str(center_string(lines[1]), GRAVE_KILLER_NAME_ROW + 1, GRAVE_LINE_START_COL);
+    show_tomb_line(lines[1], GRAVE_KILLER_NAME_ROW + 1);
 }
 #endif
 
@@ -208,22 +213,22 @@ void print_tomb(PlayerType *player_ptr)
     read_dead_file(buf, sizeof(buf));
     concptr p = w_ptr->total_winner ? _("偉大なる者", "Magnificent") : player_titles[enum2i(player_ptr->pclass)][(player_ptr->lev - 1) / 5].data();
 
-    put_str(center_string(player_ptr->name), GRAVE_PLAYER_NAME_ROW, GRAVE_LINE_START_COL);
+    show_tomb_line(player_ptr->name, GRAVE_PLAYER_NAME_ROW);
 
 #ifdef JP
 #else
-    put_str(center_string("the"), GRAVE_PLAYER_TITLE_ROW - 1, GRAVE_LINE_START_COL);
+    show_tomb_line("the", GRAVE_PLAYER_TITLE_ROW - 1);
 #endif
 
-    put_str(center_string(p), GRAVE_PLAYER_TITLE_ROW, GRAVE_LINE_START_COL);
+    show_tomb_line(p, GRAVE_PLAYER_TITLE_ROW);
 
-    put_str(center_string(cp_ptr->title), GRAVE_PLAYER_CLASS_ROW, GRAVE_LINE_START_COL);
+    show_tomb_line(cp_ptr->title, GRAVE_PLAYER_CLASS_ROW);
 
     show_basic_params(player_ptr);
     show_tomb_detail(player_ptr);
 
     time_t ct = time((time_t *)0);
-    put_str(center_string(format("%-.24s", ctime(&ct))), GRAVE_DEAD_DATETIME_ROW, GRAVE_LINE_START_COL);
+    show_tomb_line(format("%-.24s", ctime(&ct)), GRAVE_DEAD_DATETIME_ROW);
     msg_format(_("さようなら、%s!", "Goodbye, %s!"), player_ptr->name);
 }
 
