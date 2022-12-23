@@ -154,7 +154,7 @@ std::string get_random_name(const ItemEntity &item, bool armour, int power)
 
     auto filename = get_random_art_filename(armour, power);
     char random_artifact_name[80]{};
-    (void)get_rnd_line(filename.data(), item.artifact_bias, random_artifact_name);
+    (void)get_random_line(filename.data(), item.artifact_bias, random_artifact_name);
 #ifdef JP
     if (random_artifact_name[0] == 0) {
         return get_table_name();

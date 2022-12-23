@@ -543,7 +543,7 @@ void process_speak_sound(PlayerType *player_ptr, MONSTER_IDX m_idx, POSITION oy,
         return;
     }
 
-    if (get_rnd_line(filename.data(), enum2i(m_ptr->ap_r_idx), monmessage) == 0) {
+    if (get_random_line(filename.data(), enum2i(m_ptr->ap_r_idx), monmessage) == 0) {
         msg_format(_("%^s%s", "%^s %s"), m_name.data(), monmessage);
     }
 }

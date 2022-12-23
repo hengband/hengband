@@ -25,7 +25,7 @@ class PlayerType;
 typedef void (*update_playtime_pf)(void);
 
 extern errr file_character(PlayerType *player_ptr, concptr name);
-extern errr get_rnd_line(concptr file_name, int entry, char *output);
+extern errr get_random_line(concptr file_name, int entry, char *output);
 void read_dead_file(char *buf, size_t buf_size);
 
 #ifdef JP

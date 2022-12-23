@@ -63,7 +63,7 @@ static void print_chainsword_noise(ItemEntity *o_ptr)
     }
 
     char chainsword_noise[1024];
-    if (!get_rnd_line(_("chainswd_j.txt", "chainswd.txt"), 0, chainsword_noise)) {
+    if (!get_random_line(_("chainswd_j.txt", "chainswd.txt"), 0, chainsword_noise)) {
         msg_print(chainsword_noise);
     }
 }

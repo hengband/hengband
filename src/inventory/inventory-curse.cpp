@@ -224,7 +224,7 @@ static void occur_chainsword_effect(PlayerType *player_ptr)
     }
 
     char noise[1024];
-    if (!get_rnd_line(_("chainswd_j.txt", "chainswd.txt"), 0, noise)) {
+    if (!get_random_line(_("chainswd_j.txt", "chainswd.txt"), 0, noise)) {
         msg_print(noise);
     }
     disturb(player_ptr, false, false);

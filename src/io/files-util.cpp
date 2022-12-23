@@ -102,7 +102,7 @@ errr file_character(PlayerType *player_ptr, concptr name)
  * Based on the monster speech patch by Matt Graham,
  * </pre>
  */
-errr get_rnd_line(concptr file_name, int entry, char *output)
+errr get_random_line(concptr file_name, int entry, char *output)
 {
     char buf[1024];
     path_build(buf, sizeof(buf), ANGBAND_DIR_FILE, file_name);
@@ -191,7 +191,7 @@ errr get_rnd_line_jonly(concptr file_name, int entry, char *output, int count)
 {
     errr result = 1;
     for (int i = 0; i < count; i++) {
-        result = get_rnd_line(file_name, entry, output);
+        result = get_random_line(file_name, entry, output);
         if (result) {
             break;
         }

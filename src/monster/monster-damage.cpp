@@ -336,8 +336,8 @@ void MonsterDamageProcessor::dying_scream(std::string_view m_name)
     }
 
     char line_got[1024];
-    if (!get_rnd_line(_("mondeath_j.txt", "mondeath.txt"), enum2i(m_ptr->r_idx), line_got)) {
-        msg_format("%^s %s", m_name.data(), line_got);
+    if (!get_random_line(_("mondeath_j.txt", "mondeath.txt"), enum2i(m_ptr->r_idx), line_got)) {
+        msg_format("%^s %s", m_name, line_got);
     }
 
 #ifdef WORLD_SCORE

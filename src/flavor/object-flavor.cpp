@@ -101,9 +101,9 @@ std::string get_table_name_aux()
     std::string name;
 #ifdef JP
     char syllable[80];
-    get_rnd_line("aname_j.txt", 1, syllable);
+    get_random_line("aname_j.txt", 1, syllable);
     name = syllable;
-    get_rnd_line("aname_j.txt", 2, syllable);
+    get_random_line("aname_j.txt", 2, syllable);
     name.append(syllable);
     return name;
 #else
@@ -127,8 +127,13 @@ std::string get_table_name_aux()
         char syllable[80];
         testcounter = randint1(2) + 1;
         while (testcounter--) {
+<<<<<<< HEAD
             (void)get_rnd_line("elvish.txt", 0, syllable);
             name.append(syllable);
+=======
+            (void)get_random_line("elvish.txt", 0, syllable);
+            strcat(out_string, syllable);
+>>>>>>> dd39ec10b ([Refactor] #2651 Renamed get_rnd_line() to get_random_line())
         }
     }
 
@@ -155,10 +160,9 @@ std::string get_table_name()
 std::string get_table_sindarin_aux()
 {
     char syllable[80];
-
-    get_rnd_line("sname.txt", 1, syllable);
+    get_random_line("sname.txt", 1, syllable);
     std::string name = syllable;
-    get_rnd_line("sname.txt", 2, syllable);
+    get_random_line("sname.txt", 2, syllable);
     name.append(syllable);
     return _(sindarin_to_kana(name), name);
 }

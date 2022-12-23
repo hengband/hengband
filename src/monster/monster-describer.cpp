@@ -32,7 +32,7 @@ std::string monster_desc(PlayerType *player_ptr, MonsterEntity *m_ptr, BIT_FLAGS
     auto is_hallucinated = player_ptr->effects()->hallucination()->is_hallucinated();
     if (is_hallucinated && !(mode & MD_IGNORE_HALLU)) {
         if (one_in_(2)) {
-            if (!get_rnd_line(_("silly_j.txt", "silly.txt"), enum2i(m_ptr->r_idx), silly_name)) {
+            if (!get_random_line(_("silly_j.txt", "silly.txt"), enum2i(m_ptr->r_idx), silly_name)) {
                 named = true;
             }
         }

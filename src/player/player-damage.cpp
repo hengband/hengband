@@ -476,9 +476,9 @@ int take_hit(PlayerType *player_ptr, int damage_type, int damage, concptr hit_fr
                 msg_print(nullptr);
             } else {
                 if (winning_seppuku) {
-                    get_rnd_line(_("seppuku_j.txt", "seppuku.txt"), 0, death_message);
+                    get_random_line(_("seppuku_j.txt", "seppuku.txt"), 0, death_message);
                 } else {
-                    get_rnd_line(_("death_j.txt", "death.txt"), 0, death_message);
+                    get_random_line(_("death_j.txt", "death.txt"), 0, death_message);
                 }
 
                 do {

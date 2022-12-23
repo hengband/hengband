@@ -683,7 +683,7 @@ void process_command(PlayerType *player_ptr)
         if (one_in_(2)) {
             char error_m[1024];
             sound(SOUND_ILLEGAL);
-            if (!get_rnd_line(_("error_j.txt", "error.txt"), 0, error_m)) {
+            if (!get_random_line(_("error_j.txt", "error.txt"), 0, error_m)) {
                 msg_print(error_m);
             }
         } else {
