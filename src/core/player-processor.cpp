@@ -87,9 +87,8 @@ static void process_fishing(PlayerType *player_ptr)
             y = player_ptr->y + ddy[player_ptr->fishing_dir];
             x = player_ptr->x + ddx[player_ptr->fishing_dir];
             if (place_monster_aux(player_ptr, 0, y, x, r_idx, PM_NO_KAGE)) {
-                GAME_TEXT m_name[MAX_NLEN];
-                monster_desc(player_ptr, m_name, &floor_ptr->m_list[floor_ptr->grid_array[y][x].m_idx], 0);
-                msg_format(_("%sが釣れた！", "You have a good catch!"), m_name);
+                const auto m_name = monster_desc(player_ptr, &floor_ptr->m_list[floor_ptr->grid_array[y][x].m_idx], 0);
+                msg_format(_("%sが釣れた！", "You have a good catch!"), m_name.data());
                 success = true;
             }
         }
@@ -187,36 +186,32 @@ void process_player(PlayerType *player_ptr)
         auto *m_ptr = &player_ptr->current_floor_ptr->m_list[player_ptr->riding];
         auto *r_ptr = &monraces_info[m_ptr->r_idx];
         if (m_ptr->is_asleep()) {
-            GAME_TEXT m_name[MAX_NLEN];
+            const auto m_name = monster_desc(player_ptr, m_ptr, 0);
             (void)set_monster_csleep(player_ptr, player_ptr->riding, 0);
-            monster_desc(player_ptr, m_name, m_ptr, 0);
-            msg_format(_("%^sを起こした。", "You have woken %s up."), m_name);
+            msg_format(_("%^sを起こした。", "You have woken %s up."), m_name.data());
         }
 
         if (m_ptr->is_stunned()) {
             if (set_monster_stunned(player_ptr, player_ptr->riding,
                     (randint0(r_ptr->level) < player_ptr->skill_exp[PlayerSkillKindType::RIDING]) ? 0 : (m_ptr->get_remaining_stun() - 1))) {
-                GAME_TEXT m_name[MAX_NLEN];
-                monster_desc(player_ptr, m_name, m_ptr, 0);
-                msg_format(_("%^sを朦朧状態から立ち直らせた。", "%^s is no longer stunned."), m_name);
+                const auto m_name = monster_desc(player_ptr, m_ptr, 0);
+                msg_format(_("%^sを朦朧状態から立ち直らせた。", "%^s is no longer stunned."), m_name.data());
             }
         }
 
         if (m_ptr->is_confused()) {
             if (set_monster_confused(player_ptr, player_ptr->riding,
                     (randint0(r_ptr->level) < player_ptr->skill_exp[PlayerSkillKindType::RIDING]) ? 0 : (m_ptr->get_remaining_confusion() - 1))) {
-                GAME_TEXT m_name[MAX_NLEN];
-                monster_desc(player_ptr, m_name, m_ptr, 0);
-                msg_format(_("%^sを混乱状態から立ち直らせた。", "%^s is no longer confused."), m_name);
+                const auto m_name = monster_desc(player_ptr, m_ptr, 0);
+                msg_format(_("%^sを混乱状態から立ち直らせた。", "%^s is no longer confused."), m_name.data());
             }
         }
 
         if (m_ptr->is_fearful()) {
             if (set_monster_monfear(player_ptr, player_ptr->riding,
                     (randint0(r_ptr->level) < player_ptr->skill_exp[PlayerSkillKindType::RIDING]) ? 0 : (m_ptr->get_remaining_fear() - 1))) {
-                GAME_TEXT m_name[MAX_NLEN];
-                monster_desc(player_ptr, m_name, m_ptr, 0);
-                msg_format(_("%^sを恐怖から立ち直らせた。", "%^s is no longer fearful."), m_name);
+                const auto m_name = monster_desc(player_ptr, m_ptr, 0);
+                msg_format(_("%^sを恐怖から立ち直らせた。", "%^s is no longer fearful."), m_name.data());
             }
         }
 

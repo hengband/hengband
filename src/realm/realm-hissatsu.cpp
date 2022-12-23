@@ -402,9 +402,7 @@ std::optional<std::string> do_hissatsu_spell(PlayerType *player_ptr, SPELL_IDX s
                 POSITION oy = y, ox = x;
                 MONSTER_IDX m_idx = player_ptr->current_floor_ptr->grid_array[y][x].m_idx;
                 auto *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
-                GAME_TEXT m_name[MAX_NLEN];
-
-                monster_desc(player_ptr, m_name, m_ptr, 0);
+                const auto m_name = monster_desc(player_ptr, m_ptr, 0);
 
                 for (i = 0; i < 5; i++) {
                     y += ddy[dir];
@@ -417,7 +415,7 @@ std::optional<std::string> do_hissatsu_spell(PlayerType *player_ptr, SPELL_IDX s
                     }
                 }
                 if ((ty != oy) || (tx != ox)) {
-                    msg_format(_("%sを吹き飛ばした！", "You blow %s away!"), m_name);
+                    msg_format(_("%sを吹き飛ばした！", "You blow %s away!"), m_name.data());
                     player_ptr->current_floor_ptr->grid_array[oy][ox].m_idx = 0;
                     player_ptr->current_floor_ptr->grid_array[ty][tx].m_idx = m_idx;
                     m_ptr->fy = ty;
@@ -690,9 +688,8 @@ std::optional<std::string> do_hissatsu_spell(PlayerType *player_ptr, SPELL_IDX s
                     continue;
                 }
 
-                GAME_TEXT m_name[MAX_NLEN];
-                monster_desc(player_ptr, m_name, m_ptr, 0);
-                msg_format(_("%sには効果がない！", "%s is unharmed!"), m_name);
+                const auto m_name = monster_desc(player_ptr, m_ptr, 0);
+                msg_format(_("%sには効果がない！", "%s is unharmed!"), m_name.data());
             }
         }
 

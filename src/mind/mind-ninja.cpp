@@ -202,9 +202,8 @@ bool rush_attack(PlayerType *player_ptr, bool *mdeath)
             msg_format("There is %s in the way!", m_ptr->ml ? (tm_idx ? "another monster" : "a monster") : "someone");
 #endif
         } else if (!player_bold(player_ptr, ty, tx)) {
-            GAME_TEXT m_name[MAX_NLEN];
-            monster_desc(player_ptr, m_name, m_ptr, 0);
-            msg_format(_("素早く%sの懐に入り込んだ！", "You quickly jump in and attack %s!"), m_name);
+            const auto m_name = monster_desc(player_ptr, m_ptr, 0);
+            msg_format(_("素早く%sの懐に入り込んだ！", "You quickly jump in and attack %s!"), m_name.data());
         }
 
         if (!player_bold(player_ptr, ty, tx)) {

@@ -117,16 +117,11 @@ void fetch_item(PlayerType *player_ptr, DIRECTION dir, WEIGHT wgt, bool require_
 
 bool fetch_monster(PlayerType *player_ptr)
 {
-    MonsterEntity *m_ptr;
-    MONSTER_IDX m_idx;
-    GAME_TEXT m_name[MAX_NLEN];
-    POSITION ty, tx;
-
     if (!target_set(player_ptr, TARGET_KILL)) {
         return false;
     }
 
-    m_idx = player_ptr->current_floor_ptr->grid_array[target_row][target_col].m_idx;
+    auto m_idx = player_ptr->current_floor_ptr->grid_array[target_row][target_col].m_idx;
     if (!m_idx) {
         return false;
     }
@@ -140,11 +135,11 @@ bool fetch_monster(PlayerType *player_ptr)
         return false;
     }
 
-    m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
-    monster_desc(player_ptr, m_name, m_ptr, 0);
-    msg_format(_("%sを引き戻した。", "You pull back %s."), m_name);
+    auto *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
+    const auto m_name = monster_desc(player_ptr, m_ptr, 0);
+    msg_format(_("%sを引き戻した。", "You pull back %s."), m_name.data());
     projection_path path_g(player_ptr, get_max_range(player_ptr), target_row, target_col, player_ptr->y, player_ptr->x, 0);
-    ty = target_row, tx = target_col;
+    auto ty = target_row, tx = target_col;
     for (const auto &[ny, nx] : path_g) {
         auto *g_ptr = &player_ptr->current_floor_ptr->grid_array[ny][nx];
 

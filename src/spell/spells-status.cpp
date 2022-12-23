@@ -540,9 +540,8 @@ bool fishing(PlayerType *player_ptr)
     }
 
     if (player_ptr->current_floor_ptr->grid_array[y][x].m_idx) {
-        GAME_TEXT m_name[MAX_NLEN];
-        monster_desc(player_ptr, m_name, &player_ptr->current_floor_ptr->m_list[player_ptr->current_floor_ptr->grid_array[y][x].m_idx], 0);
-        msg_format(_("%sが邪魔だ！", "%^s is standing in your way."), m_name);
+        const auto m_name = monster_desc(player_ptr, &player_ptr->current_floor_ptr->m_list[player_ptr->current_floor_ptr->grid_array[y][x].m_idx], 0);
+        msg_format(_("%sが邪魔だ！", "%^s is standing in your way."), m_name.data());
         PlayerEnergy(player_ptr).reset_player_turn();
         return false;
     }

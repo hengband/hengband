@@ -383,8 +383,7 @@ std::string probed_monster_info(PlayerType *player_ptr, MonsterEntity *m_ptr, Mo
         lite_spot(player_ptr, m_ptr->fy, m_ptr->fx);
     }
 
-    GAME_TEXT m_name[MAX_NLEN];
-    monster_desc(player_ptr, m_name, m_ptr, MD_IGNORE_HALLU | MD_INDEF_HIDDEN);
+    const auto m_name = monster_desc(player_ptr, m_ptr, MD_IGNORE_HALLU | MD_INDEF_HIDDEN);
 
     concptr align;
     if (r_ptr->kind_flags.has_all_of(alignment_mask)) {
@@ -404,7 +403,7 @@ std::string probed_monster_info(PlayerType *player_ptr, MonsterEntity *m_ptr, Mo
     }
 
     const auto speed = m_ptr->get_temporary_speed() - STANDARD_SPEED;
-    std::string result = format(_("%s ... 属性:%s HP:%d/%d AC:%d 速度:%s%d 経験:", "%s ... align:%s HP:%d/%d AC:%d speed:%s%d exp:"), m_name, align, (int)m_ptr->hp,
+    std::string result = format(_("%s ... 属性:%s HP:%d/%d AC:%d 速度:%s%d 経験:", "%s ... align:%s HP:%d/%d AC:%d speed:%s%d exp:"), m_name.data(), align, (int)m_ptr->hp,
         (int)m_ptr->maxhp, r_ptr->ac, (speed > 0) ? "+" : "", speed);
 
     if (MonsterRace(r_ptr->next_r_idx).is_valid()) {

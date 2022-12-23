@@ -66,6 +66,7 @@
 #include "timed-effect/player-hallucination.h"
 #include "timed-effect/timed-effects.h"
 #include "util/bit-flags-calculator.h"
+#include "util/string-processor.h"
 #include "view/display-messages.h"
 #include "view/object-describer.h"
 #include "wizard/wizard-messages.h"
@@ -217,7 +218,7 @@ void ObjectThrowEntity::exe_throw()
         auto *floor_ptr = this->player_ptr->current_floor_ptr;
         this->g_ptr = &floor_ptr->grid_array[this->y][this->x];
         this->m_ptr = &floor_ptr->m_list[this->g_ptr->m_idx];
-        monster_name(this->player_ptr, this->g_ptr->m_idx, this->m_name);
+        angband_strcpy(this->m_name, monster_name(this->player_ptr, this->g_ptr->m_idx).data(), sizeof(this->m_name));
         this->visible = this->m_ptr->ml;
         this->hit_body = true;
         this->attack_racial_power();
@@ -267,9 +268,8 @@ void ObjectThrowEntity::display_potion_throw()
         return;
     }
 
-    GAME_TEXT angry_m_name[MAX_NLEN];
-    monster_desc(this->player_ptr, angry_m_name, angry_m_ptr, 0);
-    msg_format(_("%sは怒った！", "%^s gets angry!"), angry_m_name);
+    const auto angry_m_name = monster_desc(this->player_ptr, angry_m_ptr, 0);
+    msg_format(_("%sは怒った！", "%^s gets angry!"), angry_m_name.data());
     set_hostile(this->player_ptr, &floor_ptr->m_list[floor_ptr->grid_array[this->y][this->x].m_idx]);
     this->do_drop = false;
 }

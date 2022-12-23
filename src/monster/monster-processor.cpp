@@ -243,9 +243,8 @@ void decide_drop_from_monster(PlayerType *player_ptr, MONSTER_IDX m_idx, bool is
 #ifdef JP
         msg_print("地面に落とされた。");
 #else
-        GAME_TEXT m_name[MAX_NLEN];
-        monster_desc(player_ptr, m_name, &player_ptr->current_floor_ptr->m_list[player_ptr->riding], 0);
-        msg_format("You have fallen from %s.", m_name);
+        const auto m_name = monster_desc(player_ptr, &player_ptr->current_floor_ptr->m_list[player_ptr->riding], 0);
+        msg_format("You have fallen from %s.", m_name.data());
 #endif
     }
 }
@@ -271,15 +270,13 @@ bool vanish_summoned_children(PlayerType *player_ptr, MONSTER_IDX m_idx, bool se
     }
 
     if (see_m) {
-        GAME_TEXT m_name[MAX_NLEN];
-        monster_desc(player_ptr, m_name, m_ptr, 0);
-        msg_format(_("%sは消え去った！", "%^s disappears!"), m_name);
+        const auto m_name = monster_desc(player_ptr, m_ptr, 0);
+        msg_format(_("%sは消え去った！", "%^s disappears!"), m_name.data());
     }
 
     if (record_named_pet && m_ptr->is_pet() && m_ptr->nickname) {
-        GAME_TEXT m_name[MAX_NLEN];
-        monster_desc(player_ptr, m_name, m_ptr, MD_INDEF_VISIBLE);
-        exe_write_diary(player_ptr, DIARY_NAMED_PET, RECORD_NAMED_PET_LOSE_PARENT, m_name);
+        const auto m_name = monster_desc(player_ptr, m_ptr, MD_INDEF_VISIBLE);
+        exe_write_diary(player_ptr, DIARY_NAMED_PET, RECORD_NAMED_PET_LOSE_PARENT, m_name.data());
     }
 
     delete_monster_idx(player_ptr, m_idx);
@@ -306,9 +303,8 @@ bool awake_monster(PlayerType *player_ptr, MONSTER_IDX m_idx)
 
     (void)set_monster_csleep(player_ptr, m_idx, 0);
     if (m_ptr->ml) {
-        GAME_TEXT m_name[MAX_NLEN];
-        monster_desc(player_ptr, m_name, m_ptr, 0);
-        msg_format(_("%^sが目を覚ました。", "%^s wakes up."), m_name);
+        const auto m_name = monster_desc(player_ptr, m_ptr, 0);
+        msg_format(_("%^sが目を覚ました。", "%^s wakes up."), m_name.data());
     }
 
     if (is_original_ap_and_seen(player_ptr, m_ptr) && (r_ptr->r_wake < MAX_UCHAR)) {
@@ -341,8 +337,7 @@ void process_angar(PlayerType *player_ptr, MONSTER_IDX m_idx, bool see_m)
         return;
     }
 
-    GAME_TEXT m_name[MAX_NLEN];
-    monster_desc(player_ptr, m_name, m_ptr, m_ptr->is_pet() ? MD_ASSUME_VISIBLE : 0);
+    const auto m_name = monster_desc(player_ptr, m_ptr, m_ptr->is_pet() ? MD_ASSUME_VISIBLE : 0);
 
     /* When riding a hostile alignment pet */
     if (player_ptr->riding == m_idx) {
@@ -350,7 +345,7 @@ void process_angar(PlayerType *player_ptr, MONSTER_IDX m_idx, bool see_m)
             return;
         }
 
-        msg_format(_("%^sが突然暴れだした！", "%^s suddenly begins unruly!"), m_name);
+        msg_format(_("%^sが突然暴れだした！", "%^s suddenly begins unruly!"), m_name.data());
         if (!process_fall_off_horse(player_ptr, 1, true)) {
             return;
         }
@@ -359,7 +354,7 @@ void process_angar(PlayerType *player_ptr, MONSTER_IDX m_idx, bool see_m)
     }
 
     if (m_ptr->is_pet() || see_m) {
-        msg_format(_("%^sは突然敵にまわった！", "%^s suddenly becomes hostile!"), m_name);
+        msg_format(_("%^sは突然敵にまわった！", "%^s suddenly becomes hostile!"), m_name.data());
     }
 
     set_hostile(player_ptr, m_ptr);
@@ -519,9 +514,8 @@ bool process_monster_fear(PlayerType *player_ptr, turn_flags *turn_flags_ptr, MO
         return true;
     }
 
-    GAME_TEXT m_name[MAX_NLEN];
-    monster_desc(player_ptr, m_name, m_ptr, 0);
-    msg_format(_("%^sは戦いを決意した！", "%^s turns to fight!"), m_name);
+    const auto m_name = monster_desc(player_ptr, m_ptr, 0);
+    msg_format(_("%^sは戦いを決意した！", "%^s turns to fight!"), m_name.data());
     return true;
 }
 

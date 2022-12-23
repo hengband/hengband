@@ -67,9 +67,8 @@ bool monspell_message_base(PlayerType *player_ptr, MONSTER_IDX m_idx, MONSTER_ID
     bool see_either = see_monster(player_ptr, m_idx) || see_monster(player_ptr, t_idx);
     bool mon_to_mon = (target_type == MONSTER_TO_MONSTER);
     bool mon_to_player = (target_type == MONSTER_TO_PLAYER);
-    GAME_TEXT m_name[MAX_NLEN], t_name[MAX_NLEN];
-    monster_name(player_ptr, m_idx, m_name);
-    monster_name(player_ptr, t_idx, t_name);
+    const auto m_name = monster_name(player_ptr, m_idx);
+    const auto t_name = monster_name(player_ptr, t_idx);
 
     if (mon_to_player || (mon_to_mon && known && see_either)) {
         disturb(player_ptr, true, true);
@@ -77,18 +76,18 @@ bool monspell_message_base(PlayerType *player_ptr, MONSTER_IDX m_idx, MONSTER_ID
 
     if (msg_flag_aux) {
         if (mon_to_player) {
-            msg_format(msgs.to_player_true, m_name);
+            msg_format(msgs.to_player_true, m_name.data());
             notice = true;
         } else if (mon_to_mon && known && see_either) {
-            msg_format(msgs.to_mons_true, m_name);
+            msg_format(msgs.to_mons_true, m_name.data());
             notice = true;
         }
     } else {
         if (mon_to_player) {
-            msg_format(msgs.to_player_false, m_name);
+            msg_format(msgs.to_player_false, m_name.data());
             notice = true;
         } else if (mon_to_mon && known && see_either) {
-            msg_format(msgs.to_mons_false, m_name, t_name);
+            msg_format(msgs.to_mons_false, m_name.data(), t_name.data());
             notice = true;
         }
     }

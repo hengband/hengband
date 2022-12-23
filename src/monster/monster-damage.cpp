@@ -148,10 +148,9 @@ bool MonsterDamageProcessor::process_dead_exp_virtue(concptr note, MonsterEntity
     }
 
     this->increase_kill_numbers();
-    GAME_TEXT m_name[MAX_NLEN];
-    monster_desc(this->player_ptr, m_name, m_ptr, MD_TRUE_NAME);
-    this->death_amberites(m_name);
-    this->dying_scream(m_name);
+    const auto m_name = monster_desc(this->player_ptr, m_ptr, MD_TRUE_NAME);
+    this->death_amberites(m_name.data());
+    this->dying_scream(m_name.data());
     AvatarChanger ac(player_ptr, m_ptr);
     ac.change_virtue();
     if (r_ref.kind_flags.has(MonsterKindType::UNIQUE) && record_destroy_uniq) {
@@ -159,8 +158,8 @@ bool MonsterDamageProcessor::process_dead_exp_virtue(concptr note, MonsterEntity
     }
 
     sound(SOUND_KILL);
-    this->show_kill_message(note, m_name);
-    this->show_bounty_message(m_name);
+    this->show_kill_message(note, m_name.data());
+    this->show_bounty_message(m_name.data());
     monster_death(this->player_ptr, this->m_idx, true, this->attribute_flags);
     this->summon_special_unique();
     this->get_exp_from_mon(exp_mon, exp_mon->max_maxhp * 2);
@@ -310,7 +309,7 @@ void MonsterDamageProcessor::increase_kill_numbers()
     monster_race_track(this->player_ptr, m_ptr->ap_r_idx);
 }
 
-void MonsterDamageProcessor::death_amberites(GAME_TEXT *m_name)
+void MonsterDamageProcessor::death_amberites(concptr m_name)
 {
     auto *m_ptr = &this->player_ptr->current_floor_ptr->m_list[this->m_idx];
     const auto &r_ref = m_ptr->get_real_r_ref();
@@ -328,7 +327,7 @@ void MonsterDamageProcessor::death_amberites(GAME_TEXT *m_name)
     } while (--curses);
 }
 
-void MonsterDamageProcessor::dying_scream(GAME_TEXT *m_name)
+void MonsterDamageProcessor::dying_scream(concptr m_name)
 {
     auto *m_ptr = &this->player_ptr->current_floor_ptr->m_list[this->m_idx];
     const auto &r_ref = m_ptr->get_real_r_ref();
@@ -348,7 +347,7 @@ void MonsterDamageProcessor::dying_scream(GAME_TEXT *m_name)
 #endif
 }
 
-void MonsterDamageProcessor::show_kill_message(concptr note, GAME_TEXT *m_name)
+void MonsterDamageProcessor::show_kill_message(concptr note, concptr m_name)
 {
     auto *floor_ptr = this->player_ptr->current_floor_ptr;
     auto *m_ptr = &floor_ptr->m_list[this->m_idx];
@@ -389,7 +388,7 @@ void MonsterDamageProcessor::show_kill_message(concptr note, GAME_TEXT *m_name)
     msg_format(mes, m_name);
 }
 
-void MonsterDamageProcessor::show_bounty_message(GAME_TEXT *m_name)
+void MonsterDamageProcessor::show_bounty_message(concptr m_name)
 {
     auto *floor_ptr = this->player_ptr->current_floor_ptr;
     auto *m_ptr = &floor_ptr->m_list[this->m_idx];

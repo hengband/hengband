@@ -615,11 +615,9 @@ static void process_aura_damage(MonsterEntity *m_ptr, PlayerType *player_ptr, bo
         return;
     }
 
-    GAME_TEXT mon_name[MAX_NLEN];
     int aura_damage = damroll(1 + (r_ptr->level / 26), 1 + (r_ptr->level / 17));
-    monster_desc(player_ptr, mon_name, m_ptr, MD_WRONGDOER_NAME);
     msg_print(message);
-    (*dam_func)(player_ptr, aura_damage, mon_name, true);
+    (*dam_func)(player_ptr, aura_damage, monster_desc(player_ptr, m_ptr, MD_WRONGDOER_NAME).data(), true);
     if (is_original_ap_and_seen(player_ptr, m_ptr)) {
         r_ptr->r_aura_flags.set(aura_flag);
     }

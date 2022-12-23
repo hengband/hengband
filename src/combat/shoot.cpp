@@ -781,12 +781,10 @@ void exe_fire(PlayerType *player_ptr, INVENTORY_IDX item, ItemEntity *j_ptr, SPE
 
                     /* Handle visible monster */
                     else {
-                        GAME_TEXT m_name[MAX_NLEN];
-
                         /* Get "the monster" or "it" */
-                        monster_desc(player_ptr, m_name, m_ptr, 0);
+                        const auto m_name = monster_desc(player_ptr, m_ptr, 0);
 
-                        msg_format(_("%sが%sに命中した。", "The %s hits %s."), o_name, m_name);
+                        msg_format(_("%sが%sに命中した。", "The %s hits %s."), o_name, m_name.data());
 
                         if (m_ptr->ml) {
                             if (!player_ptr->effects()->hallucination()->is_hallucinated()) {
@@ -801,14 +799,12 @@ void exe_fire(PlayerType *player_ptr, INVENTORY_IDX item, ItemEntity *j_ptr, SPE
                         const auto is_unique = r_ptr->kind_flags.has(MonsterKindType::UNIQUE);
                         const auto fatality = randint1(r_ptr->level / (3 + sniper_concent)) + (8 - sniper_concent);
                         if ((randint1(fatality) == 1) && !is_unique && none_bits(r_ptr->flags7, RF7_UNIQUE2)) {
-                            GAME_TEXT m_name[MAX_NLEN];
-
                             /* Get "the monster" or "it" */
-                            monster_desc(player_ptr, m_name, m_ptr, 0);
+                            const auto m_name = monster_desc(player_ptr, m_ptr, 0);
 
                             tdam = m_ptr->hp + 1;
                             base_dam = tdam;
-                            msg_format(_("%sの急所に突き刺さった！", "Your shot hit a fatal spot of %s!"), m_name);
+                            msg_format(_("%sの急所に突き刺さった！", "Your shot hit a fatal spot of %s!"), m_name.data());
                         } else {
                             tdam = 1;
                             base_dam = tdam;
@@ -859,12 +855,10 @@ void exe_fire(PlayerType *player_ptr, INVENTORY_IDX item, ItemEntity *j_ptr, SPE
                     else {
                         /* STICK TO */
                         if (q_ptr->is_fixed_artifact() && (sniper_concent == 0)) {
-                            GAME_TEXT m_name[MAX_NLEN];
-
-                            monster_desc(player_ptr, m_name, m_ptr, 0);
+                            const auto m_name = monster_desc(player_ptr, m_ptr, 0);
 
                             stick_to = true;
-                            msg_format(_("%sは%sに突き刺さった！", "%^s is stuck in %s!"), o_name, m_name);
+                            msg_format(_("%sは%sに突き刺さった！", "%^s is stuck in %s!"), o_name, m_name.data());
                         }
 
                         message_pain(player_ptr, c_mon_ptr->m_idx, tdam);
@@ -875,10 +869,9 @@ void exe_fire(PlayerType *player_ptr, INVENTORY_IDX item, ItemEntity *j_ptr, SPE
                         }
 
                         if (fear && m_ptr->ml) {
-                            GAME_TEXT m_name[MAX_NLEN];
+                            const auto m_name = monster_desc(player_ptr, m_ptr, 0);
                             sound(SOUND_FLEE);
-                            monster_desc(player_ptr, m_name, m_ptr, 0);
-                            msg_format(_("%^sは恐怖して逃げ出した！", "%^s flees in terror!"), m_name);
+                            msg_format(_("%^sは恐怖して逃げ出した！", "%^s flees in terror!"), m_name.data());
                         }
 
                         set_target(m_ptr, player_ptr->y, player_ptr->x);
@@ -1053,9 +1046,8 @@ bool test_hit_fire(PlayerType *player_ptr, int chance, MonsterEntity *m_ptr, int
     /* Power competes against armor */
     if (randint0(chance) < (ac * 3 / 4)) {
         if (m_ptr->r_idx == MonsterRaceId::GOEMON && !m_ptr->is_asleep()) {
-            GAME_TEXT m_name[MAX_NLEN];
-            monster_desc(player_ptr, m_name, m_ptr, 0);
-            msg_format(_("%sは%sを斬り捨てた！", "%s cuts down %s!"), m_name, o_name);
+            const auto m_name = monster_desc(player_ptr, m_ptr, 0);
+            msg_format(_("%sは%sを斬り捨てた！", "%s cuts down %s!"), m_name.data(), o_name);
         }
         return false;
     }

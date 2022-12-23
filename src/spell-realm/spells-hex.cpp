@@ -356,9 +356,8 @@ void SpellHex::eyes_on_eyes()
 #ifdef JP
     msg_format("攻撃が%s自身を傷つけた！", this->monap_ptr->m_name);
 #else
-    GAME_TEXT m_name_self[MAX_MONSTER_NAME];
-    monster_desc(this->player_ptr, m_name_self, this->monap_ptr->m_ptr, MD_PRON_VISIBLE | MD_POSSESSIVE | MD_OBJECTIVE);
-    msg_format("The attack of %s has wounded %s!", this->monap_ptr->m_name, m_name_self);
+    const auto m_name_self = monster_desc(this->player_ptr, this->monap_ptr->m_ptr, MD_PRON_VISIBLE | MD_POSSESSIVE | MD_OBJECTIVE);
+    msg_format("The attack of %s has wounded %s!", this->monap_ptr->m_name, m_name_self.data());
 #endif
     const auto y = this->monap_ptr->m_ptr->fy;
     const auto x = this->monap_ptr->m_ptr->fx;

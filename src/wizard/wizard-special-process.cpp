@@ -825,10 +825,8 @@ void wiz_zap_surrounding_monsters(PlayerType *player_ptr)
         }
 
         if (record_named_pet && m_ptr->is_pet() && m_ptr->nickname) {
-            GAME_TEXT m_name[MAX_NLEN];
-
-            monster_desc(player_ptr, m_name, m_ptr, MD_INDEF_VISIBLE);
-            exe_write_diary(player_ptr, DIARY_NAMED_PET, RECORD_NAMED_PET_WIZ_ZAP, m_name);
+            const auto m_name = monster_desc(player_ptr, m_ptr, MD_INDEF_VISIBLE);
+            exe_write_diary(player_ptr, DIARY_NAMED_PET, RECORD_NAMED_PET_WIZ_ZAP, m_name.data());
         }
 
         delete_monster_idx(player_ptr, i);
@@ -848,9 +846,8 @@ void wiz_zap_floor_monsters(PlayerType *player_ptr)
         }
 
         if (record_named_pet && m_ptr->is_pet() && m_ptr->nickname) {
-            GAME_TEXT m_name[MAX_NLEN];
-            monster_desc(player_ptr, m_name, m_ptr, MD_INDEF_VISIBLE);
-            exe_write_diary(player_ptr, DIARY_NAMED_PET, RECORD_NAMED_PET_WIZ_ZAP, m_name);
+            const auto m_name = monster_desc(player_ptr, m_ptr, MD_INDEF_VISIBLE);
+            exe_write_diary(player_ptr, DIARY_NAMED_PET, RECORD_NAMED_PET_WIZ_ZAP, m_name.data());
         }
 
         delete_monster_idx(player_ptr, i);

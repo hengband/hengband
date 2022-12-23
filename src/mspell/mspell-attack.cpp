@@ -36,6 +36,7 @@
 #include "target/projection-path-calculator.h"
 #include "timed-effect/player-blindness.h"
 #include "timed-effect/timed-effects.h"
+#include "util/string-processor.h"
 #include "view/display-messages.h"
 #include "world/world.h"
 #ifdef JP
@@ -129,14 +130,7 @@ static void set_mspell_list(msa_type *msa_ptr)
 
 static void describe_mspell_monster(PlayerType *player_ptr, msa_type *msa_ptr)
 {
-    monster_desc(player_ptr, msa_ptr->m_name, msa_ptr->m_ptr, 0x00);
-
-#ifdef JP
-#else
-    /* Get the monster possessive ("his"/"her"/"its") */
-    char m_poss[80];
-    monster_desc(player_ptr, m_poss, msa_ptr->m_ptr, MD_PRON_VISIBLE | MD_POSSESSIVE);
-#endif
+    angband_strcpy(msa_ptr->m_name, monster_desc(player_ptr, msa_ptr->m_ptr, 0x00).data(), sizeof(msa_ptr->m_name));
 }
 
 static bool switch_do_spell(PlayerType *player_ptr, msa_type *msa_ptr)

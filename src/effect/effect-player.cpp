@@ -35,6 +35,7 @@
 #include "timed-effect/player-blindness.h"
 #include "timed-effect/timed-effects.h"
 #include "util/bit-flags-calculator.h"
+#include "util/string-processor.h"
 #include "view/display-messages.h"
 #include <string>
 
@@ -158,8 +159,8 @@ static void describe_effect_source(PlayerType *player_ptr, EffectPlayerType *ep_
     if (ep_ptr->who > 0) {
         ep_ptr->m_ptr = &player_ptr->current_floor_ptr->m_list[ep_ptr->who];
         ep_ptr->rlev = (&monraces_info[ep_ptr->m_ptr->r_idx])->level >= 1 ? (&monraces_info[ep_ptr->m_ptr->r_idx])->level : 1;
-        monster_desc(player_ptr, ep_ptr->m_name, ep_ptr->m_ptr, 0);
-        strcpy(ep_ptr->killer, who_name);
+        angband_strcpy(ep_ptr->m_name, monster_desc(player_ptr, ep_ptr->m_ptr, 0).data(), sizeof(ep_ptr->m_name));
+        angband_strcpy(ep_ptr->killer, who_name, sizeof(ep_ptr->killer));
         return;
     }
 
@@ -211,9 +212,8 @@ bool affect_player(MONSTER_IDX who, PlayerType *player_ptr, concptr who_name, in
 
     SpellHex(player_ptr).store_vengeful_damage(ep_ptr->get_damage);
     if ((player_ptr->tim_eyeeye || SpellHex(player_ptr).is_spelling_specific(HEX_EYE_FOR_EYE)) && (ep_ptr->get_damage > 0) && !player_ptr->is_dead && (ep_ptr->who > 0)) {
-        GAME_TEXT m_name_self[MAX_MONSTER_NAME];
-        monster_desc(player_ptr, m_name_self, ep_ptr->m_ptr, MD_PRON_VISIBLE | MD_POSSESSIVE | MD_OBJECTIVE);
-        msg_format(_("攻撃が%s自身を傷つけた！", "The attack of %s has wounded %s!"), ep_ptr->m_name, m_name_self);
+        const auto m_name_self = monster_desc(player_ptr, ep_ptr->m_ptr, MD_PRON_VISIBLE | MD_POSSESSIVE | MD_OBJECTIVE);
+        msg_format(_("攻撃が%s自身を傷つけた！", "The attack of %s has wounded %s!"), ep_ptr->m_name, m_name_self.data());
         (*project)(player_ptr, 0, 0, ep_ptr->m_ptr->fy, ep_ptr->m_ptr->fx, ep_ptr->get_damage, AttributeType::MISSILE, PROJECT_KILL, std::nullopt);
         if (player_ptr->tim_eyeeye) {
             set_tim_eyeeye(player_ptr, player_ptr->tim_eyeeye - 5, true);

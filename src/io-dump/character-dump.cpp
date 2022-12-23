@@ -76,9 +76,8 @@ static void dump_aux_pet(PlayerType *player_ptr, FILE *fff)
             pet = true;
         }
 
-        GAME_TEXT pet_name[MAX_NLEN];
-        monster_desc(player_ptr, pet_name, m_ptr, MD_ASSUME_VISIBLE | MD_INDEF_VISIBLE);
-        fprintf(fff, "%s\n", pet_name);
+        const auto pet_name = monster_desc(player_ptr, m_ptr, MD_ASSUME_VISIBLE | MD_INDEF_VISIBLE);
+        fprintf(fff, "%s\n", pet_name.data());
     }
 
     if (!pet_settings) {

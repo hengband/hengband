@@ -547,13 +547,12 @@ ProjectResult project(PlayerType *player_ptr, const MONSTER_IDX who, POSITION ra
                 }
             }
 
-            GAME_TEXT who_name[MAX_NLEN];
-            who_name[0] = '\0';
+            std::string who_name;
             if (who > 0) {
-                monster_desc(player_ptr, who_name, &player_ptr->current_floor_ptr->m_list[who], MD_WRONGDOER_NAME);
+                who_name = monster_desc(player_ptr, &player_ptr->current_floor_ptr->m_list[who], MD_WRONGDOER_NAME);
             }
 
-            if (affect_player(who, player_ptr, who_name, effective_dist, y, x, dam, typ, flag, project)) {
+            if (affect_player(who, player_ptr, who_name.data(), effective_dist, y, x, dam, typ, flag, project)) {
                 res.notice = true;
                 res.affected_player = true;
             }
@@ -561,17 +560,16 @@ ProjectResult project(PlayerType *player_ptr, const MONSTER_IDX who, POSITION ra
     }
 
     if (player_ptr->riding) {
-        GAME_TEXT m_name[MAX_NLEN];
-        monster_desc(player_ptr, m_name, &player_ptr->current_floor_ptr->m_list[player_ptr->riding], 0);
+        const auto m_name = monster_desc(player_ptr, &player_ptr->current_floor_ptr->m_list[player_ptr->riding], 0);
         if (rakubadam_m > 0) {
             if (process_fall_off_horse(player_ptr, rakubadam_m, false)) {
-                msg_format(_("%^sに振り落とされた！", "%^s has thrown you off!"), m_name);
+                msg_format(_("%^sに振り落とされた！", "%^s has thrown you off!"), m_name.data());
             }
         }
 
         if (player_ptr->riding && rakubadam_p > 0) {
             if (process_fall_off_horse(player_ptr, rakubadam_p, false)) {
-                msg_format(_("%^sから落ちてしまった！", "You have fallen from %s."), m_name);
+                msg_format(_("%^sから落ちてしまった！", "You have fallen from %s."), m_name.data());
             }
         }
     }

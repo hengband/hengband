@@ -58,6 +58,7 @@
 #include "timed-effect/player-cut.h"
 #include "timed-effect/timed-effects.h"
 #include "util/bit-flags-calculator.h"
+#include "util/string-processor.h"
 #include "view/display-messages.h"
 #include "wizard/wizard-messages.h"
 #include "world/world.h"
@@ -559,7 +560,7 @@ void exe_player_attack_to_monster(PlayerType *player_ptr, POSITION y, POSITION x
 
     /* Disturb the monster */
     (void)set_monster_csleep(player_ptr, pa_ptr->m_idx, 0);
-    monster_desc(player_ptr, pa_ptr->m_name, pa_ptr->m_ptr, 0);
+    angband_strcpy(pa_ptr->m_name, monster_desc(player_ptr, pa_ptr->m_ptr, 0).data(), sizeof(pa_ptr->m_name));
 
     int chance = calc_attack_quality(player_ptr, pa_ptr);
     auto *o_ptr = &player_ptr->inventory_list[enum2i(INVEN_MAIN_HAND) + pa_ptr->hand];

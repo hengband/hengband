@@ -16,6 +16,7 @@
 #include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
 #include "util/bit-flags-calculator.h"
+#include "util/string-processor.h"
 #include "view/display-messages.h"
 
 ProcessResult effect_monster_drain_mana(PlayerType *player_ptr, effect_monster_type *em_ptr)
@@ -60,7 +61,7 @@ ProcessResult effect_monster_drain_mana(PlayerType *player_ptr, effect_monster_t
     }
 
     if (em_ptr->see_s_msg) {
-        monster_desc(player_ptr, em_ptr->killer, em_ptr->m_caster_ptr, 0);
+        angband_strcpy(em_ptr->killer, monster_desc(player_ptr, em_ptr->m_caster_ptr, 0).data(), sizeof(em_ptr->killer));
         msg_format(_("%^sは気分が良さそうだ。", "%^s appears healthier."), em_ptr->killer);
     }
 

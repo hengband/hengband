@@ -99,13 +99,11 @@ static void record_pet_diary(PlayerType *player_ptr)
 
     for (MONSTER_IDX i = player_ptr->current_floor_ptr->m_max - 1; i >= 1; i--) {
         auto *m_ptr = &player_ptr->current_floor_ptr->m_list[i];
-        GAME_TEXT m_name[MAX_NLEN];
         if (!m_ptr->is_valid() || !m_ptr->is_pet() || !m_ptr->nickname || (player_ptr->riding == i)) {
             continue;
         }
 
-        monster_desc(player_ptr, m_name, m_ptr, MD_ASSUME_VISIBLE | MD_INDEF_VISIBLE);
-        exe_write_diary(player_ptr, DIARY_NAMED_PET, RECORD_NAMED_PET_MOVED, m_name);
+        exe_write_diary(player_ptr, DIARY_NAMED_PET, RECORD_NAMED_PET_MOVED, monster_desc(player_ptr, m_ptr, MD_ASSUME_VISIBLE | MD_INDEF_VISIBLE).data());
     }
 }
 
@@ -130,9 +128,8 @@ static void preserve_pet(PlayerType *player_ptr)
         }
 
         if (is_seen(player_ptr, m_ptr)) {
-            GAME_TEXT m_name[MAX_NLEN];
-            monster_desc(player_ptr, m_name, m_ptr, 0);
-            msg_format(_("%sは消え去った！", "%^s disappears!"), m_name);
+            const auto m_name = monster_desc(player_ptr, m_ptr, 0);
+            msg_format(_("%sは消え去った！", "%^s disappears!"), m_name.data());
         }
 
         delete_monster_idx(player_ptr, i);

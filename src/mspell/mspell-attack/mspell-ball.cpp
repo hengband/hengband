@@ -45,8 +45,7 @@ static bool message_water_ball(PlayerType *player_ptr, MONSTER_IDX m_idx, MONSTE
     auto see_either = see_monster(player_ptr, m_idx) || see_monster(player_ptr, t_idx);
     auto mon_to_mon = (target_type == MONSTER_TO_MONSTER);
     auto mon_to_player = (target_type == MONSTER_TO_PLAYER);
-    GAME_TEXT t_name[MAX_NLEN];
-    monster_name(player_ptr, t_idx, t_name);
+    const auto t_name = monster_name(player_ptr, t_idx);
 
     mspell_cast_msg_blind msg(_("%^sが何かをつぶやいた。", "%^s mumbles."), _("%^sが流れるような身振りをした。", "%^s gestures fluidly."),
         _("%^sが%sに対して流れるような身振りをした。", "%^s gestures fluidly at %s."));
@@ -56,7 +55,7 @@ static bool message_water_ball(PlayerType *player_ptr, MONSTER_IDX m_idx, MONSTE
     if (mon_to_player) {
         msg_format(_("あなたは渦巻きに飲み込まれた。", "You are engulfed in a whirlpool."));
     } else if (mon_to_mon && known && see_either && !player_ptr->effects()->blindness()->is_blind()) {
-        msg_format(_("%^sは渦巻に飲み込まれた。", "%^s is engulfed in a whirlpool."), t_name);
+        msg_format(_("%^sは渦巻に飲み込まれた。", "%^s is engulfed in a whirlpool."), t_name.data());
     }
     return result;
 }

@@ -919,10 +919,6 @@ static bool use_mane(PlayerType *player_ptr, MonsterAbilityType spell)
     case MonsterAbilityType::SPECIAL:
         break;
     case MonsterAbilityType::TELE_TO: {
-        MonsterEntity *m_ptr;
-        MonsterRaceInfo *r_ptr;
-        GAME_TEXT m_name[MAX_NLEN];
-
         if (!target_set(player_ptr, TARGET_KILL)) {
             return false;
         }
@@ -935,27 +931,27 @@ static bool use_mane(PlayerType *player_ptr, MonsterAbilityType spell)
         if (!projectable(player_ptr, player_ptr->y, player_ptr->x, target_row, target_col)) {
             break;
         }
-        m_ptr = &player_ptr->current_floor_ptr->m_list[player_ptr->current_floor_ptr->grid_array[target_row][target_col].m_idx];
-        r_ptr = &monraces_info[m_ptr->r_idx];
-        monster_desc(player_ptr, m_name, m_ptr, 0);
+        auto *m_ptr = &player_ptr->current_floor_ptr->m_list[player_ptr->current_floor_ptr->grid_array[target_row][target_col].m_idx];
+        auto *r_ptr = &monraces_info[m_ptr->r_idx];
+        const auto m_name = monster_desc(player_ptr, m_ptr, 0);
         if (r_ptr->resistance_flags.has(MonsterResistanceType::RESIST_TELEPORT)) {
             if (r_ptr->kind_flags.has(MonsterKindType::UNIQUE) || r_ptr->resistance_flags.has(MonsterResistanceType::RESIST_ALL)) {
                 if (is_original_ap_and_seen(player_ptr, m_ptr)) {
                     r_ptr->r_resistance_flags.set(MonsterResistanceType::RESIST_TELEPORT);
                 }
-                msg_format(_("%sには効果がなかった！", "%s is unaffected!"), m_name);
+                msg_format(_("%sには効果がなかった！", "%s is unaffected!"), m_name.data());
 
                 break;
             } else if (r_ptr->level > randint1(100)) {
                 if (is_original_ap_and_seen(player_ptr, m_ptr)) {
                     r_ptr->r_resistance_flags.set(MonsterResistanceType::RESIST_TELEPORT);
                 }
-                msg_format(_("%sには耐性がある！", "%s resists!"), m_name);
+                msg_format(_("%sには耐性がある！", "%s resists!"), m_name.data());
 
                 break;
             }
         }
-        msg_format(_("%sを引き戻した。", "You command %s to return."), m_name);
+        msg_format(_("%sを引き戻した。", "You command %s to return."), m_name.data());
 
         teleport_monster_to(
             player_ptr, player_ptr->current_floor_ptr->grid_array[target_row][target_col].m_idx, player_ptr->y, player_ptr->x, 100, TELEPORT_PASSIVE);
