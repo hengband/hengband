@@ -363,8 +363,7 @@ static void display_auto_roller_success_rate(const int col)
         put_str(stat_names[i], 3 + i, col + 8);
         int j = rp_ptr->r_adj[i] + cp_ptr->c_adj[i] + ap_ptr->a_adj[i];
         int m = adjust_stat(stat_limit[i], j);
-        cnv_stat(m, buf);
-        c_put_str(TERM_L_BLUE, buf, 3 + i, col + 13);
+        c_put_str(TERM_L_BLUE, cnv_stat(m), 3 + i, col + 13);
     }
 }
 

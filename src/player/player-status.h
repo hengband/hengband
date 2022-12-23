@@ -6,6 +6,7 @@
  */
 
 #include "system/angband.h"
+#include <string>
 
 class ItemEntity;
 class PlayerType;
@@ -23,7 +24,7 @@ bool player_place(PlayerType *player_ptr, POSITION y, POSITION x);
 
 void check_experience(PlayerType *player_ptr);
 void wreck_the_pattern(PlayerType *player_ptr);
-void cnv_stat(int val, char *out_val);
+std::string cnv_stat(int val);
 int16_t modify_stat_value(int value, int amount);
 long calc_score(PlayerType *player_ptr);
 

@@ -143,20 +143,16 @@ static void display_phisique(PlayerType *player_ptr)
  */
 static void display_player_stats(PlayerType *player_ptr)
 {
-    char buf[80];
     for (int i = 0; i < A_MAX; i++) {
         if (player_ptr->stat_cur[i] < player_ptr->stat_max[i]) {
             put_str(stat_names_reduced[i], 3 + i, 53);
             int value = player_ptr->stat_use[i];
-            cnv_stat(value, buf);
-            c_put_str(TERM_YELLOW, buf, 3 + i, 60);
+            c_put_str(TERM_YELLOW, cnv_stat(value), 3 + i, 60);
             value = player_ptr->stat_top[i];
-            cnv_stat(value, buf);
-            c_put_str(TERM_L_GREEN, buf, 3 + i, 67);
+            c_put_str(TERM_L_GREEN, cnv_stat(value), 3 + i, 67);
         } else {
             put_str(stat_names[i], 3 + i, 53);
-            cnv_stat(player_ptr->stat_use[i], buf);
-            c_put_str(TERM_L_GREEN, buf, 3 + i, 60);
+            c_put_str(TERM_L_GREEN, cnv_stat(player_ptr->stat_use[i]), 3 + i, 60);
         }
 
         if (player_ptr->stat_max[i] == player_ptr->stat_max_max[i]) {

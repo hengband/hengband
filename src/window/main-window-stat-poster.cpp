@@ -56,15 +56,12 @@
  */
 void print_stat(PlayerType *player_ptr, int stat)
 {
-    GAME_TEXT tmp[32];
     if (player_ptr->stat_cur[stat] < player_ptr->stat_max[stat]) {
         put_str(stat_names_reduced[stat], ROW_STAT + stat, 0);
-        cnv_stat(player_ptr->stat_use[stat], tmp);
-        c_put_str(TERM_YELLOW, tmp, ROW_STAT + stat, COL_STAT + 6);
+        c_put_str(TERM_YELLOW, cnv_stat(player_ptr->stat_use[stat]), ROW_STAT + stat, COL_STAT + 6);
     } else {
         put_str(stat_names[stat], ROW_STAT + stat, 0);
-        cnv_stat(player_ptr->stat_use[stat], tmp);
-        c_put_str(TERM_L_GREEN, tmp, ROW_STAT + stat, COL_STAT + 6);
+        c_put_str(TERM_L_GREEN, cnv_stat(player_ptr->stat_use[stat]), ROW_STAT + stat, COL_STAT + 6);
     }
 
     if (player_ptr->stat_max[stat] != player_ptr->stat_max_max[stat]) {
