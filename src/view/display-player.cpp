@@ -33,7 +33,6 @@
 #include "system/player-type-definition.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
-#include "util/buffer-shaper.h"
 #include "view/display-characteristic.h"
 #include "view/display-player-middle.h"
 #include "view/display-player-misc-info.h"
@@ -263,31 +262,6 @@ static std::string decide_current_floor(PlayerType *player_ptr)
 }
 
 /*!
- * @brief 今いる、または死亡した場所を表示する
- * @param statmsg メッセージバッファ
- * @return ダンプ表示行数の補正項
- * @details v2.2までは状況に関係なく必ず2行であり、v3.0では1～4行になり得、num_linesはその行数.
- * ギリギリ見切れる場合があるので行数は僅かに多めに取る.
- */
-static int display_current_floor(const std::string &statmsg)
-{
-    char temp[1000];
-    constexpr auto chars_per_line = 60;
-    shape_buffer(statmsg.data(), chars_per_line, temp, sizeof(temp));
-    auto t = temp;
-    auto statmsg_size = statmsg.size();
-    auto fraction = statmsg_size % (chars_per_line - 1);
-    auto num_lines = statmsg_size / (chars_per_line - 1);
-    num_lines += fraction > 0 ? 1 : 0;
-    for (auto i = 0U; i < num_lines; i++) {
-        put_str(t, i + 5 + 12, 10);
-        t += strlen(t) + 1;
-    }
-
-    return num_lines;
-}
-
-/*!
  * @brief プレイヤーのステータス表示メイン処理
  * Display the character on the screen (various modes)
  * @param player_ptr プレイヤーへの参照ポインタ
@@ -331,11 +305,12 @@ std::optional<int> display_player(PlayerType *player_ptr, const int tmp_mode)
     }
 
     auto statmsg = decide_current_floor(player_ptr);
-    if (statmsg == "") {
+    if (statmsg.empty()) {
         return std::nullopt;
     }
 
-    return display_current_floor(statmsg);
+    constexpr auto chars_per_line = 60;
+    return display_wrap_around(statmsg, chars_per_line, 17, 10);
 }
 
 /*!

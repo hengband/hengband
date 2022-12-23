@@ -71,10 +71,10 @@
 #include "timed-effect/player-stun.h"
 #include "timed-effect/timed-effects.h"
 #include "util/bit-flags-calculator.h"
-#include "util/buffer-shaper.h"
 #include "util/enum-converter.h"
 #include "util/int-char-converter.h"
 #include "view/display-messages.h"
+#include "view/display-util.h"
 #include <array>
 #include <string>
 #include <unordered_map>
@@ -947,7 +947,6 @@ void do_cmd_element(PlayerType *player_ptr)
 void do_cmd_element_browse(PlayerType *player_ptr)
 {
     SPELL_IDX n = 0;
-    char temp[62 * 5];
 
     screen_save();
     while (true) {
@@ -962,11 +961,7 @@ void do_cmd_element_browse(PlayerType *player_ptr)
         term_erase(12, 18, 255);
         term_erase(12, 17, 255);
         term_erase(12, 16, 255);
-        shape_buffer(get_element_tip(player_ptr, n).data(), 62, temp, sizeof(temp));
-        for (int j = 0, line = 17; temp[j]; j += (1 + strlen(&temp[j]))) {
-            prt(&temp[j], line, 15);
-            line++;
-        }
+        display_wrap_around(get_element_tip(player_ptr, n), 62, 17, 15);
 
         prt(_("何かキーを押して下さい。", "Hit any key."), 0, 0);
         (void)inkey();
@@ -1245,16 +1240,7 @@ byte select_element_realm(PlayerType *player_ptr)
         }
 
         auto realm = i2enum<ElementRealmType>(realm_idx);
-        char temp[80 * 5];
-        shape_buffer(element_texts.at(realm).data(), 74, temp, sizeof(temp));
-        concptr t = temp;
-        for (int i = 0; i < 5; i++) {
-            if (t[0] == 0) {
-                break;
-            }
-            prt(t, row + i, 3);
-            t += strlen(t) + 1;
-        }
+        display_wrap_around(element_texts.at(realm), 74, row, 3);
 
         if (get_check_strict(player_ptr, _("よろしいですか？", "Are you sure? "), CHECK_DEFAULT_Y)) {
             break;

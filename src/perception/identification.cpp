@@ -25,6 +25,7 @@
 #include "util/bit-flags-calculator.h"
 #include "util/buffer-shaper.h"
 #include "util/enum-converter.h"
+#include <algorithm>
 
 /*!
  * @brief オブジェクトの*鑑定*内容を詳述して表示する /
@@ -36,7 +37,6 @@
  */
 bool screen_object(PlayerType *player_ptr, ItemEntity *o_ptr, BIT_FLAGS mode)
 {
-    char temp[70 * 20];
     concptr info[128];
     GAME_TEXT o_name[MAX_NLEN];
 
@@ -44,13 +44,11 @@ bool screen_object(PlayerType *player_ptr, ItemEntity *o_ptr, BIT_FLAGS mode)
     auto flgs = object_flags(o_ptr);
 
     const auto item_text = o_ptr->is_fixed_artifact() ? artifacts_info.at(o_ptr->fixed_artifact_idx).text.data() : baseitems_info[o_ptr->bi_id].text.data();
-    shape_buffer(item_text, 77 - 15, temp, sizeof(temp));
+    const auto item_text_lines = shape_buffer(item_text, 77 - 15);
 
     int i = 0;
-    for (int j = 0; temp[j]; j += 1 + strlen(&temp[j])) {
-        info[i] = &temp[j];
-        i++;
-    }
+    std::ranges::transform(item_text_lines, &info[i], [](const auto &line) { return line.data(); });
+    i += item_text_lines.size();
 
     if (o_ptr->is_equipment()) {
         trivial_info = i;

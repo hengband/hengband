@@ -28,9 +28,10 @@
 #include "term/z-form.h"
 #include "util/angband-files.h"
 #include "util/buffer-shaper.h"
+#include "util/string-processor.h"
 #include "view/display-messages.h"
 #include "world/world.h"
-
+#include <algorithm>
 #include <string>
 
 //!< @todo コールバック関数に変更するので、いずれ消す.
@@ -314,8 +315,7 @@ bool read_histpref(PlayerType *player_ptr)
 {
     errr err;
     int i, j, n;
-    char *s, *t;
-    char temp[64 * 4];
+    char *s;
     char histbuf[HISTPREF_LIMIT];
 
     if (!get_check(_("生い立ち設定ファイルをロードしますか? ", "Load background history preference file? "))) {
@@ -357,15 +357,11 @@ bool read_histpref(PlayerType *player_ptr)
         s[--n] = '\0';
     }
 
-    shape_buffer(s, 60, temp, sizeof(temp));
-    t = temp;
-    for (i = 0; i < 4; i++) {
-        if (t[0] == 0) {
-            break;
-        } else {
-            strcpy(player_ptr->history[i], t);
-            t += strlen(t) + 1;
-        }
+    constexpr auto max_line_len = sizeof(player_ptr->history[0]);
+    const auto history_lines = shape_buffer(s, max_line_len);
+    const auto max_lines = std::min<int>(4, history_lines.size());
+    for (auto l = 0; l < max_lines; ++l) {
+        angband_strcpy(player_ptr->history[l], history_lines[l].data(), max_line_len);
     }
 
     for (i = 0; i < 4; i++) {

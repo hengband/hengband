@@ -25,9 +25,9 @@
 #include "term/term-color-types.h"
 #include "term/z-form.h"
 #include "util/bit-flags-calculator.h"
-#include "util/buffer-shaper.h"
 #include "util/int-char-converter.h"
 #include "view/display-messages.h"
+#include "view/display-util.h"
 #include <algorithm>
 #include <sstream>
 
@@ -664,9 +664,6 @@ void do_cmd_kaji(PlayerType *player_ptr, bool only_browse)
             }
 
             if (only_browse) {
-                char temp[62 * 5];
-                int line, j;
-
                 /* Clear lines, position cursor  (really should use strlen here) */
                 term_erase(14, 21, 255);
                 term_erase(14, 20, 255);
@@ -675,11 +672,7 @@ void do_cmd_kaji(PlayerType *player_ptr, bool only_browse)
                 term_erase(14, 17, 255);
                 term_erase(14, 16, 255);
 
-                shape_buffer(kaji_tips[mode - 1], 62, temp, sizeof(temp));
-                for (j = 0, line = 17; temp[j]; j += (1 + strlen(&temp[j]))) {
-                    prt(&temp[j], line, 15);
-                    line++;
-                }
+                display_wrap_around(kaji_tips[mode - 1], 62, 17, 15);
                 mode = 0;
             }
             if (!only_browse) {

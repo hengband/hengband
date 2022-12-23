@@ -36,9 +36,9 @@
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
 #include "term/z-form.h"
-#include "util/buffer-shaper.h"
 #include "util/int-char-converter.h"
 #include "view/display-messages.h"
+#include "view/display-util.h"
 
 #define MAX_SNIPE_POWERS 16
 
@@ -630,8 +630,6 @@ void do_cmd_snipe(PlayerType *player_ptr)
 void do_cmd_snipe_browse(PlayerType *player_ptr)
 {
     COMMAND_CODE n = 0;
-    int j, line;
-    char temp[62 * 4];
 
     screen_save();
 
@@ -648,10 +646,6 @@ void do_cmd_snipe_browse(PlayerType *player_ptr)
         term_erase(12, 19, 255);
         term_erase(12, 18, 255);
 
-        shape_buffer(snipe_tips[n], 62, temp, sizeof(temp));
-        for (j = 0, line = 19; temp[j]; j += (1 + strlen(&temp[j]))) {
-            prt(&temp[j], line, 15);
-            line++;
-        }
+        display_wrap_around(snipe_tips[n], 62, 19, 15);
     }
 }

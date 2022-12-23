@@ -34,9 +34,9 @@
 #include "term/screen-processor.h"
 #include "term/z-form.h"
 #include "util/bit-flags-calculator.h"
-#include "util/buffer-shaper.h"
 #include "util/int-char-converter.h"
 #include "view/display-messages.h"
+#include "view/display-util.h"
 #include <string>
 
 #define RC_PAGE_SIZE 18
@@ -305,7 +305,6 @@ static bool ask_invoke_racial_power(rc_type *rc_ptr)
 static void racial_power_display_explanation(PlayerType *player_ptr, rc_type *rc_ptr)
 {
     auto &rpi = rc_ptr->power_desc[rc_ptr->command_code];
-    char temp[62 * 5];
 
     term_erase(12, 21, 255);
     term_erase(12, 20, 255);
@@ -313,11 +312,7 @@ static void racial_power_display_explanation(PlayerType *player_ptr, rc_type *rc
     term_erase(12, 18, 255);
     term_erase(12, 17, 255);
     term_erase(12, 16, 255);
-    shape_buffer(rpi.text.data(), 62, temp, sizeof(temp));
-    for (int j = 0, line = 17; temp[j]; j += (1 + strlen(&temp[j]))) {
-        prt(&temp[j], line, 15);
-        line++;
-    }
+    display_wrap_around(rpi.text, 62, 17, 15);
 
     prt(_("何かキーを押して下さい。", "Hit any key."), 0, 0);
     (void)inkey();

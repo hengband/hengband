@@ -1,5 +1,7 @@
 ﻿#include "view/display-util.h"
+#include "term/screen-processor.h"
 #include "term/term-color-types.h"
+#include "util/buffer-shaper.h"
 #include <string>
 #include <vector>
 
@@ -88,4 +90,23 @@ void display_player_one_line(int entry, std::string_view val, TERM_COLOR attr)
     }
     str.append(val);
     term_putstr(col + head_len, row, -1, attr, str);
+}
+
+/*!
+ * @brief 文字列を折り返しながら画面に表示する
+ *
+ * @param sv 表示する文字列
+ * @param width 折り返しをする幅
+ * @param start_row 表示開始行
+ * @param col 表示開始桁
+ * @return 表示した行数
+ */
+int display_wrap_around(std::string_view sv, size_t width, int start_row, int col)
+{
+    auto line_count = 0;
+    for (const auto &line : shape_buffer(sv, width)) {
+        prt(line, start_row + line_count, col);
+        ++line_count;
+    }
+    return line_count;
 }

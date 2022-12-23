@@ -3,6 +3,8 @@
 #include "player-info/race-types.h"
 #include "system/player-type-definition.h"
 #include "util/buffer-shaper.h"
+#include "util/string-processor.h"
+#include <algorithm>
 #include <sstream>
 #include <string>
 
@@ -130,15 +132,10 @@ void get_history(PlayerType *player_ptr)
     }
 
     auto social_class = decide_social_class(player_ptr);
-    char tmp_history[64 * lines];
-    shape_buffer(social_class.data(), 60, tmp_history, sizeof(tmp_history));
-    auto *history = tmp_history;
-    for (auto i = 0; i < lines; i++) {
-        if (history[0] == 0) {
-            return;
-        }
-
-        strcpy(player_ptr->history[i], history);
-        history += strlen(history) + 1;
+    constexpr auto max_line_len = sizeof(player_ptr->history[0]);
+    const auto history_lines = shape_buffer(social_class.data(), max_line_len);
+    const auto max_lines = std::min<int>(lines, history_lines.size());
+    for (auto i = 0; i < max_lines; ++i) {
+        angband_strcpy(player_ptr->history[i], history_lines[i].data(), max_line_len);
     }
 }

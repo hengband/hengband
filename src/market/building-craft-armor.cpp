@@ -2,7 +2,7 @@
 #include "io/input-key-acceptor.h"
 #include "market/building-util.h"
 #include "term/screen-processor.h"
-#include "util/buffer-shaper.h"
+#include "view/display-util.h"
 
 /*!
  * @brief ACから回避率、ダメージ減少率を計算し表示する。 / Evaluate AC
@@ -36,7 +36,6 @@ bool eval_ac(ARMOUR_CLASS iAC)
     int protection;
     TERM_LEN col, row = 2;
     DEPTH lvl;
-    char buf[80 * 20], *t;
 
     if (iAC < 0) {
         iAC = 0;
@@ -70,10 +69,7 @@ bool eval_ac(ARMOUR_CLASS iAC)
         put_str(format("%3d", average), row + 2, col);
     }
 
-    shape_buffer(memo, 70, buf, sizeof(buf));
-    for (t = buf; t[0]; t += strlen(t) + 1) {
-        put_str(t, (row++) + 4, 4);
-    }
+    display_wrap_around(memo, 70, row + 4, 4);
 
     prt(_("現在のあなたの装備からすると、あなたの防御力はこれくらいです:", "Defense abilities from your current Armor Class are evaluated below."), 0, 0);
 
