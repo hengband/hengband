@@ -42,10 +42,11 @@
  * Centers a string within a GRAVE_LINE_WIDTH character string		-JWT-
  * @details
  */
-static std::string center_string(const std::string &str)
+static std::string center_string(std::string_view str)
 {
-    int j = GRAVE_LINE_WIDTH / 2 - str.length() / 2;
-    return std::string(j, ' ').append(str).append(GRAVE_LINE_WIDTH - str.length() - j, ' ');
+    const auto head = GRAVE_LINE_WIDTH / 2 - str.length() / 2;
+    const auto tail = GRAVE_LINE_WIDTH - str.length() - head;
+    return std::string(head, ' ').append(str).append(tail, ' ');
 }
 
 /*!
@@ -63,44 +64,51 @@ static void show_basic_params(PlayerType *player_ptr)
 
 #ifdef JP
 /*!
- * @brief プレイヤーを殺したモンスターを表示する (日本語版専用)
+ * @brief プレイヤーを殺したモンスターを墓に表示する (日本語版専用)
+ *
+ * モンスターの名称を最大で2行で墓石のアスキーアート上に表示する。
+ * 名称が1行に収まる場合、そのまま表示する。
+ * 名称が3行以上になる場合は、2行で表示できるだけ表示し、2行目の最後を…にして以降を省略する。
+ * 2行の場合は基本的に、前詰めで表示するが、モンスターの名称が ○○○『△△△』
+ * のようなタイプの場合で『△△△』の途中で改行される場合○○○を1行目に、『△△△』を2行目に
+ * 分割して表示することを試みる。但し『△△△』が1行に入り切らない場合はそのまま表示する。
+ *
  * @param player_ptr プレイヤーへの参照ポインタ
- * @return メッセージと余分な行数のペア
+ * @return 続いて死亡した場所を表示するためのオフセット行数
  */
-static std::pair<std::string, int> show_killing_monster(PlayerType *player_ptr)
+static int show_killing_monster(PlayerType *player_ptr)
 {
-    auto lines = shape_buffer(player_ptr->died_from.data(), GRAVE_LINE_WIDTH + 1);
+    const auto lines = shape_buffer(player_ptr->died_from, GRAVE_LINE_WIDTH + 1);
     if (lines.size() == 1) {
-        return std::make_pair(std::move(lines[0]), 0);
+        put_str(center_string(lines[0]), 14, 11);
+        return 0;
     }
 
     if (lines.size() >= 3) {
-        auto i = (lines[1].length() > 2) ? 0 : lines[1].length() - 2;
-        while (i > 0 && iskanji(lines[1][i - 1])) {
-            --i;
-        }
-        lines[1].erase(i);
-        lines[1].append("…");
-    } else if (angband_strstr(lines[0].data(), "『") && suffix(lines[1], "』")) {
-        char *name_head = angband_strstr(lines[0].data(), "『");
-        std::string killer2 = name_head;
-        killer2.append(lines[1]);
-        if (killer2.length() <= GRAVE_LINE_WIDTH) {
-            lines[1] = killer2;
-            lines[0].erase(name_head - lines[0].data());
-        }
-    } else if (angband_strstr(lines[0].data(), "「") && suffix(lines[1], "」")) {
-        char *name_head = angband_strstr(lines[0].data(), "「");
-        std::string killer2 = name_head;
-        killer2.append(lines[1]);
-        if (killer2.length() <= GRAVE_LINE_WIDTH) {
-            lines[1] = killer2;
-            lines[0].erase(name_head - lines[0].data());
+        char buf[GRAVE_LINE_WIDTH + 1];
+        angband_strcpy(buf, lines[1].data(), sizeof(buf) - 2);
+        angband_strcat(buf, "…", sizeof(buf));
+        put_str(center_string(lines[0]), 14, 11);
+        put_str(center_string(buf), 15, 11);
+        return 1;
+    }
+
+    if (const auto start_ptr = angband_strstr(lines[0].data(), "『");
+        (start_ptr != nullptr) && suffix(lines[1], "』")) {
+        const auto start_pos = start_ptr - lines[0].data();
+
+        if (lines[0].length() + lines[1].length() - start_pos <= GRAVE_LINE_WIDTH) {
+            const auto name = lines[0].substr(start_pos).append(lines[1]);
+            std::string_view title(lines[0].begin(), lines[0].begin() + start_pos);
+            put_str(center_string(title), 14, 11);
+            put_str(center_string(name), 15, 11);
+            return 1;
         }
     }
 
+    put_str(center_string(lines[0]), 14, 11);
     put_str(center_string(lines[1]), 15, 11);
-    return std::make_pair(std::move(lines[0]), 1);
+    return 1;
 }
 
 /*!
@@ -137,20 +145,18 @@ static void show_dead_place(PlayerType *player_ptr, int extra_line)
  */
 static void show_tomb_detail(PlayerType *player_ptr)
 {
-    auto tomb_message = std::make_pair(std::string(), 0);
+    auto offset = 0;
     if (streq(player_ptr->died_from, "途中終了")) {
-        tomb_message.first = "<自殺>";
+        put_str(center_string("<自殺>"), 14, 11);
     } else if (streq(player_ptr->died_from, "ripe")) {
-        tomb_message.first = "引退後に天寿を全う";
+        put_str(center_string("引退後に天寿を全う"), 14, 11);
     } else if (streq(player_ptr->died_from, "Seppuku")) {
-        tomb_message.first = "勝利の後、切腹";
+        put_str(center_string("勝利の後、切腹"), 14, 11);
     } else {
-        tomb_message = show_killing_monster(player_ptr);
+        offset = show_killing_monster(player_ptr);
     }
 
-    put_str(center_string(tomb_message.first), 14, 11);
-
-    show_dead_place(player_ptr, tomb_message.second);
+    show_dead_place(player_ptr, offset);
 }
 #else
 
