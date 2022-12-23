@@ -69,42 +69,38 @@ static void show_basic_params(PlayerType *player_ptr)
  */
 static std::pair<std::string, int> show_killing_monster(PlayerType *player_ptr)
 {
-    char buf[160];
-    shape_buffer(player_ptr->died_from.data(), GRAVE_LINE_WIDTH + 1, buf, sizeof(buf));
-    char *t = buf + strlen(buf) + 1;
-    if (!*t) {
-        return std::make_pair(buf, 0);
+    auto lines = shape_buffer(player_ptr->died_from.data(), GRAVE_LINE_WIDTH + 1);
+    if (lines.size() == 1) {
+        return std::make_pair(std::move(lines[0]), 0);
     }
 
-    std::string killer = t; /* 2nd line */
-    if (*(t + strlen(t) + 1)) /* Does 3rd line exist? */
-    {
-        auto i = (killer.length() > 2) ? 0 : killer.length() - 2;
-        while (i > 0 && iskanji(killer[i - 1])) {
+    if (lines.size() >= 3) {
+        auto i = (lines[1].length() > 2) ? 0 : lines[1].length() - 2;
+        while (i > 0 && iskanji(lines[1][i - 1])) {
             --i;
         }
-        killer.erase(i);
-        killer.append("…");
-    } else if (angband_strstr(buf, "『") && suffix(killer.data(), "』")) {
-        char *name_head = angband_strstr(buf, "『");
+        lines[1].erase(i);
+        lines[1].append("…");
+    } else if (angband_strstr(lines[0].data(), "『") && suffix(lines[1], "』")) {
+        char *name_head = angband_strstr(lines[0].data(), "『");
         std::string killer2 = name_head;
-        killer2.append(killer);
+        killer2.append(lines[1]);
         if (killer2.length() <= GRAVE_LINE_WIDTH) {
-            killer = killer2;
-            *name_head = '\0';
+            lines[1] = killer2;
+            lines[0].erase(name_head - lines[0].data());
         }
-    } else if (angband_strstr(buf, "「") && suffix(killer.data(), "」")) {
-        char *name_head = angband_strstr(buf, "「");
+    } else if (angband_strstr(lines[0].data(), "「") && suffix(lines[1], "」")) {
+        char *name_head = angband_strstr(lines[0].data(), "「");
         std::string killer2 = name_head;
-        killer2.append(killer);
+        killer2.append(lines[1]);
         if (killer2.length() <= GRAVE_LINE_WIDTH) {
-            killer = killer2;
-            *name_head = '\0';
+            lines[1] = killer2;
+            lines[0].erase(name_head - lines[0].data());
         }
     }
 
-    put_str(center_string(killer), 15, 11);
-    return std::make_pair(buf, 1);
+    put_str(center_string(lines[1]), 15, 11);
+    return std::make_pair(std::move(lines[0]), 1);
 }
 
 /*!
@@ -167,24 +163,20 @@ static void show_tomb_detail(PlayerType *player_ptr)
 {
     put_str(center_string(format("Killed on Level %d", player_ptr->current_floor_ptr->dun_level)), 14, 11);
 
-    char buf[160];
-    shape_buffer(format("by %s.", player_ptr->died_from.data()).data(), GRAVE_LINE_WIDTH + 1, buf, sizeof(buf));
-    put_str(center_string(buf), 15, 11);
-    char *t = buf + strlen(buf) + 1;
-    if (!*t) {
+    auto lines = shape_buffer(format("by %s.", player_ptr->died_from.data()).data(), GRAVE_LINE_WIDTH + 1);
+    put_str(center_string(lines[0]), 15, 11);
+    if (lines.size() == 1) {
         return;
     }
 
-    std::string killer = t; /* 2nd line */
-    if (*(t + strlen(t) + 1)) /* Does 3rd line exist? */
-    {
-        if (killer.length() > GRAVE_LINE_WIDTH - 3) {
-            killer.erase(GRAVE_LINE_WIDTH - 3);
+    if (lines.size() >= 3) {
+        if (lines[1].length() > GRAVE_LINE_WIDTH - 3) {
+            lines[1].erase(GRAVE_LINE_WIDTH - 3);
         }
-        killer.append("...");
+        lines[1].append("...");
     }
 
-    put_str(center_string(killer), 16, 11);
+    put_str(center_string(lines[1]), 16, 11);
 }
 #endif
 

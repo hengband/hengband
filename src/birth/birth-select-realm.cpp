@@ -11,8 +11,8 @@
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
 #include "term/z-form.h"
-#include "util/buffer-shaper.h"
 #include "util/int-char-converter.h"
+#include "view/display-util.h"
 
 static const byte REALM_SELECT_CANCEL = 255;
 
@@ -351,7 +351,6 @@ bool get_player_realms(PlayerType *player_ptr)
     }
 
     while (true) {
-        char temp[80 * 10];
         int count = 0;
         player_ptr->realm1 = select_realm(player_ptr, realm_choices1[enum2i(player_ptr->pclass)], &count);
         if (player_ptr->realm1 == REALM_SELECT_CANCEL) {
@@ -362,16 +361,7 @@ bool get_player_realms(PlayerType *player_ptr)
         }
 
         cleanup_realm_selection_window();
-        shape_buffer(realm_explanations[technic2magic(player_ptr->realm1) - 1].data(), 74, temp, sizeof(temp));
-        concptr t = temp;
-        for (int i = 0; i < 10; i++) {
-            if (t[0] == 0) {
-                break;
-            } else {
-                prt(t, 12 + i, 3);
-                t += strlen(t) + 1;
-            }
-        }
+        display_wrap_around(realm_explanations[technic2magic(player_ptr->realm1) - 1], 74, 12, 3);
 
         if (check_realm_selection(player_ptr, count)) {
             break;
@@ -390,7 +380,6 @@ bool get_player_realms(PlayerType *player_ptr)
 
     /* Select the second realm */
     while (true) {
-        char temp[80 * 8];
         int count = 0;
         player_ptr->realm2 = select_realm(player_ptr, realm_choices2[enum2i(player_ptr->pclass)], &count);
 
@@ -402,16 +391,7 @@ bool get_player_realms(PlayerType *player_ptr)
         }
 
         cleanup_realm_selection_window();
-        shape_buffer(realm_explanations[technic2magic(player_ptr->realm2) - 1].data(), 74, temp, sizeof(temp));
-        concptr t = temp;
-        for (int i = 0; i < A_MAX; i++) {
-            if (t[0] == 0) {
-                break;
-            } else {
-                prt(t, 12 + i, 3);
-                t += strlen(t) + 1;
-            }
-        }
+        display_wrap_around(realm_explanations[technic2magic(player_ptr->realm2) - 1], 74, 12, 3);
 
         if (check_realm_selection(player_ptr, count)) {
             break;

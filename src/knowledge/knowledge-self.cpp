@@ -48,6 +48,14 @@ void do_cmd_knowledge_virtues(PlayerType *player_ptr)
     fd_kill(file_name);
 }
 
+static void dump_explanation(std::string_view explanation, FILE *fff)
+{
+    for (const auto &line : shape_buffer(explanation, 78)) {
+        fputs(line.data(), fff);
+        fputc('\n', fff);
+    }
+}
+
 /*!
  * @brief 自分に関する情報を画面に表示する
  * @param player_ptr プレイヤーへの参照ポインタ
@@ -59,77 +67,29 @@ static void dump_yourself(PlayerType *player_ptr, FILE *fff)
         return;
     }
 
-    char temp[80 * 10];
-    shape_buffer(race_explanations[enum2i(player_ptr->prace)].data(), 78, temp, sizeof(temp));
     fprintf(fff, "\n\n");
     fprintf(fff, _("種族: %s\n", "Race: %s\n"), race_info[enum2i(player_ptr->prace)].title);
-    concptr t = temp;
-
-    for (int i = 0; i < 10; i++) {
-        if (t[0] == 0) {
-            break;
-        }
-        fprintf(fff, "%s\n", t);
-        t += strlen(t) + 1;
-    }
+    dump_explanation(race_explanations[enum2i(player_ptr->prace)], fff);
 
     auto short_pclass = enum2i(player_ptr->pclass);
-    shape_buffer(class_explanations[short_pclass].data(), 78, temp, sizeof(temp));
     fprintf(fff, "\n");
     fprintf(fff, _("職業: %s\n", "Class: %s\n"), class_info[short_pclass].title);
+    dump_explanation(class_explanations[short_pclass].data(), fff);
 
-    t = temp;
-    for (int i = 0; i < 10; i++) {
-        if (t[0] == 0) {
-            break;
-        }
-        fprintf(fff, "%s\n", t);
-        t += strlen(t) + 1;
-    }
-
-    shape_buffer(personality_explanations[player_ptr->ppersonality].data(), 78, temp, sizeof(temp));
     fprintf(fff, "\n");
     fprintf(fff, _("性格: %s\n", "Pesonality: %s\n"), personality_info[player_ptr->ppersonality].title);
-
-    t = temp;
-    for (int i = 0; i < A_MAX; i++) {
-        if (t[0] == 0) {
-            break;
-        }
-        fprintf(fff, "%s\n", t);
-        t += strlen(t) + 1;
-    }
+    dump_explanation(personality_explanations[player_ptr->ppersonality], fff);
 
     fprintf(fff, "\n");
     if (player_ptr->realm1) {
-        shape_buffer(realm_explanations[technic2magic(player_ptr->realm1) - 1].data(), 78, temp, sizeof(temp));
         fprintf(fff, _("魔法: %s\n", "Realm: %s\n"), realm_names[player_ptr->realm1]);
-
-        t = temp;
-        for (int i = 0; i < A_MAX; i++) {
-            if (t[0] == 0) {
-                break;
-            }
-
-            fprintf(fff, "%s\n", t);
-            t += strlen(t) + 1;
-        }
+        dump_explanation(realm_explanations[technic2magic(player_ptr->realm1) - 1], fff);
     }
 
     fprintf(fff, "\n");
     if (player_ptr->realm2) {
-        shape_buffer(realm_explanations[technic2magic(player_ptr->realm2) - 1].data(), 78, temp, sizeof(temp));
         fprintf(fff, _("魔法: %s\n", "Realm: %s\n"), realm_names[player_ptr->realm2]);
-
-        t = temp;
-        for (int i = 0; i < A_MAX; i++) {
-            if (t[0] == 0) {
-                break;
-            }
-
-            fprintf(fff, "%s\n", t);
-            t += strlen(t) + 1;
-        }
+        dump_explanation(realm_explanations[technic2magic(player_ptr->realm2) - 1], fff);
     }
 }
 

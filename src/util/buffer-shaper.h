@@ -1,5 +1,8 @@
 ﻿#pragma once
 
 #include "system/angband.h"
+#include <string>
+#include <string_view>
+#include <vector>
 
-void shape_buffer(concptr str, int wlen, char *tbuf, size_t bufsize);
+std::vector<std::string> shape_buffer(std::string_view sv, size_t maxlen);

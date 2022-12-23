@@ -80,9 +80,9 @@
 #include "term/z-form.h"
 #include "timed-effect/player-stun.h"
 #include "timed-effect/timed-effects.h"
-#include "util/buffer-shaper.h"
 #include "util/int-char-converter.h"
 #include "view/display-messages.h"
+#include "view/display-util.h"
 #include <algorithm>
 #include <optional>
 
@@ -485,21 +485,13 @@ static std::optional<BaseitemKey> select_magic_eater(PlayerType *player_ptr, boo
 
         /* Browse */
         else {
-            int line, j;
-            char temp[70 * 20];
-
             /* Clear lines, position cursor  (really should use strlen here) */
             term_erase(7, 23, 255);
             term_erase(7, 22, 255);
             term_erase(7, 21, 255);
             term_erase(7, 20, 255);
 
-            shape_buffer(baseitems_info[lookup_baseitem_id({ tval, i })].text.data(), 62, temp, sizeof(temp));
-            for (j = 0, line = 21; temp[j]; j += 1 + strlen(&temp[j])) {
-                prt(&temp[j], line, 10);
-                line++;
-            }
-
+            display_wrap_around(baseitems_info[lookup_baseitem_id({ tval, i })].text, 62, 21, 10);
             continue;
         }
 

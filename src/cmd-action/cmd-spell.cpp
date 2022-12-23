@@ -67,9 +67,9 @@
 #include "timed-effect/player-blindness.h"
 #include "timed-effect/timed-effects.h"
 #include "util/bit-flags-calculator.h"
-#include "util/buffer-shaper.h"
 #include "util/int-char-converter.h"
 #include "view/display-messages.h"
+#include "view/display-util.h"
 
 static const int extra_magic_gain_exp = 4;
 
@@ -580,12 +580,10 @@ static FuncItemTester get_learnable_spellbook_tester(PlayerType *player_ptr)
 void do_cmd_browse(PlayerType *player_ptr)
 {
     OBJECT_IDX item;
-    int j, line;
     SPELL_IDX spell = -1;
     int num = 0;
 
     SPELL_IDX spells[64];
-    char temp[62 * 4];
 
     /* Warriors are illiterate */
     PlayerClass pc(player_ptr);
@@ -671,12 +669,7 @@ void do_cmd_browse(PlayerType *player_ptr)
         term_erase(14, 11, 255);
 
         const auto spell_desc = exe_spell(player_ptr, use_realm, spell, SpellProcessType::DESCRIPTION);
-        shape_buffer(spell_desc->data(), 62, temp, sizeof(temp));
-
-        for (j = 0, line = 11; temp[j]; j += 1 + strlen(&temp[j])) {
-            prt(&temp[j], line, 15);
-            line++;
-        }
+        display_wrap_around(spell_desc.value(), 62, 11, 15);
     }
     screen_load();
 }

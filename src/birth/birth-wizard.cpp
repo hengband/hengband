@@ -35,12 +35,12 @@
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
 #include "term/z-form.h"
-#include "util/buffer-shaper.h"
 #include "util/enum-converter.h"
 #include "util/int-char-converter.h"
 #include "util/string-processor.h"
 #include "view/display-birth.h" // 暫定。後で消す予定。
 #include "view/display-player.h" // 暫定。後で消す.
+#include "view/display-util.h"
 #include "world/world.h"
 #include <sstream>
 
@@ -182,22 +182,12 @@ static bool let_player_select_race(PlayerType *player_ptr)
     clear_from(10);
     player_ptr->prace = PlayerRaceType::HUMAN;
     while (true) {
-        char temp[80 * 10];
         if (!get_player_race(player_ptr)) {
             return false;
         }
 
         clear_from(10);
-        shape_buffer(race_explanations[enum2i(player_ptr->prace)].data(), 74, temp, sizeof(temp));
-        concptr t = temp;
-        for (int i = 0; i < 10; i++) {
-            if (t[0] == 0) {
-                break;
-            } else {
-                prt(t, 12 + i, 3);
-                t += strlen(t) + 1;
-            }
-        }
+        display_wrap_around(race_explanations[enum2i(player_ptr->prace)], 74, 12, 3);
         if (get_check_strict(player_ptr, _("よろしいですか？", "Are you sure? "), CHECK_DEFAULT_Y)) {
             break;
         }
@@ -214,22 +204,12 @@ static bool let_player_select_class(PlayerType *player_ptr)
     clear_from(10);
     player_ptr->pclass = PlayerClassType::WARRIOR;
     while (true) {
-        char temp[80 * 9];
         if (!get_player_class(player_ptr)) {
             return false;
         }
 
         clear_from(10);
-        shape_buffer(class_explanations[enum2i(player_ptr->pclass)].data(), 74, temp, sizeof(temp));
-        concptr t = temp;
-        for (int i = 0; i < 9; i++) {
-            if (t[0] == 0) {
-                break;
-            } else {
-                prt(t, 12 + i, 3);
-                t += strlen(t) + 1;
-            }
-        }
+        display_wrap_around(class_explanations[enum2i(player_ptr->pclass)], 74, 12, 3);
 
         if (get_check_strict(player_ptr, _("よろしいですか？", "Are you sure? "), CHECK_DEFAULT_Y)) {
             break;
@@ -245,22 +225,12 @@ static bool let_player_select_personality(PlayerType *player_ptr)
 {
     player_ptr->ppersonality = PERSONALITY_ORDINARY;
     while (true) {
-        char temp[80 * 8];
         if (!get_player_personality(player_ptr)) {
             return false;
         }
 
         clear_from(10);
-        shape_buffer(personality_explanations[player_ptr->ppersonality].data(), 74, temp, sizeof(temp));
-        concptr t = temp;
-        for (int i = 0; i < A_MAX; i++) {
-            if (t[0] == 0) {
-                break;
-            } else {
-                prt(t, 12 + i, 3);
-                t += strlen(t) + 1;
-            }
-        }
+        display_wrap_around(personality_explanations[player_ptr->ppersonality], 74, 12, 3);
 
         if (get_check_strict(player_ptr, _("よろしいですか？", "Are you sure? "), CHECK_DEFAULT_Y)) {
             break;
