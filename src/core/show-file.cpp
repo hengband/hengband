@@ -321,9 +321,7 @@ bool show_file(PlayerType *player_ptr, bool show_version, concptr name, concptr 
             0, 0);
 
         if (show_version) {
-            char title[127];
-            put_version(title);
-            prt(format("[%s]", title), 0, 0);
+            prt(format("[%s]", get_version().data()), 0, 0);
         } else {
             prt(format(_("[%s, %d/%d]", "[%s, Line %d/%d]"), caption.data(), line, size), 0, 0);
         }

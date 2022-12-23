@@ -98,9 +98,7 @@ SpoilerOutputResultType spoil_obj_desc(concptr fname)
         return SpoilerOutputResultType::FILE_OPEN_FAILED;
     }
 
-    char title[200];
-    put_version(title);
-    fprintf(spoiler_file, "Spoiler File -- Basic Items (%s)\n\n\n", title);
+    fprintf(spoiler_file, "Spoiler File -- Basic Items (%s)\n\n\n", get_version().data());
     fprintf(spoiler_file, "%-37s%8s%7s%5s %40s%9s\n", "Description", "Dam/AC", "Wgt", "Lev", "Chance", "Cost");
     fprintf(spoiler_file, "%-37s%8s%7s%5s %40s%9s\n", "-------------------------------------", "------", "---", "---", "----------------", "----");
 

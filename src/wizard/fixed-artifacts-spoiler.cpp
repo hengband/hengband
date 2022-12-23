@@ -64,9 +64,7 @@ void spoiler_outlist(concptr header, concptr *list, char separator)
  */
 static void print_header(void)
 {
-    char title[180];
-    put_version(title);
-    spoiler_underline(std::string("Artifact Spoilers for Hengband Version ").append(title).data());
+    spoiler_underline(std::string("Artifact Spoilers for Hengband Version ").append(get_version()).data());
 }
 
 /*!

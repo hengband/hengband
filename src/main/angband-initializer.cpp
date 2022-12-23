@@ -195,14 +195,12 @@ static void init_angband_aux(const std::string &why)
  * @brief タイトル記述
  * @param なし
  */
-static void put_title(void)
+static void put_title()
 {
-    char title[120];
-    put_version(title);
+    const auto title = get_version();
 
-    int col = (80 - strlen(title)) / 2;
-    col = col < 0 ? 0 : col;
-    const int VER_INFO_ROW = 3; //!< タイトル表記(行)
+    auto col = (title.length() <= 80) ? (80 - title.length()) / 2 : 0;
+    constexpr auto VER_INFO_ROW = 3; //!< タイトル表記(行)
     prt(title, VER_INFO_ROW, col);
 }
 
