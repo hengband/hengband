@@ -395,12 +395,12 @@ static std::string name_unnatural_random_artifact(PlayerType *player_ptr, ItemEn
     o_ptr->ident |= IDENT_FULL_KNOWN;
     o_ptr->art_name = quark_add("");
     (void)screen_object(player_ptr, o_ptr, 0L);
-    char new_name[1024] = "";
+    char new_name[160] = "";
     if (!get_string(ask_msg, new_name, sizeof new_name) || !new_name[0]) {
         if (one_in_(2)) {
-            get_table_sindarin_aux(new_name);
+            return get_table_sindarin_aux();
         } else {
-            get_table_name_aux(new_name);
+            return get_table_name_aux();
         }
     }
 

@@ -3,12 +3,15 @@
 #include "system/angband.h"
 
 #ifdef JP
+#include <string>
+#include <string_view>
+
 constexpr int JVERB_AND = 1;
 constexpr int JVERB_TO = 2;
 constexpr int JVERB_OR = 3;
 void jverb(concptr in, char *out, int flag);
 
-void sindarin_to_kana(char *kana, concptr sindarin);
+std::string sindarin_to_kana(std::string_view sindarin);
 void sjis2euc(char *str);
 void euc2sjis(char *str);
 byte codeconv(char *str);

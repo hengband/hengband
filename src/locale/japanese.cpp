@@ -40,57 +40,41 @@ static const convert_key s2j_table[] = { { "mb", "nb" }, { "mp", "np" }, { "mv",
 
 /*!
  * @brief シンダリンを日本語の読みに変換する
- * @param kana 変換後の日本語文字列ポインタ
- * @param sindarin 変換前のシンダリン文字列ポインタ
+ * @param sindarin 変換前のシンダリン文字列
+ * @return std::string 変換後のシンダリン文字列
  * @details
  */
-void sindarin_to_kana(char *kana, concptr sindarin)
+std::string sindarin_to_kana(std::string_view sindarin)
 {
-    char buf[256];
-    int idx;
+    std::string kana;
 
-    sprintf(kana, "%s$", sindarin);
-    for (idx = 0; kana[idx]; idx++) {
-        if (isupper(kana[idx])) {
-            kana[idx] = (char)tolower(kana[idx]);
-        }
+    for (const auto &ch : sindarin) {
+        kana.push_back(isupper(ch) ? static_cast<char>(tolower(ch)) : ch);
     }
+    kana.append("$");
 
-    for (idx = 0; s2j_table[idx].key1 != nullptr; idx++) {
+    for (auto idx = 0; s2j_table[idx].key1 != nullptr; idx++) {
         concptr pat1 = s2j_table[idx].key1;
-        concptr pat2 = s2j_table[idx].key2;
-        int len = strlen(pat1);
-        char *src = kana;
-        char *dest = buf;
+        size_t len = strlen(pat1);
+        std::string::size_type i = 0;
 
-        while (*src) {
-            if (strncmp(src, pat1, len) == 0) {
-                strcpy(dest, pat2);
-                src += len;
-                dest += strlen(pat2);
+        while (i < kana.length()) {
+            if (strncmp(kana.data() + i, pat1, len) == 0) {
+                concptr pat2 = s2j_table[idx].key2;
+
+                kana.replace(i, len, pat2);
+                i += strlen(pat2);
             } else {
-                if (iskanji(*src)) {
-                    *dest = *src;
-                    src++;
-                    dest++;
+                if (iskanji(kana[i])) {
+                    ++i;
                 }
-                *dest = *src;
-                src++;
-                dest++;
+                ++i;
             }
         }
-
-        *dest = 0;
-        strcpy(kana, buf);
     }
 
-    idx = 0;
-
-    while (kana[idx] != '$') {
-        idx++;
-    }
-
-    kana[idx] = '\0';
+    kana.erase(kana.find('$'));
+    return kana;
 }
 
 /*! 日本語動詞活用 (打つ＞打って,打ち etc)
