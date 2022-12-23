@@ -409,10 +409,9 @@ static mind_type get_elemental_info(PlayerType *player_ptr, int spell_idx)
  * @brief 元素魔法呪文の効果表示文字列を取得
  * @param player_ptr プレイヤー情報への参照ポインタ
  * @param spell_idx 呪文番号
- * @param p バッファ
- * @return なし(pを更新)
+ * @return std::string 魔法の効果を表す文字列
  */
-void get_element_effect_info(PlayerType *player_ptr, int spell_idx, char *p)
+static std::string get_element_effect_info(PlayerType *player_ptr, int spell_idx)
 {
     PLAYER_LEVEL plev = player_ptr->lev;
     auto spell = i2enum<ElementSpells>(spell_idx);
@@ -420,51 +419,36 @@ void get_element_effect_info(PlayerType *player_ptr, int spell_idx, char *p)
 
     switch (spell) {
     case ElementSpells::BOLT_1ST:
-        sprintf(p, " %s%dd%d", KWD_DAM, 3 + ((plev - 1) / 5), 4);
-        break;
+        return format(" %s%dd%d", KWD_DAM, 3 + ((plev - 1) / 5), 4);
     case ElementSpells::CURE:
-        sprintf(p, " %s%dd%d", KWD_HEAL, 2, 8);
-        break;
+        return format(" %s%dd%d", KWD_HEAL, 2, 8);
     case ElementSpells::BOLT_2ND:
-        sprintf(p, " %s%dd%d", KWD_DAM, 8 + ((plev - 5) / 4), 8);
-        break;
+        return format(" %s%dd%d", KWD_DAM, 8 + ((plev - 5) / 4), 8);
     case ElementSpells::BALL_3RD:
-        sprintf(p, " %s%d", KWD_DAM, (50 + plev * 2));
-        break;
+        return format(" %s%d", KWD_DAM, (50 + plev * 2));
     case ElementSpells::BALL_1ST:
-        sprintf(p, " %s%d", KWD_DAM, 55 + plev);
-        break;
+        return format(" %s%d", KWD_DAM, 55 + plev);
     case ElementSpells::BREATH_2ND:
         dam = p_ptr->chp / 2;
-        sprintf(p, " %s%d", KWD_DAM, (dam > 150) ? 150 : dam);
-        break;
+        return format(" %s%d", KWD_DAM, (dam > 150) ? 150 : dam);
     case ElementSpells::ANNIHILATE:
-        sprintf(p, " %s%d", _("効力:", "pow "), 50 + plev);
-        break;
+        return format(" %s%d", _("効力:", "pow "), 50 + plev);
     case ElementSpells::BOLT_3RD:
-        sprintf(p, " %s%dd%d", KWD_DAM, 12 + ((plev - 5) / 4), 8);
-        break;
+        return format(" %s%dd%d", KWD_DAM, 12 + ((plev - 5) / 4), 8);
     case ElementSpells::WAVE_1ST:
-        sprintf(p, " %s50+d%d", KWD_DAM, plev * 3);
-        break;
+        return format(" %s50+d%d", KWD_DAM, plev * 3);
     case ElementSpells::BALL_2ND:
-        sprintf(p, " %s%d", KWD_DAM, 75 + plev * 3 / 2);
-        break;
+        return format(" %s%d", KWD_DAM, 75 + plev * 3 / 2);
     case ElementSpells::BURST_1ST:
-        sprintf(p, " %s%dd%d", KWD_DAM, 6 + plev / 8, 7);
-        break;
+        return format(" %s%dd%d", KWD_DAM, 6 + plev / 8, 7);
     case ElementSpells::STORM_2ND:
-        sprintf(p, " %s%d", KWD_DAM, 115 + plev * 5 / 2);
-        break;
+        return format(" %s%d", KWD_DAM, 115 + plev * 5 / 2);
     case ElementSpells::BREATH_1ST:
-        sprintf(p, " %s%d", KWD_DAM, p_ptr->chp * 2 / 3);
-        break;
+        return format(" %s%d", KWD_DAM, p_ptr->chp * 2 / 3);
     case ElementSpells::STORM_3ND:
-        sprintf(p, " %s%d", KWD_DAM, 300 + plev * 5);
-        break;
+        return format(" %s%d", KWD_DAM, 300 + plev * 5);
     default:
-        p[0] = '\0';
-        break;
+        return std::string();
     }
 }
 
@@ -702,7 +686,6 @@ static bool get_element_power(PlayerType *player_ptr, SPELL_IDX *sn, bool only_b
     PLAYER_LEVEL plev = player_ptr->lev;
     char choice;
     char out_val[160];
-    char comment[80];
     COMMAND_CODE code;
     bool flag, redraw;
     int menu_line = (use_menu ? 1 : 0);
@@ -800,7 +783,7 @@ static bool get_element_power(PlayerType *player_ptr, SPELL_IDX *sn, bool only_b
 
                     PERCENTAGE chance = decide_element_chance(player_ptr, spell);
                     int mana_cost = decide_element_mana_cost(player_ptr, spell);
-                    get_element_effect_info(player_ptr, i, comment);
+                    const auto comment = get_element_effect_info(player_ptr, i);
 
                     std::string desc;
                     if (use_menu) {
@@ -815,7 +798,7 @@ static bool get_element_power(PlayerType *player_ptr, SPELL_IDX *sn, bool only_b
 
                     concptr s = get_element_name(player_ptr->element, elem);
                     std::string name = format(spell.name, s);
-                    desc.append(format("%-30s%2d %4d %3d%%%s", name.data(), spell.min_lev, mana_cost, chance, comment));
+                    desc.append(format("%-30s%2d %4d %3d%%%s", name.data(), spell.min_lev, mana_cost, chance, comment.data()));
                     prt(desc, y + i + 1, x);
                 }
 
