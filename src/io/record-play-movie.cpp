@@ -223,36 +223,43 @@ static errr send_text_to_chuukei_server(TERM_LEN x, TERM_LEN y, int len, TERM_CO
 {
     if (len == 1) {
         insert_ringbuf(format("s%c%c%c%c", x + 1, y + 1, col, *str));
-    } else if (string_is_repeat(str, len)) {
+        return (*old_text_hook)(x, y, len, col, str);
+    }
+
+    if (string_is_repeat(str, len)) {
         while (len > split_max) {
             insert_ringbuf(format("n%c%c%c%c%c", x + 1, y + 1, split_max, col, *str));
             x += split_max;
             len -= split_max;
         }
-        if (len > 1) {
-            insert_ringbuf(format("n%c%c%c%c%c", x + 1, y + 1, len, col, *str));
-        } else {
-            insert_ringbuf(format("s%c%c%c%c", x + 1, y + 1, col, *str));
-        }
-    } else {
-#if defined(SJIS) && defined(JP)
-        std::string buffer = str; // strは書き換わって欲しくないのでコピーする.
-        auto *payload = buffer.data();
-        sjis2euc(payload);
-#else
-        const auto *payload = str;
-#endif
-        while (len > split_max) {
-            int split_len = _(find_split(payload, split_max), split_max);
 
-            insert_ringbuf(format("t%c%c%c%c", x + 1, y + 1, split_len, col), std::string_view(payload, split_len));
-            x += split_len;
-            len -= split_len;
-            payload += split_len;
+        std::string formatted_text;
+        if (len > 1) {
+            formatted_text = format("n%c%c%c%c%c", x + 1, y + 1, len, col, *str);
+        } else {
+            formatted_text = format("s%c%c%c%c", x + 1, y + 1, col, *str);
         }
-        insert_ringbuf(format("t%c%c%c%c", x + 1, y + 1, len, col), std::string_view(payload, len));
+
+        insert_ringbuf(formatted_text);
+        return (*old_text_hook)(x, y, len, col, str);
     }
 
+#if defined(SJIS) && defined(JP)
+    std::string buffer = str; // strは書き換わって欲しくないのでコピーする.
+    auto *payload = buffer.data();
+    sjis2euc(payload);
+#else
+    const auto *payload = str;
+#endif
+    while (len > split_max) {
+        auto split_len = _(find_split(payload, split_max), split_max);
+        insert_ringbuf(format("t%c%c%c%c", x + 1, y + 1, split_len, col), std::string_view(payload, split_len));
+        x += split_len;
+        len -= split_len;
+        payload += split_len;
+    }
+
+    insert_ringbuf(format("t%c%c%c%c", x + 1, y + 1, len, col), std::string_view(payload, len));
     return (*old_text_hook)(x, y, len, col, str);
 }
 
