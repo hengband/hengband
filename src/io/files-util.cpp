@@ -219,7 +219,7 @@ errr get_rnd_line_jonly(concptr file_name, int entry, char *output, int count)
  */
 static errr counts_seek(PlayerType *player_ptr, int fd, uint32_t where, bool flag)
 {
-    char temp1[128], temp2[128];
+    char temp1[128]{}, temp2[128]{};
     auto short_pclass = enum2i(player_ptr->pclass);
 #ifdef SAVEFILE_USE_UID
     strnfmt(temp1, sizeof(temp1), "%d.%s.%d%d%d", player_ptr->player_uid, savefile_base, short_pclass, player_ptr->ppersonality, player_ptr->age);
