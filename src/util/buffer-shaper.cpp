@@ -1,21 +1,6 @@
 ﻿#include "util/buffer-shaper.h"
+#include "locale/japanese.h"
 #include <algorithm>
-#include <set>
-
-static const std::set<std::string_view> kinsoku_list{
-    // clang-format off
-    "、", "。", "，", "．", "？", "！",
-    "ァ", "ィ", "ゥ", "ェ", "ォ", "ャ", "ュ", "ョ", "ッ",
-    "ぁ", "ぃ", "ぅ", "ぇ", "ぉ", "ゃ", "ゅ", "ょ", "っ",
-    "ー", "～",
-    "」", "』", "）", "｝", "］", "》", "】",
-    // clang-format on
-};
-
-static bool is_kinsoku(std::string_view ch)
-{
-    return (ch.length() >= 2) && kinsoku_list.contains(ch);
-}
 
 /*!
  * @brief 文字列を指定した最大長を目安として分割する
