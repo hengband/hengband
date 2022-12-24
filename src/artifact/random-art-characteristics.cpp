@@ -143,23 +143,21 @@ std::string get_random_name(const ItemEntity &item, bool armour, int power)
 {
     const auto prob = randint1(100);
     constexpr auto chance_sindarin = 10;
-    char random_artifact_name[1024]{};
     if (prob <= chance_sindarin) {
-        get_table_sindarin(random_artifact_name);
-        return random_artifact_name;
+        return get_table_sindarin();
     }
 
     constexpr auto chance_table = 20;
     if (prob <= chance_table) {
-        get_table_name(random_artifact_name);
-        return random_artifact_name;
+        return get_table_name();
     }
 
     auto filename = get_random_art_filename(armour, power);
+    char random_artifact_name[80]{};
     (void)get_rnd_line(filename.data(), item.artifact_bias, random_artifact_name);
 #ifdef JP
     if (random_artifact_name[0] == 0) {
-        get_table_name(random_artifact_name);
+        return get_table_name();
     }
 #endif
     return random_artifact_name;
