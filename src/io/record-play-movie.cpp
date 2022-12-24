@@ -235,13 +235,12 @@ static errr send_text_to_chuukei_server(TERM_LEN x, TERM_LEN y, int len, TERM_CO
             insert_ringbuf(format("s%c%c%c%c", x + 1, y + 1, col, *str));
         }
     } else {
-        concptr payload;
 #if defined(SJIS) && defined(JP)
-        std::string buffer = str;
-        payload = buf.data();
+        std::string buffer = str; // strは書き換わって欲しくないのでコピーする.
+        auto *payload = buffer.data();
         sjis2euc(payload);
 #else
-        payload = str;
+        const auto *payload = str;
 #endif
         while (len > split_max) {
             int split_len = _(find_split(payload, split_max), split_max);
