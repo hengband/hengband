@@ -47,7 +47,7 @@ bool screen_object(PlayerType *player_ptr, ItemEntity *o_ptr, BIT_FLAGS mode)
     const auto item_text_lines = shape_buffer(item_text, 77 - 15);
 
     int i = 0;
-    std::ranges::transform(item_text_lines, &info[i], [](const auto &line) { return line.data(); });
+    std::transform(item_text_lines.begin(), item_text_lines.end(), &info[i], [](const auto &line) { return line.data(); });
     i += item_text_lines.size();
 
     if (o_ptr->is_equipment()) {
