@@ -71,7 +71,7 @@ static std::string describe_artifact_mark_ja(const ItemEntity &item, const descr
 
     if (item.is_fixed_artifact()) {
         return "★";
-    } else if (item.art_name) {
+    } else if (item.is_random_artifact()) {
         return "☆";
     }
 
@@ -95,7 +95,7 @@ static std::string describe_unique_name_before_body_ja(const ItemEntity &item, c
         return "";
     }
 
-    if (item.art_name) {
+    if (item.is_random_artifact()) {
         concptr temp = quark_str(item.art_name);
 
         /* '『' から始まらない伝説のアイテムの名前は最初に付加する */
@@ -128,7 +128,7 @@ static std::string describe_unique_name_before_body_ja(const ItemEntity &item, c
 
 static std::optional<std::string> describe_random_artifact_name_after_body_ja(const ItemEntity &item)
 {
-    if (item.art_name == 0) {
+    if (!item.is_random_artifact()) {
         return std::nullopt;
     }
 
@@ -290,7 +290,7 @@ static std::string describe_unique_name_after_body_en(const ItemEntity &item, co
 
     std::stringstream ss;
 
-    if (item.art_name) {
+    if (item.is_random_artifact()) {
         ss << ' ' << quark_str(item.art_name);
         return ss.str();
     }

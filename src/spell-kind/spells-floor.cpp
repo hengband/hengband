@@ -355,7 +355,7 @@ bool destroy_area(PlayerType *player_ptr, POSITION y1, POSITION x1, POSITION r, 
                             describe_flavor(player_ptr, o_name, o_ptr, (OD_NAME_ONLY | OD_STORE));
                             msg_format(_("伝説のアイテム (%s) は生成中に*破壊*された。", "Artifact (%s) was *destroyed* during generation."), o_name);
                         }
-                    } else if (in_generate && cheat_peek && o_ptr->art_name) {
+                    } else if (in_generate && cheat_peek && o_ptr->is_random_artifact()) {
                         msg_print(
                             _("ランダム・アーティファクトの1つは生成中に*破壊*された。", "One of the random artifacts was *destroyed* during generation."));
                     }

@@ -20,7 +20,7 @@ static int get_item_sort_rank(const ItemEntity &item)
         return 3;
     }
 
-    if (item.art_name) {
+    if (item.is_random_artifact()) {
         return 2;
     }
 

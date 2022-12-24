@@ -370,7 +370,7 @@ void build_streamer(PlayerType *player_ptr, FEAT_IDX feat, int chance)
                             describe_flavor(player_ptr, o_name, o_ptr, (OD_NAME_ONLY | OD_STORE));
                             msg_format(_("伝説のアイテム (%s) はストリーマーにより削除された。", "Artifact (%s) was deleted by streamer."), o_name);
                         }
-                    } else if (cheat_peek && o_ptr->art_name) {
+                    } else if (cheat_peek && o_ptr->is_random_artifact()) {
                         msg_print(_("ランダム・アーティファクトの1つはストリーマーにより削除された。", "One of the random artifacts was deleted by streamer."));
                     }
                 }

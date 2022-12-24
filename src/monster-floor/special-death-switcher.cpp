@@ -351,7 +351,7 @@ static void on_dead_random_artifact(PlayerType *player_ptr, monster_death_type *
             continue;
         }
 
-        if (q_ptr->art_name > 0) {
+        if (q_ptr->is_random_artifact()) {
             break;
         }
 

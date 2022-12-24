@@ -1063,9 +1063,9 @@ WishResultType do_cmd_wishing(PlayerType *player_ptr, int prob, bool allow_art, 
                 do {
                     o_ptr->prep(bi_id);
                     ItemMagicApplier(player_ptr, o_ptr, baseitem.level, AM_SPECIAL | AM_NO_FIXED_ART).execute();
-                } while (!o_ptr->art_name || o_ptr->is_ego() || o_ptr->is_cursed());
+                } while (!o_ptr->is_random_artifact() || o_ptr->is_ego() || o_ptr->is_cursed());
 
-                if (o_ptr->art_name) {
+                if (o_ptr->is_random_artifact()) {
                     drop_near(player_ptr, o_ptr, -1, player_ptr->y, player_ptr->x);
                 }
             } else {
@@ -1087,7 +1087,7 @@ WishResultType do_cmd_wishing(PlayerType *player_ptr, int prob, bool allow_art, 
                     for (i = 0; i < max_roll; i++) {
                         o_ptr->prep(bi_id);
                         ItemMagicApplier(player_ptr, o_ptr, baseitem.level, AM_GREAT | AM_NO_FIXED_ART).execute();
-                        if (o_ptr->art_name) {
+                        if (o_ptr->is_random_artifact()) {
                             continue;
                         }
 
