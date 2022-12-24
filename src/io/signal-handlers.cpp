@@ -216,10 +216,6 @@ void signals_init(void)
     (void)signal(SIGIOT, handle_signal_abort);
 #endif
 
-#ifdef SIGKILL
-    (void)signal(SIGKILL, handle_signal_abort);
-#endif
-
 #ifdef SIGBUS
     (void)signal(SIGBUS, handle_signal_abort);
 #endif
