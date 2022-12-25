@@ -51,6 +51,7 @@
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 #include "world/world.h"
+#include <algorithm>
 
 static void write_pet_death(PlayerType *player_ptr, monster_death_type *md_ptr)
 {
@@ -442,15 +443,19 @@ void monster_death(PlayerType *player_ptr, MONSTER_IDX m_idx, bool drop_item, At
  */
 concptr extract_note_dies(MonsterRaceId r_idx)
 {
-    auto *r_ptr = &monraces_info[r_idx];
+    const auto &r_ref = monraces_info[r_idx];
+    const auto explode = std::any_of(std::begin(r_ref.blow), std::end(r_ref.blow), [](const auto &blow) { return blow.method == RaceBlowMethodType::EXPLODE; });
+
     if (monster_living(r_idx)) {
+        if (explode) {
+            return _("は爆発して死んだ。", " explodes and dies.");
+        }
+
         return _("は死んだ。", " dies.");
     }
 
-    for (int i = 0; i < 4; i++) {
-        if (r_ptr->blow[i].method == RaceBlowMethodType::EXPLODE) {
-            return _("は爆発して粉々になった。", " explodes into tiny shreds.");
-        }
+    if (explode) {
+        return _("は爆発して粉々になった。", " explodes into tiny shreds.");
     }
 
     return _("を倒した。", " is destroyed.");
