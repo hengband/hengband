@@ -27,7 +27,7 @@ class PlayerType;
 typedef void (*update_playtime_pf)(void);
 
 errr file_character(PlayerType *player_ptr, concptr name);
-errr get_random_line(concptr file_name, int entry, char *output);
+std::optional<std::string> get_random_line(concptr file_name, int entry);
 void read_dead_file(char *buf, size_t buf_size);
 
 #ifdef JP

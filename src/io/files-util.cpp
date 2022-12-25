@@ -91,24 +91,18 @@ errr file_character(PlayerType *player_ptr, concptr name)
 }
 
 /*!
- * @brief ファイルからランダムに行を一つ取得する /
- * Get a random line from a file
+ * @brief ファイルからランダムに行を一つ取得する
  * @param file_name ファイル名
  * @param entry 特定条件時のN:タグヘッダID
- * @param output 出力先の文字列参照ポインタ
- * @return エラーコード
- * @details
- * <pre>
- * Based on the monster speech patch by Matt Graham,
- * </pre>
+ * @return ファイルから取得した行 (但しファイルがなかったり異常値ならばnullopt)
  */
-errr get_random_line(concptr file_name, int entry, char *output)
+std::optional<std::string> get_random_line(concptr file_name, int entry)
 {
     char filename[1024];
     path_build(filename, sizeof(filename), ANGBAND_DIR_FILE, file_name);
     auto *fp = angband_fopen(filename, "r");
     if (!fp) {
-        return -1;
+        return std::nullopt;
     }
 
     int test;
@@ -117,7 +111,7 @@ errr get_random_line(concptr file_name, int entry, char *output)
         char buf[1024];
         if (angband_fgets(fp, buf, sizeof(buf)) != 0) {
             angband_fclose(fp);
-            return -1;
+            return std::nullopt;
         }
 
         line_num++;
@@ -128,7 +122,7 @@ errr get_random_line(concptr file_name, int entry, char *output)
         if (buf[2] == '*') {
             break;
         }
-        
+
         if (buf[2] == 'M') {
             if (monraces_info[i2enum<MonsterRaceId>(entry)].flags1 & RF1_MALE) {
                 break;
@@ -144,11 +138,12 @@ errr get_random_line(concptr file_name, int entry, char *output)
         } else {
             msg_format("Error in line %d of %s!", line_num, file_name);
             angband_fclose(fp);
-            return -1;
+            return std::nullopt;
         }
     }
 
     auto counter = 0;
+    std::string line{};
     while (true) {
         char buf[1024];
         while (true) {
@@ -170,14 +165,18 @@ errr get_random_line(concptr file_name, int entry, char *output)
         }
 
         if (one_in_(counter + 1)) {
-            strcpy(output, buf);
+            line = buf;
         }
 
         counter++;
     }
 
     angband_fclose(fp);
-    return counter ? 0 : -1;
+    if (counter > 0) {
+        return line;
+    }
+
+    return std::nullopt;
 }
 
 #ifdef JP
@@ -191,16 +190,16 @@ errr get_random_line(concptr file_name, int entry, char *output)
  */
 std::optional<std::string> get_random_line_ja_only(concptr file_name, int entry, int count)
 {
-    char line[1024]{};
+    std::optional<std::string> line;
     for (auto i = 0; i < count; i++) {
-        auto error = get_random_line(file_name, entry, line);
-        if (error) {
+        line = get_random_line(file_name, entry);
+        if (!line.has_value()) {
             return std::nullopt;
         }
 
         auto is_kanji = false;
-        for (auto j = 0; line[j]; j++) {
-            is_kanji |= iskanji(line[j]);
+        for (auto c = line.value().data(); *c != '\0'; c++) {
+            is_kanji |= iskanji(*c);
         }
 
         if (is_kanji) {
