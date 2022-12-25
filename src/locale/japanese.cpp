@@ -8,6 +8,7 @@
 #include "locale/utf-8.h"
 #include "util/string-processor.h"
 #include "view/display-messages.h"
+#include <set>
 
 #ifdef JP
 
@@ -141,6 +142,27 @@ void jverb(concptr in, char *out, int flag)
     if (p->from == nullptr) {
         strcpy(&out[in_len], p->to[flag - 1]);
     }
+}
+
+static const std::set<std::string_view> kinsoku_list{
+    // clang-format off
+    "、", "。", "，", "．", "？", "！",
+    "ァ", "ィ", "ゥ", "ェ", "ォ", "ャ", "ュ", "ョ", "ッ",
+    "ぁ", "ぃ", "ぅ", "ぇ", "ぉ", "ゃ", "ゅ", "ょ", "っ",
+    "ー", "～",
+    "」", "』", "）", "｝", "］", "》", "】",
+    // clang-format on
+};
+
+/*!
+ * @brief 引数で与えられた文字が行頭禁則文字であるかどうか調べる
+ *
+ * @param ch 調べる文字
+ * @return 行頭禁則文字であるなら true、そうでないなら false
+ */
+bool is_kinsoku(std::string_view ch)
+{
+    return (ch.length() >= 2) && kinsoku_list.contains(ch);
 }
 
 /*!

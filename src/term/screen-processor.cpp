@@ -1,5 +1,6 @@
 ﻿#include "term/screen-processor.h"
 #include "io/input-key-acceptor.h"
+#include "locale/japanese.h"
 #include "term/term-color-types.h"
 #include "view/display-messages.h"
 #include "world/world.h"
@@ -192,8 +193,8 @@ void c_roff(TERM_COLOR a, std::string_view str)
 #ifdef JP
                 else {
                     /* 現在が全角文字のとき */
-                    /* 文頭が「。」「、」等になるときは、その１つ前の語で改行 */
-                    if (strncmp(s, "。", 2) == 0 || strncmp(s, "、", 2) == 0) {
+                    /* 行頭が行頭禁則文字になるときは、その１つ前の語で改行 */
+                    if (is_kinsoku({ s, 2 })) {
                         term_what(x - 1, y, &av[x - 1], &cv[x - 1]);
                         term_what(x - 2, y, &av[x - 2], &cv[x - 2]);
                         n = x - 2;
