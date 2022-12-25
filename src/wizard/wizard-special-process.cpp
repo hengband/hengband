@@ -777,9 +777,7 @@ void wiz_dump_options(void)
         }
     }
 
-    char title[200];
-    put_version(title);
-    fprintf(fff, "[Option bits usage on %s\n]", title);
+    fprintf(fff, "[Option bits usage on %s\n]", get_version().data());
     fputs("Set - Bit (Page) Option Name\n", fff);
     fputs("------------------------------------------------\n", fff);
     for (int i = 0; i < NUM_O_SET; i++) {

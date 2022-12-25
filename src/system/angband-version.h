@@ -47,4 +47,4 @@ enum class VersionStatusType {
  */
 constexpr VersionStatusType VERSION_STATUS = VersionStatusType::ALPHA;
 
-void put_version(char *buf);
+std::string get_version();

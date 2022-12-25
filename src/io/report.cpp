@@ -418,12 +418,10 @@ bool report_score(PlayerType *player_ptr)
     auto *score = buf_new();
     std::string personality_desc = ap_ptr->title;
     personality_desc.append(_(ap_ptr->no ? "の" : "", " "));
-    char title[128];
-    put_version(title);
 
     auto realm1_name = PlayerClass(player_ptr).equals(PlayerClassType::ELEMENTALIST) ? get_element_title(player_ptr->element) : realm_names[player_ptr->realm1];
     buf_sprintf(score, "name: %s\n", player_ptr->name);
-    buf_sprintf(score, "version: %s\n", title);
+    buf_sprintf(score, "version: %s\n", get_version().data());
     buf_sprintf(score, "score: %d\n", calc_score(player_ptr));
     buf_sprintf(score, "level: %d\n", player_ptr->lev);
     buf_sprintf(score, "depth: %d\n", player_ptr->current_floor_ptr->dun_level);

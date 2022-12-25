@@ -216,9 +216,7 @@ void do_cmd_note(void)
  */
 void do_cmd_version(void)
 {
-    char buf[120];
-    put_version(buf);
-    msg_print(buf);
+    msg_print(get_version());
 }
 
 /*

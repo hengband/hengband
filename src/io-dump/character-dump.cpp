@@ -590,9 +590,7 @@ static std::string get_check_sum(void)
  */
 void make_character_dump(PlayerType *player_ptr, FILE *fff)
 {
-    char title[127];
-    put_version(title);
-    fprintf(fff, _("  [%s キャラクタ情報]\n\n", "  [%s Character Dump]\n\n"), title);
+    fprintf(fff, _("  [%s キャラクタ情報]\n\n", "  [%s Character Dump]\n\n"), get_version().data());
 
     dump_aux_player_status(player_ptr, fff);
     dump_aux_last_message(player_ptr, fff);
