@@ -76,15 +76,15 @@ static std::string get_monster_personal_pronoun(const int kind, const BIT_FLAGS 
     }
 }
 
-static std::optional<std::string> decide_monster_personal_pronoun(const MonsterEntity *m_ptr, const BIT_FLAGS mode)
+static std::optional<std::string> decide_monster_personal_pronoun(const MonsterEntity &monster, const BIT_FLAGS mode)
 {
-    const auto seen = (m_ptr && ((mode & MD_ASSUME_VISIBLE) || (!(mode & MD_ASSUME_HIDDEN) && m_ptr->ml)));
-    const auto pron = (m_ptr && ((seen && (mode & MD_PRON_VISIBLE)) || (!seen && (mode & MD_PRON_HIDDEN))));
+    const auto seen = any_bits(mode, MD_ASSUME_VISIBLE) || (none_bits(mode, MD_ASSUME_HIDDEN) && monster.ml);
+    const auto pron = (seen && any_bits(mode, MD_PRON_VISIBLE)) || (!seen && any_bits(mode, MD_PRON_HIDDEN));
     if (seen && !pron) {
         return std::nullopt;
     }
 
-    const auto &monrace = monraces_info[m_ptr->ap_r_idx];
+    const auto &monrace = monraces_info[monster.ap_r_idx];
     auto kind = 0x00;
     if (any_bits(monrace.flags1, RF1_FEMALE)) {
         kind = 0x20;
@@ -92,7 +92,7 @@ static std::optional<std::string> decide_monster_personal_pronoun(const MonsterE
         kind = 0x10;
     }
 
-    if (!m_ptr || !pron) {
+    if (!pron) {
         kind = 0x00;
     }
 
@@ -202,7 +202,7 @@ static std::string describe_non_pet(const PlayerType &player, const MonsterEntit
  */
 std::string monster_desc(PlayerType *player_ptr, MonsterEntity *m_ptr, BIT_FLAGS mode)
 {
-    const auto pronoun = decide_monster_personal_pronoun(m_ptr, mode);
+    const auto pronoun = decide_monster_personal_pronoun(*m_ptr, mode);
     if (pronoun.has_value()) {
         return pronoun.value();
     }
