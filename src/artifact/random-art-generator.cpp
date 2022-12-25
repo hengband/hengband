@@ -393,7 +393,7 @@ static std::string name_unnatural_random_artifact(PlayerType *player_ptr, ItemEn
     object_aware(player_ptr, o_ptr);
     object_known(o_ptr);
     o_ptr->ident |= IDENT_FULL_KNOWN;
-    o_ptr->art_name = quark_add("");
+    o_ptr->randart_name.reset();
     (void)screen_object(player_ptr, o_ptr, 0L);
     char new_name[160] = "";
     if (!get_string(ask_msg, new_name, sizeof new_name) || !new_name[0]) {
@@ -410,8 +410,7 @@ static std::string name_unnatural_random_artifact(PlayerType *player_ptr, ItemEn
 static void generate_unnatural_random_artifact(
     PlayerType *player_ptr, ItemEntity *o_ptr, const bool a_scroll, const int power_level, const int max_powers, const int total_flags)
 {
-    auto new_name = name_unnatural_random_artifact(player_ptr, o_ptr, a_scroll, power_level);
-    o_ptr->art_name = quark_add(new_name.data());
+    o_ptr->randart_name = name_unnatural_random_artifact(player_ptr, o_ptr, a_scroll, power_level);
     msg_format_wizard(player_ptr, CHEAT_OBJECT,
         _("パワー %d で 価値%ld のランダムアーティファクト生成 バイアスは「%s」", "Random artifact generated - Power:%d Value:%d Bias:%s."), max_powers,
         total_flags, artifact_bias_name[o_ptr->artifact_bias]);

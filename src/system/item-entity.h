@@ -60,7 +60,7 @@ public:
     byte ident{}; /*!< Special flags  */
     EnumClassFlagGroup<OmType> marked{}; /*!< Object is marked */
     uint16_t inscription{}; /*!< Inscription index */
-    uint16_t art_name{}; /*!< Artifact name (random artifacts) */
+    std::optional<std::string> randart_name{}; /*!< Artifact name (random artifacts) */
     byte feeling{}; /*!< Game generated inscription number (eg, pseudo-id) */
 
     TrFlags art_flags{}; /*!< Extra Flags for ego and artifacts */

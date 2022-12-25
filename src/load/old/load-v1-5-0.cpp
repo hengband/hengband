@@ -317,7 +317,7 @@ void rd_item_old(ItemEntity *o_ptr)
 
     /*!< @todo 元々このif文には末尾に";"が付いていた、バグかもしれない */
     if (buf[0]) {
-        o_ptr->art_name = quark_add(buf);
+        o_ptr->randart_name.emplace(buf);
     }
     {
         auto tmp32s = rd_s32b();
