@@ -99,6 +99,25 @@ static std::optional<std::string> decide_monster_personal_pronoun(const MonsterE
     return get_monster_personal_pronoun(kind, mode);
 }
 
+static std::optional<std::string> get_monster_self_pronoun(const MonsterEntity &monster, const BIT_FLAGS mode)
+{
+    const auto &monrace = monraces_info[monster.ap_r_idx];
+    constexpr BIT_FLAGS self = MD_POSSESSIVE | MD_OBJECTIVE;
+    if (!match_bits(mode, self, self)) {
+        return std::nullopt;
+    }
+
+    if (any_bits(monrace.flags1, RF1_FEMALE)) {
+        return _("彼女自身", "herself");
+    }
+
+    if (any_bits(monrace.flags1, RF1_MALE)) {
+        return _("彼自身", "himself");
+    }
+
+    return _("それ自身", "itself");
+}
+
 static std::string get_describing_monster_name(const MonsterEntity &monster, const bool is_hallucinated, const BIT_FLAGS mode)
 {
     const auto &monrace = monraces_info[monster.ap_r_idx];
@@ -188,15 +207,9 @@ std::string monster_desc(PlayerType *player_ptr, MonsterEntity *m_ptr, BIT_FLAGS
         return pronoun.value();
     }
 
-    const auto &monrace = monraces_info[m_ptr->ap_r_idx];
-    if ((mode & (MD_POSSESSIVE | MD_OBJECTIVE)) == (MD_POSSESSIVE | MD_OBJECTIVE)) {
-        if (any_bits(monrace.flags1, RF1_FEMALE)) {
-            return _("彼女自身", "herself");
-        } else if (any_bits(monrace.flags1, RF1_MALE)) {
-            return _("彼自身", "himself");
-        } else {
-            return _("それ自身", "itself");
-        }
+    const auto pronoun_self = get_monster_self_pronoun(*m_ptr, mode);
+    if (pronoun_self.has_value()) {
+        return pronoun_self.value();
     }
 
     const auto is_hallucinated = player_ptr->effects()->hallucination()->is_hallucinated();
@@ -217,6 +230,7 @@ std::string monster_desc(PlayerType *player_ptr, MonsterEntity *m_ptr, BIT_FLAGS
     }
 
     if ((mode & MD_IGNORE_HALLU) && m_ptr->mflag2.has(MonsterConstantFlagType::CHAMELEON)) {
+        const auto &monrace = monraces_info[m_ptr->ap_r_idx];
         if (monrace.kind_flags.has(MonsterKindType::UNIQUE)) {
             desc.append(_("(カメレオンの王)", "(Chameleon Lord)"));
         } else {
