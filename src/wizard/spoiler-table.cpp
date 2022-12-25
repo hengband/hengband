@@ -67,15 +67,18 @@ const std::vector<grouper> group_artifact_list = {
     { { ItemKindType::RING }, _("指輪", "Rings") },
 };
 
-flag_desc stat_flags_desc[MAX_STAT_FLAGS_DESCRIPTION] = { { TR_STR, _("腕力", "STR") }, { TR_INT, _("知能", "INT") }, { TR_WIS, _("賢さ", "WIS") },
-    { TR_DEX, _("器用さ", "DEX") },
-    { TR_CON, _("耐久力", "CON") }, { TR_CHR, _("魅力", "CHR") } };
+const std::vector<flag_desc> stat_flags_desc = {
+    { TR_STR, _("腕力", "STR") }, { TR_INT, _("知能", "INT") }, { TR_WIS, _("賢さ", "WIS") },
+    { TR_DEX, _("器用さ", "DEX") }, { TR_CON, _("耐久力", "CON") }, { TR_CHR, _("魅力", "CHR") }
+};
 
-flag_desc pval_flags1_desc[MAX_PVAL_FLAGS_DESCRIPTION] = { { TR_MAGIC_MASTERY, _("魔法道具使用能力", "Magic Mastery") }, { TR_STEALTH, _("隠密", "Stealth") },
+const std::vector<flag_desc> pval_flags1_desc = {
+    { TR_MAGIC_MASTERY, _("魔法道具使用能力", "Magic Mastery") }, { TR_STEALTH, _("隠密", "Stealth") },
     { TR_SEARCH, _("探索", "Searching") }, { TR_INFRA, _("赤外線視力", "Infravision") }, { TR_TUNNEL, _("採掘", "Tunneling") },
-    { TR_BLOWS, _("攻撃回数", "Attacks") }, { TR_SPEED, _("スピード", "Speed") } };
+    { TR_BLOWS, _("攻撃回数", "Attacks") }, { TR_SPEED, _("スピード", "Speed") }
+};
 
-flag_desc slay_flags_desc[MAX_SLAY_FLAGS_DESCRIPTION] = {
+const std::vector<flag_desc> slay_flags_desc = {
     { TR_SLAY_ANIMAL, _("動物", "Animal") },
     { TR_KILL_ANIMAL, _("*動物*", "XAnimal") },
     { TR_SLAY_EVIL, _("邪悪", "Evil") },
@@ -99,7 +102,7 @@ flag_desc slay_flags_desc[MAX_SLAY_FLAGS_DESCRIPTION] = {
 };
 
 /* Elemental brands for weapons */
-flag_desc brand_flags_desc[MAX_BRAND_FLAGS_DESCRIPTION] = {
+const std::vector<flag_desc> brand_flags_desc = {
     { TR_BRAND_ACID, _("溶解", "Acid Brand") },
     { TR_BRAND_ELEC, _("電撃", "Lightning Brand") },
     { TR_BRAND_FIRE, _("焼棄", "Flame Tongue") },
@@ -114,7 +117,7 @@ flag_desc brand_flags_desc[MAX_BRAND_FLAGS_DESCRIPTION] = {
     { TR_IMPACT, _("強撃", "Smash hit") },
 };
 
-const flag_desc resist_flags_desc[MAX_RESISTANCE_FLAGS_DESCRIPTION] = {
+const std::vector<flag_desc> resist_flags_desc = {
     { TR_RES_ACID, _("酸", "Acid") },
     { TR_RES_ELEC, _("電撃", "Lightning") },
     { TR_RES_FIRE, _("火炎", "Fire") },
@@ -136,7 +139,7 @@ const flag_desc resist_flags_desc[MAX_RESISTANCE_FLAGS_DESCRIPTION] = {
     { TR_RES_CURSE, _("呪力", "Curse") },
 };
 
-const flag_desc vulnerable_flags_desc[MAX_VULNERABLE_FLAGS_DESCRIPTION] = {
+const std::vector<flag_desc> vulnerable_flags_desc = {
     { TR_VUL_ACID, _("酸", "Acid") },
     { TR_VUL_ELEC, _("電撃", "Lightning") },
     { TR_VUL_FIRE, _("火炎", "Fire") },
@@ -146,7 +149,7 @@ const flag_desc vulnerable_flags_desc[MAX_VULNERABLE_FLAGS_DESCRIPTION] = {
 };
 
 /* Elemental immunities (along with poison) */
-const flag_desc immune_flags_desc[MAX_IMMUNITY_FLAGS_DESCRIPTION] = {
+const std::vector<flag_desc> immune_flags_desc = {
     { TR_IM_ACID, _("酸", "Acid") },
     { TR_IM_ELEC, _("電撃", "Lightning") },
     { TR_IM_FIRE, _("火炎", "Fire") },
@@ -154,7 +157,7 @@ const flag_desc immune_flags_desc[MAX_IMMUNITY_FLAGS_DESCRIPTION] = {
 };
 
 /* Sustain stats -  these are given their "own" line in the spoiler file, mainly for simplicity */
-const flag_desc sustain_flags_desc[MAX_SUSTAINER_FLAGS_DESCRIPTION] = {
+const std::vector<flag_desc> sustain_flags_desc = {
     { TR_SUST_STR, _("腕力", "STR") },
     { TR_SUST_INT, _("知能", "INT") },
     { TR_SUST_WIS, _("賢さ", "WIS") },
@@ -164,7 +167,7 @@ const flag_desc sustain_flags_desc[MAX_SUSTAINER_FLAGS_DESCRIPTION] = {
 };
 
 /* Miscellaneous magic given by an object's "flags2" field */
-const flag_desc misc_flags2_desc[] = {
+const std::vector<flag_desc> misc_flags2_desc = {
     { TR_THROW, _("投擲", "Throwing") },
     { TR_REFLECT, _("反射", "Reflection") },
     { TR_FREE_ACT, _("麻痺知らず", "Free Action") },
@@ -172,7 +175,7 @@ const flag_desc misc_flags2_desc[] = {
 };
 
 /* Miscellaneous magic given by an object's "flags3" field */
-const flag_desc misc_flags3_desc[MAX_MISC3_FLAGS_DESCRIPTION] = {
+const std::vector<flag_desc> misc_flags3_desc = {
     { TR_SH_FIRE, _("火炎オーラ", "Fiery Aura") },
     { TR_SH_ELEC, _("電撃オーラ", "Electric Aura") },
     { TR_SH_COLD, _("冷気オーラ", "Coldly Aura") },

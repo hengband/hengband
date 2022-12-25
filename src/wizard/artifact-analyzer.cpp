@@ -16,12 +16,13 @@
 #include "util/quarks.h"
 #include "util/string-processor.h"
 #include "wizard/spoiler-util.h"
+#include <vector>
 
 /*!
  * @brief アーティファクトの特性一覧を出力する /
  * Write a line to the spoiler file and then "underline" it with hypens
  * @param art_flags アーティファクトのフラグ群
- * @param flag_ptr フラグ記述情報の参照ポインタ
+ * @param descriptions フラグ記述情報の参照ポインタ
  * @param desc_ptr 記述内容を返すための文字列参照ポインタ
  * @param n_elmnts フラグの要素数
  * @return desc_ptrと同じアドレス
@@ -36,11 +37,11 @@
  * The possibly updated description pointer is returned.
  * </pre>
  */
-static concptr *spoiler_flag_aux(const TrFlags &art_flags, const flag_desc *flag_ptr, concptr *desc_ptr, const int n_elmnts)
+static concptr *spoiler_flag_aux(const TrFlags &art_flags, const std::vector<flag_desc> &descriptions, concptr *desc_ptr, const int n_elmnts)
 {
     for (int i = 0; i < n_elmnts; ++i) {
-        if (art_flags.has(flag_ptr[i].flag)) {
-            *desc_ptr++ = flag_ptr[i].desc;
+        if (art_flags.has(descriptions[i].flag)) {
+            *desc_ptr++ = descriptions[i].desc;
         }
     }
 
