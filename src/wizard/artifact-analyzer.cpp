@@ -19,29 +19,17 @@
 #include <vector>
 
 /*!
- * @brief アーティファクトの特性一覧を出力する /
- * Write a line to the spoiler file and then "underline" it with hypens
+ * @brief アーティファクトの特性一覧を配列に格納する
  * @param art_flags アーティファクトのフラグ群
- * @param descriptions フラグ記述情報の参照ポインタ
+ * @param descriptions フラグ記述情報のリスト
  * @param desc_ptr 記述内容を返すための文字列参照ポインタ
- * @param n_elmnts フラグの要素数
  * @return desc_ptrと同じアドレス
- * @details
- * <pre>
- * This function does most of the actual "analysis". Given a set of bit flags
- * (which will be from one of the flags fields from the object in question),
- * a "flag description structure", a "description list", and the number of
- * elements in the "flag description structure", this function sets the
- * "description list" members to the appropriate descriptions contained in
- * the "flag description structure".
- * The possibly updated description pointer is returned.
- * </pre>
  */
-static concptr *spoiler_flag_aux(const TrFlags &art_flags, const std::vector<flag_desc> &descriptions, concptr *desc_ptr, const int n_elmnts)
+static concptr *spoiler_flag_aux(const TrFlags &art_flags, const std::vector<flag_desc> &descriptions, concptr *desc_ptr)
 {
-    for (int i = 0; i < n_elmnts; ++i) {
-        if (art_flags.has(descriptions[i].flag)) {
-            *desc_ptr++ = descriptions[i].desc;
+    for (const auto &description : descriptions) {
+        if (art_flags.has(description.flag)) {
+            *desc_ptr++ = description.desc;
         }
     }
 
@@ -80,10 +68,10 @@ static void analyze_pval(ItemEntity *o_ptr, pval_info_type *pi_ptr)
     if (flgs.has_all_of(EnumRange(TR_STR, TR_CHR))) {
         *affects_list++ = _("全能力", "All stats");
     } else if (flgs.has_any_of(EnumRange(TR_STR, TR_CHR))) {
-        affects_list = spoiler_flag_aux(flgs, stat_flags_desc, affects_list, N_ELEMENTS(stat_flags_desc));
+        affects_list = spoiler_flag_aux(flgs, stat_flags_desc, affects_list);
     }
 
-    affects_list = spoiler_flag_aux(flgs, pval_flags1_desc, affects_list, N_ELEMENTS(pval_flags1_desc));
+    affects_list = spoiler_flag_aux(flgs, pval_flags1_desc, affects_list);
     *affects_list = nullptr;
 }
 
@@ -96,7 +84,7 @@ static void analyze_pval(ItemEntity *o_ptr, pval_info_type *pi_ptr)
 static void analyze_slay(ItemEntity *o_ptr, concptr *slay_list)
 {
     auto flgs = object_flags(o_ptr);
-    slay_list = spoiler_flag_aux(flgs, slay_flags_desc, slay_list, N_ELEMENTS(slay_flags_desc));
+    slay_list = spoiler_flag_aux(flgs, slay_flags_desc, slay_list);
     *slay_list = nullptr;
 }
 
@@ -109,7 +97,7 @@ static void analyze_slay(ItemEntity *o_ptr, concptr *slay_list)
 static void analyze_brand(ItemEntity *o_ptr, concptr *brand_list)
 {
     auto flgs = object_flags(o_ptr);
-    brand_list = spoiler_flag_aux(flgs, brand_flags_desc, brand_list, N_ELEMENTS(brand_flags_desc));
+    brand_list = spoiler_flag_aux(flgs, brand_flags_desc, brand_list);
     *brand_list = nullptr;
 }
 
@@ -122,7 +110,7 @@ static void analyze_brand(ItemEntity *o_ptr, concptr *brand_list)
 static void analyze_resist(ItemEntity *o_ptr, concptr *resist_list)
 {
     auto flgs = object_flags(o_ptr);
-    resist_list = spoiler_flag_aux(flgs, resist_flags_desc, resist_list, N_ELEMENTS(resist_flags_desc));
+    resist_list = spoiler_flag_aux(flgs, resist_flags_desc, resist_list);
     *resist_list = nullptr;
 }
 
@@ -135,7 +123,7 @@ static void analyze_resist(ItemEntity *o_ptr, concptr *resist_list)
 static void analyze_immune(ItemEntity *o_ptr, concptr *immune_list)
 {
     auto flgs = object_flags(o_ptr);
-    immune_list = spoiler_flag_aux(flgs, immune_flags_desc, immune_list, N_ELEMENTS(immune_flags_desc));
+    immune_list = spoiler_flag_aux(flgs, immune_flags_desc, immune_list);
     *immune_list = nullptr;
 }
 
@@ -148,7 +136,7 @@ static void analyze_immune(ItemEntity *o_ptr, concptr *immune_list)
 static void analyze_vulnerable(ItemEntity *o_ptr, concptr *vulnerable_list)
 {
     auto flgs = object_flags(o_ptr);
-    vulnerable_list = spoiler_flag_aux(flgs, vulnerable_flags_desc, vulnerable_list, N_ELEMENTS(vulnerable_flags_desc));
+    vulnerable_list = spoiler_flag_aux(flgs, vulnerable_flags_desc, vulnerable_list);
     *vulnerable_list = nullptr;
 }
 
@@ -164,7 +152,7 @@ static void analyze_sustains(ItemEntity *o_ptr, concptr *sustain_list)
     if (flgs.has_all_of(EnumRange(TR_SUST_STR, TR_SUST_CHR))) {
         *sustain_list++ = _("全能力", "All stats");
     } else if (flgs.has_any_of(EnumRange(TR_SUST_STR, TR_SUST_CHR))) {
-        sustain_list = spoiler_flag_aux(flgs, sustain_flags_desc, sustain_list, N_ELEMENTS(sustain_flags_desc));
+        sustain_list = spoiler_flag_aux(flgs, sustain_flags_desc, sustain_list);
     }
 
     *sustain_list = nullptr;
@@ -180,8 +168,8 @@ static void analyze_sustains(ItemEntity *o_ptr, concptr *sustain_list)
 static void analyze_misc_magic(ItemEntity *o_ptr, concptr *misc_list)
 {
     auto flgs = object_flags(o_ptr);
-    misc_list = spoiler_flag_aux(flgs, misc_flags2_desc, misc_list, N_ELEMENTS(misc_flags2_desc));
-    misc_list = spoiler_flag_aux(flgs, misc_flags3_desc, misc_list, N_ELEMENTS(misc_flags3_desc));
+    misc_list = spoiler_flag_aux(flgs, misc_flags2_desc, misc_list);
+    misc_list = spoiler_flag_aux(flgs, misc_flags3_desc, misc_list);
     POSITION rad = 0;
     if (flgs.has(TR_LITE_1)) {
         rad += 1;
@@ -298,7 +286,7 @@ static void analyze_addition(ItemEntity *o_ptr, char *addition, size_t addition_
 static void analyze_misc(ItemEntity *o_ptr, char *misc_desc, size_t misc_desc_sz)
 {
     const auto &a_ref = artifacts_info.at(o_ptr->fixed_artifact_idx);
-    strnfmt(misc_desc, misc_desc_sz, _("レベル %d, 希少度 %u, %d.%d kg, ＄%ld", "Level %d, Rarity %u, %d.%d lbs, %ld Gold"), (int)a_ref.level, a_ref.rarity,
+    strnfmt(misc_desc, misc_desc_sz, _("レベル %d, 希少度 %u, %d.%d kg, ＄%ld", "Level %d, Rarity %u, %d.%d lbs, %ld Gold"), a_ref.level, a_ref.rarity,
         _(lb_to_kg_integer(a_ref.weight), a_ref.weight / 10), _(lb_to_kg_fraction(a_ref.weight), a_ref.weight % 10), (long int)a_ref.cost);
 }
 
