@@ -68,9 +68,8 @@ void anger_monster(PlayerType *player_ptr, MonsterEntity *m_ptr)
         return;
     }
 
-    GAME_TEXT m_name[MAX_NLEN];
-    monster_desc(player_ptr, m_name, m_ptr, 0);
-    msg_format(_("%^sは怒った！", "%^s gets angry!"), m_name);
+    const auto m_name = monster_desc(player_ptr, m_ptr, 0);
+    msg_format(_("%^sは怒った！", "%^s gets angry!"), m_name.data());
     set_hostile(player_ptr, m_ptr);
     chg_virtue(player_ptr, V_INDIVIDUALISM, 1);
     chg_virtue(player_ptr, V_HONOUR, -1);
@@ -387,8 +386,7 @@ bool set_monster_timewalk(PlayerType *player_ptr, int num, MonsterRaceId who, bo
     }
 
     if (vs_player) {
-        GAME_TEXT m_name[MAX_NLEN];
-        monster_desc(player_ptr, m_name, m_ptr, 0);
+        const auto m_name = monster_desc(player_ptr, m_ptr, 0);
 
         concptr mes;
         switch (who) {
@@ -406,7 +404,7 @@ bool set_monster_timewalk(PlayerType *player_ptr, int num, MonsterRaceId who, bo
             break;
         }
 
-        msg_format(mes, m_name);
+        msg_format(mes, m_name.data());
         msg_print(nullptr);
     }
 

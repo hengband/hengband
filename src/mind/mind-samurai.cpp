@@ -522,10 +522,9 @@ void musou_counterattack(PlayerType *player_ptr, MonsterAttackPlayer *monap_ptr)
         return;
     }
 
-    char m_target_name[MAX_NLEN];
-    monster_desc(player_ptr, m_target_name, monap_ptr->m_ptr, 0);
+    const auto m_target_name = monster_desc(player_ptr, monap_ptr->m_ptr, 0);
     player_ptr->csp -= 7;
-    msg_format(_("%^sに反撃した！", "You counterattacked %s!"), m_target_name);
+    msg_format(_("%^sに反撃した！", "You counterattacked %s!"), m_target_name.data());
     do_cmd_attack(player_ptr, monap_ptr->m_ptr->fy, monap_ptr->m_ptr->fx, HISSATSU_COUNTER);
     monap_ptr->fear = false;
     player_ptr->redraw |= (PR_MANA);

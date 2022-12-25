@@ -93,20 +93,20 @@ static bool cast_blue_hand_doom(PlayerType *player_ptr, bmc_type *bmc_ptr)
     return true;
 }
 
-static bool exe_blue_teleport_back(PlayerType *player_ptr, GAME_TEXT *m_name)
+static std::pair<bool, std::string> exe_blue_teleport_back(PlayerType *player_ptr)
 {
     MonsterEntity *m_ptr;
     MonsterRaceInfo *r_ptr;
     auto *floor_ptr = player_ptr->current_floor_ptr;
     if ((floor_ptr->grid_array[target_row][target_col].m_idx == 0) || !player_has_los_bold(player_ptr, target_row, target_col) || !projectable(player_ptr, player_ptr->y, player_ptr->x, target_row, target_col)) {
-        return true;
+        return std::make_pair(true, std::string());
     }
 
     m_ptr = &floor_ptr->m_list[floor_ptr->grid_array[target_row][target_col].m_idx];
     r_ptr = &monraces_info[m_ptr->r_idx];
-    monster_desc(player_ptr, m_name, m_ptr, 0);
+    auto m_name = monster_desc(player_ptr, m_ptr, 0);
     if (r_ptr->resistance_flags.has_not(MonsterResistanceType::RESIST_TELEPORT)) {
-        return false;
+        return std::make_pair(false, m_name);
     }
 
     if (r_ptr->kind_flags.has(MonsterKindType::UNIQUE) || r_ptr->resistance_flags.has(MonsterResistanceType::RESIST_ALL)) {
@@ -114,20 +114,20 @@ static bool exe_blue_teleport_back(PlayerType *player_ptr, GAME_TEXT *m_name)
             r_ptr->r_resistance_flags.set(MonsterResistanceType::RESIST_TELEPORT);
         }
 
-        msg_format(_("%sには効果がなかった！", "%s is unaffected!"), m_name);
-        return true;
+        msg_format(_("%sには効果がなかった！", "%s is unaffected!"), m_name.data());
+        return std::make_pair(true, m_name);
     }
 
     if (r_ptr->level <= randint1(100)) {
-        return false;
+        return std::make_pair(false, m_name);
     }
 
     if (is_original_ap_and_seen(player_ptr, m_ptr)) {
         r_ptr->r_resistance_flags.set(MonsterResistanceType::RESIST_TELEPORT);
     }
 
-    msg_format(_("%sには耐性がある！", "%s resists!"), m_name);
-    return true;
+    msg_format(_("%sには耐性がある！", "%s resists!"), m_name.data());
+    return std::make_pair(true, m_name);
 }
 
 static bool cast_blue_teleport_back(PlayerType *player_ptr)
@@ -136,12 +136,12 @@ static bool cast_blue_teleport_back(PlayerType *player_ptr)
         return false;
     }
 
-    GAME_TEXT m_name[MAX_NLEN];
-    if (exe_blue_teleport_back(player_ptr, m_name)) {
+    const auto [resisted, m_name] = exe_blue_teleport_back(player_ptr);
+    if (resisted) {
         return true;
     }
 
-    msg_format(_("%sを引き戻した。", "You command %s to return."), m_name);
+    msg_format(_("%sを引き戻した。", "You command %s to return."), m_name.data());
     teleport_monster_to(
         player_ptr, player_ptr->current_floor_ptr->grid_array[target_row][target_col].m_idx, player_ptr->y, player_ptr->x, 100, TELEPORT_PASSIVE);
     return true;

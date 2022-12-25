@@ -58,9 +58,8 @@ static void write_pet_death(PlayerType *player_ptr, monster_death_type *md_ptr)
     md_ptr->md_y = md_ptr->m_ptr->fy;
     md_ptr->md_x = md_ptr->m_ptr->fx;
     if (record_named_pet && md_ptr->m_ptr->is_pet() && md_ptr->m_ptr->nickname) {
-        GAME_TEXT m_name[MAX_NLEN];
-        monster_desc(player_ptr, m_name, md_ptr->m_ptr, MD_INDEF_VISIBLE);
-        exe_write_diary(player_ptr, DIARY_NAMED_PET, 3, m_name);
+        const auto m_name = monster_desc(player_ptr, md_ptr->m_ptr, MD_INDEF_VISIBLE);
+        exe_write_diary(player_ptr, DIARY_NAMED_PET, 3, m_name.data());
     }
 }
 
@@ -114,9 +113,8 @@ static void on_defeat_arena_monster(PlayerType *player_ptr, monster_death_type *
         return;
     }
 
-    GAME_TEXT m_name[MAX_NLEN];
-    monster_desc(player_ptr, m_name, md_ptr->m_ptr, MD_WRONGDOER_NAME);
-    exe_write_diary(player_ptr, DIARY_ARENA, player_ptr->arena_number, m_name);
+    const auto m_name = monster_desc(player_ptr, md_ptr->m_ptr, MD_WRONGDOER_NAME);
+    exe_write_diary(player_ptr, DIARY_ARENA, player_ptr->arena_number, m_name.data());
 }
 
 static void drop_corpse(PlayerType *player_ptr, monster_death_type *md_ptr)

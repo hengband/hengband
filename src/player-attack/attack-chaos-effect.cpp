@@ -38,6 +38,7 @@
 #include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
 #include "util/bit-flags-calculator.h"
+#include "util/string-processor.h"
 #include "view/display-messages.h"
 
 /*!
@@ -242,7 +243,7 @@ static void attack_polymorph(PlayerType *player_ptr, player_attack_type *pa_ptr,
     }
 
     pa_ptr->m_ptr = &player_ptr->current_floor_ptr->m_list[pa_ptr->m_idx];
-    monster_desc(player_ptr, pa_ptr->m_name, pa_ptr->m_ptr, 0);
+    angband_strcpy(pa_ptr->m_name, monster_desc(player_ptr, pa_ptr->m_ptr, 0).data(), sizeof(pa_ptr->m_name));
 }
 
 /*!

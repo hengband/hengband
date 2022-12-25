@@ -116,7 +116,6 @@ bool vanish_dungeon(PlayerType *player_ptr)
         return false;
     }
 
-    GAME_TEXT m_name[MAX_NLEN];
     for (POSITION y = 1; y < floor_ptr->height - 1; y++) {
         for (POSITION x = 1; x < floor_ptr->width - 1; x++) {
             auto *g_ptr = &floor_ptr->grid_array[y][x];
@@ -127,8 +126,8 @@ bool vanish_dungeon(PlayerType *player_ptr)
             if (g_ptr->m_idx && m_ptr->is_asleep()) {
                 (void)set_monster_csleep(player_ptr, g_ptr->m_idx, 0);
                 if (m_ptr->ml) {
-                    monster_desc(player_ptr, m_name, m_ptr, 0);
-                    msg_format(_("%^sが目を覚ました。", "%^s wakes up."), m_name);
+                    const auto m_name = monster_desc(player_ptr, m_ptr, 0);
+                    msg_format(_("%^sが目を覚ました。", "%^s wakes up."), m_name.data());
                 }
             }
 

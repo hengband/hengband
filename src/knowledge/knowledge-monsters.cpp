@@ -119,7 +119,6 @@ void do_cmd_knowledge_pets(PlayerType *player_ptr)
     }
 
     MonsterEntity *m_ptr;
-    GAME_TEXT pet_name[MAX_NLEN];
     int t_friends = 0;
     for (int i = player_ptr->current_floor_ptr->m_max - 1; i >= 1; i--) {
         m_ptr = &player_ptr->current_floor_ptr->m_list[i];
@@ -128,8 +127,8 @@ void do_cmd_knowledge_pets(PlayerType *player_ptr)
         }
 
         t_friends++;
-        monster_desc(player_ptr, pet_name, m_ptr, MD_ASSUME_VISIBLE | MD_INDEF_VISIBLE);
-        fprintf(fff, "%s (%s)\n", pet_name, look_mon_desc(m_ptr, 0x00).data());
+        const auto pet_name = monster_desc(player_ptr, m_ptr, MD_ASSUME_VISIBLE | MD_INDEF_VISIBLE);
+        fprintf(fff, "%s (%s)\n", pet_name.data(), look_mon_desc(m_ptr, 0x00).data());
     }
 
     int show_upkeep = calculate_upkeep(player_ptr);

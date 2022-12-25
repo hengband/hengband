@@ -46,7 +46,7 @@ static bool is_acting_monster(const MonsterRaceId r_idx)
  * @param m_ptr モンスターへの参照ポインタ
  * @param m_name モンスター名称
  */
-static void escape_monster(PlayerType *player_ptr, turn_flags *turn_flags_ptr, MonsterEntity *m_ptr, GAME_TEXT *m_name)
+static void escape_monster(PlayerType *player_ptr, turn_flags *turn_flags_ptr, MonsterEntity *m_ptr, concptr m_name)
 {
     if (turn_flags_ptr->is_riding_mon) {
         msg_format(_("%sはあなたの束縛から脱出した。", "%^s succeeded to escape from your restriction!"), m_name);
@@ -109,17 +109,16 @@ bool runaway_monster(PlayerType *player_ptr, turn_flags *turn_flags_ptr, MONSTER
         return false;
     }
 
-    GAME_TEXT m_name[MAX_NLEN];
-    monster_desc(player_ptr, m_name, m_ptr, 0);
+    const auto m_name = monster_desc(player_ptr, m_ptr, 0);
     if (turn_flags_ptr->is_riding_mon && riding_pinch < 2) {
         msg_format(
-            _("%sは傷の痛さの余りあなたの束縛から逃れようとしている。", "%^s seems to be in so much pain and tries to escape from your restriction."), m_name);
+            _("%sは傷の痛さの余りあなたの束縛から逃れようとしている。", "%^s seems to be in so much pain and tries to escape from your restriction."), m_name.data());
         riding_pinch++;
         disturb(player_ptr, true, true);
         return false;
     }
 
-    escape_monster(player_ptr, turn_flags_ptr, m_ptr, m_name);
+    escape_monster(player_ptr, turn_flags_ptr, m_ptr, m_name.data());
     QuestCompletionChecker(player_ptr, m_ptr).complete();
     delete_monster_idx(player_ptr, m_idx);
     return true;

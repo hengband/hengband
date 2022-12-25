@@ -112,9 +112,7 @@ static void natural_attack(PlayerType *player_ptr, MONSTER_IDX m_idx, PlayerMuta
         atk_desc = _("未定義の部位", "undefined body part");
     }
 
-    GAME_TEXT m_name[MAX_NLEN];
-    monster_desc(player_ptr, m_name, m_ptr, 0);
-
+    const auto m_name = monster_desc(player_ptr, m_ptr, 0);
     int bonus = player_ptr->to_h_m + (player_ptr->lev * 6 / 5);
     int chance = (player_ptr->skill_thn + (bonus * BTH_PLUS_ADJ));
 
@@ -122,12 +120,12 @@ static void natural_attack(PlayerType *player_ptr, MONSTER_IDX m_idx, PlayerMuta
     is_hit &= test_hit_norm(player_ptr, chance, r_ptr->ac, m_ptr->ml);
     if (!is_hit) {
         sound(SOUND_MISS);
-        msg_format(_("ミス！ %sにかわされた。", "You miss %s."), m_name);
+        msg_format(_("ミス！ %sにかわされた。", "You miss %s."), m_name.data());
         return;
     }
 
     sound(SOUND_HIT);
-    msg_format(_("%sを%sで攻撃した。", "You hit %s with your %s."), m_name, atk_desc);
+    msg_format(_("%sを%sで攻撃した。", "You hit %s with your %s."), m_name.data(), atk_desc);
 
     int k = damroll(dice_num, dice_side);
     k = critical_norm(player_ptr, n_weight, bonus, k, (int16_t)bonus, HISSATSU_NONE);
@@ -176,7 +174,6 @@ bool do_cmd_attack(PlayerType *player_ptr, POSITION y, POSITION x, combat_option
     auto *g_ptr = &player_ptr->current_floor_ptr->grid_array[y][x];
     auto *m_ptr = &player_ptr->current_floor_ptr->m_list[g_ptr->m_idx];
     auto *r_ptr = &monraces_info[m_ptr->r_idx];
-    GAME_TEXT m_name[MAX_NLEN];
 
     const std::initializer_list<PlayerMutationType> mutation_attack_methods = { PlayerMutationType::HORNS, PlayerMutationType::BEAK, PlayerMutationType::SCOR_TAIL, PlayerMutationType::TRUNK, PlayerMutationType::TENTACLES };
 
@@ -190,8 +187,7 @@ bool do_cmd_attack(PlayerType *player_ptr, POSITION y, POSITION x, combat_option
         return false;
     }
 
-    monster_desc(player_ptr, m_name, m_ptr, 0);
-
+    const auto m_name = monster_desc(player_ptr, m_ptr, 0);
     auto effects = player_ptr->effects();
     auto is_hallucinated = effects->hallucination()->is_hallucinated();
     if (m_ptr->ml) {
@@ -234,7 +230,7 @@ bool do_cmd_attack(PlayerType *player_ptr, POSITION y, POSITION x, combat_option
         }
 
         if (is_stormbringer) {
-            msg_format(_("黒い刃は強欲に%sを攻撃した！", "Your black blade greedily attacks %s!"), m_name);
+            msg_format(_("黒い刃は強欲に%sを攻撃した！", "Your black blade greedily attacks %s!"), m_name.data());
             chg_virtue(player_ptr, V_INDIVIDUALISM, 1);
             chg_virtue(player_ptr, V_HONOUR, -1);
             chg_virtue(player_ptr, V_JUSTICE, -1);
@@ -246,7 +242,7 @@ bool do_cmd_attack(PlayerType *player_ptr, POSITION y, POSITION x, combat_option
                 chg_virtue(player_ptr, V_JUSTICE, -1);
                 chg_virtue(player_ptr, V_COMPASSION, -1);
             } else {
-                msg_format(_("%sを攻撃するのを止めた。", "You stop to avoid hitting %s."), m_name);
+                msg_format(_("%sを攻撃するのを止めた。", "You stop to avoid hitting %s."), m_name.data());
                 return false;
             }
         }
@@ -255,7 +251,7 @@ bool do_cmd_attack(PlayerType *player_ptr, POSITION y, POSITION x, combat_option
     if (effects->fear()->is_fearful()) {
         if (m_ptr->ml) {
             sound(SOUND_ATTACK_FAILED);
-            msg_format(_("恐くて%sを攻撃できない！", "You are too fearful to attack %s!"), m_name);
+            msg_format(_("恐くて%sを攻撃できない！", "You are too fearful to attack %s!"), m_name.data());
         } else {
             sound(SOUND_ATTACK_FAILED);
             msg_format(_("そっちには何か恐いものがいる！", "There is something scary in your way!"));
@@ -304,7 +300,7 @@ bool do_cmd_attack(PlayerType *player_ptr, POSITION y, POSITION x, combat_option
 
     if (fear && m_ptr->ml && !mdeath) {
         sound(SOUND_FLEE);
-        msg_format(_("%^sは恐怖して逃げ出した！", "%^s flees in terror!"), m_name);
+        msg_format(_("%^sは恐怖して逃げ出した！", "%^s flees in terror!"), m_name.data());
     }
 
     if (PlayerClass(player_ptr).samurai_stance_is(SamuraiStanceType::IAI) && ((mode != HISSATSU_IAI) || mdeath)) {

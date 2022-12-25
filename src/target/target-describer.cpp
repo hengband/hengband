@@ -195,8 +195,7 @@ static bool describe_grid_lore(PlayerType *player_ptr, eg_type *eg_ptr)
 static void describe_grid_monster(PlayerType *player_ptr, eg_type *eg_ptr)
 {
     bool recall = false;
-    GAME_TEXT m_name[MAX_NLEN];
-    monster_desc(player_ptr, m_name, eg_ptr->m_ptr, MD_INDEF_VISIBLE);
+    const auto m_name = monster_desc(player_ptr, eg_ptr->m_ptr, MD_INDEF_VISIBLE);
     while (true) {
         if (recall) {
             if (describe_grid_lore(player_ptr, eg_ptr)) {
@@ -210,10 +209,10 @@ static void describe_grid_monster(PlayerType *player_ptr, eg_type *eg_ptr)
         std::string acount = evaluate_monster_exp(player_ptr, eg_ptr->m_ptr);
         const auto mon_desc = look_mon_desc(eg_ptr->m_ptr, 0x01);
 #ifdef JP
-        strnfmt(eg_ptr->out_val, sizeof(eg_ptr->out_val), "[%s]%s%s(%s)%s%s [r思 %s%s]", acount.data(), eg_ptr->s1, m_name, mon_desc.data(), eg_ptr->s2, eg_ptr->s3,
+        strnfmt(eg_ptr->out_val, sizeof(eg_ptr->out_val), "[%s]%s%s(%s)%s%s [r思 %s%s]", acount.data(), eg_ptr->s1, m_name.data(), mon_desc.data(), eg_ptr->s2, eg_ptr->s3,
             eg_ptr->x_info, eg_ptr->info);
 #else
-        strnfmt(eg_ptr->out_val, sizeof(eg_ptr->out_val), "[%s]%s%s%s%s(%s) [r, %s%s]", acount.data(), eg_ptr->s1, eg_ptr->s2, eg_ptr->s3, m_name, mon_desc.data(),
+        strnfmt(eg_ptr->out_val, sizeof(eg_ptr->out_val), "[%s]%s%s%s%s(%s) [r, %s%s]", acount.data(), eg_ptr->s1, eg_ptr->s2, eg_ptr->s3, m_name.data(), mon_desc.data(),
             eg_ptr->x_info, eg_ptr->info);
 #endif
         prt(eg_ptr->out_val, 0, 0);

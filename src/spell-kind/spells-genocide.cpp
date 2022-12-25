@@ -63,9 +63,8 @@ bool genocide_aux(PlayerType *player_ptr, MONSTER_IDX m_idx, int power, bool pla
         resist = true;
     } else {
         if (record_named_pet && m_ptr->is_pet() && m_ptr->nickname) {
-            GAME_TEXT m_name[MAX_NLEN];
-            monster_desc(player_ptr, m_name, m_ptr, MD_INDEF_VISIBLE);
-            exe_write_diary(player_ptr, DIARY_NAMED_PET, RECORD_NAMED_PET_GENOCIDE, m_name);
+            const auto m_name = monster_desc(player_ptr, m_ptr, MD_INDEF_VISIBLE);
+            exe_write_diary(player_ptr, DIARY_NAMED_PET, RECORD_NAMED_PET_GENOCIDE, m_name.data());
         }
 
         delete_monster_idx(player_ptr, m_idx);
@@ -73,22 +72,21 @@ bool genocide_aux(PlayerType *player_ptr, MONSTER_IDX m_idx, int power, bool pla
 
     if (resist && player_cast) {
         bool see_m = is_seen(player_ptr, m_ptr);
-        GAME_TEXT m_name[MAX_NLEN];
-        monster_desc(player_ptr, m_name, m_ptr, 0);
+        const auto m_name = monster_desc(player_ptr, m_ptr, 0);
         if (see_m) {
-            msg_format(_("%^sには効果がなかった。", "%^s is unaffected."), m_name);
+            msg_format(_("%^sには効果がなかった。", "%^s is unaffected."), m_name.data());
         }
 
         if (m_ptr->is_asleep()) {
             (void)set_monster_csleep(player_ptr, m_idx, 0);
             if (m_ptr->ml) {
-                msg_format(_("%^sが目を覚ました。", "%^s wakes up."), m_name);
+                msg_format(_("%^sが目を覚ました。", "%^s wakes up."), m_name.data());
             }
         }
 
         if (m_ptr->is_friendly() && !m_ptr->is_pet()) {
             if (see_m) {
-                msg_format(_("%sは怒った！", "%^s gets angry!"), m_name);
+                msg_format(_("%sは怒った！", "%^s gets angry!"), m_name.data());
             }
 
             set_hostile(player_ptr, m_ptr);

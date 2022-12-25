@@ -1,6 +1,7 @@
 ﻿#pragma once
 
 #include "system/angband.h"
+#include <string>
 
 /*
  * Bit flags for the *_can_enter() and monster_can_cross_terrain()
@@ -16,4 +17,4 @@ bool monster_can_enter(PlayerType *player_ptr, POSITION y, POSITION x, MonsterRa
 bool are_enemies(PlayerType *player_ptr, const MonsterEntity &m1_ref, const MonsterEntity &m2_ref);
 bool monster_has_hostile_align(PlayerType *player_ptr, MonsterEntity *m_ptr, int pa_good, int pa_evil, MonsterRaceInfo *r_ptr);
 bool is_original_ap_and_seen(PlayerType *player_ptr, const MonsterEntity *m_ptr);
-void monster_name(PlayerType *player_ptr, MONSTER_IDX m_idx, char *m_name);
+std::string monster_name(PlayerType *player_ptr, MONSTER_IDX m_idx);

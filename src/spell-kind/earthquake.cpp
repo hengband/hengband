@@ -177,10 +177,9 @@ bool earthquake(PlayerType *player_ptr, POSITION cy, POSITION cx, POSITION r, MO
             std::string killer;
 
             if (m_idx) {
-                GAME_TEXT m_name[MAX_NLEN];
                 auto *m_ptr = &floor_ptr->m_list[m_idx];
-                monster_desc(player_ptr, m_name, m_ptr, MD_WRONGDOER_NAME);
-                killer = format(_("%sの起こした地震", "an earthquake caused by %s"), m_name);
+                const auto m_name = monster_desc(player_ptr, m_ptr, MD_WRONGDOER_NAME);
+                killer = format(_("%sの起こした地震", "an earthquake caused by %s"), m_name.data());
             } else {
                 killer = _("地震", "an earthquake");
             }
@@ -218,7 +217,6 @@ bool earthquake(PlayerType *player_ptr, POSITION cy, POSITION cx, POSITION r, MO
                 continue;
             }
 
-            GAME_TEXT m_name[MAX_NLEN];
             sn = 0;
             if (r_ptr->behavior_flags.has_not(MonsterBehaviorType::NEVER_MOVE)) {
                 for (DIRECTION i = 0; i < 8; i++) {
@@ -264,9 +262,9 @@ bool earthquake(PlayerType *player_ptr, POSITION cy, POSITION cx, POSITION r, MO
                 }
             }
 
-            monster_desc(player_ptr, m_name, m_ptr, 0);
+            const auto m_name = monster_desc(player_ptr, m_ptr, 0);
             if (!ignore_unview || is_seen(player_ptr, m_ptr)) {
-                msg_format(_("%^sは苦痛で泣きわめいた！", "%^s wails out in pain!"), m_name);
+                msg_format(_("%^sは苦痛で泣きわめいた！", "%^s wails out in pain!"), m_name.data());
             }
 
             damage = (sn ? damroll(4, 8) : (m_ptr->hp + 1));
@@ -274,16 +272,14 @@ bool earthquake(PlayerType *player_ptr, POSITION cy, POSITION cx, POSITION r, MO
             m_ptr->hp -= damage;
             if (m_ptr->hp < 0) {
                 if (!ignore_unview || is_seen(player_ptr, m_ptr)) {
-                    msg_format(_("%^sは岩石に埋もれてしまった！", "%^s is embedded in the rock!"), m_name);
+                    msg_format(_("%^sは岩石に埋もれてしまった！", "%^s is embedded in the rock!"), m_name.data());
                 }
 
                 if (gg_ptr->m_idx) {
                     const auto &m_ref = floor_ptr->m_list[gg_ptr->m_idx];
                     if (record_named_pet && m_ref.is_pet() && m_ref.nickname) {
-                        char m2_name[MAX_NLEN];
-
-                        monster_desc(player_ptr, m2_name, m_ptr, MD_INDEF_VISIBLE);
-                        exe_write_diary(player_ptr, DIARY_NAMED_PET, RECORD_NAMED_PET_EARTHQUAKE, m2_name);
+                        const auto m2_name = monster_desc(player_ptr, m_ptr, MD_INDEF_VISIBLE);
+                        exe_write_diary(player_ptr, DIARY_NAMED_PET, RECORD_NAMED_PET_EARTHQUAKE, m2_name.data());
                     }
                 }
 

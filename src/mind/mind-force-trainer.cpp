@@ -221,11 +221,10 @@ bool shock_power(PlayerType *player_ptr)
     MONSTER_IDX m_idx = player_ptr->current_floor_ptr->grid_array[y][x].m_idx;
     auto *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
     auto *r_ptr = &monraces_info[m_ptr->r_idx];
-    GAME_TEXT m_name[MAX_NLEN];
-    monster_desc(player_ptr, m_name, m_ptr, 0);
+    const auto m_name = monster_desc(player_ptr, m_ptr, 0);
 
     if (randint1(r_ptr->level * 3 / 2) > randint0(dam / 2) + dam / 2) {
-        msg_format(_("%sは飛ばされなかった。", "%^s was not blown away."), m_name);
+        msg_format(_("%sは飛ばされなかった。", "%^s was not blown away."), m_name.data());
         return true;
     }
 
@@ -246,7 +245,7 @@ bool shock_power(PlayerType *player_ptr)
         return true;
     }
 
-    msg_format(_("%sを吹き飛ばした！", "You blow %s away!"), m_name);
+    msg_format(_("%sを吹き飛ばした！", "You blow %s away!"), m_name.data());
     player_ptr->current_floor_ptr->grid_array[oy][ox].m_idx = 0;
     player_ptr->current_floor_ptr->grid_array[ty][tx].m_idx = m_idx;
     m_ptr->fy = ty;

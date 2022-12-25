@@ -40,10 +40,9 @@ void check_fall_off_horse(PlayerType *player_ptr, MonsterAttackPlayer *monap_ptr
         return;
     }
 
-    char m_steed_name[MAX_NLEN];
-    monster_desc(player_ptr, m_steed_name, &player_ptr->current_floor_ptr->m_list[player_ptr->riding], 0);
+    const auto m_steed_name = monster_desc(player_ptr, &player_ptr->current_floor_ptr->m_list[player_ptr->riding], 0);
     if (process_fall_off_horse(player_ptr, (monap_ptr->damage > 200) ? 200 : monap_ptr->damage, false)) {
-        msg_format(_("%^sから落ちてしまった！", "You have fallen from %s."), m_steed_name);
+        msg_format(_("%^sから落ちてしまった！", "You have fallen from %s."), m_steed_name.data());
     }
 }
 
@@ -93,7 +92,6 @@ bool process_fall_off_horse(PlayerType *player_ptr, int dam, bool force)
     POSITION sy = 0;
     POSITION sx = 0;
     int sn = 0;
-    GAME_TEXT m_name[MAX_NLEN];
     auto *m_ptr = &player_ptr->current_floor_ptr->m_list[player_ptr->riding];
     auto *r_ptr = &monraces_info[m_ptr->r_idx];
 
@@ -143,8 +141,8 @@ bool process_fall_off_horse(PlayerType *player_ptr, int dam, bool force)
         }
 
         if (!sn) {
-            monster_desc(player_ptr, m_name, m_ptr, 0);
-            msg_format(_("%sから振り落とされそうになって、壁にぶつかった。", "You have nearly fallen from %s but bumped into a wall."), m_name);
+            const auto m_name = monster_desc(player_ptr, m_ptr, 0);
+            msg_format(_("%sから振り落とされそうになって、壁にぶつかった。", "You have nearly fallen from %s but bumped into a wall."), m_name.data());
             take_hit(player_ptr, DAMAGE_NOESCAPE, r_ptr->level + 3, _("壁への衝突", "bumping into a wall"));
             return false;
         }
@@ -173,8 +171,8 @@ bool process_fall_off_horse(PlayerType *player_ptr, int dam, bool force)
 
     bool fall_dam = false;
     if (player_ptr->levitation && !force) {
-        monster_desc(player_ptr, m_name, m_ptr, 0);
-        msg_format(_("%sから落ちたが、空中でうまく体勢を立て直して着地した。", "You are thrown from %s but make a good landing."), m_name);
+        const auto m_name = monster_desc(player_ptr, m_ptr, 0);
+        msg_format(_("%sから落ちたが、空中でうまく体勢を立て直して着地した。", "You are thrown from %s but make a good landing."), m_name.data());
     } else {
         take_hit(player_ptr, DAMAGE_NOESCAPE, r_ptr->level + 3, _("落馬", "Falling from riding"));
         fall_dam = true;

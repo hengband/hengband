@@ -141,9 +141,8 @@ void compact_monsters(PlayerType *player_ptr, int size)
             }
 
             if (record_named_pet && m_ptr->is_pet() && m_ptr->nickname) {
-                GAME_TEXT m_name[MAX_NLEN];
-                monster_desc(player_ptr, m_name, m_ptr, MD_INDEF_VISIBLE);
-                exe_write_diary(player_ptr, DIARY_NAMED_PET, RECORD_NAMED_PET_COMPACT, m_name);
+                const auto m_name = monster_desc(player_ptr, m_ptr, MD_INDEF_VISIBLE);
+                exe_write_diary(player_ptr, DIARY_NAMED_PET, RECORD_NAMED_PET_COMPACT, m_name.data());
             }
 
             delete_monster_idx(player_ptr, i);

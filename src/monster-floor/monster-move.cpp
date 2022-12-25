@@ -535,13 +535,8 @@ void process_speak_sound(PlayerType *player_ptr, MONSTER_IDX m_idx, POSITION oy,
         return;
     }
 
-    GAME_TEXT m_name[MAX_NLEN];
+    const auto m_name = m_ptr->ml ? monster_desc(player_ptr, m_ptr, 0) : std::string(_("それ", "It"));
     char monmessage[1024];
-    if (m_ptr->ml) {
-        monster_desc(player_ptr, m_name, m_ptr, 0);
-    } else {
-        strcpy(m_name, _("それ", "It"));
-    }
 
     auto filename = get_speak_filename(m_ptr);
     if (filename.empty()) {
@@ -549,7 +544,7 @@ void process_speak_sound(PlayerType *player_ptr, MONSTER_IDX m_idx, POSITION oy,
     }
 
     if (get_rnd_line(filename.data(), enum2i(m_ptr->ap_r_idx), monmessage) == 0) {
-        msg_format(_("%^s%s", "%^s %s"), m_name, monmessage);
+        msg_format(_("%^s%s", "%^s %s"), m_name.data(), monmessage);
     }
 }
 
