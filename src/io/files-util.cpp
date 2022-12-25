@@ -190,7 +190,7 @@ errr get_random_line(concptr file_name, int entry, char *output)
  * @return エラーコード
  * @details
  */
-errr get_rnd_line_jonly(concptr file_name, int entry, char *output, int count)
+errr get_random_line_ja_only(concptr file_name, int entry, char *output, int count)
 {
     errr result = 1;
     for (int i = 0; i < count; i++) {

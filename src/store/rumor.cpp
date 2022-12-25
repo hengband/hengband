@@ -95,7 +95,7 @@ void display_rumor(PlayerType *player_ptr, bool ex)
 {
     char rumor[1024];
     int section = (ex && (randint0(3) == 0)) ? 1 : 0;
-    errr err = _(get_rnd_line_jonly("rumors_j.txt", section, rumor, 10), get_random_line("rumors.txt", section, rumor));
+    errr err = _(get_random_line_ja_only("rumors_j.txt", section, rumor, 10), get_random_line("rumors.txt", section, rumor));
     if (err) {
         strcpy(rumor, _("嘘の噂もある。", "Some rumors are wrong."));
     }
