@@ -118,6 +118,40 @@ static std::string replace_monster_name_undefined(std::string_view name)
 }
 #endif
 
+static std::string describe_non_pet(const PlayerType &player, const MonsterEntity &monster, const std::string &name, const BIT_FLAGS mode)
+{
+    const auto is_hallucinated = player.effects()->hallucination()->is_hallucinated();
+    const auto &monrace = monraces_info[monster.ap_r_idx];
+    if (monrace.kind_flags.has(MonsterKindType::UNIQUE) && !(is_hallucinated && none_bits(mode, MD_IGNORE_HALLU))) {
+        if (monster.mflag2.has(MonsterConstantFlagType::CHAMELEON) && !(mode & MD_TRUE_NAME)) {
+            return _(replace_monster_name_undefined(name), format("%s?", name.data()));
+        }
+        
+        if (player.phase_out && !(player.riding && (&player.current_floor_ptr->m_list[player.riding] == &monster))) {
+            return format(_("%sもどき", "fake %s"), name.data());
+        }
+
+        return name;
+    }
+    
+    if (any_bits(mode, MD_INDEF_VISIBLE)) {
+#ifndef JP
+        return is_a_vowel(name[0]) ? "an " : "a ";
+#endif
+        return name;
+    }
+
+    std::stringstream ss;
+    if (monster.is_pet()) {
+        ss << _("あなたの", "your ");
+    } else {
+        ss << _("", "the ");
+    }
+
+    ss << name;
+    return ss.str();
+}
+
 /*!
  * @brief モンスターの呼称を作成する / Build a string describing a monster in some way.
  * @param m_ptr モンスターの参照ポインタ
@@ -165,28 +199,7 @@ std::string monster_desc(PlayerType *player_ptr, MonsterEntity *m_ptr, BIT_FLAGS
     if (m_ptr->is_pet() && !m_ptr->is_original_ap()) {
         desc = _(replace_monster_name_undefined(name), format("%s?", name.data()));
     } else {
-        if (monrace.kind_flags.has(MonsterKindType::UNIQUE) && !(is_hallucinated && !(mode & MD_IGNORE_HALLU))) {
-            if (m_ptr->mflag2.has(MonsterConstantFlagType::CHAMELEON) && !(mode & MD_TRUE_NAME)) {
-                desc = _(replace_monster_name_undefined(name), format("%s?", name.data()));
-            } else if (player_ptr->phase_out && !(player_ptr->riding && (&floor_ptr->m_list[player_ptr->riding] == m_ptr))) {
-                desc = format(_("%sもどき", "fake %s"), name.data());
-            } else {
-                desc = name;
-            }
-        } else if (mode & MD_INDEF_VISIBLE) {
-#ifndef JP
-            desc = is_a_vowel(name[0]) ? "an " : "a ";
-#endif
-            desc = name;
-        } else {
-            if (m_ptr->is_pet()) {
-                desc = _("あなたの", "your ");
-            } else {
-                desc = _("", "the ");
-            }
-
-            desc.append(name);
-        }
+        desc = describe_non_pet(*player_ptr, *m_ptr, name, mode);
     }
 
     if (m_ptr->is_named()) {
