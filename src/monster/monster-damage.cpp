@@ -365,18 +365,18 @@ void MonsterDamageProcessor::show_kill_message(concptr note, GAME_TEXT *m_name)
         return;
     }
 
+    const auto explode = std::any_of(std::begin(r_ref.blow), std::end(r_ref.blow), [](const auto &blow) { return blow.method == RaceBlowMethodType::EXPLODE; });
+
     if (monster_living(m_ptr->r_idx)) {
-        auto mes = is_echizen(this->player_ptr) ? _("せっかくだから%sを殺した。", "Because it's time, you have slain %s.")
-                                                : _("%sを殺した。", "You have slain %s.");
+        if (explode) {
+            msg_format(_("%sは爆発して死んだ。", "%^s explodes and dies."), m_name);
+            return;
+        }
+
+        auto mes = is_echizen(this->player_ptr) ? _("せっかくだから%sを葬り去った。", "Because it's time, you have slain %s.")
+                                                : _("%sを葬り去った。", "You have slain %s.");
         msg_format(mes, m_name);
         return;
-    }
-
-    auto explode = false;
-    for (auto i = 0; i < 4; i++) {
-        if (r_ref.blow[i].method == RaceBlowMethodType::EXPLODE) {
-            explode = true;
-        }
     }
 
     if (explode) {
@@ -384,8 +384,8 @@ void MonsterDamageProcessor::show_kill_message(concptr note, GAME_TEXT *m_name)
         return;
     }
 
-    auto mes = is_echizen(this->player_ptr) ? _("せっかくだから%sを殺した。", "Because it's time, you have destroyed %s.")
-                                            : _("%sを殺した。", "You have destroyed %s.");
+    auto mes = is_echizen(this->player_ptr) ? _("せっかくだから%sを倒した。", "Because it's time, you have destroyed %s.")
+                                            : _("%sを倒した。", "You have destroyed %s.");
     msg_format(mes, m_name);
 }
 
