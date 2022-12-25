@@ -99,6 +99,25 @@ static std::string get_monster_personal_pronoun(const int kind, const BIT_FLAGS 
     }
 }
 
+#ifdef JP
+/*!
+ * @brief モンスターの名前末尾に「？」を付ける
+ * @param name モンスターの名前
+ * @return ユニークの時は「『ユニーク？』」、非ユニークの時は「非ユニーク？」
+ * @details 幻覚時のペット、カメレオンが該当する
+ */
+static std::string replace_monster_name_undefined(std::string_view name)
+{
+    if (name.starts_with("』")) {
+        constexpr auto ja_char_length = 2;
+        const auto name_without_brackets = name.substr(0, name.length() - ja_char_length);
+        return format("%s？』", name_without_brackets.data());
+    }
+
+    return format("%s？", name.data());
+}
+#endif
+
 /*!
  * @brief モンスターの呼称を作成する / Build a string describing a monster in some way.
  * @param m_ptr モンスターの参照ポインタ
@@ -142,35 +161,13 @@ std::string monster_desc(PlayerType *player_ptr, MonsterEntity *m_ptr, BIT_FLAGS
         }
     }
 
-    /* Handle all other visible monster requests */
-    /* Tanuki? */
     std::string desc;
     if (m_ptr->is_pet() && !m_ptr->is_original_ap()) {
-#ifdef JP
-        if (name.ends_with("』")) {
-            constexpr auto ja_char_length = 2;
-            const auto name_without_brackets = name.substr(0, name.length() - ja_char_length);
-            desc = format("%s？』", name_without_brackets.data());
-        } else {
-            desc = format("%s？", name.data());
-        }
-#else
-        desc = format("%s?", name.data());
-#endif
+        desc = _(replace_monster_name_undefined(name), format("%s?", name.data()));
     } else {
         if (monrace.kind_flags.has(MonsterKindType::UNIQUE) && !(is_hallucinated && !(mode & MD_IGNORE_HALLU))) {
             if (m_ptr->mflag2.has(MonsterConstantFlagType::CHAMELEON) && !(mode & MD_TRUE_NAME)) {
-#ifdef JP
-                if (name.ends_with("』")) {
-                    constexpr auto ja_char_length = 2;
-                    const auto name_without_brackets = name.substr(0, name.length() - ja_char_length);
-                    desc = format("%s？』", name_without_brackets.data());
-                } else {
-                    desc = format("%s？", name.data());
-                }
-#else
-                desc = format("%s?", name.data());
-#endif
+                desc = _(replace_monster_name_undefined(name), format("%s?", name.data()));
             } else if (player_ptr->phase_out && !(player_ptr->riding && (&floor_ptr->m_list[player_ptr->riding] == m_ptr))) {
                 desc = format(_("%sもどき", "fake %s"), name.data());
             } else {
@@ -180,7 +177,7 @@ std::string monster_desc(PlayerType *player_ptr, MonsterEntity *m_ptr, BIT_FLAGS
 #ifndef JP
             desc = is_a_vowel(name[0]) ? "an " : "a ";
 #endif
-            desc.append(name);
+            desc = name;
         } else {
             if (m_ptr->is_pet()) {
                 desc = _("あなたの", "your ");
