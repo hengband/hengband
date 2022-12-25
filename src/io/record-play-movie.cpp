@@ -35,7 +35,7 @@
 #define DEFAULT_DELAY 50
 #define RECVBUF_SIZE 1024
 /* 「n」、「t」、および「w」コマンドでは、長さが「signed char」に配置されるときに負の値を回避するために、これよりも長い長さを使用しないでください。 */
-static constexpr auto split_max = 127;
+static constexpr auto SPLIT_MAX = 127;
 
 static long epoch_time; /* バッファ開始時刻 */
 static int browse_delay; /* 表示するまでの時間(100ms単位)(この間にラグを吸収する) */
@@ -223,46 +223,52 @@ static errr send_text_to_chuukei_server(TERM_LEN x, TERM_LEN y, int len, TERM_CO
 {
     if (len == 1) {
         insert_ringbuf(format("s%c%c%c%c", x + 1, y + 1, col, *str));
-    } else if (string_is_repeat(str, len)) {
-        while (len > split_max) {
-            insert_ringbuf(format("n%c%c%c%c%c", x + 1, y + 1, split_max, col, *str));
-            x += split_max;
-            len -= split_max;
-        }
-        if (len > 1) {
-            insert_ringbuf(format("n%c%c%c%c%c", x + 1, y + 1, len, col, *str));
-        } else {
-            insert_ringbuf(format("s%c%c%c%c", x + 1, y + 1, col, *str));
-        }
-    } else {
-        concptr payload;
-#if defined(SJIS) && defined(JP)
-        std::string buffer = str;
-        payload = buf.data();
-        sjis2euc(payload);
-#else
-        payload = str;
-#endif
-        while (len > split_max) {
-            int split_len = _(find_split(payload, split_max), split_max);
-
-            insert_ringbuf(format("t%c%c%c%c", x + 1, y + 1, split_len, col), std::string_view(payload, split_len));
-            x += split_len;
-            len -= split_len;
-            payload += split_len;
-        }
-        insert_ringbuf(format("t%c%c%c%c", x + 1, y + 1, len, col), std::string_view(payload, len));
+        return (*old_text_hook)(x, y, len, col, str);
     }
 
+    if (string_is_repeat(str, len)) {
+        while (len > SPLIT_MAX) {
+            insert_ringbuf(format("n%c%c%c%c%c", x + 1, y + 1, SPLIT_MAX, col, *str));
+            x += SPLIT_MAX;
+            len -= SPLIT_MAX;
+        }
+
+        std::string formatted_text;
+        if (len > 1) {
+            formatted_text = format("n%c%c%c%c%c", x + 1, y + 1, len, col, *str);
+        } else {
+            formatted_text = format("s%c%c%c%c", x + 1, y + 1, col, *str);
+        }
+
+        insert_ringbuf(formatted_text);
+        return (*old_text_hook)(x, y, len, col, str);
+    }
+
+#if defined(SJIS) && defined(JP)
+    std::string buffer = str; // strは書き換わって欲しくないのでコピーする.
+    auto *payload = buffer.data();
+    sjis2euc(payload);
+#else
+    const auto *payload = str;
+#endif
+    while (len > SPLIT_MAX) {
+        auto split_len = _(find_split(payload, SPLIT_MAX), SPLIT_MAX);
+        insert_ringbuf(format("t%c%c%c%c", x + 1, y + 1, split_len, col), std::string_view(payload, split_len));
+        x += split_len;
+        len -= split_len;
+        payload += split_len;
+    }
+
+    insert_ringbuf(format("t%c%c%c%c", x + 1, y + 1, len, col), std::string_view(payload, len));
     return (*old_text_hook)(x, y, len, col, str);
 }
 
 static errr send_wipe_to_chuukei_server(int x, int y, int len)
 {
-    while (len > split_max) {
-        insert_ringbuf(format("w%c%c%c", x + 1, y + 1, split_max));
-        x += split_max;
-        len -= split_max;
+    while (len > SPLIT_MAX) {
+        insert_ringbuf(format("w%c%c%c", x + 1, y + 1, SPLIT_MAX));
+        x += SPLIT_MAX;
+        len -= SPLIT_MAX;
     }
     insert_ringbuf(format("w%c%c%c", x + 1, y + 1, len));
 
