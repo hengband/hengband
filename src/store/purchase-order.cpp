@@ -298,7 +298,7 @@ void store_purchase(PlayerType *player_ptr, StoreSaleType store_num)
     }
 
     describe_flavor(player_ptr, o_name, o_ptr, OD_NAME_ONLY);
-    if (record_rand_art && o_ptr->art_name) {
+    if (record_rand_art && o_ptr->is_random_artifact()) {
         exe_write_diary(player_ptr, DIARY_ART, 0, o_name);
     }
 

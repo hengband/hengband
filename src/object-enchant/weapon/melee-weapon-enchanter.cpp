@@ -46,7 +46,7 @@ void MeleeWeaponEnchanter::strengthen()
     }
 
     this->give_ego_index();
-    if (this->o_ptr->art_name > 0) {
+    if (this->o_ptr->is_random_artifact()) {
         return;
     }
 

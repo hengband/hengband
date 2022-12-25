@@ -447,7 +447,7 @@ void mass_produce(ItemEntity *o_ptr, StoreSaleType store_num)
     const auto cost = o_ptr->get_price();
     int size = switch_mass_production(*o_ptr, cost, store_num);
     auto discount = decide_discount_rate(cost);
-    if (o_ptr->art_name) {
+    if (o_ptr->is_random_artifact()) {
         discount = 0;
     }
 
