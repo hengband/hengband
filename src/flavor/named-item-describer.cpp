@@ -96,16 +96,16 @@ static std::string describe_unique_name_before_body_ja(const ItemEntity &item, c
     }
 
     if (item.is_random_artifact()) {
-        concptr temp = quark_str(item.art_name);
+        const std::string_view name_sv = item.randart_name.value();
 
         /* '『' から始まらない伝説のアイテムの名前は最初に付加する */
         /* 英語版のセーブファイルから来た 'of XXX' は,「XXXの」と表示する */
-        if (strncmp(temp, "of ", 3) == 0) {
+        if (name_sv.starts_with("of ")) {
             std::stringstream ss;
-            ss << &temp[3] << "の";
+            ss << name_sv.substr(3) << "の";
             return ss.str();
-        } else if ((strncmp(temp, "『", 2) != 0) && (strncmp(temp, "《", 2) != 0) && (temp[0] != '\'')) {
-            return temp;
+        } else if (!name_sv.starts_with("『") && !name_sv.starts_with("《") && !name_sv.starts_with('\'')) {
+            return item.randart_name.value();
         }
     }
 
@@ -132,20 +132,18 @@ static std::optional<std::string> describe_random_artifact_name_after_body_ja(co
         return std::nullopt;
     }
 
-    char temp[256];
-    int itemp;
-    strcpy(temp, quark_str(item.art_name));
-    if (strncmp(temp, "『", 2) == 0 || strncmp(temp, "《", 2) == 0) {
-        return temp;
+    const std::string_view name_sv = item.randart_name.value();
+    if (name_sv.starts_with("『") || name_sv.starts_with("《")) {
+        return item.randart_name;
     }
 
-    if (temp[0] != '\'') {
+    if (!name_sv.starts_with('\'')) {
         return "";
     }
 
-    itemp = strlen(temp);
-    temp[itemp - 1] = 0;
-    return format("『%s』", &temp[1]);
+    // "'foobar'" の foobar の部分を取り出し『foobar』と表記する
+    // (英語版のセーブファイルのランダムアーティファクトを考慮)
+    return format("『%s』", name_sv.substr(1, name_sv.length() - 2));
 }
 
 static std::string describe_fake_artifact_name_after_body_ja(const ItemEntity &item)
@@ -291,7 +289,7 @@ static std::string describe_unique_name_after_body_en(const ItemEntity &item, co
     std::stringstream ss;
 
     if (item.is_random_artifact()) {
-        ss << ' ' << quark_str(item.art_name);
+        ss << ' ' << item.randart_name.value();
         return ss.str();
     }
 

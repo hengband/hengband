@@ -328,7 +328,7 @@ bool ItemEntity::is_smith() const
  */
 bool ItemEntity::is_artifact() const
 {
-    return this->is_fixed_artifact() || (this->art_name != 0);
+    return this->is_fixed_artifact() || this->randart_name.has_value();
 }
 
 /*!

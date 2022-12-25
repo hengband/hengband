@@ -401,7 +401,8 @@ bool activate_recall(PlayerType *player_ptr)
 
 bool activate_tree_creation(PlayerType *player_ptr, ItemEntity *o_ptr, concptr name)
 {
-    msg_format(_("%s%sから明るい緑の光があふれ出た...", "The %s%s wells with clear light..."), name, quark_str(o_ptr->art_name));
+    const auto randart_name = o_ptr->is_random_artifact() ? o_ptr->randart_name->data() : "";
+    msg_format(_("%s%sから明るい緑の光があふれ出た...", "The %s%s wells with clear light..."), name, randart_name);
     return tree_creation(player_ptr, player_ptr->y, player_ptr->x);
 }
 
