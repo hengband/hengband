@@ -189,6 +189,10 @@ bool store_object_similar(ItemEntity *o_ptr, ItemEntity *j_ptr)
         return false;
     }
 
+    if ((tval == ItemKindType::LITE) && (o_ptr->fuel != j_ptr->fuel)) {
+        return false;
+    }
+
     if (o_ptr->discount != j_ptr->discount) {
         return false;
     }
