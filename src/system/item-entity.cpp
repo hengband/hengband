@@ -799,3 +799,8 @@ bool ItemEntity::is_cross_bow() const
 {
     return this->bi_key.is_cross_bow();
 }
+
+bool ItemEntity::is_inscribed() const
+{
+    return this->inscription != std::nullopt;
+}

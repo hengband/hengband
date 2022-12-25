@@ -142,14 +142,14 @@ bool mundane_spell(PlayerType *player_ptr, bool only_equip)
     POSITION iy = o_ptr->iy;
     POSITION ix = o_ptr->ix;
     auto marked = o_ptr->marked;
-    uint16_t inscription = o_ptr->inscription;
+    auto inscription = std::move(o_ptr->inscription);
 
     o_ptr->prep(o_ptr->bi_id);
 
     o_ptr->iy = iy;
     o_ptr->ix = ix;
     o_ptr->marked = marked;
-    o_ptr->inscription = inscription;
+    o_ptr->inscription = std::move(inscription);
 
     calc_android_exp(player_ptr);
     return true;

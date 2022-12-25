@@ -471,7 +471,7 @@ static std::string describe_ability_abbrev(const ItemEntity &item)
 {
     auto should_describe = abbrev_extra || abbrev_all;
     should_describe &= item.is_fully_known();
-    should_describe &= (item.inscription == 0) || !angband_strchr(quark_str(item.inscription), '%');
+    should_describe &= !item.is_inscribed() || !angband_strchr(item.inscription->data(), '%');
     if (!should_describe) {
         return "";
     }
@@ -482,7 +482,7 @@ static std::string describe_ability_abbrev(const ItemEntity &item)
 
 static std::string describe_player_inscription(const ItemEntity &item)
 {
-    if (item.inscription == 0) {
+    if (!item.is_inscribed()) {
         return "";
     }
 

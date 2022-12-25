@@ -243,7 +243,7 @@ int store_carry(ItemEntity *o_ptr)
     }
 
     o_ptr->ident |= IDENT_FULL_KNOWN;
-    o_ptr->inscription = 0;
+    o_ptr->inscription.reset();
     o_ptr->feeling = FEEL_NONE;
     int slot;
     for (slot = 0; slot < st_ptr->stock_num; slot++) {

@@ -175,9 +175,9 @@ void ItemLoader50::rd_item(ItemEntity *o_ptr)
     if (any_bits(flags, SaveDataItemFlagType::INSCRIPTION)) {
         char buf[128];
         rd_string(buf, sizeof(buf));
-        o_ptr->inscription = quark_add(buf);
+        o_ptr->inscription.emplace(buf);
     } else {
-        o_ptr->inscription = 0;
+        o_ptr->inscription.reset();
     }
 
     if (any_bits(flags, SaveDataItemFlagType::ART_NAME)) {

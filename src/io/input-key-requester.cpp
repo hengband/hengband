@@ -320,7 +320,7 @@ void InputKeyRequestor::sweep_confirmation_equipments()
     auto caret_command = this->get_caret_command();
     for (auto i = enum2i(INVEN_MAIN_HAND); i < INVEN_TOTAL; i++) {
         auto &o_ref = this->player_ptr->inventory_list[i];
-        if ((o_ref.bi_id == 0) || (o_ref.inscription == 0)) {
+        if ((o_ref.bi_id == 0) || !o_ref.is_inscribed()) {
             continue;
         }
 
@@ -330,7 +330,7 @@ void InputKeyRequestor::sweep_confirmation_equipments()
 
 void InputKeyRequestor::confirm_command(ItemEntity &o_ref, const int caret_command)
 {
-    auto s = quark_str(o_ref.inscription);
+    auto s = o_ref.inscription->data();
     s = angband_strchr(s, '^');
     while (s) {
 #ifdef JP

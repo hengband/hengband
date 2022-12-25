@@ -806,7 +806,7 @@ BIT_FLAGS has_warning(PlayerType *player_ptr)
         auto flgs = object_flags(o_ptr);
 
         if (flgs.has(TR_WARNING)) {
-            if (!o_ptr->inscription || !(angband_strchr(quark_str(o_ptr->inscription), '$'))) {
+            if (!o_ptr->is_inscribed() || !angband_strchr(o_ptr->inscription->data(), '$')) {
                 set_bits(result, convert_inventory_slot_type_to_flag_cause(i2enum<inventory_slot_type>(i)));
             }
         }
@@ -1145,10 +1145,8 @@ void update_curses(PlayerType *player_ptr)
             if (o_ptr->is_cursed()) {
                 player_ptr->cursed.set(CurseTraitType::TELEPORT);
             } else {
-                concptr insc = quark_str(o_ptr->inscription);
-
                 /* {.} will stop random teleportation. */
-                if (o_ptr->inscription && angband_strchr(insc, '.')) {
+                if (o_ptr->is_inscribed() && angband_strchr(o_ptr->inscription->data(), '.')) {
                 } else {
                     player_ptr->cursed_special.set(CurseSpecialTraitType::TELEPORT_SELF);
                 }

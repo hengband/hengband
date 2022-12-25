@@ -302,7 +302,7 @@ void store_purchase(PlayerType *player_ptr, StoreSaleType store_num)
         exe_write_diary(player_ptr, DIARY_ART, 0, o_name);
     }
 
-    j_ptr->inscription = 0;
+    j_ptr->inscription.reset();
     j_ptr->feeling = FEEL_NONE;
     j_ptr->ident &= ~(IDENT_STORE);
 

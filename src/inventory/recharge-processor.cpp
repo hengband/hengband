@@ -22,11 +22,11 @@
  */
 static void recharged_notice(PlayerType *player_ptr, ItemEntity *o_ptr)
 {
-    if (!o_ptr->inscription) {
+    if (!o_ptr->is_inscribed()) {
         return;
     }
 
-    concptr s = angband_strchr(quark_str(o_ptr->inscription), '!');
+    auto s = angband_strchr(o_ptr->inscription->data(), '!');
     while (s) {
         if (s[1] == '!') {
             GAME_TEXT o_name[MAX_NLEN];

@@ -191,7 +191,7 @@ static void curse_teleport(PlayerType *player_ptr)
             continue;
         }
 
-        if (o_ptr->inscription && angband_strchr(quark_str(o_ptr->inscription), '.')) {
+        if (o_ptr->is_inscribed() && angband_strchr(o_ptr->inscription->data(), '.')) {
             continue;
         }
 

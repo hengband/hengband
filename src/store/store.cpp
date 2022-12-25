@@ -295,7 +295,7 @@ void store_shuffle(PlayerType *player_ptr, StoreSaleType store_num)
         }
 
         o_ptr->discount = 50;
-        o_ptr->inscription = quark_add(_("売出中", "on sale"));
+        o_ptr->inscription.emplace(_("売出中", "on sale"));
     }
 }
 

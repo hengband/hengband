@@ -106,7 +106,7 @@ static void write_item_flags(ItemEntity *o_ptr, BIT_FLAGS *flags)
         set_bits(*flags, SaveDataItemFlagType::FEELING);
     }
 
-    if (o_ptr->inscription) {
+    if (o_ptr->is_inscribed()) {
         set_bits(*flags, SaveDataItemFlagType::INSCRIPTION);
     }
 
@@ -260,7 +260,7 @@ void wr_item(ItemEntity *o_ptr)
 
     write_item_info(o_ptr, flags);
     if (any_bits(flags, SaveDataItemFlagType::INSCRIPTION)) {
-        wr_string(quark_str(o_ptr->inscription));
+        wr_string(o_ptr->inscription.value());
     }
 
     if (any_bits(flags, SaveDataItemFlagType::ART_NAME)) {

@@ -58,8 +58,8 @@ void auto_inscribe_item(PlayerType *player_ptr, ItemEntity *o_ptr, int idx)
         return;
     }
 
-    if (!o_ptr->inscription) {
-        o_ptr->inscription = quark_add(autopick_list[idx].insc.data());
+    if (!o_ptr->is_inscribed()) {
+        o_ptr->inscription = autopick_list[idx].insc;
     }
 
     player_ptr->window_flags |= (PW_EQUIP | PW_INVEN);

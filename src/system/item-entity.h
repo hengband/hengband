@@ -59,7 +59,7 @@ public:
     TIME_EFFECT timeout{}; /*!< Timeout Counter */
     byte ident{}; /*!< Special flags  */
     EnumClassFlagGroup<OmType> marked{}; /*!< Object is marked */
-    uint16_t inscription{}; /*!< Inscription index */
+    std::optional<std::string> inscription{}; /*!< Inscription */
     std::optional<std::string> randart_name{}; /*!< Artifact name (random artifacts) */
     byte feeling{}; /*!< Game generated inscription number (eg, pseudo-id) */
 
@@ -132,6 +132,7 @@ public:
     bool is_junk() const;
     bool is_armour() const;
     bool is_cross_bow() const;
+    bool is_inscribed() const;
 
 private:
     int get_baseitem_price() const;

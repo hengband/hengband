@@ -328,9 +328,8 @@ void autopick_entry_from_object(PlayerType *player_ptr, autopick_type *entry, It
 {
     /* Assume that object name is to be added */
     bool name = true;
-    auto insc = quark_str(o_ptr->inscription);
     entry->name.clear();
-    entry->insc = insc != nullptr ? insc : "";
+    entry->insc = o_ptr->inscription.value_or("");
     entry->action = DO_AUTOPICK | DO_DISPLAY;
     entry->flag[0] = entry->flag[1] = 0L;
     entry->dice = 0;

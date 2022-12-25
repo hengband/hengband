@@ -21,6 +21,7 @@
 #include "target/target-getter.h"
 #include "util/flag-group.h"
 #include "util/quarks.h"
+#include "util/string-processor.h"
 #include "view/display-messages.h"
 
 static void inscribe_nickname(ae_type *ae_ptr, CapturedMonsterType *cap_mon_ptr)
@@ -32,8 +33,8 @@ static void inscribe_nickname(ae_type *ae_ptr, CapturedMonsterType *cap_mon_ptr)
     concptr t;
     char *s;
     char buf[80] = "";
-    if (ae_ptr->o_ptr->inscription) {
-        strcpy(buf, quark_str(ae_ptr->o_ptr->inscription));
+    if (ae_ptr->o_ptr->is_inscribed()) {
+        angband_strcpy(buf, ae_ptr->o_ptr->inscription->data(), sizeof(buf));
     }
 
     s = buf;
@@ -62,7 +63,7 @@ static void inscribe_nickname(ae_type *ae_ptr, CapturedMonsterType *cap_mon_ptr)
     *s++ = '\'';
 #endif
     *s = '\0';
-    ae_ptr->o_ptr->inscription = quark_add(buf);
+    ae_ptr->o_ptr->inscription.emplace(buf);
 }
 
 static bool set_activation_target(PlayerType *player_ptr, ae_type *ae_ptr)
@@ -120,7 +121,7 @@ static void add_quark_to_inscription(PlayerType *player_ptr, ae_type *ae_ptr, co
 
     *s = '\0';
     player_ptr->current_floor_ptr->m_list[hack_m_idx_ii].nickname = quark_add(buf);
-    t = quark_str(ae_ptr->o_ptr->inscription);
+    t = ae_ptr->o_ptr->inscription->data();
     s = buf;
     while (*t && (*t != '#')) {
         *s = *t;
@@ -129,18 +130,18 @@ static void add_quark_to_inscription(PlayerType *player_ptr, ae_type *ae_ptr, co
     }
 
     *s = '\0';
-    ae_ptr->o_ptr->inscription = quark_add(buf);
+    ae_ptr->o_ptr->inscription.emplace(buf);
 }
 
 static void check_inscription_value(PlayerType *player_ptr, ae_type *ae_ptr)
 {
-    if (ae_ptr->o_ptr->inscription == 0) {
+    if (!ae_ptr->o_ptr->is_inscribed()) {
         return;
     }
 
     char buf[80];
-    concptr t = quark_str(ae_ptr->o_ptr->inscription);
-    for (t = quark_str(ae_ptr->o_ptr->inscription); *t && (*t != '#'); t++) {
+    concptr t;
+    for (t = ae_ptr->o_ptr->inscription->data(); *t && (*t != '#'); t++) {
 #ifdef JP
         if (iskanji(*t)) {
             t++;
