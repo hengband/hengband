@@ -366,8 +366,8 @@ void MonsterDamageProcessor::show_kill_message(concptr note, GAME_TEXT *m_name)
     }
 
     if (monster_living(m_ptr->r_idx)) {
-        auto mes = is_echizen(this->player_ptr) ? _("せっかくだから%sを殺した。", "Because it's time, you have slain %s.")
-                                                : _("%sを殺した。", "You have slain %s.");
+        auto mes = is_echizen(this->player_ptr) ? _("せっかくだから%sを葬り去った。", "Because it's time, you have slain %s.")
+                                                : _("%sを葬り去った。", "You have slain %s.");
         msg_format(mes, m_name);
         return;
     }
@@ -384,8 +384,8 @@ void MonsterDamageProcessor::show_kill_message(concptr note, GAME_TEXT *m_name)
         return;
     }
 
-    auto mes = is_echizen(this->player_ptr) ? _("せっかくだから%sを殺した。", "Because it's time, you have destroyed %s.")
-                                            : _("%sを殺した。", "You have destroyed %s.");
+    auto mes = is_echizen(this->player_ptr) ? _("せっかくだから%sを倒した。", "Because it's time, you have destroyed %s.")
+                                            : _("%sを倒した。", "You have destroyed %s.");
     msg_format(mes, m_name);
 }
 
