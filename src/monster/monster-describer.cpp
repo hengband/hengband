@@ -20,6 +20,29 @@
 #include <string>
 #include <string_view>
 
+static std::string get_describing_monster_name(const MonsterEntity &monster, const bool is_hallucinated, const BIT_FLAGS mode)
+{
+    const auto &monrace = monraces_info[monster.ap_r_idx];
+    if (!is_hallucinated || any_bits(mode, MD_IGNORE_HALLU)) {
+        return any_bits(mode, MD_TRUE_NAME) ? monster.get_real_r_ref().name : monrace.name;
+    }
+
+    if (one_in_(2)) {
+        constexpr auto filename = _("silly_j.txt", "silly.txt");
+        const auto silly_name = get_random_line(filename, enum2i(monster.r_idx));
+        if (silly_name.has_value()) {
+            return silly_name.value();
+        }
+    }
+
+    MonsterRaceInfo *hallu_race;
+    do {
+        auto r_idx = MonsterRace::pick_one_at_random();
+        hallu_race = &monraces_info[r_idx];
+    } while (hallu_race->name.empty() || hallu_race->kind_flags.has(MonsterKindType::UNIQUE));
+    return hallu_race->name;
+}
+
 static std::string get_monster_personal_pronoun(const int kind, const BIT_FLAGS mode)
 {
     switch (kind + (mode & (MD_INDEF_HIDDEN | MD_POSSESSIVE | MD_OBJECTIVE))) {
@@ -84,40 +107,19 @@ static std::string get_monster_personal_pronoun(const int kind, const BIT_FLAGS 
  */
 std::string monster_desc(PlayerType *player_ptr, MonsterEntity *m_ptr, BIT_FLAGS mode)
 {
-    MonsterRaceInfo *r_ptr;
-    r_ptr = &monraces_info[m_ptr->ap_r_idx];
-    std::string name((mode & MD_TRUE_NAME) ? m_ptr->get_real_r_ref().name : r_ptr->name);
-    auto is_hallucinated = player_ptr->effects()->hallucination()->is_hallucinated();
-    if (is_hallucinated && !(mode & MD_IGNORE_HALLU)) {
-        std::optional<std::string> silly_name{};
-        if (one_in_(2)) {
-            silly_name = get_random_line(_("silly_j.txt", "silly.txt"), enum2i(m_ptr->r_idx));
-        }
-
-        if (!silly_name.has_value()) {
-            MonsterRaceInfo *hallu_race;
-
-            do {
-                auto r_idx = MonsterRace::pick_one_at_random();
-                hallu_race = &monraces_info[r_idx];
-            } while (hallu_race->name.empty() || hallu_race->kind_flags.has(MonsterKindType::UNIQUE));
-
-            silly_name = hallu_race->name;
-        }
-
-        name = std::move(silly_name.value());
-    }
-
-    bool seen = (m_ptr && ((mode & MD_ASSUME_VISIBLE) || (!(mode & MD_ASSUME_HIDDEN) && m_ptr->ml)));
-    bool pron = (m_ptr && ((seen && (mode & MD_PRON_VISIBLE)) || (!seen && (mode & MD_PRON_HIDDEN))));
+    const auto is_hallucinated = player_ptr->effects()->hallucination()->is_hallucinated();
+    const auto name = get_describing_monster_name(*m_ptr, is_hallucinated, mode);
+    const auto seen = (m_ptr && ((mode & MD_ASSUME_VISIBLE) || (!(mode & MD_ASSUME_HIDDEN) && m_ptr->ml)));
+    const auto pron = (m_ptr && ((seen && (mode & MD_PRON_VISIBLE)) || (!seen && (mode & MD_PRON_HIDDEN))));
 
     /* First, try using pronouns, or describing hidden monsters */
+    const auto &monrace = monraces_info[m_ptr->ap_r_idx];
     auto *floor_ptr = player_ptr->current_floor_ptr;
     if (!seen || pron) {
-        int kind = 0x00;
-        if (r_ptr->flags1 & (RF1_FEMALE)) {
+        auto kind = 0x00;
+        if (any_bits(monrace.flags1, RF1_FEMALE)) {
             kind = 0x20;
-        } else if (r_ptr->flags1 & (RF1_MALE)) {
+        } else if (any_bits(monrace.flags1, RF1_MALE)) {
             kind = 0x10;
         }
 
@@ -131,9 +133,9 @@ std::string monster_desc(PlayerType *player_ptr, MonsterEntity *m_ptr, BIT_FLAGS
     /* Handle visible monsters, "reflexive" request */
     if ((mode & (MD_POSSESSIVE | MD_OBJECTIVE)) == (MD_POSSESSIVE | MD_OBJECTIVE)) {
         /* The monster is visible, so use its gender */
-        if (r_ptr->flags1 & (RF1_FEMALE)) {
+        if (any_bits(monrace.flags1, RF1_FEMALE)) {
             return _("彼女自身", "herself");
-        } else if (r_ptr->flags1 & (RF1_MALE)) {
+        } else if (any_bits(monrace.flags1, RF1_MALE)) {
             return _("彼自身", "himself");
         } else {
             return _("それ自身", "itself");
@@ -156,7 +158,7 @@ std::string monster_desc(PlayerType *player_ptr, MonsterEntity *m_ptr, BIT_FLAGS
         desc = format("%s?", name.data());
 #endif
     } else {
-        if (r_ptr->kind_flags.has(MonsterKindType::UNIQUE) && !(is_hallucinated && !(mode & MD_IGNORE_HALLU))) {
+        if (monrace.kind_flags.has(MonsterKindType::UNIQUE) && !(is_hallucinated && !(mode & MD_IGNORE_HALLU))) {
             if (m_ptr->mflag2.has(MonsterConstantFlagType::CHAMELEON) && !(mode & MD_TRUE_NAME)) {
 #ifdef JP
                 if (name.ends_with("』")) {
@@ -199,7 +201,7 @@ std::string monster_desc(PlayerType *player_ptr, MonsterEntity *m_ptr, BIT_FLAGS
     }
 
     if ((mode & MD_IGNORE_HALLU) && m_ptr->mflag2.has(MonsterConstantFlagType::CHAMELEON)) {
-        if (r_ptr->kind_flags.has(MonsterKindType::UNIQUE)) {
+        if (monrace.kind_flags.has(MonsterKindType::UNIQUE)) {
             desc.append(_("(カメレオンの王)", "(Chameleon Lord)"));
         } else {
             desc.append(_("(カメレオン)", "(Chameleon)"));
