@@ -1,6 +1,8 @@
 ﻿#pragma once
 
 #include "system/angband.h"
+#include <optional>
+#include <string>
 
 extern char savefile[1024];
 extern char savefile_base[40];
@@ -29,7 +31,7 @@ errr get_random_line(concptr file_name, int entry, char *output);
 void read_dead_file(char *buf, size_t buf_size);
 
 #ifdef JP
-errr get_random_line_ja_only(concptr file_name, int entry, char *output, int count);
+std::optional<std::string> get_random_line_ja_only(concptr file_name, int entry, int count);
 #endif
 errr counts_write(PlayerType *player_ptr, int where, uint32_t count);
 uint32_t counts_read(PlayerType *player_ptr, int where);

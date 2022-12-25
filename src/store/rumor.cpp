@@ -93,12 +93,23 @@ static std::pair<FixedArtifactId, const ArtifactType *> get_artifact_definition(
 
 void display_rumor(PlayerType *player_ptr, bool ex)
 {
-    char rumor[1024];
     int section = (ex && (randint0(3) == 0)) ? 1 : 0;
-    errr err = _(get_random_line_ja_only("rumors_j.txt", section, rumor, 10), get_random_line("rumors.txt", section, rumor));
+    char rumor[1024]{};
+
+    // @todo「嘘の噂もある。」は後で統合するため日英分離しない.
+#ifdef JP
+    auto tmp_rumor = get_random_line_ja_only("rumors_j.txt", section, 10);
+    if (tmp_rumor.has_value()) {
+        strcpy(rumor, tmp_rumor.value().data());
+    } else {
+        strcpy(rumor, _("嘘の噂もある。", "Some rumors are wrong."));
+    }
+#else
+    errr err = get_random_line("rumors.txt", section, rumor);
     if (err) {
         strcpy(rumor, _("嘘の噂もある。", "Some rumors are wrong."));
     }
+#endif
 
     if (strncmp(rumor, "R:", 2) != 0) {
         msg_format("%s", rumor);

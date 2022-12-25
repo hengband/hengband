@@ -182,32 +182,33 @@ errr get_random_line(concptr file_name, int entry, char *output)
 
 #ifdef JP
 /*!
- * @brief ファイルからランダムに行を一つ取得する(日本語文字列のみ) /
+ * @brief ファイルからランダムに行を一つ取得する(日本語文字列のみ)
  * @param file_name ファイル名
  * @param entry 特定条件時のN:タグヘッダID
- * @param output 出力先の文字列参照ポインタ
  * @param count 試行回数
- * @return エラーコード
+ * @return ファイルから取得した行 (但しファイルがなかったり異常値ならばnullopt)
  * @details
  */
-errr get_random_line_ja_only(concptr file_name, int entry, char *output, int count)
+std::optional<std::string> get_random_line_ja_only(concptr file_name, int entry, int count)
 {
-    errr result = 1;
-    for (int i = 0; i < count; i++) {
-        result = get_random_line(file_name, entry, output);
-        if (result) {
-            break;
+    char line[1024]{};
+    for (auto i = 0; i < count; i++) {
+        auto error = get_random_line(file_name, entry, line);
+        if (error) {
+            return std::nullopt;
         }
-        bool kanji = false;
-        for (int j = 0; output[j]; j++) {
-            kanji |= iskanji(output[j]);
+
+        auto is_kanji = false;
+        for (auto j = 0; line[j]; j++) {
+            is_kanji |= iskanji(line[j]);
         }
-        if (kanji) {
-            break;
+
+        if (is_kanji) {
+            return line;
         }
     }
 
-    return result;
+    return line;
 }
 #endif
 
