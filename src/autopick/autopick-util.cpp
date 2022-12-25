@@ -58,7 +58,7 @@ void auto_inscribe_item(PlayerType *player_ptr, ItemEntity *o_ptr, int idx)
         return;
     }
 
-    if (!o_ptr->inscription) {
+    if (!o_ptr->is_inscribed()) {
         o_ptr->inscription = quark_add(autopick_list[idx].insc.data());
     }
 

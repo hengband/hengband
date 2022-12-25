@@ -32,7 +32,7 @@ static void inscribe_nickname(ae_type *ae_ptr, CapturedMonsterType *cap_mon_ptr)
     concptr t;
     char *s;
     char buf[80] = "";
-    if (ae_ptr->o_ptr->inscription) {
+    if (ae_ptr->o_ptr->is_inscribed()) {
         strcpy(buf, quark_str(ae_ptr->o_ptr->inscription));
     }
 
@@ -134,7 +134,7 @@ static void add_quark_to_inscription(PlayerType *player_ptr, ae_type *ae_ptr, co
 
 static void check_inscription_value(PlayerType *player_ptr, ae_type *ae_ptr)
 {
-    if (ae_ptr->o_ptr->inscription == 0) {
+    if (!ae_ptr->o_ptr->is_inscribed()) {
         return;
     }
 

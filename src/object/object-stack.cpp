@@ -213,7 +213,7 @@ int object_similar_part(const ItemEntity *o_ptr, const ItemEntity *j_ptr)
         return 0;
     }
 
-    if (o_ptr->inscription && j_ptr->inscription && (o_ptr->inscription != j_ptr->inscription)) {
+    if (o_ptr->is_inscribed() && j_ptr->is_inscribed() && (o_ptr->inscription != j_ptr->inscription)) {
         return 0;
     }
 
@@ -277,7 +277,7 @@ void object_absorb(ItemEntity *o_ptr, ItemEntity *j_ptr)
     if (j_ptr->is_fully_known()) {
         o_ptr->ident |= (IDENT_FULL_KNOWN);
     }
-    if (j_ptr->inscription) {
+    if (j_ptr->is_inscribed()) {
         o_ptr->inscription = j_ptr->inscription;
     }
     if (j_ptr->feeling) {

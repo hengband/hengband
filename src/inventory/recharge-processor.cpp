@@ -22,7 +22,7 @@
  */
 static void recharged_notice(PlayerType *player_ptr, ItemEntity *o_ptr)
 {
-    if (!o_ptr->inscription) {
+    if (!o_ptr->is_inscribed()) {
         return;
     }
 

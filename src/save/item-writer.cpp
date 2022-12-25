@@ -106,7 +106,7 @@ static void write_item_flags(ItemEntity *o_ptr, BIT_FLAGS *flags)
         set_bits(*flags, SaveDataItemFlagType::FEELING);
     }
 
-    if (o_ptr->inscription) {
+    if (o_ptr->is_inscribed()) {
         set_bits(*flags, SaveDataItemFlagType::INSCRIPTION);
     }
 

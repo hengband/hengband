@@ -148,7 +148,7 @@ static std::optional<std::string> describe_random_artifact_name_after_body_ja(co
 
 static std::string describe_fake_artifact_name_after_body_ja(const ItemEntity &item)
 {
-    if (!item.inscription) {
+    if (!item.is_inscribed()) {
         return "";
     }
 
@@ -303,7 +303,7 @@ static std::string describe_unique_name_after_body_en(const ItemEntity &item, co
         ss << ' ' << egos_info[item.ego_idx].name;
     }
 
-    if (item.inscription) {
+    if (item.is_inscribed()) {
         if (auto str = angband_strchr(quark_str(item.inscription), '#'); str != nullptr) {
             ss << ' ' << str + 1;
         }

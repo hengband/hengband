@@ -188,7 +188,7 @@ void do_cmd_uninscribe(PlayerType *player_ptr)
         return;
     }
 
-    if (!o_ptr->inscription) {
+    if (!o_ptr->is_inscribed()) {
         msg_print(_("このアイテムには消すべき銘がない。", "That item had no inscription to remove."));
         return;
     }
@@ -221,7 +221,7 @@ void do_cmd_inscribe(PlayerType *player_ptr)
     msg_format(_("%sに銘を刻む。", "Inscribing %s."), o_name);
     msg_print(nullptr);
     strcpy(out_val, "");
-    if (o_ptr->inscription) {
+    if (o_ptr->is_inscribed()) {
         angband_strcpy(out_val, quark_str(o_ptr->inscription), MAX_INSCRIPTION);
     }
 
