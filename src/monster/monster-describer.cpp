@@ -12,12 +12,69 @@
 #include "system/player-type-definition.h"
 #include "timed-effect/player-hallucination.h"
 #include "timed-effect/timed-effects.h"
+#include "util/bit-flags-calculator.h"
 #include "util/quarks.h"
 #include "util/string-processor.h"
 #include "view/display-messages.h"
 #include <optional>
 #include <string>
 #include <string_view>
+
+static std::string get_monster_personal_pronoun(const int kind, const BIT_FLAGS mode)
+{
+    switch (kind + (mode & (MD_INDEF_HIDDEN | MD_POSSESSIVE | MD_OBJECTIVE))) {
+    case 0x00:
+        return _("何か", "it");
+    case 0x00 + (MD_OBJECTIVE):
+        return _("何か", "it");
+    case 0x00 + (MD_POSSESSIVE):
+        return _("何かの", "its");
+    case 0x00 + (MD_POSSESSIVE | MD_OBJECTIVE):
+        return _("何か自身", "itself");
+    case 0x00 + (MD_INDEF_HIDDEN):
+        return _("何か", "something");
+    case 0x00 + (MD_INDEF_HIDDEN | MD_OBJECTIVE):
+        return _("何か", "something");
+    case 0x00 + (MD_INDEF_HIDDEN | MD_POSSESSIVE):
+        return _("何かの", "something's");
+    case 0x00 + (MD_INDEF_HIDDEN | MD_POSSESSIVE | MD_OBJECTIVE):
+        return _("それ自身", "itself");
+    case 0x10:
+        return _("彼", "he");
+    case 0x10 + (MD_OBJECTIVE):
+        return _("彼", "him");
+    case 0x10 + (MD_POSSESSIVE):
+        return _("彼の", "his");
+    case 0x10 + (MD_POSSESSIVE | MD_OBJECTIVE):
+        return _("彼自身", "himself");
+    case 0x10 + (MD_INDEF_HIDDEN):
+        return _("誰か", "someone");
+    case 0x10 + (MD_INDEF_HIDDEN | MD_OBJECTIVE):
+        return _("誰か", "someone");
+    case 0x10 + (MD_INDEF_HIDDEN | MD_POSSESSIVE):
+        return _("誰かの", "someone's");
+    case 0x10 + (MD_INDEF_HIDDEN | MD_POSSESSIVE | MD_OBJECTIVE):
+        return _("彼自身", "himself");
+    case 0x20:
+        return _("彼女", "she");
+    case 0x20 + (MD_OBJECTIVE):
+        return _("彼女", "her");
+    case 0x20 + (MD_POSSESSIVE):
+        return _("彼女の", "her");
+    case 0x20 + (MD_POSSESSIVE | MD_OBJECTIVE):
+        return _("彼女自身", "herself");
+    case 0x20 + (MD_INDEF_HIDDEN):
+        return _("誰か", "someone");
+    case 0x20 + (MD_INDEF_HIDDEN | MD_OBJECTIVE):
+        return _("誰か", "someone");
+    case 0x20 + (MD_INDEF_HIDDEN | MD_POSSESSIVE):
+        return _("誰かの", "someone's");
+    case 0x20 + (MD_INDEF_HIDDEN | MD_POSSESSIVE | MD_OBJECTIVE):
+        return _("彼女自身", "herself");
+    default:
+        return _("何か", "it");
+    }
+}
 
 /*!
  * @brief モンスターの呼称を作成する / Build a string describing a monster in some way.
@@ -68,83 +125,7 @@ std::string monster_desc(PlayerType *player_ptr, MonsterEntity *m_ptr, BIT_FLAGS
             kind = 0x00;
         }
 
-        concptr res = _("何か", "it");
-        switch (kind + (mode & (MD_INDEF_HIDDEN | MD_POSSESSIVE | MD_OBJECTIVE))) {
-        case 0x00:
-            res = _("何か", "it");
-            break;
-        case 0x00 + (MD_OBJECTIVE):
-            res = _("何か", "it");
-            break;
-        case 0x00 + (MD_POSSESSIVE):
-            res = _("何かの", "its");
-            break;
-        case 0x00 + (MD_POSSESSIVE | MD_OBJECTIVE):
-            res = _("何か自身", "itself");
-            break;
-        case 0x00 + (MD_INDEF_HIDDEN):
-            res = _("何か", "something");
-            break;
-        case 0x00 + (MD_INDEF_HIDDEN | MD_OBJECTIVE):
-            res = _("何か", "something");
-            break;
-        case 0x00 + (MD_INDEF_HIDDEN | MD_POSSESSIVE):
-            res = _("何か", "something's");
-            break;
-        case 0x00 + (MD_INDEF_HIDDEN | MD_POSSESSIVE | MD_OBJECTIVE):
-            res = _("それ自身", "itself");
-            break;
-        case 0x10:
-            res = _("彼", "he");
-            break;
-        case 0x10 + (MD_OBJECTIVE):
-            res = _("彼", "him");
-            break;
-        case 0x10 + (MD_POSSESSIVE):
-            res = _("彼の", "his");
-            break;
-        case 0x10 + (MD_POSSESSIVE | MD_OBJECTIVE):
-            res = _("彼自身", "himself");
-            break;
-        case 0x10 + (MD_INDEF_HIDDEN):
-            res = _("誰か", "someone");
-            break;
-        case 0x10 + (MD_INDEF_HIDDEN | MD_OBJECTIVE):
-            res = _("誰か", "someone");
-            break;
-        case 0x10 + (MD_INDEF_HIDDEN | MD_POSSESSIVE):
-            res = _("誰かの", "someone's");
-            break;
-        case 0x10 + (MD_INDEF_HIDDEN | MD_POSSESSIVE | MD_OBJECTIVE):
-            res = _("彼自身", "himself");
-            break;
-        case 0x20:
-            res = _("彼女", "she");
-            break;
-        case 0x20 + (MD_OBJECTIVE):
-            res = _("彼女", "her");
-            break;
-        case 0x20 + (MD_POSSESSIVE):
-            res = _("彼女の", "her");
-            break;
-        case 0x20 + (MD_POSSESSIVE | MD_OBJECTIVE):
-            res = _("彼女自身", "herself");
-            break;
-        case 0x20 + (MD_INDEF_HIDDEN):
-            res = _("誰か", "someone");
-            break;
-        case 0x20 + (MD_INDEF_HIDDEN | MD_OBJECTIVE):
-            res = _("誰か", "someone");
-            break;
-        case 0x20 + (MD_INDEF_HIDDEN | MD_POSSESSIVE):
-            res = _("誰かの", "someone's");
-            break;
-        case 0x20 + (MD_INDEF_HIDDEN | MD_POSSESSIVE | MD_OBJECTIVE):
-            res = _("彼女自身", "herself");
-            break;
-        }
-
-        return res;
+        return get_monster_personal_pronoun(kind, mode);
     }
 
     /* Handle visible monsters, "reflexive" request */
