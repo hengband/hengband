@@ -21,15 +21,11 @@ LiteEnchanter::LiteEnchanter(PlayerType *player_ptr, ItemEntity *o_ptr, int powe
         if (o_ptr->pval > 0) {
             o_ptr->fuel = randint1(o_ptr->pval);
         }
-
-        o_ptr->pval = 0;
         return;
     case SV_LITE_LANTERN:
         if (o_ptr->pval > 0) {
             o_ptr->fuel = randint1(o_ptr->pval);
         }
-
-        o_ptr->pval = 0;
         return;
     default:
         return;
