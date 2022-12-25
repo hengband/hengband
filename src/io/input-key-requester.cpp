@@ -330,7 +330,7 @@ void InputKeyRequestor::sweep_confirmation_equipments()
 
 void InputKeyRequestor::confirm_command(ItemEntity &o_ref, const int caret_command)
 {
-    auto s = quark_str(o_ref.inscription);
+    auto s = o_ref.inscription->data();
     s = angband_strchr(s, '^');
     while (s) {
 #ifdef JP

@@ -53,7 +53,7 @@ bool get_tag_floor(FloorType *floor_ptr, COMMAND_CODE *cp, char tag, FLOOR_IDX f
             continue;
         }
 
-        concptr s = angband_strchr(quark_str(o_ptr->inscription), '@');
+        auto s = angband_strchr(o_ptr->inscription->data(), '@');
         while (s) {
             if ((s[1] == command_cmd) && (s[2] == tag)) {
                 *cp = i;
@@ -74,7 +74,7 @@ bool get_tag_floor(FloorType *floor_ptr, COMMAND_CODE *cp, char tag, FLOOR_IDX f
             continue;
         }
 
-        concptr s = angband_strchr(quark_str(o_ptr->inscription), '@');
+        auto s = angband_strchr(o_ptr->inscription->data(), '@');
         while (s) {
             if (s[1] == tag) {
                 *cp = i;
@@ -132,7 +132,7 @@ bool get_tag(PlayerType *player_ptr, COMMAND_CODE *cp, char tag, BIT_FLAGS mode,
             continue;
         }
 
-        concptr s = angband_strchr(quark_str(o_ptr->inscription), '@');
+        auto s = angband_strchr(o_ptr->inscription->data(), '@');
         while (s) {
             if ((s[1] == command_cmd) && (s[2] == tag)) {
                 *cp = i;
@@ -157,7 +157,7 @@ bool get_tag(PlayerType *player_ptr, COMMAND_CODE *cp, char tag, BIT_FLAGS mode,
             continue;
         }
 
-        concptr s = angband_strchr(quark_str(o_ptr->inscription), '@');
+        auto s = angband_strchr(o_ptr->inscription->data(), '@');
         while (s) {
             if (s[1] == tag) {
                 *cp = i;
@@ -215,7 +215,7 @@ bool get_item_allow(PlayerType *player_ptr, INVENTORY_IDX item)
         return true;
     }
 
-    concptr s = angband_strchr(quark_str(o_ptr->inscription), '!');
+    auto s = angband_strchr(o_ptr->inscription->data(), '!');
     while (s) {
         if ((s[1] == command_cmd) || (s[1] == '*')) {
             if (!verify(player_ptr, _("本当に", "Really try"), item)) {

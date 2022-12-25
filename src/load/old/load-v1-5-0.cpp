@@ -310,7 +310,7 @@ void rd_item_old(ItemEntity *o_ptr)
     char buf[128];
     rd_string(buf, sizeof(buf));
     if (buf[0]) {
-        o_ptr->inscription = quark_add(buf);
+        o_ptr->inscription.emplace(buf);
     }
 
     rd_string(buf, sizeof(buf));

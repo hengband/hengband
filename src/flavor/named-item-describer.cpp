@@ -152,7 +152,7 @@ static std::string describe_fake_artifact_name_after_body_ja(const ItemEntity &i
         return "";
     }
 
-    concptr str = quark_str(item.inscription);
+    auto str = item.inscription->data();
     while (*str) {
         if (iskanji(*str)) {
             str += 2;
@@ -170,7 +170,7 @@ static std::string describe_fake_artifact_name_after_body_ja(const ItemEntity &i
         return "";
     }
 
-    concptr str_aux = angband_strchr(quark_str(item.inscription), '#');
+    auto str_aux = angband_strchr(item.inscription->data(), '#');
     return format("『%s』", str_aux + 1);
 }
 
@@ -304,7 +304,7 @@ static std::string describe_unique_name_after_body_en(const ItemEntity &item, co
     }
 
     if (item.is_inscribed()) {
-        if (auto str = angband_strchr(quark_str(item.inscription), '#'); str != nullptr) {
+        if (auto str = angband_strchr(item.inscription->data(), '#'); str != nullptr) {
             ss << ' ' << str + 1;
         }
     }

@@ -122,7 +122,7 @@ void store_sell(PlayerType *player_ptr, StoreSaleType store_num)
     GAME_TEXT o_name[MAX_NLEN];
     describe_flavor(player_ptr, o_name, q_ptr, 0);
     if ((store_num != StoreSaleType::HOME) && (store_num != StoreSaleType::MUSEUM)) {
-        q_ptr->inscription = 0;
+        q_ptr->inscription.reset();
         q_ptr->feeling = FEEL_NONE;
     }
 

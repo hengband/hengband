@@ -802,5 +802,5 @@ bool ItemEntity::is_cross_bow() const
 
 bool ItemEntity::is_inscribed() const
 {
-    return this->inscription != 0;
+    return this->inscription != std::nullopt;
 }

@@ -218,11 +218,14 @@ std::string get_ability_abbreviation(const ItemEntity &item, bool is_kanji, bool
  */
 std::string get_inscription(const ItemEntity &item)
 {
-    const auto insc = quark_str(item.inscription);
+    if (!item.is_inscribed()) {
+        return {};
+    }
+
     std::stringstream ss;
 
     if (!item.is_fully_known()) {
-        for (std::string_view sv = insc; !sv.empty(); sv.remove_prefix(1)) {
+        for (std::string_view sv = item.inscription.value(); !sv.empty(); sv.remove_prefix(1)) {
             if (sv.front() == '#') {
                 break;
             }
@@ -241,7 +244,7 @@ std::string get_inscription(const ItemEntity &item)
         return ss.str();
     }
 
-    for (std::string_view sv = insc; !sv.empty(); sv.remove_prefix(1)) {
+    for (std::string_view sv = item.inscription.value(); !sv.empty(); sv.remove_prefix(1)) {
         switch (sv.front()) {
         case '#':
             return ss.str();

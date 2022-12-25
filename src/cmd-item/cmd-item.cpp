@@ -194,7 +194,7 @@ void do_cmd_uninscribe(PlayerType *player_ptr)
     }
 
     msg_print(_("銘を消した。", "Inscription removed."));
-    o_ptr->inscription = 0;
+    o_ptr->inscription.reset();
     set_bits(player_ptr->update, PU_COMBINE);
     set_bits(player_ptr->window_flags, PW_INVEN | PW_EQUIP | PW_FLOOR_ITEM_LIST | PW_FOUND_ITEM_LIST);
     set_bits(player_ptr->update, PU_BONUS);
@@ -222,11 +222,11 @@ void do_cmd_inscribe(PlayerType *player_ptr)
     msg_print(nullptr);
     strcpy(out_val, "");
     if (o_ptr->is_inscribed()) {
-        angband_strcpy(out_val, quark_str(o_ptr->inscription), MAX_INSCRIPTION);
+        angband_strcpy(out_val, o_ptr->inscription->data(), MAX_INSCRIPTION);
     }
 
     if (get_string(_("銘: ", "Inscription: "), out_val, MAX_INSCRIPTION)) {
-        o_ptr->inscription = quark_add(out_val);
+        o_ptr->inscription.emplace(out_val);
         set_bits(player_ptr->update, PU_COMBINE);
         set_bits(player_ptr->window_flags, PW_INVEN | PW_EQUIP | PW_FLOOR_ITEM_LIST | PW_FOUND_ITEM_LIST);
         set_bits(player_ptr->update, PU_BONUS);
