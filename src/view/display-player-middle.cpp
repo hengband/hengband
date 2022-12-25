@@ -6,6 +6,7 @@
 #include "mind/stances-table.h"
 #include "monster/monster-status.h"
 #include "object-enchant/special-object-flags.h"
+#include "object/tval-types.h"
 #include "perception/object-perception.h"
 #include "player-base/player-class.h"
 #include "player-base/player-race.h"
@@ -24,6 +25,7 @@
 #include "system/monster-entity.h"
 #include "system/player-type-definition.h"
 #include "term/term-color-types.h"
+#include "term/z-form.h"
 #include "timed-effect/player-deceleration.h"
 #include "timed-effect/timed-effects.h"
 #include "view/display-util.h"
@@ -51,9 +53,7 @@ static void display_player_melee_bonus(PlayerType *player_ptr, int hand, int han
 
     show_tohit += player_ptr->skill_thn / BTH_PLUS_ADJ;
 
-    char buf[160];
-    sprintf(buf, "(%+d,%+d)", (int)show_tohit, (int)show_todam);
-
+    std::string buf = format("(%+d,%+d)", (int)show_tohit, (int)show_todam);
     if (!has_melee_weapon(player_ptr, INVEN_MAIN_HAND) && !has_melee_weapon(player_ptr, INVEN_SUB_HAND)) {
         display_player_one_line(ENTRY_BARE_HAND, buf, TERM_L_BLUE);
     } else if (has_two_handed_weapons(player_ptr)) {
@@ -92,29 +92,37 @@ static void display_sub_hand(PlayerType *player_ptr)
 }
 
 /*!
- * @brief 武器による命中率とダメージの補正を表示する
+ * @brief 弓による命中率とダメージの補正を表示する
  * @param player_ptr プレイヤーへの参照ポインタ
  */
-static void display_hit_damage(PlayerType *player_ptr)
+static void display_bow_hit_damage(PlayerType *player_ptr)
 {
-    auto *o_ptr = &player_ptr->inventory_list[INVEN_BOW];
-    HIT_PROB show_tohit = player_ptr->dis_to_h_b;
-    int show_todam = 0;
-    if (o_ptr->is_known()) {
-        show_tohit += o_ptr->to_h;
-    }
-    if (o_ptr->is_known()) {
-        show_todam += o_ptr->to_d;
+    const auto &item = player_ptr->inventory_list[INVEN_BOW];
+    auto show_tohit = player_ptr->dis_to_h_b;
+    auto show_todam = 0;
+    if (item.is_known()) {
+        show_tohit += item.to_h;
+        show_todam += item.to_d;
     }
 
-    if ((o_ptr->sval == SV_LIGHT_XBOW) || (o_ptr->sval == SV_HEAVY_XBOW)) {
-        show_tohit += player_ptr->weapon_exp[o_ptr->tval][o_ptr->sval] / 400;
+    const auto tval = item.bi_key.tval();
+    const auto median_skill_exp = PlayerSkill::weapon_exp_at(PlayerSkillRank::MASTER) / 2;
+    const auto &weapon_exps = player_ptr->weapon_exp[tval];
+    constexpr auto bow_magnification = 200;
+    constexpr auto xbow_magnification = 400;
+    if (tval == ItemKindType::NONE) {
+        show_tohit += (weapon_exps[0] - median_skill_exp) / bow_magnification;
     } else {
-        show_tohit += (player_ptr->weapon_exp[o_ptr->tval][o_ptr->sval] - (PlayerSkill::weapon_exp_at(PlayerSkillRank::MASTER) / 2)) / 200;
+        const auto sval = item.bi_key.sval().value();
+        const auto weapon_exp = weapon_exps[sval];
+        if (item.is_cross_bow()) {
+            show_tohit += weapon_exp / xbow_magnification;
+        } else {
+            show_tohit += (weapon_exp - median_skill_exp) / bow_magnification;
+        }
     }
 
     show_tohit += player_ptr->skill_thb / BTH_PLUS_ADJ;
-
     display_player_one_line(ENTRY_SHOOT_HIT_DAM, format("(%+d,%+d)", show_tohit, show_todam), TERM_L_BLUE);
 }
 
@@ -211,16 +219,16 @@ static int calc_temporary_speed(PlayerType *player_ptr)
  */
 static void display_player_speed(PlayerType *player_ptr, TERM_COLOR attr, int base_speed, int tmp_speed)
 {
-    char buf[160];
+    std::string buf;
     if (tmp_speed) {
         if (!player_ptr->riding) {
             if (player_ptr->lightspeed) {
-                sprintf(buf, _("光速化 (+99)", "Lightspeed (+99)"));
+                buf = _("光速化 (+99)", "Lightspeed (+99)");
             } else {
-                sprintf(buf, "(%+d%+d)", base_speed - tmp_speed, tmp_speed);
+                buf = format("(%+d%+d)", base_speed - tmp_speed, tmp_speed);
             }
         } else {
-            sprintf(buf, _("乗馬中 (%+d%+d)", "Riding (%+d%+d)"), base_speed - tmp_speed, tmp_speed);
+            buf = format(_("乗馬中 (%+d%+d)", "Riding (%+d%+d)"), base_speed - tmp_speed, tmp_speed);
         }
 
         if (tmp_speed > 0) {
@@ -230,9 +238,9 @@ static void display_player_speed(PlayerType *player_ptr, TERM_COLOR attr, int ba
         }
     } else {
         if (!player_ptr->riding) {
-            sprintf(buf, "(%+d)", base_speed);
+            buf = format("(%+d)", base_speed);
         } else {
-            sprintf(buf, _("乗馬中 (%+d)", "Riding (%+d)"), base_speed);
+            buf = format(_("乗馬中 (%+d)", "Riding (%+d)"), base_speed);
         }
     }
 
@@ -278,11 +286,11 @@ static void display_playtime_in_game(PlayerType *player_ptr)
     int day, hour, min;
     extract_day_hour_min(player_ptr, &day, &hour, &min);
 
-    char buf[160];
+    std::string buf;
     if (day < MAX_DAYS) {
-        sprintf(buf, _("%d日目 %2d:%02d", "Day %d %2d:%02d"), day, hour, min);
+        buf = format(_("%d日目 %2d:%02d", "Day %d %2d:%02d"), day, hour, min);
     } else {
-        sprintf(buf, _("*****日目 %2d:%02d", "Day ***** %2d:%02d"), hour, min);
+        buf = format(_("*****日目 %2d:%02d", "Day ***** %2d:%02d"), hour, min);
     }
 
     display_player_one_line(ENTRY_DAY, buf, TERM_L_GREEN);
@@ -329,7 +337,7 @@ void display_player_middle(PlayerType *player_ptr)
     }
 
     display_sub_hand(player_ptr);
-    display_hit_damage(player_ptr);
+    display_bow_hit_damage(player_ptr);
     display_shoot_magnification(player_ptr);
     display_player_one_line(ENTRY_BASE_AC, format("[%d,%+d]", player_ptr->dis_ac, player_ptr->dis_to_a), TERM_L_BLUE);
 

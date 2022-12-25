@@ -9,7 +9,8 @@
 
 std::unique_ptr<ReadExecutorBase> ReadExecutorFactory::create(PlayerType *player_ptr, ItemEntity *o_ptr, bool known)
 {
-    if (o_ptr->tval == ItemKindType::SCROLL) {
+    const auto tval = o_ptr->bi_key.tval();
+    if (tval == ItemKindType::SCROLL) {
         return std::make_unique<ScrollReadExecutor>(player_ptr, o_ptr, known);
     }
 
@@ -21,7 +22,7 @@ std::unique_ptr<ReadExecutorBase> ReadExecutorFactory::create(PlayerType *player
         return std::make_unique<RingOfPowerReadExecutor>();
     }
 
-    if (o_ptr->tval == ItemKindType::PARCHMENT) {
+    if (tval == ItemKindType::PARCHMENT) {
         return std::make_unique<ParchmentReadExecutor>(player_ptr, o_ptr);
     }
 

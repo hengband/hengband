@@ -46,21 +46,23 @@ static bool is_leave_special_item(PlayerType *player_ptr, ItemEntity *o_ptr)
     }
 
     PlayerClass pc(player_ptr);
+    const auto &bi_key = o_ptr->bi_key;
+    const auto tval = bi_key.tval();
     if (PlayerRace(player_ptr).equals(PlayerRaceType::BALROG)) {
         auto r_idx = i2enum<MonsterRaceId>(o_ptr->pval);
-        if (o_ptr->tval == ItemKindType::CORPSE && o_ptr->sval == SV_CORPSE && angband_strchr("pht", monraces_info[r_idx].d_char)) {
+        if (bi_key == BaseitemKey(ItemKindType::CORPSE, SV_CORPSE) && angband_strchr("pht", monraces_info[r_idx].d_char)) {
             return false;
         }
     } else if (pc.equals(PlayerClassType::ARCHER)) {
-        if (o_ptr->tval == ItemKindType::SKELETON || (o_ptr->tval == ItemKindType::CORPSE && o_ptr->sval == SV_SKELETON)) {
+        if ((tval == ItemKindType::SKELETON) || (bi_key == BaseitemKey(ItemKindType::CORPSE, SV_SKELETON))) {
             return false;
         }
     } else if (pc.equals(PlayerClassType::NINJA)) {
-        if (o_ptr->tval == ItemKindType::LITE && o_ptr->ego_idx == EgoType::LITE_DARKNESS && o_ptr->is_known()) {
+        if (tval == ItemKindType::LITE && o_ptr->ego_idx == EgoType::LITE_DARKNESS && o_ptr->is_known()) {
             return false;
         }
     } else if (pc.is_tamer()) {
-        if (o_ptr->tval == ItemKindType::WAND && o_ptr->sval == SV_WAND_HEAL_MONSTER && o_ptr->is_aware()) {
+        if (bi_key == BaseitemKey(ItemKindType::WAND, SV_WAND_HEAL_MONSTER) && o_ptr->is_aware()) {
             return false;
         }
     }
@@ -89,8 +91,9 @@ static bool is_opt_confirm_destroy(PlayerType *player_ptr, ItemEntity *o_ptr)
         }
     }
 
+    const auto tval = o_ptr->bi_key.tval();
     if (leave_chest) {
-        if ((o_ptr->tval == ItemKindType::CHEST) && o_ptr->pval) {
+        if ((tval == ItemKindType::CHEST) && o_ptr->pval) {
             return false;
         }
     }
@@ -102,13 +105,13 @@ static bool is_opt_confirm_destroy(PlayerType *player_ptr, ItemEntity *o_ptr)
     }
 
     if (leave_corpse) {
-        if (o_ptr->tval == ItemKindType::CORPSE) {
+        if (tval == ItemKindType::CORPSE) {
             return false;
         }
     }
 
     if (leave_junk) {
-        if ((o_ptr->tval == ItemKindType::SKELETON) || (o_ptr->tval == ItemKindType::BOTTLE) || (o_ptr->tval == ItemKindType::JUNK) || (o_ptr->tval == ItemKindType::STATUE)) {
+        if (o_ptr->is_junk()) {
             return false;
         }
     }
@@ -117,7 +120,7 @@ static bool is_opt_confirm_destroy(PlayerType *player_ptr, ItemEntity *o_ptr)
         return false;
     }
 
-    if (o_ptr->tval == ItemKindType::GOLD) {
+    if (tval == ItemKindType::GOLD) {
         return false;
     }
 

@@ -16,6 +16,7 @@
 
 #include <memory>
 #include <stack>
+#include <string_view>
 #include <vector>
 
 /*!
@@ -170,9 +171,9 @@ errr term_gotoxy(TERM_LEN x, TERM_LEN y);
 errr term_draw(TERM_LEN x, TERM_LEN y, TERM_COLOR a, char c);
 errr term_addch(TERM_COLOR a, char c);
 errr term_add_bigch(TERM_COLOR a, char c);
-errr term_addstr(int n, TERM_COLOR a, concptr s);
+errr term_addstr(int n, TERM_COLOR a, std::string_view sv);
 errr term_putch(TERM_LEN x, TERM_LEN y, TERM_COLOR a, char c);
-errr term_putstr(TERM_LEN x, TERM_LEN y, int n, TERM_COLOR a, concptr s);
+errr term_putstr(TERM_LEN x, TERM_LEN y, int n, TERM_COLOR a, std::string_view sv);
 errr term_erase(TERM_LEN x, TERM_LEN y, int n);
 errr term_clear(void);
 errr term_redraw(void);

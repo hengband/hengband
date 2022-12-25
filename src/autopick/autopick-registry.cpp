@@ -29,12 +29,12 @@ static const char autoregister_header[] = "?:$AUTOREGISTER";
 static bool clear_auto_register(PlayerType *player_ptr)
 {
     char pref_file[1024];
-    path_build(pref_file, sizeof(pref_file), ANGBAND_DIR_USER, pickpref_filename(player_ptr, PT_WITH_PNAME));
+    path_build(pref_file, sizeof(pref_file), ANGBAND_DIR_USER, pickpref_filename(player_ptr, PT_WITH_PNAME).data());
     FILE *pref_fff;
     pref_fff = angband_fopen(pref_file, "r");
 
     if (!pref_fff) {
-        path_build(pref_file, sizeof(pref_file), ANGBAND_DIR_USER, pickpref_filename(player_ptr, PT_DEFAULT));
+        path_build(pref_file, sizeof(pref_file), ANGBAND_DIR_USER, pickpref_filename(player_ptr, PT_DEFAULT).data());
         pref_fff = angband_fopen(pref_file, "r");
     }
 
@@ -146,11 +146,11 @@ bool autopick_autoregister(PlayerType *player_ptr, ItemEntity *o_ptr)
     char buf[1024];
     char pref_file[1024];
     FILE *pref_fff;
-    path_build(pref_file, sizeof(pref_file), ANGBAND_DIR_USER, pickpref_filename(player_ptr, PT_WITH_PNAME));
+    path_build(pref_file, sizeof(pref_file), ANGBAND_DIR_USER, pickpref_filename(player_ptr, PT_WITH_PNAME).data());
     pref_fff = angband_fopen(pref_file, "r");
 
     if (!pref_fff) {
-        path_build(pref_file, sizeof(pref_file), ANGBAND_DIR_USER, pickpref_filename(player_ptr, PT_DEFAULT));
+        path_build(pref_file, sizeof(pref_file), ANGBAND_DIR_USER, pickpref_filename(player_ptr, PT_DEFAULT).data());
         pref_fff = angband_fopen(pref_file, "r");
     }
 

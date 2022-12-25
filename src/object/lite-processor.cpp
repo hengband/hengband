@@ -21,11 +21,11 @@
 void reduce_lite_life(PlayerType *player_ptr)
 {
     auto *o_ptr = &player_ptr->inventory_list[INVEN_LITE];
-    if (o_ptr->tval != ItemKindType::LITE) {
+    if (o_ptr->bi_key.tval() != ItemKindType::LITE) {
         return;
     }
 
-    if (o_ptr->is_fixed_artifact() || (o_ptr->sval == SV_LITE_FEANOR) || (o_ptr->fuel <= 0)) {
+    if (o_ptr->is_fixed_artifact() || (o_ptr->bi_key.sval() == SV_LITE_FEANOR) || (o_ptr->fuel <= 0)) {
         return;
     }
 

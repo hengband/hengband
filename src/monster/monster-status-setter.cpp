@@ -11,6 +11,7 @@
 #include "monster-floor/monster-move.h"
 #include "monster-race/monster-kind-mask.h"
 #include "monster-race/monster-race.h"
+#include "monster-race/race-brightness-mask.h"
 #include "monster-race/race-flags3.h"
 #include "monster-race/race-flags7.h"
 #include "monster-race/race-indice-types.h"
@@ -67,9 +68,8 @@ void anger_monster(PlayerType *player_ptr, MonsterEntity *m_ptr)
         return;
     }
 
-    GAME_TEXT m_name[MAX_NLEN];
-    monster_desc(player_ptr, m_name, m_ptr, 0);
-    msg_format(_("%^sは怒った！", "%^s gets angry!"), m_name);
+    const auto m_name = monster_desc(player_ptr, m_ptr, 0);
+    msg_format(_("%^sは怒った！", "%^s gets angry!"), m_name.data());
     set_hostile(player_ptr, m_ptr);
     chg_virtue(player_ptr, V_INDIVIDUALISM, 1);
     chg_virtue(player_ptr, V_HONOUR, -1);
@@ -133,7 +133,7 @@ bool set_monster_csleep(PlayerType *player_ptr, MONSTER_IDX m_idx, int v)
         }
     }
 
-    if (monraces_info[m_ptr->r_idx].flags7 & RF7_HAS_LD_MASK) {
+    if (monraces_info[m_ptr->r_idx].brightness_flags.has_any_of(has_ld_mask)) {
         player_ptr->update |= PU_MON_LITE;
     }
 
@@ -386,8 +386,7 @@ bool set_monster_timewalk(PlayerType *player_ptr, int num, MonsterRaceId who, bo
     }
 
     if (vs_player) {
-        GAME_TEXT m_name[MAX_NLEN];
-        monster_desc(player_ptr, m_name, m_ptr, 0);
+        const auto m_name = monster_desc(player_ptr, m_ptr, 0);
 
         concptr mes;
         switch (who) {
@@ -405,7 +404,7 @@ bool set_monster_timewalk(PlayerType *player_ptr, int num, MonsterRaceId who, bo
             break;
         }
 
-        msg_format(mes, m_name);
+        msg_format(mes, m_name.data());
         msg_print(nullptr);
     }
 

@@ -43,8 +43,8 @@
 
 static bool weakening_artifact(ItemEntity *o_ptr)
 {
-    const auto bi_id = lookup_baseitem_id({ o_ptr->tval, o_ptr->sval });
-    auto *k_ptr = &baseitems_info[bi_id];
+    const auto bi_id = lookup_baseitem_id(o_ptr->bi_key);
+    const auto &baseitem = baseitems_info[bi_id];
     auto flgs = object_flags(o_ptr);
 
     if (flgs.has(TR_KILL_EVIL)) {
@@ -53,12 +53,12 @@ static bool weakening_artifact(ItemEntity *o_ptr)
         return true;
     }
 
-    if (k_ptr->dd < o_ptr->dd) {
+    if (baseitem.dd < o_ptr->dd) {
         o_ptr->dd--;
         return true;
     }
 
-    if (k_ptr->ds < o_ptr->ds) {
+    if (baseitem.ds < o_ptr->ds) {
         o_ptr->ds--;
         return true;
     }
@@ -178,7 +178,8 @@ static bool decide_random_art_cursed(const bool a_scroll, ItemEntity *o_ptr)
         return true;
     }
 
-    if (((o_ptr->tval == ItemKindType::AMULET) || (o_ptr->tval == ItemKindType::RING)) && o_ptr->is_cursed()) {
+    const auto tval = o_ptr->bi_key.tval();
+    if (((tval == ItemKindType::AMULET) || (tval == ItemKindType::RING)) && o_ptr->is_cursed()) {
         return true;
     }
 
@@ -215,7 +216,7 @@ static void invest_powers(PlayerType *player_ptr, ItemEntity *o_ptr, int *powers
             break;
         case 3:
         case 4:
-            if (one_in_(2) && o_ptr->is_weapon_ammo() && (o_ptr->tval != ItemKindType::BOW)) {
+            if (one_in_(2) && o_ptr->is_weapon_ammo() && (o_ptr->bi_key.tval() != ItemKindType::BOW)) {
                 if (a_cursed && !one_in_(13)) {
                     break;
                 }
@@ -254,7 +255,7 @@ static void strengthen_pval(ItemEntity *o_ptr)
 {
     if (o_ptr->art_flags.has(TR_BLOWS)) {
         o_ptr->pval = randint1(2);
-        if ((o_ptr->tval == ItemKindType::SWORD) && (o_ptr->sval == SV_HAYABUSA)) {
+        if (o_ptr->bi_key == BaseitemKey(ItemKindType::SWORD, SV_HAYABUSA)) {
             o_ptr->pval++;
         }
     } else {
@@ -323,7 +324,7 @@ static void invest_negative_modified_value(ItemEntity *o_ptr)
 
 static void reset_flags_poison_needle(ItemEntity *o_ptr)
 {
-    if ((o_ptr->tval != ItemKindType::SWORD) || (o_ptr->sval != SV_POISON_NEEDLE)) {
+    if (o_ptr->bi_key != BaseitemKey(ItemKindType::SWORD, SV_POISON_NEEDLE)) {
         return;
     }
 
@@ -382,40 +383,34 @@ static int decide_random_art_power_level(ItemEntity *o_ptr, const bool a_cursed,
     return 3;
 }
 
-static void name_unnatural_random_artifact(PlayerType *player_ptr, ItemEntity *o_ptr, const bool a_scroll, const int power_level, GAME_TEXT *new_name)
+static std::string name_unnatural_random_artifact(PlayerType *player_ptr, ItemEntity *o_ptr, const bool a_scroll, const int power_level)
 {
     if (!a_scroll) {
-        get_random_name(o_ptr, new_name, o_ptr->is_protector(), power_level);
-        return;
+        return get_random_name(*o_ptr, o_ptr->is_protector(), power_level);
     }
 
-    GAME_TEXT dummy_name[MAX_NLEN] = "";
     concptr ask_msg = _("このアーティファクトを何と名付けますか？", "What do you want to call the artifact? ");
     object_aware(player_ptr, o_ptr);
     object_known(o_ptr);
     o_ptr->ident |= IDENT_FULL_KNOWN;
-    o_ptr->art_name = quark_add("");
+    o_ptr->randart_name.reset();
     (void)screen_object(player_ptr, o_ptr, 0L);
-    if (!get_string(ask_msg, dummy_name, sizeof dummy_name) || !dummy_name[0]) {
+    char new_name[160] = "";
+    if (!get_string(ask_msg, new_name, sizeof new_name) || !new_name[0]) {
         if (one_in_(2)) {
-            get_table_sindarin_aux(dummy_name);
+            return get_table_sindarin_aux();
         } else {
-            get_table_name_aux(dummy_name);
+            return get_table_name_aux();
         }
     }
 
-    sprintf(new_name, _("《%s》", "'%s'"), dummy_name);
-    chg_virtue(player_ptr, V_INDIVIDUALISM, 2);
-    chg_virtue(player_ptr, V_ENCHANT, 5);
+    return std::string(_("《", "'")).append(new_name).append(_("》", "'"));
 }
 
 static void generate_unnatural_random_artifact(
     PlayerType *player_ptr, ItemEntity *o_ptr, const bool a_scroll, const int power_level, const int max_powers, const int total_flags)
 {
-    GAME_TEXT new_name[1024];
-    strcpy(new_name, "");
-    name_unnatural_random_artifact(player_ptr, o_ptr, a_scroll, power_level, new_name);
-    o_ptr->art_name = quark_add(new_name);
+    o_ptr->randart_name = name_unnatural_random_artifact(player_ptr, o_ptr, a_scroll, power_level);
     msg_format_wizard(player_ptr, CHEAT_OBJECT,
         _("パワー %d で 価値%ld のランダムアーティファクト生成 バイアスは「%s」", "Random artifact generated - Power:%d Value:%d Bias:%s."), max_powers,
         total_flags, artifact_bias_name[o_ptr->artifact_bias]);
@@ -466,7 +461,7 @@ bool become_random_artifact(PlayerType *player_ptr, ItemEntity *o_ptr, bool a_sc
     }
 
     invest_negative_modified_value(o_ptr);
-    if (((o_ptr->artifact_bias == BIAS_MAGE) || (o_ptr->artifact_bias == BIAS_INT)) && (o_ptr->tval == ItemKindType::GLOVES)) {
+    if (((o_ptr->artifact_bias == BIAS_MAGE) || (o_ptr->artifact_bias == BIAS_INT)) && (o_ptr->bi_key.tval() == ItemKindType::GLOVES)) {
         o_ptr->art_flags.set(TR_FREE_ACT);
     }
 
@@ -478,5 +473,11 @@ bool become_random_artifact(PlayerType *player_ptr, ItemEntity *o_ptr, bool a_sc
     }
 
     generate_unnatural_random_artifact(player_ptr, o_ptr, a_scroll, power_level, max_powers, total_flags);
+
+    if (a_scroll) {
+        chg_virtue(player_ptr, V_INDIVIDUALISM, 2);
+        chg_virtue(player_ptr, V_ENCHANT, 5);
+    }
+
     return true;
 }

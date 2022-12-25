@@ -270,10 +270,10 @@ bool is_original_ap_and_seen(PlayerType *player_ptr, const MonsterEntity *m_ptr)
  * @brief モンスターIDを取り、モンスター名をm_nameに代入する /
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param m_idx モンスターID
- * @param m_name モンスター名を入力する配列
+ * @return std::string モンスター名
  */
-void monster_name(PlayerType *player_ptr, MONSTER_IDX m_idx, char *m_name)
+std::string monster_name(PlayerType *player_ptr, MONSTER_IDX m_idx)
 {
     auto *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
-    monster_desc(player_ptr, m_name, m_ptr, 0x00);
+    return monster_desc(player_ptr, m_ptr, 0x00);
 }

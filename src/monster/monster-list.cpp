@@ -23,6 +23,7 @@
 #include "monster-floor/monster-summon.h"
 #include "monster-race/monster-kind-mask.h"
 #include "monster-race/monster-race.h"
+#include "monster-race/race-brightness-mask.h"
 #include "monster-race/race-flags1.h"
 #include "monster-race/race-flags2.h"
 #include "monster-race/race-flags3.h"
@@ -319,8 +320,7 @@ void choose_new_monster(PlayerType *player_ptr, MONSTER_IDX m_idx, bool born, Mo
     }
     r_ptr = &monraces_info[r_idx];
 
-    char old_m_name[MAX_NLEN];
-    monster_desc(player_ptr, old_m_name, m_ptr, 0);
+    const auto old_m_name = monster_desc(player_ptr, m_ptr, 0);
 
     if (!MonsterRace(r_idx).is_valid()) {
         DEPTH level;
@@ -359,7 +359,7 @@ void choose_new_monster(PlayerType *player_ptr, MONSTER_IDX m_idx, bool born, Mo
     lite_spot(player_ptr, m_ptr->fy, m_ptr->fx);
 
     auto old_r_idx = m_ptr->r_idx;
-    if ((monraces_info[old_r_idx].flags7 & (RF7_LITE_MASK | RF7_DARK_MASK)) || (r_ptr->flags7 & (RF7_LITE_MASK | RF7_DARK_MASK))) {
+    if (monraces_info[old_r_idx].brightness_flags.has_any_of(ld_mask) || r_ptr->brightness_flags.has_any_of(ld_mask)) {
         player_ptr->update |= (PU_MON_LITE);
     }
 
@@ -378,12 +378,11 @@ void choose_new_monster(PlayerType *player_ptr, MONSTER_IDX m_idx, bool born, Mo
     }
 
     if (m_idx == player_ptr->riding) {
-        GAME_TEXT m_name[MAX_NLEN];
-        monster_desc(player_ptr, m_name, m_ptr, 0);
-        msg_format(_("突然%sが変身した。", "Suddenly, %s transforms!"), old_m_name);
+        msg_format(_("突然%sが変身した。", "Suddenly, %s transforms!"), old_m_name.data());
         if (!(r_ptr->flags7 & RF7_RIDING)) {
             if (process_fall_off_horse(player_ptr, 0, true)) {
-                msg_format(_("地面に落とされた。", "You have fallen from %s."), m_name);
+                const auto m_name = monster_desc(player_ptr, m_ptr, 0);
+                msg_format(_("地面に落とされた。", "You have fallen from %s."), m_name.data());
             }
         }
     }

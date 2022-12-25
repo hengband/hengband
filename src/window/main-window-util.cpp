@@ -122,7 +122,7 @@ static void display_shortened_item_name(PlayerType *player_ptr, ItemEntity *o_pt
 {
     char buf[MAX_NLEN];
     describe_flavor(player_ptr, buf, o_ptr, (OD_NO_FLAVOR | OD_OMIT_PREFIX | OD_NAME_ONLY));
-    TERM_COLOR attr = tval_to_attr[enum2i(o_ptr->tval) % 128];
+    auto attr = tval_to_attr[enum2i(o_ptr->bi_key.tval()) % 128];
 
     if (player_ptr->effects()->hallucination()->is_hallucinated()) {
         attr = TERM_WHITE;

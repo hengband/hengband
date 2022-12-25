@@ -31,6 +31,7 @@
 #include "system/item-entity.h"
 #include "system/player-type-definition.h"
 #include "target/target-checker.h"
+#include "term/z-form.h"
 #include "view/display-messages.h"
 #include "world/world.h"
 #ifdef JP
@@ -96,7 +97,7 @@ void py_pickup_floor(PlayerType *player_ptr, bool pickup)
         o_ptr = &player_ptr->current_floor_ptr->o_list[this_o_idx];
         describe_flavor(player_ptr, o_name, o_ptr, 0);
         disturb(player_ptr, false, false);
-        if (o_ptr->tval == ItemKindType::GOLD) {
+        if (o_ptr->bi_key.tval() == ItemKindType::GOLD) {
             msg_format(_(" $%ld の価値がある%sを見つけた。", "You have found %ld gold pieces worth of %s."), (long)o_ptr->pval, o_name);
             sound(SOUND_SELL);
             player_ptr->au += o_ptr->pval;
@@ -159,7 +160,7 @@ void py_pickup_floor(PlayerType *player_ptr, bool pickup)
         char out_val[MAX_NLEN + 20];
         o_ptr = &player_ptr->current_floor_ptr->o_list[floor_o_idx];
         describe_flavor(player_ptr, o_name, o_ptr, 0);
-        (void)sprintf(out_val, _("%sを拾いますか? ", "Pick up %s? "), o_name);
+        strnfmt(out_val, sizeof(out_val), _("%sを拾いますか? ", "Pick up %s? "), o_name);
         if (!get_check(out_val)) {
             return;
         }
@@ -187,8 +188,6 @@ void describe_pickup_item(PlayerType *player_ptr, OBJECT_IDX o_idx)
 #ifdef JP
     GAME_TEXT o_name[MAX_NLEN];
     GAME_TEXT old_name[MAX_NLEN];
-    char kazu_str[80];
-    int hirottakazu;
 #else
     GAME_TEXT o_name[MAX_NLEN];
 #endif
@@ -198,8 +197,8 @@ void describe_pickup_item(PlayerType *player_ptr, OBJECT_IDX o_idx)
 
 #ifdef JP
     describe_flavor(player_ptr, old_name, o_ptr, OD_NAME_ONLY);
-    object_desc_count_japanese(kazu_str, o_ptr);
-    hirottakazu = o_ptr->number;
+    const auto picked_count_str = describe_count_with_counter_suffix(*o_ptr);
+    const auto picked_count = o_ptr->number;
 #endif
 
     INVENTORY_IDX slot = store_item_to_inventory(player_ptr, o_ptr);
@@ -224,8 +223,8 @@ void describe_pickup_item(PlayerType *player_ptr, OBJECT_IDX o_idx)
         if (plain_pickup) {
             msg_format("%s(%c)を持っている。", o_name, index_to_label(slot));
         } else {
-            if (o_ptr->number > hirottakazu) {
-                msg_format("%s拾って、%s(%c)を持っている。", kazu_str, o_name, index_to_label(slot));
+            if (o_ptr->number > picked_count) {
+                msg_format("%s拾って、%s(%c)を持っている。", picked_count_str.data(), o_name, index_to_label(slot));
             } else {
                 msg_format("%s(%c)を拾った。", o_name, index_to_label(slot));
             }
@@ -267,7 +266,7 @@ void carry(PlayerType *player_ptr, bool pickup)
         GAME_TEXT o_name[MAX_NLEN];
         describe_flavor(player_ptr, o_name, o_ptr, 0);
         disturb(player_ptr, false, false);
-        if (o_ptr->tval == ItemKindType::GOLD) {
+        if (o_ptr->bi_key.tval() == ItemKindType::GOLD) {
             int value = (long)o_ptr->pval;
             delete_object_idx(player_ptr, this_o_idx);
             msg_format(_(" $%ld の価値がある%sを見つけた。", "You collect %ld gold pieces worth of %s."), (long)value, o_name);
@@ -296,7 +295,7 @@ void carry(PlayerType *player_ptr, bool pickup)
         int is_pickup_successful = true;
         if (carry_query_flag) {
             char out_val[MAX_NLEN + 20];
-            sprintf(out_val, _("%sを拾いますか? ", "Pick up %s? "), o_name);
+            strnfmt(out_val, sizeof(out_val), _("%sを拾いますか? ", "Pick up %s? "), o_name);
             is_pickup_successful = get_check(out_val);
         }
 

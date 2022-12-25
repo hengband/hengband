@@ -328,10 +328,8 @@ bool destroy_area(PlayerType *player_ptr, POSITION y1, POSITION x1, POSITION r, 
                     }
                 } else {
                     if (record_named_pet && m_ptr->is_pet() && m_ptr->nickname) {
-                        GAME_TEXT m_name[MAX_NLEN];
-
-                        monster_desc(player_ptr, m_name, m_ptr, MD_INDEF_VISIBLE);
-                        exe_write_diary(player_ptr, DIARY_NAMED_PET, RECORD_NAMED_PET_DESTROY, m_name);
+                        const auto m_name = monster_desc(player_ptr, m_ptr, MD_INDEF_VISIBLE);
+                        exe_write_diary(player_ptr, DIARY_NAMED_PET, RECORD_NAMED_PET_DESTROY, m_name.data());
                     }
 
                     /* Delete the monster (if any) */
@@ -355,7 +353,7 @@ bool destroy_area(PlayerType *player_ptr, POSITION y1, POSITION x1, POSITION r, 
                             describe_flavor(player_ptr, o_name, o_ptr, (OD_NAME_ONLY | OD_STORE));
                             msg_format(_("伝説のアイテム (%s) は生成中に*破壊*された。", "Artifact (%s) was *destroyed* during generation."), o_name);
                         }
-                    } else if (in_generate && cheat_peek && o_ptr->art_name) {
+                    } else if (in_generate && cheat_peek && o_ptr->is_random_artifact()) {
                         msg_print(
                             _("ランダム・アーティファクトの1つは生成中に*破壊*された。", "One of the random artifacts was *destroyed* during generation."));
                     }

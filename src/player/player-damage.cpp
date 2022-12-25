@@ -297,7 +297,6 @@ int take_hit(PlayerType *player_ptr, int damage_type, int damage, concptr hit_fr
     int old_chp = player_ptr->chp;
 
     char death_message[1024];
-    char tmp[1024];
 
     int warning = (player_ptr->mhp * hitpoint_warn / 10);
     if (player_ptr->is_dead) {
@@ -496,7 +495,7 @@ int take_hit(PlayerType *player_ptr, int damage_type, int damage, concptr hit_fr
 
                 if (death_message[0] == '\0') {
 #ifdef JP
-                    strcpy(death_message, format("あなたは%sました。", android ? "壊れ" : "死に"));
+                    strcpy(death_message, format("あなたは%sました。", android ? "壊れ" : "死に").data());
 #else
                     strcpy(death_message, android ? "You are broken." : "You die.");
 #endif
@@ -580,8 +579,7 @@ int take_hit(PlayerType *player_ptr, int damage_type, int damage, concptr hit_fr
                 hit_from = _("何か", "something");
             }
 
-            sprintf(tmp, _("%sによってピンチに陥った。", "was in a critical situation because of %s."), hit_from);
-            exe_write_diary(player_ptr, DIARY_DESCRIPTION, 0, tmp);
+            exe_write_diary(player_ptr, DIARY_DESCRIPTION, 0, std::string(_(hit_from, "was in a critical situation because of ")).append(_("によってピンチに陥った。", hit_from)).append(_("", ".")).data());
         }
 
         if (auto_more) {
@@ -617,11 +615,9 @@ static void process_aura_damage(MonsterEntity *m_ptr, PlayerType *player_ptr, bo
         return;
     }
 
-    GAME_TEXT mon_name[MAX_NLEN];
     int aura_damage = damroll(1 + (r_ptr->level / 26), 1 + (r_ptr->level / 17));
-    monster_desc(player_ptr, mon_name, m_ptr, MD_WRONGDOER_NAME);
     msg_print(message);
-    (*dam_func)(player_ptr, aura_damage, mon_name, true);
+    (*dam_func)(player_ptr, aura_damage, monster_desc(player_ptr, m_ptr, MD_WRONGDOER_NAME).data(), true);
     if (is_original_ap_and_seen(player_ptr, m_ptr)) {
         r_ptr->r_aura_flags.set(aura_flag);
     }

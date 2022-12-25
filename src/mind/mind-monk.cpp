@@ -11,6 +11,7 @@
 #include "status/action-setter.h"
 #include "system/player-type-definition.h"
 #include "term/screen-processor.h"
+#include "term/z-form.h"
 #include "util/int-char-converter.h"
 #include "view/display-messages.h"
 
@@ -44,7 +45,7 @@ bool choose_monk_stance(PlayerType *player_ptr)
     for (auto i = 0U; i < monk_stances.size(); i++) {
         if (player_ptr->lev >= monk_stances[i].min_level) {
             char buf[80];
-            sprintf(buf, " %c) %-12s  %s", I2A(i + 1), monk_stances[i].desc, monk_stances[i].info);
+            strnfmt(buf, sizeof(buf), " %c) %-12s  %s", I2A(i + 1), monk_stances[i].desc, monk_stances[i].info);
             prt(buf, 3 + i, 20);
         }
     }

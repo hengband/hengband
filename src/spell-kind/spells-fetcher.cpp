@@ -9,6 +9,7 @@
 #include "grid/feature-flag-types.h"
 #include "grid/grid.h"
 #include "monster-race/monster-race.h"
+#include "monster-race/race-brightness-mask.h"
 #include "monster-race/race-flags7.h"
 #include "monster/monster-describer.h"
 #include "monster/monster-status-setter.h"
@@ -116,16 +117,11 @@ void fetch_item(PlayerType *player_ptr, DIRECTION dir, WEIGHT wgt, bool require_
 
 bool fetch_monster(PlayerType *player_ptr)
 {
-    MonsterEntity *m_ptr;
-    MONSTER_IDX m_idx;
-    GAME_TEXT m_name[MAX_NLEN];
-    POSITION ty, tx;
-
     if (!target_set(player_ptr, TARGET_KILL)) {
         return false;
     }
 
-    m_idx = player_ptr->current_floor_ptr->grid_array[target_row][target_col].m_idx;
+    auto m_idx = player_ptr->current_floor_ptr->grid_array[target_row][target_col].m_idx;
     if (!m_idx) {
         return false;
     }
@@ -139,11 +135,11 @@ bool fetch_monster(PlayerType *player_ptr)
         return false;
     }
 
-    m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
-    monster_desc(player_ptr, m_name, m_ptr, 0);
-    msg_format(_("%sを引き戻した。", "You pull back %s."), m_name);
+    auto *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
+    const auto m_name = monster_desc(player_ptr, m_ptr, 0);
+    msg_format(_("%sを引き戻した。", "You pull back %s."), m_name.data());
     projection_path path_g(player_ptr, get_max_range(player_ptr), target_row, target_col, player_ptr->y, player_ptr->x, 0);
-    ty = target_row, tx = target_col;
+    auto ty = target_row, tx = target_col;
     for (const auto &[ny, nx] : path_g) {
         auto *g_ptr = &player_ptr->current_floor_ptr->grid_array[ny][nx];
 
@@ -161,7 +157,7 @@ bool fetch_monster(PlayerType *player_ptr)
     update_monster(player_ptr, m_idx, true);
     lite_spot(player_ptr, target_row, target_col);
     lite_spot(player_ptr, ty, tx);
-    if (monraces_info[m_ptr->r_idx].flags7 & (RF7_LITE_MASK | RF7_DARK_MASK)) {
+    if (monraces_info[m_ptr->r_idx].brightness_flags.has_any_of(ld_mask)) {
         player_ptr->update |= (PU_MON_LITE);
     }
 

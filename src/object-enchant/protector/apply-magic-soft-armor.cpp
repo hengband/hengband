@@ -47,7 +47,12 @@ void SoftArmorEnchanter::apply_magic()
 
 void SoftArmorEnchanter::sval_enchant()
 {
-    switch (this->o_ptr->sval) {
+    const auto sval = this->o_ptr->bi_key.sval();
+    if (!sval.has_value()) {
+        return;
+    }
+
+    switch (sval.value()) {
     case SV_KUROSHOUZOKU:
         this->o_ptr->pval = randint1(4);
         return;
@@ -76,7 +81,8 @@ void SoftArmorEnchanter::sval_enchant()
  */
 void SoftArmorEnchanter::give_high_ego_index()
 {
-    if ((this->o_ptr->sval != SV_ROBE) || (randint0(100) >= 15)) {
+    const auto sval = this->o_ptr->bi_key.sval();
+    if ((sval != SV_ROBE) || (randint0(100) >= 15)) {
         return;
     }
 
@@ -87,8 +93,9 @@ void SoftArmorEnchanter::give_high_ego_index()
         return;
     }
 
-    this->o_ptr->bi_id = lookup_baseitem_id({ ItemKindType::SOFT_ARMOR, SV_TWILIGHT_ROBE });
-    this->o_ptr->sval = SV_TWILIGHT_ROBE;
+    const BaseitemKey key(ItemKindType::SOFT_ARMOR, SV_TWILIGHT_ROBE);
+    this->o_ptr->bi_id = lookup_baseitem_id(key);
+    this->o_ptr->bi_key = key;
     this->o_ptr->ac = 0;
     this->o_ptr->to_a = 0;
     return;

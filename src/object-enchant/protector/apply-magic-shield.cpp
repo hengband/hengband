@@ -31,7 +31,7 @@ ShieldEnchanter::ShieldEnchanter(PlayerType *player_ptr, ItemEntity *o_ptr, DEPT
  */
 void ShieldEnchanter::apply_magic()
 {
-    if (this->o_ptr->sval == SV_DRAGON_SHIELD) {
+    if (this->o_ptr->bi_key.sval() == SV_DRAGON_SHIELD) {
         dragon_resist(this->o_ptr);
         if (!one_in_(3)) {
             return;
@@ -56,10 +56,11 @@ void ShieldEnchanter::apply_magic()
  */
 void ShieldEnchanter::give_ego_index()
 {
+    const auto sval = this->o_ptr->bi_key.sval();
     while (true) {
         this->o_ptr->ego_idx = get_random_ego(INVEN_SUB_HAND, true);
-        auto is_metal = this->o_ptr->sval == SV_SMALL_METAL_SHIELD;
-        is_metal |= this->o_ptr->sval == SV_LARGE_METAL_SHIELD;
+        auto is_metal = sval == SV_SMALL_METAL_SHIELD;
+        is_metal |= sval == SV_LARGE_METAL_SHIELD;
         if (!is_metal && (this->o_ptr->ego_idx == EgoType::S_DWARVEN)) {
             continue;
         }
@@ -69,7 +70,7 @@ void ShieldEnchanter::give_ego_index()
 
     switch (this->o_ptr->ego_idx) {
     case EgoType::REFLECTION:
-        if (this->o_ptr->sval == SV_MIRROR_SHIELD) {
+        if (sval == SV_MIRROR_SHIELD) {
             this->o_ptr->ego_idx = EgoType::NONE;
         }
 

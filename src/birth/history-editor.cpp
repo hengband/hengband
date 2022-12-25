@@ -6,6 +6,7 @@
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
 #include "util/int-char-converter.h"
+#include "util/string-processor.h"
 #include "view/display-player.h" // 暫定。後で消す.
 
 /*!
@@ -14,9 +15,9 @@
  */
 void edit_history(PlayerType *player_ptr)
 {
-    char old_history[4][60];
+    std::string old_history[4];
     for (int i = 0; i < 4; i++) {
-        sprintf(old_history[i], "%s", player_ptr->history[i]);
+        old_history[i] = player_ptr->history[i];
     }
 
     for (int i = 0; i < 4; i++) {
@@ -117,7 +118,7 @@ void edit_history(PlayerType *player_ptr)
             clear_from(11);
             put_str(_("(キャラクターの生い立ち)", "(Character Background)"), 11, 25);
             for (int i = 0; i < 4; i++) {
-                sprintf(player_ptr->history[i], "%s", old_history[i]);
+                angband_strcpy(player_ptr->history[i], old_history[i].data(), sizeof(player_ptr->history[i]));
                 put_str(player_ptr->history[i], i + 12, 10);
             }
 

@@ -21,14 +21,9 @@
 PRICE flag_cost(const ItemEntity *o_ptr, int plusses)
 {
     PRICE total = 0;
-    auto *k_ptr = &baseitems_info[o_ptr->bi_id];
     auto flgs = object_flags(o_ptr);
-
-    /*
-     * Exclude fixed flags of the base item.
-     * pval bonuses of base item will be treated later.
-     */
-    flgs.reset(k_ptr->flags);
+    const auto &baseitem = baseitems_info[o_ptr->bi_id];
+    flgs.reset(baseitem.flags);
 
     if (o_ptr->is_fixed_artifact()) {
         const auto &a_ref = artifacts_info.at(o_ptr->fixed_artifact_idx);
@@ -533,7 +528,7 @@ PRICE flag_cost(const ItemEntity *o_ptr, int plusses)
     }
 
     /* Also, give some extra for activatable powers... */
-    if (o_ptr->art_name && (o_ptr->art_flags.has(TR_ACTIVATE))) {
+    if (o_ptr->is_random_artifact() && o_ptr->art_flags.has(TR_ACTIVATE)) {
         auto act_ptr = find_activation_info(o_ptr);
         if (act_ptr.has_value()) {
             total += act_ptr.value()->value;

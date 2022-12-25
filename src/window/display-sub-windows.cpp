@@ -37,6 +37,7 @@
 #include "term/gameterm.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
+#include "term/z-form.h"
 #include "timed-effect/player-hallucination.h"
 #include "timed-effect/timed-effects.h"
 #include "util/bit-flags-calculator.h"
@@ -48,6 +49,7 @@
 #include "window/main-window-equipments.h"
 #include "window/main-window-util.h"
 #include "world/world.h"
+#include <algorithm>
 #include <mutex>
 #include <sstream>
 #include <string>
@@ -74,7 +76,7 @@ void fix_inventory(PlayerType *player_ptr)
 {
     for (int j = 0; j < 8; j++) {
         term_type *old = game_term;
-        if (!angband_term[j]) {
+        if (!angband_terms[j]) {
             continue;
         }
 
@@ -82,7 +84,7 @@ void fix_inventory(PlayerType *player_ptr)
             continue;
         }
 
-        term_activate(angband_term[j]);
+        term_activate(angband_terms[j]);
         display_inventory(player_ptr, *fix_item_tester);
         term_fresh();
         term_activate(old);
@@ -107,7 +109,7 @@ void fix_inventory(PlayerType *player_ptr)
  */
 static void print_monster_line(TERM_LEN x, TERM_LEN y, MonsterEntity *m_ptr, int n_same, int n_awake)
 {
-    char buf[256];
+    std::string buf;
     MonsterRaceId r_idx = m_ptr->ap_r_idx;
     auto *r_ptr = &monraces_info[r_idx];
 
@@ -117,26 +119,24 @@ static void print_monster_line(TERM_LEN x, TERM_LEN y, MonsterEntity *m_ptr, int
         return;
     }
     if (r_ptr->kind_flags.has(MonsterKindType::UNIQUE)) {
-        sprintf(buf, _("%3s(覚%2d)", "%3s(%2d)"), MonsterRace(r_idx).is_bounty(true) ? "  W" : "  U", n_awake);
-        term_addstr(-1, TERM_WHITE, buf);
+        buf = format(_("%3s(覚%2d)", "%3s(%2d)"), MonsterRace(r_idx).is_bounty(true) ? "  W" : "  U", n_awake);
     } else {
-        sprintf(buf, _("%3d(覚%2d)", "%3d(%2d)"), n_same, n_awake);
-        term_addstr(-1, TERM_WHITE, buf);
+        buf = format(_("%3d(覚%2d)", "%3d(%2d)"), n_same, n_awake);
     }
+    term_addstr(-1, TERM_WHITE, buf);
 
     term_addstr(-1, TERM_WHITE, " ");
     term_add_bigch(r_ptr->x_attr, r_ptr->x_char);
 
     if (r_ptr->r_tkills && m_ptr->mflag2.has_not(MonsterConstantFlagType::KAGE)) {
-        sprintf(buf, " %2d", (int)r_ptr->level);
+        buf = format(" %2d", (int)r_ptr->level);
     } else {
-        strcpy(buf, " ??");
+        buf = " ??";
     }
 
     term_addstr(-1, TERM_WHITE, buf);
 
-    sprintf(buf, " %s ", r_ptr->name.data());
-    term_addstr(-1, TERM_WHITE, buf);
+    term_addstr(-1, TERM_WHITE, format(" %s ", r_ptr->name.data()));
 }
 
 /*!
@@ -210,17 +210,17 @@ void fix_monster_list(PlayerType *player_ptr)
 
     for (int j = 0; j < 8; j++) {
         term_type *old = game_term;
-        if (!angband_term[j]) {
+        if (!angband_terms[j]) {
             continue;
         }
         if (!(window_flag[j] & PW_MONSTER_LIST)) {
             continue;
         }
-        if (angband_term[j]->never_fresh) {
+        if (angband_terms[j]->never_fresh) {
             continue;
         }
 
-        term_activate(angband_term[j]);
+        term_activate(angband_terms[j]);
         int w, h;
         term_get_size(&w, &h);
         std::call_once(once, target_sensing_monsters_prepare, player_ptr, monster_list);
@@ -249,7 +249,6 @@ static void display_equipment(PlayerType *player_ptr, const ItemTester &item_tes
     term_get_size(&wid, &hgt);
 
     TERM_COLOR attr = TERM_WHITE;
-    char tmp_val[80];
     GAME_TEXT o_name[MAX_NLEN];
     for (int i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
         int cur_row = i - INVEN_MAIN_HAND;
@@ -259,7 +258,7 @@ static void display_equipment(PlayerType *player_ptr, const ItemTester &item_tes
 
         auto o_ptr = &player_ptr->inventory_list[i];
         auto do_disp = player_ptr->select_ring_slot ? is_ring_slot(i) : item_tester.okay(o_ptr);
-        strcpy(tmp_val, "   ");
+        std::string tmp_val = "   ";
 
         if (do_disp) {
             tmp_val[0] = index_to_label(i);
@@ -275,7 +274,7 @@ static void display_equipment(PlayerType *player_ptr, const ItemTester &item_tes
             attr = TERM_WHITE;
         } else {
             describe_flavor(player_ptr, o_name, o_ptr, 0);
-            attr = tval_to_attr[enum2i(o_ptr->tval) % 128];
+            attr = tval_to_attr[enum2i(o_ptr->bi_key.tval()) % 128];
         }
 
         int n = strlen(o_name);
@@ -297,7 +296,7 @@ static void display_equipment(PlayerType *player_ptr, const ItemTester &item_tes
         term_putstr(cur_col, cur_row, n, attr, o_name);
         if (show_weights) {
             int wgt = o_ptr->weight * o_ptr->number;
-            sprintf(tmp_val, _("%3d.%1d kg", "%3d.%1d lb"), _(lb_to_kg_integer(wgt), wgt / 10), _(lb_to_kg_fraction(wgt), wgt % 10));
+            tmp_val = format(_("%3d.%1d kg", "%3d.%1d lb"), _(lb_to_kg_integer(wgt), wgt / 10), _(lb_to_kg_fraction(wgt), wgt % 10));
             prt(tmp_val, cur_row, wid - (show_labels ? 28 : 9));
         }
 
@@ -321,14 +320,14 @@ void fix_equip(PlayerType *player_ptr)
 {
     for (int j = 0; j < 8; j++) {
         term_type *old = game_term;
-        if (!angband_term[j]) {
+        if (!angband_terms[j]) {
             continue;
         }
         if (!(window_flag[j] & (PW_EQUIP))) {
             continue;
         }
 
-        term_activate(angband_term[j]);
+        term_activate(angband_terms[j]);
         display_equipment(player_ptr, *fix_item_tester);
         term_fresh();
         term_activate(old);
@@ -344,7 +343,7 @@ void fix_player(PlayerType *player_ptr)
 {
     for (int j = 0; j < 8; j++) {
         term_type *old = game_term;
-        if (!angband_term[j]) {
+        if (!angband_terms[j]) {
             continue;
         }
 
@@ -352,7 +351,7 @@ void fix_player(PlayerType *player_ptr)
             continue;
         }
 
-        term_activate(angband_term[j]);
+        term_activate(angband_terms[j]);
         update_playtime();
         (void)display_player(player_ptr, 0);
         term_fresh();
@@ -369,7 +368,7 @@ void fix_message(void)
 {
     for (int j = 0; j < 8; j++) {
         term_type *old = game_term;
-        if (!angband_term[j]) {
+        if (!angband_terms[j]) {
             continue;
         }
 
@@ -377,7 +376,7 @@ void fix_message(void)
             continue;
         }
 
-        term_activate(angband_term[j]);
+        term_activate(angband_terms[j]);
         TERM_LEN w, h;
         term_get_size(&w, &h);
         for (int i = 0; i < h; i++) {
@@ -405,7 +404,7 @@ void fix_overhead(PlayerType *player_ptr)
     for (int j = 0; j < 8; j++) {
         term_type *old = game_term;
         TERM_LEN wid, hgt;
-        if (!angband_term[j]) {
+        if (!angband_terms[j]) {
             continue;
         }
 
@@ -413,7 +412,7 @@ void fix_overhead(PlayerType *player_ptr)
             continue;
         }
 
-        term_activate(angband_term[j]);
+        term_activate(angband_terms[j]);
         term_get_size(&wid, &hgt);
         if (wid > COL_MAP + 2 && hgt > ROW_MAP + 2) {
             int cy, cx;
@@ -471,7 +470,7 @@ void fix_dungeon(PlayerType *player_ptr)
 {
     for (int j = 0; j < 8; j++) {
         term_type *old = game_term;
-        if (!angband_term[j]) {
+        if (!angband_terms[j]) {
             continue;
         }
 
@@ -479,7 +478,7 @@ void fix_dungeon(PlayerType *player_ptr)
             continue;
         }
 
-        term_activate(angband_term[j]);
+        term_activate(angband_terms[j]);
         display_dungeon(player_ptr);
         term_fresh();
         term_activate(old);
@@ -495,7 +494,7 @@ void fix_monster(PlayerType *player_ptr)
 {
     for (int j = 0; j < 8; j++) {
         term_type *old = game_term;
-        if (!angband_term[j]) {
+        if (!angband_terms[j]) {
             continue;
         }
 
@@ -503,7 +502,7 @@ void fix_monster(PlayerType *player_ptr)
             continue;
         }
 
-        term_activate(angband_term[j]);
+        term_activate(angband_terms[j]);
         if (MonsterRace(player_ptr->monster_race_idx).is_valid()) {
             display_roff(player_ptr);
         }
@@ -520,21 +519,18 @@ void fix_monster(PlayerType *player_ptr)
  */
 void fix_object(PlayerType *player_ptr)
 {
-    for (int j = 0; j < 8; j++) {
-        term_type *old = game_term;
-        if (!angband_term[j]) {
+    for (auto i = 0; i < 8; i++) {
+        auto *old = game_term;
+        if (angband_terms[i] == nullptr) {
             continue;
         }
 
-        if (!(window_flag[j] & (PW_OBJECT))) {
+        if (none_bits(window_flag[i], PW_OBJECT)) {
             continue;
         }
 
-        term_activate(angband_term[j]);
-        if (player_ptr->baseitem_info_idx) {
-            display_koff(player_ptr, player_ptr->baseitem_info_idx);
-        }
-
+        term_activate(angband_terms[i]);
+        display_koff(player_ptr);
         term_fresh();
         term_activate(old);
     }
@@ -585,42 +581,41 @@ static void display_floor_item_list(PlayerType *player_ptr, const int y, const i
 
     auto *floor_ptr = player_ptr->current_floor_ptr;
     const auto *g_ptr = &floor_ptr->grid_array[y][x];
-    char line[1024];
+    std::string line;
 
     // 先頭行を書く。
     auto is_hallucinated = player_ptr->effects()->hallucination()->is_hallucinated();
     if (player_bold(player_ptr, y, x)) {
-        sprintf(line, _("(X:%03d Y:%03d) あなたの足元のアイテム一覧", "Items at (%03d,%03d) under you"), x, y);
+        line = format(_("(X:%03d Y:%03d) あなたの足元のアイテム一覧", "Items at (%03d,%03d) under you"), x, y);
     } else if (const auto *m_ptr = monster_on_floor_items(floor_ptr, g_ptr); m_ptr != nullptr) {
         if (is_hallucinated) {
-            sprintf(line, _("(X:%03d Y:%03d) 何か奇妙な物の足元の発見済みアイテム一覧", "Found items at (%03d,%03d) under something strange"), x, y);
+            line = format(_("(X:%03d Y:%03d) 何か奇妙な物の足元の発見済みアイテム一覧", "Found items at (%03d,%03d) under something strange"), x, y);
         } else {
             const MonsterRaceInfo *const r_ptr = &monraces_info[m_ptr->ap_r_idx];
-            sprintf(line, _("(X:%03d Y:%03d) %sの足元の発見済みアイテム一覧", "Found items at (%03d,%03d) under %s"), x, y, r_ptr->name.data());
+            line = format(_("(X:%03d Y:%03d) %sの足元の発見済みアイテム一覧", "Found items at (%03d,%03d) under %s"), x, y, r_ptr->name.data());
         }
     } else {
         const TerrainType *const f_ptr = &terrains_info[g_ptr->feat];
         concptr fn = f_ptr->name.data();
-        char buf[512];
+        std::string buf;
 
         if (f_ptr->flags.has(TerrainCharacteristics::STORE) || (f_ptr->flags.has(TerrainCharacteristics::BLDG) && !floor_ptr->inside_arena)) {
-            sprintf(buf, _("%sの入口", "on the entrance of %s"), fn);
+            buf = format(_("%sの入口", "on the entrance of %s"), fn);
         } else if (f_ptr->flags.has(TerrainCharacteristics::WALL)) {
-            sprintf(buf, _("%sの中", "in %s"), fn);
+            buf = format(_("%sの中", "in %s"), fn);
         } else {
-            sprintf(buf, _("%s", "on %s"), fn);
+            buf = format(_("%s", "on %s"), fn);
         }
-        sprintf(line, _("(X:%03d Y:%03d) %sの上の発見済みアイテム一覧", "Found items at (X:%03d Y:%03d) %s"), x, y, buf);
+        line = format(_("(X:%03d Y:%03d) %sの上の発見済みアイテム一覧", "Found items at (X:%03d Y:%03d) %s"), x, y, buf.data());
     }
     term_addstr(-1, TERM_WHITE, line);
 
     // (y,x) のアイテムを1行に1個ずつ書く。
     TERM_LEN term_y = 1;
     for (const auto o_idx : g_ptr->o_idx_list) {
-        ItemEntity *const o_ptr = &floor_ptr->o_list[o_idx];
-
-        // 未発見アイテムおよび金は対象外。
-        if (o_ptr->marked.has_not(OmType::FOUND) || o_ptr->tval == ItemKindType::GOLD) {
+        auto *const o_ptr = &floor_ptr->o_list[o_idx];
+        const auto tval = o_ptr->bi_key.tval();
+        if (o_ptr->marked.has_not(OmType::FOUND) || tval == ItemKindType::GOLD) {
             continue;
         }
 
@@ -635,9 +630,10 @@ static void display_floor_item_list(PlayerType *player_ptr, const int y, const i
         if (is_hallucinated) {
             term_addstr(-1, TERM_WHITE, _("何か奇妙な物", "something strange"));
         } else {
-            describe_flavor(player_ptr, line, o_ptr, 0);
-            TERM_COLOR attr = tval_to_attr[enum2i(o_ptr->tval) % 128];
-            term_addstr(-1, attr, line);
+            char buf[1024];
+            describe_flavor(player_ptr, buf, o_ptr, 0);
+            TERM_COLOR attr = tval_to_attr[enum2i(tval) % 128];
+            term_addstr(-1, attr, buf);
         }
 
         ++term_y;
@@ -650,10 +646,10 @@ static void display_floor_item_list(PlayerType *player_ptr, const int y, const i
 void fix_floor_item_list(PlayerType *player_ptr, const int y, const int x)
 {
     for (int j = 0; j < 8; j++) {
-        if (!angband_term[j]) {
+        if (!angband_terms[j]) {
             continue;
         }
-        if (angband_term[j]->never_fresh) {
+        if (angband_terms[j]->never_fresh) {
             continue;
         }
         if (!(window_flag[j] & PW_FLOOR_ITEM_LIST)) {
@@ -661,7 +657,7 @@ void fix_floor_item_list(PlayerType *player_ptr, const int y, const int x)
         }
 
         term_type *old = game_term;
-        term_activate(angband_term[j]);
+        term_activate(angband_terms[j]);
 
         display_floor_item_list(player_ptr, y, x);
         term_fresh();
@@ -695,7 +691,7 @@ static void display_found_item_list(PlayerType *player_ptr)
     std::vector<ItemEntity *> found_item_list;
     for (auto &item : floor_ptr->o_list) {
         auto item_entity_ptr = &item;
-        if (item_entity_ptr->bi_id > 0 && item_entity_ptr->marked.has(OmType::FOUND) && item_entity_ptr->tval != ItemKindType::GOLD) {
+        if (item_entity_ptr->bi_id > 0 && item_entity_ptr->marked.has(OmType::FOUND) && item_entity_ptr->bi_key.tval() != ItemKindType::GOLD) {
             found_item_list.push_back(item_entity_ptr);
         }
     }
@@ -732,7 +728,7 @@ static void display_found_item_list(PlayerType *player_ptr)
         char temp[512];
         describe_flavor(player_ptr, temp, item, 0);
         const std::string item_description(temp);
-        const auto color_code_for_item = tval_to_attr[enum2i(item->tval) % 128];
+        const auto color_code_for_item = tval_to_attr[enum2i(item->bi_key.tval()) % 128];
         term_addstr(-1, color_code_for_item, item_description.data());
 
         // アイテム座標表示
@@ -749,10 +745,10 @@ static void display_found_item_list(PlayerType *player_ptr)
 void fix_found_item_list(PlayerType *player_ptr)
 {
     for (int j = 0; j < 8; j++) {
-        if (!angband_term[j]) {
+        if (!angband_terms[j]) {
             continue;
         }
-        if (angband_term[j]->never_fresh) {
+        if (angband_terms[j]->never_fresh) {
             continue;
         }
         if (none_bits(window_flag[j], PW_FOUND_ITEM_LIST)) {
@@ -760,7 +756,7 @@ void fix_found_item_list(PlayerType *player_ptr)
         }
 
         term_type *old = game_term;
-        term_activate(angband_term[j]);
+        term_activate(angband_terms[j]);
 
         display_found_item_list(player_ptr);
         term_fresh();
@@ -775,21 +771,21 @@ void fix_found_item_list(PlayerType *player_ptr)
  */
 void toggle_inventory_equipment(PlayerType *player_ptr)
 {
-    for (int j = 0; j < 8; j++) {
-        if (!angband_term[j]) {
+    for (auto i = 0U; i < angband_terms.size(); ++i) {
+        if (!angband_terms[i]) {
             continue;
         }
 
-        if (window_flag[j] & (PW_INVEN)) {
-            window_flag[j] &= ~(PW_INVEN);
-            window_flag[j] |= (PW_EQUIP);
+        if (window_flag[i] & (PW_INVEN)) {
+            window_flag[i] &= ~(PW_INVEN);
+            window_flag[i] |= (PW_EQUIP);
             player_ptr->window_flags |= (PW_EQUIP);
             continue;
         }
 
-        if (window_flag[j] & PW_EQUIP) {
-            window_flag[j] &= ~(PW_EQUIP);
-            window_flag[j] |= PW_INVEN;
+        if (window_flag[i] & PW_EQUIP) {
+            window_flag[i] &= ~(PW_EQUIP);
+            window_flag[i] |= PW_INVEN;
             player_ptr->window_flags |= PW_INVEN;
         }
     }

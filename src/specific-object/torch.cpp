@@ -27,7 +27,7 @@
  */
 bool is_active_torch(ItemEntity *o_ptr)
 {
-    return (o_ptr->tval == ItemKindType::LITE) && (o_ptr->sval == SV_LITE_TORCH) && (o_ptr->fuel > 0);
+    return (o_ptr->bi_key == BaseitemKey(ItemKindType::LITE, SV_LITE_TORCH)) && (o_ptr->fuel > 0);
 }
 
 /*!
@@ -103,12 +103,13 @@ void update_lite_radius(PlayerType *player_ptr)
         }
 
         if (flgs.has_not(TR_DARK_SOURCE)) {
-            if (o_ptr->tval == ItemKindType::LITE) {
-                if ((o_ptr->sval == SV_LITE_TORCH) && !(o_ptr->fuel > 0)) {
+            if (o_ptr->bi_key.tval() == ItemKindType::LITE) {
+                const auto sval = o_ptr->bi_key.sval();
+                if ((sval == SV_LITE_TORCH) && (o_ptr->fuel <= 0)) {
                     continue;
                 }
 
-                if ((o_ptr->sval == SV_LITE_LANTERN) && !(o_ptr->fuel > 0)) {
+                if ((sval == SV_LITE_LANTERN) && (o_ptr->fuel <= 0)) {
                     continue;
                 }
             }

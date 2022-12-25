@@ -32,6 +32,7 @@
 #include "system/player-type-definition.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
+#include "term/z-form.h"
 #include "util/angband-files.h"
 #include "util/bit-flags-calculator.h"
 #include "util/int-char-converter.h"
@@ -118,7 +119,6 @@ void do_cmd_knowledge_pets(PlayerType *player_ptr)
     }
 
     MonsterEntity *m_ptr;
-    GAME_TEXT pet_name[MAX_NLEN];
     int t_friends = 0;
     for (int i = player_ptr->current_floor_ptr->m_max - 1; i >= 1; i--) {
         m_ptr = &player_ptr->current_floor_ptr->m_list[i];
@@ -127,8 +127,8 @@ void do_cmd_knowledge_pets(PlayerType *player_ptr)
         }
 
         t_friends++;
-        monster_desc(player_ptr, pet_name, m_ptr, MD_ASSUME_VISIBLE | MD_INDEF_VISIBLE);
-        fprintf(fff, "%s (%s)\n", pet_name, look_mon_desc(m_ptr, 0x00));
+        const auto pet_name = monster_desc(player_ptr, m_ptr, MD_ASSUME_VISIBLE | MD_INDEF_VISIBLE);
+        fprintf(fff, "%s (%s)\n", pet_name.data(), look_mon_desc(m_ptr, 0x00).data());
     }
 
     int show_upkeep = calculate_upkeep(player_ptr);
@@ -193,21 +193,19 @@ void do_cmd_knowledge_kill_count(PlayerType *player_ptr)
     }
 
     uint16_t why = 2;
-    char buf[80];
     ang_sort(player_ptr, who.data(), &why, who.size(), ang_sort_comp_hook, ang_sort_swap_hook);
     for (auto r_idx : who) {
         auto *r_ptr = &monraces_info[r_idx];
         if (r_ptr->kind_flags.has(MonsterKindType::UNIQUE)) {
             bool dead = (r_ptr->max_num == 0);
             if (dead) {
+                std::string details;
                 if (r_ptr->defeat_level && r_ptr->defeat_time) {
-                    sprintf(buf, _(" - レベル%2d - %d:%02d:%02d", " - level %2d - %d:%02d:%02d"), r_ptr->defeat_level, r_ptr->defeat_time / (60 * 60),
+                    details = format(_(" - レベル%2d - %d:%02d:%02d", " - level %2d - %d:%02d:%02d"), r_ptr->defeat_level, r_ptr->defeat_time / (60 * 60),
                         (r_ptr->defeat_time / 60) % 60, r_ptr->defeat_time % 60);
-                } else {
-                    buf[0] = '\0';
                 }
 
-                fprintf(fff, "     %s%s\n", r_ptr->name.data(), buf);
+                fprintf(fff, "     %s%s\n", r_ptr->name.data(), details.data());
                 total++;
             }
 

@@ -20,6 +20,7 @@
 #include "monster-floor/special-death-switcher.h"
 #include "monster-race/monster-race-hook.h"
 #include "monster-race/monster-race.h"
+#include "monster-race/race-brightness-mask.h"
 #include "monster-race/race-flags1.h"
 #include "monster-race/race-flags2.h"
 #include "monster-race/race-flags7.h"
@@ -50,15 +51,15 @@
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 #include "world/world.h"
+#include <algorithm>
 
 static void write_pet_death(PlayerType *player_ptr, monster_death_type *md_ptr)
 {
     md_ptr->md_y = md_ptr->m_ptr->fy;
     md_ptr->md_x = md_ptr->m_ptr->fx;
     if (record_named_pet && md_ptr->m_ptr->is_pet() && md_ptr->m_ptr->nickname) {
-        GAME_TEXT m_name[MAX_NLEN];
-        monster_desc(player_ptr, m_name, md_ptr->m_ptr, MD_INDEF_VISIBLE);
-        exe_write_diary(player_ptr, DIARY_NAMED_PET, 3, m_name);
+        const auto m_name = monster_desc(player_ptr, md_ptr->m_ptr, MD_INDEF_VISIBLE);
+        exe_write_diary(player_ptr, DIARY_NAMED_PET, 3, m_name.data());
     }
 }
 
@@ -112,9 +113,8 @@ static void on_defeat_arena_monster(PlayerType *player_ptr, monster_death_type *
         return;
     }
 
-    GAME_TEXT m_name[MAX_NLEN];
-    monster_desc(player_ptr, m_name, md_ptr->m_ptr, MD_WRONGDOER_NAME);
-    exe_write_diary(player_ptr, DIARY_ARENA, player_ptr->arena_number, m_name);
+    const auto m_name = monster_desc(player_ptr, md_ptr->m_ptr, MD_WRONGDOER_NAME);
+    exe_write_diary(player_ptr, DIARY_ARENA, player_ptr->arena_number, m_name.data());
 }
 
 static void drop_corpse(PlayerType *player_ptr, monster_death_type *md_ptr)
@@ -399,7 +399,7 @@ void monster_death(PlayerType *player_ptr, MONSTER_IDX m_idx, bool drop_item, At
         md_ptr->r_ptr->defeat_level = player_ptr->lev;
     }
 
-    if (md_ptr->r_ptr->flags7 & (RF7_LITE_MASK | RF7_DARK_MASK)) {
+    if (md_ptr->r_ptr->brightness_flags.has_any_of(ld_mask)) {
         player_ptr->update |= PU_MON_LITE;
     }
 
@@ -441,15 +441,19 @@ void monster_death(PlayerType *player_ptr, MONSTER_IDX m_idx, bool drop_item, At
  */
 concptr extract_note_dies(MonsterRaceId r_idx)
 {
-    auto *r_ptr = &monraces_info[r_idx];
+    const auto &r_ref = monraces_info[r_idx];
+    const auto explode = std::any_of(std::begin(r_ref.blow), std::end(r_ref.blow), [](const auto &blow) { return blow.method == RaceBlowMethodType::EXPLODE; });
+
     if (monster_living(r_idx)) {
+        if (explode) {
+            return _("は爆発して死んだ。", " explodes and dies.");
+        }
+
         return _("は死んだ。", " dies.");
     }
 
-    for (int i = 0; i < 4; i++) {
-        if (r_ptr->blow[i].method == RaceBlowMethodType::EXPLODE) {
-            return _("は爆発して粉々になった。", " explodes into tiny shreds.");
-        }
+    if (explode) {
+        return _("は爆発して粉々になった。", " explodes into tiny shreds.");
     }
 
     return _("を倒した。", " is destroyed.");

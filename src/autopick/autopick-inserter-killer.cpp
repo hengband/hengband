@@ -105,7 +105,7 @@ bool insert_macro_line(text_body_type *tb)
     tb->cx = 0;
     insert_return_code(tb);
     string_free(tb->lines_list[tb->cy]);
-    tb->lines_list[tb->cy] = string_make(format("P:%s", tmp));
+    tb->lines_list[tb->cy] = string_make(format("P:%s", tmp).data());
 
     i = macro_find_exact(buf);
     if (i == -1) {
@@ -116,7 +116,7 @@ bool insert_macro_line(text_body_type *tb)
 
     insert_return_code(tb);
     string_free(tb->lines_list[tb->cy]);
-    tb->lines_list[tb->cy] = string_make(format("A:%s", tmp));
+    tb->lines_list[tb->cy] = string_make(format("A:%s", tmp).data());
 
     return true;
 }
@@ -151,7 +151,7 @@ bool insert_keymap_line(text_body_type *tb)
     tb->cx = 0;
     insert_return_code(tb);
     string_free(tb->lines_list[tb->cy]);
-    tb->lines_list[tb->cy] = string_make(format("C:%d:%s", mode, tmp));
+    tb->lines_list[tb->cy] = string_make(format("C:%d:%s", mode, tmp).data());
 
     concptr act = keymap_act[mode][(byte)(buf[0])];
     if (act) {
@@ -160,7 +160,7 @@ bool insert_keymap_line(text_body_type *tb)
 
     insert_return_code(tb);
     string_free(tb->lines_list[tb->cy]);
-    tb->lines_list[tb->cy] = string_make(format("A:%s", tmp));
+    tb->lines_list[tb->cy] = string_make(format("A:%s", tmp).data());
 
     return true;
 }

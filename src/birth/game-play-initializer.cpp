@@ -32,9 +32,9 @@
  */
 static void reset_baseitem_idenditication_flags()
 {
-    for (auto &k_ref : baseitems_info) {
-        k_ref.tried = false;
-        k_ref.aware = false;
+    for (auto &baseitem : baseitems_info) {
+        baseitem.tried = false;
+        baseitem.aware = false;
     }
 }
 

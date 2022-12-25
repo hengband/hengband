@@ -690,9 +690,8 @@ static XImage *ResizeImage(Display *dpy, XImage *Im, int ix, int iy, int ox, int
     Visual *visual = DefaultVisual(dpy, DefaultScreen(dpy));
 
     int width1, height1, width2, height2;
-    volatile int x1, x2, y1, y2, Tx, Ty;
-    volatile int *px1, *px2, *dx1, *dx2;
-    volatile int *py1, *py2, *dy1, *dy2;
+    int x1, x2, y1, y2, Tx, Ty;
+    int dx1, dx2, dy1, dy2;
 
     XImage *Tmp;
 
@@ -713,52 +712,60 @@ static XImage *ResizeImage(Display *dpy, XImage *Im, int ix, int iy, int ox, int
     Tmp = XCreateImage(dpy, visual, Im->depth, ZPixmap, 0, Data, width2, height2, 32, 0);
 
     if (ix > ox) {
-        px1 = &x1;
-        px2 = &x2;
-        dx1 = &ix;
-        dx2 = &ox;
+        dx1 = ix;
+        dx2 = ox;
     } else {
-        px1 = &x2;
-        px2 = &x1;
-        dx1 = &ox;
-        dx2 = &ix;
+        dx1 = ox;
+        dx2 = ix;
     }
 
     if (iy > oy) {
-        py1 = &y1;
-        py2 = &y2;
-        dy1 = &iy;
-        dy2 = &oy;
+        dy1 = iy;
+        dy2 = oy;
     } else {
-        py1 = &y2;
-        py2 = &y1;
-        dy1 = &oy;
-        dy2 = &iy;
+        dy1 = oy;
+        dy2 = iy;
     }
 
-    Ty = *dy1 / 2;
+    Ty = dy1 / 2;
 
     for (y1 = 0, y2 = 0; (y1 < height1) && (y2 < height2);) {
-        Tx = *dx1 / 2;
+        Tx = dx1 / 2;
 
         for (x1 = 0, x2 = 0; (x1 < width1) && (x2 < width2);) {
             XPutPixel(Tmp, x2, y2, XGetPixel(Im, x1, y1));
 
-            (*px1)++;
+            if (ix > ox) {
+                ++x1;
+            } else {
+                ++x2;
+            }
 
-            Tx -= *dx2;
+            Tx -= dx2;
             if (Tx < 0) {
-                Tx += *dx1;
-                (*px2)++;
+                Tx += dx1;
+                if (ix > ox) {
+                    ++x2;
+                } else {
+                    ++x1;
+                }
             }
         }
 
-        (*py1)++;
+        if (iy > oy) {
+            ++y1;
+        } else {
+            ++y2;
+        }
 
-        Ty -= *dy2;
+        Ty -= dy2;
         if (Ty < 0) {
-            Ty += *dy1;
-            (*py2)++;
+            Ty += dy1;
+            if (iy > oy) {
+                ++y2;
+            } else {
+                ++y1;
+            }
         }
     }
 

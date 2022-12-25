@@ -23,7 +23,7 @@ byte kanji_code = 0;
  * @details
  * Avoid the top two lines, to avoid interference with "msg_print()".
  */
-void load_note(concptr msg)
+void load_note(std::string_view msg)
 {
     static TERM_LEN y = 2;
     prt(msg, y, 0);

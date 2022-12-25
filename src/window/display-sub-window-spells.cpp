@@ -15,6 +15,7 @@
 #include "term/gameterm.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
+#include "term/z-form.h"
 #include "timed-effect/player-stun.h"
 #include "timed-effect/timed-effects.h"
 #include "util/int-char-converter.h"
@@ -33,7 +34,6 @@ static void display_spell_list(PlayerType *player_ptr)
     int m[9];
     const magic_type *s_ptr;
     GAME_TEXT name[MAX_NLEN];
-    char out_val[160];
 
     clear_from(0);
 
@@ -52,8 +52,6 @@ static void display_spell_list(PlayerType *player_ptr)
         PLAYER_LEVEL plev = player_ptr->lev;
         PERCENTAGE chance = 0;
         mind_type spell;
-        char comment[80];
-        char psi_desc[160];
         MindKindType use_mind;
         bool use_hp = false;
 
@@ -123,10 +121,9 @@ static void display_spell_list(PlayerType *player_ptr)
                 chance = 95;
             }
 
-            mindcraft_info(player_ptr, comment, use_mind, i);
-            sprintf(psi_desc, "  %c) %-30s%2d %4d %3d%%%s", I2A(i), spell.name, spell.min_lev, spell.mana_cost, chance, comment);
+            const auto comment = mindcraft_info(player_ptr, use_mind, i);
 
-            term_putstr(x, y + i + 1, -1, a, psi_desc);
+            term_putstr(x, y + i + 1, -1, a, format("  %c) %-30s%2d %4d %3d%%%s", I2A(i), spell.name, spell.min_lev, spell.mana_cost, chance, comment.data()));
         }
 
         return;
@@ -150,7 +147,8 @@ static void display_spell_list(PlayerType *player_ptr)
                 s_ptr = &mp_ptr->info[((j < 1) ? player_ptr->realm1 : player_ptr->realm2) - 1][i % 32];
             }
 
-            strcpy(name, exe_spell(player_ptr, (j < 1) ? player_ptr->realm1 : player_ptr->realm2, i % 32, SpellProcessType::NAME));
+            const auto spell_name = exe_spell(player_ptr, (j < 1) ? player_ptr->realm1 : player_ptr->realm2, i % 32, SpellProcessType::NAME);
+            strcpy(name, spell_name->data());
 
             if (s_ptr->slevel >= 99) {
                 strcpy(name, _("(判読不能)", "(illegible)"));
@@ -163,10 +161,8 @@ static void display_spell_list(PlayerType *player_ptr)
                 a = TERM_YELLOW;
             }
 
-            sprintf(out_val, "%c/%c) %-20.20s", I2A(n / 8), I2A(n % 8), name);
-
             m[j] = y + n;
-            term_putstr(x, m[j], -1, a, out_val);
+            term_putstr(x, m[j], -1, a, format("%c/%c) %-20.20s", I2A(n / 8), I2A(n % 8), name));
             n++;
         }
     }
@@ -179,17 +175,17 @@ static void display_spell_list(PlayerType *player_ptr)
  */
 void fix_spell(PlayerType *player_ptr)
 {
-    for (int j = 0; j < 8; j++) {
+    for (auto i = 0U; i < angband_terms.size(); ++i) {
         term_type *old = game_term;
-        if (!angband_term[j]) {
+        if (!angband_terms[i]) {
             continue;
         }
 
-        if (!(window_flag[j] & (PW_SPELL))) {
+        if (!(window_flag[i] & (PW_SPELL))) {
             continue;
         }
 
-        term_activate(angband_term[j]);
+        term_activate(angband_terms[i]);
         display_spell_list(player_ptr);
         term_fresh();
         player_ptr->window_flags &= ~(PW_SPELL);

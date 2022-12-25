@@ -176,7 +176,7 @@ static void set_bias_pois(ItemEntity *o_ptr)
 /* 一定確率で再試行する */
 static void set_weird_bias_aura_elec(ItemEntity *o_ptr)
 {
-    if (o_ptr->tval >= ItemKindType::CLOAK && o_ptr->tval <= ItemKindType::HARD_ARMOR) {
+    if (o_ptr->can_be_aura_protector()) {
         o_ptr->art_flags.set(TR_SH_ELEC);
     } else {
         random_resistance(o_ptr);
@@ -190,7 +190,7 @@ static void set_weird_bias_aura_elec(ItemEntity *o_ptr)
 /* 一定確率で再試行する */
 static void set_weird_bias_aura_fire(ItemEntity *o_ptr)
 {
-    if (o_ptr->tval >= ItemKindType::CLOAK && o_ptr->tval <= ItemKindType::HARD_ARMOR) {
+    if (o_ptr->can_be_aura_protector()) {
         o_ptr->art_flags.set(TR_SH_FIRE);
     } else {
         random_resistance(o_ptr);
@@ -204,9 +204,15 @@ static void set_weird_bias_aura_fire(ItemEntity *o_ptr)
 /* 一定確率で再試行する */
 static void set_weird_bias_reflection(ItemEntity *o_ptr)
 {
-    if (o_ptr->tval == ItemKindType::SHIELD || o_ptr->tval == ItemKindType::CLOAK || o_ptr->tval == ItemKindType::HELM || o_ptr->tval == ItemKindType::HARD_ARMOR) {
+    switch (o_ptr->bi_key.tval()) {
+    case ItemKindType::SHIELD:
+    case ItemKindType::CLOAK:
+    case ItemKindType::HELM:
+    case ItemKindType::HARD_ARMOR:
         o_ptr->art_flags.set(TR_REFLECT);
         return;
+    default:
+        break;
     }
 
     random_resistance(o_ptr);
@@ -215,7 +221,7 @@ static void set_weird_bias_reflection(ItemEntity *o_ptr)
 /* 一定確率で再試行する */
 static void set_weird_bias_aura_cold(ItemEntity *o_ptr)
 {
-    if (o_ptr->tval >= ItemKindType::CLOAK && o_ptr->tval <= ItemKindType::HARD_ARMOR) {
+    if (o_ptr->can_be_aura_protector()) {
         o_ptr->art_flags.set(TR_SH_COLD);
     } else {
         random_resistance(o_ptr);

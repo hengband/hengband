@@ -127,7 +127,7 @@ void ObjectQuaffEntity::moisten(const ItemEntity &o_ref)
         set_food(this->player_ptr, std::min<short>(this->player_ptr->food + o_ref.pval + std::max<short>(0, o_ref.pval * 10) + 2000, PY_FOOD_MAX - 1));
         return;
     case PlayerRaceFoodType::OIL:
-        if (o_ref.tval != ItemKindType::FLASK) {
+        if (o_ref.bi_key.tval() != ItemKindType::FLASK) {
             set_food(this->player_ptr, this->player_ptr->food + ((o_ref.pval) / 20));
             return;
         }

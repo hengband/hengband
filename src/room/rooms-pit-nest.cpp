@@ -67,50 +67,46 @@ static int pick_vault_type(FloorType *floor_ptr, std::vector<nest_pit_type> &l_p
  * Hack -- Get the string describing subtype of pit/nest
  * Determined in prepare function (some pit/nest only)
  */
-static concptr pit_subtype_string(int type, bool nest)
+static std::string pit_subtype_string(int type, bool nest)
 {
-    static char inner_buf[256] = "";
-    inner_buf[0] = '\0';
     if (nest) {
         switch (type) {
         case NEST_TYPE_CLONE:
-            sprintf(inner_buf, "(%s)", monraces_info[vault_aux_race].name.data());
-            break;
+            return std::string("(").append(monraces_info[vault_aux_race].name).append(1, ')');
         case NEST_TYPE_SYMBOL_GOOD:
         case NEST_TYPE_SYMBOL_EVIL:
-            sprintf(inner_buf, "(%c)", vault_aux_char);
-            break;
+            return std::string("(").append(1, vault_aux_char).append(1, ')');
         }
 
-        return inner_buf;
+        return std::string();
     }
 
     /* Pits */
     switch (type) {
     case PIT_TYPE_SYMBOL_GOOD:
     case PIT_TYPE_SYMBOL_EVIL:
-        sprintf(inner_buf, "(%c)", vault_aux_char);
+        return std::string("(").append(1, vault_aux_char).append(1, ')');
         break;
     case PIT_TYPE_DRAGON:
         if (vault_aux_dragon_mask4.has_all_of({ MonsterAbilityType::BR_ACID, MonsterAbilityType::BR_ELEC, MonsterAbilityType::BR_FIRE, MonsterAbilityType::BR_COLD, MonsterAbilityType::BR_POIS })) {
-            strcpy(inner_buf, _("(万色)", "(multi-hued)"));
+            return _("(万色)", "(multi-hued)");
         } else if (vault_aux_dragon_mask4.has(MonsterAbilityType::BR_ACID)) {
-            strcpy(inner_buf, _("(酸)", "(acid)"));
+            return _("(酸)", "(acid)");
         } else if (vault_aux_dragon_mask4.has(MonsterAbilityType::BR_ELEC)) {
-            strcpy(inner_buf, _("(稲妻)", "(lightning)"));
+            return _("(稲妻)", "(lightning)");
         } else if (vault_aux_dragon_mask4.has(MonsterAbilityType::BR_FIRE)) {
-            strcpy(inner_buf, _("(火炎)", "(fire)"));
+            return _("(火炎)", "(fire)");
         } else if (vault_aux_dragon_mask4.has(MonsterAbilityType::BR_COLD)) {
-            strcpy(inner_buf, _("(冷気)", "(frost)"));
+            return _("(冷気)", "(frost)");
         } else if (vault_aux_dragon_mask4.has(MonsterAbilityType::BR_POIS)) {
-            strcpy(inner_buf, _("(毒)", "(poison)"));
+            return _("(毒)", "(poison)");
         } else {
-            strcpy(inner_buf, _("(未定義)", "(undefined)"));
+            return _("(未定義)", "(undefined)");
         }
         break;
     }
 
-    return inner_buf;
+    return std::string();
 }
 
 /*
@@ -374,7 +370,7 @@ bool build_type5(PlayerType *player_ptr, dun_data_type *dd_ptr)
     }
 
     msg_format_wizard(
-        player_ptr, CHEAT_DUNGEON, _("モンスター部屋(nest)(%s%s)を生成します。", "Monster nest (%s%s)"), n_ptr->name, pit_subtype_string(cur_nest_type, true));
+        player_ptr, CHEAT_DUNGEON, _("モンスター部屋(nest)(%s%s)を生成します。", "Monster nest (%s%s)"), n_ptr->name, pit_subtype_string(cur_nest_type, true).data());
 
     /* Place some monsters */
     for (y = yval - 2; y <= yval + 2; y++) {
@@ -628,7 +624,7 @@ bool build_type6(PlayerType *player_ptr, dun_data_type *dd_ptr)
     }
 
     msg_format_wizard(
-        player_ptr, CHEAT_DUNGEON, _("モンスター部屋(pit)(%s%s)を生成します。", "Monster pit (%s%s)"), n_ptr->name, pit_subtype_string(cur_pit_type, false));
+        player_ptr, CHEAT_DUNGEON, _("モンスター部屋(pit)(%s%s)を生成します。", "Monster pit (%s%s)"), n_ptr->name, pit_subtype_string(cur_pit_type, false).data());
 
     /* Select the entries */
     for (i = 0; i < 8; i++) {
@@ -959,7 +955,7 @@ bool build_type13(PlayerType *player_ptr, dun_data_type *dd_ptr)
     }
 
     msg_format_wizard(
-        player_ptr, CHEAT_DUNGEON, _("%s%sの罠ピットが生成されました。", "Trapped monster pit (%s%s)"), n_ptr->name, pit_subtype_string(cur_pit_type, false));
+        player_ptr, CHEAT_DUNGEON, _("%s%sの罠ピットが生成されました。", "Trapped monster pit (%s%s)"), n_ptr->name, pit_subtype_string(cur_pit_type, false).data());
 
     /* Select the entries */
     for (i = 0; i < 8; i++) {

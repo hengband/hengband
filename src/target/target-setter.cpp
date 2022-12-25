@@ -21,8 +21,10 @@
 #include "target/target-preparation.h"
 #include "target/target-types.h"
 #include "term/screen-processor.h"
+#include "term/z-form.h"
 #include "util/bit-flags-calculator.h"
 #include "util/int-char-converter.h"
+#include "util/string-processor.h"
 #include "window/display-sub-windows.h"
 #include "window/main-window-util.h"
 #include <vector>
@@ -175,9 +177,9 @@ static void describe_projectablity(PlayerType *player_ptr, ts_type *ts_ptr)
 
     ts_ptr->g_ptr = &player_ptr->current_floor_ptr->grid_array[ts_ptr->y][ts_ptr->x];
     if (target_able(player_ptr, ts_ptr->g_ptr->m_idx)) {
-        strcpy(ts_ptr->info, _("q止 t決 p自 o現 +次 -前", "q,t,p,o,+,-,<dir>"));
+        angband_strcpy(ts_ptr->info, _("q止 t決 p自 o現 +次 -前", "q,t,p,o,+,-,<dir>"), sizeof(ts_ptr->info));
     } else {
-        strcpy(ts_ptr->info, _("q止 p自 o現 +次 -前", "q,p,o,+,-,<dir>"));
+        angband_strcpy(ts_ptr->info, _("q止 p自 o現 +次 -前", "q,p,o,+,-,<dir>"), sizeof(ts_ptr->info));
     }
 
     if (!cheat_sight) {
@@ -185,9 +187,11 @@ static void describe_projectablity(PlayerType *player_ptr, ts_type *ts_ptr)
     }
 
     char cheatinfo[30];
-    sprintf(cheatinfo, " X:%d Y:%d LOS:%d LOP:%d", ts_ptr->x, ts_ptr->y, los(player_ptr, player_ptr->y, player_ptr->x, ts_ptr->y, ts_ptr->x),
+    strnfmt(cheatinfo, sizeof(cheatinfo), " X:%d Y:%d LOS:%d LOP:%d", ts_ptr->x,
+        ts_ptr->y,
+        los(player_ptr, player_ptr->y, player_ptr->x, ts_ptr->y, ts_ptr->x),
         projectable(player_ptr, player_ptr->y, player_ptr->x, ts_ptr->y, ts_ptr->x));
-    strcat(ts_ptr->info, cheatinfo);
+    angband_strcat(ts_ptr->info, cheatinfo, sizeof(ts_ptr->info));
 }
 
 static void menu_target(ts_type *ts_ptr)
@@ -424,9 +428,9 @@ static void describe_grid_wizard(PlayerType *player_ptr, ts_type *ts_ptr)
     }
 
     char cheatinfo[100];
-    sprintf(cheatinfo, " X:%d Y:%d LOS:%d LOP:%d SPECIAL:%d", ts_ptr->x, ts_ptr->y, los(player_ptr, player_ptr->y, player_ptr->x, ts_ptr->y, ts_ptr->x),
+    strnfmt(cheatinfo, sizeof(cheatinfo), " X:%d Y:%d LOS:%d LOP:%d SPECIAL:%d", ts_ptr->x, ts_ptr->y, los(player_ptr, player_ptr->y, player_ptr->x, ts_ptr->y, ts_ptr->x),
         projectable(player_ptr, player_ptr->y, player_ptr->x, ts_ptr->y, ts_ptr->x), ts_ptr->g_ptr->special);
-    strcat(ts_ptr->info, cheatinfo);
+    angband_strcat(ts_ptr->info, cheatinfo, sizeof(ts_ptr->info));
 }
 
 static void switch_next_grid_command(PlayerType *player_ptr, ts_type *ts_ptr)

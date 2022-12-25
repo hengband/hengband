@@ -20,6 +20,7 @@
 #include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
 #include "util/bit-flags-calculator.h"
+#include "util/string-processor.h"
 #include "view/display-messages.h"
 #include "world/world.h"
 
@@ -161,7 +162,7 @@ static void effect_monster_psi_resist(PlayerType *player_ptr, effect_monster_typ
     }
 
     /* Injure +/- confusion */
-    monster_desc(player_ptr, em_ptr->killer, em_ptr->m_ptr, MD_WRONGDOER_NAME);
+    angband_strcpy(em_ptr->killer, monster_desc(player_ptr, em_ptr->m_ptr, MD_WRONGDOER_NAME).data(), sizeof(em_ptr->killer));
     take_hit(player_ptr, DAMAGE_ATTACK, em_ptr->dam, em_ptr->killer);
     effect_monster_psi_reflect_extra_effect(player_ptr, em_ptr);
     em_ptr->dam = 0;
@@ -253,7 +254,7 @@ static void effect_monster_psi_drain_resist(PlayerType *player_ptr, effect_monst
         return;
     }
 
-    monster_desc(player_ptr, em_ptr->killer, em_ptr->m_ptr, MD_WRONGDOER_NAME);
+    angband_strcpy(em_ptr->killer, monster_desc(player_ptr, em_ptr->m_ptr, MD_WRONGDOER_NAME).data(), sizeof(em_ptr->killer));
     if (check_multishadow(player_ptr)) {
         take_hit(player_ptr, DAMAGE_ATTACK, em_ptr->dam, em_ptr->killer);
         em_ptr->dam = 0;

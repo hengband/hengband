@@ -123,9 +123,9 @@ static void ninja_critical(PlayerType *player_ptr, player_attack_type *pa_ptr)
  */
 void critical_attack(PlayerType *player_ptr, player_attack_type *pa_ptr)
 {
-    auto *o_ptr = &player_ptr->inventory_list[INVEN_MAIN_HAND + pa_ptr->hand];
+    auto *o_ptr = &player_ptr->inventory_list[enum2i(INVEN_MAIN_HAND) + pa_ptr->hand];
     auto *r_ptr = &monraces_info[pa_ptr->m_ptr->r_idx];
-    if (((o_ptr->tval == ItemKindType::SWORD) && (o_ptr->sval == SV_POISON_NEEDLE)) || (pa_ptr->mode == HISSATSU_KYUSHO)) {
+    if ((o_ptr->bi_key == BaseitemKey(ItemKindType::SWORD, SV_POISON_NEEDLE)) || (pa_ptr->mode == HISSATSU_KYUSHO)) {
         if ((randint1(randint1(r_ptr->level / 7) + 5) == 1) && r_ptr->kind_flags.has_not(MonsterKindType::UNIQUE) && !(r_ptr->flags7 & RF7_UNIQUE2)) {
             pa_ptr->attack_damage = pa_ptr->m_ptr->hp + 1;
             msg_format(_("%sの急所を突き刺した！", "You hit %s on a fatal spot!"), pa_ptr->m_name);
@@ -136,7 +136,12 @@ void critical_attack(PlayerType *player_ptr, player_attack_type *pa_ptr)
         return;
     }
 
-    bool is_ninja_hit = PlayerClass(player_ptr).equals(PlayerClassType::NINJA) && has_melee_weapon(player_ptr, INVEN_MAIN_HAND + pa_ptr->hand) && !player_ptr->is_icky_wield[pa_ptr->hand] && ((player_ptr->cur_lite <= 0) || one_in_(7));
+    if (!PlayerClass(player_ptr).equals(PlayerClassType::NINJA)) {
+        return;
+    }
+
+    const auto has_weapon = has_melee_weapon(player_ptr, enum2i(INVEN_MAIN_HAND) + pa_ptr->hand);
+    const auto is_ninja_hit = has_weapon && !player_ptr->is_icky_wield[pa_ptr->hand] && ((player_ptr->cur_lite <= 0) || one_in_(7));
     if (is_ninja_hit) {
         ninja_critical(player_ptr, pa_ptr);
     }

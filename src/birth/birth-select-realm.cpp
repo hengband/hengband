@@ -10,8 +10,9 @@
 #include "system/player-type-definition.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
-#include "util/buffer-shaper.h"
+#include "term/z-form.h"
 #include "util/int-char-converter.h"
+#include "view/display-util.h"
 
 static const byte REALM_SELECT_CANCEL = 255;
 
@@ -149,7 +150,7 @@ static void analyze_realms(const PlayerType *player_ptr, const uint32_t choices,
 
         birth_realm_ptr->sym[birth_realm_ptr->n] = I2A(birth_realm_ptr->n);
 
-        sprintf(birth_realm_ptr->buf, "%c%c %s", birth_realm_ptr->sym[birth_realm_ptr->n], birth_realm_ptr->p2, realm_names[i + 1]);
+        strnfmt(birth_realm_ptr->buf, sizeof(birth_realm_ptr->buf), "%c%c %s", birth_realm_ptr->sym[birth_realm_ptr->n], birth_realm_ptr->p2, realm_names[i + 1]);
         put_str(birth_realm_ptr->buf, 12 + (birth_realm_ptr->n / 5), 2 + 15 * (birth_realm_ptr->n % 5));
         birth_realm_ptr->picks[birth_realm_ptr->n++] = i + 1;
     }
@@ -164,11 +165,11 @@ static void move_birth_realm_cursor(birth_realm_type *birth_realm_ptr)
     c_put_str(TERM_WHITE, birth_realm_ptr->cur, 12 + (birth_realm_ptr->os / 5), 2 + 15 * (birth_realm_ptr->os % 5));
 
     if (birth_realm_ptr->cs == birth_realm_ptr->n) {
-        sprintf(birth_realm_ptr->cur, "%c%c %s", '*', birth_realm_ptr->p2, _("ランダム", "Random"));
+        strnfmt(birth_realm_ptr->cur, sizeof(birth_realm_ptr->cur), "%c%c %s", '*', birth_realm_ptr->p2, _("ランダム", "Random"));
     } else {
-        sprintf(birth_realm_ptr->cur, "%c%c %s", birth_realm_ptr->sym[birth_realm_ptr->cs], birth_realm_ptr->p2,
+        strnfmt(birth_realm_ptr->cur, sizeof(birth_realm_ptr->cur), "%c%c %s", birth_realm_ptr->sym[birth_realm_ptr->cs], birth_realm_ptr->p2,
             realm_names[birth_realm_ptr->picks[birth_realm_ptr->cs]]);
-        sprintf(birth_realm_ptr->buf, "%s", realm_names[birth_realm_ptr->picks[birth_realm_ptr->cs]]);
+        strnfmt(birth_realm_ptr->buf, sizeof(birth_realm_ptr->buf), "%s", realm_names[birth_realm_ptr->picks[birth_realm_ptr->cs]]);
         c_put_str(TERM_L_BLUE, birth_realm_ptr->buf, 3, 40);
         prt(_("の特徴", ": Characteristic"), 3, 40 + strlen(birth_realm_ptr->buf));
         prt(realm_subinfo[technic2magic(birth_realm_ptr->picks[birth_realm_ptr->cs]) - 1].data(), 4, 40);
@@ -218,7 +219,7 @@ static bool get_a_realm(PlayerType *player_ptr, birth_realm_type *birth_realm_pt
             break;
         }
 
-        sprintf(birth_realm_ptr->buf, _("領域を選んで下さい(%c-%c) ('='初期オプション設定): ", "Choose a realm (%c-%c) ('=' for options): "),
+        strnfmt(birth_realm_ptr->buf, sizeof(birth_realm_ptr->buf), _("領域を選んで下さい(%c-%c) ('='初期オプション設定): ", "Choose a realm (%c-%c) ('=' for options): "),
             birth_realm_ptr->sym[0], birth_realm_ptr->sym[birth_realm_ptr->n - 1]);
 
         put_str(birth_realm_ptr->buf, 10, 10);
@@ -285,7 +286,7 @@ static byte select_realm(PlayerType *player_ptr, uint32_t choices, int *count)
     birth_realm_type tmp_birth_realm;
     birth_realm_type *birth_realm_ptr = initialize_birth_realm_type(&tmp_birth_realm);
     analyze_realms(player_ptr, choices, birth_realm_ptr);
-    sprintf(birth_realm_ptr->cur, "%c%c %s", '*', birth_realm_ptr->p2, _("ランダム", "Random"));
+    strnfmt(birth_realm_ptr->cur, sizeof(birth_realm_ptr->cur), "%c%c %s", '*', birth_realm_ptr->p2, _("ランダム", "Random"));
     if (get_a_realm(player_ptr, birth_realm_ptr)) {
         return REALM_SELECT_CANCEL;
     }
@@ -350,7 +351,6 @@ bool get_player_realms(PlayerType *player_ptr)
     }
 
     while (true) {
-        char temp[80 * 10];
         int count = 0;
         player_ptr->realm1 = select_realm(player_ptr, realm_choices1[enum2i(player_ptr->pclass)], &count);
         if (player_ptr->realm1 == REALM_SELECT_CANCEL) {
@@ -361,16 +361,7 @@ bool get_player_realms(PlayerType *player_ptr)
         }
 
         cleanup_realm_selection_window();
-        shape_buffer(realm_explanations[technic2magic(player_ptr->realm1) - 1].data(), 74, temp, sizeof(temp));
-        concptr t = temp;
-        for (int i = 0; i < 10; i++) {
-            if (t[0] == 0) {
-                break;
-            } else {
-                prt(t, 12 + i, 3);
-                t += strlen(t) + 1;
-            }
-        }
+        display_wrap_around(realm_explanations[technic2magic(player_ptr->realm1) - 1], 74, 12, 3);
 
         if (check_realm_selection(player_ptr, count)) {
             break;
@@ -389,7 +380,6 @@ bool get_player_realms(PlayerType *player_ptr)
 
     /* Select the second realm */
     while (true) {
-        char temp[80 * 8];
         int count = 0;
         player_ptr->realm2 = select_realm(player_ptr, realm_choices2[enum2i(player_ptr->pclass)], &count);
 
@@ -401,16 +391,7 @@ bool get_player_realms(PlayerType *player_ptr)
         }
 
         cleanup_realm_selection_window();
-        shape_buffer(realm_explanations[technic2magic(player_ptr->realm2) - 1].data(), 74, temp, sizeof(temp));
-        concptr t = temp;
-        for (int i = 0; i < A_MAX; i++) {
-            if (t[0] == 0) {
-                break;
-            } else {
-                prt(t, 12 + i, 3);
-                t += strlen(t) + 1;
-            }
-        }
+        display_wrap_around(realm_explanations[technic2magic(player_ptr->realm2) - 1], 74, 12, 3);
 
         if (check_realm_selection(player_ptr, count)) {
             break;

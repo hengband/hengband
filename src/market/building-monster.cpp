@@ -11,6 +11,7 @@
 #include "term/gameterm.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
+#include "term/z-form.h"
 #include "util/int-char-converter.h"
 #include "util/sort.h"
 #include "util/string-processor.h"
@@ -24,7 +25,6 @@
  */
 bool research_mon(PlayerType *player_ptr)
 {
-    char buf[256];
     bool notpicked;
     bool recall = false;
     uint16_t why = 0;
@@ -54,15 +54,16 @@ bool research_mon(PlayerType *player_ptr)
     }
 
     /* XTRA HACK WHATSEARCH */
+    std::string buf;
     if (sym == KTRL('A')) {
         all = true;
-        strcpy(buf, _("全モンスターのリスト", "Full monster list."));
+        buf = _("全モンスターのリスト", "Full monster list.");
     } else if (sym == KTRL('U')) {
         all = uniq = true;
-        strcpy(buf, _("ユニーク・モンスターのリスト", "Unique monster list."));
+        buf = _("ユニーク・モンスターのリスト", "Unique monster list.");
     } else if (sym == KTRL('N')) {
         all = norm = true;
-        strcpy(buf, _("ユニーク外モンスターのリスト", "Non-unique monster list."));
+        buf = _("ユニーク外モンスターのリスト", "Non-unique monster list.");
     } else if (sym == KTRL('M')) {
         all = true;
         if (!get_string(_("名前(英語の場合小文字で可)", "Enter name:"), temp, 70)) {
@@ -72,11 +73,11 @@ bool research_mon(PlayerType *player_ptr)
             return false;
         }
 
-        sprintf(buf, _("名前:%sにマッチ", "Monsters' names with \"%s\""), temp);
+        buf = format(_("名前:%sにマッチ", "Monsters' names with \"%s\""), temp);
     } else if (ident_info[ident_i]) {
-        sprintf(buf, "%c - %s.", sym, ident_info[ident_i] + 2);
+        buf = format("%c - %s.", sym, ident_info[ident_i] + 2);
     } else {
-        sprintf(buf, "%c - %s", sym, _("無効な文字", "Unknown Symbol"));
+        buf = format("%c - %s", sym, _("無効な文字", "Unknown Symbol"));
     }
 
     /* Display the result */
@@ -117,22 +118,17 @@ bool research_mon(PlayerType *player_ptr)
                 }
             }
 
-            char temp2[MAX_MONSTER_NAME];
-#ifdef JP
-            strcpy(temp2, r_ref.E_name.data());
-#else
-            strcpy(temp2, r_ref.name.data());
-#endif
-            for (int xx = 0; temp2[xx] && xx < 80; xx++) {
-                if (isupper(temp2[xx])) {
-                    temp2[xx] = (char)tolower(temp2[xx]);
+            std::string temp2 = _(r_ref.E_name, r_ref.name);
+            for (auto &ch : temp2) {
+                if (isupper(ch)) {
+                    ch = static_cast<char>(tolower(ch));
                 }
             }
 
 #ifdef JP
-            if (angband_strstr(temp2, temp) || angband_strstr(r_ref.name.data(), temp))
+            if (angband_strstr(temp2.data(), temp) || angband_strstr(r_ref.name.data(), temp))
 #else
-            if (angband_strstr(temp2, temp))
+            if (angband_strstr(temp2.data(), temp))
 #endif
                 who.push_back(r_ref.idx);
         } else if (all || (r_ref.d_char == sym)) {

@@ -86,6 +86,11 @@ short MonsterEntity::get_remaining_sleep() const
     return this->mtimed[MTIMED_CSLEEP];
 }
 
+bool MonsterEntity::is_dead() const
+{
+    return this->hp < 0;
+}
+
 bool MonsterEntity::is_asleep() const
 {
     return this->get_remaining_sleep() > 0;

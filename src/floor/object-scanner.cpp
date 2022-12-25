@@ -13,6 +13,8 @@
 #include "system/player-type-definition.h"
 #include "term/gameterm.h"
 #include "term/screen-processor.h"
+#include "term/z-form.h"
+#include "util/string-processor.h"
 
 /*!
  * @brief 床に落ちているオブジェクトの数を返す / scan floor items
@@ -122,14 +124,15 @@ COMMAND_CODE show_floor_items(PlayerType *player_ptr, int target_item, POSITION 
         o_ptr = &floor_ptr->o_list[floor_list[i]];
         describe_flavor(player_ptr, o_name, o_ptr, 0);
         out_index[k] = i;
-        out_color[k] = tval_to_attr[enum2i(o_ptr->tval) & 0x7F];
+        const auto tval = o_ptr->bi_key.tval();
+        out_color[k] = tval_to_attr[enum2i(tval) & 0x7F];
         strcpy(out_desc[k], o_name);
         l = strlen(out_desc[k]) + 5;
         if (show_weights) {
             l += 9;
         }
 
-        if (o_ptr->tval != ItemKindType::GOLD) {
+        if (tval != ItemKindType::GOLD) {
             dont_need_to_show_weights = false;
         }
 
@@ -153,20 +156,20 @@ COMMAND_CODE show_floor_items(PlayerType *player_ptr, int target_item, POSITION 
         prt("", j + 1, col ? col - 2 : col);
         if (use_menu && target_item) {
             if (j == (target_item - 1)) {
-                strcpy(tmp_val, _("》", "> "));
+                angband_strcpy(tmp_val, _("》", "> "), sizeof(tmp_val));
                 target_item_label = m;
             } else {
-                strcpy(tmp_val, "   ");
+                angband_strcpy(tmp_val, "   ", sizeof(tmp_val));
             }
         } else {
-            sprintf(tmp_val, "%c)", floor_label[j]);
+            strnfmt(tmp_val, sizeof(tmp_val), "%c)", floor_label[j]);
         }
 
         put_str(tmp_val, j + 1, col);
         c_put_str(out_color[j], out_desc[j], j + 1, col + 3);
-        if (show_weights && (o_ptr->tval != ItemKindType::GOLD)) {
+        if (show_weights && (o_ptr->bi_key.tval() != ItemKindType::GOLD)) {
             int wgt = o_ptr->weight * o_ptr->number;
-            sprintf(tmp_val, _("%3d.%1d kg", "%3d.%1d lb"), _(lb_to_kg_integer(wgt), wgt / 10), _(lb_to_kg_fraction(wgt), wgt % 10));
+            strnfmt(tmp_val, sizeof(tmp_val), _("%3d.%1d kg", "%3d.%1d lb"), _(lb_to_kg_integer(wgt), wgt / 10), _(lb_to_kg_fraction(wgt), wgt % 10));
             prt(tmp_val, j + 1, wid - 9);
         }
     }

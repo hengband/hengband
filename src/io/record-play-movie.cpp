@@ -14,6 +14,7 @@
 #include "locale/japanese.h"
 #include "system/player-type-definition.h"
 #include "term/gameterm.h"
+#include "term/z-form.h"
 #include "util/angband-files.h"
 #include "view/display-messages.h"
 #include <algorithm>
@@ -33,6 +34,8 @@
 #define FRESH_QUEUE_SIZE 4096
 #define DEFAULT_DELAY 50
 #define RECVBUF_SIZE 1024
+/* 「n」、「t」、および「w」コマンドでは、長さが「signed char」に配置されるときに負の値を回避するために、これよりも長い長さを使用しないでください。 */
+static constexpr auto SPLIT_MAX = 127;
 
 static long epoch_time; /* バッファ開始時刻 */
 static int browse_delay; /* 表示するまでの時間(100ms単位)(この間にラグを吸収する) */
@@ -65,7 +68,7 @@ static errr (*old_text_hook)(int x, int y, int n, TERM_COLOR a, concptr s);
 
 static void disable_chuukei_server(void)
 {
-    term_type *t = angband_term[0];
+    term_type *t = angband_terms[0];
     t->xtra_hook = old_xtra_hook;
     t->curs_hook = old_curs_hook;
     t->bigcurs_hook = old_bigcurs_hook;
@@ -100,45 +103,70 @@ static long get_current_time(void)
 #endif
 }
 
-/* リングバッファ構造体に buf の内容を加える */
-static errr insert_ringbuf(char *buf)
+/*!
+ * @brief リングバッファにヘッダとペイロードを追加する
+ * @param header ヘッダ
+ * @param payload ペイロード (オプション)
+ * @return エラーコード
+ */
+static errr insert_ringbuf(std::string_view header, std::string_view payload = "")
 {
-    int len;
-    len = strlen(buf) + 1; /* +1は終端文字分 */
-
     if (movie_mode) {
-        fd_write(movie_fd, buf, len);
+        fd_write(movie_fd, header.data(), header.length());
+        if (!payload.empty()) {
+            fd_write(movie_fd, payload.data(), payload.length());
+        }
+        fd_write(movie_fd, "", 1);
         return 0;
     }
 
     /* バッファをオーバー */
-    if (ring.inlen + len >= RINGBUF_SIZE) {
+    auto all_length = header.length() + payload.length();
+    if (ring.inlen + all_length + 1 >= RINGBUF_SIZE) {
         return -1;
     }
 
     /* バッファの終端までに収まる */
-    if (ring.wptr + len < RINGBUF_SIZE) {
-        memcpy(ring.buf + ring.wptr, buf, len);
-        ring.wptr += len;
+    if (ring.wptr + all_length + 1 < RINGBUF_SIZE) {
+        memcpy(ring.buf + ring.wptr, header.data(), header.length());
+        if (!payload.empty()) {
+            memcpy(ring.buf + ring.wptr + header.length(), payload.data(), payload.length());
+        }
+        *(ring.buf + ring.wptr + all_length) = '\0';
+        ring.wptr += all_length + 1;
     }
     /* バッファの終端までに収まらない(ピッタリ収まる場合も含む) */
     else {
         int head = RINGBUF_SIZE - ring.wptr; /* 前半 */
-        int tail = len - head; /* 後半 */
+        int tail = all_length - head; /* 後半 */
 
-        memcpy(ring.buf + ring.wptr, buf, head);
-        memcpy(ring.buf, buf + head, tail);
-        ring.wptr = tail;
+        if ((int)header.length() <= head) {
+            memcpy(ring.buf + ring.wptr, header.data(), header.length());
+            head -= header.length();
+            if (head > 0) {
+                memcpy(ring.buf + ring.wptr + header.length(), payload.data(), head);
+            }
+            memcpy(ring.buf, payload.data() + head, tail);
+        } else {
+            memcpy(ring.buf + ring.wptr, header.data(), head);
+            int part = header.length() - head;
+            memcpy(ring.buf, header.data() + head, part);
+            if (tail > part) {
+                memcpy(ring.buf + part, payload.data(), tail - part);
+            }
+        }
+        *(ring.buf + tail) = '\0';
+        ring.wptr = tail + 1;
     }
 
-    ring.inlen += len;
+    ring.inlen += all_length + 1;
 
     /* Success */
     return 0;
 }
 
 /* strが同じ文字の繰り返しかどうか調べる */
-static bool string_is_repeat(char *str, int len)
+static bool string_is_repeat(concptr str, int len)
 {
     char c = str[0];
     int i;
@@ -167,56 +195,93 @@ static bool string_is_repeat(char *str, int len)
     return true;
 }
 
+#ifdef JP
+/* マルチバイト文字を分割せずに str を分割する長さを len 以下で返す */
+static int find_split(concptr str, int len)
+{
+    /*
+     * SJIS が定義されている場合でも、str は常に EUC-JP としてエンコードされます。
+     * 他の場所で行われているような 3 バイトのエンコーディングは想定していません。
+     */
+    int last_split = 0, i = 0;
+    while (i < len) {
+        if (iseuckanji(str[i])) {
+            if (i < len - 1) {
+                last_split = i + 2;
+            }
+            i += 2;
+        } else {
+            last_split = i + 1;
+            ++i;
+        }
+    }
+    return last_split;
+}
+#endif
+
 static errr send_text_to_chuukei_server(TERM_LEN x, TERM_LEN y, int len, TERM_COLOR col, concptr str)
 {
-    char buf[1024 + 32];
-    char buf2[1024];
-
-    strncpy(buf2, str, len);
-    buf2[len] = '\0';
-
     if (len == 1) {
-        sprintf(buf, "s%c%c%c%c", x + 1, y + 1, col, buf2[0]);
-    } else if (string_is_repeat(buf2, len)) {
-        int i;
-        for (i = len; i > 0; i -= 127) {
-            sprintf(buf, "n%c%c%c%c%c", x + 1, y + 1, std::min<int>(i, 127), col, buf2[0]);
-        }
-    } else {
-#if defined(SJIS) && defined(JP)
-        sjis2euc(buf2);
-#endif
-        sprintf(buf, "t%c%c%c%c%s", x + 1, y + 1, len, col, buf2);
+        insert_ringbuf(format("s%c%c%c%c", x + 1, y + 1, col, *str));
+        return (*old_text_hook)(x, y, len, col, str);
     }
 
-    insert_ringbuf(buf);
+    if (string_is_repeat(str, len)) {
+        while (len > SPLIT_MAX) {
+            insert_ringbuf(format("n%c%c%c%c%c", x + 1, y + 1, SPLIT_MAX, col, *str));
+            x += SPLIT_MAX;
+            len -= SPLIT_MAX;
+        }
 
+        std::string formatted_text;
+        if (len > 1) {
+            formatted_text = format("n%c%c%c%c%c", x + 1, y + 1, len, col, *str);
+        } else {
+            formatted_text = format("s%c%c%c%c", x + 1, y + 1, col, *str);
+        }
+
+        insert_ringbuf(formatted_text);
+        return (*old_text_hook)(x, y, len, col, str);
+    }
+
+#if defined(SJIS) && defined(JP)
+    std::string buffer = str; // strは書き換わって欲しくないのでコピーする.
+    auto *payload = buffer.data();
+    sjis2euc(payload);
+#else
+    const auto *payload = str;
+#endif
+    while (len > SPLIT_MAX) {
+        auto split_len = _(find_split(payload, SPLIT_MAX), SPLIT_MAX);
+        insert_ringbuf(format("t%c%c%c%c", x + 1, y + 1, split_len, col), std::string_view(payload, split_len));
+        x += split_len;
+        len -= split_len;
+        payload += split_len;
+    }
+
+    insert_ringbuf(format("t%c%c%c%c", x + 1, y + 1, len, col), std::string_view(payload, len));
     return (*old_text_hook)(x, y, len, col, str);
 }
 
 static errr send_wipe_to_chuukei_server(int x, int y, int len)
 {
-    char buf[1024];
-
-    sprintf(buf, "w%c%c%c", x + 1, y + 1, len);
-
-    insert_ringbuf(buf);
+    while (len > SPLIT_MAX) {
+        insert_ringbuf(format("w%c%c%c", x + 1, y + 1, SPLIT_MAX));
+        x += SPLIT_MAX;
+        len -= SPLIT_MAX;
+    }
+    insert_ringbuf(format("w%c%c%c", x + 1, y + 1, len));
 
     return (*old_wipe_hook)(x, y, len);
 }
 
 static errr send_xtra_to_chuukei_server(int n, int v)
 {
-    char buf[1024];
-
     if (n == TERM_XTRA_CLEAR || n == TERM_XTRA_FRESH || n == TERM_XTRA_SHAPE) {
-        sprintf(buf, "x%c", n + 1);
-
-        insert_ringbuf(buf);
+        insert_ringbuf(format("x%c", n + 1));
 
         if (n == TERM_XTRA_FRESH) {
-            sprintf(buf, "d%ld", get_current_time() - epoch_time);
-            insert_ringbuf(buf);
+            insert_ringbuf("d", std::to_string(get_current_time() - epoch_time));
         }
     }
 
@@ -230,22 +295,14 @@ static errr send_xtra_to_chuukei_server(int n, int v)
 
 static errr send_curs_to_chuukei_server(int x, int y)
 {
-    char buf[1024];
-
-    sprintf(buf, "c%c%c", x + 1, y + 1);
-
-    insert_ringbuf(buf);
+    insert_ringbuf(format("c%c%c", x + 1, y + 1));
 
     return (*old_curs_hook)(x, y);
 }
 
 static errr send_bigcurs_to_chuukei_server(int x, int y)
 {
-    char buf[1024];
-
-    sprintf(buf, "C%c%c", x + 1, y + 1);
-
-    insert_ringbuf(buf);
+    insert_ringbuf(format("C%c%c", x + 1, y + 1));
 
     return (*old_bigcurs_hook)(x, y);
 }
@@ -255,7 +312,7 @@ static errr send_bigcurs_to_chuukei_server(int x, int y)
  */
 void prepare_chuukei_hooks(void)
 {
-    term_type *t0 = angband_term[0];
+    term_type *t0 = angband_terms[0];
 
     /* Save original z-term hooks */
     old_xtra_hook = t0->xtra_hook;
@@ -277,33 +334,33 @@ void prepare_chuukei_hooks(void)
  */
 void prepare_movie_hooks(PlayerType *player_ptr)
 {
-    char buf[1024];
-    char tmp[80];
-
     if (movie_mode) {
         movie_mode = 0;
         disable_chuukei_server();
         fd_close(movie_fd);
         msg_print(_("録画を終了しました。", "Stopped recording."));
     } else {
-        sprintf(tmp, "%s.amv", player_ptr->base_name);
-        if (get_string(_("ムービー記録ファイル: ", "Movie file name: "), tmp, 80)) {
+        char filename[80];
+        strnfmt(filename, sizeof(filename), "%s.amv", player_ptr->base_name);
+        if (get_string(_("ムービー記録ファイル: ", "Movie file name: "), filename, 80)) {
+            char buf[1024];
             int fd;
 
-            path_build(buf, sizeof(buf), ANGBAND_DIR_USER, tmp);
+            path_build(buf, sizeof(buf), ANGBAND_DIR_USER, filename);
 
             fd = fd_open(buf, O_RDONLY);
 
             /* Existing file */
             if (fd >= 0) {
-                char out_val[sizeof(buf) + 128];
                 (void)fd_close(fd);
 
                 /* Build query */
-                (void)sprintf(out_val, _("現存するファイルに上書きしますか? (%s)", "Replace existing file %s? "), buf);
+                std::string query = _("現存するファイルに上>書きしますか? (", "Replace existing file ");
+                query.append(buf);
+                query.append(_(")", "? "));
 
                 /* Ask */
-                if (!get_check(out_val)) {
+                if (!get_check(query)) {
                     return;
                 }
 
@@ -354,7 +411,7 @@ static int read_movie_file(void)
     static char recv_buf[RECVBUF_SIZE];
     static int remain_bytes = 0;
     int recv_bytes;
-    int i;
+    int i, start;
 
     recv_bytes = read(movie_fd, recv_buf + remain_bytes, RECVBUF_SIZE - remain_bytes);
 
@@ -365,25 +422,29 @@ static int read_movie_file(void)
     /* 前回残ったデータ量に今回読んだデータ量を追加 */
     remain_bytes += recv_bytes;
 
-    for (i = 0; i < remain_bytes; i++) {
+    for (i = 0, start = 0; i < remain_bytes; i++) {
         /* データのくぎり('\0')を探す */
         if (recv_buf[i] == '\0') {
             /* 'd'で始まるデータ(タイムスタンプ)の場合は
                描画キューに保存する処理を呼ぶ */
-            if ((recv_buf[0] == 'd') && (handle_movie_timestamp_data(atoi(recv_buf + 1)) < 0)) {
+            if ((recv_buf[start] == 'd') && (handle_movie_timestamp_data(atoi(recv_buf + start + 1)) < 0)) {
                 return -1;
             }
 
             /* 受信データを保存 */
-            if (insert_ringbuf(recv_buf) < 0) {
+            if (insert_ringbuf(std::string_view(recv_buf + start, i - start)) < 0) {
                 return -1;
             }
 
-            /* 次のデータ移行をrecv_bufの先頭に移動 */
-            memmove(recv_buf, recv_buf + i + 1, remain_bytes - i - 1);
-
-            remain_bytes -= (i + 1);
-            i = 0;
+            start = i + 1;
+        }
+    }
+    if (start > 0) {
+        if (remain_bytes >= start) {
+            memmove(recv_buf, recv_buf + start, remain_bytes - start);
+            remain_bytes -= start;
+        } else {
+            remain_bytes = 0;
         }
     }
 
@@ -507,7 +568,7 @@ static bool flush_ringbuf_client(void)
             euc2sjis(mesg);
 #endif
             update_term_size(x, y, len);
-            (void)((*angband_term[0]->text_hook)(x, y, len, (byte)col, mesg));
+            (void)((*angband_terms[0]->text_hook)(x, y, len, (byte)col, mesg));
             memcpy(&game_term->scr->c[y][x], mesg, len);
             for (i = x; i < x + len; i++) {
                 game_term->scr->a[y][i] = col;
@@ -520,7 +581,7 @@ static bool flush_ringbuf_client(void)
             }
             mesg[i] = '\0';
             update_term_size(x, y, len);
-            (void)((*angband_term[0]->text_hook)(x, y, len, (byte)col, mesg));
+            (void)((*angband_terms[0]->text_hook)(x, y, len, (byte)col, mesg));
             memcpy(&game_term->scr->c[y][x], mesg, len);
             for (i = x; i < x + len; i++) {
                 game_term->scr->a[y][i] = col;
@@ -529,30 +590,30 @@ static bool flush_ringbuf_client(void)
 
         case 's': /* 一文字 */
             update_term_size(x, y, 1);
-            (void)((*angband_term[0]->text_hook)(x, y, 1, (byte)col, mesg));
+            (void)((*angband_terms[0]->text_hook)(x, y, 1, (byte)col, mesg));
             memcpy(&game_term->scr->c[y][x], mesg, 1);
             game_term->scr->a[y][x] = col;
             break;
 
         case 'w':
             update_term_size(x, y, len);
-            (void)((*angband_term[0]->wipe_hook)(x, y, len));
+            (void)((*angband_terms[0]->wipe_hook)(x, y, len));
             break;
 
         case 'x':
             if (x == TERM_XTRA_CLEAR) {
                 term_clear();
             }
-            (void)((*angband_term[0]->xtra_hook)(x, 0));
+            (void)((*angband_terms[0]->xtra_hook)(x, 0));
             break;
 
         case 'c':
             update_term_size(x, y, 1);
-            (void)((*angband_term[0]->curs_hook)(x, y));
+            (void)((*angband_terms[0]->curs_hook)(x, y));
             break;
         case 'C':
             update_term_size(x, y, 1);
-            (void)((*angband_term[0]->bigcurs_hook)(x, y));
+            (void)((*angband_terms[0]->bigcurs_hook)(x, y));
             break;
         }
     }

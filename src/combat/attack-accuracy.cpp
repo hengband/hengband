@@ -125,9 +125,9 @@ bool check_hit_from_monster_to_monster(int power, DEPTH level, ARMOUR_CLASS ac, 
 static bool decide_attack_hit(PlayerType *player_ptr, player_attack_type *pa_ptr, int chance)
 {
     bool success_hit = false;
-    auto *o_ptr = &player_ptr->inventory_list[INVEN_MAIN_HAND + pa_ptr->hand];
+    auto *o_ptr = &player_ptr->inventory_list[enum2i(INVEN_MAIN_HAND) + pa_ptr->hand];
     auto *r_ptr = &monraces_info[pa_ptr->m_ptr->r_idx];
-    if (((o_ptr->tval == ItemKindType::SWORD) && (o_ptr->sval == SV_POISON_NEEDLE)) || (pa_ptr->mode == HISSATSU_KYUSHO)) {
+    if ((o_ptr->bi_key == BaseitemKey(ItemKindType::SWORD, SV_POISON_NEEDLE)) || (pa_ptr->mode == HISSATSU_KYUSHO)) {
         int n = 1;
 
         if (can_attack_with_main_hand(player_ptr) && can_attack_with_sub_hand(player_ptr)) {
@@ -161,7 +161,7 @@ static bool decide_attack_hit(PlayerType *player_ptr, player_attack_type *pa_ptr
  */
 bool process_attack_hit(PlayerType *player_ptr, player_attack_type *pa_ptr, int chance)
 {
-    auto *o_ptr = &player_ptr->inventory_list[INVEN_MAIN_HAND + pa_ptr->hand];
+    auto *o_ptr = &player_ptr->inventory_list[enum2i(INVEN_MAIN_HAND) + pa_ptr->hand];
     if (decide_attack_hit(player_ptr, pa_ptr, chance)) {
         return true;
     }
@@ -169,7 +169,7 @@ bool process_attack_hit(PlayerType *player_ptr, player_attack_type *pa_ptr, int 
     pa_ptr->backstab = false; /* Clumsy! */
     pa_ptr->surprise_attack = false; /* Clumsy! */
 
-    if ((o_ptr->tval == ItemKindType::POLEARM) && (o_ptr->sval == SV_DEATH_SCYTHE) && one_in_(3)) {
+    if ((o_ptr->bi_key == BaseitemKey(ItemKindType::POLEARM, SV_DEATH_SCYTHE)) && one_in_(3)) {
         process_death_scythe_reflection(player_ptr, pa_ptr);
     } else {
         sound(SOUND_MISS);

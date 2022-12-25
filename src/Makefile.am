@@ -510,6 +510,8 @@ hengband_SOURCES = \
 	monster-race/race-ability-flags.h \
 	monster-race/race-ability-mask.cpp monster-race/race-ability-mask.h \
 	monster-race/race-behavior-flags.h \
+	monster-race/race-brightness-flags.h \
+	monster-race/race-brightness-mask.h monster-race/race-brightness-mask.cpp \
 	monster-race/race-drop-flags.h \
 	monster-race/race-feature-flags.h \
 	monster-race/race-feature-mask.cpp monster-race/race-feature-mask.h \
@@ -991,11 +993,10 @@ hengband_SOURCES = \
 	view/status-first-page.cpp view/status-first-page.h \
 	view/status-bars-table.cpp view/status-bars-table.h \
 	\
-	window/display-sub-window-items.cpp window/display-sub-window-items.h \
 	window/display-sub-window-spells.cpp window/display-sub-window-spells.h \
 	window/display-sub-windows.cpp window/display-sub-windows.h \
 	window/main-window-left-frame.cpp window/main-window-left-frame.h \
-	window/main-window-row-column.h \
+	window/main-window-row-column.cpp window/main-window-row-column.h \
 	window/main-window-stat-poster.cpp window/main-window-stat-poster.h \
 	window/main-window-util.cpp window/main-window-util.h \
 	window/main-window-equipments.cpp window/main-window-equipments.h \

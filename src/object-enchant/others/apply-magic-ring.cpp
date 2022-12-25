@@ -67,7 +67,12 @@ void RingEnchanter::apply_magic()
 
 void RingEnchanter::sval_enchant()
 {
-    switch (this->o_ptr->sval) {
+    const auto sval = this->o_ptr->bi_key.sval();
+    if (!sval.has_value()) {
+        return;
+    }
+
+    switch (sval.value()) {
     case SV_RING_ATTACKS:
         this->o_ptr->pval = (PARAMETER_VALUE)m_bonus(2, this->level);
         if (one_in_(15)) {
@@ -228,7 +233,7 @@ void RingEnchanter::give_ego_index()
 {
     while (!this->o_ptr->is_ego()) {
         int tmp = m_bonus(10, this->level);
-        auto *k_ptr = &baseitems_info[this->o_ptr->bi_id];
+        const auto &baseitem = baseitems_info[this->o_ptr->bi_id];
         switch (randint1(28)) {
         case 1:
         case 2:
@@ -236,7 +241,7 @@ void RingEnchanter::give_ego_index()
             break;
         case 3:
         case 4:
-            if (k_ptr->flags.has(TR_REGEN)) {
+            if (baseitem.flags.has(TR_REGEN)) {
                 break;
             }
 
@@ -244,7 +249,7 @@ void RingEnchanter::give_ego_index()
             break;
         case 5:
         case 6:
-            if (k_ptr->flags.has(TR_LITE_1)) {
+            if (baseitem.flags.has(TR_LITE_1)) {
                 break;
             }
 
@@ -252,7 +257,7 @@ void RingEnchanter::give_ego_index()
             break;
         case 7:
         case 8:
-            if (k_ptr->flags.has(TR_TELEPORT)) {
+            if (baseitem.flags.has(TR_TELEPORT)) {
                 break;
             }
 
@@ -282,21 +287,21 @@ void RingEnchanter::give_ego_index()
             this->o_ptr->ego_idx = EgoType::RING_SLAY;
             break;
         case 14:
-            if ((k_ptr->flags.has(TR_STR)) || this->o_ptr->to_h || this->o_ptr->to_d) {
+            if ((baseitem.flags.has(TR_STR)) || this->o_ptr->to_h || this->o_ptr->to_d) {
                 break;
             }
 
             this->o_ptr->ego_idx = EgoType::RING_WIZARD;
             break;
         case 15:
-            if (k_ptr->flags.has(TR_ACTIVATE)) {
+            if (baseitem.flags.has(TR_ACTIVATE)) {
                 break;
             }
 
             this->o_ptr->ego_idx = EgoType::RING_HERO;
             break;
         case 16:
-            if (k_ptr->flags.has(TR_ACTIVATE)) {
+            if (baseitem.flags.has(TR_ACTIVATE)) {
                 break;
             }
 
@@ -313,11 +318,11 @@ void RingEnchanter::give_ego_index()
             this->o_ptr->ego_idx = EgoType::RING_MAGIC_MIS;
             break;
         case 17:
-            if (k_ptr->flags.has(TR_ACTIVATE)) {
+            if (baseitem.flags.has(TR_ACTIVATE)) {
                 break;
             }
 
-            if (k_ptr->flags.has_not(TR_RES_FIRE) && (k_ptr->flags.has(TR_RES_COLD) || k_ptr->flags.has(TR_RES_ELEC) || k_ptr->flags.has(TR_RES_ACID))) {
+            if (baseitem.flags.has_not(TR_RES_FIRE) && (baseitem.flags.has(TR_RES_COLD) || baseitem.flags.has(TR_RES_ELEC) || baseitem.flags.has(TR_RES_ACID))) {
                 break;
             }
 
@@ -334,11 +339,11 @@ void RingEnchanter::give_ego_index()
             this->o_ptr->ego_idx = EgoType::RING_FIRE_BOLT;
             break;
         case 18:
-            if (k_ptr->flags.has(TR_ACTIVATE)) {
+            if (baseitem.flags.has(TR_ACTIVATE)) {
                 break;
             }
 
-            if (k_ptr->flags.has_not(TR_RES_COLD) && (k_ptr->flags.has(TR_RES_FIRE) || k_ptr->flags.has(TR_RES_ELEC) || k_ptr->flags.has(TR_RES_ACID))) {
+            if (baseitem.flags.has_not(TR_RES_COLD) && (baseitem.flags.has(TR_RES_FIRE) || baseitem.flags.has(TR_RES_ELEC) || baseitem.flags.has(TR_RES_ACID))) {
                 break;
             }
 
@@ -355,11 +360,11 @@ void RingEnchanter::give_ego_index()
             this->o_ptr->ego_idx = EgoType::RING_COLD_BOLT;
             break;
         case 19:
-            if (k_ptr->flags.has(TR_ACTIVATE)) {
+            if (baseitem.flags.has(TR_ACTIVATE)) {
                 break;
             }
 
-            if (k_ptr->flags.has_not(TR_RES_ELEC) && (k_ptr->flags.has(TR_RES_COLD) || k_ptr->flags.has(TR_RES_FIRE) || k_ptr->flags.has(TR_RES_ACID))) {
+            if (baseitem.flags.has_not(TR_RES_ELEC) && (baseitem.flags.has(TR_RES_COLD) || baseitem.flags.has(TR_RES_FIRE) || baseitem.flags.has(TR_RES_ACID))) {
                 break;
             }
 
@@ -371,11 +376,11 @@ void RingEnchanter::give_ego_index()
             this->o_ptr->ego_idx = EgoType::RING_ELEC_BOLT;
             break;
         case 20:
-            if (k_ptr->flags.has(TR_ACTIVATE)) {
+            if (baseitem.flags.has(TR_ACTIVATE)) {
                 break;
             }
 
-            if (k_ptr->flags.has_not(TR_RES_ACID) && (k_ptr->flags.has(TR_RES_COLD) || k_ptr->flags.has(TR_RES_ELEC) || k_ptr->flags.has(TR_RES_FIRE))) {
+            if (baseitem.flags.has_not(TR_RES_ACID) && (baseitem.flags.has(TR_RES_COLD) || baseitem.flags.has(TR_RES_ELEC) || baseitem.flags.has(TR_RES_FIRE))) {
                 break;
             }
 
@@ -400,7 +405,12 @@ void RingEnchanter::give_ego_index()
 
 void RingEnchanter::give_high_ego_index()
 {
-    switch (this->o_ptr->sval) {
+    const auto sval = this->o_ptr->bi_key.sval();
+    if (!sval.has_value()) {
+        return;
+    }
+
+    switch (sval.value()) {
     case SV_RING_SPEED:
         if (!one_in_(3)) {
             break;
@@ -501,10 +511,10 @@ void RingEnchanter::give_cursed()
     }
 
     while (!this->o_ptr->is_ego()) {
-        auto *k_ptr = &baseitems_info[this->o_ptr->bi_id];
+        const auto &baseitem = baseitems_info[this->o_ptr->bi_id];
         switch (randint1(5)) {
         case 1:
-            if (k_ptr->flags.has(TR_DRAIN_EXP)) {
+            if (baseitem.flags.has(TR_DRAIN_EXP)) {
                 break;
             }
             this->o_ptr->ego_idx = EgoType::RING_DRAIN_EXP;
@@ -513,13 +523,13 @@ void RingEnchanter::give_cursed()
             this->o_ptr->ego_idx = EgoType::RING_NO_MELEE;
             break;
         case 3:
-            if (k_ptr->flags.has(TR_AGGRAVATE)) {
+            if (baseitem.flags.has(TR_AGGRAVATE)) {
                 break;
             }
             this->o_ptr->ego_idx = EgoType::RING_AGGRAVATE;
             break;
         case 4:
-            if (k_ptr->flags.has(TR_TY_CURSE)) {
+            if (baseitem.flags.has(TR_TY_CURSE)) {
                 break;
             }
             this->o_ptr->ego_idx = EgoType::RING_TY_CURSE;

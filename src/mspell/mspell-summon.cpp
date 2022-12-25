@@ -139,17 +139,15 @@ MonsterSpellResult spell_RF6_S_KIN(PlayerType *player_ptr, POSITION y, POSITION 
     auto *floor_ptr = player_ptr->current_floor_ptr;
     auto *m_ptr = &floor_ptr->m_list[m_idx];
     DEPTH rlev = monster_level_idx(floor_ptr, m_idx);
-    GAME_TEXT m_name[MAX_NLEN], t_name[MAX_NLEN], m_poss[80];
-    monster_name(player_ptr, m_idx, m_name);
-    monster_name(player_ptr, t_idx, t_name);
-    monster_desc(player_ptr, m_poss, m_ptr, MD_PRON_VISIBLE | MD_POSSESSIVE);
+    const auto m_name = monster_name(player_ptr, m_idx);
+    const auto m_poss = monster_desc(player_ptr, m_ptr, MD_PRON_VISIBLE | MD_POSSESSIVE);
 
     bool see_either = see_monster(player_ptr, m_idx) || see_monster(player_ptr, t_idx);
     bool known = monster_near_player(floor_ptr, m_idx, t_idx);
 
     summon_disturb(player_ptr, target_type, known, see_either);
 
-    decide_summon_kin_caster(player_ptr, m_idx, t_idx, target_type, m_name, m_poss, known);
+    decide_summon_kin_caster(player_ptr, m_idx, t_idx, target_type, m_name.data(), m_poss.data(), known);
     int count = 0;
     switch (m_ptr->r_idx) {
     case MonsterRaceId::MENELDOR:
@@ -773,8 +771,6 @@ MonsterSpellResult spell_RF6_S_HI_UNDEAD(PlayerType *player_ptr, POSITION y, POS
     bool see_either = see_monster(player_ptr, m_idx) || see_monster(player_ptr, t_idx);
     bool known = monster_near_player(floor_ptr, m_idx, t_idx);
 
-    GAME_TEXT m_name[MAX_NLEN];
-    monster_name(player_ptr, m_idx, m_name);
     summon_disturb(player_ptr, target_type, known, see_either);
 
     int count = 0;

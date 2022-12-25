@@ -168,8 +168,7 @@ static MonsterSpellResult spell_RF6_SPECIAL_B(PlayerType *player_ptr, POSITION y
     bool monster_to_player = (target_type == MONSTER_TO_PLAYER);
     bool monster_to_monster = (target_type == MONSTER_TO_MONSTER);
     bool direct = player_bold(player_ptr, y, x);
-    GAME_TEXT m_name[MAX_NLEN];
-    monster_name(player_ptr, m_idx, m_name);
+    const auto m_name = monster_name(player_ptr, m_idx);
 
     disturb(player_ptr, true, true);
     if (one_in_(3) || !direct) {
@@ -213,11 +212,10 @@ static MonsterSpellResult spell_RF6_SPECIAL_B(PlayerType *player_ptr, POSITION y
     dam += damroll(6, 8);
 
     if (monster_to_player || (monster_to_monster && player_ptr->riding == t_idx)) {
-        int get_damage = take_hit(player_ptr, DAMAGE_NOESCAPE, dam, m_name);
+        int get_damage = take_hit(player_ptr, DAMAGE_NOESCAPE, dam, m_name.data());
         if (player_ptr->tim_eyeeye && get_damage > 0 && !player_ptr->is_dead) {
-            GAME_TEXT m_name_self[MAX_MONSTER_NAME];
-            monster_desc(player_ptr, m_name_self, m_ptr, MD_PRON_VISIBLE | MD_POSSESSIVE | MD_OBJECTIVE);
-            msg_format(_("攻撃が%s自身を傷つけた！", "The attack of %s has wounded %s!"), m_name, m_name_self);
+            const auto m_name_self = monster_desc(player_ptr, m_ptr, MD_PRON_VISIBLE | MD_POSSESSIVE | MD_OBJECTIVE);
+            msg_format(_("攻撃が%s自身を傷つけた！", "The attack of %s has wounded %s!"), m_name.data(), m_name_self.data());
             project(player_ptr, 0, 0, m_ptr->fy, m_ptr->fx, get_damage, AttributeType::MISSILE, PROJECT_KILL);
             set_tim_eyeeye(player_ptr, player_ptr->tim_eyeeye - 5, true);
         }

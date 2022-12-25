@@ -28,9 +28,9 @@
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param spell 魔法ID
  * @param mode 処理内容 (SpellProcessType::NAME / SPELL_DESC / SpellProcessType::INFO / SpellProcessType::CAST)
- * @return SpellProcessType::NAME / SPELL_DESC / SpellProcessType::INFO 時には文字列ポインタを返す。SpellProcessType::CAST時はnullptr文字列を返す。
+ * @return SpellProcessType::NAME / SPELL_DESC / SpellProcessType::INFO 時には文字列を返す。SpellProcessType::CAST時は std::nullopt を返す。
  */
-concptr do_life_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessType mode)
+std::optional<std::string> do_life_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessType mode)
 {
     bool name = mode == SpellProcessType::NAME;
     bool desc = mode == SpellProcessType::DESCRIPTION;
@@ -97,7 +97,7 @@ concptr do_life_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessType 
 
             if (cast) {
                 if (!get_aim_dir(player_ptr, &dir)) {
-                    return nullptr;
+                    return std::nullopt;
                 }
                 fire_ball_hide(player_ptr, AttributeType::WOUNDS, dir, damroll(dice, sides), 0);
             }
@@ -228,7 +228,7 @@ concptr do_life_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessType 
 
             if (cast) {
                 if (!get_aim_dir(player_ptr, &dir)) {
-                    return nullptr;
+                    return std::nullopt;
                 }
                 fire_ball_hide(player_ptr, AttributeType::WOUNDS, dir, damroll(dice, sides), 0);
             }
@@ -374,7 +374,7 @@ concptr do_life_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessType 
         {
             if (cast) {
                 if (!ident_spell(player_ptr, false)) {
-                    return nullptr;
+                    return std::nullopt;
                 }
             }
         }
@@ -441,7 +441,7 @@ concptr do_life_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessType 
 
             if (cast) {
                 if (!get_aim_dir(player_ptr, &dir)) {
-                    return nullptr;
+                    return std::nullopt;
                 }
                 fire_ball_hide(player_ptr, AttributeType::WOUNDS, dir, damroll(dice, sides), 0);
             }
@@ -467,7 +467,7 @@ concptr do_life_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessType 
 
             if (cast) {
                 if (!recall_player(player_ptr, randint0(21) + 15)) {
-                    return nullptr;
+                    return std::nullopt;
                 }
             }
         }
@@ -639,7 +639,7 @@ concptr do_life_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessType 
         {
             if (cast) {
                 if (!identify_fully(player_ptr, false)) {
-                    return nullptr;
+                    return std::nullopt;
                 }
             }
         }

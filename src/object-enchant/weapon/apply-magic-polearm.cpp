@@ -32,7 +32,7 @@ void PolearmEnchanter::apply_magic()
 void PolearmEnchanter::decide_skip()
 {
     AbstractWeaponEnchanter::decide_skip();
-    this->should_skip |= this->o_ptr->sval == SV_DEATH_SCYTHE;
+    this->should_skip |= this->o_ptr->bi_key.sval() == SV_DEATH_SCYTHE;
 }
 
 void PolearmEnchanter::give_ego_index()

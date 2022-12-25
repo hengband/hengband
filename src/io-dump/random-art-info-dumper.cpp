@@ -22,14 +22,12 @@
 static void spoiler_print_randart(ItemEntity *o_ptr, obj_desc_list *art_ptr)
 {
     pval_info_type *pval_ptr = &art_ptr->pval_info;
-    char buf[80];
     fprintf(spoiler_file, "%s\n", art_ptr->description);
     if (!o_ptr->is_fully_known()) {
         fprintf(spoiler_file, _("%s不明\n", "%sUnknown\n"), spoiler_indent);
     } else {
         if (pval_ptr->pval_desc[0]) {
-            sprintf(buf, _("%sの修正:", "%s to"), pval_ptr->pval_desc);
-            spoiler_outlist(buf, pval_ptr->pval_affects, item_separator);
+            spoiler_outlist(std::string(pval_ptr->pval_desc).append(_("の修正:", " to")).data(), pval_ptr->pval_affects, item_separator);
         }
 
         spoiler_outlist(_("対:", "Slay"), art_ptr->slays, item_separator);
@@ -55,7 +53,7 @@ static void spoiler_print_randart(ItemEntity *o_ptr, obj_desc_list *art_ptr)
 static void spoil_random_artifact_aux(PlayerType *player_ptr, ItemEntity *o_ptr, ItemKindType tval)
 {
     obj_desc_list artifact;
-    if (!o_ptr->is_known() || !o_ptr->art_name || o_ptr->tval != tval) {
+    if (!o_ptr->is_known() || !o_ptr->is_random_artifact() || (o_ptr->bi_key.tval() != tval)) {
         return;
     }
 
@@ -80,8 +78,7 @@ void spoil_random_artifact(PlayerType *player_ptr, concptr fname)
         return;
     }
 
-    sprintf(buf, "Random artifacts list.\r");
-    spoiler_underline(buf);
+    spoiler_underline("Random artifacts list.\r");
     for (const auto &[tval_list, name] : group_artifact_list) {
         for (auto tval : tval_list) {
             for (int i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {

@@ -155,7 +155,6 @@ static byte get_dungeon_feeling(PlayerType *player_ptr)
 
     for (MONSTER_IDX i = 1; i < floor_ptr->o_max; i++) {
         auto *o_ptr = &floor_ptr->o_list[i];
-        auto *k_ptr = &baseitems_info[o_ptr->bi_id];
         int delta = 0;
         if (!o_ptr->is_valid() || (o_ptr->is_known() && o_ptr->marked.has(OmType::TOUCHED)) || ((o_ptr->ident & IDENT_SENSE) != 0)) {
             continue;
@@ -186,40 +185,41 @@ static byte get_dungeon_feeling(PlayerType *player_ptr)
             }
         }
 
-        if (o_ptr->tval == ItemKindType::DRAG_ARMOR) {
+        if (o_ptr->bi_key.tval() == ItemKindType::DRAG_ARMOR) {
             delta += 30 * base;
         }
 
-        if (o_ptr->tval == ItemKindType::SHIELD && o_ptr->sval == SV_DRAGON_SHIELD) {
+        if (o_ptr->bi_key == BaseitemKey(ItemKindType::SHIELD, SV_DRAGON_SHIELD)) {
             delta += 5 * base;
         }
 
-        if (o_ptr->tval == ItemKindType::GLOVES && o_ptr->sval == SV_SET_OF_DRAGON_GLOVES) {
+        if (o_ptr->bi_key == BaseitemKey(ItemKindType::GLOVES, SV_SET_OF_DRAGON_GLOVES)) {
             delta += 5 * base;
         }
 
-        if (o_ptr->tval == ItemKindType::BOOTS && o_ptr->sval == SV_PAIR_OF_DRAGON_GREAVE) {
+        if (o_ptr->bi_key == BaseitemKey(ItemKindType::BOOTS, SV_PAIR_OF_DRAGON_GREAVE)) {
             delta += 5 * base;
         }
 
-        if (o_ptr->tval == ItemKindType::HELM && o_ptr->sval == SV_DRAGON_HELM) {
+        if (o_ptr->bi_key == BaseitemKey(ItemKindType::HELM, SV_DRAGON_HELM)) {
             delta += 5 * base;
         }
 
-        if (o_ptr->tval == ItemKindType::RING && o_ptr->sval == SV_RING_SPEED && !o_ptr->is_cursed()) {
+        if (o_ptr->bi_key == BaseitemKey(ItemKindType::RING, SV_RING_SPEED) && !o_ptr->is_cursed()) {
             delta += 25 * base;
         }
 
-        if (o_ptr->tval == ItemKindType::RING && o_ptr->sval == SV_RING_LORDLY && !o_ptr->is_cursed()) {
+        if (o_ptr->bi_key == BaseitemKey(ItemKindType::RING, SV_RING_LORDLY) && !o_ptr->is_cursed()) {
             delta += 15 * base;
         }
 
-        if (o_ptr->tval == ItemKindType::AMULET && o_ptr->sval == SV_AMULET_THE_MAGI && !o_ptr->is_cursed()) {
+        if (o_ptr->bi_key == BaseitemKey(ItemKindType::AMULET, SV_AMULET_THE_MAGI) && !o_ptr->is_cursed()) {
             delta += 15 * base;
         }
 
-        if (!o_ptr->is_cursed() && !o_ptr->is_broken() && k_ptr->level > floor_ptr->dun_level) {
-            delta += (k_ptr->level - floor_ptr->dun_level) * base;
+        const auto &baseitem = baseitems_info[o_ptr->bi_id];
+        if (!o_ptr->is_cursed() && !o_ptr->is_broken() && baseitem.level > floor_ptr->dun_level) {
+            delta += (baseitem.level - floor_ptr->dun_level) * base;
         }
 
         rating += rating_boost(delta);

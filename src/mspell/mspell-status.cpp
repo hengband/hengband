@@ -66,14 +66,13 @@ mspell_cast_msg_bad_status_to_monster::mspell_cast_msg_bad_status_to_monster(con
 void spell_badstatus_message_to_player(PlayerType *player_ptr, MONSTER_IDX m_idx, const mspell_cast_msg_bad_status_to_player &msgs, bool resist,
     bool saved_throw)
 {
-    GAME_TEXT m_name[MAX_NLEN];
-    monster_name(player_ptr, m_idx, m_name);
+    const auto m_name = monster_name(player_ptr, m_idx);
 
     disturb(player_ptr, true, true);
     if (player_ptr->effects()->blindness()->is_blind()) {
-        msg_format(msgs.blind, m_name);
+        msg_format(msgs.blind, m_name.data());
     } else {
-        msg_format(msgs.not_blind, m_name);
+        msg_format(msgs.not_blind, m_name.data());
     }
 
     if (resist) {
@@ -101,13 +100,12 @@ void spell_badstatus_message_to_mons(PlayerType *player_ptr, MONSTER_IDX m_idx, 
     bool see_either = see_monster(player_ptr, m_idx) || see_monster(player_ptr, t_idx);
     bool see_t = see_monster(player_ptr, t_idx);
     bool known = monster_near_player(floor_ptr, m_idx, t_idx);
-    GAME_TEXT m_name[MAX_NLEN], t_name[MAX_NLEN];
-    monster_name(player_ptr, m_idx, m_name);
-    monster_name(player_ptr, t_idx, t_name);
+    const auto m_name = monster_name(player_ptr, m_idx);
+    const auto t_name = monster_name(player_ptr, t_idx);
 
     if (known) {
         if (see_either) {
-            msg_format(msgs.default_msg, m_name, t_name);
+            msg_format(msgs.default_msg, m_name.data(), t_name.data());
         } else {
             floor_ptr->monster_noise = true;
         }
@@ -115,15 +113,15 @@ void spell_badstatus_message_to_mons(PlayerType *player_ptr, MONSTER_IDX m_idx, 
 
     if (resist) {
         if (see_t) {
-            msg_format(msgs.resist, t_name);
+            msg_format(msgs.resist, t_name.data());
         }
     } else if (saved_throw) {
         if (see_t) {
-            msg_format(msgs.saved_throw, t_name);
+            msg_format(msgs.saved_throw, t_name.data());
         }
     } else {
         if (see_t) {
-            msg_format(msgs.success, t_name);
+            msg_format(msgs.success, t_name.data());
         }
     }
 
@@ -143,15 +141,14 @@ void spell_badstatus_message_to_mons(PlayerType *player_ptr, MONSTER_IDX m_idx, 
  */
 MonsterSpellResult spell_RF5_DRAIN_MANA(PlayerType *player_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int target_type)
 {
-    GAME_TEXT m_name[MAX_NLEN], t_name[MAX_NLEN];
-    monster_name(player_ptr, m_idx, m_name);
-    monster_name(player_ptr, t_idx, t_name);
+    const auto m_name = monster_name(player_ptr, m_idx);
+    const auto t_name = monster_name(player_ptr, t_idx);
 
     if (target_type == MONSTER_TO_PLAYER) {
         disturb(player_ptr, true, true);
     } else if (target_type == MONSTER_TO_MONSTER && see_monster(player_ptr, m_idx)) {
         /* Basic message */
-        msg_format(_("%^sは精神エネルギーを%sから吸いとった。", "%^s draws psychic energy from %s."), m_name, t_name);
+        msg_format(_("%^sは精神エネルギーを%sから吸いとった。", "%^s draws psychic energy from %s."), m_name.data(), t_name.data());
     }
 
     const auto dam = monspell_damage(player_ptr, MonsterAbilityType::DRAIN_MANA, m_idx, DAM_ROLL);
@@ -181,19 +178,18 @@ MonsterSpellResult spell_RF5_MIND_BLAST(PlayerType *player_ptr, POSITION y, POSI
 {
     auto *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
     bool seen = (!player_ptr->effects()->blindness()->is_blind() && m_ptr->ml);
-    GAME_TEXT m_name[MAX_NLEN], t_name[MAX_NLEN];
-    monster_name(player_ptr, m_idx, m_name);
-    monster_name(player_ptr, t_idx, t_name);
+    const auto m_name = monster_name(player_ptr, m_idx);
+    const auto t_name = monster_name(player_ptr, t_idx);
 
     if (target_type == MONSTER_TO_PLAYER) {
         disturb(player_ptr, true, true);
         if (!seen) {
             msg_print(_("何かがあなたの精神に念を放っているようだ。", "You feel something focusing on your mind."));
         } else {
-            msg_format(_("%^sがあなたの瞳をじっとにらんでいる。", "%^s gazes deep into your eyes."), m_name);
+            msg_format(_("%^sがあなたの瞳をじっとにらんでいる。", "%^s gazes deep into your eyes."), m_name.data());
         }
     } else if (target_type == MONSTER_TO_MONSTER && see_monster(player_ptr, m_idx)) {
-        msg_format(_("%^sは%sをじっと睨んだ。", "%^s gazes intently at %s."), m_name, t_name);
+        msg_format(_("%^sは%sをじっと睨んだ。", "%^s gazes intently at %s."), m_name.data(), t_name.data());
     }
 
     const auto dam = monspell_damage(player_ptr, MonsterAbilityType::MIND_BLAST, m_idx, DAM_ROLL);
@@ -220,19 +216,18 @@ MonsterSpellResult spell_RF5_BRAIN_SMASH(PlayerType *player_ptr, POSITION y, POS
 {
     auto *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
     bool seen = (!player_ptr->effects()->blindness()->is_blind() && m_ptr->ml);
-    GAME_TEXT m_name[MAX_NLEN], t_name[MAX_NLEN];
-    monster_name(player_ptr, m_idx, m_name);
-    monster_name(player_ptr, t_idx, t_name);
+    const auto m_name = monster_name(player_ptr, m_idx);
+    const auto t_name = monster_name(player_ptr, t_idx);
 
     if (target_type == MONSTER_TO_PLAYER) {
         disturb(player_ptr, true, true);
         if (!seen) {
             msg_print(_("何かがあなたの精神に念を放っているようだ。", "You feel something focusing on your mind."));
         } else {
-            msg_format(_("%^sがあなたの瞳をじっとにらんでいる。", "%^s gazes deep into your eyes."), m_name);
+            msg_format(_("%^sがあなたの瞳をじっとにらんでいる。", "%^s gazes deep into your eyes."), m_name.data());
         }
     } else if (target_type == MONSTER_TO_MONSTER && see_monster(player_ptr, m_idx)) {
-        msg_format(_("%^sは%sをじっと睨んだ。", "%^s gazes intently at %s."), m_name, t_name);
+        msg_format(_("%^sは%sをじっと睨んだ。", "%^s gazes intently at %s."), m_name.data(), t_name.data());
     }
 
     const auto dam = monspell_damage(player_ptr, MonsterAbilityType::BRAIN_SMASH, m_idx, DAM_ROLL);
@@ -343,10 +338,9 @@ MonsterSpellResult spell_RF5_BLIND(MONSTER_IDX m_idx, PlayerType *player_ptr, MO
     }
 
     concptr msg_default;
-    GAME_TEXT t_name[MAX_NLEN];
-    monster_name(player_ptr, t_idx, t_name);
+    const auto t_name = monster_name(player_ptr, t_idx);
 
-    if (streq(t_name, "it")) {
+    if (streq(t_name.data(), "it")) {
         msg_default = _("%sは呪文を唱えて%sの目を焼き付かせた。", "%^s casts a spell, burning %ss eyes.");
     } else {
         msg_default = _("%sは呪文を唱えて%sの目を焼き付かせた。", "%^s casts a spell, burning %s's eyes.");
@@ -494,21 +488,19 @@ MonsterSpellResult spell_RF6_HASTE(PlayerType *player_ptr, MONSTER_IDX m_idx, MO
 {
     bool see_m = see_monster(player_ptr, m_idx);
     auto *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
-    GAME_TEXT m_name[MAX_NLEN];
-    monster_name(player_ptr, m_idx, m_name);
-    char m_poss[10];
-    monster_desc(player_ptr, m_poss, m_ptr, MD_PRON_VISIBLE | MD_POSSESSIVE);
+    const auto m_name = monster_name(player_ptr, m_idx);
+    const auto m_poss = monster_desc(player_ptr, m_ptr, MD_PRON_VISIBLE | MD_POSSESSIVE);
 
     mspell_cast_msg msg(_("%^sが何かをつぶやいた。", "%^s mumbles."),
-        _("%^sが自分の体に念を送った。", format("%%^s concentrates on %s body.", m_poss)),
-        _("%^sが自分の体に念を送った。", format("%%^s concentrates on %s body.", m_poss)),
-        _("%^sが自分の体に念を送った。", format("%%^s concentrates on %s body.", m_poss)));
+        _("%^sが自分の体に念を送った。", format("%%^s concentrates on %s body.", m_poss.data())),
+        _("%^sが自分の体に念を送った。", format("%%^s concentrates on %s body.", m_poss.data())),
+        _("%^sが自分の体に念を送った。", format("%%^s concentrates on %s body.", m_poss.data())));
 
     monspell_message_base(player_ptr, m_idx, t_idx, msg, player_ptr->effects()->blindness()->is_blind(), target_type);
 
     if (set_monster_fast(player_ptr, m_idx, m_ptr->get_remaining_acceleration() + 100)) {
         if (target_type == MONSTER_TO_PLAYER || (target_type == MONSTER_TO_MONSTER && see_m)) {
-            msg_format(_("%^sの動きが速くなった。", "%^s starts moving faster."), m_name);
+            msg_format(_("%^sの動きが速くなった。", "%^s starts moving faster."), m_name.data());
         }
     }
 
@@ -557,10 +549,9 @@ MonsterSpellResult spell_RF5_SLOW(MONSTER_IDX m_idx, PlayerType *player_ptr, MON
     }
 
     concptr msg_default;
-    GAME_TEXT t_name[MAX_NLEN];
-    monster_name(player_ptr, t_idx, t_name);
+    const auto t_name = monster_name(player_ptr, t_idx);
 
-    if (streq(t_name, "it")) {
+    if (streq(t_name.data(), "it")) {
         msg_default = _("%sが%sの筋肉から力を吸いとった。", "%^s drains power from %ss muscles.");
     } else {
         msg_default = _("%sが%sの筋肉から力を吸いとった。", "%^s drains power from %s's muscles.");
@@ -600,15 +591,12 @@ MonsterSpellResult spell_RF6_HEAL(PlayerType *player_ptr, MONSTER_IDX m_idx, MON
     DEPTH rlev = monster_level_idx(floor_ptr, m_idx);
     const auto is_blind = player_ptr->effects()->blindness()->is_blind();
     const auto seen = (!is_blind && m_ptr->ml);
-    GAME_TEXT m_name[MAX_NLEN];
-    monster_name(player_ptr, m_idx, m_name);
-    char m_poss[10];
-    monster_desc(player_ptr, m_poss, m_ptr, MD_PRON_VISIBLE | MD_POSSESSIVE);
+    const auto m_poss = monster_desc(player_ptr, m_ptr, MD_PRON_VISIBLE | MD_POSSESSIVE);
 
     msg.to_player_true = _("%^sが何かをつぶやいた。", "%^s mumbles.");
-    msg.to_mons_true = _("%^sは自分の傷に念を集中した。", format("%%^s concentrates on %s wounds.", m_poss));
-    msg.to_player_false = _("%^sが自分の傷に集中した。", format("%%^s concentrates on %s wounds.", m_poss));
-    msg.to_mons_false = _("%^sは自分の傷に念を集中した。", format("%%^s concentrates on %s wounds.", m_poss));
+    msg.to_mons_true = _("%^sは自分の傷に念を集中した。", format("%%^s concentrates on %s wounds.", m_poss.data()));
+    msg.to_player_false = _("%^sが自分の傷に集中した。", format("%%^s concentrates on %s wounds.", m_poss.data()));
+    msg.to_mons_false = _("%^sは自分の傷に念を集中した。", format("%%^s concentrates on %s wounds.", m_poss.data()));
 
     monspell_message_base(player_ptr, m_idx, t_idx, msg, is_blind, target_type);
 
@@ -644,7 +632,8 @@ MonsterSpellResult spell_RF6_HEAL(PlayerType *player_ptr, MONSTER_IDX m_idx, MON
     (void)set_monster_monfear(player_ptr, m_idx, 0);
 
     if (see_monster(player_ptr, m_idx)) {
-        msg_format(_("%^sは勇気を取り戻した。", format("%%^s recovers %s courage.", m_poss)), m_name);
+        const auto m_name = monster_name(player_ptr, m_idx);
+        msg_format(_("%^sは勇気を取り戻した。", format("%%^s recovers %s courage.", m_poss.data())), m_name.data());
     }
 
     return res;
@@ -671,18 +660,17 @@ MonsterSpellResult spell_RF6_INVULNER(PlayerType *player_ptr, MONSTER_IDX m_idx,
 
     if (m_ptr->ml) {
         MonsterRaceId r_idx = m_ptr->r_idx;
-        GAME_TEXT m_name[MAX_NLEN];
-        monster_desc(player_ptr, m_name, m_ptr, MD_NONE);
+        const auto m_name = monster_desc(player_ptr, m_ptr, MD_NONE);
         switch (r_idx) {
         case MonsterRaceId::MARIO:
         case MonsterRaceId::LUIGI:
-            msg_format(_("%sはスターを取った！", "%^s got a star!"), m_name);
+            msg_format(_("%sはスターを取った！", "%^s got a star!"), m_name.data());
             break;
         case MonsterRaceId::DIAVOLO:
             msg_print(_("『読める』………動きの『軌跡』が読める……", "'Read'......... I can read the 'trajectory' of movement..."));
             break;
         default:
-            msg_format(_("%sの身体がまばゆく輝き始めた！", "The body of %^s began to shine dazzlingly!"), m_name);
+            msg_format(_("%sの身体がまばゆく輝き始めた！", "The body of %^s began to shine dazzlingly!"), m_name.data());
             break;
         }
     }
@@ -704,12 +692,11 @@ MonsterSpellResult spell_RF6_INVULNER(PlayerType *player_ptr, MONSTER_IDX m_idx,
 MonsterSpellResult spell_RF6_FORGET(PlayerType *player_ptr, MONSTER_IDX m_idx)
 {
     DEPTH rlev = monster_level_idx(player_ptr->current_floor_ptr, m_idx);
-    GAME_TEXT m_name[MAX_NLEN];
-    monster_name(player_ptr, m_idx, m_name);
+    const auto m_name = monster_name(player_ptr, m_idx);
 
     disturb(player_ptr, true, true);
 
-    msg_format(_("%^sがあなたの記憶を消去しようとしている。", "%^s tries to blank your mind."), m_name);
+    msg_format(_("%^sがあなたの記憶を消去しようとしている。", "%^s tries to blank your mind."), m_name.data());
 
     if (randint0(100 + rlev / 2) < player_ptr->skill_sav) {
         msg_print(_("しかし効力を跳ね返した！", "You resist the effects!"));

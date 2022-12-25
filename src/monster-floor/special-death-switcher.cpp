@@ -299,10 +299,9 @@ static void on_dead_dragon_centipede(PlayerType *player_ptr, monster_death_type 
         }
     }
 
-    GAME_TEXT m_name[MAX_NLEN];
-    monster_desc(player_ptr, m_name, md_ptr->m_ptr, MD_NONE);
     if (notice) {
-        msg_format(_("%sが再生した！", "The %s reproduced!"), m_name);
+        const auto m_name = monster_desc(player_ptr, md_ptr->m_ptr, MD_NONE);
+        msg_format(_("%sが再生した！", "The %s reproduced!"), m_name.data());
         sound(SOUND_SUMMON);
     }
 }
@@ -324,7 +323,7 @@ static bool make_equipment(PlayerType *player_ptr, ItemEntity *q_ptr, const BIT_
         return true;
     }
 
-    return q_ptr->is_wearable() && (q_ptr->tval != ItemKindType::CARD);
+    return q_ptr->is_wearable() && (q_ptr->bi_key.tval() != ItemKindType::CARD);
 }
 
 /*
@@ -351,7 +350,7 @@ static void on_dead_random_artifact(PlayerType *player_ptr, monster_death_type *
             continue;
         }
 
-        if (q_ptr->art_name > 0) {
+        if (q_ptr->is_random_artifact()) {
             break;
         }
 

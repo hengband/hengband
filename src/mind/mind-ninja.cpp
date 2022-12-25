@@ -202,9 +202,8 @@ bool rush_attack(PlayerType *player_ptr, bool *mdeath)
             msg_format("There is %s in the way!", m_ptr->ml ? (tm_idx ? "another monster" : "a monster") : "someone");
 #endif
         } else if (!player_bold(player_ptr, ty, tx)) {
-            GAME_TEXT m_name[MAX_NLEN];
-            monster_desc(player_ptr, m_name, m_ptr, 0);
-            msg_format(_("素早く%sの懐に入り込んだ！", "You quickly jump in and attack %s!"), m_name);
+            const auto m_name = monster_desc(player_ptr, m_ptr, 0);
+            msg_format(_("素早く%sの懐に入り込んだ！", "You quickly jump in and attack %s!"), m_name.data());
         }
 
         if (!player_bold(player_ptr, ty, tx)) {
@@ -447,7 +446,7 @@ bool cast_ninja_spell(PlayerType *player_ptr, MindNinjaType spell)
             OBJECT_IDX slot;
 
             for (slot = 0; slot < INVEN_PACK; slot++) {
-                if (player_ptr->inventory_list[slot].tval == ItemKindType::SPIKE) {
+                if (player_ptr->inventory_list[slot].bi_key.tval() == ItemKindType::SPIKE) {
                     break;
                 }
             }

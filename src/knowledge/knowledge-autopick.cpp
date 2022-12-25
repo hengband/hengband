@@ -60,9 +60,9 @@ void do_cmd_knowledge_autopick(PlayerType *player_ptr)
         }
 
         if (act & DO_DISPLAY) {
-            fprintf(fff, "%11s", format("[%s]", tmp));
+            fprintf(fff, "%11s", format("[%s]", tmp).data());
         } else {
-            fprintf(fff, "%11s", format("(%s)", tmp));
+            fprintf(fff, "%11s", format("(%s)", tmp).data());
         }
 
         tmp = autopick_line_from_entry(&item);

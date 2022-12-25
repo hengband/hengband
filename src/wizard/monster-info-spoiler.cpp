@@ -7,6 +7,7 @@
 #include "system/angband-version.h"
 #include "system/monster-race-info.h"
 #include "term/term-color-types.h"
+#include "term/z-form.h"
 #include "util/angband-files.h"
 #include "util/bit-flags-calculator.h"
 #include "util/sort.h"
@@ -77,23 +78,13 @@ SpoilerOutputResultType spoil_mon_desc(concptr fname, std::function<bool(const M
     PlayerType dummy;
     uint16_t why = 2;
     char buf[1024];
-    char nam[MAX_MONSTER_NAME + 10]; // ユニークには[U] が付くので少し伸ばす
-    char lev[80];
-    char rar[80];
-    char spd[80];
-    char ac[80];
-    char hp[80];
-    char symbol[80];
     path_build(buf, sizeof(buf), ANGBAND_DIR_USER, fname);
     spoiler_file = angband_fopen(buf, "w");
     if (!spoiler_file) {
         return SpoilerOutputResultType::FILE_OPEN_FAILED;
     }
 
-    char title[200];
-    put_version(title);
-
-    fprintf(spoiler_file, "Monster Spoilers for %s\n", title);
+    fprintf(spoiler_file, "Monster Spoilers for %s\n", get_version().data());
     fprintf(spoiler_file, "------------------------------------------\n\n");
     fprintf(spoiler_file, "%-45.45s%4s %4s %4s %7s %7s  %19.19s\n", "Name", "Lev", "Rar", "Spd", "Hp", "Ac", "Visual Info");
     fprintf(spoiler_file, "%-45.45s%4s %4s %4s %7s %7s  %4.19s\n",
@@ -121,27 +112,31 @@ SpoilerOutputResultType spoil_mon_desc(concptr fname, std::function<bool(const M
         }
 
         const auto name = str_separate(r_ptr->name, 40);
+        std::string nam;
         if (r_ptr->kind_flags.has(MonsterKindType::UNIQUE)) {
-            sprintf(nam, "[U] %s", name.front().data());
+            nam = "[U] ";
         } else if (r_ptr->population_flags.has(MonsterPopulationType::NAZGUL)) {
-            sprintf(nam, "[N] %s", name.front().data());
+            nam = "[N] ";
         } else {
-            sprintf(nam, _("    %s", "The %s"), name.front().data());
+            nam = _("    ", "The ");
         }
+        nam.append(name.front());
 
-        sprintf(lev, "%d", (int)r_ptr->level);
-        sprintf(rar, "%d", (int)r_ptr->rarity);
-        sprintf(spd, "%+d", r_ptr->speed - STANDARD_SPEED);
-        sprintf(ac, "%d", r_ptr->ac);
+        std::string lev = format("%d", (int)r_ptr->level);
+        std::string rar = format("%d", (int)r_ptr->rarity);
+        std::string spd = format("%+d", r_ptr->speed - STANDARD_SPEED);
+        std::string ac = format("%d", r_ptr->ac);
+        std::string hp;
         if (any_bits(r_ptr->flags1, RF1_FORCE_MAXHP) || (r_ptr->hside == 1)) {
-            sprintf(hp, "%d", r_ptr->hdice * r_ptr->hside);
+            hp = format("%d", r_ptr->hdice * r_ptr->hside);
         } else {
-            sprintf(hp, "%dd%d", r_ptr->hdice, r_ptr->hside);
+            hp = format("%dd%d", r_ptr->hdice, r_ptr->hside);
         }
 
-        sprintf(symbol, "%ld", (long)(r_ptr->mexp));
-        sprintf(symbol, "%s '%c'", attr_to_text(r_ptr), r_ptr->d_char);
-        fprintf(spoiler_file, "%-45.45s%4s %4s %4s %7s %7s  %19.19s\n", nam, lev, rar, spd, hp, ac, symbol);
+        std::string symbol = format("%s '%c'", attr_to_text(r_ptr), r_ptr->d_char);
+        fprintf(spoiler_file, "%-45.45s%4s %4s %4s %7s %7s  %19.19s\n",
+            nam.data(), lev.data(), rar.data(), spd.data(), hp.data(),
+            ac.data(), symbol.data());
 
         for (auto i = 1U; i < name.size(); ++i) {
             fprintf(spoiler_file, "    %s\n", name[i].data());
@@ -159,10 +154,10 @@ SpoilerOutputResultType spoil_mon_desc(concptr fname, std::function<bool(const M
  * @param attr 未使用
  * @param str 文字列参照ポインタ
  */
-static void roff_func(TERM_COLOR attr, concptr str)
+static void roff_func(TERM_COLOR attr, std::string_view str)
 {
     (void)attr;
-    spoil_out(str);
+    spoil_out(str.data());
 }
 
 /*!
@@ -180,10 +175,7 @@ SpoilerOutputResultType spoil_mon_info(concptr fname)
         return SpoilerOutputResultType::FILE_OPEN_FAILED;
     }
 
-    char title[200];
-    put_version(title);
-    sprintf(buf, "Monster Spoilers for %s\n", title);
-    spoil_out(buf);
+    spoil_out(std::string("Monster Spoilers for ").append(get_version()).append("\n"));
     spoil_out("------------------------------------------\n\n");
 
     std::vector<MonsterRaceId> who;
@@ -203,34 +195,24 @@ SpoilerOutputResultType spoil_mon_info(concptr fname)
             spoil_out("[N] ");
         }
 
-        sprintf(buf, _("%s/%s  (", "%s%s ("), r_ptr->name.data(), _(r_ptr->E_name.data(), "")); /* ---)--- */
-        spoil_out(buf);
+        spoil_out(format(_("%s/%s  (", "%s%s ("), r_ptr->name.data(), _(r_ptr->E_name.data(), ""))); /* ---)--- */
         spoil_out(attr_to_text(r_ptr));
-        sprintf(buf, " '%c')\n", r_ptr->d_char);
-        spoil_out(buf);
-        sprintf(buf, "=== ");
-        spoil_out(buf);
-        sprintf(buf, "Num:%d  ", enum2i(r_idx));
-        spoil_out(buf);
-        sprintf(buf, "Lev:%d  ", (int)r_ptr->level);
-        spoil_out(buf);
-        sprintf(buf, "Rar:%d  ", r_ptr->rarity);
-        spoil_out(buf);
-        sprintf(buf, "%+d", r_ptr->speed - STANDARD_SPEED);
-        spoil_out(buf);
+        spoil_out(format(" '%c')\n", r_ptr->d_char));
+        spoil_out("=== ");
+        spoil_out(format("Num:%d  ", enum2i(r_idx)));
+        spoil_out(format("Lev:%d  ", (int)r_ptr->level));
+        spoil_out(format("Rar:%d  ", r_ptr->rarity));
+        spoil_out(format("Spd:%+d  ", r_ptr->speed - STANDARD_SPEED));
         if (any_bits(r_ptr->flags1, RF1_FORCE_MAXHP) || (r_ptr->hside == 1)) {
-            sprintf(buf, "Hp:%d  ", r_ptr->hdice * r_ptr->hside);
+            spoil_out(format("Hp:%d  ", r_ptr->hdice * r_ptr->hside));
         } else {
-            sprintf(buf, "Hp:%dd%d  ", r_ptr->hdice, r_ptr->hside);
+            spoil_out(format("Hp:%dd%d  ", r_ptr->hdice, r_ptr->hside));
         }
 
-        spoil_out(buf);
-        sprintf(buf, "Ac:%d  ", r_ptr->ac);
-        spoil_out(buf);
-        sprintf(buf, "Exp:%ld\n", (long)(r_ptr->mexp));
-        spoil_out(buf);
+        spoil_out(format("Ac:%d  ", r_ptr->ac));
+        spoil_out(format("Exp:%ld\n", (long)(r_ptr->mexp)));
         output_monster_spoiler(r_idx, roff_func);
-        spoil_out(nullptr);
+        spoil_out({}, true);
     }
 
     return ferror(spoiler_file) || angband_fclose(spoiler_file) ? SpoilerOutputResultType::FILE_CLOSE_FAILED

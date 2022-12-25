@@ -50,9 +50,9 @@
 #include "term/screen-processor.h"
 #include "timed-effect/player-stun.h"
 #include "timed-effect/timed-effects.h"
-#include "util/buffer-shaper.h"
 #include "util/enum-converter.h"
 #include "view/display-messages.h"
+#include "view/display-util.h"
 
 /*!
  * @brief 職業別特殊技能の処理用構造体
@@ -454,7 +454,6 @@ static MindKindType decide_use_mind_browse(PlayerType *player_ptr)
 void do_cmd_mind_browse(PlayerType *player_ptr)
 {
     SPELL_IDX n = 0;
-    char temp[62 * 5];
     MindKindType use_mind = decide_use_mind_browse(player_ptr);
     screen_save();
     while (true) {
@@ -469,11 +468,7 @@ void do_cmd_mind_browse(PlayerType *player_ptr)
         term_erase(12, 18, 255);
         term_erase(12, 17, 255);
         term_erase(12, 16, 255);
-        shape_buffer(mind_tips[(int)use_mind][n], 62, temp, sizeof(temp));
-        for (int j = 0, line = 17; temp[j]; j += (1 + strlen(&temp[j]))) {
-            prt(&temp[j], line, 15);
-            line++;
-        }
+        display_wrap_around(mind_tips[enum2i(use_mind)][n], 62, 17, 15);
 
         switch (use_mind) {
         case MindKindType::MIRROR_MASTER:

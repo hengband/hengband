@@ -1,6 +1,7 @@
 ﻿#include "effect/effect-monster-resist-hurt.h"
 #include "effect/effect-monster-util.h"
 #include "monster-race/monster-race.h"
+#include "monster-race/race-brightness-flags.h"
 #include "monster-race/race-flags-resistance.h"
 #include "monster-race/race-flags1.h"
 #include "monster-race/race-flags2.h"
@@ -727,9 +728,9 @@ ProcessResult effect_monster_abyss(PlayerType *player_ptr, effect_monster_type *
         em_ptr->obvious = true;
     }
 
-    BIT_FLAGS dark = RF7_SELF_DARK_1 | RF7_SELF_DARK_2 | RF7_HAS_DARK_1 | RF7_HAS_DARK_2;
+    auto dark = { MonsterBrightnessType::SELF_DARK_1, MonsterBrightnessType::SELF_DARK_2, MonsterBrightnessType::HAS_DARK_1, MonsterBrightnessType::HAS_DARK_2 };
 
-    if (any_bits(em_ptr->r_ptr->flags7, dark)) {
+    if (em_ptr->r_ptr->brightness_flags.has_any_of(dark)) {
         em_ptr->note = _("には耐性がある！", " resists!");
         em_ptr->dam *= 3;
         em_ptr->dam /= (randint1(6) + 6);

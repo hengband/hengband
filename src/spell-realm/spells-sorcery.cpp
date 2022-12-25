@@ -12,6 +12,7 @@
 #include "object/object-value.h"
 #include "system/item-entity.h"
 #include "system/player-type-definition.h"
+#include "term/z-form.h"
 #include "view/display-messages.h"
 
 /*!
@@ -38,7 +39,7 @@ bool alchemy(PlayerType *player_ptr)
 
     int amt = 1;
     if (o_ptr->number > 1) {
-        amt = get_quantity(nullptr, o_ptr->number);
+        amt = get_quantity(std::nullopt, o_ptr->number);
         if (amt <= 0) {
             return false;
         }
@@ -53,7 +54,7 @@ bool alchemy(PlayerType *player_ptr)
     if (!force) {
         if (confirm_destroy || (o_ptr->get_price() > 0)) {
             char out_val[MAX_NLEN + 40];
-            sprintf(out_val, _("本当に%sを金に変えますか？", "Really turn %s to gold? "), o_name);
+            strnfmt(out_val, sizeof(out_val), _("本当に%sを金に変えますか？", "Really turn %s to gold? "), o_name);
             if (!get_check(out_val)) {
                 return false;
             }

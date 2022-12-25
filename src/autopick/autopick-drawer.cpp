@@ -13,7 +13,7 @@
 #include "system/player-type-definition.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
-#include "util/buffer-shaper.h"
+#include "view/display-util.h"
 
 #define DESCRIPT_HGT 3
 
@@ -216,7 +216,7 @@ void draw_text_editor(PlayerType *player_ptr, text_body_type *tb)
     }
 
     autopick_type an_entry, *entry = &an_entry;
-    concptr str1 = nullptr, str2 = nullptr;
+    std::string str1, str2;
     for (int j = 0; j < DESCRIPT_HGT; j++) {
         term_erase(0, tb->hgt + 2 + j, tb->wid);
     }
@@ -268,8 +268,6 @@ void draw_text_editor(PlayerType *player_ptr, text_body_type *tb)
         }
     } else if (autopick_new_entry(entry, tb->lines_list[tb->cy], false)) {
         char buf[MAX_LINELEN];
-        char temp[MAX_LINELEN];
-        concptr t;
 
         describe_autopick(buf, entry);
 
@@ -281,22 +279,13 @@ void draw_text_editor(PlayerType *player_ptr, text_body_type *tb)
             strcat(buf, _("この行は現在は無効な状態です。", "  This line is bypassed currently."));
         }
 
-        shape_buffer(buf, 81, temp, sizeof(temp));
-        t = temp;
-        for (int j = 0; j < 3; j++) {
-            if (t[0] == 0) {
-                break;
-            } else {
-                prt(t, tb->hgt + 1 + 1 + j, 0);
-                t += strlen(t) + 1;
-            }
-        }
+        display_wrap_around(buf, 81, tb->hgt + 2, 0);
     }
 
-    if (str1) {
+    if (!str1.empty()) {
         prt(str1, tb->hgt + 1 + 1, 0);
     }
-    if (str2) {
+    if (!str2.empty()) {
         prt(str2, tb->hgt + 1 + 2, 0);
     }
 }

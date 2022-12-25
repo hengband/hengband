@@ -12,6 +12,7 @@
 #include "object-enchant/trc-types.h"
 #include "object/object-mark-types.h"
 #include "system/angband.h"
+#include "system/baseitem-info.h"
 #include "system/system-variables.h"
 #include "util/flag-group.h"
 #include <optional>
@@ -28,9 +29,7 @@ public:
     POSITION iy{}; /*!< Y-position on map, or zero */
     POSITION ix{}; /*!< X-position on map, or zero */
     IDX stack_idx{}; /*!< このアイテムを含むアイテムリスト内の位置(降順) */
-    ItemKindType tval{}; /*!< Item type (from kind) */
-
-    OBJECT_SUBTYPE_VALUE sval{}; /*!< Item sub-type (from kind) */
+    BaseitemKey bi_key;
     PARAMETER_VALUE pval{}; /*!< Item extra-parameter */
     byte discount{}; /*!< ゲーム中の値引き率 (0～100) / Discount (if any) */
     ITEM_NUMBER number{}; /*!< Number of items */
@@ -60,8 +59,8 @@ public:
     TIME_EFFECT timeout{}; /*!< Timeout Counter */
     byte ident{}; /*!< Special flags  */
     EnumClassFlagGroup<OmType> marked{}; /*!< Object is marked */
-    uint16_t inscription{}; /*!< Inscription index */
-    uint16_t art_name{}; /*!< Artifact name (random artifacts) */
+    std::optional<std::string> inscription{}; /*!< Inscription */
+    std::optional<std::string> randart_name{}; /*!< Artifact name (random artifacts) */
     byte feeling{}; /*!< Game generated inscription number (eg, pseudo-id) */
 
     TrFlags art_flags{}; /*!< Extra Flags for ego and artifacts */
@@ -130,6 +129,10 @@ public:
     int get_arrow_magnification() const;
     bool is_aiming_rod() const;
     bool is_lite_requiring_fuel() const;
+    bool is_junk() const;
+    bool is_armour() const;
+    bool is_cross_bow() const;
+    bool is_inscribed() const;
 
 private:
     int get_baseitem_price() const;

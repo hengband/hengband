@@ -97,12 +97,13 @@ static errr init_info(std::string_view filename, angband_header &head, InfoType 
 
     auto *fp = angband_fopen(buf, "r");
     if (!fp) {
-        quit(format(_("'%s'ファイルをオープンできません。", "Cannot open '%s' file."), filename));
+        quit_fmt(_("'%s'ファイルをオープンできません。", "Cannot open '%s' file."), filename);
     }
 
     constexpr auto info_is_vector = is_vector_v<InfoType>;
     if constexpr (info_is_vector) {
-        info.assign(head.info_num, {});
+        using value_type = typename InfoType::value_type;
+        info.assign(head.info_num, value_type{});
     }
 
     const auto err = init_info_txt(fp, buf, &head, parser);
@@ -117,7 +118,7 @@ static errr init_info(std::string_view filename, angband_header &head, InfoType 
         msg_format(_("レコード %d は '%s' エラーがあります。", "Record %d contains a '%s' error."), error_idx, oops);
         msg_format(_("構文 '%s'。", "Parsing '%s'."), buf);
         msg_print(nullptr);
-        quit(format(_("'%s'ファイルにエラー", "Error in '%s' file."), filename));
+        quit_fmt(_("'%s'ファイルにエラー", "Error in '%s' file."), filename);
     }
 
     if constexpr (info_is_vector) {

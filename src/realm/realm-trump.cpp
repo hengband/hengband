@@ -34,9 +34,9 @@
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param spell 魔法ID
  * @param mode 処理内容 (SpellProcessType::NAME / SPELL_DESC / SpellProcessType::INFO / SpellProcessType::CAST)
- * @return SpellProcessType::NAME / SPELL_DESC / SpellProcessType::INFO 時には文字列ポインタを返す。SpellProcessType::CAST時はnullptr文字列を返す。
+ * @return SpellProcessType::NAME / SPELL_DESC / SpellProcessType::INFO 時には文字列を返す。SpellProcessType::CAST時は std::nullopt を返す。
  */
-concptr do_trump_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessType mode)
+std::optional<std::string> do_trump_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessType mode)
 {
     bool name = mode == SpellProcessType::NAME;
     bool desc = mode == SpellProcessType::DESCRIPTION;
@@ -119,7 +119,7 @@ concptr do_trump_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessType
         {
             if (cast) {
                 if (!reset_recall(player_ptr)) {
-                    return nullptr;
+                    return std::nullopt;
                 }
             }
         }
@@ -185,7 +185,7 @@ concptr do_trump_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessType
 
             if (cast) {
                 if (!get_aim_dir(player_ptr, &dir)) {
-                    return nullptr;
+                    return std::nullopt;
                 }
 
                 fire_beam(player_ptr, AttributeType::AWAY_ALL, dir, power);
@@ -231,7 +231,7 @@ concptr do_trump_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessType
 
             if (cast) {
                 if (!get_aim_dir(player_ptr, &dir)) {
-                    return nullptr;
+                    return std::nullopt;
                 }
 
                 fetch_item(player_ptr, dir, weight, false);
@@ -254,7 +254,7 @@ concptr do_trump_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessType
 
                 if (cast) {
                     if (!target_set(player_ptr, TARGET_KILL)) {
-                        return nullptr;
+                        return std::nullopt;
                     }
                     x = target_col;
                     y = target_row;
@@ -322,7 +322,7 @@ concptr do_trump_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessType
                 target_pet = old_target_pet;
 
                 if (!result) {
-                    return nullptr;
+                    return std::nullopt;
                 }
 
                 speed_monster(player_ptr, dir, plev);
@@ -341,7 +341,7 @@ concptr do_trump_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessType
         {
             if (cast) {
                 if (!get_check(_("本当に他の階にテレポートしますか？", "Are you sure? (Teleport Level)"))) {
-                    return nullptr;
+                    return std::nullopt;
                 }
                 teleport_level(player_ptr, 0);
             }
@@ -366,7 +366,7 @@ concptr do_trump_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessType
             if (cast) {
                 msg_print(_("次元の扉が開いた。目的地を選んで下さい。", "You open a dimensional gate. Choose a destination."));
                 if (!dimension_door(player_ptr)) {
-                    return nullptr;
+                    return std::nullopt;
                 }
             }
         }
@@ -391,7 +391,7 @@ concptr do_trump_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessType
 
             if (cast) {
                 if (!recall_player(player_ptr, randint0(21) + 15)) {
-                    return nullptr;
+                    return std::nullopt;
                 }
             }
         }
@@ -439,7 +439,7 @@ concptr do_trump_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessType
                 project_length = 0;
 
                 if (!result) {
-                    return nullptr;
+                    return std::nullopt;
                 }
 
                 teleport_swap(player_ptr, dir);
@@ -615,7 +615,7 @@ concptr do_trump_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessType
         {
             if (cast) {
                 if (!identify_fully(player_ptr, false)) {
-                    return nullptr;
+                    return std::nullopt;
                 }
             }
         }
@@ -649,7 +649,7 @@ concptr do_trump_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessType
                 target_pet = old_target_pet;
 
                 if (!result) {
-                    return nullptr;
+                    return std::nullopt;
                 }
 
                 heal_monster(player_ptr, dir, heal);

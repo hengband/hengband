@@ -336,7 +336,7 @@ Smith::DrainEssenceResult Smith::drain_essence(ItemEntity *o_ptr)
     }
 
     // マイナス効果のあるアイテムから抽出する時のペナルティを計算
-    int dec = 4;
+    auto dec = 4;
     if (o_ptr->curse_flags.has_any_of({ CurseTraitType::CURSED, CurseTraitType::HEAVY_CURSE, CurseTraitType::PERMA_CURSE })) {
         dec--;
     }
@@ -352,16 +352,15 @@ Smith::DrainEssenceResult Smith::drain_essence(ItemEntity *o_ptr)
     // アイテムをエッセンス抽出後の状態にする
     const ItemEntity old_o = *o_ptr;
     o_ptr->prep(o_ptr->bi_id);
-
     o_ptr->iy = old_o.iy;
     o_ptr->ix = old_o.ix;
     o_ptr->marked = old_o.marked;
     o_ptr->number = old_o.number;
     o_ptr->discount = old_o.discount;
-
-    if (o_ptr->tval == ItemKindType::DRAG_ARMOR) {
+    if (o_ptr->bi_key.tval() == ItemKindType::DRAG_ARMOR) {
         o_ptr->timeout = old_o.timeout;
     }
+
     o_ptr->ident |= (IDENT_FULL_KNOWN);
     object_aware(player_ptr, o_ptr);
     object_known(o_ptr);

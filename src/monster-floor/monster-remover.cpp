@@ -5,6 +5,7 @@
 #include "floor/floor-object.h"
 #include "grid/grid.h"
 #include "monster-race/monster-race.h"
+#include "monster-race/race-brightness-mask.h"
 #include "monster-race/race-flags2.h"
 #include "monster-race/race-flags7.h"
 #include "monster-race/race-indice-types.h"
@@ -98,7 +99,7 @@ void delete_monster_idx(PlayerType *player_ptr, MONSTER_IDX i)
     *m_ptr = {};
     floor_ptr->m_cnt--;
     lite_spot(player_ptr, y, x);
-    if (r_ptr->flags7 & (RF7_LITE_MASK | RF7_DARK_MASK)) {
+    if (r_ptr->brightness_flags.has_any_of(ld_mask)) {
         player_ptr->update |= (PU_MON_LITE);
     }
 }

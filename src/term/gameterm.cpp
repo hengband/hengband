@@ -345,7 +345,7 @@ const concptr ident_info[] = {
 /*
  * The array of window pointers
  */
-term_type *angband_term[8];
+std::array<term_type *, 8> angband_terms;
 
 /*!
  * スクリーン表示色キャラクタ /

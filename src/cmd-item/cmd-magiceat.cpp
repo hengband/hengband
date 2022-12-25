@@ -77,14 +77,14 @@
 #include "target/target-getter.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
+#include "term/z-form.h"
 #include "timed-effect/player-stun.h"
 #include "timed-effect/timed-effects.h"
-#include "util/buffer-shaper.h"
 #include "util/int-char-converter.h"
 #include "view/display-messages.h"
+#include "view/display-util.h"
 #include <algorithm>
 #include <optional>
-#include <tuple>
 
 static std::optional<BaseitemKey> check_magic_eater_spell_repeat(magic_eater_data_type *magic_eater_data)
 {
@@ -258,12 +258,9 @@ static std::optional<BaseitemKey> select_magic_eater(PlayerType *player_ptr, boo
             OBJECT_SUBTYPE_VALUE ctr;
             PERCENTAGE chance;
             short bi_id;
-            char dummy[80];
             POSITION x1, y1;
             DEPTH level;
             byte col;
-
-            strcpy(dummy, "");
 
             for (y = 1; y < 20; y++) {
                 prt("", y, x);
@@ -291,11 +288,12 @@ static std::optional<BaseitemKey> select_magic_eater(PlayerType *player_ptr, boo
 
                 bi_id = lookup_baseitem_id({ tval, ctr });
 
+                std::string dummy;
                 if (use_menu) {
                     if (ctr == (menu_line - 1)) {
-                        strcpy(dummy, _("》", "> "));
+                        dummy = _("》", "> ");
                     } else {
-                        strcpy(dummy, "  ");
+                        dummy = "  ";
                     }
                 }
                 /* letter/number for power selection */
@@ -306,7 +304,7 @@ static std::optional<BaseitemKey> select_magic_eater(PlayerType *player_ptr, boo
                     } else {
                         letter = '0' + ctr - 26;
                     }
-                    sprintf(dummy, "%c)", letter);
+                    dummy = format("%c)", letter);
                 }
                 x1 = ((ctr < ITEM_GROUP_SIZE / 2) ? x : x + 40);
                 y1 = ((ctr < ITEM_GROUP_SIZE / 2) ? y + ctr : y + ctr - ITEM_GROUP_SIZE / 2);
@@ -331,23 +329,25 @@ static std::optional<BaseitemKey> select_magic_eater(PlayerType *player_ptr, boo
 
                 if (bi_id) {
                     if (tval == ItemKindType::ROD) {
-                        strcat(dummy,
+                        dummy.append(
                             format(_(" %-22.22s 充填:%2d/%2d%3d%%", " %-22.22s   (%2d/%2d) %3d%%"), baseitems_info[bi_id].name.data(),
                                 item.charge ? (item.charge - 1) / (EATER_ROD_CHARGE * baseitems_info[bi_id].pval) + 1 : 0,
-                                item.count, chance));
+                                item.count, chance)
+                                .data());
                         if (item.charge > baseitems_info[bi_id].pval * (item.count - 1) * EATER_ROD_CHARGE) {
                             col = TERM_RED;
                         }
                     } else {
-                        strcat(dummy,
+                        dummy.append(
                             format(" %-22.22s    %2d/%2d %3d%%", baseitems_info[bi_id].name.data(), (int16_t)(item.charge / EATER_CHARGE),
-                                item.count, chance));
+                                item.count, chance)
+                                .data());
                         if (item.charge < EATER_CHARGE) {
                             col = TERM_RED;
                         }
                     }
                 } else {
-                    strcpy(dummy, "");
+                    dummy.clear();
                 }
                 c_prt(col, dummy, y1, x1);
             }
@@ -485,21 +485,13 @@ static std::optional<BaseitemKey> select_magic_eater(PlayerType *player_ptr, boo
 
         /* Browse */
         else {
-            int line, j;
-            char temp[70 * 20];
-
             /* Clear lines, position cursor  (really should use strlen here) */
             term_erase(7, 23, 255);
             term_erase(7, 22, 255);
             term_erase(7, 21, 255);
             term_erase(7, 20, 255);
 
-            shape_buffer(baseitems_info[lookup_baseitem_id({ tval, i })].text.data(), 62, temp, sizeof(temp));
-            for (j = 0, line = 21; temp[j]; j += 1 + strlen(&temp[j])) {
-                prt(&temp[j], line, 10);
-                line++;
-            }
-
+            display_wrap_around(baseitems_info[lookup_baseitem_id({ tval, i })].text, 62, 21, 10);
             continue;
         }
 

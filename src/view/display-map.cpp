@@ -45,9 +45,9 @@ char image_monster_hack[MAX_IMAGE_MONSTER_HACK] = "abcdefghijklmnopqrstuvwxyzABC
 static void image_object(TERM_COLOR *ap, char *cp)
 {
     if (use_graphics) {
-        auto *k_ptr = &baseitems_info[randint1(baseitems_info.size() - 1)];
-        *cp = k_ptr->x_char;
-        *ap = k_ptr->x_attr;
+        const auto &baseitem = baseitems_info[randint1(baseitems_info.size() - 1)];
+        *cp = baseitem.x_char;
+        *ap = baseitem.x_attr;
         return;
     }
 

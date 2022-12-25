@@ -102,6 +102,7 @@
 #include "system/system-variables.h"
 #include "term/gameterm.h"
 #include "term/term-color-types.h"
+#include "term/z-form.h"
 #include "util/angband-files.h"
 #include "util/bit-flags-calculator.h"
 #include "util/int-char-converter.h"
@@ -1166,9 +1167,9 @@ static void react_keypress(XKeyEvent *xev)
     }
 
     if (ks) {
-        sprintf(msg, "%c%s%s%s%s_%lX%c", 31, mc ? "N" : "", ms ? "S" : "", mo ? "O" : "", mx ? "M" : "", (unsigned long)(ks), 13);
+        strnfmt(msg, sizeof(msg), "%c%s%s%s%s_%lX%c", 31, mc ? "N" : "", ms ? "S" : "", mo ? "O" : "", mx ? "M" : "", (unsigned long)(ks), 13);
     } else {
-        sprintf(msg, "%c%s%s%s%sK_%X%c", 31, mc ? "N" : "", ms ? "S" : "", mo ? "O" : "", mx ? "M" : "", ev->keycode, 13);
+        strnfmt(msg, sizeof(msg), "%c%s%s%s%sK_%X%c", 31, mc ? "N" : "", ms ? "S" : "", mo ? "O" : "", mx ? "M" : "", ev->keycode, 13);
     }
 
     send_keys(msg);
@@ -1799,13 +1800,13 @@ static bool check_file(concptr s)
 static void init_sound(void)
 {
     int i;
-    char wav[128];
     char buf[1024];
     char dir_xtra_sound[1024];
     path_build(dir_xtra_sound, sizeof(dir_xtra_sound), ANGBAND_DIR_XTRA, "sound");
     for (i = 1; i < SOUND_MAX; i++) {
-        sprintf(wav, "%s.wav", angband_sound_name[i]);
-        path_build(buf, sizeof(buf), dir_xtra_sound, wav);
+        std::string wav = angband_sound_name[i];
+        wav.append(".wav");
+        path_build(buf, sizeof(buf), dir_xtra_sound, wav.data());
         if (check_file(buf)) {
             sound_file[i] = string_make(buf);
         }
@@ -1820,7 +1821,6 @@ static void init_sound(void)
  */
 static errr game_term_xtra_x11_sound(int v)
 {
-    char buf[1024];
     if (!use_sound) {
         return 1;
     }
@@ -1831,8 +1831,9 @@ static errr game_term_xtra_x11_sound(int v)
         return 1;
     }
 
-    sprintf(buf, "./playwave.sh %s\n", sound_file[v]);
-    return system(buf) < 0;
+    std::string buf = "./playwave.sh ";
+    buf.append(sound_file[v]).append("\n");
+    return system(buf.data()) < 0;
 }
 
 /*
@@ -2162,7 +2163,7 @@ static void game_term_nuke_x11(term_type *)
             XftDrawDestroy(iwin->draw);
         }
 #endif
-        angband_term[i] = nullptr;
+        angband_terms[i] = nullptr;
     }
 
     if (Metadpy->xim) {
@@ -2193,8 +2194,6 @@ static errr term_data_init(term_data *td, int i)
 
     int wid, hgt, num;
 
-    char buf[80];
-
     concptr str;
 
     int val;
@@ -2209,8 +2208,7 @@ static errr term_data_init(term_data *td, int i)
     XWMHints *wh;
 #endif
 
-    sprintf(buf, "ANGBAND_X11_FONT_%d", i);
-    font = getenv(buf);
+    font = getenv(format("ANGBAND_X11_FONT_%d", i).data());
     if (!font) {
         font = getenv("ANGBAND_X11_FONT");
     }
@@ -2247,23 +2245,19 @@ static errr term_data_init(term_data *td, int i)
         }
     }
 
-    sprintf(buf, "ANGBAND_X11_AT_X_%d", i);
-    str = getenv(buf);
+    str = getenv(format("ANGBAND_X11_AT_X_%d", i).data());
     x = (str != nullptr) ? atoi(str) : -1;
 
-    sprintf(buf, "ANGBAND_X11_AT_Y_%d", i);
-    str = getenv(buf);
+    str = getenv(format("ANGBAND_X11_AT_Y_%d", i).data());
     y = (str != nullptr) ? atoi(str) : -1;
 
-    sprintf(buf, "ANGBAND_X11_COLS_%d", i);
-    str = getenv(buf);
+    str = getenv(format("ANGBAND_X11_COLS_%d", i).data());
     val = (str != nullptr) ? atoi(str) : -1;
     if (val > 0) {
         cols = val;
     }
 
-    sprintf(buf, "ANGBAND_X11_ROWS_%d", i);
-    str = getenv(buf);
+    str = getenv(format("ANGBAND_X11_ROWS_%d", i).data());
     val = (str != nullptr) ? atoi(str) : -1;
     if (val > 0) {
         rows = val;
@@ -2278,15 +2272,13 @@ static errr term_data_init(term_data *td, int i)
         }
     }
 
-    sprintf(buf, "ANGBAND_X11_IBOX_%d", i);
-    str = getenv(buf);
+    str = getenv(format("ANGBAND_X11_IBOX_%d", i).data());
     val = (str != nullptr) ? atoi(str) : -1;
     if (val > 0) {
         ox = val;
     }
 
-    sprintf(buf, "ANGBAND_X11_IBOY_%d", i);
-    str = getenv(buf);
+    str = getenv(format("ANGBAND_X11_IBOY_%d", i).data());
     val = (str != nullptr) ? atoi(str) : -1;
     if (val > 0) {
         oy = val;
@@ -2502,7 +2494,7 @@ errr init_x11(int argc, char *argv[])
     for (i = 0; i < num_term; i++) {
         term_data *td = &data[i];
         term_data_init(td, i);
-        angband_term[i] = game_term;
+        angband_terms[i] = game_term;
     }
 
     Infowin_set(data[0].win.get());

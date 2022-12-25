@@ -272,15 +272,14 @@ void sense_inventory1(PlayerType *player_ptr)
     }
 
     for (INVENTORY_IDX i = 0; i < INVEN_TOTAL; i++) {
-        bool okay = false;
-
         o_ptr = &player_ptr->inventory_list[i];
 
         if (!o_ptr->bi_id) {
             continue;
         }
 
-        switch (o_ptr->tval) {
+        auto okay = false;
+        switch (o_ptr->bi_key.tval()) {
         case ItemKindType::SHOT:
         case ItemKindType::ARROW:
         case ItemKindType::BOLT:
@@ -298,11 +297,9 @@ void sense_inventory1(PlayerType *player_ptr)
         case ItemKindType::SOFT_ARMOR:
         case ItemKindType::HARD_ARMOR:
         case ItemKindType::DRAG_ARMOR:
-        case ItemKindType::CARD: {
+        case ItemKindType::CARD:
             okay = true;
             break;
-        }
-
         default:
             break;
         }
@@ -409,7 +406,7 @@ void sense_inventory2(PlayerType *player_ptr)
             continue;
         }
 
-        switch (o_ptr->tval) {
+        switch (o_ptr->bi_key.tval()) {
         case ItemKindType::RING:
         case ItemKindType::AMULET:
         case ItemKindType::LITE:
@@ -465,7 +462,8 @@ item_feel_type pseudo_value_check_heavy(ItemEntity *o_ptr)
         return FEEL_BROKEN;
     }
 
-    if ((o_ptr->tval == ItemKindType::RING) || (o_ptr->tval == ItemKindType::AMULET)) {
+    const auto tval = o_ptr->bi_key.tval();
+    if ((tval == ItemKindType::RING) || (tval == ItemKindType::AMULET)) {
         return FEEL_AVERAGE;
     }
 

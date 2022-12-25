@@ -545,7 +545,8 @@ void dump_virtues(PlayerType *player_ptr, FILE *out_file)
         GAME_TEXT vir_name[20];
         int tester = player_ptr->virtues[v_nr];
         strcpy(vir_name, virtue[(player_ptr->vir_types[v_nr]) - 1]);
-        concptr vir_val = show_actual_value ? format(" (%d)", tester) : "";
+        const std::string vir_val_str = format(" (%d)", tester);
+        const auto vir_val = show_actual_value ? vir_val_str.data() : "";
         if (player_ptr->vir_types[v_nr] == 0 || player_ptr->vir_types[v_nr] > MAX_VIRTUE) {
             fprintf(out_file, _("おっと。%sの情報なし。", "Oops. No info about %s."), vir_name);
         }

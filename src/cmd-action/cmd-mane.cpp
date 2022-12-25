@@ -65,6 +65,7 @@
 #include "target/target-setter.h"
 #include "target/target-types.h"
 #include "term/screen-processor.h"
+#include "term/z-form.h"
 #include "timed-effect/player-stun.h"
 #include "timed-effect/timed-effects.h"
 #include "util/enum-converter.h"
@@ -77,46 +78,36 @@ static int damage;
 
 /*!
  * @brief 受け取ったパラメータに応じてものまねの効果情報をまとめたフォーマットを返す
- * @param p 情報を返す文字列参照ポインタ
  * @param power ものまねの効力の種類
  * @param dam ものまねの威力
+ * @param std::string ものまねの効果を表す文字列
  */
-static void mane_info(PlayerType *player_ptr, char *p, MonsterAbilityType power, int dam)
+static std::string mane_info(PlayerType *player_ptr, MonsterAbilityType power, int dam)
 {
     PLAYER_LEVEL plev = player_ptr->lev;
-
-    strcpy(p, "");
 
     const auto power_int = enum2i(power);
 
     if ((power_int > 2 && power_int < 41) || (power_int > 41 && power_int < 59) || (power == MonsterAbilityType::PSY_SPEAR) || (power == MonsterAbilityType::BO_VOID) || (power == MonsterAbilityType::BO_ABYSS) || (power == MonsterAbilityType::BA_VOID) || (power == MonsterAbilityType::BA_ABYSS) || (power == MonsterAbilityType::BR_VOID) || (power == MonsterAbilityType::BR_ABYSS)) {
-        sprintf(p, " %s%d", KWD_DAM, (int)dam);
-    } else {
-        switch (power) {
-        case MonsterAbilityType::DRAIN_MANA:
-            sprintf(p, " %sd%d+%d", KWD_HEAL, plev * 3, plev);
-            break;
-        case MonsterAbilityType::HASTE:
-            sprintf(p, " %sd%d+%d", KWD_DURATION, 20 + plev, plev);
-            break;
-        case MonsterAbilityType::HEAL:
-            sprintf(p, " %s%d", KWD_HEAL, plev * 6);
-            break;
-        case MonsterAbilityType::INVULNER:
-            sprintf(p, " %sd7+7", KWD_DURATION);
-            break;
-        case MonsterAbilityType::BLINK:
-            sprintf(p, " %s10", KWD_SPHERE);
-            break;
-        case MonsterAbilityType::TPORT:
-            sprintf(p, " %s%d", KWD_SPHERE, plev * 5);
-            break;
-        case MonsterAbilityType::RAISE_DEAD:
-            sprintf(p, " %s5", KWD_SPHERE);
-            break;
-        default:
-            break;
-        }
+        return format(" %s%d", KWD_DAM, (int)dam);
+    }
+    switch (power) {
+    case MonsterAbilityType::DRAIN_MANA:
+        return format(" %sd%d+%d", KWD_HEAL, plev * 3, plev);
+    case MonsterAbilityType::HASTE:
+        return format(" %sd%d+%d", KWD_DURATION, 20 + plev, plev);
+    case MonsterAbilityType::HEAL:
+        return format(" %s%d", KWD_HEAL, plev * 6);
+    case MonsterAbilityType::INVULNER:
+        return format(" %sd7+7", KWD_DURATION);
+    case MonsterAbilityType::BLINK:
+        return format(" %s10", KWD_SPHERE);
+    case MonsterAbilityType::TPORT:
+        return format(" %s%d", KWD_SPHERE, plev * 5);
+    case MonsterAbilityType::RAISE_DEAD:
+        return format(" %s5", KWD_SPHERE);
+    default:
+        return std::string();
     }
 }
 
@@ -149,7 +140,6 @@ static int get_mane_power(PlayerType *player_ptr, int *sn, bool baigaesi)
     PERCENTAGE chance = 0;
     char choice;
     char out_val[MAX_MONSTER_NAME];
-    char comment[80];
     concptr p = _("能力", "power");
 
     monster_power spell;
@@ -180,7 +170,6 @@ static int get_mane_power(PlayerType *player_ptr, int *sn, bool baigaesi)
         if ((choice == ' ') || (choice == '*') || (choice == '?')) {
             /* Show the list */
             if (!redraw) {
-                char psi_desc[160];
                 redraw = true;
                 screen_save();
 
@@ -230,11 +219,10 @@ static int get_mane_power(PlayerType *player_ptr, int *sn, bool baigaesi)
                     }
 
                     /* Get info */
-                    mane_info(player_ptr, comment, mane.spell, (baigaesi ? mane.damage * 2 : mane.damage));
+                    const auto comment = mane_info(player_ptr, mane.spell, (baigaesi ? mane.damage * 2 : mane.damage));
 
                     /* Dump the spell --(-- */
-                    sprintf(psi_desc, "  %c) %-30s %3d%%%s", I2A(i), spell.name, chance, comment);
-                    prt(psi_desc, y + i + 1, x);
+                    prt(format("  %c) %-30s %3d%%%s", I2A(i), spell.name, chance, comment.data()), y + i + 1, x);
                 }
 
                 /* Clear the bottom line */
@@ -931,10 +919,6 @@ static bool use_mane(PlayerType *player_ptr, MonsterAbilityType spell)
     case MonsterAbilityType::SPECIAL:
         break;
     case MonsterAbilityType::TELE_TO: {
-        MonsterEntity *m_ptr;
-        MonsterRaceInfo *r_ptr;
-        GAME_TEXT m_name[MAX_NLEN];
-
         if (!target_set(player_ptr, TARGET_KILL)) {
             return false;
         }
@@ -947,27 +931,27 @@ static bool use_mane(PlayerType *player_ptr, MonsterAbilityType spell)
         if (!projectable(player_ptr, player_ptr->y, player_ptr->x, target_row, target_col)) {
             break;
         }
-        m_ptr = &player_ptr->current_floor_ptr->m_list[player_ptr->current_floor_ptr->grid_array[target_row][target_col].m_idx];
-        r_ptr = &monraces_info[m_ptr->r_idx];
-        monster_desc(player_ptr, m_name, m_ptr, 0);
+        auto *m_ptr = &player_ptr->current_floor_ptr->m_list[player_ptr->current_floor_ptr->grid_array[target_row][target_col].m_idx];
+        auto *r_ptr = &monraces_info[m_ptr->r_idx];
+        const auto m_name = monster_desc(player_ptr, m_ptr, 0);
         if (r_ptr->resistance_flags.has(MonsterResistanceType::RESIST_TELEPORT)) {
             if (r_ptr->kind_flags.has(MonsterKindType::UNIQUE) || r_ptr->resistance_flags.has(MonsterResistanceType::RESIST_ALL)) {
                 if (is_original_ap_and_seen(player_ptr, m_ptr)) {
                     r_ptr->r_resistance_flags.set(MonsterResistanceType::RESIST_TELEPORT);
                 }
-                msg_format(_("%sには効果がなかった！", "%s is unaffected!"), m_name);
+                msg_format(_("%sには効果がなかった！", "%s is unaffected!"), m_name.data());
 
                 break;
             } else if (r_ptr->level > randint1(100)) {
                 if (is_original_ap_and_seen(player_ptr, m_ptr)) {
                     r_ptr->r_resistance_flags.set(MonsterResistanceType::RESIST_TELEPORT);
                 }
-                msg_format(_("%sには耐性がある！", "%s resists!"), m_name);
+                msg_format(_("%sには耐性がある！", "%s resists!"), m_name.data());
 
                 break;
             }
         }
-        msg_format(_("%sを引き戻した。", "You command %s to return."), m_name);
+        msg_format(_("%sを引き戻した。", "You command %s to return."), m_name.data());
 
         teleport_monster_to(
             player_ptr, player_ptr->current_floor_ptr->grid_array[target_row][target_col].m_idx, player_ptr->y, player_ptr->x, 100, TELEPORT_PASSIVE);

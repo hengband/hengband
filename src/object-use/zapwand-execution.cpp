@@ -46,7 +46,8 @@ void ObjectZapWandEntity::execute(INVENTORY_IDX item)
         return;
     }
 
-    if (o_ptr->is_aware() && (o_ptr->sval == SV_WAND_HEAL_MONSTER || o_ptr->sval == SV_WAND_HASTE_MONSTER)) {
+    const auto sval = o_ptr->bi_key.sval();
+    if (o_ptr->is_aware() && (sval == SV_WAND_HEAL_MONSTER || sval == SV_WAND_HASTE_MONSTER)) {
         target_pet = true;
     }
 
@@ -100,7 +101,7 @@ void ObjectZapWandEntity::execute(INVENTORY_IDX item)
     }
 
     sound(SOUND_ZAP);
-    auto ident = wand_effect(this->player_ptr, o_ptr->sval, dir, false, false);
+    auto ident = wand_effect(this->player_ptr, sval.value(), dir, false, false);
 
     /*
      * Temporarily remove the flags for updating the inventory so

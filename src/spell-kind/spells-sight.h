@@ -2,6 +2,7 @@
 
 #include "effect/attribute-types.h"
 #include "system/angband.h"
+#include <string>
 
 class MonsterRaceInfo;
 class MonsterEntity;
@@ -30,5 +31,5 @@ bool banish_monsters(PlayerType *player_ptr, int dist);
 bool turn_evil(PlayerType *player_ptr, int dam);
 bool turn_monsters(PlayerType *player_ptr, int dam);
 bool deathray_monsters(PlayerType *player_ptr);
-void probed_monster_info(char *buf, PlayerType *player_ptr, MonsterEntity *m_ptr, MonsterRaceInfo *r_ptr);
+std::string probed_monster_info(PlayerType *player_ptr, MonsterEntity *m_ptr, MonsterRaceInfo *r_ptr);
 bool probing(PlayerType *player_ptr);

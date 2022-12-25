@@ -35,9 +35,10 @@
 #include "system/player-type-definition.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
-#include "util/buffer-shaper.h"
+#include "term/z-form.h"
 #include "util/int-char-converter.h"
 #include "view/display-messages.h"
+#include "view/display-util.h"
 
 #define MAX_SNIPE_POWERS 16
 
@@ -214,13 +215,10 @@ void display_snipe_list(PlayerType *player_ptr)
             continue;
         }
 
-        sprintf(psi_desc, "  %c) %-30s%2d %4d", I2A(i), spell.name, spell.min_lev, spell.mana_cost);
+        strnfmt(psi_desc, sizeof(psi_desc), "  %c) %-30s%2d %4d", I2A(i), spell.name, spell.min_lev, spell.mana_cost);
 
-        if (spell.mana_cost > sniper_data->concent) {
-            term_putstr(x, y + i + 1, -1, TERM_SLATE, psi_desc);
-        } else {
-            term_putstr(x, y + i + 1, -1, TERM_WHITE, psi_desc);
-        }
+        TERM_COLOR tcol = (spell.mana_cost > sniper_data->concent) ? TERM_SLATE : TERM_WHITE;
+        term_putstr(x, y + i + 1, -1, tcol, psi_desc);
     }
 }
 
@@ -302,8 +300,6 @@ static int get_snipe_power(PlayerType *player_ptr, COMMAND_CODE *sn, bool only_b
         if ((choice == ' ') || (choice == '*') || (choice == '?')) {
             /* Show the list */
             if (!redraw) {
-                char psi_index[6];
-                char psi_desc[75];
                 redraw = true;
                 if (!only_browse) {
                     screen_save();
@@ -324,21 +320,12 @@ static int get_snipe_power(PlayerType *player_ptr, COMMAND_CODE *sn, bool only_b
 
                     /* Dump the spell --(-- */
                     if (spell.min_lev > plev) {
-                        sprintf(psi_index, "   ) ");
-                    } else {
-                        sprintf(psi_index, "  %c) ", I2A(i));
-                    }
-
-                    sprintf(psi_desc, "%-30s%2d %4d", spell.name, spell.min_lev, spell.mana_cost);
-
-                    if (spell.min_lev > plev) {
                         tcol = TERM_SLATE;
                     } else if (spell.mana_cost > sniper_data->concent) {
                         tcol = TERM_L_BLUE;
                     }
-
-                    term_putstr(x, y + i + 1, -1, tcol, psi_index);
-                    term_putstr(x + 5, y + i + 1, -1, tcol, psi_desc);
+                    term_putstr(x, y + i + 1, -1, tcol, (spell.min_lev > plev) ? "   ) " : format("  %c) ", I2A(i)));
+                    term_putstr(x + 5, y + i + 1, -1, tcol, format("%-30s%2d %4d", spell.name, spell.min_lev, spell.mana_cost));
                 }
 
                 /* Clear the bottom line */
@@ -536,14 +523,12 @@ MULTIPLY calc_snipe_damage_with_slay(PlayerType *player_ptr, MULTIPLY mult, Mons
 static bool cast_sniper_spell(PlayerType *player_ptr, int spell)
 {
     auto *o_ptr = &player_ptr->inventory_list[INVEN_BOW];
-    SPELL_IDX snipe_type = SP_NONE;
-
-    if (o_ptr->tval != ItemKindType::BOW) {
+    if (o_ptr->bi_key.tval() != ItemKindType::BOW) {
         msg_print(_("弓を装備していない！", "You wield no bow!"));
         return false;
     }
 
-    /* spell code */
+    auto snipe_type = SP_NONE;
     switch (spell) {
     case 0: /* Concentration */
         sound(SOUND_ZAP);
@@ -645,8 +630,6 @@ void do_cmd_snipe(PlayerType *player_ptr)
 void do_cmd_snipe_browse(PlayerType *player_ptr)
 {
     COMMAND_CODE n = 0;
-    int j, line;
-    char temp[62 * 4];
 
     screen_save();
 
@@ -663,10 +646,6 @@ void do_cmd_snipe_browse(PlayerType *player_ptr)
         term_erase(12, 19, 255);
         term_erase(12, 18, 255);
 
-        shape_buffer(snipe_tips[n], 62, temp, sizeof(temp));
-        for (j = 0, line = 19; temp[j]; j += (1 + strlen(&temp[j]))) {
-            prt(&temp[j], line, 15);
-            line++;
-        }
+        display_wrap_around(snipe_tips[n], 62, 19, 15);
     }
 }

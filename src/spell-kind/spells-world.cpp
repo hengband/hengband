@@ -38,6 +38,7 @@
 #include "target/target-setter.h"
 #include "target/target-types.h"
 #include "term/screen-processor.h"
+#include "term/z-form.h"
 #include "util/int-char-converter.h"
 #include "view/display-messages.h"
 #include "world/world.h"
@@ -68,14 +69,14 @@ bool is_teleport_level_ineffective(PlayerType *player_ptr, MONSTER_IDX idx)
  */
 void teleport_level(PlayerType *player_ptr, MONSTER_IDX m_idx)
 {
-    GAME_TEXT m_name[160];
+    std::string m_name;
     auto see_m = true;
     auto &floor_ref = *player_ptr->current_floor_ptr;
     if (m_idx <= 0) {
-        strcpy(m_name, _("あなた", "you"));
+        m_name = _("あなた", "you");
     } else {
         auto *m_ptr = &floor_ref.m_list[m_idx];
-        monster_desc(player_ptr, m_name, m_ptr, 0);
+        m_name = monster_desc(player_ptr, m_ptr, 0);
         see_m = is_seen(player_ptr, m_ptr);
     }
 
@@ -109,11 +110,11 @@ void teleport_level(PlayerType *player_ptr, MONSTER_IDX m_idx)
     if ((ironman_downward && (m_idx <= 0)) || (floor_ref.dun_level <= dungeons_info[player_ptr->dungeon_idx].mindepth)) {
 #ifdef JP
         if (see_m) {
-            msg_format("%^sは床を突き破って沈んでいく。", m_name);
+            msg_format("%^sは床を突き破って沈んでいく。", m_name.data());
         }
 #else
         if (see_m) {
-            msg_format("%^s sink%s through the floor.", m_name, (m_idx <= 0) ? "" : "s");
+            msg_format("%^s sink%s through the floor.", m_name.data(), (m_idx <= 0) ? "" : "s");
         }
 #endif
         if (m_idx <= 0) {
@@ -143,11 +144,11 @@ void teleport_level(PlayerType *player_ptr, MONSTER_IDX m_idx)
     } else if (inside_quest(quest_number(player_ptr, floor_ref.dun_level)) || (floor_ref.dun_level >= dungeons_info[player_ptr->dungeon_idx].maxdepth)) {
 #ifdef JP
         if (see_m) {
-            msg_format("%^sは天井を突き破って宙へ浮いていく。", m_name);
+            msg_format("%^sは天井を突き破って宙へ浮いていく。", m_name.data());
         }
 #else
         if (see_m) {
-            msg_format("%^s rise%s up through the ceiling.", m_name, (m_idx <= 0) ? "" : "s");
+            msg_format("%^s rise%s up through the ceiling.", m_name.data(), (m_idx <= 0) ? "" : "s");
         }
 #endif
 
@@ -169,11 +170,11 @@ void teleport_level(PlayerType *player_ptr, MONSTER_IDX m_idx)
     } else if (go_up) {
 #ifdef JP
         if (see_m) {
-            msg_format("%^sは天井を突き破って宙へ浮いていく。", m_name);
+            msg_format("%^sは天井を突き破って宙へ浮いていく。", m_name.data());
         }
 #else
         if (see_m) {
-            msg_format("%^s rise%s up through the ceiling.", m_name, (m_idx <= 0) ? "" : "s");
+            msg_format("%^s rise%s up through the ceiling.", m_name.data(), (m_idx <= 0) ? "" : "s");
         }
 #endif
 
@@ -192,11 +193,11 @@ void teleport_level(PlayerType *player_ptr, MONSTER_IDX m_idx)
     } else {
 #ifdef JP
         if (see_m) {
-            msg_format("%^sは床を突き破って沈んでいく。", m_name);
+            msg_format("%^sは床を突き破って沈んでいく。", m_name.data());
         }
 #else
         if (see_m) {
-            msg_format("%^s sink%s through the floor.", m_name, (m_idx <= 0) ? "" : "s");
+            msg_format("%^s sink%s through the floor.", m_name.data(), (m_idx <= 0) ? "" : "s");
         }
 #endif
 
@@ -221,10 +222,8 @@ void teleport_level(PlayerType *player_ptr, MONSTER_IDX m_idx)
     auto *m_ptr = &floor_ref.m_list[m_idx];
     QuestCompletionChecker(player_ptr, m_ptr).complete();
     if (record_named_pet && m_ptr->is_pet() && m_ptr->nickname) {
-        char m2_name[MAX_NLEN];
-
-        monster_desc(player_ptr, m2_name, m_ptr, MD_INDEF_VISIBLE);
-        exe_write_diary(player_ptr, DIARY_NAMED_PET, RECORD_NAMED_PET_TELE_LEVEL, m2_name);
+        const auto m2_name = monster_desc(player_ptr, m_ptr, MD_INDEF_VISIBLE);
+        exe_write_diary(player_ptr, DIARY_NAMED_PET, RECORD_NAMED_PET_TELE_LEVEL, m2_name.data());
     }
 
     delete_monster_idx(player_ptr, m_idx);
@@ -253,14 +252,13 @@ bool teleport_level_other(PlayerType *player_ptr)
     MonsterRaceInfo *r_ptr;
     m_ptr = &player_ptr->current_floor_ptr->m_list[target_m_idx];
     r_ptr = &monraces_info[m_ptr->r_idx];
-    GAME_TEXT m_name[MAX_NLEN];
-    monster_desc(player_ptr, m_name, m_ptr, 0);
-    msg_format(_("%^sの足を指さした。", "You gesture at %^s's feet."), m_name);
+    const auto m_name = monster_desc(player_ptr, m_ptr, 0);
+    msg_format(_("%^sの足を指さした。", "You gesture at %^s's feet."), m_name.data());
 
     auto has_immune = r_ptr->resistance_flags.has_any_of(RFR_EFF_RESIST_NEXUS_MASK) || r_ptr->resistance_flags.has(MonsterResistanceType::RESIST_TELEPORT);
 
     if (has_immune || (r_ptr->flags1 & RF1_QUESTOR) || (r_ptr->level + randint1(50) > player_ptr->lev + randint1(60))) {
-        msg_format(_("しかし効果がなかった！", "%^s is unaffected!"), m_name);
+        msg_format(_("しかし効果がなかった！", "%^s is unaffected!"), m_name.data());
     } else {
         teleport_level(player_ptr, target_m_idx);
     }
@@ -297,7 +295,7 @@ bool tele_town(PlayerType *player_ptr)
             continue;
         }
 
-        sprintf(buf, "%c) %-20s", I2A(i - 1), town_info[i].name);
+        strnfmt(buf, sizeof(buf), "%c) %-20s", I2A(i - 1), town_info[i].name);
         prt(buf, 5 + i, 5);
         num++;
     }
@@ -406,8 +404,7 @@ static DUNGEON_IDX choose_dungeon(concptr note, POSITION y, POSITION x)
             seiha = true;
         }
 
-        sprintf(buf, _("      %c) %c%-12s : 最大 %d 階", "      %c) %c%-16s : Max level %d"),
-            static_cast<char>('a' + dun.size()), seiha ? '!' : ' ', d_ref.name.data(), (int)max_dlv[d_ref.idx]);
+        strnfmt(buf, sizeof(buf), _("      %c) %c%-12s : 最大 %d 階", "      %c) %c%-16s : Max level %d"), static_cast<char>('a' + dun.size()), seiha ? '!' : ' ', d_ref.name.data(), (int)max_dlv[d_ref.idx]);
         prt(buf, y + dun.size(), x);
         dun.push_back(d_ref.idx);
     }
@@ -532,8 +529,6 @@ bool free_level_recall(PlayerType *player_ptr)
 bool reset_recall(PlayerType *player_ptr)
 {
     int select_dungeon, dummy = 0;
-    char ppp[80];
-    char tmp_val[160];
 
     select_dungeon = choose_dungeon(_("をセット", "reset"), 2, 14);
     if (ironman_downward) {
@@ -544,8 +539,10 @@ bool reset_recall(PlayerType *player_ptr)
     if (!select_dungeon) {
         return false;
     }
-    sprintf(ppp, _("何階にセットしますか (%d-%d):", "Reset to which level (%d-%d): "), (int)dungeons_info[select_dungeon].mindepth, (int)max_dlv[select_dungeon]);
-    sprintf(tmp_val, "%d", (int)std::max(player_ptr->current_floor_ptr->dun_level, 1));
+    char ppp[80];
+    strnfmt(ppp, sizeof(ppp), _("何階にセットしますか (%d-%d):", "Reset to which level (%d-%d): "), (int)dungeons_info[select_dungeon].mindepth, (int)max_dlv[select_dungeon]);
+    char tmp_val[160];
+    strnfmt(tmp_val, sizeof(tmp_val), "%d", (int)std::max(player_ptr->current_floor_ptr->dun_level, 1));
 
     if (!get_string(ppp, tmp_val, 10)) {
         return false;

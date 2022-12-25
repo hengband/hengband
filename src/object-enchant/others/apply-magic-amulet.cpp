@@ -68,7 +68,12 @@ void AmuletEnchanter::apply_magic()
 
 void AmuletEnchanter::sval_enchant()
 {
-    switch (this->o_ptr->sval) {
+    const auto sval = this->o_ptr->bi_key.sval();
+    if (!sval.has_value()) {
+        return;
+    }
+
+    switch (sval.value()) {
     case SV_AMULET_INTELLIGENCE:
     case SV_AMULET_WISDOM:
     case SV_AMULET_CHARISMA:
@@ -152,11 +157,11 @@ void AmuletEnchanter::sval_enchant()
 void AmuletEnchanter::give_ego_index()
 {
     while (!this->o_ptr->is_ego()) {
-        auto *k_ptr = &baseitems_info[this->o_ptr->bi_id];
+        const auto &baseitem = baseitems_info[this->o_ptr->bi_id];
         switch (randint1(21)) {
         case 1:
         case 2:
-            if (k_ptr->flags.has(TR_SLOW_DIGEST)) {
+            if (baseitem.flags.has(TR_SLOW_DIGEST)) {
                 break;
             }
 
@@ -172,7 +177,7 @@ void AmuletEnchanter::give_ego_index()
             break;
         case 5:
         case 6:
-            if (k_ptr->flags.has(TR_SEE_INVIS)) {
+            if (baseitem.flags.has(TR_SEE_INVIS)) {
                 break;
             }
 
@@ -180,14 +185,14 @@ void AmuletEnchanter::give_ego_index()
             break;
         case 7:
         case 8:
-            if (k_ptr->flags.has(TR_HOLD_EXP)) {
+            if (baseitem.flags.has(TR_HOLD_EXP)) {
                 break;
             }
 
             this->o_ptr->ego_idx = EgoType::AMU_HOLD_EXP;
             break;
         case 9:
-            if (k_ptr->flags.has(TR_LEVITATION)) {
+            if (baseitem.flags.has(TR_LEVITATION)) {
                 break;
             }
 
@@ -199,7 +204,7 @@ void AmuletEnchanter::give_ego_index()
             this->o_ptr->ego_idx = EgoType::AMU_AC;
             break;
         case 12:
-            if (k_ptr->flags.has(TR_RES_FIRE)) {
+            if (baseitem.flags.has(TR_RES_FIRE)) {
                 break;
             }
 
@@ -211,7 +216,7 @@ void AmuletEnchanter::give_ego_index()
             this->o_ptr->ego_idx = EgoType::AMU_RES_FIRE;
             break;
         case 13:
-            if (k_ptr->flags.has(TR_RES_COLD)) {
+            if (baseitem.flags.has(TR_RES_COLD)) {
                 break;
             }
 
@@ -223,7 +228,7 @@ void AmuletEnchanter::give_ego_index()
             this->o_ptr->ego_idx = EgoType::AMU_RES_COLD;
             break;
         case 14:
-            if (k_ptr->flags.has(TR_RES_ELEC)) {
+            if (baseitem.flags.has(TR_RES_ELEC)) {
                 break;
             }
 
@@ -235,7 +240,7 @@ void AmuletEnchanter::give_ego_index()
             this->o_ptr->ego_idx = EgoType::AMU_RES_ELEC;
             break;
         case 15:
-            if (k_ptr->flags.has(TR_RES_ACID)) {
+            if (baseitem.flags.has(TR_RES_ACID)) {
                 break;
             }
 
@@ -259,7 +264,12 @@ void AmuletEnchanter::give_ego_index()
 
 void AmuletEnchanter::give_high_ego_index()
 {
-    switch (this->o_ptr->sval) {
+    const auto sval = this->o_ptr->bi_key.sval();
+    if (!sval.has_value()) {
+        return;
+    }
+
+    switch (sval.value()) {
     case SV_AMULET_TELEPORT:
         if (m_bonus(10, this->level) > 9) {
             this->o_ptr->ego_idx = EgoType::AMU_D_DOOR;
@@ -341,10 +351,10 @@ void AmuletEnchanter::give_cursed()
     }
 
     while (!this->o_ptr->is_ego()) {
-        auto *k_ptr = &baseitems_info[this->o_ptr->bi_id];
+        const auto &baseitem = baseitems_info[this->o_ptr->bi_id];
         switch (randint1(5)) {
         case 1:
-            if (k_ptr->flags.has(TR_DRAIN_EXP)) {
+            if (baseitem.flags.has(TR_DRAIN_EXP)) {
                 break;
             }
 
@@ -354,14 +364,14 @@ void AmuletEnchanter::give_cursed()
             this->o_ptr->ego_idx = EgoType::AMU_FOOL;
             break;
         case 3:
-            if (k_ptr->flags.has(TR_AGGRAVATE)) {
+            if (baseitem.flags.has(TR_AGGRAVATE)) {
                 break;
             }
 
             this->o_ptr->ego_idx = EgoType::AMU_AGGRAVATE;
             break;
         case 4:
-            if (k_ptr->flags.has(TR_TY_CURSE)) {
+            if (baseitem.flags.has(TR_TY_CURSE)) {
                 break;
             }
 

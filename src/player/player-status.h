@@ -6,6 +6,7 @@
  */
 
 #include "system/angband.h"
+#include <string>
 
 class ItemEntity;
 class PlayerType;
@@ -14,7 +15,7 @@ WEIGHT calc_weapon_weight_limit(PlayerType *player_ptr);
 WEIGHT calc_bow_weight_limit(PlayerType *player_ptr);
 WEIGHT calc_inventory_weight(PlayerType *player_ptr);
 
-int16_t calc_num_fire(PlayerType *player_ptr, ItemEntity *o_ptr);
+short calc_num_fire(PlayerType *player_ptr, const ItemEntity *o_ptr);
 WEIGHT calc_weight_limit(PlayerType *player_ptr);
 void update_creature(PlayerType *player_ptr);
 bool player_has_no_spellbooks(PlayerType *player_ptr);
@@ -23,7 +24,7 @@ bool player_place(PlayerType *player_ptr, POSITION y, POSITION x);
 
 void check_experience(PlayerType *player_ptr);
 void wreck_the_pattern(PlayerType *player_ptr);
-void cnv_stat(int val, char *out_val);
+std::string cnv_stat(int val);
 int16_t modify_stat_value(int value, int amount);
 long calc_score(PlayerType *player_ptr);
 

@@ -119,9 +119,9 @@ bool raise_possible(PlayerType *player_ptr, MonsterEntity *m_ptr)
 
             g_ptr = &floor_ptr->grid_array[yy][xx];
             for (const auto this_o_idx : g_ptr->o_idx_list) {
-                auto *o_ptr = &floor_ptr->o_list[this_o_idx];
-                if (o_ptr->tval == ItemKindType::CORPSE) {
-                    auto corpse_r_idx = i2enum<MonsterRaceId>(o_ptr->pval);
+                const auto &item = floor_ptr->o_list[this_o_idx];
+                if (item.bi_key.tval() == ItemKindType::CORPSE) {
+                    auto corpse_r_idx = i2enum<MonsterRaceId>(item.pval);
                     if (!monster_has_hostile_align(player_ptr, m_ptr, 0, 0, &monraces_info[corpse_r_idx])) {
                         return true;
                     }

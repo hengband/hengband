@@ -32,10 +32,11 @@
 #include "status/action-setter.h"
 #include "system/player-type-definition.h"
 #include "term/screen-processor.h"
+#include "term/z-form.h"
 #include "util/bit-flags-calculator.h"
-#include "util/buffer-shaper.h"
 #include "util/int-char-converter.h"
 #include "view/display-messages.h"
+#include "view/display-util.h"
 #include <string>
 
 #define RC_PAGE_SIZE 18
@@ -64,8 +65,6 @@ static void racial_power_erase_cursor(rc_type *rc_ptr)
 static void racial_power_display_list(PlayerType *player_ptr, rc_type *rc_ptr)
 {
     TERM_LEN x = 11;
-    char dummy[256];
-    strcpy(dummy, "");
 
     prt(_("                                   Lv   MP 失率 効果", "                                   Lv   MP Fail Effect"), 1, x);
 
@@ -76,8 +75,9 @@ static void racial_power_display_list(PlayerType *player_ptr, rc_type *rc_ptr)
             break;
         }
 
+        std::string dummy;
         if (use_menu) {
-            strcpy(dummy, "    ");
+            dummy = "    ";
         } else {
             char letter;
             if (ctr < 26) {
@@ -86,13 +86,14 @@ static void racial_power_display_list(PlayerType *player_ptr, rc_type *rc_ptr)
                 letter = '0' + ctr - 26;
             }
 
-            sprintf(dummy, " %c) ", letter);
+            dummy = format(" %c) ", letter);
         }
 
         auto &rpi = rc_ptr->power_desc[ctr];
-        strcat(dummy,
+        dummy.append(
             format("%-30.30s %2d %4d %3d%% %s", rpi.racial_name.data(), rpi.min_level, rpi.cost, 100 - racial_chance(player_ptr, &rc_ptr->power_desc[ctr]),
-                rpi.info.data()));
+                rpi.info.data())
+                .data());
 
         prt(dummy, 2 + y, x);
     }
@@ -304,7 +305,6 @@ static bool ask_invoke_racial_power(rc_type *rc_ptr)
 static void racial_power_display_explanation(PlayerType *player_ptr, rc_type *rc_ptr)
 {
     auto &rpi = rc_ptr->power_desc[rc_ptr->command_code];
-    char temp[62 * 5];
 
     term_erase(12, 21, 255);
     term_erase(12, 20, 255);
@@ -312,11 +312,7 @@ static void racial_power_display_explanation(PlayerType *player_ptr, rc_type *rc
     term_erase(12, 18, 255);
     term_erase(12, 17, 255);
     term_erase(12, 16, 255);
-    shape_buffer(rpi.text.data(), 62, temp, sizeof(temp));
-    for (int j = 0, line = 17; temp[j]; j += (1 + strlen(&temp[j]))) {
-        prt(&temp[j], line, 15);
-        line++;
-    }
+    display_wrap_around(rpi.text, 62, 17, 15);
 
     prt(_("何かキーを押して下さい。", "Hit any key."), 0, 0);
     (void)inkey();

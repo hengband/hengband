@@ -1,5 +1,6 @@
 ﻿#include "term/screen-processor.h"
 #include "io/input-key-acceptor.h"
+#include "locale/japanese.h"
 #include "term/term-color-types.h"
 #include "view/display-messages.h"
 #include "world/world.h"
@@ -77,36 +78,36 @@ void screen_load(ScreenLoadOptType opt)
  * At the given location, using the given attribute, if allowed,
  * add the given string.  Do not clear the line.
  */
-void c_put_str(TERM_COLOR attr, concptr str, TERM_LEN row, TERM_LEN col)
+void c_put_str(TERM_COLOR attr, std::string_view sv, TERM_LEN row, TERM_LEN col)
 {
-    term_putstr(col, row, -1, attr, str);
+    term_putstr(col, row, -1, attr, sv);
 }
 
 /*
  * As above, but in "white"
  */
-void put_str(concptr str, TERM_LEN row, TERM_LEN col)
+void put_str(std::string_view sv, TERM_LEN row, TERM_LEN col)
 {
-    term_putstr(col, row, -1, TERM_WHITE, str);
+    term_putstr(col, row, -1, TERM_WHITE, sv);
 }
 
 /*
  * Display a string on the screen using an attribute, and clear
  * to the end of the line.
  */
-void c_prt(TERM_COLOR attr, concptr str, TERM_LEN row, TERM_LEN col)
+void c_prt(TERM_COLOR attr, std::string_view sv, TERM_LEN row, TERM_LEN col)
 {
     term_erase(col, row, 255);
-    term_addstr(-1, attr, str);
+    term_addstr(-1, attr, sv);
 }
 
 /*
  * As above, but in "white"
  */
-void prt(concptr str, TERM_LEN row, TERM_LEN col)
+void prt(std::string_view sv, TERM_LEN row, TERM_LEN col)
 {
     /* Spawn */
-    c_prt(TERM_WHITE, str, row, col);
+    c_prt(TERM_WHITE, sv, row, col);
 }
 
 /*
@@ -123,7 +124,7 @@ void prt(concptr str, TERM_LEN row, TERM_LEN col)
  * This function will correctly handle any width up to the maximum legal
  * value of 256, though it works best for a standard 80 character width.
  */
-void c_roff(TERM_COLOR a, concptr str)
+void c_roff(TERM_COLOR a, std::string_view str)
 {
     int w, h;
     (void)term_get_size(&w, &h);
@@ -135,7 +136,7 @@ void c_roff(TERM_COLOR a, concptr str)
         return;
     }
 
-    for (concptr s = str; *s; s++) {
+    for (auto s = str.data(); *s != '\0'; ++s) {
         char ch;
 #ifdef JP
         int k_flag = iskanji(*s);
@@ -192,8 +193,8 @@ void c_roff(TERM_COLOR a, concptr str)
 #ifdef JP
                 else {
                     /* 現在が全角文字のとき */
-                    /* 文頭が「。」「、」等になるときは、その１つ前の語で改行 */
-                    if (strncmp(s, "。", 2) == 0 || strncmp(s, "、", 2) == 0) {
+                    /* 行頭が行頭禁則文字になるときは、その１つ前の語で改行 */
+                    if (is_kinsoku({ s, 2 })) {
                         term_what(x - 1, y, &av[x - 1], &cv[x - 1]);
                         term_what(x - 2, y, &av[x - 2], &cv[x - 2]);
                         n = x - 2;
@@ -250,7 +251,7 @@ void c_roff(TERM_COLOR a, concptr str)
 /*
  * As above, but in "white"
  */
-void roff(concptr str)
+void roff(std::string_view str)
 {
     /* Spawn */
     c_roff(TERM_WHITE, str);

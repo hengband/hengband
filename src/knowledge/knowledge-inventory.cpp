@@ -65,8 +65,18 @@ static void print_flag(tr_type tr, const TrFlags &flags, FILE *fff)
  */
 static bool determine_spcial_item_type(ItemEntity *o_ptr, ItemKindType tval)
 {
-    bool is_special_item_type = (o_ptr->is_wearable() && o_ptr->is_ego()) || ((tval == ItemKindType::AMULET) && (o_ptr->sval == SV_AMULET_RESISTANCE)) || ((tval == ItemKindType::RING) && (o_ptr->sval == SV_RING_LORDLY)) || ((tval == ItemKindType::SHIELD) && (o_ptr->sval == SV_DRAGON_SHIELD)) || ((tval == ItemKindType::HELM) && (o_ptr->sval == SV_DRAGON_HELM)) || ((tval == ItemKindType::GLOVES) && (o_ptr->sval == SV_SET_OF_DRAGON_GLOVES)) || ((tval == ItemKindType::BOOTS) && (o_ptr->sval == SV_PAIR_OF_DRAGON_GREAVE)) || o_ptr->is_artifact();
+    const auto bi_key = BaseitemKey(tval, o_ptr->bi_key.sval());
+    if (!o_ptr->is_wearable() || !o_ptr->is_ego()) {
+        return false;
+    }
 
+    auto is_special_item_type = bi_key == BaseitemKey(ItemKindType::AMULET, SV_AMULET_RESISTANCE);
+    is_special_item_type |= bi_key == BaseitemKey(ItemKindType::RING, SV_RING_LORDLY);
+    is_special_item_type |= bi_key == BaseitemKey(ItemKindType::SHIELD, SV_DRAGON_SHIELD);
+    is_special_item_type |= bi_key == BaseitemKey(ItemKindType::HELM, SV_DRAGON_HELM);
+    is_special_item_type |= bi_key == BaseitemKey(ItemKindType::GLOVES, SV_SET_OF_DRAGON_GLOVES);
+    is_special_item_type |= bi_key == BaseitemKey(ItemKindType::BOOTS, SV_PAIR_OF_DRAGON_GREAVE);
+    is_special_item_type |= o_ptr->is_artifact();
     return is_special_item_type;
 }
 
@@ -81,7 +91,7 @@ static bool check_item_knowledge(ItemEntity *o_ptr, ItemKindType tval)
     if (o_ptr->bi_id == 0) {
         return false;
     }
-    if (o_ptr->tval != tval) {
+    if (o_ptr->bi_key.tval() != tval) {
         return false;
     }
     if (!o_ptr->is_known()) {

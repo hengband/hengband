@@ -25,6 +25,7 @@
 #include "util/bit-flags-calculator.h"
 #include "util/buffer-shaper.h"
 #include "util/enum-converter.h"
+#include <algorithm>
 
 /*!
  * @brief オブジェクトの*鑑定*内容を詳述して表示する /
@@ -36,22 +37,18 @@
  */
 bool screen_object(PlayerType *player_ptr, ItemEntity *o_ptr, BIT_FLAGS mode)
 {
-    char temp[70 * 20];
     concptr info[128];
     GAME_TEXT o_name[MAX_NLEN];
-    char desc[256];
 
     int trivial_info = 0;
     auto flgs = object_flags(o_ptr);
 
     const auto item_text = o_ptr->is_fixed_artifact() ? artifacts_info.at(o_ptr->fixed_artifact_idx).text.data() : baseitems_info[o_ptr->bi_id].text.data();
-    shape_buffer(item_text, 77 - 15, temp, sizeof(temp));
+    const auto item_text_lines = shape_buffer(item_text, 77 - 15);
 
     int i = 0;
-    for (int j = 0; temp[j]; j += 1 + strlen(&temp[j])) {
-        info[i] = &temp[j];
-        i++;
-    }
+    std::transform(item_text_lines.begin(), item_text_lines.end(), &info[i], [](const auto &line) { return line.data(); });
+    i += item_text_lines.size();
 
     if (o_ptr->is_equipment()) {
         trivial_info = i;
@@ -63,7 +60,8 @@ bool screen_object(PlayerType *player_ptr, ItemEntity *o_ptr, BIT_FLAGS mode)
         info[i++] = _("...ただし装備していなければならない。", "...if it is being worn.");
     }
 
-    if (o_ptr->tval == ItemKindType::FIGURINE) {
+    const auto &bi_key = o_ptr->bi_key;
+    if (bi_key.tval() == ItemKindType::FIGURINE) {
         info[i++] = _("それは投げた時ペットに変化する。", "It will transform into a pet when thrown.");
     }
 
@@ -71,11 +69,11 @@ bool screen_object(PlayerType *player_ptr, ItemEntity *o_ptr, BIT_FLAGS mode)
         info[i++] = _("それを装備した者は吸血鬼になる。", "It makes you turn into a vampire permanently.");
     }
 
-    if ((o_ptr->tval == ItemKindType::SWORD) && (o_ptr->sval == SV_POISON_NEEDLE)) {
+    if (bi_key == BaseitemKey(ItemKindType::SWORD, SV_POISON_NEEDLE)) {
         info[i++] = _("それは相手を一撃で倒すことがある。", "It will attempt to instantly kill a monster.");
     }
 
-    if ((o_ptr->tval == ItemKindType::POLEARM) && (o_ptr->sval == SV_DEATH_SCYTHE)) {
+    if (bi_key == BaseitemKey(ItemKindType::POLEARM, SV_DEATH_SCYTHE)) {
         info[i++] = _("それは自分自身に攻撃が返ってくることがある。", "It causes you to strike yourself sometimes.");
         info[i++] = _("それは無敵のバリアを切り裂く。", "It always penetrates invulnerability barriers.");
     }
@@ -104,7 +102,7 @@ bool screen_object(PlayerType *player_ptr, ItemEntity *o_ptr, BIT_FLAGS mode)
         info[i++] = _("それは物を強く投げることを可能にする。", "It provides great strength when you throw an item.");
     }
 
-    if (o_ptr->tval == ItemKindType::STATUE) {
+    if (bi_key.tval() == ItemKindType::STATUE) {
         auto statue_r_idx = i2enum<MonsterRaceId>(o_ptr->pval);
         auto *r_ptr = &monraces_info[statue_r_idx];
         if (statue_r_idx == MonsterRaceId::BULLGATES) {
@@ -144,21 +142,25 @@ bool screen_object(PlayerType *player_ptr, ItemEntity *o_ptr, BIT_FLAGS mode)
         rad++;
     }
 
+    std::string desc;
     if (flgs.has(TR_LITE_FUEL) && flgs.has_not(TR_DARK_SOURCE)) {
         if (rad > 0) {
-            sprintf(desc, _("それは燃料補給によって明かり(半径 %d)を授ける。", "It provides light (radius %d) when fueled."), (int)rad);
+            desc = _("それは燃料補給によって明かり(半径 ", "It provides light (radius ");
+            desc.append(std::to_string((int)rad)).append(_(")を授ける。", ") when fueled."));
         }
     } else {
         if (rad > 0) {
-            sprintf(desc, _("それは永遠なる明かり(半径 %d)を授ける。", "It provides light (radius %d) forever."), (int)rad);
+            desc = _("それは永遠なる明かり(半径 ", "It provides light (radius ");
+            desc.append(std::to_string((int)rad)).append(_(")を授ける。", ") forever."));
         }
         if (rad < 0) {
-            sprintf(desc, _("それは明かりの半径を狭める(半径に-%d)。", "It decreases the radius of your light by %d."), (int)-rad);
+            desc = _("それは明かりの半径を狭める(半径に-", "It decreases the radius of your light by");
+            desc.append(std::to_string((int)-rad)).append(_(")。", "."));
         }
     }
 
     if (rad != 0) {
-        info[i++] = desc;
+        info[i++] = desc.data();
     }
 
     if (o_ptr->ego_idx == EgoType::LITE_LONG) {
@@ -727,9 +729,10 @@ bool screen_object(PlayerType *player_ptr, ItemEntity *o_ptr, BIT_FLAGS mode)
     }
 
     if (mode & SCROBJ_FAKE_OBJECT) {
-        switch (o_ptr->tval) {
+        const auto sval = o_ptr->bi_key.sval().value();
+        switch (o_ptr->bi_key.tval()) {
         case ItemKindType::RING:
-            switch (o_ptr->sval) {
+            switch (sval) {
             case SV_RING_LORDLY:
                 info[i++] = _("それは幾つかのランダムな耐性を授ける。", "It provides some random resistances.");
                 break;
@@ -741,7 +744,7 @@ bool screen_object(PlayerType *player_ptr, ItemEntity *o_ptr, BIT_FLAGS mode)
             break;
 
         case ItemKindType::AMULET:
-            switch (o_ptr->sval) {
+            switch (sval) {
             case SV_AMULET_RESISTANCE:
                 info[i++] = _("それは毒への耐性を授ける事がある。", "It may provides resistance to poison.");
                 info[i++] = _("それはランダムな耐性を授ける事がある。", "It may provide a random resistances.");
@@ -801,7 +804,7 @@ bool screen_object(PlayerType *player_ptr, ItemEntity *o_ptr, BIT_FLAGS mode)
         prt("", k, 13);
     }
 
-    if ((o_ptr->tval == ItemKindType::STATUE) && (o_ptr->sval == SV_PHOTO)) {
+    if (bi_key == BaseitemKey(ItemKindType::STATUE, SV_PHOTO)) {
         auto statue_r_idx = i2enum<MonsterRaceId>(o_ptr->pval);
         auto *r_ptr = &monraces_info[statue_r_idx];
         int namelen = strlen(r_ptr->name.data());

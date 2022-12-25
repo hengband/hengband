@@ -597,16 +597,16 @@ static bool init_sound(void)
     }
 
     int i;
-    char wav[128];
     char buf[1024];
 
     /* Prepare the sounds */
     for (i = 1; i < SOUND_MAX; i++) {
         /* Extract name of sound file */
-        sprintf(wav, "%s.wav", angband_sound_name[i]);
+        std::string wav = angband_sound_name[i];
+        wav.append(".wav");
 
         /* Access the sound */
-        path_build(buf, sizeof(buf), ANGBAND_DIR_XTRA_SOUND, wav);
+        path_build(buf, sizeof(buf), ANGBAND_DIR_XTRA_SOUND, wav.data());
 
         /* Save the sound filename, if it exists */
         if (check_file(buf)) {
@@ -875,8 +875,6 @@ static errr game_term_xtra_gcu_event(int v)
  */
 static errr game_term_xtra_gcu_sound(int v)
 {
-    char buf[1024];
-
     /* Sound disabled */
     if (!use_sound) {
         return 1;
@@ -892,11 +890,9 @@ static errr game_term_xtra_gcu_sound(int v)
         return 1;
     }
 
-    sprintf(buf, "./gcusound.sh %s\n", sound_file[v]);
-
-    return system(buf) < 0;
-
-    return 0;
+    std::string buf = "./gcusound.sh ";
+    buf.append(sound_file[v]).append("\n");
+    return system(buf.data()) < 0;
 }
 
 static int scale_color(int i, int j, int scale)
@@ -1455,7 +1451,7 @@ errr init_gcu(int argc, char *argv[])
             term_data_init_gcu(&data[next_win], rows, cols, y, x);
 
             /* Remember the term */
-            angband_term[next_win] = &data[next_win].t;
+            angband_terms[next_win] = &data[next_win].t;
 
             /* One more window */
             next_win++;
@@ -1503,13 +1499,13 @@ errr init_gcu(int argc, char *argv[])
 
                 i++;
                 if (i >= argc) {
-                    quit(format("Missing size specifier for -%s", left ? "left" : "right"));
+                    quit_fmt("Missing size specifier for -%s", left ? "left" : "right");
                 }
 
                 arg = argv[i];
                 tmp = strchr(arg, 'x');
                 if (!tmp) {
-                    quit(format("Expected something like -%s 60x27,* for two %s hand terminals of 60 columns, the first 27 lines and the second whatever is left.", left ? "left" : "right", left ? "left" : "right"));
+                    quit_fmt("Expected something like -%s 60x27,* for two %s hand terminals of 60 columns, the first 27 lines and the second whatever is left.", left ? "left" : "right", left ? "left" : "right");
                 }
                 cx = atoi(arg);
                 remaining.cx -= cx;
@@ -1534,11 +1530,11 @@ errr init_gcu(int argc, char *argv[])
                         cy = remaining.y + remaining.cy - y;
                     }
                     if (next_term >= MAX_TERM_DATA) {
-                        quit(format("Too many terminals. Only %d are allowed.", MAX_TERM_DATA));
+                        quit_fmt("Too many terminals. Only %d are allowed.", MAX_TERM_DATA);
                     }
                     if (cy <= 0) {
-                        quit(format("Out of bounds in -%s: %d is too large (%d rows max for this strip)",
-                            left ? "left" : "right", cys[j], remaining.cy));
+                        quit_fmt("Out of bounds in -%s: %d is too large (%d rows max for this strip)",
+                            left ? "left" : "right", cys[j], remaining.cy);
                     }
                     data[next_term++].r = rect(x, y, cx, cy);
                     y += cy + spacer_cy;
@@ -1551,13 +1547,13 @@ errr init_gcu(int argc, char *argv[])
 
                 i++;
                 if (i >= argc) {
-                    quit(format("Missing size specifier for -%s", top ? "top" : "bottom"));
+                    quit_fmt("Missing size specifier for -%s", top ? "top" : "bottom");
                 }
 
                 arg = argv[i];
                 tmp = strchr(arg, 'x');
                 if (!tmp) {
-                    quit(format("Expected something like -%s *x7 for a single %s terminal of 7 lines using as many columns as are available.", top ? "top" : "bottom", top ? "top" : "bottom"));
+                    quit_fmt("Expected something like -%s *x7 for a single %s terminal of 7 lines using as many columns as are available.", top ? "top" : "bottom", top ? "top" : "bottom");
                 }
                 tmp++;
                 cy = atoi(tmp);
@@ -1584,11 +1580,11 @@ errr init_gcu(int argc, char *argv[])
                         cx = remaining.x + remaining.cx - x;
                     }
                     if (next_term >= MAX_TERM_DATA) {
-                        quit(format("Too many terminals. Only %d are allowed.", MAX_TERM_DATA));
+                        quit_fmt("Too many terminals. Only %d are allowed.", MAX_TERM_DATA);
                     }
                     if (cx <= 0) {
-                        quit(format("Out of bounds in -%s: %d is too large (%d cols max for this strip)",
-                            top ? "top" : "bottom", cxs[j], remaining.cx));
+                        quit_fmt("Out of bounds in -%s: %d is too large (%d cols max for this strip)",
+                            top ? "top" : "bottom", cxs[j], remaining.cx);
                     }
                     data[next_term++].r = rect(x, y, cx, cy);
                     x += cx + spacer_cx;
@@ -1603,12 +1599,12 @@ errr init_gcu(int argc, char *argv[])
         }
         data[0].r = remaining;
         term_data_init(&data[0]);
-        angband_term[0] = game_term;
+        angband_terms[0] = game_term;
 
         /* Child Terminals */
         for (next_term = 1; next_term < term_ct; next_term++) {
             term_data_init(&data[next_term]);
-            angband_term[next_term] = game_term;
+            angband_terms[next_term] = game_term;
         }
     }
 

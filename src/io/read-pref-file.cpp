@@ -25,11 +25,13 @@
 #include "player-info/race-info.h"
 #include "realm/realm-names-table.h"
 #include "system/player-type-definition.h"
+#include "term/z-form.h"
 #include "util/angband-files.h"
 #include "util/buffer-shaper.h"
+#include "util/string-processor.h"
 #include "view/display-messages.h"
 #include "world/world.h"
-
+#include <algorithm>
 #include <string>
 
 //!< @todo コールバック関数に変更するので、いずれ消す.
@@ -248,8 +250,7 @@ void auto_dump_printf(FILE *auto_dump_stream, concptr fmt, ...)
 bool open_auto_dump(FILE **fpp, concptr buf, concptr mark)
 {
     char header_mark_str[80];
-    concptr auto_dump_mark = mark;
-    sprintf(header_mark_str, auto_dump_header, auto_dump_mark);
+    strnfmt(header_mark_str, sizeof(header_mark_str), auto_dump_header, mark);
     remove_auto_dump(buf, mark);
     *fpp = angband_fopen(buf, "a");
     if (!fpp) {
@@ -269,11 +270,12 @@ bool open_auto_dump(FILE **fpp, concptr buf, concptr mark)
 /*!
  * @brief prfファイルをファイルクローズする /
  * Append foot part and close auto dump.
+ * @param auto_dump_mark 出力するヘッダマーク
  */
 void close_auto_dump(FILE **fpp, concptr auto_dump_mark)
 {
     char footer_mark_str[80];
-    sprintf(footer_mark_str, auto_dump_footer, auto_dump_mark);
+    strnfmt(footer_mark_str, sizeof(footer_mark_str), auto_dump_footer, auto_dump_mark);
     auto_dump_printf(*fpp, _("# *警告!!* 以降の行は自動生成されたものです。\n", "# *Warning!*  The lines below are an automatic dump.\n"));
     auto_dump_printf(
         *fpp, _("# *警告!!* 後で自動的に削除されるので編集しないでください。\n", "# Don't edit them; changes will be deleted and replaced automatically.\n"));
@@ -290,25 +292,17 @@ void close_auto_dump(FILE **fpp, concptr auto_dump_mark)
  */
 void load_all_pref_files(PlayerType *player_ptr)
 {
-    char buf[1024];
-    sprintf(buf, "user.prf");
-    process_pref_file(player_ptr, buf);
-    sprintf(buf, "user-%s.prf", ANGBAND_SYS);
-    process_pref_file(player_ptr, buf);
-    sprintf(buf, "%s.prf", rp_ptr->title);
-    process_pref_file(player_ptr, buf);
-    sprintf(buf, "%s.prf", cp_ptr->title);
-    process_pref_file(player_ptr, buf);
-    sprintf(buf, "%s.prf", player_ptr->base_name);
-    process_pref_file(player_ptr, buf);
+    process_pref_file(player_ptr, "user.prf");
+    process_pref_file(player_ptr, std::string("user-").append(ANGBAND_SYS).append(".prf").data());
+    process_pref_file(player_ptr, std::string(rp_ptr->title).append(".prf").data());
+    process_pref_file(player_ptr, std::string(cp_ptr->title).append(".prf").data());
+    process_pref_file(player_ptr, std::string(player_ptr->base_name).append(".prf").data());
     if (player_ptr->realm1 != REALM_NONE) {
-        sprintf(buf, "%s.prf", realm_names[player_ptr->realm1]);
-        process_pref_file(player_ptr, buf);
+        process_pref_file(player_ptr, std::string(realm_names[player_ptr->realm1]).append(".prf").data());
     }
 
     if (player_ptr->realm2 != REALM_NONE) {
-        sprintf(buf, "%s.prf", realm_names[player_ptr->realm2]);
-        process_pref_file(player_ptr, buf);
+        process_pref_file(player_ptr, std::string(realm_names[player_ptr->realm2]).append(".prf").data());
     }
 
     autopick_load_pref(player_ptr, false);
@@ -319,11 +313,9 @@ void load_all_pref_files(PlayerType *player_ptr)
  */
 bool read_histpref(PlayerType *player_ptr)
 {
-    char buf[80];
     errr err;
     int i, j, n;
-    char *s, *t;
-    char temp[64 * 4];
+    char *s;
     char histbuf[HISTPREF_LIMIT];
 
     if (!get_check(_("生い立ち設定ファイルをロードしますか? ", "Load background history preference file? "))) {
@@ -333,12 +325,10 @@ bool read_histpref(PlayerType *player_ptr)
     histbuf[0] = '\0';
     histpref_buf = histbuf;
 
-    sprintf(buf, _("histedit-%s.prf", "histpref-%s.prf"), player_ptr->base_name);
-    err = process_histpref_file(player_ptr, buf);
+    err = process_histpref_file(player_ptr, std::string(_("histedit-", "histpref-")).append(player_ptr->base_name).append(".prf").data());
 
     if (0 > err) {
-        strcpy(buf, _("histedit.prf", "histpref.prf"));
-        err = process_histpref_file(player_ptr, buf);
+        err = process_histpref_file(player_ptr, _("histedit.prf", "histpref.prf"));
     }
 
     if (err) {
@@ -367,15 +357,11 @@ bool read_histpref(PlayerType *player_ptr)
         s[--n] = '\0';
     }
 
-    shape_buffer(s, 60, temp, sizeof(temp));
-    t = temp;
-    for (i = 0; i < 4; i++) {
-        if (t[0] == 0) {
-            break;
-        } else {
-            strcpy(player_ptr->history[i], t);
-            t += strlen(t) + 1;
-        }
+    constexpr auto max_line_len = sizeof(player_ptr->history[0]);
+    const auto history_lines = shape_buffer(s, max_line_len);
+    const auto max_lines = std::min<int>(4, history_lines.size());
+    for (auto l = 0; l < max_lines; ++l) {
+        angband_strcpy(player_ptr->history[l], history_lines[l].data(), max_line_len);
     }
 
     for (i = 0; i < 4; i++) {

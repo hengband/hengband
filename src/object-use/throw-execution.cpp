@@ -66,6 +66,7 @@
 #include "timed-effect/player-hallucination.h"
 #include "timed-effect/timed-effects.h"
 #include "util/bit-flags-calculator.h"
+#include "util/string-processor.h"
 #include "view/display-messages.h"
 #include "view/object-describer.h"
 #include "wizard/wizard-messages.h"
@@ -91,7 +92,8 @@ bool ObjectThrowEntity::check_can_throw()
         return false;
     }
 
-    if (this->player_ptr->current_floor_ptr->inside_arena && !this->boomerang && (this->o_ptr->tval != ItemKindType::SPIKE)) {
+    const auto is_spike = this->o_ptr->bi_key.tval() == ItemKindType::SPIKE;
+    if (this->player_ptr->current_floor_ptr->inside_arena && !this->boomerang && !is_spike) {
         msg_print(_("アリーナではアイテムを使えない！", "You're in the arena now. This is hand-to-hand!"));
         msg_print(nullptr);
         return false;
@@ -181,7 +183,10 @@ void ObjectThrowEntity::set_class_specific_throw_params()
     this->y = this->player_ptr->y;
     this->x = this->player_ptr->x;
     handle_stuff(this->player_ptr);
-    this->shuriken = pc.equals(PlayerClassType::NINJA) && ((this->q_ptr->tval == ItemKindType::SPIKE) || ((this->obj_flags.has(TR_THROW)) && (this->q_ptr->tval == ItemKindType::SWORD)));
+    const auto tval = this->q_ptr->bi_key.tval();
+    const auto is_spike = tval == ItemKindType::SPIKE;
+    const auto is_sword = tval == ItemKindType::SWORD;
+    this->shuriken = pc.equals(PlayerClassType::NINJA) && (is_spike || ((this->obj_flags.has(TR_THROW)) && is_sword));
 }
 
 void ObjectThrowEntity::set_racial_chance()
@@ -213,7 +218,7 @@ void ObjectThrowEntity::exe_throw()
         auto *floor_ptr = this->player_ptr->current_floor_ptr;
         this->g_ptr = &floor_ptr->grid_array[this->y][this->x];
         this->m_ptr = &floor_ptr->m_list[this->g_ptr->m_idx];
-        monster_name(this->player_ptr, this->g_ptr->m_idx, this->m_name);
+        angband_strcpy(this->m_name, monster_name(this->player_ptr, this->g_ptr->m_idx).data(), sizeof(this->m_name));
         this->visible = this->m_ptr->ml;
         this->hit_body = true;
         this->attack_racial_power();
@@ -223,7 +228,7 @@ void ObjectThrowEntity::exe_throw()
 
 void ObjectThrowEntity::display_figurine_throw()
 {
-    if ((this->q_ptr->tval != ItemKindType::FIGURINE) || this->player_ptr->current_floor_ptr->inside_arena) {
+    if ((this->q_ptr->bi_key.tval() != ItemKindType::FIGURINE) || this->player_ptr->current_floor_ptr->inside_arena) {
         return;
     }
 
@@ -263,9 +268,8 @@ void ObjectThrowEntity::display_potion_throw()
         return;
     }
 
-    GAME_TEXT angry_m_name[MAX_NLEN];
-    monster_desc(this->player_ptr, angry_m_name, angry_m_ptr, 0);
-    msg_format(_("%sは怒った！", "%^s gets angry!"), angry_m_name);
+    const auto angry_m_name = monster_desc(this->player_ptr, angry_m_ptr, 0);
+    msg_format(_("%sは怒った！", "%^s gets angry!"), angry_m_name.data());
     set_hostile(this->player_ptr, &floor_ptr->m_list[floor_ptr->grid_array[this->y][this->x].m_idx]);
     this->do_drop = false;
 }
@@ -388,7 +392,8 @@ bool ObjectThrowEntity::check_racial_target_bold()
     }
 
     this->hit_wall = true;
-    return (this->q_ptr->tval == ItemKindType::FIGURINE) || this->q_ptr->is_potion() || (floor_ptr->grid_array[this->ny[this->cur_dis]][this->nx[this->cur_dis]].m_idx == 0);
+    const auto is_figurine = this->q_ptr->bi_key.tval() == ItemKindType::FIGURINE;
+    return is_figurine || this->q_ptr->is_potion() || (floor_ptr->grid_array[this->ny[this->cur_dis]][this->nx[this->cur_dis]].m_idx == 0);
 }
 
 void ObjectThrowEntity::check_racial_target_seen()

@@ -59,7 +59,7 @@ bool ScrollReadExecutor::is_identified() const
 bool ScrollReadExecutor::read()
 {
     auto used_up = true;
-    switch (this->o_ptr->sval) {
+    switch (this->o_ptr->bi_key.sval().value()) {
     case SV_SCROLL_DARKNESS:
         if (!has_resist_blind(this->player_ptr) && !has_resist_dark(this->player_ptr)) {
             (void)BadStatusSetter(this->player_ptr).mod_blindness(3 + randint1(5));

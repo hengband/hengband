@@ -53,12 +53,12 @@ bool is_autopick_match(PlayerType *player_ptr, ItemEntity *o_ptr, autopick_type 
     }
 
     if (IS_FLG(FLG_BOOSTED)) {
-        auto *k_ptr = &baseitems_info[o_ptr->bi_id];
         if (!o_ptr->is_melee_weapon()) {
             return false;
         }
 
-        if ((o_ptr->dd == k_ptr->dd) && (o_ptr->ds == k_ptr->ds)) {
+        const auto &baseitem = baseitems_info[o_ptr->bi_id];
+        if ((o_ptr->dd == baseitem.dd) && (o_ptr->ds == baseitem.ds)) {
             return false;
         }
 
@@ -198,16 +198,19 @@ bool is_autopick_match(PlayerType *player_ptr, ItemEntity *o_ptr, autopick_type 
         return false;
     }
 
+    // @details このタイミングでは、svalは絶対にnulloptにならない、はず.
+    const auto &bi_key = o_ptr->bi_key;
+    const auto tval = bi_key.tval();
+    const auto sval = bi_key.sval().value();
     const auto r_idx = i2enum<MonsterRaceId>(o_ptr->pval);
-    if (IS_FLG(FLG_UNIQUE) && ((o_ptr->tval != ItemKindType::CORPSE && o_ptr->tval != ItemKindType::STATUE) || monraces_info[r_idx].kind_flags.has_not(MonsterKindType::UNIQUE))) {
+    if (IS_FLG(FLG_UNIQUE) && ((tval != ItemKindType::CORPSE && tval != ItemKindType::STATUE) || monraces_info[r_idx].kind_flags.has_not(MonsterKindType::UNIQUE))) {
         return false;
     }
 
-    if (IS_FLG(FLG_HUMAN) && (o_ptr->tval != ItemKindType::CORPSE || !angband_strchr("pht", monraces_info[r_idx].d_char))) {
+    if (IS_FLG(FLG_HUMAN) && (tval != ItemKindType::CORPSE || !angband_strchr("pht", monraces_info[r_idx].d_char))) {
         return false;
     }
 
-    const BaseitemKey bi_key(o_ptr->tval, o_ptr->sval);
     if (IS_FLG(FLG_UNREADABLE) && check_book_realm(player_ptr, bi_key)) {
         return false;
     }
@@ -215,27 +218,27 @@ bool is_autopick_match(PlayerType *player_ptr, ItemEntity *o_ptr, autopick_type 
     PlayerClass pc(player_ptr);
     auto realm_except_class = pc.equals(PlayerClassType::SORCERER) || pc.equals(PlayerClassType::RED_MAGE);
 
-    if (IS_FLG(FLG_REALM1) && ((get_realm1_book(player_ptr) != o_ptr->tval) || realm_except_class)) {
+    if (IS_FLG(FLG_REALM1) && ((get_realm1_book(player_ptr) != tval) || realm_except_class)) {
         return false;
     }
 
-    if (IS_FLG(FLG_REALM2) && ((get_realm2_book(player_ptr) != o_ptr->tval) || realm_except_class)) {
+    if (IS_FLG(FLG_REALM2) && ((get_realm2_book(player_ptr) != tval) || realm_except_class)) {
         return false;
     }
 
-    if (IS_FLG(FLG_FIRST) && (!o_ptr->is_spell_book() || (o_ptr->sval != 0))) {
+    if (IS_FLG(FLG_FIRST) && (!o_ptr->is_spell_book() || (sval != 0))) {
         return false;
     }
 
-    if (IS_FLG(FLG_SECOND) && (!o_ptr->is_spell_book() || (o_ptr->sval != 1))) {
+    if (IS_FLG(FLG_SECOND) && (!o_ptr->is_spell_book() || (sval != 1))) {
         return false;
     }
 
-    if (IS_FLG(FLG_THIRD) && (!o_ptr->is_spell_book() || (o_ptr->sval != 2))) {
+    if (IS_FLG(FLG_THIRD) && (!o_ptr->is_spell_book() || (sval != 2))) {
         return false;
     }
 
-    if (IS_FLG(FLG_FOURTH) && (!o_ptr->is_spell_book() || (o_ptr->sval != 3))) {
+    if (IS_FLG(FLG_FOURTH) && (!o_ptr->is_spell_book() || (sval != 3))) {
         return false;
     }
 
@@ -256,7 +259,7 @@ bool is_autopick_match(PlayerType *player_ptr, ItemEntity *o_ptr, autopick_type 
             return false;
         }
     } else if (IS_FLG(FLG_DEVICES)) {
-        switch (o_ptr->tval) {
+        switch (tval) {
         case ItemKindType::SCROLL:
         case ItemKindType::STAFF:
         case ItemKindType::WAND:
@@ -266,11 +269,11 @@ bool is_autopick_match(PlayerType *player_ptr, ItemEntity *o_ptr, autopick_type 
             return false;
         }
     } else if (IS_FLG(FLG_LIGHTS)) {
-        if (!(o_ptr->tval == ItemKindType::LITE)) {
+        if (!(tval == ItemKindType::LITE)) {
             return false;
         }
     } else if (IS_FLG(FLG_JUNKS)) {
-        switch (o_ptr->tval) {
+        switch (tval) {
         case ItemKindType::SKELETON:
         case ItemKindType::BOTTLE:
         case ItemKindType::JUNK:
@@ -280,7 +283,7 @@ bool is_autopick_match(PlayerType *player_ptr, ItemEntity *o_ptr, autopick_type 
             return false;
         }
     } else if (IS_FLG(FLG_CORPSES)) {
-        if (o_ptr->tval != ItemKindType::CORPSE && o_ptr->tval != ItemKindType::SKELETON) {
+        if (tval != ItemKindType::CORPSE && tval != ItemKindType::SKELETON) {
             return false;
         }
     } else if (IS_FLG(FLG_SPELLBOOKS)) {
@@ -288,43 +291,43 @@ bool is_autopick_match(PlayerType *player_ptr, ItemEntity *o_ptr, autopick_type 
             return false;
         }
     } else if (IS_FLG(FLG_HAFTED)) {
-        if (!(o_ptr->tval == ItemKindType::HAFTED)) {
+        if (!(tval == ItemKindType::HAFTED)) {
             return false;
         }
     } else if (IS_FLG(FLG_SHIELDS)) {
-        if (!(o_ptr->tval == ItemKindType::SHIELD)) {
+        if (!(tval == ItemKindType::SHIELD)) {
             return false;
         }
     } else if (IS_FLG(FLG_BOWS)) {
-        if (!(o_ptr->tval == ItemKindType::BOW)) {
+        if (!(tval == ItemKindType::BOW)) {
             return false;
         }
     } else if (IS_FLG(FLG_RINGS)) {
-        if (!(o_ptr->tval == ItemKindType::RING)) {
+        if (!(tval == ItemKindType::RING)) {
             return false;
         }
     } else if (IS_FLG(FLG_AMULETS)) {
-        if (!(o_ptr->tval == ItemKindType::AMULET)) {
+        if (!(tval == ItemKindType::AMULET)) {
             return false;
         }
     } else if (IS_FLG(FLG_SUITS)) {
-        if (!(o_ptr->tval == ItemKindType::DRAG_ARMOR || o_ptr->tval == ItemKindType::HARD_ARMOR || o_ptr->tval == ItemKindType::SOFT_ARMOR)) {
+        if (!o_ptr->is_armour()) {
             return false;
         }
     } else if (IS_FLG(FLG_CLOAKS)) {
-        if (!(o_ptr->tval == ItemKindType::CLOAK)) {
+        if (!(tval == ItemKindType::CLOAK)) {
             return false;
         }
     } else if (IS_FLG(FLG_HELMS)) {
-        if (!(o_ptr->tval == ItemKindType::CROWN || o_ptr->tval == ItemKindType::HELM)) {
+        if (!(tval == ItemKindType::CROWN || tval == ItemKindType::HELM)) {
             return false;
         }
     } else if (IS_FLG(FLG_GLOVES)) {
-        if (!(o_ptr->tval == ItemKindType::GLOVES)) {
+        if (!(tval == ItemKindType::GLOVES)) {
             return false;
         }
     } else if (IS_FLG(FLG_BOOTS)) {
-        if (!(o_ptr->tval == ItemKindType::BOOTS)) {
+        if (!(tval == ItemKindType::BOOTS)) {
             return false;
         }
     }

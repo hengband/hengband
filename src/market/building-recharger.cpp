@@ -70,24 +70,29 @@ void building_recharge(PlayerType *player_ptr)
 
     const auto &baseitem = baseitems_info[o_ptr->bi_id];
     const auto lev = baseitem.level;
+    const auto tval = o_ptr->bi_key.tval();
     int price;
-    if (o_ptr->tval == ItemKindType::ROD) {
+    switch (tval) {
+    case ItemKindType::ROD:
         if (o_ptr->timeout > 0) {
             price = (lev * 50 * o_ptr->timeout) / baseitem.pval;
-        } else {
-            price = 0;
-            msg_format(_("それは再充填する必要はありません。", "That doesn't need to be recharged."));
-            return;
+            break;
         }
-    } else if (o_ptr->tval == ItemKindType::STAFF) {
+
+        price = 0;
+        msg_format(_("それは再充填する必要はありません。", "That doesn't need to be recharged."));
+        return;
+    case ItemKindType::STAFF:
         price = (baseitem.cost / 10) * o_ptr->number;
         price = std::max(10, price);
-    } else {
+        break;
+    default:
         price = baseitem.cost / 10;
         price = std::max(10, price);
+        break;
     }
 
-    if ((o_ptr->tval == ItemKindType::WAND) && (o_ptr->pval / o_ptr->number >= baseitem.pval)) {
+    if ((tval == ItemKindType::WAND) && (o_ptr->pval / o_ptr->number >= baseitem.pval)) {
         if (o_ptr->number > 1) {
             msg_print(_("この魔法棒はもう充分に充填されています。", "These wands are already fully charged."));
         } else {
@@ -95,7 +100,7 @@ void building_recharge(PlayerType *player_ptr)
         }
 
         return;
-    } else if ((o_ptr->tval == ItemKindType::STAFF) && o_ptr->pval >= baseitem.pval) {
+    } else if ((tval == ItemKindType::STAFF) && o_ptr->pval >= baseitem.pval) {
         if (o_ptr->number > 1) {
             msg_print(_("この杖はもう充分に充填されています。", "These staffs are already fully charged."));
         } else {
@@ -115,7 +120,7 @@ void building_recharge(PlayerType *player_ptr)
         return;
     }
 
-    if (o_ptr->tval == ItemKindType::ROD) {
+    if (tval == ItemKindType::ROD) {
 #ifdef JP
         if (get_check(format("そのロッドを＄%d で再充填しますか？", price)))
 #else
@@ -129,7 +134,7 @@ void building_recharge(PlayerType *player_ptr)
         }
     } else {
         int max_charges;
-        if (o_ptr->tval == ItemKindType::STAFF) {
+        if (tval == ItemKindType::STAFF) {
             max_charges = baseitem.pval - o_ptr->pval;
         } else {
             max_charges = o_ptr->number * baseitem.pval - o_ptr->pval;
@@ -188,7 +193,7 @@ void building_recharge_all(PlayerType *player_ptr)
 
         const auto lev = baseitems_info[item.bi_id].level;
         const auto &baseitem = baseitems_info[item.bi_id];
-        switch (item.tval) {
+        switch (item.bi_key.tval()) {
         case ItemKindType::ROD:
             price = (lev * 50 * item.timeout) / baseitem.pval;
             break;
@@ -239,7 +244,7 @@ void building_recharge_all(PlayerType *player_ptr)
             autopick_alter_item(player_ptr, i, false);
         }
 
-        switch (o_ptr->tval) {
+        switch (o_ptr->bi_key.tval()) {
         case ItemKindType::ROD:
             o_ptr->timeout = 0;
             break;

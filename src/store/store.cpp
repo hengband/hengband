@@ -30,6 +30,7 @@
 #include "system/item-entity.h"
 #include "system/player-type-definition.h"
 #include "term/screen-processor.h"
+#include "term/z-form.h"
 #include "util/int-char-converter.h"
 #include "util/quarks.h"
 #include "view/display-messages.h"
@@ -164,9 +165,9 @@ int get_stock(COMMAND_CODE *com_val, concptr pmt, int i, int j, [[maybe_unused]]
     char hi = (j > 25) ? toupper(I2A(j - 26)) : I2A(j);
     char out_val[160];
 #ifdef JP
-    (void)sprintf(out_val, "(%s:%c-%c, ESCで中断) %s", (((store_num == StoreSaleType::HOME) || (store_num == StoreSaleType::MUSEUM)) ? "アイテム" : "商品"), lo, hi, pmt);
+    strnfmt(out_val, sizeof(out_val), "(%s:%c-%c, ESCで中断) %s", (((store_num == StoreSaleType::HOME) || (store_num == StoreSaleType::MUSEUM)) ? "アイテム" : "商品"), lo, hi, pmt);
 #else
-    (void)sprintf(out_val, "(Items %c-%c, ESC to exit) %s", lo, hi, pmt);
+    strnfmt(out_val, sizeof(out_val), "(Items %c-%c, ESC to exit) %s", lo, hi, pmt);
 #endif
 
     char command;
@@ -223,11 +224,8 @@ void store_examine(PlayerType *player_ptr, StoreSaleType store_num)
         i = store_bottom;
     }
 
-    char out_val[160];
-    sprintf(out_val, _("どれを調べますか？", "Which item do you want to examine? "));
-
     COMMAND_CODE item;
-    if (!get_stock(&item, out_val, 0, i - 1, store_num)) {
+    if (!get_stock(&item, _("どれを調べますか？", "Which item do you want to examine? "), 0, i - 1, store_num)) {
         return;
     }
     item = item + store_top;
@@ -297,7 +295,7 @@ void store_shuffle(PlayerType *player_ptr, StoreSaleType store_num)
         }
 
         o_ptr->discount = 50;
-        o_ptr->inscription = quark_add(_("売出中", "on sale"));
+        o_ptr->inscription.emplace(_("売出中", "on sale"));
     }
 }
 
@@ -355,19 +353,21 @@ static void store_create(PlayerType *player_ptr, short fix_k_idx, StoreSaleType 
             q_ptr->pval = pval;
         }
 
-        if (q_ptr->tval == ItemKindType::LITE) {
-            if (q_ptr->sval == SV_LITE_TORCH) {
+        const auto tval = q_ptr->bi_key.tval();
+        const auto sval = q_ptr->bi_key.sval();
+        if (tval == ItemKindType::LITE) {
+            if (sval == SV_LITE_TORCH) {
                 q_ptr->fuel = FUEL_TORCH / 2;
             }
 
-            if (q_ptr->sval == SV_LITE_LANTERN) {
+            if (sval == SV_LITE_LANTERN) {
                 q_ptr->fuel = FUEL_LAMP / 2;
             }
         }
 
         object_known(q_ptr);
         q_ptr->ident |= IDENT_STORE;
-        if (q_ptr->tval == ItemKindType::CHEST) {
+        if (tval == ItemKindType::CHEST) {
             continue;
         }
 
@@ -381,7 +381,7 @@ static void store_create(PlayerType *player_ptr, short fix_k_idx, StoreSaleType 
             }
         }
 
-        mass_produce(player_ptr, q_ptr, store_num);
+        mass_produce(q_ptr, store_num);
         (void)store_carry(q_ptr);
         break;
     }

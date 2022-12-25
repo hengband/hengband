@@ -168,10 +168,9 @@ void WorldTurnProcessor::process_monster_arena()
 
 void WorldTurnProcessor::process_monster_arena_winner(int win_m_idx)
 {
-    GAME_TEXT m_name[MAX_NLEN];
     auto *wm_ptr = &this->player_ptr->current_floor_ptr->m_list[win_m_idx];
-    monster_desc(this->player_ptr, m_name, wm_ptr, 0);
-    msg_format(_("%sが勝利した！", "%s won!"), m_name);
+    const auto m_name = monster_desc(this->player_ptr, wm_ptr, 0);
+    msg_format(_("%sが勝利した！", "%s won!"), m_name.data());
     msg_print(nullptr);
 
     if (win_m_idx == (sel_monster + 1)) {

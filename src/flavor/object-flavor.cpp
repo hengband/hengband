@@ -54,8 +54,8 @@
  */
 static bool object_easy_know(int i)
 {
-    auto *k_ptr = &baseitems_info[i];
-    switch (k_ptr->bi_key.tval()) {
+    const auto &baseitem = baseitems_info[i];
+    switch (baseitem.bi_key.tval()) {
     case ItemKindType::LIFE_BOOK:
     case ItemKindType::SORCERY_BOOK:
     case ItemKindType::NATURE_BOOK:
@@ -92,18 +92,20 @@ static bool object_easy_know(int i)
 
 /*!
  * @brief 各種語彙からランダムな名前を作成する / Create a name from random parts.
- * @param out_string 作成した名を保管する参照ポインタ
+ * @return std::string 作成した名前
  * @details 日本語の場合 aname_j.txt 英語の場合確率に応じて
  * syllables 配列と elvish.txt を組み合わせる。\n
  */
-void get_table_name_aux(char *out_string)
+std::string get_table_name_aux()
 {
+    std::string name;
 #ifdef JP
     char syllable[80];
     get_rnd_line("aname_j.txt", 1, syllable);
-    strcpy(out_string, syllable);
+    name = syllable;
     get_rnd_line("aname_j.txt", 2, syllable);
-    strcat(out_string, syllable);
+    name.append(syllable);
+    return name;
 #else
 #define MAX_SYLLABLES 164 /* Used with scrolls (see below) */
 
@@ -117,70 +119,59 @@ void get_table_name_aux(char *out_string)
         "wed", "werg", "wex", "whon", "wun", "x", "yerg", "yp", "zun", "tri", "blaa", "jah", "bul", "on", "foo", "ju", "xuxu" };
 
     int testcounter = randint1(3) + 1;
-    strcpy(out_string, "");
     if (randint1(3) == 2) {
         while (testcounter--) {
-            strcat(out_string, syllables[randint0(MAX_SYLLABLES)]);
+            name.append(syllables[randint0(MAX_SYLLABLES)]);
         }
     } else {
         char syllable[80];
         testcounter = randint1(2) + 1;
         while (testcounter--) {
             (void)get_rnd_line("elvish.txt", 0, syllable);
-            strcat(out_string, syllable);
+            name.append(syllable);
         }
     }
 
-    out_string[0] = toupper(out_string[1]);
-    out_string[16] = '\0';
+    name[0] = toupper(name[0]);
+    return name;
 #endif
 }
 
 /*!
  * @brief ランダムな名前をアーティファクト銘として整形する。 / Create a name from random parts with quotes.
- * @param out_string 作成した名を保管する参照ポインタ
+ * @return std::string 作成した名前
  * @details get_table_name_aux()ほぼ完全に実装を依存している。
  */
-void get_table_name(char *out_string)
+std::string get_table_name()
 {
-    char buff[80];
-    get_table_name_aux(buff);
-    sprintf(out_string, _("『%s』", "'%s'"), buff);
+    return std::string(_("『", "'")).append(get_table_name_aux()).append(_("』", "'"));
 }
 
 /*!
  * @brief ランダムなシンダリン銘を作成する / Make random Sindarin name
- * @param out_string 作成した名を保管する参照ポインタ
+ * @return std::string 作成した名前
  * @details sname.txtが語幹の辞書となっている。
  */
-void get_table_sindarin_aux(char *out_string)
+std::string get_table_sindarin_aux()
 {
     char syllable[80];
-#ifdef JP
-    char tmp[80];
-#endif
 
     get_rnd_line("sname.txt", 1, syllable);
-    strcpy(_(tmp, out_string), syllable);
+    std::string name = syllable;
     get_rnd_line("sname.txt", 2, syllable);
-#ifdef JP
-    strcat(tmp, syllable);
-    sindarin_to_kana(out_string, tmp);
-#else
-    strcat(out_string, syllable);
-#endif
+    name.append(syllable);
+    return _(sindarin_to_kana(name), name);
 }
 
 /*!
  * @brief シンダリン銘をアーティファクト用に整形する。 / Make random Sindarin name with quotes
  * @param out_string 作成した名を保管する参照ポインタ
+ * @return std::string 作成した名前
  * @details get_table_sindarin_aux()ほぼ完全に実装を依存している。
  */
-void get_table_sindarin(char *out_string)
+std::string get_table_sindarin()
 {
-    char buff[80];
-    get_table_sindarin_aux(buff);
-    sprintf(out_string, _("『%s』", "'%s'"), buff);
+    return std::string(_("『", "'")).append(get_table_sindarin_aux()).append(_("』", "'"));
 }
 
 /*!
@@ -191,20 +182,20 @@ void get_table_sindarin(char *out_string)
 static void shuffle_flavors(ItemKindType tval)
 {
     std::vector<std::reference_wrapper<IDX>> flavor_idx_ref_list;
-    for (const auto &k_ref : baseitems_info) {
-        if (k_ref.bi_key.tval() != tval) {
+    for (const auto &baseitem : baseitems_info) {
+        if (baseitem.bi_key.tval() != tval) {
             continue;
         }
 
-        if (!k_ref.flavor) {
+        if (baseitem.flavor == 0) {
             continue;
         }
 
-        if (k_ref.flags.has(TR_FIXED_FLAVOR)) {
+        if (baseitem.flags.has(TR_FIXED_FLAVOR)) {
             continue;
         }
 
-        flavor_idx_ref_list.push_back(baseitems_info[k_ref.idx].flavor);
+        flavor_idx_ref_list.push_back(baseitems_info[baseitem.idx].flavor);
     }
 
     rand_shuffle(flavor_idx_ref_list.begin(), flavor_idx_ref_list.end());
@@ -218,12 +209,12 @@ void flavor_init(void)
 {
     const auto state_backup = w_ptr->rng.get_state();
     w_ptr->rng.set_state(w_ptr->seed_flavor);
-    for (auto &k_ref : baseitems_info) {
-        if (k_ref.flavor_name.empty()) {
+    for (auto &baseitem : baseitems_info) {
+        if (baseitem.flavor_name.empty()) {
             continue;
         }
 
-        k_ref.flavor = k_ref.idx;
+        baseitem.flavor = baseitem.idx;
     }
 
     shuffle_flavors(ItemKindType::RING);
@@ -235,16 +226,16 @@ void flavor_init(void)
     shuffle_flavors(ItemKindType::POTION);
     shuffle_flavors(ItemKindType::SCROLL);
     w_ptr->rng.set_state(state_backup);
-    for (auto &k_ref : baseitems_info) {
-        if (k_ref.idx == 0 || k_ref.name.empty()) {
+    for (auto &baseitem : baseitems_info) {
+        if (baseitem.idx == 0 || baseitem.name.empty()) {
             continue;
         }
 
-        if (!k_ref.flavor) {
-            k_ref.aware = true;
+        if (!baseitem.flavor) {
+            baseitem.aware = true;
         }
 
-        k_ref.easy_know = object_easy_know(k_ref.idx);
+        baseitem.easy_know = object_easy_know(baseitem.idx);
     }
 }
 
@@ -255,8 +246,8 @@ void flavor_init(void)
  */
 std::string strip_name(short bi_id)
 {
-    auto k_ptr = &baseitems_info[bi_id];
-    auto tok = str_split(k_ptr->name, ' ');
+    const auto &baseitem = baseitems_info[bi_id];
+    auto tok = str_split(baseitem.name, ' ');
     std::stringstream name;
     for (const auto &s : tok) {
         if (s == "" || s == "~" || s == "&" || s == "#") {

@@ -22,6 +22,7 @@
 #include "system/player-type-definition.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
+#include "term/z-form.h"
 #include "util/bit-flags-calculator.h"
 
 /*!
@@ -119,28 +120,21 @@ static void display_basic_stat_name(PlayerType *player_ptr, int stat_num, int ro
  * @param e_adj 種族補正値
  * @param row 行数
  * @param stat_col 列数
- * @param buf 能力値の数値
  */
-static void display_basic_stat_value(PlayerType *player_ptr, int stat_num, int r_adj, int e_adj, int row, int stat_col, char *buf)
+static void display_basic_stat_value(PlayerType *player_ptr, int stat_num, int r_adj, int e_adj, int row, int stat_col)
 {
-    (void)sprintf(buf, "%3d", r_adj);
-    c_put_str(TERM_L_BLUE, buf, row + stat_num + 1, stat_col + 13);
+    c_put_str(TERM_L_BLUE, format("%3d", r_adj), row + stat_num + 1, stat_col + 13);
 
-    (void)sprintf(buf, "%3d", (int)cp_ptr->c_adj[stat_num]);
-    c_put_str(TERM_L_BLUE, buf, row + stat_num + 1, stat_col + 16);
+    c_put_str(TERM_L_BLUE, format("%3d", (int)cp_ptr->c_adj[stat_num]), row + stat_num + 1, stat_col + 16);
 
-    (void)sprintf(buf, "%3d", (int)ap_ptr->a_adj[stat_num]);
-    c_put_str(TERM_L_BLUE, buf, row + stat_num + 1, stat_col + 19);
+    c_put_str(TERM_L_BLUE, format("%3d", (int)ap_ptr->a_adj[stat_num]), row + stat_num + 1, stat_col + 19);
 
-    (void)sprintf(buf, "%3d", (int)e_adj);
-    c_put_str(TERM_L_BLUE, buf, row + stat_num + 1, stat_col + 22);
+    c_put_str(TERM_L_BLUE, format("%3d", (int)e_adj), row + stat_num + 1, stat_col + 22);
 
-    cnv_stat(player_ptr->stat_top[stat_num], buf);
-    c_put_str(TERM_L_GREEN, buf, row + stat_num + 1, stat_col + 26);
+    c_put_str(TERM_L_GREEN, cnv_stat(player_ptr->stat_top[stat_num]), row + stat_num + 1, stat_col + 26);
 
     if (player_ptr->stat_use[stat_num] < player_ptr->stat_top[stat_num]) {
-        cnv_stat(player_ptr->stat_use[stat_num], buf);
-        c_put_str(TERM_YELLOW, buf, row + stat_num + 1, stat_col + 33);
+        c_put_str(TERM_YELLOW, cnv_stat(player_ptr->stat_use[stat_num]), row + stat_num + 1, stat_col + 33);
     }
 }
 
@@ -152,7 +146,6 @@ static void display_basic_stat_value(PlayerType *player_ptr, int stat_num, int r
  */
 static void process_stats(PlayerType *player_ptr, int row, int stat_col)
 {
-    char buf[80];
     for (int i = 0; i < A_MAX; i++) {
         int r_adj = player_ptr->mimic_form != MimicKindType::NONE ? mimic_info.at(player_ptr->mimic_form).r_adj[i] : rp_ptr->r_adj[i];
         int e_adj = calc_basic_stat(player_ptr, i);
@@ -162,14 +155,14 @@ static void process_stats(PlayerType *player_ptr, int row, int stat_col)
         e_adj -= ap_ptr->a_adj[i];
 
         display_basic_stat_name(player_ptr, i, row, stat_col);
-        cnv_stat(player_ptr->stat_max[i], buf);
         if (player_ptr->stat_max[i] == player_ptr->stat_max_max[i]) {
             c_put_str(TERM_WHITE, "!", row + i + 1, _(stat_col + 6, stat_col + 4));
         }
 
-        c_put_str(TERM_BLUE, buf, row + i + 1, stat_col + 13 - strlen(buf));
+        const auto stat_str = cnv_stat(player_ptr->stat_max[i]);
+        c_put_str(TERM_BLUE, stat_str, row + i + 1, stat_col + 13 - stat_str.length());
 
-        display_basic_stat_value(player_ptr, i, r_adj, e_adj, row, stat_col, buf);
+        display_basic_stat_value(player_ptr, i, r_adj, e_adj, row, stat_col);
     }
 }
 
@@ -399,8 +392,8 @@ void display_player_stat_info(PlayerType *player_ptr)
     c_put_str(TERM_WHITE, _("能力", "Stat"), row, stat_col + 1);
     c_put_str(TERM_BLUE, _("  基本", "  Base"), row, stat_col + 7);
     c_put_str(TERM_L_BLUE, _(" 種 職 性 装 ", "RacClaPerMod"), row, stat_col + 13);
-    c_put_str(TERM_L_GREEN, _("合計", "Actual"), row, stat_col + 28);
-    c_put_str(TERM_YELLOW, _("現在", "Current"), row, stat_col + 35);
+    c_put_str(TERM_L_GREEN, _("合計", "Actual"), row, stat_col + _(28, 26));
+    c_put_str(TERM_YELLOW, _("現在", "Current"), row, stat_col + _(35, 33));
     process_stats(player_ptr, row, stat_col);
 
     int col = stat_col + 41;

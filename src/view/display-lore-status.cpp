@@ -3,6 +3,7 @@
 #include "lore/lore-calculator.h"
 #include "lore/lore-util.h"
 #include "monster-race/monster-race.h"
+#include "monster-race/race-brightness-flags.h"
 #include "monster-race/race-flags-resistance.h"
 #include "monster-race/race-flags1.h"
 #include "monster-race/race-flags2.h"
@@ -30,12 +31,12 @@ void display_monster_hp_ac(lore_type *lore_ptr)
 
 void display_monster_concrete_abilities(lore_type *lore_ptr)
 {
-    if (lore_ptr->flags7 & (RF7_HAS_LITE_1 | RF7_HAS_LITE_2)) {
+    if (lore_ptr->brightness_flags.has_any_of({ MonsterBrightnessType::HAS_LITE_1, MonsterBrightnessType::HAS_LITE_2 })) {
         lore_ptr->vp[lore_ptr->vn] = _("ダンジョンを照らす", "illuminate the dungeon");
         lore_ptr->color[lore_ptr->vn++] = TERM_WHITE;
     }
 
-    if (lore_ptr->flags7 & (RF7_HAS_DARK_1 | RF7_HAS_DARK_2)) {
+    if (lore_ptr->brightness_flags.has_any_of({ MonsterBrightnessType::HAS_DARK_1, MonsterBrightnessType::HAS_DARK_2 })) {
         lore_ptr->vp[lore_ptr->vn] = _("ダンジョンを暗くする", "darken the dungeon");
         lore_ptr->color[lore_ptr->vn++] = TERM_L_DARK;
     }
@@ -129,11 +130,11 @@ void display_monster_constitutions(lore_type *lore_ptr)
         hooked_roff(format(_("%^sは水中に棲んでいる。", "%^s lives in water.  "), Who::who(lore_ptr->msex)));
     }
 
-    if (lore_ptr->flags7 & (RF7_SELF_LITE_1 | RF7_SELF_LITE_2)) {
+    if (lore_ptr->brightness_flags.has_any_of({ MonsterBrightnessType::SELF_LITE_1, MonsterBrightnessType::SELF_LITE_2 })) {
         hooked_roff(format(_("%^sは光っている。", "%^s is shining.  "), Who::who(lore_ptr->msex)));
     }
 
-    if (lore_ptr->flags7 & (RF7_SELF_DARK_1 | RF7_SELF_DARK_2)) {
+    if (lore_ptr->brightness_flags.has_any_of({ MonsterBrightnessType::SELF_DARK_1, MonsterBrightnessType::SELF_DARK_2 })) {
         hook_c_roff(TERM_L_DARK, format(_("%^sは暗黒に包まれている。", "%^s is surrounded by darkness.  "), Who::who(lore_ptr->msex)));
     }
 

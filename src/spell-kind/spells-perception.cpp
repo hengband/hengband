@@ -86,7 +86,7 @@ bool identify_item(PlayerType *player_ptr, ItemEntity *o_ptr)
     if (record_fix_art && !old_known && o_ptr->is_fixed_artifact()) {
         exe_write_diary(player_ptr, DIARY_ART, 0, o_name);
     }
-    if (record_rand_art && !old_known && o_ptr->art_name) {
+    if (record_rand_art && !old_known && o_ptr->is_random_artifact()) {
         exe_write_diary(player_ptr, DIARY_ART, 0, o_name);
     }
 

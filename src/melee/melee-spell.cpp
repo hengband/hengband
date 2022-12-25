@@ -20,6 +20,7 @@
 #include "system/player-type-definition.h"
 #include "timed-effect/player-blindness.h"
 #include "timed-effect/timed-effects.h"
+#include "util/string-processor.h"
 #include "view/display-messages.h"
 #include "world/world.h"
 #ifdef JP
@@ -99,16 +100,12 @@ static void process_rememberance(melee_spell_type *ms_ptr)
 static void describe_melee_spell(PlayerType *player_ptr, melee_spell_type *ms_ptr)
 {
     /* Get the monster name (or "it") */
-    monster_desc(player_ptr, ms_ptr->m_name, ms_ptr->m_ptr, 0x00);
+    angband_strcpy(ms_ptr->m_name, monster_desc(player_ptr, ms_ptr->m_ptr, 0x00).data(), sizeof(ms_ptr->m_name));
 #ifdef JP
 #else
     /* Get the monster possessive ("his"/"her"/"its") */
-    monster_desc(player_ptr, ms_ptr->m_poss, ms_ptr->m_ptr, MD_PRON_VISIBLE | MD_POSSESSIVE);
+    angband_strcpy(ms_ptr->m_poss, monster_desc(player_ptr, ms_ptr->m_ptr, MD_PRON_VISIBLE | MD_POSSESSIVE).data(), sizeof(ms_ptr->m_poss));
 #endif
-
-    /* Get the target's name (or "it") */
-    GAME_TEXT t_name[160];
-    monster_desc(player_ptr, t_name, ms_ptr->t_ptr, 0x00);
 }
 
 /*!

@@ -52,7 +52,7 @@ static void all_term_fresh(int x, int y)
     p_ptr->window_flags |= PW_ALL;
     handle_stuff(p_ptr);
 
-    term_activate(angband_term[0]);
+    term_activate(angband_terms[0]);
     term_gotoxy(x, y);
     term_fresh();
 }
@@ -226,9 +226,9 @@ char inkey(bool do_all_term_refresh)
         (void)term_set_cursor(1);
     }
 
-    term_activate(angband_term[0]);
-    auto y = angband_term[0]->scr->cy;
-    auto x = angband_term[0]->scr->cx;
+    term_activate(angband_terms[0]);
+    auto y = angband_terms[0]->scr->cy;
+    auto x = angband_terms[0]->scr->cx;
     char kk;
     while (!ch) {
         if (!inkey_base && inkey_scan && (0 != term_inkey(&kk, false, false))) {
@@ -443,9 +443,9 @@ int inkey_special(bool numpad_cursor)
  */
 void stop_term_fresh(void)
 {
-    for (int j = 0; j < 8; j++) {
-        if (angband_term[j]) {
-            angband_term[j]->never_fresh = true;
+    for (auto &angband_term : angband_terms) {
+        if (angband_term != nullptr) {
+            angband_term->never_fresh = true;
         }
     }
 }
@@ -455,9 +455,9 @@ void stop_term_fresh(void)
  */
 void start_term_fresh(void)
 {
-    for (int j = 0; j < 8; j++) {
-        if (angband_term[j]) {
-            angband_term[j]->never_fresh = false;
+    for (auto &angband_term : angband_terms) {
+        if (angband_term != nullptr) {
+            angband_term->never_fresh = false;
         }
     }
 }
@@ -470,7 +470,7 @@ bool macro_running(void)
 {
     /* マクロ展開中のみ詳細に判定する */
     if (parse_macro) {
-        int diff = angband_term[0]->key_head - angband_term[0]->key_tail;
+        int diff = angband_terms[0]->key_head - angband_terms[0]->key_tail;
 
         /* 最終入力を展開した直後はdiff==1となる */
         if (diff != 1) {

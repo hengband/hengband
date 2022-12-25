@@ -39,6 +39,7 @@
 #include "system/monster-entity.h"
 #include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
+#include "term/z-form.h"
 #include "util/enum-converter.h"
 #include "util/int-char-converter.h"
 #include "util/sort.h"
@@ -75,9 +76,8 @@ static void dump_aux_pet(PlayerType *player_ptr, FILE *fff)
             pet = true;
         }
 
-        GAME_TEXT pet_name[MAX_NLEN];
-        monster_desc(player_ptr, pet_name, m_ptr, MD_ASSUME_VISIBLE | MD_INDEF_VISIBLE);
-        fprintf(fff, "%s\n", pet_name);
+        const auto pet_name = monster_desc(player_ptr, m_ptr, MD_ASSUME_VISIBLE | MD_INDEF_VISIBLE);
+        fprintf(fff, "%s\n", pet_name.data());
     }
 
     if (!pet_settings) {
@@ -368,7 +368,7 @@ static void dump_aux_monsters(PlayerType *player_ptr, FILE *fff)
     for (auto it = who.rbegin(); it != who.rend() && std::distance(who.rbegin(), it) < 10; it++) {
         auto *r_ptr = &monraces_info[*it];
         if (r_ptr->defeat_level && r_ptr->defeat_time) {
-            sprintf(buf, _(" - レベル%2d - %d:%02d:%02d", " - level %2d - %d:%02d:%02d"), r_ptr->defeat_level, r_ptr->defeat_time / (60 * 60),
+            strnfmt(buf, sizeof(buf), _(" - レベル%2d - %d:%02d:%02d", " - level %2d - %d:%02d:%02d"), r_ptr->defeat_level, r_ptr->defeat_time / (60 * 60),
                 (r_ptr->defeat_time / 60) % 60, r_ptr->defeat_time % 60);
         } else {
             buf[0] = '\0';
@@ -573,7 +573,7 @@ static void dump_aux_home_museum(PlayerType *player_ptr, FILE *fff)
  * @brief チェックサム情報を出力 / Get check sum in string form
  * @return チェックサム情報の文字列
  */
-static concptr get_check_sum(void)
+static std::string get_check_sum(void)
 {
     return format("%02x%02x%02x%02x%02x%02x%02x%02x%02x", terrains_header.checksum, baseitems_header.checksum,
         artifacts_header.checksum, egos_header.checksum, monraces_header.checksum, dungeons_header.checksum,
@@ -589,9 +589,7 @@ static concptr get_check_sum(void)
  */
 void make_character_dump(PlayerType *player_ptr, FILE *fff)
 {
-    char title[127];
-    put_version(title);
-    fprintf(fff, _("  [%s キャラクタ情報]\n\n", "  [%s Character Dump]\n\n"), title);
+    fprintf(fff, _("  [%s キャラクタ情報]\n\n", "  [%s Character Dump]\n\n"), get_version().data());
 
     dump_aux_player_status(player_ptr, fff);
     dump_aux_last_message(player_ptr, fff);
@@ -610,5 +608,5 @@ void make_character_dump(PlayerType *player_ptr, FILE *fff)
     dump_aux_equipment_inventory(player_ptr, fff);
     dump_aux_home_museum(player_ptr, fff);
 
-    fprintf(fff, _("  [チェックサム: \"%s\"]\n\n", "  [Check Sum: \"%s\"]\n\n"), get_check_sum());
+    fprintf(fff, _("  [チェックサム: \"%s\"]\n\n", "  [Check Sum: \"%s\"]\n\n"), get_check_sum().data());
 }

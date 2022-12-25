@@ -190,26 +190,26 @@ void update_object_by_monster_movement(PlayerType *player_ptr, turn_flags *turn_
     for (auto it = g_ptr->o_idx_list.begin(); it != g_ptr->o_idx_list.end();) {
         EnumClassFlagGroup<MonsterKindType> flg_monster_kind;
         EnumClassFlagGroup<MonsterResistanceType> flgr;
-        GAME_TEXT m_name[MAX_NLEN], o_name[MAX_NLEN];
+        GAME_TEXT o_name[MAX_NLEN];
         OBJECT_IDX this_o_idx = *it++;
         auto *o_ptr = &player_ptr->current_floor_ptr->o_list[this_o_idx];
 
         if (turn_flags_ptr->do_take) {
-            /* Skip gold, corpse and statue */
-            if (o_ptr->tval == ItemKindType::GOLD || (o_ptr->tval == ItemKindType::CORPSE) || (o_ptr->tval == ItemKindType::STATUE)) {
+            const auto tval = o_ptr->bi_key.tval();
+            if (tval == ItemKindType::GOLD || (tval == ItemKindType::CORPSE) || (tval == ItemKindType::STATUE)) {
                 continue;
             }
         }
 
         auto flgs = object_flags(o_ptr);
         describe_flavor(player_ptr, o_name, o_ptr, 0);
-        monster_desc(player_ptr, m_name, m_ptr, MD_INDEF_HIDDEN);
+        const auto m_name = monster_desc(player_ptr, m_ptr, MD_INDEF_HIDDEN);
         update_object_flags(flgs, flg_monster_kind, flgr);
 
         auto is_unpickable_object = o_ptr->is_artifact();
         is_unpickable_object |= r_ptr->kind_flags.has_any_of(flg_monster_kind);
         is_unpickable_object |= !r_ptr->resistance_flags.has_all_of(flgr) && r_ptr->resistance_flags.has_not(MonsterResistanceType::RESIST_ALL);
-        monster_pickup_object(player_ptr, turn_flags_ptr, m_idx, o_ptr, is_unpickable_object, ny, nx, m_name, o_name, this_o_idx);
+        monster_pickup_object(player_ptr, turn_flags_ptr, m_idx, o_ptr, is_unpickable_object, ny, nx, m_name.data(), o_name, this_o_idx);
     }
 }
 

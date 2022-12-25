@@ -47,13 +47,14 @@ void spoiler_underline(concptr str)
  * @brief 文字列をファイルポインタに出力する /
  * Buffer text to the given file. (-SHAWN-)
  * This is basically c_roff() from mon-desc.c with a few changes.
- * @param str 文字列参照ポインタ
+ * @param sv 文字列
+ * @param flush_buffer trueならバッファの内容をフラッシュし、改行を書き込む。strは無視される。
  */
-void spoil_out(concptr str)
+void spoil_out(std::string_view sv, bool flush_buffer)
 {
     concptr r;
-    static char roff_buf[256];
-    static char roff_waiting_buf[256];
+    static char roff_buf[256]{};
+    static char roff_waiting_buf[256]{};
 
 #ifdef JP
     bool iskanji_flag = false;
@@ -62,7 +63,7 @@ void spoil_out(concptr str)
     static char *roff_p = roff_buf;
     static char *roff_s = nullptr;
     static bool waiting_output = false;
-    if (!str) {
+    if (flush_buffer) {
         if (waiting_output) {
             fputs(roff_waiting_buf, spoiler_file);
             waiting_output = false;
@@ -88,7 +89,7 @@ void spoil_out(concptr str)
         return;
     }
 
-    for (; *str; str++) {
+    for (auto str = sv.data(); *str != '\0'; ++str) {
 #ifdef JP
         char cbak;
         bool k_flag = iskanji((unsigned char)(*str));

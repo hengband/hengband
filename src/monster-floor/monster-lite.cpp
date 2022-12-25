@@ -6,6 +6,7 @@
 #include "grid/grid.h"
 #include "monster-floor/monster-lite-util.h"
 #include "monster-race/monster-race.h"
+#include "monster-race/race-brightness-flags.h"
 #include "monster-race/race-flags7.h"
 #include "monster/monster-status.h"
 #include "player-base/player-class.h"
@@ -171,19 +172,19 @@ void update_mon_lite(PlayerType *player_ptr)
             }
 
             int rad = 0;
-            if (r_ptr->flags7 & (RF7_HAS_LITE_1 | RF7_SELF_LITE_1)) {
+            if (r_ptr->brightness_flags.has_any_of({ MonsterBrightnessType::HAS_LITE_1, MonsterBrightnessType::SELF_LITE_1 })) {
                 rad++;
             }
 
-            if (r_ptr->flags7 & (RF7_HAS_LITE_2 | RF7_SELF_LITE_2)) {
+            if (r_ptr->brightness_flags.has_any_of({ MonsterBrightnessType::HAS_LITE_2, MonsterBrightnessType::SELF_LITE_2 })) {
                 rad += 2;
             }
 
-            if (r_ptr->flags7 & (RF7_HAS_DARK_1 | RF7_SELF_DARK_1)) {
+            if (r_ptr->brightness_flags.has_any_of({ MonsterBrightnessType::HAS_DARK_1, MonsterBrightnessType::SELF_DARK_1 })) {
                 rad--;
             }
 
-            if (r_ptr->flags7 & (RF7_HAS_DARK_2 | RF7_SELF_DARK_2)) {
+            if (r_ptr->brightness_flags.has_any_of({ MonsterBrightnessType::HAS_DARK_2, MonsterBrightnessType::SELF_DARK_2 })) {
                 rad -= 2;
             }
 
@@ -193,7 +194,7 @@ void update_mon_lite(PlayerType *player_ptr)
 
             TerrainCharacteristics f_flag;
             if (rad > 0) {
-                if (!(r_ptr->flags7 & (RF7_SELF_LITE_1 | RF7_SELF_LITE_2)) && (m_ptr->is_asleep() || (!floor_ptr->dun_level && is_daytime()) || player_ptr->phase_out)) {
+                if (r_ptr->brightness_flags.has_none_of({ MonsterBrightnessType::SELF_LITE_1, MonsterBrightnessType::SELF_LITE_2 }) && (m_ptr->is_asleep() || (!floor_ptr->dun_level && is_daytime()) || player_ptr->phase_out)) {
                     continue;
                 }
 
@@ -204,7 +205,7 @@ void update_mon_lite(PlayerType *player_ptr)
                 add_mon_lite = update_monster_lite;
                 f_flag = TerrainCharacteristics::LOS;
             } else {
-                if (!(r_ptr->flags7 & (RF7_SELF_DARK_1 | RF7_SELF_DARK_2)) && (m_ptr->is_asleep() || (!floor_ptr->dun_level && !is_daytime()))) {
+                if (r_ptr->brightness_flags.has_none_of({ MonsterBrightnessType::SELF_DARK_1, MonsterBrightnessType::SELF_DARK_2 }) && (m_ptr->is_asleep() || (!floor_ptr->dun_level && !is_daytime()))) {
                     continue;
                 }
 

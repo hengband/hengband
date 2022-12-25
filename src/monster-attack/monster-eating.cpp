@@ -117,8 +117,7 @@ static void move_item_to_monster(PlayerType *player_ptr, MonsterAttackPlayer *mo
         return;
     }
 
-    ItemEntity *j_ptr;
-    j_ptr = &player_ptr->current_floor_ptr->o_list[o_idx];
+    auto *j_ptr = &player_ptr->current_floor_ptr->o_list[o_idx];
     j_ptr->copy_from(monap_ptr->o_ptr);
     j_ptr->number = 1;
     if (monap_ptr->o_ptr->is_wand_rod()) {
@@ -177,7 +176,8 @@ void process_eat_food(PlayerType *player_ptr, MonsterAttackPlayer *monap_ptr)
             continue;
         }
 
-        if ((monap_ptr->o_ptr->tval != ItemKindType::FOOD) && !((monap_ptr->o_ptr->tval == ItemKindType::CORPSE) && (monap_ptr->o_ptr->sval))) {
+        const auto tval = monap_ptr->o_ptr->bi_key.tval();
+        if ((tval != ItemKindType::FOOD) && !((tval == ItemKindType::CORPSE) && (monap_ptr->o_ptr->bi_key.sval() != 0))) {
             continue;
         }
 
@@ -227,10 +227,10 @@ bool process_un_power(PlayerType *player_ptr, MonsterAttackPlayer *monap_ptr)
         return false;
     }
 
-    bool is_magic_mastery = has_magic_mastery(player_ptr) != 0;
-    BaseitemInfo *kind_ptr = &baseitems_info[monap_ptr->o_ptr->bi_id];
-    PARAMETER_VALUE pval = kind_ptr->pval;
-    DEPTH level = monap_ptr->rlev;
+    const auto is_magic_mastery = has_magic_mastery(player_ptr) != 0;
+    const auto &baseitem = baseitems_info[monap_ptr->o_ptr->bi_id];
+    const auto pval = baseitem.pval;
+    const auto level = monap_ptr->rlev;
     auto drain = is_magic_mastery ? std::min<short>(pval, pval * level / 400 + pval * randint1(level) / 400) : pval;
     drain = std::min(drain, monap_ptr->o_ptr->pval);
     if (drain <= 0) {
@@ -243,9 +243,9 @@ bool process_un_power(PlayerType *player_ptr, MonsterAttackPlayer *monap_ptr)
     }
 
     monap_ptr->obvious = true;
-    int recovery = drain * kind_ptr->level;
-
-    if (monap_ptr->o_ptr->tval == ItemKindType::STAFF) {
+    auto recovery = drain * baseitem.level;
+    const auto tval = monap_ptr->o_ptr->bi_key.tval();
+    if (tval == ItemKindType::STAFF) {
         recovery *= monap_ptr->o_ptr->number;
     }
 

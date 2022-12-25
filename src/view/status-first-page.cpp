@@ -27,10 +27,9 @@
 #include "system/item-entity.h"
 #include "system/player-type-definition.h"
 #include "term/term-color-types.h"
+#include "term/z-form.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-util.h"
-
-static TERM_COLOR likert_color = TERM_WHITE;
 
 /*!
  * @brief
@@ -101,7 +100,7 @@ static bool calc_weapon_damage_limit(PlayerType *player_ptr, int hand, int *dama
     }
 
     damage[hand] += *basedam;
-    if ((o_ptr->tval == ItemKindType::SWORD) && (o_ptr->sval == SV_POISON_NEEDLE)) {
+    if (o_ptr->bi_key == BaseitemKey(ItemKindType::SWORD, SV_POISON_NEEDLE)) {
         damage[hand] = 1;
     }
     if (damage[hand] < 0) {
@@ -127,7 +126,7 @@ static bool calc_weapon_one_hand(ItemEntity *o_ptr, int hand, int *damage, int *
 
     *basedam = 0;
     damage[hand] += *basedam;
-    if ((o_ptr->tval == ItemKindType::SWORD) && (o_ptr->sval == SV_POISON_NEEDLE)) {
+    if (o_ptr->bi_key == BaseitemKey(ItemKindType::SWORD, SV_POISON_NEEDLE)) {
         damage[hand] = 1;
     }
 
@@ -177,86 +176,64 @@ static int strengthen_basedam(PlayerType *player_ptr, ItemEntity *o_ptr, int bas
  * Returns a "rating" of x depending on y
  * @param x 技能値
  * @param y 技能値に対するランク基準比
+ * @return スキル レベルのテキスト説明とその説明のカラー インデックスのペア
  */
-static concptr likert(int x, int y)
+static std::pair<std::string, TERM_COLOR> likert(int x, int y)
 {
-    static char dummy[20] = "", dummy2[20] = "";
-    memset(dummy, 0, strlen(dummy));
-    memset(dummy2, 0, strlen(dummy2));
-    if (y <= 0) {
-        y = 1;
-    }
+    std::string desc;
 
     if (show_actual_value) {
-        sprintf(dummy, "%3d-", x);
+        desc = format("%3d-", x);
     }
 
     if (x < 0) {
-        likert_color = TERM_L_DARK;
-        strcat(dummy, _("最低", "Very Bad"));
-        return dummy;
+        return make_pair(desc.append(_("最低", "Very Bad")), TERM_L_DARK);
+    }
+
+    if (y <= 0) {
+        y = 1;
     }
 
     switch ((x / y)) {
     case 0:
     case 1: {
-        likert_color = TERM_RED;
-        strcat(dummy, _("悪い", "Bad"));
-        break;
+        return make_pair(desc.append(_("悪い", "Bad")), TERM_RED);
     }
     case 2: {
-        likert_color = TERM_L_RED;
-        strcat(dummy, _("劣る", "Poor"));
-        break;
+        return make_pair(desc.append(_("劣る", "Poor")), TERM_L_RED);
     }
     case 3:
     case 4: {
-        likert_color = TERM_ORANGE;
-        strcat(dummy, _("普通", "Fair"));
-        break;
+        return make_pair(desc.append(_("普通", "Fair")), TERM_ORANGE);
     }
     case 5: {
-        likert_color = TERM_YELLOW;
-        strcat(dummy, _("良い", "Good"));
-        break;
+        return make_pair(desc.append(_("良い", "Good")), TERM_YELLOW);
     }
     case 6: {
-        likert_color = TERM_YELLOW;
-        strcat(dummy, _("大変良い", "Very Good"));
-        break;
+        return make_pair(desc.append(_("大変良い", "Very Good")), TERM_YELLOW);
     }
     case 7:
     case 8: {
-        likert_color = TERM_L_GREEN;
-        strcat(dummy, _("卓越", "Excellent"));
-        break;
+        return make_pair(desc.append(_("卓越", "Excellent")), TERM_L_GREEN);
     }
     case 9:
     case 10:
     case 11:
     case 12:
     case 13: {
-        likert_color = TERM_GREEN;
-        strcat(dummy, _("超越", "Superb"));
-        break;
+        return make_pair(desc.append(_("超越", "Superb")), TERM_GREEN);
     }
     case 14:
     case 15:
     case 16:
     case 17: {
-        likert_color = TERM_BLUE;
-        strcat(dummy, _("英雄的", "Heroic"));
-        break;
+        return make_pair(desc.append(_("英雄的", "Heroic")), TERM_BLUE);
     }
     default: {
-        likert_color = TERM_VIOLET;
-        sprintf(dummy2, _("伝説的[%d]", "Legendary[%d]"), (int)((((x / y) - 17) * 5) / 2));
-        strcat(dummy, dummy2);
-        break;
+        desc.append(format(_("伝説的[%d]", "Legendary[%d]"), (int)((((x / y) - 17) * 5) / 2)));
+        return make_pair(desc, TERM_VIOLET);
     }
     }
-
-    return dummy;
 }
 
 /*!
@@ -288,10 +265,11 @@ static void calc_two_hands(PlayerType *player_ptr, int *damage, int *to_h)
         }
 
         to_h[i] = 0;
-        bool poison_needle = false;
-        if ((o_ptr->tval == ItemKindType::SWORD) && (o_ptr->sval == SV_POISON_NEEDLE)) {
+        auto poison_needle = false;
+        if (o_ptr->bi_key == BaseitemKey(ItemKindType::SWORD, SV_POISON_NEEDLE)) {
             poison_needle = true;
         }
+
         if (o_ptr->is_known()) {
             damage[i] += o_ptr->to_d * 100;
             to_h[i] += o_ptr->to_h;
@@ -304,7 +282,7 @@ static void calc_two_hands(PlayerType *player_ptr, int *damage, int *to_h)
         basedam = calc_expect_crit(player_ptr, o_ptr->weight, to_h[i], basedam, player_ptr->dis_to_h[i], poison_needle, impact);
         basedam = strengthen_basedam(player_ptr, o_ptr, basedam, flgs);
         damage[i] += basedam;
-        if ((o_ptr->tval == ItemKindType::SWORD) && (o_ptr->sval == SV_POISON_NEEDLE)) {
+        if (o_ptr->bi_key == BaseitemKey(ItemKindType::SWORD, SV_POISON_NEEDLE)) {
             damage[i] = 1;
         }
         if (damage[i] < 0) {
@@ -353,35 +331,32 @@ static void display_first_page(PlayerType *player_ptr, int xthb, int *damage, in
     int xfos = player_ptr->skill_fos;
     int xdig = player_ptr->skill_dig;
 
-    concptr desc = likert(xthn, 12);
-    display_player_one_line(ENTRY_SKILL_FIGHT, desc, likert_color);
+    auto sd = likert(xthn, 12);
+    display_player_one_line(ENTRY_SKILL_FIGHT, sd.first, sd.second);
 
-    desc = likert(xthb, 12);
-    display_player_one_line(ENTRY_SKILL_SHOOT, desc, likert_color);
+    sd = likert(xthb, 12);
+    display_player_one_line(ENTRY_SKILL_SHOOT, sd.first, sd.second);
 
-    desc = likert(xsav, 7);
-    display_player_one_line(ENTRY_SKILL_SAVING, desc, likert_color);
+    sd = likert(xsav, 7);
+    display_player_one_line(ENTRY_SKILL_SAVING, sd.first, sd.second);
 
-    desc = likert((xstl > 0) ? xstl : -1, 1);
-    display_player_one_line(ENTRY_SKILL_STEALTH, desc, likert_color);
+    sd = likert((xstl > 0) ? xstl : -1, 1);
+    display_player_one_line(ENTRY_SKILL_STEALTH, sd.first, sd.second);
 
-    desc = likert(xfos, 6);
-    display_player_one_line(ENTRY_SKILL_PERCEP, desc, likert_color);
+    sd = likert(xfos, 6);
+    display_player_one_line(ENTRY_SKILL_PERCEP, sd.first, sd.second);
 
-    desc = likert(xsrh, 6);
-    display_player_one_line(ENTRY_SKILL_SEARCH, desc, likert_color);
+    sd = likert(xsrh, 6);
+    display_player_one_line(ENTRY_SKILL_SEARCH, sd.first, sd.second);
 
-    desc = likert(xdis, 8);
-    display_player_one_line(ENTRY_SKILL_DISARM, desc, likert_color);
+    sd = likert(xdis, 8);
+    display_player_one_line(ENTRY_SKILL_DISARM, sd.first, sd.second);
 
-    desc = likert(xdev, 6);
-    display_player_one_line(ENTRY_SKILL_DEVICE, desc, likert_color);
+    sd = likert(xdev, 6);
+    display_player_one_line(ENTRY_SKILL_DEVICE, sd.first, sd.second);
 
-    desc = likert(xdev, 6);
-    display_player_one_line(ENTRY_SKILL_DEVICE, desc, likert_color);
-
-    desc = likert(xdig, 4);
-    display_player_one_line(ENTRY_SKILL_DIG, desc, likert_color);
+    sd = likert(xdig, 4);
+    display_player_one_line(ENTRY_SKILL_DIG, sd.first, sd.second);
 
     if (!muta_att) {
         display_player_one_line(ENTRY_BLOWS, format("%d+%d", blows1, blows2), TERM_L_BLUE);
@@ -391,6 +366,7 @@ static void display_first_page(PlayerType *player_ptr, int xthb, int *damage, in
 
     display_player_one_line(ENTRY_SHOTS, format("%d.%02d", shots, shot_frac), TERM_L_BLUE);
 
+    std::string desc;
     if ((damage[0] + damage[1]) == 0) {
         desc = "nil!";
     } else {

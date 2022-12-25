@@ -76,7 +76,7 @@ bool ItemTester::okay(const ItemEntity *o_ptr) const
         return false;
     }
 
-    if (o_ptr->tval == ItemKindType::GOLD) {
+    if (o_ptr->bi_key.tval() == ItemKindType::GOLD) {
         if (!show_gold_on_floor) {
             return false;
         }
@@ -87,7 +87,7 @@ bool ItemTester::okay(const ItemEntity *o_ptr) const
 
 bool TvalItemTester::okay_impl(const ItemEntity *o_ptr) const
 {
-    return this->tval == o_ptr->tval;
+    return this->tval == o_ptr->bi_key.tval();
 }
 
 bool FuncItemTester::okay_impl(const ItemEntity *o_ptr) const

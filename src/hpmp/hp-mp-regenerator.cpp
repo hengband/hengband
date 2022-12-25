@@ -212,12 +212,11 @@ void regenerate_captured_monsters(PlayerType *player_ptr)
 {
     bool heal = false;
     for (int i = 0; i < INVEN_TOTAL; i++) {
-        MonsterRaceInfo *r_ptr;
         auto *o_ptr = &player_ptr->inventory_list[i];
         if (!o_ptr->bi_id) {
             continue;
         }
-        if (o_ptr->tval != ItemKindType::CAPTURE) {
+        if (o_ptr->bi_key.tval() != ItemKindType::CAPTURE) {
             continue;
         }
         if (!o_ptr->pval) {
@@ -226,7 +225,7 @@ void regenerate_captured_monsters(PlayerType *player_ptr)
 
         heal = true;
         const auto r_idx = i2enum<MonsterRaceId>(o_ptr->pval);
-        r_ptr = &monraces_info[r_idx];
+        const auto *r_ptr = &monraces_info[r_idx];
         if (o_ptr->captured_monster_current_hp < o_ptr->captured_monster_max_hp) {
             short frac = o_ptr->captured_monster_max_hp / 100;
             if (!frac) {

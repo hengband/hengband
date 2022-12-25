@@ -90,6 +90,7 @@
 #include "target/target-checker.h"
 #include "term/gameterm.h"
 #include "term/screen-processor.h"
+#include "term/z-form.h"
 #include "util/angband-files.h"
 #include "view/display-messages.h"
 #include "view/display-player.h"
@@ -101,11 +102,11 @@ static void restore_windows(PlayerType *player_ptr)
 {
     player_ptr->hack_mutation = false;
     w_ptr->character_icky_depth = 1;
-    term_activate(angband_term[0]);
-    angband_term[0]->resize_hook = resize_map;
-    for (MONSTER_IDX i = 1; i < 8; i++) {
-        if (angband_term[i]) {
-            angband_term[i]->resize_hook = redraw_window;
+    term_activate(angband_terms[0]);
+    angband_terms[0]->resize_hook = resize_map;
+    for (auto i = 0U; i < angband_terms.size(); ++i) {
+        if (angband_terms[i]) {
+            angband_terms[i]->resize_hook = redraw_window;
         }
     }
 
@@ -284,7 +285,7 @@ static void generate_world(PlayerType *player_ptr, bool new_game)
     }
 
     char buf[80];
-    sprintf(buf, _("%sに降り立った。", "arrived in %s."), map_name(player_ptr));
+    strnfmt(buf, sizeof(buf), _("%sに降り立った。", "arrived in %s."), map_name(player_ptr));
     exe_write_diary(player_ptr, DIARY_DESCRIPTION, 0, buf);
 }
 

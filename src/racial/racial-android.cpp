@@ -89,7 +89,7 @@ void calc_android_exp(PlayerType *player_ptr)
             level += std::min(20, fixed_artifact.rarity / (fixed_artifact.gen_flags.has(ItemGenerationTraitType::INSTA_ART) ? 10 : 3));
         } else if (o_ptr->is_ego()) {
             level += std::max(3, (egos_info[o_ptr->ego_idx].rating - 5) / 2);
-        } else if (o_ptr->art_name) {
+        } else if (o_ptr->is_random_artifact()) {
             int32_t total_flags = flag_cost(o_ptr, o_ptr->pval);
             int fake_level;
 
@@ -118,17 +118,28 @@ void calc_android_exp(PlayerType *player_ptr)
         if (value <= 0) {
             continue;
         }
-        if ((o_ptr->tval == ItemKindType::SOFT_ARMOR) && (o_ptr->sval == SV_ABUNAI_MIZUGI) && (player_ptr->ppersonality != PERSONALITY_SEXY)) {
+
+        const auto &bi_key = o_ptr->bi_key;
+        if ((bi_key == BaseitemKey(ItemKindType::SOFT_ARMOR, SV_ABUNAI_MIZUGI)) && (player_ptr->ppersonality != PERSONALITY_SEXY)) {
             value /= 32;
         }
+
         if (value > 5000000L) {
             value = 5000000L;
         }
-        if ((o_ptr->tval == ItemKindType::DRAG_ARMOR) || (o_ptr->tval == ItemKindType::CARD)) {
+
+        const auto tval = o_ptr->bi_key.tval();
+        if ((tval == ItemKindType::DRAG_ARMOR) || (tval == ItemKindType::CARD)) {
             level /= 2;
         }
 
-        if (o_ptr->is_artifact() || o_ptr->is_ego() || (o_ptr->tval == ItemKindType::DRAG_ARMOR) || ((o_ptr->tval == ItemKindType::HELM) && (o_ptr->sval == SV_DRAGON_HELM)) || ((o_ptr->tval == ItemKindType::SHIELD) && (o_ptr->sval == SV_DRAGON_SHIELD)) || ((o_ptr->tval == ItemKindType::GLOVES) && (o_ptr->sval == SV_SET_OF_DRAGON_GLOVES)) || ((o_ptr->tval == ItemKindType::BOOTS) && (o_ptr->sval == SV_PAIR_OF_DRAGON_GREAVE)) || ((o_ptr->tval == ItemKindType::SWORD) && (o_ptr->sval == SV_DIAMOND_EDGE))) {
+        auto is_dragon_protector = tval == ItemKindType::DRAG_ARMOR;
+        is_dragon_protector |= bi_key == BaseitemKey(ItemKindType::HELM, SV_DRAGON_HELM);
+        is_dragon_protector |= bi_key == BaseitemKey(ItemKindType::SHIELD, SV_DRAGON_SHIELD);
+        is_dragon_protector |= bi_key == BaseitemKey(ItemKindType::GLOVES, SV_SET_OF_DRAGON_GLOVES);
+        is_dragon_protector |= bi_key == BaseitemKey(ItemKindType::BOOTS, SV_PAIR_OF_DRAGON_GREAVE);
+        const auto is_diamond_edge = bi_key == BaseitemKey(ItemKindType::SWORD, SV_DIAMOND_EDGE);
+        if (o_ptr->is_artifact() || o_ptr->is_ego() || is_dragon_protector || is_diamond_edge) {
             if (level > 65) {
                 level = 35 + (level - 65) / 5;
             } else if (level > 35) {

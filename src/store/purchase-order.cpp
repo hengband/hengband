@@ -51,7 +51,7 @@ static std::optional<PRICE> prompt_to_buy(PlayerType *player_ptr, ItemEntity *o_
     auto price_ask = price_item(player_ptr, o_ptr, ot_ptr->inflate, false, store_num);
 
     price_ask *= o_ptr->number;
-    concptr s = format(_("買値 $%ld で買いますか？", "Do you buy for $%ld? "), static_cast<long>(price_ask));
+    const auto s = format(_("買値 $%ld で買いますか？", "Do you buy for $%ld? "), static_cast<long>(price_ask));
     if (get_check_strict(player_ptr, s, CHECK_DEFAULT_Y)) {
         return price_ask;
     }
@@ -70,21 +70,21 @@ static std::optional<PRICE> prompt_to_buy(PlayerType *player_ptr, ItemEntity *o_
  */
 static bool show_store_select_item(COMMAND_CODE *item, const int i, StoreSaleType store_num)
 {
-    char out_val[160];
+    concptr prompt;
 
     switch (store_num) {
     case StoreSaleType::HOME:
-        sprintf(out_val, _("どのアイテムを取りますか? ", "Which item do you want to take? "));
+        prompt = _("どのアイテムを取りますか? ", "Which item do you want to take? ");
         break;
     case StoreSaleType::BLACK:
-        sprintf(out_val, _("どれ? ", "Which item, huh? "));
+        prompt = _("どれ? ", "Which item, huh? ");
         break;
     default:
-        sprintf(out_val, _("どの品物が欲しいんだい? ", "Which item are you interested in? "));
+        prompt = _("どの品物が欲しいんだい? ", "Which item are you interested in? ");
         break;
     }
 
-    return get_stock(item, out_val, 0, i - 1, store_num) != 0;
+    return get_stock(item, prompt, 0, i - 1, store_num) != 0;
 }
 
 /*!
@@ -140,15 +140,11 @@ static void shuffle_store(PlayerType *player_ptr, StoreSaleType store_num)
         return;
     }
 
-    char buf[80];
-
     msg_print(_("店主は引退した。", "The shopkeeper retires."));
     store_shuffle(player_ptr, store_num);
     prt("", 3, 0);
-    sprintf(buf, "%s (%s)", ot_ptr->owner_name, race_info[enum2i(ot_ptr->owner_race)].title);
-    put_str(buf, 3, 10);
-    sprintf(buf, "%s (%ld)", terrains_info[cur_store_feat].name.data(), (long)(ot_ptr->max_cost));
-    prt(buf, 3, 50);
+    put_str(format("%s (%s)", ot_ptr->owner_name, race_info[enum2i(ot_ptr->owner_race)].title), 3, 10);
+    prt(format("%s (%ld)", terrains_info[cur_store_feat].name.data(), (long)(ot_ptr->max_cost)), 3, 50);
 }
 
 static void switch_store_stock(PlayerType *player_ptr, const int i, const COMMAND_CODE item, StoreSaleType store_num)
@@ -231,7 +227,7 @@ void store_purchase(PlayerType *player_ptr, StoreSaleType store_num)
             msg_format(_("一つにつき $%ldです。", "That costs %ld gold per item."), (long)(best));
         }
 
-        amt = get_quantity(nullptr, o_ptr->number);
+        amt = get_quantity(std::nullopt, o_ptr->number);
         if (amt <= 0) {
             return;
         }
@@ -282,7 +278,7 @@ void store_purchase(PlayerType *player_ptr, StoreSaleType store_num)
     if (store_num == StoreSaleType::BLACK) {
         chg_virtue(player_ptr, V_JUSTICE, -1);
     }
-    if ((o_ptr->tval == ItemKindType::BOTTLE) && (store_num != StoreSaleType::HOME)) {
+    if ((o_ptr->bi_key.tval() == ItemKindType::BOTTLE) && (store_num != StoreSaleType::HOME)) {
         chg_virtue(player_ptr, V_NATURE, -1);
     }
 
@@ -302,11 +298,11 @@ void store_purchase(PlayerType *player_ptr, StoreSaleType store_num)
     }
 
     describe_flavor(player_ptr, o_name, o_ptr, OD_NAME_ONLY);
-    if (record_rand_art && o_ptr->art_name) {
+    if (record_rand_art && o_ptr->is_random_artifact()) {
         exe_write_diary(player_ptr, DIARY_ART, 0, o_name);
     }
 
-    j_ptr->inscription = 0;
+    j_ptr->inscription.reset();
     j_ptr->feeling = FEEL_NONE;
     j_ptr->ident &= ~(IDENT_STORE);
 

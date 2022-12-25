@@ -34,6 +34,7 @@
 #include "system/item-entity.h"
 #include "system/player-type-definition.h"
 #include "term/screen-processor.h"
+#include "term/z-form.h"
 #include "util/int-char-converter.h"
 #include "view/display-messages.h"
 
@@ -63,7 +64,7 @@ static bool check_destory_item(PlayerType *player_ptr, destroy_type *destroy_ptr
     }
 
     describe_flavor(player_ptr, destroy_ptr->o_name, destroy_ptr->o_ptr, OD_OMIT_PREFIX);
-    sprintf(destroy_ptr->out_val, _("本当に%sを壊しますか? [y/n/Auto]", "Really destroy %s? [y/n/Auto]"), destroy_ptr->o_name);
+    strnfmt(destroy_ptr->out_val, sizeof(destroy_ptr->out_val), _("本当に%sを壊しますか? [y/n/Auto]", "Really destroy %s? [y/n/Auto]"), destroy_ptr->o_name);
     msg_print(nullptr);
     message_add(destroy_ptr->out_val);
     player_ptr->window_flags |= PW_MESSAGE;
@@ -109,7 +110,7 @@ static bool select_destroying_item(PlayerType *player_ptr, destroy_type *destroy
         return true;
     }
 
-    destroy_ptr->amt = get_quantity(nullptr, destroy_ptr->o_ptr->number);
+    destroy_ptr->amt = get_quantity(std::nullopt, destroy_ptr->o_ptr->number);
     return destroy_ptr->amt > 0;
 }
 
@@ -126,15 +127,15 @@ static bool decide_magic_book_exp(PlayerType *player_ptr, destroy_type *destroy_
     }
 
     PlayerClass pc(player_ptr);
+    const auto tval = destroy_ptr->o_ptr->bi_key.tval();
     if (pc.equals(PlayerClassType::WARRIOR) || pc.equals(PlayerClassType::BERSERKER)) {
-        return destroy_ptr->q_ptr->tval != ItemKindType::HISSATSU_BOOK;
+        return tval != ItemKindType::HISSATSU_BOOK;
     }
 
     if (!pc.equals(PlayerClassType::PALADIN)) {
         return false;
     }
 
-    const auto tval = destroy_ptr->o_ptr->tval;
     auto is_good_magic_realm = (tval == ItemKindType::LIFE_BOOK) || (tval == ItemKindType::CRUSADE_BOOK);
     if (is_good_realm(player_ptr->realm1)) {
         return !is_good_magic_realm;
@@ -155,7 +156,7 @@ static void gain_exp_by_destroying_magic_book(PlayerType *player_ptr, destroy_ty
         tester_exp = 10000;
     }
 
-    if (destroy_ptr->q_ptr->sval < 3) {
+    if (destroy_ptr->q_ptr->bi_key.sval() < 3) {
         tester_exp /= 4;
     }
 
@@ -170,7 +171,7 @@ static void gain_exp_by_destroying_magic_book(PlayerType *player_ptr, destroy_ty
 static void process_destroy_magic_book(PlayerType *player_ptr, destroy_type *destroy_ptr)
 {
     const auto *q_ptr = destroy_ptr->q_ptr;
-    const BaseitemKey bi_key(q_ptr->tval, q_ptr->sval);
+    const BaseitemKey &bi_key = q_ptr->bi_key;
     if (!bi_key.is_high_level_book()) {
         return;
     }

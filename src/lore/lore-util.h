@@ -4,6 +4,7 @@
 #include "monster-race/monster-aura-types.h"
 #include "monster-race/race-ability-flags.h"
 #include "monster-race/race-behavior-flags.h"
+#include "monster-race/race-brightness-flags.h"
 #include "monster-race/race-drop-flags.h"
 #include "monster-race/race-feature-flags.h"
 #include "monster-race/race-flags-resistance.h"
@@ -12,6 +13,7 @@
 #include "system/angband.h"
 #include "util/flag-group.h"
 #include <string>
+#include <string_view>
 #include <unordered_map>
 
 enum class MonsterRaceId : int16_t;
@@ -45,6 +47,7 @@ struct lore_type {
     EnumClassFlagGroup<MonsterResistanceType> resistance_flags;
     EnumClassFlagGroup<MonsterDropType> drop_flags;
     EnumClassFlagGroup<MonsterFeatureType> feature_flags;
+    EnumClassFlagGroup<MonsterBrightnessType> brightness_flags;
 
     BIT_FLAGS flags7;
     bool reinforce;
@@ -78,11 +81,11 @@ enum monster_lore_mode {
     MONSTER_LORE_DEBUG
 };
 
-typedef void (*hook_c_roff_pf)(TERM_COLOR attr, concptr str);
+using hook_c_roff_pf = void (*)(TERM_COLOR attr, std::string_view str);
 extern hook_c_roff_pf hook_c_roff;
 
 lore_type *initialize_lore_type(lore_type *lore_ptr, MonsterRaceId r_idx, monster_lore_mode mode);
-void hooked_roff(concptr str);
+void hooked_roff(std::string_view str);
 
 enum WHO_WORD_TYPE { WHO = 0,
     WHOSE = 1,

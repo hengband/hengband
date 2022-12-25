@@ -36,6 +36,7 @@
 #include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
 #include "term/screen-processor.h"
+#include "term/z-form.h"
 #include "timed-effect/player-cut.h"
 #include "timed-effect/player-fear.h"
 #include "timed-effect/player-stun.h"
@@ -396,7 +397,7 @@ bool choose_samurai_stance(PlayerType *player_ptr)
     prt(_(" a) 型を崩す", " a) No Form"), 2, 20);
     for (auto i = 0U; i < samurai_stances.size(); i++) {
         if (player_ptr->lev >= samurai_stances[i].min_level) {
-            sprintf(buf, _(" %c) %sの型    %s", " %c) Stance of %-12s  %s"), I2A(i + 1), samurai_stances[i].desc, samurai_stances[i].info);
+            strnfmt(buf, sizeof(buf), _(" %c) %sの型    %s", " %c) Stance of %-12s  %s"), I2A(i + 1), samurai_stances[i].desc, samurai_stances[i].info);
             prt(buf, 3 + i, 20);
         }
     }
@@ -521,10 +522,9 @@ void musou_counterattack(PlayerType *player_ptr, MonsterAttackPlayer *monap_ptr)
         return;
     }
 
-    char m_target_name[MAX_NLEN];
-    monster_desc(player_ptr, m_target_name, monap_ptr->m_ptr, 0);
+    const auto m_target_name = monster_desc(player_ptr, monap_ptr->m_ptr, 0);
     player_ptr->csp -= 7;
-    msg_format(_("%^sに反撃した！", "You counterattacked %s!"), m_target_name);
+    msg_format(_("%^sに反撃した！", "You counterattacked %s!"), m_target_name.data());
     do_cmd_attack(player_ptr, monap_ptr->m_ptr->fy, monap_ptr->m_ptr->fx, HISSATSU_COUNTER);
     monap_ptr->fear = false;
     player_ptr->redraw |= (PR_MANA);

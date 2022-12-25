@@ -49,7 +49,7 @@
 #include "window/main-window-util.h"
 #include "world/world.h"
 
-#define MAX_FEAT_IN_TERRAIN 18
+constexpr auto MAX_FEAT_IN_TERRAIN = 18;
 
 std::vector<std::vector<wilderness_type>> wilderness;
 bool generate_encounter;
@@ -65,7 +65,22 @@ struct border_type {
     int16_t south_east;
 };
 
+struct wilderness_grid {
+    wt_type terrain; /* Terrain type */
+    int16_t town; /* Town number */
+    DEPTH level; /* Level of the wilderness */
+    byte road; /* Road */
+    char name[32]; /* Name of the town/wilderness */
+};
+
 static border_type border;
+
+static wilderness_grid w_letter[255];
+
+/* The default table in terrain level generation. */
+static int16_t terrain_table[MAX_WILDERNESS][MAX_FEAT_IN_TERRAIN];
+
+static int16_t conv_terrain2feat[MAX_WILDERNESS];
 
 /*!
  * @brief 地形生成確率を決める要素100の配列を確率テーブルから作成する
@@ -222,9 +237,6 @@ static void plasma_recursive(FloorType *floor_ptr, POSITION x1, POSITION y1, POS
     plasma_recursive(floor_ptr, x1, ymid, xmid, y2, depth_max, rough);
     plasma_recursive(floor_ptr, xmid, ymid, x2, y2, depth_max, rough);
 }
-
-/* The default table in terrain level generation. */
-static int16_t terrain_table[MAX_WILDERNESS][MAX_FEAT_IN_TERRAIN];
 
 /*!
  * @brief 荒野フロア生成のサブルーチン
@@ -588,8 +600,6 @@ void wilderness_gen(PlayerType *player_ptr)
     }
 }
 
-static int16_t conv_terrain2feat[MAX_WILDERNESS];
-
 /*!
  * @brief 広域マップの生成(簡易処理版) /
  * Build the wilderness area. -DG-
@@ -647,16 +657,6 @@ void wilderness_gen_small(PlayerType *player_ptr)
     player_ptr->y = player_ptr->wilderness_y;
     player_ptr->town_num = 0;
 }
-
-struct wilderness_grid {
-    wt_type terrain; /* Terrain type */
-    int16_t town; /* Town number */
-    DEPTH level; /* Level of the wilderness */
-    byte road; /* Road */
-    char name[32]; /* Name of the town/wilderness */
-};
-
-static wilderness_grid w_letter[255];
 
 /*!
  * @brief w_info.txtのデータ解析 /
@@ -806,9 +806,6 @@ void seed_wilderness(void)
         }
     }
 }
-
-/* Pointer to wilderness_type */
-typedef wilderness_type *wilderness_type_ptr;
 
 /*!
  * @brief ゲーム開始時の荒野初期化メインルーチン /

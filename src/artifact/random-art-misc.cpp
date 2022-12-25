@@ -142,7 +142,9 @@ static void invest_misc_hit_dice(ItemEntity *o_ptr)
     o_ptr->art_flags.set(TR_SHOW_MODS);
     HIT_PROB bonus_h = 4 + (HIT_PROB)randint1(11);
     int bonus_d = 4 + (int)randint1(11);
-    if ((o_ptr->tval != ItemKindType::SWORD) && (o_ptr->tval != ItemKindType::POLEARM) && (o_ptr->tval != ItemKindType::HAFTED) && (o_ptr->tval != ItemKindType::DIGGING) && (o_ptr->tval != ItemKindType::GLOVES) && (o_ptr->tval != ItemKindType::RING)) {
+    const auto is_weapon = o_ptr->is_melee_weapon();
+    const auto tval = o_ptr->bi_key.tval();
+    if (!is_weapon && (tval != ItemKindType::GLOVES) && (tval != ItemKindType::RING)) {
         bonus_h /= 2;
         bonus_d /= 2;
     }

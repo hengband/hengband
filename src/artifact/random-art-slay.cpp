@@ -13,7 +13,7 @@
 
 static bool random_art_slay_bow(ItemEntity *o_ptr)
 {
-    if (o_ptr->tval != ItemKindType::BOW) {
+    if (o_ptr->bi_key.tval() != ItemKindType::BOW) {
         return false;
     }
 
@@ -173,22 +173,27 @@ static bool switch_random_art_slay(ItemEntity *o_ptr)
     case BIAS_MAGE:
     case BIAS_INT:
         return random_art_brand_magical(o_ptr);
-    case BIAS_PRIESTLY:
-        if (((o_ptr->tval == ItemKindType::SWORD) || (o_ptr->tval == ItemKindType::POLEARM)) && o_ptr->art_flags.has_not(TR_BLESSED)) {
+    case BIAS_PRIESTLY: {
+        const auto tval = o_ptr->bi_key.tval();
+        if (((tval == ItemKindType::SWORD) || (tval == ItemKindType::POLEARM)) && o_ptr->art_flags.has_not(TR_BLESSED)) {
             o_ptr->art_flags.set(TR_BLESSED);
         }
 
         return false;
+    }
     case BIAS_NECROMANTIC:
         return random_art_slay_vampiric(o_ptr) || random_art_slay_brand_pois(o_ptr);
     case BIAS_RANGER:
         return random_art_slay_animal(o_ptr);
-    case BIAS_ROGUE:
-        if ((((o_ptr->tval == ItemKindType::SWORD) && (o_ptr->sval == SV_DAGGER)) || ((o_ptr->tval == ItemKindType::POLEARM) && (o_ptr->sval == SV_SPEAR))) && o_ptr->art_flags.has_not(TR_THROW)) {
+    case BIAS_ROGUE: {
+        auto is_throwable = o_ptr->bi_key == BaseitemKey(ItemKindType::SWORD, SV_DAGGER);
+        is_throwable |= o_ptr->bi_key == BaseitemKey(ItemKindType::POLEARM, SV_SPEAR);
+        if (is_throwable && o_ptr->art_flags.has_not(TR_THROW)) {
             o_ptr->art_flags.set(TR_THROW);
         }
 
         return random_art_slay_brand_pois(o_ptr);
+    }
     case BIAS_POIS:
         return random_art_slay_brand_pois(o_ptr);
     case BIAS_ACID:
@@ -311,7 +316,7 @@ void random_slay(ItemEntity *o_ptr)
         break;
     case 18:
     case 19:
-        if (o_ptr->tval != ItemKindType::SWORD) {
+        if (o_ptr->bi_key.tval() != ItemKindType::SWORD) {
             random_slay(o_ptr);
             break;
         }

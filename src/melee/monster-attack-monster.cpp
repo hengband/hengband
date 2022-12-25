@@ -36,6 +36,7 @@
 #include "system/monster-entity.h"
 #include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
+#include "util/string-processor.h"
 #include "view/display-messages.h"
 
 static void heal_monster_by_melee(PlayerType *player_ptr, mam_type *mam_ptr)
@@ -203,14 +204,14 @@ static void describe_silly_melee(mam_type *mam_ptr)
         mam_ptr->act = silly_attacks2[randint0(MAX_SILLY_ATTACK)];
     }
 
-    strfmt(temp, mam_ptr->act, mam_ptr->t_name);
+    strnfmt(temp, sizeof(temp), mam_ptr->act, mam_ptr->t_name);
     msg_format("%^sは%s", mam_ptr->m_name, temp);
 #else
     if (mam_ptr->do_silly_attack) {
         mam_ptr->act = silly_attacks[randint0(MAX_SILLY_ATTACK)];
-        strfmt(temp, "%s %s.", mam_ptr->act, mam_ptr->t_name);
+        strnfmt(temp, sizeof(temp), "%s %s.", mam_ptr->act, mam_ptr->t_name);
     } else {
-        strfmt(temp, mam_ptr->act, mam_ptr->t_name);
+        strnfmt(temp, sizeof(temp), mam_ptr->act, mam_ptr->t_name);
     }
 
     msg_format("%^s %s", mam_ptr->m_name, temp);
@@ -343,8 +344,8 @@ bool monst_attack_monst(PlayerType *player_ptr, MONSTER_IDX m_idx, MONSTER_IDX t
         return false;
     }
 
-    monster_desc(player_ptr, mam_ptr->m_name, mam_ptr->m_ptr, 0);
-    monster_desc(player_ptr, mam_ptr->t_name, mam_ptr->t_ptr, 0);
+    angband_strcpy(mam_ptr->m_name, monster_desc(player_ptr, mam_ptr->m_ptr, 0).data(), sizeof(mam_ptr->m_name));
+    angband_strcpy(mam_ptr->t_name, monster_desc(player_ptr, mam_ptr->t_ptr, 0).data(), sizeof(mam_ptr->t_name));
     if (!mam_ptr->see_either && mam_ptr->known) {
         player_ptr->current_floor_ptr->monster_noise = true;
     }

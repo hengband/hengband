@@ -20,6 +20,7 @@
 #include "main/sound-of-music.h"
 #include "monster-floor/monster-move.h"
 #include "monster-race/monster-race.h"
+#include "monster-race/race-brightness-mask.h"
 #include "monster-race/race-flags-resistance.h"
 #include "monster-race/race-flags7.h"
 #include "monster/monster-info.h"
@@ -194,7 +195,7 @@ bool teleport_away(PlayerType *player_ptr, MONSTER_IDX m_idx, POSITION dis, tele
     lite_spot(player_ptr, oy, ox);
     lite_spot(player_ptr, ny, nx);
 
-    if (monraces_info[m_ptr->r_idx].flags7 & (RF7_LITE_MASK | RF7_DARK_MASK)) {
+    if (monraces_info[m_ptr->r_idx].brightness_flags.has_any_of(ld_mask)) {
         player_ptr->update |= (PU_MON_LITE);
     }
 
@@ -275,7 +276,7 @@ void teleport_monster_to(PlayerType *player_ptr, MONSTER_IDX m_idx, POSITION ty,
     lite_spot(player_ptr, oy, ox);
     lite_spot(player_ptr, ny, nx);
 
-    if (monraces_info[m_ptr->r_idx].flags7 & (RF7_LITE_MASK | RF7_DARK_MASK)) {
+    if (monraces_info[m_ptr->r_idx].brightness_flags.has_any_of(ld_mask)) {
         player_ptr->update |= (PU_MON_LITE);
     }
 }

@@ -148,21 +148,18 @@ bool MonsterDamageProcessor::process_dead_exp_virtue(concptr note, MonsterEntity
     }
 
     this->increase_kill_numbers();
-    GAME_TEXT m_name[MAX_NLEN];
-    monster_desc(this->player_ptr, m_name, m_ptr, MD_TRUE_NAME);
-    this->death_amberites(m_name);
-    this->dying_scream(m_name);
+    const auto m_name = monster_desc(this->player_ptr, m_ptr, MD_TRUE_NAME);
+    this->death_amberites(m_name.data());
+    this->dying_scream(m_name.data());
     AvatarChanger ac(player_ptr, m_ptr);
     ac.change_virtue();
     if (r_ref.kind_flags.has(MonsterKindType::UNIQUE) && record_destroy_uniq) {
-        char note_buf[160];
-        sprintf(note_buf, "%s%s", r_ref.name.data(), m_ptr->mflag2.has(MonsterConstantFlagType::CLONED) ? _("(クローン)", "(Clone)") : "");
-        exe_write_diary(this->player_ptr, DIARY_UNIQUE, 0, note_buf);
+        exe_write_diary(this->player_ptr, DIARY_UNIQUE, 0, std::string(r_ref.name).append(m_ptr->mflag2.has(MonsterConstantFlagType::CLONED) ? _("(クローン)", "(Clone)") : "").data());
     }
 
     sound(SOUND_KILL);
-    this->show_kill_message(note, m_name);
-    this->show_bounty_message(m_name);
+    this->show_kill_message(note, m_name.data());
+    this->show_bounty_message(m_name.data());
     monster_death(this->player_ptr, this->m_idx, true, this->attribute_flags);
     this->summon_special_unique();
     this->get_exp_from_mon(exp_mon, exp_mon->max_maxhp * 2);
@@ -312,7 +309,7 @@ void MonsterDamageProcessor::increase_kill_numbers()
     monster_race_track(this->player_ptr, m_ptr->ap_r_idx);
 }
 
-void MonsterDamageProcessor::death_amberites(GAME_TEXT *m_name)
+void MonsterDamageProcessor::death_amberites(concptr m_name)
 {
     auto *m_ptr = &this->player_ptr->current_floor_ptr->m_list[this->m_idx];
     const auto &r_ref = m_ptr->get_real_r_ref();
@@ -330,7 +327,7 @@ void MonsterDamageProcessor::death_amberites(GAME_TEXT *m_name)
     } while (--curses);
 }
 
-void MonsterDamageProcessor::dying_scream(GAME_TEXT *m_name)
+void MonsterDamageProcessor::dying_scream(concptr m_name)
 {
     auto *m_ptr = &this->player_ptr->current_floor_ptr->m_list[this->m_idx];
     const auto &r_ref = m_ptr->get_real_r_ref();
@@ -350,7 +347,7 @@ void MonsterDamageProcessor::dying_scream(GAME_TEXT *m_name)
 #endif
 }
 
-void MonsterDamageProcessor::show_kill_message(concptr note, GAME_TEXT *m_name)
+void MonsterDamageProcessor::show_kill_message(concptr note, concptr m_name)
 {
     auto *floor_ptr = this->player_ptr->current_floor_ptr;
     auto *m_ptr = &floor_ptr->m_list[this->m_idx];
@@ -367,18 +364,18 @@ void MonsterDamageProcessor::show_kill_message(concptr note, GAME_TEXT *m_name)
         return;
     }
 
+    const auto explode = std::any_of(std::begin(r_ref.blow), std::end(r_ref.blow), [](const auto &blow) { return blow.method == RaceBlowMethodType::EXPLODE; });
+
     if (monster_living(m_ptr->r_idx)) {
-        auto mes = is_echizen(this->player_ptr) ? _("せっかくだから%sを殺した。", "Because it's time, you have slain %s.")
-                                                : _("%sを殺した。", "You have slain %s.");
+        if (explode) {
+            msg_format(_("%sは爆発して死んだ。", "%^s explodes and dies."), m_name);
+            return;
+        }
+
+        auto mes = is_echizen(this->player_ptr) ? _("せっかくだから%sを葬り去った。", "Because it's time, you have slain %s.")
+                                                : _("%sを葬り去った。", "You have slain %s.");
         msg_format(mes, m_name);
         return;
-    }
-
-    auto explode = false;
-    for (auto i = 0; i < 4; i++) {
-        if (r_ref.blow[i].method == RaceBlowMethodType::EXPLODE) {
-            explode = true;
-        }
     }
 
     if (explode) {
@@ -386,12 +383,12 @@ void MonsterDamageProcessor::show_kill_message(concptr note, GAME_TEXT *m_name)
         return;
     }
 
-    auto mes = is_echizen(this->player_ptr) ? _("せっかくだから%sを殺した。", "Because it's time, you have destroyed %s.")
-                                            : _("%sを殺した。", "You have destroyed %s.");
+    auto mes = is_echizen(this->player_ptr) ? _("せっかくだから%sを倒した。", "Because it's time, you have destroyed %s.")
+                                            : _("%sを倒した。", "You have destroyed %s.");
     msg_format(mes, m_name);
 }
 
-void MonsterDamageProcessor::show_bounty_message(GAME_TEXT *m_name)
+void MonsterDamageProcessor::show_bounty_message(concptr m_name)
 {
     auto *floor_ptr = this->player_ptr->current_floor_ptr;
     auto *m_ptr = &floor_ptr->m_list[this->m_idx];

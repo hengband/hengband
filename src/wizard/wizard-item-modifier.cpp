@@ -37,6 +37,7 @@
 #include "system/system-variables.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
+#include "term/z-form.h"
 #include "util/bit-flags-calculator.h"
 #include "util/int-char-converter.h"
 #include "util/string-processor.h"
@@ -225,8 +226,8 @@ void wiz_identify_full_inventory(PlayerType *player_ptr)
             continue;
         }
 
-        auto k_ptr = &baseitems_info[o_ptr->bi_id];
-        k_ptr->aware = true; //!< @note 記録には残さないためTRUEを立てるのみ
+        auto &baseitem = baseitems_info[o_ptr->bi_id];
+        baseitem.aware = true; //!< @note 記録には残さないためTRUEを立てるのみ
         set_bits(o_ptr->ident, IDENT_KNOWN | IDENT_FULL_KNOWN);
         o_ptr->marked.set(OmType::TOUCHED);
     }
@@ -245,7 +246,7 @@ void wiz_identify_full_inventory(PlayerType *player_ptr)
  * @param row 表示列
  * @param col 表示行
  */
-static void prt_alloc(ItemKindType tval, OBJECT_SUBTYPE_VALUE sval, TERM_LEN row, TERM_LEN col)
+static void prt_alloc(const BaseitemKey &bi_key, TERM_LEN row, TERM_LEN col)
 {
     uint32_t rarity[BASEITEM_MAX_DEPTH]{};
     uint32_t total[BASEITEM_MAX_DEPTH]{};
@@ -267,7 +268,6 @@ static void prt_alloc(ItemKindType tval, OBJECT_SUBTYPE_VALUE sval, TERM_LEN row
             total[i] += prob / magnificant;
             total_frac += prob % magnificant;
 
-            BaseitemKey bi_key(tval, sval);
             if (baseitem.bi_key == bi_key) {
                 home = baseitem.level;
                 rarity[i] += prob / magnificant;
@@ -338,13 +338,15 @@ static void wiz_display_item(PlayerType *player_ptr, ItemEntity *o_ptr)
         prt("", i, j - 2);
     }
 
-    prt_alloc(o_ptr->tval, o_ptr->sval, 1, 0);
+    prt_alloc(o_ptr->bi_key, 1, 0);
     char buf[256];
     describe_flavor(player_ptr, buf, o_ptr, OD_STORE);
     prt(buf, 2, j);
 
     auto line = 4;
-    prt(format("kind = %-5d  level = %-4d  tval = %-5d  sval = %-5d", o_ptr->bi_id, baseitems_info[o_ptr->bi_id].level, o_ptr->tval, o_ptr->sval), line, j);
+    const auto &bi_key = o_ptr->bi_key;
+    const auto item_level = baseitems_info[o_ptr->bi_id].level;
+    prt(format("kind = %-5d  level = %-4d  tval = %-5d  sval = %-5d", o_ptr->bi_id, item_level, bi_key.tval(), bi_key.sval().value()), line, j);
     prt(format("number = %-3d  wgt = %-6d  ac = %-5d    damage = %dd%d", o_ptr->number, o_ptr->weight, o_ptr->ac, o_ptr->dd, o_ptr->ds), ++line, j);
     prt(format("pval = %-5d  toac = %-5d  tohit = %-4d  todam = %-4d", o_ptr->pval, o_ptr->to_a, o_ptr->to_h, o_ptr->to_d), ++line, j);
     prt(format("fixed_artifact_idx = %-4d  ego_idx = %-4d  cost = %ld", o_ptr->fixed_artifact_idx, o_ptr->ego_idx, object_value_real(o_ptr)), ++line, j);
@@ -434,7 +436,7 @@ static void wiz_statistics(PlayerType *player_ptr, ItemEntity *o_ptr)
             break;
         }
 
-        sprintf(tmp_val, "%ld", (long int)test_roll);
+        strnfmt(tmp_val, sizeof(tmp_val), "%ld", (long int)test_roll);
         if (get_string(p, tmp_val, 10)) {
             test_roll = atol(tmp_val);
         }
@@ -463,7 +465,7 @@ static void wiz_statistics(PlayerType *player_ptr, ItemEntity *o_ptr)
                 artifacts_info.at(q_ptr->fixed_artifact_idx).is_generated = false;
             }
 
-            if ((o_ptr->tval != q_ptr->tval) || (o_ptr->sval != q_ptr->sval)) {
+            if (o_ptr->bi_key != q_ptr->bi_key) {
                 continue;
             }
 
@@ -595,7 +597,7 @@ static void wiz_tweak_item(PlayerType *player_ptr, ItemEntity *o_ptr)
 
     concptr p = "Enter new 'pval' setting: ";
     char tmp_val[80];
-    sprintf(tmp_val, "%d", o_ptr->pval);
+    strnfmt(tmp_val, sizeof(tmp_val), "%d", o_ptr->pval);
     if (!get_string(p, tmp_val, 5)) {
         return;
     }
@@ -603,7 +605,7 @@ static void wiz_tweak_item(PlayerType *player_ptr, ItemEntity *o_ptr)
     o_ptr->pval = clamp_cast<int16_t>(atoi(tmp_val));
     wiz_display_item(player_ptr, o_ptr);
     p = "Enter new 'to_a' setting: ";
-    sprintf(tmp_val, "%d", o_ptr->to_a);
+    strnfmt(tmp_val, sizeof(tmp_val), "%d", o_ptr->to_a);
     if (!get_string(p, tmp_val, 5)) {
         return;
     }
@@ -611,7 +613,7 @@ static void wiz_tweak_item(PlayerType *player_ptr, ItemEntity *o_ptr)
     o_ptr->to_a = clamp_cast<int16_t>(atoi(tmp_val));
     wiz_display_item(player_ptr, o_ptr);
     p = "Enter new 'to_h' setting: ";
-    sprintf(tmp_val, "%d", o_ptr->to_h);
+    strnfmt(tmp_val, sizeof(tmp_val), "%d", o_ptr->to_h);
     if (!get_string(p, tmp_val, 5)) {
         return;
     }
@@ -619,7 +621,7 @@ static void wiz_tweak_item(PlayerType *player_ptr, ItemEntity *o_ptr)
     o_ptr->to_h = clamp_cast<int16_t>(atoi(tmp_val));
     wiz_display_item(player_ptr, o_ptr);
     p = "Enter new 'to_d' setting: ";
-    sprintf(tmp_val, "%d", (int)o_ptr->to_d);
+    strnfmt(tmp_val, sizeof(tmp_val), "%d", (int)o_ptr->to_d);
     if (!get_string(p, tmp_val, 5)) {
         return;
     }
@@ -642,7 +644,7 @@ static void wiz_quantity_item(ItemEntity *o_ptr)
 
     int tmp_qnt = o_ptr->number;
     char tmp_val[100];
-    sprintf(tmp_val, "%d", (int)o_ptr->number);
+    strnfmt(tmp_val, sizeof(tmp_val), "%d", (int)o_ptr->number);
     if (get_string("Quantity: ", tmp_val, 2)) {
         int tmp_int = atoi(tmp_val);
         if (tmp_int < 1) {
@@ -656,7 +658,7 @@ static void wiz_quantity_item(ItemEntity *o_ptr)
         o_ptr->number = (byte)tmp_int;
     }
 
-    if (o_ptr->tval == ItemKindType::ROD) {
+    if (o_ptr->bi_key.tval() == ItemKindType::ROD) {
         o_ptr->pval = o_ptr->pval * o_ptr->number / tmp_qnt;
     }
 }
@@ -741,7 +743,7 @@ static int is_slot_able_to_be_ego(PlayerType *player_ptr, ItemEntity *o_ptr)
         return slot;
     }
 
-    if ((o_ptr->tval == ItemKindType::SHOT) || (o_ptr->tval == ItemKindType::ARROW) || (o_ptr->tval == ItemKindType::BOLT)) {
+    if (o_ptr->is_ammo()) {
         return INVEN_AMMO;
     }
 
@@ -879,25 +881,25 @@ WishResultType do_cmd_wishing(PlayerType *player_ptr, int prob, bool allow_art, 
     if (exam_base) {
         int len;
         int max_len = 0;
-        for (const auto &k_ref : baseitems_info) {
-            if (k_ref.idx == 0 || k_ref.name.empty()) {
+        for (const auto &baseitem : baseitems_info) {
+            if (baseitem.idx == 0 || baseitem.name.empty()) {
                 continue;
             }
 
-            o_ptr->prep(k_ref.idx);
+            o_ptr->prep(baseitem.idx);
             describe_flavor(player_ptr, o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY | OD_STORE));
 #ifndef JP
             str_tolower(o_name);
 #endif
             if (cheat_xtra) {
-                msg_format("Matching object No.%d %s", k_ref.idx, o_name);
+                msg_format("Matching object No.%d %s", baseitem.idx, o_name);
             }
 
             len = strlen(o_name);
 
             if (_(!strrncmp(str, o_name, len), !strncmp(str, o_name, len))) {
                 if (len > max_len) {
-                    k_ids.push_back(k_ref.idx);
+                    k_ids.push_back(baseitem.idx);
                     max_len = len;
                 }
             }
@@ -1032,11 +1034,11 @@ WishResultType do_cmd_wishing(PlayerType *player_ptr, int prob, bool allow_art, 
 
     if (k_ids.size() == 1) {
         const auto bi_id = k_ids.back();
-        const auto &k_ref = baseitems_info[bi_id];
+        const auto &baseitem = baseitems_info[bi_id];
         auto a_idx = FixedArtifactId::NONE;
-        if (k_ref.gen_flags.has(ItemGenerationTraitType::INSTA_ART)) {
+        if (baseitem.gen_flags.has(ItemGenerationTraitType::INSTA_ART)) {
             for (const auto &[a_idx_loop, a_ref_loop] : artifacts_info) {
-                if (a_idx_loop == FixedArtifactId::NONE || a_ref_loop.bi_key != k_ref.bi_key) {
+                if (a_idx_loop == FixedArtifactId::NONE || a_ref_loop.bi_key != baseitem.bi_key) {
                     continue;
                 }
 
@@ -1060,10 +1062,10 @@ WishResultType do_cmd_wishing(PlayerType *player_ptr, int prob, bool allow_art, 
             if (must || ok_art) {
                 do {
                     o_ptr->prep(bi_id);
-                    ItemMagicApplier(player_ptr, o_ptr, k_ref.level, AM_SPECIAL | AM_NO_FIXED_ART).execute();
-                } while (!o_ptr->art_name || o_ptr->is_ego() || o_ptr->is_cursed());
+                    ItemMagicApplier(player_ptr, o_ptr, baseitem.level, AM_SPECIAL | AM_NO_FIXED_ART).execute();
+                } while (!o_ptr->is_random_artifact() || o_ptr->is_ego() || o_ptr->is_cursed());
 
-                if (o_ptr->art_name) {
+                if (o_ptr->is_random_artifact()) {
                     drop_near(player_ptr, o_ptr, -1, player_ptr->y, player_ptr->x);
                 }
             } else {
@@ -1084,8 +1086,8 @@ WishResultType do_cmd_wishing(PlayerType *player_ptr, int prob, bool allow_art, 
                     int i = 0;
                     for (i = 0; i < max_roll; i++) {
                         o_ptr->prep(bi_id);
-                        ItemMagicApplier(player_ptr, o_ptr, k_ref.level, AM_GREAT | AM_NO_FIXED_ART).execute();
-                        if (o_ptr->art_name) {
+                        ItemMagicApplier(player_ptr, o_ptr, baseitem.level, AM_GREAT | AM_NO_FIXED_ART).execute();
+                        if (o_ptr->is_random_artifact()) {
                             continue;
                         }
 

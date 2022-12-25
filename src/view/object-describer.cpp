@@ -61,35 +61,28 @@ void inven_item_describe(PlayerType *player_ptr, short item)
 }
 
 /*!
- * @brief 現在アクティブになっているウィンドウにオブジェクトの詳細を表示する /
- * Hack -- display an object kind in the current window
+ * @brief 現在アクティブになっているウィンドウにオブジェクトの詳細を表示する
  * @param player_ptr プレイヤーへの参照ポインタ
- * @param bi_id ベースアイテムの参照ID
- * @details
- * Include list of usable spells for readible books
+ * @details Include list of usable spells for readible books
  */
-void display_koff(PlayerType *player_ptr, short bi_id)
+void display_koff(PlayerType *player_ptr)
 {
-    ItemEntity forge;
-    ItemEntity *q_ptr;
-    int sval;
-    int16_t use_realm;
-    GAME_TEXT o_name[MAX_NLEN];
-    for (int y = 0; y < game_term->hgt; y++) {
+    if (player_ptr->tracking_bi_id == 0) {
+        return;
+    }
+
+    for (auto y = 0; y < game_term->hgt; y++) {
         term_erase(0, y, 255);
     }
 
-    if (!bi_id) {
-        return;
-    }
-    q_ptr = &forge;
-
-    q_ptr->prep(bi_id);
-    describe_flavor(player_ptr, o_name, q_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY | OD_STORE));
+    ItemEntity item;
+    item.prep(player_ptr->tracking_bi_id);
+    GAME_TEXT o_name[MAX_NLEN];
+    describe_flavor(player_ptr, o_name, &item, (OD_OMIT_PREFIX | OD_NAME_ONLY | OD_STORE));
 
     term_putstr(0, 0, -1, TERM_WHITE, o_name);
-    sval = q_ptr->sval;
-    use_realm = tval2realm(q_ptr->tval);
+    const auto sval = item.bi_key.sval().value();
+    const short use_realm = tval2realm(item.bi_key.tval());
 
     if (player_ptr->realm1 || player_ptr->realm2) {
         if ((use_realm != player_ptr->realm1) && (use_realm != player_ptr->realm2)) {
@@ -108,9 +101,8 @@ void display_koff(PlayerType *player_ptr, short bi_id)
         }
     }
 
-    int num = 0;
-    SPELL_IDX spells[64];
-
+    auto num = 0;
+    int spells[64]{};
     for (int spell = 0; spell < 32; spell++) {
         if (fake_spell_flags[sval] & (1UL << spell)) {
             spells[num++] = spell;
