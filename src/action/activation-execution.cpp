@@ -268,7 +268,7 @@ void exe_activate(PlayerType *player_ptr, INVENTORY_IDX item)
         return;
     }
 
-    if (exe_monster_capture(player_ptr, ae_ptr)) {
+    if (exe_monster_capture(player_ptr, *ae_ptr->o_ptr)) {
         return;
     }
 

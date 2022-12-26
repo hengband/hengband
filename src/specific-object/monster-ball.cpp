@@ -1,5 +1,4 @@
 ﻿#include "specific-object/monster-ball.h"
-#include "effect/attribute-types.h"
 #include "effect/spells-effect-util.h"
 #include "floor/geometry.h"
 #include "game-option/input-options.h"
@@ -8,7 +7,6 @@
 #include "monster-race/monster-race.h"
 #include "monster/monster-info.h"
 #include "monster/monster-util.h"
-#include "object-activation/activation-util.h"
 #include "object/tval-types.h"
 #include "pet/pet-util.h"
 #include "racial/racial-android.h"
@@ -20,179 +18,122 @@
 #include "system/player-type-definition.h"
 #include "target/target-getter.h"
 #include "util/flag-group.h"
-#include "util/quarks.h"
 #include "util/string-processor.h"
 #include "view/display-messages.h"
+#include <sstream>
 
-static void inscribe_nickname(ae_type *ae_ptr, CapturedMonsterType *cap_mon_ptr)
+static void inscribe_nickname(ItemEntity &item, const CapturedMonsterType &cap_mon)
 {
-    if (cap_mon_ptr->nickname.empty()) {
+    if (cap_mon.nickname.empty()) {
         return;
     }
 
-    concptr t;
-    char *s;
-    char buf[80] = "";
-    if (ae_ptr->o_ptr->is_inscribed()) {
-        angband_strcpy(buf, ae_ptr->o_ptr->inscription->data(), sizeof(buf));
+    auto &insc = item.inscription;
+    if (!insc.has_value()) {
+        insc = "";
     }
 
-    s = buf;
-    for (s = buf; *s && (*s != '#'); s++) {
-#ifdef JP
-        if (iskanji(*s)) {
-            s++;
-        }
-#endif
+    if (auto s = angband_strchr(insc->data(), '#'); s != nullptr) {
+        insc->erase(s - insc->data());
     }
 
-    *s = '#';
-    s++;
-#ifdef JP
-#else
-    *s++ = '\'';
-#endif
-    t = cap_mon_ptr->nickname.data();
-    while (*t) {
-        *s = *t;
-        s++;
-        t++;
-    }
-#ifdef JP
-#else
-    *s++ = '\'';
-#endif
-    *s = '\0';
-    ae_ptr->o_ptr->inscription.emplace(buf);
+    std::stringstream nickname;
+    nickname << '#' << _("", '\'') << cap_mon.nickname << _("", '\'');
+
+    insc->append(nickname.str());
 }
 
-static bool set_activation_target(PlayerType *player_ptr, ae_type *ae_ptr)
+static bool capture_monster(PlayerType *player_ptr, ItemEntity &item)
 {
-    bool old_target_pet = target_pet;
+    const auto old_target_pet = target_pet;
     target_pet = true;
-    if (!get_aim_dir(player_ptr, &ae_ptr->dir)) {
+    DIRECTION dir;
+    if (!get_aim_dir(player_ptr, &dir)) {
         target_pet = old_target_pet;
         return false;
     }
 
     target_pet = old_target_pet;
-    CapturedMonsterType cap_mon_ptr;
-    if (!fire_ball(player_ptr, AttributeType::CAPTURE, ae_ptr->dir, 0, 0, &cap_mon_ptr)) {
+    CapturedMonsterType cap_mon;
+    if (!fire_ball(player_ptr, AttributeType::CAPTURE, dir, 0, 0, &cap_mon)) {
         return true;
     }
 
-    ae_ptr->o_ptr->pval = enum2i(cap_mon_ptr.r_idx);
-    ae_ptr->o_ptr->captured_monster_speed = cap_mon_ptr.speed;
-    ae_ptr->o_ptr->captured_monster_current_hp = cap_mon_ptr.current_hp;
-    ae_ptr->o_ptr->captured_monster_max_hp = cap_mon_ptr.max_hp;
-    inscribe_nickname(ae_ptr, &cap_mon_ptr);
+    item.pval = enum2i(cap_mon.r_idx);
+    item.captured_monster_speed = cap_mon.speed;
+    item.captured_monster_current_hp = cap_mon.current_hp;
+    item.captured_monster_max_hp = cap_mon.max_hp;
+    inscribe_nickname(item, cap_mon);
     return true;
 }
 
-static void add_quark_to_inscription(PlayerType *player_ptr, ae_type *ae_ptr, concptr t, char *buf)
+static void restore_monster_nickname(MonsterEntity &monster, ItemEntity &item)
 {
-    if (!*t) {
+    if (!item.is_inscribed()) {
         return;
     }
 
-    char *s = buf;
-    t++;
-#ifdef JP
-#else
-    bool quote = false;
-    if (*t == '\'') {
-        t++;
-        quote = true;
-    }
-#endif
-
-    while (*t) {
-        *s = *t;
-        t++;
-        s++;
-    }
-
-#ifdef JP
-#else
-    if (quote && *(s - 1) == '\'') {
-        s--;
-    }
-#endif
-
-    *s = '\0';
-    player_ptr->current_floor_ptr->m_list[hack_m_idx_ii].nickname = buf;
-    t = ae_ptr->o_ptr->inscription->data();
-    s = buf;
-    while (*t && (*t != '#')) {
-        *s = *t;
-        t++;
-        s++;
-    }
-
-    *s = '\0';
-    ae_ptr->o_ptr->inscription.emplace(buf);
-}
-
-static void check_inscription_value(PlayerType *player_ptr, ae_type *ae_ptr)
-{
-    if (!ae_ptr->o_ptr->is_inscribed()) {
+    auto &insc = item.inscription;
+    const auto s = angband_strchr(insc->data(), '#');
+    if (s == nullptr) {
         return;
     }
 
-    char buf[80];
-    concptr t;
-    for (t = ae_ptr->o_ptr->inscription->data(); *t && (*t != '#'); t++) {
-#ifdef JP
-        if (iskanji(*t)) {
-            t++;
+    std::string_view nickname = s + 1;
+#ifndef JP
+    if (nickname.starts_with('\'')) {
+        nickname.remove_prefix(1);
+        if (nickname.ends_with('\'')) {
+            nickname.remove_suffix(1);
         }
+    }
 #endif
-    }
+    monster.nickname = nickname;
 
-    add_quark_to_inscription(player_ptr, ae_ptr, t, buf);
+    insc->erase(s - insc->data());
 }
 
-static void check_monster_ball_use(PlayerType *player_ptr, ae_type *ae_ptr)
+static bool release_monster(PlayerType *player_ptr, ItemEntity &item, DIRECTION dir)
 {
-    auto r_idx = i2enum<MonsterRaceId>(ae_ptr->o_ptr->pval);
-    if (!monster_can_enter(player_ptr, player_ptr->y + ddy[ae_ptr->dir], player_ptr->x + ddx[ae_ptr->dir], &monraces_info[r_idx], 0)) {
-        return;
-    }
-
-    if (!place_monster_aux(player_ptr, 0, player_ptr->y + ddy[ae_ptr->dir], player_ptr->x + ddx[ae_ptr->dir], r_idx, PM_FORCE_PET | PM_NO_KAGE)) {
-        return;
-    }
-
-    auto *floor_ptr = player_ptr->current_floor_ptr;
-    if (ae_ptr->o_ptr->captured_monster_speed > 0) {
-        floor_ptr->m_list[hack_m_idx_ii].mspeed = ae_ptr->o_ptr->captured_monster_speed;
-    }
-
-    if (ae_ptr->o_ptr->captured_monster_max_hp) {
-        floor_ptr->m_list[hack_m_idx_ii].max_maxhp = ae_ptr->o_ptr->captured_monster_max_hp;
-    }
-
-    if (ae_ptr->o_ptr->captured_monster_current_hp > 0) {
-        floor_ptr->m_list[hack_m_idx_ii].hp = ae_ptr->o_ptr->captured_monster_current_hp;
-    }
-
-    floor_ptr->m_list[hack_m_idx_ii].maxhp = floor_ptr->m_list[hack_m_idx_ii].max_maxhp;
-    check_inscription_value(player_ptr, ae_ptr);
-    ae_ptr->o_ptr->pval = 0;
-    ae_ptr->o_ptr->captured_monster_speed = 0;
-    ae_ptr->o_ptr->captured_monster_current_hp = 0;
-    ae_ptr->o_ptr->captured_monster_max_hp = 0;
-    ae_ptr->success = true;
-}
-
-bool exe_monster_capture(PlayerType *player_ptr, ae_type *ae_ptr)
-{
-    if (ae_ptr->o_ptr->bi_key.tval() != ItemKindType::CAPTURE) {
+    auto r_idx = i2enum<MonsterRaceId>(item.pval);
+    if (!monster_can_enter(player_ptr, player_ptr->y + ddy[dir], player_ptr->x + ddx[dir], &monraces_info[r_idx], 0)) {
         return false;
     }
 
-    if (ae_ptr->o_ptr->pval == 0) {
-        if (!set_activation_target(player_ptr, ae_ptr)) {
+    if (!place_monster_aux(player_ptr, 0, player_ptr->y + ddy[dir], player_ptr->x + ddx[dir], r_idx, PM_FORCE_PET | PM_NO_KAGE)) {
+        return false;
+    }
+
+    auto &monster = player_ptr->current_floor_ptr->m_list[hack_m_idx_ii];
+    if (item.captured_monster_speed > 0) {
+        monster.mspeed = item.captured_monster_speed;
+    }
+
+    if (item.captured_monster_max_hp) {
+        monster.max_maxhp = item.captured_monster_max_hp;
+    }
+
+    if (item.captured_monster_current_hp > 0) {
+        monster.hp = item.captured_monster_current_hp;
+    }
+
+    monster.maxhp = monster.max_maxhp;
+    restore_monster_nickname(monster, item);
+    item.pval = 0;
+    item.captured_monster_speed = 0;
+    item.captured_monster_current_hp = 0;
+    item.captured_monster_max_hp = 0;
+    return true;
+}
+
+bool exe_monster_capture(PlayerType *player_ptr, ItemEntity &item)
+{
+    if (item.bi_key.tval() != ItemKindType::CAPTURE) {
+        return false;
+    }
+
+    if (item.pval == 0) {
+        if (!capture_monster(player_ptr, item)) {
             return true;
         }
 
@@ -200,13 +141,12 @@ bool exe_monster_capture(PlayerType *player_ptr, ae_type *ae_ptr)
         return true;
     }
 
-    ae_ptr->success = false;
-    if (!get_direction(player_ptr, &ae_ptr->dir, false, false)) {
+    DIRECTION dir;
+    if (!get_direction(player_ptr, &dir, false, false)) {
         return true;
     }
 
-    check_monster_ball_use(player_ptr, ae_ptr);
-    if (!ae_ptr->success) {
+    if (!release_monster(player_ptr, item, dir)) {
         msg_print(_("おっと、解放に失敗した。", "Oops.  You failed to release your pet."));
     }
 
