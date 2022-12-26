@@ -60,10 +60,10 @@ static concptr decide_horror_message(MonsterRaceInfo *r_ptr)
  * @param r_ptr モンスター情報への参照ポインタ
  * @todo m_nameとdescで何が違うのかは良く分からない
  */
-static void see_eldritch_horror(concptr m_name, MonsterRaceInfo *r_ptr)
+static void see_eldritch_horror(std::string_view m_name, MonsterRaceInfo *r_ptr)
 {
     concptr horror_message = decide_horror_message(r_ptr);
-    msg_format(_("%s%sの顔を見てしまった！", "You behold the %s visage of %s!"), horror_message, m_name);
+    msg_format(_("%s%sの顔を見てしまった！", "You behold the %s visage of %s!"), horror_message, m_name.data());
     r_ptr->r_flags2 |= RF2_ELDRITCH_HORROR;
 }
 
@@ -137,7 +137,7 @@ void sanity_blast(PlayerType *player_ptr, MonsterEntity *m_ptr, bool necro)
             return;
         }
 
-        see_eldritch_horror(m_name.data(), r_ptr);
+        see_eldritch_horror(m_name, r_ptr);
         switch (PlayerRace(player_ptr).life()) {
         case PlayerRaceLifeType::DEMON:
             return;
