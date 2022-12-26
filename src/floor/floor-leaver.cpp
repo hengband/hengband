@@ -62,7 +62,7 @@ static bool check_pet_preservation_conditions(PlayerType *player_ptr, MonsterEnt
         return true;
     }
 
-    if (m_ptr->nickname && ((player_has_los_bold(player_ptr, m_ptr->fy, m_ptr->fx) && projectable(player_ptr, player_ptr->y, player_ptr->x, m_ptr->fy, m_ptr->fx)) || (los(player_ptr, m_ptr->fy, m_ptr->fx, player_ptr->y, player_ptr->x) && projectable(player_ptr, m_ptr->fy, m_ptr->fx, player_ptr->y, player_ptr->x)))) {
+    if (m_ptr->is_named() && ((player_has_los_bold(player_ptr, m_ptr->fy, m_ptr->fx) && projectable(player_ptr, player_ptr->y, player_ptr->x, m_ptr->fy, m_ptr->fx)) || (los(player_ptr, m_ptr->fy, m_ptr->fx, player_ptr->y, player_ptr->x) && projectable(player_ptr, m_ptr->fy, m_ptr->fx, player_ptr->y, player_ptr->x)))) {
         if (dis > 3) {
             return true;
         }
@@ -99,7 +99,7 @@ static void record_pet_diary(PlayerType *player_ptr)
 
     for (MONSTER_IDX i = player_ptr->current_floor_ptr->m_max - 1; i >= 1; i--) {
         auto *m_ptr = &player_ptr->current_floor_ptr->m_list[i];
-        if (!m_ptr->is_valid() || !m_ptr->is_pet() || !m_ptr->nickname || (player_ptr->riding == i)) {
+        if (!m_ptr->is_valid() || !m_ptr->is_named_pet() || (player_ptr->riding == i)) {
             continue;
         }
 

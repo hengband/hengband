@@ -68,7 +68,7 @@ static void write_monster_flags(MonsterEntity *m_ptr, BIT_FLAGS *flags)
         set_bits(*flags, SaveDataMonsterFlagType::MFLAG2);
     }
 
-    if (m_ptr->nickname) {
+    if (m_ptr->is_named()) {
         set_bits(*flags, SaveDataMonsterFlagType::NICKNAME);
     }
 

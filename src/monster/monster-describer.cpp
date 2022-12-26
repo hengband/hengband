@@ -221,7 +221,7 @@ std::string monster_desc(PlayerType *player_ptr, MonsterEntity *m_ptr, BIT_FLAGS
         }
     }
 
-    if (m_ptr->nickname) {
+    if (m_ptr->is_named()) {
         desc.append(_("「", " called ")).append(quark_str(m_ptr->nickname)).append(_("」", ""));
     }
 

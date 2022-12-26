@@ -57,6 +57,8 @@ public:
     bool is_friendly() const;
     bool is_pet() const;
     bool is_hostile() const;
+    bool is_named() const;
+    bool is_named_pet() const;
     bool is_original_ap() const;
     bool is_mimicry() const;
     bool is_valid() const;

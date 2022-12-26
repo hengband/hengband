@@ -106,7 +106,7 @@ void do_cmd_pet_dismiss(PlayerType *player_ptr)
         m_ptr = &player_ptr->current_floor_ptr->m_list[pet_ctr];
 
         bool delete_this = false;
-        bool kakunin = ((pet_ctr == player_ptr->riding) || (m_ptr->nickname));
+        bool kakunin = (pet_ctr == player_ptr->riding) || m_ptr->is_named();
         const auto friend_name = monster_desc(player_ptr, m_ptr, MD_ASSUME_VISIBLE);
 
         if (!all_pets) {
@@ -150,7 +150,7 @@ void do_cmd_pet_dismiss(PlayerType *player_ptr)
         }
 
         if ((all_pets && !kakunin) || (!all_pets && delete_this)) {
-            if (record_named_pet && m_ptr->nickname) {
+            if (record_named_pet && m_ptr->is_named()) {
                 const auto m_name = monster_desc(player_ptr, m_ptr, MD_INDEF_VISIBLE);
                 exe_write_diary(player_ptr, DIARY_NAMED_PET, RECORD_NAMED_PET_DISMISS, m_name.data());
             }
@@ -345,7 +345,7 @@ static void do_name_pet(PlayerType *player_ptr)
         strcpy(out_val, "");
 
         /* Use old inscription */
-        if (m_ptr->nickname) {
+        if (m_ptr->is_named()) {
             /* Start with the old inscription */
             strcpy(out_val, quark_str(m_ptr->nickname));
             old_name = true;

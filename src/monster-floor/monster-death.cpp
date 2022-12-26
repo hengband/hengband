@@ -57,7 +57,7 @@ static void write_pet_death(PlayerType *player_ptr, monster_death_type *md_ptr)
 {
     md_ptr->md_y = md_ptr->m_ptr->fy;
     md_ptr->md_x = md_ptr->m_ptr->fx;
-    if (record_named_pet && md_ptr->m_ptr->is_pet() && md_ptr->m_ptr->nickname) {
+    if (record_named_pet && md_ptr->m_ptr->is_named_pet()) {
         const auto m_name = monster_desc(player_ptr, md_ptr->m_ptr, MD_INDEF_VISIBLE);
         exe_write_diary(player_ptr, DIARY_NAMED_PET, 3, m_name.data());
     }

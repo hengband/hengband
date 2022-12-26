@@ -29,7 +29,7 @@ void discharge_minion(PlayerType *player_ptr)
         if (!MonsterRace(m_ptr->r_idx).is_valid() || !m_ptr->is_pet()) {
             continue;
         }
-        if (m_ptr->nickname) {
+        if (m_ptr->is_named()) {
             okay = false;
         }
     }
@@ -67,7 +67,7 @@ void discharge_minion(PlayerType *player_ptr)
         }
         project(player_ptr, i, 2 + (r_ptr->level / 20), m_ptr->fy, m_ptr->fx, dam, AttributeType::PLASMA, PROJECT_STOP | PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL);
 
-        if (record_named_pet && m_ptr->nickname) {
+        if (record_named_pet && m_ptr->is_named()) {
             const auto m_name = monster_desc(player_ptr, m_ptr, MD_INDEF_VISIBLE);
             exe_write_diary(player_ptr, DIARY_NAMED_PET, RECORD_NAMED_PET_BLAST, m_name.data());
         }
