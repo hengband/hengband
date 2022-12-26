@@ -66,9 +66,6 @@
 #include "world/world.h"
 #include <queue>
 
-#define MONSTER_FLOW_DEPTH \
-    32 /*!< 敵のプレイヤーに対する移動道のりの最大値(この値以上は処理を打ち切る) / OPTION: Maximum flow depth when using "MONSTER_FLOW" */
-
 /*!
  * @brief 新規フロアに入りたてのプレイヤーをランダムな場所に配置する / Returns random co-ordinates for player/monster/object
  * @param player_ptr プレイヤーへの参照ポインタ
@@ -752,8 +749,9 @@ void update_flow(PlayerType *player_ptr)
                     g_ptr->dists[i] = n;
                 }
 
-                /* Hack -- limit flow depth */
-                if (n == MONSTER_FLOW_DEPTH) {
+                // 敵のプレイヤーに対する移動道のりの最大値(この値以上は処理を打ち切る).
+                constexpr auto monster_flow_depth = 32;
+                if (n == monster_flow_depth) {
                     continue;
                 }
 
