@@ -180,19 +180,26 @@ bool check_local_illumination(PlayerType *player_ptr, POSITION y, POSITION x)
     }
 }
 
-/*! 対象座標のマスの照明状態を更新する際の補助処理マクロ */
-#define update_local_illumination_aux(C, Y, X)                                                  \
-    {                                                                                           \
-        if (player_has_los_bold((C), (Y), (X))) {                                               \
-            /* Update the monster */                                                            \
-            if ((C)->current_floor_ptr->grid_array[(Y)][(X)].m_idx)                             \
-                update_monster((C), (C)->current_floor_ptr->grid_array[(Y)][(X)].m_idx, false); \
-                                                                                                \
-            /* Notice and redraw */                                                             \
-            note_spot((C), (Y), (X));                                                           \
-            lite_spot((C), (Y), (X));                                                           \
-        }                                                                                       \
+/*!
+ * @brief 対象座標のマスの照明状態を更新する
+ * @param player_ptr プレイヤーへの参照ポインタ
+ * @param y 更新したいマスのY座標
+ * @param x 更新したいマスのX座標
+ */
+static void update_local_illumination_aux(PlayerType *player_ptr, int y, int x)
+{
+    if (!player_has_los_bold(player_ptr, y, x)) {
+        return;
     }
+
+    const auto &grid = player_ptr->current_floor_ptr->grid_array[y][x];
+    if (grid.m_idx > 0) {
+        update_monster(player_ptr, grid.m_idx, false);
+    }
+
+    note_spot(player_ptr, y, x);
+    lite_spot(player_ptr, y, x);
+}
 
 /*!
  * @brief 指定された座標の照明状態を更新する / Update "local" illumination
