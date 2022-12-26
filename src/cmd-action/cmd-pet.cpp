@@ -66,6 +66,7 @@
 #include "util/int-char-converter.h"
 #include "util/quarks.h"
 #include "util/sort.h"
+#include "util/string-processor.h"
 #include "view/display-messages.h"
 #include "world/world.h"
 #include <sstream>
@@ -314,7 +315,6 @@ bool do_cmd_riding(PlayerType *player_ptr, bool force)
 static void do_name_pet(PlayerType *player_ptr)
 {
     MonsterEntity *m_ptr;
-    char out_val[20];
     bool old_name = false;
     bool old_target_pet = target_pet;
 
@@ -342,12 +342,12 @@ static void do_name_pet(PlayerType *player_ptr)
         msg_print(nullptr);
 
         /* Start with nothing */
-        strcpy(out_val, "");
+        char out_val[20]{};
 
         /* Use old inscription */
         if (m_ptr->is_named()) {
             /* Start with the old inscription */
-            strcpy(out_val, quark_str(m_ptr->nickname));
+            angband_strcpy(out_val, m_ptr->nickname.data(), sizeof(out_val));
             old_name = true;
         }
 
@@ -355,7 +355,7 @@ static void do_name_pet(PlayerType *player_ptr)
         if (get_string(_("名前: ", "Name: "), out_val, 15)) {
             if (out_val[0]) {
                 /* Save the inscription */
-                m_ptr->nickname = quark_add(out_val);
+                m_ptr->nickname = out_val;
                 if (record_named_pet) {
                     exe_write_diary(player_ptr, DIARY_NAMED_PET, RECORD_NAMED_PET_NAME, monster_desc(player_ptr, m_ptr, MD_INDEF_VISIBLE).data());
                 }
@@ -363,7 +363,7 @@ static void do_name_pet(PlayerType *player_ptr)
                 if (record_named_pet && old_name) {
                     exe_write_diary(player_ptr, DIARY_NAMED_PET, RECORD_NAMED_PET_UNNAME, monster_desc(player_ptr, m_ptr, MD_INDEF_VISIBLE).data());
                 }
-                m_ptr->nickname = 0;
+                m_ptr->nickname.clear();
             }
         }
     }

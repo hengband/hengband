@@ -133,7 +133,7 @@ static void write_monster_info(MonsterEntity *m_ptr, const BIT_FLAGS flags)
     }
 
     if (any_bits(flags, SaveDataMonsterFlagType::NICKNAME)) {
-        wr_string(quark_str(m_ptr->nickname));
+        wr_string(m_ptr->nickname);
     }
 
     if (any_bits(flags, SaveDataMonsterFlagType::PARENT)) {

@@ -1,6 +1,7 @@
 ﻿#pragma once
 
 #include "system/angband.h"
+#include <string>
 
 extern int rakubadam_m; /*!< 振り落とされた際のダメージ量 */
 extern int rakubadam_p; /*!< 落馬した際のダメージ量 */
@@ -14,7 +15,7 @@ public:
     byte speed;
     short current_hp;
     short max_hp;
-    ushort nickname;
+    std::string nickname;
 };
 
 extern bool sukekaku;

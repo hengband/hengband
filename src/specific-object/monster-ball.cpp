@@ -26,7 +26,7 @@
 
 static void inscribe_nickname(ae_type *ae_ptr, CapturedMonsterType *cap_mon_ptr)
 {
-    if (cap_mon_ptr->nickname == 0) {
+    if (cap_mon_ptr->nickname.empty()) {
         return;
     }
 
@@ -52,7 +52,7 @@ static void inscribe_nickname(ae_type *ae_ptr, CapturedMonsterType *cap_mon_ptr)
 #else
     *s++ = '\'';
 #endif
-    t = quark_str(cap_mon_ptr->nickname);
+    t = cap_mon_ptr->nickname.data();
     while (*t) {
         *s = *t;
         s++;
@@ -120,7 +120,7 @@ static void add_quark_to_inscription(PlayerType *player_ptr, ae_type *ae_ptr, co
 #endif
 
     *s = '\0';
-    player_ptr->current_floor_ptr->m_list[hack_m_idx_ii].nickname = quark_add(buf);
+    player_ptr->current_floor_ptr->m_list[hack_m_idx_ii].nickname = buf;
     t = ae_ptr->o_ptr->inscription->data();
     s = buf;
     while (*t && (*t != '#')) {

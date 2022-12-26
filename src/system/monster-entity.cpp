@@ -24,7 +24,7 @@ bool MonsterEntity::is_hostile() const
 
 bool MonsterEntity::is_named() const
 {
-    return this->nickname != 0;
+    return !this->nickname.empty();
 }
 
 bool MonsterEntity::is_named_pet() const
