@@ -76,9 +76,11 @@ static bool confirm_leave_level(PlayerType *player_ptr, bool down_stair)
  */
 void do_cmd_go_up(PlayerType *player_ptr)
 {
+    const auto &floor_ptr = player_ptr->current_floor_ptr;
+
     auto &quest_list = QuestList::get_instance();
     bool go_up = false;
-    auto *g_ptr = &player_ptr->current_floor_ptr->grid_array[player_ptr->y][player_ptr->x];
+    auto *g_ptr = &floor_ptr->grid_array[player_ptr->y][player_ptr->x];
     auto *f_ptr = &terrains_info[g_ptr->feat];
     int up_num = 0;
     PlayerClass(player_ptr).break_samurai_stance({ SamuraiStanceType::MUSOU });
@@ -88,7 +90,6 @@ void do_cmd_go_up(PlayerType *player_ptr)
         return;
     }
 
-    const auto &floor_ptr = player_ptr->current_floor_ptr;
     if (f_ptr->flags.has(TerrainCharacteristics::QUEST)) {
         if (!confirm_leave_level(player_ptr, false)) {
             return;
@@ -143,18 +144,18 @@ void do_cmd_go_up(PlayerType *player_ptr)
         do_cmd_save_game(player_ptr, true);
     }
 
-    const auto quest_number = player_ptr->current_floor_ptr->quest_number;
+    const auto quest_number = floor_ptr->quest_number;
     auto &q_ref = quest_list[quest_number];
 
     if (inside_quest(quest_number) && q_ref.type == QuestKindType::RANDOM) {
         leave_quest_check(player_ptr);
-        player_ptr->current_floor_ptr->quest_number = QuestId::NONE;
+        floor_ptr->quest_number = QuestId::NONE;
     }
 
     if (inside_quest(quest_number) && q_ref.type != QuestKindType::RANDOM) {
         leave_quest_check(player_ptr);
-        player_ptr->current_floor_ptr->quest_number = i2enum<QuestId>(g_ptr->special);
-        player_ptr->current_floor_ptr->dun_level = 0;
+        floor_ptr->quest_number = i2enum<QuestId>(g_ptr->special);
+        floor_ptr->dun_level = 0;
         up_num = 0;
     } else {
         if (f_ptr->flags.has(TerrainCharacteristics::SHAFT)) {
@@ -165,8 +166,8 @@ void do_cmd_go_up(PlayerType *player_ptr)
             up_num = 1;
         }
 
-        if (player_ptr->current_floor_ptr->dun_level - up_num < dungeons_info[player_ptr->dungeon_idx].mindepth) {
-            up_num = player_ptr->current_floor_ptr->dun_level;
+        if (floor_ptr->dun_level - up_num < dungeons_info[player_ptr->dungeon_idx].mindepth) {
+            up_num = floor_ptr->dun_level;
         }
     }
 
@@ -174,7 +175,7 @@ void do_cmd_go_up(PlayerType *player_ptr)
         exe_write_diary(player_ptr, DIARY_STAIR, 0 - up_num, _("階段を上った", "climbed up the stairs to"));
     }
 
-    if (up_num == player_ptr->current_floor_ptr->dun_level) {
+    if (up_num == floor_ptr->dun_level) {
         if (is_echizen(player_ptr)) {
             msg_print(_("なんだこの階段は！", "What's this STAIRWAY!"));
         } else {
