@@ -35,9 +35,8 @@ constexpr int MACRO_MAX = 256;
 
 static void init_gf_colors()
 {
-    constexpr ushort default_gf_color = 0;
     for (auto i = 0; i < enum2i(AttributeType::MAX); i++) {
-        gf_colors.emplace(i2enum<AttributeType>(i), default_gf_color);
+        gf_colors.emplace(i2enum<AttributeType>(i), "");
     }
 }
 
