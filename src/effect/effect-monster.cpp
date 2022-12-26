@@ -269,7 +269,7 @@ static bool heal_leaper(PlayerType *player_ptr, effect_monster_type *em_ptr)
         msg_print(_("不潔な病人は病気が治った！", "The Mangy looking leper is healed!"));
     }
 
-    if (record_named_pet && em_ptr->m_ptr->is_pet() && em_ptr->m_ptr->nickname) {
+    if (record_named_pet && em_ptr->m_ptr->is_named_pet()) {
         const auto m2_name = monster_desc(player_ptr, em_ptr->m_ptr, MD_INDEF_VISIBLE);
         exe_write_diary(player_ptr, DIARY_NAMED_PET, RECORD_NAMED_PET_HEAL_LEPER, m2_name.data());
     }

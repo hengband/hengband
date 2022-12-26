@@ -221,8 +221,8 @@ std::string monster_desc(PlayerType *player_ptr, MonsterEntity *m_ptr, BIT_FLAGS
         }
     }
 
-    if (m_ptr->nickname) {
-        desc.append(_("「", " called ")).append(quark_str(m_ptr->nickname)).append(_("」", ""));
+    if (m_ptr->is_named()) {
+        desc.append(_("「", " called ")).append(m_ptr->nickname).append(_("」", ""));
     }
 
     if (player_ptr->riding && (&floor_ptr->m_list[player_ptr->riding] == m_ptr)) {

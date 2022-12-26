@@ -336,7 +336,7 @@ bool place_monster_one(PlayerType *player_ptr, MONSTER_IDX who, POSITION y, POSI
 
     m_ptr->cdis = 0;
     reset_target(m_ptr);
-    m_ptr->nickname = 0;
+    m_ptr->nickname.clear();
     m_ptr->exp = 0;
 
     if (who > 0 && floor_ptr->m_list[who].is_pet()) {

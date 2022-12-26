@@ -259,7 +259,7 @@ bool exe_mutation_power(PlayerType *player_ptr, PlayerMutationType power)
         MonsterRaceInfo *r_ptr;
         r_ptr = &monraces_info[m_ptr->r_idx];
         if (r_ptr->kind_flags.has(MonsterKindType::EVIL) && none_bits(r_ptr->flags1, RF1_QUESTOR) && r_ptr->kind_flags.has_not(MonsterKindType::UNIQUE) && !player_ptr->current_floor_ptr->inside_arena && !inside_quest(player_ptr->current_floor_ptr->quest_number) && (r_ptr->level < randint1(player_ptr->lev + 50)) && m_ptr->mflag2.has_not(MonsterConstantFlagType::NOGENO)) {
-            if (record_named_pet && m_ptr->is_pet() && m_ptr->nickname) {
+            if (record_named_pet && m_ptr->is_named_pet()) {
                 const auto m_name = monster_desc(player_ptr, m_ptr, MD_INDEF_VISIBLE);
                 exe_write_diary(player_ptr, DIARY_NAMED_PET, RECORD_NAMED_PET_GENOCIDE, m_name.data());
             }

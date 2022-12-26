@@ -88,9 +88,9 @@ void MonsterLoader50::rd_monster(MonsterEntity *m_ptr_)
     if (any_bits(flags, SaveDataMonsterFlagType::NICKNAME)) {
         char buf[128];
         rd_string(buf, sizeof(buf));
-        this->m_ptr->nickname = quark_add(buf);
+        this->m_ptr->nickname = buf;
     } else {
-        this->m_ptr->nickname = 0;
+        this->m_ptr->nickname.clear();
     }
 
     this->m_ptr->parent_m_idx = any_bits(flags, SaveDataMonsterFlagType::PARENT) ? rd_s16b() : 0;

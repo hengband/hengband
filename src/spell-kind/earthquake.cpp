@@ -277,7 +277,7 @@ bool earthquake(PlayerType *player_ptr, POSITION cy, POSITION cx, POSITION r, MO
 
                 if (gg_ptr->m_idx) {
                     const auto &m_ref = floor_ptr->m_list[gg_ptr->m_idx];
-                    if (record_named_pet && m_ref.is_pet() && m_ref.nickname) {
+                    if (record_named_pet && m_ref.is_named_pet()) {
                         const auto m2_name = monster_desc(player_ptr, m_ptr, MD_INDEF_VISIBLE);
                         exe_write_diary(player_ptr, DIARY_NAMED_PET, RECORD_NAMED_PET_EARTHQUAKE, m2_name.data());
                     }
