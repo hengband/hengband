@@ -66,10 +66,18 @@
  * Format("%g", double r)
  *   Append the double "r", in various formats.
  *
+ * Format("%LE", long double r)
+ * Format("%LF", long double r)
+ * Format("%LG", long double r)
+ * Format("%Le", long double r)
+ * Format("%Lf", long double r)
+ * Format("%Lg", long double r)
+ *   Append the long double "r", in various formats.
+ *
  * Format("%ld", long int i)
  *   Append the long integer "i".
  *
- * Format("%Ld", long long int i)
+ * Format("%lld", long long int i)
  *   Append the long long integer "i".
  *
  * Format("%d", int i)
@@ -78,7 +86,7 @@
  * Format("%lu", unsigned long int i)
  *   Append the unsigned long integer "i".
  *
- * Format("%Lu", unsigned long long int i)
+ * Format("%llu", unsigned long long int i)
  *   Append the unsigned long long integer "i".
  *
  * Format("%u", unsigned int i)
@@ -230,6 +238,7 @@ uint vstrnfmt(char *buf, uint max, concptr fmt, va_list vp)
 
         auto do_long = false;
         auto do_long_long = false;
+        auto do_long_double = false;
         auto do_capitalize = false;
 
         /* Format sequence */
@@ -252,17 +261,21 @@ uint vstrnfmt(char *buf, uint max, concptr fmt, va_list vp)
             }
 
             if (isalpha(*s)) {
-                /* handle "long" request */
+                /* handle "long" or "long long" request */
                 if (*s == 'l') {
                     aux.push_back(*s++);
-                    do_long = true;
+                    if (*s == 'l') {
+                        aux.push_back(*s++);
+                        do_long_long = true;
+                    } else {
+                        do_long = true;
+                    }
                 }
 
-                /* handle "extra-long" request */
+                /* handle "long double" request */
                 else if (*s == 'L') {
-                    aux.append("ll");
-                    do_long_long = true;
-                    s++;
+                    aux.push_back(*s++);
+                    do_long_double = true;
                 }
 
                 /* Handle normal end of format sequence */
@@ -344,8 +357,13 @@ uint vstrnfmt(char *buf, uint max, concptr fmt, va_list vp)
         case 'E':
         case 'g':
         case 'G': {
-            auto arg = va_arg(vp, double);
-            snprintf(tmp, sizeof(tmp), aux.data(), arg);
+            if (do_long_double) {
+                auto arg = va_arg(vp, long double);
+                snprintf(tmp, sizeof(tmp), aux.data(), arg);
+            } else {
+                auto arg = va_arg(vp, double);
+                snprintf(tmp, sizeof(tmp), aux.data(), arg);
+            }
             break;
         }
 
