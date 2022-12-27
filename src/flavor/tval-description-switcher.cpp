@@ -79,7 +79,7 @@ static std::pair<std::string, std::string> describe_corpse(const ItemEntity &ite
             ? "& % of #"
             : "& # %";
 #endif
-    return { modstr, basename };
+    return { basename, modstr };
 }
 
 /*!
