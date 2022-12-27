@@ -203,6 +203,20 @@ static std::string describe_non_pet(const PlayerType &player, const MonsterEntit
     return ss.str();
 }
 
+static std::string add_cameleon_name(const MonsterEntity &monster, const BIT_FLAGS mode)
+{
+    if (none_bits(mode, MD_IGNORE_HALLU) || monster.mflag2.has_not(MonsterConstantFlagType::CHAMELEON)) {
+        return "";
+    }
+
+    const auto &monrace = monraces_info[monster.ap_r_idx];
+    if (monrace.kind_flags.has(MonsterKindType::UNIQUE)) {
+        return _("(カメレオンの王)", "(Chameleon Lord)");
+    }
+
+    return _("(カメレオン)", "(Chameleon)");
+}
+
 /*!
  * @brief モンスターの呼称を作成する / Build a string describing a monster in some way.
  * @param m_ptr モンスターの参照ポインタ
@@ -238,21 +252,12 @@ std::string monster_desc(PlayerType *player_ptr, MonsterEntity *m_ptr, BIT_FLAGS
         ss << _("(乗馬中)", "(riding)");
     }
 
-    if ((mode & MD_IGNORE_HALLU) && m_ptr->mflag2.has(MonsterConstantFlagType::CHAMELEON)) {
-        const auto &monrace = monraces_info[m_ptr->ap_r_idx];
-        if (monrace.kind_flags.has(MonsterKindType::UNIQUE)) {
-            ss << _("(カメレオンの王)", "(Chameleon Lord)");
-        } else {
-            ss << _("(カメレオン)", "(Chameleon)");
-        }
-    }
-
-    if ((mode & MD_IGNORE_HALLU) && !m_ptr->is_original_ap()) {
+    ss << add_cameleon_name(*m_ptr, mode);
+    if (any_bits(mode, MD_IGNORE_HALLU) && !m_ptr->is_original_ap()) {
         ss << "(" << monraces_info[m_ptr->r_idx].name << ")";
     }
 
-    /* Handle the Possessive as a special afterthought */
-    if (mode & MD_POSSESSIVE) {
+    if (any_bits(mode, MD_POSSESSIVE)) {
         ss << _("の", "'s");
     }
 
