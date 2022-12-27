@@ -169,20 +169,30 @@ static std::string replace_monster_name_undefined(std::string_view name)
 }
 #endif
 
+static std::optional<std::string> get_fake_monster_name(const PlayerType &player, const MonsterEntity &monster, const std::string &name, const BIT_FLAGS mode)
+{
+    const auto &monrace = monraces_info[monster.ap_r_idx];
+    const auto is_hallucinated = player.effects()->hallucination()->is_hallucinated();
+    if (monrace.kind_flags.has_not(MonsterKindType::UNIQUE) || (is_hallucinated && none_bits(mode, MD_IGNORE_HALLU))) {
+        return std::nullopt;
+    }
+
+    if (monster.mflag2.has(MonsterConstantFlagType::CHAMELEON) && none_bits(mode, MD_TRUE_NAME)) {
+        return _(replace_monster_name_undefined(name), format("%s?", name.data()));
+    }
+
+    if (player.phase_out && !(player.riding && (&player.current_floor_ptr->m_list[player.riding] == &monster))) {
+        return format(_("%sもどき", "fake %s"), name.data());
+    }
+
+    return name;
+}
+
 static std::string describe_non_pet(const PlayerType &player, const MonsterEntity &monster, const std::string &name, const BIT_FLAGS mode)
 {
-    const auto is_hallucinated = player.effects()->hallucination()->is_hallucinated();
-    const auto &monrace = monraces_info[monster.ap_r_idx];
-    if (monrace.kind_flags.has(MonsterKindType::UNIQUE) && !(is_hallucinated && none_bits(mode, MD_IGNORE_HALLU))) {
-        if (monster.mflag2.has(MonsterConstantFlagType::CHAMELEON) && !(mode & MD_TRUE_NAME)) {
-            return _(replace_monster_name_undefined(name), format("%s?", name.data()));
-        }
-
-        if (player.phase_out && !(player.riding && (&player.current_floor_ptr->m_list[player.riding] == &monster))) {
-            return format(_("%sもどき", "fake %s"), name.data());
-        }
-
-        return name;
+    const auto fake_name = get_fake_monster_name(player, monster, name, mode);
+    if (fake_name.has_value()) {
+        return fake_name.value();
     }
 
     if (any_bits(mode, MD_INDEF_VISIBLE)) {
