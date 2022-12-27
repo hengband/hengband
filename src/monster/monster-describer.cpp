@@ -20,6 +20,24 @@
 #include <string>
 #include <string_view>
 
+// @todo 性別をEnumFlags に切り替えたら引数の型も変えること.
+static int get_monster_pronoun_kind(const MonsterRaceInfo &monrace, const bool pron)
+{
+    if (!pron) {
+        return 0x00;
+    }
+
+    if (any_bits(monrace.flags1, RF1_FEMALE)) {
+        return 0x20;
+    }
+
+    if (any_bits(monrace.flags1, RF1_MALE)) {
+        return 0x10;
+    }
+
+    return 0x00;
+}
+
 static std::string get_monster_personal_pronoun(const int kind, const BIT_FLAGS mode)
 {
     switch (kind + (mode & (MD_INDEF_HIDDEN | MD_POSSESSIVE | MD_OBJECTIVE))) {
@@ -85,17 +103,7 @@ static std::optional<std::string> decide_monster_personal_pronoun(const MonsterE
     }
 
     const auto &monrace = monraces_info[monster.ap_r_idx];
-    auto kind = 0x00;
-    if (any_bits(monrace.flags1, RF1_FEMALE)) {
-        kind = 0x20;
-    } else if (any_bits(monrace.flags1, RF1_MALE)) {
-        kind = 0x10;
-    }
-
-    if (!pron) {
-        kind = 0x00;
-    }
-
+    const auto kind = get_monster_pronoun_kind(monrace, pron);
     return get_monster_personal_pronoun(kind, mode);
 }
 
