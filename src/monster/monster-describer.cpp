@@ -172,7 +172,7 @@ std::string monster_desc(PlayerType *player_ptr, MonsterEntity *m_ptr, BIT_FLAGS
             desc = format("%s？", name.data());
         }
 #else
-        desc = format("%s?", name);
+        desc = format("%s?", name.data());
 #endif
     } else {
         if (r_ptr->kind_flags.has(MonsterKindType::UNIQUE) && !(is_hallucinated && !(mode & MD_IGNORE_HALLU))) {
@@ -186,7 +186,7 @@ std::string monster_desc(PlayerType *player_ptr, MonsterEntity *m_ptr, BIT_FLAGS
                     desc = format("%s？", name.data());
                 }
 #else
-                desc = format("%s?", name);
+                desc = format("%s?", name.data());
 #endif
             } else if (player_ptr->phase_out && !(player_ptr->riding && (&floor_ptr->m_list[player_ptr->riding] == m_ptr))) {
                 desc = format(_("%sもどき", "fake %s"), name.data());
