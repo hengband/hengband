@@ -104,7 +104,7 @@ std::string get_table_name_aux()
     ss << get_random_line("aname_j.txt", 2).value();
     return ss.str();
 #else
-    static std::vector<std::string_view> syllables = {
+    static const std::vector<std::string_view> syllables = {
         "a", "ab", "ag", "aks", "ala", "an", "ankh", "app", "arg", "arze", "ash", "aus", "ban", "bar", "bat", "bek",
         "bie", "bin", "bit", "bjor", "blu", "bot", "bu", "byt", "comp", "con", "cos", "cre", "dalf", "dan", "den", "der", "doe", "dok", "eep", "el", "eng",
         "er", "ere", "erk", "esh", "evs", "fa", "fid", "flit", "for", "fri", "fu", "gan", "gar", "glen", "gop", "gre", "ha", "he", "hyd", "i", "ing", "ion",

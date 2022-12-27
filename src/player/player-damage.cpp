@@ -482,19 +482,23 @@ int take_hit(PlayerType *player_ptr, int damage_type, int damage, concptr hit_fr
                 }
 
                 auto &death_message = opt_death_message.value();
+                constexpr auto max_last_words = 1024;
+                char player_last_words[max_last_words]{};
+                angband_strcpy(player_last_words, death_message.data(), max_last_words);
                 do {
 #ifdef JP
-                    while (!get_string(winning_seppuku ? "辞世の句: " : "断末魔の叫び: ", death_message.data(), death_message.length())) {
+                    while (!get_string(winning_seppuku ? "辞世の句: " : "断末魔の叫び: ", player_last_words, max_last_words)) {
                         ;
                     }
 #else
-                    while (!get_string("Last words: ", death_message.data(), 1024)) {
+                    while (!get_string("Last words: ", player_last_words, max_last_words)) {
                         ;
                     }
 #endif
                 } while (winning_seppuku && !get_check_strict(player_ptr, _("よろしいですか？", "Are you sure? "), CHECK_NO_HISTORY));
 
-                if (death_message[0] == '\0') {
+                death_message = player_last_words;
+                if (death_message.empty()) {
 #ifdef JP
                     death_message = format("あなたは%sました。", android ? "壊れ" : "死に");
 #else

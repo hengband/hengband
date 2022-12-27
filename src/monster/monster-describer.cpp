@@ -29,19 +29,15 @@ std::string monster_desc(PlayerType *player_ptr, MonsterEntity *m_ptr, BIT_FLAGS
 {
     MonsterRaceInfo *r_ptr;
     r_ptr = &monraces_info[m_ptr->ap_r_idx];
-    std::string_view name = (mode & MD_TRUE_NAME) ? m_ptr->get_real_r_ref().name : r_ptr->name;
-    std::optional<std::string> silly_name;
-    bool named = false;
+    std::string name((mode & MD_TRUE_NAME) ? m_ptr->get_real_r_ref().name : r_ptr->name);
     auto is_hallucinated = player_ptr->effects()->hallucination()->is_hallucinated();
     if (is_hallucinated && !(mode & MD_IGNORE_HALLU)) {
+        std::optional<std::string> silly_name{};
         if (one_in_(2)) {
             silly_name = get_random_line(_("silly_j.txt", "silly.txt"), enum2i(m_ptr->r_idx));
-            if (silly_name.has_value()) {
-                named = true;
-            }
         }
 
-        if (!named) {
+        if (!silly_name.has_value()) {
             MonsterRaceInfo *hallu_race;
 
             do {
@@ -52,7 +48,7 @@ std::string monster_desc(PlayerType *player_ptr, MonsterEntity *m_ptr, BIT_FLAGS
             silly_name = hallu_race->name;
         }
 
-        name = silly_name.value();
+        name = std::move(silly_name.value());
     }
 
     bool seen = (m_ptr && ((mode & MD_ASSUME_VISIBLE) || (!(mode & MD_ASSUME_HIDDEN) && m_ptr->ml)));
@@ -168,15 +164,12 @@ std::string monster_desc(PlayerType *player_ptr, MonsterEntity *m_ptr, BIT_FLAGS
     std::string desc;
     if (m_ptr->is_pet() && !m_ptr->is_original_ap()) {
 #ifdef JP
-        std::string buf(name);
-        auto *t = buf.data();
-        while (strncmp(t, "』", 2) && *t) {
-            t++;
-        }
-        if (*t) {
-            desc = format("%s？』", name);
+        if (name.ends_with("』")) {
+            constexpr auto ja_char_length = 2;
+            const auto name_without_brackets = name.substr(0, name.length() - ja_char_length);
+            desc = format("%s？』", name_without_brackets.data());
         } else {
-            desc = format("%s？", name);
+            desc = format("%s？", name.data());
         }
 #else
         desc = format("%s?", name);
@@ -185,21 +178,18 @@ std::string monster_desc(PlayerType *player_ptr, MonsterEntity *m_ptr, BIT_FLAGS
         if (r_ptr->kind_flags.has(MonsterKindType::UNIQUE) && !(is_hallucinated && !(mode & MD_IGNORE_HALLU))) {
             if (m_ptr->mflag2.has(MonsterConstantFlagType::CHAMELEON) && !(mode & MD_TRUE_NAME)) {
 #ifdef JP
-                std::string buf(name);
-                auto *t = buf.data();
-                while (strncmp(t, "』", 2) && *t) {
-                    t++;
-                }
-                if (*t) {
-                    desc = format("%s？』", name);
+                if (name.ends_with("』")) {
+                    constexpr auto ja_char_length = 2;
+                    const auto name_without_brackets = name.substr(0, name.length() - ja_char_length);
+                    desc = format("%s？』", name_without_brackets.data());
                 } else {
-                    desc = format("%s？", name);
+                    desc = format("%s？", name.data());
                 }
 #else
                 desc = format("%s?", name);
 #endif
             } else if (player_ptr->phase_out && !(player_ptr->riding && (&floor_ptr->m_list[player_ptr->riding] == m_ptr))) {
-                desc = format(_("%sもどき", "fake %s"), name);
+                desc = format(_("%sもどき", "fake %s"), name.data());
             } else {
                 desc = name;
             }

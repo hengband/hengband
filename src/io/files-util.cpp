@@ -24,6 +24,7 @@
 #include "term/z-form.h"
 #include "util/angband-files.h"
 #include "view/display-messages.h"
+#include <algorithm>
 
 concptr ANGBAND_DIR; //!< Path name: The main "lib" directory This variable is not actually used anywhere in the code
 concptr ANGBAND_DIR_APEX; //!< High score files (binary) These files may be portable between platforms
@@ -143,7 +144,7 @@ std::optional<std::string> get_random_line(concptr file_name, int entry)
     }
 
     auto counter = 0;
-    std::string line{};
+    std::optional<std::string> line{};
     while (true) {
         char buf[1024];
         while (true) {
@@ -172,11 +173,7 @@ std::optional<std::string> get_random_line(concptr file_name, int entry)
     }
 
     angband_fclose(fp);
-    if (counter > 0) {
-        return line;
-    }
-
-    return std::nullopt;
+    return line;
 }
 
 #ifdef JP
@@ -198,8 +195,8 @@ std::optional<std::string> get_random_line_ja_only(concptr file_name, int entry,
         }
 
         auto is_kanji = false;
-        for (auto c = line.value().data(); *c != '\0'; c++) {
-            is_kanji |= iskanji(*c);
+        for (const auto c : line.value()) {
+            is_kanji |= iskanji(c);
         }
 
         if (is_kanji) {

@@ -101,12 +101,12 @@ void display_rumor(PlayerType *player_ptr, bool ex)
 #endif
     std::string rumor;
     if (opt_rumor.has_value()) {
-        rumor = opt_rumor.value().data();
+        rumor = std::move(opt_rumor.value());
     } else {
         rumor = _("嘘の噂もある。", "Some rumors are wrong.");
     }
 
-    if (strncmp(rumor.data(), "R:", 2) != 0) {
+    if (!rumor.starts_with("R:")) {
         msg_print(rumor);
         return;
     }
