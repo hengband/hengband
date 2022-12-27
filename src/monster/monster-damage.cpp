@@ -339,7 +339,7 @@ void MonsterDamageProcessor::dying_scream(std::string_view m_name)
 
     const auto death_mes = get_random_line(_("mondeath_j.txt", "mondeath.txt"), enum2i(m_ptr->r_idx));
     if (death_mes.has_value()) {
-        msg_format("%^s %s", m_name, death_mes->data());
+        msg_format("%^s %s", m_name.data(), death_mes->data());
     }
 
 #ifdef WORLD_SCORE
