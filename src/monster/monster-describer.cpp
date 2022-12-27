@@ -17,6 +17,7 @@
 #include "util/string-processor.h"
 #include "view/display-messages.h"
 #include <optional>
+#include <sstream>
 #include <string>
 #include <string_view>
 
@@ -222,40 +223,40 @@ std::string monster_desc(PlayerType *player_ptr, MonsterEntity *m_ptr, BIT_FLAGS
 
     const auto is_hallucinated = player_ptr->effects()->hallucination()->is_hallucinated();
     const auto name = get_describing_monster_name(*m_ptr, is_hallucinated, mode);
-    std::string desc;
+    std::stringstream ss;
     if (m_ptr->is_pet() && !m_ptr->is_original_ap()) {
-        desc = _(replace_monster_name_undefined(name), format("%s?", name.data()));
+        ss << _(replace_monster_name_undefined(name), format("%s?", name.data()));
     } else {
-        desc = describe_non_pet(*player_ptr, *m_ptr, name, mode);
+        ss << describe_non_pet(*player_ptr, *m_ptr, name, mode);
     }
 
     if (m_ptr->is_named()) {
-        desc.append(_("「", " called ")).append(m_ptr->nickname).append(_("」", ""));
+        ss << _("「", " called ") << m_ptr->nickname << _("」", "");
     }
 
     if (player_ptr->riding && (&player_ptr->current_floor_ptr->m_list[player_ptr->riding] == m_ptr)) {
-        desc.append(_("(乗馬中)", "(riding)"));
+        ss << _("(乗馬中)", "(riding)");
     }
 
     if ((mode & MD_IGNORE_HALLU) && m_ptr->mflag2.has(MonsterConstantFlagType::CHAMELEON)) {
         const auto &monrace = monraces_info[m_ptr->ap_r_idx];
         if (monrace.kind_flags.has(MonsterKindType::UNIQUE)) {
-            desc.append(_("(カメレオンの王)", "(Chameleon Lord)"));
+            ss << _("(カメレオンの王)", "(Chameleon Lord)");
         } else {
-            desc.append(_("(カメレオン)", "(Chameleon)"));
+            ss << _("(カメレオン)", "(Chameleon)");
         }
     }
 
     if ((mode & MD_IGNORE_HALLU) && !m_ptr->is_original_ap()) {
-        desc.append("(").append(monraces_info[m_ptr->r_idx].name).append(")");
+        ss << "(" << monraces_info[m_ptr->r_idx].name << ")";
     }
 
     /* Handle the Possessive as a special afterthought */
     if (mode & MD_POSSESSIVE) {
-        desc.append(_("の", "'s"));
+        ss << _("の", "'s");
     }
 
-    return desc;
+    return ss.str();
 }
 
 /*!
