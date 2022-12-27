@@ -95,6 +95,8 @@
 #include "window/display-sub-windows.h"
 #include "wizard/cmd-wizard.h"
 #include "world/world.h"
+#include <optional>
+#include <string>
 
 /*!
  * @brief ウィザードモードへの導入処理
@@ -681,10 +683,10 @@ void process_command(PlayerType *player_ptr)
             flush();
         }
         if (one_in_(2)) {
-            char error_m[1024];
             sound(SOUND_ILLEGAL);
-            if (!get_rnd_line(_("error_j.txt", "error.txt"), 0, error_m)) {
-                msg_print(error_m);
+            const auto error_mes = get_random_line(_("error_j.txt", "error.txt"), 0);
+            if (error_mes.has_value()) {
+                msg_print(error_mes.value());
             }
         } else {
             prt(_(" '?' でヘルプが表示されます。", "Type '?' for help."), 0, 0);

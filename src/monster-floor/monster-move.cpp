@@ -536,15 +536,14 @@ void process_speak_sound(PlayerType *player_ptr, MONSTER_IDX m_idx, POSITION oy,
     }
 
     const auto m_name = m_ptr->ml ? monster_desc(player_ptr, m_ptr, 0) : std::string(_("それ", "It"));
-    char monmessage[1024];
-
     auto filename = get_speak_filename(m_ptr);
     if (filename.empty()) {
         return;
     }
 
-    if (get_rnd_line(filename.data(), enum2i(m_ptr->ap_r_idx), monmessage) == 0) {
-        msg_format(_("%^s%s", "%^s %s"), m_name.data(), monmessage);
+    const auto monmessage = get_random_line(filename.data(), enum2i(m_ptr->ap_r_idx));
+    if (monmessage.has_value()) {
+        msg_format(_("%^s%s", "%^s %s"), m_name.data(), monmessage->data());
     }
 }
 
