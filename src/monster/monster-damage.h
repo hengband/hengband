@@ -33,10 +33,10 @@ private:
     bool check_combined_unique(const MonsterRaceId r_idx, std::vector<MonsterRaceId> *combined_uniques);
     void death_combined_uniques(const MonsterRaceId r_idx, const combined_uniques &combined_uniques);
     void increase_kill_numbers();
-    void death_amberites(concptr m_name);
-    void dying_scream(concptr m_name);
-    void show_kill_message(concptr note, concptr m_name);
-    void show_bounty_message(concptr m_name);
+    void death_amberites(std::string_view m_name);
+    void dying_scream(std::string_view m_name);
+    void show_kill_message(concptr note, std::string_view m_name);
+    void show_bounty_message(std::string_view m_name);
     void set_redraw();
     void summon_special_unique();
     void add_monster_fear();

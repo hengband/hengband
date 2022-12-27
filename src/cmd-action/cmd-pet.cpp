@@ -106,8 +106,8 @@ void do_cmd_pet_dismiss(PlayerType *player_ptr)
         auto pet_ctr = who[i];
         m_ptr = &player_ptr->current_floor_ptr->m_list[pet_ctr];
 
-        bool delete_this = false;
-        bool kakunin = (pet_ctr == player_ptr->riding) || m_ptr->is_named();
+        auto delete_this = false;
+        auto should_ask = (pet_ctr == player_ptr->riding) || m_ptr->is_named();
         const auto friend_name = monster_desc(player_ptr, m_ptr, MD_ASSUME_VISIBLE);
 
         if (!all_pets) {
@@ -127,7 +127,7 @@ void do_cmd_pet_dismiss(PlayerType *player_ptr)
                 if (ch == 'Y' || ch == 'y') {
                     delete_this = true;
 
-                    if (kakunin) {
+                    if (should_ask) {
                         msg_format(_("本当によろしいですか？ (%s) ", "Are you sure? (%s) "), friend_name.data());
                         ch = inkey();
                         if (ch != 'Y' && ch != 'y') {
@@ -150,7 +150,7 @@ void do_cmd_pet_dismiss(PlayerType *player_ptr)
             }
         }
 
-        if ((all_pets && !kakunin) || (!all_pets && delete_this)) {
+        if ((all_pets && !should_ask) || (!all_pets && delete_this)) {
             if (record_named_pet && m_ptr->is_named()) {
                 const auto m_name = monster_desc(player_ptr, m_ptr, MD_INDEF_VISIBLE);
                 exe_write_diary(player_ptr, DIARY_NAMED_PET, RECORD_NAMED_PET_DISMISS, m_name.data());
