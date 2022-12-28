@@ -70,7 +70,7 @@ void select_mutation_racial(PlayerType *player_ptr, rc_type *rc_ptr)
 
     if (player_ptr->muta.has(PlayerMutationType::MIND_BLST)) {
         rpi = rpi_type(_("精神攻撃", "Mind Blast"));
-        rpi.info = format("%s%dd%", KWD_DAM, 3 + (rc_ptr->lvl - 1) / 5, 3);
+        rpi.info = format("%s%dd%d", KWD_DAM, 3 + (rc_ptr->lvl - 1) / 5, 3);
         rpi.text = _("モンスター1体に精神攻撃を行う。", "Deals a PSI damage to a monster.");
         rpi.min_level = 5;
         rpi.cost = 3;

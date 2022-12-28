@@ -61,7 +61,7 @@ void roff_top(MonsterRaceId r_idx)
 
     if (w_ptr->wizard || cheat_know) {
         term_addstr(-1, TERM_WHITE, "[");
-        term_addstr(-1, TERM_L_BLUE, format("%d", r_idx));
+        term_addstr(-1, TERM_L_BLUE, format("%d", static_cast<int>(r_idx)));
         term_addstr(-1, TERM_WHITE, "] ");
     }
 
@@ -207,16 +207,16 @@ static void display_number_of_nazguls(lore_type *lore_ptr)
     int killed = lore_ptr->r_ptr->r_akills;
     if (remain == 0) {
 #ifdef JP
-        hooked_roff(format("%sはかつて %ld 体存在した。", Who::who(lore_ptr->msex, (killed > 1)), killed));
+        hooked_roff(format("%sはかつて %d 体存在した。", Who::who(lore_ptr->msex, (killed > 1)), killed));
 #else
-        hooked_roff(format("You already killed all %ld of %s.  ", killed, Who::whom(lore_ptr->msex, (killed > 1))));
+        hooked_roff(format("You already killed all %d of %s.  ", killed, Who::whom(lore_ptr->msex, (killed > 1))));
 #endif
     } else {
 #ifdef JP
-        hooked_roff(format("%sはまだ %ld 体生きている。", Who::who(lore_ptr->msex, (remain + killed > 1)), remain));
+        hooked_roff(format("%sはまだ %d 体生きている。", Who::who(lore_ptr->msex, (remain + killed > 1)), remain));
 #else
         concptr be = (remain > 1) ? "are" : "is";
-        hooked_roff(format("%ld of %s %s still alive.  ", remain, Who::whom(lore_ptr->msex, (remain + killed > 1)), be));
+        hooked_roff(format("%d of %s %s still alive.  ", remain, Who::whom(lore_ptr->msex, (remain + killed > 1)), be));
 #endif
     }
 }

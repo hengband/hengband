@@ -346,11 +346,11 @@ static void wiz_display_item(PlayerType *player_ptr, ItemEntity *o_ptr)
     auto line = 4;
     const auto &bi_key = o_ptr->bi_key;
     const auto item_level = baseitems_info[o_ptr->bi_id].level;
-    prt(format("kind = %-5d  level = %-4d  tval = %-5d  sval = %-5d", o_ptr->bi_id, item_level, bi_key.tval(), bi_key.sval().value()), line, j);
+    prt(format("kind = %-5d  level = %-4d  tval = %-5d  sval = %-5d", o_ptr->bi_id, item_level, static_cast<int>(bi_key.tval()), bi_key.sval().value()), line, j);
     prt(format("number = %-3d  wgt = %-6d  ac = %-5d    damage = %dd%d", o_ptr->number, o_ptr->weight, o_ptr->ac, o_ptr->dd, o_ptr->ds), ++line, j);
     prt(format("pval = %-5d  toac = %-5d  tohit = %-4d  todam = %-4d", o_ptr->pval, o_ptr->to_a, o_ptr->to_h, o_ptr->to_d), ++line, j);
-    prt(format("fixed_artifact_idx = %-4d  ego_idx = %-4d  cost = %ld", o_ptr->fixed_artifact_idx, o_ptr->ego_idx, object_value_real(o_ptr)), ++line, j);
-    prt(format("ident = %04x  activation_id = %-4d  timeout = %-d", o_ptr->ident, o_ptr->activation_id, o_ptr->timeout), ++line, j);
+    prt(format("fixed_artifact_idx = %-4d  ego_idx = %-4d  cost = %ld", static_cast<int>(o_ptr->fixed_artifact_idx), o_ptr->ego_idx, static_cast<long>(object_value_real(o_ptr))), ++line, j);
+    prt(format("ident = %04x  activation_id = %-4d  timeout = %-d", o_ptr->ident, static_cast<int>(o_ptr->activation_id), o_ptr->timeout), ++line, j);
     prt(format("chest_level = %-4d  fuel = %-d", o_ptr->chest_level, o_ptr->fuel), ++line, j);
     prt(format("smith_hit = %-4d  smith_damage = %-4d", o_ptr->smith_hit, o_ptr->smith_damage), ++line, j);
     prt(format("cursed  = %-d  captured_monster_speed = %-4d", o_ptr->curse_flags, o_ptr->captured_monster_speed), ++line, j);
