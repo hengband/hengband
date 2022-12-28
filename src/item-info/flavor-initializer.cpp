@@ -1,7 +1,13 @@
-﻿#include "item-info/item-initializer.h"
-#include "world/world.h"
-#include "system/baseitem-info.h"
+﻿/*!
+ * @brief アイテムのフレーバー初期化 (未鑑定名のシャッフル処理)
+ * @author Hourier
+ * @date 2022/12/28
+ */
+
+#include "item-info/flavor-initializer.h"
 #include "object/tval-types.h"
+#include "system/baseitem-info.h"
+#include "world/world.h"
 
 /*!
  * @brief ベースアイテムの未確定名を共通tval間でシャッフルする / Shuffle flavor indices of a group of objects with given tval
@@ -32,9 +38,8 @@ static void shuffle_flavors(ItemKindType tval)
 
 /*!
  * @brief ゲーム開始時に行われるベースアイテムの初期化ルーチン
- * @param なし
  */
-void flavor_init(void)
+void flavor_init()
 {
     const auto state_backup = w_ptr->rng.get_state();
     w_ptr->rng.set_state(w_ptr->seed_flavor);
@@ -64,6 +69,6 @@ void flavor_init(void)
             baseitem.aware = true;
         }
 
-        baseitem.easy_know = object_easy_know(baseitem.idx);
+        baseitem.decide_easy_know();
     }
 }
