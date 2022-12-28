@@ -40,7 +40,7 @@ static bool try_melee_spell(PlayerType *player_ptr, melee_spell_type *ms_ptr)
 
     disturb(player_ptr, true, true);
     if (ms_ptr->see_m) {
-        msg_format(_("%^sは呪文を唱えようとしたが失敗した。", "%^s tries to cast a spell, but fails."), ms_ptr->m_name);
+        msg_format(_("%s^は呪文を唱えようとしたが失敗した。", "%s^ tries to cast a spell, but fails."), ms_ptr->m_name);
     }
 
     return true;
@@ -53,7 +53,7 @@ static bool disturb_melee_spell(PlayerType *player_ptr, melee_spell_type *ms_ptr
     }
 
     if (ms_ptr->see_m) {
-        msg_format(_("反魔法バリアが%^sの呪文をかき消した。", "Anti magic barrier cancels the spell which %^s casts."), ms_ptr->m_name);
+        msg_format(_("反魔法バリアが%s^の呪文をかき消した。", "Anti magic barrier cancels the spell which %s^ casts."), ms_ptr->m_name);
     }
 
     return true;

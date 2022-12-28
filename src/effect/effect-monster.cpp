@@ -185,7 +185,7 @@ static void effect_damage_killed_pet(PlayerType *player_ptr, effect_monster_type
     if (em_ptr->known && em_ptr->note) {
         angband_strcpy(em_ptr->m_name, monster_desc(player_ptr, em_ptr->m_ptr, MD_TRUE_NAME).data(), sizeof(em_ptr->m_name));
         if (em_ptr->see_s_msg) {
-            msg_format("%^s%s", em_ptr->m_name, em_ptr->note);
+            msg_format("%s^%s", em_ptr->m_name, em_ptr->note);
         } else {
             player_ptr->current_floor_ptr->monster_noise = true;
         }
@@ -210,7 +210,7 @@ static void effect_damage_killed_pet(PlayerType *player_ptr, effect_monster_type
 static void effect_damage_makes_sleep(PlayerType *player_ptr, effect_monster_type *em_ptr)
 {
     if (em_ptr->note && em_ptr->seen_msg) {
-        msg_format("%^s%s", em_ptr->m_name, em_ptr->note);
+        msg_format("%s^%s", em_ptr->m_name, em_ptr->note);
     } else if (em_ptr->see_s_msg) {
         const auto pain_message = MonsterPainDescriber(player_ptr, em_ptr->g_ptr->m_idx).describe(em_ptr->dam);
         if (!pain_message.empty()) {
@@ -303,7 +303,7 @@ static bool deal_effect_damage_from_player(PlayerType *player_ptr, effect_monste
     }
 
     if (em_ptr->note && em_ptr->seen) {
-        msg_format(_("%s%s", "%^s%s"), em_ptr->m_name, em_ptr->note);
+        msg_format(_("%s%s", "%s^%s"), em_ptr->m_name, em_ptr->note);
     } else if (em_ptr->known && (em_ptr->dam || !em_ptr->do_fear)) {
         const auto pain_message = MonsterPainDescriber(player_ptr, em_ptr->g_ptr->m_idx).describe(em_ptr->dam);
         if (!pain_message.empty()) {
@@ -317,7 +317,7 @@ static bool deal_effect_damage_from_player(PlayerType *player_ptr, effect_monste
 
     if ((fear || em_ptr->do_fear) && em_ptr->seen) {
         sound(SOUND_FLEE);
-        msg_format(_("%^sは恐怖して逃げ出した！", "%^s flees in terror!"), em_ptr->m_name);
+        msg_format(_("%s^は恐怖して逃げ出した！", "%s^ flees in terror!"), em_ptr->m_name);
     }
 
     return false;

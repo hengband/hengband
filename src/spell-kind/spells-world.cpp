@@ -110,11 +110,11 @@ void teleport_level(PlayerType *player_ptr, MONSTER_IDX m_idx)
     if ((ironman_downward && (m_idx <= 0)) || (floor_ref.dun_level <= dungeons_info[player_ptr->dungeon_idx].mindepth)) {
 #ifdef JP
         if (see_m) {
-            msg_format("%^sは床を突き破って沈んでいく。", m_name.data());
+            msg_format("%s^は床を突き破って沈んでいく。", m_name.data());
         }
 #else
         if (see_m) {
-            msg_format("%^s sink%s through the floor.", m_name.data(), (m_idx <= 0) ? "" : "s");
+            msg_format("%s^ sink%s through the floor.", m_name.data(), (m_idx <= 0) ? "" : "s");
         }
 #endif
         if (m_idx <= 0) {
@@ -144,11 +144,11 @@ void teleport_level(PlayerType *player_ptr, MONSTER_IDX m_idx)
     } else if (inside_quest(quest_number(player_ptr, floor_ref.dun_level)) || (floor_ref.dun_level >= dungeons_info[player_ptr->dungeon_idx].maxdepth)) {
 #ifdef JP
         if (see_m) {
-            msg_format("%^sは天井を突き破って宙へ浮いていく。", m_name.data());
+            msg_format("%s^は天井を突き破って宙へ浮いていく。", m_name.data());
         }
 #else
         if (see_m) {
-            msg_format("%^s rise%s up through the ceiling.", m_name.data(), (m_idx <= 0) ? "" : "s");
+            msg_format("%s^ rise%s up through the ceiling.", m_name.data(), (m_idx <= 0) ? "" : "s");
         }
 #endif
 
@@ -170,11 +170,11 @@ void teleport_level(PlayerType *player_ptr, MONSTER_IDX m_idx)
     } else if (go_up) {
 #ifdef JP
         if (see_m) {
-            msg_format("%^sは天井を突き破って宙へ浮いていく。", m_name.data());
+            msg_format("%s^は天井を突き破って宙へ浮いていく。", m_name.data());
         }
 #else
         if (see_m) {
-            msg_format("%^s rise%s up through the ceiling.", m_name.data(), (m_idx <= 0) ? "" : "s");
+            msg_format("%s^ rise%s up through the ceiling.", m_name.data(), (m_idx <= 0) ? "" : "s");
         }
 #endif
 
@@ -193,11 +193,11 @@ void teleport_level(PlayerType *player_ptr, MONSTER_IDX m_idx)
     } else {
 #ifdef JP
         if (see_m) {
-            msg_format("%^sは床を突き破って沈んでいく。", m_name.data());
+            msg_format("%s^は床を突き破って沈んでいく。", m_name.data());
         }
 #else
         if (see_m) {
-            msg_format("%^s sink%s through the floor.", m_name.data(), (m_idx <= 0) ? "" : "s");
+            msg_format("%s^ sink%s through the floor.", m_name.data(), (m_idx <= 0) ? "" : "s");
         }
 #endif
 
@@ -253,12 +253,12 @@ bool teleport_level_other(PlayerType *player_ptr)
     m_ptr = &player_ptr->current_floor_ptr->m_list[target_m_idx];
     r_ptr = &monraces_info[m_ptr->r_idx];
     const auto m_name = monster_desc(player_ptr, m_ptr, 0);
-    msg_format(_("%^sの足を指さした。", "You gesture at %^s's feet."), m_name.data());
+    msg_format(_("%s^の足を指さした。", "You gesture at %s^'s feet."), m_name.data());
 
     auto has_immune = r_ptr->resistance_flags.has_any_of(RFR_EFF_RESIST_NEXUS_MASK) || r_ptr->resistance_flags.has(MonsterResistanceType::RESIST_TELEPORT);
 
     if (has_immune || (r_ptr->flags1 & RF1_QUESTOR) || (r_ptr->level + randint1(50) > player_ptr->lev + randint1(60))) {
-        msg_format(_("しかし効果がなかった！", "%^s is unaffected!"), m_name.data());
+        msg_format(_("しかし効果がなかった！", "%s^ is unaffected!"), m_name.data());
     } else {
         teleport_level(player_ptr, target_m_idx);
     }

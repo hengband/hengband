@@ -79,7 +79,7 @@ ProcessResult effect_monster_star_heal(PlayerType *player_ptr, effect_monster_ty
 
     if (em_ptr->m_ptr->maxhp < em_ptr->m_ptr->max_maxhp) {
         if (em_ptr->seen_msg) {
-            msg_format(_("%^sの強さが戻った。", "%^s recovers %s vitality."), em_ptr->m_name, em_ptr->m_poss);
+            msg_format(_("%s^の強さが戻った。", "%s^ recovers %s vitality."), em_ptr->m_name, em_ptr->m_poss);
         }
         em_ptr->m_ptr->maxhp = em_ptr->m_ptr->max_maxhp;
     }
@@ -130,7 +130,7 @@ static void effect_monster_old_heal_recovery(PlayerType *player_ptr, effect_mons
 {
     if (em_ptr->m_ptr->get_remaining_stun()) {
         if (em_ptr->seen_msg) {
-            msg_format(_("%^sは朦朧状態から立ち直った。", "%^s is no longer stunned."), em_ptr->m_name);
+            msg_format(_("%s^は朦朧状態から立ち直った。", "%s^ is no longer stunned."), em_ptr->m_name);
         }
 
         (void)set_monster_stunned(player_ptr, em_ptr->g_ptr->m_idx, 0);
@@ -138,7 +138,7 @@ static void effect_monster_old_heal_recovery(PlayerType *player_ptr, effect_mons
 
     if (em_ptr->m_ptr->is_confused()) {
         if (em_ptr->seen_msg) {
-            msg_format(_("%^sは混乱から立ち直った。", "%^s is no longer confused."), em_ptr->m_name);
+            msg_format(_("%s^は混乱から立ち直った。", "%s^ is no longer confused."), em_ptr->m_name);
         }
 
         (void)set_monster_confused(player_ptr, em_ptr->g_ptr->m_idx, 0);
@@ -146,7 +146,7 @@ static void effect_monster_old_heal_recovery(PlayerType *player_ptr, effect_mons
 
     if (em_ptr->m_ptr->is_fearful()) {
         if (em_ptr->seen_msg) {
-            msg_format(_("%^sは勇気を取り戻した。", "%^s recovers %s courage."), em_ptr->m_name, em_ptr->m_poss);
+            msg_format(_("%s^は勇気を取り戻した。", "%s^ recovers %s courage."), em_ptr->m_name, em_ptr->m_poss);
         }
 
         (void)set_monster_monfear(player_ptr, em_ptr->g_ptr->m_idx, 0);

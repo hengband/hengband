@@ -74,19 +74,19 @@ bool genocide_aux(PlayerType *player_ptr, MONSTER_IDX m_idx, int power, bool pla
         bool see_m = is_seen(player_ptr, m_ptr);
         const auto m_name = monster_desc(player_ptr, m_ptr, 0);
         if (see_m) {
-            msg_format(_("%^sには効果がなかった。", "%^s is unaffected."), m_name.data());
+            msg_format(_("%s^には効果がなかった。", "%s^ is unaffected."), m_name.data());
         }
 
         if (m_ptr->is_asleep()) {
             (void)set_monster_csleep(player_ptr, m_idx, 0);
             if (m_ptr->ml) {
-                msg_format(_("%^sが目を覚ました。", "%^s wakes up."), m_name.data());
+                msg_format(_("%s^が目を覚ました。", "%s^ wakes up."), m_name.data());
             }
         }
 
         if (m_ptr->is_friendly() && !m_ptr->is_pet()) {
             if (see_m) {
-                msg_format(_("%sは怒った！", "%^s gets angry!"), m_name.data());
+                msg_format(_("%sは怒った！", "%s^ gets angry!"), m_name.data());
             }
 
             set_hostile(player_ptr, m_ptr);
@@ -98,7 +98,7 @@ bool genocide_aux(PlayerType *player_ptr, MONSTER_IDX m_idx, int power, bool pla
     }
 
     if (player_cast) {
-        take_hit(player_ptr, DAMAGE_GENO, randint1(dam_side), format(_("%^sの呪文を唱えた疲労", "the strain of casting %^s"), spell_name).data());
+        take_hit(player_ptr, DAMAGE_GENO, randint1(dam_side), format(_("%s^の呪文を唱えた疲労", "the strain of casting %s^"), spell_name).data());
     }
 
     move_cursor_relative(player_ptr->y, player_ptr->x);

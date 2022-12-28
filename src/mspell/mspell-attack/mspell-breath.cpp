@@ -30,18 +30,18 @@
 static bool spell_RF4_BREATH_special_message(MonsterRaceId r_idx, AttributeType GF_TYPE, concptr m_name)
 {
     if (r_idx == MonsterRaceId::JAIAN && GF_TYPE == AttributeType::SOUND) {
-        msg_format(_("%^s「ボォエ～～～～～～」", "%^s sings, 'Booooeeeeee'"), m_name);
+        msg_format(_("%s^「ボォエ～～～～～～」", "%s^ sings, 'Booooeeeeee'"), m_name);
         return true;
     }
     if (r_idx == MonsterRaceId::BOTEI && GF_TYPE == AttributeType::SHARDS) {
-        msg_format(_("%^s「ボ帝ビルカッター！！！」", "%^s shouts, 'Boty-Build cutter!!!'"), m_name);
+        msg_format(_("%s^「ボ帝ビルカッター！！！」", "%s^ shouts, 'Boty-Build cutter!!!'"), m_name);
         return true;
     }
     if (r_idx == MonsterRaceId::RAOU && (GF_TYPE == AttributeType::FORCE)) {
         if (one_in_(2)) {
-            msg_format(_("%^s「北斗剛掌波！！」", "%^s says, 'Hokuto Goh-Sho-Ha!!'"), m_name);
+            msg_format(_("%s^「北斗剛掌波！！」", "%s^ says, 'Hokuto Goh-Sho-Ha!!'"), m_name);
         } else {
-            msg_format(_("%^s「受けてみい！！天将奔烈！！！」", "%^s says, 'Tensho-Honretsu!!'"), m_name);
+            msg_format(_("%s^「受けてみい！！天将奔烈！！！」", "%s^ says, 'Tensho-Honretsu!!'"), m_name);
         }
         return true;
     }
@@ -62,13 +62,13 @@ static void message_breath(PlayerType *player_ptr, MONSTER_IDX m_idx, MONSTER_ID
     if (!spell_RF4_BREATH_special_message(m_ptr->r_idx, GF_TYPE, m_name.data())) {
         if (player_ptr->effects()->blindness()->is_blind()) {
             if (mon_to_player || (mon_to_mon && known && see_either)) {
-                msg_format(_("%^sが何かのブレスを吐いた。", "%^s breathes."), m_name.data());
+                msg_format(_("%s^が何かのブレスを吐いた。", "%s^ breathes."), m_name.data());
             }
         } else {
             if (mon_to_player) {
-                msg_format(_("%^sが%^sのブレスを吐いた。", "%^s breathes %^s."), m_name.data(), type_s.data());
+                msg_format(_("%s^が%s^のブレスを吐いた。", "%s^ breathes %s^."), m_name.data(), type_s.data());
             } else if (mon_to_mon && known && see_either) {
-                _(msg_format("%^sが%^sに%^sのブレスを吐いた。", m_name.data(), t_name.data(), type_s.data()), msg_format("%^s breathes %^s at %^s.", m_name.data(), type_s.data(), t_name.data()));
+                _(msg_format("%s^が%s^に%s^のブレスを吐いた。", m_name.data(), t_name.data(), type_s.data()), msg_format("%s^ breathes %s^ at %s^.", m_name.data(), type_s.data(), t_name.data()));
             }
         }
     }

@@ -60,7 +60,7 @@ static void heal_monster_by_melee(PlayerType *player_ptr, mam_type *mam_ptr)
     }
 
     if (mam_ptr->see_m && did_heal) {
-        msg_format(_("%sは体力を回復したようだ。", "%^s appears healthier."), mam_ptr->m_name);
+        msg_format(_("%sは体力を回復したようだ。", "%s^ appears healthier."), mam_ptr->m_name);
     }
 }
 
@@ -98,7 +98,7 @@ static void aura_fire_by_melee(PlayerType *player_ptr, mam_type *mam_ptr)
     }
 
     if (mam_ptr->see_either) {
-        msg_format(_("%^sは突然熱くなった！", "%^s is suddenly very hot!"), mam_ptr->m_name);
+        msg_format(_("%s^は突然熱くなった！", "%s^ is suddenly very hot!"), mam_ptr->m_name);
     }
 
     if (mam_ptr->m_ptr->ml && is_original_ap_and_seen(player_ptr, mam_ptr->t_ptr)) {
@@ -123,7 +123,7 @@ static void aura_cold_by_melee(PlayerType *player_ptr, mam_type *mam_ptr)
     }
 
     if (mam_ptr->see_either) {
-        msg_format(_("%^sは突然寒くなった！", "%^s is suddenly very cold!"), mam_ptr->m_name);
+        msg_format(_("%s^は突然寒くなった！", "%s^ is suddenly very cold!"), mam_ptr->m_name);
     }
 
     if (mam_ptr->m_ptr->ml && is_original_ap_and_seen(player_ptr, mam_ptr->t_ptr)) {
@@ -148,7 +148,7 @@ static void aura_elec_by_melee(PlayerType *player_ptr, mam_type *mam_ptr)
     }
 
     if (mam_ptr->see_either) {
-        msg_format(_("%^sは電撃を食らった！", "%^s gets zapped!"), mam_ptr->m_name);
+        msg_format(_("%s^は電撃を食らった！", "%s^ gets zapped!"), mam_ptr->m_name);
     }
 
     if (mam_ptr->m_ptr->ml && is_original_ap_and_seen(player_ptr, mam_ptr->t_ptr)) {
@@ -205,7 +205,7 @@ static void describe_silly_melee(mam_type *mam_ptr)
     }
 
     strnfmt(temp, sizeof(temp), mam_ptr->act, mam_ptr->t_name);
-    msg_format("%^sは%s", mam_ptr->m_name, temp);
+    msg_format("%s^は%s", mam_ptr->m_name, temp);
 #else
     if (mam_ptr->do_silly_attack) {
         mam_ptr->act = silly_attacks[randint0(MAX_SILLY_ATTACK)];
@@ -214,7 +214,7 @@ static void describe_silly_melee(mam_type *mam_ptr)
         strnfmt(temp, sizeof(temp), mam_ptr->act, mam_ptr->t_name);
     }
 
-    msg_format("%^s %s", mam_ptr->m_name, temp);
+    msg_format("%s^ %s", mam_ptr->m_name, temp);
 #endif
 }
 

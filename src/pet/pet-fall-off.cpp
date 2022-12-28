@@ -42,7 +42,7 @@ void check_fall_off_horse(PlayerType *player_ptr, MonsterAttackPlayer *monap_ptr
 
     const auto m_steed_name = monster_desc(player_ptr, &player_ptr->current_floor_ptr->m_list[player_ptr->riding], 0);
     if (process_fall_off_horse(player_ptr, (monap_ptr->damage > 200) ? 200 : monap_ptr->damage, false)) {
-        msg_format(_("%^sから落ちてしまった！", "You have fallen from %s."), m_steed_name.data());
+        msg_format(_("%s^から落ちてしまった！", "You have fallen from %s."), m_steed_name.data());
     }
 }
 

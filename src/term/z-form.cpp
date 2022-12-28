@@ -291,12 +291,6 @@ uint vstrnfmt(char *buf, uint max, concptr fmt, va_list vp)
                     s++;
                 }
 
-                /* Handle 'caret' (for "uppercase" request) */
-                else if (*s == '^') {
-                    do_capitalize = true;
-                    s++;
-                }
-
                 /* Collect "normal" characters (digits, "-", "+", ".", etc) */
                 else {
                     aux.push_back(*s++);
@@ -376,6 +370,10 @@ uint vstrnfmt(char *buf, uint max, concptr fmt, va_list vp)
 
         /* String */
         case 's': {
+            if (*s == '^') {
+                do_capitalize = true;
+                ++s;
+            }
             auto arg = va_arg(vp, const char *);
             if (arg == nullptr) {
                 arg = "";

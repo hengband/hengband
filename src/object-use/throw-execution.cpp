@@ -270,7 +270,7 @@ void ObjectThrowEntity::display_potion_throw()
     }
 
     const auto angry_m_name = monster_desc(this->player_ptr, angry_m_ptr, 0);
-    msg_format(_("%sは怒った！", "%^s gets angry!"), angry_m_name.data());
+    msg_format(_("%sは怒った！", "%s^ gets angry!"), angry_m_name.data());
     set_hostile(this->player_ptr, &floor_ptr->m_list[floor_ptr->grid_array[this->y][this->x].m_idx]);
     this->do_drop = false;
 }
@@ -462,7 +462,7 @@ void ObjectThrowEntity::attack_racial_power()
 
     if (fear && this->m_ptr->ml) {
         sound(SOUND_FLEE);
-        msg_format(_("%^sは恐怖して逃げ出した！", "%^s flees in terror!"), this->m_name);
+        msg_format(_("%s^は恐怖して逃げ出した！", "%s^ flees in terror!"), this->m_name);
     }
 }
 

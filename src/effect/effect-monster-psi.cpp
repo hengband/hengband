@@ -90,8 +90,8 @@ static bool reflects_psi_with_currupted_mind(PlayerType *player_ptr, effect_mons
     }
 
     em_ptr->note = nullptr;
-    msg_format(_("%^sの堕落した精神は攻撃を跳ね返した！",
-                   (em_ptr->seen ? "%^s's corrupted mind backlashes your attack!" : "%^ss corrupted mind backlashes your attack!")),
+    msg_format(_("%s^の堕落した精神は攻撃を跳ね返した！",
+                   (em_ptr->seen ? "%s^'s corrupted mind backlashes your attack!" : "%s^s corrupted mind backlashes your attack!")),
         em_ptr->m_name);
     return true;
 }
@@ -215,7 +215,7 @@ ProcessResult effect_monster_psi(PlayerType *player_ptr, effect_monster_type *em
     }
     if (!(los(player_ptr, em_ptr->m_ptr->fy, em_ptr->m_ptr->fx, player_ptr->y, player_ptr->x))) {
         if (em_ptr->seen_msg) {
-            msg_format(_("%sはあなたが見えないので影響されない！", "%^s can't see you, and isn't affected!"), em_ptr->m_name);
+            msg_format(_("%sはあなたが見えないので影響されない！", "%s^ can't see you, and isn't affected!"), em_ptr->m_name);
         }
 
         em_ptr->skipped = true;

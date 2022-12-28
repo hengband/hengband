@@ -385,9 +385,9 @@ static int get_spell(PlayerType *player_ptr, SPELL_IDX *sn, concptr prompt, OBJE
     /* Build a prompt (accept all spells) */
 #ifdef JP
     jverb(prompt, jverb_buf, JVERB_AND);
-    (void)strnfmt(out_val, 78, "(%^s:%c-%c, '*'で一覧, ESCで中断) どの%sを%^sますか? ", p, I2A(0), I2A(num - 1), p, jverb_buf);
+    (void)strnfmt(out_val, 78, "(%s^:%c-%c, '*'で一覧, ESCで中断) どの%sを%s^ますか? ", p, I2A(0), I2A(num - 1), p, jverb_buf);
 #else
-    (void)strnfmt(out_val, 78, "(%^ss %c-%c, *=List, ESC=exit) %^s which %s? ", p, I2A(0), I2A(num - 1), prompt, p);
+    (void)strnfmt(out_val, 78, "(%s^s %c-%c, *=List, ESC=exit) %s^ which %s? ", p, I2A(0), I2A(num - 1), prompt, p);
 #endif
 
     choice = (always_show_list || use_menu) ? ESCAPE : 1;

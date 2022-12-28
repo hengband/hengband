@@ -278,10 +278,10 @@ bool MonsterAttackPlayer::effect_protecion_from_evil()
     }
 
 #ifdef JP
-    this->abbreviate ? msg_format("撃退した。") : msg_format("%^sは撃退された。", this->m_name);
+    this->abbreviate ? msg_format("撃退した。") : msg_format("%s^は撃退された。", this->m_name);
     this->abbreviate = 1; /* 2回目以降は省略 */
 #else
-    msg_format("%^s is repelled.", this->m_name);
+    msg_format("%s^ is repelled.", this->m_name);
 #endif
 
     return true;
@@ -302,17 +302,17 @@ void MonsterAttackPlayer::describe_silly_attacks()
 
 #ifdef JP
     if (this->abbreviate == 0) {
-        msg_format("%^sに%s", this->m_name, this->act);
+        msg_format("%s^に%s", this->m_name, this->act);
     } else if (this->abbreviate == 1) {
         msg_format("%s", this->act);
     } else {
         /* if (this->abbreviate == -1) */
-        msg_format("%^s%s", this->m_name, this->act);
+        msg_format("%s^%s", this->m_name, this->act);
     }
 
     this->abbreviate = 1; /*2回目以降は省略 */
 #else
-    msg_format("%^s %s%s", this->m_name, this->act, this->do_silly_attack ? " you." : "");
+    msg_format("%s^ %s%s", this->m_name, this->act, this->do_silly_attack ? " you." : "");
 #endif
 }
 
@@ -442,12 +442,12 @@ void MonsterAttackPlayer::describe_attack_evasion()
     if (this->abbreviate) {
         msg_format("%sかわした。", is_suiken ? "奇妙な動きで" : "");
     } else {
-        msg_format("%s%^sの攻撃をかわした。", is_suiken ? "奇妙な動きで" : "", this->m_name);
+        msg_format("%s%s^の攻撃をかわした。", is_suiken ? "奇妙な動きで" : "", this->m_name);
     }
 
     this->abbreviate = 1; /* 2回目以降は省略 */
 #else
-    msg_format("%^s misses you.", this->m_name);
+    msg_format("%s^ misses you.", this->m_name);
 #endif
 }
 
@@ -514,7 +514,7 @@ void MonsterAttackPlayer::postprocess_monster_blows()
 
     if (this->m_ptr->ml && this->fear && this->alive && !this->player_ptr->is_dead) {
         sound(SOUND_FLEE);
-        msg_format(_("%^sは恐怖で逃げ出した！", "%^s flees in terror!"), this->m_name);
+        msg_format(_("%s^は恐怖で逃げ出した！", "%s^ flees in terror!"), this->m_name);
     }
 
     PlayerClass(this->player_ptr).break_samurai_stance({ SamuraiStanceType::IAI });

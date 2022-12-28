@@ -200,7 +200,7 @@ std::string MonsterPainDescriber::describe(int dam)
 
     if (dam == 0) {
         if (this->m_ptr->ml) {
-            return format(_("%^sはダメージを受けていない。", "%^s is unharmed."), m_name.data());
+            return format(_("%s^はダメージを受けていない。", "%s^ is unharmed."), m_name.data());
         }
         return "";
     }
@@ -215,7 +215,7 @@ std::string MonsterPainDescriber::describe(int dam)
         }
 
         const auto msg = table.lower_bound(percentage)->second;
-        return format("%^s%s", m_name.data(), msg);
+        return format("%s^%s", m_name.data(), msg);
     }
 
     return "";

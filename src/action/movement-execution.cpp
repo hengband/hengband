@@ -196,7 +196,7 @@ void exe_movement(PlayerType *player_ptr, DIRECTION dir, bool do_pickup, bool br
             } else if (monster_can_cross_terrain(player_ptr, floor_ptr->grid_array[player_ptr->y][player_ptr->x].feat, r_ptr, 0)) {
                 do_past = true;
             } else {
-                msg_format(_("%^sが邪魔だ！", "%^s is in your way!"), m_name.data());
+                msg_format(_("%s^が邪魔だ！", "%s^ is in your way!"), m_name.data());
                 PlayerEnergy(player_ptr).reset_player_turn();
                 can_move = false;
             }
@@ -217,7 +217,7 @@ void exe_movement(PlayerType *player_ptr, DIRECTION dir, bool do_pickup, bool br
             disturb(player_ptr, false, true);
         } else if (riding_m_ptr->is_fearful()) {
             const auto steed_name = monster_desc(player_ptr, riding_m_ptr, 0);
-            msg_format(_("%sが恐怖していて制御できない。", "%^s is too scared to control."), steed_name.data());
+            msg_format(_("%sが恐怖していて制御できない。", "%s^ is too scared to control."), steed_name.data());
             can_move = false;
             disturb(player_ptr, false, true);
         } else if (player_ptr->riding_ryoute) {
