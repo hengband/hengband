@@ -709,11 +709,11 @@ static bool get_element_power(PlayerType *player_ptr, SPELL_IDX *sn, bool only_b
     }
 
     if (only_browse) {
-        (void)strnfmt(out_val, 78, _("(%^s %c-%c, '*'で一覧, ESC) どの%sについて知りますか？", "(%^ss %c-%c, *=List, ESC=exit) Use which %s? "), p, I2A(0),
+        (void)strnfmt(out_val, 78, _("(%s^ %c-%c, '*'で一覧, ESC) どの%sについて知りますか？", "(%s^s %c-%c, *=List, ESC=exit) Use which %s? "), p, I2A(0),
             I2A(num - 1), p);
     } else {
         (void)strnfmt(
-            out_val, 78, _("(%^s %c-%c, '*'で一覧, ESC) どの%sを使いますか？", "(%^ss %c-%c, *=List, ESC=exit) Use which %s? "), p, I2A(0), I2A(num - 1), p);
+            out_val, 78, _("(%s^ %c-%c, '*'で一覧, ESC) どの%sを使いますか？", "(%s^s %c-%c, *=List, ESC=exit) Use which %s? "), p, I2A(0), I2A(num - 1), p);
     }
 
     if (use_menu && !only_browse) {
@@ -1046,7 +1046,7 @@ ProcessResult effect_monster_elemental_genocide(PlayerType *player_ptr, effect_m
 
     if (!b) {
         if (em_ptr->seen_msg) {
-            msg_format(_("%sには効果がなかった。", "%^s is unaffected."), em_ptr->m_name);
+            msg_format(_("%sには効果がなかった。", "%s^ is unaffected."), em_ptr->m_name);
         }
         em_ptr->dam = 0;
         return ProcessResult::PROCESS_TRUE;
@@ -1054,7 +1054,7 @@ ProcessResult effect_monster_elemental_genocide(PlayerType *player_ptr, effect_m
 
     if (genocide_aux(player_ptr, em_ptr->g_ptr->m_idx, em_ptr->dam, !em_ptr->who, (em_ptr->r_ptr->level + 1) / 2, _("モンスター消滅", "Genocide One"))) {
         if (em_ptr->seen_msg) {
-            msg_format(_("%sは消滅した！", "%^s disappeared!"), em_ptr->m_name);
+            msg_format(_("%sは消滅した！", "%s^ disappeared!"), em_ptr->m_name);
         }
         em_ptr->dam = 0;
         chg_virtue(player_ptr, V_VITALITY, -1);

@@ -264,7 +264,7 @@ bool earthquake(PlayerType *player_ptr, POSITION cy, POSITION cx, POSITION r, MO
 
             const auto m_name = monster_desc(player_ptr, m_ptr, 0);
             if (!ignore_unview || is_seen(player_ptr, m_ptr)) {
-                msg_format(_("%^sは苦痛で泣きわめいた！", "%^s wails out in pain!"), m_name.data());
+                msg_format(_("%s^は苦痛で泣きわめいた！", "%s^ wails out in pain!"), m_name.data());
             }
 
             damage = (sn ? damroll(4, 8) : (m_ptr->hp + 1));
@@ -272,7 +272,7 @@ bool earthquake(PlayerType *player_ptr, POSITION cy, POSITION cx, POSITION r, MO
             m_ptr->hp -= damage;
             if (m_ptr->hp < 0) {
                 if (!ignore_unview || is_seen(player_ptr, m_ptr)) {
-                    msg_format(_("%^sは岩石に埋もれてしまった！", "%^s is embedded in the rock!"), m_name.data());
+                    msg_format(_("%s^は岩石に埋もれてしまった！", "%s^ is embedded in the rock!"), m_name.data());
                 }
 
                 if (gg_ptr->m_idx) {

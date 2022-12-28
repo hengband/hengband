@@ -1,6 +1,7 @@
 ﻿#pragma once
 
 #include "system/angband.h"
+#include <concepts>
 #include <string_view>
 
 /*

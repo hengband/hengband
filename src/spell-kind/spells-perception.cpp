@@ -132,7 +132,7 @@ bool ident_spell(PlayerType *player_ptr, bool only_equip)
     GAME_TEXT o_name[MAX_NLEN];
     describe_flavor(player_ptr, o_name, o_ptr, 0);
     if (item >= INVEN_MAIN_HAND) {
-        msg_format(_("%^s: %s(%c)。", "%^s: %s (%c)."), describe_use(player_ptr, item), o_name, index_to_label(item));
+        msg_format(_("%s^: %s(%c)。", "%s^: %s (%c)."), describe_use(player_ptr, item), o_name, index_to_label(item));
     } else if (item >= 0) {
         msg_format(_("ザック中: %s(%c)。", "In your pack: %s (%c)."), o_name, index_to_label(item));
     } else {
@@ -190,7 +190,7 @@ bool identify_fully(PlayerType *player_ptr, bool only_equip)
     GAME_TEXT o_name[MAX_NLEN];
     describe_flavor(player_ptr, o_name, o_ptr, 0);
     if (item >= INVEN_MAIN_HAND) {
-        msg_format(_("%^s: %s(%c)。", "%^s: %s (%c)."), describe_use(player_ptr, item), o_name, index_to_label(item));
+        msg_format(_("%s^: %s(%c)。", "%s^: %s (%c)."), describe_use(player_ptr, item), o_name, index_to_label(item));
     } else if (item >= 0) {
         msg_format(_("ザック中: %s(%c)。", "In your pack: %s (%c)."), o_name, index_to_label(item));
     } else {

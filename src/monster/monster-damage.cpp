@@ -322,7 +322,7 @@ void MonsterDamageProcessor::death_amberites(std::string_view m_name)
     auto curses = 1 + randint1(3);
     auto stop_ty = false;
     auto count = 0;
-    msg_format(_("%^sは恐ろしい血の呪いをあなたにかけた！", "%^s puts a terrible blood curse on you!"), m_name.data());
+    msg_format(_("%s^は恐ろしい血の呪いをあなたにかけた！", "%s^ puts a terrible blood curse on you!"), m_name.data());
     curse_equipment(this->player_ptr, 100, 50);
     do {
         stop_ty = activate_ty_curse(this->player_ptr, stop_ty, &count);
@@ -339,7 +339,7 @@ void MonsterDamageProcessor::dying_scream(std::string_view m_name)
 
     const auto death_mes = get_random_line(_("mondeath_j.txt", "mondeath.txt"), enum2i(m_ptr->r_idx));
     if (death_mes.has_value()) {
-        msg_format("%^s %s", m_name.data(), death_mes->data());
+        msg_format("%s^ %s", m_name.data(), death_mes->data());
     }
 
 #ifdef WORLD_SCORE
@@ -355,7 +355,7 @@ void MonsterDamageProcessor::show_kill_message(concptr note, std::string_view m_
     auto *m_ptr = &floor_ptr->m_list[this->m_idx];
     const auto &r_ref = m_ptr->get_real_r_ref();
     if (note != nullptr) {
-        msg_format("%^s%s", m_name.data(), note);
+        msg_format("%s^%s", m_name.data(), note);
         return;
     }
 
@@ -370,7 +370,7 @@ void MonsterDamageProcessor::show_kill_message(concptr note, std::string_view m_
 
     if (monster_living(m_ptr->r_idx)) {
         if (explode) {
-            msg_format(_("%sは爆発して死んだ。", "%^s explodes and dies."), m_name.data());
+            msg_format(_("%sは爆発して死んだ。", "%s^ explodes and dies."), m_name.data());
             return;
         }
 
@@ -381,7 +381,7 @@ void MonsterDamageProcessor::show_kill_message(concptr note, std::string_view m_
     }
 
     if (explode) {
-        msg_format(_("%sは爆発して粉々になった。", "%^s explodes into tiny shreds."), m_name.data());
+        msg_format(_("%sは爆発して粉々になった。", "%s^ explodes into tiny shreds."), m_name.data());
         return;
     }
 

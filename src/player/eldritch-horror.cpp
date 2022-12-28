@@ -176,7 +176,7 @@ void sanity_blast(PlayerType *player_ptr, MonsterEntity *m_ptr, bool necro)
         }
 
         if (saving_throw(player_ptr->skill_sav * 100 / power)) {
-            msg_format(_("夢の中で%sに追いかけられた。", "%^s chases you through your dreams."), m_name.data());
+            msg_format(_("夢の中で%sに追いかけられた。", "%s^ chases you through your dreams."), m_name.data());
             return;
         }
 

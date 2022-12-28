@@ -723,7 +723,7 @@ std::optional<std::string> do_hex_spell(PlayerType *player_ptr, spell_hex_type s
 
             if (!flag) {
                 const auto spell_name = exe_spell(player_ptr, REALM_HEX, HEX_RESTORE, SpellProcessType::NAME);
-                msg_format(_("%sの呪文の詠唱をやめた。", "Finish casting '%^s'."), spell_name->data());
+                msg_format(_("%sの呪文の詠唱をやめた。", "Finish casting '%s^'."), spell_name->data());
                 SpellHex spell_hex(player_ptr);
                 spell_hex.reset_casting_flag(HEX_RESTORE);
                 if (!spell_hex.is_spelling_any()) {

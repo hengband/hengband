@@ -272,9 +272,9 @@ void describe_monster_missed_monster(PlayerType *player_ptr, mam_type *mam_ptr)
         (void)set_monster_csleep(player_ptr, mam_ptr->t_idx, 0);
         if (mam_ptr->see_m) {
 #ifdef JP
-            msg_format("%sは%^sの攻撃をかわした。", mam_ptr->t_name, mam_ptr->m_name);
+            msg_format("%sは%s^の攻撃をかわした。", mam_ptr->t_name, mam_ptr->m_name);
 #else
-            msg_format("%^s misses %s.", mam_ptr->m_name, mam_ptr->t_name);
+            msg_format("%s^ misses %s.", mam_ptr->m_name, mam_ptr->t_name);
 #endif
         }
 

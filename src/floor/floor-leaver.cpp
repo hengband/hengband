@@ -129,7 +129,7 @@ static void preserve_pet(PlayerType *player_ptr)
 
         if (is_seen(player_ptr, m_ptr)) {
             const auto m_name = monster_desc(player_ptr, m_ptr, 0);
-            msg_format(_("%sは消え去った！", "%^s disappears!"), m_name.data());
+            msg_format(_("%sは消え去った！", "%s^ disappears!"), m_name.data());
         }
 
         delete_monster_idx(player_ptr, i);

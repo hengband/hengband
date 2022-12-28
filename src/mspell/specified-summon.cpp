@@ -182,9 +182,9 @@ MONSTER_NUMBER summon_NAZGUL(PlayerType *player_ptr, POSITION y, POSITION x, MON
     const auto m_name = monster_name(player_ptr, m_idx);
 
     if (player_ptr->effects()->blindness()->is_blind()) {
-        msg_format(_("%^sが何かをつぶやいた。", "%^s mumbles."), m_name.data());
+        msg_format(_("%s^が何かをつぶやいた。", "%s^ mumbles."), m_name.data());
     } else {
-        msg_format(_("%^sが魔法で幽鬼戦隊を召喚した！", "%^s magically summons rangers of Nazgul!"), m_name.data());
+        msg_format(_("%s^が魔法で幽鬼戦隊を召喚した！", "%s^ magically summons rangers of Nazgul!"), m_name.data());
     }
 
     msg_print(nullptr);

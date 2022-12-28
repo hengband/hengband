@@ -563,13 +563,13 @@ ProjectResult project(PlayerType *player_ptr, const MONSTER_IDX who, POSITION ra
         const auto m_name = monster_desc(player_ptr, &player_ptr->current_floor_ptr->m_list[player_ptr->riding], 0);
         if (rakubadam_m > 0) {
             if (process_fall_off_horse(player_ptr, rakubadam_m, false)) {
-                msg_format(_("%^sに振り落とされた！", "%^s has thrown you off!"), m_name.data());
+                msg_format(_("%s^に振り落とされた！", "%s^ has thrown you off!"), m_name.data());
             }
         }
 
         if (player_ptr->riding && rakubadam_p > 0) {
             if (process_fall_off_horse(player_ptr, rakubadam_p, false)) {
-                msg_format(_("%^sから落ちてしまった！", "You have fallen from %s."), m_name.data());
+                msg_format(_("%s^から落ちてしまった！", "You have fallen from %s."), m_name.data());
             }
         }
     }
