@@ -40,55 +40,9 @@
 #include "util/bit-flags-calculator.h"
 #include "util/quarks.h"
 #include "util/string-processor.h"
-#include "world/world.h"
 #include <functional>
 #include <sstream>
 #include <utility>
-
-/*!
- * @brief 最初から簡易な名称が明らかになるベースアイテムの判定。 /  Certain items, if aware, are known instantly
- * @param i ベースアイテムID
- * @return 簡易名称を明らかにするならTRUEを返す。
- * @details
- * This function is used only by "flavor_init()"
- */
-static bool object_easy_know(int i)
-{
-    const auto &baseitem = baseitems_info[i];
-    switch (baseitem.bi_key.tval()) {
-    case ItemKindType::LIFE_BOOK:
-    case ItemKindType::SORCERY_BOOK:
-    case ItemKindType::NATURE_BOOK:
-    case ItemKindType::CHAOS_BOOK:
-    case ItemKindType::DEATH_BOOK:
-    case ItemKindType::TRUMP_BOOK:
-    case ItemKindType::ARCANE_BOOK:
-    case ItemKindType::CRAFT_BOOK:
-    case ItemKindType::DEMON_BOOK:
-    case ItemKindType::CRUSADE_BOOK:
-    case ItemKindType::MUSIC_BOOK:
-    case ItemKindType::HISSATSU_BOOK:
-    case ItemKindType::HEX_BOOK:
-        return true;
-    case ItemKindType::FLASK:
-    case ItemKindType::JUNK:
-    case ItemKindType::BOTTLE:
-    case ItemKindType::SKELETON:
-    case ItemKindType::SPIKE:
-    case ItemKindType::WHISTLE:
-        return true;
-    case ItemKindType::FOOD:
-    case ItemKindType::POTION:
-    case ItemKindType::SCROLL:
-    case ItemKindType::ROD:
-        return true;
-
-    default:
-        break;
-    }
-
-    return false;
-}
 
 /*!
  * @brief 各種語彙からランダムな名前を作成する
@@ -166,71 +120,6 @@ std::string get_table_sindarin_aux()
 std::string get_table_sindarin()
 {
     return std::string(_("『", "'")).append(get_table_sindarin_aux()).append(_("』", "'"));
-}
-
-/*!
- * @brief ベースアイテムの未確定名を共通tval間でシャッフルする / Shuffle flavor indices of a group of objects with given tval
- * @param tval シャッフルしたいtval
- * @details 巻物、各種魔道具などに利用される。
- */
-static void shuffle_flavors(ItemKindType tval)
-{
-    std::vector<std::reference_wrapper<IDX>> flavor_idx_ref_list;
-    for (const auto &baseitem : baseitems_info) {
-        if (baseitem.bi_key.tval() != tval) {
-            continue;
-        }
-
-        if (baseitem.flavor == 0) {
-            continue;
-        }
-
-        if (baseitem.flags.has(TR_FIXED_FLAVOR)) {
-            continue;
-        }
-
-        flavor_idx_ref_list.push_back(baseitems_info[baseitem.idx].flavor);
-    }
-
-    rand_shuffle(flavor_idx_ref_list.begin(), flavor_idx_ref_list.end());
-}
-
-/*!
- * @brief ゲーム開始時に行われるベースアイテムの初期化ルーチン
- * @param なし
- */
-void flavor_init(void)
-{
-    const auto state_backup = w_ptr->rng.get_state();
-    w_ptr->rng.set_state(w_ptr->seed_flavor);
-    for (auto &baseitem : baseitems_info) {
-        if (baseitem.flavor_name.empty()) {
-            continue;
-        }
-
-        baseitem.flavor = baseitem.idx;
-    }
-
-    shuffle_flavors(ItemKindType::RING);
-    shuffle_flavors(ItemKindType::AMULET);
-    shuffle_flavors(ItemKindType::STAFF);
-    shuffle_flavors(ItemKindType::WAND);
-    shuffle_flavors(ItemKindType::ROD);
-    shuffle_flavors(ItemKindType::FOOD);
-    shuffle_flavors(ItemKindType::POTION);
-    shuffle_flavors(ItemKindType::SCROLL);
-    w_ptr->rng.set_state(state_backup);
-    for (auto &baseitem : baseitems_info) {
-        if (baseitem.idx == 0 || baseitem.name.empty()) {
-            continue;
-        }
-
-        if (!baseitem.flavor) {
-            baseitem.aware = true;
-        }
-
-        baseitem.easy_know = object_easy_know(baseitem.idx);
-    }
 }
 
 /*!

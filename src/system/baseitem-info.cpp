@@ -576,4 +576,43 @@ BaseitemInfo::BaseitemInfo()
 {
 }
 
+/*!
+ * @brief 最初から簡易な名称が明らかなベースアイテムにその旨のフラグを立てる
+ */
+void BaseitemInfo::decide_easy_know()
+{
+    switch (this->bi_key.tval()) {
+    case ItemKindType::LIFE_BOOK:
+    case ItemKindType::SORCERY_BOOK:
+    case ItemKindType::NATURE_BOOK:
+    case ItemKindType::CHAOS_BOOK:
+    case ItemKindType::DEATH_BOOK:
+    case ItemKindType::TRUMP_BOOK:
+    case ItemKindType::ARCANE_BOOK:
+    case ItemKindType::CRAFT_BOOK:
+    case ItemKindType::DEMON_BOOK:
+    case ItemKindType::CRUSADE_BOOK:
+    case ItemKindType::MUSIC_BOOK:
+    case ItemKindType::HISSATSU_BOOK:
+    case ItemKindType::HEX_BOOK:
+    case ItemKindType::FLASK:
+    case ItemKindType::JUNK:
+    case ItemKindType::BOTTLE:
+    case ItemKindType::SKELETON:
+    case ItemKindType::SPIKE:
+    case ItemKindType::WHISTLE:
+    case ItemKindType::FOOD:
+    case ItemKindType::POTION:
+    case ItemKindType::SCROLL:
+    case ItemKindType::ROD:
+    case ItemKindType::STATUE:
+    case ItemKindType::PARCHMENT:
+        this->easy_know = true;
+        return;
+    default:
+        this->easy_know = false;
+        return;
+    }
+}
+
 std::vector<BaseitemInfo> baseitems_info;

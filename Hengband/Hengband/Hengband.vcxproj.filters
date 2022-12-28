@@ -2475,6 +2475,9 @@
     <ClCompile Include="..\..\src\monster\monster-pain-describer.cpp">
       <Filter>monster</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\item-info\item-initializer.cpp">
+      <Filter>item-info</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\combat\shoot.h">
@@ -5370,6 +5373,9 @@
     <ClInclude Include="..\..\src\monster\monster-pain-describer.h">
       <Filter>monster</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\item-info\item-initializer.h">
+      <Filter>item-info</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\src\wall.bmp" />
@@ -5624,6 +5630,9 @@
     </Filter>
     <Filter Include="mspell\mspell-attack">
       <UniqueIdentifier>{ab971e7b-4a9e-4f88-a557-eb89840abd61}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="item-info">
+      <UniqueIdentifier>{3aefd2e8-8dd8-41dd-bc6b-7dadd75dfd6b}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
