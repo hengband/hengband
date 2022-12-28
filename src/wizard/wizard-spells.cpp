@@ -259,7 +259,7 @@ void wiz_kill_target(PlayerType *player_ptr, int dam, AttributeType effect_idx, 
         for (auto i = 0U; i < std::size(gf_descriptions); ++i) {
             auto name = std::string_view(gf_descriptions[i].name).substr(3); // 先頭の"GF_"を取り除く
             auto num = enum2i(gf_descriptions[i].num);
-            put_str(format("%03d:%^-.10s", num, name.data()), 1 + i / 5, 1 + (i % 5) * 16);
+            put_str(format("%03d:%-.10s^", num, name.data()), 1 + i / 5, 1 + (i % 5) * 16);
         }
         if (!get_value("EffectID", 1, max - 1, &idx)) {
             screen_load();
