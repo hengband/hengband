@@ -46,51 +46,6 @@
 #include <utility>
 
 /*!
- * @brief 最初から簡易な名称が明らかになるベースアイテムの判定。 /  Certain items, if aware, are known instantly
- * @param i ベースアイテムID
- * @return 簡易名称を明らかにするならTRUEを返す。
- * @details
- * This function is used only by "flavor_init()"
- */
-static bool object_easy_know(int i)
-{
-    const auto &baseitem = baseitems_info[i];
-    switch (baseitem.bi_key.tval()) {
-    case ItemKindType::LIFE_BOOK:
-    case ItemKindType::SORCERY_BOOK:
-    case ItemKindType::NATURE_BOOK:
-    case ItemKindType::CHAOS_BOOK:
-    case ItemKindType::DEATH_BOOK:
-    case ItemKindType::TRUMP_BOOK:
-    case ItemKindType::ARCANE_BOOK:
-    case ItemKindType::CRAFT_BOOK:
-    case ItemKindType::DEMON_BOOK:
-    case ItemKindType::CRUSADE_BOOK:
-    case ItemKindType::MUSIC_BOOK:
-    case ItemKindType::HISSATSU_BOOK:
-    case ItemKindType::HEX_BOOK:
-        return true;
-    case ItemKindType::FLASK:
-    case ItemKindType::JUNK:
-    case ItemKindType::BOTTLE:
-    case ItemKindType::SKELETON:
-    case ItemKindType::SPIKE:
-    case ItemKindType::WHISTLE:
-        return true;
-    case ItemKindType::FOOD:
-    case ItemKindType::POTION:
-    case ItemKindType::SCROLL:
-    case ItemKindType::ROD:
-        return true;
-
-    default:
-        break;
-    }
-
-    return false;
-}
-
-/*!
  * @brief 各種語彙からランダムな名前を作成する
  * @return std::string 作成した名前
  * @details 日本語の場合 aname_j.txt 英語の場合確率に応じて
@@ -229,7 +184,7 @@ void flavor_init(void)
             baseitem.aware = true;
         }
 
-        baseitem.easy_know = object_easy_know(baseitem.idx);
+        baseitem.decide_easy_know();
     }
 }
 
