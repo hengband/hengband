@@ -39,7 +39,7 @@ static void shuffle_flavors(ItemKindType tval)
 /*!
  * @brief ゲーム開始時に行われるベースアイテムの初期化ルーチン
  */
-void flavor_init()
+void initialize_items_flavor()
 {
     const auto state_backup = w_ptr->rng.get_state();
     w_ptr->rng.set_state(w_ptr->seed_flavor);

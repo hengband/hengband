@@ -1,3 +1,3 @@
 ﻿#pragma once
 
-void flavor_init();
+void initialize_items_flavor();

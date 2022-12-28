@@ -273,7 +273,7 @@ static void generate_world(PlayerType *player_ptr, bool new_game)
     panel_col_min = floor_ptr->width;
 
     set_floor_and_wall(player_ptr->dungeon_idx);
-    flavor_init();
+    initialize_items_flavor();
     prt(_("お待ち下さい...", "Please wait..."), 0, 0);
     term_fresh();
     generate_wilderness(player_ptr);
