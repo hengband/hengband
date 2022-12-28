@@ -605,6 +605,8 @@ void BaseitemInfo::decide_easy_know()
     case ItemKindType::POTION:
     case ItemKindType::SCROLL:
     case ItemKindType::ROD:
+    case ItemKindType::STATUE:
+    case ItemKindType::PARCHMENT:
         this->easy_know = true;
         return;
     default:
