@@ -36,6 +36,7 @@
 #include "monster/monster-describer.h"
 #include "monster/monster-description-types.h"
 #include "monster/monster-info.h"
+#include "monster/monster-pain-describer.h"
 #include "monster/monster-status-setter.h"
 #include "monster/monster-status.h"
 #include "monster/monster-update.h"
@@ -211,7 +212,10 @@ static void effect_damage_makes_sleep(PlayerType *player_ptr, effect_monster_typ
     if (em_ptr->note && em_ptr->seen_msg) {
         msg_format("%^s%s", em_ptr->m_name, em_ptr->note);
     } else if (em_ptr->see_s_msg) {
-        message_pain(player_ptr, em_ptr->g_ptr->m_idx, em_ptr->dam);
+        const auto pain_message = MonsterPainDescriber(player_ptr, em_ptr->g_ptr->m_idx).describe(em_ptr->dam);
+        if (!pain_message.empty()) {
+            msg_print(pain_message);
+        }
     } else {
         player_ptr->current_floor_ptr->monster_noise = true;
     }
@@ -301,7 +305,10 @@ static bool deal_effect_damage_from_player(PlayerType *player_ptr, effect_monste
     if (em_ptr->note && em_ptr->seen) {
         msg_format(_("%s%s", "%^s%s"), em_ptr->m_name, em_ptr->note);
     } else if (em_ptr->known && (em_ptr->dam || !em_ptr->do_fear)) {
-        message_pain(player_ptr, em_ptr->g_ptr->m_idx, em_ptr->dam);
+        const auto pain_message = MonsterPainDescriber(player_ptr, em_ptr->g_ptr->m_idx).describe(em_ptr->dam);
+        if (!pain_message.empty()) {
+            msg_print(pain_message);
+        }
     }
 
     if (((em_ptr->dam > 0) || em_ptr->get_angry) && !em_ptr->do_sleep) {

@@ -36,6 +36,7 @@
 #include "monster/monster-damage.h"
 #include "monster/monster-describer.h"
 #include "monster/monster-info.h"
+#include "monster/monster-pain-describer.h"
 #include "monster/monster-status-setter.h"
 #include "monster/monster-status.h"
 #include "object-enchant/tr-types.h"
@@ -450,7 +451,11 @@ void ObjectThrowEntity::attack_racial_power()
         return;
     }
 
-    message_pain(this->player_ptr, this->g_ptr->m_idx, this->tdam);
+    if (const auto pain_message = MonsterPainDescriber(player_ptr, this->g_ptr->m_idx).describe(this->tdam);
+        !pain_message.empty()) {
+        msg_print(pain_message);
+    }
+
     if ((this->tdam > 0) && !this->q_ptr->is_potion()) {
         anger_monster(this->player_ptr, this->m_ptr);
     }
