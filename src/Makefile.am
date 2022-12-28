@@ -464,6 +464,7 @@ hengband_SOURCES = \
 	monster/monster-flag-types.h \
 	monster/monster-info.cpp monster/monster-info.h \
 	monster/monster-list.cpp monster/monster-list.h \
+	monster/monster-pain-describer.cpp monster/monster-pain-describer.h \
 	monster/monster-processor.cpp monster/monster-processor.h \
 	monster/monster-processor-util.cpp monster/monster-processor-util.h \
 	monster/monster-timed-effect-types.h \

@@ -233,7 +233,7 @@ static std::string add_cameleon_name(const MonsterEntity &monster, const BIT_FLA
  * @param mode 呼称オプション
  * @return std::string 要求されたモンスターの説明を含む文字列
  */
-std::string monster_desc(PlayerType *player_ptr, MonsterEntity *m_ptr, BIT_FLAGS mode)
+std::string monster_desc(PlayerType *player_ptr, const MonsterEntity *m_ptr, BIT_FLAGS mode)
 {
     const auto pronoun = decide_monster_personal_pronoun(*m_ptr, mode);
     if (pronoun.has_value()) {
