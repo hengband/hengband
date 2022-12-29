@@ -18,7 +18,10 @@
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
 #include "term/z-form.h"
+#include "util/bit-flags-calculator.h"
 #include "util/string-processor.h"
+#include <array>
+#include <vector>
 
 /*!
  * @brief メインウィンドウの右上に装備アイテムの表示させる
@@ -34,10 +37,9 @@ COMMAND_CODE show_equipment(PlayerType *player_ptr, int target_item, BIT_FLAGS m
     int j, k, l;
     ItemEntity *o_ptr;
     char tmp_val[80];
-    GAME_TEXT o_name[MAX_NLEN];
     COMMAND_CODE out_index[23];
     TERM_COLOR out_color[23];
-    char out_desc[23][MAX_NLEN];
+    std::array<std::string, 23> out_desc{};
     COMMAND_CODE target_item_label = 0;
     TERM_LEN wid, hgt;
     char equip_label[52 + 1];
@@ -46,16 +48,22 @@ COMMAND_CODE show_equipment(PlayerType *player_ptr, int target_item, BIT_FLAGS m
     int len = wid - col - 1;
     for (k = 0, i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
         o_ptr = &player_ptr->inventory_list[i];
-        if (!(player_ptr->select_ring_slot ? is_ring_slot(i) : item_tester.okay(o_ptr) || (mode & USE_FULL)) && (!((((i == INVEN_MAIN_HAND) && can_attack_with_sub_hand(player_ptr)) || ((i == INVEN_SUB_HAND) && can_attack_with_main_hand(player_ptr))) && has_two_handed_weapons(player_ptr)) || (mode & IGNORE_BOTHHAND_SLOT))) {
+        auto only_slot = !(player_ptr->select_ring_slot ? is_ring_slot(i) : (item_tester.okay(o_ptr) || any_bits(mode, USE_FULL)));
+        auto is_any_hand = (i == INVEN_MAIN_HAND) && can_attack_with_sub_hand(player_ptr);
+        is_any_hand |= (i == INVEN_SUB_HAND) && can_attack_with_main_hand(player_ptr);
+        auto is_two_handed = is_any_hand && has_two_handed_weapons(player_ptr);
+        only_slot &= !is_two_handed || any_bits(mode, IGNORE_BOTHHAND_SLOT);
+        if (only_slot) {
             continue;
         }
 
-        describe_flavor(player_ptr, o_name, o_ptr, 0);
-        if ((((i == INVEN_MAIN_HAND) && can_attack_with_sub_hand(player_ptr)) || ((i == INVEN_SUB_HAND) && can_attack_with_main_hand(player_ptr))) && has_two_handed_weapons(player_ptr)) {
-            (void)strcpy(out_desc[k], _("(武器を両手持ち)", "(wielding with two-hands)"));
+        GAME_TEXT item_name[MAX_NLEN]{};
+        describe_flavor(player_ptr, item_name, o_ptr, 0);
+        if (is_two_handed) {
+            out_desc[k] = _("(武器を両手持ち)", "(wielding with two-hands)");
             out_color[k] = TERM_WHITE;
         } else {
-            (void)strcpy(out_desc[k], o_name);
+            out_desc[k] = item_name;
             out_color[k] = tval_to_attr[enum2i(o_ptr->bi_key.tval()) % 128];
         }
 
@@ -63,7 +71,7 @@ COMMAND_CODE show_equipment(PlayerType *player_ptr, int target_item, BIT_FLAGS m
         if (o_ptr->timeout) {
             out_color[k] = TERM_L_DARK;
         }
-        l = strlen(out_desc[k]) + (2 + _(1, 3));
+        l = out_desc[k].length() + (2 + _(1, 3));
 
         if (show_labels) {
             l += (_(7, 14) + 2);
