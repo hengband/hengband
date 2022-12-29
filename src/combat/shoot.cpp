@@ -992,16 +992,15 @@ void exe_fire(PlayerType *player_ptr, INVENTORY_IDX item, ItemEntity *j_ptr, SPE
 }
 
 /*!
- * @brief プレイヤーからモンスターへの射撃命中判定 /
- * Determine if the player "hits" a monster (normal combat).
+ * @brief プレイヤーからモンスターへの射撃命中判定
  * @param chance 基本命中値
  * @param monster_ptr モンスターの構造体参照ポインタ
  * @param vis 目標を視界に捕らえているならばTRUEを指定
- * @param o_name メッセージ表示時のモンスター名
+ * @param item_name 石川五右衛門専用メッセージ：無効化した矢弾の名前
  * @return 命中と判定された場合TRUEを返す
- * @note Always miss 5%, always hit 5%, otherwise random.
+ * @note 最低命中率5%、最大命中率95%
  */
-bool test_hit_fire(PlayerType *player_ptr, int chance, MonsterEntity *m_ptr, int vis, char *o_name)
+bool test_hit_fire(PlayerType *player_ptr, int chance, MonsterEntity *m_ptr, int vis, std::string_view item_name)
 {
     int k;
     ARMOUR_CLASS ac;
@@ -1051,7 +1050,7 @@ bool test_hit_fire(PlayerType *player_ptr, int chance, MonsterEntity *m_ptr, int
     if (randint0(chance) < (ac * 3 / 4)) {
         if (m_ptr->r_idx == MonsterRaceId::GOEMON && !m_ptr->is_asleep()) {
             const auto m_name = monster_desc(player_ptr, m_ptr, 0);
-            msg_format(_("%sは%sを斬り捨てた！", "%s cuts down %s!"), m_name.data(), o_name);
+            msg_format(_("%sは%sを斬り捨てた！", "%s cuts down %s!"), m_name.data(), item_name.data());
         }
         return false;
     }
