@@ -31,21 +31,21 @@
 extern uint vstrnfmt(char *buf, uint max, concptr fmt, va_list vp);
 
 /* Simple interface to "vstrnfmt()" */
-extern uint strnfmt(char *buf, uint max, concptr fmt, ...);
+extern uint strnfmt(char *buf, uint max, concptr fmt, ...) __attribute__((format(printf, 3, 4)));
 
 /* Format arguments into a static resizing buffer */
 extern std::string vformat(concptr fmt, va_list vp);
 
 /* Simple interface to "vformat()" */
-extern std::string format(concptr fmt, ...);
+extern std::string format(concptr fmt, ...) __attribute__((format(printf, 1, 2)));
 
 /* Vararg interface to "plog()", using "format()" */
-extern void plog_fmt(concptr fmt, ...);
+extern void plog_fmt(concptr fmt, ...) __attribute__((format(printf, 1, 2)));
 
 /* Vararg interface to "quit()", using "format()" */
-extern void quit_fmt(concptr fmt, ...);
+extern void quit_fmt(concptr fmt, ...) __attribute__((format(printf, 1, 2)));
 
 /* Vararg interface to "core()", using "format()" */
-extern void core_fmt(concptr fmt, ...);
+extern void core_fmt(concptr fmt, ...) __attribute__((format(printf, 1, 2)));
 
 #endif
