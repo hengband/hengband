@@ -31,7 +31,7 @@ bool ParchmentReadExecutor::read()
     GAME_TEXT o_name[MAX_NLEN]{};
     char buf[1024]{};
     screen_save();
-    auto q = format("book-%d_jp.txt", this->o_ptr->bi_key.sval());
+    auto q = format("book-%d_jp.txt", this->o_ptr->bi_key.sval().value());
     describe_flavor(this->player_ptr, o_name, this->o_ptr, OD_NAME_ONLY);
     (void)path_build(buf, sizeof(buf), ANGBAND_DIR_FILE, q.data());
     (void)show_file(this->player_ptr, true, buf, o_name, 0, 0);

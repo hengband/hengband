@@ -175,7 +175,7 @@ MonsterRaceId get_mon_num(PlayerType *player_ptr, DEPTH min_level, DEPTH max_lev
     }
 
     if (cheat_hear) {
-        msg_format(_("モンスター第3次候補数:%d(%d-%dF)%d ", "monster third selection:%d(%d-%dF)%d "), prob_table.item_count(), min_level, max_level,
+        msg_format(_("モンスター第3次候補数:%lu(%d-%dF)%d ", "monster third selection:%lu(%d-%dF)%d "), prob_table.item_count(), min_level, max_level,
             prob_table.total_prob());
     }
 
@@ -382,7 +382,7 @@ void choose_new_monster(PlayerType *player_ptr, MONSTER_IDX m_idx, bool born, Mo
         if (!(r_ptr->flags7 & RF7_RIDING)) {
             if (process_fall_off_horse(player_ptr, 0, true)) {
                 const auto m_name = monster_desc(player_ptr, m_ptr, 0);
-                msg_format(_("地面に落とされた。", "You have fallen from %s."), m_name.data());
+                msg_print(_("地面に落とされた。", format("You have fallen from %s.", m_name.data())));
             }
         }
     }

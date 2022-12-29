@@ -88,7 +88,7 @@ static void process_fishing(PlayerType *player_ptr)
             x = player_ptr->x + ddx[player_ptr->fishing_dir];
             if (place_monster_aux(player_ptr, 0, y, x, r_idx, PM_NO_KAGE)) {
                 const auto m_name = monster_desc(player_ptr, &floor_ptr->m_list[floor_ptr->grid_array[y][x].m_idx], 0);
-                msg_format(_("%sが釣れた！", "You have a good catch!"), m_name.data());
+                msg_print(_(format("%sが釣れた！", m_name.data()), "You have a good catch!"));
                 success = true;
             }
         }

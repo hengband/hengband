@@ -190,7 +190,7 @@ static bool activate_artifact(PlayerType *player_ptr, ItemEntity *o_ptr)
     case RandomArtActType::MURAMASA:
         return true;
     default:
-        msg_format("Special timeout is not implemented: %d.", act_ptr->index);
+        msg_format("Special timeout is not implemented: %d.", enum2i(act_ptr->index));
         return false;
     }
 }

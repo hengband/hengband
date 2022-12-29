@@ -633,7 +633,7 @@ MonsterSpellResult spell_RF6_HEAL(PlayerType *player_ptr, MONSTER_IDX m_idx, MON
 
     if (see_monster(player_ptr, m_idx)) {
         const auto m_name = monster_name(player_ptr, m_idx);
-        msg_format(_("%s^は勇気を取り戻した。", format("%%s^ recovers %s courage.", m_poss.data())), m_name.data());
+        msg_print(_(format("%s^は勇気を取り戻した。", m_name.data()), format("%s^ recovers %s courage.", m_name.data(), m_poss.data())));
     }
 
     return res;

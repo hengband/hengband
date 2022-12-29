@@ -258,7 +258,7 @@ bool teleport_level_other(PlayerType *player_ptr)
     auto has_immune = r_ptr->resistance_flags.has_any_of(RFR_EFF_RESIST_NEXUS_MASK) || r_ptr->resistance_flags.has(MonsterResistanceType::RESIST_TELEPORT);
 
     if (has_immune || (r_ptr->flags1 & RF1_QUESTOR) || (r_ptr->level + randint1(50) > player_ptr->lev + randint1(60))) {
-        msg_format(_("しかし効果がなかった！", "%s^ is unaffected!"), m_name.data());
+        msg_print(_("しかし効果がなかった！", format("%s^ is unaffected!", m_name.data())));
     } else {
         teleport_level(player_ptr, target_m_idx);
     }
@@ -565,7 +565,7 @@ bool reset_recall(PlayerType *player_ptr)
         exe_write_diary(player_ptr, DIARY_TRUMP, select_dungeon, _("フロア・リセットで", "using a scroll of reset recall"));
     }
 #ifdef JP
-    msg_format("%sの帰還レベルを %d 階にセット。", dungeons_info[select_dungeon].name.data(), dummy, dummy * 50);
+    msg_format("%sの帰還レベルを %d 階にセット。", dungeons_info[select_dungeon].name.data(), dummy);
 #else
     msg_format("Recall depth set to level %d (%d').", dummy, dummy * 50);
 #endif

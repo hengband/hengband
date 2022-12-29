@@ -375,6 +375,26 @@ public:
         return bs_.to_string();
     }
 
+    /*!
+     * @brief フラグ集合の状態を表したビット列を unsigned long 型にして返す
+     *
+     * @return フラグ集合の状態を表したビット列
+     */
+    [[nodiscard]] unsigned long to_ulong() const
+    {
+        return bs_.to_ulong();
+    }
+
+    /*!
+     * @brief フラグ集合の状態を表したビット列を unsigned long long 型にして返す
+     *
+     * @return フラグ集合の状態を表したビット列
+     */
+    [[nodiscard]] unsigned long long to_ullong() const
+    {
+        return bs_.to_ullong();
+    }
+
     /**
      * @brief フラグ集合 *this と rhs が等値かどうかを調べる
      *

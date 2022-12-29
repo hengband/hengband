@@ -134,7 +134,7 @@ bool create_ammo(PlayerType *player_ptr)
         int16_t slot = store_item_to_inventory(player_ptr, q_ptr);
         GAME_TEXT o_name[MAX_NLEN];
         describe_flavor(player_ptr, o_name, q_ptr, 0);
-        msg_format(_("%sを作った。", "You make some ammo."), o_name);
+        msg_print(_(format("%sを作った。", o_name), "You make some ammo."));
         if (slot >= 0) {
             autopick_alter_item(player_ptr, slot, false);
         }
@@ -162,7 +162,7 @@ bool create_ammo(PlayerType *player_ptr)
         q_ptr->discount = 99;
         GAME_TEXT o_name[MAX_NLEN];
         describe_flavor(player_ptr, o_name, q_ptr, 0);
-        msg_format(_("%sを作った。", "You make some ammo."), o_name);
+        msg_print(_(format("%sを作った。", o_name), "You make some ammo."));
         vary_item(player_ptr, item, -1);
         int16_t slot = store_item_to_inventory(player_ptr, q_ptr);
         if (slot >= 0) {
@@ -190,7 +190,7 @@ bool create_ammo(PlayerType *player_ptr)
         q_ptr->discount = 99;
         GAME_TEXT o_name[MAX_NLEN];
         describe_flavor(player_ptr, o_name, q_ptr, 0);
-        msg_format(_("%sを作った。", "You make some ammo."), o_name);
+        msg_print(_(format("%sを作った。", o_name), "You make some ammo."));
         vary_item(player_ptr, item, -1);
         int16_t slot = store_item_to_inventory(player_ptr, q_ptr);
         if (slot >= 0) {
