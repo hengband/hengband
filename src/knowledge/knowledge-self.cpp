@@ -194,50 +194,56 @@ void do_cmd_knowledge_home(PlayerType *player_ptr)
         return;
     }
 
-    store_type *store_ptr;
-    store_ptr = &town_info[1].store[enum2i(StoreSaleType::HOME)];
-
-    if (store_ptr->stock_num) {
-#ifdef JP
-        TERM_LEN x = 1;
-#endif
-        fprintf(fff, _("  [ 我が家のアイテム ]\n", "  [Home Inventory]\n"));
-        concptr paren = ")";
-        GAME_TEXT o_name[MAX_NLEN];
-        for (int i = 0; i < store_ptr->stock_num; i++) {
-#ifdef JP
-            if ((i % 12) == 0) {
-                fprintf(fff, "\n ( %d ページ )\n", x++);
-            }
-            describe_flavor(player_ptr, o_name, &store_ptr->stock[i], 0);
-            if (strlen(o_name) <= 80 - 3) {
-                fprintf(fff, "%c%s %s\n", I2A(i % 12), paren, o_name);
-            } else {
-                int n;
-                char *t;
-                for (n = 0, t = o_name; n < 80 - 3; n++, t++) {
-                    if (iskanji(*t)) {
-                        t++;
-                        n++;
-                    }
-                }
-                if (n == 81 - 3) {
-                    n = 79 - 3;
-                } /* 最後が漢字半分 */
-
-                fprintf(fff, "%c%s %.*s\n", I2A(i % 12), paren, n, o_name);
-                fprintf(fff, "   %.77s\n", o_name + n);
-            }
-#else
-            describe_flavor(player_ptr, o_name, &store_ptr->stock[i], 0);
-            fprintf(fff, "%c%s %s\n", I2A(i % 12), paren, o_name);
-#endif
-        }
-
-        fprintf(fff, "\n\n");
+    constexpr auto home_inventory = _("我が家のアイテム", "Home Inventory");
+    const auto &store = town_info[1].store[enum2i(StoreSaleType::HOME)];
+    if (store.stock_num == 0) {
+        angband_fclose(fff);
+        (void)show_file(player_ptr, true, file_name, home_inventory, 0, 0);
+        fd_kill(file_name);
+        return;
     }
 
+#ifdef JP
+    TERM_LEN x = 1;
+#endif
+    fprintf(fff, _("  [ 我が家のアイテム ]\n", "  [Home Inventory]\n"));
+    constexpr auto close_bracket = ")";
+    GAME_TEXT o_name[MAX_NLEN];
+    for (auto i = 0; i < store.stock_num; i++) {
+#ifdef JP
+        if ((i % 12) == 0) {
+            fprintf(fff, "\n ( %d ページ )\n", x++);
+        }
+
+        describe_flavor(player_ptr, o_name, &store.stock[i], 0);
+        if (strlen(o_name) <= 80 - 3) {
+            fprintf(fff, "%c%s %s\n", I2A(i % 12), close_bracket, o_name);
+            continue;
+        }
+
+        auto n = 0;
+        for (auto *t = o_name; n < 80 - 3; n++, t++) {
+            if (iskanji(*t)) {
+                t++;
+                n++;
+            }
+        }
+
+        /* 最後が漢字半分 */
+        if (n == 81 - 3) {
+            n = 79 - 3;
+        }
+
+        fprintf(fff, "%c%s %.*s\n", I2A(i % 12), close_bracket, n, o_name);
+        fprintf(fff, "   %.77s\n", o_name + n);
+#else
+        describe_flavor(player_ptr, o_name, &store.stock[i], 0);
+        fprintf(fff, "%c%s %s\n", I2A(i % 12), close_bracket, o_name);
+#endif
+    }
+
+    fprintf(fff, "\n\n");
     angband_fclose(fff);
-    (void)show_file(player_ptr, true, file_name, _("我が家のアイテム", "Home Inventory"), 0, 0);
+    (void)show_file(player_ptr, true, file_name, home_inventory, 0, 0);
     fd_kill(file_name);
 }
