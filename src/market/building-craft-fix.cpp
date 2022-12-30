@@ -112,6 +112,18 @@ static std::pair<bool, ItemEntity *> select_repairing_broken_weapon(PlayerType *
     return { true, o_ptr };
 }
 
+static void display_repair_success_message(PlayerType *player_ptr, ItemEntity *o_ptr, const int cost)
+{
+    char item_name[MAX_NLEN];
+    describe_flavor(player_ptr, item_name, o_ptr, OD_NAME_ONLY);
+#ifdef JP
+    msg_format("＄%dで%sに修復しました。", cost, item_name);
+#else
+    msg_format("Repaired into %s for %d gold.", item_name, cost);
+#endif
+    msg_print(nullptr);
+}
+
 /*!
  * @brief アイテム修復処理のメインルーチン / Repair broken weapon
  * @param player_ptr プレイヤーへの参照ポインタ
@@ -277,13 +289,7 @@ static PRICE repair_broken_weapon_aux(PlayerType *player_ptr, PRICE bcost)
         msg_print(_("これはかなりの業物だったようだ。", "This blade seems to be exceptional."));
     }
 
-    describe_flavor(player_ptr, basenm, o_ptr, OD_NAME_ONLY);
-#ifdef JP
-    msg_format("＄%dで%sに修復しました。", cost, basenm);
-#else
-    msg_format("Repaired into %s for %d gold.", basenm, cost);
-#endif
-    msg_print(nullptr);
+    display_repair_success_message(player_ptr, o_ptr, cost);
     o_ptr->ident &= ~(IDENT_BROKEN);
     o_ptr->discount = 99;
 
