@@ -66,10 +66,6 @@ static void print_flag(tr_type tr, const TrFlags &flags, FILE *fff)
 static bool determine_spcial_item_type(ItemEntity *o_ptr, ItemKindType tval)
 {
     const auto bi_key = BaseitemKey(tval, o_ptr->bi_key.sval());
-    if (!o_ptr->is_wearable() || !o_ptr->is_ego()) {
-        return false;
-    }
-
     auto is_special_item_type = bi_key == BaseitemKey(ItemKindType::AMULET, SV_AMULET_RESISTANCE);
     is_special_item_type |= bi_key == BaseitemKey(ItemKindType::RING, SV_RING_LORDLY);
     is_special_item_type |= bi_key == BaseitemKey(ItemKindType::SHIELD, SV_DRAGON_SHIELD);
@@ -77,7 +73,7 @@ static bool determine_spcial_item_type(ItemEntity *o_ptr, ItemKindType tval)
     is_special_item_type |= bi_key == BaseitemKey(ItemKindType::GLOVES, SV_SET_OF_DRAGON_GLOVES);
     is_special_item_type |= bi_key == BaseitemKey(ItemKindType::BOOTS, SV_PAIR_OF_DRAGON_GREAVE);
     is_special_item_type |= o_ptr->is_artifact();
-    return is_special_item_type;
+    return (o_ptr->is_wearable() && o_ptr->is_ego()) || is_special_item_type;
 }
 
 /*!
