@@ -2472,7 +2472,7 @@
     <ClCompile Include="..\..\src\monster\monster-pain-describer.cpp">
       <Filter>monster</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\item-info\item-initializer.cpp">
+    <ClCompile Include="..\..\src\item-info\flavor-initializer.cpp">
       <Filter>item-info</Filter>
     </ClCompile>
   </ItemGroup>
@@ -5367,7 +5367,7 @@
     <ClInclude Include="..\..\src\monster\monster-pain-describer.h">
       <Filter>monster</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\item-info\item-initializer.h">
+    <ClInclude Include="..\..\src\item-info\flavor-initializer.h">
       <Filter>item-info</Filter>
     </ClInclude>
   </ItemGroup>
