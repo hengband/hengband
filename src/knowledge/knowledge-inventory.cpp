@@ -25,6 +25,8 @@
 #include "system/player-type-definition.h"
 #include "util/angband-files.h"
 #include "util/bit-flags-calculator.h"
+#include "util/string-processor.h"
+#include <sstream>
 
 static concptr inven_res_label = _(
     "                               酸電火冷毒閃暗破轟獄因沌劣 盲恐乱麻視経感遅活浮",
@@ -146,32 +148,23 @@ static void display_identified_resistances_flag(ItemEntity *o_ptr, FILE *fff)
  * @param fff 一時ファイルへの参照ポインタ
  * @param o_ptr アイテムへの参照ポインタ
  * @param where アイテムの場所 (手持ち、家等) を示す文字列への参照ポインタ
+ * @details 28文字ちょうどになるまで右側をスペースでパディングする
  */
 static void do_cmd_knowledge_inventory_aux(PlayerType *player_ptr, FILE *fff, ItemEntity *o_ptr, char *where)
 {
-    int i = 0;
-    GAME_TEXT o_name[MAX_NLEN];
-    describe_flavor(player_ptr, o_name, o_ptr, OD_NAME_ONLY);
-    while (o_name[i] && (i < 26)) {
-#ifdef JP
-        if (iskanji(o_name[i])) {
-            i++;
-        }
-#endif
-        i++;
+    char tmp_item_name[MAX_NLEN];
+    describe_flavor(player_ptr, tmp_item_name, o_ptr, OD_NAME_ONLY);
+    constexpr auto max_item_length = 26;
+    auto item_name = trim_kanji(std::string(tmp_item_name), max_item_length);
+    std::stringstream ss;
+    ss << item_name;
+    const int item_length = ss.tellp();
+    constexpr auto max_display_length = 28;
+    for (auto i = item_length; i < max_display_length; i++) {
+        ss << ' ';
     }
 
-    if (i < 28) {
-        while (i < 28) {
-            o_name[i] = ' ';
-            i++;
-        }
-    }
-
-    o_name[i] = '\0';
-
-    fprintf(fff, "%s %s", where, o_name);
-
+    fprintf(fff, "%s %s", where, ss.str().data());
     if (!o_ptr->is_fully_known()) {
         fputs(_("-------不明--------------- -------不明---------\n", "-------unknown------------ -------unknown------\n"), fff);
         return;
