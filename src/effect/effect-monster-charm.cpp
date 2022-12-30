@@ -426,7 +426,7 @@ static void effect_monster_captured(PlayerType *player_ptr, effect_monster_type 
     cap_mon_ptr->max_hp = static_cast<short>(em_ptr->m_ptr->max_maxhp);
     cap_mon_ptr->nickname = em_ptr->m_ptr->nickname;
     if ((em_ptr->g_ptr->m_idx == player_ptr->riding) && process_fall_off_horse(player_ptr, -1, false)) {
-        msg_format(_("地面に落とされた。", "You have fallen from %s."), em_ptr->m_name);
+        msg_print(_("地面に落とされた。", format("You have fallen from %s.", em_ptr->m_name)));
     }
 
     delete_monster_idx(player_ptr, em_ptr->g_ptr->m_idx);
@@ -465,7 +465,7 @@ ProcessResult effect_monster_capture(PlayerType *player_ptr, effect_monster_type
     auto capturable_hp = std::max(2, calcutate_capturable_hp(player_ptr, em_ptr->m_ptr, em_ptr->m_ptr->max_maxhp));
 
     if (threshold_hp < 2 || em_ptr->m_ptr->hp >= capturable_hp) {
-        msg_format(_("もっと弱らせないと。", "You need to weaken %s more."), em_ptr->m_name);
+        msg_print(_("もっと弱らせないと。", format("You need to weaken %s more.", em_ptr->m_name)));
         em_ptr->skipped = true;
         return ProcessResult::PROCESS_CONTINUE;
     }
@@ -475,7 +475,7 @@ ProcessResult effect_monster_capture(PlayerType *player_ptr, effect_monster_type
         return ProcessResult::PROCESS_TRUE;
     }
 
-    msg_format(_("うまく捕まえられなかった。", "You failed to capture %s."), em_ptr->m_name);
+    msg_print(_("うまく捕まえられなかった。", format("You failed to capture %s.", em_ptr->m_name)));
     em_ptr->skipped = true;
     return ProcessResult::PROCESS_CONTINUE;
 }

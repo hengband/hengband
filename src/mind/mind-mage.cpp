@@ -164,7 +164,7 @@ bool eat_magic(PlayerType *player_ptr, int power)
 
     if (fail_type == 1) {
         if (tval == ItemKindType::ROD) {
-            msg_format(_("ロッドは破損を免れたが、魔力は全て失なわれた。", "You save your rod from destruction, but all charges are lost."), o_name);
+            msg_print(_("ロッドは破損を免れたが、魔力は全て失なわれた。", "You save your rod from destruction, but all charges are lost."));
             o_ptr->timeout = baseitem.pval * o_ptr->number;
         } else if (tval == ItemKindType::WAND) {
             msg_format(_("%sは破損を免れたが、魔力が全て失われた。", "You save your %s from destruction, but all charges are lost."), o_name);

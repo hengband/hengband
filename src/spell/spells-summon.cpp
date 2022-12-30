@@ -294,7 +294,7 @@ int summon_cyber(PlayerType *player_ptr, MONSTER_IDX who, POSITION y, POSITION x
 void mitokohmon(PlayerType *player_ptr)
 {
     int count = 0;
-    concptr sukekakusan = "";
+    [[maybe_unused]] concptr sukekakusan = "";
     if (summon_named_creature(player_ptr, 0, player_ptr->y, player_ptr->x, MonsterRaceId::SUKE, PM_FORCE_PET)) {
         msg_print(_("『助さん』が現れた。", "Suke-san apperars."));
         sukekakusan = "Suke-san";
@@ -333,9 +333,9 @@ void mitokohmon(PlayerType *player_ptr)
         return;
     }
 
-    msg_format(
-        _("「者ども、ひかえおろう！！！このお方をどなたとこころえる。」", "%s^ says 'WHO do you think this person is! Bow your head, down to your knees!'"),
-        sukekakusan);
+    msg_print(_(
+        "「者ども、ひかえおろう！！！このお方をどなたとこころえる。」",
+        format("%s^ says 'WHO do you think this person is! Bow your head, down to your knees!'", sukekakusan)));
     sukekaku = true;
     stun_monsters(player_ptr, 120);
     confuse_monsters(player_ptr, 120);

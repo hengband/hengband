@@ -213,7 +213,7 @@ bool affect_player(MONSTER_IDX who, PlayerType *player_ptr, concptr who_name, in
     SpellHex(player_ptr).store_vengeful_damage(ep_ptr->get_damage);
     if ((player_ptr->tim_eyeeye || SpellHex(player_ptr).is_spelling_specific(HEX_EYE_FOR_EYE)) && (ep_ptr->get_damage > 0) && !player_ptr->is_dead && (ep_ptr->who > 0)) {
         const auto m_name_self = monster_desc(player_ptr, ep_ptr->m_ptr, MD_PRON_VISIBLE | MD_POSSESSIVE | MD_OBJECTIVE);
-        msg_format(_("攻撃が%s自身を傷つけた！", "The attack of %s has wounded %s!"), ep_ptr->m_name, m_name_self.data());
+        msg_print(_(format("攻撃が%s自身を傷つけた！", ep_ptr->m_name), format("The attack of %s has wounded %s!", ep_ptr->m_name, m_name_self.data())));
         (*project)(player_ptr, 0, 0, ep_ptr->m_ptr->fy, ep_ptr->m_ptr->fx, ep_ptr->get_damage, AttributeType::MISSILE, PROJECT_KILL, std::nullopt);
         if (player_ptr->tim_eyeeye) {
             set_tim_eyeeye(player_ptr, player_ptr->tim_eyeeye - 5, true);

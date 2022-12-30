@@ -1303,7 +1303,7 @@ void switch_element_racial(PlayerType *player_ptr, rc_type *rc_ptr)
         rc_ptr->add_power(rpi, RC_IDX_CLASS_1);
         break;
     case ElementRealmType::DARKNESS:
-        rpi = rpi_type(format(_("闇の扉", "Door to darkness"), 15 + plev / 2));
+        rpi = rpi_type(_("闇の扉", "Door to darkness"));
         rpi.info = format("%s%d", KWD_SPHERE, 15 + plev / 2);
         rpi.min_level = 5;
         rpi.cost = 5 + plev / 7;

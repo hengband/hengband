@@ -257,13 +257,13 @@ static void display_player_exp(PlayerType *player_ptr)
     PlayerRace pr(player_ptr);
     int e = pr.equals(PlayerRaceType::ANDROID) ? ENTRY_EXP_ANDR : ENTRY_CUR_EXP;
     if (player_ptr->exp >= player_ptr->max_exp) {
-        display_player_one_line(e, format("%ld", player_ptr->exp), TERM_L_GREEN);
+        display_player_one_line(e, format("%d", player_ptr->exp), TERM_L_GREEN);
     } else {
-        display_player_one_line(e, format("%ld", player_ptr->exp), TERM_YELLOW);
+        display_player_one_line(e, format("%d", player_ptr->exp), TERM_YELLOW);
     }
 
     if (!pr.equals(PlayerRaceType::ANDROID)) {
-        display_player_one_line(ENTRY_MAX_EXP, format("%ld", player_ptr->max_exp), TERM_L_GREEN);
+        display_player_one_line(ENTRY_MAX_EXP, format("%d", player_ptr->max_exp), TERM_L_GREEN);
     }
 
     e = pr.equals(PlayerRaceType::ANDROID) ? ENTRY_EXP_TO_ADV_ANDR : ENTRY_EXP_TO_ADV;
@@ -271,9 +271,9 @@ static void display_player_exp(PlayerType *player_ptr)
     if (player_ptr->lev >= PY_MAX_LEVEL) {
         display_player_one_line(e, "*****", TERM_L_GREEN);
     } else if (pr.equals(PlayerRaceType::ANDROID)) {
-        display_player_one_line(e, format("%ld", (int32_t)(player_exp_a[player_ptr->lev - 1] * player_ptr->expfact / 100L)), TERM_L_GREEN);
+        display_player_one_line(e, format("%d", player_exp_a[player_ptr->lev - 1] * player_ptr->expfact / 100), TERM_L_GREEN);
     } else {
-        display_player_one_line(e, format("%ld", (int32_t)(player_exp[player_ptr->lev - 1] * player_ptr->expfact / 100L)), TERM_L_GREEN);
+        display_player_one_line(e, format("%d", player_exp[player_ptr->lev - 1] * player_ptr->expfact / 100), TERM_L_GREEN);
     }
 }
 
@@ -322,7 +322,7 @@ static void display_real_playtime(void)
     uint32_t play_hour = w_ptr->play_time / (60 * 60);
     uint32_t play_min = (w_ptr->play_time / 60) % 60;
     uint32_t play_sec = w_ptr->play_time % 60;
-    display_player_one_line(ENTRY_PLAY_TIME, format("%.2lu:%.2lu:%.2lu", play_hour, play_min, play_sec), TERM_L_GREEN);
+    display_player_one_line(ENTRY_PLAY_TIME, format("%.2u:%.2u:%.2u", play_hour, play_min, play_sec), TERM_L_GREEN);
 }
 
 /*!
@@ -350,7 +350,7 @@ void display_player_middle(PlayerType *player_ptr)
     int tmp_speed = calc_temporary_speed(player_ptr);
     display_player_speed(player_ptr, attr, base_speed, tmp_speed);
     display_player_exp(player_ptr);
-    display_player_one_line(ENTRY_GOLD, format("%ld", player_ptr->au), TERM_L_GREEN);
+    display_player_one_line(ENTRY_GOLD, format("%d", player_ptr->au), TERM_L_GREEN);
     display_playtime_in_game(player_ptr);
     display_real_playtime();
 }

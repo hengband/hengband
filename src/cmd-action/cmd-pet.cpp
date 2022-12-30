@@ -115,7 +115,7 @@ void do_cmd_pet_dismiss(PlayerType *player_ptr)
             health_track(player_ptr, pet_ctr);
             handle_stuff(player_ptr);
 
-            msg_format(_("%sを放しますか？ [Yes/No/Unnamed (%d体)]", "Dismiss %s? [Yes/No/Unnamed (%d remain)]"), friend_name.data(), who.size() - i);
+            msg_format(_("%sを放しますか？ [Yes/No/Unnamed (%lu体)]", "Dismiss %s? [Yes/No/Unnamed (%lu remain)]"), friend_name.data(), who.size() - i);
 
             if (m_ptr->ml) {
                 move_cursor_relative(m_ptr->fy, m_ptr->fx);

@@ -403,9 +403,9 @@ static bool display_auto_roller_count(PlayerType *player_ptr, const int col)
 
     birth_put_stats(player_ptr);
     if (auto_upper_round) {
-        put_str(format("%ld%09ld", auto_upper_round, auto_round), 10, col + 20);
+        put_str(format("%d%09d", auto_upper_round, auto_round), 10, col + 20);
     } else {
-        put_str(format("%10ld", auto_round), 10, col + 20);
+        put_str(format("%10d", auto_round), 10, col + 20);
     }
     term_fresh();
     inkey_scan = true;

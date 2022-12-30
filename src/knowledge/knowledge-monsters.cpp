@@ -266,7 +266,7 @@ static void display_monster_list(int col, int row, int per_page, const std::vect
         }
 
         if (w_ptr->wizard || visual_only) {
-            c_prt(attr, format("%d", r_idx), row + i, 62);
+            c_prt(attr, format("%d", enum2i(r_idx)), row + i, 62);
         }
 
         term_erase(69, row + i, 255);
@@ -397,7 +397,7 @@ void do_cmd_knowledge_monsters(PlayerType *player_ptr, bool *need_redraw, bool v
             display_visual_list(max + 3, 7, browser_rows - 1, wid - (max + 3), attr_top, char_left);
         }
 
-        prt(format(_("%d 種", "%d Races"), r_idx_list.size()), 3, 26);
+        prt(format(_("%lu 種", "%lu Races"), r_idx_list.size()), 3, 26);
         prt(format(_("<方向>%s%s%s, ESC", "<dir>%s%s%s, ESC"), (!visual_list && !visual_only) ? _(", 'r'で思い出を見る", ", 'r' to recall") : "",
                 visual_list ? _(", ENTERで決定", ", ENTER to accept") : _(", 'v'でシンボル変更", ", 'v' for visuals"),
                 (attr_idx || char_idx) ? _(", 'c', 'p'でペースト", ", 'c', 'p' to paste") : _(", 'c'でコピー", ", 'c' to copy")),

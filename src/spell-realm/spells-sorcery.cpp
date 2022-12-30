@@ -82,7 +82,7 @@ bool alchemy(PlayerType *player_ptr)
     if (price > 30000) {
         price = 30000;
     }
-    msg_format(_("%sを＄%d の金に変えた。", "You turn %s to %ld coins worth of gold."), o_name, price);
+    msg_format(_("%sを＄%d の金に変えた。", "You turn %s to %d coins worth of gold."), o_name, price);
 
     player_ptr->au += price;
     player_ptr->redraw |= PR_GOLD;

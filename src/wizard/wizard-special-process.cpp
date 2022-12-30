@@ -304,7 +304,7 @@ static std::optional<FixedArtifactId> wiz_select_named_artifact(PlayerType *play
             put_str(ss.str().data(), i + 1, 15);
         }
         if (page_max > 1) {
-            put_str(format("-- more (%d/%d) --", current_page + 1, page_max), page_item_count + 1, 15);
+            put_str(format("-- more (%lu/%lu) --", current_page + 1, page_max), page_item_count + 1, 15);
         }
 
         char cmd = ESCAPE;

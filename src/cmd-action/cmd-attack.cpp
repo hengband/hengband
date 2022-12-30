@@ -183,7 +183,7 @@ bool do_cmd_attack(PlayerType *player_ptr, POSITION y, POSITION x, combat_option
 
     if (!can_attack_with_main_hand(player_ptr) && !can_attack_with_sub_hand(player_ptr) && player_ptr->muta.has_none_of(mutation_attack_methods)) {
         sound(SOUND_ATTACK_FAILED);
-        msg_format(_("%s攻撃できない。", "You cannot attack."), (empty_hands(player_ptr, false) == EMPTY_HAND_NONE) ? _("両手がふさがって", "") : "");
+        msg_print(_(format("%s攻撃できない。", (empty_hands(player_ptr, false) == EMPTY_HAND_NONE) ? "両手がふさがって" : ""), "You cannot attack."));
         return false;
     }
 
