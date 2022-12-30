@@ -4,4 +4,4 @@
 
 class ItemEntity;
 class PlayerType;
-void describe_flavor(PlayerType *player_ptr, char *buf, ItemEntity *o_ptr, BIT_FLAGS mode);
+void describe_flavor(PlayerType *player_ptr, char *buf, const ItemEntity *o_ptr, const BIT_FLAGS mode);
