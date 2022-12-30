@@ -74,16 +74,16 @@ void curse_equipment(PlayerType *player_ptr, PERCENTAGE chance, PERCENTAGE heavy
     if (!o_ptr->bi_id) {
         return;
     }
+
     auto oflags = object_flags(o_ptr);
-    GAME_TEXT o_name[MAX_NLEN];
-    describe_flavor(player_ptr, o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
+    const auto item_name = describe_flavor(player_ptr, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
 
     /* Extra, biased saving throw for blessed items */
     if (oflags.has(TR_BLESSED)) {
 #ifdef JP
-        msg_format("祝福された%sは呪いを跳ね返した！", o_name);
+        msg_format("祝福された%sは呪いを跳ね返した！", item_name.data());
 #else
-        msg_format("Your blessed %s resist%s cursing!", o_name, ((o_ptr->number > 1) ? "" : "s"));
+        msg_format("Your blessed %s resist%s cursing!", item_name.data(), ((o_ptr->number > 1) ? "" : "s"));
 #endif
         /* Hmmm -- can we wear multiple items? If not, this is unnecessary */
         return;
@@ -116,7 +116,7 @@ void curse_equipment(PlayerType *player_ptr, PERCENTAGE chance, PERCENTAGE heavy
     }
 
     if (changed) {
-        msg_format(_("悪意に満ちた黒いオーラが%sをとりまいた...", "There is a malignant black aura surrounding %s..."), o_name);
+        msg_format(_("悪意に満ちた黒いオーラが%sをとりまいた...", "There is a malignant black aura surrounding %s..."), item_name.data());
         o_ptr->feeling = FEEL_NONE;
     }
 

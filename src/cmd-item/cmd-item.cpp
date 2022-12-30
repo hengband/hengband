@@ -152,11 +152,9 @@ void do_cmd_drop(PlayerType *player_ptr)
 void do_cmd_observe(PlayerType *player_ptr)
 {
     OBJECT_IDX item;
-    ItemEntity *o_ptr;
-    GAME_TEXT o_name[MAX_NLEN];
-    concptr q = _("どのアイテムを調べますか? ", "Examine which item? ");
-    concptr s = _("調べられるアイテムがない。", "You have nothing to examine.");
-    o_ptr = choose_object(player_ptr, &item, q, s, (USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT));
+    const auto q = _("どのアイテムを調べますか? ", "Examine which item? ");
+    const auto s = _("調べられるアイテムがない。", "You have nothing to examine.");
+    auto *o_ptr = choose_object(player_ptr, &item, q, s, (USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT));
     if (!o_ptr) {
         return;
     }
@@ -166,8 +164,8 @@ void do_cmd_observe(PlayerType *player_ptr)
         return;
     }
 
-    describe_flavor(player_ptr, o_name, o_ptr, 0);
-    msg_format(_("%sを調べている...", "Examining %s..."), o_name);
+    const auto item_name = describe_flavor(player_ptr, o_ptr, 0);
+    msg_format(_("%sを調べている...", "Examining %s..."), item_name.data());
     if (!screen_object(player_ptr, o_ptr, SCROBJ_FORCE_DETAIL)) {
         msg_print(_("特に変わったところはないようだ。", "You see nothing special."));
     }
@@ -207,18 +205,16 @@ void do_cmd_uninscribe(PlayerType *player_ptr)
 void do_cmd_inscribe(PlayerType *player_ptr)
 {
     OBJECT_IDX item;
-    ItemEntity *o_ptr;
-    GAME_TEXT o_name[MAX_NLEN];
     char out_val[MAX_INSCRIPTION + 1] = "";
-    concptr q = _("どのアイテムに銘を刻みますか? ", "Inscribe which item? ");
-    concptr s = _("銘を刻めるアイテムがない。", "You have nothing to inscribe.");
-    o_ptr = choose_object(player_ptr, &item, q, s, (USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT));
+    const auto q = _("どのアイテムに銘を刻みますか? ", "Inscribe which item? ");
+    const auto s = _("銘を刻めるアイテムがない。", "You have nothing to inscribe.");
+    auto *o_ptr = choose_object(player_ptr, &item, q, s, (USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT));
     if (!o_ptr) {
         return;
     }
 
-    describe_flavor(player_ptr, o_name, o_ptr, OD_OMIT_INSCRIPTION);
-    msg_format(_("%sに銘を刻む。", "Inscribing %s."), o_name);
+    const auto item_name = describe_flavor(player_ptr, o_ptr, OD_OMIT_INSCRIPTION);
+    msg_format(_("%sに銘を刻む。", "Inscribing %s."), item_name.data());
     msg_print(nullptr);
     strcpy(out_val, "");
     if (o_ptr->is_inscribed()) {

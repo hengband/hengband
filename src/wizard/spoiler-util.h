@@ -26,7 +26,7 @@ struct pval_info_type {
 };
 
 struct obj_desc_list {
-    char description[MAX_NLEN]; /* "The Longsword Dragonsmiter (6d4) (+20, +25)" */
+    char description[MAX_NLEN]{}; /* "The Longsword Dragonsmiter (6d4) (+20, +25)" */
     pval_info_type pval_info; /* Description of what is affected by an object's pval */
     concptr slays[N_ELEMENTS(slay_flags_desc) + 1]; /* A list of an object's slaying preferences */
     concptr brands[N_ELEMENTS(brand_flags_desc) + 1]; /* A list if an object's elemental brands */

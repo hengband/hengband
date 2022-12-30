@@ -147,8 +147,6 @@ void Patron::gain_level_reward(PlayerType *player_ptr_, int chosen_reward)
     int type;
     patron_reward effect;
     std::string reward;
-    GAME_TEXT o_name[MAX_NLEN];
-
     int count = 0;
 
     if (!chosen_reward) {
@@ -404,27 +402,25 @@ void Patron::gain_level_reward(PlayerType *player_ptr_, int chosen_reward)
                     slot = INVEN_MAIN_HAND;
                 }
             }
-            describe_flavor(player_ptr, o_name, &this->player_ptr->inventory_list[slot], OD_NAME_ONLY);
+
+            const auto item_name = describe_flavor(this->player_ptr, &this->player_ptr->inventory_list[slot], OD_NAME_ONLY);
             (void)curse_weapon_object(player_ptr, false, &this->player_ptr->inventory_list[slot]);
-            reward = format(_("%sが破壊された。", "destroying %s"), o_name);
+            reward = format(_("%sが破壊された。", "destroying %s"), item_name.data());
             break;
         }
 
-        case REW_CURSE_AR:
-
+        case REW_CURSE_AR: {
             if (!this->player_ptr->inventory_list[INVEN_BODY].bi_id) {
                 break;
             }
             msg_format(_("%sの声が響き渡った:", "The voice of %s booms out:"), this->name.data());
             msg_print(_("「汝、防具に頼ることなかれ。」", "'Thou reliest too much on thine equipment.'"));
-
-            describe_flavor(player_ptr, o_name, &this->player_ptr->inventory_list[INVEN_BODY], OD_NAME_ONLY);
+            const auto item_name = describe_flavor(player_ptr, &this->player_ptr->inventory_list[INVEN_BODY], OD_NAME_ONLY);
             (void)curse_armor(player_ptr);
-            reward = format(_("%sが破壊された。", "destroying %s"), o_name);
+            reward = format(_("%sが破壊された。", "destroying %s"), item_name.data());
             break;
-
-        case REW_PISS_OFF:
-
+        }
+        case REW_PISS_OFF: {
             msg_format(_("%sの声がささやいた:", "The voice of %s whispers:"), this->name.data());
             msg_print(_("「我を怒りしめた罪を償うべし。」", "'Now thou shalt pay for annoying me.'"));
 
@@ -450,16 +446,18 @@ void Patron::gain_level_reward(PlayerType *player_ptr_, int chosen_reward)
                             slot = INVEN_MAIN_HAND;
                         }
                     }
-                    describe_flavor(player_ptr, o_name, &this->player_ptr->inventory_list[slot], OD_NAME_ONLY);
+
+                    const auto item_name = describe_flavor(this->player_ptr, &this->player_ptr->inventory_list[slot], OD_NAME_ONLY);
                     (void)curse_weapon_object(player_ptr, false, &this->player_ptr->inventory_list[slot]);
-                    reward = format(_("%sが破壊された。", "destroying %s"), o_name);
+                    reward = format(_("%sが破壊された。", "destroying %s"), item_name.data());
                 } else {
                     if (!this->player_ptr->inventory_list[INVEN_BODY].bi_id) {
                         break;
                     }
-                    describe_flavor(player_ptr, o_name, &this->player_ptr->inventory_list[INVEN_BODY], OD_NAME_ONLY);
+
+                    const auto item_name = describe_flavor(player_ptr, &this->player_ptr->inventory_list[INVEN_BODY], OD_NAME_ONLY);
                     (void)curse_armor(player_ptr);
-                    reward = format(_("%sが破壊された。", "destroying %s"), o_name);
+                    reward = format(_("%sが破壊された。", "destroying %s"), item_name.data());
                 }
                 break;
             default:
@@ -470,7 +468,7 @@ void Patron::gain_level_reward(PlayerType *player_ptr_, int chosen_reward)
                 break;
             }
             break;
-
+        }
         case REW_WRATH:
 
             msg_format(_("%sの声が轟き渡った:", "The voice of %s thunders:"), this->name.data());

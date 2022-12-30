@@ -32,6 +32,7 @@
 #include "term/screen-processor.h"
 #include "util/enum-converter.h"
 #include "util/int-char-converter.h"
+#include "util/string-processor.h"
 #include "view/display-messages.h"
 #include "view/display-store.h"
 #include "world/world.h"
@@ -102,11 +103,10 @@ static void take_item_from_home(PlayerType *player_ptr, ItemEntity *o_ptr, ItemE
     const int amt = j_ptr->number;
     distribute_charges(o_ptr, j_ptr, amt);
 
-    GAME_TEXT o_name[MAX_NLEN];
     auto item_new = store_item_to_inventory(player_ptr, j_ptr);
-    describe_flavor(player_ptr, o_name, &player_ptr->inventory_list[item_new], 0);
+    const auto item_name = describe_flavor(player_ptr, &player_ptr->inventory_list[item_new], 0);
     handle_stuff(player_ptr);
-    msg_format(_("%s(%c)を取った。", "You have %s (%c)."), o_name, index_to_label(item_new));
+    msg_format(_("%s(%c)を取った。", "You have %s (%c)."), item_name.data(), index_to_label(item_new));
 
     auto i = st_ptr->stock_num;
     store_item_increase(item, -amt);
@@ -254,9 +254,8 @@ void store_purchase(PlayerType *player_ptr, StoreSaleType store_num)
 
     COMMAND_CODE item_new;
     PRICE price;
-    GAME_TEXT o_name[MAX_NLEN];
-    describe_flavor(player_ptr, o_name, j_ptr, 0);
-    msg_format(_("%s(%c)を購入する。", "Buying %s (%c)."), o_name, I2A(item));
+    const auto purchased_item_name = describe_flavor(player_ptr, j_ptr, 0);
+    msg_format(_("%s(%c)を購入する。", "Buying %s (%c)."), purchased_item_name.data(), I2A(item));
     msg_print(nullptr);
 
     auto res = prompt_to_buy(player_ptr, j_ptr, store_num);
@@ -287,19 +286,17 @@ void store_purchase(PlayerType *player_ptr, StoreSaleType store_num)
     store_prt_gold(player_ptr);
     object_aware(player_ptr, j_ptr);
 
-    describe_flavor(player_ptr, o_name, j_ptr, 0);
-    msg_format(_("%sを $%ldで購入しました。", "You bought %s for %ld gold."), o_name, (long)price);
-
-    strcpy(record_o_name, o_name);
+    msg_format(_("%sを $%ldで購入しました。", "You bought %s for %ld gold."), purchased_item_name.data(), (long)price);
+    angband_strcpy(record_o_name, purchased_item_name.data(), MAX_NLEN);
     record_turn = w_ptr->game_turn;
 
     if (record_buy) {
-        exe_write_diary(player_ptr, DIARY_BUY, 0, o_name);
+        exe_write_diary(player_ptr, DIARY_BUY, 0, purchased_item_name.data());
     }
 
-    describe_flavor(player_ptr, o_name, o_ptr, OD_NAME_ONLY);
+    const auto diary_item_name = describe_flavor(player_ptr, o_ptr, OD_NAME_ONLY);
     if (record_rand_art && o_ptr->is_random_artifact()) {
-        exe_write_diary(player_ptr, DIARY_ART, 0, o_name);
+        exe_write_diary(player_ptr, DIARY_ART, 0, diary_item_name.data());
     }
 
     j_ptr->inscription.reset();
@@ -312,8 +309,8 @@ void store_purchase(PlayerType *player_ptr, StoreSaleType store_num)
     item_new = store_item_to_inventory(player_ptr, j_ptr);
     handle_stuff(player_ptr);
 
-    describe_flavor(player_ptr, o_name, &player_ptr->inventory_list[item_new], 0);
-    msg_format(_("%s(%c)を手に入れた。", "You have %s (%c)."), o_name, index_to_label(item_new));
+    const auto got_item_name = describe_flavor(player_ptr, &player_ptr->inventory_list[item_new], 0);
+    msg_format(_("%s(%c)を手に入れた。", "You have %s (%c)."), got_item_name.data(), index_to_label(item_new));
 
     if (o_ptr->is_wand_rod()) {
         o_ptr->pval -= j_ptr->pval;

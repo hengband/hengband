@@ -47,16 +47,15 @@ void inven_item_charges(const ItemEntity &item)
 void inven_item_describe(PlayerType *player_ptr, short item)
 {
     auto *o_ptr = &player_ptr->inventory_list[item];
-    GAME_TEXT o_name[MAX_NLEN];
-    describe_flavor(player_ptr, o_name, o_ptr, 0);
+    const auto item_name = describe_flavor(player_ptr, o_ptr, 0);
 #ifdef JP
     if (o_ptr->number <= 0) {
-        msg_format("もう%sを持っていない。", o_name);
+        msg_format("もう%sを持っていない。", item_name.data());
     } else {
-        msg_format("まだ %sを持っている。", o_name);
+        msg_format("まだ %sを持っている。", item_name.data());
     }
 #else
-    msg_format("You have %s.", o_name);
+    msg_format("You have %s.", item_name.data());
 #endif
 }
 
@@ -77,10 +76,8 @@ void display_koff(PlayerType *player_ptr)
 
     ItemEntity item;
     item.prep(player_ptr->tracking_bi_id);
-    GAME_TEXT o_name[MAX_NLEN];
-    describe_flavor(player_ptr, o_name, &item, (OD_OMIT_PREFIX | OD_NAME_ONLY | OD_STORE));
-
-    term_putstr(0, 0, -1, TERM_WHITE, o_name);
+    const auto item_name = describe_flavor(player_ptr, &item, (OD_OMIT_PREFIX | OD_NAME_ONLY | OD_STORE));
+    term_putstr(0, 0, -1, TERM_WHITE, item_name);
     const auto sval = item.bi_key.sval().value();
     const short use_realm = tval2realm(item.bi_key.tval());
 

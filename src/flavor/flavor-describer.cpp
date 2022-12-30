@@ -571,14 +571,13 @@ static describe_option_type decide_describe_option(const ItemEntity &item, BIT_F
 }
 
 /*!
- * @brief オブジェクトの各表記を返すメイン関数 / Creates a description of the item "o_ptr", and stores it in "out_val".
+ * @brief オブジェクトの各表記を返す
  * @param player_ptr プレイヤーへの参照ポインタ
- * @param buf 表記を返すための文字列参照ポインタ
  * @param o_ptr 特性短縮表記を得たいオブジェクト構造体の参照ポインタ
  * @param mode 表記に関するオプション指定
- * @return 現在クエスト達成目的のアイテムならばTRUEを返す
+ * @return modeに応じたオブジェクトの表記
  */
-void describe_flavor(PlayerType *player_ptr, char *buf, const ItemEntity *o_ptr, const BIT_FLAGS mode)
+std::string describe_flavor(PlayerType *player_ptr, const ItemEntity *o_ptr, BIT_FLAGS mode)
 {
     const auto &item = *o_ptr;
     const auto opt = decide_describe_option(item, mode);
@@ -586,8 +585,7 @@ void describe_flavor(PlayerType *player_ptr, char *buf, const ItemEntity *o_ptr,
     desc_ss << describe_named_item(player_ptr, item, opt);
 
     if (any_bits(mode, OD_NAME_ONLY) || (o_ptr->bi_id == 0)) {
-        angband_strcpy(buf, desc_ss.str().data(), MAX_NLEN);
-        return;
+        return desc_ss.str();
     }
 
     desc_ss << describe_chest(item, opt)
@@ -606,16 +604,14 @@ void describe_flavor(PlayerType *player_ptr, char *buf, const ItemEntity *o_ptr,
 
     desc_ss << describe_ac(item, opt);
     if (any_bits(mode, OD_NAME_AND_ENCHANT)) {
-        angband_strcpy(buf, desc_ss.str().data(), MAX_NLEN);
-        return;
+        return desc_ss.str();
     }
 
     desc_ss << describe_remaining(item, opt);
     if (any_bits(mode, OD_OMIT_INSCRIPTION)) {
-        angband_strcpy(buf, desc_ss.str().data(), MAX_NLEN);
-        return;
+        return desc_ss.str();
     }
 
     desc_ss << describe_inscription(item, opt);
-    angband_strcpy(buf, desc_ss.str().data(), MAX_NLEN);
+    return desc_ss.str();
 }

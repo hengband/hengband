@@ -278,17 +278,15 @@ bool pulish_shield(PlayerType *player_ptr)
         return false;
     }
 
-    GAME_TEXT o_name[MAX_NLEN];
-    describe_flavor(player_ptr, o_name, o_ptr, OD_OMIT_PREFIX | OD_NAME_ONLY);
-
+    const auto item_name = describe_flavor(player_ptr, o_ptr, OD_OMIT_PREFIX | OD_NAME_ONLY);
     auto is_pulish_successful = (o_ptr->bi_id > 0) && !o_ptr->is_fixed_or_random_artifact() && !o_ptr->is_ego();
     is_pulish_successful &= !o_ptr->is_cursed();
     is_pulish_successful &= (o_ptr->bi_key.sval() != SV_MIRROR_SHIELD);
     if (is_pulish_successful) {
 #ifdef JP
-        msg_format("%sは輝いた！", o_name);
+        msg_format("%sは輝いた！", item_name.data());
 #else
-        msg_format("%s %s shine%s!", ((item >= 0) ? "Your" : "The"), o_name, ((o_ptr->number > 1) ? "" : "s"));
+        msg_format("%s %s shine%s!", ((item >= 0) ? "Your" : "The"), item_name.data(), ((o_ptr->number > 1) ? "" : "s"));
 #endif
         o_ptr->ego_idx = EgoType::REFLECTION;
         enchant_equipment(player_ptr, o_ptr, randint0(3) + 4, ENCH_TOAC);

@@ -19,6 +19,7 @@
 #include <sstream>
 #include <stdexcept>
 #include <string>
+#include <string_view>
 #include <utility>
 
 /*
@@ -37,14 +38,14 @@ static short get_rumor_num(std::string_view zz, short max_idx)
     return static_cast<short>(atoi(zz.data()));
 }
 
-static std::string bind_rumor_name(std::string_view base, concptr fullname)
+static std::string bind_rumor_name(std::string_view base, std::string_view item_name)
 {
     if (const auto pos = base.find("{Name}");
         pos != std::string::npos) {
         const auto head = base.substr(0, pos);
         const auto tail = base.substr(pos + 6);
         std::stringstream ss;
-        ss << head << fullname << tail;
+        ss << head << item_name << tail;
         return ss.str();
     }
 
@@ -117,7 +118,7 @@ void display_rumor(PlayerType *player_ptr, bool ex)
     }
 
     concptr rumor_eff_format = nullptr;
-    char fullname[1024] = "";
+    std::string fullname;
     const auto &category = tokens[0];
     if (category == "ARTIFACT") {
         const auto &artifact_name = tokens[1];
@@ -127,7 +128,7 @@ void display_rumor(PlayerType *player_ptr, bool ex)
         item.prep(bi_id);
         item.fixed_artifact_idx = a_idx;
         item.ident = IDENT_STORE;
-        describe_flavor(player_ptr, fullname, &item, OD_NAME_ONLY);
+        fullname = describe_flavor(player_ptr, &item, OD_NAME_ONLY);
     } else if (category == "MONSTER") {
         MonsterRaceInfo *r_ptr;
         const auto &monster_name = tokens[1];
@@ -142,7 +143,7 @@ void display_rumor(PlayerType *player_ptr, bool ex)
             }
         }
 
-        strcpy(fullname, r_ptr->name.data());
+        fullname = r_ptr->name;
 
         if (!r_ptr->r_sights) {
             r_ptr->r_sights++;
@@ -160,7 +161,7 @@ void display_rumor(PlayerType *player_ptr, bool ex)
             }
         }
 
-        strcpy(fullname, d_ptr->name.data());
+        fullname = d_ptr->name;
         if (!max_dlv[d_idx]) {
             max_dlv[d_idx] = d_ptr->mindepth;
             rumor_eff_format = _("%sに帰還できるようになった。", "You can recall to %s.");
@@ -175,8 +176,7 @@ void display_rumor(PlayerType *player_ptr, bool ex)
             }
         }
 
-        strcpy(fullname, towns_info[t_idx].name);
-
+        fullname = towns_info[t_idx].name;
         int32_t visit = (1UL << (t_idx - 1));
         if ((t_idx != SECRET_TOWN) && !(player_ptr->visit & visit)) {
             player_ptr->visit |= visit;
@@ -190,6 +190,6 @@ void display_rumor(PlayerType *player_ptr, bool ex)
     msg_print(rumor_msg);
     if (rumor_eff_format) {
         msg_print(nullptr);
-        msg_format(rumor_eff_format, fullname);
+        msg_format(rumor_eff_format, fullname.data());
     }
 }

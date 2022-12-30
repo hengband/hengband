@@ -162,21 +162,16 @@ void do_cmd_visuals(PlayerType *player_ptr)
                     continue;
                 }
 
-                std::string o_name("");
-                GAME_TEXT char_o_name[MAX_NLEN]{};
+                std::string item_name;
                 if (baseitem.flavor == 0) {
-                    o_name = strip_name(baseitem.idx);
+                    item_name = strip_name(baseitem.idx);
                 } else {
                     ItemEntity dummy;
                     dummy.prep(baseitem.idx);
-                    describe_flavor(player_ptr, char_o_name, &dummy, OD_FORCE_FLAVOR);
+                    item_name = describe_flavor(player_ptr, &dummy, OD_FORCE_FLAVOR);
                 }
 
-                if (o_name == "") {
-                    o_name = char_o_name;
-                }
-
-                auto_dump_printf(auto_dump_stream, "# %s\n", o_name.data());
+                auto_dump_printf(auto_dump_stream, "# %s\n", item_name.data());
                 auto_dump_printf(auto_dump_stream, "K:%d:0x%02X/0x%02X\n\n", (int)baseitem.idx, (byte)(baseitem.x_attr), (byte)(baseitem.x_char));
             }
 

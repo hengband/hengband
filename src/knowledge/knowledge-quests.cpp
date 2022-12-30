@@ -52,7 +52,6 @@ static void do_cmd_knowledge_quests_current(PlayerType *player_ptr, FILE *fff)
 {
     const auto &quest_list = QuestList::get_instance();
     std::string rand_tmp_str;
-    GAME_TEXT name[MAX_NLEN];
     MonsterRaceInfo *r_ptr;
     int rand_level = 100;
     int total = 0;
@@ -91,16 +90,17 @@ static void do_cmd_knowledge_quests_current(PlayerType *player_ptr, FILE *fff)
 #ifdef JP
                         note = format(" - %d 体の%sを倒す。(あと %d 体)", (int)q_ref.max_num, r_ptr->name.data(), (int)(q_ref.max_num - q_ref.cur_num));
 #else
-                        angband_strcpy(name, r_ptr->name.data(), sizeof(name));
-                        plural_aux(name);
-                        note = format(" - kill %d %s, have killed %d.", (int)q_ref.max_num, name, (int)q_ref.cur_num);
+                        auto monster_name(r_ptr->name);
+                        plural_aux(monster_name.data());
+                        note = format(" - kill %d %s, have killed %d.", (int)q_ref.max_num, monster_name.data(), (int)q_ref.cur_num);
 #endif
                     } else {
                         note = format(_(" - %sを倒す。", " - kill %s."), r_ptr->name.data());
                     }
 
                     break;
-                case QuestKindType::FIND_ARTIFACT:
+                case QuestKindType::FIND_ARTIFACT: {
+                    std::string item_name("");
                     if (q_ref.reward_artifact_idx != FixedArtifactId::NONE) {
                         const auto &a_ref = artifacts_info.at(q_ref.reward_artifact_idx);
                         ItemEntity item;
@@ -108,11 +108,12 @@ static void do_cmd_knowledge_quests_current(PlayerType *player_ptr, FILE *fff)
                         item.prep(bi_id);
                         item.fixed_artifact_idx = q_ref.reward_artifact_idx;
                         item.ident = IDENT_STORE;
-                        describe_flavor(player_ptr, name, &item, OD_NAME_ONLY);
+                        item_name = describe_flavor(player_ptr, &item, OD_NAME_ONLY);
                     }
 
-                    note = format(_("\n   - %sを見つけ出す。", "\n   - Find %s."), name);
+                    note = format(_("\n   - %sを見つけ出す。", "\n   - Find %s."), item_name.data());
                     break;
+                }
                 case QuestKindType::FIND_EXIT:
                     note = _(" - 出口に到達する。", " - Reach exit.");
                     break;
@@ -166,11 +167,10 @@ static void do_cmd_knowledge_quests_current(PlayerType *player_ptr, FILE *fff)
         rand_tmp_str = format("  %s (%d 階) - %d 体の%sを倒す。(あと %d 体)\n", q_ref.name, (int)q_ref.level, (int)q_ref.max_num, r_ptr->name.data(),
             (int)(q_ref.max_num - q_ref.cur_num));
 #else
-        angband_strcpy(name, r_ptr->name.data(), sizeof(name));
-        plural_aux(name);
-
-        rand_tmp_str = format("  %s (Dungeon level: %d)\n  Kill %d %s, have killed %d.\n", q_ref.name, (int)q_ref.level, (int)q_ref.max_num, name,
-            (int)q_ref.cur_num);
+        auto monster_name(r_ptr->name);
+        plural_aux(monster_name.data());
+        rand_tmp_str = format("  %s (Dungeon level: %d)\n  Kill %d %s, have killed %d.\n", q_ref.name, (int)q_ref.level, (int)q_ref.max_num,
+            monster_name.data(), (int)q_ref.cur_num);
 #endif
     }
 

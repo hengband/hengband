@@ -150,11 +150,11 @@ void process_eat_item(PlayerType *player_ptr, MonsterAttackPlayer *monap_ptr)
             continue;
         }
 
-        describe_flavor(player_ptr, monap_ptr->o_name, monap_ptr->o_ptr, OD_OMIT_PREFIX);
+        const auto item_name = describe_flavor(player_ptr, monap_ptr->o_ptr, OD_OMIT_PREFIX);
 #ifdef JP
-        msg_format("%s(%c)を%s盗まれた！", monap_ptr->o_name, index_to_label(i_idx), ((monap_ptr->o_ptr->number > 1) ? "一つ" : ""));
+        msg_format("%s(%c)を%s盗まれた！", item_name.data(), index_to_label(i_idx), ((monap_ptr->o_ptr->number > 1) ? "一つ" : ""));
 #else
-        msg_format("%sour %s (%c) was stolen!", ((monap_ptr->o_ptr->number > 1) ? "One of y" : "Y"), monap_ptr->o_name, index_to_label(i_idx));
+        msg_format("%sour %s (%c) was stolen!", ((monap_ptr->o_ptr->number > 1) ? "One of y" : "Y"), item_name.data(), index_to_label(i_idx));
 #endif
         chg_virtue(player_ptr, V_SACRIFICE, 1);
         o_idx = o_pop(player_ptr->current_floor_ptr);
@@ -181,11 +181,11 @@ void process_eat_food(PlayerType *player_ptr, MonsterAttackPlayer *monap_ptr)
             continue;
         }
 
-        describe_flavor(player_ptr, monap_ptr->o_name, monap_ptr->o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
+        const auto item_name = describe_flavor(player_ptr, monap_ptr->o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
 #ifdef JP
-        msg_format("%s(%c)を%s食べられてしまった！", monap_ptr->o_name, index_to_label(i_idx), ((monap_ptr->o_ptr->number > 1) ? "一つ" : ""));
+        msg_format("%s(%c)を%s食べられてしまった！", item_name.data(), index_to_label(i_idx), ((monap_ptr->o_ptr->number > 1) ? "一つ" : ""));
 #else
-        msg_format("%sour %s (%c) was eaten!", ((monap_ptr->o_ptr->number > 1) ? "One of y" : "Y"), monap_ptr->o_name, index_to_label(i_idx));
+        msg_format("%sour %s (%c) was eaten!", ((monap_ptr->o_ptr->number > 1) ? "One of y" : "Y"), item_name.data(), index_to_label(i_idx));
 #endif
         inven_item_increase(player_ptr, i_idx, -1);
         inven_item_optimize(player_ptr, i_idx);

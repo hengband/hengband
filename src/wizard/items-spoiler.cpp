@@ -43,7 +43,8 @@ static void describe_baseitem_info(PlayerType *player_ptr,
         return;
     }
 
-    describe_flavor(player_ptr, name, q_ptr, OD_NAME_ONLY | OD_STORE);
+    auto item_name = describe_flavor(player_ptr, q_ptr, OD_NAME_ONLY | OD_STORE);
+    name = item_name.data();
     switch (q_ptr->bi_key.tval()) {
     case ItemKindType::SHOT:
     case ItemKindType::BOLT:

@@ -37,7 +37,6 @@
 static void sense_inventory_aux(PlayerType *player_ptr, INVENTORY_IDX slot, bool heavy)
 {
     auto *o_ptr = &player_ptr->inventory_list[slot];
-    GAME_TEXT o_name[MAX_NLEN];
     if (o_ptr->ident & (IDENT_SENSE)) {
         return;
     }
@@ -98,20 +97,20 @@ static void sense_inventory_aux(PlayerType *player_ptr, INVENTORY_IDX slot, bool
         disturb(player_ptr, false, false);
     }
 
-    describe_flavor(player_ptr, o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
+    const auto item_name = describe_flavor(player_ptr, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
     if (slot >= INVEN_MAIN_HAND) {
 #ifdef JP
-        msg_format("%s%s(%c)は%sという感じがする...", describe_use(player_ptr, slot), o_name, index_to_label(slot), game_inscriptions[feel]);
+        msg_format("%s%s(%c)は%sという感じがする...", describe_use(player_ptr, slot), item_name.data(), index_to_label(slot), game_inscriptions[feel]);
 #else
-        msg_format("You feel the %s (%c) you are %s %s %s...", o_name, index_to_label(slot), describe_use(player_ptr, slot),
+        msg_format("You feel the %s (%c) you are %s %s %s...", item_name.data(), index_to_label(slot), describe_use(player_ptr, slot),
             ((o_ptr->number == 1) ? "is" : "are"), game_inscriptions[feel]);
 #endif
 
     } else {
 #ifdef JP
-        msg_format("ザックの中の%s(%c)は%sという感じがする...", o_name, index_to_label(slot), game_inscriptions[feel]);
+        msg_format("ザックの中の%s(%c)は%sという感じがする...", item_name.data(), index_to_label(slot), game_inscriptions[feel]);
 #else
-        msg_format("You feel the %s (%c) in your pack %s %s...", o_name, index_to_label(slot), ((o_ptr->number == 1) ? "is" : "are"), game_inscriptions[feel]);
+        msg_format("You feel the %s (%c) in your pack %s %s...", item_name.data(), index_to_label(slot), ((o_ptr->number == 1) ? "is" : "are"), game_inscriptions[feel]);
 #endif
     }
 

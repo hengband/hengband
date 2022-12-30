@@ -32,6 +32,7 @@
 #include "system/player-type-definition.h"
 #include "target/target-checker.h"
 #include "term/z-form.h"
+#include "util/string-processor.h"
 #include "view/display-messages.h"
 #include "world/world.h"
 #ifdef JP
@@ -86,19 +87,18 @@ static bool py_pickup_floor_aux(PlayerType *player_ptr)
  */
 void py_pickup_floor(PlayerType *player_ptr, bool pickup)
 {
-    GAME_TEXT o_name[MAX_NLEN];
-    ItemEntity *o_ptr;
     int floor_num = 0;
     OBJECT_IDX floor_o_idx = 0;
     int can_pickup = 0;
     auto &o_idx_list = player_ptr->current_floor_ptr->grid_array[player_ptr->y][player_ptr->x].o_idx_list;
     for (auto it = o_idx_list.begin(); it != o_idx_list.end();) {
         const OBJECT_IDX this_o_idx = *it++;
-        o_ptr = &player_ptr->current_floor_ptr->o_list[this_o_idx];
-        describe_flavor(player_ptr, o_name, o_ptr, 0);
+        auto *o_ptr = &player_ptr->current_floor_ptr->o_list[this_o_idx];
+        const auto item_name = describe_flavor(player_ptr, o_ptr, 0);
         disturb(player_ptr, false, false);
         if (o_ptr->bi_key.tval() == ItemKindType::GOLD) {
-            msg_format(_(" $%ld の価値がある%sを見つけた。", "You have found %ld gold pieces worth of %s."), (long)o_ptr->pval, o_name);
+            constexpr auto mes = _(" $%ld の価値がある%sを見つけた。", "You have found %ld gold pieces worth of %s.");
+            msg_format(mes, (long)o_ptr->pval, item_name.data());
             sound(SOUND_SELL);
             player_ptr->au += o_ptr->pval;
             player_ptr->redraw |= (PR_GOLD);
@@ -124,9 +124,9 @@ void py_pickup_floor(PlayerType *player_ptr, bool pickup)
 
     if (!pickup) {
         if (floor_num == 1) {
-            o_ptr = &player_ptr->current_floor_ptr->o_list[floor_o_idx];
-            describe_flavor(player_ptr, o_name, o_ptr, 0);
-            msg_format(_("%sがある。", "You see %s."), o_name);
+            auto *o_ptr = &player_ptr->current_floor_ptr->o_list[floor_o_idx];
+            const auto item_name = describe_flavor(player_ptr, o_ptr, 0);
+            msg_format(_("%sがある。", "You see %s."), item_name.data());
         } else {
             msg_format(_("%d 個のアイテムの山がある。", "You see a pile of %d items."), floor_num);
         }
@@ -136,9 +136,9 @@ void py_pickup_floor(PlayerType *player_ptr, bool pickup)
 
     if (!can_pickup) {
         if (floor_num == 1) {
-            o_ptr = &player_ptr->current_floor_ptr->o_list[floor_o_idx];
-            describe_flavor(player_ptr, o_name, o_ptr, 0);
-            msg_format(_("ザックには%sを入れる隙間がない。", "You have no room for %s."), o_name);
+            auto *o_ptr = &player_ptr->current_floor_ptr->o_list[floor_o_idx];
+            const auto item_name = describe_flavor(player_ptr, o_ptr, 0);
+            msg_format(_("ザックには%sを入れる隙間がない。", "You have no room for %s."), item_name.data());
         } else {
             msg_print(_("ザックには床にあるどのアイテムも入らない。", "You have no room for any of the objects on the floor."));
         }
@@ -156,17 +156,19 @@ void py_pickup_floor(PlayerType *player_ptr, bool pickup)
         return;
     }
 
-    if (carry_query_flag) {
-        char out_val[MAX_NLEN + 20];
-        o_ptr = &player_ptr->current_floor_ptr->o_list[floor_o_idx];
-        describe_flavor(player_ptr, o_name, o_ptr, 0);
-        strnfmt(out_val, sizeof(out_val), _("%sを拾いますか? ", "Pick up %s? "), o_name);
-        if (!get_check(out_val)) {
-            return;
-        }
+    if (!carry_query_flag) {
+        describe_pickup_item(player_ptr, floor_o_idx);
+        return;
     }
 
-    o_ptr = &player_ptr->current_floor_ptr->o_list[floor_o_idx];
+    char out_val[MAX_NLEN + 20];
+    auto *o_ptr = &player_ptr->current_floor_ptr->o_list[floor_o_idx];
+    const auto item_name = describe_flavor(player_ptr, o_ptr, 0);
+    strnfmt(out_val, sizeof(out_val), _("%sを拾いますか? ", "Pick up %s? "), item_name.data());
+    if (!get_check(out_val)) {
+        return;
+    }
+
     describe_pickup_item(player_ptr, floor_o_idx);
 }
 
@@ -185,23 +187,16 @@ void py_pickup_floor(PlayerType *player_ptr, bool pickup)
  */
 void describe_pickup_item(PlayerType *player_ptr, OBJECT_IDX o_idx)
 {
+    auto *o_ptr = &player_ptr->current_floor_ptr->o_list[o_idx];
 #ifdef JP
-    GAME_TEXT o_name[MAX_NLEN];
-    GAME_TEXT old_name[MAX_NLEN];
-#else
-    GAME_TEXT o_name[MAX_NLEN];
-#endif
-
-    ItemEntity *o_ptr;
-    o_ptr = &player_ptr->current_floor_ptr->o_list[o_idx];
-
-#ifdef JP
-    describe_flavor(player_ptr, old_name, o_ptr, OD_NAME_ONLY);
+    const auto old_item_name = describe_flavor(player_ptr, o_ptr, OD_NAME_ONLY);
     const auto picked_count_str = describe_count_with_counter_suffix(*o_ptr);
     const auto picked_count = o_ptr->number;
+#else
+    (void)o_ptr;
 #endif
 
-    INVENTORY_IDX slot = store_item_to_inventory(player_ptr, o_ptr);
+    auto slot = store_item_to_inventory(player_ptr, o_ptr);
     o_ptr = &player_ptr->inventory_list[slot];
     delete_object_idx(player_ptr, o_idx);
     if (player_ptr->ppersonality == PERSONALITY_MUNCHKIN) {
@@ -212,8 +207,7 @@ void describe_pickup_item(PlayerType *player_ptr, OBJECT_IDX o_idx)
         }
     }
 
-    describe_flavor(player_ptr, o_name, o_ptr, 0);
-
+    const auto item_name = describe_flavor(player_ptr, o_ptr, 0);
 #ifdef JP
     if (o_ptr->is_specific_artifact(FixedArtifactId::CRIMSON) && (player_ptr->ppersonality == PERSONALITY_COMBAT)) {
         msg_format("こうして、%sは『クリムゾン』を手に入れた。", player_ptr->name);
@@ -221,20 +215,20 @@ void describe_pickup_item(PlayerType *player_ptr, OBJECT_IDX o_idx)
         msg_format("%sに襲いかかる．．．", player_ptr->name);
     } else {
         if (plain_pickup) {
-            msg_format("%s(%c)を持っている。", o_name, index_to_label(slot));
+            msg_format("%s(%c)を持っている。", item_name.data(), index_to_label(slot));
         } else {
             if (o_ptr->number > picked_count) {
-                msg_format("%s拾って、%s(%c)を持っている。", picked_count_str.data(), o_name, index_to_label(slot));
+                msg_format("%s拾って、%s(%c)を持っている。", picked_count_str.data(), item_name.data(), index_to_label(slot));
             } else {
-                msg_format("%s(%c)を拾った。", o_name, index_to_label(slot));
+                msg_format("%s(%c)を拾った。", item_name.data(), index_to_label(slot));
             }
         }
     }
 
-    strcpy(record_o_name, old_name);
+    angband_strcpy(record_o_name, old_item_name.data(), old_item_name.length());
 #else
-    msg_format("You have %s (%c).", o_name, index_to_label(slot));
-    strcpy(record_o_name, o_name);
+    msg_format("You have %s (%c).", item_name.data(), index_to_label(slot));
+    angband_strcpy(record_o_name, item_name.data(), item_name.length());
 #endif
     record_turn = w_ptr->game_turn;
     check_find_art_quest_completion(player_ptr, o_ptr);
@@ -261,15 +255,13 @@ void carry(PlayerType *player_ptr, bool pickup)
 
     for (auto it = g_ptr->o_idx_list.begin(); it != g_ptr->o_idx_list.end();) {
         const OBJECT_IDX this_o_idx = *it++;
-        ItemEntity *o_ptr;
-        o_ptr = &player_ptr->current_floor_ptr->o_list[this_o_idx];
-        GAME_TEXT o_name[MAX_NLEN];
-        describe_flavor(player_ptr, o_name, o_ptr, 0);
+        auto *o_ptr = &player_ptr->current_floor_ptr->o_list[this_o_idx];
+        const auto item_name = describe_flavor(player_ptr, o_ptr, 0);
         disturb(player_ptr, false, false);
         if (o_ptr->bi_key.tval() == ItemKindType::GOLD) {
             int value = (long)o_ptr->pval;
             delete_object_idx(player_ptr, this_o_idx);
-            msg_format(_(" $%ld の価値がある%sを見つけた。", "You collect %ld gold pieces worth of %s."), (long)value, o_name);
+            msg_format(_(" $%ld の価値がある%sを見つけた。", "You collect %ld gold pieces worth of %s."), (long)value, item_name.data());
             sound(SOUND_SELL);
             player_ptr->au += value;
             player_ptr->redraw |= (PR_GOLD);
@@ -283,19 +275,19 @@ void carry(PlayerType *player_ptr, bool pickup)
         }
 
         if (!pickup) {
-            msg_format(_("%sがある。", "You see %s."), o_name);
+            msg_format(_("%sがある。", "You see %s."), item_name.data());
             continue;
         }
 
         if (!check_store_item_to_inventory(player_ptr, o_ptr)) {
-            msg_format(_("ザックには%sを入れる隙間がない。", "You have no room for %s."), o_name);
+            msg_format(_("ザックには%sを入れる隙間がない。", "You have no room for %s."), item_name.data());
             continue;
         }
 
         int is_pickup_successful = true;
         if (carry_query_flag) {
             char out_val[MAX_NLEN + 20];
-            strnfmt(out_val, sizeof(out_val), _("%sを拾いますか? ", "Pick up %s? "), o_name);
+            strnfmt(out_val, sizeof(out_val), _("%sを拾いますか? ", "Pick up %s? "), item_name.data());
             is_pickup_successful = get_check(out_val);
         }
 

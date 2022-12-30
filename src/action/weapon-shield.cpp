@@ -23,19 +23,18 @@
 void verify_equip_slot(PlayerType *player_ptr, INVENTORY_IDX item)
 {
     ItemEntity *o_ptr, *new_o_ptr;
-    GAME_TEXT o_name[MAX_NLEN];
-
+    std::string item_name;
     if (item == INVEN_MAIN_HAND) {
         if (!has_melee_weapon(player_ptr, INVEN_SUB_HAND)) {
             return;
         }
 
         o_ptr = &player_ptr->inventory_list[INVEN_SUB_HAND];
-        describe_flavor(player_ptr, o_name, o_ptr, 0);
+        item_name = describe_flavor(player_ptr, o_ptr, 0);
 
         if (o_ptr->is_cursed()) {
             if (o_ptr->allow_two_hands_wielding() && can_two_hands_wielding(player_ptr)) {
-                msg_format(_("%sを両手で構えた。", "You are wielding %s with both hands."), o_name);
+                msg_format(_("%sを両手で構えた。", "You are wielding %s with both hands."), item_name.data());
             }
             return;
         }
@@ -45,9 +44,10 @@ void verify_equip_slot(PlayerType *player_ptr, INVENTORY_IDX item)
         inven_item_increase(player_ptr, INVEN_SUB_HAND, -((int)o_ptr->number));
         inven_item_optimize(player_ptr, INVEN_SUB_HAND);
         if (new_o_ptr->allow_two_hands_wielding() && can_two_hands_wielding(player_ptr)) {
-            msg_format(_("%sを両手で構えた。", "You are wielding %s with both hands."), o_name);
+            msg_format(_("%sを両手で構えた。", "You are wielding %s with both hands."), item_name.data());
         } else {
-            msg_format(_("%sを%sで構えた。", "You are wielding %s in your %s hand."), o_name, (left_hander ? _("左手", "left") : _("右手", "right")));
+            const auto mes = _("%sを%sで構えた。", "You are wielding %s in your %s hand.");
+            msg_format(mes, item_name.data(), (left_hander ? _("左手", "left") : _("右手", "right")));
         }
         return;
     }
@@ -58,12 +58,12 @@ void verify_equip_slot(PlayerType *player_ptr, INVENTORY_IDX item)
 
     o_ptr = &player_ptr->inventory_list[INVEN_MAIN_HAND];
     if (o_ptr->bi_id) {
-        describe_flavor(player_ptr, o_name, o_ptr, 0);
+        item_name = describe_flavor(player_ptr, o_ptr, 0);
     }
 
     if (has_melee_weapon(player_ptr, INVEN_MAIN_HAND)) {
         if (o_ptr->allow_two_hands_wielding() && can_two_hands_wielding(player_ptr)) {
-            msg_format(_("%sを両手で構えた。", "You are wielding %s with both hands."), o_name);
+            msg_format(_("%sを両手で構えた。", "You are wielding %s with both hands."), item_name.data());
         }
 
         return;
@@ -77,5 +77,5 @@ void verify_equip_slot(PlayerType *player_ptr, INVENTORY_IDX item)
     new_o_ptr->copy_from(o_ptr);
     inven_item_increase(player_ptr, INVEN_MAIN_HAND, -((int)o_ptr->number));
     inven_item_optimize(player_ptr, INVEN_MAIN_HAND);
-    msg_format(_("%sを持ち替えた。", "You shifted %s to your other hand."), o_name);
+    msg_format(_("%sを持ち替えた。", "You shifted %s to your other hand."), item_name.data());
 }

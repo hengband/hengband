@@ -31,11 +31,10 @@ COMMAND_CODE show_inventory(PlayerType *player_ptr, int target_item, BIT_FLAGS m
     COMMAND_CODE i;
     int k, l, z = 0;
     ItemEntity *o_ptr;
-    GAME_TEXT o_name[MAX_NLEN];
     char tmp_val[80];
     COMMAND_CODE out_index[23];
     TERM_COLOR out_color[23];
-    char out_desc[23][MAX_NLEN];
+    std::array<std::string, 23> out_desc{};
     COMMAND_CODE target_item_label = 0;
     char inven_label[52 + 1];
 
@@ -59,15 +58,14 @@ COMMAND_CODE show_inventory(PlayerType *player_ptr, int target_item, BIT_FLAGS m
             continue;
         }
 
-        describe_flavor(player_ptr, o_name, o_ptr, 0);
         out_index[k] = i;
         out_color[k] = tval_to_attr[enum2i(o_ptr->bi_key.tval()) % 128];
         if (o_ptr->timeout) {
             out_color[k] = TERM_L_DARK;
         }
 
-        (void)strcpy(out_desc[k], o_name);
-        l = strlen(out_desc[k]) + 5;
+        out_desc[k] = describe_flavor(player_ptr, o_ptr, 0);
+        l = out_desc[k].length() + 5;
         if (show_weights) {
             l += 9;
         }
@@ -141,10 +139,9 @@ COMMAND_CODE show_inventory(PlayerType *player_ptr, int target_item, BIT_FLAGS m
  */
 void display_inventory(PlayerType *player_ptr, const ItemTester &item_tester)
 {
-    int i, n, z = 0;
+    int i, z = 0;
     TERM_COLOR attr = TERM_WHITE;
     char tmp_val[80];
-    GAME_TEXT o_name[MAX_NLEN];
     TERM_LEN wid, hgt;
 
     if (!player_ptr || !player_ptr->inventory_list) {
@@ -177,8 +174,7 @@ void display_inventory(PlayerType *player_ptr, const ItemTester &item_tester)
         int cur_col = 3;
         term_erase(cur_col, i, 255);
         term_putstr(0, i, cur_col, TERM_WHITE, tmp_val);
-        describe_flavor(player_ptr, o_name, o_ptr, 0);
-        n = strlen(o_name);
+        const auto item_name = describe_flavor(player_ptr, o_ptr, 0);
         attr = tval_to_attr[enum2i(o_ptr->bi_key.tval()) % 128];
         if (o_ptr->timeout) {
             attr = TERM_L_DARK;
@@ -195,7 +191,7 @@ void display_inventory(PlayerType *player_ptr, const ItemTester &item_tester)
             cur_col += 2;
         }
 
-        term_putstr(cur_col, i, n, attr, o_name);
+        term_putstr(cur_col, i, item_name.length(), attr, item_name);
 
         if (show_weights) {
             int wgt = o_ptr->weight * o_ptr->number;

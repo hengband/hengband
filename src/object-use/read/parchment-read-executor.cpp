@@ -28,13 +28,12 @@ bool ParchmentReadExecutor::is_identified() const
 
 bool ParchmentReadExecutor::read()
 {
-    GAME_TEXT o_name[MAX_NLEN]{};
     char buf[1024]{};
     screen_save();
     auto q = format("book-%d_jp.txt", this->o_ptr->bi_key.sval().value());
-    describe_flavor(this->player_ptr, o_name, this->o_ptr, OD_NAME_ONLY);
+    const auto item_name = describe_flavor(this->player_ptr, this->o_ptr, OD_NAME_ONLY);
     (void)path_build(buf, sizeof(buf), ANGBAND_DIR_FILE, q.data());
-    (void)show_file(this->player_ptr, true, buf, o_name, 0, 0);
+    (void)show_file(this->player_ptr, true, buf, item_name.data(), 0, 0);
     screen_load();
     return false;
 }

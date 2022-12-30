@@ -119,10 +119,9 @@ bool recharge(PlayerType *player_ptr, int power)
         return update_player(player_ptr);
     }
 
-    GAME_TEXT o_name[MAX_NLEN];
     if (o_ptr->is_fixed_artifact()) {
-        describe_flavor(player_ptr, o_name, o_ptr, OD_NAME_ONLY);
-        msg_format(_("魔力が逆流した！%sは完全に魔力を失った。", "The recharging backfires - %s is completely drained!"), o_name);
+        const auto item_name = describe_flavor(player_ptr, o_ptr, OD_NAME_ONLY);
+        msg_format(_("魔力が逆流した！%sは完全に魔力を失った。", "The recharging backfires - %s is completely drained!"), item_name.data());
         if ((tval == ItemKindType::ROD) && (o_ptr->timeout < 10000)) {
             o_ptr->timeout = (o_ptr->timeout + 100) * 2;
         } else if (o_ptr->is_wand_staff()) {
@@ -131,7 +130,7 @@ bool recharge(PlayerType *player_ptr, int power)
         return update_player(player_ptr);
     }
 
-    describe_flavor(player_ptr, o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
+    const auto item_name = describe_flavor(player_ptr, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
     auto fail_type = 1;
     if (PlayerClass(player_ptr).is_wizard()) {
         /* 10% chance to blow up one rod, otherwise draining. */
@@ -192,16 +191,16 @@ bool recharge(PlayerType *player_ptr, int power)
                 o_ptr->timeout = (o_ptr->timeout + 100) * 2;
             }
         } else if (tval == ItemKindType::WAND) {
-            msg_format(_("%sは破損を免れたが、魔力が全て失われた。", "You save your %s from destruction, but all charges are lost."), o_name);
+            msg_format(_("%sは破損を免れたが、魔力が全て失われた。", "You save your %s from destruction, but all charges are lost."), item_name.data());
             o_ptr->pval = 0;
         }
 
         break;
     case 2:
         if (o_ptr->number > 1) {
-            msg_format(_("乱暴な魔法のために%sが一本壊れた！", "Wild magic consumes one of your %s!"), o_name);
+            msg_format(_("乱暴な魔法のために%sが一本壊れた！", "Wild magic consumes one of your %s!"), item_name.data());
         } else {
-            msg_format(_("乱暴な魔法のために%sが壊れた！", "Wild magic consumes your %s!"), o_name);
+            msg_format(_("乱暴な魔法のために%sが壊れた！", "Wild magic consumes your %s!"), item_name.data());
         }
 
         if (tval == ItemKindType::ROD) {
@@ -216,9 +215,9 @@ bool recharge(PlayerType *player_ptr, int power)
         break;
     case 3:
         if (o_ptr->number > 1) {
-            msg_format(_("乱暴な魔法のために%sが全て壊れた！", "Wild magic consumes all your %s!"), o_name);
+            msg_format(_("乱暴な魔法のために%sが全て壊れた！", "Wild magic consumes all your %s!"), item_name.data());
         } else {
-            msg_format(_("乱暴な魔法のために%sが壊れた！", "Wild magic consumes your %s!"), o_name);
+            msg_format(_("乱暴な魔法のために%sが壊れた！", "Wild magic consumes your %s!"), item_name.data());
         }
 
         vary_item(player_ptr, item, -999);

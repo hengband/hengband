@@ -69,15 +69,11 @@ void object_aware(PlayerType *player_ptr, const ItemEntity *o_ptr)
     // playrecordに識別したアイテムを記録
     ItemEntity forge;
     ItemEntity *q_ptr;
-    GAME_TEXT o_name[MAX_NLEN];
-
     q_ptr = &forge;
     q_ptr->copy_from(o_ptr);
-
     q_ptr->number = 1;
-    describe_flavor(player_ptr, o_name, q_ptr, OD_NAME_ONLY);
-
-    exe_write_diary(player_ptr, DIARY_FOUND, 0, o_name);
+    const auto item_name = describe_flavor(player_ptr, q_ptr, OD_NAME_ONLY);
+    exe_write_diary(player_ptr, DIARY_FOUND, 0, item_name.data());
 }
 
 /*!

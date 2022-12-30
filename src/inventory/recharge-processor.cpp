@@ -29,15 +29,14 @@ static void recharged_notice(PlayerType *player_ptr, ItemEntity *o_ptr)
     auto s = angband_strchr(o_ptr->inscription->data(), '!');
     while (s) {
         if (s[1] == '!') {
-            GAME_TEXT o_name[MAX_NLEN];
-            describe_flavor(player_ptr, o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
+            const auto item_name = describe_flavor(player_ptr, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
 #ifdef JP
-            msg_format("%sは再充填された。", o_name);
+            msg_format("%sは再充填された。", item_name.data());
 #else
             if (o_ptr->number > 1) {
-                msg_format("Your %s are recharged.", o_name);
+                msg_format("Your %s are recharged.", item_name.data());
             } else {
-                msg_format("Your %s is recharged.", o_name);
+                msg_format("Your %s is recharged.", item_name.data());
             }
 #endif
             disturb(player_ptr, false, false);

@@ -260,12 +260,11 @@ static void attack_golden_hammer(PlayerType *player_ptr, player_attack_type *pa_
     }
 
     auto *q_ptr = &floor_ptr->o_list[m_ptr->hold_o_idx_list.front()];
-    GAME_TEXT o_name[MAX_NLEN];
-    describe_flavor(player_ptr, o_name, q_ptr, OD_NAME_ONLY);
+    const auto item_name = describe_flavor(player_ptr, q_ptr, OD_NAME_ONLY);
     q_ptr->held_m_idx = 0;
     q_ptr->marked.clear().set(OmType::TOUCHED);
     m_ptr->hold_o_idx_list.pop_front();
-    msg_format(_("%sを奪った。", "You snatched %s."), o_name);
+    msg_format(_("%sを奪った。", "You snatched %s."), item_name.data());
     store_item_to_inventory(player_ptr, q_ptr);
 }
 

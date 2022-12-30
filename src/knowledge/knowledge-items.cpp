@@ -101,12 +101,11 @@ void do_cmd_knowledge_artifacts(PlayerType *player_ptr)
     ang_sort(player_ptr, whats.data(), &why, whats.size(), ang_sort_art_comp, ang_sort_art_swap);
     for (auto a_idx : whats) {
         const auto &a_ref = artifacts_info.at(a_idx);
-        GAME_TEXT base_name[MAX_NLEN];
-        strcpy(base_name, _("未知の伝説のアイテム", "Unknown Artifact"));
+        constexpr auto unknown_art = _("未知の伝説のアイテム", "Unknown Artifact");
         const auto bi_id = lookup_baseitem_id(a_ref.bi_key);
         constexpr auto template_basename = _("     %s\n", "     The %s\n");
         if (bi_id == 0) {
-            fprintf(fff, template_basename, base_name);
+            fprintf(fff, template_basename, unknown_art);
             continue;
         }
 
@@ -114,8 +113,8 @@ void do_cmd_knowledge_artifacts(PlayerType *player_ptr)
         item.prep(bi_id);
         item.fixed_artifact_idx = a_idx;
         item.ident |= IDENT_STORE;
-        describe_flavor(player_ptr, base_name, &item, (OD_OMIT_PREFIX | OD_NAME_ONLY));
-        fprintf(fff, template_basename, base_name);
+        const auto item_name = describe_flavor(player_ptr, &item, (OD_OMIT_PREFIX | OD_NAME_ONLY));
+        fprintf(fff, template_basename, item_name.data());
     }
 
     angband_fclose(fff);

@@ -310,14 +310,11 @@ static void compare_weapon_aux(PlayerType *player_ptr, ItemEntity *o_ptr, int co
  */
 static void list_weapon(PlayerType *player_ptr, ItemEntity *o_ptr, TERM_LEN row, TERM_LEN col)
 {
-    GAME_TEXT o_name[MAX_NLEN];
-
-    DICE_NUMBER eff_dd = o_ptr->dd + player_ptr->to_dd[0];
-    DICE_SID eff_ds = o_ptr->ds + player_ptr->to_ds[0];
-    auto hit_reliability = player_ptr->skill_thn + (player_ptr->to_h[0] + o_ptr->to_h) * BTH_PLUS_ADJ;
-
-    describe_flavor(player_ptr, o_name, o_ptr, OD_NAME_ONLY);
-    c_put_str(TERM_YELLOW, o_name, row, col);
+    const auto eff_dd = o_ptr->dd + player_ptr->to_dd[0];
+    const auto eff_ds = o_ptr->ds + player_ptr->to_ds[0];
+    const auto hit_reliability = player_ptr->skill_thn + (player_ptr->to_h[0] + o_ptr->to_h) * BTH_PLUS_ADJ;
+    const auto item_name = describe_flavor(player_ptr, o_ptr, OD_NAME_ONLY);
+    c_put_str(TERM_YELLOW, item_name.data(), row, col);
     put_str(format(_("攻撃回数: %d", "Number of Blows: %d"), player_ptr->num_blow[0]), row + 1, col);
 
     put_str(_("命中率:  0  50 100 150 200 (敵のAC)", "To Hit:  0  50 100 150 200 (AC)"), row + 2, col);

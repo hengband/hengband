@@ -583,9 +583,8 @@ bool cosmic_cast_off(PlayerType *player_ptr, ItemEntity **o_ptr_ptr)
     OBJECT_IDX old_o_idx = drop_near(player_ptr, &forge, 0, player_ptr->y, player_ptr->x);
     *o_ptr_ptr = &player_ptr->current_floor_ptr->o_list[old_o_idx];
 
-    GAME_TEXT o_name[MAX_NLEN];
-    describe_flavor(player_ptr, o_name, &forge, OD_NAME_ONLY);
-    msg_format(_("%sを脱ぎ捨てた。", "You cast off %s."), o_name);
+    const auto item_name = describe_flavor(player_ptr, &forge, OD_NAME_ONLY);
+    msg_format(_("%sを脱ぎ捨てた。", "You cast off %s."), item_name.data());
     sound(SOUND_TAKE_OFF);
 
     /* Get effects */

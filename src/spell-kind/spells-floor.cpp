@@ -349,9 +349,8 @@ bool destroy_area(PlayerType *player_ptr, POSITION y1, POSITION x1, POSITION r, 
                         artifacts_info.at(o_ptr->fixed_artifact_idx).is_generated = false;
 
                         if (in_generate && cheat_peek) {
-                            GAME_TEXT o_name[MAX_NLEN];
-                            describe_flavor(player_ptr, o_name, o_ptr, (OD_NAME_ONLY | OD_STORE));
-                            msg_format(_("伝説のアイテム (%s) は生成中に*破壊*された。", "Artifact (%s) was *destroyed* during generation."), o_name);
+                            const auto item_name = describe_flavor(player_ptr, o_ptr, (OD_NAME_ONLY | OD_STORE));
+                            msg_format(_("伝説のアイテム (%s) は生成中に*破壊*された。", "Artifact (%s) was *destroyed* during generation."), item_name.data());
                         }
                     } else if (in_generate && cheat_peek && o_ptr->is_random_artifact()) {
                         msg_print(

@@ -119,20 +119,19 @@ static bool acid_minus_ac(PlayerType *player_ptr)
         return false;
     }
 
-    GAME_TEXT o_name[MAX_NLEN];
-    describe_flavor(player_ptr, o_name, o_ptr, OD_OMIT_PREFIX | OD_NAME_ONLY);
+    const auto item_name = describe_flavor(player_ptr, o_ptr, OD_OMIT_PREFIX | OD_NAME_ONLY);
     auto flags = object_flags(o_ptr);
     if (o_ptr->ac + o_ptr->to_a <= 0) {
-        msg_format(_("%sは既にボロボロだ！", "Your %s is already fully corroded!"), o_name);
+        msg_format(_("%sは既にボロボロだ！", "Your %s is already fully corroded!"), item_name.data());
         return false;
     }
 
     if (flags.has(TR_IGNORE_ACID)) {
-        msg_format(_("しかし%sには効果がなかった！", "Your %s is unaffected!"), o_name);
+        msg_format(_("しかし%sには効果がなかった！", "Your %s is unaffected!"), item_name.data());
         return true;
     }
 
-    msg_format(_("%sが酸で腐食した！", "Your %s is corroded!"), o_name);
+    msg_format(_("%sが酸で腐食した！", "Your %s is corroded!"), item_name.data());
     o_ptr->to_a--;
     player_ptr->update |= PU_BONUS;
     player_ptr->window_flags |= PW_EQUIP | PW_PLAYER;

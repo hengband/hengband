@@ -260,22 +260,22 @@ bool affect_item(PlayerType *player_ptr, MONSTER_IDX who, POSITION r, POSITION y
             continue;
         }
 
-        GAME_TEXT o_name[MAX_NLEN];
+        std::string item_name("");
         if (known && o_ptr->marked.has(OmType::FOUND)) {
             is_item_affected = true;
-            describe_flavor(player_ptr, o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
+            item_name = describe_flavor(player_ptr, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
         }
 
         if ((is_fixed_or_random_artifact || ignore)) {
             if (known && o_ptr->marked.has(OmType::FOUND)) {
-                msg_format(_("%sは影響を受けない！", (plural ? "The %s are unaffected!" : "The %s is unaffected!")), o_name);
+                msg_format(_("%sは影響を受けない！", (plural ? "The %s are unaffected!" : "The %s is unaffected!")), item_name.data());
             }
 
             continue;
         }
 
         if (known && o_ptr->marked.has(OmType::FOUND) && note_kill) {
-            msg_format(_("%sは%s", "The %s%s"), o_name, note_kill);
+            msg_format(_("%sは%s", "The %s%s"), item_name.data(), note_kill);
         }
 
         short bi_id = o_ptr->bi_id;

@@ -196,13 +196,12 @@ static SpoilerOutputResultType spoil_player_spell(concptr fname)
 
         auto magic_ptr = &class_magics_info[c];
         concptr book_name = "なし";
-        char name_buffer[200];
         if (magic_ptr->spell_book != ItemKindType::NONE) {
             ItemEntity book;
             auto o_ptr = &book;
             o_ptr->prep(lookup_baseitem_id({ magic_ptr->spell_book, 0 }));
-            describe_flavor(&dummy_p, name_buffer, o_ptr, OD_NAME_ONLY);
-            book_name = name_buffer;
+            const auto item_name = describe_flavor(&dummy_p, o_ptr, OD_NAME_ONLY);
+            book_name = item_name.data();
             char *s = angband_strchr(book_name, '[');
             *s = '\0';
         }
