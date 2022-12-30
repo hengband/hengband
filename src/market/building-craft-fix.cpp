@@ -112,6 +112,13 @@ static std::pair<bool, ItemEntity *> select_repairing_broken_weapon(PlayerType *
     return { true, o_ptr };
 }
 
+static void display_reparing_weapon(PlayerType *player_ptr, ItemEntity *o_ptr, const int row)
+{
+    char item_name[MAX_NLEN];
+    describe_flavor(player_ptr, item_name, o_ptr, OD_NAME_ONLY);
+    prt(format(_("修復する武器　： %s", "Repairing: %s"), item_name), row + 3, 2);
+}
+
 static void display_repair_success_message(PlayerType *player_ptr, ItemEntity *o_ptr, const int cost)
 {
     char item_name[MAX_NLEN];
@@ -140,9 +147,7 @@ static PRICE repair_broken_weapon_aux(PlayerType *player_ptr, PRICE bcost)
         return 0;
     }
 
-    char basenm[MAX_NLEN];
-    describe_flavor(player_ptr, basenm, o_ptr, OD_NAME_ONLY);
-    prt(format(_("修復する武器　： %s", "Repairing: %s"), basenm), row + 3, 2);
+    display_reparing_weapon(player_ptr, o_ptr, row);
     const auto q = _("材料となる武器は？", "Which weapon for material? ");
     const auto s = _("材料となる武器がありません。", "You have no material for the repair.");
     short mater;
@@ -156,6 +161,7 @@ static PRICE repair_broken_weapon_aux(PlayerType *player_ptr, PRICE bcost)
         return 0;
     }
 
+    char basenm[MAX_NLEN];
     describe_flavor(player_ptr, basenm, mo_ptr, OD_NAME_ONLY);
     prt(format(_("材料とする武器： %s", "Material : %s"), basenm), row + 4, 2);
     const auto cost = bcost + object_value_real(o_ptr) * 2;
