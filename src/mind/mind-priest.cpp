@@ -29,7 +29,8 @@ bool bless_weapon(PlayerType *player_ptr)
     concptr s = _("祝福できる武器がありません。", "You have no weapon to bless.");
 
     OBJECT_IDX item;
-    auto *o_ptr = choose_object(player_ptr, &item, q, s, USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT, FuncItemTester(&ItemEntity::is_weapon));
+    constexpr BIT_FLAGS options = USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT;
+    auto *o_ptr = choose_object(player_ptr, &item, q, s, options, FuncItemTester(&ItemEntity::is_weapon));
     if (!o_ptr) {
         return false;
     }
@@ -39,7 +40,12 @@ bool bless_weapon(PlayerType *player_ptr)
     auto flags = object_flags(o_ptr);
 
     if (o_ptr->is_cursed()) {
-        if ((o_ptr->curse_flags.has(CurseTraitType::HEAVY_CURSE) && (randint1(100) < 33)) || flags.has(TR_ADD_L_CURSE) || flags.has(TR_ADD_H_CURSE) || o_ptr->curse_flags.has(CurseTraitType::PERSISTENT_CURSE) || o_ptr->curse_flags.has(CurseTraitType::PERMA_CURSE)) {
+        auto can_disturb_blessing = o_ptr->curse_flags.has(CurseTraitType::HEAVY_CURSE) && (randint1(100) < 33);
+        can_disturb_blessing |= flags.has(TR_ADD_L_CURSE);
+        can_disturb_blessing |= flags.has(TR_ADD_H_CURSE);
+        can_disturb_blessing |= o_ptr->curse_flags.has(CurseTraitType::PERSISTENT_CURSE);
+        can_disturb_blessing |= o_ptr->curse_flags.has(CurseTraitType::PERMA_CURSE);
+        if (can_disturb_blessing) {
 #ifdef JP
             msg_format("%sを覆う黒いオーラは祝福を跳ね返した！", o_name);
 #else
