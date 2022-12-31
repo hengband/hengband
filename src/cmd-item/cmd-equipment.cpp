@@ -49,6 +49,7 @@
 #include "system/player-type-definition.h"
 #include "term/screen-processor.h"
 #include "term/z-form.h"
+#include "util/bit-flags-calculator.h"
 #include "util/int-char-converter.h"
 #include "view/display-inventory.h"
 #include "view/display-messages.h"
@@ -75,15 +76,18 @@ static void do_curse_on_equip(OBJECT_IDX slot, ItemEntity *o_ptr, PlayerType *pl
         return;
     }
 
-    if ((object_flags(o_ptr).has(TR_PERSISTENT_CURSE) || o_ptr->curse_flags.has(CurseTraitType::PERSISTENT_CURSE)) && o_ptr->curse_flags.has_not(CurseTraitType::HEAVY_CURSE)) {
-
-        GAME_TEXT o_name[MAX_NLEN];
-        describe_flavor(player_ptr, o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
-        o_ptr->curse_flags.set(CurseTraitType::HEAVY_CURSE);
-        msg_format(_("悪意に満ちた黒いオーラが%sをとりまいた...", "There is a malignant black aura surrounding your %s..."), o_name);
-        o_ptr->feeling = FEEL_NONE;
-        player_ptr->update |= (PU_BONUS);
+    auto should_curse = object_flags(o_ptr).has(TR_PERSISTENT_CURSE) || o_ptr->curse_flags.has(CurseTraitType::PERSISTENT_CURSE);
+    should_curse &= o_ptr->curse_flags.has_not(CurseTraitType::HEAVY_CURSE);
+    if (!should_curse) {
+        return;
     }
+
+    GAME_TEXT o_name[MAX_NLEN];
+    describe_flavor(player_ptr, o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
+    o_ptr->curse_flags.set(CurseTraitType::HEAVY_CURSE);
+    msg_format(_("悪意に満ちた黒いオーラが%sをとりまいた...", "There is a malignant black aura surrounding your %s..."), o_name);
+    o_ptr->feeling = FEEL_NONE;
+    player_ptr->update |= (PU_BONUS);
 }
 
 /*!
@@ -231,7 +235,10 @@ void do_cmd_wield(PlayerType *player_ptr)
         return;
     }
 
-    if (confirm_wear && ((o_ptr->is_cursed() && o_ptr->is_known()) || ((o_ptr->ident & IDENT_SENSE) && (FEEL_BROKEN <= o_ptr->feeling) && (o_ptr->feeling <= FEEL_CURSED)))) {
+    auto should_equip_cursed = o_ptr->is_cursed() && o_ptr->is_known();
+    should_equip_cursed |= any_bits(o_ptr->ident, IDENT_SENSE) && (FEEL_BROKEN <= o_ptr->feeling) && (o_ptr->feeling <= FEEL_CURSED);
+    should_equip_cursed &= confirm_wear;
+    if (should_equip_cursed) {
         describe_flavor(player_ptr, o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
         if (!get_check(format(_("本当に%s{呪われている}を使いますか？", "Really use the %s {cursed}? "), o_name))) {
             return;
@@ -239,9 +246,15 @@ void do_cmd_wield(PlayerType *player_ptr)
     }
 
     PlayerRace pr(player_ptr);
-    if (o_ptr->is_specific_artifact(FixedArtifactId::STONEMASK) && o_ptr->is_known() && !pr.equals(PlayerRaceType::VAMPIRE) && !pr.equals(PlayerRaceType::ANDROID)) {
+    auto should_change_vampire = o_ptr->is_specific_artifact(FixedArtifactId::STONEMASK);
+    should_change_vampire &= o_ptr->is_known();
+    should_change_vampire &= !pr.equals(PlayerRaceType::VAMPIRE);
+    should_change_vampire &= !pr.equals(PlayerRaceType::ANDROID);
+    if (should_change_vampire) {
         describe_flavor(player_ptr, o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
-        if (!get_check(format(_("%sを装備すると吸血鬼になります。よろしいですか？", "%s will transform you into a vampire permanently when equipped. Do you become a vampire? "), o_name))) {
+        constexpr auto mes = _("%sを装備すると吸血鬼になります。よろしいですか？",
+            "%s will transform you into a vampire permanently when equipped. Do you become a vampire? ");
+        if (!get_check(format(mes, o_name))) {
             return;
         }
     }
