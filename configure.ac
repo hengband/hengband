@@ -95,7 +95,7 @@ AC_PATH_XTRA
 if test "$have_x" = yes; then
   LIBS="$LIBS -lX11"
   AC_DEFINE(USE_X11, 1, [Allow -mX11 environment])
-  CFLAGS="$X_CFLAGS $CFLAGS"
+  CXXFLAGS="$X_CFLAGS $CXXFLAGS"
   LDFLAGS="$X_LIBS $LDFLAGS"
 
   if test "$use_fontset" = yes; then
