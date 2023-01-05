@@ -13,8 +13,8 @@
 
 #include "system/angband.h"
 #include "system/h-basic.h"
-
 #include <memory>
+#include <optional>
 #include <stack>
 #include <string_view>
 #include <vector>
@@ -77,6 +77,9 @@ struct term_type {
     TERM_LEN wid{}; //!< Window Width(max 255)
     TERM_LEN hgt{}; //!< Window Height(max 255)
 
+    TERM_LEN offset_x{};
+    TERM_LEN offset_y{};
+
     TERM_LEN y1{}; //!< Minimum modified row
     TERM_LEN y2{}; //!< Maximum modified row
 
@@ -111,6 +114,34 @@ struct term_type {
     term_type &operator=(const term_type &) = delete;
     term_type(term_type &&) = default;
     term_type &operator=(term_type &&) = default;
+};
+
+class TermOffsetSetter {
+public:
+    TermOffsetSetter(std::optional<TERM_LEN> x, std::optional<TERM_LEN> y);
+    ~TermOffsetSetter();
+    TermOffsetSetter(const TermOffsetSetter &) = delete;
+    TermOffsetSetter &operator=(const TermOffsetSetter &) = delete;
+    TermOffsetSetter(TermOffsetSetter &&) = delete;
+    TermOffsetSetter &operator=(TermOffsetSetter &&) = delete;
+
+private:
+    term_type *term;
+    TERM_LEN orig_offset_x;
+    TERM_LEN orig_offset_y;
+};
+
+class TermCenteredOffsetSetter {
+public:
+    TermCenteredOffsetSetter(std::optional<TERM_LEN> width, std::optional<TERM_LEN> height);
+    ~TermCenteredOffsetSetter() = default;
+    TermCenteredOffsetSetter(const TermCenteredOffsetSetter &) = delete;
+    TermCenteredOffsetSetter &operator=(const TermCenteredOffsetSetter &) = delete;
+    TermCenteredOffsetSetter(TermCenteredOffsetSetter &&) = delete;
+    TermCenteredOffsetSetter &operator=(TermCenteredOffsetSetter &&) = delete;
+
+private:
+    std::optional<TermOffsetSetter> tos;
 };
 
 /**** Available Constants ****/
