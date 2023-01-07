@@ -110,6 +110,51 @@ void prt(std::string_view sv, TERM_LEN row, TERM_LEN col)
     c_prt(TERM_WHITE, sv, row, col);
 }
 
+static std::vector<std::pair<TERM_COLOR, char>> c_roff_wrap(int x, int y, int w, const char *s)
+{
+    if (x >= w) {
+        return {};
+    }
+
+    std::vector<std::pair<TERM_COLOR, char>> wrap_chars;
+    auto wrap_col = w;
+
+    if (_(iskanji(*s), false)) {
+        /* 現在が全角文字の場合 */
+        /* 行頭が行頭禁則文字になるときは、その１つ前の語で改行 */
+        if (is_kinsoku({ s, 2 })) {
+            TERM_COLOR a;
+            char c;
+            term_what(x - 2, y, &a, &c);
+            wrap_chars.emplace_back(a, c);
+            term_what(x - 1, y, &a, &c);
+            wrap_chars.emplace_back(a, c);
+            wrap_col = x - 2;
+        }
+    } else {
+        /* 現在が半角文字の場合 */
+        for (auto i = 0; i < x; i++) {
+            TERM_COLOR a;
+            char c;
+            term_what(i, y, &a, &c);
+
+            if (c == ' ') {
+                wrap_col = i + 1;
+                wrap_chars.clear();
+            } else if (_(iskanji(c), false)) {
+                wrap_col = i + 2;
+                i++;
+                wrap_chars.clear();
+            } else {
+                wrap_chars.emplace_back(a, c);
+            }
+        }
+    }
+
+    term_erase(wrap_col, y, 255);
+    return wrap_chars;
+}
+
 /*
  * Print some (colored) text to the screen at the current cursor position,
  * automatically "wrapping" existing text (at spaces) when necessary to
@@ -136,111 +181,40 @@ void c_roff(TERM_COLOR a, std::string_view str)
         return;
     }
 
-    for (auto s = str.data(); *s != '\0'; ++s) {
-        char ch;
-#ifdef JP
-        int k_flag = iskanji(*s);
-#endif
+    for (auto s = str.begin(); s != str.end(); ++s) {
+        const auto is_kanji = _(iskanji(*s), false);
+
         if (*s == '\n') {
-            x = 0;
-            y++;
-            if (y == h) {
-                break;
+            if (y + 1 < h) {
+                term_erase(0, y + 1, 255);
             }
 
-            term_erase(x, y, 255);
-            break;
+            return;
         }
 
-#ifdef JP
-        ch = ((k_flag || isprint(*s)) ? *s : ' ');
-#else
-        ch = (isprint(*s) ? *s : ' ');
-#endif
+        const auto ch = (is_kanji || isprint(*s)) ? *s : ' ';
 
-#ifdef JP
-        if ((x >= ((k_flag) ? w - 2 : w - 1)) && (ch != ' '))
-#else
-        if ((x >= w - 1) && (ch != ' '))
-#endif
-        {
-            int i, n = 0;
-            const int end_col = x - 1;
+        if ((x >= ((is_kanji) ? w - 2 : w - 1)) && (ch != ' ')) {
+            const auto wrap_chars = c_roff_wrap(x, y, w, &*s);
 
-            TERM_COLOR av[256];
-            char cv[256];
-            if (x < w) {
-#ifdef JP
-                /* 現在が半角文字の場合 */
-                if (!k_flag)
-#endif
-                {
-                    for (i = 0; i <= end_col; i++) {
-                        term_what(i, y, &av[i], &cv[i]);
-
-                        if (cv[i] == ' ') {
-                            n = i + 1;
-                        }
-#ifdef JP
-                        if (iskanji(cv[i])) {
-                            n = i + 2;
-                            i++;
-                            term_what(i, y, &av[i], &cv[i]);
-                        }
-#endif
-                    }
-                }
-#ifdef JP
-                else {
-                    /* 現在が全角文字のとき */
-                    /* 行頭が行頭禁則文字になるときは、その１つ前の語で改行 */
-                    if (is_kinsoku({ s, 2 })) {
-                        term_what(x - 1, y, &av[x - 1], &cv[x - 1]);
-                        term_what(x - 2, y, &av[x - 2], &cv[x - 2]);
-                        n = x - 2;
-                    }
-                }
-#endif
-            }
-            if (n == 0) {
-                n = w;
-            }
-
-            term_erase(n, y, 255);
-            x = 0;
             y++;
             if (y == h) {
-                break;
+                return;
             }
 
-            term_erase(x, y, 255);
-            for (i = n; i <= end_col; i++) {
-#ifdef JP
-                if (cv[i] == '\0') {
-                    break;
-                }
-#endif
-                term_addch(av[i], cv[i]);
-                if (++x > w) {
-                    x = w;
-                }
+            term_erase(0, y, 255);
+            for (const auto &[ca, cv] : wrap_chars) {
+                term_addch(ca, cv);
             }
+            x = wrap_chars.size();
         }
 
-#ifdef JP
-        term_addch((byte)(a | 0x10), ch);
-#else
-        term_addch(a, ch);
-#endif
-
-#ifdef JP
-        if (k_flag) {
+        term_addch(_((a | 0x10), a), ch);
+        if (is_kanji) {
             s++;
             x++;
-            ch = *s;
-            term_addch((byte)(a | 0x20), ch);
+            term_addch((a | 0x20), *s);
         }
-#endif
 
         if (++x > w) {
             x = w;
