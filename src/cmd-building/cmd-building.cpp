@@ -210,8 +210,10 @@ static void bldg_process_command(PlayerType *player_ptr, building_type *bldg, in
         break;
 
     case BACT_TELEPORT_LEVEL:
+        screen_save();
         clear_bldg(4, 20);
         paid = free_level_recall(player_ptr);
+        screen_load();
         break;
 
     case BACT_LOSE_MUTATION: {
