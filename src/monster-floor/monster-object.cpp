@@ -136,7 +136,7 @@ static void monster_pickup_object(PlayerType *player_ptr, turn_flags *turn_flags
         if (turn_flags_ptr->do_take && r_ptr->behavior_flags.has(MonsterBehaviorType::STUPID)) {
             turn_flags_ptr->did_take_item = true;
             if (m_ptr->ml && player_can_see_bold(player_ptr, ny, nx)) {
-                msg_format(_("%^sは%sを拾おうとしたが、だめだった。", "%^s tries to pick up %s, but fails."), m_name, o_name);
+                msg_format(_("%s^は%sを拾おうとしたが、だめだった。", "%s^ tries to pick up %s, but fails."), m_name, o_name);
             }
         }
 
@@ -146,7 +146,7 @@ static void monster_pickup_object(PlayerType *player_ptr, turn_flags *turn_flags
     if (turn_flags_ptr->do_take) {
         turn_flags_ptr->did_take_item = true;
         if (player_can_see_bold(player_ptr, ny, nx)) {
-            msg_format(_("%^sが%sを拾った。", "%^s picks up %s."), m_name, o_name);
+            msg_format(_("%s^が%sを拾った。", "%s^ picks up %s."), m_name, o_name);
         }
 
         excise_object_idx(player_ptr->current_floor_ptr, this_o_idx);
@@ -165,7 +165,7 @@ static void monster_pickup_object(PlayerType *player_ptr, turn_flags *turn_flags
 
     turn_flags_ptr->did_kill_item = true;
     if (player_has_los_bold(player_ptr, ny, nx)) {
-        msg_format(_("%^sが%sを破壊した。", "%^s destroys %s."), m_name, o_name);
+        msg_format(_("%s^が%sを破壊した。", "%s^ destroys %s."), m_name, o_name);
     }
 
     delete_object_idx(player_ptr, this_o_idx);

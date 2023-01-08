@@ -19,7 +19,7 @@ void display_monster_hp_ac(lore_type *lore_ptr)
         return;
     }
 
-    hooked_roff(format(_("%^sは AC%d の防御力と", "%^s has an armor rating of %d"), Who::who(lore_ptr->msex), lore_ptr->r_ptr->ac));
+    hooked_roff(format(_("%s^は AC%d の防御力と", "%s^ has an armor rating of %d"), Who::who(lore_ptr->msex), lore_ptr->r_ptr->ac));
     if ((lore_ptr->flags1 & RF1_FORCE_MAXHP) || (lore_ptr->r_ptr->hside == 1)) {
         auto hp = lore_ptr->r_ptr->hdice * (lore_ptr->nightmare ? 2 : 1) * lore_ptr->r_ptr->hside;
         hooked_roff(format(_(" %d の体力がある。", " and a life rating of %d.  "), std::min(MONSTER_MAXHP, hp)));
@@ -98,7 +98,7 @@ void display_monster_abilities(lore_type *lore_ptr)
         return;
     }
 
-    hooked_roff(format(_("%^sは", "%^s"), Who::who(lore_ptr->msex)));
+    hooked_roff(format(_("%s^は", "%s^"), Who::who(lore_ptr->msex)));
     for (int n = 0; n < lore_ptr->vn; n++) {
 #ifdef JP
         if (n != lore_ptr->vn - 1) {
@@ -127,41 +127,41 @@ void display_monster_abilities(lore_type *lore_ptr)
 void display_monster_constitutions(lore_type *lore_ptr)
 {
     if (lore_ptr->feature_flags.has(MonsterFeatureType::AQUATIC)) {
-        hooked_roff(format(_("%^sは水中に棲んでいる。", "%^s lives in water.  "), Who::who(lore_ptr->msex)));
+        hooked_roff(format(_("%s^は水中に棲んでいる。", "%s^ lives in water.  "), Who::who(lore_ptr->msex)));
     }
 
     if (lore_ptr->brightness_flags.has_any_of({ MonsterBrightnessType::SELF_LITE_1, MonsterBrightnessType::SELF_LITE_2 })) {
-        hooked_roff(format(_("%^sは光っている。", "%^s is shining.  "), Who::who(lore_ptr->msex)));
+        hooked_roff(format(_("%s^は光っている。", "%s^ is shining.  "), Who::who(lore_ptr->msex)));
     }
 
     if (lore_ptr->brightness_flags.has_any_of({ MonsterBrightnessType::SELF_DARK_1, MonsterBrightnessType::SELF_DARK_2 })) {
-        hook_c_roff(TERM_L_DARK, format(_("%^sは暗黒に包まれている。", "%^s is surrounded by darkness.  "), Who::who(lore_ptr->msex)));
+        hook_c_roff(TERM_L_DARK, format(_("%s^は暗黒に包まれている。", "%s^ is surrounded by darkness.  "), Who::who(lore_ptr->msex)));
     }
 
     if (lore_ptr->flags2 & RF2_INVISIBLE) {
-        hooked_roff(format(_("%^sは透明で目に見えない。", "%^s is invisible.  "), Who::who(lore_ptr->msex)));
+        hooked_roff(format(_("%s^は透明で目に見えない。", "%s^ is invisible.  "), Who::who(lore_ptr->msex)));
     }
 
     if (lore_ptr->flags2 & RF2_COLD_BLOOD) {
-        hooked_roff(format(_("%^sは冷血動物である。", "%^s is cold blooded.  "), Who::who(lore_ptr->msex)));
+        hooked_roff(format(_("%s^は冷血動物である。", "%s^ is cold blooded.  "), Who::who(lore_ptr->msex)));
     }
 
     if (lore_ptr->flags2 & RF2_EMPTY_MIND) {
-        hooked_roff(format(_("%^sはテレパシーでは感知できない。", "%^s is not detected by telepathy.  "), Who::who(lore_ptr->msex)));
+        hooked_roff(format(_("%s^はテレパシーでは感知できない。", "%s^ is not detected by telepathy.  "), Who::who(lore_ptr->msex)));
     } else if (lore_ptr->flags2 & RF2_WEIRD_MIND) {
-        hooked_roff(format(_("%^sはまれにテレパシーで感知できる。", "%^s is rarely detected by telepathy.  "), Who::who(lore_ptr->msex)));
+        hooked_roff(format(_("%s^はまれにテレパシーで感知できる。", "%s^ is rarely detected by telepathy.  "), Who::who(lore_ptr->msex)));
     }
 
     if (lore_ptr->flags2 & RF2_MULTIPLY) {
-        hook_c_roff(TERM_L_UMBER, format(_("%^sは爆発的に増殖する。", "%^s breeds explosively.  "), Who::who(lore_ptr->msex)));
+        hook_c_roff(TERM_L_UMBER, format(_("%s^は爆発的に増殖する。", "%s^ breeds explosively.  "), Who::who(lore_ptr->msex)));
     }
 
     if (lore_ptr->flags2 & RF2_REGENERATE) {
-        hook_c_roff(TERM_L_WHITE, format(_("%^sは素早く体力を回復する。", "%^s regenerates quickly.  "), Who::who(lore_ptr->msex)));
+        hook_c_roff(TERM_L_WHITE, format(_("%s^は素早く体力を回復する。", "%s^ regenerates quickly.  "), Who::who(lore_ptr->msex)));
     }
 
     if (lore_ptr->flags7 & RF7_RIDING) {
-        hook_c_roff(TERM_SLATE, format(_("%^sに乗ることができる。", "%^s is suitable for riding.  "), Who::who(lore_ptr->msex)));
+        hook_c_roff(TERM_SLATE, format(_("%s^に乗ることができる。", "%s^ is suitable for riding.  "), Who::who(lore_ptr->msex)));
     }
 }
 
@@ -194,7 +194,7 @@ void display_monster_weakness(lore_type *lore_ptr)
         return;
     }
 
-    hooked_roff(format(_("%^sには", "%^s"), Who::who(lore_ptr->msex)));
+    hooked_roff(format(_("%s^には", "%s^"), Who::who(lore_ptr->msex)));
     for (int n = 0; n < lore_ptr->vn; n++) {
 #ifdef JP
         if (n != 0) {
@@ -329,7 +329,7 @@ void display_monster_resistances(lore_type *lore_ptr)
         return;
     }
 
-    hooked_roff(format(_("%^sは", "%^s"), Who::who(lore_ptr->msex)));
+    hooked_roff(format(_("%s^は", "%s^"), Who::who(lore_ptr->msex)));
     for (int n = 0; n < lore_ptr->vn; n++) {
 #ifdef JP
         if (n != 0) {
@@ -357,7 +357,7 @@ void display_monster_evolution(lore_type *lore_ptr)
     }
 
     if (MonsterRace(lore_ptr->r_ptr->next_r_idx).is_valid()) {
-        hooked_roff(format(_("%^sは経験を積むと、", "%^s will evolve into "), Who::who(lore_ptr->msex)));
+        hooked_roff(format(_("%s^は経験を積むと、", "%s^ will evolve into "), Who::who(lore_ptr->msex)));
         hook_c_roff(TERM_YELLOW, format("%s", monraces_info[lore_ptr->r_ptr->next_r_idx].name.data()));
 
         hooked_roff(_(format("に進化する。"), format(" when %s gets enough experience.  ", Who::who(lore_ptr->msex))));
@@ -400,7 +400,7 @@ void display_monster_immunities(lore_type *lore_ptr)
         return;
     }
 
-    hooked_roff(format(_("%^sは", "%^s"), Who::who(lore_ptr->msex)));
+    hooked_roff(format(_("%s^は", "%s^"), Who::who(lore_ptr->msex)));
     for (int n = 0; n < lore_ptr->vn; n++) {
 #ifdef JP
         if (n != 0) {
@@ -456,6 +456,6 @@ void display_monster_alert(lore_type *lore_ptr)
         act = _("をかなり警戒しており", "is ever vigilant for");
     }
 
-    hooked_roff(_(format("%^sは侵入者%s、 %d フィート先から侵入者に気付くことがある。", Who::who(lore_ptr->msex), act, 10 * lore_ptr->r_ptr->aaf),
-        format("%^s %s intruders, which %s may notice from %d feet.  ", Who::who(lore_ptr->msex), act, Who::who(lore_ptr->msex), 10 * lore_ptr->r_ptr->aaf)));
+    hooked_roff(_(format("%s^は侵入者%s、 %d フィート先から侵入者に気付くことがある。", Who::who(lore_ptr->msex), act, 10 * lore_ptr->r_ptr->aaf),
+        format("%s^ %s intruders, which %s may notice from %d feet.  ", Who::who(lore_ptr->msex), act, Who::who(lore_ptr->msex), 10 * lore_ptr->r_ptr->aaf)));
 }

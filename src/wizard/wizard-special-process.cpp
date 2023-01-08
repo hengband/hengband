@@ -304,7 +304,7 @@ static std::optional<FixedArtifactId> wiz_select_named_artifact(PlayerType *play
             put_str(ss.str().data(), i + 1, 15);
         }
         if (page_max > 1) {
-            put_str(format("-- more (%d/%d) --", current_page + 1, page_max), page_item_count + 1, 15);
+            put_str(format("-- more (%lu/%lu) --", current_page + 1, page_max), page_item_count + 1, 15);
         }
 
         char cmd = ESCAPE;
@@ -822,7 +822,7 @@ void wiz_zap_surrounding_monsters(PlayerType *player_ptr)
             continue;
         }
 
-        if (record_named_pet && m_ptr->is_pet() && m_ptr->nickname) {
+        if (record_named_pet && m_ptr->is_named_pet()) {
             const auto m_name = monster_desc(player_ptr, m_ptr, MD_INDEF_VISIBLE);
             exe_write_diary(player_ptr, DIARY_NAMED_PET, RECORD_NAMED_PET_WIZ_ZAP, m_name.data());
         }
@@ -843,7 +843,7 @@ void wiz_zap_floor_monsters(PlayerType *player_ptr)
             continue;
         }
 
-        if (record_named_pet && m_ptr->is_pet() && m_ptr->nickname) {
+        if (record_named_pet && m_ptr->is_named_pet()) {
             const auto m_name = monster_desc(player_ptr, m_ptr, MD_INDEF_VISIBLE);
             exe_write_diary(player_ptr, DIARY_NAMED_PET, RECORD_NAMED_PET_WIZ_ZAP, m_name.data());
         }

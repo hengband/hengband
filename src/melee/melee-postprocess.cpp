@@ -102,7 +102,7 @@ static bool process_invulnerability(mam_pp_type *mam_pp_ptr)
     }
 
     if (mam_pp_ptr->seen) {
-        msg_format(_("%^sはダメージを受けない。", "%^s is unharmed."), mam_pp_ptr->m_name);
+        msg_format(_("%s^はダメージを受けない。", "%s^ is unharmed."), mam_pp_ptr->m_name);
     }
 
     return true;
@@ -132,7 +132,7 @@ static bool process_all_resistances(mam_pp_type *mam_pp_ptr)
     }
 
     if (mam_pp_ptr->seen) {
-        msg_format(_("%^sはダメージを受けない。", "%^s is unharmed."), mam_pp_ptr->m_name);
+        msg_format(_("%s^はダメージを受けない。", "%s^ is unharmed."), mam_pp_ptr->m_name);
     }
 
     return true;
@@ -161,18 +161,18 @@ static void print_monster_dead_by_monster(PlayerType *player_ptr, mam_pp_type *m
     if (mam_pp_ptr->note) {
         sound_type kill_sound = monster_living(mam_pp_ptr->m_ptr->r_idx) ? SOUND_KILL : SOUND_N_KILL;
         sound(kill_sound);
-        msg_format(_("%^s%s", "%^s%s"), mam_pp_ptr->m_name, mam_pp_ptr->note);
+        msg_format(_("%s^%s", "%s^%s"), mam_pp_ptr->m_name, mam_pp_ptr->note);
         return;
     }
 
     if (!monster_living(mam_pp_ptr->m_ptr->r_idx)) {
         sound(SOUND_N_KILL);
-        msg_format(_("%^sは破壊された。", "%^s is destroyed."), mam_pp_ptr->m_name);
+        msg_format(_("%s^は破壊された。", "%s^ is destroyed."), mam_pp_ptr->m_name);
         return;
     }
 
     sound(SOUND_KILL);
-    msg_format(_("%^sは殺された。", "%^s is killed."), mam_pp_ptr->m_name);
+    msg_format(_("%s^は殺された。", "%s^ is killed."), mam_pp_ptr->m_name);
 }
 
 /*!
@@ -258,7 +258,7 @@ static void fall_off_horse_by_melee(PlayerType *player_ptr, mam_pp_type *mam_pp_
     }
 
     if (process_fall_off_horse(player_ptr, (mam_pp_ptr->dam > 200) ? 200 : mam_pp_ptr->dam, false)) {
-        msg_format(_("%^sに振り落とされた！", "You have been thrown off from %s!"), mam_pp_ptr->m_name);
+        msg_format(_("%s^に振り落とされた！", "You have been thrown off from %s!"), mam_pp_ptr->m_name);
     }
 }
 

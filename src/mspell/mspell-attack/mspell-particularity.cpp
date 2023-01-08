@@ -43,9 +43,9 @@ MSpellAttackOther::MSpellAttackOther(PlayerType *player_ptr, MONSTER_IDX m_idx, 
  */
 MonsterSpellResult spell_RF4_ROCKET(PlayerType *player_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int target_type)
 {
-    const auto data = MSpellData({ _("%^sが何かを射った。", "%^s shoots something."),
-                                     _("%^sがロケットを発射した。", "%^s fires a rocket."),
-                                     _("%^sが%sにロケットを発射した。", "%^s fires a rocket at %s.") },
+    const auto data = MSpellData({ _("%s^が何かを射った。", "%s^ shoots something."),
+                                     _("%s^がロケットを発射した。", "%s^ fires a rocket."),
+                                     _("%s^が%sにロケットを発射した。", "%s^ fires a rocket at %s.") },
         AttributeType::ROCKET, DRS_SHARD);
     return MSpellAttackOther(player_ptr, m_idx, t_idx, MonsterAbilityType::ROCKET, data, target_type,
         [=](auto y, auto x, int dam, auto attribute) { return rocket(player_ptr, y, x, m_idx, attribute, dam, 2, target_type); })
@@ -54,8 +54,8 @@ MonsterSpellResult spell_RF4_ROCKET(PlayerType *player_ptr, POSITION y, POSITION
 
 static bool message_hand_doom(PlayerType *player_ptr, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int target_type)
 {
-    mspell_cast_msg_simple msg(_("%^sが<破滅の手>を放った！", "%^s invokes the Hand of Doom!"),
-        _("%^sが%sに<破滅の手>を放った！", "%^s invokes the Hand of Doom upon %s!"));
+    mspell_cast_msg_simple msg(_("%s^が<破滅の手>を放った！", "%s^ invokes the Hand of Doom!"),
+        _("%s^が%sに<破滅の手>を放った！", "%s^ invokes the Hand of Doom upon %s!"));
 
     simple_monspell_message(player_ptr, m_idx, t_idx, msg, target_type);
 
@@ -106,8 +106,8 @@ MonsterSpellResult spell_RF6_HAND_DOOM(PlayerType *player_ptr, POSITION y, POSIT
  */
 MonsterSpellResult spell_RF6_PSY_SPEAR(PlayerType *player_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int target_type)
 {
-    const auto data = MSpellData({ _("%^sが何かをつぶやいた。", "%^s mumbles."), _("%^sが光の剣を放った。", "%^s throws a Psycho-Spear."),
-                                     _("%^sが%sに向かって光の剣を放った。", "%^s throws a Psycho-spear at %s.") },
+    const auto data = MSpellData({ _("%s^が何かをつぶやいた。", "%s^ mumbles."), _("%s^が光の剣を放った。", "%s^ throws a Psycho-Spear."),
+                                     _("%s^が%sに向かって光の剣を放った。", "%s^ throws a Psycho-spear at %s.") },
         AttributeType::PSY_SPEAR);
 
     return MSpellAttackOther(player_ptr, m_idx, t_idx, MonsterAbilityType::PSY_SPEAR, data, target_type,

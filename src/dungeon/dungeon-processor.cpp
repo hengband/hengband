@@ -149,7 +149,7 @@ void process_dungeon(PlayerType *player_ptr, bool load_game)
 #ifdef JP
             msg_format("この階には%sの主である%sが棲んでいる。", dungeon.name.data(), guardian_ref.name.data());
 #else
-            msg_format("%^s lives in this level as the keeper of %s.", guardian_ref.name.data(), dungeon.name.data());
+            msg_format("%s^ lives in this level as the keeper of %s.", guardian_ref.name.data(), dungeon.name.data());
 #endif
         }
     }

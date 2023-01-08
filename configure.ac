@@ -95,7 +95,7 @@ AC_PATH_XTRA
 if test "$have_x" = yes; then
   LIBS="$LIBS -lX11"
   AC_DEFINE(USE_X11, 1, [Allow -mX11 environment])
-  CFLAGS="$X_CFLAGS $CFLAGS"
+  CXXFLAGS="$X_CFLAGS $CXXFLAGS"
   LDFLAGS="$X_LIBS $LDFLAGS"
 
   if test "$use_fontset" = yes; then
@@ -130,6 +130,14 @@ if test "$use_japanese" != no; then
   if test x"$NKF" != x"yes"; then
     AC_MSG_ERROR([nkf is not found. Please install nkf.])
   fi
+fi
+
+if test "$enable_pch" != no; then
+  dnl md5sum, sha224sum, sha256sum, sha384sum, sha512sum and b2sum are
+  dnl frequently available on Linux.  md5 is available on macOS and OpenBSD.
+  dnl sha1, sha256, and sha512 are available on OpenBSD.
+  AC_PATH_PROGS(PCH_CHECKSUMMER, [md5sum md5 sha1sum sha1 sha224sum sha256sum sha256 sha384sum sha512sum sha512 b2sum], [none])
+  AC_ARG_VAR([PCH_CHECKSUMMER], [full path to a utility to compute the checksum for the precompiled header; checksum is for ccache's pch_external_checksum])
 fi
 
 AC_CHECK_HEADERS(fcntl.h sys/file.h sys/ioctl.h sys/time.h termio.h unistd.h stdint.h)

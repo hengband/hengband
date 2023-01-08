@@ -40,6 +40,7 @@
 #include "monster/monster-damage.h"
 #include "monster/monster-describer.h"
 #include "monster/monster-info.h"
+#include "monster/monster-pain-describer.h"
 #include "monster/monster-status-setter.h"
 #include "monster/monster-status.h"
 #include "monster/monster-update.h"
@@ -858,10 +859,13 @@ void exe_fire(PlayerType *player_ptr, INVENTORY_IDX item, ItemEntity *j_ptr, SPE
                             const auto m_name = monster_desc(player_ptr, m_ptr, 0);
 
                             stick_to = true;
-                            msg_format(_("%sは%sに突き刺さった！", "%^s is stuck in %s!"), o_name, m_name.data());
+                            msg_format(_("%sは%sに突き刺さった！", "%s^ is stuck in %s!"), o_name, m_name.data());
                         }
 
-                        message_pain(player_ptr, c_mon_ptr->m_idx, tdam);
+                        if (const auto pain_message = MonsterPainDescriber(player_ptr, c_mon_ptr->m_idx).describe(tdam);
+                            !pain_message.empty()) {
+                            msg_print(pain_message);
+                        }
 
                         /* Anger the monster */
                         if (tdam > 0) {
@@ -871,7 +875,7 @@ void exe_fire(PlayerType *player_ptr, INVENTORY_IDX item, ItemEntity *j_ptr, SPE
                         if (fear && m_ptr->ml) {
                             const auto m_name = monster_desc(player_ptr, m_ptr, 0);
                             sound(SOUND_FLEE);
-                            msg_format(_("%^sは恐怖して逃げ出した！", "%^s flees in terror!"), m_name.data());
+                            msg_format(_("%s^は恐怖して逃げ出した！", "%s^ flees in terror!"), m_name.data());
                         }
 
                         set_target(m_ptr, player_ptr->y, player_ptr->x);

@@ -1,6 +1,8 @@
 ﻿#pragma once
 
 #include "system/angband.h"
+#include <optional>
+#include <string>
 
 extern char savefile[1024];
 extern char savefile_base[40];
@@ -24,12 +26,12 @@ extern concptr ANGBAND_DIR_XTRA;
 class PlayerType;
 typedef void (*update_playtime_pf)(void);
 
-extern errr file_character(PlayerType *player_ptr, concptr name);
-extern errr get_rnd_line(concptr file_name, int entry, char *output);
+errr file_character(PlayerType *player_ptr, concptr name);
+std::optional<std::string> get_random_line(concptr file_name, int entry);
 void read_dead_file(char *buf, size_t buf_size);
 
 #ifdef JP
-extern errr get_rnd_line_jonly(concptr file_name, int entry, char *output, int count);
+std::optional<std::string> get_random_line_ja_only(concptr file_name, int entry, int count);
 #endif
-extern errr counts_write(PlayerType *player_ptr, int where, uint32_t count);
-extern uint32_t counts_read(PlayerType *player_ptr, int where);
+errr counts_write(PlayerType *player_ptr, int where, uint32_t count);
+uint32_t counts_read(PlayerType *player_ptr, int where);

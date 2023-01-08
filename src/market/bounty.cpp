@@ -162,10 +162,10 @@ bool exchange_cash(PlayerType *player_ptr)
             chg_virtue(player_ptr, V_JUSTICE, 5);
             is_achieved = true;
 
-            auto num = std::count_if(std::begin(w_ptr->bounties), std::end(w_ptr->bounties),
-                [](const auto &b_ref) { return b_ref.is_achieved; });
+            auto num = static_cast<int>(std::count_if(std::begin(w_ptr->bounties), std::end(w_ptr->bounties),
+                [](const auto &b_ref) { return b_ref.is_achieved; }));
 
-            msg_format(_("これで合計 %d ポイント獲得しました。", "You earned %d point%s total."), num, (num > 1 ? "s" : ""));
+            msg_print(_(format("これで合計 %d ポイント獲得しました。", num), format("You earned %d point%s total.", num, (num > 1 ? "s" : ""))));
 
             (&forge)->prep(lookup_baseitem_id(prize_list[num - 1]));
             ItemMagicApplier(player_ptr, &forge, player_ptr->current_floor_ptr->object_level, AM_NO_FIXED_ART).execute();

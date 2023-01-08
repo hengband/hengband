@@ -40,98 +40,48 @@
 #include "util/bit-flags-calculator.h"
 #include "util/quarks.h"
 #include "util/string-processor.h"
-#include "world/world.h"
 #include <functional>
 #include <sstream>
 #include <utility>
 
 /*!
- * @brief 最初から簡易な名称が明らかになるベースアイテムの判定。 /  Certain items, if aware, are known instantly
- * @param i ベースアイテムID
- * @return 簡易名称を明らかにするならTRUEを返す。
- * @details
- * This function is used only by "flavor_init()"
- */
-static bool object_easy_know(int i)
-{
-    const auto &baseitem = baseitems_info[i];
-    switch (baseitem.bi_key.tval()) {
-    case ItemKindType::LIFE_BOOK:
-    case ItemKindType::SORCERY_BOOK:
-    case ItemKindType::NATURE_BOOK:
-    case ItemKindType::CHAOS_BOOK:
-    case ItemKindType::DEATH_BOOK:
-    case ItemKindType::TRUMP_BOOK:
-    case ItemKindType::ARCANE_BOOK:
-    case ItemKindType::CRAFT_BOOK:
-    case ItemKindType::DEMON_BOOK:
-    case ItemKindType::CRUSADE_BOOK:
-    case ItemKindType::MUSIC_BOOK:
-    case ItemKindType::HISSATSU_BOOK:
-    case ItemKindType::HEX_BOOK:
-        return true;
-    case ItemKindType::FLASK:
-    case ItemKindType::JUNK:
-    case ItemKindType::BOTTLE:
-    case ItemKindType::SKELETON:
-    case ItemKindType::SPIKE:
-    case ItemKindType::WHISTLE:
-        return true;
-    case ItemKindType::FOOD:
-    case ItemKindType::POTION:
-    case ItemKindType::SCROLL:
-    case ItemKindType::ROD:
-        return true;
-
-    default:
-        break;
-    }
-
-    return false;
-}
-
-/*!
- * @brief 各種語彙からランダムな名前を作成する / Create a name from random parts.
+ * @brief 各種語彙からランダムな名前を作成する
  * @return std::string 作成した名前
  * @details 日本語の場合 aname_j.txt 英語の場合確率に応じて
- * syllables 配列と elvish.txt を組み合わせる。\n
+ * syllables 配列と elvish.txt を組み合わせる
  */
 std::string get_table_name_aux()
 {
-    std::string name;
+    std::stringstream ss;
 #ifdef JP
-    char syllable[80];
-    get_rnd_line("aname_j.txt", 1, syllable);
-    name = syllable;
-    get_rnd_line("aname_j.txt", 2, syllable);
-    name.append(syllable);
-    return name;
+    ss << get_random_line("aname_j.txt", 1).value();
+    ss << get_random_line("aname_j.txt", 2).value();
+    return ss.str();
 #else
-#define MAX_SYLLABLES 164 /* Used with scrolls (see below) */
-
-    static concptr syllables[MAX_SYLLABLES] = { "a", "ab", "ag", "aks", "ala", "an", "ankh", "app", "arg", "arze", "ash", "aus", "ban", "bar", "bat", "bek",
+    static const std::vector<std::string_view> syllables = {
+        "a", "ab", "ag", "aks", "ala", "an", "ankh", "app", "arg", "arze", "ash", "aus", "ban", "bar", "bat", "bek",
         "bie", "bin", "bit", "bjor", "blu", "bot", "bu", "byt", "comp", "con", "cos", "cre", "dalf", "dan", "den", "der", "doe", "dok", "eep", "el", "eng",
         "er", "ere", "erk", "esh", "evs", "fa", "fid", "flit", "for", "fri", "fu", "gan", "gar", "glen", "gop", "gre", "ha", "he", "hyd", "i", "ing", "ion",
         "ip", "ish", "it", "ite", "iv", "jo", "kho", "kli", "klis", "la", "lech", "man", "mar", "me", "mi", "mic", "mik", "mon", "mung", "mur", "nag", "nej",
         "nelg", "nep", "ner", "nes", "nis", "nih", "nin", "o", "od", "ood", "org", "orn", "ox", "oxy", "pay", "pet", "ple", "plu", "po", "pot", "prok", "re",
         "rea", "rhov", "ri", "ro", "rog", "rok", "rol", "sa", "san", "sat", "see", "sef", "seh", "shu", "ski", "sna", "sne", "snik", "sno", "so", "sol", "sri",
         "sta", "sun", "ta", "tab", "tem", "ther", "ti", "tox", "trol", "tue", "turs", "u", "ulk", "um", "un", "uni", "ur", "val", "viv", "vly", "vom", "wah",
-        "wed", "werg", "wex", "whon", "wun", "x", "yerg", "yp", "zun", "tri", "blaa", "jah", "bul", "on", "foo", "ju", "xuxu" };
+        "wed", "werg", "wex", "whon", "wun", "x", "yerg", "yp", "zun", "tri", "blaa", "jah", "bul", "on", "foo", "ju", "xuxu"
+    };
 
     int testcounter = randint1(3) + 1;
     if (randint1(3) == 2) {
         while (testcounter--) {
-            name.append(syllables[randint0(MAX_SYLLABLES)]);
+            ss << syllables[randint0(syllables.size())];
         }
     } else {
-        char syllable[80];
         testcounter = randint1(2) + 1;
         while (testcounter--) {
-            (void)get_rnd_line("elvish.txt", 0, syllable);
-            name.append(syllable);
+            ss << get_random_line("elvish.txt", 0).value();
         }
     }
 
+    auto name = ss.str();
     name[0] = toupper(name[0]);
     return name;
 #endif
@@ -154,12 +104,10 @@ std::string get_table_name()
  */
 std::string get_table_sindarin_aux()
 {
-    char syllable[80];
-
-    get_rnd_line("sname.txt", 1, syllable);
-    std::string name = syllable;
-    get_rnd_line("sname.txt", 2, syllable);
-    name.append(syllable);
+    std::stringstream ss;
+    ss << get_random_line("sname.txt", 1).value();
+    ss << get_random_line("sname.txt", 2).value();
+    auto name = ss.str();
     return _(sindarin_to_kana(name), name);
 }
 
@@ -172,71 +120,6 @@ std::string get_table_sindarin_aux()
 std::string get_table_sindarin()
 {
     return std::string(_("『", "'")).append(get_table_sindarin_aux()).append(_("』", "'"));
-}
-
-/*!
- * @brief ベースアイテムの未確定名を共通tval間でシャッフルする / Shuffle flavor indices of a group of objects with given tval
- * @param tval シャッフルしたいtval
- * @details 巻物、各種魔道具などに利用される。
- */
-static void shuffle_flavors(ItemKindType tval)
-{
-    std::vector<std::reference_wrapper<IDX>> flavor_idx_ref_list;
-    for (const auto &baseitem : baseitems_info) {
-        if (baseitem.bi_key.tval() != tval) {
-            continue;
-        }
-
-        if (baseitem.flavor == 0) {
-            continue;
-        }
-
-        if (baseitem.flags.has(TR_FIXED_FLAVOR)) {
-            continue;
-        }
-
-        flavor_idx_ref_list.push_back(baseitems_info[baseitem.idx].flavor);
-    }
-
-    rand_shuffle(flavor_idx_ref_list.begin(), flavor_idx_ref_list.end());
-}
-
-/*!
- * @brief ゲーム開始時に行われるベースアイテムの初期化ルーチン
- * @param なし
- */
-void flavor_init(void)
-{
-    const auto state_backup = w_ptr->rng.get_state();
-    w_ptr->rng.set_state(w_ptr->seed_flavor);
-    for (auto &baseitem : baseitems_info) {
-        if (baseitem.flavor_name.empty()) {
-            continue;
-        }
-
-        baseitem.flavor = baseitem.idx;
-    }
-
-    shuffle_flavors(ItemKindType::RING);
-    shuffle_flavors(ItemKindType::AMULET);
-    shuffle_flavors(ItemKindType::STAFF);
-    shuffle_flavors(ItemKindType::WAND);
-    shuffle_flavors(ItemKindType::ROD);
-    shuffle_flavors(ItemKindType::FOOD);
-    shuffle_flavors(ItemKindType::POTION);
-    shuffle_flavors(ItemKindType::SCROLL);
-    w_ptr->rng.set_state(state_backup);
-    for (auto &baseitem : baseitems_info) {
-        if (baseitem.idx == 0 || baseitem.name.empty()) {
-            continue;
-        }
-
-        if (!baseitem.flavor) {
-            baseitem.aware = true;
-        }
-
-        baseitem.easy_know = object_easy_know(baseitem.idx);
-    }
 }
 
 /*!

@@ -225,7 +225,7 @@ static void process_monsters_mtimed_aux(PlayerType *player_ptr, MONSTER_IDX m_id
         /* Notice the "waking up" */
         if (m_ptr->ml) {
             const auto m_name = monster_desc(player_ptr, m_ptr, 0);
-            msg_format(_("%^sが目を覚ました。", "%^s wakes up."), m_name.data());
+            msg_format(_("%s^が目を覚ました。", "%s^ wakes up."), m_name.data());
         }
 
         if (is_original_ap_and_seen(player_ptr, m_ptr)) {
@@ -243,7 +243,7 @@ static void process_monsters_mtimed_aux(PlayerType *player_ptr, MONSTER_IDX m_id
         if (set_monster_fast(player_ptr, m_idx, m_ptr->get_remaining_acceleration() - 1)) {
             if (is_seen(player_ptr, m_ptr)) {
                 const auto m_name = monster_desc(player_ptr, m_ptr, 0);
-                msg_format(_("%^sはもう加速されていない。", "%^s is no longer fast."), m_name.data());
+                msg_format(_("%s^はもう加速されていない。", "%s^ is no longer fast."), m_name.data());
             }
         }
 
@@ -254,7 +254,7 @@ static void process_monsters_mtimed_aux(PlayerType *player_ptr, MONSTER_IDX m_id
         if (set_monster_slow(player_ptr, m_idx, m_ptr->get_remaining_deceleration() - 1)) {
             if (is_seen(player_ptr, m_ptr)) {
                 const auto m_name = monster_desc(player_ptr, m_ptr, 0);
-                msg_format(_("%^sはもう減速されていない。", "%^s is no longer slow."), m_name.data());
+                msg_format(_("%s^はもう減速されていない。", "%s^ is no longer slow."), m_name.data());
             }
         }
 
@@ -268,7 +268,7 @@ static void process_monsters_mtimed_aux(PlayerType *player_ptr, MONSTER_IDX m_id
             /* Message if visible */
             if (is_seen(player_ptr, m_ptr)) {
                 const auto m_name = monster_desc(player_ptr, m_ptr, 0);
-                msg_format(_("%^sは朦朧状態から立ち直った。", "%^s is no longer stunned."), m_name.data());
+                msg_format(_("%s^は朦朧状態から立ち直った。", "%s^ is no longer stunned."), m_name.data());
             }
         }
 
@@ -284,7 +284,7 @@ static void process_monsters_mtimed_aux(PlayerType *player_ptr, MONSTER_IDX m_id
         /* Message if visible */
         if (is_seen(player_ptr, m_ptr)) {
             const auto m_name = monster_desc(player_ptr, m_ptr, 0);
-            msg_format(_("%^sは混乱から立ち直った。", "%^s is no longer confused."), m_name.data());
+            msg_format(_("%s^は混乱から立ち直った。", "%s^ is no longer confused."), m_name.data());
         }
 
         break;
@@ -305,9 +305,9 @@ static void process_monsters_mtimed_aux(PlayerType *player_ptr, MONSTER_IDX m_id
             const auto m_poss = monster_desc(player_ptr, m_ptr, MD_PRON_VISIBLE | MD_POSSESSIVE);
 #endif
 #ifdef JP
-            msg_format("%^sは勇気を取り戻した。", m_name.data());
+            msg_format("%s^は勇気を取り戻した。", m_name.data());
 #else
-            msg_format("%^s recovers %s courage.", m_name.data(), m_poss.data());
+            msg_format("%s^ recovers %s courage.", m_name.data(), m_poss.data());
 #endif
         }
 
@@ -322,7 +322,7 @@ static void process_monsters_mtimed_aux(PlayerType *player_ptr, MONSTER_IDX m_id
 
         if (is_seen(player_ptr, m_ptr)) {
             const auto m_name = monster_desc(player_ptr, m_ptr, 0);
-            msg_format(_("%^sはもう無敵でない。", "%^s is no longer invulnerable."), m_name.data());
+            msg_format(_("%s^はもう無敵でない。", "%s^ is no longer invulnerable."), m_name.data());
         }
 
         break;
@@ -365,19 +365,19 @@ void dispel_monster_status(PlayerType *player_ptr, MONSTER_IDX m_idx)
     const auto m_name = monster_desc(player_ptr, m_ptr, 0);
     if (set_monster_invulner(player_ptr, m_idx, 0, true)) {
         if (m_ptr->ml) {
-            msg_format(_("%sはもう無敵ではない。", "%^s is no longer invulnerable."), m_name.data());
+            msg_format(_("%sはもう無敵ではない。", "%s^ is no longer invulnerable."), m_name.data());
         }
     }
 
     if (set_monster_fast(player_ptr, m_idx, 0)) {
         if (m_ptr->ml) {
-            msg_format(_("%sはもう加速されていない。", "%^s is no longer fast."), m_name.data());
+            msg_format(_("%sはもう加速されていない。", "%s^ is no longer fast."), m_name.data());
         }
     }
 
     if (set_monster_slow(player_ptr, m_idx, 0)) {
         if (m_ptr->ml) {
-            msg_format(_("%sはもう減速されていない。", "%^s is no longer slow."), m_name.data());
+            msg_format(_("%sはもう減速されていない。", "%s^ is no longer slow."), m_name.data());
         }
     }
 }
@@ -486,12 +486,12 @@ void monster_gain_exp(PlayerType *player_ptr, MONSTER_IDX m_idx, MonsterRaceId s
                     auto r_idx = MonsterRace::pick_one_at_random();
                     hallucinated_race = &monraces_info[r_idx];
                 } while (hallucinated_race->name.empty() || hallucinated_race->kind_flags.has(MonsterKindType::UNIQUE));
-                auto mes_evolution = _("%sは%sに進化した。", "%^s evolved into %s.");
-                auto mes_degeneration = _("%sは%sに退化した。", "%^s degenerated into %s.");
+                auto mes_evolution = _("%sは%sに進化した。", "%s^ evolved into %s.");
+                auto mes_degeneration = _("%sは%sに退化した。", "%s^ degenerated into %s.");
                 auto mes = randint0(2) == 0 ? mes_evolution : mes_degeneration;
                 msg_format(mes, m_name.data(), hallucinated_race->name.data());
             } else {
-                msg_format(_("%sは%sに進化した。", "%^s evolved into %s."), m_name.data(), r_ptr->name.data());
+                msg_format(_("%sは%sに進化した。", "%s^ evolved into %s."), m_name.data(), r_ptr->name.data());
             }
         }
 

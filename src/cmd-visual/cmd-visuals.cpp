@@ -135,7 +135,7 @@ void do_cmd_visuals(PlayerType *player_ptr)
                 }
 
                 auto_dump_printf(auto_dump_stream, "# %s\n", r_ref.name.data());
-                auto_dump_printf(auto_dump_stream, "R:%d:0x%02X/0x%02X\n\n", r_ref.idx, (byte)(r_ref.x_attr), (byte)(r_ref.x_char));
+                auto_dump_printf(auto_dump_stream, "R:%d:0x%02X/0x%02X\n\n", enum2i(r_ref.idx), (byte)(r_ref.x_attr), (byte)(r_ref.x_char));
             }
 
             close_auto_dump(&auto_dump_stream, mark);
@@ -232,7 +232,7 @@ void do_cmd_visuals(PlayerType *player_ptr)
                 TERM_COLOR ca = r_ptr->x_attr;
                 byte cc = r_ptr->x_char;
 
-                term_putstr(5, 17, -1, TERM_WHITE, format(_("モンスター = %d, 名前 = %-40.40s", "Monster = %d, Name = %-40.40s"), r, r_ptr->name.data()));
+                term_putstr(5, 17, -1, TERM_WHITE, format(_("モンスター = %d, 名前 = %-40.40s", "Monster = %d, Name = %-40.40s"), enum2i(r), r_ptr->name.data()));
                 term_putstr(10, 19, -1, TERM_WHITE, format(_("初期値  色 / 文字 = %3u / %3u", "Default attr/char = %3u / %3u"), da, dc));
                 term_putstr(40, 19, -1, TERM_WHITE, empty_symbol);
                 term_queue_bigchar(43, 19, da, dc, 0, 0);

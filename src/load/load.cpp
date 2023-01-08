@@ -440,7 +440,7 @@ bool load_savedata(PlayerType *player_ptr, bool *new_game)
     }
 
     if (err) {
-        msg_format(_("エラー(%s)がバージョン%d.%d.%d.%d 用セーブファイル読み込み中に発生。", "Error (%s) reading %d.%d.%d.% savefile."), what,
+        msg_format(_("エラー(%s)がバージョン %d.%d.%d.%d 用セーブファイル読み込み中に発生。", "Error (%s) reading %d.%d.%d.%d savefile."), what,
             w_ptr->h_ver_major, w_ptr->h_ver_minor, w_ptr->h_ver_patch, w_ptr->h_ver_extra);
         msg_print(nullptr);
         return false;

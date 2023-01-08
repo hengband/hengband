@@ -77,7 +77,7 @@ static concptr const snipe_tips[MAX_SNIPE_POWERS] = {
     "Shoot an arrow able to shatter rocks.",
     "Deals extra damage of ice.",
     "Shoot an arrow that pushes away the target.",
-    "Shoot an arrow that does not always stop at the first target on its path."
+    "Shoot an arrow that does not always stop at the first target on its path.",
     "Deals more damage to good monsters.",
     "Deals more damage to evil monsters.",
     "Shoot an arrow that explodes when it hits a monster.",
@@ -282,10 +282,10 @@ static int get_snipe_power(PlayerType *player_ptr, COMMAND_CODE *sn, bool only_b
     /* Build a prompt (accept all spells) */
     if (only_browse) {
         (void)strnfmt(
-            out_val, 78, _("(%^s %c-%c, '*'で一覧, ESC) どの%sについて知りますか？", "(%^ss %c-%c, *=List, ESC=exit) Use which %s? "), p, I2A(0), I2A(num), p);
+            out_val, 78, _("(%s^ %c-%c, '*'で一覧, ESC) どの%sについて知りますか？", "(%s^s %c-%c, *=List, ESC=exit) Use which %s? "), p, I2A(0), I2A(num), p);
     } else {
         (void)strnfmt(
-            out_val, 78, _("(%^s %c-%c, '*'で一覧, ESC) どの%sを使いますか？", "(%^ss %c-%c, *=List, ESC=exit) Use which %s? "), p, I2A(0), I2A(num), p);
+            out_val, 78, _("(%s^ %c-%c, '*'で一覧, ESC) どの%sを使いますか？", "(%s^s %c-%c, *=List, ESC=exit) Use which %s? "), p, I2A(0), I2A(num), p);
     }
 
     choice = always_show_list ? ESCAPE : 1;

@@ -153,14 +153,16 @@ std::string get_random_name(const ItemEntity &item, bool armour, int power)
     }
 
     auto filename = get_random_art_filename(armour, power);
-    char random_artifact_name[80]{};
-    (void)get_rnd_line(filename.data(), item.artifact_bias, random_artifact_name);
+    auto random_artifact_name = get_random_line(filename.data(), item.artifact_bias);
 #ifdef JP
-    if (random_artifact_name[0] == 0) {
-        return get_table_name();
+    if (random_artifact_name.has_value()) {
+        return random_artifact_name.value();
     }
+
+    return get_table_name();
+#else
+    return random_artifact_name.value();
 #endif
-    return random_artifact_name;
 }
 
 /*対邪平均ダメージの計算処理*/

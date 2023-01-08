@@ -30,7 +30,7 @@ static void vanish_nonunique(PlayerType *player_ptr, MONSTER_IDX m_idx, bool see
     auto *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
     if (see_m) {
         const auto m_name = monster_desc(player_ptr, m_ptr, 0);
-        msg_format(_("%sは消え去った！", "%^s disappears!"), m_name.data());
+        msg_format(_("%sは消え去った！", "%s^ disappears!"), m_name.data());
     }
 
     monster_death(player_ptr, m_idx, false, AttributeType::NONE);
@@ -62,7 +62,7 @@ static void produce_quantum_effect(PlayerType *player_ptr, MONSTER_IDX m_idx, bo
 
     if (see_m) {
         const auto m_name = monster_desc(player_ptr, m_ptr, MD_NONE);
-        msg_format(_("%sは量子的効果を起こした！", "%^s produced a decoherence!"), m_name.data());
+        msg_format(_("%sは量子的効果を起こした！", "%s^ produced a decoherence!"), m_name.data());
     } else {
         msg_print(_("量子的効果が起こった！", "A decoherence was produced!"));
     }

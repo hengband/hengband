@@ -369,7 +369,7 @@ static int interpret_z_token(char *buf)
             continue;
         }
 
-        gf_colors[description.num] = quark_add(t);
+        gf_colors[description.num] = t;
         return 0;
     }
 

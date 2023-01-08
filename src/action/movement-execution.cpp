@@ -196,7 +196,7 @@ void exe_movement(PlayerType *player_ptr, DIRECTION dir, bool do_pickup, bool br
             } else if (monster_can_cross_terrain(player_ptr, floor_ptr->grid_array[player_ptr->y][player_ptr->x].feat, r_ptr, 0)) {
                 do_past = true;
             } else {
-                msg_format(_("%^sが邪魔だ！", "%^s is in your way!"), m_name.data());
+                msg_format(_("%s^が邪魔だ！", "%s^ is in your way!"), m_name.data());
                 PlayerEnergy(player_ptr).reset_player_turn();
                 can_move = false;
             }
@@ -217,7 +217,7 @@ void exe_movement(PlayerType *player_ptr, DIRECTION dir, bool do_pickup, bool br
             disturb(player_ptr, false, true);
         } else if (riding_m_ptr->is_fearful()) {
             const auto steed_name = monster_desc(player_ptr, riding_m_ptr, 0);
-            msg_format(_("%sが恐怖していて制御できない。", "%^s is too scared to control."), steed_name.data());
+            msg_format(_("%sが恐怖していて制御できない。", "%s^ is too scared to control."), steed_name.data());
             can_move = false;
             disturb(player_ptr, false, true);
         } else if (player_ptr->riding_ryoute) {
@@ -228,17 +228,17 @@ void exe_movement(PlayerType *player_ptr, DIRECTION dir, bool do_pickup, bool br
         } else if (f_ptr->flags.has(TerrainCharacteristics::CAN_SWIM) && (riding_r_ptr->feature_flags.has(MonsterFeatureType::CAN_SWIM))) {
             /* Allow moving */
         } else if (f_ptr->flags.has(TerrainCharacteristics::WATER) && riding_r_ptr->feature_flags.has_not(MonsterFeatureType::AQUATIC) && (f_ptr->flags.has(TerrainCharacteristics::DEEP) || riding_r_ptr->aura_flags.has(MonsterAuraType::FIRE))) {
-            msg_format(_("%sの上に行けない。", "Can't swim."), terrains_info[g_ptr->get_feat_mimic()].name.data());
+            msg_print(_(format("%sの上に行けない。", terrains_info[g_ptr->get_feat_mimic()].name.data()), "Can't swim."));
             energy.reset_player_turn();
             can_move = false;
             disturb(player_ptr, false, true);
         } else if (f_ptr->flags.has_not(TerrainCharacteristics::WATER) && riding_r_ptr->feature_flags.has(MonsterFeatureType::AQUATIC)) {
-            msg_format(_("%sから上がれない。", "Can't land."), terrains_info[floor_ptr->grid_array[player_ptr->y][player_ptr->x].get_feat_mimic()].name.data());
+            msg_print(_(format("%sから上がれない。", terrains_info[floor_ptr->grid_array[player_ptr->y][player_ptr->x].get_feat_mimic()].name.data()), "Can't land."));
             energy.reset_player_turn();
             can_move = false;
             disturb(player_ptr, false, true);
         } else if (f_ptr->flags.has(TerrainCharacteristics::LAVA) && riding_r_ptr->resistance_flags.has_none_of(RFR_EFF_IM_FIRE_MASK)) {
-            msg_format(_("%sの上に行けない。", "Too hot to go through."), terrains_info[g_ptr->get_feat_mimic()].name.data());
+            msg_print(_(format("%sの上に行けない。", terrains_info[g_ptr->get_feat_mimic()].name.data()), "Too hot to go through."));
             energy.reset_player_turn();
             can_move = false;
             disturb(player_ptr, false, true);

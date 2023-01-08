@@ -308,7 +308,7 @@ void process_drain_life(PlayerType *player_ptr, MonsterAttackPlayer *monap_ptr, 
     }
 
     if (monap_ptr->m_ptr->ml && did_heal) {
-        msg_format(_("%sは体力を回復したようだ。", "%^s appears healthier."), monap_ptr->m_name);
+        msg_format(_("%sは体力を回復したようだ。", "%s^ appears healthier."), monap_ptr->m_name);
     }
 }
 

@@ -224,7 +224,7 @@ bool shock_power(PlayerType *player_ptr)
     const auto m_name = monster_desc(player_ptr, m_ptr, 0);
 
     if (randint1(r_ptr->level * 3 / 2) > randint0(dam / 2) + dam / 2) {
-        msg_format(_("%sは飛ばされなかった。", "%^s was not blown away."), m_name.data());
+        msg_format(_("%sは飛ばされなかった。", "%s^ was not blown away."), m_name.data());
         return true;
     }
 

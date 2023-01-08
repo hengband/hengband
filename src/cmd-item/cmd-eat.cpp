@@ -278,7 +278,7 @@ void exe_eat_food(PlayerType *player_ptr, INVENTORY_IDX item)
     if (food_type == PlayerRaceFoodType::CORPSE && (bi_key == BaseitemKey(ItemKindType::CORPSE, SV_CORPSE) && angband_strchr("pht", monraces_info[corpse_r_idx].d_char))) {
         GAME_TEXT o_name[MAX_NLEN];
         describe_flavor(player_ptr, o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
-        msg_format(_("%sは燃え上り灰になった。精力を吸収した気がする。", "%^s is burnt to ashes.  You absorb its vitality!"), o_name);
+        msg_format(_("%sは燃え上り灰になった。精力を吸収した気がする。", "%s^ is burnt to ashes.  You absorb its vitality!"), o_name);
         (void)set_food(player_ptr, PY_FOOD_MAX - 1);
 
         player_ptr->update |= inventory_flags;

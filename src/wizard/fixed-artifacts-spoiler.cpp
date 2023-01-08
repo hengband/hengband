@@ -60,14 +60,6 @@ void spoiler_outlist(concptr header, concptr *list, char separator)
 }
 
 /*!
- * @brief バッファにアーティファクト出力情報ヘッダを収める /
- */
-static void print_header(void)
-{
-    spoiler_underline(std::string("Artifact Spoilers for Hengband Version ").append(get_version()).data());
-}
-
-/*!
  * @brief アーティファクト情報を出力するためにダミー生成を行う /
  * Hack -- Create a "forged" artifact
  * @param o_ptr 一時生成先を保管するオブジェクト構造体
@@ -145,7 +137,7 @@ SpoilerOutputResultType spoil_fixed_artifact(concptr fname)
         return SpoilerOutputResultType::FILE_OPEN_FAILED;
     }
 
-    print_header();
+    spoiler_underline(std::string("Artifact Spoilers for Hengband Version ").append(get_version()).data());
     for (const auto &[tval_list, name] : group_artifact_list) {
         spoiler_blanklines(2);
         spoiler_underline(name);

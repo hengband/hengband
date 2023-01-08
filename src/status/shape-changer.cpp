@@ -172,7 +172,7 @@ void do_poly_self(PlayerType *player_ptr)
     if ((power > randint0(30)) && one_in_(6)) {
         int tmp = 0;
         power -= 20;
-        msg_format(_("%sの構成が変化した！", "Your internal organs are rearranged!"), pr.equals(PlayerRaceType::ANDROID) ? "機械" : "内臓");
+        msg_print(_(format("%sの構成が変化した！", pr.equals(PlayerRaceType::ANDROID) ? "機械" : "内臓"), "Your internal organs are rearranged!"));
 
         while (tmp < A_MAX) {
             (void)dec_stat(player_ptr, tmp, randint1(6) + 6, one_in_(3));

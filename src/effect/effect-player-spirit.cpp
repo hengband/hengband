@@ -27,7 +27,7 @@ void effect_player_drain_mana(PlayerType *player_ptr, EffectPlayerType *ep_ptr)
     }
 
     if (ep_ptr->who > 0) {
-        msg_format(_("%^sに精神エネルギーを吸い取られてしまった！", "%^s draws psychic energy from you!"), ep_ptr->m_name);
+        msg_format(_("%s^に精神エネルギーを吸い取られてしまった！", "%s^ draws psychic energy from you!"), ep_ptr->m_name);
     } else {
         msg_print(_("精神エネルギーを吸い取られてしまった！", "Your psychic energy is drained!"));
     }
@@ -61,7 +61,7 @@ void effect_player_drain_mana(PlayerType *player_ptr, EffectPlayerType *ep_ptr)
     }
 
     if (ep_ptr->m_ptr->ml) {
-        msg_format(_("%^sは気分が良さそうだ。", "%^s appears healthier."), ep_ptr->m_name);
+        msg_format(_("%s^は気分が良さそうだ。", "%s^ appears healthier."), ep_ptr->m_name);
     }
 
     ep_ptr->dam = 0;

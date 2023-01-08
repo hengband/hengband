@@ -385,7 +385,7 @@ bool switch_activation(PlayerType *player_ptr, ItemEntity **o_ptr_ptr, const act
     case RandomArtActType::DISPEL_MAGIC:
         return activate_dispel_magic(player_ptr);
     default:
-        msg_format(_("Unknown activation effect: %d.", "Unknown activation effect: %d."), act_ptr->index);
+        msg_format(_("Unknown activation effect: %d.", "Unknown activation effect: %d."), enum2i(act_ptr->index));
         return false;
     }
 }

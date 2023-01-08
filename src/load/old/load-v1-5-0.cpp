@@ -473,12 +473,12 @@ void rd_monster_old(PlayerType *player_ptr, MonsterEntity *m_ptr)
     }
 
     if (h_older_than(0, 1, 3)) {
-        m_ptr->nickname = 0;
+        m_ptr->nickname.clear();
     } else {
         char buf[128];
         rd_string(buf, sizeof(buf));
         if (buf[0]) {
-            m_ptr->nickname = quark_add(buf);
+            m_ptr->nickname = buf;
         }
     }
 

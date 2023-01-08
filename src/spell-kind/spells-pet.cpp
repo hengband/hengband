@@ -29,7 +29,7 @@ void discharge_minion(PlayerType *player_ptr)
         if (!MonsterRace(m_ptr->r_idx).is_valid() || !m_ptr->is_pet()) {
             continue;
         }
-        if (m_ptr->nickname) {
+        if (m_ptr->is_named()) {
             okay = false;
         }
     }
@@ -50,7 +50,7 @@ void discharge_minion(PlayerType *player_ptr)
         r_ptr = &monraces_info[m_ptr->r_idx];
         if (r_ptr->kind_flags.has(MonsterKindType::UNIQUE)) {
             const auto m_name = monster_desc(player_ptr, m_ptr, 0x00);
-            msg_format(_("%sは爆破されるのを嫌がり、勝手に自分の世界へと帰った。", "%^s resists being blasted and runs away."), m_name.data());
+            msg_format(_("%sは爆破されるのを嫌がり、勝手に自分の世界へと帰った。", "%s^ resists being blasted and runs away."), m_name.data());
             delete_monster_idx(player_ptr, i);
             continue;
         }
@@ -67,7 +67,7 @@ void discharge_minion(PlayerType *player_ptr)
         }
         project(player_ptr, i, 2 + (r_ptr->level / 20), m_ptr->fy, m_ptr->fx, dam, AttributeType::PLASMA, PROJECT_STOP | PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL);
 
-        if (record_named_pet && m_ptr->nickname) {
+        if (record_named_pet && m_ptr->is_named()) {
             const auto m_name = monster_desc(player_ptr, m_ptr, MD_INDEF_VISIBLE);
             exe_write_diary(player_ptr, DIARY_NAMED_PET, RECORD_NAMED_PET_BLAST, m_name.data());
         }

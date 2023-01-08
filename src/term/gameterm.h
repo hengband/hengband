@@ -3,6 +3,7 @@
 #include "system/angband.h"
 #include <array>
 #include <map>
+#include <string>
 #include <utility>
 
 extern const concptr color_names[16];
@@ -19,7 +20,7 @@ extern const char angband_term_name[8][16];
 extern byte angband_color_table[256][4];
 
 enum class AttributeType : int;
-extern std::map<AttributeType, ushort> gf_colors;
+extern std::map<AttributeType, std::string> gf_colors;
 extern TERM_COLOR color_char_to_attr(char c);
 
 std::pair<TERM_COLOR, char> bolt_pict(POSITION y, POSITION x, POSITION ny, POSITION nx, AttributeType typ);

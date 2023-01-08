@@ -319,6 +319,8 @@ hengband_SOURCES = \
 	io-dump/random-art-info-dumper.cpp io-dump/random-art-info-dumper.h \
 	io-dump/special-class-dump.cpp io-dump/special-class-dump.h \
 	\
+	item-info/flavor-initializer.cpp item-info/flavor-initializer.h \
+	\
 	knowledge/knowledge-autopick.cpp knowledge/knowledge-autopick.h \
 	knowledge/knowledge-experiences.cpp knowledge/knowledge-experiences.h \
 	knowledge/knowledge-features.cpp knowledge/knowledge-features.h \
@@ -464,6 +466,7 @@ hengband_SOURCES = \
 	monster/monster-flag-types.h \
 	monster/monster-info.cpp monster/monster-info.h \
 	monster/monster-list.cpp monster/monster-list.h \
+	monster/monster-pain-describer.cpp monster/monster-pain-describer.h \
 	monster/monster-processor.cpp monster/monster-processor.h \
 	monster/monster-processor-util.cpp monster/monster-processor-util.h \
 	monster/monster-timed-effect-types.h \
@@ -1060,8 +1063,10 @@ CXXCOMPILE = $(srcdir)/gcc-wrap $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) \
 if PCH
 stdafx.h.gch: stdafx.h stdafx.cpp Makefile
 	$(CXX) -x c++-header $(CXXFLAGS) $(srcdir)/stdafx.cpp -o $@
-	rm -f stdafx.h.gch.sum
-	md5sum $@ > stdafx.h.gch.sum
+	if test none != "$(PCH_CHECKSUMMER)" ; then \
+		rm -f "$@".sum ; \
+		$(PCH_CHECKSUMMER) $@ > "$@".sum ; \
+	fi
 
 $(hengband_SOURCES:.cpp=.$(OBJEXT)): stdafx.h.gch
 endif

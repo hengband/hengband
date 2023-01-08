@@ -131,8 +131,8 @@ static MonsterSpellResult spell_RF6_SPECIAL_ROLENTO(PlayerType *player_ptr, POSI
     bool mon_to_player = target_type == MONSTER_TO_PLAYER;
     bool known = monster_near_player(floor_ptr, m_idx, t_idx);
 
-    mspell_cast_msg_blind msg(_("%^sが何か大量に投げた。", "%^s spreads something."),
-        _("%^sは手榴弾をばらまいた。", "%^s throws some hand grenades."), _("%^sは手榴弾をばらまいた。", "%^s throws some hand grenades."));
+    mspell_cast_msg_blind msg(_("%s^が何か大量に投げた。", "%s^ spreads something."),
+        _("%s^は手榴弾をばらまいた。", "%s^ throws some hand grenades."), _("%s^は手榴弾をばらまいた。", "%s^ throws some hand grenades."));
 
     monspell_message(player_ptr, m_idx, t_idx, msg, target_type);
     if (mon_to_player || (mon_to_mon && known && see_either)) {
@@ -172,8 +172,8 @@ static MonsterSpellResult spell_RF6_SPECIAL_B(PlayerType *player_ptr, POSITION y
 
     disturb(player_ptr, true, true);
     if (one_in_(3) || !direct) {
-        msg.to_player = _("%^sは突然視界から消えた!", "You lose sight of %s!");
-        msg.to_mons = _("%^sは突然急上昇して視界から消えた!", "You lose sight of %s!");
+        msg.to_player = _("%s^は突然視界から消えた!", "You lose sight of %s!");
+        msg.to_mons = _("%s^は突然急上昇して視界から消えた!", "You lose sight of %s!");
 
         simple_monspell_message(player_ptr, m_idx, t_idx, msg, target_type);
 
@@ -186,8 +186,8 @@ static MonsterSpellResult spell_RF6_SPECIAL_B(PlayerType *player_ptr, POSITION y
         sound(SOUND_FALL);
     }
 
-    msg.to_player = _("%^sがあなたを掴んで空中から投げ落とした。", "%^s snatches you, soars into the sky, and drops you.");
-    msg.to_mons = _("%^sが%sを掴んで空中から投げ落とした。", "%^s snatches %s, soars into the sky, and releases its grip.");
+    msg.to_player = _("%s^があなたを掴んで空中から投げ落とした。", "%s^ snatches you, soars into the sky, and drops you.");
+    msg.to_mons = _("%s^が%sを掴んで空中から投げ落とした。", "%s^ snatches %s, soars into the sky, and releases its grip.");
 
     simple_monspell_message(player_ptr, m_idx, t_idx, msg, target_type);
 
@@ -202,10 +202,10 @@ static MonsterSpellResult spell_RF6_SPECIAL_B(PlayerType *player_ptr, POSITION y
 
     if ((monster_to_player && player_ptr->levitation) || (monster_to_monster && tr_ptr->feature_flags.has(MonsterFeatureType::CAN_FLY))) {
         msg.to_player = _("あなたは静かに着地した。", "You float gently down to the ground.");
-        msg.to_mons = _("%^sは静かに着地した。", "%^s floats gently down to the ground.");
+        msg.to_mons = _("%s^は静かに着地した。", "%s^ floats gently down to the ground.");
     } else {
         msg.to_player = _("あなたは地面に叩きつけられた。", "You crashed into the ground.");
-        msg.to_mons = _("%^sは地面に叩きつけられた。", "%^s crashed into the ground.");
+        msg.to_mons = _("%s^は地面に叩きつけられた。", "%s^ crashed into the ground.");
     }
 
     simple_monspell_message(player_ptr, m_idx, t_idx, msg, target_type);
@@ -215,7 +215,7 @@ static MonsterSpellResult spell_RF6_SPECIAL_B(PlayerType *player_ptr, POSITION y
         int get_damage = take_hit(player_ptr, DAMAGE_NOESCAPE, dam, m_name.data());
         if (player_ptr->tim_eyeeye && get_damage > 0 && !player_ptr->is_dead) {
             const auto m_name_self = monster_desc(player_ptr, m_ptr, MD_PRON_VISIBLE | MD_POSSESSIVE | MD_OBJECTIVE);
-            msg_format(_("攻撃が%s自身を傷つけた！", "The attack of %s has wounded %s!"), m_name.data(), m_name_self.data());
+            msg_print(_(format("攻撃が%s自身を傷つけた！", m_name.data()), format("The attack of %s has wounded %s!", m_name.data(), m_name_self.data())));
             project(player_ptr, 0, 0, m_ptr->fy, m_ptr->fx, get_damage, AttributeType::MISSILE, PROJECT_KILL);
             set_tim_eyeeye(player_ptr, player_ptr->tim_eyeeye - 5, true);
         }

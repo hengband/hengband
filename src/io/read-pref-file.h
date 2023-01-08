@@ -11,7 +11,7 @@ errr process_autopick_file(PlayerType *player_ptr, concptr name);
 errr process_histpref_file(PlayerType *player_ptr, concptr name);
 bool read_histpref(PlayerType *player_ptr);
 
-void auto_dump_printf(FILE *auto_dump_stream, concptr fmt, ...);
+void auto_dump_printf(FILE *auto_dump_stream, concptr fmt, ...) __attribute__((format(printf, 2, 3)));
 bool open_auto_dump(FILE **fpp, concptr buf, concptr mark);
 void close_auto_dump(FILE **fpp, concptr auto_dump_mark);
 

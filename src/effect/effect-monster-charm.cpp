@@ -262,8 +262,8 @@ static void effect_monster_domination_corrupted(PlayerType *player_ptr, effect_m
     }
 
     em_ptr->note = nullptr;
-    msg_format(_("%^sの堕落した精神は攻撃を跳ね返した！",
-                   (em_ptr->seen ? "%^s's corrupted mind backlashes your attack!" : "%^ss corrupted mind backlashes your attack!")),
+    msg_format(_("%s^の堕落した精神は攻撃を跳ね返した！",
+                   (em_ptr->seen ? "%s^'s corrupted mind backlashes your attack!" : "%s^s corrupted mind backlashes your attack!")),
         em_ptr->m_name);
     if (randint0(100 + em_ptr->r_ptr->level / 2) < player_ptr->skill_sav) {
         msg_print(_("しかし効力を跳ね返した！", "You resist the effects!"));
@@ -418,7 +418,7 @@ static void effect_monster_captured(PlayerType *player_ptr, effect_monster_type 
         choose_new_monster(player_ptr, em_ptr->g_ptr->m_idx, false, MonsterRaceId::CHAMELEON);
     }
 
-    msg_format(_("%sを捕えた！", "You capture %^s!"), em_ptr->m_name);
+    msg_format(_("%sを捕えた！", "You capture %s^!"), em_ptr->m_name);
     auto cap_mon_ptr = tmp_cap_mon_ptr.value();
     cap_mon_ptr->r_idx = em_ptr->m_ptr->r_idx;
     cap_mon_ptr->speed = em_ptr->m_ptr->mspeed;
@@ -426,7 +426,7 @@ static void effect_monster_captured(PlayerType *player_ptr, effect_monster_type 
     cap_mon_ptr->max_hp = static_cast<short>(em_ptr->m_ptr->max_maxhp);
     cap_mon_ptr->nickname = em_ptr->m_ptr->nickname;
     if ((em_ptr->g_ptr->m_idx == player_ptr->riding) && process_fall_off_horse(player_ptr, -1, false)) {
-        msg_format(_("地面に落とされた。", "You have fallen from %s."), em_ptr->m_name);
+        msg_print(_("地面に落とされた。", format("You have fallen from %s.", em_ptr->m_name)));
     }
 
     delete_monster_idx(player_ptr, em_ptr->g_ptr->m_idx);
@@ -465,7 +465,7 @@ ProcessResult effect_monster_capture(PlayerType *player_ptr, effect_monster_type
     auto capturable_hp = std::max(2, calcutate_capturable_hp(player_ptr, em_ptr->m_ptr, em_ptr->m_ptr->max_maxhp));
 
     if (threshold_hp < 2 || em_ptr->m_ptr->hp >= capturable_hp) {
-        msg_format(_("もっと弱らせないと。", "You need to weaken %s more."), em_ptr->m_name);
+        msg_print(_("もっと弱らせないと。", format("You need to weaken %s more.", em_ptr->m_name)));
         em_ptr->skipped = true;
         return ProcessResult::PROCESS_CONTINUE;
     }
@@ -475,7 +475,7 @@ ProcessResult effect_monster_capture(PlayerType *player_ptr, effect_monster_type
         return ProcessResult::PROCESS_TRUE;
     }
 
-    msg_format(_("うまく捕まえられなかった。", "You failed to capture %s."), em_ptr->m_name);
+    msg_print(_("うまく捕まえられなかった。", format("You failed to capture %s.", em_ptr->m_name)));
     em_ptr->skipped = true;
     return ProcessResult::PROCESS_CONTINUE;
 }

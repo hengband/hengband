@@ -24,6 +24,7 @@
 #include "term/z-form.h"
 #include "util/angband-files.h"
 #include "view/display-messages.h"
+#include <algorithm>
 
 concptr ANGBAND_DIR; //!< Path name: The main "lib" directory This variable is not actually used anywhere in the code
 concptr ANGBAND_DIR_APEX; //!< High score files (binary) These files may be portable between platforms
@@ -91,33 +92,27 @@ errr file_character(PlayerType *player_ptr, concptr name)
 }
 
 /*!
- * @brief ファイルからランダムに行を一つ取得する /
- * Get a random line from a file
+ * @brief ファイルからランダムに行を一つ取得する
  * @param file_name ファイル名
  * @param entry 特定条件時のN:タグヘッダID
- * @param output 出力先の文字列参照ポインタ
- * @return エラーコード
- * @details
- * <pre>
- * Based on the monster speech patch by Matt Graham,
- * </pre>
+ * @return ファイルから取得した行 (但しファイルがなかったり異常値ならばnullopt)
  */
-errr get_rnd_line(concptr file_name, int entry, char *output)
+std::optional<std::string> get_random_line(concptr file_name, int entry)
 {
-    char buf[1024];
-    path_build(buf, sizeof(buf), ANGBAND_DIR_FILE, file_name);
-    FILE *fp;
-    fp = angband_fopen(buf, "r");
+    char filename[1024];
+    path_build(filename, sizeof(filename), ANGBAND_DIR_FILE, file_name);
+    auto *fp = angband_fopen(filename, "r");
     if (!fp) {
-        return -1;
+        return std::nullopt;
     }
 
     int test;
-    int line_num = 0;
+    auto line_num = 0;
     while (true) {
+        char buf[1024];
         if (angband_fgets(fp, buf, sizeof(buf)) != 0) {
             angband_fclose(fp);
-            return -1;
+            return std::nullopt;
         }
 
         line_num++;
@@ -127,7 +122,9 @@ errr get_rnd_line(concptr file_name, int entry, char *output)
 
         if (buf[2] == '*') {
             break;
-        } else if (buf[2] == 'M') {
+        }
+
+        if (buf[2] == 'M') {
             if (monraces_info[i2enum<MonsterRaceId>(entry)].flags1 & RF1_MALE) {
                 break;
             }
@@ -142,24 +139,24 @@ errr get_rnd_line(concptr file_name, int entry, char *output)
         } else {
             msg_format("Error in line %d of %s!", line_num, file_name);
             angband_fclose(fp);
-            return -1;
+            return std::nullopt;
         }
     }
 
-    int counter;
-    for (counter = 0;; counter++) {
+    auto counter = 0;
+    std::optional<std::string> line{};
+    while (true) {
+        char buf[1024];
         while (true) {
-            test = angband_fgets(fp, buf, sizeof(buf));
-            if (!test) {
-                /* Ignore lines starting with 'N:' */
-                if ((buf[0] == 'N') && (buf[1] == ':')) {
-                    continue;
-                }
+            if (angband_fgets(fp, buf, sizeof(buf))) {
+                break;
+            }
 
-                if (buf[0] != '#') {
-                    break;
-                }
-            } else {
+            if ((buf[0] == 'N') && (buf[1] == ':')) {
+                continue;
+            }
+
+            if (buf[0] != '#') {
                 break;
             }
         }
@@ -169,42 +166,45 @@ errr get_rnd_line(concptr file_name, int entry, char *output)
         }
 
         if (one_in_(counter + 1)) {
-            strcpy(output, buf);
+            line = buf;
         }
+
+        counter++;
     }
 
     angband_fclose(fp);
-    return counter ? 0 : -1;
+    return line;
 }
 
 #ifdef JP
 /*!
- * @brief ファイルからランダムに行を一つ取得する(日本語文字列のみ) /
+ * @brief ファイルからランダムに行を一つ取得する(日本語文字列のみ)
  * @param file_name ファイル名
  * @param entry 特定条件時のN:タグヘッダID
- * @param output 出力先の文字列参照ポインタ
  * @param count 試行回数
- * @return エラーコード
+ * @return ファイルから取得した行 (但しファイルがなかったり異常値ならばnullopt)
  * @details
  */
-errr get_rnd_line_jonly(concptr file_name, int entry, char *output, int count)
+std::optional<std::string> get_random_line_ja_only(concptr file_name, int entry, int count)
 {
-    errr result = 1;
-    for (int i = 0; i < count; i++) {
-        result = get_rnd_line(file_name, entry, output);
-        if (result) {
-            break;
+    std::optional<std::string> line;
+    for (auto i = 0; i < count; i++) {
+        line = get_random_line(file_name, entry);
+        if (!line.has_value()) {
+            return std::nullopt;
         }
-        bool kanji = false;
-        for (int j = 0; output[j]; j++) {
-            kanji |= iskanji(output[j]);
+
+        auto is_kanji = false;
+        for (const auto c : line.value()) {
+            is_kanji |= iskanji(c);
         }
-        if (kanji) {
-            break;
+
+        if (is_kanji) {
+            return line;
         }
     }
 
-    return result;
+    return line;
 }
 #endif
 

@@ -403,3 +403,13 @@ void msg_format(std::string_view fmt, ...)
     va_end(vp);
     msg_print(buf);
 }
+
+void msg_format(const char *fmt, ...)
+{
+    va_list vp;
+    char buf[1024];
+    va_start(vp, fmt);
+    (void)vstrnfmt(buf, sizeof(buf), fmt, vp);
+    va_end(vp);
+    msg_print(buf);
+}

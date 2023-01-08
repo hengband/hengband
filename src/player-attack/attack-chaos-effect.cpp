@@ -62,12 +62,12 @@ static void attack_confuse(PlayerType *player_ptr, player_attack_type *pa_ptr, b
         if (is_original_ap_and_seen(player_ptr, pa_ptr->m_ptr)) {
             r_ptr->r_flags3 |= RF3_NO_CONF;
         }
-        msg_format(_("%^sには効果がなかった。", "%^s is unaffected."), pa_ptr->m_name);
+        msg_format(_("%s^には効果がなかった。", "%s^ is unaffected."), pa_ptr->m_name);
 
     } else if (can_resist && randint0(100) < r_ptr->level) {
-        msg_format(_("%^sには効果がなかった。", "%^s is unaffected."), pa_ptr->m_name);
+        msg_format(_("%s^には効果がなかった。", "%s^ is unaffected."), pa_ptr->m_name);
     } else {
-        msg_format(_("%^sは混乱したようだ。", "%^s appears confused."), pa_ptr->m_name);
+        msg_format(_("%s^は混乱したようだ。", "%s^ appears confused."), pa_ptr->m_name);
         (void)set_monster_confused(player_ptr, pa_ptr->m_idx, pa_ptr->m_ptr->get_remaining_confusion() + 10 + randint0(player_ptr->lev) / 5);
     }
 }
@@ -87,11 +87,11 @@ static void attack_stun(PlayerType *player_ptr, player_attack_type *pa_ptr, bool
         if (is_original_ap_and_seen(player_ptr, pa_ptr->m_ptr)) {
             set_bits(r_ptr->flags3, RF3_NO_STUN);
         }
-        msg_format(_("%^sには効果がなかった。", "%^s is unaffected."), pa_ptr->m_name);
+        msg_format(_("%s^には効果がなかった。", "%s^ is unaffected."), pa_ptr->m_name);
     } else if (can_resist && randint0(100) < r_ptr->level) {
-        msg_format(_("%^sには効果がなかった。", "%^s is unaffected."), pa_ptr->m_name);
+        msg_format(_("%s^には効果がなかった。", "%s^ is unaffected."), pa_ptr->m_name);
     } else {
-        msg_format(_("%^sは朦朧としたようだ。", "%^s appears stunned."), pa_ptr->m_name);
+        msg_format(_("%s^は朦朧としたようだ。", "%s^ appears stunned."), pa_ptr->m_name);
         (void)set_monster_stunned(player_ptr, pa_ptr->m_idx, pa_ptr->m_ptr->get_remaining_stun() + 10 + randint0(player_ptr->lev) / 5);
     }
 }
@@ -111,11 +111,11 @@ static void attack_scare(PlayerType *player_ptr, player_attack_type *pa_ptr, boo
         if (is_original_ap_and_seen(player_ptr, pa_ptr->m_ptr)) {
             set_bits(r_ptr->flags3, RF3_NO_FEAR);
         }
-        msg_format(_("%^sには効果がなかった。", "%^s is unaffected."), pa_ptr->m_name);
+        msg_format(_("%s^には効果がなかった。", "%s^ is unaffected."), pa_ptr->m_name);
     } else if (can_resist && randint0(100) < r_ptr->level) {
-        msg_format(_("%^sには効果がなかった。", "%^s is unaffected."), pa_ptr->m_name);
+        msg_format(_("%s^には効果がなかった。", "%s^ is unaffected."), pa_ptr->m_name);
     } else {
-        msg_format(_("%^sは恐怖して逃げ出した！", "%^s flees in terror!"), pa_ptr->m_name);
+        msg_format(_("%s^は恐怖して逃げ出した！", "%s^ flees in terror!"), pa_ptr->m_name);
         (void)set_monster_monfear(player_ptr, pa_ptr->m_idx, pa_ptr->m_ptr->get_remaining_fear() + 10 + randint0(player_ptr->lev) / 5);
     }
 }
@@ -186,7 +186,7 @@ static bool judge_tereprt_resistance(PlayerType *player_ptr, player_attack_type 
             r_ptr->r_resistance_flags.set(MonsterResistanceType::RESIST_TELEPORT);
         }
 
-        msg_format(_("%^sには効果がなかった。", "%^s is unaffected!"), pa_ptr->m_name);
+        msg_format(_("%s^には効果がなかった。", "%s^ is unaffected!"), pa_ptr->m_name);
         return true;
     }
 
@@ -195,7 +195,7 @@ static bool judge_tereprt_resistance(PlayerType *player_ptr, player_attack_type 
             r_ptr->r_resistance_flags.set(MonsterResistanceType::RESIST_TELEPORT);
         }
 
-        msg_format(_("%^sは抵抗力を持っている！", "%^s resists!"), pa_ptr->m_name);
+        msg_format(_("%s^は抵抗力を持っている！", "%s^ resists!"), pa_ptr->m_name);
         return true;
     }
 
@@ -214,7 +214,7 @@ static void attack_teleport_away(PlayerType *player_ptr, player_attack_type *pa_
         return;
     }
 
-    msg_format(_("%^sは消えた！", "%^s disappears!"), pa_ptr->m_name);
+    msg_format(_("%s^は消えた！", "%s^ disappears!"), pa_ptr->m_name);
     teleport_away(player_ptr, pa_ptr->m_idx, 50, TELEPORT_PASSIVE);
     *num = pa_ptr->num_blow + 1;
     *(pa_ptr->mdeath) = true;
@@ -235,11 +235,11 @@ static void attack_polymorph(PlayerType *player_ptr, player_attack_type *pa_ptr,
     }
 
     if (polymorph_monster(player_ptr, y, x)) {
-        msg_format(_("%^sは変化した！", "%^s changes!"), pa_ptr->m_name);
+        msg_format(_("%s^は変化した！", "%s^ changes!"), pa_ptr->m_name);
         *(pa_ptr->fear) = false;
         pa_ptr->weak = false;
     } else {
-        msg_format(_("%^sには効果がなかった。", "%^s is unaffected."), pa_ptr->m_name);
+        msg_format(_("%s^には効果がなかった。", "%s^ is unaffected."), pa_ptr->m_name);
     }
 
     pa_ptr->m_ptr = &player_ptr->current_floor_ptr->m_list[pa_ptr->m_idx];

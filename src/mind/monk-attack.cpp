@@ -204,7 +204,7 @@ static void process_attack_vital_spot(PlayerType *player_ptr, player_attack_type
 {
     auto *r_ptr = &monraces_info[pa_ptr->m_ptr->r_idx];
     if ((special_effect == MA_KNEE) && ((pa_ptr->attack_damage + player_ptr->to_d[pa_ptr->hand]) < pa_ptr->m_ptr->hp)) {
-        msg_format(_("%^sは苦痛にうめいている！", "%^s moans in agony!"), pa_ptr->m_name);
+        msg_format(_("%s^は苦痛にうめいている！", "%s^ moans in agony!"), pa_ptr->m_name);
         *stun_effect = 7 + randint1(13);
         *resist_stun /= 3;
         return;
@@ -213,7 +213,7 @@ static void process_attack_vital_spot(PlayerType *player_ptr, player_attack_type
     if ((special_effect == MA_SLOW) && ((pa_ptr->attack_damage + player_ptr->to_d[pa_ptr->hand]) < pa_ptr->m_ptr->hp)) {
         const auto is_unique = r_ptr->kind_flags.has_not(MonsterKindType::UNIQUE);
         if (is_unique && (randint1(player_ptr->lev) > r_ptr->level) && (pa_ptr->m_ptr->mspeed > STANDARD_SPEED - 50)) {
-            msg_format(_("%^sは足をひきずり始めた。", "You've hobbled %s."), pa_ptr->m_name);
+            msg_format(_("%s^は足をひきずり始めた。", "You've hobbled %s."), pa_ptr->m_name);
             pa_ptr->m_ptr->mspeed -= 10;
         }
     }
@@ -233,9 +233,9 @@ static void print_stun_effect(PlayerType *player_ptr, player_attack_type *pa_ptr
     if (stun_effect && ((pa_ptr->attack_damage + player_ptr->to_d[pa_ptr->hand]) < pa_ptr->m_ptr->hp)) {
         if (player_ptr->lev > randint1(r_ptr->level + resist_stun + 10)) {
             if (set_monster_stunned(player_ptr, pa_ptr->g_ptr->m_idx, stun_effect + pa_ptr->m_ptr->get_remaining_stun())) {
-                msg_format(_("%^sはフラフラになった。", "%^s is stunned."), pa_ptr->m_name);
+                msg_format(_("%s^はフラフラになった。", "%s^ is stunned."), pa_ptr->m_name);
             } else {
-                msg_format(_("%^sはさらにフラフラになった。", "%^s is more stunned."), pa_ptr->m_name);
+                msg_format(_("%s^はさらにフラフラになった。", "%s^ is more stunned."), pa_ptr->m_name);
             }
         }
     }

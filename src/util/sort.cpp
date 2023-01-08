@@ -385,11 +385,11 @@ bool ang_sort_comp_pet(PlayerType *player_ptr, vptr u, vptr v, int a, int b)
     MonsterRaceInfo *r_ptr1 = &monraces_info[m_ptr1->r_idx];
     MonsterRaceInfo *r_ptr2 = &monraces_info[m_ptr2->r_idx];
 
-    if (m_ptr1->nickname && !m_ptr2->nickname) {
+    if (m_ptr1->is_named() && !m_ptr2->is_named()) {
         return true;
     }
 
-    if (m_ptr2->nickname && !m_ptr1->nickname) {
+    if (m_ptr2->is_named() && !m_ptr1->is_named()) {
         return false;
     }
 
@@ -600,11 +600,11 @@ bool ang_sort_comp_pet_dismiss(PlayerType *player_ptr, vptr u, vptr v, int a, in
         return false;
     }
 
-    if (m_ptr1->nickname && !m_ptr2->nickname) {
+    if (m_ptr1->is_named() && !m_ptr2->is_named()) {
         return true;
     }
 
-    if (m_ptr2->nickname && !m_ptr1->nickname) {
+    if (m_ptr2->is_named() && !m_ptr1->is_named()) {
         return false;
     }
 
