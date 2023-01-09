@@ -121,13 +121,13 @@ static bool acid_minus_ac(PlayerType *player_ptr)
 
     GAME_TEXT o_name[MAX_NLEN];
     describe_flavor(player_ptr, o_name, o_ptr, OD_OMIT_PREFIX | OD_NAME_ONLY);
-    auto flgs = object_flags(o_ptr);
+    auto flags = object_flags(o_ptr);
     if (o_ptr->ac + o_ptr->to_a <= 0) {
         msg_format(_("%sは既にボロボロだ！", "Your %s is already fully corroded!"), o_name);
         return false;
     }
 
-    if (flgs.has(TR_IGNORE_ACID)) {
+    if (flags.has(TR_IGNORE_ACID)) {
         msg_format(_("しかし%sには効果がなかった！", "Your %s is unaffected!"), o_name);
         return true;
     }

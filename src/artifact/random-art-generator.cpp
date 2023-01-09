@@ -45,9 +45,9 @@ static bool weakening_artifact(ItemEntity *o_ptr)
 {
     const auto bi_id = lookup_baseitem_id(o_ptr->bi_key);
     const auto &baseitem = baseitems_info[bi_id];
-    auto flgs = object_flags(o_ptr);
+    auto flags = object_flags(o_ptr);
 
-    if (flgs.has(TR_KILL_EVIL)) {
+    if (flags.has(TR_KILL_EVIL)) {
         o_ptr->art_flags.reset(TR_KILL_EVIL);
         o_ptr->art_flags.set(TR_SLAY_EVIL);
         return true;

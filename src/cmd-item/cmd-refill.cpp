@@ -38,17 +38,17 @@ static void do_cmd_refill_lamp(PlayerType *player_ptr)
         return;
     }
 
-    auto flgs = object_flags(o_ptr);
+    auto flags = object_flags(o_ptr);
 
     PlayerEnergy(player_ptr).set_player_turn_energy(50);
     j_ptr = &player_ptr->inventory_list[INVEN_LITE];
-    auto flgs2 = object_flags(j_ptr);
+    auto flags2 = object_flags(j_ptr);
     j_ptr->fuel += o_ptr->fuel;
     msg_print(_("ランプに油を注いだ。", "You fuel your lamp."));
-    if (flgs.has(TR_DARK_SOURCE) && (j_ptr->fuel > 0)) {
+    if (flags.has(TR_DARK_SOURCE) && (j_ptr->fuel > 0)) {
         j_ptr->fuel = 0;
         msg_print(_("ランプが消えてしまった！", "Your lamp has gone out!"));
-    } else if (flgs.has(TR_DARK_SOURCE) || flgs2.has(TR_DARK_SOURCE)) {
+    } else if (flags.has(TR_DARK_SOURCE) || flags2.has(TR_DARK_SOURCE)) {
         j_ptr->fuel = 0;
         msg_print(_("しかしランプは全く光らない。", "Curiously, your lamp doesn't light."));
     } else if (j_ptr->fuel >= FUEL_LAMP) {
@@ -76,17 +76,17 @@ static void do_cmd_refill_torch(PlayerType *player_ptr)
         return;
     }
 
-    auto flgs = object_flags(o_ptr);
+    auto flags = object_flags(o_ptr);
 
     PlayerEnergy(player_ptr).set_player_turn_energy(50);
     j_ptr = &player_ptr->inventory_list[INVEN_LITE];
-    auto flgs2 = object_flags(j_ptr);
+    auto flags2 = object_flags(j_ptr);
     j_ptr->fuel += o_ptr->fuel + 5;
     msg_print(_("松明を結合した。", "You combine the torches."));
-    if (flgs.has(TR_DARK_SOURCE) && (j_ptr->fuel > 0)) {
+    if (flags.has(TR_DARK_SOURCE) && (j_ptr->fuel > 0)) {
         j_ptr->fuel = 0;
         msg_print(_("松明が消えてしまった！", "Your torch has gone out!"));
-    } else if (flgs.has(TR_DARK_SOURCE) || flgs2.has(TR_DARK_SOURCE)) {
+    } else if (flags.has(TR_DARK_SOURCE) || flags2.has(TR_DARK_SOURCE)) {
         j_ptr->fuel = 0;
         msg_print(_("しかし松明は全く光らない。", "Curiously, your torch doesn't light."));
     } else if (j_ptr->fuel >= FUEL_TORCH) {

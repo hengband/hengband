@@ -834,13 +834,13 @@ static void update_max_mana(PlayerType *player_ptr)
     if (any_bits(mp_ptr->spell_xtra, extra_magic_glove_reduce_mana)) {
         player_ptr->cumber_glove = false;
         auto *o_ptr = &player_ptr->inventory_list[INVEN_ARMS];
-        auto flgs = object_flags(o_ptr);
+        auto flags = object_flags(o_ptr);
         auto should_mp_decrease = o_ptr->bi_id != 0;
-        should_mp_decrease &= flgs.has_not(TR_FREE_ACT);
-        should_mp_decrease &= flgs.has_not(TR_DEC_MANA);
-        should_mp_decrease &= flgs.has_not(TR_EASY_SPELL);
-        should_mp_decrease &= flgs.has_not(TR_MAGIC_MASTERY) || (o_ptr->pval <= 0);
-        should_mp_decrease &= flgs.has_not(TR_DEX) || (o_ptr->pval <= 0);
+        should_mp_decrease &= flags.has_not(TR_FREE_ACT);
+        should_mp_decrease &= flags.has_not(TR_DEC_MANA);
+        should_mp_decrease &= flags.has_not(TR_EASY_SPELL);
+        should_mp_decrease &= flags.has_not(TR_MAGIC_MASTERY) || (o_ptr->pval <= 0);
+        should_mp_decrease &= flags.has_not(TR_DEX) || (o_ptr->pval <= 0);
         if (should_mp_decrease) {
             player_ptr->cumber_glove = true;
             msp = (3 * msp) / 4;
@@ -1054,14 +1054,14 @@ short calc_num_fire(PlayerType *player_ptr, const ItemEntity *o_ptr)
             continue;
         }
 
-        auto flgs = object_flags(q_ptr);
-        if (flgs.has(TR_XTRA_SHOTS)) {
+        auto flags = object_flags(q_ptr);
+        if (flags.has(TR_XTRA_SHOTS)) {
             extra_shots++;
         }
     }
 
-    auto flgs = object_flags(o_ptr);
-    if (flgs.has(TR_XTRA_SHOTS)) {
+    auto flags = object_flags(o_ptr);
+    if (flags.has(TR_XTRA_SHOTS)) {
         extra_shots++;
     }
 
@@ -1171,8 +1171,8 @@ static ACTION_SKILL_POWER calc_device_ability(PlayerType *player_ptr)
         if (!o_ptr->bi_id) {
             continue;
         }
-        auto flgs = object_flags(o_ptr);
-        if (flgs.has(TR_MAGIC_MASTERY)) {
+        auto flags = object_flags(o_ptr);
+        if (flags.has(TR_MAGIC_MASTERY)) {
             pow += 8 * o_ptr->pval;
         }
     }
@@ -1300,8 +1300,8 @@ static ACTION_SKILL_POWER calc_search(PlayerType *player_ptr)
         if (!o_ptr->bi_id) {
             continue;
         }
-        auto flgs = object_flags(o_ptr);
-        if (flgs.has(TR_SEARCH)) {
+        auto flags = object_flags(o_ptr);
+        if (flags.has(TR_SEARCH)) {
             pow += (o_ptr->pval * 5);
         }
     }
@@ -1351,8 +1351,8 @@ static ACTION_SKILL_POWER calc_search_freq(PlayerType *player_ptr)
         if (!o_ptr->bi_id) {
             continue;
         }
-        auto flgs = object_flags(o_ptr);
-        if (flgs.has(TR_SEARCH)) {
+        auto flags = object_flags(o_ptr);
+        if (flags.has(TR_SEARCH)) {
             pow += (o_ptr->pval * 5);
         }
     }
@@ -1489,8 +1489,8 @@ static ACTION_SKILL_POWER calc_skill_dig(PlayerType *player_ptr)
         if (!o_ptr->bi_id) {
             continue;
         }
-        auto flgs = object_flags(o_ptr);
-        if (flgs.has(TR_TUNNEL)) {
+        auto flags = object_flags(o_ptr);
+        if (flags.has(TR_TUNNEL)) {
             pow += (o_ptr->pval * 20);
         }
     }
@@ -1535,7 +1535,7 @@ static int16_t calc_num_blow(PlayerType *player_ptr, int i)
     int16_t num_blow = 1;
 
     o_ptr = &player_ptr->inventory_list[INVEN_MAIN_HAND + i];
-    auto flgs = object_flags(o_ptr);
+    auto flags = object_flags(o_ptr);
     PlayerClass pc(player_ptr);
     if (has_melee_weapon(player_ptr, INVEN_MAIN_HAND + i)) {
         if (o_ptr->bi_id && !player_ptr->heavy_wield[i]) {
@@ -1547,7 +1547,7 @@ static int16_t calc_num_blow(PlayerType *player_ptr, int i)
             wgt = info.wgt;
             mul = info.mul;
 
-            if (pc.equals(PlayerClassType::CAVALRY) && player_ptr->riding && flgs.has(TR_RIDING)) {
+            if (pc.equals(PlayerClassType::CAVALRY) && player_ptr->riding && flags.has(TR_RIDING)) {
                 num = 5;
                 wgt = 70;
                 mul = 4;
@@ -2117,7 +2117,7 @@ void put_equipment_warning(PlayerType *player_ptr)
 static short calc_to_damage(PlayerType *player_ptr, INVENTORY_IDX slot, bool is_real_value)
 {
     auto *o_ptr = &player_ptr->inventory_list[slot];
-    auto flgs = object_flags(o_ptr);
+    auto flags = object_flags(o_ptr);
 
     player_hand calc_hand = PLAYER_HAND_OTHER;
     if (slot == INVEN_MAIN_HAND) {
@@ -2138,7 +2138,7 @@ static short calc_to_damage(PlayerType *player_ptr, INVENTORY_IDX slot, bool is_
     damage -= player_stun->get_damage_penalty();
     PlayerClass pc(player_ptr);
     const auto tval = o_ptr->bi_key.tval();
-    if (pc.equals(PlayerClassType::PRIEST) && (flgs.has_not(TR_BLESSED)) && ((tval == ItemKindType::SWORD) || (tval == ItemKindType::POLEARM))) {
+    if (pc.equals(PlayerClassType::PRIEST) && (flags.has_not(TR_BLESSED)) && ((tval == ItemKindType::SWORD) || (tval == ItemKindType::POLEARM))) {
         damage -= 2;
     } else if (pc.equals(PlayerClassType::BERSERKER)) {
         damage += player_ptr->lev / 6;
@@ -2330,7 +2330,7 @@ static short calc_to_hit(PlayerType *player_ptr, INVENTORY_IDX slot, bool is_rea
     PlayerClass pc(player_ptr);
     if (has_melee_weapon(player_ptr, slot)) {
         auto *o_ptr = &player_ptr->inventory_list[slot];
-        auto flgs = object_flags(o_ptr);
+        auto flags = object_flags(o_ptr);
 
         /* Traind bonuses */
         const auto tval = o_ptr->bi_key.tval();
@@ -2355,7 +2355,7 @@ static short calc_to_hit(PlayerType *player_ptr, INVENTORY_IDX slot, bool is_rea
         if (player_ptr->riding > 0) {
             if (o_ptr->is_lance()) {
                 hit += 15;
-            } else if (flgs.has_not(TR_RIDING)) {
+            } else if (flags.has_not(TR_RIDING)) {
                 short penalty;
                 if (PlayerClass(player_ptr).is_tamer()) {
                     penalty = 5;
@@ -2372,7 +2372,7 @@ static short calc_to_hit(PlayerType *player_ptr, INVENTORY_IDX slot, bool is_rea
         }
 
         /* Class penalties */
-        if (pc.equals(PlayerClassType::PRIEST) && (flgs.has_not(TR_BLESSED)) && ((tval == ItemKindType::SWORD) || (tval == ItemKindType::POLEARM))) {
+        if (pc.equals(PlayerClassType::PRIEST) && (flags.has_not(TR_BLESSED)) && ((tval == ItemKindType::SWORD) || (tval == ItemKindType::POLEARM))) {
             hit -= 2;
         } else if (pc.equals(PlayerClassType::BERSERKER)) {
             hit += player_ptr->lev / 5;

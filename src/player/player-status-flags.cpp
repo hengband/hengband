@@ -129,9 +129,9 @@ BIT_FLAGS check_equipment_flags(PlayerType *player_ptr, tr_type tr_flag)
             continue;
         }
 
-        auto flgs = object_flags(o_ptr);
+        auto flags = object_flags(o_ptr);
 
-        if (flgs.has(tr_flag)) {
+        if (flags.has(tr_flag)) {
             set_bits(result, convert_inventory_slot_type_to_flag_cause(i2enum<inventory_slot_type>(i)));
         }
     }
@@ -803,9 +803,9 @@ BIT_FLAGS has_warning(PlayerType *player_ptr)
             continue;
         }
 
-        auto flgs = object_flags(o_ptr);
+        auto flags = object_flags(o_ptr);
 
-        if (flgs.has(TR_WARNING)) {
+        if (flags.has(TR_WARNING)) {
             if (!o_ptr->is_inscribed() || !angband_strchr(o_ptr->inscription->data(), '$')) {
                 set_bits(result, convert_inventory_slot_type_to_flag_cause(i2enum<inventory_slot_type>(i)));
             }
@@ -1072,65 +1072,65 @@ void update_curses(PlayerType *player_ptr)
         if (!o_ptr->bi_id) {
             continue;
         }
-        auto flgs = object_flags(o_ptr);
-        if (flgs.has(TR_AGGRAVATE)) {
+        auto flags = object_flags(o_ptr);
+        if (flags.has(TR_AGGRAVATE)) {
             player_ptr->cursed.set(CurseTraitType::AGGRAVATE);
         }
-        if (flgs.has(TR_DRAIN_EXP)) {
+        if (flags.has(TR_DRAIN_EXP)) {
             player_ptr->cursed.set(CurseTraitType::DRAIN_EXP);
         }
-        if (flgs.has(TR_TY_CURSE)) {
+        if (flags.has(TR_TY_CURSE)) {
             player_ptr->cursed.set(CurseTraitType::TY_CURSE);
         }
-        if (flgs.has(TR_ADD_L_CURSE)) {
+        if (flags.has(TR_ADD_L_CURSE)) {
             player_ptr->cursed.set(CurseTraitType::ADD_L_CURSE);
         }
-        if (flgs.has(TR_ADD_H_CURSE)) {
+        if (flags.has(TR_ADD_H_CURSE)) {
             player_ptr->cursed.set(CurseTraitType::ADD_H_CURSE);
         }
-        if (flgs.has(TR_DRAIN_HP)) {
+        if (flags.has(TR_DRAIN_HP)) {
             player_ptr->cursed.set(CurseTraitType::DRAIN_HP);
         }
-        if (flgs.has(TR_DRAIN_MANA)) {
+        if (flags.has(TR_DRAIN_MANA)) {
             player_ptr->cursed.set(CurseTraitType::DRAIN_MANA);
         }
-        if (flgs.has(TR_CALL_ANIMAL)) {
+        if (flags.has(TR_CALL_ANIMAL)) {
             player_ptr->cursed.set(CurseTraitType::CALL_ANIMAL);
         }
-        if (flgs.has(TR_CALL_DEMON)) {
+        if (flags.has(TR_CALL_DEMON)) {
             player_ptr->cursed.set(CurseTraitType::CALL_DEMON);
         }
-        if (flgs.has(TR_CALL_DRAGON)) {
+        if (flags.has(TR_CALL_DRAGON)) {
             player_ptr->cursed.set(CurseTraitType::CALL_DRAGON);
         }
-        if (flgs.has(TR_CALL_UNDEAD)) {
+        if (flags.has(TR_CALL_UNDEAD)) {
             player_ptr->cursed.set(CurseTraitType::CALL_UNDEAD);
         }
-        if (flgs.has(TR_COWARDICE)) {
+        if (flags.has(TR_COWARDICE)) {
             player_ptr->cursed.set(CurseTraitType::COWARDICE);
         }
-        if (flgs.has(TR_LOW_MELEE)) {
+        if (flags.has(TR_LOW_MELEE)) {
             player_ptr->cursed.set(CurseTraitType::LOW_MELEE);
         }
-        if (flgs.has(TR_LOW_AC)) {
+        if (flags.has(TR_LOW_AC)) {
             player_ptr->cursed.set(CurseTraitType::LOW_AC);
         }
-        if (flgs.has(TR_HARD_SPELL)) {
+        if (flags.has(TR_HARD_SPELL)) {
             player_ptr->cursed.set(CurseTraitType::HARD_SPELL);
         }
-        if (flgs.has(TR_FAST_DIGEST)) {
+        if (flags.has(TR_FAST_DIGEST)) {
             player_ptr->cursed.set(CurseTraitType::FAST_DIGEST);
         }
-        if (flgs.has(TR_SLOW_REGEN)) {
+        if (flags.has(TR_SLOW_REGEN)) {
             player_ptr->cursed.set(CurseTraitType::SLOW_REGEN);
         }
-        if (flgs.has(TR_BERS_RAGE)) {
+        if (flags.has(TR_BERS_RAGE)) {
             player_ptr->cursed.set(CurseTraitType::BERS_RAGE);
         }
-        if (flgs.has(TR_PERSISTENT_CURSE)) {
+        if (flags.has(TR_PERSISTENT_CURSE)) {
             player_ptr->cursed.set(CurseTraitType::PERSISTENT_CURSE);
         }
-        if (flgs.has(TR_VUL_CURSE)) {
+        if (flags.has(TR_VUL_CURSE)) {
             player_ptr->cursed.set(CurseTraitType::VUL_CURSE);
         }
 
@@ -1141,7 +1141,7 @@ void update_curses(PlayerType *player_ptr)
             player_ptr->cursed_special.set(CurseSpecialTraitType::CHAINSWORD);
         }
 
-        if (flgs.has(TR_TELEPORT)) {
+        if (flags.has(TR_TELEPORT)) {
             if (o_ptr->is_cursed()) {
                 player_ptr->cursed.set(CurseTraitType::TELEPORT);
             } else {
@@ -1183,8 +1183,8 @@ void update_extra_blows(PlayerType *player_ptr)
             continue;
         }
 
-        auto flgs = object_flags(o_ptr);
-        if (flgs.has(TR_BLOWS)) {
+        auto flags = object_flags(o_ptr);
+        if (flags.has(TR_BLOWS)) {
             if ((i == INVEN_MAIN_HAND || i == INVEN_MAIN_RING) && !two_handed) {
                 player_ptr->extra_blows[0] += o_ptr->pval;
             } else if ((i == INVEN_SUB_HAND || i == INVEN_SUB_RING) && !two_handed) {
@@ -1486,9 +1486,9 @@ BIT_FLAGS has_vuln_curse(PlayerType *player_ptr)
             continue;
         }
 
-        auto flgs = object_flags(o_ptr);
+        auto flags = object_flags(o_ptr);
 
-        if (flgs.has(TR_VUL_CURSE) || o_ptr->curse_flags.has(CurseTraitType::VUL_CURSE)) {
+        if (flags.has(TR_VUL_CURSE) || o_ptr->curse_flags.has(CurseTraitType::VUL_CURSE)) {
             set_bits(result, convert_inventory_slot_type_to_flag_cause(i2enum<inventory_slot_type>(i)));
         }
     }
@@ -1511,9 +1511,9 @@ BIT_FLAGS has_heavy_vuln_curse(PlayerType *player_ptr)
             continue;
         }
 
-        auto flgs = object_flags(o_ptr);
+        auto flags = object_flags(o_ptr);
 
-        if ((flgs.has(TR_VUL_CURSE) || o_ptr->curse_flags.has(CurseTraitType::VUL_CURSE)) && o_ptr->curse_flags.has(CurseTraitType::HEAVY_CURSE)) {
+        if ((flags.has(TR_VUL_CURSE) || o_ptr->curse_flags.has(CurseTraitType::VUL_CURSE)) && o_ptr->curse_flags.has(CurseTraitType::HEAVY_CURSE)) {
             set_bits(result, convert_inventory_slot_type_to_flag_cause(i2enum<inventory_slot_type>(i)));
         }
     }
@@ -1728,13 +1728,13 @@ bool has_disable_two_handed_bonus(PlayerType *player_ptr, int i)
 bool is_wielding_icky_weapon(PlayerType *player_ptr, int i)
 {
     auto *o_ptr = &player_ptr->inventory_list[INVEN_MAIN_HAND + i];
-    auto flgs = object_flags(o_ptr);
+    auto flags = object_flags(o_ptr);
 
     const auto tval = o_ptr->bi_key.tval();
     const auto has_no_weapon = (tval == ItemKindType::NONE) || (tval == ItemKindType::SHIELD);
     PlayerClass pc(player_ptr);
     if (pc.equals(PlayerClassType::PRIEST)) {
-        auto is_suitable_weapon = flgs.has(TR_BLESSED);
+        auto is_suitable_weapon = flags.has(TR_BLESSED);
         is_suitable_weapon |= (tval != ItemKindType::SWORD) && (tval != ItemKindType::POLEARM);
         return !has_no_weapon && !is_suitable_weapon;
     }
@@ -1756,10 +1756,10 @@ bool is_wielding_icky_weapon(PlayerType *player_ptr, int i)
 bool is_wielding_icky_riding_weapon(PlayerType *player_ptr, int i)
 {
     auto *o_ptr = &player_ptr->inventory_list[INVEN_MAIN_HAND + i];
-    auto flgs = object_flags(o_ptr);
+    auto flags = object_flags(o_ptr);
     const auto tval = o_ptr->bi_key.tval();
     const auto has_no_weapon = (tval == ItemKindType::NONE) || (tval == ItemKindType::SHIELD);
-    const auto is_suitable = o_ptr->is_lance() || flgs.has(TR_RIDING);
+    const auto is_suitable = o_ptr->is_lance() || flags.has(TR_RIDING);
     return (player_ptr->riding > 0) && !has_no_weapon && !is_suitable;
 }
 
