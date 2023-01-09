@@ -563,11 +563,17 @@ int main(int argc, char *argv[])
     /* Catch nasty signals */
     signals_init();
 
-    /* Initialize */
-    init_angband(p_ptr, false);
+    {
+        constexpr auto display_width = 80;
+        constexpr auto display_height = 24;
+        TermCenteredOffsetSetter tcos(display_width, display_height);
 
-    /* Wait for response */
-    pause_line(23);
+        /* Initialize */
+        init_angband(p_ptr, false);
+
+        /* Wait for response */
+        pause_line(23);
+    }
 
     /* Play the game */
     play_game(p_ptr, new_game, browsing_movie);
