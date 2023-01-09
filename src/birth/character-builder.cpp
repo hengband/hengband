@@ -90,6 +90,10 @@ static void write_birth_diary(PlayerType *player_ptr)
  */
 void player_birth(PlayerType *player_ptr)
 {
+    constexpr auto display_width = 80;
+    constexpr auto display_height = 24;
+    TermCenteredOffsetSetter tcos(display_width, display_height);
+
     w_ptr->play_time = 0;
     wipe_monsters_list(player_ptr);
     player_wipe_without_name(player_ptr);
