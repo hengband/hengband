@@ -68,6 +68,8 @@ static bool display_player_info(PlayerType *player_ptr, int mode)
     }
 
     if (mode == 5) {
+        constexpr auto display_width = 80;
+        TermCenteredOffsetSetter tcos(display_width, std::nullopt);
         do_cmd_knowledge_mutations(player_ptr);
         return true;
     }
@@ -280,7 +282,10 @@ std::optional<int> display_player(PlayerType *player_ptr, const int tmp_mode)
 {
     auto has_any_mutation = (player_ptr->muta.any() || has_good_luck(player_ptr)) && display_mutations;
     auto mode = has_any_mutation ? tmp_mode % 6 : tmp_mode % 5;
-    clear_from(0);
+    {
+        TermOffsetSetter tos(0, 0);
+        clear_from(0);
+    }
     if (display_player_info(player_ptr, mode)) {
         return std::nullopt;
     }

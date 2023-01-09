@@ -84,7 +84,10 @@ errr file_character(PlayerType *player_ptr, concptr name)
         return -1;
     }
 
+    screen_save();
     make_character_dump(player_ptr, fff);
+    screen_load();
+
     angband_fclose(fff);
     msg_print(_("キャラクタ情報のファイルへの書き出しに成功しました。", "Character dump successful."));
     msg_print(nullptr);
