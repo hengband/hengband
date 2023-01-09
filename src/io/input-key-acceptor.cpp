@@ -47,8 +47,12 @@ static bool parse_under = false;
  * @details
  * カーソル位置がずれるので戻す。
  */
-static void all_term_fresh(int x, int y)
+static void all_term_fresh()
 {
+    TERM_LEN x, y;
+    term_activate(angband_terms[0]);
+    term_locate(&x, &y);
+
     p_ptr->window_flags |= PW_ALL;
     handle_stuff(p_ptr);
 
@@ -227,8 +231,6 @@ char inkey(bool do_all_term_refresh)
     }
 
     term_activate(angband_terms[0]);
-    auto y = angband_terms[0]->scr->cy;
-    auto x = angband_terms[0]->scr->cx;
     char kk;
     while (!ch) {
         if (!inkey_base && inkey_scan && (0 != term_inkey(&kk, false, false))) {
@@ -238,7 +240,7 @@ char inkey(bool do_all_term_refresh)
         if (!done && (0 != term_inkey(&kk, false, false))) {
             start_term_fresh();
             if (do_all_term_refresh) {
-                all_term_fresh(x, y);
+                all_term_fresh();
             } else {
                 term_fresh();
             }
