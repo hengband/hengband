@@ -38,8 +38,8 @@
  */
 static void give_one_ability_of_object(ItemEntity *to_ptr, ItemEntity *from_ptr)
 {
-    auto to_flgs = object_flags(to_ptr);
-    auto from_flgs = object_flags(from_ptr);
+    auto to_flags = object_flags(to_ptr);
+    auto from_flags = object_flags(from_ptr);
 
     int n = 0;
     tr_type cand[TR_FLAG_MAX];
@@ -61,7 +61,7 @@ static void give_one_ability_of_object(ItemEntity *to_ptr, ItemEntity *from_ptr)
             break;
         default:
             auto tr_flag = i2enum<tr_type>(i);
-            if (from_flgs.has(tr_flag) && to_flgs.has_not(tr_flag)) {
+            if (from_flags.has(tr_flag) && to_flags.has_not(tr_flag)) {
                 if (!(TR_PVAL_FLAG_MASK.has(tr_flag) && (from_ptr->pval < 1))) {
                     cand[n++] = tr_flag;
                 }

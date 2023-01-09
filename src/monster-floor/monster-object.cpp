@@ -35,81 +35,81 @@
 /*!
  * @brief オブジェクトのフラグを更新する
  */
-static void update_object_flags(const TrFlags &flgs, EnumClassFlagGroup<MonsterKindType> &flg_monster_kind, EnumClassFlagGroup<MonsterResistanceType> &flgr)
+static void update_object_flags(const TrFlags &flags, EnumClassFlagGroup<MonsterKindType> &flg_monster_kind, EnumClassFlagGroup<MonsterResistanceType> &flgr)
 {
-    if (flgs.has(TR_SLAY_DRAGON)) {
+    if (flags.has(TR_SLAY_DRAGON)) {
         flg_monster_kind.set(MonsterKindType::DRAGON);
     }
-    if (flgs.has(TR_KILL_DRAGON)) {
+    if (flags.has(TR_KILL_DRAGON)) {
         flg_monster_kind.set(MonsterKindType::DRAGON);
     }
-    if (flgs.has(TR_SLAY_TROLL)) {
+    if (flags.has(TR_SLAY_TROLL)) {
         flg_monster_kind.set(MonsterKindType::TROLL);
     }
-    if (flgs.has(TR_KILL_TROLL)) {
+    if (flags.has(TR_KILL_TROLL)) {
         flg_monster_kind.set(MonsterKindType::TROLL);
     }
-    if (flgs.has(TR_SLAY_GIANT)) {
+    if (flags.has(TR_SLAY_GIANT)) {
         flg_monster_kind.set(MonsterKindType::GIANT);
     }
-    if (flgs.has(TR_KILL_GIANT)) {
+    if (flags.has(TR_KILL_GIANT)) {
         flg_monster_kind.set(MonsterKindType::GIANT);
     }
-    if (flgs.has(TR_SLAY_ORC)) {
+    if (flags.has(TR_SLAY_ORC)) {
         flg_monster_kind.set(MonsterKindType::ORC);
     }
-    if (flgs.has(TR_KILL_ORC)) {
+    if (flags.has(TR_KILL_ORC)) {
         flg_monster_kind.set(MonsterKindType::ORC);
     }
-    if (flgs.has(TR_SLAY_DEMON)) {
+    if (flags.has(TR_SLAY_DEMON)) {
         flg_monster_kind.set(MonsterKindType::DEMON);
     }
-    if (flgs.has(TR_KILL_DEMON)) {
+    if (flags.has(TR_KILL_DEMON)) {
         flg_monster_kind.set(MonsterKindType::DEMON);
     }
-    if (flgs.has(TR_SLAY_UNDEAD)) {
+    if (flags.has(TR_SLAY_UNDEAD)) {
         flg_monster_kind.set(MonsterKindType::UNDEAD);
     }
-    if (flgs.has(TR_KILL_UNDEAD)) {
+    if (flags.has(TR_KILL_UNDEAD)) {
         flg_monster_kind.set(MonsterKindType::UNDEAD);
     }
-    if (flgs.has(TR_SLAY_ANIMAL)) {
+    if (flags.has(TR_SLAY_ANIMAL)) {
         flg_monster_kind.set(MonsterKindType::ANIMAL);
     }
-    if (flgs.has(TR_KILL_ANIMAL)) {
+    if (flags.has(TR_KILL_ANIMAL)) {
         flg_monster_kind.set(MonsterKindType::ANIMAL);
     }
-    if (flgs.has(TR_SLAY_EVIL)) {
+    if (flags.has(TR_SLAY_EVIL)) {
         flg_monster_kind.set(MonsterKindType::EVIL);
     }
-    if (flgs.has(TR_KILL_EVIL)) {
+    if (flags.has(TR_KILL_EVIL)) {
         flg_monster_kind.set(MonsterKindType::EVIL);
     }
-    if (flgs.has(TR_SLAY_GOOD)) {
+    if (flags.has(TR_SLAY_GOOD)) {
         flg_monster_kind.set(MonsterKindType::GOOD);
     }
-    if (flgs.has(TR_KILL_GOOD)) {
+    if (flags.has(TR_KILL_GOOD)) {
         flg_monster_kind.set(MonsterKindType::GOOD);
     }
-    if (flgs.has(TR_SLAY_HUMAN)) {
+    if (flags.has(TR_SLAY_HUMAN)) {
         flg_monster_kind.set(MonsterKindType::HUMAN);
     }
-    if (flgs.has(TR_KILL_HUMAN)) {
+    if (flags.has(TR_KILL_HUMAN)) {
         flg_monster_kind.set(MonsterKindType::HUMAN);
     }
-    if (flgs.has(TR_BRAND_ACID)) {
+    if (flags.has(TR_BRAND_ACID)) {
         flgr.set(MonsterResistanceType::IMMUNE_ACID);
     }
-    if (flgs.has(TR_BRAND_ELEC)) {
+    if (flags.has(TR_BRAND_ELEC)) {
         flgr.set(MonsterResistanceType::IMMUNE_ELEC);
     }
-    if (flgs.has(TR_BRAND_FIRE)) {
+    if (flags.has(TR_BRAND_FIRE)) {
         flgr.set(MonsterResistanceType::IMMUNE_FIRE);
     }
-    if (flgs.has(TR_BRAND_COLD)) {
+    if (flags.has(TR_BRAND_COLD)) {
         flgr.set(MonsterResistanceType::IMMUNE_COLD);
     }
-    if (flgs.has(TR_BRAND_POIS)) {
+    if (flags.has(TR_BRAND_POIS)) {
         flgr.set(MonsterResistanceType::IMMUNE_POISON);
     }
 }
@@ -201,10 +201,10 @@ void update_object_by_monster_movement(PlayerType *player_ptr, turn_flags *turn_
             }
         }
 
-        auto flgs = object_flags(o_ptr);
+        auto flags = object_flags(o_ptr);
         describe_flavor(player_ptr, o_name, o_ptr, 0);
         const auto m_name = monster_desc(player_ptr, m_ptr, MD_INDEF_HIDDEN);
-        update_object_flags(flgs, flg_monster_kind, flgr);
+        update_object_flags(flags, flg_monster_kind, flgr);
 
         auto is_unpickable_object = o_ptr->is_artifact();
         is_unpickable_object |= r_ptr->kind_flags.has_any_of(flg_monster_kind);

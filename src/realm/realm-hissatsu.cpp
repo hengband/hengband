@@ -747,14 +747,14 @@ std::optional<std::string> do_hissatsu_spell(PlayerType *player_ptr, SPELL_IDX s
                 o_ptr = &player_ptr->inventory_list[INVEN_MAIN_HAND + i];
                 basedam = (o_ptr->dd * (o_ptr->ds + 1)) * 50;
                 damage = o_ptr->to_d * 100;
-                auto flgs = object_flags(o_ptr);
+                auto flags = object_flags(o_ptr);
 
                 // @todo ヴォーパルの多重定義.
                 if (o_ptr->is_specific_artifact(FixedArtifactId::VORPAL_BLADE) || o_ptr->is_specific_artifact(FixedArtifactId::CHAINSWORD)) {
                     /* vorpal blade */
                     basedam *= 5;
                     basedam /= 3;
-                } else if (flgs.has(TR_VORPAL)) {
+                } else if (flags.has(TR_VORPAL)) {
                     /* vorpal flag only */
                     basedam *= 11;
                     basedam /= 9;
@@ -1060,14 +1060,14 @@ std::optional<std::string> do_hissatsu_spell(PlayerType *player_ptr, SPELL_IDX s
                 o_ptr = &player_ptr->inventory_list[INVEN_MAIN_HAND + i];
                 basedam = (o_ptr->dd * (o_ptr->ds + 1)) * 50;
                 damage = o_ptr->to_d * 100;
-                auto flgs = object_flags(o_ptr);
+                auto flags = object_flags(o_ptr);
 
                 // @todo ヴォーパルの多重定義.
                 if (o_ptr->is_specific_artifact(FixedArtifactId::VORPAL_BLADE) || o_ptr->is_specific_artifact(FixedArtifactId::CHAINSWORD)) {
                     /* vorpal blade */
                     basedam *= 5;
                     basedam /= 3;
-                } else if (flgs.has(TR_VORPAL)) {
+                } else if (flags.has(TR_VORPAL)) {
                     /* vorpal flag only */
                     basedam *= 11;
                     basedam /= 9;

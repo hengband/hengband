@@ -60,8 +60,8 @@ ItemEntity *choose_warning_item(PlayerType *player_ptr)
     for (int i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
         auto *o_ptr = &player_ptr->inventory_list[i];
 
-        auto flgs = object_flags(o_ptr);
-        if (flgs.has(TR_WARNING)) {
+        auto flags = object_flags(o_ptr);
+        if (flags.has(TR_WARNING)) {
             choices[number] = i;
             number++;
         }

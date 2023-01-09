@@ -39,8 +39,8 @@ bool BasicSmithInfo::add_essence(PlayerType *, ItemEntity *o_ptr, int) const
 void BasicSmithInfo::erase_essence(ItemEntity *o_ptr) const
 {
     o_ptr->smith_effect = std::nullopt;
-    auto flgs = object_flags(o_ptr);
-    if (flgs.has_none_of(TR_PVAL_FLAG_MASK)) {
+    auto flags = object_flags(o_ptr);
+    if (flags.has_none_of(TR_PVAL_FLAG_MASK)) {
         o_ptr->pval = 0;
     }
 }

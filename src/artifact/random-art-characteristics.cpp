@@ -168,25 +168,25 @@ std::string get_random_name(const ItemEntity &item, bool armour, int power)
 /*対邪平均ダメージの計算処理*/
 static int calc_arm_avgdamage(PlayerType *player_ptr, ItemEntity *o_ptr)
 {
-    auto flgs = object_flags(o_ptr);
+    auto flags = object_flags(o_ptr);
     int base, forced, vorpal;
     int s_evil = forced = vorpal = 0;
     int dam = base = (o_ptr->dd * o_ptr->ds + o_ptr->dd) / 2;
-    if (flgs.has(TR_KILL_EVIL)) {
+    if (flags.has(TR_KILL_EVIL)) {
         dam = s_evil = dam * 7 / 2;
-    } else if (flgs.has_not(TR_KILL_EVIL) && flgs.has(TR_SLAY_EVIL)) {
+    } else if (flags.has_not(TR_KILL_EVIL) && flags.has(TR_SLAY_EVIL)) {
         dam = s_evil = dam * 2;
     } else {
         s_evil = dam;
     }
 
-    if (flgs.has(TR_FORCE_WEAPON)) {
+    if (flags.has(TR_FORCE_WEAPON)) {
         dam = forced = dam * 3 / 2 + (o_ptr->dd * o_ptr->ds + o_ptr->dd);
     } else {
         forced = dam;
     }
 
-    if (flgs.has(TR_VORPAL)) {
+    if (flags.has(TR_VORPAL)) {
         dam = vorpal = dam * 11 / 9;
     } else {
         vorpal = dam;
@@ -199,17 +199,17 @@ static int calc_arm_avgdamage(PlayerType *player_ptr, ItemEntity *o_ptr)
 
 bool has_extreme_damage_rate(PlayerType *player_ptr, ItemEntity *o_ptr)
 {
-    auto flgs = object_flags(o_ptr);
-    if (flgs.has(TR_VAMPIRIC)) {
-        if (flgs.has(TR_BLOWS) && (o_ptr->pval == 1) && (calc_arm_avgdamage(player_ptr, o_ptr) > 52)) {
+    auto flags = object_flags(o_ptr);
+    if (flags.has(TR_VAMPIRIC)) {
+        if (flags.has(TR_BLOWS) && (o_ptr->pval == 1) && (calc_arm_avgdamage(player_ptr, o_ptr) > 52)) {
             return true;
         }
 
-        if (flgs.has(TR_BLOWS) && (o_ptr->pval == 2) && (calc_arm_avgdamage(player_ptr, o_ptr) > 43)) {
+        if (flags.has(TR_BLOWS) && (o_ptr->pval == 2) && (calc_arm_avgdamage(player_ptr, o_ptr) > 43)) {
             return true;
         }
 
-        if (flgs.has(TR_BLOWS) && (o_ptr->pval == 3) && (calc_arm_avgdamage(player_ptr, o_ptr) > 33)) {
+        if (flags.has(TR_BLOWS) && (o_ptr->pval == 3) && (calc_arm_avgdamage(player_ptr, o_ptr) > 33)) {
             return true;
         }
 
@@ -220,15 +220,15 @@ bool has_extreme_damage_rate(PlayerType *player_ptr, ItemEntity *o_ptr)
         return false;
     }
 
-    if (flgs.has(TR_BLOWS) && (o_ptr->pval == 1) && (calc_arm_avgdamage(player_ptr, o_ptr) > 65)) {
+    if (flags.has(TR_BLOWS) && (o_ptr->pval == 1) && (calc_arm_avgdamage(player_ptr, o_ptr) > 65)) {
         return true;
     }
 
-    if (flgs.has(TR_BLOWS) && (o_ptr->pval == 2) && (calc_arm_avgdamage(player_ptr, o_ptr) > 52)) {
+    if (flags.has(TR_BLOWS) && (o_ptr->pval == 2) && (calc_arm_avgdamage(player_ptr, o_ptr) > 52)) {
         return true;
     }
 
-    if (flgs.has(TR_BLOWS) && (o_ptr->pval == 3) && (calc_arm_avgdamage(player_ptr, o_ptr) > 40)) {
+    if (flags.has(TR_BLOWS) && (o_ptr->pval == 3) && (calc_arm_avgdamage(player_ptr, o_ptr) > 40)) {
         return true;
     }
 

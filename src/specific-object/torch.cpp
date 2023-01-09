@@ -34,17 +34,17 @@ bool is_active_torch(ItemEntity *o_ptr)
  * @brief 投擲時たいまつに投げやすい/焼棄/アンデッドスレイの特別効果を返す。
  * Torches have special abilities when they are flaming.
  * @param o_ptr 投擲するオブジェクトの構造体参照ポインタ
- * @param flgs 特別に追加するフラグを返す参照ポインタ
+ * @param flags 特別に追加するフラグを返す参照ポインタ
  */
-void torch_flags(ItemEntity *o_ptr, TrFlags &flgs)
+void torch_flags(ItemEntity *o_ptr, TrFlags &flags)
 {
     if (!is_active_torch(o_ptr)) {
         return;
     }
 
-    flgs.set(TR_BRAND_FIRE);
-    flgs.set(TR_KILL_UNDEAD);
-    flgs.set(TR_THROW);
+    flags.set(TR_BRAND_FIRE);
+    flags.set(TR_KILL_UNDEAD);
+    flags.set(TR_THROW);
 }
 
 /*!
@@ -92,7 +92,7 @@ void update_lite_radius(PlayerType *player_ptr)
     for (int i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
         ItemEntity *o_ptr;
         o_ptr = &player_ptr->inventory_list[i];
-        auto flgs = object_flags(o_ptr);
+        auto flags = object_flags(o_ptr);
 
         if (!o_ptr->bi_id) {
             continue;
@@ -102,7 +102,7 @@ void update_lite_radius(PlayerType *player_ptr)
             player_ptr->cur_lite++;
         }
 
-        if (flgs.has_not(TR_DARK_SOURCE)) {
+        if (flags.has_not(TR_DARK_SOURCE)) {
             if (o_ptr->bi_key.tval() == ItemKindType::LITE) {
                 const auto sval = o_ptr->bi_key.sval();
                 if ((sval == SV_LITE_TORCH) && (o_ptr->fuel <= 0)) {
@@ -116,27 +116,27 @@ void update_lite_radius(PlayerType *player_ptr)
         }
 
         POSITION rad = 0;
-        if (flgs.has(TR_LITE_1) && flgs.has_not(TR_DARK_SOURCE)) {
+        if (flags.has(TR_LITE_1) && flags.has_not(TR_DARK_SOURCE)) {
             rad += 1;
         }
 
-        if (flgs.has(TR_LITE_2) && flgs.has_not(TR_DARK_SOURCE)) {
+        if (flags.has(TR_LITE_2) && flags.has_not(TR_DARK_SOURCE)) {
             rad += 2;
         }
 
-        if (flgs.has(TR_LITE_3) && flgs.has_not(TR_DARK_SOURCE)) {
+        if (flags.has(TR_LITE_3) && flags.has_not(TR_DARK_SOURCE)) {
             rad += 3;
         }
 
-        if (flgs.has(TR_LITE_M1)) {
+        if (flags.has(TR_LITE_M1)) {
             rad -= 1;
         }
 
-        if (flgs.has(TR_LITE_M2)) {
+        if (flags.has(TR_LITE_M2)) {
             rad -= 2;
         }
 
-        if (flgs.has(TR_LITE_M3)) {
+        if (flags.has(TR_LITE_M3)) {
             rad -= 3;
         }
 

@@ -36,10 +36,10 @@ bool bless_weapon(PlayerType *player_ptr)
 
     GAME_TEXT o_name[MAX_NLEN];
     describe_flavor(player_ptr, o_name, o_ptr, OD_OMIT_PREFIX | OD_NAME_ONLY);
-    auto flgs = object_flags(o_ptr);
+    auto flags = object_flags(o_ptr);
 
     if (o_ptr->is_cursed()) {
-        if ((o_ptr->curse_flags.has(CurseTraitType::HEAVY_CURSE) && (randint1(100) < 33)) || flgs.has(TR_ADD_L_CURSE) || flgs.has(TR_ADD_H_CURSE) || o_ptr->curse_flags.has(CurseTraitType::PERSISTENT_CURSE) || o_ptr->curse_flags.has(CurseTraitType::PERMA_CURSE)) {
+        if ((o_ptr->curse_flags.has(CurseTraitType::HEAVY_CURSE) && (randint1(100) < 33)) || flags.has(TR_ADD_L_CURSE) || flags.has(TR_ADD_H_CURSE) || o_ptr->curse_flags.has(CurseTraitType::PERSISTENT_CURSE) || o_ptr->curse_flags.has(CurseTraitType::PERMA_CURSE)) {
 #ifdef JP
             msg_format("%sを覆う黒いオーラは祝福を跳ね返した！", o_name);
 #else
@@ -69,7 +69,7 @@ bool bless_weapon(PlayerType *player_ptr)
      * artifact weapon they find. Ego weapons and normal weapons
      * can be blessed automatically.
      */
-    if (flgs.has(TR_BLESSED)) {
+    if (flags.has(TR_BLESSED)) {
 #ifdef JP
         msg_format("%s は既に祝福されている。", o_name);
 #else
