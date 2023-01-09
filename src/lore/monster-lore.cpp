@@ -164,7 +164,7 @@ void process_monster_lore(PlayerType *player_ptr, MonsterRaceId r_idx, monster_l
         lore_ptr->know_everything = true;
     }
 
-    set_drop_flags(lore_ptr);
+    set_flags_for_full_knowledge(lore_ptr);
     set_msex_flags(lore_ptr);
     set_flags1(lore_ptr);
     set_race_flags(lore_ptr);

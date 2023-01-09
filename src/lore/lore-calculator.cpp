@@ -141,7 +141,7 @@ void set_damage(PlayerType *player_ptr, lore_type *lore_ptr, MonsterAbilityType 
     strnfmt(tmp, tmpsz, msg, std::string("(").append(dice_to_string(base_damage, dice_num, dice_side, dice_mult, dice_div)).append(")").data());
 }
 
-void set_drop_flags(lore_type *lore_ptr)
+void set_flags_for_full_knowledge(lore_type *lore_ptr)
 {
     if (!lore_ptr->know_everything) {
         return;
@@ -165,4 +165,5 @@ void set_drop_flags(lore_type *lore_ptr)
     lore_ptr->behavior_flags = lore_ptr->r_ptr->behavior_flags;
     lore_ptr->resistance_flags = lore_ptr->r_ptr->resistance_flags;
     lore_ptr->feature_flags = lore_ptr->r_ptr->feature_flags;
+    lore_ptr->drop_flags = lore_ptr->r_ptr->drop_flags;
 }
