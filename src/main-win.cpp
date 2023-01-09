@@ -2804,12 +2804,18 @@ int WINAPI WinMain(
 
     signals_init();
     term_activate(term_screen);
-    init_angband(p_ptr, false);
-    initialized = true;
+    {
+        constexpr auto display_width = 80;
+        constexpr auto display_height = 24;
+        TermCenteredOffsetSetter tcos(display_width, display_height);
 
-    check_for_save_file(command_line.get_savefile_option());
-    prt(_("[ファイル] メニューの [新規] または [開く] を選択してください。", "[Choose 'New' or 'Open' from the 'File' menu]"), 23, _(8, 17));
-    term_fresh();
+        init_angband(p_ptr, false);
+        initialized = true;
+
+        check_for_save_file(command_line.get_savefile_option());
+        prt(_("[ファイル] メニューの [新規] または [開く] を選択してください。", "[Choose 'New' or 'Open' from the 'File' menu]"), 23, _(8, 17));
+        term_fresh();
+    }
 
     change_sound_mode(arg_sound);
     use_music = arg_music;
