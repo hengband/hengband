@@ -62,6 +62,7 @@
 #include "window/main-window-util.h"
 #include "world/world.h"
 #include <algorithm>
+#include <concepts>
 #include <mutex>
 #include <sstream>
 #include <string>
@@ -81,26 +82,46 @@ FixItemTesterSetter::~FixItemTesterSetter()
 }
 
 /*!
+ * @brief サブウィンドウの描画を行う
+ *
+ * pw_flag で指定したウィンドウフラグが設定されているサブウィンドウに対し描画を行う。
+ * 描画は display_func で指定したコールバック関数で行う。
+ *
+ * @param pw_flag 描画を行うフラグ
+ * @param display_func 描画を行う関数
+ */
+static void display_sub_windows(window_redraw_type pw_flag, std::invocable auto display_func)
+{
+    auto current_term = game_term;
+
+    for (auto i = 0U; i < angband_terms.size(); ++i) {
+        auto term = angband_terms[i];
+        if (term == nullptr) {
+            continue;
+        }
+
+        if (none_bits(window_flag[i], pw_flag)) {
+            continue;
+        }
+
+        term_activate(term);
+        display_func();
+        term_fresh();
+    }
+
+    term_activate(current_term);
+}
+
+/*!
  * @brief サブウィンドウに所持品一覧を表示する / Hack -- display inventory in sub-windows
  * @param player_ptr プレイヤーへの参照ポインタ
  */
 void fix_inventory(PlayerType *player_ptr)
 {
-    for (int j = 0; j < 8; j++) {
-        term_type *old = game_term;
-        if (!angband_terms[j]) {
-            continue;
-        }
-
-        if (!(window_flag[j] & (PW_INVEN))) {
-            continue;
-        }
-
-        term_activate(angband_terms[j]);
-        display_inventory(player_ptr, *fix_item_tester);
-        term_fresh();
-        term_activate(old);
-    }
+    display_sub_windows(PW_INVEN,
+        [player_ptr] {
+            display_inventory(player_ptr, *fix_item_tester);
+        });
 }
 
 /*!
@@ -220,26 +241,13 @@ void fix_monster_list(PlayerType *player_ptr)
     static std::vector<MONSTER_IDX> monster_list;
     std::once_flag once;
 
-    for (int j = 0; j < 8; j++) {
-        term_type *old = game_term;
-        if (!angband_terms[j]) {
-            continue;
-        }
-        if (!(window_flag[j] & PW_MONSTER_LIST)) {
-            continue;
-        }
-        if (angband_terms[j]->never_fresh) {
-            continue;
-        }
-
-        term_activate(angband_terms[j]);
-        int w, h;
-        term_get_size(&w, &h);
-        std::call_once(once, target_sensing_monsters_prepare, player_ptr, monster_list);
-        print_monster_list(player_ptr->current_floor_ptr, monster_list, 0, 0, h);
-        term_fresh();
-        term_activate(old);
-    }
+    display_sub_windows(PW_MONSTER_LIST,
+        [player_ptr, &once] {
+            int w, h;
+            term_get_size(&w, &h);
+            std::call_once(once, target_sensing_monsters_prepare, player_ptr, monster_list);
+            print_monster_list(player_ptr->current_floor_ptr, monster_list, 0, 0, h);
+        });
 
     if (use_music && has_monster_music) {
         std::call_once(once, target_sensing_monsters_prepare, player_ptr, monster_list);
@@ -330,20 +338,10 @@ static void display_equipment(PlayerType *player_ptr, const ItemTester &item_tes
  */
 void fix_equip(PlayerType *player_ptr)
 {
-    for (int j = 0; j < 8; j++) {
-        term_type *old = game_term;
-        if (!angband_terms[j]) {
-            continue;
-        }
-        if (!(window_flag[j] & (PW_EQUIP))) {
-            continue;
-        }
-
-        term_activate(angband_terms[j]);
-        display_equipment(player_ptr, *fix_item_tester);
-        term_fresh();
-        term_activate(old);
-    }
+    display_sub_windows(PW_EQUIP,
+        [player_ptr] {
+            display_equipment(player_ptr, *fix_item_tester);
+        });
 }
 
 /*!
@@ -353,22 +351,11 @@ void fix_equip(PlayerType *player_ptr)
  */
 void fix_player(PlayerType *player_ptr)
 {
-    for (int j = 0; j < 8; j++) {
-        term_type *old = game_term;
-        if (!angband_terms[j]) {
-            continue;
-        }
-
-        if (!(window_flag[j] & (PW_PLAYER))) {
-            continue;
-        }
-
-        term_activate(angband_terms[j]);
-        update_playtime();
-        (void)display_player(player_ptr, 0);
-        term_fresh();
-        term_activate(old);
-    }
+    update_playtime();
+    display_sub_windows(PW_PLAYER,
+        [player_ptr] {
+            display_player(player_ptr, 0);
+        });
 }
 
 /*!
@@ -378,29 +365,17 @@ void fix_player(PlayerType *player_ptr)
  */
 void fix_message(void)
 {
-    for (int j = 0; j < 8; j++) {
-        term_type *old = game_term;
-        if (!angband_terms[j]) {
-            continue;
-        }
-
-        if (!(window_flag[j] & (PW_MESSAGE))) {
-            continue;
-        }
-
-        term_activate(angband_terms[j]);
-        TERM_LEN w, h;
-        term_get_size(&w, &h);
-        for (int i = 0; i < h; i++) {
-            term_putstr(0, (h - 1) - i, -1, (byte)((i < now_message) ? TERM_WHITE : TERM_SLATE), message_str((int16_t)i));
-            TERM_LEN x, y;
-            term_locate(&x, &y);
-            term_erase(x, y, 255);
-        }
-
-        term_fresh();
-        term_activate(old);
-    }
+    display_sub_windows(PW_MESSAGE,
+        [] {
+            TERM_LEN w, h;
+            term_get_size(&w, &h);
+            for (int i = 0; i < h; i++) {
+                term_putstr(0, (h - 1) - i, -1, (byte)((i < now_message) ? TERM_WHITE : TERM_SLATE), message_str((int16_t)i));
+                TERM_LEN x, y;
+                term_locate(&x, &y);
+                term_erase(x, y, 255);
+            }
+        });
 }
 
 /*!
@@ -413,27 +388,15 @@ void fix_message(void)
  */
 void fix_overhead(PlayerType *player_ptr)
 {
-    for (int j = 0; j < 8; j++) {
-        term_type *old = game_term;
-        TERM_LEN wid, hgt;
-        if (!angband_terms[j]) {
-            continue;
-        }
-
-        if (!(window_flag[j] & (PW_OVERHEAD))) {
-            continue;
-        }
-
-        term_activate(angband_terms[j]);
-        term_get_size(&wid, &hgt);
-        if (wid > COL_MAP + 2 && hgt > ROW_MAP + 2) {
-            int cy, cx;
-            display_map(player_ptr, &cy, &cx);
-            term_fresh();
-        }
-
-        term_activate(old);
-    }
+    display_sub_windows(PW_OVERHEAD,
+        [player_ptr] {
+            TERM_LEN wid, hgt;
+            term_get_size(&wid, &hgt);
+            if (wid > COL_MAP + 2 && hgt > ROW_MAP + 2) {
+                int cy, cx;
+                display_map(player_ptr, &cy, &cx);
+            }
+        });
 }
 
 /*!
@@ -480,21 +443,10 @@ static void display_dungeon(PlayerType *player_ptr)
  */
 void fix_dungeon(PlayerType *player_ptr)
 {
-    for (int j = 0; j < 8; j++) {
-        term_type *old = game_term;
-        if (!angband_terms[j]) {
-            continue;
-        }
-
-        if (!(window_flag[j] & (PW_DUNGEON))) {
-            continue;
-        }
-
-        term_activate(angband_terms[j]);
-        display_dungeon(player_ptr);
-        term_fresh();
-        term_activate(old);
-    }
+    display_sub_windows(PW_DUNGEON,
+        [player_ptr] {
+            display_dungeon(player_ptr);
+        });
 }
 
 /*!
@@ -504,24 +456,13 @@ void fix_dungeon(PlayerType *player_ptr)
  */
 void fix_monster(PlayerType *player_ptr)
 {
-    for (int j = 0; j < 8; j++) {
-        term_type *old = game_term;
-        if (!angband_terms[j]) {
-            continue;
-        }
-
-        if (!(window_flag[j] & (PW_MONSTER))) {
-            continue;
-        }
-
-        term_activate(angband_terms[j]);
-        if (MonsterRace(player_ptr->monster_race_idx).is_valid()) {
-            display_roff(player_ptr);
-        }
-
-        term_fresh();
-        term_activate(old);
+    if (!MonsterRace(player_ptr->monster_race_idx).is_valid()) {
+        return;
     }
+    display_sub_windows(PW_MONSTER,
+        [player_ptr] {
+            display_roff(player_ptr);
+        });
 }
 
 /*!
@@ -531,21 +472,10 @@ void fix_monster(PlayerType *player_ptr)
  */
 void fix_object(PlayerType *player_ptr)
 {
-    for (auto i = 0; i < 8; i++) {
-        auto *old = game_term;
-        if (angband_terms[i] == nullptr) {
-            continue;
-        }
-
-        if (none_bits(window_flag[i], PW_OBJECT)) {
-            continue;
-        }
-
-        term_activate(angband_terms[i]);
-        display_koff(player_ptr);
-        term_fresh();
-        term_activate(old);
-    }
+    display_sub_windows(PW_OBJECT,
+        [player_ptr] {
+            display_koff(player_ptr);
+        });
 }
 
 /*!
@@ -657,25 +587,10 @@ static void display_floor_item_list(PlayerType *player_ptr, const int y, const i
  */
 void fix_floor_item_list(PlayerType *player_ptr, const int y, const int x)
 {
-    for (int j = 0; j < 8; j++) {
-        if (!angband_terms[j]) {
-            continue;
-        }
-        if (angband_terms[j]->never_fresh) {
-            continue;
-        }
-        if (!(window_flag[j] & PW_FLOOR_ITEM_LIST)) {
-            continue;
-        }
-
-        term_type *old = game_term;
-        term_activate(angband_terms[j]);
-
-        display_floor_item_list(player_ptr, y, x);
-        term_fresh();
-
-        term_activate(old);
-    }
+    display_sub_windows(PW_FLOOR_ITEM_LIST,
+        [player_ptr, y, x] {
+            display_floor_item_list(player_ptr, y, x);
+        });
 }
 
 /*!
@@ -756,25 +671,10 @@ static void display_found_item_list(PlayerType *player_ptr)
  */
 void fix_found_item_list(PlayerType *player_ptr)
 {
-    for (int j = 0; j < 8; j++) {
-        if (!angband_terms[j]) {
-            continue;
-        }
-        if (angband_terms[j]->never_fresh) {
-            continue;
-        }
-        if (none_bits(window_flag[j], PW_FOUND_ITEM_LIST)) {
-            continue;
-        }
-
-        term_type *old = game_term;
-        term_activate(angband_terms[j]);
-
-        display_found_item_list(player_ptr);
-        term_fresh();
-
-        term_activate(old);
-    }
+    display_sub_windows(PW_FOUND_ITEM_LIST,
+        [player_ptr] {
+            display_found_item_list(player_ptr);
+        });
 }
 
 /*!
@@ -931,22 +831,10 @@ static void display_spell_list(PlayerType *player_ptr)
  */
 void fix_spell(PlayerType *player_ptr)
 {
-    for (auto i = 0U; i < angband_terms.size(); ++i) {
-        term_type *old = game_term;
-        if (!angband_terms[i]) {
-            continue;
-        }
-
-        if (!(window_flag[i] & (PW_SPELL))) {
-            continue;
-        }
-
-        term_activate(angband_terms[i]);
-        display_spell_list(player_ptr);
-        term_fresh();
-        player_ptr->window_flags &= ~(PW_SPELL);
-        term_activate(old);
-    }
+    display_sub_windows(PW_SPELL,
+        [player_ptr] {
+            display_spell_list(player_ptr);
+        });
 }
 
 /*!
