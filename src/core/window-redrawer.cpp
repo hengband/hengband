@@ -18,7 +18,6 @@
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 #include "view/display-player.h"
-#include "window/display-sub-window-spells.h"
 #include "window/display-sub-windows.h"
 #include "window/main-window-left-frame.h"
 #include "window/main-window-row-column.h"
