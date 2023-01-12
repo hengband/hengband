@@ -102,6 +102,8 @@ static void prepare_label_string_floor(FloorType *floor_ptr, char *label, FLOOR_
  */
 COMMAND_CODE show_floor_items(PlayerType *player_ptr, int target_item, POSITION y, POSITION x, TERM_LEN *min_width, const ItemTester &item_tester)
 {
+    TermOffsetSetter tos(0, std::nullopt);
+
     COMMAND_CODE i, m;
     int j, k, l;
     ItemEntity *o_ptr;
