@@ -400,28 +400,18 @@ void print_health(PlayerType *player_ptr, bool riding)
         col = COL_INFO;
     }
 
-    const int max_height_riding = 3; // 騎乗時に描画する高さの最大範囲
-    const int max_height = 6; // 通常時に描画する高さの最大範囲
     const int max_width = 12; // 表示幅
 
-    // 表示範囲を一旦全部消す
-    int range = riding ? max_height_riding : max_height;
-    for (int y = row; y < row + range; y++) {
-        term_erase(col, y, max_width);
-    }
+    term_erase(col, row, max_width);
 
     if (!monster_idx.has_value()) {
         return;
     }
 
-    const int row_offset_name = 0; // 名前
-    const int row_offset_health = 1; // HP
-    const int row_offset_condition = 2; // 状態異常
-
     const auto &monster = player_ptr->current_floor_ptr->m_list[monster_idx.value()];
 
     if ((!monster.ml) || (player_ptr->effects()->hallucination()->is_hallucinated()) || monster.is_dead()) {
-        term_putstr(col, row + row_offset_health, max_width, TERM_WHITE, "[----------]");
+        term_putstr(col, row, max_width, TERM_WHITE, "[----------]");
         return;
     }
 
@@ -430,14 +420,9 @@ void print_health(PlayerType *player_ptr, bool riding)
     int len = (pct2 < 10) ? 1 : (pct2 < 90) ? (pct2 / 10 + 1)
                                             : 10;
     auto hit_point_bar_color = get_monster_hp_point_bar_color(monster);
-    const auto &ap_r_ref = monraces_info[monster.ap_r_idx];
 
-    // 名前
-    // 表示枠に収まらない場合は途中で切る
-    term_putstr(col, row + row_offset_name, max_width, TERM_WHITE, str_separate(ap_r_ref.name, max_width)[0].data());
-    // HPの割合
-    term_putstr(col, row + row_offset_health, max_width, TERM_WHITE, "[----------]");
-    term_putstr(col + 1, row + row_offset_health, len, hit_point_bar_color, "**********");
+    term_putstr(col, row, max_width, TERM_WHITE, "[----------]");
+    term_putstr(col + 1, row, len, hit_point_bar_color, "**********");
 
     // 騎乗中のモンスターの状態異常は表示しない
     if (riding) {
@@ -445,16 +430,23 @@ void print_health(PlayerType *player_ptr, bool riding)
     }
 
     int col_offset = 0;
-    int row_offset = 0;
+    int row_offset = 1;
+
+    TERM_LEN width, height;
+    term_get_size(&width, &height);
+    const auto extra_line_count = height - 24;
 
     // 一時的状態異常
     // MAX_WIDTHを超えたら次の行に移動する
     for (const auto &info : get_condition_layout_info(monster)) {
+        if (row_offset > extra_line_count) {
+            break;
+        }
         if (col_offset + info.label.length() - 1 > max_width) { // 改行が必要かどうかチェック。length() - 1してるのは\0の分を文字数から取り除くため
             col_offset = 0;
             row_offset++;
         }
-        term_putstr(col + col_offset, row + row_offset_condition + row_offset, max_width, info.color, info.label.data());
+        term_putstr(col + col_offset, row + row_offset, max_width, info.color, info.label);
         col_offset += info.label.length() + 1; // 文字数と空白の分だけoffsetを加算
     }
 }

@@ -81,14 +81,16 @@ void print_stat(PlayerType *player_ptr, int stat)
  */
 void print_cut(PlayerType *player_ptr)
 {
+    TERM_LEN width, height;
+    term_get_size(&width, &height);
     auto player_cut = player_ptr->effects()->cut();
     if (!player_cut->is_cut()) {
-        put_str("            ", ROW_CUT, COL_CUT);
+        put_str("            ", height + ROW_CUT, COL_CUT);
         return;
     }
 
     auto [color, stat] = player_cut->get_expr();
-    c_put_str(color, stat.data(), ROW_CUT, COL_CUT);
+    c_put_str(color, stat.data(), height + ROW_CUT, COL_CUT);
 }
 
 /*!
@@ -97,14 +99,16 @@ void print_cut(PlayerType *player_ptr)
  */
 void print_stun(PlayerType *player_ptr)
 {
+    TERM_LEN width, height;
+    term_get_size(&width, &height);
     auto player_stun = player_ptr->effects()->stun();
     if (!player_stun->is_stunned()) {
-        put_str("            ", ROW_STUN, COL_STUN);
+        put_str("            ", height + ROW_STUN, COL_STUN);
         return;
     }
 
     auto [color, stat] = player_stun->get_expr();
-    c_put_str(color, stat.data(), ROW_STUN, COL_STUN);
+    c_put_str(color, stat.data(), height + ROW_STUN, COL_STUN);
 }
 
 /*!
@@ -117,32 +121,36 @@ void print_hunger(PlayerType *player_ptr)
         return;
     }
 
+    TERM_LEN width, height;
+    term_get_size(&width, &height);
+    const auto row = height + ROW_HUNGRY;
+
     if (player_ptr->food < PY_FOOD_FAINT) {
-        c_put_str(TERM_RED, _("衰弱  ", "Weak  "), ROW_HUNGRY, COL_HUNGRY);
+        c_put_str(TERM_RED, _("衰弱  ", "Weak  "), row, COL_HUNGRY);
         return;
     }
 
     if (player_ptr->food < PY_FOOD_WEAK) {
-        c_put_str(TERM_ORANGE, _("衰弱  ", "Weak  "), ROW_HUNGRY, COL_HUNGRY);
+        c_put_str(TERM_ORANGE, _("衰弱  ", "Weak  "), row, COL_HUNGRY);
         return;
     }
 
     if (player_ptr->food < PY_FOOD_ALERT) {
-        c_put_str(TERM_YELLOW, _("空腹  ", "Hungry"), ROW_HUNGRY, COL_HUNGRY);
+        c_put_str(TERM_YELLOW, _("空腹  ", "Hungry"), row, COL_HUNGRY);
         return;
     }
 
     if (player_ptr->food < PY_FOOD_FULL) {
-        c_put_str(TERM_L_GREEN, "      ", ROW_HUNGRY, COL_HUNGRY);
+        c_put_str(TERM_L_GREEN, "      ", row, COL_HUNGRY);
         return;
     }
 
     if (player_ptr->food < PY_FOOD_MAX) {
-        c_put_str(TERM_L_GREEN, _("満腹  ", "Full  "), ROW_HUNGRY, COL_HUNGRY);
+        c_put_str(TERM_L_GREEN, _("満腹  ", "Full  "), row, COL_HUNGRY);
         return;
     }
 
-    c_put_str(TERM_GREEN, _("食過ぎ", "Gorged"), ROW_HUNGRY, COL_HUNGRY);
+    c_put_str(TERM_GREEN, _("食過ぎ", "Gorged"), row, COL_HUNGRY);
 }
 
 /*!
@@ -155,6 +163,9 @@ void print_hunger(PlayerType *player_ptr)
  */
 void print_state(PlayerType *player_ptr)
 {
+    TERM_LEN width, height;
+    term_get_size(&width, &height);
+
     TERM_COLOR attr = TERM_WHITE;
     std::string text;
     if (command_rep) {
@@ -164,7 +175,7 @@ void print_state(PlayerType *player_ptr)
             text = format("  %2d", command_rep);
         }
 
-        c_put_str(attr, format("%5.5s", text.data()), ROW_STATE, COL_STATE);
+        c_put_str(attr, format("%5.5s", text.data()), height + ROW_STATE, COL_STATE);
         return;
     }
 
@@ -246,7 +257,7 @@ void print_state(PlayerType *player_ptr)
     }
     }
 
-    c_put_str(attr, format("%5.5s", text.data()), ROW_STATE, COL_STATE);
+    c_put_str(attr, format("%5.5s", text.data()), height + ROW_STATE, COL_STATE);
 }
 
 /*!
