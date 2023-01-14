@@ -254,6 +254,13 @@ static errr term_pict_hack(TERM_LEN x, TERM_LEN y, int n, const TERM_COLOR *ap, 
  */
 static void term_queue_char_aux(TERM_LEN x, TERM_LEN y, TERM_COLOR a, char c, TERM_COLOR ta, char tc)
 {
+    if ((x < 0) || (x >= game_term->wid)) {
+        return;
+    }
+    if ((y < 0) || (y >= game_term->hgt)) {
+        return;
+    }
+
     const auto &scrn = game_term->scr;
 
     TERM_COLOR *scr_aa = &scrn->a[y][x];
@@ -302,11 +309,7 @@ static void term_queue_char_aux(TERM_LEN x, TERM_LEN y, TERM_COLOR a, char c, TE
 
 void term_queue_char(TERM_LEN x, TERM_LEN y, TERM_COLOR a, char c, TERM_COLOR ta, char tc)
 {
-    if (auto res = term_gotoxy(x, y); res != 0) {
-        return;
-    }
-
-    term_queue_char_aux(game_term->scr->cx, game_term->scr->cy, a, c, ta, tc);
+    term_queue_char_aux(x + game_term->offset_x, y + game_term->offset_y, a, c, ta, tc);
 }
 
 /*
@@ -335,13 +338,12 @@ void term_queue_bigchar(TERM_LEN x, TERM_LEN y, TERM_COLOR a, char c, TERM_COLOR
     byte a2;
     char c2;
 
-    if (auto res = term_gotoxy(x, y); res != 0) {
-        return;
-    }
+    const auto ch_x = x + game_term->offset_x;
+    const auto ch_y = y + game_term->offset_y;
 
     /* If non bigtile mode, call orginal function */
     if (!use_bigtile) {
-        term_queue_char_aux(game_term->scr->cx, game_term->scr->cy, a, c, ta, tc);
+        term_queue_char_aux(ch_x, ch_y, a, c, ta, tc);
         return;
     }
 
@@ -382,8 +384,8 @@ void term_queue_bigchar(TERM_LEN x, TERM_LEN y, TERM_COLOR a, char c, TERM_COLOR
     }
 
     /* Display pair of attr/char */
-    term_queue_char_aux(game_term->scr->cx, game_term->scr->cy, a, c, ta, tc);
-    term_queue_char_aux(game_term->scr->cx + 1, game_term->scr->cy, a2, c2, 0, 0);
+    term_queue_char_aux(ch_x, ch_y, a, c, ta, tc);
+    term_queue_char_aux(ch_x + 1, ch_y, a2, c2, 0, 0);
 }
 
 /*
