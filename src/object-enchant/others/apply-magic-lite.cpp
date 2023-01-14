@@ -18,14 +18,10 @@ LiteEnchanter::LiteEnchanter(PlayerType *player_ptr, ItemEntity *o_ptr, int powe
 
     switch (sval.value()) {
     case SV_LITE_TORCH:
-        if (o_ptr->pval > 0) {
-            o_ptr->fuel = randint1(o_ptr->pval);
-        }
+        o_ptr->fuel = randint1(FUEL_TORCH / 2);
         return;
     case SV_LITE_LANTERN:
-        if (o_ptr->pval > 0) {
-            o_ptr->fuel = randint1(o_ptr->pval);
-        }
+        o_ptr->fuel = randint1(FUEL_LAMP / 2);
         return;
     default:
         return;
