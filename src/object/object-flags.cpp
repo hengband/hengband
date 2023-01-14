@@ -2,6 +2,7 @@
 #include "mind/mind-weaponsmith.h"
 #include "object-enchant/object-ego.h"
 #include "object-enchant/tr-types.h"
+#include "object/tval-types.h"
 #include "perception/object-perception.h"
 #include "smith/object-smith.h"
 #include "system/artifact-type-definition.h"
@@ -17,15 +18,12 @@
  */
 static void object_flags_lite(const ItemEntity *o_ptr, TrFlags &flags)
 {
-    if (!o_ptr->is_ego()) {
+    if (o_ptr->bi_key.tval() != ItemKindType::LITE) {
         return;
     }
 
-    const auto &ego = egos_info[o_ptr->ego_idx];
-    flags.set(ego.flags);
-
     const auto is_out_of_fuel = o_ptr->fuel == 0;
-    if ((o_ptr->ego_idx == EgoType::AURA_FIRE) && is_out_of_fuel && o_ptr->is_lite_requiring_fuel()) {
+    if ((o_ptr->ego_idx == EgoType::LITE_AURA_FIRE) && is_out_of_fuel && o_ptr->is_lite_requiring_fuel()) {
         flags.reset(TR_SH_FIRE);
         return;
     }
@@ -55,7 +53,12 @@ TrFlags object_flags(const ItemEntity *o_ptr)
         flags = artifacts_info.at(o_ptr->fixed_artifact_idx).flags;
     }
 
-    object_flags_lite(o_ptr, flags);
+    if (o_ptr->is_ego()) {
+        const auto &ego = egos_info[o_ptr->ego_idx];
+        flags.set(ego.flags);
+        object_flags_lite(o_ptr, flags);
+    }
+
     flags.set(o_ptr->art_flags);
     if (auto effect = Smith::object_effect(o_ptr); effect.has_value()) {
         auto tr_flags = Smith::get_effect_tr_flags(effect.value());
@@ -88,7 +91,12 @@ TrFlags object_flags_known(const ItemEntity *o_ptr)
         return flags;
     }
 
-    object_flags_lite(o_ptr, flags);
+    if (o_ptr->is_ego()) {
+        const auto &ego = egos_info[o_ptr->ego_idx];
+        flags.set(ego.flags);
+        object_flags_lite(o_ptr, flags);
+    }
+
     if (o_ptr->is_fully_known()) {
         if (o_ptr->is_fixed_artifact()) {
             flags = artifacts_info.at(o_ptr->fixed_artifact_idx).flags;
