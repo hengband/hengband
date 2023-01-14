@@ -15,8 +15,8 @@
     ZAngband 2.3.0 - ???:   The ZAngband DevTeam
        ZAngband Jap ver.:   Mitsuhiro Itakura <itakura @ users.sourceforge.net>
 
-           Hengband: Mr.Hoge (echizen @ users.sourceforge.jp) & Many others
-                       https://hengband.github.io/
+       Hengband: Mr.Hoge (echizen @ users.sourceforge.jp) & Many others
+                         https://hengband.github.io/
 
             Send bug report to "hengband-dev@lists.sourceforge.jp"
  
