@@ -1599,6 +1599,10 @@ static int16_t calc_num_blow(PlayerType *player_ptr, int i)
                 num_blow = 1;
             }
 
+            if (has_not_ninja_weapon(player_ptr, i)) {
+                num_blow /= 2;
+            }
+
             if (num_blow < 1) {
                 num_blow = 1;
             }
@@ -1667,13 +1671,6 @@ static int16_t calc_num_blow(PlayerType *player_ptr, int i)
         }
 
         num_blow += 1 + player_ptr->extra_blows[0];
-    }
-
-    if (has_not_ninja_weapon(player_ptr, i)) {
-        num_blow /= 2;
-        if (num_blow < 1) {
-            num_blow = 1;
-        }
     }
 
     return num_blow;
