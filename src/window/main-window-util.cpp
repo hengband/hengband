@@ -140,6 +140,7 @@ static void display_shortened_item_name(PlayerType *player_ptr, ItemEntity *o_pt
     std::string item_name(buf);
     for (const auto &simplified_str : simplify_list) {
         const auto &replacing = simplified_str.first;
+#ifndef JP
         if (replacing.starts_with('^')) {
             const auto replacing_without_caret = replacing.substr(1);
             if (item_name.starts_with(replacing_without_caret)) {
@@ -147,6 +148,7 @@ static void display_shortened_item_name(PlayerType *player_ptr, ItemEntity *o_pt
                 break;
             }
         }
+#endif
 
         const auto pos = item_name.find(replacing);
         if (pos != std::string::npos) {

@@ -114,7 +114,7 @@ byte get_string_for_search(PlayerType *player_ptr, ItemEntity **o_handle, concpt
     }
 
     const std::string prompt(_("検索(^I:持ち物 ^L:破壊された物): ", "Search key(^I:inven ^L:destroyed): "));
-    const int col = prompt.length() - 1;
+    const auto col = prompt.length();
     prt(prompt, 0, 0);
     int pos = 0;
     while (true) {
