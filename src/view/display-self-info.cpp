@@ -6,6 +6,7 @@
 #include "player-info/self-info-util.h"
 #include "player/player-status-table.h"
 #include "system/player-type-definition.h"
+#include "term/gameterm.h"
 #include "term/screen-processor.h"
 #include "term/z-form.h"
 #include "util/string-processor.h"
@@ -103,7 +104,7 @@ void display_mimic_race_ability(PlayerType *player_ptr, self_info_type *self_ptr
 void display_self_info(self_info_type *self_ptr)
 {
     screen_save();
-    for (int k = 1; k < 24; k++) {
+    for (int k = 1; k < MAIN_TERM_MIN_ROWS; k++) {
         prt("", k, 13);
     }
 

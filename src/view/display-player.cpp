@@ -31,6 +31,7 @@
 #include "system/floor-type-definition.h"
 #include "system/item-entity.h"
 #include "system/player-type-definition.h"
+#include "term/gameterm.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
 #include "view/display-characteristic.h"
@@ -68,8 +69,7 @@ static bool display_player_info(PlayerType *player_ptr, int mode)
     }
 
     if (mode == 5) {
-        constexpr auto display_width = 80;
-        TermCenteredOffsetSetter tcos(display_width, std::nullopt);
+        TermCenteredOffsetSetter tcos(MAIN_TERM_MIN_COLS, std::nullopt);
         do_cmd_knowledge_mutations(player_ptr);
         return true;
     }

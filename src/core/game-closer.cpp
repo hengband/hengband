@@ -25,6 +25,7 @@
 #include "save/save.h"
 #include "system/floor-type-definition.h"
 #include "system/player-type-definition.h"
+#include "term/gameterm.h"
 #include "term/screen-processor.h"
 #include "util/angband-files.h"
 #include "util/int-char-converter.h"
@@ -129,7 +130,7 @@ static void kingly(PlayerType *player_ptr)
     }
 
     flush();
-    pause_line(23);
+    pause_line(MAIN_TERM_MIN_ROWS - 1);
 }
 
 /*!
@@ -160,7 +161,7 @@ void close_game(PlayerType *player_ptr)
         return;
     }
 
-    TermCenteredOffsetSetter tcos(80, 24);
+    TermCenteredOffsetSetter tcos(MAIN_TERM_MIN_COLS, MAIN_TERM_MIN_ROWS);
     if (w_ptr->total_winner) {
         kingly(player_ptr);
     }

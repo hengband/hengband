@@ -7,6 +7,7 @@
 #include "player/player-personality.h"
 #include "player/race-info-table.h"
 #include "system/angband.h"
+#include "term/gameterm.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
 #include "term/z-form.h"
@@ -65,11 +66,9 @@ void display_scores(int from, int to, int note, high_score *score)
         num_scores = to;
     }
 
-    constexpr auto display_width = 80;
-    constexpr auto display_height = 24;
-    constexpr auto per_screen = (display_height - 4) / 4;
+    constexpr auto per_screen = (MAIN_TERM_MIN_ROWS - 4) / 4;
     for (auto k = from, place = k + 1; k < num_scores; k += per_screen) {
-        TermCenteredOffsetSetter tcos(display_width, display_height);
+        TermCenteredOffsetSetter tcos(MAIN_TERM_MIN_COLS, MAIN_TERM_MIN_ROWS);
 
         term_clear();
         put_str(_("                変愚蛮怒: 勇者の殿堂", "                Hengband Hall of Fame"), 0, 0);
@@ -188,9 +187,9 @@ void display_scores(int from, int to, int note, high_score *score)
             c_put_str(attr, out_val, n * 4 + 4, 0);
         }
 
-        prt(_("[ ESCで中断, その他のキーで続けます ]", "[Press ESC to quit, any other key to continue.]"), display_height - 1, _(21, 17));
+        prt(_("[ ESCで中断, その他のキーで続けます ]", "[Press ESC to quit, any other key to continue.]"), MAIN_TERM_MIN_ROWS - 1, _(21, 17));
         auto key = inkey();
-        prt("", display_height - 1, 0);
+        prt("", MAIN_TERM_MIN_ROWS - 1, 0);
         if (key == ESCAPE) {
             break;
         }

@@ -564,15 +564,13 @@ int main(int argc, char *argv[])
     signals_init();
 
     {
-        constexpr auto display_width = 80;
-        constexpr auto display_height = 24;
-        TermCenteredOffsetSetter tcos(display_width, display_height);
+        TermCenteredOffsetSetter tcos(MAIN_TERM_MIN_COLS, MAIN_TERM_MIN_ROWS);
 
         /* Initialize */
         init_angband(p_ptr, false);
 
         /* Wait for response */
-        pause_line(23);
+        pause_line(MAIN_TERM_MIN_ROWS - 1);
     }
 
     /* Play the game */
