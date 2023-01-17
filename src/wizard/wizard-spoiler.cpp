@@ -207,7 +207,9 @@ static SpoilerOutputResultType spoil_player_spell(concptr fname)
             *s = '\0';
         }
 
-        spoil_out(format("BookType:%s Stat:%s Xtra:%x Type:%d Weight:%d\n", book_name, wiz_spell_stat[magic_ptr->spell_stat].data(), magic_ptr->spell_xtra, magic_ptr->spell_type, magic_ptr->spell_weight));
+        constexpr auto mes = "BookType:%s Stat:%s Xtra:%x Type:%d Weight:%d\n";
+        const auto &spell = wiz_spell_stat[magic_ptr->spell_stat];
+        spoil_out(format(mes, book_name, spell.data(), magic_ptr->spell_xtra, magic_ptr->spell_type, magic_ptr->spell_weight));
         if (magic_ptr->spell_book == ItemKindType::NONE) {
             spoil_out(_("呪文なし\n\n", "No spells.\n\n"));
             continue;
