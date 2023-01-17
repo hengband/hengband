@@ -23,6 +23,7 @@
 #include "term/term-color-types.h"
 #include "util/int-char-converter.h"
 #include "util/string-processor.h"
+#include <string>
 
 /*!
  * @brief 与えられたアイテムが自動拾いのリストに登録されているかどうかを検索する
@@ -102,8 +103,6 @@ byte get_string_for_search(PlayerType *player_ptr, ItemEntity **o_handle, concpt
     byte color = TERM_YELLOW;
     char buf[MAX_NLEN + 20];
     const int len = 80;
-    char prompt[] = _("検索(^I:持ち物 ^L:破壊された物): ", "Search key(^I:inven ^L:destroyed): ");
-    int col = sizeof(prompt) - 1;
     if (*search_strp) {
         strcpy(buf, *search_strp);
     } else {
@@ -114,6 +113,8 @@ byte get_string_for_search(PlayerType *player_ptr, ItemEntity **o_handle, concpt
         color = TERM_L_GREEN;
     }
 
+    const std::string prompt(_("検索(^I:持ち物 ^L:破壊された物): ", "Search key(^I:inven ^L:destroyed): "));
+    const auto col = prompt.length();
     prt(prompt, 0, 0);
     int pos = 0;
     while (true) {
