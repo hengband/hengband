@@ -12,6 +12,7 @@
 #include "system/monster-entity.h"
 #include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
+#include "term/gameterm.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
 #include "term/z-form.h"
@@ -434,7 +435,7 @@ void print_health(PlayerType *player_ptr, bool riding)
 
     TERM_LEN width, height;
     term_get_size(&width, &height);
-    const auto extra_line_count = height - 24;
+    const auto extra_line_count = height - MAIN_TERM_MIN_ROWS;
 
     // 一時的状態異常
     // MAX_WIDTHを超えたら次の行に移動する

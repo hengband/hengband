@@ -28,6 +28,7 @@
 #include "system/item-entity.h"
 #include "system/player-type-definition.h"
 #include "system/terrain-type-definition.h"
+#include "term/gameterm.h"
 #include "term/screen-processor.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
@@ -58,7 +59,7 @@ void do_cmd_store(PlayerType *player_ptr)
     TERM_LEN w, h;
     term_get_size(&w, &h);
 
-    xtra_stock = std::min(14 + 26, ((h > 24) ? (h - 24) : 0));
+    xtra_stock = std::min(14 + 26, ((h > MAIN_TERM_MIN_ROWS) ? (h - MAIN_TERM_MIN_ROWS) : 0));
     store_bottom = MIN_STOCK + xtra_stock;
 
     auto *floor_ptr = player_ptr->current_floor_ptr;

@@ -28,6 +28,7 @@
 #include "system/dungeon-info.h"
 #include "system/monster-race-info.h"
 #include "system/system-variables.h"
+#include "term/gameterm.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
 #include "time.h"
@@ -199,7 +200,7 @@ static void put_title()
 {
     const auto title = get_version();
 
-    auto col = (title.length() <= 80) ? (80 - title.length()) / 2 : 0;
+    auto col = (title.length() <= MAIN_TERM_MIN_COLS) ? (MAIN_TERM_MIN_COLS - title.length()) / 2 : 0;
     constexpr auto VER_INFO_ROW = 3; //!< タイトル表記(行)
     prt(title, VER_INFO_ROW, col);
 }

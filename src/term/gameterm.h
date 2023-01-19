@@ -6,6 +6,11 @@
 #include <string>
 #include <utility>
 
+constexpr auto TERM_DEFAULT_COLS = 80;
+constexpr auto TERM_DEFAULT_ROWS = 24;
+constexpr auto MAIN_TERM_MIN_COLS = TERM_DEFAULT_COLS;
+constexpr auto MAIN_TERM_MIN_ROWS = TERM_DEFAULT_ROWS;
+
 extern const concptr color_names[16];
 extern const concptr window_flag_desc[32];
 extern const concptr ident_info[];

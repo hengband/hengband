@@ -1323,8 +1323,8 @@ static void init_windows(void)
     *td = {};
     td->name = win_term_name[0];
 
-    td->rows = 24;
-    td->cols = 80;
+    td->rows = MAIN_TERM_MIN_ROWS;
+    td->cols = MAIN_TERM_MIN_COLS;
     td->visible = true;
     td->size_ow1 = 2;
     td->size_ow2 = 2;
@@ -1338,8 +1338,8 @@ static void init_windows(void)
         td = &data[i];
         *td = {};
         td->name = win_term_name[i];
-        td->rows = 24;
-        td->cols = 80;
+        td->rows = TERM_DEFAULT_ROWS;
+        td->cols = TERM_DEFAULT_COLS;
         td->visible = false;
         td->size_ow1 = 1;
         td->size_ow2 = 1;
@@ -2161,8 +2161,8 @@ static bool handle_window_resize(term_data *td, UINT uMsg, WPARAM wParam, LPARAM
     switch (uMsg) {
     case WM_GETMINMAXINFO: {
         const bool is_main = is_main_term(td);
-        const int min_cols = (is_main) ? 80 : 20;
-        const int min_rows = (is_main) ? 24 : 3;
+        const int min_cols = (is_main) ? MAIN_TERM_MIN_COLS : 20;
+        const int min_rows = (is_main) ? MAIN_TERM_MIN_ROWS : 3;
         const LONG w = min_cols * td->tile_wid + td->size_ow1 + td->size_ow2;
         const LONG h = min_rows * td->tile_hgt + td->size_oh1 + td->size_oh2 + 1;
         RECT rc{ 0, 0, w, h };
@@ -2805,9 +2805,7 @@ int WINAPI WinMain(
     signals_init();
     term_activate(term_screen);
     {
-        constexpr auto display_width = 80;
-        constexpr auto display_height = 24;
-        TermCenteredOffsetSetter tcos(display_width, display_height);
+        TermCenteredOffsetSetter tcos(MAIN_TERM_MIN_COLS, MAIN_TERM_MIN_ROWS);
 
         init_angband(p_ptr, false);
         initialized = true;

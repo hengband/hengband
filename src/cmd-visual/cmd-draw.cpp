@@ -77,13 +77,11 @@ void do_cmd_redraw(PlayerType *player_ptr)
  */
 void do_cmd_player_status(PlayerType *player_ptr)
 {
-    constexpr auto display_width = 80;
-    constexpr auto display_height = 24;
     int mode = 0;
     char tmp[160];
     screen_save();
     while (true) {
-        TermCenteredOffsetSetter tcos(display_width, display_height);
+        TermCenteredOffsetSetter tcos(MAIN_TERM_MIN_COLS, MAIN_TERM_MIN_ROWS);
 
         update_playtime();
         (void)display_player(player_ptr, mode);

@@ -8,6 +8,7 @@
 #include "io/input-key-requester.h" //!< @todo 相互依存している、後で何とかする.
 #include "main/sound-of-music.h"
 #include "system/player-type-definition.h"
+#include "term/gameterm.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
 #include "term/z-form.h"
@@ -54,12 +55,12 @@ bool askfor(char *buf, int len, bool numpad_cursor)
         len = 1;
     }
 
-    if ((x < 0) || (x >= 80)) {
+    if ((x < 0) || (x >= MAIN_TERM_MIN_COLS)) {
         x = 0;
     }
 
-    if (x + len > 80) {
-        len = 80 - x;
+    if (x + len > MAIN_TERM_MIN_COLS) {
+        len = MAIN_TERM_MIN_COLS - x;
     }
 
     buf[len] = '\0';

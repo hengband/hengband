@@ -97,28 +97,28 @@ static void message_add_aux(std::string str)
         return;
     }
 
-    // 80桁を超えるメッセージは80桁ずつ分割する
-    if (str.length() > 80) {
+    // MAIN_TERM_MIN_COLS桁を超えるメッセージはMAIN_TERM_MIN_COLS桁ずつ分割する
+    if (str.length() > MAIN_TERM_MIN_COLS) {
         int n;
 #ifdef JP
-        for (n = 0; n < 80; n++) {
+        for (n = 0; n < MAIN_TERM_MIN_COLS; n++) {
             if (iskanji(str[n])) {
                 n++;
             }
         }
 
         /* 最後の文字が漢字半分 */
-        if (n == 81) {
-            n = 79;
+        if (n == MAIN_TERM_MIN_COLS + 1) {
+            n = MAIN_TERM_MIN_COLS - 1;
         }
 #else
-        for (n = 80; n > 60; n--) {
+        for (n = MAIN_TERM_MIN_COLS; n > MAIN_TERM_MIN_COLS - 20; n--) {
             if (str[n] == ' ') {
                 break;
             }
         }
-        if (n == 60) {
-            n = 80;
+        if (n == MAIN_TERM_MIN_COLS - 20) {
+            n = MAIN_TERM_MIN_COLS;
         }
 #endif
         splitted = str.substr(n);
