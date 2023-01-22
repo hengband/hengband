@@ -77,6 +77,9 @@ struct term_type {
     TERM_LEN wid{}; //!< Window Width(max 255)
     TERM_LEN hgt{}; //!< Window Height(max 255)
 
+    std::optional<TERM_LEN> centered_wid{};
+    std::optional<TERM_LEN> centered_hgt{};
+
     TERM_LEN offset_x{};
     TERM_LEN offset_y{};
 
@@ -134,7 +137,7 @@ private:
 class TermCenteredOffsetSetter {
 public:
     TermCenteredOffsetSetter(std::optional<TERM_LEN> width, std::optional<TERM_LEN> height);
-    ~TermCenteredOffsetSetter() = default;
+    ~TermCenteredOffsetSetter();
     TermCenteredOffsetSetter(const TermCenteredOffsetSetter &) = delete;
     TermCenteredOffsetSetter &operator=(const TermCenteredOffsetSetter &) = delete;
     TermCenteredOffsetSetter(TermCenteredOffsetSetter &&) = delete;
@@ -142,6 +145,9 @@ public:
 
 private:
     std::optional<TermOffsetSetter> tos;
+    term_type *term;
+    std::optional<TERM_LEN> orig_centered_wid;
+    std::optional<TERM_LEN> orig_centered_hgt;
 };
 
 /**** Available Constants ****/
