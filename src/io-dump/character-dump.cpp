@@ -589,7 +589,7 @@ static std::string get_check_sum(void)
  */
 void make_character_dump(PlayerType *player_ptr, FILE *fff)
 {
-    TermOffsetSetter tos(0, 0);
+    TermCenteredOffsetSetter tos(std::nullopt, std::nullopt);
 
     fprintf(fff, _("  [%s キャラクタ情報]\n\n", "  [%s Character Dump]\n\n"), get_version().data());
 

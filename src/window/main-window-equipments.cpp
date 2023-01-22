@@ -31,8 +31,6 @@
  */
 COMMAND_CODE show_equipment(PlayerType *player_ptr, int target_item, BIT_FLAGS mode, const ItemTester &item_tester)
 {
-    TermOffsetSetter tos(0, std::nullopt);
-
     COMMAND_CODE i;
     int j, k, l;
     ItemEntity *o_ptr;

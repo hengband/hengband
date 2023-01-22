@@ -28,8 +28,6 @@
  */
 COMMAND_CODE show_inventory(PlayerType *player_ptr, int target_item, BIT_FLAGS mode, const ItemTester &item_tester)
 {
-    TermOffsetSetter tos(0, std::nullopt);
-
     COMMAND_CODE i;
     int k, l, z = 0;
     ItemEntity *o_ptr;

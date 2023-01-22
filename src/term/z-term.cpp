@@ -84,13 +84,26 @@ TermOffsetSetter::~TermOffsetSetter()
  * @param height 表示に使用する領域の縦幅
  */
 TermCenteredOffsetSetter::TermCenteredOffsetSetter(std::optional<TERM_LEN> width, std::optional<TERM_LEN> height)
+    : term(game_term)
+    , orig_centered_wid(game_term != nullptr ? game_term->centered_wid : std::nullopt)
+    , orig_centered_hgt(game_term != nullptr ? game_term->centered_hgt : std::nullopt)
 {
-    TERM_LEN term_width, term_height;
-    term_get_size(&term_width, &term_height);
-
-    const auto offset_x = width.has_value() ? (term_width - width.value()) / 2 : 0;
-    const auto offset_y = height.has_value() ? (term_height - height.value()) / 2 : 0;
+    const auto offset_x = width.has_value() ? (game_term->wid - width.value()) / 2 : 0;
+    const auto offset_y = height.has_value() ? (game_term->hgt - height.value()) / 2 : 0;
     this->tos.emplace(offset_x, offset_y);
+
+    game_term->centered_wid = (width < game_term->wid) ? width : std::nullopt;
+    game_term->centered_hgt = (height < game_term->hgt) ? height : std::nullopt;
+}
+
+TermCenteredOffsetSetter::~TermCenteredOffsetSetter()
+{
+    if (this->term == nullptr) {
+        return;
+    }
+
+    this->term->centered_wid = this->orig_centered_wid;
+    this->term->centered_hgt = this->orig_centered_hgt;
 }
 
 /*
@@ -1841,9 +1854,8 @@ errr term_get_cursor(int *v)
  */
 errr term_get_size(TERM_LEN *w, TERM_LEN *h)
 {
-    /* Access the cursor */
-    (*w) = game_term->wid;
-    (*h) = game_term->hgt;
+    (*w) = game_term->centered_wid.value_or(game_term->wid);
+    (*h) = game_term->centered_hgt.value_or(game_term->hgt);
     return 0;
 }
 
@@ -1873,6 +1885,9 @@ errr term_what(TERM_LEN x, TERM_LEN y, TERM_COLOR *a, char *c)
 {
     TERM_LEN w = game_term->wid;
     TERM_LEN h = game_term->hgt;
+
+    x += game_term->offset_x;
+    y += game_term->offset_y;
 
     if ((x < 0) || (x >= w)) {
         return -1;
