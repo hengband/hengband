@@ -112,6 +112,25 @@ static std::pair<bool, ItemEntity *> select_repairing_broken_weapon(PlayerType *
     return { true, o_ptr };
 }
 
+static void display_reparing_weapon(PlayerType *player_ptr, ItemEntity *o_ptr, const int row)
+{
+    char item_name[MAX_NLEN];
+    describe_flavor(player_ptr, item_name, o_ptr, OD_NAME_ONLY);
+    prt(format(_("修復する武器　： %s", "Repairing: %s"), item_name), row + 3, 2);
+}
+
+static void display_repair_success_message(PlayerType *player_ptr, ItemEntity *o_ptr, const int cost)
+{
+    char item_name[MAX_NLEN];
+    describe_flavor(player_ptr, item_name, o_ptr, OD_NAME_ONLY);
+#ifdef JP
+    msg_format("＄%dで%sに修復しました。", cost, item_name);
+#else
+    msg_format("Repaired into %s for %d gold.", item_name, cost);
+#endif
+    msg_print(nullptr);
+}
+
 /*!
  * @brief アイテム修復処理のメインルーチン / Repair broken weapon
  * @param player_ptr プレイヤーへの参照ポインタ
@@ -128,9 +147,7 @@ static PRICE repair_broken_weapon_aux(PlayerType *player_ptr, PRICE bcost)
         return 0;
     }
 
-    char basenm[MAX_NLEN];
-    describe_flavor(player_ptr, basenm, o_ptr, OD_NAME_ONLY);
-    prt(format(_("修復する武器　： %s", "Repairing: %s"), basenm), row + 3, 2);
+    display_reparing_weapon(player_ptr, o_ptr, row);
     const auto q = _("材料となる武器は？", "Which weapon for material? ");
     const auto s = _("材料となる武器がありません。", "You have no material for the repair.");
     short mater;
@@ -144,6 +161,7 @@ static PRICE repair_broken_weapon_aux(PlayerType *player_ptr, PRICE bcost)
         return 0;
     }
 
+    char basenm[MAX_NLEN];
     describe_flavor(player_ptr, basenm, mo_ptr, OD_NAME_ONLY);
     prt(format(_("材料とする武器： %s", "Material : %s"), basenm), row + 4, 2);
     const auto cost = bcost + object_value_real(o_ptr) * 2;
@@ -277,13 +295,7 @@ static PRICE repair_broken_weapon_aux(PlayerType *player_ptr, PRICE bcost)
         msg_print(_("これはかなりの業物だったようだ。", "This blade seems to be exceptional."));
     }
 
-    describe_flavor(player_ptr, basenm, o_ptr, OD_NAME_ONLY);
-#ifdef JP
-    msg_format("＄%dで%sに修復しました。", cost, basenm);
-#else
-    msg_format("Repaired into %s for %d gold.", basenm, cost);
-#endif
-    msg_print(nullptr);
+    display_repair_success_message(player_ptr, o_ptr, cost);
     o_ptr->ident &= ~(IDENT_BROKEN);
     o_ptr->discount = 99;
 
