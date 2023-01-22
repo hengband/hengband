@@ -20532,21 +20532,32 @@ D:無表情で襲いかかる、二足歩行の熊のような生き物だ。
 
 #
 # OnePiecebandのプレビュー。こうしてみるとなんかサブイ……。
+# [DSKL]ワンピースも100巻超えて今更サブいこともあるまいし、アラバスタ編
+# からさらにそのまた先くらいまでを基準に強化。
+# ベースを盗賊リッチにしつつ、元素攻撃で積極的に攻めていく調子で。
 #
 N:1021:航海士『ナミ』
 E:Nami, the Mate
 G:p:o
-I:120:13d12:20:30:20
-W:8:4:150:0:0
-B:HIT:EAT_GOLD:1d9
-B:HIT:EAT_GOLD:1d9
+I:125:40d10:30:60:20
+W:30:2:0:1300:0:0
+B:HIT:HURT:5d6
+B:HIT:HURT:5d6
+B:TOUCH:EAT_GOLD
 B:TOUCH:EAT_ITEM
-B:TOUCH:EAT_ITEM
-F:UNIQUE | FEMALE | PREVENT_SUDDEN_MAGIC | FORCE_MAXHP | SPEAK_ALL | FRIENDLY | HUMAN |
-F:ONLY_ITEM | DROP_1D2 | DROP_GREAT | WILD_GRASS |
-F:TAKE_ITEM | OPEN_DOOR | CAN_SWIM | DROP_SKELETON | DROP_CORPSE
-S:1_IN_3
-S:HEAL | TRAPS
+F:UNIQUE | DROP_CORPSE | FORCE_MAXHP | HUMAN | FEMALE |
+F:ONLY_ITEM | DROP_1D2 | DROP_GREAT | FRIENDLY | CAN_SWIM
+F:NO_SLEEP | NO_CONF | OPEN_DOOR | MOVE_BODY
+S:1_IN_4 |
+S:TRAPS | BA_FIRE | BA_COLD | BA_ELEC | BO_FIRE | BO_COLD | BO_ELEC
+D:海賊「麦わらの一味」の航海士で、「偉大なる航路」の探求に欠かせぬ主要な役を務めている。
+D:荒事は専門外らしいが、その手に操る天候棒なる魔道具は、
+D:世界の趨勢に関わる争いの只中を生き延びるだけの力を彼女に与えているようだ。
+D:$She is a navigator for "Straw Hat Pirates" and serves as an integral part of
+D:$ their quest for the Grandline. Combat is apparently not her specialty,
+D:$ but the magical tools "the Clima-Tact" she wields in her hands seem to 
+D:$ give her the strength to survive in the midst of
+D:$ a conflict that could determine the course of the world.
 
 #
 # 強すぎる？
