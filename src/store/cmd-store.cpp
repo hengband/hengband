@@ -56,6 +56,7 @@ void do_cmd_store(PlayerType *player_ptr)
     if (player_ptr->wild_mode) {
         return;
     }
+    TermCenteredOffsetSetter tcos(MAIN_TERM_MIN_COLS, std::nullopt);
     TERM_LEN w, h;
     term_get_size(&w, &h);
 
