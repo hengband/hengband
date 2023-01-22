@@ -29,6 +29,7 @@
 #include "term/screen-processor.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
+#include <utility>
 
 /*!
  * @brief 修復材料のオブジェクトから修復対象に特性を移植する。
@@ -38,8 +39,8 @@
  */
 static void give_one_ability_of_object(ItemEntity *to_ptr, ItemEntity *from_ptr)
 {
-    auto to_flgs = object_flags(to_ptr);
-    auto from_flgs = object_flags(from_ptr);
+    auto to_flags = object_flags(to_ptr);
+    auto from_flags = object_flags(from_ptr);
 
     int n = 0;
     tr_type cand[TR_FLAG_MAX];
@@ -61,7 +62,7 @@ static void give_one_ability_of_object(ItemEntity *to_ptr, ItemEntity *from_ptr)
             break;
         default:
             auto tr_flag = i2enum<tr_type>(i);
-            if (from_flgs.has(tr_flag) && to_flgs.has_not(tr_flag)) {
+            if (from_flags.has(tr_flag) && to_flags.has_not(tr_flag)) {
                 if (!(TR_PVAL_FLAG_MASK.has(tr_flag) && (from_ptr->pval < 1))) {
                     cand[n++] = tr_flag;
                 }
@@ -87,6 +88,49 @@ static void give_one_ability_of_object(ItemEntity *to_ptr, ItemEntity *from_ptr)
     }
 }
 
+static std::pair<bool, ItemEntity *> select_repairing_broken_weapon(PlayerType *player_ptr, const int row, short *item)
+{
+    prt(_("修復には材料となるもう1つの武器が必要です。", "Hand one material weapon to repair a broken weapon."), row, 2);
+    prt(_("材料に使用した武器はなくなります！", "The material weapon will disappear after repairing!!"), row + 1, 2);
+    const auto q = _("どの折れた武器を修復しますか？", "Repair which broken weapon? ");
+    const auto s = _("修復できる折れた武器がありません。", "You have no broken weapon to repair.");
+    auto *o_ptr = choose_object(player_ptr, item, q, s, (USE_INVEN | USE_EQUIP), FuncItemTester(&ItemEntity::is_broken_weapon));
+    if (o_ptr == nullptr) {
+        return { false, nullptr };
+    }
+
+    if (!o_ptr->is_ego() && !o_ptr->is_artifact()) {
+        msg_format(_("それは直してもしょうがないぜ。", "It is worthless to repair."));
+        return { false, o_ptr };
+    }
+
+    if (o_ptr->number > 1) {
+        msg_format(_("一度に複数を修復することはできません！", "They are too many to repair at once!"));
+        return { false, o_ptr };
+    }
+
+    return { true, o_ptr };
+}
+
+static void display_reparing_weapon(PlayerType *player_ptr, ItemEntity *o_ptr, const int row)
+{
+    char item_name[MAX_NLEN];
+    describe_flavor(player_ptr, item_name, o_ptr, OD_NAME_ONLY);
+    prt(format(_("修復する武器　： %s", "Repairing: %s"), item_name), row + 3, 2);
+}
+
+static void display_repair_success_message(PlayerType *player_ptr, ItemEntity *o_ptr, const int cost)
+{
+    char item_name[MAX_NLEN];
+    describe_flavor(player_ptr, item_name, o_ptr, OD_NAME_ONLY);
+#ifdef JP
+    msg_format("＄%dで%sに修復しました。", cost, item_name);
+#else
+    msg_format("Repaired into %s for %d gold.", item_name, cost);
+#endif
+    msg_print(nullptr);
+}
+
 /*!
  * @brief アイテム修復処理のメインルーチン / Repair broken weapon
  * @param player_ptr プレイヤーへの参照ポインタ
@@ -96,51 +140,31 @@ static void give_one_ability_of_object(ItemEntity *to_ptr, ItemEntity *from_ptr)
 static PRICE repair_broken_weapon_aux(PlayerType *player_ptr, PRICE bcost)
 {
     clear_bldg(0, 22);
-    int row = 7;
-    prt(_("修復には材料となるもう1つの武器が必要です。", "Hand one material weapon to repair a broken weapon."), row, 2);
-    prt(_("材料に使用した武器はなくなります！", "The material weapon will disappear after repairing!!"), row + 1, 2);
-
-    concptr q = _("どの折れた武器を修復しますか？", "Repair which broken weapon? ");
-    concptr s = _("修復できる折れた武器がありません。", "You have no broken weapon to repair.");
-
-    OBJECT_IDX item;
-    ItemEntity *o_ptr;
-    o_ptr = choose_object(player_ptr, &item, q, s, (USE_INVEN | USE_EQUIP), FuncItemTester(&ItemEntity::is_broken_weapon));
-    if (!o_ptr) {
+    auto row = 7;
+    short item;
+    const auto &[selection, o_ptr] = select_repairing_broken_weapon(player_ptr, row, &item);
+    if (!selection) {
         return 0;
     }
 
-    if (!o_ptr->is_ego() && !o_ptr->is_artifact()) {
-        msg_format(_("それは直してもしょうがないぜ。", "It is worthless to repair."));
-        return 0;
-    }
-
-    if (o_ptr->number > 1) {
-        msg_format(_("一度に複数を修復することはできません！", "They are too many to repair at once!"));
-        return 0;
-    }
-
-    char basenm[MAX_NLEN];
-    describe_flavor(player_ptr, basenm, o_ptr, OD_NAME_ONLY);
-    prt(format(_("修復する武器　： %s", "Repairing: %s"), basenm), row + 3, 2);
-
-    q = _("材料となる武器は？", "Which weapon for material? ");
-    s = _("材料となる武器がありません。", "You have no material for the repair.");
-
-    OBJECT_IDX mater;
-    ItemEntity *mo_ptr;
-    mo_ptr = choose_object(player_ptr, &mater, q, s, (USE_INVEN | USE_EQUIP), FuncItemTester(&ItemEntity::is_orthodox_melee_weapons));
+    display_reparing_weapon(player_ptr, o_ptr, row);
+    const auto q = _("材料となる武器は？", "Which weapon for material? ");
+    const auto s = _("材料となる武器がありません。", "You have no material for the repair.");
+    short mater;
+    auto *mo_ptr = choose_object(player_ptr, &mater, q, s, (USE_INVEN | USE_EQUIP), FuncItemTester(&ItemEntity::is_orthodox_melee_weapons));
     if (!mo_ptr) {
         return 0;
     }
+
     if (mater == item) {
         msg_print(_("クラインの壷じゃない！", "This is not a Klein bottle!"));
         return 0;
     }
 
+    char basenm[MAX_NLEN];
     describe_flavor(player_ptr, basenm, mo_ptr, OD_NAME_ONLY);
     prt(format(_("材料とする武器： %s", "Material : %s"), basenm), row + 4, 2);
-    PRICE cost = bcost + object_value_real(o_ptr) * 2;
+    const auto cost = bcost + object_value_real(o_ptr) * 2;
     if (!get_check(format(_("＄%dかかりますがよろしいですか？ ", "Costs %d gold, okay? "), cost))) {
         return 0;
     }
@@ -271,13 +295,7 @@ static PRICE repair_broken_weapon_aux(PlayerType *player_ptr, PRICE bcost)
         msg_print(_("これはかなりの業物だったようだ。", "This blade seems to be exceptional."));
     }
 
-    describe_flavor(player_ptr, basenm, o_ptr, OD_NAME_ONLY);
-#ifdef JP
-    msg_format("＄%dで%sに修復しました。", cost, basenm);
-#else
-    msg_format("Repaired into %s for %d gold.", basenm, cost);
-#endif
-    msg_print(nullptr);
+    display_repair_success_message(player_ptr, o_ptr, cost);
     o_ptr->ident &= ~(IDENT_BROKEN);
     o_ptr->discount = 99;
 

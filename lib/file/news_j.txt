@@ -15,8 +15,8 @@
     ZAngband 2.3.0 - ???:    The ZAngband DevTeam
        ZAngband 日本語版:    板倉充洋 < itakura＠users.sourceforge.net >
 
-          変愚蛮怒: Mr.hoge (echizen＠users.sourceforge.jp) ＆ 多くの方々
-                     https://hengband.github.io/
+       変愚蛮怒: Mr.hoge (echizen＠users.sourceforge.jp) ＆ 多くの方々
+                         https://hengband.github.io/
 
-       変愚蛮怒 は UNIX/X11, Windows, Macintosh で動作しています。
-          バグ情報などは上記 URL にある掲示板へお願いします。
+         変愚蛮怒 は UNIX/X11, Windows, Macintosh で動作しています。
+             バグ情報などは上記 URL にある掲示板へお願いします。

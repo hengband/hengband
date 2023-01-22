@@ -996,7 +996,6 @@ hengband_SOURCES = \
 	view/status-first-page.cpp view/status-first-page.h \
 	view/status-bars-table.cpp view/status-bars-table.h \
 	\
-	window/display-sub-window-spells.cpp window/display-sub-window-spells.h \
 	window/display-sub-windows.cpp window/display-sub-windows.h \
 	window/main-window-left-frame.cpp window/main-window-left-frame.h \
 	window/main-window-row-column.cpp window/main-window-row-column.h \

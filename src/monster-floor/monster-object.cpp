@@ -5,6 +5,7 @@
  */
 
 #include "monster-floor/monster-object.h"
+#include "core/window-redrawer.h"
 #include "flavor/flavor-describer.h"
 #include "floor/cave.h"
 #include "floor/floor-object.h"
@@ -30,86 +31,86 @@
 #include "system/player-type-definition.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
-#include <core/window-redrawer.h>
+#include <string_view>
 
 /*!
  * @brief オブジェクトのフラグを更新する
  */
-static void update_object_flags(const TrFlags &flgs, EnumClassFlagGroup<MonsterKindType> &flg_monster_kind, EnumClassFlagGroup<MonsterResistanceType> &flgr)
+static void update_object_flags(const TrFlags &flags, EnumClassFlagGroup<MonsterKindType> &flg_monster_kind, EnumClassFlagGroup<MonsterResistanceType> &flgr)
 {
-    if (flgs.has(TR_SLAY_DRAGON)) {
+    if (flags.has(TR_SLAY_DRAGON)) {
         flg_monster_kind.set(MonsterKindType::DRAGON);
     }
-    if (flgs.has(TR_KILL_DRAGON)) {
+    if (flags.has(TR_KILL_DRAGON)) {
         flg_monster_kind.set(MonsterKindType::DRAGON);
     }
-    if (flgs.has(TR_SLAY_TROLL)) {
+    if (flags.has(TR_SLAY_TROLL)) {
         flg_monster_kind.set(MonsterKindType::TROLL);
     }
-    if (flgs.has(TR_KILL_TROLL)) {
+    if (flags.has(TR_KILL_TROLL)) {
         flg_monster_kind.set(MonsterKindType::TROLL);
     }
-    if (flgs.has(TR_SLAY_GIANT)) {
+    if (flags.has(TR_SLAY_GIANT)) {
         flg_monster_kind.set(MonsterKindType::GIANT);
     }
-    if (flgs.has(TR_KILL_GIANT)) {
+    if (flags.has(TR_KILL_GIANT)) {
         flg_monster_kind.set(MonsterKindType::GIANT);
     }
-    if (flgs.has(TR_SLAY_ORC)) {
+    if (flags.has(TR_SLAY_ORC)) {
         flg_monster_kind.set(MonsterKindType::ORC);
     }
-    if (flgs.has(TR_KILL_ORC)) {
+    if (flags.has(TR_KILL_ORC)) {
         flg_monster_kind.set(MonsterKindType::ORC);
     }
-    if (flgs.has(TR_SLAY_DEMON)) {
+    if (flags.has(TR_SLAY_DEMON)) {
         flg_monster_kind.set(MonsterKindType::DEMON);
     }
-    if (flgs.has(TR_KILL_DEMON)) {
+    if (flags.has(TR_KILL_DEMON)) {
         flg_monster_kind.set(MonsterKindType::DEMON);
     }
-    if (flgs.has(TR_SLAY_UNDEAD)) {
+    if (flags.has(TR_SLAY_UNDEAD)) {
         flg_monster_kind.set(MonsterKindType::UNDEAD);
     }
-    if (flgs.has(TR_KILL_UNDEAD)) {
+    if (flags.has(TR_KILL_UNDEAD)) {
         flg_monster_kind.set(MonsterKindType::UNDEAD);
     }
-    if (flgs.has(TR_SLAY_ANIMAL)) {
+    if (flags.has(TR_SLAY_ANIMAL)) {
         flg_monster_kind.set(MonsterKindType::ANIMAL);
     }
-    if (flgs.has(TR_KILL_ANIMAL)) {
+    if (flags.has(TR_KILL_ANIMAL)) {
         flg_monster_kind.set(MonsterKindType::ANIMAL);
     }
-    if (flgs.has(TR_SLAY_EVIL)) {
+    if (flags.has(TR_SLAY_EVIL)) {
         flg_monster_kind.set(MonsterKindType::EVIL);
     }
-    if (flgs.has(TR_KILL_EVIL)) {
+    if (flags.has(TR_KILL_EVIL)) {
         flg_monster_kind.set(MonsterKindType::EVIL);
     }
-    if (flgs.has(TR_SLAY_GOOD)) {
+    if (flags.has(TR_SLAY_GOOD)) {
         flg_monster_kind.set(MonsterKindType::GOOD);
     }
-    if (flgs.has(TR_KILL_GOOD)) {
+    if (flags.has(TR_KILL_GOOD)) {
         flg_monster_kind.set(MonsterKindType::GOOD);
     }
-    if (flgs.has(TR_SLAY_HUMAN)) {
+    if (flags.has(TR_SLAY_HUMAN)) {
         flg_monster_kind.set(MonsterKindType::HUMAN);
     }
-    if (flgs.has(TR_KILL_HUMAN)) {
+    if (flags.has(TR_KILL_HUMAN)) {
         flg_monster_kind.set(MonsterKindType::HUMAN);
     }
-    if (flgs.has(TR_BRAND_ACID)) {
+    if (flags.has(TR_BRAND_ACID)) {
         flgr.set(MonsterResistanceType::IMMUNE_ACID);
     }
-    if (flgs.has(TR_BRAND_ELEC)) {
+    if (flags.has(TR_BRAND_ELEC)) {
         flgr.set(MonsterResistanceType::IMMUNE_ELEC);
     }
-    if (flgs.has(TR_BRAND_FIRE)) {
+    if (flags.has(TR_BRAND_FIRE)) {
         flgr.set(MonsterResistanceType::IMMUNE_FIRE);
     }
-    if (flgs.has(TR_BRAND_COLD)) {
+    if (flags.has(TR_BRAND_COLD)) {
         flgr.set(MonsterResistanceType::IMMUNE_COLD);
     }
-    if (flgs.has(TR_BRAND_POIS)) {
+    if (flags.has(TR_BRAND_POIS)) {
         flgr.set(MonsterResistanceType::IMMUNE_POISON);
     }
 }
@@ -128,7 +129,7 @@ static void update_object_flags(const TrFlags &flgs, EnumClassFlagGroup<MonsterK
  * @param this_o_idx モンスターが乗ったオブジェクトID
  */
 static void monster_pickup_object(PlayerType *player_ptr, turn_flags *turn_flags_ptr, const MONSTER_IDX m_idx, ItemEntity *o_ptr, const bool is_unpickable_object,
-    const POSITION ny, const POSITION nx, const GAME_TEXT *m_name, const GAME_TEXT *o_name, const OBJECT_IDX this_o_idx)
+    const POSITION ny, const POSITION nx, std::string_view m_name, std::string_view o_name, const OBJECT_IDX this_o_idx)
 {
     auto *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
     auto *r_ptr = &monraces_info[m_ptr->r_idx];
@@ -136,7 +137,7 @@ static void monster_pickup_object(PlayerType *player_ptr, turn_flags *turn_flags
         if (turn_flags_ptr->do_take && r_ptr->behavior_flags.has(MonsterBehaviorType::STUPID)) {
             turn_flags_ptr->did_take_item = true;
             if (m_ptr->ml && player_can_see_bold(player_ptr, ny, nx)) {
-                msg_format(_("%s^は%sを拾おうとしたが、だめだった。", "%s^ tries to pick up %s, but fails."), m_name, o_name);
+                msg_format(_("%s^は%sを拾おうとしたが、だめだった。", "%s^ tries to pick up %s, but fails."), m_name.data(), o_name.data());
             }
         }
 
@@ -146,7 +147,7 @@ static void monster_pickup_object(PlayerType *player_ptr, turn_flags *turn_flags
     if (turn_flags_ptr->do_take) {
         turn_flags_ptr->did_take_item = true;
         if (player_can_see_bold(player_ptr, ny, nx)) {
-            msg_format(_("%s^が%sを拾った。", "%s^ picks up %s."), m_name, o_name);
+            msg_format(_("%s^が%sを拾った。", "%s^ picks up %s."), m_name.data(), o_name.data());
         }
 
         excise_object_idx(player_ptr->current_floor_ptr, this_o_idx);
@@ -165,7 +166,7 @@ static void monster_pickup_object(PlayerType *player_ptr, turn_flags *turn_flags
 
     turn_flags_ptr->did_kill_item = true;
     if (player_has_los_bold(player_ptr, ny, nx)) {
-        msg_format(_("%s^が%sを破壊した。", "%s^ destroys %s."), m_name, o_name);
+        msg_format(_("%s^が%sを破壊した。", "%s^ destroys %s."), m_name.data(), o_name.data());
     }
 
     delete_object_idx(player_ptr, this_o_idx);
@@ -183,9 +184,7 @@ void update_object_by_monster_movement(PlayerType *player_ptr, turn_flags *turn_
 {
     auto *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
     auto *r_ptr = &monraces_info[m_ptr->r_idx];
-    grid_type *g_ptr;
-    g_ptr = &player_ptr->current_floor_ptr->grid_array[ny][nx];
-
+    auto *g_ptr = &player_ptr->current_floor_ptr->grid_array[ny][nx];
     turn_flags_ptr->do_take = r_ptr->behavior_flags.has(MonsterBehaviorType::TAKE_ITEM);
     for (auto it = g_ptr->o_idx_list.begin(); it != g_ptr->o_idx_list.end();) {
         EnumClassFlagGroup<MonsterKindType> flg_monster_kind;
@@ -201,15 +200,15 @@ void update_object_by_monster_movement(PlayerType *player_ptr, turn_flags *turn_
             }
         }
 
-        auto flgs = object_flags(o_ptr);
+        auto flags = object_flags(o_ptr);
         describe_flavor(player_ptr, o_name, o_ptr, 0);
         const auto m_name = monster_desc(player_ptr, m_ptr, MD_INDEF_HIDDEN);
-        update_object_flags(flgs, flg_monster_kind, flgr);
+        update_object_flags(flags, flg_monster_kind, flgr);
 
         auto is_unpickable_object = o_ptr->is_artifact();
         is_unpickable_object |= r_ptr->kind_flags.has_any_of(flg_monster_kind);
         is_unpickable_object |= !r_ptr->resistance_flags.has_all_of(flgr) && r_ptr->resistance_flags.has_not(MonsterResistanceType::RESIST_ALL);
-        monster_pickup_object(player_ptr, turn_flags_ptr, m_idx, o_ptr, is_unpickable_object, ny, nx, m_name.data(), o_name, this_o_idx);
+        monster_pickup_object(player_ptr, turn_flags_ptr, m_idx, o_ptr, is_unpickable_object, ny, nx, m_name, o_name, this_o_idx);
     }
 }
 

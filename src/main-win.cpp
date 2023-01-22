@@ -1323,8 +1323,8 @@ static void init_windows(void)
     *td = {};
     td->name = win_term_name[0];
 
-    td->rows = 24;
-    td->cols = 80;
+    td->rows = MAIN_TERM_MIN_ROWS;
+    td->cols = MAIN_TERM_MIN_COLS;
     td->visible = true;
     td->size_ow1 = 2;
     td->size_ow2 = 2;
@@ -1338,8 +1338,8 @@ static void init_windows(void)
         td = &data[i];
         *td = {};
         td->name = win_term_name[i];
-        td->rows = 24;
-        td->cols = 80;
+        td->rows = TERM_DEFAULT_ROWS;
+        td->cols = TERM_DEFAULT_COLS;
         td->visible = false;
         td->size_ow1 = 1;
         td->size_ow2 = 1;
@@ -2161,8 +2161,8 @@ static bool handle_window_resize(term_data *td, UINT uMsg, WPARAM wParam, LPARAM
     switch (uMsg) {
     case WM_GETMINMAXINFO: {
         const bool is_main = is_main_term(td);
-        const int min_cols = (is_main) ? 80 : 20;
-        const int min_rows = (is_main) ? 24 : 3;
+        const int min_cols = (is_main) ? MAIN_TERM_MIN_COLS : 20;
+        const int min_rows = (is_main) ? MAIN_TERM_MIN_ROWS : 3;
         const LONG w = min_cols * td->tile_wid + td->size_ow1 + td->size_ow2;
         const LONG h = min_rows * td->tile_hgt + td->size_oh1 + td->size_oh2 + 1;
         RECT rc{ 0, 0, w, h };
@@ -2804,12 +2804,16 @@ int WINAPI WinMain(
 
     signals_init();
     term_activate(term_screen);
-    init_angband(p_ptr, false);
-    initialized = true;
+    {
+        TermCenteredOffsetSetter tcos(MAIN_TERM_MIN_COLS, MAIN_TERM_MIN_ROWS);
 
-    check_for_save_file(command_line.get_savefile_option());
-    prt(_("[ファイル] メニューの [新規] または [開く] を選択してください。", "[Choose 'New' or 'Open' from the 'File' menu]"), 23, _(8, 17));
-    term_fresh();
+        init_angband(p_ptr, false);
+        initialized = true;
+
+        check_for_save_file(command_line.get_savefile_option());
+        prt(_("[ファイル] メニューの [新規] または [開く] を選択してください。", "[Choose 'New' or 'Open' from the 'File' menu]"), 23, _(8, 17));
+        term_fresh();
+    }
 
     change_sound_mode(arg_sound);
     use_music = arg_music;

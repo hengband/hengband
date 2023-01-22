@@ -73,16 +73,16 @@ static void analyze_pval(ItemEntity *o_ptr, pval_info_type *pi_ptr)
         return;
     }
 
-    auto flgs = object_flags(o_ptr);
+    auto flags = object_flags(o_ptr);
     affects_list = pi_ptr->pval_affects;
     strnfmt(pi_ptr->pval_desc, sizeof(pi_ptr->pval_desc), "%s%d", o_ptr->pval >= 0 ? "+" : "", o_ptr->pval);
-    if (flgs.has_all_of(EnumRange(TR_STR, TR_CHR))) {
+    if (flags.has_all_of(EnumRange(TR_STR, TR_CHR))) {
         *affects_list++ = _("全能力", "All stats");
-    } else if (flgs.has_any_of(EnumRange(TR_STR, TR_CHR))) {
-        affects_list = spoiler_flag_aux(flgs, stat_flags_desc, affects_list, N_ELEMENTS(stat_flags_desc));
+    } else if (flags.has_any_of(EnumRange(TR_STR, TR_CHR))) {
+        affects_list = spoiler_flag_aux(flags, stat_flags_desc, affects_list, N_ELEMENTS(stat_flags_desc));
     }
 
-    affects_list = spoiler_flag_aux(flgs, pval_flags1_desc, affects_list, N_ELEMENTS(pval_flags1_desc));
+    affects_list = spoiler_flag_aux(flags, pval_flags1_desc, affects_list, N_ELEMENTS(pval_flags1_desc));
     *affects_list = nullptr;
 }
 
@@ -94,8 +94,8 @@ static void analyze_pval(ItemEntity *o_ptr, pval_info_type *pi_ptr)
  */
 static void analyze_slay(ItemEntity *o_ptr, concptr *slay_list)
 {
-    auto flgs = object_flags(o_ptr);
-    slay_list = spoiler_flag_aux(flgs, slay_flags_desc, slay_list, N_ELEMENTS(slay_flags_desc));
+    auto flags = object_flags(o_ptr);
+    slay_list = spoiler_flag_aux(flags, slay_flags_desc, slay_list, N_ELEMENTS(slay_flags_desc));
     *slay_list = nullptr;
 }
 
@@ -107,8 +107,8 @@ static void analyze_slay(ItemEntity *o_ptr, concptr *slay_list)
  */
 static void analyze_brand(ItemEntity *o_ptr, concptr *brand_list)
 {
-    auto flgs = object_flags(o_ptr);
-    brand_list = spoiler_flag_aux(flgs, brand_flags_desc, brand_list, N_ELEMENTS(brand_flags_desc));
+    auto flags = object_flags(o_ptr);
+    brand_list = spoiler_flag_aux(flags, brand_flags_desc, brand_list, N_ELEMENTS(brand_flags_desc));
     *brand_list = nullptr;
 }
 
@@ -120,8 +120,8 @@ static void analyze_brand(ItemEntity *o_ptr, concptr *brand_list)
  */
 static void analyze_resist(ItemEntity *o_ptr, concptr *resist_list)
 {
-    auto flgs = object_flags(o_ptr);
-    resist_list = spoiler_flag_aux(flgs, resist_flags_desc, resist_list, N_ELEMENTS(resist_flags_desc));
+    auto flags = object_flags(o_ptr);
+    resist_list = spoiler_flag_aux(flags, resist_flags_desc, resist_list, N_ELEMENTS(resist_flags_desc));
     *resist_list = nullptr;
 }
 
@@ -133,8 +133,8 @@ static void analyze_resist(ItemEntity *o_ptr, concptr *resist_list)
  */
 static void analyze_immune(ItemEntity *o_ptr, concptr *immune_list)
 {
-    auto flgs = object_flags(o_ptr);
-    immune_list = spoiler_flag_aux(flgs, immune_flags_desc, immune_list, N_ELEMENTS(immune_flags_desc));
+    auto flags = object_flags(o_ptr);
+    immune_list = spoiler_flag_aux(flags, immune_flags_desc, immune_list, N_ELEMENTS(immune_flags_desc));
     *immune_list = nullptr;
 }
 
@@ -146,8 +146,8 @@ static void analyze_immune(ItemEntity *o_ptr, concptr *immune_list)
  */
 static void analyze_vulnerable(ItemEntity *o_ptr, concptr *vulnerable_list)
 {
-    auto flgs = object_flags(o_ptr);
-    vulnerable_list = spoiler_flag_aux(flgs, vulnerable_flags_desc, vulnerable_list, N_ELEMENTS(vulnerable_flags_desc));
+    auto flags = object_flags(o_ptr);
+    vulnerable_list = spoiler_flag_aux(flags, vulnerable_flags_desc, vulnerable_list, N_ELEMENTS(vulnerable_flags_desc));
     *vulnerable_list = nullptr;
 }
 
@@ -159,11 +159,11 @@ static void analyze_vulnerable(ItemEntity *o_ptr, concptr *vulnerable_list)
  */
 static void analyze_sustains(ItemEntity *o_ptr, concptr *sustain_list)
 {
-    auto flgs = object_flags(o_ptr);
-    if (flgs.has_all_of(EnumRange(TR_SUST_STR, TR_SUST_CHR))) {
+    auto flags = object_flags(o_ptr);
+    if (flags.has_all_of(EnumRange(TR_SUST_STR, TR_SUST_CHR))) {
         *sustain_list++ = _("全能力", "All stats");
-    } else if (flgs.has_any_of(EnumRange(TR_SUST_STR, TR_SUST_CHR))) {
-        sustain_list = spoiler_flag_aux(flgs, sustain_flags_desc, sustain_list, N_ELEMENTS(sustain_flags_desc));
+    } else if (flags.has_any_of(EnumRange(TR_SUST_STR, TR_SUST_CHR))) {
+        sustain_list = spoiler_flag_aux(flags, sustain_flags_desc, sustain_list, N_ELEMENTS(sustain_flags_desc));
     }
 
     *sustain_list = nullptr;
@@ -178,31 +178,31 @@ static void analyze_sustains(ItemEntity *o_ptr, concptr *sustain_list)
  */
 static void analyze_misc_magic(ItemEntity *o_ptr, concptr *misc_list)
 {
-    auto flgs = object_flags(o_ptr);
-    misc_list = spoiler_flag_aux(flgs, misc_flags2_desc, misc_list, N_ELEMENTS(misc_flags2_desc));
-    misc_list = spoiler_flag_aux(flgs, misc_flags3_desc, misc_list, N_ELEMENTS(misc_flags3_desc));
+    auto flags = object_flags(o_ptr);
+    misc_list = spoiler_flag_aux(flags, misc_flags2_desc, misc_list, N_ELEMENTS(misc_flags2_desc));
+    misc_list = spoiler_flag_aux(flags, misc_flags3_desc, misc_list, N_ELEMENTS(misc_flags3_desc));
     POSITION rad = 0;
-    if (flgs.has(TR_LITE_1)) {
+    if (flags.has(TR_LITE_1)) {
         rad += 1;
     }
 
-    if (flgs.has(TR_LITE_2)) {
+    if (flags.has(TR_LITE_2)) {
         rad += 2;
     }
 
-    if (flgs.has(TR_LITE_3)) {
+    if (flags.has(TR_LITE_3)) {
         rad += 3;
     }
 
-    if (flgs.has(TR_LITE_M1)) {
+    if (flags.has(TR_LITE_M1)) {
         rad -= 1;
     }
 
-    if (flgs.has(TR_LITE_M2)) {
+    if (flags.has(TR_LITE_M2)) {
         rad -= 2;
     }
 
-    if (flgs.has(TR_LITE_M3)) {
+    if (flags.has(TR_LITE_M3)) {
         rad -= 3;
     }
 
@@ -211,7 +211,7 @@ static void analyze_misc_magic(ItemEntity *o_ptr, concptr *misc_list)
     }
 
     std::string desc;
-    if (flgs.has(TR_LITE_FUEL)) {
+    if (flags.has(TR_LITE_FUEL)) {
         if (rad > 0) {
             desc = format(_("それは燃料補給によって明かり(半径 %d)を授ける。", "It provides light (radius %d) when fueled."), (int)rad);
         }
@@ -227,7 +227,7 @@ static void analyze_misc_magic(ItemEntity *o_ptr, concptr *misc_list)
         *misc_list++ = quark_str(quark_add(desc.data()));
     }
 
-    if (flgs.has(TR_TY_CURSE)) {
+    if (flags.has(TR_TY_CURSE)) {
         *misc_list++ = _("太古の怨念", "Ancient Curse");
     }
 
@@ -239,11 +239,11 @@ static void analyze_misc_magic(ItemEntity *o_ptr, concptr *misc_list)
         *misc_list++ = _("呪い", "Cursed");
     }
 
-    if (flgs.has(TR_ADD_L_CURSE)) {
+    if (flags.has(TR_ADD_L_CURSE)) {
         *misc_list++ = _("呪いを増やす", "Cursing");
     }
 
-    if (flgs.has(TR_ADD_H_CURSE)) {
+    if (flags.has(TR_ADD_H_CURSE)) {
         *misc_list++ = _("強力な呪いを増やす", "Heavily Cursing");
     }
 

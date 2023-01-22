@@ -27,6 +27,7 @@
 #include "player/player-status-flags.h"
 #include "player/player-status.h"
 #include "system/player-type-definition.h"
+#include "term/gameterm.h"
 #include "term/screen-processor.h"
 #include "term/z-form.h"
 #include "timed-effect/player-blindness.h"
@@ -429,7 +430,7 @@ void report_magics(PlayerType *player_ptr)
     screen_save();
 
     /* Erase the screen */
-    for (int k = 1; k < 24; k++) {
+    for (int k = 1; k < MAIN_TERM_MIN_ROWS; k++) {
         prt("", k, 13);
     }
 

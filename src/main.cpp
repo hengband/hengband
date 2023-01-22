@@ -563,11 +563,15 @@ int main(int argc, char *argv[])
     /* Catch nasty signals */
     signals_init();
 
-    /* Initialize */
-    init_angband(p_ptr, false);
+    {
+        TermCenteredOffsetSetter tcos(MAIN_TERM_MIN_COLS, MAIN_TERM_MIN_ROWS);
 
-    /* Wait for response */
-    pause_line(23);
+        /* Initialize */
+        init_angband(p_ptr, false);
+
+        /* Wait for response */
+        pause_line(MAIN_TERM_MIN_ROWS - 1);
+    }
 
     /* Play the game */
     play_game(p_ptr, new_game, browsing_movie);

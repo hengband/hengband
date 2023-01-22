@@ -45,10 +45,10 @@ static std::string item_activation_dragon_breath(ItemEntity *o_ptr)
     std::string desc = _("", "breathe ");
     int n = 0;
 
-    auto flgs = object_flags(o_ptr);
+    auto flags = object_flags(o_ptr);
 
     for (int i = 0; dragonbreath_info[i].flag != 0; i++) {
-        if (flgs.has(dragonbreath_info[i].flag)) {
+        if (flags.has(dragonbreath_info[i].flag)) {
             if (n > 0) {
                 desc.append(_("、", ", "));
             }
@@ -187,8 +187,8 @@ static concptr item_activation_aux(ItemEntity *o_ptr)
  */
 concptr activation_explanation(ItemEntity *o_ptr)
 {
-    auto flgs = object_flags(o_ptr);
-    if (flgs.has_not(TR_ACTIVATE)) {
+    auto flags = object_flags(o_ptr);
+    if (flags.has_not(TR_ACTIVATE)) {
         return _("なし", "nothing");
     }
 

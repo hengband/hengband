@@ -1,5 +1,6 @@
 ﻿#include "load/load-util.h"
 #include "locale/japanese.h"
+#include "term/gameterm.h"
 #include "term/screen-processor.h"
 
 FILE *loading_savefile;
@@ -27,7 +28,7 @@ void load_note(std::string_view msg)
 {
     static TERM_LEN y = 2;
     prt(msg, y, 0);
-    if (++y >= 24) {
+    if (++y >= MAIN_TERM_MIN_ROWS) {
         y = 2;
     }
 

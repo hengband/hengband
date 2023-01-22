@@ -63,6 +63,7 @@
 #include "system/item-entity.h"
 #include "system/player-type-definition.h"
 #include "system/terrain-type-definition.h"
+#include "term/gameterm.h"
 #include "term/screen-processor.h"
 #include "util/bit-flags-calculator.h"
 #include "util/int-char-converter.h"
@@ -210,8 +211,10 @@ static void bldg_process_command(PlayerType *player_ptr, building_type *bldg, in
         break;
 
     case BACT_TELEPORT_LEVEL:
+        screen_save();
         clear_bldg(4, 20);
         paid = free_level_recall(player_ptr);
+        screen_load();
         break;
 
     case BACT_LOSE_MUTATION: {
@@ -313,6 +316,8 @@ void do_cmd_building(PlayerType *player_ptr)
         msg_print(_("ここには建物はない。", "You see no building here."));
         return;
     }
+
+    TermCenteredOffsetSetter tcos(MAIN_TERM_MIN_COLS, MAIN_TERM_MIN_ROWS);
 
     int which = terrains_info[player_ptr->current_floor_ptr->grid_array[player_ptr->y][player_ptr->x].feat].subtype;
 

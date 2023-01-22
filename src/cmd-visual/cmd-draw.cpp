@@ -81,6 +81,8 @@ void do_cmd_player_status(PlayerType *player_ptr)
     char tmp[160];
     screen_save();
     while (true) {
+        TermCenteredOffsetSetter tcos(MAIN_TERM_MIN_COLS, MAIN_TERM_MIN_ROWS);
+
         update_playtime();
         (void)display_player(player_ptr, mode);
 

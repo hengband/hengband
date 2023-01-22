@@ -577,7 +577,7 @@ static describe_option_type decide_describe_option(const ItemEntity &item, BIT_F
  * @param mode 表記に関するオプション指定
  * @return 現在クエスト達成目的のアイテムならばTRUEを返す
  */
-void describe_flavor(PlayerType *player_ptr, char *buf, ItemEntity *o_ptr, BIT_FLAGS mode)
+void describe_flavor(PlayerType *player_ptr, char *buf, const ItemEntity *o_ptr, const BIT_FLAGS mode)
 {
     const auto &item = *o_ptr;
     const auto opt = decide_describe_option(item, mode);

@@ -47,94 +47,103 @@
  */
 bool exchange_cash(PlayerType *player_ptr)
 {
-    bool change = false;
+    auto change = false;
     GAME_TEXT o_name[MAX_NLEN];
-    ItemEntity *o_ptr;
-
     for (INVENTORY_IDX i = 0; i <= INVEN_SUB_HAND; i++) {
-        o_ptr = &player_ptr->inventory_list[i];
-        const auto r_idx_of_item = static_cast<MonsterRaceId>(o_ptr->pval);
-
-        if ((o_ptr->bi_key.tval() == ItemKindType::CAPTURE) && (r_idx_of_item == MonsterRaceId::TSUCHINOKO)) {
-            describe_flavor(player_ptr, o_name, o_ptr, 0);
-            if (get_check(format(_("%s を換金しますか？", "Convert %s into money? "), o_name))) {
-                msg_format(_("賞金 %ld＄を手に入れた。", "You get %ldgp."), (long int)(1000000L * o_ptr->number));
-                player_ptr->au += 1000000L * o_ptr->number;
-                player_ptr->redraw |= (PR_GOLD);
-                vary_item(player_ptr, i, -o_ptr->number);
-            }
-
-            change = true;
+        const auto item_ptr = &player_ptr->inventory_list[i];
+        const auto r_idx_of_item = static_cast<MonsterRaceId>(item_ptr->pval);
+        if ((item_ptr->bi_key.tval() != ItemKindType::CAPTURE) || (r_idx_of_item != MonsterRaceId::TSUCHINOKO)) {
+            continue;
         }
+
+        change = true;
+        describe_flavor(player_ptr, o_name, item_ptr, 0);
+        if (!get_check(format(_("%s を換金しますか？", "Convert %s into money? "), o_name))) {
+            continue;
+        }
+
+        msg_format(_("賞金 %ld＄を手に入れた。", "You get %ldgp."), (long int)(1000000L * item_ptr->number));
+        player_ptr->au += 1000000L * item_ptr->number;
+        player_ptr->redraw |= (PR_GOLD);
+        vary_item(player_ptr, i, -item_ptr->number);
     }
 
     for (INVENTORY_IDX i = 0; i < INVEN_PACK; i++) {
-        o_ptr = &player_ptr->inventory_list[i];
-        const auto r_idx_of_item = static_cast<MonsterRaceId>(o_ptr->pval);
-
-        if (o_ptr->bi_key == BaseitemKey(ItemKindType::CORPSE, SV_CORPSE) && (r_idx_of_item == MonsterRaceId::TSUCHINOKO)) {
-            describe_flavor(player_ptr, o_name, o_ptr, 0);
-            if (get_check(format(_("%s を換金しますか？", "Convert %s into money? "), o_name))) {
-                msg_format(_("賞金 %ld＄を手に入れた。", "You get %ldgp."), (long int)(200000L * o_ptr->number));
-                player_ptr->au += 200000L * o_ptr->number;
-                player_ptr->redraw |= (PR_GOLD);
-                vary_item(player_ptr, i, -o_ptr->number);
-            }
-
-            change = true;
+        const auto item_ptr = &player_ptr->inventory_list[i];
+        const auto r_idx_of_item = static_cast<MonsterRaceId>(item_ptr->pval);
+        if ((item_ptr->bi_key != BaseitemKey(ItemKindType::CORPSE, SV_CORPSE)) || (r_idx_of_item != MonsterRaceId::TSUCHINOKO)) {
+            continue;
         }
+
+        change = true;
+        describe_flavor(player_ptr, o_name, item_ptr, 0);
+        if (!get_check(format(_("%s を換金しますか？", "Convert %s into money? "), o_name))) {
+            continue;
+        }
+
+        msg_format(_("賞金 %ld＄を手に入れた。", "You get %ldgp."), (long int)(200000L * item_ptr->number));
+        player_ptr->au += 200000L * item_ptr->number;
+        player_ptr->redraw |= (PR_GOLD);
+        vary_item(player_ptr, i, -item_ptr->number);
     }
 
     for (INVENTORY_IDX i = 0; i < INVEN_PACK; i++) {
-        o_ptr = &player_ptr->inventory_list[i];
-        const auto r_idx_of_item = static_cast<MonsterRaceId>(o_ptr->pval);
-
-        if (o_ptr->bi_key == BaseitemKey(ItemKindType::CORPSE, SV_SKELETON) && (r_idx_of_item == MonsterRaceId::TSUCHINOKO)) {
-            describe_flavor(player_ptr, o_name, o_ptr, 0);
-            if (get_check(format(_("%s を換金しますか？", "Convert %s into money? "), o_name))) {
-                msg_format(_("賞金 %ld＄を手に入れた。", "You get %ldgp."), (long int)(100000L * o_ptr->number));
-                player_ptr->au += 100000L * o_ptr->number;
-                player_ptr->redraw |= (PR_GOLD);
-                vary_item(player_ptr, i, -o_ptr->number);
-            }
-
-            change = true;
+        const auto item_ptr = &player_ptr->inventory_list[i];
+        const auto r_idx_of_item = static_cast<MonsterRaceId>(item_ptr->pval);
+        if ((item_ptr->bi_key != BaseitemKey(ItemKindType::CORPSE, SV_SKELETON)) || (r_idx_of_item != MonsterRaceId::TSUCHINOKO)) {
+            continue;
         }
+
+        change = true;
+        describe_flavor(player_ptr, o_name, item_ptr, 0);
+        if (!get_check(format(_("%s を換金しますか？", "Convert %s into money? "), o_name))) {
+            continue;
+        }
+
+        msg_format(_("賞金 %ld＄を手に入れた。", "You get %ldgp."), (long int)(100000L * item_ptr->number));
+        player_ptr->au += 100000L * item_ptr->number;
+        player_ptr->redraw |= (PR_GOLD);
+        vary_item(player_ptr, i, -item_ptr->number);
     }
 
     for (INVENTORY_IDX i = 0; i < INVEN_PACK; i++) {
-        o_ptr = &player_ptr->inventory_list[i];
-        const auto r_idx_of_item = static_cast<MonsterRaceId>(o_ptr->pval);
-
-        if (o_ptr->bi_key == BaseitemKey(ItemKindType::CORPSE, SV_CORPSE) && (streq(monraces_info[r_idx_of_item].name.data(), monraces_info[w_ptr->today_mon].name.data()))) {
-            describe_flavor(player_ptr, o_name, o_ptr, 0);
-            if (get_check(format(_("%s を換金しますか？", "Convert %s into money? "), o_name))) {
-                msg_format(
-                    _("賞金 %ld＄を手に入れた。", "You get %ldgp."), (long int)((monraces_info[w_ptr->today_mon].level * 50 + 100) * o_ptr->number));
-                player_ptr->au += (monraces_info[w_ptr->today_mon].level * 50 + 100) * o_ptr->number;
-                player_ptr->redraw |= (PR_GOLD);
-                vary_item(player_ptr, i, -o_ptr->number);
-            }
-
-            change = true;
+        const auto item_ptr = &player_ptr->inventory_list[i];
+        const auto r_idx_of_item = static_cast<MonsterRaceId>(item_ptr->pval);
+        if ((item_ptr->bi_key != BaseitemKey(ItemKindType::CORPSE, SV_CORPSE)) || (monraces_info[r_idx_of_item].name != monraces_info[w_ptr->today_mon].name)) {
+            continue;
         }
+
+        change = true;
+        describe_flavor(player_ptr, o_name, item_ptr, 0);
+        if (!get_check(format(_("%s を換金しますか？", "Convert %s into money? "), o_name))) {
+            continue;
+        }
+
+        constexpr auto mes = _("賞金 %ld＄を手に入れた。", "You get %ldgp.");
+        msg_format(mes, (long int)((monraces_info[w_ptr->today_mon].level * 50 + 100) * item_ptr->number));
+        player_ptr->au += (monraces_info[w_ptr->today_mon].level * 50 + 100) * item_ptr->number;
+        player_ptr->redraw |= (PR_GOLD);
+        vary_item(player_ptr, i, -item_ptr->number);
     }
 
     for (INVENTORY_IDX i = 0; i < INVEN_PACK; i++) {
-        o_ptr = &player_ptr->inventory_list[i];
-        const auto r_idx_of_item = static_cast<MonsterRaceId>(o_ptr->pval);
-
-        if (o_ptr->bi_key == BaseitemKey(ItemKindType::CORPSE, SV_SKELETON) && (streq(monraces_info[r_idx_of_item].name.data(), monraces_info[w_ptr->today_mon].name.data()))) {
-            describe_flavor(player_ptr, o_name, o_ptr, 0);
-            if (get_check(format(_("%s を換金しますか？", "Convert %s into money? "), o_name))) {
-                msg_format(_("賞金 %ld＄を手に入れた。", "You get %ldgp."), (long int)((monraces_info[w_ptr->today_mon].level * 30 + 60) * o_ptr->number));
-                player_ptr->au += (monraces_info[w_ptr->today_mon].level * 30 + 60) * o_ptr->number;
-                player_ptr->redraw |= (PR_GOLD);
-                vary_item(player_ptr, i, -o_ptr->number);
-            }
-
-            change = true;
+        const auto item_ptr = &player_ptr->inventory_list[i];
+        const auto r_idx_of_item = static_cast<MonsterRaceId>(item_ptr->pval);
+        if ((item_ptr->bi_key != BaseitemKey(ItemKindType::CORPSE, SV_SKELETON)) || (monraces_info[r_idx_of_item].name != monraces_info[w_ptr->today_mon].name)) {
+            continue;
         }
+
+        change = true;
+        describe_flavor(player_ptr, o_name, item_ptr, 0);
+        if (!get_check(format(_("%s を換金しますか？", "Convert %s into money? "), o_name))) {
+            continue;
+        }
+
+        constexpr auto mes = _("賞金 %ld＄を手に入れた。", "You get %ldgp.");
+        msg_format(mes, (long int)((monraces_info[w_ptr->today_mon].level * 30 + 60) * item_ptr->number));
+        player_ptr->au += (monraces_info[w_ptr->today_mon].level * 30 + 60) * item_ptr->number;
+        player_ptr->redraw |= (PR_GOLD);
+        vary_item(player_ptr, i, -item_ptr->number);
     }
 
     for (auto &[r_idx, is_achieved] : w_ptr->bounties) {
@@ -143,22 +152,21 @@ bool exchange_cash(PlayerType *player_ptr)
         }
 
         for (INVENTORY_IDX i = INVEN_PACK - 1; i >= 0; i--) {
-            o_ptr = &player_ptr->inventory_list[i];
-            const auto r_idx_of_item = static_cast<MonsterRaceId>(o_ptr->pval);
-
-            if ((o_ptr->bi_key.tval() != ItemKindType::CORPSE) || (r_idx_of_item != r_idx)) {
+            const auto item_ptr = &player_ptr->inventory_list[i];
+            const auto r_idx_of_item = static_cast<MonsterRaceId>(item_ptr->pval);
+            if ((item_ptr->bi_key.tval() != ItemKindType::CORPSE) || (r_idx_of_item != r_idx)) {
                 continue;
             }
 
             INVENTORY_IDX item_new;
             ItemEntity forge;
 
-            describe_flavor(player_ptr, o_name, o_ptr, 0);
+            describe_flavor(player_ptr, o_name, item_ptr, 0);
             if (!get_check(format(_("%sを渡しますか？", "Hand %s over? "), o_name))) {
                 continue;
             }
 
-            vary_item(player_ptr, i, -o_ptr->number);
+            vary_item(player_ptr, i, -item_ptr->number);
             chg_virtue(player_ptr, V_JUSTICE, 5);
             is_achieved = true;
 

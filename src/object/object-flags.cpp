@@ -2,6 +2,7 @@
 #include "mind/mind-weaponsmith.h"
 #include "object-enchant/object-ego.h"
 #include "object-enchant/tr-types.h"
+#include "object/tval-types.h"
 #include "perception/object-perception.h"
 #include "smith/object-smith.h"
 #include "system/artifact-type-definition.h"
@@ -11,100 +12,113 @@
 #include "util/bit-flags-calculator.h"
 
 /*!
- * @brief 光源用のフラグを付与する
+ * @brief エゴ光源のフラグを修正する
+ *
+ * 寿命のある光源で寿命が0ターンの時、光源エゴアイテムに起因するフラグは
+ * 灼熱エゴの火炎耐性を除き付与されないようにする。
+ *
  * @param o_ptr フラグ取得元のオブジェクト構造体ポインタ
- * @param flgs フラグ情報を受け取る配列
+ * @param flags フラグ情報を受け取る配列
  */
-static void object_flags_lite(const ItemEntity *o_ptr, TrFlags &flgs)
+static void modify_ego_lite_flags(const ItemEntity *o_ptr, TrFlags &flags)
 {
-    if (!o_ptr->is_ego()) {
+    if (o_ptr->bi_key.tval() != ItemKindType::LITE) {
         return;
     }
 
-    const auto &ego = egos_info[o_ptr->ego_idx];
-    flgs.set(ego.flags);
-
-    const auto is_out_of_fuel = o_ptr->fuel == 0;
-    if ((o_ptr->ego_idx == EgoType::AURA_FIRE) && is_out_of_fuel && o_ptr->is_lite_requiring_fuel()) {
-        flgs.reset(TR_SH_FIRE);
+    if (!o_ptr->is_lite_requiring_fuel() || o_ptr->fuel != 0) {
         return;
     }
 
-    if ((o_ptr->ego_idx == EgoType::LITE_INFRA) && is_out_of_fuel && o_ptr->is_lite_requiring_fuel()) {
-        flgs.reset(TR_INFRA);
+    switch (o_ptr->ego_idx) {
+    case EgoType::LITE_AURA_FIRE:
+        flags.reset(TR_SH_FIRE);
         return;
-    }
-
-    if ((o_ptr->ego_idx == EgoType::LITE_EYE) && is_out_of_fuel && o_ptr->is_lite_requiring_fuel()) {
-        flgs.reset(TR_RES_BLIND);
-        flgs.reset(TR_SEE_INVIS);
+    case EgoType::LITE_INFRA:
+        flags.reset(TR_INFRA);
+        return;
+    case EgoType::LITE_EYE:
+        flags.reset({ TR_RES_BLIND, TR_SEE_INVIS });
+        return;
+    default:
+        return;
     }
 }
 
 /*!
  * @brief オブジェクトのフラグ類を配列に与える
  * @param o_ptr フラグ取得元のオブジェクト構造体ポインタ
- * @param flgs フラグ情報を受け取る配列
+ * @param flags フラグ情報を受け取る配列
  */
 TrFlags object_flags(const ItemEntity *o_ptr)
 {
     const auto &baseitem = baseitems_info[o_ptr->bi_id];
-    auto flgs = baseitem.flags;
+    auto flags = baseitem.flags;
 
     if (o_ptr->is_fixed_artifact()) {
-        flgs = artifacts_info.at(o_ptr->fixed_artifact_idx).flags;
+        flags = artifacts_info.at(o_ptr->fixed_artifact_idx).flags;
     }
 
-    object_flags_lite(o_ptr, flgs);
-    flgs.set(o_ptr->art_flags);
+    if (o_ptr->is_ego()) {
+        const auto &ego = egos_info[o_ptr->ego_idx];
+        flags.set(ego.flags);
+        modify_ego_lite_flags(o_ptr, flags);
+    }
+
+    flags.set(o_ptr->art_flags);
     if (auto effect = Smith::object_effect(o_ptr); effect.has_value()) {
         auto tr_flags = Smith::get_effect_tr_flags(effect.value());
-        flgs.set(tr_flags);
+        flags.set(tr_flags);
     }
 
     if (Smith::object_activation(o_ptr).has_value()) {
-        flgs.set(TR_ACTIVATE);
+        flags.set(TR_ACTIVATE);
     }
 
-    return flgs;
+    return flags;
 }
 
 /*!
  * @brief オブジェクトの明示されているフラグ類を取得する
  * Obtain the "flags" for an item which are known to the player
  * @param o_ptr フラグ取得元のオブジェクト構造体ポインタ
- * @param flgs フラグ情報を受け取る配列
+ * @param flags フラグ情報を受け取る配列
  */
 TrFlags object_flags_known(const ItemEntity *o_ptr)
 {
-    TrFlags flgs{};
+    TrFlags flags{};
     if (!o_ptr->is_aware()) {
-        return flgs;
+        return flags;
     }
 
     const auto &baseitem = baseitems_info[o_ptr->bi_id];
-    flgs = baseitem.flags;
+    flags = baseitem.flags;
     if (!o_ptr->is_known()) {
-        return flgs;
+        return flags;
     }
 
-    object_flags_lite(o_ptr, flgs);
+    if (o_ptr->is_ego()) {
+        const auto &ego = egos_info[o_ptr->ego_idx];
+        flags.set(ego.flags);
+        modify_ego_lite_flags(o_ptr, flags);
+    }
+
     if (o_ptr->is_fully_known()) {
         if (o_ptr->is_fixed_artifact()) {
-            flgs = artifacts_info.at(o_ptr->fixed_artifact_idx).flags;
+            flags = artifacts_info.at(o_ptr->fixed_artifact_idx).flags;
         }
 
-        flgs.set(o_ptr->art_flags);
+        flags.set(o_ptr->art_flags);
     }
 
     if (auto effect = Smith::object_effect(o_ptr); effect.has_value()) {
         auto tr_flags = Smith::get_effect_tr_flags(effect.value());
-        flgs.set(tr_flags);
+        flags.set(tr_flags);
     }
 
     if (Smith::object_activation(o_ptr).has_value()) {
-        flgs.set(TR_ACTIVATE);
+        flags.set(TR_ACTIVATE);
     }
 
-    return flgs;
+    return flags;
 }

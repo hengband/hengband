@@ -172,8 +172,8 @@ bool ObjectBreaker::can_destroy(ItemEntity *o_ptr) const
         return false;
     }
 
-    auto flgs = object_flags(o_ptr);
-    return flgs.has_not(this->ignore_flg);
+    auto flags = object_flags(o_ptr);
+    return flags.has_not(this->ignore_flg);
 }
 
 /*!

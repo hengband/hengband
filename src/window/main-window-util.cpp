@@ -20,6 +20,9 @@
 #include "timed-effect/timed-effects.h"
 #include "view/display-map.h"
 #include "world/world.h"
+#include <string>
+#include <string_view>
+#include <utility>
 #include <vector>
 
 /*
@@ -36,13 +39,13 @@ int match_autopick;
 ItemEntity *autopick_obj; /*!< 各種自動拾い処理時に使うオブジェクトポインタ */
 int feat_priority; /*!< マップ縮小表示時に表示すべき地形の優先度を保管する */
 
-static concptr simplify_list[][2] = {
+static const std::vector<std::pair<std::string_view, std::string_view>> simplify_list = {
 #ifdef JP
-    { "の魔法書", "" }, { nullptr, nullptr }
+    { "の魔法書", "" }
 #else
     { "^Ring of ", "=" }, { "^Amulet of ", "\"" }, { "^Scroll of ", "?" }, { "^Scroll titled ", "?" }, { "^Wand of ", "-" }, { "^Rod of ", "-" },
     { "^Staff of ", "_" }, { "^Potion of ", "!" }, { " Spellbook ", "" }, { "^Book of ", "" }, { " Magic [", "[" }, { " Book [", "[" }, { " Arts [", "[" },
-    { "^Set of ", "" }, { "^Pair of ", "" }, { nullptr, nullptr }
+    { "^Set of ", "" }, { "^Pair of ", "" }
 #endif
 };
 
@@ -118,71 +121,44 @@ void print_map(PlayerType *player_ptr)
     (void)term_set_cursor(v);
 }
 
+/*!
+ * @brief 短縮マップにおける自動拾い対象のアイテムを短縮表記する
+ * @param player_ptr プレイヤーへの参照ポインタ
+ * @param o_ptr アイテムへの参照ポインタ
+ * @param y 表示する行番号
+ */
 static void display_shortened_item_name(PlayerType *player_ptr, ItemEntity *o_ptr, int y)
 {
     char buf[MAX_NLEN];
     describe_flavor(player_ptr, buf, o_ptr, (OD_NO_FLAVOR | OD_OMIT_PREFIX | OD_NAME_ONLY));
     auto attr = tval_to_attr[enum2i(o_ptr->bi_key.tval()) % 128];
-
     if (player_ptr->effects()->hallucination()->is_hallucinated()) {
         attr = TERM_WHITE;
         strcpy(buf, _("何か奇妙な物", "something strange"));
     }
 
-    char *c = buf;
-    for (c = buf; *c; c++) {
-        for (int i = 0; simplify_list[i][1]; i++) {
-            concptr org_w = simplify_list[i][0];
-
-            if (*org_w == '^') {
-                if (c == buf) {
-                    org_w++;
-                } else {
-                    continue;
-                }
-            }
-
-            if (strncmp(c, org_w, strlen(org_w))) {
-                continue;
-            }
-
-            char *s = c;
-            concptr tmp = simplify_list[i][1];
-            while (*tmp) {
-                *s++ = *tmp++;
-            }
-            tmp = c + strlen(org_w);
-            while (*tmp) {
-                *s++ = *tmp++;
-            }
-            *s = '\0';
-        }
-    }
-
-    c = buf;
-    int len = 0;
-    /* 半角 12 文字分で切る */
-    while (*c) {
-#ifdef JP
-        if (iskanji(*c)) {
-            if (len + 2 > 12) {
+    std::string item_name(buf);
+    for (const auto &simplified_str : simplify_list) {
+        const auto &replacing = simplified_str.first;
+#ifndef JP
+        if (replacing.starts_with('^')) {
+            const auto replacing_without_caret = replacing.substr(1);
+            if (item_name.starts_with(replacing_without_caret)) {
+                item_name.replace(0, replacing_without_caret.length(), simplified_str.second);
                 break;
             }
-            c += 2;
-            len += 2;
-        } else
+        }
 #endif
-        {
-            if (len + 1 > 12) {
-                break;
-            }
-            c++;
-            len++;
+
+        const auto pos = item_name.find(replacing);
+        if (pos != std::string::npos) {
+            item_name.replace(pos, replacing.length(), simplified_str.second);
+            break;
         }
     }
 
-    *c = '\0';
-    term_putstr(0, y, 12, attr, buf);
+    constexpr auto max_shortened_name = 12;
+    term_putstr(0, y, max_shortened_name, attr, item_name);
 }
 
 /*!

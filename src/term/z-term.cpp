@@ -35,6 +35,77 @@ term_type *game_term = nullptr;
 
 /*** Local routines ***/
 
+/*!
+ * @brief オブジェクトが生存している間、画面表示関数の座標をずらす。
+ *
+ * 引数でずらすX座標オフセット、Y座標オフセットをそれぞれ指定する。
+ * 正方向のオフセットのみ有効。負の値が指定された場合、オフセット位置は 0 とする。
+ * 指定された座標が std::nullopt の場合、現在のオフセットを維持する。
+ *
+ * @param x X座標オフセット
+ * @param y Y座標オフセット
+ */
+TermOffsetSetter::TermOffsetSetter(std::optional<TERM_LEN> x, std::optional<TERM_LEN> y)
+    : term(game_term)
+    , orig_offset_x(game_term != nullptr ? game_term->offset_x : 0)
+    , orig_offset_y(game_term != nullptr ? game_term->offset_y : 0)
+{
+    if (this->term == nullptr) {
+        return;
+    }
+
+    if (x.has_value()) {
+        this->term->offset_x = (x.value() > 0) ? x.value() : 0;
+    }
+    if (y.has_value()) {
+        this->term->offset_y = (y.value() > 0) ? y.value() : 0;
+    }
+}
+
+TermOffsetSetter::~TermOffsetSetter()
+{
+    if (this->term == nullptr) {
+        return;
+    }
+
+    this->term->offset_x = this->orig_offset_x;
+    this->term->offset_y = this->orig_offset_y;
+}
+
+/*!
+ * @brief オブジェクトが生存している間、画面表示関数の座標をずらす。
+ *
+ * 表示に使用する領域の大きさを指定し、その領域が画面中央に表示されるように座標をずらす。
+ * 引数で領域の横幅、縦幅をそれぞれ指定する。
+ * 画面の幅より大きな値が指定された場合はオフセット 0 になる。
+ * 指定された幅が std::nullopt の場合、画面の幅全体を使用する（オフセット 0 になる）。
+ *
+ * @param width 表示に使用する領域の横幅
+ * @param height 表示に使用する領域の縦幅
+ */
+TermCenteredOffsetSetter::TermCenteredOffsetSetter(std::optional<TERM_LEN> width, std::optional<TERM_LEN> height)
+    : term(game_term)
+    , orig_centered_wid(game_term != nullptr ? game_term->centered_wid : std::nullopt)
+    , orig_centered_hgt(game_term != nullptr ? game_term->centered_hgt : std::nullopt)
+{
+    const auto offset_x = width.has_value() ? (game_term->wid - width.value()) / 2 : 0;
+    const auto offset_y = height.has_value() ? (game_term->hgt - height.value()) / 2 : 0;
+    this->tos.emplace(offset_x, offset_y);
+
+    game_term->centered_wid = (width < game_term->wid) ? width : std::nullopt;
+    game_term->centered_hgt = (height < game_term->hgt) ? height : std::nullopt;
+}
+
+TermCenteredOffsetSetter::~TermCenteredOffsetSetter()
+{
+    if (this->term == nullptr) {
+        return;
+    }
+
+    this->term->centered_wid = this->orig_centered_wid;
+    this->term->centered_hgt = this->orig_centered_hgt;
+}
+
 /*
  * Initialize a "term_win" (using the given window size)
  */
@@ -194,8 +265,15 @@ static errr term_pict_hack(TERM_LEN x, TERM_LEN y, int n, const TERM_COLOR *ap, 
  * Mentally draw an attr/char at a given location
  * Assumes given location and values are valid.
  */
-void term_queue_char(TERM_LEN x, TERM_LEN y, TERM_COLOR a, char c, TERM_COLOR ta, char tc)
+static void term_queue_char_aux(TERM_LEN x, TERM_LEN y, TERM_COLOR a, char c, TERM_COLOR ta, char tc)
 {
+    if ((x < 0) || (x >= game_term->wid)) {
+        return;
+    }
+    if ((y < 0) || (y >= game_term->hgt)) {
+        return;
+    }
+
     const auto &scrn = game_term->scr;
 
     TERM_COLOR *scr_aa = &scrn->a[y][x];
@@ -242,6 +320,11 @@ void term_queue_char(TERM_LEN x, TERM_LEN y, TERM_COLOR a, char c, TERM_COLOR ta
         }
 }
 
+void term_queue_char(TERM_LEN x, TERM_LEN y, TERM_COLOR a, char c, TERM_COLOR ta, char tc)
+{
+    term_queue_char_aux(x + game_term->offset_x, y + game_term->offset_y, a, c, ta, tc);
+}
+
 /*
  * Bigtile version of term_queue_char().
  * If use_bigtile is FALSE, simply call term_queue_char().
@@ -268,9 +351,12 @@ void term_queue_bigchar(TERM_LEN x, TERM_LEN y, TERM_COLOR a, char c, TERM_COLOR
     byte a2;
     char c2;
 
+    const auto ch_x = x + game_term->offset_x;
+    const auto ch_y = y + game_term->offset_y;
+
     /* If non bigtile mode, call orginal function */
     if (!use_bigtile) {
-        term_queue_char(x, y, a, c, ta, tc);
+        term_queue_char_aux(ch_x, ch_y, a, c, ta, tc);
         return;
     }
 
@@ -311,8 +397,8 @@ void term_queue_bigchar(TERM_LEN x, TERM_LEN y, TERM_COLOR a, char c, TERM_COLOR
     }
 
     /* Display pair of attr/char */
-    term_queue_char(x, y, a, c, ta, tc);
-    term_queue_char(x + 1, y, a2, c2, 0, 0);
+    term_queue_char_aux(ch_x, ch_y, a, c, ta, tc);
+    term_queue_char_aux(ch_x + 1, ch_y, a2, c2, 0, 0);
 }
 
 /*
@@ -1288,6 +1374,9 @@ errr term_gotoxy(TERM_LEN x, TERM_LEN y)
     int w = game_term->wid;
     int h = game_term->hgt;
 
+    x += game_term->offset_x;
+    y += game_term->offset_y;
+
     /* Verify */
     if ((x < 0) || (x >= w)) {
         return -1;
@@ -1312,13 +1401,7 @@ errr term_gotoxy(TERM_LEN x, TERM_LEN y)
  */
 errr term_draw(TERM_LEN x, TERM_LEN y, TERM_COLOR a, char c)
 {
-    int w = game_term->wid;
-    int h = game_term->hgt;
-
-    if ((x < 0) || (x >= w)) {
-        return -1;
-    }
-    if ((y < 0) || (y >= h)) {
+    if (auto res = term_gotoxy(x, y); res != 0) {
         return -1;
     }
 
@@ -1328,7 +1411,7 @@ errr term_draw(TERM_LEN x, TERM_LEN y, TERM_COLOR a, char c)
     }
 
     /* Queue it for later */
-    term_queue_char(x, y, a, c, 0, 0);
+    term_queue_char_aux(game_term->scr->cx, game_term->scr->cy, a, c, 0, 0);
     return 0;
 }
 
@@ -1363,7 +1446,7 @@ errr term_addch(TERM_COLOR a, char c)
     }
 
     /* Queue the given character for display */
-    term_queue_char(game_term->scr->cx, game_term->scr->cy, a, c, 0, 0);
+    term_queue_char_aux(game_term->scr->cx, game_term->scr->cy, a, c, 0, 0);
 
     /* Advance the cursor */
     game_term->scr->cx++;
@@ -1534,6 +1617,9 @@ errr term_erase(TERM_LEN x, TERM_LEN y, int n)
     if (term_gotoxy(x, y)) {
         return -1;
     }
+
+    x = game_term->scr->cx;
+    y = game_term->scr->cy;
 
     /* Force legal size */
     if (x + n > w) {
@@ -1768,9 +1854,8 @@ errr term_get_cursor(int *v)
  */
 errr term_get_size(TERM_LEN *w, TERM_LEN *h)
 {
-    /* Access the cursor */
-    (*w) = game_term->wid;
-    (*h) = game_term->hgt;
+    (*w) = game_term->centered_wid.value_or(game_term->wid);
+    (*h) = game_term->centered_hgt.value_or(game_term->hgt);
     return 0;
 }
 
@@ -1780,8 +1865,8 @@ errr term_get_size(TERM_LEN *w, TERM_LEN *h)
 errr term_locate(TERM_LEN *x, TERM_LEN *y)
 {
     /* Access the cursor */
-    (*x) = game_term->scr->cx;
-    (*y) = game_term->scr->cy;
+    *x = game_term->scr->cx - game_term->offset_x;
+    *y = game_term->scr->cy - game_term->offset_y;
 
     /* Warn about "useless" cursor */
     if (game_term->scr->cu) {
@@ -1800,6 +1885,9 @@ errr term_what(TERM_LEN x, TERM_LEN y, TERM_COLOR *a, char *c)
 {
     TERM_LEN w = game_term->wid;
     TERM_LEN h = game_term->hgt;
+
+    x += game_term->offset_x;
+    y += game_term->offset_y;
 
     if ((x < 0) || (x >= w)) {
         return -1;

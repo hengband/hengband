@@ -196,10 +196,16 @@ static std::string describe_non_pet(const PlayerType &player, const MonsterEntit
     }
 
     if (any_bits(mode, MD_INDEF_VISIBLE)) {
-#ifndef JP
-        return is_a_vowel(name[0]) ? "an " : "a ";
-#endif
+#ifdef JP
         return name;
+#else
+        std::stringstream ss;
+        const auto first_char = name[0];
+        const auto article = is_a_vowel(first_char) ? "an " : "a ";
+        ss << article;
+        ss << name;
+        return ss.str();
+#endif
     }
 
     std::stringstream ss;

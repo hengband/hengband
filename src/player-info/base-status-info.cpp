@@ -15,8 +15,8 @@ void set_equipment_influence(PlayerType *player_ptr, self_info_type *self_ptr)
             continue;
         }
 
-        auto tflgs = object_flags(o_ptr);
-        self_ptr->flags.set(tflgs);
+        auto tflags = object_flags(o_ptr);
+        self_ptr->flags.set(tflags);
     }
 
     if (self_ptr->flags.has(TR_STR)) {

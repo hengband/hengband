@@ -142,11 +142,11 @@ static bool calc_weapon_one_hand(ItemEntity *o_ptr, int hand, int *damage, int *
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param o_ptr 装備中の武器への参照ポインタ
  * @param basedam 素手における直接攻撃のダメージ
- * @param flgs オブジェクトフラグ群
+ * @param flags オブジェクトフラグ群
  * @return 強化後の素手ダメージ
  * @todo ヴォーパル計算処理が building-craft-weapon::compare_weapon_aux() と多重実装.
  */
-static int strengthen_basedam(PlayerType *player_ptr, ItemEntity *o_ptr, int basedam, const TrFlags &flgs)
+static int strengthen_basedam(PlayerType *player_ptr, ItemEntity *o_ptr, int basedam, const TrFlags &flags)
 {
     const auto is_vorpal_blade = o_ptr->is_specific_artifact(FixedArtifactId::VORPAL_BLADE);
     const auto is_chainsword = o_ptr->is_specific_artifact(FixedArtifactId::CHAINSWORD);
@@ -154,7 +154,7 @@ static int strengthen_basedam(PlayerType *player_ptr, ItemEntity *o_ptr, int bas
         /* vorpal blade */
         basedam *= 5;
         basedam /= 3;
-    } else if (flgs.has(TR_VORPAL)) {
+    } else if (flags.has(TR_VORPAL)) {
         /* vorpal flag only */
         basedam *= 11;
         basedam /= 9;
@@ -162,7 +162,7 @@ static int strengthen_basedam(PlayerType *player_ptr, ItemEntity *o_ptr, int bas
 
     // 理力
     bool is_force = !PlayerClass(player_ptr).equals(PlayerClassType::SAMURAI);
-    is_force &= flgs.has(TR_FORCE_WEAPON);
+    is_force &= flags.has(TR_FORCE_WEAPON);
     is_force &= player_ptr->csp > (o_ptr->dd * o_ptr->ds / 5);
     if (is_force) {
         basedam = basedam * 7 / 2;
@@ -276,11 +276,11 @@ static void calc_two_hands(PlayerType *player_ptr, int *damage, int *to_h)
         }
 
         basedam = ((o_ptr->dd + player_ptr->to_dd[i]) * (o_ptr->ds + player_ptr->to_ds[i] + 1)) * 50;
-        auto flgs = object_flags_known(o_ptr);
+        auto flags = object_flags_known(o_ptr);
 
         bool impact = player_ptr->impact != 0;
         basedam = calc_expect_crit(player_ptr, o_ptr->weight, to_h[i], basedam, player_ptr->dis_to_h[i], poison_needle, impact);
-        basedam = strengthen_basedam(player_ptr, o_ptr, basedam, flgs);
+        basedam = strengthen_basedam(player_ptr, o_ptr, basedam, flags);
         damage[i] += basedam;
         if (o_ptr->bi_key == BaseitemKey(ItemKindType::SWORD, SV_POISON_NEEDLE)) {
             damage[i] = 1;

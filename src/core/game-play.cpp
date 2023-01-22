@@ -104,7 +104,7 @@ static void restore_windows(PlayerType *player_ptr)
     w_ptr->character_icky_depth = 1;
     term_activate(angband_terms[0]);
     angband_terms[0]->resize_hook = resize_map;
-    for (auto i = 0U; i < angband_terms.size(); ++i) {
+    for (auto i = 1U; i < angband_terms.size(); ++i) {
         if (angband_terms[i]) {
             angband_terms[i]->resize_hook = redraw_window;
         }

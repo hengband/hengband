@@ -37,6 +37,7 @@
 #include "store/store-owners.h"
 #include "store/store.h"
 #include "system/player-type-definition.h"
+#include "term/gameterm.h"
 #include "term/z-form.h"
 #include "util/enum-converter.h"
 #include "view/display-messages.h"
@@ -90,6 +91,8 @@ static void write_birth_diary(PlayerType *player_ptr)
  */
 void player_birth(PlayerType *player_ptr)
 {
+    TermCenteredOffsetSetter tcos(MAIN_TERM_MIN_COLS, MAIN_TERM_MIN_ROWS);
+
     w_ptr->play_time = 0;
     wipe_monsters_list(player_ptr);
     player_wipe_without_name(player_ptr);

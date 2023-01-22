@@ -23,8 +23,8 @@
  */
 static bool is_blessed_item(const ItemEntity *item_ptr)
 {
-    auto flgs = object_flags(item_ptr);
-    return flgs.has(TR_BLESSED);
+    auto flags = object_flags(item_ptr);
+    return flags.has(TR_BLESSED);
 }
 
 static bool check_store_general(const ItemEntity &item)

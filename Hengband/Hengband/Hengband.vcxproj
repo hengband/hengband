@@ -622,7 +622,6 @@
     <ClCompile Include="..\..\src\view\display-map.cpp" />
     <ClCompile Include="..\..\src\view\display-self-info.cpp" />
     <ClCompile Include="..\..\src\view\display-scores.cpp" />
-    <ClCompile Include="..\..\src\window\display-sub-window-spells.cpp" />
     <ClCompile Include="..\..\src\window\display-sub-windows.cpp" />
     <ClCompile Include="..\..\src\window\main-window-left-frame.cpp" />
     <ClCompile Include="..\..\src\window\main-window-row-column.cpp" />
@@ -1825,7 +1824,6 @@
     <ClInclude Include="..\..\src\view\display-monster-status.h" />
     <ClInclude Include="..\..\src\view\display-self-info.h" />
     <ClInclude Include="..\..\src\view\display-scores.h" />
-    <ClInclude Include="..\..\src\window\display-sub-window-spells.h" />
     <ClInclude Include="..\..\src\window\display-sub-windows.h" />
     <ClInclude Include="..\..\src\window\main-window-left-frame.h" />
     <ClInclude Include="..\..\src\window\main-window-row-column.h" />

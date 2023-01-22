@@ -218,10 +218,6 @@ struct term_data {
 /* Max number of windows on screen */
 #define MAX_TERM_DATA 8
 
-/* Minimum main term size */
-#define MIN_TERM0_LINES 24
-#define MIN_TERM0_COLS 80
-
 /* Information about our windows */
 static term_data data[MAX_TERM_DATA];
 
@@ -1287,9 +1283,9 @@ errr init_gcu(int argc, char *argv[])
     core_aux = hook_quit;
 
     /* Hack -- Require large screen, or Quit with message */
-    i = ((LINES < 24) || (COLS < 80));
+    i = ((LINES < MAIN_TERM_MIN_ROWS) || (COLS < MAIN_TERM_MIN_COLS));
     if (i) {
-        quit_fmt("%s needs an 80x24 'curses' screen", std::string(VARIANT_NAME).data());
+        quit_fmt("%s needs an %dx%d 'curses' screen", std::string(VARIANT_NAME).data(), MAIN_TERM_MIN_COLS, MAIN_TERM_MIN_ROWS);
     }
 
 #ifdef A_COLOR
@@ -1402,36 +1398,36 @@ errr init_gcu(int argc, char *argv[])
             switch (i) {
             /* Upper left */
             case 0: {
-                rows = 24;
-                cols = 80;
+                rows = TERM_DEFAULT_ROWS;
+                cols = TERM_DEFAULT_COLS;
                 y = x = 0;
                 break;
             }
 
             /* Lower left */
             case 1: {
-                rows = LINES - 25;
-                cols = 80;
-                y = 25;
+                rows = LINES - TERM_DEFAULT_ROWS - 1;
+                cols = TERM_DEFAULT_COLS;
+                y = TERM_DEFAULT_ROWS + 1;
                 x = 0;
                 break;
             }
 
             /* Upper right */
             case 2: {
-                rows = 24;
-                cols = COLS - 81;
+                rows = TERM_DEFAULT_ROWS;
+                cols = COLS - TERM_DEFAULT_COLS - 1;
                 y = 0;
-                x = 81;
+                x = TERM_DEFAULT_COLS + 1;
                 break;
             }
 
             /* Lower right */
             case 3: {
-                rows = LINES - 25;
-                cols = COLS - 81;
-                y = 25;
-                x = 81;
+                rows = LINES - TERM_DEFAULT_ROWS - 1;
+                cols = COLS - TERM_DEFAULT_COLS - 1;
+                y = TERM_DEFAULT_ROWS + 1;
+                x = TERM_DEFAULT_COLS + 1;
                 break;
             }
 
@@ -1594,8 +1590,8 @@ errr init_gcu(int argc, char *argv[])
         }
 
         /* Map Terminal */
-        if (remaining.cx < MIN_TERM0_COLS || remaining.cy < MIN_TERM0_LINES) {
-            quit_fmt("Failed: %s needs an %dx%d map screen, not %dx%d", std::string(VARIANT_NAME).data(), MIN_TERM0_COLS, MIN_TERM0_LINES, remaining.cx, remaining.cy);
+        if (remaining.cx < MAIN_TERM_MIN_COLS || remaining.cy < MAIN_TERM_MIN_ROWS) {
+            quit_fmt("Failed: %s needs an %dx%d map screen, not %dx%d", std::string(VARIANT_NAME).data(), MAIN_TERM_MIN_COLS, MAIN_TERM_MIN_ROWS, remaining.cx, remaining.cy);
         }
         data[0].r = remaining;
         term_data_init(&data[0]);
