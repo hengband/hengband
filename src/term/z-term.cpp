@@ -1874,6 +1874,9 @@ errr term_what(TERM_LEN x, TERM_LEN y, TERM_COLOR *a, char *c)
     TERM_LEN w = game_term->wid;
     TERM_LEN h = game_term->hgt;
 
+    x += game_term->offset_x;
+    y += game_term->offset_y;
+
     if ((x < 0) || (x >= w)) {
         return -1;
     }
