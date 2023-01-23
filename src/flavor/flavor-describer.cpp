@@ -581,37 +581,37 @@ std::string describe_flavor(PlayerType *player_ptr, const ItemEntity *o_ptr, BIT
 {
     const auto &item = *o_ptr;
     const auto opt = decide_describe_option(item, mode);
-    std::stringstream desc_ss;
-    desc_ss << describe_named_item(player_ptr, item, opt);
+    std::stringstream ss;
+    ss << describe_named_item(player_ptr, item, opt);
 
     if (any_bits(mode, OD_NAME_ONLY) || (o_ptr->bi_id == 0)) {
-        return desc_ss.str();
+        return ss.str();
     }
 
-    desc_ss << describe_chest(item, opt)
-            << describe_weapon_dice_or_bow_power(player_ptr, item, opt)
-            << describe_accuracy_and_damage_bonus(item, opt);
+    ss << describe_chest(item, opt)
+       << describe_weapon_dice_or_bow_power(player_ptr, item, opt)
+       << describe_accuracy_and_damage_bonus(item, opt);
 
     if (none_bits(mode, OD_DEBUG)) {
         const auto &bow = player_ptr->inventory_list[INVEN_BOW];
         const auto tval = item.bi_key.tval();
         if ((bow.bi_id != 0) && (tval == bow.get_arrow_kind())) {
-            desc_ss << describe_ammo_detail(player_ptr, item, bow, opt);
+            ss << describe_ammo_detail(player_ptr, item, bow, opt);
         } else if (PlayerClass(player_ptr).equals(PlayerClassType::NINJA) && (tval == ItemKindType::SPIKE)) {
-            desc_ss << describe_spike_detail(player_ptr);
+            ss << describe_spike_detail(player_ptr);
         }
     }
 
-    desc_ss << describe_ac(item, opt);
+    ss << describe_ac(item, opt);
     if (any_bits(mode, OD_NAME_AND_ENCHANT)) {
-        return desc_ss.str();
+        return ss.str();
     }
 
-    desc_ss << describe_remaining(item, opt);
+    ss << describe_remaining(item, opt);
     if (any_bits(mode, OD_OMIT_INSCRIPTION)) {
-        return desc_ss.str();
+        return ss.str();
     }
 
-    desc_ss << describe_inscription(item, opt);
-    return desc_ss.str();
+    ss << describe_inscription(item, opt);
+    return ss.str();
 }
