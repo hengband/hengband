@@ -279,10 +279,11 @@ static void attack_golden_hammer(PlayerType *player_ptr, player_attack_type *pa_
  */
 void change_monster_stat(PlayerType *player_ptr, player_attack_type *pa_ptr, const POSITION y, const POSITION x, int *num)
 {
-    auto *r_ptr = &monraces_info[pa_ptr->m_ptr->r_idx];
-    auto *o_ptr = &player_ptr->inventory_list[INVEN_MAIN_HAND + pa_ptr->hand];
-
-    if (any_bits(player_ptr->special_attack, ATTACK_CONFUSE) || pa_ptr->chaos_effect == CE_CONFUSION || pa_ptr->mode == HISSATSU_CONF || SpellHex(player_ptr).is_spelling_specific(HEX_CONFUSION)) {
+    auto should_confuse = any_bits(player_ptr->special_attack, ATTACK_CONFUSE);
+    should_confuse |= pa_ptr->chaos_effect == CE_CONFUSION;
+    should_confuse |= pa_ptr->mode == HISSATSU_CONF;
+    should_confuse |= SpellHex(player_ptr).is_spelling_specific(HEX_CONFUSION);
+    if (should_confuse) {
         attack_confuse(player_ptr, pa_ptr);
     }
 
@@ -306,11 +307,12 @@ void change_monster_stat(PlayerType *player_ptr, player_attack_type *pa_ptr, con
         attack_teleport_away(player_ptr, pa_ptr, num);
     }
 
-    if (pa_ptr->chaos_effect == CE_POLYMORPH && randint1(90) > r_ptr->level) {
+    if (pa_ptr->chaos_effect == CE_POLYMORPH && (randint1(90) > monraces_info[pa_ptr->m_ptr->r_idx].level)) {
         attack_polymorph(player_ptr, pa_ptr, y, x);
     }
 
-    if (o_ptr->is_specific_artifact(FixedArtifactId::G_HAMMER)) {
+    const auto &item = player_ptr->inventory_list[enum2i(INVEN_MAIN_HAND) + pa_ptr->hand];
+    if (item.is_specific_artifact(FixedArtifactId::G_HAMMER)) {
         attack_golden_hammer(player_ptr, pa_ptr);
     }
 }
