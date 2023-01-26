@@ -155,7 +155,7 @@ static void do_cmd_knowledge_inventory_aux(PlayerType *player_ptr, FILE *fff, It
     char tmp_item_name[MAX_NLEN];
     describe_flavor(player_ptr, tmp_item_name, o_ptr, OD_NAME_ONLY);
     constexpr auto max_item_length = 26;
-    auto item_name = trim_kanji(std::string(tmp_item_name), max_item_length);
+    auto item_name = str_substr(tmp_item_name, 0, max_item_length);
     std::stringstream ss;
     ss << item_name;
     const int item_length = ss.tellp();
