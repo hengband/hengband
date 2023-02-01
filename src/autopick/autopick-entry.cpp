@@ -726,10 +726,9 @@ concptr autopick_line_from_entry_kill(autopick_type *entry)
  */
 bool entry_from_choosed_object(PlayerType *player_ptr, autopick_type *entry)
 {
-    concptr q = _("どのアイテムを登録しますか? ", "Enter which item? ");
-    concptr s = _("アイテムを持っていない。", "You have nothing to enter.");
-    ItemEntity *o_ptr;
-    o_ptr = choose_object(player_ptr, nullptr, q, s, USE_INVEN | USE_FLOOR | USE_EQUIP);
+    constexpr auto q = _("どのアイテムを登録しますか? ", "Enter which item? ");
+    constexpr auto s = _("アイテムを持っていない。", "You have nothing to enter.");
+    auto *o_ptr = choose_object(player_ptr, nullptr, q, s, USE_INVEN | USE_FLOOR | USE_EQUIP);
     if (!o_ptr) {
         return false;
     }

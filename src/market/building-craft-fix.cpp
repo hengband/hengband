@@ -92,8 +92,8 @@ static std::pair<bool, ItemEntity *> select_repairing_broken_weapon(PlayerType *
 {
     prt(_("修復には材料となるもう1つの武器が必要です。", "Hand one material weapon to repair a broken weapon."), row, 2);
     prt(_("材料に使用した武器はなくなります！", "The material weapon will disappear after repairing!!"), row + 1, 2);
-    const auto q = _("どの折れた武器を修復しますか？", "Repair which broken weapon? ");
-    const auto s = _("修復できる折れた武器がありません。", "You have no broken weapon to repair.");
+    constexpr auto q = _("どの折れた武器を修復しますか？", "Repair which broken weapon? ");
+    constexpr auto s = _("修復できる折れた武器がありません。", "You have no broken weapon to repair.");
     auto *o_ptr = choose_object(player_ptr, item, q, s, (USE_INVEN | USE_EQUIP), FuncItemTester(&ItemEntity::is_broken_weapon));
     if (o_ptr == nullptr) {
         return { false, nullptr };
