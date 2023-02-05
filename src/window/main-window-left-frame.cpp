@@ -403,7 +403,12 @@ void print_health(PlayerType *player_ptr, bool riding)
 
     const int max_width = 12; // 表示幅
 
-    term_erase(col, row, max_width);
+    TERM_LEN width, height;
+    term_get_size(&width, &height);
+    const auto extra_line_count = riding ? 0 : height - MAIN_TERM_MIN_ROWS;
+    for (auto y = row; y < row + extra_line_count + 1; ++y) {
+        term_erase(col, y, max_width);
+    }
 
     if (!monster_idx.has_value()) {
         return;
@@ -432,10 +437,6 @@ void print_health(PlayerType *player_ptr, bool riding)
 
     int col_offset = 0;
     int row_offset = 1;
-
-    TERM_LEN width, height;
-    term_get_size(&width, &height);
-    const auto extra_line_count = height - MAIN_TERM_MIN_ROWS;
 
     // 一時的状態異常
     // MAX_WIDTHを超えたら次の行に移動する
