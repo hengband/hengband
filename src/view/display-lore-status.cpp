@@ -51,12 +51,12 @@ void display_monster_concrete_abilities(lore_type *lore_ptr)
         lore_ptr->color[lore_ptr->vn++] = TERM_WHITE;
     }
 
-    if (lore_ptr->feature_flags.has(MonsterFeatureType::CAN_FLY)) {
+    if (lore_ptr->r_ptr->feature_flags.has(MonsterFeatureType::CAN_FLY)) {
         lore_ptr->vp[lore_ptr->vn] = _("空を飛ぶ", "fly");
         lore_ptr->color[lore_ptr->vn++] = TERM_WHITE;
     }
 
-    if (lore_ptr->feature_flags.has(MonsterFeatureType::CAN_SWIM)) {
+    if (lore_ptr->r_ptr->feature_flags.has(MonsterFeatureType::CAN_SWIM)) {
         lore_ptr->vp[lore_ptr->vn] = _("水を渡る", "swim");
         lore_ptr->color[lore_ptr->vn++] = TERM_WHITE;
     }
@@ -126,7 +126,7 @@ void display_monster_abilities(lore_type *lore_ptr)
 
 void display_monster_constitutions(lore_type *lore_ptr)
 {
-    if (lore_ptr->feature_flags.has(MonsterFeatureType::AQUATIC)) {
+    if (lore_ptr->r_ptr->feature_flags.has(MonsterFeatureType::AQUATIC)) {
         hooked_roff(format(_("%s^は水中に棲んでいる。", "%s^ lives in water.  "), Who::who(lore_ptr->msex)));
     }
 
