@@ -19,7 +19,7 @@ const std::vector<ArenaMonsterEntry> arena_info = {
     { MonsterRaceId::NOBORTA, { ItemKindType::AMULET, SV_AMULET_ADORNMENT } },
     { MonsterRaceId::MORI_TROLL, { ItemKindType::FOOD, SV_FOOD_PINT_OF_WINE } },
     { MonsterRaceId::IMP, { ItemKindType::POTION, SV_POTION_SPEED } },
-    { MonsterRaceId::LION_HEART, { ItemKindType::NONE, 0 } },
+    { MonsterRaceId::LION_HEART, { ItemKindType::ROD, SV_ROD_DETECT_TRAP } },
     { MonsterRaceId::MASTER_YEEK, { ItemKindType::POTION, SV_POTION_CURING } },
     { MonsterRaceId::SABRE_TIGER, { ItemKindType::WAND, SV_WAND_STONE_TO_MUD } },
     { MonsterRaceId::LIZARD_KING, { ItemKindType::WAND, SV_WAND_TELEPORT_AWAY } },
