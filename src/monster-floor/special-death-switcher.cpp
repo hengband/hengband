@@ -43,7 +43,6 @@
 #include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
 #include "view/display-messages.h"
-#include "world/world.h"
 
 /*!
  * @brief 死亡召喚に使用するモード選択
@@ -187,13 +186,7 @@ static void on_dead_sacred_treasures(PlayerType *player_ptr, monster_death_type 
         a_ptr = &artifacts_info.at(a_idx);
     } while (a_ptr->is_generated);
 
-    if (!create_named_art(player_ptr, a_idx, md_ptr->md_y, md_ptr->md_x)) {
-        return;
-    }
-
-    if (w_ptr->character_dungeon) {
-        a_ptr->floor_id = player_ptr->floor_id;
-    }
+    create_named_art(player_ptr, a_idx, md_ptr->md_y, md_ptr->md_x);
 }
 
 static void on_dead_serpent(PlayerType *player_ptr, monster_death_type *md_ptr)
