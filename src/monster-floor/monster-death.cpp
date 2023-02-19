@@ -185,15 +185,7 @@ bool drop_single_artifact(PlayerType *player_ptr, monster_death_type *md_ptr, Fi
         return false;
     }
 
-    if (!create_named_art(player_ptr, a_idx, md_ptr->md_y, md_ptr->md_x)) {
-        return false;
-    }
-
-    if (w_ptr->character_dungeon) {
-        a_ref.floor_id = player_ptr->floor_id;
-    }
-
-    return true;
+    return create_named_art(player_ptr, a_idx, md_ptr->md_y, md_ptr->md_x);
 }
 
 static short drop_dungeon_final_artifact(PlayerType *player_ptr, monster_death_type *md_ptr)
@@ -211,11 +203,7 @@ static short drop_dungeon_final_artifact(PlayerType *player_ptr, monster_death_t
         return bi_id;
     }
 
-    if (create_named_art(player_ptr, a_idx, md_ptr->md_y, md_ptr->md_x)) {
-        if (w_ptr->character_dungeon) {
-            a_ref.floor_id = player_ptr->floor_id;
-        }
-    }
+    create_named_art(player_ptr, a_idx, md_ptr->md_y, md_ptr->md_x);
 
     return dungeon.final_object ? bi_id : 0;
 }

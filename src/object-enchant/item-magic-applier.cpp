@@ -185,9 +185,6 @@ bool ItemMagicApplier::set_fixed_artifact_generation_info()
     apply_artifact(this->player_ptr, this->o_ptr);
     auto &a_ref = artifacts_info.at(this->o_ptr->fixed_artifact_idx);
     a_ref.is_generated = true;
-    if (w_ptr->character_dungeon) {
-        a_ref.floor_id = this->player_ptr->floor_id;
-    }
 
     return true;
 }
