@@ -1,4 +1,4 @@
-%define version 3.0.0Alpha76
+%define version 3.0.0Alpha77
 %define release 1
 %global debug_package %{nil}
 
@@ -96,13 +96,14 @@ exit 0
 %changelog
 
 * Sun Feb 19 2023 Shiro Hara <white@vx-xv.com>
+- hengband RPM 3.0.0Alpha release 77
 - Remove Packacger
 - Remove Buildroot
 - Add %license
 - Fix Version and Release
 
 * Fri Feb 17 2023 Shiro Hara <white@vx-xv.com>
-- hengband RPM 3.0.0a release 76
+- hengband RPM 3.0.0Alpha release 76
 - Renew Url
 - Renew Packager
 - Change Copyright to License
