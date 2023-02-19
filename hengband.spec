@@ -96,14 +96,21 @@ exit 0
 %changelog
 
 * Sun Feb 19 2023 Shiro Hara <white@vx-xv.com>
+<<<<<<< HEAD
 - hengband RPM 3.0.0Alpha release 77
+=======
+>>>>>>> c08938ac1a1265333f77b10e993cd7b94ec0d0c3
 - Remove Packacger
 - Remove Buildroot
 - Add %license
 - Fix Version and Release
 
 * Fri Feb 17 2023 Shiro Hara <white@vx-xv.com>
+<<<<<<< HEAD
 - hengband RPM 3.0.0Alpha release 76
+=======
+- hengband RPM 3.0.0a release 76
+>>>>>>> c08938ac1a1265333f77b10e993cd7b94ec0d0c3
 - Renew Url
 - Renew Packager
 - Change Copyright to License
