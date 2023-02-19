@@ -1,5 +1,5 @@
-%define version 3.0.0Alpha
-%define release 76
+%define version 3.0.0Alpha76
+%define release 1
 %global debug_package %{nil}
 
 Summary: hengband %{version}
@@ -8,10 +8,8 @@ Version: %{version}
 Release: %{release}
 License: unknown
 Group: Amusements/Games
-Packager: Shiro Hara <white@vx-xv.com>
 Url: https://hengband.github.io
-Source: hengband-%{version}%{release}.tar.gz
-Buildroot: %{_tmppath}/%{name}-%{version}-root
+Source: hengband-%{version}.tar.gz
 Requires: ncurses-libs libstdc++ libcurl
 BuildRequires: autoconf automake gcc-c++ ncurses-devel libcurl-devel nkf
 
@@ -47,7 +45,6 @@ rm -rf $RPM_BUILD_ROOT
 mkdir -p $RPM_BUILD_ROOT/%{_bindir}
 mkdir -p $RPM_BUILD_ROOT/%{_datadir}/games/hengband
 %makeinstall
-#cp src/hengband $RPM_BUILD_ROOT/%{_bindir}
 cp -R lib/ -p $RPM_BUILD_ROOT/%{_datadir}/games/hengband/
 find $RPM_BUILD_ROOT/%{_datadir}/games/hengband/ -type f -name "Makefile*" -exec rm {} \;
 find $RPM_BUILD_ROOT/%{_datadir}/games/hengband/ -type f -name "delete.me*" -exec rm {} \;
@@ -94,8 +91,15 @@ exit 0
 %{_datadir}/games/hengband/lib/pref/*.prf
 %{_datadir}/games/hengband/lib/xtra/graf/8x8.bmp
 %doc readme.md readme_angband readme-eng.md
+%license lib/help/jlicense.txt
 
 %changelog
+
+* Sun Feb 19 2023 Shiro Hara <white@vx-xv.com>
+- Remove Packacger
+- Remove Buildroot
+- Add %license
+- Fix Version and Release
 
 * Fri Feb 17 2023 Shiro Hara <white@vx-xv.com>
 - hengband RPM 3.0.0a release 76
