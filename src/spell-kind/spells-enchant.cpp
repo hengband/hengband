@@ -45,7 +45,7 @@ bool artifact_scroll(PlayerType *player_ptr)
 #endif
 
     bool okay = false;
-    if (o_ptr->is_artifact()) {
+    if (o_ptr->is_fixed_or_random_artifact()) {
 #ifdef JP
         msg_format("%sは既に伝説のアイテムです！", o_name);
 #else

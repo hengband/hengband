@@ -287,7 +287,7 @@ static int mass_book_produce(const PRICE cost)
 static int mass_equipment_produce(const ItemEntity &item, const PRICE cost)
 {
     int size = 1;
-    if (item.is_artifact() || item.is_ego()) {
+    if (item.is_fixed_or_random_artifact() || item.is_ego()) {
         return size;
     }
 

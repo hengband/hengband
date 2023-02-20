@@ -66,7 +66,7 @@ bool identify_item(PlayerType *player_ptr, ItemEntity *o_ptr)
     }
 
     if (!o_ptr->is_fully_known()) {
-        if (o_ptr->is_artifact() || one_in_(5)) {
+        if (o_ptr->is_fixed_or_random_artifact() || one_in_(5)) {
             chg_virtue(player_ptr, V_KNOWLEDGE, 1);
         }
     }

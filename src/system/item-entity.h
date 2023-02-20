@@ -94,7 +94,7 @@ public:
     bool is_rare() const;
     bool is_ego() const;
     bool is_smith() const;
-    bool is_artifact() const;
+    bool is_fixed_or_random_artifact() const;
     bool is_fixed_artifact() const;
     bool is_random_artifact() const;
     bool is_nameless() const;

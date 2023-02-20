@@ -74,7 +74,7 @@ static bool determine_spcial_item_type(ItemEntity *o_ptr, ItemKindType tval)
     is_special_item_type |= bi_key == BaseitemKey(ItemKindType::HELM, SV_DRAGON_HELM);
     is_special_item_type |= bi_key == BaseitemKey(ItemKindType::GLOVES, SV_SET_OF_DRAGON_GLOVES);
     is_special_item_type |= bi_key == BaseitemKey(ItemKindType::BOOTS, SV_PAIR_OF_DRAGON_GREAVE);
-    is_special_item_type |= o_ptr->is_artifact();
+    is_special_item_type |= o_ptr->is_fixed_or_random_artifact();
     return (o_ptr->is_wearable() && o_ptr->is_ego()) || is_special_item_type;
 }
 

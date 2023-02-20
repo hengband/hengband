@@ -139,7 +139,7 @@ void calc_android_exp(PlayerType *player_ptr)
         is_dragon_protector |= bi_key == BaseitemKey(ItemKindType::GLOVES, SV_SET_OF_DRAGON_GLOVES);
         is_dragon_protector |= bi_key == BaseitemKey(ItemKindType::BOOTS, SV_PAIR_OF_DRAGON_GREAVE);
         const auto is_diamond_edge = bi_key == BaseitemKey(ItemKindType::SWORD, SV_DIAMOND_EDGE);
-        if (o_ptr->is_artifact() || o_ptr->is_ego() || is_dragon_protector || is_diamond_edge) {
+        if (o_ptr->is_fixed_or_random_artifact() || o_ptr->is_ego() || is_dragon_protector || is_diamond_edge) {
             if (level > 65) {
                 level = 35 + (level - 65) / 5;
             } else if (level > 35) {

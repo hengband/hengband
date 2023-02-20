@@ -65,7 +65,7 @@ bool affect_item(PlayerType *player_ptr, MONSTER_IDX who, POSITION r, POSITION y
         bool plural = (o_ptr->number > 1);
 #endif
         auto flags = object_flags(o_ptr);
-        bool is_artifact = o_ptr->is_artifact();
+        bool is_fixed_or_random_artifact = o_ptr->is_fixed_or_random_artifact();
         switch (typ) {
         case AttributeType::ACID: {
             if (BreakerAcid().hates(o_ptr)) {
@@ -266,7 +266,7 @@ bool affect_item(PlayerType *player_ptr, MONSTER_IDX who, POSITION r, POSITION y
             describe_flavor(player_ptr, o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
         }
 
-        if ((is_artifact || ignore)) {
+        if ((is_fixed_or_random_artifact || ignore)) {
             if (known && o_ptr->marked.has(OmType::FOUND)) {
                 msg_format(_("%sは影響を受けない！", (plural ? "The %s are unaffected!" : "The %s is unaffected!")), o_name);
             }
