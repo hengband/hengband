@@ -438,7 +438,7 @@ void sense_inventory2(PlayerType *player_ptr)
  */
 item_feel_type pseudo_value_check_heavy(ItemEntity *o_ptr)
 {
-    if (o_ptr->is_artifact()) {
+    if (o_ptr->is_fixed_or_random_artifact()) {
         if (o_ptr->is_cursed() || o_ptr->is_broken()) {
             return FEEL_TERRIBLE;
         }
@@ -493,7 +493,7 @@ item_feel_type pseudo_value_check_light(ItemEntity *o_ptr)
         return FEEL_BROKEN;
     }
 
-    if (o_ptr->is_artifact()) {
+    if (o_ptr->is_fixed_or_random_artifact()) {
         return FEEL_UNCURSED;
     }
 

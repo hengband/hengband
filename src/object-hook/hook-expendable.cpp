@@ -70,7 +70,7 @@ bool item_tester_hook_quaff(PlayerType *player_ptr, const ItemEntity *o_ptr)
 bool can_player_destroy_object(PlayerType *player_ptr, ItemEntity *o_ptr)
 {
     /* Artifacts cannot be destroyed */
-    if (!o_ptr->is_artifact()) {
+    if (!o_ptr->is_fixed_or_random_artifact()) {
         return true;
     }
 

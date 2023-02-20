@@ -399,7 +399,7 @@ void autopick_entry_from_object(PlayerType *player_ptr, autopick_type *entry, It
             }
 
             ADD_FLG(FLG_EGO);
-        } else if (o_ptr->is_artifact()) {
+        } else if (o_ptr->is_fixed_or_random_artifact()) {
             ADD_FLG(FLG_ARTIFACT);
         } else {
             if (o_ptr->is_equipment()) {

@@ -498,7 +498,7 @@ static void wiz_statistics(PlayerType *player_ptr, ItemEntity *o_ptr)
  */
 static void wiz_reroll_item(PlayerType *player_ptr, ItemEntity *o_ptr)
 {
-    if (o_ptr->is_artifact()) {
+    if (o_ptr->is_fixed_or_random_artifact()) {
         return;
     }
 
@@ -561,7 +561,7 @@ static void wiz_reroll_item(PlayerType *player_ptr, ItemEntity *o_ptr)
         case 's':
             q_ptr->prep(o_ptr->bi_id);
             ItemMagicApplier(player_ptr, q_ptr, player_ptr->current_floor_ptr->dun_level, AM_GOOD | AM_GREAT | AM_SPECIAL).execute();
-            if (!q_ptr->is_artifact()) {
+            if (!q_ptr->is_fixed_or_random_artifact()) {
                 become_random_artifact(player_ptr, q_ptr, false);
             }
 
@@ -591,7 +591,7 @@ static void wiz_reroll_item(PlayerType *player_ptr, ItemEntity *o_ptr)
  */
 static void wiz_tweak_item(PlayerType *player_ptr, ItemEntity *o_ptr)
 {
-    if (o_ptr->is_artifact()) {
+    if (o_ptr->is_fixed_or_random_artifact()) {
         return;
     }
 
@@ -638,7 +638,7 @@ static void wiz_tweak_item(PlayerType *player_ptr, ItemEntity *o_ptr)
  */
 static void wiz_quantity_item(ItemEntity *o_ptr)
 {
-    if (o_ptr->is_artifact()) {
+    if (o_ptr->is_fixed_or_random_artifact()) {
         return;
     }
 

@@ -91,7 +91,7 @@ void compact_objects(PlayerType *player_ptr, int size)
             }
 
             int chance = 90;
-            if (o_ptr->is_artifact() && (cnt < 1000)) {
+            if (o_ptr->is_fixed_or_random_artifact() && (cnt < 1000)) {
                 chance = 100;
             }
 

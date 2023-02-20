@@ -94,7 +94,7 @@ bool is_autopick_match(PlayerType *player_ptr, ItemEntity *o_ptr, autopick_type 
     }
 
     if (IS_FLG(FLG_ARTIFACT)) {
-        if (!o_ptr->is_known() || !o_ptr->is_artifact()) {
+        if (!o_ptr->is_known() || !o_ptr->is_fixed_or_random_artifact()) {
             return false;
         }
     }

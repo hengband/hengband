@@ -99,7 +99,7 @@ static std::pair<bool, ItemEntity *> select_repairing_broken_weapon(PlayerType *
         return { false, nullptr };
     }
 
-    if (!o_ptr->is_ego() && !o_ptr->is_artifact()) {
+    if (!o_ptr->is_ego() && !o_ptr->is_fixed_or_random_artifact()) {
         msg_format(_("それは直してもしょうがないぜ。", "It is worthless to repair."));
         return { false, o_ptr };
     }

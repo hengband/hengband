@@ -165,7 +165,7 @@ static byte get_dungeon_feeling(PlayerType *player_ptr)
             delta += e_ptr->rating * base;
         }
 
-        if (o_ptr->is_artifact()) {
+        if (o_ptr->is_fixed_or_random_artifact()) {
             PRICE cost = object_value_real(o_ptr);
             delta += 10 * base;
             if (cost > 10000L) {

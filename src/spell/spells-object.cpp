@@ -226,7 +226,7 @@ bool curse_armor(PlayerType *player_ptr)
     GAME_TEXT o_name[MAX_NLEN];
     describe_flavor(player_ptr, o_name, o_ptr, OD_OMIT_PREFIX);
 
-    if (o_ptr->is_artifact() && one_in_(2)) {
+    if (o_ptr->is_fixed_or_random_artifact() && one_in_(2)) {
 #ifdef JP
         msg_format("%sが%sを包み込もうとしたが、%sはそれを跳ね返した！", "恐怖の暗黒オーラ", "防具", o_name);
 #else
@@ -271,7 +271,7 @@ bool curse_weapon_object(PlayerType *player_ptr, bool force, ItemEntity *o_ptr)
     GAME_TEXT o_name[MAX_NLEN];
     describe_flavor(player_ptr, o_name, o_ptr, OD_OMIT_PREFIX);
 
-    if (o_ptr->is_artifact() && one_in_(2) && !force) {
+    if (o_ptr->is_fixed_or_random_artifact() && one_in_(2) && !force) {
 #ifdef JP
         msg_format("%sが%sを包み込もうとしたが、%sはそれを跳ね返した！", "恐怖の暗黒オーラ", "武器", o_name);
 #else
@@ -314,7 +314,7 @@ void brand_bolts(PlayerType *player_ptr)
             continue;
         }
 
-        if (o_ptr->is_artifact() || o_ptr->is_ego()) {
+        if (o_ptr->is_fixed_or_random_artifact() || o_ptr->is_ego()) {
             continue;
         }
 
@@ -375,7 +375,7 @@ bool enchant_equipment(PlayerType *player_ptr, ItemEntity *o_ptr, int n, int efl
 
     int chance;
     auto res = false;
-    auto a = o_ptr->is_artifact();
+    auto a = o_ptr->is_fixed_or_random_artifact();
     auto force = (eflag & ENCH_FORCE);
     for (int i = 0; i < n; i++) {
         if (!force && randint0(prob) >= 100) {
@@ -529,7 +529,7 @@ void brand_weapon(PlayerType *player_ptr, int brand_type)
     auto special_weapon = bi_key == BaseitemKey(ItemKindType::SWORD, SV_POISON_NEEDLE);
     special_weapon |= bi_key == BaseitemKey(ItemKindType::POLEARM, SV_DEATH_SCYTHE);
     special_weapon |= bi_key == BaseitemKey(ItemKindType::SWORD, SV_DIAMOND_EDGE);
-    const auto is_normal_item = (o_ptr->bi_id > 0) && !o_ptr->is_artifact() && !o_ptr->is_ego() && !o_ptr->is_cursed() && !special_weapon;
+    const auto is_normal_item = (o_ptr->bi_id > 0) && !o_ptr->is_fixed_or_random_artifact() && !o_ptr->is_ego() && !o_ptr->is_cursed() && !special_weapon;
     if (!is_normal_item) {
         if (flush_failure) {
             flush();
