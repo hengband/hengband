@@ -552,7 +552,7 @@ OBJECT_IDX drop_near(PlayerType *player_ptr, ItemEntity *j_ptr, PERCENTAGE chanc
         done = true;
     }
 
-    if (j_ptr->is_artifact() && w_ptr->character_dungeon) {
+    if (j_ptr->is_fixed_artifact() && w_ptr->character_dungeon) {
         auto &artifact = artifacts_info.at(j_ptr->fixed_artifact_idx);
         artifact.floor_id = player_ptr->floor_id;
     }
