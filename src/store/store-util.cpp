@@ -152,7 +152,7 @@ bool store_object_similar(ItemEntity *o_ptr, ItemEntity *j_ptr)
         return false;
     }
 
-    if (o_ptr->is_artifact() || j_ptr->is_artifact()) {
+    if (o_ptr->is_fixed_or_random_artifact() || j_ptr->is_fixed_or_random_artifact()) {
         return false;
     }
 

@@ -44,7 +44,7 @@ void inventory_damage(PlayerType *player_ptr, const ObjectBreaker &breaker, int 
         }
 
         /* Hack -- for now, skip artifacts */
-        if (o_ptr->is_artifact()) {
+        if (o_ptr->is_fixed_or_random_artifact()) {
             continue;
         }
 

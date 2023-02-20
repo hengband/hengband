@@ -290,7 +290,7 @@ void store_shuffle(PlayerType *player_ptr, StoreSaleType store_num)
     for (int i = 0; i < st_ptr->stock_num; i++) {
         ItemEntity *o_ptr;
         o_ptr = &st_ptr->stock[i];
-        if (o_ptr->is_artifact()) {
+        if (o_ptr->is_fixed_or_random_artifact()) {
             continue;
         }
 

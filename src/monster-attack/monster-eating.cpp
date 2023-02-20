@@ -146,7 +146,7 @@ void process_eat_item(PlayerType *player_ptr, MonsterAttackPlayer *monap_ptr)
             continue;
         }
 
-        if (monap_ptr->o_ptr->is_artifact()) {
+        if (monap_ptr->o_ptr->is_fixed_or_random_artifact()) {
             continue;
         }
 

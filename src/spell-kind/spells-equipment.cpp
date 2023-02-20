@@ -66,7 +66,7 @@ bool apply_disenchant(PlayerType *player_ptr, BIT_FLAGS mode)
 
     GAME_TEXT o_name[MAX_NLEN];
     describe_flavor(player_ptr, o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
-    if (o_ptr->is_artifact() && (randint0(100) < 71)) {
+    if (o_ptr->is_fixed_or_random_artifact() && (randint0(100) < 71)) {
 #ifdef JP
         msg_format("%s(%c)は劣化を跳ね返した！", o_name, index_to_label(t));
 #else

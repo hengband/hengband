@@ -317,7 +317,7 @@ bool detect_objects_magic(PlayerType *player_ptr, POSITION range)
 
         auto has_bonus = o_ptr->to_a > 0;
         has_bonus |= o_ptr->to_h + o_ptr->to_d > 0;
-        if (o_ptr->is_artifact() || o_ptr->is_ego() || is_object_magically(o_ptr->bi_key.tval()) || o_ptr->is_spell_book() || has_bonus) {
+        if (o_ptr->is_fixed_or_random_artifact() || o_ptr->is_ego() || is_object_magically(o_ptr->bi_key.tval()) || o_ptr->is_spell_book() || has_bonus) {
             o_ptr->marked.set(OmType::FOUND);
             lite_spot(player_ptr, y, x);
             detect = true;

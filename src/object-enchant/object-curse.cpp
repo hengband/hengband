@@ -91,7 +91,7 @@ void curse_equipment(PlayerType *player_ptr, PERCENTAGE chance, PERCENTAGE heavy
 
     bool changed = false;
     int curse_power = 0;
-    if ((randint1(100) <= heavy_chance) && (o_ptr->is_artifact() || o_ptr->is_ego())) {
+    if ((randint1(100) <= heavy_chance) && (o_ptr->is_fixed_or_random_artifact() || o_ptr->is_ego())) {
         if (o_ptr->curse_flags.has_not(CurseTraitType::HEAVY_CURSE)) {
             changed = true;
         }

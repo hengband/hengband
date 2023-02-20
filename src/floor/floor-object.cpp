@@ -349,7 +349,7 @@ OBJECT_IDX drop_near(PlayerType *player_ptr, ItemEntity *j_ptr, PERCENTAGE chanc
     bool plural = (j_ptr->number != 1);
 #endif
     describe_flavor(player_ptr, o_name, j_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
-    if (!j_ptr->is_artifact() && (randint0(100) < chance)) {
+    if (!j_ptr->is_fixed_or_random_artifact() && (randint0(100) < chance)) {
 #ifdef JP
         msg_format("%sは消えた。", o_name);
 #else
@@ -429,7 +429,7 @@ OBJECT_IDX drop_near(PlayerType *player_ptr, ItemEntity *j_ptr, PERCENTAGE chanc
         }
     }
 
-    if (!flag && !j_ptr->is_artifact()) {
+    if (!flag && !j_ptr->is_fixed_or_random_artifact()) {
 #ifdef JP
         msg_format("%sは消えた。", o_name);
 #else

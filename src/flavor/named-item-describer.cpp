@@ -256,7 +256,7 @@ static std::string describe_item_count_or_article_en(const ItemEntity &item, con
     const auto corpse_r_idx = i2enum<MonsterRaceId>(item.pval);
     auto is_unique_corpse = item.bi_key.tval() == ItemKindType::CORPSE;
     is_unique_corpse &= monraces_info[corpse_r_idx].kind_flags.has(MonsterKindType::UNIQUE);
-    if ((opt.known && item.is_artifact()) || is_unique_corpse) {
+    if ((opt.known && item.is_fixed_or_random_artifact()) || is_unique_corpse) {
         return "The ";
     }
 
@@ -273,7 +273,7 @@ static std::string describe_item_count_or_definite_article_en(const ItemEntity &
         return prefix;
     }
 
-    if (opt.known && item.is_artifact()) {
+    if (opt.known && item.is_fixed_or_random_artifact()) {
         return "The ";
     }
 

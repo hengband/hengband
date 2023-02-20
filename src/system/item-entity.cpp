@@ -322,11 +322,11 @@ bool ItemEntity::is_smith() const
 }
 
 /*!
- * @brief アイテムがアーティファクトかを返す /
+ * @brief アイテムが固定アーティファクトもしくはランダムアーティファクトであるかを返す /
  * Check if an object is artifact
- * @return アーティファクトならばtrueを返す
+ * @return 固定アーティファクトもしくはランダムアーティファクトならばtrueを返す
  */
-bool ItemEntity::is_artifact() const
+bool ItemEntity::is_fixed_or_random_artifact() const
 {
     return this->is_fixed_artifact() || this->randart_name.has_value();
 }
@@ -348,7 +348,7 @@ bool ItemEntity::is_fixed_artifact() const
  */
 bool ItemEntity::is_random_artifact() const
 {
-    return this->is_artifact() && !this->is_fixed_artifact();
+    return this->is_fixed_or_random_artifact() && !this->is_fixed_artifact();
 }
 
 /*!
@@ -358,7 +358,7 @@ bool ItemEntity::is_random_artifact() const
  */
 bool ItemEntity::is_nameless() const
 {
-    return !this->is_artifact() && !this->is_ego() && !this->is_smith();
+    return !this->is_fixed_or_random_artifact() && !this->is_ego() && !this->is_smith();
 }
 
 bool ItemEntity::is_valid() const
@@ -570,7 +570,7 @@ bool ItemEntity::can_pile(const ItemEntity *j_ptr) const
         return false;
     }
 
-    if (this->is_artifact() || j_ptr->is_artifact()) {
+    if (this->is_fixed_or_random_artifact() || j_ptr->is_fixed_or_random_artifact()) {
         return false;
     }
 

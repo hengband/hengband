@@ -347,7 +347,7 @@ Smith::DrainEssenceResult Smith::drain_essence(ItemEntity *o_ptr)
         }
     }
 
-    const auto is_artifact = o_ptr->is_artifact();
+    const auto is_fixed_or_random_artifact = o_ptr->is_fixed_or_random_artifact();
 
     // アイテムをエッセンス抽出後の状態にする
     const ItemEntity old_o = *o_ptr;
@@ -384,7 +384,7 @@ Smith::DrainEssenceResult Smith::drain_essence(ItemEntity *o_ptr)
         }
     }
 
-    if (is_artifact) {
+    if (is_fixed_or_random_artifact) {
         drain_values[SmithEssenceType::UNIQUE] += 10;
     }
 
