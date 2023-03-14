@@ -9,7 +9,7 @@
 #include "system/floor-type-definition.h"
 #include "term/z-term.h"
 
-int interrupt_scene_type;
+TERM_XTRA interrupt_scene_type;
 int interrupt_scene_val;
 
 scene_type_list scene_list;
@@ -36,7 +36,7 @@ static void resize_scene_list()
  * @param type action-type
  * @param val action-val
  */
-void interrupt_scene(int type, int val)
+void interrupt_scene(TERM_XTRA type, int val)
 {
     interrupt_scene_type = type;
     interrupt_scene_val = val;
@@ -54,7 +54,7 @@ void interrupt_scene(int type, int val)
 void refresh_scene_table(PlayerType *player_ptr)
 {
     // clear interrupt_scene
-    interrupt_scene(0, 0);
+    interrupt_scene(TERM_XTRA::NONE, 0);
 
     resize_scene_list();
     refresh_scene_floor(player_ptr, scene_list, 0);

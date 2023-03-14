@@ -73,7 +73,7 @@ bool can_save = false;
 
 static void process_fishing(PlayerType *player_ptr)
 {
-    term_xtra(TERM_XTRA_DELAY, 10);
+    term_xtra(TERM_XTRA::DELAY, 10);
     if (one_in_(1000)) {
         bool success = false;
         get_mon_num_prep(player_ptr, monster_is_fishing_target, nullptr);

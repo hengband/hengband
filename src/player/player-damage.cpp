@@ -401,7 +401,7 @@ int take_hit(PlayerType *player_ptr, int damage_type, int damage, concptr hit_fr
             bool seppuku = streq(hit_from, "Seppuku");
             bool winning_seppuku = w_ptr->total_winner && seppuku;
 
-            play_music(TERM_XTRA_MUSIC_BASIC, MUSIC_BASIC_GAMEOVER);
+            play_music(TERM_XTRA::MUSIC_BASIC, MUSIC_BASIC_GAMEOVER);
 
 #ifdef WORLD_SCORE
             screen_dump = make_screen_dump(player_ptr);

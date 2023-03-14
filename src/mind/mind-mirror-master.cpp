@@ -130,7 +130,7 @@ bool binding_field(PlayerType *player_ptr, int dam)
                         print_bolt_pict(player_ptr, y, x, y, x, AttributeType::MANA);
                         move_cursor_relative(y, x);
                         term_fresh();
-                        term_xtra(TERM_XTRA_DELAY, delay_factor);
+                        term_xtra(TERM_XTRA::DELAY, delay_factor);
                     }
                 }
             }

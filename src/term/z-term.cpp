@@ -181,7 +181,7 @@ errr term_user(int n)
 /*
  * Execute the "Term->xtra_hook" hook, if available (see above).
  */
-errr term_xtra(int n, int v)
+errr term_xtra(TERM_XTRA n, int v)
 {
     /* Verify the hook */
     if (!game_term->xtra_hook) {
@@ -1138,7 +1138,7 @@ errr term_fresh(void)
         char nc = game_term->char_blank;
 
         /* Physically erase the entire window */
-        term_xtra(TERM_XTRA_CLEAR, 0);
+        term_xtra(TERM_XTRA::CLEAR, 0);
 
         /* clear all "cursor" data */
         old->cv = old->cu = false;
@@ -1230,7 +1230,7 @@ errr term_fresh(void)
     /* Hide the hardware cursor while drawing */
     else {
         /* Cursor will be invisible */
-        term_xtra(TERM_XTRA_SHAPE, 0);
+        term_xtra(TERM_XTRA::SHAPE, 0);
     }
 
     /* Something to update */
@@ -1278,7 +1278,7 @@ errr term_fresh(void)
 
                 /* Flush that row (if allowed) */
                 if (!game_term->never_frosh) {
-                    term_xtra(TERM_XTRA_FROSH, y);
+                    term_xtra(TERM_XTRA::FROSH, y);
                 }
             }
         }
@@ -1325,11 +1325,11 @@ errr term_fresh(void)
     old->cy = scr->cy;
 
     /* Actually flush the output */
-    term_xtra(TERM_XTRA_FRESH, 0);
+    term_xtra(TERM_XTRA::FRESH, 0);
 
     if (!game_term->soft_cursor && !scr->cu && scr->cv) {
         /* The cursor is visible, display it correctly */
-        term_xtra(TERM_XTRA_SHAPE, 1);
+        term_xtra(TERM_XTRA::SHAPE, 1);
     }
 
     return 0;
@@ -1910,7 +1910,7 @@ errr term_what(TERM_LEN x, TERM_LEN y, TERM_COLOR *a, char *c)
 errr term_flush(void)
 {
     /* Flush all events */
-    term_xtra(TERM_XTRA_FLUSH, 0);
+    term_xtra(TERM_XTRA::FLUSH, 0);
 
     /* Forget all keypresses */
     game_term->key_head = game_term->key_tail = 0;
@@ -1960,7 +1960,7 @@ errr term_inkey(char *ch, bool wait, bool take)
     /* get bored */
     if (!game_term->never_bored) {
         /* Process random events */
-        term_xtra(TERM_XTRA_BORED, 0);
+        term_xtra(TERM_XTRA::BORED, 0);
     }
 
     /* Wait */
@@ -1968,7 +1968,7 @@ errr term_inkey(char *ch, bool wait, bool take)
         /* Process pending events while necessary */
         while (game_term->key_head == game_term->key_tail) {
             /* Process events (wait for one) */
-            term_xtra(TERM_XTRA_EVENT, true);
+            term_xtra(TERM_XTRA::EVENT, true);
         }
     }
 
@@ -1977,7 +1977,7 @@ errr term_inkey(char *ch, bool wait, bool take)
         /* Process pending events if necessary */
         if (game_term->key_head == game_term->key_tail) {
             /* Process events (do not wait) */
-            term_xtra(TERM_XTRA_EVENT, false);
+            term_xtra(TERM_XTRA::EVENT, false);
         }
     }
 
@@ -2160,7 +2160,7 @@ errr term_activate(term_type *t)
 
     /* Deactivate the old Term */
     if (game_term) {
-        term_xtra(TERM_XTRA_LEVEL, 0);
+        term_xtra(TERM_XTRA::LEVEL, 0);
     }
 
     /* Call the special "init" hook */
@@ -2182,7 +2182,7 @@ errr term_activate(term_type *t)
 
     /* Activate the new Term */
     if (game_term) {
-        term_xtra(TERM_XTRA_LEVEL, 1);
+        term_xtra(TERM_XTRA::LEVEL, 1);
     }
 
     return 0;

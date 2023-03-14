@@ -60,7 +60,7 @@ static struct {
 /*
  * Original hooks
  */
-static errr (*old_xtra_hook)(int n, int v);
+static errr (*old_xtra_hook)(TERM_XTRA n, int v);
 static errr (*old_curs_hook)(int x, int y);
 static errr (*old_bigcurs_hook)(int x, int y);
 static errr (*old_wipe_hook)(int x, int y, int n);
@@ -275,12 +275,12 @@ static errr send_wipe_to_chuukei_server(int x, int y, int len)
     return (*old_wipe_hook)(x, y, len);
 }
 
-static errr send_xtra_to_chuukei_server(int n, int v)
+static errr send_xtra_to_chuukei_server(TERM_XTRA n, int v)
 {
-    if (n == TERM_XTRA_CLEAR || n == TERM_XTRA_FRESH || n == TERM_XTRA_SHAPE) {
+    if (n == TERM_XTRA::CLEAR || n == TERM_XTRA::FRESH || n == TERM_XTRA::SHAPE) {
         insert_ringbuf(format("x%c", n + 1));
 
-        if (n == TERM_XTRA_FRESH) {
+        if (n == TERM_XTRA::FRESH) {
             insert_ringbuf("d", std::to_string(get_current_time() - epoch_time));
         }
     }
@@ -601,10 +601,10 @@ static bool flush_ringbuf_client(void)
             break;
 
         case 'x':
-            if (x == TERM_XTRA_CLEAR) {
+            if (x == enum2i(TERM_XTRA::CLEAR)) {
                 term_clear();
             }
-            (void)((*angband_terms[0]->xtra_hook)(x, 0));
+            (void)((*angband_terms[0]->xtra_hook)(i2enum<TERM_XTRA>(x), 0));
             break;
 
         case 'c':
@@ -635,12 +635,12 @@ void browse_movie(void)
 {
     term_clear();
     term_fresh();
-    term_xtra(TERM_XTRA_REACT, 0);
+    term_xtra(TERM_XTRA::REACT, 0);
 
     while (read_movie_file() == 0) {
         while (fresh_queue.next != fresh_queue.tail) {
             if (!flush_ringbuf_client()) {
-                term_xtra(TERM_XTRA_FLUSH, 0);
+                term_xtra(TERM_XTRA::FLUSH, 0);
 
                 /* ソケットにデータが来ているかどうか調べる */
 #ifdef WINDOWS

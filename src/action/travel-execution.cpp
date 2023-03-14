@@ -122,7 +122,7 @@ void travel_step(PlayerType *player_ptr)
         travel.run--;
     }
 
-    term_xtra(TERM_XTRA_DELAY, delay_factor);
+    term_xtra(TERM_XTRA::DELAY, delay_factor);
 }
 
 /*!

@@ -261,7 +261,7 @@ void complete_quest(PlayerType *player_ptr, QuestId quest_num)
         return;
     }
 
-    play_music(TERM_XTRA_MUSIC_BASIC, MUSIC_BASIC_QUEST_CLEAR);
+    play_music(TERM_XTRA::MUSIC_BASIC, MUSIC_BASIC_QUEST_CLEAR);
     msg_print(_("クエストを達成した！", "You just completed your quest!"));
     msg_print(nullptr);
 }

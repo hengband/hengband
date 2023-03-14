@@ -15,25 +15,25 @@ using scene_feel_func = bool (*)(PlayerType *player_ptr, scene_type *value);
 static bool scene_basic(PlayerType *player_ptr, scene_type *value)
 {
     if (player_ptr->ambush_flag) {
-        value->type = TERM_XTRA_MUSIC_BASIC;
+        value->type = TERM_XTRA::MUSIC_BASIC;
         value->val = MUSIC_BASIC_AMBUSH;
         return true;
     }
 
     if (player_ptr->wild_mode) {
-        value->type = TERM_XTRA_MUSIC_BASIC;
+        value->type = TERM_XTRA::MUSIC_BASIC;
         value->val = MUSIC_BASIC_WILD;
         return true;
     }
 
     if (player_ptr->current_floor_ptr->inside_arena) {
-        value->type = TERM_XTRA_MUSIC_BASIC;
+        value->type = TERM_XTRA::MUSIC_BASIC;
         value->val = MUSIC_BASIC_ARENA;
         return true;
     }
 
     if (player_ptr->phase_out) {
-        value->type = TERM_XTRA_MUSIC_BASIC;
+        value->type = TERM_XTRA::MUSIC_BASIC;
         value->val = MUSIC_BASIC_BATTLE;
         return true;
     }
@@ -46,7 +46,7 @@ static bool scene_quest(PlayerType *player_ptr, scene_type *value)
     const QuestId quest_id = quest_number(player_ptr, player_ptr->current_floor_ptr->dun_level);
     const bool enable = (inside_quest(quest_id));
     if (enable) {
-        value->type = TERM_XTRA_MUSIC_QUEST;
+        value->type = TERM_XTRA::MUSIC_QUEST;
         value->val = enum2i(quest_id);
     }
 
@@ -58,7 +58,7 @@ static bool scene_quest_basic(PlayerType *player_ptr, scene_type *value)
     const QuestId quest_id = quest_number(player_ptr, player_ptr->current_floor_ptr->dun_level);
     const bool enable = (inside_quest(quest_id));
     if (enable) {
-        value->type = TERM_XTRA_MUSIC_BASIC;
+        value->type = TERM_XTRA::MUSIC_BASIC;
         value->val = MUSIC_BASIC_QUEST;
     }
 
@@ -69,7 +69,7 @@ static bool scene_town(PlayerType *player_ptr, scene_type *value)
 {
     const auto enable = !player_ptr->current_floor_ptr->is_in_dungeon() && (player_ptr->town_num > 0);
     if (enable) {
-        value->type = TERM_XTRA_MUSIC_TOWN;
+        value->type = TERM_XTRA::MUSIC_TOWN;
         value->val = player_ptr->town_num;
     }
     return enable;
@@ -79,7 +79,7 @@ static bool scene_town_basic(PlayerType *player_ptr, scene_type *value)
 {
     const auto enable = !player_ptr->current_floor_ptr->is_in_dungeon() && (player_ptr->town_num > 0);
     if (enable) {
-        value->type = TERM_XTRA_MUSIC_BASIC;
+        value->type = TERM_XTRA::MUSIC_BASIC;
         value->val = MUSIC_BASIC_TOWN;
     }
     return enable;
@@ -89,7 +89,7 @@ static bool scene_field(PlayerType *player_ptr, scene_type *value)
 {
     const auto enable = !player_ptr->current_floor_ptr->is_in_dungeon();
     if (enable) {
-        value->type = TERM_XTRA_MUSIC_BASIC;
+        value->type = TERM_XTRA::MUSIC_BASIC;
 
         if (player_ptr->lev >= 45) {
             value->val = MUSIC_BASIC_FIELD3;
@@ -106,7 +106,7 @@ static bool scene_dungeon_feeling(PlayerType *player_ptr, scene_type *value)
 {
     const bool enable = (player_ptr->feeling >= 2) && (player_ptr->feeling <= 5);
     if (enable) {
-        value->type = TERM_XTRA_MUSIC_BASIC;
+        value->type = TERM_XTRA::MUSIC_BASIC;
 
         if (player_ptr->feeling == 2) {
             value->val = MUSIC_BASIC_DUN_FEEL2;
@@ -121,7 +121,7 @@ static bool scene_dungeon(PlayerType *player_ptr, scene_type *value)
 {
     const bool enable = (player_ptr->dungeon_idx > 0);
     if (enable) {
-        value->type = TERM_XTRA_MUSIC_DUNGEON;
+        value->type = TERM_XTRA::MUSIC_DUNGEON;
         value->val = player_ptr->dungeon_idx;
     }
     return enable;
@@ -131,7 +131,7 @@ static bool scene_dungeon_basic(PlayerType *player_ptr, scene_type *value)
 {
     const auto enable = player_ptr->current_floor_ptr->is_in_dungeon();
     if (enable) {
-        value->type = TERM_XTRA_MUSIC_BASIC;
+        value->type = TERM_XTRA::MUSIC_BASIC;
 
         const auto dun_level = player_ptr->current_floor_ptr->dun_level;
         if (dun_level >= 80) {
@@ -148,7 +148,7 @@ static bool scene_dungeon_basic(PlayerType *player_ptr, scene_type *value)
 static bool scene_mute(PlayerType *player_ptr, scene_type *value)
 {
     (void)player_ptr;
-    value->type = TERM_XTRA_MUSIC_MUTE;
+    value->type = TERM_XTRA::MUSIC_MUTE;
     value->val = 0;
     return true;
 }
@@ -197,7 +197,7 @@ void refresh_scene_floor(PlayerType *player_ptr, scene_type_list &list, int from
         scene_type &item = list[from_index];
         if (!func(player_ptr, &item)) {
             // Note -- 特に定義を設けていないが、type = 0は無効な値とする。
-            item.type = 0;
+            item.type = TERM_XTRA::NONE;
             item.val = 0;
         }
         ++from_index;

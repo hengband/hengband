@@ -34,12 +34,12 @@
  *
  * This command is also used to "instantiate" the results of the user
  * selecting various things, such as graphics mode, so it must call
- * the "TERM_XTRA_REACT" hook before redrawing the windows.
+ * the "TERM_XTRA::REACT" hook before redrawing the windows.
  * </pre>
  */
 void do_cmd_redraw(PlayerType *player_ptr)
 {
-    term_xtra(TERM_XTRA_REACT, 0);
+    term_xtra(TERM_XTRA::REACT, 0);
 
     player_ptr->update |= (PU_COMBINE | PU_REORDER);
     player_ptr->update |= (PU_TORCH);

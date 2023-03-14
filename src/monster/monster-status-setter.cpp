@@ -422,7 +422,7 @@ bool set_monster_timewalk(PlayerType *player_ptr, int num, MonsterRaceId who, bo
         reset_target(m_ptr);
         handle_stuff(player_ptr);
         if (vs_player) {
-            term_xtra(TERM_XTRA_DELAY, 500);
+            term_xtra(TERM_XTRA::DELAY, 500);
         }
     }
 

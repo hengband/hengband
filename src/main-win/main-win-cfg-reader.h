@@ -24,8 +24,8 @@ struct cfg_section {
 
     //! The name of the section in cfg file
     concptr section_name;
-    //! the "actions" value of "term_xtra()". see:z-term.h TERM_XTRA_xxxxx
-    int action_type;
+    //! the "actions" value of "term_xtra()". see:z-term.h TERM_XTRA::xxxxx
+    TERM_XTRA action_type;
     /*!
      * Returns a reference to the name of the key at a specified action-val* in the section.
      * *action-val : the 2nd parameter of "term_xtra()"

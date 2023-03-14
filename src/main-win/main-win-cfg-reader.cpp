@@ -11,6 +11,7 @@
 #include "main/sound-definitions-table.h"
 #include "term/z-term.h"
 #include "util/angband-files.h"
+#include "util/enum-converter.h"
 #include <windows.h>
 
 // 1つの項目に設定可能な最大ファイル数
@@ -20,7 +21,7 @@
  * @brief マップのキーを生成する
  * @details
  * typeを上位16ビット, valを下位16ビットに設定した値をマップのキーとする。
- * @param type the "actions" value of "term_xtra()". see:z-term.h TERM_XTRA_xxxxx
+ * @param type the "actions" value of "term_xtra()". see:z-term.h TERM_XTRA::xxxxx
  * @param val the 2nd parameter of "term_xtra()"
  * @return 生成したキーを返す
  */
@@ -31,7 +32,7 @@ static cfg_key make_cfg_key(int type, int val)
 
 /*!
  * @brief マップのキーに対応する値を取得する
- * @param key1_type the "actions" value of "term_xtra()". see:z-term.h TERM_XTRA_xxxxx
+ * @param key1_type the "actions" value of "term_xtra()". see:z-term.h TERM_XTRA::xxxxx
  * @param key2_val the 2nd parameter of "term_xtra()"
  * @return キーに対応する値を返す。登録されていない場合はnullptrを返す。
  */
@@ -47,7 +48,7 @@ static cfg_values *get_map_value(cfg_map *map, int key1_type, int key2_val)
 
 /*!
  * @brief 登録されている中からランダムに選択する
- * @param type the "actions" value of "term_xtra()". see:z-term.h TERM_XTRA_xxxxx
+ * @param type the "actions" value of "term_xtra()". see:z-term.h TERM_XTRA::xxxxx
  * @param val the 2nd parameter of "term_xtra()"
  * @return キーに対応する値、複数のファイル名の中からからランダムに返す。登録されていない場合はnullptrを返す。
  */
@@ -123,7 +124,7 @@ CfgData *CfgReader::read_sections(std::initializer_list<cfg_section> sections)
                 if (filenames->empty()) {
                     delete filenames;
                 } else {
-                    result->insert(section.action_type, index, filenames);
+                    result->insert(enum2i(section.action_type), index, filenames);
                     has_data = true;
                 }
             }

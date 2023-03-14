@@ -363,7 +363,7 @@ void do_cmd_building(PlayerType *player_ptr)
 
     display_buikding_service(player_ptr, bldg);
     player_ptr->leave_bldg = false;
-    play_music(TERM_XTRA_MUSIC_BASIC, MUSIC_BASIC_BUILD);
+    play_music(TERM_XTRA::MUSIC_BASIC, MUSIC_BASIC_BUILD);
 
     bool validcmd;
     while (!player_ptr->leave_bldg) {

@@ -19,6 +19,8 @@
 #include <string_view>
 #include <vector>
 
+enum class TERM_XTRA : int;
+
 /*!
  * @brief A term_win is a "window" for a Term
  */
@@ -61,8 +63,8 @@ struct term_type {
     bool higher_pict{}; //!< Flag "higher_pict" Use the "Term_pict()" routine for special text
     bool always_text{}; //!< Flag "always_text" Use the "Term_text()" routine for invisible text
     bool unused_flag{}; //!< Flag "unused_flag" Reserved for future use
-    bool never_bored{}; //!< Flag "never_bored" Never call the "TERM_XTRA_BORED" action
-    bool never_frosh{}; //!< Flag "never_frosh" Never call the "TERM_XTRA_FROSH" action
+    bool never_bored{}; //!< Flag "never_bored" Never call the "TERM_XTRA::BORED" action
+    bool never_frosh{}; //!< Flag "never_frosh" Never call the "TERM_XTRA::FROSH" action
     bool never_fresh{}; //!< Flag "never_fresh" Never redraw the Term
 
     byte attr_blank{}; //!< Value "attr_blank" Use this "attr" value for "blank" grids
@@ -99,7 +101,7 @@ struct term_type {
     void (*nuke_hook)(term_type *t){}; //!< Hook for nuke - ing the term
 
     errr (*user_hook)(int n){}; //!< ユーザ設定項目実装部 / Hook for user actions
-    errr (*xtra_hook)(int n, int v){}; //!< 拡張機能実装部 / Hook for extra actions
+    errr (*xtra_hook)(TERM_XTRA n, int v){}; //!< 拡張機能実装部 / Hook for extra actions
     errr (*curs_hook)(TERM_LEN x, TERM_LEN y){}; //!< カーソル描画実装部 / Hook for placing the cursor
     errr (*bigcurs_hook)(TERM_LEN x, TERM_LEN y){}; //!< 大型タイル時カーソル描画実装部 / Hook for placing the cursor on bigtile mode
     errr (*wipe_hook)(TERM_LEN x, TERM_LEN y, int n){}; //!< 指定座標テキスト消去実装部 / Hook for drawing some blank spaces
@@ -159,43 +161,47 @@ private:
  * with the second parameter depending on the "action" itself.  Many
  * of the actions shown below are optional on at least one platform.
  *
- * The "TERM_XTRA_EVENT" action uses "v" to "wait" for an event
- * The "TERM_XTRA_SHAPE" action uses "v" to "show" the cursor
- * The "TERM_XTRA_FROSH" action uses "v" for the index of the row
- * The "TERM_XTRA_SOUND" action uses "v" for the index of a sound
- * The "TERM_XTRA_ALIVE" action uses "v" to "activate" (or "close")
- * The "TERM_XTRA_LEVEL" action uses "v" to "resume" (or "suspend")
- * The "TERM_XTRA_DELAY" action uses "v" as a "millisecond" value
+ * The "TERM_XTRA::EVENT" action uses "v" to "wait" for an event
+ * The "TERM_XTRA::SHAPE" action uses "v" to "show" the cursor
+ * The "TERM_XTRA::FROSH" action uses "v" for the index of the row
+ * The "TERM_XTRA::SOUND" action uses "v" for the index of a sound
+ * The "TERM_XTRA::ALIVE" action uses "v" to "activate" (or "close")
+ * The "TERM_XTRA::LEVEL" action uses "v" to "resume" (or "suspend")
+ * The "TERM_XTRA::DELAY" action uses "v" as a "millisecond" value
  *
  * The other actions do not need a "v" code, so "zero" is used.
  */
-#define TERM_XTRA_EVENT 1 /* Process some pending events */
-#define TERM_XTRA_FLUSH 2 /* Flush all pending events */
-#define TERM_XTRA_CLEAR 3 /* Clear the entire window */
-#define TERM_XTRA_SHAPE 4 /* Set cursor shape (optional) */
-#define TERM_XTRA_FROSH 5 /* Flush one row (optional) */
-#define TERM_XTRA_FRESH 6 /* Flush all rows (optional) */
-#define TERM_XTRA_NOISE 7 /* Make a noise (optional) */
-#define TERM_XTRA_SOUND 8 /* Make a sound (optional) */
-#define TERM_XTRA_BORED 9 /* Handle stuff when bored (optional) */
-#define TERM_XTRA_REACT 10 /* React to global changes (optional) */
-#define TERM_XTRA_ALIVE 11 /* Change the "hard" level (optional) */
-#define TERM_XTRA_LEVEL 12 /* Change the "soft" level (optional) */
-#define TERM_XTRA_DELAY 13 /* Delay some milliseconds (optional) */
-#define TERM_XTRA_MUSIC_BASIC 14 /* Play a music(basic) (optional) */
-#define TERM_XTRA_MUSIC_DUNGEON 15 /* Play a music(dungeon) (optional) */
-#define TERM_XTRA_MUSIC_QUEST 16 /* Play a music(quest) (optional) */
-#define TERM_XTRA_MUSIC_TOWN 17 /* Play a music(floor) (optional) */
-#define TERM_XTRA_MUSIC_MONSTER 18 /* Play a music(monster) (optional) */
-#define TERM_XTRA_MUSIC_MUTE 19
-#define TERM_XTRA_SCENE 20 /* React to scene changes (optional) */
+
+enum class TERM_XTRA : int {
+    NONE = 0,
+    EVENT = 1, /*!< Process some pending events */
+    FLUSH = 2, /*!< Flush all pending events */
+    CLEAR = 3, /*!< Clear the entire window */
+    SHAPE = 4, /*!< Set cursor shape (optional) */
+    FROSH = 5, /*!< Flush one row (optional) */
+    FRESH = 6, /*!< Flush all rows (optional) */
+    NOISE = 7, /*!< Make a noise (optional) */
+    SOUND = 8, /*!< Make a sound (optional) */
+    BORED = 9, /*!< Handle stuff when bored (optional) */
+    REACT = 10, /*!< React to global changes (optional) */
+    ALIVE = 11, /*!< Change the "hard" level (optional) */
+    LEVEL = 12, /*!< Change the "soft" level (optional) */
+    DELAY = 13, /*!< Delay some milliseconds (optional) */
+    MUSIC_BASIC = 14, /*!< Play a music(basic) (optional) */
+    MUSIC_DUNGEON = 15, /*!< Play a music(dungeon) (optional) */
+    MUSIC_QUEST = 16, /*!< Play a music(quest) (optional) */
+    MUSIC_TOWN = 17, /*!< Play a music(floor) (optional) */
+    MUSIC_MONSTER = 18, /*!< Play a music(monster) (optional) */
+    MUSIC_MUTE = 19,
+    SCENE = 20, /*!< React to scene changes (optional) */
+};
 
 /**** Available Variables ****/
 extern term_type *game_term;
 
 errr term_win_nuke(term_win *s, TERM_LEN w, TERM_LEN h);
 errr term_user(int n);
-errr term_xtra(int n, int v);
+errr term_xtra(TERM_XTRA n, int v);
 
 void term_queue_char(TERM_LEN x, TERM_LEN y, TERM_COLOR a, char c, TERM_COLOR ta, char tc);
 void term_queue_bigchar(TERM_LEN x, TERM_LEN y, TERM_COLOR a, char c, TERM_COLOR ta, char tc);

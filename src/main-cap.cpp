@@ -852,50 +852,51 @@ static errr game_term_text_cap(int x, int y, int n, byte a, concptr s)
 /*
  * Handle a "special request"
  */
-static errr game_term_xtra_cap(int n, int v)
+static errr game_term_xtra_cap(TERM_XTRA n, int v)
 {
     /* Analyze the request */
     switch (n) {
     /* Clear the screen */
-    case TERM_XTRA_CLEAR:
+    case TERM_XTRA::CLEAR:
         do_cl();
         do_move(0, 0, 0, 0);
         return 0;
 
     /* Make a noise */
-    case TERM_XTRA_NOISE:
+    case TERM_XTRA::NOISE:
         (void)write(1, "\007", 1);
         return 0;
 
     /* Change the cursor visibility */
-    case TERM_XTRA_SHAPE:
+    case TERM_XTRA::SHAPE:
         curv = v;
         curs_set(v);
         return 0;
 
     /* Suspend/Resume */
-    case TERM_XTRA_ALIVE:
+    case TERM_XTRA::ALIVE:
         return game_term_xtra_cap_alive(v);
 
     /* Process events */
-    case TERM_XTRA_EVENT:
+    case TERM_XTRA::EVENT:
         return game_term_xtra_cap_event(v);
 
     /* Flush events */
-    case TERM_XTRA_FLUSH:
+    case TERM_XTRA::FLUSH:
         while (!game_term_xtra_cap_event(false)) {
             ;
         }
         return 0;
 
     /* Delay */
-    case TERM_XTRA_DELAY:
+    case TERM_XTRA::DELAY:
         usleep(1000 * v);
         return 0;
-    }
 
-    /* Not parsed */
-    return 1;
+    default:
+        /* Not parsed */
+        return 1;
+    }
 }
 
 /*

@@ -172,7 +172,7 @@ ProjectResult project(PlayerType *player_ptr, const MONSTER_IDX who, POSITION ra
                     print_bolt_pict(player_ptr, oy, ox, ny, nx, typ);
                     move_cursor_relative(ny, nx);
                     term_fresh();
-                    term_xtra(TERM_XTRA_DELAY, delay_factor);
+                    term_xtra(TERM_XTRA::DELAY, delay_factor);
                     lite_spot(player_ptr, ny, nx);
                     term_fresh();
                     if (flag & (PROJECT_BEAM)) {
@@ -181,7 +181,7 @@ ProjectResult project(PlayerType *player_ptr, const MONSTER_IDX who, POSITION ra
 
                     visual = true;
                 } else if (visual) {
-                    term_xtra(TERM_XTRA_DELAY, delay_factor);
+                    term_xtra(TERM_XTRA::DELAY, delay_factor);
                 }
             }
         }
@@ -284,7 +284,7 @@ ProjectResult project(PlayerType *player_ptr, const MONSTER_IDX who, POSITION ra
             move_cursor_relative(by, bx);
             term_fresh();
             if (visual || drawn) {
-                term_xtra(TERM_XTRA_DELAY, delay_factor);
+                term_xtra(TERM_XTRA::DELAY, delay_factor);
             }
         }
 

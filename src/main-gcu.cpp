@@ -541,7 +541,7 @@ static errr game_term_xtra_gcu_alive(int v)
         nl();
 
         /* Hack -- make sure the cursor is visible */
-        term_xtra(TERM_XTRA_SHAPE, 1);
+        term_xtra(TERM_XTRA::SHAPE, 1);
 
         /* Flush the curses buffer */
         (void)refresh();
@@ -656,7 +656,7 @@ static void game_term_nuke_gcu(term_type *t)
     }
 
     /* Hack -- make sure the cursor is visible */
-    term_xtra(TERM_XTRA_SHAPE, 1);
+    term_xtra(TERM_XTRA::SHAPE, 1);
 
 #ifdef A_COLOR
     /* Reset colors to defaults */
@@ -959,64 +959,65 @@ static errr game_term_xtra_gcu_react(void)
 /*
  * Handle a "special request"
  */
-static errr game_term_xtra_gcu(int n, int v)
+static errr game_term_xtra_gcu(TERM_XTRA n, int v)
 {
     term_data *td = (term_data *)(game_term->data);
 
     /* Analyze the request */
     switch (n) {
     /* Clear screen */
-    case TERM_XTRA_CLEAR:
+    case TERM_XTRA::CLEAR:
         touchwin(td->win);
         (void)werase(td->win);
         return 0;
 
     /* Make a noise */
-    case TERM_XTRA_NOISE:
+    case TERM_XTRA::NOISE:
         return write(1, "\007", 1) != 1;
 
     /* Make a special sound */
-    case TERM_XTRA_SOUND:
+    case TERM_XTRA::SOUND:
         return game_term_xtra_gcu_sound(v);
 
     /* Flush the Curses buffer */
-    case TERM_XTRA_FRESH:
+    case TERM_XTRA::FRESH:
         (void)wrefresh(td->win);
         return 0;
 
     /* Change the cursor visibility */
-    case TERM_XTRA_SHAPE:
+    case TERM_XTRA::SHAPE:
         curs_set(v);
         return 0;
 
     /* Suspend/Resume curses */
-    case TERM_XTRA_ALIVE:
+    case TERM_XTRA::ALIVE:
         return game_term_xtra_gcu_alive(v);
 
     /* Process events */
-    case TERM_XTRA_EVENT:
+    case TERM_XTRA::EVENT:
         return game_term_xtra_gcu_event(v);
 
     /* Flush events */
-    case TERM_XTRA_FLUSH:
+    case TERM_XTRA::FLUSH:
         while (!game_term_xtra_gcu_event(false)) {
             ;
         }
         return 0;
 
     /* Delay */
-    case TERM_XTRA_DELAY:
+    case TERM_XTRA::DELAY:
         usleep(1000 * v);
         return 0;
 
     /* React to events */
-    case TERM_XTRA_REACT:
+    case TERM_XTRA::REACT:
         game_term_xtra_gcu_react();
         return 0;
-    }
 
-    /* Unknown */
-    return 1;
+    default:
+        /* Unknown */
+        return 1;
+    }
 }
 
 /*

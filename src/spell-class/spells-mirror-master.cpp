@@ -313,7 +313,7 @@ void SpellsMirrorMaster::project_seeker_ray(int target_x, int target_y, int dam)
                     print_bolt_pict(this->player_ptr, oy, ox, ny, nx, typ);
                     move_cursor_relative(ny, nx);
                     term_fresh();
-                    term_xtra(TERM_XTRA_DELAY, delay_factor);
+                    term_xtra(TERM_XTRA::DELAY, delay_factor);
                     lite_spot(this->player_ptr, ny, nx);
                     term_fresh();
 
@@ -321,7 +321,7 @@ void SpellsMirrorMaster::project_seeker_ray(int target_x, int target_y, int dam)
 
                     visual = true;
                 } else if (visual) {
-                    term_xtra(TERM_XTRA_DELAY, delay_factor);
+                    term_xtra(TERM_XTRA::DELAY, delay_factor);
                 }
             }
 
@@ -397,7 +397,7 @@ static void draw_super_ray_pict(PlayerType *player_ptr, const std::map<int, std:
             }
         }
         term_fresh();
-        term_xtra(TERM_XTRA_DELAY, delay_factor);
+        term_xtra(TERM_XTRA::DELAY, delay_factor);
 
         for (const auto &[y, x] : drawn_last_pos_list) {
             if (panel_contains(y, x) && player_has_los_bold(player_ptr, y, x)) {
@@ -408,7 +408,7 @@ static void draw_super_ray_pict(PlayerType *player_ptr, const std::map<int, std:
     }
 
     term_fresh();
-    term_xtra(TERM_XTRA_DELAY, delay_factor);
+    term_xtra(TERM_XTRA::DELAY, delay_factor);
 
     for (const auto &[y, x] : drawn_pos_list) {
         lite_spot(player_ptr, y, x);
@@ -489,7 +489,7 @@ void SpellsMirrorMaster::project_super_ray(int target_x, int target_y, int dam)
                 print_bolt_pict(this->player_ptr, oy, ox, ny, nx, typ);
                 move_cursor_relative(ny, nx);
                 term_fresh();
-                term_xtra(TERM_XTRA_DELAY, delay_factor);
+                term_xtra(TERM_XTRA::DELAY, delay_factor);
                 lite_spot(this->player_ptr, ny, nx);
                 term_fresh();
 
@@ -498,7 +498,7 @@ void SpellsMirrorMaster::project_super_ray(int target_x, int target_y, int dam)
                 drawn_pos_list.emplace_back(ny, nx);
                 visual = true;
             } else if (visual) {
-                term_xtra(TERM_XTRA_DELAY, delay_factor);
+                term_xtra(TERM_XTRA::DELAY, delay_factor);
             }
         }
 

@@ -90,7 +90,7 @@ void do_cmd_colors(PlayerType *player_ptr)
             }
 
             (void)process_pref_file(player_ptr, tmp, true);
-            term_xtra(TERM_XTRA_REACT, 0);
+            term_xtra(TERM_XTRA::REACT, 0);
             term_redraw();
         } else if (i == '2') {
             static concptr mark = "Colors";
@@ -181,7 +181,7 @@ void do_cmd_colors(PlayerType *player_ptr)
                     angband_color_table[a][3] = (byte)(angband_color_table[a][3] - 1);
                 }
 
-                term_xtra(TERM_XTRA_REACT, 0);
+                term_xtra(TERM_XTRA::REACT, 0);
                 term_redraw();
             }
         } else {

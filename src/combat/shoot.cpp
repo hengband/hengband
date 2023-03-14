@@ -701,7 +701,7 @@ void exe_fire(PlayerType *player_ptr, INVENTORY_IDX item, ItemEntity *j_ptr, SPE
                     print_rel(player_ptr, c, a, ny, nx);
                     move_cursor_relative(ny, nx);
                     term_fresh();
-                    term_xtra(TERM_XTRA_DELAY, delay_factor);
+                    term_xtra(TERM_XTRA::DELAY, delay_factor);
                     lite_spot(player_ptr, ny, nx);
                     term_fresh();
                 }
@@ -711,7 +711,7 @@ void exe_fire(PlayerType *player_ptr, INVENTORY_IDX item, ItemEntity *j_ptr, SPE
             else {
                 /* Pause anyway, for consistancy **/
                 if (delay_factor > 0) {
-                    term_xtra(TERM_XTRA_DELAY, delay_factor);
+                    term_xtra(TERM_XTRA::DELAY, delay_factor);
                 }
             }
 
@@ -923,7 +923,7 @@ void exe_fire(PlayerType *player_ptr, INVENTORY_IDX item, ItemEntity *j_ptr, SPE
                                     lite_spot(player_ptr, ny, nx);
                                     lite_spot(player_ptr, oy, ox);
                                     term_fresh();
-                                    term_xtra(TERM_XTRA_DELAY, delay_factor);
+                                    term_xtra(TERM_XTRA::DELAY, delay_factor);
                                 }
 
                                 x = nx;

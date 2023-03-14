@@ -12,6 +12,7 @@
 #include "main-win/main-win-utils.h"
 #include "main-win/wav-reader.h"
 #include "util/angband-files.h"
+#include "util/enum-converter.h"
 
 #include "main/sound-definitions-table.h"
 
@@ -231,7 +232,7 @@ static concptr sound_key_at(int index, char *buf)
 void load_sound_prefs(void)
 {
     CfgReader reader(ANGBAND_DIR_XTRA_SOUND, { "sound_debug.cfg", "sound.cfg" });
-    sound_cfg_data = reader.read_sections({ { "Sound", TERM_XTRA_SOUND, sound_key_at } });
+    sound_cfg_data = reader.read_sections({ { "Sound", TERM_XTRA::SOUND, sound_key_at } });
 }
 
 /*!
@@ -255,7 +256,7 @@ void finalize_sound(void)
  */
 errr play_sound(int val, int volume)
 {
-    concptr filename = sound_cfg_data->get_rand(TERM_XTRA_SOUND, val);
+    concptr filename = sound_cfg_data->get_rand(enum2i(TERM_XTRA::SOUND), val);
     if (!filename) {
         return 1;
     }

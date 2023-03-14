@@ -15,7 +15,7 @@ extern CfgData *music_cfg_data;
 namespace main_win_music {
 void load_music_prefs();
 errr stop_music(void);
-errr play_music(int type, int val);
+errr play_music(TERM_XTRA type, int val);
 errr play_music_scene(int val);
 void pause_music(void);
 void resume_music(void);

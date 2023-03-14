@@ -1878,46 +1878,46 @@ static errr game_term_xtra_x11_react(void)
 /*
  * Handle a "special request"
  */
-static errr game_term_xtra_x11(int n, int v)
+static errr game_term_xtra_x11(TERM_XTRA n, int v)
 {
     switch (n) {
-    case TERM_XTRA_NOISE:
+    case TERM_XTRA::NOISE:
         Metadpy_do_beep();
         return 0;
-    case TERM_XTRA_SOUND:
+    case TERM_XTRA::SOUND:
         return game_term_xtra_x11_sound(v);
 #ifdef USE_XFT
-    case TERM_XTRA_FRESH:
+    case TERM_XTRA::FRESH:
         Metadpy_update(1, 1, 0);
         return 0;
 #else
-    case TERM_XTRA_FRESH:
+    case TERM_XTRA::FRESH:
         Metadpy_update(1, 0, 0);
         return 0;
 #endif
-    case TERM_XTRA_BORED:
+    case TERM_XTRA::BORED:
         return CheckEvent(0);
-    case TERM_XTRA_EVENT:
+    case TERM_XTRA::EVENT:
         return CheckEvent(v);
-    case TERM_XTRA_FLUSH:
+    case TERM_XTRA::FLUSH:
         while (!CheckEvent(false)) {
             ;
         }
         return 0;
-    case TERM_XTRA_LEVEL:
+    case TERM_XTRA::LEVEL:
         return game_term_xtra_x11_level(v);
-    case TERM_XTRA_CLEAR:
+    case TERM_XTRA::CLEAR:
         Infowin_wipe();
         s_ptr->drawn = false;
         return 0;
-    case TERM_XTRA_DELAY:
+    case TERM_XTRA::DELAY:
         usleep(1000 * v);
         return 0;
-    case TERM_XTRA_REACT:
+    case TERM_XTRA::REACT:
         return game_term_xtra_x11_react();
+    default:
+        return 1;
     }
-
-    return 1;
 }
 
 /*

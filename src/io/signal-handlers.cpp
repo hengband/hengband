@@ -34,9 +34,9 @@ static void handle_signal_suspend(int sig)
     (void)signal(sig, SIG_IGN);
 #ifdef SIGSTOP
     term_fresh();
-    term_xtra(TERM_XTRA_ALIVE, 0);
+    term_xtra(TERM_XTRA::ALIVE, 0);
     (void)kill(0, SIGSTOP);
-    term_xtra(TERM_XTRA_ALIVE, 1);
+    term_xtra(TERM_XTRA::ALIVE, 1);
     term_redraw();
     term_fresh();
 #endif
@@ -88,12 +88,12 @@ static void handle_signal_simple(int sig)
         close_game(p_ptr);
         quit(_("強制終了", "interrupt"));
     } else if (signal_count >= 4) {
-        term_xtra(TERM_XTRA_NOISE, 0);
+        term_xtra(TERM_XTRA::NOISE, 0);
         term_erase(0, 0, 255);
         term_putstr(0, 0, -1, TERM_WHITE, _("熟慮の上の自殺！", "Contemplating suicide!"));
         term_fresh();
     } else if (signal_count >= 2) {
-        term_xtra(TERM_XTRA_NOISE, 0);
+        term_xtra(TERM_XTRA::NOISE, 0);
     }
 
     (void)signal(sig, handle_signal_simple);

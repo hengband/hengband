@@ -291,7 +291,7 @@ static void generate_world(PlayerType *player_ptr, bool new_game)
 
 static void init_io(PlayerType *player_ptr)
 {
-    term_xtra(TERM_XTRA_REACT, 0);
+    term_xtra(TERM_XTRA::REACT, 0);
     player_ptr->window_flags = PW_ALL;
     handle_stuff(player_ptr);
     if (arg_force_original) {

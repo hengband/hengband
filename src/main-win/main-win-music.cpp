@@ -25,7 +25,7 @@
 #include <limits>
 
 bool use_pause_music_inactive = false;
-static int current_music_type = TERM_XTRA_MUSIC_MUTE;
+static TERM_XTRA current_music_type = TERM_XTRA::MUSIC_MUTE;
 static int current_music_id = 0;
 // current filename being played
 static char current_music_path[MAIN_WIN_MAX_PATH];
@@ -140,18 +140,18 @@ void load_music_prefs()
 
     // clang-format off
     music_cfg_data = reader.read_sections({
-        { "Basic", TERM_XTRA_MUSIC_BASIC, basic_key_at },
-        { "Dungeon", TERM_XTRA_MUSIC_DUNGEON, dungeon_key_at },
-        { "Quest", TERM_XTRA_MUSIC_QUEST, quest_key_at },
-        { "Town", TERM_XTRA_MUSIC_TOWN, town_key_at },
-        { "Monster", TERM_XTRA_MUSIC_MONSTER, monster_key_at, &has_monster_music }
+        { "Basic", TERM_XTRA::MUSIC_BASIC, basic_key_at },
+        { "Dungeon", TERM_XTRA::MUSIC_DUNGEON, dungeon_key_at },
+        { "Quest", TERM_XTRA::MUSIC_QUEST, quest_key_at },
+        { "Town", TERM_XTRA::MUSIC_TOWN, town_key_at },
+        { "Monster", TERM_XTRA::MUSIC_MONSTER, monster_key_at, &has_monster_music }
         });
     // clang-format on
 
     if (!has_monster_music) {
-        int type = TERM_XTRA_MUSIC_BASIC;
+        TERM_XTRA type = TERM_XTRA::MUSIC_BASIC;
         for (int val = MUSIC_BASIC_UNIQUE; val <= MUSIC_BASIC_HIGHER_LEVEL_MONSTER; val++) {
-            if (music_cfg_data->has_key(type, val)) {
+            if (music_cfg_data->has_key(enum2i(type), val)) {
                 has_monster_music = true;
                 break;
             }
@@ -166,7 +166,7 @@ errr stop_music(void)
 {
     mciSendCommandW(mci_open_parms.wDeviceID, MCI_STOP, MCI_WAIT, 0);
     mciSendCommandW(mci_open_parms.wDeviceID, MCI_CLOSE, MCI_WAIT, 0);
-    current_music_type = TERM_XTRA_MUSIC_MUTE;
+    current_music_type = TERM_XTRA::MUSIC_MUTE;
     current_music_id = 0;
     strcpy(current_music_path, "\0");
     return 0;
@@ -175,9 +175,9 @@ errr stop_music(void)
 /*
  * Play a music
  */
-errr play_music(int type, int val)
+errr play_music(TERM_XTRA type, int val)
 {
-    if (type == TERM_XTRA_MUSIC_MUTE) {
+    if (type == TERM_XTRA::MUSIC_MUTE) {
         return stop_music();
     }
 
@@ -185,7 +185,7 @@ errr play_music(int type, int val)
         return 0;
     } // now playing
 
-    concptr filename = music_cfg_data->get_rand(type, val);
+    concptr filename = music_cfg_data->get_rand(enum2i(type), val);
     if (!filename) {
         return 1;
     } // no setting
@@ -193,7 +193,7 @@ errr play_music(int type, int val)
     char buf[MAIN_WIN_MAX_PATH];
     path_build(buf, MAIN_WIN_MAX_PATH, ANGBAND_DIR_XTRA_MUSIC, filename);
 
-    if (current_music_type != TERM_XTRA_MUSIC_MUTE) {
+    if (current_music_type != TERM_XTRA::MUSIC_MUTE) {
         if (0 == strcmp(current_music_path, buf)) {
             return 0;
         }
@@ -238,7 +238,7 @@ errr play_music_scene(int val)
     auto &list = get_scene_type_list(val);
     const errr err_sucsess = 0;
     for (auto &item : list) {
-        if (play_music(item.type, item.val) == err_sucsess) {
+        if (main_win_music::play_music(item.type, item.val) == err_sucsess) {
             break;
         }
     }
@@ -248,7 +248,7 @@ errr play_music_scene(int val)
 
 void set_music_volume(int volume)
 {
-    if (current_music_type == TERM_XTRA_MUSIC_MUTE) {
+    if (current_music_type == TERM_XTRA::MUSIC_MUTE) {
         return;
     }
 

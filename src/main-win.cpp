@@ -914,7 +914,7 @@ static errr term_xtra_win_sound(int v)
 /*!
  * @brief Hack -- play a music
  */
-static errr term_xtra_win_music(int n, int v)
+static errr term_xtra_win_music(TERM_XTRA n, int v)
 {
     if (!use_music) {
         return 1;
@@ -949,51 +949,51 @@ static int term_xtra_win_delay(int v)
  * @brief Do a "special thing"
  * @todo z-termに影響があるのでPlayerTypeの追加は保留
  */
-static errr term_xtra_win(int n, int v)
+static errr term_xtra_win(TERM_XTRA n, int v)
 {
     switch (n) {
-    case TERM_XTRA_NOISE: {
+    case TERM_XTRA::NOISE: {
         return term_xtra_win_noise();
     }
-    case TERM_XTRA_FRESH: {
+    case TERM_XTRA::FRESH: {
         term_data *td = (term_data *)(game_term->data);
         if (td->w) {
             UpdateWindow(td->w);
         }
         return 0;
     }
-    case TERM_XTRA_MUSIC_BASIC:
-    case TERM_XTRA_MUSIC_DUNGEON:
-    case TERM_XTRA_MUSIC_QUEST:
-    case TERM_XTRA_MUSIC_TOWN:
-    case TERM_XTRA_MUSIC_MONSTER: {
+    case TERM_XTRA::MUSIC_BASIC:
+    case TERM_XTRA::MUSIC_DUNGEON:
+    case TERM_XTRA::MUSIC_QUEST:
+    case TERM_XTRA::MUSIC_TOWN:
+    case TERM_XTRA::MUSIC_MONSTER: {
         return term_xtra_win_music(n, v);
     }
-    case TERM_XTRA_MUSIC_MUTE: {
+    case TERM_XTRA::MUSIC_MUTE: {
         return main_win_music::stop_music();
     }
-    case TERM_XTRA_SCENE: {
+    case TERM_XTRA::SCENE: {
         return term_xtra_win_scene(v);
     }
-    case TERM_XTRA_SOUND: {
+    case TERM_XTRA::SOUND: {
         return term_xtra_win_sound(v);
     }
-    case TERM_XTRA_BORED: {
+    case TERM_XTRA::BORED: {
         return term_xtra_win_event(0);
     }
-    case TERM_XTRA_EVENT: {
+    case TERM_XTRA::EVENT: {
         return term_xtra_win_event(v);
     }
-    case TERM_XTRA_FLUSH: {
+    case TERM_XTRA::FLUSH: {
         return term_xtra_win_flush();
     }
-    case TERM_XTRA_CLEAR: {
+    case TERM_XTRA::CLEAR: {
         return term_xtra_win_clear();
     }
-    case TERM_XTRA_REACT: {
+    case TERM_XTRA::REACT: {
         return term_xtra_win_react(p_ptr);
     }
-    case TERM_XTRA_DELAY: {
+    case TERM_XTRA::DELAY: {
         return term_xtra_win_delay(v);
     }
     }

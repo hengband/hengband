@@ -115,7 +115,7 @@ void do_cmd_store(PlayerType *player_ptr)
     st_ptr = &town_info[player_ptr->town_num].store[enum2i(store_num)];
     ot_ptr = &owners.at(store_num)[st_ptr->owner];
     store_top = 0;
-    play_music(TERM_XTRA_MUSIC_BASIC, MUSIC_BASIC_BUILD);
+    play_music(TERM_XTRA::MUSIC_BASIC, MUSIC_BASIC_BUILD);
     display_store(player_ptr, store_num);
     leave_store = false;
 

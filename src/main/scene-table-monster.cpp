@@ -155,11 +155,11 @@ static bool scene_monster(PlayerType *player_ptr, scene_type *value)
     auto *m_ptr = &player_ptr->current_floor_ptr->m_list[scene_target_monster.m_idx];
 
     if (has_shadower_flag(m_ptr)) {
-        value->type = TERM_XTRA_MUSIC_BASIC;
+        value->type = TERM_XTRA::MUSIC_BASIC;
         value->val = MUSIC_BASIC_SHADOWER;
         return true;
     } else {
-        value->type = TERM_XTRA_MUSIC_MONSTER;
+        value->type = TERM_XTRA::MUSIC_MONSTER;
         value->val = enum2i(m_ptr->ap_r_idx);
         return true;
     }
@@ -170,7 +170,7 @@ static bool scene_unique(PlayerType *player_ptr, scene_type *value)
     (void)player_ptr;
 
     if (is_unique(scene_target_monster.ap_r_ptr)) {
-        value->type = TERM_XTRA_MUSIC_BASIC;
+        value->type = TERM_XTRA::MUSIC_BASIC;
         value->val = MUSIC_BASIC_UNIQUE;
         return true;
     }
@@ -182,7 +182,7 @@ static bool scene_unknown(PlayerType *player_ptr, scene_type *value)
 {
     (void)player_ptr;
     if (is_unknown_monster(scene_target_monster.ap_r_ptr)) {
-        value->type = TERM_XTRA_MUSIC_BASIC;
+        value->type = TERM_XTRA::MUSIC_BASIC;
         value->val = MUSIC_BASIC_UNKNOWN_MONSTER;
         return true;
     }
@@ -193,7 +193,7 @@ static bool scene_unknown(PlayerType *player_ptr, scene_type *value)
 static bool scene_high_level(PlayerType *player_ptr, scene_type *value)
 {
     if (!is_unknown_monster(scene_target_monster.ap_r_ptr) && (scene_target_monster.ap_r_ptr->level >= player_ptr->lev)) {
-        value->type = TERM_XTRA_MUSIC_BASIC;
+        value->type = TERM_XTRA::MUSIC_BASIC;
         value->val = MUSIC_BASIC_HIGHER_LEVEL_MONSTER;
         return true;
     }
@@ -265,7 +265,7 @@ void refresh_scene_monster(PlayerType *player_ptr, const std::vector<MONSTER_IDX
             scene_type &item = list[from_index];
             if (!func(player_ptr, &item)) {
                 // Note -- 特に定義を設けていないが、type = 0は無効な値とする。
-                item.type = 0;
+                item.type = TERM_XTRA::NONE;
                 item.val = 0;
             }
             ++from_index;
@@ -276,7 +276,7 @@ void refresh_scene_monster(PlayerType *player_ptr, const std::vector<MONSTER_IDX
         for (int i = 0; i < count; i++) {
             scene_type &item = list[from_index + i];
             // Note -- 特に定義を設けていないが、type = 0は無効な値とする。
-            item.type = 0;
+            item.type = TERM_XTRA::NONE;
             item.val = 0;
         }
     }

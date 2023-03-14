@@ -20,7 +20,7 @@ void bell(void)
 {
     term_fresh();
     if (ring_bell) {
-        term_xtra(TERM_XTRA_NOISE, 0);
+        term_xtra(TERM_XTRA::NOISE, 0);
     }
 
     flush();
@@ -36,13 +36,13 @@ void sound(int val)
         return;
     }
 
-    term_xtra(TERM_XTRA_SOUND, val);
+    term_xtra(TERM_XTRA::SOUND, val);
 }
 
 /*!
  * @brief Hack -- Play a music
  */
-errr play_music(int type, int val)
+errr play_music(TERM_XTRA type, int val)
 {
     if (!use_music) {
         return 1;
@@ -64,7 +64,7 @@ void select_floor_music(PlayerType *player_ptr)
     }
 
     refresh_scene_table(player_ptr);
-    term_xtra(TERM_XTRA_SCENE, 0);
+    term_xtra(TERM_XTRA::SCENE, 0);
 }
 
 /*!
@@ -79,5 +79,5 @@ void select_monster_music(PlayerType *player_ptr, const std::vector<MONSTER_IDX>
     }
 
     refresh_scene_table(player_ptr, monster_list);
-    term_xtra(TERM_XTRA_SCENE, 0);
+    term_xtra(TERM_XTRA::SCENE, 0);
 }

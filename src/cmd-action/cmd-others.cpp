@@ -148,7 +148,7 @@ static void accept_winner_message(PlayerType *player_ptr)
     }
 
     char buf[1024] = "";
-    play_music(TERM_XTRA_MUSIC_BASIC, MUSIC_BASIC_WINNER);
+    play_music(TERM_XTRA::MUSIC_BASIC, MUSIC_BASIC_WINNER);
     do {
         while (!get_string(_("*勝利*メッセージ: ", "*Winning* message: "), buf, sizeof(buf))) {
             ;
@@ -195,7 +195,7 @@ void do_cmd_suicide(PlayerType *player_ptr)
         accept_winner_message(player_ptr);
         add_retired_class(player_ptr->pclass);
     } else {
-        play_music(TERM_XTRA_MUSIC_BASIC, MUSIC_BASIC_GAMEOVER);
+        play_music(TERM_XTRA::MUSIC_BASIC, MUSIC_BASIC_GAMEOVER);
         exe_write_diary(player_ptr, DIARY_DESCRIPTION, 0, _("ダンジョンの探索に絶望して自殺した。", "gave up all hope to commit suicide."));
         exe_write_diary(player_ptr, DIARY_GAMESTART, 1, _("-------- ゲームオーバー --------", "--------   Game  Over   --------"));
         exe_write_diary(player_ptr, DIARY_DESCRIPTION, 1, "\n\n\n\n");

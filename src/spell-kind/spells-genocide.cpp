@@ -107,7 +107,7 @@ bool genocide_aux(PlayerType *player_ptr, MONSTER_IDX m_idx, int power, bool pla
     handle_stuff(player_ptr);
     term_fresh();
 
-    term_xtra(TERM_XTRA_DELAY, delay_factor);
+    term_xtra(TERM_XTRA::DELAY, delay_factor);
 
     return !resist;
 }

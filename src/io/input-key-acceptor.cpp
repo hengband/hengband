@@ -157,7 +157,7 @@ static char inkey_aux(void)
                 break;
             }
 
-            term_xtra(TERM_XTRA_DELAY, w);
+            term_xtra(TERM_XTRA::DELAY, w);
         }
     }
 
@@ -269,7 +269,7 @@ char inkey(bool do_all_term_refresh)
                         break;
                     }
 
-                    term_xtra(TERM_XTRA_DELAY, w);
+                    term_xtra(TERM_XTRA::DELAY, w);
                 }
             }
 

@@ -73,7 +73,7 @@ static bool check_death(PlayerType *player_ptr)
 
     do_cmd_save_game(player_ptr, false);
     prt(_("リターンキーか ESC キーを押して下さい。", "Press Return (or Escape)."), 0, 40);
-    play_music(TERM_XTRA_MUSIC_BASIC, MUSIC_BASIC_EXIT);
+    play_music(TERM_XTRA::MUSIC_BASIC, MUSIC_BASIC_EXIT);
     if (inkey() != ESCAPE) {
         predict_score(player_ptr);
     }
