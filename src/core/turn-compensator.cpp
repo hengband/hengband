@@ -64,7 +64,7 @@ void prevent_turn_overflow(PlayerType *player_ptr)
         player_ptr->feeling_turn = 1;
     }
 
-    for (int i = 1; i < max_towns; i++) {
+    for (int i = 1; i < town_info.size(); i++) {
         for (int j = 0; j < MAX_STORES; j++) {
             store_type *store_ptr = &town_info[i].store[j];
 

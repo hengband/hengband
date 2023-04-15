@@ -123,7 +123,7 @@ static bool wr_savefile_new(PlayerType *player_ptr, SaveType type)
         wr_perception(bi_id);
     }
 
-    tmp16u = max_towns;
+    tmp16u = town_info.size();
     wr_u16b(tmp16u);
 
     const auto &quest_list = QuestList::get_instance();
@@ -214,12 +214,12 @@ static bool wr_savefile_new(PlayerType *player_ptr, SaveType type)
     }
 
     wr_u16b(0xFFFF);
-    tmp16u = max_towns;
+    tmp16u = town_info.size();
     wr_u16b(tmp16u);
 
     tmp16u = MAX_STORES;
     wr_u16b(tmp16u);
-    for (int i = 1; i < max_towns; i++) {
+    for (int i = 1; i < town_info.size(); i++) {
         for (int j = 0; j < MAX_STORES; j++) {
             wr_store(&town_info[i].store[j]);
         }

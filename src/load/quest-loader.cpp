@@ -20,7 +20,7 @@
 errr load_town(void)
 {
     auto max_towns_load = rd_u16b();
-    if (max_towns_load <= max_towns) {
+    if (max_towns_load <= town_info.size()) {
         return 0;
     }
 

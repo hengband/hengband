@@ -253,7 +253,7 @@ void store_examine(PlayerType *player_ptr, StoreSaleType store_num)
 void store_shuffle(PlayerType *player_ptr, StoreSaleType store_num)
 {
     auto owner_num = owners.at(store_num).size();
-    if ((store_num == StoreSaleType::HOME) || (store_num == StoreSaleType::MUSEUM) || (owner_num <= (uint16_t)max_towns)) {
+    if ((store_num == StoreSaleType::HOME) || (store_num == StoreSaleType::MUSEUM) || (owner_num <= (uint16_t)town_info.size())) {
         return;
     }
 
@@ -267,7 +267,7 @@ void store_shuffle(PlayerType *player_ptr, StoreSaleType store_num)
         }
 
         int i;
-        for (i = 1; i < max_towns; i++) {
+        for (i = 1; i < town_info.size(); i++) {
             if (i == player_ptr->town_num) {
                 continue;
             }
@@ -277,7 +277,7 @@ void store_shuffle(PlayerType *player_ptr, StoreSaleType store_num)
             }
         }
 
-        if (i == max_towns) {
+        if (i == town_info.size()) {
             break;
         }
     }
@@ -479,13 +479,13 @@ void store_init(int town_num, StoreSaleType store_num)
     while (true) {
         st_ptr->owner = (byte)randint0(owner_num);
 
-        if (owner_num <= (uint16_t)max_towns) {
+        if (owner_num <= (uint16_t)town_info.size()) {
             break;
         }
 
         int i;
 
-        for (i = 1; i < (uint16_t)max_towns; i++) {
+        for (i = 1; i < (uint16_t)town_info.size(); i++) {
             if (i == town_num) {
                 continue;
             }
@@ -494,7 +494,7 @@ void store_init(int town_num, StoreSaleType store_num)
             }
         }
 
-        if (i == max_towns) {
+        if (i == town_info.size()) {
             break;
         }
     }
