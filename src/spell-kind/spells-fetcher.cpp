@@ -106,7 +106,7 @@ void fetch_item(PlayerType *player_ptr, DIRECTION dir, WEIGHT wgt, bool require_
     o_ptr->ix = player_ptr->x;
 
     const auto item_name = describe_flavor(player_ptr, o_ptr, OD_NAME_ONLY);
-    msg_format(_("%^sがあなたの足元に飛んできた。", "%^s flies through the air to your feet."), item_name.data());
+    msg_format(_("%s^があなたの足元に飛んできた。", "%s^ flies through the air to your feet."), item_name.data());
     note_spot(player_ptr, player_ptr->y, player_ptr->x);
     player_ptr->redraw |= PR_MAP;
 }

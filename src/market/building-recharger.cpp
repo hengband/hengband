@@ -150,7 +150,7 @@ void building_recharge(PlayerType *player_ptr)
 #ifdef JP
     msg_format("%sを＄%d で再充填しました。", item_name.data(), price);
 #else
-    msg_format("%^s %s recharged for %d gold.", item_name.data(), ((o_ptr->number > 1) ? "were" : "was"), price);
+    msg_format("%s^ %s recharged for %d gold.", item_name.data(), ((o_ptr->number > 1) ? "were" : "was"), price);
 #endif
     player_ptr->update |= (PU_COMBINE | PU_REORDER);
     player_ptr->window_flags |= (PW_INVEN);
