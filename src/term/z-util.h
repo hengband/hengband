@@ -30,18 +30,18 @@ extern void (*core_aux)(concptr);
 /**** Available Functions ****/
 
 /* Test equality, prefix, suffix */
-extern bool streq(std::string_view s, std::string_view t);
-extern bool prefix(std::string_view s, std::string_view t);
-extern bool suffix(std::string_view s, std::string_view t);
+bool streq(std::string_view s, std::string_view t);
+bool prefix(std::string_view s, std::string_view t);
+bool suffix(std::string_view s, std::string_view t);
 
 /* Print an error message */
-extern void plog(concptr str);
+void plog(concptr str);
 
 /* Exit, with optional message */
-extern void quit(concptr str);
+void quit(concptr str);
 
 /* Dump core, with optional message */
-extern void core(concptr str);
+void core(concptr str);
 
 /* 64-bit integer operations */
 
@@ -65,12 +65,12 @@ void s64b_lshift(int32_t *hi, uint32_t *lo, int n);
  */
 void s64b_rshift(int32_t *hi, uint32_t *lo, int n);
 
-extern void s64b_add(int32_t *A1, uint32_t *A2, int32_t B1, uint32_t B2);
-extern void s64b_sub(int32_t *A1, uint32_t *A2, int32_t B1, uint32_t B2);
-extern int s64b_cmp(int32_t A1, uint32_t A2, int32_t B1, uint32_t B2);
-extern void s64b_mul(int32_t *A1, uint32_t *A2, int32_t B1, uint32_t B2);
-extern void s64b_div(int32_t *A1, uint32_t *A2, int32_t B1, uint32_t B2);
-extern void s64b_mod(int32_t *A1, uint32_t *A2, int32_t B1, uint32_t B2);
+void s64b_add(int32_t *A1, uint32_t *A2, int32_t B1, uint32_t B2);
+void s64b_sub(int32_t *A1, uint32_t *A2, int32_t B1, uint32_t B2);
+int s64b_cmp(int32_t A1, uint32_t A2, int32_t B1, uint32_t B2);
+void s64b_mul(int32_t *A1, uint32_t *A2, int32_t B1, uint32_t B2);
+void s64b_div(int32_t *A1, uint32_t *A2, int32_t B1, uint32_t B2);
+void s64b_mod(int32_t *A1, uint32_t *A2, int32_t B1, uint32_t B2);
 
-extern int count_bits(BIT_FLAGS x);
-extern int mysqrt(int n);
+int count_bits(BIT_FLAGS x);
+int mysqrt(int n);

@@ -8,8 +8,6 @@
  * are included in all such copies.
  */
 
-#include "system/h-basic.h"
-
 /*
  * Memory management routines.
  *
@@ -21,7 +19,7 @@
 /**** Available functions ****/
 
 /* Create a "dynamic string" */
-extern concptr string_make(concptr str);
+const char *string_make(const char *str);
 
 /* Free a string allocated with "string_make()" */
-extern errr string_free(concptr str);
+int string_free(const char *str);

@@ -10,16 +10,15 @@
 
 /* Purpose: Memory management routines -BEN- */
 
-#include <cstring>
-
 #include "term/z-virt.h"
+#include <cstring>
 
 /*!
  * @brief str の複製を返す。戻り値は使用後に string_free() で解放すること。
  *
  * nullptr が渡された場合、nullptr を返す。
  */
-concptr string_make(const concptr str)
+const char *string_make(const char *str)
 {
     if (!str) {
         return nullptr;
@@ -38,7 +37,7 @@ concptr string_make(const concptr str)
  *
  * nullptr が渡された場合、何もせず 0 を返す。
  */
-errr string_free(const concptr str)
+int string_free(const char *str)
 {
     if (!str) {
         return 0;
