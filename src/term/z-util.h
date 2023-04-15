@@ -1,4 +1,4 @@
-﻿/* File z-util.h */
+﻿#pragma once
 
 /*
  * Copyright (c) 1997 Ben Harrison
@@ -8,11 +8,7 @@
  * are included in all such copies.
  */
 
-#ifndef INCLUDED_Z_UTIL_H
-#define INCLUDED_Z_UTIL_H
-
 #include "system/h-basic.h"
-
 #include <string_view>
 
 /*
@@ -75,8 +71,6 @@ extern int s64b_cmp(int32_t A1, uint32_t A2, int32_t B1, uint32_t B2);
 extern void s64b_mul(int32_t *A1, uint32_t *A2, int32_t B1, uint32_t B2);
 extern void s64b_div(int32_t *A1, uint32_t *A2, int32_t B1, uint32_t B2);
 extern void s64b_mod(int32_t *A1, uint32_t *A2, int32_t B1, uint32_t B2);
-
-#endif
 
 extern int count_bits(BIT_FLAGS x);
 extern int mysqrt(int n);

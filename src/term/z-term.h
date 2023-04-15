@@ -1,4 +1,4 @@
-﻿/* File: z-term.h */
+﻿#pragma once
 
 /*
  * Copyright (c) 1997 Ben Harrison
@@ -7,9 +7,6 @@
  * and not for profit purposes provided that this copyright and statement
  * are included in all such copies.
  */
-
-#ifndef INCLUDED_Z_TERM_H
-#define INCLUDED_Z_TERM_H
 
 #include "system/angband.h"
 #include "system/h-basic.h"
@@ -242,6 +239,4 @@ errr term_putstr_v(TERM_LEN x, TERM_LEN y, int n, byte a, concptr s);
 
 #ifndef WINDOWS
 errr term_nuke(term_type *t);
-#endif
-
 #endif

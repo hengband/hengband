@@ -1,4 +1,4 @@
-﻿/* File z-form.h */
+﻿#pragma once
 
 /*
  * Copyright (c) 1997 Ben Harrison
@@ -7,9 +7,6 @@
  * and not for profit purposes provided that this copyright and statement
  * are included in all such copies.
  */
-
-#ifndef INCLUDED_Z_FORM_H
-#define INCLUDED_Z_FORM_H
 
 #include "system/h-basic.h"
 #include <string>
@@ -47,5 +44,3 @@ extern void quit_fmt(concptr fmt, ...) __attribute__((format(printf, 1, 2)));
 
 /* Vararg interface to "core()", using "format()" */
 extern void core_fmt(concptr fmt, ...) __attribute__((format(printf, 1, 2)));
-
-#endif
