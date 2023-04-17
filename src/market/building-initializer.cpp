@@ -47,11 +47,11 @@ static int count_town_numbers()
 void init_towns(void)
 {
     const auto town_numbers = count_town_numbers();
-    town_info = std::vector<town_type>(town_numbers);
+    towns_info = std::vector<town_type>(town_numbers);
     for (auto i = 1; i < town_numbers; i++) {
-        town_info[i].store = std::vector<store_type>(MAX_STORES);
+        towns_info[i].store = std::vector<store_type>(MAX_STORES);
         for (auto sst : STORE_SALE_TYPE_LIST) {
-            auto *store_ptr = &town_info[i].store[enum2i(sst)];
+            auto *store_ptr = &towns_info[i].store[enum2i(sst)];
             if ((i > 1) && (sst == StoreSaleType::MUSEUM || sst == StoreSaleType::HOME)) {
                 continue;
             }

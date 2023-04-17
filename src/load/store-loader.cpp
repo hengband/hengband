@@ -72,12 +72,12 @@ static void rd_store(PlayerType *player_ptr, int town_number, int store_number)
     store_type *store_ptr;
     auto sort = false;
     if (h_older_than(0, 3, 3) && (i2enum<StoreSaleType>(store_number) == StoreSaleType::HOME)) {
-        store_ptr = &town_info[1].store[store_number];
+        store_ptr = &towns_info[1].store[store_number];
         if (store_ptr->stock_num) {
             sort = true;
         }
     } else {
-        store_ptr = &town_info[town_number].store[store_number];
+        store_ptr = &towns_info[town_number].store[store_number];
     }
 
     store_ptr->store_open = rd_s32b();

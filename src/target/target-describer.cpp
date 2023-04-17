@@ -488,7 +488,7 @@ static std::string decide_target_floor(PlayerType *player_ptr, eg_type *eg_ptr)
     }
 
     if (eg_ptr->f_ptr->flags.has(TerrainCharacteristics::TOWN)) {
-        return town_info[eg_ptr->g_ptr->special].name;
+        return towns_info[eg_ptr->g_ptr->special].name;
     }
 
     if (player_ptr->wild_mode && (eg_ptr->feat == feat_floor)) {

@@ -208,7 +208,7 @@ concptr map_name(PlayerType *player_ptr)
     } else if (player_ptr->phase_out) {
         return _("闘技場", "Monster Arena");
     } else if (!floor_ptr->dun_level && player_ptr->town_num) {
-        return town_info[player_ptr->town_num].name;
+        return towns_info[player_ptr->town_num].name;
     } else {
         return dungeons_info[player_ptr->dungeon_idx].name.data();
     }

@@ -195,7 +195,7 @@ void do_cmd_knowledge_home(PlayerType *player_ptr)
     }
 
     constexpr auto home_inventory = _("我が家のアイテム", "Home Inventory");
-    const auto &store = town_info[1].store[enum2i(StoreSaleType::HOME)];
+    const auto &store = towns_info[1].store[enum2i(StoreSaleType::HOME)];
     if (store.stock_num == 0) {
         angband_fclose(fff);
         (void)show_file(player_ptr, true, file_name, home_inventory, 0, 0);

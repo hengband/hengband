@@ -253,11 +253,11 @@ void store_examine(PlayerType *player_ptr, StoreSaleType store_num)
 void store_shuffle(PlayerType *player_ptr, StoreSaleType store_num)
 {
     auto owner_num = owners.at(store_num).size();
-    if ((store_num == StoreSaleType::HOME) || (store_num == StoreSaleType::MUSEUM) || (owner_num <= (uint16_t)town_info.size())) {
+    if ((store_num == StoreSaleType::HOME) || (store_num == StoreSaleType::MUSEUM) || (owner_num <= (uint16_t)towns_info.size())) {
         return;
     }
 
-    st_ptr = &town_info[player_ptr->town_num].store[enum2i(store_num)];
+    st_ptr = &towns_info[player_ptr->town_num].store[enum2i(store_num)];
     int j = st_ptr->owner;
     while (true) {
         st_ptr->owner = (byte)randint0(owner_num);
@@ -267,17 +267,17 @@ void store_shuffle(PlayerType *player_ptr, StoreSaleType store_num)
         }
 
         int i;
-        for (i = 1; i < town_info.size(); i++) {
+        for (i = 1; i < towns_info.size(); i++) {
             if (i == player_ptr->town_num) {
                 continue;
             }
 
-            if (st_ptr->owner == town_info[i].store[enum2i(store_num)].owner) {
+            if (st_ptr->owner == towns_info[i].store[enum2i(store_num)].owner) {
                 break;
             }
         }
 
-        if (i == town_info.size()) {
+        if (i == towns_info.size()) {
             break;
         }
     }
@@ -401,7 +401,7 @@ void store_maintenance(PlayerType *player_ptr, int town_num, StoreSaleType store
         return;
     }
 
-    st_ptr = &town_info[town_num].store[enum2i(store_num)];
+    st_ptr = &towns_info[town_num].store[enum2i(store_num)];
     ot_ptr = &owners.at(store_num)[st_ptr->owner];
     st_ptr->insult_cur = 0;
     if (store_num == StoreSaleType::BLACK) {
@@ -475,26 +475,26 @@ void store_maintenance(PlayerType *player_ptr, int town_num, StoreSaleType store
 void store_init(int town_num, StoreSaleType store_num)
 {
     auto owner_num = owners.at(store_num).size();
-    st_ptr = &town_info[town_num].store[enum2i(store_num)];
+    st_ptr = &towns_info[town_num].store[enum2i(store_num)];
     while (true) {
         st_ptr->owner = (byte)randint0(owner_num);
 
-        if (owner_num <= (uint16_t)town_info.size()) {
+        if (owner_num <= (uint16_t)towns_info.size()) {
             break;
         }
 
         int i;
 
-        for (i = 1; i < (uint16_t)town_info.size(); i++) {
+        for (i = 1; i < (uint16_t)towns_info.size(); i++) {
             if (i == town_num) {
                 continue;
             }
-            if (st_ptr->owner == town_info[i].store[enum2i(store_num)].owner) {
+            if (st_ptr->owner == towns_info[i].store[enum2i(store_num)].owner) {
                 break;
             }
         }
 
-        if (i == town_info.size()) {
+        if (i == towns_info.size()) {
             break;
         }
     }

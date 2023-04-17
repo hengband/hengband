@@ -258,8 +258,8 @@ static void home_aware(PlayerType *player_ptr)
 {
     ItemEntity *o_ptr;
     store_type *store_ptr;
-    for (int i = 1; i < town_info.size(); i++) {
-        store_ptr = &town_info[i].store[enum2i(StoreSaleType::HOME)];
+    for (int i = 1; i < towns_info.size(); i++) {
+        store_ptr = &towns_info[i].store[enum2i(StoreSaleType::HOME)];
         for (int j = 0; j < store_ptr->stock_num; j++) {
             o_ptr = &store_ptr->stock[j];
             if (!o_ptr->bi_id) {
@@ -307,9 +307,9 @@ static bool show_dead_player_items(PlayerType *player_ptr)
  */
 static void show_dead_home_items(PlayerType *player_ptr)
 {
-    for (int l = 1; l < town_info.size(); l++) {
+    for (int l = 1; l < towns_info.size(); l++) {
         store_type *store_ptr;
-        store_ptr = &town_info[l].store[enum2i(StoreSaleType::HOME)];
+        store_ptr = &towns_info[l].store[enum2i(StoreSaleType::HOME)];
         if (store_ptr->stock_num == 0) {
             continue;
         }
