@@ -328,7 +328,7 @@ void InputKeyRequestor::sweep_confirmation_equipments()
     }
 }
 
-void InputKeyRequestor::confirm_command(std::optional<std::string_view> inscription, const int caret_command)
+void InputKeyRequestor::confirm_command(const std::optional<std::string> &inscription, const int caret_command)
 {
     if (!inscription.has_value()) {
         return;
@@ -336,11 +336,11 @@ void InputKeyRequestor::confirm_command(std::optional<std::string_view> inscript
 
     auto s = inscription->data();
     s = angband_strchr(s, '^');
-    while (s) {
+    while (s != nullptr) {
 #ifdef JP
-        auto sure = (s[1] == caret_command) || (s[1] == '*');
+        auto sure = s[1] == caret_command;
 #else
-        auto sure = (s[1] == command_cmd) || (s[1] == '*');
+        auto sure = s[1] == command_cmd;
         (void)caret_command;
 #endif
         if (sure) {

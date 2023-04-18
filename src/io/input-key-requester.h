@@ -4,7 +4,6 @@
 #include "system/angband.h"
 #include <optional>
 #include <string>
-#include <string_view>
 
 extern concptr keymap_act[KEYMAP_MODES][256];
 
@@ -49,7 +48,7 @@ private:
     void change_shopping_command();
     int get_caret_command();
     void sweep_confirmation_equipments();
-    void confirm_command(std::optional<std::string_view> inscription, const int caret_command);
+    void confirm_command(const std::optional<std::string> &inscription, const int caret_command);
 
     void make_commands_frame();
     std::string switch_special_menu_condition(const SpecialMenuContent &special_menu);
