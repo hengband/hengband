@@ -334,6 +334,17 @@ static std::string describe_unique_name_after_body_en(const ItemEntity &item, co
  */
 static std::string describe_body(const ItemEntity &item, [[maybe_unused]] const describe_option_type &opt, std::string_view basename, std::string_view modstr)
 {
+#ifndef JP
+    auto pluralize = [&opt, &item](auto &ss, auto it) {
+        if (none_bits(opt.mode, OD_NO_PLURAL) && (item.number != 1)) {
+            char k = *std::next(it, -1);
+            if ((k == 's') || (k == 'h')) {
+                ss << 'e';
+            }
+            ss << 's';
+        }
+    };
+#endif
     std::stringstream ss;
 
     for (auto it = basename.begin(), it_end = basename.end(); it != it_end; ++it) {
@@ -343,19 +354,22 @@ static std::string describe_body(const ItemEntity &item, [[maybe_unused]] const 
             break;
 
         case '%':
+#ifdef JP
             ss << baseitems_info[item.bi_id].name;
+#else
+            for (auto ib = baseitems_info[item.bi_id].name.begin(), ib_end = baseitems_info[item.bi_id].name.end(); ib != ib_end; ++ib) {
+                if (*ib == '~') {
+                    pluralize(ss, ib);
+                } else {
+                    ss << *ib;
+                }
+            }
+#endif
             break;
 
 #ifndef JP
         case '~':
-            if (none_bits(opt.mode, OD_NO_PLURAL) && (item.number != 1)) {
-                char k = *std::next(it, -1);
-                if ((k == 's') || (k == 'h')) {
-                    ss << 'e';
-                }
-
-                ss << 's';
-            }
+            pluralize(ss, it);
             break;
 #endif
 
