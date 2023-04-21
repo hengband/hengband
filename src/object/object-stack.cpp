@@ -150,6 +150,10 @@ int object_similar_part(const ItemEntity *o_ptr, const ItemEntity *j_ptr)
             return 0;
         }
 
+        if (!o_ptr->is_known() || !j_ptr->is_known()) {
+            return 0;
+        }
+
         if (!o_ptr->can_pile(j_ptr)) {
             return 0;
         }
