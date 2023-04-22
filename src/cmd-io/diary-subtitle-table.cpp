@@ -6,7 +6,7 @@
 
 #include "cmd-io/diary-subtitle-table.h"
 
-concptr subtitle[MAX_SUBTITLE] = {
+const std::vector<std::string> diary_subtitles = {
 #ifdef JP
     "最強の肉体を求めて",
     "人生それははかない",

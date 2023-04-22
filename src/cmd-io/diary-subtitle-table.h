@@ -1,7 +1,7 @@
 ﻿#pragma once
 
 #include "system/angband.h"
+#include <string>
+#include <vector>
 
-#define MAX_SUBTITLE 33
-
-extern concptr subtitle[MAX_SUBTITLE];
+extern const std::vector<std::string> diary_subtitles;
