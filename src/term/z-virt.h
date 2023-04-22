@@ -1,4 +1,4 @@
-﻿/* File: z-virt.h */
+﻿#pragma once
 
 /*
  * Copyright (c) 1997 Ben Harrison
@@ -7,11 +7,6 @@
  * and not for profit purposes provided that this copyright and statement
  * are included in all such copies.
  */
-
-#ifndef INCLUDED_Z_VIRT_H
-#define INCLUDED_Z_VIRT_H
-
-#include "system/h-basic.h"
 
 /*
  * Memory management routines.
@@ -24,9 +19,7 @@
 /**** Available functions ****/
 
 /* Create a "dynamic string" */
-extern concptr string_make(concptr str);
+const char *string_make(const char *str);
 
 /* Free a string allocated with "string_make()" */
-extern errr string_free(concptr str);
-
-#endif
+int string_free(const char *str);
