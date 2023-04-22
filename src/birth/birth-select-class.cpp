@@ -134,9 +134,9 @@ static bool select_class(PlayerType *player_ptr, concptr sym, int *k)
     auto cs = player_ptr->pclass;
     auto os = PlayerClassType::MAX;
     int int_os = enum2i(os);
-    int int_cs = enum2i(cs);
     auto cur = birth_class_label(int_os, sym);
     while (true) {
+        int int_cs = enum2i(cs);
         cur = display_class_stat(int_cs, &int_os, cur, sym);
         if (*k >= 0) {
             break;
