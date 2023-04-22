@@ -1,7 +1,8 @@
 ﻿/*
  * @brief 日記のサブタイトルを表すテキストの配列群
- * @date 2020/03/08
+ * @date 2023/04/22
  * @author Hourier
+ * @details 「最強の肉体を求めて」と「最高の頭脳を求めて」以外はそれぞれ全く言っていることが異なる
  */
 
 #include "cmd-io/diary-subtitle-table.h"
@@ -40,7 +41,7 @@ const std::vector<std::string> diary_subtitles = {
     "神に喧嘩を売る者",
     "未知の世界へ",
     "時は金なり",
-    "最高の頭脳を求めて"
+    "最高の頭脳を求めて",
 #else
     "Quest of The World's Toughest Body",
     "Attack is the best form of defence.",
@@ -74,6 +75,6 @@ const std::vector<std::string> diary_subtitles = {
     "M$ Empire strikes back.",
     "To see is to believe",
     "Time is money.",
-    "Quest of The World's Greatest Brain"
+    "Quest of The World's Wisest Brain",
 #endif
 };
