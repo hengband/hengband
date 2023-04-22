@@ -59,7 +59,7 @@ static bool open_diary_file(FILE **fff, bool *disable_diary)
     file_name.append(savefile_base).append(".txt");
     char buf[1024];
     path_build(buf, sizeof(buf), ANGBAND_DIR_USER, file_name.data());
-    *fff = angband_fopen(buf, "a");
+    *fff = angband_fopen(buf, FileOpenMode::APPEND);
     if (*fff) {
         return true;
     }

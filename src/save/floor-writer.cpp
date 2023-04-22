@@ -263,7 +263,7 @@ bool save_floor(PlayerType *player_ptr, saved_floor_type *sf_ptr, BIT_FLAGS mode
     if (fd >= 0) {
         (void)fd_close(fd);
         safe_setuid_grab(player_ptr);
-        saving_savefile = angband_fopen(floor_savefile.data(), "wb");
+        saving_savefile = angband_fopen(floor_savefile.data(), FileOpenMode::WRITE, true);
         safe_setuid_drop();
         if (saving_savefile) {
             if (save_floor_aux(player_ptr, sf_ptr)) {

@@ -66,7 +66,7 @@ static std::vector<concptr> read_text_lines(concptr filename)
     char buf[1024];
 
     path_build(buf, sizeof(buf), ANGBAND_DIR_USER, filename);
-    fff = angband_fopen(buf, "r");
+    fff = angband_fopen(buf, FileOpenMode::READ);
     if (!fff) {
         return {};
     }
@@ -105,7 +105,7 @@ static void prepare_default_pickpref(PlayerType *player_ptr)
     char buf[1024];
     path_build(buf, sizeof(buf), ANGBAND_DIR_USER, filename.data());
     FILE *user_fp;
-    user_fp = angband_fopen(buf, "w");
+    user_fp = angband_fopen(buf, FileOpenMode::WRITE);
     if (!user_fp) {
         return;
     }
@@ -118,7 +118,7 @@ static void prepare_default_pickpref(PlayerType *player_ptr)
     fprintf(user_fp, "#***\n\n\n");
     path_build(buf, sizeof(buf), ANGBAND_DIR_PREF, filename.data());
     FILE *pref_fp;
-    pref_fp = angband_fopen(buf, "r");
+    pref_fp = angband_fopen(buf, FileOpenMode::READ);
 
     if (!pref_fp) {
         angband_fclose(user_fp);
@@ -171,7 +171,7 @@ bool write_text_lines(concptr filename, concptr *lines_list)
     char buf[1024];
     path_build(buf, sizeof(buf), ANGBAND_DIR_USER, filename);
     FILE *fff;
-    fff = angband_fopen(buf, "w");
+    fff = angband_fopen(buf, FileOpenMode::WRITE);
     if (!fff) {
         return false;
     }

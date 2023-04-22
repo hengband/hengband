@@ -75,7 +75,7 @@ errr file_character(PlayerType *player_ptr, concptr name)
 
     FILE *fff = nullptr;
     if (fd < 0) {
-        fff = angband_fopen(buf, "w");
+        fff = angband_fopen(buf, FileOpenMode::WRITE);
     }
 
     if (!fff) {
@@ -104,7 +104,7 @@ std::optional<std::string> get_random_line(concptr file_name, int entry)
 {
     char filename[1024];
     path_build(filename, sizeof(filename), ANGBAND_DIR_FILE, file_name);
-    auto *fp = angband_fopen(filename, "r");
+    auto *fp = angband_fopen(filename, FileOpenMode::READ);
     if (!fp) {
         return std::nullopt;
     }
@@ -336,7 +336,7 @@ void read_dead_file(char *buf, size_t buf_size)
     path_build(buf, buf_size, ANGBAND_DIR_FILE, _("dead_j.txt", "dead.txt"));
 
     FILE *fp;
-    fp = angband_fopen(buf, "r");
+    fp = angband_fopen(buf, FileOpenMode::READ);
     if (!fp) {
         return;
     }

@@ -205,7 +205,7 @@ void do_cmd_save_screen_html_aux(char *filename, int message)
     TERM_LEN wid, hgt;
     term_get_size(&wid, &hgt);
     FILE *fff;
-    fff = angband_fopen(filename, "w");
+    fff = angband_fopen(filename, FileOpenMode::WRITE);
     if (!check_screen_html_can_open(fff, filename, message)) {
         return;
     }
@@ -217,7 +217,7 @@ void do_cmd_save_screen_html_aux(char *filename, int message)
     char buf[2048];
     path_build(buf, sizeof(buf), ANGBAND_DIR_USER, "htmldump.prf");
     FILE *tmpfff;
-    tmpfff = angband_fopen(buf, "r");
+    tmpfff = angband_fopen(buf, FileOpenMode::READ);
     write_html_header(tmpfff, fff, buf, sizeof(buf));
     screen_dump_lines(wid, hgt, fff);
     write_html_footer(tmpfff, fff, buf, sizeof(buf));
@@ -308,7 +308,7 @@ static bool do_cmd_save_screen_text(int wid, int hgt)
     FILE *fff;
     char buf[1024];
     path_build(buf, sizeof(buf), ANGBAND_DIR_USER, "dump.txt");
-    fff = angband_fopen(buf, "w");
+    fff = angband_fopen(buf, FileOpenMode::WRITE);
     if (!check_screen_text_can_open(fff, buf)) {
         return false;
     }
@@ -486,7 +486,7 @@ void do_cmd_load_screen(void)
     TERM_LEN wid, hgt;
     term_get_size(&wid, &hgt);
     path_build(buf, sizeof(buf), ANGBAND_DIR_USER, "dump.txt");
-    fff = angband_fopen(buf, "r");
+    fff = angband_fopen(buf, FileOpenMode::READ);
     if (!fff) {
         msg_format(_("%s を開くことができませんでした。", "Failed to open %s."), buf);
         msg_print(nullptr);

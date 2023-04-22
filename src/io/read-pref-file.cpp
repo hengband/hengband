@@ -59,7 +59,7 @@ static int auto_dump_line_num;
 static errr process_pref_file_aux(PlayerType *player_ptr, concptr name, int preftype)
 {
     FILE *fp;
-    fp = angband_fopen(name, "r");
+    fp = angband_fopen(name, FileOpenMode::READ);
     if (!fp) {
         return -1;
     }
@@ -252,7 +252,7 @@ bool open_auto_dump(FILE **fpp, concptr buf, concptr mark)
     char header_mark_str[80];
     strnfmt(header_mark_str, sizeof(header_mark_str), auto_dump_header, mark);
     remove_auto_dump(buf, mark);
-    *fpp = angband_fopen(buf, "a");
+    *fpp = angband_fopen(buf, FileOpenMode::APPEND);
     if (!fpp) {
         msg_format(_("%s を開くことができませんでした。", "Failed to open %s."), buf);
         msg_print(nullptr);
