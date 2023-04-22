@@ -37,7 +37,7 @@ void inventory_damage(PlayerType *player_ptr, const ObjectBreaker &breaker, int 
     /* Scan through the slots backwards */
     for (i = 0; i < INVEN_PACK; i++) {
         o_ptr = &player_ptr->inventory_list[i];
-        if (!o_ptr->bi_id) {
+        if (!o_ptr->is_valid()) {
             continue;
         }
 

@@ -40,7 +40,7 @@
  */
 static void calc_shot_params(PlayerType *player_ptr, ItemEntity *o_ptr, int *shots, int *shot_frac)
 {
-    if (o_ptr->bi_id == 0) {
+    if (!o_ptr->is_valid()) {
         return;
     }
 
@@ -120,7 +120,7 @@ static bool calc_weapon_damage_limit(PlayerType *player_ptr, int hand, int *dama
  */
 static bool calc_weapon_one_hand(ItemEntity *o_ptr, int hand, int *damage, int *basedam)
 {
-    if (o_ptr->bi_id == 0) {
+    if (!o_ptr->is_valid()) {
         return false;
     }
 

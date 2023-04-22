@@ -602,7 +602,7 @@ std::optional<std::string> do_hex_spell(PlayerType *player_ptr, spell_hex_type s
         if (cast) {
             auto *o_ptr = &player_ptr->inventory_list[INVEN_OUTER];
 
-            if (!o_ptr->bi_id) {
+            if (!o_ptr->is_valid()) {
                 msg_print(_("クロークを身につけていない！", "You are not wearing a cloak."));
                 return std::nullopt;
             } else if (!o_ptr->is_cursed()) {
@@ -615,7 +615,7 @@ std::optional<std::string> do_hex_spell(PlayerType *player_ptr, spell_hex_type s
         if (continuation) {
             auto *o_ptr = &player_ptr->inventory_list[INVEN_OUTER];
 
-            if ((!o_ptr->bi_id) || (!o_ptr->is_cursed())) {
+            if ((!o_ptr->is_valid()) || (!o_ptr->is_cursed())) {
                 exe_spell(player_ptr, REALM_HEX, spell, SpellProcessType::STOP);
                 SpellHex spell_hex(player_ptr);
                 spell_hex.reset_casting_flag(spell);

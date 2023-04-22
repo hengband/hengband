@@ -47,9 +47,8 @@ void store_item_increase(INVENTORY_IDX item, ITEM_NUMBER num)
  */
 void store_item_optimize(INVENTORY_IDX item)
 {
-    ItemEntity *o_ptr;
-    o_ptr = &st_ptr->stock[item];
-    if ((o_ptr->bi_id == 0) || (o_ptr->number != 0)) {
+    const auto *o_ptr = &st_ptr->stock[item];
+    if (!o_ptr->is_valid() || (o_ptr->number != 0)) {
         return;
     }
 

@@ -331,7 +331,7 @@ static bool get_spike(PlayerType *player_ptr, INVENTORY_IDX *ip)
 {
     for (INVENTORY_IDX i = 0; i < INVEN_PACK; i++) {
         auto *o_ptr = &player_ptr->inventory_list[i];
-        if (!o_ptr->bi_id) {
+        if (!o_ptr->is_valid()) {
             continue;
         }
 

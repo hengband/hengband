@@ -219,7 +219,7 @@ bool curse_armor(PlayerType *player_ptr)
 {
     /* Curse the body armor */
     auto *o_ptr = &player_ptr->inventory_list[INVEN_BODY];
-    if (o_ptr->bi_id == 0) {
+    if (!o_ptr->is_valid()) {
         return false;
     }
 
@@ -263,7 +263,7 @@ bool curse_armor(PlayerType *player_ptr)
  */
 bool curse_weapon_object(PlayerType *player_ptr, bool force, ItemEntity *o_ptr)
 {
-    if (o_ptr->bi_id == 0) {
+    if (!o_ptr->is_valid()) {
         return false;
     }
 
@@ -525,7 +525,7 @@ void brand_weapon(PlayerType *player_ptr, int brand_type)
     auto special_weapon = bi_key == BaseitemKey(ItemKindType::SWORD, SV_POISON_NEEDLE);
     special_weapon |= bi_key == BaseitemKey(ItemKindType::POLEARM, SV_DEATH_SCYTHE);
     special_weapon |= bi_key == BaseitemKey(ItemKindType::SWORD, SV_DIAMOND_EDGE);
-    const auto is_normal_item = (o_ptr->bi_id > 0) && !o_ptr->is_fixed_or_random_artifact() && !o_ptr->is_ego() && !o_ptr->is_cursed() && !special_weapon;
+    const auto is_normal_item = o_ptr->is_valid() && !o_ptr->is_fixed_or_random_artifact() && !o_ptr->is_ego() && !o_ptr->is_cursed() && !special_weapon;
     if (!is_normal_item) {
         if (flush_failure) {
             flush();

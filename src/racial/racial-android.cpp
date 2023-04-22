@@ -74,7 +74,7 @@ void calc_android_exp(PlayerType *player_ptr)
         if ((i == INVEN_MAIN_RING) || (i == INVEN_SUB_RING) || (i == INVEN_NECK) || (i == INVEN_LITE)) {
             continue;
         }
-        if (!o_ptr->bi_id) {
+        if (!o_ptr->is_valid()) {
             continue;
         }
 

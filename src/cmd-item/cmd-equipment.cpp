@@ -167,7 +167,7 @@ void do_cmd_wield(PlayerType *player_ptr)
             }
         } else if (has_melee_weapon(player_ptr, INVEN_SUB_HAND)) {
             slot = INVEN_MAIN_HAND;
-        } else if (o_ptr_mh->bi_id && o_ptr_sh->bi_id &&
+        } else if (o_ptr_mh->is_valid() && o_ptr_sh->is_valid() &&
                    ((tval == ItemKindType::CAPTURE) || (!o_ptr_mh->is_melee_weapon() && !o_ptr_sh->is_melee_weapon()))) {
             q = _("どちらの手に装備しますか?", "Equip which hand? ");
             s = _("おっと。", "Oops.");
@@ -185,11 +185,11 @@ void do_cmd_wield(PlayerType *player_ptr)
             if (!get_check(_("二刀流で戦いますか？", "Dual wielding? "))) {
                 slot = INVEN_MAIN_HAND;
             }
-        } else if (!o_ptr_mh->bi_id && has_melee_weapon(player_ptr, INVEN_SUB_HAND)) {
+        } else if (!o_ptr_mh->is_valid() && has_melee_weapon(player_ptr, INVEN_SUB_HAND)) {
             if (!get_check(_("二刀流で戦いますか？", "Dual wielding? "))) {
                 slot = INVEN_SUB_HAND;
             }
-        } else if (o_ptr_mh->bi_id && o_ptr_sh->bi_id) {
+        } else if (o_ptr_mh->is_valid() && o_ptr_sh->is_valid()) {
             q = _("どちらの手に装備しますか?", "Equip which hand? ");
             s = _("おっと。", "Oops.");
             if (!choose_object(player_ptr, &slot, q, s, (USE_EQUIP), FuncItemTester(&ItemEntity::is_wieldable_in_etheir_hand))) {
@@ -203,7 +203,7 @@ void do_cmd_wield(PlayerType *player_ptr)
 
         break;
     case ItemKindType::RING:
-        if (player_ptr->inventory_list[INVEN_SUB_RING].bi_id && player_ptr->inventory_list[INVEN_MAIN_RING].bi_id) {
+        if (player_ptr->inventory_list[INVEN_SUB_RING].is_valid() && player_ptr->inventory_list[INVEN_MAIN_RING].is_valid()) {
             q = _("どちらの指輪と取り替えますか?", "Replace which ring? ");
         } else {
             q = _("どちらの手に装備しますか?", "Equip which hand? ");
@@ -291,7 +291,7 @@ void do_cmd_wield(PlayerType *player_ptr)
     }
 
     o_ptr = &player_ptr->inventory_list[slot];
-    if (o_ptr->bi_id) {
+    if (o_ptr->is_valid()) {
         (void)inven_takeoff(player_ptr, slot, 255);
     }
 
