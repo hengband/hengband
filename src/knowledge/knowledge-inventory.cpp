@@ -260,7 +260,7 @@ static void show_holding_equipment_resistances(PlayerType *player_ptr, ItemKindT
 static void show_home_equipment_resistances(PlayerType *player_ptr, ItemKindType tval, int *label_number, FILE *fff)
 {
     store_type *store_ptr;
-    store_ptr = &town_info[1].store[enum2i(StoreSaleType::HOME)];
+    store_ptr = &towns_info[1].store[enum2i(StoreSaleType::HOME)];
     char where[32];
     strcpy(where, _("家", "H "));
     for (int i = 0; i < store_ptr->stock_num; i++) {

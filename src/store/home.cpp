@@ -184,7 +184,7 @@ bool combine_and_reorder_home(PlayerType *player_ptr, const StoreSaleType store_
     bool old_stack_force_notes = stack_force_notes;
     bool old_stack_force_costs = stack_force_costs;
     store_type *old_st_ptr = st_ptr;
-    st_ptr = &town_info[1].store[enum2i(store_num)];
+    st_ptr = &towns_info[1].store[enum2i(store_num)];
     bool flag = false;
     if (store_num != StoreSaleType::HOME) {
         stack_force_notes = false;

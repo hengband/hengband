@@ -256,12 +256,10 @@ static void inventory_aware(PlayerType *player_ptr)
  */
 static void home_aware(PlayerType *player_ptr)
 {
-    ItemEntity *o_ptr;
-    store_type *store_ptr;
-    for (int i = 1; i < max_towns; i++) {
-        store_ptr = &town_info[i].store[enum2i(StoreSaleType::HOME)];
-        for (int j = 0; j < store_ptr->stock_num; j++) {
-            o_ptr = &store_ptr->stock[j];
+    for (size_t i = 1; i < towns_info.size(); i++) {
+        auto *store_ptr = &towns_info[i].store[enum2i(StoreSaleType::HOME)];
+        for (auto j = 0; j < store_ptr->stock_num; j++) {
+            auto *o_ptr = &store_ptr->stock[j];
             if (!o_ptr->bi_id) {
                 continue;
             }
@@ -307,9 +305,8 @@ static bool show_dead_player_items(PlayerType *player_ptr)
  */
 static void show_dead_home_items(PlayerType *player_ptr)
 {
-    for (int l = 1; l < max_towns; l++) {
-        store_type *store_ptr;
-        store_ptr = &town_info[l].store[enum2i(StoreSaleType::HOME)];
+    for (size_t l = 1; l < towns_info.size(); l++) {
+        const auto *store_ptr = &towns_info[l].store[enum2i(StoreSaleType::HOME)];
         if (store_ptr->stock_num == 0) {
             continue;
         }
@@ -318,8 +315,7 @@ static void show_dead_home_items(PlayerType *player_ptr)
             term_clear();
             for (int j = 0; (j < 12) && (i < store_ptr->stock_num); j++, i++) {
                 GAME_TEXT o_name[MAX_NLEN];
-                ItemEntity *o_ptr;
-                o_ptr = &store_ptr->stock[i];
+                const auto *o_ptr = &store_ptr->stock[i];
                 prt(format("%c) ", I2A(j)), j + 2, 4);
                 describe_flavor(player_ptr, o_name, o_ptr, 0);
                 c_put_str(tval_to_attr[enum2i(o_ptr->bi_key.tval())], o_name, j + 2, 7);

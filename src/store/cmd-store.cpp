@@ -88,20 +88,20 @@ void do_cmd_store(PlayerType *player_ptr)
     }
 
     inner_town_num = player_ptr->town_num;
-    if ((town_info[player_ptr->town_num].store[enum2i(store_num)].store_open >= w_ptr->game_turn) || ironman_shops) {
+    if ((towns_info[player_ptr->town_num].store[enum2i(store_num)].store_open >= w_ptr->game_turn) || ironman_shops) {
         msg_print(_("ドアに鍵がかかっている。", "The doors are locked."));
         player_ptr->town_num = old_town_num;
         return;
     }
 
-    int maintain_num = (w_ptr->game_turn - town_info[player_ptr->town_num].store[enum2i(store_num)].last_visit) / (TURNS_PER_TICK * STORE_TICKS);
+    int maintain_num = (w_ptr->game_turn - towns_info[player_ptr->town_num].store[enum2i(store_num)].last_visit) / (TURNS_PER_TICK * STORE_TICKS);
     if (maintain_num > 10) {
         maintain_num = 10;
     }
     if (maintain_num) {
         store_maintenance(player_ptr, player_ptr->town_num, store_num, maintain_num);
 
-        town_info[player_ptr->town_num].store[enum2i(store_num)].last_visit = w_ptr->game_turn;
+        towns_info[player_ptr->town_num].store[enum2i(store_num)].last_visit = w_ptr->game_turn;
     }
 
     forget_lite(floor_ptr);
@@ -112,7 +112,7 @@ void do_cmd_store(PlayerType *player_ptr)
     command_new = 0;
     get_com_no_macros = true;
     cur_store_feat = g_ptr->feat;
-    st_ptr = &town_info[player_ptr->town_num].store[enum2i(store_num)];
+    st_ptr = &towns_info[player_ptr->town_num].store[enum2i(store_num)];
     ot_ptr = &owners.at(store_num)[st_ptr->owner];
     store_top = 0;
     play_music(TERM_XTRA_MUSIC_BASIC, MUSIC_BASIC_BUILD);

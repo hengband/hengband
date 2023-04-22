@@ -1,8 +1,5 @@
 # File: misc.txt
 
-# Maximum number of towns
-M:T:7
-
 # Maximum x size of the wilderness
 M:WX:99
 

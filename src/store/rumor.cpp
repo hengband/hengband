@@ -170,12 +170,12 @@ void display_rumor(PlayerType *player_ptr, bool ex)
         const auto &town_name = tokens[1];
         while (true) {
             t_idx = get_rumor_num(town_name, VALID_TOWNS);
-            if (town_info[t_idx].name[0] != '\0') {
+            if (towns_info[t_idx].name[0] != '\0') {
                 break;
             }
         }
 
-        strcpy(fullname, town_info[t_idx].name);
+        strcpy(fullname, towns_info[t_idx].name);
 
         int32_t visit = (1UL << (t_idx - 1));
         if ((t_idx != SECRET_TOWN) && !(player_ptr->visit & visit)) {
