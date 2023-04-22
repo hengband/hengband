@@ -16,6 +16,7 @@
 #include "sv-definition/sv-other-types.h"
 #include "system/baseitem-info.h"
 #include "system/item-entity.h"
+#include "util/bit-flags-calculator.h"
 
 /*!
  * @brief 魔法棒やロッドのスロット分割時に使用回数を分配する /
@@ -80,18 +81,17 @@ void reduce_charges(ItemEntity *o_ptr, int amt)
  */
 int object_similar_part(const ItemEntity *o_ptr, const ItemEntity *j_ptr)
 {
-    const int max_stack_size = 99;
-    int max_num = max_stack_size;
     if (o_ptr->bi_id != j_ptr->bi_id) {
         return 0;
     }
 
+    constexpr auto max_stack_size = 99;
+    auto max_num = max_stack_size;
     switch (o_ptr->bi_key.tval()) {
     case ItemKindType::CHEST:
     case ItemKindType::CARD:
-    case ItemKindType::CAPTURE: {
+    case ItemKindType::CAPTURE:
         return 0;
-    }
     case ItemKindType::STATUE: {
         const auto o_sval = o_ptr->bi_key.sval();
         const auto j_sval = j_ptr->bi_key.sval();
@@ -102,20 +102,18 @@ int object_similar_part(const ItemEntity *o_ptr, const ItemEntity *j_ptr)
         break;
     }
     case ItemKindType::FIGURINE:
-    case ItemKindType::CORPSE: {
+    case ItemKindType::CORPSE:
         if (o_ptr->pval != j_ptr->pval) {
             return 0;
         }
 
         break;
-    }
     case ItemKindType::FOOD:
     case ItemKindType::POTION:
-    case ItemKindType::SCROLL: {
+    case ItemKindType::SCROLL:
         break;
-    }
-    case ItemKindType::STAFF: {
-        if ((!(o_ptr->ident & (IDENT_EMPTY)) && !o_ptr->is_known()) || (!(j_ptr->ident & (IDENT_EMPTY)) && !j_ptr->is_known())) {
+    case ItemKindType::STAFF:
+        if ((none_bits(o_ptr->ident, IDENT_EMPTY) && !o_ptr->is_known()) || (none_bits(j_ptr->ident, IDENT_EMPTY) && !j_ptr->is_known())) {
             return 0;
         }
 
@@ -124,18 +122,15 @@ int object_similar_part(const ItemEntity *o_ptr, const ItemEntity *j_ptr)
         }
 
         break;
-    }
-    case ItemKindType::WAND: {
+    case ItemKindType::WAND:
         if ((!(o_ptr->ident & (IDENT_EMPTY)) && !o_ptr->is_known()) || (!(j_ptr->ident & (IDENT_EMPTY)) && !j_ptr->is_known())) {
             return 0;
         }
 
         break;
-    }
-    case ItemKindType::ROD: {
+    case ItemKindType::ROD:
         max_num = std::min(max_num, MAX_SHORT / baseitems_info[o_ptr->bi_id].pval);
         break;
-    }
     case ItemKindType::GLOVES:
         if (o_ptr->is_glove_same_temper(j_ptr)) {
             return 0;
@@ -152,6 +147,10 @@ int object_similar_part(const ItemEntity *o_ptr, const ItemEntity *j_ptr)
         break;
     case ItemKindType::LITE:
         if (o_ptr->fuel != j_ptr->fuel) {
+            return 0;
+        }
+
+        if (!o_ptr->is_known() || !j_ptr->is_known()) {
             return 0;
         }
 
@@ -193,13 +192,12 @@ int object_similar_part(const ItemEntity *o_ptr, const ItemEntity *j_ptr)
         }
 
         break;
-    default: {
+    default:
         if (!o_ptr->is_known() || !j_ptr->is_known()) {
             return 0;
         }
 
         break;
-    }
     }
 
     if (o_ptr->art_flags != j_ptr->art_flags) {
@@ -209,7 +207,8 @@ int object_similar_part(const ItemEntity *o_ptr, const ItemEntity *j_ptr)
     if (o_ptr->curse_flags != j_ptr->curse_flags) {
         return 0;
     }
-    if ((o_ptr->ident & (IDENT_BROKEN)) != (j_ptr->ident & (IDENT_BROKEN))) {
+
+    if (any_bits(o_ptr->ident, IDENT_BROKEN) != any_bits(j_ptr->ident, IDENT_BROKEN)) {
         return 0;
     }
 
@@ -220,6 +219,7 @@ int object_similar_part(const ItemEntity *o_ptr, const ItemEntity *j_ptr)
     if (!stack_force_notes && (o_ptr->inscription != j_ptr->inscription)) {
         return 0;
     }
+
     if (!stack_force_costs && (o_ptr->discount != j_ptr->discount)) {
         return 0;
     }
