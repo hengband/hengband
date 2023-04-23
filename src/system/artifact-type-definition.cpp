@@ -16,7 +16,7 @@ ArtifactsInfo &ArtifactsInfo::get_instance()
     return instance;
 }
 
-ArtifactType *ArtifactsInfo::get_artifact(const FixedArtifactId id) const
+ArtifactType &ArtifactsInfo::get_artifact(const FixedArtifactId id) const
 {
-    return &artifacts_info.at(id);
+    return artifacts_info.at(id);
 }
