@@ -195,7 +195,7 @@ static void update_unique_artifact(FloorType *floor_ptr, int16_t cur_floor_id)
         }
 
         if (o_ref.is_fixed_artifact()) {
-            artifacts_info.at(o_ref.fixed_artifact_idx).floor_id = cur_floor_id;
+            ArtifactsInfo::get_instance().get_artifact(o_ref.fixed_artifact_idx).floor_id = cur_floor_id;
         }
     }
 }
@@ -295,9 +295,9 @@ static void new_floor_allocation(PlayerType *player_ptr, saved_floor_type *sf_pt
             continue;
         }
 
-        auto &fixed_artifact = artifacts_info.at(o_ptr->fixed_artifact_idx);
-        if (fixed_artifact.floor_id == new_floor_id) {
-            fixed_artifact.is_generated = true;
+        auto &artifact = ArtifactsInfo::get_instance().get_artifact(o_ptr->fixed_artifact_idx);
+        if (artifact.floor_id == new_floor_id) {
+            artifact.is_generated = true;
         } else {
             delete_object_idx(player_ptr, i);
         }

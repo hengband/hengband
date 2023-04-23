@@ -26,8 +26,8 @@ PRICE flag_cost(const ItemEntity *o_ptr, int plusses)
     flags.reset(baseitem.flags);
 
     if (o_ptr->is_fixed_artifact()) {
-        const auto &a_ref = artifacts_info.at(o_ptr->fixed_artifact_idx);
-        flags.reset(a_ref.flags);
+        const auto &artifact = ArtifactsInfo::get_instance().get_artifact(o_ptr->fixed_artifact_idx);
+        flags.reset(artifact.flags);
     } else if (o_ptr->is_ego()) {
         const auto &e_ref = egos_info[o_ptr->ego_idx];
         flags.reset(e_ref.flags);

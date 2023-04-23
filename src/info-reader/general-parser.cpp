@@ -147,9 +147,9 @@ parse_error_type parse_line_feature(FloorType *floor_ptr, char *buf)
                 const auto &quest_list = QuestList::get_instance();
                 const auto a_idx = quest_list[floor_ptr->quest_number].reward_artifact_idx;
                 if (a_idx != FixedArtifactId::NONE) {
-                    const auto &a_ref = artifacts_info.at(a_idx);
-                    if (a_ref.gen_flags.has_not(ItemGenerationTraitType::INSTA_ART)) {
-                        letter[index].object = lookup_baseitem_id(a_ref.bi_key);
+                    const auto &artifact = ArtifactsInfo::get_instance().get_artifact(a_idx);
+                    if (artifact.gen_flags.has_not(ItemGenerationTraitType::INSTA_ART)) {
+                        letter[index].object = lookup_baseitem_id(artifact.bi_key);
                     }
                 }
             }

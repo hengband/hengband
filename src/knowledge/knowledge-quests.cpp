@@ -102,9 +102,9 @@ static void do_cmd_knowledge_quests_current(PlayerType *player_ptr, FILE *fff)
                 case QuestKindType::FIND_ARTIFACT: {
                     std::string item_name("");
                     if (q_ref.reward_artifact_idx != FixedArtifactId::NONE) {
-                        const auto &a_ref = artifacts_info.at(q_ref.reward_artifact_idx);
+                        const auto &artifact = ArtifactsInfo::get_instance().get_artifact(q_ref.reward_artifact_idx);
                         ItemEntity item;
-                        auto bi_id = lookup_baseitem_id(a_ref.bi_key);
+                        auto bi_id = lookup_baseitem_id(artifact.bi_key);
                         item.prep(bi_id);
                         item.fixed_artifact_idx = q_ref.reward_artifact_idx;
                         item.ident = IDENT_STORE;

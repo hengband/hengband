@@ -56,4 +56,5 @@ public:
 private:
     ArtifactsInfo() = default;
     static ArtifactsInfo instance;
+    static ArtifactType dummy;
 };

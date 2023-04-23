@@ -225,19 +225,19 @@ static void invest_curse_to_fixed_artifact(const ArtifactType &a_ref, ItemEntity
  */
 void apply_artifact(PlayerType *player_ptr, ItemEntity *o_ptr)
 {
-    auto &a_ref = artifacts_info.at(o_ptr->fixed_artifact_idx);
-    o_ptr->pval = a_ref.pval;
-    o_ptr->ac = a_ref.ac;
-    o_ptr->dd = a_ref.dd;
-    o_ptr->ds = a_ref.ds;
-    o_ptr->to_a = a_ref.to_a;
-    o_ptr->to_h = a_ref.to_h;
-    o_ptr->to_d = a_ref.to_d;
-    o_ptr->weight = a_ref.weight;
-    o_ptr->activation_id = a_ref.act_idx;
+    const auto &artifact = ArtifactsInfo::get_instance().get_artifact(o_ptr->fixed_artifact_idx);
+    o_ptr->pval = artifact.pval;
+    o_ptr->ac = artifact.ac;
+    o_ptr->dd = artifact.dd;
+    o_ptr->ds = artifact.ds;
+    o_ptr->to_a = artifact.to_a;
+    o_ptr->to_h = artifact.to_h;
+    o_ptr->to_d = artifact.to_d;
+    o_ptr->weight = artifact.weight;
+    o_ptr->activation_id = artifact.act_idx;
 
-    invest_curse_to_fixed_artifact(a_ref, o_ptr);
-    fixed_artifact_random_abilities(player_ptr, a_ref, o_ptr);
+    invest_curse_to_fixed_artifact(artifact, o_ptr);
+    fixed_artifact_random_abilities(player_ptr, artifact, o_ptr);
 }
 
 /*!
@@ -254,12 +254,12 @@ void apply_artifact(PlayerType *player_ptr, ItemEntity *o_ptr)
  */
 bool create_named_art(PlayerType *player_ptr, FixedArtifactId a_idx, POSITION y, POSITION x)
 {
-    auto &a_ref = artifacts_info.at(a_idx);
-    if (a_ref.name.empty()) {
+    auto &artifact = ArtifactsInfo::get_instance().get_artifact(a_idx);
+    if (artifact.name.empty()) {
         return false;
     }
 
-    auto bi_id = lookup_baseitem_id(a_ref.bi_key);
+    auto bi_id = lookup_baseitem_id(artifact.bi_key);
     if (bi_id == 0) {
         return true;
     }
@@ -273,7 +273,7 @@ bool create_named_art(PlayerType *player_ptr, FixedArtifactId a_idx, POSITION y,
         return false;
     }
 
-    a_ref.is_generated = true;
+    artifact.is_generated = true;
     return true;
 }
 

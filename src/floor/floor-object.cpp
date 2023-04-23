@@ -458,6 +458,7 @@ OBJECT_IDX drop_near(PlayerType *player_ptr, ItemEntity *j_ptr, PERCENTAGE chanc
         flag = true;
     }
 
+    auto &artifact = ArtifactsInfo::get_instance().get_artifact(j_ptr->fixed_artifact_idx);
     if (!flag) {
         int candidates = 0, pick;
         for (ty = 1; ty < floor_ptr->height - 1; ty++) {
@@ -481,7 +482,7 @@ OBJECT_IDX drop_near(PlayerType *player_ptr, ItemEntity *j_ptr, PERCENTAGE chanc
 
             if (preserve_mode) {
                 if (j_ptr->is_fixed_artifact() && !j_ptr->is_known()) {
-                    artifacts_info.at(j_ptr->fixed_artifact_idx).is_generated = false;
+                    artifact.is_generated = false;
                 }
             }
 
@@ -534,7 +535,7 @@ OBJECT_IDX drop_near(PlayerType *player_ptr, ItemEntity *j_ptr, PERCENTAGE chanc
         }
 
         if (j_ptr->is_fixed_artifact()) {
-            artifacts_info.at(j_ptr->fixed_artifact_idx).is_generated = false;
+            artifact.is_generated = false;
         }
 
         return 0;
@@ -551,7 +552,6 @@ OBJECT_IDX drop_near(PlayerType *player_ptr, ItemEntity *j_ptr, PERCENTAGE chanc
     }
 
     if (j_ptr->is_fixed_artifact() && w_ptr->character_dungeon) {
-        auto &artifact = artifacts_info.at(j_ptr->fixed_artifact_idx);
         artifact.floor_id = player_ptr->floor_id;
     }
 
