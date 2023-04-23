@@ -77,8 +77,8 @@ errr parse_artifacts_info(std::string_view buf, angband_header *)
         }
 
         const auto it = artifacts_info.rbegin();
-        auto &a_ref = it->second;
-        a_ref.name = tokens[1];
+        auto &artifact = it->second;
+        artifact.name = tokens[1];
         return PARSE_ERROR_NONE;
 #endif
     }
@@ -95,16 +95,16 @@ errr parse_artifacts_info(std::string_view buf, angband_header *)
         }
 
         const auto it = artifacts_info.rbegin();
-        auto &a_ref = it->second;
-        a_ref.text.append(tokens[1]);
+        auto &artifact = it->second;
+        artifact.text.append(tokens[1]);
 #else
         if (tokens[1][0] != '$') {
             return PARSE_ERROR_NONE;
         }
 
         const auto it = artifacts_info.rbegin();
-        auto &a_ref = it->second;
-        append_english_text(a_ref.text, tokens[1].substr(1));
+        auto &artifact = it->second;
+        append_english_text(artifact.text, tokens[1].substr(1));
 #endif
         return PARSE_ERROR_NONE;
     }
@@ -116,12 +116,12 @@ errr parse_artifacts_info(std::string_view buf, angband_header *)
         }
 
         const auto it = artifacts_info.rbegin();
-        auto &a_ref = it->second;
+        auto &artifact = it->second;
         constexpr auto base = 10;
         const auto tval = i2enum<ItemKindType>(std::stoi(tokens[1], nullptr, base));
         const auto sval = std::stoi(tokens[2], nullptr, base);
-        a_ref.bi_key = { tval, sval };
-        info_set_value(a_ref.pval, tokens[3]);
+        artifact.bi_key = { tval, sval };
+        info_set_value(artifact.pval, tokens[3]);
         return PARSE_ERROR_NONE;
     }
 
@@ -132,11 +132,11 @@ errr parse_artifacts_info(std::string_view buf, angband_header *)
         }
 
         const auto it = artifacts_info.rbegin();
-        auto &a_ref = it->second;
-        info_set_value(a_ref.level, tokens[1]);
-        info_set_value(a_ref.rarity, tokens[2]);
-        info_set_value(a_ref.weight, tokens[3]);
-        info_set_value(a_ref.cost, tokens[4]);
+        auto &artifact = it->second;
+        info_set_value(artifact.level, tokens[1]);
+        info_set_value(artifact.rarity, tokens[2]);
+        info_set_value(artifact.weight, tokens[3]);
+        info_set_value(artifact.cost, tokens[4]);
         return PARSE_ERROR_NONE;
     }
 
@@ -152,13 +152,13 @@ errr parse_artifacts_info(std::string_view buf, angband_header *)
         }
 
         const auto it = artifacts_info.rbegin();
-        auto &a_ref = it->second;
-        info_set_value(a_ref.ac, tokens[1]);
-        info_set_value(a_ref.dd, dice[0]);
-        info_set_value(a_ref.ds, dice[1]);
-        info_set_value(a_ref.to_h, tokens[3]);
-        info_set_value(a_ref.to_d, tokens[4]);
-        info_set_value(a_ref.to_a, tokens[5]);
+        auto &artifact = it->second;
+        info_set_value(artifact.ac, tokens[1]);
+        info_set_value(artifact.dd, dice[0]);
+        info_set_value(artifact.ds, dice[1]);
+        info_set_value(artifact.to_h, tokens[3]);
+        info_set_value(artifact.to_d, tokens[4]);
+        info_set_value(artifact.to_a, tokens[5]);
         return PARSE_ERROR_NONE;
     }
 
@@ -174,8 +174,8 @@ errr parse_artifacts_info(std::string_view buf, angband_header *)
         }
 
         const auto it = artifacts_info.rbegin();
-        auto &a_ref = it->second;
-        a_ref.act_idx = n;
+        auto &artifact = it->second;
+        artifact.act_idx = n;
         return PARSE_ERROR_NONE;
     }
 

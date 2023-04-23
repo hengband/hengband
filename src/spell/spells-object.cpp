@@ -96,20 +96,20 @@ static const std::array<AmuseDefinition, 13> amuse_info = { {
 
 static std::optional<FixedArtifactId> sweep_amusement_artifact(const bool insta_art, const short bi_id)
 {
-    for (const auto &[a_idx, a_ref] : artifacts_info) {
+    for (const auto &[a_idx, artifact] : artifacts_info) {
         if (a_idx == FixedArtifactId::NONE) {
             continue;
         }
 
-        if (insta_art && !a_ref.gen_flags.has(ItemGenerationTraitType::INSTA_ART)) {
+        if (insta_art && !artifact.gen_flags.has(ItemGenerationTraitType::INSTA_ART)) {
             continue;
         }
 
-        if (a_ref.bi_key != baseitems_info[bi_id].bi_key) {
+        if (artifact.bi_key != baseitems_info[bi_id].bi_key) {
             continue;
         }
 
-        if (a_ref.is_generated) {
+        if (artifact.is_generated) {
             continue;
         }
 

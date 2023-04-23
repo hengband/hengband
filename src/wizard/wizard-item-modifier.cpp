@@ -940,12 +940,12 @@ WishResultType do_cmd_wishing(PlayerType *player_ptr, int prob, bool allow_art, 
 
         int len;
         int mlen = 0;
-        for (const auto &[a_idx, a_ref] : artifacts_info) {
-            if (a_idx == FixedArtifactId::NONE || a_ref.name.empty()) {
+        for (const auto &[a_idx, artifact] : artifacts_info) {
+            if (a_idx == FixedArtifactId::NONE || artifact.name.empty()) {
                 continue;
             }
 
-            const auto bi_id = lookup_baseitem_id(a_ref.bi_key);
+            const auto bi_id = lookup_baseitem_id(artifact.bi_key);
             if (bi_id == 0) {
                 continue;
             }
@@ -960,7 +960,7 @@ WishResultType do_cmd_wishing(PlayerType *player_ptr, int prob, bool allow_art, 
             str_tolower(item_name.data());
 #endif
             a_str = a_desc;
-            strcpy(a_desc, a_ref.name.data());
+            strcpy(a_desc, artifact.name.data());
 
             if (*a_str == '$') {
                 a_str++;
@@ -998,7 +998,7 @@ WishResultType do_cmd_wishing(PlayerType *player_ptr, int prob, bool allow_art, 
                 msg_format("Matching artifact No.%d %s(%s)", enum2i(a_idx), a_desc, match_name);
             }
 
-            std::vector<const char *> l = { a_str, a_ref.name.data(), match_name };
+            std::vector<const char *> l = { a_str, artifact.name.data(), match_name };
             for (size_t c = 0; c < l.size(); c++) {
                 if (!strcmp(str, l.at(c))) {
                     len = strlen(l.at(c));
@@ -1038,8 +1038,8 @@ WishResultType do_cmd_wishing(PlayerType *player_ptr, int prob, bool allow_art, 
         const auto &baseitem = baseitems_info[bi_id];
         auto a_idx = FixedArtifactId::NONE;
         if (baseitem.gen_flags.has(ItemGenerationTraitType::INSTA_ART)) {
-            for (const auto &[a_idx_loop, a_ref_loop] : artifacts_info) {
-                if (a_idx_loop == FixedArtifactId::NONE || a_ref_loop.bi_key != baseitem.bi_key) {
+            for (const auto &[a_idx_loop, artifact_loop] : artifacts_info) {
+                if (a_idx_loop == FixedArtifactId::NONE || artifact_loop.bi_key != baseitem.bi_key) {
                     continue;
                 }
 

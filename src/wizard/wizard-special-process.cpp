@@ -240,8 +240,8 @@ void wiz_create_item(PlayerType *player_ptr)
 
     const auto &baseitem = baseitems_info[bi_id];
     if (baseitem.gen_flags.has(ItemGenerationTraitType::INSTA_ART)) {
-        for (const auto &[a_idx, a_ref] : artifacts_info) {
-            if ((a_idx == FixedArtifactId::NONE) || (a_ref.bi_key != baseitem.bi_key)) {
+        for (const auto &[a_idx, artifact] : artifacts_info) {
+            if ((a_idx == FixedArtifactId::NONE) || (artifact.bi_key != baseitem.bi_key)) {
                 continue;
             }
 
@@ -342,8 +342,8 @@ static std::vector<FixedArtifactId> wiz_collect_group_a_idx(const grouper &group
     const auto &[tval_list, name] = group_artifact;
     std::vector<FixedArtifactId> a_idx_list;
     for (auto tval : tval_list) {
-        for (const auto &[a_idx, a_ref] : artifacts_info) {
-            if (a_ref.bi_key.tval() == tval) {
+        for (const auto &[a_idx, artifact] : artifacts_info) {
+            if (artifact.bi_key.tval() == tval) {
                 a_idx_list.push_back(a_idx);
             }
         }

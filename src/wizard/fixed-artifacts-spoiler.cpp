@@ -144,8 +144,8 @@ SpoilerOutputResultType spoil_fixed_artifact(concptr fname)
         spoiler_blanklines(1);
 
         for (auto tval : tval_list) {
-            for (const auto &[a_idx, a_ref] : artifacts_info) {
-                if (a_ref.bi_key.tval() != tval) {
+            for (const auto &[a_idx, artifact] : artifacts_info) {
+                if (artifact.bi_key.tval() != tval) {
                     continue;
                 }
 
@@ -155,9 +155,9 @@ SpoilerOutputResultType spoil_fixed_artifact(concptr fname)
                 }
 
                 PlayerType dummy;
-                obj_desc_list artifact;
-                object_analyze(&dummy, &item, &artifact);
-                spoiler_print_art(&artifact);
+                obj_desc_list artifact_descriptions;
+                object_analyze(&dummy, &item, &artifact_descriptions);
+                spoiler_print_art(&artifact_descriptions);
             }
         }
     }
