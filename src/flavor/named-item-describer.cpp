@@ -200,9 +200,9 @@ static std::string describe_unique_name_after_body_ja(const ItemEntity &item, co
     }
 
     if (item.is_fixed_artifact()) {
-        const auto &a_ref = artifacts_info.at(item.fixed_artifact_idx);
-        if (a_ref.name.find("『", 0, 2) == 0) {
-            return a_ref.name;
+        const auto &artifact = artifacts_info.at(item.fixed_artifact_idx);
+        if (artifact.name.find("『", 0, 2) == 0) {
+            return artifact.name;
         }
 
         return "";
@@ -294,8 +294,8 @@ static std::string describe_unique_name_after_body_en(const ItemEntity &item, co
     }
 
     if (item.is_fixed_artifact()) {
-        const auto &a_ref = artifacts_info.at(item.fixed_artifact_idx);
-        ss << ' ' << a_ref.name;
+        const auto &artifact = artifacts_info.at(item.fixed_artifact_idx);
+        ss << ' ' << artifact.name;
         return ss.str();
     }
 

@@ -388,14 +388,8 @@ void wiz_create_named_art(PlayerType *player_ptr)
 
     screen_load();
     const auto a_idx = create_a_idx.value();
-    const auto it = artifacts_info.find(a_idx);
-    if (it == artifacts_info.end()) {
-        msg_print("The specified artifact is obsoleted for now.");
-        return;
-    }
-
-    auto &a_ref = it->second;
-    if (a_ref.is_generated) {
+    const auto &artifact = artifacts_info.at(a_idx);
+    if (artifact.is_generated) {
         msg_print("It's already allocated.");
         return;
     }

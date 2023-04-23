@@ -666,7 +666,20 @@ D:硬くした革製の鱗を厚く覆うように縫い付けた驚くほど軽
 D:着る者に機敏さと自信を与える。
 
 
-#  Artifact 29 is unused
+# TES V Skyrim
+# The Warhammer of Trollsbane
+# 日本語版の正式名称は『トロールズベイン』だがここは変愚風の名前に
+
+N:29:『トロルズベーン』
+E:of Trollsbane
+I:21:8:1
+W:25:10:240:18000
+P:0:4d3:0:10:0
+F:STR | BRAND_FIRE | SLAY_TROLL | RES_FEAR | RES_FIRE
+F:ACTIVATE
+U:HERO
+D:$It's a large warhammer to slay trolls.
+D:トロルを打ち倒すために作られた巨大な戦鎚だ。
 
 
 # The Small Metal Shield of Thorin
@@ -1069,7 +1082,18 @@ D:トゥオルはゴンドーリンの廃墟より
 D:幾千の敵の目をかいくぐり秘されたる路にて
 D:逃げおおせたり。
 
-# Artifact 51 is unused
+
+# Romancing SaGa 2
+
+N:51:黒のガラドリエル
+E:The Black Armour of Elven Queen Galadriel
+I:37:9:0
+W:30:20:290:35000
+P:19:0d0:0:0:23
+F:FULL_NAME
+F:FREE_ACT | RES_CONF | RES_BLIND | RES_FEAR | RES_WATER | XTRA_H_RES
+D:$Legendary armor long sealed in the cave of Varennes Empire.
+D:バレンヌ帝国の洞窟に長い間封印されていた伝説の鎧だ。
 
 
 # The Set of Leather Gloves 'Cambeleg'
@@ -1323,7 +1347,7 @@ W:4:10:12:12000
 P:0:2d4:4:6:0
 F:STR | HIDE_TYPE
 F:BRAND_FIRE | RES_FIRE | ACTIVATE | SHOW_MODS | LITE | THROW | XTRA_H_RES
-U:FIRE_BALL_AND_RESITANCE
+U:FIRE_BALL_AND_RESISTANCE
 D:$A fiery dagger finely balanced for deadly throws.
 D:「焔の牙」を意味する名を持つこの燃え盛る短剣は、
 D:その刃から焔の球を迸らせる力をもつ。
@@ -1338,7 +1362,7 @@ W:3:10:12:11000
 P:0:2d4:4:6:0
 F:DEX | HIDE_TYPE
 F:BRAND_COLD | RES_COLD | ACTIVATE | SHOW_MODS | THROW | XTRA_H_RES
-U:COLD_BALL_AND_RESITANCE
+U:COLD_BALL_AND_RESISTANCE
 D:$A frosty dagger finely balanced for deadly throws.
 D:「白き牙」を意味する名を持つこの短剣は必殺の冷気をもって
 D:敵を凍てつかせ、刃からは氷の球を迸らせる力をもつ。
@@ -1368,7 +1392,7 @@ I:23:4:0
 W:5:40:12:35000
 P:0:2d4:4:3:0
 F:SLAY_ORC | RES_POIS | RES_DISEN | ACTIVATE | SHOW_MODS | BRAND_POIS | THROW
-U:POIS_BALL_AND_RESITANCE
+U:POIS_BALL_AND_RESISTANCE
 D:$A large stiletto dagger that glistens with odorless poison, to which the 
 D:$wearer seems oddly immune.
 D:シンダール語で「地獄の輝き」を意味する名を持つ

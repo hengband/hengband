@@ -174,10 +174,9 @@ static bool wr_savefile_new(PlayerType *player_ptr, SaveType type)
     ArtifactType dummy;
     for (auto i = 0U; i < tmp16u; i++) {
         const auto a_idx = i2enum<FixedArtifactId>(i);
-        const auto it = artifacts_info.find(a_idx);
-        const auto &a_ref = it != artifacts_info.end() ? it->second : dummy;
-        wr_bool(a_ref.is_generated);
-        wr_s16b(a_ref.floor_id);
+        const auto &artifact = (i > 0) ? artifacts_info.at(a_idx) : dummy;
+        wr_bool(artifact.is_generated);
+        wr_s16b(artifact.floor_id);
     }
 
     wr_u32b(w_ptr->sf_play_time);
