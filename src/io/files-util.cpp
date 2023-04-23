@@ -297,11 +297,11 @@ errr counts_write(PlayerType *player_ptr, int where, uint32_t count)
     path_build(buf, sizeof(buf), ANGBAND_DIR_DATA, _("z_info_j.raw", "z_info.raw"));
 
     safe_setuid_grab(player_ptr);
-    int fd = fd_open(buf, O_RDWR);
+    auto fd = fd_open(buf, O_RDWR);
     safe_setuid_drop();
     if (fd < 0) {
         safe_setuid_grab(player_ptr);
-        fd = fd_make(buf, 0644);
+        fd = fd_make(buf);
         safe_setuid_drop();
     }
 

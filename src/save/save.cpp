@@ -257,8 +257,7 @@ static bool wr_savefile_new(PlayerType *player_ptr, SaveType type)
 static bool save_player_aux(PlayerType *player_ptr, char *name, SaveType type)
 {
     safe_setuid_grab(player_ptr);
-    int file_permission = 0644;
-    int fd = fd_make(name, file_permission);
+    auto fd = fd_make(name);
     safe_setuid_drop();
 
     bool is_save_successful = false;

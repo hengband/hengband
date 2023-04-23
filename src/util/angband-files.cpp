@@ -403,12 +403,13 @@ void fd_copy(std::string_view from, std::string_view to)
 /*!
  * @brief OSごとの差異を吸収してファイルを作成する
  * @param file 作成先ファイルの相対パスまたは絶対パス
- * @param mode ファイルのパーミッション (ex. 0644)
+ * @param can_write_group グループに書き込みを許可するか否か
  */
-int fd_make(std::string_view file, BIT_FLAGS mode)
+int fd_make(std::string_view file, bool can_write_group)
 {
+    const auto permission = can_write_group ? 0644 : 0664;
     const auto &path = path_parse(file);
-    return open(path.string().data(), O_CREAT | O_EXCL | O_WRONLY | O_BINARY, mode);
+    return open(path.string().data(), O_CREAT | O_EXCL | O_WRONLY | O_BINARY, permission);
 }
 
 /*
