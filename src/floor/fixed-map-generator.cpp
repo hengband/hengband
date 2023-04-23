@@ -235,13 +235,8 @@ static bool parse_qtw_QQ(quest_type *q_ptr, char **zz, int num)
         return true;
     }
 
-    // @note 半分デッドコード。reward_artifact_idx が定義されているクエストが1つもない.
-    if (const auto it = artifacts_info.find(a_idx); it == artifacts_info.end()) {
-        return true;
-    }
-
-    auto &a_ref = artifacts_info.at(q_ptr->reward_artifact_idx);
-    a_ref.gen_flags.set(ItemGenerationTraitType::QUESTITEM);
+    auto &artifact = artifacts_info.at(q_ptr->reward_artifact_idx);
+    artifact.gen_flags.set(ItemGenerationTraitType::QUESTITEM);
     return true;
 }
 

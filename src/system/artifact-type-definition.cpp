@@ -18,10 +18,5 @@ ArtifactsInfo &ArtifactsInfo::get_instance()
 
 ArtifactType *ArtifactsInfo::get_artifact(const FixedArtifactId id) const
 {
-    auto itr = artifacts_info.find(id);
-    if (itr == artifacts_info.end()) {
-        return nullptr;
-    }
-
-    return &itr->second;
+    return &artifacts_info.at(id);
 }
