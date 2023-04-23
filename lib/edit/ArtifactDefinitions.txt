@@ -1323,7 +1323,7 @@ W:4:10:12:12000
 P:0:2d4:4:6:0
 F:STR | HIDE_TYPE
 F:BRAND_FIRE | RES_FIRE | ACTIVATE | SHOW_MODS | LITE | THROW | XTRA_H_RES
-U:FIRE_BALL_AND_RESITANCE
+U:FIRE_BALL_AND_RESISTANCE
 D:$A fiery dagger finely balanced for deadly throws.
 D:「焔の牙」を意味する名を持つこの燃え盛る短剣は、
 D:その刃から焔の球を迸らせる力をもつ。
@@ -1338,7 +1338,7 @@ W:3:10:12:11000
 P:0:2d4:4:6:0
 F:DEX | HIDE_TYPE
 F:BRAND_COLD | RES_COLD | ACTIVATE | SHOW_MODS | THROW | XTRA_H_RES
-U:COLD_BALL_AND_RESITANCE
+U:COLD_BALL_AND_RESISTANCE
 D:$A frosty dagger finely balanced for deadly throws.
 D:「白き牙」を意味する名を持つこの短剣は必殺の冷気をもって
 D:敵を凍てつかせ、刃からは氷の球を迸らせる力をもつ。
@@ -1368,7 +1368,7 @@ I:23:4:0
 W:5:40:12:35000
 P:0:2d4:4:3:0
 F:SLAY_ORC | RES_POIS | RES_DISEN | ACTIVATE | SHOW_MODS | BRAND_POIS | THROW
-U:POIS_BALL_AND_RESITANCE
+U:POIS_BALL_AND_RESISTANCE
 D:$A large stiletto dagger that glistens with odorless poison, to which the 
 D:$wearer seems oddly immune.
 D:シンダール語で「地獄の輝き」を意味する名を持つ
