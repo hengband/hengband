@@ -28,6 +28,7 @@
 #include "view/display-scores.h"
 #include "wizard/spoiler-util.h"
 #include "wizard/wizard-spoiler.h"
+#include <filesystem>
 #include <string>
 
 /*
@@ -80,19 +81,11 @@ static void quit_hook(concptr s)
  */
 static void create_user_dir(void)
 {
-    char dirpath[1024];
-    char subdirpath[1024];
+    const auto &dirpath = path_parse(PRIVATE_USER_PATH).string();
+    mkdir(dirpath.data(), 0700);
 
-    /* Get an absolute path from the filename */
-    path_parse(dirpath, 1024, PRIVATE_USER_PATH);
-
-    /* Create the ~/.angband/ directory */
-    mkdir(dirpath, 0700);
-
-    /* Build the path to the variant-specific sub-directory */
-    path_build(subdirpath, sizeof(subdirpath), dirpath, VARIANT_NAME.data());
-
-    /* Create the directory */
+    char subdirpath[1024]{};
+    path_build(subdirpath, sizeof(subdirpath), dirpath.data(), VARIANT_NAME.data());
     mkdir(subdirpath, 0700);
 }
 
