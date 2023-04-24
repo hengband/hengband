@@ -293,7 +293,7 @@ bool load_floor(PlayerType *player_ptr, saved_floor_type *sf_ptr, BIT_FLAGS mode
     floor_savefile.append(ext);
 
     safe_setuid_grab(player_ptr);
-    loading_savefile = angband_fopen(floor_savefile.data(), "rb");
+    loading_savefile = angband_fopen(floor_savefile.data(), FileOpenMode::READ, true);
     safe_setuid_drop();
 
     bool is_save_successful = true;

@@ -1,6 +1,7 @@
 ﻿#pragma once
 
 #include "system/angband.h"
+#include <filesystem>
 
 /* Force definitions -- see fd_seek() */
 #ifndef SEEK_SET
@@ -33,9 +34,15 @@ extern int usleep(ulong usecs);
 
 #define FILE_READ_BUFF_SIZE 65535
 
+enum class FileOpenMode {
+    READ,
+    WRITE,
+    APPEND,
+};
+
 errr path_parse(char *buf, int max, concptr file);
 errr path_build(char *buf, int max, concptr path, concptr file);
-FILE *angband_fopen(concptr file, concptr mode);
+FILE *angband_fopen(const std::filesystem::path &path, const FileOpenMode mode, const bool is_binary = false);
 FILE *angband_fopen_temp(char *buf, int max);
 errr angband_fgets(FILE *fff, char *buf, ulong n);
 errr angband_fputs(FILE *fff, concptr buf, ulong n);

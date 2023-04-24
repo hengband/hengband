@@ -162,21 +162,21 @@ bool show_file(PlayerType *player_ptr, bool show_version, concptr name, concptr 
     if (what) {
         caption = what;
         angband_strcpy(path, name, sizeof(path));
-        fff = angband_fopen(path, "r");
+        fff = angband_fopen(path, FileOpenMode::READ);
     }
 
     if (!fff) {
         caption = _("ヘルプ・ファイル'", "Help file '");
         caption.append(name).append("'");
         path_build(path, sizeof(path), ANGBAND_DIR_HELP, name);
-        fff = angband_fopen(path, "r");
+        fff = angband_fopen(path, FileOpenMode::READ);
     }
 
     if (!fff) {
         caption = _("スポイラー・ファイル'", "Info file '");
         caption.append(name).append("'");
         path_build(path, sizeof(path), ANGBAND_DIR_INFO, name);
-        fff = angband_fopen(path, "r");
+        fff = angband_fopen(path, FileOpenMode::READ);
     }
 
     if (!fff) {
@@ -190,7 +190,7 @@ bool show_file(PlayerType *player_ptr, bool show_version, concptr name, concptr 
 
         caption = _("スポイラー・ファイル'", "Info file '");
         caption.append(name).append("'");
-        fff = angband_fopen(path, "r");
+        fff = angband_fopen(path, FileOpenMode::READ);
     }
 
     if (!fff) {
@@ -261,7 +261,7 @@ bool show_file(PlayerType *player_ptr, bool show_version, concptr name, concptr 
 
         if (next > line) {
             angband_fclose(fff);
-            fff = angband_fopen(path, "r");
+            fff = angband_fopen(path, FileOpenMode::READ);
             if (!fff) {
                 return false;
             }
@@ -491,9 +491,9 @@ bool show_file(PlayerType *player_ptr, bool show_version, concptr name, concptr 
             path_build(buff, sizeof(buff), ANGBAND_DIR_USER, xtmp);
 
             /* Hack -- Re-Open the file */
-            fff = angband_fopen(path, "r");
+            fff = angband_fopen(path, FileOpenMode::READ);
 
-            ffp = angband_fopen(buff, "w");
+            ffp = angband_fopen(buff, FileOpenMode::WRITE);
 
             if (!(fff && ffp)) {
                 msg_print(_("ファイルを開けません。", "Failed to open file."));
@@ -508,7 +508,7 @@ bool show_file(PlayerType *player_ptr, bool show_version, concptr name, concptr 
             }
             angband_fclose(fff);
             angband_fclose(ffp);
-            fff = angband_fopen(path, "r");
+            fff = angband_fopen(path, FileOpenMode::READ);
         }
 
         if ((skey == ESCAPE) || (skey == '<')) {

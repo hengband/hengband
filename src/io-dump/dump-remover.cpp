@@ -27,7 +27,7 @@ void remove_auto_dump(concptr orig_file, concptr auto_dump_mark)
     size_t mark_len = strlen(footer_mark_str);
 
     FILE *orig_fff;
-    orig_fff = angband_fopen(orig_file, "r");
+    orig_fff = angband_fopen(orig_file, FileOpenMode::READ);
     if (!orig_fff) {
         return;
     }
@@ -79,8 +79,8 @@ void remove_auto_dump(concptr orig_file, concptr auto_dump_mark)
     angband_fclose(tmp_fff);
 
     if (changed) {
-        tmp_fff = angband_fopen(tmp_file, "r");
-        orig_fff = angband_fopen(orig_file, "w");
+        tmp_fff = angband_fopen(tmp_file, FileOpenMode::READ);
+        orig_fff = angband_fopen(orig_file, FileOpenMode::WRITE);
         while (!angband_fgets(tmp_fff, buf, sizeof(buf))) {
             fprintf(orig_fff, "%s\n", buf);
         }

@@ -103,7 +103,7 @@ static void do_cmd_erase_diary(void)
     path_build(buf, sizeof(buf), ANGBAND_DIR_USER, file_name.data());
     fd_kill(buf);
 
-    fff = angband_fopen(buf, "w");
+    fff = angband_fopen(buf, FileOpenMode::WRITE);
     if (fff) {
         angband_fclose(fff);
         msg_format(_("記録を消去しました。", "deleted record."));

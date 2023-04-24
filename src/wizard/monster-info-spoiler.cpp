@@ -79,7 +79,7 @@ SpoilerOutputResultType spoil_mon_desc(concptr fname, std::function<bool(const M
     uint16_t why = 2;
     char buf[1024];
     path_build(buf, sizeof(buf), ANGBAND_DIR_USER, fname);
-    spoiler_file = angband_fopen(buf, "w");
+    spoiler_file = angband_fopen(buf, FileOpenMode::WRITE);
     if (!spoiler_file) {
         return SpoilerOutputResultType::FILE_OPEN_FAILED;
     }
@@ -170,7 +170,7 @@ SpoilerOutputResultType spoil_mon_info(concptr fname)
     PlayerType dummy;
     char buf[1024];
     path_build(buf, sizeof(buf), ANGBAND_DIR_USER, fname);
-    spoiler_file = angband_fopen(buf, "w");
+    spoiler_file = angband_fopen(buf, FileOpenMode::WRITE);
     if (!spoiler_file) {
         return SpoilerOutputResultType::FILE_OPEN_FAILED;
     }

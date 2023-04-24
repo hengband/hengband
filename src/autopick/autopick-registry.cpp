@@ -31,11 +31,11 @@ static bool clear_auto_register(PlayerType *player_ptr)
     char pref_file[1024];
     path_build(pref_file, sizeof(pref_file), ANGBAND_DIR_USER, pickpref_filename(player_ptr, PT_WITH_PNAME).data());
     FILE *pref_fff;
-    pref_fff = angband_fopen(pref_file, "r");
+    pref_fff = angband_fopen(pref_file, FileOpenMode::READ);
 
     if (!pref_fff) {
         path_build(pref_file, sizeof(pref_file), ANGBAND_DIR_USER, pickpref_filename(player_ptr, PT_DEFAULT).data());
-        pref_fff = angband_fopen(pref_file, "r");
+        pref_fff = angband_fopen(pref_file, FileOpenMode::READ);
     }
 
     if (!pref_fff) {
@@ -91,8 +91,8 @@ static bool clear_auto_register(PlayerType *player_ptr)
     }
 
     if (autoregister) {
-        tmp_fff = angband_fopen(tmp_file, "r");
-        pref_fff = angband_fopen(pref_file, "w");
+        tmp_fff = angband_fopen(tmp_file, FileOpenMode::READ);
+        pref_fff = angband_fopen(pref_file, FileOpenMode::WRITE);
 
         while (!angband_fgets(tmp_fff, buf, sizeof(buf))) {
             fprintf(pref_fff, "%s\n", buf);
@@ -147,11 +147,11 @@ bool autopick_autoregister(PlayerType *player_ptr, ItemEntity *o_ptr)
     char pref_file[1024];
     FILE *pref_fff;
     path_build(pref_file, sizeof(pref_file), ANGBAND_DIR_USER, pickpref_filename(player_ptr, PT_WITH_PNAME).data());
-    pref_fff = angband_fopen(pref_file, "r");
+    pref_fff = angband_fopen(pref_file, FileOpenMode::READ);
 
     if (!pref_fff) {
         path_build(pref_file, sizeof(pref_file), ANGBAND_DIR_USER, pickpref_filename(player_ptr, PT_DEFAULT).data());
-        pref_fff = angband_fopen(pref_file, "r");
+        pref_fff = angband_fopen(pref_file, FileOpenMode::READ);
     }
 
     if (pref_fff) {
@@ -176,7 +176,7 @@ bool autopick_autoregister(PlayerType *player_ptr, ItemEntity *o_ptr)
         player_ptr->autopick_autoregister = false;
     }
 
-    pref_fff = angband_fopen(pref_file, "a");
+    pref_fff = angband_fopen(pref_file, FileOpenMode::APPEND);
     if (!pref_fff) {
         msg_format(_("%s を開くことができませんでした。", "Failed to open %s."), pref_file);
         msg_print(nullptr);

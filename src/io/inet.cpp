@@ -39,7 +39,7 @@ void set_proxy(char *default_url, int default_port)
     path_build(buf, sizeof(buf), ANGBAND_DIR_PREF, "proxy.prf");
 
     /* ファイルから設定を読む。 */
-    fp = angband_fopen(buf, "r");
+    fp = angband_fopen(buf, FileOpenMode::READ);
 
     if (!fp) {
         /* ファイルが存在しない場合はデフォルトを設定 */

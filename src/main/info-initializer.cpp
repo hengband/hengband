@@ -95,7 +95,7 @@ static errr init_info(std::string_view filename, angband_header &head, InfoType 
     char buf[1024];
     path_build(buf, sizeof(buf), ANGBAND_DIR_EDIT, filename.data());
 
-    auto *fp = angband_fopen(buf, "r");
+    auto *fp = angband_fopen(buf, FileOpenMode::READ);
     if (!fp) {
         quit_fmt(_("'%s'ファイルをオープンできません。", "Cannot open '%s' file."), filename.data());
     }

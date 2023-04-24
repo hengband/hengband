@@ -93,7 +93,7 @@ SpoilerOutputResultType spoil_obj_desc(concptr fname)
 {
     char buf[1024];
     path_build(buf, sizeof(buf), ANGBAND_DIR_USER, fname);
-    spoiler_file = angband_fopen(buf, "w");
+    spoiler_file = angband_fopen(buf, FileOpenMode::WRITE);
     if (!spoiler_file) {
         return SpoilerOutputResultType::FILE_OPEN_FAILED;
     }

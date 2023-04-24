@@ -283,7 +283,7 @@ void do_cmd_time(PlayerType *player_ptr)
     }
 
     FILE *fff;
-    fff = angband_fopen(buf, "rt");
+    fff = angband_fopen(buf, FileOpenMode::READ);
 
     if (!fff) {
         return;

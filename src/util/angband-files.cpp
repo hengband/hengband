@@ -1,6 +1,8 @@
 ﻿#include "util/angband-files.h"
 #include "locale/japanese.h"
 #include "util/string-processor.h"
+#include <sstream>
+#include <string>
 
 #ifdef SET_UID
 
@@ -197,17 +199,42 @@ errr path_build(char *buf, int max, concptr path, concptr file)
     return 0;
 }
 
+static std::string make_file_mode(const FileOpenMode mode, const bool is_binary)
+{
+    std::stringstream ss;
+    switch (mode) {
+    case FileOpenMode::READ:
+        ss << 'r';
+        break;
+    case FileOpenMode::WRITE:
+        ss << 'w';
+        break;
+    case FileOpenMode::APPEND:
+        ss << 'a';
+        break;
+    default:
+        throw std::logic_error("Invalid file mode is specified!");
+    }
+
+    if (is_binary) {
+        ss << 'b';
+    }
+
+    return ss.str();
+}
+
 /*
  * Hack -- replacement for "fopen()"
  */
-FILE *angband_fopen(concptr file, concptr mode)
+FILE *angband_fopen(const std::filesystem::path &path, const FileOpenMode mode, const bool is_binary)
 {
     char buf[1024];
-    if (path_parse(buf, 1024, file)) {
+    if (path_parse(buf, 1024, path.string().data())) {
         return nullptr;
     }
 
-    return fopen(buf, mode);
+    const auto &open_mode = make_file_mode(mode, is_binary);
+    return fopen(buf, open_mode.data());
 }
 
 /*
@@ -241,7 +268,7 @@ FILE *angband_fopen_temp(char *buf, int max)
     if (path_temp(buf, max)) {
         return nullptr;
     }
-    return angband_fopen(buf, "w");
+    return angband_fopen(buf, FileOpenMode::WRITE);
 }
 #endif /* HAVE_MKSTEMP */
 

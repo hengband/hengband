@@ -254,7 +254,7 @@ parse_error_type parse_fixed_map(PlayerType *player_ptr, concptr name, int ymin,
 {
     char buf[1024];
     path_build(buf, sizeof(buf), ANGBAND_DIR_EDIT, name);
-    FILE *fp = angband_fopen(buf, "r");
+    FILE *fp = angband_fopen(buf, FileOpenMode::READ);
     if (fp == nullptr) {
         return PARSE_ERROR_GENERIC;
     }
@@ -346,7 +346,7 @@ static void parse_quest_info_aux(const char *file_name, std::set<QuestId> &key_l
 
     char file_buf[1024];
     path_build(file_buf, sizeof(file_buf), ANGBAND_DIR_EDIT, file_name);
-    auto *fp = angband_fopen(file_buf, "r");
+    auto *fp = angband_fopen(file_buf, FileOpenMode::READ);
     if (fp == nullptr) {
         std::stringstream ss;
         ss << _("ファイルが見つかりません (", "File is not found (") << file_name << ')';

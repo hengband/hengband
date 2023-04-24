@@ -266,7 +266,7 @@ static bool save_player_aux(PlayerType *player_ptr, char *name, SaveType type)
     if (fd >= 0) {
         (void)fd_close(fd);
         safe_setuid_grab(player_ptr);
-        saving_savefile = angband_fopen(name, "wb");
+        saving_savefile = angband_fopen(name, FileOpenMode::WRITE, true);
         safe_setuid_drop();
         if (saving_savefile) {
             if (wr_savefile_new(player_ptr, type)) {
