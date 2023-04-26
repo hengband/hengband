@@ -33,9 +33,8 @@
 /*!
  * @brief A function for Auto-picker/destroyer Examine whether the object matches to the entry
  */
-bool is_autopick_match(PlayerType *player_ptr, ItemEntity *o_ptr, autopick_type *entry, concptr o_name)
+bool is_autopick_match(PlayerType *player_ptr, ItemEntity *o_ptr, autopick_type *entry, std::string_view item_name)
 {
-    concptr ptr = entry->name.data();
     if (IS_FLG(FLG_UNAWARE) && o_ptr->is_aware()) {
         return false;
     }
@@ -332,13 +331,12 @@ bool is_autopick_match(PlayerType *player_ptr, ItemEntity *o_ptr, autopick_type 
         }
     }
 
-    if (*ptr == '^') {
-        ptr++;
-        if (strncmp(o_name, ptr, strlen(ptr))) {
+    if (entry->name[0] == '^') {
+        if (item_name == entry->name.substr(1, entry->name.length() - 1)) {
             return false;
         }
     } else {
-        if (!angband_strstr(o_name, ptr)) {
+        if (!angband_strstr(item_name.data(), entry->name.data())) {
             return false;
         }
     }

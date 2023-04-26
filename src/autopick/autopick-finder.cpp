@@ -43,7 +43,7 @@ int find_autopick_list(PlayerType *player_ptr, ItemEntity *o_ptr)
     str_tolower(item_name.data());
     for (auto i = 0U; i < autopick_list.size(); i++) {
         autopick_type *entry = &autopick_list[i];
-        if (is_autopick_match(player_ptr, o_ptr, entry, item_name.data())) {
+        if (is_autopick_match(player_ptr, o_ptr, entry, item_name)) {
             return i;
         }
     }
@@ -332,7 +332,7 @@ void search_for_object(PlayerType *player_ptr, text_body_type *tb, ItemEntity *o
             continue;
         }
 
-        match = is_autopick_match(player_ptr, o_ptr, entry, item_name.data());
+        match = is_autopick_match(player_ptr, o_ptr, entry, item_name);
         if (!match) {
             continue;
         }
