@@ -30,6 +30,103 @@
 #include "system/player-type-definition.h"
 #include "util/string-processor.h"
 
+static bool check_item_features(PlayerType *player_ptr, autopick_type *entry, const ItemEntity &item, const ItemKindType tval)
+{
+    if (IS_FLG(FLG_WEAPONS)) {
+        return item.is_weapon();
+    }
+
+    if (IS_FLG(FLG_FAVORITE_WEAPONS)) {
+        return object_is_favorite(player_ptr, &item);
+    }
+
+    if (IS_FLG(FLG_ARMORS)) {
+        return item.is_protector();
+    }
+
+    if (IS_FLG(FLG_MISSILES)) {
+        return item.is_ammo();
+    }
+
+    if (IS_FLG(FLG_DEVICES)) {
+        switch (tval) {
+        case ItemKindType::SCROLL:
+        case ItemKindType::STAFF:
+        case ItemKindType::WAND:
+        case ItemKindType::ROD:
+            return true;
+        default:
+            return false;
+        }
+    }
+
+    if (IS_FLG(FLG_LIGHTS)) {
+        return tval == ItemKindType::LITE;
+    }
+
+    if (IS_FLG(FLG_JUNKS)) {
+        switch (tval) {
+        case ItemKindType::SKELETON:
+        case ItemKindType::BOTTLE:
+        case ItemKindType::JUNK:
+        case ItemKindType::STATUE:
+            return true;
+        default:
+            return false;
+        }
+    }
+
+    if (IS_FLG(FLG_CORPSES)) {
+        return (tval == ItemKindType::CORPSE) || (tval == ItemKindType::SKELETON);
+    }
+
+    if (IS_FLG(FLG_SPELLBOOKS)) {
+        return item.is_spell_book();
+    }
+
+    if (IS_FLG(FLG_HAFTED)) {
+        return tval == ItemKindType::HAFTED;
+    }
+
+    if (IS_FLG(FLG_SHIELDS)) {
+        return tval == ItemKindType::SHIELD;
+    }
+
+    if (IS_FLG(FLG_BOWS)) {
+        return tval == ItemKindType::BOW;
+    }
+
+    if (IS_FLG(FLG_RINGS)) {
+        return tval == ItemKindType::RING;
+    }
+
+    if (IS_FLG(FLG_AMULETS)) {
+        return tval == ItemKindType::AMULET;
+    }
+
+    if (IS_FLG(FLG_SUITS)) {
+        return item.is_armour();
+    }
+
+    if (IS_FLG(FLG_CLOAKS)) {
+        return tval == ItemKindType::CLOAK;
+    }
+
+    if (IS_FLG(FLG_HELMS)) {
+        return (tval != ItemKindType::CROWN) && (tval != ItemKindType::HELM);
+    }
+
+    if (IS_FLG(FLG_GLOVES)) {
+        return tval == ItemKindType::GLOVES;
+    }
+
+    if (IS_FLG(FLG_BOOTS)) {
+        return tval == ItemKindType::BOOTS;
+    }
+
+    return true;
+}
+
 /*!
  * @brief A function for Auto-picker/destroyer Examine whether the object matches to the entry
  */
@@ -241,94 +338,8 @@ bool is_autopick_match(PlayerType *player_ptr, ItemEntity *o_ptr, autopick_type 
         return false;
     }
 
-    if (IS_FLG(FLG_WEAPONS)) {
-        if (!o_ptr->is_weapon()) {
-            return false;
-        }
-    } else if (IS_FLG(FLG_FAVORITE_WEAPONS)) {
-        if (!object_is_favorite(player_ptr, o_ptr)) {
-            return false;
-        }
-    } else if (IS_FLG(FLG_ARMORS)) {
-        if (!o_ptr->is_protector()) {
-            return false;
-        }
-    } else if (IS_FLG(FLG_MISSILES)) {
-        if (!o_ptr->is_ammo()) {
-            return false;
-        }
-    } else if (IS_FLG(FLG_DEVICES)) {
-        switch (tval) {
-        case ItemKindType::SCROLL:
-        case ItemKindType::STAFF:
-        case ItemKindType::WAND:
-        case ItemKindType::ROD:
-            break;
-        default:
-            return false;
-        }
-    } else if (IS_FLG(FLG_LIGHTS)) {
-        if (!(tval == ItemKindType::LITE)) {
-            return false;
-        }
-    } else if (IS_FLG(FLG_JUNKS)) {
-        switch (tval) {
-        case ItemKindType::SKELETON:
-        case ItemKindType::BOTTLE:
-        case ItemKindType::JUNK:
-        case ItemKindType::STATUE:
-            break;
-        default:
-            return false;
-        }
-    } else if (IS_FLG(FLG_CORPSES)) {
-        if (tval != ItemKindType::CORPSE && tval != ItemKindType::SKELETON) {
-            return false;
-        }
-    } else if (IS_FLG(FLG_SPELLBOOKS)) {
-        if (!o_ptr->is_spell_book()) {
-            return false;
-        }
-    } else if (IS_FLG(FLG_HAFTED)) {
-        if (!(tval == ItemKindType::HAFTED)) {
-            return false;
-        }
-    } else if (IS_FLG(FLG_SHIELDS)) {
-        if (!(tval == ItemKindType::SHIELD)) {
-            return false;
-        }
-    } else if (IS_FLG(FLG_BOWS)) {
-        if (!(tval == ItemKindType::BOW)) {
-            return false;
-        }
-    } else if (IS_FLG(FLG_RINGS)) {
-        if (!(tval == ItemKindType::RING)) {
-            return false;
-        }
-    } else if (IS_FLG(FLG_AMULETS)) {
-        if (!(tval == ItemKindType::AMULET)) {
-            return false;
-        }
-    } else if (IS_FLG(FLG_SUITS)) {
-        if (!o_ptr->is_armour()) {
-            return false;
-        }
-    } else if (IS_FLG(FLG_CLOAKS)) {
-        if (!(tval == ItemKindType::CLOAK)) {
-            return false;
-        }
-    } else if (IS_FLG(FLG_HELMS)) {
-        if (!(tval == ItemKindType::CROWN || tval == ItemKindType::HELM)) {
-            return false;
-        }
-    } else if (IS_FLG(FLG_GLOVES)) {
-        if (!(tval == ItemKindType::GLOVES)) {
-            return false;
-        }
-    } else if (IS_FLG(FLG_BOOTS)) {
-        if (!(tval == ItemKindType::BOOTS)) {
-            return false;
-        }
+    if (!check_item_features(player_ptr, entry, *o_ptr, tval)) {
+        return false;
     }
 
     if (entry->name[0] == '^') {
@@ -336,7 +347,7 @@ bool is_autopick_match(PlayerType *player_ptr, ItemEntity *o_ptr, autopick_type 
             return false;
         }
     } else {
-        if (!angband_strstr(item_name.data(), entry->name.data())) {
+        if (angband_strstr(item_name.data(), entry->name.data()) == nullptr) {
             return false;
         }
     }
