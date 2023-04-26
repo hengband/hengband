@@ -358,7 +358,6 @@ bool process_warning(PlayerType *player_ptr, POSITION xx, POSITION yy)
 {
     POSITION mx, my;
     grid_type *g_ptr;
-    GAME_TEXT o_name[MAX_NLEN];
 
 #define WARNING_AWARE_RANGE 12
     int dam_max = 0;
@@ -536,13 +535,14 @@ bool process_warning(PlayerType *player_ptr, POSITION xx, POSITION yy)
 
         if (dam_max > player_ptr->chp / 2) {
             auto *o_ptr = choose_warning_item(player_ptr);
-
-            if (o_ptr) {
-                describe_flavor(player_ptr, o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
+            std::string item_name;
+            if (o_ptr != nullptr) {
+                item_name = describe_flavor(player_ptr, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
             } else {
-                strcpy(o_name, _("体", "body")); /* Warning ability without item */
+                item_name = _("体", "body");
             }
-            msg_format(_("%sが鋭く震えた！", "Your %s pulsates sharply!"), o_name);
+
+            msg_format(_("%sが鋭く震えた！", "Your %s pulsates sharply!"), item_name.data());
 
             disturb(player_ptr, false, true);
             return get_check(_("本当にこのまま進むか？", "Really want to go ahead? "));
@@ -559,12 +559,14 @@ bool process_warning(PlayerType *player_ptr, POSITION xx, POSITION yy)
     }
 
     auto *o_ptr = choose_warning_item(player_ptr);
+    std::string item_name;
     if (o_ptr != nullptr) {
-        describe_flavor(player_ptr, o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
+        item_name = describe_flavor(player_ptr, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
     } else {
-        strcpy(o_name, _("体", "body")); /* Warning ability without item */
+        item_name = _("体", "body");
     }
-    msg_format(_("%sが鋭く震えた！", "Your %s pulsates sharply!"), o_name);
+
+    msg_format(_("%sが鋭く震えた！", "Your %s pulsates sharply!"), item_name.data());
     disturb(player_ptr, false, true);
     return get_check(_("本当にこのまま進むか？", "Really want to go ahead? "));
 }

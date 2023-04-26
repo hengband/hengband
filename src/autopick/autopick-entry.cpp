@@ -506,14 +506,13 @@ void autopick_entry_from_object(PlayerType *player_ptr, autopick_type *entry, It
         return;
     }
 
-    GAME_TEXT o_name[MAX_NLEN];
-    describe_flavor(player_ptr, o_name, o_ptr, (OD_NO_FLAVOR | OD_OMIT_PREFIX | OD_NO_PLURAL | OD_NAME_ONLY));
+    const auto item_name = describe_flavor(player_ptr, o_ptr, (OD_NO_FLAVOR | OD_OMIT_PREFIX | OD_NO_PLURAL | OD_NAME_ONLY));
 
     /*
      * If necessary, add a '^' which indicates the
      * beginning of line.
      */
-    entry->name = std::string(is_hat_added ? "^" : "").append(o_name);
+    entry->name = std::string(is_hat_added ? "^" : "").append(item_name);
     str_tolower(entry->name.data());
 }
 
@@ -727,10 +726,9 @@ concptr autopick_line_from_entry_kill(autopick_type *entry)
  */
 bool entry_from_choosed_object(PlayerType *player_ptr, autopick_type *entry)
 {
-    concptr q = _("どのアイテムを登録しますか? ", "Enter which item? ");
-    concptr s = _("アイテムを持っていない。", "You have nothing to enter.");
-    ItemEntity *o_ptr;
-    o_ptr = choose_object(player_ptr, nullptr, q, s, USE_INVEN | USE_FLOOR | USE_EQUIP);
+    constexpr auto q = _("どのアイテムを登録しますか? ", "Enter which item? ");
+    constexpr auto s = _("アイテムを持っていない。", "You have nothing to enter.");
+    auto *o_ptr = choose_object(player_ptr, nullptr, q, s, USE_INVEN | USE_FLOOR | USE_EQUIP);
     if (!o_ptr) {
         return false;
     }

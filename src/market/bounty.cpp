@@ -48,7 +48,6 @@
 bool exchange_cash(PlayerType *player_ptr)
 {
     auto change = false;
-    GAME_TEXT o_name[MAX_NLEN];
     for (INVENTORY_IDX i = 0; i <= INVEN_SUB_HAND; i++) {
         const auto item_ptr = &player_ptr->inventory_list[i];
         const auto r_idx_of_item = static_cast<MonsterRaceId>(item_ptr->pval);
@@ -57,8 +56,8 @@ bool exchange_cash(PlayerType *player_ptr)
         }
 
         change = true;
-        describe_flavor(player_ptr, o_name, item_ptr, 0);
-        if (!get_check(format(_("%s を換金しますか？", "Convert %s into money? "), o_name))) {
+        const auto item_name = describe_flavor(player_ptr, item_ptr, 0);
+        if (!get_check(format(_("%s を換金しますか？", "Convert %s into money? "), item_name.data()))) {
             continue;
         }
 
@@ -76,8 +75,8 @@ bool exchange_cash(PlayerType *player_ptr)
         }
 
         change = true;
-        describe_flavor(player_ptr, o_name, item_ptr, 0);
-        if (!get_check(format(_("%s を換金しますか？", "Convert %s into money? "), o_name))) {
+        const auto item_name = describe_flavor(player_ptr, item_ptr, 0);
+        if (!get_check(format(_("%s を換金しますか？", "Convert %s into money? "), item_name.data()))) {
             continue;
         }
 
@@ -95,8 +94,8 @@ bool exchange_cash(PlayerType *player_ptr)
         }
 
         change = true;
-        describe_flavor(player_ptr, o_name, item_ptr, 0);
-        if (!get_check(format(_("%s を換金しますか？", "Convert %s into money? "), o_name))) {
+        const auto item_name = describe_flavor(player_ptr, item_ptr, 0);
+        if (!get_check(format(_("%s を換金しますか？", "Convert %s into money? "), item_name.data()))) {
             continue;
         }
 
@@ -114,8 +113,8 @@ bool exchange_cash(PlayerType *player_ptr)
         }
 
         change = true;
-        describe_flavor(player_ptr, o_name, item_ptr, 0);
-        if (!get_check(format(_("%s を換金しますか？", "Convert %s into money? "), o_name))) {
+        const auto item_name = describe_flavor(player_ptr, item_ptr, 0);
+        if (!get_check(format(_("%s を換金しますか？", "Convert %s into money? "), item_name.data()))) {
             continue;
         }
 
@@ -134,8 +133,8 @@ bool exchange_cash(PlayerType *player_ptr)
         }
 
         change = true;
-        describe_flavor(player_ptr, o_name, item_ptr, 0);
-        if (!get_check(format(_("%s を換金しますか？", "Convert %s into money? "), o_name))) {
+        const auto item_name = describe_flavor(player_ptr, item_ptr, 0);
+        if (!get_check(format(_("%s を換金しますか？", "Convert %s into money? "), item_name.data()))) {
             continue;
         }
 
@@ -161,8 +160,8 @@ bool exchange_cash(PlayerType *player_ptr)
             INVENTORY_IDX item_new;
             ItemEntity forge;
 
-            describe_flavor(player_ptr, o_name, item_ptr, 0);
-            if (!get_check(format(_("%sを渡しますか？", "Hand %s over? "), o_name))) {
+            const auto item_name = describe_flavor(player_ptr, item_ptr, 0);
+            if (!get_check(format(_("%sを渡しますか？", "Hand %s over? "), item_name.data()))) {
                 continue;
             }
 
@@ -187,8 +186,8 @@ bool exchange_cash(PlayerType *player_ptr)
              * there is at least one empty slot.
              */
             item_new = store_item_to_inventory(player_ptr, &forge);
-            describe_flavor(player_ptr, o_name, &forge, 0);
-            msg_format(_("%s(%c)を貰った。", "You get %s (%c). "), o_name, index_to_label(item_new));
+            const auto got_item_name = describe_flavor(player_ptr, &forge, 0);
+            msg_format(_("%s(%c)を貰った。", "You get %s (%c). "), got_item_name.data(), index_to_label(item_new));
 
             autopick_alter_item(player_ptr, item_new, false);
             handle_stuff(player_ptr);

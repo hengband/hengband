@@ -17,6 +17,7 @@
 #include "object/item-use-flags.h"
 #include "object/object-kind-hook.h"
 #include "perception/object-perception.h"
+#include "system/angband.h"
 #include "system/baseitem-info.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
@@ -132,9 +133,8 @@ bool create_ammo(PlayerType *player_ptr)
         ItemMagicApplier(player_ptr, q_ptr, player_ptr->lev, AM_NO_FIXED_ART).execute();
         q_ptr->discount = 99;
         int16_t slot = store_item_to_inventory(player_ptr, q_ptr);
-        GAME_TEXT o_name[MAX_NLEN];
-        describe_flavor(player_ptr, o_name, q_ptr, 0);
-        msg_print(_(format("%sを作った。", o_name), "You make some ammo."));
+        const auto item_name = describe_flavor(player_ptr, q_ptr, 0);
+        msg_print(_(format("%sを作った。", item_name.data()), "You make some ammo."));
         if (slot >= 0) {
             autopick_alter_item(player_ptr, slot, false);
         }
@@ -160,9 +160,8 @@ bool create_ammo(PlayerType *player_ptr)
         object_known(q_ptr);
         ItemMagicApplier(player_ptr, q_ptr, player_ptr->lev, AM_NO_FIXED_ART).execute();
         q_ptr->discount = 99;
-        GAME_TEXT o_name[MAX_NLEN];
-        describe_flavor(player_ptr, o_name, q_ptr, 0);
-        msg_print(_(format("%sを作った。", o_name), "You make some ammo."));
+        const auto item_name = describe_flavor(player_ptr, q_ptr, 0);
+        msg_print(_(format("%sを作った。", item_name.data()), "You make some ammo."));
         vary_item(player_ptr, item, -1);
         int16_t slot = store_item_to_inventory(player_ptr, q_ptr);
         if (slot >= 0) {
@@ -188,9 +187,8 @@ bool create_ammo(PlayerType *player_ptr)
         object_known(q_ptr);
         ItemMagicApplier(player_ptr, q_ptr, player_ptr->lev, AM_NO_FIXED_ART).execute();
         q_ptr->discount = 99;
-        GAME_TEXT o_name[MAX_NLEN];
-        describe_flavor(player_ptr, o_name, q_ptr, 0);
-        msg_print(_(format("%sを作った。", o_name), "You make some ammo."));
+        const auto item_name = describe_flavor(player_ptr, q_ptr, 0);
+        msg_print(_(format("%sを作った。", item_name.data()), "You make some ammo."));
         vary_item(player_ptr, item, -1);
         int16_t slot = store_item_to_inventory(player_ptr, q_ptr);
         if (slot >= 0) {

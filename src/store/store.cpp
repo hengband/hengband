@@ -236,9 +236,8 @@ void store_examine(PlayerType *player_ptr, StoreSaleType store_num)
         return;
     }
 
-    GAME_TEXT o_name[MAX_NLEN];
-    describe_flavor(player_ptr, o_name, o_ptr, 0);
-    msg_format(_("%sを調べている...", "Examining %s..."), o_name);
+    const auto item_name = describe_flavor(player_ptr, o_ptr, 0);
+    msg_format(_("%sを調べている...", "Examining %s..."), item_name.data());
     if (!screen_object(player_ptr, o_ptr, SCROBJ_FORCE_DETAIL)) {
         msg_print(_("特に変わったところはないようだ。", "You see nothing special."));
     }

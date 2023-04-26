@@ -92,8 +92,8 @@ static std::pair<bool, ItemEntity *> select_repairing_broken_weapon(PlayerType *
 {
     prt(_("修復には材料となるもう1つの武器が必要です。", "Hand one material weapon to repair a broken weapon."), row, 2);
     prt(_("材料に使用した武器はなくなります！", "The material weapon will disappear after repairing!!"), row + 1, 2);
-    const auto q = _("どの折れた武器を修復しますか？", "Repair which broken weapon? ");
-    const auto s = _("修復できる折れた武器がありません。", "You have no broken weapon to repair.");
+    constexpr auto q = _("どの折れた武器を修復しますか？", "Repair which broken weapon? ");
+    constexpr auto s = _("修復できる折れた武器がありません。", "You have no broken weapon to repair.");
     auto *o_ptr = choose_object(player_ptr, item, q, s, (USE_INVEN | USE_EQUIP), FuncItemTester(&ItemEntity::is_broken_weapon));
     if (o_ptr == nullptr) {
         return { false, nullptr };
@@ -114,19 +114,17 @@ static std::pair<bool, ItemEntity *> select_repairing_broken_weapon(PlayerType *
 
 static void display_reparing_weapon(PlayerType *player_ptr, ItemEntity *o_ptr, const int row)
 {
-    char item_name[MAX_NLEN];
-    describe_flavor(player_ptr, item_name, o_ptr, OD_NAME_ONLY);
-    prt(format(_("修復する武器　： %s", "Repairing: %s"), item_name), row + 3, 2);
+    const auto item_name = describe_flavor(player_ptr, o_ptr, OD_NAME_ONLY);
+    prt(format(_("修復する武器　： %s", "Repairing: %s"), item_name.data()), row + 3, 2);
 }
 
 static void display_repair_success_message(PlayerType *player_ptr, ItemEntity *o_ptr, const int cost)
 {
-    char item_name[MAX_NLEN];
-    describe_flavor(player_ptr, item_name, o_ptr, OD_NAME_ONLY);
+    const auto item_name = describe_flavor(player_ptr, o_ptr, OD_NAME_ONLY);
 #ifdef JP
-    msg_format("＄%dで%sに修復しました。", cost, item_name);
+    msg_format("＄%dで%sに修復しました。", cost, item_name.data());
 #else
-    msg_format("Repaired into %s for %d gold.", item_name, cost);
+    msg_format("Repaired into %s for %d gold.", item_name.data(), cost);
 #endif
     msg_print(nullptr);
 }
@@ -161,17 +159,15 @@ static PRICE repair_broken_weapon_aux(PlayerType *player_ptr, PRICE bcost)
         return 0;
     }
 
-    char basenm[MAX_NLEN];
-    describe_flavor(player_ptr, basenm, mo_ptr, OD_NAME_ONLY);
-    prt(format(_("材料とする武器： %s", "Material : %s"), basenm), row + 4, 2);
+    const auto item_name = describe_flavor(player_ptr, mo_ptr, OD_NAME_ONLY);
+    prt(format(_("材料とする武器： %s", "Material : %s"), item_name.data()), row + 4, 2);
     const auto cost = bcost + object_value_real(o_ptr) * 2;
     if (!get_check(format(_("＄%dかかりますがよろしいですか？ ", "Costs %d gold, okay? "), cost))) {
         return 0;
     }
 
     if (player_ptr->au < cost) {
-        describe_flavor(player_ptr, basenm, o_ptr, OD_NAME_ONLY);
-        msg_format(_("%sを修復するだけのゴールドがありません！", "You do not have the gold to repair %s!"), basenm);
+        msg_format(_("%sを修復するだけのゴールドがありません！", "You do not have the gold to repair %s!"), item_name.data());
         msg_print(nullptr);
         return 0;
     }

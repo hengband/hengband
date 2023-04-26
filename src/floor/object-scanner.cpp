@@ -15,6 +15,7 @@
 #include "term/screen-processor.h"
 #include "term/z-form.h"
 #include "util/string-processor.h"
+#include <array>
 
 /*!
  * @brief 床に落ちているオブジェクトの数を返す / scan floor items
@@ -105,11 +106,10 @@ COMMAND_CODE show_floor_items(PlayerType *player_ptr, int target_item, POSITION 
     COMMAND_CODE i, m;
     int j, k, l;
     ItemEntity *o_ptr;
-    GAME_TEXT o_name[MAX_NLEN];
     char tmp_val[80];
     COMMAND_CODE out_index[23];
     TERM_COLOR out_color[23];
-    char out_desc[23][MAX_NLEN];
+    std::array<std::string, 23> descriptions{};
     COMMAND_CODE target_item_label = 0;
     OBJECT_IDX floor_list[23];
     ITEM_NUMBER floor_num;
@@ -122,12 +122,12 @@ COMMAND_CODE show_floor_items(PlayerType *player_ptr, int target_item, POSITION 
     auto *floor_ptr = player_ptr->current_floor_ptr;
     for (k = 0, i = 0; i < floor_num && i < 23; i++) {
         o_ptr = &floor_ptr->o_list[floor_list[i]];
-        describe_flavor(player_ptr, o_name, o_ptr, 0);
+        const auto item_name = describe_flavor(player_ptr, o_ptr, 0);
         out_index[k] = i;
         const auto tval = o_ptr->bi_key.tval();
         out_color[k] = tval_to_attr[enum2i(tval) & 0x7F];
-        strcpy(out_desc[k], o_name);
-        l = strlen(out_desc[k]) + 5;
+        descriptions[k] = item_name;
+        l = descriptions[k].length() + 5;
         if (show_weights) {
             l += 9;
         }
@@ -166,7 +166,7 @@ COMMAND_CODE show_floor_items(PlayerType *player_ptr, int target_item, POSITION 
         }
 
         put_str(tmp_val, j + 1, col);
-        c_put_str(out_color[j], out_desc[j], j + 1, col + 3);
+        c_put_str(out_color[j], descriptions[j], j + 1, col + 3);
         if (show_weights && (o_ptr->bi_key.tval() != ItemKindType::GOLD)) {
             int wgt = o_ptr->weight * o_ptr->number;
             strnfmt(tmp_val, sizeof(tmp_val), _("%3d.%1d kg", "%3d.%1d lb"), _(lb_to_kg_integer(wgt), wgt / 10), _(lb_to_kg_fraction(wgt), wgt % 10));

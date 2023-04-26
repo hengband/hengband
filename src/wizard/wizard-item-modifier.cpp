@@ -196,9 +196,9 @@ void wiz_restore_aware_flag_of_fixed_arfifact(FixedArtifactId reset_artifact_idx
  */
 void wiz_modify_item_activation(PlayerType *player_ptr)
 {
-    auto q = _("どのアイテムの発動を変更しますか？ ", "Which object? ");
-    auto s = _("発動を変更するアイテムがない。", "Nothing to do with.");
-    OBJECT_IDX item;
+    constexpr auto q = _("どのアイテムの発動を変更しますか？ ", "Which object? ");
+    constexpr auto s = _("発動を変更するアイテムがない。", "Nothing to do with.");
+    short item;
     auto *o_ptr = choose_object(player_ptr, &item, q, s, USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT);
     if (!o_ptr) {
         return;
@@ -339,9 +339,8 @@ static void wiz_display_item(PlayerType *player_ptr, ItemEntity *o_ptr)
     }
 
     prt_alloc(o_ptr->bi_key, 1, 0);
-    char buf[256];
-    describe_flavor(player_ptr, buf, o_ptr, OD_STORE);
-    prt(buf, 2, j);
+    const auto item_name = describe_flavor(player_ptr, o_ptr, OD_STORE);
+    prt(item_name, 2, j);
 
     auto line = 4;
     const auto &bi_key = o_ptr->bi_key;
@@ -674,11 +673,10 @@ static void wiz_quantity_item(ItemEntity *o_ptr)
  */
 void wiz_modify_item(PlayerType *player_ptr)
 {
-    concptr q = "Play with which object? ";
-    concptr s = "You have nothing to play with.";
-    OBJECT_IDX item;
-    ItemEntity *o_ptr;
-    o_ptr = choose_object(player_ptr, &item, q, s, USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT);
+    constexpr auto q = "Play with which object? ";
+    constexpr auto s = "You have nothing to play with.";
+    short item;
+    auto *o_ptr = choose_object(player_ptr, &item, q, s, USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT);
     if (!o_ptr) {
         return;
     }
@@ -791,8 +789,6 @@ WishResultType do_cmd_wishing(PlayerType *player_ptr, int prob, bool allow_art, 
     char *str = buf;
     ItemEntity forge;
     auto *o_ptr = &forge;
-    char o_name[MAX_NLEN];
-
     bool wish_art = false;
     bool wish_randart = false;
     bool wish_ego = false;
@@ -879,7 +875,6 @@ WishResultType do_cmd_wishing(PlayerType *player_ptr, int prob, bool allow_art, 
     std::vector<short> k_ids;
     std::vector<EgoType> e_ids;
     if (exam_base) {
-        int len;
         int max_len = 0;
         for (const auto &baseitem : baseitems_info) {
             if (baseitem.idx == 0 || baseitem.name.empty()) {
@@ -887,17 +882,18 @@ WishResultType do_cmd_wishing(PlayerType *player_ptr, int prob, bool allow_art, 
             }
 
             o_ptr->prep(baseitem.idx);
-            describe_flavor(player_ptr, o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY | OD_STORE));
-#ifndef JP
-            str_tolower(o_name);
+#ifdef JP
+            const auto item_name = describe_flavor(player_ptr, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY | OD_STORE));
+#else
+            auto item_name = describe_flavor(player_ptr, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY | OD_STORE));
+            str_tolower(item_name.data());
 #endif
             if (cheat_xtra) {
-                msg_format("Matching object No.%d %s", baseitem.idx, o_name);
+                msg_format("Matching object No.%d %s", baseitem.idx, item_name.data());
             }
 
-            len = strlen(o_name);
-
-            if (_(!strrncmp(str, o_name, len), !strncmp(str, o_name, len))) {
+            const int len = item_name.length();
+            if (std::string(str).find(item_name) != std::string::npos) {
                 if (len > max_len) {
                     k_ids.push_back(baseitem.idx);
                     max_len = len;
@@ -914,15 +910,16 @@ WishResultType do_cmd_wishing(PlayerType *player_ptr, int prob, bool allow_art, 
                     continue;
                 }
 
-                strcpy(o_name, e_ref.name.data());
-#ifndef JP
-                str_tolower(o_name);
+                std::string item_name(e_ref.name);
+#ifdef JP
+#else
+                str_tolower(item_name.data());
 #endif
                 if (cheat_xtra) {
-                    msg_format("matching ego no.%d %s...", enum2i(e_ref.idx), o_name);
+                    msg_format("matching ego no.%d %s...", enum2i(e_ref.idx), item_name.data());
                 }
 
-                if (_(!strncmp(str, o_name, strlen(o_name)), !strrncmp(str, o_name, strlen(o_name)))) {
+                if (std::string(str).find(item_name) != std::string::npos) {
                     if (is_slot_able_to_be_ego(player_ptr, o_ptr) != e_ref.slot) {
                         continue;
                     }
@@ -954,9 +951,11 @@ WishResultType do_cmd_wishing(PlayerType *player_ptr, int prob, bool allow_art, 
             o_ptr->prep(bi_id);
             o_ptr->fixed_artifact_idx = a_idx;
 
-            describe_flavor(player_ptr, o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY | OD_STORE));
-#ifndef JP
-            str_tolower(o_name);
+#ifdef JP
+            const auto item_name = describe_flavor(player_ptr, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY | OD_STORE));
+#else
+            auto item_name = describe_flavor(player_ptr, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY | OD_STORE));
+            str_tolower(item_name.data());
 #endif
             a_str = a_desc;
             strcpy(a_desc, a_ref.name.data());
@@ -992,12 +991,12 @@ WishResultType do_cmd_wishing(PlayerType *player_ptr, int prob, bool allow_art, 
 
             str_tolower(a_str);
 #endif
-
+            const auto match_name = _(item_name.data() + 2, item_name.data());
             if (cheat_xtra) {
-                msg_format("Matching artifact No.%d %s(%s)", enum2i(a_idx), a_desc, _(&o_name[2], o_name));
+                msg_format("Matching artifact No.%d %s(%s)", enum2i(a_idx), a_desc, match_name);
             }
 
-            std::vector<const char *> l = { a_str, a_ref.name.data(), _(&o_name[2], o_name) };
+            std::vector<const char *> l = { a_str, a_ref.name.data(), match_name };
             for (size_t c = 0; c < l.size(); c++) {
                 if (!strcmp(str, l.at(c))) {
                     len = strlen(l.at(c));

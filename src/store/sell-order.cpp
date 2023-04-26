@@ -119,8 +119,6 @@ void store_sell(PlayerType *player_ptr, StoreSaleType store_num)
         q_ptr->pval = o_ptr->pval * amt / o_ptr->number;
     }
 
-    GAME_TEXT o_name[MAX_NLEN];
-    describe_flavor(player_ptr, o_name, q_ptr, 0);
     if ((store_num != StoreSaleType::HOME) && (store_num != StoreSaleType::MUSEUM)) {
         q_ptr->inscription.reset();
         q_ptr->feeling = FEEL_NONE;
@@ -133,7 +131,8 @@ void store_sell(PlayerType *player_ptr, StoreSaleType store_num)
 
     bool placed = false;
     if ((store_num != StoreSaleType::HOME) && (store_num != StoreSaleType::MUSEUM)) {
-        msg_format(_("%s(%c)を売却する。", "Selling %s (%c)."), o_name, index_to_label(item));
+        const auto item_name = describe_flavor(player_ptr, q_ptr, 0);
+        msg_format(_("%s(%c)を売却する。", "Selling %s (%c)."), item_name.data(), index_to_label(item));
         msg_print(nullptr);
 
         auto res = prompt_to_sell(player_ptr, q_ptr, store_num);
@@ -167,11 +166,11 @@ void store_sell(PlayerType *player_ptr, StoreSaleType store_num)
             }
 
             const auto value = q_ptr->get_price() * q_ptr->number;
-            describe_flavor(player_ptr, o_name, q_ptr, 0);
-            msg_format(_("%sを $%ldで売却しました。", "You sold %s for %ld gold."), o_name, static_cast<long>(price));
+            const auto sold_item_name = describe_flavor(player_ptr, q_ptr, 0);
+            msg_format(_("%sを $%dで売却しました。", "You sold %s for %d gold."), sold_item_name.data(), price);
 
             if (record_sell) {
-                exe_write_diary(player_ptr, DIARY_SELL, 0, o_name);
+                exe_write_diary(player_ptr, DIARY_SELL, 0, sold_item_name.data());
             }
 
             if (!((tval == ItemKindType::FIGURINE) && (value > 0))) {
@@ -194,16 +193,14 @@ void store_sell(PlayerType *player_ptr, StoreSaleType store_num)
             }
         }
     } else if (store_num == StoreSaleType::MUSEUM) {
-        char o2_name[MAX_NLEN];
-        describe_flavor(player_ptr, o2_name, q_ptr, OD_NAME_ONLY);
-
+        const auto museum_item_name = describe_flavor(player_ptr, q_ptr, OD_NAME_ONLY);
         if (-1 == store_check_num(q_ptr, store_num)) {
             msg_print(_("それと同じ品物は既に博物館にあるようです。", "The Museum already has one of those items."));
         } else {
             msg_print(_("博物館に寄贈したものは取り出すことができません！！", "You cannot take back items which have been donated to the Museum!!"));
         }
 
-        if (!get_check(format(_("本当に%sを寄贈しますか？", "Really give %s to the Museum? "), o2_name))) {
+        if (!get_check(format(_("本当に%sを寄贈しますか？", "Really give %s to the Museum? "), museum_item_name.data()))) {
             return;
         }
 
@@ -211,7 +208,7 @@ void store_sell(PlayerType *player_ptr, StoreSaleType store_num)
         q_ptr->ident |= IDENT_FULL_KNOWN;
 
         distribute_charges(o_ptr, q_ptr, amt);
-        msg_format(_("%sを置いた。(%c)", "You drop %s (%c)."), o_name, index_to_label(item));
+        msg_format(_("%sを置いた。(%c)", "You drop %s (%c)."), museum_item_name.data(), index_to_label(item));
         placed = true;
 
         vary_item(player_ptr, item, -amt);
@@ -223,7 +220,8 @@ void store_sell(PlayerType *player_ptr, StoreSaleType store_num)
         }
     } else {
         distribute_charges(o_ptr, q_ptr, amt);
-        msg_format(_("%sを置いた。(%c)", "You drop %s (%c)."), o_name, index_to_label(item));
+        const auto item_name = describe_flavor(player_ptr, q_ptr, 0);
+        msg_format(_("%sを置いた。(%c)", "You drop %s (%c)."), item_name.data(), index_to_label(item));
         placed = true;
         vary_item(player_ptr, item, -amt);
         int item_pos = home_carry(player_ptr, q_ptr, store_num);

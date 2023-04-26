@@ -267,9 +267,7 @@ static void display_equipment(PlayerType *player_ptr, const ItemTester &item_tes
 
     TERM_LEN wid, hgt;
     term_get_size(&wid, &hgt);
-
-    TERM_COLOR attr = TERM_WHITE;
-    GAME_TEXT o_name[MAX_NLEN];
+    byte attr = TERM_WHITE;
     for (int i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
         int cur_row = i - INVEN_MAIN_HAND;
         if (cur_row >= hgt) {
@@ -289,15 +287,18 @@ static void display_equipment(PlayerType *player_ptr, const ItemTester &item_tes
         term_erase(cur_col, cur_row, 255);
         term_putstr(0, cur_row, cur_col, TERM_WHITE, tmp_val);
 
-        if ((((i == INVEN_MAIN_HAND) && can_attack_with_sub_hand(player_ptr)) || ((i == INVEN_SUB_HAND) && can_attack_with_main_hand(player_ptr))) && has_two_handed_weapons(player_ptr)) {
-            strcpy(o_name, _("(武器を両手持ち)", "(wielding with two-hands)"));
+        std::string item_name;
+        auto is_two_handed = (i == INVEN_MAIN_HAND) && can_attack_with_sub_hand(player_ptr);
+        is_two_handed |= (i == INVEN_SUB_HAND) && can_attack_with_main_hand(player_ptr);
+        if (is_two_handed && has_two_handed_weapons(player_ptr)) {
+            item_name = _("(武器を両手持ち)", "(wielding with two-hands)");
             attr = TERM_WHITE;
         } else {
-            describe_flavor(player_ptr, o_name, o_ptr, 0);
+            item_name = describe_flavor(player_ptr, o_ptr, 0);
             attr = tval_to_attr[enum2i(o_ptr->bi_key.tval()) % 128];
         }
 
-        int n = strlen(o_name);
+        int n = item_name.length();
         if (o_ptr->timeout) {
             attr = TERM_L_DARK;
         }
@@ -313,7 +314,7 @@ static void display_equipment(PlayerType *player_ptr, const ItemTester &item_tes
             cur_col += 2;
         }
 
-        term_putstr(cur_col, cur_row, n, attr, o_name);
+        term_putstr(cur_col, cur_row, n, attr, item_name);
         if (show_weights) {
             int wgt = o_ptr->weight * o_ptr->number;
             tmp_val = format(_("%3d.%1d kg", "%3d.%1d lb"), _(lb_to_kg_integer(wgt), wgt / 10), _(lb_to_kg_fraction(wgt), wgt % 10));
@@ -572,10 +573,9 @@ static void display_floor_item_list(PlayerType *player_ptr, const int y, const i
         if (is_hallucinated) {
             term_addstr(-1, TERM_WHITE, _("何か奇妙な物", "something strange"));
         } else {
-            char buf[1024];
-            describe_flavor(player_ptr, buf, o_ptr, 0);
+            const auto item_name = describe_flavor(player_ptr, o_ptr, 0);
             TERM_COLOR attr = tval_to_attr[enum2i(tval) % 128];
-            term_addstr(-1, attr, buf);
+            term_addstr(-1, attr, item_name);
         }
 
         ++term_y;
@@ -651,12 +651,9 @@ static void display_found_item_list(PlayerType *player_ptr)
         const auto color_code_for_symbol = item->get_color();
         term_addstr(-1, color_code_for_symbol, symbol.data());
 
-        // アイテム名表示
-        char temp[512];
-        describe_flavor(player_ptr, temp, item, 0);
-        const std::string item_description(temp);
+        const auto item_name = describe_flavor(player_ptr, item, 0);
         const auto color_code_for_item = tval_to_attr[enum2i(item->bi_key.tval()) % 128];
-        term_addstr(-1, color_code_for_item, item_description.data());
+        term_addstr(-1, color_code_for_item, item_name);
 
         // アイテム座標表示
         const std::string item_location = format("(X:%3d Y:%3d)", item->ix, item->iy);

@@ -50,6 +50,7 @@
 #include "view/display-messages.h"
 #include "world/world.h"
 #include <functional>
+#include <sstream>
 
 /*!
  * @brief 地形によるダメージを与える / Deal damage from feature.
@@ -151,15 +152,14 @@ void process_player_hp_mp(PlayerType *player_ptr)
         auto flags = object_flags(o_ptr);
 
         if ((player_ptr->inventory_list[INVEN_LITE].bi_key.tval() != ItemKindType::NONE) && flags.has_not(TR_DARK_SOURCE) && !has_resist_lite(player_ptr)) {
-            GAME_TEXT o_name[MAX_NLEN];
-            describe_flavor(player_ptr, o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
-            msg_format(_("%sがあなたのアンデッドの肉体を焼き焦がした！", "The %s scorches your undead flesh!"), o_name);
-
+            const auto item_name = describe_flavor(player_ptr, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
+            msg_format(_("%sがあなたのアンデッドの肉体を焼き焦がした！", "The %s scorches your undead flesh!"), item_name.data());
             cave_no_regen = true;
-
             if (!is_invuln(player_ptr)) {
-                describe_flavor(player_ptr, o_name, o_ptr, OD_NAME_ONLY);
-                take_hit(player_ptr, DAMAGE_NOESCAPE, 1, std::string(_(o_name, "wielding ")).append(_("を装備したダメージ", o_name)).data());
+                const auto wielding_item_name = describe_flavor(player_ptr, o_ptr, OD_NAME_ONLY);
+                std::stringstream ss;
+                ss << _(wielding_item_name, "wielding ") << _("を装備したダメージ", wielding_item_name);
+                take_hit(player_ptr, DAMAGE_NOESCAPE, 1, ss.str().data());
             }
         }
     }

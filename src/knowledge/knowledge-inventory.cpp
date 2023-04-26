@@ -152,8 +152,7 @@ static void display_identified_resistances_flag(ItemEntity *o_ptr, FILE *fff)
  */
 static void do_cmd_knowledge_inventory_aux(PlayerType *player_ptr, FILE *fff, ItemEntity *o_ptr, char *where)
 {
-    char tmp_item_name[MAX_NLEN];
-    describe_flavor(player_ptr, tmp_item_name, o_ptr, OD_NAME_ONLY);
+    auto tmp_item_name = describe_flavor(player_ptr, o_ptr, OD_NAME_ONLY);
     constexpr auto max_item_length = 26;
     auto item_name = str_substr(tmp_item_name, 0, max_item_length);
     std::stringstream ss;

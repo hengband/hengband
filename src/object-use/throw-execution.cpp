@@ -110,7 +110,7 @@ void ObjectThrowEntity::calc_throw_range()
     torch_flags(this->q_ptr, this->obj_flags);
     distribute_charges(this->o_ptr, this->q_ptr, 1);
     this->q_ptr->number = 1;
-    describe_flavor(this->player_ptr, this->o_name, this->q_ptr, OD_OMIT_PREFIX);
+    this->o_name = describe_flavor(this->player_ptr, this->q_ptr, OD_OMIT_PREFIX);
     if (this->player_ptr->mighty_throw) {
         this->mult += 3;
     }
@@ -219,7 +219,7 @@ void ObjectThrowEntity::exe_throw()
         auto *floor_ptr = this->player_ptr->current_floor_ptr;
         this->g_ptr = &floor_ptr->grid_array[this->y][this->x];
         this->m_ptr = &floor_ptr->m_list[this->g_ptr->m_idx];
-        angband_strcpy(this->m_name, monster_name(this->player_ptr, this->g_ptr->m_idx).data(), sizeof(this->m_name));
+        this->m_name = monster_name(this->player_ptr, this->g_ptr->m_idx);
         this->visible = this->m_ptr->ml;
         this->hit_body = true;
         this->attack_racial_power();
@@ -256,7 +256,7 @@ void ObjectThrowEntity::display_potion_throw()
         return;
     }
 
-    msg_format(_("%sは砕け散った！", "The %s shatters!"), this->o_name);
+    msg_format(_("%sは砕け散った！", "The %s shatters!"), this->o_name.data());
     if (!potion_smash_effect(this->player_ptr, 0, this->y, this->x, this->q_ptr->bi_id)) {
         this->do_drop = false;
         return;
@@ -292,7 +292,7 @@ void ObjectThrowEntity::check_boomerang_throw()
         this->back_chance += 100;
     }
 
-    describe_flavor(this->player_ptr, this->o2_name, this->q_ptr, OD_OMIT_PREFIX | OD_NAME_ONLY);
+    this->o2_name = describe_flavor(this->player_ptr, this->q_ptr, OD_OMIT_PREFIX | OD_NAME_ONLY);
     this->process_boomerang_throw();
 }
 
@@ -462,18 +462,18 @@ void ObjectThrowEntity::attack_racial_power()
 
     if (fear && this->m_ptr->ml) {
         sound(SOUND_FLEE);
-        msg_format(_("%s^は恐怖して逃げ出した！", "%s^ flees in terror!"), this->m_name);
+        msg_format(_("%s^は恐怖して逃げ出した！", "%s^ flees in terror!"), this->m_name.data());
     }
 }
 
 void ObjectThrowEntity::display_attack_racial_power()
 {
     if (!this->visible) {
-        msg_format(_("%sが敵を捕捉した。", "The %s finds a mark."), this->o_name);
+        msg_format(_("%sが敵を捕捉した。", "The %s finds a mark."), this->o_name.data());
         return;
     }
 
-    msg_format(_("%sが%sに命中した。", "The %s hits %s."), this->o_name, this->m_name);
+    msg_format(_("%sが%sに命中した。", "The %s hits %s."), this->o_name.data(), this->m_name.data());
     if (!this->m_ptr->ml) {
         return;
     }
@@ -518,7 +518,7 @@ void ObjectThrowEntity::calc_racial_power_damage()
 void ObjectThrowEntity::process_boomerang_throw()
 {
     if ((this->back_chance <= 30) || (one_in_(100) && !this->super_boomerang)) {
-        msg_format(_("%sが返ってこなかった！", "%s doesn't come back!"), this->o2_name);
+        msg_format(_("%sが返ってこなかった！", "%s doesn't come back!"), this->o2_name.data());
         return;
     }
 
@@ -549,13 +549,13 @@ void ObjectThrowEntity::display_boomerang_throw()
 {
     const auto is_blind = this->player_ptr->effects()->blindness()->is_blind();
     if ((this->back_chance > 37) && !is_blind && (this->item >= 0)) {
-        msg_format(_("%sが手元に返ってきた。", "%s comes back to you."), this->o2_name);
+        msg_format(_("%sが手元に返ってきた。", "%s comes back to you."), this->o2_name.data());
         this->come_back = true;
         return;
     }
 
     auto back_message = this->item >= 0 ? _("%sを受け損ねた！", "%s comes back, but you can't catch!") : _("%sが返ってきた。", "%s comes back.");
-    msg_format(back_message, this->o2_name);
+    msg_format(back_message, this->o2_name.data());
     this->y = this->player_ptr->y;
     this->x = this->player_ptr->x;
 }

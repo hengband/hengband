@@ -512,8 +512,7 @@ void exe_fire(PlayerType *player_ptr, INVENTORY_IDX item, ItemEntity *j_ptr, SPE
         snipe_type = SP_NONE;
     }
 
-    GAME_TEXT o_name[MAX_NLEN];
-    describe_flavor(player_ptr, o_name, o_ptr, OD_OMIT_PREFIX);
+    const auto item_name = describe_flavor(player_ptr, o_ptr, OD_OMIT_PREFIX);
 
     /* Use the proper number of shots */
     auto thits = player_ptr->num_fire;
@@ -766,7 +765,7 @@ void exe_fire(PlayerType *player_ptr, INVENTORY_IDX item, ItemEntity *j_ptr, SPE
                 }
 
                 /* Did we hit it (penalize range) */
-                if (test_hit_fire(player_ptr, chance - cur_dis, m_ptr, m_ptr->ml, o_name)) {
+                if (test_hit_fire(player_ptr, chance - cur_dis, m_ptr, m_ptr->ml, item_name.data())) {
                     bool fear = false;
                     auto tdam = tdam_base; //!< @note 実際に与えるダメージ
                     auto base_dam = tdam; //!< @note 補正前の与えるダメージ(無傷、全ての耐性など)
@@ -777,7 +776,7 @@ void exe_fire(PlayerType *player_ptr, INVENTORY_IDX item, ItemEntity *j_ptr, SPE
                     /* Handle unseen monster */
                     if (!visible) {
                         /* Invisible monster */
-                        msg_format(_("%sが敵を捕捉した。", "The %s finds a mark."), o_name);
+                        msg_format(_("%sが敵を捕捉した。", "The %s finds a mark."), item_name.data());
                     }
 
                     /* Handle visible monster */
@@ -785,7 +784,7 @@ void exe_fire(PlayerType *player_ptr, INVENTORY_IDX item, ItemEntity *j_ptr, SPE
                         /* Get "the monster" or "it" */
                         const auto m_name = monster_desc(player_ptr, m_ptr, 0);
 
-                        msg_format(_("%sが%sに命中した。", "The %s hits %s."), o_name, m_name.data());
+                        msg_format(_("%sが%sに命中した。", "The %s hits %s."), item_name.data(), m_name.data());
 
                         if (m_ptr->ml) {
                             if (!player_ptr->effects()->hallucination()->is_hallucinated()) {
@@ -859,7 +858,7 @@ void exe_fire(PlayerType *player_ptr, INVENTORY_IDX item, ItemEntity *j_ptr, SPE
                             const auto m_name = monster_desc(player_ptr, m_ptr, 0);
 
                             stick_to = true;
-                            msg_format(_("%sは%sに突き刺さった！", "%s^ is stuck in %s!"), o_name, m_name.data());
+                            msg_format(_("%sは%sに突き刺さった！", "%s^ is stuck in %s!"), item_name.data(), m_name.data());
                         }
 
                         if (const auto pain_message = MonsterPainDescriber(player_ptr, c_mon_ptr->m_idx).describe(tdam);
@@ -955,7 +954,7 @@ void exe_fire(PlayerType *player_ptr, INVENTORY_IDX item, ItemEntity *j_ptr, SPE
             OBJECT_IDX o_idx = o_pop(player_ptr->current_floor_ptr);
 
             if (!o_idx) {
-                msg_format(_("%sはどこかへ行った。", "The %s went somewhere."), o_name);
+                msg_format(_("%sはどこかへ行った。", "The %s went somewhere."), item_name.data());
                 if (q_ptr->is_fixed_artifact()) {
                     artifacts_info.at(j_ptr->fixed_artifact_idx).is_generated = false;
                 }

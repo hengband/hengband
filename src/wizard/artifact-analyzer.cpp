@@ -53,9 +53,9 @@ static concptr *spoiler_flag_aux(const TrFlags &art_flags, const flag_desc *flag
  * @param o_ptr 記述を得たいオブジェクトの参照ポインタ
  * @param desc_ptr 記述内容を返すための文字列参照ポインタ
  */
-static void analyze_general(PlayerType *player_ptr, ItemEntity *o_ptr, char *desc_ptr)
+static std::string analyze_general(PlayerType *player_ptr, ItemEntity *o_ptr)
 {
-    describe_flavor(player_ptr, desc_ptr, o_ptr, OD_NAME_AND_ENCHANT | OD_STORE | OD_DEBUG);
+    return describe_flavor(player_ptr, o_ptr, OD_NAME_AND_ENCHANT | OD_STORE | OD_DEBUG);
 }
 
 /*!
@@ -311,7 +311,7 @@ static void analyze_misc(ItemEntity *o_ptr, char *misc_desc, size_t misc_desc_sz
  */
 void object_analyze(PlayerType *player_ptr, ItemEntity *o_ptr, obj_desc_list *desc_ptr)
 {
-    analyze_general(player_ptr, o_ptr, desc_ptr->description);
+    angband_strcpy(desc_ptr->description, analyze_general(player_ptr, o_ptr).data(), MAX_NLEN);
     analyze_pval(o_ptr, &desc_ptr->pval_info);
     analyze_brand(o_ptr, desc_ptr->brands);
     analyze_slay(o_ptr, desc_ptr->slays);
@@ -334,7 +334,7 @@ void object_analyze(PlayerType *player_ptr, ItemEntity *o_ptr, obj_desc_list *de
  */
 void random_artifact_analyze(PlayerType *player_ptr, ItemEntity *o_ptr, obj_desc_list *desc_ptr)
 {
-    analyze_general(player_ptr, o_ptr, desc_ptr->description);
+    angband_strcpy(desc_ptr->description, analyze_general(player_ptr, o_ptr).data(), MAX_NLEN);
     analyze_pval(o_ptr, &desc_ptr->pval_info);
     analyze_brand(o_ptr, desc_ptr->brands);
     analyze_slay(o_ptr, desc_ptr->slays);

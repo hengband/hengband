@@ -124,9 +124,7 @@ void drop_from_inventory(PlayerType *player_ptr, INVENTORY_IDX item, ITEM_NUMBER
 {
     ItemEntity forge;
     ItemEntity *q_ptr;
-    ItemEntity *o_ptr;
-    GAME_TEXT o_name[MAX_NLEN];
-    o_ptr = &player_ptr->inventory_list[item];
+    auto *o_ptr = &player_ptr->inventory_list[item];
     if (amt <= 0) {
         return;
     }
@@ -145,8 +143,8 @@ void drop_from_inventory(PlayerType *player_ptr, INVENTORY_IDX item, ITEM_NUMBER
     distribute_charges(o_ptr, q_ptr, amt);
 
     q_ptr->number = amt;
-    describe_flavor(player_ptr, o_name, q_ptr, 0);
-    msg_format(_("%s(%c)を落とした。", "You drop %s (%c)."), o_name, index_to_label(item));
+    const auto item_name = describe_flavor(player_ptr, q_ptr, 0);
+    msg_format(_("%s(%c)を落とした。", "You drop %s (%c)."), item_name.data(), index_to_label(item));
     (void)drop_near(player_ptr, q_ptr, 0, player_ptr->y, player_ptr->x);
     vary_item(player_ptr, item, -amt);
 }
@@ -411,7 +409,6 @@ INVENTORY_IDX inven_takeoff(PlayerType *player_ptr, INVENTORY_IDX item, ITEM_NUM
     ItemEntity *q_ptr;
     ItemEntity *o_ptr;
     concptr act;
-    GAME_TEXT o_name[MAX_NLEN];
     o_ptr = &player_ptr->inventory_list[item];
     if (amt <= 0) {
         return -1;
@@ -423,7 +420,7 @@ INVENTORY_IDX inven_takeoff(PlayerType *player_ptr, INVENTORY_IDX item, ITEM_NUM
     q_ptr = &forge;
     q_ptr->copy_from(o_ptr);
     q_ptr->number = amt;
-    describe_flavor(player_ptr, o_name, q_ptr, 0);
+    const auto item_name = describe_flavor(player_ptr, q_ptr, 0);
     if (((item == INVEN_MAIN_HAND) || (item == INVEN_SUB_HAND)) && o_ptr->is_melee_weapon()) {
         act = _("を装備からはずした", "You were wielding");
     } else if (item == INVEN_BOW) {
@@ -439,9 +436,9 @@ INVENTORY_IDX inven_takeoff(PlayerType *player_ptr, INVENTORY_IDX item, ITEM_NUM
 
     slot = store_item_to_inventory(player_ptr, q_ptr);
 #ifdef JP
-    msg_format("%s(%c)%s。", o_name, index_to_label(slot), act);
+    msg_format("%s(%c)%s。", item_name.data(), index_to_label(slot), act);
 #else
-    msg_format("%s %s (%c).", act, o_name, index_to_label(slot));
+    msg_format("%s %s (%c).", act, item_name.data(), index_to_label(slot));
 #endif
 
     return slot;

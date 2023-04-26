@@ -35,10 +35,8 @@ bool bless_weapon(PlayerType *player_ptr)
         return false;
     }
 
-    GAME_TEXT o_name[MAX_NLEN];
-    describe_flavor(player_ptr, o_name, o_ptr, OD_OMIT_PREFIX | OD_NAME_ONLY);
+    const auto item_name = describe_flavor(player_ptr, o_ptr, OD_OMIT_PREFIX | OD_NAME_ONLY);
     auto flags = object_flags(o_ptr);
-
     if (o_ptr->is_cursed()) {
         auto can_disturb_blessing = o_ptr->curse_flags.has(CurseTraitType::HEAVY_CURSE) && (randint1(100) < 33);
         can_disturb_blessing |= flags.has(TR_ADD_L_CURSE);
@@ -47,18 +45,18 @@ bool bless_weapon(PlayerType *player_ptr)
         can_disturb_blessing |= o_ptr->curse_flags.has(CurseTraitType::PERMA_CURSE);
         if (can_disturb_blessing) {
 #ifdef JP
-            msg_format("%sを覆う黒いオーラは祝福を跳ね返した！", o_name);
+            msg_format("%sを覆う黒いオーラは祝福を跳ね返した！", item_name.data());
 #else
-            msg_format("The black aura on %s %s disrupts the blessing!", ((item >= 0) ? "your" : "the"), o_name);
+            msg_format("The black aura on %s %s disrupts the blessing!", ((item >= 0) ? "your" : "the"), item_name.data());
 #endif
 
             return true;
         }
 
 #ifdef JP
-        msg_format("%s から邪悪なオーラが消えた。", o_name);
+        msg_format("%s から邪悪なオーラが消えた。", item_name.data());
 #else
-        msg_format("A malignant aura leaves %s %s.", ((item >= 0) ? "your" : "the"), o_name);
+        msg_format("A malignant aura leaves %s %s.", ((item >= 0) ? "your" : "the"), item_name.data());
 #endif
         o_ptr->curse_flags.clear();
         set_bits(o_ptr->ident, IDENT_SENSE);
@@ -77,18 +75,18 @@ bool bless_weapon(PlayerType *player_ptr)
      */
     if (flags.has(TR_BLESSED)) {
 #ifdef JP
-        msg_format("%s は既に祝福されている。", o_name);
+        msg_format("%s は既に祝福されている。", item_name.data());
 #else
-        msg_format("%s %s %s blessed already.", ((item >= 0) ? "Your" : "The"), o_name, ((o_ptr->number > 1) ? "were" : "was"));
+        msg_format("%s %s %s blessed already.", ((item >= 0) ? "Your" : "The"), item_name.data(), ((o_ptr->number > 1) ? "were" : "was"));
 #endif
         return true;
     }
 
     if (!(o_ptr->is_fixed_or_random_artifact() || o_ptr->is_ego()) || one_in_(3)) {
 #ifdef JP
-        msg_format("%sは輝いた！", o_name);
+        msg_format("%sは輝いた！", item_name.data());
 #else
-        msg_format("%s %s shine%s!", ((item >= 0) ? "Your" : "The"), o_name, ((o_ptr->number > 1) ? "" : "s"));
+        msg_format("%s %s shine%s!", ((item >= 0) ? "Your" : "The"), item_name.data(), ((o_ptr->number > 1) ? "" : "s"));
 #endif
         o_ptr->art_flags.set(TR_BLESSED);
         o_ptr->discount = 99;
@@ -130,9 +128,9 @@ bool bless_weapon(PlayerType *player_ptr)
             msg_print(_("周囲が凡庸な雰囲気で満ちた...", "There is a static feeling in the air..."));
 
 #ifdef JP
-            msg_format("%s は劣化した！", o_name);
+            msg_format("%s は劣化した！", item_name.data());
 #else
-            msg_format("%s %s %s disenchanted!", ((item >= 0) ? "Your" : "The"), o_name, ((o_ptr->number > 1) ? "were" : "was"));
+            msg_format("%s %s %s disenchanted!", ((item >= 0) ? "Your" : "The"), item_name.data(), ((o_ptr->number > 1) ? "were" : "was"));
 #endif
         }
     }

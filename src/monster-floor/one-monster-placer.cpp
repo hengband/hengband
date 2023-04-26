@@ -234,9 +234,7 @@ static void warn_unique_generation(PlayerType *player_ptr, MonsterRaceId r_idx)
         return;
     }
 
-    concptr color;
-    ItemEntity *o_ptr;
-    GAME_TEXT o_name[MAX_NLEN];
+    std::string color;
     if (r_ptr->level > player_ptr->lev + 30) {
         color = _("黒く", "black");
     } else if (r_ptr->level > player_ptr->lev + 15) {
@@ -251,12 +249,12 @@ static void warn_unique_generation(PlayerType *player_ptr, MonsterRaceId r_idx)
         color = _("白く", "white");
     }
 
-    o_ptr = choose_warning_item(player_ptr);
+    auto *o_ptr = choose_warning_item(player_ptr);
     if (o_ptr != nullptr) {
-        describe_flavor(player_ptr, o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
-        msg_format(_("%sは%s光った。", "%s glows %s."), o_name, color);
+        const auto item_name = describe_flavor(player_ptr, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
+        msg_format(_("%sは%s光った。", "%s glows %s."), item_name.data(), color.data());
     } else {
-        msg_format(_("%s光る物が頭に浮かんだ。", "A %s image forms in your mind."), color);
+        msg_format(_("%s光る物が頭に浮かんだ。", "A %s image forms in your mind."), color.data());
     }
 }
 

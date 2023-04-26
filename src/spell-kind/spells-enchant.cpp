@@ -17,7 +17,6 @@
 #include "system/player-type-definition.h"
 #include "term/screen-processor.h"
 #include "view/display-messages.h"
-
 #include <memory>
 
 /*!
@@ -36,42 +35,41 @@ bool artifact_scroll(PlayerType *player_ptr)
         return false;
     }
 
-    GAME_TEXT o_name[MAX_NLEN];
-    describe_flavor(player_ptr, o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
+    const auto item_name = describe_flavor(player_ptr, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
 #ifdef JP
-    msg_format("%s は眩い光を発した！", o_name);
+    msg_format("%s は眩い光を発した！", item_name.data());
 #else
-    msg_format("%s %s radiate%s a blinding light!", ((item >= 0) ? "Your" : "The"), o_name, ((o_ptr->number > 1) ? "" : "s"));
+    msg_format("%s %s radiate%s a blinding light!", ((item >= 0) ? "Your" : "The"), item_name.data(), ((o_ptr->number > 1) ? "" : "s"));
 #endif
 
     bool okay = false;
     if (o_ptr->is_fixed_or_random_artifact()) {
 #ifdef JP
-        msg_format("%sは既に伝説のアイテムです！", o_name);
+        msg_format("%sは既に伝説のアイテムです！", item_name.data());
 #else
-        msg_format("The %s %s already %s!", o_name, ((o_ptr->number > 1) ? "are" : "is"), ((o_ptr->number > 1) ? "artifacts" : "an artifact"));
+        msg_format("The %s %s already %s!", item_name.data(), ((o_ptr->number > 1) ? "are" : "is"), ((o_ptr->number > 1) ? "artifacts" : "an artifact"));
 #endif
         okay = false;
     } else if (o_ptr->is_ego()) {
 #ifdef JP
-        msg_format("%sは既に名のあるアイテムです！", o_name);
+        msg_format("%sは既に名のあるアイテムです！", item_name.data());
 #else
-        msg_format("The %s %s already %s!", o_name, ((o_ptr->number > 1) ? "are" : "is"), ((o_ptr->number > 1) ? "ego items" : "an ego item"));
+        msg_format("The %s %s already %s!", item_name.data(), ((o_ptr->number > 1) ? "are" : "is"), ((o_ptr->number > 1) ? "ego items" : "an ego item"));
 #endif
         okay = false;
     } else if (o_ptr->is_smith()) {
 #ifdef JP
-        msg_format("%sは既に強化されています！", o_name);
+        msg_format("%sは既に強化されています！", item_name.data());
 #else
-        msg_format("The %s %s already %s!", o_name, ((o_ptr->number > 1) ? "are" : "is"), ((o_ptr->number > 1) ? "customized items" : "a customized item"));
+        msg_format("The %s %s already %s!", item_name.data(), ((o_ptr->number > 1) ? "are" : "is"), ((o_ptr->number > 1) ? "customized items" : "a customized item"));
 #endif
     } else {
         if (o_ptr->number > 1) {
             msg_print(_("複数のアイテムに魔法をかけるだけのエネルギーはありません！", "Not enough energy to enchant more than one object!"));
 #ifdef JP
-            msg_format("%d 個の%sが壊れた！", (o_ptr->number) - 1, o_name);
+            msg_format("%d 個の%sが壊れた！", (o_ptr->number) - 1, item_name.data());
 #else
-            msg_format("%d of your %s %s destroyed!", (o_ptr->number) - 1, o_name, (o_ptr->number > 2 ? "were" : "was"));
+            msg_format("%d of your %s %s destroyed!", (o_ptr->number) - 1, item_name.data(), (o_ptr->number > 2 ? "were" : "was"));
 #endif
 
             if (item >= 0) {
@@ -99,8 +97,8 @@ bool artifact_scroll(PlayerType *player_ptr)
     }
 
     if (record_rand_art) {
-        describe_flavor(player_ptr, o_name, o_ptr, OD_NAME_ONLY);
-        exe_write_diary(player_ptr, DIARY_ART_SCROLL, 0, o_name);
+        const auto diary_item_name = describe_flavor(player_ptr, o_ptr, OD_NAME_ONLY);
+        exe_write_diary(player_ptr, DIARY_ART_SCROLL, 0, diary_item_name.data());
     }
 
     chg_virtue(player_ptr, V_ENCHANT, 1);

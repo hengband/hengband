@@ -364,11 +364,9 @@ void build_streamer(PlayerType *player_ptr, FEAT_IDX feat, int chance)
                     /* Hack -- Preserve unknown artifacts */
                     if (o_ptr->is_fixed_artifact()) {
                         artifacts_info.at(o_ptr->fixed_artifact_idx).is_generated = false;
-
                         if (cheat_peek) {
-                            GAME_TEXT o_name[MAX_NLEN];
-                            describe_flavor(player_ptr, o_name, o_ptr, (OD_NAME_ONLY | OD_STORE));
-                            msg_format(_("伝説のアイテム (%s) はストリーマーにより削除された。", "Artifact (%s) was deleted by streamer."), o_name);
+                            const auto item_name = describe_flavor(player_ptr, o_ptr, (OD_NAME_ONLY | OD_STORE));
+                            msg_format(_("伝説のアイテム (%s) はストリーマーにより削除された。", "Artifact (%s) was deleted by streamer."), item_name.data());
                         }
                     } else if (cheat_peek && o_ptr->is_random_artifact()) {
                         msg_print(_("ランダム・アーティファクトの1つはストリーマーにより削除された。", "One of the random artifacts was deleted by streamer."));

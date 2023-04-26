@@ -247,14 +247,12 @@ static void describe_monster_person(eg_type *eg_ptr)
 static uint16_t describe_monster_item(PlayerType *player_ptr, eg_type *eg_ptr)
 {
     for (const auto this_o_idx : eg_ptr->m_ptr->hold_o_idx_list) {
-        GAME_TEXT o_name[MAX_NLEN];
-        ItemEntity *o_ptr;
-        o_ptr = &player_ptr->current_floor_ptr->o_list[this_o_idx];
-        describe_flavor(player_ptr, o_name, o_ptr, 0);
+        auto *o_ptr = &player_ptr->current_floor_ptr->o_list[this_o_idx];
+        const auto item_name = describe_flavor(player_ptr, o_ptr, 0);
 #ifdef JP
-        strnfmt(eg_ptr->out_val, sizeof(eg_ptr->out_val), "%s%s%s%s[%s]", eg_ptr->s1, o_name, eg_ptr->s2, eg_ptr->s3, eg_ptr->info);
+        strnfmt(eg_ptr->out_val, sizeof(eg_ptr->out_val), "%s%s%s%s[%s]", eg_ptr->s1, item_name.data(), eg_ptr->s2, eg_ptr->s3, eg_ptr->info);
 #else
-        strnfmt(eg_ptr->out_val, sizeof(eg_ptr->out_val), "%s%s%s%s [%s]", eg_ptr->s1, eg_ptr->s2, eg_ptr->s3, o_name, eg_ptr->info);
+        strnfmt(eg_ptr->out_val, sizeof(eg_ptr->out_val), "%s%s%s%s [%s]", eg_ptr->s1, eg_ptr->s2, eg_ptr->s3, item_name.data(), eg_ptr->info);
 #endif
         prt(eg_ptr->out_val, 0, 0);
         move_cursor_relative(eg_ptr->y, eg_ptr->x);
@@ -318,14 +316,12 @@ static int16_t describe_footing(PlayerType *player_ptr, eg_type *eg_ptr)
         return CONTINUOUS_DESCRIPTION;
     }
 
-    GAME_TEXT o_name[MAX_NLEN];
-    ItemEntity *o_ptr;
-    o_ptr = &player_ptr->current_floor_ptr->o_list[eg_ptr->floor_list[0]];
-    describe_flavor(player_ptr, o_name, o_ptr, 0);
+    auto *o_ptr = &player_ptr->current_floor_ptr->o_list[eg_ptr->floor_list[0]];
+    const auto item_name = describe_flavor(player_ptr, o_ptr, 0);
 #ifdef JP
-    strnfmt(eg_ptr->out_val, sizeof(eg_ptr->out_val), "%s%s%s%s[%s]", eg_ptr->s1, o_name, eg_ptr->s2, eg_ptr->s3, eg_ptr->info);
+    strnfmt(eg_ptr->out_val, sizeof(eg_ptr->out_val), "%s%s%s%s[%s]", eg_ptr->s1, item_name.data(), eg_ptr->s2, eg_ptr->s3, eg_ptr->info);
 #else
-    strnfmt(eg_ptr->out_val, sizeof(eg_ptr->out_val), "%s%s%s%s [%s]", eg_ptr->s1, eg_ptr->s2, eg_ptr->s3, o_name, eg_ptr->info);
+    strnfmt(eg_ptr->out_val, sizeof(eg_ptr->out_val), "%s%s%s%s [%s]", eg_ptr->s1, eg_ptr->s2, eg_ptr->s3, item_name.data(), eg_ptr->info);
 #endif
     prt(eg_ptr->out_val, 0, 0);
     move_cursor_relative(eg_ptr->y, eg_ptr->x);
@@ -412,13 +408,12 @@ static int16_t describe_footing_sight(PlayerType *player_ptr, eg_type *eg_ptr, I
         return CONTINUOUS_DESCRIPTION;
     }
 
-    GAME_TEXT o_name[MAX_NLEN];
     eg_ptr->boring = false;
-    describe_flavor(player_ptr, o_name, o_ptr, 0);
+    const auto item_name = describe_flavor(player_ptr, o_ptr, 0);
 #ifdef JP
-    strnfmt(eg_ptr->out_val, sizeof(eg_ptr->out_val), "%s%s%s%s[%s]", eg_ptr->s1, o_name, eg_ptr->s2, eg_ptr->s3, eg_ptr->info);
+    strnfmt(eg_ptr->out_val, sizeof(eg_ptr->out_val), "%s%s%s%s[%s]", eg_ptr->s1, item_name.data(), eg_ptr->s2, eg_ptr->s3, eg_ptr->info);
 #else
-    strnfmt(eg_ptr->out_val, sizeof(eg_ptr->out_val), "%s%s%s%s [%s]", eg_ptr->s1, eg_ptr->s2, eg_ptr->s3, o_name, eg_ptr->info);
+    strnfmt(eg_ptr->out_val, sizeof(eg_ptr->out_val), "%s%s%s%s [%s]", eg_ptr->s1, eg_ptr->s2, eg_ptr->s3, item_name.data(), eg_ptr->info);
 #endif
     prt(eg_ptr->out_val, 0, 0);
     move_cursor_relative(eg_ptr->y, eg_ptr->x);

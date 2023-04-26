@@ -29,21 +29,19 @@ bool enchant_item(PlayerType *player_ptr, PRICE cost, HIT_PROB to_hit, int to_da
     prt(format(_("現在のあなたの技量だと、+%d まで改良できます。", "  Based on your skill, we can improve up to +%d."), maxenchant), 5, 0);
     prt(format(_(" 改良の料金は一個につき＄%d です。", "  The price for the service is %d gold per item."), cost), 7, 0);
 
-    concptr q = _("どのアイテムを改良しますか？", "Improve which item? ");
-    concptr s = _("改良できるものがありません。", "You have nothing to improve.");
+    const auto q = _("どのアイテムを改良しますか？", "Improve which item? ");
+    const auto s = _("改良できるものがありません。", "You have nothing to improve.");
 
     OBJECT_IDX item;
-    ItemEntity *o_ptr;
-    o_ptr = choose_object(player_ptr, &item, q, s, (USE_INVEN | USE_EQUIP | IGNORE_BOTHHAND_SLOT), item_tester);
+    auto *o_ptr = choose_object(player_ptr, &item, q, s, (USE_INVEN | USE_EQUIP | IGNORE_BOTHHAND_SLOT), item_tester);
     if (!o_ptr) {
         return false;
     }
 
-    char tmp_str[MAX_NLEN];
     const PRICE total_cost = cost * o_ptr->number;
     if (player_ptr->au < total_cost) {
-        describe_flavor(player_ptr, tmp_str, o_ptr, OD_NAME_ONLY);
-        msg_format(_("%sを改良するだけのゴールドがありません！", "You do not have the gold to improve %s!"), tmp_str);
+        const auto item_name = describe_flavor(player_ptr, o_ptr, OD_NAME_ONLY);
+        msg_format(_("%sを改良するだけのゴールドがありません！", "You do not have the gold to improve %s!"), item_name.data());
         return false;
     }
 
@@ -77,11 +75,11 @@ bool enchant_item(PlayerType *player_ptr, PRICE cost, HIT_PROB to_hit, int to_da
         return false;
     }
 
-    describe_flavor(player_ptr, tmp_str, o_ptr, OD_NAME_AND_ENCHANT);
+    const auto item_name = describe_flavor(player_ptr, o_ptr, OD_NAME_AND_ENCHANT);
 #ifdef JP
-    msg_format("＄%dで%sに改良しました。", total_cost, tmp_str);
+    msg_format("＄%dで%sに改良しました。", total_cost, item_name.data());
 #else
-    msg_format("Improved into %s for %d gold.", tmp_str, total_cost);
+    msg_format("Improved into %s for %d gold.", item_name.data(), total_cost);
 #endif
 
     player_ptr->au -= total_cost;

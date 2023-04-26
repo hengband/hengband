@@ -41,8 +41,6 @@ void fetch_item(PlayerType *player_ptr, DIRECTION dir, WEIGHT wgt, bool require_
 {
     grid_type *g_ptr;
     ItemEntity *o_ptr;
-    GAME_TEXT o_name[MAX_NLEN];
-
     if (!player_ptr->current_floor_ptr->grid_array[player_ptr->y][player_ptr->x].o_idx_list.empty()) {
         msg_print(_("自分の足の下にある物は取れません。", "You can't fetch when you're already standing on something."));
         return;
@@ -104,13 +102,11 @@ void fetch_item(PlayerType *player_ptr, DIRECTION dir, WEIGHT wgt, bool require_
     OBJECT_IDX i = g_ptr->o_idx_list.front();
     g_ptr->o_idx_list.pop_front();
     player_ptr->current_floor_ptr->grid_array[player_ptr->y][player_ptr->x].o_idx_list.add(player_ptr->current_floor_ptr, i); /* 'move' it */
-
     o_ptr->iy = player_ptr->y;
     o_ptr->ix = player_ptr->x;
 
-    describe_flavor(player_ptr, o_name, o_ptr, OD_NAME_ONLY);
-    msg_format(_("%s^があなたの足元に飛んできた。", "%s^ flies through the air to your feet."), o_name);
-
+    const auto item_name = describe_flavor(player_ptr, o_ptr, OD_NAME_ONLY);
+    msg_format(_("%s^があなたの足元に飛んできた。", "%s^ flies through the air to your feet."), item_name.data());
     note_spot(player_ptr, player_ptr->y, player_ptr->x);
     player_ptr->redraw |= PR_MAP;
 }

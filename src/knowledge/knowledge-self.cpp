@@ -208,37 +208,27 @@ void do_cmd_knowledge_home(PlayerType *player_ptr)
 #endif
     fprintf(fff, _("  [ 我が家のアイテム ]\n", "  [Home Inventory]\n"));
     constexpr auto close_bracket = ")";
-    GAME_TEXT o_name[MAX_NLEN];
     for (auto i = 0; i < store.stock_num; i++) {
 #ifdef JP
         if ((i % 12) == 0) {
             fprintf(fff, "\n ( %d ページ )\n", x++);
         }
 
-        describe_flavor(player_ptr, o_name, &store.stock[i], 0);
-        if (strlen(o_name) <= 80 - 3) {
-            fprintf(fff, "%c%s %s\n", I2A(i % 12), close_bracket, o_name);
+        const auto item_name = describe_flavor(player_ptr, &store.stock[i], 0);
+        const int item_length = item_name.length();
+        if (item_length <= 80 - 3) {
+            fprintf(fff, "%c%s %s\n", I2A(i % 12), close_bracket, item_name.data());
             continue;
         }
 
-        auto n = 0;
-        for (auto *t = o_name; n < 80 - 3; n++, t++) {
-            if (iskanji(*t)) {
-                t++;
-                n++;
-            }
-        }
-
         /* 最後が漢字半分 */
-        if (n == 81 - 3) {
-            n = 79 - 3;
-        }
-
-        fprintf(fff, "%c%s %.*s\n", I2A(i % 12), close_bracket, n, o_name);
-        fprintf(fff, "   %.77s\n", o_name + n);
+        constexpr auto max_length = 81 - 3;
+        const auto n = item_length >= max_length ? 79 - 3 : item_length;
+        fprintf(fff, "%c%s %.*s\n", I2A(i % 12), close_bracket, n, item_name.substr(0, n).data());
+        fprintf(fff, "   %.77s\n", item_name.substr(n).data());
 #else
-        describe_flavor(player_ptr, o_name, &store.stock[i], 0);
-        fprintf(fff, "%c%s %s\n", I2A(i % 12), close_bracket, o_name);
+        const auto item_name = describe_flavor(player_ptr, &store.stock[i], 0);
+        fprintf(fff, "%c%s %s\n", I2A(i % 12), close_bracket, item_name.data());
 #endif
     }
 

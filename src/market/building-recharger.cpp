@@ -48,19 +48,14 @@ void building_recharge(PlayerType *player_ptr)
      * We don't want to give the player free info about
      * the level of the item or the number of charges.
      */
-    char tmp_str[MAX_NLEN];
     if (!o_ptr->is_known()) {
         msg_format(_("充填する前に鑑定されている必要があります！", "The item must be identified first!"));
         msg_print(nullptr);
-
-        if ((player_ptr->au >= 50) && get_check(_("＄50で鑑定しますか？ ", "Identify for 50 gold? ")))
-
-        {
+        if ((player_ptr->au >= 50) && get_check(_("＄50で鑑定しますか？ ", "Identify for 50 gold? "))) {
             player_ptr->au -= 50;
             identify_item(player_ptr, o_ptr);
-            describe_flavor(player_ptr, tmp_str, o_ptr, 0);
-            msg_format(_("%s です。", "You have: %s."), tmp_str);
-
+            const auto item_name = describe_flavor(player_ptr, o_ptr, 0);
+            msg_format(_("%s です。", "You have: %s."), item_name.data());
             autopick_alter_item(player_ptr, item, false);
             building_prt_gold(player_ptr);
         }
@@ -111,11 +106,11 @@ void building_recharge(PlayerType *player_ptr)
     }
 
     if (player_ptr->au < price) {
-        describe_flavor(player_ptr, tmp_str, o_ptr, OD_NAME_ONLY);
+        const auto item_name = describe_flavor(player_ptr, o_ptr, OD_NAME_ONLY);
 #ifdef JP
-        msg_format("%sを再充填するには＄%d 必要です！", tmp_str, price);
+        msg_format("%sを再充填するには＄%d 必要です！", item_name.data(), price);
 #else
-        msg_format("You need %d gold to recharge %s!", price, tmp_str);
+        msg_format("You need %d gold to recharge %s!", price, item_name.data());
 #endif
         return;
     }
@@ -151,11 +146,11 @@ void building_recharge(PlayerType *player_ptr)
         o_ptr->ident &= ~(IDENT_EMPTY);
     }
 
-    describe_flavor(player_ptr, tmp_str, o_ptr, 0);
+    const auto item_name = describe_flavor(player_ptr, o_ptr, 0);
 #ifdef JP
-    msg_format("%sを＄%d で再充填しました。", tmp_str, price);
+    msg_format("%sを＄%d で再充填しました。", item_name.data(), price);
 #else
-    msg_format("%s^ %s recharged for %d gold.", tmp_str, ((o_ptr->number > 1) ? "were" : "was"), price);
+    msg_format("%s^ %s recharged for %d gold.", item_name.data(), ((o_ptr->number > 1) ? "were" : "was"), price);
 #endif
     player_ptr->update |= (PU_COMBINE | PU_REORDER);
     player_ptr->window_flags |= (PW_INVEN);

@@ -31,7 +31,6 @@ public:
     bool obvious = false;
     int damage = 0;
     bool blinked = false;
-    GAME_TEXT o_name[MAX_NLEN]{};
     int get_damage = 0;
     GAME_TEXT ddesc[MAX_MONSTER_NAME]{};
     ARMOUR_CLASS ac = 0;

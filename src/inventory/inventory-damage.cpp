@@ -30,8 +30,6 @@ void inventory_damage(PlayerType *player_ptr, const ObjectBreaker &breaker, int 
     INVENTORY_IDX i;
     int j, amt;
     ItemEntity *o_ptr;
-    GAME_TEXT o_name[MAX_NLEN];
-
     if (check_multishadow(player_ptr) || player_ptr->current_floor_ptr->inside_arena) {
         return;
     }
@@ -65,13 +63,13 @@ void inventory_damage(PlayerType *player_ptr, const ObjectBreaker &breaker, int 
             continue;
         }
 
-        describe_flavor(player_ptr, o_name, o_ptr, OD_OMIT_PREFIX);
+        const auto item_name = describe_flavor(player_ptr, o_ptr, OD_OMIT_PREFIX);
 
         msg_format(_("%s(%c)が%s壊れてしまった！", "%sour %s (%c) %s destroyed!"),
 #ifdef JP
-            o_name, index_to_label(i), ((o_ptr->number > 1) ? ((amt == o_ptr->number) ? "全部" : (amt > 1 ? "何個か" : "一個")) : ""));
+            item_name.data(), index_to_label(i), ((o_ptr->number > 1) ? ((amt == o_ptr->number) ? "全部" : (amt > 1 ? "何個か" : "一個")) : ""));
 #else
-            ((o_ptr->number > 1) ? ((amt == o_ptr->number) ? "All of y" : (amt > 1 ? "Some of y" : "One of y")) : "Y"), o_name, index_to_label(i),
+            ((o_ptr->number > 1) ? ((amt == o_ptr->number) ? "All of y" : (amt > 1 ? "Some of y" : "One of y")) : "Y"), item_name.data(), index_to_label(i),
             ((amt > 1) ? "were" : "was"));
 #endif
 
