@@ -23,6 +23,11 @@ std::vector<autopick_type> autopick_list; /*!< 自動拾い/破壊設定構造�
  */
 ItemEntity autopick_last_destroyed_object;
 
+bool autopick_type::has(int flag) const
+{
+    return this->flags[flag / 32] & (1UL << (flag % 32));
+}
+
 /*!
  * @brief Free memory of lines_list.
  */
