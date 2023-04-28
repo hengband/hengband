@@ -42,7 +42,7 @@ int find_autopick_list(PlayerType *player_ptr, ItemEntity *o_ptr)
     auto item_name = describe_flavor(player_ptr, o_ptr, (OD_NO_FLAVOR | OD_OMIT_PREFIX | OD_NO_PLURAL));
     str_tolower(item_name.data());
     for (auto i = 0U; i < autopick_list.size(); i++) {
-        autopick_type *entry = &autopick_list[i];
+        const auto &entry = autopick_list[i];
         if (is_autopick_match(player_ptr, o_ptr, entry, item_name)) {
             return i;
         }
@@ -332,7 +332,7 @@ void search_for_object(PlayerType *player_ptr, text_body_type *tb, ItemEntity *o
             continue;
         }
 
-        match = is_autopick_match(player_ptr, o_ptr, entry, item_name);
+        match = is_autopick_match(player_ptr, o_ptr, *entry, item_name);
         if (!match) {
             continue;
         }

@@ -30,25 +30,25 @@
 #include "system/player-type-definition.h"
 #include "util/string-processor.h"
 
-static bool check_item_features(PlayerType *player_ptr, autopick_type *entry, const ItemEntity &item, const ItemKindType tval)
+static bool check_item_features(PlayerType *player_ptr, const autopick_type &entry, const ItemEntity &item, const ItemKindType tval)
 {
-    if (IS_FLG(FLG_WEAPONS)) {
+    if (entry.has(FLG_WEAPONS)) {
         return item.is_weapon();
     }
 
-    if (IS_FLG(FLG_FAVORITE_WEAPONS)) {
+    if (entry.has(FLG_FAVORITE_WEAPONS)) {
         return object_is_favorite(player_ptr, &item);
     }
 
-    if (IS_FLG(FLG_ARMORS)) {
+    if (entry.has(FLG_ARMORS)) {
         return item.is_protector();
     }
 
-    if (IS_FLG(FLG_MISSILES)) {
+    if (entry.has(FLG_MISSILES)) {
         return item.is_ammo();
     }
 
-    if (IS_FLG(FLG_DEVICES)) {
+    if (entry.has(FLG_DEVICES)) {
         switch (tval) {
         case ItemKindType::SCROLL:
         case ItemKindType::STAFF:
@@ -60,11 +60,11 @@ static bool check_item_features(PlayerType *player_ptr, autopick_type *entry, co
         }
     }
 
-    if (IS_FLG(FLG_LIGHTS)) {
+    if (entry.has(FLG_LIGHTS)) {
         return tval == ItemKindType::LITE;
     }
 
-    if (IS_FLG(FLG_JUNKS)) {
+    if (entry.has(FLG_JUNKS)) {
         switch (tval) {
         case ItemKindType::SKELETON:
         case ItemKindType::BOTTLE:
@@ -76,51 +76,51 @@ static bool check_item_features(PlayerType *player_ptr, autopick_type *entry, co
         }
     }
 
-    if (IS_FLG(FLG_CORPSES)) {
+    if (entry.has(FLG_CORPSES)) {
         return (tval == ItemKindType::CORPSE) || (tval == ItemKindType::SKELETON);
     }
 
-    if (IS_FLG(FLG_SPELLBOOKS)) {
+    if (entry.has(FLG_SPELLBOOKS)) {
         return item.is_spell_book();
     }
 
-    if (IS_FLG(FLG_HAFTED)) {
+    if (entry.has(FLG_HAFTED)) {
         return tval == ItemKindType::HAFTED;
     }
 
-    if (IS_FLG(FLG_SHIELDS)) {
+    if (entry.has(FLG_SHIELDS)) {
         return tval == ItemKindType::SHIELD;
     }
 
-    if (IS_FLG(FLG_BOWS)) {
+    if (entry.has(FLG_BOWS)) {
         return tval == ItemKindType::BOW;
     }
 
-    if (IS_FLG(FLG_RINGS)) {
+    if (entry.has(FLG_RINGS)) {
         return tval == ItemKindType::RING;
     }
 
-    if (IS_FLG(FLG_AMULETS)) {
+    if (entry.has(FLG_AMULETS)) {
         return tval == ItemKindType::AMULET;
     }
 
-    if (IS_FLG(FLG_SUITS)) {
+    if (entry.has(FLG_SUITS)) {
         return item.is_armour();
     }
 
-    if (IS_FLG(FLG_CLOAKS)) {
+    if (entry.has(FLG_CLOAKS)) {
         return tval == ItemKindType::CLOAK;
     }
 
-    if (IS_FLG(FLG_HELMS)) {
+    if (entry.has(FLG_HELMS)) {
         return (tval != ItemKindType::CROWN) && (tval != ItemKindType::HELM);
     }
 
-    if (IS_FLG(FLG_GLOVES)) {
+    if (entry.has(FLG_GLOVES)) {
         return tval == ItemKindType::GLOVES;
     }
 
-    if (IS_FLG(FLG_BOOTS)) {
+    if (entry.has(FLG_BOOTS)) {
         return tval == ItemKindType::BOOTS;
     }
 
@@ -130,25 +130,25 @@ static bool check_item_features(PlayerType *player_ptr, autopick_type *entry, co
 /*!
  * @brief A function for Auto-picker/destroyer Examine whether the object matches to the entry
  */
-bool is_autopick_match(PlayerType *player_ptr, ItemEntity *o_ptr, autopick_type *entry, std::string_view item_name)
+bool is_autopick_match(PlayerType *player_ptr, ItemEntity *o_ptr, const autopick_type &entry, std::string_view item_name)
 {
-    if (IS_FLG(FLG_UNAWARE) && o_ptr->is_aware()) {
+    if (entry.has(FLG_UNAWARE) && o_ptr->is_aware()) {
         return false;
     }
 
-    if (IS_FLG(FLG_UNIDENTIFIED) && (o_ptr->is_known() || (o_ptr->ident & IDENT_SENSE))) {
+    if (entry.has(FLG_UNIDENTIFIED) && (o_ptr->is_known() || (o_ptr->ident & IDENT_SENSE))) {
         return false;
     }
 
-    if (IS_FLG(FLG_IDENTIFIED) && !o_ptr->is_known()) {
+    if (entry.has(FLG_IDENTIFIED) && !o_ptr->is_known()) {
         return false;
     }
 
-    if (IS_FLG(FLG_STAR_IDENTIFIED) && (!o_ptr->is_known() || !o_ptr->is_fully_known())) {
+    if (entry.has(FLG_STAR_IDENTIFIED) && (!o_ptr->is_known() || !o_ptr->is_fully_known())) {
         return false;
     }
 
-    if (IS_FLG(FLG_BOOSTED)) {
+    if (entry.has(FLG_BOOSTED)) {
         if (!o_ptr->is_melee_weapon()) {
             return false;
         }
@@ -163,39 +163,39 @@ bool is_autopick_match(PlayerType *player_ptr, ItemEntity *o_ptr, autopick_type 
         }
     }
 
-    if (IS_FLG(FLG_MORE_DICE)) {
-        if (o_ptr->dd * o_ptr->ds < entry->dice) {
+    if (entry.has(FLG_MORE_DICE)) {
+        if (o_ptr->dd * o_ptr->ds < entry.dice) {
             return false;
         }
     }
 
-    if (IS_FLG(FLG_MORE_BONUS)) {
+    if (entry.has(FLG_MORE_BONUS)) {
         if (!o_ptr->is_known()) {
             return false;
         }
 
         if (o_ptr->pval) {
-            if (o_ptr->pval < entry->bonus) {
+            if (o_ptr->pval < entry.bonus) {
                 return false;
             }
         } else {
-            if (o_ptr->to_h < entry->bonus && o_ptr->to_d < entry->bonus && o_ptr->to_a < entry->bonus && o_ptr->pval < entry->bonus) {
+            if (o_ptr->to_h < entry.bonus && o_ptr->to_d < entry.bonus && o_ptr->to_a < entry.bonus && o_ptr->pval < entry.bonus) {
                 return false;
             }
         }
     }
 
-    if (IS_FLG(FLG_WORTHLESS) && (o_ptr->get_price() > 0)) {
+    if (entry.has(FLG_WORTHLESS) && (o_ptr->get_price() > 0)) {
         return false;
     }
 
-    if (IS_FLG(FLG_ARTIFACT)) {
+    if (entry.has(FLG_ARTIFACT)) {
         if (!o_ptr->is_known() || !o_ptr->is_fixed_or_random_artifact()) {
             return false;
         }
     }
 
-    if (IS_FLG(FLG_EGO)) {
+    if (entry.has(FLG_EGO)) {
         if (!o_ptr->is_ego()) {
             return false;
         }
@@ -204,7 +204,7 @@ bool is_autopick_match(PlayerType *player_ptr, ItemEntity *o_ptr, autopick_type 
         }
     }
 
-    if (IS_FLG(FLG_GOOD)) {
+    if (entry.has(FLG_GOOD)) {
         if (!o_ptr->is_equipment()) {
             return false;
         }
@@ -229,7 +229,7 @@ bool is_autopick_match(PlayerType *player_ptr, ItemEntity *o_ptr, autopick_type 
         }
     }
 
-    if (IS_FLG(FLG_NAMELESS)) {
+    if (entry.has(FLG_NAMELESS)) {
         if (!o_ptr->is_equipment()) {
             return false;
         }
@@ -253,7 +253,7 @@ bool is_autopick_match(PlayerType *player_ptr, ItemEntity *o_ptr, autopick_type 
         }
     }
 
-    if (IS_FLG(FLG_AVERAGE)) {
+    if (entry.has(FLG_AVERAGE)) {
         if (!o_ptr->is_equipment()) {
             return false;
         }
@@ -282,15 +282,15 @@ bool is_autopick_match(PlayerType *player_ptr, ItemEntity *o_ptr, autopick_type 
         }
     }
 
-    if (IS_FLG(FLG_RARE) && !o_ptr->is_rare()) {
+    if (entry.has(FLG_RARE) && !o_ptr->is_rare()) {
         return false;
     }
 
-    if (IS_FLG(FLG_COMMON) && o_ptr->is_rare()) {
+    if (entry.has(FLG_COMMON) && o_ptr->is_rare()) {
         return false;
     }
 
-    if (IS_FLG(FLG_WANTED) && !object_is_bounty(player_ptr, o_ptr)) {
+    if (entry.has(FLG_WANTED) && !object_is_bounty(player_ptr, o_ptr)) {
         return false;
     }
 
@@ -299,42 +299,42 @@ bool is_autopick_match(PlayerType *player_ptr, ItemEntity *o_ptr, autopick_type 
     const auto tval = bi_key.tval();
     const auto sval = bi_key.sval().value();
     const auto r_idx = i2enum<MonsterRaceId>(o_ptr->pval);
-    if (IS_FLG(FLG_UNIQUE) && ((tval != ItemKindType::CORPSE && tval != ItemKindType::STATUE) || monraces_info[r_idx].kind_flags.has_not(MonsterKindType::UNIQUE))) {
+    if (entry.has(FLG_UNIQUE) && ((tval != ItemKindType::CORPSE && tval != ItemKindType::STATUE) || monraces_info[r_idx].kind_flags.has_not(MonsterKindType::UNIQUE))) {
         return false;
     }
 
-    if (IS_FLG(FLG_HUMAN) && (tval != ItemKindType::CORPSE || !angband_strchr("pht", monraces_info[r_idx].d_char))) {
+    if (entry.has(FLG_HUMAN) && (tval != ItemKindType::CORPSE || !angband_strchr("pht", monraces_info[r_idx].d_char))) {
         return false;
     }
 
-    if (IS_FLG(FLG_UNREADABLE) && check_book_realm(player_ptr, bi_key)) {
+    if (entry.has(FLG_UNREADABLE) && check_book_realm(player_ptr, bi_key)) {
         return false;
     }
 
     PlayerClass pc(player_ptr);
     auto realm_except_class = pc.equals(PlayerClassType::SORCERER) || pc.equals(PlayerClassType::RED_MAGE);
 
-    if (IS_FLG(FLG_REALM1) && ((get_realm1_book(player_ptr) != tval) || realm_except_class)) {
+    if (entry.has(FLG_REALM1) && ((get_realm1_book(player_ptr) != tval) || realm_except_class)) {
         return false;
     }
 
-    if (IS_FLG(FLG_REALM2) && ((get_realm2_book(player_ptr) != tval) || realm_except_class)) {
+    if (entry.has(FLG_REALM2) && ((get_realm2_book(player_ptr) != tval) || realm_except_class)) {
         return false;
     }
 
-    if (IS_FLG(FLG_FIRST) && (!o_ptr->is_spell_book() || (sval != 0))) {
+    if (entry.has(FLG_FIRST) && (!o_ptr->is_spell_book() || (sval != 0))) {
         return false;
     }
 
-    if (IS_FLG(FLG_SECOND) && (!o_ptr->is_spell_book() || (sval != 1))) {
+    if (entry.has(FLG_SECOND) && (!o_ptr->is_spell_book() || (sval != 1))) {
         return false;
     }
 
-    if (IS_FLG(FLG_THIRD) && (!o_ptr->is_spell_book() || (sval != 2))) {
+    if (entry.has(FLG_THIRD) && (!o_ptr->is_spell_book() || (sval != 2))) {
         return false;
     }
 
-    if (IS_FLG(FLG_FOURTH) && (!o_ptr->is_spell_book() || (sval != 3))) {
+    if (entry.has(FLG_FOURTH) && (!o_ptr->is_spell_book() || (sval != 3))) {
         return false;
     }
 
@@ -342,17 +342,17 @@ bool is_autopick_match(PlayerType *player_ptr, ItemEntity *o_ptr, autopick_type 
         return false;
     }
 
-    if (entry->name[0] == '^') {
-        if (item_name == entry->name.substr(1, entry->name.length() - 1)) {
+    if (entry.name[0] == '^') {
+        if (item_name == entry.name.substr(1, entry.name.length() - 1)) {
             return false;
         }
     } else {
-        if (angband_strstr(item_name.data(), entry->name.data()) == nullptr) {
+        if (angband_strstr(item_name.data(), entry.name.data()) == nullptr) {
             return false;
         }
     }
 
-    if (!IS_FLG(FLG_COLLECTING)) {
+    if (!entry.has(FLG_COLLECTING)) {
         return true;
     }
 
