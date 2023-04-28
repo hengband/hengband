@@ -303,11 +303,11 @@ bool get_item(PlayerType *player_ptr, OBJECT_IDX *cp, concptr pmt, concptr str, 
                 continue;
             }
 
-            if (window_flag[i] & (PW_INVEN)) {
+            if (window_flag[i] & (PW_INVENTORY)) {
                 ni++;
             }
 
-            if (window_flag[i] & (PW_EQUIP)) {
+            if (window_flag[i] & (PW_EQUIPMENT)) {
                 ne++;
             }
         }
@@ -317,7 +317,7 @@ bool get_item(PlayerType *player_ptr, OBJECT_IDX *cp, concptr pmt, concptr str, 
             item_selection_ptr->toggle = !item_selection_ptr->toggle;
         }
 
-        player_ptr->window_flags |= (PW_INVEN | PW_EQUIP);
+        player_ptr->window_flags |= (PW_INVENTORY | PW_EQUIPMENT);
         handle_stuff(player_ptr);
 
         if (!command_wrk) {
@@ -640,7 +640,7 @@ bool get_item(PlayerType *player_ptr, OBJECT_IDX *cp, concptr pmt, concptr str, 
         toggle_inventory_equipment(player_ptr);
     }
 
-    player_ptr->window_flags |= (PW_INVEN | PW_EQUIP);
+    player_ptr->window_flags |= (PW_INVENTORY | PW_EQUIPMENT);
     handle_stuff(player_ptr);
     prt("", 0, 0);
     if (item_selection_ptr->oops && str) {

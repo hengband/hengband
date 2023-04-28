@@ -382,7 +382,7 @@ bool activate_protection_elbereth(PlayerType *player_ptr)
     (void)bss.set_blindness(0);
     (void)bss.hallucination(0);
     set_blessed(player_ptr, randint0(25) + 25, true);
-    set_bits(player_ptr->redraw, PR_STATS);
+    set_bits(player_ptr->redraw, PR_ABILITY_SCORE);
     return true;
 }
 

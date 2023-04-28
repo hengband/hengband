@@ -41,17 +41,17 @@ void do_cmd_redraw(PlayerType *player_ptr)
 {
     term_xtra(TERM_XTRA_REACT, 0);
 
-    player_ptr->update |= (PU_COMBINE | PU_REORDER);
+    player_ptr->update |= (PU_COMBINATION | PU_REORDER);
     player_ptr->update |= (PU_TORCH);
-    player_ptr->update |= (PU_BONUS | PU_HP | PU_MANA | PU_SPELLS);
+    player_ptr->update |= (PU_BONUS | PU_HP | PU_MP | PU_SPELLS);
     player_ptr->update |= (PU_UN_VIEW | PU_UN_LITE);
-    player_ptr->update |= (PU_VIEW | PU_LITE | PU_MON_LITE);
-    player_ptr->update |= (PU_MONSTERS);
+    player_ptr->update |= (PU_VIEW | PU_LITE | PU_MONSTER_LITE);
+    player_ptr->update |= (PU_MONSTER_STATUSES);
 
     player_ptr->redraw |= (PR_WIPE | PR_BASIC | PR_EXTRA | PR_MAP | PR_EQUIPPY);
 
-    player_ptr->window_flags |= (PW_INVEN | PW_EQUIP | PW_SPELL | PW_PLAYER);
-    player_ptr->window_flags |= (PW_MESSAGE | PW_OVERHEAD | PW_DUNGEON | PW_MONSTER | PW_OBJECT);
+    player_ptr->window_flags |= (PW_INVENTORY | PW_EQUIPMENT | PW_SPELL | PW_PLAYER);
+    player_ptr->window_flags |= (PW_MESSAGE | PW_OVERHEAD | PW_DUNGEON | PW_MONSTER_LORE | PW_ITEM_KNOWLEDGTE);
 
     update_playtime();
     handle_stuff(player_ptr);

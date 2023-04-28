@@ -74,8 +74,8 @@ void SpellHex::stop_all_spells()
         set_action(this->player_ptr, ACTION_NONE);
     }
 
-    this->player_ptr->update |= PU_BONUS | PU_HP | PU_MANA | PU_SPELLS;
-    this->player_ptr->redraw |= PR_EXTRA | PR_HP | PR_MANA;
+    this->player_ptr->update |= PU_BONUS | PU_HP | PU_MP | PU_SPELLS;
+    this->player_ptr->redraw |= PR_EXTRA | PR_HP | PR_MP;
 }
 
 /*!
@@ -111,8 +111,8 @@ bool SpellHex::stop_spells_with_selection()
         this->reset_casting_flag(i2enum<spell_hex_type>(n));
     }
 
-    this->player_ptr->update |= PU_BONUS | PU_HP | PU_MANA | PU_SPELLS;
-    this->player_ptr->redraw |= PR_EXTRA | PR_HP | PR_MANA;
+    this->player_ptr->update |= PU_BONUS | PU_HP | PU_MP | PU_SPELLS;
+    this->player_ptr->redraw |= PR_EXTRA | PR_HP | PR_MP;
     return is_selected;
 }
 
@@ -215,7 +215,7 @@ bool SpellHex::process_mana_cost(const bool need_restart)
     }
 
     s64b_sub(&(this->player_ptr->csp), &(this->player_ptr->csp_frac), need_mana, need_mana_frac);
-    this->player_ptr->redraw |= PR_MANA;
+    this->player_ptr->redraw |= PR_MP;
     if (!need_restart) {
         return true;
     }
@@ -223,8 +223,8 @@ bool SpellHex::process_mana_cost(const bool need_restart)
     msg_print(_("詠唱を再開した。", "You restart casting."));
     this->player_ptr->action = ACTION_SPELL;
     this->player_ptr->update |= PU_BONUS | PU_HP;
-    this->player_ptr->redraw |= PR_MAP | PR_STATUS | PR_STATE;
-    this->player_ptr->update |= PU_MONSTERS;
+    this->player_ptr->redraw |= PR_MAP | PR_TIMED_EFFECT | PR_ACTION;
+    this->player_ptr->update |= PU_MONSTER_STATUSES;
     this->player_ptr->window_flags |= PW_OVERHEAD | PW_DUNGEON;
     return true;
 }

@@ -189,7 +189,7 @@ void process_command(PlayerType *player_ptr)
             msg_print(_("ウィザードモード突入。", "Wizard mode on."));
         }
 
-        player_ptr->update |= (PU_MONSTERS);
+        player_ptr->update |= (PU_MONSTER_STATUSES);
         player_ptr->redraw |= (PR_TITLE);
         break;
     }

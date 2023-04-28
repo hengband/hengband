@@ -96,8 +96,8 @@ static void dispel_player(PlayerType *player_ptr)
         }
 
         player_ptr->action = ACTION_NONE;
-        player_ptr->update |= (PU_BONUS | PU_HP | PU_MONSTERS);
-        player_ptr->redraw |= (PR_MAP | PR_STATUS | PR_STATE);
+        player_ptr->update |= (PU_BONUS | PU_HP | PU_MONSTER_STATUSES);
+        player_ptr->redraw |= (PR_MAP | PR_TIMED_EFFECT | PR_ACTION);
         player_ptr->window_flags |= (PW_OVERHEAD | PW_DUNGEON);
         player_ptr->energy_need += ENERGY_NEED();
     }

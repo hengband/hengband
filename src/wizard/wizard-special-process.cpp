@@ -693,8 +693,8 @@ void wiz_reset_race(PlayerType *player_ptr)
     rp_ptr = &race_info[enum2i(player_ptr->prace)];
 
     player_ptr->window_flags |= PW_PLAYER;
-    player_ptr->update |= PU_BONUS | PU_HP | PU_MANA | PU_SPELLS;
-    player_ptr->redraw |= PR_BASIC | PR_HP | PR_MANA | PR_STATS;
+    player_ptr->update |= PU_BONUS | PU_HP | PU_MP | PU_SPELLS;
+    player_ptr->redraw |= PR_BASIC | PR_HP | PR_MP | PR_ABILITY_SCORE;
     handle_stuff(player_ptr);
 }
 
@@ -714,8 +714,8 @@ void wiz_reset_class(PlayerType *player_ptr)
     mp_ptr = &class_magics_info[val];
     PlayerClass(player_ptr).init_specific_data();
     player_ptr->window_flags |= PW_PLAYER;
-    player_ptr->update |= PU_BONUS | PU_HP | PU_MANA | PU_SPELLS;
-    player_ptr->redraw |= PR_BASIC | PR_HP | PR_MANA | PR_STATS;
+    player_ptr->update |= PU_BONUS | PU_HP | PU_MP | PU_SPELLS;
+    player_ptr->redraw |= PR_BASIC | PR_HP | PR_MP | PR_ABILITY_SCORE;
     handle_stuff(player_ptr);
 }
 
@@ -738,7 +738,7 @@ void wiz_reset_realms(PlayerType *player_ptr)
     player_ptr->realm1 = static_cast<int16_t>(val1);
     player_ptr->realm2 = static_cast<int16_t>(val2);
     player_ptr->window_flags |= PW_PLAYER;
-    player_ptr->update |= PU_BONUS | PU_HP | PU_MANA | PU_SPELLS;
+    player_ptr->update |= PU_BONUS | PU_HP | PU_MP | PU_SPELLS;
     player_ptr->redraw |= PR_BASIC;
     handle_stuff(player_ptr);
 }

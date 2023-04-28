@@ -62,7 +62,7 @@ void day_break(PlayerType *player_ptr)
         }
     }
 
-    player_ptr->update |= PU_MONSTERS | PU_MON_LITE;
+    player_ptr->update |= PU_MONSTER_STATUSES | PU_MONSTER_LITE;
     player_ptr->redraw |= PR_MAP;
     player_ptr->window_flags |= PW_OVERHEAD | PW_DUNGEON;
     if ((floor_ptr->grid_array[player_ptr->y][player_ptr->x].info & CAVE_GLOW) != 0) {
@@ -94,7 +94,7 @@ void night_falls(PlayerType *player_ptr)
         }
     }
 
-    player_ptr->update |= PU_MONSTERS | PU_MON_LITE;
+    player_ptr->update |= PU_MONSTER_STATUSES | PU_MONSTER_LITE;
     player_ptr->redraw |= PR_MAP;
     player_ptr->window_flags |= PW_OVERHEAD | PW_DUNGEON;
 
@@ -338,7 +338,7 @@ void glow_deep_lava_and_bldg(PlayerType *player_ptr)
         }
     }
 
-    player_ptr->update |= PU_VIEW | PU_LITE | PU_MON_LITE;
+    player_ptr->update |= PU_VIEW | PU_LITE | PU_MONSTER_LITE;
     player_ptr->redraw |= PR_MAP;
 }
 

@@ -420,9 +420,9 @@ bool place_monster_one(PlayerType *player_ptr, MONSTER_IDX who, POSITION y, POSI
     }
 
     if (r_ptr->brightness_flags.has_any_of(self_ld_mask)) {
-        set_bits(player_ptr->update, PU_MON_LITE);
+        set_bits(player_ptr->update, PU_MONSTER_LITE);
     } else if (r_ptr->brightness_flags.has_any_of(has_ld_mask) && !m_ptr->is_asleep()) {
-        set_bits(player_ptr->update, PU_MON_LITE);
+        set_bits(player_ptr->update, PU_MONSTER_LITE);
     }
     update_monster(player_ptr, g_ptr->m_idx, true);
 

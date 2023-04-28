@@ -61,7 +61,7 @@ void ObjectQuaffEntity::execute(INVENTORY_IDX item)
         (void)potion_smash_effect(this->player_ptr, 0, this->player_ptr->y, this->player_ptr->x, o_ref.bi_id);
     }
 
-    this->player_ptr->update |= PU_COMBINE | PU_REORDER;
+    this->player_ptr->update |= PU_COMBINATION | PU_REORDER;
     this->change_virtue_as_quaff(o_ref);
     object_tried(&o_ref);
     if (ident && !o_ref.is_aware()) {
@@ -69,7 +69,7 @@ void ObjectQuaffEntity::execute(INVENTORY_IDX item)
         gain_exp(this->player_ptr, (baseitems_info[o_ref.bi_id].level + (this->player_ptr->lev >> 1)) / this->player_ptr->lev);
     }
 
-    this->player_ptr->window_flags |= (PW_INVEN | PW_EQUIP | PW_PLAYER);
+    this->player_ptr->window_flags |= (PW_INVENTORY | PW_EQUIPMENT | PW_PLAYER);
     if (PlayerRace(this->player_ptr).equals(PlayerRaceType::SKELETON)) {
         return;
     }

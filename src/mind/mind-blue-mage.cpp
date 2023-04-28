@@ -89,7 +89,7 @@ bool do_cmd_cast_learned(PlayerType *player_ptr)
     }
 
     PlayerEnergy(player_ptr).set_player_turn_energy(100);
-    player_ptr->redraw |= PR_MANA;
+    player_ptr->redraw |= PR_MP;
     player_ptr->window_flags |= PW_PLAYER | PW_SPELL;
     return true;
 }

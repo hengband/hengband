@@ -118,7 +118,7 @@ static void display_sub_windows(window_redraw_type pw_flag, std::invocable auto 
  */
 void fix_inventory(PlayerType *player_ptr)
 {
-    display_sub_windows(PW_INVEN,
+    display_sub_windows(PW_INVENTORY,
         [player_ptr] {
             display_inventory(player_ptr, *fix_item_tester);
         });
@@ -241,7 +241,7 @@ void fix_monster_list(PlayerType *player_ptr)
     static std::vector<MONSTER_IDX> monster_list;
     std::once_flag once;
 
-    display_sub_windows(PW_MONSTER_LIST,
+    display_sub_windows(PW_SIGHT_MONSTERS,
         [player_ptr, &once] {
             int w, h;
             term_get_size(&w, &h);
@@ -339,7 +339,7 @@ static void display_equipment(PlayerType *player_ptr, const ItemTester &item_tes
  */
 void fix_equip(PlayerType *player_ptr)
 {
-    display_sub_windows(PW_EQUIP,
+    display_sub_windows(PW_EQUIPMENT,
         [player_ptr] {
             display_equipment(player_ptr, *fix_item_tester);
         });
@@ -460,7 +460,7 @@ void fix_monster(PlayerType *player_ptr)
     if (!MonsterRace(player_ptr->monster_race_idx).is_valid()) {
         return;
     }
-    display_sub_windows(PW_MONSTER,
+    display_sub_windows(PW_MONSTER_LORE,
         [player_ptr] {
             display_roff(player_ptr);
         });
@@ -473,7 +473,7 @@ void fix_monster(PlayerType *player_ptr)
  */
 void fix_object(PlayerType *player_ptr)
 {
-    display_sub_windows(PW_OBJECT,
+    display_sub_windows(PW_ITEM_KNOWLEDGTE,
         [player_ptr] {
             display_koff(player_ptr);
         });
@@ -587,7 +587,7 @@ static void display_floor_item_list(PlayerType *player_ptr, const int y, const i
  */
 void fix_floor_item_list(PlayerType *player_ptr, const int y, const int x)
 {
-    display_sub_windows(PW_FLOOR_ITEM_LIST,
+    display_sub_windows(PW_FLOOR_ITEMS,
         [player_ptr, y, x] {
             display_floor_item_list(player_ptr, y, x);
         });
@@ -668,7 +668,7 @@ static void display_found_item_list(PlayerType *player_ptr)
  */
 void fix_found_item_list(PlayerType *player_ptr)
 {
-    display_sub_windows(PW_FOUND_ITEM_LIST,
+    display_sub_windows(PW_FOUND_ITEMS,
         [player_ptr] {
             display_found_item_list(player_ptr);
         });
@@ -845,17 +845,17 @@ void toggle_inventory_equipment(PlayerType *player_ptr)
             continue;
         }
 
-        if (window_flag[i] & (PW_INVEN)) {
-            window_flag[i] &= ~(PW_INVEN);
-            window_flag[i] |= (PW_EQUIP);
-            player_ptr->window_flags |= (PW_EQUIP);
+        if (window_flag[i] & (PW_INVENTORY)) {
+            window_flag[i] &= ~(PW_INVENTORY);
+            window_flag[i] |= (PW_EQUIPMENT);
+            player_ptr->window_flags |= (PW_EQUIPMENT);
             continue;
         }
 
-        if (window_flag[i] & PW_EQUIP) {
-            window_flag[i] &= ~(PW_EQUIP);
-            window_flag[i] |= PW_INVEN;
-            player_ptr->window_flags |= PW_INVEN;
+        if (window_flag[i] & PW_EQUIPMENT) {
+            window_flag[i] &= ~(PW_EQUIPMENT);
+            window_flag[i] |= PW_INVENTORY;
+            player_ptr->window_flags |= PW_INVENTORY;
         }
     }
 }

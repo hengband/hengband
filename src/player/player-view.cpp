@@ -379,5 +379,5 @@ void update_view(PlayerType *player_ptr)
         cave_redraw_later(floor_ptr, py, px);
     }
 
-    player_ptr->update |= PU_DELAY_VIS;
+    player_ptr->update |= PU_DELAY_VISIBILITY;
 }

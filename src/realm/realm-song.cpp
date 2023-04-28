@@ -46,7 +46,7 @@ static void start_singing(PlayerType *player_ptr, SPELL_IDX spell, int32_t song)
     set_action(player_ptr, ACTION_SING);
 
     player_ptr->update |= (PU_BONUS);
-    player_ptr->redraw |= (PR_STATUS);
+    player_ptr->redraw |= (PR_TIMED_EFFECT);
 }
 
 /*!
@@ -1092,7 +1092,7 @@ std::optional<std::string> do_music_spell(PlayerType *player_ptr, SPELL_IDX spel
             msg_print(_("フィンゴルフィンの冥王への挑戦を歌った．．．", "You recall the valor of Fingolfin's challenge to the Dark Lord..."));
 
             player_ptr->redraw |= (PR_MAP);
-            player_ptr->update |= (PU_MONSTERS);
+            player_ptr->update |= (PU_MONSTER_STATUSES);
             player_ptr->window_flags |= (PW_OVERHEAD | PW_DUNGEON);
 
             start_singing(player_ptr, spell, MUSIC_INVULN);
@@ -1103,7 +1103,7 @@ std::optional<std::string> do_music_spell(PlayerType *player_ptr, SPELL_IDX spel
                 msg_print(_("無敵ではなくなった。", "The invulnerability wears off."));
 
                 player_ptr->redraw |= (PR_MAP);
-                player_ptr->update |= (PU_MONSTERS);
+                player_ptr->update |= (PU_MONSTER_STATUSES);
                 player_ptr->window_flags |= (PW_OVERHEAD | PW_DUNGEON);
             }
         }

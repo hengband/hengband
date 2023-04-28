@@ -425,7 +425,7 @@ static void curse_drain_mp(PlayerType *player_ptr)
         player_ptr->csp_frac = 0;
     }
 
-    player_ptr->redraw |= PR_MANA;
+    player_ptr->redraw |= PR_MP;
 }
 
 static void occur_curse_effects(PlayerType *player_ptr)

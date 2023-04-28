@@ -233,10 +233,10 @@ void wiz_identify_full_inventory(PlayerType *player_ptr)
     }
 
     /* Refrect item informaiton onto subwindows without updating inventory */
-    reset_bits(player_ptr->update, PU_COMBINE | PU_REORDER);
+    reset_bits(player_ptr->update, PU_COMBINATION | PU_REORDER);
     handle_stuff(player_ptr);
-    set_bits(player_ptr->update, PU_COMBINE | PU_REORDER);
-    set_bits(player_ptr->window_flags, PW_INVEN | PW_EQUIP);
+    set_bits(player_ptr->update, PU_COMBINATION | PU_REORDER);
+    set_bits(player_ptr->window_flags, PW_INVENTORY | PW_EQUIPMENT);
 }
 
 /*!
@@ -581,8 +581,8 @@ static void wiz_reroll_item(PlayerType *player_ptr, ItemEntity *o_ptr)
     }
 
     o_ptr->copy_from(q_ptr);
-    set_bits(player_ptr->update, PU_BONUS | PU_COMBINE | PU_REORDER);
-    set_bits(player_ptr->window_flags, PW_INVEN | PW_EQUIP | PW_SPELL | PW_PLAYER | PW_FLOOR_ITEM_LIST | PW_FOUND_ITEM_LIST);
+    set_bits(player_ptr->update, PU_BONUS | PU_COMBINATION | PU_REORDER);
+    set_bits(player_ptr->window_flags, PW_INVENTORY | PW_EQUIPMENT | PW_SPELL | PW_PLAYER | PW_FLOOR_ITEMS | PW_FOUND_ITEMS);
 }
 
 /*!
@@ -725,8 +725,8 @@ void wiz_modify_item(PlayerType *player_ptr)
         msg_print("Changes accepted.");
 
         o_ptr->copy_from(q_ptr);
-        set_bits(player_ptr->update, PU_BONUS | PU_COMBINE | PU_REORDER);
-        set_bits(player_ptr->window_flags, PW_INVEN | PW_EQUIP | PW_SPELL | PW_PLAYER | PW_FLOOR_ITEM_LIST | PW_FOUND_ITEM_LIST);
+        set_bits(player_ptr->update, PU_BONUS | PU_COMBINATION | PU_REORDER);
+        set_bits(player_ptr->window_flags, PW_INVENTORY | PW_EQUIPMENT | PW_SPELL | PW_PLAYER | PW_FLOOR_ITEMS | PW_FOUND_ITEMS);
     } else {
         msg_print("Changes ignored.");
     }

@@ -53,14 +53,14 @@ void check_music(PlayerType *player_ptr)
     } else {
         s64b_sub(&(player_ptr->csp), &(player_ptr->csp_frac), need_mana, need_mana_frac);
 
-        player_ptr->redraw |= PR_MANA;
+        player_ptr->redraw |= PR_MP;
         if (interupting_song_effect != 0) {
             set_singing_song_effect(player_ptr, interupting_song_effect);
             set_interrupting_song_effect(player_ptr, MUSIC_NONE);
             msg_print(_("歌を再開した。", "You resume singing."));
             player_ptr->action = ACTION_SING;
-            player_ptr->update |= (PU_BONUS | PU_HP | PU_MONSTERS);
-            player_ptr->redraw |= (PR_MAP | PR_STATUS | PR_STATE);
+            player_ptr->update |= (PU_BONUS | PU_HP | PU_MONSTER_STATUSES);
+            player_ptr->redraw |= (PR_MAP | PR_TIMED_EFFECT | PR_ACTION);
             player_ptr->window_flags |= (PW_OVERHEAD | PW_DUNGEON);
         }
     }
@@ -103,7 +103,7 @@ bool set_tim_stealth(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
     }
 
     player_ptr->tim_stealth = v;
-    player_ptr->redraw |= (PR_STATUS);
+    player_ptr->redraw |= (PR_TIMED_EFFECT);
 
     if (!notice) {
         return false;
@@ -143,7 +143,7 @@ void stop_singing(PlayerType *player_ptr)
     set_singing_song_effect(player_ptr, MUSIC_NONE);
     set_singing_song_id(player_ptr, 0);
     set_bits(player_ptr->update, PU_BONUS);
-    set_bits(player_ptr->redraw, PR_STATUS);
+    set_bits(player_ptr->redraw, PR_TIMED_EFFECT);
 }
 
 bool music_singing(PlayerType *player_ptr, int music_songs)

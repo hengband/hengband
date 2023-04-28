@@ -188,5 +188,5 @@ void get_max_stats(PlayerType *player_ptr)
     }
 
     player_ptr->knowledge &= ~(KNOW_STAT);
-    player_ptr->redraw |= (PR_STATS);
+    player_ptr->redraw |= (PR_ABILITY_SCORE);
 }

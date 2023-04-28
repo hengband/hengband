@@ -67,9 +67,9 @@ void auto_inscribe_item(PlayerType *player_ptr, ItemEntity *o_ptr, int idx)
         o_ptr->inscription = autopick_list[idx].insc;
     }
 
-    player_ptr->window_flags |= (PW_EQUIP | PW_INVEN);
+    player_ptr->window_flags |= (PW_EQUIPMENT | PW_INVENTORY);
     player_ptr->update |= (PU_BONUS);
-    player_ptr->update |= (PU_COMBINE);
+    player_ptr->update |= (PU_COMBINATION);
 }
 
 /*!

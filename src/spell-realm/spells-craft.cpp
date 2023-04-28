@@ -88,7 +88,7 @@ bool set_ele_attack(PlayerType *player_ptr, uint32_t attack_type, TIME_EFFECT v)
     if (disturb_state) {
         disturb(player_ptr, false, false);
     }
-    player_ptr->redraw |= (PR_STATUS);
+    player_ptr->redraw |= (PR_TIMED_EFFECT);
     player_ptr->update |= (PU_BONUS);
     handle_stuff(player_ptr);
 
@@ -149,7 +149,7 @@ bool set_ele_immune(PlayerType *player_ptr, uint32_t immune_type, TIME_EFFECT v)
     if (disturb_state) {
         disturb(player_ptr, false, false);
     }
-    player_ptr->redraw |= (PR_STATUS);
+    player_ptr->redraw |= (PR_TIMED_EFFECT);
     player_ptr->update |= (PU_BONUS);
     handle_stuff(player_ptr);
 

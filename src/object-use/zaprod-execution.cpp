@@ -127,7 +127,7 @@ void ObjectZapRodEntity::execute(INVENTORY_IDX item)
         o_ptr->timeout += baseitem.pval;
     }
 
-    this->player_ptr->update |= PU_COMBINE | PU_REORDER;
+    this->player_ptr->update |= PU_COMBINATION | PU_REORDER;
     if (!(o_ptr->is_aware())) {
         chg_virtue(this->player_ptr, Virtue::PATIENCE, -1);
         chg_virtue(this->player_ptr, Virtue::CHANCE, 1);
@@ -140,7 +140,7 @@ void ObjectZapRodEntity::execute(INVENTORY_IDX item)
         gain_exp(this->player_ptr, (lev + (this->player_ptr->lev >> 1)) / this->player_ptr->lev);
     }
 
-    set_bits(this->player_ptr->window_flags, PW_INVEN | PW_EQUIP | PW_PLAYER | PW_FLOOR_ITEM_LIST | PW_FOUND_ITEM_LIST);
+    set_bits(this->player_ptr->window_flags, PW_INVENTORY | PW_EQUIPMENT | PW_PLAYER | PW_FLOOR_ITEMS | PW_FOUND_ITEMS);
 }
 
 bool ObjectZapRodEntity::check_can_zap()

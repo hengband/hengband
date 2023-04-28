@@ -83,7 +83,7 @@ bool BadStatusSetter::set_blindness(const TIME_EFFECT tmp_v)
     }
 
     blindness->set(v);
-    this->player_ptr->redraw |= PR_STATUS;
+    this->player_ptr->redraw |= PR_TIMED_EFFECT;
     if (!notice) {
         return false;
     }
@@ -92,7 +92,7 @@ bool BadStatusSetter::set_blindness(const TIME_EFFECT tmp_v)
         disturb(this->player_ptr, false, false);
     }
 
-    this->player_ptr->update |= PU_UN_VIEW | PU_UN_LITE | PU_VIEW | PU_LITE | PU_MONSTERS | PU_MON_LITE;
+    this->player_ptr->update |= PU_UN_VIEW | PU_UN_LITE | PU_VIEW | PU_LITE | PU_MONSTER_STATUSES | PU_MONSTER_LITE;
     this->player_ptr->redraw |= PR_MAP;
     this->player_ptr->window_flags |= PW_OVERHEAD | PW_DUNGEON;
     handle_stuff(this->player_ptr);
@@ -127,14 +127,14 @@ bool BadStatusSetter::set_confusion(const TIME_EFFECT tmp_v)
                 auto bluemage_data = PlayerClass(player_ptr).get_specific_data<bluemage_data_type>();
                 bluemage_data->new_magic_learned = false;
 
-                this->player_ptr->redraw |= PR_STATE;
+                this->player_ptr->redraw |= PR_ACTION;
                 this->player_ptr->action = ACTION_NONE;
             }
             if (this->player_ptr->action == ACTION_MONK_STANCE) {
                 msg_print(_("構えがとけた。", "You lose your stance."));
                 PlayerClass(player_ptr).set_monk_stance(MonkStanceType::NONE);
                 this->player_ptr->update |= PU_BONUS;
-                this->player_ptr->redraw |= PR_STATE;
+                this->player_ptr->redraw |= PR_ACTION;
                 this->player_ptr->action = ACTION_NONE;
             } else if (this->player_ptr->action == ACTION_SAMURAI_STANCE) {
                 msg_print(_("型が崩れた。", "You lose your stance."));
@@ -162,7 +162,7 @@ bool BadStatusSetter::set_confusion(const TIME_EFFECT tmp_v)
     }
 
     this->player_confusion->set(v);
-    this->player_ptr->redraw |= PR_STATUS;
+    this->player_ptr->redraw |= PR_TIMED_EFFECT;
     if (!notice) {
         return false;
     }
@@ -208,7 +208,7 @@ bool BadStatusSetter::set_poison(const TIME_EFFECT tmp_v)
     }
 
     player_poison->set(v);
-    this->player_ptr->redraw |= PR_STATUS;
+    this->player_ptr->redraw |= PR_TIMED_EFFECT;
     if (!notice) {
         return false;
     }
@@ -259,7 +259,7 @@ bool BadStatusSetter::set_fear(const TIME_EFFECT tmp_v)
     }
 
     fear->set(v);
-    this->player_ptr->redraw |= PR_STATUS;
+    this->player_ptr->redraw |= PR_TIMED_EFFECT;
     if (!notice) {
         return false;
     }
@@ -312,7 +312,7 @@ bool BadStatusSetter::set_paralysis(const TIME_EFFECT tmp_v)
     }
 
     paralysis->set(v);
-    this->player_ptr->redraw |= PR_STATUS;
+    this->player_ptr->redraw |= PR_TIMED_EFFECT;
     if (!notice) {
         return false;
     }
@@ -321,7 +321,7 @@ bool BadStatusSetter::set_paralysis(const TIME_EFFECT tmp_v)
         disturb(this->player_ptr, false, false);
     }
 
-    this->player_ptr->redraw |= PR_STATE;
+    this->player_ptr->redraw |= PR_ACTION;
     handle_stuff(this->player_ptr);
     return true;
 }
@@ -367,7 +367,7 @@ bool BadStatusSetter::hallucination(const TIME_EFFECT tmp_v)
     }
 
     hallucination->set(v);
-    this->player_ptr->redraw |= PR_STATUS;
+    this->player_ptr->redraw |= PR_TIMED_EFFECT;
     if (!notice) {
         return false;
     }
@@ -377,7 +377,7 @@ bool BadStatusSetter::hallucination(const TIME_EFFECT tmp_v)
     }
 
     this->player_ptr->redraw |= PR_MAP | PR_HEALTH | PR_UHEALTH;
-    this->player_ptr->update |= PU_MONSTERS;
+    this->player_ptr->update |= PU_MONSTER_STATUSES;
     this->player_ptr->window_flags |= PW_OVERHEAD | PW_DUNGEON;
     handle_stuff(this->player_ptr);
     return true;

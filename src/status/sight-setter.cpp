@@ -43,7 +43,7 @@ bool set_tim_esp(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
     }
 
     player_ptr->tim_esp = v;
-    player_ptr->redraw |= (PR_STATUS);
+    player_ptr->redraw |= (PR_TIMED_EFFECT);
 
     if (!notice) {
         return false;
@@ -53,7 +53,7 @@ bool set_tim_esp(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
         disturb(player_ptr, false, false);
     }
     player_ptr->update |= (PU_BONUS);
-    player_ptr->update |= (PU_MONSTERS);
+    player_ptr->update |= (PU_MONSTER_STATUSES);
     handle_stuff(player_ptr);
     return true;
 }
@@ -91,7 +91,7 @@ bool set_tim_invis(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
     }
 
     player_ptr->tim_invis = v;
-    player_ptr->redraw |= (PR_STATUS);
+    player_ptr->redraw |= (PR_TIMED_EFFECT);
 
     if (!notice) {
         return false;
@@ -101,7 +101,7 @@ bool set_tim_invis(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
         disturb(player_ptr, false, false);
     }
     player_ptr->update |= (PU_BONUS);
-    player_ptr->update |= (PU_MONSTERS);
+    player_ptr->update |= (PU_MONSTER_STATUSES);
     handle_stuff(player_ptr);
     return true;
 }
@@ -139,7 +139,7 @@ bool set_tim_infra(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
     }
 
     player_ptr->tim_infra = v;
-    player_ptr->redraw |= (PR_STATUS);
+    player_ptr->redraw |= (PR_TIMED_EFFECT);
 
     if (!notice) {
         return false;
@@ -149,7 +149,7 @@ bool set_tim_infra(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
         disturb(player_ptr, false, false);
     }
     player_ptr->update |= (PU_BONUS);
-    player_ptr->update |= (PU_MONSTERS);
+    player_ptr->update |= (PU_MONSTER_STATUSES);
     handle_stuff(player_ptr);
     return true;
 }

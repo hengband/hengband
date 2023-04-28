@@ -408,7 +408,7 @@ void do_cmd_building(PlayerType *player_ptr)
     w_ptr->character_icky_depth--;
     term_clear();
 
-    player_ptr->update |= (PU_VIEW | PU_MONSTERS | PU_BONUS | PU_LITE | PU_MON_LITE);
+    player_ptr->update |= (PU_VIEW | PU_MONSTER_STATUSES | PU_BONUS | PU_LITE | PU_MONSTER_LITE);
     player_ptr->redraw |= (PR_BASIC | PR_EXTRA | PR_EQUIPPY | PR_MAP);
     player_ptr->window_flags |= (PW_OVERHEAD | PW_DUNGEON);
 }

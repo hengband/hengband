@@ -91,8 +91,8 @@ void ObjectUseEntity::execute()
 
         msg_print(_("この杖にはもう魔力が残っていない。", "The staff has no charges left."));
         o_ptr->ident |= IDENT_EMPTY;
-        this->player_ptr->update |= PU_COMBINE | PU_REORDER;
-        this->player_ptr->window_flags |= PW_INVEN;
+        this->player_ptr->update |= PU_COMBINATION | PU_REORDER;
+        this->player_ptr->window_flags |= PW_INVENTORY;
         return;
     }
 
@@ -109,15 +109,15 @@ void ObjectUseEntity::execute()
      * gain_exp() does not reorder the inventory before the charge
      * is deducted from the staff.
      */
-    BIT_FLAGS inventory_flags = PU_COMBINE | PU_REORDER | (this->player_ptr->update & PU_AUTODESTROY);
-    reset_bits(this->player_ptr->update, PU_COMBINE | PU_REORDER | PU_AUTODESTROY);
+    BIT_FLAGS inventory_flags = PU_COMBINATION | PU_REORDER | (this->player_ptr->update & PU_AUTO_DESTRUCTION);
+    reset_bits(this->player_ptr->update, PU_COMBINATION | PU_REORDER | PU_AUTO_DESTRUCTION);
     object_tried(o_ptr);
     if (ident && !o_ptr->is_aware()) {
         object_aware(this->player_ptr, o_ptr);
         gain_exp(this->player_ptr, (lev + (this->player_ptr->lev >> 1)) / this->player_ptr->lev);
     }
 
-    set_bits(this->player_ptr->window_flags, PW_INVEN | PW_EQUIP | PW_PLAYER | PW_FLOOR_ITEM_LIST | PW_FOUND_ITEM_LIST);
+    set_bits(this->player_ptr->window_flags, PW_INVENTORY | PW_EQUIPMENT | PW_PLAYER | PW_FLOOR_ITEMS | PW_FOUND_ITEMS);
     set_bits(this->player_ptr->update, inventory_flags);
     if (!use_charge) {
         return;

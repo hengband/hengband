@@ -70,8 +70,8 @@ bool identify_item(PlayerType *player_ptr, ItemEntity *o_ptr)
     object_known(o_ptr);
     o_ptr->marked.set(OmType::TOUCHED);
 
-    set_bits(player_ptr->update, PU_BONUS | PU_COMBINE | PU_REORDER);
-    set_bits(player_ptr->window_flags, PW_INVEN | PW_EQUIP | PW_PLAYER | PW_FLOOR_ITEM_LIST | PW_FOUND_ITEM_LIST);
+    set_bits(player_ptr->update, PU_BONUS | PU_COMBINATION | PU_REORDER);
+    set_bits(player_ptr->window_flags, PW_INVENTORY | PW_EQUIPMENT | PW_PLAYER | PW_FLOOR_ITEMS | PW_FOUND_ITEMS);
 
     angband_strcpy(record_o_name, known_item_name.data(), MAX_NLEN);
     record_turn = w_ptr->game_turn;
@@ -177,9 +177,9 @@ bool identify_fully(PlayerType *player_ptr, bool only_equip)
     o_ptr->ident |= (IDENT_FULL_KNOWN);
 
     /* Refrect item informaiton onto subwindows without updating inventory */
-    player_ptr->update &= ~(PU_COMBINE | PU_REORDER);
+    player_ptr->update &= ~(PU_COMBINATION | PU_REORDER);
     handle_stuff(player_ptr);
-    player_ptr->update |= (PU_COMBINE | PU_REORDER);
+    player_ptr->update |= (PU_COMBINATION | PU_REORDER);
 
     const auto item_name = describe_flavor(player_ptr, o_ptr, 0);
     if (item >= INVEN_MAIN_HAND) {

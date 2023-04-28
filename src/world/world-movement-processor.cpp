@@ -66,7 +66,7 @@ void execute_recall(PlayerType *player_ptr)
     }
 
     player_ptr->word_recall--;
-    player_ptr->redraw |= (PR_STATUS);
+    player_ptr->redraw |= (PR_TIMED_EFFECT);
     if (player_ptr->word_recall != 0) {
         return;
     }
@@ -150,7 +150,7 @@ void execute_floor_reset(PlayerType *player_ptr)
     }
 
     player_ptr->alter_reality--;
-    player_ptr->redraw |= (PR_STATUS);
+    player_ptr->redraw |= (PR_TIMED_EFFECT);
     if (player_ptr->alter_reality != 0) {
         return;
     }

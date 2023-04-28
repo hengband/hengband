@@ -198,7 +198,7 @@ int calc_attack_damage_with_slay(PlayerType *player_ptr, ItemEntity *o_ptr, int 
 
         if (!pc.equals(PlayerClassType::SAMURAI) && (flags.has(TR_FORCE_WEAPON)) && (player_ptr->csp > (o_ptr->dd * o_ptr->ds / 5))) {
             player_ptr->csp -= (1 + (o_ptr->dd * o_ptr->ds / 5));
-            player_ptr->redraw |= (PR_MANA);
+            player_ptr->redraw |= (PR_MP);
             mult = mult * 3 / 2 + 20;
         }
 

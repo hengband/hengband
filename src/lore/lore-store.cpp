@@ -105,7 +105,7 @@ int lore_do_probe(PlayerType *player_ptr, MonsterRaceId r_idx)
     r_ptr->r_can_evolve = true;
 
     if (player_ptr->monster_race_idx == r_idx) {
-        player_ptr->window_flags |= (PW_MONSTER);
+        player_ptr->window_flags |= (PW_MONSTER_LORE);
     }
 
     return n;
@@ -141,6 +141,6 @@ void lore_treasure(PlayerType *player_ptr, MONSTER_IDX m_idx, ITEM_NUMBER num_it
         r_ptr->r_drop_flags.set(MonsterDropType::DROP_GREAT);
     }
     if (player_ptr->monster_race_idx == m_ptr->r_idx) {
-        player_ptr->window_flags |= (PW_MONSTER);
+        player_ptr->window_flags |= (PW_MONSTER_LORE);
     }
 }

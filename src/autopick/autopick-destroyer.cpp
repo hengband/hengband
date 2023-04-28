@@ -157,5 +157,5 @@ void auto_destroy_item(PlayerType *player_ptr, ItemEntity *o_ptr, int autopick_i
 
     autopick_last_destroyed_object = *o_ptr;
     o_ptr->marked.set(OmType::AUTODESTROY);
-    player_ptr->update |= PU_AUTODESTROY;
+    player_ptr->update |= PU_AUTO_DESTRUCTION;
 }

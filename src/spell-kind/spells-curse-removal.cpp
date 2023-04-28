@@ -39,7 +39,7 @@ static int exe_curse_removal(PlayerType *player_ptr, int all)
         o_ptr->feeling = FEEL_NONE;
 
         player_ptr->update |= (PU_BONUS);
-        player_ptr->window_flags |= (PW_EQUIP);
+        player_ptr->window_flags |= (PW_EQUIPMENT);
         count++;
     }
 

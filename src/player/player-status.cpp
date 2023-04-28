@@ -378,11 +378,11 @@ static void update_bonuses(PlayerType *player_ptr)
     player_ptr->dis_to_a = calc_to_ac(player_ptr, false);
 
     if (old_mighty_throw != player_ptr->mighty_throw) {
-        player_ptr->window_flags |= PW_INVEN;
+        player_ptr->window_flags |= PW_INVENTORY;
     }
 
     if (player_ptr->telepathy != old_telepathy) {
-        set_bits(player_ptr->update, PU_MONSTERS);
+        set_bits(player_ptr->update, PU_MONSTER_STATUSES);
     }
 
     auto is_esp_updated = player_ptr->esp_animal != old_esp_animal;
@@ -398,11 +398,11 @@ static void update_bonuses(PlayerType *player_ptr)
     is_esp_updated |= player_ptr->esp_nonliving != old_esp_nonliving;
     is_esp_updated |= player_ptr->esp_unique != old_esp_unique;
     if (is_esp_updated) {
-        set_bits(player_ptr->update, PU_MONSTERS);
+        set_bits(player_ptr->update, PU_MONSTER_STATUSES);
     }
 
     if (player_ptr->see_inv != old_see_inv) {
-        set_bits(player_ptr->update, PU_MONSTERS);
+        set_bits(player_ptr->update, PU_MONSTER_STATUSES);
     }
 
     if (player_ptr->pspeed != old_speed) {
@@ -410,7 +410,7 @@ static void update_bonuses(PlayerType *player_ptr)
     }
 
     if ((player_ptr->dis_ac != old_dis_ac) || (player_ptr->dis_to_a != old_dis_to_a)) {
-        set_bits(player_ptr->redraw, PR_ARMOR);
+        set_bits(player_ptr->redraw, PR_AC);
         set_bits(player_ptr->window_flags, PW_PLAYER);
     }
 
@@ -772,7 +772,7 @@ static void update_num_of_spells(PlayerType *player_ptr)
 
     player_ptr->old_spells = player_ptr->new_spells;
     set_bits(player_ptr->redraw, PR_STUDY);
-    set_bits(player_ptr->window_flags, PW_OBJECT);
+    set_bits(player_ptr->window_flags, PW_ITEM_KNOWLEDGTE);
 }
 
 /*!
@@ -799,7 +799,7 @@ static void update_max_mana(PlayerType *player_ptr)
     } else {
         if (mp_ptr->spell_first > player_ptr->lev) {
             player_ptr->msp = 0;
-            set_bits(player_ptr->redraw, PR_MANA);
+            set_bits(player_ptr->redraw, PR_MP);
             return;
         }
 
@@ -1002,7 +1002,7 @@ static void update_max_mana(PlayerType *player_ptr)
         }
 #endif
         player_ptr->msp = msp;
-        set_bits(player_ptr->redraw, PR_MANA);
+        set_bits(player_ptr->redraw, PR_MP);
         set_bits(player_ptr->window_flags, (PW_PLAYER | PW_SPELL));
     }
 
@@ -2675,13 +2675,13 @@ void update_creature(PlayerType *player_ptr)
     }
 
     auto *floor_ptr = player_ptr->current_floor_ptr;
-    if (any_bits(player_ptr->update, (PU_AUTODESTROY))) {
-        reset_bits(player_ptr->update, PU_AUTODESTROY);
+    if (any_bits(player_ptr->update, (PU_AUTO_DESTRUCTION))) {
+        reset_bits(player_ptr->update, PU_AUTO_DESTRUCTION);
         autopick_delayed_alter(player_ptr);
     }
 
-    if (any_bits(player_ptr->update, (PU_COMBINE))) {
-        reset_bits(player_ptr->update, PU_COMBINE);
+    if (any_bits(player_ptr->update, (PU_COMBINATION))) {
+        reset_bits(player_ptr->update, PU_COMBINATION);
         combine_pack(player_ptr);
     }
 
@@ -2709,8 +2709,8 @@ void update_creature(PlayerType *player_ptr)
         update_max_hitpoints(player_ptr);
     }
 
-    if (any_bits(player_ptr->update, (PU_MANA))) {
-        reset_bits(player_ptr->update, PU_MANA);
+    if (any_bits(player_ptr->update, (PU_MP))) {
+        reset_bits(player_ptr->update, PU_MP);
         update_max_mana(player_ptr);
     }
 
@@ -2756,18 +2756,18 @@ void update_creature(PlayerType *player_ptr)
         update_monsters(player_ptr, true);
     }
 
-    if (any_bits(player_ptr->update, (PU_MON_LITE))) {
-        reset_bits(player_ptr->update, PU_MON_LITE);
+    if (any_bits(player_ptr->update, (PU_MONSTER_LITE))) {
+        reset_bits(player_ptr->update, PU_MONSTER_LITE);
         update_mon_lite(player_ptr);
     }
 
-    if (any_bits(player_ptr->update, (PU_DELAY_VIS))) {
-        reset_bits(player_ptr->update, PU_DELAY_VIS);
+    if (any_bits(player_ptr->update, (PU_DELAY_VISIBILITY))) {
+        reset_bits(player_ptr->update, PU_DELAY_VISIBILITY);
         delayed_visual_update(player_ptr);
     }
 
-    if (any_bits(player_ptr->update, (PU_MONSTERS))) {
-        reset_bits(player_ptr->update, PU_MONSTERS);
+    if (any_bits(player_ptr->update, (PU_MONSTER_STATUSES))) {
+        reset_bits(player_ptr->update, PU_MONSTER_STATUSES);
         update_monsters(player_ptr, false);
     }
 }
@@ -2887,8 +2887,8 @@ void check_experience(PlayerType *player_ptr)
     PLAYER_LEVEL old_lev = player_ptr->lev;
     while ((player_ptr->lev > 1) && (player_ptr->exp < ((android ? player_exp_a : player_exp)[player_ptr->lev - 2] * player_ptr->expfact / 100L))) {
         player_ptr->lev--;
-        set_bits(player_ptr->update, PU_BONUS | PU_HP | PU_MANA | PU_SPELLS);
-        set_bits(player_ptr->redraw, PR_LEV | PR_TITLE);
+        set_bits(player_ptr->update, PU_BONUS | PU_HP | PU_MP | PU_SPELLS);
+        set_bits(player_ptr->redraw, PR_LEVEL | PR_TITLE);
         set_bits(player_ptr->window_flags, PW_PLAYER);
         handle_stuff(player_ptr);
     }
@@ -2916,9 +2916,9 @@ void check_experience(PlayerType *player_ptr)
 
         sound(SOUND_LEVEL);
         msg_format(_("レベル %d にようこそ。", "Welcome to level %d."), player_ptr->lev);
-        set_bits(player_ptr->update, (PU_BONUS | PU_HP | PU_MANA | PU_SPELLS));
-        set_bits(player_ptr->redraw, (PR_LEV | PR_TITLE | PR_EXP));
-        set_bits(player_ptr->window_flags, (PW_PLAYER | PW_SPELL | PW_INVEN));
+        set_bits(player_ptr->update, (PU_BONUS | PU_HP | PU_MP | PU_SPELLS));
+        set_bits(player_ptr->redraw, (PR_LEVEL | PR_TITLE | PR_EXP));
+        set_bits(player_ptr->window_flags, (PW_PLAYER | PW_SPELL | PW_INVENTORY));
         player_ptr->level_up_message = true;
         handle_stuff(player_ptr);
 
@@ -2977,8 +2977,8 @@ void check_experience(PlayerType *player_ptr)
             level_reward = false;
         }
 
-        set_bits(player_ptr->update, PU_BONUS | PU_HP | PU_MANA | PU_SPELLS);
-        set_bits(player_ptr->redraw, (PR_LEV | PR_TITLE));
+        set_bits(player_ptr->update, PU_BONUS | PU_HP | PU_MP | PU_SPELLS);
+        set_bits(player_ptr->redraw, (PR_LEVEL | PR_TITLE));
         set_bits(player_ptr->window_flags, (PW_PLAYER | PW_SPELL));
         handle_stuff(player_ptr);
     }

@@ -62,7 +62,7 @@ bool bless_weapon(PlayerType *player_ptr)
         set_bits(o_ptr->ident, IDENT_SENSE);
         o_ptr->feeling = FEEL_NONE;
         set_bits(player_ptr->update, PU_BONUS);
-        set_bits(player_ptr->window_flags, PW_EQUIP | PW_FLOOR_ITEM_LIST | PW_FOUND_ITEM_LIST);
+        set_bits(player_ptr->window_flags, PW_EQUIPMENT | PW_FLOOR_ITEMS | PW_FOUND_ITEMS);
     }
 
     /*
@@ -136,7 +136,7 @@ bool bless_weapon(PlayerType *player_ptr)
     }
 
     set_bits(player_ptr->update, PU_BONUS);
-    set_bits(player_ptr->window_flags, PW_EQUIP | PW_PLAYER | PW_FLOOR_ITEM_LIST | PW_FOUND_ITEM_LIST);
+    set_bits(player_ptr->window_flags, PW_EQUIPMENT | PW_PLAYER | PW_FLOOR_ITEMS | PW_FOUND_ITEMS);
     calc_android_exp(player_ptr);
     return true;
 }

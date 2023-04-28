@@ -161,7 +161,7 @@ void tgt_pt_info::move_to_symbol(PlayerType *player_ptr)
         this->y = player_ptr->y;
         this->x = player_ptr->x;
         verify_panel(player_ptr);
-        player_ptr->update |= PU_MONSTERS;
+        player_ptr->update |= PU_MONSTER_STATUSES;
         player_ptr->redraw |= PR_MAP;
         player_ptr->window_flags |= PW_OVERHEAD;
         handle_stuff(player_ptr);
@@ -304,7 +304,7 @@ bool tgt_pt(PlayerType *player_ptr, POSITION *x_ptr, POSITION *y_ptr)
 
     prt("", 0, 0);
     verify_panel(player_ptr);
-    player_ptr->update |= PU_MONSTERS;
+    player_ptr->update |= PU_MONSTER_STATUSES;
     player_ptr->redraw |= PR_MAP;
     player_ptr->window_flags |= PW_OVERHEAD;
     handle_stuff(player_ptr);

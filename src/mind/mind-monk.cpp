@@ -25,7 +25,7 @@ static void set_stance(PlayerType *player_ptr, const MonkStanceType new_stance)
     }
 
     player_ptr->update |= PU_BONUS;
-    player_ptr->redraw |= PR_STATE;
+    player_ptr->redraw |= PR_ACTION;
     msg_format(_("%sの構えをとった。", "You assume the %s stance."), monk_stances[enum2i(new_stance) - 1].desc);
     pc.set_monk_stance(new_stance);
 }
@@ -87,7 +87,7 @@ bool choose_monk_stance(PlayerType *player_ptr)
     }
 
     set_stance(player_ptr, new_stance);
-    player_ptr->redraw |= PR_STATE;
+    player_ptr->redraw |= PR_ACTION;
     screen_load();
     return true;
 }

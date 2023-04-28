@@ -724,7 +724,7 @@ std::optional<std::string> do_hex_spell(PlayerType *player_ptr, spell_hex_type s
                     set_action(player_ptr, ACTION_NONE);
                 }
 
-                player_ptr->update |= (PU_BONUS | PU_HP | PU_MANA | PU_SPELLS);
+                player_ptr->update |= (PU_BONUS | PU_HP | PU_MP | PU_SPELLS);
                 player_ptr->redraw |= (PR_EXTRA);
 
                 return "";
@@ -956,8 +956,8 @@ std::optional<std::string> do_hex_spell(PlayerType *player_ptr, spell_hex_type s
     }
 
     if (!info) {
-        player_ptr->update |= (PU_BONUS | PU_HP | PU_MANA | PU_SPELLS);
-        player_ptr->redraw |= (PR_EXTRA | PR_HP | PR_MANA);
+        player_ptr->update |= (PU_BONUS | PU_HP | PU_MP | PU_SPELLS);
+        player_ptr->redraw |= (PR_EXTRA | PR_HP | PR_MP);
     }
 
     return "";

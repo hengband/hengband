@@ -134,7 +134,7 @@ bool set_monster_csleep(PlayerType *player_ptr, MONSTER_IDX m_idx, int v)
     }
 
     if (monraces_info[m_ptr->r_idx].brightness_flags.has_any_of(has_ld_mask)) {
-        player_ptr->update |= PU_MON_LITE;
+        player_ptr->update |= PU_MONSTER_LITE;
     }
 
     return true;
@@ -427,7 +427,7 @@ bool set_monster_timewalk(PlayerType *player_ptr, int num, MonsterRaceId who, bo
     }
 
     player_ptr->redraw |= PR_MAP;
-    player_ptr->update |= PU_MONSTERS;
+    player_ptr->update |= PU_MONSTER_STATUSES;
     player_ptr->window_flags |= PW_OVERHEAD | PW_DUNGEON;
     w_ptr->timewalk_m_idx = 0;
     if (vs_player || (player_has_los_bold(player_ptr, m_ptr->fy, m_ptr->fx) && projectable(player_ptr, player_ptr->y, player_ptr->x, m_ptr->fy, m_ptr->fx))) {
