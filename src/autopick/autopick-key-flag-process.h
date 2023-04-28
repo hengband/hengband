@@ -17,4 +17,3 @@
 #define ADD_FLG(FLG) (entry->flags[FLG / 32] |= (1UL << (FLG % 32)))
 #define REM_FLG(FLG) (entry->flags[FLG / 32] &= ~(1UL << (FLG % 32)))
 #define ADD_FLG_NOUN(FLG) (ADD_FLG(FLG), prev_flg = FLG)
-#define IS_FLG(FLG) (entry->flags[FLG / 32] & (1UL << (FLG % 32)))
