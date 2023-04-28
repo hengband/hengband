@@ -712,14 +712,6 @@ concptr autopick_line_from_entry(const autopick_type &entry)
 }
 
 /*!
- * @brief Reconstruct preference line from entry and kill entry
- */
-concptr autopick_line_from_entry_kill(autopick_type *entry)
-{
-    return autopick_line_from_entry(*entry);
-}
-
-/*!
  * @brief Choose an item and get auto-picker entry from it.
  */
 bool entry_from_choosed_object(PlayerType *player_ptr, autopick_type *entry)

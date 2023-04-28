@@ -543,7 +543,7 @@ ape_quittance do_editor_command(PlayerType *player_ptr, text_body_type *tb, int 
             break;
         }
         string_free(tb->lines_list[tb->cy]);
-        tb->lines_list[tb->cy] = autopick_line_from_entry_kill(entry);
+        tb->lines_list[tb->cy] = autopick_line_from_entry(*entry);
         tb->dirty_flags |= DIRTY_SCREEN;
         break;
     }
