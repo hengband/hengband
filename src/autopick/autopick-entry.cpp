@@ -47,7 +47,7 @@ bool autopick_new_entry(autopick_type *entry, concptr str, bool allow_default)
         }
     }
 
-    entry->flag[0] = entry->flag[1] = 0L;
+    entry->flags[0] = entry->flags[1] = 0L;
     entry->dice = 0;
     entry->bonus = 0;
 
@@ -309,7 +309,7 @@ bool autopick_new_entry(autopick_type *entry, concptr str, bool allow_default)
         }
     } else {
         if (prev_flg != -1) {
-            entry->flag[prev_flg / 32] &= ~(1UL << (prev_flg % 32));
+            entry->flags[prev_flg / 32] &= ~(1UL << (prev_flg % 32));
             ptr = prev_ptr;
         }
     }
@@ -331,7 +331,7 @@ void autopick_entry_from_object(PlayerType *player_ptr, autopick_type *entry, It
     entry->name.clear();
     entry->insc = o_ptr->inscription.value_or("");
     entry->action = DO_AUTOPICK | DO_DISPLAY;
-    entry->flag[0] = entry->flag[1] = 0L;
+    entry->flags[0] = entry->flags[1] = 0L;
     entry->dice = 0;
 
     // エゴ銘が邪魔かもしれないので、デフォルトで「^」は付けない.

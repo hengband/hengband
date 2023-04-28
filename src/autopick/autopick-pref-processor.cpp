@@ -28,7 +28,7 @@ void process_autopick_file_command(char *buf)
     }
 
     for (const auto &item : autopick_list) {
-        if ((entry.name == item.name) && entry.flag[0] == item.flag[0] && entry.flag[1] == item.flag[1] && entry.dice == item.dice && entry.bonus == item.bonus) {
+        if ((entry.name == item.name) && entry.flags[0] == item.flags[0] && entry.flags[1] == item.flags[1] && entry.dice == item.dice && entry.bonus == item.bonus) {
             return;
         }
     }
