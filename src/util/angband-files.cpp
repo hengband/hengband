@@ -390,22 +390,6 @@ void fd_move(std::string_view from, std::string_view to)
 }
 
 /*!
- * @brief OSごとの差異を吸収してファイルをコピーする
- * @param from コピー元のファイルの相対パスまたは絶対パス
- * @param to コピー先のファイルの相対パスまたは絶対パス
- */
-void fd_copy(std::string_view from, std::string_view to)
-{
-    const auto &path_from = path_parse(from);
-    if (!std::filesystem::exists(path_from)) {
-        return;
-    }
-
-    const auto &path_to = path_parse(to);
-    std::filesystem::copy(path_from, path_to);
-}
-
-/*!
  * @brief OSごとの差異を吸収してファイルを作成する
  * @param file 作成先ファイルの相対パスまたは絶対パス
  * @param can_write_group グループに書き込みを許可するか否か
@@ -468,15 +452,6 @@ errr fd_seek(int fd, ulong n)
     }
 
     return 0;
-}
-
-/*
- * Hack -- attempt to truncate a file descriptor
- */
-errr fd_chop(int fd, ulong n)
-{
-    n = n ? n : 0;
-    return fd >= 0 ? 0 : -1;
 }
 
 /*
