@@ -85,10 +85,10 @@ bool set_invuln(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
             msg_print(_("無敵だ！", "Invulnerability!"));
             notice = true;
 
-            chg_virtue(player_ptr, V_UNLIFE, -2);
-            chg_virtue(player_ptr, V_HONOUR, -2);
-            chg_virtue(player_ptr, V_SACRIFICE, -3);
-            chg_virtue(player_ptr, V_VALOUR, -5);
+            chg_virtue(player_ptr, Virtue::UNLIFE, -2);
+            chg_virtue(player_ptr, Virtue::HONOUR, -2);
+            chg_virtue(player_ptr, Virtue::SACRIFICE, -3);
+            chg_virtue(player_ptr, Virtue::VALOUR, -5);
 
             player_ptr->redraw |= (PR_MAP);
             player_ptr->update |= (PU_MONSTERS);

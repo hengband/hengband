@@ -425,7 +425,7 @@ void process_player_hp_mp(PlayerType *player_ptr)
 bool hp_player(PlayerType *player_ptr, int num)
 {
     int vir;
-    vir = virtue_number(player_ptr, V_VITALITY);
+    vir = virtue_number(player_ptr, Virtue::VITALITY);
 
     if (num <= 0) {
         return false;
@@ -437,7 +437,7 @@ bool hp_player(PlayerType *player_ptr, int num)
 
     if (player_ptr->chp < player_ptr->mhp) {
         if ((num > 0) && (player_ptr->chp < (player_ptr->mhp / 3))) {
-            chg_virtue(player_ptr, V_TEMPERANCE, 1);
+            chg_virtue(player_ptr, Virtue::TEMPERANCE, 1);
         }
 
         player_ptr->chp += num;

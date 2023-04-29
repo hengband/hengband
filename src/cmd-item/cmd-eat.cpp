@@ -246,9 +246,9 @@ void exe_eat_food(PlayerType *player_ptr, INVENTORY_IDX item)
     player_ptr->update &= ~(PU_COMBINE | PU_REORDER | PU_AUTODESTROY);
 
     if (!(o_ptr->is_aware())) {
-        chg_virtue(player_ptr, V_KNOWLEDGE, -1);
-        chg_virtue(player_ptr, V_PATIENCE, -1);
-        chg_virtue(player_ptr, V_CHANCE, 1);
+        chg_virtue(player_ptr, Virtue::KNOWLEDGE, -1);
+        chg_virtue(player_ptr, Virtue::PATIENCE, -1);
+        chg_virtue(player_ptr, Virtue::CHANCE, 1);
     }
 
     /* We have tried it */

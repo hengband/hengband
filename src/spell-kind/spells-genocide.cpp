@@ -148,8 +148,8 @@ bool symbol_genocide(PlayerType *player_ptr, int power, bool player_cast)
     }
 
     if (result) {
-        chg_virtue(player_ptr, V_VITALITY, -2);
-        chg_virtue(player_ptr, V_CHANCE, -1);
+        chg_virtue(player_ptr, Virtue::VITALITY, -2);
+        chg_virtue(player_ptr, Virtue::CHANCE, -1);
     }
 
     return result;
@@ -185,8 +185,8 @@ bool mass_genocide(PlayerType *player_ptr, int power, bool player_cast)
     }
 
     if (result) {
-        chg_virtue(player_ptr, V_VITALITY, -2);
-        chg_virtue(player_ptr, V_CHANCE, -1);
+        chg_virtue(player_ptr, Virtue::VITALITY, -2);
+        chg_virtue(player_ptr, Virtue::CHANCE, -1);
     }
 
     return result;
@@ -226,8 +226,8 @@ bool mass_genocide_undead(PlayerType *player_ptr, int power, bool player_cast)
     }
 
     if (result) {
-        chg_virtue(player_ptr, V_UNLIFE, -2);
-        chg_virtue(player_ptr, V_CHANCE, -1);
+        chg_virtue(player_ptr, Virtue::UNLIFE, -2);
+        chg_virtue(player_ptr, Virtue::CHANCE, -1);
     }
 
     return result;

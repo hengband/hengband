@@ -1,39 +1,37 @@
 ﻿#pragma once
 
 #include "system/angband.h"
+#include <map>
+#include <string>
 
-#define MAX_VIRTUE 18 /*!< 徳定義の最大数 */
-
-enum virtue_idx {
-    V_NONE = 0,
-    V_COMPASSION = 1,
-    V_HONOUR = 2,
-    V_JUSTICE = 3,
-    V_SACRIFICE = 4,
-    V_KNOWLEDGE = 5,
-    V_FAITH = 6,
-    V_ENLIGHTEN = 7,
-    V_ENCHANT = 8,
-    V_CHANCE = 9,
-    V_NATURE = 10,
-    V_HARMONY = 11,
-    V_VITALITY = 12,
-    V_UNLIFE = 13,
-    V_PATIENCE = 14,
-    V_TEMPERANCE = 15,
-    V_DILIGENCE = 16,
-    V_VALOUR = 17,
-    V_INDIVIDUALISM = 18,
+enum class Virtue : short {
+    NONE = 0,
+    COMPASSION = 1,
+    HONOUR = 2,
+    JUSTICE = 3,
+    SACRIFICE = 4,
+    KNOWLEDGE = 5,
+    FAITH = 6,
+    ENLIGHTEN = 7,
+    ENCHANT = 8,
+    CHANCE = 9,
+    NATURE = 10,
+    HARMONY = 11,
+    VITALITY = 12,
+    UNLIFE = 13,
+    PATIENCE = 14,
+    TEMPERANCE = 15,
+    DILIGENCE = 16,
+    VALOUR = 17,
+    INDIVIDUALISM = 18,
+    MAX,
 };
 
-#define VIRTUE_LARGE 1
-#define VIRTUE_SMALL 2
-
 class PlayerType;
-bool compare_virtue(PlayerType *player_ptr, int type, int num, int tekitou);
-int virtue_number(PlayerType *player_ptr, int type);
-extern concptr virtue[MAX_VIRTUE];
+extern const std::map<Virtue, std::string> virtue_names;
+bool compare_virtue(PlayerType *player_ptr, Virtue virtue, int threshold);
+int virtue_number(PlayerType *player_ptr, Virtue virtue);
 void initialize_virtues(PlayerType *player_ptr);
-void chg_virtue(PlayerType *player_ptr, int virtue, int amount);
-void set_virtue(PlayerType *player_ptr, int virtue, int amount);
-void dump_virtues(PlayerType *player_ptr, FILE *OutFile);
+void chg_virtue(PlayerType *player_ptr, Virtue virtue, int amount);
+void set_virtue(PlayerType *player_ptr, Virtue virtue, int amount);
+void dump_virtues(PlayerType *player_ptr, FILE *out_file);

@@ -81,7 +81,7 @@ int home_carry(PlayerType *player_ptr, ItemEntity *o_ptr, StoreSaleType store_nu
 
     st_ptr->stock_num++;
     st_ptr->stock[slot] = *o_ptr;
-    chg_virtue(player_ptr, V_SACRIFICE, -1);
+    chg_virtue(player_ptr, Virtue::SACRIFICE, -1);
     (void)combine_and_reorder_home(player_ptr, store_num);
     return slot;
 }

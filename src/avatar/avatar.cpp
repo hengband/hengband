@@ -19,70 +19,56 @@
 #include "player-info/race-types.h"
 #include "realm/realm-names-table.h"
 #include "system/player-type-definition.h"
+#include "util/enum-converter.h"
 
 /*!
  * 徳の名称 / The names of the virtues
  */
-concptr virtue[MAX_VIRTUE] = {
-    _("情", "Compassion"),
-    _("誉", "Honour"),
-    _("正", "Justice"),
-    _("犠", "Sacrifice"),
-    _("識", "Knowledge"),
-    _("誠", "Faith"),
-    _("啓", "Enlightenment"),
-    _("秘", "Mysticism"),
-    _("運", "Chance"),
-    _("然", "Nature"),
-    _("調", "Harmony"),
-    _("活", "Vitality"),
-    _("死", "Unlife"),
-    _("忍", "Patience"),
-    _("節", "Temperance"),
-    _("勤", "Diligence"),
-    _("勇", "Valour"),
-    _("個", "Individualism"),
+const std::map<Virtue, std::string> virtue_names = {
+    { Virtue::NONE, "" },
+    { Virtue::COMPASSION, _("情", "Compassion") },
+    { Virtue::HONOUR, _("誉", "Honour") },
+    { Virtue::JUSTICE, _("正", "Justice") },
+    { Virtue::SACRIFICE, _("犠", "Sacrifice") },
+    { Virtue::KNOWLEDGE, _("識", "Knowledge") },
+    { Virtue::FAITH, _("誠", "Faith") },
+    { Virtue::ENLIGHTEN, _("啓", "Enlightenment") },
+    { Virtue::ENCHANT, _("秘", "Mysticism") },
+    { Virtue::CHANCE, _("運", "Chance") },
+    { Virtue::NATURE, _("然", "Nature") },
+    { Virtue::HARMONY, _("調", "Harmony") },
+    { Virtue::VITALITY, _("活", "Vitality") },
+    { Virtue::UNLIFE, _("死", "Unlife") },
+    { Virtue::PATIENCE, _("忍", "Patience") },
+    { Virtue::TEMPERANCE, _("節", "Temperance") },
+    { Virtue::DILIGENCE, _("勤", "Diligence") },
+    { Virtue::VALOUR, _("勇", "Valour") },
+    { Virtue::INDIVIDUALISM, _("個", "Individualism") },
 };
 
 /*!
  * @brief 該当の徳がプレイヤーに指定されているか否かに応じつつ、大小を比較する。
  * @details 徳がない場合は値0として比較する。
- * @param type 比較したい徳のID
- * @param num 比較基準値
- * @param tekitou VIRTUE_LARGE = 基準値より大きいか / VIRTUE_SMALL = 基準値より小さいか
+ * @param virtue_names 比較したい徳のID
+ * @param threshold 比較基準値
  * @return 比較の真偽値を返す
- * @todo 引数名を直しておく
  */
-bool compare_virtue(PlayerType *player_ptr, int type, int num, int tekitou)
+bool compare_virtue(PlayerType *player_ptr, Virtue virtue, int threshold)
 {
-    int vir = virtue_number(player_ptr, type) ? player_ptr->virtues[virtue_number(player_ptr, type) - 1] : 0;
-    switch (tekitou) {
-    case VIRTUE_LARGE:
-        if (vir > num) {
-            return true;
-        } else {
-            return false;
-        }
-    case VIRTUE_SMALL:
-        if (vir < num) {
-            return true;
-        } else {
-            return false;
-        }
-    default:
-        return false;
-    }
+    const auto num = virtue_number(player_ptr, virtue);
+    const auto virtue_value = num ? player_ptr->virtues[num - 1] : 0;
+    return virtue_value > threshold;
 }
 
 /*!
  * @brief プレイヤーの指定の徳が何番目のスロットに登録されているかを返す。 / Aux function
- * @param type 確認したい徳のID
+ * @param virtue_names 確認したい徳のID
  * @return スロットがあるならばスロットのID(0～7)+1、ない場合は0を返す。
  */
-int virtue_number(PlayerType *player_ptr, int type)
+int virtue_number(PlayerType *player_ptr, Virtue virtue)
 {
     for (int i = 0; i < 8; i++) {
-        if (player_ptr->vir_types[i] == type) {
+        if (player_ptr->vir_types[i] == virtue) {
             return i + 1;
         }
     }
@@ -96,18 +82,18 @@ int virtue_number(PlayerType *player_ptr, int type)
  */
 static void get_random_virtue(PlayerType *player_ptr, int which)
 {
-    int type = 0;
-    while (!(type) || virtue_number(player_ptr, type)) {
+    auto type = Virtue::NONE;
+    while ((type == Virtue::NONE) || virtue_number(player_ptr, type)) {
         switch (randint1(29)) {
         case 1:
         case 2:
         case 3:
-            type = V_SACRIFICE;
+            type = Virtue::SACRIFICE;
             break;
         case 4:
         case 5:
         case 6:
-            type = V_COMPASSION;
+            type = Virtue::COMPASSION;
             break;
         case 7:
         case 8:
@@ -115,41 +101,41 @@ static void get_random_virtue(PlayerType *player_ptr, int which)
         case 10:
         case 11:
         case 12:
-            type = V_VALOUR;
+            type = Virtue::VALOUR;
             break;
         case 13:
         case 14:
         case 15:
         case 16:
         case 17:
-            type = V_HONOUR;
+            type = Virtue::HONOUR;
             break;
         case 18:
         case 19:
         case 20:
         case 21:
-            type = V_JUSTICE;
+            type = Virtue::JUSTICE;
             break;
         case 22:
         case 23:
-            type = V_TEMPERANCE;
+            type = Virtue::TEMPERANCE;
             break;
         case 24:
         case 25:
-            type = V_HARMONY;
+            type = Virtue::HARMONY;
             break;
         case 26:
         case 27:
         case 28:
-            type = V_PATIENCE;
+            type = Virtue::PATIENCE;
             break;
         default:
-            type = V_DILIGENCE;
+            type = Virtue::DILIGENCE;
             break;
         }
     }
 
-    player_ptr->vir_types[which] = (int16_t)type;
+    player_ptr->vir_types[which] = type;
 }
 
 /*!
@@ -157,65 +143,65 @@ static void get_random_virtue(PlayerType *player_ptr, int which)
  * @param realm 魔法領域のID
  * @return 対応する徳のID
  */
-static enum virtue_idx get_realm_virtues(PlayerType *player_ptr, int16_t realm)
+static enum Virtue get_realm_virtues(PlayerType *player_ptr, int16_t realm)
 {
     switch (realm) {
     case REALM_LIFE:
-        if (virtue_number(player_ptr, V_VITALITY)) {
-            return V_TEMPERANCE;
+        if (virtue_number(player_ptr, Virtue::VITALITY)) {
+            return Virtue::TEMPERANCE;
         } else {
-            return V_VITALITY;
+            return Virtue::VITALITY;
         }
     case REALM_SORCERY:
-        if (virtue_number(player_ptr, V_KNOWLEDGE)) {
-            return V_ENCHANT;
+        if (virtue_number(player_ptr, Virtue::KNOWLEDGE)) {
+            return Virtue::ENCHANT;
         } else {
-            return V_KNOWLEDGE;
+            return Virtue::KNOWLEDGE;
         }
     case REALM_NATURE:
-        if (virtue_number(player_ptr, V_NATURE)) {
-            return V_HARMONY;
+        if (virtue_number(player_ptr, Virtue::NATURE)) {
+            return Virtue::HARMONY;
         } else {
-            return V_NATURE;
+            return Virtue::NATURE;
         }
     case REALM_CHAOS:
-        if (virtue_number(player_ptr, V_CHANCE)) {
-            return V_INDIVIDUALISM;
+        if (virtue_number(player_ptr, Virtue::CHANCE)) {
+            return Virtue::INDIVIDUALISM;
         } else {
-            return V_CHANCE;
+            return Virtue::CHANCE;
         }
     case REALM_DEATH:
-        return V_UNLIFE;
+        return Virtue::UNLIFE;
     case REALM_TRUMP:
-        return V_KNOWLEDGE;
+        return Virtue::KNOWLEDGE;
     case REALM_ARCANE:
-        return V_NONE;
+        return Virtue::NONE;
     case REALM_CRAFT:
-        if (virtue_number(player_ptr, V_ENCHANT)) {
-            return V_INDIVIDUALISM;
+        if (virtue_number(player_ptr, Virtue::ENCHANT)) {
+            return Virtue::INDIVIDUALISM;
         } else {
-            return V_ENCHANT;
+            return Virtue::ENCHANT;
         }
     case REALM_DAEMON:
-        if (virtue_number(player_ptr, V_JUSTICE)) {
-            return V_FAITH;
+        if (virtue_number(player_ptr, Virtue::JUSTICE)) {
+            return Virtue::FAITH;
         } else {
-            return V_JUSTICE;
+            return Virtue::JUSTICE;
         }
     case REALM_CRUSADE:
-        if (virtue_number(player_ptr, V_JUSTICE)) {
-            return V_HONOUR;
+        if (virtue_number(player_ptr, Virtue::JUSTICE)) {
+            return Virtue::HONOUR;
         } else {
-            return V_JUSTICE;
+            return Virtue::JUSTICE;
         }
     case REALM_HEX:
-        if (virtue_number(player_ptr, V_COMPASSION)) {
-            return V_JUSTICE;
+        if (virtue_number(player_ptr, Virtue::COMPASSION)) {
+            return Virtue::JUSTICE;
         } else {
-            return V_COMPASSION;
+            return Virtue::COMPASSION;
         }
     default:
-        return V_NONE;
+        return Virtue::NONE;
     };
 }
 
@@ -226,12 +212,12 @@ static enum virtue_idx get_realm_virtues(PlayerType *player_ptr, int16_t realm)
 void initialize_virtues(PlayerType *player_ptr)
 {
     int i = 0, j = 0;
-    int16_t tmp_vir;
+    Virtue tmp_vir;
 
     /* Reset */
     for (i = 0; i < 8; i++) {
         player_ptr->virtues[i] = 0;
-        player_ptr->vir_types[i] = 0;
+        player_ptr->vir_types[i] = Virtue::NONE;
     }
 
     i = 0;
@@ -241,198 +227,198 @@ void initialize_virtues(PlayerType *player_ptr)
     switch (player_ptr->pclass) {
     case PlayerClassType::WARRIOR:
     case PlayerClassType::SAMURAI:
-        player_ptr->vir_types[i++] = V_VALOUR;
-        player_ptr->vir_types[i++] = V_HONOUR;
+        player_ptr->vir_types[i++] = Virtue::VALOUR;
+        player_ptr->vir_types[i++] = Virtue::HONOUR;
         break;
     case PlayerClassType::MAGE:
-        player_ptr->vir_types[i++] = V_KNOWLEDGE;
-        player_ptr->vir_types[i++] = V_ENCHANT;
+        player_ptr->vir_types[i++] = Virtue::KNOWLEDGE;
+        player_ptr->vir_types[i++] = Virtue::ENCHANT;
         break;
     case PlayerClassType::PRIEST:
-        player_ptr->vir_types[i++] = V_FAITH;
-        player_ptr->vir_types[i++] = V_TEMPERANCE;
+        player_ptr->vir_types[i++] = Virtue::FAITH;
+        player_ptr->vir_types[i++] = Virtue::TEMPERANCE;
         break;
     case PlayerClassType::ROGUE:
     case PlayerClassType::SNIPER:
-        player_ptr->vir_types[i++] = V_HONOUR;
+        player_ptr->vir_types[i++] = Virtue::HONOUR;
         break;
     case PlayerClassType::RANGER:
     case PlayerClassType::ARCHER:
-        player_ptr->vir_types[i++] = V_NATURE;
-        player_ptr->vir_types[i++] = V_TEMPERANCE;
+        player_ptr->vir_types[i++] = Virtue::NATURE;
+        player_ptr->vir_types[i++] = Virtue::TEMPERANCE;
         break;
     case PlayerClassType::PALADIN:
-        player_ptr->vir_types[i++] = V_JUSTICE;
-        player_ptr->vir_types[i++] = V_VALOUR;
-        player_ptr->vir_types[i++] = V_HONOUR;
-        player_ptr->vir_types[i++] = V_FAITH;
+        player_ptr->vir_types[i++] = Virtue::JUSTICE;
+        player_ptr->vir_types[i++] = Virtue::VALOUR;
+        player_ptr->vir_types[i++] = Virtue::HONOUR;
+        player_ptr->vir_types[i++] = Virtue::FAITH;
         break;
     case PlayerClassType::WARRIOR_MAGE:
     case PlayerClassType::RED_MAGE:
-        player_ptr->vir_types[i++] = V_ENCHANT;
-        player_ptr->vir_types[i++] = V_VALOUR;
+        player_ptr->vir_types[i++] = Virtue::ENCHANT;
+        player_ptr->vir_types[i++] = Virtue::VALOUR;
         break;
     case PlayerClassType::CHAOS_WARRIOR:
-        player_ptr->vir_types[i++] = V_CHANCE;
-        player_ptr->vir_types[i++] = V_INDIVIDUALISM;
+        player_ptr->vir_types[i++] = Virtue::CHANCE;
+        player_ptr->vir_types[i++] = Virtue::INDIVIDUALISM;
         break;
     case PlayerClassType::MONK:
     case PlayerClassType::FORCETRAINER:
-        player_ptr->vir_types[i++] = V_FAITH;
-        player_ptr->vir_types[i++] = V_HARMONY;
-        player_ptr->vir_types[i++] = V_TEMPERANCE;
-        player_ptr->vir_types[i++] = V_PATIENCE;
+        player_ptr->vir_types[i++] = Virtue::FAITH;
+        player_ptr->vir_types[i++] = Virtue::HARMONY;
+        player_ptr->vir_types[i++] = Virtue::TEMPERANCE;
+        player_ptr->vir_types[i++] = Virtue::PATIENCE;
         break;
     case PlayerClassType::MINDCRAFTER:
     case PlayerClassType::MIRROR_MASTER:
-        player_ptr->vir_types[i++] = V_HARMONY;
-        player_ptr->vir_types[i++] = V_ENLIGHTEN;
-        player_ptr->vir_types[i++] = V_PATIENCE;
+        player_ptr->vir_types[i++] = Virtue::HARMONY;
+        player_ptr->vir_types[i++] = Virtue::ENLIGHTEN;
+        player_ptr->vir_types[i++] = Virtue::PATIENCE;
         break;
     case PlayerClassType::HIGH_MAGE:
     case PlayerClassType::SORCERER:
-        player_ptr->vir_types[i++] = V_ENLIGHTEN;
-        player_ptr->vir_types[i++] = V_ENCHANT;
-        player_ptr->vir_types[i++] = V_KNOWLEDGE;
+        player_ptr->vir_types[i++] = Virtue::ENLIGHTEN;
+        player_ptr->vir_types[i++] = Virtue::ENCHANT;
+        player_ptr->vir_types[i++] = Virtue::KNOWLEDGE;
         break;
     case PlayerClassType::TOURIST:
-        player_ptr->vir_types[i++] = V_ENLIGHTEN;
-        player_ptr->vir_types[i++] = V_CHANCE;
+        player_ptr->vir_types[i++] = Virtue::ENLIGHTEN;
+        player_ptr->vir_types[i++] = Virtue::CHANCE;
         break;
     case PlayerClassType::IMITATOR:
-        player_ptr->vir_types[i++] = V_CHANCE;
+        player_ptr->vir_types[i++] = Virtue::CHANCE;
         break;
     case PlayerClassType::BLUE_MAGE:
-        player_ptr->vir_types[i++] = V_CHANCE;
-        player_ptr->vir_types[i++] = V_KNOWLEDGE;
+        player_ptr->vir_types[i++] = Virtue::CHANCE;
+        player_ptr->vir_types[i++] = Virtue::KNOWLEDGE;
         break;
     case PlayerClassType::BEASTMASTER:
-        player_ptr->vir_types[i++] = V_NATURE;
-        player_ptr->vir_types[i++] = V_CHANCE;
-        player_ptr->vir_types[i++] = V_VITALITY;
+        player_ptr->vir_types[i++] = Virtue::NATURE;
+        player_ptr->vir_types[i++] = Virtue::CHANCE;
+        player_ptr->vir_types[i++] = Virtue::VITALITY;
         break;
     case PlayerClassType::MAGIC_EATER:
-        player_ptr->vir_types[i++] = V_ENCHANT;
-        player_ptr->vir_types[i++] = V_KNOWLEDGE;
+        player_ptr->vir_types[i++] = Virtue::ENCHANT;
+        player_ptr->vir_types[i++] = Virtue::KNOWLEDGE;
         break;
     case PlayerClassType::BARD:
-        player_ptr->vir_types[i++] = V_HARMONY;
-        player_ptr->vir_types[i++] = V_COMPASSION;
+        player_ptr->vir_types[i++] = Virtue::HARMONY;
+        player_ptr->vir_types[i++] = Virtue::COMPASSION;
         break;
     case PlayerClassType::CAVALRY:
-        player_ptr->vir_types[i++] = V_VALOUR;
-        player_ptr->vir_types[i++] = V_HARMONY;
+        player_ptr->vir_types[i++] = Virtue::VALOUR;
+        player_ptr->vir_types[i++] = Virtue::HARMONY;
         break;
     case PlayerClassType::BERSERKER:
-        player_ptr->vir_types[i++] = V_VALOUR;
-        player_ptr->vir_types[i++] = V_INDIVIDUALISM;
+        player_ptr->vir_types[i++] = Virtue::VALOUR;
+        player_ptr->vir_types[i++] = Virtue::INDIVIDUALISM;
         break;
     case PlayerClassType::SMITH:
-        player_ptr->vir_types[i++] = V_HONOUR;
-        player_ptr->vir_types[i++] = V_KNOWLEDGE;
+        player_ptr->vir_types[i++] = Virtue::HONOUR;
+        player_ptr->vir_types[i++] = Virtue::KNOWLEDGE;
         break;
     case PlayerClassType::NINJA:
-        player_ptr->vir_types[i++] = V_PATIENCE;
-        player_ptr->vir_types[i++] = V_KNOWLEDGE;
-        player_ptr->vir_types[i++] = V_FAITH;
-        player_ptr->vir_types[i++] = V_UNLIFE;
+        player_ptr->vir_types[i++] = Virtue::PATIENCE;
+        player_ptr->vir_types[i++] = Virtue::KNOWLEDGE;
+        player_ptr->vir_types[i++] = Virtue::FAITH;
+        player_ptr->vir_types[i++] = Virtue::UNLIFE;
         break;
     case PlayerClassType::ELEMENTALIST:
-        player_ptr->vir_types[i++] = V_NATURE;
+        player_ptr->vir_types[i++] = Virtue::NATURE;
         break;
     case PlayerClassType::MAX:
         break;
     };
 
-    /* Get one virtue based on race */
+    /* Get one virtue_names based on race */
     switch (player_ptr->prace) {
     case PlayerRaceType::HUMAN:
     case PlayerRaceType::HALF_ELF:
     case PlayerRaceType::DUNADAN:
-        player_ptr->vir_types[i++] = V_INDIVIDUALISM;
+        player_ptr->vir_types[i++] = Virtue::INDIVIDUALISM;
         break;
     case PlayerRaceType::ELF:
     case PlayerRaceType::SPRITE:
     case PlayerRaceType::ENT:
     case PlayerRaceType::MERFOLK:
-        player_ptr->vir_types[i++] = V_NATURE;
+        player_ptr->vir_types[i++] = Virtue::NATURE;
         break;
     case PlayerRaceType::HOBBIT:
     case PlayerRaceType::HALF_OGRE:
-        player_ptr->vir_types[i++] = V_TEMPERANCE;
+        player_ptr->vir_types[i++] = Virtue::TEMPERANCE;
         break;
     case PlayerRaceType::DWARF:
     case PlayerRaceType::KLACKON:
     case PlayerRaceType::ANDROID:
-        player_ptr->vir_types[i++] = V_DILIGENCE;
+        player_ptr->vir_types[i++] = Virtue::DILIGENCE;
         break;
     case PlayerRaceType::GNOME:
     case PlayerRaceType::CYCLOPS:
-        player_ptr->vir_types[i++] = V_KNOWLEDGE;
+        player_ptr->vir_types[i++] = Virtue::KNOWLEDGE;
         break;
     case PlayerRaceType::HALF_ORC:
     case PlayerRaceType::AMBERITE:
     case PlayerRaceType::KOBOLD:
-        player_ptr->vir_types[i++] = V_HONOUR;
+        player_ptr->vir_types[i++] = Virtue::HONOUR;
         break;
     case PlayerRaceType::HALF_TROLL:
     case PlayerRaceType::BARBARIAN:
-        player_ptr->vir_types[i++] = V_VALOUR;
+        player_ptr->vir_types[i++] = Virtue::VALOUR;
         break;
     case PlayerRaceType::HIGH_ELF:
     case PlayerRaceType::KUTAR:
-        player_ptr->vir_types[i++] = V_VITALITY;
+        player_ptr->vir_types[i++] = Virtue::VITALITY;
         break;
     case PlayerRaceType::HALF_GIANT:
     case PlayerRaceType::GOLEM:
     case PlayerRaceType::ARCHON:
     case PlayerRaceType::BALROG:
-        player_ptr->vir_types[i++] = V_JUSTICE;
+        player_ptr->vir_types[i++] = Virtue::JUSTICE;
         break;
     case PlayerRaceType::HALF_TITAN:
-        player_ptr->vir_types[i++] = V_HARMONY;
+        player_ptr->vir_types[i++] = Virtue::HARMONY;
         break;
     case PlayerRaceType::YEEK:
-        player_ptr->vir_types[i++] = V_SACRIFICE;
+        player_ptr->vir_types[i++] = Virtue::SACRIFICE;
         break;
     case PlayerRaceType::MIND_FLAYER:
-        player_ptr->vir_types[i++] = V_ENLIGHTEN;
+        player_ptr->vir_types[i++] = Virtue::ENLIGHTEN;
         break;
     case PlayerRaceType::DARK_ELF:
     case PlayerRaceType::DRACONIAN:
     case PlayerRaceType::S_FAIRY:
-        player_ptr->vir_types[i++] = V_ENCHANT;
+        player_ptr->vir_types[i++] = Virtue::ENCHANT;
         break;
     case PlayerRaceType::NIBELUNG:
-        player_ptr->vir_types[i++] = V_PATIENCE;
+        player_ptr->vir_types[i++] = Virtue::PATIENCE;
         break;
     case PlayerRaceType::IMP:
-        player_ptr->vir_types[i++] = V_FAITH;
+        player_ptr->vir_types[i++] = Virtue::FAITH;
         break;
     case PlayerRaceType::ZOMBIE:
     case PlayerRaceType::SKELETON:
     case PlayerRaceType::VAMPIRE:
     case PlayerRaceType::SPECTRE:
-        player_ptr->vir_types[i++] = V_UNLIFE;
+        player_ptr->vir_types[i++] = Virtue::UNLIFE;
         break;
     case PlayerRaceType::BEASTMAN:
-        player_ptr->vir_types[i++] = V_CHANCE;
+        player_ptr->vir_types[i++] = Virtue::CHANCE;
         break;
     case PlayerRaceType::MAX:
         break;
     }
 
-    /* Get a virtue for realms */
+    /* Get a virtue_names for realms */
     if (player_ptr->realm1) {
         tmp_vir = get_realm_virtues(player_ptr, player_ptr->realm1);
-        if (tmp_vir) {
+        if (tmp_vir != Virtue::NONE) {
             player_ptr->vir_types[i++] = tmp_vir;
         }
     }
 
     if (player_ptr->realm2) {
         tmp_vir = get_realm_virtues(player_ptr, player_ptr->realm2);
-        if (tmp_vir) {
+        if (tmp_vir != Virtue::NONE) {
             player_ptr->vir_types[i++] = tmp_vir;
         }
     }
@@ -440,15 +426,15 @@ void initialize_virtues(PlayerType *player_ptr)
     /* Eliminate doubles */
     for (i = 0; i < 8; i++) {
         for (j = i + 1; j < 8; j++) {
-            if ((player_ptr->vir_types[j] != 0) && (player_ptr->vir_types[j] == player_ptr->vir_types[i])) {
-                player_ptr->vir_types[j] = 0;
+            if ((player_ptr->vir_types[j] != Virtue::NONE) && (player_ptr->vir_types[j] == player_ptr->vir_types[i])) {
+                player_ptr->vir_types[j] = Virtue::NONE;
             }
         }
     }
 
     /* Fill in the blanks */
     for (i = 0; i < 8; i++) {
-        if (player_ptr->vir_types[i] == 0) {
+        if (player_ptr->vir_types[i] == Virtue::NONE) {
             get_random_virtue(player_ptr, i);
         }
     }
@@ -457,10 +443,10 @@ void initialize_virtues(PlayerType *player_ptr)
 /*!
  * @brief 対応する徳をプレイヤーがスロットに登録している場合に加減を行う。
  * @details 範囲は-125～125、基本的に絶対値が大きいほど絶対値が上がり辛くなる。
- * @param virtue 徳のID
+ * @param virtue_names 徳のID
  * @param amount 加減量
  */
-void chg_virtue(PlayerType *player_ptr, int virtue_id, int amount)
+void chg_virtue(PlayerType *player_ptr, Virtue virtue_id, int amount)
 {
     for (int i = 0; i < 8; i++) {
         if (player_ptr->vir_types[i] != virtue_id) {
@@ -518,10 +504,10 @@ void chg_virtue(PlayerType *player_ptr, int virtue_id, int amount)
 
 /*!
  * @brief 対応する徳をプレイヤーがスロットに登録している場合に固定値をセットする
- * @param virtue 徳のID
+ * @param virtue_names 徳のID
  * @param amount セットしたい値
  */
-void set_virtue(PlayerType *player_ptr, int virtue_id, int amount)
+void set_virtue(PlayerType *player_ptr, Virtue virtue_id, int amount)
 {
     for (int i = 0; i < 8; i++) {
         if (player_ptr->vir_types[i] == virtue_id) {
@@ -544,10 +530,10 @@ void dump_virtues(PlayerType *player_ptr, FILE *out_file)
     for (int v_nr = 0; v_nr < 8; v_nr++) {
         GAME_TEXT vir_name[20];
         int tester = player_ptr->virtues[v_nr];
-        strcpy(vir_name, virtue[(player_ptr->vir_types[v_nr]) - 1]);
+        strcpy(vir_name, virtue_names.at(player_ptr->vir_types[v_nr]).data());
         const std::string vir_val_str = format(" (%d)", tester);
         const auto vir_val = show_actual_value ? vir_val_str.data() : "";
-        if (player_ptr->vir_types[v_nr] == 0 || player_ptr->vir_types[v_nr] > MAX_VIRTUE) {
+        if ((player_ptr->vir_types[v_nr] == Virtue::NONE) || (player_ptr->vir_types[v_nr] >= Virtue::MAX)) {
             fprintf(out_file, _("おっと。%sの情報なし。", "Oops. No info about %s."), vir_name);
         }
 

@@ -190,7 +190,7 @@ void process_monster(PlayerType *player_ptr, MONSTER_IDX m_idx)
     }
 
     if (m_ptr->ml) {
-        chg_virtue(player_ptr, V_COMPASSION, -1);
+        chg_virtue(player_ptr, Virtue::COMPASSION, -1);
     }
 }
 

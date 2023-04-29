@@ -235,7 +235,7 @@ bool curse_armor(PlayerType *player_ptr)
     }
 
     msg_format(_("恐怖の暗黒オーラがあなたの%sを包み込んだ！", "A terrible black aura blasts your %s!"), item_name.data());
-    chg_virtue(player_ptr, V_ENCHANT, -5);
+    chg_virtue(player_ptr, Virtue::ENCHANT, -5);
     o_ptr->fixed_artifact_idx = FixedArtifactId::NONE;
     o_ptr->ego_idx = EgoType::BLASTED;
     o_ptr->to_a = 0 - randint1(5) - randint1(5);
@@ -281,7 +281,7 @@ bool curse_weapon_object(PlayerType *player_ptr, bool force, ItemEntity *o_ptr)
         msg_format(_("恐怖の暗黒オーラがあなたの%sを包み込んだ！", "A terrible black aura blasts your %s!"), item_name.data());
     }
 
-    chg_virtue(player_ptr, V_ENCHANT, -5);
+    chg_virtue(player_ptr, Virtue::ENCHANT, -5);
     o_ptr->fixed_artifact_idx = FixedArtifactId::NONE;
     o_ptr->ego_idx = EgoType::SHATTERED;
     o_ptr->to_h = 0 - randint1(5) - randint1(5);
@@ -495,10 +495,10 @@ bool enchant_spell(PlayerType *player_ptr, HIT_PROB num_hit, int num_dam, ARMOUR
         }
         msg_print(_("強化に失敗した。", "The enchantment failed."));
         if (one_in_(3)) {
-            chg_virtue(player_ptr, V_ENCHANT, -1);
+            chg_virtue(player_ptr, Virtue::ENCHANT, -1);
         }
     } else {
-        chg_virtue(player_ptr, V_ENCHANT, 1);
+        chg_virtue(player_ptr, Virtue::ENCHANT, 1);
     }
 
     calc_android_exp(player_ptr);
@@ -532,7 +532,7 @@ void brand_weapon(PlayerType *player_ptr, int brand_type)
         }
 
         msg_print(_("属性付加に失敗した。", "The branding failed."));
-        chg_virtue(player_ptr, V_ENCHANT, -2);
+        chg_virtue(player_ptr, Virtue::ENCHANT, -2);
         calc_android_exp(player_ptr);
         return;
     }
@@ -629,6 +629,6 @@ void brand_weapon(PlayerType *player_ptr, int brand_type)
     msg_format(_("あなたの%s%s", "Your %s %s"), item_name.data(), act);
     enchant_equipment(player_ptr, o_ptr, randint0(3) + 4, ENCH_TOHIT | ENCH_TODAM);
     o_ptr->discount = 99;
-    chg_virtue(player_ptr, V_ENCHANT, 2);
+    chg_virtue(player_ptr, Virtue::ENCHANT, 2);
     calc_android_exp(player_ptr);
 }

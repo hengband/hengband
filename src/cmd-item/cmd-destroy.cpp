@@ -180,21 +180,21 @@ static void process_destroy_magic_book(PlayerType *player_ptr, destroy_type *des
     const auto tval = bi_key.tval();
     gain_exp_by_destroying_magic_book(player_ptr, destroy_ptr);
     if (tval == ItemKindType::LIFE_BOOK) {
-        chg_virtue(player_ptr, V_UNLIFE, 1);
-        chg_virtue(player_ptr, V_VITALITY, -1);
+        chg_virtue(player_ptr, Virtue::UNLIFE, 1);
+        chg_virtue(player_ptr, Virtue::VITALITY, -1);
     } else if (tval == ItemKindType::DEATH_BOOK) {
-        chg_virtue(player_ptr, V_UNLIFE, -1);
-        chg_virtue(player_ptr, V_VITALITY, 1);
+        chg_virtue(player_ptr, Virtue::UNLIFE, -1);
+        chg_virtue(player_ptr, Virtue::VITALITY, 1);
     }
 
     if ((destroy_ptr->q_ptr->to_a != 0) || (destroy_ptr->q_ptr->to_h != 0) || (destroy_ptr->q_ptr->to_d != 0)) {
-        chg_virtue(player_ptr, V_ENCHANT, -1);
+        chg_virtue(player_ptr, Virtue::ENCHANT, -1);
     }
 
     if (object_value_real(destroy_ptr->q_ptr) > 30000) {
-        chg_virtue(player_ptr, V_SACRIFICE, 2);
+        chg_virtue(player_ptr, Virtue::SACRIFICE, 2);
     } else if (object_value_real(destroy_ptr->q_ptr) > 10000) {
-        chg_virtue(player_ptr, V_SACRIFICE, 1);
+        chg_virtue(player_ptr, Virtue::SACRIFICE, 1);
     }
 }
 
@@ -207,7 +207,7 @@ static void exe_destroy_item(PlayerType *player_ptr, destroy_type *destroy_ptr)
     vary_item(player_ptr, destroy_ptr->item, -destroy_ptr->amt);
     process_destroy_magic_book(player_ptr, destroy_ptr);
     if ((destroy_ptr->q_ptr->to_a != 0) || (destroy_ptr->q_ptr->to_d != 0) || (destroy_ptr->q_ptr->to_h != 0)) {
-        chg_virtue(player_ptr, V_HARMONY, 1);
+        chg_virtue(player_ptr, Virtue::HARMONY, 1);
     }
 
     if (destroy_ptr->item >= INVEN_MAIN_HAND) {

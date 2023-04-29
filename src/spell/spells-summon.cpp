@@ -457,7 +457,7 @@ void cast_invoke_spirits(PlayerType *player_ptr, DIRECTION dir)
 {
     PLAYER_LEVEL plev = player_ptr->lev;
     int die = randint1(100) + plev / 5;
-    int vir = virtue_number(player_ptr, V_CHANCE);
+    int vir = virtue_number(player_ptr, Virtue::CHANCE);
 
     if (vir != 0) {
         if (player_ptr->virtues[vir - 1] > 0) {
@@ -473,7 +473,7 @@ void cast_invoke_spirits(PlayerType *player_ptr, DIRECTION dir)
 
     msg_print(_("あなたは死者たちの力を招集した...", "You call on the power of the dead..."));
     if (die < 26) {
-        chg_virtue(player_ptr, V_CHANCE, 1);
+        chg_virtue(player_ptr, Virtue::CHANCE, 1);
     }
 
     if (die > 100) {
@@ -486,7 +486,7 @@ void cast_invoke_spirits(PlayerType *player_ptr, DIRECTION dir)
 
         (void)summon_specific(player_ptr, 0, player_ptr->y, player_ptr->x, player_ptr->current_floor_ptr->dun_level, SUMMON_UNDEAD,
             (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE | PM_NO_PET));
-        chg_virtue(player_ptr, V_UNLIFE, 1);
+        chg_virtue(player_ptr, Virtue::UNLIFE, 1);
     } else if (die < 14) {
         msg_print(_("名状し難い邪悪な存在があなたの心を通り過ぎて行った...", "An unnamable evil brushes against your mind..."));
         (void)bss.mod_fear(randint1(4) + 4);

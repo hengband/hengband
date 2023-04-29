@@ -749,10 +749,10 @@ void exe_fire(PlayerType *player_ptr, INVENTORY_IDX item, ItemEntity *j_ptr, SPE
 
                 if (m_ptr->is_asleep()) {
                     if (r_ptr->kind_flags.has_not(MonsterKindType::EVIL) || one_in_(5)) {
-                        chg_virtue(player_ptr, V_COMPASSION, -1);
+                        chg_virtue(player_ptr, Virtue::COMPASSION, -1);
                     }
                     if (r_ptr->kind_flags.has_not(MonsterKindType::EVIL) || one_in_(5)) {
-                        chg_virtue(player_ptr, V_HONOUR, -1);
+                        chg_virtue(player_ptr, Virtue::HONOUR, -1);
                     }
                 }
 

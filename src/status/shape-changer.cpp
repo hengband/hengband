@@ -65,7 +65,7 @@ void change_race(PlayerType *player_ptr, PlayerRaceType new_race, concptr effect
     msg_format("You turn into %s %s%s!", (is_a_vowel((effect_msg[0]) ? effect_msg[0] : title[0]) ? "an" : "a"), effect_msg, title);
 #endif
 
-    chg_virtue(player_ptr, V_CHANCE, 2);
+    chg_virtue(player_ptr, Virtue::CHANCE, 2);
     if (enum2i(player_ptr->prace) < 32) {
         player_ptr->old_race1 |= 1UL << enum2i(player_ptr->prace);
     } else {
@@ -113,7 +113,7 @@ void do_poly_self(PlayerType *player_ptr)
     int power = player_ptr->lev;
 
     msg_print(_("あなたは変化の訪れを感じた...", "You feel a change coming over you..."));
-    chg_virtue(player_ptr, V_CHANCE, 1);
+    chg_virtue(player_ptr, Virtue::CHANCE, 1);
 
     PlayerRace pr(player_ptr);
     if ((power > randint0(20)) && one_in_(3) && !pr.equals(PlayerRaceType::ANDROID)) {

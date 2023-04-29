@@ -130,7 +130,7 @@ static void take_item_from_home(PlayerType *player_ptr, ItemEntity *o_ptr, ItemE
     }
 
     display_store_inventory(player_ptr, StoreSaleType::HOME);
-    chg_virtue(player_ptr, V_SACRIFICE, 1);
+    chg_virtue(player_ptr, Virtue::SACRIFICE, 1);
 }
 
 static void shuffle_store(PlayerType *player_ptr, StoreSaleType store_num)
@@ -275,10 +275,10 @@ void store_purchase(PlayerType *player_ptr, StoreSaleType store_num)
 
     store_owner_says_comment(player_ptr, store_num);
     if (store_num == StoreSaleType::BLACK) {
-        chg_virtue(player_ptr, V_JUSTICE, -1);
+        chg_virtue(player_ptr, Virtue::JUSTICE, -1);
     }
     if ((o_ptr->bi_key.tval() == ItemKindType::BOTTLE) && (store_num != StoreSaleType::HOME)) {
-        chg_virtue(player_ptr, V_NATURE, -1);
+        chg_virtue(player_ptr, Virtue::NATURE, -1);
     }
 
     sound(SOUND_BUY);

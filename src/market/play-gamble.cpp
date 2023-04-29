@@ -275,10 +275,10 @@ bool gamble_comm(PlayerType *player_ptr, int cmd)
     prt("", 18, 37);
     if (player_ptr->au >= oldgold) {
         msg_print(_("「今回は儲けたな！でも次はこっちが勝ってやるからな、絶対に！」", "You came out a winner! We'll win next time, I'm sure."));
-        chg_virtue(player_ptr, V_CHANCE, 3);
+        chg_virtue(player_ptr, Virtue::CHANCE, 3);
     } else {
         msg_print(_("「金をスッてしまったな、わはは！うちに帰った方がいいぜ。」", "You lost gold! Haha, better head home."));
-        chg_virtue(player_ptr, V_CHANCE, -3);
+        chg_virtue(player_ptr, Virtue::CHANCE, -3);
     }
 
     msg_print(nullptr);

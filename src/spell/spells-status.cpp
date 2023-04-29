@@ -171,7 +171,7 @@ bool poly_monster(PlayerType *player_ptr, DIRECTION dir, int power)
     BIT_FLAGS flg = PROJECT_STOP | PROJECT_KILL | PROJECT_REFLECTABLE;
     bool tester = (project_hook(player_ptr, AttributeType::OLD_POLY, dir, power, flg));
     if (tester) {
-        chg_virtue(player_ptr, V_CHANCE, 1);
+        chg_virtue(player_ptr, Virtue::CHANCE, 1);
     }
     return tester;
 }
@@ -280,8 +280,8 @@ void roll_hitdice(PlayerType *player_ptr, spell_operation options)
 bool life_stream(PlayerType *player_ptr, bool message, bool virtue_change)
 {
     if (virtue_change) {
-        chg_virtue(player_ptr, V_VITALITY, 1);
-        chg_virtue(player_ptr, V_UNLIFE, -5);
+        chg_virtue(player_ptr, Virtue::VITALITY, 1);
+        chg_virtue(player_ptr, Virtue::UNLIFE, -5);
     }
 
     if (message) {
