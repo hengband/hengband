@@ -9,6 +9,7 @@
 #include "util/string-processor.h"
 #include "view/display-messages.h"
 #include <stdexcept>
+#include <string_view>
 
 /*!
  * @brief Load an autopick preference file
@@ -58,7 +59,7 @@ std::string pickpref_filename(PlayerType *player_ptr, int filename_mode)
 /*!
  * @brief Read whole lines of a file to memory
  */
-static std::vector<concptr> read_text_lines(concptr filename)
+static std::vector<concptr> read_text_lines(std::string_view filename)
 {
     FILE *fff;
 
@@ -142,17 +143,17 @@ std::vector<concptr> read_pickpref_text_lines(PlayerType *player_ptr, int *filen
     /* Try a filename with player name */
     *filename_mode_p = PT_WITH_PNAME;
     auto filename = pickpref_filename(player_ptr, *filename_mode_p);
-    std::vector<concptr> lines_list = read_text_lines(filename.data());
+    std::vector<concptr> lines_list = read_text_lines(filename);
 
     if (lines_list.empty()) {
         *filename_mode_p = PT_DEFAULT;
         filename = pickpref_filename(player_ptr, *filename_mode_p);
-        lines_list = read_text_lines(filename.data());
+        lines_list = read_text_lines(filename);
     }
 
     if (lines_list.empty()) {
         prepare_default_pickpref(player_ptr);
-        lines_list = read_text_lines(filename.data());
+        lines_list = read_text_lines(filename);
     }
 
     if (lines_list.empty()) {
