@@ -52,21 +52,24 @@ static void do_cmd_knowledge_quests_current(PlayerType *player_ptr, FILE *fff)
 {
     const auto &quest_list = QuestList::get_instance();
     std::string rand_tmp_str;
-    MonsterRaceInfo *r_ptr;
     int rand_level = 100;
     int total = 0;
 
     fprintf(fff, _("《遂行中のクエスト》\n", "< Current Quest >\n"));
 
     for (const auto &[q_idx, q_ref] : quest_list) {
-        bool is_print = q_ref.status == QuestStatusType::TAKEN;
+        if (q_idx == QuestId::NONE) {
+            continue;
+        }
+
+        auto is_print = q_ref.status == QuestStatusType::TAKEN;
         is_print |= (q_ref.status == QuestStatusType::STAGE_COMPLETED) && (q_ref.type == QuestKindType::TOWER);
         is_print |= q_ref.status == QuestStatusType::COMPLETED;
         if (!is_print) {
             continue;
         }
 
-        QuestId old_quest = player_ptr->current_floor_ptr->quest_number;
+        const auto old_quest = player_ptr->current_floor_ptr->quest_number;
         for (int j = 0; j < 10; j++) {
             quest_text[j][0] = '\0';
         }
@@ -79,26 +82,28 @@ static void do_cmd_knowledge_quests_current(PlayerType *player_ptr, FILE *fff)
         if (q_ref.flags & QUEST_FLAG_SILENT) {
             continue;
         }
+
         total++;
         if (q_ref.type != QuestKindType::RANDOM) {
             std::string note;
             if (q_ref.status == QuestStatusType::TAKEN || q_ref.status == QuestStatusType::STAGE_COMPLETED) {
                 switch (q_ref.type) {
-                case QuestKindType::KILL_LEVEL:
-                    r_ptr = &monraces_info[q_ref.r_idx];
+                case QuestKindType::KILL_LEVEL: {
+                    const auto &monrace = monraces_info[q_ref.r_idx];
                     if (q_ref.max_num > 1) {
 #ifdef JP
-                        note = format(" - %d 体の%sを倒す。(あと %d 体)", (int)q_ref.max_num, r_ptr->name.data(), (int)(q_ref.max_num - q_ref.cur_num));
+                        note = format(" - %d 体の%sを倒す。(あと %d 体)", (int)q_ref.max_num, monrace.name.data(), (int)(q_ref.max_num - q_ref.cur_num));
 #else
-                        auto monster_name(r_ptr->name);
+                        auto monster_name(monrace.name);
                         plural_aux(monster_name.data());
                         note = format(" - kill %d %s, have killed %d.", (int)q_ref.max_num, monster_name.data(), (int)q_ref.cur_num);
 #endif
                     } else {
-                        note = format(_(" - %sを倒す。", " - kill %s."), r_ptr->name.data());
+                        note = format(_(" - %sを倒す。", " - kill %s."), monrace.name.data());
                     }
 
                     break;
+                }
                 case QuestKindType::FIND_ARTIFACT: {
                     std::string item_name("");
                     if (q_ref.reward_artifact_idx != FixedArtifactId::NONE) {
@@ -157,17 +162,17 @@ static void do_cmd_knowledge_quests_current(PlayerType *player_ptr, FILE *fff)
             continue;
         }
 
-        r_ptr = &monraces_info[q_ref.r_idx];
+        const auto &monrace = monraces_info[q_ref.r_idx];
         if (q_ref.max_num <= 1) {
-            rand_tmp_str = format(_("  %s (%d 階) - %sを倒す。\n", "  %s (Dungeon level: %d)\n  Kill %s.\n"), q_ref.name, (int)q_ref.level, r_ptr->name.data());
+            rand_tmp_str = format(_("  %s (%d 階) - %sを倒す。\n", "  %s (Dungeon level: %d)\n  Kill %s.\n"), q_ref.name, (int)q_ref.level, monrace.name.data());
             continue;
         }
 
 #ifdef JP
-        rand_tmp_str = format("  %s (%d 階) - %d 体の%sを倒す。(あと %d 体)\n", q_ref.name, (int)q_ref.level, (int)q_ref.max_num, r_ptr->name.data(),
+        rand_tmp_str = format("  %s (%d 階) - %d 体の%sを倒す。(あと %d 体)\n", q_ref.name, (int)q_ref.level, (int)q_ref.max_num, monrace.name.data(),
             (int)(q_ref.max_num - q_ref.cur_num));
 #else
-        auto monster_name(r_ptr->name);
+        auto monster_name(monrace.name);
         plural_aux(monster_name.data());
         rand_tmp_str = format("  %s (Dungeon level: %d)\n  Kill %d %s, have killed %d.\n", q_ref.name, (int)q_ref.level, (int)q_ref.max_num,
             monster_name.data(), (int)q_ref.cur_num);
