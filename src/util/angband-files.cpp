@@ -381,6 +381,11 @@ void fd_move(std::string_view from, std::string_view to)
     }
 
     const auto &path_to = path_parse(to);
+    const auto directory = std::filesystem::path(path_to).remove_filename();
+    if (!std::filesystem::exists(directory)) {
+        std::filesystem::create_directory(directory);
+    }
+
     std::filesystem::rename(path_from, path_to);
 }
 
