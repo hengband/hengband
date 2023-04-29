@@ -62,7 +62,7 @@ bool identify_item(PlayerType *player_ptr, ItemEntity *o_ptr)
     const auto old_known = any_bits(o_ptr->ident, IDENT_KNOWN);
     if (!o_ptr->is_fully_known()) {
         if (o_ptr->is_fixed_or_random_artifact() || one_in_(5)) {
-            chg_virtue(player_ptr, V_KNOWLEDGE, 1);
+            chg_virtue(player_ptr, Virtue::KNOWLEDGE, 1);
         }
     }
 

@@ -39,17 +39,17 @@ void AvatarChanger::change_virtue()
     this->change_virtue_unique();
     const auto &r_ref = this->m_ptr->get_real_r_ref();
     if (m_ptr->r_idx == MonsterRaceId::BEGGAR || m_ptr->r_idx == MonsterRaceId::LEPER) {
-        chg_virtue(this->player_ptr, V_COMPASSION, -1);
+        chg_virtue(this->player_ptr, Virtue::COMPASSION, -1);
     }
 
     this->change_virtue_good_evil();
     if (r_ref.kind_flags.has(MonsterKindType::UNDEAD) && r_ref.kind_flags.has(MonsterKindType::UNIQUE)) {
-        chg_virtue(this->player_ptr, V_VITALITY, 2);
+        chg_virtue(this->player_ptr, Virtue::VITALITY, 2);
     }
 
     this->change_virtue_revenge();
     if (any_bits(r_ref.flags2, RF2_MULTIPLY) && (r_ref.r_akills > 1000) && one_in_(10)) {
-        chg_virtue(this->player_ptr, V_VALOUR, -1);
+        chg_virtue(this->player_ptr, Virtue::VALOUR, -1);
     }
 
     this->change_virtue_wild_thief();
@@ -68,19 +68,19 @@ void AvatarChanger::change_virtue_non_beginner()
     }
 
     if ((floor_ptr->dun_level == 0) && !this->player_ptr->ambush_flag && !floor_ptr->inside_arena) {
-        chg_virtue(this->player_ptr, V_VALOUR, -1);
+        chg_virtue(this->player_ptr, Virtue::VALOUR, -1);
     } else if (r_ptr->level > floor_ptr->dun_level) {
         if (randint1(10) <= (r_ptr->level - floor_ptr->dun_level)) {
-            chg_virtue(this->player_ptr, V_VALOUR, 1);
+            chg_virtue(this->player_ptr, Virtue::VALOUR, 1);
         }
     }
 
     if (r_ptr->level > 60) {
-        chg_virtue(this->player_ptr, V_VALOUR, 1);
+        chg_virtue(this->player_ptr, Virtue::VALOUR, 1);
     }
 
     if (r_ptr->level >= 2 * (this->player_ptr->lev + 1)) {
-        chg_virtue(this->player_ptr, V_VALOUR, 2);
+        chg_virtue(this->player_ptr, Virtue::VALOUR, 2);
     }
 }
 
@@ -95,16 +95,16 @@ void AvatarChanger::change_virtue_unique()
     }
 
     if (r_ptr->kind_flags.has_any_of(alignment_mask)) {
-        chg_virtue(this->player_ptr, V_HARMONY, 2);
+        chg_virtue(this->player_ptr, Virtue::HARMONY, 2);
     }
 
     if (r_ptr->kind_flags.has(MonsterKindType::GOOD)) {
-        chg_virtue(this->player_ptr, V_UNLIFE, 2);
-        chg_virtue(this->player_ptr, V_VITALITY, -2);
+        chg_virtue(this->player_ptr, Virtue::UNLIFE, 2);
+        chg_virtue(this->player_ptr, Virtue::VITALITY, -2);
     }
 
     if (one_in_(3)) {
-        chg_virtue(this->player_ptr, V_INDIVIDUALISM, -1);
+        chg_virtue(this->player_ptr, Virtue::INDIVIDUALISM, -1);
     }
 }
 
@@ -117,15 +117,15 @@ void AvatarChanger::change_virtue_good_evil()
     auto *floor_ptr = this->player_ptr->current_floor_ptr;
     auto *r_ptr = &monraces_info[m_ptr->r_idx];
     if (r_ptr->kind_flags.has(MonsterKindType::GOOD) && ((r_ptr->level) / 10 + (3 * floor_ptr->dun_level) >= randint1(100))) {
-        chg_virtue(this->player_ptr, V_UNLIFE, 1);
+        chg_virtue(this->player_ptr, Virtue::UNLIFE, 1);
     }
 
     if (r_ptr->kind_flags.has(MonsterKindType::ANGEL)) {
         if (r_ptr->kind_flags.has(MonsterKindType::UNIQUE)) {
-            chg_virtue(this->player_ptr, V_FAITH, -2);
+            chg_virtue(this->player_ptr, Virtue::FAITH, -2);
         } else if ((r_ptr->level) / 10 + (3 * floor_ptr->dun_level) >= randint1(100)) {
             auto change_value = r_ptr->kind_flags.has(MonsterKindType::GOOD) ? -1 : 1;
-            chg_virtue(this->player_ptr, V_FAITH, change_value);
+            chg_virtue(this->player_ptr, Virtue::FAITH, change_value);
         }
 
         return;
@@ -133,9 +133,9 @@ void AvatarChanger::change_virtue_good_evil()
 
     if (r_ptr->kind_flags.has(MonsterKindType::DEMON)) {
         if (r_ptr->kind_flags.has(MonsterKindType::UNIQUE)) {
-            chg_virtue(this->player_ptr, V_FAITH, 2);
+            chg_virtue(this->player_ptr, Virtue::FAITH, 2);
         } else if ((r_ptr->level) / 10 + (3 * floor_ptr->dun_level) >= randint1(100)) {
-            chg_virtue(this->player_ptr, V_FAITH, 1);
+            chg_virtue(this->player_ptr, Virtue::FAITH, 1);
         }
     }
 }
@@ -152,12 +152,12 @@ void AvatarChanger::change_virtue_revenge()
     }
 
     if (r_ptr->kind_flags.has(MonsterKindType::UNIQUE)) {
-        chg_virtue(this->player_ptr, V_HONOUR, 10);
+        chg_virtue(this->player_ptr, Virtue::HONOUR, 10);
         return;
     }
 
     if ((r_ptr->level) / 10 + (2 * floor_ptr->dun_level) >= randint1(100)) {
-        chg_virtue(this->player_ptr, V_HONOUR, 1);
+        chg_virtue(this->player_ptr, Virtue::HONOUR, 1);
     }
 }
 
@@ -186,19 +186,19 @@ void AvatarChanger::change_virtue_wild_thief()
 
     if (thief) {
         if (r_ptr->kind_flags.has(MonsterKindType::UNIQUE)) {
-            chg_virtue(this->player_ptr, V_JUSTICE, 3);
+            chg_virtue(this->player_ptr, Virtue::JUSTICE, 3);
             return;
         }
 
         if (1 + ((r_ptr->level) / 10 + (2 * floor_ptr->dun_level)) >= randint1(100)) {
-            chg_virtue(this->player_ptr, V_JUSTICE, 1);
+            chg_virtue(this->player_ptr, Virtue::JUSTICE, 1);
         }
 
         return;
     }
 
     if (innocent) {
-        chg_virtue(this->player_ptr, V_JUSTICE, -1);
+        chg_virtue(this->player_ptr, Virtue::JUSTICE, -1);
     }
 }
 
@@ -215,6 +215,6 @@ void AvatarChanger::change_virtue_good_animal()
     }
 
     if (one_in_(4)) {
-        chg_virtue(this->player_ptr, V_NATURE, -1);
+        chg_virtue(this->player_ptr, Virtue::NATURE, -1);
     }
 }

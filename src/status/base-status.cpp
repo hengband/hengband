@@ -125,9 +125,9 @@ bool dec_stat(PlayerType *player_ptr, int stat, int amount, int permanent)
     }
 
     if (permanent && (max > 3)) {
-        chg_virtue(player_ptr, V_SACRIFICE, 1);
+        chg_virtue(player_ptr, Virtue::SACRIFICE, 1);
         if (stat == A_WIS || stat == A_INT) {
-            chg_virtue(player_ptr, V_ENLIGHTEN, -2);
+            chg_virtue(player_ptr, Virtue::ENLIGHTEN, -2);
         }
 
         if (max <= 18) {
@@ -263,13 +263,13 @@ bool do_inc_stat(PlayerType *player_ptr, int stat)
     bool res = res_stat(player_ptr, stat);
     if (inc_stat(player_ptr, stat)) {
         if (stat == A_WIS) {
-            chg_virtue(player_ptr, V_ENLIGHTEN, 1);
-            chg_virtue(player_ptr, V_FAITH, 1);
+            chg_virtue(player_ptr, Virtue::ENLIGHTEN, 1);
+            chg_virtue(player_ptr, Virtue::FAITH, 1);
         } else if (stat == A_INT) {
-            chg_virtue(player_ptr, V_KNOWLEDGE, 1);
-            chg_virtue(player_ptr, V_ENLIGHTEN, 1);
+            chg_virtue(player_ptr, Virtue::KNOWLEDGE, 1);
+            chg_virtue(player_ptr, Virtue::ENLIGHTEN, 1);
         } else if (stat == A_CON) {
-            chg_virtue(player_ptr, V_VITALITY, 1);
+            chg_virtue(player_ptr, Virtue::VITALITY, 1);
         }
 
         msg_format(_("ワーオ！とても%sなった！", "Wow! You feel %s!"), desc_stat_pos[stat]);
@@ -289,8 +289,8 @@ bool do_inc_stat(PlayerType *player_ptr, int stat)
  */
 bool lose_all_info(PlayerType *player_ptr)
 {
-    chg_virtue(player_ptr, V_KNOWLEDGE, -5);
-    chg_virtue(player_ptr, V_ENLIGHTEN, -5);
+    chg_virtue(player_ptr, Virtue::KNOWLEDGE, -5);
+    chg_virtue(player_ptr, Virtue::ENLIGHTEN, -5);
     for (int i = 0; i < INVEN_TOTAL; i++) {
         auto *o_ptr = &player_ptr->inventory_list[i];
         if ((o_ptr->bi_id == 0) || o_ptr->is_fully_known()) {

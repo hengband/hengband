@@ -266,7 +266,7 @@ void sense_inventory1(PlayerType *player_ptr)
         break;
     }
 
-    if (compare_virtue(player_ptr, V_KNOWLEDGE, 100, VIRTUE_LARGE)) {
+    if (compare_virtue(player_ptr, Virtue::KNOWLEDGE, 100, VIRTUE_LARGE)) {
         heavy = true;
     }
 

@@ -367,8 +367,8 @@ int take_hit(PlayerType *player_ptr, int damage_type, int damage, concptr hit_fr
     player_ptr->window_flags |= PW_PLAYER;
 
     if (damage_type != DAMAGE_GENO && player_ptr->chp == 0) {
-        chg_virtue(player_ptr, V_SACRIFICE, 1);
-        chg_virtue(player_ptr, V_CHANCE, 2);
+        chg_virtue(player_ptr, Virtue::SACRIFICE, 1);
+        chg_virtue(player_ptr, Virtue::CHANCE, 2);
     }
 
     if (player_ptr->chp < 0 && !cheat_immortal) {
@@ -380,7 +380,7 @@ int take_hit(PlayerType *player_ptr, int damage_type, int damage, concptr hit_fr
         }
 
         sound(SOUND_DEATH);
-        chg_virtue(player_ptr, V_SACRIFICE, 10);
+        chg_virtue(player_ptr, Virtue::SACRIFICE, 10);
         handle_stuff(player_ptr);
         player_ptr->leaving = true;
         if (!cheat_immortal) {

@@ -138,8 +138,8 @@ bool cast_mindcrafter_spell(PlayerType *player_ptr, MindMindcrafterType spell)
     switch (spell) {
     case MindMindcrafterType::PRECOGNITION:
         if (plev > 44) {
-            chg_virtue(player_ptr, V_KNOWLEDGE, 1);
-            chg_virtue(player_ptr, V_ENLIGHTEN, 1);
+            chg_virtue(player_ptr, Virtue::KNOWLEDGE, 1);
+            chg_virtue(player_ptr, Virtue::ENLIGHTEN, 1);
             wiz_lite(player_ptr, false);
         } else if (plev > 19) {
             map_area(player_ptr, DETECT_RAD_MAP);

@@ -472,7 +472,7 @@ int calc_attack_quality(PlayerType *player_ptr, player_attack_type *pa_ptr)
         chance = std::max(chance * 3 / 2, chance + 60);
     }
 
-    int vir = virtue_number(player_ptr, V_VALOUR);
+    int vir = virtue_number(player_ptr, Virtue::VALOUR);
     if (vir != 0) {
         chance += (player_ptr->virtues[vir - 1] / 10);
     }

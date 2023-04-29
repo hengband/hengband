@@ -200,7 +200,7 @@ static chaotic_effect select_chaotic_effect(PlayerType *player_ptr, player_attac
     }
 
     if (one_in_(10)) {
-        chg_virtue(player_ptr, V_CHANCE, 1);
+        chg_virtue(player_ptr, Virtue::CHANCE, 1);
     }
 
     if (randint1(5) < 3) {
@@ -231,7 +231,7 @@ static MagicalBrandEffectType select_magical_brand_effect(PlayerType *player_ptr
     }
 
     if (one_in_(10)) {
-        chg_virtue(player_ptr, V_CHANCE, 1);
+        chg_virtue(player_ptr, Virtue::CHANCE, 1);
     }
 
     if (one_in_(5)) {
@@ -601,7 +601,7 @@ void exe_player_attack_to_monster(PlayerType *player_ptr, POSITION y, POSITION x
     }
 
     if ((pa_ptr->drain_left != MAX_VAMPIRIC_DRAIN) && one_in_(4)) {
-        chg_virtue(player_ptr, V_UNLIFE, 1);
+        chg_virtue(player_ptr, Virtue::UNLIFE, 1);
     }
 
     cause_earthquake(player_ptr, pa_ptr, do_quake, y, x);

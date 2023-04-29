@@ -103,16 +103,16 @@ void PlayerAlignment::update_alignment()
     int neutral[2];
     for (int i = 0; i < 8; i++) {
         switch (this->player_ptr->vir_types[i]) {
-        case V_JUSTICE:
+        case Virtue::JUSTICE:
             this->bias_good_alignment(this->player_ptr->virtues[i] * 2);
             break;
-        case V_CHANCE:
+        case Virtue::CHANCE:
             break;
-        case V_NATURE:
-        case V_HARMONY:
+        case Virtue::NATURE:
+        case Virtue::HARMONY:
             neutral[j++] = i;
             break;
-        case V_UNLIFE:
+        case Virtue::UNLIFE:
             this->bias_evil_alignment(this->player_ptr->virtues[i]);
             break;
         default:

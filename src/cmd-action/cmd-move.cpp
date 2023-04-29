@@ -483,11 +483,11 @@ void do_cmd_rest(PlayerType *player_ptr)
 
     PlayerEnergy(player_ptr).set_player_turn_energy(100);
     if (command_arg > 100) {
-        chg_virtue(player_ptr, V_DILIGENCE, -1);
+        chg_virtue(player_ptr, Virtue::DILIGENCE, -1);
     }
 
     if (player_ptr->is_fully_healthy()) {
-        chg_virtue(player_ptr, V_DILIGENCE, -1);
+        chg_virtue(player_ptr, Virtue::DILIGENCE, -1);
     }
 
     player_ptr->resting = command_arg;

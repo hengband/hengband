@@ -80,7 +80,7 @@ bool do_cmd_cast_learned(PlayerType *player_ptr)
         player_ptr->csp_frac = 0;
         msg_print(_("精神を集中しすぎて気を失ってしまった！", "You faint from the effort!"));
         (void)BadStatusSetter(player_ptr).mod_paralysis(randint1(5 * oops + 1));
-        chg_virtue(player_ptr, V_KNOWLEDGE, -10);
+        chg_virtue(player_ptr, Virtue::KNOWLEDGE, -10);
         if (randint0(100) < 50) {
             bool perm = (randint0(100) < 25);
             msg_print(_("体を悪くしてしまった！", "You have damaged your health!"));

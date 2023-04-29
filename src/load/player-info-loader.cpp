@@ -454,7 +454,7 @@ static void set_virtues(PlayerType *player_ptr)
     }
 
     for (int i = 0; i < 8; i++) {
-        player_ptr->vir_types[i] = rd_s16b();
+        player_ptr->vir_types[i] = i2enum<Virtue>(rd_s16b());
     }
 }
 

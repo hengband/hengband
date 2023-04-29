@@ -89,7 +89,7 @@ bool artifact_scroll(PlayerType *player_ptr)
 
         msg_print(_("強化に失敗した。", "The enchantment failed."));
         if (one_in_(3)) {
-            chg_virtue(player_ptr, V_ENCHANT, -1);
+            chg_virtue(player_ptr, Virtue::ENCHANT, -1);
         }
 
         calc_android_exp(player_ptr);
@@ -101,7 +101,7 @@ bool artifact_scroll(PlayerType *player_ptr)
         exe_write_diary(player_ptr, DIARY_ART_SCROLL, 0, diary_item_name.data());
     }
 
-    chg_virtue(player_ptr, V_ENCHANT, 1);
+    chg_virtue(player_ptr, Virtue::ENCHANT, 1);
     calc_android_exp(player_ptr);
     return true;
 }

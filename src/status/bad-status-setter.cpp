@@ -68,7 +68,7 @@ bool BadStatusSetter::set_blindness(const TIME_EFFECT tmp_v)
             }
 
             notice = true;
-            chg_virtue(this->player_ptr, V_ENLIGHTEN, -1);
+            chg_virtue(this->player_ptr, Virtue::ENLIGHTEN, -1);
         }
     } else {
         if (is_blind) {
@@ -151,7 +151,7 @@ bool BadStatusSetter::set_confusion(const TIME_EFFECT tmp_v)
 
             notice = true;
             this->player_ptr->counter = false;
-            chg_virtue(this->player_ptr, V_HARMONY, -1);
+            chg_virtue(this->player_ptr, Virtue::HARMONY, -1);
         }
     } else {
         if (is_confused) {
@@ -249,7 +249,7 @@ bool BadStatusSetter::set_fear(const TIME_EFFECT tmp_v)
 
             notice = true;
             this->player_ptr->counter = false;
-            chg_virtue(this->player_ptr, V_VALOUR, -1);
+            chg_virtue(this->player_ptr, Virtue::VALOUR, -1);
         }
     } else {
         if (fear->is_fearful()) {

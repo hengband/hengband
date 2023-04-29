@@ -335,7 +335,7 @@ void do_cmd_wield(PlayerType *player_ptr)
     msg_format(act, item_name.data(), index_to_label(slot));
     if (o_ptr->is_cursed()) {
         msg_print(_("うわ！ すさまじく冷たい！", "Oops! It feels deathly cold!"));
-        chg_virtue(player_ptr, V_HARMONY, -1);
+        chg_virtue(player_ptr, Virtue::HARMONY, -1);
         o_ptr->ident |= (IDENT_SENSE);
     }
 

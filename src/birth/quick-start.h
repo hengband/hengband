@@ -10,6 +10,7 @@
 /*
  * A structure to hold "rolled" information
  */
+enum class Virtue : short;
 struct birther {
     player_sex psex{}; /* Sex index */
     PlayerRaceType prace{}; /* Race index */
@@ -31,7 +32,7 @@ struct birther {
 
     int16_t chaos_patron{}; /*! カオスパトロンのID */
 
-    int16_t vir_types[8]{};
+    Virtue vir_types[8]{};
 
     char history[4][60]{};
 

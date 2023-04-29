@@ -105,8 +105,8 @@ bool exe_tunnel(PlayerType *player_ptr, POSITION y, POSITION x)
             }
 
             cave_alter_feat(player_ptr, y, x, TerrainCharacteristics::TUNNEL);
-            chg_virtue(player_ptr, V_DILIGENCE, 1);
-            chg_virtue(player_ptr, V_NATURE, -1);
+            chg_virtue(player_ptr, Virtue::DILIGENCE, 1);
+            chg_virtue(player_ptr, Virtue::NATURE, -1);
         } else {
             if (tree) {
                 msg_format(_("%sを切っている。", "You chop away at the %s."), name);

@@ -106,23 +106,23 @@ static void effect_monster_old_heal_check_player(PlayerType *player_ptr, effect_
         return;
     }
 
-    chg_virtue(player_ptr, V_VITALITY, 1);
+    chg_virtue(player_ptr, Virtue::VITALITY, 1);
     if (em_ptr->r_ptr->kind_flags.has(MonsterKindType::UNIQUE)) {
-        chg_virtue(player_ptr, V_INDIVIDUALISM, 1);
+        chg_virtue(player_ptr, Virtue::INDIVIDUALISM, 1);
     }
 
     if (em_ptr->m_ptr->is_friendly()) {
-        chg_virtue(player_ptr, V_HONOUR, 1);
+        chg_virtue(player_ptr, Virtue::HONOUR, 1);
     } else if (em_ptr->r_ptr->kind_flags.has_not(MonsterKindType::EVIL)) {
         if (em_ptr->r_ptr->kind_flags.has(MonsterKindType::GOOD)) {
-            chg_virtue(player_ptr, V_COMPASSION, 2);
+            chg_virtue(player_ptr, Virtue::COMPASSION, 2);
         } else {
-            chg_virtue(player_ptr, V_COMPASSION, 1);
+            chg_virtue(player_ptr, Virtue::COMPASSION, 1);
         }
     }
 
     if (em_ptr->r_ptr->kind_flags.has(MonsterKindType::ANIMAL)) {
-        chg_virtue(player_ptr, V_NATURE, 1);
+        chg_virtue(player_ptr, Virtue::NATURE, 1);
     }
 }
 
@@ -173,7 +173,7 @@ ProcessResult effect_monster_old_heal(PlayerType *player_ptr, effect_monster_typ
     if (em_ptr->m_ptr->r_idx == MonsterRaceId::LEPER) {
         em_ptr->heal_leper = true;
         if (!em_ptr->who) {
-            chg_virtue(player_ptr, V_COMPASSION, 5);
+            chg_virtue(player_ptr, Virtue::COMPASSION, 5);
         }
     }
 
@@ -201,10 +201,10 @@ ProcessResult effect_monster_old_speed(PlayerType *player_ptr, effect_monster_ty
 
     if (!em_ptr->who) {
         if (em_ptr->r_ptr->kind_flags.has(MonsterKindType::UNIQUE)) {
-            chg_virtue(player_ptr, V_INDIVIDUALISM, 1);
+            chg_virtue(player_ptr, Virtue::INDIVIDUALISM, 1);
         }
         if (em_ptr->m_ptr->is_friendly()) {
-            chg_virtue(player_ptr, V_HONOUR, 1);
+            chg_virtue(player_ptr, Virtue::HONOUR, 1);
         }
     }
 

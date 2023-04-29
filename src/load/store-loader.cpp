@@ -57,7 +57,7 @@ static void home_carry_load(PlayerType *player_ptr, store_type *store_ptr, ItemE
 
     store_ptr->stock_num++;
     store_ptr->stock[slot] = *o_ptr;
-    chg_virtue(player_ptr, V_SACRIFICE, -1);
+    chg_virtue(player_ptr, Virtue::SACRIFICE, -1);
 }
 
 /*!
