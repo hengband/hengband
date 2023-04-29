@@ -31,10 +31,10 @@ enum class Virtue : short {
 #define VIRTUE_SMALL 2
 
 class PlayerType;
-bool compare_virtue(PlayerType *player_ptr, Virtue type, int num, int tekitou);
-int virtue_number(PlayerType *player_ptr, Virtue type);
+bool compare_virtue(PlayerType *player_ptr, Virtue virtue, int num, int tekitou);
+int virtue_number(PlayerType *player_ptr, Virtue virtue);
 extern concptr virtue[MAX_VIRTUE];
 void initialize_virtues(PlayerType *player_ptr);
 void chg_virtue(PlayerType *player_ptr, Virtue virtue, int amount);
 void set_virtue(PlayerType *player_ptr, Virtue virtue, int amount);
-void dump_virtues(PlayerType *player_ptr, FILE *OutFile);
+void dump_virtues(PlayerType *player_ptr, FILE *out_file);

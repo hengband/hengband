@@ -48,15 +48,15 @@ concptr virtue[MAX_VIRTUE] = {
 /*!
  * @brief 該当の徳がプレイヤーに指定されているか否かに応じつつ、大小を比較する。
  * @details 徳がない場合は値0として比較する。
- * @param type 比較したい徳のID
+ * @param virtue 比較したい徳のID
  * @param num 比較基準値
  * @param tekitou VIRTUE_LARGE = 基準値より大きいか / VIRTUE_SMALL = 基準値より小さいか
  * @return 比較の真偽値を返す
  * @todo 引数名を直しておく
  */
-bool compare_virtue(PlayerType *player_ptr, Virtue type, int num, int tekitou)
+bool compare_virtue(PlayerType *player_ptr, Virtue virtue, int num, int tekitou)
 {
-    int vir = virtue_number(player_ptr, type) ? player_ptr->virtues[virtue_number(player_ptr, type) - 1] : 0;
+    int vir = virtue_number(player_ptr, virtue) ? player_ptr->virtues[virtue_number(player_ptr, virtue) - 1] : 0;
     switch (tekitou) {
     case VIRTUE_LARGE:
         if (vir > num) {
@@ -77,13 +77,13 @@ bool compare_virtue(PlayerType *player_ptr, Virtue type, int num, int tekitou)
 
 /*!
  * @brief プレイヤーの指定の徳が何番目のスロットに登録されているかを返す。 / Aux function
- * @param type 確認したい徳のID
+ * @param virtue 確認したい徳のID
  * @return スロットがあるならばスロットのID(0～7)+1、ない場合は0を返す。
  */
-int virtue_number(PlayerType *player_ptr, Virtue type)
+int virtue_number(PlayerType *player_ptr, Virtue virtue)
 {
     for (int i = 0; i < 8; i++) {
-        if (player_ptr->vir_types[i] == type) {
+        if (player_ptr->vir_types[i] == virtue) {
             return i + 1;
         }
     }
