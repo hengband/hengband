@@ -38,26 +38,6 @@
 #include <string_view>
 
 /*!
- * @brief エルドリッチホラーの形容詞種別を決める
- * @param r_ptr モンスター情報への参照ポインタ
- * @return
- */
-static std::string decide_horror_message(MonsterRaceInfo *r_ptr)
-{
-    const int horror_desc_common_size = horror_desc_common.size();
-    auto horror_num = randint0(horror_desc_common_size + horror_desc_evil.size());
-    if (horror_num < horror_desc_common_size) {
-        return horror_desc_common[horror_num];
-    }
-
-    if (r_ptr->kind_flags.has(MonsterKindType::EVIL)) {
-        return horror_desc_evil[horror_num - horror_desc_common_size];
-    }
-
-    return horror_desc_neutral[horror_num - horror_desc_common_size];
-}
-
-/*!
  * @brief エルドリッチホラー持ちのモンスターを見た時の反応 (モンスター名版)
  * @param m_name モンスター名
  * @param r_ptr モンスター情報への参照ポインタ
@@ -65,7 +45,7 @@ static std::string decide_horror_message(MonsterRaceInfo *r_ptr)
  */
 static void see_eldritch_horror(std::string_view m_name, MonsterRaceInfo *r_ptr)
 {
-    const auto &horror_message = decide_horror_message(r_ptr);
+    const auto &horror_message = r_ptr->decide_horror_message();
     msg_format(_("%s%sの顔を見てしまった！", "You behold the %s visage of %s!"), horror_message.data(), m_name.data());
     r_ptr->r_flags2 |= RF2_ELDRITCH_HORROR;
 }
@@ -77,7 +57,7 @@ static void see_eldritch_horror(std::string_view m_name, MonsterRaceInfo *r_ptr)
  */
 static void feel_eldritch_horror(std::string_view desc, MonsterRaceInfo *r_ptr)
 {
-    const auto &horror_message = decide_horror_message(r_ptr);
+    const auto &horror_message = r_ptr->decide_horror_message();
     msg_format(_("%s%sの顔を見てしまった！", "You behold the %s visage of %s!"), horror_message.data(), desc.data());
     r_ptr->r_flags2 |= RF2_ELDRITCH_HORROR;
 }

@@ -2475,6 +2475,9 @@
     <ClCompile Include="..\..\src\item-info\flavor-initializer.cpp">
       <Filter>item-info</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\system\monster-race-info.cpp">
+      <Filter>system</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\combat\shoot.h">
