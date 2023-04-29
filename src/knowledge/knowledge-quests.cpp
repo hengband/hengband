@@ -59,6 +59,10 @@ static void do_cmd_knowledge_quests_current(PlayerType *player_ptr, FILE *fff)
     fprintf(fff, _("《遂行中のクエスト》\n", "< Current Quest >\n"));
 
     for (const auto &[q_idx, q_ref] : quest_list) {
+        if (q_idx == QuestId::NONE) {
+            continue;
+        }
+
         bool is_print = q_ref.status == QuestStatusType::TAKEN;
         is_print |= (q_ref.status == QuestStatusType::STAGE_COMPLETED) && (q_ref.type == QuestKindType::TOWER);
         is_print |= q_ref.status == QuestStatusType::COMPLETED;
