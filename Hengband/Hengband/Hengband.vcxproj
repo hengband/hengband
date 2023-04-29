@@ -598,6 +598,7 @@
     <ClCompile Include="..\..\src\system\angband-version.cpp" />
     <ClCompile Include="..\..\src\system\monster-entity.cpp" />
     <ClCompile Include="..\..\src\system\item-entity.cpp" />
+    <ClCompile Include="..\..\src\system\monster-race-info.cpp" />
     <ClCompile Include="..\..\src\system\player-type-definition.cpp" />
     <ClCompile Include="..\..\src\system\terrain-type-definition.cpp" />
     <ClCompile Include="..\..\src\target\grid-selector.cpp" />
