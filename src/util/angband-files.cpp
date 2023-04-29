@@ -154,28 +154,18 @@ static errr path_temp(char *buf, int max)
 #endif
 
 /*!
- * @brief ファイル入出力のためのパス生成する。/ Create a new path by appending a file (or directory) to a path.
+ * @brief OSの差異を吸収しつつ、絶対パスを生成する.
  * @param buf ファイルのフルを返すバッファ
  * @param max bufのサイズ
- * @param path ファイルパス
- * @param file ファイル名
- * @return エラーコード(ただし常に0を返す)
- *
- * This requires no special processing on simple machines, except
- * for verifying the size of the filename, but note the ability to
- * bypass the given "path" with certain special file-names.
- *
- * Note that the "file" may actually be a "sub-path", including
- * a path and a file.
- *
- * Note that this function yields a path which must be "parsed"
- * using the "parse" function above.
+ * @param directory ディレクトリ
+ * @param file ファイル名またはディレクトリ名
+ * @todo buf, max は削除してファイル名が長すぎたら例外を送出する。またreturn で絶対パスを返すように書き換える.
  */
 void path_build(char *buf, int max, const std::filesystem::path &path, std::string_view file)
 {
     if (file[0] == '~') {
         (void)strnfmt(buf, max, "%s", file);
-    } else if (prefix(file, PATH_SEP) && !streq(PATH_SEP, "")) {
+    } else if (prefix(file, PATH_SEP)) {
         (void)strnfmt(buf, max, "%s", file);
     } else if (!path.string()[0]) {
         (void)strnfmt(buf, max, "%s", file);
