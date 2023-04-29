@@ -104,7 +104,7 @@ static void prepare_default_pickpref(PlayerType *player_ptr)
 
     msg_print(nullptr);
     char buf[1024];
-    path_build(buf, sizeof(buf), ANGBAND_DIR_USER, filename.data());
+    path_build(buf, sizeof(buf), ANGBAND_DIR_USER, filename);
     FILE *user_fp;
     user_fp = angband_fopen(buf, FileOpenMode::WRITE);
     if (!user_fp) {
@@ -117,7 +117,7 @@ static void prepare_default_pickpref(PlayerType *player_ptr)
     }
 
     fprintf(user_fp, "#***\n\n\n");
-    path_build(buf, sizeof(buf), ANGBAND_DIR_PREF, filename.data());
+    path_build(buf, sizeof(buf), ANGBAND_DIR_PREF, filename);
     FILE *pref_fp;
     pref_fp = angband_fopen(buf, FileOpenMode::READ);
 

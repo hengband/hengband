@@ -171,19 +171,18 @@ static errr path_temp(char *buf, int max)
  * Note that this function yields a path which must be "parsed"
  * using the "parse" function above.
  */
-errr path_build(char *buf, int max, concptr path, concptr file)
+void path_build(char *buf, int max, const std::filesystem::path &path, std::string_view file)
 {
     if (file[0] == '~') {
         (void)strnfmt(buf, max, "%s", file);
     } else if (prefix(file, PATH_SEP) && !streq(PATH_SEP, "")) {
         (void)strnfmt(buf, max, "%s", file);
-    } else if (!path[0]) {
+    } else if (!path.string()[0]) {
         (void)strnfmt(buf, max, "%s", file);
     } else {
-        (void)strnfmt(buf, max, "%s%s%s", path, PATH_SEP, file);
+        const auto &path_str = path.string();
+        (void)strnfmt(buf, max, "%s%s%s", path_str.data(), PATH_SEP, file);
     }
-
-    return 0;
 }
 
 static std::string make_file_mode(const FileOpenMode mode, const bool is_binary)

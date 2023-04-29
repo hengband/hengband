@@ -11,6 +11,7 @@
 #include "floor/fixed-map-generator.h"
 #include "game-option/birth-options.h"
 #include "game-option/runtime-arguments.h"
+#include "info-reader/parse-error-types.h"
 #include "io/files-util.h"
 #include "main/init-error-messages-table.h"
 #include "player-info/class-info.h"
@@ -250,7 +251,7 @@ static concptr parse_fixed_map_expression(PlayerType *player_ptr, char **sp, cha
  * @param xmax 詳細不明
  * @return エラーコード
  */
-parse_error_type parse_fixed_map(PlayerType *player_ptr, concptr name, int ymin, int xmin, int ymax, int xmax)
+parse_error_type parse_fixed_map(PlayerType *player_ptr, std::string_view name, int ymin, int xmin, int ymax, int xmax)
 {
     char buf[1024];
     path_build(buf, sizeof(buf), ANGBAND_DIR_EDIT, name);
@@ -327,7 +328,7 @@ static QuestId parse_quest_number(const std::vector<std::string> &token)
  * @param file_name ファイル名
  * @param key_list キーになるQuestIdの配列
  */
-static void parse_quest_info_aux(const char *file_name, std::set<QuestId> &key_list_ref)
+static void parse_quest_info_aux(std::string_view file_name, std::set<QuestId> &key_list_ref)
 {
 
     auto push_set = [&key_list_ref, &file_name](auto q, auto line) {
@@ -384,7 +385,7 @@ static void parse_quest_info_aux(const char *file_name, std::set<QuestId> &key_l
  * @param file_name ファイル名
  * @return クエスト番号の配列
  */
-std::set<QuestId> parse_quest_info(const char *file_name)
+std::set<QuestId> parse_quest_info(std::string_view file_name)
 {
     std::set<QuestId> key_list;
     parse_quest_info_aux(file_name, key_list);

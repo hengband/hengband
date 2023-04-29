@@ -93,7 +93,7 @@ template <typename InfoType>
 static errr init_info(std::string_view filename, angband_header &head, InfoType &info, Parser parser, Retoucher retouch = nullptr)
 {
     char buf[1024];
-    path_build(buf, sizeof(buf), ANGBAND_DIR_EDIT, filename.data());
+    path_build(buf, sizeof(buf), ANGBAND_DIR_EDIT, filename);
 
     auto *fp = angband_fopen(buf, FileOpenMode::READ);
     if (!fp) {
