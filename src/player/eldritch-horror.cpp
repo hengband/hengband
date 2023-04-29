@@ -34,24 +34,27 @@
 #include "timed-effect/timed-effects.h"
 #include "view/display-messages.h"
 #include "world/world.h"
+#include <string>
+#include <string_view>
 
 /*!
  * @brief エルドリッチホラーの形容詞種別を決める
  * @param r_ptr モンスター情報への参照ポインタ
  * @return
  */
-static concptr decide_horror_message(MonsterRaceInfo *r_ptr)
+static std::string decide_horror_message(MonsterRaceInfo *r_ptr)
 {
-    int horror_num = randint0(MAX_SAN_HORROR_SUM);
-    if (horror_num < MAX_SAN_HORROR_COMMON) {
+    const int horror_desc_common_size = horror_desc_common.size();
+    auto horror_num = randint0(horror_desc_common_size + horror_desc_evil.size());
+    if (horror_num < horror_desc_common_size) {
         return horror_desc_common[horror_num];
     }
 
     if (r_ptr->kind_flags.has(MonsterKindType::EVIL)) {
-        return horror_desc_evil[horror_num - MAX_SAN_HORROR_COMMON];
+        return horror_desc_evil[horror_num - horror_desc_common_size];
     }
 
-    return horror_desc_neutral[horror_num - MAX_SAN_HORROR_COMMON];
+    return horror_desc_neutral[horror_num - horror_desc_common_size];
 }
 
 /*!
@@ -62,8 +65,8 @@ static concptr decide_horror_message(MonsterRaceInfo *r_ptr)
  */
 static void see_eldritch_horror(std::string_view m_name, MonsterRaceInfo *r_ptr)
 {
-    concptr horror_message = decide_horror_message(r_ptr);
-    msg_format(_("%s%sの顔を見てしまった！", "You behold the %s visage of %s!"), horror_message, m_name.data());
+    const auto &horror_message = decide_horror_message(r_ptr);
+    msg_format(_("%s%sの顔を見てしまった！", "You behold the %s visage of %s!"), horror_message.data(), m_name.data());
     r_ptr->r_flags2 |= RF2_ELDRITCH_HORROR;
 }
 
@@ -72,10 +75,10 @@ static void see_eldritch_horror(std::string_view m_name, MonsterRaceInfo *r_ptr)
  * @param desc モンスター名 (エルドリッチホラー持ちの全モンスターからランダム…のはず)
  * @param r_ptr モンスターへの参照ポインタ
  */
-static void feel_eldritch_horror(concptr desc, MonsterRaceInfo *r_ptr)
+static void feel_eldritch_horror(std::string_view desc, MonsterRaceInfo *r_ptr)
 {
-    concptr horror_message = decide_horror_message(r_ptr);
-    msg_format(_("%s%sの顔を見てしまった！", "You behold the %s visage of %s!"), horror_message, desc);
+    const auto &horror_message = decide_horror_message(r_ptr);
+    msg_format(_("%s%sの顔を見てしまった！", "You behold the %s visage of %s!"), horror_message.data(), desc.data());
     r_ptr->r_flags2 |= RF2_ELDRITCH_HORROR;
 }
 
@@ -128,9 +131,9 @@ void sanity_blast(PlayerType *player_ptr, MonsterEntity *m_ptr, bool necro)
         }
 
         if (player_ptr->effects()->hallucination()->is_hallucinated()) {
-            msg_format(_("%s%sの顔を見てしまった！", "You behold the %s visage of %s!"), funny_desc[randint0(MAX_SAN_FUNNY)], m_name.data());
+            msg_format(_("%s%sの顔を見てしまった！", "You behold the %s visage of %s!"), funny_desc[randint0(funny_desc.size())].data(), m_name.data());
             if (one_in_(3)) {
-                msg_print(funny_comments[randint0(MAX_SAN_COMMENT)]);
+                msg_print(funny_comments[randint0(funny_comments.size())]);
                 BadStatusSetter(player_ptr).mod_hallucination(randint1(r_ptr->level));
             }
 
@@ -152,11 +155,10 @@ void sanity_blast(PlayerType *player_ptr, MonsterEntity *m_ptr, bool necro)
     } else if (!necro) {
         MonsterRaceInfo *r_ptr;
         std::string m_name;
-        concptr desc;
         get_mon_num_prep(player_ptr, get_nightmare, nullptr);
         r_ptr = &monraces_info[get_mon_num(player_ptr, 0, MAX_DEPTH, 0)];
         power = r_ptr->level + 10;
-        desc = r_ptr->name.data();
+        const auto &desc = r_ptr->name;
         get_mon_num_prep(player_ptr, nullptr, nullptr);
 #ifdef JP
 #else
@@ -181,9 +183,9 @@ void sanity_blast(PlayerType *player_ptr, MonsterEntity *m_ptr, bool necro)
         }
 
         if (player_ptr->effects()->hallucination()->is_hallucinated()) {
-            msg_format(_("%s%sの顔を見てしまった！", "You behold the %s visage of %s!"), funny_desc[randint0(MAX_SAN_FUNNY)], m_name.data());
+            msg_format(_("%s%sの顔を見てしまった！", "You behold the %s visage of %s!"), funny_desc[randint0(funny_desc.size())].data(), m_name.data());
             if (one_in_(3)) {
-                msg_print(funny_comments[randint0(MAX_SAN_COMMENT)]);
+                msg_print(funny_comments[randint0(funny_comments.size())]);
                 BadStatusSetter(player_ptr).mod_hallucination(randint1(r_ptr->level));
             }
 

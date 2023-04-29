@@ -8,11 +8,12 @@
  */
 
 #include "monster/horror-descriptions.h"
+#include "locale/language-switcher.h"
 
 /*!
  * @brief ELDRITCH HORROR効果時のモンスターの形容メッセージ (正常時、邪悪・中立共通)
  */
-concptr horror_desc_common[MAX_SAN_HORROR_COMMON] = {
+const std::vector<std::string> horror_desc_common = {
     _("底知れぬ", "abysmal"),
     _("破滅的な", "baleful"),
     _("容赦のない", "grisly"),
@@ -23,7 +24,7 @@ concptr horror_desc_common[MAX_SAN_HORROR_COMMON] = {
 /*!
  * @brief ELDRITCH HORROR効果時のモンスターの形容メッセージ (正常時、邪悪)
  */
-concptr horror_desc_evil[MAX_SAN_HORROR_EVIL] = {
+const std::vector<std::string> horror_desc_evil = {
     _("忌まわしい", "abominable"),
     _("ぞっとする", "appalling"),
     _("冒涜的な", "blasphemous"),
@@ -44,7 +45,7 @@ concptr horror_desc_evil[MAX_SAN_HORROR_EVIL] = {
 /*
  * @brief ELDRITCH HORROR効果時のモンスターの形容メッセージ (正常時、中立)
  */
-concptr horror_desc_neutral[MAX_SAN_HORROR_NEUTRAL] = {
+const std::vector<std::string> horror_desc_neutral = {
     _("大いなる畏怖に包まれた", "awe-inspiring"),
     _("妖しげな笑みの", "slyly grinning"),
     _("いるはずのない", "impossible"),
@@ -65,7 +66,7 @@ concptr horror_desc_neutral[MAX_SAN_HORROR_NEUTRAL] = {
 /*!
  * @brief ELDRITCH HORROR効果時のモンスターの形容メッセージ (幻覚状態時)
  */
-concptr funny_desc[MAX_SAN_FUNNY] = {
+const std::vector<std::string> funny_desc = {
     _("間抜けな", "silly"),
     _("滑稽な", "hilarious"),
     _("ばからしい", "absurd"),
@@ -93,7 +94,7 @@ concptr funny_desc[MAX_SAN_FUNNY] = {
 /*!
  * @brief ELDRITCH HORROR効果時の幻覚時間延長を示す錯乱表現
  */
-concptr funny_comments[MAX_SAN_COMMENT] = {
+const std::vector<std::string> funny_comments = {
     _("最高だぜ！", "Wow, cosmic, man!"),
     _("うひょー！", "Rad!"),
     _("いかすぜ！", "Groovy!"),
