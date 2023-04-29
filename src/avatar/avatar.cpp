@@ -49,30 +49,14 @@ concptr virtue[MAX_VIRTUE] = {
  * @brief 該当の徳がプレイヤーに指定されているか否かに応じつつ、大小を比較する。
  * @details 徳がない場合は値0として比較する。
  * @param virtue 比較したい徳のID
- * @param num 比較基準値
- * @param tekitou VIRTUE_LARGE = 基準値より大きいか / VIRTUE_SMALL = 基準値より小さいか
+ * @param threshold 比較基準値
  * @return 比較の真偽値を返す
- * @todo 引数名を直しておく
  */
-bool compare_virtue(PlayerType *player_ptr, Virtue virtue, int num, int tekitou)
+bool compare_virtue(PlayerType *player_ptr, Virtue virtue, int threshold)
 {
-    int vir = virtue_number(player_ptr, virtue) ? player_ptr->virtues[virtue_number(player_ptr, virtue) - 1] : 0;
-    switch (tekitou) {
-    case VIRTUE_LARGE:
-        if (vir > num) {
-            return true;
-        } else {
-            return false;
-        }
-    case VIRTUE_SMALL:
-        if (vir < num) {
-            return true;
-        } else {
-            return false;
-        }
-    default:
-        return false;
-    }
+    const auto num = virtue_number(player_ptr, virtue);
+    const auto virtue_value = num ? player_ptr->virtues[num - 1] : 0;
+    return virtue_value > threshold;
 }
 
 /*!

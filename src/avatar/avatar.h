@@ -27,11 +27,8 @@ enum class Virtue : short {
     MAX,
 };
 
-#define VIRTUE_LARGE 1
-#define VIRTUE_SMALL 2
-
 class PlayerType;
-bool compare_virtue(PlayerType *player_ptr, Virtue virtue, int num, int tekitou);
+bool compare_virtue(PlayerType *player_ptr, Virtue virtue, int threshold);
 int virtue_number(PlayerType *player_ptr, Virtue virtue);
 extern concptr virtue[MAX_VIRTUE];
 void initialize_virtues(PlayerType *player_ptr);
