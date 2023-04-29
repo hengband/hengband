@@ -316,10 +316,10 @@ void Patron::gain_level_reward(PlayerType *player_ptr_, int chosen_reward)
             msg_format(_("%sの声が鳴り響いた:", "The voice of %s rings out:"), this->name.data());
             msg_print(_("「留まるのだ、下僕よ。余が汝の肉体を鍛えん。」", "'Stay, mortal, and let me mold thee.'"));
 
-            if (one_in_(3) && !(this->boost_stat != A_RANDOM)) {
-                do_inc_stat(player_ptr, this->boost_stat);
+            if ((this->boost_stat == A_RANDOM) || !one_in_(3)) {
+                do_inc_stat(this->player_ptr, randint0(6));
             } else {
-                do_inc_stat(player_ptr, randint0(6));
+                do_inc_stat(this->player_ptr, this->boost_stat);
             }
             reward = _("能力値が上がった。", "increasing a stat");
             break;
@@ -328,10 +328,10 @@ void Patron::gain_level_reward(PlayerType *player_ptr_, int chosen_reward)
             msg_format(_("%sの声が響き渡った:", "The voice of %s booms out:"), this->name.data());
             msg_print(_("「下僕よ、余は汝に飽みたり。」", "'I grow tired of thee, mortal.'"));
 
-            if (one_in_(3) && !(this->boost_stat != A_RANDOM)) {
-                do_dec_stat(player_ptr, this->boost_stat);
+            if ((this->boost_stat == A_RANDOM) || !one_in_(3)) {
+                do_dec_stat(this->player_ptr, randint0(6));
             } else {
-                (void)do_dec_stat(player_ptr, randint0(6));
+                do_dec_stat(this->player_ptr, this->boost_stat);
             }
             reward = _("能力値が下がった。", "decreasing a stat");
             break;
