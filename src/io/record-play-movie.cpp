@@ -344,22 +344,13 @@ void prepare_movie_hooks(PlayerType *player_ptr)
         strnfmt(filename, sizeof(filename), "%s.amv", player_ptr->base_name);
         if (get_string(_("ムービー記録ファイル: ", "Movie file name: "), filename, 80)) {
             char buf[1024];
-            int fd;
-
             path_build(buf, sizeof(buf), ANGBAND_DIR_USER, filename);
-
-            fd = fd_open(buf, O_RDONLY);
-
-            /* Existing file */
+            auto fd = fd_open(buf, O_RDONLY);
             if (fd >= 0) {
                 (void)fd_close(fd);
-
-                /* Build query */
                 std::string query = _("現存するファイルに上>書きしますか? (", "Replace existing file ");
                 query.append(buf);
                 query.append(_(")", "? "));
-
-                /* Ask */
                 if (!get_check(query)) {
                     return;
                 }

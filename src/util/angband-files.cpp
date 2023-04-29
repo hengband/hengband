@@ -164,14 +164,14 @@ static errr path_temp(char *buf, int max)
 void path_build(char *buf, int max, const std::filesystem::path &path, std::string_view file)
 {
     if (file[0] == '~') {
-        (void)strnfmt(buf, max, "%s", file);
+        (void)strnfmt(buf, max, "%s", file.data());
     } else if (prefix(file, PATH_SEP)) {
-        (void)strnfmt(buf, max, "%s", file);
+        (void)strnfmt(buf, max, "%s", file.data());
     } else if (!path.string()[0]) {
-        (void)strnfmt(buf, max, "%s", file);
+        (void)strnfmt(buf, max, "%s", file.data());
     } else {
         const auto &path_str = path.string();
-        (void)strnfmt(buf, max, "%s%s%s", path_str.data(), PATH_SEP, file);
+        (void)strnfmt(buf, max, "%s%s%s", path_str.data(), PATH_SEP, file.data());
     }
 }
 

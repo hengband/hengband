@@ -102,10 +102,9 @@ void process_player_name(PlayerType *player_ptr, bool is_new_savefile)
     }
 
     if (is_modified || !savefile_base[0]) {
-        concptr s = savefile;
+        auto s = savefile;
         while (true) {
-            concptr t;
-            t = angband_strstr(s, PATH_SEP);
+            auto t = angband_strstr(s, PATH_SEP);
             if (!t) {
                 break;
             }

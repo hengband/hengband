@@ -159,7 +159,6 @@ errr process_pref_file(PlayerType *player_ptr, concptr name, bool only_user_dir)
     errr err1 = 0;
     if (!only_user_dir) {
         path_build(buf, sizeof(buf), ANGBAND_DIR_PREF, name);
-
         err1 = process_pref_file_aux(player_ptr, buf, PREF_TYPE_NORMAL);
         if (err1 > 0) {
             return err1;

@@ -255,7 +255,7 @@ parse_error_type parse_fixed_map(PlayerType *player_ptr, std::string_view name, 
 {
     char buf[1024];
     path_build(buf, sizeof(buf), ANGBAND_DIR_EDIT, name);
-    FILE *fp = angband_fopen(buf, FileOpenMode::READ);
+    auto *fp = angband_fopen(buf, FileOpenMode::READ);
     if (fp == nullptr) {
         return PARSE_ERROR_GENERIC;
     }
@@ -294,7 +294,7 @@ parse_error_type parse_fixed_map(PlayerType *player_ptr, std::string_view name, 
 
     if (err != 0) {
         concptr oops = (((err > 0) && (err < PARSE_ERROR_MAX)) ? err_str[err] : "unknown");
-        msg_format("Error %d (%s) at line %d of '%s'.", err, oops, num, name);
+        msg_format("Error %d (%s) at line %d of '%s'.", err, oops, num, name.data());
         msg_format(_("'%s'を解析中。", "Parsing '%s'."), buf);
         msg_print(nullptr);
     }
@@ -330,7 +330,6 @@ static QuestId parse_quest_number(const std::vector<std::string> &token)
  */
 static void parse_quest_info_aux(std::string_view file_name, std::set<QuestId> &key_list_ref)
 {
-
     auto push_set = [&key_list_ref, &file_name](auto q, auto line) {
         if (q == QuestId::NONE) {
             return;

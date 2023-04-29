@@ -32,17 +32,9 @@ static int proxy_port;
 void set_proxy(char *default_url, int default_port)
 {
     char buf[1024];
-    size_t len;
-    FILE *fp;
-    char *s;
-
     path_build(buf, sizeof(buf), ANGBAND_DIR_PREF, "proxy.prf");
-
-    /* ファイルから設定を読む。 */
-    fp = angband_fopen(buf, FileOpenMode::READ);
-
+    auto *fp = angband_fopen(buf, FileOpenMode::READ);
     if (!fp) {
-        /* ファイルが存在しない場合はデフォルトを設定 */
         proxy = default_url;
         proxy_port = default_port;
         return;
@@ -55,9 +47,7 @@ void set_proxy(char *default_url, int default_port)
     }
 
     angband_fclose(fp);
-
-    /* ポインタを用意。 */
-    s = buf;
+    auto *s = buf;
 
     /* "http://" から始まっている場合はその部分をカットする。 */
 #if defined(WINDOWS)
@@ -71,7 +61,7 @@ void set_proxy(char *default_url, int default_port)
 #endif
 
     /* 文字列の長さを調べ、必要なメモリを確保 */
-    len = strlen(s);
+    auto len = strlen(s);
     proxy = static_cast<char *>(malloc(len + 1));
 
     /* ポート番号があるかどうかを調べ、あればproxy_portに設定。 */

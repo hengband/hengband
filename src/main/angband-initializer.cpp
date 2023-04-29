@@ -224,13 +224,10 @@ void init_angband(PlayerType *player_ptr, bool no_term)
     }
 
     (void)fd_close(fd);
-
     if (!no_term) {
         term_clear();
-
         path_build(buf, sizeof(buf), ANGBAND_DIR_FILE, _("news_j.txt", "news.txt"));
-        FILE *fp;
-        fp = angband_fopen(buf, FileOpenMode::READ);
+        auto *fp = angband_fopen(buf, FileOpenMode::READ);
         if (fp) {
             int i = 0;
             while (0 == angband_fgets(fp, buf, sizeof(buf))) {

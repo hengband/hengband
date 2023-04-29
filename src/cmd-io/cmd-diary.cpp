@@ -26,10 +26,10 @@
  */
 static void display_diary(PlayerType *player_ptr)
 {
-    std::stringstream file_name;
-    file_name << _("playrecord-", "playrec-") << savefile_base << ".txt";
+    std::stringstream ss;
+    ss << _("playrecord-", "playrec-") << savefile_base << ".txt";
     char buf[1024];
-    path_build(buf, sizeof(buf), ANGBAND_DIR_USER, file_name.str());
+    path_build(buf, sizeof(buf), ANGBAND_DIR_USER, ss.str());
 
     PlayerClass pc(player_ptr);
     const auto max_subtitles = diary_subtitles.size();

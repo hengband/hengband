@@ -9,7 +9,9 @@
 #include "util/string-processor.h"
 #include "view/display-messages.h"
 #include <stdexcept>
+#include <string>
 #include <string_view>
+#include <vector>
 
 /*!
  * @brief Load an autopick preference file
@@ -61,17 +63,14 @@ std::string pickpref_filename(PlayerType *player_ptr, int filename_mode)
  */
 static std::vector<concptr> read_text_lines(std::string_view filename)
 {
-    FILE *fff;
-
-    int lines = 0;
     char buf[1024];
-
     path_build(buf, sizeof(buf), ANGBAND_DIR_USER, filename);
-    fff = angband_fopen(buf, FileOpenMode::READ);
+    auto *fff = angband_fopen(buf, FileOpenMode::READ);
     if (!fff) {
         return {};
     }
 
+    auto lines = 0;
     std::vector<concptr> lines_list(MAX_LINES);
     while (angband_fgets(fff, buf, sizeof(buf)) == 0) {
         lines_list[lines++] = string_make(buf);
@@ -93,34 +92,31 @@ static std::vector<concptr> read_text_lines(std::string_view filename)
  */
 static void prepare_default_pickpref(PlayerType *player_ptr)
 {
-    const concptr messages[] = { _("あなたは「自動拾いエディタ」を初めて起動しました。", "You have activated the Auto-Picker Editor for the first time."),
+    const std::vector<std::string> messages = { _("あなたは「自動拾いエディタ」を初めて起動しました。", "You have activated the Auto-Picker Editor for the first time."),
         _("自動拾いのユーザー設定ファイルがまだ書かれていないので、", "Since user pref file for autopick is not yet created,"),
-        _("基本的な自動拾い設定ファイルをlib/pref/picktype.prfからコピーします。", "the default setting is loaded from lib/pref/pickpref.prf ."), nullptr };
+        _("基本的な自動拾い設定ファイルをlib/pref/picktype.prfからコピーします。", "the default setting is loaded from lib/pref/pickpref.prf .") };
 
     const auto filename = pickpref_filename(player_ptr, PT_DEFAULT);
-    for (int i = 0; messages[i]; i++) {
-        msg_print(messages[i]);
+    for (const auto &message : messages) {
+        msg_print(message);
     }
 
     msg_print(nullptr);
     char buf[1024];
     path_build(buf, sizeof(buf), ANGBAND_DIR_USER, filename);
-    FILE *user_fp;
-    user_fp = angband_fopen(buf, FileOpenMode::WRITE);
+    auto *user_fp = angband_fopen(buf, FileOpenMode::WRITE);
     if (!user_fp) {
         return;
     }
 
     fprintf(user_fp, "#***\n");
-    for (int i = 0; messages[i]; i++) {
-        fprintf(user_fp, "#***  %s\n", messages[i]);
+    for (const auto &message : messages) {
+        fprintf(user_fp, "#***  %s\n", message.data());
     }
 
     fprintf(user_fp, "#***\n\n\n");
     path_build(buf, sizeof(buf), ANGBAND_DIR_PREF, filename);
-    FILE *pref_fp;
-    pref_fp = angband_fopen(buf, FileOpenMode::READ);
-
+    auto *pref_fp = angband_fopen(buf, FileOpenMode::READ);
     if (!pref_fp) {
         angband_fclose(user_fp);
         return;
@@ -171,8 +167,7 @@ bool write_text_lines(concptr filename, concptr *lines_list)
 {
     char buf[1024];
     path_build(buf, sizeof(buf), ANGBAND_DIR_USER, filename);
-    FILE *fff;
-    fff = angband_fopen(buf, FileOpenMode::WRITE);
+    auto *fff = angband_fopen(buf, FileOpenMode::WRITE);
     if (!fff) {
         return false;
     }

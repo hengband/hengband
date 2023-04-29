@@ -68,8 +68,6 @@ static void spoil_random_artifact_aux(PlayerType *player_ptr, ItemEntity *o_ptr,
  */
 void spoil_random_artifact(PlayerType *player_ptr, concptr fname)
 {
-    store_type *store_ptr;
-    ItemEntity *q_ptr;
     char buf[1024];
     path_build(buf, sizeof(buf), ANGBAND_DIR_USER, fname);
     spoiler_file = angband_fopen(buf, FileOpenMode::WRITE);
@@ -82,24 +80,24 @@ void spoil_random_artifact(PlayerType *player_ptr, concptr fname)
     for (const auto &[tval_list, name] : group_artifact_list) {
         for (auto tval : tval_list) {
             for (int i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
-                q_ptr = &player_ptr->inventory_list[i];
+                auto *q_ptr = &player_ptr->inventory_list[i];
                 spoil_random_artifact_aux(player_ptr, q_ptr, tval);
             }
 
             for (int i = 0; i < INVEN_PACK; i++) {
-                q_ptr = &player_ptr->inventory_list[i];
+                auto *q_ptr = &player_ptr->inventory_list[i];
                 spoil_random_artifact_aux(player_ptr, q_ptr, tval);
             }
 
-            store_ptr = &towns_info[1].store[enum2i(StoreSaleType::HOME)];
+            const auto *store_ptr = &towns_info[1].store[enum2i(StoreSaleType::HOME)];
             for (int i = 0; i < store_ptr->stock_num; i++) {
-                q_ptr = &store_ptr->stock[i];
+                auto *q_ptr = &store_ptr->stock[i];
                 spoil_random_artifact_aux(player_ptr, q_ptr, tval);
             }
 
             store_ptr = &towns_info[1].store[enum2i(StoreSaleType::MUSEUM)];
             for (int i = 0; i < store_ptr->stock_num; i++) {
-                q_ptr = &store_ptr->stock[i];
+                auto *q_ptr = &store_ptr->stock[i];
                 spoil_random_artifact_aux(player_ptr, q_ptr, tval);
             }
         }
