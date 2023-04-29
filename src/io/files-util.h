@@ -28,7 +28,7 @@ typedef void (*update_playtime_pf)(void);
 
 errr file_character(PlayerType *player_ptr, concptr name);
 std::optional<std::string> get_random_line(concptr file_name, int entry);
-void read_dead_file(char *buf, size_t buf_size);
+void read_dead_file();
 
 #ifdef JP
 std::optional<std::string> get_random_line_ja_only(concptr file_name, int entry, int count);

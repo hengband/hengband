@@ -163,7 +163,7 @@ std::vector<concptr> read_pickpref_text_lines(PlayerType *player_ptr, int *filen
 /*!
  * @brief Write whole lines of memory to a file.
  */
-bool write_text_lines(concptr filename, concptr *lines_list)
+bool write_text_lines(std::string_view filename, const std::vector<concptr> &lines)
 {
     char buf[1024];
     path_build(buf, sizeof(buf), ANGBAND_DIR_USER, filename);
@@ -172,8 +172,8 @@ bool write_text_lines(concptr filename, concptr *lines_list)
         return false;
     }
 
-    for (int lines = 0; lines_list[lines]; lines++) {
-        angband_fputs(fff, lines_list[lines], 1024);
+    for (const auto *line : lines) {
+        angband_fputs(fff, line, 1024);
     }
 
     angband_fclose(fff);

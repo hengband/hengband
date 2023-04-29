@@ -209,8 +209,7 @@ static void show_tomb_detail(PlayerType *player_ptr)
 void print_tomb(PlayerType *player_ptr)
 {
     term_clear();
-    char buf[1024];
-    read_dead_file(buf, sizeof(buf));
+    read_dead_file();
     concptr p = w_ptr->total_winner ? _("偉大なる者", "Magnificent") : player_titles[enum2i(player_ptr->pclass)][(player_ptr->lev - 1) / 5].data();
 
     show_tomb_line(player_ptr->name, GRAVE_PLAYER_NAME_ROW);

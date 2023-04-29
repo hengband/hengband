@@ -325,20 +325,19 @@ errr counts_write(PlayerType *player_ptr, int where, uint32_t count)
 }
 
 /*!
- * @brief 墓のアスキーアートテンプレを読み込む
- * @param buf テンプレへのバッファ
- * @param buf_size バッファの長さ
+ * @brief 墓のアスキーアートテンプレを読み込んで画面に表示する
  */
-void read_dead_file(char *buf, size_t buf_size)
+void read_dead_file()
 {
-    path_build(buf, buf_size, ANGBAND_DIR_FILE, _("dead_j.txt", "dead.txt"));
+    char buf[1024];
+    path_build(buf, sizeof(buf), ANGBAND_DIR_FILE, _("dead_j.txt", "dead.txt"));
     auto *fp = angband_fopen(buf, FileOpenMode::READ);
     if (!fp) {
         return;
     }
 
     int i = 0;
-    while (angband_fgets(fp, buf, buf_size) == 0) {
+    while (angband_fgets(fp, buf, sizeof(buf)) == 0) {
         put_str(buf, i++, 0);
     }
 
