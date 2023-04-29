@@ -364,12 +364,12 @@ static int interpret_z_token(char *buf)
     }
 
     *(t++) = '\0';
-    for (const auto &description : gf_descriptions) {
-        if (!streq(description.name, buf + 2)) {
+    for (const auto &[name, num] : gf_descriptions) {
+        if (!streq(name.data(), buf + 2)) {
             continue;
         }
 
-        gf_colors[description.num] = t;
+        gf_colors[num] = t;
         return 0;
     }
 
