@@ -234,18 +234,19 @@ void auto_dump_printf(FILE *auto_dump_stream, concptr fmt, ...)
 /*!
  * @brief prfファイルをファイルオープンする /
  * Open file to append auto dump.
- * @param buf ファイル名
+ * @param path ファイル名
  * @param mark 出力するヘッダマーク
  * @return ファイルポインタを取得できたらTRUEを返す
  */
-bool open_auto_dump(FILE **fpp, concptr buf, concptr mark)
+bool open_auto_dump(FILE **fpp, const std::filesystem::path &path, std::string_view mark)
 {
     char header_mark_str[80];
-    strnfmt(header_mark_str, sizeof(header_mark_str), auto_dump_header, mark);
-    remove_auto_dump(buf, mark);
-    *fpp = angband_fopen(buf, FileOpenMode::APPEND);
+    strnfmt(header_mark_str, sizeof(header_mark_str), auto_dump_header, mark.data());
+    remove_auto_dump(path, mark);
+    *fpp = angband_fopen(path, FileOpenMode::APPEND);
     if (!fpp) {
-        msg_format(_("%s を開くことができませんでした。", "Failed to open %s."), buf);
+        const auto &path_str = path.string();
+        msg_format(_("%s を開くことができませんでした。", "Failed to open %s."), path_str.data());
         msg_print(nullptr);
         return false;
     }
@@ -263,10 +264,10 @@ bool open_auto_dump(FILE **fpp, concptr buf, concptr mark)
  * Append foot part and close auto dump.
  * @param auto_dump_mark 出力するヘッダマーク
  */
-void close_auto_dump(FILE **fpp, concptr auto_dump_mark)
+void close_auto_dump(FILE **fpp, std::string_view mark)
 {
     char footer_mark_str[80];
-    strnfmt(footer_mark_str, sizeof(footer_mark_str), auto_dump_footer, auto_dump_mark);
+    strnfmt(footer_mark_str, sizeof(footer_mark_str), auto_dump_footer, mark.data());
     auto_dump_printf(*fpp, _("# *警告!!* 以降の行は自動生成されたものです。\n", "# *Warning!*  The lines below are an automatic dump.\n"));
     auto_dump_printf(
         *fpp, _("# *警告!!* 後で自動的に削除されるので編集しないでください。\n", "# Don't edit them; changes will be deleted and replaced automatically.\n"));
