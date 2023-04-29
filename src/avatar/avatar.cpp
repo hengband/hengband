@@ -24,25 +24,26 @@
 /*!
  * 徳の名称 / The names of the virtues
  */
-concptr virtue_names[MAX_VIRTUE] = {
-    _("情", "Compassion"),
-    _("誉", "Honour"),
-    _("正", "Justice"),
-    _("犠", "Sacrifice"),
-    _("識", "Knowledge"),
-    _("誠", "Faith"),
-    _("啓", "Enlightenment"),
-    _("秘", "Mysticism"),
-    _("運", "Chance"),
-    _("然", "Nature"),
-    _("調", "Harmony"),
-    _("活", "Vitality"),
-    _("死", "Unlife"),
-    _("忍", "Patience"),
-    _("節", "Temperance"),
-    _("勤", "Diligence"),
-    _("勇", "Valour"),
-    _("個", "Individualism"),
+const std::map<Virtue, std::string> virtue_names = {
+    { Virtue::NONE, "" },
+    { Virtue::COMPASSION, _("情", "Compassion") },
+    { Virtue::HONOUR, _("誉", "Honour") },
+    { Virtue::JUSTICE, _("正", "Justice") },
+    { Virtue::SACRIFICE, _("犠", "Sacrifice") },
+    { Virtue::KNOWLEDGE, _("識", "Knowledge") },
+    { Virtue::FAITH, _("誠", "Faith") },
+    { Virtue::ENLIGHTEN, _("啓", "Enlightenment") },
+    { Virtue::ENCHANT, _("秘", "Mysticism") },
+    { Virtue::CHANCE, _("運", "Chance") },
+    { Virtue::NATURE, _("然", "Nature") },
+    { Virtue::HARMONY, _("調", "Harmony") },
+    { Virtue::VITALITY, _("活", "Vitality") },
+    { Virtue::UNLIFE, _("死", "Unlife") },
+    { Virtue::PATIENCE, _("忍", "Patience") },
+    { Virtue::TEMPERANCE, _("節", "Temperance") },
+    { Virtue::DILIGENCE, _("勤", "Diligence") },
+    { Virtue::VALOUR, _("勇", "Valour") },
+    { Virtue::INDIVIDUALISM, _("個", "Individualism") },
 };
 
 /*!
@@ -529,7 +530,7 @@ void dump_virtues(PlayerType *player_ptr, FILE *out_file)
     for (int v_nr = 0; v_nr < 8; v_nr++) {
         GAME_TEXT vir_name[20];
         int tester = player_ptr->virtues[v_nr];
-        strcpy(vir_name, virtue_names[enum2i(player_ptr->vir_types[v_nr]) - 1]);
+        strcpy(vir_name, virtue_names.at(player_ptr->vir_types[v_nr]).data());
         const std::string vir_val_str = format(" (%d)", tester);
         const auto vir_val = show_actual_value ? vir_val_str.data() : "";
         if ((player_ptr->vir_types[v_nr] == Virtue::NONE) || (player_ptr->vir_types[v_nr] >= Virtue::MAX)) {
