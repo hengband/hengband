@@ -4,7 +4,7 @@
 
 #define MAX_VIRTUE 18 /*!< 徳定義の最大数 */
 
-enum virtue_idx {
+enum Virtue {
     V_NONE = 0,
     V_COMPASSION = 1,
     V_HONOUR = 2,

@@ -157,7 +157,7 @@ static void get_random_virtue(PlayerType *player_ptr, int which)
  * @param realm 魔法領域のID
  * @return 対応する徳のID
  */
-static enum virtue_idx get_realm_virtues(PlayerType *player_ptr, int16_t realm)
+static enum Virtue get_realm_virtues(PlayerType *player_ptr, int16_t realm)
 {
     switch (realm) {
     case REALM_LIFE:
