@@ -69,39 +69,34 @@ void user_name(char *buf, int id)
 
 #endif /* SET_UID */
 
+std::filesystem::path path_parse(std::string_view file)
 #ifdef SET_UID
-/*
- * Extract a "parsed" path from an initial filename
- * Normally, we simply copy the filename into the buffer
- * But leading tilde symbols must be handled in a special way
- * Replace "~user/" by the home directory of the user named "user"
- * Replace "~/" by the home directory of the current user
- */
-errr path_parse(char *buf, int max, concptr file)
 {
-    buf[0] = '\0';
-    if (!file) {
-        return -1;
+    /*
+     * Extract a "parsed" path from an initial filename
+     * Normally, we simply copy the filename into the buffer
+     * But leading tilde symbols must be handled in a special way
+     * Replace "~user/" by the home directory of the user named "user"
+     * Replace "~/" by the home directory of the current user
+     */
+    if (file.empty() || (file[0] != '~')) {
+        return file;
     }
 
-    if (file[0] != '~') {
-        (void)strnfmt(buf, max, "%s", file);
-        return 0;
+    auto u = file.data() + 1;
+    auto s = angband_strstr(u, PATH_SEP);
+    constexpr auto user_size = 128;
+    char user[user_size]{};
+    if ((s != nullptr) && (s >= u + user_size)) {
+        throw std::runtime_error("User name is too long!");
     }
 
-    concptr u = file + 1;
-    concptr s = angband_strstr(u, PATH_SEP);
-    char user[128];
-    if (s && (s >= u + sizeof(user))) {
-        return 1;
-    }
-
-    if (s) {
+    if (s != nullptr) {
         int i;
         for (i = 0; u < s; ++i) {
             user[i] = *u++;
         }
-        user[i] = '\0';
+
         u = user;
     }
 
@@ -110,35 +105,27 @@ errr path_parse(char *buf, int max, concptr file)
     }
 
     struct passwd *pw;
-    if (u) {
+    if (u != nullptr) {
         pw = getpwnam(u);
     } else {
         pw = getpwuid(getuid());
     }
 
-    if (!pw) {
-        return 1;
+    if (pw == nullptr) {
+        throw std::runtime_error("Failed to get User ID!");
     }
 
-    if (s) {
-        strnfmt(buf, max, "%s%s", pw->pw_dir, s);
-    } else {
-        strnfmt(buf, max, "%s", pw->pw_dir);
+    if (s == nullptr) {
+        return pw->pw_dir;
     }
 
-    return 0;
+    std::stringstream ss;
+    ss << pw->pw_dir << s;
+    return ss.str();
 }
-#else /* SET_UID */
-/*
- * Extract a "parsed" path from an initial filename
- *
- * This requires no special processing on simple machines,
- * except for verifying the size of the filename.
- */
-errr path_parse(char *buf, int max, concptr file)
+#else
 {
-    (void)strnfmt(buf, max, "%s", file);
-    return 0;
+    return file;
 }
 #endif /* SET_UID */
 
@@ -223,18 +210,18 @@ static std::string make_file_mode(const FileOpenMode mode, const bool is_binary)
     return ss.str();
 }
 
-/*
- * Hack -- replacement for "fopen()"
+/*!
+ * @brief OSごとの差異を吸収してファイルを開く
+ * @param file ファイルの相対パスまたは絶対パス
+ * @param mode ファイルを開くモード
+ * @param is_binary バイナリモードか否か (無指定の場合false：テキストモード)
+ * @return ファイルポインタ
  */
-FILE *angband_fopen(const std::filesystem::path &path, const FileOpenMode mode, const bool is_binary)
+FILE *angband_fopen(const std::filesystem::path &file, const FileOpenMode mode, const bool is_binary)
 {
-    char buf[1024];
-    if (path_parse(buf, 1024, path.string().data())) {
-        return nullptr;
-    }
-
+    const auto &path = path_parse(file.string());
     const auto &open_mode = make_file_mode(mode, is_binary);
-    return fopen(buf, open_mode.data());
+    return fopen(path.string().data(), open_mode.data());
 }
 
 /*
@@ -367,113 +354,62 @@ errr angband_fputs(FILE *fff, concptr buf, ulong n)
 #define O_BINARY 0
 #endif /* O_BINARY */
 
-/*
- * Hack -- attempt to delete a file
+/*!
+ * @brief OSごとの差異を吸収してファイルを削除する
+ * @param file ファイルの相対パスまたは絶対パス
  */
-errr fd_kill(concptr file)
+void fd_kill(std::string_view file)
 {
-    char buf[1024];
-    if (path_parse(buf, 1024, file)) {
-        return -1;
+    const auto &path = path_parse(file);
+    if (!std::filesystem::exists(path)) {
+        return;
     }
 
-    (void)remove(buf);
-    return 0;
+    std::filesystem::remove(path);
+}
+
+/*!
+ * @brief OSごとの差異を吸収してファイルを移動する
+ * @param from 移動元のファイルの相対パスまたは絶対パス
+ * @param to 移動先のファイルの相対パスまたは絶対パス
+ */
+void fd_move(std::string_view from, std::string_view to)
+{
+    const auto &path_from = path_parse(from);
+    if (!std::filesystem::exists(path_from)) {
+        return;
+    }
+
+    const auto &path_to = path_parse(to);
+    const auto directory = std::filesystem::path(path_to).remove_filename();
+    if (!std::filesystem::exists(directory)) {
+        std::filesystem::create_directory(directory);
+    }
+
+    std::filesystem::rename(path_from, path_to);
+}
+
+/*!
+ * @brief OSごとの差異を吸収してファイルを作成する
+ * @param file 作成先ファイルの相対パスまたは絶対パス
+ * @param can_write_group グループに書き込みを許可するか否か
+ */
+int fd_make(std::string_view file, bool can_write_group)
+{
+    const auto permission = can_write_group ? 0644 : 0664;
+    const auto &path = path_parse(file);
+    return open(path.string().data(), O_CREAT | O_EXCL | O_WRONLY | O_BINARY, permission);
 }
 
 /*
- * Hack -- attempt to move a file
+ * @brief OSごとの差異を吸収してファイルを開く
+ * @param file ファイルの相対パスまたは絶対パス
+ * @param mode ファイルのオープンモード (読み書き、Append/Trunc等)
  */
-errr fd_move(concptr file, concptr what)
+int fd_open(std::string_view file, int mode)
 {
-    char buf[1024];
-    char aux[1024];
-    if (path_parse(buf, 1024, file)) {
-        return -1;
-    }
-    if (path_parse(aux, 1024, what)) {
-        return -1;
-    }
-
-    (void)rename(buf, aux);
-    return 0;
-}
-
-/*
- * Hack -- attempt to copy a file
- */
-errr fd_copy(concptr file, concptr what)
-{
-    char buf[1024];
-    char aux[1024];
-    int read_num;
-    int src_fd, dst_fd;
-
-    if (path_parse(buf, 1024, file)) {
-        return -1;
-    }
-    if (path_parse(aux, 1024, what)) {
-        return -1;
-    }
-
-    src_fd = fd_open(buf, O_RDONLY);
-    if (src_fd < 0) {
-        return -1;
-    }
-
-    dst_fd = fd_open(aux, O_WRONLY | O_TRUNC | O_CREAT);
-    if (dst_fd < 0) {
-        return -1;
-    }
-
-    while ((read_num = read(src_fd, buf, 1024)) > 0) {
-        int write_num = 0;
-        while (write_num < read_num) {
-            int ret = write(dst_fd, buf + write_num, read_num - write_num);
-            if (ret < 0) {
-                fd_close(src_fd);
-                fd_close(dst_fd);
-
-                return ret;
-            }
-
-            write_num += ret;
-        }
-    }
-
-    fd_close(src_fd);
-    fd_close(dst_fd);
-    return 0;
-}
-
-/*
- * Hack -- attempt to open a file descriptor (create file)
- * This function should fail if the file already exists
- * Note that we assume that the file should be "binary"
- */
-int fd_make(concptr file, BIT_FLAGS mode)
-{
-    char buf[1024];
-    if (path_parse(buf, 1024, file)) {
-        return -1;
-    }
-
-    return open(buf, O_CREAT | O_EXCL | O_WRONLY | O_BINARY, mode);
-}
-
-/*
- * Hack -- attempt to open a file descriptor (existing file)
- *
- * Note that we assume that the file should be "binary"
- */
-int fd_open(concptr file, int flags)
-{
-    char buf[1024];
-    if (path_parse(buf, 1024, file)) {
-        return -1;
-    }
-
-    return open(buf, flags | O_BINARY, 0);
+    const auto &path = path_parse(file);
+    return open(path.string().data(), mode | O_BINARY, 0);
 }
 
 /*
@@ -516,15 +452,6 @@ errr fd_seek(int fd, ulong n)
     }
 
     return 0;
-}
-
-/*
- * Hack -- attempt to truncate a file descriptor
- */
-errr fd_chop(int fd, ulong n)
-{
-    n = n ? n : 0;
-    return fd >= 0 ? 0 : -1;
 }
 
 /*

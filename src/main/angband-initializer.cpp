@@ -215,7 +215,7 @@ void init_angband(PlayerType *player_ptr, bool no_term)
 {
     char buf[1024];
     path_build(buf, sizeof(buf), ANGBAND_DIR_FILE, _("news_j.txt", "news.txt"));
-    int fd = fd_open(buf, O_RDONLY);
+    auto fd = fd_open(buf, O_RDONLY);
     if (fd < 0) {
         std::string why = _("'", "Cannot access the '");
         why.append(buf);
@@ -245,10 +245,9 @@ void init_angband(PlayerType *player_ptr, bool no_term)
 
     path_build(buf, sizeof(buf), ANGBAND_DIR_APEX, "scores.raw");
     fd = fd_open(buf, O_RDONLY);
-    BIT_FLAGS file_permission = 0664;
     if (fd < 0) {
         safe_setuid_grab(player_ptr);
-        fd = fd_make(buf, file_permission);
+        fd = fd_make(buf, true);
         safe_setuid_drop();
         if (fd < 0) {
             std::string why = _("'", "Cannot create the '");

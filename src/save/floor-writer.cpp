@@ -257,7 +257,7 @@ bool save_floor(PlayerType *player_ptr, saved_floor_type *sf_ptr, BIT_FLAGS mode
     saving_savefile = nullptr;
     safe_setuid_grab(player_ptr);
 
-    int fd = fd_make(floor_savefile.data(), 0644);
+    auto fd = fd_make(floor_savefile.data());
     safe_setuid_drop();
     bool is_save_successful = false;
     if (fd >= 0) {
