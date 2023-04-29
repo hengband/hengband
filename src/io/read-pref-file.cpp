@@ -1,16 +1,7 @@
 ﻿/*
  * @brief プレイヤーのインターフェイスに関するコマンドの実装 / Interface commands
- * @date 2020/03/01
+ * @date 2023/04/30
  * @author Mogami & Hourier
- * -Mogami-
- * remove_auto_dump(orig_file, mark)
- *     Remove the old automatic dump of type "mark".
- * auto_dump_printf(fmt, ...)
- *     Dump a formatted string using fprintf().
- * open_auto_dump(buf, mark)
- *     Open a file, remove old dump, and add new header.
- * close_auto_dump(void)
- *     Add a footer, and close the file.
  */
 
 #include "io/read-pref-file.h"
