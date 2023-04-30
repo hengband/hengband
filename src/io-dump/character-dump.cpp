@@ -118,7 +118,7 @@ static void dump_aux_quest(PlayerType *player_ptr, FILE *fff)
 
     const auto &quest_list = QuestList::get_instance();
     std::vector<QuestId> quest_numbers;
-    for (const auto &[q_idx, q_ref] : quest_list) {
+    for (const auto &[q_idx, quest] : quest_list) {
         quest_numbers.push_back(q_idx);
     }
     int dummy;

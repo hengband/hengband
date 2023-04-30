@@ -31,19 +31,19 @@ void check_random_quest_auto_failure(PlayerType *player_ptr)
         return;
     }
     for (auto q_idx : EnumRange(QuestId::RANDOM_QUEST1, QuestId::RANDOM_QUEST10)) {
-        auto &q_ref = quest_list[q_idx];
-        auto is_taken_quest = (q_ref.type == QuestKindType::RANDOM);
-        is_taken_quest &= (q_ref.status == QuestStatusType::TAKEN);
-        is_taken_quest &= (q_ref.level < player_ptr->current_floor_ptr->dun_level);
+        auto &quest = quest_list[q_idx];
+        auto is_taken_quest = (quest.type == QuestKindType::RANDOM);
+        is_taken_quest &= (quest.status == QuestStatusType::TAKEN);
+        is_taken_quest &= (quest.level < player_ptr->current_floor_ptr->dun_level);
         if (!is_taken_quest) {
             continue;
         }
 
-        q_ref.status = QuestStatusType::FAILED;
-        q_ref.complev = (byte)player_ptr->lev;
+        quest.status = QuestStatusType::FAILED;
+        quest.complev = (byte)player_ptr->lev;
         update_playtime();
-        q_ref.comptime = w_ptr->play_time;
-        monraces_info[q_ref.r_idx].flags1 &= ~(RF1_QUESTOR);
+        quest.comptime = w_ptr->play_time;
+        monraces_info[quest.r_idx].flags1 &= ~(RF1_QUESTOR);
     }
 }
 

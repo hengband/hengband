@@ -180,8 +180,8 @@ int exe_write_diary_quest(PlayerType *player_ptr, int type, QuestId num)
 
     auto old_quest = player_ptr->current_floor_ptr->quest_number;
     const auto &quest_list = QuestList::get_instance();
-    const auto &q_ref = quest_list[num];
-    player_ptr->current_floor_ptr->quest_number = (q_ref.type == QuestKindType::RANDOM) ? QuestId::NONE : num;
+    const auto &quest = quest_list[num];
+    player_ptr->current_floor_ptr->quest_number = (quest.type == QuestKindType::RANDOM) ? QuestId::NONE : num;
     init_flags = INIT_NAME_ONLY;
     parse_fixed_map(player_ptr, QUEST_DEFINITION_LIST, 0, 0, 0, 0);
     player_ptr->current_floor_ptr->quest_number = old_quest;
@@ -197,40 +197,40 @@ int exe_write_diary_quest(PlayerType *player_ptr, int type, QuestId num)
 
     switch (type) {
     case DIARY_FIX_QUEST_C: {
-        if (any_bits(q_ref.flags, QUEST_FLAG_SILENT)) {
+        if (any_bits(quest.flags, QUEST_FLAG_SILENT)) {
             break;
         }
 
         constexpr auto mes = _(" %2d:%02d %20s クエスト「%s」を達成した。\n", " %2d:%02d %20s completed quest '%s'.\n");
-        fprintf(fff, mes, hour, min, note_level.data(), q_ref.name.data());
+        fprintf(fff, mes, hour, min, note_level.data(), quest.name.data());
         break;
     }
     case DIARY_FIX_QUEST_F: {
-        if (any_bits(q_ref.flags, QUEST_FLAG_SILENT)) {
+        if (any_bits(quest.flags, QUEST_FLAG_SILENT)) {
             break;
         }
 
         constexpr auto mes = _(" %2d:%02d %20s クエスト「%s」から命からがら逃げ帰った。\n", " %2d:%02d %20s ran away from quest '%s'.\n");
-        fprintf(fff, mes, hour, min, note_level.data(), q_ref.name.data());
+        fprintf(fff, mes, hour, min, note_level.data(), quest.name.data());
         break;
     }
     case DIARY_RAND_QUEST_C: {
         constexpr auto mes = _(" %2d:%02d %20s ランダムクエスト(%s)を達成した。\n", " %2d:%02d %20s completed random quest '%s'\n");
-        fprintf(fff, mes, hour, min, note_level.data(), monraces_info[q_ref.r_idx].name.data());
+        fprintf(fff, mes, hour, min, note_level.data(), monraces_info[quest.r_idx].name.data());
         break;
     }
     case DIARY_RAND_QUEST_F: {
         constexpr auto mes = _(" %2d:%02d %20s ランダムクエスト(%s)から逃げ出した。\n", " %2d:%02d %20s ran away from quest '%s'.\n");
-        fprintf(fff, mes, hour, min, note_level.data(), monraces_info[q_ref.r_idx].name.data());
+        fprintf(fff, mes, hour, min, note_level.data(), monraces_info[quest.r_idx].name.data());
         break;
     }
     case DIARY_TO_QUEST: {
-        if (any_bits(q_ref.flags, QUEST_FLAG_SILENT)) {
+        if (any_bits(quest.flags, QUEST_FLAG_SILENT)) {
             break;
         }
 
         constexpr auto mes = _(" %2d:%02d %20s クエスト「%s」へと突入した。\n", " %2d:%02d %20s entered the quest '%s'.\n");
-        fprintf(fff, mes, hour, min, note_level.data(), q_ref.name.data());
+        fprintf(fff, mes, hour, min, note_level.data(), quest.name.data());
         break;
     }
     default:

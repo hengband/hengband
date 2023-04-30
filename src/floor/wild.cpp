@@ -593,9 +593,9 @@ void wilderness_gen(PlayerType *player_ptr)
     generate_encounter = false;
     set_floor_and_wall(0);
     auto &quest_list = QuestList::get_instance();
-    for (auto &[q_idx, q_ref] : quest_list) {
-        if (q_ref.status == QuestStatusType::REWARDED) {
-            q_ref.status = QuestStatusType::FINISHED;
+    for (auto &[q_idx, quest] : quest_list) {
+        if (quest.status == QuestStatusType::REWARDED) {
+            quest.status = QuestStatusType::FINISHED;
         }
     }
 }

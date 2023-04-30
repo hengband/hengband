@@ -251,14 +251,14 @@ static void preserve_info(PlayerType *player_ptr)
 {
     auto quest_r_idx = MonsterRace::empty_id();
     const auto &quest_list = QuestList::get_instance();
-    for (const auto &[q_idx, q_ref] : quest_list) {
-        auto quest_relating_monster = (q_ref.status == QuestStatusType::TAKEN);
-        quest_relating_monster &= ((q_ref.type == QuestKindType::KILL_LEVEL) || (q_ref.type == QuestKindType::RANDOM));
-        quest_relating_monster &= (q_ref.level == player_ptr->current_floor_ptr->dun_level);
-        quest_relating_monster &= (player_ptr->dungeon_idx == q_ref.dungeon);
-        quest_relating_monster &= !(q_ref.flags & QUEST_FLAG_PRESET);
+    for (const auto &[q_idx, quest] : quest_list) {
+        auto quest_relating_monster = (quest.status == QuestStatusType::TAKEN);
+        quest_relating_monster &= ((quest.type == QuestKindType::KILL_LEVEL) || (quest.type == QuestKindType::RANDOM));
+        quest_relating_monster &= (quest.level == player_ptr->current_floor_ptr->dun_level);
+        quest_relating_monster &= (player_ptr->dungeon_idx == quest.dungeon);
+        quest_relating_monster &= !(quest.flags & QUEST_FLAG_PRESET);
         if (quest_relating_monster) {
-            quest_r_idx = q_ref.r_idx;
+            quest_r_idx = quest.r_idx;
         }
     }
 
