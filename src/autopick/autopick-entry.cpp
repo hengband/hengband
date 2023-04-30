@@ -47,7 +47,7 @@ bool autopick_new_entry(autopick_type *entry, concptr str, bool allow_default)
         }
     }
 
-    entry->flag[0] = entry->flag[1] = 0L;
+    entry->flags[0] = entry->flags[1] = 0L;
     entry->dice = 0;
     entry->bonus = 0;
 
@@ -309,7 +309,7 @@ bool autopick_new_entry(autopick_type *entry, concptr str, bool allow_default)
         }
     } else {
         if (prev_flg != -1) {
-            entry->flag[prev_flg / 32] &= ~(1UL << (prev_flg % 32));
+            entry->flags[prev_flg / 32] &= ~(1UL << (prev_flg % 32));
             ptr = prev_ptr;
         }
     }
@@ -331,7 +331,7 @@ void autopick_entry_from_object(PlayerType *player_ptr, autopick_type *entry, It
     entry->name.clear();
     entry->insc = o_ptr->inscription.value_or("");
     entry->action = DO_AUTOPICK | DO_DISPLAY;
-    entry->flag[0] = entry->flag[1] = 0L;
+    entry->flags[0] = entry->flags[1] = 0L;
     entry->dice = 0;
 
     // エゴ銘が邪魔かもしれないので、デフォルトで「^」は付けない.
@@ -519,179 +519,178 @@ void autopick_entry_from_object(PlayerType *player_ptr, autopick_type *entry, It
 /*!
  * @brief Reconstruct preference line from entry
  */
-concptr autopick_line_from_entry(autopick_type *entry)
+concptr autopick_line_from_entry(const autopick_type &entry)
 {
-    char buf[MAX_LINELEN];
-    *buf = '\0';
-    if (!(entry->action & DO_DISPLAY)) {
+    char buf[MAX_LINELEN]{};
+    if (!(entry.action & DO_DISPLAY)) {
         strcat(buf, "(");
     }
-    if (entry->action & DO_QUERY_AUTOPICK) {
+    if (entry.action & DO_QUERY_AUTOPICK) {
         strcat(buf, ";");
     }
-    if (entry->action & DO_AUTODESTROY) {
+    if (entry.action & DO_AUTODESTROY) {
         strcat(buf, "!");
     }
-    if (entry->action & DONT_AUTOPICK) {
+    if (entry.action & DONT_AUTOPICK) {
         strcat(buf, "~");
     }
 
     char *ptr;
     ptr = buf;
-    if (IS_FLG(FLG_ALL)) {
+    if (entry.has(FLG_ALL)) {
         ADD_KEY(KEY_ALL);
     }
-    if (IS_FLG(FLG_COLLECTING)) {
+    if (entry.has(FLG_COLLECTING)) {
         ADD_KEY(KEY_COLLECTING);
     }
-    if (IS_FLG(FLG_UNAWARE)) {
+    if (entry.has(FLG_UNAWARE)) {
         ADD_KEY(KEY_UNAWARE);
     }
-    if (IS_FLG(FLG_UNIDENTIFIED)) {
+    if (entry.has(FLG_UNIDENTIFIED)) {
         ADD_KEY(KEY_UNIDENTIFIED);
     }
-    if (IS_FLG(FLG_IDENTIFIED)) {
+    if (entry.has(FLG_IDENTIFIED)) {
         ADD_KEY(KEY_IDENTIFIED);
     }
-    if (IS_FLG(FLG_STAR_IDENTIFIED)) {
+    if (entry.has(FLG_STAR_IDENTIFIED)) {
         ADD_KEY(KEY_STAR_IDENTIFIED);
     }
-    if (IS_FLG(FLG_BOOSTED)) {
+    if (entry.has(FLG_BOOSTED)) {
         ADD_KEY(KEY_BOOSTED);
     }
 
-    if (IS_FLG(FLG_MORE_DICE)) {
+    if (entry.has(FLG_MORE_DICE)) {
         ADD_KEY(KEY_MORE_THAN);
-        strcat(ptr, format("%d", entry->dice).data());
+        strcat(ptr, format("%d", entry.dice).data());
         ADD_KEY(KEY_DICE);
     }
 
-    if (IS_FLG(FLG_MORE_BONUS)) {
+    if (entry.has(FLG_MORE_BONUS)) {
         ADD_KEY(KEY_MORE_BONUS);
-        strcat(ptr, format("%d", entry->bonus).data());
+        strcat(ptr, format("%d", entry.bonus).data());
         ADD_KEY(KEY_MORE_BONUS2);
     }
 
-    if (IS_FLG(FLG_UNREADABLE)) {
+    if (entry.has(FLG_UNREADABLE)) {
         ADD_KEY(KEY_UNREADABLE);
     }
-    if (IS_FLG(FLG_REALM1)) {
+    if (entry.has(FLG_REALM1)) {
         ADD_KEY(KEY_REALM1);
     }
-    if (IS_FLG(FLG_REALM2)) {
+    if (entry.has(FLG_REALM2)) {
         ADD_KEY(KEY_REALM2);
     }
-    if (IS_FLG(FLG_FIRST)) {
+    if (entry.has(FLG_FIRST)) {
         ADD_KEY(KEY_FIRST);
     }
-    if (IS_FLG(FLG_SECOND)) {
+    if (entry.has(FLG_SECOND)) {
         ADD_KEY(KEY_SECOND);
     }
-    if (IS_FLG(FLG_THIRD)) {
+    if (entry.has(FLG_THIRD)) {
         ADD_KEY(KEY_THIRD);
     }
-    if (IS_FLG(FLG_FOURTH)) {
+    if (entry.has(FLG_FOURTH)) {
         ADD_KEY(KEY_FOURTH);
     }
-    if (IS_FLG(FLG_WANTED)) {
+    if (entry.has(FLG_WANTED)) {
         ADD_KEY(KEY_WANTED);
     }
-    if (IS_FLG(FLG_UNIQUE)) {
+    if (entry.has(FLG_UNIQUE)) {
         ADD_KEY(KEY_UNIQUE);
     }
-    if (IS_FLG(FLG_HUMAN)) {
+    if (entry.has(FLG_HUMAN)) {
         ADD_KEY(KEY_HUMAN);
     }
-    if (IS_FLG(FLG_WORTHLESS)) {
+    if (entry.has(FLG_WORTHLESS)) {
         ADD_KEY(KEY_WORTHLESS);
     }
-    if (IS_FLG(FLG_GOOD)) {
+    if (entry.has(FLG_GOOD)) {
         ADD_KEY(KEY_GOOD);
     }
-    if (IS_FLG(FLG_NAMELESS)) {
+    if (entry.has(FLG_NAMELESS)) {
         ADD_KEY(KEY_NAMELESS);
     }
-    if (IS_FLG(FLG_AVERAGE)) {
+    if (entry.has(FLG_AVERAGE)) {
         ADD_KEY(KEY_AVERAGE);
     }
-    if (IS_FLG(FLG_RARE)) {
+    if (entry.has(FLG_RARE)) {
         ADD_KEY(KEY_RARE);
     }
-    if (IS_FLG(FLG_COMMON)) {
+    if (entry.has(FLG_COMMON)) {
         ADD_KEY(KEY_COMMON);
     }
-    if (IS_FLG(FLG_EGO)) {
+    if (entry.has(FLG_EGO)) {
         ADD_KEY(KEY_EGO);
     }
 
-    if (IS_FLG(FLG_ARTIFACT)) {
+    if (entry.has(FLG_ARTIFACT)) {
         ADD_KEY(KEY_ARTIFACT);
     }
 
     bool sepa_flag = true;
-    if (IS_FLG(FLG_ITEMS)) {
+    if (entry.has(FLG_ITEMS)) {
         ADD_KEY2(KEY_ITEMS);
-    } else if (IS_FLG(FLG_WEAPONS)) {
+    } else if (entry.has(FLG_WEAPONS)) {
         ADD_KEY2(KEY_WEAPONS);
-    } else if (IS_FLG(FLG_FAVORITE_WEAPONS)) {
+    } else if (entry.has(FLG_FAVORITE_WEAPONS)) {
         ADD_KEY2(KEY_FAVORITE_WEAPONS);
-    } else if (IS_FLG(FLG_ARMORS)) {
+    } else if (entry.has(FLG_ARMORS)) {
         ADD_KEY2(KEY_ARMORS);
-    } else if (IS_FLG(FLG_MISSILES)) {
+    } else if (entry.has(FLG_MISSILES)) {
         ADD_KEY2(KEY_MISSILES);
-    } else if (IS_FLG(FLG_DEVICES)) {
+    } else if (entry.has(FLG_DEVICES)) {
         ADD_KEY2(KEY_DEVICES);
-    } else if (IS_FLG(FLG_LIGHTS)) {
+    } else if (entry.has(FLG_LIGHTS)) {
         ADD_KEY2(KEY_LIGHTS);
-    } else if (IS_FLG(FLG_JUNKS)) {
+    } else if (entry.has(FLG_JUNKS)) {
         ADD_KEY2(KEY_JUNKS);
-    } else if (IS_FLG(FLG_CORPSES)) {
+    } else if (entry.has(FLG_CORPSES)) {
         ADD_KEY2(KEY_CORPSES);
-    } else if (IS_FLG(FLG_SPELLBOOKS)) {
+    } else if (entry.has(FLG_SPELLBOOKS)) {
         ADD_KEY2(KEY_SPELLBOOKS);
-    } else if (IS_FLG(FLG_HAFTED)) {
+    } else if (entry.has(FLG_HAFTED)) {
         ADD_KEY2(KEY_HAFTED);
-    } else if (IS_FLG(FLG_SHIELDS)) {
+    } else if (entry.has(FLG_SHIELDS)) {
         ADD_KEY2(KEY_SHIELDS);
-    } else if (IS_FLG(FLG_BOWS)) {
+    } else if (entry.has(FLG_BOWS)) {
         ADD_KEY2(KEY_BOWS);
-    } else if (IS_FLG(FLG_RINGS)) {
+    } else if (entry.has(FLG_RINGS)) {
         ADD_KEY2(KEY_RINGS);
-    } else if (IS_FLG(FLG_AMULETS)) {
+    } else if (entry.has(FLG_AMULETS)) {
         ADD_KEY2(KEY_AMULETS);
-    } else if (IS_FLG(FLG_SUITS)) {
+    } else if (entry.has(FLG_SUITS)) {
         ADD_KEY2(KEY_SUITS);
-    } else if (IS_FLG(FLG_CLOAKS)) {
+    } else if (entry.has(FLG_CLOAKS)) {
         ADD_KEY2(KEY_CLOAKS);
-    } else if (IS_FLG(FLG_HELMS)) {
+    } else if (entry.has(FLG_HELMS)) {
         ADD_KEY2(KEY_HELMS);
-    } else if (IS_FLG(FLG_GLOVES)) {
+    } else if (entry.has(FLG_GLOVES)) {
         ADD_KEY2(KEY_GLOVES);
-    } else if (IS_FLG(FLG_BOOTS)) {
+    } else if (entry.has(FLG_BOOTS)) {
         ADD_KEY2(KEY_BOOTS);
-    } else if (!IS_FLG(FLG_ARTIFACT)) {
+    } else if (!entry.has(FLG_ARTIFACT)) {
         sepa_flag = false;
     }
 
-    if (!entry->name.empty()) {
+    if (!entry.name.empty()) {
         if (sepa_flag) {
             strcat(buf, ":");
         }
 
         int i = strlen(buf);
         int j = 0;
-        while (entry->name[j] && i < MAX_LINELEN - 2 - 1) {
+        while (entry.name[j] && i < MAX_LINELEN - 2 - 1) {
 #ifdef JP
-            if (iskanji(entry->name[j])) {
-                buf[i++] = entry->name[j++];
+            if (iskanji(entry.name[j])) {
+                buf[i++] = entry.name[j++];
             }
 #endif
-            buf[i++] = entry->name[j++];
+            buf[i++] = entry.name[j++];
         }
         buf[i] = '\0';
     }
 
-    if (entry->insc.empty()) {
+    if (entry.insc.empty()) {
         return string_make(buf);
     }
 
@@ -699,26 +698,17 @@ concptr autopick_line_from_entry(autopick_type *entry)
     strcat(buf, "#");
     i = strlen(buf);
 
-    while (entry->insc[j] && i < MAX_LINELEN - 2) {
+    while (entry.insc[j] && i < MAX_LINELEN - 2) {
 #ifdef JP
-        if (iskanji(entry->insc[j])) {
-            buf[i++] = entry->insc[j++];
+        if (iskanji(entry.insc[j])) {
+            buf[i++] = entry.insc[j++];
         }
 #endif
-        buf[i++] = entry->insc[j++];
+        buf[i++] = entry.insc[j++];
     }
 
     buf[i] = '\0';
     return string_make(buf);
-}
-
-/*!
- * @brief Reconstruct preference line from entry and kill entry
- */
-concptr autopick_line_from_entry_kill(autopick_type *entry)
-{
-    concptr ptr = autopick_line_from_entry(entry);
-    return ptr;
 }
 
 /*!
