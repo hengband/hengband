@@ -418,7 +418,7 @@ void leave_quest_check(PlayerType *player_ptr)
         quest_list[QuestId::TOWER1].complev = player_ptr->lev;
         break;
     case QuestKindType::FIND_ARTIFACT:
-        ArtifactsInfo::get_instance().get_artifact(q_ptr->reward_artifact_idx).gen_flags.reset(ItemGenerationTraitType::QUESTITEM);
+        q_ptr->get_reward().gen_flags.reset(ItemGenerationTraitType::QUESTITEM);
         break;
     case QuestKindType::RANDOM:
         monraces_info[q_ptr->r_idx].flags1 &= ~(RF1_QUESTOR);

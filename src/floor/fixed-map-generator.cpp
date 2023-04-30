@@ -235,7 +235,7 @@ static bool parse_qtw_QQ(QuestType *q_ptr, char **zz, int num)
         return true;
     }
 
-    auto &artifact = ArtifactsInfo::get_instance().get_artifact(q_ptr->reward_artifact_idx);
+    auto &artifact = q_ptr->get_reward();
     artifact.gen_flags.set(ItemGenerationTraitType::QUESTITEM);
     return true;
 }
