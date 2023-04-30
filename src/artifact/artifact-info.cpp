@@ -35,8 +35,11 @@ RandomArtActType activation_index(const ItemEntity *o_ptr)
         }
     }
 
-    if (o_ptr->is_ego() && egos_info[o_ptr->ego_idx].flags.has(TR_ACTIVATE)) {
-        return egos_info[o_ptr->ego_idx].act_idx;
+    if (o_ptr->is_ego()) {
+        const auto &ego = o_ptr->get_ego();
+        if (ego.flags.has(TR_ACTIVATE)) {
+            return ego.act_idx;
+        }
     }
 
     if (!o_ptr->is_random_artifact() && baseitems_info[o_ptr->bi_id].flags.has(TR_ACTIVATE)) {

@@ -60,7 +60,7 @@ TrFlags object_flags(const ItemEntity *o_ptr)
     }
 
     if (o_ptr->is_ego()) {
-        const auto &ego = egos_info[o_ptr->ego_idx];
+        const auto &ego = o_ptr->get_ego();
         flags.set(ego.flags);
         modify_ego_lite_flags(o_ptr, flags);
     }
@@ -98,7 +98,7 @@ TrFlags object_flags_known(const ItemEntity *o_ptr)
     }
 
     if (o_ptr->is_ego()) {
-        const auto &ego = egos_info[o_ptr->ego_idx];
+        const auto &ego = o_ptr->get_ego();
         flags.set(ego.flags);
         modify_ego_lite_flags(o_ptr, flags);
     }

@@ -907,26 +907,26 @@ WishResultType do_cmd_wishing(PlayerType *player_ptr, int prob, bool allow_art, 
             short bi_id = k_ids.back();
             o_ptr->prep(bi_id);
 
-            for (const auto &[e_idx, e_ref] : egos_info) {
-                if (e_ref.idx == EgoType::NONE || e_ref.name.empty()) {
+            for (const auto &[e_idx, ego] : egos_info) {
+                if (ego.idx == EgoType::NONE || ego.name.empty()) {
                     continue;
                 }
 
-                std::string item_name(e_ref.name);
+                std::string item_name(ego.name);
 #ifdef JP
 #else
                 str_tolower(item_name.data());
 #endif
                 if (cheat_xtra) {
-                    msg_format("matching ego no.%d %s...", enum2i(e_ref.idx), item_name.data());
+                    msg_format("matching ego no.%d %s...", enum2i(ego.idx), item_name.data());
                 }
 
                 if (std::string(str).find(item_name) != std::string::npos) {
-                    if (is_slot_able_to_be_ego(player_ptr, o_ptr) != e_ref.slot) {
+                    if (is_slot_able_to_be_ego(player_ptr, o_ptr) != ego.slot) {
                         continue;
                     }
 
-                    e_ids.push_back(e_ref.idx);
+                    e_ids.push_back(ego.idx);
                 }
             }
         }
