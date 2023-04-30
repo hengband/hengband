@@ -72,7 +72,7 @@
  *   Append the character "c".
  *   Do not use the "+" or "0" flags.
  *
- * Format("%s", concptr s)
+ * Format("%s", const char *s)
  *   Append the string "s".
  *   Do not use the "+" or "0" flags.
  *   Note that a "nullptr" value of "s" is converted to the empty string.
@@ -86,11 +86,11 @@
 #include <vector>
 
 namespace {
-std::string vformat(concptr fmt, va_list vp)
+std::string vformat(const char *fmt, va_list vp)
 {
     std::vector<char> format_buf(1024);
     while (true) {
-        uint len;
+        uint32_t len;
         len = vstrnfmt(format_buf.data(), format_buf.size(), fmt, vp);
         if (len < format_buf.size() - 1) {
             break;
@@ -107,7 +107,7 @@ std::string vformat(concptr fmt, va_list vp)
  * @brief 2バイト文字、及び文頭の大文字小文字を考慮しつつ、文字列のフォーマットを行う
  * @details 文頭を大文字にするには'%s^'とする.
  */
-uint vstrnfmt(char *buf, uint max, concptr fmt, va_list vp)
+uint32_t vstrnfmt(char *buf, uint32_t max, const char *fmt, va_list vp)
 {
     /* treat "no format" or "illegal" length as "empty string" */
     if (!fmt || (max == 0)) {
@@ -352,9 +352,9 @@ uint vstrnfmt(char *buf, uint max, concptr fmt, va_list vp)
 /*
  * Do a vstrnfmt (see above) into a buffer of a given size.
  */
-uint strnfmt(char *buf, uint max, concptr fmt, ...)
+uint32_t strnfmt(char *buf, uint32_t max, const char *fmt, ...)
 {
-    uint len;
+    uint32_t len;
     va_list vp;
     va_start(vp, fmt);
     len = vstrnfmt(buf, max, fmt, vp);
@@ -368,7 +368,7 @@ uint strnfmt(char *buf, uint max, concptr fmt, ...)
  * Note that the buffer is (technically) writable, but only up to
  * the length of the string contained inside it.
  */
-std::string format(concptr fmt, ...)
+std::string format(const char *fmt, ...)
 {
     va_list vp;
     va_start(vp, fmt);
@@ -380,7 +380,7 @@ std::string format(concptr fmt, ...)
 /*
  * Vararg interface to plog()
  */
-void plog_fmt(concptr fmt, ...)
+void plog_fmt(const char *fmt, ...)
 {
     va_list vp;
     va_start(vp, fmt);
@@ -392,7 +392,7 @@ void plog_fmt(concptr fmt, ...)
 /*
  * Vararg interface to quit()
  */
-void quit_fmt(concptr fmt, ...)
+void quit_fmt(const char *fmt, ...)
 {
     va_list vp;
     va_start(vp, fmt);
@@ -404,7 +404,7 @@ void quit_fmt(concptr fmt, ...)
 /*
  * Vararg interface to core()
  */
-void core_fmt(concptr fmt, ...)
+void core_fmt(const char *fmt, ...)
 {
     va_list vp;
     va_start(vp, fmt);
