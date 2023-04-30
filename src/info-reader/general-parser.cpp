@@ -144,10 +144,9 @@ parse_error_type parse_line_feature(FloorType *floor_ptr, char *buf)
             }
         } else if (zz[4][0] == '!') {
             if (inside_quest(floor_ptr->quest_number)) {
-                const auto &quest_list = QuestList::get_instance();
-                const auto a_idx = quest_list[floor_ptr->quest_number].reward_artifact_idx;
-                if (a_idx != FixedArtifactId::NONE) {
-                    const auto &artifact = ArtifactsInfo::get_instance().get_artifact(a_idx);
+                const auto &quest = QuestList::get_instance()[floor_ptr->quest_number];
+                if (quest.has_reward()) {
+                    const auto &artifact = quest.get_reward();
                     if (artifact.gen_flags.has_not(ItemGenerationTraitType::INSTA_ART)) {
                         letter[index].object = lookup_baseitem_id(artifact.bi_key);
                     }

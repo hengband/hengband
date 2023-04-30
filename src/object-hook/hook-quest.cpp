@@ -52,10 +52,8 @@ bool object_is_quest_target(QuestId quest_idx, const ItemEntity *o_ptr)
         return false;
     }
 
-    const auto &quest_list = QuestList::get_instance();
-    const auto &quest = quest_list[quest_idx];
-    auto a_idx = quest.reward_artifact_idx;
-    if (a_idx == FixedArtifactId::NONE) {
+    const auto &quest = QuestList::get_instance()[quest_idx];
+    if (quest.has_reward()) {
         return false;
     }
 

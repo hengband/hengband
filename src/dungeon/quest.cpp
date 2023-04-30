@@ -1,4 +1,5 @@
 ﻿#include "dungeon/quest.h"
+#include "artifact/fixed-art-types.h"
 #include "cmd-io/cmd-dump.h"
 #include "core/asking-player.h"
 #include "core/player-update-types.h"
@@ -162,6 +163,11 @@ void QuestList::initialize()
 bool QuestType::is_fixed(QuestId quest_idx)
 {
     return (enum2i(quest_idx) < MIN_RANDOM_QUEST) || (enum2i(quest_idx) > MAX_RANDOM_QUEST);
+}
+
+bool QuestType::has_reward() const
+{
+    return this->reward_artifact_idx != FixedArtifactId::NONE;
 }
 
 ArtifactType &QuestType::get_reward() const
