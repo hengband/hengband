@@ -23,7 +23,7 @@
  */
 static void macro_dump(FILE **fpp, concptr fname)
 {
-    static concptr mark = "Macro Dump";
+    constexpr auto mark = "Macro Dump";
     char buf[1024];
     path_build(buf, sizeof(buf), ANGBAND_DIR_USER, fname);
     if (!open_auto_dump(fpp, buf, mark)) {
@@ -32,7 +32,7 @@ static void macro_dump(FILE **fpp, concptr fname)
 
     auto_dump_printf(*fpp, _("\n# 自動マクロセーブ\n\n", "\n# Automatic macro dump\n\n"));
 
-    for (int i = 0; i < macro__num; i++) {
+    for (auto i = 0; i < macro__num; i++) {
         ascii_to_text(buf, macro__act[i], sizeof(buf));
         auto_dump_printf(*fpp, "A:%s\n", buf);
         ascii_to_text(buf, macro__pat[i], sizeof(buf));
@@ -105,7 +105,6 @@ static void do_cmd_macro_aux_keymap(char *buf)
 static errr keymap_dump(concptr fname)
 {
     FILE *auto_dump_stream;
-    static concptr mark = "Keymap Dump";
     char key[1024];
     char buf[1024];
     BIT_FLAGS mode;
@@ -116,6 +115,7 @@ static errr keymap_dump(concptr fname)
     }
 
     path_build(buf, sizeof(buf), ANGBAND_DIR_USER, fname);
+    constexpr auto mark = "Keymap Dump";
     if (!open_auto_dump(&auto_dump_stream, buf, mark)) {
         return -1;
     }

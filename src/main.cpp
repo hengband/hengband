@@ -85,7 +85,7 @@ static void create_user_dir(void)
     mkdir(dirpath.data(), 0700);
 
     char subdirpath[1024]{};
-    path_build(subdirpath, sizeof(subdirpath), dirpath.data(), VARIANT_NAME.data());
+    path_build(subdirpath, sizeof(subdirpath), dirpath, VARIANT_NAME);
     mkdir(subdirpath, 0700);
 }
 

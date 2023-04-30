@@ -92,7 +92,7 @@ void init_file_paths(char *libpath, char *varpath)
     path_build(buf, sizeof(buf), ANGBAND_DIR_SAVE, "log");
     ANGBAND_DIR_DEBUG_SAVE = string_make(buf);
 #ifdef PRIVATE_USER_PATH
-    path_build(buf, sizeof(buf), PRIVATE_USER_PATH, VARIANT_NAME.data());
+    path_build(buf, sizeof(buf), PRIVATE_USER_PATH, VARIANT_NAME);
     ANGBAND_DIR_USER = string_make(buf);
 #else
     strcpy(vartail, "user");
@@ -224,13 +224,10 @@ void init_angband(PlayerType *player_ptr, bool no_term)
     }
 
     (void)fd_close(fd);
-
     if (!no_term) {
         term_clear();
-
         path_build(buf, sizeof(buf), ANGBAND_DIR_FILE, _("news_j.txt", "news.txt"));
-        FILE *fp;
-        fp = angband_fopen(buf, FileOpenMode::READ);
+        auto *fp = angband_fopen(buf, FileOpenMode::READ);
         if (fp) {
             int i = 0;
             while (0 == angband_fgets(fp, buf, sizeof(buf))) {

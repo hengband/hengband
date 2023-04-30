@@ -63,7 +63,7 @@ errr file_character(PlayerType *player_ptr, concptr name)
 {
     char buf[1024];
     path_build(buf, sizeof(buf), ANGBAND_DIR_USER, name);
-    int fd = fd_open(buf, O_RDONLY);
+    auto fd = fd_open(buf, O_RDONLY);
     if (fd >= 0) {
         std::string query = _("現存するファイル ", "Replace existing file ");
         query.append(buf).append(_(" に上書きしますか? ", "? "));
@@ -271,15 +271,13 @@ uint32_t counts_read(PlayerType *player_ptr, int where)
 {
     char buf[1024];
     path_build(buf, sizeof(buf), ANGBAND_DIR_DATA, _("z_info_j.raw", "z_info.raw"));
-    int fd = fd_open(buf, O_RDONLY);
-
+    auto fd = fd_open(buf, O_RDONLY);
     uint32_t count = 0;
     if (counts_seek(player_ptr, fd, where, false) || fd_read(fd, (char *)(&count), sizeof(uint32_t))) {
         count = 0;
     }
 
     (void)fd_close(fd);
-
     return count;
 }
 
@@ -306,7 +304,7 @@ errr counts_write(PlayerType *player_ptr, int where, uint32_t count)
     }
 
     safe_setuid_grab(player_ptr);
-    errr err = fd_lock(fd, F_WRLCK);
+    auto err = fd_lock(fd, F_WRLCK);
     safe_setuid_drop();
     if (err) {
         return 1;
@@ -327,22 +325,19 @@ errr counts_write(PlayerType *player_ptr, int where, uint32_t count)
 }
 
 /*!
- * @brief 墓のアスキーアートテンプレを読み込む
- * @param buf テンプレへのバッファ
- * @param buf_size バッファの長さ
+ * @brief 墓のアスキーアートテンプレを読み込んで画面に表示する
  */
-void read_dead_file(char *buf, size_t buf_size)
+void read_dead_file()
 {
-    path_build(buf, buf_size, ANGBAND_DIR_FILE, _("dead_j.txt", "dead.txt"));
-
-    FILE *fp;
-    fp = angband_fopen(buf, FileOpenMode::READ);
+    char buf[1024];
+    path_build(buf, sizeof(buf), ANGBAND_DIR_FILE, _("dead_j.txt", "dead.txt"));
+    auto *fp = angband_fopen(buf, FileOpenMode::READ);
     if (!fp) {
         return;
     }
 
     int i = 0;
-    while (angband_fgets(fp, buf, buf_size) == 0) {
+    while (angband_fgets(fp, buf, sizeof(buf)) == 0) {
         put_str(buf, i++, 0);
     }
 

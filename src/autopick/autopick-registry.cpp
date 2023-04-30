@@ -29,12 +29,10 @@ static const char autoregister_header[] = "?:$AUTOREGISTER";
 static bool clear_auto_register(PlayerType *player_ptr)
 {
     char pref_file[1024];
-    path_build(pref_file, sizeof(pref_file), ANGBAND_DIR_USER, pickpref_filename(player_ptr, PT_WITH_PNAME).data());
-    FILE *pref_fff;
-    pref_fff = angband_fopen(pref_file, FileOpenMode::READ);
-
+    path_build(pref_file, sizeof(pref_file), ANGBAND_DIR_USER, pickpref_filename(player_ptr, PT_WITH_PNAME));
+    auto *pref_fff = angband_fopen(pref_file, FileOpenMode::READ);
     if (!pref_fff) {
-        path_build(pref_file, sizeof(pref_file), ANGBAND_DIR_USER, pickpref_filename(player_ptr, PT_DEFAULT).data());
+        path_build(pref_file, sizeof(pref_file), ANGBAND_DIR_USER, pickpref_filename(player_ptr, PT_DEFAULT));
         pref_fff = angband_fopen(pref_file, FileOpenMode::READ);
     }
 
@@ -43,8 +41,7 @@ static bool clear_auto_register(PlayerType *player_ptr)
     }
 
     char tmp_file[1024];
-    FILE *tmp_fff;
-    tmp_fff = angband_fopen_temp(tmp_file, sizeof(tmp_file));
+    auto *tmp_fff = angband_fopen_temp(tmp_file, sizeof(tmp_file));
     if (!tmp_fff) {
         fclose(pref_fff);
         msg_format(_("一時ファイル %s を作成できませんでした。", "Failed to create temporary file %s."), tmp_file);
@@ -52,8 +49,8 @@ static bool clear_auto_register(PlayerType *player_ptr)
         return false;
     }
 
-    bool autoregister = false;
-    int num = 0;
+    auto autoregister = false;
+    auto num = 0;
     char buf[1024];
     while (true) {
         if (angband_fgets(pref_fff, buf, sizeof(buf))) {
@@ -144,12 +141,10 @@ bool autopick_autoregister(PlayerType *player_ptr, ItemEntity *o_ptr)
 
     char buf[1024];
     char pref_file[1024];
-    FILE *pref_fff;
-    path_build(pref_file, sizeof(pref_file), ANGBAND_DIR_USER, pickpref_filename(player_ptr, PT_WITH_PNAME).data());
-    pref_fff = angband_fopen(pref_file, FileOpenMode::READ);
-
+    path_build(pref_file, sizeof(pref_file), ANGBAND_DIR_USER, pickpref_filename(player_ptr, PT_WITH_PNAME));
+    auto *pref_fff = angband_fopen(pref_file, FileOpenMode::READ);
     if (!pref_fff) {
-        path_build(pref_file, sizeof(pref_file), ANGBAND_DIR_USER, pickpref_filename(player_ptr, PT_DEFAULT).data());
+        path_build(pref_file, sizeof(pref_file), ANGBAND_DIR_USER, pickpref_filename(player_ptr, PT_DEFAULT));
         pref_fff = angband_fopen(pref_file, FileOpenMode::READ);
     }
 

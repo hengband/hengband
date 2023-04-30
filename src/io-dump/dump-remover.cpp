@@ -12,7 +12,7 @@
  * @param orig_file 消去を行うファイル名
  * @param auto_dump_mark 出力するヘッダマーク
  */
-void remove_auto_dump(concptr orig_file, concptr auto_dump_mark)
+void remove_auto_dump(const std::filesystem::path &orig_file, std::string_view auto_dump_mark)
 {
     char buf[1024];
     bool between_mark = false;
@@ -22,8 +22,8 @@ void remove_auto_dump(concptr orig_file, concptr auto_dump_mark)
     char header_mark_str[80];
     char footer_mark_str[80];
 
-    strnfmt(header_mark_str, sizeof(header_mark_str), auto_dump_header, auto_dump_mark);
-    strnfmt(footer_mark_str, sizeof(footer_mark_str), auto_dump_footer, auto_dump_mark);
+    strnfmt(header_mark_str, sizeof(header_mark_str), auto_dump_header, auto_dump_mark.data());
+    strnfmt(footer_mark_str, sizeof(footer_mark_str), auto_dump_footer, auto_dump_mark.data());
     size_t mark_len = strlen(footer_mark_str);
 
     FILE *orig_fff;

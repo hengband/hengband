@@ -79,8 +79,8 @@ graphics_mode change_graphics(graphics_mode arg)
 
     char buf[MAIN_WIN_MAX_PATH];
     BYTE wid, hgt, twid, thgt, ox, oy;
-    concptr name;
-    concptr name_mask = nullptr;
+    std::string name;
+    std::string name_mask("");
 
     infGraph.delete_bitmap();
 
@@ -124,7 +124,7 @@ graphics_mode change_graphics(graphics_mode arg)
     path_build(buf, sizeof(buf), ANGBAND_DIR_XTRA_GRAF, name);
     infGraph.hBitmap = read_graphic(buf);
     if (!infGraph.hBitmap) {
-        plog_fmt(_("ビットマップ '%s' を読み込めません。", "Cannot read bitmap file '%s'"), name);
+        plog_fmt(_("ビットマップ '%s' を読み込めません。", "Cannot read bitmap file '%s'"), name.data());
         ANGBAND_GRAF = "ascii";
         current_graphics_mode = graphics_mode::GRAPHICS_NONE;
         return current_graphics_mode;
@@ -137,11 +137,11 @@ graphics_mode change_graphics(graphics_mode arg)
     infGraph.OffsetX = ox;
     infGraph.OffsetY = oy;
 
-    if (name_mask) {
+    if (name_mask.empty()) {
         path_build(buf, sizeof(buf), ANGBAND_DIR_XTRA_GRAF, name_mask);
         infGraph.hBitmapMask = read_graphic(buf);
         if (!infGraph.hBitmapMask) {
-            plog_fmt(_("ビットマップ '%s' を読み込めません。", "Cannot read bitmap file '%s'"), name_mask);
+            plog_fmt(_("ビットマップ '%s' を読み込めません。", "Cannot read bitmap file '%s'"), name_mask.data());
             ANGBAND_GRAF = "ascii";
             current_graphics_mode = graphics_mode::GRAPHICS_NONE;
             return current_graphics_mode;

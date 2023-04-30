@@ -204,8 +204,7 @@ void do_cmd_save_screen_html_aux(char *filename, int message)
 {
     TERM_LEN wid, hgt;
     term_get_size(&wid, &hgt);
-    FILE *fff;
-    fff = angband_fopen(filename, FileOpenMode::WRITE);
+    auto *fff = angband_fopen(filename, FileOpenMode::WRITE);
     if (!check_screen_html_can_open(fff, filename, message)) {
         return;
     }
@@ -216,8 +215,7 @@ void do_cmd_save_screen_html_aux(char *filename, int message)
 
     char buf[2048];
     path_build(buf, sizeof(buf), ANGBAND_DIR_USER, "htmldump.prf");
-    FILE *tmpfff;
-    tmpfff = angband_fopen(buf, FileOpenMode::READ);
+    auto *tmpfff = angband_fopen(buf, FileOpenMode::READ);
     write_html_header(tmpfff, fff, buf, sizeof(buf));
     screen_dump_lines(wid, hgt, fff);
     write_html_footer(tmpfff, fff, buf, sizeof(buf));
@@ -239,14 +237,12 @@ void do_cmd_save_screen_html_aux(char *filename, int message)
 static void do_cmd_save_screen_html(void)
 {
     char buf[1024], tmp[256] = "screen.html";
-
     if (!get_string(_("ファイル名: ", "File name: "), tmp, 80)) {
         return;
     }
+
     path_build(buf, sizeof(buf), ANGBAND_DIR_USER, tmp);
-
     msg_print(nullptr);
-
     do_cmd_save_screen_html_aux(buf, 1);
 }
 
@@ -305,10 +301,9 @@ static bool do_cmd_save_screen_text(int wid, int hgt)
 {
     TERM_COLOR a = 0;
     auto c = ' ';
-    FILE *fff;
     char buf[1024];
     path_build(buf, sizeof(buf), ANGBAND_DIR_USER, "dump.txt");
-    fff = angband_fopen(buf, FileOpenMode::WRITE);
+    auto *fff = angband_fopen(buf, FileOpenMode::WRITE);
     if (!check_screen_text_can_open(fff, buf)) {
         return false;
     }
@@ -481,12 +476,11 @@ static void draw_colored_characters(char buf[], FILE *fff, int wid, int hgt, boo
  */
 void do_cmd_load_screen(void)
 {
-    FILE *fff;
     char buf[1024];
     TERM_LEN wid, hgt;
     term_get_size(&wid, &hgt);
     path_build(buf, sizeof(buf), ANGBAND_DIR_USER, "dump.txt");
-    fff = angband_fopen(buf, FileOpenMode::READ);
+    auto *fff = angband_fopen(buf, FileOpenMode::READ);
     if (!fff) {
         msg_format(_("%s を開くことができませんでした。", "Failed to open %s."), buf);
         msg_print(nullptr);

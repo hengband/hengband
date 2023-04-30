@@ -204,7 +204,7 @@ void do_cmd_edit_autopick(PlayerType *player_ptr)
     const auto filename = pickpref_filename(player_ptr, tb->filename_mode);
 
     if (quit == APE_QUIT_AND_SAVE) {
-        write_text_lines(filename.data(), tb->lines_list.data());
+        write_text_lines(filename.data(), tb->lines_list);
     }
 
     free_text_lines(tb->lines_list);

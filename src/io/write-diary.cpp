@@ -20,6 +20,7 @@
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 #include "world/world.h"
+#include <sstream>
 
 bool write_level; //!< @todo *抹殺* したい…
 
@@ -55,10 +56,10 @@ concptr get_ordinal_number_suffix(int num)
  */
 static bool open_diary_file(FILE **fff, bool *disable_diary)
 {
-    std::string file_name = _("playrecord-", "playrec-");
-    file_name.append(savefile_base).append(".txt");
+    std::stringstream ss;
+    ss << _("playrecord-", "playrec-") << savefile_base << ".txt";
     char buf[1024];
-    path_build(buf, sizeof(buf), ANGBAND_DIR_USER, file_name.data());
+    path_build(buf, sizeof(buf), ANGBAND_DIR_USER, ss.str());
     *fff = angband_fopen(buf, FileOpenMode::APPEND);
     if (*fff) {
         return true;

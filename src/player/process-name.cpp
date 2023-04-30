@@ -97,15 +97,14 @@ void process_player_name(PlayerType *player_ptr, bool is_new_savefile)
         /* Rename the savefile, using the player_ptr->base_name */
         temp = player_ptr->base_name;
 #endif
-        path_build(savefile, sizeof(savefile), ANGBAND_DIR_SAVE, temp.data());
+        path_build(savefile, sizeof(savefile), ANGBAND_DIR_SAVE, temp);
         is_modified = true;
     }
 
     if (is_modified || !savefile_base[0]) {
-        concptr s = savefile;
+        auto s = savefile;
         while (true) {
-            concptr t;
-            t = angband_strstr(s, PATH_SEP);
+            auto t = angband_strstr(s, PATH_SEP);
             if (!t) {
                 break;
             }

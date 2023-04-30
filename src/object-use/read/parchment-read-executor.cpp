@@ -32,7 +32,7 @@ bool ParchmentReadExecutor::read()
     screen_save();
     auto q = format("book-%d_jp.txt", this->o_ptr->bi_key.sval().value());
     const auto item_name = describe_flavor(this->player_ptr, this->o_ptr, OD_NAME_ONLY);
-    (void)path_build(buf, sizeof(buf), ANGBAND_DIR_FILE, q.data());
+    path_build(buf, sizeof(buf), ANGBAND_DIR_FILE, q);
     (void)show_file(this->player_ptr, true, buf, item_name.data(), 0, 0);
     screen_load();
     return false;

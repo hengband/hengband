@@ -26,10 +26,10 @@
  */
 static void display_diary(PlayerType *player_ptr)
 {
-    std::stringstream file_name;
-    file_name << _("playrecord-", "playrec-") << savefile_base << ".txt";
+    std::stringstream ss;
+    ss << _("playrecord-", "playrec-") << savefile_base << ".txt";
     char buf[1024];
-    path_build(buf, sizeof(buf), ANGBAND_DIR_USER, file_name.str().data());
+    path_build(buf, sizeof(buf), ANGBAND_DIR_USER, ss.str());
 
     PlayerClass pc(player_ptr);
     const auto max_subtitles = diary_subtitles.size();
@@ -90,20 +90,19 @@ static void do_cmd_last_get(PlayerType *player_ptr)
 /*!
  * @brief ファイル中の全日記記録を消去する /
  */
-static void do_cmd_erase_diary(void)
+static void do_cmd_erase_diary()
 {
-    char buf[256];
-    FILE *fff = nullptr;
-
     if (!get_check(_("本当に記録を消去しますか？", "Do you really want to delete all your records? "))) {
         return;
     }
-    std::string file_name = _("playrecord-", "playrec-");
-    file_name.append(savefile_base).append(".txt");
-    path_build(buf, sizeof(buf), ANGBAND_DIR_USER, file_name.data());
+
+    std::stringstream ss;
+    ss << _("playrecord-", "playrec-") << savefile_base << ".txt";
+    char buf[256];
+    path_build(buf, sizeof(buf), ANGBAND_DIR_USER, ss.str());
     fd_kill(buf);
 
-    fff = angband_fopen(buf, FileOpenMode::WRITE);
+    auto *fff = angband_fopen(buf, FileOpenMode::WRITE);
     if (fff) {
         angband_fclose(fff);
         msg_format(_("記録を消去しました。", "deleted record."));

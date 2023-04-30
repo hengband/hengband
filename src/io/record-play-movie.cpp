@@ -339,46 +339,41 @@ void prepare_movie_hooks(PlayerType *player_ptr)
         disable_chuukei_server();
         fd_close(movie_fd);
         msg_print(_("録画を終了しました。", "Stopped recording."));
-    } else {
-        char filename[80];
-        strnfmt(filename, sizeof(filename), "%s.amv", player_ptr->base_name);
-        if (get_string(_("ムービー記録ファイル: ", "Movie file name: "), filename, 80)) {
-            char buf[1024];
-            int fd;
-
-            path_build(buf, sizeof(buf), ANGBAND_DIR_USER, filename);
-
-            fd = fd_open(buf, O_RDONLY);
-
-            /* Existing file */
-            if (fd >= 0) {
-                (void)fd_close(fd);
-
-                /* Build query */
-                std::string query = _("現存するファイルに上>書きしますか? (", "Replace existing file ");
-                query.append(buf);
-                query.append(_(")", "? "));
-
-                /* Ask */
-                if (!get_check(query)) {
-                    return;
-                }
-
-                movie_fd = fd_open(buf, O_WRONLY | O_TRUNC);
-            } else {
-                movie_fd = fd_make(buf);
-            }
-
-            if (!movie_fd) {
-                msg_print(_("ファイルを開けません！", "Can not open file."));
-                return;
-            }
-
-            movie_mode = 1;
-            prepare_chuukei_hooks();
-            do_cmd_redraw(player_ptr);
-        }
+        return;
     }
+
+    std::stringstream ss;
+    ss << player_ptr->base_name << ".amv";
+    auto movie_filename = ss.str();
+    if (!get_string(_("ムービー記録ファイル: ", "Movie file name: "), movie_filename.data(), 80)) {
+        return;
+    }
+
+    char buf[1024];
+    path_build(buf, sizeof(buf), ANGBAND_DIR_USER, movie_filename);
+    auto fd = fd_open(buf, O_RDONLY);
+    if (fd >= 0) {
+        (void)fd_close(fd);
+        std::string query = _("現存するファイルに上>書きしますか? (", "Replace existing file ");
+        query.append(buf);
+        query.append(_(")", "? "));
+        if (!get_check(query)) {
+            return;
+        }
+
+        movie_fd = fd_open(buf, O_WRONLY | O_TRUNC);
+    } else {
+        movie_fd = fd_make(buf);
+    }
+
+    if (!movie_fd) {
+        msg_print(_("ファイルを開けません！", "Can not open file."));
+        return;
+    }
+
+    movie_mode = 1;
+    prepare_chuukei_hooks();
+    do_cmd_redraw(player_ptr);
 }
 
 static int handle_movie_timestamp_data(int timestamp)
@@ -524,7 +519,7 @@ static void update_term_size(int x, int y, int len)
     }
 }
 
-static bool flush_ringbuf_client(void)
+static bool flush_ringbuf_client()
 {
     char buf[1024];
 
@@ -625,7 +620,7 @@ static bool flush_ringbuf_client(void)
     return true;
 }
 
-void prepare_browse_movie_without_path_build(concptr filename)
+void prepare_browse_movie_without_path_build(std::string_view filename)
 {
     movie_fd = fd_open(filename, O_RDONLY);
     init_buffer();
@@ -654,7 +649,7 @@ void browse_movie(void)
 }
 
 #ifndef WINDOWS
-void prepare_browse_movie_with_path_build(concptr filename)
+void prepare_browse_movie_with_path_build(std::string_view filename)
 {
     char buf[1024];
     path_build(buf, sizeof(buf), ANGBAND_DIR_USER, filename);

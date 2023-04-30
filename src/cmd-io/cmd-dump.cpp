@@ -93,7 +93,7 @@ void do_cmd_colors(PlayerType *player_ptr)
             term_xtra(TERM_XTRA_REACT, 0);
             term_redraw();
         } else if (i == '2') {
-            static concptr mark = "Colors";
+            constexpr auto mark = "Colors";
             prt(_("コマンド: カラーの設定をファイルに書き出します", "Command: Dump colors"), 8, 0);
             prt(_("ファイル: ", "File: "), 10, 0);
             strnfmt(tmp, sizeof(tmp), "%s.prf", player_ptr->base_name);
@@ -113,7 +113,7 @@ void do_cmd_colors(PlayerType *player_ptr)
                 int gv = angband_color_table[i][2];
                 int bv = angband_color_table[i][3];
 
-                concptr name = _("未知", "unknown");
+                auto name = _("未知", "unknown");
                 if (!kv && !rv && !gv && !bv) {
                     continue;
                 }
@@ -267,14 +267,10 @@ void do_cmd_time(PlayerType *player_ptr)
 {
     int day, hour, min;
     extract_day_hour_min(player_ptr, &day, &hour, &min);
-
     std::string desc = _("変な時刻だ。", "It is a strange time.");
-
     std::string day_buf = (day < MAX_DAYS) ? std::to_string(day) : "*****";
-
-    msg_format(_("%s日目, 時刻は%d:%02d %sです。", "This is day %s. The time is %d:%02d %s."), day_buf.data(), (hour % 12 == 0) ? 12 : (hour % 12), min,
-        (hour < 12) ? "AM" : "PM");
-
+    constexpr auto mes = _("%s日目, 時刻は%d:%02d %sです。", "This is day %s. The time is %d:%02d %s.");
+    msg_format(mes, day_buf.data(), (hour % 12 == 0) ? 12 : (hour % 12), min, (hour < 12) ? "AM" : "PM");
     char buf[1024];
     if (!randint0(10) || player_ptr->effects()->hallucination()->is_hallucinated()) {
         path_build(buf, sizeof(buf), ANGBAND_DIR_FILE, _("timefun_j.txt", "timefun.txt"));
@@ -282,17 +278,15 @@ void do_cmd_time(PlayerType *player_ptr)
         path_build(buf, sizeof(buf), ANGBAND_DIR_FILE, _("timenorm_j.txt", "timenorm.txt"));
     }
 
-    FILE *fff;
-    fff = angband_fopen(buf, FileOpenMode::READ);
-
+    auto *fff = angband_fopen(buf, FileOpenMode::READ);
     if (!fff) {
         return;
     }
 
-    int full = hour * 100 + min;
-    int start = 9999;
-    int end = -9999;
-    int num = 0;
+    auto full = hour * 100 + min;
+    auto start = 9999;
+    auto end = -9999;
+    auto num = 0;
     while (!angband_fgets(fff, buf, sizeof(buf))) {
         if (!buf[0] || (buf[0] == '#')) {
             continue;

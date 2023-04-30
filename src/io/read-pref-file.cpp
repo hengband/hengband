@@ -1,16 +1,7 @@
 ﻿/*
  * @brief プレイヤーのインターフェイスに関するコマンドの実装 / Interface commands
- * @date 2020/03/01
+ * @date 2023/04/30
  * @author Mogami & Hourier
- * -Mogami-
- * remove_auto_dump(orig_file, mark)
- *     Remove the old automatic dump of type "mark".
- * auto_dump_printf(fmt, ...)
- *     Dump a formatted string using fprintf().
- * open_auto_dump(buf, mark)
- *     Open a file, remove old dump, and add new header.
- * close_auto_dump(void)
- *     Add a footer, and close the file.
  */
 
 #include "io/read-pref-file.h"
@@ -32,6 +23,7 @@
 #include "view/display-messages.h"
 #include "world/world.h"
 #include <algorithm>
+#include <filesystem>
 #include <string>
 
 //!< @todo コールバック関数に変更するので、いずれ消す.
@@ -56,10 +48,9 @@ static int auto_dump_line_num;
  * @return エラーコード
  * @todo 関数名を変更する
  */
-static errr process_pref_file_aux(PlayerType *player_ptr, concptr name, int preftype)
+static errr process_pref_file_aux(PlayerType *player_ptr, const std::filesystem::path &name, int preftype)
 {
-    FILE *fp;
-    fp = angband_fopen(name, FileOpenMode::READ);
+    auto *fp = angband_fopen(name, FileOpenMode::READ);
     if (!fp) {
         return -1;
     }
@@ -139,7 +130,8 @@ static errr process_pref_file_aux(PlayerType *player_ptr, concptr name, int pref
     if (err != 0) {
         /* Print error message */
         /* ToDo: Add better error messages */
-        msg_format(_("ファイル'%s'の%d行でエラー番号%dのエラー。", "Error %d in line %d of file '%s'."), _(name, err), line, _(err, name));
+        const auto &name_str = name.string();
+        msg_format(_("ファイル'%s'の%d行でエラー番号%dのエラー。", "Error %d in line %d of file '%s'."), _(name_str.data(), err), line, _(err, name_str.data()));
         msg_format(_("('%s'を解析中)", "Parsing '%s'"), error_line.data());
         msg_print(nullptr);
     }
@@ -162,13 +154,12 @@ static errr process_pref_file_aux(PlayerType *player_ptr, concptr name, int pref
  * allow conditional evaluation and filename inclusion.
  * </pre>
  */
-errr process_pref_file(PlayerType *player_ptr, concptr name, bool only_user_dir)
+errr process_pref_file(PlayerType *player_ptr, std::string_view name, bool only_user_dir)
 {
     char buf[1024];
     errr err1 = 0;
     if (!only_user_dir) {
         path_build(buf, sizeof(buf), ANGBAND_DIR_PREF, name);
-
         err1 = process_pref_file_aux(player_ptr, buf, PREF_TYPE_NORMAL);
         if (err1 > 0) {
             return err1;
@@ -190,12 +181,11 @@ errr process_pref_file(PlayerType *player_ptr, concptr name, bool only_user_dir)
  * @param name ファイル名
  * @details
  */
-errr process_autopick_file(PlayerType *player_ptr, concptr name)
+errr process_autopick_file(PlayerType *player_ptr, std::string_view name)
 {
     char buf[1024];
     path_build(buf, sizeof(buf), ANGBAND_DIR_USER, name);
-    errr err = process_pref_file_aux(player_ptr, buf, PREF_TYPE_AUTOPICK);
-    return err;
+    return process_pref_file_aux(player_ptr, buf, PREF_TYPE_AUTOPICK);
 }
 
 /*!
@@ -206,7 +196,7 @@ errr process_autopick_file(PlayerType *player_ptr, concptr name)
  * @return エラーコード
  * @details
  */
-errr process_histpref_file(PlayerType *player_ptr, concptr name)
+errr process_histpref_file(PlayerType *player_ptr, std::string_view name)
 {
     bool old_character_xtra = w_ptr->character_xtra;
     char buf[1024];
@@ -224,14 +214,14 @@ errr process_histpref_file(PlayerType *player_ptr, concptr name)
  * Dump a formatted line, using "vstrnfmt()".
  * @param fmt 出力内容
  */
-void auto_dump_printf(FILE *auto_dump_stream, concptr fmt, ...)
+void auto_dump_printf(FILE *auto_dump_stream, const char *fmt, ...)
 {
     va_list vp;
     char buf[1024];
     va_start(vp, fmt);
     (void)vstrnfmt(buf, sizeof(buf), fmt, vp);
     va_end(vp);
-    for (concptr p = buf; *p; p++) {
+    for (auto p = buf; *p; p++) {
         if (*p == '\n') {
             auto_dump_line_num++;
         }
@@ -243,18 +233,19 @@ void auto_dump_printf(FILE *auto_dump_stream, concptr fmt, ...)
 /*!
  * @brief prfファイルをファイルオープンする /
  * Open file to append auto dump.
- * @param buf ファイル名
+ * @param path ファイル名
  * @param mark 出力するヘッダマーク
  * @return ファイルポインタを取得できたらTRUEを返す
  */
-bool open_auto_dump(FILE **fpp, concptr buf, concptr mark)
+bool open_auto_dump(FILE **fpp, const std::filesystem::path &path, std::string_view mark)
 {
     char header_mark_str[80];
-    strnfmt(header_mark_str, sizeof(header_mark_str), auto_dump_header, mark);
-    remove_auto_dump(buf, mark);
-    *fpp = angband_fopen(buf, FileOpenMode::APPEND);
+    strnfmt(header_mark_str, sizeof(header_mark_str), auto_dump_header, mark.data());
+    remove_auto_dump(path, mark);
+    *fpp = angband_fopen(path, FileOpenMode::APPEND);
     if (!fpp) {
-        msg_format(_("%s を開くことができませんでした。", "Failed to open %s."), buf);
+        const auto &path_str = path.string();
+        msg_format(_("%s を開くことができませんでした。", "Failed to open %s."), path_str.data());
         msg_print(nullptr);
         return false;
     }
@@ -272,10 +263,10 @@ bool open_auto_dump(FILE **fpp, concptr buf, concptr mark)
  * Append foot part and close auto dump.
  * @param auto_dump_mark 出力するヘッダマーク
  */
-void close_auto_dump(FILE **fpp, concptr auto_dump_mark)
+void close_auto_dump(FILE **fpp, std::string_view mark)
 {
     char footer_mark_str[80];
-    strnfmt(footer_mark_str, sizeof(footer_mark_str), auto_dump_footer, auto_dump_mark);
+    strnfmt(footer_mark_str, sizeof(footer_mark_str), auto_dump_footer, mark.data());
     auto_dump_printf(*fpp, _("# *警告!!* 以降の行は自動生成されたものです。\n", "# *Warning!*  The lines below are an automatic dump.\n"));
     auto_dump_printf(
         *fpp, _("# *警告!!* 後で自動的に削除されるので編集しないでください。\n", "# Don't edit them; changes will be deleted and replaced automatically.\n"));

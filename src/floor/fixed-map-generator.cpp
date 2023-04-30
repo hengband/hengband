@@ -10,6 +10,7 @@
 #include "grid/object-placer.h"
 #include "grid/trap.h"
 #include "info-reader/general-parser.h"
+#include "info-reader/parse-error-types.h"
 #include "info-reader/random-grid-effect-types.h"
 #include "io/tokenizer.h"
 #include "monster-floor/monster-generator.h"

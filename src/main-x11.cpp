@@ -1806,7 +1806,7 @@ static void init_sound(void)
     for (i = 1; i < SOUND_MAX; i++) {
         std::string wav = angband_sound_name[i];
         wav.append(".wav");
-        path_build(buf, sizeof(buf), dir_xtra_sound, wav.data());
+        path_build(buf, sizeof(buf), dir_xtra_sound, wav);
         if (check_file(buf)) {
             sound_file[i] = string_make(buf);
         }
