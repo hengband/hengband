@@ -105,14 +105,14 @@ void do_cmd_go_up(PlayerType *player_ptr)
         leave_quest_check(player_ptr);
         floor_ptr->quest_number = i2enum<QuestId>(g_ptr->special);
         const auto quest_number = floor_ptr->quest_number;
-        auto &q_ref = quest_list[quest_number];
-        if (q_ref.status == QuestStatusType::UNTAKEN) {
-            if (q_ref.type != QuestKindType::RANDOM) {
+        auto &quest = quest_list[quest_number];
+        if (quest.status == QuestStatusType::UNTAKEN) {
+            if (quest.type != QuestKindType::RANDOM) {
                 init_flags = INIT_ASSIGN;
                 parse_fixed_map(player_ptr, QUEST_DEFINITION_LIST, 0, 0, 0, 0);
             }
 
-            q_ref.status = QuestStatusType::TAKEN;
+            quest.status = QuestStatusType::TAKEN;
         }
 
         if (!inside_quest(quest_number)) {
@@ -144,14 +144,14 @@ void do_cmd_go_up(PlayerType *player_ptr)
     }
 
     const auto quest_number = player_ptr->current_floor_ptr->quest_number;
-    auto &q_ref = quest_list[quest_number];
+    auto &quest = quest_list[quest_number];
 
-    if (inside_quest(quest_number) && q_ref.type == QuestKindType::RANDOM) {
+    if (inside_quest(quest_number) && quest.type == QuestKindType::RANDOM) {
         leave_quest_check(player_ptr);
         player_ptr->current_floor_ptr->quest_number = QuestId::NONE;
     }
 
-    if (inside_quest(quest_number) && q_ref.type != QuestKindType::RANDOM) {
+    if (inside_quest(quest_number) && quest.type != QuestKindType::RANDOM) {
         leave_quest_check(player_ptr);
         player_ptr->current_floor_ptr->quest_number = i2enum<QuestId>(g_ptr->special);
         player_ptr->current_floor_ptr->dun_level = 0;

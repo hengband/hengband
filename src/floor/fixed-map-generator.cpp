@@ -199,7 +199,7 @@ static void parse_qtw_D(PlayerType *player_ptr, qtwg_type *qtwg_ptr, char *s)
     }
 }
 
-static bool parse_qtw_QQ(quest_type *q_ptr, char **zz, int num)
+static bool parse_qtw_QQ(QuestType *q_ptr, char **zz, int num)
 {
     if (zz[1][0] != 'Q') {
         return false;
@@ -236,7 +236,7 @@ static bool parse_qtw_QQ(quest_type *q_ptr, char **zz, int num)
         return true;
     }
 
-    auto &artifact = ArtifactsInfo::get_instance().get_artifact(q_ptr->reward_artifact_idx);
+    auto &artifact = q_ptr->get_reward();
     artifact.gen_flags.set(ItemGenerationTraitType::QUESTITEM);
     return true;
 }
@@ -244,7 +244,7 @@ static bool parse_qtw_QQ(quest_type *q_ptr, char **zz, int num)
 /*!
  * @todo 処理がどうなっているのかいずれチェックする
  */
-static bool parse_qtw_QR(quest_type *q_ptr, char **zz, int num)
+static bool parse_qtw_QR(QuestType *q_ptr, char **zz, int num)
 {
     if (zz[1][0] != 'R') {
         return false;
@@ -322,7 +322,7 @@ static int parse_qtw_Q(qtwg_type *qtwg_ptr, char **zz)
 
     if (zz[1][0] == 'N') {
         if (init_flags & (INIT_ASSIGN | INIT_SHOW_TEXT | INIT_NAME_ONLY)) {
-            strcpy(q_ptr->name, zz[2]);
+            q_ptr->name = zz[2];
         }
 
         return PARSE_ERROR_NONE;

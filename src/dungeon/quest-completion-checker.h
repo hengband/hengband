@@ -8,7 +8,7 @@
 class MonsterEntity;
 class ItemEntity;
 class PlayerType;
-struct quest_type;
+class QuestType;
 class QuestCompletionChecker {
 public:
     QuestCompletionChecker(PlayerType *player_ptr, MonsterEntity *m_ptr);
@@ -20,7 +20,7 @@ private:
     PlayerType *player_ptr;
     MonsterEntity *m_ptr;
     QuestId quest_idx;
-    quest_type *q_ptr = nullptr;
+    QuestType *q_ptr = nullptr;
 
     void set_quest_idx();
     std::tuple<bool, bool> switch_completion();

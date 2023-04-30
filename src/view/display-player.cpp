@@ -188,7 +188,7 @@ static std::optional<std::string> search_death_cause(PlayerType *player_ptr)
 #endif
     }
 
-    if (inside_quest(floor_ptr->quest_number) && quest_type::is_fixed(floor_ptr->quest_number)) {
+    if (inside_quest(floor_ptr->quest_number) && QuestType::is_fixed(floor_ptr->quest_number)) {
         const auto &quest_list = QuestList::get_instance();
 
         /* Get the quest text */
@@ -198,9 +198,9 @@ static std::optional<std::string> search_death_cause(PlayerType *player_ptr)
 
         const auto *q_ptr = &quest_list[floor_ptr->quest_number];
 #ifdef JP
-        return std::string(format("…あなたは、クエスト「%s」で%sに殺された。", q_ptr->name, player_ptr->died_from.data()));
+        return std::string(format("…あなたは、クエスト「%s」で%sに殺された。", q_ptr->name.data(), player_ptr->died_from.data()));
 #else
-        return std::string(format("...You were killed by %s in the quest '%s'.", player_ptr->died_from.data(), q_ptr->name));
+        return std::string(format("...You were killed by %s in the quest '%s'.", player_ptr->died_from.data(), q_ptr->name.data()));
 #endif
     }
 
@@ -220,7 +220,7 @@ static std::optional<std::string> search_death_cause(PlayerType *player_ptr)
 static std::optional<std::string> decide_death_in_quest(PlayerType *player_ptr)
 {
     auto *floor_ptr = player_ptr->current_floor_ptr;
-    if (!inside_quest(floor_ptr->quest_number) || !quest_type::is_fixed(floor_ptr->quest_number)) {
+    if (!inside_quest(floor_ptr->quest_number) || !QuestType::is_fixed(floor_ptr->quest_number)) {
         return std::nullopt;
     }
 
@@ -232,7 +232,7 @@ static std::optional<std::string> decide_death_in_quest(PlayerType *player_ptr)
     quest_text_line = 0;
     init_flags = INIT_NAME_ONLY;
     parse_fixed_map(player_ptr, QUEST_DEFINITION_LIST, 0, 0, 0, 0);
-    return std::string(format(_("…あなたは現在、 クエスト「%s」を遂行中だ。", "...Now, you are in the quest '%s'."), quest_list[floor_ptr->quest_number].name));
+    return std::string(format(_("…あなたは現在、 クエスト「%s」を遂行中だ。", "...Now, you are in the quest '%s'."), quest_list[floor_ptr->quest_number].name.data()));
 }
 
 /*!

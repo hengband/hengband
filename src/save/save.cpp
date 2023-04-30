@@ -133,27 +133,27 @@ static bool wr_savefile_new(PlayerType *player_ptr, SaveType type)
     tmp8u = MAX_RANDOM_QUEST - MIN_RANDOM_QUEST;
     wr_byte(tmp8u);
 
-    for (const auto &[q_idx, q_ref] : quest_list) {
+    for (const auto &[q_idx, quest] : quest_list) {
         wr_s16b(enum2i(q_idx));
-        wr_s16b(enum2i(q_ref.status));
-        wr_s16b((int16_t)q_ref.level);
-        wr_byte((byte)q_ref.complev);
-        wr_u32b(q_ref.comptime);
+        wr_s16b(enum2i(quest.status));
+        wr_s16b((int16_t)quest.level);
+        wr_byte((byte)quest.complev);
+        wr_u32b(quest.comptime);
 
-        auto is_quest_running = q_ref.status == QuestStatusType::TAKEN;
-        is_quest_running |= q_ref.status == QuestStatusType::COMPLETED;
-        is_quest_running |= !quest_type::is_fixed(q_idx);
+        auto is_quest_running = quest.status == QuestStatusType::TAKEN;
+        is_quest_running |= quest.status == QuestStatusType::COMPLETED;
+        is_quest_running |= !QuestType::is_fixed(q_idx);
         if (!is_quest_running) {
             continue;
         }
 
-        wr_s16b((int16_t)q_ref.cur_num);
-        wr_s16b((int16_t)q_ref.max_num);
-        wr_s16b(enum2i(q_ref.type));
-        wr_s16b(enum2i(q_ref.r_idx));
-        wr_s16b(enum2i(q_ref.reward_artifact_idx));
-        wr_byte((byte)q_ref.flags);
-        wr_byte((byte)q_ref.dungeon);
+        wr_s16b((int16_t)quest.cur_num);
+        wr_s16b((int16_t)quest.max_num);
+        wr_s16b(enum2i(quest.type));
+        wr_s16b(enum2i(quest.r_idx));
+        wr_s16b(enum2i(quest.reward_artifact_idx));
+        wr_byte((byte)quest.flags);
+        wr_byte((byte)quest.dungeon);
     }
 
     wr_s32b(player_ptr->wilderness_x);

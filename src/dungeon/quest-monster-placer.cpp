@@ -23,21 +23,21 @@ bool place_quest_monsters(PlayerType *player_ptr)
 {
     auto *floor_ptr = player_ptr->current_floor_ptr;
     const auto &quest_list = QuestList::get_instance();
-    for (const auto &[q_idx, q_ref] : quest_list) {
+    for (const auto &[q_idx, quest] : quest_list) {
         MonsterRaceInfo *r_ptr;
         BIT_FLAGS mode;
 
-        auto no_quest_monsters = q_ref.status != QuestStatusType::TAKEN;
-        no_quest_monsters |= (q_ref.type != QuestKindType::KILL_LEVEL && q_ref.type != QuestKindType::RANDOM);
-        no_quest_monsters |= q_ref.level != floor_ptr->dun_level;
-        no_quest_monsters |= player_ptr->dungeon_idx != q_ref.dungeon;
-        no_quest_monsters |= any_bits(q_ref.flags, QUEST_FLAG_PRESET);
+        auto no_quest_monsters = quest.status != QuestStatusType::TAKEN;
+        no_quest_monsters |= (quest.type != QuestKindType::KILL_LEVEL && quest.type != QuestKindType::RANDOM);
+        no_quest_monsters |= quest.level != floor_ptr->dun_level;
+        no_quest_monsters |= player_ptr->dungeon_idx != quest.dungeon;
+        no_quest_monsters |= any_bits(quest.flags, QUEST_FLAG_PRESET);
 
         if (no_quest_monsters) {
             continue;
         }
 
-        r_ptr = &monraces_info[q_ref.r_idx];
+        r_ptr = &monraces_info[quest.r_idx];
         if (r_ptr->kind_flags.has(MonsterKindType::UNIQUE) && (r_ptr->cur_num >= r_ptr->max_num)) {
             continue;
         }
@@ -47,7 +47,7 @@ bool place_quest_monsters(PlayerType *player_ptr)
             mode |= PM_ALLOW_GROUP;
         }
 
-        for (int j = 0; j < (q_ref.max_num - q_ref.cur_num); j++) {
+        for (int j = 0; j < (quest.max_num - quest.cur_num); j++) {
             int k;
             for (k = 0; k < SAFE_MAX_ATTEMPTS; k++) {
                 POSITION x = 0;
@@ -83,7 +83,7 @@ bool place_quest_monsters(PlayerType *player_ptr)
                     return false;
                 }
 
-                if (place_monster_aux(player_ptr, 0, y, x, q_ref.r_idx, mode)) {
+                if (place_monster_aux(player_ptr, 0, y, x, quest.r_idx, mode)) {
                     break;
                 } else {
                     continue;

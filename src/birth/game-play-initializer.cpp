@@ -61,15 +61,15 @@ void player_wipe_without_name(PlayerType *player_ptr)
     }
 
     auto &quest_list = QuestList::get_instance();
-    for (auto &[q_idx, q_ref] : quest_list) {
-        q_ref.status = QuestStatusType::UNTAKEN;
-        q_ref.cur_num = 0;
-        q_ref.max_num = 0;
-        q_ref.type = QuestKindType::NONE;
-        q_ref.level = 0;
-        q_ref.r_idx = MonsterRace::empty_id();
-        q_ref.complev = 0;
-        q_ref.comptime = 0;
+    for (auto &[q_idx, quest] : quest_list) {
+        quest.status = QuestStatusType::UNTAKEN;
+        quest.cur_num = 0;
+        quest.max_num = 0;
+        quest.type = QuestKindType::NONE;
+        quest.level = 0;
+        quest.r_idx = MonsterRace::empty_id();
+        quest.complev = 0;
+        quest.comptime = 0;
     }
 
     player_ptr->inven_cnt = 0;

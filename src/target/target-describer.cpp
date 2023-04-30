@@ -471,7 +471,7 @@ static std::string decide_target_floor(PlayerType *player_ptr, eg_type *eg_ptr)
         init_flags = INIT_NAME_ONLY;
         parse_fixed_map(player_ptr, QUEST_DEFINITION_LIST, 0, 0, 0, 0);
         player_ptr->current_floor_ptr->quest_number = old_quest;
-        return format(msg.data(), q_ptr->name, q_ptr->level);
+        return format(msg.data(), q_ptr->name.data(), q_ptr->level);
     }
 
     if (eg_ptr->f_ptr->flags.has(TerrainCharacteristics::BLDG) && !player_ptr->current_floor_ptr->inside_arena) {

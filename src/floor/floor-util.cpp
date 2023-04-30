@@ -197,7 +197,7 @@ concptr map_name(PlayerType *player_ptr)
     auto *floor_ptr = player_ptr->current_floor_ptr;
     const auto &quest_list = QuestList::get_instance();
     auto is_fixed_quest = inside_quest(floor_ptr->quest_number);
-    is_fixed_quest &= quest_type::is_fixed(floor_ptr->quest_number);
+    is_fixed_quest &= QuestType::is_fixed(floor_ptr->quest_number);
     is_fixed_quest &= any_bits(quest_list[floor_ptr->quest_number].flags, QUEST_FLAG_PRESET);
     if (is_fixed_quest) {
         return _("クエスト", "Quest");

@@ -114,7 +114,7 @@ void process_dungeon(PlayerType *player_ptr, bool load_game)
     auto no_feeling_quest = (quest_num == QuestId::OBERON);
     no_feeling_quest |= (quest_num == QuestId::SERPENT);
     no_feeling_quest |= none_bits(quest_list[quest_num].flags, QUEST_FLAG_PRESET);
-    if (inside_quest(quest_num) && quest_type::is_fixed(quest_num) && !no_feeling_quest) {
+    if (inside_quest(quest_num) && QuestType::is_fixed(quest_num) && !no_feeling_quest) {
         do_cmd_feeling(player_ptr);
     }
 

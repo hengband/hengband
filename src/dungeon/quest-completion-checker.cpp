@@ -55,34 +55,34 @@ void QuestCompletionChecker::complete()
     this->make_reward(pos);
 }
 
-static bool check_quest_completion(PlayerType *player_ptr, const quest_type &q_ref, MonsterEntity *m_ptr)
+static bool check_quest_completion(PlayerType *player_ptr, const QuestType &quest, MonsterEntity *m_ptr)
 {
     auto *floor_ptr = player_ptr->current_floor_ptr;
-    if (q_ref.status != QuestStatusType::TAKEN) {
+    if (quest.status != QuestStatusType::TAKEN) {
         return false;
     }
 
-    if (any_bits(q_ref.flags, QUEST_FLAG_PRESET)) {
+    if (any_bits(quest.flags, QUEST_FLAG_PRESET)) {
         return false;
     }
 
-    if ((q_ref.level != floor_ptr->dun_level)) {
+    if ((quest.level != floor_ptr->dun_level)) {
         return false;
     }
 
-    if ((q_ref.type == QuestKindType::FIND_ARTIFACT) || (q_ref.type == QuestKindType::FIND_EXIT)) {
+    if ((quest.type == QuestKindType::FIND_ARTIFACT) || (quest.type == QuestKindType::FIND_EXIT)) {
         return false;
     }
 
-    auto kill_them_all = q_ref.type == QuestKindType::KILL_NUMBER;
-    kill_them_all |= q_ref.type == QuestKindType::TOWER;
-    kill_them_all |= q_ref.type == QuestKindType::KILL_ALL;
+    auto kill_them_all = quest.type == QuestKindType::KILL_NUMBER;
+    kill_them_all |= quest.type == QuestKindType::TOWER;
+    kill_them_all |= quest.type == QuestKindType::KILL_ALL;
     if (kill_them_all) {
         return true;
     }
 
-    auto is_target = (q_ref.type == QuestKindType::RANDOM) && (q_ref.r_idx == m_ptr->r_idx);
-    if ((q_ref.type == QuestKindType::KILL_LEVEL) || is_target) {
+    auto is_target = (quest.type == QuestKindType::RANDOM) && (quest.r_idx == m_ptr->r_idx);
+    if ((quest.type == QuestKindType::KILL_LEVEL) || is_target) {
         return true;
     }
 

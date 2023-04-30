@@ -52,13 +52,12 @@ bool object_is_quest_target(QuestId quest_idx, const ItemEntity *o_ptr)
         return false;
     }
 
-    const auto &quest_list = QuestList::get_instance();
-    auto a_idx = quest_list[quest_idx].reward_artifact_idx;
-    if (a_idx == FixedArtifactId::NONE) {
+    const auto &quest = QuestList::get_instance()[quest_idx];
+    if (quest.has_reward()) {
         return false;
     }
 
-    const auto &artifact = ArtifactsInfo::get_instance().get_artifact(a_idx);
+    const auto &artifact = quest.get_reward();
     if (artifact.gen_flags.has(ItemGenerationTraitType::INSTA_ART)) {
         return false;
     }
