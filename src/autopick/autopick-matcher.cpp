@@ -153,7 +153,7 @@ bool is_autopick_match(PlayerType *player_ptr, ItemEntity *o_ptr, const autopick
             return false;
         }
 
-        const auto &baseitem = baseitems_info[o_ptr->bi_id];
+        const auto &baseitem = o_ptr->get_baseitem();
         if ((o_ptr->dd == baseitem.dd) && (o_ptr->ds == baseitem.ds)) {
             return false;
         }

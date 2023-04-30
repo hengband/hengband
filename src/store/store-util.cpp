@@ -212,7 +212,7 @@ bool store_object_similar(ItemEntity *o_ptr, ItemEntity *j_ptr)
  */
 static void store_object_absorb(ItemEntity *o_ptr, ItemEntity *j_ptr)
 {
-    int max_num = (o_ptr->bi_key.tval() == ItemKindType::ROD) ? std::min(99, MAX_SHORT / baseitems_info[o_ptr->bi_id].pval) : 99;
+    int max_num = (o_ptr->bi_key.tval() == ItemKindType::ROD) ? std::min(99, MAX_SHORT / o_ptr->get_baseitem().pval) : 99;
     int total = o_ptr->number + j_ptr->number;
     int diff = (total > max_num) ? total - max_num : 0;
     o_ptr->number = (total > max_num) ? max_num : total;

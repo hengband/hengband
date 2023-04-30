@@ -34,7 +34,7 @@ static std::string get_fullname_if_set(const ItemEntity &item, const describe_op
 
     const auto fixed_art_id = item.fixed_artifact_idx;
     const auto is_known_artifact = opt.known && item.is_fixed_artifact() && none_bits(opt.mode, OD_BASE_NAME);
-    return is_known_artifact ? ArtifactsInfo::get_instance().get_artifact(fixed_art_id).name : baseitems_info[item.bi_id].name;
+    return is_known_artifact ? ArtifactsInfo::get_instance().get_artifact(fixed_art_id).name : item.get_baseitem().name;
 }
 
 #ifdef JP
@@ -353,11 +353,12 @@ static std::string describe_body(const ItemEntity &item, [[maybe_unused]] const 
             ss << modstr;
             break;
 
-        case '%':
+        case '%': {
+            const auto &baseitem = item.get_baseitem();
 #ifdef JP
-            ss << baseitems_info[item.bi_id].name;
+            ss << baseitem.name;
 #else
-            for (auto ib = baseitems_info[item.bi_id].name.begin(), ib_end = baseitems_info[item.bi_id].name.end(); ib != ib_end; ++ib) {
+            for (auto ib = baseitem.name.begin(), ib_end = baseitem.name.end(); ib != ib_end; ++ib) {
                 if (*ib == '~') {
                     pluralize(ss, ib);
                 } else {
@@ -366,6 +367,7 @@ static std::string describe_body(const ItemEntity &item, [[maybe_unused]] const 
             }
 #endif
             break;
+        }
 
 #ifndef JP
         case '~':

@@ -226,7 +226,7 @@ void wiz_identify_full_inventory(PlayerType *player_ptr)
             continue;
         }
 
-        auto &baseitem = baseitems_info[o_ptr->bi_id];
+        auto &baseitem = o_ptr->get_baseitem();
         baseitem.aware = true; //!< @note 記録には残さないためTRUEを立てるのみ
         set_bits(o_ptr->ident, IDENT_KNOWN | IDENT_FULL_KNOWN);
         o_ptr->marked.set(OmType::TOUCHED);
@@ -344,7 +344,7 @@ static void wiz_display_item(PlayerType *player_ptr, ItemEntity *o_ptr)
 
     auto line = 4;
     const auto &bi_key = o_ptr->bi_key;
-    const auto item_level = baseitems_info[o_ptr->bi_id].level;
+    const auto item_level = o_ptr->get_baseitem().level;
     prt(format("kind = %-5d  level = %-4d  tval = %-5d  sval = %-5d", o_ptr->bi_id, item_level, enum2i(bi_key.tval()), bi_key.sval().value()), line, j);
     prt(format("number = %-3d  wgt = %-6d  ac = %-5d    damage = %dd%d", o_ptr->number, o_ptr->weight, o_ptr->ac, o_ptr->dd, o_ptr->ds), ++line, j);
     prt(format("pval = %-5d  toac = %-5d  tohit = %-4d  todam = %-4d", o_ptr->pval, o_ptr->to_a, o_ptr->to_h, o_ptr->to_d), ++line, j);

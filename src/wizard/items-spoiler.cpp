@@ -37,7 +37,7 @@ static void describe_baseitem_info(PlayerType *player_ptr,
     q_ptr->to_a = 0;
     q_ptr->to_h = 0;
     q_ptr->to_d = 0;
-    *level_desc = baseitems_info[q_ptr->bi_id].level;
+    *level_desc = q_ptr->get_baseitem().level;
     *value = q_ptr->get_price();
     if (!name || !damage_desc || !chance_desc || !weight_desc) {
         return;
@@ -74,7 +74,7 @@ static void describe_baseitem_info(PlayerType *player_ptr,
     }
 
     chance_desc->clear();
-    const auto &baseitem = baseitems_info[q_ptr->bi_id];
+    const auto &baseitem = q_ptr->get_baseitem();
     for (auto i = 0U; i < baseitem.alloc_tables.size(); i++) {
         const auto &[level, chance] = baseitem.alloc_tables[i];
         if (chance > 0) {

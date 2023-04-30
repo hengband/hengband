@@ -37,7 +37,7 @@ bool eat_magic(PlayerType *player_ptr, int power)
         return false;
     }
 
-    const auto &baseitem = baseitems_info[o_ptr->bi_id];
+    const auto &baseitem = o_ptr->get_baseitem();
     const auto lev = baseitem.level;
     const auto tval = o_ptr->bi_key.tval();
     auto recharge_strength = 0;
