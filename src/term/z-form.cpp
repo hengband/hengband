@@ -90,16 +90,13 @@ std::string vformat(const char *fmt, va_list vp)
 {
     std::vector<char> format_buf(1024);
     while (true) {
-        uint32_t len;
-        len = vstrnfmt(format_buf.data(), format_buf.size(), fmt, vp);
+        const auto len = vstrnfmt(format_buf.data(), format_buf.size(), fmt, vp);
         if (len < format_buf.size() - 1) {
-            break;
+            return std::string(format_buf.data());
         }
 
         format_buf.resize(format_buf.size() * 2);
     }
-
-    return std::string(format_buf.data());
 }
 }
 
@@ -228,7 +225,7 @@ uint32_t vstrnfmt(char *buf, uint32_t max, const char *fmt, va_list vp)
 
         /* Signed Integers -- standard format */
         case 'd':
-        case 'i': {
+        case 'i':
             if (do_long) {
                 auto arg = va_arg(vp, long);
                 snprintf(tmp, sizeof(tmp), aux.data(), arg);
@@ -239,14 +236,14 @@ uint32_t vstrnfmt(char *buf, uint32_t max, const char *fmt, va_list vp)
                 auto arg = va_arg(vp, int);
                 snprintf(tmp, sizeof(tmp), aux.data(), arg);
             }
+
             break;
-        }
 
         /* Unsigned Integers -- various formats */
         case 'u':
         case 'o':
         case 'x':
-        case 'X': {
+        case 'X':
             if (do_long) {
                 auto arg = va_arg(vp, unsigned long);
                 snprintf(tmp, sizeof(tmp), aux.data(), arg);
@@ -257,8 +254,8 @@ uint32_t vstrnfmt(char *buf, uint32_t max, const char *fmt, va_list vp)
                 auto arg = va_arg(vp, unsigned int);
                 snprintf(tmp, sizeof(tmp), aux.data(), arg);
             }
+
             break;
-        }
 
         /* Floating Point -- various formats */
         case 'f':
@@ -266,7 +263,7 @@ uint32_t vstrnfmt(char *buf, uint32_t max, const char *fmt, va_list vp)
         case 'e':
         case 'E':
         case 'g':
-        case 'G': {
+        case 'G':
             if (do_long_double) {
                 auto arg = va_arg(vp, long double);
                 snprintf(tmp, sizeof(tmp), aux.data(), arg);
@@ -274,8 +271,8 @@ uint32_t vstrnfmt(char *buf, uint32_t max, const char *fmt, va_list vp)
                 auto arg = va_arg(vp, double);
                 snprintf(tmp, sizeof(tmp), aux.data(), arg);
             }
+
             break;
-        }
 
         /* Pointer -- implementation varies */
         case 'p': {
@@ -290,14 +287,15 @@ uint32_t vstrnfmt(char *buf, uint32_t max, const char *fmt, va_list vp)
                 do_capitalize = true;
                 ++s;
             }
+
             auto arg = va_arg(vp, const char *);
             if (arg == nullptr) {
                 arg = "";
             }
+
             snprintf(tmp, sizeof(tmp), aux.data(), arg);
             break;
         }
-
         default: {
             /* Error -- illegal format char */
             buf[0] = '\0';
@@ -320,6 +318,7 @@ uint32_t vstrnfmt(char *buf, uint32_t max, const char *fmt, va_list vp)
                     if (islower(ch)) {
                         ch = static_cast<char>(toupper(ch));
                     }
+
                     break;
                 }
             }
@@ -354,10 +353,9 @@ uint32_t vstrnfmt(char *buf, uint32_t max, const char *fmt, va_list vp)
  */
 uint32_t strnfmt(char *buf, uint32_t max, const char *fmt, ...)
 {
-    uint32_t len;
     va_list vp;
     va_start(vp, fmt);
-    len = vstrnfmt(buf, max, fmt, vp);
+    auto len = vstrnfmt(buf, max, fmt, vp);
     va_end(vp);
     return len;
 }
