@@ -437,7 +437,7 @@ int take_hit(PlayerType *player_ptr, int damage_type, int damage, concptr hit_fr
                     place = _("アリーナ", "in the Arena");
                 } else if (!floor_ref.is_in_dungeon()) {
                     place = _("地上", "on the surface");
-                } else if (inside_quest(q_idx) && (quest_type::is_fixed(q_idx) && !((q_idx == QuestId::OBERON) || (q_idx == QuestId::SERPENT)))) {
+                } else if (inside_quest(q_idx) && (QuestType::is_fixed(q_idx) && !((q_idx == QuestId::OBERON) || (q_idx == QuestId::SERPENT)))) {
                     place = _("クエスト", "in a quest");
                 } else {
                     place = format(_("%d階", "on level %d"), static_cast<int>(floor_ref.dun_level));

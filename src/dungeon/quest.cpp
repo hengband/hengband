@@ -61,12 +61,12 @@ QuestList &QuestList::get_instance()
     return instance;
 }
 
-quest_type &QuestList::operator[](QuestId id)
+QuestType &QuestList::operator[](QuestId id)
 {
     return this->quest_data.at(id);
 }
 
-const quest_type &QuestList::operator[](QuestId id) const
+const QuestType &QuestList::operator[](QuestId id) const
 {
     return this->quest_data.at(id);
 }
@@ -137,7 +137,7 @@ void QuestList::initialize()
     }
     try {
         auto quest_numbers = parse_quest_info(QUEST_DEFINITION_LIST);
-        quest_type init_quest{};
+        QuestType init_quest{};
         init_quest.status = QuestStatusType::UNTAKEN;
         this->quest_data.insert({ QuestId::NONE, init_quest });
         for (auto q : quest_numbers) {
@@ -159,7 +159,7 @@ void QuestList::initialize()
  * @param quest_idx クエストID
  * @return 固定クエストならばTRUEを返す
  */
-bool quest_type::is_fixed(QuestId quest_idx)
+bool QuestType::is_fixed(QuestId quest_idx)
 {
     return (enum2i(quest_idx) < MIN_RANDOM_QUEST) || (enum2i(quest_idx) > MAX_RANDOM_QUEST);
 }
@@ -168,7 +168,7 @@ bool quest_type::is_fixed(QuestId quest_idx)
  * @brief ランダムクエストの討伐ユニークを決める / Determine the random quest uniques
  * @param q_ptr クエスト構造体の参照ポインタ
  */
-void determine_random_questor(PlayerType *player_ptr, quest_type *q_ptr)
+void determine_random_questor(PlayerType *player_ptr, QuestType *q_ptr)
 {
     get_mon_num_prep(player_ptr, mon_hook_quest, nullptr);
     MonsterRaceId r_idx;
@@ -224,7 +224,7 @@ void determine_random_questor(PlayerType *player_ptr, quest_type *q_ptr)
  * @param q_ptr クエスト情報への参照ポインタ
  * @param stat ステータス(成功or失敗)
  */
-void record_quest_final_status(quest_type *q_ptr, PLAYER_LEVEL lev, QuestStatusType stat)
+void record_quest_final_status(QuestType *q_ptr, PLAYER_LEVEL lev, QuestStatusType stat)
 {
     q_ptr->status = stat;
     q_ptr->complev = lev;

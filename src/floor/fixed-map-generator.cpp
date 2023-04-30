@@ -198,7 +198,7 @@ static void parse_qtw_D(PlayerType *player_ptr, qtwg_type *qtwg_ptr, char *s)
     }
 }
 
-static bool parse_qtw_QQ(quest_type *q_ptr, char **zz, int num)
+static bool parse_qtw_QQ(QuestType *q_ptr, char **zz, int num)
 {
     if (zz[1][0] != 'Q') {
         return false;
@@ -243,7 +243,7 @@ static bool parse_qtw_QQ(quest_type *q_ptr, char **zz, int num)
 /*!
  * @todo 処理がどうなっているのかいずれチェックする
  */
-static bool parse_qtw_QR(quest_type *q_ptr, char **zz, int num)
+static bool parse_qtw_QR(QuestType *q_ptr, char **zz, int num)
 {
     if (zz[1][0] != 'R') {
         return false;

@@ -288,7 +288,7 @@ void update_dungeon_feeling(PlayerType *player_ptr)
     dungeon_quest |= !(quest_list[quest_num].flags & QUEST_FLAG_PRESET);
 
     auto feeling_quest = inside_quest(quest_num);
-    feeling_quest &= quest_type::is_fixed(quest_num);
+    feeling_quest &= QuestType::is_fixed(quest_num);
     feeling_quest &= !dungeon_quest;
     if (feeling_quest) {
         return;

@@ -41,7 +41,7 @@ std::tuple<uint16_t, byte> load_quest_info()
     return std::make_tuple(max_quests_load, max_rquests_load);
 }
 
-static void load_quest_completion(quest_type *q_ptr)
+static void load_quest_completion(QuestType *q_ptr)
 {
     q_ptr->status = i2enum<QuestStatusType>(rd_s16b());
     q_ptr->level = rd_s16b();
@@ -59,7 +59,7 @@ static void load_quest_completion(quest_type *q_ptr)
     }
 }
 
-static void load_quest_details(PlayerType *player_ptr, quest_type *q_ptr, const QuestId loading_quest_index)
+static void load_quest_details(PlayerType *player_ptr, QuestType *q_ptr, const QuestId loading_quest_index)
 {
     q_ptr->cur_num = rd_s16b();
     q_ptr->max_num = rd_s16b();

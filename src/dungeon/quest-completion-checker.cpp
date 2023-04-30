@@ -55,7 +55,7 @@ void QuestCompletionChecker::complete()
     this->make_reward(pos);
 }
 
-static bool check_quest_completion(PlayerType *player_ptr, const quest_type &q_ref, MonsterEntity *m_ptr)
+static bool check_quest_completion(PlayerType *player_ptr, const QuestType &q_ref, MonsterEntity *m_ptr)
 {
     auto *floor_ptr = player_ptr->current_floor_ptr;
     if (q_ref.status != QuestStatusType::TAKEN) {

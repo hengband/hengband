@@ -303,7 +303,7 @@ static errr do_get_mon_num_prep(PlayerType *player_ptr, const monsterrace_hook_t
             //   * フェイズアウト状態でない
             //   * 1階かそれより深いところにいる
             //   * ランダムクエスト中でない
-            const bool in_random_quest = inside_quest(floor_ptr->quest_number) && !quest_type::is_fixed(floor_ptr->quest_number);
+            const bool in_random_quest = inside_quest(floor_ptr->quest_number) && !QuestType::is_fixed(floor_ptr->quest_number);
             const bool cond = !player_ptr->phase_out && floor_ptr->dun_level > 0 && !in_random_quest;
 
             if (cond && !restrict_monster_to_dungeon(player_ptr, entry_r_idx)) {
