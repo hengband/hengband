@@ -164,6 +164,12 @@ bool QuestType::is_fixed(QuestId quest_idx)
     return (enum2i(quest_idx) < MIN_RANDOM_QUEST) || (enum2i(quest_idx) > MAX_RANDOM_QUEST);
 }
 
+ArtifactType &QuestType::get_reward() const
+{
+    const auto &artifacts = ArtifactsInfo::get_instance();
+    return artifacts.get_artifact(this->reward_artifact_idx);
+}
+
 /*!
  * @brief ランダムクエストの討伐ユニークを決める / Determine the random quest uniques
  * @param q_ptr クエスト構造体の参照ポインタ

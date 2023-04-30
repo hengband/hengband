@@ -96,6 +96,7 @@ enum class QuestKindType : short {
  */
 enum class FixedArtifactId : short;
 enum class MonsterRaceId : int16_t;
+class ArtifactType;
 class QuestType {
 public:
     QuestType() = default;
@@ -120,6 +121,7 @@ public:
     REAL_TIME comptime = 0; /*!< クリア時ゲーム時間 /  quest clear time*/
 
     static bool is_fixed(QuestId quest_idx);
+    ArtifactType &get_reward() const;
 };
 
 class QuestList final {
