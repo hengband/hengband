@@ -3,6 +3,7 @@
 #include "system/angband.h"
 #include "util/enum-converter.h"
 #include <map>
+#include <string>
 #include <vector>
 
 // clang-format off
@@ -102,7 +103,7 @@ public:
     QuestStatusType status{}; /*!< クエストの進行ステータス / Is the quest taken, completed, finished? */
     QuestKindType type{}; /*!< クエストの種別 / The quest type */
 
-    GAME_TEXT name[60]{}; /*!< クエスト名 / Quest name */
+    std::string name = ""; /*!< クエスト名 / Quest name */
     DEPTH level = 0; /*!< 処理階層 / Dungeon level */
     MonsterRaceId r_idx{}; /*!< クエスト対象のモンスターID / Monster race */
 

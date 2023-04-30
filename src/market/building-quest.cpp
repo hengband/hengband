@@ -91,7 +91,7 @@ void castle_quest(PlayerType *player_ptr)
         put_str(_("CTRL-Qを使えばクエストの状態がチェックできます。", "Use CTRL-Q to check the status of your quest."), 9, 0);
 
         get_questinfo(player_ptr, q_index, false);
-        put_str(format(_("現在のクエスト「%s」", "Current quest is '%s'."), q_ptr->name), 11, 0);
+        put_str(format(_("現在のクエスト「%s」", "Current quest is '%s'."), q_ptr->name.data()), 11, 0);
 
         if (q_ptr->type != QuestKindType::KILL_LEVEL || q_ptr->dungeon == 0) {
             put_str(_("クエストを終わらせたら戻って来て下さい。", "Return when you have completed your quest."), 12, 0);

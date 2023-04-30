@@ -201,7 +201,8 @@ int exe_write_diary_quest(PlayerType *player_ptr, int type, QuestId num)
             break;
         }
 
-        fprintf(fff, _(" %2d:%02d %20s クエスト「%s」を達成した。\n", " %2d:%02d %20s completed quest '%s'.\n"), hour, min, note_level.data(), q_ref.name);
+        constexpr auto mes = _(" %2d:%02d %20s クエスト「%s」を達成した。\n", " %2d:%02d %20s completed quest '%s'.\n");
+        fprintf(fff, mes, hour, min, note_level.data(), q_ref.name.data());
         break;
     }
     case DIARY_FIX_QUEST_F: {
@@ -209,15 +210,18 @@ int exe_write_diary_quest(PlayerType *player_ptr, int type, QuestId num)
             break;
         }
 
-        fprintf(fff, _(" %2d:%02d %20s クエスト「%s」から命からがら逃げ帰った。\n", " %2d:%02d %20s ran away from quest '%s'.\n"), hour, min, note_level.data(), q_ref.name);
+        constexpr auto mes = _(" %2d:%02d %20s クエスト「%s」から命からがら逃げ帰った。\n", " %2d:%02d %20s ran away from quest '%s'.\n");
+        fprintf(fff, mes, hour, min, note_level.data(), q_ref.name.data());
         break;
     }
     case DIARY_RAND_QUEST_C: {
-        fprintf(fff, _(" %2d:%02d %20s ランダムクエスト(%s)を達成した。\n", " %2d:%02d %20s completed random quest '%s'\n"), hour, min, note_level.data(), monraces_info[q_ref.r_idx].name.data());
+        constexpr auto mes = _(" %2d:%02d %20s ランダムクエスト(%s)を達成した。\n", " %2d:%02d %20s completed random quest '%s'\n");
+        fprintf(fff, mes, hour, min, note_level.data(), monraces_info[q_ref.r_idx].name.data());
         break;
     }
     case DIARY_RAND_QUEST_F: {
-        fprintf(fff, _(" %2d:%02d %20s ランダムクエスト(%s)から逃げ出した。\n", " %2d:%02d %20s ran away from quest '%s'.\n"), hour, min, note_level.data(), monraces_info[q_ref.r_idx].name.data());
+        constexpr auto mes = _(" %2d:%02d %20s ランダムクエスト(%s)から逃げ出した。\n", " %2d:%02d %20s ran away from quest '%s'.\n");
+        fprintf(fff, mes, hour, min, note_level.data(), monraces_info[q_ref.r_idx].name.data());
         break;
     }
     case DIARY_TO_QUEST: {
@@ -225,8 +229,8 @@ int exe_write_diary_quest(PlayerType *player_ptr, int type, QuestId num)
             break;
         }
 
-        fprintf(fff, _(" %2d:%02d %20s クエスト「%s」へと突入した。\n", " %2d:%02d %20s entered the quest '%s'.\n"),
-            hour, min, note_level.data(), q_ref.name);
+        constexpr auto mes = _(" %2d:%02d %20s クエスト「%s」へと突入した。\n", " %2d:%02d %20s entered the quest '%s'.\n");
+        fprintf(fff, mes, hour, min, note_level.data(), q_ref.name.data());
         break;
     }
     default:

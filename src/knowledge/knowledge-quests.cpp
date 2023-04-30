@@ -139,7 +139,7 @@ static void do_cmd_knowledge_quests_current(PlayerType *player_ptr, FILE *fff)
                 }
             }
 
-            fprintf(fff, _("  %s (危険度:%d階相当)%s\n", "  %s (Danger level: %d)%s\n"), q_ref.name, (int)q_ref.level, note.data());
+            fprintf(fff, _("  %s (危険度:%d階相当)%s\n", "  %s (Danger level: %d)%s\n"), q_ref.name.data(), (int)q_ref.level, note.data());
             if (q_ref.status == QuestStatusType::COMPLETED) {
                 fputs(_("    クエスト達成 - まだ報酬を受けとってない。\n", "    Quest Completed - Unrewarded\n"), fff);
                 continue;
@@ -164,17 +164,18 @@ static void do_cmd_knowledge_quests_current(PlayerType *player_ptr, FILE *fff)
 
         const auto &monrace = monraces_info[q_ref.r_idx];
         if (q_ref.max_num <= 1) {
-            rand_tmp_str = format(_("  %s (%d 階) - %sを倒す。\n", "  %s (Dungeon level: %d)\n  Kill %s.\n"), q_ref.name, (int)q_ref.level, monrace.name.data());
+            constexpr auto mes = _("  %s (%d 階) - %sを倒す。\n", "  %s (Dungeon level: %d)\n  Kill %s.\n");
+            rand_tmp_str = format(mes, q_ref.name.data(), (int)q_ref.level, monrace.name.data());
             continue;
         }
 
 #ifdef JP
-        rand_tmp_str = format("  %s (%d 階) - %d 体の%sを倒す。(あと %d 体)\n", q_ref.name, (int)q_ref.level, (int)q_ref.max_num, monrace.name.data(),
+        rand_tmp_str = format("  %s (%d 階) - %d 体の%sを倒す。(あと %d 体)\n", q_ref.name.data(), (int)q_ref.level, (int)q_ref.max_num, monrace.name.data(),
             (int)(q_ref.max_num - q_ref.cur_num));
 #else
         auto monster_name(monrace.name);
         plural_aux(monster_name.data());
-        rand_tmp_str = format("  %s (Dungeon level: %d)\n  Kill %d %s, have killed %d.\n", q_ref.name, (int)q_ref.level, (int)q_ref.max_num,
+        rand_tmp_str = format("  %s (Dungeon level: %d)\n  Kill %d %s, have killed %d.\n", q_ref.name.data(), (int)q_ref.level, (int)q_ref.max_num,
             monster_name.data(), (int)q_ref.cur_num);
 #endif
     }
@@ -299,7 +300,8 @@ static void do_cmd_knowledge_quests_wiz_random(FILE *fff)
 
         if ((q_ref.type == QuestKindType::RANDOM) && (q_ref.status == QuestStatusType::TAKEN)) {
             total++;
-            fprintf(fff, _("  %s (%d階, %s)\n", "  %s (%d, %s)\n"), q_ref.name, (int)q_ref.level, monraces_info[q_ref.r_idx].name.data());
+            constexpr auto mes = _("  %s (%d階, %s)\n", "  %s (%d, %s)\n");
+            fprintf(fff, mes, q_ref.name.data(), (int)q_ref.level, monraces_info[q_ref.r_idx].name.data());
         }
     }
 

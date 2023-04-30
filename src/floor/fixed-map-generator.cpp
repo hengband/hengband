@@ -321,7 +321,7 @@ static int parse_qtw_Q(qtwg_type *qtwg_ptr, char **zz)
 
     if (zz[1][0] == 'N') {
         if (init_flags & (INIT_ASSIGN | INIT_SHOW_TEXT | INIT_NAME_ONLY)) {
-            strcpy(q_ptr->name, zz[2]);
+            q_ptr->name = zz[2];
         }
 
         return PARSE_ERROR_NONE;
