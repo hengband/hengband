@@ -13,4 +13,4 @@
 
 class PlayerType;
 void init_angband(PlayerType *player_ptr, bool no_term);
-void init_file_paths(char *path, char *varpath);
+void init_file_paths(char *libpath);

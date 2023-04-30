@@ -91,53 +91,16 @@ static void create_user_dir(void)
 
 #endif /* PRIVATE_USER_PATH */
 
-/*
- * Initialize and verify the file paths, and the score file.
- *
- * Use the ANGBAND_PATH environment var if possible, else use
- * DEFAULT_(LIB|VAR)_PATH, and in either case, branch off
- * appropriately.
- *
- * First, we'll look for the ANGBAND_PATH environment variable,
- * and then look for the files in there.  If that doesn't work,
- * we'll try the DEFAULT_(LIB|VAR)_PATH constants.  So be sure
- * that one of these two things works...
- *
- * We must ensure that the path ends with "PATH_SEP" if needed,
- * since the "init_file_paths()" function will simply append the
- * relevant "sub-directory names" to the given path.
- *
- * Make sure that the path doesn't overflow the buffer.  We have
- * to leave enough space for the path separator, directory, and
- * filenames.
- */
-static void init_stuff(void)
+static void init_stuff()
 {
-    char libpath[1024], varpath[1024];
-
-    concptr tail;
-
-    /* Get the environment variable */
-    tail = getenv("ANGBAND_PATH");
-
-    /* Use the angband_path, or a default */
+    char libpath[1024]{};
+    const auto tail = getenv("ANGBAND_PATH");
     strncpy(libpath, tail ? tail : DEFAULT_LIB_PATH, 511);
-    strncpy(varpath, tail ? tail : DEFAULT_VAR_PATH, 511);
-
-    /* Make sure they're terminated */
-    libpath[511] = '\0';
-    varpath[511] = '\0';
-
-    /* Hack -- Add a path separator (only if needed) */
     if (!suffix(libpath, PATH_SEP)) {
         strcat(libpath, PATH_SEP);
     }
-    if (!suffix(varpath, PATH_SEP)) {
-        strcat(varpath, PATH_SEP);
-    }
 
-    /* Initialize */
-    init_file_paths(libpath, varpath);
+    init_file_paths(libpath);
 }
 
 /*

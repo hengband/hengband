@@ -47,9 +47,9 @@
  * Find the default paths to all of our important sub-directories.
  * @param path パス保管先の文字列
  */
-void init_file_paths(char *libpath, char *varpath)
+void init_file_paths(char *libpath)
 {
-    char *libtail, *vartail;
+    char *libtail;
     char buf[1024];
 
     string_free(ANGBAND_DIR);
@@ -68,13 +68,12 @@ void init_file_paths(char *libpath, char *varpath)
 
     ANGBAND_DIR = string_make(libpath);
     libtail = libpath + strlen(libpath);
-    vartail = varpath + strlen(varpath);
-    strcpy(vartail, "apex");
-    ANGBAND_DIR_APEX = string_make(varpath);
-    strcpy(vartail, "bone");
-    ANGBAND_DIR_BONE = string_make(varpath);
-    strcpy(vartail, "data");
-    ANGBAND_DIR_DATA = string_make(varpath);
+    strcpy(libtail, "apex");
+    ANGBAND_DIR_APEX = string_make(libpath);
+    strcpy(libtail, "bone");
+    ANGBAND_DIR_BONE = string_make(libpath);
+    strcpy(libtail, "data");
+    ANGBAND_DIR_DATA = string_make(libpath);
     strcpy(libtail, "edit");
     ANGBAND_DIR_EDIT = string_make(libpath);
     strcpy(libtail, "script");
@@ -87,16 +86,16 @@ void init_file_paths(char *libpath, char *varpath)
     ANGBAND_DIR_INFO = string_make(libpath);
     strcpy(libtail, "pref");
     ANGBAND_DIR_PREF = string_make(libpath);
-    strcpy(vartail, "save");
-    ANGBAND_DIR_SAVE = string_make(varpath);
+    strcpy(libtail, "save");
+    ANGBAND_DIR_SAVE = string_make(libpath);
     path_build(buf, sizeof(buf), ANGBAND_DIR_SAVE, "log");
     ANGBAND_DIR_DEBUG_SAVE = string_make(buf);
 #ifdef PRIVATE_USER_PATH
     path_build(buf, sizeof(buf), PRIVATE_USER_PATH, VARIANT_NAME);
     ANGBAND_DIR_USER = string_make(buf);
 #else
-    strcpy(vartail, "user");
-    ANGBAND_DIR_USER = string_make(varpath);
+    strcpy(libtail, "user");
+    ANGBAND_DIR_USER = string_make(libpath);
 #endif
     strcpy(libtail, "xtra");
     ANGBAND_DIR_XTRA = string_make(libpath);

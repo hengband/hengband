@@ -2613,7 +2613,7 @@ static void hook_quit(concptr str)
 /*!
  * @brief Init some stuff
  */
-static void init_stuff(void)
+static void init_stuff()
 {
     char path[MAIN_WIN_MAX_PATH];
     DWORD path_len = GetModuleFileNameA(hInstance, path, MAIN_WIN_MAX_PATH);
@@ -2629,7 +2629,7 @@ static void init_stuff(void)
 
     strcpy(path + i + 1, "lib\\");
     validate_dir(path, true);
-    init_file_paths(path, path);
+    init_file_paths(path);
     validate_dir(ANGBAND_DIR_APEX, false);
     validate_dir(ANGBAND_DIR_BONE, false);
     if (!check_dir(ANGBAND_DIR_EDIT)) {

@@ -61,10 +61,6 @@ constexpr auto MAINTAINER = "echizen@users.sourceforge.jp";
     #define DEFAULT_LIB_PATH "./lib/"
   #endif
   
-  #ifndef DEFAULT_VAR_PATH
-    #define DEFAULT_VAR_PATH DEFAULT_LIB_PATH
-  #endif
-  
   #ifdef USE_XFT
     #ifdef JP
       #define DEFAULT_X11_FONT "monospace-24:lang=ja:spacing=90"
