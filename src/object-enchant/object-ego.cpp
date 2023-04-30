@@ -19,7 +19,7 @@
 #include "util/probability-table.h"
 #include <vector>
 
-std::map<EgoType, ego_item_type> egos_info;
+std::map<EgoType, EgoItemDefinition> egos_info;
 
 /*!
  * @brief アイテムのエゴをレア度の重みに合わせてランダムに選択する
@@ -158,7 +158,7 @@ static void ego_invest_extra_abilities(ItemEntity *o_ptr, EnumClassFlagGroup<Ite
  * @param e_ptr エゴアイテム情報への参照ポインタ
  * @param gen_flags 生成フラグ(参照渡し)
  */
-static void ego_interpret_extra_abilities(ItemEntity *o_ptr, ego_item_type *e_ptr, EnumClassFlagGroup<ItemGenerationTraitType> &gen_flags)
+static void ego_interpret_extra_abilities(ItemEntity *o_ptr, EgoItemDefinition *e_ptr, EnumClassFlagGroup<ItemGenerationTraitType> &gen_flags)
 {
     for (auto &xtra : e_ptr->xtra_flags) {
         if (xtra.mul == 0 || xtra.dev == 0) {
@@ -208,7 +208,7 @@ static int randint1_signed(const int n)
  * @param flag フラグ
  * @return 持つならtrue、持たないならfalse
  */
-static bool ego_has_flag(ItemEntity *o_ptr, ego_item_type *e_ptr, tr_type flag)
+static bool ego_has_flag(ItemEntity *o_ptr, EgoItemDefinition *e_ptr, tr_type flag)
 {
     if (o_ptr->art_flags.has(flag)) {
         return true;
@@ -226,7 +226,7 @@ static bool ego_has_flag(ItemEntity *o_ptr, ego_item_type *e_ptr, tr_type flag)
  * @param e_ptr エゴアイテム情報への参照ポインタ
  * @param lev 生成階
  */
-void ego_invest_extra_attack(ItemEntity *o_ptr, ego_item_type *e_ptr, DEPTH lev)
+void ego_invest_extra_attack(ItemEntity *o_ptr, EgoItemDefinition *e_ptr, DEPTH lev)
 {
     if (!o_ptr->is_weapon()) {
         o_ptr->pval = e_ptr->max_pval >= 0 ? 1 : randint1_signed(e_ptr->max_pval);
