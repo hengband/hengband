@@ -331,10 +331,10 @@ void display_player_equippy(PlayerType *player_ptr, TERM_LEN y, TERM_LEN x, BIT_
 {
     const auto max_i = (mode & DP_WP) ? INVEN_BOW + 1 : INVEN_TOTAL;
     for (int i = INVEN_MAIN_HAND; i < max_i; i++) {
-        const auto &o_ref = player_ptr->inventory_list[i];
-        auto a = o_ref.get_color();
-        auto c = o_ref.get_symbol();
-        if (!equippy_chars || (o_ref.bi_id == 0)) {
+        const auto &item = player_ptr->inventory_list[i];
+        auto a = item.get_color();
+        auto c = item.get_symbol();
+        if (!equippy_chars || !item.is_valid()) {
             c = ' ';
             a = TERM_DARK;
         }

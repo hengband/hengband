@@ -243,7 +243,7 @@ void floor_item_increase(PlayerType *player_ptr, INVENTORY_IDX item, ITEM_NUMBER
 void floor_item_optimize(PlayerType *player_ptr, INVENTORY_IDX item)
 {
     auto *o_ptr = &player_ptr->current_floor_ptr->o_list[item];
-    if (!o_ptr->bi_id) {
+    if (!o_ptr->is_valid()) {
         return;
     }
     if (o_ptr->number) {

@@ -621,7 +621,7 @@ TERM_COLOR ItemEntity::get_color() const
         return baseitems_info[flavor].x_attr;
     }
 
-    auto has_attr = this->bi_id == 0;
+    auto has_attr = !this->is_valid();
     has_attr |= this->bi_key != BaseitemKey(ItemKindType::CORPSE, SV_CORPSE);
     has_attr |= baseitem.x_attr != TERM_DARK;
     if (has_attr) {

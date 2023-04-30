@@ -618,7 +618,7 @@ static void display_found_item_list(PlayerType *player_ptr)
     std::vector<ItemEntity *> found_item_list;
     for (auto &item : floor_ptr->o_list) {
         auto item_entity_ptr = &item;
-        if (item_entity_ptr->bi_id > 0 && item_entity_ptr->marked.has(OmType::FOUND) && item_entity_ptr->bi_key.tval() != ItemKindType::GOLD) {
+        if (item_entity_ptr->is_valid() && item_entity_ptr->marked.has(OmType::FOUND) && item_entity_ptr->bi_key.tval() != ItemKindType::GOLD) {
             found_item_list.push_back(item_entity_ptr);
         }
     }

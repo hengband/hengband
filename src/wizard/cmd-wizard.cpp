@@ -242,7 +242,7 @@ bool exe_cmd_debug(PlayerType *player_ptr, char cmd)
         break;
     case 'X':
         for (INVENTORY_IDX i = INVEN_TOTAL - 1; i >= 0; i--) {
-            if (player_ptr->inventory_list[i].bi_id) {
+            if (player_ptr->inventory_list[i].is_valid()) {
                 drop_from_inventory(player_ptr, i, 999);
             }
         }

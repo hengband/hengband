@@ -241,7 +241,7 @@ static void inventory_aware(PlayerType *player_ptr)
     ItemEntity *o_ptr;
     for (int i = 0; i < INVEN_TOTAL; i++) {
         o_ptr = &player_ptr->inventory_list[i];
-        if (!o_ptr->bi_id) {
+        if (!o_ptr->is_valid()) {
             continue;
         }
 
@@ -260,7 +260,7 @@ static void home_aware(PlayerType *player_ptr)
         auto *store_ptr = &towns_info[i].store[enum2i(StoreSaleType::HOME)];
         for (auto j = 0; j < store_ptr->stock_num; j++) {
             auto *o_ptr = &store_ptr->stock[j];
-            if (!o_ptr->bi_id) {
+            if (!o_ptr->is_valid()) {
                 continue;
             }
 

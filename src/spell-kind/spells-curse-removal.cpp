@@ -18,18 +18,17 @@
  */
 static int exe_curse_removal(PlayerType *player_ptr, int all)
 {
-    int cnt = 0;
+    auto count = 0;
     for (int i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
         auto *o_ptr = &player_ptr->inventory_list[i];
-        if (!o_ptr->bi_id) {
+        if (!o_ptr->is_valid() || !o_ptr->is_cursed()) {
             continue;
         }
-        if (!o_ptr->is_cursed()) {
-            continue;
-        }
+
         if (!all && o_ptr->curse_flags.has(CurseTraitType::HEAVY_CURSE)) {
             continue;
         }
+
         if (o_ptr->curse_flags.has(CurseTraitType::PERMA_CURSE)) {
             o_ptr->curse_flags &= { CurseTraitType::CURSED, CurseTraitType::HEAVY_CURSE, CurseTraitType::PERMA_CURSE };
             continue;
@@ -41,14 +40,14 @@ static int exe_curse_removal(PlayerType *player_ptr, int all)
 
         player_ptr->update |= (PU_BONUS);
         player_ptr->window_flags |= (PW_EQUIP);
-        cnt++;
+        count++;
     }
 
-    if (cnt) {
+    if (count > 0) {
         msg_print(_("誰かに見守られているような気がする。", "You feel as if someone is watching over you."));
     }
 
-    return cnt;
+    return count;
 }
 
 /*!

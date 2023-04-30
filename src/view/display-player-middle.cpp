@@ -133,7 +133,7 @@ static void display_bow_hit_damage(PlayerType *player_ptr)
 static void display_shoot_magnification(PlayerType *player_ptr)
 {
     int tmul = 0;
-    if (player_ptr->inventory_list[INVEN_BOW].bi_id) {
+    if (player_ptr->inventory_list[INVEN_BOW].is_valid()) {
         tmul = player_ptr->inventory_list[INVEN_BOW].get_arrow_magnification();
         if (player_ptr->xtra_might) {
             tmul++;

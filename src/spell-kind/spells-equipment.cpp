@@ -52,7 +52,7 @@ bool apply_disenchant(PlayerType *player_ptr, BIT_FLAGS mode)
 
     ItemEntity *o_ptr;
     o_ptr = &player_ptr->inventory_list[t];
-    if (!o_ptr->bi_id) {
+    if (!o_ptr->is_valid()) {
         return false;
     }
 

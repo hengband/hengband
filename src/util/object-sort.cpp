@@ -41,7 +41,7 @@ static int get_item_sort_rank(const ItemEntity &item)
  */
 bool object_sort_comp(PlayerType *player_ptr, ItemEntity *o_ptr, int32_t o_value, ItemEntity *j_ptr)
 {
-    if (j_ptr->bi_id == 0) {
+    if (!j_ptr->is_valid()) {
         return true;
     }
 

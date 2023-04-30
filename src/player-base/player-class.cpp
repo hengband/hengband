@@ -100,9 +100,10 @@ TrFlags PlayerClass::tr_flags() const
         if (heavy_armor(this->player_ptr)) {
             flags.set(TR_SPEED);
         } else {
-            if ((!this->player_ptr->inventory_list[INVEN_MAIN_HAND].bi_id || can_attack_with_main_hand(this->player_ptr)) && (!this->player_ptr->inventory_list[INVEN_SUB_HAND].bi_id || can_attack_with_sub_hand(this->player_ptr))) {
+            if (this->has_ninja_speed()) {
                 flags.set(TR_SPEED);
             }
+
             if (plev > 24 && !this->player_ptr->is_icky_wield[0] && !this->player_ptr->is_icky_wield[1]) {
                 flags.set(TR_FREE_ACT);
             }
@@ -521,4 +522,13 @@ void PlayerClass::init_specific_data()
         this->player_ptr->class_specific_data = no_class_specific_data();
         break;
     }
+}
+
+bool PlayerClass::has_ninja_speed() const
+{
+    auto has_ninja_speed_main = !this->player_ptr->inventory_list[INVEN_MAIN_HAND].is_valid();
+    has_ninja_speed_main |= can_attack_with_main_hand(this->player_ptr);
+    auto has_ninja_speed_sub = !this->player_ptr->inventory_list[INVEN_SUB_HAND].is_valid();
+    has_ninja_speed_sub |= can_attack_with_sub_hand(this->player_ptr);
+    return has_ninja_speed_main && has_ninja_speed_sub;
 }

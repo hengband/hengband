@@ -366,7 +366,7 @@ void Patron::gain_level_reward(PlayerType *player_ptr_, int chosen_reward)
             break;
         }
         case REW_CURSE_AR: {
-            if (!this->player_ptr->inventory_list[INVEN_BODY].bi_id) {
+            if (!this->player_ptr->inventory_list[INVEN_BODY].is_valid()) {
                 break;
             }
 
@@ -407,7 +407,7 @@ void Patron::gain_level_reward(PlayerType *player_ptr_, int chosen_reward)
                     (void)curse_weapon_object(this->player_ptr, false, &this->player_ptr->inventory_list[slot]);
                     reward = format(_("%sが破壊された。", "destroying %s"), item_name.data());
                 } else {
-                    if (!this->player_ptr->inventory_list[INVEN_BODY].bi_id) {
+                    if (!this->player_ptr->inventory_list[INVEN_BODY].is_valid()) {
                         break;
                     }
 

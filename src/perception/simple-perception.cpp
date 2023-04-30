@@ -273,7 +273,7 @@ void sense_inventory1(PlayerType *player_ptr)
     for (INVENTORY_IDX i = 0; i < INVEN_TOTAL; i++) {
         o_ptr = &player_ptr->inventory_list[i];
 
-        if (!o_ptr->bi_id) {
+        if (!o_ptr->is_valid()) {
             continue;
         }
 
@@ -401,7 +401,7 @@ void sense_inventory2(PlayerType *player_ptr)
     for (INVENTORY_IDX i = 0; i < INVEN_TOTAL; i++) {
         bool okay = false;
         o_ptr = &player_ptr->inventory_list[i];
-        if (!o_ptr->bi_id) {
+        if (!o_ptr->is_valid()) {
             continue;
         }
 

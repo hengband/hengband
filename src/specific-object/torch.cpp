@@ -94,7 +94,7 @@ void update_lite_radius(PlayerType *player_ptr)
         o_ptr = &player_ptr->inventory_list[i];
         auto flags = object_flags(o_ptr);
 
-        if (!o_ptr->bi_id) {
+        if (!o_ptr->is_valid()) {
             continue;
         }
 

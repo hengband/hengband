@@ -67,14 +67,15 @@ int16_t PlayerStealth::class_base_bonus()
  */
 int16_t PlayerStealth::class_bonus()
 {
-    if (!PlayerClass(this->player_ptr).equals(PlayerClassType::NINJA)) {
+    PlayerClass pc(this->player_ptr);
+    if (!pc.equals(PlayerClassType::NINJA)) {
         return 0;
     }
 
     int16_t bonus = 0;
     if (heavy_armor(this->player_ptr)) {
         bonus -= (this->player_ptr->lev) / 10;
-    } else if ((!this->player_ptr->inventory_list[INVEN_MAIN_HAND].bi_id || can_attack_with_main_hand(this->player_ptr)) && (!this->player_ptr->inventory_list[INVEN_SUB_HAND].bi_id || can_attack_with_sub_hand(this->player_ptr))) {
+    } else if (pc.has_ninja_speed()) {
         bonus += (this->player_ptr->lev) / 10;
     }
 

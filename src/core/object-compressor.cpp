@@ -106,7 +106,7 @@ void compact_objects(PlayerType *player_ptr, int size)
 
     for (OBJECT_IDX i = floor_ptr->o_max - 1; i >= 1; i--) {
         o_ptr = &floor_ptr->o_list[i];
-        if (o_ptr->bi_id) {
+        if (o_ptr->is_valid()) {
             continue;
         }
 

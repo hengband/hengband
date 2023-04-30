@@ -192,7 +192,7 @@ bool ItemMagicApplier::set_fixed_artifact_generation_info()
  */
 void ItemMagicApplier::apply_cursed()
 {
-    if (this->o_ptr->bi_id == 0) {
+    if (!this->o_ptr->is_valid()) {
         return;
     }
 

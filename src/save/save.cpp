@@ -203,7 +203,7 @@ static bool wr_savefile_new(PlayerType *player_ptr, SaveType type)
 
     for (int i = 0; i < INVEN_TOTAL; i++) {
         auto *o_ptr = &player_ptr->inventory_list[i];
-        if (!o_ptr->bi_id) {
+        if (!o_ptr->is_valid()) {
             continue;
         }
 

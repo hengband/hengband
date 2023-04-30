@@ -584,7 +584,7 @@ std::string describe_flavor(PlayerType *player_ptr, const ItemEntity *o_ptr, BIT
     std::stringstream ss;
     ss << describe_named_item(player_ptr, item, opt);
 
-    if (any_bits(mode, OD_NAME_ONLY) || (o_ptr->bi_id == 0)) {
+    if (any_bits(mode, OD_NAME_ONLY) || !o_ptr->is_valid()) {
         return ss.str();
     }
 
@@ -595,7 +595,7 @@ std::string describe_flavor(PlayerType *player_ptr, const ItemEntity *o_ptr, BIT
     if (none_bits(mode, OD_DEBUG)) {
         const auto &bow = player_ptr->inventory_list[INVEN_BOW];
         const auto tval = item.bi_key.tval();
-        if ((bow.bi_id != 0) && (tval == bow.get_arrow_kind())) {
+        if (bow.is_valid() && (tval == bow.get_arrow_kind())) {
             ss << describe_ammo_detail(player_ptr, item, bow, opt);
         } else if (PlayerClass(player_ptr).equals(PlayerClassType::NINJA) && (tval == ItemKindType::SPIKE)) {
             ss << describe_spike_detail(player_ptr);

@@ -48,6 +48,8 @@ public:
     template <typename T>
     std::shared_ptr<T> get_specific_data() const;
 
+    bool has_ninja_speed() const;
+
 private:
     PlayerType *player_ptr;
 };

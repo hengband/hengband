@@ -40,10 +40,8 @@
  */
 static void autopick_delayed_alter_aux(PlayerType *player_ptr, INVENTORY_IDX item)
 {
-    ItemEntity *o_ptr;
-    o_ptr = ref_item(player_ptr, item);
-
-    if (o_ptr->bi_id == 0 || o_ptr->marked.has_not(OmType::AUTODESTROY)) {
+    const auto *o_ptr = ref_item(player_ptr, item);
+    if (!o_ptr->is_valid() || o_ptr->marked.has_not(OmType::AUTODESTROY)) {
         return;
     }
 

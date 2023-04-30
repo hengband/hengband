@@ -86,7 +86,7 @@ static bool determine_spcial_item_type(ItemEntity *o_ptr, ItemKindType tval)
  */
 static bool check_item_knowledge(ItemEntity *o_ptr, ItemKindType tval)
 {
-    if (o_ptr->bi_id == 0) {
+    if (!o_ptr->is_valid()) {
         return false;
     }
     if (o_ptr->bi_key.tval() != tval) {
