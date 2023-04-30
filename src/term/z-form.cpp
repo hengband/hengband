@@ -85,6 +85,24 @@
 #include <span>
 #include <vector>
 
+namespace {
+std::string vformat(concptr fmt, va_list vp)
+{
+    std::vector<char> format_buf(1024);
+    while (true) {
+        uint len;
+        len = vstrnfmt(format_buf.data(), format_buf.size(), fmt, vp);
+        if (len < format_buf.size() - 1) {
+            break;
+        }
+
+        format_buf.resize(format_buf.size() * 2);
+    }
+
+    return std::string(format_buf.data());
+}
+}
+
 /*!
  * @brief 2バイト文字、及び文頭の大文字小文字を考慮しつつ、文字列のフォーマットを行う
  * @details 文頭を大文字にするには'%s^'とする.
@@ -329,22 +347,6 @@ uint vstrnfmt(char *buf, uint max, concptr fmt, va_list vp)
 
     buf[n] = '\0';
     return n;
-}
-
-std::string vformat(concptr fmt, va_list vp)
-{
-    std::vector<char> format_buf(1024);
-    while (true) {
-        uint len;
-        len = vstrnfmt(format_buf.data(), format_buf.size(), fmt, vp);
-        if (len < format_buf.size() - 1) {
-            break;
-        }
-
-        format_buf.resize(format_buf.size() * 2);
-    }
-
-    return std::string(format_buf.data());
 }
 
 /*
