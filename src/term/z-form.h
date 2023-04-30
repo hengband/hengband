@@ -1,46 +1,18 @@
 ﻿#pragma once
 
-/*
- * Copyright (c) 1997 Ben Harrison
- *
- * This software may be copied and distributed for educational, research,
- * and not for profit purposes provided that this copyright and statement
- * are included in all such copies.
+/*!
+ * @file z-form.h
+ * @brief Low level text formatting
+ * @date 2023/04/30
+ * @author Ben Harrison, 1997
  */
 
 #include "system/h-basic.h"
 #include <string>
 
-/*
- * This file provides functions very similar to "sprintf()", but which
- * not only parse some additional "format sequences", but also enforce
- * bounds checking, and allow repeated "appends" to the same buffer.
- *
- * See "z-form.c" for more detailed information about the routines,
- * including a list of the legal "format sequences".
- *
- * This file makes use of both "z-util.c" and "z-virt.c"
- */
-
-/**** Available Functions ****/
-
-/* Format arguments into given bounded-length buffer */
-uint vstrnfmt(char *buf, uint max, concptr fmt, va_list vp);
-
-/* Simple interface to "vstrnfmt()" */
-uint strnfmt(char *buf, uint max, concptr fmt, ...) __attribute__((format(printf, 3, 4)));
-
-/* Format arguments into a static resizing buffer */
-std::string vformat(concptr fmt, va_list vp);
-
-/* Simple interface to "vformat()" */
-std::string format(concptr fmt, ...) __attribute__((format(printf, 1, 2)));
-
-/* Vararg interface to "plog()", using "format()" */
-void plog_fmt(concptr fmt, ...) __attribute__((format(printf, 1, 2)));
-
-/* Vararg interface to "quit()", using "format()" */
-void quit_fmt(concptr fmt, ...) __attribute__((format(printf, 1, 2)));
-
-/* Vararg interface to "core()", using "format()" */
-void core_fmt(concptr fmt, ...) __attribute__((format(printf, 1, 2)));
+uint32_t vstrnfmt(char *buf, uint32_t max, const char *fmt, va_list vp);
+uint32_t strnfmt(char *buf, uint32_t max, const char *fmt, ...) __attribute__((format(printf, 3, 4)));
+std::string format(const char *fmt, ...) __attribute__((format(printf, 1, 2)));
+void plog_fmt(const char *fmt, ...) __attribute__((format(printf, 1, 2)));
+void quit_fmt(const char *fmt, ...) __attribute__((format(printf, 1, 2)));
+void core_fmt(const char *fmt, ...) __attribute__((format(printf, 1, 2)));
