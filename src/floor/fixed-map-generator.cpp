@@ -76,14 +76,14 @@ static void drop_here(FloorType *floor_ptr, ItemEntity *j_ptr, POSITION y, POSIT
     g_ptr->o_idx_list.add(floor_ptr, o_idx);
 }
 
-static void generate_artifact(PlayerType *player_ptr, qtwg_type *qtwg_ptr, const FixedArtifactId artifact_index)
+static void generate_artifact(PlayerType *player_ptr, qtwg_type *qtwg_ptr, const FixedArtifactId a_idx)
 {
-    if (artifact_index == FixedArtifactId::NONE) {
+    if (a_idx == FixedArtifactId::NONE) {
         return;
     }
 
-    auto &fixed_artifact = artifacts_info.at(artifact_index);
-    if (!fixed_artifact.is_generated && create_named_art(player_ptr, artifact_index, *qtwg_ptr->y, *qtwg_ptr->x)) {
+    const auto &artifact = ArtifactsInfo::get_instance().get_artifact(a_idx);
+    if (!artifact.is_generated && create_named_art(player_ptr, a_idx, *qtwg_ptr->y, *qtwg_ptr->x)) {
         return;
     }
 
@@ -235,7 +235,7 @@ static bool parse_qtw_QQ(quest_type *q_ptr, char **zz, int num)
         return true;
     }
 
-    auto &artifact = artifacts_info.at(q_ptr->reward_artifact_idx);
+    auto &artifact = ArtifactsInfo::get_instance().get_artifact(q_ptr->reward_artifact_idx);
     artifact.gen_flags.set(ItemGenerationTraitType::QUESTITEM);
     return true;
 }
@@ -255,13 +255,14 @@ static bool parse_qtw_QR(quest_type *q_ptr, char **zz, int num)
 
     int count = 0;
     FixedArtifactId reward_idx = FixedArtifactId::NONE;
+    const auto &artifacts = ArtifactsInfo::get_instance();
     for (auto idx = 2; idx < num; idx++) {
         const auto a_idx = i2enum<FixedArtifactId>(atoi(zz[idx]));
         if (a_idx == FixedArtifactId::NONE) {
             continue;
         }
 
-        if (artifacts_info.at(a_idx).is_generated) {
+        if (artifacts.get_artifact(a_idx).is_generated) {
             continue;
         }
 
@@ -273,7 +274,7 @@ static bool parse_qtw_QR(quest_type *q_ptr, char **zz, int num)
 
     if (reward_idx != FixedArtifactId::NONE) {
         q_ptr->reward_artifact_idx = reward_idx;
-        artifacts_info.at(reward_idx).gen_flags.set(ItemGenerationTraitType::QUESTITEM);
+        artifacts.get_artifact(reward_idx).gen_flags.set(ItemGenerationTraitType::QUESTITEM);
     } else {
         q_ptr->type = QuestKindType::KILL_ALL;
     }

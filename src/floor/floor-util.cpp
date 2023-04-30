@@ -133,7 +133,7 @@ void wipe_o_list(FloorType *floor_ptr)
 
         if (!w_ptr->character_dungeon || preserve_mode) {
             if (o_ptr->is_fixed_artifact() && !o_ptr->is_known()) {
-                artifacts_info.at(o_ptr->fixed_artifact_idx).is_generated = false;
+                ArtifactsInfo::get_instance().get_artifact(o_ptr->fixed_artifact_idx).is_generated = false;
             }
         }
 

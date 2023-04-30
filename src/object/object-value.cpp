@@ -46,12 +46,12 @@ PRICE object_value_real(const ItemEntity *o_ptr)
     PRICE value = baseitems_info[o_ptr->bi_id].cost;
     auto flags = object_flags(o_ptr);
     if (o_ptr->is_fixed_artifact()) {
-        const auto &a_ref = artifacts_info.at(o_ptr->fixed_artifact_idx);
-        if (!a_ref.cost) {
+        const auto &artifact = ArtifactsInfo::get_instance().get_artifact(o_ptr->fixed_artifact_idx);
+        if (!artifact.cost) {
             return 0;
         }
 
-        value = a_ref.cost;
+        value = artifact.cost;
         value += flag_cost(o_ptr, o_ptr->pval);
         return value;
     } else if (o_ptr->is_ego()) {

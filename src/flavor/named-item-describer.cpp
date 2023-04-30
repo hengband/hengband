@@ -34,7 +34,7 @@ static std::string get_fullname_if_set(const ItemEntity &item, const describe_op
 
     const auto fixed_art_id = item.fixed_artifact_idx;
     const auto is_known_artifact = opt.known && item.is_fixed_artifact() && none_bits(opt.mode, OD_BASE_NAME);
-    return is_known_artifact ? artifacts_info.at(fixed_art_id).name : baseitems_info[item.bi_id].name;
+    return is_known_artifact ? ArtifactsInfo::get_instance().get_artifact(fixed_art_id).name : baseitems_info[item.bi_id].name;
 }
 
 #ifdef JP
@@ -110,10 +110,10 @@ static std::string describe_unique_name_before_body_ja(const ItemEntity &item, c
     }
 
     if (item.is_fixed_artifact() && object_flags(&item).has_not(TR_FULL_NAME)) {
-        const auto &a_ref = artifacts_info.at(item.fixed_artifact_idx);
+        const auto &artifact = ArtifactsInfo::get_instance().get_artifact(item.fixed_artifact_idx);
         /* '『' から始まらない伝説のアイテムの名前は最初に付加する */
-        if (a_ref.name.find("『", 0, 2) != 0) {
-            return a_ref.name;
+        if (artifact.name.find("『", 0, 2) != 0) {
+            return artifact.name;
         }
 
         return "";
@@ -200,7 +200,7 @@ static std::string describe_unique_name_after_body_ja(const ItemEntity &item, co
     }
 
     if (item.is_fixed_artifact()) {
-        const auto &artifact = artifacts_info.at(item.fixed_artifact_idx);
+        const auto &artifact = ArtifactsInfo::get_instance().get_artifact(item.fixed_artifact_idx);
         if (artifact.name.find("『", 0, 2) == 0) {
             return artifact.name;
         }
@@ -294,7 +294,7 @@ static std::string describe_unique_name_after_body_en(const ItemEntity &item, co
     }
 
     if (item.is_fixed_artifact()) {
-        const auto &artifact = artifacts_info.at(item.fixed_artifact_idx);
+        const auto &artifact = ArtifactsInfo::get_instance().get_artifact(item.fixed_artifact_idx);
         ss << ' ' << artifact.name;
         return ss.str();
     }

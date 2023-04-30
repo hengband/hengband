@@ -340,13 +340,14 @@ bool destroy_area(PlayerType *player_ptr, POSITION y1, POSITION x1, POSITION r, 
             /* During generation, destroyed artifacts are "preserved" */
             if (preserve_mode || in_generate) {
                 /* Scan all objects in the grid */
+                const auto &artifacts = ArtifactsInfo::get_instance();
                 for (const auto this_o_idx : g_ptr->o_idx_list) {
                     ItemEntity *o_ptr;
                     o_ptr = &floor_ptr->o_list[this_o_idx];
 
                     /* Hack -- Preserve unknown artifacts */
                     if (o_ptr->is_fixed_artifact() && (!o_ptr->is_known() || in_generate)) {
-                        artifacts_info.at(o_ptr->fixed_artifact_idx).is_generated = false;
+                        artifacts.get_artifact(o_ptr->fixed_artifact_idx).is_generated = false;
 
                         if (in_generate && cheat_peek) {
                             const auto item_name = describe_flavor(player_ptr, o_ptr, (OD_NAME_ONLY | OD_STORE));

@@ -183,7 +183,7 @@ static void on_dead_sacred_treasures(PlayerType *player_ptr, monster_death_type 
             break;
         }
 
-        a_ptr = &artifacts_info.at(a_idx);
+        a_ptr = &ArtifactsInfo::get_instance().get_artifact(a_idx);
     } while (a_ptr->is_generated);
 
     create_named_art(player_ptr, a_idx, md_ptr->md_y, md_ptr->md_x);

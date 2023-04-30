@@ -240,8 +240,8 @@ void wiz_create_item(PlayerType *player_ptr)
 
     const auto &baseitem = baseitems_info[bi_id];
     if (baseitem.gen_flags.has(ItemGenerationTraitType::INSTA_ART)) {
-        for (const auto &[a_idx, a_ref] : artifacts_info) {
-            if ((a_idx == FixedArtifactId::NONE) || (a_ref.bi_key != baseitem.bi_key)) {
+        for (const auto &[a_idx, artifact] : artifacts_info) {
+            if ((a_idx == FixedArtifactId::NONE) || (artifact.bi_key != baseitem.bi_key)) {
                 continue;
             }
 
@@ -266,9 +266,9 @@ void wiz_create_item(PlayerType *player_ptr)
  */
 static std::string wiz_make_named_artifact_desc(PlayerType *player_ptr, FixedArtifactId a_idx)
 {
-    const auto &a_ref = artifacts_info.at(a_idx);
+    const auto &artifact = ArtifactsInfo::get_instance().get_artifact(a_idx);
     ItemEntity item;
-    item.prep(lookup_baseitem_id(a_ref.bi_key));
+    item.prep(lookup_baseitem_id(artifact.bi_key));
     item.fixed_artifact_idx = a_idx;
     object_known(&item);
     return describe_flavor(player_ptr, &item, OD_NAME_ONLY);
@@ -342,8 +342,8 @@ static std::vector<FixedArtifactId> wiz_collect_group_a_idx(const grouper &group
     const auto &[tval_list, name] = group_artifact;
     std::vector<FixedArtifactId> a_idx_list;
     for (auto tval : tval_list) {
-        for (const auto &[a_idx, a_ref] : artifacts_info) {
-            if (a_ref.bi_key.tval() == tval) {
+        for (const auto &[a_idx, artifact] : artifacts_info) {
+            if (artifact.bi_key.tval() == tval) {
                 a_idx_list.push_back(a_idx);
             }
         }
@@ -386,7 +386,7 @@ void wiz_create_named_art(PlayerType *player_ptr)
 
     screen_load();
     const auto a_idx = create_a_idx.value();
-    const auto &artifact = artifacts_info.at(a_idx);
+    const auto &artifact = ArtifactsInfo::get_instance().get_artifact(a_idx);
     if (artifact.is_generated) {
         msg_print("It's already allocated.");
         return;

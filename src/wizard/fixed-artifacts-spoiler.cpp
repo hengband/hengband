@@ -68,26 +68,26 @@ void spoiler_outlist(concptr header, concptr *list, char separator)
  */
 static bool make_fake_artifact(ItemEntity *o_ptr, FixedArtifactId fixed_artifact_idx)
 {
-    auto &a_ref = artifacts_info.at(fixed_artifact_idx);
-    if (a_ref.name.empty()) {
+    const auto &artifact = ArtifactsInfo::get_instance().get_artifact(fixed_artifact_idx);
+    if (artifact.name.empty()) {
         return false;
     }
 
-    const auto bi_id = lookup_baseitem_id(a_ref.bi_key);
+    const auto bi_id = lookup_baseitem_id(artifact.bi_key);
     if (bi_id == 0) {
         return false;
     }
 
     o_ptr->prep(bi_id);
     o_ptr->fixed_artifact_idx = fixed_artifact_idx;
-    o_ptr->pval = a_ref.pval;
-    o_ptr->ac = a_ref.ac;
-    o_ptr->dd = a_ref.dd;
-    o_ptr->ds = a_ref.ds;
-    o_ptr->to_a = a_ref.to_a;
-    o_ptr->to_h = a_ref.to_h;
-    o_ptr->to_d = a_ref.to_d;
-    o_ptr->weight = a_ref.weight;
+    o_ptr->pval = artifact.pval;
+    o_ptr->ac = artifact.ac;
+    o_ptr->dd = artifact.dd;
+    o_ptr->ds = artifact.ds;
+    o_ptr->to_a = artifact.to_a;
+    o_ptr->to_h = artifact.to_h;
+    o_ptr->to_d = artifact.to_d;
+    o_ptr->weight = artifact.weight;
     return true;
 }
 
@@ -144,8 +144,8 @@ SpoilerOutputResultType spoil_fixed_artifact(concptr fname)
         spoiler_blanklines(1);
 
         for (auto tval : tval_list) {
-            for (const auto &[a_idx, a_ref] : artifacts_info) {
-                if (a_ref.bi_key.tval() != tval) {
+            for (const auto &[a_idx, artifact] : artifacts_info) {
+                if (artifact.bi_key.tval() != tval) {
                     continue;
                 }
 
@@ -155,9 +155,9 @@ SpoilerOutputResultType spoil_fixed_artifact(concptr fname)
                 }
 
                 PlayerType dummy;
-                obj_desc_list artifact;
-                object_analyze(&dummy, &item, &artifact);
-                spoiler_print_art(&artifact);
+                obj_desc_list artifact_descriptions;
+                object_analyze(&dummy, &item, &artifact_descriptions);
+                spoiler_print_art(&artifact_descriptions);
             }
         }
     }

@@ -81,13 +81,9 @@ static std::pair<FixedArtifactId, const ArtifactType *> get_artifact_definition(
     const auto max_idx = enum2i(artifacts_info.rbegin()->first);
     while (true) {
         const auto a_idx = i2enum<FixedArtifactId>(get_rumor_num(artifact_name.data(), max_idx));
-        const auto *a_ptr = ArtifactsInfo::get_instance().get_artifact(a_idx);
-        if (a_ptr == nullptr) {
-            continue;
-        }
-
-        if (!a_ptr->name.empty()) {
-            return { a_idx, a_ptr };
+        const auto &artifact = ArtifactsInfo::get_instance().get_artifact(a_idx);
+        if (!artifact.name.empty()) {
+            return { a_idx, &artifact };
         }
     }
 }

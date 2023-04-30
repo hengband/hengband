@@ -11,12 +11,18 @@ std::map<FixedArtifactId, ArtifactType> artifacts_info;
 
 ArtifactsInfo ArtifactsInfo::instance{};
 
+ArtifactType ArtifactsInfo::dummy{};
+
 ArtifactsInfo &ArtifactsInfo::get_instance()
 {
     return instance;
 }
 
-ArtifactType *ArtifactsInfo::get_artifact(const FixedArtifactId id) const
+ArtifactType &ArtifactsInfo::get_artifact(const FixedArtifactId id) const
 {
-    return &artifacts_info.at(id);
+    if (id == FixedArtifactId::NONE) {
+        return dummy;
+    }
+
+    return artifacts_info.at(id);
 }

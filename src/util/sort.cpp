@@ -268,10 +268,12 @@ bool ang_sort_art_comp(PlayerType *player_ptr, vptr u, vptr v, int a, int b)
     int z2;
 
     /* Sort by total kills */
+    const auto &artifact_w1 = ArtifactsInfo::get_instance().get_artifact(w1);
+    const auto &artifact_w2 = ArtifactsInfo::get_instance().get_artifact(w2);
     if (*why >= 3) {
         /* Extract total kills */
-        z1 = enum2i(artifacts_info.at(w1).bi_key.tval());
-        z2 = enum2i(artifacts_info.at(w2).bi_key.tval());
+        z1 = enum2i(artifact_w1.bi_key.tval());
+        z2 = enum2i(artifact_w2.bi_key.tval());
 
         /* Compare total kills */
         if (z1 < z2) {
@@ -286,8 +288,8 @@ bool ang_sort_art_comp(PlayerType *player_ptr, vptr u, vptr v, int a, int b)
     /* Sort by monster level */
     if (*why >= 2) {
         /* Extract levels */
-        z1 = artifacts_info.at(w1).bi_key.sval().value();
-        z2 = artifacts_info.at(w2).bi_key.sval().value();
+        z1 = artifact_w1.bi_key.sval().value();
+        z2 = artifact_w2.bi_key.sval().value();
 
         /* Compare levels */
         if (z1 < z2) {
@@ -302,8 +304,8 @@ bool ang_sort_art_comp(PlayerType *player_ptr, vptr u, vptr v, int a, int b)
     /* Sort by monster experience */
     if (*why >= 1) {
         /* Extract experience */
-        z1 = artifacts_info.at(w1).level;
-        z2 = artifacts_info.at(w2).level;
+        z1 = artifact_w1.level;
+        z2 = artifact_w2.level;
 
         /* Compare experience */
         if (z1 < z2) {

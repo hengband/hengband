@@ -78,8 +78,8 @@ void player_wipe_without_name(PlayerType *player_ptr)
         (&player_ptr->inventory_list[i])->wipe();
     }
 
-    for (auto &[a_idx, a_ref] : artifacts_info) {
-        a_ref.is_generated = false;
+    for (auto &[a_idx, artifact] : artifacts_info) {
+        artifact.is_generated = false;
     }
 
     reset_baseitem_idenditication_flags();

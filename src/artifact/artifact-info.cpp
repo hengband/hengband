@@ -29,9 +29,9 @@ RandomArtActType activation_index(const ItemEntity *o_ptr)
     }
 
     if (o_ptr->is_fixed_artifact()) {
-        const auto &fixed_artifact = artifacts_info.at(o_ptr->fixed_artifact_idx);
-        if (fixed_artifact.flags.has(TR_ACTIVATE)) {
-            return fixed_artifact.act_idx;
+        const auto &artifact = ArtifactsInfo::get_instance().get_artifact(o_ptr->fixed_artifact_idx);
+        if (artifact.flags.has(TR_ACTIVATE)) {
+            return artifact.act_idx;
         }
     }
 

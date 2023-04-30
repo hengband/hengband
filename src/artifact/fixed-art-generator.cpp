@@ -133,7 +133,7 @@ static void invest_special_artifact_abilities(PlayerType *player_ptr, ItemEntity
  * @param a_ptr 固定アーティファクト情報への参照ポインタ
  * @param q_ptr オブジェクト情報への参照ポインタ
  */
-static void fixed_artifact_random_abilities(PlayerType *player_ptr, const ArtifactType &a_ref, ItemEntity *o_ptr)
+static void fixed_artifact_random_abilities(PlayerType *player_ptr, const ArtifactType &artifact, ItemEntity *o_ptr)
 {
     auto give_power = false;
     auto give_resistance = false;
@@ -145,15 +145,15 @@ static void fixed_artifact_random_abilities(PlayerType *player_ptr, const Artifa
 
     invest_special_artifact_abilities(player_ptr, o_ptr);
 
-    if (a_ref.gen_flags.has(ItemGenerationTraitType::XTRA_POWER)) {
+    if (artifact.gen_flags.has(ItemGenerationTraitType::XTRA_POWER)) {
         give_power = true;
     }
 
-    if (a_ref.gen_flags.has(ItemGenerationTraitType::XTRA_H_RES)) {
+    if (artifact.gen_flags.has(ItemGenerationTraitType::XTRA_H_RES)) {
         give_resistance = true;
     }
 
-    if (a_ref.gen_flags.has(ItemGenerationTraitType::XTRA_RES_OR_POWER)) {
+    if (artifact.gen_flags.has(ItemGenerationTraitType::XTRA_RES_OR_POWER)) {
         if (one_in_(2)) {
             give_resistance = true;
         } else {
@@ -169,7 +169,7 @@ static void fixed_artifact_random_abilities(PlayerType *player_ptr, const Artifa
         one_high_resistance(o_ptr);
     }
 
-    if (a_ref.gen_flags.has(ItemGenerationTraitType::XTRA_DICE)) {
+    if (artifact.gen_flags.has(ItemGenerationTraitType::XTRA_DICE)) {
         do {
             o_ptr->dd++;
         } while (one_in_(o_ptr->dd));
@@ -186,33 +186,33 @@ static void fixed_artifact_random_abilities(PlayerType *player_ptr, const Artifa
  * @param a_ptr 固定アーティファクト情報への参照ポインタ
  * @param q_ptr オブジェクト情報への参照ポインタ
  */
-static void invest_curse_to_fixed_artifact(const ArtifactType &a_ref, ItemEntity *o_ptr)
+static void invest_curse_to_fixed_artifact(const ArtifactType &artifact, ItemEntity *o_ptr)
 {
-    if (!a_ref.cost) {
+    if (!artifact.cost) {
         set_bits(o_ptr->ident, IDENT_BROKEN);
     }
 
-    if (a_ref.gen_flags.has(ItemGenerationTraitType::CURSED)) {
+    if (artifact.gen_flags.has(ItemGenerationTraitType::CURSED)) {
         o_ptr->curse_flags.set(CurseTraitType::CURSED);
     }
 
-    if (a_ref.gen_flags.has(ItemGenerationTraitType::HEAVY_CURSE)) {
+    if (artifact.gen_flags.has(ItemGenerationTraitType::HEAVY_CURSE)) {
         o_ptr->curse_flags.set(CurseTraitType::HEAVY_CURSE);
     }
 
-    if (a_ref.gen_flags.has(ItemGenerationTraitType::PERMA_CURSE)) {
+    if (artifact.gen_flags.has(ItemGenerationTraitType::PERMA_CURSE)) {
         o_ptr->curse_flags.set(CurseTraitType::PERMA_CURSE);
     }
 
-    if (a_ref.gen_flags.has(ItemGenerationTraitType::RANDOM_CURSE0)) {
+    if (artifact.gen_flags.has(ItemGenerationTraitType::RANDOM_CURSE0)) {
         o_ptr->curse_flags.set(get_curse(0, o_ptr));
     }
 
-    if (a_ref.gen_flags.has(ItemGenerationTraitType::RANDOM_CURSE1)) {
+    if (artifact.gen_flags.has(ItemGenerationTraitType::RANDOM_CURSE1)) {
         o_ptr->curse_flags.set(get_curse(1, o_ptr));
     }
 
-    if (a_ref.gen_flags.has(ItemGenerationTraitType::RANDOM_CURSE2)) {
+    if (artifact.gen_flags.has(ItemGenerationTraitType::RANDOM_CURSE2)) {
         o_ptr->curse_flags.set(get_curse(2, o_ptr));
     }
 }
@@ -225,19 +225,19 @@ static void invest_curse_to_fixed_artifact(const ArtifactType &a_ref, ItemEntity
  */
 void apply_artifact(PlayerType *player_ptr, ItemEntity *o_ptr)
 {
-    auto &a_ref = artifacts_info.at(o_ptr->fixed_artifact_idx);
-    o_ptr->pval = a_ref.pval;
-    o_ptr->ac = a_ref.ac;
-    o_ptr->dd = a_ref.dd;
-    o_ptr->ds = a_ref.ds;
-    o_ptr->to_a = a_ref.to_a;
-    o_ptr->to_h = a_ref.to_h;
-    o_ptr->to_d = a_ref.to_d;
-    o_ptr->weight = a_ref.weight;
-    o_ptr->activation_id = a_ref.act_idx;
+    const auto &artifact = ArtifactsInfo::get_instance().get_artifact(o_ptr->fixed_artifact_idx);
+    o_ptr->pval = artifact.pval;
+    o_ptr->ac = artifact.ac;
+    o_ptr->dd = artifact.dd;
+    o_ptr->ds = artifact.ds;
+    o_ptr->to_a = artifact.to_a;
+    o_ptr->to_h = artifact.to_h;
+    o_ptr->to_d = artifact.to_d;
+    o_ptr->weight = artifact.weight;
+    o_ptr->activation_id = artifact.act_idx;
 
-    invest_curse_to_fixed_artifact(a_ref, o_ptr);
-    fixed_artifact_random_abilities(player_ptr, a_ref, o_ptr);
+    invest_curse_to_fixed_artifact(artifact, o_ptr);
+    fixed_artifact_random_abilities(player_ptr, artifact, o_ptr);
 }
 
 /*!
@@ -254,12 +254,12 @@ void apply_artifact(PlayerType *player_ptr, ItemEntity *o_ptr)
  */
 bool create_named_art(PlayerType *player_ptr, FixedArtifactId a_idx, POSITION y, POSITION x)
 {
-    auto &a_ref = artifacts_info.at(a_idx);
-    if (a_ref.name.empty()) {
+    auto &artifact = ArtifactsInfo::get_instance().get_artifact(a_idx);
+    if (artifact.name.empty()) {
         return false;
     }
 
-    auto bi_id = lookup_baseitem_id(a_ref.bi_key);
+    auto bi_id = lookup_baseitem_id(artifact.bi_key);
     if (bi_id == 0) {
         return true;
     }
@@ -273,7 +273,7 @@ bool create_named_art(PlayerType *player_ptr, FixedArtifactId a_idx, POSITION y,
         return false;
     }
 
-    a_ref.is_generated = true;
+    artifact.is_generated = true;
     return true;
 }
 
@@ -299,35 +299,35 @@ bool make_artifact(PlayerType *player_ptr, ItemEntity *o_ptr)
         return false;
     }
 
-    for (const auto &[a_idx, a_ref] : artifacts_info) {
-        if (a_ref.name.empty()) {
+    for (const auto &[a_idx, artifact] : artifacts_info) {
+        if (artifact.name.empty()) {
             continue;
         }
 
-        if (a_ref.is_generated) {
+        if (artifact.is_generated) {
             continue;
         }
 
-        if (a_ref.gen_flags.has(ItemGenerationTraitType::QUESTITEM)) {
+        if (artifact.gen_flags.has(ItemGenerationTraitType::QUESTITEM)) {
             continue;
         }
 
-        if (a_ref.gen_flags.has(ItemGenerationTraitType::INSTA_ART)) {
+        if (artifact.gen_flags.has(ItemGenerationTraitType::INSTA_ART)) {
             continue;
         }
 
-        if (a_ref.bi_key != o_ptr->bi_key) {
+        if (artifact.bi_key != o_ptr->bi_key) {
             continue;
         }
 
-        if (a_ref.level > floor_ptr->dun_level) {
-            int d = (a_ref.level - floor_ptr->dun_level) * 2;
+        if (artifact.level > floor_ptr->dun_level) {
+            int d = (artifact.level - floor_ptr->dun_level) * 2;
             if (!one_in_(d)) {
                 continue;
             }
         }
 
-        if (!one_in_(a_ref.rarity)) {
+        if (!one_in_(artifact.rarity)) {
             continue;
         }
 
@@ -364,34 +364,34 @@ bool make_artifact_special(PlayerType *player_ptr, ItemEntity *o_ptr)
     }
 
     /*! @note 全固定アーティファクト中からIDの若い順に生成対象とその確率を走査する / Check the artifact list (just the "specials") */
-    for (const auto &[a_idx, a_ref] : artifacts_info) {
+    for (const auto &[a_idx, artifact] : artifacts_info) {
         /*! @note アーティファクト名が空の不正なデータは除外する / Skip "empty" artifacts */
-        if (a_ref.name.empty()) {
+        if (artifact.name.empty()) {
             continue;
         }
 
         /*! @note 既に生成回数がカウントされたアーティファクト、QUESTITEMと非INSTA_ARTは除外 / Cannot make an artifact twice */
-        if (a_ref.is_generated) {
+        if (artifact.is_generated) {
             continue;
         }
-        if (a_ref.gen_flags.has(ItemGenerationTraitType::QUESTITEM)) {
+        if (artifact.gen_flags.has(ItemGenerationTraitType::QUESTITEM)) {
             continue;
         }
-        if (!(a_ref.gen_flags.has(ItemGenerationTraitType::INSTA_ART))) {
+        if (!(artifact.gen_flags.has(ItemGenerationTraitType::INSTA_ART))) {
             continue;
         }
 
         /*! @note アーティファクト生成階が現在に対して足りない場合は高確率で1/(不足階層*2)を満たさないと生成リストに加えられない */
-        if (a_ref.level > floor_ptr->object_level) {
+        if (artifact.level > floor_ptr->object_level) {
             /* @note  / Acquire the "out-of-depth factor". Roll for out-of-depth creation. */
-            int d = (a_ref.level - floor_ptr->object_level) * 2;
+            int d = (artifact.level - floor_ptr->object_level) * 2;
             if (!one_in_(d)) {
                 continue;
             }
         }
 
         /*! @note 1/(レア度)の確率を満たさないと除外される / Artifact "rarity roll" */
-        if (!one_in_(a_ref.rarity)) {
+        if (!one_in_(artifact.rarity)) {
             continue;
         }
 
@@ -399,7 +399,7 @@ bool make_artifact_special(PlayerType *player_ptr, ItemEntity *o_ptr)
          * @note INSTA_ART型固定アーティファクトのベースアイテムもチェック対象とする。
          * ベースアイテムの生成階層が足りない場合1/(不足階層*5)を満たさないと除外される。
          */
-        const auto bi_id = lookup_baseitem_id(a_ref.bi_key);
+        const auto bi_id = lookup_baseitem_id(artifact.bi_key);
         if (baseitems_info[bi_id].level > floor_ptr->object_level) {
             int d = (baseitems_info[bi_id].level - floor_ptr->object_level) * 5;
             if (!one_in_(d)) {

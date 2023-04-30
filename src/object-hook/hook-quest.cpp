@@ -58,10 +58,10 @@ bool object_is_quest_target(QuestId quest_idx, const ItemEntity *o_ptr)
         return false;
     }
 
-    const auto &a_ref = artifacts_info.at(a_idx);
-    if (a_ref.gen_flags.has(ItemGenerationTraitType::INSTA_ART)) {
+    const auto &artifact = ArtifactsInfo::get_instance().get_artifact(a_idx);
+    if (artifact.gen_flags.has(ItemGenerationTraitType::INSTA_ART)) {
         return false;
     }
 
-    return o_ptr->bi_key == a_ref.bi_key;
+    return o_ptr->bi_key == artifact.bi_key;
 }
