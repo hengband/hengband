@@ -264,7 +264,7 @@ static void prt_alloc(const BaseitemKey &bi_key, TERM_LEN row, TERM_LEN col)
                 prob = entry.prob1 * i * BASEITEM_MAX_DEPTH / (entry.level - 1);
             }
 
-            const auto &baseitem = baseitems_info[entry.index];
+            const auto &baseitem = entry.get_baseitem();
             total[i] += prob / magnificant;
             total_frac += prob % magnificant;
 
