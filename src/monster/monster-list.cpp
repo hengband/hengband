@@ -45,6 +45,7 @@
 #include "util/probability-table.h"
 #include "view/display-messages.h"
 #include "world/world.h"
+#include <cmath>
 #include <iterator>
 
 #define HORDE_NOGOOD 0x01 /*!< (未実装フラグ)HORDE生成でGOODなモンスターの生成を禁止する？ */
@@ -94,7 +95,7 @@ MONSTER_IDX m_pop(FloorType *floor_ptr)
 MonsterRaceId get_mon_num(PlayerType *player_ptr, DEPTH min_level, DEPTH max_level, BIT_FLAGS option)
 {
     /* town max_level : same delay as 10F, no nasty mons till day18 */
-    auto delay = mysqrt(max_level * 10000L) + (max_level * 5);
+    auto delay = static_cast<int>(std::sqrt(max_level * 10000)) + (max_level * 5);
     if (!max_level) {
         delay = 360;
     }
