@@ -21,6 +21,7 @@
 #include "sv-definition/sv-weapon-types.h"
 #include "system/item-entity.h"
 #include "system/player-type-definition.h"
+#include "system/redrawing-flags-updater.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
 #include "term/z-form.h"
@@ -376,7 +377,7 @@ PRICE compare_weapons(PlayerType *player_ptr, PRICE bcost)
 
     int n = 1;
     total = bcost;
-
+    auto &rfu = RedrawingFlagsUpdater::get_instance();
     while (true) {
         clear_bldg(0, 22);
         w_ptr->character_xtra = true;
@@ -386,7 +387,7 @@ PRICE compare_weapons(PlayerType *player_ptr, PRICE bcost)
                 i_ptr->copy_from(o_ptr[i]);
             }
 
-            player_ptr->update |= PU_BONUS;
+            rfu.set_flag(StatusRedrawingFlag::BONUS);
             handle_stuff(player_ptr);
 
             list_weapon(player_ptr, o_ptr[i], row, col);
@@ -394,7 +395,7 @@ PRICE compare_weapons(PlayerType *player_ptr, PRICE bcost)
             i_ptr->copy_from(&orig_weapon);
         }
 
-        player_ptr->update |= PU_BONUS;
+        rfu.set_flag(StatusRedrawingFlag::BONUS);
         handle_stuff(player_ptr);
 
         w_ptr->character_xtra = old_character_xtra;

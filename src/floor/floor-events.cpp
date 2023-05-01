@@ -39,6 +39,7 @@
 #include "system/monster-entity.h"
 #include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
+#include "system/redrawing-flags-updater.h"
 #include "system/terrain-type-definition.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
@@ -46,7 +47,12 @@
 
 static void update_sun_light(PlayerType *player_ptr)
 {
-    player_ptr->update |= PU_MONSTER_STATUSES | PU_MONSTER_LITE;
+    auto &rfu = RedrawingFlagsUpdater::get_instance();
+    const auto flags_srf = {
+        StatusRedrawingFlag::MONSTER_STATUSES,
+        StatusRedrawingFlag::MONSTER_LITE,
+    };
+    rfu.set_flags(flags_srf);
     player_ptr->redraw |= PR_MAP;
     player_ptr->window_flags |= PW_OVERHEAD | PW_DUNGEON;
     if ((player_ptr->current_floor_ptr->grid_array[player_ptr->y][player_ptr->x].info & CAVE_GLOW) != 0) {
@@ -344,7 +350,13 @@ void glow_deep_lava_and_bldg(PlayerType *player_ptr)
         }
     }
 
-    player_ptr->update |= PU_VIEW | PU_LITE | PU_MONSTER_LITE;
+    auto &rfu = RedrawingFlagsUpdater::get_instance();
+    const auto flags_srf = {
+        StatusRedrawingFlag::VIEW,
+        StatusRedrawingFlag::LITE,
+        StatusRedrawingFlag::MONSTER_LITE,
+    };
+    rfu.set_flags(flags_srf);
     player_ptr->redraw |= PR_MAP;
 }
 

@@ -8,6 +8,7 @@
 #include "system/artifact-type-definition.h"
 #include "system/item-entity.h"
 #include "system/player-type-definition.h"
+#include "system/redrawing-flags-updater.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 
@@ -67,6 +68,10 @@ bool activate_bloody_moon(PlayerType *player_ptr, ItemEntity *o_ptr)
         calc_android_exp(player_ptr);
     }
 
-    player_ptr->update |= PU_BONUS | PU_HP;
+    const auto flags = {
+        StatusRedrawingFlag::BONUS,
+        StatusRedrawingFlag::HP,
+    };
+    RedrawingFlagsUpdater::get_instance().set_flags(flags);
     return true;
 }

@@ -30,6 +30,7 @@
 #include "status/shape-changer.h"
 #include "system/item-entity.h"
 #include "system/player-type-definition.h"
+#include "system/redrawing-flags-updater.h"
 #include "timed-effect/player-blindness.h"
 #include "timed-effect/timed-effects.h"
 #include "view/display-messages.h"
@@ -432,8 +433,9 @@ void effect_player_lite(PlayerType *player_ptr, EffectPlayerType *ep_ptr)
     player_ptr->wraith_form = 0;
     msg_print(_("閃光のため非物質的な影の存在でいられなくなった。", "The light forces you out of your incorporeal shadow form."));
 
+    auto &rfu = RedrawingFlagsUpdater::get_instance();
     player_ptr->redraw |= (PR_MAP | PR_TIMED_EFFECT);
-    player_ptr->update |= (PU_MONSTER_STATUSES);
+    rfu.set_flag(StatusRedrawingFlag::MONSTER_STATUSES);
     player_ptr->window_flags |= (PW_OVERHEAD | PW_DUNGEON);
 }
 
@@ -495,7 +497,7 @@ static void effect_player_time_one_disability(PlayerType *player_ptr)
         player_ptr->stat_cur[k] = 3;
     }
 
-    player_ptr->update |= (PU_BONUS);
+    RedrawingFlagsUpdater::get_instance().set_flag(StatusRedrawingFlag::BONUS);
 }
 
 static void effect_player_time_all_disabilities(PlayerType *player_ptr)
@@ -508,7 +510,7 @@ static void effect_player_time_all_disabilities(PlayerType *player_ptr)
         }
     }
 
-    player_ptr->update |= (PU_BONUS);
+    RedrawingFlagsUpdater::get_instance().set_flag(StatusRedrawingFlag::BONUS);
 }
 
 static void effect_player_time_addition(PlayerType *player_ptr)

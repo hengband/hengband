@@ -37,6 +37,7 @@
 #include "system/angband.h"
 #include "system/item-entity.h"
 #include "system/player-type-definition.h"
+#include "system/redrawing-flags-updater.h"
 #include "timed-effect/player-acceleration.h"
 #include "timed-effect/player-poison.h"
 #include "timed-effect/timed-effects.h"
@@ -504,7 +505,7 @@ bool QuaffEffects::new_life()
 {
     roll_hitdice(this->player_ptr, SPOP_NONE);
     get_max_stats(this->player_ptr);
-    this->player_ptr->update |= PU_BONUS;
+    RedrawingFlagsUpdater::get_instance().set_flag(StatusRedrawingFlag::BONUS);
     lose_all_mutations(this->player_ptr);
     return true;
 }

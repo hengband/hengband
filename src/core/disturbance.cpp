@@ -8,6 +8,7 @@
 #include "player/attack-defense-types.h"
 #include "status/action-setter.h"
 #include "system/player-type-definition.h"
+#include "system/redrawing-flags-updater.h"
 #include "target/target-checker.h"
 #include "term/screen-processor.h"
 
@@ -19,6 +20,7 @@
  */
 void disturb(PlayerType *player_ptr, bool stop_search, bool stop_travel)
 {
+    auto &rfu = RedrawingFlagsUpdater::get_instance();
     if (command_rep) {
         command_rep = 0;
         player_ptr->redraw |= PR_ACTION;
@@ -34,8 +36,11 @@ void disturb(PlayerType *player_ptr, bool stop_search, bool stop_travel)
             verify_panel(player_ptr);
         }
 
-        player_ptr->update |= PU_TORCH;
-        player_ptr->update |= PU_FLOW;
+        const auto flags = {
+            StatusRedrawingFlag::TORCH,
+            StatusRedrawingFlag::FLOW,
+        };
+        rfu.set_flags(flags);
     }
 
     if (stop_travel) {
@@ -44,7 +49,7 @@ void disturb(PlayerType *player_ptr, bool stop_search, bool stop_travel)
             verify_panel(player_ptr);
         }
 
-        player_ptr->update |= PU_TORCH;
+        rfu.set_flag(StatusRedrawingFlag::TORCH);
     }
 
     if (flush_disturb) {

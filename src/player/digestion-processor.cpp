@@ -18,6 +18,7 @@
 #include "player/special-defense-types.h"
 #include "status/bad-status-setter.h"
 #include "system/player-type-definition.h"
+#include "system/redrawing-flags-updater.h"
 #include "timed-effect/player-paralysis.h"
 #include "timed-effect/timed-effects.h"
 #include "view/display-messages.h"
@@ -214,7 +215,9 @@ bool set_food(PlayerType *player_ptr, TIME_EFFECT v)
     if (disturb_state) {
         disturb(player_ptr, false, false);
     }
-    player_ptr->update |= (PU_BONUS);
+
+    auto &rfu = RedrawingFlagsUpdater::get_instance();
+    rfu.set_flag(StatusRedrawingFlag::BONUS);
     player_ptr->redraw |= (PR_HUNGER);
     handle_stuff(player_ptr);
 

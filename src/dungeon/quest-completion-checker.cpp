@@ -18,6 +18,7 @@
 #include "system/monster-entity.h"
 #include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
+#include "system/redrawing-flags-updater.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 #include <algorithm>
@@ -240,7 +241,7 @@ Pos2D QuestCompletionChecker::make_stairs(const bool create_stairs)
 
     msg_print(_("魔法の階段が現れた...", "A magical staircase appears..."));
     cave_set_feat(this->player_ptr, y, x, feat_down_stair);
-    set_bits(this->player_ptr->update, PU_FLOW);
+    RedrawingFlagsUpdater::get_instance().set_flag(StatusRedrawingFlag::FLOW);
     return Pos2D(y, x);
 }
 

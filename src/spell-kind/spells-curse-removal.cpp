@@ -7,6 +7,7 @@
 #include "object-enchant/trc-types.h"
 #include "system/item-entity.h"
 #include "system/player-type-definition.h"
+#include "system/redrawing-flags-updater.h"
 #include "view/display-messages.h"
 
 /*!
@@ -19,6 +20,7 @@
 static int exe_curse_removal(PlayerType *player_ptr, int all)
 {
     auto count = 0;
+    auto &rfu = RedrawingFlagsUpdater::get_instance();
     for (int i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
         auto *o_ptr = &player_ptr->inventory_list[i];
         if (!o_ptr->is_valid() || !o_ptr->is_cursed()) {
@@ -37,8 +39,7 @@ static int exe_curse_removal(PlayerType *player_ptr, int all)
         o_ptr->curse_flags.clear();
         o_ptr->ident |= IDENT_SENSE;
         o_ptr->feeling = FEEL_NONE;
-
-        player_ptr->update |= (PU_BONUS);
+        rfu.set_flag(StatusRedrawingFlag::BONUS);
         player_ptr->window_flags |= (PW_EQUIPMENT);
         count++;
     }

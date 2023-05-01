@@ -15,6 +15,7 @@
 #include "racial/racial-android.h"
 #include "system/item-entity.h"
 #include "system/player-type-definition.h"
+#include "system/redrawing-flags-updater.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 
@@ -37,6 +38,7 @@ bool bless_weapon(PlayerType *player_ptr)
 
     const auto item_name = describe_flavor(player_ptr, o_ptr, OD_OMIT_PREFIX | OD_NAME_ONLY);
     auto flags = object_flags(o_ptr);
+    auto &rfu = RedrawingFlagsUpdater::get_instance();
     if (o_ptr->is_cursed()) {
         auto can_disturb_blessing = o_ptr->curse_flags.has(CurseTraitType::HEAVY_CURSE) && (randint1(100) < 33);
         can_disturb_blessing |= flags.has(TR_ADD_L_CURSE);
@@ -61,7 +63,7 @@ bool bless_weapon(PlayerType *player_ptr)
         o_ptr->curse_flags.clear();
         set_bits(o_ptr->ident, IDENT_SENSE);
         o_ptr->feeling = FEEL_NONE;
-        set_bits(player_ptr->update, PU_BONUS);
+        rfu.set_flag(StatusRedrawingFlag::BONUS);
         set_bits(player_ptr->window_flags, PW_EQUIPMENT | PW_FLOOR_ITEMS | PW_FOUND_ITEMS);
     }
 
@@ -135,7 +137,7 @@ bool bless_weapon(PlayerType *player_ptr)
         }
     }
 
-    set_bits(player_ptr->update, PU_BONUS);
+    rfu.set_flag(StatusRedrawingFlag::BONUS);
     set_bits(player_ptr->window_flags, PW_EQUIPMENT | PW_PLAYER | PW_FLOOR_ITEMS | PW_FOUND_ITEMS);
     calc_android_exp(player_ptr);
     return true;

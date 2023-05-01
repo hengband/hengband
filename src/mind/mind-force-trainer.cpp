@@ -34,6 +34,7 @@
 #include "system/monster-entity.h"
 #include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
+#include "system/redrawing-flags-updater.h"
 #include "target/projection-path-calculator.h"
 #include "target/target-checker.h"
 #include "target/target-getter.h"
@@ -139,7 +140,8 @@ void set_lightspeed(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
     if (disturb_state) {
         disturb(player_ptr, false, false);
     }
-    player_ptr->update |= (PU_BONUS);
+
+    RedrawingFlagsUpdater::get_instance().set_flag(StatusRedrawingFlag::BONUS);
     handle_stuff(player_ptr);
 }
 
@@ -256,7 +258,7 @@ bool shock_power(PlayerType *player_ptr)
     lite_spot(player_ptr, ty, tx);
 
     if (r_ptr->brightness_flags.has_any_of(ld_mask)) {
-        player_ptr->update |= (PU_MONSTER_LITE);
+        RedrawingFlagsUpdater::get_instance().set_flag(StatusRedrawingFlag::MONSTER_LITE);
     }
 
     return true;
@@ -277,6 +279,7 @@ bool cast_force_spell(PlayerType *player_ptr, MindForceTrainerType spell)
         boost /= 2;
     }
 
+    auto &rfu = RedrawingFlagsUpdater::get_instance();
     switch (spell) {
     case MindForceTrainerType::SMALL_FORCE_BALL:
         if (!get_aim_dir(player_ptr, &dir)) {
@@ -305,7 +308,7 @@ bool cast_force_spell(PlayerType *player_ptr, MindForceTrainerType spell)
     case MindForceTrainerType::IMPROVE_FORCE:
         msg_print(_("気を練った。", "You improved the Force."));
         set_current_ki(player_ptr, false, 70 + plev);
-        player_ptr->update |= (PU_BONUS);
+        rfu.set_flag(StatusRedrawingFlag::BONUS);
         if (randint1(get_current_ki(player_ptr)) > (plev * 4 + 120)) {
             msg_print(_("気が暴走した！", "The Force exploded!"));
             fire_ball(player_ptr, AttributeType::MANA, 0, get_current_ki(player_ptr) / 2, 10);
@@ -377,6 +380,6 @@ bool cast_force_spell(PlayerType *player_ptr, MindForceTrainerType spell)
     }
 
     set_current_ki(player_ptr, true, 0);
-    player_ptr->update |= PU_BONUS;
+    rfu.set_flag(StatusRedrawingFlag::BONUS);
     return true;
 }

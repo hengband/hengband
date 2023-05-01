@@ -39,6 +39,7 @@
 #include "system/monster-entity.h"
 #include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
+#include "system/redrawing-flags-updater.h"
 #include "system/terrain-type-definition.h"
 #include "target/projection-path-calculator.h"
 #include "util/bit-flags-calculator.h"
@@ -209,7 +210,8 @@ static bool process_door(PlayerType *player_ptr, turn_flags *turn_flags_ptr, Mon
     if (turn_flags_ptr->did_bash_door && ((randint0(100) < 50) || is_open || terrain_ptr->flags.has(TerrainCharacteristics::GLASS))) {
         cave_alter_feat(player_ptr, ny, nx, TerrainCharacteristics::BASH);
         if (!m_ptr->is_valid()) {
-            player_ptr->update |= (PU_FLOW);
+            auto &rfu = RedrawingFlagsUpdater::get_instance();
+            rfu.set_flag(StatusRedrawingFlag::FLOW);
             player_ptr->window_flags |= (PW_OVERHEAD | PW_DUNGEON);
             if (is_original_ap_and_seen(player_ptr, m_ptr)) {
                 r_ptr->r_behavior_flags.set(MonsterBehaviorType::BASH_DOOR);
@@ -344,7 +346,8 @@ static bool process_post_dig_wall(PlayerType *player_ptr, turn_flags *turn_flags
     cave_alter_feat(player_ptr, ny, nx, TerrainCharacteristics::HURT_DISI);
 
     if (!m_ptr->is_valid()) {
-        player_ptr->update |= (PU_FLOW);
+        auto &rfu = RedrawingFlagsUpdater::get_instance();
+        rfu.set_flag(StatusRedrawingFlag::FLOW);
         player_ptr->window_flags |= (PW_OVERHEAD | PW_DUNGEON);
         if (is_original_ap_and_seen(player_ptr, m_ptr)) {
             r_ptr->r_feature_flags.set(MonsterFeatureType::KILL_WALL);

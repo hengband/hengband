@@ -10,6 +10,7 @@
 #include "grid/grid.h"
 #include "spell-kind/earthquake.h"
 #include "system/player-type-definition.h"
+#include "system/redrawing-flags-updater.h"
 #include "util/bit-flags-calculator.h"
 
 /*!
@@ -67,7 +68,8 @@ bool wall_stone(PlayerType *player_ptr)
 {
     BIT_FLAGS flg = PROJECT_GRID | PROJECT_ITEM | PROJECT_HIDE;
     bool dummy = project(player_ptr, 0, 1, player_ptr->y, player_ptr->x, 0, AttributeType::STONE_WALL, flg).notice;
-    player_ptr->update |= (PU_FLOW);
+    auto &rfu = RedrawingFlagsUpdater::get_instance();
+    rfu.set_flag(StatusRedrawingFlag::FLOW);
     player_ptr->redraw |= (PR_MAP);
     return dummy;
 }

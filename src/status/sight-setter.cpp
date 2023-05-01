@@ -13,6 +13,7 @@
 
 static bool update_sight(PlayerType *player_ptr, const bool notice)
 {
+    auto &rfu = RedrawingFlagsUpdater::get_instance();
     player_ptr->redraw |= (PR_TIMED_EFFECT);
     if (!notice) {
         return false;
@@ -22,8 +23,11 @@ static bool update_sight(PlayerType *player_ptr, const bool notice)
         disturb(player_ptr, false, false);
     }
 
-    player_ptr->update |= (PU_BONUS);
-    player_ptr->update |= (PU_MONSTER_STATUSES);
+    const auto flags = {
+        StatusRedrawingFlag::BONUS,
+        StatusRedrawingFlag::MONSTER_STATUSES,
+    };
+    rfu.set_flags(flags);
     handle_stuff(player_ptr);
     return true;
 }

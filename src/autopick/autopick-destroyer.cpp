@@ -30,6 +30,7 @@
 #include "system/item-entity.h"
 #include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
+#include "system/redrawing-flags-updater.h"
 #include "util/string-processor.h"
 #include "view/display-messages.h"
 
@@ -157,5 +158,5 @@ void auto_destroy_item(PlayerType *player_ptr, ItemEntity *o_ptr, int autopick_i
 
     autopick_last_destroyed_object = *o_ptr;
     o_ptr->marked.set(OmType::AUTODESTROY);
-    player_ptr->update |= PU_AUTO_DESTRUCTION;
+    RedrawingFlagsUpdater::get_instance().set_flag(StatusRedrawingFlag::AUTO_DESTRUCTION);
 }

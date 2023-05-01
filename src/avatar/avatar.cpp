@@ -19,6 +19,7 @@
 #include "player-info/race-types.h"
 #include "realm/realm-names-table.h"
 #include "system/player-type-definition.h"
+#include "system/redrawing-flags-updater.h"
 #include "util/enum-converter.h"
 
 /*!
@@ -497,7 +498,7 @@ void chg_virtue(PlayerType *player_ptr, Virtue virtue_id, int amount)
             }
         }
 
-        player_ptr->update |= PU_BONUS;
+        RedrawingFlagsUpdater::get_instance().set_flag(StatusRedrawingFlag::BONUS);
         return;
     }
 }

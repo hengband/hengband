@@ -10,6 +10,7 @@
 #include "player/special-defense-types.h"
 #include "status/action-setter.h"
 #include "system/player-type-definition.h"
+#include "system/redrawing-flags-updater.h"
 #include "term/screen-processor.h"
 #include "term/z-form.h"
 #include "util/int-char-converter.h"
@@ -24,7 +25,8 @@ static void set_stance(PlayerType *player_ptr, const MonkStanceType new_stance)
         return;
     }
 
-    player_ptr->update |= PU_BONUS;
+    auto &rfu = RedrawingFlagsUpdater::get_instance();
+    rfu.set_flag(StatusRedrawingFlag::BONUS);
     player_ptr->redraw |= PR_ACTION;
     msg_format(_("%sの構えをとった。", "You assume the %s stance."), monk_stances[enum2i(new_stance) - 1].desc);
     pc.set_monk_stance(new_stance);

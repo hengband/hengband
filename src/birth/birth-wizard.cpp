@@ -32,6 +32,7 @@
 #include "player/process-name.h"
 #include "system/game-option-types.h"
 #include "system/player-type-definition.h"
+#include "system/redrawing-flags-updater.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
 #include "term/z-form.h"
@@ -438,8 +439,13 @@ static void exe_auto_roller(PlayerType *player_ptr, chara_limit_type chara_limit
 static bool display_auto_roller_result(PlayerType *player_ptr, bool prev, char *c)
 {
     BIT_FLAGS mode = 0;
+    auto &rfu = RedrawingFlagsUpdater::get_instance();
+    const auto flags = {
+        StatusRedrawingFlag::BONUS,
+        StatusRedrawingFlag::HP,
+    };
     while (true) {
-        player_ptr->update |= (PU_BONUS | PU_HP);
+        rfu.set_flags(flags);
         update_creature(player_ptr);
         player_ptr->chp = player_ptr->mhp;
         player_ptr->csp = player_ptr->msp;

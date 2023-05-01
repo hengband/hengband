@@ -14,6 +14,7 @@
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h" // @todo 相互依存している. 後で何とかする.
 #include "system/player-type-definition.h"
+#include "system/redrawing-flags-updater.h"
 #include "system/terrain-type-definition.h"
 #include "util/bit-flags-calculator.h"
 #include "world/world.h"
@@ -244,7 +245,13 @@ void cave_set_feat(PlayerType *player_ptr, POSITION y, POSITION x, FEAT_IDX feat
     note_spot(player_ptr, y, x);
     lite_spot(player_ptr, y, x);
     if (old_los ^ f_ptr->flags.has(TerrainCharacteristics::LOS)) {
-        player_ptr->update |= PU_VIEW | PU_LITE | PU_MONSTER_LITE | PU_MONSTER_STATUSES;
+        const auto flags = {
+            StatusRedrawingFlag::VIEW,
+            StatusRedrawingFlag::LITE,
+            StatusRedrawingFlag::MONSTER_LITE,
+            StatusRedrawingFlag::MONSTER_STATUSES,
+        };
+        RedrawingFlagsUpdater::get_instance().set_flags(flags);
     }
 
     if (f_ptr->flags.has_not(TerrainCharacteristics::GLOW) || dungeons_info[player_ptr->dungeon_idx].flags.has(DungeonFeatureType::DARKNESS)) {

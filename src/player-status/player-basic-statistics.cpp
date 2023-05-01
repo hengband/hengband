@@ -14,6 +14,7 @@
 #include "realm/realm-hex-numbers.h"
 #include "spell-realm/spells-hex.h"
 #include "system/player-type-definition.h"
+#include "system/redrawing-flags-updater.h"
 #include "util/bit-flags-calculator.h"
 #include "util/enum-converter.h"
 
@@ -169,19 +170,24 @@ void PlayerBasicStatistics::update_index_status()
     }
 
     this->player_ptr->stat_index[status] = (int16_t)index;
+    auto &rfu = RedrawingFlagsUpdater::get_instance();
+    const auto flags = {
+        StatusRedrawingFlag::MP,
+        StatusRedrawingFlag::SPELLS,
+    };
     if (status == A_CON) {
-        set_bits(this->player_ptr->update, PU_HP);
+        rfu.set_flag(StatusRedrawingFlag::HP);
     } else if (status == A_INT) {
         if (mp_ptr->spell_stat == A_INT) {
-            set_bits(this->player_ptr->update, (PU_MP | PU_SPELLS));
+            rfu.set_flags(flags);
         }
     } else if (status == A_WIS) {
         if (mp_ptr->spell_stat == A_WIS) {
-            set_bits(this->player_ptr->update, (PU_MP | PU_SPELLS));
+            rfu.set_flags(flags);
         }
     } else if (status == A_CHR) {
         if (mp_ptr->spell_stat == A_CHR) {
-            set_bits(this->player_ptr->update, (PU_MP | PU_SPELLS));
+            rfu.set_flags(flags);
         }
     }
 

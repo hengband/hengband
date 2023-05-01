@@ -62,6 +62,7 @@
 #include "system/floor-type-definition.h"
 #include "system/item-entity.h"
 #include "system/player-type-definition.h"
+#include "system/redrawing-flags-updater.h"
 #include "term/screen-processor.h"
 #include "term/z-form.h"
 #include "timed-effect/player-blindness.h"
@@ -705,8 +706,11 @@ static void change_realm2(PlayerType *player_ptr, int16_t next_realm)
     player_ptr->old_realm |= 1U << (player_ptr->realm2 - 1);
     player_ptr->realm2 = next_realm;
 
-    player_ptr->update |= (PU_REORDER);
-    player_ptr->update |= (PU_SPELLS);
+    const auto flags = {
+        StatusRedrawingFlag::REORDER,
+        StatusRedrawingFlag::SPELLS,
+    };
+    RedrawingFlagsUpdater::get_instance().set_flags(flags);
     handle_stuff(player_ptr);
 
     /* Load an autopick preference file */
@@ -916,8 +920,8 @@ void do_cmd_study(PlayerType *player_ptr)
     /* One less spell available */
     player_ptr->learned_spells++;
 
-    /* Update Study */
-    player_ptr->update |= (PU_SPELLS);
+    auto &rfu = RedrawingFlagsUpdater::get_instance();
+    rfu.set_flag(StatusRedrawingFlag::SPELLS);
     update_creature(player_ptr);
 
     /* Redraw object recall */

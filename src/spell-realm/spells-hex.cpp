@@ -23,6 +23,7 @@
 #include "system/monster-entity.h"
 #include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
+#include "system/redrawing-flags-updater.h"
 #include "term/screen-processor.h"
 #include "util/bit-flags-calculator.h"
 #include "util/int-char-converter.h"
@@ -74,7 +75,14 @@ void SpellHex::stop_all_spells()
         set_action(this->player_ptr, ACTION_NONE);
     }
 
-    this->player_ptr->update |= PU_BONUS | PU_HP | PU_MP | PU_SPELLS;
+    auto &rfu = RedrawingFlagsUpdater::get_instance();
+    const auto flags_srf = {
+        StatusRedrawingFlag::BONUS,
+        StatusRedrawingFlag::HP,
+        StatusRedrawingFlag::MP,
+        StatusRedrawingFlag::SPELLS,
+    };
+    rfu.set_flags(flags_srf);
     this->player_ptr->redraw |= PR_EXTRA | PR_HP | PR_MP;
 }
 
@@ -111,7 +119,14 @@ bool SpellHex::stop_spells_with_selection()
         this->reset_casting_flag(i2enum<spell_hex_type>(n));
     }
 
-    this->player_ptr->update |= PU_BONUS | PU_HP | PU_MP | PU_SPELLS;
+    auto &rfu = RedrawingFlagsUpdater::get_instance();
+    const auto flags_srf = {
+        StatusRedrawingFlag::BONUS,
+        StatusRedrawingFlag::HP,
+        StatusRedrawingFlag::MP,
+        StatusRedrawingFlag::SPELLS,
+    };
+    rfu.set_flags(flags_srf);
     this->player_ptr->redraw |= PR_EXTRA | PR_HP | PR_MP;
     return is_selected;
 }
@@ -222,9 +237,14 @@ bool SpellHex::process_mana_cost(const bool need_restart)
 
     msg_print(_("詠唱を再開した。", "You restart casting."));
     this->player_ptr->action = ACTION_SPELL;
-    this->player_ptr->update |= PU_BONUS | PU_HP;
+    auto &rfu = RedrawingFlagsUpdater::get_instance();
+    const auto flags_srf = {
+        StatusRedrawingFlag::BONUS,
+        StatusRedrawingFlag::HP,
+        StatusRedrawingFlag::MONSTER_STATUSES,
+    };
+    rfu.set_flags(flags_srf);
     this->player_ptr->redraw |= PR_MAP | PR_TIMED_EFFECT | PR_ACTION;
-    this->player_ptr->update |= PU_MONSTER_STATUSES;
     this->player_ptr->window_flags |= PW_OVERHEAD | PW_DUNGEON;
     return true;
 }
