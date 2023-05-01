@@ -92,32 +92,28 @@ void init_file_paths(char *libpath)
         _findclose(hFile);
     }
 #else
-    {
-        const auto &debug_save_str = ANGBAND_DIR_DEBUG_SAVE.string();
-        DIR *saves_dir = opendir(debug_save_str.data());
+    const auto &debug_save_str = ANGBAND_DIR_DEBUG_SAVE.string();
+    DIR *saves_dir = opendir(debug_save_str.data());
+    if (saves_dir == nullptr) {
+        return;
+    }
 
-        if (saves_dir) {
-            struct dirent *next_entry;
+    struct dirent *next_entry;
+    while ((next_entry = readdir(saves_dir))) {
+        if (!angband_strchr(next_entry->d_name, '-')) {
+            continue;
+        }
 
-            while ((next_entry = readdir(saves_dir))) {
-                if (angband_strchr(next_entry->d_name, '-')) {
-                    char path[1024];
-                    struct stat next_stat;
-
-                    path_build(path, sizeof(path), ANGBAND_DIR_DEBUG_SAVE, next_entry->d_name);
-                    /*
-                     * Remove if modified more than a week ago,
-                     * 7*24*60*60 seconds.
-                     */
-                    if (stat(path, &next_stat) == 0 &&
-                        difftime(now, next_stat.st_mtime) > 604800) {
-                        remove(path);
-                    }
-                }
-            }
-            closedir(saves_dir);
+        char path[1024];
+        struct stat next_stat;
+        path_build(path, sizeof(path), ANGBAND_DIR_DEBUG_SAVE, next_entry->d_name);
+        constexpr auto one_week = 7 * 24 * 60 * 60;
+        if ((stat(path, &next_stat) == 0) && (difftime(now, next_stat.st_mtime) > one_week)) {
+            remove(path);
         }
     }
+
+    closedir(saves_dir);
 #endif
 }
 
