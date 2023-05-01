@@ -91,53 +91,16 @@ static void create_user_dir(void)
 
 #endif /* PRIVATE_USER_PATH */
 
-/*
- * Initialize and verify the file paths, and the score file.
- *
- * Use the ANGBAND_PATH environment var if possible, else use
- * DEFAULT_(LIB|VAR)_PATH, and in either case, branch off
- * appropriately.
- *
- * First, we'll look for the ANGBAND_PATH environment variable,
- * and then look for the files in there.  If that doesn't work,
- * we'll try the DEFAULT_(LIB|VAR)_PATH constants.  So be sure
- * that one of these two things works...
- *
- * We must ensure that the path ends with "PATH_SEP" if needed,
- * since the "init_file_paths()" function will simply append the
- * relevant "sub-directory names" to the given path.
- *
- * Make sure that the path doesn't overflow the buffer.  We have
- * to leave enough space for the path separator, directory, and
- * filenames.
- */
-static void init_stuff(void)
+static void init_stuff()
 {
-    char libpath[1024], varpath[1024];
-
-    concptr tail;
-
-    /* Get the environment variable */
-    tail = getenv("ANGBAND_PATH");
-
-    /* Use the angband_path, or a default */
+    char libpath[1024]{};
+    const auto tail = getenv("ANGBAND_PATH");
     strncpy(libpath, tail ? tail : DEFAULT_LIB_PATH, 511);
-    strncpy(varpath, tail ? tail : DEFAULT_VAR_PATH, 511);
-
-    /* Make sure they're terminated */
-    libpath[511] = '\0';
-    varpath[511] = '\0';
-
-    /* Hack -- Add a path separator (only if needed) */
     if (!suffix(libpath, PATH_SEP)) {
         strcat(libpath, PATH_SEP);
     }
-    if (!suffix(varpath, PATH_SEP)) {
-        strcat(varpath, PATH_SEP);
-    }
 
-    /* Initialize */
-    init_file_paths(libpath, varpath);
+    init_file_paths(libpath);
 }
 
 /*
@@ -151,87 +114,49 @@ static void init_stuff(void)
  */
 static void change_path(concptr info)
 {
-    concptr s;
-
-    /* Find equal sign */
-    s = angband_strchr(info, '=');
+    const auto s = angband_strchr(info, '=');
 
     /* Verify equal sign */
     if (!s) {
         quit_fmt("Try '-d<what>=<path>' not '-d%s'", info);
     }
 
-    /* Analyze */
     switch (tolower(info[0])) {
-    case 'a': {
-        string_free(ANGBAND_DIR_APEX);
-        ANGBAND_DIR_APEX = string_make(s + 1);
+    case 'a':
+        ANGBAND_DIR_APEX = s + 1;
         break;
-    }
-
-    case 'f': {
-        string_free(ANGBAND_DIR_FILE);
-        ANGBAND_DIR_FILE = string_make(s + 1);
+    case 'f':
+        ANGBAND_DIR_FILE = s + 1;
         break;
-    }
-
-    case 'h': {
-        string_free(ANGBAND_DIR_HELP);
-        ANGBAND_DIR_HELP = string_make(s + 1);
+    case 'h':
+        ANGBAND_DIR_HELP = s + 1;
         break;
-    }
-
-    case 'i': {
-        string_free(ANGBAND_DIR_INFO);
-        ANGBAND_DIR_INFO = string_make(s + 1);
+    case 'i':
+        ANGBAND_DIR_INFO = s + 1;
         break;
-    }
-
-    case 'u': {
-        string_free(ANGBAND_DIR_USER);
-        ANGBAND_DIR_USER = string_make(s + 1);
+    case 'u':
+        ANGBAND_DIR_USER = s + 1;
         break;
-    }
-
-    case 'x': {
-        string_free(ANGBAND_DIR_XTRA);
-        ANGBAND_DIR_XTRA = string_make(s + 1);
+    case 'x':
+        ANGBAND_DIR_XTRA = s + 1;
         break;
-    }
-
-    case 'b': {
-        string_free(ANGBAND_DIR_BONE);
-        ANGBAND_DIR_BONE = string_make(s + 1);
+    case 'b':
+        ANGBAND_DIR_BONE = s + 1;
         break;
-    }
-
-    case 'd': {
-        string_free(ANGBAND_DIR_DATA);
-        ANGBAND_DIR_DATA = string_make(s + 1);
+    case 'd':
+        ANGBAND_DIR_DATA = s + 1;
         break;
-    }
-
-    case 'e': {
-        string_free(ANGBAND_DIR_EDIT);
-        ANGBAND_DIR_EDIT = string_make(s + 1);
+    case 'e':
+        ANGBAND_DIR_EDIT = s + 1;
         break;
-    }
-
-    case 's': {
-        string_free(ANGBAND_DIR_SAVE);
-        ANGBAND_DIR_SAVE = string_make(s + 1);
+    case 's':
+        ANGBAND_DIR_SAVE = s + 1;
         break;
-    }
-
-    case 'z': {
-        string_free(ANGBAND_DIR_SCRIPT);
-        ANGBAND_DIR_SCRIPT = string_make(s + 1);
+    case 'z':
+        ANGBAND_DIR_SCRIPT = s + 1;
         break;
-    }
-
-    default: {
+    default:
         quit_fmt("Bad semantics in '-d%s'", info);
-    }
     }
 }
 

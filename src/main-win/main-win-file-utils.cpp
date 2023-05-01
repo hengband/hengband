@@ -16,9 +16,10 @@
  * @retval true 指定ファイルが存在する（かつディレクトリではない）
  * @retval false 指定ファイルが存在しない、またはディレクトリである
  */
-bool check_file(concptr s)
+bool check_file(const std::filesystem::path &s)
 {
-    DWORD attrib = GetFileAttributesW(to_wchar(s).wc_str());
+    const auto &file = s.string();
+    DWORD attrib = GetFileAttributesW(to_wchar(file.data()).wc_str());
     if (attrib == INVALID_FILE_NAME) {
         return false;
     }
@@ -35,10 +36,11 @@ bool check_file(concptr s)
  * @retval true 指定ディレクトリが存在する
  * @retval false 指定ディレクトリが存在しない、またはディレクトリではない
  */
-bool check_dir(concptr s)
+bool check_dir(const std::filesystem::path &s)
 {
+    const auto &dir = s.string();
     char path[MAIN_WIN_MAX_PATH];
-    strcpy(path, s);
+    strcpy(path, dir.data());
     int i = strlen(path);
     if (i && (path[i - 1] == '\\')) {
         path[--i] = '\0';
@@ -61,10 +63,9 @@ bool check_dir(concptr s)
  * @param files ファイル名のリスト
  * @return ファイルのパスを返す。候補リストのファイルすべて存在しない場合は空文字列を返す。
  */
-std::string find_any_file(concptr dir, std::initializer_list<concptr> files)
+std::string find_any_file(const std::filesystem::path &dir, std::initializer_list<concptr> files)
 {
     char path[MAIN_WIN_MAX_PATH];
-
     for (concptr filename : files) {
         path_build(path, MAIN_WIN_MAX_PATH, dir, filename);
         if (check_file(path)) {
