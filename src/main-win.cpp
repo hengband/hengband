@@ -519,7 +519,6 @@ static void load_prefs(void)
     GetPrivateProfileStringA("Angband", "BackGroundBitmap", DEFAULT_BG_FILENAME, wallpaper_file, 1023, ini_file);
     char savefile_buf[1024]{};
     GetPrivateProfileStringA("Angband", "SaveFile", "", savefile_buf, 1023, ini_file);
-
     if (strncmp(".\\", savefile_buf, 2) == 0) {
         std::string angband_dir_str(ANGBAND_DIR.string());
         const auto path_length = angband_dir_str.length() - 4; // "\lib" を除く.
