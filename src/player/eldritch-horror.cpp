@@ -143,7 +143,7 @@ void sanity_blast(PlayerType *player_ptr, MonsterEntity *m_ptr, bool necro)
         }
     } else if (!necro) {
         get_mon_num_prep(player_ptr, get_nightmare, nullptr);
-        auto *r_ptr = &monraces_info[get_mon_num(player_ptr, 0, MAX_DEPTH, 0)];
+        auto *r_ptr = &monraces_info[get_mon_num(player_ptr, 0, MAX_DEPTH)];
         power = r_ptr->level + 10;
         const auto &desc = r_ptr->name;
         get_mon_num_prep(player_ptr, nullptr, nullptr);

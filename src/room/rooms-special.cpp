@@ -95,7 +95,7 @@ bool build_type15(PlayerType *player_ptr, dun_data_type *dd_ptr)
 
         /* Place fixed lite berathers */
         for (dir1 = 4; dir1 < 8; dir1++) {
-            MonsterRaceId r_idx = get_mon_num(player_ptr, 0, floor_ptr->dun_level, 0);
+            MonsterRaceId r_idx = get_mon_num(player_ptr, 0, floor_ptr->dun_level);
 
             y = yval + 2 * ddy_ddd[dir1];
             x = xval + 2 * ddx_ddd[dir1];
@@ -160,7 +160,7 @@ bool build_type15(PlayerType *player_ptr, dun_data_type *dd_ptr)
         g_ptr->feat = feat_glass_wall;
         get_mon_num_prep(player_ptr, vault_aux_lite, nullptr);
 
-        r_idx = get_mon_num(player_ptr, 0, floor_ptr->dun_level, 0);
+        r_idx = get_mon_num(player_ptr, 0, floor_ptr->dun_level);
         if (MonsterRace(r_idx).is_valid()) {
             place_specific_monster(player_ptr, 0, yval, xval, r_idx, 0L);
         }
@@ -221,7 +221,7 @@ bool build_type15(PlayerType *player_ptr, dun_data_type *dd_ptr)
 
         /* Place shard berathers */
         for (dir1 = 4; dir1 < 8; dir1++) {
-            MonsterRaceId r_idx = get_mon_num(player_ptr, 0, floor_ptr->dun_level, 0);
+            MonsterRaceId r_idx = get_mon_num(player_ptr, 0, floor_ptr->dun_level);
 
             y = yval + ddy_ddd[dir1];
             x = xval + ddx_ddd[dir1];

@@ -184,7 +184,7 @@ void determine_random_questor(PlayerType *player_ptr, QuestType *q_ptr)
     get_mon_num_prep(player_ptr, mon_hook_quest, nullptr);
     MonsterRaceId r_idx;
     while (true) {
-        r_idx = get_mon_num(player_ptr, 0, q_ptr->level + 5 + randint1(q_ptr->level / 10), GMN_ARENA);
+        r_idx = get_mon_num(player_ptr, 0, q_ptr->level + 5 + randint1(q_ptr->level / 10), true);
         const auto &monrace = monraces_info[r_idx];
         if (monrace.kind_flags.has_not(MonsterKindType::UNIQUE)) {
             continue;

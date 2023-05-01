@@ -103,7 +103,7 @@ static void decide_initial_items(PlayerType *player_ptr, ItemEntity *q_ptr)
         get_mon_num_prep(player_ptr, monster_hook_human, nullptr);
         for (int i = rand_range(3, 4); i > 0; i--) {
             q_ptr->prep(lookup_baseitem_id({ ItemKindType::CORPSE, SV_CORPSE }));
-            q_ptr->pval = enum2i(get_mon_num(player_ptr, 0, 2, 0));
+            q_ptr->pval = enum2i(get_mon_num(player_ptr, 0, 2));
             if (q_ptr->pval) {
                 q_ptr->number = 1;
                 add_outfit(player_ptr, q_ptr);

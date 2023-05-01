@@ -102,7 +102,7 @@ static MonsterRaceId initial_r_appearance(PlayerType *player_ptr, MonsterRaceId 
     int attempts = 1000;
     DEPTH min = std::min(floor_ptr->base_level - 5, 50);
     while (--attempts) {
-        auto ap_r_idx = get_mon_num(player_ptr, 0, floor_ptr->base_level + 10, 0);
+        auto ap_r_idx = get_mon_num(player_ptr, 0, floor_ptr->base_level + 10);
         if (monraces_info[ap_r_idx].level >= min) {
             return ap_r_idx;
         }

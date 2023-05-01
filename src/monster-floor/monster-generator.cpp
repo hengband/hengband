@@ -348,7 +348,7 @@ bool place_specific_monster(PlayerType *player_ptr, MONSTER_IDX who, POSITION y,
         }
 
         get_mon_num_prep(player_ptr, place_monster_can_escort, get_monster_hook2(player_ptr, ny, nx));
-        z = get_mon_num(player_ptr, 0, r_ptr->level, 0);
+        z = get_mon_num(player_ptr, 0, r_ptr->level);
         if (!MonsterRace(z).is_valid()) {
             break;
         }
@@ -375,7 +375,7 @@ bool place_random_monster(PlayerType *player_ptr, POSITION y, POSITION x, BIT_FL
     get_mon_num_prep(player_ptr, get_monster_hook(player_ptr), get_monster_hook2(player_ptr, y, x));
     MonsterRaceId r_idx;
     do {
-        r_idx = get_mon_num(player_ptr, 0, player_ptr->current_floor_ptr->monster_level, 0);
+        r_idx = get_mon_num(player_ptr, 0, player_ptr->current_floor_ptr->monster_level);
     } while ((mode & PM_NO_QUEST) && (monraces_info[r_idx].flags8 & RF8_NO_QUEST));
 
     if (!MonsterRace(r_idx).is_valid()) {
@@ -394,7 +394,7 @@ static std::optional<MonsterRaceId> select_horde_leader_r_idx(PlayerType *player
     const auto *floor_ptr = player_ptr->current_floor_ptr;
 
     for (auto attempts = 1000; attempts > 0; --attempts) {
-        auto r_idx = get_mon_num(player_ptr, 0, floor_ptr->monster_level, 0);
+        auto r_idx = get_mon_num(player_ptr, 0, floor_ptr->monster_level);
         if (!MonsterRace(r_idx).is_valid()) {
             return std::nullopt;
         }

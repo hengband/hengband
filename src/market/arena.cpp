@@ -202,7 +202,7 @@ void update_gambling_monsters(PlayerType *player_ptr)
             int j;
             while (true) {
                 get_mon_num_prep(player_ptr, monster_can_entry_arena, nullptr);
-                r_idx = get_mon_num(player_ptr, 0, mon_level, GMN_ARENA);
+                r_idx = get_mon_num(player_ptr, 0, mon_level, true);
                 if (!MonsterRace(r_idx).is_valid()) {
                     continue;
                 }

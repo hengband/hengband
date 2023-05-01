@@ -147,7 +147,7 @@ void OtherItemsEnchanter::generate_corpse()
     auto *floor_ptr = this->player_ptr->current_floor_ptr;
     MonsterRaceId r_idx;
     while (true) {
-        r_idx = get_mon_num(this->player_ptr, 0, floor_ptr->dun_level, 0);
+        r_idx = get_mon_num(this->player_ptr, 0, floor_ptr->dun_level);
         auto &r_ref = monraces_info[r_idx];
         auto check = (floor_ptr->dun_level < r_ref.level) ? (r_ref.level - floor_ptr->dun_level) : 0;
         const auto sval = this->o_ptr->bi_key.sval();

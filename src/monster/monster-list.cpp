@@ -89,10 +89,11 @@ MONSTER_IDX m_pop(FloorType *floor_ptr)
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param min_level 最小生成階
  * @param max_level 最大生成階
+ * @param is_arena アリーナ生成か否か
  * @return 選択されたモンスター生成種族
  * @details nasty生成 (ゲーム内経過日数に応じて、現在フロアより深いフロアのモンスターを出現させる仕様)は
  */
-MonsterRaceId get_mon_num(PlayerType *player_ptr, DEPTH min_level, DEPTH max_level, BIT_FLAGS option)
+MonsterRaceId get_mon_num(PlayerType *player_ptr, DEPTH min_level, DEPTH max_level, bool is_arena)
 {
     /* town max_level : same delay as 10F, no nasty mons till day18 */
     auto delay = static_cast<int>(std::sqrt(max_level * 10000)) + (max_level * 5);
@@ -128,7 +129,7 @@ MonsterRaceId get_mon_num(PlayerType *player_ptr, DEPTH min_level, DEPTH max_lev
     }
 
     /* Boost the max_level */
-    if ((option & GMN_ARENA) || dungeon.flags.has_not(DungeonFeatureType::BEGINNER)) {
+    if (is_arena || dungeon.flags.has_not(DungeonFeatureType::BEGINNER)) {
         /* Nightmare mode allows more out-of depth monsters */
         if (ironman_nightmare && !randint0(chance_nasty)) {
             /* What a bizarre calculation */
@@ -155,7 +156,7 @@ MonsterRaceId get_mon_num(PlayerType *player_ptr, DEPTH min_level, DEPTH max_lev
         } // sorted by depth array,
         auto r_idx = i2enum<MonsterRaceId>(entry.index);
         auto r_ptr = &monraces_info[r_idx];
-        if (!(option & GMN_ARENA) && !chameleon_change_m_idx) {
+        if (!is_arena && !chameleon_change_m_idx) {
             if ((r_ptr->kind_flags.has(MonsterKindType::UNIQUE) || r_ptr->population_flags.has(MonsterPopulationType::NAZGUL)) && (r_ptr->cur_num >= r_ptr->max_num)) {
                 continue;
             }
@@ -347,7 +348,7 @@ void choose_new_monster(PlayerType *player_ptr, MONSTER_IDX m_idx, bool born, Mo
             level += 2 + randint1(3);
         }
 
-        r_idx = get_mon_num(player_ptr, 0, level, 0);
+        r_idx = get_mon_num(player_ptr, 0, level);
         r_ptr = &monraces_info[r_idx];
 
         chameleon_change_m_idx = 0;

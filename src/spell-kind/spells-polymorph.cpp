@@ -40,7 +40,7 @@ static MonsterRaceId poly_r_idx(PlayerType *player_ptr, MonsterRaceId r_idx)
     DEPTH lev2 = r_ptr->level + ((randint1(20) / randint1(9)) + 1);
     MonsterRaceId r;
     for (int i = 0; i < 1000; i++) {
-        r = get_mon_num(player_ptr, 0, (player_ptr->current_floor_ptr->dun_level + r_ptr->level) / 2 + 5, 0);
+        r = get_mon_num(player_ptr, 0, (player_ptr->current_floor_ptr->dun_level + r_ptr->level) / 2 + 5);
         if (!MonsterRace(r).is_valid()) {
             break;
         }
