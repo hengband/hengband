@@ -256,28 +256,30 @@ static byte ignore_key_list[] = {
 /*!
  * @brief Validate a file
  */
-static void validate_file(concptr s)
+static void validate_file(const std::filesystem::path &s)
 {
-    if (check_file(s)) {
+    if (std::filesystem::is_regular_file(s)) {
         return;
     }
 
-    quit_fmt(_("必要なファイル[%s]が見あたりません。", "Cannot find required file:\n%s"), s);
+    const auto &file = s.string();
+    quit_fmt(_("必要なファイル[%s]が見あたりません。", "Cannot find required file:\n%s"), file.data());
 }
 
 /*!
  * @brief Validate a directory
  */
-static void validate_dir(concptr s, bool vital)
+static void validate_dir(const std::filesystem::path &s, bool vital)
 {
-    if (check_dir(s)) {
+    if (std::filesystem::is_directory(s)) {
         return;
     }
 
+    const auto &dir = s.string();
     if (vital) {
-        quit_fmt(_("必要なディレクトリ[%s]が見あたりません。", "Cannot find required directory:\n%s"), s);
-    } else if (mkdir(s)) {
-        quit_fmt("Unable to create directory:\n%s", s);
+        quit_fmt(_("必要なディレクトリ[%s]が見あたりません。", "Cannot find required directory:\n%s"), dir.data());
+    } else if (mkdir(dir.data())) {
+        quit_fmt("Unable to create directory:\n%s", dir.data());
     }
 }
 
