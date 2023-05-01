@@ -2657,11 +2657,11 @@ static void init_stuff()
 
     validate_file(path);
     path_build(path, sizeof(path), ANGBAND_DIR_XTRA, "graf");
-    ANGBAND_DIR_XTRA_GRAF = string_make(path);
+    ANGBAND_DIR_XTRA_GRAF = path;
     validate_dir(ANGBAND_DIR_XTRA_GRAF, true);
 
     path_build(path, sizeof(path), ANGBAND_DIR_XTRA, "sound");
-    ANGBAND_DIR_XTRA_SOUND = string_make(path);
+    ANGBAND_DIR_XTRA_SOUND = path;
     validate_dir(ANGBAND_DIR_XTRA_SOUND, false);
 
     path_build(path, sizeof(path), ANGBAND_DIR_XTRA, "music");

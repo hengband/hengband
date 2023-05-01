@@ -11,19 +11,16 @@
 #include "main-win/main-win-file-utils.h"
 #include "main-win/main-win-utils.h"
 #include "main-win/wav-reader.h"
-#include "util/angband-files.h"
-
 #include "main/sound-definitions-table.h"
-
+#include "util/angband-files.h"
 #include <memory>
-#include <queue>
-
 #include <mmsystem.h>
+#include <queue>
 
 /*
  * Directory name
  */
-concptr ANGBAND_DIR_XTRA_SOUND;
+std::filesystem::path ANGBAND_DIR_XTRA_SOUND;
 
 /*
  * "sound.cfg" data
@@ -253,7 +250,7 @@ void finalize_sound(void)
  * @retval 1 設定なし
  * @retval -1 PlaySoundの戻り値が正常終了以外
  */
-errr play_sound(int val, int volume)
+int play_sound(int val, int volume)
 {
     auto filename = sound_cfg_data->get_rand(TERM_XTRA_SOUND, val);
     if (!filename) {

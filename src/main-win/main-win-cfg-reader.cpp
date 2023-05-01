@@ -76,7 +76,7 @@ void CfgData::insert(int key1_type, int key2_val, cfg_values *value)
  * @param dir .cfgファイルのディレクトリ
  * @param files .cfgファイル名。複数指定可能で、最初に見つかったファイルから読み取る。
  */
-CfgReader::CfgReader(concptr dir, std::initializer_list<concptr> files)
+CfgReader::CfgReader(std::filesystem::path dir, std::initializer_list<concptr> files)
 {
     this->dir = dir;
     this->cfg_path = find_any_file(dir, files);
