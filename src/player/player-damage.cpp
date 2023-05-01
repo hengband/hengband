@@ -134,7 +134,7 @@ static bool acid_minus_ac(PlayerType *player_ptr)
     msg_format(_("%sが酸で腐食した！", "Your %s is corroded!"), item_name.data());
     o_ptr->to_a--;
     player_ptr->update |= PU_BONUS;
-    player_ptr->window_flags |= PW_EQUIP | PW_PLAYER;
+    player_ptr->window_flags |= PW_EQUIPMENT | PW_PLAYER;
     calc_android_exp(player_ptr);
     return true;
 }

@@ -118,8 +118,8 @@ static void sense_inventory_aux(PlayerType *player_ptr, INVENTORY_IDX slot, bool
     o_ptr->feeling = feel;
 
     autopick_alter_item(player_ptr, slot, destroy_feeling);
-    player_ptr->update |= (PU_COMBINE | PU_REORDER);
-    player_ptr->window_flags |= (PW_INVEN | PW_EQUIP);
+    player_ptr->update |= (PU_COMBINATION | PU_REORDER);
+    player_ptr->window_flags |= (PW_INVENTORY | PW_EQUIPMENT);
 }
 
 /*!

@@ -152,8 +152,8 @@ void building_recharge(PlayerType *player_ptr)
 #else
     msg_format("%s^ %s recharged for %d gold.", item_name.data(), ((o_ptr->number > 1) ? "were" : "was"), price);
 #endif
-    player_ptr->update |= (PU_COMBINE | PU_REORDER);
-    player_ptr->window_flags |= (PW_INVEN);
+    player_ptr->update |= (PU_COMBINATION | PU_REORDER);
+    player_ptr->window_flags |= (PW_INVENTORY);
     player_ptr->au -= price;
 }
 
@@ -264,7 +264,7 @@ void building_recharge_all(PlayerType *player_ptr)
 
     msg_format(_("＄%d で再充填しました。", "You pay %d gold."), total_cost);
     msg_print(nullptr);
-    player_ptr->update |= (PU_COMBINE | PU_REORDER);
-    player_ptr->window_flags |= (PW_INVEN);
+    player_ptr->update |= (PU_COMBINATION | PU_REORDER);
+    player_ptr->window_flags |= (PW_INVENTORY);
     player_ptr->au -= total_cost;
 }

@@ -445,7 +445,7 @@ static MULTIPLY calc_shot_damage_with_slay(
 
         if ((flags.has(TR_FORCE_WEAPON)) && (player_ptr->csp > (player_ptr->msp / 30))) {
             player_ptr->csp -= (1 + (player_ptr->msp / 30));
-            set_bits(player_ptr->redraw, PR_MANA);
+            set_bits(player_ptr->redraw, PR_MP);
             mult = mult * 5 / 2;
         }
         break;
@@ -665,7 +665,7 @@ void exe_fire(PlayerType *player_ptr, INVENTORY_IDX item, ItemEntity *j_ptr, SPE
                     }
                     /* Forget the wall */
                     reset_bits(g_ptr->info, (CAVE_MARK));
-                    set_bits(player_ptr->update, PU_VIEW | PU_LITE | PU_FLOW | PU_MON_LITE);
+                    set_bits(player_ptr->update, PU_VIEW | PU_LITE | PU_FLOW | PU_MONSTER_LITE);
 
                     /* Destroy the wall */
                     cave_alter_feat(player_ptr, ny, nx, TerrainCharacteristics::HURT_ROCK);

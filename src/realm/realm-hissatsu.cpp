@@ -426,7 +426,7 @@ std::optional<std::string> do_hissatsu_spell(PlayerType *player_ptr, SPELL_IDX s
                     lite_spot(player_ptr, ty, tx);
 
                     if (monraces_info[m_ptr->r_idx].brightness_flags.has_any_of(ld_mask)) {
-                        player_ptr->update |= (PU_MON_LITE);
+                        player_ptr->update |= (PU_MONSTER_LITE);
                     }
                 }
             }
@@ -951,7 +951,7 @@ std::optional<std::string> do_hissatsu_spell(PlayerType *player_ptr, SPELL_IDX s
                 }
                 command_dir = 0;
 
-                player_ptr->redraw |= PR_MANA;
+                player_ptr->redraw |= PR_MP;
                 handle_stuff(player_ptr);
             } while (player_ptr->csp > mana_cost_per_monster);
 

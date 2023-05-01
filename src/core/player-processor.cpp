@@ -244,7 +244,7 @@ void process_player(PlayerType *player_ptr)
             s64b_sub(&(player_ptr->csp), &(player_ptr->csp_frac), cost, cost_frac);
         }
 
-        player_ptr->redraw |= PR_MANA;
+        player_ptr->redraw |= PR_MP;
     }
 
     if (PlayerClass(player_ptr).samurai_stance_is(SamuraiStanceType::MUSOU)) {
@@ -252,7 +252,7 @@ void process_player(PlayerType *player_ptr)
             set_action(player_ptr, ACTION_NONE);
         } else {
             player_ptr->csp -= 2;
-            player_ptr->redraw |= (PR_MANA);
+            player_ptr->redraw |= (PR_MP);
         }
     }
 
@@ -291,7 +291,7 @@ void process_player(PlayerType *player_ptr)
                 if (!player_ptr->resting) {
                     set_action(player_ptr, ACTION_NONE);
                 }
-                player_ptr->redraw |= (PR_STATE);
+                player_ptr->redraw |= (PR_ACTION);
             }
 
             energy.set_player_turn_energy(100);
@@ -303,7 +303,7 @@ void process_player(PlayerType *player_ptr)
             travel_step(player_ptr);
         } else if (command_rep) {
             command_rep--;
-            player_ptr->redraw |= (PR_STATE);
+            player_ptr->redraw |= (PR_ACTION);
             handle_stuff(player_ptr);
             msg_flag = false;
             prt("", 0, 0);
@@ -311,7 +311,7 @@ void process_player(PlayerType *player_ptr)
         } else {
             move_cursor_relative(player_ptr->y, player_ptr->x);
 
-            player_ptr->window_flags |= PW_MONSTER_LIST;
+            player_ptr->window_flags |= PW_SIGHT_MONSTERS;
             window_stuff(player_ptr);
 
             can_save = true;
@@ -392,12 +392,12 @@ void process_player(PlayerType *player_ptr)
             if (player_ptr->action == ACTION_LEARN) {
                 auto mane_data = PlayerClass(player_ptr).get_specific_data<bluemage_data_type>();
                 mane_data->new_magic_learned = false;
-                player_ptr->redraw |= (PR_STATE);
+                player_ptr->redraw |= (PR_ACTION);
             }
 
             if (player_ptr->timewalk && (player_ptr->energy_need > -1000)) {
                 player_ptr->redraw |= (PR_MAP);
-                player_ptr->update |= (PU_MONSTERS);
+                player_ptr->update |= (PU_MONSTER_STATUSES);
                 player_ptr->window_flags |= (PW_OVERHEAD | PW_DUNGEON);
 
                 msg_print(_("「時は動きだす…」", "You feel time flowing around you once more."));

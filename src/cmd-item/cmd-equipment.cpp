@@ -345,9 +345,9 @@ void do_cmd_wield(PlayerType *player_ptr)
     }
 
     calc_android_exp(player_ptr);
-    player_ptr->update |= PU_BONUS | PU_TORCH | PU_MANA;
+    player_ptr->update |= PU_BONUS | PU_TORCH | PU_MP;
     player_ptr->redraw |= PR_EQUIPPY;
-    player_ptr->window_flags |= PW_INVEN | PW_EQUIP | PW_PLAYER;
+    player_ptr->window_flags |= PW_INVENTORY | PW_EQUIPMENT | PW_PLAYER;
 }
 
 /*!
@@ -380,7 +380,7 @@ void do_cmd_takeoff(PlayerType *player_ptr)
             o_ptr->curse_flags.clear();
             o_ptr->feeling = FEEL_NONE;
             player_ptr->update |= PU_BONUS;
-            player_ptr->window_flags |= PW_EQUIP;
+            player_ptr->window_flags |= PW_EQUIPMENT;
             msg_print(_("呪いを打ち破った。", "You break the curse."));
         } else {
             msg_print(_("装備を外せなかった。", "You couldn't remove the equipment."));
@@ -394,7 +394,7 @@ void do_cmd_takeoff(PlayerType *player_ptr)
     (void)inven_takeoff(player_ptr, item, 255);
     verify_equip_slot(player_ptr, item);
     calc_android_exp(player_ptr);
-    player_ptr->update |= PU_BONUS | PU_TORCH | PU_MANA;
+    player_ptr->update |= PU_BONUS | PU_TORCH | PU_MP;
     player_ptr->redraw |= PR_EQUIPPY;
-    player_ptr->window_flags |= PW_INVEN | PW_EQUIP | PW_PLAYER;
+    player_ptr->window_flags |= PW_INVENTORY | PW_EQUIPMENT | PW_PLAYER;
 }

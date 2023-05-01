@@ -749,7 +749,7 @@ bool affect_monster(
 
     lite_spot(player_ptr, em_ptr->y, em_ptr->x);
     if ((player_ptr->monster_race_idx == em_ptr->m_ptr->r_idx) && (em_ptr->seen || !monster_is_valid)) {
-        player_ptr->window_flags |= (PW_MONSTER);
+        player_ptr->window_flags |= (PW_MONSTER_LORE);
     }
 
     exe_affect_monster_postprocess(player_ptr, em_ptr);

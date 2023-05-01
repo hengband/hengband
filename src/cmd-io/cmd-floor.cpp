@@ -41,7 +41,7 @@ void do_cmd_target(PlayerType *player_ptr)
  */
 void do_cmd_look(PlayerType *player_ptr)
 {
-    set_bits(player_ptr->window_flags, PW_MONSTER_LIST | PW_FLOOR_ITEM_LIST);
+    set_bits(player_ptr->window_flags, PW_SIGHT_MONSTERS | PW_FLOOR_ITEMS);
     handle_stuff(player_ptr);
     if (target_set(player_ptr, TARGET_LOOK)) {
         msg_print(_("ターゲット決定。", "Target Selected."));
@@ -94,7 +94,7 @@ void do_cmd_locate(PlayerType *player_ptr)
     }
 
     verify_panel(player_ptr);
-    player_ptr->update |= PU_MONSTERS;
+    player_ptr->update |= PU_MONSTER_STATUSES;
     player_ptr->redraw |= PR_MAP;
     player_ptr->window_flags |= PW_OVERHEAD | PW_DUNGEON;
     handle_stuff(player_ptr);

@@ -21,7 +21,7 @@ void disturb(PlayerType *player_ptr, bool stop_search, bool stop_travel)
 {
     if (command_rep) {
         command_rep = 0;
-        player_ptr->redraw |= PR_STATE;
+        player_ptr->redraw |= PR_ACTION;
     }
 
     if ((player_ptr->action == ACTION_REST) || (player_ptr->action == ACTION_FISH) || (stop_search && (player_ptr->action == ACTION_SEARCH))) {

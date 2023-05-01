@@ -62,7 +62,7 @@ void learn_spell(PlayerType *player_ptr, MonsterAbilityType monspell)
         gain_exp(player_ptr, monster_power.level * monster_power.smana);
         sound(SOUND_STUDY);
         bluemage_data->new_magic_learned = true;
-        player_ptr->redraw |= PR_STATE;
+        player_ptr->redraw |= PR_ACTION;
     }
 }
 

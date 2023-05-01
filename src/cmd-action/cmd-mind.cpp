@@ -425,7 +425,7 @@ void do_cmd_mind(PlayerType *player_ptr)
 
     mind_turn_passing(player_ptr, cm_ptr);
     process_hard_concentration(player_ptr, cm_ptr);
-    player_ptr->redraw |= PR_MANA;
+    player_ptr->redraw |= PR_MP;
     player_ptr->window_flags |= PW_PLAYER;
     player_ptr->window_flags |= PW_SPELL;
 }

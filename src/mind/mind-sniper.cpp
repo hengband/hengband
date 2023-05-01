@@ -146,8 +146,8 @@ static bool snipe_concentrate(PlayerType *player_ptr)
     msg_format(_("集中した。(集中度 %d)", "You concentrate deeply. (lvl %d)"), sniper_data->concent);
     sniper_data->reset_concent = false;
 
-    player_ptr->update |= (PU_BONUS | PU_MONSTERS);
-    player_ptr->redraw |= (PR_STATUS);
+    player_ptr->update |= (PU_BONUS | PU_MONSTER_STATUSES);
+    player_ptr->redraw |= (PR_TIMED_EFFECT);
     return true;
 }
 
@@ -170,8 +170,8 @@ void reset_concentration(PlayerType *player_ptr, bool msg)
     sniper_data->concent = 0;
     sniper_data->reset_concent = false;
 
-    player_ptr->update |= (PU_BONUS | PU_MONSTERS);
-    player_ptr->redraw |= (PR_STATUS);
+    player_ptr->update |= (PU_BONUS | PU_MONSTER_STATUSES);
+    player_ptr->redraw |= (PR_TIMED_EFFECT);
 }
 
 /*!
@@ -619,7 +619,7 @@ void do_cmd_snipe(PlayerType *player_ptr)
     if (!cast) {
         return;
     }
-    player_ptr->redraw |= (PR_HP | PR_MANA);
+    player_ptr->redraw |= (PR_HP | PR_MP);
     player_ptr->window_flags |= (PW_PLAYER);
     player_ptr->window_flags |= (PW_SPELL);
 }

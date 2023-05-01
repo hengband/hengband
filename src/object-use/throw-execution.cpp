@@ -308,8 +308,8 @@ void ObjectThrowEntity::process_boomerang_back()
         this->o_ptr = &player_ptr->inventory_list[this->item];
         this->o_ptr->copy_from(this->q_ptr);
         player_ptr->equip_cnt++;
-        player_ptr->update |= PU_BONUS | PU_TORCH | PU_MANA;
-        player_ptr->window_flags |= PW_EQUIP;
+        player_ptr->update |= PU_BONUS | PU_TORCH | PU_MP;
+        player_ptr->window_flags |= PW_EQUIPMENT;
         this->do_drop = false;
         return;
     }

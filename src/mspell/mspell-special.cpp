@@ -178,7 +178,7 @@ static MonsterSpellResult spell_RF6_SPECIAL_B(PlayerType *player_ptr, POSITION y
         simple_monspell_message(player_ptr, m_idx, t_idx, msg, target_type);
 
         teleport_away(player_ptr, m_idx, 10, TELEPORT_NONMAGICAL);
-        player_ptr->update |= (PU_MONSTERS);
+        player_ptr->update |= (PU_MONSTER_STATUSES);
         return MonsterSpellResult::make_valid();
     }
 

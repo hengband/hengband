@@ -55,7 +55,7 @@ void StoneOfLore::consume_mp()
 
     if (this->player_ptr->csp >= 20) {
         this->player_ptr->csp -= 20;
-        set_bits(this->player_ptr->redraw, PR_MANA);
+        set_bits(this->player_ptr->redraw, PR_MP);
         return;
     }
 
@@ -66,5 +66,5 @@ void StoneOfLore::consume_mp()
     BadStatusSetter bss(this->player_ptr);
     (void)bss.mod_paralysis(randint1(5 * oops + 1));
     (void)bss.mod_confusion(randint1(5 * oops + 1));
-    set_bits(this->player_ptr->redraw, PR_MANA);
+    set_bits(this->player_ptr->redraw, PR_MP);
 }

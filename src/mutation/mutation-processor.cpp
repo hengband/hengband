@@ -473,7 +473,7 @@ void process_world_aux_mutation(PlayerType *player_ptr)
 
             hp_player(player_ptr, healing);
             player_ptr->csp -= healing;
-            player_ptr->redraw |= (PR_HP | PR_MANA);
+            player_ptr->redraw |= (PR_HP | PR_MP);
         }
     }
 
@@ -486,7 +486,7 @@ void process_world_aux_mutation(PlayerType *player_ptr)
             }
 
             player_ptr->csp += healing;
-            player_ptr->redraw |= (PR_HP | PR_MANA);
+            player_ptr->redraw |= (PR_HP | PR_MP);
             take_hit(player_ptr, DAMAGE_LOSELIFE, healing, _("頭に昇った血", "blood rushing to the head"));
         }
     }

@@ -54,7 +54,7 @@ static void attack_confuse(PlayerType *player_ptr, player_attack_type *pa_ptr, b
     if (player_ptr->special_attack & ATTACK_CONFUSE) {
         player_ptr->special_attack &= ~(ATTACK_CONFUSE);
         msg_print(_("手の輝きがなくなった。", "Your hands stop glowing."));
-        player_ptr->redraw |= (PR_STATUS);
+        player_ptr->redraw |= (PR_TIMED_EFFECT);
     }
 
     auto *r_ptr = pa_ptr->r_ptr;
@@ -149,7 +149,7 @@ static void attack_dispel(PlayerType *player_ptr, player_attack_type *pa_ptr)
 
     auto sp = damroll(dd, 8);
     player_ptr->csp = std::min(player_ptr->msp, player_ptr->csp + sp);
-    set_bits(player_ptr->redraw, PR_MANA);
+    set_bits(player_ptr->redraw, PR_MP);
 }
 
 /*!

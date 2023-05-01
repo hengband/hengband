@@ -388,7 +388,7 @@ void monster_death(PlayerType *player_ptr, MONSTER_IDX m_idx, bool drop_item, At
     }
 
     if (md_ptr->r_ptr->brightness_flags.has_any_of(ld_mask)) {
-        player_ptr->update |= PU_MON_LITE;
+        player_ptr->update |= PU_MONSTER_LITE;
     }
 
     write_pet_death(player_ptr, md_ptr);

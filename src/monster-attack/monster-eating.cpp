@@ -210,7 +210,7 @@ void process_eat_lite(PlayerType *player_ptr, MonsterAttackPlayer *monap_ptr)
         monap_ptr->obvious = true;
     }
 
-    player_ptr->window_flags |= (PW_EQUIP);
+    player_ptr->window_flags |= (PW_EQUIPMENT);
 }
 
 /*!
@@ -261,8 +261,8 @@ bool process_un_power(PlayerType *player_ptr, MonsterAttackPlayer *monap_ptr)
     }
 
     monap_ptr->o_ptr->pval = !is_magic_mastery || (monap_ptr->o_ptr->pval == 1) ? 0 : monap_ptr->o_ptr->pval - drain;
-    player_ptr->update |= PU_COMBINE | PU_REORDER;
-    player_ptr->window_flags |= PW_INVEN;
+    player_ptr->update |= PU_COMBINATION | PU_REORDER;
+    player_ptr->window_flags |= PW_INVENTORY;
     return true;
 }
 
@@ -326,7 +326,7 @@ void process_drain_mana(PlayerType *player_ptr, MonsterAttackPlayer *monap_ptr)
         player_ptr->csp_frac = 0;
     }
 
-    player_ptr->redraw |= (PR_MANA);
+    player_ptr->redraw |= (PR_MP);
 }
 
 /*!

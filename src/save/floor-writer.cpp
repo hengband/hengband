@@ -156,8 +156,8 @@ bool wr_dungeon(PlayerType *player_ptr)
     forget_lite(player_ptr->current_floor_ptr);
     forget_view(player_ptr->current_floor_ptr);
     clear_mon_lite(player_ptr->current_floor_ptr);
-    player_ptr->update |= PU_VIEW | PU_LITE | PU_MON_LITE;
-    player_ptr->update |= PU_MONSTERS | PU_DISTANCE | PU_FLOW;
+    player_ptr->update |= PU_VIEW | PU_LITE | PU_MONSTER_LITE;
+    player_ptr->update |= PU_MONSTER_STATUSES | PU_DISTANCE | PU_FLOW;
     wr_s16b(max_floor_id);
     wr_byte((byte)player_ptr->dungeon_idx);
     if (!player_ptr->floor_id) {

@@ -242,7 +242,7 @@ void describe_pickup_item(PlayerType *player_ptr, OBJECT_IDX o_idx)
 void carry(PlayerType *player_ptr, bool pickup)
 {
     verify_panel(player_ptr);
-    player_ptr->update |= PU_MONSTERS;
+    player_ptr->update |= PU_MONSTER_STATUSES;
     player_ptr->redraw |= PR_MAP;
     player_ptr->window_flags |= PW_OVERHEAD;
     handle_stuff(player_ptr);

@@ -72,7 +72,7 @@ void recharge_magic_items(PlayerType *player_ptr)
     }
 
     if (changed) {
-        player_ptr->window_flags |= (PW_EQUIP);
+        player_ptr->window_flags |= (PW_EQUIPMENT);
         wild_regen = 20;
     }
 
@@ -109,7 +109,7 @@ void recharge_magic_items(PlayerType *player_ptr)
     }
 
     if (changed) {
-        player_ptr->window_flags |= (PW_INVEN);
+        player_ptr->window_flags |= (PW_INVENTORY);
         wild_regen = 20;
     }
 

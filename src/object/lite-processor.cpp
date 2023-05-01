@@ -48,7 +48,7 @@ void reduce_lite_life(PlayerType *player_ptr)
 void notice_lite_change(PlayerType *player_ptr, ItemEntity *o_ptr)
 {
     if ((o_ptr->fuel < 100) || (!(o_ptr->fuel % 100))) {
-        player_ptr->window_flags |= (PW_EQUIP);
+        player_ptr->window_flags |= (PW_EQUIPMENT);
     }
 
     if (player_ptr->effects()->blindness()->is_blind()) {

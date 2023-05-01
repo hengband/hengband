@@ -212,8 +212,8 @@ void do_cmd_store(PlayerType *player_ptr)
     msg_erase();
     term_clear();
 
-    player_ptr->update |= PU_VIEW | PU_LITE | PU_MON_LITE;
-    player_ptr->update |= PU_MONSTERS;
+    player_ptr->update |= PU_VIEW | PU_LITE | PU_MONSTER_LITE;
+    player_ptr->update |= PU_MONSTER_STATUSES;
     player_ptr->redraw |= PR_BASIC | PR_EXTRA | PR_EQUIPPY;
     player_ptr->redraw |= PR_MAP;
     player_ptr->window_flags |= PW_OVERHEAD | PW_DUNGEON;

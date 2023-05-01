@@ -267,7 +267,7 @@ static void effect_monster_psi_drain_resist(PlayerType *player_ptr, effect_monst
         player_ptr->csp = 0;
     }
 
-    set_bits(player_ptr->redraw, PR_MANA);
+    set_bits(player_ptr->redraw, PR_MP);
     set_bits(player_ptr->window_flags, PW_SPELL);
     take_hit(player_ptr, DAMAGE_ATTACK, em_ptr->dam, em_ptr->killer);
     em_ptr->dam = 0;
@@ -287,7 +287,7 @@ static void effect_monster_psi_drain_change_power(PlayerType *player_ptr, effect
 
     b = std::min(player_ptr->msp, player_ptr->csp + b);
     player_ptr->csp = b;
-    set_bits(player_ptr->redraw, PR_MANA);
+    set_bits(player_ptr->redraw, PR_MP);
     set_bits(player_ptr->window_flags, PW_SPELL);
 }
 

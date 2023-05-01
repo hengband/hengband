@@ -366,7 +366,7 @@ void concentration(PlayerType *player_ptr)
         player_ptr->csp_frac = 0;
     }
 
-    player_ptr->redraw |= PR_MANA;
+    player_ptr->redraw |= PR_MP;
 }
 
 /*!
@@ -439,12 +439,12 @@ bool choose_samurai_stance(PlayerType *player_ptr)
     if (PlayerClass(player_ptr).samurai_stance_is(new_stance)) {
         msg_print(_("構え直した。", "You reassume a stance."));
     } else {
-        player_ptr->update |= (PU_BONUS | PU_MONSTERS);
+        player_ptr->update |= (PU_BONUS | PU_MONSTER_STATUSES);
         msg_format(_("%sの型で構えた。", "You assume the %s stance."), samurai_stances[enum2i(new_stance) - 1].desc);
         PlayerClass(player_ptr).set_samurai_stance(new_stance);
     }
 
-    player_ptr->redraw |= (PR_STATE | PR_STATUS);
+    player_ptr->redraw |= (PR_ACTION | PR_TIMED_EFFECT);
     screen_load();
     return true;
 }
@@ -527,5 +527,5 @@ void musou_counterattack(PlayerType *player_ptr, MonsterAttackPlayer *monap_ptr)
     msg_format(_("%s^に反撃した！", "You counterattacked %s!"), m_target_name.data());
     do_cmd_attack(player_ptr, monap_ptr->m_ptr->fy, monap_ptr->m_ptr->fx, HISSATSU_COUNTER);
     monap_ptr->fear = false;
-    player_ptr->redraw |= (PR_MANA);
+    player_ptr->redraw |= (PR_MP);
 }

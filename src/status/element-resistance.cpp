@@ -50,7 +50,7 @@ bool set_oppose_acid(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
     if (!notice) {
         return false;
     }
-    player_ptr->redraw |= (PR_STATUS);
+    player_ptr->redraw |= (PR_TIMED_EFFECT);
 
     if (disturb_state) {
         disturb(player_ptr, false, false);
@@ -97,7 +97,7 @@ bool set_oppose_elec(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
     if (!notice) {
         return false;
     }
-    player_ptr->redraw |= (PR_STATUS);
+    player_ptr->redraw |= (PR_TIMED_EFFECT);
 
     if (disturb_state) {
         disturb(player_ptr, false, false);
@@ -146,7 +146,7 @@ bool set_oppose_fire(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
     if (!notice) {
         return false;
     }
-    player_ptr->redraw |= (PR_STATUS);
+    player_ptr->redraw |= (PR_TIMED_EFFECT);
 
     if (disturb_state) {
         disturb(player_ptr, false, false);
@@ -192,7 +192,7 @@ bool set_oppose_cold(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
     if (!notice) {
         return false;
     }
-    player_ptr->redraw |= (PR_STATUS);
+    player_ptr->redraw |= (PR_TIMED_EFFECT);
 
     if (disturb_state) {
         disturb(player_ptr, false, false);
@@ -241,7 +241,7 @@ bool set_oppose_pois(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
     if (!notice) {
         return false;
     }
-    player_ptr->redraw |= (PR_STATUS);
+    player_ptr->redraw |= (PR_TIMED_EFFECT);
 
     if (disturb_state) {
         disturb(player_ptr, false, false);

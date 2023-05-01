@@ -126,7 +126,7 @@ std::optional<std::string> do_chaos_spell(PlayerType *player_ptr, SPELL_IDX spel
                 if (!(player_ptr->special_attack & ATTACK_CONFUSE)) {
                     msg_print(_("あなたの手は光り始めた。", "Your hands start glowing."));
                     player_ptr->special_attack |= ATTACK_CONFUSE;
-                    player_ptr->redraw |= (PR_STATUS);
+                    player_ptr->redraw |= (PR_TIMED_EFFECT);
                 }
             }
         }

@@ -82,8 +82,8 @@ bool can_player_destroy_object(PlayerType *player_ptr, ItemEntity *o_ptr)
 
         o_ptr->feeling = feel;
         o_ptr->ident |= IDENT_SENSE;
-        player_ptr->update |= (PU_COMBINE);
-        player_ptr->window_flags |= (PW_INVEN | PW_EQUIP);
+        player_ptr->update |= (PU_COMBINATION);
+        player_ptr->window_flags |= (PW_INVENTORY | PW_EQUIPMENT);
         return false;
     }
 

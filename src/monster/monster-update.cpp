@@ -112,7 +112,7 @@ void update_player_type(PlayerType *player_ptr, turn_flags *turn_flags_ptr, Mons
     }
 
     if (turn_flags_ptr->do_move && (r_ptr->brightness_flags.has_any_of(except_has_lite) || (r_ptr->brightness_flags.has_any_of({ MonsterBrightnessType::HAS_LITE_1, MonsterBrightnessType::HAS_LITE_2 }) && !player_ptr->phase_out))) {
-        player_ptr->update |= PU_MON_LITE;
+        player_ptr->update |= PU_MONSTER_LITE;
     }
 }
 
@@ -175,7 +175,7 @@ void update_player_window(PlayerType *player_ptr, old_race_flags *old_race_flags
         (old_race_flags_ptr->old_r_blows3 != r_ptr->r_blows[3]) || (old_race_flags_ptr->old_r_cast_spell != r_ptr->r_cast_spell) ||
         (old_race_flags_ptr->old_r_behavior_flags != r_ptr->r_behavior_flags) || (old_race_flags_ptr->old_r_kind_flags != r_ptr->r_kind_flags) ||
         (old_race_flags_ptr->old_r_drop_flags != r_ptr->r_drop_flags) || (old_race_flags_ptr->old_r_feature_flags != r_ptr->r_feature_flags)) {
-        player_ptr->window_flags |= PW_MONSTER;
+        player_ptr->window_flags |= PW_MONSTER_LORE;
     }
 }
 

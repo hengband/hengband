@@ -169,7 +169,7 @@ static bool exe_eat_charge_of_magic_device(PlayerType *player_ptr, ItemEntity *o
     if (o_ptr->pval == 0) {
         msg_format(_("この%sにはもう魔力が残っていない。", "The %s has no charges left."), staff);
         o_ptr->ident |= IDENT_EMPTY;
-        player_ptr->window_flags |= PW_INVEN;
+        player_ptr->window_flags |= PW_INVENTORY;
         return true;
     }
 
@@ -203,7 +203,7 @@ static bool exe_eat_charge_of_magic_device(PlayerType *player_ptr, ItemEntity *o
         floor_item_charges(player_ptr->current_floor_ptr, 0 - inventory);
     }
 
-    player_ptr->window_flags |= PW_INVEN | PW_EQUIP;
+    player_ptr->window_flags |= PW_INVENTORY | PW_EQUIPMENT;
     return true;
 }
 
@@ -242,8 +242,8 @@ void exe_eat_food(PlayerType *player_ptr, INVENTORY_IDX item)
      * do not rearrange the inventory before the food item is destroyed in
      * the pack.
      */
-    BIT_FLAGS inventory_flags = (PU_COMBINE | PU_REORDER | (player_ptr->update & PU_AUTODESTROY));
-    player_ptr->update &= ~(PU_COMBINE | PU_REORDER | PU_AUTODESTROY);
+    BIT_FLAGS inventory_flags = (PU_COMBINATION | PU_REORDER | (player_ptr->update & PU_AUTO_DESTRUCTION));
+    player_ptr->update &= ~(PU_COMBINATION | PU_REORDER | PU_AUTO_DESTRUCTION);
 
     if (!(o_ptr->is_aware())) {
         chg_virtue(player_ptr, Virtue::KNOWLEDGE, -1);
@@ -263,7 +263,7 @@ void exe_eat_food(PlayerType *player_ptr, INVENTORY_IDX item)
         gain_exp(player_ptr, (lev + (player_ptr->lev >> 1)) / player_ptr->lev);
     }
 
-    player_ptr->window_flags |= (PW_INVEN | PW_EQUIP | PW_PLAYER);
+    player_ptr->window_flags |= (PW_INVENTORY | PW_EQUIPMENT | PW_PLAYER);
 
     /* Undeads drain recharge of magic device */
     if (exe_eat_charge_of_magic_device(player_ptr, o_ptr, item)) {

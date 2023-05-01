@@ -120,7 +120,7 @@ bool apply_disenchant(PlayerType *player_ptr, BIT_FLAGS mode)
     chg_virtue(player_ptr, Virtue::HARMONY, 1);
     chg_virtue(player_ptr, Virtue::ENCHANT, -2);
     player_ptr->update |= (PU_BONUS);
-    player_ptr->window_flags |= (PW_EQUIP | PW_PLAYER);
+    player_ptr->window_flags |= (PW_EQUIPMENT | PW_PLAYER);
 
     calc_android_exp(player_ptr);
     return true;

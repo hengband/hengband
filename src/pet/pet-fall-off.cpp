@@ -160,7 +160,7 @@ bool process_fall_off_horse(PlayerType *player_ptr, int dam, bool force)
     player_ptr->pet_extra_flags &= ~(PF_TWO_HANDS);
     player_ptr->riding_ryoute = player_ptr->old_riding_ryoute = false;
 
-    player_ptr->update |= (PU_BONUS | PU_VIEW | PU_LITE | PU_FLOW | PU_MON_LITE | PU_MONSTERS);
+    player_ptr->update |= (PU_BONUS | PU_VIEW | PU_LITE | PU_FLOW | PU_MONSTER_LITE | PU_MONSTER_STATUSES);
     handle_stuff(player_ptr);
 
     player_ptr->window_flags |= (PW_OVERHEAD | PW_DUNGEON);

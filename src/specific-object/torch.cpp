@@ -163,7 +163,7 @@ void update_lite_radius(PlayerType *player_ptr)
         return;
     }
 
-    player_ptr->update |= PU_LITE | PU_MON_LITE | PU_MONSTERS;
+    player_ptr->update |= PU_LITE | PU_MONSTER_LITE | PU_MONSTER_STATUSES;
     player_ptr->old_lite = player_ptr->cur_lite;
 
     if (player_ptr->cur_lite > 0) {
@@ -337,5 +337,5 @@ void update_lite(PlayerType *player_ptr)
         cave_redraw_later(floor_ptr, y, x);
     }
 
-    player_ptr->update |= PU_DELAY_VIS;
+    player_ptr->update |= PU_DELAY_VISIBILITY;
 }

@@ -166,7 +166,7 @@ bool dec_stat(PlayerType *player_ptr, int stat, int amount, int permanent)
     if (res) {
         player_ptr->stat_cur[stat] = cur;
         player_ptr->stat_max[stat] = max;
-        player_ptr->redraw |= (PR_STATS);
+        player_ptr->redraw |= (PR_ABILITY_SCORE);
         player_ptr->update |= (PU_BONUS);
     }
 
@@ -183,7 +183,7 @@ bool res_stat(PlayerType *player_ptr, int stat)
     if (player_ptr->stat_cur[stat] != player_ptr->stat_max[stat]) {
         player_ptr->stat_cur[stat] = player_ptr->stat_max[stat];
         player_ptr->update |= (PU_BONUS);
-        player_ptr->redraw |= (PR_STATS);
+        player_ptr->redraw |= (PR_ABILITY_SCORE);
         return true;
     }
 
@@ -303,8 +303,8 @@ bool lose_all_info(PlayerType *player_ptr)
         o_ptr->ident &= ~(IDENT_SENSE);
     }
 
-    set_bits(player_ptr->update, PU_BONUS | PU_COMBINE | PU_REORDER);
-    set_bits(player_ptr->window_flags, PW_INVEN | PW_EQUIP | PW_PLAYER | PW_FLOOR_ITEM_LIST | PW_FOUND_ITEM_LIST);
+    set_bits(player_ptr->update, PU_BONUS | PU_COMBINATION | PU_REORDER);
+    set_bits(player_ptr->window_flags, PW_INVENTORY | PW_EQUIPMENT | PW_PLAYER | PW_FLOOR_ITEMS | PW_FOUND_ITEMS);
     wiz_dark(player_ptr);
     return true;
 }

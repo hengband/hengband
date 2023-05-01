@@ -396,9 +396,9 @@ bool PlayerClass::lose_balance()
 
     this->set_samurai_stance(SamuraiStanceType::NONE);
     this->player_ptr->update |= PU_BONUS;
-    this->player_ptr->update |= PU_MONSTERS;
-    this->player_ptr->redraw |= PR_STATE;
-    this->player_ptr->redraw |= PR_STATUS;
+    this->player_ptr->update |= PU_MONSTER_STATUSES;
+    this->player_ptr->redraw |= PR_ACTION;
+    this->player_ptr->redraw |= PR_TIMED_EFFECT;
     this->player_ptr->action = ACTION_NONE;
     return true;
 }

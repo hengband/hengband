@@ -46,7 +46,7 @@ bool set_protevil(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
     }
 
     player_ptr->protevil = v;
-    player_ptr->redraw |= (PR_STATUS);
+    player_ptr->redraw |= (PR_TIMED_EFFECT);
 
     if (!notice) {
         return false;
@@ -91,7 +91,7 @@ bool set_invuln(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
             chg_virtue(player_ptr, Virtue::VALOUR, -5);
 
             player_ptr->redraw |= (PR_MAP);
-            player_ptr->update |= (PU_MONSTERS);
+            player_ptr->update |= (PU_MONSTER_STATUSES);
 
             player_ptr->window_flags |= (PW_OVERHEAD | PW_DUNGEON);
         }
@@ -101,7 +101,7 @@ bool set_invuln(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
             notice = true;
 
             player_ptr->redraw |= (PR_MAP);
-            player_ptr->update |= (PU_MONSTERS);
+            player_ptr->update |= (PU_MONSTER_STATUSES);
 
             player_ptr->window_flags |= (PW_OVERHEAD | PW_DUNGEON);
 
@@ -110,7 +110,7 @@ bool set_invuln(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
     }
 
     player_ptr->invuln = v;
-    player_ptr->redraw |= (PR_STATUS);
+    player_ptr->redraw |= (PR_TIMED_EFFECT);
 
     if (!notice) {
         return false;
@@ -158,7 +158,7 @@ bool set_tim_regen(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
     }
 
     player_ptr->tim_regen = v;
-    player_ptr->redraw |= (PR_STATUS);
+    player_ptr->redraw |= (PR_TIMED_EFFECT);
 
     if (!notice) {
         return false;
@@ -206,7 +206,7 @@ bool set_tim_reflect(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
     }
 
     player_ptr->tim_reflect = v;
-    player_ptr->redraw |= (PR_STATUS);
+    player_ptr->redraw |= (PR_TIMED_EFFECT);
 
     if (!notice) {
         return false;
@@ -254,7 +254,7 @@ bool set_pass_wall(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
     }
 
     player_ptr->tim_pass_wall = v;
-    player_ptr->redraw |= (PR_STATUS);
+    player_ptr->redraw |= (PR_TIMED_EFFECT);
 
     if (!notice) {
         return false;

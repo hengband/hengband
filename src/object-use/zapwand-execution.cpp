@@ -95,8 +95,8 @@ void ObjectZapWandEntity::execute(INVENTORY_IDX item)
 
         msg_print(_("この魔法棒にはもう魔力が残っていない。", "The wand has no charges left."));
         o_ptr->ident |= IDENT_EMPTY;
-        this->player_ptr->update |= PU_COMBINE | PU_REORDER;
-        this->player_ptr->window_flags |= PW_INVEN;
+        this->player_ptr->update |= PU_COMBINATION | PU_REORDER;
+        this->player_ptr->window_flags |= PW_INVENTORY;
         return;
     }
 
@@ -108,8 +108,8 @@ void ObjectZapWandEntity::execute(INVENTORY_IDX item)
      * gain_exp() does not reorder the inventory before the charge
      * is deducted from the wand.
      */
-    BIT_FLAGS inventory_flags = (PU_COMBINE | PU_REORDER | (this->player_ptr->update & PU_AUTODESTROY));
-    reset_bits(this->player_ptr->update, PU_COMBINE | PU_REORDER | PU_AUTODESTROY);
+    BIT_FLAGS inventory_flags = (PU_COMBINATION | PU_REORDER | (this->player_ptr->update & PU_AUTO_DESTRUCTION));
+    reset_bits(this->player_ptr->update, PU_COMBINATION | PU_REORDER | PU_AUTO_DESTRUCTION);
     if (!(o_ptr->is_aware())) {
         chg_virtue(this->player_ptr, Virtue::PATIENCE, -1);
         chg_virtue(this->player_ptr, Virtue::CHANCE, 1);
@@ -122,7 +122,7 @@ void ObjectZapWandEntity::execute(INVENTORY_IDX item)
         gain_exp(this->player_ptr, (lev + (this->player_ptr->lev >> 1)) / this->player_ptr->lev);
     }
 
-    set_bits(this->player_ptr->window_flags, PW_INVEN | PW_EQUIP | PW_PLAYER | PW_FLOOR_ITEM_LIST | PW_FOUND_ITEM_LIST);
+    set_bits(this->player_ptr->window_flags, PW_INVENTORY | PW_EQUIPMENT | PW_PLAYER | PW_FLOOR_ITEMS | PW_FOUND_ITEMS);
     set_bits(this->player_ptr->update, inventory_flags);
     o_ptr->pval--;
     if (item >= 0) {

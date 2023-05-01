@@ -887,7 +887,7 @@ static bool try_cast_element_spell(PlayerType *player_ptr, SPELL_IDX spell_idx, 
         player_ptr->csp = std::max(0, player_ptr->csp - player_ptr->msp * 10 / (20 + randint1(10)));
 
         PlayerEnergy(player_ptr).set_player_turn_energy(100);
-        set_bits(player_ptr->redraw, PR_MANA);
+        set_bits(player_ptr->redraw, PR_MP);
         set_bits(player_ptr->window_flags, PW_PLAYER | PW_SPELL);
 
         return false;
@@ -936,7 +936,7 @@ void do_cmd_element(PlayerType *player_ptr)
     }
 
     PlayerEnergy(player_ptr).set_player_turn_energy(100);
-    set_bits(player_ptr->redraw, PR_MANA);
+    set_bits(player_ptr->redraw, PR_MP);
     set_bits(player_ptr->window_flags, PW_PLAYER | PW_SPELL);
 }
 

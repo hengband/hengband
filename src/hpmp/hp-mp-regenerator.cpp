@@ -108,7 +108,7 @@ void regenmana(PlayerType *player_ptr, MANA_POINT upkeep_factor, MANA_POINT rege
     }
 
     if (old_csp != player_ptr->csp) {
-        player_ptr->redraw |= (PR_MANA);
+        player_ptr->redraw |= (PR_MP);
         player_ptr->window_flags |= (PW_PLAYER);
         player_ptr->window_flags |= (PW_SPELL);
         wild_regen = 20;
@@ -246,10 +246,10 @@ void regenerate_captured_monsters(PlayerType *player_ptr)
     }
 
     if (heal) {
-        player_ptr->update |= (PU_COMBINE);
+        player_ptr->update |= (PU_COMBINATION);
         // FIXME 広域マップ移動で1歩毎に何度も再描画されて重くなる。現在はボール中モンスターのHP回復でボールの表示は変わらないためコメントアウトする。
-        // player_ptr->window_flags |= (PW_INVEN);
-        // player_ptr->window_flags |= (PW_EQUIP);
+        // player_ptr->window_flags |= (PW_INVENTORY);
+        // player_ptr->window_flags |= (PW_EQUIPMENT);
         wild_regen = 20;
     }
 }

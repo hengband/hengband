@@ -89,7 +89,7 @@ bool clear_mind(PlayerType *player_ptr)
         player_ptr->csp_frac = 0;
     }
 
-    player_ptr->redraw |= (PR_MANA);
+    player_ptr->redraw |= (PR_MP);
     return true;
 }
 
@@ -176,7 +176,7 @@ bool set_tim_sh_force(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
     }
 
     player_ptr->tim_sh_touki = v;
-    player_ptr->redraw |= (PR_STATUS);
+    player_ptr->redraw |= (PR_TIMED_EFFECT);
 
     if (!notice) {
         return false;
@@ -256,7 +256,7 @@ bool shock_power(PlayerType *player_ptr)
     lite_spot(player_ptr, ty, tx);
 
     if (r_ptr->brightness_flags.has_any_of(ld_mask)) {
-        player_ptr->update |= (PU_MON_LITE);
+        player_ptr->update |= (PU_MONSTER_LITE);
     }
 
     return true;

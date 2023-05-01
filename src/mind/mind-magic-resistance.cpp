@@ -40,7 +40,7 @@ bool set_resist_magic(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
     }
 
     player_ptr->resist_magic = v;
-    player_ptr->redraw |= (PR_STATUS);
+    player_ptr->redraw |= (PR_TIMED_EFFECT);
 
     if (!notice) {
         return false;

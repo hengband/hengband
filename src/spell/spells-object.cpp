@@ -247,8 +247,8 @@ bool curse_armor(PlayerType *player_ptr)
     o_ptr->art_flags.clear();
     o_ptr->curse_flags.set(CurseTraitType::CURSED);
     o_ptr->ident |= IDENT_BROKEN;
-    player_ptr->update |= PU_BONUS | PU_MANA;
-    player_ptr->window_flags |= PW_INVEN | PW_EQUIP | PW_PLAYER;
+    player_ptr->update |= PU_BONUS | PU_MP;
+    player_ptr->window_flags |= PW_INVENTORY | PW_EQUIPMENT | PW_PLAYER;
     return true;
 }
 
@@ -293,8 +293,8 @@ bool curse_weapon_object(PlayerType *player_ptr, bool force, ItemEntity *o_ptr)
     o_ptr->art_flags.clear();
     o_ptr->curse_flags.set(CurseTraitType::CURSED);
     o_ptr->ident |= IDENT_BROKEN;
-    player_ptr->update |= PU_BONUS | PU_MANA;
-    player_ptr->window_flags |= PW_INVEN | PW_EQUIP | PW_PLAYER;
+    player_ptr->update |= PU_BONUS | PU_MP;
+    player_ptr->window_flags |= PW_INVENTORY | PW_EQUIPMENT | PW_PLAYER;
     return true;
 }
 
@@ -440,8 +440,8 @@ bool enchant_equipment(PlayerType *player_ptr, ItemEntity *o_ptr, int n, int efl
         return false;
     }
 
-    set_bits(player_ptr->update, PU_BONUS | PU_COMBINE | PU_REORDER);
-    set_bits(player_ptr->window_flags, PW_INVEN | PW_EQUIP | PW_PLAYER | PW_FLOOR_ITEM_LIST | PW_FOUND_ITEM_LIST);
+    set_bits(player_ptr->update, PU_BONUS | PU_COMBINATION | PU_REORDER);
+    set_bits(player_ptr->window_flags, PW_INVENTORY | PW_EQUIPMENT | PW_PLAYER | PW_FLOOR_ITEMS | PW_FOUND_ITEMS);
     return true;
 }
 

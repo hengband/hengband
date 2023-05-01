@@ -200,7 +200,7 @@ bool set_shield(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
     }
 
     player_ptr->shield = v;
-    player_ptr->redraw |= (PR_STATUS);
+    player_ptr->redraw |= (PR_TIMED_EFFECT);
 
     if (!notice) {
         return false;
@@ -247,7 +247,7 @@ bool set_magicdef(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
     }
 
     player_ptr->magicdef = v;
-    player_ptr->redraw |= (PR_STATUS);
+    player_ptr->redraw |= (PR_TIMED_EFFECT);
 
     if (!notice) {
         return false;
@@ -294,7 +294,7 @@ bool set_blessed(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
     }
 
     player_ptr->blessed = v;
-    player_ptr->redraw |= (PR_STATUS);
+    player_ptr->redraw |= (PR_TIMED_EFFECT);
 
     if (!notice) {
         return false;
@@ -341,7 +341,7 @@ bool set_hero(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
     }
 
     player_ptr->hero = v;
-    player_ptr->redraw |= (PR_STATUS);
+    player_ptr->redraw |= (PR_TIMED_EFFECT);
 
     if (!notice) {
         return false;
@@ -406,7 +406,7 @@ bool set_mimic(PlayerType *player_ptr, TIME_EFFECT v, MimicKindType mimic_race_i
         disturb(player_ptr, false, true);
     }
 
-    player_ptr->redraw |= (PR_BASIC | PR_STATUS);
+    player_ptr->redraw |= (PR_BASIC | PR_TIMED_EFFECT);
     player_ptr->update |= (PU_BONUS | PU_HP);
 
     handle_stuff(player_ptr);
@@ -451,7 +451,7 @@ bool set_shero(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
     }
 
     player_ptr->shero = v;
-    player_ptr->redraw |= (PR_STATUS);
+    player_ptr->redraw |= (PR_TIMED_EFFECT);
 
     if (!notice) {
         return false;
@@ -496,7 +496,7 @@ bool set_wraith_form(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
             chg_virtue(player_ptr, Virtue::VALOUR, -5);
 
             player_ptr->redraw |= (PR_MAP);
-            player_ptr->update |= (PU_MONSTERS);
+            player_ptr->update |= (PU_MONSTER_STATUSES);
 
             player_ptr->window_flags |= (PW_OVERHEAD | PW_DUNGEON);
         }
@@ -506,14 +506,14 @@ bool set_wraith_form(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
             notice = true;
 
             player_ptr->redraw |= (PR_MAP);
-            player_ptr->update |= (PU_MONSTERS);
+            player_ptr->update |= (PU_MONSTER_STATUSES);
 
             player_ptr->window_flags |= (PW_OVERHEAD | PW_DUNGEON);
         }
     }
 
     player_ptr->wraith_form = v;
-    player_ptr->redraw |= (PR_STATUS);
+    player_ptr->redraw |= (PR_TIMED_EFFECT);
 
     if (!notice) {
         return false;
@@ -566,7 +566,7 @@ bool set_tsuyoshi(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
     }
 
     player_ptr->tsuyoshi = v;
-    player_ptr->redraw |= (PR_STATUS);
+    player_ptr->redraw |= (PR_TIMED_EFFECT);
 
     if (!notice) {
         return false;

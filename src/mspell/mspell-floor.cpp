@@ -127,7 +127,7 @@ MonsterSpellResult spell_RF6_BLINK(PlayerType *player_ptr, MONSTER_IDX m_idx, in
     teleport_away(player_ptr, m_idx, 10, TELEPORT_SPONTANEOUS);
 
     if (target_type == MONSTER_TO_PLAYER) {
-        player_ptr->update |= (PU_MONSTERS);
+        player_ptr->update |= (PU_MONSTER_STATUSES);
     }
 
     return res;

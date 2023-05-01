@@ -359,7 +359,7 @@ void do_cmd_hissatsu(PlayerType *player_ptr)
     if (player_ptr->csp < 0) {
         player_ptr->csp = 0;
     }
-    player_ptr->redraw |= (PR_MANA);
+    player_ptr->redraw |= (PR_MP);
     player_ptr->window_flags |= (PW_PLAYER | PW_SPELL);
 }
 

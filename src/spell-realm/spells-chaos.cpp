@@ -186,7 +186,7 @@ bool vanish_dungeon(PlayerType *player_ptr)
         }
     }
 
-    player_ptr->update |= (PU_UN_VIEW | PU_UN_LITE | PU_VIEW | PU_LITE | PU_FLOW | PU_MON_LITE | PU_MONSTERS);
+    player_ptr->update |= (PU_UN_VIEW | PU_UN_LITE | PU_VIEW | PU_LITE | PU_FLOW | PU_MONSTER_LITE | PU_MONSTER_STATUSES);
     player_ptr->redraw |= (PR_MAP);
     player_ptr->window_flags |= (PW_OVERHEAD | PW_DUNGEON);
     return true;

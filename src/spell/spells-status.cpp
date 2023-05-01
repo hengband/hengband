@@ -215,7 +215,7 @@ bool time_walk(PlayerType *player_ptr)
 
     player_ptr->energy_need -= 1000 + (100 + player_ptr->csp - 50) * TURNS_PER_TICK / 10;
     player_ptr->redraw |= (PR_MAP);
-    player_ptr->update |= (PU_MONSTERS);
+    player_ptr->update |= (PU_MONSTER_STATUSES);
     player_ptr->window_flags |= (PW_OVERHEAD | PW_DUNGEON);
     handle_stuff(player_ptr);
     return true;
@@ -495,7 +495,7 @@ bool restore_mana(PlayerType *player_ptr, bool magic_eater)
     player_ptr->csp = player_ptr->msp;
     player_ptr->csp_frac = 0;
     msg_print(_("頭がハッキリとした。", "You feel your head clear."));
-    player_ptr->redraw |= (PR_MANA);
+    player_ptr->redraw |= (PR_MP);
     player_ptr->window_flags |= (PW_PLAYER);
     player_ptr->window_flags |= (PW_SPELL);
     return true;
@@ -547,7 +547,7 @@ bool fishing(PlayerType *player_ptr)
     }
 
     set_action(player_ptr, ACTION_FISH);
-    player_ptr->redraw |= (PR_STATE);
+    player_ptr->redraw |= (PR_ACTION);
     return true;
 }
 
