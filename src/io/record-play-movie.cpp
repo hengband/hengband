@@ -18,6 +18,7 @@
 #include "util/angband-files.h"
 #include "view/display-messages.h"
 #include <algorithm>
+#include <sstream>
 
 #ifdef WINDOWS
 #include <windows.h>
