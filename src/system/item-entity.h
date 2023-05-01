@@ -22,6 +22,7 @@ enum class ItemKindType : short;
 enum class SmithEffectType : int16_t;
 enum class RandomArtActType : short;
 
+class ArtifactType;
 class EgoItemDefinition;
 class BaseitemInfo;
 class ItemEntity {
@@ -138,6 +139,7 @@ public:
 
     BaseitemInfo &get_baseitem() const;
     EgoItemDefinition &get_ego() const;
+    ArtifactType &get_fixed_artifact() const;
 
 private:
     int get_baseitem_price() const;

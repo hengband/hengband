@@ -225,7 +225,7 @@ static void invest_curse_to_fixed_artifact(const ArtifactType &artifact, ItemEnt
  */
 void apply_artifact(PlayerType *player_ptr, ItemEntity *o_ptr)
 {
-    const auto &artifact = ArtifactsInfo::get_instance().get_artifact(o_ptr->fixed_artifact_idx);
+    const auto &artifact = o_ptr->get_fixed_artifact();
     o_ptr->pval = artifact.pval;
     o_ptr->ac = artifact.ac;
     o_ptr->dd = artifact.dd;

@@ -133,7 +133,7 @@ void rd_item_old(ItemEntity *o_ptr)
                 o_ptr->curse_flags.set(CurseTraitType::PERMA_CURSE);
             }
             if (o_ptr->is_fixed_artifact()) {
-                const auto &artifact = ArtifactsInfo::get_instance().get_artifact(o_ptr->fixed_artifact_idx);
+                const auto &artifact = o_ptr->get_fixed_artifact();
                 if (artifact.gen_flags.has(ItemGenerationTraitType::HEAVY_CURSE)) {
                     o_ptr->curse_flags.set(CurseTraitType::HEAVY_CURSE);
                 }
@@ -340,7 +340,7 @@ void rd_item_old(ItemEntity *o_ptr)
     }
 
     if (o_ptr->is_fixed_artifact()) {
-        const auto &artifact = ArtifactsInfo::get_instance().get_artifact(o_ptr->fixed_artifact_idx);
+        const auto &artifact = o_ptr->get_fixed_artifact();
         if (artifact.name.empty()) {
             o_ptr->fixed_artifact_idx = FixedArtifactId::NONE;
         }

@@ -19,6 +19,7 @@
 #include "sv-definition/sv-lite-types.h"
 #include "sv-definition/sv-other-types.h"
 #include "sv-definition/sv-weapon-types.h"
+#include "system/artifact-type-definition.h"
 #include "system/baseitem-info.h"
 #include "system/monster-race-info.h"
 #include "term/term-color-types.h"
@@ -813,4 +814,9 @@ BaseitemInfo &ItemEntity::get_baseitem() const
 EgoItemDefinition &ItemEntity::get_ego() const
 {
     return egos_info.at(this->ego_idx);
+}
+
+ArtifactType &ItemEntity::get_fixed_artifact() const
+{
+    return ArtifactsInfo::get_instance().get_artifact(this->fixed_artifact_idx);
 }

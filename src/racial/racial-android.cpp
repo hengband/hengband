@@ -84,7 +84,7 @@ void calc_android_exp(PlayerType *player_ptr)
         q_ptr->curse_flags.clear();
 
         if (o_ptr->is_fixed_artifact()) {
-            const auto &artifact = ArtifactsInfo::get_instance().get_artifact(o_ptr->fixed_artifact_idx);
+            const auto &artifact = o_ptr->get_fixed_artifact();
             level = (level + std::max(artifact.level - 8, 5)) / 2;
             level += std::min(20, artifact.rarity / (artifact.gen_flags.has(ItemGenerationTraitType::INSTA_ART) ? 10 : 3));
         } else if (o_ptr->is_ego()) {
