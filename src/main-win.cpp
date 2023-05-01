@@ -1593,7 +1593,8 @@ static void process_menus(PlayerType *player_ptr, WORD wCmd)
             ofn.nFilterIndex = 1;
             ofn.Flags = OFN_FILEMUSTEXIST | OFN_NOCHANGEDIR | OFN_HIDEREADONLY;
 
-            if (get_open_filename(&ofn, ANGBAND_DIR_SAVE, savefile, MAIN_WIN_MAX_PATH)) {
+            const std::filesystem::path dir_save(ANGBAND_DIR_SAVE);
+            if (get_open_filename(&ofn, &dir_save, savefile, MAIN_WIN_MAX_PATH)) {
                 validate_file(savefile);
                 game_in_progress = true;
             }
@@ -1664,7 +1665,8 @@ static void process_menus(PlayerType *player_ptr, WORD wCmd)
             ofn.nFilterIndex = 1;
             ofn.Flags = OFN_FILEMUSTEXIST | OFN_NOCHANGEDIR;
 
-            if (get_open_filename(&ofn, ANGBAND_DIR_USER, savefile, MAIN_WIN_MAX_PATH)) {
+            const std::filesystem::path dir_user(ANGBAND_DIR_USER);
+            if (get_open_filename(&ofn, &dir_user, savefile, MAIN_WIN_MAX_PATH)) {
                 prepare_browse_movie_without_path_build(savefile);
                 movie_in_progress = true;
             }
