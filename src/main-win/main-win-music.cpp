@@ -28,7 +28,7 @@ bool use_pause_music_inactive = false;
 static int current_music_type = TERM_XTRA_MUSIC_MUTE;
 static int current_music_id = 0;
 // current filename being played
-static char current_music_path[MAIN_WIN_MAX_PATH];
+static std::filesystem::path current_music_path;
 
 /*
  * Directory name
@@ -168,7 +168,7 @@ errr stop_music(void)
     mciSendCommandW(mci_open_parms.wDeviceID, MCI_CLOSE, MCI_WAIT, 0);
     current_music_type = TERM_XTRA_MUSIC_MUTE;
     current_music_id = 0;
-    strcpy(current_music_path, "\0");
+    current_music_path = "";
     return 0;
 }
 
@@ -194,14 +194,14 @@ errr play_music(int type, int val)
     path_build(buf, MAIN_WIN_MAX_PATH, ANGBAND_DIR_XTRA_MUSIC, filename);
 
     if (current_music_type != TERM_XTRA_MUSIC_MUTE) {
-        if (0 == strcmp(current_music_path, buf)) {
+        if (current_music_path.string() == std::string(buf)) {
             return 0;
         }
     } // now playing same file
 
     current_music_type = type;
     current_music_id = val;
-    strcpy(current_music_path, buf);
+    current_music_path = buf;
 
     to_wchar path(buf);
     mci_open_parms.lpstrDeviceType = mci_device_type.data();
