@@ -135,6 +135,7 @@
 #include <direct.h>
 #include <locale>
 #include <string>
+#include <string_view>
 #include <vector>
 
 /*
@@ -420,15 +421,13 @@ static void save_prefs(void)
     WritePrivateProfileStringA("Angband", "BackGround", buf, ini_file);
     WritePrivateProfileStringA("Angband", "BackGroundBitmap", wallpaper_file[0] != '\0' ? wallpaper_file : DEFAULT_BG_FILENAME, ini_file);
 
-    int path_length = strlen(ANGBAND_DIR) - 4; /* \libの4文字分を削除 */
-    char tmp[1024] = "";
-    strncat(tmp, ANGBAND_DIR, path_length);
-
-    int n = strncmp(tmp, savefile, path_length);
-    if (n == 0) {
-        char relative_path[1024] = "";
-        snprintf(relative_path, sizeof(relative_path), ".\\%s", (savefile + path_length));
-        WritePrivateProfileStringA("Angband", "SaveFile", relative_path, ini_file);
+    std::string_view angband_dir_str(ANGBAND_DIR.string());
+    const auto path_length = angband_dir_str.length() - 4; // "\lib" を除く.
+    angband_dir_str = angband_dir_str.substr(0, path_length);
+    const std::string_view savefile_str(savefile);
+    if (angband_dir_str == savefile_str) {
+        const auto relative_path = format(".\\%s", (savefile + path_length));
+        WritePrivateProfileStringA("Angband", "SaveFile", relative_path.data(), ini_file);
     } else {
         WritePrivateProfileStringA("Angband", "SaveFile", savefile, ini_file);
     }
@@ -522,9 +521,11 @@ static void load_prefs(void)
 
     int n = strncmp(".\\", savefile, 2);
     if (n == 0) {
-        int path_length = strlen(ANGBAND_DIR) - 4; /* \libの4文字分を削除 */
+        std::string_view angband_dir_str(ANGBAND_DIR.string());
+        const auto path_length = angband_dir_str.length() - 4; // "\lib" を除く.
+        angband_dir_str = angband_dir_str.substr(0, path_length);
         char tmp[1024] = "";
-        strncat(tmp, ANGBAND_DIR, path_length);
+        strncat(tmp, angband_dir_str.data(), path_length);
         strncat(tmp, savefile + 2, strlen(savefile) - 2 + path_length);
         strncpy(savefile, tmp, strlen(tmp));
     }
@@ -1595,8 +1596,7 @@ static void process_menus(PlayerType *player_ptr, WORD wCmd)
             ofn.nFilterIndex = 1;
             ofn.Flags = OFN_FILEMUSTEXIST | OFN_NOCHANGEDIR | OFN_HIDEREADONLY;
 
-            const std::filesystem::path dir_save(ANGBAND_DIR_SAVE);
-            if (get_open_filename(&ofn, &dir_save, savefile, MAIN_WIN_MAX_PATH)) {
+            if (get_open_filename(&ofn, &ANGBAND_DIR_SAVE, savefile, MAIN_WIN_MAX_PATH)) {
                 validate_file(savefile);
                 game_in_progress = true;
             }
@@ -1667,8 +1667,7 @@ static void process_menus(PlayerType *player_ptr, WORD wCmd)
             ofn.nFilterIndex = 1;
             ofn.Flags = OFN_FILEMUSTEXIST | OFN_NOCHANGEDIR;
 
-            const std::filesystem::path dir_user(ANGBAND_DIR_USER);
-            if (get_open_filename(&ofn, &dir_user, savefile, MAIN_WIN_MAX_PATH)) {
+            if (get_open_filename(&ofn, &ANGBAND_DIR_USER, savefile, MAIN_WIN_MAX_PATH)) {
                 prepare_browse_movie_without_path_build(savefile);
                 movie_in_progress = true;
             }

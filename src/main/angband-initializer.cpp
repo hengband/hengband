@@ -49,56 +49,25 @@
  */
 void init_file_paths(char *libpath)
 {
-    char *libtail;
-    char buf[1024];
-
-    string_free(ANGBAND_DIR);
-    string_free(ANGBAND_DIR_APEX);
-    string_free(ANGBAND_DIR_BONE);
-    string_free(ANGBAND_DIR_DATA);
-    string_free(ANGBAND_DIR_EDIT);
-    string_free(ANGBAND_DIR_SCRIPT);
-    string_free(ANGBAND_DIR_FILE);
-    string_free(ANGBAND_DIR_HELP);
-    string_free(ANGBAND_DIR_INFO);
-    string_free(ANGBAND_DIR_SAVE);
-    string_free(ANGBAND_DIR_DEBUG_SAVE);
-    string_free(ANGBAND_DIR_USER);
-    string_free(ANGBAND_DIR_XTRA);
-
-    ANGBAND_DIR = string_make(libpath);
-    libtail = libpath + strlen(libpath);
-    strcpy(libtail, "apex");
-    ANGBAND_DIR_APEX = string_make(libpath);
-    strcpy(libtail, "bone");
-    ANGBAND_DIR_BONE = string_make(libpath);
-    strcpy(libtail, "data");
-    ANGBAND_DIR_DATA = string_make(libpath);
-    strcpy(libtail, "edit");
-    ANGBAND_DIR_EDIT = string_make(libpath);
-    strcpy(libtail, "script");
-    ANGBAND_DIR_SCRIPT = string_make(libpath);
-    strcpy(libtail, "file");
-    ANGBAND_DIR_FILE = string_make(libpath);
-    strcpy(libtail, "help");
-    ANGBAND_DIR_HELP = string_make(libpath);
-    strcpy(libtail, "info");
-    ANGBAND_DIR_INFO = string_make(libpath);
-    strcpy(libtail, "pref");
-    ANGBAND_DIR_PREF = string_make(libpath);
-    strcpy(libtail, "save");
-    ANGBAND_DIR_SAVE = string_make(libpath);
-    path_build(buf, sizeof(buf), ANGBAND_DIR_SAVE, "log");
-    ANGBAND_DIR_DEBUG_SAVE = string_make(buf);
+    std::filesystem::path path(libpath);
+    ANGBAND_DIR = path;
+    ANGBAND_DIR_APEX = std::filesystem::path(path).append("apex");
+    ANGBAND_DIR_BONE = std::filesystem::path(path).append("bone");
+    ANGBAND_DIR_DATA = std::filesystem::path(path).append("data");
+    ANGBAND_DIR_EDIT = std::filesystem::path(path).append("edit");
+    ANGBAND_DIR_SCRIPT = std::filesystem::path(path).append("script");
+    ANGBAND_DIR_FILE = std::filesystem::path(path).append("file");
+    ANGBAND_DIR_HELP = std::filesystem::path(path).append("help");
+    ANGBAND_DIR_INFO = std::filesystem::path(path).append("info");
+    ANGBAND_DIR_PREF = std::filesystem::path(path).append("pref");
+    ANGBAND_DIR_SAVE = std::filesystem::path(path).append("save");
+    ANGBAND_DIR_DEBUG_SAVE = std::filesystem::path(ANGBAND_DIR_SAVE).append("log");
 #ifdef PRIVATE_USER_PATH
-    path_build(buf, sizeof(buf), PRIVATE_USER_PATH, VARIANT_NAME);
-    ANGBAND_DIR_USER = string_make(buf);
+    ANGBAND_DIR_USER = std::filesystem::path(PRIVATE_USER_PATH).append(VARIANT_NAME);
 #else
-    strcpy(libtail, "user");
-    ANGBAND_DIR_USER = string_make(libpath);
+    ANGBAND_DIR_USER = std::filesystem::path(path).append("user");
 #endif
-    strcpy(libtail, "xtra");
-    ANGBAND_DIR_XTRA = string_make(libpath);
+    ANGBAND_DIR_XTRA = std::filesystem::path(path).append("xtra");
 
     time_t now = time(nullptr);
     struct tm *t = localtime(&now);
@@ -124,7 +93,8 @@ void init_file_paths(char *libpath)
     }
 #else
     {
-        DIR *saves_dir = opendir(ANGBAND_DIR_DEBUG_SAVE);
+        const auto &debug_save_str = ANGBAND_DIR_DEBUG_SAVE.string();
+        DIR *saves_dir = opendir(debug_save_str.data());
 
         if (saves_dir) {
             struct dirent *next_entry;

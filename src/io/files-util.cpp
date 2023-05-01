@@ -26,20 +26,20 @@
 #include "view/display-messages.h"
 #include <algorithm>
 
-concptr ANGBAND_DIR; //!< Path name: The main "lib" directory This variable is not actually used anywhere in the code
-concptr ANGBAND_DIR_APEX; //!< High score files (binary) These files may be portable between platforms
-concptr ANGBAND_DIR_BONE; //!< Bone files for player ghosts (ascii) These files are portable between platforms
-concptr ANGBAND_DIR_DATA; //!< Binary image files for the "*_info" arrays (binary) These files are not portable between platforms
-concptr ANGBAND_DIR_EDIT; //!< Textual template files for the "*_info" arrays (ascii) These files are portable between platforms
-concptr ANGBAND_DIR_SCRIPT; //!< Script files These files are portable between platforms.
-concptr ANGBAND_DIR_FILE; //!< Various extra files (ascii) These files may be portable between platforms
-concptr ANGBAND_DIR_HELP; //!< Help files (normal) for the online help (ascii) These files are portable between platforms
-concptr ANGBAND_DIR_INFO; //!< Help files (spoilers) for the online help (ascii) These files are portable between platforms
-concptr ANGBAND_DIR_PREF; //!< Default user "preference" files (ascii) These files are rarely portable between platforms
-concptr ANGBAND_DIR_SAVE; //!< Savefiles for current characters (binary)
-concptr ANGBAND_DIR_DEBUG_SAVE; //*< Savefiles for debug data
-concptr ANGBAND_DIR_USER; //!< User "preference" files (ascii) These files are rarely portable between platforms
-concptr ANGBAND_DIR_XTRA; //!< Various extra files (binary) These files are rarely portable between platforms
+std::filesystem::path ANGBAND_DIR; //!< Path name: The main "lib" directory This variable is not actually used anywhere in the code
+std::filesystem::path ANGBAND_DIR_APEX; //!< High score files (binary) These files may be portable between platforms
+std::filesystem::path ANGBAND_DIR_BONE; //!< Bone files for player ghosts (ascii) These files are portable between platforms
+std::filesystem::path ANGBAND_DIR_DATA; //!< Binary image files for the "*_info" arrays (binary) These files are not portable between platforms
+std::filesystem::path ANGBAND_DIR_EDIT; //!< Textual template files for the "*_info" arrays (ascii) These files are portable between platforms
+std::filesystem::path ANGBAND_DIR_SCRIPT; //!< Script files These files are portable between platforms.
+std::filesystem::path ANGBAND_DIR_FILE; //!< Various extra files (ascii) These files may be portable between platforms
+std::filesystem::path ANGBAND_DIR_HELP; //!< Help files (normal) for the online help (ascii) These files are portable between platforms
+std::filesystem::path ANGBAND_DIR_INFO; //!< Help files (spoilers) for the online help (ascii) These files are portable between platforms
+std::filesystem::path ANGBAND_DIR_PREF; //!< Default user "preference" files (ascii) These files are rarely portable between platforms
+std::filesystem::path ANGBAND_DIR_SAVE; //!< Savefiles for current characters (binary)
+std::filesystem::path ANGBAND_DIR_DEBUG_SAVE; //*< Savefiles for debug data
+std::filesystem::path ANGBAND_DIR_USER; //!< User "preference" files (ascii) These files are rarely portable between platforms
+std::filesystem::path ANGBAND_DIR_XTRA; //!< Various extra files (binary) These files are rarely portable between platforms
 
 /*
  * Buffer to hold the current savefile name
