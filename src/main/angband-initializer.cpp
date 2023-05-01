@@ -43,31 +43,29 @@
 #endif
 
 /*!
- * @brief 各データファイルを読み取るためのパスを取得する
- * Find the default paths to all of our important sub-directories.
- * @param path パス保管先の文字列
+ * @brief 各データファイルを読み取るためのパスを取得する.
+ * @param libpath 各PCのインストール環境における"lib/" を表す絶対パス
  */
-void init_file_paths(char *libpath)
+void init_file_paths(const std::filesystem::path &libpath)
 {
-    std::filesystem::path path(libpath);
-    ANGBAND_DIR = path;
-    ANGBAND_DIR_APEX = std::filesystem::path(path).append("apex");
-    ANGBAND_DIR_BONE = std::filesystem::path(path).append("bone");
-    ANGBAND_DIR_DATA = std::filesystem::path(path).append("data");
-    ANGBAND_DIR_EDIT = std::filesystem::path(path).append("edit");
-    ANGBAND_DIR_SCRIPT = std::filesystem::path(path).append("script");
-    ANGBAND_DIR_FILE = std::filesystem::path(path).append("file");
-    ANGBAND_DIR_HELP = std::filesystem::path(path).append("help");
-    ANGBAND_DIR_INFO = std::filesystem::path(path).append("info");
-    ANGBAND_DIR_PREF = std::filesystem::path(path).append("pref");
-    ANGBAND_DIR_SAVE = std::filesystem::path(path).append("save");
+    ANGBAND_DIR = std::filesystem::path(libpath);
+    ANGBAND_DIR_APEX = std::filesystem::path(libpath).append("apex");
+    ANGBAND_DIR_BONE = std::filesystem::path(libpath).append("bone");
+    ANGBAND_DIR_DATA = std::filesystem::path(libpath).append("data");
+    ANGBAND_DIR_EDIT = std::filesystem::path(libpath).append("edit");
+    ANGBAND_DIR_SCRIPT = std::filesystem::path(libpath).append("script");
+    ANGBAND_DIR_FILE = std::filesystem::path(libpath).append("file");
+    ANGBAND_DIR_HELP = std::filesystem::path(libpath).append("help");
+    ANGBAND_DIR_INFO = std::filesystem::path(libpath).append("info");
+    ANGBAND_DIR_PREF = std::filesystem::path(libpath).append("pref");
+    ANGBAND_DIR_SAVE = std::filesystem::path(libpath).append("save");
     ANGBAND_DIR_DEBUG_SAVE = std::filesystem::path(ANGBAND_DIR_SAVE).append("log");
 #ifdef PRIVATE_USER_PATH
     ANGBAND_DIR_USER = std::filesystem::path(PRIVATE_USER_PATH).append(VARIANT_NAME);
 #else
-    ANGBAND_DIR_USER = std::filesystem::path(path).append("user");
+    ANGBAND_DIR_USER = std::filesystem::path(libpath).append("user");
 #endif
-    ANGBAND_DIR_XTRA = std::filesystem::path(path).append("xtra");
+    ANGBAND_DIR_XTRA = std::filesystem::path(libpath).append("xtra");
 
     time_t now = time(nullptr);
     struct tm *t = localtime(&now);
