@@ -32,13 +32,11 @@ OBJECT_IDX o_pop(FloorType *floor_ptr)
     }
 
     for (OBJECT_IDX i = 1; i < floor_ptr->o_max; i++) {
-        ItemEntity *o_ptr;
-        o_ptr = &floor_ptr->o_list[i];
-        if (o_ptr->bi_id) {
+        if (floor_ptr->o_list[i].is_valid()) {
             continue;
         }
-        floor_ptr->o_cnt++;
 
+        floor_ptr->o_cnt++;
         return i;
     }
 
@@ -88,7 +86,7 @@ OBJECT_IDX get_obj_index(PlayerType *player_ptr, DEPTH level, BIT_FLAGS mode)
             break;
         }
 
-        const auto &baseitem = baseitems_info[entry.index];
+        const auto &baseitem = entry.get_baseitem();
         if ((mode & AM_FORBID_CHEST) && (baseitem.bi_key.tval() == ItemKindType::CHEST)) {
             continue;
         }

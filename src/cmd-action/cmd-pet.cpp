@@ -161,7 +161,7 @@ void do_cmd_pet_dismiss(PlayerType *player_ptr)
 
                 player_ptr->riding = 0;
 
-                player_ptr->update |= (PU_MONSTERS);
+                player_ptr->update |= (PU_MONSTER_STATUSES);
                 player_ptr->redraw |= (PR_EXTRA | PR_UHEALTH);
             }
 

@@ -255,14 +255,13 @@ void finalize_sound(void)
  */
 errr play_sound(int val, int volume)
 {
-    concptr filename = sound_cfg_data->get_rand(TERM_XTRA_SOUND, val);
+    auto filename = sound_cfg_data->get_rand(TERM_XTRA_SOUND, val);
     if (!filename) {
         return 1;
     }
 
     char buf[MAIN_WIN_MAX_PATH];
     path_build(buf, MAIN_WIN_MAX_PATH, ANGBAND_DIR_XTRA_SOUND, filename);
-
     if (play_sound_impl(buf, volume)) {
         return 0;
     }

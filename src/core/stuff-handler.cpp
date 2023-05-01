@@ -28,7 +28,7 @@ void handle_stuff(PlayerType *player_ptr)
 void monster_race_track(PlayerType *player_ptr, MonsterRaceId r_idx)
 {
     player_ptr->monster_race_idx = r_idx;
-    player_ptr->window_flags |= (PW_MONSTER);
+    player_ptr->window_flags |= (PW_MONSTER_LORE);
 }
 
 /*
@@ -37,7 +37,7 @@ void monster_race_track(PlayerType *player_ptr, MonsterRaceId r_idx)
 void object_kind_track(PlayerType *player_ptr, short bi_id)
 {
     player_ptr->tracking_bi_id = bi_id;
-    player_ptr->window_flags |= (PW_OBJECT);
+    player_ptr->window_flags |= (PW_ITEM_KNOWLEDGTE);
 }
 
 /*
@@ -58,8 +58,8 @@ void health_track(PlayerType *player_ptr, MONSTER_IDX m_idx)
 
 bool update_player(PlayerType *player_ptr)
 {
-    player_ptr->update |= PU_COMBINE | PU_REORDER;
-    player_ptr->window_flags |= PW_INVEN;
+    player_ptr->update |= PU_COMBINATION | PU_REORDER;
+    player_ptr->window_flags |= PW_INVENTORY;
     return true;
 }
 
@@ -69,8 +69,8 @@ bool redraw_player(PlayerType *player_ptr)
         player_ptr->csp = player_ptr->msp;
     }
 
-    player_ptr->redraw |= PR_MANA;
-    player_ptr->update |= PU_COMBINE | PU_REORDER;
-    player_ptr->window_flags |= PW_INVEN;
+    player_ptr->redraw |= PR_MP;
+    player_ptr->update |= PU_COMBINATION | PU_REORDER;
+    player_ptr->window_flags |= PW_INVENTORY;
     return true;
 }

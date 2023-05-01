@@ -1,4 +1,5 @@
 ﻿#pragma once
+
 /*!
  * @file angband.h
  * @brief Angband(変愚蛮怒)メインヘッダファイル
@@ -11,14 +12,6 @@
  * not for profit purposes provided that this copyright and statement are
  * included in all such copies.
  * This file has been modified for use with "Angband 2.8.2"
- */
-
-#ifndef INCLUDED_ANGBAND_H
-#define INCLUDED_ANGBAND_H
-
-/*
- * First, include the low-level includes.  Be sure to edit "h-config.h"
- * to reflect any hardware, operating system, or compiler nuances.
  */
 
 /*
@@ -131,5 +124,3 @@
  * @dir inventory 所持品に関する処理(フロアからの取得/呪いの品/攻撃による損壊/所持状態の記述/所持数表記/アイテムスロット/ザック溢れ/選択処理/自然充填)
  * @dir store 店舗処理
  */
-
-#endif

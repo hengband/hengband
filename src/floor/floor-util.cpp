@@ -133,7 +133,7 @@ void wipe_o_list(FloorType *floor_ptr)
 
         if (!w_ptr->character_dungeon || preserve_mode) {
             if (o_ptr->is_fixed_artifact() && !o_ptr->is_known()) {
-                artifacts_info.at(o_ptr->fixed_artifact_idx).is_generated = false;
+                ArtifactsInfo::get_instance().get_artifact(o_ptr->fixed_artifact_idx).is_generated = false;
             }
         }
 
@@ -197,7 +197,7 @@ concptr map_name(PlayerType *player_ptr)
     auto *floor_ptr = player_ptr->current_floor_ptr;
     const auto &quest_list = QuestList::get_instance();
     auto is_fixed_quest = inside_quest(floor_ptr->quest_number);
-    is_fixed_quest &= quest_type::is_fixed(floor_ptr->quest_number);
+    is_fixed_quest &= QuestType::is_fixed(floor_ptr->quest_number);
     is_fixed_quest &= any_bits(quest_list[floor_ptr->quest_number].flags, QUEST_FLAG_PRESET);
     if (is_fixed_quest) {
         return _("クエスト", "Quest");
@@ -208,7 +208,7 @@ concptr map_name(PlayerType *player_ptr)
     } else if (player_ptr->phase_out) {
         return _("闘技場", "Monster Arena");
     } else if (!floor_ptr->dun_level && player_ptr->town_num) {
-        return town_info[player_ptr->town_num].name;
+        return towns_info[player_ptr->town_num].name;
     } else {
         return dungeons_info[player_ptr->dungeon_idx].name.data();
     }

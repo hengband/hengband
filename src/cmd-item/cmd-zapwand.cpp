@@ -59,7 +59,7 @@ bool wand_effect(PlayerType *player_ptr, OBJECT_SUBTYPE_VALUE sval, DIRECTION di
 
     /* XXX Hack -- Wand of wonder can do anything before it */
     if (sval == SV_WAND_WONDER) {
-        int vir = virtue_number(player_ptr, V_CHANCE);
+        int vir = virtue_number(player_ptr, Virtue::CHANCE);
         sval = (OBJECT_SUBTYPE_VALUE)randint0(SV_WAND_WONDER);
 
         if (vir) {
@@ -80,7 +80,7 @@ bool wand_effect(PlayerType *player_ptr, OBJECT_SUBTYPE_VALUE sval, DIRECTION di
             }
         }
         if (sval < SV_WAND_TELEPORT_AWAY) {
-            chg_virtue(player_ptr, V_CHANCE, 1);
+            chg_virtue(player_ptr, Virtue::CHANCE, 1);
         }
     }
 

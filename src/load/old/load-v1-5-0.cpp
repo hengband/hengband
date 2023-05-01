@@ -133,19 +133,19 @@ void rd_item_old(ItemEntity *o_ptr)
                 o_ptr->curse_flags.set(CurseTraitType::PERMA_CURSE);
             }
             if (o_ptr->is_fixed_artifact()) {
-                const auto &a_ref = artifacts_info.at(o_ptr->fixed_artifact_idx);
-                if (a_ref.gen_flags.has(ItemGenerationTraitType::HEAVY_CURSE)) {
+                const auto &artifact = ArtifactsInfo::get_instance().get_artifact(o_ptr->fixed_artifact_idx);
+                if (artifact.gen_flags.has(ItemGenerationTraitType::HEAVY_CURSE)) {
                     o_ptr->curse_flags.set(CurseTraitType::HEAVY_CURSE);
                 }
-                if (a_ref.gen_flags.has(ItemGenerationTraitType::PERMA_CURSE)) {
+                if (artifact.gen_flags.has(ItemGenerationTraitType::PERMA_CURSE)) {
                     o_ptr->curse_flags.set(CurseTraitType::PERMA_CURSE);
                 }
             } else if (o_ptr->is_ego()) {
-                const auto &e_ref = egos_info[o_ptr->ego_idx];
-                if (e_ref.gen_flags.has(ItemGenerationTraitType::HEAVY_CURSE)) {
+                const auto &ego = o_ptr->get_ego();
+                if (ego.gen_flags.has(ItemGenerationTraitType::HEAVY_CURSE)) {
                     o_ptr->curse_flags.set(CurseTraitType::HEAVY_CURSE);
                 }
-                if (e_ref.gen_flags.has(ItemGenerationTraitType::PERMA_CURSE)) {
+                if (ego.gen_flags.has(ItemGenerationTraitType::PERMA_CURSE)) {
                     o_ptr->curse_flags.set(CurseTraitType::PERMA_CURSE);
                 }
             }
@@ -340,15 +340,15 @@ void rd_item_old(ItemEntity *o_ptr)
     }
 
     if (o_ptr->is_fixed_artifact()) {
-        const auto &a_ref = artifacts_info.at(o_ptr->fixed_artifact_idx);
-        if (a_ref.name.empty()) {
+        const auto &artifact = ArtifactsInfo::get_instance().get_artifact(o_ptr->fixed_artifact_idx);
+        if (artifact.name.empty()) {
             o_ptr->fixed_artifact_idx = FixedArtifactId::NONE;
         }
     }
 
     if (o_ptr->is_ego()) {
-        const auto &e_ref = egos_info[o_ptr->ego_idx];
-        if (e_ref.name.empty()) {
+        const auto &ego = o_ptr->get_ego();
+        if (ego.name.empty()) {
             o_ptr->ego_idx = EgoType::NONE;
         }
     }

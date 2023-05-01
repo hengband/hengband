@@ -86,7 +86,7 @@ static bool determine_spcial_item_type(ItemEntity *o_ptr, ItemKindType tval)
  */
 static bool check_item_knowledge(ItemEntity *o_ptr, ItemKindType tval)
 {
-    if (o_ptr->bi_id == 0) {
+    if (!o_ptr->is_valid()) {
         return false;
     }
     if (o_ptr->bi_key.tval() != tval) {
@@ -152,8 +152,7 @@ static void display_identified_resistances_flag(ItemEntity *o_ptr, FILE *fff)
  */
 static void do_cmd_knowledge_inventory_aux(PlayerType *player_ptr, FILE *fff, ItemEntity *o_ptr, char *where)
 {
-    char tmp_item_name[MAX_NLEN];
-    describe_flavor(player_ptr, tmp_item_name, o_ptr, OD_NAME_ONLY);
+    auto tmp_item_name = describe_flavor(player_ptr, o_ptr, OD_NAME_ONLY);
     constexpr auto max_item_length = 26;
     auto item_name = str_substr(tmp_item_name, 0, max_item_length);
     std::stringstream ss;
@@ -260,7 +259,7 @@ static void show_holding_equipment_resistances(PlayerType *player_ptr, ItemKindT
 static void show_home_equipment_resistances(PlayerType *player_ptr, ItemKindType tval, int *label_number, FILE *fff)
 {
     store_type *store_ptr;
-    store_ptr = &town_info[1].store[enum2i(StoreSaleType::HOME)];
+    store_ptr = &towns_info[1].store[enum2i(StoreSaleType::HOME)];
     char where[32];
     strcpy(where, _("家", "H "));
     for (int i = 0; i < store_ptr->stock_num; i++) {

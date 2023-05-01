@@ -71,17 +71,17 @@ std::string get_ability_abbreviation(const ItemEntity &item, bool is_kanji, bool
 {
     auto flags = object_flags(&item);
     if (!all) {
-        const auto &baseitem = baseitems_info[item.bi_id];
+        const auto &baseitem = item.get_baseitem();
         flags.reset(baseitem.flags);
 
         if (item.is_fixed_artifact()) {
-            const auto &a_ref = artifacts_info.at(item.fixed_artifact_idx);
-            flags.reset(a_ref.flags);
+            const auto &artifact = ArtifactsInfo::get_instance().get_artifact(item.fixed_artifact_idx);
+            flags.reset(artifact.flags);
         }
 
         if (item.is_ego()) {
-            auto *e_ptr = &egos_info[item.ego_idx];
-            flags.reset(e_ptr->flags);
+            const auto &ego = item.get_ego();
+            flags.reset(ego.flags);
         }
     }
 

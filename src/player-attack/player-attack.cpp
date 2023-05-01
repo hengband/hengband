@@ -150,7 +150,7 @@ static void get_attack_exp(PlayerType *player_ptr, player_attack_type *pa_ptr)
 {
     auto *r_ptr = &monraces_info[pa_ptr->m_ptr->r_idx];
     auto *o_ptr = &player_ptr->inventory_list[enum2i(INVEN_MAIN_HAND) + pa_ptr->hand];
-    if (o_ptr->bi_id == 0) {
+    if (!o_ptr->is_valid()) {
         get_bare_knuckle_exp(player_ptr, pa_ptr);
         return;
     }
@@ -200,7 +200,7 @@ static chaotic_effect select_chaotic_effect(PlayerType *player_ptr, player_attac
     }
 
     if (one_in_(10)) {
-        chg_virtue(player_ptr, V_CHANCE, 1);
+        chg_virtue(player_ptr, Virtue::CHANCE, 1);
     }
 
     if (randint1(5) < 3) {
@@ -231,7 +231,7 @@ static MagicalBrandEffectType select_magical_brand_effect(PlayerType *player_ptr
     }
 
     if (one_in_(10)) {
-        chg_virtue(player_ptr, V_CHANCE, 1);
+        chg_virtue(player_ptr, Virtue::CHANCE, 1);
     }
 
     if (one_in_(5)) {
@@ -374,7 +374,7 @@ static void calc_attack_damage(PlayerType *player_ptr, player_attack_type *pa_pt
         return;
     }
 
-    if (o_ptr->bi_id) {
+    if (o_ptr->is_valid()) {
         process_weapon_attack(player_ptr, pa_ptr, do_quake, vorpal_cut, vorpal_chance);
     }
 }
@@ -601,7 +601,7 @@ void exe_player_attack_to_monster(PlayerType *player_ptr, POSITION y, POSITION x
     }
 
     if ((pa_ptr->drain_left != MAX_VAMPIRIC_DRAIN) && one_in_(4)) {
-        chg_virtue(player_ptr, V_UNLIFE, 1);
+        chg_virtue(player_ptr, Virtue::UNLIFE, 1);
     }
 
     cause_earthquake(player_ptr, pa_ptr, do_quake, y, x);

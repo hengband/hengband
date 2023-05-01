@@ -370,10 +370,10 @@ static void effect_makes_change_virtues(PlayerType *player_ptr, effect_monster_t
     }
 
     if (em_ptr->r_ptr->kind_flags.has_not(MonsterKindType::EVIL) || one_in_(5)) {
-        chg_virtue(player_ptr, V_COMPASSION, -1);
+        chg_virtue(player_ptr, Virtue::COMPASSION, -1);
     }
     if (em_ptr->r_ptr->kind_flags.has_not(MonsterKindType::EVIL) || one_in_(5)) {
-        chg_virtue(player_ptr, V_HONOUR, -1);
+        chg_virtue(player_ptr, Virtue::HONOUR, -1);
     }
 }
 
@@ -540,7 +540,7 @@ static void effect_damage_makes_teleport(PlayerType *player_ptr, effect_monster_
     em_ptr->note = _("が消え去った！", " disappears!");
 
     if (!em_ptr->who) {
-        chg_virtue(player_ptr, V_VALOUR, -1);
+        chg_virtue(player_ptr, Virtue::VALOUR, -1);
     }
 
     teleport_flags tflag = i2enum<teleport_flags>((!em_ptr->who ? TELEPORT_DEC_VALOUR : TELEPORT_SPONTANEOUS) | TELEPORT_PASSIVE);
@@ -749,7 +749,7 @@ bool affect_monster(
 
     lite_spot(player_ptr, em_ptr->y, em_ptr->x);
     if ((player_ptr->monster_race_idx == em_ptr->m_ptr->r_idx) && (em_ptr->seen || !monster_is_valid)) {
-        player_ptr->window_flags |= (PW_MONSTER);
+        player_ptr->window_flags |= (PW_MONSTER_LORE);
     }
 
     exe_affect_monster_postprocess(player_ptr, em_ptr);

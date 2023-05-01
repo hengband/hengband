@@ -244,7 +244,7 @@ void cave_set_feat(PlayerType *player_ptr, POSITION y, POSITION x, FEAT_IDX feat
     note_spot(player_ptr, y, x);
     lite_spot(player_ptr, y, x);
     if (old_los ^ f_ptr->flags.has(TerrainCharacteristics::LOS)) {
-        player_ptr->update |= PU_VIEW | PU_LITE | PU_MON_LITE | PU_MONSTERS;
+        player_ptr->update |= PU_VIEW | PU_LITE | PU_MONSTER_LITE | PU_MONSTER_STATUSES;
     }
 
     if (f_ptr->flags.has_not(TerrainCharacteristics::GLOW) || dungeons_info[player_ptr->dungeon_idx].flags.has(DungeonFeatureType::DARKNESS)) {

@@ -51,11 +51,8 @@ void do_cmd_knowledge_artifacts(PlayerType *player_ptr)
 
     std::set<FixedArtifactId> known_list;
 
-    for (const auto &[a_idx, a_ref] : artifacts_info) {
-        if (a_ref.name.empty()) {
-            continue;
-        }
-        if (!a_ref.is_generated) {
+    for (const auto &[a_idx, artifact] : artifacts_info) {
+        if (artifact.name.empty() || !artifact.is_generated) {
             continue;
         }
 
@@ -66,12 +63,8 @@ void do_cmd_knowledge_artifacts(PlayerType *player_ptr)
         for (POSITION x = 0; x < player_ptr->current_floor_ptr->width; x++) {
             auto *g_ptr = &player_ptr->current_floor_ptr->grid_array[y][x];
             for (const auto this_o_idx : g_ptr->o_idx_list) {
-                ItemEntity *o_ptr;
-                o_ptr = &player_ptr->current_floor_ptr->o_list[this_o_idx];
-                if (!o_ptr->is_fixed_artifact()) {
-                    continue;
-                }
-                if (o_ptr->is_known()) {
+                const auto *o_ptr = &player_ptr->current_floor_ptr->o_list[this_o_idx];
+                if (!o_ptr->is_fixed_artifact() || o_ptr->is_known()) {
                     continue;
                 }
 
@@ -82,7 +75,7 @@ void do_cmd_knowledge_artifacts(PlayerType *player_ptr)
 
     for (auto i = 0; i < INVEN_TOTAL; i++) {
         auto *o_ptr = &player_ptr->inventory_list[i];
-        if (!o_ptr->bi_id) {
+        if (!o_ptr->is_valid()) {
             continue;
         }
         if (!o_ptr->is_fixed_artifact()) {
@@ -100,13 +93,12 @@ void do_cmd_knowledge_artifacts(PlayerType *player_ptr)
     uint16_t why = 3;
     ang_sort(player_ptr, whats.data(), &why, whats.size(), ang_sort_art_comp, ang_sort_art_swap);
     for (auto a_idx : whats) {
-        const auto &a_ref = artifacts_info.at(a_idx);
-        GAME_TEXT base_name[MAX_NLEN];
-        strcpy(base_name, _("未知の伝説のアイテム", "Unknown Artifact"));
-        const auto bi_id = lookup_baseitem_id(a_ref.bi_key);
+        const auto &artifact = ArtifactsInfo::get_instance().get_artifact(a_idx);
+        constexpr auto unknown_art = _("未知の伝説のアイテム", "Unknown Artifact");
+        const auto bi_id = lookup_baseitem_id(artifact.bi_key);
         constexpr auto template_basename = _("     %s\n", "     The %s\n");
         if (bi_id == 0) {
-            fprintf(fff, template_basename, base_name);
+            fprintf(fff, template_basename, unknown_art);
             continue;
         }
 
@@ -114,8 +106,8 @@ void do_cmd_knowledge_artifacts(PlayerType *player_ptr)
         item.prep(bi_id);
         item.fixed_artifact_idx = a_idx;
         item.ident |= IDENT_STORE;
-        describe_flavor(player_ptr, base_name, &item, (OD_OMIT_PREFIX | OD_NAME_ONLY));
-        fprintf(fff, template_basename, base_name);
+        const auto item_name = describe_flavor(player_ptr, &item, (OD_OMIT_PREFIX | OD_NAME_ONLY));
+        fprintf(fff, template_basename, item_name.data());
     }
 
     angband_fclose(fff);

@@ -9,6 +9,7 @@
 #include "term/gameterm.h"
 #include "term/screen-processor.h"
 #include "term/z-form.h"
+#include "util/enum-converter.h"
 #include "util/string-processor.h"
 #include <string>
 
@@ -40,8 +41,8 @@ void display_virtue(PlayerType *player_ptr, self_info_type *self_ptr)
     angband_strcpy(self_ptr->buf[1], self_ptr->plev_buf, sizeof(self_ptr->buf[1]));
     self_ptr->info[self_ptr->line++] = self_ptr->buf[1];
     for (int v_nr = 0; v_nr < 8; v_nr++) {
-        concptr vir_name = virtue[(player_ptr->vir_types[v_nr]) - 1];
-        std::string vir_desc = format(_("おっと。%sの情報なし。", "Oops. No info about %s."), vir_name);
+        const auto vir_name = virtue_names.at(player_ptr->vir_types[v_nr]).data();
+        std::string vir_desc;
         int tester = player_ptr->virtues[v_nr];
         if (tester < -100) {
             vir_desc = format(_("[%s]の対極 (%d)", "You are the polar opposite of %s (%d)."), vir_name, tester);

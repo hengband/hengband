@@ -52,16 +52,15 @@ bool object_is_quest_target(QuestId quest_idx, const ItemEntity *o_ptr)
         return false;
     }
 
-    const auto &quest_list = QuestList::get_instance();
-    auto a_idx = quest_list[quest_idx].reward_artifact_idx;
-    if (a_idx == FixedArtifactId::NONE) {
+    const auto &quest = QuestList::get_instance()[quest_idx];
+    if (quest.has_reward()) {
         return false;
     }
 
-    const auto &a_ref = artifacts_info.at(a_idx);
-    if (a_ref.gen_flags.has(ItemGenerationTraitType::INSTA_ART)) {
+    const auto &artifact = quest.get_reward();
+    if (artifact.gen_flags.has(ItemGenerationTraitType::INSTA_ART)) {
         return false;
     }
 
-    return o_ptr->bi_key == a_ref.bi_key;
+    return o_ptr->bi_key == artifact.bi_key;
 }

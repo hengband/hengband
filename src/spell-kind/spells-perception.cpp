@@ -25,6 +25,7 @@
 #include "system/item-entity.h"
 #include "system/player-type-definition.h"
 #include "util/bit-flags-calculator.h"
+#include "util/string-processor.h"
 #include "view/display-messages.h"
 #include "world/world.h"
 #include <memory>
@@ -39,7 +40,7 @@ void identify_pack(PlayerType *player_ptr)
 {
     for (INVENTORY_IDX i = 0; i < INVEN_TOTAL; i++) {
         auto *o_ptr = &player_ptr->inventory_list[i];
-        if (!o_ptr->bi_id) {
+        if (!o_ptr->is_valid()) {
             continue;
         }
 
@@ -57,17 +58,11 @@ void identify_pack(PlayerType *player_ptr)
  */
 bool identify_item(PlayerType *player_ptr, ItemEntity *o_ptr)
 {
-    GAME_TEXT o_name[MAX_NLEN];
-    describe_flavor(player_ptr, o_name, o_ptr, 0);
-
-    bool old_known = false;
-    if (any_bits(o_ptr->ident, IDENT_KNOWN)) {
-        old_known = true;
-    }
-
+    const auto known_item_name = describe_flavor(player_ptr, o_ptr, 0);
+    const auto old_known = any_bits(o_ptr->ident, IDENT_KNOWN);
     if (!o_ptr->is_fully_known()) {
         if (o_ptr->is_fixed_or_random_artifact() || one_in_(5)) {
-            chg_virtue(player_ptr, V_KNOWLEDGE, 1);
+            chg_virtue(player_ptr, Virtue::KNOWLEDGE, 1);
         }
     }
 
@@ -75,19 +70,19 @@ bool identify_item(PlayerType *player_ptr, ItemEntity *o_ptr)
     object_known(o_ptr);
     o_ptr->marked.set(OmType::TOUCHED);
 
-    set_bits(player_ptr->update, PU_BONUS | PU_COMBINE | PU_REORDER);
-    set_bits(player_ptr->window_flags, PW_INVEN | PW_EQUIP | PW_PLAYER | PW_FLOOR_ITEM_LIST | PW_FOUND_ITEM_LIST);
+    set_bits(player_ptr->update, PU_BONUS | PU_COMBINATION | PU_REORDER);
+    set_bits(player_ptr->window_flags, PW_INVENTORY | PW_EQUIPMENT | PW_PLAYER | PW_FLOOR_ITEMS | PW_FOUND_ITEMS);
 
-    strcpy(record_o_name, o_name);
+    angband_strcpy(record_o_name, known_item_name.data(), MAX_NLEN);
     record_turn = w_ptr->game_turn;
 
-    describe_flavor(player_ptr, o_name, o_ptr, OD_NAME_ONLY);
-
+    const auto item_name = describe_flavor(player_ptr, o_ptr, OD_NAME_ONLY);
     if (record_fix_art && !old_known && o_ptr->is_fixed_artifact()) {
-        exe_write_diary(player_ptr, DIARY_ART, 0, o_name);
+        exe_write_diary(player_ptr, DIARY_ART, 0, item_name.data());
     }
+
     if (record_rand_art && !old_known && o_ptr->is_random_artifact()) {
-        exe_write_diary(player_ptr, DIARY_ART, 0, o_name);
+        exe_write_diary(player_ptr, DIARY_ART, 0, item_name.data());
     }
 
     return old_known;
@@ -129,14 +124,13 @@ bool ident_spell(PlayerType *player_ptr, bool only_equip)
 
     bool old_known = identify_item(player_ptr, o_ptr);
 
-    GAME_TEXT o_name[MAX_NLEN];
-    describe_flavor(player_ptr, o_name, o_ptr, 0);
+    const auto item_name = describe_flavor(player_ptr, o_ptr, 0);
     if (item >= INVEN_MAIN_HAND) {
-        msg_format(_("%s^: %s(%c)。", "%s^: %s (%c)."), describe_use(player_ptr, item), o_name, index_to_label(item));
+        msg_format(_("%s^: %s(%c)。", "%s^: %s (%c)."), describe_use(player_ptr, item), item_name.data(), index_to_label(item));
     } else if (item >= 0) {
-        msg_format(_("ザック中: %s(%c)。", "In your pack: %s (%c)."), o_name, index_to_label(item));
+        msg_format(_("ザック中: %s(%c)。", "In your pack: %s (%c)."), item_name.data(), index_to_label(item));
     } else {
-        msg_format(_("床上: %s。", "On the ground: %s."), o_name);
+        msg_format(_("床上: %s。", "On the ground: %s."), item_name.data());
     }
 
     autopick_alter_item(player_ptr, item, (bool)(destroy_identify && !old_known));
@@ -183,18 +177,17 @@ bool identify_fully(PlayerType *player_ptr, bool only_equip)
     o_ptr->ident |= (IDENT_FULL_KNOWN);
 
     /* Refrect item informaiton onto subwindows without updating inventory */
-    player_ptr->update &= ~(PU_COMBINE | PU_REORDER);
+    player_ptr->update &= ~(PU_COMBINATION | PU_REORDER);
     handle_stuff(player_ptr);
-    player_ptr->update |= (PU_COMBINE | PU_REORDER);
+    player_ptr->update |= (PU_COMBINATION | PU_REORDER);
 
-    GAME_TEXT o_name[MAX_NLEN];
-    describe_flavor(player_ptr, o_name, o_ptr, 0);
+    const auto item_name = describe_flavor(player_ptr, o_ptr, 0);
     if (item >= INVEN_MAIN_HAND) {
-        msg_format(_("%s^: %s(%c)。", "%s^: %s (%c)."), describe_use(player_ptr, item), o_name, index_to_label(item));
+        msg_format(_("%s^: %s(%c)。", "%s^: %s (%c)."), describe_use(player_ptr, item), item_name.data(), index_to_label(item));
     } else if (item >= 0) {
-        msg_format(_("ザック中: %s(%c)。", "In your pack: %s (%c)."), o_name, index_to_label(item));
+        msg_format(_("ザック中: %s(%c)。", "In your pack: %s (%c)."), item_name.data(), index_to_label(item));
     } else {
-        msg_format(_("床上: %s。", "On the ground: %s."), o_name);
+        msg_format(_("床上: %s。", "On the ground: %s."), item_name.data());
     }
 
     (void)screen_object(player_ptr, o_ptr, 0L);

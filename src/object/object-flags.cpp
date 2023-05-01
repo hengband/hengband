@@ -52,15 +52,15 @@ static void modify_ego_lite_flags(const ItemEntity *o_ptr, TrFlags &flags)
  */
 TrFlags object_flags(const ItemEntity *o_ptr)
 {
-    const auto &baseitem = baseitems_info[o_ptr->bi_id];
+    const auto &baseitem = o_ptr->get_baseitem();
     auto flags = baseitem.flags;
 
     if (o_ptr->is_fixed_artifact()) {
-        flags = artifacts_info.at(o_ptr->fixed_artifact_idx).flags;
+        flags = ArtifactsInfo::get_instance().get_artifact(o_ptr->fixed_artifact_idx).flags;
     }
 
     if (o_ptr->is_ego()) {
-        const auto &ego = egos_info[o_ptr->ego_idx];
+        const auto &ego = o_ptr->get_ego();
         flags.set(ego.flags);
         modify_ego_lite_flags(o_ptr, flags);
     }
@@ -91,21 +91,21 @@ TrFlags object_flags_known(const ItemEntity *o_ptr)
         return flags;
     }
 
-    const auto &baseitem = baseitems_info[o_ptr->bi_id];
+    const auto &baseitem = o_ptr->get_baseitem();
     flags = baseitem.flags;
     if (!o_ptr->is_known()) {
         return flags;
     }
 
     if (o_ptr->is_ego()) {
-        const auto &ego = egos_info[o_ptr->ego_idx];
+        const auto &ego = o_ptr->get_ego();
         flags.set(ego.flags);
         modify_ego_lite_flags(o_ptr, flags);
     }
 
     if (o_ptr->is_fully_known()) {
         if (o_ptr->is_fixed_artifact()) {
-            flags = artifacts_info.at(o_ptr->fixed_artifact_idx).flags;
+            flags = ArtifactsInfo::get_instance().get_artifact(o_ptr->fixed_artifact_idx).flags;
         }
 
         flags.set(o_ptr->art_flags);

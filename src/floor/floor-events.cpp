@@ -62,7 +62,7 @@ void day_break(PlayerType *player_ptr)
         }
     }
 
-    player_ptr->update |= PU_MONSTERS | PU_MON_LITE;
+    player_ptr->update |= PU_MONSTER_STATUSES | PU_MONSTER_LITE;
     player_ptr->redraw |= PR_MAP;
     player_ptr->window_flags |= PW_OVERHEAD | PW_DUNGEON;
     if ((floor_ptr->grid_array[player_ptr->y][player_ptr->x].info & CAVE_GLOW) != 0) {
@@ -94,7 +94,7 @@ void night_falls(PlayerType *player_ptr)
         }
     }
 
-    player_ptr->update |= PU_MONSTERS | PU_MON_LITE;
+    player_ptr->update |= PU_MONSTER_STATUSES | PU_MONSTER_LITE;
     player_ptr->redraw |= PR_MAP;
     player_ptr->window_flags |= PW_OVERHEAD | PW_DUNGEON;
 
@@ -161,8 +161,8 @@ static byte get_dungeon_feeling(PlayerType *player_ptr)
         }
 
         if (o_ptr->is_ego()) {
-            auto *e_ptr = &egos_info[o_ptr->ego_idx];
-            delta += e_ptr->rating * base;
+            const auto &ego = o_ptr->get_ego();
+            delta += ego.rating * base;
         }
 
         if (o_ptr->is_fixed_or_random_artifact()) {
@@ -217,7 +217,7 @@ static byte get_dungeon_feeling(PlayerType *player_ptr)
             delta += 15 * base;
         }
 
-        const auto &baseitem = baseitems_info[o_ptr->bi_id];
+        const auto &baseitem = o_ptr->get_baseitem();
         if (!o_ptr->is_cursed() && !o_ptr->is_broken() && baseitem.level > floor_ptr->dun_level) {
             delta += (baseitem.level - floor_ptr->dun_level) * base;
         }
@@ -288,7 +288,7 @@ void update_dungeon_feeling(PlayerType *player_ptr)
     dungeon_quest |= !(quest_list[quest_num].flags & QUEST_FLAG_PRESET);
 
     auto feeling_quest = inside_quest(quest_num);
-    feeling_quest &= quest_type::is_fixed(quest_num);
+    feeling_quest &= QuestType::is_fixed(quest_num);
     feeling_quest &= !dungeon_quest;
     if (feeling_quest) {
         return;
@@ -338,7 +338,7 @@ void glow_deep_lava_and_bldg(PlayerType *player_ptr)
         }
     }
 
-    player_ptr->update |= PU_VIEW | PU_LITE | PU_MON_LITE;
+    player_ptr->update |= PU_VIEW | PU_LITE | PU_MONSTER_LITE;
     player_ptr->redraw |= PR_MAP;
 }
 

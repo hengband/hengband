@@ -121,9 +121,9 @@ void wiz_lite(PlayerType *player_ptr, bool ninja)
         }
     }
 
-    player_ptr->update |= (PU_MONSTERS);
+    player_ptr->update |= (PU_MONSTER_STATUSES);
     player_ptr->redraw |= (PR_MAP);
-    player_ptr->window_flags |= (PW_OVERHEAD | PW_DUNGEON | PW_FOUND_ITEM_LIST);
+    player_ptr->window_flags |= (PW_OVERHEAD | PW_DUNGEON | PW_FOUND_ITEMS);
 
     if (player_ptr->current_floor_ptr->grid_array[player_ptr->y][player_ptr->x].info & CAVE_GLOW) {
         set_superstealth(player_ptr, false);
@@ -178,10 +178,10 @@ void wiz_dark(PlayerType *player_ptr)
     forget_travel_flow(player_ptr->current_floor_ptr);
 
     player_ptr->update |= (PU_UN_VIEW | PU_UN_LITE);
-    player_ptr->update |= (PU_VIEW | PU_LITE | PU_MON_LITE);
-    player_ptr->update |= (PU_MONSTERS);
+    player_ptr->update |= (PU_VIEW | PU_LITE | PU_MONSTER_LITE);
+    player_ptr->update |= (PU_MONSTER_STATUSES);
     player_ptr->redraw |= (PR_MAP);
-    player_ptr->window_flags |= (PW_OVERHEAD | PW_DUNGEON | PW_FOUND_ITEM_LIST);
+    player_ptr->window_flags |= (PW_OVERHEAD | PW_DUNGEON | PW_FOUND_ITEMS);
 }
 
 /*
@@ -257,7 +257,7 @@ bool destroy_area(PlayerType *player_ptr, POSITION y1, POSITION x1, POSITION r, 
 {
     /* Prevent destruction of quest levels and town */
     auto *floor_ptr = player_ptr->current_floor_ptr;
-    if ((inside_quest(floor_ptr->quest_number) && quest_type::is_fixed(floor_ptr->quest_number)) || !floor_ptr->dun_level) {
+    if ((inside_quest(floor_ptr->quest_number) && QuestType::is_fixed(floor_ptr->quest_number)) || !floor_ptr->dun_level) {
         return false;
     }
 
@@ -340,18 +340,18 @@ bool destroy_area(PlayerType *player_ptr, POSITION y1, POSITION x1, POSITION r, 
             /* During generation, destroyed artifacts are "preserved" */
             if (preserve_mode || in_generate) {
                 /* Scan all objects in the grid */
+                const auto &artifacts = ArtifactsInfo::get_instance();
                 for (const auto this_o_idx : g_ptr->o_idx_list) {
                     ItemEntity *o_ptr;
                     o_ptr = &floor_ptr->o_list[this_o_idx];
 
                     /* Hack -- Preserve unknown artifacts */
                     if (o_ptr->is_fixed_artifact() && (!o_ptr->is_known() || in_generate)) {
-                        artifacts_info.at(o_ptr->fixed_artifact_idx).is_generated = false;
+                        artifacts.get_artifact(o_ptr->fixed_artifact_idx).is_generated = false;
 
                         if (in_generate && cheat_peek) {
-                            GAME_TEXT o_name[MAX_NLEN];
-                            describe_flavor(player_ptr, o_name, o_ptr, (OD_NAME_ONLY | OD_STORE));
-                            msg_format(_("伝説のアイテム (%s) は生成中に*破壊*された。", "Artifact (%s) was *destroyed* during generation."), o_name);
+                            const auto item_name = describe_flavor(player_ptr, o_ptr, (OD_NAME_ONLY | OD_STORE));
+                            msg_format(_("伝説のアイテム (%s) は生成中に*破壊*された。", "Artifact (%s) was *destroyed* during generation."), item_name.data());
                         }
                     } else if (in_generate && cheat_peek && o_ptr->is_random_artifact()) {
                         msg_print(
@@ -467,7 +467,7 @@ bool destroy_area(PlayerType *player_ptr, POSITION y1, POSITION x1, POSITION r, 
     forget_flow(floor_ptr);
 
     /* Mega-Hack -- Forget the view and lite */
-    player_ptr->update |= (PU_UN_VIEW | PU_UN_LITE | PU_VIEW | PU_LITE | PU_FLOW | PU_MON_LITE | PU_MONSTERS);
+    player_ptr->update |= (PU_UN_VIEW | PU_UN_LITE | PU_VIEW | PU_LITE | PU_FLOW | PU_MONSTER_LITE | PU_MONSTER_STATUSES);
     player_ptr->redraw |= (PR_MAP);
     player_ptr->window_flags |= (PW_OVERHEAD | PW_DUNGEON);
 

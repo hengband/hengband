@@ -61,12 +61,12 @@ void ObjectReadEntity::execute(bool known)
 
     auto executor = ReadExecutorFactory::create(player_ptr, o_ptr, known);
     auto used_up = executor->read();
-    BIT_FLAGS inventory_flags = PU_COMBINE | PU_REORDER | (this->player_ptr->update & PU_AUTODESTROY);
-    reset_bits(this->player_ptr->update, PU_COMBINE | PU_REORDER | PU_AUTODESTROY);
+    BIT_FLAGS inventory_flags = PU_COMBINATION | PU_REORDER | (this->player_ptr->update & PU_AUTO_DESTRUCTION);
+    reset_bits(this->player_ptr->update, PU_COMBINATION | PU_REORDER | PU_AUTO_DESTRUCTION);
     this->change_virtue_as_read(*o_ptr);
     object_tried(o_ptr);
     this->gain_exp_from_item_use(o_ptr, executor->is_identified());
-    this->player_ptr->window_flags |= PW_INVEN | PW_EQUIP | PW_PLAYER;
+    this->player_ptr->window_flags |= PW_INVENTORY | PW_EQUIPMENT | PW_PLAYER;
     this->player_ptr->update |= inventory_flags;
     if (!used_up) {
         return;
@@ -96,9 +96,9 @@ void ObjectReadEntity::change_virtue_as_read(ItemEntity &o_ref)
         return;
     }
 
-    chg_virtue(this->player_ptr, V_PATIENCE, -1);
-    chg_virtue(this->player_ptr, V_CHANCE, 1);
-    chg_virtue(this->player_ptr, V_KNOWLEDGE, -1);
+    chg_virtue(this->player_ptr, Virtue::PATIENCE, -1);
+    chg_virtue(this->player_ptr, Virtue::CHANCE, 1);
+    chg_virtue(this->player_ptr, Virtue::KNOWLEDGE, -1);
 }
 
 void ObjectReadEntity::gain_exp_from_item_use(ItemEntity *o_ptr, bool is_identified)
@@ -108,6 +108,6 @@ void ObjectReadEntity::gain_exp_from_item_use(ItemEntity *o_ptr, bool is_identif
     }
 
     object_aware(this->player_ptr, o_ptr);
-    auto lev = baseitems_info[o_ptr->bi_id].level;
+    auto lev = o_ptr->get_baseitem().level;
     gain_exp(this->player_ptr, (lev + (this->player_ptr->lev >> 1)) / this->player_ptr->lev);
 }

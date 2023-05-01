@@ -135,6 +135,7 @@
 #include <direct.h>
 #include <locale>
 #include <string>
+#include <string_view>
 #include <vector>
 
 /*
@@ -256,28 +257,30 @@ static byte ignore_key_list[] = {
 /*!
  * @brief Validate a file
  */
-static void validate_file(concptr s)
+static void validate_file(const std::filesystem::path &s)
 {
-    if (check_file(s)) {
+    if (std::filesystem::is_regular_file(s)) {
         return;
     }
 
-    quit_fmt(_("必要なファイル[%s]が見あたりません。", "Cannot find required file:\n%s"), s);
+    const auto &file = s.string();
+    quit_fmt(_("必要なファイル[%s]が見あたりません。", "Cannot find required file:\n%s"), file.data());
 }
 
 /*!
  * @brief Validate a directory
  */
-static void validate_dir(concptr s, bool vital)
+static void validate_dir(const std::filesystem::path &s, bool vital)
 {
-    if (check_dir(s)) {
+    if (std::filesystem::is_directory(s)) {
         return;
     }
 
+    const auto &dir = s.string();
     if (vital) {
-        quit_fmt(_("必要なディレクトリ[%s]が見あたりません。", "Cannot find required directory:\n%s"), s);
-    } else if (mkdir(s)) {
-        quit_fmt("Unable to create directory:\n%s", s);
+        quit_fmt(_("必要なディレクトリ[%s]が見あたりません。", "Cannot find required directory:\n%s"), dir.data());
+    } else if (mkdir(dir.data())) {
+        quit_fmt("Unable to create directory:\n%s", dir.data());
     }
 }
 
@@ -418,15 +421,13 @@ static void save_prefs(void)
     WritePrivateProfileStringA("Angband", "BackGround", buf, ini_file);
     WritePrivateProfileStringA("Angband", "BackGroundBitmap", wallpaper_file[0] != '\0' ? wallpaper_file : DEFAULT_BG_FILENAME, ini_file);
 
-    int path_length = strlen(ANGBAND_DIR) - 4; /* \libの4文字分を削除 */
-    char tmp[1024] = "";
-    strncat(tmp, ANGBAND_DIR, path_length);
-
-    int n = strncmp(tmp, savefile, path_length);
-    if (n == 0) {
-        char relative_path[1024] = "";
-        snprintf(relative_path, sizeof(relative_path), ".\\%s", (savefile + path_length));
-        WritePrivateProfileStringA("Angband", "SaveFile", relative_path, ini_file);
+    std::string_view angband_dir_str(ANGBAND_DIR.string());
+    const auto path_length = angband_dir_str.length() - 4; // "\lib" を除く.
+    angband_dir_str = angband_dir_str.substr(0, path_length);
+    const std::string_view savefile_str(savefile);
+    if (angband_dir_str == savefile_str) {
+        const auto relative_path = format(".\\%s", (savefile + path_length));
+        WritePrivateProfileStringA("Angband", "SaveFile", relative_path.data(), ini_file);
     } else {
         WritePrivateProfileStringA("Angband", "SaveFile", savefile, ini_file);
     }
@@ -520,9 +521,11 @@ static void load_prefs(void)
 
     int n = strncmp(".\\", savefile, 2);
     if (n == 0) {
-        int path_length = strlen(ANGBAND_DIR) - 4; /* \libの4文字分を削除 */
+        std::string_view angband_dir_str(ANGBAND_DIR.string());
+        const auto path_length = angband_dir_str.length() - 4; // "\lib" を除く.
+        angband_dir_str = angband_dir_str.substr(0, path_length);
         char tmp[1024] = "";
-        strncat(tmp, ANGBAND_DIR, path_length);
+        strncat(tmp, angband_dir_str.data(), path_length);
         strncat(tmp, savefile + 2, strlen(savefile) - 2 + path_length);
         strncpy(savefile, tmp, strlen(tmp));
     }
@@ -1953,7 +1956,7 @@ static void process_menus(PlayerType *player_ptr, WORD wCmd)
         ofn.lpstrTitle = _(L"壁紙を選んでね。", L"Choose wall paper.");
         ofn.Flags = OFN_FILEMUSTEXIST | OFN_HIDEREADONLY;
 
-        if (get_open_filename(&ofn, nullptr, wallpaper_file, MAIN_WIN_MAX_PATH)) {
+        if (get_open_filename(&ofn, "", wallpaper_file, MAIN_WIN_MAX_PATH)) {
             change_bg_mode(bg_mode::BG_ONE, true, true);
         }
         break;
@@ -2613,7 +2616,7 @@ static void hook_quit(concptr str)
 /*!
  * @brief Init some stuff
  */
-static void init_stuff(void)
+static void init_stuff()
 {
     char path[MAIN_WIN_MAX_PATH];
     DWORD path_len = GetModuleFileNameA(hInstance, path, MAIN_WIN_MAX_PATH);
@@ -2629,7 +2632,7 @@ static void init_stuff(void)
 
     strcpy(path + i + 1, "lib\\");
     validate_dir(path, true);
-    init_file_paths(path, path);
+    init_file_paths(path);
     validate_dir(ANGBAND_DIR_APEX, false);
     validate_dir(ANGBAND_DIR_BONE, false);
     if (!check_dir(ANGBAND_DIR_EDIT)) {

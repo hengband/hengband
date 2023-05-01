@@ -139,8 +139,8 @@ bool set_acceleration(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
         } else if (!is_fast(player_ptr) && !player_ptr->lightspeed) {
             msg_print(_("素早く動けるようになった！", "You feel yourself moving much faster!"));
             notice = true;
-            chg_virtue(player_ptr, V_PATIENCE, -1);
-            chg_virtue(player_ptr, V_DILIGENCE, 1);
+            chg_virtue(player_ptr, Virtue::PATIENCE, -1);
+            chg_virtue(player_ptr, Virtue::DILIGENCE, 1);
         }
     } else {
         if (acceleration->is_fast() && !player_ptr->lightspeed && !music_singing(player_ptr, MUSIC_SPEED) && !music_singing(player_ptr, MUSIC_SHERO)) {
@@ -200,7 +200,7 @@ bool set_shield(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
     }
 
     player_ptr->shield = v;
-    player_ptr->redraw |= (PR_STATUS);
+    player_ptr->redraw |= (PR_TIMED_EFFECT);
 
     if (!notice) {
         return false;
@@ -247,7 +247,7 @@ bool set_magicdef(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
     }
 
     player_ptr->magicdef = v;
-    player_ptr->redraw |= (PR_STATUS);
+    player_ptr->redraw |= (PR_TIMED_EFFECT);
 
     if (!notice) {
         return false;
@@ -294,7 +294,7 @@ bool set_blessed(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
     }
 
     player_ptr->blessed = v;
-    player_ptr->redraw |= (PR_STATUS);
+    player_ptr->redraw |= (PR_TIMED_EFFECT);
 
     if (!notice) {
         return false;
@@ -341,7 +341,7 @@ bool set_hero(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
     }
 
     player_ptr->hero = v;
-    player_ptr->redraw |= (PR_STATUS);
+    player_ptr->redraw |= (PR_TIMED_EFFECT);
 
     if (!notice) {
         return false;
@@ -406,7 +406,7 @@ bool set_mimic(PlayerType *player_ptr, TIME_EFFECT v, MimicKindType mimic_race_i
         disturb(player_ptr, false, true);
     }
 
-    player_ptr->redraw |= (PR_BASIC | PR_STATUS);
+    player_ptr->redraw |= (PR_BASIC | PR_TIMED_EFFECT);
     player_ptr->update |= (PU_BONUS | PU_HP);
 
     handle_stuff(player_ptr);
@@ -451,7 +451,7 @@ bool set_shero(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
     }
 
     player_ptr->shero = v;
-    player_ptr->redraw |= (PR_STATUS);
+    player_ptr->redraw |= (PR_TIMED_EFFECT);
 
     if (!notice) {
         return false;
@@ -490,13 +490,13 @@ bool set_wraith_form(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
         } else if (!player_ptr->wraith_form) {
             msg_print(_("物質界を離れて幽鬼のような存在になった！", "You leave the physical world and turn into a wraith-being!"));
             notice = true;
-            chg_virtue(player_ptr, V_UNLIFE, 3);
-            chg_virtue(player_ptr, V_HONOUR, -2);
-            chg_virtue(player_ptr, V_SACRIFICE, -2);
-            chg_virtue(player_ptr, V_VALOUR, -5);
+            chg_virtue(player_ptr, Virtue::UNLIFE, 3);
+            chg_virtue(player_ptr, Virtue::HONOUR, -2);
+            chg_virtue(player_ptr, Virtue::SACRIFICE, -2);
+            chg_virtue(player_ptr, Virtue::VALOUR, -5);
 
             player_ptr->redraw |= (PR_MAP);
-            player_ptr->update |= (PU_MONSTERS);
+            player_ptr->update |= (PU_MONSTER_STATUSES);
 
             player_ptr->window_flags |= (PW_OVERHEAD | PW_DUNGEON);
         }
@@ -506,14 +506,14 @@ bool set_wraith_form(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
             notice = true;
 
             player_ptr->redraw |= (PR_MAP);
-            player_ptr->update |= (PU_MONSTERS);
+            player_ptr->update |= (PU_MONSTER_STATUSES);
 
             player_ptr->window_flags |= (PW_OVERHEAD | PW_DUNGEON);
         }
     }
 
     player_ptr->wraith_form = v;
-    player_ptr->redraw |= (PR_STATUS);
+    player_ptr->redraw |= (PR_TIMED_EFFECT);
 
     if (!notice) {
         return false;
@@ -551,7 +551,7 @@ bool set_tsuyoshi(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
         } else if (!player_ptr->tsuyoshi) {
             msg_print(_("「オクレ兄さん！」", "Brother OKURE!"));
             notice = true;
-            chg_virtue(player_ptr, V_VITALITY, 2);
+            chg_virtue(player_ptr, Virtue::VITALITY, 2);
         }
     } else {
         if (player_ptr->tsuyoshi) {
@@ -561,12 +561,12 @@ bool set_tsuyoshi(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
             (void)dec_stat(player_ptr, A_STR, 20, true);
 
             notice = true;
-            chg_virtue(player_ptr, V_VITALITY, -3);
+            chg_virtue(player_ptr, Virtue::VITALITY, -3);
         }
     }
 
     player_ptr->tsuyoshi = v;
-    player_ptr->redraw |= (PR_STATUS);
+    player_ptr->redraw |= (PR_TIMED_EFFECT);
 
     if (!notice) {
         return false;

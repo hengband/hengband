@@ -20,6 +20,7 @@
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 #include "world/world.h"
+#include <sstream>
 
 bool write_level; //!< @todo *抹殺* したい…
 
@@ -55,11 +56,11 @@ concptr get_ordinal_number_suffix(int num)
  */
 static bool open_diary_file(FILE **fff, bool *disable_diary)
 {
-    std::string file_name = _("playrecord-", "playrec-");
-    file_name.append(savefile_base).append(".txt");
+    std::stringstream ss;
+    ss << _("playrecord-", "playrec-") << savefile_base << ".txt";
     char buf[1024];
-    path_build(buf, sizeof(buf), ANGBAND_DIR_USER, file_name.data());
-    *fff = angband_fopen(buf, "a");
+    path_build(buf, sizeof(buf), ANGBAND_DIR_USER, ss.str());
+    *fff = angband_fopen(buf, FileOpenMode::APPEND);
     if (*fff) {
         return true;
     }
@@ -87,7 +88,7 @@ static std::pair<QuestId, std::string> write_floor(PlayerType *player_ptr)
         return make_pair(q_idx, std::string(_("アリーナ:", "Arena:")));
     } else if (!floor_ptr->dun_level) {
         return make_pair(q_idx, std::string(_("地上:", "Surface:")));
-    } else if (inside_quest(q_idx) && quest_type::is_fixed(q_idx) && !((q_idx == QuestId::OBERON) || (q_idx == QuestId::SERPENT))) {
+    } else if (inside_quest(q_idx) && QuestType::is_fixed(q_idx) && !((q_idx == QuestId::OBERON) || (q_idx == QuestId::SERPENT))) {
         return make_pair(q_idx, std::string(_("クエスト:", "Quest:")));
     } else {
         char desc[40];
@@ -180,8 +181,8 @@ int exe_write_diary_quest(PlayerType *player_ptr, int type, QuestId num)
 
     auto old_quest = player_ptr->current_floor_ptr->quest_number;
     const auto &quest_list = QuestList::get_instance();
-    const auto &q_ref = quest_list[num];
-    player_ptr->current_floor_ptr->quest_number = (q_ref.type == QuestKindType::RANDOM) ? QuestId::NONE : num;
+    const auto &quest = quest_list[num];
+    player_ptr->current_floor_ptr->quest_number = (quest.type == QuestKindType::RANDOM) ? QuestId::NONE : num;
     init_flags = INIT_NAME_ONLY;
     parse_fixed_map(player_ptr, QUEST_DEFINITION_LIST, 0, 0, 0, 0);
     player_ptr->current_floor_ptr->quest_number = old_quest;
@@ -197,36 +198,40 @@ int exe_write_diary_quest(PlayerType *player_ptr, int type, QuestId num)
 
     switch (type) {
     case DIARY_FIX_QUEST_C: {
-        if (any_bits(q_ref.flags, QUEST_FLAG_SILENT)) {
+        if (any_bits(quest.flags, QUEST_FLAG_SILENT)) {
             break;
         }
 
-        fprintf(fff, _(" %2d:%02d %20s クエスト「%s」を達成した。\n", " %2d:%02d %20s completed quest '%s'.\n"), hour, min, note_level.data(), q_ref.name);
+        constexpr auto mes = _(" %2d:%02d %20s クエスト「%s」を達成した。\n", " %2d:%02d %20s completed quest '%s'.\n");
+        fprintf(fff, mes, hour, min, note_level.data(), quest.name.data());
         break;
     }
     case DIARY_FIX_QUEST_F: {
-        if (any_bits(q_ref.flags, QUEST_FLAG_SILENT)) {
+        if (any_bits(quest.flags, QUEST_FLAG_SILENT)) {
             break;
         }
 
-        fprintf(fff, _(" %2d:%02d %20s クエスト「%s」から命からがら逃げ帰った。\n", " %2d:%02d %20s ran away from quest '%s'.\n"), hour, min, note_level.data(), q_ref.name);
+        constexpr auto mes = _(" %2d:%02d %20s クエスト「%s」から命からがら逃げ帰った。\n", " %2d:%02d %20s ran away from quest '%s'.\n");
+        fprintf(fff, mes, hour, min, note_level.data(), quest.name.data());
         break;
     }
     case DIARY_RAND_QUEST_C: {
-        fprintf(fff, _(" %2d:%02d %20s ランダムクエスト(%s)を達成した。\n", " %2d:%02d %20s completed random quest '%s'\n"), hour, min, note_level.data(), monraces_info[q_ref.r_idx].name.data());
+        constexpr auto mes = _(" %2d:%02d %20s ランダムクエスト(%s)を達成した。\n", " %2d:%02d %20s completed random quest '%s'\n");
+        fprintf(fff, mes, hour, min, note_level.data(), monraces_info[quest.r_idx].name.data());
         break;
     }
     case DIARY_RAND_QUEST_F: {
-        fprintf(fff, _(" %2d:%02d %20s ランダムクエスト(%s)から逃げ出した。\n", " %2d:%02d %20s ran away from quest '%s'.\n"), hour, min, note_level.data(), monraces_info[q_ref.r_idx].name.data());
+        constexpr auto mes = _(" %2d:%02d %20s ランダムクエスト(%s)から逃げ出した。\n", " %2d:%02d %20s ran away from quest '%s'.\n");
+        fprintf(fff, mes, hour, min, note_level.data(), monraces_info[quest.r_idx].name.data());
         break;
     }
     case DIARY_TO_QUEST: {
-        if (any_bits(q_ref.flags, QUEST_FLAG_SILENT)) {
+        if (any_bits(quest.flags, QUEST_FLAG_SILENT)) {
             break;
         }
 
-        fprintf(fff, _(" %2d:%02d %20s クエスト「%s」へと突入した。\n", " %2d:%02d %20s entered the quest '%s'.\n"),
-            hour, min, note_level.data(), q_ref.name);
+        constexpr auto mes = _(" %2d:%02d %20s クエスト「%s」へと突入した。\n", " %2d:%02d %20s entered the quest '%s'.\n");
+        fprintf(fff, mes, hour, min, note_level.data(), quest.name.data());
         break;
     }
     default:
@@ -314,7 +319,7 @@ errr exe_write_diary(PlayerType *player_ptr, int type, int num, concptr note)
         break;
     }
     case DIARY_STAIR: {
-        auto to = inside_quest(q_idx) && (quest_type::is_fixed(q_idx) && !((q_idx == QuestId::OBERON) || (q_idx == QuestId::SERPENT)))
+        auto to = inside_quest(q_idx) && (QuestType::is_fixed(q_idx) && !((q_idx == QuestId::OBERON) || (q_idx == QuestId::SERPENT)))
                       ? _("地上", "the surface")
                   : !(player_ptr->current_floor_ptr->dun_level + num)
                       ? _("地上", "the surface")

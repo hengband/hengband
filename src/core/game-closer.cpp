@@ -144,7 +144,6 @@ static void kingly(PlayerType *player_ptr)
  */
 void close_game(PlayerType *player_ptr)
 {
-    bool do_send = true;
     handle_stuff(player_ptr);
     msg_print(nullptr);
     flush();
@@ -166,6 +165,7 @@ void close_game(PlayerType *player_ptr)
         kingly(player_ptr);
     }
 
+    auto do_send = true;
     if (!cheat_save || get_check(_("死んだデータをセーブしますか？ ", "Save death? "))) {
         update_playtime();
         w_ptr->sf_play_time += w_ptr->play_time;

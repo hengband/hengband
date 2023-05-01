@@ -236,9 +236,8 @@ void store_examine(PlayerType *player_ptr, StoreSaleType store_num)
         return;
     }
 
-    GAME_TEXT o_name[MAX_NLEN];
-    describe_flavor(player_ptr, o_name, o_ptr, 0);
-    msg_format(_("%sを調べている...", "Examining %s..."), o_name);
+    const auto item_name = describe_flavor(player_ptr, o_ptr, 0);
+    msg_format(_("%sを調べている...", "Examining %s..."), item_name.data());
     if (!screen_object(player_ptr, o_ptr, SCROBJ_FORCE_DETAIL)) {
         msg_print(_("特に変わったところはないようだ。", "You see nothing special."));
     }
@@ -253,11 +252,11 @@ void store_examine(PlayerType *player_ptr, StoreSaleType store_num)
 void store_shuffle(PlayerType *player_ptr, StoreSaleType store_num)
 {
     auto owner_num = owners.at(store_num).size();
-    if ((store_num == StoreSaleType::HOME) || (store_num == StoreSaleType::MUSEUM) || (owner_num <= (uint16_t)max_towns)) {
+    if ((store_num == StoreSaleType::HOME) || (store_num == StoreSaleType::MUSEUM) || (owner_num <= (uint16_t)towns_info.size())) {
         return;
     }
 
-    st_ptr = &town_info[player_ptr->town_num].store[enum2i(store_num)];
+    st_ptr = &towns_info[player_ptr->town_num].store[enum2i(store_num)];
     int j = st_ptr->owner;
     while (true) {
         st_ptr->owner = (byte)randint0(owner_num);
@@ -267,17 +266,18 @@ void store_shuffle(PlayerType *player_ptr, StoreSaleType store_num)
         }
 
         int i;
-        for (i = 1; i < max_towns; i++) {
+        const int towns_size = towns_info.size();
+        for (i = 1; i < towns_size; i++) {
             if (i == player_ptr->town_num) {
                 continue;
             }
 
-            if (st_ptr->owner == town_info[i].store[enum2i(store_num)].owner) {
+            if (st_ptr->owner == towns_info[i].store[enum2i(store_num)].owner) {
                 break;
             }
         }
 
-        if (i == max_towns) {
+        if (i == towns_size) {
             break;
         }
     }
@@ -401,7 +401,7 @@ void store_maintenance(PlayerType *player_ptr, int town_num, StoreSaleType store
         return;
     }
 
-    st_ptr = &town_info[town_num].store[enum2i(store_num)];
+    st_ptr = &towns_info[town_num].store[enum2i(store_num)];
     ot_ptr = &owners.at(store_num)[st_ptr->owner];
     st_ptr->insult_cur = 0;
     if (store_num == StoreSaleType::BLACK) {
@@ -474,27 +474,27 @@ void store_maintenance(PlayerType *player_ptr, int town_num, StoreSaleType store
  */
 void store_init(int town_num, StoreSaleType store_num)
 {
-    auto owner_num = owners.at(store_num).size();
-    st_ptr = &town_info[town_num].store[enum2i(store_num)];
+    int owner_num = owners.at(store_num).size();
+    st_ptr = &towns_info[town_num].store[enum2i(store_num)];
+    const int towns_size = towns_info.size();
     while (true) {
         st_ptr->owner = (byte)randint0(owner_num);
 
-        if (owner_num <= (uint16_t)max_towns) {
+        if (owner_num <= towns_size) {
             break;
         }
 
         int i;
-
-        for (i = 1; i < (uint16_t)max_towns; i++) {
+        for (i = 1; i < towns_size; i++) {
             if (i == town_num) {
                 continue;
             }
-            if (st_ptr->owner == town_info[i].store[enum2i(store_num)].owner) {
+            if (st_ptr->owner == towns_info[i].store[enum2i(store_num)].owner) {
                 break;
             }
         }
 
-        if (i == max_towns) {
+        if (i == towns_size) {
             break;
         }
     }

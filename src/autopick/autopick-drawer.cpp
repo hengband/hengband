@@ -269,7 +269,7 @@ void draw_text_editor(PlayerType *player_ptr, text_body_type *tb)
     } else if (autopick_new_entry(entry, tb->lines_list[tb->cy], false)) {
         char buf[MAX_LINELEN];
 
-        describe_autopick(buf, entry);
+        describe_autopick(buf, *entry);
 
         if (tb->states[tb->cy] & LSTAT_AUTOREGISTER) {
             strcat(buf, _("この行は後で削除されます。", "  This line will be deleted later."));

@@ -43,63 +43,29 @@
 #endif
 
 /*!
- * @brief 各データファイルを読み取るためのパスを取得する
- * Find the default paths to all of our important sub-directories.
- * @param path パス保管先の文字列
+ * @brief 各データファイルを読み取るためのパスを取得する.
+ * @param libpath 各PCのインストール環境における"lib/" を表す絶対パス
  */
-void init_file_paths(char *libpath, char *varpath)
+void init_file_paths(const std::filesystem::path &libpath)
 {
-    char *libtail, *vartail;
-    char buf[1024];
-
-    string_free(ANGBAND_DIR);
-    string_free(ANGBAND_DIR_APEX);
-    string_free(ANGBAND_DIR_BONE);
-    string_free(ANGBAND_DIR_DATA);
-    string_free(ANGBAND_DIR_EDIT);
-    string_free(ANGBAND_DIR_SCRIPT);
-    string_free(ANGBAND_DIR_FILE);
-    string_free(ANGBAND_DIR_HELP);
-    string_free(ANGBAND_DIR_INFO);
-    string_free(ANGBAND_DIR_SAVE);
-    string_free(ANGBAND_DIR_DEBUG_SAVE);
-    string_free(ANGBAND_DIR_USER);
-    string_free(ANGBAND_DIR_XTRA);
-
-    ANGBAND_DIR = string_make(libpath);
-    libtail = libpath + strlen(libpath);
-    vartail = varpath + strlen(varpath);
-    strcpy(vartail, "apex");
-    ANGBAND_DIR_APEX = string_make(varpath);
-    strcpy(vartail, "bone");
-    ANGBAND_DIR_BONE = string_make(varpath);
-    strcpy(vartail, "data");
-    ANGBAND_DIR_DATA = string_make(varpath);
-    strcpy(libtail, "edit");
-    ANGBAND_DIR_EDIT = string_make(libpath);
-    strcpy(libtail, "script");
-    ANGBAND_DIR_SCRIPT = string_make(libpath);
-    strcpy(libtail, "file");
-    ANGBAND_DIR_FILE = string_make(libpath);
-    strcpy(libtail, "help");
-    ANGBAND_DIR_HELP = string_make(libpath);
-    strcpy(libtail, "info");
-    ANGBAND_DIR_INFO = string_make(libpath);
-    strcpy(libtail, "pref");
-    ANGBAND_DIR_PREF = string_make(libpath);
-    strcpy(vartail, "save");
-    ANGBAND_DIR_SAVE = string_make(varpath);
-    path_build(buf, sizeof(buf), ANGBAND_DIR_SAVE, "log");
-    ANGBAND_DIR_DEBUG_SAVE = string_make(buf);
+    ANGBAND_DIR = std::filesystem::path(libpath);
+    ANGBAND_DIR_APEX = std::filesystem::path(libpath).append("apex");
+    ANGBAND_DIR_BONE = std::filesystem::path(libpath).append("bone");
+    ANGBAND_DIR_DATA = std::filesystem::path(libpath).append("data");
+    ANGBAND_DIR_EDIT = std::filesystem::path(libpath).append("edit");
+    ANGBAND_DIR_SCRIPT = std::filesystem::path(libpath).append("script");
+    ANGBAND_DIR_FILE = std::filesystem::path(libpath).append("file");
+    ANGBAND_DIR_HELP = std::filesystem::path(libpath).append("help");
+    ANGBAND_DIR_INFO = std::filesystem::path(libpath).append("info");
+    ANGBAND_DIR_PREF = std::filesystem::path(libpath).append("pref");
+    ANGBAND_DIR_SAVE = std::filesystem::path(libpath).append("save");
+    ANGBAND_DIR_DEBUG_SAVE = std::filesystem::path(ANGBAND_DIR_SAVE).append("log");
 #ifdef PRIVATE_USER_PATH
-    path_build(buf, sizeof(buf), PRIVATE_USER_PATH, VARIANT_NAME.data());
-    ANGBAND_DIR_USER = string_make(buf);
+    ANGBAND_DIR_USER = std::filesystem::path(PRIVATE_USER_PATH).append(VARIANT_NAME);
 #else
-    strcpy(vartail, "user");
-    ANGBAND_DIR_USER = string_make(varpath);
+    ANGBAND_DIR_USER = std::filesystem::path(libpath).append("user");
 #endif
-    strcpy(libtail, "xtra");
-    ANGBAND_DIR_XTRA = string_make(libpath);
+    ANGBAND_DIR_XTRA = std::filesystem::path(libpath).append("xtra");
 
     time_t now = time(nullptr);
     struct tm *t = localtime(&now);
@@ -124,31 +90,28 @@ void init_file_paths(char *libpath, char *varpath)
         _findclose(hFile);
     }
 #else
-    {
-        DIR *saves_dir = opendir(ANGBAND_DIR_DEBUG_SAVE);
+    const auto &debug_save_str = ANGBAND_DIR_DEBUG_SAVE.string();
+    DIR *saves_dir = opendir(debug_save_str.data());
+    if (saves_dir == nullptr) {
+        return;
+    }
 
-        if (saves_dir) {
-            struct dirent *next_entry;
+    struct dirent *next_entry;
+    while ((next_entry = readdir(saves_dir))) {
+        if (!angband_strchr(next_entry->d_name, '-')) {
+            continue;
+        }
 
-            while ((next_entry = readdir(saves_dir))) {
-                if (angband_strchr(next_entry->d_name, '-')) {
-                    char path[1024];
-                    struct stat next_stat;
-
-                    path_build(path, sizeof(path), ANGBAND_DIR_DEBUG_SAVE, next_entry->d_name);
-                    /*
-                     * Remove if modified more than a week ago,
-                     * 7*24*60*60 seconds.
-                     */
-                    if (stat(path, &next_stat) == 0 &&
-                        difftime(now, next_stat.st_mtime) > 604800) {
-                        remove(path);
-                    }
-                }
-            }
-            closedir(saves_dir);
+        char path[1024];
+        struct stat next_stat;
+        path_build(path, sizeof(path), ANGBAND_DIR_DEBUG_SAVE, next_entry->d_name);
+        constexpr auto one_week = 7 * 24 * 60 * 60;
+        if ((stat(path, &next_stat) == 0) && (difftime(now, next_stat.st_mtime) > one_week)) {
+            remove(path);
         }
     }
+
+    closedir(saves_dir);
 #endif
 }
 
@@ -215,7 +178,7 @@ void init_angband(PlayerType *player_ptr, bool no_term)
 {
     char buf[1024];
     path_build(buf, sizeof(buf), ANGBAND_DIR_FILE, _("news_j.txt", "news.txt"));
-    int fd = fd_open(buf, O_RDONLY);
+    auto fd = fd_open(buf, O_RDONLY);
     if (fd < 0) {
         std::string why = _("'", "Cannot access the '");
         why.append(buf);
@@ -224,13 +187,10 @@ void init_angband(PlayerType *player_ptr, bool no_term)
     }
 
     (void)fd_close(fd);
-
     if (!no_term) {
         term_clear();
-
         path_build(buf, sizeof(buf), ANGBAND_DIR_FILE, _("news_j.txt", "news.txt"));
-        FILE *fp;
-        fp = angband_fopen(buf, "r");
+        auto *fp = angband_fopen(buf, FileOpenMode::READ);
         if (fp) {
             int i = 0;
             while (0 == angband_fgets(fp, buf, sizeof(buf))) {
@@ -245,10 +205,9 @@ void init_angband(PlayerType *player_ptr, bool no_term)
 
     path_build(buf, sizeof(buf), ANGBAND_DIR_APEX, "scores.raw");
     fd = fd_open(buf, O_RDONLY);
-    BIT_FLAGS file_permission = 0664;
     if (fd < 0) {
         safe_setuid_grab(player_ptr);
-        fd = fd_make(buf, file_permission);
+        fd = fd_make(buf, true);
         safe_setuid_drop();
         if (fd < 0) {
             std::string why = _("'", "Cannot create the '");

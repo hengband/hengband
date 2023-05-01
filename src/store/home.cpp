@@ -81,7 +81,7 @@ int home_carry(PlayerType *player_ptr, ItemEntity *o_ptr, StoreSaleType store_nu
 
     st_ptr->stock_num++;
     st_ptr->stock[slot] = *o_ptr;
-    chg_virtue(player_ptr, V_SACRIFICE, -1);
+    chg_virtue(player_ptr, Virtue::SACRIFICE, -1);
     (void)combine_and_reorder_home(player_ptr, store_num);
     return slot;
 }
@@ -109,7 +109,7 @@ static void sweep_reorder_store_item(ItemEntity *o_ptr, const int i, bool *combi
     for (int j = 0; j < i; j++) {
         ItemEntity *j_ptr;
         j_ptr = &st_ptr->stock[j];
-        if (!j_ptr->bi_id) {
+        if (!j_ptr->is_valid()) {
             continue;
         }
 
@@ -144,7 +144,7 @@ static void exe_reorder_store_item(PlayerType *player_ptr, bool *flag)
     for (int i = 0; i < st_ptr->stock_num; i++) {
         ItemEntity *o_ptr;
         o_ptr = &st_ptr->stock[i];
-        if (!o_ptr->bi_id) {
+        if (!o_ptr->is_valid()) {
             continue;
         }
 
@@ -184,7 +184,7 @@ bool combine_and_reorder_home(PlayerType *player_ptr, const StoreSaleType store_
     bool old_stack_force_notes = stack_force_notes;
     bool old_stack_force_costs = stack_force_costs;
     store_type *old_st_ptr = st_ptr;
-    st_ptr = &town_info[1].store[enum2i(store_num)];
+    st_ptr = &towns_info[1].store[enum2i(store_num)];
     bool flag = false;
     if (store_num != StoreSaleType::HOME) {
         stack_force_notes = false;
@@ -197,7 +197,7 @@ bool combine_and_reorder_home(PlayerType *player_ptr, const StoreSaleType store_
         for (int i = st_ptr->stock_num - 1; i > 0; i--) {
             ItemEntity *o_ptr;
             o_ptr = &st_ptr->stock[i];
-            if (!o_ptr->bi_id) {
+            if (!o_ptr->is_valid()) {
                 continue;
             }
 

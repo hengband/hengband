@@ -43,22 +43,22 @@
 #define ROW_CURSP 15
 #define COL_CURSP 0 /* "Cur SP xxxxx" */
 
-#define ROW_RIDING_INFO 16
+#define ROW_RIDING_INFO 19
 #define COL_RIDING_INFO 0 /* "xxxxxxxxxxxx" */
 
-#define ROW_INFO 17
+#define ROW_INFO 20
 #define COL_INFO 0 /* "xxxxxxxxxxxx" */
 
-#define ROW_CUT (-6)
+#define ROW_CUT 16
 #define COL_CUT 0 /* <cut> */
 
-#define ROW_STUN (-5)
+#define ROW_STUN 17
 #define COL_STUN 0 /* <stun> */
 
-#define ROW_HUNGRY (-4)
+#define ROW_HUNGRY 18
 #define COL_HUNGRY 0 /* "Weak" / "Hungry" / "Full" / "Gorged" */
 
-#define ROW_STATE (-4)
+#define ROW_STATE 18
 #define COL_STATE 7 /* <state> */
 
 #define ROW_DAY (-3)

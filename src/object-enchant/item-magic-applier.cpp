@@ -183,9 +183,7 @@ bool ItemMagicApplier::set_fixed_artifact_generation_info()
     }
 
     apply_artifact(this->player_ptr, this->o_ptr);
-    auto &a_ref = artifacts_info.at(this->o_ptr->fixed_artifact_idx);
-    a_ref.is_generated = true;
-
+    ArtifactsInfo::get_instance().get_artifact(this->o_ptr->fixed_artifact_idx).is_generated = true;
     return true;
 }
 
@@ -194,12 +192,12 @@ bool ItemMagicApplier::set_fixed_artifact_generation_info()
  */
 void ItemMagicApplier::apply_cursed()
 {
-    if (this->o_ptr->bi_id == 0) {
+    if (!this->o_ptr->is_valid()) {
         return;
     }
 
-    const auto &baseitem = baseitems_info[this->o_ptr->bi_id];
-    if (!baseitems_info[this->o_ptr->bi_id].cost) {
+    const auto &baseitem = this->o_ptr->get_baseitem();
+    if (!baseitem.cost) {
         set_bits(this->o_ptr->ident, IDENT_BROKEN);
     }
 

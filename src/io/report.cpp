@@ -262,7 +262,7 @@ static errr make_dump(PlayerType *player_ptr, BUF *dumpbuf)
     angband_fclose(fff);
 
     /* Open for read */
-    fff = angband_fopen(file_name, "r");
+    fff = angband_fopen(file_name, FileOpenMode::READ);
 
     while (fgets(buf, 1024, fff)) {
         (void)buf_sprintf(dumpbuf, "%s", buf);

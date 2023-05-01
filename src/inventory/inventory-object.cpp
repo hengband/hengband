@@ -55,9 +55,9 @@ void inven_item_increase(PlayerType *player_ptr, INVENTORY_IDX item, ITEM_NUMBER
 
     o_ptr->number += num;
     player_ptr->update |= (PU_BONUS);
-    player_ptr->update |= (PU_MANA);
-    player_ptr->update |= (PU_COMBINE);
-    player_ptr->window_flags |= (PW_INVEN | PW_EQUIP);
+    player_ptr->update |= (PU_MP);
+    player_ptr->update |= (PU_COMBINATION);
+    player_ptr->window_flags |= (PW_INVENTORY | PW_EQUIPMENT);
 
     if (o_ptr->number || !player_ptr->ele_attack) {
         return;
@@ -81,7 +81,7 @@ void inven_item_increase(PlayerType *player_ptr, INVENTORY_IDX item, ITEM_NUMBER
 void inven_item_optimize(PlayerType *player_ptr, INVENTORY_IDX item)
 {
     auto *o_ptr = &player_ptr->inventory_list[item];
-    if (!o_ptr->bi_id) {
+    if (!o_ptr->is_valid()) {
         return;
     }
     if (o_ptr->number) {
@@ -93,9 +93,9 @@ void inven_item_optimize(PlayerType *player_ptr, INVENTORY_IDX item)
         (&player_ptr->inventory_list[item])->wipe();
         player_ptr->update |= PU_BONUS;
         player_ptr->update |= PU_TORCH;
-        player_ptr->update |= PU_MANA;
+        player_ptr->update |= PU_MP;
 
-        player_ptr->window_flags |= PW_EQUIP;
+        player_ptr->window_flags |= PW_EQUIPMENT;
         player_ptr->window_flags |= PW_SPELL;
         return;
     }
@@ -107,7 +107,7 @@ void inven_item_optimize(PlayerType *player_ptr, INVENTORY_IDX item)
     }
 
     (&player_ptr->inventory_list[i])->wipe();
-    player_ptr->window_flags |= PW_INVEN;
+    player_ptr->window_flags |= PW_INVENTORY;
     player_ptr->window_flags |= PW_SPELL;
 }
 
@@ -124,9 +124,7 @@ void drop_from_inventory(PlayerType *player_ptr, INVENTORY_IDX item, ITEM_NUMBER
 {
     ItemEntity forge;
     ItemEntity *q_ptr;
-    ItemEntity *o_ptr;
-    GAME_TEXT o_name[MAX_NLEN];
-    o_ptr = &player_ptr->inventory_list[item];
+    auto *o_ptr = &player_ptr->inventory_list[item];
     if (amt <= 0) {
         return;
     }
@@ -145,8 +143,8 @@ void drop_from_inventory(PlayerType *player_ptr, INVENTORY_IDX item, ITEM_NUMBER
     distribute_charges(o_ptr, q_ptr, amt);
 
     q_ptr->number = amt;
-    describe_flavor(player_ptr, o_name, q_ptr, 0);
-    msg_format(_("%s(%c)を落とした。", "You drop %s (%c)."), o_name, index_to_label(item));
+    const auto item_name = describe_flavor(player_ptr, q_ptr, 0);
+    msg_format(_("%s(%c)を落とした。", "You drop %s (%c)."), item_name.data(), index_to_label(item));
     (void)drop_near(player_ptr, q_ptr, 0, player_ptr->y, player_ptr->x);
     vary_item(player_ptr, item, -amt);
 }
@@ -169,13 +167,13 @@ void combine_pack(PlayerType *player_ptr)
         for (int i = INVEN_PACK; i > 0; i--) {
             ItemEntity *o_ptr;
             o_ptr = &player_ptr->inventory_list[i];
-            if (!o_ptr->bi_id) {
+            if (!o_ptr->is_valid()) {
                 continue;
             }
             for (int j = 0; j < i; j++) {
                 ItemEntity *j_ptr;
                 j_ptr = &player_ptr->inventory_list[j];
-                if (!j_ptr->bi_id) {
+                if (!j_ptr->is_valid()) {
                     continue;
                 }
 
@@ -216,7 +214,7 @@ void combine_pack(PlayerType *player_ptr)
                     }
                 }
 
-                player_ptr->window_flags |= (PW_INVEN);
+                player_ptr->window_flags |= (PW_INVENTORY);
                 combined = true;
                 break;
             }
@@ -250,7 +248,7 @@ void reorder_pack(PlayerType *player_ptr)
         }
 
         o_ptr = &player_ptr->inventory_list[i];
-        if (!o_ptr->bi_id) {
+        if (!o_ptr->is_valid()) {
             continue;
         }
 
@@ -273,7 +271,7 @@ void reorder_pack(PlayerType *player_ptr)
         }
 
         (&player_ptr->inventory_list[j])->copy_from(q_ptr);
-        player_ptr->window_flags |= (PW_INVEN);
+        player_ptr->window_flags |= (PW_INVENTORY);
     }
 
     if (flag) {
@@ -309,7 +307,7 @@ int16_t store_item_to_inventory(PlayerType *player_ptr, ItemEntity *o_ptr)
     ItemEntity *j_ptr;
     for (j = 0; j < INVEN_PACK; j++) {
         j_ptr = &player_ptr->inventory_list[j];
-        if (!j_ptr->bi_id) {
+        if (!j_ptr->is_valid()) {
             continue;
         }
 
@@ -318,7 +316,7 @@ int16_t store_item_to_inventory(PlayerType *player_ptr, ItemEntity *o_ptr)
             object_absorb(j_ptr, o_ptr);
 
             player_ptr->update |= (PU_BONUS);
-            player_ptr->window_flags |= (PW_INVEN | PW_PLAYER);
+            player_ptr->window_flags |= (PW_INVENTORY | PW_PLAYER);
             return j;
         }
     }
@@ -329,7 +327,7 @@ int16_t store_item_to_inventory(PlayerType *player_ptr, ItemEntity *o_ptr)
 
     for (j = 0; j <= INVEN_PACK; j++) {
         j_ptr = &player_ptr->inventory_list[j];
-        if (!j_ptr->bi_id) {
+        if (!j_ptr->is_valid()) {
             break;
         }
     }
@@ -358,8 +356,8 @@ int16_t store_item_to_inventory(PlayerType *player_ptr, ItemEntity *o_ptr)
     j_ptr->marked.clear().set(OmType::TOUCHED);
 
     player_ptr->inven_cnt++;
-    player_ptr->update |= (PU_BONUS | PU_COMBINE | PU_REORDER);
-    player_ptr->window_flags |= (PW_INVEN | PW_PLAYER);
+    player_ptr->update |= (PU_BONUS | PU_COMBINATION | PU_REORDER);
+    player_ptr->window_flags |= (PW_INVENTORY | PW_PLAYER);
 
     return i;
 }
@@ -379,7 +377,7 @@ bool check_store_item_to_inventory(PlayerType *player_ptr, const ItemEntity *o_p
 
     for (int j = 0; j < INVEN_PACK; j++) {
         auto *j_ptr = &player_ptr->inventory_list[j];
-        if (!j_ptr->bi_id) {
+        if (!j_ptr->is_valid()) {
             continue;
         }
 
@@ -411,7 +409,6 @@ INVENTORY_IDX inven_takeoff(PlayerType *player_ptr, INVENTORY_IDX item, ITEM_NUM
     ItemEntity *q_ptr;
     ItemEntity *o_ptr;
     concptr act;
-    GAME_TEXT o_name[MAX_NLEN];
     o_ptr = &player_ptr->inventory_list[item];
     if (amt <= 0) {
         return -1;
@@ -423,7 +420,7 @@ INVENTORY_IDX inven_takeoff(PlayerType *player_ptr, INVENTORY_IDX item, ITEM_NUM
     q_ptr = &forge;
     q_ptr->copy_from(o_ptr);
     q_ptr->number = amt;
-    describe_flavor(player_ptr, o_name, q_ptr, 0);
+    const auto item_name = describe_flavor(player_ptr, q_ptr, 0);
     if (((item == INVEN_MAIN_HAND) || (item == INVEN_SUB_HAND)) && o_ptr->is_melee_weapon()) {
         act = _("を装備からはずした", "You were wielding");
     } else if (item == INVEN_BOW) {
@@ -439,9 +436,9 @@ INVENTORY_IDX inven_takeoff(PlayerType *player_ptr, INVENTORY_IDX item, ITEM_NUM
 
     slot = store_item_to_inventory(player_ptr, q_ptr);
 #ifdef JP
-    msg_format("%s(%c)%s。", o_name, index_to_label(slot), act);
+    msg_format("%s(%c)%s。", item_name.data(), index_to_label(slot), act);
 #else
-    msg_format("%s %s (%c).", act, o_name, index_to_label(slot));
+    msg_format("%s %s (%c).", act, item_name.data(), index_to_label(slot));
 #endif
 
     return slot;

@@ -40,7 +40,7 @@ void effect_player_drain_mana(PlayerType *player_ptr, EffectPlayerType *ep_ptr)
         player_ptr->csp -= ep_ptr->dam;
     }
 
-    player_ptr->redraw |= (PR_MANA);
+    player_ptr->redraw |= (PR_MP);
     player_ptr->window_flags |= (PW_PLAYER | PW_SPELL);
 
     if ((ep_ptr->who <= 0) || (ep_ptr->m_ptr->hp >= ep_ptr->m_ptr->maxhp)) {
@@ -95,7 +95,7 @@ void effect_player_mind_blast(PlayerType *player_ptr, EffectPlayerType *ep_ptr)
         player_ptr->csp_frac = 0;
     }
 
-    player_ptr->redraw |= PR_MANA;
+    player_ptr->redraw |= PR_MP;
     ep_ptr->get_damage = take_hit(player_ptr, DAMAGE_ATTACK, ep_ptr->dam, ep_ptr->killer);
 }
 
@@ -114,7 +114,7 @@ void effect_player_brain_smash(PlayerType *player_ptr, EffectPlayerType *ep_ptr)
             player_ptr->csp = 0;
             player_ptr->csp_frac = 0;
         }
-        player_ptr->redraw |= PR_MANA;
+        player_ptr->redraw |= PR_MP;
     }
 
     ep_ptr->get_damage = take_hit(player_ptr, DAMAGE_ATTACK, ep_ptr->dam, ep_ptr->killer);

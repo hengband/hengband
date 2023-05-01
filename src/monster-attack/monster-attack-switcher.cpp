@@ -110,7 +110,7 @@ static void calc_blow_un_power(PlayerType *player_ptr, MonsterAttackPlayer *mona
     for (int i = 0; i < max_draining_item; i++) {
         INVENTORY_IDX i_idx = (INVENTORY_IDX)randint0(INVEN_PACK);
         monap_ptr->o_ptr = &player_ptr->inventory_list[i_idx];
-        if (monap_ptr->o_ptr->bi_id == 0) {
+        if (!monap_ptr->o_ptr->is_valid()) {
             continue;
         }
 

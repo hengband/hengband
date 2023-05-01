@@ -123,7 +123,7 @@ static bool wr_savefile_new(PlayerType *player_ptr, SaveType type)
         wr_perception(bi_id);
     }
 
-    tmp16u = max_towns;
+    tmp16u = static_cast<uint16_t>(towns_info.size());
     wr_u16b(tmp16u);
 
     const auto &quest_list = QuestList::get_instance();
@@ -133,27 +133,27 @@ static bool wr_savefile_new(PlayerType *player_ptr, SaveType type)
     tmp8u = MAX_RANDOM_QUEST - MIN_RANDOM_QUEST;
     wr_byte(tmp8u);
 
-    for (const auto &[q_idx, q_ref] : quest_list) {
+    for (const auto &[q_idx, quest] : quest_list) {
         wr_s16b(enum2i(q_idx));
-        wr_s16b(enum2i(q_ref.status));
-        wr_s16b((int16_t)q_ref.level);
-        wr_byte((byte)q_ref.complev);
-        wr_u32b(q_ref.comptime);
+        wr_s16b(enum2i(quest.status));
+        wr_s16b((int16_t)quest.level);
+        wr_byte((byte)quest.complev);
+        wr_u32b(quest.comptime);
 
-        auto is_quest_running = q_ref.status == QuestStatusType::TAKEN;
-        is_quest_running |= q_ref.status == QuestStatusType::COMPLETED;
-        is_quest_running |= !quest_type::is_fixed(q_idx);
+        auto is_quest_running = quest.status == QuestStatusType::TAKEN;
+        is_quest_running |= quest.status == QuestStatusType::COMPLETED;
+        is_quest_running |= !QuestType::is_fixed(q_idx);
         if (!is_quest_running) {
             continue;
         }
 
-        wr_s16b((int16_t)q_ref.cur_num);
-        wr_s16b((int16_t)q_ref.max_num);
-        wr_s16b(enum2i(q_ref.type));
-        wr_s16b(enum2i(q_ref.r_idx));
-        wr_s16b(enum2i(q_ref.reward_artifact_idx));
-        wr_byte((byte)q_ref.flags);
-        wr_byte((byte)q_ref.dungeon);
+        wr_s16b((int16_t)quest.cur_num);
+        wr_s16b((int16_t)quest.max_num);
+        wr_s16b(enum2i(quest.type));
+        wr_s16b(enum2i(quest.r_idx));
+        wr_s16b(enum2i(quest.reward_artifact_idx));
+        wr_byte((byte)quest.flags);
+        wr_byte((byte)quest.dungeon);
     }
 
     wr_s32b(player_ptr->wilderness_x);
@@ -171,13 +171,11 @@ static bool wr_savefile_new(PlayerType *player_ptr, SaveType type)
     auto max_a_num = enum2i(artifacts_info.rbegin()->first);
     tmp16u = max_a_num + 1;
     wr_u16b(tmp16u);
-    ArtifactType dummy;
     for (auto i = 0U; i < tmp16u; i++) {
         const auto a_idx = i2enum<FixedArtifactId>(i);
-        const auto it = artifacts_info.find(a_idx);
-        const auto &a_ref = it != artifacts_info.end() ? it->second : dummy;
-        wr_bool(a_ref.is_generated);
-        wr_s16b(a_ref.floor_id);
+        const auto &artifact = ArtifactsInfo::get_instance().get_artifact(a_idx);
+        wr_bool(artifact.is_generated);
+        wr_s16b(artifact.floor_id);
     }
 
     wr_u32b(w_ptr->sf_play_time);
@@ -205,7 +203,7 @@ static bool wr_savefile_new(PlayerType *player_ptr, SaveType type)
 
     for (int i = 0; i < INVEN_TOTAL; i++) {
         auto *o_ptr = &player_ptr->inventory_list[i];
-        if (!o_ptr->bi_id) {
+        if (!o_ptr->is_valid()) {
             continue;
         }
 
@@ -214,14 +212,14 @@ static bool wr_savefile_new(PlayerType *player_ptr, SaveType type)
     }
 
     wr_u16b(0xFFFF);
-    tmp16u = max_towns;
+    tmp16u = static_cast<uint16_t>(towns_info.size());
     wr_u16b(tmp16u);
 
     tmp16u = MAX_STORES;
     wr_u16b(tmp16u);
-    for (int i = 1; i < max_towns; i++) {
-        for (int j = 0; j < MAX_STORES; j++) {
-            wr_store(&town_info[i].store[j]);
+    for (size_t i = 1; i < towns_info.size(); i++) {
+        for (auto j = 0; j < MAX_STORES; j++) {
+            wr_store(&towns_info[i].store[j]);
         }
     }
 
@@ -258,8 +256,7 @@ static bool wr_savefile_new(PlayerType *player_ptr, SaveType type)
 static bool save_player_aux(PlayerType *player_ptr, char *name, SaveType type)
 {
     safe_setuid_grab(player_ptr);
-    int file_permission = 0644;
-    int fd = fd_make(name, file_permission);
+    auto fd = fd_make(name);
     safe_setuid_drop();
 
     bool is_save_successful = false;
@@ -267,7 +264,7 @@ static bool save_player_aux(PlayerType *player_ptr, char *name, SaveType type)
     if (fd >= 0) {
         (void)fd_close(fd);
         safe_setuid_grab(player_ptr);
-        saving_savefile = angband_fopen(name, "wb");
+        saving_savefile = angband_fopen(name, FileOpenMode::WRITE, true);
         safe_setuid_drop();
         if (saving_savefile) {
             if (wr_savefile_new(player_ptr, type)) {

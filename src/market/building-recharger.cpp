@@ -48,19 +48,14 @@ void building_recharge(PlayerType *player_ptr)
      * We don't want to give the player free info about
      * the level of the item or the number of charges.
      */
-    char tmp_str[MAX_NLEN];
     if (!o_ptr->is_known()) {
         msg_format(_("充填する前に鑑定されている必要があります！", "The item must be identified first!"));
         msg_print(nullptr);
-
-        if ((player_ptr->au >= 50) && get_check(_("＄50で鑑定しますか？ ", "Identify for 50 gold? ")))
-
-        {
+        if ((player_ptr->au >= 50) && get_check(_("＄50で鑑定しますか？ ", "Identify for 50 gold? "))) {
             player_ptr->au -= 50;
             identify_item(player_ptr, o_ptr);
-            describe_flavor(player_ptr, tmp_str, o_ptr, 0);
-            msg_format(_("%s です。", "You have: %s."), tmp_str);
-
+            const auto item_name = describe_flavor(player_ptr, o_ptr, 0);
+            msg_format(_("%s です。", "You have: %s."), item_name.data());
             autopick_alter_item(player_ptr, item, false);
             building_prt_gold(player_ptr);
         }
@@ -68,7 +63,7 @@ void building_recharge(PlayerType *player_ptr)
         return;
     }
 
-    const auto &baseitem = baseitems_info[o_ptr->bi_id];
+    const auto &baseitem = o_ptr->get_baseitem();
     const auto lev = baseitem.level;
     const auto tval = o_ptr->bi_key.tval();
     int price;
@@ -111,11 +106,11 @@ void building_recharge(PlayerType *player_ptr)
     }
 
     if (player_ptr->au < price) {
-        describe_flavor(player_ptr, tmp_str, o_ptr, OD_NAME_ONLY);
+        const auto item_name = describe_flavor(player_ptr, o_ptr, OD_NAME_ONLY);
 #ifdef JP
-        msg_format("%sを再充填するには＄%d 必要です！", tmp_str, price);
+        msg_format("%sを再充填するには＄%d 必要です！", item_name.data(), price);
 #else
-        msg_format("You need %d gold to recharge %s!", price, tmp_str);
+        msg_format("You need %d gold to recharge %s!", price, item_name.data());
 #endif
         return;
     }
@@ -151,14 +146,14 @@ void building_recharge(PlayerType *player_ptr)
         o_ptr->ident &= ~(IDENT_EMPTY);
     }
 
-    describe_flavor(player_ptr, tmp_str, o_ptr, 0);
+    const auto item_name = describe_flavor(player_ptr, o_ptr, 0);
 #ifdef JP
-    msg_format("%sを＄%d で再充填しました。", tmp_str, price);
+    msg_format("%sを＄%d で再充填しました。", item_name.data(), price);
 #else
-    msg_format("%s^ %s recharged for %d gold.", tmp_str, ((o_ptr->number > 1) ? "were" : "was"), price);
+    msg_format("%s^ %s recharged for %d gold.", item_name.data(), ((o_ptr->number > 1) ? "were" : "was"), price);
 #endif
-    player_ptr->update |= (PU_COMBINE | PU_REORDER);
-    player_ptr->window_flags |= (PW_INVEN);
+    player_ptr->update |= (PU_COMBINATION | PU_REORDER);
+    player_ptr->window_flags |= (PW_INVENTORY);
     player_ptr->au -= price;
 }
 
@@ -191,19 +186,19 @@ void building_recharge_all(PlayerType *player_ptr)
             total_cost += 50;
         }
 
-        const auto lev = baseitems_info[item.bi_id].level;
-        const auto &baseitem = baseitems_info[item.bi_id];
+        const auto &baseitem = item.get_baseitem();
+        const auto lev = baseitem.level;
         switch (item.bi_key.tval()) {
         case ItemKindType::ROD:
             price = (lev * 50 * item.timeout) / baseitem.pval;
             break;
         case ItemKindType::STAFF:
-            price = (baseitems_info[item.bi_id].cost / 10) * item.number;
+            price = (baseitem.cost / 10) * item.number;
             price = std::max(10, price);
             price = (baseitem.pval - item.pval) * price;
             break;
         case ItemKindType::WAND:
-            price = (baseitems_info[item.bi_id].cost / 10);
+            price = (baseitem.cost / 10);
             price = std::max(10, price);
             price = (item.number * baseitem.pval - item.pval) * price;
             break;
@@ -234,7 +229,7 @@ void building_recharge_all(PlayerType *player_ptr)
 
     for (short i = 0; i < INVEN_PACK; i++) {
         auto *o_ptr = &player_ptr->inventory_list[i];
-        const auto &baseitem = baseitems_info[o_ptr->bi_id];
+        const auto &baseitem = o_ptr->get_baseitem();
         if (!o_ptr->can_recharge()) {
             continue;
         }
@@ -269,7 +264,7 @@ void building_recharge_all(PlayerType *player_ptr)
 
     msg_format(_("＄%d で再充填しました。", "You pay %d gold."), total_cost);
     msg_print(nullptr);
-    player_ptr->update |= (PU_COMBINE | PU_REORDER);
-    player_ptr->window_flags |= (PW_INVEN);
+    player_ptr->update |= (PU_COMBINATION | PU_REORDER);
+    player_ptr->window_flags |= (PW_INVENTORY);
     player_ptr->au -= total_cost;
 }

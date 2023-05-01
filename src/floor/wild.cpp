@@ -593,9 +593,9 @@ void wilderness_gen(PlayerType *player_ptr)
     generate_encounter = false;
     set_floor_and_wall(0);
     auto &quest_list = QuestList::get_instance();
-    for (auto &[q_idx, q_ref] : quest_list) {
-        if (q_ref.status == QuestStatusType::REWARDED) {
-            q_ref.status = QuestStatusType::FINISHED;
+    for (auto &[q_idx, quest] : quest_list) {
+        if (quest.status == QuestStatusType::REWARDED) {
+            quest.status = QuestStatusType::FINISHED;
         }
     }
 }
@@ -743,7 +743,7 @@ parse_error_type parse_line_wilderness(PlayerType *player_ptr, char *buf, int xm
             wilderness[*y][*x].level = w_letter[id].level;
             wilderness[*y][*x].town = w_letter[id].town;
             wilderness[*y][*x].road = w_letter[id].road;
-            strcpy(town_info[w_letter[id].town].name, w_letter[id].name);
+            strcpy(towns_info[w_letter[id].town].name, w_letter[id].name);
         }
 
         (*y)++;

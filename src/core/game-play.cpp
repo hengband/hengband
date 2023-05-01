@@ -124,7 +124,7 @@ static void send_waiting_record(PlayerType *player_ptr)
         quit(0);
     }
 
-    player_ptr->update |= (PU_BONUS | PU_HP | PU_MANA | PU_SPELLS);
+    player_ptr->update |= (PU_BONUS | PU_HP | PU_MP | PU_SPELLS);
     update_creature(player_ptr);
     player_ptr->is_dead = true;
     w_ptr->start_time = (uint32_t)time(nullptr);

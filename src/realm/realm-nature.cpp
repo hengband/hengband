@@ -720,8 +720,8 @@ std::optional<std::string> do_nature_spell(PlayerType *player_ptr, SPELL_IDX spe
 
             if (cast) {
                 fire_ball(player_ptr, AttributeType::LITE, 0, dam, rad);
-                chg_virtue(player_ptr, V_KNOWLEDGE, 1);
-                chg_virtue(player_ptr, V_ENLIGHTEN, 1);
+                chg_virtue(player_ptr, Virtue::KNOWLEDGE, 1);
+                chg_virtue(player_ptr, Virtue::ENLIGHTEN, 1);
                 wiz_lite(player_ptr, false);
 
                 PlayerRace race(player_ptr);

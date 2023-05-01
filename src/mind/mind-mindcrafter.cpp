@@ -68,26 +68,24 @@ bool psychometry(PlayerType *player_ptr)
     }
 
     item_feel_type feel = pseudo_value_check_heavy(o_ptr);
-    GAME_TEXT o_name[MAX_NLEN];
-    describe_flavor(player_ptr, o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
-
+    const auto item_name = describe_flavor(player_ptr, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
     if (!feel) {
-        msg_format(_("%sからは特に変わった事は感じとれなかった。", "You do not perceive anything unusual about the %s."), o_name);
+        msg_format(_("%sからは特に変わった事は感じとれなかった。", "You do not perceive anything unusual about the %s."), item_name.data());
         return true;
     }
 
 #ifdef JP
-    msg_format("%sは%sという感じがする...", o_name, game_inscriptions[feel]);
+    msg_format("%sは%sという感じがする...", item_name.data(), game_inscriptions[feel]);
 #else
-    msg_format("You feel that the %s %s %s...", o_name, ((o_ptr->number == 1) ? "is" : "are"), game_inscriptions[feel]);
+    msg_format("You feel that the %s %s %s...", item_name.data(), ((o_ptr->number == 1) ? "is" : "are"), game_inscriptions[feel]);
 #endif
 
     set_bits(o_ptr->ident, IDENT_SENSE);
     o_ptr->feeling = feel;
     o_ptr->marked.set(OmType::TOUCHED);
 
-    set_bits(player_ptr->update, PU_COMBINE | PU_REORDER);
-    set_bits(player_ptr->window_flags, PW_INVEN | PW_EQUIP | PW_PLAYER | PW_FLOOR_ITEM_LIST | PW_FOUND_ITEM_LIST);
+    set_bits(player_ptr->update, PU_COMBINATION | PU_REORDER);
+    set_bits(player_ptr->window_flags, PW_INVENTORY | PW_EQUIPMENT | PW_PLAYER | PW_FLOOR_ITEMS | PW_FOUND_ITEMS);
 
     bool okay = false;
     switch (o_ptr->bi_key.tval()) {
@@ -140,8 +138,8 @@ bool cast_mindcrafter_spell(PlayerType *player_ptr, MindMindcrafterType spell)
     switch (spell) {
     case MindMindcrafterType::PRECOGNITION:
         if (plev > 44) {
-            chg_virtue(player_ptr, V_KNOWLEDGE, 1);
-            chg_virtue(player_ptr, V_ENLIGHTEN, 1);
+            chg_virtue(player_ptr, Virtue::KNOWLEDGE, 1);
+            chg_virtue(player_ptr, Virtue::ENLIGHTEN, 1);
             wiz_lite(player_ptr, false);
         } else if (plev > 19) {
             map_area(player_ptr, DETECT_RAD_MAP);

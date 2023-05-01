@@ -88,20 +88,20 @@ void do_cmd_store(PlayerType *player_ptr)
     }
 
     inner_town_num = player_ptr->town_num;
-    if ((town_info[player_ptr->town_num].store[enum2i(store_num)].store_open >= w_ptr->game_turn) || ironman_shops) {
+    if ((towns_info[player_ptr->town_num].store[enum2i(store_num)].store_open >= w_ptr->game_turn) || ironman_shops) {
         msg_print(_("ドアに鍵がかかっている。", "The doors are locked."));
         player_ptr->town_num = old_town_num;
         return;
     }
 
-    int maintain_num = (w_ptr->game_turn - town_info[player_ptr->town_num].store[enum2i(store_num)].last_visit) / (TURNS_PER_TICK * STORE_TICKS);
+    int maintain_num = (w_ptr->game_turn - towns_info[player_ptr->town_num].store[enum2i(store_num)].last_visit) / (TURNS_PER_TICK * STORE_TICKS);
     if (maintain_num > 10) {
         maintain_num = 10;
     }
     if (maintain_num) {
         store_maintenance(player_ptr, player_ptr->town_num, store_num, maintain_num);
 
-        town_info[player_ptr->town_num].store[enum2i(store_num)].last_visit = w_ptr->game_turn;
+        towns_info[player_ptr->town_num].store[enum2i(store_num)].last_visit = w_ptr->game_turn;
     }
 
     forget_lite(floor_ptr);
@@ -112,7 +112,7 @@ void do_cmd_store(PlayerType *player_ptr)
     command_new = 0;
     get_com_no_macros = true;
     cur_store_feat = g_ptr->feat;
-    st_ptr = &town_info[player_ptr->town_num].store[enum2i(store_num)];
+    st_ptr = &towns_info[player_ptr->town_num].store[enum2i(store_num)];
     ot_ptr = &owners.at(store_num)[st_ptr->owner];
     store_top = 0;
     play_music(TERM_XTRA_MUSIC_BASIC, MUSIC_BASIC_BUILD);
@@ -174,12 +174,11 @@ void do_cmd_store(PlayerType *player_ptr)
                 int item_pos;
                 ItemEntity forge;
                 ItemEntity *q_ptr;
-                GAME_TEXT o_name[MAX_NLEN];
                 msg_print(_("ザックからアイテムがあふれてしまった！", "Your pack overflows!"));
                 q_ptr = &forge;
                 q_ptr->copy_from(o_ptr);
-                describe_flavor(player_ptr, o_name, q_ptr, 0);
-                msg_format(_("%sが落ちた。(%c)", "You drop %s (%c)."), o_name, index_to_label(item));
+                const auto item_name = describe_flavor(player_ptr, q_ptr, 0);
+                msg_format(_("%sが落ちた。(%c)", "You drop %s (%c)."), item_name.data(), index_to_label(item));
                 vary_item(player_ptr, item, -255);
                 handle_stuff(player_ptr);
 
@@ -213,8 +212,8 @@ void do_cmd_store(PlayerType *player_ptr)
     msg_erase();
     term_clear();
 
-    player_ptr->update |= PU_VIEW | PU_LITE | PU_MON_LITE;
-    player_ptr->update |= PU_MONSTERS;
+    player_ptr->update |= PU_VIEW | PU_LITE | PU_MONSTER_LITE;
+    player_ptr->update |= PU_MONSTER_STATUSES;
     player_ptr->redraw |= PR_BASIC | PR_EXTRA | PR_EQUIPPY;
     player_ptr->redraw |= PR_MAP;
     player_ptr->window_flags |= PW_OVERHEAD | PW_DUNGEON;

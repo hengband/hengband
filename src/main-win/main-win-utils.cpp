@@ -8,7 +8,6 @@
 #include "locale/language-switcher.h"
 #include "main-win/main-win-define.h"
 #include "system/angband-version.h"
-
 #include <string>
 
 /*!
@@ -80,11 +79,17 @@ void open_dir_in_explorer(char *filename)
  * @retval true filenameに選択されたファイルのパスが設定されている。
  * @retval false ファイル選択がキャンセルされた。
  */
-bool get_open_filename(OPENFILENAMEW *ofn, concptr dirname, char *filename, DWORD max_name_size)
+bool get_open_filename(OPENFILENAMEW *ofn, const std::filesystem::path &dirname, char *filename, DWORD max_name_size)
 {
     std::vector<WCHAR> buf(max_name_size);
     wcscpy(&buf[0], to_wchar(filename).wc_str());
-    to_wchar wc_dir(dirname);
+    const char *dir = nullptr;
+    const auto &dirname_str = dirname.string();
+    if (dirname_str != "") {
+        dir = dirname_str.data();
+    }
+
+    to_wchar wc_dir(dir);
 
     // Overwrite struct data
     ofn->lpstrFile = &buf[0];

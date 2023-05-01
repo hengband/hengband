@@ -286,16 +286,16 @@ bool tele_town(PlayerType *player_ptr)
     screen_save();
     clear_bldg(4, 10);
 
-    int i;
-    int num = 0;
-    for (i = 1; i < max_towns; i++) {
+    auto num = 0;
+    const int towns_size = towns_info.size();
+    for (auto i = 1; i < towns_size; i++) {
         char buf[80];
 
         if ((i == VALID_TOWNS) || (i == SECRET_TOWN) || (i == player_ptr->town_num) || !(player_ptr->visit & (1UL << (i - 1)))) {
             continue;
         }
 
-        strnfmt(buf, sizeof(buf), "%c) %-20s", I2A(i - 1), town_info[i].name);
+        strnfmt(buf, sizeof(buf), "%c) %-20s", I2A(i - 1), towns_info[i].name);
         prt(buf, 5 + i, 5);
         num++;
     }
@@ -308,25 +308,30 @@ bool tele_town(PlayerType *player_ptr)
     }
 
     prt(_("どこに行きますか:", "Where do you want to go: "), 0, 0);
+    char key;
     while (true) {
-        i = inkey();
+        key = inkey();
 
-        if (i == ESCAPE) {
+        if (key == ESCAPE) {
             screen_load();
             return false;
         }
 
-        else if ((i < 'a') || (i > ('a' + max_towns - 2))) {
-            continue;
-        } else if (((i - 'a' + 1) == player_ptr->town_num) || ((i - 'a' + 1) == VALID_TOWNS) || ((i - 'a' + 1) == SECRET_TOWN) || !(player_ptr->visit & (1UL << (i - 'a')))) {
+        if ((key < 'a') || (key > ('a' + towns_size - 2))) {
             continue;
         }
+
+        const auto town_num = key - 'a' + 1;
+        if ((town_num == player_ptr->town_num) || (town_num == VALID_TOWNS) || (town_num == SECRET_TOWN) || !(player_ptr->visit & (1UL << (key - 'a')))) {
+            continue;
+        }
+
         break;
     }
 
     for (POSITION y = 0; y < w_ptr->max_wild_y; y++) {
         for (POSITION x = 0; x < w_ptr->max_wild_x; x++) {
-            if (wilderness[y][x].town == (i - 'a' + 1)) {
+            if (wilderness[y][x].town == (key - 'a' + 1)) {
                 player_ptr->wilderness_y = y;
                 player_ptr->wilderness_x = x;
             }
@@ -354,13 +359,13 @@ void reserve_alter_reality(PlayerType *player_ptr, TIME_EFFECT turns)
     if (player_ptr->alter_reality || turns == 0) {
         player_ptr->alter_reality = 0;
         msg_print(_("景色が元に戻った...", "The view around you returns to normal..."));
-        player_ptr->redraw |= PR_STATUS;
+        player_ptr->redraw |= PR_TIMED_EFFECT;
         return;
     }
 
     player_ptr->alter_reality = turns;
     msg_print(_("回りの景色が変わり始めた...", "The view around you begins to change..."));
-    player_ptr->redraw |= PR_STATUS;
+    player_ptr->redraw |= PR_TIMED_EFFECT;
 }
 
 /*!
@@ -464,7 +469,7 @@ bool recall_player(PlayerType *player_ptr, TIME_EFFECT turns)
     if (player_ptr->word_recall || turns == 0) {
         player_ptr->word_recall = 0;
         msg_print(_("張りつめた大気が流れ去った...", "A tension leaves the air around you..."));
-        player_ptr->redraw |= (PR_STATUS);
+        player_ptr->redraw |= (PR_TIMED_EFFECT);
         return true;
     }
 
@@ -479,7 +484,7 @@ bool recall_player(PlayerType *player_ptr, TIME_EFFECT turns)
 
     player_ptr->word_recall = turns;
     msg_print(_("回りの大気が張りつめてきた...", "The air about you becomes charged..."));
-    player_ptr->redraw |= (PR_STATUS);
+    player_ptr->redraw |= (PR_TIMED_EFFECT);
     return true;
 }
 
@@ -517,7 +522,7 @@ bool free_level_recall(PlayerType *player_ptr)
 
     msg_print(_("回りの大気が張りつめてきた...", "The air about you becomes charged..."));
 
-    player_ptr->redraw |= PR_STATUS;
+    player_ptr->redraw |= PR_TIMED_EFFECT;
     return true;
 }
 

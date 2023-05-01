@@ -503,6 +503,6 @@ void do_cmd_racial_power(PlayerType *player_ptr)
         return;
     }
 
-    set_bits(player_ptr->redraw, PR_HP | PR_MANA);
+    set_bits(player_ptr->redraw, PR_HP | PR_MP);
     set_bits(player_ptr->window_flags, PW_PLAYER | PW_SPELL);
 }

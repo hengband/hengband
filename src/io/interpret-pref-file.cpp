@@ -352,28 +352,28 @@ static errr interpret_xy_token(PlayerType *player_ptr, char *buf)
 
 /*!
  * @brief Zトークンの解釈 / Process "Z:<type>:<str>" -- set spell color
- * @param buf バッファ
+ * @param line トークン1行
  * @param zz トークン保管文字列
- * @return エラーコード
+ * @return 解釈に成功したか
  */
-static int interpret_z_token(char *buf)
+static bool interpret_z_token(std::string_view line)
 {
-    auto *t = angband_strchr(buf + 2, ':');
-    if (t == nullptr) {
-        return 1;
+    constexpr auto num_splits = 3;
+    const auto splits = str_split(line, ':', false, num_splits);
+    if (splits.size() != num_splits) {
+        return false;
     }
 
-    *(t++) = '\0';
-    for (const auto &description : gf_descriptions) {
-        if (!streq(description.name, buf + 2)) {
+    for (const auto &[name, num] : gf_descriptions) {
+        if (name != splits[1]) {
             continue;
         }
 
-        gf_colors[description.num] = t;
-        return 0;
+        gf_colors[num] = splits[2];
+        return true;
     }
 
-    return 1;
+    return false;
 }
 
 /*!
@@ -541,7 +541,7 @@ errr interpret_pref_file(PlayerType *player_ptr, char *buf)
     case 'Y':
         return interpret_xy_token(player_ptr, buf);
     case 'Z':
-        return interpret_z_token(buf);
+        return interpret_z_token(buf) ? 0 : 1;
     case 'T':
         return interpret_t_token(buf);
     default:

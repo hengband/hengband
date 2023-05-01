@@ -887,7 +887,7 @@ static bool try_cast_element_spell(PlayerType *player_ptr, SPELL_IDX spell_idx, 
         player_ptr->csp = std::max(0, player_ptr->csp - player_ptr->msp * 10 / (20 + randint1(10)));
 
         PlayerEnergy(player_ptr).set_player_turn_energy(100);
-        set_bits(player_ptr->redraw, PR_MANA);
+        set_bits(player_ptr->redraw, PR_MP);
         set_bits(player_ptr->window_flags, PW_PLAYER | PW_SPELL);
 
         return false;
@@ -927,7 +927,7 @@ void do_cmd_element(PlayerType *player_ptr)
         player_ptr->csp_frac = 0;
         msg_print(_("精神を集中しすぎて気を失ってしまった！", "You faint from the effort!"));
         (void)BadStatusSetter(player_ptr).mod_paralysis(randint1(5 * oops + 1));
-        chg_virtue(player_ptr, V_KNOWLEDGE, -10);
+        chg_virtue(player_ptr, Virtue::KNOWLEDGE, -10);
         if (randint0(100) < 50) {
             bool perm = (randint0(100) < 25);
             msg_print(_("体を悪くしてしまった！", "You have damaged your health!"));
@@ -936,7 +936,7 @@ void do_cmd_element(PlayerType *player_ptr)
     }
 
     PlayerEnergy(player_ptr).set_player_turn_energy(100);
-    set_bits(player_ptr->redraw, PR_MANA);
+    set_bits(player_ptr->redraw, PR_MP);
     set_bits(player_ptr->window_flags, PW_PLAYER | PW_SPELL);
 }
 
@@ -1057,7 +1057,7 @@ ProcessResult effect_monster_elemental_genocide(PlayerType *player_ptr, effect_m
             msg_format(_("%sは消滅した！", "%s^ disappeared!"), em_ptr->m_name);
         }
         em_ptr->dam = 0;
-        chg_virtue(player_ptr, V_VITALITY, -1);
+        chg_virtue(player_ptr, Virtue::VITALITY, -1);
         return ProcessResult::PROCESS_TRUE;
     }
 

@@ -32,7 +32,7 @@ void toggle_keyword(text_body_type *tb, BIT_FLAGS flg)
 
         string_free(tb->lines_list[y]);
         if (!fixed) {
-            if (!IS_FLG(flg)) {
+            if (!entry->has(flg)) {
                 add = true;
             } else {
                 add = false;
@@ -69,7 +69,7 @@ void toggle_keyword(text_body_type *tb, BIT_FLAGS flg)
             REM_FLG(flg);
         }
 
-        tb->lines_list[y] = autopick_line_from_entry_kill(entry);
+        tb->lines_list[y] = autopick_line_from_entry(*entry);
         tb->dirty_flags |= DIRTY_ALL;
         tb->changed = true;
     }
@@ -157,7 +157,7 @@ void toggle_command_letter(text_body_type *tb, byte flg)
             }
         }
 
-        tb->lines_list[y] = autopick_line_from_entry_kill(entry);
+        tb->lines_list[y] = autopick_line_from_entry(*entry);
         tb->dirty_flags |= DIRTY_ALL;
         tb->changed = true;
     }
@@ -182,7 +182,7 @@ void add_keyword(text_body_type *tb, BIT_FLAGS flg)
             continue;
         }
 
-        if (IS_FLG(flg)) {
+        if (entry->has(flg)) {
             continue;
         }
 
@@ -195,7 +195,7 @@ void add_keyword(text_body_type *tb, BIT_FLAGS flg)
         }
 
         ADD_FLG(flg);
-        tb->lines_list[y] = autopick_line_from_entry_kill(entry);
+        tb->lines_list[y] = autopick_line_from_entry(*entry);
         tb->dirty_flags |= DIRTY_ALL;
         tb->changed = true;
     }

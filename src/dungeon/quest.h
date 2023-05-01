@@ -1,13 +1,10 @@
 ﻿#pragma once
 
 #include "system/angband.h"
-
 #include "util/enum-converter.h"
 #include <map>
+#include <string>
 #include <vector>
-
-enum class FixedArtifactId : short;
-enum class MonsterRaceId : int16_t;
 
 // clang-format off
 
@@ -95,44 +92,48 @@ enum class QuestKindType : short {
 // clang-format on
 
 /*!
- * @struct quest_type
  * @brief クエスト情報の構造体 / Structure for the "quests".
  */
-struct quest_type {
+enum class FixedArtifactId : short;
+enum class MonsterRaceId : int16_t;
+class ArtifactType;
+class QuestType {
 public:
-    quest_type() = default;
-    virtual ~quest_type() = default;
-    QuestStatusType status; /*!< クエストの進行ステータス / Is the quest taken, completed, finished? */
-    QuestKindType type; /*!< クエストの種別 / The quest type */
+    QuestType() = default;
+    virtual ~QuestType() = default;
+    QuestStatusType status{}; /*!< クエストの進行ステータス / Is the quest taken, completed, finished? */
+    QuestKindType type{}; /*!< クエストの種別 / The quest type */
 
-    GAME_TEXT name[60]; /*!< クエスト名 / Quest name */
-    DEPTH level; /*!< 処理階層 / Dungeon level */
-    MonsterRaceId r_idx; /*!< クエスト対象のモンスターID / Monster race */
+    std::string name = ""; /*!< クエスト名 / Quest name */
+    DEPTH level = 0; /*!< 処理階層 / Dungeon level */
+    MonsterRaceId r_idx{}; /*!< クエスト対象のモンスターID / Monster race */
 
-    MONSTER_NUMBER cur_num; /*!< 撃破したモンスターの数 / Number killed */
-    MONSTER_NUMBER max_num; /*!< 求められるモンスターの撃破数 / Number required */
+    MONSTER_NUMBER cur_num = 0; /*!< 撃破したモンスターの数 / Number killed */
+    MONSTER_NUMBER max_num = 0; /*!< 求められるモンスターの撃破数 / Number required */
 
-    FixedArtifactId reward_artifact_idx; /*!< クエスト対象のアイテムID / object index */
-    MONSTER_NUMBER num_mon; /*!< QuestKindTypeがKILL_NUMBER時の目標撃破数 number of monsters on level */
+    FixedArtifactId reward_artifact_idx{}; /*!< クエスト対象のアイテムID / object index */
+    MONSTER_NUMBER num_mon = 0; /*!< QuestKindTypeがKILL_NUMBER時の目標撃破数 number of monsters on level */
 
-    BIT_FLAGS flags; /*!< クエストに関するフラグビット / quest flags */
-    DUNGEON_IDX dungeon; /*!< クエスト対象のダンジョンID / quest dungeon */
+    BIT_FLAGS flags = 0; /*!< クエストに関するフラグビット / quest flags */
+    DUNGEON_IDX dungeon = 0; /*!< クエスト対象のダンジョンID / quest dungeon */
 
-    PLAYER_LEVEL complev; /*!< クリア時プレイヤーレベル / player level (complete) */
-    REAL_TIME comptime; /*!< クリア時ゲーム時間 /  quest clear time*/
+    PLAYER_LEVEL complev = 0; /*!< クリア時プレイヤーレベル / player level (complete) */
+    REAL_TIME comptime = 0; /*!< クリア時ゲーム時間 /  quest clear time*/
 
     static bool is_fixed(QuestId quest_idx);
+    bool has_reward() const;
+    ArtifactType &get_reward() const;
 };
 
 class QuestList final {
 public:
-    using iterator = std::map<QuestId, quest_type>::iterator;
-    using reverse_iterator = std::map<QuestId, quest_type>::reverse_iterator;
-    using const_iterator = std::map<QuestId, quest_type>::const_iterator;
-    using const_reverse_iterator = std::map<QuestId, quest_type>::const_reverse_iterator;
+    using iterator = std::map<QuestId, QuestType>::iterator;
+    using reverse_iterator = std::map<QuestId, QuestType>::reverse_iterator;
+    using const_iterator = std::map<QuestId, QuestType>::const_iterator;
+    using const_reverse_iterator = std::map<QuestId, QuestType>::const_reverse_iterator;
     static QuestList &get_instance();
-    quest_type &operator[](QuestId id);
-    const quest_type &operator[](QuestId id) const;
+    QuestType &operator[](QuestId id);
+    const QuestType &operator[](QuestId id) const;
     iterator begin();
     const_iterator begin() const;
     iterator end();
@@ -152,7 +153,7 @@ public:
 
 private:
     bool initialized = false;
-    std::map<QuestId, quest_type> quest_data;
+    std::map<QuestId, QuestType> quest_data;
     QuestList() = default;
     ~QuestList() = default;
 };
@@ -163,8 +164,8 @@ extern QuestId leaving_quest;
 
 class ItemEntity;
 class PlayerType;
-void determine_random_questor(PlayerType *player_ptr, quest_type *q_ptr);
-void record_quest_final_status(quest_type *q_ptr, PLAYER_LEVEL lev, QuestStatusType stat);
+void determine_random_questor(PlayerType *player_ptr, QuestType *q_ptr);
+void record_quest_final_status(QuestType *q_ptr, PLAYER_LEVEL lev, QuestStatusType stat);
 void complete_quest(PlayerType *player_ptr, QuestId quest_num);
 void check_find_art_quest_completion(PlayerType *player_ptr, ItemEntity *o_ptr);
 void quest_discovery(QuestId q_idx);

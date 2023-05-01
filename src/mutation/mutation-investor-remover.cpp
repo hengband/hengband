@@ -218,7 +218,7 @@ bool gain_mutation(PlayerType *player_ptr, MUTATION_IDX choose_mut)
         return false;
     }
 
-    chg_virtue(player_ptr, V_CHANCE, 1);
+    chg_virtue(player_ptr, Virtue::CHANCE, 1);
     race_dependent_mutation(player_ptr, gm_ptr);
     msg_print(_("突然変異した！", "You mutate!"));
     msg_print(gm_ptr->muta_desc);
@@ -283,7 +283,7 @@ bool lose_mutation(PlayerType *player_ptr, MUTATION_IDX choose_mut)
 void lose_all_mutations(PlayerType *player_ptr)
 {
     if (player_ptr->muta.any()) {
-        chg_virtue(player_ptr, V_CHANCE, -5);
+        chg_virtue(player_ptr, Virtue::CHANCE, -5);
         msg_print(_("全ての突然変異が治った。", "You are cured of all mutations."));
         player_ptr->muta.clear();
         set_bits(player_ptr->update, PU_BONUS);

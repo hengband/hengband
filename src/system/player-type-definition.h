@@ -20,6 +20,7 @@ enum class PlayerSkillKindType;
 enum class MimicKindType;
 enum class MonsterAbilityType;
 enum class MonsterRaceId : int16_t;
+enum class Virtue : short;
 
 class FloorType;
 class ItemEntity;
@@ -149,7 +150,7 @@ public:
     EnumClassFlagGroup<PlayerMutationType> muta{}; /*!< 突然変異 / mutations */
 
     int16_t virtues[8]{};
-    int16_t vir_types[8]{};
+    Virtue vir_types[8]{};
 
     TIME_EFFECT word_recall{}; /* Word of recall counter */
     TIME_EFFECT alter_reality{}; /* Alter reality counter */

@@ -102,31 +102,37 @@ static std::string display_class_stat(int cs, int *os, const std::string &cur, c
     return result;
 }
 
-static void interpret_class_select_key_move(char c, int *cs)
+static bool interpret_class_select_key_move(char c, int *cs)
 {
     if (c == '8') {
         if (*cs >= 4) {
             *cs -= 4;
         }
+        return true;
     }
 
     if (c == '4') {
         if (*cs > 0) {
             (*cs)--;
         }
+        return true;
     }
 
     if (c == '6') {
         if (*cs < PLAYER_CLASS_TYPE_MAX) {
             (*cs)++;
         }
+        return true;
     }
 
     if (c == '2') {
         if (*cs + 4 <= PLAYER_CLASS_TYPE_MAX) {
             *cs += 4;
         }
+        return true;
     }
+
+    return false;
 }
 
 static bool select_class(PlayerType *player_ptr, concptr sym, int *k)
@@ -134,9 +140,9 @@ static bool select_class(PlayerType *player_ptr, concptr sym, int *k)
     auto cs = player_ptr->pclass;
     auto os = PlayerClassType::MAX;
     int int_os = enum2i(os);
-    int int_cs = enum2i(cs);
     auto cur = birth_class_label(int_os, sym);
     while (true) {
+        int int_cs = enum2i(cs);
         cur = display_class_stat(int_cs, &int_os, cur, sym);
         if (*k >= 0) {
             break;
@@ -166,7 +172,11 @@ static bool select_class(PlayerType *player_ptr, concptr sym, int *k)
             }
         }
 
-        interpret_class_select_key_move(c, &int_cs);
+        if (interpret_class_select_key_move(c, &int_cs)) {
+            cs = i2enum<PlayerClassType>(int_cs);
+            continue;
+        }
+
         if (c == '*') {
             *k = randint0(PLAYER_CLASS_TYPE_MAX);
             cs = i2enum<PlayerClassType>(*k);

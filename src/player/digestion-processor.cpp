@@ -142,15 +142,15 @@ bool set_food(PlayerType *player_ptr, TIME_EFFECT v)
     }
 
     if (old_aux < 1 && new_aux > 0) {
-        chg_virtue(player_ptr, V_PATIENCE, 2);
+        chg_virtue(player_ptr, Virtue::PATIENCE, 2);
     } else if (old_aux < 3 && (old_aux != new_aux)) {
-        chg_virtue(player_ptr, V_PATIENCE, 1);
+        chg_virtue(player_ptr, Virtue::PATIENCE, 1);
     }
     if (old_aux == 2) {
-        chg_virtue(player_ptr, V_TEMPERANCE, 1);
+        chg_virtue(player_ptr, Virtue::TEMPERANCE, 1);
     }
     if (old_aux == 0) {
-        chg_virtue(player_ptr, V_TEMPERANCE, -1);
+        chg_virtue(player_ptr, Virtue::TEMPERANCE, -1);
     }
 
     if (new_aux > old_aux) {
@@ -170,9 +170,9 @@ bool set_food(PlayerType *player_ptr, TIME_EFFECT v)
 
         case 5:
             msg_print(_("食べ過ぎだ！", "You have gorged yourself!"));
-            chg_virtue(player_ptr, V_HARMONY, -1);
-            chg_virtue(player_ptr, V_PATIENCE, -1);
-            chg_virtue(player_ptr, V_TEMPERANCE, -2);
+            chg_virtue(player_ptr, Virtue::HARMONY, -1);
+            chg_virtue(player_ptr, Virtue::PATIENCE, -1);
+            chg_virtue(player_ptr, Virtue::TEMPERANCE, -2);
             break;
         }
 

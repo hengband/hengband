@@ -2475,6 +2475,12 @@
     <ClCompile Include="..\..\src\item-info\flavor-initializer.cpp">
       <Filter>item-info</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\system\monster-race-info.cpp">
+      <Filter>system</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\system\redrawing-flags-updater.cpp">
+      <Filter>system</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\combat\shoot.h">
@@ -5369,6 +5375,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\item-info\flavor-initializer.h">
       <Filter>item-info</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\system\redrawing-flags-updater.h">
+      <Filter>system</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

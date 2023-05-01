@@ -196,7 +196,7 @@ void set_zangband_visited_towns(PlayerType *player_ptr)
     player_ptr->visit = 1L;
 }
 
-void set_zangband_quest(PlayerType *player_ptr, quest_type *const q_ptr, const QuestId loading_quest_index, const QuestId old_inside_quest)
+void set_zangband_quest(PlayerType *player_ptr, QuestType *const q_ptr, const QuestId loading_quest_index, const QuestId old_inside_quest)
 {
     if (q_ptr->flags & QUEST_FLAG_PRESET) {
         q_ptr->dungeon = 0;

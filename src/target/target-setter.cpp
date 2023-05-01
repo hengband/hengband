@@ -254,7 +254,7 @@ static void switch_target_input(PlayerType *player_ptr, ts_type *ts_ptr)
         return;
     case 'p': {
         verify_panel(player_ptr);
-        player_ptr->update |= PU_MONSTERS;
+        player_ptr->update |= PU_MONSTER_STATUSES;
         player_ptr->redraw |= PR_MAP;
         player_ptr->window_flags |= PW_OVERHEAD;
         handle_stuff(player_ptr);
@@ -351,7 +351,7 @@ static void sweep_targets(PlayerType *player_ptr, ts_type *ts_ptr)
         panel_row_min = ts_ptr->y2;
         panel_col_min = ts_ptr->x2;
         panel_bounds_center();
-        player_ptr->update |= PU_MONSTERS;
+        player_ptr->update |= PU_MONSTER_STATUSES;
         player_ptr->redraw |= PR_MAP;
         player_ptr->window_flags |= PW_OVERHEAD;
         handle_stuff(player_ptr);
@@ -451,7 +451,7 @@ static void switch_next_grid_command(PlayerType *player_ptr, ts_type *ts_ptr)
         break;
     case 'p':
         verify_panel(player_ptr);
-        player_ptr->update |= PU_MONSTERS;
+        player_ptr->update |= PU_MONSTER_STATUSES;
         player_ptr->redraw |= PR_MAP;
         player_ptr->window_flags |= PW_OVERHEAD;
         handle_stuff(player_ptr);
@@ -590,9 +590,9 @@ bool target_set(PlayerType *player_ptr, target_type mode)
     sweep_target_grids(player_ptr, ts_ptr);
     prt("", 0, 0);
     verify_panel(player_ptr);
-    set_bits(player_ptr->update, PU_MONSTERS);
+    set_bits(player_ptr->update, PU_MONSTER_STATUSES);
     set_bits(player_ptr->redraw, PR_MAP);
-    set_bits(player_ptr->window_flags, PW_OVERHEAD | PW_FLOOR_ITEM_LIST);
+    set_bits(player_ptr->window_flags, PW_OVERHEAD | PW_FLOOR_ITEMS);
     handle_stuff(player_ptr);
     return target_who != 0;
 }

@@ -311,11 +311,11 @@ bool get_item_floor(PlayerType *player_ptr, COMMAND_CODE *cp, concptr pmt, concp
                 continue;
             }
 
-            if (window_flag[i] & PW_INVEN) {
+            if (window_flag[i] & PW_INVENTORY) {
                 ni++;
             }
 
-            if (window_flag[i] & PW_EQUIP) {
+            if (window_flag[i] & PW_EQUIPMENT) {
                 ne++;
             }
         }
@@ -325,7 +325,7 @@ bool get_item_floor(PlayerType *player_ptr, COMMAND_CODE *cp, concptr pmt, concp
             fis_ptr->toggle = !fis_ptr->toggle;
         }
 
-        player_ptr->window_flags |= (PW_INVEN | PW_EQUIP);
+        player_ptr->window_flags |= (PW_INVENTORY | PW_EQUIPMENT);
         handle_stuff(player_ptr);
         COMMAND_CODE get_item_label = 0;
         if (command_wrk == USE_INVEN) {
@@ -664,7 +664,7 @@ bool get_item_floor(PlayerType *player_ptr, COMMAND_CODE *cp, concptr pmt, concp
                 g_ptr->o_idx_list.rotate(player_ptr->current_floor_ptr);
             }
 
-            player_ptr->window_flags |= PW_FLOOR_ITEM_LIST;
+            player_ptr->window_flags |= PW_FLOOR_ITEMS;
             window_stuff(player_ptr);
 
             fis_ptr->floor_num = scan_floor_items(player_ptr, fis_ptr->floor_list, player_ptr->y, player_ptr->x, SCAN_FLOOR_ITEM_TESTER | SCAN_FLOOR_ONLY_MARKED, item_tester);
@@ -880,7 +880,7 @@ bool get_item_floor(PlayerType *player_ptr, COMMAND_CODE *cp, concptr pmt, concp
         toggle_inventory_equipment(player_ptr);
     }
 
-    player_ptr->window_flags |= (PW_INVEN | PW_EQUIP);
+    player_ptr->window_flags |= (PW_INVENTORY | PW_EQUIPMENT);
     handle_stuff(player_ptr);
     prt("", 0, 0);
     if (fis_ptr->oops && str) {

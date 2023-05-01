@@ -1,6 +1,8 @@
 ﻿#pragma once
 
 #include "system/angband.h"
+#include <filesystem>
+#include <string_view>
 
 /* Force definitions -- see fd_seek() */
 #ifndef SEEK_SET
@@ -33,21 +35,25 @@ extern int usleep(ulong usecs);
 
 #define FILE_READ_BUFF_SIZE 65535
 
-errr path_parse(char *buf, int max, concptr file);
-errr path_build(char *buf, int max, concptr path, concptr file);
-FILE *angband_fopen(concptr file, concptr mode);
+enum class FileOpenMode {
+    READ,
+    WRITE,
+    APPEND,
+};
+
+std::filesystem::path path_parse(std::string_view file);
+void path_build(char *buf, int max, const std::filesystem::path &path, std::string_view file);
+FILE *angband_fopen(const std::filesystem::path &file, const FileOpenMode mode, const bool is_binary = false);
 FILE *angband_fopen_temp(char *buf, int max);
 errr angband_fgets(FILE *fff, char *buf, ulong n);
 errr angband_fputs(FILE *fff, concptr buf, ulong n);
 errr angband_fclose(FILE *fff);
-errr fd_kill(concptr file);
-errr fd_move(concptr file, concptr what);
-errr fd_copy(concptr file, concptr what);
-int fd_make(concptr file, BIT_FLAGS mode);
-int fd_open(concptr file, int flags);
+void fd_kill(std::string_view file);
+void fd_move(std::string_view from, std::string_view to);
+int fd_make(std::string_view file, bool can_write_group = false);
+int fd_open(std::string_view file, int mode);
 errr fd_lock(int fd, int what);
 errr fd_seek(int fd, ulong n);
-errr fd_chop(int fd, ulong n);
 errr fd_read(int fd, char *buf, ulong n);
 errr fd_write(int fd, concptr buf, ulong n);
 errr fd_close(int fd);

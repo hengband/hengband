@@ -45,8 +45,8 @@ void object_known(ItemEntity *o_ptr)
 void object_aware(PlayerType *player_ptr, const ItemEntity *o_ptr)
 {
     const bool is_already_awared = o_ptr->is_aware();
-
-    baseitems_info[o_ptr->bi_id].aware = true;
+    auto &baseitem = o_ptr->get_baseitem();
+    baseitem.aware = true;
 
     // 以下、playrecordに記録しない場合はreturnする
     if (!record_ident) {
@@ -58,7 +58,7 @@ void object_aware(PlayerType *player_ptr, const ItemEntity *o_ptr)
     }
 
     // アーティファクト専用ベースアイテムは記録しない
-    if (baseitems_info[o_ptr->bi_id].gen_flags.has(ItemGenerationTraitType::INSTA_ART)) {
+    if (baseitem.gen_flags.has(ItemGenerationTraitType::INSTA_ART)) {
         return;
     }
 
@@ -69,15 +69,11 @@ void object_aware(PlayerType *player_ptr, const ItemEntity *o_ptr)
     // playrecordに識別したアイテムを記録
     ItemEntity forge;
     ItemEntity *q_ptr;
-    GAME_TEXT o_name[MAX_NLEN];
-
     q_ptr = &forge;
     q_ptr->copy_from(o_ptr);
-
     q_ptr->number = 1;
-    describe_flavor(player_ptr, o_name, q_ptr, OD_NAME_ONLY);
-
-    exe_write_diary(player_ptr, DIARY_FOUND, 0, o_name);
+    const auto item_name = describe_flavor(player_ptr, q_ptr, OD_NAME_ONLY);
+    exe_write_diary(player_ptr, DIARY_FOUND, 0, item_name.data());
 }
 
 /*!
@@ -87,5 +83,5 @@ void object_aware(PlayerType *player_ptr, const ItemEntity *o_ptr)
  */
 void object_tried(const ItemEntity *o_ptr)
 {
-    baseitems_info[o_ptr->bi_id].tried = true;
+    o_ptr->get_baseitem().tried = true;
 }

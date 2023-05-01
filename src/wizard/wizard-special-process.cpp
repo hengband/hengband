@@ -240,8 +240,8 @@ void wiz_create_item(PlayerType *player_ptr)
 
     const auto &baseitem = baseitems_info[bi_id];
     if (baseitem.gen_flags.has(ItemGenerationTraitType::INSTA_ART)) {
-        for (const auto &[a_idx, a_ref] : artifacts_info) {
-            if ((a_idx == FixedArtifactId::NONE) || (a_ref.bi_key != baseitem.bi_key)) {
+        for (const auto &[a_idx, artifact] : artifacts_info) {
+            if ((a_idx == FixedArtifactId::NONE) || (artifact.bi_key != baseitem.bi_key)) {
                 continue;
             }
 
@@ -266,14 +266,12 @@ void wiz_create_item(PlayerType *player_ptr)
  */
 static std::string wiz_make_named_artifact_desc(PlayerType *player_ptr, FixedArtifactId a_idx)
 {
-    const auto &a_ref = artifacts_info.at(a_idx);
+    const auto &artifact = ArtifactsInfo::get_instance().get_artifact(a_idx);
     ItemEntity item;
-    item.prep(lookup_baseitem_id(a_ref.bi_key));
+    item.prep(lookup_baseitem_id(artifact.bi_key));
     item.fixed_artifact_idx = a_idx;
     object_known(&item);
-    char buf[MAX_NLEN];
-    describe_flavor(player_ptr, buf, &item, OD_NAME_ONLY);
-    return buf;
+    return describe_flavor(player_ptr, &item, OD_NAME_ONLY);
 }
 
 /**
@@ -344,8 +342,8 @@ static std::vector<FixedArtifactId> wiz_collect_group_a_idx(const grouper &group
     const auto &[tval_list, name] = group_artifact;
     std::vector<FixedArtifactId> a_idx_list;
     for (auto tval : tval_list) {
-        for (const auto &[a_idx, a_ref] : artifacts_info) {
-            if (a_ref.bi_key.tval() == tval) {
+        for (const auto &[a_idx, artifact] : artifacts_info) {
+            if (artifact.bi_key.tval() == tval) {
                 a_idx_list.push_back(a_idx);
             }
         }
@@ -388,14 +386,8 @@ void wiz_create_named_art(PlayerType *player_ptr)
 
     screen_load();
     const auto a_idx = create_a_idx.value();
-    const auto it = artifacts_info.find(a_idx);
-    if (it == artifacts_info.end()) {
-        msg_print("The specified artifact is obsoleted for now.");
-        return;
-    }
-
-    auto &a_ref = it->second;
-    if (a_ref.is_generated) {
+    const auto &artifact = ArtifactsInfo::get_instance().get_artifact(a_idx);
+    if (artifact.is_generated) {
         msg_print("It's already allocated.");
         return;
     }
@@ -701,8 +693,8 @@ void wiz_reset_race(PlayerType *player_ptr)
     rp_ptr = &race_info[enum2i(player_ptr->prace)];
 
     player_ptr->window_flags |= PW_PLAYER;
-    player_ptr->update |= PU_BONUS | PU_HP | PU_MANA | PU_SPELLS;
-    player_ptr->redraw |= PR_BASIC | PR_HP | PR_MANA | PR_STATS;
+    player_ptr->update |= PU_BONUS | PU_HP | PU_MP | PU_SPELLS;
+    player_ptr->redraw |= PR_BASIC | PR_HP | PR_MP | PR_ABILITY_SCORE;
     handle_stuff(player_ptr);
 }
 
@@ -722,8 +714,8 @@ void wiz_reset_class(PlayerType *player_ptr)
     mp_ptr = &class_magics_info[val];
     PlayerClass(player_ptr).init_specific_data();
     player_ptr->window_flags |= PW_PLAYER;
-    player_ptr->update |= PU_BONUS | PU_HP | PU_MANA | PU_SPELLS;
-    player_ptr->redraw |= PR_BASIC | PR_HP | PR_MANA | PR_STATS;
+    player_ptr->update |= PU_BONUS | PU_HP | PU_MP | PU_SPELLS;
+    player_ptr->redraw |= PR_BASIC | PR_HP | PR_MP | PR_ABILITY_SCORE;
     handle_stuff(player_ptr);
 }
 
@@ -746,7 +738,7 @@ void wiz_reset_realms(PlayerType *player_ptr)
     player_ptr->realm1 = static_cast<int16_t>(val1);
     player_ptr->realm2 = static_cast<int16_t>(val2);
     player_ptr->window_flags |= PW_PLAYER;
-    player_ptr->update |= PU_BONUS | PU_HP | PU_MANA | PU_SPELLS;
+    player_ptr->update |= PU_BONUS | PU_HP | PU_MP | PU_SPELLS;
     player_ptr->redraw |= PR_BASIC;
     handle_stuff(player_ptr);
 }
@@ -760,8 +752,7 @@ void wiz_dump_options(void)
 {
     char buf[1024];
     path_build(buf, sizeof(buf), ANGBAND_DIR_USER, "opt_info.txt");
-    FILE *fff;
-    fff = angband_fopen(buf, "a");
+    auto *fff = angband_fopen(buf, FileOpenMode::APPEND);
     if (fff == nullptr) {
         msg_format(_("ファイル %s を開けませんでした。", "Failed to open file %s."), buf);
         msg_print(nullptr);

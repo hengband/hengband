@@ -37,13 +37,14 @@ static void describe_baseitem_info(PlayerType *player_ptr,
     q_ptr->to_a = 0;
     q_ptr->to_h = 0;
     q_ptr->to_d = 0;
-    *level_desc = baseitems_info[q_ptr->bi_id].level;
+    *level_desc = q_ptr->get_baseitem().level;
     *value = q_ptr->get_price();
     if (!name || !damage_desc || !chance_desc || !weight_desc) {
         return;
     }
 
-    describe_flavor(player_ptr, name, q_ptr, OD_NAME_ONLY | OD_STORE);
+    auto item_name = describe_flavor(player_ptr, q_ptr, OD_NAME_ONLY | OD_STORE);
+    name = item_name.data();
     switch (q_ptr->bi_key.tval()) {
     case ItemKindType::SHOT:
     case ItemKindType::BOLT:
@@ -73,7 +74,7 @@ static void describe_baseitem_info(PlayerType *player_ptr,
     }
 
     chance_desc->clear();
-    const auto &baseitem = baseitems_info[q_ptr->bi_id];
+    const auto &baseitem = q_ptr->get_baseitem();
     for (auto i = 0U; i < baseitem.alloc_tables.size(); i++) {
         const auto &[level, chance] = baseitem.alloc_tables[i];
         if (chance > 0) {
@@ -93,7 +94,7 @@ SpoilerOutputResultType spoil_obj_desc(concptr fname)
 {
     char buf[1024];
     path_build(buf, sizeof(buf), ANGBAND_DIR_USER, fname);
-    spoiler_file = angband_fopen(buf, "w");
+    spoiler_file = angband_fopen(buf, FileOpenMode::WRITE);
     if (!spoiler_file) {
         return SpoilerOutputResultType::FILE_OPEN_FAILED;
     }

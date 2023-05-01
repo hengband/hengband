@@ -174,16 +174,15 @@ std::optional<std::string> do_hex_spell(PlayerType *player_ptr, spell_hex_type s
                 return "";
             }
 
-            GAME_TEXT o_name[MAX_NLEN];
-            describe_flavor(player_ptr, o_name, o_ptr, OD_NAME_ONLY);
+            const auto item_name = describe_flavor(player_ptr, o_ptr, OD_NAME_ONLY);
             auto f = object_flags(o_ptr);
 
-            if (!get_check(format(_("本当に %s を呪いますか？", "Do you curse %s, really？"), o_name))) {
+            if (!get_check(format(_("本当に %s を呪いますか？", "Do you curse %s, really？"), item_name.data()))) {
                 return "";
             }
 
             if (!one_in_(3) && (o_ptr->is_fixed_or_random_artifact() || f.has(TR_BLESSED))) {
-                msg_format(_("%s は呪いを跳ね返した。", "%s resists the effect."), o_name);
+                msg_format(_("%s は呪いを跳ね返した。", "%s resists the effect."), item_name.data());
                 if (one_in_(3)) {
                     if (o_ptr->to_d > 0) {
                         o_ptr->to_d -= randint1(3) % 2;
@@ -203,11 +202,11 @@ std::optional<std::string> do_hex_spell(PlayerType *player_ptr, spell_hex_type s
                             o_ptr->to_a = 0;
                         }
                     }
-                    msg_format(_("%s は劣化してしまった。", "Your %s was disenchanted!"), o_name);
+                    msg_format(_("%s は劣化してしまった。", "Your %s was disenchanted!"), item_name.data());
                 }
             } else {
                 int curse_rank = 0;
-                msg_format(_("恐怖の暗黒オーラがあなたの%sを包み込んだ！", "A terrible black aura blasts your %s!"), o_name);
+                msg_format(_("恐怖の暗黒オーラがあなたの%sを包み込んだ！", "A terrible black aura blasts your %s!"), item_name.data());
                 o_ptr->curse_flags.set(CurseTraitType::CURSED);
 
                 if (o_ptr->is_fixed_or_random_artifact() || o_ptr->is_ego()) {
@@ -521,29 +520,24 @@ std::optional<std::string> do_hex_spell(PlayerType *player_ptr, spell_hex_type s
             return _("装備している防具に呪いをかける。", "Curse a piece of armour that you are wielding.");
         }
         if (cast) {
+            const auto q = _("どれを呪いますか？", "Which piece of armour do you curse?");
+            const auto s = _("防具を装備していない。", "You're not wearing any armor.");
             OBJECT_IDX item;
-            concptr q, s;
-            GAME_TEXT o_name[MAX_NLEN];
-            ItemEntity *o_ptr;
-
-            q = _("どれを呪いますか？", "Which piece of armour do you curse?");
-            s = _("防具を装備していない。", "You're not wearing any armor.");
-
-            o_ptr = choose_object(player_ptr, &item, q, s, (USE_EQUIP), FuncItemTester(&ItemEntity::is_protector));
+            auto *o_ptr = choose_object(player_ptr, &item, q, s, (USE_EQUIP), FuncItemTester(&ItemEntity::is_protector));
             if (!o_ptr) {
                 return "";
             }
 
             o_ptr = &player_ptr->inventory_list[item];
-            describe_flavor(player_ptr, o_name, o_ptr, OD_NAME_ONLY);
+            const auto item_name = describe_flavor(player_ptr, o_ptr, OD_NAME_ONLY);
             auto f = object_flags(o_ptr);
 
-            if (!get_check(format(_("本当に %s を呪いますか？", "Do you curse %s, really？"), o_name))) {
+            if (!get_check(format(_("本当に %s を呪いますか？", "Do you curse %s, really？"), item_name.data()))) {
                 return "";
             }
 
             if (!one_in_(3) && (o_ptr->is_fixed_or_random_artifact() || f.has(TR_BLESSED))) {
-                msg_format(_("%s は呪いを跳ね返した。", "%s resists the effect."), o_name);
+                msg_format(_("%s は呪いを跳ね返した。", "%s resists the effect."), item_name.data());
                 if (one_in_(3)) {
                     if (o_ptr->to_d > 0) {
                         o_ptr->to_d -= randint1(3) % 2;
@@ -563,11 +557,11 @@ std::optional<std::string> do_hex_spell(PlayerType *player_ptr, spell_hex_type s
                             o_ptr->to_a = 0;
                         }
                     }
-                    msg_format(_("%s は劣化してしまった。", "Your %s was disenchanted!"), o_name);
+                    msg_format(_("%s は劣化してしまった。", "Your %s was disenchanted!"), item_name.data());
                 }
             } else {
                 int curse_rank = 0;
-                msg_format(_("恐怖の暗黒オーラがあなたの%sを包み込んだ！", "A terrible black aura blasts your %s!"), o_name);
+                msg_format(_("恐怖の暗黒オーラがあなたの%sを包み込んだ！", "A terrible black aura blasts your %s!"), item_name.data());
                 o_ptr->curse_flags.set(CurseTraitType::CURSED);
 
                 if (o_ptr->is_fixed_or_random_artifact() || o_ptr->is_ego()) {
@@ -608,7 +602,7 @@ std::optional<std::string> do_hex_spell(PlayerType *player_ptr, spell_hex_type s
         if (cast) {
             auto *o_ptr = &player_ptr->inventory_list[INVEN_OUTER];
 
-            if (!o_ptr->bi_id) {
+            if (!o_ptr->is_valid()) {
                 msg_print(_("クロークを身につけていない！", "You are not wearing a cloak."));
                 return std::nullopt;
             } else if (!o_ptr->is_cursed()) {
@@ -621,7 +615,7 @@ std::optional<std::string> do_hex_spell(PlayerType *player_ptr, spell_hex_type s
         if (continuation) {
             auto *o_ptr = &player_ptr->inventory_list[INVEN_OUTER];
 
-            if ((!o_ptr->bi_id) || (!o_ptr->is_cursed())) {
+            if ((!o_ptr->is_valid()) || (!o_ptr->is_cursed())) {
                 exe_spell(player_ptr, REALM_HEX, spell, SpellProcessType::STOP);
                 SpellHex spell_hex(player_ptr);
                 spell_hex.reset_casting_flag(spell);
@@ -730,7 +724,7 @@ std::optional<std::string> do_hex_spell(PlayerType *player_ptr, spell_hex_type s
                     set_action(player_ptr, ACTION_NONE);
                 }
 
-                player_ptr->update |= (PU_BONUS | PU_HP | PU_MANA | PU_SPELLS);
+                player_ptr->update |= (PU_BONUS | PU_HP | PU_MP | PU_SPELLS);
                 player_ptr->redraw |= (PR_EXTRA);
 
                 return "";
@@ -962,8 +956,8 @@ std::optional<std::string> do_hex_spell(PlayerType *player_ptr, spell_hex_type s
     }
 
     if (!info) {
-        player_ptr->update |= (PU_BONUS | PU_HP | PU_MANA | PU_SPELLS);
-        player_ptr->redraw |= (PR_EXTRA | PR_HP | PR_MANA);
+        player_ptr->update |= (PU_BONUS | PU_HP | PU_MP | PU_SPELLS);
+        player_ptr->redraw |= (PR_EXTRA | PR_HP | PR_MP);
     }
 
     return "";

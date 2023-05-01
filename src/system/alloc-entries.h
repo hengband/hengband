@@ -17,12 +17,15 @@
  * Pass 1 is determined from allocation information
  * Pass 2 is determined from allocation restriction
  */
+class BaseitemInfo;
 struct alloc_entry {
     short index; /* The actual index */
 
     DEPTH level; /* Base dungeon level */
     PROB prob1; /* Probability, pass 1 */
     PROB prob2; /* Probability, pass 2 */
+
+    BaseitemInfo &get_baseitem() const;
 };
 
 extern std::vector<alloc_entry> alloc_race_table;

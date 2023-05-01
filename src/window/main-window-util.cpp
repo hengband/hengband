@@ -129,15 +129,13 @@ void print_map(PlayerType *player_ptr)
  */
 static void display_shortened_item_name(PlayerType *player_ptr, ItemEntity *o_ptr, int y)
 {
-    char buf[MAX_NLEN];
-    describe_flavor(player_ptr, buf, o_ptr, (OD_NO_FLAVOR | OD_OMIT_PREFIX | OD_NAME_ONLY));
+    auto item_name = describe_flavor(player_ptr, o_ptr, (OD_NO_FLAVOR | OD_OMIT_PREFIX | OD_NAME_ONLY));
     auto attr = tval_to_attr[enum2i(o_ptr->bi_key.tval()) % 128];
     if (player_ptr->effects()->hallucination()->is_hallucinated()) {
         attr = TERM_WHITE;
-        strcpy(buf, _("何か奇妙な物", "something strange"));
+        item_name = _("何か奇妙な物", "something strange");
     }
 
-    std::string item_name(buf);
     for (const auto &simplified_str : simplify_list) {
         const auto &replacing = simplified_str.first;
 #ifndef JP

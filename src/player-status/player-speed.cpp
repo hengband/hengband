@@ -71,19 +71,23 @@ int16_t PlayerSpeed::class_bonus()
 {
     int16_t bonus = 0;
     PlayerClass pc(this->player_ptr);
+    PlayerRace pr(this->player_ptr);
+    auto has_speed = pr.equals(PlayerRaceType::KLACKON);
+    has_speed |= pr.equals(PlayerRaceType::SPRITE);
+    has_speed |= this->player_ptr->ppersonality == PERSONALITY_MUNCHKIN;
     if (pc.equals(PlayerClassType::NINJA)) {
         if (heavy_armor(this->player_ptr)) {
             bonus -= (this->player_ptr->lev) / 10;
-        } else if ((!this->player_ptr->inventory_list[INVEN_MAIN_HAND].bi_id || can_attack_with_main_hand(this->player_ptr)) && (!this->player_ptr->inventory_list[INVEN_SUB_HAND].bi_id || can_attack_with_sub_hand(this->player_ptr))) {
+        } else if (pc.has_ninja_speed()) {
             bonus += 3;
-            if (!(PlayerRace(this->player_ptr).equals(PlayerRaceType::KLACKON) || PlayerRace(this->player_ptr).equals(PlayerRaceType::SPRITE) || (this->player_ptr->ppersonality == PERSONALITY_MUNCHKIN))) {
+            if (!has_speed) {
                 bonus += (this->player_ptr->lev) / 10;
             }
         }
     }
 
     if ((pc.equals(PlayerClassType::MONK) || pc.equals(PlayerClassType::FORCETRAINER)) && !heavy_armor(this->player_ptr)) {
-        if (!(PlayerRace(this->player_ptr).equals(PlayerRaceType::KLACKON) || PlayerRace(this->player_ptr).equals(PlayerRaceType::SPRITE) || (this->player_ptr->ppersonality == PERSONALITY_MUNCHKIN))) {
+        if (!has_speed) {
             bonus += (this->player_ptr->lev) / 10;
         }
     }
@@ -117,13 +121,16 @@ int16_t PlayerSpeed::class_bonus()
  */
 int16_t PlayerSpeed::personality_bonus()
 {
-    int16_t bonus = 0;
     PlayerRace pr(this->player_ptr);
-    if (this->player_ptr->ppersonality == PERSONALITY_MUNCHKIN && !pr.equals(PlayerRaceType::KLACKON) && !pr.equals(PlayerRaceType::SPRITE)) {
-        bonus += (this->player_ptr->lev) / 10 + 5;
+    if (this->player_ptr->ppersonality != PERSONALITY_MUNCHKIN) {
+        return 0;
     }
 
-    return bonus;
+    if (pr.equals(PlayerRaceType::KLACKON) || pr.equals(PlayerRaceType::SPRITE)) {
+        return 0;
+    }
+
+    return this->player_ptr->lev / 10 + 5;
 }
 
 /*!
@@ -267,7 +274,8 @@ int16_t PlayerSpeed::riding_bonus()
     }
 
     if (riding_m_ptr->mspeed > STANDARD_SPEED) {
-        bonus = (int16_t)((speed - STANDARD_SPEED) * (this->player_ptr->skill_exp[PlayerSkillKindType::RIDING] * 3 + this->player_ptr->lev * 160L - 10000L) / (22000L));
+        const auto skill_exp = this->player_ptr->skill_exp[PlayerSkillKindType::RIDING];
+        bonus = (int16_t)((speed - STANDARD_SPEED) * (skill_exp * 3 + this->player_ptr->lev * 160L - 10000L) / (22000L));
         if (bonus < 0) {
             bonus = 0;
         }

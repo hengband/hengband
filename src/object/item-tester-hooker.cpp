@@ -72,7 +72,7 @@ FuncItemTester::FuncItemTester(std::function<bool(PlayerType *, const ItemEntity
  */
 bool ItemTester::okay(const ItemEntity *o_ptr) const
 {
-    if (o_ptr->bi_id == 0) {
+    if (!o_ptr->is_valid()) {
         return false;
     }
 

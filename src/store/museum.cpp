@@ -31,17 +31,14 @@ void museum_remove_object(PlayerType *player_ptr)
     }
 
     item = item + store_top;
-    ItemEntity *o_ptr;
-    o_ptr = &st_ptr->stock[item];
-
-    GAME_TEXT o_name[MAX_NLEN];
-    describe_flavor(player_ptr, o_name, o_ptr, 0);
+    auto *o_ptr = &st_ptr->stock[item];
+    const auto item_name = describe_flavor(player_ptr, o_ptr, 0);
     msg_print(_("展示をやめさせたアイテムは二度と見ることはできません！", "Once removed from the Museum, an item will be gone forever!"));
-    if (!get_check(format(_("本当に%sの展示をやめさせますか？", "Really order to remove %s from the Museum? "), o_name))) {
+    if (!get_check(format(_("本当に%sの展示をやめさせますか？", "Really order to remove %s from the Museum? "), item_name.data()))) {
         return;
     }
 
-    msg_format(_("%sの展示をやめさせた。", "You ordered to remove %s."), o_name);
+    msg_format(_("%sの展示をやめさせた。", "You ordered to remove %s."), item_name.data());
     store_item_increase(item, -o_ptr->number);
     store_item_optimize(item);
     (void)combine_and_reorder_home(player_ptr, StoreSaleType::MUSEUM);

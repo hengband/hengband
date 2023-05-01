@@ -38,12 +38,11 @@
 bool screen_object(PlayerType *player_ptr, ItemEntity *o_ptr, BIT_FLAGS mode)
 {
     concptr info[128];
-    GAME_TEXT o_name[MAX_NLEN];
-
     int trivial_info = 0;
     auto flags = object_flags(o_ptr);
 
-    const auto item_text = o_ptr->is_fixed_artifact() ? artifacts_info.at(o_ptr->fixed_artifact_idx).text.data() : baseitems_info[o_ptr->bi_id].text.data();
+    const auto &artifacts = ArtifactsInfo::get_instance();
+    const auto item_text = o_ptr->is_fixed_artifact() ? artifacts.get_artifact(o_ptr->fixed_artifact_idx).text.data() : o_ptr->get_baseitem().text.data();
     const auto item_text_lines = shape_buffer(item_text, 77 - 15);
 
     int i = 0;
@@ -793,13 +792,14 @@ bool screen_object(PlayerType *player_ptr, ItemEntity *o_ptr, BIT_FLAGS mode)
     int wid, hgt;
     term_get_size(&wid, &hgt);
 
+    std::string item_name;
     if (!(mode & SCROBJ_FAKE_OBJECT)) {
-        describe_flavor(player_ptr, o_name, o_ptr, 0);
+        item_name = describe_flavor(player_ptr, o_ptr, 0);
     } else {
-        describe_flavor(player_ptr, o_name, o_ptr, (OD_NAME_ONLY | OD_STORE));
+        item_name = describe_flavor(player_ptr, o_ptr, (OD_NAME_ONLY | OD_STORE));
     }
 
-    prt(o_name, 0, 0);
+    prt(item_name, 0, 0);
     for (int k = 1; k < hgt; k++) {
         prt("", k, 13);
     }

@@ -16,7 +16,7 @@ Q:$27:T:evil spell casters, dragons, and even titans are rumored to be
 Q:$27:T:in there.  The entrance to the old castle is in a large clearing 
 Q:$27:T:east of here.  Destroy ALL the monsters within the castle, and your
 Q:$27:T:reward will be an artifact of great value.
-Q:27:T:街の古城が邪悪なモンスターどもに占拠されてしまいまいた。
+Q:27:T:街の古城が邪悪なモンスターどもに占拠されてしまいました。
 Q:27:T:強力なアンデッド、邪悪な魔術師、ドラゴン、さらにはタイタンまでもが
 Q:27:T:中にいると噂されています。城への入口はここの東の広い平地にあります。
 Q:27:T:中にいる全てのモンスターを倒して下さい。報酬はとても価値のある

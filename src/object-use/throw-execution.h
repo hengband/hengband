@@ -4,11 +4,11 @@
  * @brief 投擲処理関連ヘッダ
  */
 
+#include "object-enchant/tr-flags.h"
 #include "system/angband.h"
 #include "system/system-variables.h"
-
-#include "object-enchant/tr-flags.h"
 #include "util/flag-group.h"
+#include <string>
 
 struct grid_type;
 class MonsterEntity;
@@ -62,15 +62,15 @@ private:
     ItemEntity *o_ptr{};
     bool hit_wall = false;
     bool return_when_thrown = false;
-    GAME_TEXT o_name[MAX_NLEN]{};
+    std::string o_name{};
     TrFlags obj_flags{};
     bool come_back = false;
     bool do_drop = true;
     grid_type *g_ptr{};
     MonsterEntity *m_ptr{};
-    GAME_TEXT m_name[MAX_NLEN]{};
+    std::string m_name{};
     int back_chance{};
-    char o2_name[MAX_NLEN]{};
+    std::string o2_name{};
     bool super_boomerang{};
 
     bool check_what_throw();

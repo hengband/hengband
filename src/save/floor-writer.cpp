@@ -156,8 +156,8 @@ bool wr_dungeon(PlayerType *player_ptr)
     forget_lite(player_ptr->current_floor_ptr);
     forget_view(player_ptr->current_floor_ptr);
     clear_mon_lite(player_ptr->current_floor_ptr);
-    player_ptr->update |= PU_VIEW | PU_LITE | PU_MON_LITE;
-    player_ptr->update |= PU_MONSTERS | PU_DISTANCE | PU_FLOW;
+    player_ptr->update |= PU_VIEW | PU_LITE | PU_MONSTER_LITE;
+    player_ptr->update |= PU_MONSTER_STATUSES | PU_DISTANCE | PU_FLOW;
     wr_s16b(max_floor_id);
     wr_byte((byte)player_ptr->dungeon_idx);
     if (!player_ptr->floor_id) {
@@ -257,13 +257,13 @@ bool save_floor(PlayerType *player_ptr, saved_floor_type *sf_ptr, BIT_FLAGS mode
     saving_savefile = nullptr;
     safe_setuid_grab(player_ptr);
 
-    int fd = fd_make(floor_savefile.data(), 0644);
+    auto fd = fd_make(floor_savefile.data());
     safe_setuid_drop();
     bool is_save_successful = false;
     if (fd >= 0) {
         (void)fd_close(fd);
         safe_setuid_grab(player_ptr);
-        saving_savefile = angband_fopen(floor_savefile.data(), "wb");
+        saving_savefile = angband_fopen(floor_savefile.data(), FileOpenMode::WRITE, true);
         safe_setuid_drop();
         if (saving_savefile) {
             if (save_floor_aux(player_ptr, sf_ptr)) {

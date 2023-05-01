@@ -101,20 +101,20 @@ void process_dungeon(PlayerType *player_ptr, bool load_game)
     msg_erase();
 
     w_ptr->character_xtra = true;
-    set_bits(player_ptr->window_flags, PW_INVEN | PW_EQUIP | PW_SPELL | PW_PLAYER | PW_MONSTER | PW_OVERHEAD | PW_DUNGEON);
+    set_bits(player_ptr->window_flags, PW_INVENTORY | PW_EQUIPMENT | PW_SPELL | PW_PLAYER | PW_MONSTER_LORE | PW_OVERHEAD | PW_DUNGEON);
     set_bits(player_ptr->redraw, PR_WIPE | PR_BASIC | PR_EXTRA | PR_EQUIPPY | PR_MAP);
-    set_bits(player_ptr->update, PU_BONUS | PU_HP | PU_MANA | PU_SPELLS | PU_VIEW | PU_LITE | PU_MON_LITE | PU_TORCH | PU_MONSTERS | PU_DISTANCE | PU_FLOW);
+    set_bits(player_ptr->update, PU_BONUS | PU_HP | PU_MP | PU_SPELLS | PU_VIEW | PU_LITE | PU_MONSTER_LITE | PU_TORCH | PU_MONSTER_STATUSES | PU_DISTANCE | PU_FLOW);
     handle_stuff(player_ptr);
 
     w_ptr->character_xtra = false;
-    set_bits(player_ptr->update, PU_BONUS | PU_HP | PU_MANA | PU_SPELLS | PU_COMBINE | PU_REORDER);
+    set_bits(player_ptr->update, PU_BONUS | PU_HP | PU_MP | PU_SPELLS | PU_COMBINATION | PU_REORDER);
     handle_stuff(player_ptr);
     term_fresh();
 
     auto no_feeling_quest = (quest_num == QuestId::OBERON);
     no_feeling_quest |= (quest_num == QuestId::SERPENT);
     no_feeling_quest |= none_bits(quest_list[quest_num].flags, QUEST_FLAG_PRESET);
-    if (inside_quest(quest_num) && quest_type::is_fixed(quest_num) && !no_feeling_quest) {
+    if (inside_quest(quest_num) && QuestType::is_fixed(quest_num) && !no_feeling_quest) {
         do_cmd_feeling(player_ptr);
     }
 

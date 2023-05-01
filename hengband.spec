@@ -1,49 +1,55 @@
-%define version 1.1.0b
-%define release 3
+%define version 3.0.0Alpha78
+%define release 1
+%global debug_package %{nil}
 
 Summary: hengband %{version}
 Name: hengband
 Version: %{version}
 Release: %{release}
-Copyright: unknown
+License: unknown
 Group: Amusements/Games
-Packager: Takahiro MIZUNO <tow@plum.freemail.ne.jp>
-Url: http://echizen.s5.xrea.com/heng/index.html
-Source: hengband-%{version}.tar.bz2
-Buildroot: %{_tmppath}/%{name}-%{version}-root
+Url: https://hengband.github.io
+Source: hengband-%{version}.tar.gz
+Requires: ncurses-libs libstdc++ libcurl
+BuildRequires: autoconf automake gcc-c++ ncurses-devel libcurl-devel nkf
 
 %description
 Hengband is a variant of ZAngband.
 
 Official page is this,
-http://echizen.s5.xrea.com/heng/eng-hengband/index.html
+https://hengband.github.io
 
-More infomation is /usr/doc/hengband-hoge/readme_eng.txt
+More infomation is /usr/share/doc/hengband/readme-eng.md
 
-Summary(ja): ÊÑ¶òÈÚÅÜ %{version}
+Summary(ja): å¤‰æ„šè›®æ€’ %{version}
 
 %description -l ja
-ÊÑ¶òÈÚÅÜ¤Ï Angband ¤Î¥Ğ¥ê¥¢¥ó¥È¤Ç¤¹¡£
+å¤‰æ„šè›®æ€’ã¯ Angband ã®ãƒãƒªã‚¢ãƒ³ãƒˆã§ã™ã€‚
 
-ËÜ¥½¥Õ¥È¥¦¥§¥¢¤ÎºÇ¿·ÈÇ¤Ï°Ê²¼¤Î¾ì½ê¤«¤éÆş¼ê¤Ç¤­¤Ş¤¹¡£
-http://echizen.s5.xrea.com/heng/index.html
+æœ¬ã‚½ãƒ•ãƒˆã‚¦ã‚§ã‚¢ã®æœ€æ–°ç‰ˆã¯ä»¥ä¸‹ã®å ´æ‰€ã‹ã‚‰å…¥æ‰‹ã§ãã¾ã™ã€‚
+https://hengband.github.io
 
-¾Ü¤·¤¯¤Ï /usr/doc/hengband-hoge/readme.txt ¤ò»²¾È¡£
+è©³ã—ãã¯ /usr/share/doc/hengband/readme.md ã‚’å‚ç…§ã€‚
 
 %prep
 rm -rf $RPM_BUILD_ROOT
 
 %setup -n %{name}-%{version}
+./bootstrap
 
 %build
-./configure --prefix=%{_prefix} --bindir=%{_bindir} --with-libpath=%{_datadir}/games/hengband/lib
-make
+%configure --with-libpath=%{_datadir}/games/hengband/lib
+%make_build
 
 %install
 mkdir -p $RPM_BUILD_ROOT/%{_bindir}
 mkdir -p $RPM_BUILD_ROOT/%{_datadir}/games/hengband
-cp src/hengband $RPM_BUILD_ROOT/%{_bindir}
+%makeinstall
 cp -R lib/ -p $RPM_BUILD_ROOT/%{_datadir}/games/hengband/
+find $RPM_BUILD_ROOT/%{_datadir}/games/hengband/ -type f -name "Makefile*" -exec rm {} \;
+find $RPM_BUILD_ROOT/%{_datadir}/games/hengband/ -type f -name "delete.me*" -exec rm {} \;
+find $RPM_BUILD_ROOT/%{_datadir}/games/hengband/ -name ".git*" -exec rm -rf {} \;
+rm -rf $RPM_BUILD_ROOT/%{_datadir}/games/hengband/lib/xtra/{sound,music}
 touch $RPM_BUILD_ROOT/%{_datadir}/games/hengband/lib/apex/scores.raw
 
 %clean
@@ -76,22 +82,35 @@ exit 0
 %{_datadir}/games/hengband/lib/apex/h_scores.raw
 %{_datadir}/games/hengband/lib/apex/readme.txt
 %attr(664 root,games) %config(noreplace) %{_datadir}/games/hengband/lib/apex/scores.raw
-%{_datadir}/games/hengband/lib/bone/delete.me
-%{_datadir}/games/hengband/lib/data/delete.me
 %{_datadir}/games/hengband/lib/edit/*.txt
+%{_datadir}/games/hengband/lib/edit/quests/*.txt
+%{_datadir}/games/hengband/lib/edit/towns/*.txt
 %{_datadir}/games/hengband/lib/file/*.txt
 %{_datadir}/games/hengband/lib/help/*.hlp
 %{_datadir}/games/hengband/lib/help/*.txt
-%{_datadir}/games/hengband/lib/info/delete.me
 %{_datadir}/games/hengband/lib/pref/*.prf
-%{_datadir}/games/hengband/lib/save/delete.me
-%{_datadir}/games/hengband/lib/script/delete.me
-%{_datadir}/games/hengband/lib/user/delete.me
 %{_datadir}/games/hengband/lib/xtra/graf/8x8.bmp
-%doc readme.txt readme_angband readme_eng.txt
-
+%doc readme.md readme_angband readme-eng.md
+%license lib/help/jlicense.txt
 
 %changelog
+
+* Mon Feb 20 2023 Shiro Hara <white@vx-xv.com>
+- hengband RPM 3.0.0Alpha release 78
+
+* Sun Feb 19 2023 Shiro Hara <white@vx-xv.com>
+- hengband RPM 3.0.0Alpha release 77
+- Remove Packacger
+- Remove Buildroot
+- Add %license
+- Fix Version and Release
+
+* Fri Feb 17 2023 Shiro Hara <white@vx-xv.com>
+- hengband RPM 3.0.0Alpha release 76
+- Renew Url
+- Renew Packager
+- Change Copyright to License
+- Change readme.txt to readme.md
 
 * Fri Jul 05 2002 Takahiro MIZUNO <tow@plum.freemail.ne.jp>
 - hengband RPM 1.0.0b release 3
@@ -103,7 +122,7 @@ exit 0
 
 * Mon Jun 17 2002 Takahiro MIZUNO <tow@plum.freemail.ne.jp>
 - hengband RPM 1.0.0b release 2
-- Fix setgid permission. (Mogami¤µ¤óÂ¿¼Õ)
+- Fix setgid permission. (Mogamiã•ã‚“å¤šè¬)
 
 * Sun Jun 16 2002 Takahiro MIZUNO <tow@plum.freemail.ne.jp>
 - hengband RPM 1.0.0b release 1

@@ -45,6 +45,7 @@
 #include <array>
 #include <iterator>
 #include <set>
+#include <sstream>
 #include <string>
 
 static constexpr std::array<std::string_view, 6> wiz_spell_stat = { {
@@ -100,15 +101,15 @@ static SpoilerOutputResultType spoil_mon_evol(concptr fname)
 {
     char buf[1024];
     path_build(buf, sizeof buf, ANGBAND_DIR_USER, fname);
-    spoiler_file = angband_fopen(buf, "w");
+    spoiler_file = angband_fopen(buf, FileOpenMode::WRITE);
     if (!spoiler_file) {
         return SpoilerOutputResultType::FILE_OPEN_FAILED;
     }
 
-    spoil_out(std::string("Monster Spoilers for ").append(get_version()).append("\n"));
-
+    std::stringstream ss;
+    ss << "Monster Spoilers for " << get_version() << '\n';
+    spoil_out(ss.str());
     spoil_out("------------------------------------------\n\n");
-
     for (auto r_idx : get_mon_evol_roots()) {
         auto r_ptr = &monraces_info[r_idx];
         fprintf(spoiler_file, _("[%d]: %s (レベル%d, '%c')\n", "[%d]: %s (Level %d, '%c')\n"), enum2i(r_idx), r_ptr->name.data(), (int)r_ptr->level, r_ptr->d_char);
@@ -177,9 +178,8 @@ static SpoilerOutputResultType spoil_categorized_mon_desc()
 static SpoilerOutputResultType spoil_player_spell(concptr fname)
 {
     char buf[1024];
-
     path_build(buf, sizeof buf, ANGBAND_DIR_USER, fname);
-    spoiler_file = angband_fopen(buf, "w");
+    spoiler_file = angband_fopen(buf, FileOpenMode::WRITE);
     if (!spoiler_file) {
         return SpoilerOutputResultType::FILE_OPEN_FAILED;
     }
@@ -189,20 +189,18 @@ static SpoilerOutputResultType spoil_player_spell(concptr fname)
 
     PlayerType dummy_p;
     dummy_p.lev = 1;
-
-    for (int c = 0; c < PLAYER_CLASS_TYPE_MAX; c++) {
+    for (auto c = 0; c < PLAYER_CLASS_TYPE_MAX; c++) {
         auto class_ptr = &class_info[c];
         spoil_out(format("[[Class: %s]]\n", class_ptr->title));
 
         auto magic_ptr = &class_magics_info[c];
-        concptr book_name = "なし";
-        char name_buffer[200];
+        auto book_name = "なし";
         if (magic_ptr->spell_book != ItemKindType::NONE) {
             ItemEntity book;
             auto o_ptr = &book;
             o_ptr->prep(lookup_baseitem_id({ magic_ptr->spell_book, 0 }));
-            describe_flavor(&dummy_p, name_buffer, o_ptr, OD_NAME_ONLY);
-            book_name = name_buffer;
+            const auto item_name = describe_flavor(&dummy_p, o_ptr, OD_NAME_ONLY);
+            book_name = item_name.data();
             char *s = angband_strchr(book_name, '[');
             *s = '\0';
         }

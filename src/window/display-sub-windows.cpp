@@ -118,7 +118,7 @@ static void display_sub_windows(window_redraw_type pw_flag, std::invocable auto 
  */
 void fix_inventory(PlayerType *player_ptr)
 {
-    display_sub_windows(PW_INVEN,
+    display_sub_windows(PW_INVENTORY,
         [player_ptr] {
             display_inventory(player_ptr, *fix_item_tester);
         });
@@ -241,7 +241,7 @@ void fix_monster_list(PlayerType *player_ptr)
     static std::vector<MONSTER_IDX> monster_list;
     std::once_flag once;
 
-    display_sub_windows(PW_MONSTER_LIST,
+    display_sub_windows(PW_SIGHT_MONSTERS,
         [player_ptr, &once] {
             int w, h;
             term_get_size(&w, &h);
@@ -267,9 +267,7 @@ static void display_equipment(PlayerType *player_ptr, const ItemTester &item_tes
 
     TERM_LEN wid, hgt;
     term_get_size(&wid, &hgt);
-
-    TERM_COLOR attr = TERM_WHITE;
-    GAME_TEXT o_name[MAX_NLEN];
+    byte attr = TERM_WHITE;
     for (int i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
         int cur_row = i - INVEN_MAIN_HAND;
         if (cur_row >= hgt) {
@@ -289,15 +287,18 @@ static void display_equipment(PlayerType *player_ptr, const ItemTester &item_tes
         term_erase(cur_col, cur_row, 255);
         term_putstr(0, cur_row, cur_col, TERM_WHITE, tmp_val);
 
-        if ((((i == INVEN_MAIN_HAND) && can_attack_with_sub_hand(player_ptr)) || ((i == INVEN_SUB_HAND) && can_attack_with_main_hand(player_ptr))) && has_two_handed_weapons(player_ptr)) {
-            strcpy(o_name, _("(武器を両手持ち)", "(wielding with two-hands)"));
+        std::string item_name;
+        auto is_two_handed = (i == INVEN_MAIN_HAND) && can_attack_with_sub_hand(player_ptr);
+        is_two_handed |= (i == INVEN_SUB_HAND) && can_attack_with_main_hand(player_ptr);
+        if (is_two_handed && has_two_handed_weapons(player_ptr)) {
+            item_name = _("(武器を両手持ち)", "(wielding with two-hands)");
             attr = TERM_WHITE;
         } else {
-            describe_flavor(player_ptr, o_name, o_ptr, 0);
+            item_name = describe_flavor(player_ptr, o_ptr, 0);
             attr = tval_to_attr[enum2i(o_ptr->bi_key.tval()) % 128];
         }
 
-        int n = strlen(o_name);
+        int n = item_name.length();
         if (o_ptr->timeout) {
             attr = TERM_L_DARK;
         }
@@ -313,7 +314,7 @@ static void display_equipment(PlayerType *player_ptr, const ItemTester &item_tes
             cur_col += 2;
         }
 
-        term_putstr(cur_col, cur_row, n, attr, o_name);
+        term_putstr(cur_col, cur_row, n, attr, item_name);
         if (show_weights) {
             int wgt = o_ptr->weight * o_ptr->number;
             tmp_val = format(_("%3d.%1d kg", "%3d.%1d lb"), _(lb_to_kg_integer(wgt), wgt / 10), _(lb_to_kg_fraction(wgt), wgt % 10));
@@ -338,7 +339,7 @@ static void display_equipment(PlayerType *player_ptr, const ItemTester &item_tes
  */
 void fix_equip(PlayerType *player_ptr)
 {
-    display_sub_windows(PW_EQUIP,
+    display_sub_windows(PW_EQUIPMENT,
         [player_ptr] {
             display_equipment(player_ptr, *fix_item_tester);
         });
@@ -459,7 +460,7 @@ void fix_monster(PlayerType *player_ptr)
     if (!MonsterRace(player_ptr->monster_race_idx).is_valid()) {
         return;
     }
-    display_sub_windows(PW_MONSTER,
+    display_sub_windows(PW_MONSTER_LORE,
         [player_ptr] {
             display_roff(player_ptr);
         });
@@ -472,7 +473,7 @@ void fix_monster(PlayerType *player_ptr)
  */
 void fix_object(PlayerType *player_ptr)
 {
-    display_sub_windows(PW_OBJECT,
+    display_sub_windows(PW_ITEM_KNOWLEDGTE,
         [player_ptr] {
             display_koff(player_ptr);
         });
@@ -572,10 +573,9 @@ static void display_floor_item_list(PlayerType *player_ptr, const int y, const i
         if (is_hallucinated) {
             term_addstr(-1, TERM_WHITE, _("何か奇妙な物", "something strange"));
         } else {
-            char buf[1024];
-            describe_flavor(player_ptr, buf, o_ptr, 0);
+            const auto item_name = describe_flavor(player_ptr, o_ptr, 0);
             TERM_COLOR attr = tval_to_attr[enum2i(tval) % 128];
-            term_addstr(-1, attr, buf);
+            term_addstr(-1, attr, item_name);
         }
 
         ++term_y;
@@ -587,7 +587,7 @@ static void display_floor_item_list(PlayerType *player_ptr, const int y, const i
  */
 void fix_floor_item_list(PlayerType *player_ptr, const int y, const int x)
 {
-    display_sub_windows(PW_FLOOR_ITEM_LIST,
+    display_sub_windows(PW_FLOOR_ITEMS,
         [player_ptr, y, x] {
             display_floor_item_list(player_ptr, y, x);
         });
@@ -618,7 +618,7 @@ static void display_found_item_list(PlayerType *player_ptr)
     std::vector<ItemEntity *> found_item_list;
     for (auto &item : floor_ptr->o_list) {
         auto item_entity_ptr = &item;
-        if (item_entity_ptr->bi_id > 0 && item_entity_ptr->marked.has(OmType::FOUND) && item_entity_ptr->bi_key.tval() != ItemKindType::GOLD) {
+        if (item_entity_ptr->is_valid() && item_entity_ptr->marked.has(OmType::FOUND) && item_entity_ptr->bi_key.tval() != ItemKindType::GOLD) {
             found_item_list.push_back(item_entity_ptr);
         }
     }
@@ -651,12 +651,9 @@ static void display_found_item_list(PlayerType *player_ptr)
         const auto color_code_for_symbol = item->get_color();
         term_addstr(-1, color_code_for_symbol, symbol.data());
 
-        // アイテム名表示
-        char temp[512];
-        describe_flavor(player_ptr, temp, item, 0);
-        const std::string item_description(temp);
+        const auto item_name = describe_flavor(player_ptr, item, 0);
         const auto color_code_for_item = tval_to_attr[enum2i(item->bi_key.tval()) % 128];
-        term_addstr(-1, color_code_for_item, item_description.data());
+        term_addstr(-1, color_code_for_item, item_name);
 
         // アイテム座標表示
         const std::string item_location = format("(X:%3d Y:%3d)", item->ix, item->iy);
@@ -671,7 +668,7 @@ static void display_found_item_list(PlayerType *player_ptr)
  */
 void fix_found_item_list(PlayerType *player_ptr)
 {
-    display_sub_windows(PW_FOUND_ITEM_LIST,
+    display_sub_windows(PW_FOUND_ITEMS,
         [player_ptr] {
             display_found_item_list(player_ptr);
         });
@@ -848,17 +845,17 @@ void toggle_inventory_equipment(PlayerType *player_ptr)
             continue;
         }
 
-        if (window_flag[i] & (PW_INVEN)) {
-            window_flag[i] &= ~(PW_INVEN);
-            window_flag[i] |= (PW_EQUIP);
-            player_ptr->window_flags |= (PW_EQUIP);
+        if (window_flag[i] & (PW_INVENTORY)) {
+            window_flag[i] &= ~(PW_INVENTORY);
+            window_flag[i] |= (PW_EQUIPMENT);
+            player_ptr->window_flags |= (PW_EQUIPMENT);
             continue;
         }
 
-        if (window_flag[i] & PW_EQUIP) {
-            window_flag[i] &= ~(PW_EQUIP);
-            window_flag[i] |= PW_INVEN;
-            player_ptr->window_flags |= PW_INVEN;
+        if (window_flag[i] & PW_EQUIPMENT) {
+            window_flag[i] &= ~(PW_EQUIPMENT);
+            window_flag[i] |= PW_INVENTORY;
+            player_ptr->window_flags |= PW_INVENTORY;
         }
     }
 }

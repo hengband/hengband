@@ -29,18 +29,24 @@ RandomArtActType activation_index(const ItemEntity *o_ptr)
     }
 
     if (o_ptr->is_fixed_artifact()) {
-        const auto &fixed_artifact = artifacts_info.at(o_ptr->fixed_artifact_idx);
-        if (fixed_artifact.flags.has(TR_ACTIVATE)) {
-            return fixed_artifact.act_idx;
+        const auto &artifact = ArtifactsInfo::get_instance().get_artifact(o_ptr->fixed_artifact_idx);
+        if (artifact.flags.has(TR_ACTIVATE)) {
+            return artifact.act_idx;
         }
     }
 
-    if (o_ptr->is_ego() && egos_info[o_ptr->ego_idx].flags.has(TR_ACTIVATE)) {
-        return egos_info[o_ptr->ego_idx].act_idx;
+    if (o_ptr->is_ego()) {
+        const auto &ego = o_ptr->get_ego();
+        if (ego.flags.has(TR_ACTIVATE)) {
+            return ego.act_idx;
+        }
     }
 
-    if (!o_ptr->is_random_artifact() && baseitems_info[o_ptr->bi_id].flags.has(TR_ACTIVATE)) {
-        return baseitems_info[o_ptr->bi_id].act_idx;
+    if (!o_ptr->is_random_artifact()) {
+        const auto &baseitem = o_ptr->get_baseitem();
+        if (baseitem.flags.has(TR_ACTIVATE)) {
+            return baseitem.act_idx;
+        }
     }
 
     return o_ptr->activation_id;

@@ -602,7 +602,7 @@ static bool init_sound(void)
         wav.append(".wav");
 
         /* Access the sound */
-        path_build(buf, sizeof(buf), ANGBAND_DIR_XTRA_SOUND, wav.data());
+        path_build(buf, sizeof(buf), ANGBAND_DIR_XTRA_SOUND, wav);
 
         /* Save the sound filename, if it exists */
         if (check_file(buf)) {

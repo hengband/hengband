@@ -234,9 +234,7 @@ static void warn_unique_generation(PlayerType *player_ptr, MonsterRaceId r_idx)
         return;
     }
 
-    concptr color;
-    ItemEntity *o_ptr;
-    GAME_TEXT o_name[MAX_NLEN];
+    std::string color;
     if (r_ptr->level > player_ptr->lev + 30) {
         color = _("黒く", "black");
     } else if (r_ptr->level > player_ptr->lev + 15) {
@@ -251,12 +249,12 @@ static void warn_unique_generation(PlayerType *player_ptr, MonsterRaceId r_idx)
         color = _("白く", "white");
     }
 
-    o_ptr = choose_warning_item(player_ptr);
+    auto *o_ptr = choose_warning_item(player_ptr);
     if (o_ptr != nullptr) {
-        describe_flavor(player_ptr, o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
-        msg_format(_("%sは%s光った。", "%s glows %s."), o_name, color);
+        const auto item_name = describe_flavor(player_ptr, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
+        msg_format(_("%sは%s光った。", "%s glows %s."), item_name.data(), color.data());
     } else {
-        msg_format(_("%s光る物が頭に浮かんだ。", "A %s image forms in your mind."), color);
+        msg_format(_("%s光る物が頭に浮かんだ。", "A %s image forms in your mind."), color.data());
     }
 }
 
@@ -422,9 +420,9 @@ bool place_monster_one(PlayerType *player_ptr, MONSTER_IDX who, POSITION y, POSI
     }
 
     if (r_ptr->brightness_flags.has_any_of(self_ld_mask)) {
-        set_bits(player_ptr->update, PU_MON_LITE);
+        set_bits(player_ptr->update, PU_MONSTER_LITE);
     } else if (r_ptr->brightness_flags.has_any_of(has_ld_mask) && !m_ptr->is_asleep()) {
-        set_bits(player_ptr->update, PU_MON_LITE);
+        set_bits(player_ptr->update, PU_MONSTER_LITE);
     }
     update_monster(player_ptr, g_ptr->m_idx, true);
 

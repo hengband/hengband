@@ -171,7 +171,7 @@ bool poly_monster(PlayerType *player_ptr, DIRECTION dir, int power)
     BIT_FLAGS flg = PROJECT_STOP | PROJECT_KILL | PROJECT_REFLECTABLE;
     bool tester = (project_hook(player_ptr, AttributeType::OLD_POLY, dir, power, flg));
     if (tester) {
-        chg_virtue(player_ptr, V_CHANCE, 1);
+        chg_virtue(player_ptr, Virtue::CHANCE, 1);
     }
     return tester;
 }
@@ -215,7 +215,7 @@ bool time_walk(PlayerType *player_ptr)
 
     player_ptr->energy_need -= 1000 + (100 + player_ptr->csp - 50) * TURNS_PER_TICK / 10;
     player_ptr->redraw |= (PR_MAP);
-    player_ptr->update |= (PU_MONSTERS);
+    player_ptr->update |= (PU_MONSTER_STATUSES);
     player_ptr->window_flags |= (PW_OVERHEAD | PW_DUNGEON);
     handle_stuff(player_ptr);
     return true;
@@ -280,8 +280,8 @@ void roll_hitdice(PlayerType *player_ptr, spell_operation options)
 bool life_stream(PlayerType *player_ptr, bool message, bool virtue_change)
 {
     if (virtue_change) {
-        chg_virtue(player_ptr, V_VITALITY, 1);
-        chg_virtue(player_ptr, V_UNLIFE, -5);
+        chg_virtue(player_ptr, Virtue::VITALITY, 1);
+        chg_virtue(player_ptr, Virtue::UNLIFE, -5);
     }
 
     if (message) {
@@ -495,7 +495,7 @@ bool restore_mana(PlayerType *player_ptr, bool magic_eater)
     player_ptr->csp = player_ptr->msp;
     player_ptr->csp_frac = 0;
     msg_print(_("頭がハッキリとした。", "You feel your head clear."));
-    player_ptr->redraw |= (PR_MANA);
+    player_ptr->redraw |= (PR_MP);
     player_ptr->window_flags |= (PW_PLAYER);
     player_ptr->window_flags |= (PW_SPELL);
     return true;
@@ -547,7 +547,7 @@ bool fishing(PlayerType *player_ptr)
     }
 
     set_action(player_ptr, ACTION_FISH);
-    player_ptr->redraw |= (PR_STATE);
+    player_ptr->redraw |= (PR_ACTION);
     return true;
 }
 
@@ -583,9 +583,8 @@ bool cosmic_cast_off(PlayerType *player_ptr, ItemEntity **o_ptr_ptr)
     OBJECT_IDX old_o_idx = drop_near(player_ptr, &forge, 0, player_ptr->y, player_ptr->x);
     *o_ptr_ptr = &player_ptr->current_floor_ptr->o_list[old_o_idx];
 
-    GAME_TEXT o_name[MAX_NLEN];
-    describe_flavor(player_ptr, o_name, &forge, OD_NAME_ONLY);
-    msg_format(_("%sを脱ぎ捨てた。", "You cast off %s."), o_name);
+    const auto item_name = describe_flavor(player_ptr, &forge, OD_NAME_ONLY);
+    msg_format(_("%sを脱ぎ捨てた。", "You cast off %s."), item_name.data());
     sound(SOUND_TAKE_OFF);
 
     /* Get effects */

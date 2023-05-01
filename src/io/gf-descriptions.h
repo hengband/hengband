@@ -1,11 +1,11 @@
 ﻿#pragma once
 
-#include "effect/attribute-types.h"
-#include "system/angband.h"
+#include <string>
 #include <vector>
 
+enum class AttributeType;
 struct named_num {
-    concptr name; /* The name of this thing */
+    std::string name; /* The name of this thing */
     AttributeType num; /* A number associated with it */
 };
 

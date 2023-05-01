@@ -23,6 +23,11 @@ std::vector<autopick_type> autopick_list; /*!< 自動拾い/破壊設定構造�
  */
 ItemEntity autopick_last_destroyed_object;
 
+bool autopick_type::has(int flag) const
+{
+    return this->flags[flag / 32] & (1UL << (flag % 32));
+}
+
 /*!
  * @brief Free memory of lines_list.
  */
@@ -62,9 +67,9 @@ void auto_inscribe_item(PlayerType *player_ptr, ItemEntity *o_ptr, int idx)
         o_ptr->inscription = autopick_list[idx].insc;
     }
 
-    player_ptr->window_flags |= (PW_EQUIP | PW_INVEN);
+    player_ptr->window_flags |= (PW_EQUIPMENT | PW_INVENTORY);
     player_ptr->update |= (PU_BONUS);
-    player_ptr->update |= (PU_COMBINE);
+    player_ptr->update |= (PU_COMBINATION);
 }
 
 /*!
