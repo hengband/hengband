@@ -1907,9 +1907,9 @@ static void process_menus(PlayerType *player_ptr, WORD wCmd)
         break;
     }
     case IDM_OPTIONS_OPEN_MUSIC_DIR: {
-        std::vector<char> buf(MAIN_WIN_MAX_PATH);
-        path_build(&buf[0], MAIN_WIN_MAX_PATH, ANGBAND_DIR_XTRA_MUSIC, "music.cfg");
-        open_dir_in_explorer(&buf[0]);
+        char buf[MAIN_WIN_MAX_PATH];
+        path_build(buf, MAIN_WIN_MAX_PATH, ANGBAND_DIR_XTRA_MUSIC, "music.cfg");
+        open_dir_in_explorer(buf);
         break;
     }
     case IDM_OPTIONS_SOUND: {
@@ -1931,9 +1931,9 @@ static void process_menus(PlayerType *player_ptr, WORD wCmd)
         break;
     }
     case IDM_OPTIONS_OPEN_SOUND_DIR: {
-        std::vector<char> buf(MAIN_WIN_MAX_PATH);
-        path_build(&buf[0], MAIN_WIN_MAX_PATH, ANGBAND_DIR_XTRA_SOUND, "sound.cfg");
-        open_dir_in_explorer(&buf[0]);
+        char buf[MAIN_WIN_MAX_PATH];
+        path_build(buf, MAIN_WIN_MAX_PATH, ANGBAND_DIR_XTRA_SOUND, "sound.cfg");
+        open_dir_in_explorer(buf);
         break;
     }
     case IDM_OPTIONS_NO_BG: {
