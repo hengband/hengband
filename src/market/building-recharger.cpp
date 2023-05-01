@@ -63,7 +63,7 @@ void building_recharge(PlayerType *player_ptr)
         return;
     }
 
-    const auto &baseitem = baseitems_info[o_ptr->bi_id];
+    const auto &baseitem = o_ptr->get_baseitem();
     const auto lev = baseitem.level;
     const auto tval = o_ptr->bi_key.tval();
     int price;
@@ -186,19 +186,19 @@ void building_recharge_all(PlayerType *player_ptr)
             total_cost += 50;
         }
 
-        const auto lev = baseitems_info[item.bi_id].level;
-        const auto &baseitem = baseitems_info[item.bi_id];
+        const auto &baseitem = item.get_baseitem();
+        const auto lev = baseitem.level;
         switch (item.bi_key.tval()) {
         case ItemKindType::ROD:
             price = (lev * 50 * item.timeout) / baseitem.pval;
             break;
         case ItemKindType::STAFF:
-            price = (baseitems_info[item.bi_id].cost / 10) * item.number;
+            price = (baseitem.cost / 10) * item.number;
             price = std::max(10, price);
             price = (baseitem.pval - item.pval) * price;
             break;
         case ItemKindType::WAND:
-            price = (baseitems_info[item.bi_id].cost / 10);
+            price = (baseitem.cost / 10);
             price = std::max(10, price);
             price = (item.number * baseitem.pval - item.pval) * price;
             break;
@@ -229,7 +229,7 @@ void building_recharge_all(PlayerType *player_ptr)
 
     for (short i = 0; i < INVEN_PACK; i++) {
         auto *o_ptr = &player_ptr->inventory_list[i];
-        const auto &baseitem = baseitems_info[o_ptr->bi_id];
+        const auto &baseitem = o_ptr->get_baseitem();
         if (!o_ptr->can_recharge()) {
             continue;
         }

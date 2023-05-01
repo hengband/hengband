@@ -23,6 +23,7 @@ enum class SmithEffectType : int16_t;
 enum class RandomArtActType : short;
 
 class EgoItemDefinition;
+class BaseitemInfo;
 class ItemEntity {
 public:
     ItemEntity();
@@ -135,6 +136,7 @@ public:
     bool is_cross_bow() const;
     bool is_inscribed() const;
 
+    BaseitemInfo &get_baseitem() const;
     EgoItemDefinition &get_ego() const;
 
 private:

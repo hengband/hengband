@@ -52,7 +52,7 @@ static void modify_ego_lite_flags(const ItemEntity *o_ptr, TrFlags &flags)
  */
 TrFlags object_flags(const ItemEntity *o_ptr)
 {
-    const auto &baseitem = baseitems_info[o_ptr->bi_id];
+    const auto &baseitem = o_ptr->get_baseitem();
     auto flags = baseitem.flags;
 
     if (o_ptr->is_fixed_artifact()) {
@@ -91,7 +91,7 @@ TrFlags object_flags_known(const ItemEntity *o_ptr)
         return flags;
     }
 
-    const auto &baseitem = baseitems_info[o_ptr->bi_id];
+    const auto &baseitem = o_ptr->get_baseitem();
     flags = baseitem.flags;
     if (!o_ptr->is_known()) {
         return flags;

@@ -83,7 +83,7 @@ void recharge_magic_items(PlayerType *player_ptr)
      */
     for (changed = false, i = 0; i < INVEN_PACK; i++) {
         auto *o_ptr = &player_ptr->inventory_list[i];
-        const auto &baseitem = baseitems_info[o_ptr->bi_id];
+        const auto &baseitem = o_ptr->get_baseitem();
         if (!o_ptr->is_valid()) {
             continue;
         }

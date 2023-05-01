@@ -42,7 +42,7 @@ bool screen_object(PlayerType *player_ptr, ItemEntity *o_ptr, BIT_FLAGS mode)
     auto flags = object_flags(o_ptr);
 
     const auto &artifacts = ArtifactsInfo::get_instance();
-    const auto item_text = o_ptr->is_fixed_artifact() ? artifacts.get_artifact(o_ptr->fixed_artifact_idx).text.data() : baseitems_info[o_ptr->bi_id].text.data();
+    const auto item_text = o_ptr->is_fixed_artifact() ? artifacts.get_artifact(o_ptr->fixed_artifact_idx).text.data() : o_ptr->get_baseitem().text.data();
     const auto item_text_lines = shape_buffer(item_text, 77 - 15);
 
     int i = 0;

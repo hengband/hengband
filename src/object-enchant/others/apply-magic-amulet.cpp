@@ -157,7 +157,7 @@ void AmuletEnchanter::sval_enchant()
 void AmuletEnchanter::give_ego_index()
 {
     while (!this->o_ptr->is_ego()) {
-        const auto &baseitem = baseitems_info[this->o_ptr->bi_id];
+        const auto &baseitem = this->o_ptr->get_baseitem();
         switch (randint1(21)) {
         case 1:
         case 2:
@@ -351,7 +351,7 @@ void AmuletEnchanter::give_cursed()
     }
 
     while (!this->o_ptr->is_ego()) {
-        const auto &baseitem = baseitems_info[this->o_ptr->bi_id];
+        const auto &baseitem = this->o_ptr->get_baseitem();
         switch (randint1(5)) {
         case 1:
             if (baseitem.flags.has(TR_DRAIN_EXP)) {

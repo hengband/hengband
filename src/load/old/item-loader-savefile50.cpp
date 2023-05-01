@@ -34,7 +34,7 @@ void ItemLoader50::rd_item(ItemEntity *o_ptr)
     o_ptr->bi_id = rd_s16b();
     o_ptr->iy = rd_byte();
     o_ptr->ix = rd_byte();
-    auto &baseitem = baseitems_info[o_ptr->bi_id];
+    auto &baseitem = o_ptr->get_baseitem();
     o_ptr->bi_key = baseitem.bi_key;
     o_ptr->pval = any_bits(flags, SaveDataItemFlagType::PVAL) ? rd_s16b() : 0;
     o_ptr->discount = any_bits(flags, SaveDataItemFlagType::DISCOUNT) ? rd_byte() : 0;

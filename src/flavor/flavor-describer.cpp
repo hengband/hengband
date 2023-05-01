@@ -130,7 +130,7 @@ static bool should_show_slaying_bonus(const ItemEntity &item)
     }
 
     if (item.bi_key.tval() == ItemKindType::RING) {
-        const auto &baseitem = baseitems_info[item.bi_id];
+        const auto &baseitem = item.get_baseitem();
         const auto base_has_no_bonus = (baseitem.to_h == 0) && (baseitem.to_d == 0);
         const auto item_has_bonus = (item.to_h != 0) || (item.to_d != 0);
         if ((base_has_no_bonus && item_has_bonus) || (item.bi_key.sval() == SV_RING_LAW)) {
@@ -345,7 +345,7 @@ static std::string describe_charges_rod(const ItemEntity &item)
         return _("(充填中)", " (charging)");
     }
 
-    const auto timeout_per_one = baseitems_info[item.bi_id].pval;
+    const auto timeout_per_one = item.get_baseitem().pval;
     auto num_of_charging = (item.timeout + (timeout_per_one - 1)) / timeout_per_one;
     if (num_of_charging > item.number) {
         num_of_charging = item.number;

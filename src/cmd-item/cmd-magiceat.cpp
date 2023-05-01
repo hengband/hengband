@@ -308,7 +308,8 @@ static std::optional<BaseitemKey> select_magic_eater(PlayerType *player_ptr, boo
                 }
                 x1 = ((ctr < ITEM_GROUP_SIZE / 2) ? x : x + 40);
                 y1 = ((ctr < ITEM_GROUP_SIZE / 2) ? y + ctr : y + ctr - ITEM_GROUP_SIZE / 2);
-                level = (tval == ItemKindType::ROD ? baseitems_info[bi_id].level * 5 / 6 - 5 : baseitems_info[bi_id].level);
+                const auto &baseitem = baseitems_info[bi_id];
+                level = (tval == ItemKindType::ROD ? baseitem.level * 5 / 6 - 5 : baseitem.level);
                 chance = level * 4 / 5 + 20;
                 chance -= 3 * (adj_mag_stat[player_ptr->stat_index[mp_ptr->spell_stat]] - 1);
                 level /= 2;
@@ -330,16 +331,16 @@ static std::optional<BaseitemKey> select_magic_eater(PlayerType *player_ptr, boo
                 if (bi_id) {
                     if (tval == ItemKindType::ROD) {
                         dummy.append(
-                            format(_(" %-22.22s 充填:%2d/%2d%3d%%", " %-22.22s   (%2d/%2d) %3d%%"), baseitems_info[bi_id].name.data(),
-                                item.charge ? (item.charge - 1) / (EATER_ROD_CHARGE * baseitems_info[bi_id].pval) + 1 : 0,
+                            format(_(" %-22.22s 充填:%2d/%2d%3d%%", " %-22.22s   (%2d/%2d) %3d%%"), baseitem.name.data(),
+                                item.charge ? (item.charge - 1) / (EATER_ROD_CHARGE * baseitem.pval) + 1 : 0,
                                 item.count, chance)
                                 .data());
-                        if (item.charge > baseitems_info[bi_id].pval * (item.count - 1) * EATER_ROD_CHARGE) {
+                        if (item.charge > baseitem.pval * (item.count - 1) * EATER_ROD_CHARGE) {
                             col = TERM_RED;
                         }
                     } else {
                         dummy.append(
-                            format(" %-22.22s    %2d/%2d %3d%%", baseitems_info[bi_id].name.data(), (int16_t)(item.charge / EATER_CHARGE),
+                            format(" %-22.22s    %2d/%2d %3d%%", baseitem.name.data(), (int16_t)(item.charge / EATER_CHARGE),
                                 item.count, chance)
                                 .data());
                         if (item.charge < EATER_CHARGE) {
@@ -545,10 +546,11 @@ bool do_cmd_magic_eater(PlayerType *player_ptr, bool only_browse, bool powerful)
         energy.reset_player_turn();
         return false;
     }
-    auto &baseitem = result.value();
+    auto &bi_key = result.value();
 
-    auto bi_id = lookup_baseitem_id(baseitem);
-    auto level = (baseitem.tval() == ItemKindType::ROD ? baseitems_info[bi_id].level * 5 / 6 - 5 : baseitems_info[bi_id].level);
+    const auto bi_id = lookup_baseitem_id(bi_key);
+    const auto &baseitem = baseitems_info[bi_id];
+    auto level = (bi_key.tval() == ItemKindType::ROD ? baseitem.level * 5 / 6 - 5 : baseitem.level);
     auto chance = level * 4 / 5 + 20;
     chance -= 3 * (adj_mag_stat[player_ptr->stat_index[mp_ptr->spell_stat]] - 1);
     level /= 2;
@@ -581,14 +583,14 @@ bool do_cmd_magic_eater(PlayerType *player_ptr, bool only_browse, bool powerful)
     } else {
         DIRECTION dir = 0;
 
-        switch (baseitem.tval()) {
+        switch (bi_key.tval()) {
         case ItemKindType::ROD: {
-            const auto sval = baseitem.sval();
+            const auto sval = bi_key.sval();
             if (!sval.has_value()) {
                 return false;
             }
 
-            if (baseitem.is_aiming_rod() && !get_aim_dir(player_ptr, &dir)) {
+            if (bi_key.is_aiming_rod() && !get_aim_dir(player_ptr, &dir)) {
                 return false;
             }
 
@@ -600,7 +602,7 @@ bool do_cmd_magic_eater(PlayerType *player_ptr, bool only_browse, bool powerful)
             break;
         }
         case ItemKindType::WAND: {
-            const auto sval = baseitem.sval();
+            const auto sval = bi_key.sval();
             if (!sval.has_value()) {
                 return false;
             }
@@ -613,7 +615,7 @@ bool do_cmd_magic_eater(PlayerType *player_ptr, bool only_browse, bool powerful)
             break;
         }
         default:
-            const auto sval = baseitem.sval();
+            const auto sval = bi_key.sval();
             if (!sval.has_value()) {
                 return false;
             }
@@ -632,18 +634,18 @@ bool do_cmd_magic_eater(PlayerType *player_ptr, bool only_browse, bool powerful)
     }
 
     auto magic_eater_data = PlayerClass(player_ptr).get_specific_data<magic_eater_data_type>();
-    const auto opt_sval = baseitem.sval();
+    const auto opt_sval = bi_key.sval();
     if (!opt_sval.has_value()) {
         return false;
     }
 
-    const auto tval = baseitem.tval();
+    const auto tval = bi_key.tval();
     const auto sval = opt_sval.value();
     auto &item = magic_eater_data->get_item_group(tval)[sval];
 
     energy.set_player_turn_energy(100);
     if (tval == ItemKindType::ROD) {
-        item.charge += baseitems_info[bi_id].pval * EATER_ROD_CHARGE;
+        item.charge += baseitem.pval * EATER_ROD_CHARGE;
     } else {
         item.charge -= EATER_CHARGE;
     }

@@ -67,7 +67,7 @@ void compact_objects(PlayerType *player_ptr, int size)
         for (OBJECT_IDX i = 1; i < floor_ptr->o_max; i++) {
             o_ptr = &floor_ptr->o_list[i];
 
-            if (!o_ptr->is_valid() || (baseitems_info[o_ptr->bi_id].level > cur_lev)) {
+            if (!o_ptr->is_valid() || (o_ptr->get_baseitem().level > cur_lev)) {
                 continue;
             }
 

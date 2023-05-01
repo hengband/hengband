@@ -129,7 +129,7 @@ int object_similar_part(const ItemEntity *o_ptr, const ItemEntity *j_ptr)
 
         break;
     case ItemKindType::ROD:
-        max_num = std::min(max_num, MAX_SHORT / baseitems_info[o_ptr->bi_id].pval);
+        max_num = std::min(max_num, MAX_SHORT / o_ptr->get_baseitem().pval);
         break;
     case ItemKindType::GLOVES:
         if (o_ptr->is_glove_same_temper(j_ptr)) {

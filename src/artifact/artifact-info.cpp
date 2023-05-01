@@ -42,8 +42,11 @@ RandomArtActType activation_index(const ItemEntity *o_ptr)
         }
     }
 
-    if (!o_ptr->is_random_artifact() && baseitems_info[o_ptr->bi_id].flags.has(TR_ACTIVATE)) {
-        return baseitems_info[o_ptr->bi_id].act_idx;
+    if (!o_ptr->is_random_artifact()) {
+        const auto &baseitem = o_ptr->get_baseitem();
+        if (baseitem.flags.has(TR_ACTIVATE)) {
+            return baseitem.act_idx;
+        }
     }
 
     return o_ptr->activation_id;
