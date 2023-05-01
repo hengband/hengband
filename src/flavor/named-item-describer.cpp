@@ -120,7 +120,7 @@ static std::string describe_unique_name_before_body_ja(const ItemEntity &item, c
     }
 
     if (item.is_ego()) {
-        return egos_info[item.ego_idx].name;
+        return item.get_ego().name;
     }
 
     return "";

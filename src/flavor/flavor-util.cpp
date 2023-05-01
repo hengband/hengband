@@ -80,8 +80,8 @@ std::string get_ability_abbreviation(const ItemEntity &item, bool is_kanji, bool
         }
 
         if (item.is_ego()) {
-            auto *e_ptr = &egos_info[item.ego_idx];
-            flags.reset(e_ptr->flags);
+            const auto &ego = item.get_ego();
+            flags.reset(ego.flags);
         }
     }
 

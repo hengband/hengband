@@ -378,19 +378,14 @@ void autopick_entry_from_object(PlayerType *player_ptr, autopick_type *entry, It
     } else {
         if (o_ptr->is_ego()) {
             if (o_ptr->is_weapon_armour_ammo()) {
-                /*
-                 * Base name of ego weapons and armors
-                 * are almost meaningless.
-                 * Register the ego type only.
-                 */
-                auto *e_ptr = &egos_info[o_ptr->ego_idx];
+                auto &ego = o_ptr->get_ego();
 #ifdef JP
                 /* エゴ銘には「^」マークが使える */
                 entry->name = "^";
-                entry->name.append(e_ptr->name);
+                entry->name.append(ego.name);
 #else
                 /* We omit the basename and cannot use the ^ mark */
-                entry->name = e_ptr->name;
+                entry->name = ego.name;
 #endif
                 name = false;
                 if (!o_ptr->is_rare()) {

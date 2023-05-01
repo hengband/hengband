@@ -18,7 +18,7 @@
  * @param what 参照元の文字列ポインタ
  * @return 見つけたらtrue
  */
-static bool grab_one_ego_item_flag(ego_item_type *e_ptr, std::string_view what)
+static bool grab_one_ego_item_flag(EgoItemDefinition *e_ptr, std::string_view what)
 {
     if (TrFlags::grab_one_flag(e_ptr->flags, baseitem_flags, what)) {
         return true;
@@ -62,7 +62,7 @@ static bool grab_ego_generate_flags(ego_generate_type &xtra, std::string_view wh
  */
 errr parse_egos_info(std::string_view buf, angband_header *)
 {
-    static ego_item_type *e_ptr = nullptr;
+    static EgoItemDefinition *e_ptr = nullptr;
     const auto &tokens = str_split(buf, ':', false, 10);
 
     error_idx = 0; //!< @note 順不同で登録しているため
@@ -79,7 +79,7 @@ errr parse_egos_info(std::string_view buf, angband_header *)
         }
 
         error_idx = i;
-        e_ptr = &(egos_info.emplace_hint(egos_info.end(), i2enum<EgoType>(i), ego_item_type{})->second);
+        e_ptr = &(egos_info.emplace_hint(egos_info.end(), i2enum<EgoType>(i), EgoItemDefinition{})->second);
         e_ptr->idx = i2enum<EgoType>(i);
 #ifdef JP
         e_ptr->name = tokens[2];

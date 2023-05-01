@@ -19,7 +19,7 @@
 #include "util/probability-table.h"
 #include <vector>
 
-std::map<EgoType, ego_item_type> egos_info;
+std::map<EgoType, EgoItemDefinition> egos_info;
 
 /*!
  * @brief アイテムのエゴをレア度の重みに合わせてランダムに選択する
@@ -31,8 +31,8 @@ std::map<EgoType, ego_item_type> egos_info;
 EgoType get_random_ego(byte slot, bool good)
 {
     ProbabilityTable<EgoType> prob_table;
-    for (const auto &[e_idx, e_ref] : egos_info) {
-        if (e_ref.idx == EgoType::NONE || e_ref.slot != slot || e_ref.rarity <= 0) {
+    for (const auto &[e_idx, ego] : egos_info) {
+        if (ego.idx == EgoType::NONE || ego.slot != slot || ego.rarity <= 0) {
             continue;
         }
 
@@ -41,9 +41,9 @@ EgoType get_random_ego(byte slot, bool good)
             ItemGenerationTraitType::HEAVY_CURSE,
             ItemGenerationTraitType::PERMA_CURSE
         };
-        const auto worthless = e_ref.rating == 0 || e_ref.gen_flags.has_any_of(curses);
+        const auto worthless = ego.rating == 0 || ego.gen_flags.has_any_of(curses);
         if (good != worthless) {
-            prob_table.entry_item(e_ref.idx, (255 / e_ref.rarity));
+            prob_table.entry_item(ego.idx, (255 / ego.rarity));
         }
     }
 
@@ -155,12 +155,12 @@ static void ego_invest_extra_abilities(ItemEntity *o_ptr, EnumClassFlagGroup<Ite
  * @brief エゴアイテムの追加能力/耐性フラグを解釈する
  * @param player_ptr プレイヤー情報への参照ポインタ
  * @param o_ptr オブジェクト情報への参照ポインタ
- * @param e_ptr エゴアイテム情報への参照ポインタ
+ * @param ego エゴアイテム情報への参照
  * @param gen_flags 生成フラグ(参照渡し)
  */
-static void ego_interpret_extra_abilities(ItemEntity *o_ptr, ego_item_type *e_ptr, EnumClassFlagGroup<ItemGenerationTraitType> &gen_flags)
+static void ego_interpret_extra_abilities(ItemEntity *o_ptr, const EgoItemDefinition &ego, EnumClassFlagGroup<ItemGenerationTraitType> &gen_flags)
 {
-    for (auto &xtra : e_ptr->xtra_flags) {
+    for (const auto &xtra : ego.xtra_flags) {
         if (xtra.mul == 0 || xtra.dev == 0) {
             continue;
         }
@@ -204,16 +204,16 @@ static int randint1_signed(const int n)
 /*!
  * @brief 追加込みでエゴがフラグを保持しているか判定する
  * @param o_ptr オブジェクト情報への参照ポインタ
- * @param e_ptr エゴアイテム情報への参照ポインタ
+ * @param ego エゴアイテム情報への参照
  * @param flag フラグ
  * @return 持つならtrue、持たないならfalse
  */
-static bool ego_has_flag(ItemEntity *o_ptr, ego_item_type *e_ptr, tr_type flag)
+static bool ego_has_flag(ItemEntity *o_ptr, const EgoItemDefinition &ego, tr_type flag)
 {
     if (o_ptr->art_flags.has(flag)) {
         return true;
     }
-    if (e_ptr->flags.has(flag)) {
+    if (ego.flags.has(flag)) {
         return true;
     }
     return false;
@@ -223,18 +223,18 @@ static bool ego_has_flag(ItemEntity *o_ptr, ego_item_type *e_ptr, tr_type flag)
  * @brief エゴに追加攻撃のpvalを付加する
  * @param player_ptr プレイヤー情報への参照ポインタ
  * @param o_ptr オブジェクト情報への参照ポインタ
- * @param e_ptr エゴアイテム情報への参照ポインタ
+ * @param ego エゴアイテム情報への参照
  * @param lev 生成階
  */
-void ego_invest_extra_attack(ItemEntity *o_ptr, ego_item_type *e_ptr, DEPTH lev)
+void ego_invest_extra_attack(ItemEntity *o_ptr, const EgoItemDefinition &ego, DEPTH lev)
 {
     if (!o_ptr->is_weapon()) {
-        o_ptr->pval = e_ptr->max_pval >= 0 ? 1 : randint1_signed(e_ptr->max_pval);
+        o_ptr->pval = ego.max_pval >= 0 ? 1 : randint1_signed(ego.max_pval);
         return;
     }
 
     if (o_ptr->ego_idx == EgoType::ATTACKS) {
-        o_ptr->pval = randint1(e_ptr->max_pval * lev / 100 + 1);
+        o_ptr->pval = randint1(ego.max_pval * lev / 100 + 1);
         if (o_ptr->pval > 3) {
             o_ptr->pval = 3;
         }
@@ -246,12 +246,12 @@ void ego_invest_extra_attack(ItemEntity *o_ptr, ego_item_type *e_ptr, DEPTH lev)
         return;
     }
 
-    if (ego_has_flag(o_ptr, e_ptr, TR_EARTHQUAKE)) {
-        o_ptr->pval += randint1(e_ptr->max_pval);
+    if (ego_has_flag(o_ptr, ego, TR_EARTHQUAKE)) {
+        o_ptr->pval += randint1(ego.max_pval);
         return;
     }
 
-    if (ego_has_flag(o_ptr, e_ptr, TR_SLAY_EVIL) || ego_has_flag(o_ptr, e_ptr, TR_KILL_EVIL)) {
+    if (ego_has_flag(o_ptr, ego, TR_SLAY_EVIL) || ego_has_flag(o_ptr, ego, TR_KILL_EVIL)) {
         o_ptr->pval++;
         if ((lev > 60) && one_in_(3) && ((o_ptr->dd * (o_ptr->ds + 1)) < 15)) {
             o_ptr->pval++;
@@ -270,57 +270,57 @@ void ego_invest_extra_attack(ItemEntity *o_ptr, ego_item_type *e_ptr, DEPTH lev)
  */
 void apply_ego(ItemEntity *o_ptr, DEPTH lev)
 {
-    auto e_ptr = &egos_info[o_ptr->ego_idx];
-    auto gen_flags = e_ptr->gen_flags;
+    const auto &ego = o_ptr->get_ego();
+    auto gen_flags = ego.gen_flags;
 
-    ego_interpret_extra_abilities(o_ptr, e_ptr, gen_flags);
+    ego_interpret_extra_abilities(o_ptr, ego, gen_flags);
 
-    if (!e_ptr->cost) {
+    if (!ego.cost) {
         o_ptr->ident |= (IDENT_BROKEN);
     }
 
     ego_invest_curse(o_ptr, gen_flags);
     ego_invest_extra_abilities(o_ptr, gen_flags);
 
-    if (e_ptr->act_idx > RandomArtActType::NONE) {
-        o_ptr->activation_id = e_ptr->act_idx;
+    if (ego.act_idx > RandomArtActType::NONE) {
+        o_ptr->activation_id = ego.act_idx;
     }
 
-    o_ptr->to_h += (HIT_PROB)e_ptr->base_to_h;
-    o_ptr->to_d += (int)e_ptr->base_to_d;
-    o_ptr->to_a += (ARMOUR_CLASS)e_ptr->base_to_a;
+    o_ptr->to_h += (HIT_PROB)ego.base_to_h;
+    o_ptr->to_d += (int)ego.base_to_d;
+    o_ptr->to_a += (ARMOUR_CLASS)ego.base_to_a;
 
-    auto is_powerful = e_ptr->gen_flags.has(ItemGenerationTraitType::POWERFUL);
+    auto is_powerful = ego.gen_flags.has(ItemGenerationTraitType::POWERFUL);
     auto is_cursed = (o_ptr->is_cursed() || o_ptr->is_broken()) && !is_powerful;
     if (is_cursed) {
-        if (e_ptr->max_to_h) {
-            o_ptr->to_h -= randint1(e_ptr->max_to_h);
+        if (ego.max_to_h) {
+            o_ptr->to_h -= randint1(ego.max_to_h);
         }
-        if (e_ptr->max_to_d) {
-            o_ptr->to_d -= randint1(e_ptr->max_to_d);
+        if (ego.max_to_d) {
+            o_ptr->to_d -= randint1(ego.max_to_d);
         }
-        if (e_ptr->max_to_a) {
-            o_ptr->to_a -= randint1(e_ptr->max_to_a);
+        if (ego.max_to_a) {
+            o_ptr->to_a -= randint1(ego.max_to_a);
         }
-        if (e_ptr->max_pval) {
-            o_ptr->pval -= randint1(e_ptr->max_pval);
+        if (ego.max_pval) {
+            o_ptr->pval -= randint1(ego.max_pval);
         }
     } else {
         if (is_powerful) {
-            if (e_ptr->max_to_h > 0 && o_ptr->to_h < 0) {
+            if (ego.max_to_h > 0 && o_ptr->to_h < 0) {
                 o_ptr->to_h = 0 - o_ptr->to_h;
             }
-            if (e_ptr->max_to_d > 0 && o_ptr->to_d < 0) {
+            if (ego.max_to_d > 0 && o_ptr->to_d < 0) {
                 o_ptr->to_d = 0 - o_ptr->to_d;
             }
-            if (e_ptr->max_to_a > 0 && o_ptr->to_a < 0) {
+            if (ego.max_to_a > 0 && o_ptr->to_a < 0) {
                 o_ptr->to_a = 0 - o_ptr->to_a;
             }
         }
 
-        o_ptr->to_h += (HIT_PROB)randint1_signed(e_ptr->max_to_h);
-        o_ptr->to_d += (int)randint1_signed(e_ptr->max_to_d);
-        o_ptr->to_a += (ARMOUR_CLASS)randint1_signed(e_ptr->max_to_a);
+        o_ptr->to_h += (HIT_PROB)randint1_signed(ego.max_to_h);
+        o_ptr->to_d += (int)randint1_signed(ego.max_to_d);
+        o_ptr->to_a += (ARMOUR_CLASS)randint1_signed(ego.max_to_a);
 
         if (gen_flags.has(ItemGenerationTraitType::MOD_ACCURACY)) {
             while (o_ptr->to_h < o_ptr->to_d + 10) {
@@ -342,20 +342,20 @@ void apply_ego(ItemEntity *o_ptr, DEPTH lev)
             o_ptr->to_a = std::max<short>(o_ptr->to_a, 15);
         }
 
-        if (e_ptr->max_pval) {
+        if (ego.max_pval) {
             if (o_ptr->ego_idx == EgoType::BAT) {
-                o_ptr->pval = randint1(e_ptr->max_pval);
+                o_ptr->pval = randint1(ego.max_pval);
                 if (o_ptr->bi_key.sval() == SV_ELVEN_CLOAK) {
                     o_ptr->pval += randint1(2);
                 }
             } else {
-                if (ego_has_flag(o_ptr, e_ptr, TR_BLOWS)) {
-                    ego_invest_extra_attack(o_ptr, e_ptr, lev);
+                if (ego_has_flag(o_ptr, ego, TR_BLOWS)) {
+                    ego_invest_extra_attack(o_ptr, ego, lev);
                 } else {
-                    if (e_ptr->max_pval > 0) {
-                        o_ptr->pval += randint1(e_ptr->max_pval);
-                    } else if (e_ptr->max_pval < 0) {
-                        o_ptr->pval -= randint1(0 - e_ptr->max_pval);
+                    if (ego.max_pval > 0) {
+                        o_ptr->pval += randint1(ego.max_pval);
+                    } else if (ego.max_pval < 0) {
+                        o_ptr->pval -= randint1(0 - ego.max_pval);
                     }
                 }
             }

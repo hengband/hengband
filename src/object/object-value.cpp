@@ -55,12 +55,12 @@ PRICE object_value_real(const ItemEntity *o_ptr)
         value += flag_cost(o_ptr, o_ptr->pval);
         return value;
     } else if (o_ptr->is_ego()) {
-        const auto &e_ref = egos_info[o_ptr->ego_idx];
-        if (!e_ref.cost) {
+        const auto &ego = o_ptr->get_ego();
+        if (!ego.cost) {
             return 0;
         }
 
-        value += e_ref.cost;
+        value += ego.cost;
         value += flag_cost(o_ptr, o_ptr->pval);
     } else {
         if (o_ptr->art_flags.any()) {

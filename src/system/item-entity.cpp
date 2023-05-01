@@ -804,3 +804,8 @@ bool ItemEntity::is_inscribed() const
 {
     return this->inscription != std::nullopt;
 }
+
+EgoItemDefinition &ItemEntity::get_ego() const
+{
+    return egos_info.at(this->ego_idx);
+}

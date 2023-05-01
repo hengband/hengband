@@ -88,7 +88,7 @@ void calc_android_exp(PlayerType *player_ptr)
             level = (level + std::max(artifact.level - 8, 5)) / 2;
             level += std::min(20, artifact.rarity / (artifact.gen_flags.has(ItemGenerationTraitType::INSTA_ART) ? 10 : 3));
         } else if (o_ptr->is_ego()) {
-            level += std::max(3, (egos_info[o_ptr->ego_idx].rating - 5) / 2);
+            level += std::max(3, (o_ptr->get_ego().rating - 5) / 2);
         } else if (o_ptr->is_random_artifact()) {
             int32_t total_flags = flag_cost(o_ptr, o_ptr->pval);
             int fake_level;

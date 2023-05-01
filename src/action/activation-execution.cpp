@@ -70,7 +70,7 @@ static void decide_activation_level(ae_type *ae_ptr)
 
     const auto tval = ae_ptr->o_ptr->bi_key.tval();
     if (((tval == ItemKindType::RING) || (tval == ItemKindType::AMULET)) && ae_ptr->o_ptr->is_ego()) {
-        ae_ptr->lev = egos_info[ae_ptr->o_ptr->ego_idx].level;
+        ae_ptr->lev = ae_ptr->o_ptr->get_ego().level;
     }
 }
 

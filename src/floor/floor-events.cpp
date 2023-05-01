@@ -161,8 +161,8 @@ static byte get_dungeon_feeling(PlayerType *player_ptr)
         }
 
         if (o_ptr->is_ego()) {
-            auto *e_ptr = &egos_info[o_ptr->ego_idx];
-            delta += e_ptr->rating * base;
+            const auto &ego = o_ptr->get_ego();
+            delta += ego.rating * base;
         }
 
         if (o_ptr->is_fixed_or_random_artifact()) {

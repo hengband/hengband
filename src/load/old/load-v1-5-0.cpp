@@ -141,11 +141,11 @@ void rd_item_old(ItemEntity *o_ptr)
                     o_ptr->curse_flags.set(CurseTraitType::PERMA_CURSE);
                 }
             } else if (o_ptr->is_ego()) {
-                const auto &e_ref = egos_info[o_ptr->ego_idx];
-                if (e_ref.gen_flags.has(ItemGenerationTraitType::HEAVY_CURSE)) {
+                const auto &ego = o_ptr->get_ego();
+                if (ego.gen_flags.has(ItemGenerationTraitType::HEAVY_CURSE)) {
                     o_ptr->curse_flags.set(CurseTraitType::HEAVY_CURSE);
                 }
-                if (e_ref.gen_flags.has(ItemGenerationTraitType::PERMA_CURSE)) {
+                if (ego.gen_flags.has(ItemGenerationTraitType::PERMA_CURSE)) {
                     o_ptr->curse_flags.set(CurseTraitType::PERMA_CURSE);
                 }
             }
@@ -347,8 +347,8 @@ void rd_item_old(ItemEntity *o_ptr)
     }
 
     if (o_ptr->is_ego()) {
-        const auto &e_ref = egos_info[o_ptr->ego_idx];
-        if (e_ref.name.empty()) {
+        const auto &ego = o_ptr->get_ego();
+        if (ego.name.empty()) {
             o_ptr->ego_idx = EgoType::NONE;
         }
     }
