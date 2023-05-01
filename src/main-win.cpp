@@ -2665,7 +2665,7 @@ static void init_stuff()
     validate_dir(ANGBAND_DIR_XTRA_SOUND, false);
 
     path_build(path, sizeof(path), ANGBAND_DIR_XTRA, "music");
-    ANGBAND_DIR_XTRA_MUSIC = string_make(path);
+    ANGBAND_DIR_XTRA_MUSIC = path;
     validate_dir(ANGBAND_DIR_XTRA_MUSIC, false);
 
     for (i = 0; special_key_list[i]; ++i) {

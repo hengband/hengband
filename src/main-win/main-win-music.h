@@ -1,15 +1,14 @@
 ﻿#pragma once
 
 #include "main-win/main-win-cfg-reader.h"
-#include "system/h-type.h"
-
 #include "main/music-definitions-table.h"
-
+#include "system/h-type.h"
 #include <array>
+#include <filesystem>
 #include <windows.h>
 
 extern bool use_pause_music_inactive;
-extern concptr ANGBAND_DIR_XTRA_MUSIC;
+extern std::filesystem::path ANGBAND_DIR_XTRA_MUSIC;
 extern CfgData *music_cfg_data;
 
 namespace main_win_music {

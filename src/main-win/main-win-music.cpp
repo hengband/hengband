@@ -33,7 +33,7 @@ static char current_music_path[MAIN_WIN_MAX_PATH];
 /*
  * Directory name
  */
-concptr ANGBAND_DIR_XTRA_MUSIC;
+std::filesystem::path ANGBAND_DIR_XTRA_MUSIC;
 
 /*
  * "music.cfg" data
