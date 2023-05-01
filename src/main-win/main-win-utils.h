@@ -83,4 +83,4 @@ protected:
 bool is_already_running(void);
 void save_screen_as_html(HWND hWnd);
 void open_dir_in_explorer(char *filename);
-bool get_open_filename(OPENFILENAMEW *ofn, const std::filesystem::path *dirname, char *filename, DWORD max_name_size);
+bool get_open_filename(OPENFILENAMEW *ofn, const std::filesystem::path &dirname, char *filename, DWORD max_name_size);
