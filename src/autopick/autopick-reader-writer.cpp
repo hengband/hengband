@@ -173,6 +173,10 @@ bool write_text_lines(std::string_view filename, const std::vector<concptr> &lin
     }
 
     for (const auto *line : lines) {
+        if (line == nullptr) {
+            break;
+        }
+
         angband_fputs(fff, line, 1024);
     }
 
