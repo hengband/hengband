@@ -28,8 +28,7 @@ static void display_diary(PlayerType *player_ptr)
 {
     std::stringstream ss;
     ss << _("playrecord-", "playrec-") << savefile_base << ".txt";
-    char buf[1024];
-    path_build(buf, sizeof(buf), ANGBAND_DIR_USER, ss.str());
+    const auto &filename = path_build(ANGBAND_DIR_USER, ss.str()).string();
 
     PlayerClass pc(player_ptr);
     const auto max_subtitles = diary_subtitles.size();
@@ -49,7 +48,7 @@ static void display_diary(PlayerType *player_ptr)
     strnfmt(diary_title, sizeof(diary_title), "Legend of %s %s '%s'", ap_ptr->title, player_ptr->name, subtitle.data());
 #endif
 
-    (void)show_file(player_ptr, false, buf, diary_title, -1, 0);
+    (void)show_file(player_ptr, false, filename.data(), diary_title, -1, 0);
 }
 
 /*!
@@ -98,16 +97,15 @@ static void do_cmd_erase_diary()
 
     std::stringstream ss;
     ss << _("playrecord-", "playrec-") << savefile_base << ".txt";
-    char buf[256];
-    path_build(buf, sizeof(buf), ANGBAND_DIR_USER, ss.str());
-    fd_kill(buf);
+    const auto &filename = path_build(ANGBAND_DIR_USER, ss.str()).string();
+    fd_kill(filename);
 
-    auto *fff = angband_fopen(buf, FileOpenMode::WRITE);
+    auto *fff = angband_fopen(filename, FileOpenMode::WRITE);
     if (fff) {
         angband_fclose(fff);
         msg_format(_("記録を消去しました。", "deleted record."));
     } else {
-        msg_format(_("%s の消去に失敗しました。", "failed to delete %s."), buf);
+        msg_format(_("%s の消去に失敗しました。", "failed to delete %s."), filename.data());
     }
 
     msg_print(nullptr);

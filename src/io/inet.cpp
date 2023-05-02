@@ -31,15 +31,15 @@ static int proxy_port;
 /* プロキシサーバのアドレスををファイルから読んで設定する */
 void set_proxy(char *default_url, int default_port)
 {
-    char buf[1024];
-    path_build(buf, sizeof(buf), ANGBAND_DIR_PREF, "proxy.prf");
-    auto *fp = angband_fopen(buf, FileOpenMode::READ);
+    const auto &path = path_build(ANGBAND_DIR_PREF, "proxy.prf");
+    auto *fp = angband_fopen(path, FileOpenMode::READ);
     if (!fp) {
         proxy = default_url;
         proxy_port = default_port;
         return;
     }
 
+    char buf[1024]{};
     while (angband_fgets(fp, buf, sizeof(buf)) == 0) {
         if (buf[0] != '#' && buf[0] != '\0') {
             break;

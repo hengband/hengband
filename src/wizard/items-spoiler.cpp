@@ -119,9 +119,8 @@ static ItemEntity prepare_item_for_obj_desc(short bi_id)
  */
 SpoilerOutputResultType spoil_obj_desc(concptr fname)
 {
-    char buf[1024];
-    path_build(buf, sizeof(buf), ANGBAND_DIR_USER, fname);
-    spoiler_file = angband_fopen(buf, FileOpenMode::WRITE);
+    const auto &path = path_build(ANGBAND_DIR_USER, fname);
+    spoiler_file = angband_fopen(path, FileOpenMode::WRITE);
     if (!spoiler_file) {
         return SpoilerOutputResultType::FILE_OPEN_FAILED;
     }

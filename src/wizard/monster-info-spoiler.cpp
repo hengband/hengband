@@ -77,9 +77,8 @@ SpoilerOutputResultType spoil_mon_desc(concptr fname, std::function<bool(const M
 {
     PlayerType dummy;
     uint16_t why = 2;
-    char buf[1024];
-    path_build(buf, sizeof(buf), ANGBAND_DIR_USER, fname);
-    spoiler_file = angband_fopen(buf, FileOpenMode::WRITE);
+    const auto &path = path_build(ANGBAND_DIR_USER, fname);
+    spoiler_file = angband_fopen(path, FileOpenMode::WRITE);
     if (!spoiler_file) {
         return SpoilerOutputResultType::FILE_OPEN_FAILED;
     }
@@ -168,9 +167,8 @@ static void roff_func(TERM_COLOR attr, std::string_view str)
 SpoilerOutputResultType spoil_mon_info(concptr fname)
 {
     PlayerType dummy;
-    char buf[1024];
-    path_build(buf, sizeof(buf), ANGBAND_DIR_USER, fname);
-    spoiler_file = angband_fopen(buf, FileOpenMode::WRITE);
+    const auto &path = path_build(ANGBAND_DIR_USER, fname);
+    spoiler_file = angband_fopen(path, FileOpenMode::WRITE);
     if (!spoiler_file) {
         return SpoilerOutputResultType::FILE_OPEN_FAILED;
     }

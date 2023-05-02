@@ -84,9 +84,8 @@ static void create_user_dir(void)
     const auto &dirpath = path_parse(PRIVATE_USER_PATH).string();
     mkdir(dirpath.data(), 0700);
 
-    char subdirpath[1024]{};
-    path_build(subdirpath, sizeof(subdirpath), dirpath, VARIANT_NAME);
-    mkdir(subdirpath, 0700);
+    const auto &subdirpath = path_build(dirpath, VARIANT_NAME).string();
+    mkdir(subdirpath.data(), 0700);
 }
 
 #endif /* PRIVATE_USER_PATH */

@@ -24,10 +24,9 @@
  */
 static int count_town_numbers()
 {
-    char towns_path[1024]{};
-    path_build(towns_path, sizeof(towns_path), ANGBAND_DIR_EDIT, "towns");
+    const auto &path = path_build(ANGBAND_DIR_EDIT, "towns");
     std::set<std::string> unique_towns;
-    for (const auto &entry : std::filesystem::directory_iterator(towns_path)) {
+    for (const auto &entry : std::filesystem::directory_iterator(path)) {
         const auto &filename = entry.path().filename().string();
         if (!filename.ends_with(".txt")) {
             continue;

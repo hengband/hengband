@@ -57,12 +57,11 @@ std::filesystem::path debug_savefile;
  */
 errr file_character(PlayerType *player_ptr, concptr name)
 {
-    char buf[1024];
-    path_build(buf, sizeof(buf), ANGBAND_DIR_USER, name);
-    auto fd = fd_open(buf, O_RDONLY);
+    const auto &filename = path_build(ANGBAND_DIR_USER, name).string();
+    auto fd = fd_open(filename, O_RDONLY);
     if (fd >= 0) {
         std::string query = _("現存するファイル ", "Replace existing file ");
-        query.append(buf).append(_(" に上書きしますか? ", "? "));
+        query.append(filename).append(_(" に上書きしますか? ", "? "));
         (void)fd_close(fd);
         if (get_check_strict(player_ptr, query, CHECK_NO_HISTORY)) {
             fd = -1;
@@ -71,7 +70,7 @@ errr file_character(PlayerType *player_ptr, concptr name)
 
     FILE *fff = nullptr;
     if (fd < 0) {
-        fff = angband_fopen(buf, FileOpenMode::WRITE);
+        fff = angband_fopen(filename, FileOpenMode::WRITE);
     }
 
     if (!fff) {
@@ -98,9 +97,8 @@ errr file_character(PlayerType *player_ptr, concptr name)
  */
 std::optional<std::string> get_random_line(concptr file_name, int entry)
 {
-    char filename[1024];
-    path_build(filename, sizeof(filename), ANGBAND_DIR_FILE, file_name);
-    auto *fp = angband_fopen(filename, FileOpenMode::READ);
+    const auto &path = path_build(ANGBAND_DIR_FILE, file_name);
+    auto *fp = angband_fopen(path, FileOpenMode::READ);
     if (!fp) {
         return std::nullopt;
     }
@@ -265,9 +263,8 @@ static errr counts_seek(PlayerType *player_ptr, int fd, uint32_t where, bool fla
  */
 uint32_t counts_read(PlayerType *player_ptr, int where)
 {
-    char buf[1024];
-    path_build(buf, sizeof(buf), ANGBAND_DIR_DATA, _("z_info_j.raw", "z_info.raw"));
-    auto fd = fd_open(buf, O_RDONLY);
+    const auto &filename = path_build(ANGBAND_DIR_DATA, _("z_info_j.raw", "z_info.raw")).string();
+    auto fd = fd_open(filename, O_RDONLY);
     uint32_t count = 0;
     if (counts_seek(player_ptr, fd, where, false) || fd_read(fd, (char *)(&count), sizeof(uint32_t))) {
         count = 0;
@@ -287,15 +284,14 @@ uint32_t counts_read(PlayerType *player_ptr, int where)
  */
 errr counts_write(PlayerType *player_ptr, int where, uint32_t count)
 {
-    char buf[1024];
-    path_build(buf, sizeof(buf), ANGBAND_DIR_DATA, _("z_info_j.raw", "z_info.raw"));
+    const auto &filename = path_build(ANGBAND_DIR_DATA, _("z_info_j.raw", "z_info.raw")).string();
 
     safe_setuid_grab(player_ptr);
-    auto fd = fd_open(buf, O_RDWR);
+    auto fd = fd_open(filename, O_RDWR);
     safe_setuid_drop();
     if (fd < 0) {
         safe_setuid_grab(player_ptr);
-        fd = fd_make(buf);
+        fd = fd_make(filename);
         safe_setuid_drop();
     }
 
@@ -325,14 +321,14 @@ errr counts_write(PlayerType *player_ptr, int where, uint32_t count)
  */
 void read_dead_file()
 {
-    char buf[1024];
-    path_build(buf, sizeof(buf), ANGBAND_DIR_FILE, _("dead_j.txt", "dead.txt"));
-    auto *fp = angband_fopen(buf, FileOpenMode::READ);
+    const auto &path = path_build(ANGBAND_DIR_FILE, _("dead_j.txt", "dead.txt"));
+    auto *fp = angband_fopen(path, FileOpenMode::READ);
     if (!fp) {
         return;
     }
 
     int i = 0;
+    char buf[1024]{};
     while (angband_fgets(fp, buf, sizeof(buf)) == 0) {
         put_str(buf, i++, 0);
     }

@@ -66,7 +66,6 @@ void do_cmd_colors(PlayerType *player_ptr)
 {
     int i;
     char tmp[160];
-    char buf[1024];
     FILE *auto_dump_stream;
     screen_save();
     while (true) {
@@ -101,8 +100,8 @@ void do_cmd_colors(PlayerType *player_ptr)
                 continue;
             }
 
-            path_build(buf, sizeof(buf), ANGBAND_DIR_USER, tmp);
-            if (!open_auto_dump(&auto_dump_stream, buf, mark)) {
+            const auto &path = path_build(ANGBAND_DIR_USER, tmp);
+            if (!open_auto_dump(&auto_dump_stream, path, mark)) {
                 continue;
             }
 
@@ -271,14 +270,14 @@ void do_cmd_time(PlayerType *player_ptr)
     std::string day_buf = (day < MAX_DAYS) ? std::to_string(day) : "*****";
     constexpr auto mes = _("%s日目, 時刻は%d:%02d %sです。", "This is day %s. The time is %d:%02d %s.");
     msg_format(mes, day_buf.data(), (hour % 12 == 0) ? 12 : (hour % 12), min, (hour < 12) ? "AM" : "PM");
-    char buf[1024];
+    std::filesystem::path path;
     if (!randint0(10) || player_ptr->effects()->hallucination()->is_hallucinated()) {
-        path_build(buf, sizeof(buf), ANGBAND_DIR_FILE, _("timefun_j.txt", "timefun.txt"));
+        path = path_build(ANGBAND_DIR_FILE, _("timefun_j.txt", "timefun.txt"));
     } else {
-        path_build(buf, sizeof(buf), ANGBAND_DIR_FILE, _("timenorm_j.txt", "timenorm.txt"));
+        path = path_build(ANGBAND_DIR_FILE, _("timenorm_j.txt", "timenorm.txt"));
     }
 
-    auto *fff = angband_fopen(buf, FileOpenMode::READ);
+    auto *fff = angband_fopen(path, FileOpenMode::READ);
     if (!fff) {
         return;
     }
@@ -287,6 +286,7 @@ void do_cmd_time(PlayerType *player_ptr)
     auto start = 9999;
     auto end = -9999;
     auto num = 0;
+    char buf[1024]{};
     while (!angband_fgets(fff, buf, sizeof(buf))) {
         if (!buf[0] || (buf[0] == '#')) {
             continue;
