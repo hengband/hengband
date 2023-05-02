@@ -259,7 +259,7 @@ static void analyze_misc_magic(ItemEntity *o_ptr, concptr *misc_list)
  */
 static void analyze_addition(ItemEntity *o_ptr, char *addition, size_t addition_sz)
 {
-    const auto &artifact = ArtifactsInfo::get_instance().get_artifact(o_ptr->fixed_artifact_idx);
+    const auto &artifact = o_ptr->get_fixed_artifact();
     strcpy(addition, "");
 
     if (artifact.gen_flags.has_all_of({ ItemGenerationTraitType::XTRA_POWER, ItemGenerationTraitType::XTRA_H_RES })) {
@@ -296,7 +296,7 @@ static void analyze_addition(ItemEntity *o_ptr, char *addition, size_t addition_
  */
 static void analyze_misc(ItemEntity *o_ptr, char *misc_desc, size_t misc_desc_sz)
 {
-    const auto &artifact = ArtifactsInfo::get_instance().get_artifact(o_ptr->fixed_artifact_idx);
+    const auto &artifact = o_ptr->get_fixed_artifact();
     const auto *mes = _("レベル %d, 希少度 %u, %d.%d kg, ＄%ld", "Level %d, Rarity %u, %d.%d lbs, %ld Gold");
     strnfmt(misc_desc, misc_desc_sz, mes, (int)artifact.level, artifact.rarity,
         _(lb_to_kg_integer(artifact.weight), artifact.weight / 10), _(lb_to_kg_fraction(artifact.weight), artifact.weight % 10), (long int)artifact.cost);

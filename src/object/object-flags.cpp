@@ -56,7 +56,7 @@ TrFlags object_flags(const ItemEntity *o_ptr)
     auto flags = baseitem.flags;
 
     if (o_ptr->is_fixed_artifact()) {
-        flags = ArtifactsInfo::get_instance().get_artifact(o_ptr->fixed_artifact_idx).flags;
+        flags = o_ptr->get_fixed_artifact().flags;
     }
 
     if (o_ptr->is_ego()) {
@@ -105,7 +105,7 @@ TrFlags object_flags_known(const ItemEntity *o_ptr)
 
     if (o_ptr->is_fully_known()) {
         if (o_ptr->is_fixed_artifact()) {
-            flags = ArtifactsInfo::get_instance().get_artifact(o_ptr->fixed_artifact_idx).flags;
+            flags = o_ptr->get_fixed_artifact().flags;
         }
 
         flags.set(o_ptr->art_flags);

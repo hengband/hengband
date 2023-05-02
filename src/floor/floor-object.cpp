@@ -458,7 +458,7 @@ OBJECT_IDX drop_near(PlayerType *player_ptr, ItemEntity *j_ptr, PERCENTAGE chanc
         flag = true;
     }
 
-    auto &artifact = ArtifactsInfo::get_instance().get_artifact(j_ptr->fixed_artifact_idx);
+    auto &artifact = j_ptr->get_fixed_artifact();
     if (!flag) {
         int candidates = 0, pick;
         for (ty = 1; ty < floor_ptr->height - 1; ty++) {

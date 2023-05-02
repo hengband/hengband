@@ -283,7 +283,7 @@ static void preserve_info(PlayerType *player_ptr)
         }
 
         if (o_ptr->is_fixed_artifact()) {
-            ArtifactsInfo::get_instance().get_artifact(o_ptr->fixed_artifact_idx).floor_id = 0;
+            o_ptr->get_fixed_artifact().floor_id = 0;
         }
     }
 }
