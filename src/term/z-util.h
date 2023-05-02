@@ -73,4 +73,3 @@ void s64b_div(int32_t *A1, uint32_t *A2, int32_t B1, uint32_t B2);
 void s64b_mod(int32_t *A1, uint32_t *A2, int32_t B1, uint32_t B2);
 
 int count_bits(BIT_FLAGS x);
-int mysqrt(int n);
