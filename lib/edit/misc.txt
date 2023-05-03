@@ -5,9 +5,3 @@ M:WX:99
 
 # Maximum y size of the wilderness
 M:WY:66
-
-# Maximum size for "o_list[]"
-M:O:1024
-
-# Maximum size for "m_list[]"
-M:M:1024

@@ -65,8 +65,8 @@ struct world_type {
 
     bool wizard{}; /* This world under wizard mode */
 
-    OBJECT_IDX max_o_idx{}; /*!< Maximum number of objects in the level */
-    MONSTER_IDX max_m_idx{}; /*!< Maximum number of monsters in the level */
+    OBJECT_IDX max_o_idx = 1024; /*!< 1フロアに存在可能な最大アイテム数 */
+    MONSTER_IDX max_m_idx = 1024; /*!< 1フロアに存在可能な最大モンスター数 */
 };
 
 extern world_type *w_ptr;

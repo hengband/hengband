@@ -396,11 +396,7 @@ static bool parse_qtw_M(qtwg_type *qtwg_ptr, char **zz)
         return true;
     }
 
-    if (zz[0][0] == 'O') {
-        w_ptr->max_o_idx = (OBJECT_IDX)atoi(zz[1]);
-    } else if (zz[0][0] == 'M') {
-        w_ptr->max_m_idx = (MONSTER_IDX)atoi(zz[1]);
-    } else if (zz[0][0] == 'W') {
+    if (zz[0][0] == 'W') {
         if (zz[0][1] == 'X') {
             w_ptr->max_wild_x = (POSITION)atoi(zz[1]);
         }
