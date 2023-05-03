@@ -1,7 +1,0 @@
-# File: misc.txt
-
-# Maximum x size of the wilderness
-M:WX:99
-
-# Maximum y size of the wilderness
-M:WY:66

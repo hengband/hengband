@@ -224,11 +224,6 @@ void init_angband(PlayerType *player_ptr, bool no_term)
 
     void (*init_note)(concptr) = (no_term ? init_note_no_term : init_note_term);
 
-    init_note(_("[変数を初期化しています...(その他)", "[Initializing values... (misc)]"));
-    if (init_misc(player_ptr)) {
-        quit(_("その他の変数を初期化できません", "Cannot initialize misc. values"));
-    }
-
     init_note(_("[データの初期化中... (地形)]", "[Initializing arrays... (features)]"));
     if (init_terrains_info()) {
         quit(_("地形初期化不能", "Cannot initialize features"));
@@ -280,7 +275,7 @@ void init_angband(PlayerType *player_ptr, bool no_term)
     }
 
     init_note(_("[配列を初期化しています... (荒野)]", "[Initializing arrays... (wilderness)]"));
-    if (init_wilderness()) {
+    if (!init_wilderness()) {
         quit(_("荒野を初期化できません", "Cannot initialize wilderness"));
     }
 
