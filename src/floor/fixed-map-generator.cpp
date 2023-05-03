@@ -386,33 +386,6 @@ static bool parse_qtw_P(PlayerType *player_ptr, qtwg_type *qtwg_ptr, char **zz)
     return true;
 }
 
-static bool parse_qtw_M(qtwg_type *qtwg_ptr, char **zz)
-{
-    if (qtwg_ptr->buf[0] != 'M') {
-        return false;
-    }
-
-    if ((tokenize(qtwg_ptr->buf + 2, 2, zz, 0) == 2) == 0) {
-        return true;
-    }
-
-    if (zz[0][0] == 'O') {
-        w_ptr->max_o_idx = (OBJECT_IDX)atoi(zz[1]);
-    } else if (zz[0][0] == 'M') {
-        w_ptr->max_m_idx = (MONSTER_IDX)atoi(zz[1]);
-    } else if (zz[0][0] == 'W') {
-        if (zz[0][1] == 'X') {
-            w_ptr->max_wild_x = (POSITION)atoi(zz[1]);
-        }
-
-        if (zz[0][1] == 'Y') {
-            w_ptr->max_wild_y = (POSITION)atoi(zz[1]);
-        }
-    }
-
-    return true;
-}
-
 /*!
  * @brief 固定マップ (クエスト＆街＆広域マップ)をフロアに生成する
  * Parse a sub-file of the "extra info"
@@ -483,7 +456,8 @@ parse_error_type generate_fixed_map_floor(PlayerType *player_ptr, qtwg_type *qtw
         return parse_line_building(qtwg_ptr->buf);
     }
 
-    if (parse_qtw_M(qtwg_ptr, zz)) {
+    // 荒野の広さを表すタグ。初期化時に読み込むのでそれ以降は無視する.
+    if (qtwg_ptr->buf[0] == 'M') {
         return PARSE_ERROR_NONE;
     }
 

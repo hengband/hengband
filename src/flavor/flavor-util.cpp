@@ -75,7 +75,7 @@ std::string get_ability_abbreviation(const ItemEntity &item, bool is_kanji, bool
         flags.reset(baseitem.flags);
 
         if (item.is_fixed_artifact()) {
-            const auto &artifact = ArtifactsInfo::get_instance().get_artifact(item.fixed_artifact_idx);
+            const auto &artifact = item.get_fixed_artifact();
             flags.reset(artifact.flags);
         }
 

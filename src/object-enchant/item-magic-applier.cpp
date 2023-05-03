@@ -183,7 +183,7 @@ bool ItemMagicApplier::set_fixed_artifact_generation_info()
     }
 
     apply_artifact(this->player_ptr, this->o_ptr);
-    ArtifactsInfo::get_instance().get_artifact(this->o_ptr->fixed_artifact_idx).is_generated = true;
+    this->o_ptr->get_fixed_artifact().is_generated = true;
     return true;
 }
 

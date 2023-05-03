@@ -406,9 +406,8 @@ static void wiz_statistics(PlayerType *player_ptr, ItemEntity *o_ptr)
     concptr p = "Enter number of items to roll: ";
     char tmp_val[80];
 
-    const auto &artifacts = ArtifactsInfo::get_instance();
     if (o_ptr->is_fixed_artifact()) {
-        artifacts.get_artifact(o_ptr->fixed_artifact_idx).is_generated = false;
+        o_ptr->get_fixed_artifact().is_generated = false;
     }
 
     uint32_t i, matches, better, worse, other, correct;
@@ -462,7 +461,7 @@ static void wiz_statistics(PlayerType *player_ptr, ItemEntity *o_ptr)
             q_ptr->wipe();
             make_object(player_ptr, q_ptr, mode);
             if (q_ptr->is_fixed_artifact()) {
-                artifacts.get_artifact(q_ptr->fixed_artifact_idx).is_generated = false;
+                q_ptr->get_fixed_artifact().is_generated = false;
             }
 
             if (o_ptr->bi_key != q_ptr->bi_key) {
@@ -487,7 +486,7 @@ static void wiz_statistics(PlayerType *player_ptr, ItemEntity *o_ptr)
     }
 
     if (o_ptr->is_fixed_artifact()) {
-        artifacts.get_artifact(o_ptr->fixed_artifact_idx).is_generated = true;
+        o_ptr->get_fixed_artifact().is_generated = true;
     }
 }
 
@@ -509,12 +508,11 @@ static void wiz_reroll_item(PlayerType *player_ptr, ItemEntity *o_ptr)
 
     char ch;
     bool changed = false;
-    const auto &artifacts = ArtifactsInfo::get_instance();
     while (true) {
         wiz_display_item(player_ptr, q_ptr);
         if (!get_com("[a]ccept, [w]orthless, [c]ursed, [n]ormal, [g]ood, [e]xcellent, [s]pecial? ", &ch, false)) {
             if (q_ptr->is_fixed_artifact()) {
-                artifacts.get_artifact(q_ptr->fixed_artifact_idx).is_generated = false;
+                q_ptr->get_fixed_artifact().is_generated = false;
                 q_ptr->fixed_artifact_idx = FixedArtifactId::NONE;
             }
 
@@ -528,7 +526,7 @@ static void wiz_reroll_item(PlayerType *player_ptr, ItemEntity *o_ptr)
         }
 
         if (q_ptr->is_fixed_artifact()) {
-            artifacts.get_artifact(q_ptr->fixed_artifact_idx).is_generated = false;
+            q_ptr->get_fixed_artifact().is_generated = false;
             q_ptr->fixed_artifact_idx = FixedArtifactId::NONE;
         }
 

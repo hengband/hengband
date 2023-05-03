@@ -343,7 +343,7 @@ bool is_autopick_match(PlayerType *player_ptr, ItemEntity *o_ptr, const autopick
     }
 
     if (entry.name[0] == '^') {
-        if (item_name == entry.name.substr(1, entry.name.length() - 1)) {
+        if (!item_name.starts_with(std::string_view(entry.name).substr(1))) {
             return false;
         }
     } else {

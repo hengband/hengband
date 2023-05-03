@@ -4,6 +4,7 @@
  */
 
 #include "main/info-initializer.h"
+#include "floor/wild.h"
 #include "info-reader/artifact-reader.h"
 #include "info-reader/baseitem-reader.h"
 #include "info-reader/dungeon-reader.h"
@@ -33,13 +34,16 @@
 #include "system/player-type-definition.h"
 #include "system/terrain-type-definition.h"
 #include "util/angband-files.h"
+#include "util/string-processor.h"
 #include "view/display-messages.h"
 #include "world/world.h"
+#include <fstream>
+#include <string>
+#include <string_view>
 #include <sys/stat.h>
 #ifndef WINDOWS
 #include <sys/types.h>
 #endif
-#include <string_view>
 
 namespace {
 
@@ -228,12 +232,53 @@ errr init_vaults_info()
     return init_info("VaultDefinitions.txt", vaults_header, vaults_info, parse_vaults_info);
 }
 
-/*!
- * @brief 基本情報読み込みのメインルーチン
- * @param player_ptr プレイヤーへの参照ポインタ
- * @return エラーコード
- */
-errr init_misc(PlayerType *player_ptr)
+static bool read_wilderness_definition(std::ifstream &ifs)
 {
-    return parse_fixed_map(player_ptr, "misc.txt", 0, 0, 0, 0);
+    std::string line;
+    while (!ifs.eof()) {
+        if (!std::getline(ifs, line)) {
+            return false;
+        }
+
+        if (line.empty() || line.starts_with('#')) {
+            continue;
+        }
+
+        const auto &splits = str_split(line, ':');
+        if ((splits.size() != 3) || (splits[0] != "M")) {
+            continue;
+        }
+
+        if (splits[1] == "WX") {
+            w_ptr->max_wild_x = std::stoi(splits[2]);
+        } else if (splits[1] == "WY") {
+            w_ptr->max_wild_y = std::stoi(splits[2]);
+        } else {
+            return false;
+        }
+
+        if ((w_ptr->max_wild_x > 0) && (w_ptr->max_wild_y > 0)) {
+            wilderness.assign(w_ptr->max_wild_y, std::vector<wilderness_type>(w_ptr->max_wild_x));
+            init_wilderness_encounter();
+            return true;
+        }
+    }
+
+    return false;
+}
+
+/*!
+ * @brief 荒野情報読み込み処理
+ * @return 読み込みに成功したか
+ */
+bool init_wilderness()
+{
+    char path[1024]{};
+    path_build(path, sizeof(path), ANGBAND_DIR_EDIT, WILDERNESS_DEFINITION);
+    std::ifstream ifs(path);
+    if (!ifs) {
+        return false;
+    }
+
+    return read_wilderness_definition(ifs);
 }
