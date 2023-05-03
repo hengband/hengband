@@ -188,7 +188,10 @@ static bool check_monster_hp(PlayerType *player_ptr, mam_pp_type *mam_pp_ptr)
         return false;
     }
 
-    if ((r_ptr->kind_flags.has(MonsterKindType::UNIQUE) || any_bits(r_ptr->flags1, RF1_QUESTOR) || (r_ptr->population_flags.has(MonsterPopulationType::NAZGUL))) && !player_ptr->phase_out) {
+    auto is_like_unique = r_ptr->kind_flags.has(MonsterKindType::UNIQUE);
+    is_like_unique |= any_bits(r_ptr->flags1, RF1_QUESTOR);
+    is_like_unique |= r_ptr->population_flags.has(MonsterPopulationType::NAZGUL);
+    if (is_like_unique && !player_ptr->phase_out) {
         mam_pp_ptr->m_ptr->hp = 1;
         return false;
     }

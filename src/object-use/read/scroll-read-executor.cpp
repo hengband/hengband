@@ -59,6 +59,7 @@ bool ScrollReadExecutor::is_identified() const
 bool ScrollReadExecutor::read()
 {
     auto used_up = true;
+    auto *floor_ptr = this->player_ptr->current_floor_ptr;
     switch (this->o_ptr->bi_key.sval().value()) {
     case SV_SCROLL_DARKNESS:
         if (!has_resist_blind(this->player_ptr) && !has_resist_dark(this->player_ptr)) {
@@ -100,7 +101,7 @@ bool ScrollReadExecutor::read()
     }
     case SV_SCROLL_SUMMON_MONSTER:
         for (auto k = 0; k < randint1(3); k++) {
-            if (summon_specific(this->player_ptr, 0, this->player_ptr->y, this->player_ptr->x, this->player_ptr->current_floor_ptr->dun_level, SUMMON_NONE,
+            if (summon_specific(this->player_ptr, 0, this->player_ptr->y, this->player_ptr->x, floor_ptr->dun_level, SUMMON_NONE,
                     PM_ALLOW_GROUP | PM_ALLOW_UNIQUE | PM_NO_PET)) {
                 this->ident = true;
             }
@@ -109,7 +110,7 @@ bool ScrollReadExecutor::read()
         break;
     case SV_SCROLL_SUMMON_UNDEAD:
         for (auto k = 0; k < randint1(3); k++) {
-            if (summon_specific(this->player_ptr, 0, this->player_ptr->y, this->player_ptr->x, this->player_ptr->current_floor_ptr->dun_level, SUMMON_UNDEAD,
+            if (summon_specific(this->player_ptr, 0, this->player_ptr->y, this->player_ptr->x, floor_ptr->dun_level, SUMMON_UNDEAD,
                     PM_ALLOW_GROUP | PM_ALLOW_UNIQUE | PM_NO_PET)) {
                 this->ident = true;
             }
@@ -118,7 +119,7 @@ bool ScrollReadExecutor::read()
         break;
     case SV_SCROLL_SUMMON_PET:
         if (summon_specific(
-                this->player_ptr, -1, this->player_ptr->y, this->player_ptr->x, this->player_ptr->current_floor_ptr->dun_level, SUMMON_NONE, PM_ALLOW_GROUP | PM_FORCE_PET)) {
+                this->player_ptr, -1, this->player_ptr->y, this->player_ptr->x, floor_ptr->dun_level, SUMMON_NONE, PM_ALLOW_GROUP | PM_FORCE_PET)) {
             this->ident = true;
         }
 

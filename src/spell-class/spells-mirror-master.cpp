@@ -361,7 +361,8 @@ void SpellsMirrorMaster::project_seeker_ray(int target_x, int target_y, int dam)
     }
 }
 
-static void draw_super_ray_pict(PlayerType *player_ptr, const std::map<int, std::vector<projection_path::const_iterator>> &pos_list_map, const std::vector<projection_path> &second_path_g_list, const std::pair<int, int> &center)
+static void draw_super_ray_pict(PlayerType *player_ptr, const std::map<int, std::vector<projection_path::const_iterator>> &pos_list_map,
+    const std::vector<projection_path> &second_path_g_list, const std::pair<int, int> &center)
 {
     if (delay_factor <= 0) {
         return;

@@ -378,7 +378,7 @@ static void update_specific_race_telepathy(PlayerType *player_ptr, um_type *um_p
         }
     }
 
-    if ((player_ptr->esp_nonliving) && (r_ptr->kind_flags.has(MonsterKindType::NONLIVING) && r_ptr->kind_flags.has_none_of({ MonsterKindType::DEMON, MonsterKindType::UNDEAD }))) {
+    if ((player_ptr->esp_nonliving) && r_ptr->kind_flags.has(MonsterKindType::NONLIVING) && r_ptr->kind_flags.has_none_of({ MonsterKindType::DEMON, MonsterKindType::UNDEAD })) {
         um_ptr->flag = true;
         m_ptr->mflag.set(MonsterTemporaryFlagType::ESP);
         if (m_ptr->is_original_ap() && !is_hallucinated) {

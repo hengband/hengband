@@ -52,8 +52,10 @@
 bool is_teleport_level_ineffective(PlayerType *player_ptr, MONSTER_IDX idx)
 {
     auto *floor_ptr = player_ptr->current_floor_ptr;
-    bool is_special_floor = floor_ptr->inside_arena || player_ptr->phase_out || (inside_quest(floor_ptr->quest_number) && !inside_quest(random_quest_number(player_ptr, floor_ptr->dun_level)));
-    bool is_invalid_floor = idx <= 0;
+    auto is_special_floor = floor_ptr->inside_arena;
+    is_special_floor |= player_ptr->phase_out;
+    is_special_floor |= inside_quest(floor_ptr->quest_number) && !inside_quest(random_quest_number(player_ptr, floor_ptr->dun_level));
+    auto is_invalid_floor = idx <= 0;
     is_invalid_floor &= inside_quest(quest_number(player_ptr, floor_ptr->dun_level)) || (floor_ptr->dun_level >= dungeons_info[player_ptr->dungeon_idx].maxdepth);
     is_invalid_floor &= player_ptr->current_floor_ptr->dun_level >= 1;
     is_invalid_floor &= ironman_downward;
@@ -409,7 +411,8 @@ static DUNGEON_IDX choose_dungeon(concptr note, POSITION y, POSITION x)
             seiha = true;
         }
 
-        strnfmt(buf, sizeof(buf), _("      %c) %c%-12s : 最大 %d 階", "      %c) %c%-16s : Max level %d"), static_cast<char>('a' + dun.size()), seiha ? '!' : ' ', d_ref.name.data(), (int)max_dlv[d_ref.idx]);
+        constexpr auto fmt = _("      %c) %c%-12s : 最大 %d 階", "      %c) %c%-16s : Max level %d");
+        strnfmt(buf, sizeof(buf), fmt, static_cast<char>('a' + dun.size()), seiha ? '!' : ' ', d_ref.name.data(), (int)max_dlv[d_ref.idx]);
         prt(buf, y + dun.size(), x);
         dun.push_back(d_ref.idx);
     }
@@ -545,7 +548,8 @@ bool reset_recall(PlayerType *player_ptr)
         return false;
     }
     char ppp[80];
-    strnfmt(ppp, sizeof(ppp), _("何階にセットしますか (%d-%d):", "Reset to which level (%d-%d): "), (int)dungeons_info[select_dungeon].mindepth, (int)max_dlv[select_dungeon]);
+    constexpr auto mes = _("何階にセットしますか (%d-%d):", "Reset to which level (%d-%d): ");
+    strnfmt(ppp, sizeof(ppp), mes, (int)dungeons_info[select_dungeon].mindepth, (int)max_dlv[select_dungeon]);
     char tmp_val[160];
     strnfmt(tmp_val, sizeof(tmp_val), "%d", (int)std::max(player_ptr->current_floor_ptr->dun_level, 1));
 
@@ -567,7 +571,8 @@ bool reset_recall(PlayerType *player_ptr)
     max_dlv[select_dungeon] = dummy;
 
     if (record_maxdepth) {
-        exe_write_diary(player_ptr, DIARY_TRUMP, select_dungeon, _("フロア・リセットで", "using a scroll of reset recall"));
+        constexpr auto note = _("フロア・リセットで", "using a scroll of reset recall");
+        exe_write_diary(player_ptr, DIARY_TRUMP, select_dungeon, note);
     }
 #ifdef JP
     msg_format("%sの帰還レベルを %d 階にセット。", dungeons_info[select_dungeon].name.data(), dummy);

@@ -657,10 +657,11 @@ void do_cmd_options_aux(PlayerType *player_ptr, game_option_types page, concptr 
     term_clear();
     while (true) {
         DIRECTION dir;
-        prt(format(_("%s (リターン:次, %sESC:終了, ?:ヘルプ) ", "%s (RET:next, %s, ?:help) "), info, browse_only ? _("", "ESC:exit") : _("y/n:変更, ", "y/n:change, ESC:accept")), 0, 0);
+        constexpr auto command = _("%s (リターン:次, %sESC:終了, ?:ヘルプ) ", "%s (RET:next, %s, ?:help) ");
+        prt(format(command, info, browse_only ? _("", "ESC:exit") : _("y/n:変更, ", "y/n:change, ESC:accept")), 0, 0);
         if (page == OPT_PAGE_AUTODESTROY) {
-            c_prt(TERM_YELLOW, _("以下のオプションは、簡易自動破壊を使用するときのみ有効", "Following options will protect items from easy auto-destroyer."), 6,
-                _(6, 3));
+            constexpr auto mes = _("以下のオプションは、簡易自動破壊を使用するときのみ有効", "Following options will protect items from easy auto-destroyer.");
+            c_prt(TERM_YELLOW, mes, 6, _(6, 3));
         }
 
         for (i = 0; i < n; i++) {

@@ -403,13 +403,16 @@ void process_command(PlayerType *player_ptr)
             break;
         }
 
-        if (floor_ptr->dun_level && dungeons_info[player_ptr->dungeon_idx].flags.has(DungeonFeatureType::NO_MAGIC) && !pc.equals(PlayerClassType::BERSERKER) && !pc.equals(PlayerClassType::SMITH)) {
+        const auto &dungeon = dungeons_info[player_ptr->dungeon_idx];
+        auto non_magic_class = pc.equals(PlayerClassType::BERSERKER);
+        non_magic_class |= pc.equals(PlayerClassType::SMITH);
+        if (floor_ptr->dun_level && dungeon.flags.has(DungeonFeatureType::NO_MAGIC) && !non_magic_class) {
             msg_print(_("ダンジョンが魔法を吸収した！", "The dungeon absorbs all attempted magic!"));
             msg_print(nullptr);
             break;
         }
 
-        if (player_ptr->anti_magic && !pc.equals(PlayerClassType::BERSERKER) && !pc.equals(PlayerClassType::SMITH)) {
+        if (player_ptr->anti_magic && !non_magic_class) {
             concptr which_power = _("魔法", "magic");
             switch (player_ptr->pclass) {
             case PlayerClassType::MINDCRAFTER:

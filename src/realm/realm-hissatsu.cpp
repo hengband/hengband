@@ -284,21 +284,22 @@ std::optional<std::string> do_hissatsu_spell(PlayerType *player_ptr, SPELL_IDX s
             y = player_ptr->y + ddy[dir];
             x = player_ptr->x + ddx[dir];
 
-            if (!player_ptr->current_floor_ptr->grid_array[y][x].m_idx) {
+            const auto *floor_ptr = player_ptr->current_floor_ptr;
+            const auto &grid = floor_ptr->grid_array[y][x];
+            if (!grid.m_idx) {
                 msg_print(_("その方向にはモンスターはいません。", "There is no monster."));
                 return std::nullopt;
             }
 
             do_cmd_attack(player_ptr, y, x, HISSATSU_NONE);
-
-            if (!player_can_enter(player_ptr, player_ptr->current_floor_ptr->grid_array[y][x].feat, 0) || is_trap(player_ptr, player_ptr->current_floor_ptr->grid_array[y][x].feat)) {
+            if (!player_can_enter(player_ptr, grid.feat, 0) || is_trap(player_ptr, grid.feat)) {
                 break;
             }
 
             y += ddy[dir];
             x += ddx[dir];
 
-            if (player_can_enter(player_ptr, player_ptr->current_floor_ptr->grid_array[y][x].feat, 0) && !is_trap(player_ptr, player_ptr->current_floor_ptr->grid_array[y][x].feat) && !player_ptr->current_floor_ptr->grid_array[y][x].m_idx) {
+            if (player_can_enter(player_ptr, grid.feat, 0) && !is_trap(player_ptr, grid.feat) && !grid.m_idx) {
                 msg_print(nullptr);
                 (void)move_player_effect(player_ptr, y, x, MPE_FORGET_FLOW | MPE_HANDLE_STUFF | MPE_DONT_PICKUP);
             }
@@ -980,7 +981,9 @@ std::optional<std::string> do_hissatsu_spell(PlayerType *player_ptr, SPELL_IDX s
                 return std::nullopt;
             }
 
-            if (!cave_player_teleportable_bold(player_ptr, y, x, TELEPORT_SPONTANEOUS) || (distance(y, x, player_ptr->y, player_ptr->x) > MAX_PLAYER_SIGHT / 2) || !projectable(player_ptr, player_ptr->y, player_ptr->x, y, x)) {
+            const auto is_teleportable = cave_player_teleportable_bold(player_ptr, y, x, TELEPORT_SPONTANEOUS);
+            const auto dist = distance(y, x, player_ptr->y, player_ptr->x);
+            if (!is_teleportable || (dist > MAX_PLAYER_SIGHT / 2) || !projectable(player_ptr, player_ptr->y, player_ptr->x, y, x)) {
                 msg_print(_("失敗！", "You cannot move to that place!"));
                 break;
             }
@@ -1077,8 +1080,11 @@ std::optional<std::string> do_hissatsu_spell(PlayerType *player_ptr, SPELL_IDX s
                 damage *= player_ptr->num_blow[i];
                 total_damage += (damage / 100);
             }
-            project(player_ptr, 0, (cave_has_flag_bold(player_ptr->current_floor_ptr, y, x, TerrainCharacteristics::PROJECT) ? 5 : 0), y, x, total_damage * 3 / 2, AttributeType::METEOR,
-                PROJECT_KILL | PROJECT_JUMP | PROJECT_ITEM);
+
+            auto *floor_ptr = player_ptr->current_floor_ptr;
+            const auto is_bold = cave_has_flag_bold(floor_ptr, y, x, TerrainCharacteristics::PROJECT);
+            constexpr auto flags = PROJECT_KILL | PROJECT_JUMP | PROJECT_ITEM;
+            project(player_ptr, 0, (is_bold ? 5 : 0), y, x, total_damage * 3 / 2, AttributeType::METEOR, flags);
         }
         break;
 

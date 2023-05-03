@@ -528,10 +528,12 @@ static void decide_change_panel(PlayerType *player_ptr, ts_type *ts_ptr)
         dy = 0;
     }
 
-    if ((ts_ptr->y >= panel_row_min + ts_ptr->hgt) || (ts_ptr->y < panel_row_min) || (ts_ptr->x >= panel_col_min + ts_ptr->wid) || (ts_ptr->x < panel_col_min)) {
-        if (change_panel(player_ptr, dy, dx)) {
-            target_set_prepare(player_ptr, ys_interest, xs_interest, ts_ptr->mode);
-        }
+    auto should_change_panel = ts_ptr->y >= panel_row_min + ts_ptr->hgt;
+    should_change_panel |= ts_ptr->y < panel_row_min;
+    should_change_panel |= ts_ptr->x >= panel_col_min + ts_ptr->wid;
+    should_change_panel |= ts_ptr->x < panel_col_min;
+    if (should_change_panel && change_panel(player_ptr, dy, dx)) {
+        target_set_prepare(player_ptr, ys_interest, xs_interest, ts_ptr->mode);
     }
 
     auto *floor_ptr = player_ptr->current_floor_ptr;
@@ -566,7 +568,8 @@ static void sweep_target_grids(PlayerType *player_ptr, ts_type *ts_ptr)
         fix_floor_item_list(player_ptr, ts_ptr->y, ts_ptr->x);
 
         /* Describe and Prompt (enable "TARGET_LOOK") */
-        while ((ts_ptr->query = examine_grid(player_ptr, ts_ptr->y, ts_ptr->x, i2enum<target_type>(ts_ptr->mode | TARGET_LOOK), ts_ptr->info)) == 0) {
+        const auto target = i2enum<target_type>(ts_ptr->mode | TARGET_LOOK);
+        while ((ts_ptr->query = examine_grid(player_ptr, ts_ptr->y, ts_ptr->x, target, ts_ptr->info)) == 0) {
             ;
         }
 
