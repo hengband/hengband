@@ -73,20 +73,21 @@ void open_dir_in_explorer(std::string_view filename)
  * ワイド文字列版のAPIを使用するが、選択ファイルのパスをマルチバイト文字列で受け取る。
  * @param ofn GetOpenFileNameWに指定するOPENFILENAMEW構造体へのポインタ。
  * lpstrFile、nMaxFileメンバの設定は無視される（関数内で上書きするため）。
- * @param dirname GetOpenFileNameWに指定する初期フォルダパス。
+ * @param path_dir GetOpenFileNameWに指定する初期フォルダパス。
  * empty以外を指定した場合、ワイド文字列に変換しlpstrInitialDirに設定される。
- * @param filename 選択ファイルパス
+ * @param path_file 選択ファイルパス
  * @param max_name_size filenameのバッファサイズ
  * @retval true filenameに選択されたファイルのパスが設定されている。
  * @retval false ファイル選択がキャンセルされた。
  */
-std::optional<std::string> get_open_filename(OPENFILENAMEW *ofn, const std::filesystem::path &dirname, std::string_view filename, DWORD max_name_size)
+std::optional<std::string> get_open_filename(OPENFILENAMEW *ofn, const std::filesystem::path &path_dir, const std::filesystem::path &path_file, DWORD max_name_size)
 {
     std::vector<WCHAR> buf(max_name_size);
-    wcscpy(&buf[0], to_wchar(filename.data()).wc_str());
+    const auto &path_file_str = path_file.string();
+    wcscpy(&buf[0], to_wchar(path_file_str.data()).wc_str());
     const char *dir = nullptr;
-    if (!dirname.empty()) {
-        const auto &dirname_str = dirname.string();
+    if (!path_dir.empty()) {
+        const auto &dirname_str = path_dir.string();
         dir = dirname_str.data();
     }
 
