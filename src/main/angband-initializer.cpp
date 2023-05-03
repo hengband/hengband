@@ -34,13 +34,37 @@
 #include "time.h"
 #include "util/angband-files.h"
 #include "world/world.h"
-#ifndef WINDOWS
-#include "util/string-processor.h"
-#include <dirent.h>
-#endif
-#ifdef PRIVATE_USER_PATH
-#include <string>
-#endif
+#include <chrono>
+
+/*!
+ * @brief 古いデバッグ用セーブファイルを削除する
+ *
+ * 最終更新日時が現在時刻より7日以前のデバッグ用セーブファイルを削除する。
+ * デバッグ用セーブファイルは、ANGBAND_DIR_DEBUG_SAVEディレクトリにある、
+ * ファイル名に '-' を含むファイルであることを想定する。
+ */
+static void remove_old_debug_savefiles()
+{
+    namespace fs = std::filesystem;
+    constexpr auto remove_threshold_days = std::chrono::days(7);
+    const auto now = fs::file_time_type::clock::now();
+
+    for (const auto &entry : fs::directory_iterator(ANGBAND_DIR_DEBUG_SAVE)) {
+        const auto &path = entry.path();
+        if (path.filename().string().find('-') == std::string::npos) {
+            continue;
+        }
+
+        const auto savefile_timestamp = fs::last_write_time(path);
+        const auto elapsed_days = std::chrono::duration_cast<std::chrono::days>(now - savefile_timestamp);
+        if (elapsed_days >= remove_threshold_days) {
+            // ファイルシステムのエラーにより削除できなかった場合に例外が送出されないようにするため
+            // 例外を送出せず引数でエラーコードを返すオーバーロードを使用する
+            std::error_code ec;
+            fs::remove(path, ec);
+        }
+    }
+}
 
 /*!
  * @brief 各データファイルを読み取るためのパスを取得する.
@@ -73,46 +97,7 @@ void init_file_paths(const std::filesystem::path &libpath)
     strftime(tmp, sizeof(tmp), "%Y-%m-%d-%H-%M-%S", t);
     path_build(debug_savefile, sizeof(debug_savefile), ANGBAND_DIR_DEBUG_SAVE, tmp);
 
-#ifdef WINDOWS
-    struct _finddata_t c_file;
-    intptr_t hFile;
-    char log_file_expr[1024];
-    path_build(log_file_expr, sizeof(log_file_expr), ANGBAND_DIR_DEBUG_SAVE, "*-*");
-
-    if ((hFile = _findfirst(log_file_expr, &c_file)) != -1L) {
-        do {
-            if (((t->tm_yday + 365 - localtime(&c_file.time_write)->tm_yday) % 365) > 7) {
-                char c_file_fullpath[1024];
-                path_build(c_file_fullpath, sizeof(c_file_fullpath), ANGBAND_DIR_DEBUG_SAVE, c_file.name);
-                remove(c_file_fullpath);
-            }
-        } while (_findnext(hFile, &c_file) == 0);
-        _findclose(hFile);
-    }
-#else
-    const auto &debug_save_str = ANGBAND_DIR_DEBUG_SAVE.string();
-    DIR *saves_dir = opendir(debug_save_str.data());
-    if (saves_dir == nullptr) {
-        return;
-    }
-
-    struct dirent *next_entry;
-    while ((next_entry = readdir(saves_dir))) {
-        if (!angband_strchr(next_entry->d_name, '-')) {
-            continue;
-        }
-
-        char path[1024];
-        struct stat next_stat;
-        path_build(path, sizeof(path), ANGBAND_DIR_DEBUG_SAVE, next_entry->d_name);
-        constexpr auto one_week = 7 * 24 * 60 * 60;
-        if ((stat(path, &next_stat) == 0) && (difftime(now, next_stat.st_mtime) > one_week)) {
-            remove(path);
-        }
-    }
-
-    closedir(saves_dir);
-#endif
+    remove_old_debug_savefiles();
 }
 
 /*!
