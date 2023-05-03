@@ -384,10 +384,11 @@ void do_cmd_gain_hissatsu(PlayerType *player_ptr)
     msg_format("You can learn %d new special attack%s.", player_ptr->new_spells, (player_ptr->new_spells == 1 ? "" : "s"));
 #endif
 
-    const auto q = _("どの書から学びますか? ", "Study which book? ");
-    const auto s = _("読める書がない。", "You have no books that you can read.");
+    constexpr auto q = _("どの書から学びますか? ", "Study which book? ");
+    constexpr auto s = _("読める書がない。", "You have no books that you can read.");
+    constexpr auto options = USE_INVEN | USE_FLOOR;
     short item;
-    const auto *o_ptr = choose_object(player_ptr, &item, q, s, (USE_INVEN | USE_FLOOR), TvalItemTester(ItemKindType::HISSATSU_BOOK));
+    const auto *o_ptr = choose_object(player_ptr, &item, q, s, options, TvalItemTester(ItemKindType::HISSATSU_BOOK));
     if (o_ptr == nullptr) {
         return;
     }

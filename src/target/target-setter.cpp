@@ -427,9 +427,11 @@ static void describe_grid_wizard(PlayerType *player_ptr, ts_type *ts_ptr)
         return;
     }
 
+    constexpr auto fmt = " X:%d Y:%d LOS:%d LOP:%d SPECIAL:%d";
     char cheatinfo[100];
-    strnfmt(cheatinfo, sizeof(cheatinfo), " X:%d Y:%d LOS:%d LOP:%d SPECIAL:%d", ts_ptr->x, ts_ptr->y, los(player_ptr, player_ptr->y, player_ptr->x, ts_ptr->y, ts_ptr->x),
-        projectable(player_ptr, player_ptr->y, player_ptr->x, ts_ptr->y, ts_ptr->x), ts_ptr->g_ptr->special);
+    const auto is_los = los(player_ptr, player_ptr->y, player_ptr->x, ts_ptr->y, ts_ptr->x);
+    const auto is_projectable = projectable(player_ptr, player_ptr->y, player_ptr->x, ts_ptr->y, ts_ptr->x);
+    strnfmt(cheatinfo, sizeof(cheatinfo), fmt, ts_ptr->x, ts_ptr->y, is_los, is_projectable, ts_ptr->g_ptr->special);
     angband_strcat(ts_ptr->info, cheatinfo, sizeof(ts_ptr->info));
 }
 

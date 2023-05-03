@@ -198,13 +198,14 @@ bool move_player_effect(PlayerType *player_ptr, POSITION ny, POSITION nx, BIT_FL
             }
         }
 
-        if ((player_ptr->action == ACTION_HAYAGAKE) && (f_ptr->flags.has_not(TerrainCharacteristics::PROJECT) || (!player_ptr->levitation && f_ptr->flags.has(TerrainCharacteristics::DEEP)))) {
+        using Tc = TerrainCharacteristics;
+        if ((player_ptr->action == ACTION_HAYAGAKE) && (f_ptr->flags.has_not(Tc::PROJECT) || (!player_ptr->levitation && f_ptr->flags.has(Tc::DEEP)))) {
             msg_print(_("ここでは素早く動けない。", "You cannot run in here."));
             set_action(player_ptr, ACTION_NONE);
         }
 
         if (PlayerRace(player_ptr).equals(PlayerRaceType::MERFOLK)) {
-            if (f_ptr->flags.has(TerrainCharacteristics::WATER) ^ of_ptr->flags.has(TerrainCharacteristics::WATER)) {
+            if (f_ptr->flags.has(Tc::WATER) ^ of_ptr->flags.has(Tc::WATER)) {
                 player_ptr->update |= PU_BONUS;
                 update_creature(player_ptr);
             }

@@ -600,8 +600,10 @@ bool exe_dimension_door(PlayerType *player_ptr, POSITION x, POSITION y)
     PLAYER_LEVEL plev = player_ptr->lev;
 
     player_ptr->energy_need += (int16_t)((int32_t)(60 - plev) * ENERGY_NEED() / 100L);
-
-    if (!cave_player_teleportable_bold(player_ptr, y, x, TELEPORT_SPONTANEOUS) || (distance(y, x, player_ptr->y, player_ptr->x) > plev / 2 + 10) || (!randint0(plev / 10 + 10))) {
+    auto is_successful = cave_player_teleportable_bold(player_ptr, y, x, TELEPORT_SPONTANEOUS);
+    is_successful &= distance(y, x, player_ptr->y, player_ptr->x) <= plev / 2 + 10;
+    is_successful &= !one_in_(plev / 10 + 10);
+    if (!is_successful) {
         player_ptr->energy_need += (int16_t)((int32_t)(60 - plev) * ENERGY_NEED() / 100L);
         teleport_player(player_ptr, (plev + 2) * 2, TELEPORT_PASSIVE);
         return false;

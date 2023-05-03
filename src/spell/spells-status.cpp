@@ -253,7 +253,7 @@ void roll_hitdice(PlayerType *player_ptr, spell_operation options)
 
     player_ptr->knowledge &= ~(KNOW_HPRATE);
 
-    PERCENTAGE percent = (int)(((long)player_ptr->player_hp[PY_MAX_LEVEL - 1] * 200L) / (2 * player_ptr->hitdie + ((PY_MAX_LEVEL - 1 + 3) * (player_ptr->hitdie + 1))));
+    auto percent = (player_ptr->player_hp[PY_MAX_LEVEL - 1] * 200) / (2 * player_ptr->hitdie + ((PY_MAX_LEVEL - 1 + 3) * (player_ptr->hitdie + 1)));
 
     /* Update and redraw hitpoints */
     player_ptr->update |= (PU_HP);

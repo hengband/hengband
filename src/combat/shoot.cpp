@@ -501,10 +501,11 @@ void exe_fire(PlayerType *player_ptr, INVENTORY_IDX item, ItemEntity *j_ptr, SPE
     auto stick_to = false;
 
     /* Access the item (if in the pack) */
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     if (item >= 0) {
         o_ptr = &player_ptr->inventory_list[item];
     } else {
-        o_ptr = &player_ptr->current_floor_ptr->o_list[0 - item];
+        o_ptr = &floor_ptr->o_list[0 - item];
     }
 
     /* Sniper - Cannot shot a single arrow twice */
@@ -657,7 +658,7 @@ void exe_fire(PlayerType *player_ptr, INVENTORY_IDX item, ItemEntity *j_ptr, SPE
 
             /* Shatter Arrow */
             if (snipe_type == SP_KILL_WALL) {
-                g_ptr = &player_ptr->current_floor_ptr->grid_array[ny][nx];
+                g_ptr = &floor_ptr->grid_array[ny][nx];
 
                 if (g_ptr->cave_has_flag(TerrainCharacteristics::HURT_ROCK) && !g_ptr->m_idx) {
                     if (any_bits(g_ptr->info, (CAVE_MARK))) {
@@ -676,7 +677,7 @@ void exe_fire(PlayerType *player_ptr, INVENTORY_IDX item, ItemEntity *j_ptr, SPE
             }
 
             /* Stopped by walls/doors */
-            if (!cave_has_flag_bold(player_ptr->current_floor_ptr, ny, nx, TerrainCharacteristics::PROJECT) && !player_ptr->current_floor_ptr->grid_array[ny][nx].m_idx) {
+            if (!cave_has_flag_bold(floor_ptr, ny, nx, TerrainCharacteristics::PROJECT) && !floor_ptr->grid_array[ny][nx].m_idx) {
                 break;
             }
 
@@ -685,7 +686,7 @@ void exe_fire(PlayerType *player_ptr, INVENTORY_IDX item, ItemEntity *j_ptr, SPE
 
             /* Sniper */
             if (snipe_type == SP_LITE) {
-                set_bits(player_ptr->current_floor_ptr->grid_array[ny][nx].info, CAVE_GLOW);
+                set_bits(floor_ptr->grid_array[ny][nx].info, CAVE_GLOW);
                 note_spot(player_ptr, ny, nx);
                 lite_spot(player_ptr, ny, nx);
             }
@@ -716,12 +717,13 @@ void exe_fire(PlayerType *player_ptr, INVENTORY_IDX item, ItemEntity *j_ptr, SPE
 
             /* Sniper */
             if (snipe_type == SP_KILL_TRAP) {
-                project(player_ptr, 0, 0, ny, nx, 0, AttributeType::KILL_TRAP, (PROJECT_JUMP | PROJECT_HIDE | PROJECT_GRID | PROJECT_ITEM));
+                constexpr auto flags = PROJECT_JUMP | PROJECT_HIDE | PROJECT_GRID | PROJECT_ITEM;
+                project(player_ptr, 0, 0, ny, nx, 0, AttributeType::KILL_TRAP, flags);
             }
 
             /* Sniper */
             if (snipe_type == SP_EVILNESS) {
-                reset_bits(player_ptr->current_floor_ptr->grid_array[ny][nx].info, (CAVE_GLOW | CAVE_MARK));
+                reset_bits(floor_ptr->grid_array[ny][nx].info, (CAVE_GLOW | CAVE_MARK));
                 note_spot(player_ptr, ny, nx);
                 lite_spot(player_ptr, ny, nx);
             }
@@ -734,11 +736,11 @@ void exe_fire(PlayerType *player_ptr, INVENTORY_IDX item, ItemEntity *j_ptr, SPE
             y = ny;
 
             /* Monster here, Try to hit it */
-            if (player_ptr->current_floor_ptr->grid_array[y][x].m_idx) {
+            if (floor_ptr->grid_array[y][x].m_idx) {
                 sound(SOUND_SHOOT_HIT);
-                grid_type *c_mon_ptr = &player_ptr->current_floor_ptr->grid_array[y][x];
+                grid_type *c_mon_ptr = &floor_ptr->grid_array[y][x];
 
-                auto *m_ptr = &player_ptr->current_floor_ptr->m_list[c_mon_ptr->m_idx];
+                auto *m_ptr = &floor_ptr->m_list[c_mon_ptr->m_idx];
                 auto *r_ptr = &monraces_info[m_ptr->r_idx];
 
                 /* Check the visibility */
@@ -840,7 +842,7 @@ void exe_fire(PlayerType *player_ptr, INVENTORY_IDX item, ItemEntity *j_ptr, SPE
 
                     /* Sniper */
                     if (snipe_type == SP_HOLYNESS) {
-                        set_bits(player_ptr->current_floor_ptr->grid_array[ny][nx].info, CAVE_GLOW);
+                        set_bits(floor_ptr->grid_array[ny][nx].info, CAVE_GLOW);
                         note_spot(player_ptr, ny, nx);
                         lite_spot(player_ptr, ny, nx);
                     }
@@ -896,12 +898,12 @@ void exe_fire(PlayerType *player_ptr, INVENTORY_IDX item, ItemEntity *j_ptr, SPE
                                 mmove2(&ny, &nx, player_ptr->y, player_ptr->x, ty, tx);
 
                                 /* Stopped by wilderness boundary */
-                                if (!in_bounds2(player_ptr->current_floor_ptr, ny, nx)) {
+                                if (!in_bounds2(floor_ptr, ny, nx)) {
                                     break;
                                 }
 
                                 /* Stopped by walls/doors */
-                                if (!player_can_enter(player_ptr, player_ptr->current_floor_ptr->grid_array[ny][nx].feat, 0)) {
+                                if (!player_can_enter(player_ptr, floor_ptr->grid_array[ny][nx].feat, 0)) {
                                     break;
                                 }
 
@@ -910,8 +912,8 @@ void exe_fire(PlayerType *player_ptr, INVENTORY_IDX item, ItemEntity *j_ptr, SPE
                                     break;
                                 }
 
-                                player_ptr->current_floor_ptr->grid_array[ny][nx].m_idx = m_idx;
-                                player_ptr->current_floor_ptr->grid_array[oy][ox].m_idx = 0;
+                                floor_ptr->grid_array[ny][nx].m_idx = m_idx;
+                                floor_ptr->grid_array[oy][ox].m_idx = 0;
 
                                 m_ptr->fx = nx;
                                 m_ptr->fy = ny;
@@ -949,9 +951,9 @@ void exe_fire(PlayerType *player_ptr, INVENTORY_IDX item, ItemEntity *j_ptr, SPE
         auto j = (hit_body ? breakage_chance(player_ptr, q_ptr, PlayerClass(player_ptr).equals(PlayerClassType::ARCHER), snipe_type) : 0);
 
         if (stick_to) {
-            MONSTER_IDX m_idx = player_ptr->current_floor_ptr->grid_array[y][x].m_idx;
-            auto *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
-            OBJECT_IDX o_idx = o_pop(player_ptr->current_floor_ptr);
+            MONSTER_IDX m_idx = floor_ptr->grid_array[y][x].m_idx;
+            auto *m_ptr = &floor_ptr->m_list[m_idx];
+            OBJECT_IDX o_idx = o_pop(floor_ptr);
 
             if (!o_idx) {
                 msg_format(_("%sはどこかへ行った。", "The %s went somewhere."), item_name.data());
@@ -961,7 +963,7 @@ void exe_fire(PlayerType *player_ptr, INVENTORY_IDX item, ItemEntity *j_ptr, SPE
                 return;
             }
 
-            o_ptr = &player_ptr->current_floor_ptr->o_list[o_idx];
+            o_ptr = &floor_ptr->o_list[o_idx];
             o_ptr->copy_from(q_ptr);
 
             /* Forget mark */
@@ -974,8 +976,8 @@ void exe_fire(PlayerType *player_ptr, INVENTORY_IDX item, ItemEntity *j_ptr, SPE
             o_ptr->held_m_idx = m_idx;
 
             /* Carry object */
-            m_ptr->hold_o_idx_list.add(player_ptr->current_floor_ptr, o_idx);
-        } else if (cave_has_flag_bold(player_ptr->current_floor_ptr, y, x, TerrainCharacteristics::PROJECT)) {
+            m_ptr->hold_o_idx_list.add(floor_ptr, o_idx);
+        } else if (cave_has_flag_bold(floor_ptr, y, x, TerrainCharacteristics::PROJECT)) {
             /* Drop (or break) near that location */
             (void)drop_near(player_ptr, q_ptr, j, y, x);
         } else {

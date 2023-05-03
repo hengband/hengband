@@ -140,7 +140,8 @@ void wall_breaker(PlayerType *player_ptr)
             }
         }
 
-        project(player_ptr, 0, 0, y, x, 20 + randint1(30), AttributeType::KILL_WALL, (PROJECT_BEAM | PROJECT_THRU | PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL));
+        constexpr auto flags = PROJECT_BEAM | PROJECT_THRU | PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL;
+        project(player_ptr, 0, 0, y, x, 20 + randint1(30), AttributeType::KILL_WALL, flags);
         return;
     }
 
@@ -159,6 +160,7 @@ void wall_breaker(PlayerType *player_ptr)
             }
         }
 
-        project(player_ptr, 0, 0, y, x, 20 + randint1(30), AttributeType::KILL_WALL, (PROJECT_BEAM | PROJECT_THRU | PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL));
+        constexpr auto flags = PROJECT_BEAM | PROJECT_THRU | PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL;
+        project(player_ptr, 0, 0, y, x, 20 + randint1(30), AttributeType::KILL_WALL, flags);
     }
 }

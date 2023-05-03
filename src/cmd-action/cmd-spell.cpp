@@ -698,7 +698,8 @@ static void change_realm2(PlayerType *player_ptr, int16_t next_realm)
     player_ptr->spell_worked2 = 0L;
     player_ptr->spell_forgotten2 = 0L;
 
-    strnfmt(tmp, sizeof(tmp), _("魔法の領域を%sから%sに変更した。", "changed magic realm from %s to %s."), realm_names[player_ptr->realm2], realm_names[next_realm]);
+    constexpr auto mes = _("魔法の領域を%sから%sに変更した。", "changed magic realm from %s to %s.");
+    strnfmt(tmp, sizeof(tmp), mes, realm_names[player_ptr->realm2], realm_names[next_realm]);
     exe_write_diary(player_ptr, DIARY_DESCRIPTION, 0, tmp);
     player_ptr->old_realm |= 1U << (player_ptr->realm2 - 1);
     player_ptr->realm2 = next_realm;
