@@ -191,7 +191,7 @@ static HICON hIcon;
 /* bg */
 bg_mode current_bg_mode = bg_mode::BG_NONE;
 #define DEFAULT_BG_FILENAME "bg.bmp"
-char wallpaper_file[MAIN_WIN_MAX_PATH] = ""; //!< 壁紙ファイル名。
+std::filesystem::path wallpaper_path = ""; //!< 壁紙ファイル名。
 
 /*
  * Show sub-windows even when Hengband is not in focus
@@ -419,7 +419,8 @@ static void save_prefs(void)
 
     wsprintfA(buf, "%d", current_bg_mode);
     WritePrivateProfileStringA("Angband", "BackGround", buf, ini_file);
-    WritePrivateProfileStringA("Angband", "BackGroundBitmap", wallpaper_file[0] != '\0' ? wallpaper_file : DEFAULT_BG_FILENAME, ini_file);
+    const auto &wallpaper_filename = wallpaper_path.string();
+    WritePrivateProfileStringA("Angband", "BackGroundBitmap", wallpaper_path.empty() ? wallpaper_filename.data() : DEFAULT_BG_FILENAME, ini_file);
 
     auto angband_dir_str = ANGBAND_DIR.string();
     const auto path_length = angband_dir_str.length() - 4; // "\lib" を除く.
@@ -516,7 +517,9 @@ static void load_prefs(void)
     arg_music_volume_table_index = std::clamp<int>(GetPrivateProfileIntA("Angband", "MusicVolumeTableIndex", 0, ini_file), 0, main_win_music::VOLUME_TABLE.size() - 1);
     use_pause_music_inactive = (GetPrivateProfileIntA("Angband", "MusicPauseInactive", 0, ini_file) != 0);
     current_bg_mode = static_cast<bg_mode>(GetPrivateProfileIntA("Angband", "BackGround", 0, ini_file));
-    GetPrivateProfileStringA("Angband", "BackGroundBitmap", DEFAULT_BG_FILENAME, wallpaper_file, 1023, ini_file);
+    char wallpaper_buf[1024]{};
+    GetPrivateProfileStringA("Angband", "BackGroundBitmap", DEFAULT_BG_FILENAME, wallpaper_buf, 1023, ini_file);
+    wallpaper_path = wallpaper_buf;
     char savefile_buf[1024]{};
     GetPrivateProfileStringA("Angband", "SaveFile", "", savefile_buf, 1023, ini_file);
     if (strncmp(".\\", savefile_buf, 2) == 0) {
@@ -605,10 +608,11 @@ static bool change_bg_mode(bg_mode new_mode, bool show_error = false, bool force
     current_bg_mode = new_mode;
     if (current_bg_mode != bg_mode::BG_NONE) {
         init_background();
-        if (!load_bg(wallpaper_file)) {
+        if (!load_bg(wallpaper_path)) {
             current_bg_mode = bg_mode::BG_NONE;
             if (show_error) {
-                plog_fmt(_("壁紙用ファイル '%s' を読み込めません。", "Can't load the image file '%s'."), wallpaper_file);
+                const auto &wallaper_filename = wallpaper_path.string();
+                plog_fmt(_("壁紙用ファイル '%s' を読み込めません。", "Can't load the image file '%s'."), wallaper_filename.data());
             }
         }
     } else {
@@ -1958,9 +1962,9 @@ static void process_menus(PlayerType *player_ptr, WORD wCmd)
         ofn.nFilterIndex = 1;
         ofn.lpstrTitle = _(L"壁紙を選んでね。", L"Choose wall paper.");
         ofn.Flags = OFN_FILEMUSTEXIST | OFN_HIDEREADONLY;
-        const auto &filename = get_open_filename(&ofn, "", wallpaper_file, MAIN_WIN_MAX_PATH);
+        const auto &filename = get_open_filename(&ofn, "", wallpaper_path.string(), MAIN_WIN_MAX_PATH);
         if (filename.has_value()) {
-            angband_strcpy(wallpaper_file, filename->data(), filename->length());
+            wallpaper_path = filename.value();
             change_bg_mode(bg_mode::BG_ONE, true, true);
         }
         break;

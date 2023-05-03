@@ -57,7 +57,7 @@ static void finalize_gdi_plus()
     }
 }
 
-HBITMAP read_graphic(char *filename)
+HBITMAP read_graphic(const char *filename)
 {
     HBITMAP result = NULL;
     init_gdi_plus();

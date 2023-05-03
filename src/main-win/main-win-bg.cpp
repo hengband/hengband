@@ -27,10 +27,11 @@ void delete_bg(void)
     }
 }
 
-bool load_bg(char *filename)
+bool load_bg(const std::filesystem::path &path)
 {
     delete_bg();
-    hBG = read_graphic(filename);
+    const auto &filename = path.string();
+    hBG = read_graphic(filename.data());
 
     return hBG != NULL;
 }
