@@ -49,7 +49,12 @@ static void remove_old_debug_savefiles()
     constexpr auto remove_threshold_days = std::chrono::days(7);
     const auto now = fs::file_time_type::clock::now();
 
-    for (const auto &entry : fs::directory_iterator(ANGBAND_DIR_DEBUG_SAVE)) {
+    // アクセスエラーが発生した場合に例外が送出されないようにするため
+    // 例外を送出せず引数でエラーコードを返すオーバーロードを使用する。
+    // アクセスエラーが発生した場合は単に無視し、エラーコードの確認は行わない。
+    std::error_code ec;
+
+    for (const auto &entry : fs::directory_iterator(ANGBAND_DIR_DEBUG_SAVE, ec)) {
         const auto &path = entry.path();
         if (path.filename().string().find('-') == std::string::npos) {
             continue;
@@ -58,9 +63,6 @@ static void remove_old_debug_savefiles()
         const auto savefile_timestamp = fs::last_write_time(path);
         const auto elapsed_days = std::chrono::duration_cast<std::chrono::days>(now - savefile_timestamp);
         if (elapsed_days >= remove_threshold_days) {
-            // ファイルシステムのエラーにより削除できなかった場合に例外が送出されないようにするため
-            // 例外を送出せず引数でエラーコードを返すオーバーロードを使用する
-            std::error_code ec;
             fs::remove(path, ec);
         }
     }
