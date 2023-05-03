@@ -244,7 +244,7 @@ static bool read_wilderness_definition(std::ifstream &ifs)
             continue;
         }
 
-        auto splits = str_split(line, ':');
+        const auto &splits = str_split(line, ':');
         if ((splits.size() != 3) || (splits[0] != "M")) {
             continue;
         }
