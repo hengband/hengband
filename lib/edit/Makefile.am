@@ -7,8 +7,7 @@ angband_files = \
 	ClassSkillDefinitions.txt DungeonDefinitions.txt EgoDefinitions.txt \
 	MonsterRaceDefinitions.txt QuestDefinitionList.txt QuestPreferences.txt \
 	TerrainDefinitions.txt TownDefinitionList.txt TownPreferences.txt \
-	VaultDefinitions.txt WildernessDefinition.txt \
-	misc.txt
+	VaultDefinitions.txt WildernessDefinition.txt
 
 EXTRA_DIST = \
   $(angband_files)
