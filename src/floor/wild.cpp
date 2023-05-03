@@ -52,7 +52,7 @@
 constexpr auto MAX_FEAT_IN_TERRAIN = 18;
 
 std::vector<std::vector<wilderness_type>> wilderness;
-bool generate_encounter;
+static bool generate_encounter;
 
 struct border_type {
     int16_t north[MAX_WID];
@@ -808,19 +808,6 @@ void seed_wilderness(void)
 }
 
 /*!
- * @brief ゲーム開始時の荒野初期化メインルーチン /
- * Initialize wilderness array
- * @return エラーコード
- */
-errr init_wilderness(void)
-{
-    wilderness.assign(w_ptr->max_wild_y, std::vector<wilderness_type>(w_ptr->max_wild_x));
-
-    generate_encounter = false;
-    return 0;
-}
-
-/*!
  * @brief 荒野の地勢設定を初期化する /
  * Initialize wilderness array
  * @param terrain 初期化したい地勢ID
@@ -885,6 +872,11 @@ void init_wilderness_terrains(void)
         TERRAIN_DEEP_LAVA, feat_deep_lava, "abcd", feat_dirt, 3, feat_shallow_lava, 3, feat_deep_lava, 10, feat_mountain, MAX_FEAT_IN_TERRAIN - 16);
     init_terrain_table(TERRAIN_MOUNTAIN, feat_mountain, "abcdef", feat_floor, 1, feat_brake, 1, feat_grass, 2, feat_dirt, 2, feat_tree, 2, feat_mountain,
         MAX_FEAT_IN_TERRAIN - 8);
+}
+
+void init_wilderness_encounter()
+{
+    generate_encounter = false;
 }
 
 /*!

@@ -6,6 +6,12 @@
 
 # Road Flags: Sum of NORTH 1, SOUTH 2, EAST 4, WEST 8
 
+# Maximum width
+M:WX:99
+
+# Maximum height
+M:WY:66
+
 ?:[EQU $WILDERNESS NORMAL]
 
 # Edge of the world
