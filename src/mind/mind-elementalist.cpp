@@ -709,11 +709,11 @@ static bool get_element_power(PlayerType *player_ptr, SPELL_IDX *sn, bool only_b
     }
 
     if (only_browse) {
-        (void)strnfmt(out_val, 78, _("(%s^ %c-%c, '*'で一覧, ESC) どの%sについて知りますか？", "(%s^s %c-%c, *=List, ESC=exit) Use which %s? "), p, I2A(0),
-            I2A(num - 1), p);
+        constexpr auto mes = _("(%s^ %c-%c, '*'で一覧, ESC) どの%sについて知りますか？", "(%s^s %c-%c, *=List, ESC=exit) Use which %s? ");
+        (void)strnfmt(out_val, 78, mes, p, I2A(0), I2A(num - 1), p);
     } else {
-        (void)strnfmt(
-            out_val, 78, _("(%s^ %c-%c, '*'で一覧, ESC) どの%sを使いますか？", "(%s^s %c-%c, *=List, ESC=exit) Use which %s? "), p, I2A(0), I2A(num - 1), p);
+        constexpr auto mes = _("(%s^ %c-%c, '*'で一覧, ESC) どの%sを使いますか？", "(%s^s %c-%c, *=List, ESC=exit) Use which %s? ");
+        (void)strnfmt(out_val, 78, mes, p, I2A(0), I2A(num - 1), p);
     }
 
     if (use_menu && !only_browse) {

@@ -421,7 +421,8 @@ static std::optional<MonsterAbilityType> select_learnt_spells_by_menu(PlayerType
     char out_val[80];
     angband_strcpy(out_val, _("(ESC=中断) どの魔法を唱えますか？", "(ESC=exit) Use which magic? "), sizeof(out_val));
 
-    auto it = std::find_if(spells.begin(), spells.end(), [&bluemage_data](const auto &spell) { return bluemage_data.learnt_blue_magics.has(spell); });
+    auto it = std::find_if(
+        spells.begin(), spells.end(), [&bluemage_data](const auto &spell) { return bluemage_data.learnt_blue_magics.has(spell); });
     int menu_line = std::distance(spells.begin(), it) + 1;
     std::optional<MonsterAbilityType> selected_spell;
 

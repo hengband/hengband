@@ -44,9 +44,12 @@
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 
-static bool check_hp_for_feat_destruction(TerrainType *f_ptr, MonsterEntity *m_ptr)
+static bool check_hp_for_terrain_destruction(TerrainType *f_ptr, MonsterEntity *m_ptr)
 {
-    return f_ptr->flags.has_not(TerrainCharacteristics::GLASS) || monraces_info[m_ptr->r_idx].behavior_flags.has(MonsterBehaviorType::STUPID) || (m_ptr->hp >= std::max(m_ptr->maxhp / 3, 200));
+    auto can_destroy = f_ptr->flags.has_not(TerrainCharacteristics::GLASS);
+    can_destroy |= monraces_info[m_ptr->r_idx].behavior_flags.has(MonsterBehaviorType::STUPID);
+    can_destroy |= m_ptr->hp >= std::max(m_ptr->maxhp / 3, 200);
+    return can_destroy;
 }
 
 /*!
@@ -61,10 +64,8 @@ static bool check_hp_for_feat_destruction(TerrainType *f_ptr, MonsterEntity *m_p
 static bool process_wall(PlayerType *player_ptr, turn_flags *turn_flags_ptr, MonsterEntity *m_ptr, POSITION ny, POSITION nx, bool can_cross)
 {
     auto *r_ptr = &monraces_info[m_ptr->r_idx];
-    grid_type *g_ptr;
-    g_ptr = &player_ptr->current_floor_ptr->grid_array[ny][nx];
-    TerrainType *f_ptr;
-    f_ptr = &terrains_info[g_ptr->feat];
+    auto *g_ptr = &player_ptr->current_floor_ptr->grid_array[ny][nx];
+    auto *f_ptr = &terrains_info[g_ptr->feat];
     if (player_bold(player_ptr, ny, nx)) {
         turn_flags_ptr->do_move = true;
         return true;
@@ -75,7 +76,14 @@ static bool process_wall(PlayerType *player_ptr, turn_flags *turn_flags_ptr, Mon
         return true;
     }
 
-    if (r_ptr->feature_flags.has(MonsterFeatureType::KILL_WALL) && (can_cross ? f_ptr->flags.has_not(TerrainCharacteristics::LOS) : !turn_flags_ptr->is_riding_mon) && f_ptr->flags.has(TerrainCharacteristics::HURT_DISI) && f_ptr->flags.has_not(TerrainCharacteristics::PERMANENT) && check_hp_for_feat_destruction(f_ptr, m_ptr)) {
+    using Mft = MonsterFeatureType;
+    using Tc = TerrainCharacteristics;
+    auto can_kill_wall = r_ptr->feature_flags.has(Mft::KILL_WALL);
+    can_kill_wall &= can_cross ? f_ptr->flags.has_not(Tc::LOS) : !turn_flags_ptr->is_riding_mon;
+    can_kill_wall &= f_ptr->flags.has(Tc::HURT_DISI);
+    can_kill_wall &= f_ptr->flags.has_not(Tc::PERMANENT);
+    can_kill_wall &= check_hp_for_terrain_destruction(f_ptr, m_ptr);
+    if (can_kill_wall) {
         turn_flags_ptr->do_move = true;
         if (!can_cross) {
             turn_flags_ptr->must_alter_to_move = true;
@@ -90,7 +98,7 @@ static bool process_wall(PlayerType *player_ptr, turn_flags *turn_flags_ptr, Mon
     }
 
     turn_flags_ptr->do_move = true;
-    if ((r_ptr->feature_flags.has(MonsterFeatureType::PASS_WALL)) && (!turn_flags_ptr->is_riding_mon || has_pass_wall(player_ptr)) && f_ptr->flags.has(TerrainCharacteristics::CAN_PASS)) {
+    if ((r_ptr->feature_flags.has(Mft::PASS_WALL)) && (!turn_flags_ptr->is_riding_mon || has_pass_wall(player_ptr)) && f_ptr->flags.has(Tc::CAN_PASS)) {
         turn_flags_ptr->did_pass_wall = true;
     }
 
@@ -109,12 +117,14 @@ static bool process_wall(PlayerType *player_ptr, turn_flags *turn_flags_ptr, Mon
 static bool bash_normal_door(PlayerType *player_ptr, turn_flags *turn_flags_ptr, MonsterEntity *m_ptr, POSITION ny, POSITION nx)
 {
     auto *r_ptr = &monraces_info[m_ptr->r_idx];
-    grid_type *g_ptr;
-    g_ptr = &player_ptr->current_floor_ptr->grid_array[ny][nx];
-    TerrainType *f_ptr;
-    f_ptr = &terrains_info[g_ptr->feat];
+    auto *g_ptr = &player_ptr->current_floor_ptr->grid_array[ny][nx];
+    auto *f_ptr = &terrains_info[g_ptr->feat];
     turn_flags_ptr->do_move = false;
-    if ((r_ptr->behavior_flags.has_not(MonsterBehaviorType::OPEN_DOOR)) || f_ptr->flags.has_not(TerrainCharacteristics::OPEN) || (m_ptr->is_pet() && ((player_ptr->pet_extra_flags & PF_OPEN_DOORS) == 0))) {
+    using Tc = TerrainCharacteristics;
+    auto can_bash = r_ptr->behavior_flags.has_not(MonsterBehaviorType::OPEN_DOOR);
+    can_bash |= f_ptr->flags.has_not(Tc::OPEN);
+    can_bash |= m_ptr->is_pet() && ((player_ptr->pet_extra_flags & PF_OPEN_DOORS) == 0);
+    if (can_bash) {
         return true;
     }
 
@@ -125,7 +135,7 @@ static bool bash_normal_door(PlayerType *player_ptr, turn_flags *turn_flags_ptr,
     }
 
     if (randint0(m_ptr->hp / 10) > f_ptr->power) {
-        cave_alter_feat(player_ptr, ny, nx, TerrainCharacteristics::DISARM);
+        cave_alter_feat(player_ptr, ny, nx, Tc::DISARM);
         turn_flags_ptr->do_turn = true;
         return false;
     }
@@ -144,11 +154,15 @@ static bool bash_normal_door(PlayerType *player_ptr, turn_flags *turn_flags_ptr,
 static void bash_glass_door(PlayerType *player_ptr, turn_flags *turn_flags_ptr, MonsterEntity *m_ptr, TerrainType *f_ptr, bool may_bash)
 {
     auto *r_ptr = &monraces_info[m_ptr->r_idx];
-    if (!may_bash || (r_ptr->behavior_flags.has_not(MonsterBehaviorType::BASH_DOOR)) || f_ptr->flags.has_not(TerrainCharacteristics::BASH) || (m_ptr->is_pet() && ((player_ptr->pet_extra_flags & PF_OPEN_DOORS) == 0))) {
+    auto can_bash = may_bash;
+    can_bash &= r_ptr->behavior_flags.has(MonsterBehaviorType::BASH_DOOR);
+    can_bash &= f_ptr->flags.has(TerrainCharacteristics::BASH);
+    can_bash &= !m_ptr->is_pet() || any_bits(player_ptr->pet_extra_flags, PF_OPEN_DOORS);
+    if (!can_bash) {
         return;
     }
 
-    if (!check_hp_for_feat_destruction(f_ptr, m_ptr) || (randint0(m_ptr->hp / 10) <= f_ptr->power)) {
+    if (!check_hp_for_terrain_destruction(f_ptr, m_ptr) || (randint0(m_ptr->hp / 10) <= f_ptr->power)) {
         return;
     }
 
@@ -218,14 +232,16 @@ static bool process_door(PlayerType *player_ptr, turn_flags *turn_flags_ptr, Mon
  * @param m_ptr モンスターへの参照ポインタ
  * @param ny モンスターのY座標
  * @param nx モンスターのX座標
- * @return ルーンのある/なし
+ * @return ルーンに侵入できるか否か
  */
 static bool process_protection_rune(PlayerType *player_ptr, turn_flags *turn_flags_ptr, MonsterEntity *m_ptr, POSITION ny, POSITION nx)
 {
-    grid_type *g_ptr;
-    g_ptr = &player_ptr->current_floor_ptr->grid_array[ny][nx];
+    auto *g_ptr = &player_ptr->current_floor_ptr->grid_array[ny][nx];
     auto *r_ptr = &monraces_info[m_ptr->r_idx];
-    if (!turn_flags_ptr->do_move || !g_ptr->is_rune_protection() || ((r_ptr->behavior_flags.has(MonsterBehaviorType::NEVER_BLOW)) && player_bold(player_ptr, ny, nx))) {
+    auto can_enter = turn_flags_ptr->do_move;
+    can_enter &= g_ptr->is_rune_protection();
+    can_enter &= (r_ptr->behavior_flags.has_not(MonsterBehaviorType::NEVER_BLOW)) || !player_bold(player_ptr, ny, nx);
+    if (!can_enter) {
         return false;
     }
 
@@ -257,10 +273,12 @@ static bool process_protection_rune(PlayerType *player_ptr, turn_flags *turn_fla
  */
 static bool process_explosive_rune(PlayerType *player_ptr, turn_flags *turn_flags_ptr, MonsterEntity *m_ptr, POSITION ny, POSITION nx)
 {
-    grid_type *g_ptr;
-    g_ptr = &player_ptr->current_floor_ptr->grid_array[ny][nx];
+    auto *g_ptr = &player_ptr->current_floor_ptr->grid_array[ny][nx];
     auto *r_ptr = &monraces_info[m_ptr->r_idx];
-    if (!turn_flags_ptr->do_move || !g_ptr->is_rune_explosion() || ((r_ptr->behavior_flags.has(MonsterBehaviorType::NEVER_BLOW)) && player_bold(player_ptr, ny, nx))) {
+    auto should_explode = turn_flags_ptr->do_move;
+    should_explode &= g_ptr->is_rune_explosion();
+    should_explode &= (r_ptr->behavior_flags.has_not(MonsterBehaviorType::NEVER_BLOW)) || !player_bold(player_ptr, ny, nx);
+    if (!should_explode) {
         return true;
     }
 

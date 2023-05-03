@@ -341,7 +341,11 @@ void process_player_hp_mp(PlayerType *player_ptr)
      * WILL BE!
      */
     if (f_ptr->flags.has_none_of({ TerrainCharacteristics::MOVE, TerrainCharacteristics::CAN_FLY })) {
-        if (!is_invuln(player_ptr) && !player_ptr->wraith_form && !player_ptr->tim_pass_wall && ((player_ptr->chp > (player_ptr->lev / 5)) || !has_pass_wall(player_ptr))) {
+        auto should_damage = !is_invuln(player_ptr);
+        should_damage &= player_ptr->wraith_form == 0;
+        should_damage &= player_ptr->tim_pass_wall == 0;
+        should_damage &= (player_ptr->chp > (player_ptr->lev / 5)) || !has_pass_wall(player_ptr);
+        if (should_damage) {
             concptr dam_desc;
             cave_no_regen = true;
 

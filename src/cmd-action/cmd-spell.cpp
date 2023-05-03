@@ -601,9 +601,10 @@ void do_cmd_browse(PlayerType *player_ptr)
     /* Restrict choices to "useful" books */
     auto item_tester = get_learnable_spellbook_tester(player_ptr);
 
-    const auto q = _("どの本を読みますか? ", "Browse which book? ");
-    const auto s = _("読める本がない。", "You have no books that you can read.");
-    const auto *o_ptr = choose_object(player_ptr, &item, q, s, USE_INVEN | USE_FLOOR | (pc.equals(PlayerClassType::FORCETRAINER) ? USE_FORCE : 0), item_tester);
+    constexpr auto q = _("どの本を読みますか? ", "Browse which book? ");
+    constexpr auto s = _("読める本がない。", "You have no books that you can read.");
+    constexpr auto options = USE_INVEN | USE_FLOOR;
+    const auto *o_ptr = choose_object(player_ptr, &item, q, s, options | (pc.equals(PlayerClassType::FORCETRAINER) ? USE_FORCE : 0), item_tester);
     if (o_ptr == nullptr) {
         if (item == INVEN_FORCE) /* the_force */
         {
@@ -846,8 +847,9 @@ void do_cmd_study(PlayerType *player_ptr)
 
     if (learned) {
         auto max_exp = PlayerSkill::spell_exp_at((spell < 32) ? PlayerSkillRank::MASTER : PlayerSkillRank::EXPERT);
-        int old_exp = player_ptr->spell_exp[spell];
-        const auto spell_name = exe_spell(player_ptr, increment ? player_ptr->realm2 : player_ptr->realm1, spell % 32, SpellProcessType::NAME);
+        const auto old_exp = player_ptr->spell_exp[spell];
+        const auto realm = increment ? player_ptr->realm2 : player_ptr->realm1;
+        const auto spell_name = exe_spell(player_ptr, realm, spell % 32, SpellProcessType::NAME);
 
         if (old_exp >= max_exp) {
             msg_format(_("その%sは完全に使いこなせるので学ぶ必要はない。", "You don't need to study this %s anymore."), p);
@@ -879,9 +881,9 @@ void do_cmd_study(PlayerType *player_ptr)
         player_ptr->spell_order[i++] = spell;
 
         /* Mention the result */
-        const auto spell_name = exe_spell(player_ptr, increment ? player_ptr->realm2 : player_ptr->realm1, spell % 32, SpellProcessType::NAME);
+        const auto realm = increment ? player_ptr->realm2 : player_ptr->realm1;
+        const auto spell_name = exe_spell(player_ptr, realm, spell % 32, SpellProcessType::NAME);
 #ifdef JP
-        /* 英日切り替え機能に対応 */
         if (mp_ptr->spell_book == ItemKindType::MUSIC_BOOK) {
             msg_format("%sを学んだ。", spell_name->data());
         } else {
