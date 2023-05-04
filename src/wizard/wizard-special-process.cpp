@@ -673,6 +673,20 @@ void wiz_learn_items_all(PlayerType *player_ptr)
     }
 }
 
+static void change_birth_flags(PlayerType *player_ptr)
+{
+    auto &rfu = RedrawingFlagsUpdater::get_instance();
+    const auto &flags_srf = EnumClassFlagGroup<StatusRedrawingFlag>{
+        StatusRedrawingFlag::BONUS,
+        StatusRedrawingFlag::HP,
+        StatusRedrawingFlag::MP,
+        StatusRedrawingFlag::SPELLS,
+    };
+    player_ptr->window_flags |= PW_PLAYER;
+    rfu.set_flags(flags_srf);
+    player_ptr->redraw |= PR_BASIC | PR_HP | PR_MP | PR_ABILITY_SCORE;
+}
+
 /*!
  * @brief プレイヤーの種族を変更する
  */
@@ -685,17 +699,7 @@ void wiz_reset_race(PlayerType *player_ptr)
 
     player_ptr->prace = i2enum<PlayerRaceType>(val);
     rp_ptr = &race_info[enum2i(player_ptr->prace)];
-
-    auto &rfu = RedrawingFlagsUpdater::get_instance();
-    const auto flags_srf = {
-        StatusRedrawingFlag::BONUS,
-        StatusRedrawingFlag::HP,
-        StatusRedrawingFlag::MP,
-        StatusRedrawingFlag::SPELLS,
-    };
-    player_ptr->window_flags |= PW_PLAYER;
-    rfu.set_flags(flags_srf);
-    player_ptr->redraw |= PR_BASIC | PR_HP | PR_MP | PR_ABILITY_SCORE;
+    change_birth_flags(player_ptr);
     handle_stuff(player_ptr);
 }
 
@@ -714,16 +718,7 @@ void wiz_reset_class(PlayerType *player_ptr)
     cp_ptr = &class_info[val];
     mp_ptr = &class_magics_info[val];
     PlayerClass(player_ptr).init_specific_data();
-    auto &rfu = RedrawingFlagsUpdater::get_instance();
-    const auto flags_srf = {
-        StatusRedrawingFlag::BONUS,
-        StatusRedrawingFlag::HP,
-        StatusRedrawingFlag::MP,
-        StatusRedrawingFlag::SPELLS,
-    };
-    player_ptr->window_flags |= PW_PLAYER;
-    rfu.set_flags(flags_srf);
-    player_ptr->redraw |= PR_BASIC | PR_HP | PR_MP | PR_ABILITY_SCORE;
+    change_birth_flags(player_ptr);
     handle_stuff(player_ptr);
 }
 
@@ -745,16 +740,7 @@ void wiz_reset_realms(PlayerType *player_ptr)
 
     player_ptr->realm1 = static_cast<int16_t>(val1);
     player_ptr->realm2 = static_cast<int16_t>(val2);
-    auto &rfu = RedrawingFlagsUpdater::get_instance();
-    const auto flags = {
-        StatusRedrawingFlag::BONUS,
-        StatusRedrawingFlag::HP,
-        StatusRedrawingFlag::MP,
-        StatusRedrawingFlag::SPELLS,
-    };
-    player_ptr->window_flags |= PW_PLAYER;
-    rfu.set_flags(flags);
-    player_ptr->redraw |= PR_BASIC;
+    change_birth_flags(player_ptr);
     handle_stuff(player_ptr);
 }
 
