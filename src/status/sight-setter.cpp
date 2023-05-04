@@ -10,6 +10,23 @@
 #include "system/player-type-definition.h"
 #include "view/display-messages.h"
 
+static bool update_sight(PlayerType *player_ptr, const bool notice)
+{
+    player_ptr->redraw |= (PR_TIMED_EFFECT);
+    if (!notice) {
+        return false;
+    }
+
+    if (disturb_state) {
+        disturb(player_ptr, false, false);
+    }
+
+    player_ptr->update |= (PU_BONUS);
+    player_ptr->update |= (PU_MONSTER_STATUSES);
+    handle_stuff(player_ptr);
+    return true;
+}
+
 /*!
  * @brief 時限ESPの継続時間をセットする / Set "tim_esp", notice observable changes
  * @param v 継続時間
@@ -43,19 +60,7 @@ bool set_tim_esp(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
     }
 
     player_ptr->tim_esp = v;
-    player_ptr->redraw |= (PR_TIMED_EFFECT);
-
-    if (!notice) {
-        return false;
-    }
-
-    if (disturb_state) {
-        disturb(player_ptr, false, false);
-    }
-    player_ptr->update |= (PU_BONUS);
-    player_ptr->update |= (PU_MONSTER_STATUSES);
-    handle_stuff(player_ptr);
-    return true;
+    return update_sight(player_ptr, notice);
 }
 
 /*!
@@ -91,19 +96,7 @@ bool set_tim_invis(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
     }
 
     player_ptr->tim_invis = v;
-    player_ptr->redraw |= (PR_TIMED_EFFECT);
-
-    if (!notice) {
-        return false;
-    }
-
-    if (disturb_state) {
-        disturb(player_ptr, false, false);
-    }
-    player_ptr->update |= (PU_BONUS);
-    player_ptr->update |= (PU_MONSTER_STATUSES);
-    handle_stuff(player_ptr);
-    return true;
+    return update_sight(player_ptr, notice);
 }
 
 /*!
@@ -139,17 +132,5 @@ bool set_tim_infra(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
     }
 
     player_ptr->tim_infra = v;
-    player_ptr->redraw |= (PR_TIMED_EFFECT);
-
-    if (!notice) {
-        return false;
-    }
-
-    if (disturb_state) {
-        disturb(player_ptr, false, false);
-    }
-    player_ptr->update |= (PU_BONUS);
-    player_ptr->update |= (PU_MONSTER_STATUSES);
-    handle_stuff(player_ptr);
-    return true;
+    return update_sight(player_ptr, notice);
 }
