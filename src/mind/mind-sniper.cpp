@@ -128,6 +128,13 @@ static snipe_power const snipe_powers[MAX_SNIPE_POWERS] = {
 #endif
 };
 
+static void reset_concentration_flag(PlayerType *player_ptr, sniper_data_type *sniper_data)
+{
+    sniper_data->reset_concent = false;
+    player_ptr->update |= (PU_BONUS | PU_MONSTER_STATUSES);
+    player_ptr->redraw |= (PR_TIMED_EFFECT);
+}
+
 /*!
  * @brief スナイパーの集中度加算
  * @return 集中度を加算した場合は true、そうでなければ false
@@ -144,10 +151,7 @@ static bool snipe_concentrate(PlayerType *player_ptr)
     }
 
     msg_format(_("集中した。(集中度 %d)", "You concentrate deeply. (lvl %d)"), sniper_data->concent);
-    sniper_data->reset_concent = false;
-
-    player_ptr->update |= (PU_BONUS | PU_MONSTER_STATUSES);
-    player_ptr->redraw |= (PR_TIMED_EFFECT);
+    reset_concentration_flag(player_ptr, sniper_data.get());
     return true;
 }
 
@@ -168,10 +172,7 @@ void reset_concentration(PlayerType *player_ptr, bool msg)
     }
 
     sniper_data->concent = 0;
-    sniper_data->reset_concent = false;
-
-    player_ptr->update |= (PU_BONUS | PU_MONSTER_STATUSES);
-    player_ptr->redraw |= (PR_TIMED_EFFECT);
+    reset_concentration_flag(player_ptr, sniper_data.get());
 }
 
 /*!
