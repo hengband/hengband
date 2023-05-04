@@ -44,64 +44,69 @@
 #include "view/display-messages.h"
 #include "world/world.h"
 
+static void update_sun_light(PlayerType *player_ptr)
+{
+    player_ptr->update |= PU_MONSTER_STATUSES | PU_MONSTER_LITE;
+    player_ptr->redraw |= PR_MAP;
+    player_ptr->window_flags |= PW_OVERHEAD | PW_DUNGEON;
+    if ((player_ptr->current_floor_ptr->grid_array[player_ptr->y][player_ptr->x].info & CAVE_GLOW) != 0) {
+        set_superstealth(player_ptr, false);
+    }
+}
+
 void day_break(PlayerType *player_ptr)
 {
     msg_print(_("夜が明けた。", "The sun has risen."));
     auto *floor_ptr = player_ptr->current_floor_ptr;
-    if (!player_ptr->wild_mode) {
-        for (POSITION y = 0; y < floor_ptr->height; y++) {
-            for (POSITION x = 0; x < floor_ptr->width; x++) {
-                auto *g_ptr = &floor_ptr->grid_array[y][x];
-                g_ptr->info |= CAVE_GLOW;
-                if (view_perma_grids) {
-                    g_ptr->info |= CAVE_MARK;
-                }
+    if (player_ptr->wild_mode) {
+        update_sun_light(player_ptr);
+        return;
+    }
 
-                note_spot(player_ptr, y, x);
+    for (auto y = 0; y < floor_ptr->height; y++) {
+        for (auto x = 0; x < floor_ptr->width; x++) {
+            auto *g_ptr = &floor_ptr->grid_array[y][x];
+            g_ptr->info |= CAVE_GLOW;
+            if (view_perma_grids) {
+                g_ptr->info |= CAVE_MARK;
             }
+
+            note_spot(player_ptr, y, x);
         }
     }
 
-    player_ptr->update |= PU_MONSTER_STATUSES | PU_MONSTER_LITE;
-    player_ptr->redraw |= PR_MAP;
-    player_ptr->window_flags |= PW_OVERHEAD | PW_DUNGEON;
-    if ((floor_ptr->grid_array[player_ptr->y][player_ptr->x].info & CAVE_GLOW) != 0) {
-        set_superstealth(player_ptr, false);
-    }
+    update_sun_light(player_ptr);
 }
 
 void night_falls(PlayerType *player_ptr)
 {
     msg_print(_("日が沈んだ。", "The sun has fallen."));
     auto *floor_ptr = player_ptr->current_floor_ptr;
-    if (!player_ptr->wild_mode) {
-        for (POSITION y = 0; y < floor_ptr->height; y++) {
-            for (POSITION x = 0; x < floor_ptr->width; x++) {
-                auto *g_ptr = &floor_ptr->grid_array[y][x];
-                auto *f_ptr = &terrains_info[g_ptr->get_feat_mimic()];
-                using Tc = TerrainCharacteristics;
-                if (g_ptr->is_mirror() || f_ptr->flags.has(Tc::QUEST_ENTER) || f_ptr->flags.has(Tc::ENTRANCE)) {
-                    continue;
-                }
+    if (player_ptr->wild_mode) {
+        update_sun_light(player_ptr);
+        return;
+    }
 
-                g_ptr->info &= ~(CAVE_GLOW);
-                if (f_ptr->flags.has_not(Tc::REMEMBER)) {
-                    g_ptr->info &= ~(CAVE_MARK);
-                    note_spot(player_ptr, y, x);
-                }
+    for (auto y = 0; y < floor_ptr->height; y++) {
+        for (auto x = 0; x < floor_ptr->width; x++) {
+            auto *g_ptr = &floor_ptr->grid_array[y][x];
+            auto *f_ptr = &terrains_info[g_ptr->get_feat_mimic()];
+            using Tc = TerrainCharacteristics;
+            if (g_ptr->is_mirror() || f_ptr->flags.has(Tc::QUEST_ENTER) || f_ptr->flags.has(Tc::ENTRANCE)) {
+                continue;
             }
 
-            glow_deep_lava_and_bldg(player_ptr);
+            g_ptr->info &= ~(CAVE_GLOW);
+            if (f_ptr->flags.has_not(Tc::REMEMBER)) {
+                g_ptr->info &= ~(CAVE_MARK);
+                note_spot(player_ptr, y, x);
+            }
         }
+
+        glow_deep_lava_and_bldg(player_ptr);
     }
 
-    player_ptr->update |= PU_MONSTER_STATUSES | PU_MONSTER_LITE;
-    player_ptr->redraw |= PR_MAP;
-    player_ptr->window_flags |= PW_OVERHEAD | PW_DUNGEON;
-
-    if ((floor_ptr->grid_array[player_ptr->y][player_ptr->x].info & CAVE_GLOW) != 0) {
-        set_superstealth(player_ptr, false);
-    }
+    update_sun_light(player_ptr);
 }
 
 /*!
