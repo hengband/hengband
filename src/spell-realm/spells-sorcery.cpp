@@ -12,6 +12,7 @@
 #include "object/object-value.h"
 #include "system/item-entity.h"
 #include "system/player-type-definition.h"
+#include "system/redrawing-flags-updater.h"
 #include "term/z-form.h"
 #include "view/display-messages.h"
 
@@ -84,7 +85,8 @@ bool alchemy(PlayerType *player_ptr)
 
     msg_format(_("%sを＄%d の金に変えた。", "You turn %s to %d coins worth of gold."), item_name.data(), price);
     player_ptr->au += price;
-    player_ptr->redraw |= PR_GOLD;
+    auto &rfu = RedrawingFlagsUpdater::get_instance();
+    rfu.set_flag(MainWindowRedrawingFlag::GOLD);
     player_ptr->window_flags |= PW_PLAYER;
     vary_item(player_ptr, item, -amt);
     return true;

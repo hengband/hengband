@@ -14,6 +14,7 @@
 #include "io/files-util.h"
 #include "io/input-key-acceptor.h"
 #include "system/player-type-definition.h"
+#include "system/redrawing-flags-updater.h"
 #include "term/gameterm.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
@@ -349,7 +350,14 @@ static bool update_use_graphics(PlayerType *player_ptr)
 
     use_graphics = false;
     reset_visuals(player_ptr);
-    player_ptr->redraw |= (PR_WIPE | PR_BASIC | PR_EXTRA | PR_MAP | PR_EQUIPPY);
+    const auto flags = {
+        MainWindowRedrawingFlag::WIPE,
+        MainWindowRedrawingFlag::BASIC,
+        MainWindowRedrawingFlag::EXTRA,
+        MainWindowRedrawingFlag::MAP,
+        MainWindowRedrawingFlag::EQUIPPY,
+    };
+    RedrawingFlagsUpdater::get_instance().set_flags(flags);
     handle_stuff(player_ptr);
     return false;
 }
@@ -384,7 +392,14 @@ void do_cmd_save_screen(PlayerType *player_ptr)
 
     use_graphics = true;
     reset_visuals(player_ptr);
-    player_ptr->redraw |= (PR_WIPE | PR_BASIC | PR_EXTRA | PR_MAP | PR_EQUIPPY);
+    const auto flags = {
+        MainWindowRedrawingFlag::WIPE,
+        MainWindowRedrawingFlag::BASIC,
+        MainWindowRedrawingFlag::EXTRA,
+        MainWindowRedrawingFlag::MAP,
+        MainWindowRedrawingFlag::EQUIPPY,
+    };
+    RedrawingFlagsUpdater::get_instance().set_flags(flags);
     handle_stuff(player_ptr);
 }
 

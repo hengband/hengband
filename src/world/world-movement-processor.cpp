@@ -16,6 +16,7 @@
 #include "system/floor-type-definition.h"
 #include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
+#include "system/redrawing-flags-updater.h"
 #include "util/enum-range.h"
 #include "view/display-messages.h"
 #include "world/world.h"
@@ -66,7 +67,7 @@ void execute_recall(PlayerType *player_ptr)
     }
 
     player_ptr->word_recall--;
-    player_ptr->redraw |= (PR_TIMED_EFFECT);
+    RedrawingFlagsUpdater::get_instance().set_flag(MainWindowRedrawingFlag::TIMED_EFFECT);
     if (player_ptr->word_recall != 0) {
         return;
     }
@@ -150,7 +151,7 @@ void execute_floor_reset(PlayerType *player_ptr)
     }
 
     player_ptr->alter_reality--;
-    player_ptr->redraw |= (PR_TIMED_EFFECT);
+    RedrawingFlagsUpdater::get_instance().set_flag(MainWindowRedrawingFlag::TIMED_EFFECT);
     if (player_ptr->alter_reality != 0) {
         return;
     }

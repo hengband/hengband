@@ -69,7 +69,7 @@ bool wall_stone(PlayerType *player_ptr)
     bool dummy = project(player_ptr, 0, 1, player_ptr->y, player_ptr->x, 0, AttributeType::STONE_WALL, flg).notice;
     auto &rfu = RedrawingFlagsUpdater::get_instance();
     rfu.set_flag(StatusRedrawingFlag::FLOW);
-    player_ptr->redraw |= (PR_MAP);
+    rfu.set_flag(MainWindowRedrawingFlag::MAP);
     return dummy;
 }
 

@@ -174,7 +174,7 @@ bool move_player_effect(PlayerType *player_ptr, POSITION ny, POSITION nx, BIT_FL
         if (mpe_mode & MPE_FORGET_FLOW) {
             forget_flow(floor_ptr);
             rfu.set_flag(StatusRedrawingFlag::UN_VIEW);
-            player_ptr->redraw |= PR_MAP;
+            rfu.set_flag(MainWindowRedrawingFlag::MAP);
         }
 
         const auto flags_srf = {

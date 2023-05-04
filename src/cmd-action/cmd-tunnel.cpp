@@ -15,6 +15,7 @@
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
 #include "system/player-type-definition.h"
+#include "system/redrawing-flags-updater.h"
 #include "system/terrain-type-definition.h"
 #include "target/target-getter.h"
 #include "util/bit-flags-calculator.h"
@@ -39,7 +40,7 @@ void do_cmd_tunnel(PlayerType *player_ptr)
 
     if (command_arg) {
         command_rep = command_arg - 1;
-        player_ptr->redraw |= PR_ACTION;
+        RedrawingFlagsUpdater::get_instance().set_flag(MainWindowRedrawingFlag::ACTION);
         command_arg = 0;
     }
 

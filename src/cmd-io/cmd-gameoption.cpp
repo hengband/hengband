@@ -17,6 +17,7 @@
 #include "main/sound-of-music.h"
 #include "system/game-option-types.h"
 #include "system/player-type-definition.h"
+#include "system/redrawing-flags-updater.h"
 #include "term/gameterm.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
@@ -628,7 +629,7 @@ void do_cmd_options(PlayerType *player_ptr)
     }
 
     screen_load();
-    player_ptr->redraw |= (PR_EQUIPPY);
+    RedrawingFlagsUpdater::get_instance().set_flag(MainWindowRedrawingFlag::EQUIPPY);
 }
 
 /*!

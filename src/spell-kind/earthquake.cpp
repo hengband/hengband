@@ -370,7 +370,12 @@ bool earthquake(PlayerType *player_ptr, POSITION cy, POSITION cx, POSITION r, MO
         StatusRedrawingFlag::MONSTER_STATUSES,
     };
     rfu.set_flags(flags_srf);
-    player_ptr->redraw |= (PR_HEALTH | PR_UHEALTH | PR_MAP);
+    const auto flags_mwrf = {
+        MainWindowRedrawingFlag::HEALTH,
+        MainWindowRedrawingFlag::UHEALTH,
+        MainWindowRedrawingFlag::MAP,
+    };
+    rfu.set_flags(flags_mwrf);
     player_ptr->window_flags |= (PW_OVERHEAD | PW_DUNGEON);
     if (floor_ptr->grid_array[player_ptr->y][player_ptr->x].info & CAVE_GLOW) {
         set_superstealth(player_ptr, false);

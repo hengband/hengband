@@ -128,7 +128,7 @@ void verify_panel(PlayerType *player_ptr)
     panel_bounds_center();
     auto &rfu = RedrawingFlagsUpdater::get_instance();
     rfu.set_flag(StatusRedrawingFlag::MONSTER_STATUSES);
-    player_ptr->redraw |= PR_MAP;
+    rfu.set_flag(MainWindowRedrawingFlag::MAP);
     player_ptr->window_flags |= PW_OVERHEAD | PW_DUNGEON;
 }
 

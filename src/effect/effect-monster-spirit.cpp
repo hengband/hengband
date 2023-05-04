@@ -15,6 +15,7 @@
 #include "system/monster-entity.h"
 #include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
+#include "system/redrawing-flags-updater.h"
 #include "util/bit-flags-calculator.h"
 #include "util/string-processor.h"
 #include "view/display-messages.h"
@@ -52,12 +53,13 @@ ProcessResult effect_monster_drain_mana(PlayerType *player_ptr, effect_monster_t
         em_ptr->m_caster_ptr->hp = em_ptr->m_caster_ptr->maxhp;
     }
 
+    auto &rfu = RedrawingFlagsUpdater::get_instance();
     if (player_ptr->health_who == em_ptr->who) {
-        player_ptr->redraw |= (PR_HEALTH);
+        rfu.set_flag(MainWindowRedrawingFlag::HEALTH);
     }
 
     if (player_ptr->riding == em_ptr->who) {
-        player_ptr->redraw |= (PR_UHEALTH);
+        rfu.set_flag(MainWindowRedrawingFlag::UHEALTH);
     }
 
     if (em_ptr->see_s_msg) {

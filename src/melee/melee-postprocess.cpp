@@ -42,6 +42,7 @@
 #include "system/monster-entity.h"
 #include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
+#include "system/redrawing-flags-updater.h"
 #include "util/bit-flags-calculator.h"
 #include "util/string-processor.h"
 #include "view/display-messages.h"
@@ -81,12 +82,13 @@ static void prepare_redraw(PlayerType *player_ptr, mam_pp_type *mam_pp_ptr)
         return;
     }
 
+    auto &rfu = RedrawingFlagsUpdater::get_instance();
     if (player_ptr->health_who == mam_pp_ptr->m_idx) {
-        player_ptr->redraw |= (PR_HEALTH);
+        rfu.set_flag(MainWindowRedrawingFlag::HEALTH);
     }
 
     if (player_ptr->riding == mam_pp_ptr->m_idx) {
-        player_ptr->redraw |= (PR_UHEALTH);
+        rfu.set_flag(MainWindowRedrawingFlag::UHEALTH);
     }
 }
 

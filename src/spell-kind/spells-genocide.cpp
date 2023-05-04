@@ -28,6 +28,7 @@
 #include "system/monster-entity.h"
 #include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
+#include "system/redrawing-flags-updater.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 
@@ -111,7 +112,8 @@ bool genocide_aux(PlayerType *player_ptr, MONSTER_IDX m_idx, int power, bool pla
     }
 
     move_cursor_relative(player_ptr->y, player_ptr->x);
-    player_ptr->redraw |= (PR_HP);
+    auto &rfu = RedrawingFlagsUpdater::get_instance();
+    rfu.set_flag(MainWindowRedrawingFlag::HP);
     player_ptr->window_flags |= (PW_PLAYER);
     handle_stuff(player_ptr);
     term_fresh();

@@ -397,20 +397,21 @@ static void update_bonuses(PlayerType *player_ptr)
     is_esp_updated |= player_ptr->esp_good != old_esp_good;
     is_esp_updated |= player_ptr->esp_nonliving != old_esp_nonliving;
     is_esp_updated |= player_ptr->esp_unique != old_esp_unique;
+    auto &rfu = RedrawingFlagsUpdater::get_instance();
     if (is_esp_updated) {
-        RedrawingFlagsUpdater::get_instance().set_flag(StatusRedrawingFlag::MONSTER_STATUSES);
+        rfu.set_flag(StatusRedrawingFlag::MONSTER_STATUSES);
     }
 
     if (player_ptr->see_inv != old_see_inv) {
-        RedrawingFlagsUpdater::get_instance().set_flag(StatusRedrawingFlag::MONSTER_STATUSES);
+        rfu.set_flag(StatusRedrawingFlag::MONSTER_STATUSES);
     }
 
     if (player_ptr->pspeed != old_speed) {
-        set_bits(player_ptr->redraw, PR_SPEED);
+        rfu.set_flag(MainWindowRedrawingFlag::SPEED);
     }
 
     if ((player_ptr->dis_ac != old_dis_ac) || (player_ptr->dis_to_a != old_dis_to_a)) {
-        set_bits(player_ptr->redraw, PR_AC);
+        rfu.set_flag(MainWindowRedrawingFlag::AC);
         set_bits(player_ptr->window_flags, PW_PLAYER);
     }
 
@@ -496,7 +497,8 @@ static void update_max_hitpoints(PlayerType *player_ptr)
 #endif
     player_ptr->mhp = mhp;
 
-    player_ptr->redraw |= PR_HP;
+    auto &rfu = RedrawingFlagsUpdater::get_instance();
+    rfu.set_flag(MainWindowRedrawingFlag::HP);
     player_ptr->window_flags |= PW_PLAYER;
 }
 
@@ -771,7 +773,8 @@ static void update_num_of_spells(PlayerType *player_ptr)
     }
 
     player_ptr->old_spells = player_ptr->new_spells;
-    set_bits(player_ptr->redraw, PR_STUDY);
+    auto &rfu = RedrawingFlagsUpdater::get_instance();
+    rfu.set_flag(MainWindowRedrawingFlag::STUDY);
     set_bits(player_ptr->window_flags, PW_ITEM_KNOWLEDGTE);
 }
 
@@ -799,7 +802,7 @@ static void update_max_mana(PlayerType *player_ptr)
     } else {
         if (mp_ptr->spell_first > player_ptr->lev) {
             player_ptr->msp = 0;
-            set_bits(player_ptr->redraw, PR_MP);
+            RedrawingFlagsUpdater::get_instance().set_flag(MainWindowRedrawingFlag::MP);
             return;
         }
 
@@ -1002,7 +1005,8 @@ static void update_max_mana(PlayerType *player_ptr)
         }
 #endif
         player_ptr->msp = msp;
-        set_bits(player_ptr->redraw, PR_MP);
+        auto &rfu = RedrawingFlagsUpdater::get_instance();
+        rfu.set_flag(MainWindowRedrawingFlag::MP);
         set_bits(player_ptr->window_flags, (PW_PLAYER | PW_SPELL));
     }
 
@@ -2896,13 +2900,13 @@ void check_experience(PlayerType *player_ptr)
         player_ptr->max_max_exp = player_ptr->max_exp;
     }
 
-    set_bits(player_ptr->redraw, PR_EXP);
+    auto &rfu = RedrawingFlagsUpdater::get_instance();
+    rfu.set_flag(MainWindowRedrawingFlag::EXP);
     handle_stuff(player_ptr);
 
     PlayerRace pr(player_ptr);
     bool android = pr.equals(PlayerRaceType::ANDROID);
     PLAYER_LEVEL old_lev = player_ptr->lev;
-    auto &rfu = RedrawingFlagsUpdater::get_instance();
     const auto flags_srf = {
         StatusRedrawingFlag::BONUS,
         StatusRedrawingFlag::HP,
@@ -2912,7 +2916,11 @@ void check_experience(PlayerType *player_ptr)
     while ((player_ptr->lev > 1) && (player_ptr->exp < ((android ? player_exp_a : player_exp)[player_ptr->lev - 2] * player_ptr->expfact / 100L))) {
         player_ptr->lev--;
         rfu.set_flags(flags_srf);
-        set_bits(player_ptr->redraw, PR_LEVEL | PR_TITLE);
+        const auto flags_mwrf = {
+            MainWindowRedrawingFlag::LEVEL,
+            MainWindowRedrawingFlag::TITLE,
+        };
+        rfu.set_flags(flags_mwrf);
         set_bits(player_ptr->window_flags, PW_PLAYER);
         handle_stuff(player_ptr);
     }
@@ -2941,7 +2949,12 @@ void check_experience(PlayerType *player_ptr)
         sound(SOUND_LEVEL);
         msg_format(_("レベル %d にようこそ。", "Welcome to level %d."), player_ptr->lev);
         rfu.set_flags(flags_srf);
-        set_bits(player_ptr->redraw, (PR_LEVEL | PR_TITLE | PR_EXP));
+        const auto flags_mwrf_levelup = {
+            MainWindowRedrawingFlag::LEVEL,
+            MainWindowRedrawingFlag::TITLE,
+            MainWindowRedrawingFlag::EXP,
+        };
+        rfu.set_flags(flags_mwrf_levelup);
         set_bits(player_ptr->window_flags, (PW_PLAYER | PW_SPELL | PW_INVENTORY));
         player_ptr->level_up_message = true;
         handle_stuff(player_ptr);
@@ -3002,7 +3015,11 @@ void check_experience(PlayerType *player_ptr)
         }
 
         rfu.set_flags(flags_srf);
-        set_bits(player_ptr->redraw, (PR_LEVEL | PR_TITLE));
+        const auto flags_mwrf = {
+            MainWindowRedrawingFlag::LEVEL,
+            MainWindowRedrawingFlag::TITLE,
+        };
+        rfu.set_flags(flags_mwrf);
         set_bits(player_ptr->window_flags, (PW_PLAYER | PW_SPELL));
         handle_stuff(player_ptr);
     }

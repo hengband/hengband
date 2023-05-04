@@ -676,7 +676,7 @@ void wiz_learn_items_all(PlayerType *player_ptr)
 static void change_birth_flags(PlayerType *player_ptr)
 {
     auto &rfu = RedrawingFlagsUpdater::get_instance();
-    const auto &flags_srf = EnumClassFlagGroup<StatusRedrawingFlag>{
+    const auto flags_srf = {
         StatusRedrawingFlag::BONUS,
         StatusRedrawingFlag::HP,
         StatusRedrawingFlag::MP,
@@ -684,7 +684,13 @@ static void change_birth_flags(PlayerType *player_ptr)
     };
     player_ptr->window_flags |= PW_PLAYER;
     rfu.set_flags(flags_srf);
-    player_ptr->redraw |= PR_BASIC | PR_HP | PR_MP | PR_ABILITY_SCORE;
+    const auto flags_mwrf = {
+        MainWindowRedrawingFlag::BASIC,
+        MainWindowRedrawingFlag::HP,
+        MainWindowRedrawingFlag::MP,
+        MainWindowRedrawingFlag::ABILITY_SCORE,
+    };
+    rfu.set_flags(flags_mwrf);
 }
 
 /*!

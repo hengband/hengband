@@ -143,7 +143,7 @@ void do_cmd_drop(PlayerType *player_ptr)
         calc_android_exp(player_ptr);
     }
 
-    player_ptr->redraw |= (PR_EQUIPPY);
+    RedrawingFlagsUpdater::get_instance().set_flag(MainWindowRedrawingFlag::EQUIPPY);
 }
 
 /*!

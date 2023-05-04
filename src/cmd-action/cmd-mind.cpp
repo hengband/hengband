@@ -47,6 +47,7 @@
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
 #include "system/player-type-definition.h"
+#include "system/redrawing-flags-updater.h"
 #include "term/screen-processor.h"
 #include "timed-effect/player-stun.h"
 #include "timed-effect/timed-effects.h"
@@ -374,7 +375,7 @@ static void process_hard_concentration(PlayerType *player_ptr, cm_type *cm_ptr)
 {
     if ((cm_ptr->use_mind == MindKindType::BERSERKER) || (cm_ptr->use_mind == MindKindType::NINJUTSU)) {
         take_hit(player_ptr, DAMAGE_USELIFE, cm_ptr->mana_cost, _("過度の集中", "concentrating too hard"));
-        player_ptr->redraw |= PR_HP;
+        RedrawingFlagsUpdater::get_instance().set_flag(MainWindowRedrawingFlag::HP);
         return;
     }
 
@@ -425,7 +426,8 @@ void do_cmd_mind(PlayerType *player_ptr)
 
     mind_turn_passing(player_ptr, cm_ptr);
     process_hard_concentration(player_ptr, cm_ptr);
-    player_ptr->redraw |= PR_MP;
+    auto &rfu = RedrawingFlagsUpdater::get_instance();
+    rfu.set_flag(MainWindowRedrawingFlag::MP);
     player_ptr->window_flags |= PW_PLAYER;
     player_ptr->window_flags |= PW_SPELL;
 }

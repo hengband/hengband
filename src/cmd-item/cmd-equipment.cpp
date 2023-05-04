@@ -357,7 +357,7 @@ void do_cmd_wield(PlayerType *player_ptr)
     };
     auto &rfu = RedrawingFlagsUpdater::get_instance();
     rfu.set_flags(flags_srf);
-    player_ptr->redraw |= PR_EQUIPPY;
+    rfu.set_flag(MainWindowRedrawingFlag::EQUIPPY);
     player_ptr->window_flags |= PW_INVENTORY | PW_EQUIPMENT | PW_PLAYER;
 }
 
@@ -412,6 +412,6 @@ void do_cmd_takeoff(PlayerType *player_ptr)
         StatusRedrawingFlag::MP,
     };
     rfu.set_flags(flags_srf);
-    player_ptr->redraw |= PR_EQUIPPY;
+    rfu.set_flag(MainWindowRedrawingFlag::EQUIPPY);
     player_ptr->window_flags |= PW_INVENTORY | PW_EQUIPMENT | PW_PLAYER;
 }

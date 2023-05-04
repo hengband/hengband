@@ -191,7 +191,7 @@ void process_command(PlayerType *player_ptr)
 
         auto &rfu = RedrawingFlagsUpdater::get_instance();
         rfu.set_flag(StatusRedrawingFlag::MONSTER_STATUSES);
-        player_ptr->redraw |= (PR_TITLE);
+        rfu.set_flag(MainWindowRedrawingFlag::TITLE);
         break;
     }
     case KTRL('A'): {

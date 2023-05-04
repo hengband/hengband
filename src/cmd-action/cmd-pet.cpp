@@ -162,10 +162,13 @@ void do_cmd_pet_dismiss(PlayerType *player_ptr)
 
                 player_ptr->riding = 0;
                 rfu.set_flag(StatusRedrawingFlag::MONSTER_STATUSES);
-                player_ptr->redraw |= (PR_EXTRA | PR_UHEALTH);
+                const auto flags = {
+                    MainWindowRedrawingFlag::EXTRA,
+                    MainWindowRedrawingFlag::UHEALTH,
+                };
+                rfu.set_flags(flags);
             }
 
-            /* HACK : Add the line to message buffer */
             msg_format(_("%s を放した。", "Dismissed %s."), friend_name.data());
             rfu.set_flag(StatusRedrawingFlag::BONUS);
             player_ptr->window_flags |= (PW_MESSAGE);
@@ -306,11 +309,13 @@ bool do_cmd_riding(PlayerType *player_ptr, bool force)
         StatusRedrawingFlag::BONUS,
     };
     rfu.set_flags(flags_srf);
-    player_ptr->redraw |= (PR_MAP | PR_EXTRA);
-    player_ptr->redraw |= (PR_UHEALTH);
-
+    const auto flags_mwrf = {
+        MainWindowRedrawingFlag::MAP,
+        MainWindowRedrawingFlag::EXTRA,
+        MainWindowRedrawingFlag::UHEALTH,
+    };
+    rfu.set_flags(flags_mwrf);
     (void)move_player_effect(player_ptr, y, x, MPE_HANDLE_STUFF | MPE_ENERGY_USE | MPE_DONT_PICKUP | MPE_DONT_SWAP_MON);
-
     return true;
 }
 

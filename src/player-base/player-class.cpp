@@ -402,8 +402,11 @@ bool PlayerClass::lose_balance()
         StatusRedrawingFlag::MONSTER_STATUSES,
     };
     rfu.set_flags(flags_srf);
-    this->player_ptr->redraw |= PR_ACTION;
-    this->player_ptr->redraw |= PR_TIMED_EFFECT;
+    const auto flags_mwrf = {
+        MainWindowRedrawingFlag::ACTION,
+        MainWindowRedrawingFlag::TIMED_EFFECT,
+    };
+    rfu.set_flags(flags_mwrf);
     this->player_ptr->action = ACTION_NONE;
     return true;
 }

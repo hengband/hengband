@@ -58,12 +58,16 @@ void do_cmd_redraw(PlayerType *player_ptr)
         StatusRedrawingFlag::MONSTER_STATUSES,
     };
     rfu.set_flags(flags_srf);
-
-    player_ptr->redraw |= (PR_WIPE | PR_BASIC | PR_EXTRA | PR_MAP | PR_EQUIPPY);
-
+    const auto flags_mwrf = {
+        MainWindowRedrawingFlag::WIPE,
+        MainWindowRedrawingFlag::BASIC,
+        MainWindowRedrawingFlag::EXTRA,
+        MainWindowRedrawingFlag::EQUIPPY,
+        MainWindowRedrawingFlag::MAP,
+    };
+    rfu.set_flags(flags_mwrf);
     player_ptr->window_flags |= (PW_INVENTORY | PW_EQUIPMENT | PW_SPELL | PW_PLAYER);
     player_ptr->window_flags |= (PW_MESSAGE | PW_OVERHEAD | PW_DUNGEON | PW_MONSTER_LORE | PW_ITEM_KNOWLEDGTE);
-
     update_playtime();
     handle_stuff(player_ptr);
     if (PlayerRace(player_ptr).equals(PlayerRaceType::ANDROID)) {
@@ -130,7 +134,15 @@ void do_cmd_player_status(PlayerType *player_ptr)
     }
 
     screen_load();
-    player_ptr->redraw |= (PR_WIPE | PR_BASIC | PR_EXTRA | PR_MAP | PR_EQUIPPY);
+    auto &rfu = RedrawingFlagsUpdater::get_instance();
+    const auto flags_mwrf = {
+        MainWindowRedrawingFlag::WIPE,
+        MainWindowRedrawingFlag::BASIC,
+        MainWindowRedrawingFlag::EXTRA,
+        MainWindowRedrawingFlag::EQUIPPY,
+        MainWindowRedrawingFlag::MAP,
+    };
+    rfu.set_flags(flags_mwrf);
     handle_stuff(player_ptr);
 }
 

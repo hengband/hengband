@@ -33,6 +33,7 @@
 #include "system/monster-entity.h"
 #include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
+#include "system/redrawing-flags-updater.h"
 #include "target/projection-path-calculator.h"
 #include "target/target-checker.h"
 #include "target/target-setter.h"
@@ -358,16 +359,17 @@ void reserve_alter_reality(PlayerType *player_ptr, TIME_EFFECT turns)
         return;
     }
 
+    auto &rfu = RedrawingFlagsUpdater::get_instance();
     if (player_ptr->alter_reality || turns == 0) {
         player_ptr->alter_reality = 0;
         msg_print(_("景色が元に戻った...", "The view around you returns to normal..."));
-        player_ptr->redraw |= PR_TIMED_EFFECT;
+        rfu.set_flag(MainWindowRedrawingFlag::TIMED_EFFECT);
         return;
     }
 
     player_ptr->alter_reality = turns;
     msg_print(_("回りの景色が変わり始めた...", "The view around you begins to change..."));
-    player_ptr->redraw |= PR_TIMED_EFFECT;
+    rfu.set_flag(MainWindowRedrawingFlag::TIMED_EFFECT);
 }
 
 /*!
@@ -469,10 +471,11 @@ bool recall_player(PlayerType *player_ptr, TIME_EFFECT turns)
         }
     }
 
+    auto &rfu = RedrawingFlagsUpdater::get_instance();
     if (player_ptr->word_recall || turns == 0) {
         player_ptr->word_recall = 0;
         msg_print(_("張りつめた大気が流れ去った...", "A tension leaves the air around you..."));
-        player_ptr->redraw |= (PR_TIMED_EFFECT);
+        rfu.set_flag(MainWindowRedrawingFlag::TIMED_EFFECT);
         return true;
     }
 
@@ -487,7 +490,7 @@ bool recall_player(PlayerType *player_ptr, TIME_EFFECT turns)
 
     player_ptr->word_recall = turns;
     msg_print(_("回りの大気が張りつめてきた...", "The air about you becomes charged..."));
-    player_ptr->redraw |= (PR_TIMED_EFFECT);
+    rfu.set_flag(MainWindowRedrawingFlag::TIMED_EFFECT);
     return true;
 }
 
@@ -524,8 +527,7 @@ bool free_level_recall(PlayerType *player_ptr)
     }
 
     msg_print(_("回りの大気が張りつめてきた...", "The air about you becomes charged..."));
-
-    player_ptr->redraw |= PR_TIMED_EFFECT;
+    RedrawingFlagsUpdater::get_instance().set_flag(MainWindowRedrawingFlag::TIMED_EFFECT);
     return true;
 }
 

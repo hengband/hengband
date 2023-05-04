@@ -1323,7 +1323,8 @@ bool do_cmd_cast(PlayerType *player_ptr)
     } else {
         over_exerted = true;
     }
-    player_ptr->redraw |= (PR_MP);
+
+    RedrawingFlagsUpdater::get_instance().set_flag(MainWindowRedrawingFlag::MP);
 
     /* Over-exert the player */
     if (over_exerted) {

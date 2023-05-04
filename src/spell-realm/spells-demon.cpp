@@ -41,7 +41,7 @@ bool set_tim_sh_fire(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
 
     player_ptr->tim_sh_fire = v;
     auto &rfu = RedrawingFlagsUpdater::get_instance();
-    player_ptr->redraw |= (PR_TIMED_EFFECT);
+    rfu.set_flag(MainWindowRedrawingFlag::TIMED_EFFECT);
 
     if (!notice) {
         return false;

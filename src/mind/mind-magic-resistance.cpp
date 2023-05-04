@@ -41,8 +41,7 @@ bool set_resist_magic(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
 
     player_ptr->resist_magic = v;
     auto &rfu = RedrawingFlagsUpdater::get_instance();
-    player_ptr->redraw |= (PR_TIMED_EFFECT);
-
+    rfu.set_flag(MainWindowRedrawingFlag::TIMED_EFFECT);
     if (!notice) {
         return false;
     }

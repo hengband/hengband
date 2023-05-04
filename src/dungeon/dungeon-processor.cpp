@@ -48,6 +48,15 @@ static void redraw_character_xtra(PlayerType *player_ptr)
 {
     w_ptr->character_xtra = true;
     auto &rfu = RedrawingFlagsUpdater::get_instance();
+    set_bits(player_ptr->window_flags, PW_INVENTORY | PW_EQUIPMENT | PW_SPELL | PW_PLAYER | PW_MONSTER_LORE | PW_OVERHEAD | PW_DUNGEON);
+    const auto flags_mwrf = {
+        MainWindowRedrawingFlag::WIPE,
+        MainWindowRedrawingFlag::BASIC,
+        MainWindowRedrawingFlag::EXTRA,
+        MainWindowRedrawingFlag::EQUIPPY,
+        MainWindowRedrawingFlag::MAP,
+    };
+    rfu.set_flags(flags_mwrf);
     auto flags_srf = {
         StatusRedrawingFlag::BONUS,
         StatusRedrawingFlag::HP,
@@ -61,8 +70,6 @@ static void redraw_character_xtra(PlayerType *player_ptr)
         StatusRedrawingFlag::DISTANCE,
         StatusRedrawingFlag::FLOW,
     };
-    set_bits(player_ptr->window_flags, PW_INVENTORY | PW_EQUIPMENT | PW_SPELL | PW_PLAYER | PW_MONSTER_LORE | PW_OVERHEAD | PW_DUNGEON);
-    set_bits(player_ptr->redraw, PR_WIPE | PR_BASIC | PR_EXTRA | PR_EQUIPPY | PR_MAP);
     rfu.set_flags(flags_srf);
     handle_stuff(player_ptr);
     w_ptr->character_xtra = false;

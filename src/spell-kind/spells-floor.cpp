@@ -123,7 +123,7 @@ void wiz_lite(PlayerType *player_ptr, bool ninja)
 
     auto &rfu = RedrawingFlagsUpdater::get_instance();
     rfu.set_flag(StatusRedrawingFlag::MONSTER_STATUSES);
-    player_ptr->redraw |= (PR_MAP);
+    rfu.set_flag(MainWindowRedrawingFlag::MAP);
     player_ptr->window_flags |= (PW_OVERHEAD | PW_DUNGEON | PW_FOUND_ITEMS);
 
     if (player_ptr->current_floor_ptr->grid_array[player_ptr->y][player_ptr->x].info & CAVE_GLOW) {
@@ -188,7 +188,7 @@ void wiz_dark(PlayerType *player_ptr)
         StatusRedrawingFlag::MONSTER_STATUSES,
     };
     rfu.set_flags(flags_srf);
-    player_ptr->redraw |= (PR_MAP);
+    rfu.set_flag(MainWindowRedrawingFlag::MAP);
     player_ptr->window_flags |= (PW_OVERHEAD | PW_DUNGEON | PW_FOUND_ITEMS);
 }
 
@@ -242,7 +242,8 @@ void map_area(PlayerType *player_ptr, POSITION range)
         }
     }
 
-    player_ptr->redraw |= (PR_MAP);
+    auto &rfu = RedrawingFlagsUpdater::get_instance();
+    rfu.set_flag(MainWindowRedrawingFlag::MAP);
     player_ptr->window_flags |= (PW_OVERHEAD | PW_DUNGEON);
 }
 
@@ -483,7 +484,7 @@ bool destroy_area(PlayerType *player_ptr, POSITION y1, POSITION x1, POSITION r, 
         StatusRedrawingFlag::MONSTER_STATUSES,
     };
     rfu.set_flags(flags_srf);
-    player_ptr->redraw |= (PR_MAP);
+    rfu.set_flag(MainWindowRedrawingFlag::MAP);
     player_ptr->window_flags |= (PW_OVERHEAD | PW_DUNGEON);
 
     if (floor_ptr->grid_array[player_ptr->y][player_ptr->x].info & CAVE_GLOW) {

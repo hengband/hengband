@@ -348,7 +348,7 @@ void do_cmd_walk(PlayerType *player_ptr, bool pickup)
 {
     if (command_arg) {
         command_rep = command_arg - 1;
-        player_ptr->redraw |= PR_ACTION;
+        RedrawingFlagsUpdater::get_instance().set_flag(MainWindowRedrawingFlag::ACTION);
         command_arg = 0;
     }
 
@@ -426,7 +426,7 @@ void do_cmd_stay(PlayerType *player_ptr, bool pickup)
     uint32_t mpe_mode = MPE_STAYING | MPE_ENERGY_USE;
     if (command_arg) {
         command_rep = command_arg - 1;
-        player_ptr->redraw |= (PR_ACTION);
+        RedrawingFlagsUpdater::get_instance().set_flag(MainWindowRedrawingFlag::ACTION);
         command_arg = 0;
     }
 
@@ -498,7 +498,7 @@ void do_cmd_rest(PlayerType *player_ptr)
     player_ptr->action = ACTION_REST;
     auto &rfu = RedrawingFlagsUpdater::get_instance();
     rfu.set_flag(StatusRedrawingFlag::BONUS);
-    player_ptr->redraw |= (PR_ACTION);
+    rfu.set_flag(MainWindowRedrawingFlag::ACTION);
     handle_stuff(player_ptr);
     term_fresh();
 }

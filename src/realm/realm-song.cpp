@@ -47,7 +47,7 @@ static void start_singing(PlayerType *player_ptr, SPELL_IDX spell, int32_t song)
 
     auto &rfu = RedrawingFlagsUpdater::get_instance();
     rfu.set_flag(StatusRedrawingFlag::BONUS);
-    player_ptr->redraw |= (PR_TIMED_EFFECT);
+    rfu.set_flag(MainWindowRedrawingFlag::TIMED_EFFECT);
 }
 
 /*!
@@ -1092,20 +1092,19 @@ std::optional<std::string> do_music_spell(PlayerType *player_ptr, SPELL_IDX spel
 
         if (cast) {
             msg_print(_("フィンゴルフィンの冥王への挑戦を歌った．．．", "You recall the valor of Fingolfin's challenge to the Dark Lord..."));
-
-            player_ptr->redraw |= (PR_MAP);
-            RedrawingFlagsUpdater::get_instance().set_flag(StatusRedrawingFlag::MONSTER_STATUSES);
+            auto &rfu = RedrawingFlagsUpdater::get_instance();
+            rfu.set_flag(MainWindowRedrawingFlag::MAP);
+            rfu.set_flag(StatusRedrawingFlag::MONSTER_STATUSES);
             player_ptr->window_flags |= (PW_OVERHEAD | PW_DUNGEON);
-
             start_singing(player_ptr, spell, MUSIC_INVULN);
         }
 
         if (stop) {
             if (!player_ptr->invuln) {
                 msg_print(_("無敵ではなくなった。", "The invulnerability wears off."));
-
-                player_ptr->redraw |= (PR_MAP);
-                RedrawingFlagsUpdater::get_instance().set_flag(StatusRedrawingFlag::MONSTER_STATUSES);
+                auto &rfu = RedrawingFlagsUpdater::get_instance();
+                rfu.set_flag(MainWindowRedrawingFlag::MAP);
+                rfu.set_flag(StatusRedrawingFlag::MONSTER_STATUSES);
                 player_ptr->window_flags |= (PW_OVERHEAD | PW_DUNGEON);
             }
         }

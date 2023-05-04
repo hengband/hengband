@@ -217,7 +217,7 @@ bool set_food(PlayerType *player_ptr, TIME_EFFECT v)
 
     auto &rfu = RedrawingFlagsUpdater::get_instance();
     rfu.set_flag(StatusRedrawingFlag::BONUS);
-    player_ptr->redraw |= (PR_HUNGER);
+    rfu.set_flag(MainWindowRedrawingFlag::HUNGER);
     handle_stuff(player_ptr);
 
     return true;

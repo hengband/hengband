@@ -12,6 +12,7 @@
 #include "spell/spells-status.h"
 #include "sv-definition/sv-weapon-types.h"
 #include "system/player-type-definition.h"
+#include "system/redrawing-flags-updater.h"
 #include <array>
 
 namespace {
@@ -190,5 +191,5 @@ void get_max_stats(PlayerType *player_ptr)
     }
 
     player_ptr->knowledge &= ~(KNOW_STAT);
-    player_ptr->redraw |= (PR_ABILITY_SCORE);
+    RedrawingFlagsUpdater::get_instance().set_flag(MainWindowRedrawingFlag::ABILITY_SCORE);
 }

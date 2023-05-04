@@ -59,6 +59,7 @@
 #include "system/monster-entity.h"
 #include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
+#include "system/redrawing-flags-updater.h"
 #include "target/projection-path-calculator.h"
 #include "target/target-checker.h"
 #include "target/target-getter.h"
@@ -1287,12 +1288,10 @@ bool do_cmd_mane(PlayerType *player_ptr, bool baigaesi)
     }
 
     mane_data->mane_list.erase(std::next(mane_data->mane_list.begin(), n));
-
     PlayerEnergy(player_ptr).set_player_turn_energy(100);
-
-    player_ptr->redraw |= (PR_IMITATION);
+    auto &rfu = RedrawingFlagsUpdater::get_instance();
+    rfu.set_flag(MainWindowRedrawingFlag::IMITATION);
     player_ptr->window_flags |= (PW_PLAYER);
     player_ptr->window_flags |= (PW_SPELL);
-
     return true;
 }

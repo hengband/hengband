@@ -22,6 +22,7 @@
 #include "spell/spells-summon.h"
 #include "status/shape-changer.h"
 #include "system/player-type-definition.h"
+#include "system/redrawing-flags-updater.h"
 #include "target/target-getter.h"
 #include "view/display-messages.h"
 
@@ -126,7 +127,7 @@ std::optional<std::string> do_chaos_spell(PlayerType *player_ptr, SPELL_IDX spel
                 if (!(player_ptr->special_attack & ATTACK_CONFUSE)) {
                     msg_print(_("あなたの手は光り始めた。", "Your hands start glowing."));
                     player_ptr->special_attack |= ATTACK_CONFUSE;
-                    player_ptr->redraw |= (PR_TIMED_EFFECT);
+                    RedrawingFlagsUpdater::get_instance().set_flag(MainWindowRedrawingFlag::TIMED_EFFECT);
                 }
             }
         }

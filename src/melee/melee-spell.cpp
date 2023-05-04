@@ -18,6 +18,7 @@
 #include "system/monster-entity.h"
 #include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
+#include "system/redrawing-flags-updater.h"
 #include "timed-effect/player-blindness.h"
 #include "timed-effect/timed-effects.h"
 #include "util/string-processor.h"
@@ -80,8 +81,7 @@ static void process_special_melee_spell(PlayerType *player_ptr, melee_spell_type
 
     mane_data->mane_list.push_back({ ms_ptr->thrown_spell, ms_ptr->dam });
     mane_data->new_mane = true;
-
-    player_ptr->redraw |= PR_IMITATION;
+    RedrawingFlagsUpdater::get_instance().set_flag(MainWindowRedrawingFlag::IMITATION);
 }
 
 static void process_rememberance(melee_spell_type *ms_ptr)

@@ -26,6 +26,7 @@
 #include "system/dungeon-info.h"
 #include "system/floor-type-definition.h"
 #include "system/player-type-definition.h"
+#include "system/redrawing-flags-updater.h"
 #include "system/system-variables.h"
 #include "term/gameterm.h"
 #include "term/screen-processor.h"
@@ -301,6 +302,7 @@ concptr make_screen_dump(PlayerType *player_ptr)
         return nullptr;
     }
 
+    auto &rfu = RedrawingFlagsUpdater::get_instance();
     bool old_use_graphics = use_graphics;
     if (old_use_graphics) {
         /* Clear -more- prompt first */
@@ -309,7 +311,14 @@ concptr make_screen_dump(PlayerType *player_ptr)
         use_graphics = false;
         reset_visuals(player_ptr);
 
-        player_ptr->redraw |= (PR_WIPE | PR_BASIC | PR_EXTRA | PR_MAP | PR_EQUIPPY);
+        const auto flags = {
+            MainWindowRedrawingFlag::WIPE,
+            MainWindowRedrawingFlag::BASIC,
+            MainWindowRedrawingFlag::EXTRA,
+            MainWindowRedrawingFlag::MAP,
+            MainWindowRedrawingFlag::EQUIPPY,
+        };
+        rfu.set_flags(flags);
         handle_stuff(player_ptr);
     }
 
@@ -402,8 +411,14 @@ concptr make_screen_dump(PlayerType *player_ptr)
 
     use_graphics = true;
     reset_visuals(player_ptr);
-
-    player_ptr->redraw |= (PR_WIPE | PR_BASIC | PR_EXTRA | PR_MAP | PR_EQUIPPY);
+    const auto flags = {
+        MainWindowRedrawingFlag::WIPE,
+        MainWindowRedrawingFlag::BASIC,
+        MainWindowRedrawingFlag::EXTRA,
+        MainWindowRedrawingFlag::MAP,
+        MainWindowRedrawingFlag::EQUIPPY,
+    };
+    rfu.set_flags(flags);
     handle_stuff(player_ptr);
     return ret;
 }

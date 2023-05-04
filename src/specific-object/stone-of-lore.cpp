@@ -10,6 +10,7 @@
 #include "spell-kind/spells-perception.h"
 #include "status/bad-status-setter.h"
 #include "system/player-type-definition.h"
+#include "system/redrawing-flags-updater.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 
@@ -53,9 +54,10 @@ void StoneOfLore::consume_mp()
         return;
     }
 
+    auto &rfu = RedrawingFlagsUpdater::get_instance();
     if (this->player_ptr->csp >= 20) {
         this->player_ptr->csp -= 20;
-        set_bits(this->player_ptr->redraw, PR_MP);
+        rfu.set_flag(MainWindowRedrawingFlag::MP);
         return;
     }
 
@@ -66,5 +68,5 @@ void StoneOfLore::consume_mp()
     BadStatusSetter bss(this->player_ptr);
     (void)bss.mod_paralysis(randint1(5 * oops + 1));
     (void)bss.mod_confusion(randint1(5 * oops + 1));
-    set_bits(this->player_ptr->redraw, PR_MP);
+    rfu.set_flag(MainWindowRedrawingFlag::MP);
 }

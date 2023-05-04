@@ -33,18 +33,18 @@
 #include "system/monster-entity.h"
 #include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
+#include "system/redrawing-flags-updater.h"
 #include "target/projection-path-calculator.h"
 #include "timed-effect/player-blindness.h"
 #include "timed-effect/timed-effects.h"
 #include "util/string-processor.h"
 #include "view/display-messages.h"
 #include "world/world.h"
+#include <iterator>
 #ifdef JP
 #else
 #include "monster/monster-description-types.h"
 #endif
-
-#include <iterator>
 
 static void set_no_magic_mask(msa_type *msa_ptr)
 {
@@ -290,7 +290,7 @@ static void check_mspell_imitation(PlayerType *player_ptr, msa_type *msa_ptr)
 
     mane_data->mane_list.push_back({ msa_ptr->thrown_spell, msa_ptr->dam });
     mane_data->new_mane = true;
-    player_ptr->redraw |= PR_IMITATION;
+    RedrawingFlagsUpdater::get_instance().set_flag(MainWindowRedrawingFlag::IMITATION);
 }
 
 static void remember_mspell(msa_type *msa_ptr)

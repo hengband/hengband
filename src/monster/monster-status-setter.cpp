@@ -126,11 +126,11 @@ bool set_monster_csleep(PlayerType *player_ptr, MONSTER_IDX m_idx, int v)
     auto &rfu = RedrawingFlagsUpdater::get_instance();
     if (m_ptr->ml) {
         if (player_ptr->health_who == m_idx) {
-            player_ptr->redraw |= PR_HEALTH;
+            rfu.set_flag(MainWindowRedrawingFlag::HEALTH);
         }
 
         if (player_ptr->riding == m_idx) {
-            player_ptr->redraw |= PR_UHEALTH;
+            rfu.set_flag(MainWindowRedrawingFlag::UHEALTH);
         }
     }
 
@@ -310,12 +310,13 @@ bool set_monster_monfear(PlayerType *player_ptr, MONSTER_IDX m_idx, int v)
     }
 
     if (m_ptr->ml) {
+        auto &rfu = RedrawingFlagsUpdater::get_instance();
         if (player_ptr->health_who == m_idx) {
-            player_ptr->redraw |= PR_HEALTH;
+            rfu.set_flag(MainWindowRedrawingFlag::HEALTH);
         }
 
         if (player_ptr->riding == m_idx) {
-            player_ptr->redraw |= PR_UHEALTH;
+            rfu.set_flag(MainWindowRedrawingFlag::UHEALTH);
         }
     }
 
@@ -359,12 +360,13 @@ bool set_monster_invulner(PlayerType *player_ptr, MONSTER_IDX m_idx, int v, bool
     }
 
     if (m_ptr->ml) {
+        auto &rfu = RedrawingFlagsUpdater::get_instance();
         if (player_ptr->health_who == m_idx) {
-            player_ptr->redraw |= PR_HEALTH;
+            rfu.set_flag(MainWindowRedrawingFlag::HEALTH);
         }
 
         if (player_ptr->riding == m_idx) {
-            player_ptr->redraw |= PR_UHEALTH;
+            rfu.set_flag(MainWindowRedrawingFlag::UHEALTH);
         }
     }
 
@@ -428,7 +430,7 @@ bool set_monster_timewalk(PlayerType *player_ptr, int num, MonsterRaceId who, bo
     }
 
     auto &rfu = RedrawingFlagsUpdater::get_instance();
-    player_ptr->redraw |= PR_MAP;
+    rfu.set_flag(MainWindowRedrawingFlag::MAP);
     rfu.set_flag(StatusRedrawingFlag::MONSTER_STATUSES);
     player_ptr->window_flags |= PW_OVERHEAD | PW_DUNGEON;
     w_ptr->timewalk_m_idx = 0;

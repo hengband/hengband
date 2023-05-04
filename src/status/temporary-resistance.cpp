@@ -41,7 +41,7 @@ bool set_tim_levitation(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
 
     player_ptr->tim_levitation = v;
     auto &rfu = RedrawingFlagsUpdater::get_instance();
-    player_ptr->redraw |= (PR_TIMED_EFFECT);
+    rfu.set_flag(MainWindowRedrawingFlag::TIMED_EFFECT);
     if (!notice) {
         return false;
     }
@@ -83,7 +83,7 @@ bool set_ultimate_res(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
 
     player_ptr->ult_res = v;
     auto &rfu = RedrawingFlagsUpdater::get_instance();
-    player_ptr->redraw |= (PR_TIMED_EFFECT);
+    rfu.set_flag(MainWindowRedrawingFlag::TIMED_EFFECT);
     if (!notice) {
         return false;
     }
@@ -127,7 +127,7 @@ bool set_tim_res_nether(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
 
     player_ptr->tim_res_nether = v;
     auto &rfu = RedrawingFlagsUpdater::get_instance();
-    player_ptr->redraw |= (PR_TIMED_EFFECT);
+    rfu.set_flag(MainWindowRedrawingFlag::TIMED_EFFECT);
     if (!notice) {
         return false;
     }
@@ -168,7 +168,7 @@ bool set_tim_res_time(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
 
     player_ptr->tim_res_time = v;
     auto &rfu = RedrawingFlagsUpdater::get_instance();
-    player_ptr->redraw |= (PR_TIMED_EFFECT);
+    rfu.set_flag(MainWindowRedrawingFlag::TIMED_EFFECT);
     if (!notice) {
         return false;
     }

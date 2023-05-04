@@ -952,7 +952,7 @@ std::optional<std::string> do_hissatsu_spell(PlayerType *player_ptr, SPELL_IDX s
                 }
                 command_dir = 0;
 
-                player_ptr->redraw |= PR_MP;
+                RedrawingFlagsUpdater::get_instance().set_flag(MainWindowRedrawingFlag::MP);
                 handle_stuff(player_ptr);
             } while (player_ptr->csp > mana_cost_per_monster);
 

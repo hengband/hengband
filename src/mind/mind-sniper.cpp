@@ -137,7 +137,7 @@ static void reset_concentration_flag(PlayerType *player_ptr, sniper_data_type *s
         StatusRedrawingFlag::MONSTER_STATUSES,
     };
     rfu.set_flags(flags);
-    player_ptr->redraw |= (PR_TIMED_EFFECT);
+    rfu.set_flag(MainWindowRedrawingFlag::TIMED_EFFECT);
 }
 
 /*!
@@ -603,29 +603,33 @@ static bool cast_sniper_spell(PlayerType *player_ptr, int spell)
  */
 void do_cmd_snipe(PlayerType *player_ptr)
 {
-    COMMAND_CODE n = 0;
-    bool cast;
-
     if (cmd_limit_confused(player_ptr)) {
         return;
     }
+
     if (cmd_limit_image(player_ptr)) {
         return;
     }
+
     if (cmd_limit_stun(player_ptr)) {
         return;
     }
 
+    COMMAND_CODE n = 0;
     if (!get_snipe_power(player_ptr, &n, false)) {
         return;
     }
 
-    cast = cast_sniper_spell(player_ptr, n);
-
-    if (!cast) {
+    if (!cast_sniper_spell(player_ptr, n)) {
         return;
     }
-    player_ptr->redraw |= (PR_HP | PR_MP);
+
+    auto &rfu = RedrawingFlagsUpdater::get_instance();
+    const auto flags_mwrf = {
+        MainWindowRedrawingFlag::HP,
+        MainWindowRedrawingFlag::MP,
+    };
+    rfu.set_flags(flags_mwrf);
     player_ptr->window_flags |= (PW_PLAYER);
     player_ptr->window_flags |= (PW_SPELL);
 }

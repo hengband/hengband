@@ -22,6 +22,7 @@
 #include "status/experience.h"
 #include "system/angband.h"
 #include "system/player-type-definition.h"
+#include "system/redrawing-flags-updater.h"
 #include "timed-effect/player-blindness.h"
 #include "timed-effect/player-confusion.h"
 #include "timed-effect/player-hallucination.h"
@@ -62,7 +63,7 @@ void learn_spell(PlayerType *player_ptr, MonsterAbilityType monspell)
         gain_exp(player_ptr, monster_power.level * monster_power.smana);
         sound(SOUND_STUDY);
         bluemage_data->new_magic_learned = true;
-        player_ptr->redraw |= PR_ACTION;
+        RedrawingFlagsUpdater::get_instance().set_flag(MainWindowRedrawingFlag::ACTION);
     }
 }
 

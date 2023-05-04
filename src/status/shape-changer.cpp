@@ -98,7 +98,7 @@ void change_race(PlayerType *player_ptr, PlayerRaceType new_race, concptr effect
     roll_hitdice(player_ptr, SPOP_NONE);
     check_experience(player_ptr);
     auto &rfu = RedrawingFlagsUpdater::get_instance();
-    player_ptr->redraw |= (PR_BASIC);
+    rfu.set_flag(MainWindowRedrawingFlag::BASIC);
     rfu.set_flag(StatusRedrawingFlag::BONUS);
     handle_stuff(player_ptr);
 

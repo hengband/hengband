@@ -219,7 +219,12 @@ void do_cmd_store(PlayerType *player_ptr)
         StatusRedrawingFlag::MONSTER_STATUSES,
     };
     rfu.set_flags(flags_srf);
-    player_ptr->redraw |= PR_BASIC | PR_EXTRA | PR_EQUIPPY;
-    player_ptr->redraw |= PR_MAP;
+    const auto flags_mwrf = {
+        MainWindowRedrawingFlag::BASIC,
+        MainWindowRedrawingFlag::EXTRA,
+        MainWindowRedrawingFlag::EQUIPPY,
+        MainWindowRedrawingFlag::MAP,
+    };
+    rfu.set_flags(flags_mwrf);
     player_ptr->window_flags |= PW_OVERHEAD | PW_DUNGEON;
 }

@@ -90,7 +90,7 @@ bool set_ele_attack(PlayerType *player_ptr, uint32_t attack_type, TIME_EFFECT v)
     }
 
     auto &rfu = RedrawingFlagsUpdater::get_instance();
-    player_ptr->redraw |= (PR_TIMED_EFFECT);
+    rfu.set_flag(MainWindowRedrawingFlag::TIMED_EFFECT);
     rfu.set_flag(StatusRedrawingFlag::BONUS);
     handle_stuff(player_ptr);
 
@@ -153,7 +153,7 @@ bool set_ele_immune(PlayerType *player_ptr, uint32_t immune_type, TIME_EFFECT v)
     }
 
     auto &rfu = RedrawingFlagsUpdater::get_instance();
-    player_ptr->redraw |= (PR_TIMED_EFFECT);
+    rfu.set_flag(MainWindowRedrawingFlag::TIMED_EFFECT);
     rfu.set_flag(StatusRedrawingFlag::BONUS);
     handle_stuff(player_ptr);
 
