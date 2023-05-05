@@ -113,7 +113,7 @@ static bool check_item_features(PlayerType *player_ptr, const autopick_type &ent
     }
 
     if (entry.has(FLG_HELMS)) {
-        return (tval != ItemKindType::CROWN) && (tval != ItemKindType::HELM);
+        return (tval == ItemKindType::CROWN) || (tval == ItemKindType::HELM);
     }
 
     if (entry.has(FLG_GLOVES)) {

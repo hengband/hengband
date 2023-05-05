@@ -2787,13 +2787,6 @@ int WINAPI WinMain(
     core_aux = quit_aux;
 
     init_stuff();
-
-    HDC hdc = GetDC(NULL);
-    if (GetDeviceCaps(hdc, BITSPIXEL) <= 8) {
-        quit(_("画面を16ビット以上のカラーモードにして下さい。", "Please switch to High Color (16-bit) or higher color mode."));
-    }
-    ReleaseDC(NULL, hdc);
-
     refresh_color_table();
     init_windows();
     change_graphics_mode(static_cast<graphics_mode>(arg_graphics));
