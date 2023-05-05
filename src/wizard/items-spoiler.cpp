@@ -14,49 +14,39 @@
 #include "view/display-messages.h"
 #include "wizard/spoiler-util.h"
 #include <algorithm>
+#include <sstream>
 
 /*!
- * @brief ベースアイテムの各情報を文字列化する
- * @param player_ptr プレイヤーへの参照ポインタ
- * @param name 名称を返すバッファ参照ポインタ
- * @param damage_desc ダメージダイス記述を返すバッファ参照ポインタ
- * @param weight_desc 重量記述を返すバッファ参照ポインタ
- * @param level 生成階記述を返すバッファ参照ポインタ
- * @param chance 生成機会を返すバッファ参照ポインタ
- * @param value 価値を返すバッファ参照ポインタ
- * @param bi_id ベースアイテムID
+ * @brief アイテムの生成階層と価格を得る
+ *
+ * @param item アイテム
+ * @return 階層と価格のペア
  */
-static void describe_baseitem_info(PlayerType *player_ptr,
-    char *name, std::string *damage_desc, std::string *weight_desc, std::string *chance_desc, DEPTH *level_desc, PRICE *value, short bi_id)
+static std::pair<DEPTH, PRICE> get_info(const ItemEntity &item)
 {
-    ItemEntity forge;
-    auto *q_ptr = &forge;
-    q_ptr->prep(bi_id);
-    q_ptr->ident |= IDENT_KNOWN;
-    q_ptr->pval = 0;
-    q_ptr->to_a = 0;
-    q_ptr->to_h = 0;
-    q_ptr->to_d = 0;
-    *level_desc = q_ptr->get_baseitem().level;
-    *value = q_ptr->get_price();
-    if (!name || !damage_desc || !chance_desc || !weight_desc) {
-        return;
-    }
+    const auto level = item.get_baseitem().level;
+    const auto price = item.get_price();
+    return { level, price };
+}
 
-    auto item_name = describe_flavor(player_ptr, q_ptr, OD_NAME_ONLY | OD_STORE);
-    name = item_name.data();
-    switch (q_ptr->bi_key.tval()) {
+/*!
+ * @brief アイテムのダメージもしくはACの文字列表記を得る
+ *
+ * @param item アイテム
+ * @return ダメージもしくはACの文字列表記
+ */
+static std::string describe_dam_or_ac(const ItemEntity &item)
+{
+    switch (item.bi_key.tval()) {
     case ItemKindType::SHOT:
     case ItemKindType::BOLT:
     case ItemKindType::ARROW:
-        *damage_desc = format("%dd%d", q_ptr->dd, q_ptr->ds);
-        break;
+        return format("%dd%d", item.dd, item.ds);
     case ItemKindType::HAFTED:
     case ItemKindType::POLEARM:
     case ItemKindType::SWORD:
     case ItemKindType::DIGGING:
-        *damage_desc = format("%dd%d", q_ptr->dd, q_ptr->ds);
-        break;
+        return format("%dd%d", item.dd, item.ds);
     case ItemKindType::BOOTS:
     case ItemKindType::GLOVES:
     case ItemKindType::CLOAK:
@@ -66,23 +56,60 @@ static void describe_baseitem_info(PlayerType *player_ptr,
     case ItemKindType::SOFT_ARMOR:
     case ItemKindType::HARD_ARMOR:
     case ItemKindType::DRAG_ARMOR:
-        *damage_desc = format("%d", q_ptr->ac);
-        break;
+        return format("%d", item.ac);
     default:
-        damage_desc->clear();
-        break;
+        return {};
     }
+}
 
-    chance_desc->clear();
-    const auto &baseitem = q_ptr->get_baseitem();
+/*!
+ * @brief アイテムの生成確率の文字列表記を得る
+ *
+ * @param item アイテム
+ * @return 生成確率の文字列表記
+ */
+static std::string describe_chance(const ItemEntity &item)
+{
+    std::stringstream ss;
+
+    const auto &baseitem = item.get_baseitem();
     for (auto i = 0U; i < baseitem.alloc_tables.size(); i++) {
         const auto &[level, chance] = baseitem.alloc_tables[i];
         if (chance > 0) {
-            chance_desc->append(format("%s%3dF:%+4d", (i != 0 ? "/" : ""), level, 100 / chance));
+            ss << format("%s%3dF:%+4d", (i != 0 ? "/" : ""), level, 100 / chance);
         }
     }
 
-    *weight_desc = format("%3d.%d", (int)(q_ptr->weight / 10), (int)(q_ptr->weight % 10));
+    return ss.str();
+}
+
+/*!
+ * @brief アイテムの重量の文字列表記を得る
+ *
+ * @param item アイテム
+ * @return アイテムの重量の文字列表記
+ */
+static std::string describe_weight(const ItemEntity &item)
+{
+    return format("%3d.%d", (int)(item.weight / 10), (int)(item.weight % 10));
+}
+
+/*!
+ * @brief obj-desc.txt出力用にベースアイテムIDからItemEntityオブジェクトを生成する
+ *
+ * @param bi_id ベースアイテムID
+ * @return obj-desc.txt出力用に使用するItemEntityオブジェクト
+ */
+static ItemEntity prepare_item_for_obj_desc(short bi_id)
+{
+    ItemEntity item;
+    item.prep(bi_id);
+    item.ident |= IDENT_KNOWN;
+    item.pval = 0;
+    item.to_a = 0;
+    item.to_h = 0;
+    item.to_d = 0;
+    return item;
 }
 
 /*!
@@ -116,25 +143,26 @@ SpoilerOutputResultType spoil_obj_desc(concptr fname)
             continue;
         }
 
-        std::stable_sort(whats.begin(), whats.end(), [](auto k1_idx, auto k2_idx) {
-            PlayerType dummy;
-            DEPTH d1, d2;
-            PRICE p1, p2;
-            describe_baseitem_info(&dummy, nullptr, nullptr, nullptr, nullptr, &d1, &p1, k1_idx);
-            describe_baseitem_info(&dummy, nullptr, nullptr, nullptr, nullptr, &d2, &p2, k2_idx);
-            return (p1 != p2) ? p1 < p2 : d1 < d2;
+        std::stable_sort(whats.begin(), whats.end(), [](auto bi_id1, auto bi_id2) {
+            const auto item1 = prepare_item_for_obj_desc(bi_id1);
+            const auto item2 = prepare_item_for_obj_desc(bi_id2);
+            const auto [depth1, price1] = get_info(item1);
+            const auto [depth2, price2] = get_info(item2);
+            return (price1 != price2) ? price1 < price2 : depth1 < depth2;
         });
 
         fprintf(spoiler_file, "\n\n%s\n\n", name);
         for (const auto &bi_id : whats) {
-            DEPTH e;
-            PRICE v;
-            std::string wgt, chance, dam;
             PlayerType dummy;
-            describe_baseitem_info(&dummy, buf, &dam, &wgt, &chance, &e, &v, bi_id);
-            fprintf(spoiler_file, "  %-35s%8s%7s%5d %-40s%9ld\n", buf,
-                dam.data(), wgt.data(), static_cast<int>(e), chance.data(),
-                static_cast<long>(v));
+            const auto item = prepare_item_for_obj_desc(bi_id);
+            const auto item_name = describe_flavor(&dummy, &item, OD_NAME_ONLY | OD_STORE);
+            const auto [depth, price] = get_info(item);
+            const auto dam_or_ac = describe_dam_or_ac(item);
+            const auto weight = describe_weight(item);
+            const auto chance = describe_chance(item);
+            fprintf(spoiler_file, "  %-35s%8s%7s%5d %-40s%9ld\n", item_name.data(),
+                dam_or_ac.data(), weight.data(), static_cast<int>(depth), chance.data(),
+                static_cast<long>(price));
         }
     }
 
