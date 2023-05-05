@@ -6,7 +6,6 @@
 
 #include "monster-floor/monster-move.h"
 #include "core/disturbance.h"
-#include "core/player-update-types.h"
 #include "core/speed-table.h"
 #include "core/window-redrawer.h"
 #include "effect/attribute-types.h"

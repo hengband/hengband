@@ -6,7 +6,6 @@
 #include "combat/combat-options-type.h"
 #include "core/asking-player.h"
 #include "core/player-redraw-types.h"
-#include "core/player-update-types.h"
 #include "core/stuff-handler.h"
 #include "dungeon/dungeon-flag-types.h"
 #include "effect/attribute-types.h"

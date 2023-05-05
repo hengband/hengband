@@ -1,6 +1,5 @@
 ﻿#include "spell-kind/spells-neighbor.h"
 #include "core/player-redraw-types.h"
-#include "core/player-update-types.h"
 #include "effect/attribute-types.h"
 #include "effect/effect-characteristics.h"
 #include "effect/effect-processor.h"

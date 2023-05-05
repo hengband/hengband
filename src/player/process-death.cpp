@@ -8,7 +8,6 @@
 
 #include "player/process-death.h"
 #include "core/asking-player.h"
-#include "core/player-update-types.h"
 #include "core/stuff-handler.h"
 #include "flavor/flavor-describer.h"
 #include "floor/floor-town.h"

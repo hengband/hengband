@@ -7,7 +7,6 @@
 #include "spell-kind/spells-teleport.h"
 #include "avatar/avatar.h"
 #include "core/asking-player.h"
-#include "core/player-update-types.h"
 #include "core/speed-table.h"
 #include "effect/attribute-types.h"
 #include "effect/effect-characteristics.h"

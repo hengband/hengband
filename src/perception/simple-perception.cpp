@@ -8,7 +8,6 @@
 #include "autopick/autopick.h"
 #include "avatar/avatar.h"
 #include "core/disturbance.h"
-#include "core/player-update-types.h"
 #include "core/window-redrawer.h"
 #include "flavor/flag-inscriptions-table.h"
 #include "flavor/flavor-describer.h"

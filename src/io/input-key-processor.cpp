@@ -47,7 +47,6 @@
 #include "cmd-visual/cmd-visuals.h"
 #include "core/asking-player.h"
 #include "core/player-redraw-types.h"
-#include "core/player-update-types.h"
 #include "core/special-internal-keys.h"
 #include "dungeon/dungeon-flag-types.h"
 #include "dungeon/quest.h" //!< @do_cmd_quest() がある。後で移設する.

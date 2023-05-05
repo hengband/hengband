@@ -7,7 +7,6 @@
 #include "object-use/quaff/quaff-effects.h"
 #include "avatar/avatar.h"
 #include "birth/birth-stat.h"
-#include "core/player-update-types.h"
 #include "game-option/birth-options.h"
 #include "mutation/mutation-investor-remover.h"
 #include "object/object-info.h"

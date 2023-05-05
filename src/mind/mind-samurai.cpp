@@ -9,7 +9,6 @@
 #include "avatar/avatar.h"
 #include "cmd-action/cmd-attack.h"
 #include "core/player-redraw-types.h"
-#include "core/player-update-types.h"
 #include "inventory/inventory-slot-types.h"
 #include "io/input-key-acceptor.h"
 #include "mind/stances-table.h"

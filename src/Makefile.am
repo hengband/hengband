@@ -153,7 +153,6 @@ hengband_SOURCES = \
 	core/object-compressor.cpp core/object-compressor.h \
 	core/player-processor.cpp core/player-processor.h \
 	core/player-redraw-types.h \
-	core/player-update-types.h \
 	core/score-util.cpp core/score-util.h \
 	core/scores.cpp core/scores.h \
 	core/show-file.cpp core/show-file.h \

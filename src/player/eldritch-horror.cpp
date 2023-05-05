@@ -5,7 +5,6 @@
  */
 
 #include "player/eldritch-horror.h"
-#include "core/player-update-types.h"
 #include "core/stuff-handler.h"
 #include "locale/english.h"
 #include "monster-race/monster-race-hook.h"

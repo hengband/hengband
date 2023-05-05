@@ -6,7 +6,6 @@
 
 #include "object-use/quaff/quaff-execution.h"
 #include "avatar/avatar.h"
-#include "core/player-update-types.h"
 #include "core/window-redrawer.h"
 #include "game-option/disturbance-options.h"
 #include "inventory/inventory-object.h"

@@ -18,7 +18,6 @@
 #include "cmd-io/cmd-dump.h"
 #include "core/asking-player.h"
 #include "core/player-redraw-types.h"
-#include "core/player-update-types.h"
 #include "core/scores.h"
 #include "core/show-file.h"
 #include "core/special-internal-keys.h"

@@ -4,7 +4,6 @@
 #include "artifact/random-art-effects.h"
 #include "artifact/random-art-generator.h"
 #include "core/asking-player.h"
-#include "core/player-update-types.h"
 #include "core/show-file.h"
 #include "core/stuff-handler.h"
 #include "core/window-redrawer.h"

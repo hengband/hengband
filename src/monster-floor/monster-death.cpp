@@ -3,7 +3,6 @@
 #include "artifact/fixed-art-types.h"
 #include "cmd-building/cmd-building.h"
 #include "core/player-redraw-types.h"
-#include "core/player-update-types.h"
 #include "dungeon/quest-completion-checker.h"
 #include "effect/effect-characteristics.h"
 #include "effect/effect-processor.h"

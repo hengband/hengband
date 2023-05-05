@@ -7,7 +7,6 @@
 #include "object-use/read/read-execution.h"
 #include "action/action-limited.h"
 #include "avatar/avatar.h"
-#include "core/player-update-types.h"
 #include "core/window-redrawer.h"
 #include "inventory/inventory-object.h"
 #include "main/sound-definitions-table.h"

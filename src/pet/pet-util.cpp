@@ -1,5 +1,4 @@
 ﻿#include "pet/pet-util.h"
-#include "core/player-update-types.h"
 #include "core/stuff-handler.h"
 #include "grid/grid.h"
 #include "monster-race/monster-race.h"

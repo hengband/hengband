@@ -1,6 +1,5 @@
 ﻿#include "object/lite-processor.h"
 #include "core/disturbance.h"
-#include "core/player-update-types.h"
 #include "core/window-redrawer.h"
 #include "game-option/disturbance-options.h"
 #include "inventory/inventory-slot-types.h"

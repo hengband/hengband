@@ -11,7 +11,6 @@
 #include "combat/attack-power-table.h"
 #include "combat/shoot.h"
 #include "combat/slaying.h"
-#include "core/player-update-types.h"
 #include "core/stuff-handler.h"
 #include "core/window-redrawer.h"
 #include "effect/attribute-types.h"

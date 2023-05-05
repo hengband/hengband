@@ -1,5 +1,4 @@
 ﻿#include "grid/feature.h"
-#include "core/player-update-types.h"
 #include "dungeon/dungeon-flag-types.h"
 #include "floor/cave.h"
 #include "floor/geometry.h"

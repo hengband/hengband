@@ -1,7 +1,6 @@
 ﻿#include "mind/mind-mindcrafter.h"
 #include "autopick/autopick.h"
 #include "avatar/avatar.h"
-#include "core/player-update-types.h"
 #include "core/window-redrawer.h"
 #include "effect/attribute-types.h"
 #include "effect/effect-characteristics.h"

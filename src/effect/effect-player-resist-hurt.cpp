@@ -2,7 +2,6 @@
 #include "artifact/fixed-art-types.h"
 #include "blue-magic/blue-magic-checker.h"
 #include "core/player-redraw-types.h"
-#include "core/player-update-types.h"
 #include "core/window-redrawer.h"
 #include "effect/effect-player.h"
 #include "hpmp/hp-mp-processor.h"

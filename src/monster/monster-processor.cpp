@@ -15,7 +15,6 @@
 #include "monster/monster-processor.h"
 #include "avatar/avatar.h"
 #include "cmd-io/cmd-dump.h"
-#include "core/player-update-types.h"
 #include "core/speed-table.h"
 #include "floor/cave.h"
 #include "floor/geometry.h"

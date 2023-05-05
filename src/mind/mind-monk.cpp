@@ -1,7 +1,6 @@
 ﻿#include "mind/mind-monk.h"
 #include "action/action-limited.h"
 #include "core/player-redraw-types.h"
-#include "core/player-update-types.h"
 #include "io/input-key-acceptor.h"
 #include "mind/stances-table.h"
 #include "player-base/player-class.h"

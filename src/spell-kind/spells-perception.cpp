@@ -1,7 +1,6 @@
 ﻿#include "spell-kind/spells-perception.h"
 #include "autopick/autopick.h"
 #include "avatar/avatar.h"
-#include "core/player-update-types.h"
 #include "core/stuff-handler.h"
 #include "core/window-redrawer.h"
 #include "flavor/flavor-describer.h"

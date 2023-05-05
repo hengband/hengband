@@ -1,5 +1,4 @@
 ﻿#include "spell-realm/spells-arcane.h"
-#include "core/player-update-types.h"
 #include "inventory/inventory-slot-types.h"
 #include "object/tval-types.h"
 #include "sv-definition/sv-lite-types.h"

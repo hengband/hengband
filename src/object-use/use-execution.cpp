@@ -7,7 +7,6 @@
 #include "action/action-limited.h"
 #include "avatar/avatar.h"
 #include "cmd-item/cmd-usestaff.h"
-#include "core/player-update-types.h"
 #include "core/window-redrawer.h"
 #include "floor/floor-object.h"
 #include "game-option/disturbance-options.h"

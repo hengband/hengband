@@ -3,7 +3,6 @@
 #include "action/travel-execution.h"
 #include "core/disturbance.h"
 #include "core/player-redraw-types.h"
-#include "core/player-update-types.h"
 #include "core/special-internal-keys.h"
 #include "core/speed-table.h"
 #include "core/stuff-handler.h"

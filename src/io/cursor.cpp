@@ -1,6 +1,5 @@
 ﻿#include "io/cursor.h"
 #include "core/player-redraw-types.h"
-#include "core/player-update-types.h"
 #include "core/stuff-handler.h"
 #include "effect/effect-characteristics.h"
 #include "effect/spells-effect-util.h"

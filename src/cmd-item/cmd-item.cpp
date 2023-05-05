@@ -23,7 +23,6 @@
 #include "combat/shoot.h"
 #include "core/asking-player.h"
 #include "core/player-redraw-types.h"
-#include "core/player-update-types.h"
 #include "core/window-redrawer.h"
 #include "flavor/flavor-describer.h"
 #include "flavor/object-flavor-types.h"

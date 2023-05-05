@@ -8,7 +8,6 @@
 #include "autopick/autopick-methods-table.h"
 #include "autopick/autopick-util.h"
 #include "core/disturbance.h"
-#include "core/player-update-types.h"
 #include "flavor/flavor-describer.h"
 #include "game-option/auto-destruction-options.h"
 #include "game-option/input-options.h"

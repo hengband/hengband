@@ -7,7 +7,6 @@
 #include "mspell/mspell-floor.h"
 #include "blue-magic/blue-magic-checker.h"
 #include "core/disturbance.h"
-#include "core/player-update-types.h"
 #include "effect/attribute-types.h"
 #include "effect/effect-characteristics.h"
 #include "effect/effect-processor.h"

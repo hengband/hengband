@@ -13,7 +13,6 @@
 #include "combat/combat-options-type.h"
 #include "combat/hallucination-attacks-table.h"
 #include "core/disturbance.h"
-#include "core/player-update-types.h"
 #include "dungeon/dungeon-flag-types.h"
 #include "floor/geometry.h"
 #include "inventory/inventory-slot-types.h"

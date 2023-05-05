@@ -1,7 +1,6 @@
 ﻿#include "store/cmd-store.h"
 #include "cmd-io/macro-util.h"
 #include "core/player-redraw-types.h"
-#include "core/player-update-types.h"
 #include "core/stuff-handler.h"
 #include "core/window-redrawer.h"
 #include "flavor/flavor-describer.h"

@@ -5,7 +5,6 @@
 #include "core/object-compressor.h"
 #include "core/player-processor.h"
 #include "core/player-redraw-types.h"
-#include "core/player-update-types.h"
 #include "core/stuff-handler.h"
 #include "core/turn-compensator.h"
 #include "core/window-redrawer.h"

@@ -4,7 +4,6 @@
  */
 #include "action/tunnel-execution.h"
 #include "avatar/avatar.h"
-#include "core/player-update-types.h"
 #include "floor/cave.h"
 #include "grid/grid.h"
 #include "io/input-key-requester.h"

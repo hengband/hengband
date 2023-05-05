@@ -3,7 +3,6 @@
 #include "artifact/fixed-art-types.h"
 #include "artifact/random-art-effects.h"
 #include "core/asking-player.h"
-#include "core/player-update-types.h"
 #include "core/stuff-handler.h"
 #include "flavor/flavor-describer.h"
 #include "flavor/object-flavor-types.h"

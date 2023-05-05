@@ -2,7 +2,6 @@
 #include "action/action-limited.h"
 #include "autopick/autopick.h"
 #include "core/asking-player.h"
-#include "core/player-update-types.h"
 #include "flavor/flavor-describer.h"
 #include "floor/cave.h"
 #include "floor/floor-object.h"

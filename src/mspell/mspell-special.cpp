@@ -6,7 +6,6 @@
 
 #include "mspell/mspell-special.h"
 #include "core/disturbance.h"
-#include "core/player-update-types.h"
 #include "effect/attribute-types.h"
 #include "effect/effect-characteristics.h"
 #include "effect/effect-processor.h"

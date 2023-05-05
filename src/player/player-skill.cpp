@@ -1,5 +1,4 @@
 ﻿#include "player/player-skill.h"
-#include "core/player-update-types.h"
 #include "monster-race/monster-race.h"
 #include "player-base/player-class.h"
 #include "player-base/player-race.h"

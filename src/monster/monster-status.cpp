@@ -1,6 +1,5 @@
 ﻿#include "monster/monster-status.h"
 #include "autopick/autopick-pref-processor.h"
-#include "core/player-update-types.h"
 #include "core/speed-table.h"
 #include "floor/cave.h"
 #include "floor/geometry.h"

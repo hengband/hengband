@@ -1,6 +1,5 @@
 ﻿#include "save/floor-writer.h"
 #include "core/object-compressor.h"
-#include "core/player-update-types.h"
 #include "floor/floor-events.h"
 #include "floor/floor-save-util.h"
 #include "floor/floor-save.h"

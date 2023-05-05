@@ -8,7 +8,6 @@
 #include "artifact/fixed-art-types.h"
 #include "cmd-action/cmd-attack.h"
 #include "core/disturbance.h"
-#include "core/player-update-types.h"
 #include "core/stuff-handler.h"
 #include "floor/geometry.h"
 #include "floor/pattern-walk.h"
