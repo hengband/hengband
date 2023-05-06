@@ -328,7 +328,7 @@ bool get_item_floor(PlayerType *player_ptr, COMMAND_CODE *cp, concptr pmt, concp
         }
 
         if ((command_wrk == (USE_EQUIP) && ni && !ne) || (command_wrk == (USE_INVEN) && !ni && ne)) {
-            toggle_inventory_equipment(player_ptr);
+            toggle_inventory_equipment();
             fis_ptr->toggle = !fis_ptr->toggle;
         }
 
@@ -884,7 +884,7 @@ bool get_item_floor(PlayerType *player_ptr, COMMAND_CODE *cp, concptr pmt, concp
     }
 
     if (fis_ptr->toggle) {
-        toggle_inventory_equipment(player_ptr);
+        toggle_inventory_equipment();
     }
 
     rfu.set_flags(flags);

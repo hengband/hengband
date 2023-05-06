@@ -83,10 +83,9 @@ struct text_body_type {
 extern std::vector<autopick_type> autopick_list;
 extern ItemEntity autopick_last_destroyed_object;
 
-class PlayerType;
 void free_text_lines(std::vector<concptr> &lines_list);
 int get_com_id(char key);
-void auto_inscribe_item(PlayerType *player_ptr, ItemEntity *o_ptr, int idx);
+void auto_inscribe_item(ItemEntity *o_ptr, int idx);
 int count_line(text_body_type *tb);
 
 /*!

@@ -47,21 +47,21 @@ bool enchant_item(PlayerType *player_ptr, PRICE cost, HIT_PROB to_hit, int to_da
 
     bool okay = false;
     for (int i = 0; i < to_hit; i++) {
-        if ((o_ptr->to_h < maxenchant) && enchant_equipment(player_ptr, o_ptr, 1, (ENCH_TOHIT | ENCH_FORCE))) {
+        if ((o_ptr->to_h < maxenchant) && enchant_equipment(o_ptr, 1, (ENCH_TOHIT | ENCH_FORCE))) {
             okay = true;
             break;
         }
     }
 
     for (int i = 0; i < to_dam; i++) {
-        if ((o_ptr->to_d < maxenchant) && enchant_equipment(player_ptr, o_ptr, 1, (ENCH_TODAM | ENCH_FORCE))) {
+        if ((o_ptr->to_d < maxenchant) && enchant_equipment(o_ptr, 1, (ENCH_TODAM | ENCH_FORCE))) {
             okay = true;
             break;
         }
     }
 
     for (int i = 0; i < to_ac; i++) {
-        if ((o_ptr->to_a < maxenchant) && enchant_equipment(player_ptr, o_ptr, 1, (ENCH_TOAC | ENCH_FORCE))) {
+        if ((o_ptr->to_a < maxenchant) && enchant_equipment(o_ptr, 1, (ENCH_TOAC | ENCH_FORCE))) {
             okay = true;
             break;
         }

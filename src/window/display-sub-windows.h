@@ -20,7 +20,7 @@ void fix_object(PlayerType *player_ptr);
 void fix_floor_item_list(PlayerType *player_ptr, const int y, const int x);
 void fix_found_item_list(PlayerType *player_ptr);
 void fix_spell(PlayerType *player_ptr);
-void toggle_inventory_equipment(PlayerType *player_ptr);
+void toggle_inventory_equipment();
 
 /*!
  * @brief サブウィンドウ表示用の ItemTester オブジェクトを設定するクラス

@@ -655,8 +655,7 @@ void wiz_jump_to_dungeon(PlayerType *player_ptr)
 }
 
 /*!
- * @brief 全ベースアイテムを鑑定済みにする /
- * Become aware of a lot of objects
+ * @brief 全ベースアイテムを鑑定済みにする
  * @param player_ptr プレイヤーへの参照ポインタ
  */
 void wiz_learn_items_all(PlayerType *player_ptr)
@@ -672,7 +671,7 @@ void wiz_learn_items_all(PlayerType *player_ptr)
     }
 }
 
-static void change_birth_flags(PlayerType *player_ptr)
+static void change_birth_flags()
 {
     auto &rfu = RedrawingFlagsUpdater::get_instance();
     const auto flags_srf = {
@@ -704,7 +703,7 @@ void wiz_reset_race(PlayerType *player_ptr)
 
     player_ptr->prace = i2enum<PlayerRaceType>(val);
     rp_ptr = &race_info[enum2i(player_ptr->prace)];
-    change_birth_flags(player_ptr);
+    change_birth_flags();
     handle_stuff(player_ptr);
 }
 
@@ -723,7 +722,7 @@ void wiz_reset_class(PlayerType *player_ptr)
     cp_ptr = &class_info[val];
     mp_ptr = &class_magics_info[val];
     PlayerClass(player_ptr).init_specific_data();
-    change_birth_flags(player_ptr);
+    change_birth_flags();
     handle_stuff(player_ptr);
 }
 
@@ -745,7 +744,7 @@ void wiz_reset_realms(PlayerType *player_ptr)
 
     player_ptr->realm1 = static_cast<int16_t>(val1);
     player_ptr->realm2 = static_cast<int16_t>(val2);
-    change_birth_flags(player_ptr);
+    change_birth_flags();
     handle_stuff(player_ptr);
 }
 

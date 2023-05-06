@@ -241,7 +241,7 @@ void do_cmd_destroy(PlayerType *player_ptr)
     destroy_ptr->o_ptr->number = destroy_ptr->old_number;
     PlayerEnergy energy(player_ptr);
     energy.set_player_turn_energy(100);
-    if (!can_player_destroy_object(player_ptr, destroy_ptr->o_ptr)) {
+    if (!can_player_destroy_object(destroy_ptr->o_ptr)) {
         energy.reset_player_turn();
         msg_format(_("%sは破壊不可能だ。", "You cannot destroy %s."), destroy_ptr->item_name.data());
         return;

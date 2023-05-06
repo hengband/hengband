@@ -239,7 +239,7 @@ void process_command(PlayerType *player_ptr)
     }
 
     case KTRL('I'): {
-        toggle_inventory_equipment(player_ptr);
+        toggle_inventory_equipment();
         break;
     }
     case '+': {

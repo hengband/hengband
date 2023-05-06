@@ -319,7 +319,7 @@ bool get_item(PlayerType *player_ptr, OBJECT_IDX *cp, concptr pmt, concptr str, 
         }
 
         if ((command_wrk && ni && !ne) || (!command_wrk && !ni && ne)) {
-            toggle_inventory_equipment(player_ptr);
+            toggle_inventory_equipment();
             item_selection_ptr->toggle = !item_selection_ptr->toggle;
         }
 
@@ -643,7 +643,7 @@ bool get_item(PlayerType *player_ptr, OBJECT_IDX *cp, concptr pmt, concptr str, 
     }
 
     if (item_selection_ptr->toggle) {
-        toggle_inventory_equipment(player_ptr);
+        toggle_inventory_equipment();
     }
 
     rfu.set_flags(flags);

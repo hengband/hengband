@@ -57,7 +57,7 @@ void health_track(PlayerType *player_ptr, MONSTER_IDX m_idx)
     RedrawingFlagsUpdater::get_instance().set_flag(MainWindowRedrawingFlag::HEALTH);
 }
 
-bool update_player(PlayerType *player_ptr)
+bool update_player()
 {
     auto &rfu = RedrawingFlagsUpdater::get_instance();
     const auto flags_srf = {

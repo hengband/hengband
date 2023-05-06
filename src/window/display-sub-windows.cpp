@@ -837,10 +837,9 @@ void fix_spell(PlayerType *player_ptr)
 }
 
 /*!
- * @brief サブウィンドウに所持品、装備品リストの表示を行う /
- * Flip "inven" and "equip" in any sub-windows
+ * @brief サブウィンドウに所持品、装備品リストの表示を行う
  */
-void toggle_inventory_equipment(PlayerType *player_ptr)
+void toggle_inventory_equipment()
 {
     auto &rfu = RedrawingFlagsUpdater::get_instance();
     for (auto i = 0U; i < angband_terms.size(); ++i) {

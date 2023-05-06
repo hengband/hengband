@@ -68,7 +68,7 @@ int get_com_id(char key)
 /*!
  * @brief Auto inscription
  */
-void auto_inscribe_item(PlayerType *player_ptr, ItemEntity *o_ptr, int idx)
+void auto_inscribe_item(ItemEntity *o_ptr, int idx)
 {
     if (idx < 0 || autopick_list[idx].insc.empty()) {
         return;

@@ -116,7 +116,7 @@ bool recharge(PlayerType *player_ptr, int power)
     }
 
     if (is_recharge_successful) {
-        return update_player(player_ptr);
+        return update_player();
     }
 
     if (o_ptr->is_fixed_artifact()) {
@@ -127,7 +127,7 @@ bool recharge(PlayerType *player_ptr, int power)
         } else if (o_ptr->is_wand_staff()) {
             o_ptr->pval = 0;
         }
-        return update_player(player_ptr);
+        return update_player();
     }
 
     const auto item_name = describe_flavor(player_ptr, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
@@ -226,5 +226,5 @@ bool recharge(PlayerType *player_ptr, int power)
         throw std::logic_error("Invalid fail type!");
     }
 
-    return update_player(player_ptr);
+    return update_player();
 }
