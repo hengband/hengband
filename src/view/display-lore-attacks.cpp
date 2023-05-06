@@ -35,23 +35,22 @@ static void display_monster_blow_jp(lore_type *lore_ptr, int attack_numbers, int
 
     /* XXしてYYし/XXしてYYする/XXし/XXする */
     if (lore_ptr->q != nullptr) {
-        jverb(lore_ptr->p, lore_ptr->jverb_buf, JVERB_TO);
+        const auto verb = conjugate_jverb(lore_ptr->p, JVerbConjugationType::TO);
+        hook_c_roff(lore_ptr->pc, verb);
     } else if (attack_numbers != lore_ptr->count - 1) {
-        jverb(lore_ptr->p, lore_ptr->jverb_buf, JVERB_AND);
+        const auto verb = conjugate_jverb(lore_ptr->p, JVerbConjugationType::AND);
+        hook_c_roff(lore_ptr->pc, verb);
     } else {
-        strcpy(lore_ptr->jverb_buf, lore_ptr->p);
+        hook_c_roff(lore_ptr->pc, lore_ptr->p);
     }
-
-    hook_c_roff(lore_ptr->pc, lore_ptr->jverb_buf);
 
     if (lore_ptr->q) {
         if (attack_numbers != lore_ptr->count - 1) {
-            jverb(lore_ptr->q, lore_ptr->jverb_buf, JVERB_AND);
+            const auto verb = conjugate_jverb(lore_ptr->q, JVerbConjugationType::AND);
+            hook_c_roff(lore_ptr->qc, verb);
         } else {
-            strcpy(lore_ptr->jverb_buf, lore_ptr->q);
+            hook_c_roff(lore_ptr->qc, lore_ptr->q);
         }
-
-        hook_c_roff(lore_ptr->qc, lore_ptr->jverb_buf);
     }
 
     if (attack_numbers != lore_ptr->count - 1) {

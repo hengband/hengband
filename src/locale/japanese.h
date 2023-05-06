@@ -6,10 +6,12 @@
 
 #ifdef JP
 
-constexpr int JVERB_AND = 1;
-constexpr int JVERB_TO = 2;
-constexpr int JVERB_OR = 3;
-void jverb(concptr in, char *out, int flag);
+enum class JVerbConjugationType {
+    AND = 0,
+    TO = 1,
+    OR = 2,
+};
+std::string conjugate_jverb(std::string_view in, JVerbConjugationType type);
 
 std::string sindarin_to_kana(std::string_view sindarin);
 bool is_kinsoku(std::string_view ch);
