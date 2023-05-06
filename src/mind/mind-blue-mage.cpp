@@ -4,7 +4,6 @@
 #include "blue-magic/blue-magic-caster.h"
 #include "blue-magic/learnt-power-getter.h"
 #include "core/asking-player.h"
-#include "core/player-redraw-types.h"
 #include "core/window-redrawer.h"
 #include "game-option/disturbance-options.h"
 #include "game-option/input-options.h"

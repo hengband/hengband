@@ -3,7 +3,6 @@
 #include "action/open-util.h"
 #include "cmd-action/cmd-attack.h"
 #include "core/disturbance.h"
-#include "core/player-redraw-types.h"
 #include "floor/geometry.h"
 #include "game-option/disturbance-options.h"
 #include "game-option/input-options.h"

@@ -8,7 +8,6 @@
 
 #include "player-attack/attack-chaos-effect.h"
 #include "artifact/fixed-art-types.h"
-#include "core/player-redraw-types.h"
 #include "flavor/flavor-describer.h"
 #include "flavor/object-flavor-types.h"
 #include "inventory/inventory-object.h"

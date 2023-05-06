@@ -1,6 +1,5 @@
 ﻿#include "cmd-visual/cmd-draw.h"
 #include "core/asking-player.h"
-#include "core/player-redraw-types.h"
 #include "core/stuff-handler.h"
 #include "core/window-redrawer.h"
 #include "io/files-util.h"

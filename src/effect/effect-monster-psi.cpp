@@ -1,5 +1,4 @@
 ﻿#include "effect/effect-monster-psi.h"
-#include "core/player-redraw-types.h"
 #include "core/window-redrawer.h"
 #include "effect/effect-monster-util.h"
 #include "floor/line-of-sight.h"

@@ -1,7 +1,6 @@
 ﻿#include "world/world-movement-processor.h"
 #include "cmd-io/cmd-save.h"
 #include "core/disturbance.h"
-#include "core/player-redraw-types.h"
 #include "dungeon/quest.h"
 #include "floor/floor-mode-changer.h"
 #include "game-option/birth-options.h"

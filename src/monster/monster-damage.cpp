@@ -6,7 +6,6 @@
 
 #include "monster/monster-damage.h"
 #include "avatar/avatar-changer.h"
-#include "core/player-redraw-types.h"
 #include "core/speed-table.h"
 #include "core/stuff-handler.h"
 #include "game-option/birth-options.h"

@@ -1,7 +1,6 @@
 ﻿#include "mind/mind-force-trainer.h"
 #include "avatar/avatar.h"
 #include "core/disturbance.h"
-#include "core/player-redraw-types.h"
 #include "core/stuff-handler.h"
 #include "effect/attribute-types.h"
 #include "effect/spells-effect-util.h"

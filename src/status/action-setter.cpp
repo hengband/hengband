@@ -12,7 +12,6 @@
  */
 
 #include "status/action-setter.h"
-#include "core/player-redraw-types.h"
 #include "player-base/player-class.h"
 #include "player-info/bluemage-data-type.h"
 #include "player-info/monk-data-type.h"

@@ -14,7 +14,6 @@
 #include "artifact/fixed-art-types.h"
 #include "cmd-action/cmd-spell.h"
 #include "core/asking-player.h"
-#include "core/player-redraw-types.h"
 #include "core/stuff-handler.h"
 #include "core/window-redrawer.h"
 #include "floor/cave.h"

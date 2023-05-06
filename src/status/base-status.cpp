@@ -1,6 +1,5 @@
 ﻿#include "status/base-status.h"
 #include "avatar/avatar.h"
-#include "core/player-redraw-types.h"
 #include "core/window-redrawer.h"
 #include "game-option/birth-options.h"
 #include "inventory/inventory-slot-types.h"

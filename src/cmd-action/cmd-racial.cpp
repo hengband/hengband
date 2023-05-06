@@ -9,7 +9,6 @@
 #include "action/mutation-execution.h"
 #include "action/racial-execution.h"
 #include "core/asking-player.h"
-#include "core/player-redraw-types.h"
 #include "core/window-redrawer.h"
 #include "game-option/text-display-options.h"
 #include "io/command-repeater.h"

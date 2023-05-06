@@ -7,7 +7,6 @@
 #include "spell-kind/spells-world.h"
 #include "cmd-io/cmd-save.h"
 #include "core/asking-player.h"
-#include "core/player-redraw-types.h"
 #include "dungeon/quest-completion-checker.h"
 #include "floor/cave.h"
 #include "floor/floor-mode-changer.h"

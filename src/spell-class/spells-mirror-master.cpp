@@ -6,7 +6,6 @@
  */
 
 #include "spell-class/spells-mirror-master.h"
-#include "core/player-redraw-types.h"
 #include "core/stuff-handler.h"
 #include "dungeon/dungeon-flag-types.h"
 #include "effect/attribute-types.h"

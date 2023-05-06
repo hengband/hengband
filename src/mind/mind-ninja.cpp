@@ -3,7 +3,6 @@
 #include "cmd-item/cmd-throw.h"
 #include "combat/combat-options-type.h"
 #include "core/disturbance.h"
-#include "core/player-redraw-types.h"
 #include "effect/attribute-types.h"
 #include "effect/effect-characteristics.h"
 #include "effect/effect-processor.h"

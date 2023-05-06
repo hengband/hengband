@@ -7,7 +7,6 @@
 
 #include "io/report.h"
 #include "core/asking-player.h"
-#include "core/player-redraw-types.h"
 #include "core/stuff-handler.h"
 #include "core/turn-compensator.h"
 #include "core/visuals-reseter.h"

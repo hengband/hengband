@@ -4,7 +4,6 @@
  * @author Hourier
  */
 #include "core/window-redrawer.h"
-#include "core/player-redraw-types.h"
 #include "core/stuff-handler.h"
 #include "floor/floor-util.h"
 #include "game-option/option-flags.h"

@@ -4,7 +4,6 @@
  * @author Hourier
  */
 #include "cmd-item/cmd-throw.h"
-#include "core/player-redraw-types.h"
 #include "game-option/special-options.h"
 #include "inventory/inventory-slot-types.h"
 #include "object-use/throw-execution.h"

@@ -5,7 +5,6 @@
  */
 
 #include "specific-object/stone-of-lore.h"
-#include "core/player-redraw-types.h"
 #include "player/player-damage.h"
 #include "spell-kind/spells-perception.h"
 #include "status/bad-status-setter.h"

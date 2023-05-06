@@ -7,7 +7,6 @@
 
 #include "player/player-move.h"
 #include "core/disturbance.h"
-#include "core/player-redraw-types.h"
 #include "core/special-internal-keys.h"
 #include "core/stuff-handler.h"
 #include "core/window-redrawer.h"

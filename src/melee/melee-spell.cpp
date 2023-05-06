@@ -1,6 +1,5 @@
 ﻿#include "melee/melee-spell.h"
 #include "core/disturbance.h"
-#include "core/player-redraw-types.h"
 #include "melee/melee-spell-flags-checker.h"
 #include "melee/melee-spell-util.h"
 #include "monster-race/monster-race.h"

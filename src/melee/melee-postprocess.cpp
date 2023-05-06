@@ -12,7 +12,6 @@
 
 #include "melee/melee-postprocess.h"
 #include "core/disturbance.h"
-#include "core/player-redraw-types.h"
 #include "effect/attribute-types.h"
 #include "floor/cave.h"
 #include "floor/geometry.h"

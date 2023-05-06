@@ -5,7 +5,6 @@
  */
 
 #include "object-use/read/scroll-read-executor.h"
-#include "core/player-redraw-types.h"
 #include "monster-floor/monster-summon.h"
 #include "monster-floor/place-monster-types.h"
 #include "player-base/player-class.h"

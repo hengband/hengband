@@ -1,6 +1,5 @@
 ﻿#include "combat/slaying.h"
 #include "artifact/fixed-art-types.h"
-#include "core/player-redraw-types.h"
 #include "effect/attribute-types.h"
 #include "mind/mind-samurai.h"
 #include "monster-race/monster-race.h"

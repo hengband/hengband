@@ -9,7 +9,6 @@
 #include "cmd-action/cmd-spell.h"
 #include "cmd-io/cmd-gameoption.h"
 #include "core/asking-player.h"
-#include "core/player-redraw-types.h"
 #include "core/stuff-handler.h"
 #include "core/window-redrawer.h"
 #include "effect/effect-characteristics.h"

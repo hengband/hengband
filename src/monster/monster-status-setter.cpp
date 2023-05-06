@@ -1,7 +1,6 @@
 ﻿#include "monster/monster-status-setter.h"
 #include "avatar/avatar.h"
 #include "cmd-visual/cmd-draw.h"
-#include "core/player-redraw-types.h"
 #include "core/speed-table.h"
 #include "core/stuff-handler.h"
 #include "core/window-redrawer.h"

@@ -7,7 +7,6 @@
 #include "spell-kind/spells-floor.h"
 #include "action/travel-execution.h"
 #include "cmd-io/cmd-dump.h"
-#include "core/player-redraw-types.h"
 #include "core/window-redrawer.h"
 #include "dungeon/dungeon-flag-types.h"
 #include "dungeon/quest.h"

@@ -6,7 +6,6 @@
  */
 #include "player-base/player-class.h"
 #include "cmd-io/diary-subtitle-table.h"
-#include "core/player-redraw-types.h"
 #include "inventory/inventory-slot-types.h"
 #include "mind/mind-elementalist.h"
 #include "player-info/bard-data-type.h"

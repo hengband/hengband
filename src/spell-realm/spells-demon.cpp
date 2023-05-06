@@ -1,6 +1,5 @@
 ﻿#include "spell-realm/spells-demon.h"
 #include "core/disturbance.h"
-#include "core/player-redraw-types.h"
 #include "core/stuff-handler.h"
 #include "game-option/disturbance-options.h"
 #include "system/player-type-definition.h"

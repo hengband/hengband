@@ -9,7 +9,6 @@
 #include "action/action-limited.h"
 #include "cmd-action/cmd-shoot.h"
 #include "core/asking-player.h"
-#include "core/player-redraw-types.h"
 #include "core/stuff-handler.h"
 #include "core/window-redrawer.h"
 #include "floor/geometry.h"

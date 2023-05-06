@@ -3,7 +3,6 @@
 #include "avatar/avatar.h"
 #include "cmd-building/cmd-building.h"
 #include "core/asking-player.h"
-#include "core/player-redraw-types.h"
 #include "core/stuff-handler.h"
 #include "flavor/flavor-describer.h"
 #include "game-option/cheat-options.h"

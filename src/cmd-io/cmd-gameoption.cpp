@@ -3,7 +3,6 @@
 #include "cmd-io/cmd-autopick.h"
 #include "cmd-io/cmd-dump.h"
 #include "core/asking-player.h"
-#include "core/player-redraw-types.h"
 #include "core/show-file.h"
 #include "core/window-redrawer.h"
 #include "floor/geometry.h"

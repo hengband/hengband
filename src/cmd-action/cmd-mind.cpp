@@ -13,7 +13,6 @@
 #include "cmd-action/cmd-mind.h"
 #include "action/action-limited.h"
 #include "core/asking-player.h"
-#include "core/player-redraw-types.h"
 #include "core/window-redrawer.h"
 #include "effect/attribute-types.h"
 #include "effect/effect-characteristics.h"

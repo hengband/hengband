@@ -1,7 +1,6 @@
 ﻿#include "mutation/mutation-processor.h"
 #include "core/asking-player.h"
 #include "core/disturbance.h"
-#include "core/player-redraw-types.h"
 #include "effect/attribute-types.h"
 #include "floor/geometry.h"
 #include "grid/grid.h"

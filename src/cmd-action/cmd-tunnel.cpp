@@ -2,7 +2,6 @@
 #include "action/tunnel-execution.h"
 #include "cmd-action/cmd-attack.h"
 #include "core/disturbance.h"
-#include "core/player-redraw-types.h"
 #include "floor/geometry.h"
 #include "grid/grid.h"
 #include "io/input-key-requester.h"

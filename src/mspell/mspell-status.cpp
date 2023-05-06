@@ -8,7 +8,6 @@
 #include "mspell/mspell-status.h"
 #include "blue-magic/blue-magic-checker.h"
 #include "core/disturbance.h"
-#include "core/player-redraw-types.h"
 #include "effect/attribute-types.h"
 #include "effect/effect-processor.h"
 #include "mind/drs-types.h"

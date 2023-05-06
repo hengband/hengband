@@ -6,7 +6,6 @@
 
 #include "monster/monster-update.h"
 #include "core/disturbance.h"
-#include "core/player-redraw-types.h"
 #include "core/window-redrawer.h"
 #include "dungeon/dungeon-flag-types.h"
 #include "floor/cave.h"

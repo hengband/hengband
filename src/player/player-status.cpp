@@ -9,7 +9,6 @@
 #include "cmd-item/cmd-magiceat.h"
 #include "combat/attack-power-table.h"
 #include "core/asking-player.h"
-#include "core/player-redraw-types.h"
 #include "core/stuff-handler.h"
 #include "core/window-redrawer.h"
 #include "dungeon/dungeon-flag-types.h"

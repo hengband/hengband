@@ -1,5 +1,4 @@
 ﻿#include "mind/mind-warrior-mage.h"
-#include "core/player-redraw-types.h"
 #include "hpmp/hp-mp-processor.h"
 #include "player/player-damage.h"
 #include "system/player-type-definition.h"

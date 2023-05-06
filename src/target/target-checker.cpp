@@ -11,7 +11,6 @@
 
 #include "target/target-checker.h"
 #include "core/disturbance.h"
-#include "core/player-redraw-types.h"
 #include "core/window-redrawer.h"
 #include "game-option/disturbance-options.h"
 #include "game-option/map-screen-options.h"

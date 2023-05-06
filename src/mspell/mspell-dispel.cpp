@@ -1,6 +1,5 @@
 ﻿#include "mspell/mspell-dispel.h"
 #include "blue-magic/blue-magic-checker.h"
-#include "core/player-redraw-types.h"
 #include "core/speed-table.h"
 #include "core/window-redrawer.h"
 #include "mind/mind-force-trainer.h"

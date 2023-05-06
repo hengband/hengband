@@ -1,6 +1,5 @@
 ﻿#include "core/disturbance.h"
 #include "action/travel-execution.h"
-#include "core/player-redraw-types.h"
 #include "game-option/disturbance-options.h"
 #include "game-option/map-screen-options.h"
 #include "io/input-key-requester.h"

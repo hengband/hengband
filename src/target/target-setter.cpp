@@ -1,5 +1,4 @@
 ﻿#include "target/target-setter.h"
-#include "core/player-redraw-types.h"
 #include "core/stuff-handler.h"
 #include "core/window-redrawer.h"
 #include "floor/geometry.h"

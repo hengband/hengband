@@ -1,5 +1,4 @@
 ﻿#include "effect/effect-monster-spirit.h"
-#include "core/player-redraw-types.h"
 #include "effect/effect-monster-util.h"
 #include "hpmp/hp-mp-processor.h"
 #include "monster-race/monster-race.h"
