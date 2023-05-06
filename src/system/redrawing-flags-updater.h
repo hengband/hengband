@@ -3,7 +3,6 @@
 #include "util/flag-group.h"
 
 enum class MainWindowRedrawingFlag {
-    MISC, /*!< 種族と職業 */
     TITLE, /*!< 称号 */
     LEVEL,
     EXP, /*!< 経験値 */
