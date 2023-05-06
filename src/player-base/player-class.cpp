@@ -507,7 +507,7 @@ void PlayerClass::init_specific_data()
         this->player_ptr->class_specific_data = std::make_shared<mane_data_type>();
         break;
     case PlayerClassType::SNIPER:
-        this->player_ptr->class_specific_data = std::make_shared<sniper_data_type>();
+        this->player_ptr->class_specific_data = std::make_shared<SniperData>();
         break;
     case PlayerClassType::SAMURAI:
         this->player_ptr->class_specific_data = std::make_shared<samurai_data_type>();

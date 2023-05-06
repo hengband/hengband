@@ -489,7 +489,7 @@ static void rd_player_status(PlayerType *player_ptr)
     strip_bytes(8);
     player_ptr->sc = rd_s16b();
     if (loading_savefile_version_is_older_than(9)) {
-        auto sniper_data = PlayerClass(player_ptr).get_specific_data<sniper_data_type>();
+        auto sniper_data = PlayerClass(player_ptr).get_specific_data<SniperData>();
         if (sniper_data) {
             sniper_data->concent = rd_s16b();
         } else {
