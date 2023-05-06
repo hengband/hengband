@@ -318,11 +318,11 @@ bool get_item_floor(PlayerType *player_ptr, COMMAND_CODE *cp, concptr pmt, concp
                 continue;
             }
 
-            if (window_flag[i] & PW_INVENTORY) {
+            if (g_window_flags[i] & PW_INVENTORY) {
                 ni++;
             }
 
-            if (window_flag[i] & PW_EQUIPMENT) {
+            if (g_window_flags[i] & PW_EQUIPMENT) {
                 ne++;
             }
         }

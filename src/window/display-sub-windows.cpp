@@ -101,7 +101,7 @@ static void display_sub_windows(window_redraw_type pw_flag, std::invocable auto 
             continue;
         }
 
-        if (none_bits(window_flag[i], pw_flag)) {
+        if (none_bits(g_window_flags[i], pw_flag)) {
             continue;
         }
 
@@ -847,16 +847,16 @@ void toggle_inventory_equipment()
             continue;
         }
 
-        if (window_flag[i] & (PW_INVENTORY)) {
-            window_flag[i] &= ~(PW_INVENTORY);
-            window_flag[i] |= (PW_EQUIPMENT);
+        if (g_window_flags[i] & (PW_INVENTORY)) {
+            g_window_flags[i] &= ~(PW_INVENTORY);
+            g_window_flags[i] |= (PW_EQUIPMENT);
             rfu.set_flag(SubWindowRedrawingFlag::EQUIPMENT);
             continue;
         }
 
-        if (window_flag[i] & PW_EQUIPMENT) {
-            window_flag[i] &= ~(PW_EQUIPMENT);
-            window_flag[i] |= PW_INVENTORY;
+        if (g_window_flags[i] & PW_EQUIPMENT) {
+            g_window_flags[i] &= ~(PW_EQUIPMENT);
+            g_window_flags[i] |= PW_INVENTORY;
             rfu.set_flag(SubWindowRedrawingFlag::INVENTORY);
         }
     }

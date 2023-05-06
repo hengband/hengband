@@ -335,12 +335,12 @@ static errr interpret_xy_token(PlayerType *player_ptr, char *buf)
         }
 
         if (buf[0] == 'X') {
-            option_flag[os] &= ~(1UL << ob);
+            g_option_flags[os] &= ~(1UL << ob);
             (*option_info[i].o_var) = false;
             return 0;
         }
 
-        option_flag[os] |= (1UL << ob);
+        g_option_flags[os] |= (1UL << ob);
         (*option_info[i].o_var) = true;
         return 0;
     }

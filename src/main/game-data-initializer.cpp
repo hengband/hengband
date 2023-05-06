@@ -71,18 +71,18 @@ void init_other(PlayerType *player_ptr)
             continue;
         }
 
-        option_mask[os] |= (1UL << ob);
+        g_option_masks[os] |= (1UL << ob);
         if (option_info[i].o_norm) {
-            set_bits(option_flag[os], 1U << ob);
+            set_bits(g_option_flags[os], 1U << ob);
         } else {
-            reset_bits(option_flag[os], 1U << ob);
+            reset_bits(g_option_flags[os], 1U << ob);
         }
     }
 
     for (auto n = 0; n < 8; n++) {
         for (auto i = 0; i < 32; i++) {
             if (window_flag_desc[i]) {
-                set_bits(window_mask[n], 1U << i);
+                set_bits(g_window_masks[n], 1U << i);
             }
         }
     }
@@ -92,8 +92,8 @@ void init_other(PlayerType *player_ptr)
      *  Window 1 : Display messages
      *  Window 2 : Display inven/equip
      */
-    window_flag[1] = 1U << A_MAX;
-    window_flag[2] = 1U << 0;
+    g_window_flags[1] = 1U << A_MAX;
+    g_window_flags[2] = 1U << 0;
     (void)format("%s (%s).", "Mr.Hoge", MAINTAINER);
 }
 

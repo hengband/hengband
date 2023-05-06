@@ -130,26 +130,26 @@ void wr_options(SaveType type)
         }
 
         if (*option_info[i].o_var) {
-            option_flag[os] |= (1UL << ob);
+            g_option_flags[os] |= (1UL << ob);
         } else {
-            option_flag[os] &= ~(1UL << ob);
+            g_option_flags[os] &= ~(1UL << ob);
         }
     }
 
     for (int i = 0; i < 8; i++) {
-        wr_u32b(option_flag[i]);
+        wr_u32b(g_option_flags[i]);
     }
 
     for (int i = 0; i < 8; i++) {
-        wr_u32b(option_mask[i]);
+        wr_u32b(g_option_masks[i]);
     }
 
     for (int i = 0; i < 8; i++) {
-        wr_u32b(window_flag[i]);
+        wr_u32b(g_window_flags[i]);
     }
 
     for (int i = 0; i < 8; i++) {
-        wr_u32b(window_mask[i]);
+        wr_u32b(g_window_masks[i]);
     }
 }
 

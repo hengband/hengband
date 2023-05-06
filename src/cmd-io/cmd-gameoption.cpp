@@ -175,7 +175,7 @@ static void do_cmd_options_autosave(PlayerType *player_ptr, concptr info)
 static bool has_window_flag(int x, int y)
 {
     auto flag = i2enum<window_redraw_type>(1UL << y);
-    return any_bits(window_flag[x], flag);
+    return any_bits(g_window_flags[x], flag);
 }
 
 /*!
@@ -189,7 +189,7 @@ static void set_window_flag(int x, int y)
 {
     auto flag = i2enum<window_redraw_type>(1UL << y);
     if (any_bits(PW_ALL, flag)) {
-        set_bits(window_flag[x], flag);
+        set_bits(g_window_flags[x], flag);
     }
 }
 
@@ -199,11 +199,11 @@ static void set_window_flag(int x, int y)
  */
 static void clear_window_flag(int x, int y)
 {
-    window_flag[x] = 0;
+    g_window_flags[x] = 0;
 
     auto flag = i2enum<window_redraw_type>(1UL << y);
     for (int i = 0; i < 8; i++) {
-        reset_bits(window_flag[i], flag);
+        reset_bits(g_window_flags[i], flag);
     }
 }
 
@@ -221,7 +221,7 @@ static void do_cmd_options_win(PlayerType *player_ptr)
     uint32_t old_flag[8];
 
     for (j = 0; j < 8; j++) {
-        old_flag[j] = window_flag[j];
+        old_flag[j] = g_window_flags[j];
     }
 
     term_clear();
@@ -256,7 +256,7 @@ static void do_cmd_options_win(PlayerType *player_ptr)
                     a = TERM_L_BLUE;
                 }
 
-                if (window_flag[j] & (1UL << i)) {
+                if (g_window_flags[j] & (1UL << i)) {
                     c = 'X';
                 }
 
@@ -275,7 +275,7 @@ static void do_cmd_options_win(PlayerType *player_ptr)
         case 't':
         case 'T':
             has_flag = has_window_flag(x, y);
-            window_flag[x] = 0;
+            g_window_flags[x] = 0;
             if (x > 0 && !has_flag) {
                 set_window_flag(x, y);
             }
@@ -285,7 +285,7 @@ static void do_cmd_options_win(PlayerType *player_ptr)
             if (x == 0) {
                 break;
             }
-            window_flag[x] = 0;
+            g_window_flags[x] = 0;
             clear_window_flag(x, y);
             set_window_flag(x, y);
             break;
@@ -310,7 +310,7 @@ static void do_cmd_options_win(PlayerType *player_ptr)
             continue;
         }
 
-        if (window_flag[term_index] == old_flag[term_index]) {
+        if (g_window_flags[term_index] == old_flag[term_index]) {
             continue;
         }
 
@@ -408,7 +408,7 @@ void extract_option_vars(void)
         int os = option_info[i].o_set;
         int ob = option_info[i].o_bit;
         if (option_info[i].o_var) {
-            if (option_flag[os] & (1UL << ob)) {
+            if (g_option_flags[os] & (1UL << ob)) {
                 (*option_info[i].o_var) = true;
             } else {
                 (*option_info[i].o_var) = false;

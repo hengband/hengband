@@ -123,11 +123,11 @@ void player_birth(PlayerType *player_ptr)
         player_ptr->hack_mutation = false;
     }
 
-    if (!window_flag[1]) {
-        window_flag[1] |= PW_MESSAGE;
+    if (!g_window_flags[1]) {
+        g_window_flags[1] |= PW_MESSAGE;
     }
 
-    if (!window_flag[2]) {
-        window_flag[2] |= PW_INVENTORY;
+    if (!g_window_flags[2]) {
+        g_window_flags[2] |= PW_INVENTORY;
     }
 }

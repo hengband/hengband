@@ -75,14 +75,14 @@ void rd_options(void)
 
     for (auto n = 0; n < 8; n++) {
         for (auto i = 0; i < 32; i++) {
-            if (none_bits(mask[n], 1U << i) || none_bits(option_mask[n], 1U << i)) {
+            if (none_bits(mask[n], 1U << i) || none_bits(g_option_masks[n], 1U << i)) {
                 continue;
             }
 
             if (flag[n] & (1UL << i)) {
-                option_flag[n] |= (1UL << i);
+                g_option_flags[n] |= (1UL << i);
             } else {
-                option_flag[n] &= ~(1UL << i);
+                g_option_flags[n] &= ~(1UL << i);
             }
         }
     }
@@ -105,14 +105,14 @@ void rd_options(void)
             if (!(mask[n] & (1UL << i))) {
                 continue;
             }
-            if (!(window_mask[n] & (1UL << i))) {
+            if (!(g_window_masks[n] & (1UL << i))) {
                 continue;
             }
 
             if (flag[n] & (1UL << i)) {
-                window_flag[n] |= (1UL << i);
+                g_window_flags[n] |= (1UL << i);
             } else {
-                window_flag[n] &= ~(1UL << i);
+                g_window_flags[n] &= ~(1UL << i);
             }
         }
     }
