@@ -316,9 +316,6 @@ static int get_spell(PlayerType *player_ptr, SPELL_IDX *sn, concptr prompt, OBJE
     char out_val[160];
     concptr p;
     COMMAND_CODE code;
-#ifdef JP
-    char jverb_buf[128];
-#endif
     int menu_line = (use_menu ? 1 : 0);
 
     /* Get the spell, if available */
@@ -384,8 +381,8 @@ static int get_spell(PlayerType *player_ptr, SPELL_IDX *sn, concptr prompt, OBJE
 
     /* Build a prompt (accept all spells) */
 #ifdef JP
-    jverb(prompt, jverb_buf, JVERB_AND);
-    (void)strnfmt(out_val, 78, "(%s^:%c-%c, '*'で一覧, ESCで中断) どの%sを%s^ますか? ", p, I2A(0), I2A(num - 1), p, jverb_buf);
+    const auto verb = conjugate_jverb(prompt, JVerbConjugationType::AND);
+    (void)strnfmt(out_val, 78, "(%s^:%c-%c, '*'で一覧, ESCで中断) どの%sを%s^ますか? ", p, I2A(0), I2A(num - 1), p, verb.data());
 #else
     (void)strnfmt(out_val, 78, "(%s^s %c-%c, *=List, ESC=exit) %s^ which %s? ", p, I2A(0), I2A(num - 1), prompt, p);
 #endif
