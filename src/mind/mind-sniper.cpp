@@ -128,7 +128,7 @@ static snipe_power const snipe_powers[MAX_SNIPE_POWERS] = {
 #endif
 };
 
-static void reset_concentration_flag(PlayerType *player_ptr, sniper_data_type *sniper_data)
+static void reset_concentration_flag(sniper_data_type *sniper_data)
 {
     sniper_data->reset_concent = false;
     auto &rfu = RedrawingFlagsUpdater::get_instance();
@@ -156,7 +156,7 @@ static bool snipe_concentrate(PlayerType *player_ptr)
     }
 
     msg_format(_("集中した。(集中度 %d)", "You concentrate deeply. (lvl %d)"), sniper_data->concent);
-    reset_concentration_flag(player_ptr, sniper_data.get());
+    reset_concentration_flag(sniper_data.get());
     return true;
 }
 
@@ -177,7 +177,7 @@ void reset_concentration(PlayerType *player_ptr, bool msg)
     }
 
     sniper_data->concent = 0;
-    reset_concentration_flag(player_ptr, sniper_data.get());
+    reset_concentration_flag(sniper_data.get());
 }
 
 /*!
