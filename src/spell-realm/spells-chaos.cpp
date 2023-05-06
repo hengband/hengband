@@ -197,7 +197,11 @@ bool vanish_dungeon(PlayerType *player_ptr)
     };
     rfu.set_flags(flags_srf);
     rfu.set_flag(MainWindowRedrawingFlag::MAP);
-    player_ptr->window_flags |= (PW_OVERHEAD | PW_DUNGEON);
+    const auto flags_swrf = {
+        SubWindowRedrawingFlag::OVERHEAD,
+        SubWindowRedrawingFlag::DUNGEON,
+    };
+    rfu.set_flags(flags_swrf);
     return true;
 }
 

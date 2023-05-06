@@ -128,7 +128,11 @@ static void sense_inventory_aux(PlayerType *player_ptr, INVENTORY_IDX slot, bool
         StatusRedrawingFlag::REORDER,
     };
     rfu.set_flags(flags_srf);
-    player_ptr->window_flags |= (PW_INVENTORY | PW_EQUIPMENT);
+    const auto flags_swrf = {
+        SubWindowRedrawingFlag::INVENTORY,
+        SubWindowRedrawingFlag::EQUIPMENT,
+    };
+    rfu.set_flags(flags_swrf);
 }
 
 /*!

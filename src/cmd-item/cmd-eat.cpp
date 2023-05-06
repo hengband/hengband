@@ -165,11 +165,11 @@ static bool exe_eat_charge_of_magic_device(PlayerType *player_ptr, ItemEntity *o
 
     const auto staff = is_staff ? _("杖", "staff") : _("魔法棒", "wand");
 
-    /* "Eat" charges */
+    auto &rfu = RedrawingFlagsUpdater::get_instance();
     if (o_ptr->pval == 0) {
         msg_format(_("この%sにはもう魔力が残っていない。", "The %s has no charges left."), staff);
         o_ptr->ident |= IDENT_EMPTY;
-        player_ptr->window_flags |= PW_INVENTORY;
+        rfu.set_flag(SubWindowRedrawingFlag::INVENTORY);
         return true;
     }
 
@@ -203,7 +203,11 @@ static bool exe_eat_charge_of_magic_device(PlayerType *player_ptr, ItemEntity *o
         floor_item_charges(player_ptr->current_floor_ptr, 0 - inventory);
     }
 
-    player_ptr->window_flags |= PW_INVENTORY | PW_EQUIPMENT;
+    const auto flags = {
+        SubWindowRedrawingFlag::INVENTORY,
+        SubWindowRedrawingFlag::EQUIPMENT,
+    };
+    rfu.set_flags(flags);
     return true;
 }
 
@@ -266,7 +270,12 @@ void exe_eat_food(PlayerType *player_ptr, INVENTORY_IDX item)
         gain_exp(player_ptr, (lev + (player_ptr->lev >> 1)) / player_ptr->lev);
     }
 
-    player_ptr->window_flags |= (PW_INVENTORY | PW_EQUIPMENT | PW_PLAYER);
+    const auto flags_swrf = {
+        SubWindowRedrawingFlag::INVENTORY,
+        SubWindowRedrawingFlag::EQUIPMENT,
+        SubWindowRedrawingFlag::PLAYER,
+    };
+    rfu.set_flags(flags_swrf);
 
     /* Undeads drain recharge of magic device */
     if (exe_eat_charge_of_magic_device(player_ptr, o_ptr, item)) {

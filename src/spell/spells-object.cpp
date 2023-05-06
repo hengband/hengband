@@ -253,7 +253,12 @@ bool curse_armor(PlayerType *player_ptr)
         StatusRedrawingFlag::MP,
     };
     rfu.set_flags(flags_srf);
-    player_ptr->window_flags |= PW_INVENTORY | PW_EQUIPMENT | PW_PLAYER;
+    const auto flags_swrf = {
+        SubWindowRedrawingFlag::INVENTORY,
+        SubWindowRedrawingFlag::EQUIPMENT,
+        SubWindowRedrawingFlag::PLAYER,
+    };
+    rfu.set_flags(flags_swrf);
     return true;
 }
 
@@ -304,7 +309,12 @@ bool curse_weapon_object(PlayerType *player_ptr, bool force, ItemEntity *o_ptr)
         StatusRedrawingFlag::MP,
     };
     rfu.set_flags(flags_srf);
-    player_ptr->window_flags |= PW_INVENTORY | PW_EQUIPMENT | PW_PLAYER;
+    const auto flags_swrf = {
+        SubWindowRedrawingFlag::INVENTORY,
+        SubWindowRedrawingFlag::EQUIPMENT,
+        SubWindowRedrawingFlag::PLAYER,
+    };
+    rfu.set_flags(flags_swrf);
     return true;
 }
 
@@ -457,7 +467,14 @@ bool enchant_equipment(PlayerType *player_ptr, ItemEntity *o_ptr, int n, int efl
         StatusRedrawingFlag::REORDER,
     };
     rfu.set_flags(flags_srf);
-    set_bits(player_ptr->window_flags, PW_INVENTORY | PW_EQUIPMENT | PW_PLAYER | PW_FLOOR_ITEMS | PW_FOUND_ITEMS);
+    const auto flags_swrf = {
+        SubWindowRedrawingFlag::INVENTORY,
+        SubWindowRedrawingFlag::EQUIPMENT,
+        SubWindowRedrawingFlag::PLAYER,
+        SubWindowRedrawingFlag::FLOOR_ITEMS,
+        SubWindowRedrawingFlag::FOUND_ITEMS,
+    };
+    rfu.set_flags(flags_swrf);
     return true;
 }
 

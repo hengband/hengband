@@ -77,8 +77,14 @@ bool identify_item(PlayerType *player_ptr, ItemEntity *o_ptr)
         StatusRedrawingFlag::REORDER,
     };
     rfu.set_flags(flags_srf);
-    set_bits(player_ptr->window_flags, PW_INVENTORY | PW_EQUIPMENT | PW_PLAYER | PW_FLOOR_ITEMS | PW_FOUND_ITEMS);
-
+    const auto flags_swrf = {
+        SubWindowRedrawingFlag::INVENTORY,
+        SubWindowRedrawingFlag::EQUIPMENT,
+        SubWindowRedrawingFlag::PLAYER,
+        SubWindowRedrawingFlag::FLOOR_ITEMS,
+        SubWindowRedrawingFlag::FOUND_ITEMS,
+    };
+    rfu.set_flags(flags_swrf);
     angband_strcpy(record_o_name, known_item_name.data(), MAX_NLEN);
     record_turn = w_ptr->game_turn;
 

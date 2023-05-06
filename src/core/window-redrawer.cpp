@@ -31,14 +31,13 @@
  * Redraw a term when it is resized
  * @todo ここにPlayerType を追加するとz-termに影響が行くので保留
  */
-void redraw_window(void)
+void redraw_window()
 {
     if (!w_ptr->character_dungeon) {
         return;
     }
 
-    p_ptr->window_flags = PW_ALL;
-
+    RedrawingFlagsUpdater::get_instance().fill_up_sub_flags();
     handle_stuff(p_ptr);
     term_redraw();
 }
@@ -240,13 +239,14 @@ void redraw_stuff(PlayerType *player_ptr)
 }
 
 /*!
- * @brief player_ptr->window のフラグに応じた更新をまとめて行う / Handle "player_ptr->window"
+ * @brief SubWindowRedrawingFlag のフラグに応じた更新をまとめて行う
  * @param player_ptr プレイヤーへの参照ポインタ
- * @details 更新処理の対象はサブウィンドウ全般
+ * @details 更新処理の対象はサブウィンドウ全て
  */
 void window_stuff(PlayerType *player_ptr)
 {
-    if (!player_ptr->window_flags) {
+    auto &rfu = RedrawingFlagsUpdater::get_instance();
+    if (!rfu.any_sub()) {
         return;
     }
 

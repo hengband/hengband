@@ -211,7 +211,11 @@ static bool process_door(PlayerType *player_ptr, turn_flags *turn_flags_ptr, Mon
         if (!m_ptr->is_valid()) {
             auto &rfu = RedrawingFlagsUpdater::get_instance();
             rfu.set_flag(StatusRedrawingFlag::FLOW);
-            player_ptr->window_flags |= (PW_OVERHEAD | PW_DUNGEON);
+            const auto flags = {
+                SubWindowRedrawingFlag::OVERHEAD,
+                SubWindowRedrawingFlag::DUNGEON,
+            };
+            rfu.set_flags(flags);
             if (is_original_ap_and_seen(player_ptr, m_ptr)) {
                 r_ptr->r_behavior_flags.set(MonsterBehaviorType::BASH_DOOR);
             }
@@ -347,7 +351,11 @@ static bool process_post_dig_wall(PlayerType *player_ptr, turn_flags *turn_flags
     if (!m_ptr->is_valid()) {
         auto &rfu = RedrawingFlagsUpdater::get_instance();
         rfu.set_flag(StatusRedrawingFlag::FLOW);
-        player_ptr->window_flags |= (PW_OVERHEAD | PW_DUNGEON);
+        const auto flags = {
+            SubWindowRedrawingFlag::OVERHEAD,
+            SubWindowRedrawingFlag::DUNGEON,
+        };
+        rfu.set_flags(flags);
         if (is_original_ap_and_seen(player_ptr, m_ptr)) {
             r_ptr->r_feature_flags.set(MonsterFeatureType::KILL_WALL);
         }

@@ -27,6 +27,7 @@
 #include "system/grid-type-definition.h"
 #include "system/item-entity.h"
 #include "system/player-type-definition.h"
+#include "system/redrawing-flags-updater.h"
 #include "term/gameterm.h"
 #include "term/screen-processor.h"
 #include "term/z-form.h"
@@ -304,6 +305,11 @@ bool get_item_floor(PlayerType *player_ptr, COMMAND_CODE *cp, concptr pmt, concp
         screen_save();
     }
 
+    auto &rfu = RedrawingFlagsUpdater::get_instance();
+    const auto flags = {
+        SubWindowRedrawingFlag::INVENTORY,
+        SubWindowRedrawingFlag::EQUIPMENT,
+    };
     while (!fis_ptr->done) {
         int ni = 0;
         int ne = 0;
@@ -326,7 +332,7 @@ bool get_item_floor(PlayerType *player_ptr, COMMAND_CODE *cp, concptr pmt, concp
             fis_ptr->toggle = !fis_ptr->toggle;
         }
 
-        player_ptr->window_flags |= (PW_INVENTORY | PW_EQUIPMENT);
+        rfu.set_flags(flags);
         handle_stuff(player_ptr);
         COMMAND_CODE get_item_label = 0;
         if (command_wrk == USE_INVEN) {
@@ -665,7 +671,7 @@ bool get_item_floor(PlayerType *player_ptr, COMMAND_CODE *cp, concptr pmt, concp
                 g_ptr->o_idx_list.rotate(player_ptr->current_floor_ptr);
             }
 
-            player_ptr->window_flags |= PW_FLOOR_ITEMS;
+            rfu.set_flag(SubWindowRedrawingFlag::FLOOR_ITEMS);
             window_stuff(player_ptr);
             constexpr auto options = SCAN_FLOOR_ITEM_TESTER | SCAN_FLOOR_ONLY_MARKED;
             fis_ptr->floor_num = scan_floor_items(player_ptr, fis_ptr->floor_list, player_ptr->y, player_ptr->x, options, item_tester);
@@ -881,7 +887,7 @@ bool get_item_floor(PlayerType *player_ptr, COMMAND_CODE *cp, concptr pmt, concp
         toggle_inventory_equipment(player_ptr);
     }
 
-    player_ptr->window_flags |= (PW_INVENTORY | PW_EQUIPMENT);
+    rfu.set_flags(flags);
     handle_stuff(player_ptr);
     prt("", 0, 0);
     if (fis_ptr->oops && str) {

@@ -170,7 +170,7 @@ void do_cmd_pet_dismiss(PlayerType *player_ptr)
 
             msg_format(_("%s を放した。", "Dismissed %s."), friend_name.data());
             rfu.set_flag(StatusRedrawingFlag::BONUS);
-            player_ptr->window_flags |= (PW_MESSAGE);
+            rfu.set_flag(SubWindowRedrawingFlag::MESSAGE);
 
             delete_monster_idx(player_ptr, pet_ctr);
             Dismissed++;

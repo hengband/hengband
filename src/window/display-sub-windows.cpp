@@ -39,6 +39,7 @@
 #include "system/monster-entity.h"
 #include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
+#include "system/redrawing-flags-updater.h"
 #include "system/terrain-type-definition.h"
 #include "target/target-describer.h"
 #include "target/target-preparation.h"
@@ -841,6 +842,7 @@ void fix_spell(PlayerType *player_ptr)
  */
 void toggle_inventory_equipment(PlayerType *player_ptr)
 {
+    auto &rfu = RedrawingFlagsUpdater::get_instance();
     for (auto i = 0U; i < angband_terms.size(); ++i) {
         if (!angband_terms[i]) {
             continue;
@@ -849,14 +851,14 @@ void toggle_inventory_equipment(PlayerType *player_ptr)
         if (window_flag[i] & (PW_INVENTORY)) {
             window_flag[i] &= ~(PW_INVENTORY);
             window_flag[i] |= (PW_EQUIPMENT);
-            player_ptr->window_flags |= (PW_EQUIPMENT);
+            rfu.set_flag(SubWindowRedrawingFlag::EQUIPMENT);
             continue;
         }
 
         if (window_flag[i] & PW_EQUIPMENT) {
             window_flag[i] &= ~(PW_EQUIPMENT);
             window_flag[i] |= PW_INVENTORY;
-            player_ptr->window_flags |= PW_INVENTORY;
+            rfu.set_flag(SubWindowRedrawingFlag::INVENTORY);
         }
     }
 }

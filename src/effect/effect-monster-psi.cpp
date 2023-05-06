@@ -269,7 +269,7 @@ static void effect_monster_psi_drain_resist(PlayerType *player_ptr, effect_monst
 
     auto &rfu = RedrawingFlagsUpdater::get_instance();
     rfu.set_flag(MainWindowRedrawingFlag::MP);
-    set_bits(player_ptr->window_flags, PW_SPELL);
+    rfu.set_flag(SubWindowRedrawingFlag::SPELL);
     take_hit(player_ptr, DAMAGE_ATTACK, em_ptr->dam, em_ptr->killer);
     em_ptr->dam = 0;
 }
@@ -290,7 +290,7 @@ static void effect_monster_psi_drain_change_power(PlayerType *player_ptr, effect
     player_ptr->csp = b;
     auto &rfu = RedrawingFlagsUpdater::get_instance();
     rfu.set_flag(MainWindowRedrawingFlag::MP);
-    set_bits(player_ptr->window_flags, PW_SPELL);
+    rfu.set_flag(SubWindowRedrawingFlag::SPELL);
 }
 
 /*!

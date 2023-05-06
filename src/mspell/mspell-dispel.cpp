@@ -108,7 +108,11 @@ static void dispel_player(PlayerType *player_ptr)
             MainWindowRedrawingFlag::ACTION,
         };
         rfu.set_flags(flags_mwrf);
-        player_ptr->window_flags |= (PW_OVERHEAD | PW_DUNGEON);
+        const auto flags_swrf = {
+            SubWindowRedrawingFlag::OVERHEAD,
+            SubWindowRedrawingFlag::DUNGEON,
+        };
+        rfu.set_flags(flags_swrf);
         player_ptr->energy_need += ENERGY_NEED();
     }
 }

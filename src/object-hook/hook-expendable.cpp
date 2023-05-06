@@ -84,7 +84,11 @@ bool can_player_destroy_object(PlayerType *player_ptr, ItemEntity *o_ptr)
         o_ptr->ident |= IDENT_SENSE;
         auto &rfu = RedrawingFlagsUpdater::get_instance();
         rfu.set_flag(StatusRedrawingFlag::COMBINATION);
-        player_ptr->window_flags |= (PW_INVENTORY | PW_EQUIPMENT);
+        const auto flags = {
+            SubWindowRedrawingFlag::INVENTORY,
+            SubWindowRedrawingFlag::EQUIPMENT,
+        };
+        rfu.set_flags(flags);
         return false;
     }
 

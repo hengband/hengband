@@ -75,7 +75,7 @@ void process_eat_gold(PlayerType *player_ptr, MonsterAttackPlayer *monap_ptr)
 
     auto &rfu = RedrawingFlagsUpdater::get_instance();
     rfu.set_flag(MainWindowRedrawingFlag::GOLD);
-    player_ptr->window_flags |= (PW_PLAYER);
+    rfu.set_flag(SubWindowRedrawingFlag::PLAYER);
     monap_ptr->blinked = true;
 }
 
@@ -210,7 +210,7 @@ void process_eat_lite(PlayerType *player_ptr, MonsterAttackPlayer *monap_ptr)
         monap_ptr->obvious = true;
     }
 
-    player_ptr->window_flags |= (PW_EQUIPMENT);
+    RedrawingFlagsUpdater::get_instance().set_flag(SubWindowRedrawingFlag::EQUIPMENT);
 }
 
 /*!
@@ -267,7 +267,7 @@ bool process_un_power(PlayerType *player_ptr, MonsterAttackPlayer *monap_ptr)
         StatusRedrawingFlag::REORDER,
     };
     rfu.set_flags(flags);
-    player_ptr->window_flags |= PW_INVENTORY;
+    rfu.set_flag(SubWindowRedrawingFlag::INVENTORY);
     return true;
 }
 

@@ -681,7 +681,7 @@ static void change_birth_flags(PlayerType *player_ptr)
         StatusRedrawingFlag::MP,
         StatusRedrawingFlag::SPELLS,
     };
-    player_ptr->window_flags |= PW_PLAYER;
+    rfu.set_flag(SubWindowRedrawingFlag::PLAYER);
     rfu.set_flags(flags_srf);
     const auto flags_mwrf = {
         MainWindowRedrawingFlag::BASIC,

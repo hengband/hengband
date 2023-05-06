@@ -297,7 +297,7 @@ static void generate_world(PlayerType *player_ptr, bool new_game)
 static void init_io(PlayerType *player_ptr)
 {
     term_xtra(TERM_XTRA_REACT, 0);
-    player_ptr->window_flags = PW_ALL;
+    RedrawingFlagsUpdater::get_instance().fill_up_sub_flags();
     handle_stuff(player_ptr);
     if (arg_force_original) {
         rogue_like_commands = false;

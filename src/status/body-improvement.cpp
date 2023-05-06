@@ -76,6 +76,10 @@ bool set_invuln(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
     }
 
     auto &rfu = RedrawingFlagsUpdater::get_instance();
+    const auto flags_swrf = {
+        SubWindowRedrawingFlag::OVERHEAD,
+        SubWindowRedrawingFlag::DUNGEON,
+    };
     if (v) {
         if (player_ptr->invuln && !do_dec) {
             if (player_ptr->invuln > v) {
@@ -90,7 +94,7 @@ bool set_invuln(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
             chg_virtue(player_ptr, Virtue::VALOUR, -5);
             rfu.set_flag(MainWindowRedrawingFlag::MAP);
             rfu.set_flag(StatusRedrawingFlag::MONSTER_STATUSES);
-            player_ptr->window_flags |= (PW_OVERHEAD | PW_DUNGEON);
+            rfu.set_flags(flags_swrf);
         }
     } else {
         if (player_ptr->invuln && !music_singing(player_ptr, MUSIC_INVULN)) {
@@ -98,7 +102,7 @@ bool set_invuln(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
             notice = true;
             rfu.set_flag(MainWindowRedrawingFlag::MAP);
             rfu.set_flag(StatusRedrawingFlag::MONSTER_STATUSES);
-            player_ptr->window_flags |= (PW_OVERHEAD | PW_DUNGEON);
+            rfu.set_flags(flags_swrf);
             player_ptr->energy_need += ENERGY_NEED();
         }
     }

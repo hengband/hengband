@@ -128,7 +128,11 @@ void verify_panel(PlayerType *player_ptr)
     auto &rfu = RedrawingFlagsUpdater::get_instance();
     rfu.set_flag(StatusRedrawingFlag::MONSTER_STATUSES);
     rfu.set_flag(MainWindowRedrawingFlag::MAP);
-    player_ptr->window_flags |= PW_OVERHEAD | PW_DUNGEON;
+    const auto flags = {
+        SubWindowRedrawingFlag::OVERHEAD,
+        SubWindowRedrawingFlag::DUNGEON,
+    };
+    rfu.set_flags(flags);
 }
 
 /*

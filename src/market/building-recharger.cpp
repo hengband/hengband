@@ -158,7 +158,7 @@ void building_recharge(PlayerType *player_ptr)
         StatusRedrawingFlag::REORDER,
     };
     rfu.set_flags(flags);
-    player_ptr->window_flags |= (PW_INVENTORY);
+    rfu.set_flag(SubWindowRedrawingFlag::INVENTORY);
     player_ptr->au -= price;
 }
 
@@ -275,6 +275,6 @@ void building_recharge_all(PlayerType *player_ptr)
         StatusRedrawingFlag::REORDER,
     };
     rfu.set_flags(flags);
-    player_ptr->window_flags |= (PW_INVENTORY);
+    rfu.set_flag(SubWindowRedrawingFlag::INVENTORY);
     player_ptr->au -= total_cost;
 }

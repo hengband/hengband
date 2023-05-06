@@ -26,6 +26,6 @@ enum window_redraw_type {
 
 // clang-format on
 class PlayerType;
-void redraw_window(void);
+void redraw_window();
 void window_stuff(PlayerType *player_ptr);
 void redraw_stuff(PlayerType *player_ptr);

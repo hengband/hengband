@@ -233,7 +233,7 @@ void store_sell(PlayerType *player_ptr, StoreSaleType store_num)
 
     auto &rfu = RedrawingFlagsUpdater::get_instance();
     rfu.set_flag(StatusRedrawingFlag::BONUS);
-    set_bits(player_ptr->window_flags, PW_PLAYER);
+    rfu.set_flag(SubWindowRedrawingFlag::PLAYER);
     handle_stuff(player_ptr);
 
     if (placed && (item >= INVEN_MAIN_HAND)) {

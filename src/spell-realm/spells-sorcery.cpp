@@ -86,7 +86,7 @@ bool alchemy(PlayerType *player_ptr)
     player_ptr->au += price;
     auto &rfu = RedrawingFlagsUpdater::get_instance();
     rfu.set_flag(MainWindowRedrawingFlag::GOLD);
-    player_ptr->window_flags |= PW_PLAYER;
+    rfu.set_flag(SubWindowRedrawingFlag::PLAYER);
     vary_item(player_ptr, item, -amt);
     return true;
 }

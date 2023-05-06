@@ -71,7 +71,11 @@ void check_music(PlayerType *player_ptr)
             MainWindowRedrawingFlag::ACTION,
         };
         rfu.set_flags(flags_mwrf);
-        player_ptr->window_flags |= (PW_OVERHEAD | PW_DUNGEON);
+        const auto flags_swrf = {
+            SubWindowRedrawingFlag::OVERHEAD,
+            SubWindowRedrawingFlag::DUNGEON,
+        };
+        rfu.set_flags(flags_swrf);
     }
 
     PlayerSkill(player_ptr).gain_continuous_spell_skill_exp(REALM_MUSIC, spell);

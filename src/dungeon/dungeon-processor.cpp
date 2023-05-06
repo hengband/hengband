@@ -47,7 +47,16 @@ static void redraw_character_xtra(PlayerType *player_ptr)
 {
     w_ptr->character_xtra = true;
     auto &rfu = RedrawingFlagsUpdater::get_instance();
-    set_bits(player_ptr->window_flags, PW_INVENTORY | PW_EQUIPMENT | PW_SPELL | PW_PLAYER | PW_MONSTER_LORE | PW_OVERHEAD | PW_DUNGEON);
+    const auto flags_swrf = {
+        SubWindowRedrawingFlag::INVENTORY,
+        SubWindowRedrawingFlag::EQUIPMENT,
+        SubWindowRedrawingFlag::SPELL,
+        SubWindowRedrawingFlag::PLAYER,
+        SubWindowRedrawingFlag::MONSTER_LORE,
+        SubWindowRedrawingFlag::OVERHEAD,
+        SubWindowRedrawingFlag::DUNGEON,
+    };
+    rfu.set_flags(flags_swrf);
     const auto flags_mwrf = {
         MainWindowRedrawingFlag::WIPE,
         MainWindowRedrawingFlag::BASIC,

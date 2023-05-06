@@ -33,6 +33,7 @@
 #include "system/baseitem-info.h"
 #include "system/item-entity.h"
 #include "system/player-type-definition.h"
+#include "system/redrawing-flags-updater.h"
 #include "term/screen-processor.h"
 #include "term/z-form.h"
 #include "util/int-char-converter.h"
@@ -68,7 +69,7 @@ static bool check_destory_item(PlayerType *player_ptr, destroy_type *destroy_ptr
     strnfmt(destroy_ptr->out_val, sizeof(destroy_ptr->out_val), mes, destroy_ptr->item_name.data());
     msg_print(nullptr);
     message_add(destroy_ptr->out_val);
-    player_ptr->window_flags |= PW_MESSAGE;
+    RedrawingFlagsUpdater::get_instance().set_flag(SubWindowRedrawingFlag::MESSAGE);
     handle_stuff(player_ptr);
     while (true) {
         prt(destroy_ptr->out_val, 0, 0);

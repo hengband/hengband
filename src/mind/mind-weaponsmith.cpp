@@ -112,7 +112,7 @@ static void set_smith_redrawing_flags(PlayerType *player_ptr)
         StatusRedrawingFlag::REORDER,
     };
     rfu.set_flags(flags);
-    player_ptr->window_flags |= (PW_INVENTORY);
+    rfu.set_flag(SubWindowRedrawingFlag::INVENTORY);
 }
 
 /*!

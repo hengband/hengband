@@ -34,6 +34,7 @@
 #include "system/baseitem-info.h"
 #include "system/item-entity.h"
 #include "system/player-type-definition.h"
+#include "system/redrawing-flags-updater.h"
 #include "util/bit-flags-calculator.h"
 #include "util/quarks.h"
 #include "view/display-messages.h"
@@ -420,7 +421,13 @@ static void generate_unnatural_random_artifact(
     msg_format_wizard(player_ptr, CHEAT_OBJECT,
         _("パワー %d で 価値 %d のランダムアーティファクト生成 バイアスは「%s」", "Random artifact generated - Power:%d Value:%d Bias:%s."), max_powers,
         total_flags, artifact_bias_name[o_ptr->artifact_bias]);
-    set_bits(player_ptr->window_flags, PW_INVENTORY | PW_EQUIPMENT | PW_FLOOR_ITEMS | PW_FOUND_ITEMS);
+    const auto flags = {
+        SubWindowRedrawingFlag::INVENTORY,
+        SubWindowRedrawingFlag::EQUIPMENT,
+        SubWindowRedrawingFlag::FLOOR_ITEMS,
+        SubWindowRedrawingFlag::FOUND_ITEMS,
+    };
+    RedrawingFlagsUpdater::get_instance().set_flags(flags);
 }
 
 /*!

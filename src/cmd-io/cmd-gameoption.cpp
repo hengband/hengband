@@ -554,7 +554,7 @@ void do_cmd_options(PlayerType *player_ptr)
         case 'W':
         case 'w': {
             do_cmd_options_win(player_ptr);
-            player_ptr->window_flags = PW_ALL;
+            RedrawingFlagsUpdater::get_instance().fill_up_sub_flags();
             break;
         }
         case 'P':

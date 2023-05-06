@@ -263,7 +263,7 @@ static int get_mane_power(PlayerType *player_ptr, int *sn, bool baigaesi)
         screen_load();
     }
 
-    player_ptr->window_flags |= (PW_SPELL);
+    RedrawingFlagsUpdater::get_instance().set_flag(SubWindowRedrawingFlag::SPELL);
     handle_stuff(player_ptr);
 
     /* Abort if needed */
@@ -1290,7 +1290,10 @@ bool do_cmd_mane(PlayerType *player_ptr, bool baigaesi)
     PlayerEnergy(player_ptr).set_player_turn_energy(100);
     auto &rfu = RedrawingFlagsUpdater::get_instance();
     rfu.set_flag(MainWindowRedrawingFlag::IMITATION);
-    player_ptr->window_flags |= (PW_PLAYER);
-    player_ptr->window_flags |= (PW_SPELL);
+    const auto flags = {
+        SubWindowRedrawingFlag::PLAYER,
+        SubWindowRedrawingFlag::SPELL,
+    };
+    rfu.set_flags(flags);
     return true;
 }

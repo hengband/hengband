@@ -21,6 +21,7 @@
 #include "system/grid-type-definition.h"
 #include "system/item-entity.h"
 #include "system/player-type-definition.h"
+#include "system/redrawing-flags-updater.h"
 #include "term/gameterm.h"
 #include "term/screen-processor.h"
 #include "term/z-form.h"
@@ -294,6 +295,11 @@ bool get_item(PlayerType *player_ptr, OBJECT_IDX *cp, concptr pmt, concptr str, 
         screen_save();
     }
 
+    const auto flags = {
+        SubWindowRedrawingFlag::INVENTORY,
+        SubWindowRedrawingFlag::EQUIPMENT,
+    };
+    auto &rfu = RedrawingFlagsUpdater::get_instance();
     while (!item_selection_ptr->done) {
         COMMAND_CODE get_item_label = 0;
         int ni = 0;
@@ -317,7 +323,7 @@ bool get_item(PlayerType *player_ptr, OBJECT_IDX *cp, concptr pmt, concptr str, 
             item_selection_ptr->toggle = !item_selection_ptr->toggle;
         }
 
-        player_ptr->window_flags |= (PW_INVENTORY | PW_EQUIPMENT);
+        rfu.set_flags(flags);
         handle_stuff(player_ptr);
 
         if (!command_wrk) {
@@ -640,7 +646,7 @@ bool get_item(PlayerType *player_ptr, OBJECT_IDX *cp, concptr pmt, concptr str, 
         toggle_inventory_equipment(player_ptr);
     }
 
-    player_ptr->window_flags |= (PW_INVENTORY | PW_EQUIPMENT);
+    rfu.set_flags(flags);
     handle_stuff(player_ptr);
     prt("", 0, 0);
     if (item_selection_ptr->oops && str) {

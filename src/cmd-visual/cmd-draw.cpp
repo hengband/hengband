@@ -65,8 +65,18 @@ void do_cmd_redraw(PlayerType *player_ptr)
         MainWindowRedrawingFlag::MAP,
     };
     rfu.set_flags(flags_mwrf);
-    player_ptr->window_flags |= (PW_INVENTORY | PW_EQUIPMENT | PW_SPELL | PW_PLAYER);
-    player_ptr->window_flags |= (PW_MESSAGE | PW_OVERHEAD | PW_DUNGEON | PW_MONSTER_LORE | PW_ITEM_KNOWLEDGTE);
+    const auto flags_swrf = {
+        SubWindowRedrawingFlag::INVENTORY,
+        SubWindowRedrawingFlag::EQUIPMENT,
+        SubWindowRedrawingFlag::SPELL,
+        SubWindowRedrawingFlag::PLAYER,
+        SubWindowRedrawingFlag::MESSAGE,
+        SubWindowRedrawingFlag::OVERHEAD,
+        SubWindowRedrawingFlag::DUNGEON,
+        SubWindowRedrawingFlag::MONSTER_LORE,
+        SubWindowRedrawingFlag::ITEM_KNOWLEDGTE,
+    };
+    rfu.set_flags(flags_swrf);
     update_playtime();
     handle_stuff(player_ptr);
     if (PlayerRace(player_ptr).equals(PlayerRaceType::ANDROID)) {

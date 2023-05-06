@@ -438,7 +438,11 @@ void effect_player_lite(PlayerType *player_ptr, EffectPlayerType *ep_ptr)
     };
     rfu.set_flags(flags_mwrf);
     rfu.set_flag(StatusRedrawingFlag::MONSTER_STATUSES);
-    player_ptr->window_flags |= (PW_OVERHEAD | PW_DUNGEON);
+    const auto flags_swrf = {
+        SubWindowRedrawingFlag::OVERHEAD,
+        SubWindowRedrawingFlag::DUNGEON,
+    };
+    rfu.set_flags(flags_swrf);
 }
 
 void effect_player_dark(PlayerType *player_ptr, EffectPlayerType *ep_ptr)

@@ -216,7 +216,11 @@ bool time_walk(PlayerType *player_ptr)
     auto &rfu = RedrawingFlagsUpdater::get_instance();
     rfu.set_flag(MainWindowRedrawingFlag::MAP);
     rfu.set_flag(StatusRedrawingFlag::MONSTER_STATUSES);
-    player_ptr->window_flags |= (PW_OVERHEAD | PW_DUNGEON);
+    const auto flags = {
+        SubWindowRedrawingFlag::OVERHEAD,
+        SubWindowRedrawingFlag::DUNGEON,
+    };
+    rfu.set_flags(flags);
     handle_stuff(player_ptr);
     return true;
 }
@@ -257,8 +261,7 @@ void roll_hitdice(PlayerType *player_ptr, spell_operation options)
     auto &rfu = RedrawingFlagsUpdater::get_instance();
     rfu.set_flag(StatusRedrawingFlag::HP);
     rfu.set_flag(MainWindowRedrawingFlag::HP);
-    player_ptr->window_flags |= (PW_PLAYER);
-
+    rfu.set_flag(SubWindowRedrawingFlag::PLAYER);
     if (!(options & SPOP_NO_UPDATE)) {
         handle_stuff(player_ptr);
     }
@@ -462,6 +465,7 @@ bool true_healing(PlayerType *player_ptr, int pow)
 
 bool restore_mana(PlayerType *player_ptr, bool magic_eater)
 {
+    auto &rfu = RedrawingFlagsUpdater::get_instance();
     if (PlayerClass(player_ptr).equals(PlayerClassType::MAGIC_EATER) && magic_eater) {
         // 魔力復活による、魔道具術師の取り込んだ魔法の回復量
         // 取り込み数が10回未満: 3 回分回復
@@ -483,7 +487,7 @@ bool restore_mana(PlayerType *player_ptr, bool magic_eater)
         }
 
         msg_print(_("頭がハッキリとした。", "You feel your head clear."));
-        player_ptr->window_flags |= (PW_PLAYER);
+        rfu.set_flag(SubWindowRedrawingFlag::PLAYER);
         return true;
     }
 
@@ -494,10 +498,12 @@ bool restore_mana(PlayerType *player_ptr, bool magic_eater)
     player_ptr->csp = player_ptr->msp;
     player_ptr->csp_frac = 0;
     msg_print(_("頭がハッキリとした。", "You feel your head clear."));
-    auto &rfu = RedrawingFlagsUpdater::get_instance();
     rfu.set_flag(MainWindowRedrawingFlag::MP);
-    player_ptr->window_flags |= (PW_PLAYER);
-    player_ptr->window_flags |= (PW_SPELL);
+    const auto flags_swrf = {
+        SubWindowRedrawingFlag::SPELL,
+        SubWindowRedrawingFlag::PLAYER,
+    };
+    rfu.set_flags(flags_swrf);
     return true;
 }
 

@@ -124,8 +124,12 @@ void wiz_lite(PlayerType *player_ptr, bool ninja)
     auto &rfu = RedrawingFlagsUpdater::get_instance();
     rfu.set_flag(StatusRedrawingFlag::MONSTER_STATUSES);
     rfu.set_flag(MainWindowRedrawingFlag::MAP);
-    player_ptr->window_flags |= (PW_OVERHEAD | PW_DUNGEON | PW_FOUND_ITEMS);
-
+    const auto flags_swrf = {
+        SubWindowRedrawingFlag::OVERHEAD,
+        SubWindowRedrawingFlag::DUNGEON,
+        SubWindowRedrawingFlag::FOUND_ITEMS,
+    };
+    rfu.set_flags(flags_swrf);
     if (floor.grid_array[player_ptr->y][player_ptr->x].info & CAVE_GLOW) {
         set_superstealth(player_ptr, false);
     }
@@ -189,7 +193,12 @@ void wiz_dark(PlayerType *player_ptr)
     };
     rfu.set_flags(flags_srf);
     rfu.set_flag(MainWindowRedrawingFlag::MAP);
-    player_ptr->window_flags |= (PW_OVERHEAD | PW_DUNGEON | PW_FOUND_ITEMS);
+    const auto flags_swrf = {
+        SubWindowRedrawingFlag::OVERHEAD,
+        SubWindowRedrawingFlag::DUNGEON,
+        SubWindowRedrawingFlag::FOUND_ITEMS,
+    };
+    rfu.set_flags(flags_swrf);
 }
 
 /*
@@ -245,7 +254,11 @@ void map_area(PlayerType *player_ptr, POSITION range)
 
     auto &rfu = RedrawingFlagsUpdater::get_instance();
     rfu.set_flag(MainWindowRedrawingFlag::MAP);
-    player_ptr->window_flags |= (PW_OVERHEAD | PW_DUNGEON);
+    const auto flags_swrf = {
+        SubWindowRedrawingFlag::OVERHEAD,
+        SubWindowRedrawingFlag::DUNGEON,
+    };
+    rfu.set_flags(flags_swrf);
 }
 
 /*!
@@ -486,8 +499,11 @@ bool destroy_area(PlayerType *player_ptr, POSITION y1, POSITION x1, POSITION r, 
     };
     rfu.set_flags(flags_srf);
     rfu.set_flag(MainWindowRedrawingFlag::MAP);
-    player_ptr->window_flags |= (PW_OVERHEAD | PW_DUNGEON);
-
+    const auto flags_swrf = {
+        SubWindowRedrawingFlag::OVERHEAD,
+        SubWindowRedrawingFlag::DUNGEON,
+    };
+    rfu.set_flags(flags_swrf);
     if (floor_ptr->grid_array[player_ptr->y][player_ptr->x].info & CAVE_GLOW) {
         set_superstealth(player_ptr, false);
     }

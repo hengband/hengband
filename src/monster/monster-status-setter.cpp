@@ -431,7 +431,11 @@ bool set_monster_timewalk(PlayerType *player_ptr, int num, MonsterRaceId who, bo
     auto &rfu = RedrawingFlagsUpdater::get_instance();
     rfu.set_flag(MainWindowRedrawingFlag::MAP);
     rfu.set_flag(StatusRedrawingFlag::MONSTER_STATUSES);
-    player_ptr->window_flags |= PW_OVERHEAD | PW_DUNGEON;
+    const auto flags = {
+        SubWindowRedrawingFlag::OVERHEAD,
+        SubWindowRedrawingFlag::DUNGEON,
+    };
+    rfu.set_flags(flags);
     w_ptr->timewalk_m_idx = 0;
     if (vs_player || (player_has_los_bold(player_ptr, m_ptr->fy, m_ptr->fx) && projectable(player_ptr, player_ptr->y, player_ptr->x, m_ptr->fy, m_ptr->fx))) {
         concptr mes;

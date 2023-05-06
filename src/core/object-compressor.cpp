@@ -58,7 +58,11 @@ void compact_objects(PlayerType *player_ptr, int size)
         msg_print(_("アイテム情報を圧縮しています...", "Compacting objects..."));
         auto &rfu = RedrawingFlagsUpdater::get_instance();
         rfu.set_flag(MainWindowRedrawingFlag::MAP);
-        player_ptr->window_flags |= PW_OVERHEAD | PW_DUNGEON;
+        const auto flags_swrf = {
+            SubWindowRedrawingFlag::OVERHEAD,
+            SubWindowRedrawingFlag::DUNGEON,
+        };
+        rfu.set_flags(flags_swrf);
     }
 
     auto *floor_ptr = player_ptr->current_floor_ptr;
