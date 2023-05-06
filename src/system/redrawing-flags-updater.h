@@ -130,6 +130,7 @@ public:
     void reset_flags(const EnumClassFlagGroup<StatusRedrawingFlag> &flags);
 
     void fill_up_sub_flags();
+    EnumClassFlagGroup<SubWindowRedrawingFlag> get_sub_intersection(const EnumClassFlagGroup<SubWindowRedrawingFlag> &flags);
 
 private:
     RedrawingFlagsUpdater() = default;

@@ -197,7 +197,7 @@ bool is_msg_window_flowed(void)
 {
     auto i = 0U;
     for (; i < angband_terms.size(); ++i) {
-        if (angband_terms[i] && (g_window_flags[i] & PW_MESSAGE)) {
+        if (angband_terms[i] && g_window_flags[i].has(SubWindowRedrawingFlag::MESSAGE)) {
             break;
         }
     }

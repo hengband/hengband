@@ -1,8 +1,13 @@
 ﻿#pragma once
 
-#include "system/angband.h"
+#include "system/redrawing-flags-updater.h"
+#include "util/flag-group.h"
+#include <array>
+#include <stdint.h>
 
-extern BIT_FLAGS g_option_flags[8];
-extern BIT_FLAGS g_option_masks[8];
-extern BIT_FLAGS g_window_flags[8];
-extern BIT_FLAGS g_window_masks[8];
+constexpr auto MAX_WINDOW_ENTITIES = 8;
+
+extern std::array<uint32_t, MAX_WINDOW_ENTITIES> g_option_flags;
+extern std::array<uint32_t, MAX_WINDOW_ENTITIES> g_option_masks;
+extern std::array<EnumClassFlagGroup<SubWindowRedrawingFlag>, MAX_WINDOW_ENTITIES> g_window_flags;
+extern std::array<uint32_t, MAX_WINDOW_ENTITIES> g_window_masks;

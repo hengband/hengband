@@ -110,9 +110,9 @@ void rd_options(void)
             }
 
             if (flag[n] & (1UL << i)) {
-                g_window_flags[n] |= (1UL << i);
+                g_window_flags[n].set(i2enum<SubWindowRedrawingFlag>(i));
             } else {
-                g_window_flags[n] &= ~(1UL << i);
+                g_window_flags[n].reset(i2enum<SubWindowRedrawingFlag>(i));
             }
         }
     }

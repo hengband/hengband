@@ -309,11 +309,11 @@ bool get_item(PlayerType *player_ptr, OBJECT_IDX *cp, concptr pmt, concptr str, 
                 continue;
             }
 
-            if (g_window_flags[i] & (PW_INVENTORY)) {
+            if (g_window_flags[i].has(SubWindowRedrawingFlag::INVENTORY)) {
                 ni++;
             }
 
-            if (g_window_flags[i] & (PW_EQUIPMENT)) {
+            if (g_window_flags[i].has(SubWindowRedrawingFlag::EQUIPMENT)) {
                 ne++;
             }
         }

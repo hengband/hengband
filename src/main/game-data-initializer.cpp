@@ -19,6 +19,7 @@
 #include "system/monster-entity.h"
 #include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
+#include "system/redrawing-flags-updater.h"
 #include "term/gameterm.h"
 #include "util/angband-files.h"
 #include "util/bit-flags-calculator.h"
@@ -87,14 +88,10 @@ void init_other(PlayerType *player_ptr)
         }
     }
 
-    /*
-     *  Set the "default" window flags
-     *  Window 1 : Display messages
-     *  Window 2 : Display inven/equip
-     */
-    g_window_flags[1] = 1U << A_MAX;
-    g_window_flags[2] = 1U << 0;
-    (void)format("%s (%s).", "Mr.Hoge", MAINTAINER);
+    g_window_flags[1].clear();
+    g_window_flags[1].set(SubWindowRedrawingFlag::MESSAGE);
+    g_window_flags[2].clear();
+    g_window_flags[2].set(SubWindowRedrawingFlag::INVENTORY);
 }
 
 /*!
