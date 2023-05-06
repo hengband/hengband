@@ -1,3 +1,3 @@
 ﻿#pragma once
 
-void rd_options(void);
+void rd_options();
