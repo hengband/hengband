@@ -19,6 +19,7 @@
 #include "term/term-color-types.h"
 #include "util/angband-files.h"
 #include "view/display-messages.h"
+#include <string_view>
 
 // Encode the screen colors
 static char hack[17] = "dwsorgbuDWvyRGBU";
@@ -44,16 +45,15 @@ static concptr html_foot[3] = {
  * @brief 一時ファイルを読み込み、ファイルに書き出す
  * @param fff ファイルへの参照ポインタ
  * @param tempfff 一時ファイルへの参照ポインタ
- * @param buf バッファ
- * @param buf_size バッファサイズ
  * @param num_tag タグ番号
  * @todo io/ 以下に移したいところだが、このファイルの行数も大したことがないので一旦保留
  */
-static void read_temporary_file(FILE *fff, FILE *tmpfff, char buf[], size_t buf_size, int num_tag)
+static void read_temporary_file(FILE *fff, FILE *tmpfff, int num_tag)
 {
     bool is_first_line = true;
     int next_tag = num_tag + 1;
-    while (!angband_fgets(tmpfff, buf, buf_size)) {
+    char buf[2048]{};
+    while (!angband_fgets(tmpfff, buf, sizeof(buf))) {
         if (is_first_line) {
             if (strncmp(buf, tags[num_tag], strlen(tags[num_tag])) == 0) {
                 is_first_line = false;
@@ -162,13 +162,11 @@ static bool check_screen_html_can_open(FILE *fff, char *filename, int message)
  * @brief HTMLヘッダを書き込む
  * @param tmpfff 一時ファイルへの参照ポインタ
  * @param fff 記念撮影ファイルへの参照ポインタ
- * @param buf バッファ
- * @param buf_size バッファサイズ
  */
-static void write_html_header(FILE *tmpfff, FILE *fff, char buf[], size_t buf_size)
+static void write_html_header(FILE *tmpfff, FILE *fff)
 {
     if (tmpfff) {
-        read_temporary_file(fff, tmpfff, buf, buf_size, 0);
+        read_temporary_file(fff, tmpfff, 0);
         return;
     }
 
@@ -181,10 +179,8 @@ static void write_html_header(FILE *tmpfff, FILE *fff, char buf[], size_t buf_si
  * @brief HTMLフッタを書き込む
  * @param tmpfff 一時ファイルへの参照ポインタ
  * @param fff 記念撮影ファイルへの参照ポインタ
- * @param buf バッファ
- * @param buf_size バッファサイズ
  */
-static void write_html_footer(FILE *tmpfff, FILE *fff, char buf[], size_t buf_size)
+static void write_html_footer(FILE *tmpfff, FILE *fff)
 {
     fprintf(fff, "</font>");
     if (!tmpfff) {
@@ -193,7 +189,7 @@ static void write_html_footer(FILE *tmpfff, FILE *fff, char buf[], size_t buf_si
         }
     } else {
         rewind(tmpfff);
-        read_temporary_file(fff, tmpfff, buf, buf_size, 2);
+        read_temporary_file(fff, tmpfff, 2);
         angband_fclose(tmpfff);
     }
 
@@ -216,9 +212,9 @@ void do_cmd_save_screen_html_aux(char *filename, int message)
     char buf[2048];
     path_build(buf, sizeof(buf), ANGBAND_DIR_USER, "htmldump.prf");
     auto *tmpfff = angband_fopen(buf, FileOpenMode::READ);
-    write_html_header(tmpfff, fff, buf, sizeof(buf));
+    write_html_header(tmpfff, fff);
     screen_dump_lines(wid, hgt, fff);
-    write_html_footer(tmpfff, fff, buf, sizeof(buf));
+    write_html_footer(tmpfff, fff);
     angband_fclose(fff);
     if (message) {
         msg_print(_("画面(記念撮影)をファイルに書き出しました。", "Screen dump saved."));
@@ -276,16 +272,15 @@ static bool ask_html_dump(bool *html_dump)
 /*!
  * @brief ファイルへ書き込めない場合にエラーを表示する
  * @param fff ダンプファイルへの参照ポインタ
- * @param buf バッファ
  * @return ファイルへ書き込めるならTRUE、書き込めないならFALSE
  */
-static bool check_screen_text_can_open(FILE *fff, char buf[])
+static bool check_screen_text_can_open(FILE *fff, const std::string_view filename)
 {
     if (fff) {
         return true;
     }
 
-    msg_format(_("ファイル %s を開けませんでした。", "Failed to open file %s."), buf);
+    msg_format(_("ファイル %s を開けませんでした。", "Failed to open file %s."), filename.data());
     msg_print(nullptr);
     return false;
 }
@@ -401,11 +396,12 @@ void do_cmd_save_screen(PlayerType *player_ptr)
  * @todo 目的は不明瞭
  * @return ファイルが読み込めなくなったらFALSEで抜ける
  */
-static bool draw_white_characters(char buf[], FILE *fff, int wid, int hgt)
+static bool draw_white_characters(FILE *fff, int wid, int hgt)
 {
     bool okay = true;
     for (TERM_LEN y = 0; okay; y++) {
-        if (!fgets(buf, 1024, fff)) {
+        char buf[1024]{};
+        if (!fgets(buf, sizeof(buf), fff)) {
             okay = false;
         }
 
@@ -430,19 +426,19 @@ static bool draw_white_characters(char buf[], FILE *fff, int wid, int hgt)
 
 /*!
  * @brief 白以外の文字を画面に描画する
- * @param buf 描画用バッファ
  * @param fff 記念撮影ファイルへの参照ポインタ
  * @param wid 幅
  * @param hgt 高さ
  * @param 白文字が途中で読み込めなくなっていたらTRUE
  * @todo 目的は不明瞭
  */
-static void draw_colored_characters(char buf[], FILE *fff, int wid, int hgt, bool okay)
+static void draw_colored_characters(FILE *fff, int wid, int hgt, bool okay)
 {
     TERM_COLOR a = TERM_DARK;
     auto c = ' ';
     for (TERM_LEN y = 0; okay; y++) {
-        if (!fgets(buf, 1024, fff)) {
+        char buf[1024]{};
+        if (!fgets(buf, sizeof(buf), fff)) {
             okay = false;
         }
 
@@ -489,8 +485,8 @@ void do_cmd_load_screen(void)
 
     screen_save();
     term_clear();
-    bool okay = draw_white_characters(buf, fff, wid, hgt);
-    draw_colored_characters(buf, fff, wid, hgt, okay);
+    bool okay = draw_white_characters(fff, wid, hgt);
+    draw_colored_characters(fff, wid, hgt, okay);
 
     angband_fclose(fff);
     prt(_("ファイルに書き出された画面(記念撮影)をロードしました。", "Screen dump loaded."), 0, 0);

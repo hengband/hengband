@@ -5,9 +5,9 @@
 #include <optional>
 #include <string>
 
-extern char savefile[1024];
-extern char savefile_base[40];
-extern char debug_savefile[1024];
+extern std::filesystem::path savefile; //!< セーブファイルのフルパス
+extern std::string savefile_base; //!< セーブファイル名
+extern std::filesystem::path debug_savefile; //!< デバッグセーブファイルのフルパス
 
 extern std::filesystem::path ANGBAND_DIR;
 extern std::filesystem::path ANGBAND_DIR_APEX;

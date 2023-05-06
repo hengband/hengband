@@ -29,7 +29,7 @@ static std::string get_saved_floor_name(int level)
 {
     char ext[32];
     strnfmt(ext, sizeof(ext), ".F%02d", level);
-    return std::string(savefile).append(ext);
+    return savefile.string().append(ext);
 }
 
 static void check_saved_tmp_files(const int fd, bool *force)

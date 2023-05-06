@@ -86,7 +86,7 @@ void process_player_name(PlayerType *player_ptr, bool is_new_savefile)
     }
 
     auto is_modified = false;
-    if (is_new_savefile && (!savefile[0] || !keep_savefile)) {
+    if (is_new_savefile && (savefile.empty() || !keep_savefile)) {
         std::string temp;
 
 #ifdef SAVEFILE_USE_UID
@@ -97,12 +97,15 @@ void process_player_name(PlayerType *player_ptr, bool is_new_savefile)
         /* Rename the savefile, using the player_ptr->base_name */
         temp = player_ptr->base_name;
 #endif
-        path_build(savefile, sizeof(savefile), ANGBAND_DIR_SAVE, temp);
+        char buf[1024];
+        path_build(buf, sizeof(buf), ANGBAND_DIR_SAVE, temp);
+        savefile = buf;
         is_modified = true;
     }
 
     if (is_modified || !savefile_base[0]) {
-        auto s = savefile;
+        const auto &savefile_str = savefile.string();
+        auto s = savefile_str.data();
         while (true) {
             auto t = angband_strstr(s, PATH_SEP);
             if (!t) {
@@ -112,9 +115,9 @@ void process_player_name(PlayerType *player_ptr, bool is_new_savefile)
         }
 
 #ifdef SAVEFILE_USE_UID
-        strcpy(savefile_base, angband_strstr(s, ".") + 1);
+        savefile_base = angband_strstr(s, ".") + 1;
 #else
-        strcpy(savefile_base, s);
+        savefile_base = s;
 #endif
     }
 

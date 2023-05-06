@@ -2,6 +2,7 @@
 
 #include "system/angband.h"
 #include <cstddef>
+#include <filesystem>
 #include <initializer_list>
 #include <unordered_map>
 #include <vector>
@@ -55,14 +56,14 @@ protected:
 
 class CfgReader {
 public:
-    CfgReader(concptr dir, std::initializer_list<concptr> files);
+    CfgReader(std::filesystem::path dir, std::initializer_list<concptr> files);
     CfgData *read_sections(std::initializer_list<cfg_section> sections);
-    concptr get_cfg_path()
+    std::string get_cfg_path()
     {
-        return cfg_path.data();
+        return cfg_path;
     }
 
 protected:
-    concptr dir;
+    std::filesystem::path dir;
     std::string cfg_path;
 };

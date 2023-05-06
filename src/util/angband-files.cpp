@@ -157,22 +157,19 @@ static errr path_temp(char *buf, int max)
  * @brief OSの差異を吸収しつつ、絶対パスを生成する.
  * @param buf ファイルのフルを返すバッファ
  * @param max bufのサイズ
- * @param directory ディレクトリ
+ * @param path file 引数があるディレクトリ
  * @param file ファイル名またはディレクトリ名
  * @todo buf, max は削除してファイル名が長すぎたら例外を送出する。またreturn で絶対パスを返すように書き換える.
  */
 void path_build(char *buf, int max, const std::filesystem::path &path, std::string_view file)
 {
-    if (file[0] == '~') {
+    if ((file[0] == '~') || (prefix(file, PATH_SEP)) || path.empty()) {
         (void)strnfmt(buf, max, "%s", file.data());
-    } else if (prefix(file, PATH_SEP)) {
-        (void)strnfmt(buf, max, "%s", file.data());
-    } else if (!path.string()[0]) {
-        (void)strnfmt(buf, max, "%s", file.data());
-    } else {
-        const auto &path_str = path.string();
-        (void)strnfmt(buf, max, "%s%s%s", path_str.data(), PATH_SEP, file.data());
+        return;
     }
+
+    const auto &path_str = path.string();
+    (void)strnfmt(buf, max, "%s%s%s", path_str.data(), PATH_SEP, file.data());
 }
 
 static std::string make_file_mode(const FileOpenMode mode, const bool is_binary)

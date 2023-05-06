@@ -247,7 +247,7 @@ bool save_floor(PlayerType *player_ptr, saved_floor_type *sf_ptr, BIT_FLAGS mode
         old_x_stamp = x_stamp;
     }
 
-    std::string floor_savefile = savefile;
+    auto floor_savefile = savefile.string();
     char ext[32];
     strnfmt(ext, sizeof(ext), ".F%02d", (int)sf_ptr->savefile_id);
     floor_savefile.append(ext);

@@ -97,7 +97,9 @@ void init_file_paths(const std::filesystem::path &libpath)
     struct tm *t = localtime(&now);
     char tmp[128];
     strftime(tmp, sizeof(tmp), "%Y-%m-%d-%H-%M-%S", t);
-    path_build(debug_savefile, sizeof(debug_savefile), ANGBAND_DIR_DEBUG_SAVE, tmp);
+    char savefile_buf[1024]{};
+    path_build(savefile_buf, sizeof(savefile_buf), ANGBAND_DIR_DEBUG_SAVE, tmp);
+    debug_savefile = savefile_buf;
 
     remove_old_debug_savefiles();
 }

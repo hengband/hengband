@@ -346,12 +346,13 @@ bool load_savedata(PlayerType *player_ptr, bool *new_game)
     auto what = "generic";
     w_ptr->game_turn = 0;
     player_ptr->is_dead = false;
-    if (!savefile[0]) {
+    if (savefile.empty()) {
         return true;
     }
 
+    const auto &savefile_str = savefile.string();
 #ifndef WINDOWS
-    if (access(savefile, 0) < 0) {
+    if (access(savefile_str.data(), 0) < 0) {
         msg_print(_("セーブファイルがありません。", "Savefile does not exist."));
         msg_print(nullptr);
         *new_game = true;
@@ -367,7 +368,7 @@ bool load_savedata(PlayerType *player_ptr, bool *new_game)
     constexpr auto version_length = variant_length + 6;
     char tmp_ver[version_length]{};
     if (!err) {
-        fd = fd_open(savefile, O_RDONLY);
+        fd = fd_open(savefile_str.data(), O_RDONLY);
         if (fd < 0) {
             err = true;
         }
@@ -410,7 +411,7 @@ bool load_savedata(PlayerType *player_ptr, bool *new_game)
     }
 
     if (err) {
-        msg_format("%s: %s", what, savefile);
+        msg_format("%s: %s", what, savefile_str.data());
         msg_print(nullptr);
         return false;
     }
