@@ -250,49 +250,70 @@ bool autopick_new_entry(autopick_type *entry, concptr str, bool allow_default)
 
     int prev_flg = -1;
     if (MATCH_KEY2(KEY_ARTIFACT)) {
-        ADD_FLG_NOUN(FLG_ARTIFACT);
+        entry->add(FLG_ARTIFACT);
+        prev_flg = FLG_ARTIFACT;
     }
 
     if (MATCH_KEY2(KEY_ITEMS)) {
-        ADD_FLG_NOUN(FLG_ITEMS);
+        entry->add(FLG_ITEMS);
+        prev_flg = FLG_ITEMS;
     } else if (MATCH_KEY2(KEY_WEAPONS)) {
-        ADD_FLG_NOUN(FLG_WEAPONS);
+        entry->add(FLG_WEAPONS);
+        prev_flg = FLG_WEAPONS;
     } else if (MATCH_KEY2(KEY_FAVORITE_WEAPONS)) {
-        ADD_FLG_NOUN(FLG_FAVORITE_WEAPONS);
+        entry->add(FLG_FAVORITE_WEAPONS);
+        prev_flg = FLG_FAVORITE_WEAPONS;
     } else if (MATCH_KEY2(KEY_ARMORS)) {
-        ADD_FLG_NOUN(FLG_ARMORS);
+        entry->add(FLG_ARMORS);
+        prev_flg = FLG_ARMORS;
     } else if (MATCH_KEY2(KEY_MISSILES)) {
-        ADD_FLG_NOUN(FLG_MISSILES);
+        entry->add(FLG_MISSILES);
+        prev_flg = FLG_MISSILES;
     } else if (MATCH_KEY2(KEY_DEVICES)) {
-        ADD_FLG_NOUN(FLG_DEVICES);
+        entry->add(FLG_DEVICES);
+        prev_flg = FLG_DEVICES;
     } else if (MATCH_KEY2(KEY_LIGHTS)) {
-        ADD_FLG_NOUN(FLG_LIGHTS);
+        entry->add(FLG_LIGHTS);
+        prev_flg = FLG_LIGHTS;
     } else if (MATCH_KEY2(KEY_JUNKS)) {
-        ADD_FLG_NOUN(FLG_JUNKS);
+        entry->add(FLG_JUNKS);
+        prev_flg = FLG_JUNKS;
     } else if (MATCH_KEY2(KEY_CORPSES)) {
-        ADD_FLG_NOUN(FLG_CORPSES);
+        entry->add(FLG_CORPSES);
+        prev_flg = FLG_CORPSES;
     } else if (MATCH_KEY2(KEY_SPELLBOOKS)) {
-        ADD_FLG_NOUN(FLG_SPELLBOOKS);
+        entry->add(FLG_SPELLBOOKS);
+        prev_flg = FLG_SPELLBOOKS;
     } else if (MATCH_KEY2(KEY_HAFTED)) {
-        ADD_FLG_NOUN(FLG_HAFTED);
+        entry->add(FLG_HAFTED);
+        prev_flg = FLG_HAFTED;
     } else if (MATCH_KEY2(KEY_SHIELDS)) {
-        ADD_FLG_NOUN(FLG_SHIELDS);
+        entry->add(FLG_SHIELDS);
+        prev_flg = FLG_SHIELDS;
     } else if (MATCH_KEY2(KEY_BOWS)) {
-        ADD_FLG_NOUN(FLG_BOWS);
+        entry->add(FLG_BOWS);
+        prev_flg = FLG_BOWS;
     } else if (MATCH_KEY2(KEY_RINGS)) {
-        ADD_FLG_NOUN(FLG_RINGS);
+        entry->add(FLG_RINGS);
+        prev_flg = FLG_RINGS;
     } else if (MATCH_KEY2(KEY_AMULETS)) {
-        ADD_FLG_NOUN(FLG_AMULETS);
+        entry->add(FLG_AMULETS);
+        prev_flg = FLG_AMULETS;
     } else if (MATCH_KEY2(KEY_SUITS)) {
-        ADD_FLG_NOUN(FLG_SUITS);
+        entry->add(FLG_SUITS);
+        prev_flg = FLG_SUITS;
     } else if (MATCH_KEY2(KEY_CLOAKS)) {
-        ADD_FLG_NOUN(FLG_CLOAKS);
+        entry->add(FLG_CLOAKS);
+        prev_flg = FLG_CLOAKS;
     } else if (MATCH_KEY2(KEY_HELMS)) {
-        ADD_FLG_NOUN(FLG_HELMS);
+        entry->add(FLG_HELMS);
+        prev_flg = FLG_HELMS;
     } else if (MATCH_KEY2(KEY_GLOVES)) {
-        ADD_FLG_NOUN(FLG_GLOVES);
+        entry->add(FLG_GLOVES);
+        prev_flg = FLG_GLOVES;
     } else if (MATCH_KEY2(KEY_BOOTS)) {
-        ADD_FLG_NOUN(FLG_BOOTS);
+        entry->add(FLG_BOOTS);
+        prev_flg = FLG_BOOTS;
     }
 
     if (*ptr == ':') {
@@ -305,7 +326,8 @@ bool autopick_new_entry(autopick_type *entry, concptr str, bool allow_default)
 #endif
     else if (*ptr == '\0') {
         if (prev_flg == -1) {
-            ADD_FLG_NOUN(FLG_ITEMS);
+            entry->add(FLG_ITEMS);
+            prev_flg = FLG_ITEMS;
         }
     } else {
         if (prev_flg != -1) {

@@ -13,5 +13,3 @@
 #define ADD_KEY(KEY) (strcat(ptr, KEY), strcat(ptr, " "))
 #endif
 #define ADD_KEY2(KEY) strcat(ptr, KEY)
-
-#define ADD_FLG_NOUN(FLG) (entry->add(FLG), prev_flg = FLG)
