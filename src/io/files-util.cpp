@@ -57,7 +57,8 @@ std::filesystem::path debug_savefile;
  */
 errr file_character(PlayerType *player_ptr, concptr name)
 {
-    const auto &filename = path_build(ANGBAND_DIR_USER, name).string();
+    const auto &path = path_build(ANGBAND_DIR_USER, name);
+    const auto &filename = path.string();
     auto fd = fd_open(filename, O_RDONLY);
     if (fd >= 0) {
         std::string query = _("現存するファイル ", "Replace existing file ");
@@ -70,7 +71,7 @@ errr file_character(PlayerType *player_ptr, concptr name)
 
     FILE *fff = nullptr;
     if (fd < 0) {
-        fff = angband_fopen(filename, FileOpenMode::WRITE);
+        fff = angband_fopen(path, FileOpenMode::WRITE);
     }
 
     if (!fff) {
@@ -263,8 +264,8 @@ static errr counts_seek(PlayerType *player_ptr, int fd, uint32_t where, bool fla
  */
 uint32_t counts_read(PlayerType *player_ptr, int where)
 {
-    const auto &filename = path_build(ANGBAND_DIR_DATA, _("z_info_j.raw", "z_info.raw")).string();
-    auto fd = fd_open(filename, O_RDONLY);
+    const auto &path = path_build(ANGBAND_DIR_DATA, _("z_info_j.raw", "z_info.raw"));
+    auto fd = fd_open(path.string(), O_RDONLY);
     uint32_t count = 0;
     if (counts_seek(player_ptr, fd, where, false) || fd_read(fd, (char *)(&count), sizeof(uint32_t))) {
         count = 0;
@@ -284,14 +285,13 @@ uint32_t counts_read(PlayerType *player_ptr, int where)
  */
 errr counts_write(PlayerType *player_ptr, int where, uint32_t count)
 {
-    const auto &filename = path_build(ANGBAND_DIR_DATA, _("z_info_j.raw", "z_info.raw")).string();
-
+    const auto &path = path_build(ANGBAND_DIR_DATA, _("z_info_j.raw", "z_info.raw"));
     safe_setuid_grab(player_ptr);
-    auto fd = fd_open(filename, O_RDWR);
+    auto fd = fd_open(path.string(), O_RDWR);
     safe_setuid_drop();
     if (fd < 0) {
         safe_setuid_grab(player_ptr);
-        fd = fd_make(filename);
+        fd = fd_make(path.string());
         safe_setuid_drop();
     }
 

@@ -58,13 +58,14 @@ static bool open_diary_file(FILE **fff, bool *disable_diary)
 {
     std::stringstream ss;
     ss << _("playrecord-", "playrec-") << savefile_base << ".txt";
-    const auto &filename = path_build(ANGBAND_DIR_USER, ss.str()).string();
-    *fff = angband_fopen(filename, FileOpenMode::APPEND);
+    const auto &path = path_build(ANGBAND_DIR_USER, ss.str());
+    *fff = angband_fopen(path, FileOpenMode::APPEND);
     if (*fff) {
         return true;
     }
 
     constexpr auto mes = _("%s を開くことができませんでした。プレイ記録を一時停止します。", "Failed to open %s. Play-Record is disabled temporarily.");
+    const auto &filename = path.string();
     msg_format(mes, filename.data());
     msg_print(nullptr);
     *disable_diary = true;

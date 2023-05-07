@@ -97,9 +97,7 @@ void init_file_paths(const std::filesystem::path &libpath)
     struct tm *t = localtime(&now);
     char tmp[128];
     strftime(tmp, sizeof(tmp), "%Y-%m-%d-%H-%M-%S", t);
-    const auto &path_savefile = path_build(ANGBAND_DIR_DEBUG_SAVE, tmp);
-    debug_savefile = path_savefile;
-
+    debug_savefile = path_build(ANGBAND_DIR_DEBUG_SAVE, tmp);
     remove_old_debug_savefiles();
 }
 
@@ -190,7 +188,8 @@ void init_angband(PlayerType *player_ptr, bool no_term)
         term_flush();
     }
 
-    const auto &filename_score = path_build(ANGBAND_DIR_APEX, "scores.raw").string();
+    const auto &path_score = path_build(ANGBAND_DIR_APEX, "scores.raw");
+    const auto &filename_score = path_score.string();
     fd = fd_open(filename_score, O_RDONLY);
     if (fd < 0) {
         safe_setuid_grab(player_ptr);

@@ -138,11 +138,11 @@ bool autopick_autoregister(PlayerType *player_ptr, ItemEntity *o_ptr)
         }
     }
 
-    auto filename_pref = path_build(ANGBAND_DIR_USER, pickpref_filename(player_ptr, PT_WITH_PNAME)).string();
-    auto *pref_fff = angband_fopen(filename_pref, FileOpenMode::READ);
+    const auto path_pref = path_build(ANGBAND_DIR_USER, pickpref_filename(player_ptr, PT_WITH_PNAME));
+    auto *pref_fff = angband_fopen(path_pref, FileOpenMode::READ);
     if (!pref_fff) {
         path_build(ANGBAND_DIR_USER, pickpref_filename(player_ptr, PT_DEFAULT));
-        pref_fff = angband_fopen(filename_pref, FileOpenMode::READ);
+        pref_fff = angband_fopen(path_pref, FileOpenMode::READ);
     }
 
     if (pref_fff) {
@@ -168,8 +168,9 @@ bool autopick_autoregister(PlayerType *player_ptr, ItemEntity *o_ptr)
         player_ptr->autopick_autoregister = false;
     }
 
-    pref_fff = angband_fopen(filename_pref, FileOpenMode::APPEND);
+    pref_fff = angband_fopen(path_pref, FileOpenMode::APPEND);
     if (!pref_fff) {
+        const auto filename_pref = path_pref.string();
         msg_format(_("%s を開くことができませんでした。", "Failed to open %s."), filename_pref.data());
         msg_print(nullptr);
         return false;

@@ -31,7 +31,8 @@ bool ParchmentReadExecutor::read()
     screen_save();
     auto q = format("book-%d_jp.txt", this->o_ptr->bi_key.sval().value());
     const auto item_name = describe_flavor(this->player_ptr, this->o_ptr, OD_NAME_ONLY);
-    const auto &filename = path_build(ANGBAND_DIR_FILE, q).string();
+    const auto &path = path_build(ANGBAND_DIR_FILE, q);
+    const auto &filename = path.string();
     (void)show_file(this->player_ptr, true, filename.data(), item_name.data(), 0, 0);
     screen_load();
     return false;

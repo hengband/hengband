@@ -350,7 +350,8 @@ void prepare_movie_hooks(PlayerType *player_ptr)
         return;
     }
 
-    const auto &filename = path_build(ANGBAND_DIR_USER, movie_filename).string();
+    const auto &path = path_build(ANGBAND_DIR_USER, movie_filename);
+    const auto &filename = path.string();
     auto fd = fd_open(filename, O_RDONLY);
     if (fd >= 0) {
         (void)fd_close(fd);
@@ -651,8 +652,8 @@ void browse_movie(void)
 #ifndef WINDOWS
 void prepare_browse_movie_with_path_build(std::string_view filename)
 {
-    const auto &path_str = path_build(ANGBAND_DIR_USER, filename).string();
-    movie_fd = fd_open(path_str, O_RDONLY);
+    const auto &path = path_build(ANGBAND_DIR_USER, filename);
+    movie_fd = fd_open(path.string(), O_RDONLY);
     init_buffer();
 }
 #endif

@@ -257,7 +257,8 @@ int play_sound(int val, int volume)
         return 1;
     }
 
-    auto filename_sound = path_build(ANGBAND_DIR_XTRA_SOUND, filename).string();
+    auto path = path_build(ANGBAND_DIR_XTRA_SOUND, filename);
+    auto filename_sound = path.string();
     if (play_sound_impl(filename_sound.data(), volume)) {
         return 0;
     }

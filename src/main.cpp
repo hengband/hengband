@@ -81,11 +81,13 @@ static void quit_hook(concptr s)
  */
 static void create_user_dir(void)
 {
-    const auto &dirpath = path_parse(PRIVATE_USER_PATH).string();
-    mkdir(dirpath.data(), 0700);
+    const auto &dirpath = path_parse(PRIVATE_USER_PATH);
+    const auto &dir_str = dirpath.string();
+    mkdir(dir_str.data(), 0700);
 
-    const auto &subdirpath = path_build(dirpath, VARIANT_NAME).string();
-    mkdir(subdirpath.data(), 0700);
+    const auto &subdirpath = path_build(dirpath, VARIANT_NAME);
+    const auto &subdir_str = subdirpath.string();
+    mkdir(subdir_str.data(), 0700);
 }
 
 #endif /* PRIVATE_USER_PATH */

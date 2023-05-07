@@ -750,8 +750,9 @@ void wiz_reset_realms(PlayerType *player_ptr)
  */
 void wiz_dump_options(void)
 {
-    const auto &filename = path_build(ANGBAND_DIR_USER, "opt_info.txt").string();
-    auto *fff = angband_fopen(filename, FileOpenMode::APPEND);
+    const auto &path = path_build(ANGBAND_DIR_USER, "opt_info.txt");
+    const auto &filename = path.string();
+    auto *fff = angband_fopen(path, FileOpenMode::APPEND);
     if (fff == nullptr) {
         msg_format(_("ファイル %s を開けませんでした。", "Failed to open file %s."), filename.data());
         msg_print(nullptr);

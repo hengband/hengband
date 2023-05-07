@@ -156,17 +156,16 @@ static errr process_pref_file_aux(PlayerType *player_ptr, const std::filesystem:
  */
 errr process_pref_file(PlayerType *player_ptr, std::string_view name, bool only_user_dir)
 {
-    std::filesystem::path path;
     errr err1 = 0;
     if (!only_user_dir) {
-        path = path_build(ANGBAND_DIR_PREF, name);
+        const auto &path = path_build(ANGBAND_DIR_PREF, name);
         err1 = process_pref_file_aux(player_ptr, path, PREF_TYPE_NORMAL);
         if (err1 > 0) {
             return err1;
         }
     }
 
-    path = path_build(ANGBAND_DIR_USER, name);
+    const auto &path = path_build(ANGBAND_DIR_USER, name);
     errr err2 = process_pref_file_aux(player_ptr, path, PREF_TYPE_NORMAL);
     if (err2 < 0 && !err1) {
         return -2;

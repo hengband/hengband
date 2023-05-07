@@ -190,17 +190,18 @@ errr play_music(int type, int val)
         return 1;
     } // no setting
 
-    auto filename_music = path_build(ANGBAND_DIR_XTRA_MUSIC, filename).string();
+    auto path_music = path_build(ANGBAND_DIR_XTRA_MUSIC, filename);
     if (current_music_type != TERM_XTRA_MUSIC_MUTE) {
-        if (current_music_path.string() == filename_music) {
+        if (current_music_path == path_music) {
             return 0;
         }
     } // now playing same file
 
     current_music_type = type;
     current_music_id = val;
-    current_music_path = filename_music;
+    current_music_path = path_music;
 
+    const auto &filename_music = path_music.string();
     to_wchar path(filename_music.data());
     mci_open_parms.lpstrDeviceType = mci_device_type.data();
     mci_open_parms.lpstrElementName = path.wc_str();

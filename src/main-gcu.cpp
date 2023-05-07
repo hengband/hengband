@@ -291,7 +291,7 @@ static term_data data[MAX_TERM_DATA];
 /* #define nonl() */
 /* #define nl() */
 
-static concptr ANGBAND_DIR_XTRA_SOUND;
+static std::filesystem::path ANGBAND_DIR_XTRA_SOUND;
 
 /*
  * todo 有効活用されていない疑惑
@@ -594,7 +594,8 @@ static bool init_sound(void)
     for (auto i = 1; i < SOUND_MAX; i++) {
         std::string wav = angband_sound_name[i];
         wav.append(".wav");
-        const auto &filename = path_build(ANGBAND_DIR_XTRA_SOUND, wav).string();
+        const auto &path = path_build(ANGBAND_DIR_XTRA_SOUND, wav);
+        const auto &filename = path.string();
         if (check_file(filename.data())) {
             sound_file[i] = string_make(filename.data());
         }
@@ -1242,8 +1243,7 @@ errr init_gcu(int argc, char *argv[])
 
     setlocale(LC_ALL, "");
 
-    const auto &filename = path_build(ANGBAND_DIR_XTRA, "sound").string();
-    ANGBAND_DIR_XTRA_SOUND = string_make(filename.data());
+    ANGBAND_DIR_XTRA_SOUND = path_build(ANGBAND_DIR_XTRA, "sound");
     keymap_norm_prepare();
     auto nobigscreen = false;
     for (auto i = 1; i < argc; i++) {

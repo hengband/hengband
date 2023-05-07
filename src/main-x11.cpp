@@ -1803,7 +1803,8 @@ static void init_sound(void)
     for (auto i = 1; i < SOUND_MAX; i++) {
         std::string wav = angband_sound_name[i];
         wav.append(".wav");
-        const auto &filename = path_build(dir_xtra_sound, wav).string();
+        const auto &path = path_build(dir_xtra_sound, wav);
+        const auto &filename = path.string();
         if (check_file(filename.data())) {
             sound_file[i] = string_make(filename.data());
         }
@@ -2514,7 +2515,8 @@ errr init_x11(int argc, char *argv[])
 #ifndef USE_XFT
     switch (arg_graphics) {
     case GRAPHICS_ORIGINAL: {
-        const auto &filename = path_build(ANGBAND_DIR_XTRA, "graf/8x8.bmp").string();
+        const auto &path = path_build(ANGBAND_DIR_XTRA, "graf/8x8.bmp");
+        const auto &filename = path.string();
         if (0 == fd_close(fd_open(filename, O_RDONLY))) {
             use_graphics = true;
             pict_wid = pict_hgt = 8;
@@ -2523,7 +2525,8 @@ errr init_x11(int argc, char *argv[])
         break;
     }
     case GRAPHICS_ADAM_BOLT: {
-        const auto &filename = path_build(ANGBAND_DIR_XTRA, "graf/16x16.bmp").string();
+        const auto &path = path_build(ANGBAND_DIR_XTRA, "graf/16x16.bmp");
+        const auto &filename = path.string();
         if (0 == fd_close(fd_open(filename, O_RDONLY))) {
             use_graphics = true;
             pict_wid = pict_hgt = 16;

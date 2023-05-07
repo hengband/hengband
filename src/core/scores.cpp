@@ -359,8 +359,8 @@ errr predict_score(PlayerType *player_ptr)
 void show_highclass(PlayerType *player_ptr)
 {
     screen_save();
-    const auto &filename = path_build(ANGBAND_DIR_APEX, "scores.raw").string();
-    highscore_fd = fd_open(filename, O_RDONLY);
+    const auto &path = path_build(ANGBAND_DIR_APEX, "scores.raw");
+    highscore_fd = fd_open(path.string(), O_RDONLY);
     if (highscore_fd < 0) {
         msg_print(_("スコア・ファイルが使用できません。", "Score file unavailable."));
         msg_print(nullptr);
@@ -438,8 +438,8 @@ void race_score(PlayerType *player_ptr, int race_num)
 
     /* rr9: TODO - pluralize the race */
     prt(std::string(_("最高の", "The Greatest of all the ")).append(race_info[race_num].title), 5, 15);
-    const auto &filename = path_build(ANGBAND_DIR_APEX, "scores.raw").string();
-    highscore_fd = fd_open(filename, O_RDONLY);
+    const auto &path = path_build(ANGBAND_DIR_APEX, "scores.raw");
+    highscore_fd = fd_open(path.string(), O_RDONLY);
     if (highscore_fd < 0) {
         msg_print(_("スコア・ファイルが使用できません。", "Score file unavailable."));
         msg_print(nullptr);

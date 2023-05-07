@@ -236,7 +236,8 @@ static void do_cmd_save_screen_html(void)
         return;
     }
 
-    auto filename = path_build(ANGBAND_DIR_USER, tmp).string();
+    auto path = path_build(ANGBAND_DIR_USER, tmp);
+    auto filename = path.string();
     msg_print(nullptr);
     do_cmd_save_screen_html_aux(filename.data(), 1);
 }
@@ -474,9 +475,10 @@ void do_cmd_load_screen(void)
 {
     TERM_LEN wid, hgt;
     term_get_size(&wid, &hgt);
-    const auto &filename = path_build(ANGBAND_DIR_USER, "dump.txt").string();
-    auto *fff = angband_fopen(filename, FileOpenMode::READ);
+    const auto path = path_build(ANGBAND_DIR_USER, "dump.txt");
+    auto *fff = angband_fopen(path, FileOpenMode::READ);
     if (!fff) {
+        const auto filename = path.string();
         msg_format(_("%s を開くことができませんでした。", "Failed to open %s."), filename.data());
         msg_print(nullptr);
         return;
