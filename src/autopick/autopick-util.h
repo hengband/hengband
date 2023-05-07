@@ -32,6 +32,8 @@ struct autopick_type {
     byte dice; /*!< 武器のダイス値基準値 / Weapons which have more than 'dice' dice match */
     byte bonus; /*!< アイテムのボーナス基準値 / Items which have more than 'bonus' magical bonus match */
     bool has(int flag) const;
+    void add(int flag);
+    void remove(int flag);
 };
 
 /*

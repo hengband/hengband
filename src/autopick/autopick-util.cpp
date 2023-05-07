@@ -8,6 +8,7 @@
 #include "object-enchant/item-feeling.h"
 #include "system/item-entity.h"
 #include "system/player-type-definition.h"
+#include "util/bit-flags-calculator.h"
 #include "util/quarks.h"
 
 /*!
@@ -26,6 +27,16 @@ ItemEntity autopick_last_destroyed_object;
 bool autopick_type::has(int flag) const
 {
     return this->flags[flag / 32] & (1UL << (flag % 32));
+}
+
+void autopick_type::add(int flag)
+{
+    set_bits(this->flags[flag / 32], 1UL << (flag % 32));
+}
+
+void autopick_type::remove(int flag)
+{
+    reset_bits(this->flags[flag / 32], 1UL << (flag % 32));
 }
 
 /*!

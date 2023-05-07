@@ -44,29 +44,29 @@ void toggle_keyword(text_body_type *tb, BIT_FLAGS flg)
         if (FLG_NOUN_BEGIN <= flg && flg <= FLG_NOUN_END) {
             int i;
             for (i = FLG_NOUN_BEGIN; i <= FLG_NOUN_END; i++) {
-                REM_FLG(i);
+                entry->remove(i);
             }
         } else if (FLG_UNAWARE <= flg && flg <= FLG_STAR_IDENTIFIED) {
             int i;
             for (i = FLG_UNAWARE; i <= FLG_STAR_IDENTIFIED; i++) {
-                REM_FLG(i);
+                entry->remove(i);
             }
         } else if (FLG_ARTIFACT <= flg && flg <= FLG_AVERAGE) {
             int i;
             for (i = FLG_ARTIFACT; i <= FLG_AVERAGE; i++) {
-                REM_FLG(i);
+                entry->remove(i);
             }
         } else if (FLG_RARE <= flg && flg <= FLG_COMMON) {
             int i;
             for (i = FLG_RARE; i <= FLG_COMMON; i++) {
-                REM_FLG(i);
+                entry->remove(i);
             }
         }
 
         if (add) {
-            ADD_FLG(flg);
+            entry->add(flg);
         } else {
-            REM_FLG(flg);
+            entry->remove(flg);
         }
 
         tb->lines_list[y] = autopick_line_from_entry(*entry);
@@ -190,11 +190,11 @@ void add_keyword(text_body_type *tb, BIT_FLAGS flg)
         if (FLG_NOUN_BEGIN <= flg && flg <= FLG_NOUN_END) {
             int i;
             for (i = FLG_NOUN_BEGIN; i <= FLG_NOUN_END; i++) {
-                REM_FLG(i);
+                entry->remove(i);
             }
         }
 
-        ADD_FLG(flg);
+        entry->add(flg);
         tb->lines_list[y] = autopick_line_from_entry(*entry);
         tb->dirty_flags |= DIRTY_ALL;
         tb->changed = true;
