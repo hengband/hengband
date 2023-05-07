@@ -725,16 +725,7 @@ concptr autopick_line_from_entry(const autopick_type &entry)
             ss << ":";
         }
 
-        const auto i = ss.tellp();
-        auto j = 0;
-        while (entry.name[j] && (i < MAX_LINELEN - 2 - 1)) {
-#ifdef JP
-            if (iskanji(entry.name[j])) {
-                ss << entry.name[j++];
-            }
-#endif
-            ss << entry.name[j++];
-        }
+        ss << entry.name;
     }
 
     if (entry.insc.empty()) {
@@ -742,18 +733,7 @@ concptr autopick_line_from_entry(const autopick_type &entry)
         return string_make(str.data());
     }
 
-    ss << '#';
-    const auto i = ss.tellp();
-    auto j = 0;
-    while (entry.insc[j] && (i < MAX_LINELEN - 2)) {
-#ifdef JP
-        if (iskanji(entry.insc[j])) {
-            ss << entry.insc[j++];
-        }
-#endif
-        ss << entry.insc[j++];
-    }
-
+    ss << '#' << entry.insc;
     auto str = ss.str();
     return string_make(str.data());
 }
