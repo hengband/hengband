@@ -1,4 +1,4 @@
-%define version 3.0.0Alpha81
+%define version 3.0.0Alpha82
 %define release 1
 %global debug_package %{nil}
 
@@ -94,6 +94,9 @@ exit 0
 %license lib/help/jlicense.txt
 
 %changelog
+
+* Sat May 06 2023 Shiro Hara <white@vx-xv.com>
+- hengband RPM 3.0.0Alpha release 82
 
 * Thu May 04 2023 Shiro Hara <white@vx-xv.com>
 - hengband RPM 3.0.0Alpha release 81
