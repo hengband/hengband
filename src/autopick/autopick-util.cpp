@@ -29,6 +29,11 @@ bool autopick_type::has(int flag) const
     return this->flags[flag / 32] & (1UL << (flag % 32));
 }
 
+void autopick_type::add(int flag)
+{
+    set_bits(this->flags[flag / 32], 1UL << (flag % 32));
+}
+
 void autopick_type::remove(int flag)
 {
     reset_bits(this->flags[flag / 32], 1UL << (flag % 32));

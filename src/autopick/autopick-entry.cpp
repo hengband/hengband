@@ -122,25 +122,25 @@ bool autopick_new_entry(autopick_type *entry, concptr str, bool allow_default)
     while (old_ptr != ptr) {
         old_ptr = ptr;
         if (MATCH_KEY(KEY_ALL)) {
-            ADD_FLG(FLG_ALL);
+            entry->add(FLG_ALL);
         }
         if (MATCH_KEY(KEY_COLLECTING)) {
-            ADD_FLG(FLG_COLLECTING);
+            entry->add(FLG_COLLECTING);
         }
         if (MATCH_KEY(KEY_UNAWARE)) {
-            ADD_FLG(FLG_UNAWARE);
+            entry->add(FLG_UNAWARE);
         }
         if (MATCH_KEY(KEY_UNIDENTIFIED)) {
-            ADD_FLG(FLG_UNIDENTIFIED);
+            entry->add(FLG_UNIDENTIFIED);
         }
         if (MATCH_KEY(KEY_IDENTIFIED)) {
-            ADD_FLG(FLG_IDENTIFIED);
+            entry->add(FLG_IDENTIFIED);
         }
         if (MATCH_KEY(KEY_STAR_IDENTIFIED)) {
-            ADD_FLG(FLG_STAR_IDENTIFIED);
+            entry->add(FLG_STAR_IDENTIFIED);
         }
         if (MATCH_KEY(KEY_BOOSTED)) {
-            ADD_FLG(FLG_BOOSTED);
+            entry->add(FLG_BOOSTED);
         }
 
         /*** Weapons whose dd*ds is more than nn ***/
@@ -160,7 +160,7 @@ bool autopick_new_entry(autopick_type *entry, concptr str, bool allow_default)
 
             if (k > 0 && k <= 2) {
                 (void)MATCH_KEY(KEY_DICE);
-                ADD_FLG(FLG_MORE_DICE);
+                entry->add(FLG_MORE_DICE);
             } else {
                 ptr = prev_ptr;
             }
@@ -189,62 +189,62 @@ bool autopick_new_entry(autopick_type *entry, concptr str, bool allow_default)
                     ptr++;
                 }
 #endif
-                ADD_FLG(FLG_MORE_BONUS);
+                entry->add(FLG_MORE_BONUS);
             } else {
                 ptr = prev_ptr;
             }
         }
 
         if (MATCH_KEY(KEY_WORTHLESS)) {
-            ADD_FLG(FLG_WORTHLESS);
+            entry->add(FLG_WORTHLESS);
         }
         if (MATCH_KEY(KEY_EGO)) {
-            ADD_FLG(FLG_EGO);
+            entry->add(FLG_EGO);
         }
         if (MATCH_KEY(KEY_GOOD)) {
-            ADD_FLG(FLG_GOOD);
+            entry->add(FLG_GOOD);
         }
         if (MATCH_KEY(KEY_NAMELESS)) {
-            ADD_FLG(FLG_NAMELESS);
+            entry->add(FLG_NAMELESS);
         }
         if (MATCH_KEY(KEY_AVERAGE)) {
-            ADD_FLG(FLG_AVERAGE);
+            entry->add(FLG_AVERAGE);
         }
         if (MATCH_KEY(KEY_RARE)) {
-            ADD_FLG(FLG_RARE);
+            entry->add(FLG_RARE);
         }
         if (MATCH_KEY(KEY_COMMON)) {
-            ADD_FLG(FLG_COMMON);
+            entry->add(FLG_COMMON);
         }
         if (MATCH_KEY(KEY_WANTED)) {
-            ADD_FLG(FLG_WANTED);
+            entry->add(FLG_WANTED);
         }
         if (MATCH_KEY(KEY_UNIQUE)) {
-            ADD_FLG(FLG_UNIQUE);
+            entry->add(FLG_UNIQUE);
         }
         if (MATCH_KEY(KEY_HUMAN)) {
-            ADD_FLG(FLG_HUMAN);
+            entry->add(FLG_HUMAN);
         }
         if (MATCH_KEY(KEY_UNREADABLE)) {
-            ADD_FLG(FLG_UNREADABLE);
+            entry->add(FLG_UNREADABLE);
         }
         if (MATCH_KEY(KEY_REALM1)) {
-            ADD_FLG(FLG_REALM1);
+            entry->add(FLG_REALM1);
         }
         if (MATCH_KEY(KEY_REALM2)) {
-            ADD_FLG(FLG_REALM2);
+            entry->add(FLG_REALM2);
         }
         if (MATCH_KEY(KEY_FIRST)) {
-            ADD_FLG(FLG_FIRST);
+            entry->add(FLG_FIRST);
         }
         if (MATCH_KEY(KEY_SECOND)) {
-            ADD_FLG(FLG_SECOND);
+            entry->add(FLG_SECOND);
         }
         if (MATCH_KEY(KEY_THIRD)) {
-            ADD_FLG(FLG_THIRD);
+            entry->add(FLG_THIRD);
         }
         if (MATCH_KEY(KEY_FOURTH)) {
-            ADD_FLG(FLG_FOURTH);
+            entry->add(FLG_FOURTH);
         }
     }
 
@@ -338,34 +338,34 @@ void autopick_entry_from_object(PlayerType *player_ptr, autopick_type *entry, It
     // We can always use the ^ mark in English.
     bool is_hat_added = _(false, true);
     if (!o_ptr->is_aware()) {
-        ADD_FLG(FLG_UNAWARE);
+        entry->add(FLG_UNAWARE);
         is_hat_added = true;
     } else if (!o_ptr->is_known()) {
         if (!(o_ptr->ident & IDENT_SENSE)) {
-            ADD_FLG(FLG_UNIDENTIFIED);
+            entry->add(FLG_UNIDENTIFIED);
             is_hat_added = true;
         } else {
             switch (o_ptr->feeling) {
             case FEEL_AVERAGE:
             case FEEL_GOOD:
-                ADD_FLG(FLG_NAMELESS);
+                entry->add(FLG_NAMELESS);
                 is_hat_added = true;
                 break;
 
             case FEEL_BROKEN:
             case FEEL_CURSED:
-                ADD_FLG(FLG_NAMELESS);
-                ADD_FLG(FLG_WORTHLESS);
+                entry->add(FLG_NAMELESS);
+                entry->add(FLG_WORTHLESS);
                 is_hat_added = true;
                 break;
 
             case FEEL_TERRIBLE:
             case FEEL_WORTHLESS:
-                ADD_FLG(FLG_WORTHLESS);
+                entry->add(FLG_WORTHLESS);
                 break;
 
             case FEEL_EXCELLENT:
-                ADD_FLG(FLG_EGO);
+                entry->add(FLG_EGO);
                 break;
 
             case FEEL_UNCURSED:
@@ -389,16 +389,16 @@ void autopick_entry_from_object(PlayerType *player_ptr, autopick_type *entry, It
 #endif
                 name = false;
                 if (!o_ptr->is_rare()) {
-                    ADD_FLG(FLG_COMMON);
+                    entry->add(FLG_COMMON);
                 }
             }
 
-            ADD_FLG(FLG_EGO);
+            entry->add(FLG_EGO);
         } else if (o_ptr->is_fixed_or_random_artifact()) {
-            ADD_FLG(FLG_ARTIFACT);
+            entry->add(FLG_ARTIFACT);
         } else {
             if (o_ptr->is_equipment()) {
-                ADD_FLG(FLG_NAMELESS);
+                entry->add(FLG_NAMELESS);
             }
 
             is_hat_added = true;
@@ -408,28 +408,28 @@ void autopick_entry_from_object(PlayerType *player_ptr, autopick_type *entry, It
     if (o_ptr->is_melee_weapon()) {
         const auto &baseitem = o_ptr->get_baseitem();
         if ((o_ptr->dd != baseitem.dd) || (o_ptr->ds != baseitem.ds)) {
-            ADD_FLG(FLG_BOOSTED);
+            entry->add(FLG_BOOSTED);
         }
     }
 
     if (object_is_bounty(player_ptr, o_ptr)) {
         entry->remove(FLG_WORTHLESS);
-        ADD_FLG(FLG_WANTED);
+        entry->add(FLG_WANTED);
     }
 
     const auto r_idx = i2enum<MonsterRaceId>(o_ptr->pval);
     const auto &bi_key = o_ptr->bi_key;
     const auto tval = bi_key.tval();
     if ((tval == ItemKindType::CORPSE || tval == ItemKindType::STATUE) && monraces_info[r_idx].kind_flags.has(MonsterKindType::UNIQUE)) {
-        ADD_FLG(FLG_UNIQUE);
+        entry->add(FLG_UNIQUE);
     }
 
     if (tval == ItemKindType::CORPSE && angband_strchr("pht", monraces_info[r_idx].d_char)) {
-        ADD_FLG(FLG_HUMAN);
+        entry->add(FLG_HUMAN);
     }
 
     if (o_ptr->is_spell_book() && !check_book_realm(player_ptr, bi_key)) {
-        ADD_FLG(FLG_UNREADABLE);
+        entry->add(FLG_UNREADABLE);
         if (tval != ItemKindType::ARCANE_BOOK) {
             name = false;
         }
@@ -439,61 +439,61 @@ void autopick_entry_from_object(PlayerType *player_ptr, autopick_type *entry, It
     auto realm_except_class = pc.equals(PlayerClassType::SORCERER) || pc.equals(PlayerClassType::RED_MAGE);
 
     if ((get_realm1_book(player_ptr) == tval) && !realm_except_class) {
-        ADD_FLG(FLG_REALM1);
+        entry->add(FLG_REALM1);
         name = false;
     }
 
     if ((get_realm2_book(player_ptr) == tval) && !realm_except_class) {
-        ADD_FLG(FLG_REALM2);
+        entry->add(FLG_REALM2);
         name = false;
     }
 
     const auto sval = bi_key.sval();
     if (o_ptr->is_spell_book() && (sval == 0)) {
-        ADD_FLG(FLG_FIRST);
+        entry->add(FLG_FIRST);
     }
     if (o_ptr->is_spell_book() && (sval == 1)) {
-        ADD_FLG(FLG_SECOND);
+        entry->add(FLG_SECOND);
     }
     if (o_ptr->is_spell_book() && (sval == 2)) {
-        ADD_FLG(FLG_THIRD);
+        entry->add(FLG_THIRD);
     }
     if (o_ptr->is_spell_book() && (sval == 3)) {
-        ADD_FLG(FLG_FOURTH);
+        entry->add(FLG_FOURTH);
     }
 
     if (o_ptr->is_ammo()) {
-        ADD_FLG(FLG_MISSILES);
+        entry->add(FLG_MISSILES);
     } else if (tval == ItemKindType::SCROLL || o_ptr->is_wand_staff() || o_ptr->is_wand_rod()) {
-        ADD_FLG(FLG_DEVICES);
+        entry->add(FLG_DEVICES);
     } else if (tval == ItemKindType::LITE) {
-        ADD_FLG(FLG_LIGHTS);
+        entry->add(FLG_LIGHTS);
     } else if (o_ptr->is_junk()) {
-        ADD_FLG(FLG_JUNKS);
+        entry->add(FLG_JUNKS);
     } else if (tval == ItemKindType::CORPSE) {
-        ADD_FLG(FLG_CORPSES);
+        entry->add(FLG_CORPSES);
     } else if (o_ptr->is_spell_book()) {
-        ADD_FLG(FLG_SPELLBOOKS);
+        entry->add(FLG_SPELLBOOKS);
     } else if (o_ptr->is_melee_weapon()) {
-        ADD_FLG(FLG_WEAPONS);
+        entry->add(FLG_WEAPONS);
     } else if (tval == ItemKindType::SHIELD) {
-        ADD_FLG(FLG_SHIELDS);
+        entry->add(FLG_SHIELDS);
     } else if (tval == ItemKindType::BOW) {
-        ADD_FLG(FLG_BOWS);
+        entry->add(FLG_BOWS);
     } else if (tval == ItemKindType::RING) {
-        ADD_FLG(FLG_RINGS);
+        entry->add(FLG_RINGS);
     } else if (tval == ItemKindType::AMULET) {
-        ADD_FLG(FLG_AMULETS);
+        entry->add(FLG_AMULETS);
     } else if (o_ptr->is_armour()) {
-        ADD_FLG(FLG_SUITS);
+        entry->add(FLG_SUITS);
     } else if (tval == ItemKindType::CLOAK) {
-        ADD_FLG(FLG_CLOAKS);
+        entry->add(FLG_CLOAKS);
     } else if (tval == ItemKindType::HELM) {
-        ADD_FLG(FLG_HELMS);
+        entry->add(FLG_HELMS);
     } else if (tval == ItemKindType::GLOVES) {
-        ADD_FLG(FLG_GLOVES);
+        entry->add(FLG_GLOVES);
     } else if (tval == ItemKindType::BOOTS) {
-        ADD_FLG(FLG_BOOTS);
+        entry->add(FLG_BOOTS);
     }
 
     if (!name) {

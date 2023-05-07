@@ -64,7 +64,7 @@ void toggle_keyword(text_body_type *tb, BIT_FLAGS flg)
         }
 
         if (add) {
-            ADD_FLG(flg);
+            entry->add(flg);
         } else {
             entry->remove(flg);
         }
@@ -194,7 +194,7 @@ void add_keyword(text_body_type *tb, BIT_FLAGS flg)
             }
         }
 
-        ADD_FLG(flg);
+        entry->add(flg);
         tb->lines_list[y] = autopick_line_from_entry(*entry);
         tb->dirty_flags |= DIRTY_ALL;
         tb->changed = true;
