@@ -250,72 +250,72 @@ bool autopick_new_entry(autopick_type *entry, concptr str, bool allow_default)
         }
     }
 
-    int prev_flg = -1;
+    auto previous_flag = -1;
     if (MATCH_KEY2(KEY_ARTIFACT)) {
         entry->add(FLG_ARTIFACT);
-        prev_flg = FLG_ARTIFACT;
+        previous_flag = FLG_ARTIFACT;
     }
 
     if (MATCH_KEY2(KEY_ITEMS)) {
         entry->add(FLG_ITEMS);
-        prev_flg = FLG_ITEMS;
+        previous_flag = FLG_ITEMS;
     } else if (MATCH_KEY2(KEY_WEAPONS)) {
         entry->add(FLG_WEAPONS);
-        prev_flg = FLG_WEAPONS;
+        previous_flag = FLG_WEAPONS;
     } else if (MATCH_KEY2(KEY_FAVORITE_WEAPONS)) {
         entry->add(FLG_FAVORITE_WEAPONS);
-        prev_flg = FLG_FAVORITE_WEAPONS;
+        previous_flag = FLG_FAVORITE_WEAPONS;
     } else if (MATCH_KEY2(KEY_ARMORS)) {
         entry->add(FLG_ARMORS);
-        prev_flg = FLG_ARMORS;
+        previous_flag = FLG_ARMORS;
     } else if (MATCH_KEY2(KEY_MISSILES)) {
         entry->add(FLG_MISSILES);
-        prev_flg = FLG_MISSILES;
+        previous_flag = FLG_MISSILES;
     } else if (MATCH_KEY2(KEY_DEVICES)) {
         entry->add(FLG_DEVICES);
-        prev_flg = FLG_DEVICES;
+        previous_flag = FLG_DEVICES;
     } else if (MATCH_KEY2(KEY_LIGHTS)) {
         entry->add(FLG_LIGHTS);
-        prev_flg = FLG_LIGHTS;
+        previous_flag = FLG_LIGHTS;
     } else if (MATCH_KEY2(KEY_JUNKS)) {
         entry->add(FLG_JUNKS);
-        prev_flg = FLG_JUNKS;
+        previous_flag = FLG_JUNKS;
     } else if (MATCH_KEY2(KEY_CORPSES)) {
         entry->add(FLG_CORPSES);
-        prev_flg = FLG_CORPSES;
+        previous_flag = FLG_CORPSES;
     } else if (MATCH_KEY2(KEY_SPELLBOOKS)) {
         entry->add(FLG_SPELLBOOKS);
-        prev_flg = FLG_SPELLBOOKS;
+        previous_flag = FLG_SPELLBOOKS;
     } else if (MATCH_KEY2(KEY_HAFTED)) {
         entry->add(FLG_HAFTED);
-        prev_flg = FLG_HAFTED;
+        previous_flag = FLG_HAFTED;
     } else if (MATCH_KEY2(KEY_SHIELDS)) {
         entry->add(FLG_SHIELDS);
-        prev_flg = FLG_SHIELDS;
+        previous_flag = FLG_SHIELDS;
     } else if (MATCH_KEY2(KEY_BOWS)) {
         entry->add(FLG_BOWS);
-        prev_flg = FLG_BOWS;
+        previous_flag = FLG_BOWS;
     } else if (MATCH_KEY2(KEY_RINGS)) {
         entry->add(FLG_RINGS);
-        prev_flg = FLG_RINGS;
+        previous_flag = FLG_RINGS;
     } else if (MATCH_KEY2(KEY_AMULETS)) {
         entry->add(FLG_AMULETS);
-        prev_flg = FLG_AMULETS;
+        previous_flag = FLG_AMULETS;
     } else if (MATCH_KEY2(KEY_SUITS)) {
         entry->add(FLG_SUITS);
-        prev_flg = FLG_SUITS;
+        previous_flag = FLG_SUITS;
     } else if (MATCH_KEY2(KEY_CLOAKS)) {
         entry->add(FLG_CLOAKS);
-        prev_flg = FLG_CLOAKS;
+        previous_flag = FLG_CLOAKS;
     } else if (MATCH_KEY2(KEY_HELMS)) {
         entry->add(FLG_HELMS);
-        prev_flg = FLG_HELMS;
+        previous_flag = FLG_HELMS;
     } else if (MATCH_KEY2(KEY_GLOVES)) {
         entry->add(FLG_GLOVES);
-        prev_flg = FLG_GLOVES;
+        previous_flag = FLG_GLOVES;
     } else if (MATCH_KEY2(KEY_BOOTS)) {
         entry->add(FLG_BOOTS);
-        prev_flg = FLG_BOOTS;
+        previous_flag = FLG_BOOTS;
     }
 
     if (*ptr == ':') {
@@ -327,13 +327,13 @@ bool autopick_new_entry(autopick_type *entry, concptr str, bool allow_default)
     }
 #endif
     else if (*ptr == '\0') {
-        if (prev_flg == -1) {
+        if (previous_flag == -1) {
             entry->add(FLG_ITEMS);
-            prev_flg = FLG_ITEMS;
+            previous_flag = FLG_ITEMS;
         }
     } else {
-        if (prev_flg != -1) {
-            entry->flags[prev_flg / 32] &= ~(1UL << (prev_flg % 32));
+        if (previous_flag != -1) {
+            entry->flags[previous_flag / 32] &= ~(1UL << (previous_flag % 32));
             ptr = prev_ptr;
         }
     }
@@ -674,7 +674,7 @@ concptr autopick_line_from_entry(const autopick_type &entry)
         ss << shape_autopick_key(KEY_ARTIFACT);
     }
 
-    bool sepa_flag = true;
+    auto should_separate = true;
     if (entry.has(FLG_ITEMS)) {
         ss << KEY_ITEMS;
     } else if (entry.has(FLG_WEAPONS)) {
@@ -716,11 +716,11 @@ concptr autopick_line_from_entry(const autopick_type &entry)
     } else if (entry.has(FLG_BOOTS)) {
         ss << KEY_BOOTS;
     } else if (!entry.has(FLG_ARTIFACT)) {
-        sepa_flag = false;
+        should_separate = false;
     }
 
     if (!entry.name.empty()) {
-        if (sepa_flag) {
+        if (should_separate) {
             ss << ":";
         }
 
