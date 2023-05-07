@@ -97,10 +97,7 @@ void init_file_paths(const std::filesystem::path &libpath)
     struct tm *t = localtime(&now);
     char tmp[128];
     strftime(tmp, sizeof(tmp), "%Y-%m-%d-%H-%M-%S", t);
-    char savefile_buf[1024]{};
-    path_build(savefile_buf, sizeof(savefile_buf), ANGBAND_DIR_DEBUG_SAVE, tmp);
-    debug_savefile = savefile_buf;
-
+    debug_savefile = path_build(ANGBAND_DIR_DEBUG_SAVE, tmp);
     remove_old_debug_savefiles();
 }
 
@@ -165,12 +162,11 @@ static void put_title()
  */
 void init_angband(PlayerType *player_ptr, bool no_term)
 {
-    char buf[1024];
-    path_build(buf, sizeof(buf), ANGBAND_DIR_FILE, _("news_j.txt", "news.txt"));
-    auto fd = fd_open(buf, O_RDONLY);
+    const auto &path_news = path_build(ANGBAND_DIR_FILE, _("news_j.txt", "news.txt"));
+    auto fd = fd_open(path_news.string(), O_RDONLY);
     if (fd < 0) {
         std::string why = _("'", "Cannot access the '");
-        why.append(buf);
+        why.append(path_news.string());
         why.append(_("'ファイルにアクセスできません!", "' file!"));
         init_angband_aux(why);
     }
@@ -178,10 +174,10 @@ void init_angband(PlayerType *player_ptr, bool no_term)
     (void)fd_close(fd);
     if (!no_term) {
         term_clear();
-        path_build(buf, sizeof(buf), ANGBAND_DIR_FILE, _("news_j.txt", "news.txt"));
-        auto *fp = angband_fopen(buf, FileOpenMode::READ);
+        auto *fp = angband_fopen(path_news, FileOpenMode::READ);
         if (fp) {
             int i = 0;
+            char buf[1024]{};
             while (0 == angband_fgets(fp, buf, sizeof(buf))) {
                 term_putstr(0, i++, -1, TERM_WHITE, buf);
             }
@@ -192,15 +188,16 @@ void init_angband(PlayerType *player_ptr, bool no_term)
         term_flush();
     }
 
-    path_build(buf, sizeof(buf), ANGBAND_DIR_APEX, "scores.raw");
-    fd = fd_open(buf, O_RDONLY);
+    const auto &path_score = path_build(ANGBAND_DIR_APEX, "scores.raw");
+    const auto &filename_score = path_score.string();
+    fd = fd_open(filename_score, O_RDONLY);
     if (fd < 0) {
         safe_setuid_grab(player_ptr);
-        fd = fd_make(buf, true);
+        fd = fd_make(filename_score, true);
         safe_setuid_drop();
         if (fd < 0) {
             std::string why = _("'", "Cannot create the '");
-            why.append(buf);
+            why.append(filename_score);
             why.append(_("'ファイルを作成できません!", "' file!"));
             init_angband_aux(why);
         }

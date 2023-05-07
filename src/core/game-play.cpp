@@ -119,7 +119,6 @@ static void send_waiting_record(PlayerType *player_ptr)
         return;
     }
 
-    char buf[1024];
     if (!get_check_strict(player_ptr, _("待機していたスコア登録を今行ないますか？", "Do you register score now? "), CHECK_NO_HISTORY)) {
         quit(0);
     }
@@ -130,8 +129,8 @@ static void send_waiting_record(PlayerType *player_ptr)
     w_ptr->start_time = (uint32_t)time(nullptr);
     signals_ignore_tstp();
     w_ptr->character_icky_depth = 1;
-    path_build(buf, sizeof(buf), ANGBAND_DIR_APEX, "scores.raw");
-    highscore_fd = fd_open(buf, O_RDWR);
+    const auto &path = path_build(ANGBAND_DIR_APEX, "scores.raw");
+    highscore_fd = fd_open(path.string(), O_RDWR);
 
     /* 町名消失バグ対策(#38205)のためここで世界マップ情報を読み出す */
     parse_fixed_map(player_ptr, WILDERNESS_DEFINITION, 0, 0, w_ptr->max_wild_y, w_ptr->max_wild_x);

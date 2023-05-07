@@ -209,9 +209,8 @@ void do_cmd_save_screen_html_aux(char *filename, int message)
         screen_save();
     }
 
-    char buf[2048];
-    path_build(buf, sizeof(buf), ANGBAND_DIR_USER, "htmldump.prf");
-    auto *tmpfff = angband_fopen(buf, FileOpenMode::READ);
+    const auto &path = path_build(ANGBAND_DIR_USER, "htmldump.prf");
+    auto *tmpfff = angband_fopen(path, FileOpenMode::READ);
     write_html_header(tmpfff, fff);
     screen_dump_lines(wid, hgt, fff);
     write_html_footer(tmpfff, fff);
@@ -232,14 +231,15 @@ void do_cmd_save_screen_html_aux(char *filename, int message)
  */
 static void do_cmd_save_screen_html(void)
 {
-    char buf[1024], tmp[256] = "screen.html";
+    char tmp[256] = "screen.html";
     if (!get_string(_("ファイル名: ", "File name: "), tmp, 80)) {
         return;
     }
 
-    path_build(buf, sizeof(buf), ANGBAND_DIR_USER, tmp);
+    auto path = path_build(ANGBAND_DIR_USER, tmp);
+    auto filename = path.string();
     msg_print(nullptr);
-    do_cmd_save_screen_html_aux(buf, 1);
+    do_cmd_save_screen_html_aux(filename.data(), 1);
 }
 
 /*!
@@ -296,16 +296,16 @@ static bool do_cmd_save_screen_text(int wid, int hgt)
 {
     TERM_COLOR a = 0;
     auto c = ' ';
-    char buf[1024];
-    path_build(buf, sizeof(buf), ANGBAND_DIR_USER, "dump.txt");
-    auto *fff = angband_fopen(buf, FileOpenMode::WRITE);
-    if (!check_screen_text_can_open(fff, buf)) {
+    const auto &path = path_build(ANGBAND_DIR_USER, "dump.txt");
+    auto *fff = angband_fopen(path, FileOpenMode::WRITE);
+    if (!check_screen_text_can_open(fff, path.string())) {
         return false;
     }
 
     screen_save();
     for (TERM_LEN y = 0; y < hgt; y++) {
         TERM_LEN x;
+        char buf[1024]{};
         for (x = 0; x < wid - 1; x++) {
             (void)(term_what(x, y, &a, &c));
             buf[x] = c;
@@ -318,6 +318,7 @@ static bool do_cmd_save_screen_text(int wid, int hgt)
     fprintf(fff, "\n");
     for (TERM_LEN y = 0; y < hgt; y++) {
         TERM_LEN x;
+        char buf[1024]{};
         for (x = 0; x < wid - 1; x++) {
             (void)(term_what(x, y, &a, &c));
             buf[x] = hack[a & 0x0F];
@@ -472,13 +473,13 @@ static void draw_colored_characters(FILE *fff, int wid, int hgt, bool okay)
  */
 void do_cmd_load_screen(void)
 {
-    char buf[1024];
     TERM_LEN wid, hgt;
     term_get_size(&wid, &hgt);
-    path_build(buf, sizeof(buf), ANGBAND_DIR_USER, "dump.txt");
-    auto *fff = angband_fopen(buf, FileOpenMode::READ);
+    const auto path = path_build(ANGBAND_DIR_USER, "dump.txt");
+    auto *fff = angband_fopen(path, FileOpenMode::READ);
     if (!fff) {
-        msg_format(_("%s を開くことができませんでした。", "Failed to open %s."), buf);
+        const auto filename = path.string();
+        msg_format(_("%s を開くことができませんでした。", "Failed to open %s."), filename.data());
         msg_print(nullptr);
         return;
     }

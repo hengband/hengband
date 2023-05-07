@@ -1799,16 +1799,14 @@ static bool check_file(concptr s)
  */
 static void init_sound(void)
 {
-    int i;
-    char buf[1024];
-    char dir_xtra_sound[1024];
-    path_build(dir_xtra_sound, sizeof(dir_xtra_sound), ANGBAND_DIR_XTRA, "sound");
-    for (i = 1; i < SOUND_MAX; i++) {
+    const auto &dir_xtra_sound = path_build(ANGBAND_DIR_XTRA, "sound");
+    for (auto i = 1; i < SOUND_MAX; i++) {
         std::string wav = angband_sound_name[i];
         wav.append(".wav");
-        path_build(buf, sizeof(buf), dir_xtra_sound, wav);
-        if (check_file(buf)) {
-            sound_file[i] = string_make(buf);
+        const auto &path = path_build(dir_xtra_sound, wav);
+        const auto &filename = path.string();
+        if (check_file(filename.data())) {
+            sound_file[i] = string_make(filename.data());
         }
     }
 
@@ -2388,8 +2386,6 @@ errr init_x11(int argc, char *argv[])
     int num_term = 3;
 
 #ifndef USE_XFT
-    char filename[1024];
-
     int pict_wid = 0;
     int pict_hgt = 0;
 
@@ -2518,16 +2514,19 @@ errr init_x11(int argc, char *argv[])
 
 #ifndef USE_XFT
     switch (arg_graphics) {
-    case GRAPHICS_ORIGINAL:
-        path_build(filename, sizeof(filename), ANGBAND_DIR_XTRA, "graf/8x8.bmp");
+    case GRAPHICS_ORIGINAL: {
+        const auto &path = path_build(ANGBAND_DIR_XTRA, "graf/8x8.bmp");
+        const auto &filename = path.string();
         if (0 == fd_close(fd_open(filename, O_RDONLY))) {
             use_graphics = true;
             pict_wid = pict_hgt = 8;
             ANGBAND_GRAF = "old";
         }
         break;
-    case GRAPHICS_ADAM_BOLT:
-        path_build(filename, sizeof(filename), ANGBAND_DIR_XTRA, "graf/16x16.bmp");
+    }
+    case GRAPHICS_ADAM_BOLT: {
+        const auto &path = path_build(ANGBAND_DIR_XTRA, "graf/16x16.bmp");
+        const auto &filename = path.string();
         if (0 == fd_close(fd_open(filename, O_RDONLY))) {
             use_graphics = true;
             pict_wid = pict_hgt = 16;
@@ -2535,10 +2534,12 @@ errr init_x11(int argc, char *argv[])
         }
         break;
     }
+    }
 
     if (use_graphics) {
         Display *dpy = Metadpy->dpy;
         XImage *tiles_raw;
+        char filename[1024]{};
         tiles_raw = ReadBMP(dpy, filename);
         for (i = 0; i < num_term; i++) {
             term_data *td = &data[i];

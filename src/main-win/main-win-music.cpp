@@ -190,20 +190,19 @@ errr play_music(int type, int val)
         return 1;
     } // no setting
 
-    char buf[MAIN_WIN_MAX_PATH];
-    path_build(buf, MAIN_WIN_MAX_PATH, ANGBAND_DIR_XTRA_MUSIC, filename);
-
+    auto path_music = path_build(ANGBAND_DIR_XTRA_MUSIC, filename);
     if (current_music_type != TERM_XTRA_MUSIC_MUTE) {
-        if (current_music_path.string() == std::string(buf)) {
+        if (current_music_path == path_music) {
             return 0;
         }
     } // now playing same file
 
     current_music_type = type;
     current_music_id = val;
-    current_music_path = buf;
+    current_music_path = path_music;
 
-    to_wchar path(buf);
+    const auto &filename_music = path_music.string();
+    to_wchar path(filename_music.data());
     mci_open_parms.lpstrDeviceType = mci_device_type.data();
     mci_open_parms.lpstrElementName = path.wc_str();
     mciSendCommandW(mci_open_parms.wDeviceID, MCI_STOP, MCI_WAIT, 0);

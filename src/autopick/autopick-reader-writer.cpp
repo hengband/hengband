@@ -63,15 +63,15 @@ std::string pickpref_filename(PlayerType *player_ptr, int filename_mode)
  */
 static std::vector<concptr> read_text_lines(std::string_view filename)
 {
-    char buf[1024];
-    path_build(buf, sizeof(buf), ANGBAND_DIR_USER, filename);
-    auto *fff = angband_fopen(buf, FileOpenMode::READ);
+    const auto &path = path_build(ANGBAND_DIR_USER, filename);
+    auto *fff = angband_fopen(path, FileOpenMode::READ);
     if (!fff) {
         return {};
     }
 
     auto lines = 0;
     std::vector<concptr> lines_list(MAX_LINES);
+    char buf[1024]{};
     while (angband_fgets(fff, buf, sizeof(buf)) == 0) {
         lines_list[lines++] = string_make(buf);
         if (is_greater_autopick_max_line(lines)) {
@@ -102,9 +102,8 @@ static void prepare_default_pickpref(PlayerType *player_ptr)
     }
 
     msg_print(nullptr);
-    char buf[1024];
-    path_build(buf, sizeof(buf), ANGBAND_DIR_USER, filename);
-    auto *user_fp = angband_fopen(buf, FileOpenMode::WRITE);
+    const auto &path_user = path_build(ANGBAND_DIR_USER, filename);
+    auto *user_fp = angband_fopen(path_user, FileOpenMode::WRITE);
     if (!user_fp) {
         return;
     }
@@ -115,13 +114,14 @@ static void prepare_default_pickpref(PlayerType *player_ptr)
     }
 
     fprintf(user_fp, "#***\n\n\n");
-    path_build(buf, sizeof(buf), ANGBAND_DIR_PREF, filename);
-    auto *pref_fp = angband_fopen(buf, FileOpenMode::READ);
+    const auto &path_pref = path_build(ANGBAND_DIR_PREF, filename);
+    auto *pref_fp = angband_fopen(path_pref, FileOpenMode::READ);
     if (!pref_fp) {
         angband_fclose(user_fp);
         return;
     }
 
+    char buf[1024]{};
     while (!angband_fgets(pref_fp, buf, sizeof(buf))) {
         fprintf(user_fp, "%s\n", buf);
     }
@@ -165,9 +165,8 @@ std::vector<concptr> read_pickpref_text_lines(PlayerType *player_ptr, int *filen
  */
 bool write_text_lines(std::string_view filename, const std::vector<concptr> &lines)
 {
-    char buf[1024];
-    path_build(buf, sizeof(buf), ANGBAND_DIR_USER, filename);
-    auto *fff = angband_fopen(buf, FileOpenMode::WRITE);
+    const auto &path = path_build(ANGBAND_DIR_USER, filename);
+    auto *fff = angband_fopen(path, FileOpenMode::WRITE);
     if (!fff) {
         return false;
     }

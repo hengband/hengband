@@ -161,15 +161,13 @@ static errr path_temp(char *buf, int max)
  * @param file ファイル名またはディレクトリ名
  * @todo buf, max は削除してファイル名が長すぎたら例外を送出する。またreturn で絶対パスを返すように書き換える.
  */
-void path_build(char *buf, int max, const std::filesystem::path &path, std::string_view file)
+std::filesystem::path path_build(const std::filesystem::path &path, std::string_view file)
 {
     if ((file[0] == '~') || (prefix(file, PATH_SEP)) || path.empty()) {
-        (void)strnfmt(buf, max, "%s", file.data());
-        return;
+        return file;
     }
 
-    const auto &path_str = path.string();
-    (void)strnfmt(buf, max, "%s%s%s", path_str.data(), PATH_SEP, file.data());
+    return std::filesystem::path(path).append(file);
 }
 
 static std::string make_file_mode(const FileOpenMode mode, const bool is_binary)

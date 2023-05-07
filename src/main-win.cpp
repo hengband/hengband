@@ -1645,9 +1645,8 @@ static void process_menus(PlayerType *player_ptr, WORD wCmd)
         break;
     }
     case IDM_FILE_SCORE: {
-        char buf[1024];
-        path_build(buf, sizeof(buf), ANGBAND_DIR_APEX, "scores.raw");
-        highscore_fd = fd_open(buf, O_RDONLY);
+        const auto &path = path_build(ANGBAND_DIR_APEX, "scores.raw");
+        highscore_fd = fd_open(path.string(), O_RDONLY);
         if (highscore_fd < 0) {
             msg_print("Score file unavailable.");
         } else {
@@ -1910,9 +1909,8 @@ static void process_menus(PlayerType *player_ptr, WORD wCmd)
         break;
     }
     case IDM_OPTIONS_OPEN_MUSIC_DIR: {
-        char buf[MAIN_WIN_MAX_PATH];
-        path_build(buf, MAIN_WIN_MAX_PATH, ANGBAND_DIR_XTRA_MUSIC, "music.cfg");
-        open_dir_in_explorer(buf);
+        const auto &path = path_build(ANGBAND_DIR_XTRA_MUSIC, "music.cfg");
+        open_dir_in_explorer(path.string());
         break;
     }
     case IDM_OPTIONS_SOUND: {
@@ -1934,9 +1932,8 @@ static void process_menus(PlayerType *player_ptr, WORD wCmd)
         break;
     }
     case IDM_OPTIONS_OPEN_SOUND_DIR: {
-        char buf[MAIN_WIN_MAX_PATH];
-        path_build(buf, MAIN_WIN_MAX_PATH, ANGBAND_DIR_XTRA_SOUND, "sound.cfg");
-        open_dir_in_explorer(buf);
+        const auto &path = path_build(ANGBAND_DIR_XTRA_SOUND, "sound.cfg");
+        open_dir_in_explorer(path.string());
         break;
     }
     case IDM_OPTIONS_NO_BG: {
@@ -2657,19 +2654,16 @@ static void init_stuff()
     validate_dir(ANGBAND_DIR_DEBUG_SAVE, false);
     validate_dir(ANGBAND_DIR_USER, true);
     validate_dir(ANGBAND_DIR_XTRA, true);
-    path_build(path, sizeof(path), ANGBAND_DIR_FILE, _("news_j.txt", "news.txt"));
+    const auto &path_news = path_build(ANGBAND_DIR_FILE, _("news_j.txt", "news.txt"));
+    validate_file(path_news);
 
-    validate_file(path);
-    path_build(path, sizeof(path), ANGBAND_DIR_XTRA, "graf");
-    ANGBAND_DIR_XTRA_GRAF = path;
+    ANGBAND_DIR_XTRA_GRAF = path_build(ANGBAND_DIR_XTRA, "graf");
     validate_dir(ANGBAND_DIR_XTRA_GRAF, true);
 
-    path_build(path, sizeof(path), ANGBAND_DIR_XTRA, "sound");
-    ANGBAND_DIR_XTRA_SOUND = path;
+    ANGBAND_DIR_XTRA_SOUND = path_build(ANGBAND_DIR_XTRA, "sound");
     validate_dir(ANGBAND_DIR_XTRA_SOUND, false);
 
-    path_build(path, sizeof(path), ANGBAND_DIR_XTRA, "music");
-    ANGBAND_DIR_XTRA_MUSIC = path;
+    ANGBAND_DIR_XTRA_MUSIC = path_build(ANGBAND_DIR_XTRA, "music");
     validate_dir(ANGBAND_DIR_XTRA_MUSIC, false);
 
     for (i = 0; special_key_list[i]; ++i) {

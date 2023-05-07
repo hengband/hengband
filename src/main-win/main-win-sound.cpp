@@ -257,9 +257,9 @@ int play_sound(int val, int volume)
         return 1;
     }
 
-    char buf[MAIN_WIN_MAX_PATH];
-    path_build(buf, MAIN_WIN_MAX_PATH, ANGBAND_DIR_XTRA_SOUND, filename);
-    if (play_sound_impl(buf, volume)) {
+    auto path = path_build(ANGBAND_DIR_XTRA_SOUND, filename);
+    auto filename_sound = path.string();
+    if (play_sound_impl(filename_sound.data(), volume)) {
         return 0;
     }
 

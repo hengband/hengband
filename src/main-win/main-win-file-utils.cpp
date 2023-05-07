@@ -65,13 +65,12 @@ bool check_dir(const std::filesystem::path &s)
  */
 std::string find_any_file(const std::filesystem::path &dir, std::initializer_list<concptr> files)
 {
-    char path[MAIN_WIN_MAX_PATH];
-    for (concptr filename : files) {
-        path_build(path, MAIN_WIN_MAX_PATH, dir, filename);
+    for (const auto *filename : files) {
+        const auto &path = path_build(dir, filename);
         if (check_file(path)) {
-            return std::string(path);
+            return path.string();
         }
     }
 
-    return std::string();
+    return "";
 }

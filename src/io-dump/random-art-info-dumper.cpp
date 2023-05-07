@@ -68,9 +68,8 @@ static void spoil_random_artifact_aux(PlayerType *player_ptr, ItemEntity *o_ptr,
  */
 void spoil_random_artifact(PlayerType *player_ptr, concptr fname)
 {
-    char buf[1024];
-    path_build(buf, sizeof(buf), ANGBAND_DIR_USER, fname);
-    spoiler_file = angband_fopen(buf, FileOpenMode::WRITE);
+    const auto &path = path_build(ANGBAND_DIR_USER, fname);
+    spoiler_file = angband_fopen(path, FileOpenMode::WRITE);
     if (!spoiler_file) {
         msg_print("Cannot create list file.");
         return;

@@ -750,11 +750,11 @@ void wiz_reset_realms(PlayerType *player_ptr)
  */
 void wiz_dump_options(void)
 {
-    char buf[1024];
-    path_build(buf, sizeof(buf), ANGBAND_DIR_USER, "opt_info.txt");
-    auto *fff = angband_fopen(buf, FileOpenMode::APPEND);
+    const auto &path = path_build(ANGBAND_DIR_USER, "opt_info.txt");
+    const auto &filename = path.string();
+    auto *fff = angband_fopen(path, FileOpenMode::APPEND);
     if (fff == nullptr) {
-        msg_format(_("ファイル %s を開けませんでした。", "Failed to open file %s."), buf);
+        msg_format(_("ファイル %s を開けませんでした。", "Failed to open file %s."), filename.data());
         msg_print(nullptr);
         return;
     }
@@ -785,7 +785,7 @@ void wiz_dump_options(void)
     }
 
     angband_fclose(fff);
-    msg_format(_("オプションbit使用状況をファイル %s に書き出しました。", "Option bits usage dump saved to file %s."), buf);
+    msg_format(_("オプションbit使用状況をファイル %s に書き出しました。", "Option bits usage dump saved to file %s."), filename.data());
 }
 
 /*!
