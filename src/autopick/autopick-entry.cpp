@@ -26,6 +26,8 @@
 #include "system/player-type-definition.h"
 #include "util/quarks.h"
 #include "util/string-processor.h"
+#include <sstream>
+#include <string>
 
 #ifdef JP
 static char kanji_colon[] = "：";
@@ -533,199 +535,226 @@ void autopick_entry_from_object(PlayerType *player_ptr, autopick_type *entry, It
     str_tolower(entry->name.data());
 }
 
+std::string shape_autopick_key(const std::string &key)
+{
+#ifdef JP
+    return key;
+#else
+    std::stringstream ss;
+    ss << key << ' ';
+    return ss.str();
+#endif
+}
+
 /*!
  * @brief Reconstruct preference line from entry
  */
 concptr autopick_line_from_entry(const autopick_type &entry)
 {
-    char buf[MAX_LINELEN]{};
+    std::stringstream ss;
     if (!(entry.action & DO_DISPLAY)) {
-        strcat(buf, "(");
-    }
-    if (entry.action & DO_QUERY_AUTOPICK) {
-        strcat(buf, ";");
-    }
-    if (entry.action & DO_AUTODESTROY) {
-        strcat(buf, "!");
-    }
-    if (entry.action & DONT_AUTOPICK) {
-        strcat(buf, "~");
+        ss << '(';
     }
 
-    char *ptr;
-    ptr = buf;
+    if (entry.action & DO_QUERY_AUTOPICK) {
+        ss << ';';
+    }
+
+    if (entry.action & DO_AUTODESTROY) {
+        ss << '!';
+    }
+
+    if (entry.action & DONT_AUTOPICK) {
+        ss << '~';
+    }
+
     if (entry.has(FLG_ALL)) {
-        ADD_KEY(KEY_ALL);
+        ss << shape_autopick_key(KEY_ALL);
     }
     if (entry.has(FLG_COLLECTING)) {
-        ADD_KEY(KEY_COLLECTING);
+        ss << shape_autopick_key(KEY_COLLECTING);
     }
     if (entry.has(FLG_UNAWARE)) {
-        ADD_KEY(KEY_UNAWARE);
+        ss << shape_autopick_key(KEY_UNAWARE);
     }
     if (entry.has(FLG_UNIDENTIFIED)) {
-        ADD_KEY(KEY_UNIDENTIFIED);
+        ss << shape_autopick_key(KEY_UNIDENTIFIED);
     }
     if (entry.has(FLG_IDENTIFIED)) {
-        ADD_KEY(KEY_IDENTIFIED);
+        ss << shape_autopick_key(KEY_IDENTIFIED);
     }
     if (entry.has(FLG_STAR_IDENTIFIED)) {
-        ADD_KEY(KEY_STAR_IDENTIFIED);
+        ss << shape_autopick_key(KEY_STAR_IDENTIFIED);
     }
     if (entry.has(FLG_BOOSTED)) {
-        ADD_KEY(KEY_BOOSTED);
+        ss << shape_autopick_key(KEY_BOOSTED);
     }
 
     if (entry.has(FLG_MORE_DICE)) {
-        ADD_KEY(KEY_MORE_THAN);
-        strcat(ptr, format("%d", entry.dice).data());
-        ADD_KEY(KEY_DICE);
+        ss << shape_autopick_key(KEY_MORE_THAN);
+        ss << entry.dice;
+        ss << shape_autopick_key(KEY_DICE);
     }
 
     if (entry.has(FLG_MORE_BONUS)) {
-        ADD_KEY(KEY_MORE_BONUS);
-        strcat(ptr, format("%d", entry.bonus).data());
-        ADD_KEY(KEY_MORE_BONUS2);
+        ss << shape_autopick_key(KEY_MORE_BONUS);
+        ss << entry.bonus;
+        ss << shape_autopick_key(KEY_MORE_BONUS2);
     }
 
     if (entry.has(FLG_UNREADABLE)) {
-        ADD_KEY(KEY_UNREADABLE);
+        ss << shape_autopick_key(KEY_UNREADABLE);
     }
+
     if (entry.has(FLG_REALM1)) {
-        ADD_KEY(KEY_REALM1);
+        ss << shape_autopick_key(KEY_REALM1);
     }
+
     if (entry.has(FLG_REALM2)) {
-        ADD_KEY(KEY_REALM2);
+        ss << shape_autopick_key(KEY_REALM2);
     }
+
     if (entry.has(FLG_FIRST)) {
-        ADD_KEY(KEY_FIRST);
+        ss << shape_autopick_key(KEY_FIRST);
     }
+
     if (entry.has(FLG_SECOND)) {
-        ADD_KEY(KEY_SECOND);
+        ss << shape_autopick_key(KEY_SECOND);
     }
+
     if (entry.has(FLG_THIRD)) {
-        ADD_KEY(KEY_THIRD);
+        ss << shape_autopick_key(KEY_THIRD);
     }
+
     if (entry.has(FLG_FOURTH)) {
-        ADD_KEY(KEY_FOURTH);
+        ss << shape_autopick_key(KEY_FOURTH);
     }
+
     if (entry.has(FLG_WANTED)) {
-        ADD_KEY(KEY_WANTED);
+        ss << shape_autopick_key(KEY_WANTED);
     }
+
     if (entry.has(FLG_UNIQUE)) {
-        ADD_KEY(KEY_UNIQUE);
+        ss << shape_autopick_key(KEY_UNIQUE);
     }
+
     if (entry.has(FLG_HUMAN)) {
-        ADD_KEY(KEY_HUMAN);
+        ss << shape_autopick_key(KEY_HUMAN);
     }
+
     if (entry.has(FLG_WORTHLESS)) {
-        ADD_KEY(KEY_WORTHLESS);
+        ss << shape_autopick_key(KEY_WORTHLESS);
     }
+
     if (entry.has(FLG_GOOD)) {
-        ADD_KEY(KEY_GOOD);
+        ss << shape_autopick_key(KEY_GOOD);
     }
+
     if (entry.has(FLG_NAMELESS)) {
-        ADD_KEY(KEY_NAMELESS);
+        ss << shape_autopick_key(KEY_NAMELESS);
     }
+
     if (entry.has(FLG_AVERAGE)) {
-        ADD_KEY(KEY_AVERAGE);
+        ss << shape_autopick_key(KEY_AVERAGE);
     }
+
     if (entry.has(FLG_RARE)) {
-        ADD_KEY(KEY_RARE);
+        ss << shape_autopick_key(KEY_RARE);
     }
+
     if (entry.has(FLG_COMMON)) {
-        ADD_KEY(KEY_COMMON);
+        ss << shape_autopick_key(KEY_COMMON);
     }
+
     if (entry.has(FLG_EGO)) {
-        ADD_KEY(KEY_EGO);
+        ss << shape_autopick_key(KEY_EGO);
     }
 
     if (entry.has(FLG_ARTIFACT)) {
-        ADD_KEY(KEY_ARTIFACT);
+        ss << shape_autopick_key(KEY_ARTIFACT);
     }
 
     bool sepa_flag = true;
     if (entry.has(FLG_ITEMS)) {
-        ADD_KEY2(KEY_ITEMS);
+        ss << KEY_ITEMS;
     } else if (entry.has(FLG_WEAPONS)) {
-        ADD_KEY2(KEY_WEAPONS);
+        ss << KEY_WEAPONS;
     } else if (entry.has(FLG_FAVORITE_WEAPONS)) {
-        ADD_KEY2(KEY_FAVORITE_WEAPONS);
+        ss << KEY_FAVORITE_WEAPONS;
     } else if (entry.has(FLG_ARMORS)) {
-        ADD_KEY2(KEY_ARMORS);
+        ss << KEY_ARMORS;
     } else if (entry.has(FLG_MISSILES)) {
-        ADD_KEY2(KEY_MISSILES);
+        ss << KEY_MISSILES;
     } else if (entry.has(FLG_DEVICES)) {
-        ADD_KEY2(KEY_DEVICES);
+        ss << KEY_DEVICES;
     } else if (entry.has(FLG_LIGHTS)) {
-        ADD_KEY2(KEY_LIGHTS);
+        ss << KEY_LIGHTS;
     } else if (entry.has(FLG_JUNKS)) {
-        ADD_KEY2(KEY_JUNKS);
+        ss << KEY_JUNKS;
     } else if (entry.has(FLG_CORPSES)) {
-        ADD_KEY2(KEY_CORPSES);
+        ss << KEY_CORPSES;
     } else if (entry.has(FLG_SPELLBOOKS)) {
-        ADD_KEY2(KEY_SPELLBOOKS);
+        ss << KEY_SPELLBOOKS;
     } else if (entry.has(FLG_HAFTED)) {
-        ADD_KEY2(KEY_HAFTED);
+        ss << KEY_HAFTED;
     } else if (entry.has(FLG_SHIELDS)) {
-        ADD_KEY2(KEY_SHIELDS);
+        ss << KEY_SHIELDS;
     } else if (entry.has(FLG_BOWS)) {
-        ADD_KEY2(KEY_BOWS);
+        ss << KEY_BOWS;
     } else if (entry.has(FLG_RINGS)) {
-        ADD_KEY2(KEY_RINGS);
+        ss << KEY_RINGS;
     } else if (entry.has(FLG_AMULETS)) {
-        ADD_KEY2(KEY_AMULETS);
+        ss << KEY_AMULETS;
     } else if (entry.has(FLG_SUITS)) {
-        ADD_KEY2(KEY_SUITS);
+        ss << KEY_SUITS;
     } else if (entry.has(FLG_CLOAKS)) {
-        ADD_KEY2(KEY_CLOAKS);
+        ss << KEY_CLOAKS;
     } else if (entry.has(FLG_HELMS)) {
-        ADD_KEY2(KEY_HELMS);
+        ss << KEY_HELMS;
     } else if (entry.has(FLG_GLOVES)) {
-        ADD_KEY2(KEY_GLOVES);
+        ss << KEY_GLOVES;
     } else if (entry.has(FLG_BOOTS)) {
-        ADD_KEY2(KEY_BOOTS);
+        ss << KEY_BOOTS;
     } else if (!entry.has(FLG_ARTIFACT)) {
         sepa_flag = false;
     }
 
     if (!entry.name.empty()) {
         if (sepa_flag) {
-            strcat(buf, ":");
+            ss << ":";
         }
 
-        int i = strlen(buf);
-        int j = 0;
-        while (entry.name[j] && i < MAX_LINELEN - 2 - 1) {
+        const auto i = ss.tellp();
+        auto j = 0;
+        while (entry.name[j] && (i < MAX_LINELEN - 2 - 1)) {
 #ifdef JP
             if (iskanji(entry.name[j])) {
-                buf[i++] = entry.name[j++];
+                ss << entry.name[j++];
             }
 #endif
-            buf[i++] = entry.name[j++];
+            ss << entry.name[j++];
         }
-        buf[i] = '\0';
     }
 
     if (entry.insc.empty()) {
-        return string_make(buf);
+        auto str = ss.str();
+        return string_make(str.data());
     }
 
-    int i, j = 0;
-    strcat(buf, "#");
-    i = strlen(buf);
-
-    while (entry.insc[j] && i < MAX_LINELEN - 2) {
+    ss << '#';
+    const auto i = ss.tellp();
+    auto j = 0;
+    while (entry.insc[j] && (i < MAX_LINELEN - 2)) {
 #ifdef JP
         if (iskanji(entry.insc[j])) {
-            buf[i++] = entry.insc[j++];
+            ss << entry.insc[j++];
         }
 #endif
-        buf[i++] = entry.insc[j++];
+        ss << entry.insc[j++];
     }
 
-    buf[i] = '\0';
-    return string_make(buf);
+    auto str = ss.str();
+    return string_make(str.data());
 }
 
 /*!
