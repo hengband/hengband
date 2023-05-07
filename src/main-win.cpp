@@ -420,7 +420,7 @@ static void save_prefs(void)
     wsprintfA(buf, "%d", current_bg_mode);
     WritePrivateProfileStringA("Angband", "BackGround", buf, ini_file);
     const auto &wallpaper_filename = wallpaper_path.string();
-    WritePrivateProfileStringA("Angband", "BackGroundBitmap", wallpaper_path.empty() ? wallpaper_filename.data() : DEFAULT_BG_FILENAME, ini_file);
+    WritePrivateProfileStringA("Angband", "BackGroundBitmap", !wallpaper_path.empty() ? wallpaper_filename.data() : DEFAULT_BG_FILENAME, ini_file);
 
     auto angband_dir_str = ANGBAND_DIR.string();
     const auto path_length = angband_dir_str.length() - 4; // "\lib" を除く.
