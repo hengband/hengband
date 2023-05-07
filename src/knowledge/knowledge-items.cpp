@@ -26,6 +26,7 @@
 #include "system/grid-type-definition.h"
 #include "system/item-entity.h"
 #include "system/player-type-definition.h"
+#include "term/gameterm.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
 #include "util/angband-files.h"
@@ -241,6 +242,8 @@ static void desc_obj_fake(PlayerType *player_ptr, short bi_id)
  */
 void do_cmd_knowledge_objects(PlayerType *player_ptr, bool *need_redraw, bool visual_only, short direct_k_idx)
 {
+    TermCenteredOffsetSetter tcos(MAIN_TERM_MIN_COLS, std::nullopt);
+
     short object_old, object_top;
     short grp_idx[100];
     int object_cnt;
