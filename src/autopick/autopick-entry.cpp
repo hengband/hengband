@@ -26,6 +26,7 @@
 #include "system/player-type-definition.h"
 #include "util/quarks.h"
 #include "util/string-processor.h"
+#include <optional>
 #include <sstream>
 #include <string>
 
@@ -250,7 +251,7 @@ bool autopick_new_entry(autopick_type *entry, concptr str, bool allow_default)
         }
     }
 
-    auto previous_flag = -1;
+    std::optional<int> previous_flag = std::nullopt;
     if (MATCH_KEY2(KEY_ARTIFACT)) {
         entry->add(FLG_ARTIFACT);
         previous_flag = FLG_ARTIFACT;
@@ -327,13 +328,13 @@ bool autopick_new_entry(autopick_type *entry, concptr str, bool allow_default)
     }
 #endif
     else if (*ptr == '\0') {
-        if (previous_flag == -1) {
+        if (!previous_flag.has_value()) {
             entry->add(FLG_ITEMS);
             previous_flag = FLG_ITEMS;
         }
     } else {
-        if (previous_flag != -1) {
-            entry->flags[previous_flag / 32] &= ~(1UL << (previous_flag % 32));
+        if (previous_flag.has_value()) {
+            entry->remove(previous_flag.value());
             ptr = prev_ptr;
         }
     }
