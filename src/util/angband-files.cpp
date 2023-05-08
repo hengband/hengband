@@ -343,14 +343,14 @@ errr angband_fputs(FILE *fff, concptr buf, ulong n)
  * @brief OSごとの差異を吸収してファイルを削除する
  * @param file ファイルの相対パスまたは絶対パス
  */
-void fd_kill(std::string_view file)
+void fd_kill(const std::filesystem::path &path)
 {
-    const auto &path = path_parse(file);
-    if (!std::filesystem::exists(path)) {
+    const auto &parsed_path = path_parse(path);
+    if (!std::filesystem::exists(parsed_path)) {
         return;
     }
 
-    std::filesystem::remove(path);
+    std::filesystem::remove(parsed_path);
 }
 
 /*!

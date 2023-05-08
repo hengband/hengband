@@ -99,14 +99,14 @@ static void do_cmd_erase_diary()
     std::stringstream ss;
     ss << _("playrecord-", "playrec-") << savefile_base << ".txt";
     const auto &path = path_build(ANGBAND_DIR_USER, ss.str());
-    const auto &filename = path.string();
-    fd_kill(filename);
+    fd_kill(path);
 
     auto *fff = angband_fopen(path, FileOpenMode::WRITE);
     if (fff) {
         angband_fclose(fff);
         msg_format(_("記録を消去しました。", "deleted record."));
     } else {
+        const auto &filename = path.string();
         msg_format(_("%s の消去に失敗しました。", "failed to delete %s."), filename.data());
     }
 
