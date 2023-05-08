@@ -253,7 +253,7 @@ void roll_hitdice(PlayerType *player_ptr, spell_operation options)
 
     player_ptr->knowledge &= ~(KNOW_HPRATE);
 
-    PERCENTAGE percent = (int)(((long)player_ptr->player_hp[PY_MAX_LEVEL - 1] * 200L) / (2 * player_ptr->hitdie + ((PY_MAX_LEVEL - 1 + 3) * (player_ptr->hitdie + 1))));
+    auto percent = (player_ptr->player_hp[PY_MAX_LEVEL - 1] * 200) / (2 * player_ptr->hitdie + ((PY_MAX_LEVEL - 1 + 3) * (player_ptr->hitdie + 1)));
 
     /* Update and redraw hitpoints */
     player_ptr->update |= (PU_HP);
@@ -534,13 +534,14 @@ bool fishing(PlayerType *player_ptr)
     POSITION y = player_ptr->y + ddy[dir];
     POSITION x = player_ptr->x + ddx[dir];
     player_ptr->fishing_dir = dir;
-    if (!cave_has_flag_bold(player_ptr->current_floor_ptr, y, x, TerrainCharacteristics::WATER)) {
+    auto *floor_ptr = player_ptr->current_floor_ptr;
+    if (!cave_has_flag_bold(floor_ptr, y, x, TerrainCharacteristics::WATER)) {
         msg_print(_("そこは水辺ではない。", "You can't fish here."));
         return false;
     }
 
-    if (player_ptr->current_floor_ptr->grid_array[y][x].m_idx) {
-        const auto m_name = monster_desc(player_ptr, &player_ptr->current_floor_ptr->m_list[player_ptr->current_floor_ptr->grid_array[y][x].m_idx], 0);
+    if (floor_ptr->grid_array[y][x].m_idx) {
+        const auto m_name = monster_desc(player_ptr, &floor_ptr->m_list[floor_ptr->grid_array[y][x].m_idx], 0);
         msg_format(_("%sが邪魔だ！", "%s^ is standing in your way."), m_name.data());
         PlayerEnergy(player_ptr).reset_player_turn();
         return false;

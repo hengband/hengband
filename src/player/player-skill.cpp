@@ -316,7 +316,10 @@ void PlayerSkill::gain_riding_skill_exp_on_range_attack()
         return;
     }
 
-    if (((this->player_ptr->skill_exp[PlayerSkillKindType::RIDING] - (RIDING_EXP_BEGINNER * 2)) / 200 < monraces_info[this->player_ptr->current_floor_ptr->m_list[this->player_ptr->riding].r_idx].level) && one_in_(2)) {
+    const auto *floor_ptr = this->player_ptr->current_floor_ptr;
+    const auto &monster = floor_ptr->m_list[this->player_ptr->riding];
+    const auto &monrace = monraces_info[monster.r_idx];
+    if (((this->player_ptr->skill_exp[PlayerSkillKindType::RIDING] - (RIDING_EXP_BEGINNER * 2)) / 200 < monrace.level) && one_in_(2)) {
         this->player_ptr->skill_exp[PlayerSkillKindType::RIDING] += 1;
         set_bits(this->player_ptr->update, PU_BONUS);
     }

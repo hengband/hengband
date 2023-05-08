@@ -127,7 +127,23 @@ void process_monster(PlayerType *player_ptr, MONSTER_IDX m_idx)
     }
 
     turn_flags_ptr->aware = process_stealth(player_ptr, m_idx);
-    if (vanish_summoned_children(player_ptr, m_idx, turn_flags_ptr->see_m) || process_quantum_effect(player_ptr, m_idx, turn_flags_ptr->see_m) || explode_grenade(player_ptr, m_idx) || runaway_monster(player_ptr, turn_flags_ptr, m_idx) || !awake_monster(player_ptr, m_idx)) {
+    if (vanish_summoned_children(player_ptr, m_idx, turn_flags_ptr->see_m)) {
+        return;
+    }
+
+    if (process_quantum_effect(player_ptr, m_idx, turn_flags_ptr->see_m)) {
+        return;
+    }
+
+    if (explode_grenade(player_ptr, m_idx)) {
+        return;
+    }
+
+    if (runaway_monster(player_ptr, turn_flags_ptr, m_idx)) {
+        return;
+    }
+
+    if (!awake_monster(player_ptr, m_idx)) {
         return;
     }
 

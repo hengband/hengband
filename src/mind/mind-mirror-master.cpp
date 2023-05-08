@@ -80,11 +80,19 @@ bool binding_field(PlayerType *player_ptr, int dam)
 
     for (POSITION x = 0; x < player_ptr->current_floor_ptr->width; x++) {
         for (POSITION y = 0; y < player_ptr->current_floor_ptr->height; y++) {
-            if (player_ptr->current_floor_ptr->grid_array[y][x].is_mirror() && distance(player_ptr->y, player_ptr->x, y, x) <= get_max_range(player_ptr) && distance(player_ptr->y, player_ptr->x, y, x) != 0 && player_has_los_bold(player_ptr, y, x) && projectable(player_ptr, player_ptr->y, player_ptr->x, y, x)) {
-                mirror_y[mirror_num] = y;
-                mirror_x[mirror_num] = x;
-                mirror_num++;
+            if (!player_ptr->current_floor_ptr->grid_array[y][x].is_mirror()) {
+                continue;
             }
+
+            const auto dist = distance(player_ptr->y, player_ptr->x, y, x);
+            const auto is_projectable = projectable(player_ptr, player_ptr->y, player_ptr->x, y, x);
+            if ((dist == 0) || (dist > get_max_range(player_ptr)) || !player_has_los_bold(player_ptr, y, x) || !is_projectable) {
+                continue;
+            }
+
+            mirror_y[mirror_num] = y;
+            mirror_x[mirror_num] = x;
+            mirror_num++;
         }
     }
 
@@ -124,14 +132,24 @@ bool binding_field(PlayerType *player_ptr, int dam)
 
     for (y = y1; y <= y2; y++) {
         for (x = x1; x <= x2; x++) {
-            if (centersign * ((point_x[0] - x) * (point_y[1] - y) - (point_y[0] - y) * (point_x[1] - x)) >= 0 && centersign * ((point_x[1] - x) * (point_y[2] - y) - (point_y[1] - y) * (point_x[2] - x)) >= 0 && centersign * ((point_x[2] - x) * (point_y[0] - y) - (point_y[2] - y) * (point_x[0] - x)) >= 0) {
-                if (player_has_los_bold(player_ptr, y, x) && projectable(player_ptr, player_ptr->y, player_ptr->x, y, x)) {
-                    if (!(player_ptr->effects()->blindness()->is_blind()) && panel_contains(y, x)) {
-                        print_bolt_pict(player_ptr, y, x, y, x, AttributeType::MANA);
-                        move_cursor_relative(y, x);
-                        term_fresh();
-                        term_xtra(TERM_XTRA_DELAY, delay_factor);
-                    }
+            if ((centersign * ((point_x[0] - x) * (point_y[1] - y) - (point_y[0] - y) * (point_x[1] - x)) < 0)) {
+                continue;
+            }
+
+            if ((centersign * ((point_x[1] - x) * (point_y[2] - y) - (point_y[1] - y) * (point_x[2] - x)) < 0)) {
+                continue;
+            }
+
+            if ((centersign * ((point_x[2] - x) * (point_y[0] - y) - (point_y[2] - y) * (point_x[0] - x)) < 0)) {
+                continue;
+            }
+
+            if (player_has_los_bold(player_ptr, y, x) && projectable(player_ptr, player_ptr->y, player_ptr->x, y, x)) {
+                if (!(player_ptr->effects()->blindness()->is_blind()) && panel_contains(y, x)) {
+                    print_bolt_pict(player_ptr, y, x, y, x, AttributeType::MANA);
+                    move_cursor_relative(y, x);
+                    term_fresh();
+                    term_xtra(TERM_XTRA_DELAY, delay_factor);
                 }
             }
         }
@@ -139,30 +157,61 @@ bool binding_field(PlayerType *player_ptr, int dam)
 
     for (y = y1; y <= y2; y++) {
         for (x = x1; x <= x2; x++) {
-            if (centersign * ((point_x[0] - x) * (point_y[1] - y) - (point_y[0] - y) * (point_x[1] - x)) >= 0 && centersign * ((point_x[1] - x) * (point_y[2] - y) - (point_y[1] - y) * (point_x[2] - x)) >= 0 && centersign * ((point_x[2] - x) * (point_y[0] - y) - (point_y[2] - y) * (point_x[0] - x)) >= 0) {
-                if (player_has_los_bold(player_ptr, y, x) && projectable(player_ptr, player_ptr->y, player_ptr->x, y, x)) {
-                    (void)affect_feature(player_ptr, 0, 0, y, x, dam, AttributeType::MANA);
-                }
+            if (centersign * ((point_x[0] - x) * (point_y[1] - y) - (point_y[0] - y) * (point_x[1] - x)) < 0) {
+                continue;
+            }
+
+            if (centersign * ((point_x[1] - x) * (point_y[2] - y) - (point_y[1] - y) * (point_x[2] - x)) < 0) {
+                continue;
+            }
+
+            if (centersign * ((point_x[2] - x) * (point_y[0] - y) - (point_y[2] - y) * (point_x[0] - x)) < 0) {
+                continue;
+            }
+
+            if (player_has_los_bold(player_ptr, y, x) && projectable(player_ptr, player_ptr->y, player_ptr->x, y, x)) {
+                (void)affect_feature(player_ptr, 0, 0, y, x, dam, AttributeType::MANA);
             }
         }
     }
 
     for (y = y1; y <= y2; y++) {
         for (x = x1; x <= x2; x++) {
-            if (centersign * ((point_x[0] - x) * (point_y[1] - y) - (point_y[0] - y) * (point_x[1] - x)) >= 0 && centersign * ((point_x[1] - x) * (point_y[2] - y) - (point_y[1] - y) * (point_x[2] - x)) >= 0 && centersign * ((point_x[2] - x) * (point_y[0] - y) - (point_y[2] - y) * (point_x[0] - x)) >= 0) {
-                if (player_has_los_bold(player_ptr, y, x) && projectable(player_ptr, player_ptr->y, player_ptr->x, y, x)) {
-                    (void)affect_item(player_ptr, 0, 0, y, x, dam, AttributeType::MANA);
-                }
+            if (centersign * ((point_x[0] - x) * (point_y[1] - y) - (point_y[0] - y) * (point_x[1] - x)) < 0) {
+                continue;
+            }
+
+            if (centersign * ((point_x[1] - x) * (point_y[2] - y) - (point_y[1] - y) * (point_x[2] - x)) < 0) {
+                continue;
+            }
+
+            if (centersign * ((point_x[2] - x) * (point_y[0] - y) - (point_y[2] - y) * (point_x[0] - x)) < 0) {
+                continue;
+            }
+
+            if (player_has_los_bold(player_ptr, y, x) && projectable(player_ptr, player_ptr->y, player_ptr->x, y, x)) {
+                (void)affect_item(player_ptr, 0, 0, y, x, dam, AttributeType::MANA);
             }
         }
     }
 
     for (y = y1; y <= y2; y++) {
         for (x = x1; x <= x2; x++) {
-            if (centersign * ((point_x[0] - x) * (point_y[1] - y) - (point_y[0] - y) * (point_x[1] - x)) >= 0 && centersign * ((point_x[1] - x) * (point_y[2] - y) - (point_y[1] - y) * (point_x[2] - x)) >= 0 && centersign * ((point_x[2] - x) * (point_y[0] - y) - (point_y[2] - y) * (point_x[0] - x)) >= 0) {
-                if (player_has_los_bold(player_ptr, y, x) && projectable(player_ptr, player_ptr->y, player_ptr->x, y, x)) {
-                    (void)affect_monster(player_ptr, 0, 0, y, x, dam, AttributeType::MANA, (PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL | PROJECT_JUMP), true);
-                }
+            if (centersign * ((point_x[0] - x) * (point_y[1] - y) - (point_y[0] - y) * (point_x[1] - x)) < 0) {
+                continue;
+            }
+
+            if (centersign * ((point_x[1] - x) * (point_y[2] - y) - (point_y[1] - y) * (point_x[2] - x)) < 0) {
+                continue;
+            }
+
+            if (centersign * ((point_x[2] - x) * (point_y[0] - y) - (point_y[2] - y) * (point_x[0] - x)) < 0) {
+                continue;
+            }
+
+            if (player_has_los_bold(player_ptr, y, x) && projectable(player_ptr, player_ptr->y, player_ptr->x, y, x)) {
+                constexpr auto flags = PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL | PROJECT_JUMP;
+                (void)affect_monster(player_ptr, 0, 0, y, x, dam, AttributeType::MANA, flags, true);
             }
         }
     }

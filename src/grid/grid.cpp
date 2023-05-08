@@ -163,21 +163,18 @@ bool is_hidden_door(PlayerType *player_ptr, grid_type *g_ptr)
  */
 bool check_local_illumination(PlayerType *player_ptr, POSITION y, POSITION x)
 {
-    /* Hack -- move towards player */
-    POSITION yy = (y < player_ptr->y) ? (y + 1) : (y > player_ptr->y) ? (y - 1)
-                                                                      : y;
-    POSITION xx = (x < player_ptr->x) ? (x + 1) : (x > player_ptr->x) ? (x - 1)
-                                                                      : x;
-
-    /* Check for "local" illumination */
-
-    /* Check for "complex" illumination */
-    auto *floor_ptr = player_ptr->current_floor_ptr;
-    if ((feat_supports_los(floor_ptr->grid_array[yy][xx].get_feat_mimic()) && (floor_ptr->grid_array[yy][xx].info & CAVE_GLOW)) || (feat_supports_los(floor_ptr->grid_array[y][xx].get_feat_mimic()) && (floor_ptr->grid_array[y][xx].info & CAVE_GLOW)) || (feat_supports_los(floor_ptr->grid_array[yy][x].get_feat_mimic()) && (floor_ptr->grid_array[yy][x].info & CAVE_GLOW))) {
-        return true;
-    } else {
-        return false;
-    }
+    const auto yy = (y < player_ptr->y) ? (y + 1) : (y > player_ptr->y) ? (y - 1)
+                                                                        : y;
+    const auto xx = (x < player_ptr->x) ? (x + 1) : (x > player_ptr->x) ? (x - 1)
+                                                                        : x;
+    const auto *floor_ptr = player_ptr->current_floor_ptr;
+    const auto &grid_yyxx = floor_ptr->grid_array[yy][xx];
+    const auto &grid_yxx = floor_ptr->grid_array[y][xx];
+    const auto &grid_yyx = floor_ptr->grid_array[yy][x];
+    auto is_illuminated = feat_supports_los(grid_yyxx.get_feat_mimic()) && (grid_yyxx.info & CAVE_GLOW);
+    is_illuminated |= feat_supports_los(grid_yxx.get_feat_mimic()) && (grid_yxx.info & CAVE_GLOW);
+    is_illuminated |= feat_supports_los(grid_yyx.get_feat_mimic()) && (grid_yyx.info & CAVE_GLOW);
+    return is_illuminated;
 }
 
 /*!
@@ -416,7 +413,6 @@ void note_spot(PlayerType *player_ptr, POSITION y, POSITION x)
  */
 void lite_spot(PlayerType *player_ptr, POSITION y, POSITION x)
 {
-    /* Redraw if on screen */
     if (panel_contains(y, x) && in_bounds2(player_ptr->current_floor_ptr, y, x)) {
         TERM_COLOR a;
         char c;
@@ -424,8 +420,6 @@ void lite_spot(PlayerType *player_ptr, POSITION y, POSITION x)
         char tc;
 
         map_info(player_ptr, y, x, &a, &c, &ta, &tc);
-
-        /* Hack -- fake monochrome */
         if (!use_graphics) {
             if (w_ptr->timewalk_m_idx) {
                 a = TERM_DARK;
@@ -436,10 +430,7 @@ void lite_spot(PlayerType *player_ptr, POSITION y, POSITION x)
             }
         }
 
-        /* Hack -- Queue it */
         term_queue_bigchar(panel_col_of(x), y - panel_row_prt, a, c, ta, tc);
-
-        /* Update sub-windows */
         player_ptr->window_flags |= (PW_OVERHEAD | PW_DUNGEON);
     }
 }

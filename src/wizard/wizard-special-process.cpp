@@ -892,7 +892,7 @@ void cheat_death(PlayerType *player_ptr)
 
     player_ptr->wild_mode = false;
     player_ptr->leaving = true;
-
-    exe_write_diary(player_ptr, DIARY_DESCRIPTION, 1, _("                            しかし、生き返った。", "                            but revived."));
+    constexpr auto note = _("                            しかし、生き返った。", "                            but revived.");
+    exe_write_diary(player_ptr, DIARY_DESCRIPTION, 1, note);
     leave_floor(player_ptr);
 }

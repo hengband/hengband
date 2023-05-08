@@ -202,7 +202,8 @@ static void init_world_floor_info(PlayerType *player_ptr)
 static void restore_world_floor_info(PlayerType *player_ptr)
 {
     write_level = false;
-    exe_write_diary(player_ptr, DIARY_GAMESTART, 1, _("                            ----ゲーム再開----", "                            --- Restarted Game ---"));
+    constexpr auto mes = _("                            ----ゲーム再開----", "                            --- Restarted Game ---");
+    exe_write_diary(player_ptr, DIARY_GAMESTART, 1, mes);
 
     if (player_ptr->riding == -1) {
         player_ptr->riding = 0;

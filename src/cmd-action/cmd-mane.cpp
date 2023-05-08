@@ -87,8 +87,11 @@ static std::string mane_info(PlayerType *player_ptr, MonsterAbilityType power, i
     PLAYER_LEVEL plev = player_ptr->lev;
 
     const auto power_int = enum2i(power);
-
-    if ((power_int > 2 && power_int < 41) || (power_int > 41 && power_int < 59) || (power == MonsterAbilityType::PSY_SPEAR) || (power == MonsterAbilityType::BO_VOID) || (power == MonsterAbilityType::BO_ABYSS) || (power == MonsterAbilityType::BA_VOID) || (power == MonsterAbilityType::BA_ABYSS) || (power == MonsterAbilityType::BR_VOID) || (power == MonsterAbilityType::BR_ABYSS)) {
+    using Mat = MonsterAbilityType;
+    EnumClassFlagGroup<Mat> flags{
+        Mat::PSY_SPEAR, Mat::BO_VOID, Mat::BO_ABYSS, Mat::BA_VOID, Mat::BA_ABYSS, Mat::BR_VOID, Mat::BR_ABYSS
+    };
+    if ((power_int > 2 && power_int < 41) || (power_int > 41 && power_int < 59) || flags.has(power)) {
         return format(" %s%d", KWD_DAM, (int)dam);
     }
     switch (power) {
@@ -156,7 +159,8 @@ static int get_mane_power(PlayerType *player_ptr, int *sn, bool baigaesi)
     num = mane_data->mane_list.size();
 
     /* Build a prompt (accept all spells) */
-    (void)strnfmt(out_val, 78, _("(%c-%c, '*'で一覧, ESC) どの%sをまねますか？", "(%c-%c, *=List, ESC=exit) Use which %s? "), I2A(0), I2A(num - 1), p);
+    constexpr auto mes = _("(%c-%c, '*'で一覧, ESC) どの%sをまねますか？", "(%c-%c, *=List, ESC=exit) Use which %s? ");
+    (void)strnfmt(out_val, 78, mes, I2A(0), I2A(num - 1), p);
 
     choice = always_show_list ? ESCAPE : 1;
     while (!flag) {
@@ -922,7 +926,9 @@ static bool use_mane(PlayerType *player_ptr, MonsterAbilityType spell)
         if (!target_set(player_ptr, TARGET_KILL)) {
             return false;
         }
-        if (!player_ptr->current_floor_ptr->grid_array[target_row][target_col].m_idx) {
+
+        auto *floor_ptr = player_ptr->current_floor_ptr;
+        if (!floor_ptr->grid_array[target_row][target_col].m_idx) {
             break;
         }
         if (!player_has_los_bold(player_ptr, target_row, target_col)) {
@@ -931,7 +937,9 @@ static bool use_mane(PlayerType *player_ptr, MonsterAbilityType spell)
         if (!projectable(player_ptr, player_ptr->y, player_ptr->x, target_row, target_col)) {
             break;
         }
-        auto *m_ptr = &player_ptr->current_floor_ptr->m_list[player_ptr->current_floor_ptr->grid_array[target_row][target_col].m_idx];
+
+        const auto &grid = floor_ptr->grid_array[target_row][target_col];
+        auto *m_ptr = &floor_ptr->m_list[grid.m_idx];
         auto *r_ptr = &monraces_info[m_ptr->r_idx];
         const auto m_name = monster_desc(player_ptr, m_ptr, 0);
         if (r_ptr->resistance_flags.has(MonsterResistanceType::RESIST_TELEPORT)) {
@@ -953,8 +961,7 @@ static bool use_mane(PlayerType *player_ptr, MonsterAbilityType spell)
         }
         msg_format(_("%sを引き戻した。", "You command %s to return."), m_name.data());
 
-        teleport_monster_to(
-            player_ptr, player_ptr->current_floor_ptr->grid_array[target_row][target_col].m_idx, player_ptr->y, player_ptr->x, 100, TELEPORT_PASSIVE);
+        teleport_monster_to(player_ptr, grid.m_idx, player_ptr->y, player_ptr->x, 100, TELEPORT_PASSIVE);
         break;
     }
     case MonsterAbilityType::TELE_AWAY:

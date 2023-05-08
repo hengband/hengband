@@ -107,13 +107,14 @@ static void bldg_process_command(PlayerType *player_ptr, building_type *bldg, in
     }
 
     /* action restrictions */
-    if (((bldg->action_restr[i] == 1) && !is_member(player_ptr, bldg)) || ((bldg->action_restr[i] == 2) && !is_owner(player_ptr, bldg))) {
+    const auto can_be_owner = is_owner(player_ptr, bldg);
+    if (((bldg->action_restr[i] == 1) && !is_member(player_ptr, bldg)) || ((bldg->action_restr[i] == 2) && !can_be_owner)) {
         msg_print(_("それを選択する権利はありません！", "You have no right to choose that!"));
         return;
     }
 
     auto bact = bldg->actions[i];
-    if ((bact != BACT_RECHARGE) && (((bldg->member_costs[i] > player_ptr->au) && is_owner(player_ptr, bldg)) || ((bldg->other_costs[i] > player_ptr->au) && !is_owner(player_ptr, bldg)))) {
+    if ((bact != BACT_RECHARGE) && (((bldg->member_costs[i] > player_ptr->au) && can_be_owner) || ((bldg->other_costs[i] > player_ptr->au) && !can_be_owner))) {
         msg_print(_("お金が足りません！", "You do not have the gold!"));
         return;
     }

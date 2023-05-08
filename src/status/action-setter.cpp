@@ -28,8 +28,8 @@
 
 /*!
  * @brief プレイヤーの継続行動を設定する。
- * @param typ 継続行動のID\n
- * #ACTION_NONE / #ACTION_SEARCH / #ACTION_REST / #ACTION_LEARN / #ACTION_FISH / #ACTION_MONK_STANCE / #ACTION_SAMURAI_STANCE / #ACTION_SING / #ACTION_HAYAGAKE / #ACTION_SPELL
+ * @param typ 継続行動のID
+ * NONE / SEARCH / REST / LEARN / FISH / MONK_STANCE / SAMURAI_STANCE / SING / HAYAGAKE / SPELL
  * から選択。
  */
 void set_action(PlayerType *player_ptr, uint8_t typ)

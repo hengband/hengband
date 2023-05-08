@@ -143,9 +143,13 @@ bool set_acceleration(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
             chg_virtue(player_ptr, Virtue::DILIGENCE, 1);
         }
     } else {
-        if (acceleration->is_fast() && !player_ptr->lightspeed && !music_singing(player_ptr, MUSIC_SPEED) && !music_singing(player_ptr, MUSIC_SHERO)) {
-            msg_print(_("動きの素早さがなくなったようだ。", "You feel yourself slow down."));
-            notice = true;
+        if (acceleration->is_fast() && !player_ptr->lightspeed) {
+            auto is_singing = music_singing(player_ptr, MUSIC_SPEED);
+            is_singing |= music_singing(player_ptr, MUSIC_SHERO);
+            if (!is_singing) {
+                msg_print(_("動きの素早さがなくなったようだ。", "You feel yourself slow down."));
+                notice = true;
+            }
         }
     }
 

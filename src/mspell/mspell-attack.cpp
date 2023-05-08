@@ -104,7 +104,8 @@ static bool check_mspell_non_stupid(PlayerType *player_ptr, msa_type *msa_ptr)
         msa_ptr->ability_flags.reset(MonsterAbilityType::DRAIN_MANA);
     }
 
-    if (msa_ptr->ability_flags.has_any_of(RF_ABILITY_BOLT_MASK) && !clean_shot(player_ptr, msa_ptr->m_ptr->fy, msa_ptr->m_ptr->fx, player_ptr->y, player_ptr->x, false)) {
+    if (msa_ptr->ability_flags.has_any_of(RF_ABILITY_BOLT_MASK) &&
+        !clean_shot(player_ptr, msa_ptr->m_ptr->fy, msa_ptr->m_ptr->fx, player_ptr->y, player_ptr->x, false)) {
         msa_ptr->ability_flags.reset(RF_ABILITY_BOLT_MASK);
     }
 
@@ -116,7 +117,8 @@ static bool check_mspell_non_stupid(PlayerType *player_ptr, msa_type *msa_ptr)
         msa_ptr->ability_flags.reset(MonsterAbilityType::RAISE_DEAD);
     }
 
-    if (msa_ptr->ability_flags.has(MonsterAbilityType::SPECIAL) && (msa_ptr->m_ptr->r_idx == MonsterRaceId::ROLENTO) && !summon_possible(player_ptr, msa_ptr->y, msa_ptr->x)) {
+    if (msa_ptr->ability_flags.has(MonsterAbilityType::SPECIAL) && (msa_ptr->m_ptr->r_idx == MonsterRaceId::ROLENTO) &&
+        !summon_possible(player_ptr, msa_ptr->y, msa_ptr->x)) {
         msa_ptr->ability_flags.reset(MonsterAbilityType::SPECIAL);
     }
 

@@ -52,15 +52,21 @@ int lore_do_probe(PlayerType *player_ptr, MonsterRaceId r_idx)
         }
     }
 
-    byte tmp_byte = ((r_ptr->drop_flags.has(MonsterDropType::DROP_4D2) ? 8 : 0) + (r_ptr->drop_flags.has(MonsterDropType::DROP_3D2) ? 6 : 0) + (r_ptr->drop_flags.has(MonsterDropType::DROP_2D2) ? 4 : 0) + (r_ptr->drop_flags.has(MonsterDropType::DROP_1D2) ? 2 : 0) + (r_ptr->drop_flags.has(MonsterDropType::DROP_90) ? 1 : 0) + (r_ptr->drop_flags.has(MonsterDropType::DROP_60) ? 1 : 0));
+    using Mdt = MonsterDropType;
+    byte tmp_byte = (r_ptr->drop_flags.has(Mdt::DROP_4D2) ? 8 : 0);
+    tmp_byte += (r_ptr->drop_flags.has(Mdt::DROP_3D2) ? 6 : 0);
+    tmp_byte += (r_ptr->drop_flags.has(Mdt::DROP_2D2) ? 4 : 0);
+    tmp_byte += (r_ptr->drop_flags.has(Mdt::DROP_1D2) ? 2 : 0);
+    tmp_byte += (r_ptr->drop_flags.has(Mdt::DROP_90) ? 1 : 0);
+    tmp_byte += (r_ptr->drop_flags.has(Mdt::DROP_60) ? 1 : 0);
 
-    if (r_ptr->drop_flags.has_not(MonsterDropType::ONLY_GOLD)) {
+    if (r_ptr->drop_flags.has_not(Mdt::ONLY_GOLD)) {
         if (r_ptr->r_drop_item != tmp_byte) {
             n++;
         }
         r_ptr->r_drop_item = tmp_byte;
     }
-    if (r_ptr->drop_flags.has_not(MonsterDropType::ONLY_ITEM)) {
+    if (r_ptr->drop_flags.has_not(Mdt::ONLY_ITEM)) {
         if (r_ptr->r_drop_gold != tmp_byte) {
             n++;
         }

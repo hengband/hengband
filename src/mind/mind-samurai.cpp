@@ -518,7 +518,8 @@ void mineuchi(PlayerType *player_ptr, player_attack_type *pa_ptr)
  */
 void musou_counterattack(PlayerType *player_ptr, MonsterAttackPlayer *monap_ptr)
 {
-    if ((!player_ptr->counter && !PlayerClass(player_ptr).samurai_stance_is(SamuraiStanceType::MUSOU)) || !monap_ptr->alive || player_ptr->is_dead || !monap_ptr->m_ptr->ml || (player_ptr->csp <= 7)) {
+    const auto is_musou = PlayerClass(player_ptr).samurai_stance_is(SamuraiStanceType::MUSOU);
+    if ((!player_ptr->counter && !is_musou) || !monap_ptr->alive || player_ptr->is_dead || !monap_ptr->m_ptr->ml || (player_ptr->csp <= 7)) {
         return;
     }
 

@@ -79,12 +79,13 @@ void night_falls(PlayerType *player_ptr)
             for (POSITION x = 0; x < floor_ptr->width; x++) {
                 auto *g_ptr = &floor_ptr->grid_array[y][x];
                 auto *f_ptr = &terrains_info[g_ptr->get_feat_mimic()];
-                if (g_ptr->is_mirror() || f_ptr->flags.has(TerrainCharacteristics::QUEST_ENTER) || f_ptr->flags.has(TerrainCharacteristics::ENTRANCE)) {
+                using Tc = TerrainCharacteristics;
+                if (g_ptr->is_mirror() || f_ptr->flags.has(Tc::QUEST_ENTER) || f_ptr->flags.has(Tc::ENTRANCE)) {
                     continue;
                 }
 
                 g_ptr->info &= ~(CAVE_GLOW);
-                if (f_ptr->flags.has_not(TerrainCharacteristics::REMEMBER)) {
+                if (f_ptr->flags.has_not(Tc::REMEMBER)) {
                     g_ptr->info &= ~(CAVE_MARK);
                     note_spot(player_ptr, y, x);
                 }

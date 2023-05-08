@@ -403,8 +403,8 @@ std::string probed_monster_info(PlayerType *player_ptr, MonsterEntity *m_ptr, Mo
     }
 
     const auto speed = m_ptr->get_temporary_speed() - STANDARD_SPEED;
-    std::string result = format(_("%s ... 属性:%s HP:%d/%d AC:%d 速度:%s%d 経験:", "%s ... align:%s HP:%d/%d AC:%d speed:%s%d exp:"), m_name.data(), align, (int)m_ptr->hp,
-        (int)m_ptr->maxhp, r_ptr->ac, (speed > 0) ? "+" : "", speed);
+    constexpr auto mes = _("%s ... 属性:%s HP:%d/%d AC:%d 速度:%s%d 経験:", "%s ... align:%s HP:%d/%d AC:%d speed:%s%d exp:");
+    auto result = format(mes, m_name.data(), align, (int)m_ptr->hp, (int)m_ptr->maxhp, r_ptr->ac, (speed > 0) ? "+" : "", speed);
 
     if (MonsterRace(r_ptr->next_r_idx).is_valid()) {
         result.append(format("%d/%d ", m_ptr->exp, r_ptr->next_exp));

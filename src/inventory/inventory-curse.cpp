@@ -37,11 +37,28 @@
 #include <optional>
 #include <string>
 
+// clang-format off
 namespace {
-const EnumClassFlagGroup<CurseTraitType> TRC_P_FLAG_MASK({ CurseTraitType::TY_CURSE, CurseTraitType::DRAIN_EXP, CurseTraitType::ADD_L_CURSE, CurseTraitType::ADD_H_CURSE, CurseTraitType::CALL_ANIMAL, CurseTraitType::CALL_DEMON,
-    CurseTraitType::CALL_DRAGON, CurseTraitType::COWARDICE, CurseTraitType::TELEPORT, CurseTraitType::DRAIN_HP, CurseTraitType::DRAIN_MANA, CurseTraitType::CALL_UNDEAD, CurseTraitType::BERS_RAGE, CurseTraitType::PERSISTENT_CURSE });
-const EnumClassFlagGroup<CurseSpecialTraitType> TRCS_P_FLAG_MASK({ CurseSpecialTraitType::TELEPORT_SELF, CurseSpecialTraitType::CHAINSWORD });
+const EnumClassFlagGroup<CurseTraitType> TRC_P_FLAG_MASK({
+    CurseTraitType::TY_CURSE,
+    CurseTraitType::DRAIN_EXP,
+    CurseTraitType::ADD_L_CURSE,
+    CurseTraitType::ADD_H_CURSE,
+    CurseTraitType::CALL_ANIMAL,
+    CurseTraitType::CALL_DEMON,
+    CurseTraitType::CALL_DRAGON,
+    CurseTraitType::COWARDICE,
+    CurseTraitType::TELEPORT,
+    CurseTraitType::DRAIN_HP,
+    CurseTraitType::DRAIN_MANA,
+    CurseTraitType::CALL_UNDEAD,
+    CurseTraitType::BERS_RAGE,
+    CurseTraitType::PERSISTENT_CURSE });
+const EnumClassFlagGroup<CurseSpecialTraitType> TRCS_P_FLAG_MASK({
+    CurseSpecialTraitType::TELEPORT_SELF,
+    CurseSpecialTraitType::CHAINSWORD });
 }
+// clang-format on
 
 static bool is_specific_curse(CurseTraitType flag)
 {
@@ -406,7 +423,8 @@ static void curse_drain_hp(PlayerType *player_ptr)
         return;
     }
 
-    const auto item_name = describe_flavor(player_ptr, choose_cursed_obj_name(player_ptr, CurseTraitType::DRAIN_HP), (OD_OMIT_PREFIX | OD_NAME_ONLY));
+    const auto *item_ptr = choose_cursed_obj_name(player_ptr, CurseTraitType::DRAIN_HP);
+    const auto item_name = describe_flavor(player_ptr, item_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
     msg_format(_("%sはあなたの体力を吸収した！", "Your %s drains HP from you!"), item_name.data());
     take_hit(player_ptr, DAMAGE_LOSELIFE, std::min(player_ptr->lev * 2, 100), item_name.data());
 }
@@ -417,7 +435,8 @@ static void curse_drain_mp(PlayerType *player_ptr)
         return;
     }
 
-    const auto item_name = describe_flavor(player_ptr, choose_cursed_obj_name(player_ptr, CurseTraitType::DRAIN_MANA), (OD_OMIT_PREFIX | OD_NAME_ONLY));
+    const auto *item_ptr = choose_cursed_obj_name(player_ptr, CurseTraitType::DRAIN_MANA);
+    const auto item_name = describe_flavor(player_ptr, item_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
     msg_format(_("%sはあなたの魔力を吸収した！", "Your %s drains mana from you!"), item_name.data());
     player_ptr->csp -= std::min<short>(player_ptr->lev, 50);
     if (player_ptr->csp < 0) {
@@ -430,7 +449,9 @@ static void curse_drain_mp(PlayerType *player_ptr)
 
 static void occur_curse_effects(PlayerType *player_ptr)
 {
-    if ((player_ptr->cursed.has_none_of(TRC_P_FLAG_MASK) && player_ptr->cursed_special.has_none_of(TRCS_P_FLAG_MASK)) || player_ptr->phase_out || player_ptr->wild_mode) {
+    auto is_cursed = player_ptr->cursed.has_any_of(TRC_P_FLAG_MASK);
+    is_cursed |= player_ptr->cursed_special.has_any_of(TRCS_P_FLAG_MASK);
+    if (!is_cursed || player_ptr->phase_out || player_ptr->wild_mode) {
         return;
     }
 

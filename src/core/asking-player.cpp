@@ -353,7 +353,10 @@ bool get_com(std::string_view prompt, char *command, bool z_escape)
  */
 QUANTITY get_quantity(std::optional<std::string_view> prompt_opt, QUANTITY max)
 {
-    // FIXME : QUANTITY、COMMAND_CODE、その他の型サイズがまちまちな変数とのやり取りが多数ある。この処理での数の入力を0からSHRT_MAXに制限することで不整合の発生を回避する。
+    /*!
+     * @todo QUANTITY、COMMAND_CODE、その他の型サイズがまちまちな変数とのやり取りが多数ある.
+     * この処理での数の入力を0からSHRT_MAXに制限することで不整合の発生を回避する.
+     */
     max = std::clamp<QUANTITY>(max, 0, SHRT_MAX);
 
     bool res;

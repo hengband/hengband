@@ -105,13 +105,15 @@ bool update_riding_monster(PlayerType *player_ptr, turn_flags *turn_flags_ptr, M
  */
 void update_player_type(PlayerType *player_ptr, turn_flags *turn_flags_ptr, MonsterRaceInfo *r_ptr)
 {
-    auto except_has_lite = EnumClassFlagGroup<MonsterBrightnessType>(self_ld_mask).set({ MonsterBrightnessType::HAS_DARK_1, MonsterBrightnessType::HAS_DARK_2 });
+    using Mbt = MonsterBrightnessType;
+    const auto &except_has_lite = EnumClassFlagGroup<Mbt>(self_ld_mask).set({ Mbt::HAS_DARK_1, Mbt::HAS_DARK_2 });
     if (turn_flags_ptr->do_view) {
         player_ptr->update |= PU_FLOW;
         player_ptr->window_flags |= PW_OVERHEAD | PW_DUNGEON;
     }
 
-    if (turn_flags_ptr->do_move && (r_ptr->brightness_flags.has_any_of(except_has_lite) || (r_ptr->brightness_flags.has_any_of({ MonsterBrightnessType::HAS_LITE_1, MonsterBrightnessType::HAS_LITE_2 }) && !player_ptr->phase_out))) {
+    const auto has_lite = r_ptr->brightness_flags.has_any_of({ Mbt::HAS_LITE_1, Mbt::HAS_LITE_2 });
+    if (turn_flags_ptr->do_move && (r_ptr->brightness_flags.has_any_of(except_has_lite) || (has_lite && !player_ptr->phase_out))) {
         player_ptr->update |= PU_MONSTER_LITE;
     }
 }
@@ -376,7 +378,7 @@ static void update_specific_race_telepathy(PlayerType *player_ptr, um_type *um_p
         }
     }
 
-    if ((player_ptr->esp_nonliving) && (r_ptr->kind_flags.has(MonsterKindType::NONLIVING) && r_ptr->kind_flags.has_none_of({ MonsterKindType::DEMON, MonsterKindType::UNDEAD }))) {
+    if ((player_ptr->esp_nonliving) && r_ptr->kind_flags.has(MonsterKindType::NONLIVING) && r_ptr->kind_flags.has_none_of({ MonsterKindType::DEMON, MonsterKindType::UNDEAD })) {
         um_ptr->flag = true;
         m_ptr->mflag.set(MonsterTemporaryFlagType::ESP);
         if (m_ptr->is_original_ap() && !is_hallucinated) {

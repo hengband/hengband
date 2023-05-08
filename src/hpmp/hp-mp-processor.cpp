@@ -90,8 +90,8 @@ static bool deal_damege_by_feat(PlayerType *player_ptr, grid_type *g_ptr, concpt
 
     if (player_ptr->levitation) {
         msg_print(msg_levitation);
-
-        take_hit(player_ptr, DAMAGE_NOESCAPE, damage, format(_("%sの上に浮遊したダメージ", "flying over %s"), terrains_info[g_ptr->get_feat_mimic()].name.data()).data());
+        constexpr auto mes = _("%sの上に浮遊したダメージ", "flying over %s");
+        take_hit(player_ptr, DAMAGE_NOESCAPE, damage, format(mes, terrains_info[g_ptr->get_feat_mimic()].name.data()).data());
 
         if (additional_effect != nullptr) {
             additional_effect(player_ptr, damage);
@@ -165,39 +165,45 @@ void process_player_hp_mp(PlayerType *player_ptr)
     }
 
     if (f_ptr->flags.has(TerrainCharacteristics::LAVA) && !is_invuln(player_ptr) && !has_immune_fire(player_ptr)) {
-        if (deal_damege_by_feat(
-                player_ptr, g_ptr, _("熱で火傷した！", "The heat burns you!"), _("で火傷した！", "burns you!"), calc_fire_damage_rate, nullptr)) {
+        constexpr auto mes_leviation = _("熱で火傷した！", "The heat burns you!");
+        constexpr auto mes_normal = _("で火傷した！", "burns you!");
+        if (deal_damege_by_feat(player_ptr, g_ptr, mes_leviation, mes_normal, calc_fire_damage_rate, nullptr)) {
             cave_no_regen = true;
             sound(SOUND_TERRAIN_DAMAGE);
         }
     }
 
     if (f_ptr->flags.has(TerrainCharacteristics::COLD_PUDDLE) && !is_invuln(player_ptr) && !has_immune_cold(player_ptr)) {
-        if (deal_damege_by_feat(
-                player_ptr, g_ptr, _("冷気に覆われた！", "The cold engulfs you!"), _("に凍えた！", "frostbites you!"), calc_cold_damage_rate, nullptr)) {
+        constexpr auto mes_leviation = _("冷気に覆われた！", "The cold engulfs you!");
+        constexpr auto mes_normal = _("に凍えた！", "frostbites you!");
+        if (deal_damege_by_feat(player_ptr, g_ptr, mes_leviation, mes_normal, calc_cold_damage_rate, nullptr)) {
             cave_no_regen = true;
             sound(SOUND_TERRAIN_DAMAGE);
         }
     }
 
     if (f_ptr->flags.has(TerrainCharacteristics::ELEC_PUDDLE) && !is_invuln(player_ptr) && !has_immune_elec(player_ptr)) {
-        if (deal_damege_by_feat(
-                player_ptr, g_ptr, _("電撃を受けた！", "The electricity shocks you!"), _("に感電した！", "shocks you!"), calc_elec_damage_rate, nullptr)) {
+        constexpr auto mes_leviation = _("電撃を受けた！", "The electricity shocks you!");
+        constexpr auto mes_normal = _("に感電した！", "shocks you!");
+        if (deal_damege_by_feat(player_ptr, g_ptr, mes_leviation, mes_normal, calc_elec_damage_rate, nullptr)) {
             cave_no_regen = true;
             sound(SOUND_TERRAIN_DAMAGE);
         }
     }
 
     if (f_ptr->flags.has(TerrainCharacteristics::ACID_PUDDLE) && !is_invuln(player_ptr) && !has_immune_acid(player_ptr)) {
-        if (deal_damege_by_feat(
-                player_ptr, g_ptr, _("酸が飛び散った！", "The acid melts you!"), _("に溶かされた！", "melts you!"), calc_acid_damage_rate, nullptr)) {
+        constexpr auto mes_leviation = _("酸が飛び散った！", "The acid melts you!");
+        constexpr auto mes_normal = _("に溶かされた！", "melts you!");
+        if (deal_damege_by_feat(player_ptr, g_ptr, mes_leviation, mes_normal, calc_acid_damage_rate, nullptr)) {
             cave_no_regen = true;
             sound(SOUND_TERRAIN_DAMAGE);
         }
     }
 
     if (f_ptr->flags.has(TerrainCharacteristics::POISON_PUDDLE) && !is_invuln(player_ptr)) {
-        if (deal_damege_by_feat(player_ptr, g_ptr, _("毒気を吸い込んだ！", "The gas poisons you!"), _("に毒された！", "poisons you!"), calc_acid_damage_rate,
+        constexpr auto mes_leviation = _("毒気を吸い込んだ！", "The gas poisons you!");
+        constexpr auto mes_normal = _("に毒された！", "poisons you!");
+        if (deal_damege_by_feat(player_ptr, g_ptr, mes_leviation, mes_normal, calc_acid_damage_rate,
                 [](PlayerType *player_ptr, int damage) {
                     if (!has_resist_pois(player_ptr)) {
                         (void)BadStatusSetter(player_ptr).mod_poison(static_cast<TIME_EFFECT>(damage));
@@ -208,7 +214,8 @@ void process_player_hp_mp(PlayerType *player_ptr)
         }
     }
 
-    if (f_ptr->flags.has_all_of({ TerrainCharacteristics::WATER, TerrainCharacteristics::DEEP }) && !player_ptr->levitation && !player_ptr->can_swim && !has_resist_water(player_ptr)) {
+    const auto can_drown = f_ptr->flags.has_all_of({ TerrainCharacteristics::WATER, TerrainCharacteristics::DEEP });
+    if (can_drown && !player_ptr->levitation && !player_ptr->can_swim && !has_resist_water(player_ptr)) {
         if (calc_inventory_weight(player_ptr) > calc_weight_limit(player_ptr)) {
             msg_print(_("溺れている！", "You are drowning!"));
             take_hit(player_ptr, DAMAGE_NOESCAPE, randint1(player_ptr->lev), _("溺れ", "drowning"));
@@ -334,7 +341,11 @@ void process_player_hp_mp(PlayerType *player_ptr)
      * WILL BE!
      */
     if (f_ptr->flags.has_none_of({ TerrainCharacteristics::MOVE, TerrainCharacteristics::CAN_FLY })) {
-        if (!is_invuln(player_ptr) && !player_ptr->wraith_form && !player_ptr->tim_pass_wall && ((player_ptr->chp > (player_ptr->lev / 5)) || !has_pass_wall(player_ptr))) {
+        auto should_damage = !is_invuln(player_ptr);
+        should_damage &= player_ptr->wraith_form == 0;
+        should_damage &= player_ptr->tim_pass_wall == 0;
+        should_damage &= (player_ptr->chp > (player_ptr->lev / 5)) || !has_pass_wall(player_ptr);
+        if (should_damage) {
             concptr dam_desc;
             cave_no_regen = true;
 

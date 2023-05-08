@@ -775,8 +775,8 @@ static void display_spell_list(PlayerType *player_ptr)
             }
 
             const auto comment = mindcraft_info(player_ptr, use_mind, i);
-
-            term_putstr(x, y + i + 1, -1, a, format("  %c) %-30s%2d %4d %3d%%%s", I2A(i), spell.name, spell.min_lev, spell.mana_cost, chance, comment.data()));
+            constexpr auto fmt = "  %c) %-30s%2d %4d %3d%%%s";
+            term_putstr(x, y + i + 1, -1, a, format(fmt, I2A(i), spell.name, spell.min_lev, spell.mana_cost, chance, comment.data()));
         }
 
         return;
@@ -800,7 +800,8 @@ static void display_spell_list(PlayerType *player_ptr)
                 s_ptr = &mp_ptr->info[((j < 1) ? player_ptr->realm1 : player_ptr->realm2) - 1][i % 32];
             }
 
-            const auto spell_name = exe_spell(player_ptr, (j < 1) ? player_ptr->realm1 : player_ptr->realm2, i % 32, SpellProcessType::NAME);
+            const auto realm = (j < 1) ? player_ptr->realm1 : player_ptr->realm2;
+            const auto spell_name = exe_spell(player_ptr, realm, i % 32, SpellProcessType::NAME);
             strcpy(name, spell_name->data());
 
             if (s_ptr->slevel >= 99) {

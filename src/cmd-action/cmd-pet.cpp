@@ -114,8 +114,8 @@ void do_cmd_pet_dismiss(PlayerType *player_ptr)
             /* Hack -- health bar for this monster */
             health_track(player_ptr, pet_ctr);
             handle_stuff(player_ptr);
-
-            msg_format(_("%sを放しますか？ [Yes/No/Unnamed (%lu体)]", "Dismiss %s? [Yes/No/Unnamed (%lu remain)]"), friend_name.data(), who.size() - i);
+            constexpr auto mes = _("%sを放しますか？ [Yes/No/Unnamed (%lu体)]", "Dismiss %s? [Yes/No/Unnamed (%lu remain)]");
+            msg_format(mes, friend_name.data(), who.size() - i);
 
             if (m_ptr->ml) {
                 move_cursor_relative(m_ptr->fy, m_ptr->fx);
@@ -262,12 +262,13 @@ bool do_cmd_riding(PlayerType *player_ptr, bool force)
         if (!can_player_ride_pet(player_ptr, g_ptr, true)) {
             /* Feature code (applying "mimic" field) */
             auto *f_ptr = &terrains_info[g_ptr->get_feat_mimic()];
+            using Tc = TerrainCharacteristics;
 #ifdef JP
             msg_format("そのモンスターは%sの%sにいる。", f_ptr->name.data(),
-                (f_ptr->flags.has_none_of({ TerrainCharacteristics::MOVE, TerrainCharacteristics::CAN_FLY }) || f_ptr->flags.has_none_of({ TerrainCharacteristics::LOS, TerrainCharacteristics::TREE })) ? "中" : "上");
+                (f_ptr->flags.has_none_of({ Tc::MOVE, Tc::CAN_FLY }) || f_ptr->flags.has_none_of({ Tc::LOS, Tc::TREE })) ? "中" : "上");
 #else
             msg_format("This monster is %s the %s.",
-                (f_ptr->flags.has_none_of({ TerrainCharacteristics::MOVE, TerrainCharacteristics::CAN_FLY }) || f_ptr->flags.has_none_of({ TerrainCharacteristics::LOS, TerrainCharacteristics::TREE })) ? "in" : "on", f_ptr->name.data());
+                (f_ptr->flags.has_none_of({ Tc::MOVE, Tc::CAN_FLY }) || f_ptr->flags.has_none_of({ Tc::LOS, Tc::TREE })) ? "in" : "on", f_ptr->name.data());
 #endif
 
             return false;
@@ -503,7 +504,7 @@ void do_cmd_pet(PlayerType *player_ptr)
             switch (player_ptr->pclass) {
             case PlayerClassType::MONK:
             case PlayerClassType::FORCETRAINER:
-            case PlayerClassType::BERSERKER:
+            case PlayerClassType::BERSERKER: {
                 if (empty_hands(player_ptr, false) == (EMPTY_HAND_MAIN | EMPTY_HAND_SUB)) {
                     if (player_ptr->pet_extra_flags & PF_TWO_HANDS) {
                         power_desc[num] = _("片手で格闘する", "use one hand to control the pet you are riding");
@@ -512,7 +513,12 @@ void do_cmd_pet(PlayerType *player_ptr)
                     }
 
                     powers[num++] = PET_TWO_HANDS;
-                } else if ((empty_hands(player_ptr, false) != EMPTY_HAND_NONE) && !has_melee_weapon(player_ptr, INVEN_MAIN_HAND) && !has_melee_weapon(player_ptr, INVEN_SUB_HAND)) {
+                    break;
+                }
+
+                auto has_any_melee_weapon = has_melee_weapon(player_ptr, INVEN_MAIN_HAND);
+                has_any_melee_weapon |= has_melee_weapon(player_ptr, INVEN_SUB_HAND);
+                if ((empty_hands(player_ptr, false) != EMPTY_HAND_NONE) && !has_any_melee_weapon) {
                     if (player_ptr->pet_extra_flags & PF_TWO_HANDS) {
                         power_desc[num] = _("格闘を行わない", "use one hand to control the pet you are riding");
                     } else {
@@ -520,9 +526,11 @@ void do_cmd_pet(PlayerType *player_ptr)
                     }
 
                     powers[num++] = PET_TWO_HANDS;
+                    break;
                 }
-                break;
 
+                break;
+            }
             default:
                 break;
             }

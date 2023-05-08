@@ -114,7 +114,8 @@ static void drain_essence(PlayerType *player_ptr)
     auto s = _("抽出できるアイテムがありません。", "You have nothing you can extract from.");
 
     OBJECT_IDX item;
-    auto o_ptr = choose_object(player_ptr, &item, q, s, (USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT), FuncItemTester(&ItemEntity::is_weapon_armour_ammo));
+    constexpr auto options = USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT;
+    auto o_ptr = choose_object(player_ptr, &item, q, s, options, FuncItemTester(&ItemEntity::is_weapon_armour_ammo));
     if (!o_ptr) {
         return;
     }

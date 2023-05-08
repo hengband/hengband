@@ -840,18 +840,20 @@ std::optional<std::string> do_hex_spell(PlayerType *player_ptr, spell_hex_type s
 
                 flag = false;
 
+                const auto *floor_ptr = player_ptr->current_floor_ptr;
                 for (dir = 0; dir < 8; dir++) {
                     int dy = y + ddy_ddd[dir];
                     int dx = x + ddx_ddd[dir];
                     if (dir == 5) {
                         continue;
                     }
-                    if (player_ptr->current_floor_ptr->grid_array[dy][dx].m_idx) {
+                    if (floor_ptr->grid_array[dy][dx].m_idx) {
                         flag = true;
                     }
                 }
 
-                if (!is_cave_empty_bold(player_ptr, y, x) || player_ptr->current_floor_ptr->grid_array[y][x].is_icky() || (distance(y, x, player_ptr->y, player_ptr->x) > player_ptr->lev + 2)) {
+                const auto dist = distance(y, x, player_ptr->y, player_ptr->x);
+                if (!is_cave_empty_bold(player_ptr, y, x) || floor_ptr->grid_array[y][x].is_icky() || (dist > player_ptr->lev + 2)) {
                     msg_print(_("そこには移動できない。", "Can not teleport to there."));
                     continue;
                 }

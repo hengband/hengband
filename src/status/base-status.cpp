@@ -16,10 +16,24 @@
 #include "view/display-messages.h"
 
 /* Array of stat "descriptions" */
-static concptr desc_stat_pos[] = { _("強く", "stronger"), _("知的に", "smarter"), _("賢く", "wiser"), _("器用に", "more dextrous"), _("健康に", "healthier"), _("美しく", "cuter") };
+static concptr desc_stat_pos[] = {
+    _("強く", "stronger"),
+    _("知的に", "smarter"),
+    _("賢く", "wiser"),
+    _("器用に", "more dextrous"),
+    _("健康に", "healthier"),
+    _("美しく", "cuter")
+};
 
 /* Array of stat "descriptions" */
-static concptr desc_stat_neg[] = { _("弱く", "weaker"), _("無知に", "stupider"), _("愚かに", "more naive"), _("不器用に", "clumsier"), _("不健康に", "more sickly"), _("醜く", "uglier") };
+static concptr desc_stat_neg[] = {
+    _("弱く", "weaker"),
+    _("無知に", "stupider"),
+    _("愚かに", "more naive"),
+    _("不器用に", "clumsier"),
+    _("不健康に", "more sickly"),
+    _("醜く", "uglier")
+};
 
 /*!
  * @brief プレイヤーの基本能力値を増加させる / Increases a stat by one randomized level -RAK-

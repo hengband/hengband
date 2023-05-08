@@ -156,7 +156,8 @@ bool MonsterDamageProcessor::process_dead_exp_virtue(concptr note, MonsterEntity
     AvatarChanger ac(player_ptr, m_ptr);
     ac.change_virtue();
     if (r_ref.kind_flags.has(MonsterKindType::UNIQUE) && record_destroy_uniq) {
-        exe_write_diary(this->player_ptr, DIARY_UNIQUE, 0, std::string(r_ref.name).append(m_ptr->mflag2.has(MonsterConstantFlagType::CLONED) ? _("(クローン)", "(Clone)") : "").data());
+        const auto clone_name = std::string(r_ref.name).append(m_ptr->mflag2.has(MonsterConstantFlagType::CLONED) ? _("(クローン)", "(Clone)") : "");
+        exe_write_diary(this->player_ptr, DIARY_UNIQUE, 0, clone_name.data());
     }
 
     sound(SOUND_KILL);
@@ -442,8 +443,12 @@ void MonsterDamageProcessor::get_exp_from_mon(MonsterEntity *m_ptr, int exp_dam)
     s64b_mul(&div_h, &div_l, 0, r_ptr->hdice * (ironman_nightmare ? 2 : 1) * compensation);
 
     /* Special penalty in the wilderness */
-    if (!this->player_ptr->current_floor_ptr->dun_level && (r_ptr->wilderness_flags.has_not(MonsterWildernessType::WILD_ONLY) || r_ptr->kind_flags.has_not(MonsterKindType::UNIQUE))) {
-        s64b_mul(&div_h, &div_l, 0, 5);
+    if (!this->player_ptr->current_floor_ptr->is_in_dungeon()) {
+        auto is_dungeon_monster = r_ptr->wilderness_flags.has_not(MonsterWildernessType::WILD_ONLY);
+        is_dungeon_monster |= r_ptr->kind_flags.has_not(MonsterKindType::UNIQUE);
+        if (is_dungeon_monster) {
+            s64b_mul(&div_h, &div_l, 0, 5);
+        }
     }
 
     /* Do ENERGY_DIVISION first to prevent overflaw */

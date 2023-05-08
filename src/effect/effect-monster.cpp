@@ -384,11 +384,18 @@ static void effect_makes_change_virtues(PlayerType *player_ptr, effect_monster_t
  */
 static void affected_monster_prevents_bad_status(PlayerType *player_ptr, effect_monster_type *em_ptr)
 {
-    if (em_ptr->r_ptr->kind_flags.has(MonsterKindType::UNIQUE) || any_bits(em_ptr->r_ptr->flags1, RF1_QUESTOR) || (player_ptr->riding && (em_ptr->g_ptr->m_idx == player_ptr->riding))) {
+    const auto *r_ptr = em_ptr->r_ptr;
+    auto can_avoid_polymorph = r_ptr->kind_flags.has(MonsterKindType::UNIQUE);
+    can_avoid_polymorph |= any_bits(r_ptr->flags1, RF1_QUESTOR);
+    can_avoid_polymorph |= (player_ptr->riding != 0) && (em_ptr->g_ptr->m_idx == player_ptr->riding);
+    if (can_avoid_polymorph) {
         em_ptr->do_polymorph = false;
     }
 
-    if ((em_ptr->r_ptr->kind_flags.has(MonsterKindType::UNIQUE) || any_bits(em_ptr->r_ptr->flags1, RF1_QUESTOR) || (em_ptr->r_ptr->population_flags.has(MonsterPopulationType::NAZGUL))) && !player_ptr->phase_out && (em_ptr->who > 0) && (em_ptr->dam > em_ptr->m_ptr->hp)) {
+    auto should_alive = r_ptr->kind_flags.has(MonsterKindType::UNIQUE);
+    should_alive |= any_bits(r_ptr->flags1, RF1_QUESTOR);
+    should_alive |= r_ptr->population_flags.has(MonsterPopulationType::NAZGUL);
+    if (should_alive && !player_ptr->phase_out && (em_ptr->who > 0) && (em_ptr->dam > em_ptr->m_ptr->hp)) {
         em_ptr->dam = em_ptr->m_ptr->hp;
     }
 }
@@ -401,7 +408,11 @@ static void affected_monster_prevents_bad_status(PlayerType *player_ptr, effect_
  */
 static void effect_damage_piles_stun(PlayerType *player_ptr, effect_monster_type *em_ptr)
 {
-    if ((em_ptr->do_stun == 0) || em_ptr->r_ptr->resistance_flags.has_any_of({ MonsterResistanceType::RESIST_SOUND, MonsterResistanceType::RESIST_FORCE }) || (em_ptr->r_ptr->flags3 & RF3_NO_STUN)) {
+    const auto *r_ptr = em_ptr->r_ptr;
+    auto can_avoid_stun = em_ptr->do_stun == 0;
+    can_avoid_stun |= r_ptr->resistance_flags.has_any_of({ MonsterResistanceType::RESIST_SOUND, MonsterResistanceType::RESIST_FORCE });
+    can_avoid_stun |= any_bits(r_ptr->flags3, RF3_NO_STUN);
+    if (can_avoid_stun) {
         return;
     }
 
@@ -719,7 +730,8 @@ static void exe_affect_monster_postprocess(PlayerType *player_ptr, effect_monste
  * 3.ペット及び撮影による事後効果
  */
 bool affect_monster(
-    PlayerType *player_ptr, MONSTER_IDX who, POSITION r, POSITION y, POSITION x, int dam, AttributeType attribute, BIT_FLAGS flag, bool see_s_msg, std::optional<CapturedMonsterType *> cap_mon_ptr)
+    PlayerType *player_ptr, MONSTER_IDX who, POSITION r, POSITION y, POSITION x, int dam, AttributeType attribute, BIT_FLAGS flag, bool see_s_msg,
+    std::optional<CapturedMonsterType *> cap_mon_ptr)
 {
     effect_monster_type tmp_effect;
     effect_monster_type *em_ptr = initialize_effect_monster(player_ptr, &tmp_effect, who, r, y, x, dam, attribute, flag, see_s_msg);
