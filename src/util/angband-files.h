@@ -50,7 +50,7 @@ errr angband_fputs(FILE *fff, concptr buf, ulong n);
 errr angband_fclose(FILE *fff);
 void fd_kill(std::string_view file);
 void fd_move(std::string_view from, std::string_view to);
-int fd_make(std::string_view file, bool can_write_group = false);
+int fd_make(const std::filesystem::path &path, bool can_write_group = false);
 int fd_open(std::string_view file, int mode);
 errr fd_lock(int fd, int what);
 errr fd_seek(int fd, ulong n);

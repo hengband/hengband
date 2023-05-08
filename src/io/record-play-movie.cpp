@@ -366,7 +366,7 @@ void prepare_movie_hooks(PlayerType *player_ptr)
 
         movie_fd = fd_open(filename, O_WRONLY | O_TRUNC);
     } else {
-        movie_fd = fd_make(filename);
+        movie_fd = fd_make(path);
     }
 
     if (!movie_fd) {

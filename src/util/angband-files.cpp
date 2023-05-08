@@ -376,14 +376,14 @@ void fd_move(std::string_view from, std::string_view to)
 
 /*!
  * @brief OSごとの差異を吸収してファイルを作成する
- * @param file 作成先ファイルの相対パスまたは絶対パス
+ * @param path 作成先ファイルの相対パスまたは絶対パス
  * @param can_write_group グループに書き込みを許可するか否か
  */
-int fd_make(std::string_view file, bool can_write_group)
+int fd_make(const std::filesystem::path &path, bool can_write_group)
 {
     const auto permission = can_write_group ? 0644 : 0664;
-    const auto &path = path_parse(file);
-    return open(path.string().data(), O_CREAT | O_EXCL | O_WRONLY | O_BINARY, permission);
+    const auto &parsed_path = path_parse(path);
+    return open(parsed_path.string().data(), O_CREAT | O_EXCL | O_WRONLY | O_BINARY, permission);
 }
 
 /*

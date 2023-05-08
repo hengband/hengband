@@ -65,9 +65,9 @@ void init_saved_floors(PlayerType *player_ptr, bool force)
     auto fd = -1;
     for (int i = 0; i < MAX_SAVED_FLOORS; i++) {
         saved_floor_type *sf_ptr = &saved_floors[i];
-        std::string floor_savefile = get_saved_floor_name(i);
+        auto floor_savefile = get_saved_floor_name(i);
         safe_setuid_grab(player_ptr);
-        fd = fd_make(floor_savefile.data());
+        fd = fd_make(floor_savefile);
         safe_setuid_drop();
         check_saved_tmp_files(fd, &force);
         safe_setuid_grab(player_ptr);

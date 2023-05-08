@@ -193,7 +193,7 @@ void init_angband(PlayerType *player_ptr, bool no_term)
     fd = fd_open(filename_score, O_RDONLY);
     if (fd < 0) {
         safe_setuid_grab(player_ptr);
-        fd = fd_make(filename_score, true);
+        fd = fd_make(path_score, true);
         safe_setuid_drop();
         if (fd < 0) {
             std::string why = _("'", "Cannot create the '");

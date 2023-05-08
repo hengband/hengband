@@ -291,7 +291,7 @@ errr counts_write(PlayerType *player_ptr, int where, uint32_t count)
     safe_setuid_drop();
     if (fd < 0) {
         safe_setuid_grab(player_ptr);
-        fd = fd_make(path.string());
+        fd = fd_make(path);
         safe_setuid_drop();
     }
 
