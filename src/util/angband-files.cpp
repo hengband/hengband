@@ -69,7 +69,7 @@ void user_name(char *buf, int id)
 
 #endif /* SET_UID */
 
-std::filesystem::path path_parse(std::string_view file)
+std::filesystem::path path_parse(const std::filesystem::path &path)
 #ifdef SET_UID
 {
     /*
@@ -79,6 +79,7 @@ std::filesystem::path path_parse(std::string_view file)
      * Replace "~user/" by the home directory of the user named "user"
      * Replace "~/" by the home directory of the current user
      */
+    const auto &file = path.string();
     if (file.empty() || (file[0] != '~')) {
         return file;
     }
@@ -125,7 +126,7 @@ std::filesystem::path path_parse(std::string_view file)
 }
 #else
 {
-    return file;
+    return path;
 }
 #endif /* SET_UID */
 
@@ -196,16 +197,16 @@ static std::string make_file_mode(const FileOpenMode mode, const bool is_binary)
 
 /*!
  * @brief OSごとの差異を吸収してファイルを開く
- * @param file ファイルの相対パスまたは絶対パス
+ * @param path ファイルの相対パスまたは絶対パス
  * @param mode ファイルを開くモード
  * @param is_binary バイナリモードか否か (無指定の場合false：テキストモード)
  * @return ファイルポインタ
  */
-FILE *angband_fopen(const std::filesystem::path &file, const FileOpenMode mode, const bool is_binary)
+FILE *angband_fopen(const std::filesystem::path &path, const FileOpenMode mode, const bool is_binary)
 {
-    const auto &path = path_parse(file.string());
+    const auto &parsed_path = path_parse(path);
     const auto &open_mode = make_file_mode(mode, is_binary);
-    return fopen(path.string().data(), open_mode.data());
+    return fopen(parsed_path.string().data(), open_mode.data());
 }
 
 /*
