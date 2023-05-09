@@ -335,6 +335,8 @@ void prepare_chuukei_hooks(void)
  */
 void prepare_movie_hooks(PlayerType *player_ptr)
 {
+    TermCenteredOffsetSetter tcos(std::nullopt, std::nullopt);
+
     if (movie_mode) {
         movie_mode = 0;
         disable_chuukei_server();

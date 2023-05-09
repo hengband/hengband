@@ -11,6 +11,7 @@
 #include "player-base/player-class.h"
 #include "player/player-personality.h"
 #include "system/player-type-definition.h"
+#include "term/gameterm.h"
 #include "term/screen-processor.h"
 #include "term/z-form.h"
 #include "util/angband-files.h"
@@ -119,6 +120,8 @@ static void do_cmd_erase_diary()
 void do_cmd_diary(PlayerType *player_ptr)
 {
     screen_save();
+    TermCenteredOffsetSetter tcos(MAIN_TERM_MIN_COLS, MAIN_TERM_MIN_ROWS);
+
     while (true) {
         term_clear();
         prt(_("[ 記録の設定 ]", "[ Play Record ]"), 2, 0);

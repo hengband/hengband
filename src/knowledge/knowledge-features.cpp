@@ -16,6 +16,7 @@
 #include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
 #include "system/terrain-type-definition.h"
+#include "term/gameterm.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
 #include "util/angband-files.h"
@@ -100,6 +101,8 @@ static void display_feature_list(int col, int row, int per_page, FEAT_IDX *feat_
  */
 void do_cmd_knowledge_features(bool *need_redraw, bool visual_only, IDX direct_f_idx, IDX *lighting_level)
 {
+    TermCenteredOffsetSetter tcos(MAIN_TERM_MIN_COLS, std::nullopt);
+
     TERM_COLOR attr_old[F_LIT_MAX] = {};
     char char_old[F_LIT_MAX] = {};
 
