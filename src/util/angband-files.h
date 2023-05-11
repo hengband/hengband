@@ -49,7 +49,7 @@ errr angband_fgets(FILE *fff, char *buf, ulong n);
 errr angband_fputs(FILE *fff, concptr buf, ulong n);
 errr angband_fclose(FILE *fff);
 void fd_kill(const std::filesystem::path &path);
-void fd_move(std::string_view from, std::string_view to);
+void fd_move(const std::filesystem::path &path_from, const std::filesystem::path &path_to);
 int fd_make(const std::filesystem::path &path, bool can_write_group = false);
 int fd_open(const std::filesystem::path &path, int mode);
 errr fd_lock(int fd, int what);

@@ -320,9 +320,9 @@ bool save_player(PlayerType *player_ptr, SaveType type)
         auto savefile_old = ss_old.str();
         safe_setuid_grab(player_ptr);
         fd_kill(savefile_old);
-        const auto &filename = type == SaveType::DEBUG ? debug_savefile.string() : savefile.string();
-        fd_move(filename, savefile_old);
-        fd_move(savefile_new, filename);
+        const auto &path = type == SaveType::DEBUG ? debug_savefile : savefile;
+        fd_move(path, savefile_old);
+        fd_move(savefile_new, path);
         fd_kill(savefile_old);
         safe_setuid_drop();
         w_ptr->character_loaded = true;

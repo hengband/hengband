@@ -359,23 +359,23 @@ void fd_kill(const std::filesystem::path &path)
 
 /*!
  * @brief OSごとの差異を吸収してファイルを移動する
- * @param from 移動元のファイルの相対パスまたは絶対パス
- * @param to 移動先のファイルの相対パスまたは絶対パス
+ * @param path_from 移動元のファイルの相対パスまたは絶対パス
+ * @param path_to 移動先のファイルの相対パスまたは絶対パス
  */
-void fd_move(std::string_view from, std::string_view to)
+void fd_move(const std::filesystem::path &path_from, const std::filesystem::path &path_to)
 {
-    const auto &path_from = path_parse(from);
-    if (!std::filesystem::exists(path_from)) {
+    const auto &abs_path_from = path_parse(path_from);
+    if (!std::filesystem::exists(abs_path_from)) {
         return;
     }
 
-    const auto &path_to = path_parse(to);
-    const auto directory = std::filesystem::path(path_to).remove_filename();
+    const auto &abs_path_to = path_parse(path_to);
+    const auto directory = std::filesystem::path(abs_path_to).remove_filename();
     if (!std::filesystem::exists(directory)) {
         std::filesystem::create_directory(directory);
     }
 
-    std::filesystem::rename(path_from, path_to);
+    std::filesystem::rename(abs_path_from, abs_path_to);
 }
 
 /*!
