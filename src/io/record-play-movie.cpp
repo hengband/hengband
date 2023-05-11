@@ -623,9 +623,9 @@ static bool flush_ringbuf_client()
     return true;
 }
 
-void prepare_browse_movie_without_path_build(std::string_view filename)
+void prepare_browse_movie_without_path_build(const std::filesystem::path &path)
 {
-    movie_fd = fd_open(filename, O_RDONLY);
+    movie_fd = fd_open(path, O_RDONLY);
     init_buffer();
 }
 
@@ -655,7 +655,7 @@ void browse_movie(void)
 void prepare_browse_movie_with_path_build(std::string_view filename)
 {
     const auto &path = path_build(ANGBAND_DIR_USER, filename);
-    movie_fd = fd_open(path.string(), O_RDONLY);
+    movie_fd = fd_open(path, O_RDONLY);
     init_buffer();
 }
 #endif

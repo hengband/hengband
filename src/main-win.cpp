@@ -1675,7 +1675,7 @@ static void process_menus(PlayerType *player_ptr, WORD wCmd)
             const auto &filename = get_open_filename(&ofn, ANGBAND_DIR_USER, savefile, MAIN_WIN_MAX_PATH);
             if (filename.has_value()) {
                 savefile = filename.value();
-                prepare_browse_movie_without_path_build(savefile.string());
+                prepare_browse_movie_without_path_build(savefile);
                 movie_in_progress = true;
             }
         }
