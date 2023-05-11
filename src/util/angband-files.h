@@ -51,7 +51,7 @@ errr angband_fclose(FILE *fff);
 void fd_kill(const std::filesystem::path &path);
 void fd_move(std::string_view from, std::string_view to);
 int fd_make(const std::filesystem::path &path, bool can_write_group = false);
-int fd_open(std::string_view file, int mode);
+int fd_open(const std::filesystem::path &path, int mode);
 errr fd_lock(int fd, int what);
 errr fd_seek(int fd, ulong n);
 errr fd_read(int fd, char *buf, ulong n);

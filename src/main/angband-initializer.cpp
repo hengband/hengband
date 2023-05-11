@@ -163,7 +163,7 @@ static void put_title()
 void init_angband(PlayerType *player_ptr, bool no_term)
 {
     const auto &path_news = path_build(ANGBAND_DIR_FILE, _("news_j.txt", "news.txt"));
-    auto fd = fd_open(path_news.string(), O_RDONLY);
+    auto fd = fd_open(path_news, O_RDONLY);
     if (fd < 0) {
         std::string why = _("'", "Cannot access the '");
         why.append(path_news.string());
@@ -189,13 +189,13 @@ void init_angband(PlayerType *player_ptr, bool no_term)
     }
 
     const auto &path_score = path_build(ANGBAND_DIR_APEX, "scores.raw");
-    const auto &filename_score = path_score.string();
-    fd = fd_open(filename_score, O_RDONLY);
+    fd = fd_open(path_score, O_RDONLY);
     if (fd < 0) {
         safe_setuid_grab(player_ptr);
         fd = fd_make(path_score, true);
         safe_setuid_drop();
         if (fd < 0) {
+            const auto &filename_score = path_score.string();
             std::string why = _("'", "Cannot create the '");
             why.append(filename_score);
             why.append(_("'ファイルを作成できません!", "' file!"));

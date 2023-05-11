@@ -1647,7 +1647,7 @@ static void process_menus(PlayerType *player_ptr, WORD wCmd)
     }
     case IDM_FILE_SCORE: {
         const auto &path = path_build(ANGBAND_DIR_APEX, "scores.raw");
-        highscore_fd = fd_open(path.string(), O_RDONLY);
+        highscore_fd = fd_open(path, O_RDONLY);
         if (highscore_fd < 0) {
             msg_print("Score file unavailable.");
         } else {

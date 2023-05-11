@@ -152,7 +152,7 @@ void close_game(PlayerType *player_ptr)
     w_ptr->character_icky_depth = 1;
     const auto &path = path_build(ANGBAND_DIR_APEX, "scores.raw");
     safe_setuid_grab(player_ptr);
-    highscore_fd = fd_open(path.string(), O_RDWR);
+    highscore_fd = fd_open(path, O_RDWR);
     safe_setuid_drop();
 
     if (!check_death(player_ptr)) {

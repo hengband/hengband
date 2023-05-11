@@ -392,13 +392,13 @@ int fd_make(const std::filesystem::path &path, bool can_write_group)
 
 /*
  * @brief OSごとの差異を吸収してファイルを開く
- * @param file ファイルの相対パスまたは絶対パス
+ * @param path ファイルの相対パスまたは絶対パス
  * @param mode ファイルのオープンモード (読み書き、Append/Trunc等)
  */
-int fd_open(std::string_view file, int mode)
+int fd_open(const std::filesystem::path &path, int mode)
 {
-    const auto &path = path_parse(file);
-    return open(path.string().data(), mode | O_BINARY, 0);
+    const auto &path_abs = path_parse(path);
+    return open(path_abs.string().data(), mode | O_BINARY, 0);
 }
 
 /*
