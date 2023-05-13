@@ -106,7 +106,7 @@ bool update_riding_monster(PlayerType *player_ptr, turn_flags *turn_flags_ptr, M
 void update_player_type(PlayerType *player_ptr, turn_flags *turn_flags_ptr, MonsterRaceInfo *r_ptr)
 {
     using Mbt = MonsterBrightnessType;
-    const auto &except_has_lite = EnumClassFlagGroup<Mbt>(self_ld_mask).set({ Mbt::HAS_DARK_1, Mbt::HAS_DARK_2 });
+    const auto except_has_lite = EnumClassFlagGroup<Mbt>(self_ld_mask).set({ Mbt::HAS_DARK_1, Mbt::HAS_DARK_2 });
     if (turn_flags_ptr->do_view) {
         player_ptr->update |= PU_FLOW;
         player_ptr->window_flags |= PW_OVERHEAD | PW_DUNGEON;
