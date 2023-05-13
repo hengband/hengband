@@ -353,9 +353,9 @@ void prepare_movie_hooks(PlayerType *player_ptr)
     }
 
     const auto &path = path_build(ANGBAND_DIR_USER, movie_filename);
-    const auto &filename = path.string();
-    auto fd = fd_open(filename, O_RDONLY);
+    auto fd = fd_open(path, O_RDONLY);
     if (fd >= 0) {
+        const auto &filename = path.string();
         (void)fd_close(fd);
         std::string query = _("現存するファイルに上>書きしますか? (", "Replace existing file ");
         query.append(filename);
@@ -364,9 +364,9 @@ void prepare_movie_hooks(PlayerType *player_ptr)
             return;
         }
 
-        movie_fd = fd_open(filename, O_WRONLY | O_TRUNC);
+        movie_fd = fd_open(path, O_WRONLY | O_TRUNC);
     } else {
-        movie_fd = fd_make(filename);
+        movie_fd = fd_make(path);
     }
 
     if (!movie_fd) {
@@ -623,9 +623,9 @@ static bool flush_ringbuf_client()
     return true;
 }
 
-void prepare_browse_movie_without_path_build(std::string_view filename)
+void prepare_browse_movie_without_path_build(const std::filesystem::path &path)
 {
-    movie_fd = fd_open(filename, O_RDONLY);
+    movie_fd = fd_open(path, O_RDONLY);
     init_buffer();
 }
 
@@ -655,7 +655,7 @@ void browse_movie(void)
 void prepare_browse_movie_with_path_build(std::string_view filename)
 {
     const auto &path = path_build(ANGBAND_DIR_USER, filename);
-    movie_fd = fd_open(path.string(), O_RDONLY);
+    movie_fd = fd_open(path, O_RDONLY);
     init_buffer();
 }
 #endif

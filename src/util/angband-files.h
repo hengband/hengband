@@ -41,17 +41,17 @@ enum class FileOpenMode {
     APPEND,
 };
 
-std::filesystem::path path_parse(std::string_view file);
+std::filesystem::path path_parse(const std::filesystem::path &path);
 std::filesystem::path path_build(const std::filesystem::path &path, std::string_view file);
-FILE *angband_fopen(const std::filesystem::path &file, const FileOpenMode mode, const bool is_binary = false);
+FILE *angband_fopen(const std::filesystem::path &path, const FileOpenMode mode, const bool is_binary = false);
 FILE *angband_fopen_temp(char *buf, int max);
 errr angband_fgets(FILE *fff, char *buf, ulong n);
 errr angband_fputs(FILE *fff, concptr buf, ulong n);
 errr angband_fclose(FILE *fff);
-void fd_kill(std::string_view file);
-void fd_move(std::string_view from, std::string_view to);
-int fd_make(std::string_view file, bool can_write_group = false);
-int fd_open(std::string_view file, int mode);
+void fd_kill(const std::filesystem::path &path);
+void fd_move(const std::filesystem::path &path_from, const std::filesystem::path &path_to);
+int fd_make(const std::filesystem::path &path, bool can_write_group = false);
+int fd_open(const std::filesystem::path &path, int mode);
 errr fd_lock(int fd, int what);
 errr fd_seek(int fd, ulong n);
 errr fd_read(int fd, char *buf, ulong n);

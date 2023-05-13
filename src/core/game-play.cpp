@@ -130,7 +130,7 @@ static void send_waiting_record(PlayerType *player_ptr)
     signals_ignore_tstp();
     w_ptr->character_icky_depth = 1;
     const auto &path = path_build(ANGBAND_DIR_APEX, "scores.raw");
-    highscore_fd = fd_open(path.string(), O_RDWR);
+    highscore_fd = fd_open(path, O_RDWR);
 
     /* 町名消失バグ対策(#38205)のためここで世界マップ情報を読み出す */
     parse_fixed_map(player_ptr, WILDERNESS_DEFINITION, 0, 0, w_ptr->max_wild_y, w_ptr->max_wild_x);

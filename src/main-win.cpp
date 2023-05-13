@@ -1647,7 +1647,7 @@ static void process_menus(PlayerType *player_ptr, WORD wCmd)
     }
     case IDM_FILE_SCORE: {
         const auto &path = path_build(ANGBAND_DIR_APEX, "scores.raw");
-        highscore_fd = fd_open(path.string(), O_RDONLY);
+        highscore_fd = fd_open(path, O_RDONLY);
         if (highscore_fd < 0) {
             msg_print("Score file unavailable.");
         } else {
@@ -1675,7 +1675,7 @@ static void process_menus(PlayerType *player_ptr, WORD wCmd)
             const auto &filename = get_open_filename(&ofn, ANGBAND_DIR_USER, savefile, MAIN_WIN_MAX_PATH);
             if (filename.has_value()) {
                 savefile = filename.value();
-                prepare_browse_movie_without_path_build(savefile.string());
+                prepare_browse_movie_without_path_build(savefile);
                 movie_in_progress = true;
             }
         }

@@ -368,7 +368,7 @@ bool load_savedata(PlayerType *player_ptr, bool *new_game)
     constexpr auto version_length = variant_length + 6;
     char tmp_ver[version_length]{};
     if (!err) {
-        fd = fd_open(savefile_str.data(), O_RDONLY);
+        fd = fd_open(savefile, O_RDONLY);
         if (fd < 0) {
             err = true;
         }

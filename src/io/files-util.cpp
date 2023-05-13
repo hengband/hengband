@@ -58,9 +58,9 @@ std::filesystem::path debug_savefile;
 errr file_character(PlayerType *player_ptr, concptr name)
 {
     const auto &path = path_build(ANGBAND_DIR_USER, name);
-    const auto &filename = path.string();
-    auto fd = fd_open(filename, O_RDONLY);
+    auto fd = fd_open(path, O_RDONLY);
     if (fd >= 0) {
+        const auto &filename = path.string();
         std::string query = _("現存するファイル ", "Replace existing file ");
         query.append(filename).append(_(" に上書きしますか? ", "? "));
         (void)fd_close(fd);
@@ -265,7 +265,7 @@ static errr counts_seek(PlayerType *player_ptr, int fd, uint32_t where, bool fla
 uint32_t counts_read(PlayerType *player_ptr, int where)
 {
     const auto &path = path_build(ANGBAND_DIR_DATA, _("z_info_j.raw", "z_info.raw"));
-    auto fd = fd_open(path.string(), O_RDONLY);
+    auto fd = fd_open(path, O_RDONLY);
     uint32_t count = 0;
     if (counts_seek(player_ptr, fd, where, false) || fd_read(fd, (char *)(&count), sizeof(uint32_t))) {
         count = 0;
@@ -287,11 +287,11 @@ errr counts_write(PlayerType *player_ptr, int where, uint32_t count)
 {
     const auto &path = path_build(ANGBAND_DIR_DATA, _("z_info_j.raw", "z_info.raw"));
     safe_setuid_grab(player_ptr);
-    auto fd = fd_open(path.string(), O_RDWR);
+    auto fd = fd_open(path, O_RDWR);
     safe_setuid_drop();
     if (fd < 0) {
         safe_setuid_grab(player_ptr);
-        fd = fd_make(path.string());
+        fd = fd_make(path);
         safe_setuid_drop();
     }
 

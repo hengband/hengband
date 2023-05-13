@@ -252,18 +252,18 @@ bool save_floor(PlayerType *player_ptr, saved_floor_type *sf_ptr, BIT_FLAGS mode
     strnfmt(ext, sizeof(ext), ".F%02d", (int)sf_ptr->savefile_id);
     floor_savefile.append(ext);
     safe_setuid_grab(player_ptr);
-    fd_kill(floor_savefile.data());
+    fd_kill(floor_savefile);
     safe_setuid_drop();
     saving_savefile = nullptr;
     safe_setuid_grab(player_ptr);
 
-    auto fd = fd_make(floor_savefile.data());
+    auto fd = fd_make(floor_savefile);
     safe_setuid_drop();
     bool is_save_successful = false;
     if (fd >= 0) {
         (void)fd_close(fd);
         safe_setuid_grab(player_ptr);
-        saving_savefile = angband_fopen(floor_savefile.data(), FileOpenMode::WRITE, true);
+        saving_savefile = angband_fopen(floor_savefile, FileOpenMode::WRITE, true);
         safe_setuid_drop();
         if (saving_savefile) {
             if (save_floor_aux(player_ptr, sf_ptr)) {
@@ -277,7 +277,7 @@ bool save_floor(PlayerType *player_ptr, saved_floor_type *sf_ptr, BIT_FLAGS mode
 
         if (!is_save_successful) {
             safe_setuid_grab(player_ptr);
-            (void)fd_kill(floor_savefile.data());
+            (void)fd_kill(floor_savefile);
             safe_setuid_drop();
         }
     }

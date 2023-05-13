@@ -248,17 +248,16 @@ static bool wr_savefile_new(PlayerType *player_ptr, SaveType type)
 }
 
 /*!
- * @brief セーブデータ書き込みのサブルーチン /
- * Medium level player saver
+ * @brief セーブデータ書き込みのサブルーチン
  * @param player_ptr プレイヤーへの参照ポインタ
- * @return 成功すればtrue
- * @details
- * Angband 2.8.0 will use "fd" instead of "fff" if possible
+ * @param path セーブデータのフルパス
+ * @param type セーブ後の処理種別
+ * @return セーブの成功可否
  */
-static bool save_player_aux(PlayerType *player_ptr, char *name, SaveType type)
+static bool save_player_aux(PlayerType *player_ptr, const std::filesystem::path &path, SaveType type)
 {
     safe_setuid_grab(player_ptr);
-    auto fd = fd_make(name);
+    auto fd = fd_make(path);
     safe_setuid_drop();
 
     bool is_save_successful = false;
@@ -266,7 +265,7 @@ static bool save_player_aux(PlayerType *player_ptr, char *name, SaveType type)
     if (fd >= 0) {
         (void)fd_close(fd);
         safe_setuid_grab(player_ptr);
-        saving_savefile = angband_fopen(name, FileOpenMode::WRITE, true);
+        saving_savefile = angband_fopen(path, FileOpenMode::WRITE, true);
         safe_setuid_drop();
         if (saving_savefile) {
             if (wr_savefile_new(player_ptr, type)) {
@@ -280,7 +279,7 @@ static bool save_player_aux(PlayerType *player_ptr, char *name, SaveType type)
 
         safe_setuid_grab(player_ptr);
         if (!is_save_successful) {
-            (void)fd_kill(name);
+            (void)fd_kill(path);
         }
 
         safe_setuid_drop();
@@ -321,9 +320,9 @@ bool save_player(PlayerType *player_ptr, SaveType type)
         auto savefile_old = ss_old.str();
         safe_setuid_grab(player_ptr);
         fd_kill(savefile_old);
-        const auto &filename = type == SaveType::DEBUG ? debug_savefile.string() : savefile.string();
-        fd_move(filename, savefile_old);
-        fd_move(savefile_new, filename);
+        const auto &path = type == SaveType::DEBUG ? debug_savefile : savefile;
+        fd_move(path, savefile_old);
+        fd_move(savefile_new, path);
         fd_kill(savefile_old);
         safe_setuid_drop();
         w_ptr->character_loaded = true;

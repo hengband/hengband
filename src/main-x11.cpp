@@ -2516,8 +2516,7 @@ errr init_x11(int argc, char *argv[])
     switch (arg_graphics) {
     case GRAPHICS_ORIGINAL: {
         const auto &path = path_build(ANGBAND_DIR_XTRA, "graf/8x8.bmp");
-        const auto &filename = path.string();
-        if (0 == fd_close(fd_open(filename, O_RDONLY))) {
+        if (0 == fd_close(fd_open(path, O_RDONLY))) {
             use_graphics = true;
             pict_wid = pict_hgt = 8;
             ANGBAND_GRAF = "old";
@@ -2526,8 +2525,7 @@ errr init_x11(int argc, char *argv[])
     }
     case GRAPHICS_ADAM_BOLT: {
         const auto &path = path_build(ANGBAND_DIR_XTRA, "graf/16x16.bmp");
-        const auto &filename = path.string();
-        if (0 == fd_close(fd_open(filename, O_RDONLY))) {
+        if (0 == fd_close(fd_open(path, O_RDONLY))) {
             use_graphics = true;
             pict_wid = pict_hgt = 16;
             ANGBAND_GRAF = "new";
