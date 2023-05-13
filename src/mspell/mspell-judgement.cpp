@@ -108,7 +108,7 @@ bool breath_direct(PlayerType *player_ptr, POSITION y1, POSITION x1, POSITION y2
     }
 
     projection_path grid_g(player_ptr, get_max_range(player_ptr), y1, x1, y2, x2, flg);
-    int i = 0;
+    auto path_n = 0;
     POSITION y = y1;
     POSITION x = x1;
     for (const auto &[ny, nx] : grid_g) {
@@ -128,12 +128,12 @@ bool breath_direct(PlayerType *player_ptr, POSITION y1, POSITION x1, POSITION y2
 
         y = ny;
         x = nx;
-        i++;
+        ++path_n;
     }
 
     bool hit2 = false;
     bool hityou = false;
-    if (i == 0) {
+    if (path_n == 0) {
         if (flg & PROJECT_DISI) {
             if (in_disintegration_range(player_ptr->current_floor_ptr, y1, x1, y2, x2) && (distance(y1, x1, y2, x2) <= rad)) {
                 hit2 = true;
@@ -161,8 +161,8 @@ bool breath_direct(PlayerType *player_ptr, POSITION y1, POSITION x1, POSITION y2
         POSITION gx[1024], gy[1024];
         POSITION gm[32];
         POSITION gm_rad = rad;
-        breath_shape(player_ptr, grid_g, grid_g.path_num(), &grids, gx, gy, gm, &gm_rad, rad, y1, x1, y, x, typ);
-        for (i = 0; i < grids; i++) {
+        breath_shape(player_ptr, grid_g, path_n, &grids, gx, gy, gm, &gm_rad, rad, y1, x1, y, x, typ);
+        for (auto i = 0; i < grids; i++) {
             y = gy[i];
             x = gx[i];
             if ((y == y2) && (x == x2)) {
