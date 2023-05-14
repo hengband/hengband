@@ -66,7 +66,7 @@ void prevent_turn_overflow(PlayerType *player_ptr)
 
     for (size_t i = 1; i < towns_info.size(); i++) {
         for (auto j = 0; j < MAX_STORES; j++) {
-            store_type *store_ptr = &towns_info[i].store[j];
+            store_type *store_ptr = &towns_info[i].stores[j];
 
             if (store_ptr->last_visit > -10L * TURNS_PER_TICK * STORE_TICKS) {
                 store_ptr->last_visit -= rollback_turns;
