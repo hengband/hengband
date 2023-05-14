@@ -291,7 +291,7 @@ static term_data data[MAX_TERM_DATA];
 /* #define nonl() */
 /* #define nl() */
 
-static concptr ANGBAND_DIR_XTRA_SOUND;
+static std::filesystem::path ANGBAND_DIR_XTRA_SOUND;
 
 /*
  * todo 有効活用されていない疑惑
@@ -587,26 +587,17 @@ static bool check_file(concptr s)
  */
 static bool init_sound(void)
 {
-    /* Initialize once */
     if (can_use_sound) {
         return can_use_sound;
     }
 
-    int i;
-    char buf[1024];
-
-    /* Prepare the sounds */
-    for (i = 1; i < SOUND_MAX; i++) {
-        /* Extract name of sound file */
+    for (auto i = 1; i < SOUND_MAX; i++) {
         std::string wav = angband_sound_name[i];
         wav.append(".wav");
-
-        /* Access the sound */
-        path_build(buf, sizeof(buf), ANGBAND_DIR_XTRA_SOUND, wav);
-
-        /* Save the sound filename, if it exists */
-        if (check_file(buf)) {
-            sound_file[i] = string_make(buf);
+        const auto &path = path_build(ANGBAND_DIR_XTRA_SOUND, wav);
+        const auto &filename = path.string();
+        if (check_file(filename.data())) {
+            sound_file[i] = string_make(filename.data());
         }
     }
 
@@ -1244,10 +1235,7 @@ static void hook_quit(concptr str)
  */
 errr init_gcu(int argc, char *argv[])
 {
-    int i;
-
     int num_term = 4, next_win = 0;
-    char path[1024];
 
     /* Unused */
     (void)argc;
@@ -1255,36 +1243,22 @@ errr init_gcu(int argc, char *argv[])
 
     setlocale(LC_ALL, "");
 
-    /* Build the "sound" path */
-    path_build(path, sizeof(path), ANGBAND_DIR_XTRA, "sound");
-
-    /* Allocate the path */
-    ANGBAND_DIR_XTRA_SOUND = string_make(path);
-
-    /* Extract the normal keymap */
+    ANGBAND_DIR_XTRA_SOUND = path_build(ANGBAND_DIR_XTRA, "sound");
     keymap_norm_prepare();
-
-    bool nobigscreen = false;
-
-    /* Parse args */
-    for (i = 1; i < argc; i++) {
+    auto nobigscreen = false;
+    for (auto i = 1; i < argc; i++) {
         if (prefix(argv[i], "-o")) {
             nobigscreen = true;
         }
     }
 
-    /* Initialize for others systems */
     if (initscr() == (WINDOW *)ERR) {
         return -1;
     }
 
-    /* Activate hooks */
     quit_aux = hook_quit;
     core_aux = hook_quit;
-
-    /* Hack -- Require large screen, or Quit with message */
-    i = ((LINES < MAIN_TERM_MIN_ROWS) || (COLS < MAIN_TERM_MIN_COLS));
-    if (i) {
+    if ((LINES < MAIN_TERM_MIN_ROWS) || (COLS < MAIN_TERM_MIN_COLS)) {
         quit_fmt("%s needs an %dx%d 'curses' screen", std::string(VARIANT_NAME).data(), MAIN_TERM_MIN_COLS, MAIN_TERM_MIN_ROWS);
     }
 
@@ -1303,7 +1277,7 @@ errr init_gcu(int argc, char *argv[])
     /* Attempt to use customized colors */
     if (can_fix_color) {
         /* Prepare the color pairs */
-        for (i = 1; i <= 15; i++) {
+        for (auto i = 1; i <= 15; i++) {
             if (init_pair(i, i, 0) == ERR) {
                 quit("Color pair init failed");
             }
@@ -1391,7 +1365,7 @@ errr init_gcu(int argc, char *argv[])
     /*** Now prepare the term(s) ***/
     if (nobigscreen) {
         /* Create several terms */
-        for (i = 0; i < num_term; i++) {
+        for (auto i = 0; i < num_term; i++) {
             int rows, cols, y, x;
 
             /* Decide on size and position */
@@ -1481,7 +1455,7 @@ errr init_gcu(int argc, char *argv[])
         int next_term = 1;
         int term_ct = 1;
 
-        for (i = 1; i < argc; i++) {
+        for (auto i = 1; i < argc; i++) {
             if (streq(argv[i], "-spacer")) {
                 i++;
                 if (i >= argc) {

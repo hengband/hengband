@@ -119,7 +119,6 @@ static void send_waiting_record(PlayerType *player_ptr)
         return;
     }
 
-    char buf[1024];
     if (!get_check_strict(player_ptr, _("待機していたスコア登録を今行ないますか？", "Do you register score now? "), CHECK_NO_HISTORY)) {
         quit(0);
     }
@@ -130,8 +129,8 @@ static void send_waiting_record(PlayerType *player_ptr)
     w_ptr->start_time = (uint32_t)time(nullptr);
     signals_ignore_tstp();
     w_ptr->character_icky_depth = 1;
-    path_build(buf, sizeof(buf), ANGBAND_DIR_APEX, "scores.raw");
-    highscore_fd = fd_open(buf, O_RDWR);
+    const auto &path = path_build(ANGBAND_DIR_APEX, "scores.raw");
+    highscore_fd = fd_open(path, O_RDWR);
 
     /* 町名消失バグ対策(#38205)のためここで世界マップ情報を読み出す */
     parse_fixed_map(player_ptr, WILDERNESS_DEFINITION, 0, 0, w_ptr->max_wild_y, w_ptr->max_wild_x);
@@ -203,7 +202,8 @@ static void init_world_floor_info(PlayerType *player_ptr)
 static void restore_world_floor_info(PlayerType *player_ptr)
 {
     write_level = false;
-    exe_write_diary(player_ptr, DIARY_GAMESTART, 1, _("                            ----ゲーム再開----", "                            --- Restarted Game ---"));
+    constexpr auto mes = _("                            ----ゲーム再開----", "                            --- Restarted Game ---");
+    exe_write_diary(player_ptr, DIARY_GAMESTART, 1, mes);
 
     if (player_ptr->riding == -1) {
         player_ptr->riding = 0;
@@ -285,7 +285,7 @@ static void generate_world(PlayerType *player_ptr, bool new_game)
     }
 
     char buf[80];
-    strnfmt(buf, sizeof(buf), _("%sに降り立った。", "arrived in %s."), map_name(player_ptr));
+    strnfmt(buf, sizeof(buf), _("%sに降り立った。", "arrived in %s."), map_name(player_ptr).data());
     exe_write_diary(player_ptr, DIARY_DESCRIPTION, 0, buf);
 }
 

@@ -102,8 +102,8 @@ void display_monster_abilities(lore_type *lore_ptr)
     for (int n = 0; n < lore_ptr->vn; n++) {
 #ifdef JP
         if (n != lore_ptr->vn - 1) {
-            jverb(lore_ptr->vp[n], lore_ptr->jverb_buf, JVERB_AND);
-            hook_c_roff(lore_ptr->color[n], lore_ptr->jverb_buf);
+            const auto verb = conjugate_jverb(lore_ptr->vp[n], JVerbConjugationType::AND);
+            hook_c_roff(lore_ptr->color[n], verb);
             hooked_roff("、");
         } else {
             hook_c_roff(lore_ptr->color[n], lore_ptr->vp[n]);

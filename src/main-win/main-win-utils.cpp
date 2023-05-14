@@ -60,10 +60,11 @@ void save_screen_as_html(HWND hWnd)
  * @brief 対象ファイルを選択した状態でエクスプローラーを開く
  * @param filename 対象ファイル
  */
-void open_dir_in_explorer(char *filename)
+void open_dir_in_explorer(std::string_view filename)
 {
-    std::string str = "/select," + std::string(filename);
-    ShellExecuteW(NULL, NULL, L"explorer.exe", to_wchar(str.data()).wc_str(), NULL, SW_SHOWNORMAL);
+    std::stringstream ss;
+    ss << "/select," << filename;
+    ShellExecuteW(NULL, NULL, L"explorer.exe", to_wchar(ss.str().data()).wc_str(), NULL, SW_SHOWNORMAL);
 }
 
 /*!
@@ -72,20 +73,21 @@ void open_dir_in_explorer(char *filename)
  * ワイド文字列版のAPIを使用するが、選択ファイルのパスをマルチバイト文字列で受け取る。
  * @param ofn GetOpenFileNameWに指定するOPENFILENAMEW構造体へのポインタ。
  * lpstrFile、nMaxFileメンバの設定は無視される（関数内で上書きするため）。
- * @param dirname GetOpenFileNameWに指定する初期フォルダパス。
- * NULL以外を指定した場合、ワイド文字列に変換しlpstrInitialDirに設定される。
- * @param filename 選択ファイルパス設定先バッファへのポインタ
+ * @param path_dir GetOpenFileNameWに指定する初期フォルダパス。
+ * empty以外を指定した場合、ワイド文字列に変換しlpstrInitialDirに設定される。
+ * @param path_file 選択ファイルパス
  * @param max_name_size filenameのバッファサイズ
  * @retval true filenameに選択されたファイルのパスが設定されている。
  * @retval false ファイル選択がキャンセルされた。
  */
-bool get_open_filename(OPENFILENAMEW *ofn, const std::filesystem::path &dirname, char *filename, DWORD max_name_size)
+std::optional<std::string> get_open_filename(OPENFILENAMEW *ofn, const std::filesystem::path &path_dir, const std::filesystem::path &path_file, DWORD max_name_size)
 {
     std::vector<WCHAR> buf(max_name_size);
-    wcscpy(&buf[0], to_wchar(filename).wc_str());
+    const auto &path_file_str = path_file.string();
+    wcscpy(&buf[0], to_wchar(path_file_str.data()).wc_str());
     const char *dir = nullptr;
-    const auto &dirname_str = dirname.string();
-    if (dirname_str != "") {
+    if (!path_dir.empty()) {
+        const auto &dirname_str = path_dir.string();
         dir = dirname_str.data();
     }
 
@@ -99,9 +101,10 @@ bool get_open_filename(OPENFILENAMEW *ofn, const std::filesystem::path &dirname,
     // call API
     if (GetOpenFileNameW(ofn)) {
         // to multibyte
-        strncpy_s(filename, max_name_size, to_multibyte(&buf[0]).c_str(), _TRUNCATE);
-        return true;
+        char multibyte_filename[1024];
+        strncpy_s(multibyte_filename, max_name_size, to_multibyte(&buf[0]).c_str(), _TRUNCATE);
+        return multibyte_filename;
     }
 
-    return false;
+    return std::nullopt;
 }

@@ -6,9 +6,11 @@
 
 #include "locale/japanese.h"
 #include "locale/utf-8.h"
+#include "util/enum-converter.h"
 #include "util/string-processor.h"
 #include "view/display-messages.h"
 #include <set>
+#include <sstream>
 
 #ifdef JP
 
@@ -78,13 +80,15 @@ std::string sindarin_to_kana(std::string_view sindarin)
     return kana;
 }
 
-/*! 日本語動詞活用 (打つ＞打って,打ち etc)
- * JVERB_AND: 殴る,蹴る > 殴り,蹴る
- * JVERB_TO:  殴る,蹴る > 殴って蹴る
- * JVERB_OR:  殴る,蹴る > 殴ったり蹴ったり */
-static const struct jverb_table_t {
-    const char *from;
-    const char *to[3];
+/*!
+ * 日本語動詞活用 (打つ＞打って,打ち etc)
+ * AND : 殴る,蹴る > 殴り,蹴る
+ * TO  : 殴る,蹴る > 殴って蹴る
+ * OR  : 殴る,蹴る > 殴ったり蹴ったり
+ */
+static constexpr struct jverb_table_t {
+    std::string_view from;
+    std::string_view to_list[3];
 } jverb_table[] = {
     { "する", { "し", "して", "した" } },
     { "いる", { "いて", "いて", "いた" } },
@@ -114,34 +118,34 @@ static const struct jverb_table_t {
     { "ぶ", { "び", "んで", "んだ" } },
     { "む", { "み", "んで", "んだ" } },
     { "る", { "り", "って", "った" } },
-    { nullptr, { "そして", "ことにより", "ことや" } },
 };
 
 /*!
  * @brief jverb_table_tに従って動詞を活用する
- * @param in 変換元文字列ポインタ
- * @param out 変換先文字列ポインタ
- * @param flag 変換種類を指定(JVERB_AND/JVERB_TO/JVERB_OR)
- * @details
+ * @param in 変換元となる原形動詞
+ * @param type 変換種類を指定(AND/TO/OR)
+ * @return 活用形の動詞
  */
-void jverb(concptr in, char *out, int flag)
+std::string conjugate_jverb(std::string_view in, JVerbConjugationType type)
 {
-    const struct jverb_table_t *p;
-    int in_len = strlen(in);
+    std::stringstream ss;
 
-    strcpy(out, in);
-
-    for (p = jverb_table; p->from; p++) {
-        int from_len = strlen(p->from);
-        if (strncmp(&in[in_len - from_len], p->from, from_len) == 0) {
-            strcpy(&out[in_len - from_len], p->to[flag - 1]);
-            break;
+    for (const auto &[from, to_list] : jverb_table) {
+        const auto stem_length = in.length() - from.length();
+        if (in.substr(stem_length) == from) {
+            ss << in.substr(0, stem_length) << to_list[enum2i(type)];
+            return ss.str();
         }
     }
 
-    if (p->from == nullptr) {
-        strcpy(&out[in_len], p->to[flag - 1]);
-    }
+    constexpr std::string_view conjuctions[3] = {
+        "そして",
+        "ことにより",
+        "ことや",
+    };
+
+    ss << in << conjuctions[enum2i(type)];
+    return ss.str();
 }
 
 static const std::set<std::string_view> kinsoku_list{

@@ -5,6 +5,7 @@
 #include "store/store-util.h"
 #include "store/store.h"
 #include "system/floor-type-definition.h"
+#include "system/item-entity.h"
 #include "system/player-type-definition.h"
 #include "world/world.h"
 
@@ -65,9 +66,8 @@ void prevent_turn_overflow(PlayerType *player_ptr)
     }
 
     for (size_t i = 1; i < towns_info.size(); i++) {
-        for (auto j = 0; j < MAX_STORES; j++) {
-            store_type *store_ptr = &towns_info[i].store[j];
-
+        for (auto sst : STORE_SALE_TYPE_LIST) {
+            auto *store_ptr = &towns_info[i].stores[sst];
             if (store_ptr->last_visit > -10L * TURNS_PER_TICK * STORE_TICKS) {
                 store_ptr->last_visit -= rollback_turns;
                 if (store_ptr->last_visit < -10L * TURNS_PER_TICK * STORE_TICKS) {

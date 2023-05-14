@@ -11,6 +11,7 @@
 #include "player-base/player-class.h"
 #include "player/player-personality.h"
 #include "system/player-type-definition.h"
+#include "term/gameterm.h"
 #include "term/screen-processor.h"
 #include "term/z-form.h"
 #include "util/angband-files.h"
@@ -26,11 +27,6 @@
  */
 static void display_diary(PlayerType *player_ptr)
 {
-    std::stringstream ss;
-    ss << _("playrecord-", "playrec-") << savefile_base << ".txt";
-    char buf[1024];
-    path_build(buf, sizeof(buf), ANGBAND_DIR_USER, ss.str());
-
     PlayerClass pc(player_ptr);
     const auto max_subtitles = diary_subtitles.size();
     std::string subtitle;
@@ -49,7 +45,11 @@ static void display_diary(PlayerType *player_ptr)
     strnfmt(diary_title, sizeof(diary_title), "Legend of %s %s '%s'", ap_ptr->title, player_ptr->name, subtitle.data());
 #endif
 
-    (void)show_file(player_ptr, false, buf, diary_title, -1, 0);
+    std::stringstream ss;
+    ss << _("playrecord-", "playrec-") << savefile_base << ".txt";
+    const auto &path = path_build(ANGBAND_DIR_USER, ss.str());
+    const auto &filename = path.string();
+    (void)show_file(player_ptr, false, filename.data(), diary_title, -1, 0);
 }
 
 /*!
@@ -98,16 +98,16 @@ static void do_cmd_erase_diary()
 
     std::stringstream ss;
     ss << _("playrecord-", "playrec-") << savefile_base << ".txt";
-    char buf[256];
-    path_build(buf, sizeof(buf), ANGBAND_DIR_USER, ss.str());
-    fd_kill(buf);
+    const auto &path = path_build(ANGBAND_DIR_USER, ss.str());
+    fd_kill(path);
 
-    auto *fff = angband_fopen(buf, FileOpenMode::WRITE);
+    auto *fff = angband_fopen(path, FileOpenMode::WRITE);
     if (fff) {
         angband_fclose(fff);
         msg_format(_("記録を消去しました。", "deleted record."));
     } else {
-        msg_format(_("%s の消去に失敗しました。", "failed to delete %s."), buf);
+        const auto &filename = path.string();
+        msg_format(_("%s の消去に失敗しました。", "failed to delete %s."), filename.data());
     }
 
     msg_print(nullptr);
@@ -120,6 +120,8 @@ static void do_cmd_erase_diary()
 void do_cmd_diary(PlayerType *player_ptr)
 {
     screen_save();
+    TermCenteredOffsetSetter tcos(MAIN_TERM_MIN_COLS, MAIN_TERM_MIN_ROWS);
+
     while (true) {
         term_clear();
         prt(_("[ 記録の設定 ]", "[ Play Record ]"), 2, 0);

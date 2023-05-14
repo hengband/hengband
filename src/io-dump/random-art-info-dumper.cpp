@@ -68,9 +68,8 @@ static void spoil_random_artifact_aux(PlayerType *player_ptr, ItemEntity *o_ptr,
  */
 void spoil_random_artifact(PlayerType *player_ptr, concptr fname)
 {
-    char buf[1024];
-    path_build(buf, sizeof(buf), ANGBAND_DIR_USER, fname);
-    spoiler_file = angband_fopen(buf, FileOpenMode::WRITE);
+    const auto &path = path_build(ANGBAND_DIR_USER, fname);
+    spoiler_file = angband_fopen(path, FileOpenMode::WRITE);
     if (!spoiler_file) {
         msg_print("Cannot create list file.");
         return;
@@ -89,13 +88,13 @@ void spoil_random_artifact(PlayerType *player_ptr, concptr fname)
                 spoil_random_artifact_aux(player_ptr, q_ptr, tval);
             }
 
-            const auto *store_ptr = &towns_info[1].store[enum2i(StoreSaleType::HOME)];
+            const auto *store_ptr = &towns_info[1].stores[StoreSaleType::HOME];
             for (int i = 0; i < store_ptr->stock_num; i++) {
                 auto *q_ptr = &store_ptr->stock[i];
                 spoil_random_artifact_aux(player_ptr, q_ptr, tval);
             }
 
-            store_ptr = &towns_info[1].store[enum2i(StoreSaleType::MUSEUM)];
+            store_ptr = &towns_info[1].stores[StoreSaleType::MUSEUM];
             for (int i = 0; i < store_ptr->stock_num; i++) {
                 auto *q_ptr = &store_ptr->stock[i];
                 spoil_random_artifact_aux(player_ptr, q_ptr, tval);

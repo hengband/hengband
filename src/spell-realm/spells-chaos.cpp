@@ -221,7 +221,12 @@ void cast_meteor(PlayerType *player_ptr, int dam, POSITION rad)
             }
 
             auto *floor_ptr = player_ptr->current_floor_ptr;
-            if (!in_bounds(floor_ptr, y, x) || !projectable(player_ptr, player_ptr->y, player_ptr->x, y, x) || !cave_has_flag_bold(floor_ptr, y, x, TerrainCharacteristics::PROJECT)) {
+            if (!in_bounds(floor_ptr, y, x)) {
+                continue;
+            }
+
+            const auto is_projectable = projectable(player_ptr, player_ptr->y, player_ptr->x, y, x);
+            if (!is_projectable || !cave_has_flag_bold(floor_ptr, y, x, TerrainCharacteristics::PROJECT)) {
                 continue;
             }
 

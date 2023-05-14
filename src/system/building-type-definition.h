@@ -27,5 +27,5 @@ struct building_type {
     std::vector<short> member_realm; /* 店主ごとの魔法領域 / which realms are part of guild */
 };
 
-extern building_type building[MAX_BLDG];
+extern building_type buildings[MAX_BLDG];
 extern MonsterRaceId battle_mon_list[4];

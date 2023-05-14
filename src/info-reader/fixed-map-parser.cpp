@@ -253,9 +253,8 @@ static concptr parse_fixed_map_expression(PlayerType *player_ptr, char **sp, cha
  */
 parse_error_type parse_fixed_map(PlayerType *player_ptr, std::string_view name, int ymin, int xmin, int ymax, int xmax)
 {
-    char buf[1024];
-    path_build(buf, sizeof(buf), ANGBAND_DIR_EDIT, name);
-    auto *fp = angband_fopen(buf, FileOpenMode::READ);
+    const auto &path = path_build(ANGBAND_DIR_EDIT, name);
+    auto *fp = angband_fopen(path, FileOpenMode::READ);
     if (fp == nullptr) {
         return PARSE_ERROR_GENERIC;
     }
@@ -266,6 +265,7 @@ parse_error_type parse_fixed_map(PlayerType *player_ptr, std::string_view name, 
     int x = xmin;
     int y = ymin;
     qtwg_type tmp_qg;
+    char buf[1024]{};
     qtwg_type *qg_ptr = initialize_quest_generator_type(&tmp_qg, buf, ymin, xmin, ymax, xmax, &y, &x);
     while (angband_fgets(fp, buf, sizeof(buf)) == 0) {
         num++;
@@ -344,9 +344,8 @@ static void parse_quest_info_aux(std::string_view file_name, std::set<QuestId> &
         key_list_ref.insert(q);
     };
 
-    char file_buf[1024];
-    path_build(file_buf, sizeof(file_buf), ANGBAND_DIR_EDIT, file_name);
-    auto *fp = angband_fopen(file_buf, FileOpenMode::READ);
+    const auto &path = path_build(ANGBAND_DIR_EDIT, file_name);
+    auto *fp = angband_fopen(path, FileOpenMode::READ);
     if (fp == nullptr) {
         std::stringstream ss;
         ss << _("ファイルが見つかりません (", "File is not found (") << file_name << ')';

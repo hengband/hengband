@@ -349,9 +349,8 @@ static void list_weapon(PlayerType *player_ptr, ItemEntity *o_ptr, TERM_LEN row,
  */
 PRICE compare_weapons(PlayerType *player_ptr, PRICE bcost)
 {
-    ItemEntity *o_ptr[2];
+    ItemEntity *o_ptr[2]{};
     ItemEntity orig_weapon;
-    ItemEntity *i_ptr;
     TERM_LEN row = 2;
     TERM_LEN wid = 38, mgn = 2;
     bool old_character_xtra = w_ptr->character_xtra;
@@ -361,14 +360,15 @@ PRICE compare_weapons(PlayerType *player_ptr, PRICE bcost)
 
     screen_save();
     clear_bldg(0, 22);
-    i_ptr = &player_ptr->inventory_list[INVEN_MAIN_HAND];
+    auto *i_ptr = &player_ptr->inventory_list[INVEN_MAIN_HAND];
     (&orig_weapon)->copy_from(i_ptr);
 
     concptr q = _("第一の武器は？", "What is your first weapon? ");
     concptr s = _("比べるものがありません。", "You have nothing to compare.");
 
     OBJECT_IDX item;
-    o_ptr[0] = choose_object(player_ptr, &item, q, s, (USE_EQUIP | USE_INVEN | IGNORE_BOTHHAND_SLOT), FuncItemTester(&ItemEntity::is_orthodox_melee_weapons));
+    constexpr auto options = USE_EQUIP | USE_INVEN | IGNORE_BOTHHAND_SLOT;
+    o_ptr[0] = choose_object(player_ptr, &item, q, s, options, FuncItemTester(&ItemEntity::is_orthodox_melee_weapons));
     if (!o_ptr[0]) {
         screen_load();
         return 0;

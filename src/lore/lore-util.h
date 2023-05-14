@@ -26,9 +26,7 @@ enum monster_sex {
 
 class MonsterRaceInfo;
 struct lore_type {
-#ifdef JP
-    char jverb_buf[64];
-#else
+#ifndef JP
     bool sin;
 #endif
     bool nightmare;

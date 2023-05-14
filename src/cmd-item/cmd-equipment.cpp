@@ -340,8 +340,12 @@ void do_cmd_wield(PlayerType *player_ptr)
     }
 
     do_curse_on_equip(slot, o_ptr, player_ptr);
-    if (o_ptr->is_specific_artifact(FixedArtifactId::STONEMASK) && !pr.equals(PlayerRaceType::VAMPIRE) && !pr.equals(PlayerRaceType::ANDROID)) {
-        change_race(player_ptr, PlayerRaceType::VAMPIRE, "");
+    if (o_ptr->is_specific_artifact(FixedArtifactId::STONEMASK)) {
+        auto is_specific_race = pr.equals(PlayerRaceType::VAMPIRE);
+        is_specific_race |= pr.equals(PlayerRaceType::ANDROID);
+        if (!is_specific_race) {
+            change_race(player_ptr, PlayerRaceType::VAMPIRE, "");
+        }
     }
 
     calc_android_exp(player_ptr);

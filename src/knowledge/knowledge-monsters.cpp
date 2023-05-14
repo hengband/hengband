@@ -30,6 +30,7 @@
 #include "system/monster-entity.h"
 #include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
+#include "term/gameterm.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
 #include "term/z-form.h"
@@ -295,6 +296,8 @@ static void display_monster_list(int col, int row, int per_page, const std::vect
  */
 void do_cmd_knowledge_monsters(PlayerType *player_ptr, bool *need_redraw, bool visual_only, std::optional<MonsterRaceId> direct_r_idx)
 {
+    TermCenteredOffsetSetter tcos(MAIN_TERM_MIN_COLS, std::nullopt);
+
     TERM_LEN wid, hgt;
     term_get_size(&wid, &hgt);
     std::vector<MonsterRaceId> r_idx_list;

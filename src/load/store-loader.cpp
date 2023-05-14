@@ -67,24 +67,24 @@ static void home_carry_load(PlayerType *player_ptr, store_type *store_ptr, ItemE
  * @param store_number 店舗ID
  * @return エラーID
  */
-static void rd_store(PlayerType *player_ptr, int town_number, int store_number)
+static void rd_store(PlayerType *player_ptr, int town_number, StoreSaleType store_number)
 {
     store_type *store_ptr;
     auto sort = false;
-    if (h_older_than(0, 3, 3) && (i2enum<StoreSaleType>(store_number) == StoreSaleType::HOME)) {
-        store_ptr = &towns_info[1].store[store_number];
+    if (h_older_than(0, 3, 3) && (store_number == StoreSaleType::HOME)) {
+        store_ptr = &towns_info[1].stores[store_number];
         if (store_ptr->stock_num) {
             sort = true;
         }
     } else {
-        store_ptr = &towns_info[town_number].store[store_number];
+        store_ptr = &towns_info[town_number].stores[store_number];
     }
 
     store_ptr->store_open = rd_s32b();
     store_ptr->insult_cur = rd_s16b();
     store_ptr->owner = rd_byte();
 
-    if (auto num = owners.at(i2enum<StoreSaleType>(store_number)).size();
+    if (auto num = owners.at(store_number).size();
         num <= store_ptr->owner) {
         store_ptr->owner %= num;
     }
@@ -104,7 +104,7 @@ static void rd_store(PlayerType *player_ptr, int town_number, int store_number)
     for (int j = 0; j < inven_num; j++) {
         ItemEntity item;
         item_loader->rd_item(&item);
-        auto stock_max = store_get_stock_max(i2enum<StoreSaleType>(store_number));
+        auto stock_max = store_get_stock_max(store_number);
         if (store_ptr->stock_num >= stock_max) {
             continue;
         }
@@ -120,16 +120,15 @@ static void rd_store(PlayerType *player_ptr, int town_number, int store_number)
 
 /*!
  * @brief 店舗情報を読み込む
- * @param player_ptr プレイヤー情報への参照ポインタ(未使用)
- * @return 読み込み終わったら0、失敗したら22
+ * @param player_ptr プレイヤーへの参照ポインタ
  */
 void load_store(PlayerType *player_ptr)
 {
-    int16_t town_count = rd_u16b();
-    int16_t store_count = rd_u16b();
-    for (int16_t town_idx = 1; town_idx < town_count; town_idx++) {
-        for (int16_t store_idx = 0; store_idx < store_count; store_idx++) {
-            rd_store(player_ptr, town_idx, store_idx);
+    const int town_count = rd_u16b();
+    const int store_count = rd_u16b();
+    for (auto town_idx = 1; town_idx < town_count; town_idx++) {
+        for (auto store_idx = 0; store_idx < store_count; store_idx++) {
+            rd_store(player_ptr, town_idx, i2enum<StoreSaleType>(store_idx));
         }
     }
 }

@@ -256,7 +256,7 @@ static void inventory_aware(PlayerType *player_ptr)
 static void home_aware(PlayerType *player_ptr)
 {
     for (size_t i = 1; i < towns_info.size(); i++) {
-        auto *store_ptr = &towns_info[i].store[enum2i(StoreSaleType::HOME)];
+        auto *store_ptr = &towns_info[i].stores[StoreSaleType::HOME];
         for (auto j = 0; j < store_ptr->stock_num; j++) {
             auto *o_ptr = &store_ptr->stock[j];
             if (!o_ptr->is_valid()) {
@@ -305,7 +305,7 @@ static bool show_dead_player_items(PlayerType *player_ptr)
 static void show_dead_home_items(PlayerType *player_ptr)
 {
     for (size_t l = 1; l < towns_info.size(); l++) {
-        const auto *store_ptr = &towns_info[l].store[enum2i(StoreSaleType::HOME)];
+        const auto *store_ptr = &towns_info[l].stores[StoreSaleType::HOME];
         if (store_ptr->stock_num == 0) {
             continue;
         }

@@ -5,7 +5,7 @@
  */
 
 #include "system/h-type.h"
-
+#include <filesystem>
 #include <windows.h>
 
 /*
@@ -105,7 +105,7 @@ extern Graphics graphic;
 /*
  * Directory names
  */
-extern concptr ANGBAND_DIR_XTRA_GRAF;
+extern std::filesystem::path ANGBAND_DIR_XTRA_GRAF;
 
 /*!
  * @brief Creates a GDI bitmap from an image file
@@ -114,4 +114,4 @@ extern concptr ANGBAND_DIR_XTRA_GRAF;
  * @param filename an image file name
  * @return bitmap handle
  */
-HBITMAP read_graphic(char *filename);
+HBITMAP read_graphic(const char *filename);

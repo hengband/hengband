@@ -45,21 +45,19 @@ static bool tgt_pt_accept(PlayerType *player_ptr, POSITION y, POSITION x)
         return false;
     }
 
-    grid_type *g_ptr;
-    g_ptr = &floor_ptr->grid_array[y][x];
-    if (!g_ptr->is_mark()) {
+    auto &grid = floor_ptr->grid_array[y][x];
+    if (!grid.is_mark()) {
         return false;
     }
 
-    if (g_ptr->cave_has_flag(TerrainCharacteristics::LESS) || g_ptr->cave_has_flag(TerrainCharacteristics::MORE) || g_ptr->cave_has_flag(TerrainCharacteristics::QUEST_ENTER) || g_ptr->cave_has_flag(TerrainCharacteristics::QUEST_EXIT)) {
-        return true;
-    }
-
-    if (g_ptr->cave_has_flag(TerrainCharacteristics::STORE) || g_ptr->cave_has_flag(TerrainCharacteristics::BLDG)) {
-        return true;
-    }
-
-    return false;
+    using Tc = TerrainCharacteristics;
+    auto is_acceptable = grid.cave_has_flag(Tc::LESS);
+    is_acceptable |= grid.cave_has_flag(Tc::MORE);
+    is_acceptable |= grid.cave_has_flag(Tc::QUEST_ENTER);
+    is_acceptable |= grid.cave_has_flag(Tc::QUEST_EXIT);
+    is_acceptable |= grid.cave_has_flag(Tc::STORE);
+    is_acceptable |= grid.cave_has_flag(Tc::BLDG);
+    return is_acceptable;
 }
 
 /*

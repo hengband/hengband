@@ -114,15 +114,14 @@ bool ident_spell(PlayerType *player_ptr, bool only_equip)
         q = _("すべて鑑定済みです。 ", "All items are identified. ");
     }
 
-    concptr s = _("鑑定するべきアイテムがない。", "You have nothing to identify.");
+    constexpr auto s = _("鑑定するべきアイテムがない。", "You have nothing to identify.");
     OBJECT_IDX item;
-    ItemEntity *o_ptr;
-    o_ptr = choose_object(player_ptr, &item, q, s, (USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT), *item_tester);
+    auto o_ptr = choose_object(player_ptr, &item, q, s, (USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT), *item_tester);
     if (!o_ptr) {
         return false;
     }
 
-    bool old_known = identify_item(player_ptr, o_ptr);
+    auto old_known = identify_item(player_ptr, o_ptr);
 
     const auto item_name = describe_flavor(player_ptr, o_ptr, 0);
     if (item >= INVEN_MAIN_HAND) {
@@ -163,16 +162,15 @@ bool identify_fully(PlayerType *player_ptr, bool only_equip)
         q = _("すべて*鑑定*済みです。 ", "All items are *identified*. ");
     }
 
-    concptr s = _("*鑑定*するべきアイテムがない。", "You have nothing to *identify*.");
+    constexpr auto s = _("*鑑定*するべきアイテムがない。", "You have nothing to *identify*.");
 
     OBJECT_IDX item;
-    ItemEntity *o_ptr;
-    o_ptr = choose_object(player_ptr, &item, q, s, (USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT), *item_tester);
+    auto o_ptr = choose_object(player_ptr, &item, q, s, (USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT), *item_tester);
     if (!o_ptr) {
         return false;
     }
 
-    bool old_known = identify_item(player_ptr, o_ptr);
+    auto old_known = identify_item(player_ptr, o_ptr);
 
     o_ptr->ident |= (IDENT_FULL_KNOWN);
 

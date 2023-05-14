@@ -53,13 +53,13 @@ static void print_dungeon(PlayerType *player_ptr)
     term_get_size(&width, &height);
 
     c_put_str(TERM_WHITE, "             ", height + ROW_DUNGEON, COL_DUNGEON);
-    concptr dungeon_name = map_name(player_ptr);
-    TERM_LEN col = COL_DUNGEON + 6 - strlen(dungeon_name) / 2;
+    const auto dungeon_name = map_name(player_ptr);
+    TERM_LEN col = COL_DUNGEON + 6 - dungeon_name.length() / 2;
     if (col < 0) {
         col = 0;
     }
 
-    c_put_str(TERM_L_UMBER, format("%s", dungeon_name), height + ROW_DUNGEON, col);
+    c_put_str(TERM_L_UMBER, dungeon_name, height + ROW_DUNGEON, col);
 }
 
 /*!

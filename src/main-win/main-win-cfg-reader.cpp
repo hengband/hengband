@@ -76,7 +76,7 @@ void CfgData::insert(int key1_type, int key2_val, cfg_values *value)
  * @param dir .cfgファイルのディレクトリ
  * @param files .cfgファイル名。複数指定可能で、最初に見つかったファイルから読み取る。
  */
-CfgReader::CfgReader(concptr dir, std::initializer_list<concptr> files)
+CfgReader::CfgReader(std::filesystem::path dir, std::initializer_list<concptr> files)
 {
     this->dir = dir;
     this->cfg_path = find_any_file(dir, files);
@@ -97,7 +97,6 @@ CfgData *CfgReader::read_sections(std::initializer_list<cfg_section> sections)
 
     char key_buf[80];
     char buf[MAIN_WIN_MAX_PATH];
-    char path[MAIN_WIN_MAX_PATH];
     char *tokens[SAMPLE_MAX];
 
     for (auto &section : sections) {
@@ -115,7 +114,7 @@ CfgData *CfgReader::read_sections(std::initializer_list<cfg_section> sections)
 #endif
                 const int num = tokenize_whitespace(buf, SAMPLE_MAX, tokens);
                 for (auto j = 0; j < num; j++) {
-                    path_build(path, MAIN_WIN_MAX_PATH, dir, tokens[j]);
+                    const auto &path = path_build(dir, tokens[j]);
                     if (check_file(path)) {
                         filenames->push_back(string_make(tokens[j]));
                     }

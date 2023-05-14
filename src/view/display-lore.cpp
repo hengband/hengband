@@ -647,8 +647,8 @@ void display_monster_sometimes(lore_type *lore_ptr)
     for (int n = 0; n < lore_ptr->vn; n++) {
 #ifdef JP
         if (n != lore_ptr->vn - 1) {
-            jverb(lore_ptr->vp[n], lore_ptr->jverb_buf, JVERB_OR);
-            hook_c_roff(lore_ptr->color[n], lore_ptr->jverb_buf);
+            const auto verb = conjugate_jverb(lore_ptr->vp[n], JVerbConjugationType::OR);
+            hook_c_roff(lore_ptr->color[n], verb);
             hook_c_roff(lore_ptr->color[n], "り");
             hooked_roff("、");
         } else {

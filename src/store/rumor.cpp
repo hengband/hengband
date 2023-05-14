@@ -167,7 +167,7 @@ void display_rumor(PlayerType *player_ptr, bool ex)
         const auto &town_name = tokens[1];
         while (true) {
             t_idx = get_rumor_num(town_name, VALID_TOWNS);
-            if (towns_info[t_idx].name[0] != '\0') {
+            if (!towns_info[t_idx].name.empty()) {
                 break;
             }
         }

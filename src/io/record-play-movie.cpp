@@ -335,6 +335,8 @@ void prepare_chuukei_hooks(void)
  */
 void prepare_movie_hooks(PlayerType *player_ptr)
 {
+    TermCenteredOffsetSetter tcos(std::nullopt, std::nullopt);
+
     if (movie_mode) {
         movie_mode = 0;
         disable_chuukei_server();
@@ -350,21 +352,21 @@ void prepare_movie_hooks(PlayerType *player_ptr)
         return;
     }
 
-    char buf[1024];
-    path_build(buf, sizeof(buf), ANGBAND_DIR_USER, movie_filename);
-    auto fd = fd_open(buf, O_RDONLY);
+    const auto &path = path_build(ANGBAND_DIR_USER, movie_filename);
+    auto fd = fd_open(path, O_RDONLY);
     if (fd >= 0) {
+        const auto &filename = path.string();
         (void)fd_close(fd);
         std::string query = _("現存するファイルに上>書きしますか? (", "Replace existing file ");
-        query.append(buf);
+        query.append(filename);
         query.append(_(")", "? "));
         if (!get_check(query)) {
             return;
         }
 
-        movie_fd = fd_open(buf, O_WRONLY | O_TRUNC);
+        movie_fd = fd_open(path, O_WRONLY | O_TRUNC);
     } else {
-        movie_fd = fd_make(buf);
+        movie_fd = fd_make(path);
     }
 
     if (!movie_fd) {
@@ -621,9 +623,9 @@ static bool flush_ringbuf_client()
     return true;
 }
 
-void prepare_browse_movie_without_path_build(std::string_view filename)
+void prepare_browse_movie_without_path_build(const std::filesystem::path &path)
 {
-    movie_fd = fd_open(filename, O_RDONLY);
+    movie_fd = fd_open(path, O_RDONLY);
     init_buffer();
 }
 
@@ -652,9 +654,8 @@ void browse_movie(void)
 #ifndef WINDOWS
 void prepare_browse_movie_with_path_build(std::string_view filename)
 {
-    char buf[1024];
-    path_build(buf, sizeof(buf), ANGBAND_DIR_USER, filename);
-    movie_fd = fd_open(buf, O_RDONLY);
+    const auto &path = path_build(ANGBAND_DIR_USER, filename);
+    movie_fd = fd_open(path, O_RDONLY);
     init_buffer();
 }
 #endif

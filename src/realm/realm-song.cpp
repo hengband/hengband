@@ -53,8 +53,10 @@ static void start_singing(PlayerType *player_ptr, SPELL_IDX spell, int32_t song)
  * @brief 歌の各処理を行う
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param spell 歌ID
- * @param mode 処理内容 (SpellProcessType::NAME / SPELL_DESC / SpellProcessType::INFO / SpellProcessType::CAST / SpellProcessType::FAIL / SPELL_CONT / SpellProcessType::STOP)
- * @return SpellProcessType::NAME / SPELL_DESC / SpellProcessType::INFO 時には文字列を返す。SpellProcessType::CAST / SpellProcessType::FAIL / SPELL_CONT / SpellProcessType::STOP 時は std::nullopt を返す。
+ * @param mode 処理内容 (NAME / SPELL_DESC / INFO / CAST / FAIL / SPELL_CONT / STOP)
+ * @return
+ * NAME / SPELL_DESC / INFO 時には文字列を返す.
+ * CAST / FAIL / SPELL_CONT / STOP 時は std::nullopt を返す.
  */
 std::optional<std::string> do_music_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessType mode)
 {

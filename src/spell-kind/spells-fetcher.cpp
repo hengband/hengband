@@ -39,14 +39,14 @@
  */
 void fetch_item(PlayerType *player_ptr, DIRECTION dir, WEIGHT wgt, bool require_los)
 {
-    grid_type *g_ptr;
-    ItemEntity *o_ptr;
-    if (!player_ptr->current_floor_ptr->grid_array[player_ptr->y][player_ptr->x].o_idx_list.empty()) {
+    auto *floor_ptr = player_ptr->current_floor_ptr;
+    if (!floor_ptr->grid_array[player_ptr->y][player_ptr->x].o_idx_list.empty()) {
         msg_print(_("自分の足の下にある物は取れません。", "You can't fetch when you're already standing on something."));
         return;
     }
 
     POSITION ty, tx;
+    grid_type *g_ptr;
     if (dir == 5 && target_okay(player_ptr)) {
         tx = target_col;
         ty = target_row;
@@ -56,7 +56,7 @@ void fetch_item(PlayerType *player_ptr, DIRECTION dir, WEIGHT wgt, bool require_
             return;
         }
 
-        g_ptr = &player_ptr->current_floor_ptr->grid_array[ty][tx];
+        g_ptr = &floor_ptr->grid_array[ty][tx];
         if (g_ptr->o_idx_list.empty()) {
             msg_print(_("そこには何もありません。", "There is no object there."));
             return;
@@ -80,20 +80,23 @@ void fetch_item(PlayerType *player_ptr, DIRECTION dir, WEIGHT wgt, bool require_
         ty = player_ptr->y;
         tx = player_ptr->x;
         bool is_first_loop = true;
-        g_ptr = &player_ptr->current_floor_ptr->grid_array[ty][tx];
+        g_ptr = &floor_ptr->grid_array[ty][tx];
         while (is_first_loop || g_ptr->o_idx_list.empty()) {
             is_first_loop = false;
             ty += ddy[dir];
             tx += ddx[dir];
-            g_ptr = &player_ptr->current_floor_ptr->grid_array[ty][tx];
+            g_ptr = &floor_ptr->grid_array[ty][tx];
+            if ((distance(player_ptr->y, player_ptr->x, ty, tx) > get_max_range(player_ptr))) {
+                return;
+            }
 
-            if ((distance(player_ptr->y, player_ptr->x, ty, tx) > get_max_range(player_ptr)) || !cave_has_flag_bold(player_ptr->current_floor_ptr, ty, tx, TerrainCharacteristics::PROJECT)) {
+            if (!cave_has_flag_bold(floor_ptr, ty, tx, TerrainCharacteristics::PROJECT)) {
                 return;
             }
         }
     }
 
-    o_ptr = &player_ptr->current_floor_ptr->o_list[g_ptr->o_idx_list.front()];
+    auto *o_ptr = &floor_ptr->o_list[g_ptr->o_idx_list.front()];
     if (o_ptr->weight > wgt) {
         msg_print(_("そのアイテムは重過ぎます。", "The object is too heavy."));
         return;
@@ -101,7 +104,7 @@ void fetch_item(PlayerType *player_ptr, DIRECTION dir, WEIGHT wgt, bool require_
 
     OBJECT_IDX i = g_ptr->o_idx_list.front();
     g_ptr->o_idx_list.pop_front();
-    player_ptr->current_floor_ptr->grid_array[player_ptr->y][player_ptr->x].o_idx_list.add(player_ptr->current_floor_ptr, i); /* 'move' it */
+    floor_ptr->grid_array[player_ptr->y][player_ptr->x].o_idx_list.add(floor_ptr, i); /* 'move' it */
     o_ptr->iy = player_ptr->y;
     o_ptr->ix = player_ptr->x;
 
@@ -117,7 +120,8 @@ bool fetch_monster(PlayerType *player_ptr)
         return false;
     }
 
-    auto m_idx = player_ptr->current_floor_ptr->grid_array[target_row][target_col].m_idx;
+    auto *floor_ptr = player_ptr->current_floor_ptr;
+    auto m_idx = floor_ptr->grid_array[target_row][target_col].m_idx;
     if (!m_idx) {
         return false;
     }
@@ -131,22 +135,22 @@ bool fetch_monster(PlayerType *player_ptr)
         return false;
     }
 
-    auto *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
+    auto *m_ptr = &floor_ptr->m_list[m_idx];
     const auto m_name = monster_desc(player_ptr, m_ptr, 0);
     msg_format(_("%sを引き戻した。", "You pull back %s."), m_name.data());
     projection_path path_g(player_ptr, get_max_range(player_ptr), target_row, target_col, player_ptr->y, player_ptr->x, 0);
     auto ty = target_row, tx = target_col;
     for (const auto &[ny, nx] : path_g) {
-        auto *g_ptr = &player_ptr->current_floor_ptr->grid_array[ny][nx];
+        auto *g_ptr = &floor_ptr->grid_array[ny][nx];
 
-        if (in_bounds(player_ptr->current_floor_ptr, ny, nx) && is_cave_empty_bold(player_ptr, ny, nx) && !g_ptr->is_object() && !pattern_tile(player_ptr->current_floor_ptr, ny, nx)) {
+        if (in_bounds(floor_ptr, ny, nx) && is_cave_empty_bold(player_ptr, ny, nx) && !g_ptr->is_object() && !pattern_tile(floor_ptr, ny, nx)) {
             ty = ny;
             tx = nx;
         }
     }
 
-    player_ptr->current_floor_ptr->grid_array[target_row][target_col].m_idx = 0;
-    player_ptr->current_floor_ptr->grid_array[ty][tx].m_idx = m_idx;
+    floor_ptr->grid_array[target_row][target_col].m_idx = 0;
+    floor_ptr->grid_array[ty][tx].m_idx = m_idx;
     m_ptr->fy = ty;
     m_ptr->fx = tx;
     (void)set_monster_csleep(player_ptr, m_idx, 0);
