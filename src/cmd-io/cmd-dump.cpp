@@ -235,7 +235,7 @@ void do_cmd_feeling(PlayerType *player_ptr)
     }
 
     if (player_ptr->town_num && !floor_ref.is_in_dungeon()) {
-        if (!strcmp(towns_info[player_ptr->town_num].name, _("荒野", "wilderness"))) {
+        if (towns_info[player_ptr->town_num].name == _("荒野", "wilderness")) {
             msg_print(_("何かありそうな荒野のようだ。", "Looks like a strange wilderness."));
             return;
         }

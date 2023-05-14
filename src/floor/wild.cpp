@@ -743,7 +743,7 @@ parse_error_type parse_line_wilderness(PlayerType *player_ptr, char *buf, int xm
             wilderness[*y][*x].level = w_letter[id].level;
             wilderness[*y][*x].town = w_letter[id].town;
             wilderness[*y][*x].road = w_letter[id].road;
-            strcpy(towns_info[w_letter[id].town].name, w_letter[id].name);
+            towns_info[w_letter[id].town].name = w_letter[id].name;
         }
 
         (*y)++;

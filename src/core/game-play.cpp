@@ -285,7 +285,7 @@ static void generate_world(PlayerType *player_ptr, bool new_game)
     }
 
     char buf[80];
-    strnfmt(buf, sizeof(buf), _("%sに降り立った。", "arrived in %s."), map_name(player_ptr));
+    strnfmt(buf, sizeof(buf), _("%sに降り立った。", "arrived in %s."), map_name(player_ptr).data());
     exe_write_diary(player_ptr, DIARY_DESCRIPTION, 0, buf);
 }
 

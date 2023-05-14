@@ -48,9 +48,9 @@ void init_towns(void)
     const auto town_numbers = count_town_numbers();
     towns_info = std::vector<town_type>(town_numbers);
     for (auto i = 1; i < town_numbers; i++) {
-        towns_info[i].store = std::vector<store_type>(MAX_STORES);
+        auto &town = towns_info[i];
         for (auto sst : STORE_SALE_TYPE_LIST) {
-            auto *store_ptr = &towns_info[i].store[enum2i(sst)];
+            auto *store_ptr = &town.stores[sst];
             if ((i > 1) && (sst == StoreSaleType::MUSEUM || sst == StoreSaleType::HOME)) {
                 continue;
             }
@@ -81,20 +81,20 @@ void init_towns(void)
 void init_buildings(void)
 {
     for (auto i = 0; i < MAX_BLDG; i++) {
-        building[i].name[0] = '\0';
-        building[i].owner_name[0] = '\0';
-        building[i].owner_race[0] = '\0';
+        buildings[i].name[0] = '\0';
+        buildings[i].owner_name[0] = '\0';
+        buildings[i].owner_race[0] = '\0';
         for (auto j = 0; j < 8; j++) {
-            building[i].act_names[j][0] = '\0';
-            building[i].member_costs[j] = 0;
-            building[i].other_costs[j] = 0;
-            building[i].letters[j] = 0;
-            building[i].actions[j] = 0;
-            building[i].action_restr[j] = 0;
+            buildings[i].act_names[j][0] = '\0';
+            buildings[i].member_costs[j] = 0;
+            buildings[i].other_costs[j] = 0;
+            buildings[i].letters[j] = 0;
+            buildings[i].actions[j] = 0;
+            buildings[i].action_restr[j] = 0;
         }
 
-        building[i].member_class.assign(PLAYER_CLASS_TYPE_MAX, static_cast<short>(PlayerClassType::WARRIOR));
-        building[i].member_race.assign(MAX_RACES, static_cast<short>(PlayerRaceType::HUMAN));
-        building[i].member_realm.assign(MAX_MAGIC + 1, 0);
+        buildings[i].member_class.assign(PLAYER_CLASS_TYPE_MAX, static_cast<short>(PlayerClassType::WARRIOR));
+        buildings[i].member_race.assign(MAX_RACES, static_cast<short>(PlayerRaceType::HUMAN));
+        buildings[i].member_realm.assign(MAX_MAGIC + 1, 0);
     }
 }

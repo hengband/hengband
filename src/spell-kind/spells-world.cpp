@@ -297,7 +297,7 @@ bool tele_town(PlayerType *player_ptr)
             continue;
         }
 
-        strnfmt(buf, sizeof(buf), "%c) %-20s", I2A(i - 1), towns_info[i].name);
+        strnfmt(buf, sizeof(buf), "%c) %-20s", I2A(i - 1), towns_info[i].name.data());
         prt(buf, 5 + i, 5);
         num++;
     }

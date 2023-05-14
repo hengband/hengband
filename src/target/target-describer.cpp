@@ -456,8 +456,9 @@ static int16_t sweep_footing_items(PlayerType *player_ptr, eg_type *eg_ptr)
 
 static std::string decide_target_floor(PlayerType *player_ptr, eg_type *eg_ptr)
 {
+    auto *floor_ptr = player_ptr->current_floor_ptr;
     if (eg_ptr->f_ptr->flags.has(TerrainCharacteristics::QUEST_ENTER)) {
-        QuestId old_quest = player_ptr->current_floor_ptr->quest_number;
+        QuestId old_quest = floor_ptr->quest_number;
         const auto &quest_list = QuestList::get_instance();
         const QuestId number = i2enum<QuestId>(eg_ptr->g_ptr->special);
         const auto *q_ptr = &quest_list[number];
@@ -467,19 +468,20 @@ static std::string decide_target_floor(PlayerType *player_ptr, eg_type *eg_ptr)
         }
 
         quest_text_line = 0;
-        player_ptr->current_floor_ptr->quest_number = number;
+        floor_ptr->quest_number = number;
         init_flags = INIT_NAME_ONLY;
         parse_fixed_map(player_ptr, QUEST_DEFINITION_LIST, 0, 0, 0, 0);
-        player_ptr->current_floor_ptr->quest_number = old_quest;
+        floor_ptr->quest_number = old_quest;
         return format(msg.data(), q_ptr->name.data(), q_ptr->level);
     }
 
-    if (eg_ptr->f_ptr->flags.has(TerrainCharacteristics::BLDG) && !player_ptr->current_floor_ptr->inside_arena) {
-        return building[eg_ptr->f_ptr->subtype].name;
+    if (eg_ptr->f_ptr->flags.has(TerrainCharacteristics::BLDG) && !floor_ptr->inside_arena) {
+        return buildings[eg_ptr->f_ptr->subtype].name;
     }
 
     if (eg_ptr->f_ptr->flags.has(TerrainCharacteristics::ENTRANCE)) {
-        return format(_("%s(%d階相当)", "%s(level %d)"), dungeons_info[eg_ptr->g_ptr->special].text.data(), dungeons_info[eg_ptr->g_ptr->special].mindepth);
+        const auto &dungeon = dungeons_info[eg_ptr->g_ptr->special];
+        return format(_("%s(%d階相当)", "%s(level %d)"), dungeon.text.data(), dungeon.mindepth);
     }
 
     if (eg_ptr->f_ptr->flags.has(TerrainCharacteristics::TOWN)) {
@@ -490,7 +492,7 @@ static std::string decide_target_floor(PlayerType *player_ptr, eg_type *eg_ptr)
         return _("道", "road");
     }
 
-    return eg_ptr->f_ptr->name.data();
+    return eg_ptr->f_ptr->name;
 }
 
 static void describe_grid_monster_all(eg_type *eg_ptr)

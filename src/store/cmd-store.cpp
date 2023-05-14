@@ -89,7 +89,7 @@ void do_cmd_store(PlayerType *player_ptr)
 
     inner_town_num = player_ptr->town_num;
     auto &town = towns_info[player_ptr->town_num];
-    auto &store = town.store[enum2i(store_num)];
+    auto &store = town.stores[store_num];
     if ((store.store_open >= w_ptr->game_turn) || ironman_shops) {
         msg_print(_("ドアに鍵がかかっている。", "The doors are locked."));
         player_ptr->town_num = old_town_num;
@@ -114,7 +114,7 @@ void do_cmd_store(PlayerType *player_ptr)
     command_new = 0;
     get_com_no_macros = true;
     cur_store_feat = g_ptr->feat;
-    st_ptr = &towns_info[player_ptr->town_num].store[enum2i(store_num)];
+    st_ptr = &towns_info[player_ptr->town_num].stores[store_num];
     ot_ptr = &owners.at(store_num)[st_ptr->owner];
     store_top = 0;
     play_music(TERM_XTRA_MUSIC_BASIC, MUSIC_BASIC_BUILD);

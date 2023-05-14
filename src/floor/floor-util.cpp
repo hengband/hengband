@@ -192,7 +192,7 @@ void scatter(PlayerType *player_ptr, POSITION *yp, POSITION *xp, POSITION y, POS
  * @param player_ptr プレイヤーへの参照ポインタ
  * @return マップ名の文字列参照ポインタ
  */
-concptr map_name(PlayerType *player_ptr)
+std::string map_name(PlayerType *player_ptr)
 {
     auto *floor_ptr = player_ptr->current_floor_ptr;
     const auto &quest_list = QuestList::get_instance();
@@ -210,6 +210,6 @@ concptr map_name(PlayerType *player_ptr)
     } else if (!floor_ptr->dun_level && player_ptr->town_num) {
         return towns_info[player_ptr->town_num].name;
     } else {
-        return dungeons_info[player_ptr->dungeon_idx].name.data();
+        return dungeons_info[player_ptr->dungeon_idx].name;
     }
 }

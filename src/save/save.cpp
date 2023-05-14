@@ -220,8 +220,8 @@ static bool wr_savefile_new(PlayerType *player_ptr, SaveType type)
     tmp16u = MAX_STORES;
     wr_u16b(tmp16u);
     for (size_t i = 1; i < towns_info.size(); i++) {
-        for (auto j = 0; j < MAX_STORES; j++) {
-            wr_store(&towns_info[i].store[j]);
+        for (auto sst : STORE_SALE_TYPE_LIST) {
+            wr_store(&towns_info[i].stores[sst]);
         }
     }
 
