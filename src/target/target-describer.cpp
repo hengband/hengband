@@ -475,7 +475,7 @@ static std::string decide_target_floor(PlayerType *player_ptr, eg_type *eg_ptr)
     }
 
     if (eg_ptr->f_ptr->flags.has(TerrainCharacteristics::BLDG) && !player_ptr->current_floor_ptr->inside_arena) {
-        return building[eg_ptr->f_ptr->subtype].name;
+        return buildings[eg_ptr->f_ptr->subtype].name;
     }
 
     if (eg_ptr->f_ptr->flags.has(TerrainCharacteristics::ENTRANCE)) {
