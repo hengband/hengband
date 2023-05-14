@@ -6500,3 +6500,14 @@ I:69:6:0
 W:0:5:1
 A:0/255
 F:IGNORE_ACID | IGNORE_ELEC | IGNORE_FIRE | IGNORE_COLD
+
+N:681:宝の地図
+E:Treasure map
+G:?:o
+I:69:7:0
+W:0:5:1
+A:0/255
+F:IGNORE_ACID | IGNORE_ELEC | IGNORE_FIRE | IGNORE_COLD
+D:$It's a cheap piece of paper.
+D:$  You should wonder if the hidden location of Gungnir is written.
+D:安っぽい紙切れだ。グングニルの隠し場所でも書いてあるのだろうか。
