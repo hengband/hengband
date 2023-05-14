@@ -48,9 +48,9 @@ void init_towns(void)
     const auto town_numbers = count_town_numbers();
     towns_info = std::vector<town_type>(town_numbers);
     for (auto i = 1; i < town_numbers; i++) {
-        towns_info[i].stores = std::vector<store_type>(MAX_STORES);
+        auto &town = towns_info[i];
         for (auto sst : STORE_SALE_TYPE_LIST) {
-            auto *store_ptr = &towns_info[i].stores[enum2i(sst)];
+            auto *store_ptr = &town.stores[sst];
             if ((i > 1) && (sst == StoreSaleType::MUSEUM || sst == StoreSaleType::HOME)) {
                 continue;
             }
