@@ -2,6 +2,7 @@
 
 #include "store/store-util.h"
 #include "system/angband.h"
+#include <string>
 #include <vector>
 
 /*
@@ -9,7 +10,7 @@
  * stores and buildings
  */
 struct town_type {
-    GAME_TEXT name[32];
+    std::string name;
     std::vector<store_type> store; /* The stores [MAX_STORES] */
 };
 

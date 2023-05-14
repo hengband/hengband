@@ -490,7 +490,7 @@ static std::string decide_target_floor(PlayerType *player_ptr, eg_type *eg_ptr)
         return _("道", "road");
     }
 
-    return eg_ptr->f_ptr->name.data();
+    return eg_ptr->f_ptr->name;
 }
 
 static void describe_grid_monster_all(eg_type *eg_ptr)
