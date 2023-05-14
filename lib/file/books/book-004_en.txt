@@ -3,7 +3,14 @@
 			   Ancient Weapons
 			---------------------
 
- 
+
+  Notes by an annotator Mumei: 
+       This list is ancient.
+       In modern times, it includes things that have already been lost,
+       things that have been newly created, things that have been
+       brought in from the outside world, and things that have changed
+       over the years.
+
   The Longsword 'Ringil' (4d5) (+22,+25)
        The Sword of Fingolfin (High-Elf).  When wielded it will
        haste its wielder.  It is a blade of such deathly cold that 

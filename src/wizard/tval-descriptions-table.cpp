@@ -42,7 +42,7 @@ const std::vector<tval_desc> tvals = {
     { ItemKindType::MUSIC_BOOK, _("歌集", "Music Spellbook") },
     { ItemKindType::HISSATSU_BOOK, _("武芸の書", "Book of Kendo") },
     { ItemKindType::HEX_BOOK, _("呪術の魔法書", "Hex Spellbook") },
-    { ItemKindType::PARCHMENT, _("冒険者のための中つ国ガイド", "Parchment") },
+    { ItemKindType::PARCHMENT, _("羊皮紙", "Parchment") },
     { ItemKindType::WHISTLE, _("笛", "Whistle") },
     { ItemKindType::SPIKE, _("くさび", "Spikes") },
     { ItemKindType::DIGGING, _("シャベル/つるはし", "Digger") },

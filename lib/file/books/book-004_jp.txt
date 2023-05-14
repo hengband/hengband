@@ -1,9 +1,14 @@
 
-			Artifact Lore, Vol. I
-			   Ancient Weapons
-			---------------------
+                     アーティファクトの伝承　第1巻
+                                武器編
+                 -----------------------------------
 
- 
+
+  無名の注釈者によるメモ：
+       このリストは太古のものである。
+       現代においては既に失われたもの、新たに作られたもの、外の世界
+       から持ち込まれたもの、そして年月の間に変質したものが含まれる。
+
   The Longsword 'Ringil' (4d5) (+22,+25)
        The Sword of Fingolfin (High-Elf).  When wielded it will
        haste its wielder.  It is a blade of such deathly cold that 

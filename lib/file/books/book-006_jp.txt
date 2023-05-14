@@ -1,11 +1,16 @@
 
-		       Artifact Lore, Vol. III
-			Ancient Magical Tools
-		       -----------------------
+                     アーティファクトの伝承　第3巻
+                             アクセサリ編
+                 -----------------------------------
 
+
+  無名の注釈者によるメモ：
+       このリストは太古のものである。
+       現代においては既に失われたもの、新たに作られたもの、外の世界
+       から持ち込まれたもの、そして年月の間に変質したものが含まれる。
 
   The Amulet of Ingwe (+3)
-	This amulet belonged to the high king of  the  Vanyar,  the 
+	This amulet belonged to the high king of  the  Vanyar,  the
 	most powerful of the High Elves. It gives  resistance,  and
 	greatly increases your wisdom and charisma.  It  gives  you
 	good infravision, see invisible, and it casts a x5 strength
