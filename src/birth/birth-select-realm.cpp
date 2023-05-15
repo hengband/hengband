@@ -258,7 +258,7 @@ static bool get_a_realm(PlayerType *player_ptr, birth_realm_type *birth_realm_pt
             birth_realm_ptr->k = -1;
         }
 
-        birth_help_option(player_ptr, c, BK_REALM);
+        birth_help_option(player_ptr, c, BirthKind::REALM);
     }
 
     return false;

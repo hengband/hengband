@@ -25,23 +25,23 @@ void show_help(PlayerType *player_ptr, concptr helpfile)
     screen_load();
 }
 
-void birth_help_option(PlayerType *player_ptr, char c, birth_kind bk)
+void birth_help_option(PlayerType *player_ptr, char c, BirthKind bk)
 {
     concptr help_file;
     switch (bk) {
-    case BK_RACE:
+    case BirthKind::RACE:
         help_file = _("jraceclas.txt#TheRaces", "raceclas.txt#TheRaces");
         break;
-    case BK_CLASS:
+    case BirthKind::CLASS:
         help_file = _("jraceclas.txt#TheClasses", "raceclas.txt#TheClasses");
         break;
-    case BK_REALM:
+    case BirthKind::REALM:
         help_file = _("jmagic.txt#MagicRealms", "magic.txt#MagicRealms");
         break;
-    case BK_PERSONALITY:
+    case BirthKind::PERSONALITY:
         help_file = _("jraceclas.txt#ThePersonalities", "raceclas.txt#ThePersonalities");
         break;
-    case BK_AUTO_ROLLER:
+    case BirthKind::AUTO_ROLLER:
         help_file = _("jbirth.txt#AutoRoller", "birth.txt#AutoRoller");
         break;
     default:

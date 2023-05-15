@@ -196,7 +196,7 @@ static bool select_personality(PlayerType *player_ptr, int *k, concptr sym)
             *k = -1;
         }
 
-        birth_help_option(player_ptr, c, BK_PERSONALITY);
+        birth_help_option(player_ptr, c, BirthKind::PERSONALITY);
     }
 
     return true;
