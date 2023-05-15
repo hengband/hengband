@@ -104,7 +104,6 @@ typedef char GAME_TEXT; /*!< ゲーム中のテキスト型定義 */
 typedef int32_t MANA_POINT; /*!< ゲーム中のMP型を定義 */
 
 typedef int16_t HIT_PROB; /*!< ゲーム中の装備命中修正値を定義 */
-typedef int16_t BASE_STATUS; /*!< ゲーム中の基礎能力値型を定義 */
 
 typedef int32_t MONSTER_NUMBER; /*!< ゲーム中のモンスター数型を定義 */
 typedef int32_t ITEM_NUMBER; /*!< ゲーム中のアイテム数型を定義 */

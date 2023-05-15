@@ -666,10 +666,10 @@ void status_shuffle(PlayerType *player_ptr)
         ;
     }
 
-    BASE_STATUS max1 = player_ptr->stat_max[i];
-    BASE_STATUS cur1 = player_ptr->stat_cur[i];
-    BASE_STATUS max2 = player_ptr->stat_max[j];
-    BASE_STATUS cur2 = player_ptr->stat_cur[j];
+    const auto max1 = player_ptr->stat_max[i];
+    const auto cur1 = player_ptr->stat_cur[i];
+    const auto max2 = player_ptr->stat_max[j];
+    const auto cur2 = player_ptr->stat_cur[j];
 
     player_ptr->stat_max[i] = max2;
     player_ptr->stat_cur[i] = cur2;

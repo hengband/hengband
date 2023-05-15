@@ -45,17 +45,15 @@ static concptr desc_stat_neg[] = {
  */
 bool inc_stat(PlayerType *player_ptr, int stat)
 {
-    BASE_STATUS gain;
-    BASE_STATUS value = player_ptr->stat_cur[stat];
+    auto value = player_ptr->stat_cur[stat];
     if (value >= player_ptr->stat_max_max[stat]) {
         return false;
     }
 
     if (value < 18) {
-        gain = ((randint0(100) < 75) ? 1 : 2);
-        value += gain;
+        value += (randint0(100) < 75) ? 1 : 2;
     } else if (value < (player_ptr->stat_max_max[stat] - 2)) {
-        gain = (((player_ptr->stat_max_max[stat]) - value) / 2 + 3) / 2;
+        auto gain = (((player_ptr->stat_max_max[stat]) - value) / 2 + 3) / 2;
         if (gain < 1) {
             gain = 1;
         }
@@ -96,9 +94,9 @@ bool inc_stat(PlayerType *player_ptr, int stat)
  */
 bool dec_stat(PlayerType *player_ptr, int stat, int amount, int permanent)
 {
-    bool res = false;
-    BASE_STATUS cur = player_ptr->stat_cur[stat];
-    BASE_STATUS max = player_ptr->stat_max[stat];
+    auto res = false;
+    auto cur = player_ptr->stat_cur[stat];
+    auto max = player_ptr->stat_max[stat];
     int same = (cur == max);
     if (cur > 3) {
         if (cur <= 18) {
