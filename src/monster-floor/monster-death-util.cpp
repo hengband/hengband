@@ -19,7 +19,7 @@
  * Used to allocate proper treasure when "Creeping coins" die
  * Note the use of actual "monster names"
  */
-static OBJECT_SUBTYPE_VALUE get_coin_type(MonsterRaceId r_idx)
+static int get_coin_type(MonsterRaceId r_idx)
 {
     switch (r_idx) {
     case MonsterRaceId::COPPER_COINS:

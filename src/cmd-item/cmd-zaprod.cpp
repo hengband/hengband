@@ -42,7 +42,7 @@
  * @param powerful 強力発動上の処理ならばTRUE
  * @return 発動により効果内容が確定したならばTRUEを返す
  */
-int rod_effect(PlayerType *player_ptr, OBJECT_SUBTYPE_VALUE sval, DIRECTION dir, bool *use_charge, bool powerful)
+int rod_effect(PlayerType *player_ptr, int sval, int dir, bool *use_charge, bool powerful)
 {
     int ident = false;
     PLAYER_LEVEL lev = powerful ? player_ptr->lev * 2 : player_ptr->lev;

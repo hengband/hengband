@@ -138,7 +138,7 @@ void OtherItemsEnchanter::generate_figurine()
  */
 void OtherItemsEnchanter::generate_corpse()
 {
-    const std::unordered_map<OBJECT_SUBTYPE_VALUE, MonsterDropType> match = {
+    const std::unordered_map<int, MonsterDropType> match = {
         { SV_SKELETON, MonsterDropType::DROP_SKELETON },
         { SV_CORPSE, MonsterDropType::DROP_CORPSE },
     };

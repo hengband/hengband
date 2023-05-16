@@ -51,7 +51,7 @@
  * @param magic 魔道具術上の処理ならばTRUE
  * @return 発動により効果内容が確定したならばTRUEを返す
  */
-bool wand_effect(PlayerType *player_ptr, OBJECT_SUBTYPE_VALUE sval, DIRECTION dir, bool powerful, bool magic)
+bool wand_effect(PlayerType *player_ptr, int sval, int dir, bool powerful, bool magic)
 {
     bool ident = false;
     PLAYER_LEVEL lev = powerful ? player_ptr->lev * 2 : player_ptr->lev;
@@ -60,7 +60,7 @@ bool wand_effect(PlayerType *player_ptr, OBJECT_SUBTYPE_VALUE sval, DIRECTION di
     /* XXX Hack -- Wand of wonder can do anything before it */
     if (sval == SV_WAND_WONDER) {
         int vir = virtue_number(player_ptr, Virtue::CHANCE);
-        sval = (OBJECT_SUBTYPE_VALUE)randint0(SV_WAND_WONDER);
+        sval = randint0(SV_WAND_WONDER);
 
         if (vir) {
             if (player_ptr->virtues[vir - 1] > 0) {
