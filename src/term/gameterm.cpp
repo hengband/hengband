@@ -540,7 +540,7 @@ static TERM_COLOR spell_color(AttributeType type)
         }
 
         /* Pick a random color */
-        auto c = color[randint0(color.size())];
+        auto c = rand_choice(color);
 
         /* Lookup this color */
         a = angband_strchr(color_char, c) - color_char;

@@ -28,6 +28,7 @@
 #include "util/bit-flags-calculator.h"
 #include "window/main-window-util.h"
 #include "world/world.h"
+#include <span>
 
 byte display_autopick; /*!< 自動拾い状態の設定フラグ */
 
@@ -45,7 +46,8 @@ char image_monster_hack[MAX_IMAGE_MONSTER_HACK] = "abcdefghijklmnopqrstuvwxyzABC
 static void image_object(TERM_COLOR *ap, char *cp)
 {
     if (use_graphics) {
-        const auto &baseitem = baseitems_info[randint1(baseitems_info.size() - 1)];
+        std::span<BaseitemInfo> candidates(baseitems_info.begin() + 1, baseitems_info.end());
+        const auto &baseitem = rand_choice(candidates);
         *cp = baseitem.x_char;
         *ap = baseitem.x_attr;
         return;

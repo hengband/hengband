@@ -302,7 +302,7 @@ MonsterAbilityType choose_attack_spell(PlayerType *player_ptr, msa_type *msa_ptr
     auto *m_ptr = &player_ptr->current_floor_ptr->m_list[msa_ptr->m_idx];
     auto *r_ptr = &monraces_info[m_ptr->r_idx];
     if (r_ptr->flags2 & RF2_STUPID) {
-        return msa_ptr->mspells[randint0(msa_ptr->mspells.size())];
+        return rand_choice(msa_ptr->mspells);
     }
 
     for (size_t i = 0; i < msa_ptr->mspells.size(); i++) {
@@ -360,7 +360,7 @@ MonsterAbilityType choose_attack_spell(PlayerType *player_ptr, msa_type *msa_ptr
     }
 
     if (!world.empty() && (randint0(100) < 15) && !w_ptr->timewalk_m_idx) {
-        return world[randint0(world.size())];
+        return rand_choice(world);
     }
 
     if (!special.empty()) {
@@ -377,19 +377,19 @@ MonsterAbilityType choose_attack_spell(PlayerType *player_ptr, msa_type *msa_ptr
         }
 
         if (success) {
-            return special[randint0(special.size())];
+            return rand_choice(special);
         }
     }
 
     if (m_ptr->hp < m_ptr->maxhp / 3 && one_in_(2)) {
         if (!heal.empty()) {
-            return heal[randint0(heal.size())];
+            return rand_choice(heal);
         }
     }
 
     if (((m_ptr->hp < m_ptr->maxhp / 3) || m_ptr->is_fearful()) && one_in_(2)) {
         if (!escape.empty()) {
-            return escape[randint0(escape.size())];
+            return rand_choice(escape);
         }
     }
 
@@ -417,60 +417,60 @@ MonsterAbilityType choose_attack_spell(PlayerType *player_ptr, msa_type *msa_ptr
             break;
         }
         if (success) {
-            return special[randint0(special.size())];
+            return rand_choice(special);
         }
     }
 
     if ((distance(player_ptr->y, player_ptr->x, m_ptr->fy, m_ptr->fx) < 4) && (!attack.empty() || r_ptr->ability_flags.has(MonsterAbilityType::TRAPS)) && (randint0(100) < 75) && !w_ptr->timewalk_m_idx) {
         if (!tactic.empty()) {
-            return tactic[randint0(tactic.size())];
+            return rand_choice(tactic);
         }
     }
 
     if (!summon.empty() && (randint0(100) < 40)) {
-        return summon[randint0(summon.size())];
+        return rand_choice(summon);
     }
 
     if (!dispel.empty() && one_in_(2)) {
         if (dispel_check(player_ptr, msa_ptr->m_idx)) {
-            return dispel[randint0(dispel.size())];
+            return rand_choice(dispel);
         }
     }
 
     if (!raise.empty() && (randint0(100) < 40)) {
-        return raise[randint0(raise.size())];
+        return rand_choice(raise);
     }
 
     if (is_invuln(player_ptr)) {
         if (!psy_spe.empty() && (randint0(100) < 50)) {
-            return psy_spe[randint0(psy_spe.size())];
+            return rand_choice(psy_spe);
         } else if (!attack.empty() && (randint0(100) < 40)) {
-            return attack[randint0(attack.size())];
+            return rand_choice(attack);
         }
     } else if (!attack.empty() && (randint0(100) < 85)) {
-        return attack[randint0(attack.size())];
+        return rand_choice(attack);
     }
 
     if (!tactic.empty() && (randint0(100) < 50) && !w_ptr->timewalk_m_idx) {
-        return tactic[randint0(tactic.size())];
+        return rand_choice(tactic);
     }
 
     if (!invul.empty() && !m_ptr->mtimed[MTIMED_INVULNER] && (randint0(100) < 50)) {
-        return invul[randint0(invul.size())];
+        return rand_choice(invul);
     }
 
     if ((m_ptr->hp < m_ptr->maxhp * 3 / 4) && (randint0(100) < 25)) {
         if (!heal.empty()) {
-            return heal[randint0(heal.size())];
+            return rand_choice(heal);
         }
     }
 
     if (!haste.empty() && (randint0(100) < 20) && !m_ptr->is_accelerated()) {
-        return haste[randint0(haste.size())];
+        return rand_choice(haste);
     }
 
     if (!annoy.empty() && (randint0(100) < 80)) {
-        return annoy[randint0(annoy.size())];
+        return rand_choice(annoy);
     }
 
     return MonsterAbilityType::MAX;
