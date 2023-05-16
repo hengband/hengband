@@ -90,30 +90,18 @@ using dam_func = int (*)(PlayerType *player_ptr, int dam, concptr kb_str, bool a
  */
 static bool acid_minus_ac(PlayerType *player_ptr)
 {
-    ItemEntity *o_ptr = nullptr;
-    switch (randint1(7)) {
-    case 1:
-        o_ptr = &player_ptr->inventory_list[INVEN_MAIN_HAND];
-        break;
-    case 2:
-        o_ptr = &player_ptr->inventory_list[INVEN_SUB_HAND];
-        break;
-    case 3:
-        o_ptr = &player_ptr->inventory_list[INVEN_BODY];
-        break;
-    case 4:
-        o_ptr = &player_ptr->inventory_list[INVEN_OUTER];
-        break;
-    case 5:
-        o_ptr = &player_ptr->inventory_list[INVEN_ARMS];
-        break;
-    case 6:
-        o_ptr = &player_ptr->inventory_list[INVEN_HEAD];
-        break;
-    case 7:
-        o_ptr = &player_ptr->inventory_list[INVEN_FEET];
-        break;
-    }
+    constexpr static auto candidates = {
+        INVEN_MAIN_HAND,
+        INVEN_SUB_HAND,
+        INVEN_BODY,
+        INVEN_OUTER,
+        INVEN_ARMS,
+        INVEN_HEAD,
+        INVEN_FEET,
+    };
+
+    const auto slot = rand_choice(candidates);
+    auto *o_ptr = &player_ptr->inventory_list[slot];
 
     if ((o_ptr == nullptr) || !o_ptr->is_valid() || !o_ptr->is_protector()) {
         return false;
