@@ -32,11 +32,13 @@
 
 byte display_autopick; /*!< 自動拾い状態の設定フラグ */
 
+namespace {
 /* 一般的にオブジェクトシンボルとして扱われる記号を定義する(幻覚処理向け) /  Hack -- Legal object codes */
-char image_object_hack[MAX_IMAGE_OBJECT_HACK] = "?/|\\\"!$()_-=[]{},~";
+const std::string image_objects = R"(?/|\"!$()_-=[]{},~)";
 
 /* 一般的にモンスターシンボルとして扱われる記号を定義する(幻覚処理向け) / Hack -- Legal monster codes */
-char image_monster_hack[MAX_IMAGE_MONSTER_HACK] = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+const std::string image_monsters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+}
 
 /*!
  * @brief オブジェクトの表示を幻覚状態に差し替える / Hallucinatory object
@@ -53,8 +55,7 @@ static void image_object(TERM_COLOR *ap, char *cp)
         return;
     }
 
-    size_t n = sizeof(image_object_hack) - 1;
-    *cp = image_object_hack[randint0(n)];
+    *cp = rand_choice(image_objects);
     *ap = randint1(15);
 }
 
@@ -73,7 +74,7 @@ static void image_monster(TERM_COLOR *ap, char *cp)
         return;
     }
 
-    *cp = (one_in_(25) ? image_object_hack[randint0(sizeof(image_object_hack) - 1)] : image_monster_hack[randint0(sizeof(image_monster_hack) - 1)]);
+    *cp = one_in_(25) ? rand_choice(image_objects) : rand_choice(image_monsters);
     *ap = randint1(15);
 }
 
@@ -383,7 +384,7 @@ void map_info(PlayerType *player_ptr, POSITION y, POSITION x, TERM_COLOR *ap, ch
             *cp = tmp_r_ptr->x_char;
             *ap = tmp_r_ptr->x_attr;
         } else {
-            *cp = (one_in_(25) ? image_object_hack[randint0(sizeof(image_object_hack) - 1)] : image_monster_hack[randint0(sizeof(image_monster_hack) - 1)]);
+            *cp = one_in_(25) ? rand_choice(image_objects) : rand_choice(image_monsters);
         }
 
         set_term_color(player_ptr, y, x, ap, cp);
