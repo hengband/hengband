@@ -402,7 +402,6 @@ void wiz_create_named_art(PlayerType *player_ptr)
  */
 void wiz_change_status(PlayerType *player_ptr)
 {
-    short stat;
     char tmp_val[160];
     char ppp[80];
     for (int i = 0; i < A_MAX; i++) {
@@ -412,14 +411,9 @@ void wiz_change_status(PlayerType *player_ptr)
             return;
         }
 
-        stat = static_cast<short>(atoi(tmp_val));
-        if (stat > player_ptr->stat_max_max[i]) {
-            stat = player_ptr->stat_max_max[i];
-        } else if (stat < 3) {
-            stat = 3;
-        }
-
-        player_ptr->stat_cur[i] = player_ptr->stat_max[i] = stat;
+        auto stat = std::clamp<short>(static_cast<short>(atoi(tmp_val)), 3, player_ptr->stat_max_max[i]);
+        player_ptr->stat_cur[i] = stat;
+        player_ptr->stat_max[i] = stat;
     }
 
     strnfmt(tmp_val, sizeof(tmp_val), "%d", PlayerSkill::weapon_exp_at(PlayerSkillRank::MASTER));
