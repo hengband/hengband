@@ -98,11 +98,39 @@ void init_other(PlayerType *player_ptr)
 }
 
 /*!
- * @brief オブジェクト配列を初期化する /
- * Initialize some other arrays
- * @return エラーコード
+ * @brief モンスター生成テーブルを初期化する
  */
-static void init_object_alloc()
+void init_monsters_alloc()
+{
+    std::vector<const MonsterRaceInfo *> elements;
+    for (const auto &[r_idx, r_ref] : monraces_info) {
+        if (MonsterRace(r_ref.idx).is_valid()) {
+            elements.push_back(&r_ref);
+        }
+    }
+
+    std::sort(elements.begin(), elements.end(),
+        [](const MonsterRaceInfo *r1_ptr, const MonsterRaceInfo *r2_ptr) {
+            return r1_ptr->level < r2_ptr->level;
+        });
+
+    alloc_race_table.clear();
+    for (const auto r_ptr : elements) {
+        if (r_ptr->rarity == 0) {
+            continue;
+        }
+
+        const auto index = static_cast<short>(r_ptr->idx);
+        const auto level = r_ptr->level;
+        const auto prob = static_cast<PROB>(100 / r_ptr->rarity);
+        alloc_race_table.push_back({ index, level, prob, prob });
+    }
+}
+
+/*!
+ * @brief アイテム生成テーブルを初期化する
+ */
+void init_items_alloc()
 {
     short num[MAX_DEPTH]{};
     auto alloc_kind_size = 0;
@@ -142,38 +170,4 @@ static void init_object_alloc()
             aux[x]++;
         }
     }
-}
-
-/*!
- * @brief モンスター配列と生成テーブルを初期化する /
- * Initialize some other arrays
- * @return エラーコード
- */
-void init_alloc(void)
-{
-    std::vector<const MonsterRaceInfo *> elements;
-    for (const auto &[r_idx, r_ref] : monraces_info) {
-        if (MonsterRace(r_ref.idx).is_valid()) {
-            elements.push_back(&r_ref);
-        }
-    }
-
-    std::sort(elements.begin(), elements.end(),
-        [](const MonsterRaceInfo *r1_ptr, const MonsterRaceInfo *r2_ptr) {
-            return r1_ptr->level < r2_ptr->level;
-        });
-
-    alloc_race_table.clear();
-    for (const auto r_ptr : elements) {
-        if (r_ptr->rarity == 0) {
-            continue;
-        }
-
-        const auto index = static_cast<short>(r_ptr->idx);
-        const auto level = r_ptr->level;
-        const auto prob = static_cast<PROB>(100 / r_ptr->rarity);
-        alloc_race_table.push_back({ index, level, prob, prob });
-    }
-
-    init_object_alloc();
 }

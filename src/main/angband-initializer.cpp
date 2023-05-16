@@ -279,8 +279,10 @@ void init_angband(PlayerType *player_ptr, bool no_term)
 
     init_note(_("[データの初期化中... (その他)]", "[Initializing arrays... (other)]"));
     init_other(player_ptr);
-    init_note(_("[データの初期化中... (アロケーション)]", "[Initializing arrays... (alloc)]"));
-    init_alloc();
+    init_note(_("[データの初期化中... (モンスターアロケーション)]", "[Initializing arrays... (monsters alloc)]"));
+    init_monsters_alloc();
+    init_note(_("[データの初期化中... (アイテムアロケーション)]", "[Initializing arrays... (items alloc)]"));
+    init_items_alloc();
     init_note(_("[ユーザー設定ファイルを初期化しています...]", "[Initializing user pref files...]"));
     process_pref_file(player_ptr, "pref.prf");
     process_pref_file(player_ptr, std::string("pref-").append(ANGBAND_SYS).append(".prf").data());
