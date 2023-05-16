@@ -12,16 +12,24 @@
 #include "spell/spells-status.h"
 #include "sv-definition/sv-weapon-types.h"
 #include "system/player-type-definition.h"
+#include <array>
 
-/*! オートロール能力値の乱数分布 / emulate 5 + 1d3 + 1d4 + 1d5 by randint0(60) */
-BASE_STATUS rand3_4_5[60] = {
-    8, 9, 9, 9, 10, 10, 10, 10, 10, 10, /*00-09*/
-    11, 11, 11, 11, 11, 11, 11, 11, 11, 12, /*10-19*/
-    12, 12, 12, 12, 12, 12, 12, 12, 12, 12, /*20-29*/
-    13, 13, 13, 13, 13, 13, 13, 13, 13, 13, /*30-49*/
-    13, 14, 14, 14, 14, 14, 14, 14, 14, 14, /*40-49*/
-    15, 15, 15, 15, 15, 15, 16, 16, 16, 17 /*50-59*/
+namespace {
+
+constexpr auto random_distribution = 60;
+
+/*! オートロール能力値の乱数分布 (1d3, 1d4, 1d5 を3 * 4 * 5 = 60個で表現) */
+constexpr std::array<short, random_distribution> auto_roller_distribution = {
+    {
+        8, 9, 9, 9, 10, 10, 10, 10, 10, 10, /*00-09*/
+        11, 11, 11, 11, 11, 11, 11, 11, 11, 12, /*10-19*/
+        12, 12, 12, 12, 12, 12, 12, 12, 12, 12, /*20-29*/
+        13, 13, 13, 13, 13, 13, 13, 13, 13, 13, /*30-49*/
+        13, 14, 14, 14, 14, 14, 14, 14, 14, 14, /*40-49*/
+        15, 15, 15, 15, 15, 15, 16, 16, 16, 17 /*50-59*/
+    }
 };
+}
 
 /*!
  * @brief プレイヤーの能力値表現に基づいて加減算を行う。
@@ -64,21 +72,15 @@ int adjust_stat(int value, int amount)
 void get_stats(PlayerType *player_ptr)
 {
     while (true) {
-        int sum = 0;
-        for (int i = 0; i < 2; i++) {
-            int32_t tmp = randint0(60 * 60 * 60);
-            BASE_STATUS val;
-
-            for (int j = 0; j < 3; j++) {
-                int stat = i * 3 + j;
-
-                /* Extract 5 + 1d3 + 1d4 + 1d5 */
-                val = rand3_4_5[tmp % 60];
-
+        auto sum = 0;
+        for (auto i = 0; i < 2; i++) {
+            auto tmp = randint0(random_distribution * random_distribution * random_distribution);
+            for (auto j = 0; j < 3; j++) {
+                auto stat = i * 3 + j;
+                auto val = auto_roller_distribution[tmp % random_distribution];
                 sum += val;
                 player_ptr->stat_cur[stat] = player_ptr->stat_max[stat] = val;
-
-                tmp /= 60;
+                tmp /= random_distribution;
             }
         }
 
@@ -163,10 +165,10 @@ void get_extra(PlayerType *player_ptr, bool roll_hitdie)
  */
 void get_max_stats(PlayerType *player_ptr)
 {
-    int dice[6];
+    int dice[6]{};
     while (true) {
-        int j = 0;
-        for (int i = 0; i < A_MAX; i++) {
+        auto j = 0;
+        for (auto i = 0; i < A_MAX; i++) {
             dice[i] = randint1(7);
             j += dice[i];
         }
@@ -176,8 +178,8 @@ void get_max_stats(PlayerType *player_ptr)
         }
     }
 
-    for (int i = 0; i < A_MAX; i++) {
-        BASE_STATUS max_max = 18 + 60 + dice[i] * 10;
+    for (auto i = 0; i < A_MAX; i++) {
+        short max_max = 18 + 60 + dice[i] * 10;
         player_ptr->stat_max_max[i] = max_max;
         if (player_ptr->stat_max[i] > max_max) {
             player_ptr->stat_max[i] = max_max;
