@@ -297,7 +297,7 @@ void MonsterAttackPlayer::describe_silly_attacks()
 #ifdef JP
         this->abbreviate = -1;
 #endif
-        this->act = silly_attacks[randint0(MAX_SILLY_ATTACK)];
+        this->act = rand_choice(silly_attacks);
     }
 
 #ifdef JP

@@ -39,6 +39,7 @@
 #include "timed-effect/timed-effects.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
+#include <vector>
 
 /*!
  * @brief 警告を放つアイテムを選択する /
@@ -48,27 +49,24 @@
  */
 ItemEntity *choose_warning_item(PlayerType *player_ptr)
 {
-    int choices[INVEN_TOTAL - INVEN_MAIN_HAND];
-
     /* Paranoia -- Player has no warning ability */
     if (!player_ptr->warning) {
         return nullptr;
     }
 
     /* Search Inventory */
-    int number = 0;
+    std::vector<int> candidates;
     for (int i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
         auto *o_ptr = &player_ptr->inventory_list[i];
 
         auto flags = object_flags(o_ptr);
         if (flags.has(TR_WARNING)) {
-            choices[number] = i;
-            number++;
+            candidates.push_back(i);
         }
     }
 
     /* Choice one of them */
-    return number ? &player_ptr->inventory_list[choices[randint0(number)]] : nullptr;
+    return candidates.empty() ? nullptr : &player_ptr->inventory_list[rand_choice(candidates)];
 }
 
 /*!

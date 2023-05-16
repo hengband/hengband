@@ -128,7 +128,7 @@ void stair_creation(PlayerType *player_ptr)
 
                 /* Remove old stairs */
                 g_ptr->special = 0;
-                cave_set_feat(player_ptr, y, x, feat_ground_type[randint0(100)]);
+                cave_set_feat(player_ptr, y, x, rand_choice(feat_ground_type));
             }
         }
     } else {

@@ -18,9 +18,9 @@
 void store_owner_says_comment(PlayerType *player_ptr, StoreSaleType store_num)
 {
     if (store_num == StoreSaleType::BLACK) {
-        msg_print(comment_1_B[randint0(MAX_COMMENT_1)]);
+        msg_print(rand_choice(comment_1_B));
     } else {
-        msg_print(comment_1[randint0(MAX_COMMENT_1)]);
+        msg_print(rand_choice(comment_1));
     }
 
     if (one_in_(RUMOR_CHANCE)) {
@@ -42,7 +42,7 @@ void purchase_analyze(PlayerType *player_ptr, PRICE price, PRICE value, PRICE gu
 {
     /* Item was worthless, but we bought it */
     if ((value <= 0) && (price > value)) {
-        msg_print(comment_7a[randint0(MAX_COMMENT_7A)]);
+        msg_print(rand_choice(comment_7a));
         chg_virtue(player_ptr, Virtue::HONOUR, -1);
         chg_virtue(player_ptr, Virtue::JUSTICE, -1);
         sound(SOUND_STORE1);
@@ -51,7 +51,7 @@ void purchase_analyze(PlayerType *player_ptr, PRICE price, PRICE value, PRICE gu
 
     /* Item was cheaper than we thought, and we paid more than necessary */
     if ((value < guess) && (price > value)) {
-        msg_print(comment_7b[randint0(MAX_COMMENT_7B)]);
+        msg_print(rand_choice(comment_7b));
         chg_virtue(player_ptr, Virtue::JUSTICE, -1);
         if (one_in_(4)) {
             chg_virtue(player_ptr, Virtue::HONOUR, -1);
@@ -62,7 +62,7 @@ void purchase_analyze(PlayerType *player_ptr, PRICE price, PRICE value, PRICE gu
 
     /* Item was a good bargain, and we got away with it */
     if ((value > guess) && (value < (4 * guess)) && (price < value)) {
-        msg_print(comment_7c[randint0(MAX_COMMENT_7C)]);
+        msg_print(rand_choice(comment_7c));
         if (one_in_(4)) {
             chg_virtue(player_ptr, Virtue::HONOUR, -1);
         } else if (one_in_(4)) {
@@ -74,7 +74,7 @@ void purchase_analyze(PlayerType *player_ptr, PRICE price, PRICE value, PRICE gu
 
     /* Item was a great bargain, and we got away with it */
     if ((value > guess) && (price < value)) {
-        msg_print(comment_7d[randint0(MAX_COMMENT_7D)]);
+        msg_print(rand_choice(comment_7d));
         if (one_in_(2)) {
             chg_virtue(player_ptr, Virtue::HONOUR, -1);
         }

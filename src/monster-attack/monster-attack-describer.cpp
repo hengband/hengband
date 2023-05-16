@@ -236,7 +236,7 @@ void describe_monster_attack_method(MonsterAttackPlayer *monap_ptr)
 #ifdef JP
         monap_ptr->abbreviate = -1;
 #endif
-        monap_ptr->act = desc_moan[randint0(4)];
+        monap_ptr->act = rand_choice(desc_moan);
         sound(SOUND_MOAN);
         break;
     }

@@ -275,9 +275,9 @@ bool generate_fracave(PlayerType *player_ptr, POSITION y0, POSITION x0, POSITION
     fill_data.c1 = cutoff;
     fill_data.c2 = 0;
     fill_data.c3 = 0;
-    fill_data.feat1 = feat_ground_type[randint0(100)];
-    fill_data.feat2 = feat_ground_type[randint0(100)];
-    fill_data.feat3 = feat_ground_type[randint0(100)];
+    fill_data.feat1 = rand_choice(feat_ground_type);
+    fill_data.feat2 = rand_choice(feat_ground_type);
+    fill_data.feat3 = rand_choice(feat_ground_type);
     fill_data.info1 = CAVE_FLOOR;
     fill_data.info2 = CAVE_FLOOR;
     fill_data.info3 = CAVE_FLOOR;
@@ -407,21 +407,21 @@ bool generate_lake(PlayerType *player_ptr, POSITION y0, POSITION x0, POSITION xs
     case LAKE_T_LAVA: /* Lava */
         feat1 = feat_deep_lava;
         feat2 = feat_shallow_lava;
-        feat3 = feat_ground_type[randint0(100)];
+        feat3 = rand_choice(feat_ground_type);
         break;
     case LAKE_T_WATER: /* Water */
         feat1 = feat_deep_water;
         feat2 = feat_shallow_water;
-        feat3 = feat_ground_type[randint0(100)];
+        feat3 = rand_choice(feat_ground_type);
         break;
     case LAKE_T_CAVE: /* Collapsed floor_ptr->grid_array */
-        feat1 = feat_ground_type[randint0(100)];
-        feat2 = feat_ground_type[randint0(100)];
+        feat1 = rand_choice(feat_ground_type);
+        feat2 = rand_choice(feat_ground_type);
         feat3 = feat_rubble;
         break;
     case LAKE_T_EARTH_VAULT: /* Earth vault */
         feat1 = feat_rubble;
-        feat2 = feat_ground_type[randint0(100)];
+        feat2 = rand_choice(feat_ground_type);
         feat3 = feat_rubble;
         break;
     case LAKE_T_AIR_VAULT: /* Air vault */

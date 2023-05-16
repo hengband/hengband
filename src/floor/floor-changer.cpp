@@ -217,7 +217,7 @@ static void check_visited_floor(PlayerType *player_ptr, saved_floor_type *sf_ptr
     }
 
     if (player_ptr->change_floor_mode & (CFM_DOWN | CFM_UP)) {
-        g_ptr->feat = feat_ground_type[randint0(100)];
+        g_ptr->feat = rand_choice(feat_ground_type);
     }
 
     g_ptr->special = 0;

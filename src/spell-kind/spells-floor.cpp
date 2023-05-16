@@ -382,7 +382,7 @@ bool destroy_area(PlayerType *player_ptr, POSITION y1, POSITION x1, POSITION r, 
                     cave_set_feat(player_ptr, y, x, feat_magma_vein);
                 } else {
                     /* Create floor */
-                    cave_set_feat(player_ptr, y, x, feat_ground_type[randint0(100)]);
+                    cave_set_feat(player_ptr, y, x, rand_choice(feat_ground_type));
                 }
 
                 continue;
