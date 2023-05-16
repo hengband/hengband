@@ -488,7 +488,7 @@ static bool display_auto_roller_result(PlayerType *player_ptr, bool prev, char *
             continue;
         }
 
-        birth_help_option(player_ptr, *c, BK_AUTO_ROLLER);
+        birth_help_option(player_ptr, *c, BirthKind::AUTO_ROLLER);
         bell();
     }
 
