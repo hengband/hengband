@@ -169,7 +169,7 @@ FEAT_IDX choose_random_trap(PlayerType *player_ptr)
     /* Pick a trap */
     auto *floor_ptr = player_ptr->current_floor_ptr;
     while (true) {
-        feat = normal_traps[randint0(normal_traps.size())];
+        feat = rand_choice(normal_traps);
 
         /* Accept non-trapdoors */
         if (terrains_info[feat].flags.has_not(TerrainCharacteristics::MORE)) {

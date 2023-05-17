@@ -17,6 +17,7 @@
 #include "system/terrain-type-definition.h"
 #include "util/bit-flags-calculator.h"
 #include "world/world.h"
+#include <span>
 
 enum conversion_type {
     CONVERT_TYPE_FLOOR = 0,
@@ -184,12 +185,16 @@ bool permanent_wall(TerrainType *f_ptr)
 
 FEAT_IDX feat_locked_door_random(int door_type)
 {
-    return feat_door[door_type].num_locked ? feat_door[door_type].locked[randint0(feat_door[door_type].num_locked)] : feat_none;
+    const auto &door = feat_door[door_type];
+    std::span<const FEAT_IDX> candidates(std::begin(door.locked), door.num_locked);
+    return candidates.empty() ? feat_none : rand_choice(candidates);
 }
 
 FEAT_IDX feat_jammed_door_random(int door_type)
 {
-    return feat_door[door_type].num_jammed ? feat_door[door_type].jammed[randint0(feat_door[door_type].num_jammed)] : feat_none;
+    const auto &door = feat_door[door_type];
+    std::span<const FEAT_IDX> candidates(std::begin(door.jammed), door.num_jammed);
+    return candidates.empty() ? feat_none : rand_choice(candidates);
 }
 
 /*
@@ -292,9 +297,9 @@ FEAT_IDX conv_dungeon_feat(FloorType *floor_ptr, FEAT_IDX newfeat)
 
     switch (f_ptr->subtype) {
     case CONVERT_TYPE_FLOOR:
-        return feat_ground_type[randint0(100)];
+        return rand_choice(feat_ground_type);
     case CONVERT_TYPE_WALL:
-        return feat_wall_type[randint0(100)];
+        return rand_choice(feat_wall_type);
     case CONVERT_TYPE_INNER:
         return feat_wall_inner;
     case CONVERT_TYPE_OUTER:

@@ -72,7 +72,7 @@ std::string get_table_name_aux()
     int testcounter = randint1(3) + 1;
     if (randint1(3) == 2) {
         while (testcounter--) {
-            ss << syllables[randint0(syllables.size())];
+            ss << rand_choice(syllables);
         }
     } else {
         testcounter = randint1(2) + 1;

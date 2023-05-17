@@ -11,6 +11,7 @@
 #pragma once
 
 #include "system/h-basic.h"
+#include <initializer_list>
 #include <iterator>
 #include <type_traits>
 #include <utility>
@@ -107,4 +108,40 @@ void rand_shuffle(Iter first, Iter last)
             swap(first[n], first[m]);
         }
     }
+}
+
+/*!
+ * @brief 与えられた範囲から等確率で要素を1つ選ぶ
+ *
+ * @tparam T 範囲の型
+ * @param range 要素を選ぶ範囲
+ * @return 選んだ要素
+ *
+ * @todo MacOSでApple ClangのC++20 Ranges Libraryのサポートが浸透したら
+ * requires std::ranges::borrowed_range<T> && std::ranges::sized_range<T>
+ * をコンセプトに指定する
+ */
+template <typename T>
+decltype(auto) rand_choice(T &&range)
+{
+    using std::begin;
+    using std::size;
+    const auto index = randint0(size(range));
+
+    return *(std::next(begin(range), index));
+}
+
+/*!
+ * @brief 与えられたリストから等確率で要素を1つ選ぶ
+ *
+ * @tparam T リストの要素の型
+ * @param list 要素を選ぶリスト
+ * @return 選んだ要素
+ */
+template <typename T>
+T rand_choice(std::initializer_list<T> list)
+{
+    const auto index = randint0(list.size());
+
+    return *(list.begin() + index);
 }

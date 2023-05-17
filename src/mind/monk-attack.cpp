@@ -106,7 +106,7 @@ static int select_blow(PlayerType *player_ptr, player_attack_type *pa_ptr, int m
     const martial_arts *old_ptr = &ma_blows[0];
     for (int times = 0; times < max_blow_selection_times; times++) {
         do {
-            pa_ptr->ma_ptr = &ma_blows[randint0(MAX_MA)];
+            pa_ptr->ma_ptr = &rand_choice(ma_blows);
             if (PlayerClass(player_ptr).equals(PlayerClassType::FORCETRAINER) && (pa_ptr->ma_ptr->min_level > 1)) {
                 min_level = pa_ptr->ma_ptr->min_level + 3;
             } else {

@@ -169,9 +169,8 @@ static void ego_interpret_extra_abilities(ItemEntity *o_ptr, const EgoItemDefini
             continue;
         }
 
-        auto n = xtra.tr_flags.size();
-        if (n > 0) {
-            const auto f = xtra.tr_flags[randint0(n)];
+        if (!xtra.tr_flags.empty()) {
+            const auto f = rand_choice(xtra.tr_flags);
             const auto except = (f == TR_VORPAL) && (o_ptr->bi_key.tval() != ItemKindType::SWORD);
             if (!except) {
                 o_ptr->art_flags.set(f);

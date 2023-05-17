@@ -68,9 +68,9 @@ static bool process_mod_hallucination(PlayerType *player_ptr, std::string_view m
         return false;
     }
 
-    msg_format(_("%s%sの顔を見てしまった！", "You behold the %s visage of %s!"), funny_desc[randint0(funny_desc.size())].data(), m_name.data());
+    msg_format(_("%s%sの顔を見てしまった！", "You behold the %s visage of %s!"), rand_choice(funny_desc).data(), m_name.data());
     if (one_in_(3)) {
-        msg_print(funny_comments[randint0(funny_comments.size())]);
+        msg_print(rand_choice(funny_comments));
         BadStatusSetter(player_ptr).mod_hallucination(randint1(monrace.level));
     }
 

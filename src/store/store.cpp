@@ -334,7 +334,7 @@ static void store_create(PlayerType *player_ptr, short fix_k_idx, StoreSaleType 
             bi_id = fix_k_idx;
             level = rand_range(1, ow_ptr->level);
         } else {
-            bi_id = st_ptr->table[randint0(st_ptr->table.size())];
+            bi_id = rand_choice(st_ptr->table);
             level = rand_range(1, ow_ptr->level);
         }
 
@@ -349,7 +349,7 @@ static void store_create(PlayerType *player_ptr, short fix_k_idx, StoreSaleType 
 
         auto pvals = store_same_magic_device_pvals(q_ptr);
         if (pvals.size() >= 2) {
-            auto pval = pvals.at(randint0(pvals.size()));
+            auto pval = rand_choice(pvals);
             q_ptr->pval = pval;
         }
 

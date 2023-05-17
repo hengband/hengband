@@ -63,26 +63,22 @@ void vault_prep_dragon(PlayerType *player_ptr)
     (void)player_ptr;
 
     vault_aux_dragon_mask4.clear();
-    switch (randint0(6)) {
-    case 0: /* Black */
-        vault_aux_dragon_mask4.set(MonsterAbilityType::BR_ACID);
-        break;
-    case 1: /* Blue */
-        vault_aux_dragon_mask4.set(MonsterAbilityType::BR_ELEC);
-        break;
-    case 2: /* Red */
-        vault_aux_dragon_mask4.set(MonsterAbilityType::BR_FIRE);
-        break;
-    case 3: /* White */
-        vault_aux_dragon_mask4.set(MonsterAbilityType::BR_COLD);
-        break;
-    case 4: /* Green */
-        vault_aux_dragon_mask4.set(MonsterAbilityType::BR_POIS);
-        break;
-    default: /* Multi-hued */
-        vault_aux_dragon_mask4.set({ MonsterAbilityType::BR_ACID, MonsterAbilityType::BR_ELEC, MonsterAbilityType::BR_FIRE, MonsterAbilityType::BR_COLD, MonsterAbilityType::BR_POIS });
-        break;
+
+    constexpr static auto breath_list = {
+        MonsterAbilityType::BR_ACID, /* Black */
+        MonsterAbilityType::BR_ELEC, /* Blue */
+        MonsterAbilityType::BR_FIRE, /* Red */
+        MonsterAbilityType::BR_COLD, /* White */
+        MonsterAbilityType::BR_POIS, /* Green */
+    };
+
+    if (one_in_(6)) {
+        /* Multi-hued */
+        vault_aux_dragon_mask4.set(breath_list);
+        return;
     }
+
+    vault_aux_dragon_mask4.set(rand_choice(breath_list));
 }
 
 /*!

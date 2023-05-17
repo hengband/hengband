@@ -126,7 +126,7 @@ bool monst_spell_monst(PlayerType *player_ptr, MONSTER_IDX m_idx)
     }
 
     describe_melee_spell(player_ptr, ms_ptr);
-    ms_ptr->thrown_spell = ms_ptr->spells[randint0(ms_ptr->spells.size())];
+    ms_ptr->thrown_spell = rand_choice(ms_ptr->spells);
     if (player_ptr->riding && (m_idx == player_ptr->riding)) {
         disturb(player_ptr, true, true);
     }
