@@ -18,6 +18,7 @@
 #include "util/int-char-converter.h"
 #include "view/display-messages.h"
 #include "world/world.h"
+#include <span>
 #include <sstream>
 #include <string>
 
@@ -28,28 +29,28 @@
 static void display_diary(PlayerType *player_ptr)
 {
     PlayerClass pc(player_ptr);
-    const auto max_subtitles = diary_subtitles.size();
-    std::string subtitle;
+    std::span<const std::string> subtitle_candidates;
     if (pc.is_tough()) {
-        subtitle = diary_subtitles[randint0(max_subtitles - 1)];
+        subtitle_candidates = { diary_subtitles.begin(), diary_subtitles.end() - 1 };
     } else if (pc.is_wizard()) {
-        subtitle = diary_subtitles[randint0(max_subtitles - 1) + 1];
+        subtitle_candidates = { diary_subtitles.begin() + 1, diary_subtitles.end() };
     } else {
-        subtitle = diary_subtitles[randint0(max_subtitles - 2) + 1];
+        subtitle_candidates = { diary_subtitles.begin() + 1, diary_subtitles.end() - 1 };
     }
 
-    char diary_title[256];
+    const auto choice = Rand_external(subtitle_candidates.size());
+    const auto &subtitle = subtitle_candidates[choice];
 #ifdef JP
-    strnfmt(diary_title, sizeof(diary_title), "「%s%s%sの伝説 -%s-」", ap_ptr->title, ap_ptr->no ? "の" : "", player_ptr->name, subtitle.data());
+    const auto diary_title = format("「%s%s%sの伝説 -%s-」", ap_ptr->title, ap_ptr->no ? "の" : "", player_ptr->name, subtitle.data());
 #else
-    strnfmt(diary_title, sizeof(diary_title), "Legend of %s %s '%s'", ap_ptr->title, player_ptr->name, subtitle.data());
+    const auto diary_title = format("Legend of %s %s '%s'", ap_ptr->title, player_ptr->name, subtitle.data());
 #endif
 
     std::stringstream ss;
     ss << _("playrecord-", "playrec-") << savefile_base << ".txt";
     const auto &path = path_build(ANGBAND_DIR_USER, ss.str());
     const auto &filename = path.string();
-    (void)show_file(player_ptr, false, filename.data(), diary_title, -1, 0);
+    (void)show_file(player_ptr, false, filename.data(), diary_title.data(), -1, 0);
 }
 
 /*!
