@@ -1,6 +1,5 @@
 ﻿#include "target/target-setter.h"
 #include "core/player-redraw-types.h"
-#include "core/player-update-types.h"
 #include "core/stuff-handler.h"
 #include "core/window-redrawer.h"
 #include "floor/geometry.h"
@@ -15,6 +14,7 @@
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
 #include "system/player-type-definition.h"
+#include "system/redrawing-flags-updater.h"
 #include "target/projection-path-calculator.h"
 #include "target/target-checker.h"
 #include "target/target-describer.h"
@@ -254,7 +254,8 @@ static void switch_target_input(PlayerType *player_ptr, ts_type *ts_ptr)
         return;
     case 'p': {
         verify_panel(player_ptr);
-        player_ptr->update |= PU_MONSTER_STATUSES;
+        auto &rfu = RedrawingFlagsUpdater::get_instance();
+        rfu.set_flag(StatusRedrawingFlag::MONSTER_STATUSES);
         player_ptr->redraw |= PR_MAP;
         player_ptr->window_flags |= PW_OVERHEAD;
         handle_stuff(player_ptr);
@@ -339,6 +340,7 @@ static bool check_panel_changed(PlayerType *player_ptr, ts_type *ts_ptr)
 static void sweep_targets(PlayerType *player_ptr, ts_type *ts_ptr)
 {
     auto *floor_ptr = player_ptr->current_floor_ptr;
+    auto &rfu = RedrawingFlagsUpdater::get_instance();
     while (ts_ptr->flag && (ts_ptr->target_num < 0)) {
         // カーソル移動に伴い、必要なだけ描画範囲を更新。
         // "interesting" 座標リストおよび現在のターゲットも更新。
@@ -351,7 +353,7 @@ static void sweep_targets(PlayerType *player_ptr, ts_type *ts_ptr)
         panel_row_min = ts_ptr->y2;
         panel_col_min = ts_ptr->x2;
         panel_bounds_center();
-        player_ptr->update |= PU_MONSTER_STATUSES;
+        rfu.set_flag(StatusRedrawingFlag::MONSTER_STATUSES);
         player_ptr->redraw |= PR_MAP;
         player_ptr->window_flags |= PW_OVERHEAD;
         handle_stuff(player_ptr);
@@ -451,9 +453,10 @@ static void switch_next_grid_command(PlayerType *player_ptr, ts_type *ts_ptr)
         target_col = ts_ptr->x;
         ts_ptr->done = true;
         break;
-    case 'p':
+    case 'p': {
         verify_panel(player_ptr);
-        player_ptr->update |= PU_MONSTER_STATUSES;
+        auto &rfu = RedrawingFlagsUpdater::get_instance();
+        rfu.set_flag(StatusRedrawingFlag::MONSTER_STATUSES);
         player_ptr->redraw |= PR_MAP;
         player_ptr->window_flags |= PW_OVERHEAD;
         handle_stuff(player_ptr);
@@ -461,6 +464,7 @@ static void switch_next_grid_command(PlayerType *player_ptr, ts_type *ts_ptr)
         ts_ptr->y = player_ptr->y;
         ts_ptr->x = player_ptr->x;
         break;
+    }
     case 'o':
         // ターゲット時の「m近」「o現」の切り替え
         // すでに「o現」の時にoを押してもなにも起きない
@@ -595,7 +599,8 @@ bool target_set(PlayerType *player_ptr, target_type mode)
     sweep_target_grids(player_ptr, ts_ptr);
     prt("", 0, 0);
     verify_panel(player_ptr);
-    set_bits(player_ptr->update, PU_MONSTER_STATUSES);
+    auto &rfu = RedrawingFlagsUpdater::get_instance();
+    rfu.set_flag(StatusRedrawingFlag::MONSTER_STATUSES);
     set_bits(player_ptr->redraw, PR_MAP);
     set_bits(player_ptr->window_flags, PW_OVERHEAD | PW_FLOOR_ITEMS);
     handle_stuff(player_ptr);

@@ -1,6 +1,5 @@
 ﻿#include "object/lite-processor.h"
 #include "core/disturbance.h"
-#include "core/player-update-types.h"
 #include "core/window-redrawer.h"
 #include "game-option/disturbance-options.h"
 #include "inventory/inventory-slot-types.h"
@@ -9,6 +8,7 @@
 #include "sv-definition/sv-lite-types.h"
 #include "system/item-entity.h"
 #include "system/player-type-definition.h"
+#include "system/redrawing-flags-updater.h"
 #include "timed-effect/player-blindness.h"
 #include "timed-effect/timed-effects.h"
 #include "view/display-messages.h"
@@ -58,8 +58,11 @@ void notice_lite_change(PlayerType *player_ptr, ItemEntity *o_ptr)
     } else if (o_ptr->fuel == 0) {
         disturb(player_ptr, false, true);
         msg_print(_("明かりが消えてしまった！", "Your light has gone out!"));
-        player_ptr->update |= (PU_TORCH);
-        player_ptr->update |= (PU_BONUS);
+        const auto flags = {
+            StatusRedrawingFlag::TORCH,
+            StatusRedrawingFlag::BONUS,
+        };
+        RedrawingFlagsUpdater::get_instance().set_flags(flags);
     } else if (o_ptr->ego_idx == EgoType::LITE_LONG) {
         if ((o_ptr->fuel < 50) && (!(o_ptr->fuel % 5)) && (w_ptr->game_turn % (TURNS_PER_TICK * 2))) {
             if (disturb_minor) {

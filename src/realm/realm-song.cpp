@@ -1,6 +1,5 @@
 ﻿#include "cmd-action/cmd-spell.h"
 #include "core/player-redraw-types.h"
-#include "core/player-update-types.h"
 #include "core/window-redrawer.h"
 #include "effect/effect-characteristics.h"
 #include "effect/effect-processor.h"
@@ -24,6 +23,7 @@
 #include "status/bad-status-setter.h"
 #include "status/experience.h"
 #include "system/player-type-definition.h"
+#include "system/redrawing-flags-updater.h"
 #include "target/target-getter.h"
 #include "timed-effect/player-acceleration.h"
 #include "timed-effect/timed-effects.h"
@@ -45,7 +45,8 @@ static void start_singing(PlayerType *player_ptr, SPELL_IDX spell, int32_t song)
     /* Now the player is singing */
     set_action(player_ptr, ACTION_SING);
 
-    player_ptr->update |= (PU_BONUS);
+    auto &rfu = RedrawingFlagsUpdater::get_instance();
+    rfu.set_flag(StatusRedrawingFlag::BONUS);
     player_ptr->redraw |= (PR_TIMED_EFFECT);
 }
 
@@ -305,15 +306,14 @@ std::optional<std::string> do_music_spell(PlayerType *player_ptr, SPELL_IDX spel
 
             (void)hp_player(player_ptr, 10);
             (void)BadStatusSetter(player_ptr).set_fear(0);
-            player_ptr->update |= PU_HP;
+            RedrawingFlagsUpdater::get_instance().set_flag(StatusRedrawingFlag::HP);
             start_singing(player_ptr, spell, MUSIC_HERO);
         }
 
         if (stop) {
             if (!player_ptr->hero) {
                 msg_print(_("ヒーローの気分が消え失せた。", "The heroism wears off."));
-                /* Recalculate hitpoints */
-                player_ptr->update |= (PU_HP);
+                RedrawingFlagsUpdater::get_instance().set_flag(StatusRedrawingFlag::HP);
             }
         }
 
@@ -962,14 +962,14 @@ std::optional<std::string> do_music_spell(PlayerType *player_ptr, SPELL_IDX spel
             msg_print(_("英雄の歌を口ずさんだ．．．", "You chant a powerful, heroic call to arms..."));
             (void)hp_player(player_ptr, 10);
             (void)BadStatusSetter(player_ptr).set_fear(0);
-            player_ptr->update |= PU_HP;
+            RedrawingFlagsUpdater::get_instance().set_flag(StatusRedrawingFlag::HP);
             start_singing(player_ptr, spell, MUSIC_SHERO);
         }
 
         if (stop) {
             if (!player_ptr->hero) {
                 msg_print(_("ヒーローの気分が消え失せた。", "The heroism wears off."));
-                player_ptr->update |= PU_HP;
+                RedrawingFlagsUpdater::get_instance().set_flag(StatusRedrawingFlag::HP);
             }
 
             if (!player_ptr->effects()->acceleration()->is_fast()) {
@@ -1094,7 +1094,7 @@ std::optional<std::string> do_music_spell(PlayerType *player_ptr, SPELL_IDX spel
             msg_print(_("フィンゴルフィンの冥王への挑戦を歌った．．．", "You recall the valor of Fingolfin's challenge to the Dark Lord..."));
 
             player_ptr->redraw |= (PR_MAP);
-            player_ptr->update |= (PU_MONSTER_STATUSES);
+            RedrawingFlagsUpdater::get_instance().set_flag(StatusRedrawingFlag::MONSTER_STATUSES);
             player_ptr->window_flags |= (PW_OVERHEAD | PW_DUNGEON);
 
             start_singing(player_ptr, spell, MUSIC_INVULN);
@@ -1105,7 +1105,7 @@ std::optional<std::string> do_music_spell(PlayerType *player_ptr, SPELL_IDX spel
                 msg_print(_("無敵ではなくなった。", "The invulnerability wears off."));
 
                 player_ptr->redraw |= (PR_MAP);
-                player_ptr->update |= (PU_MONSTER_STATUSES);
+                RedrawingFlagsUpdater::get_instance().set_flag(StatusRedrawingFlag::MONSTER_STATUSES);
                 player_ptr->window_flags |= (PW_OVERHEAD | PW_DUNGEON);
             }
         }

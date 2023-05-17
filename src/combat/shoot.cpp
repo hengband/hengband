@@ -3,7 +3,6 @@
 #include "avatar/avatar.h"
 #include "combat/attack-criticality.h"
 #include "core/player-redraw-types.h"
-#include "core/player-update-types.h"
 #include "core/stuff-handler.h"
 #include "effect/attribute-types.h"
 #include "effect/effect-characteristics.h"
@@ -64,6 +63,7 @@
 #include "system/monster-entity.h"
 #include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
+#include "system/redrawing-flags-updater.h"
 #include "target/projection-path-calculator.h"
 #include "target/target-checker.h"
 #include "target/target-getter.h"
@@ -666,7 +666,13 @@ void exe_fire(PlayerType *player_ptr, INVENTORY_IDX item, ItemEntity *j_ptr, SPE
                     }
                     /* Forget the wall */
                     reset_bits(g_ptr->info, (CAVE_MARK));
-                    set_bits(player_ptr->update, PU_VIEW | PU_LITE | PU_FLOW | PU_MONSTER_LITE);
+                    const auto flags = {
+                        StatusRedrawingFlag::VIEW,
+                        StatusRedrawingFlag::LITE,
+                        StatusRedrawingFlag::FLOW,
+                        StatusRedrawingFlag::MONSTER_LITE,
+                    };
+                    RedrawingFlagsUpdater::get_instance().set_flags(flags);
 
                     /* Destroy the wall */
                     cave_alter_feat(player_ptr, ny, nx, TerrainCharacteristics::HURT_ROCK);

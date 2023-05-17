@@ -8,7 +8,6 @@
 #include "artifact/fixed-art-types.h"
 #include "cmd-action/cmd-attack.h"
 #include "core/disturbance.h"
-#include "core/player-update-types.h"
 #include "core/stuff-handler.h"
 #include "floor/geometry.h"
 #include "floor/pattern-walk.h"
@@ -44,6 +43,7 @@
 #include "system/monster-entity.h"
 #include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
+#include "system/redrawing-flags-updater.h"
 #include "system/terrain-type-definition.h"
 #include "timed-effect/player-confusion.h"
 #include "timed-effect/player-hallucination.h"
@@ -371,7 +371,7 @@ void exe_movement(PlayerType *player_ptr, DIRECTION dir, bool do_pickup, bool br
 
     if (p_can_kill_walls) {
         cave_alter_feat(player_ptr, y, x, TerrainCharacteristics::HURT_DISI);
-        player_ptr->update |= PU_FLOW;
+        RedrawingFlagsUpdater::get_instance().set_flag(StatusRedrawingFlag::FLOW);
     }
 
     uint32_t mpe_mode = MPE_ENERGY_USE;

@@ -1,7 +1,6 @@
 ﻿#include "store/cmd-store.h"
 #include "cmd-io/macro-util.h"
 #include "core/player-redraw-types.h"
-#include "core/player-update-types.h"
 #include "core/stuff-handler.h"
 #include "core/window-redrawer.h"
 #include "flavor/flavor-describer.h"
@@ -27,6 +26,7 @@
 #include "system/grid-type-definition.h"
 #include "system/item-entity.h"
 #include "system/player-type-definition.h"
+#include "system/redrawing-flags-updater.h"
 #include "system/terrain-type-definition.h"
 #include "term/gameterm.h"
 #include "term/screen-processor.h"
@@ -120,7 +120,7 @@ void do_cmd_store(PlayerType *player_ptr)
     play_music(TERM_XTRA_MUSIC_BASIC, MUSIC_BASIC_BUILD);
     display_store(player_ptr, store_num);
     leave_store = false;
-
+    auto &rfu = RedrawingFlagsUpdater::get_instance();
     while (!leave_store) {
         prt("", 1, 0);
         clear_from(20 + xtra_stock);
@@ -154,8 +154,6 @@ void do_cmd_store(PlayerType *player_ptr)
         prt(_("コマンド:", "You may: "), 20 + xtra_stock, 0);
         InputKeyRequestor(player_ptr, true).request_command();
         store_process_command(player_ptr, store_num);
-
-        bool need_redraw_store_inv = any_bits(player_ptr->update, PU_BONUS);
         w_ptr->character_icky_depth = 1;
         handle_stuff(player_ptr);
         if (player_ptr->inventory_list[INVEN_PACK].bi_id) {
@@ -192,7 +190,7 @@ void do_cmd_store(PlayerType *player_ptr)
             }
         }
 
-        if (need_redraw_store_inv) {
+        if (rfu.has(StatusRedrawingFlag::BONUS)) {
             display_store_inventory(player_ptr, store_num);
         }
 
@@ -214,8 +212,13 @@ void do_cmd_store(PlayerType *player_ptr)
     msg_erase();
     term_clear();
 
-    player_ptr->update |= PU_VIEW | PU_LITE | PU_MONSTER_LITE;
-    player_ptr->update |= PU_MONSTER_STATUSES;
+    const auto flags_srf = {
+        StatusRedrawingFlag::VIEW,
+        StatusRedrawingFlag::LITE,
+        StatusRedrawingFlag::MONSTER_LITE,
+        StatusRedrawingFlag::MONSTER_STATUSES,
+    };
+    rfu.set_flags(flags_srf);
     player_ptr->redraw |= PR_BASIC | PR_EXTRA | PR_EQUIPPY;
     player_ptr->redraw |= PR_MAP;
     player_ptr->window_flags |= PW_OVERHEAD | PW_DUNGEON;

@@ -4,7 +4,6 @@
 #include "artifact/random-art-effects.h"
 #include "artifact/random-art-generator.h"
 #include "core/asking-player.h"
-#include "core/player-update-types.h"
 #include "core/show-file.h"
 #include "core/stuff-handler.h"
 #include "core/window-redrawer.h"
@@ -34,6 +33,7 @@
 #include "system/floor-type-definition.h"
 #include "system/item-entity.h"
 #include "system/player-type-definition.h"
+#include "system/redrawing-flags-updater.h"
 #include "system/system-variables.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
@@ -232,10 +232,14 @@ void wiz_identify_full_inventory(PlayerType *player_ptr)
         o_ptr->marked.set(OmType::TOUCHED);
     }
 
-    /* Refrect item informaiton onto subwindows without updating inventory */
-    reset_bits(player_ptr->update, PU_COMBINATION | PU_REORDER);
+    auto &rfu = RedrawingFlagsUpdater::get_instance();
+    const auto flags_srf = {
+        StatusRedrawingFlag::COMBINATION,
+        StatusRedrawingFlag::REORDER,
+    };
+    rfu.reset_flags(flags_srf);
     handle_stuff(player_ptr);
-    set_bits(player_ptr->update, PU_COMBINATION | PU_REORDER);
+    rfu.set_flags(flags_srf);
     set_bits(player_ptr->window_flags, PW_INVENTORY | PW_EQUIPMENT);
 }
 
@@ -579,7 +583,13 @@ static void wiz_reroll_item(PlayerType *player_ptr, ItemEntity *o_ptr)
     }
 
     o_ptr->copy_from(q_ptr);
-    set_bits(player_ptr->update, PU_BONUS | PU_COMBINATION | PU_REORDER);
+    auto &rfu = RedrawingFlagsUpdater::get_instance();
+    const auto flags_srf = {
+        StatusRedrawingFlag::BONUS,
+        StatusRedrawingFlag::COMBINATION,
+        StatusRedrawingFlag::REORDER,
+    };
+    rfu.set_flags(flags_srf);
     set_bits(player_ptr->window_flags, PW_INVENTORY | PW_EQUIPMENT | PW_SPELL | PW_PLAYER | PW_FLOOR_ITEMS | PW_FOUND_ITEMS);
 }
 
@@ -723,7 +733,13 @@ void wiz_modify_item(PlayerType *player_ptr)
         msg_print("Changes accepted.");
 
         o_ptr->copy_from(q_ptr);
-        set_bits(player_ptr->update, PU_BONUS | PU_COMBINATION | PU_REORDER);
+        auto &rfu = RedrawingFlagsUpdater::get_instance();
+        const auto flags_srf = {
+            StatusRedrawingFlag::BONUS,
+            StatusRedrawingFlag::COMBINATION,
+            StatusRedrawingFlag::REORDER,
+        };
+        rfu.set_flags(flags_srf);
         set_bits(player_ptr->window_flags, PW_INVENTORY | PW_EQUIPMENT | PW_SPELL | PW_PLAYER | PW_FLOOR_ITEMS | PW_FOUND_ITEMS);
     } else {
         msg_print("Changes ignored.");

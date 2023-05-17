@@ -1,10 +1,10 @@
 ﻿#include "mind/mind-magic-resistance.h"
 #include "core/disturbance.h"
 #include "core/player-redraw-types.h"
-#include "core/player-update-types.h"
 #include "core/stuff-handler.h"
 #include "game-option/disturbance-options.h"
 #include "system/player-type-definition.h"
+#include "system/redrawing-flags-updater.h"
 #include "view/display-messages.h"
 
 /*!
@@ -40,6 +40,7 @@ bool set_resist_magic(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
     }
 
     player_ptr->resist_magic = v;
+    auto &rfu = RedrawingFlagsUpdater::get_instance();
     player_ptr->redraw |= (PR_TIMED_EFFECT);
 
     if (!notice) {
@@ -49,7 +50,8 @@ bool set_resist_magic(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
     if (disturb_state) {
         disturb(player_ptr, false, false);
     }
-    player_ptr->update |= (PU_BONUS);
+
+    rfu.set_flag(StatusRedrawingFlag::BONUS);
     handle_stuff(player_ptr);
     return true;
 }

@@ -1,5 +1,4 @@
 ﻿#include "monster-floor/monster-lite.h"
-#include "core/player-update-types.h"
 #include "dungeon/dungeon-flag-types.h"
 #include "floor/cave.h"
 #include "grid/feature-flag-types.h"
@@ -18,6 +17,7 @@
 #include "system/monster-entity.h"
 #include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
+#include "system/redrawing-flags-updater.h"
 #include "util/point-2d.h"
 #include "view/display-messages.h"
 #include "world/world.h"
@@ -319,7 +319,7 @@ void update_mon_lite(PlayerType *player_ptr)
 
     floor_ptr->mon_lite_n = 0;
     for (size_t i = 0; i < end_temp; i++) {
-        const auto [fy, fx] = points[i];
+        const auto &[fy, fx] = points[i];
 
         grid_type *const g_ptr = &floor_ptr->grid_array[fy][fx];
         if (g_ptr->info & CAVE_MNLT) {
@@ -336,11 +336,11 @@ void update_mon_lite(PlayerType *player_ptr)
     }
 
     for (size_t i = end_temp; i < size(points); i++) {
-        const auto [y, x] = points[i];
+        const auto &[y, x] = points[i];
         floor_ptr->grid_array[y][x].info &= ~(CAVE_TEMP | CAVE_XTRA);
     }
 
-    player_ptr->update |= PU_DELAY_VISIBILITY;
+    RedrawingFlagsUpdater::get_instance().set_flag(StatusRedrawingFlag::DELAY_VISIBILITY);
     player_ptr->monlite = (floor_ptr->grid_array[player_ptr->y][player_ptr->x].info & CAVE_MNLT) != 0;
     auto ninja_data = PlayerClass(player_ptr).get_specific_data<ninja_data_type>();
     if (!ninja_data || !ninja_data->s_stealth) {

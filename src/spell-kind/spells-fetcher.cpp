@@ -1,6 +1,5 @@
 ﻿#include "spell-kind/spells-fetcher.h"
 #include "core/player-redraw-types.h"
-#include "core/player-update-types.h"
 #include "core/stuff-handler.h"
 #include "flavor/flavor-describer.h"
 #include "flavor/object-flavor-types.h"
@@ -20,6 +19,7 @@
 #include "system/monster-entity.h"
 #include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
+#include "system/redrawing-flags-updater.h"
 #include "target/projection-path-calculator.h"
 #include "target/target-checker.h"
 #include "target/target-setter.h"
@@ -158,7 +158,7 @@ bool fetch_monster(PlayerType *player_ptr)
     lite_spot(player_ptr, target_row, target_col);
     lite_spot(player_ptr, ty, tx);
     if (monraces_info[m_ptr->r_idx].brightness_flags.has_any_of(ld_mask)) {
-        player_ptr->update |= (PU_MONSTER_LITE);
+        RedrawingFlagsUpdater::get_instance().set_flag(StatusRedrawingFlag::MONSTER_LITE);
     }
 
     if (m_ptr->ml) {

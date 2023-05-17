@@ -9,7 +9,6 @@
 #include "cmd-action/cmd-spell.h"
 #include "cmd-item/cmd-magiceat.h"
 #include "core/player-redraw-types.h"
-#include "core/player-update-types.h"
 #include "core/stuff-handler.h"
 #include "core/window-redrawer.h"
 #include "effect/attribute-types.h"
@@ -50,6 +49,7 @@
 #include "system/item-entity.h"
 #include "system/monster-entity.h"
 #include "system/player-type-definition.h"
+#include "system/redrawing-flags-updater.h"
 #include "target/target-getter.h"
 #include "timed-effect/player-acceleration.h"
 #include "timed-effect/player-cut.h"
@@ -214,8 +214,9 @@ bool time_walk(PlayerType *player_ptr)
     msg_print(nullptr);
 
     player_ptr->energy_need -= 1000 + (100 + player_ptr->csp - 50) * TURNS_PER_TICK / 10;
+    auto &rfu = RedrawingFlagsUpdater::get_instance();
     player_ptr->redraw |= (PR_MAP);
-    player_ptr->update |= (PU_MONSTER_STATUSES);
+    rfu.set_flag(StatusRedrawingFlag::MONSTER_STATUSES);
     player_ptr->window_flags |= (PW_OVERHEAD | PW_DUNGEON);
     handle_stuff(player_ptr);
     return true;
@@ -254,9 +255,8 @@ void roll_hitdice(PlayerType *player_ptr, spell_operation options)
     player_ptr->knowledge &= ~(KNOW_HPRATE);
 
     auto percent = (player_ptr->player_hp[PY_MAX_LEVEL - 1] * 200) / (2 * player_ptr->hitdie + ((PY_MAX_LEVEL - 1 + 3) * (player_ptr->hitdie + 1)));
-
-    /* Update and redraw hitpoints */
-    player_ptr->update |= (PU_HP);
+    auto &rfu = RedrawingFlagsUpdater::get_instance();
+    rfu.set_flag(StatusRedrawingFlag::HP);
     player_ptr->redraw |= (PR_HP);
     player_ptr->window_flags |= (PW_PLAYER);
 
@@ -685,5 +685,5 @@ void status_shuffle(PlayerType *player_ptr)
         }
     }
 
-    player_ptr->update |= PU_BONUS;
+    RedrawingFlagsUpdater::get_instance().set_flag(StatusRedrawingFlag::BONUS);
 }

@@ -1,6 +1,5 @@
 ﻿#include "cmd-item/cmd-refill.h"
 #include "core/player-redraw-types.h"
-#include "core/player-update-types.h"
 #include "floor/floor-object.h"
 #include "inventory/inventory-object.h"
 #include "inventory/inventory-slot-types.h"
@@ -19,6 +18,7 @@
 #include "sv-definition/sv-lite-types.h"
 #include "system/item-entity.h"
 #include "system/player-type-definition.h"
+#include "system/redrawing-flags-updater.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 
@@ -57,7 +57,7 @@ static void do_cmd_refill_lamp(PlayerType *player_ptr)
     }
 
     vary_item(player_ptr, item, -1);
-    player_ptr->update |= PU_TORCH;
+    RedrawingFlagsUpdater::get_instance().set_flag(StatusRedrawingFlag::TORCH);
 }
 
 /*!
@@ -97,7 +97,7 @@ static void do_cmd_refill_torch(PlayerType *player_ptr)
     }
 
     vary_item(player_ptr, item, -1);
-    player_ptr->update |= PU_TORCH;
+    RedrawingFlagsUpdater::get_instance().set_flag(StatusRedrawingFlag::TORCH);
 }
 
 /*!

@@ -1,7 +1,6 @@
 ﻿#include "status/base-status.h"
 #include "avatar/avatar.h"
 #include "core/player-redraw-types.h"
-#include "core/player-update-types.h"
 #include "core/window-redrawer.h"
 #include "game-option/birth-options.h"
 #include "inventory/inventory-slot-types.h"
@@ -12,6 +11,7 @@
 #include "spell-kind/spells-floor.h"
 #include "system/item-entity.h"
 #include "system/player-type-definition.h"
+#include "system/redrawing-flags-updater.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 
@@ -71,7 +71,7 @@ bool inc_stat(PlayerType *player_ptr, int stat)
         player_ptr->stat_max[stat] = value;
     }
 
-    player_ptr->update |= PU_BONUS;
+    RedrawingFlagsUpdater::get_instance().set_flag(StatusRedrawingFlag::BONUS);
     return true;
 }
 
@@ -178,8 +178,9 @@ bool dec_stat(PlayerType *player_ptr, int stat, int amount, int permanent)
     if (res) {
         player_ptr->stat_cur[stat] = cur;
         player_ptr->stat_max[stat] = max;
+        auto &rfu = RedrawingFlagsUpdater::get_instance();
         player_ptr->redraw |= (PR_ABILITY_SCORE);
-        player_ptr->update |= (PU_BONUS);
+        rfu.set_flag(StatusRedrawingFlag::BONUS);
     }
 
     return res;
@@ -194,7 +195,8 @@ bool res_stat(PlayerType *player_ptr, int stat)
 {
     if (player_ptr->stat_cur[stat] != player_ptr->stat_max[stat]) {
         player_ptr->stat_cur[stat] = player_ptr->stat_max[stat];
-        player_ptr->update |= (PU_BONUS);
+        auto &rfu = RedrawingFlagsUpdater::get_instance();
+        rfu.set_flag(StatusRedrawingFlag::BONUS);
         player_ptr->redraw |= (PR_ABILITY_SCORE);
         return true;
     }
@@ -315,7 +317,13 @@ bool lose_all_info(PlayerType *player_ptr)
         o_ptr->ident &= ~(IDENT_SENSE);
     }
 
-    set_bits(player_ptr->update, PU_BONUS | PU_COMBINATION | PU_REORDER);
+    auto &rfu = RedrawingFlagsUpdater::get_instance();
+    const auto flags_srf = {
+        StatusRedrawingFlag::BONUS,
+        StatusRedrawingFlag::COMBINATION,
+        StatusRedrawingFlag::REORDER,
+    };
+    rfu.set_flags(flags_srf);
     set_bits(player_ptr->window_flags, PW_INVENTORY | PW_EQUIPMENT | PW_PLAYER | PW_FLOOR_ITEMS | PW_FOUND_ITEMS);
     wiz_dark(player_ptr);
     return true;

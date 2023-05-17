@@ -1315,7 +1315,6 @@
     <ClInclude Include="..\..\src\object-hook\hook-weapon.h" />
     <ClInclude Include="..\..\src\object-use\quaff\quaff-execution.h" />
     <ClInclude Include="..\..\src\player\attack-defense-types.h" />
-    <ClInclude Include="..\..\src\core\player-update-types.h" />
     <ClInclude Include="..\..\src\load\angband-version-comparer.h" />
     <ClInclude Include="..\..\src\load\birth-loader.h" />
     <ClInclude Include="..\..\src\load\dummy-loader.h" />

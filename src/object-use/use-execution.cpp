@@ -7,7 +7,6 @@
 #include "action/action-limited.h"
 #include "avatar/avatar.h"
 #include "cmd-item/cmd-usestaff.h"
-#include "core/player-update-types.h"
 #include "core/window-redrawer.h"
 #include "floor/floor-object.h"
 #include "game-option/disturbance-options.h"
@@ -24,6 +23,7 @@
 #include "system/baseitem-info.h"
 #include "system/item-entity.h"
 #include "system/player-type-definition.h"
+#include "system/redrawing-flags-updater.h"
 #include "term/screen-processor.h"
 #include "timed-effect/player-confusion.h"
 #include "timed-effect/timed-effects.h"
@@ -91,7 +91,12 @@ void ObjectUseEntity::execute()
 
         msg_print(_("この杖にはもう魔力が残っていない。", "The staff has no charges left."));
         o_ptr->ident |= IDENT_EMPTY;
-        this->player_ptr->update |= PU_COMBINATION | PU_REORDER;
+        auto &rfu = RedrawingFlagsUpdater::get_instance();
+        const auto flags = {
+            StatusRedrawingFlag::COMBINATION,
+            StatusRedrawingFlag::REORDER,
+        };
+        rfu.set_flags(flags);
         this->player_ptr->window_flags |= PW_INVENTORY;
         return;
     }
@@ -104,13 +109,14 @@ void ObjectUseEntity::execute()
         chg_virtue(this->player_ptr, Virtue::KNOWLEDGE, -1);
     }
 
-    /*
-     * Temporarily remove the flags for updating the inventory so
-     * gain_exp() does not reorder the inventory before the charge
-     * is deducted from the staff.
-     */
-    BIT_FLAGS inventory_flags = PU_COMBINATION | PU_REORDER | (this->player_ptr->update & PU_AUTO_DESTRUCTION);
-    reset_bits(this->player_ptr->update, PU_COMBINATION | PU_REORDER | PU_AUTO_DESTRUCTION);
+    auto &rfu = RedrawingFlagsUpdater::get_instance();
+    using Srf = StatusRedrawingFlag;
+    EnumClassFlagGroup<Srf> flags_srf = { Srf::COMBINATION, Srf::REORDER };
+    if (rfu.has(Srf::AUTO_DESTRUCTION)) {
+        flags_srf.set(Srf::AUTO_DESTRUCTION);
+    }
+
+    rfu.reset_flags(flags_srf);
     object_tried(o_ptr);
     if (ident && !o_ptr->is_aware()) {
         object_aware(this->player_ptr, o_ptr);
@@ -118,7 +124,7 @@ void ObjectUseEntity::execute()
     }
 
     set_bits(this->player_ptr->window_flags, PW_INVENTORY | PW_EQUIPMENT | PW_PLAYER | PW_FLOOR_ITEMS | PW_FOUND_ITEMS);
-    set_bits(this->player_ptr->update, inventory_flags);
+    rfu.set_flags(flags_srf);
     if (!use_charge) {
         return;
     }

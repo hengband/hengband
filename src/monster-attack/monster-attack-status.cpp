@@ -5,7 +5,6 @@
  */
 
 #include "monster-attack/monster-attack-status.h"
-#include "core/player-update-types.h"
 #include "mind/mind-mirror-master.h"
 #include "monster-attack/monster-attack-player.h"
 #include "monster-race/monster-race.h"
@@ -18,6 +17,7 @@
 #include "system/monster-entity.h"
 #include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
+#include "system/redrawing-flags-updater.h"
 #include "timed-effect/player-paralysis.h"
 #include "timed-effect/timed-effects.h"
 #include "view/display-messages.h"
@@ -177,6 +177,7 @@ void process_monster_attack_time(PlayerType *player_ptr, MonsterAttackPlayer *mo
         return;
     }
 
+    auto &rfu = RedrawingFlagsUpdater::get_instance();
     switch (randint1(10)) {
     case 1:
     case 2:
@@ -195,7 +196,7 @@ void process_monster_attack_time(PlayerType *player_ptr, MonsterAttackPlayer *mo
     case 8:
     case 9:
         describe_disability(player_ptr, monap_ptr);
-        player_ptr->update |= (PU_BONUS);
+        rfu.set_flag(StatusRedrawingFlag::BONUS);
         break;
     case 10:
         msg_print(_("あなたは以前ほど力強くなくなってしまった...。", "You're not as powerful as you used to be..."));
@@ -206,7 +207,7 @@ void process_monster_attack_time(PlayerType *player_ptr, MonsterAttackPlayer *mo
             }
         }
 
-        player_ptr->update |= PU_BONUS;
+        rfu.set_flag(StatusRedrawingFlag::BONUS);
         break;
     }
 }

@@ -12,7 +12,6 @@
 #include "target/target-checker.h"
 #include "core/disturbance.h"
 #include "core/player-redraw-types.h"
-#include "core/player-update-types.h"
 #include "core/window-redrawer.h"
 #include "game-option/disturbance-options.h"
 #include "game-option/map-screen-options.h"
@@ -21,6 +20,7 @@
 #include "system/floor-type-definition.h"
 #include "system/monster-entity.h"
 #include "system/player-type-definition.h"
+#include "system/redrawing-flags-updater.h"
 #include "target/target-preparation.h"
 #include "target/target-types.h"
 #include "window/main-window-util.h"
@@ -126,7 +126,8 @@ void verify_panel(PlayerType *player_ptr)
     }
 
     panel_bounds_center();
-    player_ptr->update |= PU_MONSTER_STATUSES;
+    auto &rfu = RedrawingFlagsUpdater::get_instance();
+    rfu.set_flag(StatusRedrawingFlag::MONSTER_STATUSES);
     player_ptr->redraw |= PR_MAP;
     player_ptr->window_flags |= PW_OVERHEAD | PW_DUNGEON;
 }

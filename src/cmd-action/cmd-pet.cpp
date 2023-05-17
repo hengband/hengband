@@ -4,7 +4,6 @@
 #include "cmd-io/cmd-dump.h"
 #include "core/asking-player.h"
 #include "core/player-redraw-types.h"
-#include "core/player-update-types.h"
 #include "core/stuff-handler.h"
 #include "core/window-redrawer.h"
 #include "effect/spells-effect-util.h"
@@ -54,6 +53,7 @@
 #include "system/monster-entity.h"
 #include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
+#include "system/redrawing-flags-updater.h"
 #include "system/terrain-type-definition.h"
 #include "target/target-checker.h"
 #include "target/target-getter.h"
@@ -102,6 +102,7 @@ void do_cmd_pet_dismiss(PlayerType *player_ptr)
     ang_sort(player_ptr, who.data(), &dummy_why, who.size(), ang_sort_comp_pet_dismiss, ang_sort_swap_hook);
 
     /* Process the monsters (backwards) */
+    auto &rfu = RedrawingFlagsUpdater::get_instance();
     for (auto i = 0U; i < who.size(); i++) {
         auto pet_ctr = who[i];
         m_ptr = &player_ptr->current_floor_ptr->m_list[pet_ctr];
@@ -160,14 +161,13 @@ void do_cmd_pet_dismiss(PlayerType *player_ptr)
                 msg_format(_("%sから降りた。", "You dismount from %s. "), friend_name.data());
 
                 player_ptr->riding = 0;
-
-                player_ptr->update |= (PU_MONSTER_STATUSES);
+                rfu.set_flag(StatusRedrawingFlag::MONSTER_STATUSES);
                 player_ptr->redraw |= (PR_EXTRA | PR_UHEALTH);
             }
 
             /* HACK : Add the line to message buffer */
             msg_format(_("%s を放した。", "Dismissed %s."), friend_name.data());
-            player_ptr->update |= (PU_BONUS);
+            rfu.set_flag(StatusRedrawingFlag::BONUS);
             player_ptr->window_flags |= (PW_MESSAGE);
 
             delete_monster_idx(player_ptr, pet_ctr);
@@ -299,9 +299,13 @@ bool do_cmd_riding(PlayerType *player_ptr, bool force)
 
     PlayerEnergy(player_ptr).set_player_turn_energy(100);
 
-    /* Mega-Hack -- Forget the view and lite */
-    player_ptr->update |= (PU_UN_VIEW | PU_UN_LITE);
-    player_ptr->update |= (PU_BONUS);
+    auto &rfu = RedrawingFlagsUpdater::get_instance();
+    const auto flags_srf = {
+        StatusRedrawingFlag::UN_VIEW,
+        StatusRedrawingFlag::UN_LITE,
+        StatusRedrawingFlag::BONUS,
+    };
+    rfu.set_flags(flags_srf);
     player_ptr->redraw |= (PR_MAP | PR_EXTRA);
     player_ptr->redraw |= (PR_UHEALTH);
 
@@ -811,7 +815,8 @@ void do_cmd_pet(PlayerType *player_ptr)
         } else {
             player_ptr->pet_extra_flags |= (PF_TWO_HANDS);
         }
-        player_ptr->update |= (PU_BONUS);
+
+        RedrawingFlagsUpdater::get_instance().set_flag(StatusRedrawingFlag::BONUS);
         handle_stuff(player_ptr);
         break;
     }

@@ -18,7 +18,6 @@
 #include "core/asking-player.h"
 #include "core/game-closer.h"
 #include "core/player-processor.h"
-#include "core/player-update-types.h"
 #include "core/score-util.h"
 #include "core/scores.h"
 #include "core/speed-table.h"
@@ -87,6 +86,7 @@
 #include "system/monster-entity.h"
 #include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
+#include "system/redrawing-flags-updater.h"
 #include "target/target-checker.h"
 #include "term/gameterm.h"
 #include "term/screen-processor.h"
@@ -123,7 +123,13 @@ static void send_waiting_record(PlayerType *player_ptr)
         quit(0);
     }
 
-    player_ptr->update |= (PU_BONUS | PU_HP | PU_MP | PU_SPELLS);
+    const auto flags = {
+        StatusRedrawingFlag::BONUS,
+        StatusRedrawingFlag::HP,
+        StatusRedrawingFlag::MP,
+        StatusRedrawingFlag::SPELLS,
+    };
+    RedrawingFlagsUpdater::get_instance().set_flags(flags);
     update_creature(player_ptr);
     player_ptr->is_dead = true;
     w_ptr->start_time = (uint32_t)time(nullptr);

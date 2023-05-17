@@ -1,7 +1,6 @@
 ﻿#include "hpmp/hp-mp-regenerator.h"
 #include "cmd-item/cmd-magiceat.h"
 #include "core/player-redraw-types.h"
-#include "core/player-update-types.h"
 #include "core/window-redrawer.h"
 #include "inventory/inventory-slot-types.h"
 #include "monster-race/monster-race.h"
@@ -18,6 +17,7 @@
 #include "system/monster-entity.h"
 #include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
+#include "system/redrawing-flags-updater.h"
 
 /*!<広域マップ移動時の自然回復処理カウンタ（広域マップ1マス毎に20回処理を基本とする）*/
 int wild_regen = 20;
@@ -246,10 +246,14 @@ void regenerate_captured_monsters(PlayerType *player_ptr)
     }
 
     if (heal) {
-        player_ptr->update |= (PU_COMBINATION);
-        // FIXME 広域マップ移動で1歩毎に何度も再描画されて重くなる。現在はボール中モンスターのHP回復でボールの表示は変わらないためコメントアウトする。
-        // player_ptr->window_flags |= (PW_INVENTORY);
-        // player_ptr->window_flags |= (PW_EQUIPMENT);
+        RedrawingFlagsUpdater::get_instance().set_flag(StatusRedrawingFlag::COMBINATION);
+
+        /*!
+         * @todo FIXME 広域マップ移動で1歩毎に何度も再描画されて重くなる.
+         * 現在はボール中モンスターのHP回復でボールの表示は変わらないためコメントアウトする.
+         */
+        // rfu.set_flag(SubWindowRedrawingFlag::INVENTORY);
+        // rfu.set_flag(SubWindowRedrawingFlag::EQUIPMENT);
         wild_regen = 20;
     }
 }

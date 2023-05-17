@@ -1,6 +1,5 @@
 ﻿#include "save/floor-writer.h"
 #include "core/object-compressor.h"
-#include "core/player-update-types.h"
 #include "floor/floor-events.h"
 #include "floor/floor-save-util.h"
 #include "floor/floor-save.h"
@@ -16,6 +15,7 @@
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
 #include "system/item-entity.h"
+#include "system/redrawing-flags-updater.h"
 #include "term/z-form.h"
 #include "util/angband-files.h"
 #include "util/sort.h"
@@ -156,8 +156,15 @@ bool wr_dungeon(PlayerType *player_ptr)
     forget_lite(player_ptr->current_floor_ptr);
     forget_view(player_ptr->current_floor_ptr);
     clear_mon_lite(player_ptr->current_floor_ptr);
-    player_ptr->update |= PU_VIEW | PU_LITE | PU_MONSTER_LITE;
-    player_ptr->update |= PU_MONSTER_STATUSES | PU_DISTANCE | PU_FLOW;
+    const auto flags = {
+        StatusRedrawingFlag::VIEW,
+        StatusRedrawingFlag::LITE,
+        StatusRedrawingFlag::MONSTER_LITE,
+        StatusRedrawingFlag::MONSTER_STATUSES,
+        StatusRedrawingFlag::DISTANCE,
+        StatusRedrawingFlag::FLOW,
+    };
+    RedrawingFlagsUpdater::get_instance().set_flags(flags);
     wr_s16b(max_floor_id);
     wr_byte((byte)player_ptr->dungeon_idx);
     if (!player_ptr->floor_id) {

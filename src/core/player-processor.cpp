@@ -3,7 +3,6 @@
 #include "action/travel-execution.h"
 #include "core/disturbance.h"
 #include "core/player-redraw-types.h"
-#include "core/player-update-types.h"
 #include "core/special-internal-keys.h"
 #include "core/speed-table.h"
 #include "core/stuff-handler.h"
@@ -55,6 +54,7 @@
 #include "system/grid-type-definition.h"
 #include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
+#include "system/redrawing-flags-updater.h"
 #include "term/screen-processor.h"
 #include "timed-effect/player-blindness.h"
 #include "timed-effect/player-confusion.h"
@@ -223,13 +223,14 @@ void process_player(PlayerType *player_ptr)
         set_lightspeed(player_ptr, player_ptr->lightspeed - 1, true);
     }
 
+    auto &rfu = RedrawingFlagsUpdater::get_instance();
     if (PlayerClass(player_ptr).equals(PlayerClassType::FORCETRAINER) && get_current_ki(player_ptr)) {
         if (get_current_ki(player_ptr) < 40) {
             set_current_ki(player_ptr, true, 0);
         } else {
             set_current_ki(player_ptr, false, -40);
         }
-        player_ptr->update |= (PU_BONUS);
+        rfu.set_flag(StatusRedrawingFlag::BONUS);
     }
 
     if (player_ptr->action == ACTION_LEARN) {
@@ -397,7 +398,7 @@ void process_player(PlayerType *player_ptr)
 
             if (player_ptr->timewalk && (player_ptr->energy_need > -1000)) {
                 player_ptr->redraw |= (PR_MAP);
-                player_ptr->update |= (PU_MONSTER_STATUSES);
+                rfu.set_flag(StatusRedrawingFlag::MONSTER_STATUSES);
                 player_ptr->window_flags |= (PW_OVERHEAD | PW_DUNGEON);
 
                 msg_print(_("「時は動きだす…」", "You feel time flowing around you once more."));

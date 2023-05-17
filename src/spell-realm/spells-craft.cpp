@@ -2,7 +2,6 @@
 #include "avatar/avatar.h"
 #include "core/disturbance.h"
 #include "core/player-redraw-types.h"
-#include "core/player-update-types.h"
 #include "core/stuff-handler.h"
 #include "flavor/flavor-describer.h"
 #include "flavor/object-flavor-types.h"
@@ -21,6 +20,7 @@
 #include "sv-definition/sv-protector-types.h"
 #include "system/item-entity.h"
 #include "system/player-type-definition.h"
+#include "system/redrawing-flags-updater.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
 #include "view/display-messages.h"
@@ -88,8 +88,10 @@ bool set_ele_attack(PlayerType *player_ptr, uint32_t attack_type, TIME_EFFECT v)
     if (disturb_state) {
         disturb(player_ptr, false, false);
     }
+
+    auto &rfu = RedrawingFlagsUpdater::get_instance();
     player_ptr->redraw |= (PR_TIMED_EFFECT);
-    player_ptr->update |= (PU_BONUS);
+    rfu.set_flag(StatusRedrawingFlag::BONUS);
     handle_stuff(player_ptr);
 
     return true;
@@ -149,8 +151,10 @@ bool set_ele_immune(PlayerType *player_ptr, uint32_t immune_type, TIME_EFFECT v)
     if (disturb_state) {
         disturb(player_ptr, false, false);
     }
+
+    auto &rfu = RedrawingFlagsUpdater::get_instance();
     player_ptr->redraw |= (PR_TIMED_EFFECT);
-    player_ptr->update |= (PU_BONUS);
+    rfu.set_flag(StatusRedrawingFlag::BONUS);
     handle_stuff(player_ptr);
 
     return true;

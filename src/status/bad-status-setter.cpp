@@ -2,7 +2,6 @@
 #include "avatar/avatar.h"
 #include "core/disturbance.h"
 #include "core/player-redraw-types.h"
-#include "core/player-update-types.h"
 #include "core/stuff-handler.h"
 #include "core/window-redrawer.h"
 #include "game-option/disturbance-options.h"
@@ -19,6 +18,7 @@
 #include "status/base-status.h"
 #include "status/buff-setter.h"
 #include "system/player-type-definition.h"
+#include "system/redrawing-flags-updater.h"
 #include "timed-effect/player-blindness.h"
 #include "timed-effect/player-confusion.h"
 #include "timed-effect/player-cut.h"
@@ -92,7 +92,16 @@ bool BadStatusSetter::set_blindness(const TIME_EFFECT tmp_v)
         disturb(this->player_ptr, false, false);
     }
 
-    this->player_ptr->update |= PU_UN_VIEW | PU_UN_LITE | PU_VIEW | PU_LITE | PU_MONSTER_STATUSES | PU_MONSTER_LITE;
+    const auto flags_srf = {
+        StatusRedrawingFlag::UN_VIEW,
+        StatusRedrawingFlag::UN_LITE,
+        StatusRedrawingFlag::VIEW,
+        StatusRedrawingFlag::LITE,
+        StatusRedrawingFlag::MONSTER_STATUSES,
+        StatusRedrawingFlag::MONSTER_LITE,
+    };
+    auto &rfu = RedrawingFlagsUpdater::get_instance();
+    rfu.set_flags(flags_srf);
     this->player_ptr->redraw |= PR_MAP;
     this->player_ptr->window_flags |= PW_OVERHEAD | PW_DUNGEON;
     handle_stuff(this->player_ptr);
@@ -121,7 +130,7 @@ bool BadStatusSetter::set_confusion(const TIME_EFFECT tmp_v)
     if (v > 0) {
         if (!is_confused) {
             msg_print(_("あなたは混乱した！", "You are confused!"));
-
+            auto &rfu = RedrawingFlagsUpdater::get_instance();
             if (this->player_ptr->action == ACTION_LEARN) {
                 msg_print(_("学習が続けられない！", "You cannot continue learning!"));
                 auto bluemage_data = PlayerClass(player_ptr).get_specific_data<bluemage_data_type>();
@@ -133,7 +142,7 @@ bool BadStatusSetter::set_confusion(const TIME_EFFECT tmp_v)
             if (this->player_ptr->action == ACTION_MONK_STANCE) {
                 msg_print(_("構えがとけた。", "You lose your stance."));
                 PlayerClass(player_ptr).set_monk_stance(MonkStanceType::NONE);
-                this->player_ptr->update |= PU_BONUS;
+                rfu.set_flag(StatusRedrawingFlag::BONUS);
                 this->player_ptr->redraw |= PR_ACTION;
                 this->player_ptr->action = ACTION_NONE;
             } else if (this->player_ptr->action == ACTION_SAMURAI_STANCE) {
@@ -376,8 +385,9 @@ bool BadStatusSetter::hallucination(const TIME_EFFECT tmp_v)
         disturb(this->player_ptr, false, true);
     }
 
+    auto &rfu = RedrawingFlagsUpdater::get_instance();
     this->player_ptr->redraw |= PR_MAP | PR_HEALTH | PR_UHEALTH;
-    this->player_ptr->update |= PU_MONSTER_STATUSES;
+    rfu.set_flag(StatusRedrawingFlag::MONSTER_STATUSES);
     this->player_ptr->window_flags |= PW_OVERHEAD | PW_DUNGEON;
     handle_stuff(this->player_ptr);
     return true;
@@ -429,7 +439,7 @@ bool BadStatusSetter::set_deceleration(const TIME_EFFECT tmp_v, bool do_dec)
         disturb(this->player_ptr, false, false);
     }
 
-    this->player_ptr->update |= PU_BONUS;
+    RedrawingFlagsUpdater::get_instance().set_flag(StatusRedrawingFlag::BONUS);
     handle_stuff(this->player_ptr);
     return true;
 }
@@ -467,7 +477,8 @@ bool BadStatusSetter::set_stun(const TIME_EFFECT tmp_v)
         disturb(this->player_ptr, false, false);
     }
 
-    this->player_ptr->update |= PU_BONUS;
+    auto &rfu = RedrawingFlagsUpdater::get_instance();
+    rfu.set_flag(StatusRedrawingFlag::BONUS);
     this->player_ptr->redraw |= PR_STUN;
     handle_stuff(this->player_ptr);
     return true;
@@ -506,7 +517,8 @@ bool BadStatusSetter::set_cut(const TIME_EFFECT tmp_v)
         disturb(this->player_ptr, false, false);
     }
 
-    this->player_ptr->update |= PU_BONUS;
+    auto &rfu = RedrawingFlagsUpdater::get_instance();
+    rfu.set_flag(StatusRedrawingFlag::BONUS);
     this->player_ptr->redraw |= PR_CUT;
     handle_stuff(this->player_ptr);
     return true;

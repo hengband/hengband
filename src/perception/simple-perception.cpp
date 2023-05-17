@@ -8,7 +8,6 @@
 #include "autopick/autopick.h"
 #include "avatar/avatar.h"
 #include "core/disturbance.h"
-#include "core/player-update-types.h"
 #include "core/window-redrawer.h"
 #include "flavor/flag-inscriptions-table.h"
 #include "flavor/flavor-describer.h"
@@ -24,6 +23,7 @@
 #include "player/player-status-flags.h"
 #include "system/item-entity.h"
 #include "system/player-type-definition.h"
+#include "system/redrawing-flags-updater.h"
 #include "timed-effect/player-confusion.h"
 #include "timed-effect/timed-effects.h"
 #include "view/display-messages.h"
@@ -122,7 +122,12 @@ static void sense_inventory_aux(PlayerType *player_ptr, INVENTORY_IDX slot, bool
     o_ptr->feeling = feel;
 
     autopick_alter_item(player_ptr, slot, destroy_feeling);
-    player_ptr->update |= (PU_COMBINATION | PU_REORDER);
+    auto &rfu = RedrawingFlagsUpdater::get_instance();
+    const auto flags_srf = {
+        StatusRedrawingFlag::COMBINATION,
+        StatusRedrawingFlag::REORDER,
+    };
+    rfu.set_flags(flags_srf);
     player_ptr->window_flags |= (PW_INVENTORY | PW_EQUIPMENT);
 }
 

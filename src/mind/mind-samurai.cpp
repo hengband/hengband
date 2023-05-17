@@ -9,7 +9,6 @@
 #include "avatar/avatar.h"
 #include "cmd-action/cmd-attack.h"
 #include "core/player-redraw-types.h"
-#include "core/player-update-types.h"
 #include "inventory/inventory-slot-types.h"
 #include "io/input-key-acceptor.h"
 #include "mind/stances-table.h"
@@ -35,6 +34,7 @@
 #include "system/monster-entity.h"
 #include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
+#include "system/redrawing-flags-updater.h"
 #include "term/screen-processor.h"
 #include "term/z-form.h"
 #include "timed-effect/player-cut.h"
@@ -436,10 +436,15 @@ bool choose_samurai_stance(PlayerType *player_ptr)
     }
 
     set_action(player_ptr, ACTION_SAMURAI_STANCE);
+    auto &rfu = RedrawingFlagsUpdater::get_instance();
     if (PlayerClass(player_ptr).samurai_stance_is(new_stance)) {
         msg_print(_("構え直した。", "You reassume a stance."));
     } else {
-        player_ptr->update |= (PU_BONUS | PU_MONSTER_STATUSES);
+        const auto flags_srf = {
+            StatusRedrawingFlag::BONUS,
+            StatusRedrawingFlag::MONSTER_STATUSES,
+        };
+        rfu.set_flags(flags_srf);
         msg_format(_("%sの型で構えた。", "You assume the %s stance."), samurai_stances[enum2i(new_stance) - 1].desc);
         PlayerClass(player_ptr).set_samurai_stance(new_stance);
     }

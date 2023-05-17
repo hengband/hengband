@@ -8,7 +8,6 @@
 #include "action/travel-execution.h"
 #include "cmd-io/cmd-dump.h"
 #include "core/player-redraw-types.h"
-#include "core/player-update-types.h"
 #include "core/window-redrawer.h"
 #include "dungeon/dungeon-flag-types.h"
 #include "dungeon/quest.h"
@@ -52,6 +51,7 @@
 #include "system/monster-entity.h"
 #include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
+#include "system/redrawing-flags-updater.h"
 #include "system/terrain-type-definition.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
@@ -121,7 +121,8 @@ void wiz_lite(PlayerType *player_ptr, bool ninja)
         }
     }
 
-    player_ptr->update |= (PU_MONSTER_STATUSES);
+    auto &rfu = RedrawingFlagsUpdater::get_instance();
+    rfu.set_flag(StatusRedrawingFlag::MONSTER_STATUSES);
     player_ptr->redraw |= (PR_MAP);
     player_ptr->window_flags |= (PW_OVERHEAD | PW_DUNGEON | PW_FOUND_ITEMS);
 
@@ -177,9 +178,16 @@ void wiz_dark(PlayerType *player_ptr)
     /* Forget travel route when we have forgotten map */
     forget_travel_flow(player_ptr->current_floor_ptr);
 
-    player_ptr->update |= (PU_UN_VIEW | PU_UN_LITE);
-    player_ptr->update |= (PU_VIEW | PU_LITE | PU_MONSTER_LITE);
-    player_ptr->update |= (PU_MONSTER_STATUSES);
+    auto &rfu = RedrawingFlagsUpdater::get_instance();
+    const auto flags_srf = {
+        StatusRedrawingFlag::UN_VIEW,
+        StatusRedrawingFlag::UN_LITE,
+        StatusRedrawingFlag::VIEW,
+        StatusRedrawingFlag::LITE,
+        StatusRedrawingFlag::MONSTER_LITE,
+        StatusRedrawingFlag::MONSTER_STATUSES,
+    };
+    rfu.set_flags(flags_srf);
     player_ptr->redraw |= (PR_MAP);
     player_ptr->window_flags |= (PW_OVERHEAD | PW_DUNGEON | PW_FOUND_ITEMS);
 }
@@ -464,9 +472,17 @@ bool destroy_area(PlayerType *player_ptr, POSITION y1, POSITION x1, POSITION r, 
     }
 
     forget_flow(floor_ptr);
-
-    /* Mega-Hack -- Forget the view and lite */
-    player_ptr->update |= (PU_UN_VIEW | PU_UN_LITE | PU_VIEW | PU_LITE | PU_FLOW | PU_MONSTER_LITE | PU_MONSTER_STATUSES);
+    auto &rfu = RedrawingFlagsUpdater::get_instance();
+    const auto flags_srf = {
+        StatusRedrawingFlag::UN_VIEW,
+        StatusRedrawingFlag::UN_LITE,
+        StatusRedrawingFlag::VIEW,
+        StatusRedrawingFlag::LITE,
+        StatusRedrawingFlag::FLOW,
+        StatusRedrawingFlag::MONSTER_LITE,
+        StatusRedrawingFlag::MONSTER_STATUSES,
+    };
+    rfu.set_flags(flags_srf);
     player_ptr->redraw |= (PR_MAP);
     player_ptr->window_flags |= (PW_OVERHEAD | PW_DUNGEON);
 

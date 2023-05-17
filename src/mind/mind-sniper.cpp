@@ -10,7 +10,6 @@
 #include "cmd-action/cmd-shoot.h"
 #include "core/asking-player.h"
 #include "core/player-redraw-types.h"
-#include "core/player-update-types.h"
 #include "core/stuff-handler.h"
 #include "core/window-redrawer.h"
 #include "floor/geometry.h"
@@ -33,6 +32,7 @@
 #include "system/monster-entity.h"
 #include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
+#include "system/redrawing-flags-updater.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
 #include "term/z-form.h"
@@ -131,7 +131,12 @@ static snipe_power const snipe_powers[MAX_SNIPE_POWERS] = {
 static void reset_concentration_flag(PlayerType *player_ptr, sniper_data_type *sniper_data)
 {
     sniper_data->reset_concent = false;
-    player_ptr->update |= (PU_BONUS | PU_MONSTER_STATUSES);
+    auto &rfu = RedrawingFlagsUpdater::get_instance();
+    const auto flags = {
+        StatusRedrawingFlag::BONUS,
+        StatusRedrawingFlag::MONSTER_STATUSES,
+    };
+    rfu.set_flags(flags);
     player_ptr->redraw |= (PR_TIMED_EFFECT);
 }
 

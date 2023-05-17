@@ -1,6 +1,5 @@
 ﻿#include "spell-kind/spells-equipment.h"
 #include "avatar/avatar.h"
-#include "core/player-update-types.h"
 #include "core/window-redrawer.h"
 #include "flavor/flavor-describer.h"
 #include "flavor/object-flavor-types.h"
@@ -10,6 +9,7 @@
 #include "racial/racial-android.h"
 #include "system/item-entity.h"
 #include "system/player-type-definition.h"
+#include "system/redrawing-flags-updater.h"
 #include "view/display-messages.h"
 
 /*!
@@ -119,7 +119,8 @@ bool apply_disenchant(PlayerType *player_ptr, BIT_FLAGS mode)
 #endif
     chg_virtue(player_ptr, Virtue::HARMONY, 1);
     chg_virtue(player_ptr, Virtue::ENCHANT, -2);
-    player_ptr->update |= (PU_BONUS);
+    auto &rfu = RedrawingFlagsUpdater::get_instance();
+    rfu.set_flag(StatusRedrawingFlag::BONUS);
     player_ptr->window_flags |= (PW_EQUIPMENT | PW_PLAYER);
 
     calc_android_exp(player_ptr);

@@ -1,5 +1,4 @@
 ﻿#include "specific-object/torch.h"
-#include "core/player-update-types.h"
 #include "dungeon/dungeon-flag-types.h"
 #include "floor/cave.h"
 #include "grid/grid.h"
@@ -16,6 +15,7 @@
 #include "system/grid-type-definition.h"
 #include "system/item-entity.h"
 #include "system/player-type-definition.h"
+#include "system/redrawing-flags-updater.h"
 #include "util/bit-flags-calculator.h"
 #include "util/point-2d.h"
 #include <vector>
@@ -163,9 +163,13 @@ void update_lite_radius(PlayerType *player_ptr)
         return;
     }
 
-    player_ptr->update |= PU_LITE | PU_MONSTER_LITE | PU_MONSTER_STATUSES;
+    const auto flags = {
+        StatusRedrawingFlag::LITE,
+        StatusRedrawingFlag::MONSTER_LITE,
+        StatusRedrawingFlag::MONSTER_STATUSES,
+    };
+    RedrawingFlagsUpdater::get_instance().set_flags(flags);
     player_ptr->old_lite = player_ptr->cur_lite;
-
     if (player_ptr->cur_lite > 0) {
         set_superstealth(player_ptr, false);
     }
@@ -337,5 +341,5 @@ void update_lite(PlayerType *player_ptr)
         cave_redraw_later(floor_ptr, y, x);
     }
 
-    player_ptr->update |= PU_DELAY_VISIBILITY;
+    RedrawingFlagsUpdater::get_instance().set_flag(StatusRedrawingFlag::DELAY_VISIBILITY);
 }

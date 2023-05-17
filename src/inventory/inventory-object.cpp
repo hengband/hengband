@@ -1,5 +1,4 @@
 ﻿#include "inventory/inventory-object.h"
-#include "core/player-update-types.h"
 #include "core/window-redrawer.h"
 #include "flavor/flavor-describer.h"
 #include "floor/floor-object.h"
@@ -13,6 +12,7 @@
 #include "spell-realm/spells-craft.h"
 #include "system/item-entity.h"
 #include "system/player-type-definition.h"
+#include "system/redrawing-flags-updater.h"
 #include "util/object-sort.h"
 #include "view/display-messages.h"
 #include "view/object-describer.h"
@@ -54,9 +54,13 @@ void inven_item_increase(PlayerType *player_ptr, INVENTORY_IDX item, ITEM_NUMBER
     }
 
     o_ptr->number += num;
-    player_ptr->update |= (PU_BONUS);
-    player_ptr->update |= (PU_MP);
-    player_ptr->update |= (PU_COMBINATION);
+    auto &rfu = RedrawingFlagsUpdater::get_instance();
+    const auto flags_srf = {
+        StatusRedrawingFlag::BONUS,
+        StatusRedrawingFlag::MP,
+        StatusRedrawingFlag::COMBINATION,
+    };
+    rfu.set_flags(flags_srf);
     player_ptr->window_flags |= (PW_INVENTORY | PW_EQUIPMENT);
 
     if (o_ptr->number || !player_ptr->ele_attack) {
@@ -91,10 +95,13 @@ void inven_item_optimize(PlayerType *player_ptr, INVENTORY_IDX item)
     if (item >= INVEN_MAIN_HAND) {
         player_ptr->equip_cnt--;
         (&player_ptr->inventory_list[item])->wipe();
-        player_ptr->update |= PU_BONUS;
-        player_ptr->update |= PU_TORCH;
-        player_ptr->update |= PU_MP;
-
+        auto &rfu = RedrawingFlagsUpdater::get_instance();
+        const auto flags_srf = {
+            StatusRedrawingFlag::BONUS,
+            StatusRedrawingFlag::TORCH,
+            StatusRedrawingFlag::MP,
+        };
+        rfu.set_flags(flags_srf);
         player_ptr->window_flags |= PW_EQUIPMENT;
         player_ptr->window_flags |= PW_SPELL;
         return;
@@ -314,8 +321,8 @@ int16_t store_item_to_inventory(PlayerType *player_ptr, ItemEntity *o_ptr)
         n = j;
         if (object_similar(j_ptr, o_ptr)) {
             object_absorb(j_ptr, o_ptr);
-
-            player_ptr->update |= (PU_BONUS);
+            auto &rfu = RedrawingFlagsUpdater::get_instance();
+            rfu.set_flag(StatusRedrawingFlag::BONUS);
             player_ptr->window_flags |= (PW_INVENTORY | PW_PLAYER);
             return j;
         }
@@ -356,7 +363,13 @@ int16_t store_item_to_inventory(PlayerType *player_ptr, ItemEntity *o_ptr)
     j_ptr->marked.clear().set(OmType::TOUCHED);
 
     player_ptr->inven_cnt++;
-    player_ptr->update |= (PU_BONUS | PU_COMBINATION | PU_REORDER);
+    auto &rfu = RedrawingFlagsUpdater::get_instance();
+    const auto flags_srf = {
+        StatusRedrawingFlag::BONUS,
+        StatusRedrawingFlag::COMBINATION,
+        StatusRedrawingFlag::REORDER,
+    };
+    rfu.set_flags(flags_srf);
     player_ptr->window_flags |= (PW_INVENTORY | PW_PLAYER);
 
     return i;

@@ -5,7 +5,6 @@
 #include "birth/birth-stat.h"
 #include "core/disturbance.h"
 #include "core/player-redraw-types.h"
-#include "core/player-update-types.h"
 #include "core/stuff-handler.h"
 #include "game-option/disturbance-options.h"
 #include "grid/grid.h"
@@ -24,6 +23,7 @@
 #include "status/bad-status-setter.h"
 #include "status/base-status.h"
 #include "system/player-type-definition.h"
+#include "system/redrawing-flags-updater.h"
 #include "timed-effect/player-cut.h"
 #include "timed-effect/timed-effects.h"
 #include "util/enum-converter.h"
@@ -97,8 +97,9 @@ void change_race(PlayerType *player_ptr, PlayerRaceType new_race, concptr effect
 
     roll_hitdice(player_ptr, SPOP_NONE);
     check_experience(player_ptr);
+    auto &rfu = RedrawingFlagsUpdater::get_instance();
     player_ptr->redraw |= (PR_BASIC);
-    player_ptr->update |= (PU_BONUS);
+    rfu.set_flag(StatusRedrawingFlag::BONUS);
     handle_stuff(player_ptr);
 
     if (old_race != player_ptr->prace) {

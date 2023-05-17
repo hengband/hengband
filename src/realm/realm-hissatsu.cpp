@@ -6,7 +6,6 @@
 #include "combat/combat-options-type.h"
 #include "core/asking-player.h"
 #include "core/player-redraw-types.h"
-#include "core/player-update-types.h"
 #include "core/stuff-handler.h"
 #include "dungeon/dungeon-flag-types.h"
 #include "effect/attribute-types.h"
@@ -49,6 +48,7 @@
 #include "system/monster-entity.h"
 #include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
+#include "system/redrawing-flags-updater.h"
 #include "target/grid-selector.h"
 #include "target/projection-path-calculator.h"
 #include "target/target-getter.h"
@@ -427,7 +427,7 @@ std::optional<std::string> do_hissatsu_spell(PlayerType *player_ptr, SPELL_IDX s
                     lite_spot(player_ptr, ty, tx);
 
                     if (monraces_info[m_ptr->r_idx].brightness_flags.has_any_of(ld_mask)) {
-                        player_ptr->update |= (PU_MONSTER_LITE);
+                        RedrawingFlagsUpdater::get_instance().set_flag(StatusRedrawingFlag::MONSTER_LITE);
                     }
                 }
             }
@@ -487,7 +487,7 @@ std::optional<std::string> do_hissatsu_spell(PlayerType *player_ptr, SPELL_IDX s
 
             /* Destroy the feature */
             cave_alter_feat(player_ptr, y, x, TerrainCharacteristics::HURT_ROCK);
-            player_ptr->update |= (PU_FLOW);
+            RedrawingFlagsUpdater::get_instance().set_flag(StatusRedrawingFlag::FLOW);
         }
         break;
 

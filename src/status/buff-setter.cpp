@@ -2,7 +2,6 @@
 #include "avatar/avatar.h"
 #include "core/disturbance.h"
 #include "core/player-redraw-types.h"
-#include "core/player-update-types.h"
 #include "core/speed-table.h"
 #include "core/stuff-handler.h"
 #include "core/window-redrawer.h"
@@ -19,6 +18,7 @@
 #include "status/buff-setter.h"
 #include "status/element-resistance.h"
 #include "system/player-type-definition.h"
+#include "system/redrawing-flags-updater.h"
 #include "timed-effect/player-acceleration.h"
 #include "timed-effect/player-blindness.h"
 #include "timed-effect/player-confusion.h"
@@ -161,7 +161,7 @@ bool set_acceleration(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
     if (disturb_state) {
         disturb(player_ptr, false, false);
     }
-    player_ptr->update |= (PU_BONUS);
+    RedrawingFlagsUpdater::get_instance().set_flag(StatusRedrawingFlag::BONUS);
     handle_stuff(player_ptr);
     return true;
 }
@@ -213,7 +213,7 @@ bool set_shield(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
     if (disturb_state) {
         disturb(player_ptr, false, false);
     }
-    player_ptr->update |= (PU_BONUS);
+    RedrawingFlagsUpdater::get_instance().set_flag(StatusRedrawingFlag::BONUS);
     handle_stuff(player_ptr);
     return true;
 }
@@ -260,7 +260,8 @@ bool set_magicdef(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
     if (disturb_state) {
         disturb(player_ptr, false, false);
     }
-    player_ptr->update |= (PU_BONUS);
+
+    RedrawingFlagsUpdater::get_instance().set_flag(StatusRedrawingFlag::BONUS);
     handle_stuff(player_ptr);
     return true;
 }
@@ -307,7 +308,8 @@ bool set_blessed(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
     if (disturb_state) {
         disturb(player_ptr, false, false);
     }
-    player_ptr->update |= (PU_BONUS);
+
+    RedrawingFlagsUpdater::get_instance().set_flag(StatusRedrawingFlag::BONUS);
     handle_stuff(player_ptr);
     return true;
 }
@@ -354,8 +356,12 @@ bool set_hero(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
     if (disturb_state) {
         disturb(player_ptr, false, false);
     }
-    player_ptr->update |= (PU_BONUS);
-    player_ptr->update |= (PU_HP);
+
+    const auto flags = {
+        StatusRedrawingFlag::BONUS,
+        StatusRedrawingFlag::HP,
+    };
+    RedrawingFlagsUpdater::get_instance().set_flags(flags);
     handle_stuff(player_ptr);
     return true;
 }
@@ -410,9 +416,13 @@ bool set_mimic(PlayerType *player_ptr, TIME_EFFECT v, MimicKindType mimic_race_i
         disturb(player_ptr, false, true);
     }
 
+    auto &rfu = RedrawingFlagsUpdater::get_instance();
     player_ptr->redraw |= (PR_BASIC | PR_TIMED_EFFECT);
-    player_ptr->update |= (PU_BONUS | PU_HP);
-
+    const auto flags = {
+        StatusRedrawingFlag::BONUS,
+        StatusRedrawingFlag::HP,
+    };
+    rfu.set_flags(flags);
     handle_stuff(player_ptr);
     return true;
 }
@@ -464,8 +474,12 @@ bool set_shero(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
     if (disturb_state) {
         disturb(player_ptr, false, false);
     }
-    player_ptr->update |= (PU_BONUS);
-    player_ptr->update |= (PU_HP);
+
+    const auto flags = {
+        StatusRedrawingFlag::BONUS,
+        StatusRedrawingFlag::HP,
+    };
+    RedrawingFlagsUpdater::get_instance().set_flags(flags);
     handle_stuff(player_ptr);
     return true;
 }
@@ -486,6 +500,7 @@ bool set_wraith_form(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
         return false;
     }
 
+    auto &rfu = RedrawingFlagsUpdater::get_instance();
     if (v) {
         if (player_ptr->wraith_form && !do_dec) {
             if (player_ptr->wraith_form > v) {
@@ -500,8 +515,7 @@ bool set_wraith_form(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
             chg_virtue(player_ptr, Virtue::VALOUR, -5);
 
             player_ptr->redraw |= (PR_MAP);
-            player_ptr->update |= (PU_MONSTER_STATUSES);
-
+            rfu.set_flag(StatusRedrawingFlag::MONSTER_STATUSES);
             player_ptr->window_flags |= (PW_OVERHEAD | PW_DUNGEON);
         }
     } else {
@@ -510,8 +524,7 @@ bool set_wraith_form(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
             notice = true;
 
             player_ptr->redraw |= (PR_MAP);
-            player_ptr->update |= (PU_MONSTER_STATUSES);
-
+            rfu.set_flag(StatusRedrawingFlag::MONSTER_STATUSES);
             player_ptr->window_flags |= (PW_OVERHEAD | PW_DUNGEON);
         }
     }
@@ -526,7 +539,7 @@ bool set_wraith_form(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
     if (disturb_state) {
         disturb(player_ptr, false, false);
     }
-    player_ptr->update |= (PU_BONUS);
+    rfu.set_flag(StatusRedrawingFlag::BONUS);
     handle_stuff(player_ptr);
     return true;
 }
@@ -569,6 +582,7 @@ bool set_tsuyoshi(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
         }
     }
 
+    auto &rfu = RedrawingFlagsUpdater::get_instance();
     player_ptr->tsuyoshi = v;
     player_ptr->redraw |= (PR_TIMED_EFFECT);
 
@@ -579,8 +593,12 @@ bool set_tsuyoshi(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
     if (disturb_state) {
         disturb(player_ptr, false, false);
     }
-    player_ptr->update |= (PU_BONUS);
-    player_ptr->update |= (PU_HP);
+
+    const auto flags = {
+        StatusRedrawingFlag::BONUS,
+        StatusRedrawingFlag::HP,
+    };
+    rfu.set_flags(flags);
     handle_stuff(player_ptr);
     return true;
 }

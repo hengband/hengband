@@ -4,7 +4,6 @@
  */
 #include "action/tunnel-execution.h"
 #include "avatar/avatar.h"
-#include "core/player-update-types.h"
 #include "floor/cave.h"
 #include "grid/grid.h"
 #include "io/input-key-requester.h"
@@ -15,6 +14,7 @@
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
 #include "system/player-type-definition.h"
+#include "system/redrawing-flags-updater.h"
 #include "system/terrain-type-definition.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
@@ -84,7 +84,7 @@ bool exe_tunnel(PlayerType *player_ptr, POSITION y, POSITION x)
             sound(SOUND_DIG_THROUGH);
             msg_format(_("%sをくずした。", "You have removed the %s."), name);
             cave_alter_feat(player_ptr, y, x, TerrainCharacteristics::TUNNEL);
-            player_ptr->update |= PU_FLOW;
+            RedrawingFlagsUpdater::get_instance().set_flag(StatusRedrawingFlag::FLOW);
         } else {
             msg_format(_("%sをくずしている。", "You dig into the %s."), name);
             more = true;
@@ -97,7 +97,7 @@ bool exe_tunnel(PlayerType *player_ptr, POSITION y, POSITION x)
                 msg_format(_("%sを切り払った。", "You have cleared away the %s."), name);
             } else {
                 msg_print(_("穴を掘り終えた。", "You have finished the tunnel."));
-                player_ptr->update |= (PU_FLOW);
+                RedrawingFlagsUpdater::get_instance().set_flag(StatusRedrawingFlag::FLOW);
             }
 
             if (f_ptr->flags.has(TerrainCharacteristics::GLASS)) {

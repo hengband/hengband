@@ -2,7 +2,6 @@
 #include "birth/birth-stat.h"
 #include "birth/birth-util.h"
 #include "birth/game-play-initializer.h"
-#include "core/player-update-types.h"
 #include "io/input-key-acceptor.h"
 #include "player-base/player-class.h"
 #include "player-info/class-info.h"
@@ -13,6 +12,7 @@
 #include "player/process-name.h"
 #include "player/race-info-table.h"
 #include "system/player-type-definition.h"
+#include "system/redrawing-flags-updater.h"
 #include "term/screen-processor.h"
 #include "util/enum-converter.h"
 
@@ -64,7 +64,11 @@ bool ask_quick_start(PlayerType *player_ptr)
     ap_ptr = &personality_info[player_ptr->ppersonality];
 
     get_extra(player_ptr, false);
-    player_ptr->update |= (PU_BONUS | PU_HP);
+    const auto flags = {
+        StatusRedrawingFlag::BONUS,
+        StatusRedrawingFlag::HP,
+    };
+    RedrawingFlagsUpdater::get_instance().set_flags(flags);
     update_creature(player_ptr);
     player_ptr->chp = player_ptr->mhp;
     player_ptr->csp = player_ptr->msp;

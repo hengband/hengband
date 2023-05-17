@@ -1,7 +1,6 @@
 ﻿#include "cmd-item/cmd-zapwand.h"
 #include "action/action-limited.h"
 #include "avatar/avatar.h"
-#include "core/player-update-types.h"
 #include "core/window-redrawer.h"
 #include "effect/attribute-types.h"
 #include "floor/floor-object.h"

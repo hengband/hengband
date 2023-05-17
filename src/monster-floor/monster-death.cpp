@@ -3,7 +3,6 @@
 #include "artifact/fixed-art-types.h"
 #include "cmd-building/cmd-building.h"
 #include "core/player-redraw-types.h"
-#include "core/player-update-types.h"
 #include "dungeon/quest-completion-checker.h"
 #include "effect/effect-characteristics.h"
 #include "effect/effect-processor.h"
@@ -45,6 +44,7 @@
 #include "system/monster-entity.h"
 #include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
+#include "system/redrawing-flags-updater.h"
 #include "system/system-variables.h"
 #include "timed-effect/player-hallucination.h"
 #include "timed-effect/timed-effects.h"
@@ -388,7 +388,7 @@ void monster_death(PlayerType *player_ptr, MONSTER_IDX m_idx, bool drop_item, At
     }
 
     if (md_ptr->r_ptr->brightness_flags.has_any_of(ld_mask)) {
-        player_ptr->update |= PU_MONSTER_LITE;
+        RedrawingFlagsUpdater::get_instance().set_flag(StatusRedrawingFlag::MONSTER_LITE);
     }
 
     write_pet_death(player_ptr, md_ptr);
@@ -430,7 +430,8 @@ void monster_death(PlayerType *player_ptr, MONSTER_IDX m_idx, bool drop_item, At
 concptr extract_note_dies(MonsterRaceId r_idx)
 {
     const auto &r_ref = monraces_info[r_idx];
-    const auto explode = std::any_of(std::begin(r_ref.blow), std::end(r_ref.blow), [](const auto &blow) { return blow.method == RaceBlowMethodType::EXPLODE; });
+    const auto explode = std::any_of(std::begin(r_ref.blow), std::end(r_ref.blow),
+        [](const auto &blow) { return blow.method == RaceBlowMethodType::EXPLODE; });
 
     if (monster_living(r_idx)) {
         if (explode) {

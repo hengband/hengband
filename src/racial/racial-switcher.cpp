@@ -17,7 +17,6 @@
 #include "cmd-item/cmd-magiceat.h"
 #include "cmd-item/cmd-zapwand.h"
 #include "core/player-redraw-types.h"
-#include "core/player-update-types.h"
 #include "core/stuff-handler.h"
 #include "core/window-redrawer.h"
 #include "effect/spells-effect-util.h"
@@ -79,6 +78,7 @@
 #include "status/buff-setter.h"
 #include "status/experience.h"
 #include "system/player-type-definition.h"
+#include "system/redrawing-flags-updater.h"
 #include "target/target-getter.h"
 #include "timed-effect/player-paralysis.h"
 #include "timed-effect/timed-effects.h"
@@ -155,7 +155,7 @@ bool switch_class_racial_execution(PlayerType *player_ptr, const int32_t command
                 return false;
             }
 
-            set_bits(player_ptr->update, PU_BONUS);
+            RedrawingFlagsUpdater::get_instance().set_flag(StatusRedrawingFlag::BONUS);
             return true;
         }
 
@@ -248,7 +248,7 @@ bool switch_class_racial_execution(PlayerType *player_ptr, const int32_t command
             return false;
         }
 
-        set_bits(player_ptr->update, PU_BONUS);
+        RedrawingFlagsUpdater::get_instance().set_flag(StatusRedrawingFlag::BONUS);
         return true;
     case PlayerClassType::BLUE_MAGE:
         set_action(player_ptr, player_ptr->action == ACTION_LEARN ? ACTION_NONE : ACTION_LEARN);

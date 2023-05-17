@@ -282,7 +282,6 @@ public:
 
     POSITION cur_lite{}; /* Radius of lite (if any) */
 
-    BIT_FLAGS update{}; /* Pending Updates */
     BIT_FLAGS redraw{}; /* Normal Redraws */
     BIT_FLAGS window_flags{}; /* Window Redraws */
     int16_t stat_use[A_MAX]{}; /* Current modified stats */

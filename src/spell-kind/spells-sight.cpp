@@ -1,6 +1,5 @@
 ﻿#include "spell-kind/spells-sight.h"
 #include "avatar/avatar.h"
-#include "core/player-update-types.h"
 #include "core/stuff-handler.h"
 #include "core/window-redrawer.h"
 #include "effect/attribute-types.h"
@@ -28,6 +27,7 @@
 #include "system/monster-entity.h"
 #include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
+#include "system/redrawing-flags-updater.h"
 #include "target/projection-path-calculator.h"
 #include "term/screen-processor.h"
 #include "view/display-messages.h"
@@ -251,8 +251,9 @@ void aggravate_monsters(PlayerType *player_ptr, MONSTER_IDX who)
     } else if (sleep) {
         msg_print(_("何かが突如興奮したような騒々しい音が遠くに聞こえた！", "You hear a sudden stirring in the distance!"));
     }
+
     if (player_ptr->riding) {
-        player_ptr->update |= PU_BONUS;
+        RedrawingFlagsUpdater::get_instance().set_flag(StatusRedrawingFlag::BONUS);
     }
 }
 

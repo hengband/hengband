@@ -1,7 +1,6 @@
 ﻿#include "spell-kind/spells-perception.h"
 #include "autopick/autopick.h"
 #include "avatar/avatar.h"
-#include "core/player-update-types.h"
 #include "core/stuff-handler.h"
 #include "core/window-redrawer.h"
 #include "flavor/flavor-describer.h"
@@ -24,6 +23,7 @@
 #include "perception/object-perception.h"
 #include "system/item-entity.h"
 #include "system/player-type-definition.h"
+#include "system/redrawing-flags-updater.h"
 #include "util/bit-flags-calculator.h"
 #include "util/string-processor.h"
 #include "view/display-messages.h"
@@ -70,7 +70,13 @@ bool identify_item(PlayerType *player_ptr, ItemEntity *o_ptr)
     object_known(o_ptr);
     o_ptr->marked.set(OmType::TOUCHED);
 
-    set_bits(player_ptr->update, PU_BONUS | PU_COMBINATION | PU_REORDER);
+    auto &rfu = RedrawingFlagsUpdater::get_instance();
+    const auto flags_srf = {
+        StatusRedrawingFlag::BONUS,
+        StatusRedrawingFlag::COMBINATION,
+        StatusRedrawingFlag::REORDER,
+    };
+    rfu.set_flags(flags_srf);
     set_bits(player_ptr->window_flags, PW_INVENTORY | PW_EQUIPMENT | PW_PLAYER | PW_FLOOR_ITEMS | PW_FOUND_ITEMS);
 
     angband_strcpy(record_o_name, known_item_name.data(), MAX_NLEN);
@@ -174,10 +180,14 @@ bool identify_fully(PlayerType *player_ptr, bool only_equip)
 
     o_ptr->ident |= (IDENT_FULL_KNOWN);
 
-    /* Refrect item informaiton onto subwindows without updating inventory */
-    player_ptr->update &= ~(PU_COMBINATION | PU_REORDER);
+    auto &rfu = RedrawingFlagsUpdater::get_instance();
+    const auto flags_srf = {
+        StatusRedrawingFlag::COMBINATION,
+        StatusRedrawingFlag::REORDER,
+    };
+    rfu.reset_flags(flags_srf);
     handle_stuff(player_ptr);
-    player_ptr->update |= (PU_COMBINATION | PU_REORDER);
+    rfu.set_flags(flags_srf);
 
     const auto item_name = describe_flavor(player_ptr, o_ptr, 0);
     if (item >= INVEN_MAIN_HAND) {

@@ -2,7 +2,6 @@
 #include "avatar/avatar.h"
 #include "cmd-visual/cmd-draw.h"
 #include "core/player-redraw-types.h"
-#include "core/player-update-types.h"
 #include "core/speed-table.h"
 #include "core/stuff-handler.h"
 #include "core/window-redrawer.h"
@@ -25,6 +24,7 @@
 #include "system/monster-entity.h"
 #include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
+#include "system/redrawing-flags-updater.h"
 #include "target/projection-path-calculator.h"
 #include "view/display-messages.h"
 #include "world/world.h"
@@ -123,6 +123,7 @@ bool set_monster_csleep(PlayerType *player_ptr, MONSTER_IDX m_idx, int v)
         return false;
     }
 
+    auto &rfu = RedrawingFlagsUpdater::get_instance();
     if (m_ptr->ml) {
         if (player_ptr->health_who == m_idx) {
             player_ptr->redraw |= PR_HEALTH;
@@ -134,7 +135,7 @@ bool set_monster_csleep(PlayerType *player_ptr, MONSTER_IDX m_idx, int v)
     }
 
     if (monraces_info[m_ptr->r_idx].brightness_flags.has_any_of(has_ld_mask)) {
-        player_ptr->update |= PU_MONSTER_LITE;
+        rfu.set_flag(StatusRedrawingFlag::MONSTER_LITE);
     }
 
     return true;
@@ -173,7 +174,7 @@ bool set_monster_fast(PlayerType *player_ptr, MONSTER_IDX m_idx, int v)
     }
 
     if ((player_ptr->riding == m_idx) && !player_ptr->leaving) {
-        player_ptr->update |= PU_BONUS;
+        RedrawingFlagsUpdater::get_instance().set_flag(StatusRedrawingFlag::BONUS);
     }
 
     return true;
@@ -207,7 +208,7 @@ bool set_monster_slow(PlayerType *player_ptr, MONSTER_IDX m_idx, int v)
     }
 
     if ((player_ptr->riding == m_idx) && !player_ptr->leaving) {
-        player_ptr->update |= PU_BONUS;
+        RedrawingFlagsUpdater::get_instance().set_flag(StatusRedrawingFlag::BONUS);
     }
 
     return true;
@@ -426,8 +427,9 @@ bool set_monster_timewalk(PlayerType *player_ptr, int num, MonsterRaceId who, bo
         }
     }
 
+    auto &rfu = RedrawingFlagsUpdater::get_instance();
     player_ptr->redraw |= PR_MAP;
-    player_ptr->update |= PU_MONSTER_STATUSES;
+    rfu.set_flag(StatusRedrawingFlag::MONSTER_STATUSES);
     player_ptr->window_flags |= PW_OVERHEAD | PW_DUNGEON;
     w_ptr->timewalk_m_idx = 0;
     if (vs_player || (player_has_los_bold(player_ptr, m_ptr->fy, m_ptr->fx) && projectable(player_ptr, player_ptr->y, player_ptr->x, m_ptr->fy, m_ptr->fx))) {

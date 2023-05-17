@@ -10,7 +10,6 @@
 #include "cmd-item/cmd-quaff.h"
 #include "core/asking-player.h"
 #include "core/player-redraw-types.h"
-#include "core/player-update-types.h"
 #include "effect/attribute-types.h"
 #include "effect/effect-characteristics.h"
 #include "effect/effect-processor.h"
@@ -46,13 +45,13 @@
 #include "system/grid-type-definition.h"
 #include "system/item-entity.h"
 #include "system/player-type-definition.h"
+#include "system/redrawing-flags-updater.h"
 #include "target/grid-selector.h"
 #include "target/target-getter.h"
 #include "term/screen-processor.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 #include "world/world.h"
-
 #ifdef JP
 #else
 #include "player-info/equipment-info.h"
@@ -231,7 +230,7 @@ std::optional<std::string> do_hex_spell(PlayerType *player_ptr, spell_hex_type s
                 o_ptr->curse_flags.set(get_curse(curse_rank, o_ptr));
             }
 
-            player_ptr->update |= (PU_BONUS);
+            RedrawingFlagsUpdater::get_instance().set_flag(StatusRedrawingFlag::BONUS);
             should_continue = false;
         }
         break;
@@ -587,7 +586,7 @@ std::optional<std::string> do_hex_spell(PlayerType *player_ptr, spell_hex_type s
                 o_ptr->curse_flags.set(get_curse(curse_rank, o_ptr));
             }
 
-            player_ptr->update |= (PU_BONUS);
+            RedrawingFlagsUpdater::get_instance().set_flag(StatusRedrawingFlag::BONUS);
             should_continue = false;
         }
         break;
@@ -698,6 +697,8 @@ std::optional<std::string> do_hex_spell(PlayerType *player_ptr, spell_hex_type s
 
                 flag = true;
             }
+
+            auto &rfu = RedrawingFlagsUpdater::get_instance();
             for (i = A_STR; i < A_MAX; i++) {
                 if (player_ptr->stat_cur[i] < player_ptr->stat_max[i]) {
                     if (player_ptr->stat_cur[i] < 18) {
@@ -709,8 +710,8 @@ std::optional<std::string> do_hex_spell(PlayerType *player_ptr, spell_hex_type s
                     if (player_ptr->stat_cur[i] > player_ptr->stat_max[i]) {
                         player_ptr->stat_cur[i] = player_ptr->stat_max[i];
                     }
-                    player_ptr->update |= (PU_BONUS);
 
+                    rfu.set_flag(StatusRedrawingFlag::BONUS);
                     flag = true;
                 }
             }
@@ -724,7 +725,13 @@ std::optional<std::string> do_hex_spell(PlayerType *player_ptr, spell_hex_type s
                     set_action(player_ptr, ACTION_NONE);
                 }
 
-                player_ptr->update |= (PU_BONUS | PU_HP | PU_MP | PU_SPELLS);
+                const auto flags = {
+                    StatusRedrawingFlag::BONUS,
+                    StatusRedrawingFlag::HP,
+                    StatusRedrawingFlag::MP,
+                    StatusRedrawingFlag::SPELLS,
+                };
+                rfu.set_flags(flags);
                 player_ptr->redraw |= (PR_EXTRA);
 
                 return "";
@@ -958,7 +965,14 @@ std::optional<std::string> do_hex_spell(PlayerType *player_ptr, spell_hex_type s
     }
 
     if (!info) {
-        player_ptr->update |= (PU_BONUS | PU_HP | PU_MP | PU_SPELLS);
+        auto &rfu = RedrawingFlagsUpdater::get_instance();
+        const auto flags_srf = {
+            StatusRedrawingFlag::BONUS,
+            StatusRedrawingFlag::HP,
+            StatusRedrawingFlag::MP,
+            StatusRedrawingFlag::SPELLS,
+        };
+        rfu.set_flags(flags_srf);
         player_ptr->redraw |= (PR_EXTRA | PR_HP | PR_MP);
     }
 

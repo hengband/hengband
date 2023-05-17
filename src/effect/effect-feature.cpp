@@ -1,5 +1,4 @@
 ﻿#include "effect/effect-feature.h"
-#include "core/player-update-types.h"
 #include "dungeon/dungeon-flag-types.h"
 #include "effect/effect-characteristics.h"
 #include "effect/effect-processor.h" // 暫定、後で消す.
@@ -20,6 +19,7 @@
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
 #include "system/player-type-definition.h"
+#include "system/redrawing-flags-updater.h"
 #include "system/terrain-type-definition.h"
 #include "timed-effect/player-blindness.h"
 #include "timed-effect/timed-effects.h"
@@ -255,7 +255,7 @@ bool affect_feature(PlayerType *player_ptr, MONSTER_IDX who, POSITION r, POSITIO
         }
 
         cave_alter_feat(player_ptr, y, x, TerrainCharacteristics::HURT_ROCK);
-        player_ptr->update |= (PU_FLOW);
+        RedrawingFlagsUpdater::get_instance().set_flag(StatusRedrawingFlag::FLOW);
         break;
     }
     case AttributeType::MAKE_DOOR: {
@@ -433,7 +433,7 @@ bool affect_feature(PlayerType *player_ptr, MONSTER_IDX who, POSITION r, POSITIO
         }
 
         cave_alter_feat(player_ptr, y, x, TerrainCharacteristics::HURT_ROCK);
-        player_ptr->update |= (PU_FLOW);
+        RedrawingFlagsUpdater::get_instance().set_flag(StatusRedrawingFlag::FLOW);
         break;
     }
     case AttributeType::SOUND: {
@@ -455,7 +455,7 @@ bool affect_feature(PlayerType *player_ptr, MONSTER_IDX who, POSITION r, POSITIO
         }
 
         cave_alter_feat(player_ptr, y, x, TerrainCharacteristics::HURT_ROCK);
-        player_ptr->update |= (PU_FLOW);
+        RedrawingFlagsUpdater::get_instance().set_flag(StatusRedrawingFlag::FLOW);
         break;
     }
     case AttributeType::DISINTEGRATE: {
@@ -468,7 +468,7 @@ bool affect_feature(PlayerType *player_ptr, MONSTER_IDX who, POSITION r, POSITIO
         }
 
         cave_alter_feat(player_ptr, y, x, TerrainCharacteristics::HURT_DISI);
-        player_ptr->update |= (PU_FLOW);
+        RedrawingFlagsUpdater::get_instance().set_flag(StatusRedrawingFlag::FLOW);
         break;
     }
     default:

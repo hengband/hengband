@@ -7,7 +7,6 @@
 #include "monster/monster-update.h"
 #include "core/disturbance.h"
 #include "core/player-redraw-types.h"
-#include "core/player-update-types.h"
 #include "core/window-redrawer.h"
 #include "dungeon/dungeon-flag-types.h"
 #include "floor/cave.h"
@@ -42,6 +41,7 @@
 #include "system/monster-entity.h"
 #include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
+#include "system/redrawing-flags-updater.h"
 #include "target/projection-path-calculator.h"
 #include "timed-effect/player-blindness.h"
 #include "timed-effect/player-hallucination.h"
@@ -107,14 +107,15 @@ void update_player_type(PlayerType *player_ptr, turn_flags *turn_flags_ptr, Mons
 {
     using Mbt = MonsterBrightnessType;
     const auto except_has_lite = EnumClassFlagGroup<Mbt>(self_ld_mask).set({ Mbt::HAS_DARK_1, Mbt::HAS_DARK_2 });
+    auto &rfu = RedrawingFlagsUpdater::get_instance();
     if (turn_flags_ptr->do_view) {
-        player_ptr->update |= PU_FLOW;
+        rfu.set_flag(StatusRedrawingFlag::FLOW);
         player_ptr->window_flags |= PW_OVERHEAD | PW_DUNGEON;
     }
 
     const auto has_lite = r_ptr->brightness_flags.has_any_of({ Mbt::HAS_LITE_1, Mbt::HAS_LITE_2 });
     if (turn_flags_ptr->do_move && (r_ptr->brightness_flags.has_any_of(except_has_lite) || (has_lite && !player_ptr->phase_out))) {
-        player_ptr->update |= PU_MONSTER_LITE;
+        rfu.set_flag(StatusRedrawingFlag::MONSTER_LITE);
     }
 }
 

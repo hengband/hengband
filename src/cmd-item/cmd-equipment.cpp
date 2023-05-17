@@ -5,7 +5,6 @@
 #include "avatar/avatar.h"
 #include "core/asking-player.h"
 #include "core/player-redraw-types.h"
-#include "core/player-update-types.h"
 #include "core/window-redrawer.h"
 #include "dungeon/quest.h" //!< @todo 違和感、何故アイテムを装備するとクエストの成功判定が走るのか？.
 #include "flavor/flavor-describer.h"
@@ -47,6 +46,7 @@
 #include "status/shape-changer.h"
 #include "system/item-entity.h"
 #include "system/player-type-definition.h"
+#include "system/redrawing-flags-updater.h"
 #include "term/screen-processor.h"
 #include "term/z-form.h"
 #include "util/bit-flags-calculator.h"
@@ -59,6 +59,7 @@
  */
 static void do_curse_on_equip(OBJECT_IDX slot, ItemEntity *o_ptr, PlayerType *player_ptr)
 {
+    auto &rfu = RedrawingFlagsUpdater::get_instance();
     if (set_anubis_and_chariot(player_ptr) && ((slot == INVEN_MAIN_HAND) || (slot == INVEN_SUB_HAND))) {
 
         ItemEntity *anubis = &(player_ptr->inventory_list[INVEN_MAIN_HAND]);
@@ -72,7 +73,7 @@ static void do_curse_on_equip(OBJECT_IDX slot, ItemEntity *o_ptr, PlayerType *pl
         chariot->curse_flags.set(CurseTraitType::VUL_CURSE);
 
         msg_format(_("『銀の戦車』プラス『アヌビス神』二刀流ッ！", "*Silver Chariot* plus *Anubis God* Two Swords!"));
-        player_ptr->update |= (PU_BONUS);
+        rfu.set_flag(StatusRedrawingFlag::BONUS);
         return;
     }
 
@@ -86,7 +87,7 @@ static void do_curse_on_equip(OBJECT_IDX slot, ItemEntity *o_ptr, PlayerType *pl
     o_ptr->curse_flags.set(CurseTraitType::HEAVY_CURSE);
     msg_format(_("悪意に満ちた黒いオーラが%sをとりまいた...", "There is a malignant black aura surrounding your %s..."), item_name.data());
     o_ptr->feeling = FEEL_NONE;
-    player_ptr->update |= (PU_BONUS);
+    rfu.set_flag(StatusRedrawingFlag::BONUS);
 }
 
 /*!
@@ -349,7 +350,13 @@ void do_cmd_wield(PlayerType *player_ptr)
     }
 
     calc_android_exp(player_ptr);
-    player_ptr->update |= PU_BONUS | PU_TORCH | PU_MP;
+    const auto flags_srf = {
+        StatusRedrawingFlag::BONUS,
+        StatusRedrawingFlag::TORCH,
+        StatusRedrawingFlag::MP,
+    };
+    auto &rfu = RedrawingFlagsUpdater::get_instance();
+    rfu.set_flags(flags_srf);
     player_ptr->redraw |= PR_EQUIPPY;
     player_ptr->window_flags |= PW_INVENTORY | PW_EQUIPMENT | PW_PLAYER;
 }
@@ -372,6 +379,7 @@ void do_cmd_takeoff(PlayerType *player_ptr)
     }
 
     PlayerEnergy energy(player_ptr);
+    auto &rfu = RedrawingFlagsUpdater::get_instance();
     if (o_ptr->is_cursed()) {
         if (o_ptr->curse_flags.has(CurseTraitType::PERMA_CURSE) || !pc.equals(PlayerClassType::BERSERKER)) {
             msg_print(_("ふーむ、どうやら呪われているようだ。", "Hmmm, it seems to be cursed."));
@@ -383,7 +391,7 @@ void do_cmd_takeoff(PlayerType *player_ptr)
             o_ptr->ident |= (IDENT_SENSE);
             o_ptr->curse_flags.clear();
             o_ptr->feeling = FEEL_NONE;
-            player_ptr->update |= PU_BONUS;
+            rfu.set_flag(StatusRedrawingFlag::BONUS);
             player_ptr->window_flags |= PW_EQUIPMENT;
             msg_print(_("呪いを打ち破った。", "You break the curse."));
         } else {
@@ -398,7 +406,12 @@ void do_cmd_takeoff(PlayerType *player_ptr)
     (void)inven_takeoff(player_ptr, item, 255);
     verify_equip_slot(player_ptr, item);
     calc_android_exp(player_ptr);
-    player_ptr->update |= PU_BONUS | PU_TORCH | PU_MP;
+    const auto flags_srf = {
+        StatusRedrawingFlag::BONUS,
+        StatusRedrawingFlag::TORCH,
+        StatusRedrawingFlag::MP,
+    };
+    rfu.set_flags(flags_srf);
     player_ptr->redraw |= PR_EQUIPPY;
     player_ptr->window_flags |= PW_INVENTORY | PW_EQUIPMENT | PW_PLAYER;
 }

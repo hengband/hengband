@@ -6,7 +6,6 @@
  */
 #include "player-base/player-class.h"
 #include "core/player-redraw-types.h"
-#include "core/player-update-types.h"
 #include "inventory/inventory-slot-types.h"
 #include "mind/mind-elementalist.h"
 #include "player-info/bard-data-type.h"
@@ -28,6 +27,7 @@
 #include "status/action-setter.h"
 #include "system/item-entity.h"
 #include "system/player-type-definition.h"
+#include "system/redrawing-flags-updater.h"
 #include "timed-effect/player-blindness.h"
 #include "timed-effect/timed-effects.h"
 #include "util/bit-flags-calculator.h"
@@ -395,8 +395,12 @@ bool PlayerClass::lose_balance()
     }
 
     this->set_samurai_stance(SamuraiStanceType::NONE);
-    this->player_ptr->update |= PU_BONUS;
-    this->player_ptr->update |= PU_MONSTER_STATUSES;
+    auto &rfu = RedrawingFlagsUpdater::get_instance();
+    const auto flags_srf = {
+        StatusRedrawingFlag::BONUS,
+        StatusRedrawingFlag::MONSTER_STATUSES,
+    };
+    rfu.set_flags(flags_srf);
     this->player_ptr->redraw |= PR_ACTION;
     this->player_ptr->redraw |= PR_TIMED_EFFECT;
     this->player_ptr->action = ACTION_NONE;

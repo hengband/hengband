@@ -7,7 +7,6 @@
 #include "spell/spells-object.h"
 #include "artifact/fixed-art-types.h"
 #include "avatar/avatar.h"
-#include "core/player-update-types.h"
 #include "core/window-redrawer.h"
 #include "flavor/flavor-describer.h"
 #include "flavor/object-flavor-types.h"
@@ -41,6 +40,7 @@
 #include "system/item-entity.h"
 #include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
+#include "system/redrawing-flags-updater.h"
 #include "term/screen-processor.h"
 #include "util/bit-flags-calculator.h"
 #include "util/probability-table.h"
@@ -247,7 +247,12 @@ bool curse_armor(PlayerType *player_ptr)
     o_ptr->art_flags.clear();
     o_ptr->curse_flags.set(CurseTraitType::CURSED);
     o_ptr->ident |= IDENT_BROKEN;
-    player_ptr->update |= PU_BONUS | PU_MP;
+    auto &rfu = RedrawingFlagsUpdater::get_instance();
+    const auto flags_srf = {
+        StatusRedrawingFlag::BONUS,
+        StatusRedrawingFlag::MP,
+    };
+    rfu.set_flags(flags_srf);
     player_ptr->window_flags |= PW_INVENTORY | PW_EQUIPMENT | PW_PLAYER;
     return true;
 }
@@ -293,7 +298,12 @@ bool curse_weapon_object(PlayerType *player_ptr, bool force, ItemEntity *o_ptr)
     o_ptr->art_flags.clear();
     o_ptr->curse_flags.set(CurseTraitType::CURSED);
     o_ptr->ident |= IDENT_BROKEN;
-    player_ptr->update |= PU_BONUS | PU_MP;
+    auto &rfu = RedrawingFlagsUpdater::get_instance();
+    const auto flags_srf = {
+        StatusRedrawingFlag::BONUS,
+        StatusRedrawingFlag::MP,
+    };
+    rfu.set_flags(flags_srf);
     player_ptr->window_flags |= PW_INVENTORY | PW_EQUIPMENT | PW_PLAYER;
     return true;
 }
@@ -440,7 +450,13 @@ bool enchant_equipment(PlayerType *player_ptr, ItemEntity *o_ptr, int n, int efl
         return false;
     }
 
-    set_bits(player_ptr->update, PU_BONUS | PU_COMBINATION | PU_REORDER);
+    auto &rfu = RedrawingFlagsUpdater::get_instance();
+    const auto flags_srf = {
+        StatusRedrawingFlag::BONUS,
+        StatusRedrawingFlag::COMBINATION,
+        StatusRedrawingFlag::REORDER,
+    };
+    rfu.set_flags(flags_srf);
     set_bits(player_ptr->window_flags, PW_INVENTORY | PW_EQUIPMENT | PW_PLAYER | PW_FLOOR_ITEMS | PW_FOUND_ITEMS);
     return true;
 }

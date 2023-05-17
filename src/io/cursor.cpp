@@ -1,6 +1,5 @@
 ﻿#include "io/cursor.h"
 #include "core/player-redraw-types.h"
-#include "core/player-update-types.h"
 #include "core/stuff-handler.h"
 #include "effect/effect-characteristics.h"
 #include "effect/spells-effect-util.h"
@@ -14,6 +13,7 @@
 #include "system/grid-type-definition.h"
 #include "system/monster-entity.h"
 #include "system/player-type-definition.h"
+#include "system/redrawing-flags-updater.h"
 #include "system/terrain-type-definition.h"
 #include "target/projection-path-calculator.h"
 #include "term/term-color-types.h"
@@ -133,8 +133,8 @@ bool change_panel(PlayerType *player_ptr, POSITION dy, POSITION dx)
     panel_row_min = y;
     panel_col_min = x;
     panel_bounds_center();
-
-    player_ptr->update |= (PU_MONSTER_STATUSES);
+    auto &rfu = RedrawingFlagsUpdater::get_instance();
+    rfu.set_flag(StatusRedrawingFlag::MONSTER_STATUSES);
     player_ptr->redraw |= (PR_MAP);
     handle_stuff(player_ptr);
     return true;

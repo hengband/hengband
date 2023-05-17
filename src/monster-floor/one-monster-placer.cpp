@@ -5,7 +5,6 @@
  */
 
 #include "monster-floor/one-monster-placer.h"
-#include "core/player-update-types.h"
 #include "core/speed-table.h"
 #include "dungeon/quest.h"
 #include "effect/attribute-types.h"
@@ -43,6 +42,7 @@
 #include "system/grid-type-definition.h"
 #include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
+#include "system/redrawing-flags-updater.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 #include "wizard/wizard-messages.h"
@@ -419,11 +419,12 @@ bool place_monster_one(PlayerType *player_ptr, MONSTER_IDX who, POSITION y, POSI
         m_ptr->mflag.set(MonsterTemporaryFlagType::BORN);
     }
 
-    if (r_ptr->brightness_flags.has_any_of(self_ld_mask)) {
-        set_bits(player_ptr->update, PU_MONSTER_LITE);
-    } else if (r_ptr->brightness_flags.has_any_of(has_ld_mask) && !m_ptr->is_asleep()) {
-        set_bits(player_ptr->update, PU_MONSTER_LITE);
+    auto is_awake_lightning_monster = r_ptr->brightness_flags.has_any_of(self_ld_mask);
+    is_awake_lightning_monster |= r_ptr->brightness_flags.has_any_of(has_ld_mask) && !m_ptr->is_asleep();
+    if (is_awake_lightning_monster) {
+        RedrawingFlagsUpdater::get_instance().set_flag(StatusRedrawingFlag::MONSTER_LITE);
     }
+
     update_monster(player_ptr, g_ptr->m_idx, true);
 
     m_ptr->get_real_r_ref().cur_num++;

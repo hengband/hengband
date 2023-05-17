@@ -13,7 +13,6 @@
 #include "cmd-action/cmd-spell.h"
 #include "core/asking-player.h"
 #include "core/player-redraw-types.h"
-#include "core/player-update-types.h"
 #include "core/stuff-handler.h"
 #include "core/window-redrawer.h"
 #include "floor/floor-object.h"
@@ -38,6 +37,7 @@
 #include "status/action-setter.h"
 #include "system/item-entity.h"
 #include "system/player-type-definition.h"
+#include "system/redrawing-flags-updater.h"
 #include "term/screen-processor.h"
 #include "term/z-form.h"
 #include "util/int-char-converter.h"
@@ -425,5 +425,5 @@ void do_cmd_gain_hissatsu(PlayerType *player_ptr)
         PlayerEnergy(player_ptr).set_player_turn_energy(100);
     }
 
-    player_ptr->update |= (PU_SPELLS);
+    RedrawingFlagsUpdater::get_instance().set_flag(StatusRedrawingFlag::SPELLS);
 }

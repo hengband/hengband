@@ -1,7 +1,6 @@
 ﻿#include "market/building-recharger.h"
 #include "autopick/autopick.h"
 #include "core/asking-player.h"
-#include "core/player-update-types.h"
 #include "core/window-redrawer.h"
 #include "flavor/flavor-describer.h"
 #include "flavor/object-flavor-types.h"
@@ -17,6 +16,7 @@
 #include "system/baseitem-info.h"
 #include "system/item-entity.h"
 #include "system/player-type-definition.h"
+#include "system/redrawing-flags-updater.h"
 #include "term/screen-processor.h"
 #include "view/display-messages.h"
 
@@ -152,7 +152,12 @@ void building_recharge(PlayerType *player_ptr)
 #else
     msg_format("%s^ %s recharged for %d gold.", item_name.data(), ((o_ptr->number > 1) ? "were" : "was"), price);
 #endif
-    player_ptr->update |= (PU_COMBINATION | PU_REORDER);
+    auto &rfu = RedrawingFlagsUpdater::get_instance();
+    const auto flags = {
+        StatusRedrawingFlag::COMBINATION,
+        StatusRedrawingFlag::REORDER,
+    };
+    rfu.set_flags(flags);
     player_ptr->window_flags |= (PW_INVENTORY);
     player_ptr->au -= price;
 }
@@ -264,7 +269,12 @@ void building_recharge_all(PlayerType *player_ptr)
 
     msg_format(_("＄%d で再充填しました。", "You pay %d gold."), total_cost);
     msg_print(nullptr);
-    player_ptr->update |= (PU_COMBINATION | PU_REORDER);
+    auto &rfu = RedrawingFlagsUpdater::get_instance();
+    const auto flags = {
+        StatusRedrawingFlag::COMBINATION,
+        StatusRedrawingFlag::REORDER,
+    };
+    rfu.set_flags(flags);
     player_ptr->window_flags |= (PW_INVENTORY);
     player_ptr->au -= total_cost;
 }

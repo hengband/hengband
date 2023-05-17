@@ -3,7 +3,6 @@
 #include "autopick/autopick.h"
 #include "avatar/avatar.h"
 #include "core/asking-player.h"
-#include "core/player-update-types.h"
 #include "core/stuff-handler.h"
 #include "core/window-redrawer.h"
 #include "flavor/flavor-describer.h"
@@ -34,6 +33,7 @@
 #include "store/store.h"
 #include "system/item-entity.h"
 #include "system/player-type-definition.h"
+#include "system/redrawing-flags-updater.h"
 #include "term/screen-processor.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
@@ -231,7 +231,8 @@ void store_sell(PlayerType *player_ptr, StoreSaleType store_num)
         }
     }
 
-    set_bits(player_ptr->update, PU_BONUS);
+    auto &rfu = RedrawingFlagsUpdater::get_instance();
+    rfu.set_flag(StatusRedrawingFlag::BONUS);
     set_bits(player_ptr->window_flags, PW_PLAYER);
     handle_stuff(player_ptr);
 

@@ -5,7 +5,6 @@
 #include "core/object-compressor.h"
 #include "core/player-processor.h"
 #include "core/player-redraw-types.h"
-#include "core/player-update-types.h"
 #include "core/stuff-handler.h"
 #include "core/turn-compensator.h"
 #include "core/window-redrawer.h"
@@ -38,11 +37,36 @@
 #include "system/floor-type-definition.h"
 #include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
+#include "system/redrawing-flags-updater.h"
 #include "target/target-checker.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 #include "world/world-turn-processor.h"
 #include "world/world.h"
+
+static void redraw_character_xtra(PlayerType *player_ptr)
+{
+    w_ptr->character_xtra = true;
+    auto &rfu = RedrawingFlagsUpdater::get_instance();
+    auto flags_srf = {
+        StatusRedrawingFlag::BONUS,
+        StatusRedrawingFlag::HP,
+        StatusRedrawingFlag::MP,
+        StatusRedrawingFlag::SPELLS,
+        StatusRedrawingFlag::VIEW,
+        StatusRedrawingFlag::LITE,
+        StatusRedrawingFlag::MONSTER_LITE,
+        StatusRedrawingFlag::TORCH,
+        StatusRedrawingFlag::MONSTER_STATUSES,
+        StatusRedrawingFlag::DISTANCE,
+        StatusRedrawingFlag::FLOW,
+    };
+    set_bits(player_ptr->window_flags, PW_INVENTORY | PW_EQUIPMENT | PW_SPELL | PW_PLAYER | PW_MONSTER_LORE | PW_OVERHEAD | PW_DUNGEON);
+    set_bits(player_ptr->redraw, PR_WIPE | PR_BASIC | PR_EXTRA | PR_EQUIPPY | PR_MAP);
+    rfu.set_flags(flags_srf);
+    handle_stuff(player_ptr);
+    w_ptr->character_xtra = false;
+}
 
 /*!
  * process_player()、process_world() をcore.c から移設するのが先.
@@ -100,14 +124,16 @@ void process_dungeon(PlayerType *player_ptr, bool load_game)
     verify_panel(player_ptr);
     msg_erase();
 
-    w_ptr->character_xtra = true;
-    set_bits(player_ptr->window_flags, PW_INVENTORY | PW_EQUIPMENT | PW_SPELL | PW_PLAYER | PW_MONSTER_LORE | PW_OVERHEAD | PW_DUNGEON);
-    set_bits(player_ptr->redraw, PR_WIPE | PR_BASIC | PR_EXTRA | PR_EQUIPPY | PR_MAP);
-    set_bits(player_ptr->update, PU_BONUS | PU_HP | PU_MP | PU_SPELLS | PU_VIEW | PU_LITE | PU_MONSTER_LITE | PU_TORCH | PU_MONSTER_STATUSES | PU_DISTANCE | PU_FLOW);
-    handle_stuff(player_ptr);
-
-    w_ptr->character_xtra = false;
-    set_bits(player_ptr->update, PU_BONUS | PU_HP | PU_MP | PU_SPELLS | PU_COMBINATION | PU_REORDER);
+    redraw_character_xtra(player_ptr);
+    auto flags_srf = {
+        StatusRedrawingFlag::BONUS,
+        StatusRedrawingFlag::HP,
+        StatusRedrawingFlag::MP,
+        StatusRedrawingFlag::SPELLS,
+        StatusRedrawingFlag::COMBINATION,
+        StatusRedrawingFlag::REORDER,
+    };
+    RedrawingFlagsUpdater::get_instance().set_flags(flags_srf);
     handle_stuff(player_ptr);
     term_fresh();
 

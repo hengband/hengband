@@ -19,7 +19,6 @@
 #include "cmd-visual/cmd-draw.h"
 #include "core/asking-player.h"
 #include "core/player-redraw-types.h"
-#include "core/player-update-types.h"
 #include "core/stuff-handler.h"
 #include "core/window-redrawer.h"
 #include "dungeon/quest.h"
@@ -87,6 +86,7 @@
 #include "system/item-entity.h"
 #include "system/monster-entity.h"
 #include "system/player-type-definition.h"
+#include "system/redrawing-flags-updater.h"
 #include "system/terrain-type-definition.h"
 #include "target/grid-selector.h"
 #include "term/screen-processor.h"
@@ -519,7 +519,7 @@ void wiz_create_feature(PlayerType *player_ptr)
 
     note_spot(player_ptr, y, x);
     lite_spot(player_ptr, y, x);
-    player_ptr->update |= PU_FLOW;
+    RedrawingFlagsUpdater::get_instance().set_flag(StatusRedrawingFlag::FLOW);
 }
 
 /*!
@@ -686,8 +686,15 @@ void wiz_reset_race(PlayerType *player_ptr)
     player_ptr->prace = i2enum<PlayerRaceType>(val);
     rp_ptr = &race_info[enum2i(player_ptr->prace)];
 
+    auto &rfu = RedrawingFlagsUpdater::get_instance();
+    const auto flags_srf = {
+        StatusRedrawingFlag::BONUS,
+        StatusRedrawingFlag::HP,
+        StatusRedrawingFlag::MP,
+        StatusRedrawingFlag::SPELLS,
+    };
     player_ptr->window_flags |= PW_PLAYER;
-    player_ptr->update |= PU_BONUS | PU_HP | PU_MP | PU_SPELLS;
+    rfu.set_flags(flags_srf);
     player_ptr->redraw |= PR_BASIC | PR_HP | PR_MP | PR_ABILITY_SCORE;
     handle_stuff(player_ptr);
 }
@@ -707,8 +714,15 @@ void wiz_reset_class(PlayerType *player_ptr)
     cp_ptr = &class_info[val];
     mp_ptr = &class_magics_info[val];
     PlayerClass(player_ptr).init_specific_data();
+    auto &rfu = RedrawingFlagsUpdater::get_instance();
+    const auto flags_srf = {
+        StatusRedrawingFlag::BONUS,
+        StatusRedrawingFlag::HP,
+        StatusRedrawingFlag::MP,
+        StatusRedrawingFlag::SPELLS,
+    };
     player_ptr->window_flags |= PW_PLAYER;
-    player_ptr->update |= PU_BONUS | PU_HP | PU_MP | PU_SPELLS;
+    rfu.set_flags(flags_srf);
     player_ptr->redraw |= PR_BASIC | PR_HP | PR_MP | PR_ABILITY_SCORE;
     handle_stuff(player_ptr);
 }
@@ -731,8 +745,15 @@ void wiz_reset_realms(PlayerType *player_ptr)
 
     player_ptr->realm1 = static_cast<int16_t>(val1);
     player_ptr->realm2 = static_cast<int16_t>(val2);
+    auto &rfu = RedrawingFlagsUpdater::get_instance();
+    const auto flags = {
+        StatusRedrawingFlag::BONUS,
+        StatusRedrawingFlag::HP,
+        StatusRedrawingFlag::MP,
+        StatusRedrawingFlag::SPELLS,
+    };
     player_ptr->window_flags |= PW_PLAYER;
-    player_ptr->update |= PU_BONUS | PU_HP | PU_MP | PU_SPELLS;
+    rfu.set_flags(flags);
     player_ptr->redraw |= PR_BASIC;
     handle_stuff(player_ptr);
 }

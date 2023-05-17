@@ -10,7 +10,6 @@
 #include "combat/attack-power-table.h"
 #include "core/asking-player.h"
 #include "core/player-redraw-types.h"
-#include "core/player-update-types.h"
 #include "core/stuff-handler.h"
 #include "core/window-redrawer.h"
 #include "dungeon/dungeon-flag-types.h"
@@ -108,6 +107,7 @@
 #include "system/monster-entity.h"
 #include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
+#include "system/redrawing-flags-updater.h"
 #include "system/terrain-type-definition.h"
 #include "term/screen-processor.h"
 #include "timed-effect/player-acceleration.h"
@@ -382,7 +382,7 @@ static void update_bonuses(PlayerType *player_ptr)
     }
 
     if (player_ptr->telepathy != old_telepathy) {
-        set_bits(player_ptr->update, PU_MONSTER_STATUSES);
+        RedrawingFlagsUpdater::get_instance().set_flag(StatusRedrawingFlag::MONSTER_STATUSES);
     }
 
     auto is_esp_updated = player_ptr->esp_animal != old_esp_animal;
@@ -398,11 +398,11 @@ static void update_bonuses(PlayerType *player_ptr)
     is_esp_updated |= player_ptr->esp_nonliving != old_esp_nonliving;
     is_esp_updated |= player_ptr->esp_unique != old_esp_unique;
     if (is_esp_updated) {
-        set_bits(player_ptr->update, PU_MONSTER_STATUSES);
+        RedrawingFlagsUpdater::get_instance().set_flag(StatusRedrawingFlag::MONSTER_STATUSES);
     }
 
     if (player_ptr->see_inv != old_see_inv) {
-        set_bits(player_ptr->update, PU_MONSTER_STATUSES);
+        RedrawingFlagsUpdater::get_instance().set_flag(StatusRedrawingFlag::MONSTER_STATUSES);
     }
 
     if (player_ptr->pspeed != old_speed) {
@@ -2689,28 +2689,29 @@ WEIGHT calc_weight_limit(PlayerType *player_ptr)
  */
 void update_creature(PlayerType *player_ptr)
 {
-    if (!player_ptr->update) {
+    auto &rfu = RedrawingFlagsUpdater::get_instance();
+    if (!rfu.any_stats()) {
         return;
     }
 
     auto *floor_ptr = player_ptr->current_floor_ptr;
-    if (any_bits(player_ptr->update, (PU_AUTO_DESTRUCTION))) {
-        reset_bits(player_ptr->update, PU_AUTO_DESTRUCTION);
+    if (rfu.has(StatusRedrawingFlag::AUTO_DESTRUCTION)) {
+        rfu.reset_flag(StatusRedrawingFlag::AUTO_DESTRUCTION);
         autopick_delayed_alter(player_ptr);
     }
 
-    if (any_bits(player_ptr->update, (PU_COMBINATION))) {
-        reset_bits(player_ptr->update, PU_COMBINATION);
+    if (rfu.has(StatusRedrawingFlag::COMBINATION)) {
+        rfu.reset_flag(StatusRedrawingFlag::COMBINATION);
         combine_pack(player_ptr);
     }
 
-    if (any_bits(player_ptr->update, (PU_REORDER))) {
-        reset_bits(player_ptr->update, PU_REORDER);
+    if (rfu.has(StatusRedrawingFlag::REORDER)) {
+        rfu.reset_flag(StatusRedrawingFlag::REORDER);
         reorder_pack(player_ptr);
     }
 
-    if (any_bits(player_ptr->update, (PU_BONUS))) {
-        reset_bits(player_ptr->update, PU_BONUS);
+    if (rfu.has(StatusRedrawingFlag::BONUS)) {
+        rfu.reset_flag(StatusRedrawingFlag::BONUS);
         PlayerAlignment(player_ptr).update_alignment();
         PlayerSkill ps(player_ptr);
         ps.apply_special_weapon_skill_max_values();
@@ -2718,75 +2719,72 @@ void update_creature(PlayerType *player_ptr)
         update_bonuses(player_ptr);
     }
 
-    if (any_bits(player_ptr->update, (PU_TORCH))) {
-        reset_bits(player_ptr->update, PU_TORCH);
+    if (rfu.has(StatusRedrawingFlag::TORCH)) {
+        rfu.reset_flag(StatusRedrawingFlag::TORCH);
         update_lite_radius(player_ptr);
     }
 
-    if (any_bits(player_ptr->update, (PU_HP))) {
-        reset_bits(player_ptr->update, PU_HP);
+    if (rfu.has(StatusRedrawingFlag::HP)) {
+        rfu.reset_flag(StatusRedrawingFlag::HP);
         update_max_hitpoints(player_ptr);
     }
 
-    if (any_bits(player_ptr->update, (PU_MP))) {
-        reset_bits(player_ptr->update, PU_MP);
+    if (rfu.has(StatusRedrawingFlag::MP)) {
+        rfu.reset_flag(StatusRedrawingFlag::MP);
         update_max_mana(player_ptr);
     }
 
-    if (any_bits(player_ptr->update, (PU_SPELLS))) {
-        reset_bits(player_ptr->update, PU_SPELLS);
+    if (rfu.has(StatusRedrawingFlag::SPELLS)) {
+        rfu.reset_flag(StatusRedrawingFlag::SPELLS);
         update_num_of_spells(player_ptr);
     }
 
-    if (!w_ptr->character_generated) {
+    if (!w_ptr->character_generated || (w_ptr->character_icky_depth > 0)) {
         return;
     }
-    if (w_ptr->character_icky_depth > 0) {
-        return;
-    }
-    if (any_bits(player_ptr->update, (PU_UN_LITE))) {
-        reset_bits(player_ptr->update, PU_UN_LITE);
+
+    if (rfu.has(StatusRedrawingFlag::UN_LITE)) {
+        rfu.reset_flag(StatusRedrawingFlag::UN_LITE);
         forget_lite(floor_ptr);
     }
 
-    if (any_bits(player_ptr->update, (PU_UN_VIEW))) {
-        reset_bits(player_ptr->update, PU_UN_VIEW);
+    if (rfu.has(StatusRedrawingFlag::UN_VIEW)) {
+        rfu.reset_flag(StatusRedrawingFlag::UN_VIEW);
         forget_view(floor_ptr);
     }
 
-    if (any_bits(player_ptr->update, (PU_VIEW))) {
-        reset_bits(player_ptr->update, PU_VIEW);
+    if (rfu.has(StatusRedrawingFlag::VIEW)) {
+        rfu.reset_flag(StatusRedrawingFlag::VIEW);
         update_view(player_ptr);
     }
 
-    if (any_bits(player_ptr->update, (PU_LITE))) {
-        reset_bits(player_ptr->update, PU_LITE);
+    if (rfu.has(StatusRedrawingFlag::LITE)) {
+        rfu.reset_flag(StatusRedrawingFlag::LITE);
         update_lite(player_ptr);
     }
 
-    if (any_bits(player_ptr->update, (PU_FLOW))) {
-        reset_bits(player_ptr->update, PU_FLOW);
+    if (rfu.has(StatusRedrawingFlag::FLOW)) {
+        rfu.reset_flag(StatusRedrawingFlag::FLOW);
         update_flow(player_ptr);
     }
 
-    if (any_bits(player_ptr->update, (PU_DISTANCE))) {
-        reset_bits(player_ptr->update, PU_DISTANCE);
-
+    if (rfu.has(StatusRedrawingFlag::DISTANCE)) {
+        rfu.reset_flag(StatusRedrawingFlag::DISTANCE);
         update_monsters(player_ptr, true);
     }
 
-    if (any_bits(player_ptr->update, (PU_MONSTER_LITE))) {
-        reset_bits(player_ptr->update, PU_MONSTER_LITE);
+    if (rfu.has(StatusRedrawingFlag::MONSTER_LITE)) {
+        rfu.reset_flag(StatusRedrawingFlag::MONSTER_LITE);
         update_mon_lite(player_ptr);
     }
 
-    if (any_bits(player_ptr->update, (PU_DELAY_VISIBILITY))) {
-        reset_bits(player_ptr->update, PU_DELAY_VISIBILITY);
+    if (rfu.has(StatusRedrawingFlag::DELAY_VISIBILITY)) {
+        rfu.reset_flag(StatusRedrawingFlag::DELAY_VISIBILITY);
         delayed_visual_update(player_ptr);
     }
 
-    if (any_bits(player_ptr->update, (PU_MONSTER_STATUSES))) {
-        reset_bits(player_ptr->update, PU_MONSTER_STATUSES);
+    if (rfu.has(StatusRedrawingFlag::MONSTER_STATUSES)) {
+        rfu.reset_flag(StatusRedrawingFlag::MONSTER_STATUSES);
         update_monsters(player_ptr, false);
     }
 }
@@ -2904,9 +2902,16 @@ void check_experience(PlayerType *player_ptr)
     PlayerRace pr(player_ptr);
     bool android = pr.equals(PlayerRaceType::ANDROID);
     PLAYER_LEVEL old_lev = player_ptr->lev;
+    auto &rfu = RedrawingFlagsUpdater::get_instance();
+    const auto flags_srf = {
+        StatusRedrawingFlag::BONUS,
+        StatusRedrawingFlag::HP,
+        StatusRedrawingFlag::MP,
+        StatusRedrawingFlag::SPELLS,
+    };
     while ((player_ptr->lev > 1) && (player_ptr->exp < ((android ? player_exp_a : player_exp)[player_ptr->lev - 2] * player_ptr->expfact / 100L))) {
         player_ptr->lev--;
-        set_bits(player_ptr->update, PU_BONUS | PU_HP | PU_MP | PU_SPELLS);
+        rfu.set_flags(flags_srf);
         set_bits(player_ptr->redraw, PR_LEVEL | PR_TITLE);
         set_bits(player_ptr->window_flags, PW_PLAYER);
         handle_stuff(player_ptr);
@@ -2935,7 +2940,7 @@ void check_experience(PlayerType *player_ptr)
 
         sound(SOUND_LEVEL);
         msg_format(_("レベル %d にようこそ。", "Welcome to level %d."), player_ptr->lev);
-        set_bits(player_ptr->update, (PU_BONUS | PU_HP | PU_MP | PU_SPELLS));
+        rfu.set_flags(flags_srf);
         set_bits(player_ptr->redraw, (PR_LEVEL | PR_TITLE | PR_EXP));
         set_bits(player_ptr->window_flags, (PW_PLAYER | PW_SPELL | PW_INVENTORY));
         player_ptr->level_up_message = true;
@@ -2996,7 +3001,7 @@ void check_experience(PlayerType *player_ptr)
             level_reward = false;
         }
 
-        set_bits(player_ptr->update, PU_BONUS | PU_HP | PU_MP | PU_SPELLS);
+        rfu.set_flags(flags_srf);
         set_bits(player_ptr->redraw, (PR_LEVEL | PR_TITLE));
         set_bits(player_ptr->window_flags, (PW_PLAYER | PW_SPELL));
         handle_stuff(player_ptr);

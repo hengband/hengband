@@ -1,10 +1,10 @@
 ﻿#include "spell-realm/spells-arcane.h"
-#include "core/player-update-types.h"
 #include "inventory/inventory-slot-types.h"
 #include "object/tval-types.h"
 #include "sv-definition/sv-lite-types.h"
 #include "system/item-entity.h"
 #include "system/player-type-definition.h"
+#include "system/redrawing-flags-updater.h"
 #include "view/display-messages.h"
 
 /*!
@@ -37,5 +37,5 @@ void phlogiston(PlayerType *player_ptr)
         msg_print(_("照明用アイテムは満タンになった。", "Your light is full."));
     }
 
-    player_ptr->update |= PU_TORCH;
+    RedrawingFlagsUpdater::get_instance().set_flag(StatusRedrawingFlag::TORCH);
 }

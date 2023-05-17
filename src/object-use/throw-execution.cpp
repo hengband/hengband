@@ -11,7 +11,6 @@
 #include "combat/attack-power-table.h"
 #include "combat/shoot.h"
 #include "combat/slaying.h"
-#include "core/player-update-types.h"
 #include "core/stuff-handler.h"
 #include "core/window-redrawer.h"
 #include "effect/attribute-types.h"
@@ -60,6 +59,7 @@
 #include "system/item-entity.h"
 #include "system/monster-entity.h"
 #include "system/player-type-definition.h"
+#include "system/redrawing-flags-updater.h"
 #include "target/target-checker.h"
 #include "target/target-getter.h"
 #include "term/screen-processor.h"
@@ -300,23 +300,29 @@ void ObjectThrowEntity::process_boomerang_back()
 {
     if (this->come_back) {
         if ((this->item != INVEN_MAIN_HAND) && (this->item != INVEN_SUB_HAND)) {
-            store_item_to_inventory(player_ptr, this->q_ptr);
+            store_item_to_inventory(this->player_ptr, this->q_ptr);
             this->do_drop = false;
             return;
         }
 
         this->o_ptr = &player_ptr->inventory_list[this->item];
         this->o_ptr->copy_from(this->q_ptr);
-        player_ptr->equip_cnt++;
-        player_ptr->update |= PU_BONUS | PU_TORCH | PU_MP;
-        player_ptr->window_flags |= PW_EQUIPMENT;
+        this->player_ptr->equip_cnt++;
+        auto &rfu = RedrawingFlagsUpdater::get_instance();
+        const auto flags = {
+            StatusRedrawingFlag::BONUS,
+            StatusRedrawingFlag::TORCH,
+            StatusRedrawingFlag::MP,
+        };
+        rfu.set_flags(flags);
+        this->player_ptr->window_flags |= PW_EQUIPMENT;
         this->do_drop = false;
         return;
     }
 
     if (this->equiped_item) {
-        verify_equip_slot(player_ptr, this->item);
-        calc_android_exp(player_ptr);
+        verify_equip_slot(this->player_ptr, this->item);
+        calc_android_exp(this->player_ptr);
     }
 }
 

@@ -12,7 +12,6 @@
 #include "io/screen-util.h"
 #include "core/player-processor.h"
 #include "core/player-redraw-types.h"
-#include "core/player-update-types.h"
 #include "core/stuff-handler.h"
 #include "dungeon/quest.h"
 #include "effect/effect-characteristics.h"
@@ -29,6 +28,7 @@
 #include "system/dungeon-info.h"
 #include "system/floor-type-definition.h"
 #include "system/player-type-definition.h"
+#include "system/redrawing-flags-updater.h"
 #include "target/target-checker.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
@@ -55,10 +55,21 @@ void resize_map()
     panel_col_min = p_ptr->current_floor_ptr->width;
     verify_panel(p_ptr);
 
-    p_ptr->update |= (PU_TORCH | PU_BONUS | PU_HP | PU_MP | PU_SPELLS);
-    p_ptr->update |= (PU_UN_VIEW | PU_UN_LITE);
-    p_ptr->update |= (PU_VIEW | PU_LITE | PU_MONSTER_LITE);
-    p_ptr->update |= (PU_MONSTER_STATUSES);
+    auto &rfu = RedrawingFlagsUpdater::get_instance();
+    const auto flags_srf = {
+        StatusRedrawingFlag::TORCH,
+        StatusRedrawingFlag::BONUS,
+        StatusRedrawingFlag::HP,
+        StatusRedrawingFlag::MP,
+        StatusRedrawingFlag::SPELLS,
+        StatusRedrawingFlag::UN_VIEW,
+        StatusRedrawingFlag::UN_LITE,
+        StatusRedrawingFlag::VIEW,
+        StatusRedrawingFlag::LITE,
+        StatusRedrawingFlag::MONSTER_LITE,
+        StatusRedrawingFlag::MONSTER_STATUSES,
+    };
+    rfu.set_flags(flags_srf);
     p_ptr->redraw |= (PR_WIPE | PR_BASIC | PR_EXTRA | PR_MAP | PR_EQUIPPY);
 
     handle_stuff(p_ptr);
