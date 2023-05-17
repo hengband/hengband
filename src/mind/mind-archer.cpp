@@ -126,7 +126,7 @@ bool create_ammo(PlayerType *player_ptr)
 
         ItemEntity forge;
         auto *q_ptr = &forge;
-        q_ptr->prep(lookup_baseitem_id({ ItemKindType::SHOT, (OBJECT_SUBTYPE_VALUE)m_bonus(1, player_ptr->lev) + 1 }));
+        q_ptr->prep(lookup_baseitem_id({ ItemKindType::SHOT, m_bonus(1, player_ptr->lev) + 1 }));
         q_ptr->number = (byte)rand_range(15, 30);
         object_aware(player_ptr, q_ptr);
         object_known(q_ptr);

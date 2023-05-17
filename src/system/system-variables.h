@@ -27,5 +27,5 @@ extern concptr ANGBAND_SYS;
 extern concptr ANGBAND_KEYBOARD;
 extern concptr ANGBAND_GRAF;
 
-extern OBJECT_SUBTYPE_VALUE coin_type;
+extern int coin_type;
 extern bool (*get_obj_index_hook)(short bi_id);

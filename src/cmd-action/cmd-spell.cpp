@@ -305,7 +305,7 @@ static bool spell_okay(PlayerType *player_ptr, int spell, bool learned, bool stu
  * The "known" should be TRUE for cast/pray, FALSE for study
  * </pre>
  */
-static int get_spell(PlayerType *player_ptr, SPELL_IDX *sn, concptr prompt, OBJECT_SUBTYPE_VALUE sval, bool learned, int16_t use_realm)
+static int get_spell(PlayerType *player_ptr, SPELL_IDX *sn, concptr prompt, int sval, bool learned, int16_t use_realm)
 {
     int i;
     SPELL_IDX spell = -1;

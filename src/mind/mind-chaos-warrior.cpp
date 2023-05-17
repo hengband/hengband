@@ -14,7 +14,7 @@ void acquire_chaos_weapon(PlayerType *player_ptr)
     ItemEntity forge;
     auto *q_ptr = &forge;
     auto dummy = ItemKindType::SWORD;
-    OBJECT_SUBTYPE_VALUE dummy2;
+    int dummy2;
     switch (randint1(player_ptr->lev)) {
     case 0:
     case 1:

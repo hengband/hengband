@@ -50,7 +50,7 @@
  * @param known 判明済ならばTRUE
  * @return 発動により効果内容が確定したならばTRUEを返す
  */
-int staff_effect(PlayerType *player_ptr, OBJECT_SUBTYPE_VALUE sval, bool *use_charge, bool powerful, bool magic, bool known)
+int staff_effect(PlayerType *player_ptr, int sval, bool *use_charge, bool powerful, bool magic, bool known)
 {
     int k;
     bool ident = false;

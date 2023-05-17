@@ -31,4 +31,4 @@ init_flags_type init_flags; //!< @todo このグローバル変数何とかし�
  */
 bool (*get_obj_index_hook)(short bi_id);
 
-OBJECT_SUBTYPE_VALUE coin_type;
+int coin_type;
