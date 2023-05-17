@@ -6452,3 +6452,62 @@ F:INT | WIS | SUST_INT | SUST_WIS
 F:RES_CHAOS | RES_CONF | RES_NEXUS | HOLD_EXP
 D:$It protects you from the power of chaos.
 D:それは混沌の力からあなたを守る。
+
+N:675:モルデンカイネン著『洞察の魔法大全』第1巻
+E:Mordekainen's Magical Compendum of Deep Thought Vol 1.
+G:?:o
+I:69:1:0
+W:0:5:1
+A:0/255
+F:IGNORE_ACID | IGNORE_ELEC | IGNORE_FIRE | IGNORE_COLD
+
+N:676:モルデンカイネン著『洞察の魔法大全』第2巻
+E:Mordekainen's Magical Compendum of Deep Thought Vol 2.
+G:?:o
+I:69:2:0
+W:0:5:1
+A:0/255
+F:IGNORE_ACID | IGNORE_ELEC | IGNORE_FIRE | IGNORE_COLD
+
+N:677:モルデンカイネン著『洞察の魔法大全』第3巻
+E:Mordekainen's Magical Compendum of Deep Thought Vol 3.
+G:?:o
+I:69:3:0
+W:0:5:1
+A:0/255
+F:IGNORE_ACID | IGNORE_ELEC | IGNORE_FIRE | IGNORE_COLD
+
+N:678:アーティファクトの伝承　第1巻　武器編
+E:Artifact Lore, Vol. I "Ancient Weapons"
+G:?:o
+I:69:4:0
+W:0:5:1
+A:0/255
+F:IGNORE_ACID | IGNORE_ELEC | IGNORE_FIRE | IGNORE_COLD
+
+N:679:アーティファクトの伝承　第2巻　防具編
+E:Artifact Lore, Vol. II, "Ancient Armor"
+G:?:o
+I:69:5:0
+W:0:5:1
+A:0/255
+F:IGNORE_ACID | IGNORE_ELEC | IGNORE_FIRE | IGNORE_COLD
+
+N:680:アーティファクトの伝承　第3巻　アクセサリ編
+E:Artifact Lore, Vol. III, "Ancient Magical Tools"
+G:?:o
+I:69:6:0
+W:0:5:1
+A:0/255
+F:IGNORE_ACID | IGNORE_ELEC | IGNORE_FIRE | IGNORE_COLD
+
+N:681:宝の地図
+E:Treasure map
+G:?:o
+I:69:7:0
+W:0:5:1
+A:0/255
+F:IGNORE_ACID | IGNORE_ELEC | IGNORE_FIRE | IGNORE_COLD
+D:$It's a cheap piece of paper.
+D:$  You should wonder if the hidden location of Gungnir is written.
+D:安っぽい紙切れだ。グングニルの隠し場所でも書いてあるのだろうか。
