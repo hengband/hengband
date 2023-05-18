@@ -23,21 +23,38 @@
 #include <string>
 
 /*!
+ * @brief 日記のサブタイトルの候補一覧を取得する
+ *
+ * 候補一覧の先頭は「最高の肉体を求めて」、末尾は「最高の頭脳を求めて」で
+ * あるため、プレイヤーの職業に従い範囲を決定する。
+ *
+ * @return 候補一覧を参照するstd::spanオブジェクト
+ */
+static auto get_subtitle_candidates(PlayerType *player_ptr)
+{
+    std::span<const std::string> candidates(diary_subtitles);
+    const auto max = diary_subtitles.size();
+
+    PlayerClass pc(player_ptr);
+
+    if (pc.is_tough()) {
+        return candidates.subspan(0, max - 1);
+    }
+
+    if (pc.is_wizard()) {
+        return candidates.subspan(1);
+    }
+
+    return candidates.subspan(1, max - 2);
+}
+
+/*!
  * @brief 日記のタイトル表記と内容出力
  * @param player_ptr プレイヤーへの参照ポインタ
  */
 static void display_diary(PlayerType *player_ptr)
 {
-    PlayerClass pc(player_ptr);
-    std::span<const std::string> subtitle_candidates;
-    if (pc.is_tough()) {
-        subtitle_candidates = { diary_subtitles.begin(), diary_subtitles.end() - 1 };
-    } else if (pc.is_wizard()) {
-        subtitle_candidates = { diary_subtitles.begin() + 1, diary_subtitles.end() };
-    } else {
-        subtitle_candidates = { diary_subtitles.begin() + 1, diary_subtitles.end() - 1 };
-    }
-
+    const auto subtitle_candidates = get_subtitle_candidates(player_ptr);
     const auto choice = Rand_external(subtitle_candidates.size());
     const auto &subtitle = subtitle_candidates[choice];
 #ifdef JP
