@@ -4,6 +4,7 @@
 #include "term/term-color-types.h"
 #include "util/quarks.h"
 #include "util/string-processor.h"
+#include <span>
 
 /*
  * Convert an "attr"/"char" pair into a "pict" (P)
@@ -379,40 +380,26 @@ std::map<AttributeType, std::string> gf_colors;
  */
 static TERM_COLOR mh_attr(int max)
 {
-    switch (randint1(max)) {
-    case 1:
-        return TERM_RED;
-    case 2:
-        return TERM_GREEN;
-    case 3:
-        return TERM_BLUE;
-    case 4:
-        return TERM_YELLOW;
-    case 5:
-        return TERM_ORANGE;
-    case 6:
-        return TERM_VIOLET;
-    case 7:
-        return TERM_L_RED;
-    case 8:
-        return TERM_L_GREEN;
-    case 9:
-        return TERM_L_BLUE;
-    case 10:
-        return TERM_UMBER;
-    case 11:
-        return TERM_L_UMBER;
-    case 12:
-        return TERM_SLATE;
-    case 13:
-        return TERM_WHITE;
-    case 14:
-        return TERM_L_WHITE;
-    case 15:
-        return TERM_L_DARK;
-    }
+    constexpr static auto colors = {
+        TERM_RED,
+        TERM_GREEN,
+        TERM_BLUE,
+        TERM_YELLOW,
+        TERM_ORANGE,
+        TERM_VIOLET,
+        TERM_L_RED,
+        TERM_L_GREEN,
+        TERM_L_BLUE,
+        TERM_UMBER,
+        TERM_L_UMBER,
+        TERM_SLATE,
+        TERM_WHITE,
+        TERM_L_WHITE,
+        TERM_L_DARK,
+    };
 
-    return TERM_WHITE;
+    std::span<const term_color_type> candidates(colors.begin(), max);
+    return rand_choice(candidates);
 }
 
 /*!

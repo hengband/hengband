@@ -8,112 +8,70 @@
 #include "system/floor-type-definition.h"
 #include "system/item-entity.h"
 #include "system/player-type-definition.h"
+#include <span>
 
 void acquire_chaos_weapon(PlayerType *player_ptr)
 {
+    constexpr static auto weapons = {
+        SV_DAGGER,
+        SV_DAGGER,
+        SV_MAIN_GAUCHE,
+        SV_MAIN_GAUCHE,
+        SV_TANTO,
+        SV_RAPIER,
+        SV_RAPIER,
+        SV_SMALL_SWORD,
+        SV_SMALL_SWORD,
+        SV_BASILLARD, // LV10
+        SV_BASILLARD,
+        SV_SHORT_SWORD,
+        SV_SHORT_SWORD,
+        SV_SHORT_SWORD,
+        SV_SABRE,
+        SV_SABRE,
+        SV_CUTLASS,
+        SV_CUTLASS,
+        SV_WAKIZASHI,
+        SV_KHOPESH, // LV20
+        SV_TULWAR,
+        SV_BROAD_SWORD,
+        SV_LONG_SWORD,
+        SV_LONG_SWORD,
+        SV_SCIMITAR,
+        SV_SCIMITAR,
+        SV_NINJATO,
+        SV_KATANA,
+        SV_BASTARD_SWORD,
+        SV_BASTARD_SWORD, // LV30
+        SV_GREAT_SCIMITAR,
+        SV_CLAYMORE,
+        SV_ESPADON,
+        SV_TWO_HANDED_SWORD,
+        SV_FLAMBERGE,
+        SV_NO_DACHI,
+        SV_EXECUTIONERS_SWORD,
+        SV_ZWEIHANDER,
+        SV_HAYABUSA,
+        SV_BLADE_OF_CHAOS, // LV40
+        SV_BLADE_OF_CHAOS,
+        SV_BLADE_OF_CHAOS,
+        SV_BLADE_OF_CHAOS,
+        SV_BLADE_OF_CHAOS,
+        SV_BLADE_OF_CHAOS,
+        SV_BLADE_OF_CHAOS,
+        SV_BLADE_OF_CHAOS,
+        SV_BLADE_OF_CHAOS,
+        SV_BLADE_OF_CHAOS,
+        SV_BLADE_OF_CHAOS, // LV50
+    };
+
+    std::span<const sv_sword_type> candidates(weapons.begin(), player_ptr->lev);
+    const auto sval = rand_choice(candidates);
+
     ItemEntity forge;
     auto *q_ptr = &forge;
-    auto dummy = ItemKindType::SWORD;
-    int dummy2;
-    switch (randint1(player_ptr->lev)) {
-    case 0:
-    case 1:
-        dummy2 = SV_DAGGER;
-        break;
-    case 2:
-    case 3:
-        dummy2 = SV_MAIN_GAUCHE;
-        break;
-    case 4:
-        dummy2 = SV_TANTO;
-        break;
-    case 5:
-    case 6:
-        dummy2 = SV_RAPIER;
-        break;
-    case 7:
-    case 8:
-        dummy2 = SV_SMALL_SWORD;
-        break;
-    case 9:
-    case 10:
-        dummy2 = SV_BASILLARD;
-        break;
-    case 11:
-    case 12:
-    case 13:
-        dummy2 = SV_SHORT_SWORD;
-        break;
-    case 14:
-    case 15:
-        dummy2 = SV_SABRE;
-        break;
-    case 16:
-    case 17:
-        dummy2 = SV_CUTLASS;
-        break;
-    case 18:
-        dummy2 = SV_WAKIZASHI;
-        break;
-    case 19:
-        dummy2 = SV_KHOPESH;
-        break;
-    case 20:
-        dummy2 = SV_TULWAR;
-        break;
-    case 21:
-        dummy2 = SV_BROAD_SWORD;
-        break;
-    case 22:
-    case 23:
-        dummy2 = SV_LONG_SWORD;
-        break;
-    case 24:
-    case 25:
-        dummy2 = SV_SCIMITAR;
-        break;
-    case 26:
-        dummy2 = SV_NINJATO;
-        break;
-    case 27:
-        dummy2 = SV_KATANA;
-        break;
-    case 28:
-    case 29:
-        dummy2 = SV_BASTARD_SWORD;
-        break;
-    case 30:
-        dummy2 = SV_GREAT_SCIMITAR;
-        break;
-    case 31:
-        dummy2 = SV_CLAYMORE;
-        break;
-    case 32:
-        dummy2 = SV_ESPADON;
-        break;
-    case 33:
-        dummy2 = SV_TWO_HANDED_SWORD;
-        break;
-    case 34:
-        dummy2 = SV_FLAMBERGE;
-        break;
-    case 35:
-        dummy2 = SV_NO_DACHI;
-        break;
-    case 36:
-        dummy2 = SV_EXECUTIONERS_SWORD;
-        break;
-    case 37:
-        dummy2 = SV_ZWEIHANDER;
-        break;
-    case 38:
-        dummy2 = SV_HAYABUSA;
-        break;
-    default:
-        dummy2 = SV_BLADE_OF_CHAOS;
-    }
 
-    q_ptr->prep(lookup_baseitem_id({ dummy, dummy2 }));
+    q_ptr->prep(lookup_baseitem_id({ ItemKindType::SWORD, sval }));
     q_ptr->to_h = 3 + randint1(player_ptr->current_floor_ptr->dun_level) % 10;
     q_ptr->to_d = 3 + randint1(player_ptr->current_floor_ptr->dun_level) % 10;
     one_resistance(q_ptr);

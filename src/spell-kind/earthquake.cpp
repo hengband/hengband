@@ -129,44 +129,29 @@ bool earthquake(PlayerType *player_ptr, POSITION cy, POSITION cx, POSITION r, MO
             sx = x;
         }
 
-        switch (randint1(3)) {
-        case 1: {
-            msg_print(_("ダンジョンの壁が崩れた！", "The dungeon's ceiling collapses!"));
-            break;
-        }
-        case 2: {
-            msg_print(_("ダンジョンの床が不自然にねじ曲がった！", "The dungeon's floor twists in an unnatural way!"));
-            break;
-        }
-        default: {
-            msg_print(_("ダンジョンが揺れた！崩れた岩が頭に降ってきた！", "The dungeon quakes!  You are pummeled with debris!"));
-            break;
-        }
-        }
+        constexpr static auto msgs = {
+            _("ダンジョンの壁が崩れた！", "The dungeon's ceiling collapses!"),
+            _("ダンジョンの床が不自然にねじ曲がった！", "The dungeon's floor twists in an unnatural way!"),
+            _("ダンジョンが揺れた！崩れた岩が頭に降ってきた！", "The dungeon quakes!  You are pummeled with debris!"),
+        };
+        msg_print(rand_choice(msgs));
 
         if (!sn) {
             msg_print(_("あなたはひどい怪我を負った！", "You are severely crushed!"));
             damage = 200;
         } else {
-            BadStatusSetter bss(player_ptr);
-            switch (randint1(3)) {
-            case 1: {
-                msg_print(_("降り注ぐ岩をうまく避けた！", "You nimbly dodge the blast!"));
-                damage = 0;
-                break;
-            }
-            case 2: {
-                msg_print(_("岩石があなたに直撃した!", "You are bashed by rubble!"));
+            constexpr std::array<std::pair<bool, std::string_view>, 3> candidates = { {
+                { false, _("降り注ぐ岩をうまく避けた！", "You nimbly dodge the blast!") },
+                { true, _("岩石があなたに直撃した!", "You are bashed by rubble!") },
+                { true, _("あなたは床と壁との間に挟まれてしまった！", "You are crushed between the floor and ceiling!") },
+            } };
+
+            const auto &[is_damaged, msg] = rand_choice(candidates);
+
+            msg_print(msg);
+            if (is_damaged) {
                 damage = damroll(10, 4);
-                (void)bss.mod_stun(randint1(50));
-                break;
-            }
-            case 3: {
-                msg_print(_("あなたは床と壁との間に挟まれてしまった！", "You are crushed between the floor and ceiling!"));
-                damage = damroll(10, 4);
-                (void)bss.mod_stun(randint1(50));
-                break;
-            }
+                BadStatusSetter(player_ptr).mod_stun(randint1(50));
             }
 
             (void)move_player_effect(player_ptr, sy, sx, MPE_DONT_PICKUP);
