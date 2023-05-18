@@ -6454,7 +6454,7 @@ D:$It protects you from the power of chaos.
 D:それは混沌の力からあなたを守る。
 
 N:675:モルデンカイネン著『洞察の魔法大全』第1巻
-E:Mordekainen's Magical Compendum of Deep Thought Vol 1.
+E:Mordekainen's Magical Compendium of Deep Thought Vol 1.
 G:?:o
 I:69:1:0
 W:0:5:1
@@ -6462,7 +6462,7 @@ A:0/255
 F:IGNORE_ACID | IGNORE_ELEC | IGNORE_FIRE | IGNORE_COLD
 
 N:676:モルデンカイネン著『洞察の魔法大全』第2巻
-E:Mordekainen's Magical Compendum of Deep Thought Vol 2.
+E:Mordekainen's Magical Compendium of Deep Thought Vol 2.
 G:?:o
 I:69:2:0
 W:0:5:1
@@ -6470,7 +6470,7 @@ A:0/255
 F:IGNORE_ACID | IGNORE_ELEC | IGNORE_FIRE | IGNORE_COLD
 
 N:677:モルデンカイネン著『洞察の魔法大全』第3巻
-E:Mordekainen's Magical Compendum of Deep Thought Vol 3.
+E:Mordekainen's Magical Compendium of Deep Thought Vol 3.
 G:?:o
 I:69:3:0
 W:0:5:1
