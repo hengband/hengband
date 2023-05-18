@@ -49,4 +49,5 @@ jobs:
       cxx: g++-11
       cxx-flags: "-pipe -O3 -Werror -Wall -Wextra"
       configure-opts: "--disable-japanese"
+      distcheck: true
       use-ccache: true
