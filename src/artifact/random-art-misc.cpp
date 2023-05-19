@@ -155,28 +155,17 @@ static void invest_misc_hit_dice(ItemEntity *o_ptr)
 
 static void invest_misc_string_esp(ItemEntity *o_ptr)
 {
-    switch (randint1(3)) {
-    case 1:
-        o_ptr->art_flags.set(TR_ESP_EVIL);
-        if (!o_ptr->artifact_bias && one_in_(3)) {
-            o_ptr->artifact_bias = BIAS_LAW;
-        }
+    constexpr std::array<std::tuple<tr_type, random_art_bias_type, int>, 3> candidates = { {
+        { TR_ESP_EVIL, BIAS_LAW, 3 },
+        { TR_ESP_NONLIVING, BIAS_MAGE, 3 },
+        { TR_TELEPATHY, BIAS_MAGE, 9 },
+    } };
 
-        return;
-    case 2:
-        o_ptr->art_flags.set(TR_ESP_NONLIVING);
-        if (!o_ptr->artifact_bias && one_in_(3)) {
-            o_ptr->artifact_bias = BIAS_MAGE;
-        }
+    const auto &[flag, bias, denom] = rand_choice(candidates);
 
-        return;
-    case 3:
-        o_ptr->art_flags.set(TR_TELEPATHY);
-        if (!o_ptr->artifact_bias && one_in_(9)) {
-            o_ptr->artifact_bias = BIAS_MAGE;
-        }
-
-        return;
+    o_ptr->art_flags.set(flag);
+    if ((o_ptr->artifact_bias == BIAS_NONE) && one_in_(denom)) {
+        o_ptr->artifact_bias = bias;
     }
 }
 

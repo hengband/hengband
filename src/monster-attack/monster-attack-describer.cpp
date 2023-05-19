@@ -17,49 +17,25 @@
 static void show_jaian_song(MonsterAttackPlayer *monap_ptr)
 {
 #ifdef JP
-    switch (randint1(15)) {
-    case 1:
-    case 6:
-    case 11:
-        monap_ptr->act = "「♪お～れはジャイアン～～ガ～キだいしょう～」";
-        break;
-    case 2:
-        monap_ptr->act = "「♪て～んかむ～てきのお～とこだぜ～～」";
-        break;
-    case 3:
-        monap_ptr->act = "「♪の～び太スネ夫はメじゃないよ～～」";
-        break;
-    case 4:
-        monap_ptr->act = "「♪け～んかスポ～ツ～どんとこい～」";
-        break;
-    case 5:
-        monap_ptr->act = "「♪うた～も～～う～まいぜ～まかしとけ～」";
-        break;
-    case 7:
-        monap_ptr->act = "「♪ま～ちいちば～んのに～んきもの～～」";
-        break;
-    case 8:
-        monap_ptr->act = "「♪べんきょうしゅくだいメじゃないよ～～」";
-        break;
-    case 9:
-        monap_ptr->act = "「♪きはやさし～くて～ち～からもち～」";
-        break;
-    case 10:
-        monap_ptr->act = "「♪かお～も～～スタイルも～バツグンさ～」";
-        break;
-    case 12:
-        monap_ptr->act = "「♪がっこうい～ちの～あ～ばれんぼう～～」";
-        break;
-    case 13:
-        monap_ptr->act = "「♪ド～ラもドラミもメじゃないよ～～」";
-        break;
-    case 14:
-        monap_ptr->act = "「♪よじげんぽけっと～な～くたって～」";
-        break;
-    case 15:
-        monap_ptr->act = "「♪あし～の～～ながさ～は～まけないぜ～」";
-        break;
-    }
+    constexpr static auto songs = {
+        "「♪お～れはジャイアン～～ガ～キだいしょう～」",
+        "「♪て～んかむ～てきのお～とこだぜ～～」",
+        "「♪の～び太スネ夫はメじゃないよ～～」",
+        "「♪け～んかスポ～ツ～どんとこい～」",
+        "「♪うた～も～～う～まいぜ～まかしとけ～」",
+        "「♪お～れはジャイアン～～ガ～キだいしょう～」",
+        "「♪ま～ちいちば～んのに～んきもの～～」",
+        "「♪べんきょうしゅくだいメじゃないよ～～」",
+        "「♪きはやさし～くて～ち～からもち～」",
+        "「♪かお～も～～スタイルも～バツグンさ～」",
+        "「♪お～れはジャイアン～～ガ～キだいしょう～」",
+        "「♪がっこうい～ちの～あ～ばれんぼう～～」",
+        "「♪ド～ラもドラミもメじゃないよ～～」",
+        "「♪よじげんぽけっと～な～くたって～」",
+        "「♪あし～の～～ながさ～は～まけないぜ～」",
+    };
+
+    monap_ptr->act = rand_choice(songs);
 #else
     monap_ptr->act = "horribly sings 'I AM GIAAAAAN. THE BOOOSS OF THE KIIIIDS.'";
 #endif

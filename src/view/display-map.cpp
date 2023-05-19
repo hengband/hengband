@@ -342,29 +342,17 @@ void map_info(PlayerType *player_ptr, POSITION y, POSITION x, TERM_COLOR *ap, ch
         if (r_ptr->visual_flags.has(MonsterVisualType::ANY_COLOR)) {
             *ap = randint1(15);
         } else {
-            switch (randint1(7)) {
-            case 1:
-                *ap = TERM_RED;
-                break;
-            case 2:
-                *ap = TERM_L_RED;
-                break;
-            case 3:
-                *ap = TERM_WHITE;
-                break;
-            case 4:
-                *ap = TERM_L_GREEN;
-                break;
-            case 5:
-                *ap = TERM_BLUE;
-                break;
-            case 6:
-                *ap = TERM_L_DARK;
-                break;
-            case 7:
-                *ap = TERM_GREEN;
-                break;
-            }
+            constexpr static auto colors = {
+                TERM_RED,
+                TERM_L_RED,
+                TERM_WHITE,
+                TERM_L_GREEN,
+                TERM_BLUE,
+                TERM_L_DARK,
+                TERM_GREEN,
+            };
+
+            *ap = rand_choice(colors);
         }
     } else if (r_ptr->visual_flags.has(MonsterVisualType::RANDOM_COLOR) && !use_graphics) {
         *ap = g_ptr->m_idx % 15 + 1;

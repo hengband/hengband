@@ -272,37 +272,21 @@ bool wand_effect(PlayerType *player_ptr, int sval, int dir, bool powerful, bool 
     }
 
     case SV_WAND_DRAGON_BREATH: {
-        int dam;
-        AttributeType typ;
+        constexpr std::array<std::pair<int, AttributeType>, 5> candidates = { {
+            { 240, AttributeType::ACID },
+            { 210, AttributeType::ELEC },
+            { 240, AttributeType::FIRE },
+            { 210, AttributeType::COLD },
+            { 180, AttributeType::POIS },
+        } };
 
-        switch (randint1(5)) {
-        case 1:
-            dam = 240;
-            typ = AttributeType::ACID;
-            break;
-        case 2:
-            dam = 210;
-            typ = AttributeType::ELEC;
-            break;
-        case 3:
-            dam = 240;
-            typ = AttributeType::FIRE;
-            break;
-        case 4:
-            dam = 210;
-            typ = AttributeType::COLD;
-            break;
-        default:
-            dam = 180;
-            typ = AttributeType::POIS;
-            break;
-        }
+        auto [dam, type] = rand_choice(candidates);
 
         if (powerful) {
             dam = (dam * 3) / 2;
         }
 
-        fire_breath(player_ptr, typ, dir, dam, 3);
+        fire_breath(player_ptr, type, dir, dam, 3);
 
         ident = true;
         break;

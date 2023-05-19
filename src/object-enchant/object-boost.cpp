@@ -123,22 +123,16 @@ void one_sustain(ItemEntity *o_ptr)
  */
 bool add_esp_strong(ItemEntity *o_ptr)
 {
-    bool nonliv = false;
+    constexpr static auto candidates = {
+        TR_ESP_EVIL,
+        TR_TELEPATHY,
+        TR_ESP_NONLIVING,
+    };
 
-    switch (randint1(3)) {
-    case 1:
-        o_ptr->art_flags.set(TR_ESP_EVIL);
-        break;
-    case 2:
-        o_ptr->art_flags.set(TR_TELEPATHY);
-        break;
-    case 3:
-        o_ptr->art_flags.set(TR_ESP_NONLIVING);
-        nonliv = true;
-        break;
-    }
+    const auto flag = rand_choice(candidates);
+    o_ptr->art_flags.set(flag);
 
-    return nonliv;
+    return flag == TR_ESP_NONLIVING;
 }
 
 /*!
@@ -330,38 +324,20 @@ void one_ability(ItemEntity *o_ptr)
  */
 void one_low_esp(ItemEntity *o_ptr)
 {
-    switch (randint1(10)) {
-    case 1:
-        o_ptr->art_flags.set(TR_ESP_ANIMAL);
-        break;
-    case 2:
-        o_ptr->art_flags.set(TR_ESP_UNDEAD);
-        break;
-    case 3:
-        o_ptr->art_flags.set(TR_ESP_DEMON);
-        break;
-    case 4:
-        o_ptr->art_flags.set(TR_ESP_ORC);
-        break;
-    case 5:
-        o_ptr->art_flags.set(TR_ESP_TROLL);
-        break;
-    case 6:
-        o_ptr->art_flags.set(TR_ESP_GIANT);
-        break;
-    case 7:
-        o_ptr->art_flags.set(TR_ESP_DRAGON);
-        break;
-    case 8:
-        o_ptr->art_flags.set(TR_ESP_HUMAN);
-        break;
-    case 9:
-        o_ptr->art_flags.set(TR_ESP_GOOD);
-        break;
-    case 10:
-        o_ptr->art_flags.set(TR_ESP_UNIQUE);
-        break;
-    }
+    constexpr static auto low_esps = {
+        TR_ESP_ANIMAL,
+        TR_ESP_UNDEAD,
+        TR_ESP_DEMON,
+        TR_ESP_ORC,
+        TR_ESP_TROLL,
+        TR_ESP_GIANT,
+        TR_ESP_DRAGON,
+        TR_ESP_HUMAN,
+        TR_ESP_GOOD,
+        TR_ESP_UNIQUE,
+    };
+
+    o_ptr->art_flags.set(rand_choice(low_esps));
 }
 
 /*!
