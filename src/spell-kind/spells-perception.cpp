@@ -180,14 +180,7 @@ bool identify_fully(PlayerType *player_ptr, bool only_equip)
 
     o_ptr->ident |= (IDENT_FULL_KNOWN);
 
-    auto &rfu = RedrawingFlagsUpdater::get_instance();
-    const auto flags_srf = {
-        StatusRedrawingFlag::COMBINATION,
-        StatusRedrawingFlag::REORDER,
-    };
-    rfu.reset_flags(flags_srf);
-    handle_stuff(player_ptr);
-    rfu.set_flags(flags_srf);
+    window_stuff(player_ptr);
 
     const auto item_name = describe_flavor(player_ptr, o_ptr, 0);
     if (item >= INVEN_MAIN_HAND) {

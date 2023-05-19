@@ -237,8 +237,6 @@ void wiz_identify_full_inventory(PlayerType *player_ptr)
         StatusRedrawingFlag::COMBINATION,
         StatusRedrawingFlag::REORDER,
     };
-    rfu.reset_flags(flags_srf);
-    handle_stuff(player_ptr);
     rfu.set_flags(flags_srf);
     set_bits(player_ptr->window_flags, PW_INVENTORY | PW_EQUIPMENT);
 }
