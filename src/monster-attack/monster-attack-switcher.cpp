@@ -245,7 +245,7 @@ static void calc_blow_time(PlayerType *player_ptr, MonsterAttackPlayer *monap_pt
         return;
     }
 
-    process_monster_attack_time(player_ptr, monap_ptr);
+    process_monster_attack_time(player_ptr);
     if (has_resist_time(player_ptr)) {
         monap_ptr->damage = monap_ptr->damage * (randint1(4) + 4) / 9;
     }
