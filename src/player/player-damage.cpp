@@ -76,7 +76,7 @@
 #include <sstream>
 #include <string>
 
-using dam_func = int (*)(PlayerType *player_ptr, int dam, concptr kb_str, bool aura);
+using dam_func = int (*)(PlayerType *player_ptr, int dam, std::string_view kb_str, bool aura);
 
 /*!
  * @brief 酸攻撃による装備のAC劣化処理 /
@@ -139,7 +139,7 @@ static bool acid_minus_ac(PlayerType *player_ptr)
  * @return 修正HPダメージ量
  * @details 酸オーラは存在しないが関数ポインタのために引数だけは用意している
  */
-int acid_dam(PlayerType *player_ptr, int dam, concptr kb_str, bool aura)
+int acid_dam(PlayerType *player_ptr, int dam, std::string_view kb_str, bool aura)
 {
     int inv = (dam < 30) ? 1 : (dam < 60) ? 2
                                           : 3;
@@ -177,7 +177,7 @@ int acid_dam(PlayerType *player_ptr, int dam, concptr kb_str, bool aura)
  * @param aura オーラよるダメージが原因ならばTRUE
  * @return 修正HPダメージ量
  */
-int elec_dam(PlayerType *player_ptr, int dam, concptr kb_str, bool aura)
+int elec_dam(PlayerType *player_ptr, int dam, std::string_view kb_str, bool aura)
 {
     int inv = (dam < 30) ? 1 : (dam < 60) ? 2
                                           : 3;
@@ -213,7 +213,7 @@ int elec_dam(PlayerType *player_ptr, int dam, concptr kb_str, bool aura)
  * @param aura オーラよるダメージが原因ならばTRUE
  * @return 修正HPダメージ量
  */
-int fire_dam(PlayerType *player_ptr, int dam, concptr kb_str, bool aura)
+int fire_dam(PlayerType *player_ptr, int dam, std::string_view kb_str, bool aura)
 {
     int inv = (dam < 30) ? 1 : (dam < 60) ? 2
                                           : 3;
@@ -249,7 +249,7 @@ int fire_dam(PlayerType *player_ptr, int dam, concptr kb_str, bool aura)
  * @param aura オーラよるダメージが原因ならばTRUE
  * @return 修正HPダメージ量
  */
-int cold_dam(PlayerType *player_ptr, int dam, concptr kb_str, bool aura)
+int cold_dam(PlayerType *player_ptr, int dam, std::string_view kb_str, bool aura)
 {
     int inv = (dam < 30) ? 1 : (dam < 60) ? 2
                                           : 3;
@@ -282,7 +282,7 @@ int cold_dam(PlayerType *player_ptr, int dam, concptr kb_str, bool aura)
  * the game when he dies, since the "You die." message is shown before
  * setting the player to "dead".
  */
-int take_hit(PlayerType *player_ptr, int damage_type, int damage, concptr hit_from)
+int take_hit(PlayerType *player_ptr, int damage_type, int damage, std::string_view hit_from)
 {
     int old_chp = player_ptr->chp;
     int warning = (player_ptr->mhp * hitpoint_warn / 10);
@@ -385,9 +385,9 @@ int take_hit(PlayerType *player_ptr, int damage_type, int damage, concptr hit_fr
                 exe_write_diary(player_ptr, DIARY_ARENA, -1 - player_ptr->arena_number, m_name);
             }
         } else {
-            auto q_idx = quest_number(player_ptr, floor_ref.dun_level);
-            bool seppuku = streq(hit_from, "Seppuku");
-            bool winning_seppuku = w_ptr->total_winner && seppuku;
+            const auto q_idx = quest_number(player_ptr, floor_ref.dun_level);
+            const auto seppuku = hit_from == "Seppuku";
+            const auto winning_seppuku = w_ptr->total_winner && seppuku;
 
             play_music(TERM_XTRA_MUSIC_BASIC, MUSIC_BASIC_GAMEOVER);
 
@@ -409,9 +409,9 @@ int take_hit(PlayerType *player_ptr, int damage_type, int damage, concptr hit_fr
 
                 auto hallucintion_state = is_hallucinated ? _("幻覚に歪んだ", "hallucinatingly distorted ") : "";
 #ifdef JP
-                player_ptr->died_from = format("%s%s%s", paralysis_state, hallucintion_state, hit_from);
+                player_ptr->died_from = format("%s%s%s", paralysis_state, hallucintion_state, hit_from.data());
 #else
-                player_ptr->died_from = format("%s%s%s", hallucintion_state, hit_from, paralysis_state);
+                player_ptr->died_from = format("%s%s%s", hallucintion_state, hit_from.data(), paralysis_state);
 #endif
             }
 

@@ -1,6 +1,6 @@
 ﻿#pragma once
 
-#include "system/angband.h"
+#include <string_view>
 
 #define DAMAGE_FORCE 1
 #define DAMAGE_GENO 2
@@ -11,9 +11,9 @@
 
 class MonsterEntity;
 class PlayerType;
-int take_hit(PlayerType *player_ptr, int damage_type, int damage, concptr kb_str);
-int acid_dam(PlayerType *player_ptr, int dam, concptr kb_str, bool aura);
-int elec_dam(PlayerType *player_ptr, int dam, concptr kb_str, bool aura);
-int fire_dam(PlayerType *player_ptr, int dam, concptr kb_str, bool aura);
-int cold_dam(PlayerType *player_ptr, int dam, concptr kb_str, bool aura);
+int take_hit(PlayerType *player_ptr, int damage_type, int damage, std::string_view kb_str);
+int acid_dam(PlayerType *player_ptr, int dam, std::string_view kb_str, bool aura);
+int elec_dam(PlayerType *player_ptr, int dam, std::string_view kb_str, bool aura);
+int fire_dam(PlayerType *player_ptr, int dam, std::string_view kb_str, bool aura);
+int cold_dam(PlayerType *player_ptr, int dam, std::string_view kb_str, bool aura);
 void touch_zap_player(MonsterEntity *m_ptr, PlayerType *player_ptr);
