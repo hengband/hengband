@@ -79,7 +79,8 @@ effect_monster_type *initialize_effect_monster(PlayerType *player_ptr, effect_mo
     em_ptr->heal_leper = false;
     em_ptr->photo = 0;
     em_ptr->note = nullptr;
-    em_ptr->note_dies = extract_note_dies(em_ptr->m_ptr->get_real_r_idx());
+    const auto died_mes = em_ptr->m_ptr->get_died_message();
+    em_ptr->note_dies = died_mes.data();
     em_ptr->caster_lev = (em_ptr->who > 0) ? monraces_info[em_ptr->m_caster_ptr->r_idx].level : (player_ptr->lev * 2);
     return em_ptr;
 }

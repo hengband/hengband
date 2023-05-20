@@ -198,3 +198,9 @@ bool MonsterEntity::has_living_flag(bool is_apperance) const
     const auto &monrace = monraces_info[is_apperance ? this->ap_r_idx : this->r_idx];
     return monrace.has_living_flag();
 }
+
+std::string MonsterEntity::get_died_message() const
+{
+    const auto &monrace = monraces_info[this->r_idx];
+    return monrace.get_died_message();
+}

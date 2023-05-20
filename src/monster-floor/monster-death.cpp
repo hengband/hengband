@@ -420,30 +420,3 @@ void monster_death(PlayerType *player_ptr, MONSTER_IDX m_idx, bool drop_item, At
 
     on_defeat_last_boss(player_ptr);
 }
-
-/*!
- * @brief モンスターを撃破した際の述語メッセージを返す /
- * Return monster death string
- * @param r_ptr 撃破されたモンスターの種族情報を持つ構造体の参照ポインタ
- * @return 撃破されたモンスターの述語
- */
-concptr extract_note_dies(MonsterRaceId r_idx)
-{
-    const auto &r_ref = monraces_info[r_idx];
-    const auto explode = std::any_of(std::begin(r_ref.blow), std::end(r_ref.blow),
-        [](const auto &blow) { return blow.method == RaceBlowMethodType::EXPLODE; });
-
-    if (r_ref.has_living_flag()) {
-        if (explode) {
-            return _("は爆発して死んだ。", " explodes and dies.");
-        }
-
-        return _("は死んだ。", " dies.");
-    }
-
-    if (explode) {
-        return _("は爆発して粉々になった。", " explodes into tiny shreds.");
-    }
-
-    return _("を倒した。", " is destroyed.");
-}
