@@ -109,6 +109,3 @@ struct player_race_info {
 };
 
 extern const player_race_info *rp_ptr;
-
-class PlayerType;
-char get_summon_symbol_from_player(PlayerType *player_ptr);

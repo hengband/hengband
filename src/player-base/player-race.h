@@ -26,6 +26,7 @@ public:
     int16_t additional_strength() const;
     int16_t additional_dexterity() const;
     int16_t additional_constitution() const;
+    char get_summon_symbol() const;
 
 private:
     PlayerType *player_ptr;

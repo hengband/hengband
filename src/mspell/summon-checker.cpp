@@ -9,7 +9,7 @@
 #include "monster-race/race-flags8.h"
 #include "monster-race/race-indice-types.h"
 #include "monster/monster-util.h"
-#include "player-info/race-info.h"
+#include "player-base/player-race.h"
 #include "spell/summon-types.h"
 #include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
@@ -87,7 +87,7 @@ bool check_summon_specific(PlayerType *player_ptr, MonsterRaceId summoner_idx, M
         is_match = (r_ptr->d_char == 'U') && r_ptr->ability_flags.has(MonsterAbilityType::ROCKET);
         break;
     case SUMMON_KIN: {
-        auto summon_kin_type = MonsterRace(summoner_idx).is_valid() ? monraces_info[summoner_idx].d_char : get_summon_symbol_from_player(player_ptr);
+        auto summon_kin_type = MonsterRace(summoner_idx).is_valid() ? monraces_info[summoner_idx].d_char : PlayerRace(player_ptr).get_summon_symbol();
         is_match = (r_ptr->d_char == summon_kin_type) && (r_idx != MonsterRaceId::HAGURE);
         break;
     }
