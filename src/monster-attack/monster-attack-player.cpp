@@ -395,7 +395,7 @@ void MonsterAttackPlayer::monster_explode()
 
     sound(SOUND_EXPLODE);
     MonsterDamageProcessor mdp(this->player_ptr, this->m_idx, this->m_ptr->hp + 1, &this->fear, AttributeType::NONE);
-    if (mdp.mon_take_hit(nullptr)) {
+    if (mdp.mon_take_hit("")) {
         this->blinked = false;
         this->alive = false;
     }

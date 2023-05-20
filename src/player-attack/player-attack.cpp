@@ -445,7 +445,7 @@ static void apply_damage_negative_effect(player_attack_type *pa_ptr, bool is_zan
 static bool check_fear_death(PlayerType *player_ptr, player_attack_type *pa_ptr, const int num, const bool is_lowlevel)
 {
     MonsterDamageProcessor mdp(player_ptr, pa_ptr->m_idx, pa_ptr->attack_damage, pa_ptr->fear, pa_ptr->attribute_flags);
-    if (!mdp.mon_take_hit(nullptr)) {
+    if (!mdp.mon_take_hit("")) {
         return false;
     }
 

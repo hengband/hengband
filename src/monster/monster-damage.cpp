@@ -92,7 +92,7 @@ MonsterDamageProcessor::MonsterDamageProcessor(PlayerType *player_ptr, MONSTER_I
  * @brief モンスターのHPをダメージに応じて減算する /
  * @return モンスターが生きていればfalse、死んだらtrue
  */
-bool MonsterDamageProcessor::mon_take_hit(concptr note)
+bool MonsterDamageProcessor::mon_take_hit(std::string_view note)
 {
     auto *m_ptr = &this->player_ptr->current_floor_ptr->m_list[this->m_idx];
     auto exp_mon = *m_ptr;
@@ -136,7 +136,7 @@ bool MonsterDamageProcessor::genocide_chaos_patron()
     return this->m_idx == 0;
 }
 
-bool MonsterDamageProcessor::process_dead_exp_virtue(concptr note, MonsterEntity *exp_mon)
+bool MonsterDamageProcessor::process_dead_exp_virtue(std::string_view note, MonsterEntity *exp_mon)
 {
     auto *m_ptr = &this->player_ptr->current_floor_ptr->m_list[this->m_idx];
     auto &r_ref = m_ptr->get_real_r_ref();
@@ -350,13 +350,13 @@ void MonsterDamageProcessor::dying_scream(std::string_view m_name)
 #endif
 }
 
-void MonsterDamageProcessor::show_kill_message(concptr note, std::string_view m_name)
+void MonsterDamageProcessor::show_kill_message(std::string_view note, std::string_view m_name)
 {
     auto *floor_ptr = this->player_ptr->current_floor_ptr;
     auto *m_ptr = &floor_ptr->m_list[this->m_idx];
     const auto &r_ref = m_ptr->get_real_r_ref();
-    if (note != nullptr) {
-        msg_format("%s^%s", m_name.data(), note);
+    if (!note.empty()) {
+        msg_format("%s^%s", m_name.data(), note.data());
         return;
     }
 
@@ -367,7 +367,8 @@ void MonsterDamageProcessor::show_kill_message(concptr note, std::string_view m_
         return;
     }
 
-    const auto explode = std::any_of(std::begin(r_ref.blow), std::end(r_ref.blow), [](const auto &blow) { return blow.method == RaceBlowMethodType::EXPLODE; });
+    const auto explode = std::any_of(std::begin(r_ref.blow), std::end(r_ref.blow),
+        [](const auto &blow) { return blow.method == RaceBlowMethodType::EXPLODE; });
 
     if (m_ptr->has_living_flag()) {
         if (explode) {

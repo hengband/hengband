@@ -45,6 +45,7 @@
 #include "util/bit-flags-calculator.h"
 #include "util/string-processor.h"
 #include "view/display-messages.h"
+#include <string>
 
 // Melee-post-process-type
 struct mam_pp_type {
@@ -54,14 +55,14 @@ struct mam_pp_type {
     GAME_TEXT m_name[160];
     int dam;
     bool known; /* Can the player be aware of this attack? */
-    concptr note;
+    std::string note;
     bool *dead;
     bool *fear;
     MONSTER_IDX who;
 };
 
 mam_pp_type *initialize_mam_pp_type(
-    PlayerType *player_ptr, mam_pp_type *mam_pp_ptr, MONSTER_IDX m_idx, int dam, bool *dead, bool *fear, concptr note, MONSTER_IDX who)
+    PlayerType *player_ptr, mam_pp_type *mam_pp_ptr, MONSTER_IDX m_idx, int dam, bool *dead, bool *fear, std::string_view note, MONSTER_IDX who)
 {
     mam_pp_ptr->m_idx = m_idx;
     mam_pp_ptr->m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
@@ -158,10 +159,10 @@ static void print_monster_dead_by_monster(PlayerType *player_ptr, mam_pp_type *m
         return;
     }
 
-    if (mam_pp_ptr->note) {
+    if (!mam_pp_ptr->note.empty()) {
         sound_type kill_sound = mam_pp_ptr->m_ptr->has_living_flag() ? SOUND_KILL : SOUND_N_KILL;
         sound(kill_sound);
-        msg_format(_("%s^%s", "%s^%s"), mam_pp_ptr->m_name, mam_pp_ptr->note);
+        msg_format(_("%s^%s", "%s^%s"), mam_pp_ptr->m_name, mam_pp_ptr->note.data());
         return;
     }
 
@@ -276,7 +277,7 @@ static void fall_off_horse_by_melee(PlayerType *player_ptr, mam_pp_type *mam_pp_
  * @param who 打撃を行ったモンスターの参照ID
  * @todo 打撃が当たった時の後処理 (爆発持ちのモンスターを爆発させる等)なので、関数名を変更する必要あり
  */
-void mon_take_hit_mon(PlayerType *player_ptr, MONSTER_IDX m_idx, int dam, bool *dead, bool *fear, concptr note, MONSTER_IDX who)
+void mon_take_hit_mon(PlayerType *player_ptr, MONSTER_IDX m_idx, int dam, bool *dead, bool *fear, std::string_view note, MONSTER_IDX who)
 {
     auto *floor_ptr = player_ptr->current_floor_ptr;
     auto *m_ptr = &floor_ptr->m_list[m_idx];
