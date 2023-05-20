@@ -65,15 +65,15 @@ static void write_pet_death(PlayerType *player_ptr, monster_death_type *md_ptr)
 
 static void on_dead_explosion(PlayerType *player_ptr, monster_death_type *md_ptr)
 {
-    for (int i = 0; i < 4; i++) {
-        if (md_ptr->r_ptr->blows[i].method != RaceBlowMethodType::EXPLODE) {
+    for (const auto &blow : md_ptr->r_ptr->blows) {
+        if (blow.method != RaceBlowMethodType::EXPLODE) {
             continue;
         }
 
         BIT_FLAGS flg = PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL;
-        AttributeType typ = mbe_info[enum2i(md_ptr->r_ptr->blows[i].effect)].explode_type;
-        DICE_NUMBER d_dice = md_ptr->r_ptr->blows[i].d_dice;
-        DICE_SID d_side = md_ptr->r_ptr->blows[i].d_side;
+        AttributeType typ = mbe_info[enum2i(blow.effect)].explode_type;
+        DICE_NUMBER d_dice = blow.d_dice;
+        DICE_SID d_side = blow.d_side;
         int damage = damroll(d_dice, d_side);
         (void)project(player_ptr, md_ptr->m_idx, 3, md_ptr->md_y, md_ptr->md_x, damage, typ, flg);
         break;

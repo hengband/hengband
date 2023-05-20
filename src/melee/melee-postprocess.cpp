@@ -184,14 +184,14 @@ static void print_monster_dead_by_monster(PlayerType *player_ptr, mam_pp_type *m
  */
 static bool check_monster_hp(PlayerType *player_ptr, mam_pp_type *mam_pp_ptr)
 {
-    auto *r_ptr = &monraces_info[mam_pp_ptr->m_ptr->r_idx];
+    const auto &monrace = monraces_info[mam_pp_ptr->m_ptr->r_idx];
     if (mam_pp_ptr->m_ptr->hp < 0) {
         return false;
     }
 
-    auto is_like_unique = r_ptr->kind_flags.has(MonsterKindType::UNIQUE);
-    is_like_unique |= any_bits(r_ptr->flags1, RF1_QUESTOR);
-    is_like_unique |= r_ptr->population_flags.has(MonsterPopulationType::NAZGUL);
+    auto is_like_unique = monrace.kind_flags.has(MonsterKindType::UNIQUE);
+    is_like_unique |= any_bits(monrace.flags1, RF1_QUESTOR);
+    is_like_unique |= monrace.population_flags.has(MonsterPopulationType::NAZGUL);
     if (is_like_unique && !player_ptr->phase_out) {
         mam_pp_ptr->m_ptr->hp = 1;
         return false;

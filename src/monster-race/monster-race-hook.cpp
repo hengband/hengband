@@ -856,27 +856,24 @@ bool monster_can_entry_arena(PlayerType *player_ptr, MonsterRaceId r_idx)
     (void)player_ptr;
 
     int dam = 0;
-    auto *r_ptr = &monraces_info[r_idx];
-    bool unselectable = r_ptr->behavior_flags.has(MonsterBehaviorType::NEVER_MOVE);
-    unselectable |= any_bits(r_ptr->flags2, RF2_MULTIPLY);
-    unselectable |= r_ptr->kind_flags.has(MonsterKindType::QUANTUM) && r_ptr->kind_flags.has_not(MonsterKindType::UNIQUE);
-    unselectable |= r_ptr->feature_flags.has(MonsterFeatureType::AQUATIC);
-    unselectable |= any_bits(r_ptr->flags7, RF7_CHAMELEON);
+    const auto &monrace = monraces_info[r_idx];
+    bool unselectable = monrace.behavior_flags.has(MonsterBehaviorType::NEVER_MOVE);
+    unselectable |= any_bits(monrace.flags2, RF2_MULTIPLY);
+    unselectable |= monrace.kind_flags.has(MonsterKindType::QUANTUM) && monrace.kind_flags.has_not(MonsterKindType::UNIQUE);
+    unselectable |= monrace.feature_flags.has(MonsterFeatureType::AQUATIC);
+    unselectable |= any_bits(monrace.flags7, RF7_CHAMELEON);
+    unselectable |= monrace.is_explodable();
     if (unselectable) {
         return false;
     }
 
-    for (int i = 0; i < 4; i++) {
-        if (r_ptr->blows[i].method == RaceBlowMethodType::EXPLODE) {
-            return false;
-        }
-
-        if (r_ptr->blows[i].effect != RaceBlowEffectType::DR_MANA) {
-            dam += r_ptr->blows[i].d_dice;
+    for (const auto &blow : monrace.blows) {
+        if (blow.effect != RaceBlowEffectType::DR_MANA) {
+            dam += blow.d_dice;
         }
     }
 
-    if (!dam && r_ptr->ability_flags.has_none_of(RF_ABILITY_BOLT_MASK | RF_ABILITY_BEAM_MASK | RF_ABILITY_BALL_MASK | RF_ABILITY_BREATH_MASK)) {
+    if (!dam && monrace.ability_flags.has_none_of(RF_ABILITY_BOLT_MASK | RF_ABILITY_BEAM_MASK | RF_ABILITY_BALL_MASK | RF_ABILITY_BREATH_MASK)) {
         return false;
     }
 

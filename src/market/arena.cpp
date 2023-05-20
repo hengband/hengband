@@ -289,14 +289,14 @@ bool monster_arena_comm(PlayerType *player_ptr)
     clear_bldg(4, 10);
 
     prt(_("モンスター                                                     倍率", "Monsters                                                       Odds"), 4, 4);
-    for (int i = 0; i < 4; i++) {
-        auto *r_ptr = &monraces_info[battle_mon_list[i]];
+    for (auto i = 0; i < 4; i++) {
+        const auto &monrace = monraces_info[battle_mon_list[i]];
         std::string name;
-        if (r_ptr->kind_flags.has(MonsterKindType::UNIQUE)) {
-            name = _(r_ptr->name, "Fake ");
-            name.append(_("もどき", r_ptr->name));
+        if (monrace.kind_flags.has(MonsterKindType::UNIQUE)) {
+            name = _(monrace.name, "Fake ");
+            name.append(_("もどき", monrace.name));
         } else {
-            name = r_ptr->name;
+            name = monrace.name;
             name.append(_("      ", ""));
         }
 
