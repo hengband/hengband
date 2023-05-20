@@ -410,6 +410,8 @@ public:
 
     std::shared_ptr<TimedEffects> effects() const;
     bool is_fully_healthy() const;
+    std::string decrease_ability_random();
+    std::string decrease_ability_all();
 
 private:
     std::shared_ptr<TimedEffects> timed_effects;
