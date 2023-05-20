@@ -277,8 +277,8 @@ static byte get_dungeon_feeling(PlayerType *player_ptr)
  */
 void update_dungeon_feeling(PlayerType *player_ptr)
 {
-    auto *floor_ptr = player_ptr->current_floor_ptr;
-    if (!floor_ptr->dun_level) {
+    const auto &floor = *player_ptr->current_floor_ptr;
+    if (!floor.dun_level) {
         return;
     }
 
@@ -286,12 +286,12 @@ void update_dungeon_feeling(PlayerType *player_ptr)
         return;
     }
 
-    int delay = std::max(10, 150 - player_ptr->skill_fos) * (150 - floor_ptr->dun_level) * TURNS_PER_TICK / 100;
+    int delay = std::max(10, 150 - player_ptr->skill_fos) * (150 - floor.dun_level) * TURNS_PER_TICK / 100;
     if (w_ptr->game_turn < player_ptr->feeling_turn + delay && !cheat_xtra) {
         return;
     }
 
-    auto quest_num = quest_number(player_ptr, floor_ptr->dun_level);
+    auto quest_num = quest_number(floor, floor.dun_level);
     const auto &quest_list = QuestList::get_instance();
 
     auto dungeon_quest = (quest_num == QuestId::OBERON);
@@ -324,11 +324,11 @@ void update_dungeon_feeling(PlayerType *player_ptr)
  */
 void glow_deep_lava_and_bldg(PlayerType *player_ptr)
 {
-    if (dungeons_info[player_ptr->dungeon_idx].flags.has(DungeonFeatureType::DARKNESS)) {
+    auto *floor_ptr = player_ptr->current_floor_ptr;
+    if (dungeons_info[floor_ptr->dungeon_idx].flags.has(DungeonFeatureType::DARKNESS)) {
         return;
     }
 
-    auto *floor_ptr = player_ptr->current_floor_ptr;
     for (POSITION y = 0; y < floor_ptr->height; y++) {
         for (POSITION x = 0; x < floor_ptr->width; x++) {
             grid_type *g_ptr;

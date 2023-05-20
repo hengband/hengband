@@ -282,15 +282,16 @@ static void reset_unique_by_floor_change(PlayerType *player_ptr)
 static void new_floor_allocation(PlayerType *player_ptr, saved_floor_type *sf_ptr)
 {
     GAME_TURN tmp_last_visit = sf_ptr->last_visit;
-    int alloc_chance = dungeons_info[player_ptr->dungeon_idx].max_m_alloc_chance;
+    const auto &floor = *player_ptr->current_floor_ptr;
+    int alloc_chance = dungeons_info[floor.dungeon_idx].max_m_alloc_chance;
     while (tmp_last_visit > w_ptr->game_turn) {
         tmp_last_visit -= TURNS_PER_TICK * TOWN_DAWN;
     }
 
     GAME_TURN absence_ticks = (w_ptr->game_turn - tmp_last_visit) / TURNS_PER_TICK;
     reset_unique_by_floor_change(player_ptr);
-    for (MONSTER_IDX i = 1; i < player_ptr->current_floor_ptr->o_max; i++) {
-        auto *o_ptr = &player_ptr->current_floor_ptr->o_list[i];
+    for (MONSTER_IDX i = 1; i < floor.o_max; i++) {
+        const auto *o_ptr = &floor.o_list[i];
         if (!o_ptr->is_valid() || !o_ptr->is_fixed_artifact()) {
             continue;
         }
@@ -339,16 +340,17 @@ static void update_new_floor_feature(PlayerType *player_ptr, saved_floor_type *s
 
     check_dead_end(player_ptr, sf_ptr);
     sf_ptr->last_visit = w_ptr->game_turn;
-    sf_ptr->dun_level = player_ptr->current_floor_ptr->dun_level;
+    auto &floor = *player_ptr->current_floor_ptr;
+    sf_ptr->dun_level = floor.dun_level;
     if ((player_ptr->change_floor_mode & CFM_NO_RETURN) != 0) {
         return;
     }
 
-    auto *g_ptr = &player_ptr->current_floor_ptr->grid_array[player_ptr->y][player_ptr->x];
-    if ((player_ptr->change_floor_mode & CFM_UP) && !inside_quest(quest_number(player_ptr, player_ptr->current_floor_ptr->dun_level))) {
-        g_ptr->feat = (player_ptr->change_floor_mode & CFM_SHAFT) ? feat_state(player_ptr->current_floor_ptr, feat_down_stair, TerrainCharacteristics::SHAFT) : feat_down_stair;
+    auto *g_ptr = &floor.grid_array[player_ptr->y][player_ptr->x];
+    if ((player_ptr->change_floor_mode & CFM_UP) && !inside_quest(quest_number(floor, floor.dun_level))) {
+        g_ptr->feat = (player_ptr->change_floor_mode & CFM_SHAFT) ? feat_state(&floor, feat_down_stair, TerrainCharacteristics::SHAFT) : feat_down_stair;
     } else if ((player_ptr->change_floor_mode & CFM_DOWN) && !ironman_downward) {
-        g_ptr->feat = (player_ptr->change_floor_mode & CFM_SHAFT) ? feat_state(player_ptr->current_floor_ptr, feat_up_stair, TerrainCharacteristics::SHAFT) : feat_up_stair;
+        g_ptr->feat = (player_ptr->change_floor_mode & CFM_SHAFT) ? feat_state(&floor, feat_up_stair, TerrainCharacteristics::SHAFT) : feat_up_stair;
     }
 
     g_ptr->mimic = 0;

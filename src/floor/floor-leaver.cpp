@@ -251,19 +251,20 @@ static void preserve_info(PlayerType *player_ptr)
 {
     auto quest_r_idx = MonsterRace::empty_id();
     const auto &quest_list = QuestList::get_instance();
+    const auto &floor = *player_ptr->current_floor_ptr;
     for (const auto &[q_idx, quest] : quest_list) {
         auto quest_relating_monster = (quest.status == QuestStatusType::TAKEN);
         quest_relating_monster &= ((quest.type == QuestKindType::KILL_LEVEL) || (quest.type == QuestKindType::RANDOM));
-        quest_relating_monster &= (quest.level == player_ptr->current_floor_ptr->dun_level);
-        quest_relating_monster &= (player_ptr->dungeon_idx == quest.dungeon);
+        quest_relating_monster &= (quest.level == floor.dun_level);
+        quest_relating_monster &= (floor.dungeon_idx == quest.dungeon);
         quest_relating_monster &= !(quest.flags & QUEST_FLAG_PRESET);
         if (quest_relating_monster) {
             quest_r_idx = quest.r_idx;
         }
     }
 
-    for (DUNGEON_IDX i = 1; i < player_ptr->current_floor_ptr->m_max; i++) {
-        auto *m_ptr = &player_ptr->current_floor_ptr->m_list[i];
+    for (DUNGEON_IDX i = 1; i < floor.m_max; i++) {
+        auto *m_ptr = &floor.m_list[i];
         if (!m_ptr->is_valid() || (quest_r_idx != m_ptr->r_idx)) {
             continue;
         }
@@ -323,35 +324,38 @@ static void jump_floors(PlayerType *player_ptr)
         move_num *= 2;
     }
 
-    auto &floor_ref = *player_ptr->current_floor_ptr;
+    auto &floor = *player_ptr->current_floor_ptr;
+    const auto &dungeon = dungeons_info[floor.dungeon_idx];
     if (any_bits(mode, CFM_DOWN)) {
-        if (!floor_ref.is_in_dungeon()) {
-            move_num = dungeons_info[player_ptr->dungeon_idx].mindepth;
+        if (!floor.is_in_dungeon()) {
+            move_num = dungeon.mindepth;
         }
     } else if (any_bits(mode, CFM_UP)) {
-        if (floor_ref.dun_level + move_num < dungeons_info[player_ptr->dungeon_idx].mindepth) {
-            move_num = -floor_ref.dun_level;
+        if (floor.dun_level + move_num < dungeon.mindepth) {
+            move_num = -floor.dun_level;
         }
     }
 
-    floor_ref.dun_level += move_num;
+    floor.dun_level += move_num;
 }
 
 static void exit_to_wilderness(PlayerType *player_ptr)
 {
-    if (player_ptr->current_floor_ptr->is_in_dungeon() || (player_ptr->dungeon_idx == 0)) {
+    auto &floor = *player_ptr->current_floor_ptr;
+    if (floor.is_in_dungeon() || (floor.dungeon_idx == 0)) {
         return;
     }
 
     player_ptr->leaving_dungeon = true;
     if (!vanilla_town && !lite_town) {
-        player_ptr->wilderness_y = dungeons_info[player_ptr->dungeon_idx].dy;
-        player_ptr->wilderness_x = dungeons_info[player_ptr->dungeon_idx].dx;
+        const auto &dungeon = dungeons_info[floor.dungeon_idx];
+        player_ptr->wilderness_y = dungeon.dy;
+        player_ptr->wilderness_x = dungeon.dx;
     }
 
-    player_ptr->recall_dungeon = player_ptr->dungeon_idx;
+    player_ptr->recall_dungeon = floor.dungeon_idx;
     player_ptr->word_recall = 0;
-    player_ptr->dungeon_idx = 0;
+    floor.dungeon_idx = 0;
     player_ptr->change_floor_mode &= ~CFM_SAVE_FLOORS; // TODO
 }
 

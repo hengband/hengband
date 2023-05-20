@@ -161,13 +161,14 @@ void init_normal_traps(void)
  * That is, it does not make sense to have spiked pits at 50 feet.\n
  * Actually, it is not this routine, but the "trap instantiation"\n
  * code, which should also check for "trap doors" on quest levels.\n
+ * @todo 引数はFloorType に差し替え可能
  */
 FEAT_IDX choose_random_trap(PlayerType *player_ptr)
 {
     FEAT_IDX feat;
 
     /* Pick a trap */
-    auto *floor_ptr = player_ptr->current_floor_ptr;
+    const auto &floor = *player_ptr->current_floor_ptr;
     while (true) {
         feat = rand_choice(normal_traps);
 
@@ -177,12 +178,12 @@ FEAT_IDX choose_random_trap(PlayerType *player_ptr)
         }
 
         /* Hack -- no trap doors on special levels */
-        if (floor_ptr->inside_arena || inside_quest(quest_number(player_ptr, floor_ptr->dun_level))) {
+        if (floor.inside_arena || inside_quest(quest_number(floor, floor.dun_level))) {
             continue;
         }
 
         /* Hack -- no trap doors on the deepest level */
-        if (floor_ptr->dun_level >= dungeons_info[floor_ptr->dungeon_idx].maxdepth) {
+        if (floor.dun_level >= dungeons_info[floor.dungeon_idx].maxdepth) {
             continue;
         }
 

@@ -66,13 +66,13 @@ OBJECT_IDX o_pop(FloorType *floor_ptr)
  * Note that if no objects are "appropriate", then this function will\n
  * fail, and return zero, but this should *almost* never happen.\n
  */
-OBJECT_IDX get_obj_index(PlayerType *player_ptr, DEPTH level, BIT_FLAGS mode)
+OBJECT_IDX get_obj_index(const FloorType *floor_ptr, DEPTH level, BIT_FLAGS mode)
 {
     if (level > MAX_DEPTH - 1) {
         level = MAX_DEPTH - 1;
     }
 
-    if ((level > 0) && dungeons_info[player_ptr->dungeon_idx].flags.has_not(DungeonFeatureType::BEGINNER)) {
+    if ((level > 0) && dungeons_info[floor_ptr->dungeon_idx].flags.has_not(DungeonFeatureType::BEGINNER)) {
         if (one_in_(CHANCE_BASEITEM_LEVEL_BOOST)) {
             level = 1 + (level * MAX_DEPTH / randint1(MAX_DEPTH));
         }

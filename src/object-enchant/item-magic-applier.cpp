@@ -74,13 +74,15 @@ void ItemMagicApplier::execute()
 std::tuple<int, int> ItemMagicApplier::calculate_chances()
 {
     auto chance_good = this->lev + 10;
-    if (chance_good > dungeons_info[this->player_ptr->dungeon_idx].obj_good) {
-        chance_good = dungeons_info[this->player_ptr->dungeon_idx].obj_good;
+    const auto &floor = *this->player_ptr->current_floor_ptr;
+    const auto &dungeon = dungeons_info[floor.dungeon_idx];
+    if (chance_good > dungeon.obj_good) {
+        chance_good = dungeon.obj_good;
     }
 
     auto chance_great = chance_good * 2 / 3;
-    if ((this->player_ptr->ppersonality != PERSONALITY_MUNCHKIN) && (chance_great > dungeons_info[this->player_ptr->dungeon_idx].obj_great)) {
-        chance_great = dungeons_info[this->player_ptr->dungeon_idx].obj_great;
+    if ((this->player_ptr->ppersonality != PERSONALITY_MUNCHKIN) && (chance_great > dungeon.obj_great)) {
+        chance_great = dungeon.obj_great;
     }
 
     if (has_good_luck(this->player_ptr)) {

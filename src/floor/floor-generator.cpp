@@ -494,7 +494,6 @@ static bool floor_is_connected(const FloorType *const floor_ptr, const IsWallFun
 void generate_floor(PlayerType *player_ptr)
 {
     auto *floor_ptr = player_ptr->current_floor_ptr;
-    floor_ptr->dungeon_idx = player_ptr->dungeon_idx;
     set_floor_and_wall(floor_ptr->dungeon_idx);
     for (int num = 0; true; num++) {
         bool okay = true;

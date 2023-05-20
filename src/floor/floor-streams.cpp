@@ -470,7 +470,7 @@ void place_trees(PlayerType *player_ptr, POSITION x, POSITION y)
                 g_ptr->mimic = 0;
 
                 /* Light area since is open above */
-                if (dungeons_info[player_ptr->dungeon_idx].flags.has_not(DungeonFeatureType::DARKNESS)) {
+                if (dungeons_info[floor_ptr->dungeon_idx].flags.has_not(DungeonFeatureType::DARKNESS)) {
                     floor_ptr->grid_array[j][i].info |= (CAVE_GLOW | CAVE_ROOM);
                 }
             }

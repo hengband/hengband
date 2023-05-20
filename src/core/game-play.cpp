@@ -278,7 +278,7 @@ static void generate_world(PlayerType *player_ptr, bool new_game)
     panel_row_min = floor_ptr->height;
     panel_col_min = floor_ptr->width;
 
-    set_floor_and_wall(player_ptr->dungeon_idx);
+    set_floor_and_wall(floor_ptr->dungeon_idx);
     initialize_items_flavor();
     prt(_("お待ち下さい...", "Please wait..."), 0, 0);
     term_fresh();

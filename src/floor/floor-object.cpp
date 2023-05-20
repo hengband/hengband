@@ -129,7 +129,7 @@ bool make_object(PlayerType *player_ptr, ItemEntity *j_ptr, BIT_FLAGS mode, std:
             get_obj_index_prep();
         }
 
-        auto bi_id = get_obj_index(player_ptr, base, mode);
+        auto bi_id = get_obj_index(floor_ptr, base, mode);
         if (get_obj_index_hook) {
             get_obj_index_hook = nullptr;
             get_obj_index_prep();

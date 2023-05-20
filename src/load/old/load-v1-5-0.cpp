@@ -557,9 +557,9 @@ errr rd_dungeon_old(PlayerType *player_ptr)
     auto *floor_ptr = player_ptr->current_floor_ptr;
     floor_ptr->dun_level = rd_s16b();
     if (h_older_than(0, 3, 8)) {
-        player_ptr->dungeon_idx = DUNGEON_ANGBAND;
+        floor_ptr->dungeon_idx = DUNGEON_ANGBAND;
     } else {
-        player_ptr->dungeon_idx = rd_byte();
+        floor_ptr->dungeon_idx = rd_byte();
     }
 
     floor_ptr->base_level = floor_ptr->dun_level;

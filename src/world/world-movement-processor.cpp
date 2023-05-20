@@ -27,14 +27,15 @@
 void check_random_quest_auto_failure(PlayerType *player_ptr)
 {
     auto &quest_list = QuestList::get_instance();
-    if (player_ptr->dungeon_idx != DUNGEON_ANGBAND) {
+    const auto &floor = *player_ptr->current_floor_ptr;
+    if (floor.dungeon_idx != DUNGEON_ANGBAND) {
         return;
     }
     for (auto q_idx : EnumRange(QuestId::RANDOM_QUEST1, QuestId::RANDOM_QUEST10)) {
         auto &quest = quest_list[q_idx];
         auto is_taken_quest = (quest.type == QuestKindType::RANDOM);
         is_taken_quest &= (quest.status == QuestStatusType::TAKEN);
-        is_taken_quest &= (quest.level < player_ptr->current_floor_ptr->dun_level);
+        is_taken_quest &= (quest.level < floor.dun_level);
         if (!is_taken_quest) {
             continue;
         }
@@ -75,40 +76,40 @@ void execute_recall(PlayerType *player_ptr)
     auto *floor_ptr = player_ptr->current_floor_ptr;
     if (floor_ptr->dun_level || inside_quest(floor_ptr->quest_number) || player_ptr->enter_dungeon) {
         msg_print(_("上に引っ張りあげられる感じがする！", "You feel yourself yanked upwards!"));
-        if (player_ptr->dungeon_idx) {
-            player_ptr->recall_dungeon = player_ptr->dungeon_idx;
+        if (floor_ptr->dungeon_idx) {
+            player_ptr->recall_dungeon = floor_ptr->dungeon_idx;
         }
         if (record_stair) {
             exe_write_diary(player_ptr, DIARY_RECALL, floor_ptr->dun_level, nullptr);
         }
 
         floor_ptr->dun_level = 0;
-        player_ptr->dungeon_idx = 0;
+        floor_ptr->dungeon_idx = 0;
         leave_quest_check(player_ptr);
         leave_tower_check(player_ptr);
-        player_ptr->current_floor_ptr->quest_number = QuestId::NONE;
+        floor_ptr->quest_number = QuestId::NONE;
         player_ptr->leaving = true;
         sound(SOUND_TPLEVEL);
         return;
     }
 
     msg_print(_("下に引きずり降ろされる感じがする！", "You feel yourself yanked downwards!"));
-    player_ptr->dungeon_idx = player_ptr->recall_dungeon;
+    floor_ptr->dungeon_idx = player_ptr->recall_dungeon;
     if (record_stair) {
         exe_write_diary(player_ptr, DIARY_RECALL, floor_ptr->dun_level, nullptr);
     }
 
-    floor_ptr->dun_level = max_dlv[player_ptr->dungeon_idx];
+    floor_ptr->dun_level = max_dlv[floor_ptr->dungeon_idx];
     if (floor_ptr->dun_level < 1) {
         floor_ptr->dun_level = 1;
     }
-    if (ironman_nightmare && !randint0(666) && (player_ptr->dungeon_idx == DUNGEON_ANGBAND)) {
+    if (ironman_nightmare && !randint0(666) && (floor_ptr->dungeon_idx == DUNGEON_ANGBAND)) {
         if (floor_ptr->dun_level < 50) {
             floor_ptr->dun_level *= 2;
         } else if (floor_ptr->dun_level < 99) {
             floor_ptr->dun_level = (floor_ptr->dun_level + 99) / 2;
         } else if (floor_ptr->dun_level > 100) {
-            floor_ptr->dun_level = dungeons_info[player_ptr->dungeon_idx].maxdepth - 1;
+            floor_ptr->dun_level = dungeons_info[floor_ptr->dungeon_idx].maxdepth - 1;
         }
     }
 
@@ -140,7 +141,7 @@ void execute_recall(PlayerType *player_ptr)
  */
 void execute_floor_reset(PlayerType *player_ptr)
 {
-    auto *floor_ptr = player_ptr->current_floor_ptr;
+    const auto &floor = *player_ptr->current_floor_ptr;
     if (player_ptr->alter_reality == 0) {
         return;
     }
@@ -156,7 +157,7 @@ void execute_floor_reset(PlayerType *player_ptr)
     }
 
     disturb(player_ptr, false, true);
-    if (!inside_quest(quest_number(player_ptr, floor_ptr->dun_level)) && floor_ptr->dun_level) {
+    if (!inside_quest(quest_number(floor, floor.dun_level)) && floor.dun_level) {
         msg_print(_("世界が変わった！", "The world changes!"));
 
         /*

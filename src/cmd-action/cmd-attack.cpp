@@ -170,11 +170,18 @@ static void natural_attack(PlayerType *player_ptr, MONSTER_IDX m_idx, PlayerMuta
  */
 bool do_cmd_attack(PlayerType *player_ptr, POSITION y, POSITION x, combat_options mode)
 {
-    auto *g_ptr = &player_ptr->current_floor_ptr->grid_array[y][x];
-    auto *m_ptr = &player_ptr->current_floor_ptr->m_list[g_ptr->m_idx];
+    auto &floor = *player_ptr->current_floor_ptr;
+    auto *g_ptr = &floor.grid_array[y][x];
+    auto *m_ptr = &floor.m_list[g_ptr->m_idx];
     auto *r_ptr = &monraces_info[m_ptr->r_idx];
 
-    const std::initializer_list<PlayerMutationType> mutation_attack_methods = { PlayerMutationType::HORNS, PlayerMutationType::BEAK, PlayerMutationType::SCOR_TAIL, PlayerMutationType::TRUNK, PlayerMutationType::TENTACLES };
+    const auto mutation_attack_methods = {
+        PlayerMutationType::HORNS,
+        PlayerMutationType::BEAK,
+        PlayerMutationType::SCOR_TAIL,
+        PlayerMutationType::TRUNK,
+        PlayerMutationType::TENTACLES,
+    };
 
     disturb(player_ptr, false, true);
 
@@ -211,7 +218,7 @@ bool do_cmd_attack(PlayerType *player_ptr, POSITION y, POSITION x, combat_option
         }
     }
 
-    if (dungeons_info[player_ptr->dungeon_idx].flags.has(DungeonFeatureType::NO_MELEE)) {
+    if (dungeons_info[floor.dungeon_idx].flags.has(DungeonFeatureType::NO_MELEE)) {
         sound(SOUND_ATTACK_FAILED);
         msg_print(_("なぜか攻撃することができない。", "Something prevents you from attacking."));
         return false;

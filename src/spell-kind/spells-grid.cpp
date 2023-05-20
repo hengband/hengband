@@ -70,17 +70,17 @@ void stair_creation(PlayerType *player_ptr)
     }
 
     bool down = true;
-    auto *floor_ptr = player_ptr->current_floor_ptr;
-    if (inside_quest(quest_number(player_ptr, floor_ptr->dun_level)) || (floor_ptr->dun_level >= dungeons_info[player_ptr->dungeon_idx].maxdepth)) {
+    auto &floor = *player_ptr->current_floor_ptr;
+    if (inside_quest(quest_number(floor, floor.dun_level)) || (floor.dun_level >= dungeons_info[floor.dungeon_idx].maxdepth)) {
         down = false;
     }
 
-    if (!floor_ptr->dun_level || (!up && !down) || (inside_quest(floor_ptr->quest_number) && QuestType::is_fixed(floor_ptr->quest_number)) || floor_ptr->inside_arena || player_ptr->phase_out) {
+    if (!floor.dun_level || (!up && !down) || (inside_quest(floor.quest_number) && QuestType::is_fixed(floor.quest_number)) || floor.inside_arena || player_ptr->phase_out) {
         msg_print(_("効果がありません！", "There is no effect!"));
         return;
     }
 
-    if (!cave_valid_bold(floor_ptr, player_ptr->y, player_ptr->x)) {
+    if (!cave_valid_bold(&floor, player_ptr->y, player_ptr->x)) {
         msg_print(_("床上のアイテムが呪文を跳ね返した。", "The object resists the spell."));
         return;
     }
@@ -113,9 +113,9 @@ void stair_creation(PlayerType *player_ptr)
     }
 
     if (dest_floor_id) {
-        for (POSITION y = 0; y < floor_ptr->height; y++) {
-            for (POSITION x = 0; x < floor_ptr->width; x++) {
-                auto *g_ptr = &floor_ptr->grid_array[y][x];
+        for (POSITION y = 0; y < floor.height; y++) {
+            for (POSITION x = 0; x < floor.width; x++) {
+                auto *g_ptr = &floor.grid_array[y][x];
                 if (!g_ptr->special) {
                     continue;
                 }
@@ -144,13 +144,13 @@ void stair_creation(PlayerType *player_ptr)
     dest_sf_ptr = get_sf_ptr(dest_floor_id);
     if (up) {
         cave_set_feat(player_ptr, player_ptr->y, player_ptr->x,
-            (dest_sf_ptr->last_visit && (dest_sf_ptr->dun_level <= floor_ptr->dun_level - 2)) ? feat_state(player_ptr->current_floor_ptr, feat_up_stair, TerrainCharacteristics::SHAFT)
-                                                                                              : feat_up_stair);
+            (dest_sf_ptr->last_visit && (dest_sf_ptr->dun_level <= floor.dun_level - 2)) ? feat_state(&floor, feat_up_stair, TerrainCharacteristics::SHAFT)
+                                                                                         : feat_up_stair);
     } else {
         cave_set_feat(player_ptr, player_ptr->y, player_ptr->x,
-            (dest_sf_ptr->last_visit && (dest_sf_ptr->dun_level >= floor_ptr->dun_level + 2)) ? feat_state(player_ptr->current_floor_ptr, feat_down_stair, TerrainCharacteristics::SHAFT)
-                                                                                              : feat_down_stair);
+            (dest_sf_ptr->last_visit && (dest_sf_ptr->dun_level >= floor.dun_level + 2)) ? feat_state(&floor, feat_down_stair, TerrainCharacteristics::SHAFT)
+                                                                                         : feat_down_stair);
     }
 
-    floor_ptr->grid_array[player_ptr->y][player_ptr->x].special = dest_floor_id;
+    floor.grid_array[player_ptr->y][player_ptr->x].special = dest_floor_id;
 }

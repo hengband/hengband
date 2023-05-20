@@ -77,26 +77,25 @@ static bool open_diary_file(FILE **fff, bool *disable_diary)
  * @param player_ptr プレイヤーへの参照ポインタ
  * @return クエストIDとレベルノートのペア
  */
-static std::pair<QuestId, std::string> write_floor(PlayerType *player_ptr)
+static std::pair<QuestId, std::string> write_floor(const FloorType &floor)
 {
-    auto *floor_ptr = player_ptr->current_floor_ptr;
-    auto q_idx = quest_number(player_ptr, floor_ptr->dun_level);
+    auto q_idx = quest_number(floor, floor.dun_level);
     if (!write_level) {
         return make_pair(q_idx, std::string());
     }
 
-    if (floor_ptr->inside_arena) {
+    if (floor.inside_arena) {
         return make_pair(q_idx, std::string(_("アリーナ:", "Arena:")));
-    } else if (!floor_ptr->dun_level) {
+    } else if (!floor.dun_level) {
         return make_pair(q_idx, std::string(_("地上:", "Surface:")));
     } else if (inside_quest(q_idx) && QuestType::is_fixed(q_idx) && !((q_idx == QuestId::OBERON) || (q_idx == QuestId::SERPENT))) {
         return make_pair(q_idx, std::string(_("クエスト:", "Quest:")));
     } else {
         char desc[40];
 #ifdef JP
-        strnfmt(desc, sizeof(desc), "%d階(%s):", (int)floor_ptr->dun_level, dungeons_info[player_ptr->dungeon_idx].name.data());
+        strnfmt(desc, sizeof(desc), "%d階(%s):", (int)floor.dun_level, dungeons_info[floor.dungeon_idx].name.data());
 #else
-        strnfmt(desc, sizeof(desc), "%s L%d:", dungeons_info[player_ptr->dungeon_idx].name.data(), (int)floor_ptr->dun_level);
+        strnfmt(desc, sizeof(desc), "%s L%d:", dungeons_info[floor.dungeon_idx].name.data(), (int)floor.dun_level);
 #endif
         return make_pair(q_idx, std::string(desc));
     }
@@ -180,15 +179,16 @@ int exe_write_diary_quest(PlayerType *player_ptr, int type, QuestId num)
         return -1;
     }
 
-    auto old_quest = player_ptr->current_floor_ptr->quest_number;
+    auto &floor = *player_ptr->current_floor_ptr;
+    auto old_quest = floor.quest_number;
     const auto &quest_list = QuestList::get_instance();
     const auto &quest = quest_list[num];
-    player_ptr->current_floor_ptr->quest_number = (quest.type == QuestKindType::RANDOM) ? QuestId::NONE : num;
+    floor.quest_number = (quest.type == QuestKindType::RANDOM) ? QuestId::NONE : num;
     init_flags = INIT_NAME_ONLY;
     parse_fixed_map(player_ptr, QUEST_DEFINITION_LIST, 0, 0, 0, 0);
-    player_ptr->current_floor_ptr->quest_number = old_quest;
+    floor.quest_number = old_quest;
 
-    const auto [q_idx, note_level] = write_floor(player_ptr);
+    const auto [q_idx, note_level] = write_floor(floor);
 
     FILE *fff = nullptr;
     if (!open_diary_file(&fff, &disable_diary)) {
@@ -271,7 +271,8 @@ errr exe_write_diary(PlayerType *player_ptr, int type, int num, concptr note)
         return -1;
     }
 
-    const auto [q_idx, note_level] = write_floor(player_ptr);
+    const auto &floor = *player_ptr->current_floor_ptr;
+    const auto [q_idx, note_level] = write_floor(floor);
 
     bool do_level = true;
     switch (type) {
@@ -308,15 +309,15 @@ errr exe_write_diary(PlayerType *player_ptr, int type, int num, concptr note)
         break;
     }
     case DIARY_MAXDEAPTH: {
-        fprintf(fff, _(" %2d:%02d %20s %sの最深階%d階に到達した。\n", " %2d:%02d %20s reached level %d of %s for the first time.\n"), hour, min, note_level.data(),
-            _(dungeons_info[player_ptr->dungeon_idx].name.data(), num),
-            _(num, dungeons_info[player_ptr->dungeon_idx].name.data()));
+        constexpr auto mes = _(" %2d:%02d %20s %sの最深階%d階に到達した。\n", " %2d:%02d %20s reached level %d of %s for the first time.\n");
+        const auto &dungeon = dungeons_info[floor.dungeon_idx];
+        fprintf(fff, mes, hour, min, note_level.data(), _(dungeon.name.data(), num), _(num, dungeon.name.data()));
         break;
     }
     case DIARY_TRUMP: {
-        fprintf(fff, _(" %2d:%02d %20s %s%sの最深階を%d階にセットした。\n", " %2d:%02d %20s reset recall level of %s to %d %s.\n"), hour, min, note_level.data(), note,
-            _(dungeons_info[num].name.data(), (int)max_dlv[num]),
-            _((int)max_dlv[num], dungeons_info[num].name.data()));
+        constexpr auto mes = _(" %2d:%02d %20s %s%sの最深階を%d階にセットした。\n", " %2d:%02d %20s reset recall level of %s to %d %s.\n");
+        const auto &dungeon = dungeons_info[floor.dungeon_idx];
+        fprintf(fff, mes, hour, min, note_level.data(), note, _(dungeon.name.data(), (int)max_dlv[num]), _((int)max_dlv[num], dungeon.name.data()));
         break;
     }
     case DIARY_STAIR: {
@@ -330,9 +331,9 @@ errr exe_write_diary(PlayerType *player_ptr, int type, int num, concptr note)
     }
     case DIARY_RECALL: {
         if (!num) {
-            fprintf(fff, _(" %2d:%02d %20s 帰還を使って%sの%d階へ下りた。\n", " %2d:%02d %20s recalled to dungeon level %d of %s.\n"),
-                hour, min, note_level.data(), _(dungeons_info[player_ptr->dungeon_idx].name.data(), (int)max_dlv[player_ptr->dungeon_idx]),
-                _((int)max_dlv[player_ptr->dungeon_idx], dungeons_info[player_ptr->dungeon_idx].name.data()));
+            constexpr auto mes = _(" %2d:%02d %20s 帰還を使って%sの%d階へ下りた。\n", " %2d:%02d %20s recalled to dungeon level %d of %s.\n");
+            const auto &dungeon = dungeons_info[floor.dungeon_idx];
+            fprintf(fff, mes, hour, min, note_level.data(), _(dungeon.name.data(), (int)max_dlv[floor.dungeon_idx]), _((int)max_dlv[floor.dungeon_idx], dungeon.name.data()));
         } else {
             fprintf(fff, _(" %2d:%02d %20s 帰還を使って地上へと戻った。\n", " %2d:%02d %20s recalled from dungeon to surface.\n"), hour, min, note_level.data());
         }
@@ -376,23 +377,24 @@ errr exe_write_diary(PlayerType *player_ptr, int type, int num, concptr note)
         break;
     }
     case DIARY_WIZ_TELE: {
-        const auto &floor_ref = *player_ptr->current_floor_ptr;
-        auto to = !floor_ref.is_in_dungeon()
+        auto to = !floor.is_in_dungeon()
                       ? _("地上", "the surface")
-                      : format(_("%d階(%s)", "level %d of %s"), floor_ref.dun_level, dungeons_info[player_ptr->dungeon_idx].name.data());
-        fprintf(fff, _(" %2d:%02d %20s %sへとウィザード・テレポートで移動した。\n", " %2d:%02d %20s wizard-teleported to %s.\n"), hour, min, note_level.data(), to.data());
+                      : format(_("%d階(%s)", "level %d of %s"), floor.dun_level, dungeons_info[floor.dungeon_idx].name.data());
+        constexpr auto mes = _(" %2d:%02d %20s %sへとウィザード・テレポートで移動した。\n", " %2d:%02d %20s wizard-teleported to %s.\n");
+        fprintf(fff, mes, hour, min, note_level.data(), to.data());
         break;
     }
     case DIARY_PAT_TELE: {
-        const auto &floor_ref = *player_ptr->current_floor_ptr;
-        auto to = !floor_ref.is_in_dungeon()
+        auto to = !floor.is_in_dungeon()
                       ? _("地上", "the surface")
-                      : format(_("%d階(%s)", "level %d of %s"), floor_ref.dun_level, dungeons_info[player_ptr->dungeon_idx].name.data());
-        fprintf(fff, _(" %2d:%02d %20s %sへとパターンの力で移動した。\n", " %2d:%02d %20s used Pattern to teleport to %s.\n"), hour, min, note_level.data(), to.data());
+                      : format(_("%d階(%s)", "level %d of %s"), floor.dun_level, dungeons_info[floor.dungeon_idx].name.data());
+        constexpr auto mes = _(" %2d:%02d %20s %sへとパターンの力で移動した。\n", " %2d:%02d %20s used Pattern to teleport to %s.\n");
+        fprintf(fff, mes, hour, min, note_level.data(), to.data());
         break;
     }
     case DIARY_LEVELUP: {
-        fprintf(fff, _(" %2d:%02d %20s レベルが%dに上がった。\n", " %2d:%02d %20s reached player level %d.\n"), hour, min, note_level.data(), num);
+        constexpr auto mes = _(" %2d:%02d %20s レベルが%dに上がった。\n", " %2d:%02d %20s reached player level %d.\n");
+        fprintf(fff, mes, hour, min, note_level.data(), num);
         break;
     }
     case DIARY_GAMESTART: {

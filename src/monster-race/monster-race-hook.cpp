@@ -126,13 +126,13 @@ bool mon_hook_quest(PlayerType *player_ptr, MonsterRaceId r_idx)
  */
 bool mon_hook_dungeon(PlayerType *player_ptr, MonsterRaceId r_idx)
 {
-    const auto &floor_ref = *player_ptr->current_floor_ptr;
-    if (!floor_ref.is_in_dungeon() && !inside_quest(floor_ref.quest_number)) {
+    const auto &floor = *player_ptr->current_floor_ptr;
+    if (!floor.is_in_dungeon() && !inside_quest(floor.quest_number)) {
         return true;
     }
 
     auto *r_ptr = &monraces_info[r_idx];
-    dungeon_type *d_ptr = &dungeons_info[player_ptr->dungeon_idx];
+    dungeon_type *d_ptr = &dungeons_info[floor.dungeon_idx];
     if (r_ptr->wilderness_flags.has(MonsterWildernessType::WILD_ONLY)) {
         return d_ptr->mon_wilderness_flags.has(MonsterWildernessType::WILD_MOUNTAIN) && r_ptr->wilderness_flags.has(MonsterWildernessType::WILD_MOUNTAIN);
     }

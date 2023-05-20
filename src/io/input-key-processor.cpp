@@ -404,7 +404,7 @@ void process_command(PlayerType *player_ptr)
             break;
         }
 
-        const auto &dungeon = dungeons_info[player_ptr->dungeon_idx];
+        const auto &dungeon = dungeons_info[floor_ptr->dungeon_idx];
         auto non_magic_class = pc.equals(PlayerClassType::BERSERKER);
         non_magic_class |= pc.equals(PlayerClassType::SMITH);
         if (floor_ptr->dun_level && dungeon.flags.has(DungeonFeatureType::NO_MAGIC) && !non_magic_class) {

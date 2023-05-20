@@ -388,13 +388,14 @@ std::optional<std::string> do_hissatsu_spell(PlayerType *player_ptr, SPELL_IDX s
             y = player_ptr->y + ddy[dir];
             x = player_ptr->x + ddx[dir];
 
+            const auto &floor = *player_ptr->current_floor_ptr;
             if (player_ptr->current_floor_ptr->grid_array[y][x].m_idx) {
                 do_cmd_attack(player_ptr, y, x, HISSATSU_NONE);
             } else {
                 msg_print(_("その方向にはモンスターはいません。", "There is no monster."));
                 return std::nullopt;
             }
-            if (dungeons_info[player_ptr->dungeon_idx].flags.has(DungeonFeatureType::NO_MELEE)) {
+            if (dungeons_info[floor.dungeon_idx].flags.has(DungeonFeatureType::NO_MELEE)) {
                 return "";
             }
             if (player_ptr->current_floor_ptr->grid_array[y][x].m_idx) {
@@ -805,6 +806,7 @@ std::optional<std::string> do_hissatsu_spell(PlayerType *player_ptr, SPELL_IDX s
                 return std::nullopt;
             }
 
+            const auto &floor = *player_ptr->current_floor_ptr;
             for (i = 0; i < 3; i++) {
                 POSITION y, x;
                 POSITION ny, nx;
@@ -823,7 +825,7 @@ std::optional<std::string> do_hissatsu_spell(PlayerType *player_ptr, SPELL_IDX s
                     return std::nullopt;
                 }
 
-                if (dungeons_info[player_ptr->dungeon_idx].flags.has(DungeonFeatureType::NO_MELEE)) {
+                if (dungeons_info[floor.dungeon_idx].flags.has(DungeonFeatureType::NO_MELEE)) {
                     return "";
                 }
 
@@ -1050,7 +1052,8 @@ std::optional<std::string> do_hissatsu_spell(PlayerType *player_ptr, SPELL_IDX s
             y = player_ptr->y + ddy[dir];
             x = player_ptr->x + ddx[dir];
 
-            if (dungeons_info[player_ptr->dungeon_idx].flags.has(DungeonFeatureType::NO_MELEE)) {
+            auto &floor = *player_ptr->current_floor_ptr;
+            if (dungeons_info[floor.dungeon_idx].flags.has(DungeonFeatureType::NO_MELEE)) {
                 msg_print(_("なぜか攻撃することができない。", "Something prevents you from attacking."));
                 return "";
             }
@@ -1081,8 +1084,7 @@ std::optional<std::string> do_hissatsu_spell(PlayerType *player_ptr, SPELL_IDX s
                 total_damage += (damage / 100);
             }
 
-            auto *floor_ptr = player_ptr->current_floor_ptr;
-            const auto is_bold = cave_has_flag_bold(floor_ptr, y, x, TerrainCharacteristics::PROJECT);
+            const auto is_bold = cave_has_flag_bold(&floor, y, x, TerrainCharacteristics::PROJECT);
             constexpr auto flags = PROJECT_KILL | PROJECT_JUMP | PROJECT_ITEM;
             project(player_ptr, 0, (is_bold ? 5 : 0), y, x, total_damage * 3 / 2, AttributeType::METEOR, flags);
         }

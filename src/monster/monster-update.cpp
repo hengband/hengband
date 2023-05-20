@@ -184,13 +184,14 @@ void update_player_window(PlayerType *player_ptr, old_race_flags *old_race_flags
 
 static um_type *initialize_um_type(PlayerType *player_ptr, um_type *um_ptr, MONSTER_IDX m_idx, bool full)
 {
-    um_ptr->m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
+    auto &floor = *player_ptr->current_floor_ptr;
+    um_ptr->m_ptr = &floor.m_list[m_idx];
     um_ptr->do_disturb = disturb_move;
     um_ptr->fy = um_ptr->m_ptr->fy;
     um_ptr->fx = um_ptr->m_ptr->fx;
     um_ptr->flag = false;
     um_ptr->easy = false;
-    um_ptr->in_darkness = dungeons_info[player_ptr->dungeon_idx].flags.has(DungeonFeatureType::DARKNESS) && !player_ptr->see_nocto;
+    um_ptr->in_darkness = dungeons_info[floor.dungeon_idx].flags.has(DungeonFeatureType::DARKNESS) && !player_ptr->see_nocto;
     um_ptr->full = full;
     return um_ptr;
 }
