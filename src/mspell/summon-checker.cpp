@@ -116,10 +116,10 @@ bool check_summon_specific(PlayerType *player_ptr, MonsterRaceId summoner_idx, M
         is_match = r_idx == MonsterRaceId::TOTEM_MOAI;
         break;
     case SUMMON_LIVING:
-        is_match = monster_living(r_idx);
+        is_match = r_ptr->has_living_flag();
         break;
     case SUMMON_HI_DRAGON_LIVING:
-        is_match = ((r_ptr->d_char == 'D') && monster_living(r_idx));
+        is_match = (r_ptr->d_char == 'D') && r_ptr->has_living_flag();
         break;
     case SUMMON_ELEMENTAL:
         is_match = r_ptr->d_char == 'E';
@@ -148,7 +148,7 @@ bool check_summon_specific(PlayerType *player_ptr, MonsterRaceId summoner_idx, M
             }
         }
 
-        is_match &= monster_living(r_idx);
+        is_match &= r_ptr->has_living_flag();
         break;
     case SUMMON_MANES:
         is_match = r_idx == MonsterRaceId::MANES;

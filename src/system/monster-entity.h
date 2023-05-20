@@ -80,4 +80,5 @@ public:
     bool is_fearful() const;
     bool is_invulnerable() const;
     byte get_temporary_speed() const;
+    bool has_living_flag(bool is_apperance = false) const;
 };

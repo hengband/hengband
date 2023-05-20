@@ -19,3 +19,12 @@ const std::string &MonsterRaceInfo::decide_horror_message() const
 
     return horror_desc_neutral[horror_num - horror_desc_common_size];
 }
+
+/*!
+ * @brief モンスターが生命体かどうかを返す
+ * @return 生命体ならばtrue
+ */
+bool MonsterRaceInfo::has_living_flag() const
+{
+    return this->kind_flags.has_none_of({ MonsterKindType::DEMON, MonsterKindType::UNDEAD, MonsterKindType::NONLIVING });
+}

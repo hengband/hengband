@@ -369,7 +369,7 @@ void MonsterDamageProcessor::show_kill_message(concptr note, std::string_view m_
 
     const auto explode = std::any_of(std::begin(r_ref.blow), std::end(r_ref.blow), [](const auto &blow) { return blow.method == RaceBlowMethodType::EXPLODE; });
 
-    if (monster_living(m_ptr->r_idx)) {
+    if (m_ptr->has_living_flag()) {
         if (explode) {
             msg_format(_("%sは爆発して死んだ。", "%s^ explodes and dies."), m_name.data());
             return;

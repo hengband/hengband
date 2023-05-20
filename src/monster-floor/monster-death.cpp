@@ -433,7 +433,7 @@ concptr extract_note_dies(MonsterRaceId r_idx)
     const auto explode = std::any_of(std::begin(r_ref.blow), std::end(r_ref.blow),
         [](const auto &blow) { return blow.method == RaceBlowMethodType::EXPLODE; });
 
-    if (monster_living(r_idx)) {
+    if (r_ref.has_living_flag()) {
         if (explode) {
             return _("は爆発して死んだ。", " explodes and dies.");
         }

@@ -785,21 +785,6 @@ bool vault_aux_dark_elf(PlayerType *player_ptr, MonsterRaceId r_idx)
 }
 
 /*!
- * @brief モンスターが生命体かどうかを返す
- * Is the monster "alive"?
- * @param r_ptr 判定するモンスターの種族情報構造体参照ポインタ
- * @return 生命体ならばTRUEを返す
- * @details
- * Used to determine the message to print for a killed monster.
- * ("dies", "destroyed")
- */
-bool monster_living(MonsterRaceId r_idx)
-{
-    auto *r_ptr = &monraces_info[r_idx];
-    return r_ptr->kind_flags.has_none_of({ MonsterKindType::DEMON, MonsterKindType::UNDEAD, MonsterKindType::NONLIVING });
-}
-
-/*!
  * @brief モンスターが特殊能力上、賞金首から排除する必要があるかどうかを返す。
  * Is the monster "alive"? / Is this monster declined to be questor or bounty?
  * @param r_idx モンスターの種族ID

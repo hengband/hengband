@@ -159,13 +159,13 @@ static void print_monster_dead_by_monster(PlayerType *player_ptr, mam_pp_type *m
     }
 
     if (mam_pp_ptr->note) {
-        sound_type kill_sound = monster_living(mam_pp_ptr->m_ptr->r_idx) ? SOUND_KILL : SOUND_N_KILL;
+        sound_type kill_sound = mam_pp_ptr->m_ptr->has_living_flag() ? SOUND_KILL : SOUND_N_KILL;
         sound(kill_sound);
         msg_format(_("%s^%s", "%s^%s"), mam_pp_ptr->m_name, mam_pp_ptr->note);
         return;
     }
 
-    if (!monster_living(mam_pp_ptr->m_ptr->r_idx)) {
+    if (!mam_pp_ptr->m_ptr->has_living_flag()) {
         sound(SOUND_N_KILL);
         msg_format(_("%s^は破壊された。", "%s^ is destroyed."), mam_pp_ptr->m_name);
         return;
