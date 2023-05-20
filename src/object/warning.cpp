@@ -509,13 +509,13 @@ bool process_warning(PlayerType *player_ptr, POSITION xx, POSITION yy)
             int dam_melee = 0;
             for (int m = 0; m < 4; m++) {
                 /* Skip non-attacks */
-                if (r_ptr->blow[m].method == RaceBlowMethodType::NONE || (r_ptr->blow[m].method == RaceBlowMethodType::SHOOT)) {
+                if (r_ptr->blows[m].method == RaceBlowMethodType::NONE || (r_ptr->blows[m].method == RaceBlowMethodType::SHOOT)) {
                     continue;
                 }
 
                 /* Extract the attack info */
-                dam_melee += blow_damcalc(m_ptr, player_ptr, &r_ptr->blow[m]);
-                if (r_ptr->blow[m].method == RaceBlowMethodType::EXPLODE) {
+                dam_melee += blow_damcalc(m_ptr, player_ptr, &r_ptr->blows[m]);
+                if (r_ptr->blows[m].method == RaceBlowMethodType::EXPLODE) {
                     break;
                 }
             }

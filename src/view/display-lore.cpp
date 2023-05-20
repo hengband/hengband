@@ -606,11 +606,11 @@ void display_monster_launching(PlayerType *player_ptr, lore_type *lore_ptr)
     int n = 0; /* Number of blows */
     const int max_blows = 4;
     for (int m = 0; m < max_blows; m++) {
-        if (lore_ptr->r_ptr->blow[m].method != RaceBlowMethodType::NONE) {
+        if (lore_ptr->r_ptr->blows[m].method != RaceBlowMethodType::NONE) {
             n++;
         } /* Count blows */
 
-        if (lore_ptr->r_ptr->blow[m].method == RaceBlowMethodType::SHOOT) {
+        if (lore_ptr->r_ptr->blows[m].method == RaceBlowMethodType::SHOOT) {
             p = m; /* Remember position */
             break;
         }
@@ -626,8 +626,8 @@ void display_monster_launching(PlayerType *player_ptr, lore_type *lore_ptr)
     }
 
     if (know_armour(lore_ptr->r_idx, lore_ptr->know_everything)) {
-        strnfmt(lore_ptr->tmp_msg[lore_ptr->vn], sizeof(lore_ptr->tmp_msg[lore_ptr->vn]), _("威力 %dd%d の射撃をする", "fire an arrow (Power:%dd%d)"), lore_ptr->r_ptr->blow[p].d_dice,
-            lore_ptr->r_ptr->blow[p].d_side);
+        strnfmt(lore_ptr->tmp_msg[lore_ptr->vn], sizeof(lore_ptr->tmp_msg[lore_ptr->vn]), _("威力 %dd%d の射撃をする", "fire an arrow (Power:%dd%d)"), lore_ptr->r_ptr->blows[p].d_dice,
+            lore_ptr->r_ptr->blows[p].d_side);
     } else {
         angband_strcpy(lore_ptr->tmp_msg[lore_ptr->vn], _("射撃をする", "fire an arrow"), sizeof(lore_ptr->tmp_msg[lore_ptr->vn]));
     }

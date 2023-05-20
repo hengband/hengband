@@ -33,7 +33,7 @@ bool MonsterRaceInfo::has_living_flag() const
 
 bool MonsterRaceInfo::is_explodable() const
 {
-    return std::any_of(std::begin(this->blow), std::end(this->blow),
+    return std::any_of(std::begin(this->blows), std::end(this->blows),
         [](const auto &blow) { return blow.method == RaceBlowMethodType::EXPLODE; });
 }
 

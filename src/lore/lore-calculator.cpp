@@ -96,8 +96,8 @@ bool know_damage(MonsterRaceId r_idx, int i)
     DEPTH level = r_ptr->level;
     int32_t a = r_ptr->r_blows[i];
 
-    int32_t d1 = r_ptr->blow[i].d_dice;
-    int32_t d2 = r_ptr->blow[i].d_side;
+    int32_t d1 = r_ptr->blows[i].d_dice;
+    int32_t d2 = r_ptr->blows[i].d_side;
     int32_t d = d1 * d2;
 
     if (d >= ((4 + level) * MAX_UCHAR) / 80) {

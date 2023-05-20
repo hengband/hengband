@@ -447,11 +447,11 @@ void monspell_shoot_dice(MonsterRaceInfo *r_ptr, int *dd, int *ds)
     int n = 0; /* Number of blows */
     const int max_blows = 4;
     for (int m = 0; m < max_blows; m++) {
-        if (r_ptr->blow[m].method != RaceBlowMethodType::NONE) {
+        if (r_ptr->blows[m].method != RaceBlowMethodType::NONE) {
             n++;
         } /* Count blows */
 
-        if (r_ptr->blow[m].method == RaceBlowMethodType::SHOOT) {
+        if (r_ptr->blows[m].method == RaceBlowMethodType::SHOOT) {
             p = m; /* Remember position */
             break;
         }
@@ -466,8 +466,8 @@ void monspell_shoot_dice(MonsterRaceInfo *r_ptr, int *dd, int *ds)
         (*dd) = 0;
         (*ds) = 0;
     } else {
-        (*dd) = r_ptr->blow[p].d_dice;
-        (*ds) = r_ptr->blow[p].d_side;
+        (*dd) = r_ptr->blows[p].d_dice;
+        (*ds) = r_ptr->blows[p].d_side;
     }
 }
 

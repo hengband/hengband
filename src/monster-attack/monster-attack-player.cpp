@@ -149,10 +149,10 @@ bool MonsterAttackPlayer::process_monster_blows()
         this->obvious = false;
         this->damage = 0;
         this->act = nullptr;
-        this->effect = r_ptr->blow[ap_cnt].effect;
-        this->method = r_ptr->blow[ap_cnt].method;
-        this->d_dice = r_ptr->blow[ap_cnt].d_dice;
-        this->d_side = r_ptr->blow[ap_cnt].d_side;
+        this->effect = r_ptr->blows[ap_cnt].effect;
+        this->method = r_ptr->blows[ap_cnt].method;
+        this->d_dice = r_ptr->blows[ap_cnt].d_dice;
+        this->d_side = r_ptr->blows[ap_cnt].d_side;
 
         if (!this->check_monster_continuous_attack()) {
             break;
