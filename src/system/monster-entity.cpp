@@ -199,6 +199,12 @@ bool MonsterEntity::has_living_flag(bool is_apperance) const
     return monrace.has_living_flag();
 }
 
+bool MonsterEntity::is_explodable() const
+{
+    const auto &monrace = monraces_info[this->r_idx];
+    return monrace.is_explodable();
+}
+
 std::string MonsterEntity::get_died_message() const
 {
     const auto &monrace = monraces_info[this->r_idx];

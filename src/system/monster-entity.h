@@ -82,5 +82,6 @@ public:
     bool is_invulnerable() const;
     byte get_temporary_speed() const;
     bool has_living_flag(bool is_apperance = false) const;
+    bool is_explodable() const;
     std::string get_died_message() const;
 };
