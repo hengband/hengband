@@ -329,7 +329,7 @@ void determine_bounty_uniques(PlayerType *player_ptr)
         bool is_suitable = r_ref.kind_flags.has(MonsterKindType::UNIQUE);
         is_suitable &= r_ref.drop_flags.has_any_of({ MonsterDropType::DROP_CORPSE, MonsterDropType::DROP_SKELETON });
         is_suitable &= r_ref.rarity <= 100;
-        is_suitable &= !no_questor_or_bounty_uniques(r_idx);
+        is_suitable &= r_ref.is_suitable_questor_bounty();
         return is_suitable;
     };
 

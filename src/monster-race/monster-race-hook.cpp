@@ -785,30 +785,6 @@ bool vault_aux_dark_elf(PlayerType *player_ptr, MonsterRaceId r_idx)
 }
 
 /*!
- * @brief モンスターが特殊能力上、賞金首から排除する必要があるかどうかを返す。
- * Is the monster "alive"? / Is this monster declined to be questor or bounty?
- * @param r_idx モンスターの種族ID
- * @return 賞金首に加えられないならばTRUEを返す
- * @details
- * 実質バーノール＝ルパート用。
- */
-bool no_questor_or_bounty_uniques(MonsterRaceId r_idx)
-{
-    switch (r_idx) {
-        /*
-         * Decline them to be questor or bounty because they use
-         * special motion "split and combine"
-         */
-    case MonsterRaceId::BANORLUPART:
-    case MonsterRaceId::BANOR:
-    case MonsterRaceId::LUPART:
-        return true;
-    default:
-        return false;
-    }
-}
-
-/*!
  * @brief バルログが死体を食べられるモンスターかの判定 / Hook function for human corpses
  * @param r_idx モンスターＩＤ
  * @return 死体を食べられるならTRUEを返す。
