@@ -5,6 +5,7 @@
  * @details PlayerRaceからPlayerClassへの依存はあるが、逆は依存させないこと.
  */
 #include "player-base/player-class.h"
+#include "cmd-io/diary-subtitle-table.h"
 #include "core/player-redraw-types.h"
 #include "inventory/inventory-slot-types.h"
 #include "mind/mind-elementalist.h"
@@ -535,4 +536,27 @@ bool PlayerClass::has_ninja_speed() const
     auto has_ninja_speed_sub = !this->player_ptr->inventory_list[INVEN_SUB_HAND].is_valid();
     has_ninja_speed_sub |= can_attack_with_sub_hand(this->player_ptr);
     return has_ninja_speed_main && has_ninja_speed_sub;
+}
+
+/*!
+ * @brief 日記のサブタイトルの候補一覧を取得する
+ *
+ * 候補一覧の先頭は「最高の肉体を求めて」、末尾は「最高の頭脳を求めて」で
+ * あるため、プレイヤーの職業に従い範囲を決定する。
+ *
+ * @return 候補一覧を参照するstd::spanオブジェクト
+ */
+std::span<const std::string> PlayerClass::get_subtitle_candidates() const
+{
+    static const std::span<const std::string> candidates(diary_subtitles);
+    const auto max = diary_subtitles.size();
+    if (this->is_tough()) {
+        return candidates.subspan(0, max - 1);
+    }
+
+    if (this->is_wizard()) {
+        return candidates.subspan(1);
+    }
+
+    return candidates.subspan(1, max - 2);
 }
