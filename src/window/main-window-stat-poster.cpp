@@ -88,7 +88,7 @@ void print_cut(PlayerType *player_ptr)
     }
 
     auto [color, stat] = player_cut->get_expr();
-    c_put_str(color, stat.data(), ROW_CUT, COL_CUT);
+    c_put_str(color, stat, ROW_CUT, COL_CUT);
 }
 
 /*!
@@ -104,7 +104,7 @@ void print_stun(PlayerType *player_ptr)
     }
 
     auto [color, stat] = player_stun->get_expr();
-    c_put_str(color, stat.data(), ROW_STUN, COL_STUN);
+    c_put_str(color, stat, ROW_STUN, COL_STUN);
 }
 
 /*!

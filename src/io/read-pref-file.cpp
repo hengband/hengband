@@ -279,16 +279,16 @@ void close_auto_dump(FILE **fpp, std::string_view mark)
 void load_all_pref_files(PlayerType *player_ptr)
 {
     process_pref_file(player_ptr, "user.prf");
-    process_pref_file(player_ptr, std::string("user-").append(ANGBAND_SYS).append(".prf").data());
-    process_pref_file(player_ptr, std::string(rp_ptr->title).append(".prf").data());
-    process_pref_file(player_ptr, std::string(cp_ptr->title).append(".prf").data());
-    process_pref_file(player_ptr, std::string(player_ptr->base_name).append(".prf").data());
+    process_pref_file(player_ptr, std::string("user-").append(ANGBAND_SYS).append(".prf"));
+    process_pref_file(player_ptr, std::string(rp_ptr->title).append(".prf"));
+    process_pref_file(player_ptr, std::string(cp_ptr->title).append(".prf"));
+    process_pref_file(player_ptr, std::string(player_ptr->base_name).append(".prf"));
     if (player_ptr->realm1 != REALM_NONE) {
-        process_pref_file(player_ptr, std::string(realm_names[player_ptr->realm1]).append(".prf").data());
+        process_pref_file(player_ptr, std::string(realm_names[player_ptr->realm1]).append(".prf"));
     }
 
     if (player_ptr->realm2 != REALM_NONE) {
-        process_pref_file(player_ptr, std::string(realm_names[player_ptr->realm2]).append(".prf").data());
+        process_pref_file(player_ptr, std::string(realm_names[player_ptr->realm2]).append(".prf"));
     }
 
     autopick_load_pref(player_ptr, false);

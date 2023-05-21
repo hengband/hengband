@@ -285,6 +285,6 @@ void init_angband(PlayerType *player_ptr, bool no_term)
     init_items_alloc();
     init_note(_("[ユーザー設定ファイルを初期化しています...]", "[Initializing user pref files...]"));
     process_pref_file(player_ptr, "pref.prf");
-    process_pref_file(player_ptr, std::string("pref-").append(ANGBAND_SYS).append(".prf").data());
+    process_pref_file(player_ptr, std::string("pref-").append(ANGBAND_SYS).append(".prf"));
     init_note(_("[初期化終了]", "[Initialization complete]"));
 }

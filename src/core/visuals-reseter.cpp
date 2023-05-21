@@ -32,5 +32,5 @@ void reset_visuals(PlayerType *player_ptr)
 
     concptr pref_file = use_graphics ? "graf.prf" : "font.prf";
     process_pref_file(player_ptr, pref_file);
-    process_pref_file(player_ptr, std::string(use_graphics ? "graf-" : "font-").append(player_ptr->base_name).append(".prf").data());
+    process_pref_file(player_ptr, std::string(use_graphics ? "graf-" : "font-").append(player_ptr->base_name).append(".prf"));
 }

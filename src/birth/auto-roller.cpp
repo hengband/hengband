@@ -225,7 +225,7 @@ bool get_stat_limits(PlayerType *player_ptr)
     decide_initial_stat(player_ptr, cval);
 
     for (int i = 0; i < A_MAX; i++) {
-        put_str(cursor_of_adjusted_stat(cval, i).data(), 14 + i, 10);
+        put_str(cursor_of_adjusted_stat(cval, i), 14 + i, 10);
     }
 
     display_autoroller_chance(cval);
@@ -240,14 +240,14 @@ bool get_stat_limits(PlayerType *player_ptr)
             } else if (os == A_MAX) {
                 c_put_str(TERM_WHITE, _("決定する", "Accept"), 21, 35);
             } else if (os < A_MAX) {
-                c_put_str(TERM_WHITE, cur.data(), 14 + os, 10);
+                c_put_str(TERM_WHITE, cur, 14 + os, 10);
             }
 
             if (cs == A_MAX) {
                 c_put_str(TERM_YELLOW, _("決定する", "Accept"), 21, 35);
             } else {
                 cur = cursor_of_adjusted_stat(cval, cs);
-                c_put_str(TERM_YELLOW, cur.data(), 14 + cs, 10);
+                c_put_str(TERM_YELLOW, cur, 14 + cs, 10);
             }
 
             os = cs;

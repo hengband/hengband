@@ -84,7 +84,7 @@ void display_wizard_sub_menu()
     for (const auto &[symbol, desc] : wizard_sub_menu_table) {
         std::stringstream ss;
         ss << symbol << ") " << desc;
-        put_str(ss.str().data(), r++, c);
+        put_str(ss.str(), r++, c);
     }
 }
 }

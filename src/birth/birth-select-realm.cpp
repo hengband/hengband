@@ -172,7 +172,7 @@ static void move_birth_realm_cursor(birth_realm_type *birth_realm_ptr)
         strnfmt(birth_realm_ptr->buf, sizeof(birth_realm_ptr->buf), "%s", realm_names[birth_realm_ptr->picks[birth_realm_ptr->cs]]);
         c_put_str(TERM_L_BLUE, birth_realm_ptr->buf, 3, 40);
         prt(_("の特徴", ": Characteristic"), 3, 40 + strlen(birth_realm_ptr->buf));
-        prt(realm_subinfo[technic2magic(birth_realm_ptr->picks[birth_realm_ptr->cs]) - 1].data(), 4, 40);
+        prt(realm_subinfo[technic2magic(birth_realm_ptr->picks[birth_realm_ptr->cs]) - 1], 4, 40);
     }
 
     c_put_str(TERM_YELLOW, birth_realm_ptr->cur, 12 + (birth_realm_ptr->cs / 5), 2 + 15 * (birth_realm_ptr->cs % 5));

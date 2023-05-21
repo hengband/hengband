@@ -65,7 +65,7 @@ void roff_top(MonsterRaceId r_idx)
         term_addstr(-1, TERM_WHITE, "] ");
     }
 
-    term_addstr(-1, TERM_WHITE, (r_ptr->name.data()));
+    term_addstr(-1, TERM_WHITE, r_ptr->name);
 
     term_addstr(-1, TERM_WHITE, " ('");
     term_add_bigch(a1, c1);
