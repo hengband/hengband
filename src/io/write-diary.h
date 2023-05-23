@@ -1,6 +1,6 @@
 ﻿#pragma once
 
-#include "system/angband.h"
+#include <string_view>
 #ifdef JP
 #else
 #include <string>
@@ -51,10 +51,10 @@
 extern bool write_level;
 
 class PlayerType;
-enum class QuestId : int16_t;
+enum class QuestId : short;
 #ifdef JP
 #else
 std::string get_ordinal_number_suffix(int num);
 #endif
 int exe_write_diary_quest(PlayerType *player_ptr, int type, QuestId num);
-errr exe_write_diary(PlayerType *player_ptr, int type, int num, concptr note);
+void exe_write_diary(PlayerType *player_ptr, int type, int num, std::string_view note = "");

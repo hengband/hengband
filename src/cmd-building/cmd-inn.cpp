@@ -203,7 +203,7 @@ static bool stay_inn(PlayerType *player_ptr)
 
     if ((prev_hour >= 18) && (prev_hour <= 23)) {
         determine_daily_bounty(player_ptr, false); /* Update daily bounty */
-        exe_write_diary(player_ptr, DIARY_DIALY, 0, nullptr);
+        exe_write_diary(player_ptr, DIARY_DIALY, 0);
     }
 
     player_ptr->chp = player_ptr->mhp;

@@ -128,7 +128,7 @@ void teleport_level(PlayerType *player_ptr, MONSTER_IDX m_idx)
             }
 
             if (record_stair) {
-                exe_write_diary(player_ptr, DIARY_TELEPORT_LEVEL, 1, nullptr);
+                exe_write_diary(player_ptr, DIARY_TELEPORT_LEVEL, 1);
             }
 
             if (autosave_l) {
@@ -157,7 +157,7 @@ void teleport_level(PlayerType *player_ptr, MONSTER_IDX m_idx)
 
         if (m_idx <= 0) {
             if (record_stair) {
-                exe_write_diary(player_ptr, DIARY_TELEPORT_LEVEL, -1, nullptr);
+                exe_write_diary(player_ptr, DIARY_TELEPORT_LEVEL, -1);
             }
 
             if (autosave_l) {
@@ -183,7 +183,7 @@ void teleport_level(PlayerType *player_ptr, MONSTER_IDX m_idx)
 
         if (m_idx <= 0) {
             if (record_stair) {
-                exe_write_diary(player_ptr, DIARY_TELEPORT_LEVEL, -1, nullptr);
+                exe_write_diary(player_ptr, DIARY_TELEPORT_LEVEL, -1);
             }
 
             if (autosave_l) {
@@ -206,7 +206,7 @@ void teleport_level(PlayerType *player_ptr, MONSTER_IDX m_idx)
 
         if (m_idx <= 0) {
             if (record_stair) {
-                exe_write_diary(player_ptr, DIARY_TELEPORT_LEVEL, 1, nullptr);
+                exe_write_diary(player_ptr, DIARY_TELEPORT_LEVEL, 1);
             }
             if (autosave_l) {
                 do_cmd_save_game(player_ptr, true);

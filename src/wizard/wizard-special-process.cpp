@@ -613,7 +613,7 @@ static void wiz_jump_floor(PlayerType *player_ptr, DUNGEON_IDX dun_idx, DEPTH de
     player_ptr->wild_mode = false;
     leave_quest_check(player_ptr);
     if (record_stair) {
-        exe_write_diary(player_ptr, DIARY_WIZ_TELE, 0, nullptr);
+        exe_write_diary(player_ptr, DIARY_WIZ_TELE, 0);
     }
 
     floor.quest_number = QuestId::NONE;
