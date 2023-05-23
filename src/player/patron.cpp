@@ -517,7 +517,7 @@ void Patron::gain_level_reward(PlayerType *player_ptr_, int chosen_reward)
 
     if (!reward.empty()) {
         const auto note = format(_("パトロンの報酬で%s", "The patron rewarded you with %s."), reward.data());
-        exe_write_diary(this->player_ptr, DIARY_DESCRIPTION, 0, note.data());
+        exe_write_diary(this->player_ptr, DIARY_DESCRIPTION, 0, note);
     }
 }
 

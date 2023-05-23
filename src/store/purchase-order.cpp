@@ -291,12 +291,12 @@ void store_purchase(PlayerType *player_ptr, StoreSaleType store_num)
     record_turn = w_ptr->game_turn;
 
     if (record_buy) {
-        exe_write_diary(player_ptr, DIARY_BUY, 0, purchased_item_name.data());
+        exe_write_diary(player_ptr, DIARY_BUY, 0, purchased_item_name);
     }
 
     const auto diary_item_name = describe_flavor(player_ptr, o_ptr, OD_NAME_ONLY);
     if (record_rand_art && o_ptr->is_random_artifact()) {
-        exe_write_diary(player_ptr, DIARY_ART, 0, diary_item_name.data());
+        exe_write_diary(player_ptr, DIARY_ART, 0, diary_item_name);
     }
 
     j_ptr->inscription.reset();
