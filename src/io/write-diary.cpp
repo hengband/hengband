@@ -31,7 +31,7 @@ bool write_level; //!< @todo *抹殺* したい…
  * @param num number
  * @return pointer of suffix string.
  */
-concptr get_ordinal_number_suffix(int num)
+std::string get_ordinal_number_suffix(int num)
 {
     num = std::abs(num) % 100;
     switch (num % 10) {
@@ -357,12 +357,12 @@ errr exe_write_diary(PlayerType *player_ptr, int type, int num, concptr note)
         if (num < 0) {
             int n = -num;
             fprintf(fff, _(" %2d:%02d %20s 闘技場の%d%s回戦で、%sの前に敗れ去った。\n", " %2d:%02d %20s beaten by %s in the %d%s fight.\n"),
-                hour, min, note_level.data(), _(n, note), _("", n), _(note, get_ordinal_number_suffix(n)));
+                hour, min, note_level.data(), _(n, note), _("", n), _(note, get_ordinal_number_suffix(n).data()));
             break;
         }
 
         fprintf(fff, _(" %2d:%02d %20s 闘技場の%d%s回戦(%s)に勝利した。\n", " %2d:%02d %20s won the %d%s fight (%s).\n"),
-            hour, min, note_level.data(), num, _("", get_ordinal_number_suffix(num)), note);
+            hour, min, note_level.data(), num, _("", get_ordinal_number_suffix(num).data()), note);
 
         if (num == MAX_ARENA_MONS) {
             fprintf(fff, _("                 闘技場のすべての敵に勝利し、チャンピオンとなった。\n",

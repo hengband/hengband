@@ -269,7 +269,7 @@ static void dump_aux_arena(PlayerType *player_ptr, FILE *fff)
                 fff, "\n 闘技場: %d回戦で%sの前に敗北\n", -player_ptr->arena_number, monraces_info[arena_info[-1 - player_ptr->arena_number].r_idx].name.data());
 #else
             fprintf(fff, "\n Arena: Defeated by %s in the %d%s fight\n", monraces_info[arena_info[-1 - player_ptr->arena_number].r_idx].name.data(),
-                -player_ptr->arena_number, get_ordinal_number_suffix(-player_ptr->arena_number));
+                -player_ptr->arena_number, get_ordinal_number_suffix(-player_ptr->arena_number).data());
 #endif
         }
 

@@ -1,6 +1,10 @@
 ﻿#pragma once
 
 #include "system/angband.h"
+#ifdef JP
+#else
+#include <string>
+#endif
 
 #define DIARY_DIALY 0
 #define DIARY_DESCRIPTION 1
@@ -50,7 +54,7 @@ class PlayerType;
 enum class QuestId : int16_t;
 #ifdef JP
 #else
-concptr get_ordinal_number_suffix(int num);
+std::string get_ordinal_number_suffix(int num);
 #endif
 int exe_write_diary_quest(PlayerType *player_ptr, int type, QuestId num);
 errr exe_write_diary(PlayerType *player_ptr, int type, int num, concptr note);
