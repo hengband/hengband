@@ -26,7 +26,7 @@
 #define DIARY_FOUND 17
 #define DIARY_LEVELUP 18
 #define DIARY_GAMESTART 19
-#define DIARY_WIZ_TELE 20
+// 20は欠番.
 #define DIARY_NAMED_PET 21
 #define DIARY_PAT_TELE 22
 #define DIARY_ART_SCROLL 23

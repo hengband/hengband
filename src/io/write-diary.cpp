@@ -380,14 +380,6 @@ void exe_write_diary(PlayerType *player_ptr, int type, int num, std::string_view
         fprintf(fff, mes, hour, min, note_level.data(), note.data());
         break;
     }
-    case DIARY_WIZ_TELE: {
-        auto to = !floor.is_in_dungeon()
-                      ? _("地上", "the surface")
-                      : format(_("%d階(%s)", "level %d of %s"), floor.dun_level, dungeons_info[floor.dungeon_idx].name.data());
-        constexpr auto mes = _(" %2d:%02d %20s %sへとウィザード・テレポートで移動した。\n", " %2d:%02d %20s wizard-teleported to %s.\n");
-        fprintf(fff, mes, hour, min, note_level.data(), to.data());
-        break;
-    }
     case DIARY_PAT_TELE: {
         auto to = !floor.is_in_dungeon()
                       ? _("地上", "the surface")

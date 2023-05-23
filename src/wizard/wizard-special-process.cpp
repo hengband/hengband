@@ -97,6 +97,7 @@
 #include "view/display-messages.h"
 #include "wizard/spoiler-table.h"
 #include "wizard/tval-descriptions-table.h"
+#include "wizard/wizard-messages.h"
 #include "wizard/wizard-spells.h"
 #include "wizard/wizard-spoiler.h"
 #include "world/world.h"
@@ -612,10 +613,11 @@ static void wiz_jump_floor(PlayerType *player_ptr, DUNGEON_IDX dun_idx, DEPTH de
     floor.inside_arena = false;
     player_ptr->wild_mode = false;
     leave_quest_check(player_ptr);
-    if (record_stair) {
-        exe_write_diary(player_ptr, DIARY_WIZ_TELE, 0);
-    }
-
+    auto to = !floor.is_in_dungeon()
+                  ? _("地上", "the surface")
+                  : format(_("%d階(%s)", "level %d of %s"), floor.dun_level, dungeons_info[floor.dungeon_idx].name.data());
+    constexpr auto mes = _("%sへとウィザード・テレポートで移動した。\n", "You wizard-teleported to %s.\n");
+    msg_print_wizard(player_ptr, 2, format(mes, to.data()).data());
     floor.quest_number = QuestId::NONE;
     PlayerEnergy(player_ptr).reset_player_turn();
     player_ptr->energy_need = 0;
