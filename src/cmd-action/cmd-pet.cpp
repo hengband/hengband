@@ -632,7 +632,7 @@ void do_cmd_pet(PlayerType *player_ptr)
                         }
 
                         ss << power_desc[control];
-                        prt(ss.str().data(), y + control, x);
+                        prt(ss.str(), y + control, x);
                     }
 
                     prt("", y + std::min(control, 17), x);

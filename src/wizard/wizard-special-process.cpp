@@ -299,7 +299,7 @@ static std::optional<FixedArtifactId> wiz_select_named_artifact(PlayerType *play
         for (auto i = 0U; i < page_item_count; ++i) {
             std::stringstream ss;
             ss << I2A(i) << ") " << wiz_make_named_artifact_desc(player_ptr, a_idx_list[page_base_idx + i]);
-            put_str(ss.str().data(), i + 1, 15);
+            put_str(ss.str(), i + 1, 15);
         }
         if (page_max > 1) {
             put_str(format("-- more (%lu/%lu) --", current_page + 1, page_max), page_item_count + 1, 15);
@@ -363,7 +363,7 @@ void wiz_create_named_art(PlayerType *player_ptr)
         std::stringstream ss;
         ss << I2A(i) << ") " << name;
         term_erase(14, i + 1, 255);
-        put_str(ss.str().data(), i + 1, 15);
+        put_str(ss.str(), i + 1, 15);
     }
 
     std::optional<FixedArtifactId> create_a_idx;

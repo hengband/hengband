@@ -462,7 +462,7 @@ bool probing(PlayerType *player_ptr)
         msg_print(nullptr);
 
         const auto probe_result = probed_monster_info(player_ptr, m_ptr, r_ptr);
-        prt(probe_result.data(), 0, 0);
+        prt(probe_result, 0, 0);
 
         message_add(probe_result);
         player_ptr->window_flags |= (PW_MESSAGE);

@@ -413,7 +413,7 @@ int InputKeyRequestor::get_command_per_menu_num()
             }
         }
 
-        put_str(menu_name.data(), this->base_y + 1 + command_per_menu_num / 2, this->base_x + 4 + (command_per_menu_num % 2) * 24);
+        put_str(menu_name, this->base_y + 1 + command_per_menu_num / 2, this->base_x + 4 + (command_per_menu_num % 2) * 24);
     }
 
     return command_per_menu_num;
