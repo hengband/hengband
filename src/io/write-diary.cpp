@@ -272,10 +272,9 @@ void exe_write_diary(PlayerType *player_ptr, int type, int num, std::string_view
 
     const auto &floor = *player_ptr->current_floor_ptr;
     const auto [q_idx, note_level] = write_floor(floor);
-
-    bool do_level = true;
+    auto do_level = true;
     switch (type) {
-    case DIARY_DIALY: {
+    case DIARY_DIALY:
         if (day < MAX_DAYS) {
             fprintf(fff, _("%d日目\n", "Day %d\n"), day);
         } else {
@@ -284,8 +283,7 @@ void exe_write_diary(PlayerType *player_ptr, int type, int num, std::string_view
 
         do_level = false;
         break;
-    }
-    case DIARY_DESCRIPTION: {
+    case DIARY_DESCRIPTION:
         if (num) {
             fprintf(fff, "%s\n", note.data());
             do_level = false;
@@ -294,17 +292,19 @@ void exe_write_diary(PlayerType *player_ptr, int type, int num, std::string_view
         }
 
         break;
-    }
     case DIARY_ART: {
-        fprintf(fff, _(" %2d:%02d %20s %sを発見した。\n", " %2d:%02d %20s discovered %s.\n"), hour, min, note_level.data(), note.data());
+        constexpr auto mes = _(" %2d:%02d %20s %sを発見した。\n", " %2d:%02d %20s discovered %s.\n");
+        fprintf(fff, mes, hour, min, note_level.data(), note.data());
         break;
     }
     case DIARY_ART_SCROLL: {
-        fprintf(fff, _(" %2d:%02d %20s 巻物によって%sを生成した。\n", " %2d:%02d %20s created %s by scroll.\n"), hour, min, note_level.data(), note.data());
+        constexpr auto mes = _(" %2d:%02d %20s 巻物によって%sを生成した。\n", " %2d:%02d %20s created %s by scroll.\n");
+        fprintf(fff, mes, hour, min, note_level.data(), note.data());
         break;
     }
     case DIARY_UNIQUE: {
-        fprintf(fff, _(" %2d:%02d %20s %sを倒した。\n", " %2d:%02d %20s defeated %s.\n"), hour, min, note_level.data(), note.data());
+        constexpr auto mes = _(" %2d:%02d %20s %sを倒した。\n", " %2d:%02d %20s defeated %s.\n");
+        fprintf(fff, mes, hour, min, note_level.data(), note.data());
         break;
     }
     case DIARY_MAXDEAPTH: {
@@ -325,54 +325,59 @@ void exe_write_diary(PlayerType *player_ptr, int type, int num, std::string_view
                   : !(player_ptr->current_floor_ptr->dun_level + num)
                       ? _("地上", "the surface")
                       : format(_("%d階", "level %d"), player_ptr->current_floor_ptr->dun_level + num);
-        fprintf(fff, _(" %2d:%02d %20s %sへ%s。\n", " %2d:%02d %20s %s %s.\n"), hour, min, note_level.data(), _(to.data(), note.data()), _(note.data(), to.data()));
+        constexpr auto mes = _(" %2d:%02d %20s %sへ%s。\n", " %2d:%02d %20s %s %s.\n");
+        fprintf(fff, mes, hour, min, note_level.data(), _(to.data(), note.data()), _(note.data(), to.data()));
         break;
     }
-    case DIARY_RECALL: {
+    case DIARY_RECALL:
         if (!num) {
             constexpr auto mes = _(" %2d:%02d %20s 帰還を使って%sの%d階へ下りた。\n", " %2d:%02d %20s recalled to dungeon level %d of %s.\n");
             const auto &dungeon = dungeons_info[floor.dungeon_idx];
             fprintf(fff, mes, hour, min, note_level.data(), _(dungeon.name.data(), (int)max_dlv[floor.dungeon_idx]), _((int)max_dlv[floor.dungeon_idx], dungeon.name.data()));
         } else {
-            fprintf(fff, _(" %2d:%02d %20s 帰還を使って地上へと戻った。\n", " %2d:%02d %20s recalled from dungeon to surface.\n"), hour, min, note_level.data());
+            constexpr auto mes = _(" %2d:%02d %20s 帰還を使って地上へと戻った。\n", " %2d:%02d %20s recalled from dungeon to surface.\n");
+            fprintf(fff, mes, hour, min, note_level.data());
         }
 
         break;
-    }
     case DIARY_TELEPORT_LEVEL: {
-        fprintf(fff, _(" %2d:%02d %20s レベル・テレポートで脱出した。\n", " %2d:%02d %20s got out using teleport level.\n"),
-            hour, min, note_level.data());
+        constexpr auto mes = _(" %2d:%02d %20s レベル・テレポートで脱出した。\n", " %2d:%02d %20s got out using teleport level.\n");
+        fprintf(fff, mes, hour, min, note_level.data());
         break;
     }
     case DIARY_BUY: {
-        fprintf(fff, _(" %2d:%02d %20s %sを購入した。\n", " %2d:%02d %20s bought %s.\n"), hour, min, note_level.data(), note.data());
+        constexpr auto mes = _(" %2d:%02d %20s %sを購入した。\n", " %2d:%02d %20s bought %s.\n");
+        fprintf(fff, mes, hour, min, note_level.data(), note.data());
         break;
     }
     case DIARY_SELL: {
-        fprintf(fff, _(" %2d:%02d %20s %sを売却した。\n", " %2d:%02d %20s sold %s.\n"), hour, min, note_level.data(), note.data());
+        constexpr auto mes = _(" %2d:%02d %20s %sを売却した。\n", " %2d:%02d %20s sold %s.\n");
+        fprintf(fff, mes, hour, min, note_level.data(), note.data());
         break;
     }
     case DIARY_ARENA: {
         if (num < 0) {
             int n = -num;
-            fprintf(fff, _(" %2d:%02d %20s 闘技場の%d%s回戦で、%sの前に敗れ去った。\n", " %2d:%02d %20s beaten by %s in the %d%s fight.\n"),
-                hour, min, note_level.data(), _(n, note.data()), _("", n), _(note.data(), get_ordinal_number_suffix(n).data()));
+            constexpr auto mes = _(" %2d:%02d %20s 闘技場の%d%s回戦で、%sの前に敗れ去った。\n", " %2d:%02d %20s beaten by %s in the %d%s fight.\n");
+            fprintf(fff, mes, hour, min, note_level.data(), _(n, note.data()), _("", n), _(note.data(), get_ordinal_number_suffix(n).data()));
             break;
         }
 
-        fprintf(fff, _(" %2d:%02d %20s 闘技場の%d%s回戦(%s)に勝利した。\n", " %2d:%02d %20s won the %d%s fight (%s).\n"),
-            hour, min, note_level.data(), num, _("", get_ordinal_number_suffix(num).data()), note.data());
+        constexpr auto mes = _(" %2d:%02d %20s 闘技場の%d%s回戦(%s)に勝利した。\n", " %2d:%02d %20s won the %d%s fight (%s).\n");
+        fprintf(fff, mes, hour, min, note_level.data(), num, _("", get_ordinal_number_suffix(num).data()), note.data());
 
         if (num == MAX_ARENA_MONS) {
-            fprintf(fff, _("                 闘技場のすべての敵に勝利し、チャンピオンとなった。\n",
-                             "                 won all fights to become a Champion.\n"));
+            constexpr auto mes_champion = _("                 闘技場のすべての敵に勝利し、チャンピオンとなった。\n",
+                "                 won all fights to become a Champion.\n");
+            fprintf(fff, mes_champion);
             do_level = false;
         }
 
         break;
     }
     case DIARY_FOUND: {
-        fprintf(fff, _(" %2d:%02d %20s %sを識別した。\n", " %2d:%02d %20s identified %s.\n"), hour, min, note_level.data(), note.data());
+        constexpr auto mes = _(" %2d:%02d %20s %sを識別した。\n", " %2d:%02d %20s identified %s.\n");
+        fprintf(fff, mes, hour, min, note_level.data(), note.data());
         break;
     }
     case DIARY_WIZ_TELE: {
@@ -407,11 +412,10 @@ void exe_write_diary(PlayerType *player_ptr, int type, int num, std::string_view
 
         break;
     }
-    case DIARY_NAMED_PET: {
+    case DIARY_NAMED_PET:
         fprintf(fff, " %2d:%02d %20s ", hour, min, note_level.data());
         write_diary_pet(fff, num, note.data());
         break;
-    }
     case DIARY_WIZARD_LOG:
         fprintf(fff, "%s\n", note.data());
         break;
