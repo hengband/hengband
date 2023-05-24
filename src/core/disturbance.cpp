@@ -1,6 +1,5 @@
 ﻿#include "core/disturbance.h"
 #include "action/travel-execution.h"
-#include "core/player-redraw-types.h"
 #include "game-option/disturbance-options.h"
 #include "game-option/map-screen-options.h"
 #include "io/input-key-requester.h"
@@ -22,7 +21,7 @@ void disturb(PlayerType *player_ptr, bool stop_search, bool stop_travel)
     auto &rfu = RedrawingFlagsUpdater::get_instance();
     if (command_rep) {
         command_rep = 0;
-        player_ptr->redraw |= PR_ACTION;
+        rfu.set_flag(MainWindowRedrawingFlag::ACTION);
     }
 
     if ((player_ptr->action == ACTION_REST) || (player_ptr->action == ACTION_FISH) || (stop_search && (player_ptr->action == ACTION_SEARCH))) {

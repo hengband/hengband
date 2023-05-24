@@ -1,7 +1,6 @@
 ﻿#include "mind/mind-force-trainer.h"
 #include "avatar/avatar.h"
 #include "core/disturbance.h"
-#include "core/player-redraw-types.h"
 #include "core/stuff-handler.h"
 #include "effect/attribute-types.h"
 #include "effect/spells-effect-util.h"
@@ -89,7 +88,7 @@ bool clear_mind(PlayerType *player_ptr)
         player_ptr->csp_frac = 0;
     }
 
-    player_ptr->redraw |= (PR_MP);
+    RedrawingFlagsUpdater::get_instance().set_flag(MainWindowRedrawingFlag::MP);
     return true;
 }
 
@@ -177,8 +176,7 @@ bool set_tim_sh_force(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
     }
 
     player_ptr->tim_sh_touki = v;
-    player_ptr->redraw |= (PR_TIMED_EFFECT);
-
+    RedrawingFlagsUpdater::get_instance().set_flag(MainWindowRedrawingFlag::TIMED_EFFECT);
     if (!notice) {
         return false;
     }
@@ -186,6 +184,7 @@ bool set_tim_sh_force(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
     if (disturb_state) {
         disturb(player_ptr, false, false);
     }
+
     handle_stuff(player_ptr);
     return true;
 }

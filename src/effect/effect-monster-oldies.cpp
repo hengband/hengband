@@ -1,6 +1,5 @@
 ﻿#include "effect/effect-monster-oldies.h"
 #include "avatar/avatar.h"
-#include "core/player-redraw-types.h"
 #include "effect/effect-monster-util.h"
 #include "monster-floor/monster-generator.h"
 #include "monster-race/monster-race.h"
@@ -16,6 +15,7 @@
 #include "system/monster-entity.h"
 #include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
+#include "system/redrawing-flags-updater.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 
@@ -84,12 +84,14 @@ ProcessResult effect_monster_star_heal(PlayerType *player_ptr, effect_monster_ty
         em_ptr->m_ptr->maxhp = em_ptr->m_ptr->max_maxhp;
     }
 
+    auto &rfu = RedrawingFlagsUpdater::get_instance();
     if (!em_ptr->dam) {
         if (player_ptr->health_who == em_ptr->g_ptr->m_idx) {
-            player_ptr->redraw |= (PR_HEALTH);
+            rfu.set_flag(MainWindowRedrawingFlag::HEALTH);
         }
+
         if (player_ptr->riding == em_ptr->g_ptr->m_idx) {
-            player_ptr->redraw |= (PR_UHEALTH);
+            rfu.set_flag(MainWindowRedrawingFlag::UHEALTH);
         }
 
         return ProcessResult::PROCESS_FALSE;
@@ -177,11 +179,13 @@ ProcessResult effect_monster_old_heal(PlayerType *player_ptr, effect_monster_typ
         }
     }
 
+    auto &rfu = RedrawingFlagsUpdater::get_instance();
     if (player_ptr->health_who == em_ptr->g_ptr->m_idx) {
-        player_ptr->redraw |= (PR_HEALTH);
+        rfu.set_flag(MainWindowRedrawingFlag::HEALTH);
     }
+
     if (player_ptr->riding == em_ptr->g_ptr->m_idx) {
-        player_ptr->redraw |= (PR_UHEALTH);
+        rfu.set_flag(MainWindowRedrawingFlag::UHEALTH);
     }
 
     em_ptr->note = _("は体力を回復したようだ。", " looks healthier.");

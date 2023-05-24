@@ -11,7 +11,6 @@
 
 #include "io/screen-util.h"
 #include "core/player-processor.h"
-#include "core/player-redraw-types.h"
 #include "core/stuff-handler.h"
 #include "dungeon/quest.h"
 #include "effect/effect-characteristics.h"
@@ -70,8 +69,14 @@ void resize_map()
         StatusRedrawingFlag::MONSTER_STATUSES,
     };
     rfu.set_flags(flags_srf);
-    p_ptr->redraw |= (PR_WIPE | PR_BASIC | PR_EXTRA | PR_MAP | PR_EQUIPPY);
-
+    const auto flags_mwrf = {
+        MainWindowRedrawingFlag::WIPE,
+        MainWindowRedrawingFlag::BASIC,
+        MainWindowRedrawingFlag::EXTRA,
+        MainWindowRedrawingFlag::MAP,
+        MainWindowRedrawingFlag::EQUIPPY,
+    };
+    rfu.set_flags(flags_mwrf);
     handle_stuff(p_ptr);
     term_redraw();
 

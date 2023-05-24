@@ -1,5 +1,4 @@
 ﻿#include "spell-realm/spells-chaos.h"
-#include "core/player-redraw-types.h"
 #include "core/window-redrawer.h"
 #include "dungeon/quest.h"
 #include "effect/attribute-types.h"
@@ -197,7 +196,7 @@ bool vanish_dungeon(PlayerType *player_ptr)
         StatusRedrawingFlag::MONSTER_STATUSES,
     };
     rfu.set_flags(flags_srf);
-    player_ptr->redraw |= (PR_MAP);
+    rfu.set_flag(MainWindowRedrawingFlag::MAP);
     player_ptr->window_flags |= (PW_OVERHEAD | PW_DUNGEON);
     return true;
 }

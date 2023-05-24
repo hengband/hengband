@@ -8,7 +8,6 @@
 #include "combat/attack-accuracy.h"
 #include "combat/hallucination-attacks-table.h"
 #include "core/disturbance.h"
-#include "core/player-redraw-types.h"
 #include "dungeon/dungeon-flag-types.h"
 #include "effect/attribute-types.h"
 #include "effect/effect-characteristics.h"
@@ -36,6 +35,7 @@
 #include "system/monster-entity.h"
 #include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
+#include "system/redrawing-flags-updater.h"
 #include "util/string-processor.h"
 #include "view/display-messages.h"
 
@@ -51,12 +51,13 @@ static void heal_monster_by_melee(PlayerType *player_ptr, mam_type *mam_ptr)
         mam_ptr->m_ptr->hp = mam_ptr->m_ptr->maxhp;
     }
 
+    auto &rfu = RedrawingFlagsUpdater::get_instance();
     if (player_ptr->health_who == mam_ptr->m_idx) {
-        player_ptr->redraw |= (PR_HEALTH);
+        rfu.set_flag(MainWindowRedrawingFlag::HEALTH);
     }
 
     if (player_ptr->riding == mam_ptr->m_idx) {
-        player_ptr->redraw |= (PR_UHEALTH);
+        rfu.set_flag(MainWindowRedrawingFlag::UHEALTH);
     }
 
     if (mam_ptr->see_m && did_heal) {
@@ -188,12 +189,13 @@ static void redraw_health_bar(PlayerType *player_ptr, mam_type *mam_ptr)
         return;
     }
 
+    auto &rfu = RedrawingFlagsUpdater::get_instance();
     if (player_ptr->health_who == mam_ptr->t_idx) {
-        player_ptr->redraw |= (PR_HEALTH);
+        rfu.set_flag(MainWindowRedrawingFlag::HEALTH);
     }
 
     if (player_ptr->riding == mam_ptr->t_idx) {
-        player_ptr->redraw |= (PR_UHEALTH);
+        rfu.set_flag(MainWindowRedrawingFlag::UHEALTH);
     }
 }
 

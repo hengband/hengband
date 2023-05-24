@@ -6,7 +6,6 @@
  */
 #include "player-base/player-class.h"
 #include "cmd-io/diary-subtitle-table.h"
-#include "core/player-redraw-types.h"
 #include "inventory/inventory-slot-types.h"
 #include "mind/mind-elementalist.h"
 #include "player-info/bard-data-type.h"
@@ -402,8 +401,11 @@ bool PlayerClass::lose_balance()
         StatusRedrawingFlag::MONSTER_STATUSES,
     };
     rfu.set_flags(flags_srf);
-    this->player_ptr->redraw |= PR_ACTION;
-    this->player_ptr->redraw |= PR_TIMED_EFFECT;
+    const auto flags_mwrf = {
+        MainWindowRedrawingFlag::ACTION,
+        MainWindowRedrawingFlag::TIMED_EFFECT,
+    };
+    rfu.set_flags(flags_mwrf);
     this->player_ptr->action = ACTION_NONE;
     return true;
 }

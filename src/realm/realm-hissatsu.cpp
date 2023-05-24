@@ -5,7 +5,6 @@
 #include "cmd-item/cmd-throw.h"
 #include "combat/combat-options-type.h"
 #include "core/asking-player.h"
-#include "core/player-redraw-types.h"
 #include "core/stuff-handler.h"
 #include "dungeon/dungeon-flag-types.h"
 #include "effect/attribute-types.h"
@@ -954,7 +953,7 @@ std::optional<std::string> do_hissatsu_spell(PlayerType *player_ptr, SPELL_IDX s
                 }
                 command_dir = 0;
 
-                player_ptr->redraw |= PR_MP;
+                RedrawingFlagsUpdater::get_instance().set_flag(MainWindowRedrawingFlag::MP);
                 handle_stuff(player_ptr);
             } while (player_ptr->csp > mana_cost_per_monster);
 

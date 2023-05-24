@@ -2,7 +2,6 @@
 #include "autopick/autopick.h"
 #include "core/asking-player.h"
 #include "core/disturbance.h"
-#include "core/player-redraw-types.h"
 #include "core/stuff-handler.h"
 #include "core/window-redrawer.h"
 #include "dungeon/quest.h"
@@ -92,6 +91,7 @@ void py_pickup_floor(PlayerType *player_ptr, bool pickup)
     OBJECT_IDX floor_o_idx = 0;
     int can_pickup = 0;
     auto &o_idx_list = player_ptr->current_floor_ptr->grid_array[player_ptr->y][player_ptr->x].o_idx_list;
+    auto &rfu = RedrawingFlagsUpdater::get_instance();
     for (auto it = o_idx_list.begin(); it != o_idx_list.end();) {
         const OBJECT_IDX this_o_idx = *it++;
         auto *o_ptr = &player_ptr->current_floor_ptr->o_list[this_o_idx];
@@ -102,7 +102,7 @@ void py_pickup_floor(PlayerType *player_ptr, bool pickup)
             msg_format(mes, (long)o_ptr->pval, item_name.data());
             sound(SOUND_SELL);
             player_ptr->au += o_ptr->pval;
-            player_ptr->redraw |= (PR_GOLD);
+            rfu.set_flag(MainWindowRedrawingFlag::GOLD);
             player_ptr->window_flags |= (PW_PLAYER);
             delete_object_idx(player_ptr, this_o_idx);
             continue;
@@ -245,7 +245,7 @@ void carry(PlayerType *player_ptr, bool pickup)
     verify_panel(player_ptr);
     auto &rfu = RedrawingFlagsUpdater::get_instance();
     rfu.set_flag(StatusRedrawingFlag::MONSTER_STATUSES);
-    player_ptr->redraw |= PR_MAP;
+    rfu.set_flag(MainWindowRedrawingFlag::MAP);
     player_ptr->window_flags |= PW_OVERHEAD;
     handle_stuff(player_ptr);
     auto *g_ptr = &player_ptr->current_floor_ptr->grid_array[player_ptr->y][player_ptr->x];
@@ -266,7 +266,7 @@ void carry(PlayerType *player_ptr, bool pickup)
             msg_format(_(" $%ld の価値がある%sを見つけた。", "You collect %ld gold pieces worth of %s."), (long)value, item_name.data());
             sound(SOUND_SELL);
             player_ptr->au += value;
-            player_ptr->redraw |= (PR_GOLD);
+            rfu.set_flag(MainWindowRedrawingFlag::GOLD);
             player_ptr->window_flags |= (PW_PLAYER);
             continue;
         }

@@ -1,5 +1,4 @@
 ﻿#include "core/stuff-handler.h"
-#include "core/player-redraw-types.h"
 #include "core/window-redrawer.h"
 #include "player/player-status.h"
 #include "system/player-type-definition.h"
@@ -15,7 +14,7 @@ void handle_stuff(PlayerType *player_ptr)
         update_creature(player_ptr);
     }
 
-    if (player_ptr->redraw) {
+    if (rfu.any_main()) {
         redraw_stuff(player_ptr);
     }
 
@@ -55,7 +54,7 @@ void health_track(PlayerType *player_ptr, MONSTER_IDX m_idx)
     }
 
     player_ptr->health_who = m_idx;
-    player_ptr->redraw |= (PR_HEALTH);
+    RedrawingFlagsUpdater::get_instance().set_flag(MainWindowRedrawingFlag::HEALTH);
 }
 
 bool update_player(PlayerType *player_ptr)
@@ -77,7 +76,7 @@ bool redraw_player(PlayerType *player_ptr)
     }
 
     auto &rfu = RedrawingFlagsUpdater::get_instance();
-    player_ptr->redraw |= PR_MP;
+    rfu.set_flag(MainWindowRedrawingFlag::MP);
     const auto flags_srf = {
         StatusRedrawingFlag::COMBINATION,
         StatusRedrawingFlag::REORDER,

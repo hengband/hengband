@@ -9,7 +9,6 @@
 #include "action/mutation-execution.h"
 #include "action/racial-execution.h"
 #include "core/asking-player.h"
-#include "core/player-redraw-types.h"
 #include "core/window-redrawer.h"
 #include "game-option/text-display-options.h"
 #include "io/command-repeater.h"
@@ -30,6 +29,7 @@
 #include "racial/racial-util.h"
 #include "status/action-setter.h"
 #include "system/player-type-definition.h"
+#include "system/redrawing-flags-updater.h"
 #include "term/screen-processor.h"
 #include "term/z-form.h"
 #include "util/bit-flags-calculator.h"
@@ -502,6 +502,10 @@ void do_cmd_racial_power(PlayerType *player_ptr)
         return;
     }
 
-    set_bits(player_ptr->redraw, PR_HP | PR_MP);
+    const auto flags = {
+        MainWindowRedrawingFlag::HP,
+        MainWindowRedrawingFlag::MP,
+    };
+    RedrawingFlagsUpdater::get_instance().set_flags(flags);
     set_bits(player_ptr->window_flags, PW_PLAYER | PW_SPELL);
 }

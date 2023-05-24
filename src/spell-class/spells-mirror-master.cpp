@@ -6,7 +6,6 @@
  */
 
 #include "spell-class/spells-mirror-master.h"
-#include "core/player-redraw-types.h"
 #include "core/stuff-handler.h"
 #include "dungeon/dungeon-flag-types.h"
 #include "effect/attribute-types.h"
@@ -32,6 +31,7 @@
 #include "system/grid-type-definition.h"
 #include "system/monster-entity.h"
 #include "system/player-type-definition.h"
+#include "system/redrawing-flags-updater.h"
 #include "system/terrain-type-definition.h"
 #include "target/grid-selector.h"
 #include "target/projection-path-calculator.h"
@@ -171,7 +171,7 @@ bool SpellsMirrorMaster::mirror_concentration()
         this->player_ptr->csp_frac = 0;
     }
 
-    set_bits(this->player_ptr->redraw, PR_MP);
+    RedrawingFlagsUpdater::get_instance().set_flag(MainWindowRedrawingFlag::MP);
     return true;
 }
 

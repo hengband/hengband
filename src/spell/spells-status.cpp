@@ -8,7 +8,6 @@
 #include "avatar/avatar.h"
 #include "cmd-action/cmd-spell.h"
 #include "cmd-item/cmd-magiceat.h"
-#include "core/player-redraw-types.h"
 #include "core/stuff-handler.h"
 #include "core/window-redrawer.h"
 #include "effect/attribute-types.h"
@@ -215,7 +214,7 @@ bool time_walk(PlayerType *player_ptr)
 
     player_ptr->energy_need -= 1000 + (100 + player_ptr->csp - 50) * TURNS_PER_TICK / 10;
     auto &rfu = RedrawingFlagsUpdater::get_instance();
-    player_ptr->redraw |= (PR_MAP);
+    rfu.set_flag(MainWindowRedrawingFlag::MAP);
     rfu.set_flag(StatusRedrawingFlag::MONSTER_STATUSES);
     player_ptr->window_flags |= (PW_OVERHEAD | PW_DUNGEON);
     handle_stuff(player_ptr);
@@ -257,7 +256,7 @@ void roll_hitdice(PlayerType *player_ptr, spell_operation options)
     auto percent = (player_ptr->player_hp[PY_MAX_LEVEL - 1] * 200) / (2 * player_ptr->hitdie + ((PY_MAX_LEVEL - 1 + 3) * (player_ptr->hitdie + 1)));
     auto &rfu = RedrawingFlagsUpdater::get_instance();
     rfu.set_flag(StatusRedrawingFlag::HP);
-    player_ptr->redraw |= (PR_HP);
+    rfu.set_flag(MainWindowRedrawingFlag::HP);
     player_ptr->window_flags |= (PW_PLAYER);
 
     if (!(options & SPOP_NO_UPDATE)) {
@@ -495,7 +494,8 @@ bool restore_mana(PlayerType *player_ptr, bool magic_eater)
     player_ptr->csp = player_ptr->msp;
     player_ptr->csp_frac = 0;
     msg_print(_("頭がハッキリとした。", "You feel your head clear."));
-    player_ptr->redraw |= (PR_MP);
+    auto &rfu = RedrawingFlagsUpdater::get_instance();
+    rfu.set_flag(MainWindowRedrawingFlag::MP);
     player_ptr->window_flags |= (PW_PLAYER);
     player_ptr->window_flags |= (PW_SPELL);
     return true;
@@ -548,7 +548,7 @@ bool fishing(PlayerType *player_ptr)
     }
 
     set_action(player_ptr, ACTION_FISH);
-    player_ptr->redraw |= (PR_ACTION);
+    RedrawingFlagsUpdater::get_instance().set_flag(MainWindowRedrawingFlag::ACTION);
     return true;
 }
 

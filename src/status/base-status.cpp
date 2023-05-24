@@ -1,6 +1,5 @@
 ﻿#include "status/base-status.h"
 #include "avatar/avatar.h"
-#include "core/player-redraw-types.h"
 #include "core/window-redrawer.h"
 #include "game-option/birth-options.h"
 #include "inventory/inventory-slot-types.h"
@@ -179,7 +178,7 @@ bool dec_stat(PlayerType *player_ptr, int stat, int amount, int permanent)
         player_ptr->stat_cur[stat] = cur;
         player_ptr->stat_max[stat] = max;
         auto &rfu = RedrawingFlagsUpdater::get_instance();
-        player_ptr->redraw |= (PR_ABILITY_SCORE);
+        rfu.set_flag(MainWindowRedrawingFlag::ABILITY_SCORE);
         rfu.set_flag(StatusRedrawingFlag::BONUS);
     }
 
@@ -197,7 +196,7 @@ bool res_stat(PlayerType *player_ptr, int stat)
         player_ptr->stat_cur[stat] = player_ptr->stat_max[stat];
         auto &rfu = RedrawingFlagsUpdater::get_instance();
         rfu.set_flag(StatusRedrawingFlag::BONUS);
-        player_ptr->redraw |= (PR_ABILITY_SCORE);
+        rfu.set_flag(MainWindowRedrawingFlag::ABILITY_SCORE);
         return true;
     }
 

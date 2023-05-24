@@ -1,6 +1,5 @@
 ﻿#include "status/element-resistance.h"
 #include "core/disturbance.h"
-#include "core/player-redraw-types.h"
 #include "core/stuff-handler.h"
 #include "game-option/disturbance-options.h"
 #include "player-base/player-class.h"
@@ -11,6 +10,7 @@
 #include "realm/realm-song-numbers.h"
 #include "spell-realm/spells-song.h"
 #include "system/player-type-definition.h"
+#include "system/redrawing-flags-updater.h"
 #include "view/display-messages.h"
 
 /*!
@@ -46,15 +46,15 @@ bool set_oppose_acid(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
     }
 
     player_ptr->oppose_acid = v;
-
     if (!notice) {
         return false;
     }
-    player_ptr->redraw |= (PR_TIMED_EFFECT);
 
+    RedrawingFlagsUpdater::get_instance().set_flag(MainWindowRedrawingFlag::TIMED_EFFECT);
     if (disturb_state) {
         disturb(player_ptr, false, false);
     }
+
     handle_stuff(player_ptr);
     return true;
 }
@@ -93,15 +93,15 @@ bool set_oppose_elec(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
     }
 
     player_ptr->oppose_elec = v;
-
     if (!notice) {
         return false;
     }
-    player_ptr->redraw |= (PR_TIMED_EFFECT);
 
+    RedrawingFlagsUpdater::get_instance().set_flag(MainWindowRedrawingFlag::TIMED_EFFECT);
     if (disturb_state) {
         disturb(player_ptr, false, false);
     }
+
     handle_stuff(player_ptr);
     return true;
 }
@@ -142,15 +142,15 @@ bool set_oppose_fire(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
     }
 
     player_ptr->oppose_fire = v;
-
     if (!notice) {
         return false;
     }
-    player_ptr->redraw |= (PR_TIMED_EFFECT);
 
+    RedrawingFlagsUpdater::get_instance().set_flag(MainWindowRedrawingFlag::TIMED_EFFECT);
     if (disturb_state) {
         disturb(player_ptr, false, false);
     }
+
     handle_stuff(player_ptr);
     return true;
 }
@@ -188,15 +188,15 @@ bool set_oppose_cold(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
     }
 
     player_ptr->oppose_cold = v;
-
     if (!notice) {
         return false;
     }
-    player_ptr->redraw |= (PR_TIMED_EFFECT);
 
+    RedrawingFlagsUpdater::get_instance().set_flag(MainWindowRedrawingFlag::TIMED_EFFECT);
     if (disturb_state) {
         disturb(player_ptr, false, false);
     }
+
     handle_stuff(player_ptr);
     return true;
 }
@@ -241,11 +241,12 @@ bool set_oppose_pois(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
     if (!notice) {
         return false;
     }
-    player_ptr->redraw |= (PR_TIMED_EFFECT);
 
+    RedrawingFlagsUpdater::get_instance().set_flag(MainWindowRedrawingFlag::TIMED_EFFECT);
     if (disturb_state) {
         disturb(player_ptr, false, false);
     }
+
     handle_stuff(player_ptr);
     return true;
 }

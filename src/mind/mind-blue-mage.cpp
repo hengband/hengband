@@ -4,7 +4,6 @@
 #include "blue-magic/blue-magic-caster.h"
 #include "blue-magic/learnt-power-getter.h"
 #include "core/asking-player.h"
-#include "core/player-redraw-types.h"
 #include "core/window-redrawer.h"
 #include "game-option/disturbance-options.h"
 #include "game-option/input-options.h"
@@ -19,6 +18,7 @@
 #include "status/bad-status-setter.h"
 #include "status/base-status.h"
 #include "system/player-type-definition.h"
+#include "system/redrawing-flags-updater.h"
 #include "term/screen-processor.h"
 #include "timed-effect/player-stun.h"
 #include "timed-effect/timed-effects.h"
@@ -89,7 +89,8 @@ bool do_cmd_cast_learned(PlayerType *player_ptr)
     }
 
     PlayerEnergy(player_ptr).set_player_turn_energy(100);
-    player_ptr->redraw |= PR_MP;
+    auto &rfu = RedrawingFlagsUpdater::get_instance();
+    rfu.set_flag(MainWindowRedrawingFlag::MP);
     player_ptr->window_flags |= PW_PLAYER | PW_SPELL;
     return true;
 }

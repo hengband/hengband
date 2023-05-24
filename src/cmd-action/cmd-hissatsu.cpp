@@ -12,7 +12,6 @@
 #include "action/action-limited.h"
 #include "cmd-action/cmd-spell.h"
 #include "core/asking-player.h"
-#include "core/player-redraw-types.h"
 #include "core/stuff-handler.h"
 #include "core/window-redrawer.h"
 #include "floor/floor-object.h"
@@ -350,15 +349,13 @@ void do_cmd_hissatsu(PlayerType *player_ptr)
     }
 
     PlayerEnergy(player_ptr).set_player_turn_energy(100);
-
-    /* Use some mana */
     player_ptr->csp -= spell.smana;
-
-    /* Limit */
     if (player_ptr->csp < 0) {
         player_ptr->csp = 0;
     }
-    player_ptr->redraw |= (PR_MP);
+
+    auto &rfu = RedrawingFlagsUpdater::get_instance();
+    rfu.set_flag(MainWindowRedrawingFlag::MP);
     player_ptr->window_flags |= (PW_PLAYER | PW_SPELL);
 }
 

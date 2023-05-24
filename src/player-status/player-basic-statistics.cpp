@@ -1,5 +1,4 @@
 ﻿#include "player-status/player-basic-statistics.h"
-#include "core/player-redraw-types.h"
 #include "core/window-redrawer.h"
 #include "mutation/mutation-flag-types.h"
 #include "object/object-flags.h"
@@ -107,7 +106,8 @@ void PlayerBasicStatistics::update_top_status()
 
     if (this->player_ptr->stat_top[status] != top) {
         this->player_ptr->stat_top[status] = (int16_t)top;
-        set_bits(this->player_ptr->redraw, PR_ABILITY_SCORE);
+        auto &rfu = RedrawingFlagsUpdater::get_instance();
+        rfu.set_flag(MainWindowRedrawingFlag::ABILITY_SCORE);
         set_bits(this->player_ptr->window_flags, PW_PLAYER);
     }
 }
@@ -140,7 +140,8 @@ void PlayerBasicStatistics::update_use_status()
 
     if (this->player_ptr->stat_use[status] != use) {
         this->player_ptr->stat_use[status] = (int16_t)use;
-        set_bits(this->player_ptr->redraw, PR_ABILITY_SCORE);
+        auto &rfu = RedrawingFlagsUpdater::get_instance();
+        rfu.set_flag(MainWindowRedrawingFlag::ABILITY_SCORE);
         set_bits(this->player_ptr->window_flags, PW_PLAYER);
     }
 }

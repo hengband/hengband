@@ -12,7 +12,6 @@
 #include "cmd-action/cmd-mind.h"
 #include "cmd-io/cmd-dump.h"
 #include "core/asking-player.h"
-#include "core/player-redraw-types.h"
 #include "core/stuff-handler.h"
 #include "core/window-redrawer.h"
 #include "floor/floor-object.h"
@@ -1323,7 +1322,8 @@ bool do_cmd_cast(PlayerType *player_ptr)
     } else {
         over_exerted = true;
     }
-    player_ptr->redraw |= (PR_MP);
+
+    RedrawingFlagsUpdater::get_instance().set_flag(MainWindowRedrawingFlag::MP);
 
     /* Over-exert the player */
     if (over_exerted) {

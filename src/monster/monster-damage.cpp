@@ -6,7 +6,6 @@
 
 #include "monster/monster-damage.h"
 #include "avatar/avatar-changer.h"
-#include "core/player-redraw-types.h"
 #include "core/speed-table.h"
 #include "core/stuff-handler.h"
 #include "game-option/birth-options.h"
@@ -42,6 +41,7 @@
 #include "system/monster-entity.h"
 #include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
+#include "system/redrawing-flags-updater.h"
 #include "timed-effect/player-hallucination.h"
 #include "timed-effect/timed-effects.h"
 #include "util/bit-flags-calculator.h"
@@ -487,12 +487,13 @@ void MonsterDamageProcessor::get_exp_from_mon(MonsterEntity *m_ptr, int exp_dam)
 
 void MonsterDamageProcessor::set_redraw()
 {
+    auto &rfu = RedrawingFlagsUpdater::get_instance();
     if (this->player_ptr->health_who == this->m_idx) {
-        this->player_ptr->redraw |= PR_HEALTH;
+        rfu.set_flag(MainWindowRedrawingFlag::HEALTH);
     }
 
     if (this->player_ptr->riding == this->m_idx) {
-        this->player_ptr->redraw |= PR_UHEALTH;
+        rfu.set_flag(MainWindowRedrawingFlag::UHEALTH);
     }
 }
 

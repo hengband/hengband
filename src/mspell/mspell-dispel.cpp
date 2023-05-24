@@ -1,6 +1,5 @@
 ﻿#include "mspell/mspell-dispel.h"
 #include "blue-magic/blue-magic-checker.h"
-#include "core/player-redraw-types.h"
 #include "core/speed-table.h"
 #include "core/window-redrawer.h"
 #include "mind/mind-force-trainer.h"
@@ -103,7 +102,12 @@ static void dispel_player(PlayerType *player_ptr)
             StatusRedrawingFlag::MONSTER_STATUSES,
         };
         rfu.set_flags(flags_srf);
-        player_ptr->redraw |= (PR_MAP | PR_TIMED_EFFECT | PR_ACTION);
+        const auto flags_mwrf = {
+            MainWindowRedrawingFlag::MAP,
+            MainWindowRedrawingFlag::TIMED_EFFECT,
+            MainWindowRedrawingFlag::ACTION,
+        };
+        rfu.set_flags(flags_mwrf);
         player_ptr->window_flags |= (PW_OVERHEAD | PW_DUNGEON);
         player_ptr->energy_need += ENERGY_NEED();
     }

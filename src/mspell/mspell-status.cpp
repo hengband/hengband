@@ -8,7 +8,6 @@
 #include "mspell/mspell-status.h"
 #include "blue-magic/blue-magic-checker.h"
 #include "core/disturbance.h"
-#include "core/player-redraw-types.h"
 #include "effect/attribute-types.h"
 #include "effect/effect-processor.h"
 #include "mind/drs-types.h"
@@ -35,6 +34,7 @@
 #include "system/monster-entity.h"
 #include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
+#include "system/redrawing-flags-updater.h"
 #include "timed-effect/player-blindness.h"
 #include "timed-effect/timed-effects.h"
 #include "view/display-messages.h"
@@ -617,12 +617,13 @@ MonsterSpellResult spell_RF6_HEAL(PlayerType *player_ptr, MONSTER_IDX m_idx, MON
     }
 
     monspell_message_base(player_ptr, m_idx, t_idx, msg, !seen, target_type);
-
+    auto &rfu = RedrawingFlagsUpdater::get_instance();
     if (player_ptr->health_who == m_idx) {
-        player_ptr->redraw |= (PR_HEALTH);
+        rfu.set_flag(MainWindowRedrawingFlag::HEALTH);
     }
+
     if (player_ptr->riding == m_idx) {
-        player_ptr->redraw |= (PR_UHEALTH);
+        rfu.set_flag(MainWindowRedrawingFlag::UHEALTH);
     }
 
     if (!m_ptr->is_fearful()) {

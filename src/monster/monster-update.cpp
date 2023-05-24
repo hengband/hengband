@@ -6,7 +6,6 @@
 
 #include "monster/monster-update.h"
 #include "core/disturbance.h"
-#include "core/player-redraw-types.h"
 #include "core/window-redrawer.h"
 #include "dungeon/dungeon-flag-types.h"
 #include "floor/cave.h"
@@ -498,12 +497,13 @@ static void update_invisible_monster(PlayerType *player_ptr, um_type *um_ptr, MO
     m_ptr->ml = true;
     lite_spot(player_ptr, um_ptr->fy, um_ptr->fx);
 
+    auto &rfu = RedrawingFlagsUpdater::get_instance();
     if (player_ptr->health_who == m_idx) {
-        player_ptr->redraw |= PR_HEALTH;
+        rfu.set_flag(MainWindowRedrawingFlag::HEALTH);
     }
 
     if (player_ptr->riding == m_idx) {
-        player_ptr->redraw |= PR_UHEALTH;
+        rfu.set_flag(MainWindowRedrawingFlag::UHEALTH);
     }
 
     if (!player_ptr->effects()->hallucination()->is_hallucinated()) {
@@ -537,12 +537,13 @@ static void update_visible_monster(PlayerType *player_ptr, um_type *um_ptr, MONS
     um_ptr->m_ptr->ml = false;
     lite_spot(player_ptr, um_ptr->fy, um_ptr->fx);
 
+    auto &rfu = RedrawingFlagsUpdater::get_instance();
     if (player_ptr->health_who == m_idx) {
-        player_ptr->redraw |= PR_HEALTH;
+        rfu.set_flag(MainWindowRedrawingFlag::HEALTH);
     }
 
     if (player_ptr->riding == m_idx) {
-        player_ptr->redraw |= PR_UHEALTH;
+        rfu.set_flag(MainWindowRedrawingFlag::UHEALTH);
     }
 
     if (um_ptr->do_disturb && (disturb_pets || um_ptr->m_ptr->is_hostile())) {

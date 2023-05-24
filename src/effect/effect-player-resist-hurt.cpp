@@ -1,7 +1,6 @@
 ﻿#include "effect/effect-player-resist-hurt.h"
 #include "artifact/fixed-art-types.h"
 #include "blue-magic/blue-magic-checker.h"
-#include "core/player-redraw-types.h"
 #include "core/window-redrawer.h"
 #include "effect/effect-player.h"
 #include "hpmp/hp-mp-processor.h"
@@ -433,7 +432,11 @@ void effect_player_lite(PlayerType *player_ptr, EffectPlayerType *ep_ptr)
     msg_print(_("閃光のため非物質的な影の存在でいられなくなった。", "The light forces you out of your incorporeal shadow form."));
 
     auto &rfu = RedrawingFlagsUpdater::get_instance();
-    player_ptr->redraw |= (PR_MAP | PR_TIMED_EFFECT);
+    const auto flags_mwrf = {
+        MainWindowRedrawingFlag::MAP,
+        MainWindowRedrawingFlag::TIMED_EFFECT,
+    };
+    rfu.set_flags(flags_mwrf);
     rfu.set_flag(StatusRedrawingFlag::MONSTER_STATUSES);
     player_ptr->window_flags |= (PW_OVERHEAD | PW_DUNGEON);
 }

@@ -5,7 +5,6 @@
  */
 
 #include "pet/pet-fall-off.h"
-#include "core/player-redraw-types.h"
 #include "core/stuff-handler.h"
 #include "core/window-redrawer.h"
 #include "floor/cave.h"
@@ -173,12 +172,12 @@ bool process_fall_off_horse(PlayerType *player_ptr, int dam, bool force)
     handle_stuff(player_ptr);
 
     player_ptr->window_flags |= (PW_OVERHEAD | PW_DUNGEON);
-    player_ptr->redraw |= (PR_EXTRA);
-
-    /* Update health track of mount */
-    player_ptr->redraw |= (PR_UHEALTH);
-
-    bool fall_dam = false;
+    const auto flags_mwrf = {
+        MainWindowRedrawingFlag::EXTRA,
+        MainWindowRedrawingFlag::UHEALTH,
+    };
+    rfu.set_flags(flags_mwrf);
+    auto fall_dam = false;
     if (player_ptr->levitation && !force) {
         const auto m_name = monster_desc(player_ptr, m_ptr, 0);
         msg_format(_("%sから落ちたが、空中でうまく体勢を立て直して着地した。", "You are thrown from %s but make a good landing."), m_name.data());

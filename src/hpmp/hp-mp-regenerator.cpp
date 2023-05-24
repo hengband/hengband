@@ -1,6 +1,5 @@
 ﻿#include "hpmp/hp-mp-regenerator.h"
 #include "cmd-item/cmd-magiceat.h"
-#include "core/player-redraw-types.h"
 #include "core/window-redrawer.h"
 #include "inventory/inventory-slot-types.h"
 #include "monster-race/monster-race.h"
@@ -52,7 +51,8 @@ void regenhp(PlayerType *player_ptr, int percent)
     }
 
     if (old_chp != player_ptr->chp) {
-        player_ptr->redraw |= (PR_HP);
+        auto &rfu = RedrawingFlagsUpdater::get_instance();
+        rfu.set_flag(MainWindowRedrawingFlag::HP);
         player_ptr->window_flags |= (PW_PLAYER);
         wild_regen = 20;
     }
@@ -108,7 +108,8 @@ void regenmana(PlayerType *player_ptr, MANA_POINT upkeep_factor, MANA_POINT rege
     }
 
     if (old_csp != player_ptr->csp) {
-        player_ptr->redraw |= (PR_MP);
+        auto &rfu = RedrawingFlagsUpdater::get_instance();
+        rfu.set_flag(MainWindowRedrawingFlag::MP);
         player_ptr->window_flags |= (PW_PLAYER);
         player_ptr->window_flags |= (PW_SPELL);
         wild_regen = 20;
@@ -193,11 +194,12 @@ void regenerate_monsters(PlayerType *player_ptr)
                 m_ptr->hp = m_ptr->maxhp;
             }
 
+            auto &rfu = RedrawingFlagsUpdater::get_instance();
             if (player_ptr->health_who == i) {
-                player_ptr->redraw |= (PR_HEALTH);
+                rfu.set_flag(MainWindowRedrawingFlag::HEALTH);
             }
             if (player_ptr->riding == i) {
-                player_ptr->redraw |= (PR_UHEALTH);
+                rfu.set_flag(MainWindowRedrawingFlag::UHEALTH);
             }
         }
     }

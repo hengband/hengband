@@ -3,7 +3,6 @@
 #include "avatar/avatar.h"
 #include "cmd-building/cmd-building.h"
 #include "core/asking-player.h"
-#include "core/player-redraw-types.h"
 #include "core/stuff-handler.h"
 #include "flavor/flavor-describer.h"
 #include "game-option/cheat-options.h"
@@ -32,6 +31,7 @@
 #include "system/item-entity.h"
 #include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
+#include "system/redrawing-flags-updater.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
 #include "term/z-form.h"
@@ -48,6 +48,7 @@
 bool exchange_cash(PlayerType *player_ptr)
 {
     auto change = false;
+    auto &rfu = RedrawingFlagsUpdater::get_instance();
     for (INVENTORY_IDX i = 0; i <= INVEN_SUB_HAND; i++) {
         const auto item_ptr = &player_ptr->inventory_list[i];
         const auto r_idx_of_item = static_cast<MonsterRaceId>(item_ptr->pval);
@@ -63,7 +64,7 @@ bool exchange_cash(PlayerType *player_ptr)
 
         msg_format(_("賞金 %ld＄を手に入れた。", "You get %ldgp."), (long int)(1000000L * item_ptr->number));
         player_ptr->au += 1000000L * item_ptr->number;
-        player_ptr->redraw |= (PR_GOLD);
+        rfu.set_flag(MainWindowRedrawingFlag::GOLD);
         vary_item(player_ptr, i, -item_ptr->number);
     }
 
@@ -82,7 +83,7 @@ bool exchange_cash(PlayerType *player_ptr)
 
         msg_format(_("賞金 %ld＄を手に入れた。", "You get %ldgp."), (long int)(200000L * item_ptr->number));
         player_ptr->au += 200000L * item_ptr->number;
-        player_ptr->redraw |= (PR_GOLD);
+        rfu.set_flag(MainWindowRedrawingFlag::GOLD);
         vary_item(player_ptr, i, -item_ptr->number);
     }
 
@@ -101,7 +102,7 @@ bool exchange_cash(PlayerType *player_ptr)
 
         msg_format(_("賞金 %ld＄を手に入れた。", "You get %ldgp."), (long int)(100000L * item_ptr->number));
         player_ptr->au += 100000L * item_ptr->number;
-        player_ptr->redraw |= (PR_GOLD);
+        rfu.set_flag(MainWindowRedrawingFlag::GOLD);
         vary_item(player_ptr, i, -item_ptr->number);
     }
 
@@ -121,7 +122,7 @@ bool exchange_cash(PlayerType *player_ptr)
         constexpr auto mes = _("賞金 %ld＄を手に入れた。", "You get %ldgp.");
         msg_format(mes, (long int)((monraces_info[w_ptr->today_mon].level * 50 + 100) * item_ptr->number));
         player_ptr->au += (monraces_info[w_ptr->today_mon].level * 50 + 100) * item_ptr->number;
-        player_ptr->redraw |= (PR_GOLD);
+        rfu.set_flag(MainWindowRedrawingFlag::GOLD);
         vary_item(player_ptr, i, -item_ptr->number);
     }
 
@@ -141,7 +142,7 @@ bool exchange_cash(PlayerType *player_ptr)
         constexpr auto mes = _("賞金 %ld＄を手に入れた。", "You get %ldgp.");
         msg_format(mes, (long int)((monraces_info[w_ptr->today_mon].level * 30 + 60) * item_ptr->number));
         player_ptr->au += (monraces_info[w_ptr->today_mon].level * 30 + 60) * item_ptr->number;
-        player_ptr->redraw |= (PR_GOLD);
+        rfu.set_flag(MainWindowRedrawingFlag::GOLD);
         vary_item(player_ptr, i, -item_ptr->number);
     }
 

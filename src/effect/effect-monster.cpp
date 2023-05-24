@@ -7,7 +7,6 @@
 #include "effect/effect-monster.h"
 #include "avatar/avatar.h"
 #include "core/disturbance.h"
-#include "core/player-redraw-types.h"
 #include "core/stuff-handler.h"
 #include "core/window-redrawer.h"
 #include "effect/attribute-types.h"
@@ -53,6 +52,7 @@
 #include "system/monster-entity.h"
 #include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
+#include "system/redrawing-flags-updater.h"
 #include "util/bit-flags-calculator.h"
 #include "util/string-processor.h"
 #include "view/display-messages.h"
@@ -239,11 +239,13 @@ static bool deal_effect_damage_from_monster(PlayerType *player_ptr, effect_monst
         return false;
     }
 
+    auto &rfu = RedrawingFlagsUpdater::get_instance();
     if (player_ptr->health_who == em_ptr->g_ptr->m_idx) {
-        player_ptr->redraw |= (PR_HEALTH);
+        rfu.set_flag(MainWindowRedrawingFlag::HEALTH);
     }
+
     if (player_ptr->riding == em_ptr->g_ptr->m_idx) {
-        player_ptr->redraw |= (PR_UHEALTH);
+        rfu.set_flag(MainWindowRedrawingFlag::UHEALTH);
     }
 
     (void)set_monster_csleep(player_ptr, em_ptr->g_ptr->m_idx, 0);
@@ -627,7 +629,7 @@ static void update_phase_out_stat(PlayerType *player_ptr, effect_monster_type *e
     }
 
     player_ptr->health_who = em_ptr->g_ptr->m_idx;
-    player_ptr->redraw |= (PR_HEALTH);
+    RedrawingFlagsUpdater::get_instance().set_flag(MainWindowRedrawingFlag::HEALTH);
     handle_stuff(player_ptr);
 }
 

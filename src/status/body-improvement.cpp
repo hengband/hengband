@@ -1,7 +1,6 @@
 ﻿#include "status/body-improvement.h"
 #include "avatar/avatar.h"
 #include "core/disturbance.h"
-#include "core/player-redraw-types.h"
 #include "core/speed-table.h"
 #include "core/stuff-handler.h"
 #include "core/window-redrawer.h"
@@ -46,7 +45,7 @@ bool set_protevil(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
     }
 
     player_ptr->protevil = v;
-    player_ptr->redraw |= (PR_TIMED_EFFECT);
+    RedrawingFlagsUpdater::get_instance().set_flag(MainWindowRedrawingFlag::TIMED_EFFECT);
 
     if (!notice) {
         return false;
@@ -89,7 +88,7 @@ bool set_invuln(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
             chg_virtue(player_ptr, Virtue::HONOUR, -2);
             chg_virtue(player_ptr, Virtue::SACRIFICE, -3);
             chg_virtue(player_ptr, Virtue::VALOUR, -5);
-            player_ptr->redraw |= (PR_MAP);
+            rfu.set_flag(MainWindowRedrawingFlag::MAP);
             rfu.set_flag(StatusRedrawingFlag::MONSTER_STATUSES);
             player_ptr->window_flags |= (PW_OVERHEAD | PW_DUNGEON);
         }
@@ -97,7 +96,7 @@ bool set_invuln(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
         if (player_ptr->invuln && !music_singing(player_ptr, MUSIC_INVULN)) {
             msg_print(_("無敵ではなくなった。", "The invulnerability wears off."));
             notice = true;
-            player_ptr->redraw |= (PR_MAP);
+            rfu.set_flag(MainWindowRedrawingFlag::MAP);
             rfu.set_flag(StatusRedrawingFlag::MONSTER_STATUSES);
             player_ptr->window_flags |= (PW_OVERHEAD | PW_DUNGEON);
             player_ptr->energy_need += ENERGY_NEED();
@@ -105,7 +104,7 @@ bool set_invuln(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
     }
 
     player_ptr->invuln = v;
-    player_ptr->redraw |= (PR_TIMED_EFFECT);
+    rfu.set_flag(MainWindowRedrawingFlag::TIMED_EFFECT);
 
     if (!notice) {
         return false;
@@ -153,8 +152,8 @@ bool set_tim_regen(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
     }
 
     player_ptr->tim_regen = v;
-    player_ptr->redraw |= (PR_TIMED_EFFECT);
-
+    auto &rfu = RedrawingFlagsUpdater::get_instance();
+    rfu.set_flag(MainWindowRedrawingFlag::TIMED_EFFECT);
     if (!notice) {
         return false;
     }
@@ -163,7 +162,7 @@ bool set_tim_regen(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
         disturb(player_ptr, false, false);
     }
 
-    RedrawingFlagsUpdater::get_instance().set_flag(StatusRedrawingFlag::BONUS);
+    rfu.set_flag(StatusRedrawingFlag::BONUS);
     handle_stuff(player_ptr);
     return true;
 }
@@ -201,8 +200,8 @@ bool set_tim_reflect(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
     }
 
     player_ptr->tim_reflect = v;
-    player_ptr->redraw |= (PR_TIMED_EFFECT);
-
+    auto &rfu = RedrawingFlagsUpdater::get_instance();
+    rfu.set_flag(MainWindowRedrawingFlag::TIMED_EFFECT);
     if (!notice) {
         return false;
     }
@@ -211,7 +210,7 @@ bool set_tim_reflect(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
         disturb(player_ptr, false, false);
     }
 
-    RedrawingFlagsUpdater::get_instance().set_flag(StatusRedrawingFlag::BONUS);
+    rfu.set_flag(StatusRedrawingFlag::BONUS);
     handle_stuff(player_ptr);
     return true;
 }
@@ -249,8 +248,8 @@ bool set_pass_wall(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
     }
 
     player_ptr->tim_pass_wall = v;
-    player_ptr->redraw |= (PR_TIMED_EFFECT);
-
+    auto &rfu = RedrawingFlagsUpdater::get_instance();
+    rfu.set_flag(MainWindowRedrawingFlag::TIMED_EFFECT);
     if (!notice) {
         return false;
     }
@@ -259,7 +258,7 @@ bool set_pass_wall(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
         disturb(player_ptr, false, false);
     }
 
-    RedrawingFlagsUpdater::get_instance().set_flag(StatusRedrawingFlag::BONUS);
+    rfu.set_flag(StatusRedrawingFlag::BONUS);
     handle_stuff(player_ptr);
     return true;
 }

@@ -15,7 +15,6 @@
 #include "cmd-action/cmd-attack.h"
 #include "core/asking-player.h"
 #include "core/disturbance.h"
-#include "core/player-redraw-types.h"
 #include "floor/geometry.h"
 #include "game-option/game-play-options.h"
 #include "grid/grid.h"
@@ -34,6 +33,7 @@
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
 #include "system/player-type-definition.h"
+#include "system/redrawing-flags-updater.h"
 #include "system/terrain-type-definition.h"
 #include "target/target-getter.h"
 #include "term/screen-processor.h"
@@ -48,7 +48,7 @@ void do_cmd_search(PlayerType *player_ptr)
 {
     if (command_arg) {
         command_rep = command_arg - 1;
-        player_ptr->redraw |= PR_ACTION;
+        RedrawingFlagsUpdater::get_instance().set_flag(MainWindowRedrawingFlag::ACTION);
         command_arg = 0;
     }
 
@@ -114,7 +114,7 @@ void do_cmd_alter(PlayerType *player_ptr)
 
     if (command_arg) {
         command_rep = command_arg - 1;
-        player_ptr->redraw |= PR_ACTION;
+        RedrawingFlagsUpdater::get_instance().set_flag(MainWindowRedrawingFlag::ACTION);
         command_arg = 0;
     }
 

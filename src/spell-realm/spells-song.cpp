@@ -1,6 +1,5 @@
 ﻿#include "spell-realm/spells-song.h"
 #include "core/disturbance.h"
-#include "core/player-redraw-types.h"
 #include "core/stuff-handler.h"
 #include "core/window-redrawer.h"
 #include "game-option/disturbance-options.h"
@@ -50,29 +49,32 @@ void check_music(PlayerType *player_ptr)
     if (s64b_cmp(player_ptr->csp, player_ptr->csp_frac, need_mana, need_mana_frac) < 0) {
         stop_singing(player_ptr);
         return;
-    } else {
-        s64b_sub(&(player_ptr->csp), &(player_ptr->csp_frac), need_mana, need_mana_frac);
+    }
 
-        player_ptr->redraw |= PR_MP;
-        if (interupting_song_effect != 0) {
-            set_singing_song_effect(player_ptr, interupting_song_effect);
-            set_interrupting_song_effect(player_ptr, MUSIC_NONE);
-            msg_print(_("歌を再開した。", "You resume singing."));
-            player_ptr->action = ACTION_SING;
-            auto &rfu = RedrawingFlagsUpdater::get_instance();
-            const auto flags_srf = {
-                StatusRedrawingFlag::BONUS,
-                StatusRedrawingFlag::HP,
-                StatusRedrawingFlag::MONSTER_STATUSES,
-            };
-            rfu.set_flags(flags_srf);
-            player_ptr->redraw |= (PR_MAP | PR_TIMED_EFFECT | PR_ACTION);
-            player_ptr->window_flags |= (PW_OVERHEAD | PW_DUNGEON);
-        }
+    s64b_sub(&(player_ptr->csp), &(player_ptr->csp_frac), need_mana, need_mana_frac);
+    auto &rfu = RedrawingFlagsUpdater::get_instance();
+    rfu.set_flag(MainWindowRedrawingFlag::MP);
+    if (interupting_song_effect != 0) {
+        set_singing_song_effect(player_ptr, interupting_song_effect);
+        set_interrupting_song_effect(player_ptr, MUSIC_NONE);
+        msg_print(_("歌を再開した。", "You resume singing."));
+        player_ptr->action = ACTION_SING;
+        const auto flags_srf = {
+            StatusRedrawingFlag::BONUS,
+            StatusRedrawingFlag::HP,
+            StatusRedrawingFlag::MONSTER_STATUSES,
+        };
+        rfu.set_flags(flags_srf);
+        const auto flags_mwrf = {
+            MainWindowRedrawingFlag::MAP,
+            MainWindowRedrawingFlag::TIMED_EFFECT,
+            MainWindowRedrawingFlag::ACTION,
+        };
+        rfu.set_flags(flags_mwrf);
+        player_ptr->window_flags |= (PW_OVERHEAD | PW_DUNGEON);
     }
 
     PlayerSkill(player_ptr).gain_continuous_spell_skill_exp(REALM_MUSIC, spell);
-
     exe_spell(player_ptr, REALM_MUSIC, spell, SpellProcessType::CONTNUATION);
 }
 
@@ -110,8 +112,7 @@ bool set_tim_stealth(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
 
     player_ptr->tim_stealth = v;
     auto &rfu = RedrawingFlagsUpdater::get_instance();
-    player_ptr->redraw |= (PR_TIMED_EFFECT);
-
+    rfu.set_flag(MainWindowRedrawingFlag::TIMED_EFFECT);
     if (!notice) {
         return false;
     }
@@ -152,7 +153,7 @@ void stop_singing(PlayerType *player_ptr)
     set_singing_song_id(player_ptr, 0);
     auto &rfu = RedrawingFlagsUpdater::get_instance();
     rfu.set_flag(StatusRedrawingFlag::BONUS);
-    set_bits(player_ptr->redraw, PR_TIMED_EFFECT);
+    rfu.set_flag(MainWindowRedrawingFlag::TIMED_EFFECT);
 }
 
 bool music_singing(PlayerType *player_ptr, int music_songs)

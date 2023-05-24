@@ -5,7 +5,6 @@
  */
 
 #include "object-use/read/scroll-read-executor.h"
-#include "core/player-redraw-types.h"
 #include "monster-floor/monster-summon.h"
 #include "monster-floor/place-monster-types.h"
 #include "player-base/player-class.h"
@@ -303,7 +302,7 @@ bool ScrollReadExecutor::read()
 
         msg_print(_("手が輝き始めた。", "Your hands begin to glow."));
         this->player_ptr->special_attack |= ATTACK_CONFUSE;
-        this->player_ptr->redraw |= PR_TIMED_EFFECT;
+        RedrawingFlagsUpdater::get_instance().set_flag(MainWindowRedrawingFlag::TIMED_EFFECT);
         this->ident = true;
         break;
     case SV_SCROLL_PROTECTION_FROM_EVIL: {

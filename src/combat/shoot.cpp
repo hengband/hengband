@@ -2,7 +2,6 @@
 #include "artifact/fixed-art-types.h"
 #include "avatar/avatar.h"
 #include "combat/attack-criticality.h"
-#include "core/player-redraw-types.h"
 #include "core/stuff-handler.h"
 #include "effect/attribute-types.h"
 #include "effect/effect-characteristics.h"
@@ -445,7 +444,7 @@ static MULTIPLY calc_shot_damage_with_slay(
 
         if ((flags.has(TR_FORCE_WEAPON)) && (player_ptr->csp > (player_ptr->msp / 30))) {
             player_ptr->csp -= (1 + (player_ptr->msp / 30));
-            set_bits(player_ptr->redraw, PR_MP);
+            RedrawingFlagsUpdater::get_instance().set_flag(MainWindowRedrawingFlag::MP);
             mult = mult * 5 / 2;
         }
         break;

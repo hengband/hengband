@@ -1,7 +1,6 @@
 ﻿#include "floor/floor-events.h"
 #include "cmd-io/cmd-dump.h"
 #include "core/disturbance.h"
-#include "core/player-redraw-types.h"
 #include "core/window-redrawer.h"
 #include "dungeon/dungeon-flag-types.h"
 #include "dungeon/quest.h"
@@ -52,7 +51,7 @@ static void update_sun_light(PlayerType *player_ptr)
         StatusRedrawingFlag::MONSTER_LITE,
     };
     rfu.set_flags(flags_srf);
-    player_ptr->redraw |= PR_MAP;
+    rfu.set_flag(MainWindowRedrawingFlag::MAP);
     player_ptr->window_flags |= PW_OVERHEAD | PW_DUNGEON;
     if ((player_ptr->current_floor_ptr->grid_array[player_ptr->y][player_ptr->x].info & CAVE_GLOW) != 0) {
         set_superstealth(player_ptr, false);
@@ -313,7 +312,7 @@ void update_dungeon_feeling(PlayerType *player_ptr)
     player_ptr->feeling = new_feeling;
     do_cmd_feeling(player_ptr);
     select_floor_music(player_ptr);
-    player_ptr->redraw |= PR_DEPTH;
+    RedrawingFlagsUpdater::get_instance().set_flag(MainWindowRedrawingFlag::DEPTH);
     if (disturb_minor) {
         disturb(player_ptr, false, false);
     }
@@ -356,7 +355,7 @@ void glow_deep_lava_and_bldg(PlayerType *player_ptr)
         StatusRedrawingFlag::MONSTER_LITE,
     };
     rfu.set_flags(flags_srf);
-    player_ptr->redraw |= PR_MAP;
+    rfu.set_flag(MainWindowRedrawingFlag::MAP);
 }
 
 /*

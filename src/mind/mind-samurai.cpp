@@ -8,7 +8,6 @@
 #include "action/action-limited.h"
 #include "avatar/avatar.h"
 #include "cmd-action/cmd-attack.h"
-#include "core/player-redraw-types.h"
 #include "inventory/inventory-slot-types.h"
 #include "io/input-key-acceptor.h"
 #include "mind/stances-table.h"
@@ -366,7 +365,7 @@ void concentration(PlayerType *player_ptr)
         player_ptr->csp_frac = 0;
     }
 
-    player_ptr->redraw |= PR_MP;
+    RedrawingFlagsUpdater::get_instance().set_flag(MainWindowRedrawingFlag::MP);
 }
 
 /*!
@@ -449,7 +448,11 @@ bool choose_samurai_stance(PlayerType *player_ptr)
         PlayerClass(player_ptr).set_samurai_stance(new_stance);
     }
 
-    player_ptr->redraw |= (PR_ACTION | PR_TIMED_EFFECT);
+    const auto flags = {
+        MainWindowRedrawingFlag::ACTION,
+        MainWindowRedrawingFlag::TIMED_EFFECT,
+    };
+    rfu.set_flags(flags);
     screen_load();
     return true;
 }
@@ -533,5 +536,5 @@ void musou_counterattack(PlayerType *player_ptr, MonsterAttackPlayer *monap_ptr)
     msg_format(_("%s^に反撃した！", "You counterattacked %s!"), m_target_name.data());
     do_cmd_attack(player_ptr, monap_ptr->m_ptr->fy, monap_ptr->m_ptr->fx, HISSATSU_COUNTER);
     monap_ptr->fear = false;
-    player_ptr->redraw |= (PR_MP);
+    RedrawingFlagsUpdater::get_instance().set_flag(MainWindowRedrawingFlag::MP);
 }

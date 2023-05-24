@@ -1,5 +1,4 @@
 ﻿#include "target/grid-selector.h"
-#include "core/player-redraw-types.h"
 #include "core/stuff-handler.h"
 #include "core/window-redrawer.h"
 #include "floor/cave.h"
@@ -161,7 +160,7 @@ void tgt_pt_info::move_to_symbol(PlayerType *player_ptr)
         verify_panel(player_ptr);
         auto &rfu = RedrawingFlagsUpdater::get_instance();
         rfu.set_flag(StatusRedrawingFlag::MONSTER_STATUSES);
-        player_ptr->redraw |= PR_MAP;
+        rfu.set_flag(MainWindowRedrawingFlag::MAP);
         player_ptr->window_flags |= PW_OVERHEAD;
         handle_stuff(player_ptr);
     } else {
@@ -305,7 +304,7 @@ bool tgt_pt(PlayerType *player_ptr, POSITION *x_ptr, POSITION *y_ptr)
     verify_panel(player_ptr);
     auto &rfu = RedrawingFlagsUpdater::get_instance();
     rfu.set_flag(StatusRedrawingFlag::MONSTER_STATUSES);
-    player_ptr->redraw |= PR_MAP;
+    rfu.set_flag(MainWindowRedrawingFlag::MAP);
     player_ptr->window_flags |= PW_OVERHEAD;
     handle_stuff(player_ptr);
     *x_ptr = info.x;

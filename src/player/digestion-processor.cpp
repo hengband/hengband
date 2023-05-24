@@ -1,7 +1,6 @@
 ﻿#include "player/digestion-processor.h"
 #include "avatar/avatar.h"
 #include "core/disturbance.h"
-#include "core/player-redraw-types.h"
 #include "core/speed-table.h"
 #include "core/stuff-handler.h"
 #include "floor/wild.h"
@@ -217,7 +216,7 @@ bool set_food(PlayerType *player_ptr, TIME_EFFECT v)
 
     auto &rfu = RedrawingFlagsUpdater::get_instance();
     rfu.set_flag(StatusRedrawingFlag::BONUS);
-    player_ptr->redraw |= (PR_HUNGER);
+    rfu.set_flag(MainWindowRedrawingFlag::HUNGER);
     handle_stuff(player_ptr);
 
     return true;

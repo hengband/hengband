@@ -16,7 +16,6 @@
 #include "cmd-action/cmd-spell.h"
 #include "cmd-item/cmd-magiceat.h"
 #include "cmd-item/cmd-zapwand.h"
-#include "core/player-redraw-types.h"
 #include "core/stuff-handler.h"
 #include "core/window-redrawer.h"
 #include "effect/spells-effect-util.h"

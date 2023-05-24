@@ -12,7 +12,6 @@
  */
 
 #include "status/action-setter.h"
-#include "core/player-redraw-types.h"
 #include "player-base/player-class.h"
 #include "player-info/bluemage-data-type.h"
 #include "player-info/monk-data-type.h"
@@ -43,7 +42,7 @@ void set_action(PlayerType *player_ptr, uint8_t typ)
     switch (prev_typ) {
     case ACTION_SEARCH:
         msg_print(_("探索をやめた。", "You no longer walk carefully."));
-        player_ptr->redraw |= (PR_SPEED);
+        rfu.set_flag(MainWindowRedrawingFlag::SPEED);
         break;
     case ACTION_REST:
         player_ptr->resting = 0;
@@ -62,7 +61,7 @@ void set_action(PlayerType *player_ptr, uint8_t typ)
         msg_print(_("型を崩した。", "You stop assuming the special stance."));
         PlayerClass(player_ptr).set_samurai_stance(SamuraiStanceType::NONE);
         rfu.set_flag(StatusRedrawingFlag::MONSTER_STATUSES);
-        player_ptr->redraw |= (PR_TIMED_EFFECT);
+        rfu.set_flag(MainWindowRedrawingFlag::TIMED_EFFECT);
         break;
     case ACTION_SING:
         msg_print(_("歌うのをやめた。", "You stop singing."));
@@ -93,7 +92,7 @@ void set_action(PlayerType *player_ptr, uint8_t typ)
     switch (player_ptr->action) {
     case ACTION_SEARCH:
         msg_print(_("注意深く歩き始めた。", "You begin to walk carefully."));
-        player_ptr->redraw |= (PR_SPEED);
+        rfu.set_flag(MainWindowRedrawingFlag::SPEED);
         break;
     case ACTION_LEARN:
         msg_print(_("学習を始めた。", "You begin learning"));
@@ -109,5 +108,5 @@ void set_action(PlayerType *player_ptr, uint8_t typ)
     }
 
     rfu.set_flag(StatusRedrawingFlag::BONUS);
-    player_ptr->redraw |= (PR_ACTION);
+    rfu.set_flag(MainWindowRedrawingFlag::ACTION);
 }

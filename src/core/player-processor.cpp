@@ -2,7 +2,6 @@
 #include "action/run-execution.h"
 #include "action/travel-execution.h"
 #include "core/disturbance.h"
-#include "core/player-redraw-types.h"
 #include "core/special-internal-keys.h"
 #include "core/speed-table.h"
 #include "core/stuff-handler.h"
@@ -245,7 +244,7 @@ void process_player(PlayerType *player_ptr)
             s64b_sub(&(player_ptr->csp), &(player_ptr->csp_frac), cost, cost_frac);
         }
 
-        player_ptr->redraw |= PR_MP;
+        rfu.set_flag(MainWindowRedrawingFlag::MP);
     }
 
     if (PlayerClass(player_ptr).samurai_stance_is(SamuraiStanceType::MUSOU)) {
@@ -253,7 +252,7 @@ void process_player(PlayerType *player_ptr)
             set_action(player_ptr, ACTION_NONE);
         } else {
             player_ptr->csp -= 2;
-            player_ptr->redraw |= (PR_MP);
+            rfu.set_flag(MainWindowRedrawingFlag::MP);
         }
     }
 
@@ -292,7 +291,8 @@ void process_player(PlayerType *player_ptr)
                 if (!player_ptr->resting) {
                     set_action(player_ptr, ACTION_NONE);
                 }
-                player_ptr->redraw |= (PR_ACTION);
+
+                rfu.set_flag(MainWindowRedrawingFlag::ACTION);
             }
 
             energy.set_player_turn_energy(100);
@@ -304,7 +304,7 @@ void process_player(PlayerType *player_ptr)
             travel_step(player_ptr);
         } else if (command_rep) {
             command_rep--;
-            player_ptr->redraw |= (PR_ACTION);
+            rfu.set_flag(MainWindowRedrawingFlag::ACTION);
             handle_stuff(player_ptr);
             msg_flag = false;
             prt("", 0, 0);
@@ -330,7 +330,7 @@ void process_player(PlayerType *player_ptr)
             }
 
             if (effects->hallucination()->is_hallucinated()) {
-                player_ptr->redraw |= (PR_MAP);
+                rfu.set_flag(MainWindowRedrawingFlag::MAP);
             }
 
             for (MONSTER_IDX m_idx = 1; m_idx < player_ptr->current_floor_ptr->m_max; m_idx++) {
@@ -368,10 +368,11 @@ void process_player(PlayerType *player_ptr)
                         m_ptr->ml = false;
                         update_monster(player_ptr, m_idx, false);
                         if (player_ptr->health_who == m_idx) {
-                            player_ptr->redraw |= (PR_HEALTH);
+                            rfu.set_flag(MainWindowRedrawingFlag::HEALTH);
                         }
+
                         if (player_ptr->riding == m_idx) {
-                            player_ptr->redraw |= (PR_UHEALTH);
+                            rfu.set_flag(MainWindowRedrawingFlag::UHEALTH);
                         }
 
                         lite_spot(player_ptr, m_ptr->fy, m_ptr->fx);
@@ -387,17 +388,17 @@ void process_player(PlayerType *player_ptr)
                 }
 
                 mane_data->new_mane = false;
-                player_ptr->redraw |= (PR_IMITATION);
+                rfu.set_flag(MainWindowRedrawingFlag::IMITATION);
             }
 
             if (player_ptr->action == ACTION_LEARN) {
                 auto mane_data = PlayerClass(player_ptr).get_specific_data<bluemage_data_type>();
                 mane_data->new_magic_learned = false;
-                player_ptr->redraw |= (PR_ACTION);
+                rfu.set_flag(MainWindowRedrawingFlag::ACTION);
             }
 
             if (player_ptr->timewalk && (player_ptr->energy_need > -1000)) {
-                player_ptr->redraw |= (PR_MAP);
+                rfu.set_flag(MainWindowRedrawingFlag::MAP);
                 rfu.set_flag(StatusRedrawingFlag::MONSTER_STATUSES);
                 player_ptr->window_flags |= (PW_OVERHEAD | PW_DUNGEON);
 
