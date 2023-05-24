@@ -131,7 +131,7 @@ bool MonsterAttackPlayer::check_no_blow()
         return false;
     }
 
-    if (dungeons_info[this->player_ptr->dungeon_idx].flags.has(DungeonFeatureType::NO_MELEE)) {
+    if (dungeons_info[this->player_ptr->current_floor_ptr->dungeon_idx].flags.has(DungeonFeatureType::NO_MELEE)) {
         return false;
     }
 

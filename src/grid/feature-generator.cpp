@@ -62,9 +62,9 @@ static bool decide_cavern(const FloorType &floor_ref, const dungeon_type &dungeo
  */
 void gen_caverns_and_lakes(PlayerType *player_ptr, dungeon_type *dungeon_ptr, dun_data_type *dd_ptr)
 {
-    auto *floor_ptr = player_ptr->current_floor_ptr;
+    const auto &floor = *player_ptr->current_floor_ptr;
     constexpr auto chance_destroyed = 18;
-    if ((floor_ptr->dun_level > 30) && one_in_(chance_destroyed * 2) && small_levels && dungeon_ptr->flags.has(DungeonFeatureType::DESTROY)) {
+    if ((floor.dun_level > 30) && one_in_(chance_destroyed * 2) && small_levels && dungeon_ptr->flags.has(DungeonFeatureType::DESTROY)) {
         dd_ptr->destroyed = true;
         build_lake(player_ptr, one_in_(2) ? LAKE_T_CAVE : LAKE_T_EARTH_VAULT);
     }
@@ -73,12 +73,12 @@ void gen_caverns_and_lakes(PlayerType *player_ptr, dungeon_type *dungeon_ptr, du
     if (one_in_(chance_water) && !dd_ptr->empty_level && !dd_ptr->destroyed && dungeon_ptr->flags.has_any_of(DF_LAKE_MASK)) {
         auto count = calc_cavern_terrains(*dungeon_ptr);
         if (dungeon_ptr->flags.has(DungeonFeatureType::LAKE_LAVA)) {
-            if ((floor_ptr->dun_level > 80) && (randint0(count) < 2)) {
+            if ((floor.dun_level > 80) && (randint0(count) < 2)) {
                 dd_ptr->laketype = LAKE_T_LAVA;
             }
 
             count -= 2;
-            if (!dd_ptr->laketype && (floor_ptr->dun_level > 80) && one_in_(count)) {
+            if (!dd_ptr->laketype && (floor.dun_level > 80) && one_in_(count)) {
                 dd_ptr->laketype = LAKE_T_FIRE_VAULT;
             }
 
@@ -86,12 +86,12 @@ void gen_caverns_and_lakes(PlayerType *player_ptr, dungeon_type *dungeon_ptr, du
         }
 
         if (dungeon_ptr->flags.has(DungeonFeatureType::LAKE_WATER) && !dd_ptr->laketype) {
-            if ((floor_ptr->dun_level > 50) && randint0(count) < 2) {
+            if ((floor.dun_level > 50) && randint0(count) < 2) {
                 dd_ptr->laketype = LAKE_T_WATER;
             }
 
             count -= 2;
-            if (!dd_ptr->laketype && (floor_ptr->dun_level > 50) && one_in_(count)) {
+            if (!dd_ptr->laketype && (floor.dun_level > 50) && one_in_(count)) {
                 dd_ptr->laketype = LAKE_T_WATER_VAULT;
             }
 
@@ -99,19 +99,19 @@ void gen_caverns_and_lakes(PlayerType *player_ptr, dungeon_type *dungeon_ptr, du
         }
 
         if (dungeon_ptr->flags.has(DungeonFeatureType::LAKE_RUBBLE) && !dd_ptr->laketype) {
-            if ((floor_ptr->dun_level > 35) && (randint0(count) < 2)) {
+            if ((floor.dun_level > 35) && (randint0(count) < 2)) {
                 dd_ptr->laketype = LAKE_T_CAVE;
             }
 
             count -= 2;
-            if (!dd_ptr->laketype && (floor_ptr->dun_level > 35) && one_in_(count)) {
+            if (!dd_ptr->laketype && (floor.dun_level > 35) && one_in_(count)) {
                 dd_ptr->laketype = LAKE_T_EARTH_VAULT;
             }
 
             count--;
         }
 
-        if ((floor_ptr->dun_level > 5) && dungeon_ptr->flags.has(DungeonFeatureType::LAKE_TREE) && !dd_ptr->laketype) {
+        if ((floor.dun_level > 5) && dungeon_ptr->flags.has(DungeonFeatureType::LAKE_TREE) && !dd_ptr->laketype) {
             dd_ptr->laketype = LAKE_T_AIR_VAULT;
         }
 
@@ -121,14 +121,14 @@ void gen_caverns_and_lakes(PlayerType *player_ptr, dungeon_type *dungeon_ptr, du
         }
     }
 
-    const auto should_build_cavern = decide_cavern(*floor_ptr, *dungeon_ptr, *dd_ptr);
+    const auto should_build_cavern = decide_cavern(floor, *dungeon_ptr, *dd_ptr);
     if (should_build_cavern) {
         dd_ptr->cavern = true;
         msg_print_wizard(player_ptr, CHEAT_DUNGEON, _("洞窟を生成。", "Cavern on level."));
         build_cavern(player_ptr);
     }
 
-    if (inside_quest(quest_number(player_ptr, floor_ptr->dun_level))) {
+    if (inside_quest(quest_number(floor, floor.dun_level))) {
         dd_ptr->destroyed = false;
     }
 }
@@ -201,7 +201,7 @@ void try_door(PlayerType *player_ptr, dt_type *dt_ptr, POSITION y, POSITION x)
 
     bool can_place_door = randint0(100) < dt_ptr->dun_tun_jct;
     can_place_door &= possible_doorway(floor_ptr, y, x);
-    can_place_door &= dungeons_info[player_ptr->dungeon_idx].flags.has_not(DungeonFeatureType::NO_DOORS);
+    can_place_door &= dungeons_info[floor_ptr->dungeon_idx].flags.has_not(DungeonFeatureType::NO_DOORS);
     if (can_place_door) {
         place_random_door(player_ptr, y, x, false);
     }

@@ -33,10 +33,10 @@
 
 static bool is_in_special_floor(PlayerType *player_ptr)
 {
-    auto *floor_ptr = player_ptr->current_floor_ptr;
-    auto is_in_fixed_quest = inside_quest(floor_ptr->quest_number);
-    is_in_fixed_quest &= !inside_quest(random_quest_number(player_ptr, floor_ptr->dun_level));
-    return is_in_fixed_quest || floor_ptr->inside_arena || player_ptr->phase_out;
+    auto &floor = *player_ptr->current_floor_ptr;
+    auto is_in_fixed_quest = inside_quest(floor.quest_number);
+    is_in_fixed_quest &= !inside_quest(random_quest_number(floor, floor.dun_level));
+    return is_in_fixed_quest || floor.inside_arena || player_ptr->phase_out;
 }
 
 /*!
@@ -50,8 +50,8 @@ static bool is_in_special_floor(PlayerType *player_ptr)
  */
 bool genocide_aux(PlayerType *player_ptr, MONSTER_IDX m_idx, int power, bool player_cast, int dam_side, concptr spell_name)
 {
-    auto *floor_ptr = player_ptr->current_floor_ptr;
-    auto *m_ptr = &floor_ptr->m_list[m_idx];
+    auto &floor = *player_ptr->current_floor_ptr;
+    auto *m_ptr = &floor.m_list[m_idx];
     auto *r_ptr = &monraces_info[m_ptr->r_idx];
     if (m_ptr->is_pet() && !player_cast) {
         return false;
@@ -129,8 +129,8 @@ bool genocide_aux(PlayerType *player_ptr, MONSTER_IDX m_idx, int power, bool pla
  */
 bool symbol_genocide(PlayerType *player_ptr, int power, bool player_cast)
 {
-    auto *floor_ptr = player_ptr->current_floor_ptr;
-    bool is_special_floor = inside_quest(floor_ptr->quest_number) && !inside_quest(random_quest_number(player_ptr, floor_ptr->dun_level));
+    auto &floor = *player_ptr->current_floor_ptr;
+    bool is_special_floor = inside_quest(floor.quest_number) && !inside_quest(random_quest_number(floor, floor.dun_level));
     is_special_floor |= player_ptr->current_floor_ptr->inside_arena;
     is_special_floor |= player_ptr->phase_out;
     if (is_special_floor) {
@@ -172,17 +172,17 @@ bool symbol_genocide(PlayerType *player_ptr, int power, bool player_cast)
  */
 bool mass_genocide(PlayerType *player_ptr, int power, bool player_cast)
 {
-    auto *floor_ptr = player_ptr->current_floor_ptr;
-    bool is_special_floor = inside_quest(floor_ptr->quest_number) && !inside_quest(random_quest_number(player_ptr, floor_ptr->dun_level));
-    is_special_floor |= player_ptr->current_floor_ptr->inside_arena;
+    auto &floor = *player_ptr->current_floor_ptr;
+    bool is_special_floor = inside_quest(floor.quest_number) && !inside_quest(random_quest_number(floor, floor.dun_level));
+    is_special_floor |= floor.inside_arena;
     is_special_floor |= player_ptr->phase_out;
     if (is_special_floor) {
         return false;
     }
 
     bool result = false;
-    for (MONSTER_IDX i = 1; i < player_ptr->current_floor_ptr->m_max; i++) {
-        auto *m_ptr = &player_ptr->current_floor_ptr->m_list[i];
+    for (MONSTER_IDX i = 1; i < floor.m_max; i++) {
+        auto *m_ptr = &floor.m_list[i];
         if (!m_ptr->is_valid()) {
             continue;
         }
@@ -209,17 +209,17 @@ bool mass_genocide(PlayerType *player_ptr, int power, bool player_cast)
  */
 bool mass_genocide_undead(PlayerType *player_ptr, int power, bool player_cast)
 {
-    auto *floor_ptr = player_ptr->current_floor_ptr;
-    bool is_special_floor = inside_quest(floor_ptr->quest_number) && !inside_quest(random_quest_number(player_ptr, floor_ptr->dun_level));
-    is_special_floor |= player_ptr->current_floor_ptr->inside_arena;
+    auto &floor = *player_ptr->current_floor_ptr;
+    bool is_special_floor = inside_quest(floor.quest_number) && !inside_quest(random_quest_number(floor, floor.dun_level));
+    is_special_floor |= floor.inside_arena;
     is_special_floor |= player_ptr->phase_out;
     if (is_special_floor) {
         return false;
     }
 
     bool result = false;
-    for (MONSTER_IDX i = 1; i < player_ptr->current_floor_ptr->m_max; i++) {
-        auto *m_ptr = &player_ptr->current_floor_ptr->m_list[i];
+    for (MONSTER_IDX i = 1; i < floor.m_max; i++) {
+        auto *m_ptr = &floor.m_list[i];
         auto *r_ptr = &monraces_info[m_ptr->r_idx];
         if (!m_ptr->is_valid()) {
             continue;

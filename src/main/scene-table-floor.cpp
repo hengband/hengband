@@ -43,7 +43,8 @@ static bool scene_basic(PlayerType *player_ptr, scene_type *value)
 
 static bool scene_quest(PlayerType *player_ptr, scene_type *value)
 {
-    const QuestId quest_id = quest_number(player_ptr, player_ptr->current_floor_ptr->dun_level);
+    const auto &floor = *player_ptr->current_floor_ptr;
+    const QuestId quest_id = quest_number(floor, floor.dun_level);
     const bool enable = (inside_quest(quest_id));
     if (enable) {
         value->type = TERM_XTRA_MUSIC_QUEST;
@@ -55,7 +56,8 @@ static bool scene_quest(PlayerType *player_ptr, scene_type *value)
 
 static bool scene_quest_basic(PlayerType *player_ptr, scene_type *value)
 {
-    const QuestId quest_id = quest_number(player_ptr, player_ptr->current_floor_ptr->dun_level);
+    const auto &floor = *player_ptr->current_floor_ptr;
+    const QuestId quest_id = quest_number(floor, floor.dun_level);
     const bool enable = (inside_quest(quest_id));
     if (enable) {
         value->type = TERM_XTRA_MUSIC_BASIC;
@@ -119,10 +121,11 @@ static bool scene_dungeon_feeling(PlayerType *player_ptr, scene_type *value)
 
 static bool scene_dungeon(PlayerType *player_ptr, scene_type *value)
 {
-    const bool enable = (player_ptr->dungeon_idx > 0);
+    const auto *floor_ptr = player_ptr->current_floor_ptr;
+    const bool enable = (floor_ptr->dungeon_idx > 0);
     if (enable) {
         value->type = TERM_XTRA_MUSIC_DUNGEON;
-        value->val = player_ptr->dungeon_idx;
+        value->val = floor_ptr->dungeon_idx;
     }
     return enable;
 }

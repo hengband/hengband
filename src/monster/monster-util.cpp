@@ -75,13 +75,13 @@ static bool is_possible_monster_or(const EnumClassFlagGroup<T> &r_flags, const E
 
 /*!
  * @brief 指定されたモンスター種族がダンジョンの制限にかかるかどうかをチェックする / Some dungeon types restrict the possible monsters.
- * @param player_ptr プレイヤーへの参照ポインタ
+ * @param floor_ptr フロアへの参照ポインタ
  * @param r_idx チェックするモンスター種族ID
  * @return 召喚条件が一致するならtrue / Return TRUE is the monster is OK and FALSE otherwise
  */
-static bool restrict_monster_to_dungeon(PlayerType *player_ptr, MonsterRaceId r_idx)
+static bool restrict_monster_to_dungeon(const FloorType *floor_ptr, MonsterRaceId r_idx)
 {
-    const auto *d_ptr = &dungeons_info[player_ptr->dungeon_idx];
+    const auto *d_ptr = &dungeons_info[floor_ptr->dungeon_idx];
     const auto *r_ptr = &monraces_info[r_idx];
     if (d_ptr->flags.has(DungeonFeatureType::CHAMELEON)) {
         if (chameleon_change_m_idx) {
@@ -105,7 +105,6 @@ static bool restrict_monster_to_dungeon(PlayerType *player_ptr, MonsterRaceId r_
         }
     }
 
-    auto *floor_ptr = player_ptr->current_floor_ptr;
     if (d_ptr->flags.has(DungeonFeatureType::BEGINNER)) {
         if (r_ptr->level > floor_ptr->dun_level) {
             return false;
@@ -306,10 +305,10 @@ static errr do_get_mon_num_prep(PlayerType *player_ptr, const monsterrace_hook_t
             const bool in_random_quest = inside_quest(floor_ptr->quest_number) && !QuestType::is_fixed(floor_ptr->quest_number);
             const bool cond = !player_ptr->phase_out && floor_ptr->dun_level > 0 && !in_random_quest;
 
-            if (cond && !restrict_monster_to_dungeon(player_ptr, entry_r_idx)) {
+            if (cond && !restrict_monster_to_dungeon(floor_ptr, entry_r_idx)) {
                 // ダンジョンによる制約に掛かった場合、重みを special_div/64 倍する。
                 // 丸めは確率的に行う。
-                const int numer = entry->prob2 * dungeons_info[player_ptr->dungeon_idx].special_div;
+                const int numer = entry->prob2 * dungeons_info[floor_ptr->dungeon_idx].special_div;
                 const int q = numer / 64;
                 const int r = numer % 64;
                 entry->prob2 = (PROB)(randint0(64) < r ? q + 1 : q);

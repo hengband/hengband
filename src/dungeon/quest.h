@@ -162,6 +162,7 @@ extern char quest_text[10][80];
 extern int quest_text_line;
 extern QuestId leaving_quest;
 
+class FloorType;
 class ItemEntity;
 class PlayerType;
 void determine_random_questor(PlayerType *player_ptr, QuestType *q_ptr);
@@ -169,8 +170,8 @@ void record_quest_final_status(QuestType *q_ptr, PLAYER_LEVEL lev, QuestStatusTy
 void complete_quest(PlayerType *player_ptr, QuestId quest_num);
 void check_find_art_quest_completion(PlayerType *player_ptr, ItemEntity *o_ptr);
 void quest_discovery(QuestId q_idx);
-QuestId quest_number(PlayerType *player_ptr, DEPTH level);
-QuestId random_quest_number(PlayerType *player_ptr, DEPTH level);
+QuestId quest_number(const FloorType &floor, DEPTH level);
+QuestId random_quest_number(const FloorType &floor, DEPTH level);
 void leave_quest_check(PlayerType *player_ptr);
 void leave_tower_check(PlayerType *player_ptr);
 void exe_enter_quest(PlayerType *player_ptr, QuestId quest_idx);

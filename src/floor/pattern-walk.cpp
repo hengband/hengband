@@ -52,15 +52,17 @@ void pattern_teleport(PlayerType *player_ptr)
             min_level = player_ptr->current_floor_ptr->dun_level;
         }
 
-        if (player_ptr->dungeon_idx == DUNGEON_ANGBAND) {
-            if (player_ptr->current_floor_ptr->dun_level > 100) {
+        const auto &floor = *player_ptr->current_floor_ptr;
+        if (floor.dungeon_idx == DUNGEON_ANGBAND) {
+            if (floor.dun_level > 100) {
                 max_level = MAX_DEPTH - 1;
             } else if (player_ptr->current_floor_ptr->dun_level == 100) {
                 max_level = 100;
             }
         } else {
-            max_level = dungeons_info[player_ptr->dungeon_idx].maxdepth;
-            min_level = dungeons_info[player_ptr->dungeon_idx].mindepth;
+            const auto &dungeon = dungeons_info[floor.dungeon_idx];
+            max_level = dungeon.maxdepth;
+            min_level = dungeon.mindepth;
         }
 
         strnfmt(ppp, sizeof(ppp), _("テレポート先:(%d-%d)", "Teleport to level (%d-%d): "), (int)min_level, (int)max_level);

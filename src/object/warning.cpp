@@ -355,29 +355,25 @@ static int blow_damcalc(MonsterEntity *m_ptr, PlayerType *player_ptr, MonsterBlo
 bool process_warning(PlayerType *player_ptr, POSITION xx, POSITION yy)
 {
     POSITION mx, my;
-    grid_type *g_ptr;
-
 #define WARNING_AWARE_RANGE 12
     int dam_max = 0;
     static int old_damage = 0;
 
+    auto &floor = *player_ptr->current_floor_ptr;
     for (mx = xx - WARNING_AWARE_RANGE; mx < xx + WARNING_AWARE_RANGE + 1; mx++) {
         for (my = yy - WARNING_AWARE_RANGE; my < yy + WARNING_AWARE_RANGE + 1; my++) {
             int dam_max0 = 0;
-            MonsterEntity *m_ptr;
-            MonsterRaceInfo *r_ptr;
-
-            if (!in_bounds(player_ptr->current_floor_ptr, my, mx) || (distance(my, mx, yy, xx) > WARNING_AWARE_RANGE)) {
+            if (!in_bounds(&floor, my, mx) || (distance(my, mx, yy, xx) > WARNING_AWARE_RANGE)) {
                 continue;
             }
 
-            g_ptr = &player_ptr->current_floor_ptr->grid_array[my][mx];
+            const auto *g_ptr = &floor.grid_array[my][mx];
 
             if (!g_ptr->m_idx) {
                 continue;
             }
 
-            m_ptr = &player_ptr->current_floor_ptr->m_list[g_ptr->m_idx];
+            auto *m_ptr = &floor.m_list[g_ptr->m_idx];
 
             if (m_ptr->is_asleep()) {
                 continue;
@@ -386,13 +382,13 @@ bool process_warning(PlayerType *player_ptr, POSITION xx, POSITION yy)
                 continue;
             }
 
-            r_ptr = &monraces_info[m_ptr->r_idx];
+            auto *r_ptr = &monraces_info[m_ptr->r_idx];
 
             /* Monster spells (only powerful ones)*/
             if (projectable(player_ptr, my, mx, yy, xx)) {
                 const auto flags = r_ptr->ability_flags;
 
-                if (dungeons_info[player_ptr->dungeon_idx].flags.has_not(DungeonFeatureType::NO_MAGIC)) {
+                if (dungeons_info[floor.dungeon_idx].flags.has_not(DungeonFeatureType::NO_MAGIC)) {
                     if (flags.has(MonsterAbilityType::BA_CHAO)) {
                         spell_damcalc_by_spellnum(player_ptr, MonsterAbilityType::BA_CHAO, AttributeType::CHAOS, g_ptr->m_idx, &dam_max0);
                     }
@@ -496,7 +492,7 @@ bool process_warning(PlayerType *player_ptr, POSITION xx, POSITION yy)
                 }
             }
             /* Monster melee attacks */
-            if (r_ptr->behavior_flags.has(MonsterBehaviorType::NEVER_BLOW) || dungeons_info[player_ptr->dungeon_idx].flags.has(DungeonFeatureType::NO_MELEE)) {
+            if (r_ptr->behavior_flags.has(MonsterBehaviorType::NEVER_BLOW) || dungeons_info[floor.dungeon_idx].flags.has(DungeonFeatureType::NO_MELEE)) {
                 dam_max += dam_max0;
                 continue;
             }
@@ -549,7 +545,7 @@ bool process_warning(PlayerType *player_ptr, POSITION xx, POSITION yy)
         old_damage = old_damage / 2;
     }
 
-    g_ptr = &player_ptr->current_floor_ptr->grid_array[yy][xx];
+    auto *g_ptr = &floor.grid_array[yy][xx];
     bool is_warning = (!easy_disarm && is_trap(player_ptr, g_ptr->feat)) || (g_ptr->mimic && is_trap(player_ptr, g_ptr->feat));
     is_warning &= !one_in_(13);
     if (!is_warning) {

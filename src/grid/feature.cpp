@@ -258,7 +258,7 @@ void cave_set_feat(PlayerType *player_ptr, POSITION y, POSITION x, FEAT_IDX feat
         RedrawingFlagsUpdater::get_instance().set_flags(flags);
     }
 
-    if (f_ptr->flags.has_not(TerrainCharacteristics::GLOW) || dungeons_info[player_ptr->dungeon_idx].flags.has(DungeonFeatureType::DARKNESS)) {
+    if (f_ptr->flags.has_not(TerrainCharacteristics::GLOW) || dungeons_info[floor_ptr->dungeon_idx].flags.has(DungeonFeatureType::DARKNESS)) {
         return;
     }
 

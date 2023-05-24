@@ -339,7 +339,7 @@ bool earthquake(PlayerType *player_ptr, POSITION cy, POSITION cx, POSITION r, MO
                 continue;
             }
 
-            if (dungeons_info[player_ptr->dungeon_idx].flags.has(DungeonFeatureType::DARKNESS)) {
+            if (dungeons_info[floor_ptr->dungeon_idx].flags.has(DungeonFeatureType::DARKNESS)) {
                 continue;
             }
 

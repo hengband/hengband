@@ -21,14 +21,13 @@ void place_random_stairs(PlayerType *player_ptr, POSITION y, POSITION x)
 {
     bool up_stairs = true;
     bool down_stairs = true;
-    grid_type *g_ptr;
-    auto *floor_ptr = player_ptr->current_floor_ptr;
-    g_ptr = &floor_ptr->grid_array[y][x];
+    auto &floor = *player_ptr->current_floor_ptr;
+    const auto *g_ptr = &floor.grid_array[y][x];
     if (!g_ptr->is_floor() || !g_ptr->o_idx_list.empty()) {
         return;
     }
 
-    if (!floor_ptr->dun_level) {
+    if (!floor.dun_level) {
         up_stairs = false;
     }
 
@@ -36,11 +35,11 @@ void place_random_stairs(PlayerType *player_ptr, POSITION y, POSITION x)
         up_stairs = false;
     }
 
-    if (floor_ptr->dun_level >= dungeons_info[player_ptr->dungeon_idx].maxdepth) {
+    if (floor.dun_level >= dungeons_info[floor.dungeon_idx].maxdepth) {
         down_stairs = false;
     }
 
-    if (inside_quest(quest_number(player_ptr, floor_ptr->dun_level)) && (floor_ptr->dun_level > 1)) {
+    if (inside_quest(quest_number(floor, floor.dun_level)) && (floor.dun_level > 1)) {
         down_stairs = false;
     }
 
@@ -53,9 +52,9 @@ void place_random_stairs(PlayerType *player_ptr, POSITION y, POSITION x)
     }
 
     if (up_stairs) {
-        set_cave_feat(floor_ptr, y, x, feat_up_stair);
+        set_cave_feat(&floor, y, x, feat_up_stair);
     } else if (down_stairs) {
-        set_cave_feat(floor_ptr, y, x, feat_down_stair);
+        set_cave_feat(&floor, y, x, feat_down_stair);
     }
 }
 

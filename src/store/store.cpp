@@ -27,6 +27,7 @@
 #include "store/store-util.h"
 #include "sv-definition/sv-lite-types.h"
 #include "sv-definition/sv-scroll-types.h"
+#include "system/floor-type-definition.h"
 #include "system/item-entity.h"
 #include "system/player-type-definition.h"
 #include "term/screen-processor.h"
@@ -326,7 +327,7 @@ static void store_create(PlayerType *player_ptr, short fix_k_idx, StoreSaleType 
         DEPTH level;
         if (store_num == StoreSaleType::BLACK) {
             level = 25 + randint0(25);
-            bi_id = get_obj_index(player_ptr, level, 0x00000000);
+            bi_id = get_obj_index(player_ptr->current_floor_ptr, level, 0x00000000);
             if (bi_id == 0) {
                 continue;
             }

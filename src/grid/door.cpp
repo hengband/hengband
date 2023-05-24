@@ -106,7 +106,7 @@ void place_locked_door(PlayerType *player_ptr, POSITION y, POSITION x)
         return;
     }
 
-    set_cave_feat(floor_ptr, y, x, feat_locked_door_random(dungeons_info[player_ptr->dungeon_idx].flags.has(DungeonFeatureType::GLASS_DOOR) ? DOOR_GLASS_DOOR : DOOR_DOOR));
+    set_cave_feat(floor_ptr, y, x, feat_locked_door_random(dungeons_info[floor_ptr->dungeon_idx].flags.has(DungeonFeatureType::GLASS_DOOR) ? DOOR_GLASS_DOOR : DOOR_DOOR));
     floor_ptr->grid_array[y][x].info &= ~(CAVE_FLOOR);
     delete_monster(player_ptr, y, x);
 }

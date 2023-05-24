@@ -82,30 +82,30 @@ bool alloc_stairs(PlayerType *player_ptr, FEAT_IDX feat, int num, int walls)
 {
     int shaft_num = 0;
     auto *f_ptr = &terrains_info[feat];
-    auto *floor_ptr = player_ptr->current_floor_ptr;
+    auto &floor = *player_ptr->current_floor_ptr;
     if (f_ptr->flags.has(TerrainCharacteristics::LESS)) {
-        if (ironman_downward || !floor_ptr->dun_level) {
+        if (ironman_downward || !floor.dun_level) {
             return true;
         }
 
-        if (floor_ptr->dun_level > dungeons_info[floor_ptr->dungeon_idx].mindepth) {
+        if (floor.dun_level > dungeons_info[floor.dungeon_idx].mindepth) {
             shaft_num = (randint1(num + 1)) / 2;
         }
     } else if (f_ptr->flags.has(TerrainCharacteristics::MORE)) {
-        auto q_idx = quest_number(player_ptr, floor_ptr->dun_level);
+        auto q_idx = quest_number(floor, floor.dun_level);
         const auto &quest_list = QuestList::get_instance();
-        if (floor_ptr->dun_level > 1 && inside_quest(q_idx)) {
+        if (floor.dun_level > 1 && inside_quest(q_idx)) {
             auto *r_ptr = &monraces_info[quest_list[q_idx].r_idx];
             if (r_ptr->kind_flags.has_not(MonsterKindType::UNIQUE) || 0 < r_ptr->max_num) {
                 return true;
             }
         }
 
-        if (floor_ptr->dun_level >= dungeons_info[floor_ptr->dungeon_idx].maxdepth) {
+        if (floor.dun_level >= dungeons_info[floor.dungeon_idx].maxdepth) {
             return true;
         }
 
-        if ((floor_ptr->dun_level < dungeons_info[floor_ptr->dungeon_idx].maxdepth - 1) && !inside_quest(quest_number(player_ptr, floor_ptr->dun_level + 1))) {
+        if ((floor.dun_level < dungeons_info[floor.dungeon_idx].maxdepth - 1) && !inside_quest(quest_number(floor, floor.dun_level + 1))) {
             shaft_num = (randint1(num) + 1) / 2;
         }
     } else {
@@ -116,8 +116,8 @@ bool alloc_stairs(PlayerType *player_ptr, FEAT_IDX feat, int num, int walls)
         while (true) {
             grid_type *g_ptr;
             int candidates = 0;
-            const POSITION max_x = floor_ptr->width - 1;
-            for (POSITION y = 1; y < floor_ptr->height - 1; y++) {
+            const POSITION max_x = floor.width - 1;
+            for (POSITION y = 1; y < floor.height - 1; y++) {
                 for (POSITION x = 1; x < max_x; x++) {
                     if (alloc_stairs_aux(player_ptr, y, x, walls)) {
                         candidates++;
@@ -137,8 +137,8 @@ bool alloc_stairs(PlayerType *player_ptr, FEAT_IDX feat, int num, int walls)
             int pick = randint1(candidates);
             POSITION y;
             POSITION x = max_x;
-            for (y = 1; y < floor_ptr->height - 1; y++) {
-                for (x = 1; x < floor_ptr->width - 1; x++) {
+            for (y = 1; y < floor.height - 1; y++) {
+                for (x = 1; x < floor.width - 1; x++) {
                     if (alloc_stairs_aux(player_ptr, y, x, walls)) {
                         pick--;
                         if (pick == 0) {
@@ -152,9 +152,9 @@ bool alloc_stairs(PlayerType *player_ptr, FEAT_IDX feat, int num, int walls)
                 }
             }
 
-            g_ptr = &floor_ptr->grid_array[y][x];
+            g_ptr = &floor.grid_array[y][x];
             g_ptr->mimic = 0;
-            g_ptr->feat = (i < shaft_num) ? feat_state(player_ptr->current_floor_ptr, feat, TerrainCharacteristics::SHAFT) : feat;
+            g_ptr->feat = (i < shaft_num) ? feat_state(&floor, feat, TerrainCharacteristics::SHAFT) : feat;
             g_ptr->info &= ~(CAVE_FLOOR);
             break;
         }

@@ -143,7 +143,7 @@ void update_lite_radius(PlayerType *player_ptr)
         player_ptr->cur_lite += rad;
     }
 
-    if (dungeons_info[player_ptr->dungeon_idx].flags.has(DungeonFeatureType::DARKNESS) && player_ptr->cur_lite > 1) {
+    if (dungeons_info[player_ptr->current_floor_ptr->dungeon_idx].flags.has(DungeonFeatureType::DARKNESS) && player_ptr->cur_lite > 1) {
         player_ptr->cur_lite = 1;
     }
 

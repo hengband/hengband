@@ -376,8 +376,8 @@ int take_hit(PlayerType *player_ptr, int damage_type, int damage, std::string_vi
             player_ptr->is_dead = true;
         }
 
-        const auto &floor_ref = *player_ptr->current_floor_ptr;
-        if (floor_ref.inside_arena) {
+        const auto &floor = *player_ptr->current_floor_ptr;
+        if (floor.inside_arena) {
             concptr m_name = monraces_info[arena_info[player_ptr->arena_number].r_idx].name.data();
             msg_format(_("あなたは%sの前に敗れ去った。", "You are beaten by %s."), m_name);
             msg_print(nullptr);
@@ -385,7 +385,7 @@ int take_hit(PlayerType *player_ptr, int damage_type, int damage, std::string_vi
                 exe_write_diary(player_ptr, DIARY_ARENA, -1 - player_ptr->arena_number, m_name);
             }
         } else {
-            const auto q_idx = quest_number(player_ptr, floor_ref.dun_level);
+            const auto q_idx = quest_number(floor, floor.dun_level);
             const auto seppuku = hit_from == "Seppuku";
             const auto winning_seppuku = w_ptr->total_winner && seppuku;
 
@@ -422,14 +422,14 @@ int take_hit(PlayerType *player_ptr, int damage_type, int damage, std::string_vi
             } else {
                 std::string place;
 
-                if (floor_ref.inside_arena) {
+                if (floor.inside_arena) {
                     place = _("アリーナ", "in the Arena");
-                } else if (!floor_ref.is_in_dungeon()) {
+                } else if (!floor.is_in_dungeon()) {
                     place = _("地上", "on the surface");
                 } else if (inside_quest(q_idx) && (QuestType::is_fixed(q_idx) && !((q_idx == QuestId::OBERON) || (q_idx == QuestId::SERPENT)))) {
                     place = _("クエスト", "in a quest");
                 } else {
-                    place = format(_("%d階", "on level %d"), static_cast<int>(floor_ref.dun_level));
+                    place = format(_("%d階", "on level %d"), static_cast<int>(floor.dun_level));
                 }
 
 #ifdef JP

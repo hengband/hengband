@@ -535,7 +535,7 @@ static bool select_debugging_dungeon(PlayerType *player_ptr, DUNGEON_IDX *dungeo
 
     while (true) {
         char tmp_val[160];
-        strnfmt(tmp_val, sizeof(tmp_val), "%d", player_ptr->dungeon_idx);
+        strnfmt(tmp_val, sizeof(tmp_val), "%d", player_ptr->current_floor_ptr->dungeon_idx);
         if (!get_string("Jump which dungeon : ", tmp_val, 2)) {
             return false;
         }
@@ -602,22 +602,22 @@ static bool select_debugging_floor(PlayerType *player_ptr, int dungeon_type)
  */
 static void wiz_jump_floor(PlayerType *player_ptr, DUNGEON_IDX dun_idx, DEPTH depth)
 {
-    player_ptr->dungeon_idx = dun_idx;
-    auto &floor_ref = *player_ptr->current_floor_ptr;
-    floor_ref.dun_level = depth;
+    auto &floor = *player_ptr->current_floor_ptr;
+    floor.dungeon_idx = dun_idx;
+    floor.dun_level = depth;
     prepare_change_floor_mode(player_ptr, CFM_RAND_PLACE);
-    if (!floor_ref.is_in_dungeon()) {
-        player_ptr->dungeon_idx = 0;
+    if (!floor.is_in_dungeon()) {
+        floor.dungeon_idx = 0;
     }
 
-    floor_ref.inside_arena = false;
+    floor.inside_arena = false;
     player_ptr->wild_mode = false;
     leave_quest_check(player_ptr);
     if (record_stair) {
         exe_write_diary(player_ptr, DIARY_WIZ_TELE, 0, nullptr);
     }
 
-    floor_ref.quest_number = QuestId::NONE;
+    floor.quest_number = QuestId::NONE;
     PlayerEnergy(player_ptr).reset_player_turn();
     player_ptr->energy_need = 0;
     prepare_change_floor_mode(player_ptr, CFM_FIRST_FLOOR);
@@ -884,10 +884,10 @@ void cheat_death(PlayerType *player_ptr)
     player_ptr->phase_out = false;
     leaving_quest = QuestId::NONE;
     floor_ptr->quest_number = QuestId::NONE;
-    if (player_ptr->dungeon_idx) {
-        player_ptr->recall_dungeon = player_ptr->dungeon_idx;
+    if (floor_ptr->dungeon_idx) {
+        player_ptr->recall_dungeon = floor_ptr->dungeon_idx;
     }
-    player_ptr->dungeon_idx = 0;
+    floor_ptr->dungeon_idx = 0;
     if (lite_town || vanilla_town) {
         player_ptr->wilderness_y = 1;
         player_ptr->wilderness_x = 1;
