@@ -257,12 +257,12 @@ void complete_quest(PlayerType *player_ptr, QuestId quest_num)
     switch (q_ptr->type) {
     case QuestKindType::RANDOM:
         if (record_rand_quest) {
-            exe_write_diary_quest(player_ptr, DIARY_RAND_QUEST_C, quest_num);
+            exe_write_diary_quest(player_ptr, DiaryKind::RAND_QUEST_C, quest_num);
         }
         break;
     default:
         if (record_fix_quest) {
-            exe_write_diary_quest(player_ptr, DIARY_FIX_QUEST_C, quest_num);
+            exe_write_diary_quest(player_ptr, DiaryKind::FIX_QUEST_C, quest_num);
         }
         break;
     }
@@ -437,13 +437,13 @@ void leave_quest_check(PlayerType *player_ptr)
     /* Record finishing a quest */
     if (q_ptr->type == QuestKindType::RANDOM) {
         if (record_rand_quest) {
-            exe_write_diary_quest(player_ptr, DIARY_RAND_QUEST_F, leaving_quest);
+            exe_write_diary_quest(player_ptr, DiaryKind::RAND_QUEST_F, leaving_quest);
         }
         return;
     }
 
     if (record_fix_quest) {
-        exe_write_diary_quest(player_ptr, DIARY_FIX_QUEST_F, leaving_quest);
+        exe_write_diary_quest(player_ptr, DiaryKind::FIX_QUEST_F, leaving_quest);
     }
 }
 

@@ -119,7 +119,7 @@ bool enter_wizard_mode(PlayerType *player_ptr)
         }
 
         constexpr auto mes = _("ウィザードモードに突入してスコアを残せなくなった。", "gave up recording score to enter wizard mode.");
-        exe_write_diary(player_ptr, DIARY_DESCRIPTION, 0, mes);
+        exe_write_diary(player_ptr, DiaryKind::DESCRIPTION, 0, mes);
         w_ptr->noscore |= 0x0002;
     }
 
@@ -148,7 +148,7 @@ static bool enter_debug_mode(PlayerType *player_ptr)
         }
 
         constexpr auto mes = _("デバッグモードに突入してスコアを残せなくなった。", "gave up sending score to use debug commands.");
-        exe_write_diary(player_ptr, DIARY_DESCRIPTION, 0, mes);
+        exe_write_diary(player_ptr, DiaryKind::DESCRIPTION, 0, mes);
         w_ptr->noscore |= 0x0008;
     }
 

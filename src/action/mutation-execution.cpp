@@ -265,7 +265,7 @@ bool exe_mutation_power(PlayerType *player_ptr, PlayerMutationType power)
         if (can_banish) {
             if (record_named_pet && monster.is_named_pet()) {
                 const auto m_name = monster_desc(player_ptr, &monster, MD_INDEF_VISIBLE);
-                exe_write_diary(player_ptr, DIARY_NAMED_PET, RECORD_NAMED_PET_GENOCIDE, m_name);
+                exe_write_diary(player_ptr, DiaryKind::NAMED_PET, RECORD_NAMED_PET_GENOCIDE, m_name);
             }
 
             delete_monster_idx(player_ptr, grid.m_idx);

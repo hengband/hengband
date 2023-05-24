@@ -36,7 +36,7 @@ void msg_print_wizard(PlayerType *player_ptr, int cheat_type, concptr msg)
     const auto mes = ss.str();
     msg_print(mes);
     if (cheat_diary_output) {
-        exe_write_diary(player_ptr, DIARY_WIZARD_LOG, 0, mes);
+        exe_write_diary(player_ptr, DiaryKind::WIZARD_LOG, 0, mes);
     }
 }
 
