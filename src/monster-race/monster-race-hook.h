@@ -55,8 +55,6 @@ bool vault_aux_dark_elf(PlayerType *player_ptr, MonsterRaceId r_idx);
 
 bool vault_monster_okay(PlayerType *player_ptr, MonsterRaceId r_idx);
 
-bool monster_living(MonsterRaceId r_idx);
-bool no_questor_or_bounty_uniques(MonsterRaceId r_idx);
 bool monster_hook_human(PlayerType *player_ptr, MonsterRaceId r_idx);
 bool get_nightmare(PlayerType *player_ptr, MonsterRaceId r_idx);
 bool monster_is_fishing_target(PlayerType *player_ptr, MonsterRaceId r_idx);

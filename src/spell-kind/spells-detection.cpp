@@ -505,7 +505,7 @@ bool detect_monsters_nonliving(PlayerType *player_ptr, POSITION range)
             continue;
         }
 
-        if (!monster_living(m_ptr->r_idx)) {
+        if (!m_ptr->has_living_flag()) {
             if (player_ptr->monster_race_idx == m_ptr->r_idx) {
                 player_ptr->window_flags |= (PW_MONSTER_LORE);
             }

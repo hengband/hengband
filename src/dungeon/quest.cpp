@@ -184,36 +184,37 @@ void determine_random_questor(PlayerType *player_ptr, QuestType *q_ptr)
     get_mon_num_prep(player_ptr, mon_hook_quest, nullptr);
     MonsterRaceId r_idx;
     while (true) {
-        /*
-         * Random monster 5 - 10 levels out of depth
-         * (depending on level)
-         */
         r_idx = get_mon_num(player_ptr, 0, q_ptr->level + 5 + randint1(q_ptr->level / 10), GMN_ARENA);
-        MonsterRaceInfo *r_ptr;
-        r_ptr = &monraces_info[r_idx];
+        const auto &monrace = monraces_info[r_idx];
+        if (monrace.kind_flags.has_not(MonsterKindType::UNIQUE)) {
+            continue;
+        }
 
-        if (r_ptr->kind_flags.has_not(MonsterKindType::UNIQUE)) {
+        if (monrace.flags8 & RF8_NO_QUEST) {
             continue;
         }
-        if (r_ptr->flags8 & RF8_NO_QUEST) {
+
+        if (monrace.flags1 & RF1_QUESTOR) {
             continue;
         }
-        if (r_ptr->flags1 & RF1_QUESTOR) {
+
+        if (monrace.rarity > 100) {
             continue;
         }
-        if (r_ptr->rarity > 100) {
+
+        if (monrace.behavior_flags.has(MonsterBehaviorType::FRIENDLY)) {
             continue;
         }
-        if (r_ptr->behavior_flags.has(MonsterBehaviorType::FRIENDLY)) {
+
+        if (monrace.feature_flags.has(MonsterFeatureType::AQUATIC)) {
             continue;
         }
-        if (r_ptr->feature_flags.has(MonsterFeatureType::AQUATIC)) {
+
+        if (monrace.wilderness_flags.has(MonsterWildernessType::WILD_ONLY)) {
             continue;
         }
-        if (r_ptr->wilderness_flags.has(MonsterWildernessType::WILD_ONLY)) {
-            continue;
-        }
-        if (no_questor_or_bounty_uniques(r_idx)) {
+
+        if (monrace.no_suitable_questor_bounty()) {
             continue;
         }
 
@@ -221,7 +222,7 @@ void determine_random_questor(PlayerType *player_ptr, QuestType *q_ptr)
          * Accept monsters that are 2 - 6 levels
          * out of depth depending on the quest level
          */
-        if (r_ptr->level > (q_ptr->level + (q_ptr->level / 20))) {
+        if (monrace.level > (q_ptr->level + (q_ptr->level / 20))) {
             break;
         }
     }

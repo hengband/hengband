@@ -182,10 +182,10 @@ static ProcessResult exe_affect_monster_by_effect(PlayerType *player_ptr, effect
 static void effect_damage_killed_pet(PlayerType *player_ptr, effect_monster_type *em_ptr)
 {
     bool sad = em_ptr->m_ptr->is_pet() && !(em_ptr->m_ptr->ml);
-    if (em_ptr->known && em_ptr->note) {
+    if (em_ptr->known && !em_ptr->note.empty()) {
         angband_strcpy(em_ptr->m_name, monster_desc(player_ptr, em_ptr->m_ptr, MD_TRUE_NAME).data(), sizeof(em_ptr->m_name));
         if (em_ptr->see_s_msg) {
-            msg_format("%s^%s", em_ptr->m_name, em_ptr->note);
+            msg_format("%s^%s", em_ptr->m_name, em_ptr->note.data());
         } else {
             player_ptr->current_floor_ptr->monster_noise = true;
         }
@@ -209,8 +209,8 @@ static void effect_damage_killed_pet(PlayerType *player_ptr, effect_monster_type
  */
 static void effect_damage_makes_sleep(PlayerType *player_ptr, effect_monster_type *em_ptr)
 {
-    if (em_ptr->note && em_ptr->seen_msg) {
-        msg_format("%s^%s", em_ptr->m_name, em_ptr->note);
+    if (!em_ptr->note.empty() && em_ptr->seen_msg) {
+        msg_format("%s^%s", em_ptr->m_name, em_ptr->note.data());
     } else if (em_ptr->see_s_msg) {
         const auto pain_message = MonsterPainDescriber(player_ptr, em_ptr->g_ptr->m_idx).describe(em_ptr->dam);
         if (!pain_message.empty()) {
@@ -304,8 +304,8 @@ static bool deal_effect_damage_from_player(PlayerType *player_ptr, effect_monste
         anger_monster(player_ptr, em_ptr->m_ptr);
     }
 
-    if (em_ptr->note && em_ptr->seen) {
-        msg_format(_("%s%s", "%s^%s"), em_ptr->m_name, em_ptr->note);
+    if (!em_ptr->note.empty() && em_ptr->seen) {
+        msg_format(_("%s%s", "%s^%s"), em_ptr->m_name, em_ptr->note.data());
     } else if (em_ptr->known && (em_ptr->dam || !em_ptr->do_fear)) {
         const auto pain_message = MonsterPainDescriber(player_ptr, em_ptr->g_ptr->m_idx).describe(em_ptr->dam);
         if (!pain_message.empty()) {

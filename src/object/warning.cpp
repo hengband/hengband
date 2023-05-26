@@ -273,24 +273,24 @@ static void spell_damcalc_by_spellnum(PlayerType *player_ptr, MonsterAbilityType
  * @brief 警告基準を定めるためにモンスターの打撃最大ダメージを算出する /
  * Calculate blow damages
  * @param m_ptr 打撃を行使するモンスターの構造体参照ポインタ
- * @param blow_ptr モンスターの打撃能力の構造体参照ポインタ
+ * @param blow モンスターの打撃能力の構造体参照
  * @return 算出された最大ダメージを返す。
  */
-static int blow_damcalc(MonsterEntity *m_ptr, PlayerType *player_ptr, MonsterBlow *blow_ptr)
+static int blow_damcalc(MonsterEntity *m_ptr, PlayerType *player_ptr, const MonsterBlow &blow)
 {
-    int dam = blow_ptr->d_dice * blow_ptr->d_side;
+    int dam = blow.d_dice * blow.d_side;
     int dummy_max = 0;
 
-    if (blow_ptr->method == RaceBlowMethodType::EXPLODE) {
+    if (blow.method == RaceBlowMethodType::EXPLODE) {
         dam = (dam + 1) / 2;
-        spell_damcalc(player_ptr, m_ptr, mbe_info[enum2i(blow_ptr->effect)].explode_type, dam, &dummy_max);
+        spell_damcalc(player_ptr, m_ptr, mbe_info[enum2i(blow.effect)].explode_type, dam, &dummy_max);
         dam = dummy_max;
         return dam;
     }
 
     ARMOUR_CLASS ac = player_ptr->ac + player_ptr->to_a;
     bool check_wraith_form = true;
-    switch (blow_ptr->effect) {
+    switch (blow.effect) {
     case RaceBlowEffectType::SUPERHURT: {
         int tmp_dam = dam - (dam * ((ac < 150) ? ac : 150) / 250);
         dam = std::max(dam, tmp_dam * 2);
@@ -503,15 +503,15 @@ bool process_warning(PlayerType *player_ptr, POSITION xx, POSITION yy)
             }
 
             int dam_melee = 0;
-            for (int m = 0; m < 4; m++) {
+            for (const auto &blow : r_ptr->blows) {
                 /* Skip non-attacks */
-                if (r_ptr->blow[m].method == RaceBlowMethodType::NONE || (r_ptr->blow[m].method == RaceBlowMethodType::SHOOT)) {
+                if (blow.method == RaceBlowMethodType::NONE || (blow.method == RaceBlowMethodType::SHOOT)) {
                     continue;
                 }
 
                 /* Extract the attack info */
-                dam_melee += blow_damcalc(m_ptr, player_ptr, &r_ptr->blow[m]);
-                if (r_ptr->blow[m].method == RaceBlowMethodType::EXPLODE) {
+                dam_melee += blow_damcalc(m_ptr, player_ptr, blow);
+                if (blow.method == RaceBlowMethodType::EXPLODE) {
                     break;
                 }
             }

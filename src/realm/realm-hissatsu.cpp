@@ -684,7 +684,7 @@ std::optional<std::string> do_hissatsu_spell(PlayerType *player_ptr, SPELL_IDX s
                     continue;
                 }
 
-                if (monster_living(m_ptr->r_idx)) {
+                if (m_ptr->has_living_flag()) {
                     do_cmd_attack(player_ptr, y, x, HISSATSU_SEKIRYUKA);
                     continue;
                 }

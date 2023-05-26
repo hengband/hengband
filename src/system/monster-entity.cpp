@@ -186,3 +186,27 @@ byte MonsterEntity::get_temporary_speed() const
 
     return speed;
 }
+
+/*!
+ * @brief モンスターが生命体かどうかを返す
+ * @param is_apperance たぬき、カメレオン、各種誤認ならtrue
+ * @return 生命体ならばtrue
+ * @todo kind_flags をMonsterEntityへコピーする (将来的なモンスター仕様の拡張)
+ */
+bool MonsterEntity::has_living_flag(bool is_apperance) const
+{
+    const auto &monrace = monraces_info[is_apperance ? this->ap_r_idx : this->r_idx];
+    return monrace.has_living_flag();
+}
+
+bool MonsterEntity::is_explodable() const
+{
+    const auto &monrace = monraces_info[this->r_idx];
+    return monrace.is_explodable();
+}
+
+std::string MonsterEntity::get_died_message() const
+{
+    const auto &monrace = monraces_info[this->r_idx];
+    return monrace.get_died_message();
+}

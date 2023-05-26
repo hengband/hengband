@@ -35,7 +35,7 @@ void decide_blood_sucking(PlayerType *player_ptr, player_attack_type *pa_ptr)
         return;
     }
 
-    pa_ptr->can_drain = monster_living(pa_ptr->m_ptr->r_idx);
+    pa_ptr->can_drain = pa_ptr->m_ptr->has_living_flag();
 }
 
 /*!

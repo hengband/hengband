@@ -326,11 +326,11 @@ void determine_bounty_uniques(PlayerType *player_ptr)
     get_mon_num_prep_bounty(player_ptr);
 
     auto is_suitable_for_bounty = [](MonsterRaceId r_idx) {
-        const auto &r_ref = monraces_info[r_idx];
-        bool is_suitable = r_ref.kind_flags.has(MonsterKindType::UNIQUE);
-        is_suitable &= r_ref.drop_flags.has_any_of({ MonsterDropType::DROP_CORPSE, MonsterDropType::DROP_SKELETON });
-        is_suitable &= r_ref.rarity <= 100;
-        is_suitable &= !no_questor_or_bounty_uniques(r_idx);
+        const auto &monrace = monraces_info[r_idx];
+        bool is_suitable = monrace.kind_flags.has(MonsterKindType::UNIQUE);
+        is_suitable &= monrace.drop_flags.has_any_of({ MonsterDropType::DROP_CORPSE, MonsterDropType::DROP_SKELETON });
+        is_suitable &= monrace.rarity <= 100;
+        is_suitable &= !monrace.no_suitable_questor_bounty();
         return is_suitable;
     };
 

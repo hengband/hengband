@@ -89,7 +89,7 @@ static bool reflects_psi_with_currupted_mind(PlayerType *player_ptr, effect_mons
         return false;
     }
 
-    em_ptr->note = nullptr;
+    em_ptr->note.clear();
     msg_format(_("%s^の堕落した精神は攻撃を跳ね返した！",
                    (em_ptr->seen ? "%s^'s corrupted mind backlashes your attack!" : "%s^s corrupted mind backlashes your attack!")),
         em_ptr->m_name);

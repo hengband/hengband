@@ -2,9 +2,9 @@
 
 #include "effect/attribute-types.h"
 #include "system/angband.h"
+#include <string>
 
 struct grid_type;
-;
 class MonsterEntity;
 class MonsterRaceInfo;
 struct effect_monster_type {
@@ -31,8 +31,8 @@ struct effect_monster_type {
     GAME_TEXT m_name[MAX_NLEN];
     char m_poss[10];
     PARAMETER_VALUE photo;
-    concptr note;
-    concptr note_dies;
+    std::string note = "";
+    std::string note_dies;
     DEPTH caster_lev;
 
     MONSTER_IDX who;

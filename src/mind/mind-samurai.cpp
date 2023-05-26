@@ -154,7 +154,7 @@ static void hissatsu_zanma_ken(samurai_slaying_type *samurai_slaying_ptr)
         return;
     }
 
-    if (!monster_living(samurai_slaying_ptr->m_ptr->r_idx) && samurai_slaying_ptr->r_ptr->kind_flags.has(MonsterKindType::EVIL)) {
+    if (!samurai_slaying_ptr->m_ptr->has_living_flag() && samurai_slaying_ptr->r_ptr->kind_flags.has(MonsterKindType::EVIL)) {
         if (samurai_slaying_ptr->mult < 15) {
             samurai_slaying_ptr->mult = 25;
         } else if (samurai_slaying_ptr->mult < 50) {
@@ -275,7 +275,7 @@ static void hissatsu_lightning_eagle(PlayerType *player_ptr, samurai_slaying_typ
 static void hissatsu_bloody_maelstroem(PlayerType *player_ptr, samurai_slaying_type *samurai_slaying_ptr)
 {
     auto player_cut = player_ptr->effects()->cut();
-    if ((samurai_slaying_ptr->mode == HISSATSU_SEKIRYUKA) && player_cut->is_cut() && monster_living(samurai_slaying_ptr->m_ptr->r_idx)) {
+    if ((samurai_slaying_ptr->mode == HISSATSU_SEKIRYUKA) && player_cut->is_cut() && samurai_slaying_ptr->m_ptr->has_living_flag()) {
         auto tmp = std::min<short>(100, std::max<short>(10, player_cut->current() / 10));
         if (samurai_slaying_ptr->mult < tmp) {
             samurai_slaying_ptr->mult = tmp;

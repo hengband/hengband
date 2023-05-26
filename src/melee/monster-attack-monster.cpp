@@ -41,7 +41,7 @@
 
 static void heal_monster_by_melee(PlayerType *player_ptr, mam_type *mam_ptr)
 {
-    if (!monster_living(mam_ptr->t_ptr->r_idx) || (mam_ptr->damage <= 2)) {
+    if (!mam_ptr->t_ptr->has_living_flag() || (mam_ptr->damage <= 2)) {
         return;
     }
 
@@ -308,10 +308,10 @@ void repeat_melee(PlayerType *player_ptr, mam_type *mam_ptr)
     const auto *m_ptr = mam_ptr->m_ptr;
     auto *r_ptr = &monraces_info[m_ptr->r_idx];
     for (int ap_cnt = 0; ap_cnt < MAX_NUM_BLOWS; ap_cnt++) {
-        mam_ptr->effect = r_ptr->blow[ap_cnt].effect;
-        mam_ptr->method = r_ptr->blow[ap_cnt].method;
-        mam_ptr->d_dice = r_ptr->blow[ap_cnt].d_dice;
-        mam_ptr->d_side = r_ptr->blow[ap_cnt].d_side;
+        mam_ptr->effect = r_ptr->blows[ap_cnt].effect;
+        mam_ptr->method = r_ptr->blows[ap_cnt].method;
+        mam_ptr->d_dice = r_ptr->blows[ap_cnt].d_dice;
+        mam_ptr->d_side = r_ptr->blows[ap_cnt].d_side;
 
         if (!m_ptr->is_valid()) {
             break;

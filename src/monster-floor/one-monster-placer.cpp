@@ -66,20 +66,15 @@ static bool is_friendly_idx(PlayerType *player_ptr, MONSTER_IDX m_idx)
  */
 static bool monster_hook_tanuki(PlayerType *player_ptr, MonsterRaceId r_idx)
 {
-    auto *r_ptr = &monraces_info[r_idx];
-    bool unselectable = r_ptr->kind_flags.has(MonsterKindType::UNIQUE);
-    unselectable |= any_bits(r_ptr->flags2, RF2_MULTIPLY);
-    unselectable |= r_ptr->behavior_flags.has(MonsterBehaviorType::FRIENDLY);
-    unselectable |= r_ptr->feature_flags.has(MonsterFeatureType::AQUATIC);
-    unselectable |= any_bits(r_ptr->flags7, RF7_CHAMELEON);
+    const auto &monrace = monraces_info[r_idx];
+    bool unselectable = monrace.kind_flags.has(MonsterKindType::UNIQUE);
+    unselectable |= any_bits(monrace.flags2, RF2_MULTIPLY);
+    unselectable |= monrace.behavior_flags.has(MonsterBehaviorType::FRIENDLY);
+    unselectable |= monrace.feature_flags.has(MonsterFeatureType::AQUATIC);
+    unselectable |= any_bits(monrace.flags7, RF7_CHAMELEON);
+    unselectable |= monrace.is_explodable();
     if (unselectable) {
         return false;
-    }
-
-    for (int i = 0; i < 4; i++) {
-        if (r_ptr->blow[i].method == RaceBlowMethodType::EXPLODE) {
-            return false;
-        }
     }
 
     auto hook_pf = get_monster_hook(player_ptr);

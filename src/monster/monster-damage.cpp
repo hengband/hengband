@@ -47,7 +47,6 @@
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 #include "world/world.h"
-#include <algorithm>
 #include <optional>
 #include <sstream>
 #include <string>
@@ -93,7 +92,7 @@ MonsterDamageProcessor::MonsterDamageProcessor(PlayerType *player_ptr, MONSTER_I
  * @brief モンスターのHPをダメージに応じて減算する /
  * @return モンスターが生きていればfalse、死んだらtrue
  */
-bool MonsterDamageProcessor::mon_take_hit(concptr note)
+bool MonsterDamageProcessor::mon_take_hit(std::string_view note)
 {
     auto *m_ptr = &this->player_ptr->current_floor_ptr->m_list[this->m_idx];
     auto exp_mon = *m_ptr;
@@ -137,7 +136,7 @@ bool MonsterDamageProcessor::genocide_chaos_patron()
     return this->m_idx == 0;
 }
 
-bool MonsterDamageProcessor::process_dead_exp_virtue(concptr note, MonsterEntity *exp_mon)
+bool MonsterDamageProcessor::process_dead_exp_virtue(std::string_view note, MonsterEntity *exp_mon)
 {
     auto *m_ptr = &this->player_ptr->current_floor_ptr->m_list[this->m_idx];
     auto &r_ref = m_ptr->get_real_r_ref();
@@ -352,13 +351,12 @@ void MonsterDamageProcessor::dying_scream(std::string_view m_name)
 #endif
 }
 
-void MonsterDamageProcessor::show_kill_message(concptr note, std::string_view m_name)
+void MonsterDamageProcessor::show_kill_message(std::string_view note, std::string_view m_name)
 {
     auto *floor_ptr = this->player_ptr->current_floor_ptr;
     auto *m_ptr = &floor_ptr->m_list[this->m_idx];
-    const auto &r_ref = m_ptr->get_real_r_ref();
-    if (note != nullptr) {
-        msg_format("%s^%s", m_name.data(), note);
+    if (!note.empty()) {
+        msg_format("%s^%s", m_name.data(), note.data());
         return;
     }
 
@@ -369,11 +367,11 @@ void MonsterDamageProcessor::show_kill_message(concptr note, std::string_view m_
         return;
     }
 
-    const auto explode = std::any_of(std::begin(r_ref.blow), std::end(r_ref.blow), [](const auto &blow) { return blow.method == RaceBlowMethodType::EXPLODE; });
-
-    if (monster_living(m_ptr->r_idx)) {
-        if (explode) {
-            msg_format(_("%sは爆発して死んだ。", "%s^ explodes and dies."), m_name.data());
+    const auto is_explodable = m_ptr->is_explodable();
+    const auto died_mes = m_ptr->get_died_message();
+    if (m_ptr->has_living_flag()) {
+        if (is_explodable) {
+            this->show_explosion_message(died_mes, m_name);
             return;
         }
 
@@ -383,14 +381,23 @@ void MonsterDamageProcessor::show_kill_message(concptr note, std::string_view m_
         return;
     }
 
-    if (explode) {
-        msg_format(_("%sは爆発して粉々になった。", "%s^ explodes into tiny shreds."), m_name.data());
+    if (is_explodable) {
+        this->show_explosion_message(died_mes, m_name);
         return;
     }
 
     auto mes = is_echizen(this->player_ptr) ? _("せっかくだから%sを倒した。", "Because it's time, you have destroyed %s.")
                                             : _("%sを倒した。", "You have destroyed %s.");
     msg_format(mes, m_name.data());
+}
+
+void MonsterDamageProcessor::show_explosion_message(std::string_view died_mes, std::string_view m_name)
+{
+    std::stringstream ss;
+    ss << _(m_name, format("%s^", m_name.data()));
+    ss << died_mes;
+    msg_print(ss.str());
+    return;
 }
 
 void MonsterDamageProcessor::show_bounty_message(std::string_view m_name)

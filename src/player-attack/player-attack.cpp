@@ -392,7 +392,7 @@ static void apply_damage_bonus(PlayerType *player_ptr, player_attack_type *pa_pt
         pa_ptr->attack_damage *= 2;
     }
 
-    if ((pa_ptr->mode == HISSATSU_SEKIRYUKA) && !monster_living(pa_ptr->m_ptr->r_idx)) {
+    if ((pa_ptr->mode == HISSATSU_SEKIRYUKA) && !pa_ptr->m_ptr->has_living_flag()) {
         pa_ptr->attack_damage = 0;
     }
 
@@ -420,7 +420,7 @@ static void apply_damage_negative_effect(player_attack_type *pa_ptr, bool is_zan
     }
 
     auto *r_ptr = &monraces_info[pa_ptr->m_ptr->r_idx];
-    if ((pa_ptr->mode == HISSATSU_ZANMA) && !(!monster_living(pa_ptr->m_ptr->r_idx) && r_ptr->kind_flags.has(MonsterKindType::EVIL))) {
+    if ((pa_ptr->mode == HISSATSU_ZANMA) && !(!pa_ptr->m_ptr->has_living_flag() && r_ptr->kind_flags.has(MonsterKindType::EVIL))) {
         pa_ptr->attack_damage = 0;
     }
 
@@ -445,7 +445,7 @@ static void apply_damage_negative_effect(player_attack_type *pa_ptr, bool is_zan
 static bool check_fear_death(PlayerType *player_ptr, player_attack_type *pa_ptr, const int num, const bool is_lowlevel)
 {
     MonsterDamageProcessor mdp(player_ptr, pa_ptr->m_idx, pa_ptr->attack_damage, pa_ptr->fear, pa_ptr->attribute_flags);
-    if (!mdp.mon_take_hit(nullptr)) {
+    if (!mdp.mon_take_hit("")) {
         return false;
     }
 

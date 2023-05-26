@@ -236,7 +236,7 @@ ProcessResult effect_monster_disp_good(PlayerType *player_ptr, effect_monster_ty
 
 ProcessResult effect_monster_disp_living(effect_monster_type *em_ptr)
 {
-    if (!monster_living(em_ptr->m_ptr->r_idx)) {
+    if (!em_ptr->m_ptr->has_living_flag()) {
         em_ptr->skipped = true;
         em_ptr->dam = 0;
         return ProcessResult::PROCESS_CONTINUE;
