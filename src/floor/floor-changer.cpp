@@ -153,7 +153,7 @@ static void place_pet(PlayerType *player_ptr)
             auto &r_ref = m_ptr->get_real_r_ref();
             msg_format(_("%sとはぐれてしまった。", "You have lost sight of %s."), monster_desc(player_ptr, m_ptr, 0).data());
             if (record_named_pet && m_ptr->is_named()) {
-                exe_write_diary(player_ptr, DIARY_NAMED_PET, RECORD_NAMED_PET_LOST_SIGHT, monster_desc(player_ptr, m_ptr, MD_INDEF_VISIBLE).data());
+                exe_write_diary(player_ptr, DIARY_NAMED_PET, RECORD_NAMED_PET_LOST_SIGHT, monster_desc(player_ptr, m_ptr, MD_INDEF_VISIBLE));
             }
 
             if (r_ref.cur_num) {

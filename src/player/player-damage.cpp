@@ -378,8 +378,8 @@ int take_hit(PlayerType *player_ptr, int damage_type, int damage, std::string_vi
 
         const auto &floor = *player_ptr->current_floor_ptr;
         if (floor.inside_arena) {
-            concptr m_name = monraces_info[arena_info[player_ptr->arena_number].r_idx].name.data();
-            msg_format(_("あなたは%sの前に敗れ去った。", "You are beaten by %s."), m_name);
+            const auto &m_name = monraces_info[arena_info[player_ptr->arena_number].r_idx].name;
+            msg_format(_("あなたは%sの前に敗れ去った。", "You are beaten by %s."), m_name.data());
             msg_print(nullptr);
             if (record_arena) {
                 exe_write_diary(player_ptr, DIARY_ARENA, -1 - player_ptr->arena_number, m_name);
@@ -433,11 +433,11 @@ int take_hit(PlayerType *player_ptr, int damage_type, int damage, std::string_vi
                 }
 
 #ifdef JP
-                std::string note = format("%sで%sに殺された。", place.data(), player_ptr->died_from.data());
+                const auto note = format("%sで%sに殺された。", place.data(), player_ptr->died_from.data());
 #else
-                std::string note = format("killed by %s %s.", player_ptr->died_from.data(), place.data());
+                const auto note = format("killed by %s %s.", player_ptr->died_from.data(), place.data());
 #endif
-                exe_write_diary(player_ptr, DIARY_DESCRIPTION, 0, note.data());
+                exe_write_diary(player_ptr, DIARY_DESCRIPTION, 0, note);
             }
 
             exe_write_diary(player_ptr, DIARY_GAMESTART, 1, _("-------- ゲームオーバー --------", "--------   Game  Over   --------"));
@@ -573,7 +573,7 @@ int take_hit(PlayerType *player_ptr, int damage_type, int damage, std::string_vi
             ss << _(hit_from, "was in a critical situation because of ");
             ss << _("によってピンチに陥った。", hit_from);
             ss << _("", ".");
-            exe_write_diary(player_ptr, DIARY_DESCRIPTION, 0, ss.str().data());
+            exe_write_diary(player_ptr, DIARY_DESCRIPTION, 0, ss.str());
         }
 
         if (auto_more) {

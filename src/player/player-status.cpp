@@ -2942,7 +2942,7 @@ void check_experience(PlayerType *player_ptr)
             }
             level_inc_stat = true;
 
-            exe_write_diary(player_ptr, DIARY_LEVELUP, player_ptr->lev, nullptr);
+            exe_write_diary(player_ptr, DIARY_LEVELUP, player_ptr->lev);
         }
 
         sound(SOUND_LEVEL);

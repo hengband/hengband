@@ -78,7 +78,7 @@ void WorldTurnProcessor::process_world()
     process_world_monsters();
     if (!this->hour && !this->min) {
         if (this->min != prev_min) {
-            exe_write_diary(this->player_ptr, DIARY_DIALY, 0, nullptr);
+            exe_write_diary(this->player_ptr, DIARY_DIALY, 0);
             determine_daily_bounty(this->player_ptr, false);
         }
     }

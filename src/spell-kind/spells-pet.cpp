@@ -69,7 +69,7 @@ void discharge_minion(PlayerType *player_ptr)
 
         if (record_named_pet && m_ptr->is_named()) {
             const auto m_name = monster_desc(player_ptr, m_ptr, MD_INDEF_VISIBLE);
-            exe_write_diary(player_ptr, DIARY_NAMED_PET, RECORD_NAMED_PET_BLAST, m_name.data());
+            exe_write_diary(player_ptr, DIARY_NAMED_PET, RECORD_NAMED_PET_BLAST, m_name);
         }
 
         delete_monster_idx(player_ptr, i);

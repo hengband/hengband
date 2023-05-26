@@ -80,7 +80,7 @@ void execute_recall(PlayerType *player_ptr)
             player_ptr->recall_dungeon = floor_ptr->dungeon_idx;
         }
         if (record_stair) {
-            exe_write_diary(player_ptr, DIARY_RECALL, floor_ptr->dun_level, nullptr);
+            exe_write_diary(player_ptr, DIARY_RECALL, floor_ptr->dun_level);
         }
 
         floor_ptr->dun_level = 0;
@@ -96,7 +96,7 @@ void execute_recall(PlayerType *player_ptr)
     msg_print(_("下に引きずり降ろされる感じがする！", "You feel yourself yanked downwards!"));
     floor_ptr->dungeon_idx = player_ptr->recall_dungeon;
     if (record_stair) {
-        exe_write_diary(player_ptr, DIARY_RECALL, floor_ptr->dun_level, nullptr);
+        exe_write_diary(player_ptr, DIARY_RECALL, floor_ptr->dun_level);
     }
 
     floor_ptr->dun_level = max_dlv[floor_ptr->dungeon_idx];

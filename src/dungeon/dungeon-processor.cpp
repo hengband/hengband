@@ -121,7 +121,7 @@ void process_dungeon(PlayerType *player_ptr, bool load_game)
     if ((max_dlv[floor.dungeon_idx] < floor.dun_level) && !inside_quest(floor.quest_number)) {
         max_dlv[floor.dungeon_idx] = floor.dun_level;
         if (record_maxdepth) {
-            exe_write_diary(player_ptr, DIARY_MAXDEAPTH, floor.dun_level, nullptr);
+            exe_write_diary(player_ptr, DIARY_MAXDEAPTH, floor.dun_level);
         }
     }
 

@@ -57,12 +57,10 @@ static bool is_healthy_stay(PlayerType *player_ptr)
     return false;
 }
 
-#ifdef JP
 static bool is_player_undead(PlayerType *player_ptr)
 {
     return PlayerRace(player_ptr, true).life() == PlayerRaceLifeType::UNDEAD;
 }
-#endif
 
 /*!
  * @brief 宿屋に泊まったことを日記に残す
@@ -72,12 +70,12 @@ static bool is_player_undead(PlayerType *player_ptr)
 static void write_diary_stay_inn(PlayerType *player_ptr, int prev_hour)
 {
     if ((prev_hour >= 6) && (prev_hour < 18)) {
-        concptr stay_message = _(is_player_undead(player_ptr) ? "宿屋に泊まった。" : "日が暮れるまで宿屋で過ごした。", "stayed during the day at the inn.");
+        const auto stay_message = _(is_player_undead(player_ptr) ? "宿屋に泊まった。" : "日が暮れるまで宿屋で過ごした。", "stayed during the day at the inn.");
         exe_write_diary(player_ptr, DIARY_DESCRIPTION, 0, stay_message);
         return;
     }
 
-    concptr stay_message = _(is_player_undead(player_ptr) ? "夜が明けるまで宿屋で過ごした。" : "宿屋に泊まった。", "stayed overnight at the inn.");
+    const auto stay_message = _(is_player_undead(player_ptr) ? "夜が明けるまで宿屋で過ごした。" : "宿屋に泊まった。", "stayed overnight at the inn.");
     exe_write_diary(player_ptr, DIARY_DESCRIPTION, 0, stay_message);
 }
 
@@ -171,15 +169,15 @@ static void display_stay_result(PlayerType *player_ptr, int prev_hour)
 #if JP
         msg_format("あなたはリフレッシュして目覚め、%sを迎えた。", is_player_undead(player_ptr) ? "夜" : "夕方");
 #else
-        msg_print("You awake refreshed for the evening.");
+        msg_format("You awake refreshed for the %s.", is_player_undead(player_ptr) ? "evening" : "twilight");
 #endif
-        concptr awake_message = _(is_player_undead(player_ptr) ? "すがすがしい夜を迎えた。" : "夕方を迎えた。", "awoke refreshed.");
+        const auto awake_message = _(is_player_undead(player_ptr) ? "すがすがしい夜を迎えた。" : "夕方を迎えた。", "awoke refreshed.");
         exe_write_diary(player_ptr, DIARY_DESCRIPTION, 0, awake_message);
         return;
     }
 
     msg_print(_("あなたはリフレッシュして目覚め、新たな日を迎えた。", "You awake refreshed for the new day."));
-    concptr awake_message = _(is_player_undead(player_ptr) ? "すがすがしい朝を迎えた。" : "朝を迎えた。", "awoke refreshed.");
+    const auto awake_message = _(is_player_undead(player_ptr) ? "すがすがしい朝を迎えた。" : "朝を迎えた。", "awoke refreshed.");
     exe_write_diary(player_ptr, DIARY_DESCRIPTION, 0, awake_message);
 }
 
@@ -203,7 +201,7 @@ static bool stay_inn(PlayerType *player_ptr)
 
     if ((prev_hour >= 18) && (prev_hour <= 23)) {
         determine_daily_bounty(player_ptr, false); /* Update daily bounty */
-        exe_write_diary(player_ptr, DIARY_DIALY, 0, nullptr);
+        exe_write_diary(player_ptr, DIARY_DIALY, 0);
     }
 
     player_ptr->chp = player_ptr->mhp;

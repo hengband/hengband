@@ -47,11 +47,9 @@ static void display_diary(PlayerType *player_ptr)
  */
 static void add_diary_note(PlayerType *player_ptr)
 {
-    char tmp[80] = "\0";
-    char bunshou[80] = "\0";
+    char tmp[80]{};
     if (get_string(_("内容: ", "diary note: "), tmp, 79)) {
-        strcpy(bunshou, tmp);
-        exe_write_diary(player_ptr, DIARY_DESCRIPTION, 0, bunshou);
+        exe_write_diary(player_ptr, DIARY_DESCRIPTION, 0, tmp);
     }
 }
 
@@ -64,16 +62,15 @@ static void do_cmd_last_get(PlayerType *player_ptr)
         return;
     }
 
-    char buf[256];
-    strnfmt(buf, sizeof(buf), _("%sの入手を記録します。", "Do you really want to record getting %s? "), record_o_name);
-    if (!get_check(buf)) {
+    const auto record = format(_("%sの入手を記録します。", "Do you really want to record getting %s? "), record_o_name);
+    if (!get_check(record)) {
         return;
     }
 
     GAME_TURN turn_tmp = w_ptr->game_turn;
     w_ptr->game_turn = record_turn;
-    strnfmt(buf, sizeof(buf), _("%sを手に入れた。", "discover %s."), record_o_name);
-    exe_write_diary(player_ptr, DIARY_DESCRIPTION, 0, buf);
+    const auto mes = format(_("%sを手に入れた。", "discover %s."), record_o_name);
+    exe_write_diary(player_ptr, DIARY_DESCRIPTION, 0, mes);
     w_ptr->game_turn = turn_tmp;
 }
 
