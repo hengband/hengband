@@ -182,7 +182,7 @@ void process_dungeon(PlayerType *player_ptr, bool load_game)
         floor.quest_number = random_quest_number(floor, floor.dun_level);
     }
 
-    const auto &dungeon = dungeons_info[floor.dungeon_idx];
+    const auto &dungeon = floor.get_dungeon_definition();
     const auto guardian = dungeon.final_guardian;
     if ((floor.dun_level == dungeon.maxdepth) && MonsterRace(guardian).is_valid()) {
         const auto &guardian_ref = monraces_info[guardian];

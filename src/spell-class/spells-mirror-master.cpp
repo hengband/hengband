@@ -55,7 +55,7 @@ void SpellsMirrorMaster::remove_mirror(int y, int x)
     auto *g_ptr = &floor.grid_array[y][x];
     reset_bits(g_ptr->info, CAVE_OBJECT);
     g_ptr->mimic = 0;
-    if (dungeons_info[floor.dungeon_idx].flags.has(DungeonFeatureType::DARKNESS)) {
+    if (floor.get_dungeon_definition().flags.has(DungeonFeatureType::DARKNESS)) {
         reset_bits(g_ptr->info, CAVE_GLOW);
         if (!view_torch_grids) {
             reset_bits(g_ptr->info, CAVE_MARK);

@@ -360,6 +360,7 @@ bool process_warning(PlayerType *player_ptr, POSITION xx, POSITION yy)
     static int old_damage = 0;
 
     auto &floor = *player_ptr->current_floor_ptr;
+    const auto &dungeon = floor.get_dungeon_definition();
     for (mx = xx - WARNING_AWARE_RANGE; mx < xx + WARNING_AWARE_RANGE + 1; mx++) {
         for (my = yy - WARNING_AWARE_RANGE; my < yy + WARNING_AWARE_RANGE + 1; my++) {
             int dam_max0 = 0;
@@ -388,7 +389,7 @@ bool process_warning(PlayerType *player_ptr, POSITION xx, POSITION yy)
             if (projectable(player_ptr, my, mx, yy, xx)) {
                 const auto flags = r_ptr->ability_flags;
 
-                if (dungeons_info[floor.dungeon_idx].flags.has_not(DungeonFeatureType::NO_MAGIC)) {
+                if (dungeon.flags.has_not(DungeonFeatureType::NO_MAGIC)) {
                     if (flags.has(MonsterAbilityType::BA_CHAO)) {
                         spell_damcalc_by_spellnum(player_ptr, MonsterAbilityType::BA_CHAO, AttributeType::CHAOS, g_ptr->m_idx, &dam_max0);
                     }
@@ -492,7 +493,7 @@ bool process_warning(PlayerType *player_ptr, POSITION xx, POSITION yy)
                 }
             }
             /* Monster melee attacks */
-            if (r_ptr->behavior_flags.has(MonsterBehaviorType::NEVER_BLOW) || dungeons_info[floor.dungeon_idx].flags.has(DungeonFeatureType::NO_MELEE)) {
+            if (r_ptr->behavior_flags.has(MonsterBehaviorType::NEVER_BLOW) || dungeon.flags.has(DungeonFeatureType::NO_MELEE)) {
                 dam_max += dam_max0;
                 continue;
             }

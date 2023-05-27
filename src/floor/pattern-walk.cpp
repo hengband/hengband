@@ -60,7 +60,7 @@ void pattern_teleport(PlayerType *player_ptr)
                 max_level = 100;
             }
         } else {
-            const auto &dungeon = dungeons_info[floor.dungeon_idx];
+            const auto &dungeon = floor.get_dungeon_definition();
             max_level = dungeon.maxdepth;
             min_level = dungeon.mindepth;
         }

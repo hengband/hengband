@@ -56,7 +56,7 @@ bool is_teleport_level_ineffective(PlayerType *player_ptr, MONSTER_IDX idx)
     is_special_floor |= player_ptr->phase_out;
     is_special_floor |= inside_quest(floor.quest_number) && !inside_quest(random_quest_number(floor, floor.dun_level));
     auto is_invalid_floor = idx <= 0;
-    is_invalid_floor &= inside_quest(quest_number(floor, floor.dun_level)) || (floor.dun_level >= dungeons_info[floor.dungeon_idx].maxdepth);
+    is_invalid_floor &= inside_quest(quest_number(floor, floor.dun_level)) || (floor.dun_level >= floor.get_dungeon_definition().maxdepth);
     is_invalid_floor &= floor.dun_level >= 1;
     is_invalid_floor &= ironman_downward;
     return is_special_floor || is_invalid_floor;
@@ -109,7 +109,7 @@ void teleport_level(PlayerType *player_ptr, MONSTER_IDX m_idx)
         }
     }
 
-    const auto &dungeon = dungeons_info[floor.dungeon_idx];
+    const auto &dungeon = floor.get_dungeon_definition();
     if ((ironman_downward && (m_idx <= 0)) || (floor.dun_level <= dungeon.mindepth)) {
 #ifdef JP
         if (see_m) {

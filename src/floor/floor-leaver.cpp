@@ -325,7 +325,7 @@ static void jump_floors(PlayerType *player_ptr)
     }
 
     auto &floor = *player_ptr->current_floor_ptr;
-    const auto &dungeon = dungeons_info[floor.dungeon_idx];
+    const auto &dungeon = floor.get_dungeon_definition();
     if (any_bits(mode, CFM_DOWN)) {
         if (!floor.is_in_dungeon()) {
             move_num = dungeon.mindepth;
@@ -348,7 +348,7 @@ static void exit_to_wilderness(PlayerType *player_ptr)
 
     player_ptr->leaving_dungeon = true;
     if (!vanilla_town && !lite_town) {
-        const auto &dungeon = dungeons_info[floor.dungeon_idx];
+        const auto &dungeon = floor.get_dungeon_definition();
         player_ptr->wilderness_y = dungeon.dy;
         player_ptr->wilderness_x = dungeon.dx;
     }

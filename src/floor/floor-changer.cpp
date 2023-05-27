@@ -283,7 +283,7 @@ static void new_floor_allocation(PlayerType *player_ptr, saved_floor_type *sf_pt
 {
     GAME_TURN tmp_last_visit = sf_ptr->last_visit;
     const auto &floor = *player_ptr->current_floor_ptr;
-    int alloc_chance = dungeons_info[floor.dungeon_idx].max_m_alloc_chance;
+    auto alloc_chance = floor.get_dungeon_definition().max_m_alloc_chance;
     while (tmp_last_visit > w_ptr->game_turn) {
         tmp_last_visit -= TURNS_PER_TICK * TOWN_DAWN;
     }
