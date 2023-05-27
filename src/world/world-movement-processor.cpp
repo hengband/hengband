@@ -84,7 +84,7 @@ void execute_recall(PlayerType *player_ptr)
         }
 
         floor_ptr->dun_level = 0;
-        floor_ptr->dungeon_idx = 0;
+        floor_ptr->reset_dungeon_index();
         leave_quest_check(player_ptr);
         leave_tower_check(player_ptr);
         floor_ptr->quest_number = QuestId::NONE;

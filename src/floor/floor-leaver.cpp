@@ -355,7 +355,7 @@ static void exit_to_wilderness(PlayerType *player_ptr)
 
     player_ptr->recall_dungeon = floor.dungeon_idx;
     player_ptr->word_recall = 0;
-    floor.dungeon_idx = 0;
+    floor.reset_dungeon_index();
     player_ptr->change_floor_mode &= ~CFM_SAVE_FLOORS; // TODO
 }
 
