@@ -48,7 +48,7 @@ void safe_setuid_grab(PlayerType *player_ptr)
         quit_fmt(msg, ret);
     }
 
-    if (auto ret = setgid(player_ptr->player_egid); ret != 0) {
+    if (auto ret = setgid(ids.get_effective_group_id()); ret != 0) {
         auto msg = _("setgid(): 正しく許可が取れません！ エラーコード：%d", "setgid(): cannot set permissions correctly! Error code: %d");
         quit_fmt(msg, ret);
     }

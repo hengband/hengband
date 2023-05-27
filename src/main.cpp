@@ -272,7 +272,7 @@ int main(int argc, char *argv[])
 
 #if defined(SAFE_SETUID) && defined(_POSIX_SAVED_IDS)
     ids.set_effective_user_id(geteuid());
-    p_ptr->player_egid = getegid();
+    ids.set_effective_group_id(getegid());
 #endif
 
 #endif /* SET_UID */
