@@ -6,7 +6,7 @@
  * @details Windowsでは使わない
  */
 
-#include "main/x11-type-string.h"
+#include "main-unix/x11-type-string.h"
 #include "term/gameterm.h"
 
 /*
