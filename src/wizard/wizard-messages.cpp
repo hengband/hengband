@@ -7,7 +7,7 @@
 #include <sstream>
 #include <string>
 
-void msg_print_wizard(PlayerType *player_ptr, int cheat_type, concptr msg)
+void msg_print_wizard(PlayerType *player_ptr, int cheat_type, std::string_view msg)
 {
     constexpr auto max_type = 4;
     if ((cheat_type < 0) || (cheat_type >= max_type)) {
@@ -43,7 +43,7 @@ void msg_print_wizard(PlayerType *player_ptr, int cheat_type, concptr msg)
 /*
  * Display a formatted message, using "vstrnfmt()" and "msg_print()".
  */
-void msg_format_wizard(PlayerType *player_ptr, int cheat_type, concptr fmt, ...)
+void msg_format_wizard(PlayerType *player_ptr, int cheat_type, const char *fmt, ...)
 {
     if (!cheat_room && cheat_type == CHEAT_DUNGEON) {
         return;
