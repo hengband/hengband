@@ -603,7 +603,7 @@ static bool select_debugging_floor(PlayerType *player_ptr, int dungeon_type)
 static void wiz_jump_floor(PlayerType *player_ptr, DUNGEON_IDX dun_idx, DEPTH depth)
 {
     auto &floor = *player_ptr->current_floor_ptr;
-    floor.dungeon_idx = dun_idx;
+    floor.set_dungeon_index(dun_idx);
     floor.dun_level = depth;
     prepare_change_floor_mode(player_ptr, CFM_RAND_PLACE);
     if (!floor.is_in_dungeon()) {

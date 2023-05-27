@@ -94,7 +94,7 @@ void execute_recall(PlayerType *player_ptr)
     }
 
     msg_print(_("下に引きずり降ろされる感じがする！", "You feel yourself yanked downwards!"));
-    floor_ptr->dungeon_idx = player_ptr->recall_dungeon;
+    floor_ptr->set_dungeon_index(player_ptr->recall_dungeon);
     if (record_stair) {
         exe_write_diary(player_ptr, DiaryKind::RECALL, floor_ptr->dun_level);
     }

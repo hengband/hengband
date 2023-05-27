@@ -260,7 +260,7 @@ void do_cmd_go_down(PlayerType *player_ptr)
         return;
     }
 
-    DUNGEON_IDX target_dungeon = 0;
+    short target_dungeon = 0;
     if (!floor_ptr->is_in_dungeon()) {
         target_dungeon = f_ptr->flags.has(TerrainCharacteristics::ENTRANCE) ? g_ptr->special : DUNGEON_ANGBAND;
         if (ironman_downward && (target_dungeon != DUNGEON_ANGBAND)) {
@@ -279,7 +279,7 @@ void do_cmd_go_down(PlayerType *player_ptr)
 
         player_ptr->oldpx = player_ptr->x;
         player_ptr->oldpy = player_ptr->y;
-        floor_ptr->dungeon_idx = target_dungeon;
+        floor_ptr->set_dungeon_index(target_dungeon);
         prepare_change_floor_mode(player_ptr, CFM_FIRST_FLOOR);
     }
 

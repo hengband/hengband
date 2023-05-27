@@ -34,7 +34,7 @@ void remove_water_cave(PlayerType *player_ptr)
         return;
     }
 
-    floor.dungeon_idx = lite_town ? DUNGEON_ANGBAND : DUNGEON_GALGALS;
+    floor.set_dungeon_index(lite_town ? DUNGEON_ANGBAND : DUNGEON_GALGALS);
     floor.dun_level = 1;
     floor.quest_number = QuestId::NONE;
 }

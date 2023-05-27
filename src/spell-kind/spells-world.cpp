@@ -122,7 +122,7 @@ void teleport_level(PlayerType *player_ptr, MONSTER_IDX m_idx)
 #endif
         if (m_idx <= 0) {
             if (!floor.is_in_dungeon()) {
-                floor.dungeon_idx = ironman_downward ? DUNGEON_ANGBAND : player_ptr->recall_dungeon;
+                floor.set_dungeon_index(ironman_downward ? DUNGEON_ANGBAND : player_ptr->recall_dungeon);
                 player_ptr->oldpy = player_ptr->y;
                 player_ptr->oldpx = player_ptr->x;
             }
