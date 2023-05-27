@@ -290,16 +290,16 @@ uint32_t counts_read(PlayerType *player_ptr, int where)
 errr counts_write(PlayerType *player_ptr, int where, uint32_t count)
 {
     const auto &path = path_build(ANGBAND_DIR_DATA, _("z_info_j.raw", "z_info.raw"));
-    safe_setuid_grab(player_ptr);
+    safe_setuid_grab();
     auto fd = fd_open(path, O_RDWR);
     safe_setuid_drop();
     if (fd < 0) {
-        safe_setuid_grab(player_ptr);
+        safe_setuid_grab();
         fd = fd_make(path);
         safe_setuid_drop();
     }
 
-    safe_setuid_grab(player_ptr);
+    safe_setuid_grab();
     auto err = fd_lock(fd, F_WRLCK);
     safe_setuid_drop();
     if (err) {
@@ -308,7 +308,7 @@ errr counts_write(PlayerType *player_ptr, int where, uint32_t count)
 
     counts_seek(player_ptr, fd, where, true);
     fd_write(fd, (char *)(&count), sizeof(uint32_t));
-    safe_setuid_grab(player_ptr);
+    safe_setuid_grab();
     err = fd_lock(fd, F_UNLCK);
     safe_setuid_drop();
 
