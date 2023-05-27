@@ -398,6 +398,8 @@ hengband_SOURCES = \
 	main/x11-gamma-builder.cpp main/x11-gamma-builder.h \
 	main/x11-type-string.cpp main/x11-type-string.h \
 	\
+	main-unix/unix-user-ids.cpp main-unix/unix-user-ids.h \
+	\
 	market/arena-info-table.cpp market/arena-info-table.h \
 	market/building-initializer.cpp market/building-initializer.h \
 	market/building-util.cpp market/building-util.h \
