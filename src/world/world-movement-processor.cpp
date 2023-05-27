@@ -109,7 +109,7 @@ void execute_recall(PlayerType *player_ptr)
         } else if (floor_ptr->dun_level < 99) {
             floor_ptr->dun_level = (floor_ptr->dun_level + 99) / 2;
         } else if (floor_ptr->dun_level > 100) {
-            floor_ptr->dun_level = dungeons_info[floor_ptr->dungeon_idx].maxdepth - 1;
+            floor_ptr->dun_level = floor_ptr->get_dungeon_definition().maxdepth - 1;
         }
     }
 

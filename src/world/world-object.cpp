@@ -72,7 +72,7 @@ OBJECT_IDX get_obj_index(const FloorType *floor_ptr, DEPTH level, BIT_FLAGS mode
         level = MAX_DEPTH - 1;
     }
 
-    if ((level > 0) && dungeons_info[floor_ptr->dungeon_idx].flags.has_not(DungeonFeatureType::BEGINNER)) {
+    if ((level > 0) && floor_ptr->get_dungeon_definition().flags.has_not(DungeonFeatureType::BEGINNER)) {
         if (one_in_(CHANCE_BASEITEM_LEVEL_BOOST)) {
             level = 1 + (level * MAX_DEPTH / randint1(MAX_DEPTH));
         }

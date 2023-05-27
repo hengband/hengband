@@ -473,9 +473,10 @@ bool alloc_horde(PlayerType *player_ptr, POSITION y, POSITION x, summon_specific
 bool alloc_guardian(PlayerType *player_ptr, bool def_val)
 {
     auto *floor_ptr = player_ptr->current_floor_ptr;
-    MonsterRaceId guardian = dungeons_info[floor_ptr->dungeon_idx].final_guardian;
+    const auto &dungeon = floor_ptr->get_dungeon_definition();
+    MonsterRaceId guardian = dungeon.final_guardian;
     bool is_guardian_applicable = MonsterRace(guardian).is_valid();
-    is_guardian_applicable &= dungeons_info[floor_ptr->dungeon_idx].maxdepth == floor_ptr->dun_level;
+    is_guardian_applicable &= dungeon.maxdepth == floor_ptr->dun_level;
     is_guardian_applicable &= monraces_info[guardian].cur_num < monraces_info[guardian].max_num;
     if (!is_guardian_applicable) {
         return def_val;

@@ -81,7 +81,7 @@ static bool is_possible_monster_or(const EnumClassFlagGroup<T> &r_flags, const E
  */
 static bool restrict_monster_to_dungeon(const FloorType *floor_ptr, MonsterRaceId r_idx)
 {
-    const auto *d_ptr = &dungeons_info[floor_ptr->dungeon_idx];
+    const auto *d_ptr = &floor_ptr->get_dungeon_definition();
     const auto *r_ptr = &monraces_info[r_idx];
     if (d_ptr->flags.has(DungeonFeatureType::CHAMELEON)) {
         if (chameleon_change_m_idx) {
@@ -308,7 +308,7 @@ static errr do_get_mon_num_prep(PlayerType *player_ptr, const monsterrace_hook_t
             if (cond && !restrict_monster_to_dungeon(floor_ptr, entry_r_idx)) {
                 // ダンジョンによる制約に掛かった場合、重みを special_div/64 倍する。
                 // 丸めは確率的に行う。
-                const int numer = entry->prob2 * dungeons_info[floor_ptr->dungeon_idx].special_div;
+                const int numer = entry->prob2 * floor_ptr->get_dungeon_definition().special_div;
                 const int q = numer / 64;
                 const int r = numer % 64;
                 entry->prob2 = (PROB)(randint0(64) < r ? q + 1 : q);

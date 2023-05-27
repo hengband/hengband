@@ -44,7 +44,7 @@ bool build_type9(PlayerType *player_ptr, dun_data_type *dd_ptr)
     light = done = false;
     room = true;
 
-    if ((floor_ptr->dun_level <= randint1(25)) && dungeons_info[floor_ptr->dungeon_idx].flags.has_not(DungeonFeatureType::DARKNESS)) {
+    if ((floor_ptr->dun_level <= randint1(25)) && floor_ptr->get_dungeon_definition().flags.has_not(DungeonFeatureType::DARKNESS)) {
         light = true;
     }
 

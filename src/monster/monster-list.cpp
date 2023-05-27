@@ -343,7 +343,7 @@ void choose_new_monster(PlayerType *player_ptr, MONSTER_IDX m_idx, bool born, Mo
             level = floor_ptr->dun_level;
         }
 
-        if (dungeons_info[floor_ptr->dungeon_idx].flags.has(DungeonFeatureType::CHAMELEON)) {
+        if (floor_ptr->get_dungeon_definition().flags.has(DungeonFeatureType::CHAMELEON)) {
             level += 2 + randint1(3);
         }
 

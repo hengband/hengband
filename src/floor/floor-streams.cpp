@@ -149,7 +149,7 @@ static void recursive_river(FloorType *floor_ptr, POSITION x1, POSITION y1, POSI
 
                         /* Lava terrain glows */
                         if (terrains_info[feat1].flags.has(TerrainCharacteristics::LAVA)) {
-                            if (dungeons_info[floor_ptr->dungeon_idx].flags.has_not(DungeonFeatureType::DARKNESS)) {
+                            if (floor_ptr->get_dungeon_definition().flags.has_not(DungeonFeatureType::DARKNESS)) {
                                 g_ptr->info |= CAVE_GLOW;
                             }
                         }
@@ -173,16 +173,15 @@ static void recursive_river(FloorType *floor_ptr, POSITION x1, POSITION y1, POSI
  */
 void add_river(FloorType *floor_ptr, dun_data_type *dd_ptr)
 {
-    dungeon_type *dungeon_ptr;
     POSITION y2, x2;
     POSITION y1 = 0, x1 = 0;
     POSITION wid;
     FEAT_IDX feat1 = 0, feat2 = 0;
 
-    dungeon_ptr = &dungeons_info[floor_ptr->dungeon_idx];
+    const auto &dungeon = floor_ptr->get_dungeon_definition();
 
     /* Choose water mainly */
-    if ((randint1(MAX_DEPTH * 2) - 1 > floor_ptr->dun_level) && dungeon_ptr->flags.has(DungeonFeatureType::WATER_RIVER)) {
+    if ((randint1(MAX_DEPTH * 2) - 1 > floor_ptr->dun_level) && dungeon.flags.has(DungeonFeatureType::WATER_RIVER)) {
         feat1 = feat_deep_water;
         feat2 = feat_shallow_water;
     } else /* others */
@@ -191,17 +190,17 @@ void add_river(FloorType *floor_ptr, dun_data_type *dd_ptr)
         FEAT_IDX select_shallow_feat[10];
         int select_id_max = 0, selected;
 
-        if (dungeon_ptr->flags.has(DungeonFeatureType::LAVA_RIVER)) {
+        if (dungeon.flags.has(DungeonFeatureType::LAVA_RIVER)) {
             select_deep_feat[select_id_max] = feat_deep_lava;
             select_shallow_feat[select_id_max] = feat_shallow_lava;
             select_id_max++;
         }
-        if (dungeon_ptr->flags.has(DungeonFeatureType::POISONOUS_RIVER)) {
+        if (dungeon.flags.has(DungeonFeatureType::POISONOUS_RIVER)) {
             select_deep_feat[select_id_max] = feat_deep_poisonous_puddle;
             select_shallow_feat[select_id_max] = feat_shallow_poisonous_puddle;
             select_id_max++;
         }
-        if (dungeon_ptr->flags.has(DungeonFeatureType::ACID_RIVER)) {
+        if (dungeon.flags.has(DungeonFeatureType::ACID_RIVER)) {
             select_deep_feat[select_id_max] = feat_deep_acid_puddle;
             select_shallow_feat[select_id_max] = feat_shallow_acid_puddle;
             select_id_max++;
@@ -470,7 +469,7 @@ void place_trees(PlayerType *player_ptr, POSITION x, POSITION y)
                 g_ptr->mimic = 0;
 
                 /* Light area since is open above */
-                if (dungeons_info[floor_ptr->dungeon_idx].flags.has_not(DungeonFeatureType::DARKNESS)) {
+                if (floor_ptr->get_dungeon_definition().flags.has_not(DungeonFeatureType::DARKNESS)) {
                     floor_ptr->grid_array[j][i].info |= (CAVE_GLOW | CAVE_ROOM);
                 }
             }

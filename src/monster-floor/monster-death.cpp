@@ -215,7 +215,7 @@ static void drop_artifacts(PlayerType *player_ptr, monster_death_type *md_ptr)
 
     drop_artifact_from_unique(player_ptr, md_ptr);
     const auto *floor_ptr = player_ptr->current_floor_ptr;
-    const auto &dungeon = dungeons_info[floor_ptr->dungeon_idx];
+    const auto &dungeon = floor_ptr->get_dungeon_definition();
     if (((md_ptr->r_ptr->flags7 & RF7_GUARDIAN) == 0) || (dungeon.final_guardian != md_ptr->m_ptr->r_idx)) {
         return;
     }
