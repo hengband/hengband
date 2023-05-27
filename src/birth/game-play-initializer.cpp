@@ -171,7 +171,6 @@ void player_wipe_without_name(PlayerType *player_ptr)
     memcpy(player_ptr->name, tmp.name, sizeof(tmp.name));
 
 #ifdef SET_UID
-    player_ptr->player_uid = tmp.player_uid;
 #ifdef SAFE_SETUID
 #ifdef SAFE_SETUID_POSIX
     player_ptr->player_euid = tmp.player_euid;

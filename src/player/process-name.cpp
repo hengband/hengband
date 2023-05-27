@@ -10,6 +10,10 @@
 #include "util/angband-files.h"
 #include "util/string-processor.h"
 #include "world/world.h"
+#include <sstream>
+#ifdef SAVEFILE_USE_UID
+#include "main-unix/unix-user-ids.h"
+#endif
 
 /*!
  * @brief プレイヤーの名前をチェックして修正する
@@ -87,17 +91,15 @@ void process_player_name(PlayerType *player_ptr, bool is_new_savefile)
 
     auto is_modified = false;
     if (is_new_savefile && (savefile.empty() || !keep_savefile)) {
-        std::string temp;
+        std::stringstream ss;
 
 #ifdef SAVEFILE_USE_UID
-        /* Rename the savefile, using the player_ptr->player_uid and player_ptr->base_name */
-        temp = std::to_string(player_ptr->player_uid);
-        temp.append(".").append(player_ptr->base_name);
+        ss << UnixUserIds::get_instance().get_user_id();
+        ss << '.' << player_ptr->base_name;
 #else
-        /* Rename the savefile, using the player_ptr->base_name */
-        temp = player_ptr->base_name;
+        ss << player_ptr->base_name;
 #endif
-        savefile = path_build(ANGBAND_DIR_SAVE, temp);
+        savefile = path_build(ANGBAND_DIR_SAVE, ss.str());
         is_modified = true;
     }
 

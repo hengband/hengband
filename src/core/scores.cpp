@@ -41,6 +41,9 @@
 #include "view/display-messages.h"
 #include "view/display-scores.h"
 #include "world/world.h"
+#ifdef SET_UID
+#include "main-unix/unix-user-ids.h"
+#endif
 
 /*!
  * @brief 所定ポインタへスコア情報を書き込む / Write one score to the highscore file
@@ -214,8 +217,13 @@ errr top_twenty(PlayerType *player_ptr)
     /* Save the player name (15 chars) */
     snprintf(the_score.who, sizeof(the_score.who), "%-.15s", player_ptr->name);
 
-    /* Save the player info */
-    snprintf(the_score.uid, sizeof(the_score.uid), "%7u", player_ptr->player_uid);
+/* Save the player info */
+#ifdef SET_UID
+    const auto uid = UnixUserIds::get_instance().get_user_id();
+#else
+    const auto uid = 0;
+#endif
+    snprintf(the_score.uid, sizeof(the_score.uid), "%7u", uid);
     snprintf(the_score.sex, sizeof(the_score.sex), "%c", (player_ptr->psex ? 'm' : 'f'));
     snprintf(buf, sizeof(buf), "%2d", std::min(enum2i(player_ptr->prace), MAX_RACES));
     memcpy(the_score.p_r, buf, 3);
@@ -321,7 +329,12 @@ errr predict_score(PlayerType *player_ptr)
     snprintf(the_score.who, sizeof(the_score.who), "%-.15s", player_ptr->name);
 
     /* Save the player info */
-    snprintf(the_score.uid, sizeof(the_score.uid), "%7u", player_ptr->player_uid);
+#ifdef SET_UID
+    const auto uid = UnixUserIds::get_instance().get_user_id();
+#else
+    const auto uid = 0;
+#endif
+    snprintf(the_score.uid, sizeof(the_score.uid), "%7u", uid);
     snprintf(the_score.sex, sizeof(the_score.sex), "%c", (player_ptr->psex ? 'm' : 'f'));
     snprintf(buf, sizeof(buf), "%2d", std::min(enum2i(player_ptr->prace), MAX_RACES));
     memcpy(the_score.p_r, buf, 3);

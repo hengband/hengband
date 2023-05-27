@@ -15,6 +15,7 @@
 #include "io/record-play-movie.h"
 #include "io/signal-handlers.h"
 #include "io/uid-checker.h"
+#include "main-unix/unix-user-ids.h"
 #include "main/angband-initializer.h"
 #include "player/process-name.h"
 #include "system/angband-version.h"
@@ -262,11 +263,11 @@ int main(int argc, char *argv[])
 #endif
 
     init_stuff();
-
+    auto &ids = UnixUserIds::get_instance();
 #ifdef SET_UID
-    p_ptr->player_uid = getuid();
+    ids.set_user_id(getuid());
 #ifdef VMS
-    p_ptr->player_uid += (getgid() * 1000);
+    ids.mod_user_id(getgid() * 1000);
 #endif
 
 #if defined(SAFE_SETUID) && defined(_POSIX_SAVED_IDS)
@@ -278,7 +279,7 @@ int main(int argc, char *argv[])
 
     safe_setuid_drop();
 #ifdef SET_UID
-    user_name(p_ptr->name, p_ptr->player_uid);
+    user_name(p_ptr->name, ids.get_user_id());
 #ifdef PRIVATE_USER_PATH
     create_user_dir();
 #endif /* PRIVATE_USER_PATH */
