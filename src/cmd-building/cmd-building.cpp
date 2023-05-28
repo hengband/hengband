@@ -17,8 +17,6 @@
 #include "cmd-building/cmd-inn.h"
 #include "cmd-io/cmd-dump.h"
 #include "core/asking-player.h"
-#include "core/player-redraw-types.h"
-#include "core/player-update-types.h"
 #include "core/scores.h"
 #include "core/show-file.h"
 #include "core/special-internal-keys.h"
@@ -62,6 +60,7 @@
 #include "system/grid-type-definition.h"
 #include "system/item-entity.h"
 #include "system/player-type-definition.h"
+#include "system/redrawing-flags-updater.h"
 #include "system/terrain-type-definition.h"
 #include "term/gameterm.h"
 #include "term/screen-processor.h"
@@ -409,7 +408,21 @@ void do_cmd_building(PlayerType *player_ptr)
     w_ptr->character_icky_depth--;
     term_clear();
 
-    player_ptr->update |= (PU_VIEW | PU_MONSTER_STATUSES | PU_BONUS | PU_LITE | PU_MONSTER_LITE);
-    player_ptr->redraw |= (PR_BASIC | PR_EXTRA | PR_EQUIPPY | PR_MAP);
+    auto &rfu = RedrawingFlagsUpdater::get_instance();
+    const auto flags_srf = {
+        StatusRedrawingFlag::VIEW,
+        StatusRedrawingFlag::MONSTER_STATUSES,
+        StatusRedrawingFlag::BONUS,
+        StatusRedrawingFlag::LITE,
+        StatusRedrawingFlag::MONSTER_LITE,
+    };
+    rfu.set_flags(flags_srf);
+    const auto flags_mwrf = {
+        MainWindowRedrawingFlag::BASIC,
+        MainWindowRedrawingFlag::EXTRA,
+        MainWindowRedrawingFlag::EQUIPPY,
+        MainWindowRedrawingFlag::MAP,
+    };
+    rfu.set_flags(flags_mwrf);
     player_ptr->window_flags |= (PW_OVERHEAD | PW_DUNGEON);
 }

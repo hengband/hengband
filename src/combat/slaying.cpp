@@ -1,6 +1,5 @@
 ﻿#include "combat/slaying.h"
 #include "artifact/fixed-art-types.h"
-#include "core/player-redraw-types.h"
 #include "effect/attribute-types.h"
 #include "mind/mind-samurai.h"
 #include "monster-race/monster-race.h"
@@ -22,6 +21,7 @@
 #include "system/monster-entity.h"
 #include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
+#include "system/redrawing-flags-updater.h"
 #include "util/bit-flags-calculator.h"
 
 /*!
@@ -198,7 +198,7 @@ int calc_attack_damage_with_slay(PlayerType *player_ptr, ItemEntity *o_ptr, int 
 
         if (!pc.equals(PlayerClassType::SAMURAI) && (flags.has(TR_FORCE_WEAPON)) && (player_ptr->csp > (o_ptr->dd * o_ptr->ds / 5))) {
             player_ptr->csp -= (1 + (o_ptr->dd * o_ptr->ds / 5));
-            player_ptr->redraw |= (PR_MP);
+            RedrawingFlagsUpdater::get_instance().set_flag(MainWindowRedrawingFlag::MP);
             mult = mult * 3 / 2 + 20;
         }
 

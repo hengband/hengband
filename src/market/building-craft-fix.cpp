@@ -3,7 +3,6 @@
 #include "artifact/fixed-art-types.h"
 #include "artifact/random-art-effects.h"
 #include "core/asking-player.h"
-#include "core/player-update-types.h"
 #include "core/stuff-handler.h"
 #include "flavor/flavor-describer.h"
 #include "flavor/object-flavor-types.h"
@@ -26,10 +25,12 @@
 #include "system/baseitem-info.h"
 #include "system/item-entity.h"
 #include "system/player-type-definition.h"
+#include "system/redrawing-flags-updater.h"
 #include "term/screen-processor.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 #include <utility>
+#include <vector>
 
 /*!
  * @brief 修復材料のオブジェクトから修復対象に特性を移植する。
@@ -42,8 +43,7 @@ static void give_one_ability_of_object(ItemEntity *to_ptr, ItemEntity *from_ptr)
     auto to_flags = object_flags(to_ptr);
     auto from_flags = object_flags(from_ptr);
 
-    int n = 0;
-    tr_type cand[TR_FLAG_MAX];
+    std::vector<tr_type> candidates;
     for (int i = 0; i < TR_FLAG_MAX; i++) {
         switch (i) {
         case TR_IGNORE_ACID:
@@ -64,17 +64,17 @@ static void give_one_ability_of_object(ItemEntity *to_ptr, ItemEntity *from_ptr)
             auto tr_flag = i2enum<tr_type>(i);
             if (from_flags.has(tr_flag) && to_flags.has_not(tr_flag)) {
                 if (!(TR_PVAL_FLAG_MASK.has(tr_flag) && (from_ptr->pval < 1))) {
-                    cand[n++] = tr_flag;
+                    candidates.push_back(tr_flag);
                 }
             }
         }
     }
 
-    if (n <= 0) {
+    if (candidates.empty()) {
         return;
     }
 
-    auto tr_idx = cand[randint0(n)];
+    const auto tr_idx = rand_choice(candidates);
     to_ptr->art_flags.set(tr_idx);
     if (TR_PVAL_FLAG_MASK.has(tr_idx)) {
         to_ptr->pval = std::max<short>(to_ptr->pval, 1);
@@ -301,7 +301,7 @@ static PRICE repair_broken_weapon_aux(PlayerType *player_ptr, PRICE bcost)
     inven_item_increase(player_ptr, mater, -1);
     inven_item_optimize(player_ptr, mater);
 
-    player_ptr->update |= PU_BONUS;
+    RedrawingFlagsUpdater::get_instance().set_flag(StatusRedrawingFlag::BONUS);
     handle_stuff(player_ptr);
     return cost;
 }

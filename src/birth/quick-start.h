@@ -26,8 +26,8 @@ struct birther {
 
     PRICE au{}; /*!< 初期の所持金 */
 
-    BASE_STATUS stat_max[6]{}; /* Current "maximal" stat values */
-    BASE_STATUS stat_max_max[6]{}; /* Maximal "maximal" stat values */
+    short stat_max[6]{}; /* Current "maximal" stat values */
+    short stat_max_max[6]{}; /* Maximal "maximal" stat values */
     int player_hp[PY_MAX_LEVEL]{};
 
     int16_t chaos_patron{}; /*! カオスパトロンのID */

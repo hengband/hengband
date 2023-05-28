@@ -2,7 +2,6 @@
 #include "artifact/fixed-art-types.h"
 #include "combat/attack-accuracy.h"
 #include "combat/shoot.h"
-#include "core/player-update-types.h"
 #include "core/stuff-handler.h"
 #include "flavor/flavor-describer.h"
 #include "flavor/object-flavor-types.h"
@@ -21,6 +20,7 @@
 #include "sv-definition/sv-weapon-types.h"
 #include "system/item-entity.h"
 #include "system/player-type-definition.h"
+#include "system/redrawing-flags-updater.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
 #include "term/z-form.h"
@@ -314,7 +314,7 @@ static void list_weapon(PlayerType *player_ptr, ItemEntity *o_ptr, TERM_LEN row,
     const auto eff_ds = o_ptr->ds + player_ptr->to_ds[0];
     const auto hit_reliability = player_ptr->skill_thn + (player_ptr->to_h[0] + o_ptr->to_h) * BTH_PLUS_ADJ;
     const auto item_name = describe_flavor(player_ptr, o_ptr, OD_NAME_ONLY);
-    c_put_str(TERM_YELLOW, item_name.data(), row, col);
+    c_put_str(TERM_YELLOW, item_name, row, col);
     put_str(format(_("攻撃回数: %d", "Number of Blows: %d"), player_ptr->num_blow[0]), row + 1, col);
 
     put_str(_("命中率:  0  50 100 150 200 (敵のAC)", "To Hit:  0  50 100 150 200 (AC)"), row + 2, col);
@@ -376,7 +376,7 @@ PRICE compare_weapons(PlayerType *player_ptr, PRICE bcost)
 
     int n = 1;
     total = bcost;
-
+    auto &rfu = RedrawingFlagsUpdater::get_instance();
     while (true) {
         clear_bldg(0, 22);
         w_ptr->character_xtra = true;
@@ -386,7 +386,7 @@ PRICE compare_weapons(PlayerType *player_ptr, PRICE bcost)
                 i_ptr->copy_from(o_ptr[i]);
             }
 
-            player_ptr->update |= PU_BONUS;
+            rfu.set_flag(StatusRedrawingFlag::BONUS);
             handle_stuff(player_ptr);
 
             list_weapon(player_ptr, o_ptr[i], row, col);
@@ -394,7 +394,7 @@ PRICE compare_weapons(PlayerType *player_ptr, PRICE bcost)
             i_ptr->copy_from(&orig_weapon);
         }
 
-        player_ptr->update |= PU_BONUS;
+        rfu.set_flag(StatusRedrawingFlag::BONUS);
         handle_stuff(player_ptr);
 
         w_ptr->character_xtra = old_character_xtra;

@@ -1,7 +1,6 @@
 ﻿#include "cmd-item/cmd-zapwand.h"
 #include "action/action-limited.h"
 #include "avatar/avatar.h"
-#include "core/player-update-types.h"
 #include "core/window-redrawer.h"
 #include "effect/attribute-types.h"
 #include "floor/floor-object.h"
@@ -51,7 +50,7 @@
  * @param magic 魔道具術上の処理ならばTRUE
  * @return 発動により効果内容が確定したならばTRUEを返す
  */
-bool wand_effect(PlayerType *player_ptr, OBJECT_SUBTYPE_VALUE sval, DIRECTION dir, bool powerful, bool magic)
+bool wand_effect(PlayerType *player_ptr, int sval, int dir, bool powerful, bool magic)
 {
     bool ident = false;
     PLAYER_LEVEL lev = powerful ? player_ptr->lev * 2 : player_ptr->lev;
@@ -60,7 +59,7 @@ bool wand_effect(PlayerType *player_ptr, OBJECT_SUBTYPE_VALUE sval, DIRECTION di
     /* XXX Hack -- Wand of wonder can do anything before it */
     if (sval == SV_WAND_WONDER) {
         int vir = virtue_number(player_ptr, Virtue::CHANCE);
-        sval = (OBJECT_SUBTYPE_VALUE)randint0(SV_WAND_WONDER);
+        sval = randint0(SV_WAND_WONDER);
 
         if (vir) {
             if (player_ptr->virtues[vir - 1] > 0) {
@@ -273,37 +272,21 @@ bool wand_effect(PlayerType *player_ptr, OBJECT_SUBTYPE_VALUE sval, DIRECTION di
     }
 
     case SV_WAND_DRAGON_BREATH: {
-        int dam;
-        AttributeType typ;
+        constexpr std::array<std::pair<int, AttributeType>, 5> candidates = { {
+            { 240, AttributeType::ACID },
+            { 210, AttributeType::ELEC },
+            { 240, AttributeType::FIRE },
+            { 210, AttributeType::COLD },
+            { 180, AttributeType::POIS },
+        } };
 
-        switch (randint1(5)) {
-        case 1:
-            dam = 240;
-            typ = AttributeType::ACID;
-            break;
-        case 2:
-            dam = 210;
-            typ = AttributeType::ELEC;
-            break;
-        case 3:
-            dam = 240;
-            typ = AttributeType::FIRE;
-            break;
-        case 4:
-            dam = 210;
-            typ = AttributeType::COLD;
-            break;
-        default:
-            dam = 180;
-            typ = AttributeType::POIS;
-            break;
-        }
+        auto [dam, type] = rand_choice(candidates);
 
         if (powerful) {
             dam = (dam * 3) / 2;
         }
 
-        fire_breath(player_ptr, typ, dir, dam, 3);
+        fire_breath(player_ptr, type, dir, dam, 3);
 
         ident = true;
         break;

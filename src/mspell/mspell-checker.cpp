@@ -12,7 +12,6 @@
 #include "mspell/mspell-checker.h"
 #include "blue-magic/blue-magic-checker.h"
 #include "core/disturbance.h"
-#include "core/player-redraw-types.h"
 #include "dungeon/dungeon-flag-types.h"
 #include "dungeon/quest.h"
 #include "effect/attribute-types.h"

@@ -3,6 +3,5 @@
 #include "system/angband.h"
 
 class FloorType;
-class PlayerType;
 OBJECT_IDX o_pop(FloorType *floor_ptr);
-OBJECT_IDX get_obj_index(PlayerType *player_ptr, DEPTH level, BIT_FLAGS mode);
+OBJECT_IDX get_obj_index(const FloorType *floor_ptr, DEPTH level, BIT_FLAGS mode);

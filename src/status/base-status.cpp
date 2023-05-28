@@ -1,7 +1,5 @@
 ﻿#include "status/base-status.h"
 #include "avatar/avatar.h"
-#include "core/player-redraw-types.h"
-#include "core/player-update-types.h"
 #include "core/window-redrawer.h"
 #include "game-option/birth-options.h"
 #include "inventory/inventory-slot-types.h"
@@ -12,6 +10,7 @@
 #include "spell-kind/spells-floor.h"
 #include "system/item-entity.h"
 #include "system/player-type-definition.h"
+#include "system/redrawing-flags-updater.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 
@@ -45,17 +44,15 @@ static concptr desc_stat_neg[] = {
  */
 bool inc_stat(PlayerType *player_ptr, int stat)
 {
-    BASE_STATUS gain;
-    BASE_STATUS value = player_ptr->stat_cur[stat];
+    auto value = player_ptr->stat_cur[stat];
     if (value >= player_ptr->stat_max_max[stat]) {
         return false;
     }
 
     if (value < 18) {
-        gain = ((randint0(100) < 75) ? 1 : 2);
-        value += gain;
+        value += (randint0(100) < 75) ? 1 : 2;
     } else if (value < (player_ptr->stat_max_max[stat] - 2)) {
-        gain = (((player_ptr->stat_max_max[stat]) - value) / 2 + 3) / 2;
+        auto gain = (((player_ptr->stat_max_max[stat]) - value) / 2 + 3) / 2;
         if (gain < 1) {
             gain = 1;
         }
@@ -73,7 +70,7 @@ bool inc_stat(PlayerType *player_ptr, int stat)
         player_ptr->stat_max[stat] = value;
     }
 
-    player_ptr->update |= PU_BONUS;
+    RedrawingFlagsUpdater::get_instance().set_flag(StatusRedrawingFlag::BONUS);
     return true;
 }
 
@@ -96,9 +93,9 @@ bool inc_stat(PlayerType *player_ptr, int stat)
  */
 bool dec_stat(PlayerType *player_ptr, int stat, int amount, int permanent)
 {
-    bool res = false;
-    BASE_STATUS cur = player_ptr->stat_cur[stat];
-    BASE_STATUS max = player_ptr->stat_max[stat];
+    auto res = false;
+    auto cur = player_ptr->stat_cur[stat];
+    auto max = player_ptr->stat_max[stat];
     int same = (cur == max);
     if (cur > 3) {
         if (cur <= 18) {
@@ -180,8 +177,9 @@ bool dec_stat(PlayerType *player_ptr, int stat, int amount, int permanent)
     if (res) {
         player_ptr->stat_cur[stat] = cur;
         player_ptr->stat_max[stat] = max;
-        player_ptr->redraw |= (PR_ABILITY_SCORE);
-        player_ptr->update |= (PU_BONUS);
+        auto &rfu = RedrawingFlagsUpdater::get_instance();
+        rfu.set_flag(MainWindowRedrawingFlag::ABILITY_SCORE);
+        rfu.set_flag(StatusRedrawingFlag::BONUS);
     }
 
     return res;
@@ -196,8 +194,9 @@ bool res_stat(PlayerType *player_ptr, int stat)
 {
     if (player_ptr->stat_cur[stat] != player_ptr->stat_max[stat]) {
         player_ptr->stat_cur[stat] = player_ptr->stat_max[stat];
-        player_ptr->update |= (PU_BONUS);
-        player_ptr->redraw |= (PR_ABILITY_SCORE);
+        auto &rfu = RedrawingFlagsUpdater::get_instance();
+        rfu.set_flag(StatusRedrawingFlag::BONUS);
+        rfu.set_flag(MainWindowRedrawingFlag::ABILITY_SCORE);
         return true;
     }
 
@@ -317,7 +316,13 @@ bool lose_all_info(PlayerType *player_ptr)
         o_ptr->ident &= ~(IDENT_SENSE);
     }
 
-    set_bits(player_ptr->update, PU_BONUS | PU_COMBINATION | PU_REORDER);
+    auto &rfu = RedrawingFlagsUpdater::get_instance();
+    const auto flags_srf = {
+        StatusRedrawingFlag::BONUS,
+        StatusRedrawingFlag::COMBINATION,
+        StatusRedrawingFlag::REORDER,
+    };
+    rfu.set_flags(flags_srf);
     set_bits(player_ptr->window_flags, PW_INVENTORY | PW_EQUIPMENT | PW_PLAYER | PW_FLOOR_ITEMS | PW_FOUND_ITEMS);
     wiz_dark(player_ptr);
     return true;

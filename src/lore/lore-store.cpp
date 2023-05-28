@@ -43,8 +43,8 @@ int lore_do_probe(PlayerType *player_ptr, MonsterRaceId r_idx)
     }
     r_ptr->r_wake = r_ptr->r_ignore = MAX_UCHAR;
 
-    for (int i = 0; i < 4; i++) {
-        if (r_ptr->blow[i].effect != RaceBlowEffectType::NONE || r_ptr->blow[i].method != RaceBlowMethodType::NONE) {
+    for (auto i = 0; i < 4; i++) {
+        if (r_ptr->blows[i].effect != RaceBlowEffectType::NONE || r_ptr->blows[i].method != RaceBlowMethodType::NONE) {
             if (r_ptr->r_blows[i] != MAX_UCHAR) {
                 n++;
             }

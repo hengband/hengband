@@ -1,6 +1,5 @@
 ﻿#include "autopick/autopick-util.h"
 #include "autopick/autopick-menu-data-table.h"
-#include "core/player-update-types.h"
 #include "core/window-redrawer.h"
 #include "game-option/input-options.h"
 #include "main/sound-of-music.h"
@@ -8,6 +7,7 @@
 #include "object-enchant/item-feeling.h"
 #include "system/item-entity.h"
 #include "system/player-type-definition.h"
+#include "system/redrawing-flags-updater.h"
 #include "util/bit-flags-calculator.h"
 #include "util/quarks.h"
 
@@ -78,9 +78,13 @@ void auto_inscribe_item(PlayerType *player_ptr, ItemEntity *o_ptr, int idx)
         o_ptr->inscription = autopick_list[idx].insc;
     }
 
+    auto &rfu = RedrawingFlagsUpdater::get_instance();
     player_ptr->window_flags |= (PW_EQUIPMENT | PW_INVENTORY);
-    player_ptr->update |= (PU_BONUS);
-    player_ptr->update |= (PU_COMBINATION);
+    const auto flags = {
+        StatusRedrawingFlag::BONUS,
+        StatusRedrawingFlag::COMBINATION,
+    };
+    rfu.set_flags(flags);
 }
 
 /*!

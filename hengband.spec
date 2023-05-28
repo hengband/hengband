@@ -1,4 +1,4 @@
-%define version 3.0.0Alpha82
+%define version 3.0.0Alpha83
 %define release 1
 %global debug_package %{nil}
 
@@ -32,7 +32,7 @@ https://hengband.github.io
 詳しくは /usr/share/doc/hengband/readme.md を参照。
 
 %prep
-rm -rf $RPM_BUILD_ROOT
+rm -rf %{buildroot}
 
 %setup -n %{name}-%{version}
 ./bootstrap
@@ -42,18 +42,18 @@ rm -rf $RPM_BUILD_ROOT
 %make_build
 
 %install
-mkdir -p $RPM_BUILD_ROOT/%{_bindir}
-mkdir -p $RPM_BUILD_ROOT/%{_datadir}/games/hengband
+mkdir -p %{buildroot}/%{_bindir}
+mkdir -p %{buildroot}/%{_datadir}/games/hengband
 %makeinstall
-cp -R lib/ -p $RPM_BUILD_ROOT/%{_datadir}/games/hengband/
-find $RPM_BUILD_ROOT/%{_datadir}/games/hengband/ -type f -name "Makefile*" -exec rm {} \;
-find $RPM_BUILD_ROOT/%{_datadir}/games/hengband/ -type f -name "delete.me*" -exec rm {} \;
-find $RPM_BUILD_ROOT/%{_datadir}/games/hengband/ -name ".git*" -exec rm -rf {} \;
-rm -rf $RPM_BUILD_ROOT/%{_datadir}/games/hengband/lib/xtra/{sound,music}
-touch $RPM_BUILD_ROOT/%{_datadir}/games/hengband/lib/apex/scores.raw
+cp -R lib/ -p %{buildroot}/%{_datadir}/games/hengband/
+find %{buildroot}/%{_datadir}/games/hengband/ -type f -name "Makefile*" -exec rm {} \;
+find %{buildroot}/%{_datadir}/games/hengband/ -type f -name "delete.me*" -exec rm {} \;
+find %{buildroot}/%{_datadir}/games/hengband/ -name ".git*" -exec rm -rf {} \;
+rm -rf %{buildroot}/%{_datadir}/games/hengband/lib/xtra/{sound,music}
+touch %{buildroot}/%{_datadir}/games/hengband/lib/apex/scores.raw
 
 %clean
-rm -rf $RPM_BUILD_ROOT
+rm -rf %{buildroot}
 
 %preun
 if [ -e %{_datadir}/games/hengband/lib/data/f_info_j.raw ]
@@ -71,6 +71,7 @@ exit 0
 %attr(775,root,games) %dir %{_datadir}/games/hengband/lib/data
 %dir %{_datadir}/games/hengband/lib/edit
 %dir %{_datadir}/games/hengband/lib/file
+%dir %{_datadir}/games/hengband/lib/file/books
 %dir %{_datadir}/games/hengband/lib/help
 %dir %{_datadir}/games/hengband/lib/info
 %dir %{_datadir}/games/hengband/lib/pref
@@ -86,6 +87,7 @@ exit 0
 %{_datadir}/games/hengband/lib/edit/quests/*.txt
 %{_datadir}/games/hengband/lib/edit/towns/*.txt
 %{_datadir}/games/hengband/lib/file/*.txt
+%{_datadir}/games/hengband/lib/file/books/*.txt
 %{_datadir}/games/hengband/lib/help/*.hlp
 %{_datadir}/games/hengband/lib/help/*.txt
 %{_datadir}/games/hengband/lib/pref/*.prf
@@ -94,6 +96,10 @@ exit 0
 %license lib/help/jlicense.txt
 
 %changelog
+
+* Wed May 17 2023 Shiro Hara <white@vx-xv.com>
+- hengband RPM 3.0.0Alpha release 83
+- Replace RPM_BUILD_ROOT to builddir macro
 
 * Sat May 06 2023 Shiro Hara <white@vx-xv.com>
 - hengband RPM 3.0.0Alpha release 82

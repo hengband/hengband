@@ -2,7 +2,6 @@
 #include "action/action-limited.h"
 #include "autopick/autopick.h"
 #include "core/asking-player.h"
-#include "core/player-update-types.h"
 #include "flavor/flavor-describer.h"
 #include "floor/cave.h"
 #include "floor/floor-object.h"
@@ -23,6 +22,7 @@
 #include "system/grid-type-definition.h"
 #include "system/item-entity.h"
 #include "system/player-type-definition.h"
+#include "system/redrawing-flags-updater.h"
 #include "system/terrain-type-definition.h"
 #include "target/target-getter.h"
 #include "util/bit-flags-calculator.h"
@@ -126,7 +126,7 @@ bool create_ammo(PlayerType *player_ptr)
 
         ItemEntity forge;
         auto *q_ptr = &forge;
-        q_ptr->prep(lookup_baseitem_id({ ItemKindType::SHOT, (OBJECT_SUBTYPE_VALUE)m_bonus(1, player_ptr->lev) + 1 }));
+        q_ptr->prep(lookup_baseitem_id({ ItemKindType::SHOT, m_bonus(1, player_ptr->lev) + 1 }));
         q_ptr->number = (byte)rand_range(15, 30);
         object_aware(player_ptr, q_ptr);
         object_known(q_ptr);
@@ -140,7 +140,7 @@ bool create_ammo(PlayerType *player_ptr)
         }
 
         cave_alter_feat(player_ptr, y, x, TerrainCharacteristics::HURT_ROCK);
-        player_ptr->update |= PU_FLOW;
+        RedrawingFlagsUpdater::get_instance().set_flag(StatusRedrawingFlag::FLOW);
         return true;
     }
     case AMMO_ARROW: {

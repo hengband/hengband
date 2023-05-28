@@ -302,7 +302,7 @@ static void process_one_characteristic(PlayerType *player_ptr, TERM_LEN row, TER
         }
     }
 
-    c_put_str(row_clr, header.data(), row, col);
+    c_put_str(row_clr, header, row, col);
     col += header.length() + 1;
 
     for (auto s : char_stat.syms) {
@@ -316,7 +316,7 @@ static void process_one_characteristic(PlayerType *player_ptr, TERM_LEN row, TER
         if (s == "." && (!char_stat.has_imm && !char_stat.has_vul)) {
             clr = TERM_L_DARK;
         }
-        c_put_str(clr, s.data(), row, col++);
+        c_put_str(clr, s, row, col++);
     }
 }
 

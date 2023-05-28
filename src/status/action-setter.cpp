@@ -12,8 +12,6 @@
  */
 
 #include "status/action-setter.h"
-#include "core/player-redraw-types.h"
-#include "core/player-update-types.h"
 #include "player-base/player-class.h"
 #include "player-info/bluemage-data-type.h"
 #include "player-info/monk-data-type.h"
@@ -24,6 +22,7 @@
 #include "spell-realm/spells-hex.h"
 #include "spell-realm/spells-song.h"
 #include "system/player-type-definition.h"
+#include "system/redrawing-flags-updater.h"
 #include "view/display-messages.h"
 
 /*!
@@ -39,10 +38,11 @@ void set_action(PlayerType *player_ptr, uint8_t typ)
         return;
     }
 
+    auto &rfu = RedrawingFlagsUpdater::get_instance();
     switch (prev_typ) {
     case ACTION_SEARCH:
         msg_print(_("探索をやめた。", "You no longer walk carefully."));
-        player_ptr->redraw |= (PR_SPEED);
+        rfu.set_flag(MainWindowRedrawingFlag::SPEED);
         break;
     case ACTION_REST:
         player_ptr->resting = 0;
@@ -60,8 +60,8 @@ void set_action(PlayerType *player_ptr, uint8_t typ)
     case ACTION_SAMURAI_STANCE:
         msg_print(_("型を崩した。", "You stop assuming the special stance."));
         PlayerClass(player_ptr).set_samurai_stance(SamuraiStanceType::NONE);
-        player_ptr->update |= (PU_MONSTER_STATUSES);
-        player_ptr->redraw |= (PR_TIMED_EFFECT);
+        rfu.set_flag(StatusRedrawingFlag::MONSTER_STATUSES);
+        rfu.set_flag(MainWindowRedrawingFlag::TIMED_EFFECT);
         break;
     case ACTION_SING:
         msg_print(_("歌うのをやめた。", "You stop singing."));
@@ -92,7 +92,7 @@ void set_action(PlayerType *player_ptr, uint8_t typ)
     switch (player_ptr->action) {
     case ACTION_SEARCH:
         msg_print(_("注意深く歩き始めた。", "You begin to walk carefully."));
-        player_ptr->redraw |= (PR_SPEED);
+        rfu.set_flag(MainWindowRedrawingFlag::SPEED);
         break;
     case ACTION_LEARN:
         msg_print(_("学習を始めた。", "You begin learning"));
@@ -107,6 +107,6 @@ void set_action(PlayerType *player_ptr, uint8_t typ)
         break;
     }
 
-    player_ptr->update |= (PU_BONUS);
-    player_ptr->redraw |= (PR_ACTION);
+    rfu.set_flag(StatusRedrawingFlag::BONUS);
+    rfu.set_flag(MainWindowRedrawingFlag::ACTION);
 }

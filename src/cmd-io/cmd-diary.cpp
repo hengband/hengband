@@ -1,5 +1,4 @@
 ﻿#include "cmd-io/cmd-diary.h"
-#include "cmd-io/diary-subtitle-table.h"
 #include "core/asking-player.h"
 #include "core/show-file.h"
 #include "game-option/play-record-options.h"
@@ -27,29 +26,20 @@
  */
 static void display_diary(PlayerType *player_ptr)
 {
-    PlayerClass pc(player_ptr);
-    const auto max_subtitles = diary_subtitles.size();
-    std::string subtitle;
-    if (pc.is_tough()) {
-        subtitle = diary_subtitles[randint0(max_subtitles - 1)];
-    } else if (pc.is_wizard()) {
-        subtitle = diary_subtitles[randint0(max_subtitles - 1) + 1];
-    } else {
-        subtitle = diary_subtitles[randint0(max_subtitles - 2) + 1];
-    }
-
-    char diary_title[256];
+    const auto subtitle_candidates = PlayerClass(player_ptr).get_subtitle_candidates();
+    const auto choice = Rand_external(subtitle_candidates.size());
+    const auto &subtitle = subtitle_candidates[choice];
 #ifdef JP
-    strnfmt(diary_title, sizeof(diary_title), "「%s%s%sの伝説 -%s-」", ap_ptr->title, ap_ptr->no ? "の" : "", player_ptr->name, subtitle.data());
+    const auto diary_title = format("「%s%s%sの伝説 -%s-」", ap_ptr->title, ap_ptr->no ? "の" : "", player_ptr->name, subtitle.data());
 #else
-    strnfmt(diary_title, sizeof(diary_title), "Legend of %s %s '%s'", ap_ptr->title, player_ptr->name, subtitle.data());
+    const auto diary_title = format("Legend of %s %s '%s'", ap_ptr->title, player_ptr->name, subtitle.data());
 #endif
 
     std::stringstream ss;
     ss << _("playrecord-", "playrec-") << savefile_base << ".txt";
     const auto &path = path_build(ANGBAND_DIR_USER, ss.str());
     const auto &filename = path.string();
-    (void)show_file(player_ptr, false, filename.data(), diary_title, -1, 0);
+    (void)show_file(player_ptr, false, filename.data(), diary_title.data(), -1, 0);
 }
 
 /*!
@@ -57,11 +47,9 @@ static void display_diary(PlayerType *player_ptr)
  */
 static void add_diary_note(PlayerType *player_ptr)
 {
-    char tmp[80] = "\0";
-    char bunshou[80] = "\0";
+    char tmp[80]{};
     if (get_string(_("内容: ", "diary note: "), tmp, 79)) {
-        strcpy(bunshou, tmp);
-        exe_write_diary(player_ptr, DIARY_DESCRIPTION, 0, bunshou);
+        exe_write_diary(player_ptr, DIARY_DESCRIPTION, 0, tmp);
     }
 }
 
@@ -74,16 +62,15 @@ static void do_cmd_last_get(PlayerType *player_ptr)
         return;
     }
 
-    char buf[256];
-    strnfmt(buf, sizeof(buf), _("%sの入手を記録します。", "Do you really want to record getting %s? "), record_o_name);
-    if (!get_check(buf)) {
+    const auto record = format(_("%sの入手を記録します。", "Do you really want to record getting %s? "), record_o_name);
+    if (!get_check(record)) {
         return;
     }
 
     GAME_TURN turn_tmp = w_ptr->game_turn;
     w_ptr->game_turn = record_turn;
-    strnfmt(buf, sizeof(buf), _("%sを手に入れた。", "discover %s."), record_o_name);
-    exe_write_diary(player_ptr, DIARY_DESCRIPTION, 0, buf);
+    const auto mes = format(_("%sを手に入れた。", "discover %s."), record_o_name);
+    exe_write_diary(player_ptr, DIARY_DESCRIPTION, 0, mes);
     w_ptr->game_turn = turn_tmp;
 }
 

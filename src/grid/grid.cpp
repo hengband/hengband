@@ -994,13 +994,13 @@ void place_grid(PlayerType *player_ptr, grid_type *g_ptr, grid_bold_type gb_type
 {
     switch (gb_type) {
     case GB_FLOOR: {
-        g_ptr->feat = feat_ground_type[randint0(100)];
+        g_ptr->feat = rand_choice(feat_ground_type);
         g_ptr->info &= ~(CAVE_MASK);
         g_ptr->info |= CAVE_FLOOR;
         break;
     }
     case GB_EXTRA: {
-        g_ptr->feat = feat_wall_type[randint0(100)];
+        g_ptr->feat = rand_choice(feat_wall_type);
         g_ptr->info &= ~(CAVE_MASK);
         g_ptr->info |= CAVE_EXTRA;
         break;

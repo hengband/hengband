@@ -1,6 +1,5 @@
 ﻿#include "monster/monster-status.h"
 #include "autopick/autopick-pref-processor.h"
-#include "core/player-update-types.h"
 #include "core/speed-table.h"
 #include "floor/cave.h"
 #include "floor/geometry.h"
@@ -22,6 +21,7 @@
 #include "system/monster-entity.h"
 #include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
+#include "system/redrawing-flags-updater.h"
 #include "timed-effect/player-blindness.h"
 #include "timed-effect/player-hallucination.h"
 #include "timed-effect/timed-effects.h"
@@ -422,9 +422,10 @@ void monster_gain_exp(PlayerType *player_ptr, MONSTER_IDX m_idx, MonsterRaceId s
         return;
     }
 
+    auto &rfu = RedrawingFlagsUpdater::get_instance();
     if (m_ptr->exp < r_ptr->next_exp) {
         if (m_idx == player_ptr->riding) {
-            player_ptr->update |= PU_BONUS;
+            rfu.set_flag(StatusRedrawingFlag::BONUS);
         }
 
         return;
@@ -507,6 +508,6 @@ void monster_gain_exp(PlayerType *player_ptr, MONSTER_IDX m_idx, MonsterRaceId s
     lite_spot(player_ptr, m_ptr->fy, m_ptr->fx);
 
     if (m_idx == player_ptr->riding) {
-        player_ptr->update |= PU_BONUS;
+        rfu.set_flag(StatusRedrawingFlag::BONUS);
     }
 }

@@ -2,8 +2,6 @@
 #include "artifact/fixed-art-generator.h"
 #include "artifact/fixed-art-types.h"
 #include "cmd-building/cmd-building.h"
-#include "core/player-redraw-types.h"
-#include "core/player-update-types.h"
 #include "dungeon/quest-completion-checker.h"
 #include "effect/effect-characteristics.h"
 #include "effect/effect-processor.h"
@@ -45,6 +43,7 @@
 #include "system/monster-entity.h"
 #include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
+#include "system/redrawing-flags-updater.h"
 #include "system/system-variables.h"
 #include "timed-effect/player-hallucination.h"
 #include "timed-effect/timed-effects.h"
@@ -59,21 +58,21 @@ static void write_pet_death(PlayerType *player_ptr, monster_death_type *md_ptr)
     md_ptr->md_x = md_ptr->m_ptr->fx;
     if (record_named_pet && md_ptr->m_ptr->is_named_pet()) {
         const auto m_name = monster_desc(player_ptr, md_ptr->m_ptr, MD_INDEF_VISIBLE);
-        exe_write_diary(player_ptr, DIARY_NAMED_PET, 3, m_name.data());
+        exe_write_diary(player_ptr, DIARY_NAMED_PET, 3, m_name);
     }
 }
 
 static void on_dead_explosion(PlayerType *player_ptr, monster_death_type *md_ptr)
 {
-    for (int i = 0; i < 4; i++) {
-        if (md_ptr->r_ptr->blow[i].method != RaceBlowMethodType::EXPLODE) {
+    for (const auto &blow : md_ptr->r_ptr->blows) {
+        if (blow.method != RaceBlowMethodType::EXPLODE) {
             continue;
         }
 
         BIT_FLAGS flg = PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL;
-        AttributeType typ = mbe_info[enum2i(md_ptr->r_ptr->blow[i].effect)].explode_type;
-        DICE_NUMBER d_dice = md_ptr->r_ptr->blow[i].d_dice;
-        DICE_SID d_side = md_ptr->r_ptr->blow[i].d_side;
+        AttributeType typ = mbe_info[enum2i(blow.effect)].explode_type;
+        DICE_NUMBER d_dice = blow.d_dice;
+        DICE_SID d_side = blow.d_side;
         int damage = damroll(d_dice, d_side);
         (void)project(player_ptr, md_ptr->m_idx, 3, md_ptr->md_y, md_ptr->md_x, damage, typ, flg);
         break;
@@ -114,7 +113,7 @@ static void on_defeat_arena_monster(PlayerType *player_ptr, monster_death_type *
     }
 
     const auto m_name = monster_desc(player_ptr, md_ptr->m_ptr, MD_WRONGDOER_NAME);
-    exe_write_diary(player_ptr, DIARY_ARENA, player_ptr->arena_number, m_name.data());
+    exe_write_diary(player_ptr, DIARY_ARENA, player_ptr->arena_number, m_name);
 }
 
 static void drop_corpse(PlayerType *player_ptr, monster_death_type *md_ptr)
@@ -190,7 +189,7 @@ bool drop_single_artifact(PlayerType *player_ptr, monster_death_type *md_ptr, Fi
 
 static short drop_dungeon_final_artifact(PlayerType *player_ptr, monster_death_type *md_ptr)
 {
-    const auto &dungeon = dungeons_info[player_ptr->dungeon_idx];
+    const auto &dungeon = dungeons_info[player_ptr->current_floor_ptr->dungeon_idx];
     const auto has_reward = dungeon.final_object > 0;
     const auto bi_id = has_reward ? dungeon.final_object : lookup_baseitem_id({ ItemKindType::SCROLL, SV_SCROLL_ACQUIREMENT });
     if (dungeon.final_artifact == FixedArtifactId::NONE) {
@@ -215,7 +214,9 @@ static void drop_artifacts(PlayerType *player_ptr, monster_death_type *md_ptr)
     }
 
     drop_artifact_from_unique(player_ptr, md_ptr);
-    if (((md_ptr->r_ptr->flags7 & RF7_GUARDIAN) == 0) || (dungeons_info[player_ptr->dungeon_idx].final_guardian != md_ptr->m_ptr->r_idx)) {
+    const auto *floor_ptr = player_ptr->current_floor_ptr;
+    const auto &dungeon = dungeons_info[floor_ptr->dungeon_idx];
+    if (((md_ptr->r_ptr->flags7 & RF7_GUARDIAN) == 0) || (dungeon.final_guardian != md_ptr->m_ptr->r_idx)) {
         return;
     }
 
@@ -224,11 +225,11 @@ static void drop_artifacts(PlayerType *player_ptr, monster_death_type *md_ptr)
         ItemEntity forge;
         auto *q_ptr = &forge;
         q_ptr->prep(bi_id);
-        ItemMagicApplier(player_ptr, q_ptr, player_ptr->current_floor_ptr->object_level, AM_NO_FIXED_ART | AM_GOOD).execute();
+        ItemMagicApplier(player_ptr, q_ptr, floor_ptr->object_level, AM_NO_FIXED_ART | AM_GOOD).execute();
         (void)drop_near(player_ptr, q_ptr, -1, md_ptr->md_y, md_ptr->md_x);
     }
 
-    msg_format(_("あなたは%sを制覇した！", "You have conquered %s!"), dungeons_info[player_ptr->dungeon_idx].name.data());
+    msg_format(_("あなたは%sを制覇した！", "You have conquered %s!"), dungeon.name.data());
 }
 
 static void decide_drop_quality(monster_death_type *md_ptr)
@@ -331,7 +332,7 @@ static void on_defeat_last_boss(PlayerType *player_ptr)
 {
     w_ptr->total_winner = true;
     add_winner_class(player_ptr->pclass);
-    player_ptr->redraw |= PR_TITLE;
+    RedrawingFlagsUpdater::get_instance().set_flag(MainWindowRedrawingFlag::TITLE);
     play_music(TERM_XTRA_MUSIC_BASIC, MUSIC_BASIC_FINAL_QUEST_CLEAR);
     exe_write_diary(player_ptr, DIARY_DESCRIPTION, 0, _("見事に変愚蛮怒の勝利者となった！", "finally became *WINNER* of Hengband!"));
     patron_list[player_ptr->chaos_patron].admire(player_ptr);
@@ -388,7 +389,7 @@ void monster_death(PlayerType *player_ptr, MONSTER_IDX m_idx, bool drop_item, At
     }
 
     if (md_ptr->r_ptr->brightness_flags.has_any_of(ld_mask)) {
-        player_ptr->update |= PU_MONSTER_LITE;
+        RedrawingFlagsUpdater::get_instance().set_flag(StatusRedrawingFlag::MONSTER_LITE);
     }
 
     write_pet_death(player_ptr, md_ptr);
@@ -419,30 +420,4 @@ void monster_death(PlayerType *player_ptr, MONSTER_IDX m_idx, bool drop_item, At
     }
 
     on_defeat_last_boss(player_ptr);
-}
-
-/*!
- * @brief モンスターを撃破した際の述語メッセージを返す /
- * Return monster death string
- * @param r_ptr 撃破されたモンスターの種族情報を持つ構造体の参照ポインタ
- * @return 撃破されたモンスターの述語
- */
-concptr extract_note_dies(MonsterRaceId r_idx)
-{
-    const auto &r_ref = monraces_info[r_idx];
-    const auto explode = std::any_of(std::begin(r_ref.blow), std::end(r_ref.blow), [](const auto &blow) { return blow.method == RaceBlowMethodType::EXPLODE; });
-
-    if (monster_living(r_idx)) {
-        if (explode) {
-            return _("は爆発して死んだ。", " explodes and dies.");
-        }
-
-        return _("は死んだ。", " dies.");
-    }
-
-    if (explode) {
-        return _("は爆発して粉々になった。", " explodes into tiny shreds.");
-    }
-
-    return _("を倒した。", " is destroyed.");
 }

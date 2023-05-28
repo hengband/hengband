@@ -104,26 +104,16 @@ int m_bonus(int max, DEPTH level)
  */
 void one_sustain(ItemEntity *o_ptr)
 {
-    switch (randint0(A_MAX)) {
-    case 0:
-        o_ptr->art_flags.set(TR_SUST_STR);
-        break;
-    case 1:
-        o_ptr->art_flags.set(TR_SUST_INT);
-        break;
-    case 2:
-        o_ptr->art_flags.set(TR_SUST_WIS);
-        break;
-    case 3:
-        o_ptr->art_flags.set(TR_SUST_DEX);
-        break;
-    case 4:
-        o_ptr->art_flags.set(TR_SUST_CON);
-        break;
-    case 5:
-        o_ptr->art_flags.set(TR_SUST_CHR);
-        break;
-    }
+    constexpr static auto sustains = {
+        TR_SUST_STR,
+        TR_SUST_INT,
+        TR_SUST_WIS,
+        TR_SUST_DEX,
+        TR_SUST_CON,
+        TR_SUST_CHR,
+    };
+
+    o_ptr->art_flags.set(rand_choice(sustains));
 }
 
 /*!
@@ -133,22 +123,16 @@ void one_sustain(ItemEntity *o_ptr)
  */
 bool add_esp_strong(ItemEntity *o_ptr)
 {
-    bool nonliv = false;
+    constexpr static auto candidates = {
+        TR_ESP_EVIL,
+        TR_TELEPATHY,
+        TR_ESP_NONLIVING,
+    };
 
-    switch (randint1(3)) {
-    case 1:
-        o_ptr->art_flags.set(TR_ESP_EVIL);
-        break;
-    case 2:
-        o_ptr->art_flags.set(TR_TELEPATHY);
-        break;
-    case 3:
-        o_ptr->art_flags.set(TR_ESP_NONLIVING);
-        nonliv = true;
-        break;
-    }
+    const auto flag = rand_choice(candidates);
+    o_ptr->art_flags.set(flag);
 
-    return nonliv;
+    return flag == TR_ESP_NONLIVING;
 }
 
 /*!
@@ -223,20 +207,14 @@ void add_low_telepathy(ItemEntity *o_ptr)
  */
 void one_ele_resistance(ItemEntity *o_ptr)
 {
-    switch (randint0(4)) {
-    case 0:
-        o_ptr->art_flags.set(TR_RES_ACID);
-        break;
-    case 1:
-        o_ptr->art_flags.set(TR_RES_ELEC);
-        break;
-    case 2:
-        o_ptr->art_flags.set(TR_RES_COLD);
-        break;
-    case 3:
-        o_ptr->art_flags.set(TR_RES_FIRE);
-        break;
-    }
+    constexpr static auto resistances = {
+        TR_RES_ACID,
+        TR_RES_ELEC,
+        TR_RES_COLD,
+        TR_RES_FIRE,
+    };
+
+    o_ptr->art_flags.set(rand_choice(resistances));
 }
 
 /*!
@@ -260,53 +238,25 @@ void one_dragon_ele_resistance(ItemEntity *o_ptr)
  */
 void one_high_resistance(ItemEntity *o_ptr)
 {
-    switch (randint0(15)) {
-    case 0:
-        o_ptr->art_flags.set(TR_RES_POIS);
-        break;
-    case 1:
-        o_ptr->art_flags.set(TR_RES_LITE);
-        break;
-    case 2:
-        o_ptr->art_flags.set(TR_RES_DARK);
-        break;
-    case 3:
-        o_ptr->art_flags.set(TR_RES_SHARDS);
-        break;
-    case 4:
-        o_ptr->art_flags.set(TR_RES_BLIND);
-        break;
-    case 5:
-        o_ptr->art_flags.set(TR_RES_CONF);
-        break;
-    case 6:
-        o_ptr->art_flags.set(TR_RES_SOUND);
-        break;
-    case 7:
-        o_ptr->art_flags.set(TR_RES_NETHER);
-        break;
-    case 8:
-        o_ptr->art_flags.set(TR_RES_NEXUS);
-        break;
-    case 9:
-        o_ptr->art_flags.set(TR_RES_CHAOS);
-        break;
-    case 10:
-        o_ptr->art_flags.set(TR_RES_DISEN);
-        break;
-    case 11:
-        o_ptr->art_flags.set(TR_RES_FEAR);
-        break;
-    case 12:
-        o_ptr->art_flags.set(TR_RES_TIME);
-        break;
-    case 13:
-        o_ptr->art_flags.set(TR_RES_WATER);
-        break;
-    case 14:
-        o_ptr->art_flags.set(TR_RES_CURSE);
-        break;
-    }
+    constexpr static auto high_resistances = {
+        TR_RES_POIS,
+        TR_RES_LITE,
+        TR_RES_DARK,
+        TR_RES_SHARDS,
+        TR_RES_BLIND,
+        TR_RES_CONF,
+        TR_RES_SOUND,
+        TR_RES_NETHER,
+        TR_RES_NEXUS,
+        TR_RES_CHAOS,
+        TR_RES_DISEN,
+        TR_RES_FEAR,
+        TR_RES_TIME,
+        TR_RES_WATER,
+        TR_RES_CURSE,
+    };
+
+    o_ptr->art_flags.set(rand_choice(high_resistances));
 }
 
 /*!
@@ -347,36 +297,23 @@ void one_resistance(ItemEntity *o_ptr)
  */
 void one_ability(ItemEntity *o_ptr)
 {
-    switch (randint0(10)) {
-    case 0:
-        o_ptr->art_flags.set(TR_LEVITATION);
-        break;
-    case 1:
-        o_ptr->art_flags.set(TR_LITE_1);
-        break;
-    case 2:
-        o_ptr->art_flags.set(TR_SEE_INVIS);
-        break;
-    case 3:
-        o_ptr->art_flags.set(TR_WARNING);
-        break;
-    case 4:
-        o_ptr->art_flags.set(TR_SLOW_DIGEST);
-        break;
-    case 5:
-        o_ptr->art_flags.set(TR_REGEN);
-        break;
-    case 6:
-        o_ptr->art_flags.set(TR_FREE_ACT);
-        break;
-    case 7:
-        o_ptr->art_flags.set(TR_HOLD_EXP);
-        break;
-    case 8:
-    case 9:
+    if (one_in_(5)) {
         one_low_esp(o_ptr);
-        break;
+        return;
     }
+
+    constexpr static auto abilities = {
+        TR_LEVITATION,
+        TR_LITE_1,
+        TR_SEE_INVIS,
+        TR_WARNING,
+        TR_SLOW_DIGEST,
+        TR_REGEN,
+        TR_FREE_ACT,
+        TR_HOLD_EXP,
+    };
+
+    o_ptr->art_flags.set(rand_choice(abilities));
 }
 
 /*!
@@ -387,38 +324,20 @@ void one_ability(ItemEntity *o_ptr)
  */
 void one_low_esp(ItemEntity *o_ptr)
 {
-    switch (randint1(10)) {
-    case 1:
-        o_ptr->art_flags.set(TR_ESP_ANIMAL);
-        break;
-    case 2:
-        o_ptr->art_flags.set(TR_ESP_UNDEAD);
-        break;
-    case 3:
-        o_ptr->art_flags.set(TR_ESP_DEMON);
-        break;
-    case 4:
-        o_ptr->art_flags.set(TR_ESP_ORC);
-        break;
-    case 5:
-        o_ptr->art_flags.set(TR_ESP_TROLL);
-        break;
-    case 6:
-        o_ptr->art_flags.set(TR_ESP_GIANT);
-        break;
-    case 7:
-        o_ptr->art_flags.set(TR_ESP_DRAGON);
-        break;
-    case 8:
-        o_ptr->art_flags.set(TR_ESP_HUMAN);
-        break;
-    case 9:
-        o_ptr->art_flags.set(TR_ESP_GOOD);
-        break;
-    case 10:
-        o_ptr->art_flags.set(TR_ESP_UNIQUE);
-        break;
-    }
+    constexpr static auto low_esps = {
+        TR_ESP_ANIMAL,
+        TR_ESP_UNDEAD,
+        TR_ESP_DEMON,
+        TR_ESP_ORC,
+        TR_ESP_TROLL,
+        TR_ESP_GIANT,
+        TR_ESP_DRAGON,
+        TR_ESP_HUMAN,
+        TR_ESP_GOOD,
+        TR_ESP_UNIQUE,
+    };
+
+    o_ptr->art_flags.set(rand_choice(low_esps));
 }
 
 /*!
@@ -549,47 +468,23 @@ void one_activation(ItemEntity *o_ptr)
  */
 void one_lordly_high_resistance(ItemEntity *o_ptr)
 {
-    switch (randint0(13)) {
-    case 0:
-        o_ptr->art_flags.set(TR_RES_LITE);
-        break;
-    case 1:
-        o_ptr->art_flags.set(TR_RES_DARK);
-        break;
-    case 2:
-        o_ptr->art_flags.set(TR_RES_SHARDS);
-        break;
-    case 3:
-        o_ptr->art_flags.set(TR_RES_BLIND);
-        break;
-    case 4:
-        o_ptr->art_flags.set(TR_RES_CONF);
-        break;
-    case 5:
-        o_ptr->art_flags.set(TR_RES_SOUND);
-        break;
-    case 6:
-        o_ptr->art_flags.set(TR_RES_NETHER);
-        break;
-    case 7:
-        o_ptr->art_flags.set(TR_RES_NEXUS);
-        break;
-    case 8:
-        o_ptr->art_flags.set(TR_RES_CHAOS);
-        break;
-    case 9:
-        o_ptr->art_flags.set(TR_RES_FEAR);
-        break;
-    case 10:
-        o_ptr->art_flags.set(TR_RES_TIME);
-        break;
-    case 11:
-        o_ptr->art_flags.set(TR_RES_WATER);
-        break;
-    case 12:
-        o_ptr->art_flags.set(TR_RES_CURSE);
-        break;
-    }
+    constexpr static auto lordly_high_resistances = {
+        TR_RES_LITE,
+        TR_RES_DARK,
+        TR_RES_SHARDS,
+        TR_RES_BLIND,
+        TR_RES_CONF,
+        TR_RES_SOUND,
+        TR_RES_NETHER,
+        TR_RES_NEXUS,
+        TR_RES_CHAOS,
+        TR_RES_FEAR,
+        TR_RES_TIME,
+        TR_RES_WATER,
+        TR_RES_CURSE,
+    };
+
+    o_ptr->art_flags.set(rand_choice(lordly_high_resistances));
 }
 
 /*!

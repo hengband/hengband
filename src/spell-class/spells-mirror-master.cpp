@@ -6,7 +6,6 @@
  */
 
 #include "spell-class/spells-mirror-master.h"
-#include "core/player-redraw-types.h"
 #include "core/stuff-handler.h"
 #include "dungeon/dungeon-flag-types.h"
 #include "effect/attribute-types.h"
@@ -32,6 +31,7 @@
 #include "system/grid-type-definition.h"
 #include "system/monster-entity.h"
 #include "system/player-type-definition.h"
+#include "system/redrawing-flags-updater.h"
 #include "system/terrain-type-definition.h"
 #include "target/grid-selector.h"
 #include "target/projection-path-calculator.h"
@@ -51,10 +51,11 @@ SpellsMirrorMaster::SpellsMirrorMaster(PlayerType *player_ptr)
 
 void SpellsMirrorMaster::remove_mirror(int y, int x)
 {
-    auto *g_ptr = &this->player_ptr->current_floor_ptr->grid_array[y][x];
+    auto &floor = *this->player_ptr->current_floor_ptr;
+    auto *g_ptr = &floor.grid_array[y][x];
     reset_bits(g_ptr->info, CAVE_OBJECT);
     g_ptr->mimic = 0;
-    if (dungeons_info[this->player_ptr->dungeon_idx].flags.has(DungeonFeatureType::DARKNESS)) {
+    if (dungeons_info[floor.dungeon_idx].flags.has(DungeonFeatureType::DARKNESS)) {
         reset_bits(g_ptr->info, CAVE_GLOW);
         if (!view_torch_grids) {
             reset_bits(g_ptr->info, CAVE_MARK);
@@ -170,7 +171,7 @@ bool SpellsMirrorMaster::mirror_concentration()
         this->player_ptr->csp_frac = 0;
     }
 
-    set_bits(this->player_ptr->redraw, PR_MP);
+    RedrawingFlagsUpdater::get_instance().set_flag(MainWindowRedrawingFlag::MP);
     return true;
 }
 

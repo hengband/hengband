@@ -1,7 +1,6 @@
 ﻿#include "hpmp/hp-mp-processor.h"
 #include "avatar/avatar.h"
 #include "cmd-action/cmd-pet.h"
-#include "core/player-redraw-types.h"
 #include "core/window-redrawer.h"
 #include "flavor/flavor-describer.h"
 #include "flavor/object-flavor-types.h"
@@ -42,6 +41,7 @@
 #include "system/monster-entity.h"
 #include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
+#include "system/redrawing-flags-updater.h"
 #include "system/terrain-type-definition.h"
 #include "timed-effect/player-cut.h"
 #include "timed-effect/player-poison.h"
@@ -91,7 +91,7 @@ static bool deal_damege_by_feat(PlayerType *player_ptr, grid_type *g_ptr, concpt
     if (player_ptr->levitation) {
         msg_print(msg_levitation);
         constexpr auto mes = _("%sの上に浮遊したダメージ", "flying over %s");
-        take_hit(player_ptr, DAMAGE_NOESCAPE, damage, format(mes, terrains_info[g_ptr->get_feat_mimic()].name.data()).data());
+        take_hit(player_ptr, DAMAGE_NOESCAPE, damage, format(mes, terrains_info[g_ptr->get_feat_mimic()].name.data()));
 
         if (additional_effect != nullptr) {
             additional_effect(player_ptr, damage);
@@ -159,7 +159,7 @@ void process_player_hp_mp(PlayerType *player_ptr)
                 const auto wielding_item_name = describe_flavor(player_ptr, o_ptr, OD_NAME_ONLY);
                 std::stringstream ss;
                 ss << _(wielding_item_name, "wielding ") << _("を装備したダメージ", wielding_item_name);
-                take_hit(player_ptr, DAMAGE_NOESCAPE, 1, ss.str().data());
+                take_hit(player_ptr, DAMAGE_NOESCAPE, 1, ss.str());
             }
         }
     }
@@ -457,7 +457,8 @@ bool hp_player(PlayerType *player_ptr, int num)
             player_ptr->chp_frac = 0;
         }
 
-        player_ptr->redraw |= (PR_HP);
+        auto &rfu = RedrawingFlagsUpdater::get_instance();
+        rfu.set_flag(MainWindowRedrawingFlag::HP);
         player_ptr->window_flags |= (PW_PLAYER);
         if (num < 5) {
             msg_print(_("少し気分が良くなった。", "You feel a little better."));

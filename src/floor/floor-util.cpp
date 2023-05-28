@@ -210,6 +210,6 @@ std::string map_name(PlayerType *player_ptr)
     } else if (!floor_ptr->dun_level && player_ptr->town_num) {
         return towns_info[player_ptr->town_num].name;
     } else {
-        return dungeons_info[player_ptr->dungeon_idx].name;
+        return dungeons_info[floor_ptr->dungeon_idx].name;
     }
 }

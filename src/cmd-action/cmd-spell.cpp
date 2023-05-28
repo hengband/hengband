@@ -12,8 +12,6 @@
 #include "cmd-action/cmd-mind.h"
 #include "cmd-io/cmd-dump.h"
 #include "core/asking-player.h"
-#include "core/player-redraw-types.h"
-#include "core/player-update-types.h"
 #include "core/stuff-handler.h"
 #include "core/window-redrawer.h"
 #include "floor/floor-object.h"
@@ -62,6 +60,7 @@
 #include "system/floor-type-definition.h"
 #include "system/item-entity.h"
 #include "system/player-type-definition.h"
+#include "system/redrawing-flags-updater.h"
 #include "term/screen-processor.h"
 #include "term/z-form.h"
 #include "timed-effect/player-blindness.h"
@@ -305,7 +304,7 @@ static bool spell_okay(PlayerType *player_ptr, int spell, bool learned, bool stu
  * The "known" should be TRUE for cast/pray, FALSE for study
  * </pre>
  */
-static int get_spell(PlayerType *player_ptr, SPELL_IDX *sn, concptr prompt, OBJECT_SUBTYPE_VALUE sval, bool learned, int16_t use_realm)
+static int get_spell(PlayerType *player_ptr, SPELL_IDX *sn, concptr prompt, int sval, bool learned, int16_t use_realm)
 {
     int i;
     SPELL_IDX spell = -1;
@@ -680,8 +679,6 @@ void do_cmd_browse(PlayerType *player_ptr)
 static void change_realm2(PlayerType *player_ptr, int16_t next_realm)
 {
     int i, j = 0;
-    char tmp[80];
-
     for (i = 0; i < 64; i++) {
         player_ptr->spell_order[j] = player_ptr->spell_order[i];
         if (player_ptr->spell_order[i] < 32) {
@@ -699,14 +696,17 @@ static void change_realm2(PlayerType *player_ptr, int16_t next_realm)
     player_ptr->spell_worked2 = 0L;
     player_ptr->spell_forgotten2 = 0L;
 
-    constexpr auto mes = _("魔法の領域を%sから%sに変更した。", "changed magic realm from %s to %s.");
-    strnfmt(tmp, sizeof(tmp), mes, realm_names[player_ptr->realm2], realm_names[next_realm]);
-    exe_write_diary(player_ptr, DIARY_DESCRIPTION, 0, tmp);
+    constexpr auto fmt_realm = _("魔法の領域を%sから%sに変更した。", "changed magic realm from %s to %s.");
+    const auto mes = format(fmt_realm, realm_names[player_ptr->realm2], realm_names[next_realm]);
+    exe_write_diary(player_ptr, DIARY_DESCRIPTION, 0, mes);
     player_ptr->old_realm |= 1U << (player_ptr->realm2 - 1);
     player_ptr->realm2 = next_realm;
 
-    player_ptr->update |= (PU_REORDER);
-    player_ptr->update |= (PU_SPELLS);
+    const auto flags = {
+        StatusRedrawingFlag::REORDER,
+        StatusRedrawingFlag::SPELLS,
+    };
+    RedrawingFlagsUpdater::get_instance().set_flags(flags);
     handle_stuff(player_ptr);
 
     /* Load an autopick preference file */
@@ -916,8 +916,8 @@ void do_cmd_study(PlayerType *player_ptr)
     /* One less spell available */
     player_ptr->learned_spells++;
 
-    /* Update Study */
-    player_ptr->update |= (PU_SPELLS);
+    auto &rfu = RedrawingFlagsUpdater::get_instance();
+    rfu.set_flag(StatusRedrawingFlag::SPELLS);
     update_creature(player_ptr);
 
     /* Redraw object recall */
@@ -1320,7 +1320,8 @@ bool do_cmd_cast(PlayerType *player_ptr)
     } else {
         over_exerted = true;
     }
-    player_ptr->redraw |= (PR_MP);
+
+    RedrawingFlagsUpdater::get_instance().set_flag(MainWindowRedrawingFlag::MP);
 
     /* Over-exert the player */
     if (over_exerted) {

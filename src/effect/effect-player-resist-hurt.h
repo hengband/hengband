@@ -1,11 +1,11 @@
 ﻿#pragma once
 
-#include "system/angband.h"
+#include <string_view>
 
 class EffectPlayerType;
 class PlayerType;
 void effect_player_elements(
-    PlayerType *player_ptr, EffectPlayerType *ep_ptr, concptr attack_message, int (*damage_func)(PlayerType *, int, concptr, bool));
+    PlayerType *player_ptr, EffectPlayerType *ep_ptr, std::string_view attack_message, int (*damage_func)(PlayerType *, int, std::string_view, bool));
 void effect_player_poison(PlayerType *player_ptr, EffectPlayerType *ep_ptr);
 void effect_player_nuke(PlayerType *player_ptr, EffectPlayerType *ep_ptr);
 void effect_player_missile(PlayerType *player_ptr, EffectPlayerType *ep_ptr);

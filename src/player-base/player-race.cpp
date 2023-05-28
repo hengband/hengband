@@ -248,3 +248,24 @@ int16_t PlayerRace::additional_constitution() const
 
     return result;
 }
+
+/*!
+ * @brief 救援召喚時のモンスターシンボルを返す
+ * @param player_ptr プレイヤー情報への参照ポインタ
+ * @return シンボル文字
+ */
+char PlayerRace::get_summon_symbol() const
+{
+    auto symbol = 'N';
+    auto mmc_ptr = this->get_info();
+
+    auto l = strlen(mmc_ptr->symbol);
+    auto mul = 1;
+    for (size_t i = 0; i < l; i++) {
+        if (one_in_(mul)) {
+            symbol = mmc_ptr->symbol[i];
+        }
+        mul *= 13;
+    }
+    return symbol;
+}

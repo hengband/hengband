@@ -8,4 +8,5 @@
 
 class PlayerType;
 void init_other(PlayerType *player_ptr);
-void init_alloc(void);
+void init_monsters_alloc();
+void init_items_alloc();

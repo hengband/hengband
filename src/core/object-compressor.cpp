@@ -1,5 +1,4 @@
 ﻿#include "core/object-compressor.h"
-#include "core/player-redraw-types.h"
 #include "core/window-redrawer.h"
 #include "floor/floor-object.h"
 #include "floor/geometry.h"
@@ -9,6 +8,7 @@
 #include "system/item-entity.h"
 #include "system/monster-entity.h"
 #include "system/player-type-definition.h"
+#include "system/redrawing-flags-updater.h"
 #include "view/display-messages.h"
 #include <algorithm>
 
@@ -56,7 +56,8 @@ void compact_objects(PlayerType *player_ptr, int size)
     ItemEntity *o_ptr;
     if (size) {
         msg_print(_("アイテム情報を圧縮しています...", "Compacting objects..."));
-        player_ptr->redraw |= PR_MAP;
+        auto &rfu = RedrawingFlagsUpdater::get_instance();
+        rfu.set_flag(MainWindowRedrawingFlag::MAP);
         player_ptr->window_flags |= PW_OVERHEAD | PW_DUNGEON;
     }
 

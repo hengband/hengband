@@ -4,7 +4,6 @@
  * @author Hourier
  */
 #include "core/window-redrawer.h"
-#include "core/player-redraw-types.h"
 #include "core/stuff-handler.h"
 #include "floor/floor-util.h"
 #include "game-option/option-flags.h"
@@ -12,6 +11,7 @@
 #include "player-base/player-class.h"
 #include "player-info/race-info.h"
 #include "system/player-type-definition.h"
+#include "system/redrawing-flags-updater.h"
 #include "term/gameterm.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
@@ -68,7 +68,8 @@ static void print_dungeon(PlayerType *player_ptr)
  */
 void redraw_stuff(PlayerType *player_ptr)
 {
-    if (!player_ptr->redraw) {
+    auto &rfu = RedrawingFlagsUpdater::get_instance();
+    if (!rfu.any_main()) {
         return;
     }
 
@@ -80,55 +81,60 @@ void redraw_stuff(PlayerType *player_ptr)
         return;
     }
 
-    if (player_ptr->redraw & (PR_WIPE)) {
-        player_ptr->redraw &= ~(PR_WIPE);
+    if (rfu.has(MainWindowRedrawingFlag::WIPE)) {
+        rfu.reset_flag(MainWindowRedrawingFlag::WIPE);
         msg_print(nullptr);
         term_clear();
     }
 
-    if (player_ptr->redraw & (PR_MAP)) {
-        player_ptr->redraw &= ~(PR_MAP);
+    if (rfu.has(MainWindowRedrawingFlag::MAP)) {
+        rfu.reset_flag(MainWindowRedrawingFlag::MAP);
         print_map(player_ptr);
     }
 
-    if (player_ptr->redraw & (PR_BASIC)) {
-        player_ptr->redraw &= ~(PR_BASIC);
-        player_ptr->redraw &= ~(PR_MISC | PR_TITLE | PR_ABILITY_SCORE);
-        player_ptr->redraw &= ~(PR_LEVEL | PR_EXP | PR_GOLD);
-        player_ptr->redraw &= ~(PR_AC | PR_HP | PR_MP);
-        player_ptr->redraw &= ~(PR_DEPTH | PR_HEALTH | PR_UHEALTH);
+    if (rfu.has(MainWindowRedrawingFlag::BASIC)) {
+        const auto flags = {
+            MainWindowRedrawingFlag::BASIC,
+            MainWindowRedrawingFlag::TITLE,
+            MainWindowRedrawingFlag::ABILITY_SCORE,
+            MainWindowRedrawingFlag::LEVEL,
+            MainWindowRedrawingFlag::EXP,
+            MainWindowRedrawingFlag::GOLD,
+            MainWindowRedrawingFlag::AC,
+            MainWindowRedrawingFlag::HP,
+            MainWindowRedrawingFlag::MP,
+            MainWindowRedrawingFlag::DEPTH,
+            MainWindowRedrawingFlag::HEALTH,
+            MainWindowRedrawingFlag::UHEALTH,
+        };
+        rfu.reset_flags(flags);
         print_frame_basic(player_ptr);
         WorldTurnProcessor(player_ptr).print_time();
         print_dungeon(player_ptr);
     }
 
-    if (player_ptr->redraw & (PR_EQUIPPY)) {
-        player_ptr->redraw &= ~(PR_EQUIPPY);
+    if (rfu.has(MainWindowRedrawingFlag::EQUIPPY)) {
+        rfu.reset_flag(MainWindowRedrawingFlag::EQUIPPY);
         display_player_equippy(player_ptr, ROW_EQUIPPY, COL_EQUIPPY, 0);
     }
 
-    if (player_ptr->redraw & (PR_MISC)) {
-        player_ptr->redraw &= ~(PR_MISC);
-        print_field(rp_ptr->title, ROW_RACE, COL_RACE);
-    }
-
-    if (player_ptr->redraw & (PR_TITLE)) {
-        player_ptr->redraw &= ~(PR_TITLE);
+    if (rfu.has(MainWindowRedrawingFlag::TITLE)) {
+        rfu.reset_flag(MainWindowRedrawingFlag::TITLE);
         print_title(player_ptr);
     }
 
-    if (player_ptr->redraw & (PR_LEVEL)) {
-        player_ptr->redraw &= ~(PR_LEVEL);
+    if (rfu.has(MainWindowRedrawingFlag::LEVEL)) {
+        rfu.reset_flag(MainWindowRedrawingFlag::LEVEL);
         print_level(player_ptr);
     }
 
-    if (player_ptr->redraw & (PR_EXP)) {
-        player_ptr->redraw &= ~(PR_EXP);
+    if (rfu.has(MainWindowRedrawingFlag::EXP)) {
+        rfu.reset_flag(MainWindowRedrawingFlag::EXP);
         print_exp(player_ptr);
     }
 
-    if (player_ptr->redraw & (PR_ABILITY_SCORE)) {
-        player_ptr->redraw &= ~(PR_ABILITY_SCORE);
+    if (rfu.has(MainWindowRedrawingFlag::ABILITY_SCORE)) {
+        rfu.reset_flag(MainWindowRedrawingFlag::ABILITY_SCORE);
         print_stat(player_ptr, A_STR);
         print_stat(player_ptr, A_INT);
         print_stat(player_ptr, A_WIS);
@@ -137,90 +143,98 @@ void redraw_stuff(PlayerType *player_ptr)
         print_stat(player_ptr, A_CHR);
     }
 
-    if (player_ptr->redraw & (PR_TIMED_EFFECT)) {
-        player_ptr->redraw &= ~(PR_TIMED_EFFECT);
+    if (rfu.has(MainWindowRedrawingFlag::TIMED_EFFECT)) {
+        rfu.reset_flag(MainWindowRedrawingFlag::TIMED_EFFECT);
         print_status(player_ptr);
     }
 
-    if (player_ptr->redraw & (PR_AC)) {
-        player_ptr->redraw &= ~(PR_AC);
+    if (rfu.has(MainWindowRedrawingFlag::AC)) {
+        rfu.reset_flag(MainWindowRedrawingFlag::AC);
         print_ac(player_ptr);
     }
 
-    if (player_ptr->redraw & (PR_HP)) {
-        player_ptr->redraw &= ~(PR_HP);
+    if (rfu.has(MainWindowRedrawingFlag::HP)) {
+        rfu.reset_flag(MainWindowRedrawingFlag::HP);
         print_hp(player_ptr);
     }
 
-    if (player_ptr->redraw & (PR_MP)) {
-        player_ptr->redraw &= ~(PR_MP);
+    if (rfu.has(MainWindowRedrawingFlag::MP)) {
+        rfu.reset_flag(MainWindowRedrawingFlag::MP);
         print_sp(player_ptr);
     }
 
-    if (player_ptr->redraw & (PR_GOLD)) {
-        player_ptr->redraw &= ~(PR_GOLD);
+    if (rfu.has(MainWindowRedrawingFlag::GOLD)) {
+        rfu.reset_flag(MainWindowRedrawingFlag::GOLD);
         print_gold(player_ptr);
     }
 
-    if (player_ptr->redraw & (PR_DEPTH)) {
-        player_ptr->redraw &= ~(PR_DEPTH);
+    if (rfu.has(MainWindowRedrawingFlag::DEPTH)) {
+        rfu.reset_flag(MainWindowRedrawingFlag::DEPTH);
         print_depth(player_ptr);
     }
 
-    if (player_ptr->redraw & (PR_UHEALTH)) {
-        player_ptr->redraw &= ~(PR_UHEALTH);
+    if (rfu.has(MainWindowRedrawingFlag::UHEALTH)) {
+        rfu.reset_flag(MainWindowRedrawingFlag::UHEALTH);
         print_health(player_ptr, true);
     }
 
-    if (player_ptr->redraw & (PR_HEALTH)) {
-        player_ptr->redraw &= ~(PR_HEALTH);
+    if (rfu.has(MainWindowRedrawingFlag::HEALTH)) {
+        rfu.reset_flag(MainWindowRedrawingFlag::HEALTH);
         print_health(player_ptr, false);
     }
 
-    if (player_ptr->redraw & (PR_EXTRA)) {
-        player_ptr->redraw &= ~(PR_EXTRA);
-        player_ptr->redraw &= ~(PR_CUT | PR_STUN);
-        player_ptr->redraw &= ~(PR_HUNGER);
-        player_ptr->redraw &= ~(PR_ACTION | PR_SPEED | PR_STUDY | PR_IMITATION | PR_TIMED_EFFECT);
+    if (rfu.has(MainWindowRedrawingFlag::EXTRA)) {
+        const auto flags = {
+            MainWindowRedrawingFlag::EXTRA,
+            MainWindowRedrawingFlag::CUT,
+            MainWindowRedrawingFlag::STUN,
+            MainWindowRedrawingFlag::HUNGER,
+            MainWindowRedrawingFlag::ACTION,
+            MainWindowRedrawingFlag::SPEED,
+            MainWindowRedrawingFlag::STUDY,
+            MainWindowRedrawingFlag::IMITATION,
+            MainWindowRedrawingFlag::TIMED_EFFECT,
+        };
+        rfu.reset_flags(flags);
         print_frame_extra(player_ptr);
     }
 
-    if (player_ptr->redraw & (PR_CUT)) {
-        player_ptr->redraw &= ~(PR_CUT);
+    if (rfu.has(MainWindowRedrawingFlag::CUT)) {
+        rfu.reset_flag(MainWindowRedrawingFlag::CUT);
         print_cut(player_ptr);
     }
 
-    if (player_ptr->redraw & (PR_STUN)) {
-        player_ptr->redraw &= ~(PR_STUN);
+    if (rfu.has(MainWindowRedrawingFlag::STUN)) {
+        rfu.reset_flag(MainWindowRedrawingFlag::STUN);
         print_stun(player_ptr);
     }
 
-    if (player_ptr->redraw & (PR_HUNGER)) {
-        player_ptr->redraw &= ~(PR_HUNGER);
+    if (rfu.has(MainWindowRedrawingFlag::HUNGER)) {
+        rfu.reset_flag(MainWindowRedrawingFlag::HUNGER);
         print_hunger(player_ptr);
     }
 
-    if (player_ptr->redraw & (PR_ACTION)) {
-        player_ptr->redraw &= ~(PR_ACTION);
+    if (rfu.has(MainWindowRedrawingFlag::ACTION)) {
+        rfu.reset_flag(MainWindowRedrawingFlag::ACTION);
         print_state(player_ptr);
     }
 
-    if (player_ptr->redraw & (PR_SPEED)) {
-        player_ptr->redraw &= ~(PR_SPEED);
+    if (rfu.has(MainWindowRedrawingFlag::SPEED)) {
+        rfu.reset_flag(MainWindowRedrawingFlag::SPEED);
         print_speed(player_ptr);
     }
 
     if (PlayerClass(player_ptr).equals(PlayerClassType::IMITATOR)) {
-        if (player_ptr->redraw & (PR_IMITATION)) {
-            player_ptr->redraw &= ~(PR_IMITATION);
+        if (rfu.has(MainWindowRedrawingFlag::IMITATION)) {
+            rfu.reset_flag(MainWindowRedrawingFlag::IMITATION);
             print_imitation(player_ptr);
         }
 
         return;
     }
 
-    if (player_ptr->redraw & (PR_STUDY)) {
-        player_ptr->redraw &= ~(PR_STUDY);
+    if (rfu.has(MainWindowRedrawingFlag::STUDY)) {
+        rfu.reset_flag(MainWindowRedrawingFlag::STUDY);
         print_study(player_ptr);
     }
 }

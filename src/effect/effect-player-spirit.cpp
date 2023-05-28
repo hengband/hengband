@@ -1,6 +1,5 @@
 ﻿#include "effect/effect-player-spirit.h"
 #include "blue-magic/blue-magic-checker.h"
-#include "core/player-redraw-types.h"
 #include "core/window-redrawer.h"
 #include "effect/effect-player.h"
 #include "mind/mind-mirror-master.h"
@@ -10,6 +9,7 @@
 #include "status/base-status.h"
 #include "system/monster-entity.h"
 #include "system/player-type-definition.h"
+#include "system/redrawing-flags-updater.h"
 #include "view/display-messages.h"
 #include "world/world.h"
 
@@ -40,7 +40,8 @@ void effect_player_drain_mana(PlayerType *player_ptr, EffectPlayerType *ep_ptr)
         player_ptr->csp -= ep_ptr->dam;
     }
 
-    player_ptr->redraw |= (PR_MP);
+    auto &rfu = RedrawingFlagsUpdater::get_instance();
+    rfu.set_flag(MainWindowRedrawingFlag::MP);
     player_ptr->window_flags |= (PW_PLAYER | PW_SPELL);
 
     if ((ep_ptr->who <= 0) || (ep_ptr->m_ptr->hp >= ep_ptr->m_ptr->maxhp)) {
@@ -54,10 +55,10 @@ void effect_player_drain_mana(PlayerType *player_ptr, EffectPlayerType *ep_ptr)
     }
 
     if (player_ptr->health_who == ep_ptr->who) {
-        player_ptr->redraw |= (PR_HEALTH);
+        rfu.set_flag(MainWindowRedrawingFlag::HEALTH);
     }
     if (player_ptr->riding == ep_ptr->who) {
-        player_ptr->redraw |= (PR_UHEALTH);
+        rfu.set_flag(MainWindowRedrawingFlag::UHEALTH);
     }
 
     if (ep_ptr->m_ptr->ml) {
@@ -95,7 +96,7 @@ void effect_player_mind_blast(PlayerType *player_ptr, EffectPlayerType *ep_ptr)
         player_ptr->csp_frac = 0;
     }
 
-    player_ptr->redraw |= PR_MP;
+    RedrawingFlagsUpdater::get_instance().set_flag(MainWindowRedrawingFlag::MP);
     ep_ptr->get_damage = take_hit(player_ptr, DAMAGE_ATTACK, ep_ptr->dam, ep_ptr->killer);
 }
 
@@ -108,13 +109,13 @@ void effect_player_brain_smash(PlayerType *player_ptr, EffectPlayerType *ep_ptr)
 
     if (!check_multishadow(player_ptr)) {
         msg_print(_("霊的エネルギーで精神が攻撃された。", "Your mind is blasted by psionic energy."));
-
         player_ptr->csp -= 100;
         if (player_ptr->csp < 0) {
             player_ptr->csp = 0;
             player_ptr->csp_frac = 0;
         }
-        player_ptr->redraw |= PR_MP;
+
+        RedrawingFlagsUpdater::get_instance().set_flag(MainWindowRedrawingFlag::MP);
     }
 
     ep_ptr->get_damage = take_hit(player_ptr, DAMAGE_ATTACK, ep_ptr->dam, ep_ptr->killer);

@@ -70,7 +70,6 @@ public:
     int16_t arena_number{}; /* monster number in on_defeat_arena_monster -KMW- */
     bool phase_out{}; /*!< フェイズアウト状態(闘技場観戦状態などに利用、NPCの処理の対象にならず自身もほとんどの行動ができない) */
 
-    DUNGEON_IDX dungeon_idx{}; /* current dungeon index */
     POSITION wilderness_x{}; /* Coordinates in the wilderness */
     POSITION wilderness_y{};
     bool wild_mode{};
@@ -86,9 +85,9 @@ public:
 
     int16_t max_plv{}; /* Max Player Level */
 
-    BASE_STATUS stat_max[A_MAX]{}; /* Current "maximal" stat values */
-    BASE_STATUS stat_max_max[A_MAX]{}; /* Maximal "maximal" stat values */
-    BASE_STATUS stat_cur[A_MAX]{}; /* Current "natural" stat values */
+    short stat_max[A_MAX]{}; /* Current "maximal" stat values */
+    short stat_max_max[A_MAX]{}; /* Maximal "maximal" stat values */
+    short stat_cur[A_MAX]{}; /* Current "natural" stat values */
 
     int16_t learned_spells{};
     int16_t add_spells{};
@@ -282,8 +281,6 @@ public:
 
     POSITION cur_lite{}; /* Radius of lite (if any) */
 
-    BIT_FLAGS update{}; /* Pending Updates */
-    BIT_FLAGS redraw{}; /* Normal Redraws */
     BIT_FLAGS window_flags{}; /* Window Redraws */
     int16_t stat_use[A_MAX]{}; /* Current modified stats */
     int16_t stat_top[A_MAX]{}; /* Maximal modified stats */
@@ -411,6 +408,8 @@ public:
 
     std::shared_ptr<TimedEffects> effects() const;
     bool is_fully_healthy() const;
+    std::string decrease_ability_random();
+    std::string decrease_ability_all();
 
 private:
     std::shared_ptr<TimedEffects> timed_effects;

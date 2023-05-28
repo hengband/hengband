@@ -92,23 +92,25 @@ bool know_armour(MonsterRaceId r_idx, const bool know_everything)
  */
 bool know_damage(MonsterRaceId r_idx, int i)
 {
-    auto *r_ptr = &monraces_info[r_idx];
-    DEPTH level = r_ptr->level;
-    int32_t a = r_ptr->r_blows[i];
-
-    int32_t d1 = r_ptr->blow[i].d_dice;
-    int32_t d2 = r_ptr->blow[i].d_side;
-    int32_t d = d1 * d2;
+    const auto &monrace = monraces_info[r_idx];
+    auto level = monrace.level;
+    auto a = monrace.r_blows[i];
+    auto d1 = monrace.blows[i].d_dice;
+    auto d2 = monrace.blows[i].d_side;
+    auto d = d1 * d2;
 
     if (d >= ((4 + level) * MAX_UCHAR) / 80) {
         d = ((4 + level) * MAX_UCHAR - 1) / 80;
     }
+
     if ((4 + level) * a > 80 * d) {
         return true;
     }
-    if (r_ptr->kind_flags.has_not(MonsterKindType::UNIQUE)) {
+
+    if (monrace.kind_flags.has_not(MonsterKindType::UNIQUE)) {
         return false;
     }
+
     if ((4 + level) * (2 * a) > 80 * d) {
         return true;
     }

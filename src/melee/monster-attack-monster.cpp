@@ -8,7 +8,6 @@
 #include "combat/attack-accuracy.h"
 #include "combat/hallucination-attacks-table.h"
 #include "core/disturbance.h"
-#include "core/player-redraw-types.h"
 #include "dungeon/dungeon-flag-types.h"
 #include "effect/attribute-types.h"
 #include "effect/effect-characteristics.h"
@@ -36,12 +35,13 @@
 #include "system/monster-entity.h"
 #include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
+#include "system/redrawing-flags-updater.h"
 #include "util/string-processor.h"
 #include "view/display-messages.h"
 
 static void heal_monster_by_melee(PlayerType *player_ptr, mam_type *mam_ptr)
 {
-    if (!monster_living(mam_ptr->t_ptr->r_idx) || (mam_ptr->damage <= 2)) {
+    if (!mam_ptr->t_ptr->has_living_flag() || (mam_ptr->damage <= 2)) {
         return;
     }
 
@@ -51,12 +51,13 @@ static void heal_monster_by_melee(PlayerType *player_ptr, mam_type *mam_ptr)
         mam_ptr->m_ptr->hp = mam_ptr->m_ptr->maxhp;
     }
 
+    auto &rfu = RedrawingFlagsUpdater::get_instance();
     if (player_ptr->health_who == mam_ptr->m_idx) {
-        player_ptr->redraw |= (PR_HEALTH);
+        rfu.set_flag(MainWindowRedrawingFlag::HEALTH);
     }
 
     if (player_ptr->riding == mam_ptr->m_idx) {
-        player_ptr->redraw |= (PR_UHEALTH);
+        rfu.set_flag(MainWindowRedrawingFlag::UHEALTH);
     }
 
     if (mam_ptr->see_m && did_heal) {
@@ -175,7 +176,7 @@ static bool check_same_monster(PlayerType *player_ptr, mam_type *mam_ptr)
         return false;
     }
 
-    if (dungeons_info[player_ptr->dungeon_idx].flags.has(DungeonFeatureType::NO_MELEE)) {
+    if (dungeons_info[player_ptr->current_floor_ptr->dungeon_idx].flags.has(DungeonFeatureType::NO_MELEE)) {
         return false;
     }
 
@@ -188,12 +189,13 @@ static void redraw_health_bar(PlayerType *player_ptr, mam_type *mam_ptr)
         return;
     }
 
+    auto &rfu = RedrawingFlagsUpdater::get_instance();
     if (player_ptr->health_who == mam_ptr->t_idx) {
-        player_ptr->redraw |= (PR_HEALTH);
+        rfu.set_flag(MainWindowRedrawingFlag::HEALTH);
     }
 
     if (player_ptr->riding == mam_ptr->t_idx) {
-        player_ptr->redraw |= (PR_UHEALTH);
+        rfu.set_flag(MainWindowRedrawingFlag::UHEALTH);
     }
 }
 
@@ -206,14 +208,14 @@ static void describe_silly_melee(mam_type *mam_ptr)
 
 #ifdef JP
     if (mam_ptr->do_silly_attack) {
-        mam_ptr->act = silly_attacks2[randint0(MAX_SILLY_ATTACK)];
+        mam_ptr->act = rand_choice(silly_attacks2);
     }
 
     strnfmt(temp, sizeof(temp), mam_ptr->act, mam_ptr->t_name);
     msg_format("%s^は%s", mam_ptr->m_name, temp);
 #else
     if (mam_ptr->do_silly_attack) {
-        mam_ptr->act = silly_attacks[randint0(MAX_SILLY_ATTACK)];
+        mam_ptr->act = rand_choice(silly_attacks);
         strnfmt(temp, sizeof(temp), "%s %s.", mam_ptr->act, mam_ptr->t_name);
     } else {
         strnfmt(temp, sizeof(temp), mam_ptr->act, mam_ptr->t_name);
@@ -306,10 +308,10 @@ void repeat_melee(PlayerType *player_ptr, mam_type *mam_ptr)
     const auto *m_ptr = mam_ptr->m_ptr;
     auto *r_ptr = &monraces_info[m_ptr->r_idx];
     for (int ap_cnt = 0; ap_cnt < MAX_NUM_BLOWS; ap_cnt++) {
-        mam_ptr->effect = r_ptr->blow[ap_cnt].effect;
-        mam_ptr->method = r_ptr->blow[ap_cnt].method;
-        mam_ptr->d_dice = r_ptr->blow[ap_cnt].d_dice;
-        mam_ptr->d_side = r_ptr->blow[ap_cnt].d_side;
+        mam_ptr->effect = r_ptr->blows[ap_cnt].effect;
+        mam_ptr->method = r_ptr->blows[ap_cnt].method;
+        mam_ptr->d_dice = r_ptr->blows[ap_cnt].d_dice;
+        mam_ptr->d_side = r_ptr->blows[ap_cnt].d_side;
 
         if (!m_ptr->is_valid()) {
             break;

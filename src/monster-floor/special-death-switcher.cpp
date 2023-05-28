@@ -168,24 +168,24 @@ static void on_dead_sacred_treasures(PlayerType *player_ptr, monster_death_type 
         return;
     }
 
-    FixedArtifactId a_idx = FixedArtifactId::NONE;
-    ArtifactType *a_ptr = nullptr;
-    do {
-        switch (randint0(3)) {
-        case 0:
-            a_idx = FixedArtifactId::NAMAKE_HAMMER;
-            break;
-        case 1:
-            a_idx = FixedArtifactId::NAMAKE_BOW;
-            break;
-        case 2:
-            a_idx = FixedArtifactId::NAMAKE_ARMOR;
-            break;
-        }
+    constexpr static auto namake_equipments = {
+        FixedArtifactId::NAMAKE_HAMMER,
+        FixedArtifactId::NAMAKE_BOW,
+        FixedArtifactId::NAMAKE_ARMOR
+    };
 
-        a_ptr = &ArtifactsInfo::get_instance().get_artifact(a_idx);
-    } while (a_ptr->is_generated);
+    std::vector<FixedArtifactId> candidates;
+    std::copy_if(namake_equipments.begin(), namake_equipments.end(), std::back_inserter(candidates),
+        [](FixedArtifactId a_idx) {
+            const auto &artifact = ArtifactsInfo::get_instance().get_artifact(a_idx);
+            return !artifact.is_generated;
+        });
 
+    if (candidates.empty()) {
+        return;
+    }
+
+    const auto a_idx = rand_choice(candidates);
     create_named_art(player_ptr, a_idx, md_ptr->md_y, md_ptr->md_x);
 }
 

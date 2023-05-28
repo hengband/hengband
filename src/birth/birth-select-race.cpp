@@ -161,7 +161,7 @@ static bool select_race(PlayerType *player_ptr, char *sym, int *k)
             *k = -1;
         }
 
-        birth_help_option(player_ptr, c, BK_RACE);
+        birth_help_option(player_ptr, c, BirthKind::RACE);
     }
 
     return true;

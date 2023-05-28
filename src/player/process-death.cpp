@@ -8,7 +8,6 @@
 
 #include "player/process-death.h"
 #include "core/asking-player.h"
-#include "core/player-update-types.h"
 #include "core/stuff-handler.h"
 #include "flavor/flavor-describer.h"
 #include "floor/floor-town.h"
@@ -25,6 +24,7 @@
 #include "system/floor-type-definition.h"
 #include "system/item-entity.h"
 #include "system/player-type-definition.h"
+#include "system/redrawing-flags-updater.h"
 #include "term/gameterm.h"
 #include "term/screen-processor.h"
 #include "util/buffer-shaper.h"
@@ -381,7 +381,7 @@ void show_death_info(PlayerType *player_ptr)
     inventory_aware(player_ptr);
     home_aware(player_ptr);
 
-    player_ptr->update |= (PU_BONUS);
+    RedrawingFlagsUpdater::get_instance().set_flag(StatusRedrawingFlag::BONUS);
     handle_stuff(player_ptr);
     flush();
     msg_erase();

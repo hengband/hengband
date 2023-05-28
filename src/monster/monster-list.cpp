@@ -10,7 +10,6 @@
  */
 
 #include "monster/monster-list.h"
-#include "core/player-update-types.h"
 #include "core/speed-table.h"
 #include "dungeon/dungeon-flag-types.h"
 #include "floor/cave.h"
@@ -42,6 +41,7 @@
 #include "system/monster-entity.h"
 #include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
+#include "system/redrawing-flags-updater.h"
 #include "util/probability-table.h"
 #include "view/display-messages.h"
 #include "world/world.h"
@@ -115,7 +115,8 @@ MonsterRaceId get_mon_num(PlayerType *player_ptr, DEPTH min_level, DEPTH max_lev
     constexpr auto max_depth_nasty_monster = 25;
     auto chance_nasty = std::max(max_num_nasty_monsters, chance_nasty_monster - over_days / 2);
     auto nasty_level = std::min(max_depth_nasty_monster, over_days / 3);
-    if (dungeons_info[player_ptr->dungeon_idx].flags.has(DungeonFeatureType::MAZE)) {
+    const auto &floor = *player_ptr->current_floor_ptr;
+    if (dungeons_info[floor.dungeon_idx].flags.has(DungeonFeatureType::MAZE)) {
         chance_nasty = std::min(chance_nasty / 2, chance_nasty - 10);
         if (chance_nasty < 2) {
             chance_nasty = 2;
@@ -126,7 +127,7 @@ MonsterRaceId get_mon_num(PlayerType *player_ptr, DEPTH min_level, DEPTH max_lev
     }
 
     /* Boost the max_level */
-    if ((option & GMN_ARENA) || dungeons_info[player_ptr->dungeon_idx].flags.has_not(DungeonFeatureType::BEGINNER)) {
+    if ((option & GMN_ARENA) || dungeons_info[floor.dungeon_idx].flags.has_not(DungeonFeatureType::BEGINNER)) {
         /* Nightmare mode allows more out-of depth monsters */
         if (ironman_nightmare && !randint0(chance_nasty)) {
             /* What a bizarre calculation */
@@ -227,7 +228,7 @@ static bool monster_hook_chameleon_lord(PlayerType *player_ptr, MonsterRaceId r_
         return false;
     }
 
-    if ((r_ptr->blow[0].method == RaceBlowMethodType::EXPLODE) || (r_ptr->blow[1].method == RaceBlowMethodType::EXPLODE) || (r_ptr->blow[2].method == RaceBlowMethodType::EXPLODE) || (r_ptr->blow[3].method == RaceBlowMethodType::EXPLODE)) {
+    if (m_ptr->is_explodable()) {
         return false;
     }
 
@@ -271,7 +272,7 @@ static bool monster_hook_chameleon(PlayerType *player_ptr, MonsterRaceId r_idx)
         return false;
     }
 
-    if ((r_ptr->blow[0].method == RaceBlowMethodType::EXPLODE) || (r_ptr->blow[1].method == RaceBlowMethodType::EXPLODE) || (r_ptr->blow[2].method == RaceBlowMethodType::EXPLODE) || (r_ptr->blow[3].method == RaceBlowMethodType::EXPLODE)) {
+    if (m_ptr->is_explodable()) {
         return false;
     }
 
@@ -341,7 +342,7 @@ void choose_new_monster(PlayerType *player_ptr, MONSTER_IDX m_idx, bool born, Mo
             level = floor_ptr->dun_level;
         }
 
-        if (dungeons_info[player_ptr->dungeon_idx].flags.has(DungeonFeatureType::CHAMELEON)) {
+        if (dungeons_info[floor_ptr->dungeon_idx].flags.has(DungeonFeatureType::CHAMELEON)) {
             level += 2 + randint1(3);
         }
 
@@ -361,7 +362,7 @@ void choose_new_monster(PlayerType *player_ptr, MONSTER_IDX m_idx, bool born, Mo
 
     auto old_r_idx = m_ptr->r_idx;
     if (monraces_info[old_r_idx].brightness_flags.has_any_of(ld_mask) || r_ptr->brightness_flags.has_any_of(ld_mask)) {
-        player_ptr->update |= (PU_MONSTER_LITE);
+        RedrawingFlagsUpdater::get_instance().set_flag(StatusRedrawingFlag::MONSTER_LITE);
     }
 
     if (born) {

@@ -43,14 +43,14 @@
  */
 void call_chaos(PlayerType *player_ptr)
 {
-    AttributeType hurt_types[32] = { AttributeType::ELEC, AttributeType::POIS, AttributeType::ACID, AttributeType::COLD, AttributeType::FIRE,
+    constexpr static auto hurt_types = { AttributeType::ELEC, AttributeType::POIS, AttributeType::ACID, AttributeType::COLD, AttributeType::FIRE,
         AttributeType::MISSILE, AttributeType::PLASMA, AttributeType::HOLY_FIRE, AttributeType::WATER, AttributeType::LITE,
         AttributeType::DARK, AttributeType::FORCE, AttributeType::INERTIAL, AttributeType::MANA, AttributeType::METEOR, AttributeType::ICE,
         AttributeType::CHAOS, AttributeType::NETHER, AttributeType::DISENCHANT, AttributeType::SHARDS, AttributeType::SOUND, AttributeType::NEXUS,
         AttributeType::CONFUSION, AttributeType::TIME, AttributeType::GRAVITY, AttributeType::ROCKET, AttributeType::NUKE, AttributeType::HELL_FIRE,
         AttributeType::DISINTEGRATE, AttributeType::PSY_SPEAR, AttributeType::VOID_MAGIC, AttributeType::ABYSS };
 
-    AttributeType chaos_type = hurt_types[randint0(32)];
+    const auto chaos_type = rand_choice(hurt_types);
     bool line_chaos = false;
     if (one_in_(4)) {
         line_chaos = true;

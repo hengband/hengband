@@ -7,7 +7,6 @@
 #include "effect/effect-monster.h"
 #include "avatar/avatar.h"
 #include "core/disturbance.h"
-#include "core/player-redraw-types.h"
 #include "core/stuff-handler.h"
 #include "core/window-redrawer.h"
 #include "effect/attribute-types.h"
@@ -53,6 +52,7 @@
 #include "system/monster-entity.h"
 #include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
+#include "system/redrawing-flags-updater.h"
 #include "util/bit-flags-calculator.h"
 #include "util/string-processor.h"
 #include "view/display-messages.h"
@@ -182,10 +182,10 @@ static ProcessResult exe_affect_monster_by_effect(PlayerType *player_ptr, effect
 static void effect_damage_killed_pet(PlayerType *player_ptr, effect_monster_type *em_ptr)
 {
     bool sad = em_ptr->m_ptr->is_pet() && !(em_ptr->m_ptr->ml);
-    if (em_ptr->known && em_ptr->note) {
+    if (em_ptr->known && !em_ptr->note.empty()) {
         angband_strcpy(em_ptr->m_name, monster_desc(player_ptr, em_ptr->m_ptr, MD_TRUE_NAME).data(), sizeof(em_ptr->m_name));
         if (em_ptr->see_s_msg) {
-            msg_format("%s^%s", em_ptr->m_name, em_ptr->note);
+            msg_format("%s^%s", em_ptr->m_name, em_ptr->note.data());
         } else {
             player_ptr->current_floor_ptr->monster_noise = true;
         }
@@ -209,8 +209,8 @@ static void effect_damage_killed_pet(PlayerType *player_ptr, effect_monster_type
  */
 static void effect_damage_makes_sleep(PlayerType *player_ptr, effect_monster_type *em_ptr)
 {
-    if (em_ptr->note && em_ptr->seen_msg) {
-        msg_format("%s^%s", em_ptr->m_name, em_ptr->note);
+    if (!em_ptr->note.empty() && em_ptr->seen_msg) {
+        msg_format("%s^%s", em_ptr->m_name, em_ptr->note.data());
     } else if (em_ptr->see_s_msg) {
         const auto pain_message = MonsterPainDescriber(player_ptr, em_ptr->g_ptr->m_idx).describe(em_ptr->dam);
         if (!pain_message.empty()) {
@@ -239,11 +239,13 @@ static bool deal_effect_damage_from_monster(PlayerType *player_ptr, effect_monst
         return false;
     }
 
+    auto &rfu = RedrawingFlagsUpdater::get_instance();
     if (player_ptr->health_who == em_ptr->g_ptr->m_idx) {
-        player_ptr->redraw |= (PR_HEALTH);
+        rfu.set_flag(MainWindowRedrawingFlag::HEALTH);
     }
+
     if (player_ptr->riding == em_ptr->g_ptr->m_idx) {
-        player_ptr->redraw |= (PR_UHEALTH);
+        rfu.set_flag(MainWindowRedrawingFlag::UHEALTH);
     }
 
     (void)set_monster_csleep(player_ptr, em_ptr->g_ptr->m_idx, 0);
@@ -275,7 +277,7 @@ static bool heal_leaper(PlayerType *player_ptr, effect_monster_type *em_ptr)
 
     if (record_named_pet && em_ptr->m_ptr->is_named_pet()) {
         const auto m2_name = monster_desc(player_ptr, em_ptr->m_ptr, MD_INDEF_VISIBLE);
-        exe_write_diary(player_ptr, DIARY_NAMED_PET, RECORD_NAMED_PET_HEAL_LEPER, m2_name.data());
+        exe_write_diary(player_ptr, DIARY_NAMED_PET, RECORD_NAMED_PET_HEAL_LEPER, m2_name);
     }
 
     delete_monster_idx(player_ptr, em_ptr->g_ptr->m_idx);
@@ -302,8 +304,8 @@ static bool deal_effect_damage_from_player(PlayerType *player_ptr, effect_monste
         anger_monster(player_ptr, em_ptr->m_ptr);
     }
 
-    if (em_ptr->note && em_ptr->seen) {
-        msg_format(_("%s%s", "%s^%s"), em_ptr->m_name, em_ptr->note);
+    if (!em_ptr->note.empty() && em_ptr->seen) {
+        msg_format(_("%s%s", "%s^%s"), em_ptr->m_name, em_ptr->note.data());
     } else if (em_ptr->known && (em_ptr->dam || !em_ptr->do_fear)) {
         const auto pain_message = MonsterPainDescriber(player_ptr, em_ptr->g_ptr->m_idx).describe(em_ptr->dam);
         if (!pain_message.empty()) {
@@ -627,7 +629,7 @@ static void update_phase_out_stat(PlayerType *player_ptr, effect_monster_type *e
     }
 
     player_ptr->health_who = em_ptr->g_ptr->m_idx;
-    player_ptr->redraw |= (PR_HEALTH);
+    RedrawingFlagsUpdater::get_instance().set_flag(MainWindowRedrawingFlag::HEALTH);
     handle_stuff(player_ptr);
 }
 

@@ -2,8 +2,6 @@
 #include "action/run-execution.h"
 #include "action/travel-execution.h"
 #include "core/disturbance.h"
-#include "core/player-redraw-types.h"
-#include "core/player-update-types.h"
 #include "core/special-internal-keys.h"
 #include "core/speed-table.h"
 #include "core/stuff-handler.h"
@@ -55,6 +53,7 @@
 #include "system/grid-type-definition.h"
 #include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
+#include "system/redrawing-flags-updater.h"
 #include "term/screen-processor.h"
 #include "timed-effect/player-blindness.h"
 #include "timed-effect/player-confusion.h"
@@ -223,13 +222,14 @@ void process_player(PlayerType *player_ptr)
         set_lightspeed(player_ptr, player_ptr->lightspeed - 1, true);
     }
 
+    auto &rfu = RedrawingFlagsUpdater::get_instance();
     if (PlayerClass(player_ptr).equals(PlayerClassType::FORCETRAINER) && get_current_ki(player_ptr)) {
         if (get_current_ki(player_ptr) < 40) {
             set_current_ki(player_ptr, true, 0);
         } else {
             set_current_ki(player_ptr, false, -40);
         }
-        player_ptr->update |= (PU_BONUS);
+        rfu.set_flag(StatusRedrawingFlag::BONUS);
     }
 
     if (player_ptr->action == ACTION_LEARN) {
@@ -244,7 +244,7 @@ void process_player(PlayerType *player_ptr)
             s64b_sub(&(player_ptr->csp), &(player_ptr->csp_frac), cost, cost_frac);
         }
 
-        player_ptr->redraw |= PR_MP;
+        rfu.set_flag(MainWindowRedrawingFlag::MP);
     }
 
     if (PlayerClass(player_ptr).samurai_stance_is(SamuraiStanceType::MUSOU)) {
@@ -252,7 +252,7 @@ void process_player(PlayerType *player_ptr)
             set_action(player_ptr, ACTION_NONE);
         } else {
             player_ptr->csp -= 2;
-            player_ptr->redraw |= (PR_MP);
+            rfu.set_flag(MainWindowRedrawingFlag::MP);
         }
     }
 
@@ -291,7 +291,8 @@ void process_player(PlayerType *player_ptr)
                 if (!player_ptr->resting) {
                     set_action(player_ptr, ACTION_NONE);
                 }
-                player_ptr->redraw |= (PR_ACTION);
+
+                rfu.set_flag(MainWindowRedrawingFlag::ACTION);
             }
 
             energy.set_player_turn_energy(100);
@@ -303,7 +304,7 @@ void process_player(PlayerType *player_ptr)
             travel_step(player_ptr);
         } else if (command_rep) {
             command_rep--;
-            player_ptr->redraw |= (PR_ACTION);
+            rfu.set_flag(MainWindowRedrawingFlag::ACTION);
             handle_stuff(player_ptr);
             msg_flag = false;
             prt("", 0, 0);
@@ -329,7 +330,7 @@ void process_player(PlayerType *player_ptr)
             }
 
             if (effects->hallucination()->is_hallucinated()) {
-                player_ptr->redraw |= (PR_MAP);
+                rfu.set_flag(MainWindowRedrawingFlag::MAP);
             }
 
             for (MONSTER_IDX m_idx = 1; m_idx < player_ptr->current_floor_ptr->m_max; m_idx++) {
@@ -367,10 +368,11 @@ void process_player(PlayerType *player_ptr)
                         m_ptr->ml = false;
                         update_monster(player_ptr, m_idx, false);
                         if (player_ptr->health_who == m_idx) {
-                            player_ptr->redraw |= (PR_HEALTH);
+                            rfu.set_flag(MainWindowRedrawingFlag::HEALTH);
                         }
+
                         if (player_ptr->riding == m_idx) {
-                            player_ptr->redraw |= (PR_UHEALTH);
+                            rfu.set_flag(MainWindowRedrawingFlag::UHEALTH);
                         }
 
                         lite_spot(player_ptr, m_ptr->fy, m_ptr->fx);
@@ -386,18 +388,18 @@ void process_player(PlayerType *player_ptr)
                 }
 
                 mane_data->new_mane = false;
-                player_ptr->redraw |= (PR_IMITATION);
+                rfu.set_flag(MainWindowRedrawingFlag::IMITATION);
             }
 
             if (player_ptr->action == ACTION_LEARN) {
                 auto mane_data = PlayerClass(player_ptr).get_specific_data<bluemage_data_type>();
                 mane_data->new_magic_learned = false;
-                player_ptr->redraw |= (PR_ACTION);
+                rfu.set_flag(MainWindowRedrawingFlag::ACTION);
             }
 
             if (player_ptr->timewalk && (player_ptr->energy_need > -1000)) {
-                player_ptr->redraw |= (PR_MAP);
-                player_ptr->update |= (PU_MONSTER_STATUSES);
+                rfu.set_flag(MainWindowRedrawingFlag::MAP);
+                rfu.set_flag(StatusRedrawingFlag::MONSTER_STATUSES);
                 player_ptr->window_flags |= (PW_OVERHEAD | PW_DUNGEON);
 
                 msg_print(_("「時は動きだす…」", "You feel time flowing around you once more."));

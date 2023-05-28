@@ -1,5 +1,4 @@
 ﻿#include "player/player-view.h"
-#include "core/player-update-types.h"
 #include "floor/cave.h"
 #include "floor/line-of-sight.h"
 #include "game-option/map-screen-options.h"
@@ -7,6 +6,7 @@
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
 #include "system/player-type-definition.h"
+#include "system/redrawing-flags-updater.h"
 #include "util/point-2d.h"
 #include <vector>
 
@@ -379,5 +379,5 @@ void update_view(PlayerType *player_ptr)
         cave_redraw_later(floor_ptr, py, px);
     }
 
-    player_ptr->update |= PU_DELAY_VISIBILITY;
+    RedrawingFlagsUpdater::get_instance().set_flag(StatusRedrawingFlag::DELAY_VISIBILITY);
 }

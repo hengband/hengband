@@ -81,9 +81,9 @@ PERCENTAGE racial_chance(PlayerType *player_ptr, rpi_type *rpi_ptr)
     }
 
     difficulty = difficulty / 2;
-    const BASE_STATUS stat = player_ptr->stat_cur[rpi_ptr->stat];
-    int sum = 0;
-    for (int i = 1; i <= stat; i++) {
+    const auto stat = player_ptr->stat_cur[rpi_ptr->stat];
+    auto sum = 0;
+    for (auto i = 1; i <= stat; i++) {
         int val = i - difficulty;
         if (val > 0) {
             sum += (val <= difficulty) ? val : difficulty;

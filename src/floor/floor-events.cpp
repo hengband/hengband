@@ -1,8 +1,6 @@
 ﻿#include "floor/floor-events.h"
 #include "cmd-io/cmd-dump.h"
 #include "core/disturbance.h"
-#include "core/player-redraw-types.h"
-#include "core/player-update-types.h"
 #include "core/window-redrawer.h"
 #include "dungeon/dungeon-flag-types.h"
 #include "dungeon/quest.h"
@@ -39,6 +37,7 @@
 #include "system/monster-entity.h"
 #include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
+#include "system/redrawing-flags-updater.h"
 #include "system/terrain-type-definition.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
@@ -46,8 +45,13 @@
 
 static void update_sun_light(PlayerType *player_ptr)
 {
-    player_ptr->update |= PU_MONSTER_STATUSES | PU_MONSTER_LITE;
-    player_ptr->redraw |= PR_MAP;
+    auto &rfu = RedrawingFlagsUpdater::get_instance();
+    const auto flags_srf = {
+        StatusRedrawingFlag::MONSTER_STATUSES,
+        StatusRedrawingFlag::MONSTER_LITE,
+    };
+    rfu.set_flags(flags_srf);
+    rfu.set_flag(MainWindowRedrawingFlag::MAP);
     player_ptr->window_flags |= PW_OVERHEAD | PW_DUNGEON;
     if ((player_ptr->current_floor_ptr->grid_array[player_ptr->y][player_ptr->x].info & CAVE_GLOW) != 0) {
         set_superstealth(player_ptr, false);
@@ -272,8 +276,8 @@ static byte get_dungeon_feeling(PlayerType *player_ptr)
  */
 void update_dungeon_feeling(PlayerType *player_ptr)
 {
-    auto *floor_ptr = player_ptr->current_floor_ptr;
-    if (!floor_ptr->dun_level) {
+    const auto &floor = *player_ptr->current_floor_ptr;
+    if (!floor.dun_level) {
         return;
     }
 
@@ -281,12 +285,12 @@ void update_dungeon_feeling(PlayerType *player_ptr)
         return;
     }
 
-    int delay = std::max(10, 150 - player_ptr->skill_fos) * (150 - floor_ptr->dun_level) * TURNS_PER_TICK / 100;
+    int delay = std::max(10, 150 - player_ptr->skill_fos) * (150 - floor.dun_level) * TURNS_PER_TICK / 100;
     if (w_ptr->game_turn < player_ptr->feeling_turn + delay && !cheat_xtra) {
         return;
     }
 
-    auto quest_num = quest_number(player_ptr, floor_ptr->dun_level);
+    auto quest_num = quest_number(floor, floor.dun_level);
     const auto &quest_list = QuestList::get_instance();
 
     auto dungeon_quest = (quest_num == QuestId::OBERON);
@@ -308,7 +312,7 @@ void update_dungeon_feeling(PlayerType *player_ptr)
     player_ptr->feeling = new_feeling;
     do_cmd_feeling(player_ptr);
     select_floor_music(player_ptr);
-    player_ptr->redraw |= PR_DEPTH;
+    RedrawingFlagsUpdater::get_instance().set_flag(MainWindowRedrawingFlag::DEPTH);
     if (disturb_minor) {
         disturb(player_ptr, false, false);
     }
@@ -319,11 +323,11 @@ void update_dungeon_feeling(PlayerType *player_ptr)
  */
 void glow_deep_lava_and_bldg(PlayerType *player_ptr)
 {
-    if (dungeons_info[player_ptr->dungeon_idx].flags.has(DungeonFeatureType::DARKNESS)) {
+    auto *floor_ptr = player_ptr->current_floor_ptr;
+    if (dungeons_info[floor_ptr->dungeon_idx].flags.has(DungeonFeatureType::DARKNESS)) {
         return;
     }
 
-    auto *floor_ptr = player_ptr->current_floor_ptr;
     for (POSITION y = 0; y < floor_ptr->height; y++) {
         for (POSITION x = 0; x < floor_ptr->width; x++) {
             grid_type *g_ptr;
@@ -344,8 +348,14 @@ void glow_deep_lava_and_bldg(PlayerType *player_ptr)
         }
     }
 
-    player_ptr->update |= PU_VIEW | PU_LITE | PU_MONSTER_LITE;
-    player_ptr->redraw |= PR_MAP;
+    auto &rfu = RedrawingFlagsUpdater::get_instance();
+    const auto flags_srf = {
+        StatusRedrawingFlag::VIEW,
+        StatusRedrawingFlag::LITE,
+        StatusRedrawingFlag::MONSTER_LITE,
+    };
+    rfu.set_flags(flags_srf);
+    rfu.set_flag(MainWindowRedrawingFlag::MAP);
 }
 
 /*

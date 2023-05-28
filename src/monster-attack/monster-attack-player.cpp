@@ -13,7 +13,6 @@
 #include "combat/combat-options-type.h"
 #include "combat/hallucination-attacks-table.h"
 #include "core/disturbance.h"
-#include "core/player-update-types.h"
 #include "dungeon/dungeon-flag-types.h"
 #include "floor/geometry.h"
 #include "inventory/inventory-slot-types.h"
@@ -53,6 +52,7 @@
 #include "system/monster-entity.h"
 #include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
+#include "system/redrawing-flags-updater.h"
 #include "timed-effect/player-cut.h"
 #include "timed-effect/player-hallucination.h"
 #include "timed-effect/player-stun.h"
@@ -131,7 +131,7 @@ bool MonsterAttackPlayer::check_no_blow()
         return false;
     }
 
-    if (dungeons_info[this->player_ptr->dungeon_idx].flags.has(DungeonFeatureType::NO_MELEE)) {
+    if (dungeons_info[this->player_ptr->current_floor_ptr->dungeon_idx].flags.has(DungeonFeatureType::NO_MELEE)) {
         return false;
     }
 
@@ -149,10 +149,10 @@ bool MonsterAttackPlayer::process_monster_blows()
         this->obvious = false;
         this->damage = 0;
         this->act = nullptr;
-        this->effect = r_ptr->blow[ap_cnt].effect;
-        this->method = r_ptr->blow[ap_cnt].method;
-        this->d_dice = r_ptr->blow[ap_cnt].d_dice;
-        this->d_side = r_ptr->blow[ap_cnt].d_side;
+        this->effect = r_ptr->blows[ap_cnt].effect;
+        this->method = r_ptr->blows[ap_cnt].method;
+        this->d_dice = r_ptr->blows[ap_cnt].d_dice;
+        this->d_side = r_ptr->blows[ap_cnt].d_side;
 
         if (!this->check_monster_continuous_attack()) {
             break;
@@ -297,7 +297,7 @@ void MonsterAttackPlayer::describe_silly_attacks()
 #ifdef JP
         this->abbreviate = -1;
 #endif
-        this->act = silly_attacks[randint0(MAX_SILLY_ATTACK)];
+        this->act = rand_choice(silly_attacks);
     }
 
 #ifdef JP
@@ -395,7 +395,7 @@ void MonsterAttackPlayer::monster_explode()
 
     sound(SOUND_EXPLODE);
     MonsterDamageProcessor mdp(this->player_ptr, this->m_idx, this->m_ptr->hp + 1, &this->fear, AttributeType::NONE);
-    if (mdp.mon_take_hit(nullptr)) {
+    if (mdp.mon_take_hit("")) {
         this->blinked = false;
         this->alive = false;
     }
@@ -474,7 +474,7 @@ void MonsterAttackPlayer::gain_armor_exp()
     }
 
     this->player_ptr->skill_exp[PlayerSkillKindType::SHIELD] = std::min<short>(max, cur + increment);
-    this->player_ptr->update |= (PU_BONUS);
+    RedrawingFlagsUpdater::get_instance().set_flag(StatusRedrawingFlag::BONUS);
 }
 
 /*!

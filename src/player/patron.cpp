@@ -334,7 +334,7 @@ void Patron::gain_level_reward(PlayerType *player_ptr_, int chosen_reward)
             msg_format(_("%sの声が響き渡った:", "The voice of %s booms out:"), this->name.data());
             msg_print(_("「苦しむがよい、無能な愚か者よ！」", "'Suffer, pathetic fool!'"));
             fire_ball(this->player_ptr, AttributeType::DISINTEGRATE, 0, this->player_ptr->lev * 4, 4);
-            take_hit(this->player_ptr, DAMAGE_NOESCAPE, this->player_ptr->lev * 4, wrath_reason.data());
+            take_hit(this->player_ptr, DAMAGE_NOESCAPE, this->player_ptr->lev * 4, wrath_reason);
             reward = _("分解の球が発生した。", "generating disintegration ball");
             break;
         case REW_HEAL_FUL:
@@ -429,7 +429,7 @@ void Patron::gain_level_reward(PlayerType *player_ptr_, int chosen_reward)
         case REW_WRATH:
             msg_format(_("%sの声が轟き渡った:", "The voice of %s thunders:"), this->name.data());
             msg_print(_("「死ぬがよい、下僕よ！」", "'Die, mortal!'"));
-            take_hit(this->player_ptr, DAMAGE_LOSELIFE, this->player_ptr->lev * 4, wrath_reason.data());
+            take_hit(this->player_ptr, DAMAGE_LOSELIFE, this->player_ptr->lev * 4, wrath_reason);
             for (int stat = 0; stat < A_MAX; stat++) {
                 (void)dec_stat(this->player_ptr, stat, 10 + randint1(15), false);
             }
@@ -517,7 +517,7 @@ void Patron::gain_level_reward(PlayerType *player_ptr_, int chosen_reward)
 
     if (!reward.empty()) {
         const auto note = format(_("パトロンの報酬で%s", "The patron rewarded you with %s."), reward.data());
-        exe_write_diary(this->player_ptr, DIARY_DESCRIPTION, 0, note.data());
+        exe_write_diary(this->player_ptr, DIARY_DESCRIPTION, 0, note);
     }
 }
 

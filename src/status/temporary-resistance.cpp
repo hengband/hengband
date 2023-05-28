@@ -1,10 +1,9 @@
 ﻿#include "status/temporary-resistance.h"
 #include "core/disturbance.h"
-#include "core/player-redraw-types.h"
-#include "core/player-update-types.h"
 #include "core/stuff-handler.h"
 #include "game-option/disturbance-options.h"
 #include "system/player-type-definition.h"
+#include "system/redrawing-flags-updater.h"
 #include "view/display-messages.h"
 
 /*!
@@ -40,8 +39,8 @@ bool set_tim_levitation(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
     }
 
     player_ptr->tim_levitation = v;
-    player_ptr->redraw |= (PR_TIMED_EFFECT);
-
+    auto &rfu = RedrawingFlagsUpdater::get_instance();
+    rfu.set_flag(MainWindowRedrawingFlag::TIMED_EFFECT);
     if (!notice) {
         return false;
     }
@@ -49,7 +48,8 @@ bool set_tim_levitation(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
     if (disturb_state) {
         disturb(player_ptr, false, false);
     }
-    player_ptr->update |= (PU_BONUS);
+
+    rfu.set_flag(StatusRedrawingFlag::BONUS);
     handle_stuff(player_ptr);
     return true;
 }
@@ -73,9 +73,7 @@ bool set_ultimate_res(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
             msg_print(_("あらゆることに対して耐性がついた気がする！", "You feel resistant!"));
             notice = true;
         }
-    }
-
-    else {
+    } else {
         if (player_ptr->ult_res) {
             msg_print(_("あらゆることに対する耐性が薄れた気がする。", "You feel less resistant"));
             notice = true;
@@ -83,8 +81,8 @@ bool set_ultimate_res(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
     }
 
     player_ptr->ult_res = v;
-    player_ptr->redraw |= (PR_TIMED_EFFECT);
-
+    auto &rfu = RedrawingFlagsUpdater::get_instance();
+    rfu.set_flag(MainWindowRedrawingFlag::TIMED_EFFECT);
     if (!notice) {
         return false;
     }
@@ -92,9 +90,9 @@ bool set_ultimate_res(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
     if (disturb_state) {
         disturb(player_ptr, false, false);
     }
-    player_ptr->update |= (PU_BONUS);
-    handle_stuff(player_ptr);
 
+    rfu.set_flag(StatusRedrawingFlag::BONUS);
+    handle_stuff(player_ptr);
     return true;
 }
 
@@ -127,8 +125,8 @@ bool set_tim_res_nether(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
     }
 
     player_ptr->tim_res_nether = v;
-    player_ptr->redraw |= (PR_TIMED_EFFECT);
-
+    auto &rfu = RedrawingFlagsUpdater::get_instance();
+    rfu.set_flag(MainWindowRedrawingFlag::TIMED_EFFECT);
     if (!notice) {
         return false;
     }
@@ -136,7 +134,8 @@ bool set_tim_res_nether(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
     if (disturb_state) {
         disturb(player_ptr, false, false);
     }
-    player_ptr->update |= (PU_BONUS);
+
+    rfu.set_flag(StatusRedrawingFlag::BONUS);
     handle_stuff(player_ptr);
     return true;
 }
@@ -167,7 +166,8 @@ bool set_tim_res_time(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
     }
 
     player_ptr->tim_res_time = v;
-    player_ptr->redraw |= (PR_TIMED_EFFECT);
+    auto &rfu = RedrawingFlagsUpdater::get_instance();
+    rfu.set_flag(MainWindowRedrawingFlag::TIMED_EFFECT);
     if (!notice) {
         return false;
     }
@@ -175,7 +175,8 @@ bool set_tim_res_time(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
     if (disturb_state) {
         disturb(player_ptr, false, false);
     }
-    player_ptr->update |= (PU_BONUS);
+
+    rfu.set_flag(StatusRedrawingFlag::BONUS);
     handle_stuff(player_ptr);
     return true;
 }

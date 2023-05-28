@@ -1,6 +1,4 @@
 ﻿#include "target/grid-selector.h"
-#include "core/player-redraw-types.h"
-#include "core/player-update-types.h"
 #include "core/stuff-handler.h"
 #include "core/window-redrawer.h"
 #include "floor/cave.h"
@@ -14,6 +12,7 @@
 #include "io/screen-util.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
+#include "system/redrawing-flags-updater.h"
 #include "target/target-checker.h"
 #include "term/screen-processor.h"
 #include "timed-effect/player-hallucination.h"
@@ -159,8 +158,9 @@ void tgt_pt_info::move_to_symbol(PlayerType *player_ptr)
         this->y = player_ptr->y;
         this->x = player_ptr->x;
         verify_panel(player_ptr);
-        player_ptr->update |= PU_MONSTER_STATUSES;
-        player_ptr->redraw |= PR_MAP;
+        auto &rfu = RedrawingFlagsUpdater::get_instance();
+        rfu.set_flag(StatusRedrawingFlag::MONSTER_STATUSES);
+        rfu.set_flag(MainWindowRedrawingFlag::MAP);
         player_ptr->window_flags |= PW_OVERHEAD;
         handle_stuff(player_ptr);
     } else {
@@ -302,8 +302,9 @@ bool tgt_pt(PlayerType *player_ptr, POSITION *x_ptr, POSITION *y_ptr)
 
     prt("", 0, 0);
     verify_panel(player_ptr);
-    player_ptr->update |= PU_MONSTER_STATUSES;
-    player_ptr->redraw |= PR_MAP;
+    auto &rfu = RedrawingFlagsUpdater::get_instance();
+    rfu.set_flag(StatusRedrawingFlag::MONSTER_STATUSES);
+    rfu.set_flag(MainWindowRedrawingFlag::MAP);
     player_ptr->window_flags |= PW_OVERHEAD;
     handle_stuff(player_ptr);
     *x_ptr = info.x;

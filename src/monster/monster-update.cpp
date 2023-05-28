@@ -6,8 +6,6 @@
 
 #include "monster/monster-update.h"
 #include "core/disturbance.h"
-#include "core/player-redraw-types.h"
-#include "core/player-update-types.h"
 #include "core/window-redrawer.h"
 #include "dungeon/dungeon-flag-types.h"
 #include "floor/cave.h"
@@ -42,6 +40,7 @@
 #include "system/monster-entity.h"
 #include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
+#include "system/redrawing-flags-updater.h"
 #include "target/projection-path-calculator.h"
 #include "timed-effect/player-blindness.h"
 #include "timed-effect/player-hallucination.h"
@@ -107,14 +106,15 @@ void update_player_type(PlayerType *player_ptr, turn_flags *turn_flags_ptr, Mons
 {
     using Mbt = MonsterBrightnessType;
     const auto except_has_lite = EnumClassFlagGroup<Mbt>(self_ld_mask).set({ Mbt::HAS_DARK_1, Mbt::HAS_DARK_2 });
+    auto &rfu = RedrawingFlagsUpdater::get_instance();
     if (turn_flags_ptr->do_view) {
-        player_ptr->update |= PU_FLOW;
+        rfu.set_flag(StatusRedrawingFlag::FLOW);
         player_ptr->window_flags |= PW_OVERHEAD | PW_DUNGEON;
     }
 
     const auto has_lite = r_ptr->brightness_flags.has_any_of({ Mbt::HAS_LITE_1, Mbt::HAS_LITE_2 });
     if (turn_flags_ptr->do_move && (r_ptr->brightness_flags.has_any_of(except_has_lite) || (has_lite && !player_ptr->phase_out))) {
-        player_ptr->update |= PU_MONSTER_LITE;
+        rfu.set_flag(StatusRedrawingFlag::MONSTER_LITE);
     }
 }
 
@@ -183,13 +183,14 @@ void update_player_window(PlayerType *player_ptr, old_race_flags *old_race_flags
 
 static um_type *initialize_um_type(PlayerType *player_ptr, um_type *um_ptr, MONSTER_IDX m_idx, bool full)
 {
-    um_ptr->m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
+    auto &floor = *player_ptr->current_floor_ptr;
+    um_ptr->m_ptr = &floor.m_list[m_idx];
     um_ptr->do_disturb = disturb_move;
     um_ptr->fy = um_ptr->m_ptr->fy;
     um_ptr->fx = um_ptr->m_ptr->fx;
     um_ptr->flag = false;
     um_ptr->easy = false;
-    um_ptr->in_darkness = dungeons_info[player_ptr->dungeon_idx].flags.has(DungeonFeatureType::DARKNESS) && !player_ptr->see_nocto;
+    um_ptr->in_darkness = dungeons_info[floor.dungeon_idx].flags.has(DungeonFeatureType::DARKNESS) && !player_ptr->see_nocto;
     um_ptr->full = full;
     return um_ptr;
 }
@@ -496,12 +497,13 @@ static void update_invisible_monster(PlayerType *player_ptr, um_type *um_ptr, MO
     m_ptr->ml = true;
     lite_spot(player_ptr, um_ptr->fy, um_ptr->fx);
 
+    auto &rfu = RedrawingFlagsUpdater::get_instance();
     if (player_ptr->health_who == m_idx) {
-        player_ptr->redraw |= PR_HEALTH;
+        rfu.set_flag(MainWindowRedrawingFlag::HEALTH);
     }
 
     if (player_ptr->riding == m_idx) {
-        player_ptr->redraw |= PR_UHEALTH;
+        rfu.set_flag(MainWindowRedrawingFlag::UHEALTH);
     }
 
     if (!player_ptr->effects()->hallucination()->is_hallucinated()) {
@@ -535,12 +537,13 @@ static void update_visible_monster(PlayerType *player_ptr, um_type *um_ptr, MONS
     um_ptr->m_ptr->ml = false;
     lite_spot(player_ptr, um_ptr->fy, um_ptr->fx);
 
+    auto &rfu = RedrawingFlagsUpdater::get_instance();
     if (player_ptr->health_who == m_idx) {
-        player_ptr->redraw |= PR_HEALTH;
+        rfu.set_flag(MainWindowRedrawingFlag::HEALTH);
     }
 
     if (player_ptr->riding == m_idx) {
-        player_ptr->redraw |= PR_UHEALTH;
+        rfu.set_flag(MainWindowRedrawingFlag::UHEALTH);
     }
 
     if (um_ptr->do_disturb && (disturb_pets || um_ptr->m_ptr->is_hostile())) {

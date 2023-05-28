@@ -228,13 +228,13 @@ void do_cmd_feeling(PlayerType *player_ptr)
         return;
     }
 
-    const auto &floor_ref = *player_ptr->current_floor_ptr;
-    if (inside_quest(floor_ref.quest_number) && !inside_quest(random_quest_number(player_ptr, floor_ref.dun_level))) {
+    const auto &floor = *player_ptr->current_floor_ptr;
+    if (inside_quest(floor.quest_number) && !inside_quest(random_quest_number(floor, floor.dun_level))) {
         msg_print(_("典型的なクエストのダンジョンのようだ。", "Looks like a typical quest level."));
         return;
     }
 
-    if (player_ptr->town_num && !floor_ref.is_in_dungeon()) {
+    if (player_ptr->town_num && !floor.is_in_dungeon()) {
         if (towns_info[player_ptr->town_num].name == _("荒野", "wilderness")) {
             msg_print(_("何かありそうな荒野のようだ。", "Looks like a strange wilderness."));
             return;
@@ -244,7 +244,7 @@ void do_cmd_feeling(PlayerType *player_ptr)
         return;
     }
 
-    if (!floor_ref.is_in_dungeon()) {
+    if (!floor.is_in_dungeon()) {
         msg_print(_("典型的な荒野のようだ。", "Looks like a typical wilderness."));
         return;
     }

@@ -229,7 +229,7 @@ errr parse_monraces_info(std::string_view buf, angband_header *)
         // B:blow_type:blow_effect:dice
         size_t i = 0;
         for (; i < 4; i++) {
-            if (r_ptr->blow[i].method == RaceBlowMethodType::NONE) {
+            if (r_ptr->blows[i].method == RaceBlowMethodType::NONE) {
                 break;
             }
         }
@@ -255,16 +255,16 @@ errr parse_monraces_info(std::string_view buf, angband_header *)
             return PARSE_ERROR_INVALID_FLAG;
         }
 
-        r_ptr->blow[i].method = rbm->second;
-        r_ptr->blow[i].effect = rbe->second;
+        r_ptr->blows[i].method = rbm->second;
+        r_ptr->blows[i].effect = rbe->second;
 
         if (tokens.size() < 4) {
             return PARSE_ERROR_NONE;
         }
 
         const auto &dice = str_split(tokens[3], 'd', false, 2);
-        info_set_value(r_ptr->blow[i].d_dice, dice[0]);
-        info_set_value(r_ptr->blow[i].d_side, dice[1]);
+        info_set_value(r_ptr->blows[i].d_dice, dice[0]);
+        info_set_value(r_ptr->blows[i].d_side, dice[1]);
     } else if (tokens[0] == "F") {
         // F:flags
         if (tokens.size() < 2 || tokens[1].size() == 0) {

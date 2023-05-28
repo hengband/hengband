@@ -58,28 +58,30 @@ static void write_birth_diary(PlayerType *player_ptr)
     message_add("  ");
 
     exe_write_diary(player_ptr, DIARY_GAMESTART, 1, _("-------- 新規ゲーム開始 --------", "------- Started New Game -------"));
-    exe_write_diary(player_ptr, DIARY_DIALY, 0, nullptr);
-    char buf[80];
-    strnfmt(buf, sizeof(buf), _("%s性別に%sを選択した。", "%schose %s gender."), indent, sex_info[player_ptr->psex].title);
-    exe_write_diary(player_ptr, DIARY_DESCRIPTION, 1, buf);
-    strnfmt(buf, sizeof(buf), _("%s種族に%sを選択した。", "%schose %s race."), indent, race_info[enum2i(player_ptr->prace)].title);
-    exe_write_diary(player_ptr, DIARY_DESCRIPTION, 1, buf);
-    strnfmt(buf, sizeof(buf), _("%s職業に%sを選択した。", "%schose %s class."), indent, class_info[enum2i(player_ptr->pclass)].title);
-    exe_write_diary(player_ptr, DIARY_DESCRIPTION, 1, buf);
+    exe_write_diary(player_ptr, DIARY_DIALY, 0);
+    const auto mes_sex = format(_("%s性別に%sを選択した。", "%schose %s gender."), indent, sex_info[player_ptr->psex].title);
+    exe_write_diary(player_ptr, DIARY_DESCRIPTION, 1, mes_sex);
+    const auto mes_race = format(_("%s種族に%sを選択した。", "%schose %s race."), indent, race_info[enum2i(player_ptr->prace)].title);
+    exe_write_diary(player_ptr, DIARY_DESCRIPTION, 1, mes_race);
+    const auto mes_class = format(_("%s職業に%sを選択した。", "%schose %s class."), indent, class_info[enum2i(player_ptr->pclass)].title);
+    exe_write_diary(player_ptr, DIARY_DESCRIPTION, 1, mes_class);
     if (player_ptr->realm1) {
-        strnfmt(buf, sizeof(buf), _("%s魔法の領域に%s%sを選択した。", "%schose %s%s."), indent, realm_names[player_ptr->realm1],
-            player_ptr->realm2 ? format(_("と%s", " and %s realms"), realm_names[player_ptr->realm2]).data() : _("", " realm"));
-        exe_write_diary(player_ptr, DIARY_DESCRIPTION, 1, buf);
+        const std::string mes_realm2 = player_ptr->realm2 ? format(_("と%s", " and %s realms"), realm_names[player_ptr->realm2]) : _("", " realm");
+        const auto mes_realm = format(_("%s魔法の領域に%s%sを選択した。", "%schose %s%s."), indent, realm_names[player_ptr->realm1], mes_realm2.data());
+        exe_write_diary(player_ptr, DIARY_DESCRIPTION, 1, mes_realm);
     }
+
     if (player_ptr->element) {
-        strnfmt(buf, sizeof(buf), _("%s元素系統に%sを選択した。", "%schose %s system."), indent, get_element_title(player_ptr->element));
-        exe_write_diary(player_ptr, DIARY_DESCRIPTION, 1, buf);
+        const auto mes_element = format(_("%s元素系統に%sを選択した。", "%schose %s system."), indent, get_element_title(player_ptr->element));
+        exe_write_diary(player_ptr, DIARY_DESCRIPTION, 1, mes_element);
     }
-    strnfmt(buf, sizeof(buf), _("%s性格に%sを選択した。", "%schose %s personality."), indent, personality_info[player_ptr->ppersonality].title);
-    exe_write_diary(player_ptr, DIARY_DESCRIPTION, 1, buf);
+
+    const auto mes_personality = format(_("%s性格に%sを選択した。", "%schose %s personality."), indent, personality_info[player_ptr->ppersonality].title);
+    exe_write_diary(player_ptr, DIARY_DESCRIPTION, 1, mes_personality);
     if (PlayerClass(player_ptr).equals(PlayerClassType::CHAOS_WARRIOR)) {
-        strnfmt(buf, sizeof(buf), _("%s守護神%sと契約を交わした。", "%smade a contract with patron %s."), indent, patron_list[player_ptr->chaos_patron].name.data());
-        exe_write_diary(player_ptr, DIARY_DESCRIPTION, 1, buf);
+        const auto fmt_patron = _("%s守護神%sと契約を交わした。", "%smade a contract with patron %s.");
+        const auto mes_patron = format(fmt_patron, indent, patron_list[player_ptr->chaos_patron].name.data());
+        exe_write_diary(player_ptr, DIARY_DESCRIPTION, 1, mes_patron);
     }
 }
 

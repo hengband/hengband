@@ -1,7 +1,6 @@
 ﻿#include "mutation/mutation-processor.h"
 #include "core/asking-player.h"
 #include "core/disturbance.h"
-#include "core/player-redraw-types.h"
 #include "effect/attribute-types.h"
 #include "floor/geometry.h"
 #include "grid/grid.h"
@@ -47,6 +46,7 @@
 #include "system/monster-entity.h"
 #include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
+#include "system/redrawing-flags-updater.h"
 #include "target/target-checker.h"
 #include "target/target-setter.h"
 #include "target/target-types.h"
@@ -160,7 +160,7 @@ void process_world_aux_mutation(PlayerType *player_ptr)
     if (player_ptr->muta.has(PlayerMutationType::ALCOHOL) && (randint1(6400) == 321)) {
         if (!has_resist_conf(player_ptr) && !has_resist_chaos(player_ptr)) {
             disturb(player_ptr, false, true);
-            player_ptr->redraw |= PR_EXTRA;
+            RedrawingFlagsUpdater::get_instance().set_flag(MainWindowRedrawingFlag::EXTRA);
             msg_print(_("いひきがもーろーとひてきたきがふる...ヒック！", "You feel a SSSCHtupor cOmINg over yOu... *HIC*!"));
         }
 
@@ -192,7 +192,7 @@ void process_world_aux_mutation(PlayerType *player_ptr)
     if (player_ptr->muta.has(PlayerMutationType::HALLU) && (randint1(6400) == 42)) {
         if (!has_resist_chaos(player_ptr)) {
             disturb(player_ptr, false, true);
-            player_ptr->redraw |= PR_EXTRA;
+            RedrawingFlagsUpdater::get_instance().set_flag(MainWindowRedrawingFlag::EXTRA);
             (void)bss.mod_hallucination(randint0(50) + 20);
         }
     }
@@ -463,6 +463,10 @@ void process_world_aux_mutation(PlayerType *player_ptr)
         (void)set_invuln(player_ptr, randint1(8) + 8, false);
     }
 
+    const auto flags = {
+        MainWindowRedrawingFlag::HP,
+        MainWindowRedrawingFlag::MP,
+    };
     if (player_ptr->muta.has(PlayerMutationType::SP_TO_HP) && one_in_(2000)) {
         MANA_POINT wounds = (MANA_POINT)(player_ptr->mhp - player_ptr->chp);
         if (wounds > 0) {
@@ -473,7 +477,7 @@ void process_world_aux_mutation(PlayerType *player_ptr)
 
             hp_player(player_ptr, healing);
             player_ptr->csp -= healing;
-            player_ptr->redraw |= (PR_HP | PR_MP);
+            RedrawingFlagsUpdater::get_instance().set_flags(flags);
         }
     }
 
@@ -486,7 +490,7 @@ void process_world_aux_mutation(PlayerType *player_ptr)
             }
 
             player_ptr->csp += healing;
-            player_ptr->redraw |= (PR_HP | PR_MP);
+            RedrawingFlagsUpdater::get_instance().set_flags(flags);
             take_hit(player_ptr, DAMAGE_LOSELIFE, healing, _("頭に昇った血", "blood rushing to the head"));
         }
     }

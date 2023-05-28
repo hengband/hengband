@@ -7,8 +7,6 @@
 
 #include "player/player-move.h"
 #include "core/disturbance.h"
-#include "core/player-redraw-types.h"
-#include "core/player-update-types.h"
 #include "core/special-internal-keys.h"
 #include "core/stuff-handler.h"
 #include "core/window-redrawer.h"
@@ -45,6 +43,7 @@
 #include "system/item-entity.h"
 #include "system/monster-entity.h"
 #include "system/player-type-definition.h"
+#include "system/redrawing-flags-updater.h"
 #include "system/terrain-type-definition.h"
 #include "target/target-checker.h"
 #include "timed-effect/player-blindness.h"
@@ -144,6 +143,7 @@ bool move_player_effect(PlayerType *player_ptr, POSITION ny, POSITION nx, BIT_FL
     auto *f_ptr = &terrains_info[g_ptr->feat];
     TerrainType *of_ptr = &terrains_info[oc_ptr->feat];
 
+    auto &rfu = RedrawingFlagsUpdater::get_instance();
     if (!(mpe_mode & MPE_STAYING)) {
         MONSTER_IDX om_idx = oc_ptr->m_idx;
         MONSTER_IDX nm_idx = g_ptr->m_idx;
@@ -172,17 +172,24 @@ bool move_player_effect(PlayerType *player_ptr, POSITION ny, POSITION nx, BIT_FL
         verify_panel(player_ptr);
         if (mpe_mode & MPE_FORGET_FLOW) {
             forget_flow(floor_ptr);
-            player_ptr->update |= PU_UN_VIEW;
-            player_ptr->redraw |= PR_MAP;
+            rfu.set_flag(StatusRedrawingFlag::UN_VIEW);
+            rfu.set_flag(MainWindowRedrawingFlag::MAP);
         }
 
-        player_ptr->update |= PU_VIEW | PU_LITE | PU_FLOW | PU_MONSTER_LITE | PU_DISTANCE;
+        const auto flags_srf = {
+            StatusRedrawingFlag::VIEW,
+            StatusRedrawingFlag::LITE,
+            StatusRedrawingFlag::FLOW,
+            StatusRedrawingFlag::MONSTER_LITE,
+            StatusRedrawingFlag::DISTANCE,
+        };
+        rfu.set_flags(flags_srf);
         player_ptr->window_flags |= PW_OVERHEAD | PW_DUNGEON;
         if ((!player_ptr->effects()->blindness()->is_blind() && !no_lite(player_ptr)) || !is_trap(player_ptr, g_ptr->feat)) {
             g_ptr->info &= ~(CAVE_UNSAFE);
         }
 
-        if (floor_ptr->dun_level && dungeons_info[player_ptr->dungeon_idx].flags.has(DungeonFeatureType::FORGET)) {
+        if (floor_ptr->dun_level && dungeons_info[floor_ptr->dungeon_idx].flags.has(DungeonFeatureType::FORGET)) {
             wiz_dark(player_ptr);
         }
 
@@ -206,7 +213,7 @@ bool move_player_effect(PlayerType *player_ptr, POSITION ny, POSITION nx, BIT_FL
 
         if (PlayerRace(player_ptr).equals(PlayerRaceType::MERFOLK)) {
             if (f_ptr->flags.has(Tc::WATER) ^ of_ptr->flags.has(Tc::WATER)) {
-                player_ptr->update |= PU_BONUS;
+                rfu.set_flag(StatusRedrawingFlag::BONUS);
                 update_creature(player_ptr);
             }
         }

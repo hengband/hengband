@@ -48,8 +48,9 @@ static bool summon_specific_okay(PlayerType *player_ptr, MonsterRaceId r_idx)
         return false;
     }
 
+    auto &floor = *player_ptr->current_floor_ptr;
     if (summon_specific_who > 0) {
-        auto *m_ptr = &player_ptr->current_floor_ptr->m_list[summon_specific_who];
+        auto *m_ptr = &floor.m_list[summon_specific_who];
         if (monster_has_hostile_align(player_ptr, m_ptr, 0, 0, r_ptr)) {
             return false;
         }
@@ -67,16 +68,17 @@ static bool summon_specific_okay(PlayerType *player_ptr, MonsterRaceId r_idx)
         return true;
     }
 
-    if ((summon_specific_who < 0) && (r_ptr->kind_flags.has(MonsterKindType::UNIQUE) || (r_ptr->population_flags.has(MonsterPopulationType::NAZGUL))) && monster_has_hostile_align(player_ptr, nullptr, 10, -10, r_ptr)) {
+    const auto is_like_unique = r_ptr->kind_flags.has(MonsterKindType::UNIQUE) || (r_ptr->population_flags.has(MonsterPopulationType::NAZGUL));
+    if ((summon_specific_who < 0) && is_like_unique && monster_has_hostile_align(player_ptr, nullptr, 10, -10, r_ptr)) {
         return false;
     }
 
-    if ((r_ptr->flags7 & RF7_CHAMELEON) && dungeons_info[player_ptr->dungeon_idx].flags.has(DungeonFeatureType::CHAMELEON)) {
+    if ((r_ptr->flags7 & RF7_CHAMELEON) && dungeons_info[floor.dungeon_idx].flags.has(DungeonFeatureType::CHAMELEON)) {
         return true;
     }
 
     if (summon_specific_who > 0) {
-        auto *m_ptr = &player_ptr->current_floor_ptr->m_list[summon_specific_who];
+        auto *m_ptr = &floor.m_list[summon_specific_who];
         return check_summon_specific(player_ptr, m_ptr->r_idx, r_idx);
     } else {
         return check_summon_specific(player_ptr, MonsterRaceId::PLAYER, r_idx);

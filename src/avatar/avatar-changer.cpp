@@ -63,7 +63,7 @@ void AvatarChanger::change_virtue_non_beginner()
 {
     auto *floor_ptr = this->player_ptr->current_floor_ptr;
     auto *r_ptr = &monraces_info[m_ptr->r_idx];
-    if (dungeons_info[this->player_ptr->dungeon_idx].flags.has(DungeonFeatureType::BEGINNER)) {
+    if (dungeons_info[floor_ptr->dungeon_idx].flags.has(DungeonFeatureType::BEGINNER)) {
         return;
     }
 
@@ -170,12 +170,12 @@ void AvatarChanger::change_virtue_wild_thief()
     auto *r_ptr = &monraces_info[m_ptr->r_idx];
     auto innocent = true;
     auto thief = false;
-    for (auto i = 0; i < MAX_NUM_BLOWS; i++) {
-        if (r_ptr->blow[i].d_dice != 0) {
+    for (const auto &blow : r_ptr->blows) {
+        if (blow.d_dice != 0) {
             innocent = false;
         }
 
-        if ((r_ptr->blow[i].effect == RaceBlowEffectType::EAT_ITEM) || (r_ptr->blow[i].effect == RaceBlowEffectType::EAT_GOLD)) {
+        if ((blow.effect == RaceBlowEffectType::EAT_ITEM) || (blow.effect == RaceBlowEffectType::EAT_GOLD)) {
             thief = true;
         }
     }

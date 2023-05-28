@@ -81,7 +81,7 @@ void place_secret_door(PlayerType *player_ptr, POSITION y, POSITION x, int type)
         g_ptr->mimic = feat_wall_inner;
         if (feat_supports_los(g_ptr->mimic) && !feat_supports_los(g_ptr->feat)) {
             if (terrains_info[g_ptr->mimic].flags.has(TerrainCharacteristics::MOVE) || terrains_info[g_ptr->mimic].flags.has(TerrainCharacteristics::CAN_FLY)) {
-                g_ptr->feat = one_in_(2) ? g_ptr->mimic : feat_ground_type[randint0(100)];
+                g_ptr->feat = one_in_(2) ? g_ptr->mimic : rand_choice(feat_ground_type);
             }
 
             g_ptr->mimic = 0;
@@ -106,7 +106,7 @@ void place_locked_door(PlayerType *player_ptr, POSITION y, POSITION x)
         return;
     }
 
-    set_cave_feat(floor_ptr, y, x, feat_locked_door_random(dungeons_info[player_ptr->dungeon_idx].flags.has(DungeonFeatureType::GLASS_DOOR) ? DOOR_GLASS_DOOR : DOOR_DOOR));
+    set_cave_feat(floor_ptr, y, x, feat_locked_door_random(dungeons_info[floor_ptr->dungeon_idx].flags.has(DungeonFeatureType::GLASS_DOOR) ? DOOR_GLASS_DOOR : DOOR_DOOR));
     floor_ptr->grid_array[y][x].info &= ~(CAVE_FLOOR);
     delete_monster(player_ptr, y, x);
 }
@@ -143,10 +143,10 @@ void place_random_door(PlayerType *player_ptr, POSITION y, POSITION x, bool room
         place_closed_door(player_ptr, y, x, type);
 
         if (type != DOOR_CURTAIN) {
-            g_ptr->mimic = room ? feat_wall_outer : feat_wall_type[randint0(100)];
+            g_ptr->mimic = room ? feat_wall_outer : rand_choice(feat_wall_type);
             if (feat_supports_los(g_ptr->mimic) && !feat_supports_los(g_ptr->feat)) {
                 if (terrains_info[g_ptr->mimic].flags.has(TerrainCharacteristics::MOVE) || terrains_info[g_ptr->mimic].flags.has(TerrainCharacteristics::CAN_FLY)) {
-                    g_ptr->feat = one_in_(2) ? g_ptr->mimic : feat_ground_type[randint0(100)];
+                    g_ptr->feat = one_in_(2) ? g_ptr->mimic : rand_choice(feat_ground_type);
                 }
                 g_ptr->mimic = 0;
             }

@@ -647,17 +647,17 @@ static void display_found_item_list(PlayerType *player_ptr)
 
         // アイテムシンボル表示
         const auto symbol_code = item->get_symbol();
-        const std::string symbol = format(" %c ", symbol_code);
+        const auto symbol = format(" %c ", symbol_code);
         const auto color_code_for_symbol = item->get_color();
-        term_addstr(-1, color_code_for_symbol, symbol.data());
+        term_addstr(-1, color_code_for_symbol, symbol);
 
         const auto item_name = describe_flavor(player_ptr, item, 0);
         const auto color_code_for_item = tval_to_attr[enum2i(item->bi_key.tval()) % 128];
         term_addstr(-1, color_code_for_item, item_name);
 
         // アイテム座標表示
-        const std::string item_location = format("(X:%3d Y:%3d)", item->ix, item->iy);
-        prt(item_location.data(), term_y, term_w - item_location.length() - 1);
+        const auto item_location = format("(X:%3d Y:%3d)", item->ix, item->iy);
+        prt(item_location, term_y, term_w - item_location.length() - 1);
 
         ++term_y;
     }

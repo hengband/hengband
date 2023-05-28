@@ -1,6 +1,5 @@
 ﻿#include "specific-object/bloody-moon.h"
 #include "artifact/fixed-art-types.h"
-#include "core/player-update-types.h"
 #include "object-enchant/object-boost.h"
 #include "object-enchant/tr-types.h"
 #include "player-base/player-race.h"
@@ -8,8 +7,52 @@
 #include "system/artifact-type-definition.h"
 #include "system/item-entity.h"
 #include "system/player-type-definition.h"
+#include "system/redrawing-flags-updater.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
+
+constexpr auto BLOODY_MOON_SLAYING_FLAG_CANDIDATES = {
+    TR_SLAY_ANIMAL,
+    TR_SLAY_EVIL,
+    TR_SLAY_UNDEAD,
+    TR_SLAY_DEMON,
+    TR_SLAY_ORC,
+    TR_SLAY_TROLL,
+    TR_SLAY_GIANT,
+    TR_SLAY_DRAGON,
+    TR_SLAY_HUMAN,
+    TR_KILL_ANIMAL,
+    TR_KILL_UNDEAD,
+    TR_KILL_DEMON,
+    TR_KILL_ORC,
+    TR_KILL_TROLL,
+    TR_KILL_GIANT,
+    TR_KILL_DRAGON,
+    TR_KILL_HUMAN,
+    TR_BRAND_POIS,
+    TR_BRAND_ACID,
+    TR_BRAND_ELEC,
+    TR_BRAND_FIRE,
+    TR_BRAND_COLD,
+    TR_CHAOTIC,
+    TR_VAMPIRIC,
+    TR_VORPAL,
+    TR_EARTHQUAKE,
+};
+
+constexpr auto BLOODY_MOON_PVAL_FLAG_CANDIDATES = {
+    TR_STR,
+    TR_INT,
+    TR_WIS,
+    TR_DEX,
+    TR_CON,
+    TR_CHR,
+    TR_STEALTH,
+    TR_SEARCH,
+    TR_INFRA,
+    TR_TUNNEL,
+    TR_SPEED,
+};
 
 /*!
  * @brief 固定アーティファクト『ブラッディムーン』の特性を変更する。
@@ -20,32 +63,18 @@ void get_bloody_moon_flags(ItemEntity *o_ptr)
 {
     o_ptr->art_flags = ArtifactsInfo::get_instance().get_artifact(FixedArtifactId::BLOOD).flags;
 
-    int dummy = randint1(2) + randint1(2);
-    for (int i = 0; i < dummy; i++) {
-        int flag = randint0(26);
-        if (flag >= 20) {
-            o_ptr->art_flags.set(TR_KILL_UNDEAD + flag - 20);
-        } else if (flag == 19) {
-            o_ptr->art_flags.set(TR_KILL_ANIMAL);
-        } else if (flag == 18) {
-            o_ptr->art_flags.set(TR_SLAY_HUMAN);
-        } else {
-            o_ptr->art_flags.set(TR_CHAOTIC + flag);
-        }
+    for (int i = 0, count = damroll(2, 2); i < count; i++) {
+        const auto flag = rand_choice(BLOODY_MOON_SLAYING_FLAG_CANDIDATES);
+        o_ptr->art_flags.set(flag);
     }
 
-    dummy = randint1(2);
-    for (int i = 0; i < dummy; i++) {
+    for (int i = 0, count = randint1(2); i < count; i++) {
         one_resistance(o_ptr);
     }
 
     for (int i = 0; i < 2; i++) {
-        int tmp = randint0(11);
-        if (tmp < A_MAX) {
-            o_ptr->art_flags.set(TR_STR + tmp);
-        } else {
-            o_ptr->art_flags.set(TR_STEALTH + tmp - 6);
-        }
+        const auto flag = rand_choice(BLOODY_MOON_PVAL_FLAG_CANDIDATES);
+        o_ptr->art_flags.set(flag);
     }
 }
 
@@ -67,6 +96,10 @@ bool activate_bloody_moon(PlayerType *player_ptr, ItemEntity *o_ptr)
         calc_android_exp(player_ptr);
     }
 
-    player_ptr->update |= PU_BONUS | PU_HP;
+    const auto flags = {
+        StatusRedrawingFlag::BONUS,
+        StatusRedrawingFlag::HP,
+    };
+    RedrawingFlagsUpdater::get_instance().set_flags(flags);
     return true;
 }

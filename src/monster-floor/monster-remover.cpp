@@ -1,5 +1,4 @@
 ﻿#include "monster-floor/monster-remover.h"
-#include "core/player-update-types.h"
 #include "core/stuff-handler.h"
 #include "floor/cave.h"
 #include "floor/floor-object.h"
@@ -18,6 +17,7 @@
 #include "system/monster-entity.h"
 #include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
+#include "system/redrawing-flags-updater.h"
 #include "target/target-checker.h"
 
 /*!
@@ -100,7 +100,7 @@ void delete_monster_idx(PlayerType *player_ptr, MONSTER_IDX i)
     floor_ptr->m_cnt--;
     lite_spot(player_ptr, y, x);
     if (r_ptr->brightness_flags.has_any_of(ld_mask)) {
-        player_ptr->update |= (PU_MONSTER_LITE);
+        RedrawingFlagsUpdater::get_instance().set_flag(StatusRedrawingFlag::MONSTER_LITE);
     }
 }
 

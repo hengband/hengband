@@ -2,7 +2,6 @@
 #include "artifact/fixed-art-types.h"
 #include "cmd-io/cmd-dump.h"
 #include "core/asking-player.h"
-#include "core/player-update-types.h"
 #include "floor/cave.h"
 #include "floor/floor-events.h"
 #include "floor/floor-mode-changer.h"
@@ -185,36 +184,37 @@ void determine_random_questor(PlayerType *player_ptr, QuestType *q_ptr)
     get_mon_num_prep(player_ptr, mon_hook_quest, nullptr);
     MonsterRaceId r_idx;
     while (true) {
-        /*
-         * Random monster 5 - 10 levels out of depth
-         * (depending on level)
-         */
         r_idx = get_mon_num(player_ptr, 0, q_ptr->level + 5 + randint1(q_ptr->level / 10), GMN_ARENA);
-        MonsterRaceInfo *r_ptr;
-        r_ptr = &monraces_info[r_idx];
+        const auto &monrace = monraces_info[r_idx];
+        if (monrace.kind_flags.has_not(MonsterKindType::UNIQUE)) {
+            continue;
+        }
 
-        if (r_ptr->kind_flags.has_not(MonsterKindType::UNIQUE)) {
+        if (monrace.flags8 & RF8_NO_QUEST) {
             continue;
         }
-        if (r_ptr->flags8 & RF8_NO_QUEST) {
+
+        if (monrace.flags1 & RF1_QUESTOR) {
             continue;
         }
-        if (r_ptr->flags1 & RF1_QUESTOR) {
+
+        if (monrace.rarity > 100) {
             continue;
         }
-        if (r_ptr->rarity > 100) {
+
+        if (monrace.behavior_flags.has(MonsterBehaviorType::FRIENDLY)) {
             continue;
         }
-        if (r_ptr->behavior_flags.has(MonsterBehaviorType::FRIENDLY)) {
+
+        if (monrace.feature_flags.has(MonsterFeatureType::AQUATIC)) {
             continue;
         }
-        if (r_ptr->feature_flags.has(MonsterFeatureType::AQUATIC)) {
+
+        if (monrace.wilderness_flags.has(MonsterWildernessType::WILD_ONLY)) {
             continue;
         }
-        if (r_ptr->wilderness_flags.has(MonsterWildernessType::WILD_ONLY)) {
-            continue;
-        }
-        if (no_questor_or_bounty_uniques(r_idx)) {
+
+        if (monrace.no_suitable_questor_bounty()) {
             continue;
         }
 
@@ -222,7 +222,7 @@ void determine_random_questor(PlayerType *player_ptr, QuestType *q_ptr)
          * Accept monsters that are 2 - 6 levels
          * out of depth depending on the quest level
          */
-        if (r_ptr->level > (q_ptr->level + (q_ptr->level / 20))) {
+        if (monrace.level > (q_ptr->level + (q_ptr->level / 20))) {
             break;
         }
     }
@@ -346,12 +346,11 @@ void quest_discovery(QuestId q_idx)
  * @param level 検索対象になる階
  * @return クエストIDを返す。該当がない場合0を返す。
  */
-QuestId quest_number(PlayerType *player_ptr, DEPTH level)
+QuestId quest_number(const FloorType &floor, DEPTH level)
 {
-    auto *floor_ptr = player_ptr->current_floor_ptr;
     const auto &quest_list = QuestList::get_instance();
-    if (inside_quest(floor_ptr->quest_number)) {
-        return floor_ptr->quest_number;
+    if (inside_quest(floor.quest_number)) {
+        return floor.quest_number;
     }
 
     for (const auto &[q_idx, quest] : quest_list) {
@@ -362,13 +361,13 @@ QuestId quest_number(PlayerType *player_ptr, DEPTH level)
         auto depth_quest = (quest.type == QuestKindType::KILL_LEVEL);
         depth_quest &= !(quest.flags & QUEST_FLAG_PRESET);
         depth_quest &= (quest.level == level);
-        depth_quest &= (quest.dungeon == player_ptr->dungeon_idx);
+        depth_quest &= (quest.dungeon == floor.dungeon_idx);
         if (depth_quest) {
             return q_idx;
         }
     }
 
-    return random_quest_number(player_ptr, level);
+    return random_quest_number(floor, level);
 }
 
 /*!
@@ -377,9 +376,9 @@ QuestId quest_number(PlayerType *player_ptr, DEPTH level)
  * @param level 検索対象になる階
  * @return クエストIDを返す。該当がない場合0を返す。
  */
-QuestId random_quest_number(PlayerType *player_ptr, DEPTH level)
+QuestId random_quest_number(const FloorType &floor, DEPTH level)
 {
-    if (player_ptr->dungeon_idx != DUNGEON_ANGBAND) {
+    if (floor.dungeon_idx != DUNGEON_ANGBAND) {
         return QuestId::NONE;
     }
 

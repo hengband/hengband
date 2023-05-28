@@ -197,7 +197,7 @@ static bool select_class(PlayerType *player_ptr, concptr sym, int *k)
             *k = -1;
         }
 
-        birth_help_option(player_ptr, c, BK_CLASS);
+        birth_help_option(player_ptr, c, BirthKind::CLASS);
     }
 
     return true;

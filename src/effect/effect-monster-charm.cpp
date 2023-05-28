@@ -207,7 +207,7 @@ ProcessResult effect_monster_charm_living(PlayerType *player_ptr, effect_monster
 
     msg_format(_("%sを見つめた。", "You stare at %s."), em_ptr->m_name);
 
-    if (common_saving_throw_charm(player_ptr, em_ptr->dam, em_ptr->m_ptr) || !monster_living(em_ptr->m_ptr->r_idx)) {
+    if (common_saving_throw_charm(player_ptr, em_ptr->dam, em_ptr->m_ptr) || !em_ptr->m_ptr->has_living_flag()) {
         em_ptr->note = _("には効果がなかった。", " is unaffected.");
         em_ptr->obvious = false;
         if (one_in_(4)) {
@@ -400,7 +400,7 @@ static int calcutate_capturable_hp(PlayerType *player_ptr, MonsterEntity *m_ptr,
         return hp * 4L;
     }
 
-    if (PlayerClass(player_ptr).equals(PlayerClassType::BEASTMASTER) && monster_living(m_ptr->r_idx)) {
+    if (PlayerClass(player_ptr).equals(PlayerClassType::BEASTMASTER) && m_ptr->has_living_flag()) {
         return hp * 3 / 10;
     }
 

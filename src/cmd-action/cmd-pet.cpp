@@ -3,8 +3,6 @@
 #include "cmd-action/cmd-attack.h"
 #include "cmd-io/cmd-dump.h"
 #include "core/asking-player.h"
-#include "core/player-redraw-types.h"
-#include "core/player-update-types.h"
 #include "core/stuff-handler.h"
 #include "core/window-redrawer.h"
 #include "effect/spells-effect-util.h"
@@ -54,6 +52,7 @@
 #include "system/monster-entity.h"
 #include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
+#include "system/redrawing-flags-updater.h"
 #include "system/terrain-type-definition.h"
 #include "target/target-checker.h"
 #include "target/target-getter.h"
@@ -102,6 +101,7 @@ void do_cmd_pet_dismiss(PlayerType *player_ptr)
     ang_sort(player_ptr, who.data(), &dummy_why, who.size(), ang_sort_comp_pet_dismiss, ang_sort_swap_hook);
 
     /* Process the monsters (backwards) */
+    auto &rfu = RedrawingFlagsUpdater::get_instance();
     for (auto i = 0U; i < who.size(); i++) {
         auto pet_ctr = who[i];
         m_ptr = &player_ptr->current_floor_ptr->m_list[pet_ctr];
@@ -153,21 +153,23 @@ void do_cmd_pet_dismiss(PlayerType *player_ptr)
         if ((all_pets && !should_ask) || (!all_pets && delete_this)) {
             if (record_named_pet && m_ptr->is_named()) {
                 const auto m_name = monster_desc(player_ptr, m_ptr, MD_INDEF_VISIBLE);
-                exe_write_diary(player_ptr, DIARY_NAMED_PET, RECORD_NAMED_PET_DISMISS, m_name.data());
+                exe_write_diary(player_ptr, DIARY_NAMED_PET, RECORD_NAMED_PET_DISMISS, m_name);
             }
 
             if (pet_ctr == player_ptr->riding) {
                 msg_format(_("%sから降りた。", "You dismount from %s. "), friend_name.data());
 
                 player_ptr->riding = 0;
-
-                player_ptr->update |= (PU_MONSTER_STATUSES);
-                player_ptr->redraw |= (PR_EXTRA | PR_UHEALTH);
+                rfu.set_flag(StatusRedrawingFlag::MONSTER_STATUSES);
+                const auto flags = {
+                    MainWindowRedrawingFlag::EXTRA,
+                    MainWindowRedrawingFlag::UHEALTH,
+                };
+                rfu.set_flags(flags);
             }
 
-            /* HACK : Add the line to message buffer */
             msg_format(_("%s を放した。", "Dismissed %s."), friend_name.data());
-            player_ptr->update |= (PU_BONUS);
+            rfu.set_flag(StatusRedrawingFlag::BONUS);
             player_ptr->window_flags |= (PW_MESSAGE);
 
             delete_monster_idx(player_ptr, pet_ctr);
@@ -299,14 +301,20 @@ bool do_cmd_riding(PlayerType *player_ptr, bool force)
 
     PlayerEnergy(player_ptr).set_player_turn_energy(100);
 
-    /* Mega-Hack -- Forget the view and lite */
-    player_ptr->update |= (PU_UN_VIEW | PU_UN_LITE);
-    player_ptr->update |= (PU_BONUS);
-    player_ptr->redraw |= (PR_MAP | PR_EXTRA);
-    player_ptr->redraw |= (PR_UHEALTH);
-
+    auto &rfu = RedrawingFlagsUpdater::get_instance();
+    const auto flags_srf = {
+        StatusRedrawingFlag::UN_VIEW,
+        StatusRedrawingFlag::UN_LITE,
+        StatusRedrawingFlag::BONUS,
+    };
+    rfu.set_flags(flags_srf);
+    const auto flags_mwrf = {
+        MainWindowRedrawingFlag::MAP,
+        MainWindowRedrawingFlag::EXTRA,
+        MainWindowRedrawingFlag::UHEALTH,
+    };
+    rfu.set_flags(flags_mwrf);
     (void)move_player_effect(player_ptr, y, x, MPE_HANDLE_STUFF | MPE_ENERGY_USE | MPE_DONT_PICKUP | MPE_DONT_SWAP_MON);
-
     return true;
 }
 
@@ -358,11 +366,11 @@ static void do_name_pet(PlayerType *player_ptr)
                 /* Save the inscription */
                 m_ptr->nickname = out_val;
                 if (record_named_pet) {
-                    exe_write_diary(player_ptr, DIARY_NAMED_PET, RECORD_NAMED_PET_NAME, monster_desc(player_ptr, m_ptr, MD_INDEF_VISIBLE).data());
+                    exe_write_diary(player_ptr, DIARY_NAMED_PET, RECORD_NAMED_PET_NAME, monster_desc(player_ptr, m_ptr, MD_INDEF_VISIBLE));
                 }
             } else {
                 if (record_named_pet && old_name) {
-                    exe_write_diary(player_ptr, DIARY_NAMED_PET, RECORD_NAMED_PET_UNNAME, monster_desc(player_ptr, m_ptr, MD_INDEF_VISIBLE).data());
+                    exe_write_diary(player_ptr, DIARY_NAMED_PET, RECORD_NAMED_PET_UNNAME, monster_desc(player_ptr, m_ptr, MD_INDEF_VISIBLE));
                 }
                 m_ptr->nickname.clear();
             }
@@ -628,7 +636,7 @@ void do_cmd_pet(PlayerType *player_ptr)
                         }
 
                         ss << power_desc[control];
-                        prt(ss.str().data(), y + control, x);
+                        prt(ss.str(), y + control, x);
                     }
 
                     prt("", y + std::min(control, 17), x);
@@ -811,7 +819,8 @@ void do_cmd_pet(PlayerType *player_ptr)
         } else {
             player_ptr->pet_extra_flags |= (PF_TWO_HANDS);
         }
-        player_ptr->update |= (PU_BONUS);
+
+        RedrawingFlagsUpdater::get_instance().set_flag(StatusRedrawingFlag::BONUS);
         handle_stuff(player_ptr);
         break;
     }

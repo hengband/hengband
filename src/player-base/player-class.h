@@ -1,12 +1,10 @@
 ﻿#pragma once
 
-#include "system/angband.h"
-
 #include "object-enchant/tr-flags.h"
 #include "system/player-type-definition.h"
-
 #include <initializer_list>
 #include <memory>
+#include <span>
 #include <variant>
 
 enum class SamuraiStanceType : uint8_t;
@@ -49,6 +47,7 @@ public:
     std::shared_ptr<T> get_specific_data() const;
 
     bool has_ninja_speed() const;
+    std::span<const std::string> get_subtitle_candidates() const;
 
 private:
     PlayerType *player_ptr;

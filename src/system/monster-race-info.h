@@ -90,7 +90,7 @@ public:
     EnumClassFlagGroup<MonsterPopulationType> population_flags; //!< 能力フラグ（出現数関連） / Population Flags
     EnumClassFlagGroup<MonsterSpeakType> speak_flags; //!< 能力フラグ（セリフ） / Speaking Flags
     EnumClassFlagGroup<MonsterBrightnessType> brightness_flags; //!< 能力フラグ（明暗） / Speaking Lite or Dark
-    MonsterBlow blow[MAX_NUM_BLOWS]{}; //!< 打撃能力定義 / Up to four blows per round
+    MonsterBlow blows[MAX_NUM_BLOWS]{}; //!< 打撃能力定義 / Up to four blows per round
 
     //! 指定護衛リスト <モンスター種族ID,護衛数ダイス数,護衛数ダイス面>
     std::vector<std::tuple<MonsterRaceId, DICE_NUMBER, DICE_SID>> reinforces;
@@ -137,4 +137,8 @@ public:
     PERCENTAGE cur_hp_per{}; //!< 生成時現在HP率(%)
 
     const std::string &decide_horror_message() const;
+    bool has_living_flag() const;
+    bool is_explodable() const;
+    std::string get_died_message() const;
+    bool no_suitable_questor_bounty() const;
 };

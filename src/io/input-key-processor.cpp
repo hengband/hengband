@@ -46,8 +46,6 @@
 #include "cmd-visual/cmd-map.h"
 #include "cmd-visual/cmd-visuals.h"
 #include "core/asking-player.h"
-#include "core/player-redraw-types.h"
-#include "core/player-update-types.h"
 #include "core/special-internal-keys.h"
 #include "dungeon/dungeon-flag-types.h"
 #include "dungeon/quest.h" //!< @do_cmd_quest() がある。後で移設する.
@@ -89,6 +87,7 @@
 #include "system/dungeon-info.h"
 #include "system/floor-type-definition.h"
 #include "system/player-type-definition.h"
+#include "system/redrawing-flags-updater.h"
 #include "term/screen-processor.h"
 #include "util/int-char-converter.h"
 #include "view/display-messages.h"
@@ -119,8 +118,8 @@ bool enter_wizard_mode(PlayerType *player_ptr)
             return false;
         }
 
-        exe_write_diary(
-            player_ptr, DIARY_DESCRIPTION, 0, _("ウィザードモードに突入してスコアを残せなくなった。", "gave up recording score to enter wizard mode."));
+        constexpr auto mes = _("ウィザードモードに突入してスコアを残せなくなった。", "gave up recording score to enter wizard mode.");
+        exe_write_diary(player_ptr, DIARY_DESCRIPTION, 0, mes);
         w_ptr->noscore |= 0x0002;
     }
 
@@ -148,8 +147,8 @@ static bool enter_debug_mode(PlayerType *player_ptr)
             return false;
         }
 
-        exe_write_diary(
-            player_ptr, DIARY_DESCRIPTION, 0, _("デバッグモードに突入してスコアを残せなくなった。", "gave up sending score to use debug commands."));
+        constexpr auto mes = _("デバッグモードに突入してスコアを残せなくなった。", "gave up sending score to use debug commands.");
+        exe_write_diary(player_ptr, DIARY_DESCRIPTION, 0, mes);
         w_ptr->noscore |= 0x0008;
     }
 
@@ -189,8 +188,9 @@ void process_command(PlayerType *player_ptr)
             msg_print(_("ウィザードモード突入。", "Wizard mode on."));
         }
 
-        player_ptr->update |= (PU_MONSTER_STATUSES);
-        player_ptr->redraw |= (PR_TITLE);
+        auto &rfu = RedrawingFlagsUpdater::get_instance();
+        rfu.set_flag(StatusRedrawingFlag::MONSTER_STATUSES);
+        rfu.set_flag(MainWindowRedrawingFlag::TITLE);
         break;
     }
     case KTRL('A'): {
@@ -403,7 +403,7 @@ void process_command(PlayerType *player_ptr)
             break;
         }
 
-        const auto &dungeon = dungeons_info[player_ptr->dungeon_idx];
+        const auto &dungeon = dungeons_info[floor_ptr->dungeon_idx];
         auto non_magic_class = pc.equals(PlayerClassType::BERSERKER);
         non_magic_class |= pc.equals(PlayerClassType::SMITH);
         if (floor_ptr->dun_level && dungeon.flags.has(DungeonFeatureType::NO_MAGIC) && !non_magic_class) {

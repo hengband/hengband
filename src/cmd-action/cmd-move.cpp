@@ -6,8 +6,6 @@
 #include "cmd-io/cmd-save.h"
 #include "core/asking-player.h"
 #include "core/disturbance.h"
-#include "core/player-redraw-types.h"
-#include "core/player-update-types.h"
 #include "core/stuff-handler.h"
 #include "dungeon/quest.h"
 #include "floor/cave.h"
@@ -38,6 +36,7 @@
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
 #include "system/player-type-definition.h"
+#include "system/redrawing-flags-updater.h"
 #include "system/terrain-type-definition.h"
 #include "target/target-getter.h"
 #include "timed-effect/player-cut.h"
@@ -165,7 +164,7 @@ void do_cmd_go_up(PlayerType *player_ptr)
             up_num = 1;
         }
 
-        if (player_ptr->current_floor_ptr->dun_level - up_num < dungeons_info[player_ptr->dungeon_idx].mindepth) {
+        if (player_ptr->current_floor_ptr->dun_level - up_num < dungeons_info[floor_ptr->dungeon_idx].mindepth) {
             up_num = player_ptr->current_floor_ptr->dun_level;
         }
     }
@@ -280,7 +279,7 @@ void do_cmd_go_down(PlayerType *player_ptr)
 
         player_ptr->oldpx = player_ptr->x;
         player_ptr->oldpy = player_ptr->y;
-        player_ptr->dungeon_idx = target_dungeon;
+        floor_ptr->dungeon_idx = target_dungeon;
         prepare_change_floor_mode(player_ptr, CFM_FIRST_FLOOR);
     }
 
@@ -297,7 +296,7 @@ void do_cmd_go_down(PlayerType *player_ptr)
 
     if (!floor_ptr->is_in_dungeon()) {
         player_ptr->enter_dungeon = true;
-        down_num = dungeons_info[player_ptr->dungeon_idx].mindepth;
+        down_num = dungeons_info[floor_ptr->dungeon_idx].mindepth;
     }
 
     if (record_stair) {
@@ -312,7 +311,7 @@ void do_cmd_go_down(PlayerType *player_ptr)
         msg_print(_("わざと落とし戸に落ちた。", "You deliberately jump through the trap door."));
     } else {
         if (target_dungeon) {
-            msg_format(_("%sへ入った。", "You entered %s."), dungeons_info[player_ptr->dungeon_idx].text.data());
+            msg_format(_("%sへ入った。", "You entered %s."), dungeons_info[floor_ptr->dungeon_idx].text.data());
         } else {
             if (is_echizen(player_ptr)) {
                 msg_print(_("なんだこの階段は！", "What's this STAIRWAY!"));
@@ -348,7 +347,7 @@ void do_cmd_walk(PlayerType *player_ptr, bool pickup)
 {
     if (command_arg) {
         command_rep = command_arg - 1;
-        player_ptr->redraw |= PR_ACTION;
+        RedrawingFlagsUpdater::get_instance().set_flag(MainWindowRedrawingFlag::ACTION);
         command_arg = 0;
     }
 
@@ -426,7 +425,7 @@ void do_cmd_stay(PlayerType *player_ptr, bool pickup)
     uint32_t mpe_mode = MPE_STAYING | MPE_ENERGY_USE;
     if (command_arg) {
         command_rep = command_arg - 1;
-        player_ptr->redraw |= (PR_ACTION);
+        RedrawingFlagsUpdater::get_instance().set_flag(MainWindowRedrawingFlag::ACTION);
         command_arg = 0;
     }
 
@@ -496,8 +495,9 @@ void do_cmd_rest(PlayerType *player_ptr)
 
     player_ptr->resting = command_arg;
     player_ptr->action = ACTION_REST;
-    player_ptr->update |= PU_BONUS;
-    player_ptr->redraw |= (PR_ACTION);
+    auto &rfu = RedrawingFlagsUpdater::get_instance();
+    rfu.set_flag(StatusRedrawingFlag::BONUS);
+    rfu.set_flag(MainWindowRedrawingFlag::ACTION);
     handle_stuff(player_ptr);
     term_fresh();
 }

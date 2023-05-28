@@ -5,7 +5,6 @@
  */
 
 #include "player-info/class-info.h"
-#include "core/player-redraw-types.h"
 #include "inventory/inventory-slot-types.h"
 #include "player-info/race-info.h"
 #include "system/item-entity.h"

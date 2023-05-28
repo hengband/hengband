@@ -12,8 +12,8 @@
  */
 std::string look_mon_desc(MonsterEntity *m_ptr, BIT_FLAGS mode)
 {
-    bool living = monster_living(m_ptr->ap_r_idx);
-    int perc = m_ptr->maxhp > 0 ? 100L * m_ptr->hp / m_ptr->maxhp : 0;
+    auto living = m_ptr->has_living_flag(true);
+    auto perc = m_ptr->maxhp > 0 ? 100L * m_ptr->hp / m_ptr->maxhp : 0;
 
     concptr desc;
     if (m_ptr->hp >= m_ptr->maxhp) {

@@ -104,7 +104,6 @@ typedef char GAME_TEXT; /*!< ゲーム中のテキスト型定義 */
 typedef int32_t MANA_POINT; /*!< ゲーム中のMP型を定義 */
 
 typedef int16_t HIT_PROB; /*!< ゲーム中の装備命中修正値を定義 */
-typedef int16_t BASE_STATUS; /*!< ゲーム中の基礎能力値型を定義 */
 
 typedef int32_t MONSTER_NUMBER; /*!< ゲーム中のモンスター数型を定義 */
 typedef int32_t ITEM_NUMBER; /*!< ゲーム中のアイテム数型を定義 */
@@ -128,7 +127,6 @@ typedef int DIRECTION; /*!< ゲーム中の方角の型定義 */
 typedef int32_t EXP; /*!< ゲーム中の主経験値の型定義 */
 typedef int16_t SUB_EXP; /*!< ゲーム中の副経験値の型定義 */
 
-typedef int32_t OBJECT_SUBTYPE_VALUE; /*!< ゲーム中のアイテム副分類の型定義 */
 typedef int16_t PARAMETER_VALUE; /*!< ゲーム中のアイテム能力値の型定義 */
 typedef int32_t WEIGHT; /*!< ゲーム中の重量の型定義(ポンド) */
 

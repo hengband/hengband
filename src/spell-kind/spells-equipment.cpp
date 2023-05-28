@@ -1,6 +1,5 @@
 ﻿#include "spell-kind/spells-equipment.h"
 #include "avatar/avatar.h"
-#include "core/player-update-types.h"
 #include "core/window-redrawer.h"
 #include "flavor/flavor-describer.h"
 #include "flavor/object-flavor-types.h"
@@ -10,6 +9,7 @@
 #include "racial/racial-android.h"
 #include "system/item-entity.h"
 #include "system/player-type-definition.h"
+#include "system/redrawing-flags-updater.h"
 #include "view/display-messages.h"
 
 /*!
@@ -22,36 +22,19 @@
  */
 bool apply_disenchant(PlayerType *player_ptr, BIT_FLAGS mode)
 {
-    int t = 0;
-    switch (randint1(8)) {
-    case 1:
-        t = INVEN_MAIN_HAND;
-        break;
-    case 2:
-        t = INVEN_SUB_HAND;
-        break;
-    case 3:
-        t = INVEN_BOW;
-        break;
-    case 4:
-        t = INVEN_BODY;
-        break;
-    case 5:
-        t = INVEN_OUTER;
-        break;
-    case 6:
-        t = INVEN_HEAD;
-        break;
-    case 7:
-        t = INVEN_ARMS;
-        break;
-    case 8:
-        t = INVEN_FEET;
-        break;
-    }
+    constexpr static auto candidates = {
+        INVEN_MAIN_HAND,
+        INVEN_SUB_HAND,
+        INVEN_BOW,
+        INVEN_BODY,
+        INVEN_OUTER,
+        INVEN_HEAD,
+        INVEN_ARMS,
+        INVEN_FEET,
+    };
 
-    ItemEntity *o_ptr;
-    o_ptr = &player_ptr->inventory_list[t];
+    const auto t = rand_choice(candidates);
+    auto *o_ptr = &player_ptr->inventory_list[t];
     if (!o_ptr->is_valid()) {
         return false;
     }
@@ -119,7 +102,8 @@ bool apply_disenchant(PlayerType *player_ptr, BIT_FLAGS mode)
 #endif
     chg_virtue(player_ptr, Virtue::HARMONY, 1);
     chg_virtue(player_ptr, Virtue::ENCHANT, -2);
-    player_ptr->update |= (PU_BONUS);
+    auto &rfu = RedrawingFlagsUpdater::get_instance();
+    rfu.set_flag(StatusRedrawingFlag::BONUS);
     player_ptr->window_flags |= (PW_EQUIPMENT | PW_PLAYER);
 
     calc_android_exp(player_ptr);

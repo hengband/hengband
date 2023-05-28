@@ -38,6 +38,7 @@
 #include "room/rooms-builder.h"
 #include "dungeon/dungeon-flag-types.h"
 #include "floor/cave.h"
+#include "floor/geometry.h"
 #include "grid/door.h"
 #include "grid/feature.h"
 #include "grid/grid.h"
@@ -75,20 +76,8 @@ void build_small_room(PlayerType *player_ptr, POSITION x0, POSITION y0)
         place_bold(player_ptr, y0 + 1, x, GB_INNER);
     }
 
-    switch (randint0(4)) {
-    case 0:
-        place_secret_door(player_ptr, y0, x0 - 1, DOOR_DEFAULT);
-        break;
-    case 1:
-        place_secret_door(player_ptr, y0, x0 + 1, DOOR_DEFAULT);
-        break;
-    case 2:
-        place_secret_door(player_ptr, y0 - 1, x0, DOOR_DEFAULT);
-        break;
-    case 3:
-        place_secret_door(player_ptr, y0 + 1, x0, DOOR_DEFAULT);
-        break;
-    }
+    const auto n = randint0(4);
+    place_secret_door(player_ptr, y0 + ddy_ddd[n], x0 + ddx_ddd[n], DOOR_DEFAULT);
 
     player_ptr->current_floor_ptr->grid_array[y0][x0].mimic = 0;
     place_bold(player_ptr, y0, x0, GB_FLOOR);

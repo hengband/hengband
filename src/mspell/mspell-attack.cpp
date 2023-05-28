@@ -1,7 +1,6 @@
 ﻿#include "mspell/mspell-attack.h"
 #include "blue-magic/blue-magic-checker.h"
 #include "core/disturbance.h"
-#include "core/player-redraw-types.h"
 #include "dungeon/dungeon-flag-types.h"
 #include "dungeon/quest.h"
 #include "floor/cave.h"
@@ -33,18 +32,18 @@
 #include "system/monster-entity.h"
 #include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
+#include "system/redrawing-flags-updater.h"
 #include "target/projection-path-calculator.h"
 #include "timed-effect/player-blindness.h"
 #include "timed-effect/timed-effects.h"
 #include "util/string-processor.h"
 #include "view/display-messages.h"
 #include "world/world.h"
+#include <iterator>
 #ifdef JP
 #else
 #include "monster/monster-description-types.h"
 #endif
-
-#include <iterator>
 
 static void set_no_magic_mask(msa_type *msa_ptr)
 {
@@ -58,7 +57,7 @@ static void set_no_magic_mask(msa_type *msa_ptr)
 static void check_mspell_stupid(PlayerType *player_ptr, msa_type *msa_ptr)
 {
     auto *floor_ptr = player_ptr->current_floor_ptr;
-    msa_ptr->in_no_magic_dungeon = dungeons_info[player_ptr->dungeon_idx].flags.has(DungeonFeatureType::NO_MAGIC) && floor_ptr->dun_level && (!inside_quest(floor_ptr->quest_number) || QuestType::is_fixed(floor_ptr->quest_number));
+    msa_ptr->in_no_magic_dungeon = dungeons_info[floor_ptr->dungeon_idx].flags.has(DungeonFeatureType::NO_MAGIC) && floor_ptr->dun_level && (!inside_quest(floor_ptr->quest_number) || QuestType::is_fixed(floor_ptr->quest_number));
     if (!msa_ptr->in_no_magic_dungeon || (msa_ptr->r_ptr->behavior_flags.has(MonsterBehaviorType::STUPID))) {
         return;
     }
@@ -290,7 +289,7 @@ static void check_mspell_imitation(PlayerType *player_ptr, msa_type *msa_ptr)
 
     mane_data->mane_list.push_back({ msa_ptr->thrown_spell, msa_ptr->dam });
     mane_data->new_mane = true;
-    player_ptr->redraw |= PR_IMITATION;
+    RedrawingFlagsUpdater::get_instance().set_flag(MainWindowRedrawingFlag::IMITATION);
 }
 
 static void remember_mspell(msa_type *msa_ptr)

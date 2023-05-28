@@ -63,26 +63,22 @@ void vault_prep_dragon(PlayerType *player_ptr)
     (void)player_ptr;
 
     vault_aux_dragon_mask4.clear();
-    switch (randint0(6)) {
-    case 0: /* Black */
-        vault_aux_dragon_mask4.set(MonsterAbilityType::BR_ACID);
-        break;
-    case 1: /* Blue */
-        vault_aux_dragon_mask4.set(MonsterAbilityType::BR_ELEC);
-        break;
-    case 2: /* Red */
-        vault_aux_dragon_mask4.set(MonsterAbilityType::BR_FIRE);
-        break;
-    case 3: /* White */
-        vault_aux_dragon_mask4.set(MonsterAbilityType::BR_COLD);
-        break;
-    case 4: /* Green */
-        vault_aux_dragon_mask4.set(MonsterAbilityType::BR_POIS);
-        break;
-    default: /* Multi-hued */
-        vault_aux_dragon_mask4.set({ MonsterAbilityType::BR_ACID, MonsterAbilityType::BR_ELEC, MonsterAbilityType::BR_FIRE, MonsterAbilityType::BR_COLD, MonsterAbilityType::BR_POIS });
-        break;
+
+    constexpr static auto breath_list = {
+        MonsterAbilityType::BR_ACID, /* Black */
+        MonsterAbilityType::BR_ELEC, /* Blue */
+        MonsterAbilityType::BR_FIRE, /* Red */
+        MonsterAbilityType::BR_COLD, /* White */
+        MonsterAbilityType::BR_POIS, /* Green */
+    };
+
+    if (one_in_(6)) {
+        /* Multi-hued */
+        vault_aux_dragon_mask4.set(breath_list);
+        return;
     }
+
+    vault_aux_dragon_mask4.set(rand_choice(breath_list));
 }
 
 /*!
@@ -130,13 +126,13 @@ bool mon_hook_quest(PlayerType *player_ptr, MonsterRaceId r_idx)
  */
 bool mon_hook_dungeon(PlayerType *player_ptr, MonsterRaceId r_idx)
 {
-    const auto &floor_ref = *player_ptr->current_floor_ptr;
-    if (!floor_ref.is_in_dungeon() && !inside_quest(floor_ref.quest_number)) {
+    const auto &floor = *player_ptr->current_floor_ptr;
+    if (!floor.is_in_dungeon() && !inside_quest(floor.quest_number)) {
         return true;
     }
 
     auto *r_ptr = &monraces_info[r_idx];
-    dungeon_type *d_ptr = &dungeons_info[player_ptr->dungeon_idx];
+    dungeon_type *d_ptr = &dungeons_info[floor.dungeon_idx];
     if (r_ptr->wilderness_flags.has(MonsterWildernessType::WILD_ONLY)) {
         return d_ptr->mon_wilderness_flags.has(MonsterWildernessType::WILD_MOUNTAIN) && r_ptr->wilderness_flags.has(MonsterWildernessType::WILD_MOUNTAIN);
     }
@@ -789,45 +785,6 @@ bool vault_aux_dark_elf(PlayerType *player_ptr, MonsterRaceId r_idx)
 }
 
 /*!
- * @brief モンスターが生命体かどうかを返す
- * Is the monster "alive"?
- * @param r_ptr 判定するモンスターの種族情報構造体参照ポインタ
- * @return 生命体ならばTRUEを返す
- * @details
- * Used to determine the message to print for a killed monster.
- * ("dies", "destroyed")
- */
-bool monster_living(MonsterRaceId r_idx)
-{
-    auto *r_ptr = &monraces_info[r_idx];
-    return r_ptr->kind_flags.has_none_of({ MonsterKindType::DEMON, MonsterKindType::UNDEAD, MonsterKindType::NONLIVING });
-}
-
-/*!
- * @brief モンスターが特殊能力上、賞金首から排除する必要があるかどうかを返す。
- * Is the monster "alive"? / Is this monster declined to be questor or bounty?
- * @param r_idx モンスターの種族ID
- * @return 賞金首に加えられないならばTRUEを返す
- * @details
- * 実質バーノール＝ルパート用。
- */
-bool no_questor_or_bounty_uniques(MonsterRaceId r_idx)
-{
-    switch (r_idx) {
-        /*
-         * Decline them to be questor or bounty because they use
-         * special motion "split and combine"
-         */
-    case MonsterRaceId::BANORLUPART:
-    case MonsterRaceId::BANOR:
-    case MonsterRaceId::LUPART:
-        return true;
-    default:
-        return false;
-    }
-}
-
-/*!
  * @brief バルログが死体を食べられるモンスターかの判定 / Hook function for human corpses
  * @param r_idx モンスターＩＤ
  * @return 死体を食べられるならTRUEを返す。
@@ -899,27 +856,24 @@ bool monster_can_entry_arena(PlayerType *player_ptr, MonsterRaceId r_idx)
     (void)player_ptr;
 
     int dam = 0;
-    auto *r_ptr = &monraces_info[r_idx];
-    bool unselectable = r_ptr->behavior_flags.has(MonsterBehaviorType::NEVER_MOVE);
-    unselectable |= any_bits(r_ptr->flags2, RF2_MULTIPLY);
-    unselectable |= r_ptr->kind_flags.has(MonsterKindType::QUANTUM) && r_ptr->kind_flags.has_not(MonsterKindType::UNIQUE);
-    unselectable |= r_ptr->feature_flags.has(MonsterFeatureType::AQUATIC);
-    unselectable |= any_bits(r_ptr->flags7, RF7_CHAMELEON);
+    const auto &monrace = monraces_info[r_idx];
+    bool unselectable = monrace.behavior_flags.has(MonsterBehaviorType::NEVER_MOVE);
+    unselectable |= any_bits(monrace.flags2, RF2_MULTIPLY);
+    unselectable |= monrace.kind_flags.has(MonsterKindType::QUANTUM) && monrace.kind_flags.has_not(MonsterKindType::UNIQUE);
+    unselectable |= monrace.feature_flags.has(MonsterFeatureType::AQUATIC);
+    unselectable |= any_bits(monrace.flags7, RF7_CHAMELEON);
+    unselectable |= monrace.is_explodable();
     if (unselectable) {
         return false;
     }
 
-    for (int i = 0; i < 4; i++) {
-        if (r_ptr->blow[i].method == RaceBlowMethodType::EXPLODE) {
-            return false;
-        }
-
-        if (r_ptr->blow[i].effect != RaceBlowEffectType::DR_MANA) {
-            dam += r_ptr->blow[i].d_dice;
+    for (const auto &blow : monrace.blows) {
+        if (blow.effect != RaceBlowEffectType::DR_MANA) {
+            dam += blow.d_dice;
         }
     }
 
-    if (!dam && r_ptr->ability_flags.has_none_of(RF_ABILITY_BOLT_MASK | RF_ABILITY_BEAM_MASK | RF_ABILITY_BALL_MASK | RF_ABILITY_BREATH_MASK)) {
+    if (!dam && monrace.ability_flags.has_none_of(RF_ABILITY_BOLT_MASK | RF_ABILITY_BEAM_MASK | RF_ABILITY_BALL_MASK | RF_ABILITY_BREATH_MASK)) {
         return false;
     }
 
