@@ -261,7 +261,7 @@ static void effect_monster_domination_corrupted(PlayerType *player_ptr, effect_m
         return;
     }
 
-    em_ptr->note = nullptr;
+    em_ptr->note = "";
     msg_format(_("%s^の堕落した精神は攻撃を跳ね返した！",
                    (em_ptr->seen ? "%s^'s corrupted mind backlashes your attack!" : "%s^s corrupted mind backlashes your attack!")),
         em_ptr->m_name);
