@@ -48,7 +48,7 @@
  * are left with "meaningful" values.
  */
 
-#include "main/x11-gamma-builder.h"
+#include "main-unix/x11-gamma-builder.h"
 #include "system/angband.h"
 
 /* Table of gamma values */

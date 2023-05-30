@@ -25,6 +25,9 @@
 #include "util/angband-files.h"
 #include "view/display-messages.h"
 #include <algorithm>
+#ifdef SAVEFILE_USE_UID
+#include "main-unix/unix-user-ids.h"
+#endif
 
 std::filesystem::path ANGBAND_DIR; //!< Path name: The main "lib" directory This variable is not actually used anywhere in the code
 std::filesystem::path ANGBAND_DIR_APEX; //!< High score files (binary) These files may be portable between platforms
@@ -220,7 +223,8 @@ static errr counts_seek(PlayerType *player_ptr, int fd, uint32_t where, bool fla
     char temp1[128]{}, temp2[128]{};
     auto short_pclass = enum2i(player_ptr->pclass);
 #ifdef SAVEFILE_USE_UID
-    strnfmt(temp1, sizeof(temp1), "%d.%s.%d%d%d", player_ptr->player_uid, savefile_base.data(), short_pclass, player_ptr->ppersonality, player_ptr->age);
+    const auto user_id = UnixUserIds::get_instance().get_user_id();
+    strnfmt(temp1, sizeof(temp1), "%d.%s.%d%d%d", user_id, savefile_base.data(), short_pclass, player_ptr->ppersonality, player_ptr->age);
 #else
     strnfmt(temp1, sizeof(temp1), "%s.%d%d%d", savefile_base.data(), short_pclass, player_ptr->ppersonality, player_ptr->age);
 #endif
@@ -286,16 +290,16 @@ uint32_t counts_read(PlayerType *player_ptr, int where)
 errr counts_write(PlayerType *player_ptr, int where, uint32_t count)
 {
     const auto &path = path_build(ANGBAND_DIR_DATA, _("z_info_j.raw", "z_info.raw"));
-    safe_setuid_grab(player_ptr);
+    safe_setuid_grab();
     auto fd = fd_open(path, O_RDWR);
     safe_setuid_drop();
     if (fd < 0) {
-        safe_setuid_grab(player_ptr);
+        safe_setuid_grab();
         fd = fd_make(path);
         safe_setuid_drop();
     }
 
-    safe_setuid_grab(player_ptr);
+    safe_setuid_grab();
     auto err = fd_lock(fd, F_WRLCK);
     safe_setuid_drop();
     if (err) {
@@ -304,7 +308,7 @@ errr counts_write(PlayerType *player_ptr, int where, uint32_t count)
 
     counts_seek(player_ptr, fd, where, true);
     fd_write(fd, (char *)(&count), sizeof(uint32_t));
-    safe_setuid_grab(player_ptr);
+    safe_setuid_grab();
     err = fd_lock(fd, F_UNLCK);
     safe_setuid_drop();
 

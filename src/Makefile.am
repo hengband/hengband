@@ -395,8 +395,10 @@ hengband_SOURCES = \
 	main/scene-table-monster.cpp main/scene-table-monster.h \
 	main/sound-definitions-table.cpp main/sound-definitions-table.h \
 	main/sound-of-music.cpp main/sound-of-music.h \
-	main/x11-gamma-builder.cpp main/x11-gamma-builder.h \
-	main/x11-type-string.cpp main/x11-type-string.h \
+	\
+	main-unix/unix-user-ids.cpp main-unix/unix-user-ids.h \
+	main-unix/x11-gamma-builder.cpp main-unix/x11-gamma-builder.h \
+	main-unix/x11-type-string.cpp main-unix/x11-type-string.h \
 	\
 	market/arena-info-table.cpp market/arena-info-table.h \
 	market/building-initializer.cpp market/building-initializer.h \

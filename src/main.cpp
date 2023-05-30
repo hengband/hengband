@@ -15,6 +15,7 @@
 #include "io/record-play-movie.h"
 #include "io/signal-handlers.h"
 #include "io/uid-checker.h"
+#include "main-unix/unix-user-ids.h"
 #include "main/angband-initializer.h"
 #include "player/process-name.h"
 #include "system/angband-version.h"
@@ -249,121 +250,84 @@ static bool parse_long_opt(const char *opt)
  */
 int main(int argc, char *argv[])
 {
-    int i;
-
-    bool done = false;
-    bool new_game = false;
-    int show_score = 0;
+    auto done = false;
+    auto new_game = false;
+    auto show_score = 0;
     concptr mstr = nullptr;
-    bool args = true;
-
-    /* Save the "program name" XXX XXX XXX */
+    auto args = true;
     argv0 = argv[0];
 
 #ifdef SET_UID
-
     /* Default permissions on files */
     (void)umask(022);
-
 #endif
 
-    /* Get the file paths */
     init_stuff();
-
+    auto &ids = UnixUserIds::get_instance();
 #ifdef SET_UID
-
-    /* Get the user id (?) */
-    p_ptr->player_uid = getuid();
-
+    ids.set_user_id(getuid());
 #ifdef VMS
-    /* Mega-Hack -- Factor group id */
-    p_ptr->player_uid += (getgid() * 1000);
+    ids.mod_user_id(getgid() * 1000);
 #endif
 
-#ifdef SAFE_SETUID
-
-#ifdef _POSIX_SAVED_IDS
-
-    /* Save some info for later */
-    p_ptr->player_euid = geteuid();
-    p_ptr->player_egid = getegid();
-
+#if defined(SAFE_SETUID) && defined(_POSIX_SAVED_IDS)
+    ids.set_effective_user_id(geteuid());
+    ids.set_effective_group_id(getegid());
 #endif
-
-#endif
-
-#endif
-
-    /* Drop permissions */
-    safe_setuid_drop();
-
-#ifdef SET_UID
-
-    /* Acquire the "user name" as a default player name */
-    user_name(p_ptr->name, p_ptr->player_uid);
-
-#ifdef PRIVATE_USER_PATH
-
-    /* Create a directory for the users files. */
-    create_user_dir();
-
-#endif /* PRIVATE_USER_PATH */
 
 #endif /* SET_UID */
 
-    /* Process the command line arguments */
-    bool browsing_movie = false;
-    for (i = 1; args && (i < argc); i++) {
-        /* Require proper options */
+    safe_setuid_drop();
+#ifdef SET_UID
+    user_name(p_ptr->name, ids.get_user_id());
+#ifdef PRIVATE_USER_PATH
+    create_user_dir();
+#endif /* PRIVATE_USER_PATH */
+#endif /* SET_UID */
+
+    auto browsing_movie = false;
+    for (auto i = 1; args && (i < argc); i++) {
         if (argv[i][0] != '-') {
             display_usage(argv[0]);
             continue;
         }
 
-        /* Analyze option */
-        bool is_usage_needed = false;
+        auto is_usage_needed = false;
         switch (argv[i][1]) {
         case 'N':
-        case 'n': {
+        case 'n':
             new_game = true;
             break;
-        }
         case 'B':
-        case 'b': {
+        case 'b':
             arg_music = true;
             break;
-        }
         case 'V':
-        case 'v': {
+        case 'v':
             arg_sound = true;
             break;
-        }
         case 'G':
-        case 'g': {
-            /* HACK - Graphics mode switches on the original tiles */
+        case 'g':
             arg_graphics = GRAPHICS_ORIGINAL;
             break;
-        }
         case 'R':
-        case 'r': {
+        case 'r':
             arg_force_roguelike = true;
             break;
-        }
         case 'O':
-        case 'o': {
+        case 'o':
             arg_force_original = true;
             break;
-        }
         case 'S':
-        case 's': {
+        case 's':
             show_score = atoi(&argv[i][2]);
             if (show_score <= 0) {
                 show_score = 10;
             }
+
             break;
-        }
         case 'u':
-        case 'U': {
+        case 'U':
             if (!argv[i][2]) {
                 is_usage_needed = true;
                 break;
@@ -371,8 +335,7 @@ int main(int argc, char *argv[])
 
             strcpy(p_ptr->name, &argv[i][2]);
             break;
-        }
-        case 'm': {
+        case 'm':
             if (!argv[i][2]) {
                 is_usage_needed = true;
                 break;
@@ -380,17 +343,14 @@ int main(int argc, char *argv[])
 
             mstr = &argv[i][2];
             break;
-        }
-        case 'M': {
+        case 'M':
             arg_monochrome = true;
             break;
-        }
         case 'd':
-        case 'D': {
+        case 'D':
             change_path(&argv[i][2]);
             break;
-        }
-        case 'x': {
+        case 'x':
             if (!argv[i][2]) {
                 is_usage_needed = true;
                 break;
@@ -399,8 +359,7 @@ int main(int argc, char *argv[])
             prepare_browse_movie_with_path_build(&argv[i][2]);
             browsing_movie = true;
             break;
-        }
-        case '-': {
+        case '-':
             if (argv[i][2] == '\0') {
                 argv[i] = argv[0];
                 argc = argc - i;
@@ -409,12 +368,11 @@ int main(int argc, char *argv[])
             } else {
                 is_usage_needed = parse_long_opt(argv[i]);
             }
+
             break;
-        }
-        default: {
+        default:
             is_usage_needed = true;
             break;
-        }
         }
 
         if (!is_usage_needed) {
@@ -424,20 +382,15 @@ int main(int argc, char *argv[])
         display_usage(argv[0]);
     }
 
-    /* Hack -- Forget standard args */
     if (args) {
         argc = 1;
         argv[1] = nullptr;
     }
 
-    /* Process the player name */
     process_player_name(p_ptr, true);
-
-    /* Install "quit" hook */
     quit_aux = quit_hook;
 
 #ifdef USE_X11
-    /* Attempt to use the "main-x11.c" support */
     if (!done && (!mstr || (streq(mstr, "x11")))) {
         extern errr init_x11(int, char **);
         if (0 == init_x11(argc, argv)) {
@@ -448,7 +401,6 @@ int main(int argc, char *argv[])
 #endif
 
 #ifdef USE_GCU
-    /* Attempt to use the "main-gcu.c" support */
     if (!done && (!mstr || (streq(mstr, "gcu")))) {
         extern errr init_gcu(int, char **);
         if (0 == init_gcu(argc, argv)) {
@@ -459,7 +411,6 @@ int main(int argc, char *argv[])
 #endif
 
 #ifdef USE_CAP
-    /* Attempt to use the "main-cap.c" support */
     if (!done && (!mstr || (streq(mstr, "cap")))) {
         extern errr init_cap(int, char **);
         if (0 == init_cap(argc, argv)) {
@@ -469,36 +420,24 @@ int main(int argc, char *argv[])
     }
 #endif
 
-    /* Make sure we have a display! */
     if (!done) {
         quit("Unable to prepare any 'display module'!");
     }
 
-    /* Hack -- If requested, display scores and quit */
     if (show_score > 0) {
         display_scores(0, show_score);
     }
 
-    /* Catch nasty signals */
     signals_init();
 
     {
         TermCenteredOffsetSetter tcos(MAIN_TERM_MIN_COLS, MAIN_TERM_MIN_ROWS);
-
-        /* Initialize */
         init_angband(p_ptr, false);
-
-        /* Wait for response */
         pause_line(MAIN_TERM_MIN_ROWS - 1);
     }
 
-    /* Play the game */
     play_game(p_ptr, new_game, browsing_movie);
-
-    /* Quit */
     quit(nullptr);
-
-    /* Exit */
     return 0;
 }
 

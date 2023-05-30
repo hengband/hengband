@@ -191,7 +191,7 @@ void init_angband(PlayerType *player_ptr, bool no_term)
     const auto &path_score = path_build(ANGBAND_DIR_APEX, "scores.raw");
     fd = fd_open(path_score, O_RDONLY);
     if (fd < 0) {
-        safe_setuid_grab(player_ptr);
+        safe_setuid_grab();
         fd = fd_make(path_score, true);
         safe_setuid_drop();
         if (fd < 0) {

@@ -66,11 +66,11 @@ void init_saved_floors(PlayerType *player_ptr, bool force)
     for (int i = 0; i < MAX_SAVED_FLOORS; i++) {
         saved_floor_type *sf_ptr = &saved_floors[i];
         auto floor_savefile = get_saved_floor_name(i);
-        safe_setuid_grab(player_ptr);
+        safe_setuid_grab();
         fd = fd_make(floor_savefile);
         safe_setuid_drop();
         check_saved_tmp_files(fd, &force);
-        safe_setuid_grab(player_ptr);
+        safe_setuid_grab();
         (void)fd_kill(floor_savefile);
         safe_setuid_drop();
         sf_ptr->floor_id = 0;
@@ -96,7 +96,7 @@ void clear_saved_floor_files(PlayerType *player_ptr)
             continue;
         }
 
-        safe_setuid_grab(player_ptr);
+        safe_setuid_grab();
         (void)fd_kill(get_saved_floor_name(i));
         safe_setuid_drop();
     }
@@ -140,7 +140,7 @@ void kill_saved_floor(PlayerType *player_ptr, saved_floor_type *sf_ptr)
         return;
     }
 
-    safe_setuid_grab(player_ptr);
+    safe_setuid_grab();
     (void)fd_kill(get_saved_floor_name((int)sf_ptr->savefile_id));
     safe_setuid_drop();
     sf_ptr->floor_id = 0;

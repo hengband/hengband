@@ -292,7 +292,7 @@ bool load_floor(PlayerType *player_ptr, saved_floor_type *sf_ptr, BIT_FLAGS mode
     strnfmt(ext, sizeof(ext), ".F%02d", (int)sf_ptr->savefile_id);
     floor_savefile.append(ext);
 
-    safe_setuid_grab(player_ptr);
+    safe_setuid_grab();
     loading_savefile = angband_fopen(floor_savefile, FileOpenMode::READ, true);
     safe_setuid_drop();
 
@@ -308,7 +308,7 @@ bool load_floor(PlayerType *player_ptr, saved_floor_type *sf_ptr, BIT_FLAGS mode
         }
 
         angband_fclose(loading_savefile);
-        safe_setuid_grab(player_ptr);
+        safe_setuid_grab();
         if (!(mode & SLF_NO_KILL)) {
             (void)fd_kill(floor_savefile);
         }
