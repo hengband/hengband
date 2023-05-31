@@ -3200,7 +3200,7 @@ bool is_blessed(PlayerType *player_ptr)
 
 bool is_tim_esp(PlayerType *player_ptr)
 {
-    auto sniper_data = PlayerClass(player_ptr).get_specific_data<sniper_data_type>();
+    auto sniper_data = PlayerClass(player_ptr).get_specific_data<SniperData>();
     auto sniper_concent = sniper_data ? sniper_data->concent : 0;
     return player_ptr->tim_esp || music_singing(player_ptr, MUSIC_MIND) || (sniper_concent >= CONCENT_TELE_THRESHOLD);
 }
@@ -3212,7 +3212,7 @@ bool is_tim_stealth(PlayerType *player_ptr)
 
 bool is_time_limit_esp(PlayerType *player_ptr)
 {
-    auto sniper_data = PlayerClass(player_ptr).get_specific_data<sniper_data_type>();
+    auto sniper_data = PlayerClass(player_ptr).get_specific_data<SniperData>();
     auto sniper_concent = sniper_data ? sniper_data->concent : 0;
     return player_ptr->tim_esp || music_singing(player_ptr, MUSIC_MIND) || (sniper_concent >= CONCENT_TELE_THRESHOLD);
 }

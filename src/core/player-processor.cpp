@@ -419,7 +419,7 @@ void process_player(PlayerType *player_ptr)
             break;
         }
 
-        auto sniper_data = PlayerClass(player_ptr).get_specific_data<sniper_data_type>();
+        auto sniper_data = PlayerClass(player_ptr).get_specific_data<SniperData>();
         if (player_ptr->energy_use && sniper_data && sniper_data->reset_concent) {
             reset_concentration(player_ptr, true);
         }

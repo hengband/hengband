@@ -68,7 +68,7 @@ void do_cmd_fire(PlayerType *player_ptr, SPELL_IDX snipe_type)
     }
 
     if (snipe_type == SP_AWAY) {
-        auto sniper_data = PlayerClass(player_ptr).get_specific_data<sniper_data_type>();
+        auto sniper_data = PlayerClass(player_ptr).get_specific_data<SniperData>();
         teleport_player(player_ptr, 10 + (sniper_data->concent * 2), TELEPORT_SPONTANEOUS);
     }
 
