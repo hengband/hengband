@@ -209,7 +209,7 @@ static void restore_world_floor_info(PlayerType *player_ptr)
 {
     write_level = false;
     constexpr auto mes = _("                            ----ゲーム再開----", "                            --- Restarted Game ---");
-    exe_write_diary(player_ptr, DIARY_GAMESTART, 1, mes);
+    exe_write_diary(player_ptr, DiaryKind::GAMESTART, 1, mes);
 
     if (player_ptr->riding == -1) {
         player_ptr->riding = 0;
@@ -291,7 +291,7 @@ static void generate_world(PlayerType *player_ptr, bool new_game)
     }
 
     const auto mes = format(_("%sに降り立った。", "arrived in %s."), map_name(player_ptr).data());
-    exe_write_diary(player_ptr, DIARY_DESCRIPTION, 0, mes);
+    exe_write_diary(player_ptr, DiaryKind::DESCRIPTION, 0, mes);
 }
 
 static void init_io(PlayerType *player_ptr)

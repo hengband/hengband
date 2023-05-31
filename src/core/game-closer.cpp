@@ -124,9 +124,9 @@ static void kingly(PlayerType *player_ptr)
 #endif
 
     if (!seppuku) {
-        exe_write_diary(player_ptr, DIARY_DESCRIPTION, 0, _("ダンジョンの探索から引退した。", "retired exploring dungeons."));
-        exe_write_diary(player_ptr, DIARY_GAMESTART, 1, _("-------- ゲームオーバー --------", "--------   Game  Over   --------"));
-        exe_write_diary(player_ptr, DIARY_DESCRIPTION, 1, "\n\n\n\n");
+        exe_write_diary(player_ptr, DiaryKind::DESCRIPTION, 0, _("ダンジョンの探索から引退した。", "retired exploring dungeons."));
+        exe_write_diary(player_ptr, DiaryKind::GAMESTART, 1, _("-------- ゲームオーバー --------", "--------   Game  Over   --------"));
+        exe_write_diary(player_ptr, DiaryKind::DESCRIPTION, 1, "\n\n\n\n");
     }
 
     flush();

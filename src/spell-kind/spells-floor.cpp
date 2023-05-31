@@ -352,7 +352,7 @@ bool destroy_area(PlayerType *player_ptr, POSITION y1, POSITION x1, POSITION r, 
                 } else {
                     if (record_named_pet && m_ptr->is_named_pet()) {
                         const auto m_name = monster_desc(player_ptr, m_ptr, MD_INDEF_VISIBLE);
-                        exe_write_diary(player_ptr, DIARY_NAMED_PET, RECORD_NAMED_PET_DESTROY, m_name);
+                        exe_write_diary(player_ptr, DiaryKind::NAMED_PET, RECORD_NAMED_PET_DESTROY, m_name);
                     }
 
                     /* Delete the monster (if any) */

@@ -170,7 +170,7 @@ void do_cmd_go_up(PlayerType *player_ptr)
     }
 
     if (record_stair) {
-        exe_write_diary(player_ptr, DIARY_STAIR, 0 - up_num, _("階段を上った", "climbed up the stairs to"));
+        exe_write_diary(player_ptr, DiaryKind::STAIR, 0 - up_num, _("階段を上った", "climbed up the stairs to"));
     }
 
     if (up_num == player_ptr->current_floor_ptr->dun_level) {
@@ -301,9 +301,9 @@ void do_cmd_go_down(PlayerType *player_ptr)
 
     if (record_stair) {
         if (fall_trap) {
-            exe_write_diary(player_ptr, DIARY_STAIR, down_num, _("落とし戸に落ちた", "fell through a trap door"));
+            exe_write_diary(player_ptr, DiaryKind::STAIR, down_num, _("落とし戸に落ちた", "fell through a trap door"));
         } else {
-            exe_write_diary(player_ptr, DIARY_STAIR, down_num, _("階段を下りた", "climbed down the stairs to"));
+            exe_write_diary(player_ptr, DiaryKind::STAIR, down_num, _("階段を下りた", "climbed down the stairs to"));
         }
     }
 

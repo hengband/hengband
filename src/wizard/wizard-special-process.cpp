@@ -97,6 +97,7 @@
 #include "view/display-messages.h"
 #include "wizard/spoiler-table.h"
 #include "wizard/tval-descriptions-table.h"
+#include "wizard/wizard-messages.h"
 #include "wizard/wizard-spells.h"
 #include "wizard/wizard-spoiler.h"
 #include "world/world.h"
@@ -612,10 +613,11 @@ static void wiz_jump_floor(PlayerType *player_ptr, DUNGEON_IDX dun_idx, DEPTH de
     floor.inside_arena = false;
     player_ptr->wild_mode = false;
     leave_quest_check(player_ptr);
-    if (record_stair) {
-        exe_write_diary(player_ptr, DIARY_WIZ_TELE, 0);
-    }
-
+    auto to = !floor.is_in_dungeon()
+                  ? _("地上", "the surface")
+                  : format(_("%d階(%s)", "level %d of %s"), floor.dun_level, dungeons_info[floor.dungeon_idx].name.data());
+    constexpr auto mes = _("%sへとウィザード・テレポートで移動した。\n", "You wizard-teleported to %s.\n");
+    msg_print_wizard(player_ptr, 2, format(mes, to.data()));
     floor.quest_number = QuestId::NONE;
     PlayerEnergy(player_ptr).reset_player_turn();
     player_ptr->energy_need = 0;
@@ -820,7 +822,7 @@ void wiz_zap_surrounding_monsters(PlayerType *player_ptr)
 
         if (record_named_pet && m_ptr->is_named_pet()) {
             const auto m_name = monster_desc(player_ptr, m_ptr, MD_INDEF_VISIBLE);
-            exe_write_diary(player_ptr, DIARY_NAMED_PET, RECORD_NAMED_PET_WIZ_ZAP, m_name);
+            exe_write_diary(player_ptr, DiaryKind::NAMED_PET, RECORD_NAMED_PET_WIZ_ZAP, m_name);
         }
 
         delete_monster_idx(player_ptr, i);
@@ -841,7 +843,7 @@ void wiz_zap_floor_monsters(PlayerType *player_ptr)
 
         if (record_named_pet && m_ptr->is_named_pet()) {
             const auto m_name = monster_desc(player_ptr, m_ptr, MD_INDEF_VISIBLE);
-            exe_write_diary(player_ptr, DIARY_NAMED_PET, RECORD_NAMED_PET_WIZ_ZAP, m_name);
+            exe_write_diary(player_ptr, DiaryKind::NAMED_PET, RECORD_NAMED_PET_WIZ_ZAP, m_name);
         }
 
         delete_monster_idx(player_ptr, i);
@@ -898,6 +900,6 @@ void cheat_death(PlayerType *player_ptr)
     player_ptr->wild_mode = false;
     player_ptr->leaving = true;
     constexpr auto note = _("                            しかし、生き返った。", "                            but revived.");
-    exe_write_diary(player_ptr, DIARY_DESCRIPTION, 1, note);
+    exe_write_diary(player_ptr, DiaryKind::DESCRIPTION, 1, note);
     leave_floor(player_ptr);
 }

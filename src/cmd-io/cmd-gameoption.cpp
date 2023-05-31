@@ -379,7 +379,7 @@ static void do_cmd_options_cheat(PlayerType *player_ptr, concptr info)
         case 'Y':
         case '6':
             if (!w_ptr->noscore) {
-                exe_write_diary(player_ptr, DIARY_DESCRIPTION, 0,
+                exe_write_diary(player_ptr, DiaryKind::DESCRIPTION, 0,
                     _("詐欺オプションをONにして、スコアを残せなくなった。", "gave up sending score to use cheating options."));
             }
 

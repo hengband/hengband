@@ -52,5 +52,5 @@ void do_cmd_save_and_exit(PlayerType *player_ptr)
 {
     player_ptr->playing = false;
     player_ptr->leaving = true;
-    exe_write_diary(player_ptr, DIARY_GAMESTART, 0, _("----ゲーム中断----", "--- Saved and Exited Game ---"));
+    exe_write_diary(player_ptr, DiaryKind::GAMESTART, 0, _("----ゲーム中断----", "--- Saved and Exited Game ---"));
 }

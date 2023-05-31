@@ -161,14 +161,13 @@ static void write_diary_pet(FILE *fff, int num, std::string_view note)
     }
 }
 
-/**
+/*!
  * @brief 日記にクエストに関するメッセージを追加する
- *
- * @param type 日記内容のID
+ * @param dk 日記内容のID
  * @param num 日記内容のIDに応じた番号
  * @return エラーコード
  */
-int exe_write_diary_quest(PlayerType *player_ptr, int type, QuestId num)
+int exe_write_diary_quest(PlayerType *player_ptr, DiaryKind dk, QuestId num)
 {
     static bool disable_diary = false;
 
@@ -197,8 +196,8 @@ int exe_write_diary_quest(PlayerType *player_ptr, int type, QuestId num)
 
     bool do_level = true;
 
-    switch (type) {
-    case DIARY_FIX_QUEST_C: {
+    switch (dk) {
+    case DiaryKind::FIX_QUEST_C: {
         if (any_bits(quest.flags, QUEST_FLAG_SILENT)) {
             break;
         }
@@ -207,7 +206,7 @@ int exe_write_diary_quest(PlayerType *player_ptr, int type, QuestId num)
         fprintf(fff, mes, hour, min, note_level.data(), quest.name.data());
         break;
     }
-    case DIARY_FIX_QUEST_F: {
+    case DiaryKind::FIX_QUEST_F: {
         if (any_bits(quest.flags, QUEST_FLAG_SILENT)) {
             break;
         }
@@ -216,17 +215,17 @@ int exe_write_diary_quest(PlayerType *player_ptr, int type, QuestId num)
         fprintf(fff, mes, hour, min, note_level.data(), quest.name.data());
         break;
     }
-    case DIARY_RAND_QUEST_C: {
+    case DiaryKind::RAND_QUEST_C: {
         constexpr auto mes = _(" %2d:%02d %20s ランダムクエスト(%s)を達成した。\n", " %2d:%02d %20s completed random quest '%s'\n");
         fprintf(fff, mes, hour, min, note_level.data(), monraces_info[quest.r_idx].name.data());
         break;
     }
-    case DIARY_RAND_QUEST_F: {
+    case DiaryKind::RAND_QUEST_F: {
         constexpr auto mes = _(" %2d:%02d %20s ランダムクエスト(%s)から逃げ出した。\n", " %2d:%02d %20s ran away from quest '%s'.\n");
         fprintf(fff, mes, hour, min, note_level.data(), monraces_info[quest.r_idx].name.data());
         break;
     }
-    case DIARY_TO_QUEST: {
+    case DiaryKind::TO_QUEST: {
         if (any_bits(quest.flags, QUEST_FLAG_SILENT)) {
             break;
         }
@@ -248,13 +247,12 @@ int exe_write_diary_quest(PlayerType *player_ptr, int type, QuestId num)
 }
 
 /*!
- * @brief 日記にメッセージを追加する /
- * Take note to the diary.
- * @param type 日記内容のID
+ * @brief 日記にメッセージを追加する
+ * @param dk 日記内容のID
  * @param num 日記内容のIDに応じた数値
- * @param note 日記内容のIDに応じた文字列参照ポインタ
+ * @param note 日記内容のIDに応じた文字列
  */
-void exe_write_diary(PlayerType *player_ptr, int type, int num, std::string_view note)
+void exe_write_diary(PlayerType *player_ptr, DiaryKind dk, int num, std::string_view note)
 {
     static bool disable_diary = false;
 
@@ -273,8 +271,8 @@ void exe_write_diary(PlayerType *player_ptr, int type, int num, std::string_view
     const auto &floor = *player_ptr->current_floor_ptr;
     const auto [q_idx, note_level] = write_floor(floor);
     auto do_level = true;
-    switch (type) {
-    case DIARY_DIALY:
+    switch (dk) {
+    case DiaryKind::DIALY:
         if (day < MAX_DAYS) {
             fprintf(fff, _("%d日目\n", "Day %d\n"), day);
         } else {
@@ -283,7 +281,7 @@ void exe_write_diary(PlayerType *player_ptr, int type, int num, std::string_view
 
         do_level = false;
         break;
-    case DIARY_DESCRIPTION:
+    case DiaryKind::DESCRIPTION:
         if (num) {
             fprintf(fff, "%s\n", note.data());
             do_level = false;
@@ -292,34 +290,34 @@ void exe_write_diary(PlayerType *player_ptr, int type, int num, std::string_view
         }
 
         break;
-    case DIARY_ART: {
+    case DiaryKind::ART: {
         constexpr auto mes = _(" %2d:%02d %20s %sを発見した。\n", " %2d:%02d %20s discovered %s.\n");
         fprintf(fff, mes, hour, min, note_level.data(), note.data());
         break;
     }
-    case DIARY_ART_SCROLL: {
+    case DiaryKind::ART_SCROLL: {
         constexpr auto mes = _(" %2d:%02d %20s 巻物によって%sを生成した。\n", " %2d:%02d %20s created %s by scroll.\n");
         fprintf(fff, mes, hour, min, note_level.data(), note.data());
         break;
     }
-    case DIARY_UNIQUE: {
+    case DiaryKind::UNIQUE: {
         constexpr auto mes = _(" %2d:%02d %20s %sを倒した。\n", " %2d:%02d %20s defeated %s.\n");
         fprintf(fff, mes, hour, min, note_level.data(), note.data());
         break;
     }
-    case DIARY_MAXDEAPTH: {
+    case DiaryKind::MAXDEAPTH: {
         constexpr auto mes = _(" %2d:%02d %20s %sの最深階%d階に到達した。\n", " %2d:%02d %20s reached level %d of %s for the first time.\n");
         const auto &dungeon = dungeons_info[floor.dungeon_idx];
         fprintf(fff, mes, hour, min, note_level.data(), _(dungeon.name.data(), num), _(num, dungeon.name.data()));
         break;
     }
-    case DIARY_TRUMP: {
+    case DiaryKind::TRUMP: {
         constexpr auto mes = _(" %2d:%02d %20s %s%sの最深階を%d階にセットした。\n", " %2d:%02d %20s reset recall level of %s to %d %s.\n");
         const auto &dungeon = dungeons_info[floor.dungeon_idx];
         fprintf(fff, mes, hour, min, note_level.data(), note.data(), _(dungeon.name.data(), (int)max_dlv[num]), _((int)max_dlv[num], dungeon.name.data()));
         break;
     }
-    case DIARY_STAIR: {
+    case DiaryKind::STAIR: {
         auto to = inside_quest(q_idx) && (QuestType::is_fixed(q_idx) && !((q_idx == QuestId::OBERON) || (q_idx == QuestId::SERPENT)))
                       ? _("地上", "the surface")
                   : !(player_ptr->current_floor_ptr->dun_level + num)
@@ -329,7 +327,7 @@ void exe_write_diary(PlayerType *player_ptr, int type, int num, std::string_view
         fprintf(fff, mes, hour, min, note_level.data(), _(to.data(), note.data()), _(note.data(), to.data()));
         break;
     }
-    case DIARY_RECALL:
+    case DiaryKind::RECALL:
         if (!num) {
             constexpr auto mes = _(" %2d:%02d %20s 帰還を使って%sの%d階へ下りた。\n", " %2d:%02d %20s recalled to dungeon level %d of %s.\n");
             const auto &dungeon = dungeons_info[floor.dungeon_idx];
@@ -340,22 +338,22 @@ void exe_write_diary(PlayerType *player_ptr, int type, int num, std::string_view
         }
 
         break;
-    case DIARY_TELEPORT_LEVEL: {
+    case DiaryKind::TELEPORT_LEVEL: {
         constexpr auto mes = _(" %2d:%02d %20s レベル・テレポートで脱出した。\n", " %2d:%02d %20s got out using teleport level.\n");
         fprintf(fff, mes, hour, min, note_level.data());
         break;
     }
-    case DIARY_BUY: {
+    case DiaryKind::BUY: {
         constexpr auto mes = _(" %2d:%02d %20s %sを購入した。\n", " %2d:%02d %20s bought %s.\n");
         fprintf(fff, mes, hour, min, note_level.data(), note.data());
         break;
     }
-    case DIARY_SELL: {
+    case DiaryKind::SELL: {
         constexpr auto mes = _(" %2d:%02d %20s %sを売却した。\n", " %2d:%02d %20s sold %s.\n");
         fprintf(fff, mes, hour, min, note_level.data(), note.data());
         break;
     }
-    case DIARY_ARENA: {
+    case DiaryKind::ARENA: {
         if (num < 0) {
             int n = -num;
             constexpr auto mes = _(" %2d:%02d %20s 闘技場の%d%s回戦で、%sの前に敗れ去った。\n", " %2d:%02d %20s beaten by %s in the %d%s fight.\n");
@@ -375,33 +373,26 @@ void exe_write_diary(PlayerType *player_ptr, int type, int num, std::string_view
 
         break;
     }
-    case DIARY_FOUND: {
+    case DiaryKind::FOUND: {
         constexpr auto mes = _(" %2d:%02d %20s %sを識別した。\n", " %2d:%02d %20s identified %s.\n");
         fprintf(fff, mes, hour, min, note_level.data(), note.data());
         break;
     }
-    case DIARY_WIZ_TELE: {
-        auto to = !floor.is_in_dungeon()
-                      ? _("地上", "the surface")
-                      : format(_("%d階(%s)", "level %d of %s"), floor.dun_level, dungeons_info[floor.dungeon_idx].name.data());
-        constexpr auto mes = _(" %2d:%02d %20s %sへとウィザード・テレポートで移動した。\n", " %2d:%02d %20s wizard-teleported to %s.\n");
-        fprintf(fff, mes, hour, min, note_level.data(), to.data());
-        break;
-    }
-    case DIARY_PAT_TELE: {
-        auto to = !floor.is_in_dungeon()
+    case DiaryKind::PAT_TELE: {
+        const auto &floor_ref = *player_ptr->current_floor_ptr;
+        auto to = !floor_ref.is_in_dungeon()
                       ? _("地上", "the surface")
                       : format(_("%d階(%s)", "level %d of %s"), floor.dun_level, dungeons_info[floor.dungeon_idx].name.data());
         constexpr auto mes = _(" %2d:%02d %20s %sへとパターンの力で移動した。\n", " %2d:%02d %20s used Pattern to teleport to %s.\n");
         fprintf(fff, mes, hour, min, note_level.data(), to.data());
         break;
     }
-    case DIARY_LEVELUP: {
+    case DiaryKind::LEVELUP: {
         constexpr auto mes = _(" %2d:%02d %20s レベルが%dに上がった。\n", " %2d:%02d %20s reached player level %d.\n");
         fprintf(fff, mes, hour, min, note_level.data(), num);
         break;
     }
-    case DIARY_GAMESTART: {
+    case DiaryKind::GAMESTART: {
         time_t ct = time((time_t *)0);
         do_level = false;
         if (num) {
@@ -412,11 +403,11 @@ void exe_write_diary(PlayerType *player_ptr, int type, int num, std::string_view
 
         break;
     }
-    case DIARY_NAMED_PET:
+    case DiaryKind::NAMED_PET:
         fprintf(fff, " %2d:%02d %20s ", hour, min, note_level.data());
         write_diary_pet(fff, num, note.data());
         break;
-    case DIARY_WIZARD_LOG:
+    case DiaryKind::WIZARD_LOG:
         fprintf(fff, "%s\n", note.data());
         break;
     default:
