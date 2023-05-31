@@ -104,7 +104,7 @@ static void display_essence(PlayerType *player_ptr)
     return;
 }
 
-static void set_smith_redrawing_flags(PlayerType *player_ptr)
+static void set_smith_redrawing_flags()
 {
     auto &rfu = RedrawingFlagsUpdater::get_instance();
     const auto flags = {
@@ -112,7 +112,7 @@ static void set_smith_redrawing_flags(PlayerType *player_ptr)
         StatusRedrawingFlag::REORDER,
     };
     rfu.set_flags(flags);
-    player_ptr->window_flags |= (PW_INVENTORY);
+    rfu.set_flag(SubWindowRedrawingFlag::INVENTORY);
 }
 
 /*!
@@ -156,7 +156,7 @@ static void drain_essence(PlayerType *player_ptr)
 
     /* Apply autodestroy/inscription to the drained item */
     autopick_alter_item(player_ptr, item, true);
-    set_smith_redrawing_flags(player_ptr);
+    set_smith_redrawing_flags();
 }
 
 /*!
@@ -516,7 +516,7 @@ static void add_essence(PlayerType *player_ptr, SmithCategoryType mode)
     auto effect_name = Smith::get_effect_name(effect);
 
     _(msg_format("%sに%sの能力を付加しました。", item_name.data(), effect_name), msg_format("You have added ability of %s to %s.", effect_name, item_name.data()));
-    set_smith_redrawing_flags(player_ptr);
+    set_smith_redrawing_flags();
 }
 
 /*!
@@ -542,7 +542,7 @@ static void erase_essence(PlayerType *player_ptr)
     Smith(player_ptr).erase_essence(o_ptr);
 
     msg_print(_("エッセンスを取り去った。", "You removed all essence you have added."));
-    set_smith_redrawing_flags(player_ptr);
+    set_smith_redrawing_flags();
 }
 
 /*!

@@ -315,7 +315,7 @@ void ObjectThrowEntity::process_boomerang_back()
             StatusRedrawingFlag::MP,
         };
         rfu.set_flags(flags);
-        this->player_ptr->window_flags |= PW_EQUIPMENT;
+        rfu.set_flag(SubWindowRedrawingFlag::EQUIPMENT);
         this->do_drop = false;
         return;
     }

@@ -170,12 +170,16 @@ static void do_cmd_options_autosave(PlayerType *player_ptr, concptr info)
  * @brief 指定のサブウィンドウが指定のウィンドウフラグを持つか調べる
  * @param x ウィンドウ番号
  * @param y ウィンドウフラグ番号
- * @return 持つならTRUE、持たないならFALSE
+ * @return 持つならTRUE、持たないかメインウィンドウならFALSE
  */
 static bool has_window_flag(int x, int y)
 {
-    auto flag = i2enum<window_redraw_type>(1UL << y);
-    return any_bits(window_flag[x], flag);
+    if (x == 0) {
+        return false;
+    }
+
+    auto flag = i2enum<SubWindowRedrawingFlag>(y);
+    return g_window_flags[x].has(flag);
 }
 
 /*!
@@ -187,10 +191,12 @@ static bool has_window_flag(int x, int y)
  */
 static void set_window_flag(int x, int y)
 {
-    auto flag = i2enum<window_redraw_type>(1UL << y);
-    if (any_bits(PW_ALL, flag)) {
-        set_bits(window_flag[x], flag);
+    if (x == 0) {
+        return;
     }
+
+    auto flag = i2enum<SubWindowRedrawingFlag>(y);
+    g_window_flags[x].set(flag);
 }
 
 /*!
@@ -199,11 +205,14 @@ static void set_window_flag(int x, int y)
  */
 static void clear_window_flag(int x, int y)
 {
-    window_flag[x] = 0;
+    g_window_flags[x].clear();
+    if (x == 0) {
+        return;
+    }
 
-    auto flag = i2enum<window_redraw_type>(1UL << y);
-    for (int i = 0; i < 8; i++) {
-        reset_bits(window_flag[i], flag);
+    auto flag = i2enum<SubWindowRedrawingFlag>(y);
+    for (auto &window_flag : g_window_flags) {
+        window_flag.reset(flag);
     }
 }
 
@@ -218,12 +227,7 @@ static void do_cmd_options_win(PlayerType *player_ptr)
     TERM_LEN x = 0;
     char ch;
     bool go = true;
-    uint32_t old_flag[8];
-
-    for (j = 0; j < 8; j++) {
-        old_flag[j] = window_flag[j];
-    }
-
+    const auto old_flags = g_window_flags;
     term_clear();
     while (go) {
         prt(_("ウィンドウ・フラグ (<方向>で移動, 't'でON/OFF,'s'でON(他窓OFF), ESC)", "Window Flags (<dir>, <t>oggle, <s>et, ESC) "), 0, 0);
@@ -256,7 +260,7 @@ static void do_cmd_options_win(PlayerType *player_ptr)
                     a = TERM_L_BLUE;
                 }
 
-                if (window_flag[j] & (1UL << i)) {
+                if (g_window_flags[j].has(i2enum<SubWindowRedrawingFlag>(i))) {
                     c = 'X';
                 }
 
@@ -275,7 +279,7 @@ static void do_cmd_options_win(PlayerType *player_ptr)
         case 't':
         case 'T':
             has_flag = has_window_flag(x, y);
-            window_flag[x] = 0;
+            g_window_flags[x].clear();
             if (x > 0 && !has_flag) {
                 set_window_flag(x, y);
             }
@@ -285,7 +289,7 @@ static void do_cmd_options_win(PlayerType *player_ptr)
             if (x == 0) {
                 break;
             }
-            window_flag[x] = 0;
+            g_window_flags[x].clear();
             clear_window_flag(x, y);
             set_window_flag(x, y);
             break;
@@ -310,7 +314,7 @@ static void do_cmd_options_win(PlayerType *player_ptr)
             continue;
         }
 
-        if (window_flag[term_index] == old_flag[term_index]) {
+        if (g_window_flags[term_index] == old_flags[term_index]) {
             continue;
         }
 
@@ -347,7 +351,8 @@ static void do_cmd_options_cheat(PlayerType *player_ptr, concptr info)
                 a = TERM_L_BLUE;
             }
 
-            c_prt(enum2i(a), format("%-48s: %s (%s)", cheat_info[i].o_desc, (*cheat_info[i].o_var ? _("はい  ", "yes") : _("いいえ", "no ")), cheat_info[i].o_text), i + 2, 0);
+            const auto yesno = *cheat_info[i].o_var ? _("はい  ", "yes") : _("いいえ", "no ");
+            c_prt(enum2i(a), format("%-48s: %s (%s)", cheat_info[i].o_desc, yesno, cheat_info[i].o_text), i + 2, 0);
         }
 
         move_cursor(k + 2, 50);
@@ -408,7 +413,7 @@ void extract_option_vars(void)
         int os = option_info[i].o_set;
         int ob = option_info[i].o_bit;
         if (option_info[i].o_var) {
-            if (option_flag[os] & (1UL << ob)) {
+            if (g_option_flags[os] & (1UL << ob)) {
                 (*option_info[i].o_var) = true;
             } else {
                 (*option_info[i].o_var) = false;
@@ -554,7 +559,7 @@ void do_cmd_options(PlayerType *player_ptr)
         case 'W':
         case 'w': {
             do_cmd_options_win(player_ptr);
-            player_ptr->window_flags = PW_ALL;
+            RedrawingFlagsUpdater::get_instance().fill_up_sub_flags();
             break;
         }
         case 'P':

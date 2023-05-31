@@ -258,7 +258,11 @@ bool SpellHex::process_mana_cost(const bool need_restart)
         MainWindowRedrawingFlag::ACTION,
     };
     rfu.set_flags(flags_mwrf);
-    this->player_ptr->window_flags |= PW_OVERHEAD | PW_DUNGEON;
+    const auto flags_swrf = {
+        SubWindowRedrawingFlag::OVERHEAD,
+        SubWindowRedrawingFlag::DUNGEON,
+    };
+    rfu.set_flags(flags_swrf);
     return true;
 }
 

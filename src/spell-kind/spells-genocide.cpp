@@ -113,12 +113,10 @@ bool genocide_aux(PlayerType *player_ptr, MONSTER_IDX m_idx, int power, bool pla
     move_cursor_relative(player_ptr->y, player_ptr->x);
     auto &rfu = RedrawingFlagsUpdater::get_instance();
     rfu.set_flag(MainWindowRedrawingFlag::HP);
-    player_ptr->window_flags |= (PW_PLAYER);
+    rfu.set_flag(SubWindowRedrawingFlag::PLAYER);
     handle_stuff(player_ptr);
     term_fresh();
-
     term_xtra(TERM_XTRA_DELAY, delay_factor);
-
     return !resist;
 }
 

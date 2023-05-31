@@ -11,6 +11,7 @@
 #include "store/store-util.h"
 #include "system/angband.h"
 #include "system/item-entity.h"
+#include "util/enum-converter.h"
 #include "world/world.h"
 
 /*!
@@ -130,26 +131,26 @@ void wr_options(SaveType type)
         }
 
         if (*option_info[i].o_var) {
-            option_flag[os] |= (1UL << ob);
+            g_option_flags[os] |= (1UL << ob);
         } else {
-            option_flag[os] &= ~(1UL << ob);
+            g_option_flags[os] &= ~(1UL << ob);
         }
     }
 
-    for (int i = 0; i < 8; i++) {
-        wr_u32b(option_flag[i]);
+    for (const auto &option_flag : g_option_flags) {
+        wr_u32b(option_flag);
     }
 
-    for (int i = 0; i < 8; i++) {
-        wr_u32b(option_mask[i]);
+    for (const auto &option_mask : g_option_masks) {
+        wr_u32b(option_mask);
     }
 
-    for (int i = 0; i < 8; i++) {
-        wr_u32b(window_flag[i]);
+    for (const auto &window_flag : g_window_flags) {
+        wr_FlagGroup_bytes(window_flag, wr_byte, 4);
     }
 
-    for (int i = 0; i < 8; i++) {
-        wr_u32b(window_mask[i]);
+    for (const auto &window_mask : g_window_masks) {
+        wr_u32b(window_mask);
     }
 }
 

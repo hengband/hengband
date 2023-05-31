@@ -1,6 +1,7 @@
 ﻿#include "game-option/option-flags.h"
+#include "system/redrawing-flags-updater.h"
 
-BIT_FLAGS option_flag[8]; //!< The array of normal options
-BIT_FLAGS option_mask[8]; //!< The array of normal options
-BIT_FLAGS window_flag[8]; //!< The array of window options
-BIT_FLAGS window_mask[8]; //!< The array of window options
+std::array<uint32_t, MAX_WINDOW_ENTITIES> g_option_flags = {};
+std::array<uint32_t, MAX_WINDOW_ENTITIES> g_option_masks = {};
+std::array<EnumClassFlagGroup<SubWindowRedrawingFlag>, MAX_WINDOW_ENTITIES> g_window_flags = {};
+std::array<uint32_t, MAX_WINDOW_ENTITIES> g_window_masks = {};

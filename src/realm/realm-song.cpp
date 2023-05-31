@@ -1094,7 +1094,11 @@ std::optional<std::string> do_music_spell(PlayerType *player_ptr, SPELL_IDX spel
             auto &rfu = RedrawingFlagsUpdater::get_instance();
             rfu.set_flag(MainWindowRedrawingFlag::MAP);
             rfu.set_flag(StatusRedrawingFlag::MONSTER_STATUSES);
-            player_ptr->window_flags |= (PW_OVERHEAD | PW_DUNGEON);
+            const auto flags = {
+                SubWindowRedrawingFlag::OVERHEAD,
+                SubWindowRedrawingFlag::DUNGEON,
+            };
+            rfu.set_flags(flags);
             start_singing(player_ptr, spell, MUSIC_INVULN);
         }
 
@@ -1104,7 +1108,11 @@ std::optional<std::string> do_music_spell(PlayerType *player_ptr, SPELL_IDX spel
                 auto &rfu = RedrawingFlagsUpdater::get_instance();
                 rfu.set_flag(MainWindowRedrawingFlag::MAP);
                 rfu.set_flag(StatusRedrawingFlag::MONSTER_STATUSES);
-                player_ptr->window_flags |= (PW_OVERHEAD | PW_DUNGEON);
+                const auto flags = {
+                    SubWindowRedrawingFlag::OVERHEAD,
+                    SubWindowRedrawingFlag::DUNGEON,
+                };
+                rfu.set_flags(flags);
             }
         }
 

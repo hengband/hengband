@@ -376,8 +376,9 @@ static void update_bonuses(PlayerType *player_ptr)
     player_ptr->dis_ac = calc_base_ac(player_ptr);
     player_ptr->dis_to_a = calc_to_ac(player_ptr, false);
 
+    auto &rfu = RedrawingFlagsUpdater::get_instance();
     if (old_mighty_throw != player_ptr->mighty_throw) {
-        player_ptr->window_flags |= PW_INVENTORY;
+        rfu.set_flag(SubWindowRedrawingFlag::INVENTORY);
     }
 
     if (player_ptr->telepathy != old_telepathy) {
@@ -396,7 +397,6 @@ static void update_bonuses(PlayerType *player_ptr)
     is_esp_updated |= player_ptr->esp_good != old_esp_good;
     is_esp_updated |= player_ptr->esp_nonliving != old_esp_nonliving;
     is_esp_updated |= player_ptr->esp_unique != old_esp_unique;
-    auto &rfu = RedrawingFlagsUpdater::get_instance();
     if (is_esp_updated) {
         rfu.set_flag(StatusRedrawingFlag::MONSTER_STATUSES);
     }
@@ -411,7 +411,7 @@ static void update_bonuses(PlayerType *player_ptr)
 
     if ((player_ptr->dis_ac != old_dis_ac) || (player_ptr->dis_to_a != old_dis_to_a)) {
         rfu.set_flag(MainWindowRedrawingFlag::AC);
-        set_bits(player_ptr->window_flags, PW_PLAYER);
+        rfu.set_flag(SubWindowRedrawingFlag::PLAYER);
     }
 
     if (w_ptr->character_xtra) {
@@ -498,7 +498,7 @@ static void update_max_hitpoints(PlayerType *player_ptr)
 
     auto &rfu = RedrawingFlagsUpdater::get_instance();
     rfu.set_flag(MainWindowRedrawingFlag::HP);
-    player_ptr->window_flags |= PW_PLAYER;
+    rfu.set_flag(SubWindowRedrawingFlag::PLAYER);
 }
 
 /*!
@@ -774,7 +774,7 @@ static void update_num_of_spells(PlayerType *player_ptr)
     player_ptr->old_spells = player_ptr->new_spells;
     auto &rfu = RedrawingFlagsUpdater::get_instance();
     rfu.set_flag(MainWindowRedrawingFlag::STUDY);
-    set_bits(player_ptr->window_flags, PW_ITEM_KNOWLEDGTE);
+    rfu.set_flag(SubWindowRedrawingFlag::ITEM_KNOWLEDGTE);
 }
 
 /*!
@@ -1006,7 +1006,11 @@ static void update_max_mana(PlayerType *player_ptr)
         player_ptr->msp = msp;
         auto &rfu = RedrawingFlagsUpdater::get_instance();
         rfu.set_flag(MainWindowRedrawingFlag::MP);
-        set_bits(player_ptr->window_flags, (PW_PLAYER | PW_SPELL));
+        const auto flags = {
+            SubWindowRedrawingFlag::PLAYER,
+            SubWindowRedrawingFlag::SPELL,
+        };
+        rfu.set_flags(flags);
     }
 
     if (w_ptr->character_xtra) {
@@ -2920,7 +2924,7 @@ void check_experience(PlayerType *player_ptr)
             MainWindowRedrawingFlag::TITLE,
         };
         rfu.set_flags(flags_mwrf);
-        set_bits(player_ptr->window_flags, PW_PLAYER);
+        rfu.set_flag(SubWindowRedrawingFlag::PLAYER);
         handle_stuff(player_ptr);
     }
 
@@ -2954,7 +2958,12 @@ void check_experience(PlayerType *player_ptr)
             MainWindowRedrawingFlag::EXP,
         };
         rfu.set_flags(flags_mwrf_levelup);
-        set_bits(player_ptr->window_flags, (PW_PLAYER | PW_SPELL | PW_INVENTORY));
+        const auto &flags_swrf_levelup = {
+            SubWindowRedrawingFlag::PLAYER,
+            SubWindowRedrawingFlag::SPELL,
+            SubWindowRedrawingFlag::INVENTORY,
+        };
+        rfu.set_flags(flags_swrf_levelup);
         player_ptr->level_up_message = true;
         handle_stuff(player_ptr);
 
@@ -3019,7 +3028,11 @@ void check_experience(PlayerType *player_ptr)
             MainWindowRedrawingFlag::TITLE,
         };
         rfu.set_flags(flags_mwrf);
-        set_bits(player_ptr->window_flags, (PW_PLAYER | PW_SPELL));
+        const auto flags_swrf = {
+            SubWindowRedrawingFlag::PLAYER,
+            SubWindowRedrawingFlag::SPELL,
+        };
+        rfu.set_flags(flags_swrf);
         handle_stuff(player_ptr);
     }
 

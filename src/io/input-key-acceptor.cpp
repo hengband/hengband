@@ -6,6 +6,7 @@
 #include "game-option/map-screen-options.h"
 #include "io/signal-handlers.h"
 #include "system/player-type-definition.h"
+#include "system/redrawing-flags-updater.h"
 #include "term/gameterm.h"
 #include "util/string-processor.h"
 #include "world/world.h"
@@ -53,7 +54,7 @@ static void all_term_fresh()
     term_activate(angband_terms[0]);
     term_locate(&x, &y);
 
-    p_ptr->window_flags |= PW_ALL;
+    RedrawingFlagsUpdater::get_instance().fill_up_sub_flags();
     handle_stuff(p_ptr);
 
     term_activate(angband_terms[0]);

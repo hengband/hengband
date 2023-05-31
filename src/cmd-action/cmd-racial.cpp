@@ -502,10 +502,15 @@ void do_cmd_racial_power(PlayerType *player_ptr)
         return;
     }
 
-    const auto flags = {
+    auto &rfu = RedrawingFlagsUpdater::get_instance();
+    const auto &flags_mwrf = {
         MainWindowRedrawingFlag::HP,
         MainWindowRedrawingFlag::MP,
     };
-    RedrawingFlagsUpdater::get_instance().set_flags(flags);
-    set_bits(player_ptr->window_flags, PW_PLAYER | PW_SPELL);
+    rfu.set_flags(flags_mwrf);
+    const auto flags_swrf = {
+        SubWindowRedrawingFlag::PLAYER,
+        SubWindowRedrawingFlag::SPELL,
+    };
+    rfu.set_flags(flags_swrf);
 }

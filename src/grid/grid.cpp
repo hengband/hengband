@@ -52,6 +52,7 @@
 #include "system/monster-entity.h"
 #include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
+#include "system/redrawing-flags-updater.h"
 #include "system/terrain-type-definition.h"
 #include "term/gameterm.h"
 #include "term/term-color-types.h"
@@ -360,7 +361,7 @@ void note_spot(PlayerType *player_ptr, POSITION y, POSITION x)
 
         /* Memorize objects */
         o_ptr->marked.set(OmType::FOUND);
-        player_ptr->window_flags |= PW_FOUND_ITEMS;
+        RedrawingFlagsUpdater::get_instance().set_flag(SubWindowRedrawingFlag::FOUND_ITEMS);
     }
 
     /* Hack -- memorize grids */
@@ -431,7 +432,11 @@ void lite_spot(PlayerType *player_ptr, POSITION y, POSITION x)
         }
 
         term_queue_bigchar(panel_col_of(x), y - panel_row_prt, a, c, ta, tc);
-        player_ptr->window_flags |= (PW_OVERHEAD | PW_DUNGEON);
+        const auto flags = {
+            SubWindowRedrawingFlag::OVERHEAD,
+            SubWindowRedrawingFlag::DUNGEON,
+        };
+        RedrawingFlagsUpdater::get_instance().set_flags(flags);
     }
 }
 

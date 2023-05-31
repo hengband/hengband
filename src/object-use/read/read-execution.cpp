@@ -72,7 +72,12 @@ void ObjectReadEntity::execute(bool known)
     this->change_virtue_as_read(*o_ptr);
     object_tried(o_ptr);
     this->gain_exp_from_item_use(o_ptr, executor->is_identified());
-    this->player_ptr->window_flags |= PW_INVENTORY | PW_EQUIPMENT | PW_PLAYER;
+    const auto flags_swrf = {
+        SubWindowRedrawingFlag::INVENTORY,
+        SubWindowRedrawingFlag::EQUIPMENT,
+        SubWindowRedrawingFlag::PLAYER,
+    };
+    rfu.set_flags(flags_swrf);
     rfu.set_flags(flags_srf);
     if (!used_up) {
         return;

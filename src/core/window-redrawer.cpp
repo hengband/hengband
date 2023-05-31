@@ -31,14 +31,13 @@
  * Redraw a term when it is resized
  * @todo ここにPlayerType を追加するとz-termに影響が行くので保留
  */
-void redraw_window(void)
+void redraw_window()
 {
     if (!w_ptr->character_dungeon) {
         return;
     }
 
-    p_ptr->window_flags = PW_ALL;
-
+    RedrawingFlagsUpdater::get_instance().fill_up_sub_flags();
     handle_stuff(p_ptr);
     term_redraw();
 }
@@ -240,83 +239,86 @@ void redraw_stuff(PlayerType *player_ptr)
 }
 
 /*!
- * @brief player_ptr->window のフラグに応じた更新をまとめて行う / Handle "player_ptr->window"
+ * @brief SubWindowRedrawingFlag のフラグに応じた更新をまとめて行う
  * @param player_ptr プレイヤーへの参照ポインタ
- * @details 更新処理の対象はサブウィンドウ全般
+ * @details 更新処理の対象はサブウィンドウ全て
  */
 void window_stuff(PlayerType *player_ptr)
 {
-    if (!player_ptr->window_flags) {
+    auto &rfu = RedrawingFlagsUpdater::get_instance();
+    if (!rfu.any_sub()) {
         return;
     }
 
-    BIT_FLAGS mask = 0L;
+    EnumClassFlagGroup<SubWindowRedrawingFlag> target_flags{};
     for (auto i = 0U; i < angband_terms.size(); ++i) {
-        if (angband_terms[i] && !angband_terms[i]->never_fresh) {
-            mask |= window_flag[i];
+        if ((angband_terms[i] == nullptr) || angband_terms[i]->never_fresh) {
+            continue;
         }
-    }
-    BIT_FLAGS window_flags = player_ptr->window_flags & mask;
 
-    if (window_flags & (PW_INVENTORY)) {
-        player_ptr->window_flags &= ~(PW_INVENTORY);
+        target_flags.set(g_window_flags[i]);
+    }
+
+    const auto &window_flags = rfu.get_sub_intersection(target_flags);
+    if (window_flags.has(SubWindowRedrawingFlag::INVENTORY)) {
+        rfu.reset_flag(SubWindowRedrawingFlag::INVENTORY);
         fix_inventory(player_ptr);
     }
 
-    if (window_flags & (PW_EQUIPMENT)) {
-        player_ptr->window_flags &= ~(PW_EQUIPMENT);
+    if (window_flags.has(SubWindowRedrawingFlag::EQUIPMENT)) {
+        rfu.reset_flag(SubWindowRedrawingFlag::EQUIPMENT);
         fix_equip(player_ptr);
     }
 
-    if (window_flags & (PW_SPELL)) {
-        player_ptr->window_flags &= ~(PW_SPELL);
+    if (window_flags.has(SubWindowRedrawingFlag::SPELL)) {
+        rfu.reset_flag(SubWindowRedrawingFlag::SPELL);
         fix_spell(player_ptr);
     }
 
-    if (window_flags & (PW_PLAYER)) {
-        player_ptr->window_flags &= ~(PW_PLAYER);
+    if (window_flags.has(SubWindowRedrawingFlag::PLAYER)) {
+        rfu.reset_flag(SubWindowRedrawingFlag::PLAYER);
         fix_player(player_ptr);
     }
 
     // モンスターBGM対応のため、視界内モンスター表示のサブウインドウなし時も処理を行う
-    if (player_ptr->window_flags & (PW_SIGHT_MONSTERS)) {
-        player_ptr->window_flags &= ~(PW_SIGHT_MONSTERS);
+    if (rfu.has(SubWindowRedrawingFlag::SIGHT_MONSTERS)) {
+        rfu.reset_flag(SubWindowRedrawingFlag::SIGHT_MONSTERS);
         fix_monster_list(player_ptr);
     }
 
-    if (window_flags & (PW_MESSAGE)) {
-        player_ptr->window_flags &= ~(PW_MESSAGE);
+    if (window_flags.has(SubWindowRedrawingFlag::MESSAGE)) {
+        rfu.reset_flag(SubWindowRedrawingFlag::MESSAGE);
         fix_message();
     }
 
-    if (window_flags & (PW_OVERHEAD)) {
-        player_ptr->window_flags &= ~(PW_OVERHEAD);
+    if (window_flags.has(SubWindowRedrawingFlag::OVERHEAD)) {
+        rfu.reset_flag(SubWindowRedrawingFlag::OVERHEAD);
         fix_overhead(player_ptr);
     }
 
-    if (window_flags & (PW_DUNGEON)) {
-        player_ptr->window_flags &= ~(PW_DUNGEON);
+    if (window_flags.has(SubWindowRedrawingFlag::DUNGEON)) {
+        rfu.reset_flag(SubWindowRedrawingFlag::DUNGEON);
         fix_dungeon(player_ptr);
     }
 
-    if (window_flags & (PW_MONSTER_LORE)) {
-        player_ptr->window_flags &= ~(PW_MONSTER_LORE);
+    if (window_flags.has(SubWindowRedrawingFlag::MONSTER_LORE)) {
+        rfu.reset_flag(SubWindowRedrawingFlag::MONSTER_LORE);
         fix_monster(player_ptr);
     }
 
-    if (window_flags & (PW_ITEM_KNOWLEDGTE)) {
-        player_ptr->window_flags &= ~(PW_ITEM_KNOWLEDGTE);
+    if (window_flags.has(SubWindowRedrawingFlag::ITEM_KNOWLEDGTE)) {
+        rfu.reset_flag(SubWindowRedrawingFlag::ITEM_KNOWLEDGTE);
         fix_object(player_ptr);
     }
 
-    if (any_bits(window_flags, PW_FLOOR_ITEMS)) {
-        reset_bits(player_ptr->window_flags, PW_FLOOR_ITEMS);
+    if (window_flags.has(SubWindowRedrawingFlag::FLOOR_ITEMS)) {
+        rfu.reset_flag(SubWindowRedrawingFlag::FLOOR_ITEMS);
         // ウィンドウサイズ変更に対応できず。カーソル位置を取る必要がある。
         fix_floor_item_list(player_ptr, player_ptr->y, player_ptr->x);
     }
 
-    if (any_bits(window_flags, PW_FOUND_ITEMS)) {
-        reset_bits(player_ptr->window_flags, PW_FOUND_ITEMS);
+    if (window_flags.has(SubWindowRedrawingFlag::FOUND_ITEMS)) {
+        rfu.reset_flag(SubWindowRedrawingFlag::FOUND_ITEMS);
         fix_found_item_list(player_ptr);
     }
 }

@@ -61,14 +61,19 @@ void inven_item_increase(PlayerType *player_ptr, INVENTORY_IDX item, ITEM_NUMBER
         StatusRedrawingFlag::COMBINATION,
     };
     rfu.set_flags(flags_srf);
-    player_ptr->window_flags |= (PW_INVENTORY | PW_EQUIPMENT);
-
+    const auto flags_swrf = {
+        SubWindowRedrawingFlag::INVENTORY,
+        SubWindowRedrawingFlag::EQUIPMENT,
+    };
+    rfu.set_flags(flags_swrf);
     if (o_ptr->number || !player_ptr->ele_attack) {
         return;
     }
+
     if (!(item == INVEN_MAIN_HAND) && !(item == INVEN_SUB_HAND)) {
         return;
     }
+
     if (has_melee_weapon(player_ptr, enum2i(INVEN_MAIN_HAND + INVEN_SUB_HAND) - item)) {
         return;
     }
@@ -92,18 +97,21 @@ void inven_item_optimize(PlayerType *player_ptr, INVENTORY_IDX item)
         return;
     }
 
+    auto &rfu = RedrawingFlagsUpdater::get_instance();
     if (item >= INVEN_MAIN_HAND) {
         player_ptr->equip_cnt--;
         (&player_ptr->inventory_list[item])->wipe();
-        auto &rfu = RedrawingFlagsUpdater::get_instance();
         const auto flags_srf = {
             StatusRedrawingFlag::BONUS,
             StatusRedrawingFlag::TORCH,
             StatusRedrawingFlag::MP,
         };
         rfu.set_flags(flags_srf);
-        player_ptr->window_flags |= PW_EQUIPMENT;
-        player_ptr->window_flags |= PW_SPELL;
+        const auto flags_swrf = {
+            SubWindowRedrawingFlag::EQUIPMENT,
+            SubWindowRedrawingFlag::SPELL,
+        };
+        rfu.set_flags(flags_swrf);
         return;
     }
 
@@ -114,8 +122,11 @@ void inven_item_optimize(PlayerType *player_ptr, INVENTORY_IDX item)
     }
 
     (&player_ptr->inventory_list[i])->wipe();
-    player_ptr->window_flags |= PW_INVENTORY;
-    player_ptr->window_flags |= PW_SPELL;
+    const auto flags = {
+        SubWindowRedrawingFlag::INVENTORY,
+        SubWindowRedrawingFlag::SPELL,
+    };
+    rfu.set_flags(flags);
 }
 
 /*!
@@ -221,7 +232,7 @@ void combine_pack(PlayerType *player_ptr)
                     }
                 }
 
-                player_ptr->window_flags |= (PW_INVENTORY);
+                RedrawingFlagsUpdater::get_instance().set_flag(SubWindowRedrawingFlag::INVENTORY);
                 combined = true;
                 break;
             }
@@ -278,7 +289,7 @@ void reorder_pack(PlayerType *player_ptr)
         }
 
         (&player_ptr->inventory_list[j])->copy_from(q_ptr);
-        player_ptr->window_flags |= (PW_INVENTORY);
+        RedrawingFlagsUpdater::get_instance().set_flag(SubWindowRedrawingFlag::INVENTORY);
     }
 
     if (flag) {
@@ -312,6 +323,11 @@ int16_t store_item_to_inventory(PlayerType *player_ptr, ItemEntity *o_ptr)
     INVENTORY_IDX n = -1;
 
     ItemEntity *j_ptr;
+    auto &rfu = RedrawingFlagsUpdater::get_instance();
+    const auto flags_swrf = {
+        SubWindowRedrawingFlag::INVENTORY,
+        SubWindowRedrawingFlag::PLAYER,
+    };
     for (j = 0; j < INVEN_PACK; j++) {
         j_ptr = &player_ptr->inventory_list[j];
         if (!j_ptr->is_valid()) {
@@ -321,9 +337,8 @@ int16_t store_item_to_inventory(PlayerType *player_ptr, ItemEntity *o_ptr)
         n = j;
         if (object_similar(j_ptr, o_ptr)) {
             object_absorb(j_ptr, o_ptr);
-            auto &rfu = RedrawingFlagsUpdater::get_instance();
             rfu.set_flag(StatusRedrawingFlag::BONUS);
-            player_ptr->window_flags |= (PW_INVENTORY | PW_PLAYER);
+            rfu.set_flags(flags_swrf);
             return j;
         }
     }
@@ -363,15 +378,13 @@ int16_t store_item_to_inventory(PlayerType *player_ptr, ItemEntity *o_ptr)
     j_ptr->marked.clear().set(OmType::TOUCHED);
 
     player_ptr->inven_cnt++;
-    auto &rfu = RedrawingFlagsUpdater::get_instance();
     const auto flags_srf = {
         StatusRedrawingFlag::BONUS,
         StatusRedrawingFlag::COMBINATION,
         StatusRedrawingFlag::REORDER,
     };
     rfu.set_flags(flags_srf);
-    player_ptr->window_flags |= (PW_INVENTORY | PW_PLAYER);
-
+    rfu.set_flags(flags_swrf);
     return i;
 }
 

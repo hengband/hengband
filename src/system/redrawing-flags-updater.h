@@ -31,20 +31,43 @@ enum class MainWindowRedrawingFlag {
 };
 
 enum class SubWindowRedrawingFlag {
-    INVENTORY, /*!< 所持品-装備品 */
-    EQUIPMENT, /*!< 装備品-所持品 */
-    SPELL, /*!< 魔法一覧 */
-    PLAYER, /*!< プレイヤーのステータス */
-    SIGHT_MONSTERS, /*!< 視界内モンスターの一覧 */
-    MESSAGE, /*!< メッセージログ */
-    OVERHEAD, /*!< 周辺の光景 */
-    MONSTER_LORE, /*!< モンスターの思い出 */
-    ITEM_KNOWLEDGTE, /*!< アイテムの知識 */
-    DUNGEON, /*!< ダンジョンの地形 */
-    SNAPSHOT, /*!< 記念写真 */
-    FLOOR_ITEMS, /*!< 床上のアイテム一覧 */
-    FOUND_ITEMS, /*!< 発見済みのアイテム一覧 */
-    MAX,
+    INVENTORY = 0, /*!< 所持品-装備品 */
+    EQUIPMENT = 1, /*!< 装備品-所持品 */
+    SPELL = 2, /*!< 魔法一覧 */
+    PLAYER = 3, /*!< プレイヤーのステータス */
+    SIGHT_MONSTERS = 4, /*!< 視界内モンスターの一覧 */
+    /*!< 5は予約領域、セーブデータに影響があるので互換性を保つ変更をしない限り欠番埋め禁止 */
+    MESSAGE = 6, /*!< メッセージログ */
+    OVERHEAD = 7, /*!< 周辺の光景 */
+    MONSTER_LORE = 8, /*!< モンスターの思い出 */
+    ITEM_KNOWLEDGTE = 9, /*!< アイテムの知識 */
+    DUNGEON = 10, /*!< ダンジョンの地形 */
+    SNAPSHOT = 11, /*!< 記念写真 */
+    FLOOR_ITEMS = 12, /*!< 床上のアイテム一覧 */
+    FOUND_ITEMS = 13, /*!< 発見済みのアイテム一覧 */
+    /*!< 14は予約領域 */
+    /*!< 15は予約領域 */
+    MAX = 16,
+};
+
+/*!
+ * @details 欠番があるためEnumRageをそのまま作るのが困難であり、代替として定義する.
+ * 欠番が埋まったら不要となるので削除すること。
+ */
+inline constexpr auto ALL_SUB_WINDOW_FLAGS = {
+    SubWindowRedrawingFlag::INVENTORY,
+    SubWindowRedrawingFlag::EQUIPMENT,
+    SubWindowRedrawingFlag::SPELL,
+    SubWindowRedrawingFlag::PLAYER,
+    SubWindowRedrawingFlag::SIGHT_MONSTERS,
+    SubWindowRedrawingFlag::MESSAGE,
+    SubWindowRedrawingFlag::OVERHEAD,
+    SubWindowRedrawingFlag::MONSTER_LORE,
+    SubWindowRedrawingFlag::ITEM_KNOWLEDGTE,
+    SubWindowRedrawingFlag::DUNGEON,
+    SubWindowRedrawingFlag::SNAPSHOT,
+    SubWindowRedrawingFlag::FLOOR_ITEMS,
+    SubWindowRedrawingFlag::FOUND_ITEMS,
 };
 
 enum class StatusRedrawingFlag {
@@ -107,6 +130,7 @@ public:
     void reset_flags(const EnumClassFlagGroup<StatusRedrawingFlag> &flags);
 
     void fill_up_sub_flags();
+    EnumClassFlagGroup<SubWindowRedrawingFlag> get_sub_intersection(const EnumClassFlagGroup<SubWindowRedrawingFlag> &flags);
 
 private:
     RedrawingFlagsUpdater() = default;

@@ -184,7 +184,11 @@ bool move_player_effect(PlayerType *player_ptr, POSITION ny, POSITION nx, BIT_FL
             StatusRedrawingFlag::DISTANCE,
         };
         rfu.set_flags(flags_srf);
-        player_ptr->window_flags |= PW_OVERHEAD | PW_DUNGEON;
+        const auto flags_swrf = {
+            SubWindowRedrawingFlag::OVERHEAD,
+            SubWindowRedrawingFlag::DUNGEON,
+        };
+        rfu.set_flags(flags_swrf);
         if ((!player_ptr->effects()->blindness()->is_blind() && !no_lite(player_ptr)) || !is_trap(player_ptr, g_ptr->feat)) {
             g_ptr->info &= ~(CAVE_UNSAFE);
         }
@@ -240,9 +244,13 @@ bool move_player_effect(PlayerType *player_ptr, POSITION ny, POSITION nx, BIT_FL
         carry(player_ptr, any_bits(mpe_mode, MPE_DO_PICKUP));
     }
 
+    // 自動拾い/自動破壊により床上のアイテムリストが変化した可能性があるので表示を更新
     if (!player_ptr->running) {
-        // 自動拾い/自動破壊により床上のアイテムリストが変化した可能性があるので表示を更新
-        set_bits(player_ptr->window_flags, PW_FLOOR_ITEMS | PW_FOUND_ITEMS);
+        const auto flags_swrf = {
+            SubWindowRedrawingFlag::FLOOR_ITEMS,
+            SubWindowRedrawingFlag::FOUND_ITEMS,
+        };
+        rfu.set_flags(flags_swrf);
         window_stuff(player_ptr);
     }
 

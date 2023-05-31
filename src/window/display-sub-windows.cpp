@@ -39,6 +39,7 @@
 #include "system/monster-entity.h"
 #include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
+#include "system/redrawing-flags-updater.h"
 #include "system/terrain-type-definition.h"
 #include "target/target-describer.h"
 #include "target/target-preparation.h"
@@ -90,7 +91,7 @@ FixItemTesterSetter::~FixItemTesterSetter()
  * @param pw_flag 描画を行うフラグ
  * @param display_func 描画を行う関数
  */
-static void display_sub_windows(window_redraw_type pw_flag, std::invocable auto display_func)
+static void display_sub_windows(SubWindowRedrawingFlag pw_flag, std::invocable auto display_func)
 {
     auto current_term = game_term;
 
@@ -100,7 +101,7 @@ static void display_sub_windows(window_redraw_type pw_flag, std::invocable auto 
             continue;
         }
 
-        if (none_bits(window_flag[i], pw_flag)) {
+        if (!g_window_flags[i].has(pw_flag)) {
             continue;
         }
 
@@ -118,7 +119,7 @@ static void display_sub_windows(window_redraw_type pw_flag, std::invocable auto 
  */
 void fix_inventory(PlayerType *player_ptr)
 {
-    display_sub_windows(PW_INVENTORY,
+    display_sub_windows(SubWindowRedrawingFlag::INVENTORY,
         [player_ptr] {
             display_inventory(player_ptr, *fix_item_tester);
         });
@@ -241,7 +242,7 @@ void fix_monster_list(PlayerType *player_ptr)
     static std::vector<MONSTER_IDX> monster_list;
     std::once_flag once;
 
-    display_sub_windows(PW_SIGHT_MONSTERS,
+    display_sub_windows(SubWindowRedrawingFlag::SIGHT_MONSTERS,
         [player_ptr, &once] {
             int w, h;
             term_get_size(&w, &h);
@@ -339,7 +340,7 @@ static void display_equipment(PlayerType *player_ptr, const ItemTester &item_tes
  */
 void fix_equip(PlayerType *player_ptr)
 {
-    display_sub_windows(PW_EQUIPMENT,
+    display_sub_windows(SubWindowRedrawingFlag::EQUIPMENT,
         [player_ptr] {
             display_equipment(player_ptr, *fix_item_tester);
         });
@@ -353,7 +354,7 @@ void fix_equip(PlayerType *player_ptr)
 void fix_player(PlayerType *player_ptr)
 {
     update_playtime();
-    display_sub_windows(PW_PLAYER,
+    display_sub_windows(SubWindowRedrawingFlag::PLAYER,
         [player_ptr] {
             display_player(player_ptr, 0);
         });
@@ -366,7 +367,7 @@ void fix_player(PlayerType *player_ptr)
  */
 void fix_message(void)
 {
-    display_sub_windows(PW_MESSAGE,
+    display_sub_windows(SubWindowRedrawingFlag::MESSAGE,
         [] {
             TERM_LEN w, h;
             term_get_size(&w, &h);
@@ -389,7 +390,7 @@ void fix_message(void)
  */
 void fix_overhead(PlayerType *player_ptr)
 {
-    display_sub_windows(PW_OVERHEAD,
+    display_sub_windows(SubWindowRedrawingFlag::OVERHEAD,
         [player_ptr] {
             TERM_LEN wid, hgt;
             term_get_size(&wid, &hgt);
@@ -444,7 +445,7 @@ static void display_dungeon(PlayerType *player_ptr)
  */
 void fix_dungeon(PlayerType *player_ptr)
 {
-    display_sub_windows(PW_DUNGEON,
+    display_sub_windows(SubWindowRedrawingFlag::DUNGEON,
         [player_ptr] {
             display_dungeon(player_ptr);
         });
@@ -460,7 +461,7 @@ void fix_monster(PlayerType *player_ptr)
     if (!MonsterRace(player_ptr->monster_race_idx).is_valid()) {
         return;
     }
-    display_sub_windows(PW_MONSTER_LORE,
+    display_sub_windows(SubWindowRedrawingFlag::MONSTER_LORE,
         [player_ptr] {
             display_roff(player_ptr);
         });
@@ -473,7 +474,7 @@ void fix_monster(PlayerType *player_ptr)
  */
 void fix_object(PlayerType *player_ptr)
 {
-    display_sub_windows(PW_ITEM_KNOWLEDGTE,
+    display_sub_windows(SubWindowRedrawingFlag::ITEM_KNOWLEDGTE,
         [player_ptr] {
             display_koff(player_ptr);
         });
@@ -587,7 +588,7 @@ static void display_floor_item_list(PlayerType *player_ptr, const int y, const i
  */
 void fix_floor_item_list(PlayerType *player_ptr, const int y, const int x)
 {
-    display_sub_windows(PW_FLOOR_ITEMS,
+    display_sub_windows(SubWindowRedrawingFlag::FLOOR_ITEMS,
         [player_ptr, y, x] {
             display_floor_item_list(player_ptr, y, x);
         });
@@ -668,7 +669,7 @@ static void display_found_item_list(PlayerType *player_ptr)
  */
 void fix_found_item_list(PlayerType *player_ptr)
 {
-    display_sub_windows(PW_FOUND_ITEMS,
+    display_sub_windows(SubWindowRedrawingFlag::FOUND_ITEMS,
         [player_ptr] {
             display_found_item_list(player_ptr);
         });
@@ -829,34 +830,34 @@ static void display_spell_list(PlayerType *player_ptr)
  */
 void fix_spell(PlayerType *player_ptr)
 {
-    display_sub_windows(PW_SPELL,
+    display_sub_windows(SubWindowRedrawingFlag::SPELL,
         [player_ptr] {
             display_spell_list(player_ptr);
         });
 }
 
 /*!
- * @brief サブウィンドウに所持品、装備品リストの表示を行う /
- * Flip "inven" and "equip" in any sub-windows
+ * @brief サブウィンドウに所持品、装備品リストの表示を行う
  */
-void toggle_inventory_equipment(PlayerType *player_ptr)
+void toggle_inventory_equipment()
 {
+    auto &rfu = RedrawingFlagsUpdater::get_instance();
     for (auto i = 0U; i < angband_terms.size(); ++i) {
         if (!angband_terms[i]) {
             continue;
         }
 
-        if (window_flag[i] & (PW_INVENTORY)) {
-            window_flag[i] &= ~(PW_INVENTORY);
-            window_flag[i] |= (PW_EQUIPMENT);
-            player_ptr->window_flags |= (PW_EQUIPMENT);
+        if (g_window_flags[i].has(SubWindowRedrawingFlag::INVENTORY)) {
+            g_window_flags[i].reset(SubWindowRedrawingFlag::INVENTORY);
+            g_window_flags[i].set(SubWindowRedrawingFlag::EQUIPMENT);
+            rfu.set_flag(SubWindowRedrawingFlag::EQUIPMENT);
             continue;
         }
 
-        if (window_flag[i] & PW_EQUIPMENT) {
-            window_flag[i] &= ~(PW_EQUIPMENT);
-            window_flag[i] |= PW_INVENTORY;
-            player_ptr->window_flags |= PW_INVENTORY;
+        if (g_window_flags[i].has(SubWindowRedrawingFlag::EQUIPMENT)) {
+            g_window_flags[i].reset(SubWindowRedrawingFlag::EQUIPMENT);
+            g_window_flags[i].set(SubWindowRedrawingFlag::INVENTORY);
+            rfu.set_flag(SubWindowRedrawingFlag::INVENTORY);
         }
     }
 }

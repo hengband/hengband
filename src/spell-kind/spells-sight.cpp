@@ -442,7 +442,8 @@ bool probing(PlayerType *player_ptr)
     game_term->scr->cu = 0;
     game_term->scr->cv = 1;
 
-    bool probe = false;
+    auto &rfu = RedrawingFlagsUpdater::get_instance();
+    auto probe = false;
     for (int i = 1; i < player_ptr->current_floor_ptr->m_max; i++) {
         auto *m_ptr = &player_ptr->current_floor_ptr->m_list[i];
         auto *r_ptr = &monraces_info[m_ptr->r_idx];
@@ -465,7 +466,7 @@ bool probing(PlayerType *player_ptr)
         prt(probe_result, 0, 0);
 
         message_add(probe_result);
-        player_ptr->window_flags |= (PW_MESSAGE);
+        rfu.set_flag(SubWindowRedrawingFlag::MESSAGE);
         handle_stuff(player_ptr);
         move_cursor_relative(m_ptr->fy, m_ptr->fx);
         inkey();

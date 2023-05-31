@@ -109,7 +109,11 @@ void update_player_type(PlayerType *player_ptr, turn_flags *turn_flags_ptr, Mons
     auto &rfu = RedrawingFlagsUpdater::get_instance();
     if (turn_flags_ptr->do_view) {
         rfu.set_flag(StatusRedrawingFlag::FLOW);
-        player_ptr->window_flags |= PW_OVERHEAD | PW_DUNGEON;
+        const auto flags = {
+            SubWindowRedrawingFlag::OVERHEAD,
+            SubWindowRedrawingFlag::DUNGEON,
+        };
+        rfu.set_flags(flags);
     }
 
     const auto has_lite = r_ptr->brightness_flags.has_any_of({ Mbt::HAS_LITE_1, Mbt::HAS_LITE_2 });
@@ -177,7 +181,7 @@ void update_player_window(PlayerType *player_ptr, old_race_flags *old_race_flags
         (old_race_flags_ptr->old_r_blows3 != r_ptr->r_blows[3]) || (old_race_flags_ptr->old_r_cast_spell != r_ptr->r_cast_spell) ||
         (old_race_flags_ptr->old_r_behavior_flags != r_ptr->r_behavior_flags) || (old_race_flags_ptr->old_r_kind_flags != r_ptr->r_kind_flags) ||
         (old_race_flags_ptr->old_r_drop_flags != r_ptr->r_drop_flags) || (old_race_flags_ptr->old_r_feature_flags != r_ptr->r_feature_flags)) {
-        player_ptr->window_flags |= PW_MONSTER_LORE;
+        RedrawingFlagsUpdater::get_instance().set_flag(SubWindowRedrawingFlag::MONSTER_LORE);
     }
 }
 

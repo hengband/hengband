@@ -238,7 +238,11 @@ void wiz_identify_full_inventory(PlayerType *player_ptr)
         StatusRedrawingFlag::REORDER,
     };
     rfu.set_flags(flags_srf);
-    set_bits(player_ptr->window_flags, PW_INVENTORY | PW_EQUIPMENT);
+    const auto flags_swrf = {
+        SubWindowRedrawingFlag::INVENTORY,
+        SubWindowRedrawingFlag::EQUIPMENT,
+    };
+    rfu.set_flags(flags_swrf);
 }
 
 /*!
@@ -588,7 +592,15 @@ static void wiz_reroll_item(PlayerType *player_ptr, ItemEntity *o_ptr)
         StatusRedrawingFlag::REORDER,
     };
     rfu.set_flags(flags_srf);
-    set_bits(player_ptr->window_flags, PW_INVENTORY | PW_EQUIPMENT | PW_SPELL | PW_PLAYER | PW_FLOOR_ITEMS | PW_FOUND_ITEMS);
+    const auto flags_swrf = {
+        SubWindowRedrawingFlag::INVENTORY,
+        SubWindowRedrawingFlag::EQUIPMENT,
+        SubWindowRedrawingFlag::SPELL,
+        SubWindowRedrawingFlag::PLAYER,
+        SubWindowRedrawingFlag::FLOOR_ITEMS,
+        SubWindowRedrawingFlag::FOUND_ITEMS,
+    };
+    rfu.set_flags(flags_swrf);
 }
 
 /*!
@@ -738,7 +750,15 @@ void wiz_modify_item(PlayerType *player_ptr)
             StatusRedrawingFlag::REORDER,
         };
         rfu.set_flags(flags_srf);
-        set_bits(player_ptr->window_flags, PW_INVENTORY | PW_EQUIPMENT | PW_SPELL | PW_PLAYER | PW_FLOOR_ITEMS | PW_FOUND_ITEMS);
+        const auto flags_swrf = {
+            SubWindowRedrawingFlag::INVENTORY,
+            SubWindowRedrawingFlag::EQUIPMENT,
+            SubWindowRedrawingFlag::SPELL,
+            SubWindowRedrawingFlag::PLAYER,
+            SubWindowRedrawingFlag::FLOOR_ITEMS,
+            SubWindowRedrawingFlag::FOUND_ITEMS,
+        };
+        rfu.set_flags(flags_swrf);
     } else {
         msg_print("Changes ignored.");
     }

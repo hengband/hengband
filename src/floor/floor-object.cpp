@@ -35,6 +35,7 @@
 #include "system/item-entity.h"
 #include "system/monster-entity.h"
 #include "system/player-type-definition.h"
+#include "system/redrawing-flags-updater.h"
 #include "system/system-variables.h"
 #include "target/projection-path-calculator.h"
 #include "util/bit-flags-calculator.h"
@@ -230,8 +231,11 @@ void floor_item_increase(PlayerType *player_ptr, INVENTORY_IDX item, ITEM_NUMBER
 
     num -= o_ptr->number;
     o_ptr->number += num;
-
-    set_bits(player_ptr->window_flags, PW_FLOOR_ITEMS | PW_FOUND_ITEMS);
+    const auto flags = {
+        SubWindowRedrawingFlag::FLOOR_ITEMS,
+        SubWindowRedrawingFlag::FOUND_ITEMS,
+    };
+    RedrawingFlagsUpdater::get_instance().set_flags(flags);
 }
 
 /*!
@@ -251,8 +255,11 @@ void floor_item_optimize(PlayerType *player_ptr, INVENTORY_IDX item)
     }
 
     delete_object_idx(player_ptr, item);
-
-    set_bits(player_ptr->window_flags, PW_FLOOR_ITEMS | PW_FOUND_ITEMS);
+    const auto flags = {
+        SubWindowRedrawingFlag::FLOOR_ITEMS,
+        SubWindowRedrawingFlag::FOUND_ITEMS,
+    };
+    RedrawingFlagsUpdater::get_instance().set_flags(flags);
 }
 
 /*!
@@ -278,8 +285,11 @@ void delete_object_idx(PlayerType *player_ptr, OBJECT_IDX o_idx)
 
     j_ptr->wipe();
     floor_ptr->o_cnt--;
-
-    set_bits(player_ptr->window_flags, PW_FLOOR_ITEMS | PW_FOUND_ITEMS);
+    const auto flags = {
+        SubWindowRedrawingFlag::FLOOR_ITEMS,
+        SubWindowRedrawingFlag::FOUND_ITEMS,
+    };
+    RedrawingFlagsUpdater::get_instance().set_flags(flags);
 }
 
 /*!
@@ -560,7 +570,11 @@ OBJECT_IDX drop_near(PlayerType *player_ptr, ItemEntity *j_ptr, PERCENTAGE chanc
     sound(SOUND_DROP);
 
     if (player_bold(player_ptr, by, bx)) {
-        set_bits(player_ptr->window_flags, PW_FLOOR_ITEMS | PW_FOUND_ITEMS);
+        const auto flags = {
+            SubWindowRedrawingFlag::FLOOR_ITEMS,
+            SubWindowRedrawingFlag::FOUND_ITEMS,
+        };
+        RedrawingFlagsUpdater::get_instance().set_flags(flags);
     }
 
     if (chance && player_bold(player_ptr, by, bx)) {

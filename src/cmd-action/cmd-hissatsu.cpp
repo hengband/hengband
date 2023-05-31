@@ -283,7 +283,7 @@ static int get_hissatsu_power(PlayerType *player_ptr, SPELL_IDX *sn)
         screen_load();
     }
 
-    player_ptr->window_flags |= (PW_SPELL);
+    RedrawingFlagsUpdater::get_instance().set_flag(SubWindowRedrawingFlag::SPELL);
     handle_stuff(player_ptr);
 
     /* Abort if needed */
@@ -356,7 +356,11 @@ void do_cmd_hissatsu(PlayerType *player_ptr)
 
     auto &rfu = RedrawingFlagsUpdater::get_instance();
     rfu.set_flag(MainWindowRedrawingFlag::MP);
-    player_ptr->window_flags |= (PW_PLAYER | PW_SPELL);
+    const auto flags = {
+        SubWindowRedrawingFlag::PLAYER,
+        SubWindowRedrawingFlag::SPELL,
+    };
+    rfu.set_flags(flags);
 }
 
 /*!

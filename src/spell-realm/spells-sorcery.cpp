@@ -60,7 +60,7 @@ bool alchemy(PlayerType *player_ptr)
         }
     }
 
-    if (!can_player_destroy_object(player_ptr, o_ptr)) {
+    if (!can_player_destroy_object(o_ptr)) {
         msg_format(_("%sを金に変えることに失敗した。", "You fail to turn %s to gold!"), item_name.data());
         return false;
     }
@@ -86,7 +86,7 @@ bool alchemy(PlayerType *player_ptr)
     player_ptr->au += price;
     auto &rfu = RedrawingFlagsUpdater::get_instance();
     rfu.set_flag(MainWindowRedrawingFlag::GOLD);
-    player_ptr->window_flags |= PW_PLAYER;
+    rfu.set_flag(SubWindowRedrawingFlag::PLAYER);
     vary_item(player_ptr, item, -amt);
     return true;
 }

@@ -36,12 +36,12 @@ bool bless_weapon(PlayerType *player_ptr)
     }
 
     const auto item_name = describe_flavor(player_ptr, o_ptr, OD_OMIT_PREFIX | OD_NAME_ONLY);
-    auto flags = object_flags(o_ptr);
+    auto item_flags = object_flags(o_ptr);
     auto &rfu = RedrawingFlagsUpdater::get_instance();
     if (o_ptr->is_cursed()) {
         auto can_disturb_blessing = o_ptr->curse_flags.has(CurseTraitType::HEAVY_CURSE) && (randint1(100) < 33);
-        can_disturb_blessing |= flags.has(TR_ADD_L_CURSE);
-        can_disturb_blessing |= flags.has(TR_ADD_H_CURSE);
+        can_disturb_blessing |= item_flags.has(TR_ADD_L_CURSE);
+        can_disturb_blessing |= item_flags.has(TR_ADD_H_CURSE);
         can_disturb_blessing |= o_ptr->curse_flags.has(CurseTraitType::PERSISTENT_CURSE);
         can_disturb_blessing |= o_ptr->curse_flags.has(CurseTraitType::PERMA_CURSE);
         if (can_disturb_blessing) {
@@ -63,7 +63,12 @@ bool bless_weapon(PlayerType *player_ptr)
         set_bits(o_ptr->ident, IDENT_SENSE);
         o_ptr->feeling = FEEL_NONE;
         rfu.set_flag(StatusRedrawingFlag::BONUS);
-        set_bits(player_ptr->window_flags, PW_EQUIPMENT | PW_FLOOR_ITEMS | PW_FOUND_ITEMS);
+        const auto flags = {
+            SubWindowRedrawingFlag::EQUIPMENT,
+            SubWindowRedrawingFlag::FLOOR_ITEMS,
+            SubWindowRedrawingFlag::FOUND_ITEMS,
+        };
+        rfu.set_flags(flags);
     }
 
     /*
@@ -74,7 +79,7 @@ bool bless_weapon(PlayerType *player_ptr)
      * artifact weapon they find. Ego weapons and normal weapons
      * can be blessed automatically.
      */
-    if (flags.has(TR_BLESSED)) {
+    if (item_flags.has(TR_BLESSED)) {
 #ifdef JP
         msg_format("%s は既に祝福されている。", item_name.data());
 #else
@@ -137,7 +142,13 @@ bool bless_weapon(PlayerType *player_ptr)
     }
 
     rfu.set_flag(StatusRedrawingFlag::BONUS);
-    set_bits(player_ptr->window_flags, PW_EQUIPMENT | PW_PLAYER | PW_FLOOR_ITEMS | PW_FOUND_ITEMS);
+    const auto flags_swrf = {
+        SubWindowRedrawingFlag::EQUIPMENT,
+        SubWindowRedrawingFlag::PLAYER,
+        SubWindowRedrawingFlag::FLOOR_ITEMS,
+        SubWindowRedrawingFlag::FOUND_ITEMS,
+    };
+    rfu.set_flags(flags_swrf);
     calc_android_exp(player_ptr);
     return true;
 }

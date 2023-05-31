@@ -43,6 +43,7 @@
 #include "system/item-entity.h"
 #include "system/monster-entity.h"
 #include "system/player-type-definition.h"
+#include "system/redrawing-flags-updater.h"
 #include "target/target-getter.h"
 #include "term/screen-processor.h"
 #include "timed-effect/player-confusion.h"
@@ -259,7 +260,11 @@ void exe_activate(PlayerType *player_ptr, INVENTORY_IDX item)
     sound(SOUND_ZAP);
     if (activation_index(ae_ptr->o_ptr) > RandomArtActType::NONE) {
         (void)activate_artifact(player_ptr, ae_ptr->o_ptr);
-        player_ptr->window_flags |= PW_INVENTORY | PW_EQUIPMENT;
+        const auto flags = {
+            SubWindowRedrawingFlag::INVENTORY,
+            SubWindowRedrawingFlag::EQUIPMENT,
+        };
+        RedrawingFlagsUpdater::get_instance().set_flags(flags);
         return;
     }
 

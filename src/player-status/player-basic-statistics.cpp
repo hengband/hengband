@@ -108,7 +108,7 @@ void PlayerBasicStatistics::update_top_status()
         this->player_ptr->stat_top[status] = (int16_t)top;
         auto &rfu = RedrawingFlagsUpdater::get_instance();
         rfu.set_flag(MainWindowRedrawingFlag::ABILITY_SCORE);
-        set_bits(this->player_ptr->window_flags, PW_PLAYER);
+        rfu.set_flag(SubWindowRedrawingFlag::PLAYER);
     }
 }
 
@@ -142,7 +142,7 @@ void PlayerBasicStatistics::update_use_status()
         this->player_ptr->stat_use[status] = (int16_t)use;
         auto &rfu = RedrawingFlagsUpdater::get_instance();
         rfu.set_flag(MainWindowRedrawingFlag::ABILITY_SCORE);
-        set_bits(this->player_ptr->window_flags, PW_PLAYER);
+        rfu.set_flag(SubWindowRedrawingFlag::PLAYER);
     }
 }
 
@@ -191,5 +191,5 @@ void PlayerBasicStatistics::update_index_status()
         }
     }
 
-    set_bits(this->player_ptr->window_flags, PW_PLAYER);
+    rfu.set_flag(SubWindowRedrawingFlag::PLAYER);
 }

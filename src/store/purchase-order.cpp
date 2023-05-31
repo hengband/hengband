@@ -304,7 +304,7 @@ void store_purchase(PlayerType *player_ptr, StoreSaleType store_num)
     j_ptr->ident &= ~(IDENT_STORE);
 
     const auto idx = find_autopick_list(player_ptr, j_ptr);
-    auto_inscribe_item(player_ptr, j_ptr, idx);
+    auto_inscribe_item(j_ptr, idx);
 
     item_new = store_item_to_inventory(player_ptr, j_ptr);
     handle_stuff(player_ptr);

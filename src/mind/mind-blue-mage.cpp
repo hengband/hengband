@@ -91,6 +91,10 @@ bool do_cmd_cast_learned(PlayerType *player_ptr)
     PlayerEnergy(player_ptr).set_player_turn_energy(100);
     auto &rfu = RedrawingFlagsUpdater::get_instance();
     rfu.set_flag(MainWindowRedrawingFlag::MP);
-    player_ptr->window_flags |= PW_PLAYER | PW_SPELL;
+    const auto flags = {
+        SubWindowRedrawingFlag::PLAYER,
+        SubWindowRedrawingFlag::SPELL,
+    };
+    rfu.set_flags(flags);
     return true;
 }

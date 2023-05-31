@@ -375,7 +375,7 @@ static int get_spell(PlayerType *player_ptr, SPELL_IDX *sn, concptr prompt, int 
     flag = false;
     redraw = false;
 
-    player_ptr->window_flags |= (PW_SPELL);
+    RedrawingFlagsUpdater::get_instance().set_flag(SubWindowRedrawingFlag::SPELL);
     handle_stuff(player_ptr);
 
     /* Build a prompt (accept all spells) */
@@ -492,7 +492,7 @@ static int get_spell(PlayerType *player_ptr, SPELL_IDX *sn, concptr prompt, int 
         screen_load();
     }
 
-    player_ptr->window_flags |= (PW_SPELL);
+    RedrawingFlagsUpdater::get_instance().set_flag(SubWindowRedrawingFlag::SPELL);
     handle_stuff(player_ptr);
 
     /* Abort if needed */
@@ -919,9 +919,7 @@ void do_cmd_study(PlayerType *player_ptr)
     auto &rfu = RedrawingFlagsUpdater::get_instance();
     rfu.set_flag(StatusRedrawingFlag::SPELLS);
     update_creature(player_ptr);
-
-    /* Redraw object recall */
-    player_ptr->window_flags |= (PW_ITEM_KNOWLEDGTE);
+    rfu.set_flag(SubWindowRedrawingFlag::ITEM_KNOWLEDGTE);
 }
 
 /*!
@@ -1184,7 +1182,7 @@ bool do_cmd_cast(PlayerType *player_ptr)
             }
 
             gain_exp(player_ptr, e * s_ptr->slevel);
-            player_ptr->window_flags |= (PW_ITEM_KNOWLEDGTE);
+            RedrawingFlagsUpdater::get_instance().set_flag(SubWindowRedrawingFlag::ITEM_KNOWLEDGTE);
 
             switch (realm) {
             case REALM_LIFE:
@@ -1365,8 +1363,10 @@ bool do_cmd_cast(PlayerType *player_ptr)
         }
     }
 
-    player_ptr->window_flags |= (PW_PLAYER);
-    player_ptr->window_flags |= (PW_SPELL);
-
+    const auto flags = {
+        SubWindowRedrawingFlag::PLAYER,
+        SubWindowRedrawingFlag::SPELL,
+    };
+    RedrawingFlagsUpdater::get_instance().set_flags(flags);
     return true; //!< @note 詠唱した
 }

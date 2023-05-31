@@ -68,7 +68,7 @@ int get_com_id(char key)
 /*!
  * @brief Auto inscription
  */
-void auto_inscribe_item(PlayerType *player_ptr, ItemEntity *o_ptr, int idx)
+void auto_inscribe_item(ItemEntity *o_ptr, int idx)
 {
     if (idx < 0 || autopick_list[idx].insc.empty()) {
         return;
@@ -79,12 +79,16 @@ void auto_inscribe_item(PlayerType *player_ptr, ItemEntity *o_ptr, int idx)
     }
 
     auto &rfu = RedrawingFlagsUpdater::get_instance();
-    player_ptr->window_flags |= (PW_EQUIPMENT | PW_INVENTORY);
-    const auto flags = {
+    const auto flags_swrf = {
+        SubWindowRedrawingFlag::INVENTORY,
+        SubWindowRedrawingFlag::EQUIPMENT,
+    };
+    rfu.set_flags(flags_swrf);
+    const auto flags_srf = {
         StatusRedrawingFlag::BONUS,
         StatusRedrawingFlag::COMBINATION,
     };
-    rfu.set_flags(flags);
+    rfu.set_flags(flags_srf);
 }
 
 /*!
