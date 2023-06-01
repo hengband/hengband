@@ -194,7 +194,7 @@ static um_type *initialize_um_type(PlayerType *player_ptr, um_type *um_ptr, MONS
     um_ptr->fx = um_ptr->m_ptr->fx;
     um_ptr->flag = false;
     um_ptr->easy = false;
-    um_ptr->in_darkness = dungeons_info[floor.dungeon_idx].flags.has(DungeonFeatureType::DARKNESS) && !player_ptr->see_nocto;
+    um_ptr->in_darkness = floor.get_dungeon_definition().flags.has(DungeonFeatureType::DARKNESS) && !player_ptr->see_nocto;
     um_ptr->full = full;
     return um_ptr;
 }

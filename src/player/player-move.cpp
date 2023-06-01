@@ -193,7 +193,7 @@ bool move_player_effect(PlayerType *player_ptr, POSITION ny, POSITION nx, BIT_FL
             g_ptr->info &= ~(CAVE_UNSAFE);
         }
 
-        if (floor_ptr->dun_level && dungeons_info[floor_ptr->dungeon_idx].flags.has(DungeonFeatureType::FORGET)) {
+        if (floor_ptr->dun_level && floor_ptr->get_dungeon_definition().flags.has(DungeonFeatureType::FORGET)) {
             wiz_dark(player_ptr);
         }
 

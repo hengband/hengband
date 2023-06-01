@@ -64,15 +64,16 @@ void add_door(PlayerType *player_ptr, POSITION x, POSITION y)
 void place_secret_door(PlayerType *player_ptr, POSITION y, POSITION x, int type)
 {
     auto *floor_ptr = player_ptr->current_floor_ptr;
-    if (dungeons_info[floor_ptr->dungeon_idx].flags.has(DungeonFeatureType::NO_DOORS)) {
+    const auto &dungeon = floor_ptr->get_dungeon_definition();
+    if (dungeon.flags.has(DungeonFeatureType::NO_DOORS)) {
         place_bold(player_ptr, y, x, GB_FLOOR);
         return;
     }
 
     if (type == DOOR_DEFAULT) {
-        type = (dungeons_info[floor_ptr->dungeon_idx].flags.has(DungeonFeatureType::CURTAIN) && one_in_(dungeons_info[floor_ptr->dungeon_idx].flags.has(DungeonFeatureType::NO_CAVE) ? 16 : 256))
+        type = (dungeon.flags.has(DungeonFeatureType::CURTAIN) && one_in_(dungeon.flags.has(DungeonFeatureType::NO_CAVE) ? 16 : 256))
                    ? DOOR_CURTAIN
-                   : (dungeons_info[floor_ptr->dungeon_idx].flags.has(DungeonFeatureType::GLASS_DOOR) ? DOOR_GLASS_DOOR : DOOR_DOOR);
+                   : (dungeon.flags.has(DungeonFeatureType::GLASS_DOOR) ? DOOR_GLASS_DOOR : DOOR_DOOR);
     }
 
     place_closed_door(player_ptr, y, x, type);
@@ -101,12 +102,13 @@ void place_secret_door(PlayerType *player_ptr, POSITION y, POSITION x, int type)
 void place_locked_door(PlayerType *player_ptr, POSITION y, POSITION x)
 {
     auto *floor_ptr = player_ptr->current_floor_ptr;
-    if (dungeons_info[floor_ptr->dungeon_idx].flags.has(DungeonFeatureType::NO_DOORS)) {
+    const auto &dungeon = floor_ptr->get_dungeon_definition();
+    if (dungeon.flags.has(DungeonFeatureType::NO_DOORS)) {
         place_bold(player_ptr, y, x, GB_FLOOR);
         return;
     }
 
-    set_cave_feat(floor_ptr, y, x, feat_locked_door_random(dungeons_info[floor_ptr->dungeon_idx].flags.has(DungeonFeatureType::GLASS_DOOR) ? DOOR_GLASS_DOOR : DOOR_DOOR));
+    set_cave_feat(floor_ptr, y, x, feat_locked_door_random(dungeon.flags.has(DungeonFeatureType::GLASS_DOOR) ? DOOR_GLASS_DOOR : DOOR_DOOR));
     floor_ptr->grid_array[y][x].info &= ~(CAVE_FLOOR);
     delete_monster(player_ptr, y, x);
 }
@@ -123,15 +125,15 @@ void place_random_door(PlayerType *player_ptr, POSITION y, POSITION x, bool room
     auto *floor_ptr = player_ptr->current_floor_ptr;
     auto *g_ptr = &floor_ptr->grid_array[y][x];
     g_ptr->mimic = 0;
-
-    if (dungeons_info[floor_ptr->dungeon_idx].flags.has(DungeonFeatureType::NO_DOORS)) {
+    const auto &dungeon = floor_ptr->get_dungeon_definition();
+    if (dungeon.flags.has(DungeonFeatureType::NO_DOORS)) {
         place_bold(player_ptr, y, x, GB_FLOOR);
         return;
     }
 
-    int type = (dungeons_info[floor_ptr->dungeon_idx].flags.has(DungeonFeatureType::CURTAIN) && one_in_(dungeons_info[floor_ptr->dungeon_idx].flags.has(DungeonFeatureType::NO_CAVE) ? 16 : 256))
+    int type = (dungeon.flags.has(DungeonFeatureType::CURTAIN) && one_in_(dungeon.flags.has(DungeonFeatureType::NO_CAVE) ? 16 : 256))
                    ? DOOR_CURTAIN
-                   : (dungeons_info[floor_ptr->dungeon_idx].flags.has(DungeonFeatureType::GLASS_DOOR) ? DOOR_GLASS_DOOR : DOOR_DOOR);
+                   : (dungeon.flags.has(DungeonFeatureType::GLASS_DOOR) ? DOOR_GLASS_DOOR : DOOR_DOOR);
 
     int tmp = randint0(1000);
     FEAT_IDX feat = feat_none;
@@ -179,7 +181,7 @@ void place_random_door(PlayerType *player_ptr, POSITION y, POSITION x, bool room
 void place_closed_door(PlayerType *player_ptr, POSITION y, POSITION x, int type)
 {
     auto *floor_ptr = player_ptr->current_floor_ptr;
-    if (dungeons_info[floor_ptr->dungeon_idx].flags.has(DungeonFeatureType::NO_DOORS)) {
+    if (floor_ptr->get_dungeon_definition().flags.has(DungeonFeatureType::NO_DOORS)) {
         place_bold(player_ptr, y, x, GB_FLOOR);
         return;
     }

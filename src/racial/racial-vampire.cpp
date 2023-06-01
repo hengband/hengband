@@ -15,7 +15,7 @@
 bool vampirism(PlayerType *player_ptr)
 {
     const auto &floor = *player_ptr->current_floor_ptr;
-    if (dungeons_info[floor.dungeon_idx].flags.has(DungeonFeatureType::NO_MELEE)) {
+    if (floor.get_dungeon_definition().flags.has(DungeonFeatureType::NO_MELEE)) {
         msg_print(_("なぜか攻撃することができない。", "Something prevents you from attacking."));
         return false;
     }

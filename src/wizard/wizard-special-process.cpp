@@ -603,11 +603,11 @@ static bool select_debugging_floor(PlayerType *player_ptr, int dungeon_type)
 static void wiz_jump_floor(PlayerType *player_ptr, DUNGEON_IDX dun_idx, DEPTH depth)
 {
     auto &floor = *player_ptr->current_floor_ptr;
-    floor.dungeon_idx = dun_idx;
+    floor.set_dungeon_index(dun_idx);
     floor.dun_level = depth;
     prepare_change_floor_mode(player_ptr, CFM_RAND_PLACE);
     if (!floor.is_in_dungeon()) {
-        floor.dungeon_idx = 0;
+        floor.reset_dungeon_index();
     }
 
     floor.inside_arena = false;
@@ -879,7 +879,8 @@ void cheat_death(PlayerType *player_ptr)
     if (floor_ptr->dungeon_idx) {
         player_ptr->recall_dungeon = floor_ptr->dungeon_idx;
     }
-    floor_ptr->dungeon_idx = 0;
+
+    floor_ptr->reset_dungeon_index();
     if (lite_town || vanilla_town) {
         player_ptr->wilderness_y = 1;
         player_ptr->wilderness_x = 1;

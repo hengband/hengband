@@ -204,7 +204,7 @@ static bool make_one_floor(PlayerType *player_ptr, dun_data_type *dd_ptr, dungeo
 {
     auto *floor_ptr = player_ptr->current_floor_ptr;
 
-    if (dungeons_info[floor_ptr->dungeon_idx].flags.has(DungeonFeatureType::NO_ROOM)) {
+    if (floor_ptr->get_dungeon_definition().flags.has(DungeonFeatureType::NO_ROOM)) {
         make_only_tunnel_points(floor_ptr, dd_ptr);
     } else {
         if (!generate_rooms(player_ptr, dd_ptr)) {
@@ -435,7 +435,7 @@ bool cave_gen(PlayerType *player_ptr, concptr *why)
     }
 
     dd_ptr->cent_n = 0;
-    auto *d_ptr = &dungeons_info[floor_ptr->dungeon_idx];
+    auto *d_ptr = &floor_ptr->get_dungeon_definition();
     constexpr auto chance_empty_floor = 24;
     if (ironman_empty_levels || (d_ptr->flags.has(DungeonFeatureType::ARENA) && (empty_levels && one_in_(chance_empty_floor)))) {
         dd_ptr->empty_level = true;

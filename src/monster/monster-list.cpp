@@ -116,7 +116,8 @@ MonsterRaceId get_mon_num(PlayerType *player_ptr, DEPTH min_level, DEPTH max_lev
     auto chance_nasty = std::max(max_num_nasty_monsters, chance_nasty_monster - over_days / 2);
     auto nasty_level = std::min(max_depth_nasty_monster, over_days / 3);
     const auto &floor = *player_ptr->current_floor_ptr;
-    if (dungeons_info[floor.dungeon_idx].flags.has(DungeonFeatureType::MAZE)) {
+    const auto &dungeon = floor.get_dungeon_definition();
+    if (dungeon.flags.has(DungeonFeatureType::MAZE)) {
         chance_nasty = std::min(chance_nasty / 2, chance_nasty - 10);
         if (chance_nasty < 2) {
             chance_nasty = 2;
@@ -127,7 +128,7 @@ MonsterRaceId get_mon_num(PlayerType *player_ptr, DEPTH min_level, DEPTH max_lev
     }
 
     /* Boost the max_level */
-    if ((option & GMN_ARENA) || dungeons_info[floor.dungeon_idx].flags.has_not(DungeonFeatureType::BEGINNER)) {
+    if ((option & GMN_ARENA) || dungeon.flags.has_not(DungeonFeatureType::BEGINNER)) {
         /* Nightmare mode allows more out-of depth monsters */
         if (ironman_nightmare && !randint0(chance_nasty)) {
             /* What a bizarre calculation */
@@ -342,7 +343,7 @@ void choose_new_monster(PlayerType *player_ptr, MONSTER_IDX m_idx, bool born, Mo
             level = floor_ptr->dun_level;
         }
 
-        if (dungeons_info[floor_ptr->dungeon_idx].flags.has(DungeonFeatureType::CHAMELEON)) {
+        if (floor_ptr->get_dungeon_definition().flags.has(DungeonFeatureType::CHAMELEON)) {
             level += 2 + randint1(3);
         }
 

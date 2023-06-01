@@ -183,6 +183,7 @@ static void init_world_floor_info(PlayerType *player_ptr)
 {
     w_ptr->character_dungeon = false;
     auto *floor_ptr = player_ptr->current_floor_ptr;
+    floor_ptr->reset_dungeon_index();
     floor_ptr->dun_level = 0;
     floor_ptr->quest_number = QuestId::NONE;
     floor_ptr->inside_arena = false;

@@ -75,7 +75,7 @@ std::tuple<int, int> ItemMagicApplier::calculate_chances()
 {
     auto chance_good = this->lev + 10;
     const auto &floor = *this->player_ptr->current_floor_ptr;
-    const auto &dungeon = dungeons_info[floor.dungeon_idx];
+    const auto &dungeon = floor.get_dungeon_definition();
     if (chance_good > dungeon.obj_good) {
         chance_good = dungeon.obj_good;
     }

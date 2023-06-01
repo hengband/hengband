@@ -73,7 +73,7 @@ static bool summon_specific_okay(PlayerType *player_ptr, MonsterRaceId r_idx)
         return false;
     }
 
-    if ((r_ptr->flags7 & RF7_CHAMELEON) && dungeons_info[floor.dungeon_idx].flags.has(DungeonFeatureType::CHAMELEON)) {
+    if ((r_ptr->flags7 & RF7_CHAMELEON) && floor.get_dungeon_definition().flags.has(DungeonFeatureType::CHAMELEON)) {
         return true;
     }
 

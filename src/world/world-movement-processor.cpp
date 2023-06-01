@@ -84,7 +84,7 @@ void execute_recall(PlayerType *player_ptr)
         }
 
         floor_ptr->dun_level = 0;
-        floor_ptr->dungeon_idx = 0;
+        floor_ptr->reset_dungeon_index();
         leave_quest_check(player_ptr);
         leave_tower_check(player_ptr);
         floor_ptr->quest_number = QuestId::NONE;
@@ -94,7 +94,7 @@ void execute_recall(PlayerType *player_ptr)
     }
 
     msg_print(_("下に引きずり降ろされる感じがする！", "You feel yourself yanked downwards!"));
-    floor_ptr->dungeon_idx = player_ptr->recall_dungeon;
+    floor_ptr->set_dungeon_index(player_ptr->recall_dungeon);
     if (record_stair) {
         exe_write_diary(player_ptr, DiaryKind::RECALL, floor_ptr->dun_level);
     }
@@ -109,7 +109,7 @@ void execute_recall(PlayerType *player_ptr)
         } else if (floor_ptr->dun_level < 99) {
             floor_ptr->dun_level = (floor_ptr->dun_level + 99) / 2;
         } else if (floor_ptr->dun_level > 100) {
-            floor_ptr->dun_level = dungeons_info[floor_ptr->dungeon_idx].maxdepth - 1;
+            floor_ptr->dun_level = floor_ptr->get_dungeon_definition().maxdepth - 1;
         }
     }
 

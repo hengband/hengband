@@ -340,7 +340,7 @@ bool affect_feature(PlayerType *player_ptr, MONSTER_IDX who, POSITION r, POSITIO
     }
     case AttributeType::LITE_WEAK:
     case AttributeType::LITE: {
-        if (dungeons_info[floor_ptr->dungeon_idx].flags.has(DungeonFeatureType::DARKNESS)) {
+        if (floor_ptr->get_dungeon_definition().flags.has(DungeonFeatureType::DARKNESS)) {
             break;
         }
 

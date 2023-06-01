@@ -63,7 +63,7 @@ void AvatarChanger::change_virtue_non_beginner()
 {
     auto *floor_ptr = this->player_ptr->current_floor_ptr;
     auto *r_ptr = &monraces_info[m_ptr->r_idx];
-    if (dungeons_info[floor_ptr->dungeon_idx].flags.has(DungeonFeatureType::BEGINNER)) {
+    if (floor_ptr->get_dungeon_definition().flags.has(DungeonFeatureType::BEGINNER)) {
         return;
     }
 

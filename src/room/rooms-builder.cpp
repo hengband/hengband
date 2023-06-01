@@ -91,7 +91,7 @@ void build_cavern(PlayerType *player_ptr)
     bool light = false;
     bool done = false;
     auto *floor_ptr = player_ptr->current_floor_ptr;
-    if ((floor_ptr->dun_level <= randint1(50)) && dungeons_info[floor_ptr->dungeon_idx].flags.has_not(DungeonFeatureType::DARKNESS)) {
+    if ((floor_ptr->dun_level <= randint1(50)) && floor_ptr->get_dungeon_definition().flags.has_not(DungeonFeatureType::DARKNESS)) {
         light = true;
     }
 

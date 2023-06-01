@@ -148,10 +148,6 @@ void player_wipe_without_name(PlayerType *player_ptr)
 
     player_ptr->max_plv = player_ptr->lev = 1;
     player_ptr->arena_number = 0;
-    auto floor_ptr = player_ptr->current_floor_ptr;
-    floor_ptr->inside_arena = false;
-    floor_ptr->quest_number = QuestId::NONE;
-
     player_ptr->exit_bldg = true;
     player_ptr->knows_daily_bounty = false;
     update_gambling_monsters(player_ptr);
@@ -161,7 +157,6 @@ void player_wipe_without_name(PlayerType *player_ptr)
         player_ptr->virtues[i] = 0;
     }
 
-    floor_ptr->dungeon_idx = 0;
     if (vanilla_town || ironman_downward) {
         player_ptr->recall_dungeon = DUNGEON_ANGBAND;
     } else {

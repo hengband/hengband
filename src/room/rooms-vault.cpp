@@ -962,7 +962,7 @@ bool build_type10(PlayerType *player_ptr, dun_data_type *dd_ptr)
     /* Select type of vault */
     do {
         vtype = randint1(15);
-    } while (dungeons_info[floor_ptr->dungeon_idx].flags.has(DungeonFeatureType::NO_CAVE) && ((vtype == 1) || (vtype == 3) || (vtype == 8) || (vtype == 9) || (vtype == 11)));
+    } while (floor_ptr->get_dungeon_definition().flags.has(DungeonFeatureType::NO_CAVE) && ((vtype == 1) || (vtype == 3) || (vtype == 8) || (vtype == 9) || (vtype == 11)));
 
     switch (vtype) {
         /* Build an appropriate room */
