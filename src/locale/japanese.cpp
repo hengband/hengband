@@ -254,9 +254,7 @@ void euc2sjis(char *str)
 byte codeconv(char *str)
 {
     byte code = 0;
-    int i;
-
-    for (i = 0; str[i]; i++) {
+    for (auto i = 0; str[i]; i++) {
         unsigned char c1;
         unsigned char c2;
 
@@ -284,9 +282,13 @@ byte codeconv(char *str)
                 /* No conversion */
                 return 0;
             }
-        }
+        } else {
+            auto is_cp932 = (0x81 <= c1 && c1 <= 0x9f) && ((0x40 <= c2 && c2 <= 0x7e) || (0x80 <= c2 && c2 <= 0xfc));
+            is_cp932 |= (0xe0 <= c1 && c1 <= 0xfc) && (0x40 <= c2 && c2 <= 0x7e);
+            if (!is_cp932) {
+                continue;
+            }
 
-        else if (((0x81 <= c1 && c1 <= 0x9f) && ((0x40 <= c2 && c2 <= 0x7e) || (0x80 <= c2 && c2 <= 0xfc))) || ((0xe0 <= c1 && c1 <= 0xfc) && (0x40 <= c2 && c2 <= 0x7e))) {
             /* Only SJIS is allowed */
             if (!code) {
                 /* SJIS */
