@@ -1,5 +1,5 @@
 ﻿/*!
- *  @file japanese.c
+ *  @file japanese.cpp
  *  @brief 日本語処理関数
  *  @date 2014/07/07
  */
@@ -254,9 +254,7 @@ void euc2sjis(char *str)
 byte codeconv(char *str)
 {
     byte code = 0;
-    int i;
-
-    for (i = 0; str[i]; i++) {
+    for (auto i = 0; str[i]; i++) {
         unsigned char c1;
         unsigned char c2;
 
@@ -284,9 +282,13 @@ byte codeconv(char *str)
                 /* No conversion */
                 return 0;
             }
-        }
+        } else {
+            auto is_cp932 = (0x81 <= c1 && c1 <= 0x9f) && ((0x40 <= c2 && c2 <= 0x7e) || (0x80 <= c2 && c2 <= 0xfc));
+            is_cp932 |= (0xe0 <= c1 && c1 <= 0xfc) && (0x40 <= c2 && c2 <= 0x7e);
+            if (!is_cp932) {
+                continue;
+            }
 
-        else if (((0x81 <= c1 && c1 <= 0x9f) && ((0x40 <= c2 && c2 <= 0x7e) || (0x80 <= c2 && c2 <= 0xfc))) || ((0xe0 <= c1 && c1 <= 0xfc) && (0x40 <= c2 && c2 <= 0x7e))) {
             /* Only SJIS is allowed */
             if (!code) {
                 /* SJIS */
@@ -361,20 +363,45 @@ static bool is_ascii_str(concptr str)
 }
 
 #if defined(EUC)
+#include <algorithm>
 #include <iconv.h>
+#include <initializer_list>
+#include <vector>
 
-static const struct ms_to_jis_unicode_conv_t {
-    unsigned char from[3];
-    unsigned char to[3];
-} ms_to_jis_unicode_conv[] = {
-    { { 0xef, 0xbd, 0x9e }, { 0xe3, 0x80, 0x9c } }, /* FULLWIDTH TILDE -> WAVE DASH */
-    { { 0xef, 0xbc, 0x8d }, { 0xe2, 0x88, 0x92 } }, /* FULLWIDTH HYPHEN-MINUS -> MINUS SIGN */
+// UTF-8 の文字列長は必ずしも3バイトとは限らないが、変愚蛮怒の仕様範囲では3固定.
+constexpr auto ENCODING_LENGTH = 3;
+class EncodingConverter {
+public:
+    EncodingConverter(const std::initializer_list<unsigned char> from, const std::initializer_list<unsigned char> to)
+        : from(from)
+        , to(to)
+    {
+    }
+
+    bool equals(const unsigned char *p) const
+    {
+        return std::equal(from.begin(), from.end(), p);
+    }
+
+    void replace(unsigned char *p) const
+    {
+        std::copy_n(to.begin(), ENCODING_LENGTH, p);
+    }
+
+private:
+    std::vector<unsigned char> from;
+    std::vector<unsigned char> to;
+};
+
+const std::vector<EncodingConverter> encoding_characters = {
+    { { 0xef, 0xbd, 0x9e }, { 0xe3, 0x80, 0x9c } }, /* FULLWIDTH TILDE -> WAVE DASH (全角チルダ → 波ダッシュ) */
+    { { 0xef, 0xbc, 0x8d }, { 0xe2, 0x88, 0x92 } }, /* FULLWIDTH HYPHEN-MINUS -> MINUS SIGN (全角ハイフン → マイナス記号) */
 };
 
 /*!
  * @brief 受け取ったUTF-8文字列を調べ、特定のコードポイントの文字の置き換えを行う
  *
- * 受け取ったUTF-8の文字列に含まれる文字を1つ1つしらべて、ms_to_jis_unicode_conv で
+ * 受け取ったUTF-8の文字列に含まれる文字を1つ1つ調べて、encoding_characters で
  * 定義されている特定のコードポイントの文字の変換を行う。
  *
  * '～'と'－'は、Windows環境(CP932)とLinux/UNIX環境(EUC-JP)でUTF-8に対応する
@@ -390,9 +417,8 @@ static const struct ms_to_jis_unicode_conv_t {
  */
 static void ms_to_jis_unicode(char *str)
 {
-    unsigned char *p;
-    for (p = (unsigned char *)str; *p; p++) {
-        int subseq_num = 0;
+    for (auto *p = (unsigned char *)str; *p; p++) {
+        auto subseq_num = 0;
         if (0x00 < *p && *p <= 0x7f) {
             continue;
         }
@@ -400,16 +426,17 @@ static void ms_to_jis_unicode(char *str)
         if ((*p & 0xe0) == 0xc0) {
             subseq_num = 1;
         }
+
         if ((*p & 0xf0) == 0xe0) {
-            size_t i;
-            for (i = 0; i < sizeof(ms_to_jis_unicode_conv) / sizeof(ms_to_jis_unicode_conv[0]); ++i) {
-                const struct ms_to_jis_unicode_conv_t *c = &ms_to_jis_unicode_conv[i];
-                if (memcmp(p, c->from, 3) == 0) {
-                    memcpy(p, c->to, 3);
+            for (const auto &converter : encoding_characters) {
+                if (converter.equals(p)) {
+                    converter.replace(p);
                 }
             }
+
             subseq_num = 2;
         }
+
         if ((*p & 0xf8) == 0xf0) {
             subseq_num = 3;
         }
