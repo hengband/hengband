@@ -48,7 +48,7 @@ void print_title(PlayerType *player_ptr)
             p = _("***勝利者***", "***WINNER***");
         }
     } else {
-        angband_strcpy(str, player_titles[enum2i(player_ptr->pclass)][(player_ptr->lev - 1) / 5].data(), sizeof(str));
+        angband_strcpy(str, player_titles[enum2i(player_ptr->pclass)][(player_ptr->lev - 1) / 5], sizeof(str));
         p = str;
     }
 

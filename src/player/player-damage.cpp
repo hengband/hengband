@@ -476,7 +476,7 @@ int take_hit(PlayerType *player_ptr, int damage_type, int damage, std::string_vi
                 auto &death_message = opt_death_message.value();
                 constexpr auto max_last_words = 1024;
                 char player_last_words[max_last_words]{};
-                angband_strcpy(player_last_words, death_message.data(), max_last_words);
+                angband_strcpy(player_last_words, death_message, max_last_words);
                 do {
 #ifdef JP
                     while (!get_string(winning_seppuku ? "辞世の句: " : "断末魔の叫び: ", player_last_words, max_last_words)) {

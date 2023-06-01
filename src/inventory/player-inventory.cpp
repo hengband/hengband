@@ -226,10 +226,10 @@ void describe_pickup_item(PlayerType *player_ptr, OBJECT_IDX o_idx)
         }
     }
 
-    angband_strcpy(record_o_name, old_item_name.data(), old_item_name.length());
+    angband_strcpy(record_o_name, old_item_name, old_item_name.length());
 #else
     msg_format("You have %s (%c).", item_name.data(), index_to_label(slot));
-    angband_strcpy(record_o_name, item_name.data(), item_name.length());
+    angband_strcpy(record_o_name, item_name, item_name.length());
 #endif
     record_turn = w_ptr->game_turn;
     check_find_art_quest_completion(player_ptr, o_ptr);

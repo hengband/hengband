@@ -99,11 +99,11 @@ static void process_rememberance(melee_spell_type *ms_ptr)
 static void describe_melee_spell(PlayerType *player_ptr, melee_spell_type *ms_ptr)
 {
     /* Get the monster name (or "it") */
-    angband_strcpy(ms_ptr->m_name, monster_desc(player_ptr, ms_ptr->m_ptr, 0x00).data(), sizeof(ms_ptr->m_name));
+    angband_strcpy(ms_ptr->m_name, monster_desc(player_ptr, ms_ptr->m_ptr, 0x00), sizeof(ms_ptr->m_name));
 #ifdef JP
 #else
     /* Get the monster possessive ("his"/"her"/"its") */
-    angband_strcpy(ms_ptr->m_poss, monster_desc(player_ptr, ms_ptr->m_ptr, MD_PRON_VISIBLE | MD_POSSESSIVE).data(), sizeof(ms_ptr->m_poss));
+    angband_strcpy(ms_ptr->m_poss, monster_desc(player_ptr, ms_ptr->m_ptr, MD_PRON_VISIBLE | MD_POSSESSIVE), sizeof(ms_ptr->m_poss));
 #endif
 }
 

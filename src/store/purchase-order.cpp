@@ -287,7 +287,7 @@ void store_purchase(PlayerType *player_ptr, StoreSaleType store_num)
     object_aware(player_ptr, j_ptr);
 
     msg_format(_("%sを $%ldで購入しました。", "You bought %s for %ld gold."), purchased_item_name.data(), (long)price);
-    angband_strcpy(record_o_name, purchased_item_name.data(), MAX_NLEN);
+    angband_strcpy(record_o_name, purchased_item_name, MAX_NLEN);
     record_turn = w_ptr->game_turn;
 
     if (record_buy) {

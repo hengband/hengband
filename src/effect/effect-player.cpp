@@ -159,7 +159,7 @@ static void describe_effect_source(PlayerType *player_ptr, EffectPlayerType *ep_
     if (ep_ptr->who > 0) {
         ep_ptr->m_ptr = &player_ptr->current_floor_ptr->m_list[ep_ptr->who];
         ep_ptr->rlev = (&monraces_info[ep_ptr->m_ptr->r_idx])->level >= 1 ? (&monraces_info[ep_ptr->m_ptr->r_idx])->level : 1;
-        angband_strcpy(ep_ptr->m_name, monster_desc(player_ptr, ep_ptr->m_ptr, 0).data(), sizeof(ep_ptr->m_name));
+        angband_strcpy(ep_ptr->m_name, monster_desc(player_ptr, ep_ptr->m_ptr, 0), sizeof(ep_ptr->m_name));
         angband_strcpy(ep_ptr->killer, who_name, sizeof(ep_ptr->killer));
         return;
     }
