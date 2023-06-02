@@ -1,5 +1,11 @@
 ﻿#include "core/score-util.h"
+#include "system/dungeon-info.h"
+#include "system/floor-type-definition.h"
+#include "system/player-type-definition.h"
 #include "util/angband-files.h"
+#ifdef SET_UID
+#include "main-unix/unix-user-ids.h"
+#endif
 
 /*
  * The "highscore" file descriptor, if available.
@@ -24,4 +30,30 @@ int highscore_seek(int i)
 errr highscore_read(high_score *score)
 {
     return fd_read(highscore_fd, (char *)(score), sizeof(high_score));
+}
+
+void high_score::copy_info(const PlayerType &player)
+{
+    snprintf(this->who, sizeof(this->who), "%-.15s", player.name);
+
+#ifdef SET_UID
+    const auto tmp_uid = UnixUserIds::get_instance().get_user_id();
+#else
+    const auto tmp_uid = 0;
+#endif
+    snprintf(this->uid, sizeof(this->uid), "%7u", tmp_uid);
+    snprintf(this->sex, sizeof(this->sex), "%c", (player.psex ? 'm' : 'f'));
+    char buf[32];
+    snprintf(buf, sizeof(buf), "%2d", std::min(enum2i(player.prace), MAX_RACES));
+    memcpy(this->p_r, buf, 3);
+    snprintf(buf, sizeof(buf), "%2d", enum2i(std::min(player.pclass, PlayerClassType::MAX)));
+    memcpy(this->p_c, buf, 3);
+    snprintf(buf, sizeof(buf), "%2d", std::min(player.ppersonality, MAX_PERSONALITIES));
+    memcpy(this->p_a, buf, 3);
+
+    snprintf(this->cur_lev, sizeof(this->cur_lev), "%3d", std::min<ushort>(player.lev, 999));
+    const auto &floor = *player.current_floor_ptr;
+    snprintf(this->cur_dun, sizeof(this->cur_dun), "%3d", floor.dun_level);
+    snprintf(this->max_lev, sizeof(this->max_lev), "%3d", std::min<ushort>(player.max_plv, 999));
+    snprintf(this->max_dun, sizeof(this->max_dun), "%3d", max_dlv[floor.dungeon_idx]);
 }

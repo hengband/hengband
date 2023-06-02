@@ -29,8 +29,6 @@
 #include "player/player-status.h"
 #include "player/race-info-table.h"
 #include "system/angband-version.h"
-#include "system/dungeon-info.h"
-#include "system/floor-type-definition.h"
 #include "system/player-type-definition.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
@@ -41,9 +39,6 @@
 #include "view/display-messages.h"
 #include "view/display-scores.h"
 #include "world/world.h"
-#ifdef SET_UID
-#include "main-unix/unix-user-ids.h"
-#endif
 
 /*!
  * @brief 所定ポインタへスコア情報を書き込む / Write one score to the highscore file
@@ -205,29 +200,7 @@ errr top_twenty(PlayerType *player_ptr)
     auto ct = time((time_t *)0);
 
     strftime(the_score.day, 10, "@%Y%m%d", localtime(&ct));
-    snprintf(the_score.who, sizeof(the_score.who), "%-.15s", player_ptr->name);
-
-#ifdef SET_UID
-    const auto uid = UnixUserIds::get_instance().get_user_id();
-#else
-    const auto uid = 0;
-#endif
-    snprintf(the_score.uid, sizeof(the_score.uid), "%7u", uid);
-    snprintf(the_score.sex, sizeof(the_score.sex), "%c", (player_ptr->psex ? 'm' : 'f'));
-    char buf[32];
-    snprintf(buf, sizeof(buf), "%2d", std::min(enum2i(player_ptr->prace), MAX_RACES));
-    memcpy(the_score.p_r, buf, 3);
-    snprintf(buf, sizeof(buf), "%2d", enum2i(std::min(player_ptr->pclass, PlayerClassType::MAX)));
-    memcpy(the_score.p_c, buf, 3);
-    snprintf(buf, sizeof(buf), "%2d", std::min(player_ptr->ppersonality, MAX_PERSONALITIES));
-    memcpy(the_score.p_a, buf, 3);
-
-    snprintf(the_score.cur_lev, sizeof(the_score.cur_lev), "%3d", std::min<ushort>(player_ptr->lev, 999));
-    const auto &floor = *player_ptr->current_floor_ptr;
-    snprintf(the_score.cur_dun, sizeof(the_score.cur_dun), "%3d", floor.dun_level);
-    snprintf(the_score.max_lev, sizeof(the_score.max_lev), "%3d", std::min<ushort>(player_ptr->max_plv, 999));
-    snprintf(the_score.max_dun, sizeof(the_score.max_dun), "%3d", max_dlv[floor.dungeon_idx]);
-
+    the_score.copy_info(*player_ptr);
     if (player_ptr->died_from.size() >= sizeof(the_score.how)) {
 #ifdef JP
         angband_strcpy(the_score.how, player_ptr->died_from, sizeof(the_score.how) - 2);
@@ -284,29 +257,7 @@ errr predict_score(PlayerType *player_ptr)
     snprintf(the_score.gold, sizeof(the_score.gold), "%9lu", (long)player_ptr->au);
     snprintf(the_score.turns, sizeof(the_score.turns), "%9lu", (long)turn_real(player_ptr, w_ptr->game_turn));
     angband_strcpy(the_score.day, _("今日", "TODAY"), sizeof(the_score.day));
-    snprintf(the_score.who, sizeof(the_score.who), "%-.15s", player_ptr->name);
-
-#ifdef SET_UID
-    const auto uid = UnixUserIds::get_instance().get_user_id();
-#else
-    const auto uid = 0;
-#endif
-    snprintf(the_score.uid, sizeof(the_score.uid), "%7u", uid);
-    snprintf(the_score.sex, sizeof(the_score.sex), "%c", (player_ptr->psex ? 'm' : 'f'));
-    char buf[32];
-    snprintf(buf, sizeof(buf), "%2d", std::min(enum2i(player_ptr->prace), MAX_RACES));
-    memcpy(the_score.p_r, buf, 3);
-    snprintf(buf, sizeof(buf), "%2d", enum2i(std::min(player_ptr->pclass, PlayerClassType::MAX)));
-    memcpy(the_score.p_c, buf, 3);
-    snprintf(buf, sizeof(buf), "%2d", std::min(player_ptr->ppersonality, MAX_PERSONALITIES));
-    memcpy(the_score.p_a, buf, 3);
-
-    snprintf(the_score.cur_lev, sizeof(the_score.cur_lev), "%3d", std::min<ushort>(player_ptr->lev, 999));
-    const auto &floor = *player_ptr->current_floor_ptr;
-    snprintf(the_score.cur_dun, sizeof(the_score.cur_dun), "%3d", floor.dun_level);
-    snprintf(the_score.max_lev, sizeof(the_score.max_lev), "%3d", std::min<ushort>(player_ptr->max_plv, 999));
-    snprintf(the_score.max_dun, sizeof(the_score.max_dun), "%3d", max_dlv[floor.dungeon_idx]);
-
+    the_score.copy_info(*player_ptr);
     strcpy(the_score.how, _("yet", "nobody (yet!)"));
     auto j = highscore_where(&the_score);
     if (j < 10) {
