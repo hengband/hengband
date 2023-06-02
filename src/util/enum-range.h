@@ -21,9 +21,7 @@ public:
         // std::iterator_traits に対応するための定義
         using difference_type = int;
         using value_type = EnumType;
-        using pointer = const EnumType *;
-        using reference = const EnumType &;
-        using iterator_category = std::input_iterator_tag;
+        using iterator_concept = std::input_iterator_tag;
 
         /*!
          * @brief 引数で与えた列挙値を指すイテレータオブジェクトを生成する
@@ -46,14 +44,26 @@ public:
         }
 
         /*!
-         * @brief イテレータをインクリメントする
+         * @brief イテレータを前置インクリメントする
          *
          * @return *this の参照
          */
-        iterator &operator++() noexcept
+        constexpr iterator &operator++() noexcept
         {
             ++index;
             return *this;
+        }
+
+        /*!
+         * @brief イテレータを後置インクリメントする
+         *
+         * @return *this の参照
+         */
+        constexpr iterator operator++(int) noexcept
+        {
+            auto old = *this;
+            ++*this;
+            return old;
         }
 
         /*!
@@ -65,17 +75,6 @@ public:
         constexpr bool operator==(const iterator &other) const noexcept
         {
             return index == other.index;
-        }
-
-        /*!
-         * @brief 2つのイテレータが指している列挙値が等しくないかどうか調べる
-         *
-         * @param other 比較対象となるイテレータ
-         * @return 2つのイテレータが指している列挙値が等しくなければ true、そうでなければ false
-         */
-        constexpr bool operator!=(const iterator &other) const noexcept
-        {
-            return !this->operator==(other);
         }
 
     private:
