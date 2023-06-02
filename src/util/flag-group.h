@@ -1,10 +1,28 @@
 ﻿#pragma once
 
 #include <bitset>
+#include <concepts>
+#include <iterator>
 #include <optional>
+#include <type_traits>
 
 template <typename T>
 class EnumRange;
+
+namespace flag_group {
+
+/**
+ * @brief 型がFlagGroupクラスで使用するフラグを指すイテレータであることを表すコンセプト
+ *
+ * Iter の型が以下の要件を満たすことを表す
+ *
+ * - 入力イテレータである
+ * - そのイテレータが指す要素の型が FlagType である
+ */
+template <typename Iter, typename FlagType>
+concept FlagIter = std::input_iterator<Iter> && std::same_as<std::iter_value_t<Iter>, FlagType>;
+
+}
 
 namespace flag_group::detail {
 
@@ -114,11 +132,9 @@ public:
      * @param first 範囲の開始位置を示す入力イテレータ
      * @param last 範囲の終了位置を示す入力イテレータ
      */
-    template <typename InputIter>
+    template <flag_group::FlagIter<FlagType> InputIter>
     FlagGroup(InputIter first, InputIter last)
     {
-        static_assert(std::is_same<typename std::iterator_traits<InputIter>::value_type, FlagType>::value, "Iterator value type is invalid");
-
         for (; first != last; ++first) {
             set(*first);
         }
@@ -157,7 +173,7 @@ public:
      * @param last 範囲の終了位置を示す入力イテレータ
      * @return *thisを返す
      */
-    template <typename InputIter>
+    template <flag_group::FlagIter<FlagType> InputIter>
     FlagGroup<FlagType, MAX> &set(InputIter first, InputIter last)
     {
         return set(FlagGroup(first, last));
@@ -195,7 +211,7 @@ public:
      * @param last 範囲の終了位置を示す入力イテレータ
      * @return *thisを返す
      */
-    template <typename InputIter>
+    template <flag_group::FlagIter<FlagType> InputIter>
     FlagGroup<FlagType, MAX> &reset(InputIter first, InputIter last)
     {
         return reset(FlagGroup(first, last));
@@ -269,7 +285,7 @@ public:
      * @param last 範囲の終了位置を示す入力イテレータ
      * @return すべてのフラグがONであればtrue、そうでなければfalse
      */
-    template <typename InputIter>
+    template <flag_group::FlagIter<FlagType> InputIter>
     [[nodiscard]] bool has_all_of(InputIter first, InputIter last) const
     {
         return has_all_of(FlagGroup(first, last));
@@ -294,7 +310,7 @@ public:
      * @param last 範囲の終了位置を示す入力イテレータ
      * @return いずれかのフラグがONであればtrue、そうでなければfalse
      */
-    template <typename InputIter>
+    template <flag_group::FlagIter<FlagType> InputIter>
     [[nodiscard]] bool has_any_of(InputIter first, InputIter last) const
     {
         return has_any_of(FlagGroup(first, last));
@@ -319,7 +335,7 @@ public:
      * @param last 範囲の終了位置を示す入力イテレータ
      * @return すべてのフラグがOFFであればtrue、そうでなければfalse
      */
-    template <typename InputIter>
+    template <flag_group::FlagIter<FlagType> InputIter>
     [[nodiscard]] bool has_none_of(InputIter first, InputIter last) const
     {
         return !has_any_of(first, last);
