@@ -187,13 +187,13 @@ bool vanish_dungeon(PlayerType *player_ptr)
 
     auto &rfu = RedrawingFlagsUpdater::get_instance();
     static constexpr auto flags_srf = {
-        StatusRedrawingFlag::UN_VIEW,
-        StatusRedrawingFlag::UN_LITE,
-        StatusRedrawingFlag::VIEW,
-        StatusRedrawingFlag::LITE,
-        StatusRedrawingFlag::FLOW,
-        StatusRedrawingFlag::MONSTER_LITE,
-        StatusRedrawingFlag::MONSTER_STATUSES,
+        StatusRecalculatingFlag::UN_VIEW,
+        StatusRecalculatingFlag::UN_LITE,
+        StatusRecalculatingFlag::VIEW,
+        StatusRecalculatingFlag::LITE,
+        StatusRecalculatingFlag::FLOW,
+        StatusRecalculatingFlag::MONSTER_LITE,
+        StatusRecalculatingFlag::MONSTER_STATUSES,
     };
     rfu.set_flags(flags_srf);
     rfu.set_flag(MainWindowRedrawingFlag::MAP);

@@ -62,7 +62,7 @@ bool bless_weapon(PlayerType *player_ptr)
         o_ptr->curse_flags.clear();
         set_bits(o_ptr->ident, IDENT_SENSE);
         o_ptr->feeling = FEEL_NONE;
-        rfu.set_flag(StatusRedrawingFlag::BONUS);
+        rfu.set_flag(StatusRecalculatingFlag::BONUS);
         static constexpr auto flags = {
             SubWindowRedrawingFlag::EQUIPMENT,
             SubWindowRedrawingFlag::FLOOR_ITEMS,
@@ -141,7 +141,7 @@ bool bless_weapon(PlayerType *player_ptr)
         }
     }
 
-    rfu.set_flag(StatusRedrawingFlag::BONUS);
+    rfu.set_flag(StatusRecalculatingFlag::BONUS);
     static constexpr auto flags_swrf = {
         SubWindowRedrawingFlag::EQUIPMENT,
         SubWindowRedrawingFlag::PLAYER,

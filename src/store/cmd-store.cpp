@@ -189,7 +189,7 @@ void do_cmd_store(PlayerType *player_ptr)
             }
         }
 
-        if (rfu.has(StatusRedrawingFlag::BONUS)) {
+        if (rfu.has(StatusRecalculatingFlag::BONUS)) {
             display_store_inventory(player_ptr, store_num);
         }
 
@@ -212,10 +212,10 @@ void do_cmd_store(PlayerType *player_ptr)
     term_clear();
 
     static constexpr auto flags_srf = {
-        StatusRedrawingFlag::VIEW,
-        StatusRedrawingFlag::LITE,
-        StatusRedrawingFlag::MONSTER_LITE,
-        StatusRedrawingFlag::MONSTER_STATUSES,
+        StatusRecalculatingFlag::VIEW,
+        StatusRecalculatingFlag::LITE,
+        StatusRecalculatingFlag::MONSTER_LITE,
+        StatusRecalculatingFlag::MONSTER_STATUSES,
     };
     rfu.set_flags(flags_srf);
     static constexpr auto flags_mwrf = {

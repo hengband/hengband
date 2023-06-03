@@ -249,8 +249,8 @@ bool curse_armor(PlayerType *player_ptr)
     o_ptr->ident |= IDENT_BROKEN;
     auto &rfu = RedrawingFlagsUpdater::get_instance();
     static constexpr auto flags_srf = {
-        StatusRedrawingFlag::BONUS,
-        StatusRedrawingFlag::MP,
+        StatusRecalculatingFlag::BONUS,
+        StatusRecalculatingFlag::MP,
     };
     rfu.set_flags(flags_srf);
     static constexpr auto flags_swrf = {
@@ -305,8 +305,8 @@ bool curse_weapon_object(PlayerType *player_ptr, bool force, ItemEntity *o_ptr)
     o_ptr->ident |= IDENT_BROKEN;
     auto &rfu = RedrawingFlagsUpdater::get_instance();
     static constexpr auto flags_srf = {
-        StatusRedrawingFlag::BONUS,
-        StatusRedrawingFlag::MP,
+        StatusRecalculatingFlag::BONUS,
+        StatusRecalculatingFlag::MP,
     };
     rfu.set_flags(flags_srf);
     static constexpr auto flags_swrf = {
@@ -461,9 +461,9 @@ bool enchant_equipment(ItemEntity *o_ptr, int n, int eflag)
 
     auto &rfu = RedrawingFlagsUpdater::get_instance();
     static constexpr auto flags_srf = {
-        StatusRedrawingFlag::BONUS,
-        StatusRedrawingFlag::COMBINATION,
-        StatusRedrawingFlag::REORDER,
+        StatusRecalculatingFlag::BONUS,
+        StatusRecalculatingFlag::COMBINATION,
+        StatusRecalculatingFlag::REORDER,
     };
     rfu.set_flags(flags_srf);
     static constexpr auto flags_swrf = {

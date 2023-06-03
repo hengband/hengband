@@ -255,7 +255,7 @@ bool affect_feature(PlayerType *player_ptr, MONSTER_IDX who, POSITION r, POSITIO
         }
 
         cave_alter_feat(player_ptr, y, x, TerrainCharacteristics::HURT_ROCK);
-        RedrawingFlagsUpdater::get_instance().set_flag(StatusRedrawingFlag::FLOW);
+        RedrawingFlagsUpdater::get_instance().set_flag(StatusRecalculatingFlag::FLOW);
         break;
     }
     case AttributeType::MAKE_DOOR: {
@@ -433,7 +433,7 @@ bool affect_feature(PlayerType *player_ptr, MONSTER_IDX who, POSITION r, POSITIO
         }
 
         cave_alter_feat(player_ptr, y, x, TerrainCharacteristics::HURT_ROCK);
-        RedrawingFlagsUpdater::get_instance().set_flag(StatusRedrawingFlag::FLOW);
+        RedrawingFlagsUpdater::get_instance().set_flag(StatusRecalculatingFlag::FLOW);
         break;
     }
     case AttributeType::SOUND: {
@@ -455,7 +455,7 @@ bool affect_feature(PlayerType *player_ptr, MONSTER_IDX who, POSITION r, POSITIO
         }
 
         cave_alter_feat(player_ptr, y, x, TerrainCharacteristics::HURT_ROCK);
-        RedrawingFlagsUpdater::get_instance().set_flag(StatusRedrawingFlag::FLOW);
+        RedrawingFlagsUpdater::get_instance().set_flag(StatusRecalculatingFlag::FLOW);
         break;
     }
     case AttributeType::DISINTEGRATE: {
@@ -468,7 +468,7 @@ bool affect_feature(PlayerType *player_ptr, MONSTER_IDX who, POSITION r, POSITIO
         }
 
         cave_alter_feat(player_ptr, y, x, TerrainCharacteristics::HURT_DISI);
-        RedrawingFlagsUpdater::get_instance().set_flag(StatusRedrawingFlag::FLOW);
+        RedrawingFlagsUpdater::get_instance().set_flag(StatusRecalculatingFlag::FLOW);
         break;
     }
     default:

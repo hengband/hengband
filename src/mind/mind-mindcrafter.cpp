@@ -86,8 +86,8 @@ bool psychometry(PlayerType *player_ptr)
 
     auto &rfu = RedrawingFlagsUpdater::get_instance();
     static constexpr auto flags_srf = {
-        StatusRedrawingFlag::COMBINATION,
-        StatusRedrawingFlag::REORDER,
+        StatusRecalculatingFlag::COMBINATION,
+        StatusRecalculatingFlag::REORDER,
     };
     rfu.set_flags(flags_srf);
     static constexpr auto flags_swrf = {

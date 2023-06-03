@@ -229,7 +229,7 @@ std::optional<std::string> do_hex_spell(PlayerType *player_ptr, spell_hex_type s
                 o_ptr->curse_flags.set(get_curse(curse_rank, o_ptr));
             }
 
-            RedrawingFlagsUpdater::get_instance().set_flag(StatusRedrawingFlag::BONUS);
+            RedrawingFlagsUpdater::get_instance().set_flag(StatusRecalculatingFlag::BONUS);
             should_continue = false;
         }
         break;
@@ -585,7 +585,7 @@ std::optional<std::string> do_hex_spell(PlayerType *player_ptr, spell_hex_type s
                 o_ptr->curse_flags.set(get_curse(curse_rank, o_ptr));
             }
 
-            RedrawingFlagsUpdater::get_instance().set_flag(StatusRedrawingFlag::BONUS);
+            RedrawingFlagsUpdater::get_instance().set_flag(StatusRecalculatingFlag::BONUS);
             should_continue = false;
         }
         break;
@@ -710,7 +710,7 @@ std::optional<std::string> do_hex_spell(PlayerType *player_ptr, spell_hex_type s
                         player_ptr->stat_cur[i] = player_ptr->stat_max[i];
                     }
 
-                    rfu.set_flag(StatusRedrawingFlag::BONUS);
+                    rfu.set_flag(StatusRecalculatingFlag::BONUS);
                     flag = true;
                 }
             }
@@ -725,10 +725,10 @@ std::optional<std::string> do_hex_spell(PlayerType *player_ptr, spell_hex_type s
                 }
 
                 static constexpr auto flags = {
-                    StatusRedrawingFlag::BONUS,
-                    StatusRedrawingFlag::HP,
-                    StatusRedrawingFlag::MP,
-                    StatusRedrawingFlag::SPELLS,
+                    StatusRecalculatingFlag::BONUS,
+                    StatusRecalculatingFlag::HP,
+                    StatusRecalculatingFlag::MP,
+                    StatusRecalculatingFlag::SPELLS,
                 };
                 rfu.set_flags(flags);
                 rfu.set_flag(MainWindowRedrawingFlag::EXTRA);
@@ -965,10 +965,10 @@ std::optional<std::string> do_hex_spell(PlayerType *player_ptr, spell_hex_type s
     if (!info) {
         auto &rfu = RedrawingFlagsUpdater::get_instance();
         static constexpr auto flags_srf = {
-            StatusRedrawingFlag::BONUS,
-            StatusRedrawingFlag::HP,
-            StatusRedrawingFlag::MP,
-            StatusRedrawingFlag::SPELLS,
+            StatusRecalculatingFlag::BONUS,
+            StatusRecalculatingFlag::HP,
+            StatusRecalculatingFlag::MP,
+            StatusRecalculatingFlag::SPELLS,
         };
         rfu.set_flags(flags_srf);
         static constexpr auto flags_mwrf = {

@@ -245,7 +245,7 @@ void exe_eat_food(PlayerType *player_ptr, INVENTORY_IDX item)
      * the pack.
      */
     auto &rfu = RedrawingFlagsUpdater::get_instance();
-    using Srf = StatusRedrawingFlag;
+    using Srf = StatusRecalculatingFlag;
     EnumClassFlagGroup<Srf> flags_srf = { Srf::COMBINATION, Srf::REORDER };
     if (rfu.has(Srf::AUTO_DESTRUCTION)) {
         flags_srf.set(Srf::AUTO_DESTRUCTION);

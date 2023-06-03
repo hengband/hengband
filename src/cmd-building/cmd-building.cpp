@@ -410,11 +410,11 @@ void do_cmd_building(PlayerType *player_ptr)
 
     auto &rfu = RedrawingFlagsUpdater::get_instance();
     static constexpr auto flags_srf = {
-        StatusRedrawingFlag::VIEW,
-        StatusRedrawingFlag::MONSTER_STATUSES,
-        StatusRedrawingFlag::BONUS,
-        StatusRedrawingFlag::LITE,
-        StatusRedrawingFlag::MONSTER_LITE,
+        StatusRecalculatingFlag::VIEW,
+        StatusRecalculatingFlag::MONSTER_STATUSES,
+        StatusRecalculatingFlag::BONUS,
+        StatusRecalculatingFlag::LITE,
+        StatusRecalculatingFlag::MONSTER_LITE,
     };
     rfu.set_flags(flags_srf);
     static constexpr auto flags_mwrf = {

@@ -60,8 +60,8 @@ void notice_lite_change(PlayerType *player_ptr, ItemEntity *o_ptr)
         disturb(player_ptr, false, true);
         msg_print(_("明かりが消えてしまった！", "Your light has gone out!"));
         static constexpr auto flags = {
-            StatusRedrawingFlag::TORCH,
-            StatusRedrawingFlag::BONUS,
+            StatusRecalculatingFlag::TORCH,
+            StatusRecalculatingFlag::BONUS,
         };
         rfu.set_flags(flags);
     } else if (o_ptr->ego_idx == EgoType::LITE_LONG) {

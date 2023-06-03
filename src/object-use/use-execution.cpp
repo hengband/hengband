@@ -93,8 +93,8 @@ void ObjectUseEntity::execute()
         o_ptr->ident |= IDENT_EMPTY;
         auto &rfu = RedrawingFlagsUpdater::get_instance();
         static constexpr auto flags = {
-            StatusRedrawingFlag::COMBINATION,
-            StatusRedrawingFlag::REORDER,
+            StatusRecalculatingFlag::COMBINATION,
+            StatusRecalculatingFlag::REORDER,
         };
         rfu.set_flags(flags);
         rfu.set_flag(SubWindowRedrawingFlag::INVENTORY);
@@ -110,7 +110,7 @@ void ObjectUseEntity::execute()
     }
 
     auto &rfu = RedrawingFlagsUpdater::get_instance();
-    using Srf = StatusRedrawingFlag;
+    using Srf = StatusRecalculatingFlag;
     EnumClassFlagGroup<Srf> flags_srf = { Srf::COMBINATION, Srf::REORDER };
     if (rfu.has(Srf::AUTO_DESTRUCTION)) {
         flags_srf.set(Srf::AUTO_DESTRUCTION);

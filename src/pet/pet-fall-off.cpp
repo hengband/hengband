@@ -161,12 +161,12 @@ bool process_fall_off_horse(PlayerType *player_ptr, int dam, bool force)
 
     auto &rfu = RedrawingFlagsUpdater::get_instance();
     static constexpr auto flags_srf = {
-        StatusRedrawingFlag::BONUS,
-        StatusRedrawingFlag::VIEW,
-        StatusRedrawingFlag::LITE,
-        StatusRedrawingFlag::FLOW,
-        StatusRedrawingFlag::MONSTER_LITE,
-        StatusRedrawingFlag::MONSTER_STATUSES,
+        StatusRecalculatingFlag::BONUS,
+        StatusRecalculatingFlag::VIEW,
+        StatusRecalculatingFlag::LITE,
+        StatusRecalculatingFlag::FLOW,
+        StatusRecalculatingFlag::MONSTER_LITE,
+        StatusRecalculatingFlag::MONSTER_STATUSES,
     };
     rfu.set_flags(flags_srf);
     handle_stuff(player_ptr);

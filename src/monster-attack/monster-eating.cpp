@@ -263,8 +263,8 @@ bool process_un_power(PlayerType *player_ptr, MonsterAttackPlayer *monap_ptr)
 
     monap_ptr->o_ptr->pval = !is_magic_mastery || (monap_ptr->o_ptr->pval == 1) ? 0 : monap_ptr->o_ptr->pval - drain;
     static constexpr auto flags = {
-        StatusRedrawingFlag::COMBINATION,
-        StatusRedrawingFlag::REORDER,
+        StatusRecalculatingFlag::COMBINATION,
+        StatusRecalculatingFlag::REORDER,
     };
     rfu.set_flags(flags);
     rfu.set_flag(SubWindowRedrawingFlag::INVENTORY);

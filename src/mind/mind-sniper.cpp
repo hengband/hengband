@@ -132,8 +132,8 @@ void SniperData::reset_concentration_flag()
     this->reset_concent = false;
     auto &rfu = RedrawingFlagsUpdater::get_instance();
     static constexpr auto flags = {
-        StatusRedrawingFlag::BONUS,
-        StatusRedrawingFlag::MONSTER_STATUSES,
+        StatusRecalculatingFlag::BONUS,
+        StatusRecalculatingFlag::MONSTER_STATUSES,
     };
     rfu.set_flags(flags);
     rfu.set_flag(MainWindowRedrawingFlag::TIMED_EFFECT);

@@ -172,11 +172,11 @@ void PlayerBasicStatistics::update_index_status()
     this->player_ptr->stat_index[status] = (int16_t)index;
     auto &rfu = RedrawingFlagsUpdater::get_instance();
     static constexpr auto flags = {
-        StatusRedrawingFlag::MP,
-        StatusRedrawingFlag::SPELLS,
+        StatusRecalculatingFlag::MP,
+        StatusRecalculatingFlag::SPELLS,
     };
     if (status == A_CON) {
-        rfu.set_flag(StatusRedrawingFlag::HP);
+        rfu.set_flag(StatusRecalculatingFlag::HP);
     } else if (status == A_INT) {
         if (mp_ptr->spell_stat == A_INT) {
             rfu.set_flags(flags);

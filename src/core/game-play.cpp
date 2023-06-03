@@ -123,10 +123,10 @@ static void send_waiting_record(PlayerType *player_ptr)
     }
 
     static constexpr auto flags = {
-        StatusRedrawingFlag::BONUS,
-        StatusRedrawingFlag::HP,
-        StatusRedrawingFlag::MP,
-        StatusRedrawingFlag::SPELLS,
+        StatusRecalculatingFlag::BONUS,
+        StatusRecalculatingFlag::HP,
+        StatusRecalculatingFlag::MP,
+        StatusRecalculatingFlag::SPELLS,
     };
     RedrawingFlagsUpdater::get_instance().set_flags(flags);
     update_creature(player_ptr);

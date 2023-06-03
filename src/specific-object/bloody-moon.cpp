@@ -97,8 +97,8 @@ bool activate_bloody_moon(PlayerType *player_ptr, ItemEntity *o_ptr)
     }
 
     static constexpr auto flags = {
-        StatusRedrawingFlag::BONUS,
-        StatusRedrawingFlag::HP,
+        StatusRecalculatingFlag::BONUS,
+        StatusRecalculatingFlag::HP,
     };
     RedrawingFlagsUpdater::get_instance().set_flags(flags);
     return true;

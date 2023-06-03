@@ -160,7 +160,7 @@ void do_cmd_pet_dismiss(PlayerType *player_ptr)
                 msg_format(_("%sから降りた。", "You dismount from %s. "), friend_name.data());
 
                 player_ptr->riding = 0;
-                rfu.set_flag(StatusRedrawingFlag::MONSTER_STATUSES);
+                rfu.set_flag(StatusRecalculatingFlag::MONSTER_STATUSES);
                 static constexpr auto flags = {
                     MainWindowRedrawingFlag::EXTRA,
                     MainWindowRedrawingFlag::UHEALTH,
@@ -169,7 +169,7 @@ void do_cmd_pet_dismiss(PlayerType *player_ptr)
             }
 
             msg_format(_("%s を放した。", "Dismissed %s."), friend_name.data());
-            rfu.set_flag(StatusRedrawingFlag::BONUS);
+            rfu.set_flag(StatusRecalculatingFlag::BONUS);
             rfu.set_flag(SubWindowRedrawingFlag::MESSAGE);
 
             delete_monster_idx(player_ptr, pet_ctr);
@@ -303,9 +303,9 @@ bool do_cmd_riding(PlayerType *player_ptr, bool force)
 
     auto &rfu = RedrawingFlagsUpdater::get_instance();
     static constexpr auto flags_srf = {
-        StatusRedrawingFlag::UN_VIEW,
-        StatusRedrawingFlag::UN_LITE,
-        StatusRedrawingFlag::BONUS,
+        StatusRecalculatingFlag::UN_VIEW,
+        StatusRecalculatingFlag::UN_LITE,
+        StatusRecalculatingFlag::BONUS,
     };
     rfu.set_flags(flags_srf);
     static constexpr auto flags_mwrf = {
@@ -820,7 +820,7 @@ void do_cmd_pet(PlayerType *player_ptr)
             player_ptr->pet_extra_flags |= (PF_TWO_HANDS);
         }
 
-        RedrawingFlagsUpdater::get_instance().set_flag(StatusRedrawingFlag::BONUS);
+        RedrawingFlagsUpdater::get_instance().set_flag(StatusRecalculatingFlag::BONUS);
         handle_stuff(player_ptr);
         break;
     }

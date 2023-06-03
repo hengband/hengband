@@ -72,7 +72,7 @@ static void do_curse_on_equip(OBJECT_IDX slot, ItemEntity *o_ptr, PlayerType *pl
         chariot->curse_flags.set(CurseTraitType::VUL_CURSE);
 
         msg_format(_("『銀の戦車』プラス『アヌビス神』二刀流ッ！", "*Silver Chariot* plus *Anubis God* Two Swords!"));
-        rfu.set_flag(StatusRedrawingFlag::BONUS);
+        rfu.set_flag(StatusRecalculatingFlag::BONUS);
         return;
     }
 
@@ -86,7 +86,7 @@ static void do_curse_on_equip(OBJECT_IDX slot, ItemEntity *o_ptr, PlayerType *pl
     o_ptr->curse_flags.set(CurseTraitType::HEAVY_CURSE);
     msg_format(_("悪意に満ちた黒いオーラが%sをとりまいた...", "There is a malignant black aura surrounding your %s..."), item_name.data());
     o_ptr->feeling = FEEL_NONE;
-    rfu.set_flag(StatusRedrawingFlag::BONUS);
+    rfu.set_flag(StatusRecalculatingFlag::BONUS);
 }
 
 /*!
@@ -350,9 +350,9 @@ void do_cmd_wield(PlayerType *player_ptr)
 
     calc_android_exp(player_ptr);
     static constexpr auto flags_srf = {
-        StatusRedrawingFlag::BONUS,
-        StatusRedrawingFlag::TORCH,
-        StatusRedrawingFlag::MP,
+        StatusRecalculatingFlag::BONUS,
+        StatusRecalculatingFlag::TORCH,
+        StatusRecalculatingFlag::MP,
     };
     auto &rfu = RedrawingFlagsUpdater::get_instance();
     rfu.set_flags(flags_srf);
@@ -395,7 +395,7 @@ void do_cmd_takeoff(PlayerType *player_ptr)
             o_ptr->ident |= (IDENT_SENSE);
             o_ptr->curse_flags.clear();
             o_ptr->feeling = FEEL_NONE;
-            rfu.set_flag(StatusRedrawingFlag::BONUS);
+            rfu.set_flag(StatusRecalculatingFlag::BONUS);
             rfu.set_flag(SubWindowRedrawingFlag::EQUIPMENT);
             msg_print(_("呪いを打ち破った。", "You break the curse."));
         } else {
@@ -411,9 +411,9 @@ void do_cmd_takeoff(PlayerType *player_ptr)
     verify_equip_slot(player_ptr, item);
     calc_android_exp(player_ptr);
     static constexpr auto flags_srf = {
-        StatusRedrawingFlag::BONUS,
-        StatusRedrawingFlag::TORCH,
-        StatusRedrawingFlag::MP,
+        StatusRecalculatingFlag::BONUS,
+        StatusRecalculatingFlag::TORCH,
+        StatusRecalculatingFlag::MP,
     };
     rfu.set_flags(flags_srf);
     rfu.set_flag(MainWindowRedrawingFlag::EQUIPPY);

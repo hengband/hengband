@@ -98,7 +98,7 @@ void do_cmd_locate(PlayerType *player_ptr)
 
     verify_panel(player_ptr);
     auto &rfu = RedrawingFlagsUpdater::get_instance();
-    rfu.set_flag(StatusRedrawingFlag::MONSTER_STATUSES);
+    rfu.set_flag(StatusRecalculatingFlag::MONSTER_STATUSES);
     rfu.set_flag(MainWindowRedrawingFlag::MAP);
     static constexpr auto flags = {
         SubWindowRedrawingFlag::OVERHEAD,

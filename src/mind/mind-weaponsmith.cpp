@@ -108,8 +108,8 @@ static void set_smith_redrawing_flags()
 {
     auto &rfu = RedrawingFlagsUpdater::get_instance();
     static constexpr auto flags = {
-        StatusRedrawingFlag::COMBINATION,
-        StatusRedrawingFlag::REORDER,
+        StatusRecalculatingFlag::COMBINATION,
+        StatusRecalculatingFlag::REORDER,
     };
     rfu.set_flags(flags);
     rfu.set_flag(SubWindowRedrawingFlag::INVENTORY);

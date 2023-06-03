@@ -310,9 +310,9 @@ void ObjectThrowEntity::process_boomerang_back()
         this->player_ptr->equip_cnt++;
         auto &rfu = RedrawingFlagsUpdater::get_instance();
         static constexpr auto flags = {
-            StatusRedrawingFlag::BONUS,
-            StatusRedrawingFlag::TORCH,
-            StatusRedrawingFlag::MP,
+            StatusRecalculatingFlag::BONUS,
+            StatusRecalculatingFlag::TORCH,
+            StatusRecalculatingFlag::MP,
         };
         rfu.set_flags(flags);
         rfu.set_flag(SubWindowRedrawingFlag::EQUIPMENT);

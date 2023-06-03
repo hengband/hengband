@@ -363,7 +363,7 @@ void choose_new_monster(PlayerType *player_ptr, MONSTER_IDX m_idx, bool born, Mo
 
     auto old_r_idx = m_ptr->r_idx;
     if (monraces_info[old_r_idx].brightness_flags.has_any_of(ld_mask) || r_ptr->brightness_flags.has_any_of(ld_mask)) {
-        RedrawingFlagsUpdater::get_instance().set_flag(StatusRedrawingFlag::MONSTER_LITE);
+        RedrawingFlagsUpdater::get_instance().set_flag(StatusRecalculatingFlag::MONSTER_LITE);
     }
 
     if (born) {

@@ -65,8 +65,8 @@ bool ask_quick_start(PlayerType *player_ptr)
 
     get_extra(player_ptr, false);
     static constexpr auto flags = {
-        StatusRedrawingFlag::BONUS,
-        StatusRedrawingFlag::HP,
+        StatusRecalculatingFlag::BONUS,
+        StatusRecalculatingFlag::HP,
     };
     RedrawingFlagsUpdater::get_instance().set_flags(flags);
     update_creature(player_ptr);

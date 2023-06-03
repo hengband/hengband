@@ -666,10 +666,10 @@ void exe_fire(PlayerType *player_ptr, INVENTORY_IDX item, ItemEntity *j_ptr, SPE
                     /* Forget the wall */
                     reset_bits(g_ptr->info, (CAVE_MARK));
                     static constexpr auto flags = {
-                        StatusRedrawingFlag::VIEW,
-                        StatusRedrawingFlag::LITE,
-                        StatusRedrawingFlag::FLOW,
-                        StatusRedrawingFlag::MONSTER_LITE,
+                        StatusRecalculatingFlag::VIEW,
+                        StatusRecalculatingFlag::LITE,
+                        StatusRecalculatingFlag::FLOW,
+                        StatusRecalculatingFlag::MONSTER_LITE,
                     };
                     RedrawingFlagsUpdater::get_instance().set_flags(flags);
 

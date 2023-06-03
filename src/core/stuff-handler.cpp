@@ -61,8 +61,8 @@ bool update_player()
 {
     auto &rfu = RedrawingFlagsUpdater::get_instance();
     static constexpr auto flags_srf = {
-        StatusRedrawingFlag::COMBINATION,
-        StatusRedrawingFlag::REORDER,
+        StatusRecalculatingFlag::COMBINATION,
+        StatusRecalculatingFlag::REORDER,
     };
     rfu.set_flags(flags_srf);
     rfu.set_flag(SubWindowRedrawingFlag::INVENTORY);
@@ -78,8 +78,8 @@ bool redraw_player(PlayerType *player_ptr)
     auto &rfu = RedrawingFlagsUpdater::get_instance();
     rfu.set_flag(MainWindowRedrawingFlag::MP);
     static constexpr auto flags_srf = {
-        StatusRedrawingFlag::COMBINATION,
-        StatusRedrawingFlag::REORDER,
+        StatusRecalculatingFlag::COMBINATION,
+        StatusRecalculatingFlag::REORDER,
     };
     rfu.set_flags(flags_srf);
     rfu.set_flag(SubWindowRedrawingFlag::INVENTORY);

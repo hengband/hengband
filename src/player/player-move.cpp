@@ -172,16 +172,16 @@ bool move_player_effect(PlayerType *player_ptr, POSITION ny, POSITION nx, BIT_FL
         verify_panel(player_ptr);
         if (mpe_mode & MPE_FORGET_FLOW) {
             forget_flow(floor_ptr);
-            rfu.set_flag(StatusRedrawingFlag::UN_VIEW);
+            rfu.set_flag(StatusRecalculatingFlag::UN_VIEW);
             rfu.set_flag(MainWindowRedrawingFlag::MAP);
         }
 
         static constexpr auto flags_srf = {
-            StatusRedrawingFlag::VIEW,
-            StatusRedrawingFlag::LITE,
-            StatusRedrawingFlag::FLOW,
-            StatusRedrawingFlag::MONSTER_LITE,
-            StatusRedrawingFlag::DISTANCE,
+            StatusRecalculatingFlag::VIEW,
+            StatusRecalculatingFlag::LITE,
+            StatusRecalculatingFlag::FLOW,
+            StatusRecalculatingFlag::MONSTER_LITE,
+            StatusRecalculatingFlag::DISTANCE,
         };
         rfu.set_flags(flags_srf);
         static constexpr auto flags_swrf = {
@@ -217,7 +217,7 @@ bool move_player_effect(PlayerType *player_ptr, POSITION ny, POSITION nx, BIT_FL
 
         if (PlayerRace(player_ptr).equals(PlayerRaceType::MERFOLK)) {
             if (f_ptr->flags.has(Tc::WATER) ^ of_ptr->flags.has(Tc::WATER)) {
-                rfu.set_flag(StatusRedrawingFlag::BONUS);
+                rfu.set_flag(StatusRecalculatingFlag::BONUS);
                 update_creature(player_ptr);
             }
         }

@@ -72,9 +72,9 @@ bool identify_item(PlayerType *player_ptr, ItemEntity *o_ptr)
 
     auto &rfu = RedrawingFlagsUpdater::get_instance();
     static constexpr auto flags_srf = {
-        StatusRedrawingFlag::BONUS,
-        StatusRedrawingFlag::COMBINATION,
-        StatusRedrawingFlag::REORDER,
+        StatusRecalculatingFlag::BONUS,
+        StatusRecalculatingFlag::COMBINATION,
+        StatusRecalculatingFlag::REORDER,
     };
     rfu.set_flags(flags_srf);
     static constexpr auto flags_swrf = {

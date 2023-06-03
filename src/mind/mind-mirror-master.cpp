@@ -279,7 +279,7 @@ bool set_multishadow(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
         disturb(player_ptr, false, false);
     }
 
-    rfu.set_flag(StatusRedrawingFlag::BONUS);
+    rfu.set_flag(StatusRecalculatingFlag::BONUS);
     handle_stuff(player_ptr);
     return true;
 }
@@ -327,7 +327,7 @@ bool set_dustrobe(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
         disturb(player_ptr, false, false);
     }
 
-    rfu.set_flag(StatusRedrawingFlag::BONUS);
+    rfu.set_flag(StatusRecalculatingFlag::BONUS);
     handle_stuff(player_ptr);
     return true;
 }

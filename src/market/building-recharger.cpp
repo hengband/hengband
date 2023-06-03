@@ -154,8 +154,8 @@ void building_recharge(PlayerType *player_ptr)
 #endif
     auto &rfu = RedrawingFlagsUpdater::get_instance();
     static constexpr auto flags = {
-        StatusRedrawingFlag::COMBINATION,
-        StatusRedrawingFlag::REORDER,
+        StatusRecalculatingFlag::COMBINATION,
+        StatusRecalculatingFlag::REORDER,
     };
     rfu.set_flags(flags);
     rfu.set_flag(SubWindowRedrawingFlag::INVENTORY);
@@ -271,8 +271,8 @@ void building_recharge_all(PlayerType *player_ptr)
     msg_print(nullptr);
     auto &rfu = RedrawingFlagsUpdater::get_instance();
     static constexpr auto flags = {
-        StatusRedrawingFlag::COMBINATION,
-        StatusRedrawingFlag::REORDER,
+        StatusRecalculatingFlag::COMBINATION,
+        StatusRecalculatingFlag::REORDER,
     };
     rfu.set_flags(flags);
     rfu.set_flag(SubWindowRedrawingFlag::INVENTORY);

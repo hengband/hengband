@@ -85,8 +85,8 @@ void auto_inscribe_item(ItemEntity *o_ptr, int idx)
     };
     rfu.set_flags(flags_swrf);
     static constexpr auto flags_srf = {
-        StatusRedrawingFlag::BONUS,
-        StatusRedrawingFlag::COMBINATION,
+        StatusRecalculatingFlag::BONUS,
+        StatusRecalculatingFlag::COMBINATION,
     };
     rfu.set_flags(flags_srf);
 }

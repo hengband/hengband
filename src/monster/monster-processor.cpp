@@ -152,7 +152,7 @@ void process_monster(PlayerType *player_ptr, MONSTER_IDX m_idx)
     }
 
     if (turn_flags_ptr->is_riding_mon) {
-        RedrawingFlagsUpdater::get_instance().set_flag(StatusRedrawingFlag::BONUS);
+        RedrawingFlagsUpdater::get_instance().set_flag(StatusRecalculatingFlag::BONUS);
     }
 
     process_angar(player_ptr, m_idx, turn_flags_ptr->see_m);

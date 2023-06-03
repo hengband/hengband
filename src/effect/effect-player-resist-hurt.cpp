@@ -437,7 +437,7 @@ void effect_player_lite(PlayerType *player_ptr, EffectPlayerType *ep_ptr)
         MainWindowRedrawingFlag::TIMED_EFFECT,
     };
     rfu.set_flags(flags_mwrf);
-    rfu.set_flag(StatusRedrawingFlag::MONSTER_STATUSES);
+    rfu.set_flag(StatusRecalculatingFlag::MONSTER_STATUSES);
     static constexpr auto flags_swrf = {
         SubWindowRedrawingFlag::OVERHEAD,
         SubWindowRedrawingFlag::DUNGEON,

@@ -42,19 +42,19 @@ void do_cmd_redraw(PlayerType *player_ptr)
 
     auto &rfu = RedrawingFlagsUpdater::get_instance();
     static constexpr auto flags_srf = {
-        StatusRedrawingFlag::COMBINATION,
-        StatusRedrawingFlag::REORDER,
-        StatusRedrawingFlag::TORCH,
-        StatusRedrawingFlag::BONUS,
-        StatusRedrawingFlag::HP,
-        StatusRedrawingFlag::MP,
-        StatusRedrawingFlag::SPELLS,
-        StatusRedrawingFlag::UN_VIEW,
-        StatusRedrawingFlag::UN_LITE,
-        StatusRedrawingFlag::VIEW,
-        StatusRedrawingFlag::LITE,
-        StatusRedrawingFlag::MONSTER_LITE,
-        StatusRedrawingFlag::MONSTER_STATUSES,
+        StatusRecalculatingFlag::COMBINATION,
+        StatusRecalculatingFlag::REORDER,
+        StatusRecalculatingFlag::TORCH,
+        StatusRecalculatingFlag::BONUS,
+        StatusRecalculatingFlag::HP,
+        StatusRecalculatingFlag::MP,
+        StatusRecalculatingFlag::SPELLS,
+        StatusRecalculatingFlag::UN_VIEW,
+        StatusRecalculatingFlag::UN_LITE,
+        StatusRecalculatingFlag::VIEW,
+        StatusRecalculatingFlag::LITE,
+        StatusRecalculatingFlag::MONSTER_LITE,
+        StatusRecalculatingFlag::MONSTER_STATUSES,
     };
     rfu.set_flags(flags_srf);
     static constexpr auto flags_mwrf = {

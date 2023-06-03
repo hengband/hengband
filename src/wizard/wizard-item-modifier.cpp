@@ -234,8 +234,8 @@ void wiz_identify_full_inventory(PlayerType *player_ptr)
 
     auto &rfu = RedrawingFlagsUpdater::get_instance();
     static constexpr auto flags_srf = {
-        StatusRedrawingFlag::COMBINATION,
-        StatusRedrawingFlag::REORDER,
+        StatusRecalculatingFlag::COMBINATION,
+        StatusRecalculatingFlag::REORDER,
     };
     rfu.set_flags(flags_srf);
     static constexpr auto flags_swrf = {
@@ -587,9 +587,9 @@ static void wiz_reroll_item(PlayerType *player_ptr, ItemEntity *o_ptr)
     o_ptr->copy_from(q_ptr);
     auto &rfu = RedrawingFlagsUpdater::get_instance();
     static constexpr auto flags_srf = {
-        StatusRedrawingFlag::BONUS,
-        StatusRedrawingFlag::COMBINATION,
-        StatusRedrawingFlag::REORDER,
+        StatusRecalculatingFlag::BONUS,
+        StatusRecalculatingFlag::COMBINATION,
+        StatusRecalculatingFlag::REORDER,
     };
     rfu.set_flags(flags_srf);
     static constexpr auto flags_swrf = {
@@ -745,9 +745,9 @@ void wiz_modify_item(PlayerType *player_ptr)
         o_ptr->copy_from(q_ptr);
         auto &rfu = RedrawingFlagsUpdater::get_instance();
         static constexpr auto flags_srf = {
-            StatusRedrawingFlag::BONUS,
-            StatusRedrawingFlag::COMBINATION,
-            StatusRedrawingFlag::REORDER,
+            StatusRecalculatingFlag::BONUS,
+            StatusRecalculatingFlag::COMBINATION,
+            StatusRecalculatingFlag::REORDER,
         };
         rfu.set_flags(flags_srf);
         static constexpr auto flags_swrf = {

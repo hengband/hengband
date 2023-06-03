@@ -316,6 +316,6 @@ void sanity_blast(PlayerType *player_ptr, MonsterEntity *m_ptr, bool necro)
         break;
     }
 
-    RedrawingFlagsUpdater::get_instance().set_flag(StatusRedrawingFlag::BONUS);
+    RedrawingFlagsUpdater::get_instance().set_flag(StatusRecalculatingFlag::BONUS);
     handle_stuff(player_ptr);
 }

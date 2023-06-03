@@ -62,8 +62,8 @@ void ObjectQuaffEntity::execute(INVENTORY_IDX item)
     }
 
     static constexpr auto flags_srf = {
-        StatusRedrawingFlag::COMBINATION,
-        StatusRedrawingFlag::REORDER,
+        StatusRecalculatingFlag::COMBINATION,
+        StatusRecalculatingFlag::REORDER,
     };
     auto &rfu = RedrawingFlagsUpdater::get_instance();
     rfu.set_flags(flags_srf);

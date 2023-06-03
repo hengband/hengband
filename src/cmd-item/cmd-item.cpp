@@ -194,8 +194,8 @@ void do_cmd_uninscribe(PlayerType *player_ptr)
     o_ptr->inscription.reset();
     auto &rfu = RedrawingFlagsUpdater::get_instance();
     static constexpr auto flags_srf = {
-        StatusRedrawingFlag::COMBINATION,
-        StatusRedrawingFlag::BONUS,
+        StatusRecalculatingFlag::COMBINATION,
+        StatusRecalculatingFlag::BONUS,
     };
     rfu.set_flags(flags_srf);
     static constexpr auto flags_swrf = {
@@ -234,8 +234,8 @@ void do_cmd_inscribe(PlayerType *player_ptr)
         o_ptr->inscription.emplace(out_val);
         auto &rfu = RedrawingFlagsUpdater::get_instance();
         static constexpr auto flags_srf = {
-            StatusRedrawingFlag::COMBINATION,
-            StatusRedrawingFlag::BONUS,
+            StatusRecalculatingFlag::COMBINATION,
+            StatusRecalculatingFlag::BONUS,
         };
         rfu.set_flags(flags_srf);
         static constexpr auto flags_swrf = {

@@ -122,7 +122,7 @@ void wiz_lite(PlayerType *player_ptr, bool ninja)
     }
 
     auto &rfu = RedrawingFlagsUpdater::get_instance();
-    rfu.set_flag(StatusRedrawingFlag::MONSTER_STATUSES);
+    rfu.set_flag(StatusRecalculatingFlag::MONSTER_STATUSES);
     rfu.set_flag(MainWindowRedrawingFlag::MAP);
     static constexpr auto flags_swrf = {
         SubWindowRedrawingFlag::OVERHEAD,
@@ -184,12 +184,12 @@ void wiz_dark(PlayerType *player_ptr)
 
     auto &rfu = RedrawingFlagsUpdater::get_instance();
     static constexpr auto flags_srf = {
-        StatusRedrawingFlag::UN_VIEW,
-        StatusRedrawingFlag::UN_LITE,
-        StatusRedrawingFlag::VIEW,
-        StatusRedrawingFlag::LITE,
-        StatusRedrawingFlag::MONSTER_LITE,
-        StatusRedrawingFlag::MONSTER_STATUSES,
+        StatusRecalculatingFlag::UN_VIEW,
+        StatusRecalculatingFlag::UN_LITE,
+        StatusRecalculatingFlag::VIEW,
+        StatusRecalculatingFlag::LITE,
+        StatusRecalculatingFlag::MONSTER_LITE,
+        StatusRecalculatingFlag::MONSTER_STATUSES,
     };
     rfu.set_flags(flags_srf);
     rfu.set_flag(MainWindowRedrawingFlag::MAP);
@@ -489,13 +489,13 @@ bool destroy_area(PlayerType *player_ptr, POSITION y1, POSITION x1, POSITION r, 
     forget_flow(floor_ptr);
     auto &rfu = RedrawingFlagsUpdater::get_instance();
     static constexpr auto flags_srf = {
-        StatusRedrawingFlag::UN_VIEW,
-        StatusRedrawingFlag::UN_LITE,
-        StatusRedrawingFlag::VIEW,
-        StatusRedrawingFlag::LITE,
-        StatusRedrawingFlag::FLOW,
-        StatusRedrawingFlag::MONSTER_LITE,
-        StatusRedrawingFlag::MONSTER_STATUSES,
+        StatusRecalculatingFlag::UN_VIEW,
+        StatusRecalculatingFlag::UN_LITE,
+        StatusRecalculatingFlag::VIEW,
+        StatusRecalculatingFlag::LITE,
+        StatusRecalculatingFlag::FLOW,
+        StatusRecalculatingFlag::MONSTER_LITE,
+        StatusRecalculatingFlag::MONSTER_STATUSES,
     };
     rfu.set_flags(flags_srf);
     rfu.set_flag(MainWindowRedrawingFlag::MAP);

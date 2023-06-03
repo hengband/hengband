@@ -416,7 +416,7 @@ bool place_monster_one(PlayerType *player_ptr, MONSTER_IDX who, POSITION y, POSI
     auto is_awake_lightning_monster = r_ptr->brightness_flags.has_any_of(self_ld_mask);
     is_awake_lightning_monster |= r_ptr->brightness_flags.has_any_of(has_ld_mask) && !m_ptr->is_asleep();
     if (is_awake_lightning_monster) {
-        RedrawingFlagsUpdater::get_instance().set_flag(StatusRedrawingFlag::MONSTER_LITE);
+        RedrawingFlagsUpdater::get_instance().set_flag(StatusRecalculatingFlag::MONSTER_LITE);
     }
 
     update_monster(player_ptr, g_ptr->m_idx, true);
