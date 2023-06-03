@@ -386,8 +386,8 @@ void clear_cave(PlayerType *player_ptr)
             g_ptr->m_idx = 0;
             g_ptr->special = 0;
             g_ptr->mimic = 0;
-            memset(g_ptr->costs, 0, sizeof(g_ptr->costs));
-            memset(g_ptr->costs, 0, sizeof(g_ptr->dists));
+            g_ptr->reset_costs();
+            g_ptr->reset_dists();
             g_ptr->when = 0;
         }
     }

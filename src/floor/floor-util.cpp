@@ -105,8 +105,9 @@ void forget_flow(FloorType *floor_ptr)
 {
     for (POSITION y = 0; y < floor_ptr->height; y++) {
         for (POSITION x = 0; x < floor_ptr->width; x++) {
-            memset(&floor_ptr->grid_array[y][x].costs, 0, sizeof(floor_ptr->grid_array[y][x].costs));
-            memset(&floor_ptr->grid_array[y][x].dists, 0, sizeof(floor_ptr->grid_array[y][x].dists));
+            auto &grid = floor_ptr->grid_array[y][x];
+            grid.reset_costs();
+            grid.reset_dists();
             floor_ptr->grid_array[y][x].when = 0;
         }
     }

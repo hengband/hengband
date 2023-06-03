@@ -130,3 +130,17 @@ bool grid_type::is_symbol(const int ch) const
 {
     return terrains_info[this->feat].x_char[0] == ch;
 }
+
+void grid_type::reset_costs()
+{
+    for (auto &cost : this->costs) {
+        cost = 0;
+    }
+}
+
+void grid_type::reset_dists()
+{
+    for (auto &dist : this->dists) {
+        dist = 0;
+    }
+}
