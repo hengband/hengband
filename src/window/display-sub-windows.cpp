@@ -618,9 +618,12 @@ static void display_found_item_list(PlayerType *player_ptr)
     // ItemKindTypeがGOLD
     std::vector<ItemEntity *> found_item_list;
     for (auto &item : floor_ptr->o_list) {
-        auto item_entity_ptr = &item;
-        if (item_entity_ptr->is_valid() && item_entity_ptr->marked.has(OmType::FOUND) && item_entity_ptr->bi_key.tval() != ItemKindType::GOLD) {
-            found_item_list.push_back(item_entity_ptr);
+        const auto is_item_to_display =
+            item.is_valid() && (item.number > 0) &&
+            item.marked.has(OmType::FOUND) && (item.bi_key.tval() != ItemKindType::GOLD);
+
+        if (is_item_to_display) {
+            found_item_list.push_back(&item);
         }
     }
 
