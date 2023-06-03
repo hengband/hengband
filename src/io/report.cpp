@@ -12,7 +12,6 @@
 #include "core/visuals-reseter.h"
 #include "game-option/special-options.h"
 #include "io-dump/character-dump.h"
-#include "io/inet.h"
 #include "io/input-key-acceptor.h"
 #include "mind/mind-elementalist.h"
 #include "player-base/player-class.h"

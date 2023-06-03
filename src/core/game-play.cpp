@@ -41,7 +41,6 @@
 #include "grid/grid.h"
 #include "info-reader/fixed-map-parser.h"
 #include "io/files-util.h"
-#include "io/inet.h"
 #include "io/input-key-acceptor.h"
 #include "io/input-key-processor.h"
 #include "io/read-pref-file.h"

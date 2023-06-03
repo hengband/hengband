@@ -9,7 +9,6 @@
 #include "cmd-visual/cmd-draw.h"
 #include "core/asking-player.h"
 #include "io/files-util.h"
-#include "io/inet.h"
 #include "io/signal-handlers.h"
 #include "locale/japanese.h"
 #include "system/player-type-definition.h"
