@@ -438,7 +438,7 @@ void effect_player_lite(PlayerType *player_ptr, EffectPlayerType *ep_ptr)
     };
     rfu.set_flags(flags_mwrf);
     rfu.set_flag(StatusRedrawingFlag::MONSTER_STATUSES);
-    const auto flags_swrf = {
+    static constexpr auto flags_swrf = {
         SubWindowRedrawingFlag::OVERHEAD,
         SubWindowRedrawingFlag::DUNGEON,
     };

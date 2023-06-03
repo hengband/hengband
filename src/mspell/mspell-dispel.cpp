@@ -108,7 +108,7 @@ static void dispel_player(PlayerType *player_ptr)
             MainWindowRedrawingFlag::ACTION,
         };
         rfu.set_flags(flags_mwrf);
-        const auto flags_swrf = {
+        static constexpr auto flags_swrf = {
             SubWindowRedrawingFlag::OVERHEAD,
             SubWindowRedrawingFlag::DUNGEON,
         };

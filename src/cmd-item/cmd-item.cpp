@@ -198,7 +198,7 @@ void do_cmd_uninscribe(PlayerType *player_ptr)
         StatusRedrawingFlag::BONUS,
     };
     rfu.set_flags(flags_srf);
-    const auto flags_swrf = {
+    static constexpr auto flags_swrf = {
         SubWindowRedrawingFlag::INVENTORY,
         SubWindowRedrawingFlag::EQUIPMENT,
         SubWindowRedrawingFlag::FLOOR_ITEMS,
@@ -238,7 +238,7 @@ void do_cmd_inscribe(PlayerType *player_ptr)
             StatusRedrawingFlag::BONUS,
         };
         rfu.set_flags(flags_srf);
-        const auto flags_swrf = {
+        static constexpr auto flags_swrf = {
             SubWindowRedrawingFlag::INVENTORY,
             SubWindowRedrawingFlag::EQUIPMENT,
             SubWindowRedrawingFlag::FLOOR_ITEMS,

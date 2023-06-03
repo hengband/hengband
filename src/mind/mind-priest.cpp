@@ -142,7 +142,7 @@ bool bless_weapon(PlayerType *player_ptr)
     }
 
     rfu.set_flag(StatusRedrawingFlag::BONUS);
-    const auto flags_swrf = {
+    static constexpr auto flags_swrf = {
         SubWindowRedrawingFlag::EQUIPMENT,
         SubWindowRedrawingFlag::PLAYER,
         SubWindowRedrawingFlag::FLOOR_ITEMS,

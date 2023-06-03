@@ -77,7 +77,7 @@ bool identify_item(PlayerType *player_ptr, ItemEntity *o_ptr)
         StatusRedrawingFlag::REORDER,
     };
     rfu.set_flags(flags_srf);
-    const auto flags_swrf = {
+    static constexpr auto flags_swrf = {
         SubWindowRedrawingFlag::INVENTORY,
         SubWindowRedrawingFlag::EQUIPMENT,
         SubWindowRedrawingFlag::PLAYER,

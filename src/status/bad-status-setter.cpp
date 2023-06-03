@@ -102,7 +102,7 @@ bool BadStatusSetter::set_blindness(const TIME_EFFECT tmp_v)
     };
     rfu.set_flags(flags_srf);
     rfu.set_flag(MainWindowRedrawingFlag::MAP);
-    const auto flags_swrf = {
+    static constexpr auto flags_swrf = {
         SubWindowRedrawingFlag::OVERHEAD,
         SubWindowRedrawingFlag::DUNGEON,
     };
@@ -395,7 +395,7 @@ bool BadStatusSetter::hallucination(const TIME_EFFECT tmp_v)
     };
     rfu.set_flags(flags_mwrf);
     rfu.set_flag(StatusRedrawingFlag::MONSTER_STATUSES);
-    const auto flags_swrf = {
+    static constexpr auto flags_swrf = {
         SubWindowRedrawingFlag::OVERHEAD,
         SubWindowRedrawingFlag::DUNGEON,
     };

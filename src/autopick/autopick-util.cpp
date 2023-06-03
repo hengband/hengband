@@ -79,7 +79,7 @@ void auto_inscribe_item(ItemEntity *o_ptr, int idx)
     }
 
     auto &rfu = RedrawingFlagsUpdater::get_instance();
-    const auto flags_swrf = {
+    static constexpr auto flags_swrf = {
         SubWindowRedrawingFlag::INVENTORY,
         SubWindowRedrawingFlag::EQUIPMENT,
     };

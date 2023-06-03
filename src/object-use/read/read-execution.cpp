@@ -72,7 +72,7 @@ void ObjectReadEntity::execute(bool known)
     this->change_virtue_as_read(*o_ptr);
     object_tried(o_ptr);
     this->gain_exp_from_item_use(o_ptr, executor->is_identified());
-    const auto flags_swrf = {
+    static constexpr auto flags_swrf = {
         SubWindowRedrawingFlag::INVENTORY,
         SubWindowRedrawingFlag::EQUIPMENT,
         SubWindowRedrawingFlag::PLAYER,

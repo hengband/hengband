@@ -61,7 +61,7 @@ void inven_item_increase(PlayerType *player_ptr, INVENTORY_IDX item, ITEM_NUMBER
         StatusRedrawingFlag::COMBINATION,
     };
     rfu.set_flags(flags_srf);
-    const auto flags_swrf = {
+    static constexpr auto flags_swrf = {
         SubWindowRedrawingFlag::INVENTORY,
         SubWindowRedrawingFlag::EQUIPMENT,
     };
@@ -107,7 +107,7 @@ void inven_item_optimize(PlayerType *player_ptr, INVENTORY_IDX item)
             StatusRedrawingFlag::MP,
         };
         rfu.set_flags(flags_srf);
-        const auto flags_swrf = {
+        static constexpr auto flags_swrf = {
             SubWindowRedrawingFlag::EQUIPMENT,
             SubWindowRedrawingFlag::SPELL,
         };
@@ -324,7 +324,7 @@ int16_t store_item_to_inventory(PlayerType *player_ptr, ItemEntity *o_ptr)
 
     ItemEntity *j_ptr;
     auto &rfu = RedrawingFlagsUpdater::get_instance();
-    const auto flags_swrf = {
+    static constexpr auto flags_swrf = {
         SubWindowRedrawingFlag::INVENTORY,
         SubWindowRedrawingFlag::PLAYER,
     };

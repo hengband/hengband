@@ -400,7 +400,7 @@ void process_player(PlayerType *player_ptr)
             if (player_ptr->timewalk && (player_ptr->energy_need > -1000)) {
                 rfu.set_flag(MainWindowRedrawingFlag::MAP);
                 rfu.set_flag(StatusRedrawingFlag::MONSTER_STATUSES);
-                const auto flags_swrf = {
+                static constexpr auto flags_swrf = {
                     SubWindowRedrawingFlag::OVERHEAD,
                     SubWindowRedrawingFlag::DUNGEON,
                 };
