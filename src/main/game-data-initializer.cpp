@@ -80,10 +80,10 @@ void init_other(PlayerType *player_ptr)
         }
     }
 
-    for (auto n = 0; n < 8; n++) {
+    for (auto &window_mask : g_window_masks) {
         for (auto i = 0; i < 32; i++) {
             if (window_flag_desc[i]) {
-                set_bits(g_window_masks[n], 1U << i);
+                window_mask.set(i2enum<SubWindowRedrawingFlag>(i));
             }
         }
     }

@@ -150,7 +150,7 @@ void wr_options(SaveType type)
     }
 
     for (const auto &window_mask : g_window_masks) {
-        wr_u32b(window_mask);
+        wr_FlagGroup_bytes(window_mask, wr_byte, 4);
     }
 }
 
