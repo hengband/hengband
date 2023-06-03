@@ -156,13 +156,13 @@ bool wr_dungeon(PlayerType *player_ptr)
     forget_lite(player_ptr->current_floor_ptr);
     forget_view(player_ptr->current_floor_ptr);
     clear_mon_lite(player_ptr->current_floor_ptr);
-    const auto flags = {
-        StatusRedrawingFlag::VIEW,
-        StatusRedrawingFlag::LITE,
-        StatusRedrawingFlag::MONSTER_LITE,
-        StatusRedrawingFlag::MONSTER_STATUSES,
-        StatusRedrawingFlag::DISTANCE,
-        StatusRedrawingFlag::FLOW,
+    static constexpr auto flags = {
+        StatusRecalculatingFlag::VIEW,
+        StatusRecalculatingFlag::LITE,
+        StatusRecalculatingFlag::MONSTER_LITE,
+        StatusRecalculatingFlag::MONSTER_STATUSES,
+        StatusRecalculatingFlag::DISTANCE,
+        StatusRecalculatingFlag::FLOW,
     };
     RedrawingFlagsUpdater::get_instance().set_flags(flags);
     wr_s16b(max_floor_id);

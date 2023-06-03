@@ -439,16 +439,16 @@ bool choose_samurai_stance(PlayerType *player_ptr)
     if (PlayerClass(player_ptr).samurai_stance_is(new_stance)) {
         msg_print(_("構え直した。", "You reassume a stance."));
     } else {
-        const auto flags_srf = {
-            StatusRedrawingFlag::BONUS,
-            StatusRedrawingFlag::MONSTER_STATUSES,
+        static constexpr auto flags_srf = {
+            StatusRecalculatingFlag::BONUS,
+            StatusRecalculatingFlag::MONSTER_STATUSES,
         };
         rfu.set_flags(flags_srf);
         msg_format(_("%sの型で構えた。", "You assume the %s stance."), samurai_stances[enum2i(new_stance) - 1].desc);
         PlayerClass(player_ptr).set_samurai_stance(new_stance);
     }
 
-    const auto flags = {
+    static constexpr auto flags = {
         MainWindowRedrawingFlag::ACTION,
         MainWindowRedrawingFlag::TIMED_EFFECT,
     };

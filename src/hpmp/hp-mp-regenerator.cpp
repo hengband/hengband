@@ -110,7 +110,7 @@ void regenmana(PlayerType *player_ptr, MANA_POINT upkeep_factor, MANA_POINT rege
     if (old_csp != player_ptr->csp) {
         auto &rfu = RedrawingFlagsUpdater::get_instance();
         rfu.set_flag(MainWindowRedrawingFlag::MP);
-        const auto flags = {
+        static constexpr auto flags = {
             SubWindowRedrawingFlag::PLAYER,
             SubWindowRedrawingFlag::SPELL,
         };
@@ -251,7 +251,7 @@ void regenerate_captured_monsters(PlayerType *player_ptr)
     }
 
     if (heal) {
-        RedrawingFlagsUpdater::get_instance().set_flag(StatusRedrawingFlag::COMBINATION);
+        RedrawingFlagsUpdater::get_instance().set_flag(StatusRecalculatingFlag::COMBINATION);
 
         /*!
          * @todo FIXME 広域マップ移動で1歩毎に何度も再描画されて重くなる.

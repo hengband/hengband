@@ -172,19 +172,19 @@ bool move_player_effect(PlayerType *player_ptr, POSITION ny, POSITION nx, BIT_FL
         verify_panel(player_ptr);
         if (mpe_mode & MPE_FORGET_FLOW) {
             forget_flow(floor_ptr);
-            rfu.set_flag(StatusRedrawingFlag::UN_VIEW);
+            rfu.set_flag(StatusRecalculatingFlag::UN_VIEW);
             rfu.set_flag(MainWindowRedrawingFlag::MAP);
         }
 
-        const auto flags_srf = {
-            StatusRedrawingFlag::VIEW,
-            StatusRedrawingFlag::LITE,
-            StatusRedrawingFlag::FLOW,
-            StatusRedrawingFlag::MONSTER_LITE,
-            StatusRedrawingFlag::DISTANCE,
+        static constexpr auto flags_srf = {
+            StatusRecalculatingFlag::VIEW,
+            StatusRecalculatingFlag::LITE,
+            StatusRecalculatingFlag::FLOW,
+            StatusRecalculatingFlag::MONSTER_LITE,
+            StatusRecalculatingFlag::DISTANCE,
         };
         rfu.set_flags(flags_srf);
-        const auto flags_swrf = {
+        static constexpr auto flags_swrf = {
             SubWindowRedrawingFlag::OVERHEAD,
             SubWindowRedrawingFlag::DUNGEON,
         };
@@ -217,7 +217,7 @@ bool move_player_effect(PlayerType *player_ptr, POSITION ny, POSITION nx, BIT_FL
 
         if (PlayerRace(player_ptr).equals(PlayerRaceType::MERFOLK)) {
             if (f_ptr->flags.has(Tc::WATER) ^ of_ptr->flags.has(Tc::WATER)) {
-                rfu.set_flag(StatusRedrawingFlag::BONUS);
+                rfu.set_flag(StatusRecalculatingFlag::BONUS);
                 update_creature(player_ptr);
             }
         }
@@ -246,7 +246,7 @@ bool move_player_effect(PlayerType *player_ptr, POSITION ny, POSITION nx, BIT_FL
 
     // 自動拾い/自動破壊により床上のアイテムリストが変化した可能性があるので表示を更新
     if (!player_ptr->running) {
-        const auto flags_swrf = {
+        static constexpr auto flags_swrf = {
             SubWindowRedrawingFlag::FLOOR_ITEMS,
             SubWindowRedrawingFlag::FOUND_ITEMS,
         };

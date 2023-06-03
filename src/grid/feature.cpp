@@ -250,11 +250,11 @@ void cave_set_feat(PlayerType *player_ptr, POSITION y, POSITION x, FEAT_IDX feat
     note_spot(player_ptr, y, x);
     lite_spot(player_ptr, y, x);
     if (old_los ^ f_ptr->flags.has(TerrainCharacteristics::LOS)) {
-        const auto flags = {
-            StatusRedrawingFlag::VIEW,
-            StatusRedrawingFlag::LITE,
-            StatusRedrawingFlag::MONSTER_LITE,
-            StatusRedrawingFlag::MONSTER_STATUSES,
+        static constexpr auto flags = {
+            StatusRecalculatingFlag::VIEW,
+            StatusRecalculatingFlag::LITE,
+            StatusRecalculatingFlag::MONSTER_LITE,
+            StatusRecalculatingFlag::MONSTER_STATUSES,
         };
         RedrawingFlagsUpdater::get_instance().set_flags(flags);
     }

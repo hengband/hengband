@@ -248,12 +248,12 @@ bool curse_armor(PlayerType *player_ptr)
     o_ptr->curse_flags.set(CurseTraitType::CURSED);
     o_ptr->ident |= IDENT_BROKEN;
     auto &rfu = RedrawingFlagsUpdater::get_instance();
-    const auto flags_srf = {
-        StatusRedrawingFlag::BONUS,
-        StatusRedrawingFlag::MP,
+    static constexpr auto flags_srf = {
+        StatusRecalculatingFlag::BONUS,
+        StatusRecalculatingFlag::MP,
     };
     rfu.set_flags(flags_srf);
-    const auto flags_swrf = {
+    static constexpr auto flags_swrf = {
         SubWindowRedrawingFlag::INVENTORY,
         SubWindowRedrawingFlag::EQUIPMENT,
         SubWindowRedrawingFlag::PLAYER,
@@ -304,12 +304,12 @@ bool curse_weapon_object(PlayerType *player_ptr, bool force, ItemEntity *o_ptr)
     o_ptr->curse_flags.set(CurseTraitType::CURSED);
     o_ptr->ident |= IDENT_BROKEN;
     auto &rfu = RedrawingFlagsUpdater::get_instance();
-    const auto flags_srf = {
-        StatusRedrawingFlag::BONUS,
-        StatusRedrawingFlag::MP,
+    static constexpr auto flags_srf = {
+        StatusRecalculatingFlag::BONUS,
+        StatusRecalculatingFlag::MP,
     };
     rfu.set_flags(flags_srf);
-    const auto flags_swrf = {
+    static constexpr auto flags_swrf = {
         SubWindowRedrawingFlag::INVENTORY,
         SubWindowRedrawingFlag::EQUIPMENT,
         SubWindowRedrawingFlag::PLAYER,
@@ -460,13 +460,13 @@ bool enchant_equipment(ItemEntity *o_ptr, int n, int eflag)
     }
 
     auto &rfu = RedrawingFlagsUpdater::get_instance();
-    const auto flags_srf = {
-        StatusRedrawingFlag::BONUS,
-        StatusRedrawingFlag::COMBINATION,
-        StatusRedrawingFlag::REORDER,
+    static constexpr auto flags_srf = {
+        StatusRecalculatingFlag::BONUS,
+        StatusRecalculatingFlag::COMBINATION,
+        StatusRecalculatingFlag::REORDER,
     };
     rfu.set_flags(flags_srf);
-    const auto flags_swrf = {
+    static constexpr auto flags_swrf = {
         SubWindowRedrawingFlag::INVENTORY,
         SubWindowRedrawingFlag::EQUIPMENT,
         SubWindowRedrawingFlag::PLAYER,

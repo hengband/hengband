@@ -126,9 +126,9 @@ void verify_panel(PlayerType *player_ptr)
 
     panel_bounds_center();
     auto &rfu = RedrawingFlagsUpdater::get_instance();
-    rfu.set_flag(StatusRedrawingFlag::MONSTER_STATUSES);
+    rfu.set_flag(StatusRecalculatingFlag::MONSTER_STATUSES);
     rfu.set_flag(MainWindowRedrawingFlag::MAP);
-    const auto flags = {
+    static constexpr auto flags = {
         SubWindowRedrawingFlag::OVERHEAD,
         SubWindowRedrawingFlag::DUNGEON,
     };

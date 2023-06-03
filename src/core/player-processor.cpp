@@ -229,7 +229,7 @@ void process_player(PlayerType *player_ptr)
         } else {
             set_current_ki(player_ptr, false, -40);
         }
-        rfu.set_flag(StatusRedrawingFlag::BONUS);
+        rfu.set_flag(StatusRecalculatingFlag::BONUS);
     }
 
     if (player_ptr->action == ACTION_LEARN) {
@@ -399,8 +399,8 @@ void process_player(PlayerType *player_ptr)
 
             if (player_ptr->timewalk && (player_ptr->energy_need > -1000)) {
                 rfu.set_flag(MainWindowRedrawingFlag::MAP);
-                rfu.set_flag(StatusRedrawingFlag::MONSTER_STATUSES);
-                const auto flags_swrf = {
+                rfu.set_flag(StatusRecalculatingFlag::MONSTER_STATUSES);
+                static constexpr auto flags_swrf = {
                     SubWindowRedrawingFlag::OVERHEAD,
                     SubWindowRedrawingFlag::DUNGEON,
                 };

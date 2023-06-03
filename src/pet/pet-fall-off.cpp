@@ -160,22 +160,22 @@ bool process_fall_off_horse(PlayerType *player_ptr, int dam, bool force)
     player_ptr->riding_ryoute = player_ptr->old_riding_ryoute = false;
 
     auto &rfu = RedrawingFlagsUpdater::get_instance();
-    const auto flags_srf = {
-        StatusRedrawingFlag::BONUS,
-        StatusRedrawingFlag::VIEW,
-        StatusRedrawingFlag::LITE,
-        StatusRedrawingFlag::FLOW,
-        StatusRedrawingFlag::MONSTER_LITE,
-        StatusRedrawingFlag::MONSTER_STATUSES,
+    static constexpr auto flags_srf = {
+        StatusRecalculatingFlag::BONUS,
+        StatusRecalculatingFlag::VIEW,
+        StatusRecalculatingFlag::LITE,
+        StatusRecalculatingFlag::FLOW,
+        StatusRecalculatingFlag::MONSTER_LITE,
+        StatusRecalculatingFlag::MONSTER_STATUSES,
     };
     rfu.set_flags(flags_srf);
     handle_stuff(player_ptr);
-    const auto flags_swrf = {
+    static constexpr auto flags_swrf = {
         SubWindowRedrawingFlag::OVERHEAD,
         SubWindowRedrawingFlag::DUNGEON,
     };
     rfu.set_flags(flags_swrf);
-    const auto flags_mwrf = {
+    static constexpr auto flags_mwrf = {
         MainWindowRedrawingFlag::EXTRA,
         MainWindowRedrawingFlag::UHEALTH,
     };

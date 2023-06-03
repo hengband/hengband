@@ -432,13 +432,13 @@ void effect_player_lite(PlayerType *player_ptr, EffectPlayerType *ep_ptr)
     msg_print(_("閃光のため非物質的な影の存在でいられなくなった。", "The light forces you out of your incorporeal shadow form."));
 
     auto &rfu = RedrawingFlagsUpdater::get_instance();
-    const auto flags_mwrf = {
+    static constexpr auto flags_mwrf = {
         MainWindowRedrawingFlag::MAP,
         MainWindowRedrawingFlag::TIMED_EFFECT,
     };
     rfu.set_flags(flags_mwrf);
-    rfu.set_flag(StatusRedrawingFlag::MONSTER_STATUSES);
-    const auto flags_swrf = {
+    rfu.set_flag(StatusRecalculatingFlag::MONSTER_STATUSES);
+    static constexpr auto flags_swrf = {
         SubWindowRedrawingFlag::OVERHEAD,
         SubWindowRedrawingFlag::DUNGEON,
     };

@@ -349,7 +349,7 @@ static bool update_use_graphics(PlayerType *player_ptr)
 
     use_graphics = false;
     reset_visuals(player_ptr);
-    const auto flags = {
+    static constexpr auto flags = {
         MainWindowRedrawingFlag::WIPE,
         MainWindowRedrawingFlag::BASIC,
         MainWindowRedrawingFlag::EXTRA,
@@ -391,7 +391,7 @@ void do_cmd_save_screen(PlayerType *player_ptr)
 
     use_graphics = true;
     reset_visuals(player_ptr);
-    const auto flags = {
+    static constexpr auto flags = {
         MainWindowRedrawingFlag::WIPE,
         MainWindowRedrawingFlag::BASIC,
         MainWindowRedrawingFlag::EXTRA,

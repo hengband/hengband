@@ -432,7 +432,7 @@ void lite_spot(PlayerType *player_ptr, POSITION y, POSITION x)
         }
 
         term_queue_bigchar(panel_col_of(x), y - panel_row_prt, a, c, ta, tc);
-        const auto flags = {
+        static constexpr auto flags = {
             SubWindowRedrawingFlag::OVERHEAD,
             SubWindowRedrawingFlag::DUNGEON,
         };

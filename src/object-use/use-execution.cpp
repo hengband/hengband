@@ -92,9 +92,9 @@ void ObjectUseEntity::execute()
         msg_print(_("この杖にはもう魔力が残っていない。", "The staff has no charges left."));
         o_ptr->ident |= IDENT_EMPTY;
         auto &rfu = RedrawingFlagsUpdater::get_instance();
-        const auto flags = {
-            StatusRedrawingFlag::COMBINATION,
-            StatusRedrawingFlag::REORDER,
+        static constexpr auto flags = {
+            StatusRecalculatingFlag::COMBINATION,
+            StatusRecalculatingFlag::REORDER,
         };
         rfu.set_flags(flags);
         rfu.set_flag(SubWindowRedrawingFlag::INVENTORY);
@@ -110,7 +110,7 @@ void ObjectUseEntity::execute()
     }
 
     auto &rfu = RedrawingFlagsUpdater::get_instance();
-    using Srf = StatusRedrawingFlag;
+    using Srf = StatusRecalculatingFlag;
     EnumClassFlagGroup<Srf> flags_srf = { Srf::COMBINATION, Srf::REORDER };
     if (rfu.has(Srf::AUTO_DESTRUCTION)) {
         flags_srf.set(Srf::AUTO_DESTRUCTION);
@@ -123,7 +123,7 @@ void ObjectUseEntity::execute()
         gain_exp(this->player_ptr, (lev + (this->player_ptr->lev >> 1)) / this->player_ptr->lev);
     }
 
-    const auto flags_swrf = {
+    static constexpr auto flags_swrf = {
         SubWindowRedrawingFlag::INVENTORY,
         SubWindowRedrawingFlag::EQUIPMENT,
         SubWindowRedrawingFlag::PLAYER,

@@ -396,12 +396,12 @@ bool PlayerClass::lose_balance()
 
     this->set_samurai_stance(SamuraiStanceType::NONE);
     auto &rfu = RedrawingFlagsUpdater::get_instance();
-    const auto flags_srf = {
-        StatusRedrawingFlag::BONUS,
-        StatusRedrawingFlag::MONSTER_STATUSES,
+    static constexpr auto flags_srf = {
+        StatusRecalculatingFlag::BONUS,
+        StatusRecalculatingFlag::MONSTER_STATUSES,
     };
     rfu.set_flags(flags_srf);
-    const auto flags_mwrf = {
+    static constexpr auto flags_mwrf = {
         MainWindowRedrawingFlag::ACTION,
         MainWindowRedrawingFlag::TIMED_EFFECT,
     };

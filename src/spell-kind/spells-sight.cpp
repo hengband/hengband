@@ -253,7 +253,7 @@ void aggravate_monsters(PlayerType *player_ptr, MONSTER_IDX who)
     }
 
     if (player_ptr->riding) {
-        RedrawingFlagsUpdater::get_instance().set_flag(StatusRedrawingFlag::BONUS);
+        RedrawingFlagsUpdater::get_instance().set_flag(StatusRecalculatingFlag::BONUS);
     }
 }
 

@@ -74,14 +74,14 @@ void SpellHex::stop_all_spells()
     }
 
     auto &rfu = RedrawingFlagsUpdater::get_instance();
-    const auto flags_srf = {
-        StatusRedrawingFlag::BONUS,
-        StatusRedrawingFlag::HP,
-        StatusRedrawingFlag::MP,
-        StatusRedrawingFlag::SPELLS,
+    static constexpr auto flags_srf = {
+        StatusRecalculatingFlag::BONUS,
+        StatusRecalculatingFlag::HP,
+        StatusRecalculatingFlag::MP,
+        StatusRecalculatingFlag::SPELLS,
     };
     rfu.set_flags(flags_srf);
-    const auto flags_mwrf = {
+    static constexpr auto flags_mwrf = {
         MainWindowRedrawingFlag::EXTRA,
         MainWindowRedrawingFlag::HP,
         MainWindowRedrawingFlag::MP,
@@ -123,14 +123,14 @@ bool SpellHex::stop_spells_with_selection()
     }
 
     auto &rfu = RedrawingFlagsUpdater::get_instance();
-    const auto flags_srf = {
-        StatusRedrawingFlag::BONUS,
-        StatusRedrawingFlag::HP,
-        StatusRedrawingFlag::MP,
-        StatusRedrawingFlag::SPELLS,
+    static constexpr auto flags_srf = {
+        StatusRecalculatingFlag::BONUS,
+        StatusRecalculatingFlag::HP,
+        StatusRecalculatingFlag::MP,
+        StatusRecalculatingFlag::SPELLS,
     };
     rfu.set_flags(flags_srf);
-    const auto flags_mwrf = {
+    static constexpr auto flags_mwrf = {
         MainWindowRedrawingFlag::EXTRA,
         MainWindowRedrawingFlag::HP,
         MainWindowRedrawingFlag::MP,
@@ -246,19 +246,19 @@ bool SpellHex::process_mana_cost(const bool need_restart)
 
     msg_print(_("詠唱を再開した。", "You restart casting."));
     this->player_ptr->action = ACTION_SPELL;
-    const auto flags_srf = {
-        StatusRedrawingFlag::BONUS,
-        StatusRedrawingFlag::HP,
-        StatusRedrawingFlag::MONSTER_STATUSES,
+    static constexpr auto flags_srf = {
+        StatusRecalculatingFlag::BONUS,
+        StatusRecalculatingFlag::HP,
+        StatusRecalculatingFlag::MONSTER_STATUSES,
     };
     rfu.set_flags(flags_srf);
-    const auto flags_mwrf = {
+    static constexpr auto flags_mwrf = {
         MainWindowRedrawingFlag::MAP,
         MainWindowRedrawingFlag::TIMED_EFFECT,
         MainWindowRedrawingFlag::ACTION,
     };
     rfu.set_flags(flags_mwrf);
-    const auto flags_swrf = {
+    static constexpr auto flags_swrf = {
         SubWindowRedrawingFlag::OVERHEAD,
         SubWindowRedrawingFlag::DUNGEON,
     };

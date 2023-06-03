@@ -425,7 +425,7 @@ void monster_gain_exp(PlayerType *player_ptr, MONSTER_IDX m_idx, MonsterRaceId s
     auto &rfu = RedrawingFlagsUpdater::get_instance();
     if (m_ptr->exp < r_ptr->next_exp) {
         if (m_idx == player_ptr->riding) {
-            rfu.set_flag(StatusRedrawingFlag::BONUS);
+            rfu.set_flag(StatusRecalculatingFlag::BONUS);
         }
 
         return;
@@ -508,6 +508,6 @@ void monster_gain_exp(PlayerType *player_ptr, MONSTER_IDX m_idx, MonsterRaceId s
     lite_spot(player_ptr, m_ptr->fy, m_ptr->fx);
 
     if (m_idx == player_ptr->riding) {
-        rfu.set_flag(StatusRedrawingFlag::BONUS);
+        rfu.set_flag(StatusRecalculatingFlag::BONUS);
     }
 }

@@ -70,7 +70,7 @@ bool inc_stat(PlayerType *player_ptr, int stat)
         player_ptr->stat_max[stat] = value;
     }
 
-    RedrawingFlagsUpdater::get_instance().set_flag(StatusRedrawingFlag::BONUS);
+    RedrawingFlagsUpdater::get_instance().set_flag(StatusRecalculatingFlag::BONUS);
     return true;
 }
 
@@ -179,7 +179,7 @@ bool dec_stat(PlayerType *player_ptr, int stat, int amount, int permanent)
         player_ptr->stat_max[stat] = max;
         auto &rfu = RedrawingFlagsUpdater::get_instance();
         rfu.set_flag(MainWindowRedrawingFlag::ABILITY_SCORE);
-        rfu.set_flag(StatusRedrawingFlag::BONUS);
+        rfu.set_flag(StatusRecalculatingFlag::BONUS);
     }
 
     return res;
@@ -195,7 +195,7 @@ bool res_stat(PlayerType *player_ptr, int stat)
     if (player_ptr->stat_cur[stat] != player_ptr->stat_max[stat]) {
         player_ptr->stat_cur[stat] = player_ptr->stat_max[stat];
         auto &rfu = RedrawingFlagsUpdater::get_instance();
-        rfu.set_flag(StatusRedrawingFlag::BONUS);
+        rfu.set_flag(StatusRecalculatingFlag::BONUS);
         rfu.set_flag(MainWindowRedrawingFlag::ABILITY_SCORE);
         return true;
     }
@@ -317,13 +317,13 @@ bool lose_all_info(PlayerType *player_ptr)
     }
 
     auto &rfu = RedrawingFlagsUpdater::get_instance();
-    const auto flags_srf = {
-        StatusRedrawingFlag::BONUS,
-        StatusRedrawingFlag::COMBINATION,
-        StatusRedrawingFlag::REORDER,
+    static constexpr auto flags_srf = {
+        StatusRecalculatingFlag::BONUS,
+        StatusRecalculatingFlag::COMBINATION,
+        StatusRecalculatingFlag::REORDER,
     };
     rfu.set_flags(flags_srf);
-    const auto flags_swrf = {
+    static constexpr auto flags_swrf = {
         SubWindowRedrawingFlag::INVENTORY,
         SubWindowRedrawingFlag::EQUIPMENT,
         SubWindowRedrawingFlag::PLAYER,

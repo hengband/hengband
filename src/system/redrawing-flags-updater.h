@@ -70,7 +70,7 @@ inline constexpr auto ALL_SUB_WINDOW_FLAGS = {
     SubWindowRedrawingFlag::FOUND_ITEMS,
 };
 
-enum class StatusRedrawingFlag {
+enum class StatusRecalculatingFlag {
     BONUS, /*!< 能力値修正 */
     TORCH, /*!< 光源半径 */
     HP,
@@ -107,27 +107,27 @@ public:
 
     bool has(MainWindowRedrawingFlag flag) const;
     bool has(SubWindowRedrawingFlag flag) const;
-    bool has(StatusRedrawingFlag flag) const;
+    bool has(StatusRecalculatingFlag flag) const;
 
     bool has_any_of(const EnumClassFlagGroup<MainWindowRedrawingFlag> &flags) const;
     bool has_any_of(const EnumClassFlagGroup<SubWindowRedrawingFlag> &flags) const;
-    bool has_any_of(const EnumClassFlagGroup<StatusRedrawingFlag> &flags) const;
+    bool has_any_of(const EnumClassFlagGroup<StatusRecalculatingFlag> &flags) const;
 
     void set_flag(MainWindowRedrawingFlag flag);
     void set_flag(SubWindowRedrawingFlag flag);
-    void set_flag(StatusRedrawingFlag flag);
+    void set_flag(StatusRecalculatingFlag flag);
 
     void set_flags(const EnumClassFlagGroup<MainWindowRedrawingFlag> &flags);
     void set_flags(const EnumClassFlagGroup<SubWindowRedrawingFlag> &flags);
-    void set_flags(const EnumClassFlagGroup<StatusRedrawingFlag> &flags);
+    void set_flags(const EnumClassFlagGroup<StatusRecalculatingFlag> &flags);
 
     void reset_flag(MainWindowRedrawingFlag flag);
     void reset_flag(SubWindowRedrawingFlag flag);
-    void reset_flag(StatusRedrawingFlag flag);
+    void reset_flag(StatusRecalculatingFlag flag);
 
     void reset_flags(const EnumClassFlagGroup<MainWindowRedrawingFlag> &flags);
     void reset_flags(const EnumClassFlagGroup<SubWindowRedrawingFlag> &flags);
-    void reset_flags(const EnumClassFlagGroup<StatusRedrawingFlag> &flags);
+    void reset_flags(const EnumClassFlagGroup<StatusRecalculatingFlag> &flags);
 
     void fill_up_sub_flags();
     EnumClassFlagGroup<SubWindowRedrawingFlag> get_sub_intersection(const EnumClassFlagGroup<SubWindowRedrawingFlag> &flags);
@@ -139,5 +139,5 @@ private:
 
     EnumClassFlagGroup<MainWindowRedrawingFlag> main_window_flags{};
     EnumClassFlagGroup<SubWindowRedrawingFlag> sub_window_flags{};
-    EnumClassFlagGroup<StatusRedrawingFlag> status_flags{};
+    EnumClassFlagGroup<StatusRecalculatingFlag> status_flags{};
 };

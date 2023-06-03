@@ -160,7 +160,7 @@ bool set_acceleration(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
     if (disturb_state) {
         disturb(player_ptr, false, false);
     }
-    RedrawingFlagsUpdater::get_instance().set_flag(StatusRedrawingFlag::BONUS);
+    RedrawingFlagsUpdater::get_instance().set_flag(StatusRecalculatingFlag::BONUS);
     handle_stuff(player_ptr);
     return true;
 }
@@ -213,7 +213,7 @@ bool set_shield(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
         disturb(player_ptr, false, false);
     }
 
-    rfu.set_flag(StatusRedrawingFlag::BONUS);
+    rfu.set_flag(StatusRecalculatingFlag::BONUS);
     handle_stuff(player_ptr);
     return true;
 }
@@ -261,7 +261,7 @@ bool set_magicdef(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
         disturb(player_ptr, false, false);
     }
 
-    rfu.set_flag(StatusRedrawingFlag::BONUS);
+    rfu.set_flag(StatusRecalculatingFlag::BONUS);
     handle_stuff(player_ptr);
     return true;
 }
@@ -309,7 +309,7 @@ bool set_blessed(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
         disturb(player_ptr, false, false);
     }
 
-    rfu.set_flag(StatusRedrawingFlag::BONUS);
+    rfu.set_flag(StatusRecalculatingFlag::BONUS);
     handle_stuff(player_ptr);
     return true;
 }
@@ -357,9 +357,9 @@ bool set_hero(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
         disturb(player_ptr, false, false);
     }
 
-    const auto flags = {
-        StatusRedrawingFlag::BONUS,
-        StatusRedrawingFlag::HP,
+    static constexpr auto flags = {
+        StatusRecalculatingFlag::BONUS,
+        StatusRecalculatingFlag::HP,
     };
     RedrawingFlagsUpdater::get_instance().set_flags(flags);
     handle_stuff(player_ptr);
@@ -417,14 +417,14 @@ bool set_mimic(PlayerType *player_ptr, TIME_EFFECT v, MimicKindType mimic_race_i
     }
 
     auto &rfu = RedrawingFlagsUpdater::get_instance();
-    const auto flags_mwrf = {
+    static constexpr auto flags_mwrf = {
         MainWindowRedrawingFlag::BASIC,
         MainWindowRedrawingFlag::TIMED_EFFECT,
     };
     rfu.set_flags(flags_mwrf);
-    const auto flags_srf = {
-        StatusRedrawingFlag::BONUS,
-        StatusRedrawingFlag::HP,
+    static constexpr auto flags_srf = {
+        StatusRecalculatingFlag::BONUS,
+        StatusRecalculatingFlag::HP,
     };
     rfu.set_flags(flags_srf);
     handle_stuff(player_ptr);
@@ -479,9 +479,9 @@ bool set_shero(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
         disturb(player_ptr, false, false);
     }
 
-    const auto flags = {
-        StatusRedrawingFlag::BONUS,
-        StatusRedrawingFlag::HP,
+    static constexpr auto flags = {
+        StatusRecalculatingFlag::BONUS,
+        StatusRecalculatingFlag::HP,
     };
     RedrawingFlagsUpdater::get_instance().set_flags(flags);
     handle_stuff(player_ptr);
@@ -505,7 +505,7 @@ bool set_wraith_form(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
     }
 
     auto &rfu = RedrawingFlagsUpdater::get_instance();
-    const auto flags_swrf = {
+    static constexpr auto flags_swrf = {
         SubWindowRedrawingFlag::OVERHEAD,
         SubWindowRedrawingFlag::DUNGEON,
     };
@@ -522,7 +522,7 @@ bool set_wraith_form(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
             chg_virtue(player_ptr, Virtue::SACRIFICE, -2);
             chg_virtue(player_ptr, Virtue::VALOUR, -5);
             rfu.set_flag(MainWindowRedrawingFlag::MAP);
-            rfu.set_flag(StatusRedrawingFlag::MONSTER_STATUSES);
+            rfu.set_flag(StatusRecalculatingFlag::MONSTER_STATUSES);
             rfu.set_flags(flags_swrf);
         }
     } else {
@@ -530,7 +530,7 @@ bool set_wraith_form(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
             msg_print(_("不透明になった感じがする。", "You feel opaque."));
             notice = true;
             rfu.set_flag(MainWindowRedrawingFlag::MAP);
-            rfu.set_flag(StatusRedrawingFlag::MONSTER_STATUSES);
+            rfu.set_flag(StatusRecalculatingFlag::MONSTER_STATUSES);
             rfu.set_flags(flags_swrf);
         }
     }
@@ -545,7 +545,7 @@ bool set_wraith_form(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
         disturb(player_ptr, false, false);
     }
 
-    rfu.set_flag(StatusRedrawingFlag::BONUS);
+    rfu.set_flag(StatusRecalculatingFlag::BONUS);
     handle_stuff(player_ptr);
     return true;
 }
@@ -599,9 +599,9 @@ bool set_tsuyoshi(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
         disturb(player_ptr, false, false);
     }
 
-    const auto flags = {
-        StatusRedrawingFlag::BONUS,
-        StatusRedrawingFlag::HP,
+    static constexpr auto flags = {
+        StatusRecalculatingFlag::BONUS,
+        StatusRecalculatingFlag::HP,
     };
     rfu.set_flags(flags);
     handle_stuff(player_ptr);

@@ -215,8 +215,8 @@ bool time_walk(PlayerType *player_ptr)
     player_ptr->energy_need -= 1000 + (100 + player_ptr->csp - 50) * TURNS_PER_TICK / 10;
     auto &rfu = RedrawingFlagsUpdater::get_instance();
     rfu.set_flag(MainWindowRedrawingFlag::MAP);
-    rfu.set_flag(StatusRedrawingFlag::MONSTER_STATUSES);
-    const auto flags = {
+    rfu.set_flag(StatusRecalculatingFlag::MONSTER_STATUSES);
+    static constexpr auto flags = {
         SubWindowRedrawingFlag::OVERHEAD,
         SubWindowRedrawingFlag::DUNGEON,
     };
@@ -259,7 +259,7 @@ void roll_hitdice(PlayerType *player_ptr, spell_operation options)
 
     auto percent = (player_ptr->player_hp[PY_MAX_LEVEL - 1] * 200) / (2 * player_ptr->hitdie + ((PY_MAX_LEVEL - 1 + 3) * (player_ptr->hitdie + 1)));
     auto &rfu = RedrawingFlagsUpdater::get_instance();
-    rfu.set_flag(StatusRedrawingFlag::HP);
+    rfu.set_flag(StatusRecalculatingFlag::HP);
     rfu.set_flag(MainWindowRedrawingFlag::HP);
     rfu.set_flag(SubWindowRedrawingFlag::PLAYER);
     if (!(options & SPOP_NO_UPDATE)) {
@@ -499,7 +499,7 @@ bool restore_mana(PlayerType *player_ptr, bool magic_eater)
     player_ptr->csp_frac = 0;
     msg_print(_("頭がハッキリとした。", "You feel your head clear."));
     rfu.set_flag(MainWindowRedrawingFlag::MP);
-    const auto flags_swrf = {
+    static constexpr auto flags_swrf = {
         SubWindowRedrawingFlag::SPELL,
         SubWindowRedrawingFlag::PLAYER,
     };
@@ -691,5 +691,5 @@ void status_shuffle(PlayerType *player_ptr)
         }
     }
 
-    RedrawingFlagsUpdater::get_instance().set_flag(StatusRedrawingFlag::BONUS);
+    RedrawingFlagsUpdater::get_instance().set_flag(StatusRecalculatingFlag::BONUS);
 }

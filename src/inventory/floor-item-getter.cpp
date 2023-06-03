@@ -306,7 +306,7 @@ bool get_item_floor(PlayerType *player_ptr, COMMAND_CODE *cp, concptr pmt, concp
     }
 
     auto &rfu = RedrawingFlagsUpdater::get_instance();
-    const auto flags = {
+    static constexpr auto flags = {
         SubWindowRedrawingFlag::INVENTORY,
         SubWindowRedrawingFlag::EQUIPMENT,
     };

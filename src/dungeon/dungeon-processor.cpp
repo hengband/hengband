@@ -47,7 +47,7 @@ static void redraw_character_xtra(PlayerType *player_ptr)
 {
     w_ptr->character_xtra = true;
     auto &rfu = RedrawingFlagsUpdater::get_instance();
-    const auto flags_swrf = {
+    static constexpr auto flags_swrf = {
         SubWindowRedrawingFlag::INVENTORY,
         SubWindowRedrawingFlag::EQUIPMENT,
         SubWindowRedrawingFlag::SPELL,
@@ -57,7 +57,7 @@ static void redraw_character_xtra(PlayerType *player_ptr)
         SubWindowRedrawingFlag::DUNGEON,
     };
     rfu.set_flags(flags_swrf);
-    const auto flags_mwrf = {
+    static constexpr auto flags_mwrf = {
         MainWindowRedrawingFlag::WIPE,
         MainWindowRedrawingFlag::BASIC,
         MainWindowRedrawingFlag::EXTRA,
@@ -66,17 +66,17 @@ static void redraw_character_xtra(PlayerType *player_ptr)
     };
     rfu.set_flags(flags_mwrf);
     auto flags_srf = {
-        StatusRedrawingFlag::BONUS,
-        StatusRedrawingFlag::HP,
-        StatusRedrawingFlag::MP,
-        StatusRedrawingFlag::SPELLS,
-        StatusRedrawingFlag::VIEW,
-        StatusRedrawingFlag::LITE,
-        StatusRedrawingFlag::MONSTER_LITE,
-        StatusRedrawingFlag::TORCH,
-        StatusRedrawingFlag::MONSTER_STATUSES,
-        StatusRedrawingFlag::DISTANCE,
-        StatusRedrawingFlag::FLOW,
+        StatusRecalculatingFlag::BONUS,
+        StatusRecalculatingFlag::HP,
+        StatusRecalculatingFlag::MP,
+        StatusRecalculatingFlag::SPELLS,
+        StatusRecalculatingFlag::VIEW,
+        StatusRecalculatingFlag::LITE,
+        StatusRecalculatingFlag::MONSTER_LITE,
+        StatusRecalculatingFlag::TORCH,
+        StatusRecalculatingFlag::MONSTER_STATUSES,
+        StatusRecalculatingFlag::DISTANCE,
+        StatusRecalculatingFlag::FLOW,
     };
     rfu.set_flags(flags_srf);
     handle_stuff(player_ptr);
@@ -141,12 +141,12 @@ void process_dungeon(PlayerType *player_ptr, bool load_game)
 
     redraw_character_xtra(player_ptr);
     auto flags_srf = {
-        StatusRedrawingFlag::BONUS,
-        StatusRedrawingFlag::HP,
-        StatusRedrawingFlag::MP,
-        StatusRedrawingFlag::SPELLS,
-        StatusRedrawingFlag::COMBINATION,
-        StatusRedrawingFlag::REORDER,
+        StatusRecalculatingFlag::BONUS,
+        StatusRecalculatingFlag::HP,
+        StatusRecalculatingFlag::MP,
+        StatusRecalculatingFlag::SPELLS,
+        StatusRecalculatingFlag::COMBINATION,
+        StatusRecalculatingFlag::REORDER,
     };
     RedrawingFlagsUpdater::get_instance().set_flags(flags_srf);
     handle_stuff(player_ptr);

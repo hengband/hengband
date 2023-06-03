@@ -244,7 +244,7 @@ void carry(PlayerType *player_ptr, bool pickup)
 {
     verify_panel(player_ptr);
     auto &rfu = RedrawingFlagsUpdater::get_instance();
-    rfu.set_flag(StatusRedrawingFlag::MONSTER_STATUSES);
+    rfu.set_flag(StatusRecalculatingFlag::MONSTER_STATUSES);
     rfu.set_flag(MainWindowRedrawingFlag::MAP);
     rfu.set_flag(SubWindowRedrawingFlag::OVERHEAD);
     handle_stuff(player_ptr);

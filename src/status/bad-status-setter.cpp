@@ -92,17 +92,17 @@ bool BadStatusSetter::set_blindness(const TIME_EFFECT tmp_v)
         disturb(this->player_ptr, false, false);
     }
 
-    const auto flags_srf = {
-        StatusRedrawingFlag::UN_VIEW,
-        StatusRedrawingFlag::UN_LITE,
-        StatusRedrawingFlag::VIEW,
-        StatusRedrawingFlag::LITE,
-        StatusRedrawingFlag::MONSTER_STATUSES,
-        StatusRedrawingFlag::MONSTER_LITE,
+    static constexpr auto flags_srf = {
+        StatusRecalculatingFlag::UN_VIEW,
+        StatusRecalculatingFlag::UN_LITE,
+        StatusRecalculatingFlag::VIEW,
+        StatusRecalculatingFlag::LITE,
+        StatusRecalculatingFlag::MONSTER_STATUSES,
+        StatusRecalculatingFlag::MONSTER_LITE,
     };
     rfu.set_flags(flags_srf);
     rfu.set_flag(MainWindowRedrawingFlag::MAP);
-    const auto flags_swrf = {
+    static constexpr auto flags_swrf = {
         SubWindowRedrawingFlag::OVERHEAD,
         SubWindowRedrawingFlag::DUNGEON,
     };
@@ -144,7 +144,7 @@ bool BadStatusSetter::set_confusion(const TIME_EFFECT tmp_v)
             if (this->player_ptr->action == ACTION_MONK_STANCE) {
                 msg_print(_("構えがとけた。", "You lose your stance."));
                 PlayerClass(player_ptr).set_monk_stance(MonkStanceType::NONE);
-                rfu.set_flag(StatusRedrawingFlag::BONUS);
+                rfu.set_flag(StatusRecalculatingFlag::BONUS);
                 rfu.set_flag(MainWindowRedrawingFlag::ACTION);
                 this->player_ptr->action = ACTION_NONE;
             } else if (this->player_ptr->action == ACTION_SAMURAI_STANCE) {
@@ -388,14 +388,14 @@ bool BadStatusSetter::hallucination(const TIME_EFFECT tmp_v)
         disturb(this->player_ptr, false, true);
     }
 
-    const auto flags_mwrf = {
+    static constexpr auto flags_mwrf = {
         MainWindowRedrawingFlag::MAP,
         MainWindowRedrawingFlag::HEALTH,
         MainWindowRedrawingFlag::UHEALTH,
     };
     rfu.set_flags(flags_mwrf);
-    rfu.set_flag(StatusRedrawingFlag::MONSTER_STATUSES);
-    const auto flags_swrf = {
+    rfu.set_flag(StatusRecalculatingFlag::MONSTER_STATUSES);
+    static constexpr auto flags_swrf = {
         SubWindowRedrawingFlag::OVERHEAD,
         SubWindowRedrawingFlag::DUNGEON,
     };
@@ -450,7 +450,7 @@ bool BadStatusSetter::set_deceleration(const TIME_EFFECT tmp_v, bool do_dec)
         disturb(this->player_ptr, false, false);
     }
 
-    RedrawingFlagsUpdater::get_instance().set_flag(StatusRedrawingFlag::BONUS);
+    RedrawingFlagsUpdater::get_instance().set_flag(StatusRecalculatingFlag::BONUS);
     handle_stuff(this->player_ptr);
     return true;
 }
@@ -489,7 +489,7 @@ bool BadStatusSetter::set_stun(const TIME_EFFECT tmp_v)
     }
 
     auto &rfu = RedrawingFlagsUpdater::get_instance();
-    rfu.set_flag(StatusRedrawingFlag::BONUS);
+    rfu.set_flag(StatusRecalculatingFlag::BONUS);
     rfu.set_flag(MainWindowRedrawingFlag::STUN);
     handle_stuff(this->player_ptr);
     return true;
@@ -529,7 +529,7 @@ bool BadStatusSetter::set_cut(const TIME_EFFECT tmp_v)
     }
 
     auto &rfu = RedrawingFlagsUpdater::get_instance();
-    rfu.set_flag(StatusRedrawingFlag::BONUS);
+    rfu.set_flag(StatusRecalculatingFlag::BONUS);
     rfu.set_flag(MainWindowRedrawingFlag::CUT);
     handle_stuff(this->player_ptr);
     return true;

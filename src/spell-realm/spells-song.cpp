@@ -59,19 +59,19 @@ void check_music(PlayerType *player_ptr)
         set_interrupting_song_effect(player_ptr, MUSIC_NONE);
         msg_print(_("歌を再開した。", "You resume singing."));
         player_ptr->action = ACTION_SING;
-        const auto flags_srf = {
-            StatusRedrawingFlag::BONUS,
-            StatusRedrawingFlag::HP,
-            StatusRedrawingFlag::MONSTER_STATUSES,
+        static constexpr auto flags_srf = {
+            StatusRecalculatingFlag::BONUS,
+            StatusRecalculatingFlag::HP,
+            StatusRecalculatingFlag::MONSTER_STATUSES,
         };
         rfu.set_flags(flags_srf);
-        const auto flags_mwrf = {
+        static constexpr auto flags_mwrf = {
             MainWindowRedrawingFlag::MAP,
             MainWindowRedrawingFlag::TIMED_EFFECT,
             MainWindowRedrawingFlag::ACTION,
         };
         rfu.set_flags(flags_mwrf);
-        const auto flags_swrf = {
+        static constexpr auto flags_swrf = {
             SubWindowRedrawingFlag::OVERHEAD,
             SubWindowRedrawingFlag::DUNGEON,
         };
@@ -125,7 +125,7 @@ bool set_tim_stealth(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
         disturb(player_ptr, false, false);
     }
 
-    rfu.set_flag(StatusRedrawingFlag::BONUS);
+    rfu.set_flag(StatusRecalculatingFlag::BONUS);
     handle_stuff(player_ptr);
     return true;
 }
@@ -156,7 +156,7 @@ void stop_singing(PlayerType *player_ptr)
     set_singing_song_effect(player_ptr, MUSIC_NONE);
     set_singing_song_id(player_ptr, 0);
     auto &rfu = RedrawingFlagsUpdater::get_instance();
-    rfu.set_flag(StatusRedrawingFlag::BONUS);
+    rfu.set_flag(StatusRecalculatingFlag::BONUS);
     rfu.set_flag(MainWindowRedrawingFlag::TIMED_EFFECT);
 }
 

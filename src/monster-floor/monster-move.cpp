@@ -210,8 +210,8 @@ static bool process_door(PlayerType *player_ptr, turn_flags *turn_flags_ptr, Mon
         cave_alter_feat(player_ptr, ny, nx, TerrainCharacteristics::BASH);
         if (!m_ptr->is_valid()) {
             auto &rfu = RedrawingFlagsUpdater::get_instance();
-            rfu.set_flag(StatusRedrawingFlag::FLOW);
-            const auto flags = {
+            rfu.set_flag(StatusRecalculatingFlag::FLOW);
+            static constexpr auto flags = {
                 SubWindowRedrawingFlag::OVERHEAD,
                 SubWindowRedrawingFlag::DUNGEON,
             };
@@ -350,8 +350,8 @@ static bool process_post_dig_wall(PlayerType *player_ptr, turn_flags *turn_flags
 
     if (!m_ptr->is_valid()) {
         auto &rfu = RedrawingFlagsUpdater::get_instance();
-        rfu.set_flag(StatusRedrawingFlag::FLOW);
-        const auto flags = {
+        rfu.set_flag(StatusRecalculatingFlag::FLOW);
+        static constexpr auto flags = {
             SubWindowRedrawingFlag::OVERHEAD,
             SubWindowRedrawingFlag::DUNGEON,
         };

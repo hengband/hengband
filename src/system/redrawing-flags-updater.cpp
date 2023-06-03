@@ -33,7 +33,7 @@ bool RedrawingFlagsUpdater::has(SubWindowRedrawingFlag flag) const
     return this->sub_window_flags.has(flag);
 }
 
-bool RedrawingFlagsUpdater::has(StatusRedrawingFlag flag) const
+bool RedrawingFlagsUpdater::has(StatusRecalculatingFlag flag) const
 {
     return this->status_flags.has(flag);
 }
@@ -48,7 +48,7 @@ bool RedrawingFlagsUpdater::has_any_of(const EnumClassFlagGroup<SubWindowRedrawi
     return this->sub_window_flags.has_any_of(flags);
 }
 
-bool RedrawingFlagsUpdater::has_any_of(const EnumClassFlagGroup<StatusRedrawingFlag> &flags) const
+bool RedrawingFlagsUpdater::has_any_of(const EnumClassFlagGroup<StatusRecalculatingFlag> &flags) const
 {
     return this->status_flags.has_any_of(flags);
 }
@@ -63,7 +63,7 @@ void RedrawingFlagsUpdater::set_flag(SubWindowRedrawingFlag flag)
     this->sub_window_flags.set(flag);
 }
 
-void RedrawingFlagsUpdater::set_flag(StatusRedrawingFlag flag)
+void RedrawingFlagsUpdater::set_flag(StatusRecalculatingFlag flag)
 {
     this->status_flags.set(flag);
 }
@@ -78,7 +78,7 @@ void RedrawingFlagsUpdater::set_flags(const EnumClassFlagGroup<SubWindowRedrawin
     this->sub_window_flags.set(flags);
 }
 
-void RedrawingFlagsUpdater::set_flags(const EnumClassFlagGroup<StatusRedrawingFlag> &flags)
+void RedrawingFlagsUpdater::set_flags(const EnumClassFlagGroup<StatusRecalculatingFlag> &flags)
 {
     this->status_flags.set(flags);
 }
@@ -93,7 +93,7 @@ void RedrawingFlagsUpdater::reset_flag(SubWindowRedrawingFlag flag)
     this->sub_window_flags.reset(flag);
 }
 
-void RedrawingFlagsUpdater::reset_flag(StatusRedrawingFlag flag)
+void RedrawingFlagsUpdater::reset_flag(StatusRecalculatingFlag flag)
 {
     this->status_flags.reset(flag);
 }
@@ -108,7 +108,7 @@ void RedrawingFlagsUpdater::reset_flags(const EnumClassFlagGroup<SubWindowRedraw
     this->sub_window_flags.reset(flags);
 }
 
-void RedrawingFlagsUpdater::reset_flags(const EnumClassFlagGroup<StatusRedrawingFlag> &flags)
+void RedrawingFlagsUpdater::reset_flags(const EnumClassFlagGroup<StatusRecalculatingFlag> &flags)
 {
     this->status_flags.reset(flags);
 }

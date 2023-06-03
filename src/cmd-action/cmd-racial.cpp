@@ -508,7 +508,7 @@ void do_cmd_racial_power(PlayerType *player_ptr)
         MainWindowRedrawingFlag::MP,
     };
     rfu.set_flags(flags_mwrf);
-    const auto flags_swrf = {
+    static constexpr auto flags_swrf = {
         SubWindowRedrawingFlag::PLAYER,
         SubWindowRedrawingFlag::SPELL,
     };

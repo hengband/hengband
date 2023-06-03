@@ -121,8 +121,8 @@ static bool acid_minus_ac(PlayerType *player_ptr)
     msg_format(_("%sが酸で腐食した！", "Your %s is corroded!"), item_name.data());
     o_ptr->to_a--;
     auto &rfu = RedrawingFlagsUpdater::get_instance();
-    rfu.set_flag(StatusRedrawingFlag::BONUS);
-    const auto flags_swrf = {
+    rfu.set_flag(StatusRecalculatingFlag::BONUS);
+    static constexpr auto flags_swrf = {
         SubWindowRedrawingFlag::EQUIPMENT,
         SubWindowRedrawingFlag::PLAYER,
     };

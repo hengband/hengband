@@ -96,9 +96,9 @@ void ObjectZapWandEntity::execute(INVENTORY_IDX item)
 
         msg_print(_("この魔法棒にはもう魔力が残っていない。", "The wand has no charges left."));
         o_ptr->ident |= IDENT_EMPTY;
-        const auto flags = {
-            StatusRedrawingFlag::COMBINATION,
-            StatusRedrawingFlag::REORDER,
+        static constexpr auto flags = {
+            StatusRecalculatingFlag::COMBINATION,
+            StatusRecalculatingFlag::REORDER,
         };
         rfu.set_flags(flags);
         rfu.set_flag(SubWindowRedrawingFlag::INVENTORY);
@@ -107,7 +107,7 @@ void ObjectZapWandEntity::execute(INVENTORY_IDX item)
 
     sound(SOUND_ZAP);
     auto ident = wand_effect(this->player_ptr, sval.value(), dir, false, false);
-    using Srf = StatusRedrawingFlag;
+    using Srf = StatusRecalculatingFlag;
     EnumClassFlagGroup<Srf> flags_srf = { Srf::COMBINATION, Srf::REORDER };
     if (rfu.has(Srf::AUTO_DESTRUCTION)) {
         flags_srf.set(Srf::AUTO_DESTRUCTION);
@@ -126,7 +126,7 @@ void ObjectZapWandEntity::execute(INVENTORY_IDX item)
         gain_exp(this->player_ptr, (lev + (this->player_ptr->lev >> 1)) / this->player_ptr->lev);
     }
 
-    const auto flags_swrf = {
+    static constexpr auto flags_swrf = {
         SubWindowRedrawingFlag::INVENTORY,
         SubWindowRedrawingFlag::EQUIPMENT,
         SubWindowRedrawingFlag::PLAYER,

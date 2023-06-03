@@ -341,7 +341,7 @@ void update_mon_lite(PlayerType *player_ptr)
         floor_ptr->grid_array[y][x].info &= ~(CAVE_TEMP | CAVE_XTRA);
     }
 
-    RedrawingFlagsUpdater::get_instance().set_flag(StatusRedrawingFlag::DELAY_VISIBILITY);
+    RedrawingFlagsUpdater::get_instance().set_flag(StatusRecalculatingFlag::DELAY_VISIBILITY);
     player_ptr->monlite = (floor_ptr->grid_array[player_ptr->y][player_ptr->x].info & CAVE_MNLT) != 0;
     auto ninja_data = PlayerClass(player_ptr).get_specific_data<ninja_data_type>();
     if (!ninja_data || !ninja_data->s_stealth) {

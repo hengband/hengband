@@ -439,9 +439,9 @@ static bool display_auto_roller_result(PlayerType *player_ptr, bool prev, char *
 {
     BIT_FLAGS mode = 0;
     auto &rfu = RedrawingFlagsUpdater::get_instance();
-    const auto flags = {
-        StatusRedrawingFlag::BONUS,
-        StatusRedrawingFlag::HP,
+    static constexpr auto flags = {
+        StatusRecalculatingFlag::BONUS,
+        StatusRecalculatingFlag::HP,
     };
     while (true) {
         rfu.set_flags(flags);

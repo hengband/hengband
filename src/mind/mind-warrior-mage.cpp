@@ -10,7 +10,7 @@ bool comvert_hp_to_mp(PlayerType *player_ptr)
     constexpr auto mes = _("ＨＰからＭＰへの無謀な変換", "thoughtless conversion from HP to SP");
     auto gain_sp = take_hit(player_ptr, DAMAGE_USELIFE, player_ptr->lev, mes) / 5;
     auto &rfu = RedrawingFlagsUpdater::get_instance();
-    const auto flags = {
+    static constexpr auto flags = {
         MainWindowRedrawingFlag::HP,
         MainWindowRedrawingFlag::MP,
     };
@@ -39,7 +39,7 @@ bool comvert_mp_to_hp(PlayerType *player_ptr)
         msg_print(_("変換に失敗した。", "You failed to convert."));
     }
 
-    const auto flags = {
+    static constexpr auto flags = {
         MainWindowRedrawingFlag::HP,
         MainWindowRedrawingFlag::MP,
     };

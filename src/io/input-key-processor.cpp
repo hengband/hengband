@@ -189,7 +189,7 @@ void process_command(PlayerType *player_ptr)
         }
 
         auto &rfu = RedrawingFlagsUpdater::get_instance();
-        rfu.set_flag(StatusRedrawingFlag::MONSTER_STATUSES);
+        rfu.set_flag(StatusRecalculatingFlag::MONSTER_STATUSES);
         rfu.set_flag(MainWindowRedrawingFlag::TITLE);
         break;
     }

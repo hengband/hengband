@@ -61,9 +61,9 @@ void ObjectQuaffEntity::execute(INVENTORY_IDX item)
         (void)potion_smash_effect(this->player_ptr, 0, this->player_ptr->y, this->player_ptr->x, o_ref.bi_id);
     }
 
-    const auto flags_srf = {
-        StatusRedrawingFlag::COMBINATION,
-        StatusRedrawingFlag::REORDER,
+    static constexpr auto flags_srf = {
+        StatusRecalculatingFlag::COMBINATION,
+        StatusRecalculatingFlag::REORDER,
     };
     auto &rfu = RedrawingFlagsUpdater::get_instance();
     rfu.set_flags(flags_srf);
@@ -74,7 +74,7 @@ void ObjectQuaffEntity::execute(INVENTORY_IDX item)
         gain_exp(this->player_ptr, (o_ref.get_baseitem().level + (this->player_ptr->lev >> 1)) / this->player_ptr->lev);
     }
 
-    const auto flags = {
+    static constexpr auto flags = {
         SubWindowRedrawingFlag::INVENTORY,
         SubWindowRedrawingFlag::EQUIPMENT,
         SubWindowRedrawingFlag::PLAYER,

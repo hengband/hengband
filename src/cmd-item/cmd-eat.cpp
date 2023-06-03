@@ -203,7 +203,7 @@ static bool exe_eat_charge_of_magic_device(PlayerType *player_ptr, ItemEntity *o
         floor_item_charges(player_ptr->current_floor_ptr, 0 - inventory);
     }
 
-    const auto flags = {
+    static constexpr auto flags = {
         SubWindowRedrawingFlag::INVENTORY,
         SubWindowRedrawingFlag::EQUIPMENT,
     };
@@ -245,7 +245,7 @@ void exe_eat_food(PlayerType *player_ptr, INVENTORY_IDX item)
      * the pack.
      */
     auto &rfu = RedrawingFlagsUpdater::get_instance();
-    using Srf = StatusRedrawingFlag;
+    using Srf = StatusRecalculatingFlag;
     EnumClassFlagGroup<Srf> flags_srf = { Srf::COMBINATION, Srf::REORDER };
     if (rfu.has(Srf::AUTO_DESTRUCTION)) {
         flags_srf.set(Srf::AUTO_DESTRUCTION);
@@ -270,7 +270,7 @@ void exe_eat_food(PlayerType *player_ptr, INVENTORY_IDX item)
         gain_exp(player_ptr, (lev + (player_ptr->lev >> 1)) / player_ptr->lev);
     }
 
-    const auto flags_swrf = {
+    static constexpr auto flags_swrf = {
         SubWindowRedrawingFlag::INVENTORY,
         SubWindowRedrawingFlag::EQUIPMENT,
         SubWindowRedrawingFlag::PLAYER,

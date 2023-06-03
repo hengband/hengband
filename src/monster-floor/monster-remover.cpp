@@ -100,7 +100,7 @@ void delete_monster_idx(PlayerType *player_ptr, MONSTER_IDX i)
     floor_ptr->m_cnt--;
     lite_spot(player_ptr, y, x);
     if (r_ptr->brightness_flags.has_any_of(ld_mask)) {
-        RedrawingFlagsUpdater::get_instance().set_flag(StatusRedrawingFlag::MONSTER_LITE);
+        RedrawingFlagsUpdater::get_instance().set_flag(StatusRecalculatingFlag::MONSTER_LITE);
     }
 }
 

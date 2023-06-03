@@ -157,7 +157,7 @@ bool fetch_monster(PlayerType *player_ptr)
     lite_spot(player_ptr, target_row, target_col);
     lite_spot(player_ptr, ty, tx);
     if (monraces_info[m_ptr->r_idx].brightness_flags.has_any_of(ld_mask)) {
-        RedrawingFlagsUpdater::get_instance().set_flag(StatusRedrawingFlag::MONSTER_LITE);
+        RedrawingFlagsUpdater::get_instance().set_flag(StatusRecalculatingFlag::MONSTER_LITE);
     }
 
     if (m_ptr->ml) {

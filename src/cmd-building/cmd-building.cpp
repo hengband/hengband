@@ -409,22 +409,22 @@ void do_cmd_building(PlayerType *player_ptr)
     term_clear();
 
     auto &rfu = RedrawingFlagsUpdater::get_instance();
-    const auto flags_srf = {
-        StatusRedrawingFlag::VIEW,
-        StatusRedrawingFlag::MONSTER_STATUSES,
-        StatusRedrawingFlag::BONUS,
-        StatusRedrawingFlag::LITE,
-        StatusRedrawingFlag::MONSTER_LITE,
+    static constexpr auto flags_srf = {
+        StatusRecalculatingFlag::VIEW,
+        StatusRecalculatingFlag::MONSTER_STATUSES,
+        StatusRecalculatingFlag::BONUS,
+        StatusRecalculatingFlag::LITE,
+        StatusRecalculatingFlag::MONSTER_LITE,
     };
     rfu.set_flags(flags_srf);
-    const auto flags_mwrf = {
+    static constexpr auto flags_mwrf = {
         MainWindowRedrawingFlag::BASIC,
         MainWindowRedrawingFlag::EXTRA,
         MainWindowRedrawingFlag::EQUIPPY,
         MainWindowRedrawingFlag::MAP,
     };
     rfu.set_flags(flags_mwrf);
-    const auto flags_swrf = {
+    static constexpr auto flags_swrf = {
         SubWindowRedrawingFlag::OVERHEAD,
         SubWindowRedrawingFlag::DUNGEON,
     };

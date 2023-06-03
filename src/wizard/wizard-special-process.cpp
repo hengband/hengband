@@ -519,7 +519,7 @@ void wiz_create_feature(PlayerType *player_ptr)
 
     note_spot(player_ptr, y, x);
     lite_spot(player_ptr, y, x);
-    RedrawingFlagsUpdater::get_instance().set_flag(StatusRedrawingFlag::FLOW);
+    RedrawingFlagsUpdater::get_instance().set_flag(StatusRecalculatingFlag::FLOW);
 }
 
 /*!
@@ -676,15 +676,15 @@ void wiz_learn_items_all(PlayerType *player_ptr)
 static void change_birth_flags()
 {
     auto &rfu = RedrawingFlagsUpdater::get_instance();
-    const auto flags_srf = {
-        StatusRedrawingFlag::BONUS,
-        StatusRedrawingFlag::HP,
-        StatusRedrawingFlag::MP,
-        StatusRedrawingFlag::SPELLS,
+    static constexpr auto flags_srf = {
+        StatusRecalculatingFlag::BONUS,
+        StatusRecalculatingFlag::HP,
+        StatusRecalculatingFlag::MP,
+        StatusRecalculatingFlag::SPELLS,
     };
     rfu.set_flag(SubWindowRedrawingFlag::PLAYER);
     rfu.set_flags(flags_srf);
-    const auto flags_mwrf = {
+    static constexpr auto flags_mwrf = {
         MainWindowRedrawingFlag::BASIC,
         MainWindowRedrawingFlag::HP,
         MainWindowRedrawingFlag::MP,

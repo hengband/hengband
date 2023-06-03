@@ -46,13 +46,13 @@
 static void update_sun_light(PlayerType *player_ptr)
 {
     auto &rfu = RedrawingFlagsUpdater::get_instance();
-    const auto flags_srf = {
-        StatusRedrawingFlag::MONSTER_STATUSES,
-        StatusRedrawingFlag::MONSTER_LITE,
+    static constexpr auto flags_srf = {
+        StatusRecalculatingFlag::MONSTER_STATUSES,
+        StatusRecalculatingFlag::MONSTER_LITE,
     };
     rfu.set_flags(flags_srf);
     rfu.set_flag(MainWindowRedrawingFlag::MAP);
-    const auto flags = {
+    static constexpr auto flags = {
         SubWindowRedrawingFlag::OVERHEAD,
         SubWindowRedrawingFlag::DUNGEON,
     };
@@ -353,10 +353,10 @@ void glow_deep_lava_and_bldg(PlayerType *player_ptr)
     }
 
     auto &rfu = RedrawingFlagsUpdater::get_instance();
-    const auto flags_srf = {
-        StatusRedrawingFlag::VIEW,
-        StatusRedrawingFlag::LITE,
-        StatusRedrawingFlag::MONSTER_LITE,
+    static constexpr auto flags_srf = {
+        StatusRecalculatingFlag::VIEW,
+        StatusRecalculatingFlag::LITE,
+        StatusRecalculatingFlag::MONSTER_LITE,
     };
     rfu.set_flags(flags_srf);
     rfu.set_flag(MainWindowRedrawingFlag::MAP);

@@ -76,7 +76,7 @@ bool set_invuln(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
     }
 
     auto &rfu = RedrawingFlagsUpdater::get_instance();
-    const auto flags_swrf = {
+    static constexpr auto flags_swrf = {
         SubWindowRedrawingFlag::OVERHEAD,
         SubWindowRedrawingFlag::DUNGEON,
     };
@@ -93,7 +93,7 @@ bool set_invuln(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
             chg_virtue(player_ptr, Virtue::SACRIFICE, -3);
             chg_virtue(player_ptr, Virtue::VALOUR, -5);
             rfu.set_flag(MainWindowRedrawingFlag::MAP);
-            rfu.set_flag(StatusRedrawingFlag::MONSTER_STATUSES);
+            rfu.set_flag(StatusRecalculatingFlag::MONSTER_STATUSES);
             rfu.set_flags(flags_swrf);
         }
     } else {
@@ -101,7 +101,7 @@ bool set_invuln(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
             msg_print(_("無敵ではなくなった。", "The invulnerability wears off."));
             notice = true;
             rfu.set_flag(MainWindowRedrawingFlag::MAP);
-            rfu.set_flag(StatusRedrawingFlag::MONSTER_STATUSES);
+            rfu.set_flag(StatusRecalculatingFlag::MONSTER_STATUSES);
             rfu.set_flags(flags_swrf);
             player_ptr->energy_need += ENERGY_NEED();
         }
@@ -118,7 +118,7 @@ bool set_invuln(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
         disturb(player_ptr, false, false);
     }
 
-    rfu.set_flag(StatusRedrawingFlag::BONUS);
+    rfu.set_flag(StatusRecalculatingFlag::BONUS);
     handle_stuff(player_ptr);
     return true;
 }
@@ -166,7 +166,7 @@ bool set_tim_regen(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
         disturb(player_ptr, false, false);
     }
 
-    rfu.set_flag(StatusRedrawingFlag::BONUS);
+    rfu.set_flag(StatusRecalculatingFlag::BONUS);
     handle_stuff(player_ptr);
     return true;
 }
@@ -214,7 +214,7 @@ bool set_tim_reflect(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
         disturb(player_ptr, false, false);
     }
 
-    rfu.set_flag(StatusRedrawingFlag::BONUS);
+    rfu.set_flag(StatusRecalculatingFlag::BONUS);
     handle_stuff(player_ptr);
     return true;
 }
@@ -262,7 +262,7 @@ bool set_pass_wall(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
         disturb(player_ptr, false, false);
     }
 
-    rfu.set_flag(StatusRedrawingFlag::BONUS);
+    rfu.set_flag(StatusRecalculatingFlag::BONUS);
     handle_stuff(player_ptr);
     return true;
 }

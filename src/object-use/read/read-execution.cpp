@@ -62,7 +62,7 @@ void ObjectReadEntity::execute(bool known)
     auto executor = ReadExecutorFactory::create(player_ptr, o_ptr, known);
     auto used_up = executor->read();
     auto &rfu = RedrawingFlagsUpdater::get_instance();
-    using Srf = StatusRedrawingFlag;
+    using Srf = StatusRecalculatingFlag;
     EnumClassFlagGroup<Srf> flags_srf = { Srf::COMBINATION, Srf::REORDER };
     if (rfu.has(Srf::AUTO_DESTRUCTION)) {
         flags_srf.set(Srf::AUTO_DESTRUCTION);
@@ -72,7 +72,7 @@ void ObjectReadEntity::execute(bool known)
     this->change_virtue_as_read(*o_ptr);
     object_tried(o_ptr);
     this->gain_exp_from_item_use(o_ptr, executor->is_identified());
-    const auto flags_swrf = {
+    static constexpr auto flags_swrf = {
         SubWindowRedrawingFlag::INVENTORY,
         SubWindowRedrawingFlag::EQUIPMENT,
         SubWindowRedrawingFlag::PLAYER,

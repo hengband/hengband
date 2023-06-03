@@ -381,7 +381,7 @@ void show_death_info(PlayerType *player_ptr)
     inventory_aware(player_ptr);
     home_aware(player_ptr);
 
-    RedrawingFlagsUpdater::get_instance().set_flag(StatusRedrawingFlag::BONUS);
+    RedrawingFlagsUpdater::get_instance().set_flag(StatusRecalculatingFlag::BONUS);
     handle_stuff(player_ptr);
     flush();
     msg_erase();

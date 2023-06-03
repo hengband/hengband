@@ -84,7 +84,7 @@ std::string PlayerType::decrease_ability_random()
         this->stat_cur[k] = 3;
     }
 
-    RedrawingFlagsUpdater::get_instance().set_flag(StatusRedrawingFlag::BONUS);
+    RedrawingFlagsUpdater::get_instance().set_flag(StatusRecalculatingFlag::BONUS);
     return format(_("あなたは以前ほど%sなくなってしまった...。", "You're not as %s as you used to be..."), act.data());
 }
 
@@ -102,6 +102,6 @@ std::string PlayerType::decrease_ability_all()
         }
     }
 
-    RedrawingFlagsUpdater::get_instance().set_flag(StatusRedrawingFlag::BONUS);
+    RedrawingFlagsUpdater::get_instance().set_flag(StatusRecalculatingFlag::BONUS);
     return _("あなたは以前ほど力強くなくなってしまった...。", "You're not as powerful as you used to be...");
 }

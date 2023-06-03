@@ -107,9 +107,9 @@ static void display_essence(PlayerType *player_ptr)
 static void set_smith_redrawing_flags()
 {
     auto &rfu = RedrawingFlagsUpdater::get_instance();
-    const auto flags = {
-        StatusRedrawingFlag::COMBINATION,
-        StatusRedrawingFlag::REORDER,
+    static constexpr auto flags = {
+        StatusRecalculatingFlag::COMBINATION,
+        StatusRecalculatingFlag::REORDER,
     };
     rfu.set_flags(flags);
     rfu.set_flag(SubWindowRedrawingFlag::INVENTORY);

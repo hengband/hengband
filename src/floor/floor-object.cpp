@@ -231,7 +231,7 @@ void floor_item_increase(PlayerType *player_ptr, INVENTORY_IDX item, ITEM_NUMBER
 
     num -= o_ptr->number;
     o_ptr->number += num;
-    const auto flags = {
+    static constexpr auto flags = {
         SubWindowRedrawingFlag::FLOOR_ITEMS,
         SubWindowRedrawingFlag::FOUND_ITEMS,
     };
@@ -255,7 +255,7 @@ void floor_item_optimize(PlayerType *player_ptr, INVENTORY_IDX item)
     }
 
     delete_object_idx(player_ptr, item);
-    const auto flags = {
+    static constexpr auto flags = {
         SubWindowRedrawingFlag::FLOOR_ITEMS,
         SubWindowRedrawingFlag::FOUND_ITEMS,
     };
@@ -285,7 +285,7 @@ void delete_object_idx(PlayerType *player_ptr, OBJECT_IDX o_idx)
 
     j_ptr->wipe();
     floor_ptr->o_cnt--;
-    const auto flags = {
+    static constexpr auto flags = {
         SubWindowRedrawingFlag::FLOOR_ITEMS,
         SubWindowRedrawingFlag::FOUND_ITEMS,
     };
@@ -570,7 +570,7 @@ OBJECT_IDX drop_near(PlayerType *player_ptr, ItemEntity *j_ptr, PERCENTAGE chanc
     sound(SOUND_DROP);
 
     if (player_bold(player_ptr, by, bx)) {
-        const auto flags = {
+        static constexpr auto flags = {
             SubWindowRedrawingFlag::FLOOR_ITEMS,
             SubWindowRedrawingFlag::FOUND_ITEMS,
         };

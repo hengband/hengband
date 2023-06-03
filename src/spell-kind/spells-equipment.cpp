@@ -103,8 +103,8 @@ bool apply_disenchant(PlayerType *player_ptr, BIT_FLAGS mode)
     chg_virtue(player_ptr, Virtue::HARMONY, 1);
     chg_virtue(player_ptr, Virtue::ENCHANT, -2);
     auto &rfu = RedrawingFlagsUpdater::get_instance();
-    rfu.set_flag(StatusRedrawingFlag::BONUS);
-    const auto flags = {
+    rfu.set_flag(StatusRecalculatingFlag::BONUS);
+    static constexpr auto flags = {
         SubWindowRedrawingFlag::EQUIPMENT,
         SubWindowRedrawingFlag::PLAYER,
     };

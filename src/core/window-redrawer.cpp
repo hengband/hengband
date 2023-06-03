@@ -92,7 +92,7 @@ void redraw_stuff(PlayerType *player_ptr)
     }
 
     if (rfu.has(MainWindowRedrawingFlag::BASIC)) {
-        const auto flags = {
+        static constexpr auto flags = {
             MainWindowRedrawingFlag::BASIC,
             MainWindowRedrawingFlag::TITLE,
             MainWindowRedrawingFlag::ABILITY_SCORE,
@@ -183,7 +183,7 @@ void redraw_stuff(PlayerType *player_ptr)
     }
 
     if (rfu.has(MainWindowRedrawingFlag::EXTRA)) {
-        const auto flags = {
+        static constexpr auto flags = {
             MainWindowRedrawingFlag::EXTRA,
             MainWindowRedrawingFlag::CUT,
             MainWindowRedrawingFlag::STUN,

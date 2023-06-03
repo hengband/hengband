@@ -154,7 +154,7 @@ bool switch_class_racial_execution(PlayerType *player_ptr, const int32_t command
                 return false;
             }
 
-            RedrawingFlagsUpdater::get_instance().set_flag(StatusRedrawingFlag::BONUS);
+            RedrawingFlagsUpdater::get_instance().set_flag(StatusRecalculatingFlag::BONUS);
             return true;
         }
 
@@ -247,7 +247,7 @@ bool switch_class_racial_execution(PlayerType *player_ptr, const int32_t command
             return false;
         }
 
-        RedrawingFlagsUpdater::get_instance().set_flag(StatusRedrawingFlag::BONUS);
+        RedrawingFlagsUpdater::get_instance().set_flag(StatusRecalculatingFlag::BONUS);
         return true;
     case PlayerClassType::BLUE_MAGE:
         set_action(player_ptr, player_ptr->action == ACTION_LEARN ? ACTION_NONE : ACTION_LEARN);

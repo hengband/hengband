@@ -232,7 +232,7 @@ void store_sell(PlayerType *player_ptr, StoreSaleType store_num)
     }
 
     auto &rfu = RedrawingFlagsUpdater::get_instance();
-    rfu.set_flag(StatusRedrawingFlag::BONUS);
+    rfu.set_flag(StatusRecalculatingFlag::BONUS);
     rfu.set_flag(SubWindowRedrawingFlag::PLAYER);
     handle_stuff(player_ptr);
 

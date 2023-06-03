@@ -254,7 +254,7 @@ static void switch_target_input(PlayerType *player_ptr, ts_type *ts_ptr)
     case 'p': {
         verify_panel(player_ptr);
         auto &rfu = RedrawingFlagsUpdater::get_instance();
-        rfu.set_flag(StatusRedrawingFlag::MONSTER_STATUSES);
+        rfu.set_flag(StatusRecalculatingFlag::MONSTER_STATUSES);
         rfu.set_flag(MainWindowRedrawingFlag::MAP);
         rfu.set_flag(SubWindowRedrawingFlag::OVERHEAD);
         handle_stuff(player_ptr);
@@ -352,7 +352,7 @@ static void sweep_targets(PlayerType *player_ptr, ts_type *ts_ptr)
         panel_row_min = ts_ptr->y2;
         panel_col_min = ts_ptr->x2;
         panel_bounds_center();
-        rfu.set_flag(StatusRedrawingFlag::MONSTER_STATUSES);
+        rfu.set_flag(StatusRecalculatingFlag::MONSTER_STATUSES);
         rfu.set_flag(MainWindowRedrawingFlag::MAP);
         rfu.set_flag(SubWindowRedrawingFlag::OVERHEAD);
         handle_stuff(player_ptr);
@@ -455,7 +455,7 @@ static void switch_next_grid_command(PlayerType *player_ptr, ts_type *ts_ptr)
     case 'p': {
         verify_panel(player_ptr);
         auto &rfu = RedrawingFlagsUpdater::get_instance();
-        rfu.set_flag(StatusRedrawingFlag::MONSTER_STATUSES);
+        rfu.set_flag(StatusRecalculatingFlag::MONSTER_STATUSES);
         rfu.set_flag(MainWindowRedrawingFlag::MAP);
         rfu.set_flag(SubWindowRedrawingFlag::OVERHEAD);
         handle_stuff(player_ptr);
@@ -599,9 +599,9 @@ bool target_set(PlayerType *player_ptr, target_type mode)
     prt("", 0, 0);
     verify_panel(player_ptr);
     auto &rfu = RedrawingFlagsUpdater::get_instance();
-    rfu.set_flag(StatusRedrawingFlag::MONSTER_STATUSES);
+    rfu.set_flag(StatusRecalculatingFlag::MONSTER_STATUSES);
     rfu.set_flag(MainWindowRedrawingFlag::MAP);
-    const auto flags = {
+    static constexpr auto flags = {
         SubWindowRedrawingFlag::OVERHEAD,
         SubWindowRedrawingFlag::FLOOR_ITEMS,
     };

@@ -96,9 +96,9 @@ bool activate_bloody_moon(PlayerType *player_ptr, ItemEntity *o_ptr)
         calc_android_exp(player_ptr);
     }
 
-    const auto flags = {
-        StatusRedrawingFlag::BONUS,
-        StatusRedrawingFlag::HP,
+    static constexpr auto flags = {
+        StatusRecalculatingFlag::BONUS,
+        StatusRecalculatingFlag::HP,
     };
     RedrawingFlagsUpdater::get_instance().set_flags(flags);
     return true;

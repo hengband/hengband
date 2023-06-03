@@ -56,7 +56,7 @@ static void escape_monster(PlayerType *player_ptr, turn_flags *turn_flags_ptr, M
     }
 
     if (turn_flags_ptr->see_m) {
-        const auto flags = {
+        static constexpr auto flags = {
             MonsterSpeakType::SPEAK_ALL,
             MonsterSpeakType::SPEAK_BATTLE,
             MonsterSpeakType::SPEAK_FEAR,

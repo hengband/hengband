@@ -233,12 +233,12 @@ void wiz_identify_full_inventory(PlayerType *player_ptr)
     }
 
     auto &rfu = RedrawingFlagsUpdater::get_instance();
-    const auto flags_srf = {
-        StatusRedrawingFlag::COMBINATION,
-        StatusRedrawingFlag::REORDER,
+    static constexpr auto flags_srf = {
+        StatusRecalculatingFlag::COMBINATION,
+        StatusRecalculatingFlag::REORDER,
     };
     rfu.set_flags(flags_srf);
-    const auto flags_swrf = {
+    static constexpr auto flags_swrf = {
         SubWindowRedrawingFlag::INVENTORY,
         SubWindowRedrawingFlag::EQUIPMENT,
     };
@@ -586,13 +586,13 @@ static void wiz_reroll_item(PlayerType *player_ptr, ItemEntity *o_ptr)
 
     o_ptr->copy_from(q_ptr);
     auto &rfu = RedrawingFlagsUpdater::get_instance();
-    const auto flags_srf = {
-        StatusRedrawingFlag::BONUS,
-        StatusRedrawingFlag::COMBINATION,
-        StatusRedrawingFlag::REORDER,
+    static constexpr auto flags_srf = {
+        StatusRecalculatingFlag::BONUS,
+        StatusRecalculatingFlag::COMBINATION,
+        StatusRecalculatingFlag::REORDER,
     };
     rfu.set_flags(flags_srf);
-    const auto flags_swrf = {
+    static constexpr auto flags_swrf = {
         SubWindowRedrawingFlag::INVENTORY,
         SubWindowRedrawingFlag::EQUIPMENT,
         SubWindowRedrawingFlag::SPELL,
@@ -744,13 +744,13 @@ void wiz_modify_item(PlayerType *player_ptr)
 
         o_ptr->copy_from(q_ptr);
         auto &rfu = RedrawingFlagsUpdater::get_instance();
-        const auto flags_srf = {
-            StatusRedrawingFlag::BONUS,
-            StatusRedrawingFlag::COMBINATION,
-            StatusRedrawingFlag::REORDER,
+        static constexpr auto flags_srf = {
+            StatusRecalculatingFlag::BONUS,
+            StatusRecalculatingFlag::COMBINATION,
+            StatusRecalculatingFlag::REORDER,
         };
         rfu.set_flags(flags_srf);
-        const auto flags_swrf = {
+        static constexpr auto flags_swrf = {
             SubWindowRedrawingFlag::INVENTORY,
             SubWindowRedrawingFlag::EQUIPMENT,
             SubWindowRedrawingFlag::SPELL,

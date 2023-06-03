@@ -163,10 +163,10 @@ void update_lite_radius(PlayerType *player_ptr)
         return;
     }
 
-    const auto flags = {
-        StatusRedrawingFlag::LITE,
-        StatusRedrawingFlag::MONSTER_LITE,
-        StatusRedrawingFlag::MONSTER_STATUSES,
+    static constexpr auto flags = {
+        StatusRecalculatingFlag::LITE,
+        StatusRecalculatingFlag::MONSTER_LITE,
+        StatusRecalculatingFlag::MONSTER_STATUSES,
     };
     RedrawingFlagsUpdater::get_instance().set_flags(flags);
     player_ptr->old_lite = player_ptr->cur_lite;
@@ -341,5 +341,5 @@ void update_lite(PlayerType *player_ptr)
         cave_redraw_later(floor_ptr, y, x);
     }
 
-    RedrawingFlagsUpdater::get_instance().set_flag(StatusRedrawingFlag::DELAY_VISIBILITY);
+    RedrawingFlagsUpdater::get_instance().set_flag(StatusRecalculatingFlag::DELAY_VISIBILITY);
 }

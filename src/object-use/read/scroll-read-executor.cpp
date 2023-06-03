@@ -343,7 +343,7 @@ bool ScrollReadExecutor::read()
         }
 
         this->player_ptr->add_spells++;
-        RedrawingFlagsUpdater::get_instance().set_flag(StatusRedrawingFlag::SPELLS);
+        RedrawingFlagsUpdater::get_instance().set_flag(StatusRecalculatingFlag::SPELLS);
         this->ident = true;
         break;
     case SV_SCROLL_GENOCIDE:

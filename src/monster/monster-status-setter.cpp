@@ -134,7 +134,7 @@ bool set_monster_csleep(PlayerType *player_ptr, MONSTER_IDX m_idx, int v)
     }
 
     if (monraces_info[m_ptr->r_idx].brightness_flags.has_any_of(has_ld_mask)) {
-        rfu.set_flag(StatusRedrawingFlag::MONSTER_LITE);
+        rfu.set_flag(StatusRecalculatingFlag::MONSTER_LITE);
     }
 
     return true;
@@ -173,7 +173,7 @@ bool set_monster_fast(PlayerType *player_ptr, MONSTER_IDX m_idx, int v)
     }
 
     if ((player_ptr->riding == m_idx) && !player_ptr->leaving) {
-        RedrawingFlagsUpdater::get_instance().set_flag(StatusRedrawingFlag::BONUS);
+        RedrawingFlagsUpdater::get_instance().set_flag(StatusRecalculatingFlag::BONUS);
     }
 
     return true;
@@ -207,7 +207,7 @@ bool set_monster_slow(PlayerType *player_ptr, MONSTER_IDX m_idx, int v)
     }
 
     if ((player_ptr->riding == m_idx) && !player_ptr->leaving) {
-        RedrawingFlagsUpdater::get_instance().set_flag(StatusRedrawingFlag::BONUS);
+        RedrawingFlagsUpdater::get_instance().set_flag(StatusRecalculatingFlag::BONUS);
     }
 
     return true;
@@ -430,8 +430,8 @@ bool set_monster_timewalk(PlayerType *player_ptr, int num, MonsterRaceId who, bo
 
     auto &rfu = RedrawingFlagsUpdater::get_instance();
     rfu.set_flag(MainWindowRedrawingFlag::MAP);
-    rfu.set_flag(StatusRedrawingFlag::MONSTER_STATUSES);
-    const auto flags = {
+    rfu.set_flag(StatusRecalculatingFlag::MONSTER_STATUSES);
+    static constexpr auto flags = {
         SubWindowRedrawingFlag::OVERHEAD,
         SubWindowRedrawingFlag::DUNGEON,
     };

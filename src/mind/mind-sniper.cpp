@@ -131,9 +131,9 @@ void SniperData::reset_concentration_flag()
 {
     this->reset_concent = false;
     auto &rfu = RedrawingFlagsUpdater::get_instance();
-    const auto flags = {
-        StatusRedrawingFlag::BONUS,
-        StatusRedrawingFlag::MONSTER_STATUSES,
+    static constexpr auto flags = {
+        StatusRecalculatingFlag::BONUS,
+        StatusRecalculatingFlag::MONSTER_STATUSES,
     };
     rfu.set_flags(flags);
     rfu.set_flag(MainWindowRedrawingFlag::TIMED_EFFECT);
@@ -624,12 +624,12 @@ void do_cmd_snipe(PlayerType *player_ptr)
     }
 
     auto &rfu = RedrawingFlagsUpdater::get_instance();
-    const auto flags_mwrf = {
+    static constexpr auto flags_mwrf = {
         MainWindowRedrawingFlag::HP,
         MainWindowRedrawingFlag::MP,
     };
     rfu.set_flags(flags_mwrf);
-    const auto flags_swrf = {
+    static constexpr auto flags_swrf = {
         SubWindowRedrawingFlag::PLAYER,
         SubWindowRedrawingFlag::SPELL,
     };

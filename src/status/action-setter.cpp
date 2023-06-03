@@ -60,7 +60,7 @@ void set_action(PlayerType *player_ptr, uint8_t typ)
     case ACTION_SAMURAI_STANCE:
         msg_print(_("型を崩した。", "You stop assuming the special stance."));
         PlayerClass(player_ptr).set_samurai_stance(SamuraiStanceType::NONE);
-        rfu.set_flag(StatusRedrawingFlag::MONSTER_STATUSES);
+        rfu.set_flag(StatusRecalculatingFlag::MONSTER_STATUSES);
         rfu.set_flag(MainWindowRedrawingFlag::TIMED_EFFECT);
         break;
     case ACTION_SING:
@@ -107,6 +107,6 @@ void set_action(PlayerType *player_ptr, uint8_t typ)
         break;
     }
 
-    rfu.set_flag(StatusRedrawingFlag::BONUS);
+    rfu.set_flag(StatusRecalculatingFlag::BONUS);
     rfu.set_flag(MainWindowRedrawingFlag::ACTION);
 }

@@ -702,9 +702,9 @@ static void change_realm2(PlayerType *player_ptr, int16_t next_realm)
     player_ptr->old_realm |= 1U << (player_ptr->realm2 - 1);
     player_ptr->realm2 = next_realm;
 
-    const auto flags = {
-        StatusRedrawingFlag::REORDER,
-        StatusRedrawingFlag::SPELLS,
+    static constexpr auto flags = {
+        StatusRecalculatingFlag::REORDER,
+        StatusRecalculatingFlag::SPELLS,
     };
     RedrawingFlagsUpdater::get_instance().set_flags(flags);
     handle_stuff(player_ptr);
@@ -917,7 +917,7 @@ void do_cmd_study(PlayerType *player_ptr)
     player_ptr->learned_spells++;
 
     auto &rfu = RedrawingFlagsUpdater::get_instance();
-    rfu.set_flag(StatusRedrawingFlag::SPELLS);
+    rfu.set_flag(StatusRecalculatingFlag::SPELLS);
     update_creature(player_ptr);
     rfu.set_flag(SubWindowRedrawingFlag::ITEM_KNOWLEDGTE);
 }
@@ -1363,7 +1363,7 @@ bool do_cmd_cast(PlayerType *player_ptr)
         }
     }
 
-    const auto flags = {
+    static constexpr auto flags = {
         SubWindowRedrawingFlag::PLAYER,
         SubWindowRedrawingFlag::SPELL,
     };
