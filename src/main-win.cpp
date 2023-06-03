@@ -699,8 +699,7 @@ static errr term_force_font(term_data *td)
  */
 static void term_change_font(term_data *td)
 {
-    CHOOSEFONTW cf;
-    memset(&cf, 0, sizeof(cf));
+    CHOOSEFONTW cf{};
     cf.lStructSize = sizeof(cf);
     cf.Flags = CF_SCREENFONTS | CF_FIXEDPITCHONLY | CF_NOVERTFONTS | CF_INITTOLOGFONTSTRUCT;
     cf.lpLogFont = &(td->lf);
@@ -1580,7 +1579,7 @@ static void process_menus(PlayerType *player_ptr, WORD wCmd)
     }
 
     term_data *td;
-    OPENFILENAMEW ofn;
+    OPENFILENAMEW ofn{};
     switch (wCmd) {
     case IDM_FILE_NEW: {
         if (game_in_progress || movie_in_progress) {
@@ -1596,7 +1595,6 @@ static void process_menus(PlayerType *player_ptr, WORD wCmd)
         if (game_in_progress || movie_in_progress) {
             plog(_("プレイ中はゲームをロードすることができません！", "You can't open a new game while you're still playing!"));
         } else {
-            memset(&ofn, 0, sizeof(ofn));
             ofn.lStructSize = sizeof(ofn);
             ofn.hwndOwner = data[0].w;
             ofn.lpstrFilter = L"Save Files (*.)\0*\0";
@@ -1667,7 +1665,6 @@ static void process_menus(PlayerType *player_ptr, WORD wCmd)
         if (game_in_progress || movie_in_progress) {
             plog(_("プレイ中はムービーをロードすることができません！", "You can't open a movie while you're playing!"));
         } else {
-            memset(&ofn, 0, sizeof(ofn));
             ofn.lStructSize = sizeof(ofn);
             ofn.hwndOwner = data[0].w;
             ofn.lpstrFilter = L"Angband Movie Files (*.amv)\0*.amv\0";
@@ -1954,7 +1951,6 @@ static void process_menus(PlayerType *player_ptr, WORD wCmd)
     }
         [[fallthrough]];
     case IDM_OPTIONS_OPEN_BG: {
-        memset(&ofn, 0, sizeof(ofn));
         ofn.lStructSize = sizeof(ofn);
         ofn.hwndOwner = data[0].w;
         ofn.lpstrFilter = L"Image Files (*.bmp;*.png;*.jpg;*.jpeg;)\0*.bmp;*.png;*.jpg;*.jpeg;\0";

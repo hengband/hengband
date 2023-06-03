@@ -87,6 +87,8 @@ public:
     FEAT_IDX get_feat_mimic() const;
     bool cave_has_flag(TerrainCharacteristics feature_flags) const;
     bool is_symbol(const int ch) const;
+    void reset_costs();
+    void reset_dists();
 
 private:
     flow_type get_grid_flow_type(MonsterRaceInfo *r_ptr) const;
