@@ -81,7 +81,7 @@ void SpellHex::stop_all_spells()
         StatusRedrawingFlag::SPELLS,
     };
     rfu.set_flags(flags_srf);
-    const auto flags_mwrf = {
+    static constexpr auto flags_mwrf = {
         MainWindowRedrawingFlag::EXTRA,
         MainWindowRedrawingFlag::HP,
         MainWindowRedrawingFlag::MP,
@@ -130,7 +130,7 @@ bool SpellHex::stop_spells_with_selection()
         StatusRedrawingFlag::SPELLS,
     };
     rfu.set_flags(flags_srf);
-    const auto flags_mwrf = {
+    static constexpr auto flags_mwrf = {
         MainWindowRedrawingFlag::EXTRA,
         MainWindowRedrawingFlag::HP,
         MainWindowRedrawingFlag::MP,
@@ -252,7 +252,7 @@ bool SpellHex::process_mana_cost(const bool need_restart)
         StatusRedrawingFlag::MONSTER_STATUSES,
     };
     rfu.set_flags(flags_srf);
-    const auto flags_mwrf = {
+    static constexpr auto flags_mwrf = {
         MainWindowRedrawingFlag::MAP,
         MainWindowRedrawingFlag::TIMED_EFFECT,
         MainWindowRedrawingFlag::ACTION,

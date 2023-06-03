@@ -175,7 +175,7 @@ bool process_fall_off_horse(PlayerType *player_ptr, int dam, bool force)
         SubWindowRedrawingFlag::DUNGEON,
     };
     rfu.set_flags(flags_swrf);
-    const auto flags_mwrf = {
+    static constexpr auto flags_mwrf = {
         MainWindowRedrawingFlag::EXTRA,
         MainWindowRedrawingFlag::UHEALTH,
     };

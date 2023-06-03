@@ -308,7 +308,7 @@ bool do_cmd_riding(PlayerType *player_ptr, bool force)
         StatusRedrawingFlag::BONUS,
     };
     rfu.set_flags(flags_srf);
-    const auto flags_mwrf = {
+    static constexpr auto flags_mwrf = {
         MainWindowRedrawingFlag::MAP,
         MainWindowRedrawingFlag::EXTRA,
         MainWindowRedrawingFlag::UHEALTH,

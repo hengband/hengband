@@ -684,7 +684,7 @@ static void change_birth_flags()
     };
     rfu.set_flag(SubWindowRedrawingFlag::PLAYER);
     rfu.set_flags(flags_srf);
-    const auto flags_mwrf = {
+    static constexpr auto flags_mwrf = {
         MainWindowRedrawingFlag::BASIC,
         MainWindowRedrawingFlag::HP,
         MainWindowRedrawingFlag::MP,

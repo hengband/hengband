@@ -417,7 +417,7 @@ bool set_mimic(PlayerType *player_ptr, TIME_EFFECT v, MimicKindType mimic_race_i
     }
 
     auto &rfu = RedrawingFlagsUpdater::get_instance();
-    const auto flags_mwrf = {
+    static constexpr auto flags_mwrf = {
         MainWindowRedrawingFlag::BASIC,
         MainWindowRedrawingFlag::TIMED_EFFECT,
     };

@@ -624,7 +624,7 @@ void do_cmd_snipe(PlayerType *player_ptr)
     }
 
     auto &rfu = RedrawingFlagsUpdater::get_instance();
-    const auto flags_mwrf = {
+    static constexpr auto flags_mwrf = {
         MainWindowRedrawingFlag::HP,
         MainWindowRedrawingFlag::MP,
     };
