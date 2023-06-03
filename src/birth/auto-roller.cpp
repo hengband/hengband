@@ -371,7 +371,7 @@ bool get_chara_limits(PlayerType *player_ptr, chara_limit_type *chara_limit_ptr)
 {
 #define MAXITEMS 8
 
-    concptr itemname[] = { _("年齢", "age"), _("身長(インチ)", "height"), _("体重(ポンド)", "weight"), _("社会的地位", "social class") };
+    concptr itemname[] = { _("年齢", "age"), _("身長(cm)", "height"), _("体重(kg)", "weight"), _("社会的地位", "social class") };
 
     clear_from(10);
     put_str(_("2/4/6/8で項目選択、+/-で値の増減、Enterで次へ", "2/4/6/8 for Select, +/- for Change value, Enter for Goto next"), 11, 10);
@@ -441,7 +441,16 @@ bool get_chara_limits(PlayerType *player_ptr, chara_limit_type *chara_limit_ptr)
         }
 
         mval[i] = m;
-        cval[i] = m;
+    }
+#ifdef JP
+    /*身長と体重の単位をcmとkgに*/
+    mval[2] = mval[2] * 254 / 100;
+    mval[3] = mval[3] * 254 / 100;
+    mval[4] = mval[4] * 4536 / 10000;
+    mval[5] = mval[5] * 4536 / 10000;
+#endif
+    for (auto i = 0; i < MAXITEMS; i++) {
+        cval[i] = mval[i];
     }
 
     for (int i = 0; i < 4; i++) {
