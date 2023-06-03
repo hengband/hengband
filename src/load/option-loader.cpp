@@ -93,8 +93,10 @@ void rd_options()
     }
 
     extract_option_vars();
-    for (auto n = 0; n < MAX_WINDOW_ENTITIES; n++) {
-        flag[n] = rd_u32b();
+
+    decltype(g_window_flags) savefile_window_flags;
+    for (auto &window_flag : savefile_window_flags) {
+        rd_FlagGroup_bytes(window_flag, rd_byte, 4);
     }
 
     for (auto n = 0; n < MAX_WINDOW_ENTITIES; n++) {
@@ -107,12 +109,8 @@ void rd_options()
                 continue;
             }
 
-            auto &window_flag = g_window_flags[n];
-            if (flag[n] & (1UL << i)) {
-                window_flag.set(i2enum<SubWindowRedrawingFlag>(i));
-            } else {
-                window_flag.reset(i2enum<SubWindowRedrawingFlag>(i));
-            }
+            const auto f = i2enum<SubWindowRedrawingFlag>(i);
+            g_window_flags[n][f] = savefile_window_flags[n][f];
         }
     }
 }
