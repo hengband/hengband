@@ -347,7 +347,7 @@ bool read_histpref(PlayerType *player_ptr)
     const auto history_lines = shape_buffer(s, max_line_len);
     const auto max_lines = std::min<int>(4, history_lines.size());
     for (auto l = 0; l < max_lines; ++l) {
-        angband_strcpy(player_ptr->history[l], history_lines[l].data(), max_line_len);
+        angband_strcpy(player_ptr->history[l], history_lines[l], max_line_len);
     }
 
     for (i = 0; i < 4; i++) {

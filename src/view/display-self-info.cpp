@@ -72,7 +72,7 @@ void display_virtue(PlayerType *player_ptr, self_info_type *self_ptr)
             vir_desc = format(_("[%s]の具現者 (%d)", "You are the living embodiment of %s (%d)."), vir_name, tester);
         }
 
-        angband_strcpy(self_ptr->v_string[v_nr], vir_desc.data(), sizeof(self_ptr->v_string[v_nr]));
+        angband_strcpy(self_ptr->v_string[v_nr], vir_desc, sizeof(self_ptr->v_string[v_nr]));
         self_ptr->info[self_ptr->line++] = self_ptr->v_string[v_nr];
     }
 }

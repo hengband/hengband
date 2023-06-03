@@ -403,11 +403,11 @@ void ascii_to_text(char *buf, std::string_view sv, size_t bufsize)
  *
  * This function should be equivalent to the strlcpy() function in BSD.
  */
-size_t angband_strcpy(char *buf, concptr src, size_t bufsize)
+size_t angband_strcpy(char *buf, std::string_view src, size_t bufsize)
 {
 #ifdef JP
     char *d = buf;
-    concptr s = src;
+    const char *s = src.data();
     size_t len = 0;
 
     if (bufsize > 0) {
@@ -437,19 +437,18 @@ size_t angband_strcpy(char *buf, concptr src, size_t bufsize)
     return len;
 
 #else
-    size_t len = strlen(src);
-    size_t ret = len;
+    auto len = src.length();
     if (bufsize == 0) {
-        return ret;
+        return len;
     }
 
     if (len >= bufsize) {
         len = bufsize - 1;
     }
 
-    (void)memcpy(buf, src, len);
+    (void)src.copy(buf, len);
     buf[len] = '\0';
-    return ret;
+    return src.length();
 #endif
 }
 
@@ -464,13 +463,13 @@ size_t angband_strcpy(char *buf, concptr src, size_t bufsize)
  *
  * This function should be equivalent to the strlcat() function in BSD.
  */
-size_t angband_strcat(char *buf, concptr src, size_t bufsize)
+size_t angband_strcat(char *buf, std::string_view src, size_t bufsize)
 {
     size_t dlen = strlen(buf);
     if (dlen < bufsize - 1) {
         return dlen + angband_strcpy(buf + dlen, src, bufsize - dlen);
     } else {
-        return dlen + strlen(src);
+        return dlen + src.length();
     }
 }
 

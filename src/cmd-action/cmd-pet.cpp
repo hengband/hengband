@@ -356,7 +356,7 @@ static void do_name_pet(PlayerType *player_ptr)
         /* Use old inscription */
         if (m_ptr->is_named()) {
             /* Start with the old inscription */
-            angband_strcpy(out_val, m_ptr->nickname.data(), sizeof(out_val));
+            angband_strcpy(out_val, m_ptr->nickname, sizeof(out_val));
             old_name = true;
         }
 

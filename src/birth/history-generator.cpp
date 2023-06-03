@@ -136,6 +136,6 @@ void get_history(PlayerType *player_ptr)
     const auto history_lines = shape_buffer(social_class.data(), max_line_len);
     const auto max_lines = std::min<int>(lines, history_lines.size());
     for (auto i = 0; i < max_lines; ++i) {
-        angband_strcpy(player_ptr->history[i], history_lines[i].data(), max_line_len);
+        angband_strcpy(player_ptr->history[i], history_lines[i], max_line_len);
     }
 }

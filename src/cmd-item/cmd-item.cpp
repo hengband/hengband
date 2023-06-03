@@ -227,7 +227,7 @@ void do_cmd_inscribe(PlayerType *player_ptr)
     msg_print(nullptr);
     strcpy(out_val, "");
     if (o_ptr->is_inscribed()) {
-        angband_strcpy(out_val, o_ptr->inscription->data(), MAX_INSCRIPTION);
+        angband_strcpy(out_val, o_ptr->inscription.value(), MAX_INSCRIPTION);
     }
 
     if (get_string(_("銘: ", "Inscription: "), out_val, MAX_INSCRIPTION)) {

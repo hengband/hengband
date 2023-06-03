@@ -118,7 +118,7 @@ void edit_history(PlayerType *player_ptr)
             clear_from(11);
             put_str(_("(キャラクターの生い立ち)", "(Character Background)"), 11, 25);
             for (int i = 0; i < 4; i++) {
-                angband_strcpy(player_ptr->history[i], old_history[i].data(), sizeof(player_ptr->history[i]));
+                angband_strcpy(player_ptr->history[i], old_history[i], sizeof(player_ptr->history[i]));
                 put_str(player_ptr->history[i], i + 12, 10);
             }
 

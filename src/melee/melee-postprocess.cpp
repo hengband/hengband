@@ -154,7 +154,7 @@ static void print_monster_dead_by_monster(PlayerType *player_ptr, mam_pp_type *m
         return;
     }
 
-    angband_strcpy(mam_pp_ptr->m_name, monster_desc(player_ptr, mam_pp_ptr->m_ptr, MD_TRUE_NAME).data(), sizeof(mam_pp_ptr->m_name));
+    angband_strcpy(mam_pp_ptr->m_name, monster_desc(player_ptr, mam_pp_ptr->m_ptr, MD_TRUE_NAME), sizeof(mam_pp_ptr->m_name));
     if (!mam_pp_ptr->seen) {
         player_ptr->current_floor_ptr->monster_noise = true;
         return;
@@ -257,7 +257,7 @@ static void fall_off_horse_by_melee(PlayerType *player_ptr, mam_pp_type *mam_pp_
         return;
     }
 
-    angband_strcpy(mam_pp_ptr->m_name, monster_desc(player_ptr, mam_pp_ptr->m_ptr, 0).data(), sizeof(mam_pp_ptr->m_name));
+    angband_strcpy(mam_pp_ptr->m_name, monster_desc(player_ptr, mam_pp_ptr->m_ptr, 0), sizeof(mam_pp_ptr->m_name));
     if (mam_pp_ptr->m_ptr->hp > mam_pp_ptr->m_ptr->maxhp / 3) {
         mam_pp_ptr->dam = (mam_pp_ptr->dam + 1) / 2;
     }
@@ -284,7 +284,7 @@ void mon_take_hit_mon(PlayerType *player_ptr, MONSTER_IDX m_idx, int dam, bool *
     auto *m_ptr = &floor_ptr->m_list[m_idx];
     mam_pp_type tmp_mam_pp;
     mam_pp_type *mam_pp_ptr = initialize_mam_pp_type(player_ptr, &tmp_mam_pp, m_idx, dam, dead, fear, note, who);
-    angband_strcpy(mam_pp_ptr->m_name, monster_desc(player_ptr, m_ptr, 0).data(), sizeof(mam_pp_ptr->m_name));
+    angband_strcpy(mam_pp_ptr->m_name, monster_desc(player_ptr, m_ptr, 0), sizeof(mam_pp_ptr->m_name));
     prepare_redraw(player_ptr, mam_pp_ptr);
     (void)set_monster_csleep(player_ptr, m_idx, 0);
 

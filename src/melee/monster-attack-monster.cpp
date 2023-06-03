@@ -358,8 +358,8 @@ bool monst_attack_monst(PlayerType *player_ptr, MONSTER_IDX m_idx, MONSTER_IDX t
         return false;
     }
 
-    angband_strcpy(mam_ptr->m_name, monster_desc(player_ptr, mam_ptr->m_ptr, 0).data(), sizeof(mam_ptr->m_name));
-    angband_strcpy(mam_ptr->t_name, monster_desc(player_ptr, mam_ptr->t_ptr, 0).data(), sizeof(mam_ptr->t_name));
+    angband_strcpy(mam_ptr->m_name, monster_desc(player_ptr, mam_ptr->m_ptr, 0), sizeof(mam_ptr->m_name));
+    angband_strcpy(mam_ptr->t_name, monster_desc(player_ptr, mam_ptr->t_ptr, 0), sizeof(mam_ptr->t_name));
     if (!mam_ptr->see_either && mam_ptr->known) {
         player_ptr->current_floor_ptr->monster_noise = true;
     }

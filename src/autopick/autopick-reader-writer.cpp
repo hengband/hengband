@@ -20,14 +20,14 @@ void autopick_load_pref(PlayerType *player_ptr, bool disp_mes)
 {
     GAME_TEXT buf[80];
     init_autopick();
-    angband_strcpy(buf, pickpref_filename(player_ptr, PT_WITH_PNAME).data(), sizeof(buf));
+    angband_strcpy(buf, pickpref_filename(player_ptr, PT_WITH_PNAME), sizeof(buf));
     errr err = process_autopick_file(player_ptr, buf);
     if (err == 0 && disp_mes) {
         msg_format(_("%sを読み込みました。", "Loaded '%s'."), buf);
     }
 
     if (err < 0) {
-        angband_strcpy(buf, pickpref_filename(player_ptr, PT_DEFAULT).data(), sizeof(buf));
+        angband_strcpy(buf, pickpref_filename(player_ptr, PT_DEFAULT), sizeof(buf));
         err = process_autopick_file(player_ptr, buf);
         if (err == 0 && disp_mes) {
             msg_format(_("%sを読み込みました。", "Loaded '%s'."), buf);
