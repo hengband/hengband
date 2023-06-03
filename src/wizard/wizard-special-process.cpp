@@ -615,7 +615,7 @@ static void wiz_jump_floor(PlayerType *player_ptr, DUNGEON_IDX dun_idx, DEPTH de
     leave_quest_check(player_ptr);
     auto to = !floor.is_in_dungeon()
                   ? _("地上", "the surface")
-                  : format(_("%d階(%s)", "level %d of %s"), floor.dun_level, dungeons_info[floor.dungeon_idx].name.data());
+                  : format(_("%d階(%s)", "level %d of %s"), floor.dun_level, floor.get_dungeon_definition().name.data());
     constexpr auto mes = _("%sへとウィザード・テレポートで移動した。\n", "You wizard-teleported to %s.\n");
     msg_print_wizard(player_ptr, 2, format(mes, to.data()));
     floor.quest_number = QuestId::NONE;

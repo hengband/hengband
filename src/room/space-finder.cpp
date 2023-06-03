@@ -219,7 +219,7 @@ bool find_space(PlayerType *player_ptr, dun_data_type *dd_ptr, POSITION *y, POSI
         return false;
     }
 
-    if (dungeons_info[player_ptr->current_floor_ptr->dungeon_idx].flags.has_not(DungeonFeatureType::NO_CAVE)) {
+    if (player_ptr->current_floor_ptr->get_dungeon_definition().flags.has_not(DungeonFeatureType::NO_CAVE)) {
         pick = randint1(candidates);
     } else {
         pick = candidates / 2 + 1;
