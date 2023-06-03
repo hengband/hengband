@@ -12,7 +12,6 @@
 #include "core/visuals-reseter.h"
 #include "game-option/special-options.h"
 #include "io-dump/character-dump.h"
-#include "io/inet.h"
 #include "io/input-key-acceptor.h"
 #include "mind/mind-elementalist.h"
 #include "player-base/player-class.h"
@@ -32,9 +31,9 @@
 #include "util/angband-files.h"
 #include "view/display-messages.h"
 #include "world/world.h"
+#include <algorithm>
 
 #ifdef WORLD_SCORE
-
 #ifdef WINDOWS
 #define CURL_STATICLIB
 #endif
@@ -113,14 +112,15 @@ static int buf_append(BUF *buf, concptr data, size_t size)
             return -1;
         }
 
-        memcpy(tmp, buf->data, buf->max_size);
+        std::copy_n(buf->data, buf->max_size, tmp);
         free(buf->data);
 
         buf->data = tmp;
 
         buf->max_size *= 2;
     }
-    memcpy(buf->data + buf->size, data, size);
+
+    std::copy_n(data, size, buf->data + buf->size);
     buf->size += size;
 
     return buf->size;

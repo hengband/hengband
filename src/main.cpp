@@ -11,7 +11,6 @@
 #include "core/scores.h"
 #include "game-option/runtime-arguments.h"
 #include "io/files-util.h"
-#include "io/inet.h"
 #include "io/record-play-movie.h"
 #include "io/signal-handlers.h"
 #include "io/uid-checker.h"

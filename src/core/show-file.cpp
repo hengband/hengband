@@ -144,11 +144,7 @@ bool show_file(PlayerType *player_ptr, bool show_version, concptr name, concptr 
 
     std::string caption;
 
-    char hook[68][32];
-    for (int i = 0; i < 68; i++) {
-        hook[i][0] = '\0';
-    }
-
+    char hook[68][32]{};
     std::string stripped_name;
     concptr tag = angband_strstr(name, "#");
     if (tag) {
@@ -214,8 +210,7 @@ bool show_file(PlayerType *player_ptr, bool show_version, concptr name, concptr 
             int k = str[7] - 'A';
             menu = true;
             if ((str[8] == ']') && (str[9] == ' ')) {
-                memcpy(hook[k], str + 10, 31);
-                hook[k][31] = '\0';
+                angband_strcpy(hook[k], str + 10, sizeof(hook[k]));
             }
 
             continue;

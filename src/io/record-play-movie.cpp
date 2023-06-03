@@ -9,7 +9,6 @@
 #include "cmd-visual/cmd-draw.h"
 #include "core/asking-player.h"
 #include "io/files-util.h"
-#include "io/inet.h"
 #include "io/signal-handlers.h"
 #include "locale/japanese.h"
 #include "system/player-type-definition.h"
@@ -129,9 +128,9 @@ static errr insert_ringbuf(std::string_view header, std::string_view payload = "
 
     /* バッファの終端までに収まる */
     if (ring.wptr + all_length + 1 < RINGBUF_SIZE) {
-        memcpy(ring.buf + ring.wptr, header.data(), header.length());
+        std::copy_n(header.begin(), header.length(), ring.buf + ring.wptr);
         if (!payload.empty()) {
-            memcpy(ring.buf + ring.wptr + header.length(), payload.data(), payload.length());
+            std::copy_n(payload.begin(), payload.length(), ring.buf + ring.wptr + header.length());
         }
         *(ring.buf + ring.wptr + all_length) = '\0';
         ring.wptr += all_length + 1;
@@ -142,18 +141,18 @@ static errr insert_ringbuf(std::string_view header, std::string_view payload = "
         int tail = all_length - head; /* 後半 */
 
         if ((int)header.length() <= head) {
-            memcpy(ring.buf + ring.wptr, header.data(), header.length());
+            std::copy_n(header.begin(), header.length(), ring.buf + ring.wptr);
             head -= header.length();
             if (head > 0) {
-                memcpy(ring.buf + ring.wptr + header.length(), payload.data(), head);
+                std::copy_n(payload.begin(), head, ring.buf + ring.wptr + header.length());
             }
-            memcpy(ring.buf, payload.data() + head, tail);
+            std::copy_n(payload.data() + head, tail, ring.buf);
         } else {
-            memcpy(ring.buf + ring.wptr, header.data(), head);
+            std::copy_n(header.begin(), head, ring.buf + ring.wptr);
             int part = header.length() - head;
-            memcpy(ring.buf, header.data() + head, part);
+            std::copy_n(header.data() + head, part, ring.buf);
             if (tail > part) {
-                memcpy(ring.buf + part, payload.data(), tail - part);
+                std::copy_n(payload.begin(), tail - part, ring.buf + part);
             }
         }
         *(ring.buf + tail) = '\0';
@@ -567,7 +566,7 @@ static bool flush_ringbuf_client()
 #endif
             update_term_size(x, y, len);
             (void)((*angband_terms[0]->text_hook)(x, y, len, (byte)col, mesg));
-            memcpy(&game_term->scr->c[y][x], mesg, len);
+            std::copy_n(mesg, len, &game_term->scr->c[y][x]);
             for (i = x; i < x + len; i++) {
                 game_term->scr->a[y][i] = col;
             }
@@ -580,7 +579,7 @@ static bool flush_ringbuf_client()
             mesg[i] = '\0';
             update_term_size(x, y, len);
             (void)((*angband_terms[0]->text_hook)(x, y, len, (byte)col, mesg));
-            memcpy(&game_term->scr->c[y][x], mesg, len);
+            std::copy_n(mesg, len, &game_term->scr->c[y][x]);
             for (i = x; i < x + len; i++) {
                 game_term->scr->a[y][i] = col;
             }
@@ -589,7 +588,7 @@ static bool flush_ringbuf_client()
         case 's': /* 一文字 */
             update_term_size(x, y, 1);
             (void)((*angband_terms[0]->text_hook)(x, y, 1, (byte)col, mesg));
-            memcpy(&game_term->scr->c[y][x], mesg, 1);
+            std::copy_n(&game_term->scr->c[y][x], 1, mesg);
             game_term->scr->a[y][x] = col;
             break;
 

@@ -23,7 +23,10 @@
 #include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
 #include "util/enum-range.h"
+#include "util/string-processor.h"
 #include "world/world.h"
+#include <algorithm>
+#include <string>
 
 /*!
  * @brief ベースアイテム構造体の鑑定済みフラグをリセットする。
@@ -45,7 +48,7 @@ static void reset_baseitem_idenditication_flags()
  */
 void player_wipe_without_name(PlayerType *player_ptr)
 {
-    auto tmp = *player_ptr;
+    const std::string backup_name = player_ptr->name;
     if (player_ptr->last_message) {
         string_free(player_ptr->last_message);
     }
@@ -163,7 +166,7 @@ void player_wipe_without_name(PlayerType *player_ptr)
         player_ptr->recall_dungeon = DUNGEON_GALGALS;
     }
 
-    memcpy(player_ptr->name, tmp.name, sizeof(tmp.name));
+    std::copy_n(backup_name.begin(), backup_name.length(), player_ptr->name);
 }
 
 /*!

@@ -1685,7 +1685,6 @@
     <ClCompile Include="..\..\src\player\player-move.cpp" />
     <ClCompile Include="..\..\src\io\files-util.cpp" />
     <ClCompile Include="..\..\src\grid\grid.cpp" />
-    <ClCompile Include="..\..\src\io\inet.cpp" />
     <ClCompile Include="..\..\src\locale\japanese.cpp" />
     <ClCompile Include="..\..\src\load\load.cpp" />
     <ClCompile Include="..\..\src\main-win.cpp" />
@@ -1937,7 +1936,6 @@
     <ClInclude Include="..\..\src\system\h-system.h" />
     <ClInclude Include="..\..\src\system\h-type.h" />
     <ClInclude Include="..\..\src\birth\history.h" />
-    <ClInclude Include="..\..\src\io\inet.h" />
     <ClInclude Include="..\..\src\main\angband-initializer.h" />
     <ClInclude Include="..\..\src\load\load.h" />
     <ClInclude Include="..\..\src\cmd-action\cmd-mind.h" />
