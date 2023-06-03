@@ -110,7 +110,7 @@ void regenmana(PlayerType *player_ptr, MANA_POINT upkeep_factor, MANA_POINT rege
     if (old_csp != player_ptr->csp) {
         auto &rfu = RedrawingFlagsUpdater::get_instance();
         rfu.set_flag(MainWindowRedrawingFlag::MP);
-        const auto flags = {
+        static constexpr auto flags = {
             SubWindowRedrawingFlag::PLAYER,
             SubWindowRedrawingFlag::SPELL,
         };

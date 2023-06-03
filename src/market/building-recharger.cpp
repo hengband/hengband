@@ -153,7 +153,7 @@ void building_recharge(PlayerType *player_ptr)
     msg_format("%s^ %s recharged for %d gold.", item_name.data(), ((o_ptr->number > 1) ? "were" : "was"), price);
 #endif
     auto &rfu = RedrawingFlagsUpdater::get_instance();
-    const auto flags = {
+    static constexpr auto flags = {
         StatusRedrawingFlag::COMBINATION,
         StatusRedrawingFlag::REORDER,
     };
@@ -270,7 +270,7 @@ void building_recharge_all(PlayerType *player_ptr)
     msg_format(_("＄%d で再充填しました。", "You pay %d gold."), total_cost);
     msg_print(nullptr);
     auto &rfu = RedrawingFlagsUpdater::get_instance();
-    const auto flags = {
+    static constexpr auto flags = {
         StatusRedrawingFlag::COMBINATION,
         StatusRedrawingFlag::REORDER,
     };

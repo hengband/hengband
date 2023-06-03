@@ -1290,7 +1290,7 @@ bool do_cmd_mane(PlayerType *player_ptr, bool baigaesi)
     PlayerEnergy(player_ptr).set_player_turn_energy(100);
     auto &rfu = RedrawingFlagsUpdater::get_instance();
     rfu.set_flag(MainWindowRedrawingFlag::IMITATION);
-    const auto flags = {
+    static constexpr auto flags = {
         SubWindowRedrawingFlag::PLAYER,
         SubWindowRedrawingFlag::SPELL,
     };

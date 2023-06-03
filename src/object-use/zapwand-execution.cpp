@@ -96,7 +96,7 @@ void ObjectZapWandEntity::execute(INVENTORY_IDX item)
 
         msg_print(_("この魔法棒にはもう魔力が残っていない。", "The wand has no charges left."));
         o_ptr->ident |= IDENT_EMPTY;
-        const auto flags = {
+        static constexpr auto flags = {
             StatusRedrawingFlag::COMBINATION,
             StatusRedrawingFlag::REORDER,
         };

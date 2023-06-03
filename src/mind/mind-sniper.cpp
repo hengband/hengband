@@ -131,7 +131,7 @@ void SniperData::reset_concentration_flag()
 {
     this->reset_concent = false;
     auto &rfu = RedrawingFlagsUpdater::get_instance();
-    const auto flags = {
+    static constexpr auto flags = {
         StatusRedrawingFlag::BONUS,
         StatusRedrawingFlag::MONSTER_STATUSES,
     };

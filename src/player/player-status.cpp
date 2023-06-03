@@ -1006,7 +1006,7 @@ static void update_max_mana(PlayerType *player_ptr)
         player_ptr->msp = msp;
         auto &rfu = RedrawingFlagsUpdater::get_instance();
         rfu.set_flag(MainWindowRedrawingFlag::MP);
-        const auto flags = {
+        static constexpr auto flags = {
             SubWindowRedrawingFlag::PLAYER,
             SubWindowRedrawingFlag::SPELL,
         };

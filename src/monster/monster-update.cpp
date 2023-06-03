@@ -109,7 +109,7 @@ void update_player_type(PlayerType *player_ptr, turn_flags *turn_flags_ptr, Mons
     auto &rfu = RedrawingFlagsUpdater::get_instance();
     if (turn_flags_ptr->do_view) {
         rfu.set_flag(StatusRedrawingFlag::FLOW);
-        const auto flags = {
+        static constexpr auto flags = {
             SubWindowRedrawingFlag::OVERHEAD,
             SubWindowRedrawingFlag::DUNGEON,
         };

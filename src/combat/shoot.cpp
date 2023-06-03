@@ -665,7 +665,7 @@ void exe_fire(PlayerType *player_ptr, INVENTORY_IDX item, ItemEntity *j_ptr, SPE
                     }
                     /* Forget the wall */
                     reset_bits(g_ptr->info, (CAVE_MARK));
-                    const auto flags = {
+                    static constexpr auto flags = {
                         StatusRedrawingFlag::VIEW,
                         StatusRedrawingFlag::LITE,
                         StatusRedrawingFlag::FLOW,

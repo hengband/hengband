@@ -1094,7 +1094,7 @@ std::optional<std::string> do_music_spell(PlayerType *player_ptr, SPELL_IDX spel
             auto &rfu = RedrawingFlagsUpdater::get_instance();
             rfu.set_flag(MainWindowRedrawingFlag::MAP);
             rfu.set_flag(StatusRedrawingFlag::MONSTER_STATUSES);
-            const auto flags = {
+            static constexpr auto flags = {
                 SubWindowRedrawingFlag::OVERHEAD,
                 SubWindowRedrawingFlag::DUNGEON,
             };
@@ -1108,7 +1108,7 @@ std::optional<std::string> do_music_spell(PlayerType *player_ptr, SPELL_IDX spel
                 auto &rfu = RedrawingFlagsUpdater::get_instance();
                 rfu.set_flag(MainWindowRedrawingFlag::MAP);
                 rfu.set_flag(StatusRedrawingFlag::MONSTER_STATUSES);
-                const auto flags = {
+                static constexpr auto flags = {
                     SubWindowRedrawingFlag::OVERHEAD,
                     SubWindowRedrawingFlag::DUNGEON,
                 };

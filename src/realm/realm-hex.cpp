@@ -724,7 +724,7 @@ std::optional<std::string> do_hex_spell(PlayerType *player_ptr, spell_hex_type s
                     set_action(player_ptr, ACTION_NONE);
                 }
 
-                const auto flags = {
+                static constexpr auto flags = {
                     StatusRedrawingFlag::BONUS,
                     StatusRedrawingFlag::HP,
                     StatusRedrawingFlag::MP,

@@ -63,7 +63,7 @@ bool bless_weapon(PlayerType *player_ptr)
         set_bits(o_ptr->ident, IDENT_SENSE);
         o_ptr->feeling = FEEL_NONE;
         rfu.set_flag(StatusRedrawingFlag::BONUS);
-        const auto flags = {
+        static constexpr auto flags = {
             SubWindowRedrawingFlag::EQUIPMENT,
             SubWindowRedrawingFlag::FLOOR_ITEMS,
             SubWindowRedrawingFlag::FOUND_ITEMS,

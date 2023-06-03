@@ -21,7 +21,7 @@ static bool update_sight(PlayerType *player_ptr, const bool notice)
         disturb(player_ptr, false, false);
     }
 
-    const auto flags = {
+    static constexpr auto flags = {
         StatusRedrawingFlag::BONUS,
         StatusRedrawingFlag::MONSTER_STATUSES,
     };

@@ -59,7 +59,7 @@ void notice_lite_change(PlayerType *player_ptr, ItemEntity *o_ptr)
     } else if (o_ptr->fuel == 0) {
         disturb(player_ptr, false, true);
         msg_print(_("明かりが消えてしまった！", "Your light has gone out!"));
-        const auto flags = {
+        static constexpr auto flags = {
             StatusRedrawingFlag::TORCH,
             StatusRedrawingFlag::BONUS,
         };

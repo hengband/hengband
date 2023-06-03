@@ -34,7 +34,7 @@ void disturb(PlayerType *player_ptr, bool stop_search, bool stop_travel)
             verify_panel(player_ptr);
         }
 
-        const auto flags = {
+        static constexpr auto flags = {
             StatusRedrawingFlag::TORCH,
             StatusRedrawingFlag::FLOW,
         };

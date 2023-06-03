@@ -601,7 +601,7 @@ bool target_set(PlayerType *player_ptr, target_type mode)
     auto &rfu = RedrawingFlagsUpdater::get_instance();
     rfu.set_flag(StatusRedrawingFlag::MONSTER_STATUSES);
     rfu.set_flag(MainWindowRedrawingFlag::MAP);
-    const auto flags = {
+    static constexpr auto flags = {
         SubWindowRedrawingFlag::OVERHEAD,
         SubWindowRedrawingFlag::FLOOR_ITEMS,
     };

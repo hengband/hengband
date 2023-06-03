@@ -40,7 +40,7 @@ void do_cmd_target(PlayerType *player_ptr)
  */
 void do_cmd_look(PlayerType *player_ptr)
 {
-    const auto flags = {
+    static constexpr auto flags = {
         SubWindowRedrawingFlag::SIGHT_MONSTERS,
         SubWindowRedrawingFlag::FLOOR_ITEMS,
     };
@@ -100,7 +100,7 @@ void do_cmd_locate(PlayerType *player_ptr)
     auto &rfu = RedrawingFlagsUpdater::get_instance();
     rfu.set_flag(StatusRedrawingFlag::MONSTER_STATUSES);
     rfu.set_flag(MainWindowRedrawingFlag::MAP);
-    const auto flags = {
+    static constexpr auto flags = {
         SubWindowRedrawingFlag::OVERHEAD,
         SubWindowRedrawingFlag::DUNGEON,
     };

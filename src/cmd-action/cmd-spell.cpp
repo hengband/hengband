@@ -702,7 +702,7 @@ static void change_realm2(PlayerType *player_ptr, int16_t next_realm)
     player_ptr->old_realm |= 1U << (player_ptr->realm2 - 1);
     player_ptr->realm2 = next_realm;
 
-    const auto flags = {
+    static constexpr auto flags = {
         StatusRedrawingFlag::REORDER,
         StatusRedrawingFlag::SPELLS,
     };
@@ -1363,7 +1363,7 @@ bool do_cmd_cast(PlayerType *player_ptr)
         }
     }
 
-    const auto flags = {
+    static constexpr auto flags = {
         SubWindowRedrawingFlag::PLAYER,
         SubWindowRedrawingFlag::SPELL,
     };

@@ -427,7 +427,7 @@ void do_cmd_mind(PlayerType *player_ptr)
     process_hard_concentration(player_ptr, cm_ptr);
     auto &rfu = RedrawingFlagsUpdater::get_instance();
     rfu.set_flag(MainWindowRedrawingFlag::MP);
-    const auto flags = {
+    static constexpr auto flags = {
         SubWindowRedrawingFlag::PLAYER,
         SubWindowRedrawingFlag::SPELL,
     };

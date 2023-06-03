@@ -161,7 +161,7 @@ void do_cmd_pet_dismiss(PlayerType *player_ptr)
 
                 player_ptr->riding = 0;
                 rfu.set_flag(StatusRedrawingFlag::MONSTER_STATUSES);
-                const auto flags = {
+                static constexpr auto flags = {
                     MainWindowRedrawingFlag::EXTRA,
                     MainWindowRedrawingFlag::UHEALTH,
                 };

@@ -122,7 +122,7 @@ void inven_item_optimize(PlayerType *player_ptr, INVENTORY_IDX item)
     }
 
     (&player_ptr->inventory_list[i])->wipe();
-    const auto flags = {
+    static constexpr auto flags = {
         SubWindowRedrawingFlag::INVENTORY,
         SubWindowRedrawingFlag::SPELL,
     };

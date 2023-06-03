@@ -448,7 +448,7 @@ bool choose_samurai_stance(PlayerType *player_ptr)
         PlayerClass(player_ptr).set_samurai_stance(new_stance);
     }
 
-    const auto flags = {
+    static constexpr auto flags = {
         MainWindowRedrawingFlag::ACTION,
         MainWindowRedrawingFlag::TIMED_EFFECT,
     };

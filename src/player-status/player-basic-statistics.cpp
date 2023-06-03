@@ -171,7 +171,7 @@ void PlayerBasicStatistics::update_index_status()
 
     this->player_ptr->stat_index[status] = (int16_t)index;
     auto &rfu = RedrawingFlagsUpdater::get_instance();
-    const auto flags = {
+    static constexpr auto flags = {
         StatusRedrawingFlag::MP,
         StatusRedrawingFlag::SPELLS,
     };

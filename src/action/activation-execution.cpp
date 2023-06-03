@@ -260,7 +260,7 @@ void exe_activate(PlayerType *player_ptr, INVENTORY_IDX item)
     sound(SOUND_ZAP);
     if (activation_index(ae_ptr->o_ptr) > RandomArtActType::NONE) {
         (void)activate_artifact(player_ptr, ae_ptr->o_ptr);
-        const auto flags = {
+        static constexpr auto flags = {
             SubWindowRedrawingFlag::INVENTORY,
             SubWindowRedrawingFlag::EQUIPMENT,
         };

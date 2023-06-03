@@ -107,7 +107,7 @@ static void display_essence(PlayerType *player_ptr)
 static void set_smith_redrawing_flags()
 {
     auto &rfu = RedrawingFlagsUpdater::get_instance();
-    const auto flags = {
+    static constexpr auto flags = {
         StatusRedrawingFlag::COMBINATION,
         StatusRedrawingFlag::REORDER,
     };

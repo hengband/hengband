@@ -310,7 +310,7 @@ concptr make_screen_dump(PlayerType *player_ptr)
         use_graphics = false;
         reset_visuals(player_ptr);
 
-        const auto flags = {
+        static constexpr auto flags = {
             MainWindowRedrawingFlag::WIPE,
             MainWindowRedrawingFlag::BASIC,
             MainWindowRedrawingFlag::EXTRA,
@@ -410,7 +410,7 @@ concptr make_screen_dump(PlayerType *player_ptr)
 
     use_graphics = true;
     reset_visuals(player_ptr);
-    const auto flags = {
+    static constexpr auto flags = {
         MainWindowRedrawingFlag::WIPE,
         MainWindowRedrawingFlag::BASIC,
         MainWindowRedrawingFlag::EXTRA,

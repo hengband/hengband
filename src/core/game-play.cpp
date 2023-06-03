@@ -122,7 +122,7 @@ static void send_waiting_record(PlayerType *player_ptr)
         quit(0);
     }
 
-    const auto flags = {
+    static constexpr auto flags = {
         StatusRedrawingFlag::BONUS,
         StatusRedrawingFlag::HP,
         StatusRedrawingFlag::MP,

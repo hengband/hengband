@@ -309,7 +309,7 @@ void ObjectThrowEntity::process_boomerang_back()
         this->o_ptr->copy_from(this->q_ptr);
         this->player_ptr->equip_cnt++;
         auto &rfu = RedrawingFlagsUpdater::get_instance();
-        const auto flags = {
+        static constexpr auto flags = {
             StatusRedrawingFlag::BONUS,
             StatusRedrawingFlag::TORCH,
             StatusRedrawingFlag::MP,
