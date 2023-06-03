@@ -701,8 +701,8 @@ void update_flow(PlayerType *player_ptr)
 
         /* Now process the queue */
         while (!que.empty()) {
-            /* Extract the next entry */
-            const auto &[ty, tx] = que.front();
+            // 参照で受けるとダングリング状態になるのでコピーする.
+            const auto [ty, tx] = que.front();
             que.pop();
 
             /* Add the "children" */
