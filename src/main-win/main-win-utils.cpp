@@ -37,9 +37,7 @@ bool is_already_running(void)
 void save_screen_as_html(HWND hWnd)
 {
     std::vector<WCHAR> buf(MAIN_WIN_MAX_PATH + 1);
-    OPENFILENAMEW ofnw;
-
-    memset(&ofnw, 0, sizeof(ofnw));
+    OPENFILENAMEW ofnw{};
     ofnw.lStructSize = sizeof(ofnw);
     ofnw.hwndOwner = hWnd;
     ofnw.lpstrFilter = L"HTML Files (*.html)\0*.html\0";
