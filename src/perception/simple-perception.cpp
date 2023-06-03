@@ -123,7 +123,7 @@ static void sense_inventory_aux(PlayerType *player_ptr, INVENTORY_IDX slot, bool
 
     autopick_alter_item(player_ptr, slot, destroy_feeling);
     auto &rfu = RedrawingFlagsUpdater::get_instance();
-    const auto flags_srf = {
+    static constexpr auto flags_srf = {
         StatusRedrawingFlag::COMBINATION,
         StatusRedrawingFlag::REORDER,
     };

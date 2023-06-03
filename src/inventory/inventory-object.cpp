@@ -55,7 +55,7 @@ void inven_item_increase(PlayerType *player_ptr, INVENTORY_IDX item, ITEM_NUMBER
 
     o_ptr->number += num;
     auto &rfu = RedrawingFlagsUpdater::get_instance();
-    const auto flags_srf = {
+    static constexpr auto flags_srf = {
         StatusRedrawingFlag::BONUS,
         StatusRedrawingFlag::MP,
         StatusRedrawingFlag::COMBINATION,
@@ -101,7 +101,7 @@ void inven_item_optimize(PlayerType *player_ptr, INVENTORY_IDX item)
     if (item >= INVEN_MAIN_HAND) {
         player_ptr->equip_cnt--;
         (&player_ptr->inventory_list[item])->wipe();
-        const auto flags_srf = {
+        static constexpr auto flags_srf = {
             StatusRedrawingFlag::BONUS,
             StatusRedrawingFlag::TORCH,
             StatusRedrawingFlag::MP,
@@ -378,7 +378,7 @@ int16_t store_item_to_inventory(PlayerType *player_ptr, ItemEntity *o_ptr)
     j_ptr->marked.clear().set(OmType::TOUCHED);
 
     player_ptr->inven_cnt++;
-    const auto flags_srf = {
+    static constexpr auto flags_srf = {
         StatusRedrawingFlag::BONUS,
         StatusRedrawingFlag::COMBINATION,
         StatusRedrawingFlag::REORDER,

@@ -96,7 +96,7 @@ static void dispel_player(PlayerType *player_ptr)
 
         player_ptr->action = ACTION_NONE;
         auto &rfu = RedrawingFlagsUpdater::get_instance();
-        const auto flags_srf = {
+        static constexpr auto flags_srf = {
             StatusRedrawingFlag::BONUS,
             StatusRedrawingFlag::HP,
             StatusRedrawingFlag::MONSTER_STATUSES,

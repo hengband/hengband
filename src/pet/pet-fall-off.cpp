@@ -160,7 +160,7 @@ bool process_fall_off_horse(PlayerType *player_ptr, int dam, bool force)
     player_ptr->riding_ryoute = player_ptr->old_riding_ryoute = false;
 
     auto &rfu = RedrawingFlagsUpdater::get_instance();
-    const auto flags_srf = {
+    static constexpr auto flags_srf = {
         StatusRedrawingFlag::BONUS,
         StatusRedrawingFlag::VIEW,
         StatusRedrawingFlag::LITE,

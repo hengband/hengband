@@ -317,7 +317,7 @@ bool lose_all_info(PlayerType *player_ptr)
     }
 
     auto &rfu = RedrawingFlagsUpdater::get_instance();
-    const auto flags_srf = {
+    static constexpr auto flags_srf = {
         StatusRedrawingFlag::BONUS,
         StatusRedrawingFlag::COMBINATION,
         StatusRedrawingFlag::REORDER,

@@ -193,7 +193,7 @@ void do_cmd_uninscribe(PlayerType *player_ptr)
     msg_print(_("銘を消した。", "Inscription removed."));
     o_ptr->inscription.reset();
     auto &rfu = RedrawingFlagsUpdater::get_instance();
-    const auto flags_srf = {
+    static constexpr auto flags_srf = {
         StatusRedrawingFlag::COMBINATION,
         StatusRedrawingFlag::BONUS,
     };
@@ -233,7 +233,7 @@ void do_cmd_inscribe(PlayerType *player_ptr)
     if (get_string(_("銘: ", "Inscription: "), out_val, MAX_INSCRIPTION)) {
         o_ptr->inscription.emplace(out_val);
         auto &rfu = RedrawingFlagsUpdater::get_instance();
-        const auto flags_srf = {
+        static constexpr auto flags_srf = {
             StatusRedrawingFlag::COMBINATION,
             StatusRedrawingFlag::BONUS,
         };

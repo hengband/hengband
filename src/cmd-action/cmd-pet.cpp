@@ -302,7 +302,7 @@ bool do_cmd_riding(PlayerType *player_ptr, bool force)
     PlayerEnergy(player_ptr).set_player_turn_energy(100);
 
     auto &rfu = RedrawingFlagsUpdater::get_instance();
-    const auto flags_srf = {
+    static constexpr auto flags_srf = {
         StatusRedrawingFlag::UN_VIEW,
         StatusRedrawingFlag::UN_LITE,
         StatusRedrawingFlag::BONUS,

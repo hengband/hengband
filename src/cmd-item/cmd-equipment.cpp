@@ -349,7 +349,7 @@ void do_cmd_wield(PlayerType *player_ptr)
     }
 
     calc_android_exp(player_ptr);
-    const auto flags_srf = {
+    static constexpr auto flags_srf = {
         StatusRedrawingFlag::BONUS,
         StatusRedrawingFlag::TORCH,
         StatusRedrawingFlag::MP,
@@ -410,7 +410,7 @@ void do_cmd_takeoff(PlayerType *player_ptr)
     (void)inven_takeoff(player_ptr, item, 255);
     verify_equip_slot(player_ptr, item);
     calc_android_exp(player_ptr);
-    const auto flags_srf = {
+    static constexpr auto flags_srf = {
         StatusRedrawingFlag::BONUS,
         StatusRedrawingFlag::TORCH,
         StatusRedrawingFlag::MP,

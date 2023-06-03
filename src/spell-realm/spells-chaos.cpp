@@ -186,7 +186,7 @@ bool vanish_dungeon(PlayerType *player_ptr)
     }
 
     auto &rfu = RedrawingFlagsUpdater::get_instance();
-    const auto flags_srf = {
+    static constexpr auto flags_srf = {
         StatusRedrawingFlag::UN_VIEW,
         StatusRedrawingFlag::UN_LITE,
         StatusRedrawingFlag::VIEW,

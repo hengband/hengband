@@ -85,7 +85,7 @@ bool psychometry(PlayerType *player_ptr)
     o_ptr->marked.set(OmType::TOUCHED);
 
     auto &rfu = RedrawingFlagsUpdater::get_instance();
-    const auto flags_srf = {
+    static constexpr auto flags_srf = {
         StatusRedrawingFlag::COMBINATION,
         StatusRedrawingFlag::REORDER,
     };

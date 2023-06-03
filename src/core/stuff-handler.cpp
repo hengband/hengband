@@ -60,7 +60,7 @@ void health_track(PlayerType *player_ptr, MONSTER_IDX m_idx)
 bool update_player()
 {
     auto &rfu = RedrawingFlagsUpdater::get_instance();
-    const auto flags_srf = {
+    static constexpr auto flags_srf = {
         StatusRedrawingFlag::COMBINATION,
         StatusRedrawingFlag::REORDER,
     };
@@ -77,7 +77,7 @@ bool redraw_player(PlayerType *player_ptr)
 
     auto &rfu = RedrawingFlagsUpdater::get_instance();
     rfu.set_flag(MainWindowRedrawingFlag::MP);
-    const auto flags_srf = {
+    static constexpr auto flags_srf = {
         StatusRedrawingFlag::COMBINATION,
         StatusRedrawingFlag::REORDER,
     };

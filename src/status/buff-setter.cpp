@@ -422,7 +422,7 @@ bool set_mimic(PlayerType *player_ptr, TIME_EFFECT v, MimicKindType mimic_race_i
         MainWindowRedrawingFlag::TIMED_EFFECT,
     };
     rfu.set_flags(flags_mwrf);
-    const auto flags_srf = {
+    static constexpr auto flags_srf = {
         StatusRedrawingFlag::BONUS,
         StatusRedrawingFlag::HP,
     };

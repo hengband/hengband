@@ -183,7 +183,7 @@ void wiz_dark(PlayerType *player_ptr)
     forget_travel_flow(player_ptr->current_floor_ptr);
 
     auto &rfu = RedrawingFlagsUpdater::get_instance();
-    const auto flags_srf = {
+    static constexpr auto flags_srf = {
         StatusRedrawingFlag::UN_VIEW,
         StatusRedrawingFlag::UN_LITE,
         StatusRedrawingFlag::VIEW,
@@ -488,7 +488,7 @@ bool destroy_area(PlayerType *player_ptr, POSITION y1, POSITION x1, POSITION r, 
 
     forget_flow(floor_ptr);
     auto &rfu = RedrawingFlagsUpdater::get_instance();
-    const auto flags_srf = {
+    static constexpr auto flags_srf = {
         StatusRedrawingFlag::UN_VIEW,
         StatusRedrawingFlag::UN_LITE,
         StatusRedrawingFlag::VIEW,

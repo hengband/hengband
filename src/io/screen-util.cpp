@@ -55,7 +55,7 @@ void resize_map()
     verify_panel(p_ptr);
 
     auto &rfu = RedrawingFlagsUpdater::get_instance();
-    const auto flags_srf = {
+    static constexpr auto flags_srf = {
         StatusRedrawingFlag::TORCH,
         StatusRedrawingFlag::BONUS,
         StatusRedrawingFlag::HP,

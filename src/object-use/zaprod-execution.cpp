@@ -128,7 +128,7 @@ void ObjectZapRodEntity::execute(INVENTORY_IDX item)
     }
 
     auto &rfu = RedrawingFlagsUpdater::get_instance();
-    const auto flags_srf = {
+    static constexpr auto flags_srf = {
         StatusRedrawingFlag::COMBINATION,
         StatusRedrawingFlag::REORDER,
     };

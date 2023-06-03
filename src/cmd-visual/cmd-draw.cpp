@@ -41,7 +41,7 @@ void do_cmd_redraw(PlayerType *player_ptr)
     term_xtra(TERM_XTRA_REACT, 0);
 
     auto &rfu = RedrawingFlagsUpdater::get_instance();
-    const auto flags_srf = {
+    static constexpr auto flags_srf = {
         StatusRedrawingFlag::COMBINATION,
         StatusRedrawingFlag::REORDER,
         StatusRedrawingFlag::TORCH,

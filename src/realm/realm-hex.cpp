@@ -964,7 +964,7 @@ std::optional<std::string> do_hex_spell(PlayerType *player_ptr, spell_hex_type s
 
     if (!info) {
         auto &rfu = RedrawingFlagsUpdater::get_instance();
-        const auto flags_srf = {
+        static constexpr auto flags_srf = {
             StatusRedrawingFlag::BONUS,
             StatusRedrawingFlag::HP,
             StatusRedrawingFlag::MP,

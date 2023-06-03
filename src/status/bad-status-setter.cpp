@@ -92,7 +92,7 @@ bool BadStatusSetter::set_blindness(const TIME_EFFECT tmp_v)
         disturb(this->player_ptr, false, false);
     }
 
-    const auto flags_srf = {
+    static constexpr auto flags_srf = {
         StatusRedrawingFlag::UN_VIEW,
         StatusRedrawingFlag::UN_LITE,
         StatusRedrawingFlag::VIEW,

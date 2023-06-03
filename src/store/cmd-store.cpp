@@ -211,7 +211,7 @@ void do_cmd_store(PlayerType *player_ptr)
     msg_erase();
     term_clear();
 
-    const auto flags_srf = {
+    static constexpr auto flags_srf = {
         StatusRedrawingFlag::VIEW,
         StatusRedrawingFlag::LITE,
         StatusRedrawingFlag::MONSTER_LITE,

@@ -409,7 +409,7 @@ void do_cmd_building(PlayerType *player_ptr)
     term_clear();
 
     auto &rfu = RedrawingFlagsUpdater::get_instance();
-    const auto flags_srf = {
+    static constexpr auto flags_srf = {
         StatusRedrawingFlag::VIEW,
         StatusRedrawingFlag::MONSTER_STATUSES,
         StatusRedrawingFlag::BONUS,

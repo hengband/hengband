@@ -2910,7 +2910,7 @@ void check_experience(PlayerType *player_ptr)
     PlayerRace pr(player_ptr);
     bool android = pr.equals(PlayerRaceType::ANDROID);
     PLAYER_LEVEL old_lev = player_ptr->lev;
-    const auto flags_srf = {
+    static constexpr auto flags_srf = {
         StatusRedrawingFlag::BONUS,
         StatusRedrawingFlag::HP,
         StatusRedrawingFlag::MP,

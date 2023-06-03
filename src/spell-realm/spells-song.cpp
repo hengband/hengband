@@ -59,7 +59,7 @@ void check_music(PlayerType *player_ptr)
         set_interrupting_song_effect(player_ptr, MUSIC_NONE);
         msg_print(_("歌を再開した。", "You resume singing."));
         player_ptr->action = ACTION_SING;
-        const auto flags_srf = {
+        static constexpr auto flags_srf = {
             StatusRedrawingFlag::BONUS,
             StatusRedrawingFlag::HP,
             StatusRedrawingFlag::MONSTER_STATUSES,

@@ -61,7 +61,7 @@ void ObjectQuaffEntity::execute(INVENTORY_IDX item)
         (void)potion_smash_effect(this->player_ptr, 0, this->player_ptr->y, this->player_ptr->x, o_ref.bi_id);
     }
 
-    const auto flags_srf = {
+    static constexpr auto flags_srf = {
         StatusRedrawingFlag::COMBINATION,
         StatusRedrawingFlag::REORDER,
     };

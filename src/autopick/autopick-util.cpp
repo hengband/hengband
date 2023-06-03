@@ -84,7 +84,7 @@ void auto_inscribe_item(ItemEntity *o_ptr, int idx)
         SubWindowRedrawingFlag::EQUIPMENT,
     };
     rfu.set_flags(flags_swrf);
-    const auto flags_srf = {
+    static constexpr auto flags_srf = {
         StatusRedrawingFlag::BONUS,
         StatusRedrawingFlag::COMBINATION,
     };

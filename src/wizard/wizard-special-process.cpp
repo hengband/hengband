@@ -676,7 +676,7 @@ void wiz_learn_items_all(PlayerType *player_ptr)
 static void change_birth_flags()
 {
     auto &rfu = RedrawingFlagsUpdater::get_instance();
-    const auto flags_srf = {
+    static constexpr auto flags_srf = {
         StatusRedrawingFlag::BONUS,
         StatusRedrawingFlag::HP,
         StatusRedrawingFlag::MP,
