@@ -463,13 +463,13 @@ size_t angband_strcpy(char *buf, std::string_view src, size_t bufsize)
  *
  * This function should be equivalent to the strlcat() function in BSD.
  */
-size_t angband_strcat(char *buf, concptr src, size_t bufsize)
+size_t angband_strcat(char *buf, std::string_view src, size_t bufsize)
 {
     size_t dlen = strlen(buf);
     if (dlen < bufsize - 1) {
         return dlen + angband_strcpy(buf + dlen, src, bufsize - dlen);
     } else {
-        return dlen + strlen(src);
+        return dlen + src.length();
     }
 }
 

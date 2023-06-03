@@ -231,7 +231,7 @@ static void describe_autpick_jp(char *buff, const autopick_type &entry, autopick
     if (describer->insc) {
         char tmp[MAX_INSCRIPTION + 1] = "";
         angband_strcat(tmp, describer->insc, MAX_INSCRIPTION);
-        angband_strcat(buff, format("に「%s」", tmp).data(), MAX_INSCRIPTION + 6);
+        angband_strcat(buff, format("に「%s」", tmp), MAX_INSCRIPTION + 6);
 
         if (angband_strstr(describer->insc, "%%all")) {
             strcat(buff, "(%%allは全能力を表す英字の記号で置換)");
