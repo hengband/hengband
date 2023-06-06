@@ -49,7 +49,7 @@
 #include "world/world.h"
 
 namespace {
-const int16_t CONTINUOUS_DESCRIPTION = 256;
+constexpr short CONTINUOUS_DESCRIPTION = 256;
 
 class GridExamination {
 public:
@@ -237,7 +237,7 @@ static void describe_monster_person(GridExamination *ge_ptr)
 #endif
 }
 
-static uint16_t describe_monster_item(PlayerType *player_ptr, GridExamination *ge_ptr)
+static short describe_monster_item(PlayerType *player_ptr, GridExamination *ge_ptr)
 {
     for (const auto this_o_idx : ge_ptr->m_ptr->hold_o_idx_list) {
         auto *o_ptr = &player_ptr->current_floor_ptr->o_list[this_o_idx];
@@ -264,12 +264,12 @@ static uint16_t describe_monster_item(PlayerType *player_ptr, GridExamination *g
     return CONTINUOUS_DESCRIPTION;
 }
 
-static bool within_char_util(int16_t input)
+static bool within_char_util(const short input)
 {
     return (input > -127) && (input < 128);
 }
 
-static int16_t describe_grid(PlayerType *player_ptr, GridExamination *ge_ptr)
+static short describe_grid(PlayerType *player_ptr, GridExamination *ge_ptr)
 {
     if ((ge_ptr->g_ptr->m_idx == 0) || !player_ptr->current_floor_ptr->m_list[ge_ptr->g_ptr->m_idx].ml) {
         return CONTINUOUS_DESCRIPTION;
@@ -289,7 +289,7 @@ static int16_t describe_grid(PlayerType *player_ptr, GridExamination *ge_ptr)
     }
 
     describe_monster_person(ge_ptr);
-    uint16_t monster_item_description = describe_monster_item(player_ptr, ge_ptr);
+    const auto monster_item_description = describe_monster_item(player_ptr, ge_ptr);
     if (within_char_util(monster_item_description)) {
         return (char)monster_item_description;
     }
@@ -303,7 +303,7 @@ static int16_t describe_grid(PlayerType *player_ptr, GridExamination *ge_ptr)
     return CONTINUOUS_DESCRIPTION;
 }
 
-static int16_t describe_footing(PlayerType *player_ptr, GridExamination *ge_ptr)
+static short describe_footing(PlayerType *player_ptr, GridExamination *ge_ptr)
 {
     if (ge_ptr->floor_num != 1) {
         return CONTINUOUS_DESCRIPTION;
@@ -322,7 +322,7 @@ static int16_t describe_footing(PlayerType *player_ptr, GridExamination *ge_ptr)
     return ge_ptr->query;
 }
 
-static int16_t describe_footing_items(GridExamination *ge_ptr)
+static short describe_footing_items(GridExamination *ge_ptr)
 {
     if (!ge_ptr->boring) {
         return CONTINUOUS_DESCRIPTION;
@@ -373,20 +373,20 @@ static char describe_footing_many_items(PlayerType *player_ptr, GridExamination 
     }
 }
 
-static int16_t loop_describing_grid(PlayerType *player_ptr, GridExamination *ge_ptr)
+static short loop_describing_grid(PlayerType *player_ptr, GridExamination *ge_ptr)
 {
     if (ge_ptr->floor_num == 0) {
         return CONTINUOUS_DESCRIPTION;
     }
 
-    int min_width = 0;
+    auto min_width = 0;
     while (true) {
-        int16_t footing_description = describe_footing(player_ptr, ge_ptr);
+        const auto footing_description = describe_footing(player_ptr, ge_ptr);
         if (within_char_util(footing_description)) {
             return (char)footing_description;
         }
 
-        int16_t footing_descriptions = describe_footing_items(ge_ptr);
+        const auto footing_descriptions = describe_footing_items(ge_ptr);
         if (within_char_util(footing_descriptions)) {
             return (char)footing_descriptions;
         }
@@ -395,7 +395,7 @@ static int16_t loop_describing_grid(PlayerType *player_ptr, GridExamination *ge_
     }
 }
 
-static int16_t describe_footing_sight(PlayerType *player_ptr, GridExamination *ge_ptr, ItemEntity *o_ptr)
+static short describe_footing_sight(PlayerType *player_ptr, GridExamination *ge_ptr, ItemEntity *o_ptr)
 {
     if (o_ptr->marked.has_not(OmType::FOUND)) {
         return CONTINUOUS_DESCRIPTION;
@@ -436,9 +436,8 @@ static int16_t describe_footing_sight(PlayerType *player_ptr, GridExamination *g
 static int16_t sweep_footing_items(PlayerType *player_ptr, GridExamination *ge_ptr)
 {
     for (const auto this_o_idx : ge_ptr->g_ptr->o_idx_list) {
-        ItemEntity *o_ptr;
-        o_ptr = &player_ptr->current_floor_ptr->o_list[this_o_idx];
-        int16_t ret = describe_footing_sight(player_ptr, ge_ptr, o_ptr);
+        auto *o_ptr = &player_ptr->current_floor_ptr->o_list[this_o_idx];
+        const auto ret = describe_footing_sight(player_ptr, ge_ptr, o_ptr);
         if (within_char_util(ret)) {
             return (char)ret;
         }
@@ -535,24 +534,24 @@ char examine_grid(PlayerType *player_ptr, const POSITION y, const POSITION x, ta
     ProcessResult next_target = describe_hallucinated_target(player_ptr, ge_ptr);
     switch (next_target) {
     case ProcessResult::PROCESS_FALSE:
-        return 0;
+        return '\0';
     case ProcessResult::PROCESS_TRUE:
         return ge_ptr->query;
     default:
         break;
     }
 
-    int16_t description_grid = describe_grid(player_ptr, ge_ptr);
+    const auto description_grid = describe_grid(player_ptr, ge_ptr);
     if (within_char_util(description_grid)) {
         return (char)description_grid;
     }
 
-    int16_t loop_description = loop_describing_grid(player_ptr, ge_ptr);
+    const auto loop_description = loop_describing_grid(player_ptr, ge_ptr);
     if (within_char_util(loop_description)) {
         return (char)loop_description;
     }
 
-    int16_t footing_items_description = sweep_footing_items(player_ptr, ge_ptr);
+    const auto footing_items_description = sweep_footing_items(player_ptr, ge_ptr);
     if (within_char_util(footing_items_description)) {
         return (char)footing_items_description;
     }
@@ -572,19 +571,32 @@ char examine_grid(PlayerType *player_ptr, const POSITION y, const POSITION x, ta
      * 安全を確保できたら構造体から外すことも検討する
      */
     ge_ptr->name = decide_target_floor(player_ptr, ge_ptr);
-    if (*ge_ptr->s2 && (ge_ptr->f_ptr->flags.has_none_of({ TerrainCharacteristics::MOVE, TerrainCharacteristics::CAN_FLY }) || ge_ptr->f_ptr->flags.has_none_of({ TerrainCharacteristics::LOS, TerrainCharacteristics::TREE }) || ge_ptr->f_ptr->flags.has(TerrainCharacteristics::TOWN))) {
+    auto is_in = ge_ptr->f_ptr->flags.has_none_of({ TerrainCharacteristics::MOVE, TerrainCharacteristics::CAN_FLY });
+    is_in |= ge_ptr->f_ptr->flags.has_none_of({ TerrainCharacteristics::LOS, TerrainCharacteristics::TREE });
+    is_in |= ge_ptr->f_ptr->flags.has(TerrainCharacteristics::TOWN);
+    if (*ge_ptr->s2 && is_in) {
         ge_ptr->s2 = _("の中", "in ");
     }
 
-    if (ge_ptr->f_ptr->flags.has(TerrainCharacteristics::STORE) || ge_ptr->f_ptr->flags.has(TerrainCharacteristics::QUEST_ENTER) || (ge_ptr->f_ptr->flags.has(TerrainCharacteristics::BLDG) && !player_ptr->current_floor_ptr->inside_arena) || ge_ptr->f_ptr->flags.has(TerrainCharacteristics::ENTRANCE)) {
+    auto is_entrance = ge_ptr->f_ptr->flags.has(TerrainCharacteristics::STORE);
+    is_entrance |= ge_ptr->f_ptr->flags.has(TerrainCharacteristics::QUEST_ENTER);
+    is_entrance |= ge_ptr->f_ptr->flags.has(TerrainCharacteristics::BLDG) && !player_ptr->current_floor_ptr->inside_arena;
+    is_entrance |= ge_ptr->f_ptr->flags.has(TerrainCharacteristics::ENTRANCE);
+    if (is_entrance) {
         ge_ptr->s2 = _("の入口", "");
     }
 #ifdef JP
 #else
-    else if (ge_ptr->f_ptr->flags.has(TerrainCharacteristics::FLOOR) || ge_ptr->f_ptr->flags.has(TerrainCharacteristics::TOWN) || ge_ptr->f_ptr->flags.has(TerrainCharacteristics::SHALLOW) || ge_ptr->f_ptr->flags.has(TerrainCharacteristics::DEEP)) {
-        ge_ptr->s3 = "";
-    } else {
-        ge_ptr->s3 = (is_a_vowel(ge_ptr->name[0])) ? "an " : "a ";
+    else {
+        auto is_normal_terrain = ge_ptr->f_ptr->flags.has(TerrainCharacteristics::FLOOR);
+        is_normal_terrain |= ge_ptr->f_ptr->flags.has(TerrainCharacteristics::TOWN);
+        is_normal_terrain |= ge_ptr->f_ptr->flags.has(TerrainCharacteristics::SHALLOW);
+        is_normal_terrain |= ge_ptr->f_ptr->flags.has(TerrainCharacteristics::DEEP);
+        if (is_normal_terrain) {
+            ge_ptr->s3 = "";
+        } else {
+            ge_ptr->s3 = (is_a_vowel(ge_ptr->name[0])) ? "an " : "a ";
+        }
     }
 #endif
 
