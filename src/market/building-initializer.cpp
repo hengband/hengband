@@ -80,7 +80,7 @@ void init_towns(void)
  */
 void init_buildings(void)
 {
-    for (auto i = 0; i < MAX_BLDG; i++) {
+    for (auto i = 0; i < MAX_BUILDINGS; i++) {
         buildings[i].name[0] = '\0';
         buildings[i].owner_name[0] = '\0';
         buildings[i].owner_race[0] = '\0';
