@@ -468,7 +468,7 @@ bool get_chara_limits(PlayerType *player_ptr, chara_limit_type *chara_limit_ptr)
     int os = MAXITEMS;
     while (true) {
         if (cs != os) {
-            const char accept[] = _("決定する", "Accept");
+            constexpr auto accept = _("決定する", "Accept");
             if (os == MAXITEMS) {
                 c_put_str(TERM_WHITE, accept, 19, 35);
             } else {

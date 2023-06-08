@@ -63,25 +63,30 @@ bool set_ele_attack(PlayerType *player_ptr, uint32_t attack_type, TIME_EFFECT v)
     if ((v) && (attack_type)) {
         player_ptr->special_attack |= (attack_type);
         player_ptr->ele_attack = v;
-#ifdef JP
-        msg_format("%sで攻撃できるようになった！",
-            ((attack_type == ATTACK_ACID)
-                    ? "酸"
-                    : ((attack_type == ATTACK_ELEC)
-                              ? "電撃"
-                              : ((attack_type == ATTACK_FIRE) ? "火炎"
-                                                              : ((attack_type == ATTACK_COLD) ? "冷気" : ((attack_type == ATTACK_POIS) ? "毒" : "(なし)"))))));
-#else
-        msg_format("For a while, the blows you deal will %s",
-            ((attack_type == ATTACK_ACID)
-                    ? "melt with acid!"
-                    : ((attack_type == ATTACK_ELEC)
-                              ? "shock your foes!"
-                              : ((attack_type == ATTACK_FIRE)
-                                        ? "burn with fire!"
-                                        : ((attack_type == ATTACK_COLD) ? "chill to the bone!"
-                                                                        : ((attack_type == ATTACK_POIS) ? "poison your enemies!" : "do nothing special."))))));
-#endif
+        std::string element;
+        switch (attack_type) {
+        case ATTACK_ACID:
+            element = _("酸", "melt with acid!");
+            break;
+        case ATTACK_ELEC:
+            element = _("電撃", "shock your foes!");
+            break;
+        case ATTACK_FIRE:
+            element = _("火炎", "burn with fire!");
+            break;
+        case ATTACK_COLD:
+            element = _("冷気", "chill to the bone!");
+            break;
+        case ATTACK_POIS:
+            element = _("毒", "poison your enemies!");
+            break;
+        default: // @todo 本来はruntime_error を飛ばすべきだが、既存コードと同じように動くことを優先した.
+            element = _("(なし)", "do nothing special.");
+            break;
+        }
+
+        constexpr auto mes = _("%sで攻撃できるようになった！", "For a while, the blows you deal will %s");
+        msg_format(mes, element.data());
     }
 
     if (disturb_state) {
@@ -135,16 +140,29 @@ bool set_ele_immune(PlayerType *player_ptr, uint32_t immune_type, TIME_EFFECT v)
     if ((v) && (immune_type)) {
         player_ptr->special_defense |= (immune_type);
         player_ptr->ele_immune = v;
-        msg_format(_("%sの攻撃を受けつけなくなった！", "For a while, you are immune to %s"),
-            ((immune_type == DEFENSE_ACID)
-                    ? _("酸", "acid!")
-                    : ((immune_type == DEFENSE_ELEC)
-                              ? _("電撃", "electricity!")
-                              : ((immune_type == DEFENSE_FIRE)
-                                        ? _("火炎", "fire!")
-                                        : ((immune_type == DEFENSE_COLD)
-                                                  ? _("冷気", "cold!")
-                                                  : ((immune_type == DEFENSE_POIS) ? _("毒", "poison!") : _("(なし)", "nothing special.")))))));
+        std::string element;
+        switch (immune_type) {
+        case ATTACK_ACID:
+            element = _("酸", "acid!");
+            break;
+        case ATTACK_ELEC:
+            element = _("電撃", "electricity!");
+            break;
+        case ATTACK_FIRE:
+            element = _("火炎", "fire!");
+            break;
+        case ATTACK_COLD:
+            element = _("冷気", "cold!");
+            break;
+        case ATTACK_POIS:
+            element = _("毒", "poison!");
+            break;
+        default: // @todo 本来はruntime_error を飛ばすべきだが、既存コードと同じように動くことを優先した.
+            element = _("(なし)", "nothing special.");
+            break;
+        }
+
+        msg_format(_("%sの攻撃を受けつけなくなった！", "For a while, you are immune to %s"), element.data());
     }
 
     if (disturb_state) {

@@ -25,12 +25,12 @@
  * @brief 自動拾い/破壊設定データの構造体 / A structure type for entry of auto-picker/destroyer
  */
 struct autopick_type {
-    std::string name; /*!< 自動拾い/破壊定義の名称一致基準 / Items which have 'name' as part of its name match */
-    std::string insc; /*!< 対象となったアイテムに自動で刻む内容 / Items will be auto-inscribed as 'insc' */
-    BIT_FLAGS flags[2]; /*!< キーワードに関する汎用的な条件フラグ / Misc. keyword to be matched */
-    byte action; /*!< 対象のアイテムを拾う/破壊/放置するかの指定フラグ / Auto-pickup or Destroy or Leave items */
-    byte dice; /*!< 武器のダイス値基準値 / Weapons which have more than 'dice' dice match */
-    byte bonus; /*!< アイテムのボーナス基準値 / Items which have more than 'bonus' magical bonus match */
+    std::string name = ""; /*!< 自動拾い/破壊定義の名称一致基準 / Items which have 'name' as part of its name match */
+    std::string insc = ""; /*!< 対象となったアイテムに自動で刻む内容 / Items will be auto-inscribed as 'insc' */
+    BIT_FLAGS flags[2]{}; /*!< キーワードに関する汎用的な条件フラグ / Misc. keyword to be matched */
+    byte action = 0; /*!< 対象のアイテムを拾う/破壊/放置するかの指定フラグ / Auto-pickup or Destroy or Leave items */
+    byte dice = 0; /*!< 武器のダイス値基準値 / Weapons which have more than 'dice' dice match */
+    byte bonus = 0; /*!< アイテムのボーナス基準値 / Items which have more than 'bonus' magical bonus match */
     bool has(int flag) const;
     void add(int flag);
     void remove(int flag);
@@ -40,41 +40,46 @@ struct autopick_type {
  * Struct for yank buffer
  */
 struct chain_str_type {
-    struct chain_str_type *next;
-    char s[1];
+    struct chain_str_type *next = nullptr;
+    char s[1]{};
 };
 
 /*
  * Data struct for text editor
  */
 class ItemEntity;
-;
 struct text_body_type {
-    int wid, hgt;
-    int cx, cy;
-    int upper, left;
-    int old_wid, old_hgt;
-    int old_cy;
-    int old_upper, old_left;
-    int mx, my;
-    byte mark;
+    int wid = 0;
+    int hgt = 0;
+    int cx = 0;
+    int cy = 0;
+    int upper = 0;
+    int left = 0;
+    int old_wid = 0;
+    int old_hgt = 0;
+    int old_cy = 0;
+    int old_upper = 0;
+    int old_left = 0;
+    int mx = 0;
+    int my = 0;
+    byte mark = 0;
 
-    ItemEntity *search_o_ptr;
-    concptr search_str;
-    concptr last_destroyed;
+    ItemEntity *search_o_ptr = nullptr;
+    concptr search_str = "";
+    concptr last_destroyed = "";
 
-    chain_str_type *yank;
-    bool yank_eol;
+    chain_str_type *yank = nullptr;
+    bool yank_eol = false;
 
-    std::vector<concptr> lines_list;
-    byte states[MAX_LINES];
+    std::vector<concptr> lines_list{};
+    byte states[MAX_LINES]{};
 
-    uint16_t dirty_flags;
-    int dirty_line;
-    int filename_mode;
-    int old_com_id;
+    uint16_t dirty_flags = 0;
+    int dirty_line = 0;
+    int filename_mode = 0;
+    int old_com_id = 0;
 
-    bool changed;
+    bool changed = false;
 };
 
 /*

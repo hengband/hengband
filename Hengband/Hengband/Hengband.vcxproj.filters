@@ -479,9 +479,6 @@
     <ClCompile Include="..\..\src\object\warning.cpp">
       <Filter>object</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\io\inet.cpp">
-      <Filter>io</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\dungeon\quest.cpp">
       <Filter>dungeon</Filter>
     </ClCompile>
@@ -2996,9 +2993,6 @@
     <ClInclude Include="..\..\src\object\warning.h">
       <Filter>object</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\io\inet.h">
-      <Filter>io</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\dungeon\quest.h">
       <Filter>dungeon</Filter>
     </ClInclude>
@@ -4180,12 +4174,6 @@
     </ClInclude>
     <ClInclude Include="..\..\src\load\quest-loader.h">
       <Filter>load</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\core\player-update-types.h">
-      <Filter>core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\core\player-redraw-types.h">
-      <Filter>core</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\flavor\object-flavor-types.h">
       <Filter>flavor</Filter>

@@ -40,14 +40,14 @@
 #include "view/display-messages.h"
 
 struct destroy_type {
-    OBJECT_IDX item;
-    QUANTITY amt;
-    QUANTITY old_number;
-    bool force;
-    ItemEntity *o_ptr;
-    ItemEntity *q_ptr;
-    std::string item_name;
-    char out_val[MAX_NLEN + 40];
+    OBJECT_IDX item = 0;
+    QUANTITY amt = 0;
+    QUANTITY old_number = 0;
+    bool force = false;
+    ItemEntity *o_ptr = nullptr;
+    ItemEntity *q_ptr = nullptr;
+    std::string item_name = "";
+    char out_val[MAX_NLEN + 40]{};
 };
 
 static destroy_type *initialize_destroy_type(destroy_type *destroy_ptr, ItemEntity *o_ptr)

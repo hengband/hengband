@@ -88,6 +88,10 @@ TermCenteredOffsetSetter::TermCenteredOffsetSetter(std::optional<TERM_LEN> width
     , orig_centered_wid(game_term != nullptr ? game_term->centered_wid : std::nullopt)
     , orig_centered_hgt(game_term != nullptr ? game_term->centered_hgt : std::nullopt)
 {
+    if (game_term == nullptr) {
+        return;
+    }
+
     const auto offset_x = width.has_value() ? (game_term->wid - width.value()) / 2 : 0;
     const auto offset_y = height.has_value() ? (game_term->hgt - height.value()) / 2 : 0;
     this->tos.emplace(offset_x, offset_y);
