@@ -19,7 +19,7 @@
 #include "util/string-processor.h"
 #include "view/display-messages.h"
 
-ProcessResult effect_monster_drain_mana(PlayerType *player_ptr, effect_monster_type *em_ptr)
+ProcessResult effect_monster_drain_mana(PlayerType *player_ptr, EffectMonster *em_ptr)
 {
     if (em_ptr->seen) {
         em_ptr->obvious = true;
@@ -70,7 +70,7 @@ ProcessResult effect_monster_drain_mana(PlayerType *player_ptr, effect_monster_t
     return ProcessResult::PROCESS_CONTINUE;
 }
 
-ProcessResult effect_monster_mind_blast(PlayerType *player_ptr, effect_monster_type *em_ptr)
+ProcessResult effect_monster_mind_blast(PlayerType *player_ptr, EffectMonster *em_ptr)
 {
     if (em_ptr->seen) {
         em_ptr->obvious = true;
@@ -118,7 +118,7 @@ ProcessResult effect_monster_mind_blast(PlayerType *player_ptr, effect_monster_t
     return ProcessResult::PROCESS_CONTINUE;
 }
 
-ProcessResult effect_monster_brain_smash(PlayerType *player_ptr, effect_monster_type *em_ptr)
+ProcessResult effect_monster_brain_smash(PlayerType *player_ptr, EffectMonster *em_ptr)
 {
     if (em_ptr->seen) {
         em_ptr->obvious = true;

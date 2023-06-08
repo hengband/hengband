@@ -20,7 +20,7 @@
 #include "view/display-messages.h"
 
 // Powerful monsters can resist.
-ProcessResult effect_monster_old_poly(effect_monster_type *em_ptr)
+ProcessResult effect_monster_old_poly(EffectMonster *em_ptr)
 {
     if (em_ptr->seen) {
         em_ptr->obvious = true;
@@ -41,7 +41,7 @@ ProcessResult effect_monster_old_poly(effect_monster_type *em_ptr)
     return ProcessResult::PROCESS_CONTINUE;
 }
 
-ProcessResult effect_monster_old_clone(PlayerType *player_ptr, effect_monster_type *em_ptr)
+ProcessResult effect_monster_old_clone(PlayerType *player_ptr, EffectMonster *em_ptr)
 {
     if (em_ptr->seen) {
         em_ptr->obvious = true;
@@ -69,7 +69,7 @@ ProcessResult effect_monster_old_clone(PlayerType *player_ptr, effect_monster_ty
     return ProcessResult::PROCESS_CONTINUE;
 }
 
-ProcessResult effect_monster_star_heal(PlayerType *player_ptr, effect_monster_type *em_ptr)
+ProcessResult effect_monster_star_heal(PlayerType *player_ptr, EffectMonster *em_ptr)
 {
     if (em_ptr->seen) {
         em_ptr->obvious = true;
@@ -102,7 +102,7 @@ ProcessResult effect_monster_star_heal(PlayerType *player_ptr, effect_monster_ty
 }
 
 // who == 0ならばプレイヤーなので、それの判定.
-static void effect_monster_old_heal_check_player(PlayerType *player_ptr, effect_monster_type *em_ptr)
+static void effect_monster_old_heal_check_player(PlayerType *player_ptr, EffectMonster *em_ptr)
 {
     if (em_ptr->who != 0) {
         return;
@@ -128,7 +128,7 @@ static void effect_monster_old_heal_check_player(PlayerType *player_ptr, effect_
     }
 }
 
-static void effect_monster_old_heal_recovery(PlayerType *player_ptr, effect_monster_type *em_ptr)
+static void effect_monster_old_heal_recovery(PlayerType *player_ptr, EffectMonster *em_ptr)
 {
     if (em_ptr->m_ptr->get_remaining_stun()) {
         if (em_ptr->seen_msg) {
@@ -155,7 +155,7 @@ static void effect_monster_old_heal_recovery(PlayerType *player_ptr, effect_mons
     }
 }
 
-ProcessResult effect_monster_old_heal(PlayerType *player_ptr, effect_monster_type *em_ptr)
+ProcessResult effect_monster_old_heal(PlayerType *player_ptr, EffectMonster *em_ptr)
 {
     if (em_ptr->seen) {
         em_ptr->obvious = true;
@@ -193,7 +193,7 @@ ProcessResult effect_monster_old_heal(PlayerType *player_ptr, effect_monster_typ
     return ProcessResult::PROCESS_CONTINUE;
 }
 
-ProcessResult effect_monster_old_speed(PlayerType *player_ptr, effect_monster_type *em_ptr)
+ProcessResult effect_monster_old_speed(PlayerType *player_ptr, EffectMonster *em_ptr)
 {
     if (em_ptr->seen) {
         em_ptr->obvious = true;
@@ -216,7 +216,7 @@ ProcessResult effect_monster_old_speed(PlayerType *player_ptr, effect_monster_ty
     return ProcessResult::PROCESS_CONTINUE;
 }
 
-ProcessResult effect_monster_old_slow(PlayerType *player_ptr, effect_monster_type *em_ptr)
+ProcessResult effect_monster_old_slow(PlayerType *player_ptr, EffectMonster *em_ptr)
 {
     if (em_ptr->seen) {
         em_ptr->obvious = true;
@@ -245,7 +245,7 @@ ProcessResult effect_monster_old_slow(PlayerType *player_ptr, effect_monster_typ
  * @todo 「ユニークは (魔法では)常に眠らない」はMonsterRaceDefinitionの趣旨に反すると思われる
  * 眠る確率を半分にするとかしておいた方が良さそう
  */
-ProcessResult effect_monster_old_sleep(PlayerType *player_ptr, effect_monster_type *em_ptr)
+ProcessResult effect_monster_old_sleep(PlayerType *player_ptr, EffectMonster *em_ptr)
 {
     if (em_ptr->seen) {
         em_ptr->obvious = true;
@@ -277,7 +277,7 @@ ProcessResult effect_monster_old_sleep(PlayerType *player_ptr, effect_monster_ty
  * @todo 「ユニークは (魔法では)常に混乱しない」はMonsterRaceDefinitionの趣旨に反すると思われる
  * 眠る確率を半分にするとかしておいた方が良さそう
  */
-ProcessResult effect_monster_old_conf(PlayerType *player_ptr, effect_monster_type *em_ptr)
+ProcessResult effect_monster_old_conf(PlayerType *player_ptr, EffectMonster *em_ptr)
 {
     if (em_ptr->seen) {
         em_ptr->obvious = true;
@@ -304,7 +304,7 @@ ProcessResult effect_monster_old_conf(PlayerType *player_ptr, effect_monster_typ
     return ProcessResult::PROCESS_CONTINUE;
 }
 
-ProcessResult effect_monster_stasis(effect_monster_type *em_ptr, bool to_evil)
+ProcessResult effect_monster_stasis(EffectMonster *em_ptr, bool to_evil)
 {
     if (em_ptr->seen) {
         em_ptr->obvious = true;
@@ -329,7 +329,7 @@ ProcessResult effect_monster_stasis(effect_monster_type *em_ptr, bool to_evil)
     return ProcessResult::PROCESS_CONTINUE;
 }
 
-ProcessResult effect_monster_stun(effect_monster_type *em_ptr)
+ProcessResult effect_monster_stun(EffectMonster *em_ptr)
 {
     if (em_ptr->seen) {
         em_ptr->obvious = true;

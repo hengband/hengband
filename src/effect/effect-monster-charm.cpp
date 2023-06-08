@@ -31,7 +31,7 @@
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 
-static void effect_monster_charm_resist(PlayerType *player_ptr, effect_monster_type *em_ptr)
+static void effect_monster_charm_resist(PlayerType *player_ptr, EffectMonster *em_ptr)
 {
     if (common_saving_throw_charm(player_ptr, em_ptr->dam, em_ptr->m_ptr)) {
         em_ptr->note = _("には効果がなかった。", " is unaffected.");
@@ -56,7 +56,7 @@ static void effect_monster_charm_resist(PlayerType *player_ptr, effect_monster_t
     }
 }
 
-ProcessResult effect_monster_charm(PlayerType *player_ptr, effect_monster_type *em_ptr)
+ProcessResult effect_monster_charm(PlayerType *player_ptr, EffectMonster *em_ptr)
 {
     int vir = virtue_number(player_ptr, Virtue::HARMONY);
     if (vir) {
@@ -77,7 +77,7 @@ ProcessResult effect_monster_charm(PlayerType *player_ptr, effect_monster_type *
     return ProcessResult::PROCESS_CONTINUE;
 }
 
-ProcessResult effect_monster_control_undead(PlayerType *player_ptr, effect_monster_type *em_ptr)
+ProcessResult effect_monster_control_undead(PlayerType *player_ptr, EffectMonster *em_ptr)
 {
     if (em_ptr->seen) {
         em_ptr->obvious = true;
@@ -113,7 +113,7 @@ ProcessResult effect_monster_control_undead(PlayerType *player_ptr, effect_monst
     return ProcessResult::PROCESS_CONTINUE;
 }
 
-ProcessResult effect_monster_control_demon(PlayerType *player_ptr, effect_monster_type *em_ptr)
+ProcessResult effect_monster_control_demon(PlayerType *player_ptr, EffectMonster *em_ptr)
 {
     if (em_ptr->seen) {
         em_ptr->obvious = true;
@@ -149,7 +149,7 @@ ProcessResult effect_monster_control_demon(PlayerType *player_ptr, effect_monste
     return ProcessResult::PROCESS_CONTINUE;
 }
 
-ProcessResult effect_monster_control_animal(PlayerType *player_ptr, effect_monster_type *em_ptr)
+ProcessResult effect_monster_control_animal(PlayerType *player_ptr, EffectMonster *em_ptr)
 {
     if (em_ptr->seen) {
         em_ptr->obvious = true;
@@ -188,7 +188,7 @@ ProcessResult effect_monster_control_animal(PlayerType *player_ptr, effect_monst
     return ProcessResult::PROCESS_CONTINUE;
 }
 
-ProcessResult effect_monster_charm_living(PlayerType *player_ptr, effect_monster_type *em_ptr)
+ProcessResult effect_monster_charm_living(PlayerType *player_ptr, EffectMonster *em_ptr)
 {
     int vir = virtue_number(player_ptr, Virtue::UNLIFE);
     if (em_ptr->seen) {
@@ -230,7 +230,7 @@ ProcessResult effect_monster_charm_living(PlayerType *player_ptr, effect_monster
     return ProcessResult::PROCESS_CONTINUE;
 }
 
-static void effect_monster_domination_corrupted_addition(PlayerType *player_ptr, effect_monster_type *em_ptr)
+static void effect_monster_domination_corrupted_addition(PlayerType *player_ptr, EffectMonster *em_ptr)
 {
     BadStatusSetter bss(player_ptr);
     switch (randint1(4)) {
@@ -252,7 +252,7 @@ static void effect_monster_domination_corrupted_addition(PlayerType *player_ptr,
 }
 
 // Powerful demons & undead can turn a mindcrafter's attacks back on them.
-static void effect_monster_domination_corrupted(PlayerType *player_ptr, effect_monster_type *em_ptr)
+static void effect_monster_domination_corrupted(PlayerType *player_ptr, EffectMonster *em_ptr)
 {
     bool is_corrupted = em_ptr->r_ptr->kind_flags.has_any_of(has_corrupted_mind) && (em_ptr->r_ptr->level > player_ptr->lev / 2) && (one_in_(2));
     if (!is_corrupted) {
@@ -273,7 +273,7 @@ static void effect_monster_domination_corrupted(PlayerType *player_ptr, effect_m
     effect_monster_domination_corrupted_addition(player_ptr, em_ptr);
 }
 
-static void effect_monster_domination_addition(effect_monster_type *em_ptr)
+static void effect_monster_domination_addition(EffectMonster *em_ptr)
 {
     switch (randint1(4)) {
     case 1:
@@ -287,7 +287,7 @@ static void effect_monster_domination_addition(effect_monster_type *em_ptr)
     }
 }
 
-ProcessResult effect_monster_domination(PlayerType *player_ptr, effect_monster_type *em_ptr)
+ProcessResult effect_monster_domination(PlayerType *player_ptr, EffectMonster *em_ptr)
 {
     if (!em_ptr->m_ptr->is_hostile()) {
         return ProcessResult::PROCESS_CONTINUE;
@@ -323,7 +323,7 @@ ProcessResult effect_monster_domination(PlayerType *player_ptr, effect_monster_t
     return ProcessResult::PROCESS_CONTINUE;
 }
 
-static bool effect_monster_crusade_domination(PlayerType *player_ptr, effect_monster_type *em_ptr)
+static bool effect_monster_crusade_domination(PlayerType *player_ptr, EffectMonster *em_ptr)
 {
     if ((em_ptr->r_ptr->kind_flags.has_not(MonsterKindType::GOOD)) || player_ptr->current_floor_ptr->inside_arena) {
         return false;
@@ -366,7 +366,7 @@ static bool effect_monster_crusade_domination(PlayerType *player_ptr, effect_mon
     return true;
 }
 
-ProcessResult effect_monster_crusade(PlayerType *player_ptr, effect_monster_type *em_ptr)
+ProcessResult effect_monster_crusade(PlayerType *player_ptr, EffectMonster *em_ptr)
 {
     if (em_ptr->seen) {
         em_ptr->obvious = true;
@@ -412,7 +412,7 @@ static int calcutate_capturable_hp(PlayerType *player_ptr, MonsterEntity *m_ptr,
  * @param player_ptr プレイヤー情報への参照ポインタ
  * @param em_ptr 効果情報への参照ポインタ
  */
-static void effect_monster_captured(PlayerType *player_ptr, effect_monster_type *em_ptr, std::optional<CapturedMonsterType *> tmp_cap_mon_ptr)
+static void effect_monster_captured(PlayerType *player_ptr, EffectMonster *em_ptr, std::optional<CapturedMonsterType *> tmp_cap_mon_ptr)
 {
     if (em_ptr->m_ptr->mflag2.has(MonsterConstantFlagType::CHAMELEON)) {
         choose_new_monster(player_ptr, em_ptr->g_ptr->m_idx, false, MonsterRaceId::CHAMELEON);
@@ -439,7 +439,7 @@ static void effect_monster_captured(PlayerType *player_ptr, effect_monster_type 
  * @param em_ptr 効果情報への参照ポインタ
  * @return 効果発動結果
  */
-ProcessResult effect_monster_capture(PlayerType *player_ptr, effect_monster_type *em_ptr, std::optional<CapturedMonsterType *> cap_mon_ptr)
+ProcessResult effect_monster_capture(PlayerType *player_ptr, EffectMonster *em_ptr, std::optional<CapturedMonsterType *> cap_mon_ptr)
 {
     const auto &quest_list = QuestList::get_instance();
     auto *floor_ptr = player_ptr->current_floor_ptr;
