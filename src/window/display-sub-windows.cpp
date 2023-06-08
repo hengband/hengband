@@ -474,7 +474,7 @@ void fix_monster(PlayerType *player_ptr)
  */
 void fix_object(PlayerType *player_ptr)
 {
-    display_sub_windows(SubWindowRedrawingFlag::ITEM_KNOWLEDGTE,
+    display_sub_windows(SubWindowRedrawingFlag::ITEM_KNOWLEDGE,
         [player_ptr] {
             display_koff(player_ptr);
         });

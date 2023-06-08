@@ -306,8 +306,8 @@ void window_stuff(PlayerType *player_ptr)
         fix_monster(player_ptr);
     }
 
-    if (window_flags.has(SubWindowRedrawingFlag::ITEM_KNOWLEDGTE)) {
-        rfu.reset_flag(SubWindowRedrawingFlag::ITEM_KNOWLEDGTE);
+    if (window_flags.has(SubWindowRedrawingFlag::ITEM_KNOWLEDGE)) {
+        rfu.reset_flag(SubWindowRedrawingFlag::ITEM_KNOWLEDGE);
         fix_object(player_ptr);
     }
 
