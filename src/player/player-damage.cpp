@@ -452,11 +452,7 @@ int take_hit(PlayerType *player_ptr, int damage_type, int damage, std::string_vi
             }
 
             flush();
-            if (player_ptr->last_message) {
-                string_free(player_ptr->last_message);
-            }
-
-            player_ptr->last_message = nullptr;
+            player_ptr->last_message = "";
             if (!last_words) {
 #ifdef JP
                 msg_format("あなたは%sました。", android ? "壊れ" : "死に");
@@ -497,7 +493,7 @@ int take_hit(PlayerType *player_ptr, int damage_type, int damage, std::string_vi
                     death_message = android ? "You are broken." : "You die.";
 #endif
                 } else {
-                    player_ptr->last_message = string_make(death_message.data());
+                    player_ptr->last_message = death_message;
                 }
 
 #ifdef JP

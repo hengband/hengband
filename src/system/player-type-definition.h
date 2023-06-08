@@ -185,7 +185,7 @@ public:
 
     int player_hp[PY_MAX_LEVEL]{};
     std::string died_from{}; /* What killed the player */
-    concptr last_message{}; /* Last message on death or retirement */
+    std::string last_message = ""; /* Last message on death or retirement */
     char history[4][60]{}; /* Textual "history" for the Player */
 
     uint16_t panic_save{}; /* Panic save */

@@ -49,10 +49,6 @@ static void reset_baseitem_idenditication_flags()
 void player_wipe_without_name(PlayerType *player_ptr)
 {
     const std::string backup_name = player_ptr->name;
-    if (player_ptr->last_message) {
-        string_free(player_ptr->last_message);
-    }
-
     *player_ptr = {};
 
     // TODO: キャラ作成からゲーム開始までに  current_floor_ptr を参照しなければならない処理は今後整理して外す。
