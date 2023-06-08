@@ -1040,7 +1040,7 @@ bool is_elemental_genocide_effective(MonsterRaceInfo *r_ptr, AttributeType type)
  * @param em_ptr 魔法効果情報への参照ポインタ
  * @return 効果処理を続けるかどうか
  */
-ProcessResult effect_monster_elemental_genocide(PlayerType *player_ptr, effect_monster_type *em_ptr)
+ProcessResult effect_monster_elemental_genocide(PlayerType *player_ptr, EffectMonster *em_ptr)
 {
     auto type = get_element_type(player_ptr->element, 0);
     auto name = get_element_name(player_ptr->element, 0);

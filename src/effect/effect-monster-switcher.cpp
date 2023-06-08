@@ -9,6 +9,7 @@
 #include "effect/effect-monster-switcher.h"
 #include "avatar/avatar.h"
 #include "cmd-action/cmd-attack.h"
+#include "effect/attribute-types.h"
 #include "effect/effect-monster-charm.h"
 #include "effect/effect-monster-curse.h"
 #include "effect/effect-monster-evil.h"
@@ -37,7 +38,7 @@
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 
-ProcessResult effect_monster_hypodynamia(PlayerType *player_ptr, effect_monster_type *em_ptr)
+ProcessResult effect_monster_hypodynamia(PlayerType *player_ptr, EffectMonster *em_ptr)
 {
     if (em_ptr->seen) {
         em_ptr->obvious = true;
@@ -69,7 +70,7 @@ ProcessResult effect_monster_hypodynamia(PlayerType *player_ptr, effect_monster_
 /*!
  * @todo リファクタリング前のコード時点で、単に耐性があるだけでもダメージ0だった.
  */
-ProcessResult effect_monster_death_ray(PlayerType *player_ptr, effect_monster_type *em_ptr)
+ProcessResult effect_monster_death_ray(PlayerType *player_ptr, EffectMonster *em_ptr)
 {
     if (em_ptr->seen) {
         em_ptr->obvious = true;
@@ -106,7 +107,7 @@ ProcessResult effect_monster_death_ray(PlayerType *player_ptr, effect_monster_ty
     return ProcessResult::PROCESS_CONTINUE;
 }
 
-ProcessResult effect_monster_kill_wall(PlayerType *player_ptr, effect_monster_type *em_ptr)
+ProcessResult effect_monster_kill_wall(PlayerType *player_ptr, EffectMonster *em_ptr)
 {
     if (em_ptr->r_ptr->resistance_flags.has_not(MonsterResistanceType::HURT_ROCK)) {
         em_ptr->dam = 0;
@@ -126,7 +127,7 @@ ProcessResult effect_monster_kill_wall(PlayerType *player_ptr, effect_monster_ty
     return ProcessResult::PROCESS_CONTINUE;
 }
 
-ProcessResult effect_monster_hand_doom(effect_monster_type *em_ptr)
+ProcessResult effect_monster_hand_doom(EffectMonster *em_ptr)
 {
     if (em_ptr->seen) {
         em_ptr->obvious = true;
@@ -162,7 +163,7 @@ ProcessResult effect_monster_hand_doom(effect_monster_type *em_ptr)
  * 寝た場合は試行終了。
  * 与える効果は減速、朦朧、混乱、睡眠。
  */
-ProcessResult effect_monster_engetsu(PlayerType *player_ptr, effect_monster_type *em_ptr)
+ProcessResult effect_monster_engetsu(PlayerType *player_ptr, EffectMonster *em_ptr)
 {
     if (em_ptr->seen) {
         em_ptr->obvious = true;
@@ -259,7 +260,7 @@ ProcessResult effect_monster_engetsu(PlayerType *player_ptr, effect_monster_type
     return ProcessResult::PROCESS_CONTINUE;
 }
 
-ProcessResult effect_monster_genocide(PlayerType *player_ptr, effect_monster_type *em_ptr)
+ProcessResult effect_monster_genocide(PlayerType *player_ptr, EffectMonster *em_ptr)
 {
     if (em_ptr->seen) {
         em_ptr->obvious = true;
@@ -278,7 +279,7 @@ ProcessResult effect_monster_genocide(PlayerType *player_ptr, effect_monster_typ
     return ProcessResult::PROCESS_CONTINUE;
 }
 
-ProcessResult effect_monster_photo(PlayerType *player_ptr, effect_monster_type *em_ptr)
+ProcessResult effect_monster_photo(PlayerType *player_ptr, EffectMonster *em_ptr)
 {
     if (!em_ptr->who) {
         msg_format(_("%sを写真に撮った。", "You take a photograph of %s."), em_ptr->m_name);
@@ -303,7 +304,7 @@ ProcessResult effect_monster_photo(PlayerType *player_ptr, effect_monster_type *
     return ProcessResult::PROCESS_CONTINUE;
 }
 
-ProcessResult effect_monster_wounds(effect_monster_type *em_ptr)
+ProcessResult effect_monster_wounds(EffectMonster *em_ptr)
 {
     if (em_ptr->seen) {
         em_ptr->obvious = true;
@@ -322,7 +323,7 @@ ProcessResult effect_monster_wounds(effect_monster_type *em_ptr)
  * @param em_ptr モンスター効果構造体への参照ポインタ
  * @return ここのスイッチングで終るならTRUEかFALSE、後続処理を実行するならCONTINUE
  */
-ProcessResult switch_effects_monster(PlayerType *player_ptr, effect_monster_type *em_ptr, std::optional<CapturedMonsterType *> cap_mon_ptr)
+ProcessResult switch_effects_monster(PlayerType *player_ptr, EffectMonster *em_ptr, std::optional<CapturedMonsterType *> cap_mon_ptr)
 {
     switch (em_ptr->attribute) {
     case AttributeType::PSY_SPEAR:

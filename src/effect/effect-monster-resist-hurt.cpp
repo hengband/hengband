@@ -22,7 +22,7 @@
  * @param em_ptr 魔法効果情報への参照ポインタ
  * @return 効果処理を続ける
  */
-ProcessResult effect_monster_nothing(effect_monster_type *em_ptr)
+ProcessResult effect_monster_nothing(EffectMonster *em_ptr)
 {
     if (em_ptr->seen) {
         em_ptr->obvious = true;
@@ -31,7 +31,7 @@ ProcessResult effect_monster_nothing(effect_monster_type *em_ptr)
     return ProcessResult::PROCESS_CONTINUE;
 }
 
-ProcessResult effect_monster_acid(PlayerType *player_ptr, effect_monster_type *em_ptr)
+ProcessResult effect_monster_acid(PlayerType *player_ptr, EffectMonster *em_ptr)
 {
     if (em_ptr->seen) {
         em_ptr->obvious = true;
@@ -50,7 +50,7 @@ ProcessResult effect_monster_acid(PlayerType *player_ptr, effect_monster_type *e
     return ProcessResult::PROCESS_CONTINUE;
 }
 
-ProcessResult effect_monster_elec(PlayerType *player_ptr, effect_monster_type *em_ptr)
+ProcessResult effect_monster_elec(PlayerType *player_ptr, EffectMonster *em_ptr)
 {
     if (em_ptr->seen) {
         em_ptr->obvious = true;
@@ -69,7 +69,7 @@ ProcessResult effect_monster_elec(PlayerType *player_ptr, effect_monster_type *e
     return ProcessResult::PROCESS_CONTINUE;
 }
 
-ProcessResult effect_monster_fire(PlayerType *player_ptr, effect_monster_type *em_ptr)
+ProcessResult effect_monster_fire(PlayerType *player_ptr, EffectMonster *em_ptr)
 {
     if (em_ptr->seen) {
         em_ptr->obvious = true;
@@ -98,7 +98,7 @@ ProcessResult effect_monster_fire(PlayerType *player_ptr, effect_monster_type *e
     return ProcessResult::PROCESS_CONTINUE;
 }
 
-ProcessResult effect_monster_cold(PlayerType *player_ptr, effect_monster_type *em_ptr)
+ProcessResult effect_monster_cold(PlayerType *player_ptr, EffectMonster *em_ptr)
 {
     if (em_ptr->seen) {
         em_ptr->obvious = true;
@@ -127,7 +127,7 @@ ProcessResult effect_monster_cold(PlayerType *player_ptr, effect_monster_type *e
     return ProcessResult::PROCESS_CONTINUE;
 }
 
-ProcessResult effect_monster_pois(PlayerType *player_ptr, effect_monster_type *em_ptr)
+ProcessResult effect_monster_pois(PlayerType *player_ptr, EffectMonster *em_ptr)
 {
     if (em_ptr->seen) {
         em_ptr->obvious = true;
@@ -146,7 +146,7 @@ ProcessResult effect_monster_pois(PlayerType *player_ptr, effect_monster_type *e
     return ProcessResult::PROCESS_CONTINUE;
 }
 
-ProcessResult effect_monster_nuke(PlayerType *player_ptr, effect_monster_type *em_ptr)
+ProcessResult effect_monster_nuke(PlayerType *player_ptr, EffectMonster *em_ptr)
 {
     if (em_ptr->seen) {
         em_ptr->obvious = true;
@@ -170,7 +170,7 @@ ProcessResult effect_monster_nuke(PlayerType *player_ptr, effect_monster_type *e
     return ProcessResult::PROCESS_CONTINUE;
 }
 
-ProcessResult effect_monster_hell_fire(PlayerType *player_ptr, effect_monster_type *em_ptr)
+ProcessResult effect_monster_hell_fire(PlayerType *player_ptr, EffectMonster *em_ptr)
 {
     if (em_ptr->seen) {
         em_ptr->obvious = true;
@@ -189,7 +189,7 @@ ProcessResult effect_monster_hell_fire(PlayerType *player_ptr, effect_monster_ty
     return ProcessResult::PROCESS_CONTINUE;
 }
 
-ProcessResult effect_monster_holy_fire(PlayerType *player_ptr, effect_monster_type *em_ptr)
+ProcessResult effect_monster_holy_fire(PlayerType *player_ptr, EffectMonster *em_ptr)
 {
     if (em_ptr->seen) {
         em_ptr->obvious = true;
@@ -220,7 +220,7 @@ ProcessResult effect_monster_holy_fire(PlayerType *player_ptr, effect_monster_ty
     return ProcessResult::PROCESS_CONTINUE;
 }
 
-ProcessResult effect_monster_plasma(PlayerType *player_ptr, effect_monster_type *em_ptr)
+ProcessResult effect_monster_plasma(PlayerType *player_ptr, EffectMonster *em_ptr)
 {
     if (em_ptr->seen) {
         em_ptr->obvious = true;
@@ -240,7 +240,7 @@ ProcessResult effect_monster_plasma(PlayerType *player_ptr, effect_monster_type 
     return ProcessResult::PROCESS_CONTINUE;
 }
 
-static bool effect_monster_nether_resist(PlayerType *player_ptr, effect_monster_type *em_ptr)
+static bool effect_monster_nether_resist(PlayerType *player_ptr, EffectMonster *em_ptr)
 {
     if (em_ptr->r_ptr->resistance_flags.has_not(MonsterResistanceType::RESIST_NETHER)) {
         return false;
@@ -265,7 +265,7 @@ static bool effect_monster_nether_resist(PlayerType *player_ptr, effect_monster_
     return true;
 }
 
-ProcessResult effect_monster_nether(PlayerType *player_ptr, effect_monster_type *em_ptr)
+ProcessResult effect_monster_nether(PlayerType *player_ptr, EffectMonster *em_ptr)
 {
     if (em_ptr->seen) {
         em_ptr->obvious = true;
@@ -284,7 +284,7 @@ ProcessResult effect_monster_nether(PlayerType *player_ptr, effect_monster_type 
     return ProcessResult::PROCESS_CONTINUE;
 }
 
-ProcessResult effect_monster_water(PlayerType *player_ptr, effect_monster_type *em_ptr)
+ProcessResult effect_monster_water(PlayerType *player_ptr, EffectMonster *em_ptr)
 {
     if (em_ptr->seen) {
         em_ptr->obvious = true;
@@ -310,7 +310,7 @@ ProcessResult effect_monster_water(PlayerType *player_ptr, effect_monster_type *
     return ProcessResult::PROCESS_CONTINUE;
 }
 
-ProcessResult effect_monster_chaos(PlayerType *player_ptr, effect_monster_type *em_ptr)
+ProcessResult effect_monster_chaos(PlayerType *player_ptr, EffectMonster *em_ptr)
 {
     if (em_ptr->seen) {
         em_ptr->obvious = true;
@@ -338,7 +338,7 @@ ProcessResult effect_monster_chaos(PlayerType *player_ptr, effect_monster_type *
     return ProcessResult::PROCESS_CONTINUE;
 }
 
-ProcessResult effect_monster_shards(PlayerType *player_ptr, effect_monster_type *em_ptr)
+ProcessResult effect_monster_shards(PlayerType *player_ptr, EffectMonster *em_ptr)
 {
     if (em_ptr->seen) {
         em_ptr->obvious = true;
@@ -358,7 +358,7 @@ ProcessResult effect_monster_shards(PlayerType *player_ptr, effect_monster_type 
     return ProcessResult::PROCESS_CONTINUE;
 }
 
-ProcessResult effect_monster_rocket(PlayerType *player_ptr, effect_monster_type *em_ptr)
+ProcessResult effect_monster_rocket(PlayerType *player_ptr, EffectMonster *em_ptr)
 {
     if (em_ptr->seen) {
         em_ptr->obvious = true;
@@ -377,7 +377,7 @@ ProcessResult effect_monster_rocket(PlayerType *player_ptr, effect_monster_type 
     return ProcessResult::PROCESS_CONTINUE;
 }
 
-ProcessResult effect_monster_sound(PlayerType *player_ptr, effect_monster_type *em_ptr)
+ProcessResult effect_monster_sound(PlayerType *player_ptr, EffectMonster *em_ptr)
 {
     if (em_ptr->seen) {
         em_ptr->obvious = true;
@@ -398,7 +398,7 @@ ProcessResult effect_monster_sound(PlayerType *player_ptr, effect_monster_type *
     return ProcessResult::PROCESS_CONTINUE;
 }
 
-ProcessResult effect_monster_confusion(PlayerType *player_ptr, effect_monster_type *em_ptr)
+ProcessResult effect_monster_confusion(PlayerType *player_ptr, EffectMonster *em_ptr)
 {
     if (em_ptr->seen) {
         em_ptr->obvious = true;
@@ -419,7 +419,7 @@ ProcessResult effect_monster_confusion(PlayerType *player_ptr, effect_monster_ty
     return ProcessResult::PROCESS_CONTINUE;
 }
 
-ProcessResult effect_monster_disenchant(PlayerType *player_ptr, effect_monster_type *em_ptr)
+ProcessResult effect_monster_disenchant(PlayerType *player_ptr, EffectMonster *em_ptr)
 {
     if (em_ptr->seen) {
         em_ptr->obvious = true;
@@ -439,7 +439,7 @@ ProcessResult effect_monster_disenchant(PlayerType *player_ptr, effect_monster_t
     return ProcessResult::PROCESS_CONTINUE;
 }
 
-ProcessResult effect_monster_nexus(PlayerType *player_ptr, effect_monster_type *em_ptr)
+ProcessResult effect_monster_nexus(PlayerType *player_ptr, EffectMonster *em_ptr)
 {
     if (em_ptr->seen) {
         em_ptr->obvious = true;
@@ -459,7 +459,7 @@ ProcessResult effect_monster_nexus(PlayerType *player_ptr, effect_monster_type *
     return ProcessResult::PROCESS_CONTINUE;
 }
 
-ProcessResult effect_monster_force(PlayerType *player_ptr, effect_monster_type *em_ptr)
+ProcessResult effect_monster_force(PlayerType *player_ptr, EffectMonster *em_ptr)
 {
     if (em_ptr->seen) {
         em_ptr->obvious = true;
@@ -481,7 +481,7 @@ ProcessResult effect_monster_force(PlayerType *player_ptr, effect_monster_type *
 }
 
 // Powerful monsters can resists and normal monsters slow down.
-ProcessResult effect_monster_inertial(PlayerType *player_ptr, effect_monster_type *em_ptr)
+ProcessResult effect_monster_inertial(PlayerType *player_ptr, EffectMonster *em_ptr)
 {
     if (em_ptr->seen) {
         em_ptr->obvious = true;
@@ -512,7 +512,7 @@ ProcessResult effect_monster_inertial(PlayerType *player_ptr, effect_monster_typ
     return ProcessResult::PROCESS_CONTINUE;
 }
 
-ProcessResult effect_monster_time(PlayerType *player_ptr, effect_monster_type *em_ptr)
+ProcessResult effect_monster_time(PlayerType *player_ptr, EffectMonster *em_ptr)
 {
     if (em_ptr->seen) {
         em_ptr->obvious = true;
@@ -533,7 +533,7 @@ ProcessResult effect_monster_time(PlayerType *player_ptr, effect_monster_type *e
     return ProcessResult::PROCESS_CONTINUE;
 }
 
-static bool effect_monster_gravity_resist_teleport(PlayerType *player_ptr, effect_monster_type *em_ptr)
+static bool effect_monster_gravity_resist_teleport(PlayerType *player_ptr, EffectMonster *em_ptr)
 {
     if (em_ptr->r_ptr->resistance_flags.has_not(MonsterResistanceType::RESIST_TELEPORT)) {
         em_ptr->obvious = true;
@@ -562,7 +562,7 @@ static bool effect_monster_gravity_resist_teleport(PlayerType *player_ptr, effec
     return true;
 }
 
-static void effect_monster_gravity_slow(PlayerType *player_ptr, effect_monster_type *em_ptr)
+static void effect_monster_gravity_slow(PlayerType *player_ptr, EffectMonster *em_ptr)
 {
     bool cancel_effect = em_ptr->r_ptr->kind_flags.has(MonsterKindType::UNIQUE);
     cancel_effect |= (em_ptr->r_ptr->level > randint1(std::max(1, em_ptr->dam - 10)) + 10);
@@ -577,7 +577,7 @@ static void effect_monster_gravity_slow(PlayerType *player_ptr, effect_monster_t
     em_ptr->obvious = true;
 }
 
-static void effect_monster_gravity_stun(effect_monster_type *em_ptr)
+static void effect_monster_gravity_stun(EffectMonster *em_ptr)
 {
     em_ptr->do_stun = damroll((em_ptr->caster_lev / 20) + 3, (em_ptr->dam)) + 1;
     bool has_resistance = em_ptr->r_ptr->kind_flags.has(MonsterKindType::UNIQUE);
@@ -593,7 +593,7 @@ static void effect_monster_gravity_stun(effect_monster_type *em_ptr)
  * Powerful monsters can resist and normal monsters slow down
  * Furthermore, this magic can make non-unique monsters slow/stun.
  */
-ProcessResult effect_monster_gravity(PlayerType *player_ptr, effect_monster_type *em_ptr)
+ProcessResult effect_monster_gravity(PlayerType *player_ptr, EffectMonster *em_ptr)
 {
     em_ptr->do_dist = effect_monster_gravity_resist_teleport(player_ptr, em_ptr) ? 0 : 10;
     if (player_ptr->riding && (em_ptr->g_ptr->m_idx == player_ptr->riding)) {
@@ -618,7 +618,7 @@ ProcessResult effect_monster_gravity(PlayerType *player_ptr, effect_monster_type
     return ProcessResult::PROCESS_CONTINUE;
 }
 
-ProcessResult effect_monster_disintegration(PlayerType *player_ptr, effect_monster_type *em_ptr)
+ProcessResult effect_monster_disintegration(PlayerType *player_ptr, EffectMonster *em_ptr)
 {
     if (em_ptr->seen) {
         em_ptr->obvious = true;
@@ -638,7 +638,7 @@ ProcessResult effect_monster_disintegration(PlayerType *player_ptr, effect_monst
     return ProcessResult::PROCESS_CONTINUE;
 }
 
-ProcessResult effect_monster_icee_bolt(PlayerType *player_ptr, effect_monster_type *em_ptr)
+ProcessResult effect_monster_icee_bolt(PlayerType *player_ptr, EffectMonster *em_ptr)
 {
     if (em_ptr->seen) {
         em_ptr->obvious = true;
@@ -670,7 +670,7 @@ ProcessResult effect_monster_icee_bolt(PlayerType *player_ptr, effect_monster_ty
  * @details
  * 量子生物に倍打、壁抜けに1.5倍打、テレポート耐性が耐性
  */
-ProcessResult effect_monster_void(PlayerType *player_ptr, effect_monster_type *em_ptr)
+ProcessResult effect_monster_void(PlayerType *player_ptr, EffectMonster *em_ptr)
 {
     if (em_ptr->seen) {
         em_ptr->obvious = true;
@@ -722,7 +722,7 @@ ProcessResult effect_monster_void(PlayerType *player_ptr, effect_monster_type *e
  * 飛ばないテレポート耐性に1.25倍打、暗黒耐性が耐性
  * 1/3で追加に混乱か恐怖
  */
-ProcessResult effect_monster_abyss(PlayerType *player_ptr, effect_monster_type *em_ptr)
+ProcessResult effect_monster_abyss(PlayerType *player_ptr, EffectMonster *em_ptr)
 {
     if (em_ptr->seen) {
         em_ptr->obvious = true;

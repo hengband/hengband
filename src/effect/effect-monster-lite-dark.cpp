@@ -7,7 +7,7 @@
 #include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
 
-ProcessResult effect_monster_lite_weak(PlayerType *player_ptr, effect_monster_type *em_ptr)
+ProcessResult effect_monster_lite_weak(PlayerType *player_ptr, EffectMonster *em_ptr)
 {
     if (!em_ptr->dam) {
         em_ptr->skipped = true;
@@ -32,7 +32,7 @@ ProcessResult effect_monster_lite_weak(PlayerType *player_ptr, effect_monster_ty
     return ProcessResult::PROCESS_CONTINUE;
 }
 
-ProcessResult effect_monster_lite(PlayerType *player_ptr, effect_monster_type *em_ptr)
+ProcessResult effect_monster_lite(PlayerType *player_ptr, EffectMonster *em_ptr)
 {
     if (em_ptr->seen) {
         em_ptr->obvious = true;
@@ -58,7 +58,7 @@ ProcessResult effect_monster_lite(PlayerType *player_ptr, effect_monster_type *e
     return ProcessResult::PROCESS_CONTINUE;
 }
 
-ProcessResult effect_monster_dark(PlayerType *player_ptr, effect_monster_type *em_ptr)
+ProcessResult effect_monster_dark(PlayerType *player_ptr, EffectMonster *em_ptr)
 {
     if (em_ptr->seen) {
         em_ptr->obvious = true;
