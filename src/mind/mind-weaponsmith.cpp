@@ -475,28 +475,32 @@ static void add_essence(PlayerType *player_ptr, SmithCategoryType mode)
             msg_print(_("このアイテムの能力修正を強化することはできない。", "You cannot increase magic number of this item."));
             return;
         } else if (attribute_flags.has(TR_BLOWS)) {
-            if ((o_ptr->pval > 1) && !get_check(_("修正値は1になります。よろしいですか？", "The magic number of this weapon will become 1. Are you sure? "))) {
+            constexpr auto mes = _("修正値は1になります。よろしいですか？", "The magic number of this weapon will become 1. Are you sure? ");
+            if ((o_ptr->pval > 1) && !get_check(mes)) {
                 return;
             }
             o_ptr->pval = 1;
         } else if (o_ptr->pval == 0) {
-            char tmp_val[8] = "1";
             auto limit = std::min(5, smith.get_addable_count(effect, o_ptr));
-
-            if (!get_string(format(_("いくつ付加しますか？ (1-%d): ", "Enchant how many? (1-%d): "), limit), tmp_val, 1)) {
+            const auto prompt = format(_("いくつ付加しますか？ (1-%d): ", "Enchant how many? (1-%d): "), limit);
+            const auto num_enchant = get_string(prompt, 1, "1");
+            if (!num_enchant.has_value()) {
                 return;
             }
-            o_ptr->pval = static_cast<PARAMETER_VALUE>(std::clamp(atoi(tmp_val), 1, limit));
+
+            o_ptr->pval = static_cast<short>(std::clamp(std::stoi(num_enchant.value()), 1, limit));
         }
 
         add_essence_count = o_ptr->pval;
     } else if (effect == SmithEffectType::SLAY_GLOVE) {
-        char tmp_val[8] = "1";
         const auto max_val = player_ptr->lev / 7 + 3;
-        if (!get_string(format(_("いくつ付加しますか？ (1-%d):", "Enchant how many? (1-%d):"), max_val), tmp_val, 2)) {
+        const auto prompt = format(_("いくつ付加しますか？ (1-%d):", "Enchant how many? (1-%d):"), max_val);
+        const auto num_enchant = get_string(prompt, 2, "1");
+        if (!num_enchant.has_value()) {
             return;
         }
-        add_essence_count = std::clamp(atoi(tmp_val), 1, max_val);
+
+        add_essence_count = std::clamp(std::stoi(num_enchant.value()), 1, max_val);
     }
 
     msg_format(_("エッセンスを%d個使用します。", "It will take %d essences."), use_essence * add_essence_count);

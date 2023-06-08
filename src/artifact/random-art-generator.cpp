@@ -390,7 +390,7 @@ static std::string name_unnatural_random_artifact(PlayerType *player_ptr, ItemEn
         return get_random_name(*o_ptr, o_ptr->is_protector(), power_level);
     }
 
-    concptr ask_msg = _("このアーティファクトを何と名付けますか？", "What do you want to call the artifact? ");
+    constexpr auto ask_msg = _("このアーティファクトを何と名付けますか？", "What do you want to call the artifact? ");
     object_aware(player_ptr, o_ptr);
     object_known(o_ptr);
     o_ptr->ident |= IDENT_FULL_KNOWN;
@@ -402,8 +402,10 @@ static std::string name_unnatural_random_artifact(PlayerType *player_ptr, ItemEn
         ss << _("《", "'") << name << _("》", "'");
         return ss.str();
     };
-    char new_name[160] = "";
-    if (!get_string(ask_msg, new_name, sizeof new_name) || !new_name[0]) {
+
+    constexpr auto max_name = 160;
+    auto new_name = get_string(ask_msg, max_name);
+    if (!new_name.has_value()) {
         if (one_in_(2)) {
             return wrap_name(get_table_sindarin_aux());
         } else {
@@ -411,7 +413,7 @@ static std::string name_unnatural_random_artifact(PlayerType *player_ptr, ItemEn
         }
     }
 
-    return wrap_name(new_name);
+    return wrap_name(new_name.value());
 }
 
 static void generate_unnatural_random_artifact(

@@ -37,6 +37,7 @@
 #include "timed-effect/timed-effects.h"
 #include "util/angband-files.h"
 #include "util/int-char-converter.h"
+#include "util/string-processor.h"
 #include "view/display-messages.h"
 #include "view/display-player.h" // 暫定。後で消す.
 #include "world/world.h"
@@ -50,13 +51,13 @@
  */
 void do_cmd_pref(PlayerType *player_ptr)
 {
-    char buf[80];
-    strcpy(buf, "");
-    if (!get_string(_("設定変更コマンド: ", "Pref: "), buf, 80)) {
+    auto pref = get_string(_("設定変更コマンド: ", "Pref: "), 80);
+    if (!pref.has_value()) {
         return;
     }
 
-    (void)interpret_pref_file(player_ptr, buf);
+    auto &pref_str = pref.value();
+    (void)interpret_pref_file(player_ptr, pref_str.data());
 }
 
 /*
@@ -196,18 +197,19 @@ void do_cmd_colors(PlayerType *player_ptr)
 /*
  * Note something in the message recall
  */
-void do_cmd_note(void)
+void do_cmd_note()
 {
-    char buf[80];
-    strcpy(buf, "");
-    if (!get_string(_("メモ: ", "Note: "), buf, 60)) {
-        return;
-    }
-    if (!buf[0] || (buf[0] == ' ')) {
+    const auto note_opt = get_string(_("メモ: ", "Note: "), 60);
+    if (!note_opt.has_value()) {
         return;
     }
 
-    msg_format(_("メモ: %s", "Note: %s"), buf);
+    const auto note = str_ltrim(note_opt.value());
+    if (note.empty()) {
+        return;
+    }
+
+    msg_format(_("メモ: %s", "Note: %s"), note.data());
 }
 
 /*

@@ -41,13 +41,9 @@
  */
 void pattern_teleport(PlayerType *player_ptr)
 {
-    DEPTH min_level = 0;
-    DEPTH max_level = 99;
-
+    auto min_level = 0;
+    auto max_level = 99;
     if (get_check(_("他の階にテレポートしますか？", "Teleport level? "))) {
-        char ppp[80];
-        char tmp_val[160];
-
         if (ironman_downward) {
             min_level = player_ptr->current_floor_ptr->dun_level;
         }
@@ -65,13 +61,14 @@ void pattern_teleport(PlayerType *player_ptr)
             min_level = dungeon.mindepth;
         }
 
-        strnfmt(ppp, sizeof(ppp), _("テレポート先:(%d-%d)", "Teleport to level (%d-%d): "), (int)min_level, (int)max_level);
-        strnfmt(tmp_val, sizeof(tmp_val), "%d", (int)player_ptr->current_floor_ptr->dun_level);
-        if (!get_string(ppp, tmp_val, 10)) {
+        const auto prompt = format(_("テレポート先:(%d-%d)", "Teleport to level (%d-%d): "), min_level, max_level);
+        const auto current_level = player_ptr->current_floor_ptr->dun_level;
+        const auto next_level = get_string(prompt, 3, std::to_string(current_level));
+        if (!next_level.has_value()) {
             return;
         }
 
-        command_arg = (COMMAND_ARG)atoi(tmp_val);
+        command_arg = static_cast<short>(std::stoi(next_level.value()));
     } else if (get_check(_("通常テレポート？", "Normal teleport? "))) {
         teleport_player(player_ptr, 200, TELEPORT_SPONTANEOUS);
         return;

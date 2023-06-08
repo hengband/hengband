@@ -68,7 +68,9 @@
 #include "util/string-processor.h"
 #include "view/display-messages.h"
 #include "world/world.h"
+#include <optional>
 #include <sstream>
+#include <string>
 
 /*!
  * @brief ペットを開放するコマンドのメインルーチン
@@ -349,31 +351,30 @@ static void do_name_pet(PlayerType *player_ptr)
 
         msg_format(_("%sに名前をつける。", "Name %s."), monster_desc(player_ptr, m_ptr, 0).data());
         msg_print(nullptr);
-
-        /* Start with nothing */
-        char out_val[20]{};
-
-        /* Use old inscription */
+        std::string initial_pet_name("");
         if (m_ptr->is_named()) {
-            /* Start with the old inscription */
-            angband_strcpy(out_val, m_ptr->nickname, sizeof(out_val));
+            initial_pet_name = m_ptr->nickname;
             old_name = true;
         }
 
-        /* Get a new inscription (possibly empty) */
-        if (get_string(_("名前: ", "Name: "), out_val, 15)) {
-            if (out_val[0]) {
-                /* Save the inscription */
-                m_ptr->nickname = out_val;
-                if (record_named_pet) {
-                    exe_write_diary(player_ptr, DiaryKind::NAMED_PET, RECORD_NAMED_PET_NAME, monster_desc(player_ptr, m_ptr, MD_INDEF_VISIBLE));
-                }
-            } else {
-                if (record_named_pet && old_name) {
-                    exe_write_diary(player_ptr, DiaryKind::NAMED_PET, RECORD_NAMED_PET_UNNAME, monster_desc(player_ptr, m_ptr, MD_INDEF_VISIBLE));
-                }
-                m_ptr->nickname.clear();
+        const auto pet_name_opt = get_string(_("名前: ", "Name: "), 15, initial_pet_name);
+        if (!pet_name_opt.has_value()) {
+            return;
+        }
+
+        const auto &pet_name = pet_name_opt.value();
+        if (pet_name.empty()) {
+            if (record_named_pet && old_name) {
+                exe_write_diary(player_ptr, DiaryKind::NAMED_PET, RECORD_NAMED_PET_UNNAME, monster_desc(player_ptr, m_ptr, MD_INDEF_VISIBLE));
             }
+
+            m_ptr->nickname.clear();
+            return;
+        }
+
+        m_ptr->nickname = pet_name;
+        if (record_named_pet) {
+            exe_write_diary(player_ptr, DiaryKind::NAMED_PET, RECORD_NAMED_PET_NAME, monster_desc(player_ptr, m_ptr, MD_INDEF_VISIBLE));
         }
     }
 }

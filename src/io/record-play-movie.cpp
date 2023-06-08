@@ -346,12 +346,13 @@ void prepare_movie_hooks(PlayerType *player_ptr)
 
     std::stringstream ss;
     ss << player_ptr->base_name << ".amv";
-    auto movie_filename = ss.str();
-    if (!get_string(_("ムービー記録ファイル: ", "Movie file name: "), movie_filename.data(), 80)) {
+    const auto movie_filename = ss.str();
+    const auto user_filename = get_string(_("ムービー記録ファイル: ", "Movie file name: "), 80, movie_filename);
+    if (!user_filename.has_value()) {
         return;
     }
 
-    const auto &path = path_build(ANGBAND_DIR_USER, movie_filename);
+    const auto &path = path_build(ANGBAND_DIR_USER, user_filename.value());
     auto fd = fd_open(path, O_RDONLY);
     if (fd >= 0) {
         const auto &filename = path.string();

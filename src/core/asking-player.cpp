@@ -19,6 +19,7 @@
 #include <algorithm>
 #include <charconv>
 #include <climits>
+#include <cmath>
 #include <iostream>
 #include <sstream>
 #include <string>
@@ -206,23 +207,22 @@ bool askfor(char *buf, int len, bool numpad_cursor)
 }
 
 /*
- * Get a string from the user
- *
- * The "prompt" should take the form "Prompt: "
- *
- * Note that the initial contents of the string is used as
- * the default response, so be sure to "clear" it if needed.
- *
- * We clear the input, and return FALSE, on "ESCAPE".
+ * @brief プロンプトを表示し、それに対応した入力を受け付ける
+ * @param prompt プロンプト
+ * @param len 受け付ける入力文字列の最大長
  */
-bool get_string(std::string_view prompt, char *buf, int len)
+std::optional<std::string> get_string(std::string_view prompt, int len, std::string_view initial_value)
 {
-    bool res;
     msg_print(nullptr);
     prt(prompt, 0, 0);
-    res = askfor(buf, len);
+    char tmp[1024]{};
+    angband_strcpy(tmp, initial_value, 1023);
+    if (!askfor(tmp, len)) {
+        return std::nullopt;
+    }
+
     prt("", 0, 0);
-    return res;
+    return tmp;
 }
 
 /*
@@ -442,22 +442,28 @@ bool get_value(std::string_view prompt, int min, int max, int *value)
 {
     std::stringstream st;
     int val;
-    char tmp_val[12] = "";
-    std::to_chars(std::begin(tmp_val), std::end(tmp_val) - 1, *value);
+    const uint max_digits = std::log10(MAX_INT);
+    const auto initial_value = std::to_string(*value);
     st << prompt << "(" << min << "-" << max << "): ";
-    int digit = std::max(std::to_string(min).length(), std::to_string(max).length());
+    const auto digit = std::max(std::to_string(min).length(), std::to_string(max).length());
+    const auto mes = _("%dから%dの間で指定して下さい。", "It must be between %d to %d.");
     while (true) {
-        if (!get_string(st.str().data(), tmp_val, digit)) {
+        const auto input_value = get_string(st.str(), digit, initial_value);
+        if (!input_value.has_value()) {
             return false;
         }
 
-        val = atoi(tmp_val);
-
-        if (min <= val && max >= val) {
-            break;
+        if (input_value->length() > max_digits) {
+            msg_format(mes, min, max);
+            continue;
         }
-        msg_format(_("%dから%dの間で指定して下さい。", "It must be between %d to %d."), min, max);
+
+        val = std::stoi(input_value.value());
+        if (min <= val && val <= max) {
+            *value = val;
+            return true;
+        }
+
+        msg_format(mes, min, max);
     }
-    *value = val;
-    return true;
 }

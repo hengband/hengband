@@ -47,7 +47,9 @@
 #include "world/world.h"
 #include <algorithm>
 #include <limits>
+#include <optional>
 #include <sstream>
+#include <string>
 #include <tuple>
 #include <vector>
 
@@ -463,26 +465,25 @@ static void wiz_display_item(PlayerType *player_ptr, ItemEntity *o_ptr)
  */
 static void wiz_statistics(PlayerType *player_ptr, ItemEntity *o_ptr)
 {
-    concptr q = "Rolls: %ld  Correct: %ld  Matches: %ld  Better: %ld  Worse: %ld  Other: %ld";
-    concptr p = "Enter number of items to roll: ";
-    char tmp_val[80];
-
+    constexpr auto q = "Rolls: %d  Correct: %d  Matches: %d  Better: %d  Worse: %d  Other: %d";
+    constexpr auto p = "Enter number of items to roll: ";
+    constexpr auto pmt = "Roll for [n]ormal, [g]ood, or [e]xcellent treasure? ";
     if (o_ptr->is_fixed_artifact()) {
         o_ptr->get_fixed_artifact().is_generated = false;
     }
 
     uint32_t i, matches, better, worse, other, correct;
-    uint32_t test_roll = 1000000;
+    uint32_t test_rolls = 1000000;
     char ch;
-    concptr quality;
     BIT_FLAGS mode;
+    std::optional<std::string> input_rolls;
     while (true) {
-        concptr pmt = "Roll for [n]ormal, [g]ood, or [e]xcellent treasure? ";
         wiz_display_item(player_ptr, o_ptr);
         if (!get_com(pmt, &ch, false)) {
             break;
         }
 
+        std::string quality = "";
         if (ch == 'n' || ch == 'N') {
             mode = 0L;
             quality = "normal";
@@ -496,16 +497,17 @@ static void wiz_statistics(PlayerType *player_ptr, ItemEntity *o_ptr)
             break;
         }
 
-        strnfmt(tmp_val, sizeof(tmp_val), "%ld", (long int)test_roll);
-        if (get_string(p, tmp_val, 10)) {
-            test_roll = atol(tmp_val);
+        input_rolls = get_string(p, 10, std::to_string(test_rolls));
+        if (input_rolls.has_value()) {
+            test_rolls = std::stoi(input_rolls.value());
         }
-        test_roll = std::max<uint>(1, test_roll);
-        msg_format("Creating a lot of %s items. Base level = %d.", quality, player_ptr->current_floor_ptr->dun_level);
+
+        test_rolls = std::max<uint>(1, test_rolls);
+        msg_format("Creating a lot of %s items. Base level = %d.", quality.data(), player_ptr->current_floor_ptr->dun_level);
         msg_print(nullptr);
 
         correct = matches = better = worse = other = 0;
-        for (i = 0; i <= test_roll; i++) {
+        for (i = 0; i <= test_rolls; i++) {
             if ((i < 100) || (i % 100 == 0)) {
                 inkey_scan = true;
                 if (inkey()) {
@@ -669,38 +671,48 @@ static void wiz_tweak_item(PlayerType *player_ptr, ItemEntity *o_ptr)
         return;
     }
 
-    concptr p = "Enter new 'pval' setting: ";
-    char tmp_val[80];
-    strnfmt(tmp_val, sizeof(tmp_val), "%d", o_ptr->pval);
-    if (!get_string(p, tmp_val, 5)) {
+    constexpr auto p = "Enter new 'pval' setting: ";
+    const auto initial_pval = format("%d", o_ptr->pval);
+    const auto pval_opt = get_string(p, 5, initial_pval.data());
+    if (!pval_opt.has_value()) {
         return;
     }
 
-    o_ptr->pval = clamp_cast<int16_t>(atoi(tmp_val));
+    const auto &pval = pval_opt.value();
+    o_ptr->pval = clamp_cast<int16_t>(std::stoi(pval));
     wiz_display_item(player_ptr, o_ptr);
-    p = "Enter new 'to_a' setting: ";
-    strnfmt(tmp_val, sizeof(tmp_val), "%d", o_ptr->to_a);
-    if (!get_string(p, tmp_val, 5)) {
+
+    constexpr auto a = "Enter new 'to_a' setting: ";
+    const auto initial_ac = format("%d", o_ptr->to_a);
+    const auto ac_opt = get_string(a, 5, initial_ac);
+    if (!ac_opt.has_value()) {
         return;
     }
 
-    o_ptr->to_a = clamp_cast<int16_t>(atoi(tmp_val));
+    const auto &ac = ac_opt.value();
+    o_ptr->to_a = clamp_cast<int16_t>(std::stoi(ac));
     wiz_display_item(player_ptr, o_ptr);
-    p = "Enter new 'to_h' setting: ";
-    strnfmt(tmp_val, sizeof(tmp_val), "%d", o_ptr->to_h);
-    if (!get_string(p, tmp_val, 5)) {
+
+    constexpr auto h = "Enter new 'to_h' setting: ";
+    const auto initial_hit = format("%d", o_ptr->to_h);
+    const auto hit_opt = get_string(h, 5, initial_hit);
+    if (!hit_opt.has_value()) {
         return;
     }
 
-    o_ptr->to_h = clamp_cast<int16_t>(atoi(tmp_val));
+    const auto &hit = hit_opt.value();
+    o_ptr->to_h = clamp_cast<int16_t>(std::stoi(hit));
     wiz_display_item(player_ptr, o_ptr);
-    p = "Enter new 'to_d' setting: ";
-    strnfmt(tmp_val, sizeof(tmp_val), "%d", (int)o_ptr->to_d);
-    if (!get_string(p, tmp_val, 5)) {
+
+    constexpr auto d = "Enter new 'to_d' setting: ";
+    const auto initial_damage = format("%d", (int)o_ptr->to_d);
+    const auto damage_opt = get_string(d, 5, initial_damage);
+    if (!damage_opt.has_value()) {
         return;
     }
 
-    o_ptr->to_d = clamp_cast<int16_t>(atoi(tmp_val));
+    const auto &damage = damage_opt.value();
+    o_ptr->to_d = clamp_cast<int16_t>(std::stoi(damage));
     wiz_display_item(player_ptr, o_ptr);
 }
 
@@ -717,19 +729,11 @@ static void wiz_quantity_item(ItemEntity *o_ptr)
     }
 
     int tmp_qnt = o_ptr->number;
-    char tmp_val[100];
-    strnfmt(tmp_val, sizeof(tmp_val), "%d", (int)o_ptr->number);
-    if (get_string("Quantity: ", tmp_val, 2)) {
-        int tmp_int = atoi(tmp_val);
-        if (tmp_int < 1) {
-            tmp_int = 1;
-        }
-
-        if (tmp_int > 99) {
-            tmp_int = 99;
-        }
-
-        o_ptr->number = (byte)tmp_int;
+    const auto initial_num = format("%d", (int)o_ptr->number);
+    const auto num_opt = get_string("Quantity: ", 2, initial_num);
+    if (num_opt.has_value()) {
+        auto tmp_int = std::clamp(std::stoi(num_opt.value()), 1, 99);
+        o_ptr->number = static_cast<uint8_t>(tmp_int);
     }
 
     if (o_ptr->bi_key.tval() == ItemKindType::ROD) {
@@ -857,7 +861,7 @@ static void wishing_puff_of_smoke(void)
  */
 WishResultType do_cmd_wishing(PlayerType *player_ptr, int prob, bool allow_art, bool allow_ego, bool confirm)
 {
-    concptr fixed_str[] = {
+    static const std::vector<std::string> fixed_strings = {
 #ifdef JP
         "燃えない",
         "錆びない",
@@ -871,11 +875,8 @@ WishResultType do_cmd_wishing(PlayerType *player_ptr, int prob, bool allow_art, 
         "corrodeproof",
         "fixed",
 #endif
-        nullptr,
     };
 
-    char buf[MAX_NLEN] = "\0";
-    char *str = buf;
     ItemEntity forge;
     auto *o_ptr = &forge;
     bool wish_art = false;
@@ -888,66 +889,67 @@ WishResultType do_cmd_wishing(PlayerType *player_ptr, int prob, bool allow_art, 
     bool blessed = false;
     bool fixed = true;
 
-    while (1) {
-        if (get_string(_("何をお望み？ ", "For what do you wish?"), buf, (MAX_NLEN - 1))) {
+    std::string wish;
+    while (true) {
+        const auto wish_opt = get_string(_("何をお望み？ ", "For what do you wish?"), MAX_NLEN - 1);
+        if (wish_opt.has_value()) {
+            wish = str_rtrim(wish_opt.value());
             break;
         }
-        if (confirm) {
-            if (!get_check(_("何も願いません。本当によろしいですか？", "Do you wish nothing, really? "))) {
-                continue;
-            }
+
+        constexpr auto mes_no_wish = _("何も願いません。本当によろしいですか？", "Do you wish nothing, really? ");
+        if (confirm && !get_check(mes_no_wish)) {
+            continue;
         }
+
         return WishResultType::NOTHING;
     }
 
 #ifndef JP
-    str_tolower(str);
+    str_tolower(wish.data());
 
     /* remove 'a' */
-    if (!strncmp(buf, "a ", 2)) {
-        str = ltrim(str + 1);
-    } else if (!strncmp(buf, "an ", 3)) {
-        str = ltrim(str + 2);
+    if (wish.starts_with("a ")) {
+        wish = str_ltrim(wish.substr(0, 2));
+    } else if (wish.starts_with("an ")) {
+        wish = str_ltrim(wish.substr(0, 2));
     }
 #endif // !JP
 
-    str = rtrim(str);
-
-    if (!strncmp(str, _("祝福された", "blessed"), _(10, 7))) {
-        str = ltrim(str + _(10, 7));
+    if (wish.starts_with(_("祝福された", "blessed"))) {
+        wish = str_ltrim(wish.substr(0, _(10, 7)));
         blessed = true;
     }
 
-    for (int i = 0; fixed_str[i] != nullptr; i++) {
-        int len = strlen(fixed_str[i]);
-        if (!strncmp(str, fixed_str[i], len)) {
-            str = ltrim(str + len);
+    for (const auto &fixed_string : fixed_strings) {
+        if (wish.starts_with(fixed_string)) {
+            wish = str_ltrim(wish.substr(0, fixed_string.length()));
             fixed = true;
             break;
         }
     }
 
 #ifdef JP
-    if (!strncmp(str, "★", 2)) {
-        str = ltrim(str + 2);
+    if (wish.starts_with("★")) {
+        wish = str_ltrim(wish.substr(0, 2));
         wish_art = true;
         exam_base = false;
     } else
 #endif
 
-        if (!strncmp(str, _("☆", "The "), _(2, 4))) {
-        str = ltrim(str + _(2, 4));
+        if (wish.starts_with(_("☆", "The "))) {
+        wish = str_ltrim(wish.substr(0, _(2, 4)));
         wish_art = true;
         wish_randart = true;
     }
 
     /* wishing random ego ? */
-    else if (!strncmp(str, _("高級な", "excellent "), _(6, 9))) {
-        str = ltrim(str + _(6, 9));
+    else if (wish.starts_with(_("高級な", "excellent "))) {
+        wish = str_ltrim(wish.substr(0, _(6, 9)));
         wish_ego = true;
     }
 
-    if (strlen(str) < 1) {
+    if (wish.empty()) {
         msg_print(_("名前がない！", "What?"));
         return WishResultType::NOTHING;
     }
@@ -958,7 +960,7 @@ WishResultType do_cmd_wishing(PlayerType *player_ptr, int prob, bool allow_art, 
     }
 
     if (cheat_xtra) {
-        msg_format("Wishing %s....", buf);
+        msg_format("Wishing %s....", wish.data());
     }
 
     std::vector<short> k_ids;
@@ -982,7 +984,7 @@ WishResultType do_cmd_wishing(PlayerType *player_ptr, int prob, bool allow_art, 
             }
 
             const int len = item_name.length();
-            if (std::string(str).find(item_name) != std::string::npos) {
+            if (wish.find(item_name) != std::string::npos) {
                 if (len > max_len) {
                     k_ids.push_back(baseitem.idx);
                     max_len = len;
@@ -1008,7 +1010,7 @@ WishResultType do_cmd_wishing(PlayerType *player_ptr, int prob, bool allow_art, 
                     msg_format("matching ego no.%d %s...", enum2i(ego.idx), item_name.data());
                 }
 
-                if (std::string(str).find(item_name) != std::string::npos) {
+                if (wish.find(item_name) != std::string::npos) {
                     if (is_slot_able_to_be_ego(player_ptr, o_ptr) != ego.slot) {
                         continue;
                     }
@@ -1087,7 +1089,7 @@ WishResultType do_cmd_wishing(PlayerType *player_ptr, int prob, bool allow_art, 
 
             std::vector<const char *> l = { a_str, artifact.name.data(), match_name };
             for (size_t c = 0; c < l.size(); c++) {
-                if (!strcmp(str, l.at(c))) {
+                if (wish == l.at(c)) {
                     len = strlen(l.at(c));
                     if (len > mlen) {
                         a_ids.push_back(a_idx);

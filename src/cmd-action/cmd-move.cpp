@@ -460,19 +460,19 @@ void do_cmd_rest(PlayerType *player_ptr)
     }
 
     if (command_arg <= 0) {
-        concptr p = _("休憩 (0-9999, '*' で HP/MP全快, '&' で必要なだけ): ", "Rest (0-9999, '*' for HP/SP, '&' as needed): ");
-        char out_val[80];
-        strcpy(out_val, "&");
-        if (!get_string(p, out_val, 4)) {
+        constexpr auto p = _("休憩 (0-9999, '*' で HP/MP全快, '&' で必要なだけ): ", "Rest (0-9999, '*' for HP/SP, '&' as needed): ");
+        const auto restration_turns_opt = get_string(p, 4, "&");
+        if (!restration_turns_opt.has_value()) {
             return;
         }
 
-        if (out_val[0] == '&') {
+        const auto &restration_turns = restration_turns_opt.value();
+        if (restration_turns[0] == '&') {
             command_arg = COMMAND_ARG_REST_UNTIL_DONE;
-        } else if (out_val[0] == '*') {
+        } else if (restration_turns[0] == '*') {
             command_arg = COMMAND_ARG_REST_FULL_HEALING;
         } else {
-            command_arg = (COMMAND_ARG)atoi(out_val);
+            command_arg = static_cast<short>(std::stoi(restration_turns));
             if (command_arg <= 0) {
                 return;
             }

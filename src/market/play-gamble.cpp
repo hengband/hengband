@@ -24,12 +24,7 @@ bool gamble_comm(PlayerType *player_ptr, int cmd)
 {
     int i;
     int roll1, roll2, roll3, choice, odds, win;
-    int32_t wager;
-    int32_t maxbet;
-    int32_t oldgold;
-
-    char out_val[160] = "", again;
-    concptr p;
+    int oldgold;
 
     screen_save();
 
@@ -47,31 +42,23 @@ bool gamble_comm(PlayerType *player_ptr, int cmd)
     }
 
     clear_bldg(5, 23);
-    maxbet = player_ptr->lev * 200;
-    maxbet = std::min(maxbet, player_ptr->au);
-
-    /*
-     * Use get_string() because we may need more than
-     * the int16_t value returned by get_quantity().
-     */
-    if (!get_string(format(_("賭け金 (1-%ld)？", "Your wager (1-%ld) ? "), (long int)maxbet), out_val, 32)) {
+    auto maxbet = std::min(player_ptr->lev * 200, player_ptr->au);
+    const auto prompt = format(_("賭け金 (1-%d)？", "Your wager (1-%d) ? "), maxbet);
+    const auto wager_str = get_string(prompt, 32, "1");
+    if (!wager_str.has_value()) {
         msg_print(nullptr);
         screen_load();
         return true;
     }
 
-    for (p = out_val; *p == ' '; p++) {
-        ;
-    }
-
-    wager = atol(p);
+    auto wager = std::stoi(str_ltrim(wager_str.value()));
     if (wager > player_ptr->au) {
         msg_print(_("おい！金が足りないじゃないか！出ていけ！", "Hey! You don't have the gold - get out of here!"));
         msg_print(nullptr);
         screen_load();
         return false;
     } else if (wager > maxbet) {
-        msg_format(_("%ldゴールドだけ受けよう。残りは取っときな。", "I'll take %ld gold of that. Keep the rest."), (long int)maxbet);
+        msg_format(_("%dゴールドだけ受けよう。残りは取っときな。", "I'll take %d gold of that. Keep the rest."), maxbet);
         wager = maxbet;
     } else if (wager < 1) {
         msg_print(_("ＯＫ、１ゴールドからはじめよう。", "Ok, we'll start with 1 gold."));
@@ -82,9 +69,10 @@ bool gamble_comm(PlayerType *player_ptr, int cmd)
     odds = 0;
     oldgold = player_ptr->au;
 
-    prt(format(_("ゲーム前の所持金: %9ld", "Gold before game: %9ld"), (long int)oldgold), 20, 2);
-    prt(format(_("現在の掛け金:     %9ld", "Current Wager:    %9ld"), (long int)wager), 21, 2);
+    prt(format(_("ゲーム前の所持金: %9d", "Gold before game: %9d"), oldgold), 20, 2);
+    prt(format(_("現在の掛け金:     %9d", "Current Wager:    %9d"), wager), 21, 2);
 
+    char again;
     do {
         player_ptr->au -= wager;
         switch (cmd) {
@@ -137,27 +125,19 @@ bool gamble_comm(PlayerType *player_ptr, int cmd)
 
             break;
 
-        case BACT_SPIN_WHEEL: /* Spin the Wheel Game */
+        case BACT_SPIN_WHEEL: /* Spin the Wheel Game */ {
             win = 0;
             odds = 9;
             c_put_str(TERM_GREEN, _("ルーレット", "Wheel"), 5, 2);
 
             prt("0  1  2  3  4  5  6  7  8  9", 7, 5);
             prt("--------------------------------", 8, 3);
-            strcpy(out_val, "");
-            get_string(_("何番？ (0-9): ", "Pick a number (0-9): "), out_val, 32);
+            const auto num = get_string(_("何番？ (0-9): ", "Pick a number (0-9): "), 1);
+            if (!num.has_value()) {
+                break;
+            }
 
-            for (p = out_val; iswspace(*p); p++) {
-                ;
-            }
-            choice = atol(p);
-            if (choice < 0) {
-                msg_print(_("0番にしとくぜ。", "I'll put you down for 0."));
-                choice = 0;
-            } else if (choice > 9) {
-                msg_print(_("ＯＫ、9番にしとくぜ。", "Ok, I'll put you down for 9."));
-                choice = 9;
-            }
+            choice = std::stoi(num.value());
             msg_print(nullptr);
             roll1 = randint0(10);
             prt(format(_("ルーレットは回り、止まった。勝者は %d番だ。", "The wheel spins to a stop and the winner is %d"), roll1), 13, 3);
@@ -166,8 +146,9 @@ bool gamble_comm(PlayerType *player_ptr, int cmd)
             if (roll1 == choice) {
                 win = 1;
             }
-            break;
 
+            break;
+        }
         case BACT_DICE_SLOTS: /* The Dice Slots */
             c_put_str(TERM_GREEN, _("ダイス・スロット", "Dice Slots"), 5, 2);
             c_put_str(TERM_YELLOW, _("レモン   レモン            2", "Lemon    Lemon             2"), 6, 37);

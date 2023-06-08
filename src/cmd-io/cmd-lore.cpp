@@ -43,8 +43,6 @@ void do_cmd_query_symbol(PlayerType *player_ptr)
     bool uniq = false;
     bool norm = false;
     bool ride = false;
-    char temp[MAX_MONSTER_NAME] = "";
-
     bool recall = false;
 
     uint16_t why = 0;
@@ -62,6 +60,7 @@ void do_cmd_query_symbol(PlayerType *player_ptr)
         }
     }
 
+    std::string monster_name("");
     std::string buf;
     if (sym == KTRL('A')) {
         all = true;
@@ -77,11 +76,13 @@ void do_cmd_query_symbol(PlayerType *player_ptr)
         buf = _("乗馬可能モンスターのリスト", "Ridable monster list.");
     } else if (sym == KTRL('M')) {
         all = true;
-        if (!get_string(_("名前(英語の場合小文字で可)", "Enter name:"), temp, 70)) {
-            temp[0] = 0;
+        const auto monster_name_opt = get_string(_("名前(英語の場合小文字で可)", "Enter name:"), 70);
+        if (!monster_name_opt.has_value()) {
             return;
         }
-        buf = format(_("名前:%sにマッチ", "Monsters' names with \"%s\""), temp);
+
+        monster_name = monster_name_opt.value();
+        buf = format(_("名前:%sにマッチ", "Monsters' names with \"%s\""), monster_name.data());
     } else if (ident_info[ident_i]) {
         buf = format("%c - %s.", sym, ident_info[ident_i] + 2);
     } else {
@@ -107,42 +108,34 @@ void do_cmd_query_symbol(PlayerType *player_ptr)
             continue;
         }
 
-        if (temp[0]) {
+        if (!monster_name.empty()) {
             TERM_LEN xx;
-            char temp2[MAX_MONSTER_NAME];
-
-            for (xx = 0; temp[xx] && xx < MAX_MONSTER_NAME; xx++) {
+            for (xx = 0; (monster_name[xx] != '\0') && xx < MAX_MONSTER_NAME; xx++) {
 #ifdef JP
-                if (iskanji(temp[xx])) {
+                if (iskanji(monster_name[xx])) {
                     xx++;
                     continue;
                 }
 #endif
-                if (isupper(temp[xx])) {
-                    temp[xx] = (char)tolower(temp[xx]);
+                if (isupper(monster_name[xx])) {
+                    monster_name[xx] = static_cast<char>(tolower(monster_name[xx]));
                 }
             }
 
-#ifdef JP
-            strcpy(temp2, r_ref.E_name.data());
-#else
-            strcpy(temp2, r_ref.name.data());
-#endif
+            auto temp2 = _(r_ref.E_name, r_ref.name);
             for (xx = 0; temp2[xx] && xx < MAX_MONSTER_NAME; xx++) {
                 if (isupper(temp2[xx])) {
-                    temp2[xx] = (char)tolower(temp2[xx]);
+                    temp2[xx] = static_cast<char>(tolower(temp2[xx]));
                 }
             }
 
 #ifdef JP
-            if (angband_strstr(temp2, temp) || angband_strstr(r_ref.name.data(), temp))
+            if ((temp2.find(monster_name) != std::string::npos) || (r_ref.name.find(monster_name) != std::string::npos))
 #else
-            if (angband_strstr(temp2, temp))
+            if (temp2.find(monster_name) != std::string::npos)
 #endif
                 who.push_back(r_ref.idx);
-        }
-
-        else if (all || (r_ref.d_char == sym)) {
+        } else if (all || (r_ref.d_char == sym)) {
             who.push_back(r_ref.idx);
         }
     }

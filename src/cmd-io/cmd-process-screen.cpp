@@ -235,12 +235,13 @@ void exe_cmd_save_screen_html(const std::filesystem::path &path, bool need_messa
  */
 static void exe_cmd_save_screen_html_with_naming()
 {
-    char tmp[256] = "screen.html";
-    if (!get_string(_("ファイル名: ", "File name: "), tmp, 80)) {
+    constexpr auto initial_html = "screen.html";
+    const auto html = get_string(_("ファイル名: ", "File name: "), 80, initial_html);
+    if (!html.has_value()) {
         return;
     }
 
-    auto path = path_build(ANGBAND_DIR_USER, tmp);
+    auto path = path_build(ANGBAND_DIR_USER, html.value());
     msg_print(nullptr);
     exe_cmd_save_screen_html(path, true);
 }

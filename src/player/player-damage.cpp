@@ -469,31 +469,27 @@ int take_hit(PlayerType *player_ptr, int damage_type, int damage, std::string_vi
                     opt_death_message = get_random_line(_("death_j.txt", "death.txt"), 0);
                 }
 
-                auto &death_message = opt_death_message.value();
+                const auto &initial_last_message = opt_death_message.value();
                 constexpr auto max_last_words = 1024;
-                char player_last_words[max_last_words]{};
-                angband_strcpy(player_last_words, death_message, max_last_words);
+                std::string last_message;
                 do {
-#ifdef JP
-                    while (!get_string(winning_seppuku ? "辞世の句: " : "断末魔の叫び: ", player_last_words, max_last_words)) {
+                    const auto prompt = winning_seppuku ? _("辞世の句: ", "Haiku") : _("断末魔の叫び: ", "Last words");
+                    const auto last_words_opt = get_string(prompt, max_last_words, initial_last_message);
+                    while (!last_words_opt.has_value()) {
                         ;
                     }
-#else
-                    while (!get_string("Last words: ", player_last_words, max_last_words)) {
-                        ;
-                    }
-#endif
+
+                    last_message = last_words_opt.value();
                 } while (winning_seppuku && !get_check_strict(player_ptr, _("よろしいですか？", "Are you sure? "), CHECK_NO_HISTORY));
 
-                death_message = player_last_words;
-                if (death_message.empty()) {
+                if (last_message.empty()) {
 #ifdef JP
-                    death_message = format("あなたは%sました。", android ? "壊れ" : "死に");
+                    last_message = format("あなたは%sました。", android ? "壊れ" : "死に");
 #else
-                    death_message = android ? "You are broken." : "You die.";
+                    last_message = android ? "You are broken." : "You die.";
 #endif
                 } else {
-                    player_ptr->last_message = death_message;
+                    player_ptr->last_message = last_message;
                 }
 
 #ifdef JP
@@ -510,7 +506,7 @@ int take_hit(PlayerType *player_ptr, int damage_type, int damage, std::string_vi
                         term_putstr(randint0(w / 2) * 2, randint0(h), 2, TERM_VIOLET, "υ");
                     }
 
-                    auto str = death_message.data();
+                    auto str = initial_last_message.data();
                     if (strncmp(str, "「", 2) == 0) {
                         str += 2;
                     }
@@ -550,7 +546,7 @@ int take_hit(PlayerType *player_ptr, int damage_type, int damage, std::string_vi
                     (void)inkey();
                 } else
 #endif
-                    msg_print(death_message);
+                    msg_print(initial_last_message);
             }
         }
 

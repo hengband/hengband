@@ -402,38 +402,38 @@ void wiz_create_named_art(PlayerType *player_ptr)
  */
 void wiz_change_status(PlayerType *player_ptr)
 {
-    char tmp_val[160];
-    char ppp[80];
     for (int i = 0; i < A_MAX; i++) {
-        strnfmt(ppp, sizeof(ppp), "%s (3-%d): ", stat_names[i], player_ptr->stat_max_max[i]);
-        strnfmt(tmp_val, sizeof(tmp_val), "%d", player_ptr->stat_max[i]);
-        if (!get_string(ppp, tmp_val, 3)) {
+        const auto max_stat = format("%s (3-%d): ", stat_names[i], player_ptr->stat_max_max[i]);
+        const auto initial_stat = std::to_string(player_ptr->stat_max[i]);
+        const auto input_stat = get_string(max_stat, 3, initial_stat);
+        if (!input_stat.has_value()) {
             return;
         }
 
-        auto stat = std::clamp<short>(static_cast<short>(atoi(tmp_val)), 3, player_ptr->stat_max_max[i]);
+        auto stat = std::clamp<short>(static_cast<short>(std::stoi(input_stat.value())), 3, player_ptr->stat_max_max[i]);
         player_ptr->stat_cur[i] = stat;
         player_ptr->stat_max[i] = stat;
     }
 
-    strnfmt(tmp_val, sizeof(tmp_val), "%d", PlayerSkill::weapon_exp_at(PlayerSkillRank::MASTER));
-    if (!get_string(_("熟練度: ", "Proficiency: "), tmp_val, 4)) {
+    const auto initial_proficiency = format("%d", PlayerSkill::weapon_exp_at(PlayerSkillRank::MASTER));
+    const auto proficiency = get_string(_("熟練度: ", "Proficiency: "), 4, initial_proficiency);
+    if (!proficiency.has_value()) {
         return;
     }
 
-    auto tmp_s16b = std::clamp(static_cast<SUB_EXP>(atoi(tmp_val)),
+    auto weapon_exp = std::clamp(static_cast<short>(std::stoi(proficiency.value())),
         PlayerSkill::weapon_exp_at(PlayerSkillRank::UNSKILLED),
         PlayerSkill::weapon_exp_at(PlayerSkillRank::MASTER));
 
     for (auto tval : TV_WEAPON_RANGE) {
         for (int i = 0; i < 64; i++) {
-            player_ptr->weapon_exp[tval][i] = tmp_s16b;
+            player_ptr->weapon_exp[tval][i] = weapon_exp;
         }
     }
-    PlayerSkill(player_ptr).limit_weapon_skills_by_max_value();
 
+    PlayerSkill(player_ptr).limit_weapon_skills_by_max_value();
     for (auto j : PLAYER_SKILL_KIND_TYPE_RANGE) {
-        player_ptr->skill_exp[j] = tmp_s16b;
+        player_ptr->skill_exp[j] = weapon_exp;
         auto short_pclass = enum2i(player_ptr->pclass);
         if (player_ptr->skill_exp[j] > class_skills_info[short_pclass].s_max[j]) {
             player_ptr->skill_exp[j] = class_skills_info[short_pclass].s_max[j];
@@ -442,40 +442,33 @@ void wiz_change_status(PlayerType *player_ptr)
 
     int k;
     for (k = 0; k < 32; k++) {
-        player_ptr->spell_exp[k] = std::min(PlayerSkill::spell_exp_at(PlayerSkillRank::MASTER), tmp_s16b);
+        player_ptr->spell_exp[k] = std::min(PlayerSkill::spell_exp_at(PlayerSkillRank::MASTER), weapon_exp);
     }
 
     for (; k < 64; k++) {
-        player_ptr->spell_exp[k] = std::min(PlayerSkill::spell_exp_at(PlayerSkillRank::EXPERT), tmp_s16b);
+        player_ptr->spell_exp[k] = std::min(PlayerSkill::spell_exp_at(PlayerSkillRank::EXPERT), weapon_exp);
     }
 
-    strnfmt(tmp_val, sizeof(tmp_val), "%ld", (long)(player_ptr->au));
-    if (!get_string("Gold: ", tmp_val, 9)) {
+    const auto initial_gold = std::to_string(player_ptr->au);
+    const auto new_gold = get_string("Gold: ", 9, initial_gold);
+    if (!new_gold.has_value()) {
         return;
     }
 
-    long tmp_long = atol(tmp_val);
-    if (tmp_long < 0) {
-        tmp_long = 0L;
-    }
-
-    player_ptr->au = tmp_long;
-    strnfmt(tmp_val, sizeof(tmp_val), "%ld", (long)(player_ptr->max_exp));
-    if (!get_string("Experience: ", tmp_val, 9)) {
-        return;
-    }
-
-    tmp_long = atol(tmp_val);
-    if (tmp_long < 0) {
-        tmp_long = 0L;
-    }
-
+    player_ptr->au = std::max(std::stoi(new_gold.value()), 0);
     if (PlayerRace(player_ptr).equals(PlayerRaceType::ANDROID)) {
         return;
     }
 
-    player_ptr->max_exp = tmp_long;
-    player_ptr->exp = tmp_long;
+    const auto initial_exp = std::to_string(player_ptr->max_exp);
+    const auto new_exp_opt = get_string("Experience: ", 9, initial_exp);
+    if (!new_exp_opt.has_value()) {
+        return;
+    }
+
+    const auto new_exp = std::max(std::stoi(new_exp_opt.value()), 0);
+    player_ptr->max_exp = new_exp;
+    player_ptr->exp = new_exp;
     check_experience(player_ptr);
     do_cmd_redraw(player_ptr);
 }
@@ -534,13 +527,13 @@ static bool select_debugging_dungeon(PlayerType *player_ptr, DUNGEON_IDX *dungeo
     }
 
     while (true) {
-        char tmp_val[160];
-        strnfmt(tmp_val, sizeof(tmp_val), "%d", player_ptr->current_floor_ptr->dungeon_idx);
-        if (!get_string("Jump which dungeon : ", tmp_val, 2)) {
+        const auto initial_dungeon = std::to_string(player_ptr->current_floor_ptr->dungeon_idx);
+        const auto new_dungeon = get_string("Jump which dungeon : ", 2, initial_dungeon);
+        if (!new_dungeon.has_value()) {
             return false;
         }
 
-        *dungeon_type = (DUNGEON_IDX)atoi(tmp_val);
+        *dungeon_type = static_cast<short>(std::stoi(new_dungeon.value()));
         if ((*dungeon_type < DUNGEON_ANGBAND) || (*dungeon_type > DUNGEON_MAX)) {
             msg_print("Invalid dungeon. Please re-input.");
             continue;
@@ -567,15 +560,14 @@ static bool select_debugging_floor(PlayerType *player_ptr, int dungeon_type)
 
     auto min_depth = (int)dungeons_info[dungeon_type].mindepth;
     while (true) {
-        char ppp[80];
-        char tmp_val[160];
-        strnfmt(ppp, sizeof(ppp), "Jump to level (0, %d-%d): ", min_depth, max_depth);
-        strnfmt(tmp_val, sizeof(tmp_val), "%d", (int)player_ptr->current_floor_ptr->dun_level);
-        if (!get_string(ppp, tmp_val, 10)) {
+        const auto prompt = format("Jump to level (0, %d-%d): ", min_depth, max_depth);
+        const auto initial_level = std::to_string(player_ptr->current_floor_ptr->dun_level);
+        const auto new_level = get_string(prompt, 3, initial_level);
+        if (!new_level.has_value()) {
             return false;
         }
 
-        auto tmp_command_arg = (COMMAND_ARG)atoi(tmp_val);
+        auto tmp_command_arg = static_cast<short>(std::stoi(new_level.value()));
         if (tmp_command_arg == 0) {
             command_arg = tmp_command_arg;
             break;

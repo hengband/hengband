@@ -538,9 +538,7 @@ bool free_level_recall(PlayerType *player_ptr)
  */
 bool reset_recall(PlayerType *player_ptr)
 {
-    int select_dungeon, dummy = 0;
-
-    select_dungeon = choose_dungeon(_("をセット", "reset"), 2, 14);
+    auto select_dungeon = choose_dungeon(_("をセット", "reset"), 2, 14);
     if (ironman_downward) {
         msg_print(_("何も起こらなかった。", "Nothing happens."));
         return true;
@@ -549,17 +547,16 @@ bool reset_recall(PlayerType *player_ptr)
     if (!select_dungeon) {
         return false;
     }
-    char ppp[80];
-    constexpr auto mes = _("何階にセットしますか (%d-%d):", "Reset to which level (%d-%d): ");
-    strnfmt(ppp, sizeof(ppp), mes, (int)dungeons_info[select_dungeon].mindepth, (int)max_dlv[select_dungeon]);
-    char tmp_val[160];
-    strnfmt(tmp_val, sizeof(tmp_val), "%d", (int)std::max(player_ptr->current_floor_ptr->dun_level, 1));
 
-    if (!get_string(ppp, tmp_val, 10)) {
+    constexpr auto mes = _("何階にセットしますか (%d-%d):", "Reset to which level (%d-%d): ");
+    const auto prompt = format(mes, dungeons_info[select_dungeon].mindepth, max_dlv[select_dungeon]);
+    const auto initial_level = std::to_string(std::max(player_ptr->current_floor_ptr->dun_level, 1));
+    const auto reset_level = get_string(prompt, 10, initial_level);
+    if (!reset_level.has_value()) {
         return false;
     }
 
-    dummy = atoi(tmp_val);
+    auto dummy = std::stoi(reset_level.value());
     if (dummy < 1) {
         dummy = 1;
     }

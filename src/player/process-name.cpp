@@ -140,28 +140,19 @@ void process_player_name(PlayerType *player_ptr, bool is_new_savefile)
  */
 void get_name(PlayerType *player_ptr)
 {
-    char tmp[64];
-    strcpy(tmp, player_ptr->name);
-
-    if (get_string(_("キャラクターの名前を入力して下さい: ", "Enter a name for your character: "), tmp, 15)) {
-        strcpy(player_ptr->name, tmp);
-    }
-
-    if (strlen(player_ptr->name) == 0) {
-        strcpy(player_ptr->name, "PLAYER");
-    }
-
-    strcpy(tmp, ap_ptr->title);
+    const auto prompt = _("キャラクターの名前を入力して下さい: ", "Enter a name for your character: ");
+    const auto new_name_opt = get_string(prompt, 15, player_ptr->name);
+    const auto new_name = !new_name_opt.has_value() || new_name_opt->empty() ? "PLAYER" : new_name_opt->data();
+    angband_strcpy(player_ptr->name, new_name, strlen(player_ptr->name));
+    angband_strcpy(player_ptr->name, ap_ptr->title, strlen(player_ptr->name));
 #ifdef JP
     if (ap_ptr->no == 1) {
-        strcat(tmp, "の");
+        angband_strcat(player_ptr->name, "の", 2);
     }
 #else
-    strcat(tmp, " ");
+    angband_strcat(player_ptr->name, " ", 1);
 #endif
-    strcat(tmp, player_ptr->name);
-
     term_erase(34, 1, 255);
-    c_put_str(TERM_L_BLUE, tmp, 1, 34);
+    c_put_str(TERM_L_BLUE, player_ptr->name, 1, 34);
     clear_from(22);
 }

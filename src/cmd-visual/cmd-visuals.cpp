@@ -40,15 +40,15 @@ static std::pair<bool, short> cmd_visuals_aux(int i, short visual_id, short max)
 {
     auto num = visual_id;
     if (iscntrl(i)) {
-        char str[10] = "";
-        strnfmt(str, sizeof(str), "%d", num);
-        if (!get_string(format("Input new number(0-%d): ", max - 1), str, 4)) {
+        const auto prompt = format("Input new number(0-%d): ", max - 1);
+        const auto new_id_str = get_string(prompt, 4, std::to_string(num));
+        if (!new_id_str.has_value()) {
             return { false, num };
         }
 
-        auto tmp = static_cast<short>(strtol(str, nullptr, 0));
-        if (tmp >= 0 && tmp < max) {
-            num = tmp;
+        auto new_id = static_cast<short>(std::stoi(new_id_str.value()));
+        if (new_id >= 0 && new_id < max) {
+            num = new_id;
         }
     } else if (isupper(i)) {
         num = (num + max - 1) % max;

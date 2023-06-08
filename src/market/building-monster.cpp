@@ -32,8 +32,6 @@ bool research_mon(PlayerType *player_ptr)
     bool all = false;
     bool uniq = false;
     bool norm = false;
-    char temp[MAX_MONSTER_NAME] = "";
-
     screen_save();
 
     char sym;
@@ -53,7 +51,7 @@ bool research_mon(PlayerType *player_ptr)
         }
     }
 
-    /* XTRA HACK WHATSEARCH */
+    std::string monster_name("");
     std::string buf;
     if (sym == KTRL('A')) {
         all = true;
@@ -66,14 +64,14 @@ bool research_mon(PlayerType *player_ptr)
         buf = _("ユニーク外モンスターのリスト", "Non-unique monster list.");
     } else if (sym == KTRL('M')) {
         all = true;
-        if (!get_string(_("名前(英語の場合小文字で可)", "Enter name:"), temp, 70)) {
-            temp[0] = 0;
+        const auto monster_name_opt = get_string(_("名前(英語の場合小文字で可)", "Enter name:"), 70);
+        if (!monster_name_opt.has_value()) {
             screen_load();
-
             return false;
         }
 
-        buf = format(_("名前:%sにマッチ", "Monsters' names with \"%s\""), temp);
+        monster_name = monster_name_opt.value();
+        buf = format(_("名前:%sにマッチ", "Monsters' names with \"%s\""), monster_name.data());
     } else if (ident_info[ident_i]) {
         buf = format("%c - %s.", sym, ident_info[ident_i] + 2);
     } else {
@@ -105,20 +103,20 @@ bool research_mon(PlayerType *player_ptr)
         }
 
         /* 名前検索 */
-        if (temp[0]) {
-            for (int xx = 0; temp[xx] && xx < 80; xx++) {
+        if (!monster_name.empty()) {
+            for (int xx = 0; (monster_name[xx] != '\0') && (xx < 80); xx++) {
 #ifdef JP
-                if (iskanji(temp[xx])) {
+                if (iskanji(monster_name[xx])) {
                     xx++;
                     continue;
                 }
 #endif
-                if (isupper(temp[xx])) {
-                    temp[xx] = (char)tolower(temp[xx]);
+                if (isupper(monster_name[xx])) {
+                    monster_name[xx] = static_cast<char>(tolower(monster_name[xx]));
                 }
             }
 
-            std::string temp2 = _(r_ref.E_name, r_ref.name);
+            auto temp2 = _(r_ref.E_name, r_ref.name);
             for (auto &ch : temp2) {
                 if (isupper(ch)) {
                     ch = static_cast<char>(tolower(ch));
@@ -126,9 +124,9 @@ bool research_mon(PlayerType *player_ptr)
             }
 
 #ifdef JP
-            if (angband_strstr(temp2.data(), temp) || angband_strstr(r_ref.name.data(), temp))
+            if ((temp2.find(monster_name) != std::string::npos) || (r_ref.name.find(monster_name) != std::string::npos))
 #else
-            if (angband_strstr(temp2.data(), temp))
+            if (temp2.find(monster_name) != std::string::npos)
 #endif
                 who.push_back(r_ref.idx);
         } else if (all || (r_ref.d_char == sym)) {

@@ -40,6 +40,8 @@
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 #include "world/world.h"
+#include <optional>
+#include <string>
 
 /*!
  * @brief 探索コマンドのメインルーチン / Simple command to "search" for one turn
@@ -147,16 +149,17 @@ static void accept_winner_message(PlayerType *player_ptr)
         return;
     }
 
-    char buf[1024] = "";
+    std::optional<std::string> winning_mes;
     play_music(TERM_XTRA_MUSIC_BASIC, MUSIC_BASIC_WINNER);
     do {
-        while (!get_string(_("*勝利*メッセージ: ", "*Winning* message: "), buf, sizeof(buf))) {
+        winning_mes = get_string(_("*勝利*メッセージ: ", "*Winning* message: "), 1024);
+        while (!winning_mes.has_value()) {
             ;
         }
     } while (!get_check_strict(player_ptr, _("よろしいですか？", "Are you sure? "), CHECK_NO_HISTORY));
 
-    if (buf[0]) {
-        player_ptr->last_message = buf;
+    if (!winning_mes->empty()) {
+        player_ptr->last_message = winning_mes.value();
         msg_print(player_ptr->last_message);
     }
 }

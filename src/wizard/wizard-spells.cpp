@@ -60,15 +60,14 @@ static const std::vector<debug_spell_command> debug_spell_commands_list = {
  */
 bool wiz_debug_spell(PlayerType *player_ptr)
 {
-    char tmp_val[50] = "\0";
-    int tmp_int;
-
-    if (!get_string("SPELL: ", tmp_val, 32)) {
+    const auto spell_opt = get_string("SPELL: ", 32);
+    if (!spell_opt.has_value()) {
         return false;
     }
 
+    const auto &spell = spell_opt.value();
     for (const auto &d : debug_spell_commands_list) {
-        if (strcmp(tmp_val, d.command_name) != 0) {
+        if (spell != std::string_view(d.command_name)) {
             continue;
         }
 
@@ -76,24 +75,24 @@ bool wiz_debug_spell(PlayerType *player_ptr)
         case 2:
             (d.command_function.spell2.spell_function)(player_ptr);
             return true;
-            break;
-        case 3:
-            tmp_val[0] = '\0';
-            if (!get_string("POWER:", tmp_val, 32)) {
+        case 3: {
+            const auto power_opt = get_string("POWER: ", 32);
+            if (!power_opt.has_value()) {
                 return false;
             }
-            tmp_int = atoi(tmp_val);
-            (d.command_function.spell3.spell_function)(player_ptr, tmp_int);
+
+            auto power = std::stoi(power_opt.value());
+            (d.command_function.spell3.spell_function)(player_ptr, power);
             return true;
-            break;
-        case 4:
+        }
+        case 4: {
+            int tmp_int;
             (d.command_function.spell4.spell_function)(player_ptr, true, &tmp_int);
             return true;
-            break;
+        }
         case 5:
             (d.command_function.spell5.spell_function)(player_ptr);
             return true;
-            break;
         default:
             break;
         }
