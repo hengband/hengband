@@ -392,6 +392,6 @@ void do_cmd_knowledge_dungeon(PlayerType *player_ptr)
     }
 
     angband_fclose(fff);
-    (void)show_file(player_ptr, true, file_name, _("今までに入ったダンジョン", "Dungeon"), 0, 0);
+    (void)show_file(player_ptr, true, file_name, 0, 0, _("今までに入ったダンジョン", "Dungeon"));
     fd_kill(file_name);
 }

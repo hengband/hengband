@@ -38,7 +38,7 @@ bool ParchmentReadExecutor::read()
     auto path = path_build(ANGBAND_DIR_FILE, "books");
     path.append(ss.str());
     const auto &filename = path.string();
-    (void)show_file(this->player_ptr, true, filename.data(), item_name.data(), 0, 0);
+    (void)show_file(this->player_ptr, true, filename, 0, 0, item_name);
     screen_load();
     return false;
 }

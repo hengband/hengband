@@ -38,8 +38,7 @@ static void display_diary(PlayerType *player_ptr)
     std::stringstream ss;
     ss << _("playrecord-", "playrec-") << savefile_base << ".txt";
     const auto &path = path_build(ANGBAND_DIR_USER, ss.str());
-    const auto &filename = path.string();
-    (void)show_file(player_ptr, false, filename.data(), diary_title.data(), -1, 0);
+    (void)show_file(player_ptr, false, path.string(), -1, 0, diary_title);
 }
 
 /*!

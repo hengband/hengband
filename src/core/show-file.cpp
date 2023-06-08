@@ -131,7 +131,7 @@ static void show_file_aux_line(concptr str, int cy, concptr shower)
  * </pre>
  * @todo 表示とそれ以外を分割する
  */
-bool show_file(PlayerType *player_ptr, bool show_version, concptr name, concptr what, int line, BIT_FLAGS mode)
+bool show_file(PlayerType *player_ptr, bool show_version, std::string_view name_with_tag, int line, uint32_t mode, std::string_view what)
 {
     TermCenteredOffsetSetter tcos(MAIN_TERM_MIN_COLS, std::nullopt);
 
@@ -139,23 +139,15 @@ bool show_file(PlayerType *player_ptr, bool show_version, concptr name, concptr 
     term_get_size(&wid, &hgt);
 
     char finder_str[81] = "";
-
     char shower_str[81] = "";
-
-    std::string caption;
-
     char hook[68][32]{};
-    std::string stripped_name;
-    concptr tag = angband_strstr(name, "#");
-    if (tag) {
-        stripped_name.append(name, tag - name);
-        name = stripped_name.data();
-        ++tag;
-    }
-
+    auto stripped_names = str_split(name_with_tag, '#');
+    auto &name = stripped_names[0];
+    auto tag = stripped_names.size() > 1 ? stripped_names[1] : "";
     std::filesystem::path path_reopen("");
     FILE *fff = nullptr;
-    if (what) {
+    std::string caption;
+    if (!what.empty()) {
         caption = what;
         path_reopen = name;
         fff = angband_fopen(path_reopen, FileOpenMode::READ);
@@ -183,7 +175,7 @@ bool show_file(PlayerType *player_ptr, bool show_version, concptr name, concptr 
     }
 
     if (!fff) {
-        msg_format(_("'%s'をオープンできません。", "Cannot open '%s'."), name);
+        msg_format(_("'%s'をオープンできません。", "Cannot open '%s'."), name.data());
         msg_print(nullptr);
 
         return true;
@@ -223,7 +215,7 @@ bool show_file(PlayerType *player_ptr, bool show_version, concptr name, concptr 
         size_t len = strlen(str);
         if (str[len - 1] == '>') {
             str[len - 1] = '\0';
-            if (tag && streq(str + 7, tag)) {
+            if (!tag.empty() && streq(str + 7, tag)) {
                 line = next;
             }
         }
@@ -333,8 +325,8 @@ bool show_file(PlayerType *player_ptr, bool show_version, concptr name, concptr 
         skey = inkey_special(true);
         switch (skey) {
         case '?':
-            if (strcmp(name, _("jhelpinfo.txt", "helpinfo.txt")) != 0) {
-                show_file(player_ptr, true, _("jhelpinfo.txt", "helpinfo.txt"), nullptr, 0, mode);
+            if (name != _("jhelpinfo.txt", "helpinfo.txt")) {
+                show_file(player_ptr, true, _("jhelpinfo.txt", "helpinfo.txt"), 0, mode);
             }
             break;
         case '=':
@@ -398,7 +390,7 @@ bool show_file(PlayerType *player_ptr, bool show_version, concptr name, concptr 
             strcpy(tmp, _("jhelp.hlp", "help.hlp"));
 
             if (askfor(tmp, 80)) {
-                if (!show_file(player_ptr, true, tmp, nullptr, 0, mode)) {
+                if (!show_file(player_ptr, true, tmp, 0, mode)) {
                     skey = 'q';
                 }
             }
@@ -461,7 +453,7 @@ bool show_file(PlayerType *player_ptr, bool show_version, concptr name, concptr 
 
             if ((key > -1) && hook[key][0]) {
                 /* Recurse on that file */
-                if (!show_file(player_ptr, true, hook[key], nullptr, 0, mode)) {
+                if (!show_file(player_ptr, true, hook[key], 0, mode)) {
                     skey = 'q';
                 }
             }
@@ -486,7 +478,7 @@ bool show_file(PlayerType *player_ptr, bool show_version, concptr name, concptr 
                 break;
             }
 
-            fprintf(ffp, "%s: %s\n", player_ptr->name, what ? what : caption.data());
+            fprintf(ffp, "%s: %s\n", player_ptr->name, !what.empty() ? what.data() : caption.data());
             char buff[1024]{};
             while (!angband_fgets(fff, buff, sizeof(buff))) {
                 angband_fputs(ffp, buff, 80);

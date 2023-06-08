@@ -153,7 +153,7 @@ static void do_cmd_options_autosave(PlayerType *player_ptr, concptr info)
         }
 
         case '?': {
-            (void)show_file(player_ptr, true, _("joption.txt#Autosave", "option.txt#Autosave"), nullptr, 0, 0);
+            (void)show_file(player_ptr, true, _("joption.txt#Autosave", "option.txt#Autosave"), 0, 0);
             term_clear();
             break;
         }
@@ -294,7 +294,7 @@ static void do_cmd_options_win(PlayerType *player_ptr)
             set_window_flag(x, y);
             break;
         case '?':
-            (void)show_file(player_ptr, true, _("joption.txt#Window", "option.txt#Window"), nullptr, 0, 0);
+            (void)show_file(player_ptr, true, _("joption.txt#Window", "option.txt#Window"), 0, 0);
             term_clear();
             break;
         default:
@@ -394,7 +394,7 @@ static void do_cmd_options_cheat(PlayerType *player_ptr, concptr info)
             k = (k + 1) % n;
             break;
         case '?':
-            (void)show_file(player_ptr, true, std::string(_("joption.txt#", "option.txt#")).append(cheat_info[k].o_text).data(), nullptr, 0, 0);
+            (void)show_file(player_ptr, true, std::string(_("joption.txt#", "option.txt#")).append(cheat_info[k].o_text), 0, 0);
             term_clear();
             break;
         default:
@@ -586,7 +586,7 @@ void do_cmd_options(PlayerType *player_ptr)
                 if (k == ESCAPE) {
                     break;
                 } else if (k == '?') {
-                    (void)show_file(player_ptr, true, _("joption.txt#Hitpoint", "option.txt#Hitpoint"), nullptr, 0, 0);
+                    (void)show_file(player_ptr, true, _("joption.txt#Hitpoint", "option.txt#Hitpoint"), 0, 0);
                     term_clear();
                 } else if (isdigit(k)) {
                     hitpoint_warn = D2I(k);
@@ -608,7 +608,7 @@ void do_cmd_options(PlayerType *player_ptr)
                 if (k == ESCAPE) {
                     break;
                 } else if (k == '?') {
-                    (void)show_file(player_ptr, true, _("joption.txt#Manapoint", "option.txt#Manapoint"), nullptr, 0, 0);
+                    (void)show_file(player_ptr, true, _("joption.txt#Manapoint", "option.txt#Manapoint"), 0, 0);
                     term_clear();
                 } else if (isdigit(k)) {
                     mana_warn = D2I(k);
@@ -620,7 +620,7 @@ void do_cmd_options(PlayerType *player_ptr)
             break;
         }
         case '?':
-            (void)show_file(player_ptr, true, _("joption.txt", "option.txt"), nullptr, 0, 0);
+            (void)show_file(player_ptr, true, _("joption.txt", "option.txt"), 0, 0);
             term_clear();
             break;
         default: {
@@ -741,7 +741,7 @@ void do_cmd_options_aux(PlayerType *player_ptr, game_option_types page, concptr 
             break;
         }
         case '?': {
-            (void)show_file(player_ptr, true, std::string(_("joption.txt#", "option.txt#")).append(option_info[opt[k]].o_text).data(), nullptr, 0, 0);
+            (void)show_file(player_ptr, true, std::string(_("joption.txt#", "option.txt#")).append(option_info[opt[k]].o_text), 0, 0);
             term_clear();
             break;
         }
