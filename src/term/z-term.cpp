@@ -586,9 +586,7 @@ static void term_queue_chars(TERM_LEN x, TERM_LEN y, int n, TERM_COLOR a, std::s
      * (条件追加：タイルの1文字目でない事を確かめるように。)
      */
     {
-        int w, h;
-        term_get_size(&w, &h);
-        if (x != w && !(scr_aa[x] & AF_TILE1) && (scr_aa[x] & AF_KANJI2)) {
+        if ((x < game_term->wid) && !(scr_aa[x] & AF_TILE1) && (scr_aa[x] & AF_KANJI2)) {
             scr_cc[x] = ' ';
             scr_aa[x] &= AF_KANJIC;
             if (x1 < 0) {
