@@ -29,35 +29,28 @@ const who_word_definition Who::words = {
  */
 hook_c_roff_pf hook_c_roff = c_roff;
 
-lore_type *initialize_lore_type(lore_type *lore_ptr, MonsterRaceId r_idx, monster_lore_mode mode)
+lore_type::lore_type(MonsterRaceId r_idx, monster_lore_mode mode)
+    : r_idx(r_idx)
+    , mode(mode)
+    , msex(MSEX_NONE)
+    , method(RaceBlowMethodType::NONE)
 {
-#ifdef JP
-#else
-    lore_ptr->sin = false;
-#endif
-    lore_ptr->r_idx = r_idx;
-    lore_ptr->nightmare = ironman_nightmare && (mode != MONSTER_LORE_DEBUG);
-    lore_ptr->r_ptr = &monraces_info[r_idx];
-    lore_ptr->speed = lore_ptr->nightmare ? lore_ptr->r_ptr->speed + 5 : lore_ptr->r_ptr->speed;
-    lore_ptr->drop_gold = lore_ptr->r_ptr->r_drop_gold;
-    lore_ptr->drop_item = lore_ptr->r_ptr->r_drop_item;
-    lore_ptr->flags1 = (lore_ptr->r_ptr->flags1 & lore_ptr->r_ptr->r_flags1);
-    lore_ptr->flags2 = (lore_ptr->r_ptr->flags2 & lore_ptr->r_ptr->r_flags2);
-    lore_ptr->flags3 = (lore_ptr->r_ptr->flags3 & lore_ptr->r_ptr->r_flags3);
-    lore_ptr->ability_flags = (lore_ptr->r_ptr->ability_flags & lore_ptr->r_ptr->r_ability_flags);
-    lore_ptr->aura_flags = (lore_ptr->r_ptr->aura_flags & lore_ptr->r_ptr->r_aura_flags);
-    lore_ptr->behavior_flags = (lore_ptr->r_ptr->behavior_flags & lore_ptr->r_ptr->r_behavior_flags);
-    lore_ptr->drop_flags = (lore_ptr->r_ptr->drop_flags & lore_ptr->r_ptr->r_drop_flags);
-    lore_ptr->flags7 = (lore_ptr->r_ptr->flags7 & lore_ptr->r_ptr->flags7);
-    lore_ptr->resistance_flags = (lore_ptr->r_ptr->resistance_flags & lore_ptr->r_ptr->r_resistance_flags);
-    lore_ptr->feature_flags = (lore_ptr->r_ptr->feature_flags & lore_ptr->r_ptr->r_feature_flags);
-    lore_ptr->brightness_flags = lore_ptr->r_ptr->brightness_flags;
-    lore_ptr->reinforce = false;
-    lore_ptr->know_everything = false;
-    lore_ptr->mode = mode;
-    lore_ptr->old = false;
-    lore_ptr->count = 0;
-    return lore_ptr;
+    this->nightmare = ironman_nightmare && (mode != MONSTER_LORE_DEBUG);
+    this->r_ptr = &monraces_info[r_idx];
+    this->speed = this->nightmare ? this->r_ptr->speed + 5 : this->r_ptr->speed;
+    this->drop_gold = this->r_ptr->r_drop_gold;
+    this->drop_item = this->r_ptr->r_drop_item;
+    this->flags1 = (this->r_ptr->flags1 & this->r_ptr->r_flags1);
+    this->flags2 = (this->r_ptr->flags2 & this->r_ptr->r_flags2);
+    this->flags3 = (this->r_ptr->flags3 & this->r_ptr->r_flags3);
+    this->ability_flags = (this->r_ptr->ability_flags & this->r_ptr->r_ability_flags);
+    this->aura_flags = (this->r_ptr->aura_flags & this->r_ptr->r_aura_flags);
+    this->behavior_flags = (this->r_ptr->behavior_flags & this->r_ptr->r_behavior_flags);
+    this->drop_flags = (this->r_ptr->drop_flags & this->r_ptr->r_drop_flags);
+    this->flags7 = (this->r_ptr->flags7 & this->r_ptr->flags7);
+    this->resistance_flags = (this->r_ptr->resistance_flags & this->r_ptr->r_resistance_flags);
+    this->feature_flags = (this->r_ptr->feature_flags & this->r_ptr->r_feature_flags);
+    this->brightness_flags = this->r_ptr->brightness_flags;
 }
 
 /*!
