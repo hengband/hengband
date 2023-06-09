@@ -13,6 +13,8 @@
 #include "util/int-char-converter.h"
 #include "util/string-processor.h"
 #include "view/display-messages.h"
+#include <sstream>
+#include <string>
 
 /*!
  * @brief ファイル内容の一行をコンソールに出力する
@@ -131,7 +133,7 @@ static void show_file_aux_line(concptr str, int cy, concptr shower)
  * </pre>
  * @todo 表示とそれ以外を分割する
  */
-bool show_file(PlayerType *player_ptr, bool show_version, std::string_view name_with_tag, int line, uint32_t mode, std::string_view what)
+bool show_file(PlayerType *player_ptr, bool show_version, std::string_view name_with_tag, int initial_line, uint32_t mode, std::string_view what)
 {
     TermCenteredOffsetSetter tcos(MAIN_TERM_MIN_COLS, std::nullopt);
 
@@ -146,48 +148,51 @@ bool show_file(PlayerType *player_ptr, bool show_version, std::string_view name_
     auto tag = stripped_names.size() > 1 ? stripped_names[1] : "";
     std::filesystem::path path_reopen("");
     FILE *fff = nullptr;
-    std::string caption;
+    std::stringstream caption;
     if (!what.empty()) {
-        caption = what;
+        caption << what;
         path_reopen = name;
         fff = angband_fopen(path_reopen, FileOpenMode::READ);
     }
 
     if (!fff) {
-        caption = _("ヘルプ・ファイル'", "Help file '");
-        caption.append(name).append("'");
+        caption.clear();
+        caption << _("ヘルプ・ファイル'", "Help file '");
+        caption << name << "'";
         path_reopen = path_build(ANGBAND_DIR_HELP, name);
         fff = angband_fopen(path_reopen, FileOpenMode::READ);
     }
 
     if (!fff) {
-        caption = _("スポイラー・ファイル'", "Info file '");
-        caption.append(name).append("'");
+        caption.clear();
+        caption << _("スポイラー・ファイル'", "Info file '");
+        caption << name << "'";
         path_reopen = path_build(ANGBAND_DIR_INFO, name);
         fff = angband_fopen(path_reopen, FileOpenMode::READ);
     }
 
     if (!fff) {
+        caption.clear();
         path_reopen = path_build(ANGBAND_DIR, name);
-        caption = _("スポイラー・ファイル'", "Info file '");
-        caption.append(name).append("'");
+        caption << _("スポイラー・ファイル'", "Info file '");
+        caption << name << "'";
         fff = angband_fopen(path_reopen, FileOpenMode::READ);
     }
 
     if (!fff) {
         msg_format(_("'%s'をオープンできません。", "Cannot open '%s'."), name.data());
         msg_print(nullptr);
-
         return true;
     }
 
+    const auto caption_str = caption.str();
     int skey;
-    int next = 0;
-    int size = 0;
-    int back = 0;
-    bool menu = false;
+    auto next = 0;
+    auto back = 0;
+    auto menu = false;
     char buf[1024]{};
-    bool reverse = (line < 0);
+    auto reverse = initial_line < 0;
+    auto line = initial_line;
     while (true) {
         char *str = buf;
         if (angband_fgets(fff, buf, sizeof(buf))) {
@@ -221,7 +226,7 @@ bool show_file(PlayerType *player_ptr, bool show_version, std::string_view name_
         }
     }
 
-    size = next;
+    auto size = next;
     int rows = hgt - 4;
     if (line == -1) {
         line = ((size - 1) / rows) * rows;
@@ -298,14 +303,13 @@ bool show_file(PlayerType *player_ptr, bool show_version, std::string_view name_
             continue;
         }
 
-        prt(format(_("[変愚蛮怒 %d.%d.%d, %s, %d/%d]", "[Hengband %d.%d.%d, %s, Line %d/%d]"), H_VER_MAJOR, H_VER_MINOR, H_VER_PATCH, caption.data(),
-                line, size),
-            0, 0);
+        constexpr auto title = _("[変愚蛮怒 %d.%d.%d, %s, %d/%d]", "[Hengband %d.%d.%d, %s, Line %d/%d]");
+        prt(format(title, H_VER_MAJOR, H_VER_MINOR, H_VER_PATCH, caption_str.data(), line, size), 0, 0);
 
         if (show_version) {
             prt(format("[%s]", get_version().data()), 0, 0);
         } else {
-            prt(format(_("[%s, %d/%d]", "[%s, Line %d/%d]"), caption.data(), line, size), 0, 0);
+            prt(format(_("[%s, %d/%d]", "[%s, Line %d/%d]"), caption_str.data(), line, size), 0, 0);
         }
 
         if (size <= rows) {
@@ -478,7 +482,7 @@ bool show_file(PlayerType *player_ptr, bool show_version, std::string_view name_
                 break;
             }
 
-            fprintf(ffp, "%s: %s\n", player_ptr->name, !what.empty() ? what.data() : caption.data());
+            fprintf(ffp, "%s: %s\n", player_ptr->name, !what.empty() ? what.data() : caption_str.data());
             char buff[1024]{};
             while (!angband_fgets(fff, buff, sizeof(buff))) {
                 angband_fputs(ffp, buff, 80);
