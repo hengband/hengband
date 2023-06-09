@@ -302,13 +302,12 @@ bool show_file(PlayerType *player_ptr, bool show_version, std::string_view name_
             continue;
         }
 
-        constexpr auto title = _("[変愚蛮怒 %d.%d.%d, %s, %d/%d]", "[Hengband %d.%d.%d, %s, Line %d/%d]");
-        prt(format(title, H_VER_MAJOR, H_VER_MINOR, H_VER_PATCH, caption_str.data(), line, size), 0, 0);
-
         if (show_version) {
-            prt(format("[%s]", get_version().data()), 0, 0);
+            constexpr auto title = _("[%s, %s, %d/%d]", "[%s, %s, Line %d/%d]");
+            prt(format(title, get_version().data(), caption_str.data(), line, size), 0, 0);
         } else {
-            prt(format(_("[%s, %d/%d]", "[%s, Line %d/%d]"), caption_str.data(), line, size), 0, 0);
+            constexpr auto title = _("[%s, %d/%d]", "[%s, Line %d/%d]");
+            prt(format(title, caption_str.data(), line, size), 0, 0);
         }
 
         if (size <= rows) {
