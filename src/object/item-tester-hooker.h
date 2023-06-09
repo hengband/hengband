@@ -81,5 +81,5 @@ private:
     virtual bool okay_impl(const ItemEntity *o_ptr) const;
 
     std::function<bool(PlayerType *, const ItemEntity *)> test_func;
-    PlayerType *player_ptr;
+    PlayerType *player_ptr = nullptr;
 };
