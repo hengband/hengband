@@ -179,10 +179,9 @@ bool show_file(PlayerType *player_ptr, bool show_version, std::string_view name_
         fff = angband_fopen(path_reopen, FileOpenMode::READ);
     }
 
+    const auto open_error_mes = format(_("'%s'をオープンできません。", "Cannot open '%s'."), name.data());
     if (!fff) {
-        msg_format(_("'%s'をオープンできません。", "Cannot open '%s'."), name.data());
-        msg_print(nullptr);
-        return true;
+        throw std::runtime_error(open_error_mes);
     }
 
     const auto caption_str = caption.str();
@@ -248,7 +247,7 @@ bool show_file(PlayerType *player_ptr, bool show_version, std::string_view name_
             angband_fclose(fff);
             fff = angband_fopen(path_reopen, FileOpenMode::READ);
             if (!fff) {
-                return false;
+                throw std::runtime_error(open_error_mes);
             }
 
             next = 0;
